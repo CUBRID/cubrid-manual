@@ -1,0 +1,1460 @@
+******
+테이블
+******
+
+CREATE TABLE
+============
+
+테이블 정의
+-----------
+
+**CREATE TABLE** 문을 사용하여 새로운 테이블을 생성한다. ::
+
+	CREATE {TABLE | CLASS} <table_name>
+					   [ <subclass_definition> ]
+					   [ ( <column_definition> [,<table_constraint>]... ) ]
+					   [ AUTO_INCREMENT = initial_value ] ]
+					   [ CLASS ATTRIBUTE ( <column_definition_comma_list> ) ]
+					   [ METHOD <method_definition_comma_list> ]
+					   [ FILE <method_file_comma_list> ]
+					   [ INHERIT <resolution_comma_list> ]
+					   [ REUSE_OID ]
+	<column_definition> ::=
+	column_name column_type [[ <default_or_shared> ] | [ <column_constraint> ]]...
+	 
+	<default_or_shared> ::=
+	{SHARED <value_specification> | DEFAULT <value_specification> } |
+	AUTO_INCREMENT [(seed, increment)]
+	 
+	<column_constraint> ::=
+	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+	 
+	<table_constraint> ::=
+	[ CONSTRAINT [ <constraint_name> ] ] UNIQUE [ KEY | INDEX ]( column_name_comma_list ) |
+	[ { KEY | INDEX } [ <constraint_name> ]( column_name_comma_list ) |
+	[ PRIMARY KEY ( column_name_comma_list )] |
+	[ <referential_constraint> ]
+	 
+	<referential_constraint> ::=
+	FOREIGN KEY [ <foreign_key_name> ]( column_name_comma_list ) <referential definition>
+	 
+	<referential definition> ::=
+	REFERENCES [ referenced_table_name ] ( column_name_comma_list )
+	[ <referential_triggered_action> ... ]
+	 
+	<referential_triggered_action> ::=
+	{ ON UPDATE <referential_action> } |
+	{ ON DELETE <referential_action> } |
+	{ ON CACHE OBJECT cache_object_column_name }
+	 
+	<referential_action> ::=
+	CASCADE | RESTRICT | NO ACTION | SET NULL
+	 
+	<subclass_definition> ::=
+	{ UNDER | AS SUBCLASS OF } table_name_comma_list
+	 
+	<method_definition> ::=
+	[ CLASS ] method_name
+	[ ( [ argument_type_comma_list ] ) ]
+	[ result_type ]
+	[ FUNCTION  function_name ]
+	 
+	<resolution> ::=
+	[ CLASS ] { column_name | method_name } OF superclass_name
+	[ AS alias ]
+
+*   *table_name* : 생성할 테이블의 이름을 지정한다(최대 254바이트).
+*   *column_name* : 생성할 칼럼의 이름을 지정한다(최대 254바이트).
+*   *column_type* : 칼럼의 데이터 타입을 지정한다.
+*   [**SHARED** *value* | **DEFAULT** *value*] : 칼럼의 초기값을 지정한다. (자세한 내용은 `칼럼 정의 <#syntax_syntax_table_create_col_h_3802>`_ 참조)
+*   *column_constraints* : 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다(자세한 내용은 `제약 조건 정의 <#syntax_syntax_table_create_cond__9394>`_ 참조).
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE olympic (
+	   host_year        INT    NOT NULL PRIMARY KEY,
+	   host_nation      VARCHAR(40) NOT NULL,
+	   host_city        VARCHAR(20) NOT NULL,
+	   opening_date     DATE        NOT NULL,
+	   closing_date     DATE        NOT NULL,
+	   mascot           VARCHAR(20) ,
+	   slogan           VARCHAR(40) ,
+	   introduction     VARCHAR(1500)
+	);
+
+칼럼 정의
+---------
+
+칼럼은 테이블에서 각 열에 해당하는 항목이며, 칼럼은 칼럼 이름과 데이터 타입을 명시하여 정의한다. ::
+
+	<column_definition> ::=
+	column_name column_type [ [ <default_or_shared> ] | [ <column_constraint> ] ]...
+	 
+	<default_or_shared> ::=
+	{ SHARED <value_specification> | DEFAULT <value_specification> } |
+	AUTO_INCREMENT [ (seed, increment) ]
+	 
+	<column_constraint> ::=
+	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+
+**칼럼 이름**
+
+칼럼 이름 작성 원칙은 `식별자 <#syntax_csql_syntaxtype_identifie_2262>`_ 를 참고한다. 생성한 칼럼의 이름은 **ALTER TABLE** 문의 **RENAME COLUMN** 절을 사용하여 변경할 수 있다. 자세한 내용은 `RENAME COLUMN 절 <#syntax_syntax_def_alttable_renam_2189>`_ 을 참고한다.
+
+**예제**
+
+다음은 *full_name* 과 *age*, 2개의 칼럼을 가지는 *manager2* 테이블을 생성하는 예제이다.
+
+.. code-block:: sql
+
+	CREATE TABLE manager2 (full_name VARCHAR(40), age INT );
+
+.. warning::
+	*   칼럼 이름의 첫 글자는 반드시 알파벳이어야 한다.
+	*   칼럼 이름은 테이블 내에서 고유해야 한다.
+
+**칼럼의 초기 값 설정(SHARED, DEFAULT)**
+
+**SHARED**, **DEFAULT** 는 칼럼 초기 값과 관련된 속성이다. **SHARED**, **DEFAULT** 값은 **ALTER TABLE** 문에서 변경할 수 있다.
+
+*   **SHARED** : 칼럼 값은 모든 행에서 동일하다. 따라서 **SHARED** 속성은 **UNIQUE** 제약 조건과 동시에 정의할 수 없다. 초기에 설정한 값과 다른 새로운 값을 **INSERT** 하면, 해당 칼럼 값은 모든 행에서 새로운 값으로 갱신된다.
+
+*   **DEFAULT** : 새로운 행을 삽입할 때 칼럼 값을 지정하지 않으면 **DEFAULT** 속성으로 설정한 값이 저장된다.
+
+**DEFAULT** 의 값으로 허용되는 의사 칼럼(pseudo column, 인자가 없는 특수 함수)은 다음과 같다.
+
++---------------+-------------+
+| DEFAULT 값    | 데이터 타입 |
++===============+=============+
+| SYS_TIMESTAMP | TIMESTAMP   |
++---------------+-------------+
+| SYS_DATETIME  | DATETIME    |
++---------------+-------------+
+| SYS_DATE      | DATE        |
++---------------+-------------+
+| SYS_TIME      | TIME        |
++---------------+-------------+
+| USER, USER()  | STRING      |
++---------------+-------------+
+
+.. note::
+	CUBRID 9.0 미만 버전에서는 테이블 생성 시 **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** 칼럼의 **DEFAULT** 값을 **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** 로 지정하면, **CREATE TABLE** 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 **INSERT** 되는 시점의 값을 입력하려면 **INSERT** 구문의 **VALUES** 절에 해당 함수를 입력해야 했다.
+
+**예제 1**
+
+.. code-block:: sql
+
+	CREATE TABLE colval_tbl
+	( id INT, name VARCHAR SHARED 'AAA', phone VARCHAR DEFAULT '000-0000');
+	INSERT INTO colval_tbl(id) VALUES (1),(2);
+	SELECT * FROM colval_tbl;
+	 
+			   id  name                  phone
+	=========================================================
+				1  'AAA'                 '000-0000'
+				2  'AAA'                 '000-0000'
+	 
+	--updating column values on every row
+	INSERT INTO colval_tbl(id, name) VALUES (3,'BBB');
+	INSERT INTO colval_tbl(id) VALUES (4),(5);
+	SELECT * FROM colval_tbl;
+	 
+			   id  name                  phone
+	=========================================================
+				1  'BBB'                 '000-0000'
+				2  'BBB'                 '000-0000'
+				3  'BBB'                 '000-0000'
+				4  'BBB'                 '000-0000'
+				5  'BBB'                 '000-0000'
+	 
+	--changing DEFAULT value in the ALTER TABLE statement
+	ALTER TABLE colval_tbl CHANGE phone DEFAULT '111-1111'
+	INSERT INTO colval_tbl(id) VALUES (6);
+	SELECT * FROM colval_tbl;
+	 
+			   id  name                  phone
+	=========================================================
+				1  'BBB'                 '000-0000'
+				2  'BBB'                 '000-0000'
+				3  'BBB'                 '000-0000'
+				4  'BBB'                 '000-0000'
+				5  'BBB'                 '000-0000'
+				6  'BBB'                 '111-1111'
+
+**예제 2**
+
+하나 이상의 칼럼에 의사 칼럼의 **DEFAULT** 값 지정이 가능하다.
+
+.. code-block:: sql
+
+	CREATE TABLE t (date1 date default SYSDATE, date2 date default SYSDATE);
+	CREATE TABLE t (date1 DATE default SYSDATE,
+					ts1   TIMESTAMP default CURRENT_TIMESTAMP);
+				
+**자동 증가 특성(AUTO INCREMENT)**
+
+칼럼 값에 자동으로 일련 번호를 부여하기 위해 칼럼에 **AUTO_INCREMENT** 속성을 정의할 수 있다. **SMALLINT**, **INTEGER**, **BIGINT**, **NUMERIC** (*p*, 0) 타입에 한정하여 정의할 수 있다.
+
+동일한 칼럼에 **AUTO_INCREMENT** 속성과 **SHARED** 또는 **DEFAULT** 속성을 동시에 정의할 수 없으며, 사용자가 직접 입력한 값과 자동 증가 특성에 의해 입력된 값이 서로 충돌되지 않도록 주의해야 한다.
+
+**AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 `AUTO_INCREMENT 절 <#syntax_syntax_def_alttable_autoi_781>`_ 을 참고한다.
+
+::
+
+	CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]) |
+	CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
+
+*   *seed* : 번호가 시작하는 초기값이다. 모든 정수가 허용되며 기본값은 **1** 이다.
+*   *increment* : 행마다 증가되는 증가값이다. 양의 정수만 허용되며 기본값은 **1** 이다.
+
+**CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; 구문을 사용할 때에는 다음과 같은 제약 사항이 있다.
+
+*   **AUTO_INCREMENT** 속성을 갖는 칼럼은 하나만 정의해야 한다.
+*   (*seed*, *increment*)와 **AUTO_INCREMENT** = *seed* 는 같이 사용하지 않는다.
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE auto_tbl(id INT AUTO_INCREMENT, name VARCHAR);
+	INSERT INTO auto_tbl VALUES(NULL, 'AAA'),(NULL, 'BBB'),(NULL, 'CCC');
+	INSERT INTO auto_tbl(name) VALUES ('DDD'),('EEE');
+	SELECT * FROM auto_tbl;
+	 
+			   id  name
+	===================================
+				1  'AAA'
+				2  'BBB'
+				3  'CCC'
+				4  'DDD'
+				5  'EEE'
+	 
+	CREATE TABLE tbl (id int AUTO_INCREMENT, val string) AUTO_INCREMENT = 3;
+	INSERT INTO tbl VALUES (NULL,'cubrid');
+	 
+	SELECT * FROM tbl;
+			   id  val
+	===================================
+				3  'cubrid'
+	 
+	CREATE TABLE t (id int AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
+	ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to  have exactly one AUTO_INCREMENT column and no seed/increment specification.
+	 
+	CREATE TABLE t (i int AUTO_INCREMENT(100, 2)) AUTO_INCREMENT = 3;
+	ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to  have exactly one AUTO_INCREMENT column and no seed/increment specification.
+
+**주의 사항**
+
+*   자동 증가 특성만으로는 **UNIQUE** 제약 조건을 가지지 않는다.
+*   자동 증가 특성이 정의된 칼럼에 **NULL** 을 입력하면 자동 증가된 값이 저장된다.
+*   자동 증가 특성이 정의된 칼럼에 **SHARED** 또는 **DEFAULT** 속성을 설정할 수 없다.
+*   초기값 및 자동 증가 특성에 의해 증가된 최종 값은 해당 타입에서 허용되는 최소/최대값을 넘을 수 없다.
+* 자동 증가 특성은 순환되지 않으므로 타입의 최대값을 넘어갈 경우 오류가 발생하며, 이에 대한 롤백이 일어나지 않는다. 따라서 이와 같은 경우 해당 칼럼을 삭제 후 다시 생성해야 한다. 예를 들어, 아래와 같이 테이블을 생성했다면, A의 최대값은 32767이다. 32767이 넘어가는 경우 에러가 발생하므로, 초기 테이블 생성시에 칼럼 A의 최대값이 해당 타입의 최대값을 넘지 않는다는 것을 감안해야 한다.
+
+  .. code-block:: sql
+  
+	create table tb1(A smallint auto_increment, B char(5));
+
+제약 조건 정의
+--------------
+
+제약 조건으로 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 를 정의할 수 있다. 또한 제약 조건은 아니지만 **INDEX** 또는 **KEY** 를 사용하여 인덱스를 생성할 수도 있다. ::
+
+	<column_constraint> ::=
+	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+	 
+	<table_constraint> ::=
+	[ CONSTRAINT [ <constraint_name> ] ] UNIQUE [ KEY | INDEX ]( column_name_comma_list ) |
+	[ { KEY | INDEX } <constraint_name> ( column_name_comma_list ) |
+	[ PRIMARY KEY ( column_name_comma_list )] |
+	[ <referential_constraint> ]
+	 
+	<referential_constraint> ::=
+	FOREIGN KEY ( column_name_comma_list ) <referential definition>
+	 
+	<referential definition> ::=
+	REFERENCES [ referenced_table_name ] ( column_name_comma_list )
+	[ <referential_triggered_action> ... ]
+	 
+	<referential_triggered_action> ::=
+	{ ON UPDATE <referential_action> } |
+	{ ON DELETE <referential_action> } |
+	{ ON CACHE OBJECT cache_object_column_name }
+	 
+	<referential_action> ::=
+	CASCADE | RESTRICT | NO ACTION  | SET NULL
+
+
+**NOT NULL 제약**
+
+**NOT NULL** 제약 조건이 정의된 칼럼은 반드시 **NULL** 이 아닌 값을 가져야 한다. 모든 칼럼에 대해 **NOT NULL** 제약 조건을 정의할 수 있다. **INSERT**, **UPDATE** 구문을 통해 **NOT NULL** 속성 칼럼에 **NULL** 값을 입력하거나 갱신하면 에러가 발생한다.
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE const_tbl1(id INT NOT NULL, INDEX i_index(id ASC), phone VARCHAR);
+	 
+	CREATE TABLE const_tbl2(id INT NOT NULL PRIMARY KEY, phone VARCHAR);
+	INSERT INTO const_tbl2 (NULL,'000-0000');
+	 
+	In line 2, column 25,
+	 
+	ERROR: syntax error, unexpected Null
+
+**UNIQUE 제약**
+
+**UNIQUE** 제약 조건은 정의된 칼럼이 고유한 값을 갖도록 하는 제약 조건이다. 기존 레코드와 동일한 칼럼 값을 갖는 레코드가 추가되면 에러가 발생한다.
+
+**UNIQUE** 제약 조건은 단일 칼럼뿐만 아니라 하나 이상의 다중 칼럼에 대해서도 정의가 가능하다. **UNIQUE** 제약 조건이 다중 칼럼에 대해 정의되면 각 칼럼 값에 대해 고유성이 보장되는 것이 아니라, 다중 칼럼 값의 조합에 대해 고유성이 보장된다.
+
+**예제**
+
+**UNIQUE** 제약 조건이 다중 칼럼에 대해 정의되면?칼럼 전체 값의 조합에 대해 고유성이 보장된다. 아래의 예와 같이 두 번째 입력 구문은 *a* 칼럼의 값은 같지만 *b* 칼럼의 값이 고유하므로 성공한다. 세 번째 입력 구문은 *a*, *b* 전체에 대해 첫 번째 값과 동일하므로 오류가 발생한다.
+
+.. code-block:: sql
+
+	--UNIQUE constraint is defined on a single column only
+	CREATE TABLE const_tbl5(id INT UNIQUE, phone VARCHAR);
+	INSERT INTO const_tbl5(id) VALUES (NULL), (NULL);
+	INSERT INTO const_tbl5 VALUES (1, '000-0000');
+	SELECT * FROM const_tbl5;
+	 
+			   id  phone
+	===================================
+			 NULL  NULL
+			 NULL  NULL
+				1  '000-0000'
+	 
+	INSERT INTO const_tbl5 VALUES (1, '111-1111');
+	 
+	ERROR: Operation would have caused one or more unique constraint violations.
+	 
+	 
+	--UNIQUE constraint is defined on several columns
+	CREATE TABLE const_tbl6(id INT, phone VARCHAR, CONSTRAINT UNIQUE(id,phone));
+	INSERT INTO const_tbl6 VALUES (1,NULL), (2,NULL), (1,'000-0000'), (1,'111-1111');
+	SELECT * FROM const_tbl6;
+	 
+			   id  phone
+	===================================
+				1  NULL
+				2  NULL
+				1  '000-0000'
+				1  '111-1111'
+
+**PRIMARY KEY 제약**
+
+테이블에서 키(key)란 각 행을 고유하게 식별할 수 있는 하나 이상의 칼럼들의 집합을 말한다. 후보키(candidate key)는 테이블 내의 각 행을 고유하게 식별하는 칼럼들의 집합을 의미하며, 사용자는 이러한 후보 키 중 하나를 기본키(primary key)로 정의할 수 있다. 즉, 기본키로 정의된 칼럼 값은 각 행에서 고유하게 식별된다.
+
+기본키를 정의하여 생성되는 인덱스는 기본적으로 오름차순으로 생성되며, 칼럼 뒤에 **ASC** 또는 **DESC** 키워드를 명시하여 키의 순서를 지정할 수 있다. ::
+
+	CREATE TABLE pk_tbl (a INT, b INT, PRIMARY KEY (a, b DESC));
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE const_tbl7(
+	id INT NOT NULL,
+	phone VARCHAR,
+	CONSTRAINT pk_id PRIMARY KEY(id));
+	 
+	--CONSTRAINT keyword
+	CREATE TABLE const_tbl8(
+	id INT NOT NULL PRIMARY KEY,
+	phone VARCHAR);
+	 
+	--primary key is defined on multiple columns
+	CREATE TABLE const_tbl8 (
+	host_year    INT NOT NULL,
+	event_code   INT NOT NULL,
+	athlete_code INT NOT NULL,
+	medal        CHAR(1)  NOT NULL,
+	score        VARCHAR(20),
+	unit         VARCHAR(5),
+	PRIMARY KEY(host_year, event_code, athlete_code, medal)
+	);
+
+**FOREIGN KEY 제약**
+
+외래키(foreign key)란 참조 관계에 있는 다른 테이블의 기본키를 참조하는 칼럼 또는 칼럼들의 집합을 말한다. 외래키와 참조되는 기본키는 동일한 데이터 타입을 가져야?한다. 외래키가 기본키를 참조함에 따라 연관되는 두?테이블 사이에는 일관성이 유지되는데, 이를 참조 무결성(referential integrity)이라 한다. ::
+
+	[ CONSTRAINT < constraint_name > ]
+	FOREIGN KEY [ <foreign_key_name> ] ( column_name_comma_list )
+	REFERENCES [ referenced_table_name ] ( column_name_comma_list )
+	[ <referential_triggered_action> ]
+	 
+	<referential_triggered_action> :
+	ON UPDATE <referential_action>
+	[ ON DELETE <referential_action> [ ON CACHE OBJECT cache_object_column_name ]]
+	 
+	<referential_action> :
+	CASCADE | RESTRICT | NO ACTION | SET NULL
+
+*   *constraint_name* : 제약 조건의 이름을 지정한다.
+*   *foreign_key_name* : **FOREIGN KEY** 제약 조건의 이름을 지정한다. 생략할 수 있으며, 이 값을 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
+*   *column_name* : **FOREIGN KEY** 키워드 뒤에 외래키로 정의하고자 하는 칼럼 이름을 명시한다. 정의되는 외래키의 칼럼 개수는 참조되는 기본키의 칼럼 개수와 동일해야 한다.
+*   *referenced_table_name* : 참조되는 테이블의 이름을 지정한다.
+*   *column_name* : **REFERENCES** 키워드 뒤에 참조되는 기본키 칼럼 이름을 지정한다.
+*   *referential_triggered_action* : 참조 무결성이 유지되도록 특정 연산에 따라 대응하는 트리거 동작을 정의하는 것이며, **ON UPDATE**, **ON DELETE**, **ON CACHE OBJECT** 가 올 수 있다. 각각의 동작은 중복하여 정의 가능하며, 정의 순서는 무관하다.
+
+    *   **ON UPDATE** : 외래키가 참조하는 기본키 값을 갱신하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT** 이다.
+    *   **ON DELETE** : 외래키가 참조하는 기본키 값을 삭제하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **CASCADE**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT** 이다.
+    *   **ON CACHE OBJECT** : 객체 지향 모델링에서는 직접 객체 참조(object reference)를 이용한 객체 탐색이 가능한데, 이것을 참조 무결성 외래키와 연계하여 지원하는 것이 **ON CACHE OBJECT** 옵션이다. **ON CACHE OBJECT** 옵션은 외래키 설정에 OID 참조 관계를 부여하고, 설정된 OID는 기본키 테이블에 대한 외래키의 캐시(CACHE) 포인트 개념으로 사용된다. 이렇게 설정된 OID는 시스템 내부적으로만 관리되고, 사용자에 의해 변경될 수 없다.
+    **ON CACHE OBJECT** 를 정의하기 위해서는 기본키를 가진 테이블을 타입으로 하는 칼럼이 이미 정의되어 있어야 하며, *cache_object_column_name* 에 명시되어야 한다. **ON CACHE OBJECT** 로 정의된 속성은 기존 객체 타입의 OID와 동일하게 OID를 사용할 수 있다.
+
+*   *referential_ action* : 기본키 값이 삭제 또는 갱신될 때 이를 참조하는 외래키의 값을 유지할 것인지 또는 변경할 것인지 지정할 수 있다.
+
+    *   **CASCADE** : 기본키가 삭제되면 외래키도 삭제한다. **ON DELETE** 연산에 대해서만 지원된다.
+    *   **RESTRICT** : 기본키 값이 삭제되거나 업데이트되지 않도록 제한한다. 삭제 또는 업데이트를 시도하는 트랜잭션은 롤백된다.
+    *   **SET NULL** : 기본키가 삭제되거나 업데이트되면, 이를 참조하는 외래키 칼럼 값을 **NULL** 로 업데이트한다.
+    *   **NO ACTION** : **RESTRICT** 옵션과 동일하게 동작한다.
+
+**예제**
+
+.. code-block:: sql
+
+	--creaing two tables where one is referencing the other
+	CREATE TABLE a_tbl(
+	id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+	phone VARCHAR(10));
+	 
+	CREATE TABLE b_tbl(
+	ID INT NOT NULL,
+	name VARCHAR(10) NOT NULL,
+	CONSTRAINT pk_id PRIMARY KEY(id),
+	CONSTRAINT fk_id FOREIGN KEY(id) REFERENCES a_tbl(id)
+	ON DELETE CASCADE ON UPDATE RESTRICT);
+	 
+	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
+	INSERT INTO b_tbl VALUES(1,'George'),(2,'Laura'),(3,'Max');
+	SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
+	 
+			   id           id                   phone                 name
+	==============================================================================
+				1            1                   '111-1111'            'George'
+				2            2                   '222-2222'            'Laura'
+				3            3                   '333-3333'            'Max'
+	 
+	--when deleting primay key value, it cascades foreign key value  
+	DELETE FROM a_tbl WHERE id=3;
+	 
+	1 rows affected.
+	 
+	SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
+	 
+			   id           id                   phone                 name
+	==============================================================================
+				1            1                   '111-1111'            'George'
+				2            2                   '222-2222'            'Laura'
+	 
+	--when attempting to update primay key value, it restricts the operation
+	UPDATE  a_tbl SET id = 10 WHERE phone = '111-1111';
+	 
+	In the command from line 1,
+	 
+	ERROR: Update/Delete operations are restricted by the foreign key 'fk_id'.
+	 
+	0 command(s) successfully processed.
+
+**주의 사항**
+
+*   참조 제약 조건에는 참조 대상이 되는 기본키 테이블의 이름 및 기본키와 일치하는 칼럼명들이 정의된다. 만약, 칼럼명 목록을 지정하지 않을 경우에는 기본키 테이블의 기본키가 원래 지정된 순서대로 지정된다.
+*   참조 제약 조건의 기본키의 개수는 외래키의 개수와 동일해야 한다. 참조 제약 조건의 기본키는 동일한 칼럼명이 중복될 수 없다.
+*   참조 제약 조건에 의해 CASCADE되는 작업은 트리거의 동작을 활성화하지 않는다.
+*   CUBRID HA 환경에서는 *referential_triggered_action* 을 사용하지 않는 것을 권장한다. CUBRID HA 환경에서는 트리거를 지원하지 않으므로, *referential_triggered_action* 을 사용하면 마스터 데이터베이스와 슬레이브 데이터베이스의 데이터가 일치하지 않을 수 있다. 자세한 내용은 `CUBRID HA <#admin_admin_ha_intro_htm>`_ 를 참고한다.
+
+
+**KEY 또는 INDEX**
+
+**KEY** 와 **INDEX** 는 동일하며, 해당 칼럼을 키로 하는 인덱스를 생성한다.
+
+.. note::
+
+	CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE const_tbl4(id INT, phone VARCHAR, KEY i_key(id DESC, phone ASC));
+
+칼럼 옵션
+---------
+
+특정 칼럼에 **UNIQUE** 또는 **INDEX** 를 정의할 때, 해당 칼럼 이름 뒤에 **ASC** 또는 **DESC** 옵션을 명시할 수 있다. 이 키워드는 오름차순 또는 내림차순 인덱스 값 저장을 위해 명시된다. ::
+
+	column_name [ASC|DESC]
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE const_tbl(
+	id VARCHAR,
+	name VARCHAR,
+	CONSTRAINT UNIQUE INDEX(id DESC, name ASC)
+	);
+	 
+	INSERT INTO const_tbl VALUES('1000', 'john'), ('1000','johnny'), ('1000', 'jone');
+	INSERT INTO const_tbl VALUES('1001', 'johnny'), ('1001','john'), ('1001', 'jone');
+	 
+	SELECT * FROM const_tbl WHERE id > '100';
+	===================================================
+			  id    name    
+			  1001     john     
+			  1001     johnny     
+			  1001     jone     
+			  1000     john     
+			  1000     johnny     
+			  1000     jone
+
+
+테이블 옵션(REUSE_OID)
+----------------------
+
+테이블 생성 시 **REUSE_OID** 옵션을 명시하면, 레코드 삭제(**DELETE**)로 인해 삭제된 OID를 새로운 레코드 삽입(**INSERT**) 시 재사용할 수 있다. **REUSE_OID** 옵션을 명시하여 생성된 테이블을 OID 재사용 테이블 또는 참조 불가능(non-referable)한 테이블이라고 한다.
+
+OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같은 물리적 위치 정보로 표현되는 객체 식별자이다. CUBRID는 OID를 이용하여 객체의 참조 관계를 관리하고, 객체 조회, 저장, 삭제를 수행한다. OID를 이용하면 테이블을 참조하지 않고도 힙 파일 내의 해당 오브젝트에 직접 접근할 수 있어 접근성이 향상되지만, 객체가 삭제되더라도 참조 관계를 유지하기 위해 해당 객체의 OID를 보존하기 때문에 **DELETE** / **INSERT** 연산이 많은 경우 저장 공간 재사용률이 저하되는 문제가 있다.
+
+테이블 생성 시 **REUSE_OID** 옵션을 명시하면, 해당 테이블 내의 데이터 삭제 시 해당 OID가 함께 삭제되며, **INSERT** 된 다른 데이터가 해당 OID를 재사용할 수 있다. 단, OID 재사용 테이블을 다른 테이블이 참조할 수 없고, OID 재사용 테이블 내 객체들의 OID 값을 조회할 수 없다.
+
+**예제**
+
+.. code-block:: sql
+
+	--creating table with REUSE_OID option specified
+	CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID;
+	INSERT INTO reuse_tbl VALUES (1);
+	INSERT INTO reuse_tbl VALUES (2);
+	INSERT INTO reuse_tbl VALUES (3);
+	 
+	--an error occurs when column type is a OID reusable table itself
+	CREATE TABLE tbl_1 ( a reuse_tbl);
+	 
+	ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
+	 
+	--an error occurs when a table references a OID reusable table
+	CREATE TABLE tbl_2
+	(b int, FOREIGN KEY(b) REFERENCES reuse_tbl(a) ON CACHE OBJECT oid_value);
+	INSERT INTO tbl_2(b) VALUES(1);
+	SELECT oid_value.a FROM tbl_2;
+	 
+	ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
+
+**주의 사항**
+
+*   다른 테이블이 OID 재사용 테이블을 참조할 수 없다.
+*   OID 재사용 테이블에 대해 갱신 가능한(updatable) 뷰를 생성할 수 없다.
+*   테이블의 칼럼 타입으로 OID 재사용 테이블을 지정할 수 없다.
+*   OID 재사용 테이블 객체들의 OID 값을 읽을 수 없다.
+*   OID 재사용 테이블에서 인스턴스 메서드를 호출할 수 없다. 메서드가 정의된 클래스를 상속받은 서브클래스가 OID 재사용 테이블로 정의되어도 마찬가지로 인스턴스 메서드를 호출할 수 없다.
+*   OID 재사용 테이블은 CUBRID 2008 R2.2 버전 이상에서만 지원되며, 하위 호환성을 보장하지 않는다. 즉, 더 낮은 버전의 데이터베이스 서버에서 OID 재사용 테이블이 존재하는 데이터베이스에 접근할 수 없다.
+*   OID 재사용 테이블은 분할 테이블로 관리될 수 있으며, 복제될 수 있다.
+
+CREATE TABLE LIKE
+-----------------
+
+**CREATE TABLE … LIKE** 문을 사용하면, 이미 존재하는 테이블의 스키마와 동일한 스키마를 갖는 테이블을 생성할 수 있다. 기존 테이블에서 정의된 칼럼 속성, 테이블 제약 조건, 인덱스도 그대로 복제된다. 원본 테이블에서 자동 생성된 인덱스의 이름은 새로 생성된 테이블의 이름에 맞게 새로 생성되지만, 사용자에 의해 지어진 인덱스 이름은 그대로 복제된다. 그러므로 **USING INDEX** 문으로 특정 인덱스를 사용하도록 작성된 질의문이 있다면 주의해야 한다.
+
+**CREATE TABLE … LIKE** 문은 스키마만 복제하므로 칼럼 정의문을 작성할 수 없다. ::
+
+	CREATE {TABLE | CLASS} <new_table_name> LIKE <old_table_name>
+	
+*   *new_table_name* : 새로 생성할 테이블 이름이다.
+*   *old_table_name* : 데이터베이스에 이미 존재하는 원본 테이블 이름이다. **CREATE TABLE ... LIKE**   문에서 아래의 테이블은 원본 테이블로 지정될 수 없다.
+    *   분할 테이블
+    *   **AUTO_INCREMENT** 칼럼이 포함된 테이블
+    *   상속 또는 메서드를 사용하는 테이블
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE a_tbl(
+	id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+	phone VARCHAR(10));
+	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
+	 
+	--creating an empty table with the same schema as a_tbl
+	CREATE TABLE new_tbl LIKE a_tbl;
+	SELECT * FROM new_tbl;
+	 
+	There are no results.
+	 
+	;schema a_tbl
+	 
+	=== <Help: Schema of a Class> ===
+	 
+	 
+	 <Class Name>
+	 
+		 a_tbl
+	 
+	 <Attributes>
+	 
+		 id                   INTEGER DEFAULT 0 NOT NULL
+		 phone                CHARACTER VARYING(10)
+	 
+	 <Constraints>
+	 
+		 PRIMARY KEY pk_a_tbl_id ON a_tbl (id)
+	 
+	Current transaction has been committed.
+	 
+	;schema new_tbl
+	 
+	=== <Help: Schema of a Class> ===
+	 
+	 
+	 <Class Name>
+	 
+		 new_tbl
+	 
+	 <Attributes>
+	 
+		 id                   INTEGER DEFAULT 0 NOT NULL
+		 phone                CHARACTER VARYING(10)
+	 
+	 <Constraints>
+	 
+		 PRIMARY KEY pk_new_tbl_id ON new_tbl (id)
+	 
+	 
+	Current transaction has been committed.
+
+CREATE TABLE AS SELECT
+----------------------
+
+**CREATE TABLE ... AS SELECT** 문을 사용하여 **SELECT** 문의 결과 레코드를 포함하는 새로운 테이블을 생성할 수 있다. 새로운 테이블에 대해 칼럼 및 테이블 제약 조건을 정의할 수 있으며, 다음의 규칙을 적용하여 **SELECT** 결과 레코드를 반영한다.
+
+*   새로운 테이블에 칼럼 *col_1* 이 정의되고, *select_statement* 에 동일한 칼럼 *col_1* 이 명시된 경우, **SELECT** 결과 레코드가 새로운 테이블 *col_1* 값으로 저장된다. 칼럼 이름은 같고 칼럼 타입이 다르면 타입 변환을 시도한다.
+
+*   새로운 테이블에 칼럼 *col_1*, *col_2* 가 정의되고, *select_statement* 의 칼럼 리스트에 *col_1*, *col_2*, *col_3* 이 명시되어 모두 포함 관계가 성립하는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3* 이 생성되고, **SELECT** 결과 데이터가 모든 칼럼 값으로 저장된다. 칼럼 이름은 같고 칼럼 타입이 다르면 타입 변환을 시도한다.
+
+*   새로운 테이블에 칼럼 *col_1*, *col_2* 가 정의되고, *select_statement* 의 칼럼 리스트에 *col_1*, *col_3* 이 명시되어 포함 관계가 성립하지 않는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3* 이 생성되고, *select_statement* 에 명시된 칼럼 *col_1*, *col_3* 에 대해서만 **SELECT** 결과 데이터가 저장되고, *col_2* 에는 NULL이 저장된다.
+
+*   *select_statement* 의 칼럼 리스트에는 칼럼 별칭(alias)이 포함될 수 있으며, 이 경우 칼럼 별칭이 새로운 테이블 칼럼 이름으로 사용된다. 함수 호출이나 표현식이 사용된 경우 별칭이 없으면 유효하지 않은 칼럼 이름이 생성되므로, 이 경우에는 별칭을 사용하는 것이 좋다.
+
+*   **REPLACE** 옵션은 새로운 테이블의 칼럼(*col_1*)에 **UNIQUE** 제약 조건이 정의된 경우에만 유효하다. *select_statement* 의 결과 레코드에 중복된 값이 존재하는 경우, **REPLACE** 옵션이 명시되면 칼럼 *col_1* 에는 고유한 값이 저장되고, **REPLACE** 옵션이 생략되면 **UNIQUE** 제약 조건에 위배되므로 에러 메시지가 출력된다.
+
+::
+
+	CREATE {TABLE | CLASS} <table_name>
+					   [( <column_definition> [,<table_constraint>]... )]
+					   [REPLACE] AS <select_statement>
+
+*   *table_name* : 새로 생성할 테이블 이름이다.
+*   *column_definition*, *table_constraint* : 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성은 복제되지 않는다.
+*   *table_constraint* : 테이블 제약 조건을 정의한다.
+*   *select_statement* : 데이터베이스에 이미 존재하는 원본 테이블을 대상으로 하는 **SELECT** 문이다.
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE a_tbl(
+	id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+	phone VARCHAR(10));
+	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
+	 
+	--creating a table without column definition
+	CREATE TABLE new_tbl1 AS SELECT * FROM a_tbl;
+	SELECT * FROM new_tbl1;
+	 
+			   id  phone
+	===================================
+				1  '111-1111'
+				2  '222-2222'
+				3  '333-3333'
+	 
+	--all of column values are replicated from a_tbl
+	CREATE TABLE new_tbl2
+	(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, phone VARCHAR) AS SELECT * FROM a_tbl;
+	SELECT * FROM new_tbl2;
+	 
+			   id  phone
+	===================================
+				1  '111-1111'
+				2  '222-2222'
+				3  '333-3333'
+	 
+	--some of column values are replicated from a_tbl and the rest is NULL
+	CREATE TABLE new_tbl3
+	(id INT, name VARCHAR) AS SELECT id, phone FROM a_tbl;
+	SELECT * FROM new_tbl3
+	 
+	  name                           id  phone
+	=========================================================
+	  NULL                            1  '111-1111'
+	  NULL                            2  '222-2222'
+	  NULL                            3  '333-3333'
+	 
+	--column alias in the select statement should be used in the column definition
+	CREATE TABLE new_tbl4
+	(id1 int, id2 int)AS SELECT t1.id id1, t2.id id2 FROM new_tbl1 t1, new_tbl2 t2;
+	SELECT * FROM new_tbl4;
+	 
+			  id1          id2
+	==========================
+				1            1
+				1            2
+				1            3
+				2            1
+				2            2
+				2            3
+				3            1
+				3            2
+				3            3
+	 
+	--REPLACE is used on the UNIQUE column
+	CREATE TABLE new_tbl5(id1 int UNIQUE) REPLACE AS SELECT * FROM new_tbl4;
+	SELECT * FROM new_tbl5;
+	 
+			  id1          id2
+	==========================
+				1            3
+				2            3
+				3            3
+
+
+ALTER TABLE
+===========
+
+**ALTER** 구문을 이용하여 테이블의 구조를 변경할 수 있다. 대상 테이블에 칼럼 추가/삭제, 인덱스 생성/삭제, 기존 칼럼의 타입 변경, 테이블 이름 변경, 칼럼 이름 변경 등을 수행하거나 테이블 제약 조건을 변경한다. 또한 **AUTO_INCREMENT** 의 초기값을 변경할 수 있다. **TABLE** 은 **CLASS** 와 동의어이고, **VIEW** 는 **VCLASS** 와 동의어이다. **COLUMN** 은 **ATTRIBUTE** 와 동의어이다. ::
+
+	ALTER [ <class_type> ] <table_name> <alter_clause> ;
+	 
+	<class_type> ::= TABLE | CLASS | VCLASS | VIEW
+	 
+	<alter_clause> ::= ADD <alter_add> [ INHERIT <resolution_comma_list> ] | 
+					   ADD { KEY | INDEX } <index_name> (<index_col_name>) |
+					   ALTER [ COLUMN ] column_name SET DEFAULT <value_specifiation> |
+					   DROP <alter_drop> [ INHERIT <resolution_comma_list> ] |
+					   DROP { KEY | INDEX } index_name |
+					   DROP FOREIGN KEY constraint_name |
+					   DROP PRIMARY KEY |                   
+					   RENAME <alter_rename> [ INHERIT <resolution_comma_list> ] |
+					   CHANGE <alter_change> |
+					   INHERIT <resolution_comma_list>
+					   AUTO_INCREMENT = <initial_value>
+	 
+	<alter_add> ::= [ ATTRIBUTE | COLUMN ] [(]<class_element_comma_list>[)] [ FIRST | AFTER old_column_name ] |
+					CLASS ATTRIBUTE <column_definition_comma_list> |
+					CONSTRAINT < constraint_name > <column_constraint> ( column_name )|
+					FILE <file_name_comma_list> |
+					METHOD <method_definition_comma_list> |
+					QUERY <select_statement> |
+					SUPERCLASS <class_name_comma_list>
+	 
+	<alter_change> ::= FILE <file_path_name> AS <file_path_name> |
+					   METHOD <method_definition_comma_list> |
+					   QUERY [ <unsigned_integer_literal> ] <select_statement> |
+					   <column_name> DEFAULT <value_specifiation>
+	 
+	<alter_drop> ::= [ ATTRIBUTE | COLUMN | METHOD ]
+					 <column_name_comma_list> |
+					 FILE <file_name_comma_list> |
+					 QUERY [ <unsigned_integer_literal> ] |
+					 SUPERCLASS <class_name_comma_list> |
+					 CONSTRAINT <constraint_name>
+	 
+	<alter_rename> ::= [ ATTRIBUTE | COLUMN | METHOD ]
+					   <old_column_name> AS <new_column_name> |
+					   FUNCTION OF <column_name> AS <function_name>
+					   FILE <file_path_name> AS <file_path_name>
+	 
+	<resolution> ::= { column_name | method_name } OF <superclass_name>
+					 [ AS alias ]
+	 
+	<class_element> ::= <column_definition> | <table_constraint>
+	 
+	<column_constraint> ::= UNIQUE [ KEY ] | PRIMARY KEY | FOREIGN KEY
+	 
+	<index_col_name> ::=
+	column_name [(length)] [ ASC | DESC ]
+
+.. warning::
+
+	테이블의 소유자, **DBA**, **DBA**의 멤버만이 테이블 스키마를 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 `권한 부여 <#syntax_syntax_access_authority_h_4540>`_ 참조)
+
+ADD COLUMN 절
+-------------
+
+**ADD COLUMN** 절을 사용하여 새로운 칼럼을 추가할 수 있다. **FIRST** 또는 **AFTER** 키워드를 사용하여 새로 추가할 칼럼의 위치를 지정할 수 있다.
+
+새로 추가되는 칼럼이 **NOT NULL** 제약 조건이 있으나 **DEFAULT** 제약 조건이 없는 경우, 데이터베이스 서버 설정 파라미터인 **add_column_update_hard_default** 가 yes이면 고정 기본값(hard default)을 갖게 되고, no이면 **NOT NULL** 제약 조건이 있어도 **NULL** 값을 갖게 된다. 새로 추가되는 칼럼에 **PRIMARY KEY** 혹은 **UNIQUE** 제약 조건을 지정하는 경우에 데이터베이스 서버 설정 파라미터인 **add_column_update_hard_default** 값이 yes이면 에러를 반환하고, no이면 모든 데이터는 **NULL** 값을 갖게 된다. **add_column_update_hard_default** 의 기본값은 **no** 이다.
+
+**add_column_update_hard_default** 및 고정 기본값에 대해서는 `CHANGE, MODIFY 절 <#syntax_syntax_def_alttable_chang_3554>`_ 을 참고한다.
+
+::
+
+	ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
+	ADD [ COLUMN | ATTRIBUTE ] [(]<column_definition>[)] [ FIRST | AFTER old_column_name ]
+	 
+	column_definition ::=
+	column_name column_type
+		{ [ NOT NULL | NULL ] |
+		  [ { SHARED <value_specification> | DEFAULT <value_specification> }
+			  | AUTO_INCREMENT [(seed, increment)] ] |
+		  [ UNIQUE [ KEY ] |
+			  [ PRIMARY KEY | FOREIGN KEY REFERENCES
+				  [ referenced_table_name ]( column_name_comma_list )
+				  [ <referential_triggered_action> ... ]
+			  ]
+		  ] } ...
+	 
+	<referential_triggered_action> ::=
+	{ ON UPDATE <referential_action> } |
+	{ ON DELETE <referential_action> } |
+	{ ON CACHE OBJECT cache_object_column_name }
+	 
+	<referential_action> ::=
+	CASCADE | RESTRICT | NO ACTION | SET NULL
+
+*   *table_name* : 칼럼을 추가할 테이블의 이름을 지정한다.
+*   *column_definition* : 새로 추가할 칼럼의 이름, 데이터 타입, 제약 조건을 정의한다.
+*   **AFTER** *old_column_name* : 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE a_tbl;
+	ALTER TABLE a_tbl ADD COLUMN age INT DEFAULT 0 NOT NULL;
+	INSERT INTO a_tbl(age) VALUES(20),(30),(40);
+	ALTER TABLE a_tbl ADD COLUMN name VARCHAR FIRST;
+	ALTER TABLE a_tbl ADD COLUMN id INT NOT NULL AUTO_INCREMENT UNIQUE;
+	ALTER TABLE a_tbl ADD COLUMN phone VARCHAR(13) DEFAULT '000-0000-0000' AFTER name;
+	 
+	SELECT * FROM a_tbl;
+	 
+	  name                  phone                         age           id
+	======================================================================
+	  NULL                  '000-0000-0000'                20         NULL
+	  NULL                  '000-0000-0000'                30         NULL
+	  NULL                  '000-0000-0000'                40         NULL
+	 
+	--adding multiple columns
+	ALTER TABLE a_tbl ADD COLUMN (age1 int, age2 int, age3 int);
+
+ADD CONSTRAINT 절
+-----------------
+
+**ADD CONSTRAINT** 절을 사용하여 새로운 제약 조건을 추가할 수 있다.
+
+**PRIMARY KEY** 제약 조건을 추가할 때 생성되는 인덱스는 기본적으로 오름차순으로 생성되며, 칼럼 이름 뒤에 **ASC** 또는 **DESC** 키워드를 명시하여 키의 정렬 순서를 지정할 수 있다.
+
+::
+
+	ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
+	ADD CONSTRAINT < constraint_name > column_constraint ( column_name_comma_list )
+	 
+	column_constraint ::=
+	UNIQUE [ KEY ] |
+	PRIMARY KEY |
+	FOREIGN KEY [ <foreign_key_name> ] REFERENCES [referenced_table_name]( column_name_comma_list )
+						   [ <referential_triggered_action> ... ]
+	 
+	<referential_triggered_action> ::=
+	{ ON UPDATE <referential_action> } |
+	{ ON DELETE <referential_action> } |
+	{ ON CACHE OBJECT cache_object_column_name }
+	 
+	<referential_action> ::=
+	CASCADE | RESTRICT | NO ACTION | SET NULL
+
+*   *table_name* : 제약 조건을 추가할 테이블의 이름을 지정한다.
+*   *constraint_name* : 새로 추가할 제약 조건의 이름을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
+*   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
+*   *column_constraint* : 지정된 칼럼에 대해 제약 조건을 정의한다. 제약 조건에 대한 자세한 설명은 `제약 조건 정의 <#syntax_syntax_table_create_cond__9394>`_ 를 참고한다.
+
+**예제**
+
+.. code-block:: sql
+
+	ALTER TABLE a_tbl ADD CONSTRAINT PRIMARY KEY(id); 
+	ALTER TABLE a_tbl ADD CONSTRAINT PRIMARY KEY(id, no DESC);
+	ALTER TABLE a_tbl ADD CONSTRAINT UNIQUE u_key1(id);
+
+ADD INDEX 절
+------------
+
+**ADD INDEX** 절은 특정 칼럼에 대해 인덱스 속성을 추가로 정의할 수 있다. ::
+
+	ALTER [ TABLE | CLASS ] table_name ADD { KEY | INDEX } index_name (<index_col_name>)
+	 
+	<index_col_name> ::=
+	column_name [(length)] [ ASC | DESC ]
+
+*   *table_name* : 변경하고자 하는 테이블의 이름을 지정한다.
+*   *index_name* : 인덱스의 이름을 지정한다.
+*   *index_col_name* : 인덱스를 정의할 대상 칼럼을 지정하며, 이때 칼럼 옵션으로 인덱스 키의 *prefix_length* 와 **ASC** 또는 **DESC** 을 함께 지정할 수 있다.
+
+**예제**
+
+.. code-block:: sql
+
+	ALTER TABLE a_tbl ADD INDEX i1(age ASC), ADD INDEX i2(phone DESC);
+	;schema a_tbl
+	 
+	=== <Help: Schema of a Class> ===
+	 
+	 <Class Name>
+	 
+		 a_tbl
+	 
+	<Attributes>
+	 
+		 name                 CHARACTER VARYING(1073741823) DEFAULT ''
+		 phone                CHARACTER VARYING(13) DEFAULT '111-1111'
+		 age                  INTEGER
+		 id                   INTEGER AUTO_INCREMENT  NOT NULL
+	 
+	 <Constraints>
+	 
+		 UNIQUE u_a_tbl_id ON a_tbl (id)
+		 INDEX i1 ON a_tbl (age)
+		 INDEX i2 ON a_tbl (phone DESC)
+	 
+	Current transaction has been committed.
+
+ALTER COLUMN … SET DEFAULT 절
+-----------------------------
+
+**설명**
+
+**ALTER COLUMN** ... **SET DEFAULT** 절은 기본값이 없는 칼럼에 기본값을 지정하거나 기존의 기본값을 변경할 수 있다. `CHANGE, MODIFY 절 <#syntax_syntax_def_alttable_chang_3554>`_ 을 이용하면, 단일 구문으로 여러 칼럼의 기본값을 변경할 수 있다. ::
+
+	ALTER [ TABLE | CLASS ] table_name ALTER [COLUMN] column_name SET DEFAULT value
+
+*   *table_name* : 기본값을 변경할 칼럼이 속한 테이블의 이름을 지정한다.
+*   *column_name* : 새로운 기본값을 적용할 칼럼의 이름을 지정한다.
+*   *value* : 새로운 기본값을 지정한다.
+
+**예제**
+
+.. code-block:: sql
+
+	;schema a_tbl
+	 
+	=== <Help: Schema of a Class> ===
+	 
+	 
+	 <Class Name>
+	 
+		 a_tbl
+	 
+	 <Attributes>
+	 
+		 name                 CHARACTER VARYING(1073741823)
+		 phone                CHARACTER VARYING(13) DEFAULT '000-0000-0000'
+		 age                  INTEGER
+		 id                   INTEGER AUTO_INCREMENT  NOT NULL
+	 
+	 <Constraints>
+	 
+		 UNIQUE u_a_tbl_id ON a_tbl (id)
+	 
+	 
+	Current transaction has been committed.
+	 
+	 
+	ALTER TABLE a_tbl ALTER COLUMN name SET DEFAULT '';
+	ALTER TABLE a_tbl ALTER COLUMN phone SET DEFAULT '111-1111';
+	 
+	;schema a_tbl
+	 
+	=== <Help: Schema of a Class> ===
+	 
+	 
+	 <Class Name>
+	 
+		 a_tbl
+	 
+	 <Attributes>
+	 
+		 name                 CHARACTER VARYING(1073741823) DEFAULT ''
+		 phone                CHARACTER VARYING(13) DEFAULT '111-1111'
+		 age                  INTEGER
+		 id                   INTEGER AUTO_INCREMENT  NOT NULL
+	 
+	 <Constraints>
+	 
+		 UNIQUE u_a_tbl_id ON a_tbl (id)
+
+AUTO_INCREMENT 절
+-----------------
+
+**AUTO_INCREMENT** 절은 기존에 정의한 자동 증가값의 초기값을 변경할 수 있다. 단, 테이블 내에 **AUTO_INCREMENT** 칼럼이 한 개만 정의되어 있어야 한다. ::
+
+	ALTER TABLE table_name AUTO_INCREMENT = initial_value;
+
+*   *table_name* : 테이블 이름
+*   *initial_value* : 새로 변경할 초기값
+
+**예제**
+
+.. code-block:: sql
+
+	CREATE TABLE t (i int AUTO_INCREMENT);
+	ALTER TABLE t AUTO_INCREMENT = 5;
+	 
+	-- when 2 AUTO_INCREMENT constraints are defined on one table, it returns error.
+	CREATE TABLE t (i int AUTO_INCREMENT, j int AUTO_INCREMENT);
+	ALTER TABLE t AUTO_INCREMENT = 5;
+	 
+	ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.
+
+.. warning::
+
+	**AUTO_INCREMENT** 의 초기값 변경으로 인해 **PRIMARY KEY** 나 **UNIQUE** 와 같은 제약 조건에 위배되는 경우가 발생하지 않도록 주의한다.
+
+CHANGE, MODIFY 절
+-----------------
+
+**CHANGE** 절은 칼럼의 이름, 타입, 크기 및 속성을 변경한다. 기존 칼럼의 이름과 새 칼럼의 이름이 같으면 타입, 크기 및 속성만 변경한다.
+
+**MODIFY** 절은 칼럼의 타입, 크기 및 속성을 변경할 수 있으며, 칼럼의 이름은 변경할 수 없다.
+
+**CHANGE** 절이나 **MODIFY** 절로 새 칼럼에 적용할 타입, 크기 및 속성을 설정할 때 기존에 정의된 속성은 새 칼럼의 속성에 전달되지 않는다.
+
+**CHANGE** 절이나 **MODIFY** 절로 칼럼에 데이터 타입을 변경할 때, 기존의 칼럼 값이 변경되면서 데이터가 변형될 수 있다. 예를 들어 문자열 칼럼의 길이를 줄이면 문자열이 잘릴 수 있으므로 주의해야 한다.
+
+.. warning::
+
+	* CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> 구문은 더 이상 지원하지 않는다.
+	* 숫자를 문자 타입으로 변환할 때 해당 문자열의 길이가 숫자의 길이보다 짧으면, 변환되는 문자 타입의 길이에 맞추어 문자열이 잘린 상태로 저장된다.
+
+::
+
+	ALTER TABLE tbl_name table_options;
+	 
+	table_options :
+		 table_option[, table_option]
+	 
+	table_option :
+		CHANGE [COLUMN | CLASS ATTRIBUTE ] old_col_name new_col_name column_definition
+				 [FIRST | AFTER col_name]
+	  | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
+				 [FIRST | AFTER col_name]
+
+*   *tbl_name* : 변경할 칼럼이 속한 테이블의 이름을 지정한다.
+*   *old_col_name* : 기존 칼럼의 이름을 지정한다.
+*   *new_col_name* : 변경할 칼럼의 이름을 지정한다.
+*   *column_definition* : 변경할 칼럼의 타입, 크기 및 속성을 지정한다.
+*   *col_name* : 변경할 칼럼의 타입, 크기 및 속성을 적용할 칼럼의 이름을 지정한다.
+
+**예제 1**
+
+.. code-block:: sql
+
+	CREATE TABLE t1 (a INTEGER);
+	 
+	-- changing column a's name into a1
+	ALTER TABLE t1 CHANGE a a1 INTEGER;
+	 
+	-- changing column a1's constraint
+	ALTER TABLE t1 CHANGE a1 a1 INTEGER NOT NULL;
+	---- or
+	ALTER TABLE t1 MODIFY a1 INTEGER NOT NULL;
+	 
+	-- changing column col1's type - "DEFAULT 1" constraint is removed.
+	CREATE TABLE t1 (col1 INT DEFAULT 1);
+	ALTER TABLE t1 MODIFY col1 BIGINT;
+	 
+	-- changing column col1's type - "DEFAULT 1" constraint is kept.
+	CREATE TABLE t1 (col1 INT DEFAULT 1, b VARCHAR(10));
+	ALTER TABLE t1 MODIFY col1 BIGINT DEFAULT 1;
+	 
+	-- changing column b's size
+	ALTER TABLE t1 MODIFY b VARCHAR(20);
+
+**예제 2**
+
+.. code-block:: sql
+
+	-- changing the name and position of a column  
+	CREATE TABLE t1(i1 int,i2 int);  
+	INSERT INTO t1 VALUE (1,11),(2,22),(3,33);  
+	SELECT * FROM t1 ORDER BY 1;
+				i1           i2
+	==========================
+				 1           11
+				 2           22
+				 3           33
+	 
+	ALTER TABLE t1 CHANGE i2 i0 INTEGER FIRST;  
+	SELECT * FROM t1 ORDER BY 1;
+				i0           i1
+	==========================
+				11            1
+				22            2
+				33            3
+
+**예제 3**
+
+.. code-block:: sql
+
+	-- adding NOT NULL constraint (strict)
+	-- alter_table_change_type_strict=yes
+	 
+	CREATE TABLE t1(i int);
+	INSERT INTO t1 values (11),(NULL),(22);
+	 
+	ALTER TABLE t1 change i i1 integer not null;
+	 
+	In the command from line 1,
+	 
+	ERROR: Cannot add NOT NULL constraint for attribute "i1": there are existing NULL values for this attribute.
+
+**예제 4**
+
+.. code-block:: sql
+
+	-- adding NOT NULL constraint
+	-- alter_table_change_type_strict=no
+	 
+	CREATE TABLE t1(i int);
+	INSERT INTO t1 VALUES (11),(NULL),(22);
+	 
+	ALTER TABLE t1 CHANGE i i1 INTEGER NOT NULL;
+	 
+	SELECT * FROM t1;
+	 
+			   i1
+	=============
+			   22
+				0
+			   11
+
+**예제 5**
+
+.. code-block:: sql
+
+	-- change the column's data type (no errors)
+	 
+	CREATE TABLE t1 (i1 int);
+	INSERT INTO t1 VALUES (1),(-2147483648),(2147483647);
+	 
+	ALTER TABLE t1 CHANGE i1 s1 CHAR(11);
+	 
+	SELECT * FROM t1;
+	 
+	  s1
+	======================
+	  '2147483647 '
+	  '-2147483648'
+	  '1          '
+  
+**예제 6**
+
+.. code-block:: sql
+
+	-- change the column's data type (errors), strict mode
+	-- alter_table_change_type_strict=yes
+	 
+	CREATE TABLE t1 (i1 int);
+	INSERT INTO t1 VALUES (1),(-2147483648),(2147483647);
+	 
+	ALTER TABLE t1 CHANGE i1 s1 CHAR(4);
+	 
+	In the command from line 1,
+	 
+	ERROR: ALTER TABLE .. CHANGE : changing to new domain : cast failed, current configuration doesn't allow truncation or overflow.
+	 
+	-- change the column's data type (errors)
+	-- alter_table_change_type_strict=no
+	 
+	CREATE TABLE t1 (i1 INT);
+	INSERT INTO t1 VALUES (1),(-2147483648),(2147483647);
+	 
+	ALTER TABLE t1 CHANGE i1 s1 CHAR(4);
+	 
+	SELECT * FROM t1;
+	 
+	  s1
+	======================
+	  '    '
+	  '    '
+	  '1   '
+	 
+	-- hard default values have been placed instead of signaling overflow
+
+**칼럼의 타입 변경에 따른 테이블 속성의 변경**
+
+*   타입 변경 : 시스템 파라미터 **alter_table_change_type_strict** 의 값이 no이면 다른 타입으로 값 변경을 허용하고, yes이면 허용하지 않는다. 기본값은 **no** 이며, **CAST** 연산자로 허용되는 모든 타입으로 변경이 허용된다. 객체 타입의 변경은 객체의 상위 클래스(테이블)에 의해서만 허용된다.
+
+*   **NOT NULL**
+
+    *   변경할 칼럼에 **NOT NULL** 제약 조건이 지정되지 않으면 기존 테이블에 존재하더라도 새 테이블에서 제거된다.
+    *   변경할 칼럼에 **NOT NULL** 제약 조건이 지정되면 시스템 파라미터 **alter_table_change_type_strict** 의 설정에 따라 결과가 달라진다.
+        *   **alter_table_change_type_strict** 가 yes이면 해당 칼럼의 값을 검사하여 **NULL** 이 존재하면 오류가 발생하고 변경을 수행하지 않는다.
+        *   **alter_table_change_type_strict** 가 no이면 존재하는 모든 **NULL** 값을 변경할 타입의 고정 기본값(hard default value)으로 변경한다.
+
+*   **DEFAULT** : 변경할 칼럼에 **DEFAULT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
+
+*   **AUTO_INCREMENT** : 변경할 칼럼에 **AUTO_INCREMENT** 속성이 지정되지 않으면 이 속성이 기존 테이블에 있더라도 새 테이블에서 제거된다.
+
+*   **FOREIGN KEY** : 참조되고 있거나 참조하고 있는 외래키(foreign key) 제약 조건을 지닌 칼럼은 변경할 수 없다.
+
+*   단일 칼럼 **PRIMARY KEY**
+
+    *   변경할 칼럼에 **PRIMARY KEY** 제약 조건이 지정되면, 기존 칼럼에 **PRIMARY KEY** 제약 조건이 존재하고 타입이 업그레이드되는 경우에만 **PRIMARY KEY** 가 재생성된다.
+    *   변경할 칼럼에 **PRIMARY KEY** 제약 조건이 지정되었으나 기존 칼럼에는 존재하지 않으면 **PRIMARY KEY** 가 생성된다.
+    *   기존 칼럼에는 **PRIMARY KEY** 제약 조건이 존재하나 변경할 칼럼에는 지정되지 않으면 **PRIMARY KEY** 는 유지된다.
+
+*   멀티 칼럼 **PRIMARY KEY** : 변경할 칼럼에 **PRIMARY KEY** 제약 조건이 지정되고 타입이 업그레이드되면 **PRIMARY KEY** 가 재생성된다.
+
+*   단일 칼럼 **UNIQUE KEY**
+
+    *   타입이 업그레이드되면 **UNIQUE KEY** 가 재생성된다.
+    *   기존 칼럼에 존재하고 변경할 칼럼에 지정되지 않으면 **UNIQUE KEY** 가 유지된다.
+    *   기존 칼럼에 존재하지 않고 변경할?칼럼에 지정되면 **UNIQUE KEY** 가 생성된다.
+
+*   멀티 칼럼 **UNIQUE KEY** : 해당 칼럼의?타입이 변경되면 인덱스가 재생성된다.
+
+*   유일하지 않은(non-unique) 인덱스가 있는 칼럼 : 해당 칼럼의 타입이 변경되면 인덱스가 재생성된다.
+
+*   파티션 기준 칼럼 : 테이블이 해당 칼럼에 의해 파티션되어 있으면, 칼럼을 변경할 수 없다. 파티션을 추가할 수 없다.
+
+*   클래스 계층이 있는 테이블의 칼럼 : 하위 클래스가 없는 테이블만 변경할 수 있다. 상위 클래스에서 상속받은 하위 클래스는 변경할 수 없다. 상속받은 속성은 변경할 수 없다.
+
+*   트리거와 뷰 : 트리거와 뷰는 변경할?칼럼의 정의에 따라 변경되지 않으므로 사용자가 직접 재정의해야 한다.
+
+*   칼럼 순서 : 칼럼 순서를 변경할 수 있다.
+
+*   이름 변경 : 이름이 충돌하지 않는 한 이름을 변경할 수 있다.
+
+**칼럼의 타입 변경에 따른 값의 변경**
+
+**alter_table_change_type_strict** 파라미터는 타입 변경에 따른 값의 변환을 허용하는지 여부를 결정한다. 값이 no이면 칼럼의 타입을 변경하거나 **NOT NULL** 제약 조건을 추가할 때 값이 변경될 수 있다. 기본값은 **no** 이다.
+
+**alter_table_change_type_strict** 파라미터의 값이 no이면 상황에 따라 다음과 같이 동작한다. 
+
+*   숫자 또는 문자열을 숫자로 변환 중 오버플로우 발생 : 결과 타입의 부호에 따라 음수면 최소값, 양수면 최대값으로 정해지고 오버플로우가 발생한 레코드에 대한 경고 메시지가 로그에 기록된다. 문자열은 **DOUBLE** 타입으로 변환한 후 같은 법칙을 따른다.
+
+*   문자열을 더 짧은 문자열로 변환 : 레코드는 정의한 타입의 고정 기본값(hard default value)으로 업데이트되고 경고 메시지가 로그에 기록된다.
+
+*   그 밖의 이유로 인한 변환 실패 : 레코드는 정의한 타입의 고정 기본값(hard default value)으로 업데이트되고 경고 메시지가 로그에 기록된다.
+
+**alter_table_change_type_strict** 파라미터의 값이 yes이면 위의 모든 경우에 에러 메시지를 출력하고 변경 내용을 롤백한다.
+
+**ALTER CHANGE** 문은 레코드를 업데이트하기 전에 해당 타입 변환이 가능한지 검사하지만, 특정 값은 타입 변환에 실패할 수도 있다. 예를 들어, **VARCHAR** 를 **DATE** 로 변환할 때 값의 형식이 올바르지 않으면 변환에 실패할 수 있으며, 이때에는 **DATE** 타입의 고정 기본값(hard default value)이 지정된다.
+
+고정 기본값(hard default value)은 **ALTER TABLE ... ADD COLUMN** 문에 의한 칼럼 추가 혹은 **ALTER TABLE ... CHANGE/MODIFY** 문에 의한 타입 변환으로 인해 값이 추가되거나 변경될 때 사용되는 값이다. **ADD COLUMN** 문에서는 **add_column_update_hard_default** 시스템 파라미터에 따라 동작이 달라진다.
+
+**타입별 고정 기본값**
+
++-----------+------------------+-----------------------------------------+
+| 타입      | 고정 기본값 유무 | 고정 기본값                             |
++===========+==================+=========================================+
+| INTEGER   | 유               | 0                                       |
++-----------+------------------+-----------------------------------------+
+| FLOAT     | 유               | 0                                       |
++-----------+------------------+-----------------------------------------+
+| DOUBLE    | 유               | 0                                       |
++-----------+------------------+-----------------------------------------+
+| SMALLINT  | 유               | 0                                       |
++-----------+------------------+-----------------------------------------+
+| DATE      | 유               | date'01/01/0001'                        |
++-----------+------------------+-----------------------------------------+
+| TIME      | 유               | time'00:00'                             |
++-----------+------------------+-----------------------------------------+
+| DATETIME  | 유               | datetime'01/01/0001 00:00'              |
++-----------+------------------+-----------------------------------------+
+| TIMESTAMP | 유               | timestamp'00:00:01 AM 01/01/1970' (GMT) |
++-----------+------------------+-----------------------------------------+
+| MONETARY  | 유               | 0                                       |
++-----------+------------------+-----------------------------------------+
+| NUMERIC   | 유               | 0                                       |
++-----------+------------------+-----------------------------------------+
+| CHAR      | 유               | ''                                      |
++-----------+------------------+-----------------------------------------+
+| VARCHAR   | 유               | ''                                      |
++-----------+------------------+-----------------------------------------+
+| NCHAR     | 유               | N''                                     |
++-----------+------------------+-----------------------------------------+
+| VARNCHAR  | 유               | N''                                     |
++-----------+------------------+-----------------------------------------+
+| SET       | 유               | {}                                      |
++-----------+------------------+-----------------------------------------+
+| MULTISET  | 유               | {}                                      |
++-----------+------------------+-----------------------------------------+
+| SEQUENCE  | 유               | {}                                      |
++-----------+------------------+-----------------------------------------+
+| BIGINT    | 유               | 0                                       |
++-----------+------------------+-----------------------------------------+
+| BIT       | 무               |                                         |
++-----------+------------------+-----------------------------------------+
+| VARBIT    | 무               |                                         |
++-----------+------------------+-----------------------------------------+
+| OBJECT    | 무               |                                         |
++-----------+------------------+-----------------------------------------+
+| BLOB      | 무               |                                         |
++-----------+------------------+-----------------------------------------+
+| CLOB      | 무               |                                         |
++-----------+------------------+-----------------------------------------+
+| ELO       | 무               |                                         |
++-----------+------------------+-----------------------------------------+
+
+RENAME COLUMN 절
+----------------
+
+**RENAME COLUMN** 절을 사용하여 칼럼의 이름을 변경할 수 있다. ::
+
+	ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
+	RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name
+
+*   *table_name* : 이름을 변경할 칼럼의 테이블 이름을 지정한다.
+*   *old_column_name* : 현재의 칼럼 이름을 지정한다.
+*   *new_column_name* : 새로운 칼럼 이름을 **AS** 키워드 뒤에 명시한다.
+
+**예제**
+
+.. code-block:: sql
+
+	ALTER TABLE a_tbl?RENAME COLUMN name AS name1;
+
+DROP COLUMN 절
+--------------
+
+**DROP COLUMN** 절을 사용하여 테이블에 존재하는 칼럼을 삭제할 수 있다. 삭제하고자 하는 칼럼들을 쉼표(,)로 구분하여 여러 개의 칼럼을 한 번에 삭제할 수 있다. ::
+
+	ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
+	DROP [ COLUMN | ATTRIBUTE ] column_name, ...
+
+*   *table_name* : 삭제할 칼럼의 테이블 이름을 명시한다.
+*   *column_ name* : 삭제할 칼럼의 이름을 명시한다. 쉼표로 구분하여 여러 개의 칼럼을 지정할 수 있다.
+
+**예제**
+
+.. code-block:: sql
+
+	ALTER TABLE a_tbl DROP COLUMN age1,age2,age3;
+
+DROP CONSTRAINT 절
+------------------
+
+**DROP CONSTRAINT** 절을 사용하여, 테이블에 이미 정의된 **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 제약 조건을 삭제할 수 있다. 삭제할 제약 조건 이름을 지정해야 하며, 이는 CSQL 명령어( **;schema table_name** )를 사용하여 확인할 수 있다. ::
+
+	ALTER [ TABLE | CLASS ] table_name
+	DROP CONSTRAINT constraint_name
+
+*   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
+*   *constraint_name* : 삭제할 제약 조건의 이름을 지정한다.
+
+**예제**
+
+.. code-block:: sql
+
+	ALTER TABLE a_tbl DROP CONSTRAINT pk_a_tbl_id;
+	ALTER TABLE a_tbl DROP CONSTRAINT fk_a_tbl_id;
+	ALTER TABLE a_tbl DROP CONSTRAINT u_a_tbl_id;
+
+DROP INDEX 절
+-------------
+
+**DROP INDEX** 절을 사용하여 인덱스를 삭제할 수 있다. ::
+
+	ALTER [ TABLE | CLASS ] table_name DROP [ REVERSE ] [ UNIQUE ] INDEX index_name
+
+*   **REVERSE** : 삭제하려는 인덱스가 역순 인덱스임을 지정한다.
+*   **UNIQUE** : 삭제하려는 인덱스가 고유 인덱스임을 지정한다. 고유 인덱스는 **DROP CONSTRAINT** 절로도 삭제할 수 있다.
+*   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
+*   *index_name* : 삭제할 인덱스의 이름을 지정한다.
+
+**예제**
+
+.. code-block:: sql
+
+	ALTER TABLE a_tbl DROP INDEX i_a_tbl_age;
+
+DROP PRIMARY KEY 절
+-------------------
+
+**DROP PRIMARY KEY** 절을 사용하여 테이블에 정의된 기본키 제약 조건을 삭제할 수 있다. 하나의 테이블에는 하나의 기본키만 정의될 수 있으므로 기본키 제약 조건 이름을 지정하지 않아도 된다. ::
+
+	ALTER [ TABLE | CLASS ] table_name DROP PRIMARY KEY
+
+*   *table_name* : 기본키 제약 조건을 삭제할 테이블의 이름을 지정한다.
+
+**예제**
+
+.. code-block:: sql
+
+	ALTER TABLE a_tbl DROP PRIMARY KEY;
+
+DROP FOREIGN KEY 절
+-------------------
+
+**DROP FOREIGN KEY** 절을 사용하여 테이블에 정의된 외래키 제약 조건을 모두 삭제할 수 있다. ::
+
+	ALTER [ TABLE | CLASS ] table_name DROP FOREIGN KEY constraint_name
+
+*   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
+*   *constraint_name* : 삭제할 외래키 제약 조건의 이름을 지정한다.
+
+**예제**
+
+.. code-block:: sql
+
+	ALTER TABLE a_tbl DROP FOREIGN KEY fk_a_tbl_id;
+
+DROP TABLE
+==========
+
+**DROP** 구문을 이용하여 기존의 테이블을 삭제할 수 있다. 하나의 **DROP** 구문으로 여러 개의 테이블을 삭제할 수 있으며 테이블이 삭제되면 포함된 행도 모두 삭제된다.
+**IF EXISTS** 문을 함께 사용하면 해당 테이블이 존재하지 않을 때 에러가 발생하지 않도록 할 수 있으며, 한 구문에 여러 개의 테이블을 지정할 수 있다. ::
+
+	DROP [ TABLE | CLASS ] [ IF EXISTS ] <table_specification_comma_list>
+	 
+	<table_specification_comma_list> ::=
+	<single_table_spec> | ( <table_specification_comma_list> )
+	 
+	<single_table_spec> ::=
+	|[ ONLY ] table_name
+	| ALL table_name [ ( EXCEPT table_name, ... ) ]
+
+*   *table_name* : 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
+*   **ONLY** 키워드 뒤에 수퍼클래스 이름이 명시되면, 해당 수퍼클래스만 삭제하고 이를 상속받는 서브클래스는 삭제하지 않는다.
+*   **ALL** 키워드 뒤에 수퍼클래스 이름이 지정되면, 해당 수퍼클래스 및 이를 상속받는 서브클래스를 모두 삭제한다.
+*   **EXCEPT** 키워드 뒤에 삭제하지 않을 서브클래스 리스트를 명시할 수 있다.
+
+**예제**
+
+.. code-block:: sql
+
+	DROP TABLE history ;
+	CREATE TABLE t (i INT);
+	 
+	-- DROP TABLE IF EXISTS
+	DROP TABLE IF EXISTS history, t;
+	2 command(s) successfully processed.
+	 
+	SELECT * FROM t;
+	In line 1, column 10, ERROR: Unknown class "t".
+
+RENAME TABLE
+============
+
+**RENAME TABLE** 구문을 사용하여 테이블 이름을 변경할 수 있으며, 여러 개의 테이블 이름을 변경하는 경우 테이블 이름 리스트를 명시할 수 있다. ::
+
+	RENAME  [ TABLE | CLASS | VIEW | VCLASS ] old_table_name { AS | TO } new_table_name [, old_table_name { AS | TO } new_table_name, ... ]
+
+*   *old_table_name* : 변경할 테이블의 이름을 지정한다.
+*   *new_table_name* : 새로운 테이블 이름을 지정한다.
+
+**예제**
+
+.. code-block:: sql
+
+	RENAME TABLE a_tbl AS aa_tbl;
+	RENAME TABLE a_tbl TO aa_tbl, b_tbl TO bb_tbl;
+
+.. warning::
+
+	테이블의 소유자, **DBA**, **DBA** 의 멤버만이 테이블의 이름을 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 `권한 부여 <#syntax_syntax_access_authority_h_4540>`_ 참조).

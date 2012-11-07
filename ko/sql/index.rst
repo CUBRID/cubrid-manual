@@ -39,7 +39,7 @@ CUBRID SQL 설명서
 	function/index.rst
 	query/index.rst
 	transaction.rst
-	autuorization.rst
+	authorization.rst
 	tuning.rst
 	trigger.rst
 	jsp.rst

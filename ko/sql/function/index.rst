@@ -2,8 +2,6 @@
 연산자와 함수
 *************
 
-:func:`BIT_AND`
-
 .. toctree::
 	:maxdepth: 2
 	
@@ -23,3 +21,5 @@
 	information_fn.rst
 	encryption_fn.rst
 	condition_fn.rst
+
+	

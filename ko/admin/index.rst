@@ -15,11 +15,9 @@
 *   데이터베이스 백업 및 복구
 *   CUBRID HA
 
-**cubrid**
-**유틸리티**
+**cubrid 유틸리티**
 
-**cubrid**
-유틸리티는 CUBRID 서비스를 통합 관리할 수 있는 기능을 제공하며, CUBRID 서비스 프로세스를 관리하는 서비스 관리 유틸리티와, 데이터베이스를 관리하는 데이터베이스 관리 유틸리티로 구분된다.
+**cubrid** 유틸리티는 CUBRID 서비스를 통합 관리할 수 있는 기능을 제공하며, CUBRID 서비스 프로세스를 관리하는 서비스 관리 유틸리티와, 데이터베이스를 관리하는 데이터베이스 관리 유틸리티로 구분된다.
 
 서비스 관리 유틸리티는 다음과 같다.
 
@@ -27,199 +25,98 @@
 
     *   cubrid service
 
-
-
-
-
 *   서버 유틸리티: 서버 프로세스를 구동 및 관리한다.
 
     *   cubrid server
-
-
-
-
-
+	
 *   브로커 유틸리티: 브로커 프로세스 및 응용서버(CAS) 프로세스를 구동 및 관리한다.
 
     *   cubrid broker
-
-
-
-
-
 *   매니저 유틸리티: 매니저 서버 프로세스를 구동 및 관리한다.
 
     *   cubrid manager
-
-
-
-
-
+	
 *   HA 유틸리티: HA 관련 프로세스를 구동 및 관리한다.
 
     *   cubrid heartbeat
 
-
-
-
-
-자세한 설명은
-`CUBRID 서비스 <#admin_admin_service_conf_registe_6298>`_
-를 참조한다.
+자세한 설명은 CUBRID 서비스를 참조한다.
 
 데이터베이스 관리 유틸리티는 다음과 같다.
 
 *   데이터베이스 생성/볼륨 추가/삭제 유틸리티
 
     *   cubrid createdb
-
-
-
+	
     *   cubrid addvoldb
-
-
-
+	
     *   cubrid deletedb
-
-
-
-
-
+	
 *   데이터베이스 이름 변경/호스트 변경/복사/설치 유틸리티
 
     *   cubrid renamedb
-
-
-
+	
     *   cubrid alterdbhost
-
-
-
+	
     *   cubrid copydb
-
-
-
+	
     *   cubrid installdb
-
-
-
-
-
+	
 *   데이터베이스 공간 확인/공간 정리 유틸리티
-
     *   cubrid spacedb
-
-
-
+	
     *   cubrid compactdb
-
-
-
-
-
+	
 *   데이터베이스 질의 계획 확인/최적화 유틸리티
-
     *   cubrid plandump
-
-
-
+	
     *   cubrid optimizedb
-
-
-
+	
     *   cubrid statdump
-
-
-
-
-
+	
 *   데이터베이스 잠금 확인/트랜잭션 제거/일관성 확인 유틸리티
 
     *   cubrid lockdb
-
-
-
+	
     *   cubrid killtran
-
-
-
+	
     *   cubrid checkdb
-
-
-
-
-
+	
 *   데이터베이스 진단/파라미터 출력 유틸리티
 
     *   cubrid diagdb
-
-
-
+	
     *   cubrid paramdump
-
-
-
-
-
+	
 *   데이터베이스 적재 유틸리티
 
     *   cubrid loaddb
-
-
-
+	
     *   cubrid unloaddb
-
-
-
-
-
+	
 *   데이터베이스 백업/복구 유틸리티
 
     *   cubrid backupdb
 
-
-
     *   cubrid restoredb
-
-
-
-
 
 *   HA 유틸리티
 
     *   cubrid changemode
 
-
-
     *   cubrid copylogdb
-
-
 
     *   cubrid applylogdb
 
-
-
     *   cubrid applyinfo
-
-
-
-
 
 *   로캘 유틸리티
 
     *   cubrid genlocale
 
-
-
     *   cubrid dumplocale
 
-
-
-
-
-자세한 설명은
-`데이터베이스 관리 <#admin_admin_service_server_comma_427>`_
-를 참조한다.
+자세한 설명은 `데이터베이스 관리 <#admin_admin_service_server_comma_427>`_를 참조한다.
 
 프롬프트에서 **cubrid** 를 입력하면 다음과 같은 구문 안내문이 출력된다. ::
 
@@ -266,18 +163,11 @@
 	cubrid is a tool for DBMS.
 	For additional information, see >http://www.cubrid.com
 
-**참고**
-**사항**
+.. note::
 
-Windows Vista 이상 버전에서
-**cubrid**
-유틸리티를 사용하여 서비스를 제어하려면 명령 프롬프트 창을 관리자 권한으로 실행하여 사용하는 것을 권장한다.
-
-명령 프롬프트 창을 관리자 권한으로 구동하지 않고
-**cubrid**
-유틸리티를 사용하면 UAC(User Account Control) 대화 상자를 통하여 관리자 권한으로 수행할 수는 있으나 수행 결과 메시지를 확인할 수 없다.
-
-Windows Vista 이상 버전에서 명령 프롬프트 창을 관리자 권한으로 실행하려면 [시작] > [모든 프로그램] > [보조 프로그램] > [명령 프롬프트]를 마우스 오른쪽 버튼으로 클릭하여 [관리자 권한으로 실행]을 선택한다. 권한 상승을 확인하는 대화 상자가 나타났을 때 [예]를 클릭하면 명령 프롬프트가 관리자 권한으로 실행된다.
+	Windows Vista 이상 버전에서 **cubrid** 유틸리티를 사용하여 서비스를 제어하려면 명령 프롬프트 창을 관리자 권한으로 실행하여 사용하는 것을 권장한다. 명령 프롬프트 창을 관리자 권한으로 구동하지 않고 **cubrid** 유틸리티를 사용하면 UAC(User Account Control) 대화 상자를 통하여 관리자 권한으로 수행할 수는 있으나 수행 결과 메시지를 확인할 수 없다.
+	
+	Windows Vista 이상 버전에서 명령 프롬프트 창을 관리자 권한으로 실행하려면 [시작] > [모든 프로그램] > [보조 프로그램] > [명령 프롬프트]를 마우스 오른쪽 버튼으로 클릭하여 [관리자 권한으로 실행]을 선택한다. 권한 상승을 확인하는 대화 상자가 나타났을 때 [예]를 클릭하면 명령 프롬프트가 관리자 권한으로 실행된다.
 
 .. toctree::
 	:maxdepth: 2

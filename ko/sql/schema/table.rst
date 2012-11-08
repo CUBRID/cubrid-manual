@@ -112,6 +112,7 @@ CREATE TABLE
 	CREATE TABLE manager2 (full_name VARCHAR(40), age INT );
 
 .. warning::
+
 	*   칼럼 이름의 첫 글자는 반드시 알파벳이어야 한다.
 	*   칼럼 이름은 테이블 내에서 고유해야 한다.
 
@@ -140,6 +141,7 @@ CREATE TABLE
 +---------------+-------------+
 
 .. note::
+
 	CUBRID 9.0 미만 버전에서는 테이블 생성 시 **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** 칼럼의 **DEFAULT** 값을 **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** 로 지정하면, **CREATE TABLE** 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 **INSERT** 되는 시점의 값을 입력하려면 **INSERT** 구문의 **VALUES** 절에 해당 함수를 입력해야 했다.
 
 **예제 1**

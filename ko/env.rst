@@ -83,7 +83,7 @@ OS 환경 변수 및 Java 환경 변수
 
 Windows 환경에서 CUBRID 시스템을 설치한 경우는 설치 프로그램이 필요한 환경 변수를 자동으로 설정한다. [시스템 등록 정보] 대화 상자의 [고급] 탭에서 [환경 변수]를 클릭하면 나타나는 [환경 변수] 대화 상자에서 확인할 수 있으며, [편집] 버튼을 통해 변경할 수 있다. Windows?환경에서 환경 변수를 변경하는 방법에 대한 상세한 정보는 Windows?도움말을 참고한다.
 
-.. image:: images/image4.png
+.. image:: /images/image4.png
 
 **Linux 환경인 경우**
 
@@ -202,7 +202,7 @@ Windows 환경에서는 다음과 같은 방법으로 CUBRID 서비스를 시작
 
 *   [제어판] > [성능 및 유지 관리] > [관리도구] > [서비스]에 등록된 CUBRIDService를 선택하여 시작하거나 중지한다.
 
-	.. image:: images/image5.png
+	.. image:: /images/image5.png
 
 *   시스템 트레이에서 CUBRID Service Tray를 마우스 오른쪽 버튼으로 클릭한 후, CUBRID를 시작하려면 [Service Start]를 선택하고 중지하려면 [Service Stop]을 선택한다. 시스템 트레이에서 [Service Start]/[Service Stop] 메뉴를 선택하면, 명령어 프롬프트 창에서
     **cubrid service start** / **cubrid service stop** 을 실행했을 때와 같은 동작을 수행하며, **cubrid.conf** 의 **service** 파라미터에 설정한 프로세스들을 구동/중지한다.

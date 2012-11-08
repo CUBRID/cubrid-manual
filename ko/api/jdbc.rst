@@ -60,13 +60,13 @@ Java 설치 후 [내 컴퓨터]를 마우스 오른쪽 버튼 클릭하여 [속�
 
 [시스템 변수]에서 [새로 만들기]를 선택한다. [변수 이름]에 **JAVA_HOME** 을 입력하고, 변수 값으로 Java 설치 경로(예: C:\Program Files\Java\jdk1.6.0_16)를 입력한 후 [확인]을 클릭한다.
 
-|image51_png|
+.. image:: /images/image51.png
 
 [시스템 변수] 중 Path를 선택하고 [편집]을 클릭한다. [변수 값]에
 **%JAVA_HOME%\bin**
 를 추가하고 [확인]을 클릭한다.
 
-|image52_png|
+.. image:: /images/image52.png
 
 위의 방법을 사용하지 않고 다음과 같이 셸에서 **JAVA_HOME** 과 **PATH** 환경 변수를 설정할 수도 있다. ::
 
@@ -89,7 +89,7 @@ JDBC를 사용하려면 CUBRID JDBC 드라이버가 존재하는 경로를 환�
 
 CUBRID JDBC 드라이버(**cubrid_jdbc.jar**)는 CUBRID 설치 디렉터리 아래의 jdbc 디렉터리에 위치한다.
 
-|image53_gif|
+.. image:: /images/image53.gif
 
 **Windows 환경에서 CLASSPATH 환경 변수 설정** ::
 

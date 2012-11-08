@@ -112,11 +112,11 @@ OLE DB 드라이버에 대한 최신 정보를 확인하려면
 
 Windows용 CUBRID OLE DB Provider를 올바르게 설치하였다면 다음?그림과 같이 [데이터 연결 속성] 대화 상자의 공급자 목록에 'CUBRID OLE DB Provider'가 나타난다.
 
-|image84_png|
+.. image:: /images/image84.png
 
 'CUBRID OLE DB Provider'를 선택한 뒤 [다음] 버튼을 클릭하면 다음과 같이 [연결] 탭이 나타난다. [연결] 탭에서 원하는 연결 속성을 설정한다.
 
-|image85_png|
+.. image:: /images/image85.png
 
 *   **데이터 원본**
     : CUBRID 데이터베이스의 이름을 입력한다.
@@ -140,13 +140,13 @@ Windows용 CUBRID OLE DB Provider를 올바르게 설치하였다면 다음?그�
 
 연결 속성을 모두 설정한 후 [모두] 탭을 누른다.
 
-|image86_png|
+.. image:: /images/image86.png
 
 [모두] 탭을 클릭하면 현재 설정한 각각의 항목 값을 확인할 수 있다. 설정 값을 편집하려면 값을 편집하려는 항목을 더블 클릭한다. [속성 값 편집] 대화 상자가 나타나면 원하는 값을 입력한 뒤 [확인]을 누른다. 위 그림은 [Port] 번호는 '31000', [Fetch Size]는 '100'으로 설정한 예이다.
 
 모든 설정을 마친 뒤, [연결] 탭에서 [연결 테스트] 버튼을 클릭하면 연결이 제대로 되는지 테스트해 볼 수 있다.
 
-|image87_png|
+.. image:: /images/image87.png
 
 **연결**
 **문자열(connection string)**

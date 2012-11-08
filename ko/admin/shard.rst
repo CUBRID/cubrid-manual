@@ -69,7 +69,7 @@ CUBRID SHARD 주요 기능
 
 CUBRID SHARD는 응용 프로그램과 물리적 또는 논리적으로 분할된 shard의 중간에 위치하는 미들웨어(middleware)로서, 동시에 다수의 응용 프로그램과의 연결을 유지하며, 응용의 요청이 있는 경우 적절한 shard로 전달하여 처리하고 결과를 응용에 반환하는 기능을 수행한다.
 
-|image40_png|
+.. image:: /images/image40.png
 
 일반적으로 사용되는 JDBC(Java Database Connectivity)나 CUBRID C 인터페이스인 CCI(CUBRID C Interface)를 이용하여
 CUBRID SHARD로 연결하여 응용의 요청을 처리할 수 있으며, 별도의 드라이버나 프레임워크가 필요 없기 때문에 기존 응용의 변경을 최소화할 수 있다.
@@ -77,7 +77,7 @@ CUBRID SHARD로 연결하여 응용의 요청을 처리할 수 있으며, 별도
 CUBRID SHARD
 middleware는 broker/proxy/cas 세 개의 프로세스로 구성되며, 각 프로세스의 간략한 기능은 다음과 같다.
 
-|image41_png|
+.. image:: /images/image41.png
 
 *   **shard broker**
 
@@ -211,7 +211,7 @@ SELECT * FROM student WHERE age > 17 /*+ shard_id(3) */
 
 다음은 사용자 질의 요청이 수행되는 과정이다.
 
-|image42_png|
+.. image:: /images/image42.png
 
 *   응용 프로그램은 JDBC 인터페이스를 통해
     CUBRID SHARD로 질의 처리를 요청하며, 실제로 질의가 수행될 shard DB를 지정하기 위해 SQL 구문 내에
@@ -226,11 +226,11 @@ SELECT * FROM student WHERE age > 17 /*+ shard_id(3) */
 
 바인드 변수에 설정된 shard SQL 힌트는 다음과 같다.
 
-|image43_png|
+.. image:: /images/image43.png
 
 리터럴 값에 지정된 shard SQL 힌트는 다음과 같다.
 
-|image44_png|
+.. image:: /images/image44.png
 
 **질의**
 **분석**
@@ -243,7 +243,7 @@ SELECT * FROM student WHERE age > 17 /*+ shard_id(3) */
 
 질의를 분석하고 실제로 요청을 처리할 shard DB를 선택하는 과정은 다음과 같다.
 
-|image45_png|
+.. image:: /images/image45.png
 
 *   사용자로부터 수신한 SQL 질의를 내부에서 처리하기 위한 형태로 다시 작성된다(query rewrite).
 
@@ -294,7 +294,7 @@ shard_key 바인드 변수의 값이 100인 경우, "기본 hash 함수(shard_ke
 
 질의 수행 결과를 반환하는 과정은 다음과 같다.
 
-|image46_png|
+.. image:: /images/image46.png
 
 *   shard DB #1 에서 수행한 처리 결과를 수신하여, 요청한 응용으로 결과를 반환한다.
 
@@ -313,7 +313,7 @@ DB를 사용하는 경우
 CUBRID SHARD
 의 구조이다.
 
-|image47_png|
+.. image:: /images/image47.png
 
 **CUBRID SHARD**
 **with MySQL**
@@ -322,7 +322,7 @@ CUBRID SHARD
 CUBRID SHARD
 의 구조이다.
 
-|image48_png|
+.. image:: /images/image48.png
 
 **제약**
 **사항**
@@ -356,7 +356,7 @@ CUBRID SHARD는 아래 그림과 같이 4개의
 CUBRID SHARD
 DB로 구성되었으며, 응용은 JDBC 인터페이스를 사용하여 사용자 요청을 처리한다.
 
-|image49_png|
+.. image:: /images/image49.png
 
 **shard DB**
 **및**
@@ -938,7 +938,7 @@ sh> $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student 
 
 CUBRID SHARD는 미들웨어로서 아래의 그림과 같이 shard broker, shard proxy, shard CAS 프로세스로 구성된다.
 
-|image50_png|
+.. image:: /images/image50.png
 
 CUBRID SHARD의 모든 프로세스의 실행에 필요한 기본적인 설정은
 **shard.conf**

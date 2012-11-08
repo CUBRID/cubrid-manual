@@ -22,7 +22,7 @@ CUBRID의 HA 기능은 shared-nothing 구조이며, 액티브 서버(active serv
 
 CUBRID HA 기능은 위 두 단계를 수행하여 액티브 서버와 스탠바이 서버에 항상 동기화된 데이터를 유지한다. 따라서, 서비스를 제공 중이던 마스터 노드(master node)에 예상치 못한 장애가 발생하여 액티브 서버가 정상적으로 동작하지 못하면 슬레이브 노드(slave node)의 스탠바이 서버가 액티브 서버를 대신하여 중단 없는 서비스를 제공할 수 있다. CUBRID HA 기능은 시스템과 CUBRID의 상태를 실시간으로 감시하고 장애가 발생하면 자동 failover를 수행하기 위해 heartbeat 메시지를 사용한다.
 
-|image13_png|
+.. image:: /images/image13.png
 
 CUBRID HA 기본 개념
 ===================
@@ -56,7 +56,7 @@ CUBRID HA 그룹은 위와 같은 노드들로 이루어지며, 그룹의 멤버
 
 노드에는 마스터 프로세스(cub_master), 데이터베이스 서버 프로세스(cub_server), 복제 로그 복사 프로세스(copylogdb) 및 복제 로그 반영 프로세스(applylogdb) 등이 포함된다.
 
-|image14_png|
+.. image:: /images/image14.png
 
 **프로세스**
 
@@ -91,7 +91,7 @@ CUBRID HA 노드는 하나의 마스터 프로세스(cub_master), 하나 이상�
 
 
 
-|image15_png|
+.. image:: /images/image15.png
 
 *   **복제 로그 반영 프로세스(applylogdb)**
     : 복제 로그 복사 프로세스에 의해 복사된 로그를 노드에 반영한다. 반영한 복제 정보는 내부 카탈로그(db_ha_apply_info)에 저장하며, 이 정보는
@@ -100,7 +100,7 @@ CUBRID HA 노드는 하나의 마스터 프로세스(cub_master), 하나 이상�
 
 
 
-|image16_png|
+.. image:: /images/image16.png
 
 **서버**
 
@@ -122,7 +122,7 @@ CUBRID HA 노드는 하나의 마스터 프로세스(cub_master), 하나 이상�
 **cubrid changemode**
 유틸리티를 통해 변경할 수 있다.
 
-|image17_png|
+.. image:: /images/image17.png
 
 *   **active**
     : 일반적으로 마스터 노드에서 실행 중인 서버들은 active 상태이다. 읽기, 쓰기 등 모든 서비스를 제공한다.
@@ -158,7 +158,7 @@ HA 기능을 제공하기 위한 핵심 구성 요소로, 마스터 노드, 슬�
 
 마스터 노드의 장애가 감지되면 슬레이브 노드로 failover가 이루어진다.
 
-|image18_png|
+.. image:: /images/image18.png
 
 **failover와 failback**
 
@@ -166,7 +166,7 @@ failover란, 마스터 노드에 장애가 발생하여 서비스를 제공할 �
 
 failback은 마스터 노드였던 장애 노드가 복구되면 자동으로 다시 마스터 노드가 되는 것이며, CUBRID HA는 서버의 failback을 지원하지 않는다.
 
-|image19_png|
+.. image:: /images/image19.png
 
 heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어나므로, 네트워크가 불안정한 환경에서는 장애가 발생하지 않아도 failover가 일어날 수 있다. 이와 같은 상황에서 failover가 일어나는 것을 막기 위해
 **ha_ping_hosts**
@@ -220,7 +220,7 @@ heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어
 
 
 
-|image20_png|
+.. image:: /images/image20.png
 
 **Read Only**
 
@@ -246,7 +246,7 @@ heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어
 
 
 
-|image21_png|
+.. image:: /images/image21.png
 
 **Slave Only**
 
@@ -263,7 +263,7 @@ heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어
 
 
 
-|image22_png|
+.. image:: /images/image22.png
 
 **Preferred Host Read Only**
 
@@ -289,7 +289,7 @@ heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어
 
 
 
-|image23_png|
+.. image:: /images/image23.png
 
 **CUBRID HA**
 **기능**
@@ -305,7 +305,7 @@ heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어
 `cubrid_broker.conf <#admin_admin_ha_conf_broker_htm>`_
 를 참고한다.
 
-|image24_png|
+.. image:: /images/image24.png
 
 **서버**
 **failback**
@@ -366,7 +366,7 @@ CUBRID는 3-tier DBMS로, 응용 프로그램과 데이터베이스 서버를 �
 *broker B1*
 에 재접속하게 된다.
 
-|image25_png|
+.. image:: /images/image25.png
 
 다음은 마스터 노드, 슬레이브 노드의 각 장비 내에 Read Write(RW) 브로커와 Read Only(RO) 브로커를 구성한 예이다. app1과 app2 URL의 첫 번째 접속은 각각
 *broker A1*
@@ -384,7 +384,7 @@ CUBRID는 3-tier DBMS로, 응용 프로그램과 데이터베이스 서버를 �
 *nodeB*
 를 포함한 장비의 브로커에 접속한다.
 
-|image26_png|
+.. image:: /images/image26.png
 
 다음은 브로커 장비를 별도로 구성하여 Read Write 브로커 한 개, Preferred Host Read Only 브로커 두 개를 두고, 한 개의 마스터 노드와 두 개의 슬레이브 노드를 구성한 예이다. Preferred Host Read Only 브로커들은 각각
 *nodeB*
@@ -392,7 +392,7 @@ CUBRID는 3-tier DBMS로, 응용 프로그램과 데이터베이스 서버를 �
 *nodeC*
 에 연결함으로써 읽기 부하를 분산하였다.
 
-|image27_png|
+.. image:: /images/image27.png
 
 **브로커**
 **failover**
@@ -414,7 +414,7 @@ CUBRID는 3-tier DBMS로, 응용 프로그램과 데이터베이스 서버를 �
 
 CUBRID HA는 CUBRID HA 그룹에 포함된 모든 노드에 트랜잭션 로그를 복사하고 이를 반영함으로써 CUBRID HA 그룹 내의 모든 노드를 동일한 DB로 유지한다. CUBRID HA의 로그 복사 구조는 마스터 노드와 슬레이브 노드 사이의 상호 복사 형태로, 전체 로그의 양이 많아지는 단점이 있으나 체인 형태의 복사 구조보다 구성 및 장애 처리 측면에서 유연하다는 장점이 있다.
 
-|image28_png|
+.. image:: /images/image28.png
 
 트랜잭션 로그를 복사하는 모드는
 **SYNC**
@@ -454,7 +454,7 @@ ASYNC 모드는 로그 복제로 인한 커밋 수행 시간 지연은 거의 �
 
 CUBRID HA를 처음 접하는 사용자가 CUBRID HA를 쉽게 사용할 수 있도록 아래 그림과 같이 간단하게 구성된 CUBRID HA를 설정하는 과정을 설명한다.
 
-|image29_png|
+.. image:: /images/image29.png
 
 **사양**
 
@@ -1994,7 +1994,7 @@ CUBRID HA 고유의 기능인 장애 시 무중단(nonstop) 서비스 기능에 
 **설정**
 **예시**
 
-|image30_png|
+.. image:: /images/image30.png
 
 HA 기본 구성의 각 노드는 다음과 같이 설정한다.
 
@@ -2086,7 +2086,7 @@ testdb ????/home/cubrid/DB/testdb1 ??nodeA:nodeB ??/home/cubrid/DB/testdb/log fi
 
 이와 같은 구성에서 트랜잭션 로그의 이동 경로를 중심으로 살펴보면 다음과 같다.
 
-|image31_png|
+.. image:: /images/image31.png
 
 **다중 슬레이브 노드 구성**
 
@@ -2110,7 +2110,7 @@ HA로 구성된 노드 수가 많으므로?CUBRID HA 그룹 내의 여러 노드
 **설정**
 **예시**
 
-|image32_png|
+.. image:: /images/image32.png
 
 다중 슬레이브 구성의 각 노드는 다음과 같이 설정한다.
 
@@ -2247,7 +2247,7 @@ Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA:33000:tes
 
 이와 같은 구성에서 트랜잭션 로그의 이동 경로를 중심으로 살펴보면 다음과 같다.
 
-|image33_png|
+.. image:: /images/image33.png
 
 **부하 분산 구성**
 
@@ -2261,7 +2261,7 @@ Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA:33000:tes
 **설정**
 **예시**
 
-|image34_png|
+.. image:: /images/image34.png
 
 부하 분산 구성의 각 노드는 다음과 같이 설정한다.
 
@@ -2476,7 +2476,7 @@ Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeC:33000:tes
 
 이와 같은 구성에서 트랜잭션 로그의 이동 경로를 중심으로 살펴보면 다음과 같다.
 
-|image35_png|
+.. image:: /images/image35.png
 
 **다중 스탠바이 서버 구성**
 
@@ -2484,7 +2484,7 @@ Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeC:33000:tes
 
 매우 작은 서비스에서 슬레이브 노드로 읽기 부하를 받지 않아도 되는 경우를 위한 것으로, CUBRID 서비스의 가용성만을 위한 구성이다. 따라서 failover 후 장애가 발생했던 마스터 노드가 복구되면 부하를 다시 마스터 노드로 옮겨 오도록 하여 슬레이브 노드들이 들어있는 서버의 부하를 최소화해야 한다.
 
-|image36_png|
+.. image:: /images/image36.png
 
 **노드**
 **설정**
@@ -3654,7 +3654,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
 
 다음은 복제 재구축 원본 노드를 마스터 노드로 하여, 마스터 노드로부터 슬레이브 노드를 재구축하는 예이다.
 
-|image37_png|
+.. image:: /images/image37.png
 
 *   마스터 노드 호스트 명:
     *nodeA*
@@ -5024,7 +5024,7 @@ CUBRID 9.0
 
 수평 분할(horizontal partitioning)이란 스키마가 동일한 데이터를 행을 기준으로 두 개 이상의 테이블에 나누어 저장하는 디자인을 말한다. 예를 들어 'User Table'을 동일 스키마의 13세 미만의 유저를 저장하는 'User Table #0'과 13세 이상의 유저를 저장하는 'User Table #1'로 분할하여 사용할수 있다. 수평 분할로 인해 각 테이블의 데이터와 인덱스의 크기가 감소하고 작업 동시성이 늘어 성능 향상을 기대할 수 있다. 수평 분할은 일반적으로 하나의 테이터베이스 안에서 이루어진다. 수평 분할로 인해 각 테이블의 데이터와 인덱스의 크기가 감소하기 때문에 성능 향상을 기대할 수 있다.
 
-|image38_png|
+.. image:: /images/image38.png
 
 **database sharding**
 
@@ -5032,4 +5032,4 @@ database sharding은 물리적으로 다른 데이터베이스에 데이터를 �
 
 분할된 각 데이터베이스를 shard 또는 database shard라고 부른다.
 
-|image39_png|
+.. image:: /images/image39.png

@@ -110,7 +110,7 @@ CUBRID ODBC 드라이버는 CCI API를 기반으로 작성되었으므로, CCI A
 
 CUBRID ODBC Driver는 CUBRID 설치 시 자동으로 설치되며, [제어판] > [관리 도구] > [데이터 원본(ODBC)]을 실행하면 [드라이버] 탭에서 확인할 수 있다.
 
-|image77_gif|
+.. image:: /images/image77.gif
 
 **DNS**
 **설정**
@@ -119,11 +119,11 @@ CUBRID ODBC Driver가 확인되었다면 응용 프로그램에서 접속하려�
 **CUBRID Driver**
 를 선택하고 [마침] 버튼을 클릭한다.
 
-|image78_gif|
+.. image:: /images/image78.gif
 
 [Config CUBRID Data Sources] 대화 상자가 나타나면 다음과 같은 내용을 입력한다.
 
-|image79_png|
+.. image:: /images/image79.png
 
 *   **DSN**
     : 데이터 원본의 이름을 설정한다.
@@ -159,7 +159,7 @@ CUBRID ODBC Driver가 확인되었다면 응용 프로그램에서 접속하려�
 
 
 
-|image80_png|
+.. image:: /images/image80.png
 
 *   **FETCH_SIZE**
     : ODBC 드라이버가 내부적으로 사용하는 CCI 라이브러리의
@@ -170,7 +170,7 @@ CUBRID ODBC Driver가 확인되었다면 응용 프로그램에서 접속하려�
 
 위와 같이 입력한 후 [확인]을 클릭하면 다음과 같이 [User Data Sources]에 데이터 원본이 추가된 것을 확인할 수 있다.
 
-|image81_png|
+.. image:: /images/image81.png
 
 **DSN을**
 **사용하지**
@@ -303,7 +303,7 @@ ODBC 드라이버에 대한 최신 정보를 확인하려면
 **프로그램**
 
 ASP 예제를 실행할 가상 디렉터리의 '기본 웹 사이트' 항목에서 마우스 오른쪽 버튼을 클릭한 뒤 [속성]을 클릭한다.
-|image82_png|
+.. image:: /images/image82.png
 ?
 
 위의 그림에서
@@ -483,7 +483,7 @@ Set DBConn = Server.CreateObject("ADODB.Connection")
 
 http://localhost/ASP수행폴더/cubrid.asp에 접속하면 수행 결과를 확인할 수 있다. 위의 ASP 예제 코드를 실행하면 다음과 같은 결과를 출력한다. 해당 항목에 알맞은 값을 넣고 Query 항목에 질의문을 입력하고 [실행하기]를 클릭하면 하단에 질의 문의 결과가 출력된다.
 
-|image83_png|
+.. image:: /images/image83.png
 ?
 
 **참고**

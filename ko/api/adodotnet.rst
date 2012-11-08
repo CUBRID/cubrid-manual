@@ -65,7 +65,7 @@ CUBRID ADO.NET Data Provider를 가장 간단하게 설치하는 방법은 CUBRI
 `http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx <http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx>`_
 )를 사용하는 것이다. 필요한 네임스페이스는 다음과 같이 import한다.
 
-|image88_png|
+.. image:: /images/image88.png
 
 **참고**
 ADO.NET 드라이버에 대한 최신 정보를 확인하려면

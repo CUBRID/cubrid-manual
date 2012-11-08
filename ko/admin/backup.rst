@@ -373,7 +373,7 @@ cubrid backupdb --no-check demodb
 
 다음은 증분 백업에 관한 예시로서, 이를 참조하여 백업 수준에 관해 상세하게 살펴보기로 한다.
 
-|image11_png|
+.. image:: /images/image11.png
 ?
 
 *   **전체 백업(백업 수준 0)**
@@ -946,7 +946,7 @@ Database Volume name: /local1/testing/demodb_bkvinf
 *demodb*
 를 복구하는 것으로 가정한다.
 
-|image12_png|
+.. image:: /images/image12.png
 
 #.  
     *   

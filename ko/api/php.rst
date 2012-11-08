@@ -288,7 +288,7 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 
 
 
-|image56_png|
+.. image:: /images/image56.png
 
 **시스템 환경 변수 설정**
 
@@ -618,7 +618,7 @@ VC9 프로젝트 속성에서 [Linker] > [General]을 선택하면 [Additional L
 **$(PHPRC)**
 가 사용되는 것을 볼 수 있다.
 
-|image57_png|
+.. image:: /images/image57.png
 
 *   PHP 5.3 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 5.3 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수
     **%PHP5_SRC%**
@@ -630,7 +630,7 @@ VC9 프로젝트 속성에서 [C/C++] > [General]을 선택하면 [Additional Li
 **$(PHP5_SRC)**
 가 사용되는 것을 볼 수 있다.
 
-|image58_png|
+.. image:: /images/image58.png
 
 *   CUBRID PHP 드라이버 소스코드:
     `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_
@@ -654,13 +654,13 @@ PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트
 
 
 
-|image59_png|
+.. image:: /images/image59.png
 
 *   [Property Page] 대화 상자에서 [Configuration Manager]을 클릭한다. [Project context]의 [Configuration]에서 네 가지 설정(Release_TS, Release_NTS, Debug_TS and Debug_NTS) 중 원하는 값을 선택하고 [닫기]를 클릭한다.
 
 
 
-|image60_png|
+.. image:: /images/image60.png
 
 *   설정을 마친 후에는 [OK]를 클릭한 후, <F7> 키를 눌러 컴파일한다.
 
@@ -734,7 +734,7 @@ VC6 프로젝트의 [Project Settings]을 열면 [Link] 탭의 [Additional libra
 **$(PHPRC)**
 가 사용되는 것을 볼 수 있다.
 
-|image61_png|
+.. image:: /images/image61.png
 
 *   PHP 5.2/5.3 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수
     **%PHP5_SRC%**
@@ -746,7 +746,7 @@ VC6 프로젝트의 [Project Settings]을 열면 [C/C++] 탭의 [Additional incl
 **$(PHP5_SRC)**
 가 사용되는 것을 볼 수 있다.
 
-|image62_png|
+.. image:: /images/image62.png
 
 *   CUBRID PHP 드라이버 소스코드:
     `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_
@@ -766,13 +766,13 @@ PHP 5.3 소스코드로 CUBRID PHP 드라이버를 빌드한다면, Windows에�
 
 
 
-|image63_png|
+.. image:: /images/image63.png
 
 *   네 가지 프로젝트 설정(Win32 Release_TS, Win32 Release, Win32 Debug_TS and Win32 Debug) 중에서 원하는 설정을 선택하고 [OK]를 클릭한다.
 
 
 
-|image64_png|
+.. image:: /images/image64.png
 
 *   <F7> 키를 눌러 소스코드를 컴파일한다.
 
@@ -879,14 +879,14 @@ PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트
 
 
 
-|image65_png|
+.. image:: /images/image65.png
 
 *   **setenv /x64 /release**
     을 실행한다.
 
 
 
-|image66_png|
+.. image:: /images/image66.png
 
 *   PHP 5.3 소스코드 디렉터리로 이동한 후
     **buildconf**
@@ -896,13 +896,13 @@ PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트
 
 
 
-|image67_png|
+.. image:: /images/image67.png
 
 또는 PHP 5.3 소스코드에서
 **buildconf.bat**
 파일을 실행해도 같은 동작을 수행한다.
 
-|image68_png|
+.. image:: /images/image68.png
 
 *   PHP 프로젝트를 설정하기 위해서
     **configure**
@@ -910,9 +910,9 @@ PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트
 
 
 
-|image69_png|
+.. image:: /images/image69.png
 
-|image70_png|
+.. image:: /images/image70.png
 
 **CUBRID PHP 드라이버 빌드**
 
@@ -930,7 +930,7 @@ PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트
 
 
 
-|image71_png|
+.. image:: /images/image71.png
 
 *   [Configuration Manager] 대화 상자의 [Active solution configuration]에는 네 가지 설정(Release_TS, Release_NTS, Debug_TS and Debug_NTS)만 보인다. x64 CUBRID PHP 드라이버를 빌드하려면 새로운 설정을 생성해야 하므로
     **New**
@@ -938,7 +938,7 @@ PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트
 
 
 
-|image72_png|
+.. image:: /images/image72.png
 
 *   [New Solution Configuration] 대화상자에서 새로운 설정의 이름(예: Release_TS_x64)을 입력하고 [Copy settings from]에서 사용할 PHP와 같은 설정을 선택한다. 여기에서는
     **Release_TS**
@@ -946,7 +946,7 @@ PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트
 
 
 
-|image73_png|
+.. image:: /images/image73.png
 
 *   [Configuration Manager] 대화 상자에서 해당 프로젝트의 [Platform] 항목을 열어서
     **x64**
@@ -958,14 +958,14 @@ PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트
 
 
 
-|image74_png|
+.. image:: /images/image74.png
 
 **New**
 를 선택하면 [New Project Platform] 대화 상자가 나타난다.
 **x64**
 를 선택하고 [OK]를 클릭한다.
 
-|image75_png|
+.. image:: /images/image75.png
 
 *   [php_cubrid Property Pages] 대화 상자에서 [C/C++] > [Preprocessor]를 선택하고, [Preprocessor Definitions]에서
     **_USE_32BIT_TIME_T**
@@ -973,7 +973,7 @@ PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트
 
 
 
-|image76_png|
+.. image:: /images/image76.png
 
 *   <F7> 키를 눌러 소스코드를 컴파일하면 x64 PHP 드라이버 파일이 생성된다.
 

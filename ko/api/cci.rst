@@ -18,7 +18,7 @@ CCI를 사용하기 위해서는 헤더 파일과 라이브러리 파일이 필�
 
 CCI 드라이버는 CUBRID에서 제공되는 C 언어 인터페이스로, CUBRID 설치 패키지에 포함되어 있다. CCI는 브로커를 통해서 접속하므로 다른 인터페이스인 JDBC, PHP, ODBC, Python, Ruby 등과 동일하게 관리될 수 있다. 실제로 PHP, ODBC, Python, Ruby 인터페이스는 CCI를 기반으로 개발되었다. 단, JDBC는 CCI를 기반으로 개발되지 않았다.
 
-|image54_jpg|
+.. image:: /images/image54.jpg
 
 별도로 CCI 드라이버를 다운로드하거나 CCI 드라이버에 대한 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver>`_ 에 접속한다.
 
@@ -367,7 +367,7 @@ CCI를 이용한 응용 프로그램을 작성했다면 프로그램 특성에 �
 
 다음은 Windows에서 정적 라이브러리를 적용하기 위한 설정이다.
 
-|image55_png|
+.. image:: /images/image55.png
 
 **BLOB/CLOB 사용**
 

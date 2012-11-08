@@ -850,7 +850,7 @@ QUARTER 함수
 SEC_TO_TIME 함수
 ================
 
-.. function:: QUARTER (date)
+.. function:: SEC_TO_TIME (second)
 
 	**SEC_TO_TIME** 함수는 지정된 인자로부터 시, 분, 초를 포함한 시간을 반환한다. 인자로 0~86399 범위의 **INTEGER** 타입을 지정할 수 있으며, **TIME** 타입을 반환한다.
 

@@ -29,14 +29,14 @@ CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이�
 .. note:: 
 	CUBRID 쿼리 브라우저는 CUBRID 매니저의 기능을 경량화한 도구로, 응용 개발자에게 필수 기능인 데이터베이스 관리 기능과 질의 편집기 기능만을 제공한다. CUBRID 쿼리 브라우저에 대한 자세한 내용은 `http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_ 를 참고한다.
 
-.. image:: images/image1.png
+.. image:: /images/image1.png
 
 데이터베이스 볼륨 구조
 ----------------------
 
 아래 그림은 CUBRID 데이터베이스 볼륨의 구조를 도식화한 구성도이다. 데이터베이스 볼륨을 크게 영구 볼륨, 임시 볼륨, 백업 볼륨으로 분류하고, 아래 구성도를 참고하여 각각에 속하는 볼륨 및 특징을 살펴보기로 한다.
 
-.. image:: images/image2.png
+.. image:: /images/image2.png
 
 **영구적 볼륨(Permanent Volume)**
 

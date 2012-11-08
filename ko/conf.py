@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CUBRID'
-copyright = u'2012, Search Solution Corporation'
+copyright = u'2008, Search Solution Corporation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -94,6 +94,8 @@ pygments_style = 'sphinx'
 #html_theme = 'default'
 #html_theme = 'nature'
 html_theme = 'sphinxdoc'
+#html_theme = 'haiku'
+#html_theme = 'pyramid'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -167,7 +169,7 @@ html_use_smartypants = False
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'testdoc'
+htmlhelp_basename = 'cubrid_doc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -186,8 +188,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'test.tex', u'test Documentation',
-   u'dwkang', 'manual'),
+  ('index', 'cubrid.tex', u'CUBRID Documentation',
+   u'Search Solution Corporation', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -216,8 +218,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'test', u'test Documentation',
-     [u'dwkang'], 1)
+    ('index', 'cubrid', u'CUBRID Documentation',
+     [u'Search Solution Corporation'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -230,8 +232,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'test', u'test Documentation',
-   u'dwkang', 'test', 'One line description of project.',
+  ('index', 'cubrid', u'CUBRID Documentation',
+   u'Search Solution Corporation', 'cubrid', 'One line description of project.',
    'Miscellaneous'),
 ]
 

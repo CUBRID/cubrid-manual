@@ -1039,7 +1039,7 @@ TO_NUMBER 함수
 TO_TIME 함수
 ============
 
-.. function:: TO_TIME(string [,format [,date_lang_string_literal]]):
+.. function:: TO_TIME(string [,format [,date_lang_string_literal]])
 
 	**TO_TIME** 함수는 인자로 지정된 시간 형식을 기준으로 문자열을 해석하여, 이를 TIME 타입의 값으로 변환하여 반환한다. 시간 형식은 :func:`TO_CHAR` 의 설명 부분을 참고한다.
 

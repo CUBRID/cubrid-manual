@@ -7,7 +7,6 @@
 	
 	select.rst
 	hq.rst
-	arithmetic_op.rst
 	insert.rst
 	update.rst
 	replace.rst

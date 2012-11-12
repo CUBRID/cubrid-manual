@@ -14,75 +14,62 @@ The contents of the CUBRID Database Management System (CUBRID DBMS) product manu
 
 *   :doc:`sql/index` : This chapter describes SQL syntaxes such as data types, functions and operators, data retrieval or table manipulation. The chapter also provides SQL syntaxes used for indexes, triggers, partitioning, serial and user information changes, etc.
 
-*   :doc:`admin/index` : This chapter provides instructions on how to create, drop, back up, restore and migrate a database, configuring globalization, and executing CUBRID HA and CUBRID SHARD. Also it includes instructions on how to use the 
-    **cubrid**
-    utility, which starts and stops the server, broker, and CUBRID Manager server, etc.
+*   :doc:`admin/index` : This chapter provides instructions on how to create, drop, back up, restore and migrate a database, configuring globalization, and executing CUBRID HA and CUBRID SHARD. Also it includes instructions on how to use the  **cubrid** utility, which starts and stops the server, broker, and CUBRID Manager server, etc.
 
 *   :doc:`api/index` : The "Performance Tuning" chapter provides instructions on setting system parameters that may influence the performance. This chapter provides information on how to use the configuration file for the server and broker, and describes the meaning of each parameter.
 
-**Glossary**
+Glossary
+--------
 
 CUBRID is an object-relational database management system (ORDBMS), which supports object-oriented concepts such as inheritance. In this manual, relational database terminologies are also used along with object-oriented terminologies for better understanding. Object-oriented terminologies such as class, instance and attribute is used to describe concepts including inheritance, and relational database terminologies are mainly used to describe common SQL syntax.
 
 +-------------------------+-------------------+
-| **Relational Database** | **CUBRID**        |
-|                         |                   |
-+-------------------------+-------------------+
+| Relational Database     | CUBRID            |
++=========================+===================+
 | table                   | class, table      |
-|                         |                   |
 +-------------------------+-------------------+
 | column                  | attribute, column |
-|                         |                   |
 +-------------------------+-------------------+
 | record                  | instance, record  |
-|                         |                   |
 +-------------------------+-------------------+
 | data type               | domain, data type |
-|                         |                   |
 +-------------------------+-------------------+
 
-**Manual Conventions**
+Manual Conventions
+------------------
 
 The following table provides conventions on definitions used in the CUBRID Database Management System product manual to identify "statements," "commands" and "reference within texts."
 
-
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
-| **Convention**                       | **Description**                                                                                                                                         | **Example**          |
+| Convention                           | Description                                                                                                                                             | Example              |
 |                                      |                                                                                                                                                         |                      |
-+--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
++======================================+=========================================================================================================================================================+======================+
 | *Italics*                            | *Italics*                                                                                                                                               | *persistent*         |
 |                                      | type represents variable names and user-defined values (system, database, table, column, file) in examples.                                             | :                    |
 |                                      |                                                                                                                                                         | *stringVariableName* |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | **Boldface**                         | **Boldface**                                                                                                                                            | **fetch**            |
 |                                      | type represents names such as the member function name, class name, constants, CUBRID keyword or names such as other required characters.               | ( ) member function  |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Constant Width                       | Constant Width type represents segments of code example or describes a command's execution and results.                                                 | csql database_name   |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | UPPER-CASE                           | UPPER-CASE represents the CUBRID keyword (see                                                                                                           | **SELECT**           |
 |                                      | **Boldface**                                                                                                                                            |                      |
 |                                      | ).                                                                                                                                                      |                      |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Single Quotes (' ')                  | Single quotes (' ') are used with braces and brackets and represent the necessary sections of a syntax. Single quotes are also used to enclose strings. | {'{'                 |
 |                                      |                                                                                                                                                         | *const_list*         |
 |                                      |                                                                                                                                                         | '}'}                 |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Brackets ([ ])                       | Brackets ([ ]) represents optional parameters or keywords.                                                                                              | [                    |
 |                                      |                                                                                                                                                         | **ONLY**             |
 |                                      |                                                                                                                                                         | ]                    |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Vertical bar ( | )                   | Vertical bar (|) represents that one or another option can be specified.                                                                                | [                    |
 |                                      |                                                                                                                                                         | **COLUMN**           |
 |                                      |                                                                                                                                                         | |                    |
 |                                      |                                                                                                                                                         | **ATTRIBUTE**        |
 |                                      |                                                                                                                                                         | ]                    |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | A parameter enclosed by braces ({ }) | A parameter enclosed by braces represents that one of those parameters must be specified in a statement syntax.                                         | **CREATE**           |
 |                                      |                                                                                                                                                         | {                    |
@@ -90,16 +77,12 @@ The following table provides conventions on definitions used in the CUBRID Datab
 |                                      |                                                                                                                                                         | |                    |
 |                                      |                                                                                                                                                         | **CLASS**            |
 |                                      |                                                                                                                                                         | }                    |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | A value enclosed by braces ({ })     | A value enclosed by braces an element consisting of collection.                                                                                         | {2, 4, 6}            |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Braces with ellipsis({ }...)         | Braces before an ellipsis represents that a parameter can be repeated.                                                                                  | {,                   |
 |                                      |                                                                                                                                                         | *class_name*         |
 |                                      |                                                                                                                                                         | }...                 |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Angle brackets(< >)                  | Angle brackets represents a single key or a series of key strokes.                                                                                      | <Ctrl+n>             |
-|                                      |                                                                                                                                                         |                      |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+

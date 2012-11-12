@@ -1,0 +1,309 @@
+******
+UPDATE
+******
+
+
+**UPDATE**
+
+**Description**
+
+You can update the column value of a record stored in the target table to a new one by using the
+**UPDATE**
+statement. Specify the name of the column to update and a new value in the
+**SET**
+clause, and specify the condition to be used to extract the record to be updated in the
+`WHERE Clause <#syntax_syntax_retreive_where_htm>`_
+. You can one or more tables only with one
+**UPDATE**
+statement.
+
+In case of only one table is to be updated, you can specify
+`ORDER BY Clause <#syntax_syntax_retreive_order_htm>`_
+or
+`LIMIT Clause <#syntax_syntax_retreive_limit_htm>`_
+. You can also limit the number of records to be updated in the
+`LIMIT Clause <#syntax_syntax_retreive_limit_htm>`_
+. You can use the update with the
+`ORDER BY Clause <#syntax_syntax_retreive_order_htm>`_
+if you want to maintain the execution order or lock order of triggers.
+
+**Syntax**
+
+<UPDATE single table>
+
+**UPDATE**
+*table_name*
+**SET**
+*column_name*
+= {
+*expr*
+|
+**DEFAULT**
+} [,
+*column_name*
+= {
+*expr*
+|
+**DEFAULT**
+}...]
+
+    [
+**WHERE**
+*search_condition*
+]
+
+    [
+**ORDER BY**
+{
+*col_name | expr}*
+]
+
+    [
+**LIMIT**
+*row_count*
+]
+
+ 
+
+<UPDATE multiple tables>
+
+**UPDATE**
+<
+*table_specifications*
+>
+**SET**
+*column_name*
+= {
+*expr*
+|
+**DEFAULT**
+} [,
+*column_name*
+= {
+*expr*
+|
+**DEFAULT**
+}...]
+
+    [
+**WHERE**
+*search_condition*
+]
+
+*   <
+    *table_specifications*
+    >: You can specify the statement such as
+    **FROM**
+    clause of the
+    **SELECT**
+     statement and one or more tables can be specified.
+
+
+
+*   *column_name*
+    : Specifies the column name to be updated. Columns for one or more tables can be specified.
+
+
+
+*   *expr*
+    |
+    **DEFAULT**
+    : Specifies a new value for the column and expression or
+    **DEFAULT**
+    keyword can be specified as a value. The
+    **SELECT**
+    statement returning result record also can be specified.
+
+
+
+*   *search_condition*
+    : Update only data that meets the
+    *search_condition*
+    if conditions are specified in the
+    `WHERE Clause <#syntax_syntax_retreive_where_htm>`_
+    .
+
+
+
+*   *col_name | expr*
+    : Specifies base column to be updated.
+
+
+
+*   *row_count*
+    : Specifies the number of records to be updated after the
+    `LIMIT Clause <#syntax_syntax_retreive_limit_htm>`_
+    . An integer greater than 0 can be specified.
+
+
+
+**Note**
+In 9.0 or lower versions, only one table can be entered in <
+*table_specifications*
+>.
+
+**Example 1**
+
+The following example shows how to update one table.
+
+--creating a new table having all records copied from a_tbl1
+
+CREATE TABLE a_tbl5 AS SELECT * FROM a_tbl1;
+
+SELECT * FROM a_tbl5 WHERE name IS NULL;
+
+ 
+
+           id  name                  phone
+
+=========================================================
+
+         NULL  NULL                  '000-0000'
+
+            4  NULL                  '000-0000'
+
+            5  NULL                  '000-0000'
+
+            7  NULL                  '777-7777'
+
+ 
+
+UPDATE a_tbl5 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
+
+SELECT * FROM a_tbl5;
+
+ 
+
+           id  name                  phone
+
+=========================================================
+
+         NULL  'yyy'                 '999-9999'
+
+            1  'aaa'                 '000-0000'
+
+            2  'bbb'                 '000-0000'
+
+            3  'ccc'                 '333-3333'
+
+            4  'yyy'                 '999-9999'
+
+            5  'yyy'                 '999-9999'
+
+            6  'eee'                 '000-0000'
+
+            7  NULL                  '777-7777'
+
+ 
+
+-- using triggers, that the order in which the rows are updated is modified by the ORDER BY clause.
+
+ 
+
+CREATE TABLE t (i INT,d INT);
+
+CREATE TRIGGER trigger1 BEFORE UPDATE ON t IF new.i < 10 EXECUTE PRINT 'trigger1 executed';
+
+CREATE TRIGGER trigger2 BEFORE UPDATE ON t IF new.i > 10 EXECUTE PRINT 'trigger2 executed';
+
+INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
+
+UPDATE t  SET i = i + 1 WHERE 1 = 1;
+
+ 
+
+trigger2 executed
+
+trigger1 executed
+
+trigger2 executed
+
+trigger2 executed
+
+trigger1 executed
+
+trigger2 executed
+
+trigger1 executed
+
+ 
+
+TRUNCATE TABLE t;
+
+INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
+
+UPDATE t SET i = i + 1 WHERE 1 = 1  ORDER BY i;
+
+ 
+
+trigger1 executed
+
+trigger1 executed
+
+trigger1 executed
+
+trigger2 executed
+
+trigger2 executed
+
+trigger2 executed
+
+trigger2 executed
+
+**Example 2**
+
+The following example shows how to update multiple tables after joining them.
+
+CREATE TABLE a_tbl(id INT PRIMARY KEY, charge DOUBLE);
+
+CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);
+
+INSERT INTO a_tbl VALUES (1, 100.0), (2, 1000.0), (3, 10000.0);
+
+INSERT INTO b_tbl VALUES (1, 0.1), (2, 0.0), (3, 0.2), (3, 0.5);
+
+ 
+
+UPDATE
+
+ a_tbl INNER JOIN b_tbl ON a_tbl.id=b_tbl.rate_id
+
+SET
+
+  a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
+
+WHERE a_tbl.charge > 900.0;
+
+For the
+*a_tbl*
+table and the
+*b_tbl*
+table, which join the
+**UPDATE**
+statement, when the number of rows of
+*a_tbl*
+which joins one row of
+*b_tbl*
+is two or more and the column to be updated is included in
+*a_tbl*
+, update is executed by using the value of the row detected first among the rows of
+*b_tbl*
+.
+
+In the above example, when the number of rows with
+*id*
+=5, the
+**JOIN**
+condition column, is one in
+*a_tbl*
+and two in
+*b_tbl*
+,
+*a_tbl.charge*
+, the update target column in the row with
+*a_tbl.id*
+=5, uses the value of
+*rate*
+of the first row in
+*b_tbl*
+only.

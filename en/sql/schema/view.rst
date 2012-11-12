@@ -1,0 +1,773 @@
+***************
+VIEW Definition
+***************
+
+**CREATE VIEW**
+
+**Overview**
+
+**Description**
+
+A view is a virtual table that does not exist physically. You can create a view by using an existing table or a query.
+**VIEW**
+and
+**VCLASS**
+are used interchangeably.
+
+Use
+**CREATE VIEW**
+statement to create a view. For how to write view name, see
+`Identifier <#syntax_csql_syntaxtype_identifie_2262>`_
+.
+
+**Syntax**
+
+**CREATE**
+[
+**OR REPLACE**
+] {
+**VIEW**
+|
+**VCLASS**
+} <
+*view_name*
+>
+
+                           [ <
+*subclass_definition*
+> ]
+
+                           [ ( <
+*view_column_def_comma_list*
+> ) ]
+
+                           [
+**CLASS**
+**ATTRIBUTE**
+
+                             ( <
+*column_definition_comma_list*
+> ) ]
+
+                           [
+**METHOD**
+<
+*method_definition_comma_list*
+> ]
+
+                           [
+**FILE**
+<
+*method_file_comma_list*
+> ]
+
+                           [
+**INHERIT**
+<
+*resolution_comma_list*
+> ]
+
+                           [
+**AS**
+<
+*select_statement*
+> ]
+
+                           [
+**WITH CHECK OPTION**
+]
+
+ 
+
+<
+*view_column_definition*
+> ::= <
+*column_definition*
+> | <
+*column_name*
+>
+
+ 
+
+<
+*column_definition*
+> :
+
+*column_name*
+*column_type*
+[ <
+*default_or_shared*
+> ] [ <
+*column_constraint_list*
+>]
+
+ 
+
+<
+*default_or_shared*
+> :
+
+{
+**SHARED**
+[ <
+*value_specification*
+> ] |
+**DEFAULT**
+<
+*value_specification*
+> } |
+
+**AUTO_INCREMENT**
+[ (seed, increment) ]
+
+ 
+
+<
+*column_constraint*
+> :
+
+**NOT NULL**
+|
+**UNIQUE**
+|
+**PRIMARY KEY**
+|
+**FOREIGN KEY REFERENCES**
+...
+
+ 
+
+<
+*subclass_definition*
+> :
+
+{
+**UNDER**
+|
+**AS SUBCLASS OF**
+}
+*table_name_comma_list*
+
+ 
+
+<
+*method_definition*
+> :
+
+[
+**CLASS**
+]
+*method_name*
+
+[ ( [
+*argument_type_comma_list*
+] ) ]
+
+[
+*result_type*
+]
+
+[
+**FUNCTION**
+*function_name*
+]
+
+ 
+
+<
+*resolution*
+> :
+
+[
+**CLASS**
+] {
+*column_name*
+|
+*method_name*
+}
+**OF**
+*superclass_name*
+
+[
+**AS**
+*alias*
+]
+
+*   **OR REPLACE**
+    : If the keyword
+    **OR REPLACE**
+    is specified after
+    **CREATE**
+    , the existing view is replaced by a new one without displaying any error message, even when the
+    *view_name*
+    overlaps with the existing view name.
+
+
+
+*   *view_name*
+    : Specifies the name of a view to be created. It must be unique in a database.
+
+
+
+*   *view_column_definition*
+
+
+
+*   *column_name*
+    : Defines the column of a view.
+
+
+
+*   *column_type*
+      : Specifies the data type of a column.
+
+
+
+**AS**
+*select_statement*
+: A valid
+**SELECT**
+statement must be specified. A view is created based on this.
+
+**WITH CHECK OPTION**
+: If this option is specified, the update or insert operation is possible only when the condition specified in the
+**WHERE**
+clause of the
+*select_statement*
+is satisfied. Therefore, this option is used to disallow the update of a virtual table that violates the condition.
+
+**Example**
+
+CREATE TABLE a_tbl(
+
+id INT NOT NULL,
+
+phone VARCHAR(10));
+
+INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
+
+ 
+
+ 
+
+--creating a new view based on AS select_statement from a_tbl
+
+CREATE VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL WITH CHECK OPTION;
+
+SELECT * FROM b_view;
+
+ 
+
+           id  phone
+
+===================================
+
+            1  '111-1111'
+
+            2  '222-2222'
+
+            3  '333-3333'
+
+ 
+
+--WITH CHECK OPTION doesn’t allow to update column value which violates WHERE clause
+
+UPDATE b_view SET phone=NULL;
+
+ 
+
+In line 1, column 72,
+
+ 
+
+ERROR: Check option exception on view b_view.
+
+ 
+
+ 
+
+--creating view which name is as same as existing view name
+
+CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC;
+
+ 
+
+--the existing view has been replaced as a new view by OR REPLACE keyword
+
+SELECT * FROM b_view;
+
+ 
+
+           id  phone
+
+===================================
+
+            5  NULL
+
+            4  NULL
+
+            3  '333-3333'
+
+            2  '222-2222'
+
+            1  '111-1111'
+
+**Condition for Creating Updatable VIEW**
+
+**Description**
+
+A virtual table is updatable if it satisfies the following conditions:
+
+*   The
+    **FROM**
+    clause must include the updatable table or view only.
+
+
+
+In version lower than CUBRID 9.0, only one updatable table can be included to the
+**FROM**
+clause it requires. However, two tables in parentheses like FROM (class_x, class_y) can be updated since the two were expressed as one table. In version of CUBRID 9.0 or higher, more than one updatable table is allowed.
+
+*   The
+    **FROM**
+    clause must include only one table or updatable view. However, two tables included in parentheses as in
+    **FROM**
+    (class_x, class_y) can be updated because they represent one table.
+
+
+
+*   The
+    **DISTINCT**
+    or
+    **UNIQUE**
+    statement should not be included.
+
+
+
+*   The
+    **GROUP BY... HAVING**
+    statement should not be included.
+
+
+
+*   Aggregate functions such as
+    **SUM**
+    ( ) or
+    **AVG**
+    ( ) should not be included.
+
+
+
+*   The entire query must consist of queries that can be updated by
+    **UNION ALL**
+    , not by
+    **UNION**
+    . However, the table should exist only in one of the queries that constitute
+    **UNION ALL**
+    .
+
+
+
+*   If a record is inserted into a view created by using the
+    **UNION ALL**
+    statement, the system determines into which table the record will be inserted. This cannot be done by the user. To control this, the user must manually insert the row or create a separate view for insertion.
+
+
+
+Even when all rules above are satisfied, columns that contains following contents cannot be updated.
+
+*   Path expressions (example:
+    *tbl_name.col_name*
+    )
+
+
+
+*   Numeric type column that includes an arithmetic operator
+
+
+
+Even though the column defined in the view is updatable, a view can be updated only when an appropriate update authorization is granted on the table included in the
+**FROM**
+clause. Also there must be an access authorization to a view. The way to grant an access authorization to a view is the same to grant an access authorization to a table. For details on granting authorization, see "
+`Granting Authorization <#syntax_syntax_access_authority_h_4540>`_
+."
+
+**ALTER VIEW**
+
+**ADD QUERY Clause**
+
+**Description**
+
+You can add a new query to a query specification by using the
+**ADD QUERY**
+clause of the
+**ALTER VIEW**
+statement. 1 is assigned to the query defined when a virtual table was created, and 2 is assigned to the query added by the
+**ADD QUERY**
+clause.
+
+**Syntax**
+
+**ALTER**
+[
+**VIEW**
+|
+**VCLASS**
+]
+*view_name*
+
+**ADD QUERY**
+*select_statement*
+
+[
+**INHERIT**
+*resolution*
+[ {,
+*resolution*
+}_ ] ]
+
+ 
+
+*resolution*
+:
+
+{
+*column_name*
+|
+*method_name*
+}
+**OF**
+*superclass_name*
+[
+**AS**
+*alias*
+]
+
+*   *view_name*
+    : Specifies the name of a view where the query to be added.
+
+
+
+*   *select_statement*
+    : Specifies the query to be added.
+
+
+
+**Example**
+
+SELECT * FROM b_view;
+
+ 
+
+           id  phone
+
+===================================
+
+            1  '111-1111'
+
+            2  '222-2222'
+
+            3  '333-3333'
+
+            4  NULL
+
+            5  NULL
+
+ 
+
+ 
+
+ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
+
+SELECT * FROM b_view;
+
+ 
+
+           id  phone
+
+===================================
+
+            1  '111-1111'
+
+            2  '222-2222'
+
+            3  '333-3333'
+
+            4  NULL
+
+            5  NULL
+
+            1  '111-1111'
+
+            2  '222-2222'
+
+**AS SELECT Clause**
+
+**Description**
+
+You can change the
+**SELECT**
+query defined in the virtual table by using the
+**AS SELECT**
+clause in the
+**ALTER VIEW**
+statement. This function is working like the
+**CREATE OR REPLACE**
+statement. You can also change the query by specifying the query number 1 in the
+**CHANGE QUERY**
+clause of the
+**ALTER VIEW**
+statement.  
+
+**Syntax**
+
+**ALTER**
+[
+**VIEW**
+|
+**VCLASS**
+]
+*view_name*
+**AS**
+*select_statement*
+
+*   *view_name*
+    : Specifies the name of a view to be modified.
+
+
+
+*   *select_statement*
+    : Specifies the new query statement to replace the
+    **SELECT**
+    statement defined when a view is created.
+
+
+
+**Example**
+
+ALTER VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL;
+
+SELECT * FROM b_view;
+
+ 
+
+           id  phone
+
+===================================
+
+            1  '111-1111'
+
+            2  '222-2222'
+
+            3  '333-3333'
+
+**CHANGE QUERY Clause**
+
+**Description**
+
+You can change the query defined in the query specification by using the
+**CHANGE QUERY**
+clause reserved word of the
+**ALTER VIEW**
+statement.
+
+**Syntax**
+
+**ALTER**
+[ 
+**VIEW**
+| 
+**VCLASS**
+ ]
+*view_name*
+
+**    CHANGE QUERY**
+[
+*integer*
+]
+*select_statement*
+[ ; ]
+
+*   *view_name*
+    : Specifies the name of a view to be modified.
+
+
+
+*   *integer*
+    : Specifies the number value of the query to be modified. The default value is 1.
+
+
+
+*   *select_statement*
+    : Specifies the new query statement to replace the query whose query number is
+    *integer*
+    .
+
+
+
+**Example**
+
+--adding select_statement which query number is 2 and 3 for each
+
+ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
+
+ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id = 3;
+
+SELECT * FROM b_view;
+
+ 
+
+           id  phone
+
+===================================
+
+            1  '111-1111'
+
+            2  '222-2222'
+
+            3  '333-3333'
+
+            4  NULL
+
+            5  NULL
+
+            1  '111-1111'
+
+            2  '222-2222'
+
+            3  '333-3333'
+
+ 
+
+--altering view changing query number 2
+
+ALTER VIEW b_view CHANGE QUERY 2 SELECT * FROM a_tbl WHERE phone IS NULL;
+
+SELECT * FROM b_view;
+
+ 
+
+           id  phone
+
+===================================
+
+            1  '111-1111'
+
+            2  '222-2222'
+
+            3  '333-3333'
+
+            4  NULL
+
+            5  NULL
+
+            4  NULL
+
+            5  NULL
+
+            3  '333-3333'
+
+**DROP QUERY Clause**
+
+**Description**
+
+You can drop a query defined in the query specification by using the
+**DROP QUERY**
+of the
+**ALTER VIEW**
+statement.
+
+**Example**
+
+ALTER VIEW b_view DROP QUERY 2,3;
+
+SELECT * FROM b_view;
+
+ 
+
+           id  phone
+
+===================================
+
+            1  '111-1111'
+
+            2  '222-2222'
+
+            3  '333-3333'
+
+            4  NULL
+
+            5  NULL
+
+**DROP VIEW**
+
+**Description**
+
+You can drop a view by using the
+**DROP VIEW**
+clause. The way to drop a view is the same as to drop a regular table.
+
+**Syntax**
+
+**DROP**
+[
+**VIEW**
+|
+**VCLASS**
+]
+*view_name*
+[ { ,
+*view_name*
+, ... } ]
+
+*   *view_name*
+    : Specifies the name of a view to be dropped.
+
+
+
+**Example**
+
+DROP VIEW b_view;
+
+**RENAME VIEW**
+
+**Description**
+
+You can change the view name by using the
+**RENAME VIEW**
+statement.
+
+**Syntax**
+
+**RENAME**
+[
+**TABLE**
+|
+**CLASS**
+|
+**VIEW**
+|
+**VCLASS**
+]
+*old_view_name*
+**AS**
+*new_view_name*
+[ ; ]
+
+*   *old_view_name*
+    : Specifies the name of a view to be modified.
+
+
+
+*   *new_view_name*
+    : Specifies the new name of a view.
+
+
+
+**Example**
+
+The following example shows how to rename a view name to
+*game_2004*
+.
+
+RENAME VIEW game_2004 AS info_2004;

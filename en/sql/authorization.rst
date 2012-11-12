@@ -1,0 +1,725 @@
+************************
+데이터베이스 사용자 권한
+************************
+
+
+**Database User Authorization**
+
+**Database User**
+
+To create the user name, see
+`Identifier <#syntax_csql_syntaxtype_identifie_2262>`_
+.
+
+CUBRID has two types of users by default:
+**DBA**
+and
+**PUBLIC**
+. At initial installation of the product, no password is set.
+
+*   All users have authorization granted to the
+    **PUBLIC**
+    user. All users of the database are automatically the members of
+    **PUBLIC**
+    . Granting authorization to the
+    **PUBLIC**
+    means granting it all users.
+
+
+
+*   The
+    **DBA**
+    user has the authorization of the database administrator. The
+    **DBA**
+    automatically becomes the member of all users and groups. That is, the
+    **DBA**
+    is granted the access for all tables. Therefore, there is no need to grant authorization explicitly to the
+    **DBA**
+    and
+    **DBA**
+    members. Each database user has a unique name. The database administrator can create multiple users simultaneously using the
+    **cubrid createdb**
+    utility (see
+    `How to Use the Database Management Utilities <#admin_admin_service_server_comma_427>`_
+    for details). A database user cannot have a member who already has the same authorization. If authorization is granted to a user, all members of the user is automatically granted the same authorization.
+
+
+
+**Managing User**
+
+**Description**
+
+**DBA**
+and
+**DBA**
+members can create, drop and alter users by using SQL statements. At the initial installation, passwords for users are not configured.
+
+**Syntax**
+
+**CREATE USER**
+*user_name*
+
+[
+**PASSWORD**
+*password*
+]
+
+[
+**GROUPS**
+*user_name*
+[ {,
+*user_name*
+} ... ] ]
+
+[
+**MEMBERS**
+*user_name*
+[ {,
+*user_name*
+} ... ] ] ;
+
+**DROP USER**
+*user_name*
+;
+
+**ALTER USER**
+*user_name*
+**PASSWORD**
+*password*
+;
+
+*   *user_name*
+    : Specifies the user name to create, delete or change.
+
+
+
+*   *password*
+    : Specifies the user password to create or change.
+
+
+
+**Example 1**
+
+The following example shows how to create a user (
+*Fred*
+), change a password, and delete the user.
+
+CREATE USER Fred;
+
+ALTER USER Fred PASSWORD '1234';
+
+DROP USER Fred;
+
+**Example 2**
+
+The following example shows how to create a user and add member to the user. By the following statement,
+*company*
+becomes a group that has
+*engineering*
+,
+*marketing*
+and
+*design*
+as its members.
+*marketing*
+becomes a group with members
+*smith*
+and
+*jones*
+,
+*design*
+becomes a group with a member
+*smith*
+, and
+*engineering*
+becomes a group with a member
+*brown*
+.
+
+CREATE USER company;
+
+CREATE USER engineering GROUPS company;
+
+CREATE USER marketing GROUPS company;
+
+CREATE USER design GROUPS company;
+
+CREATE USER smith GROUPS design, marketing;
+
+CREATE USER jones GROUPS marketing;  
+
+CREATE USER brown GROUPS engineering;
+
+**Example 3**
+
+The following example shows how to create the same groups as above but use the
+**MEMBERS**
+keyword instead of
+**GROUPS**
+.
+
+CREATE USER smith;
+
+CREATE USER brown;
+
+CREATE USER jones;
+
+CREATE USER engineering MEMBERS brown;
+
+CREATE USER marketing MEMBERS smith, jones;
+
+CREATE USER design MEMBERS smith;
+
+CREATE USER company MEMBERS engineering, marketing, design;
+
+**Granting Authorization**
+
+**Description**
+
+In CUBRID, the smallest grant unit of authorization is a table. You must grant appropriate authorization to other users (groups) before allowing them to access the table you created.
+
+You don't need to grant authorization individually because the members of the granted group have the same authorization. The access to the (virtual) table created by a
+**PUBLIC**
+user is allowed to all other users. You can grant access authorization to a user by using the
+**GRANT**
+statement.
+
+**Syntax**
+
+**GRANT**
+*operation*
+[ { ,
+*operation*
+}_ ]
+**ON**
+*table_name*
+[ { ,
+*table_name*
+}_ ]
+
+**TO**
+*user*
+[ { ,
+*user*
+}_ ] [
+**WITH GRANT OPTION**
+] [ ; ]
+
+*   *operation*
+    : Specifies an operation that can be used when granting authorization. The following table shows operations.
+
+
+
+*   **SELECT**
+    : Allows to read the table definitions and retrieve records. The most general type of permissions.
+
+
+
+*   **INSERT**
+    : Allows to create records in the table.
+
+
+
+*   **UPDATE**
+    : Allows to modify the records already existing in the table.
+
+
+
+*   **DELETE**
+    : Allows to delete records in the table.
+
+
+
+*   **ALTER**
+    : Allows to modify the table definition, rename or delete the table.
+
+
+
+*   **INDEX**
+    : Allows to call table methods or instance methods.
+
+
+
+*   **EXECUTE**
+    : Allows to call table methods or instance methods.
+
+
+
+*   **ALL PRIVILEGES**
+    : Includes all permissions described above.
+
+
+
+*   *table_name*
+    : Specifies the name of a table or virtual table to be granted.
+
+
+
+*   *user*
+    : Specifies the name of a user (group) to be granted. Enter the login name of the database user or
+    **PUBLIC**
+    , a system-defined user. If
+    **PUBLIC**
+    is specified, all database users are granted with the permission.
+
+
+
+*   **WITH GRANT OPTION**
+    :
+    **WITH GRANT OPTION**
+    allows the grantee of authorization to grant that same authorization to another user.
+
+
+
+**Example 1**
+
+The following example shows how to grant the
+**SELECT**
+authorization for the
+*olympic*
+table to
+*Fred*
+(including his members).
+
+GRANT SELECT ON olympic TO Fred;
+
+**Example 2**
+
+The following example shows how to grant the
+**SELECT**
+,
+**INSERT**
+,
+**UPDATE**
+and
+**DELETE**
+authorization on the
+*nation*
+and
+*athlete*
+tables to
+*Jeniffer*
+and
+*Daniel*
+(including their members).
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jeniffer, Daniel;
+
+**Example 3**
+
+The following example shows how to grant every authorization on the
+*game*
+and
+*event*
+tables to all users.
+
+GRANT ALL PRIVILEGES ON game, event TO public;
+
+**Example 4**
+
+The following example shows how to grant retrieving authorization on the
+*record*
+and
+*history*
+tables to
+*ROSS*
+. Using
+**WITH GRANT OPTION**
+allows
+*ROSS*
+to grant retrieving to another users. Ross can grant authorization to others within her authorization.
+
+GRANT SELECT ON record, history TO Ross WITH GRANT OPTION;
+
+**Remark**
+
+*   The grantor of authorization must be the owner of all tables listed before the grant operation or have
+    **WITH GRANT OPTION**
+    specified.
+
+
+
+*   Before granting
+    **SELECT**
+    ,
+    **UPDATE**
+    ,
+    **DELETE**
+    , and
+    **INSERT**
+    authorization for a virtual table, the owner of the virtual table must have
+    **SELECT**
+    and
+    **GRANT**
+    authorization for all the tables included in the query specification. The
+    **DBA**
+    user and the members of the
+    **DBA**
+    group are automatically granted all authorization for all tables.
+
+
+
+*   To execute the
+    **TRUNCATE**
+    statement, the
+    **ALTER**
+    ,
+    **INDEX**
+    , and
+    **DELETE**
+    authorization is
+    **required**
+    .
+
+
+
+**Revoking Authorization**
+
+**Description**
+
+You can revoke authorization using the
+**REVOKE**
+statement. The authorization granted to a user can be revoked anytime. If more than one authorization is granted to a user, all or part of the authorization can be revoked. In addition, if authorization on multiple tables is granted to more than one user using one
+**GRANT**
+statement, the authorization can be selectively revoked for specific users and tables.
+
+If the authorization (
+**WITH GRANT OPTION**
+) is revoked from the grantor, the authorization granted to the grantee by that grantor is also revoked.
+
+**Syntax**
+
+**REVOKE**
+*operation*
+[ { ,
+*operation*
+}_ ]
+**ON**
+*table_name*
+[ { ,
+*class_name*
+}_ ]
+
+**FROM**
+*user*
+[ { ,
+*user*
+}_ ] [ ; ]
+
+*   *operation*
+    : Indicates an operation that can be used when granting authorization (see
+    **Syntax**
+    in
+    `Granting Authorization <#syntax_syntax_access_authority_h_4540>`_
+    for details).
+
+
+
+*   *table_name*
+    : Specifies the name of the table or virtual table to be granted.
+
+
+
+*   *user*
+    : Specifies the name of the user (group) to be granted.
+
+
+
+**Example 1**
+
+The following example shows how to grant
+**SELECT**
+,
+**INSERT**
+,
+**UPDATE**
+, and
+**DELETE**
+authorization to
+*Fred*
+and
+*John*
+so that they can perform on the
+*nation*
+and
+*athlete*
+tables.
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO Fred, John;
+
+**Example 2**
+
+The following example shows how to execute the
+**REVOKE**
+statement; this allows
+*John*
+to have only
+**SELECT**
+authorization. If
+*John*
+has granted authorization to another user, the user is also allowed to execute
+**SELECT**
+only.
+
+REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM John;
+
+**Example 3**
+
+The following example shows how to execute the
+**REVOKE**
+statement revoking all authorization that has granted to
+*Fred*
+.
+*Fred*
+is not allowed to execute any operations on the
+*nation*
+and
+*athlete*
+tables once this statement is executed.
+
+REVOKE ALL PRIVILEGES ON nation, athlete FROM Fred;
+
+**Changing Owner**
+
+**Description**
+
+Database Administrator (
+**DBA**
+) or a member of the
+**DBA**
+group can change the owner of table, view, trigger, and Java stored functions/procedures by using the following query.
+
+**Syntax**
+
+**ALTER**
+[
+**TABLE**
+|
+**CLASS**
+|
+**VIEW**
+|
+**VCLASS**
+|
+**TRIGGER**
+|
+**PROCEDURE**
+|
+**FUNCTION**
+]
+*name*
+**OWNER TO**
+*user_id*
+;
+
+*   *name*
+    : The name of schema object of which ower is to be changed
+
+
+
+*   *user_id*
+    : User ID
+
+
+
+**Example**
+
+ALTER TABLE test_tbl OWNER TO public;
+
+ALTER VIEW test_view OWNER TO public;
+
+ALTER TRIGGER test_trigger OWNER TO public;
+
+ALTER FUNCTION test_function OWNER TO public;
+
+ALTER PROCEDURE test_procedure OWNER TO public;
+
+**User Authorization Management METHOD**
+
+**Description**
+
+The database administrator (
+**DBA**
+) can check and modify user authorization by calling authorization-related methods defined in
+**db_user**
+where information about database user is stored, and
+**db_authorization**
+(the system authorization class). The administrator can specify
+**db_user**
+or
+**db_authorization**
+depending on the method to be called, and store the return value of a method to a variable. In addition, some methods can be called only by
+**DBA**
+or members of
+**DBA**
+group.
+
+**Note**
+Note that method call made by the master node is not applied to the slave node in the HA environment.
+
+**Syntax**
+
+**CALL**
+*method_definition*
+**ON CLASS**
+*auth_class*
+[
+**TO**
+*variable*
+] [ ; ]
+
+**CALL**
+*method_definition*
+ON
+*variable*
+[ ; ]
+
+**login( ) method**
+
+As a class method of
+**db_user**
+class, this method is used to change the users who are currently connected to the database. The name and password of a new user to connect are given as arguments, and they must be string type. If there is no password, a blank character ('') can be used as the argument.
+**DBA**
+and
+**DBA**
+members can call the
+**login( )**
+method without a password.
+
+-- Connect as DBA user who has no password
+
+CALL login ('dba', '') ON CLASS db_user;
+
+-- Connect as a user_1 whose password is cubrid
+
+CALL login ('user_1', 'cubrid') ON CLASS db_user;
+
+**add_user( ) method**
+
+As a class method of
+**db_user**
+class, this method is used to add a new user. The name and password of a new user to add are given as arguments, and they must be string type. At this time, the new user name should not duplicate any user name already registered in a database. The
+**add_user( )**
+can be called only by
+**DBA**
+or members of
+**DBA**
+group.
+
+-- Add user_2 who has no password
+
+CALL add_user ('user_3', '') ON CLASS db_user;
+
+-- Add user_3 who has no password, and store the return value of a method into an admin variable
+
+CALL add_user ('user_2', '') ON CLASS db_user to admin;
+
+**drop_user( ) method**
+
+As a class method of
+**db_user**
+class, this method is used to drop an existing user. Only the user name to be dropped is given as an argument, and it must be a string type. However, the owner of a class cannot be dropped thus
+**DBA**
+needs to specify a new owner of the class before dropping the user. The
+**drop_user( )**
+method can be also called only by
+**DBA**
+or members of
+**DBA**
+.
+
+-- Delete user_2
+
+CALL drop_user ('user_2') ON CLASS db_user;
+
+**find_user( ) method**
+
+As a class method of
+**db_user**
+class, this method is used to find a user who is given as an argument. The name of a user to be found is given as an argument, and the return value of the method is stored into a variable that follows 'to'. The stored value can be used in a next query execution.
+
+-- Find user_2 and store it into a variable called 'admin'
+
+CALL find_user ('user_2') ON CLASS db_user to admin;
+
+**set_password( ) method**
+
+This method is an instance method that can call each user instance, and it is used to change a user's password. The new password of a specified user is given as an argument. General users other than
+**DBA**
+and
+**DBA**
+group members can only change their own passwords.
+
+-- Add user_4 and store it into a variable called user_common
+
+CALL add_user ('user_4','') ON CLASS db_user to user_common;
+
+-- Change the password of user_4 to 'abcdef'
+
+CALL set_password('abcdef') on user_common;
+
+**change_owner() method**
+
+As a class method of
+**db_authorizations**
+class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs.
+**change_owner( )**
+can be called only by
+**DBA**
+or members of
+**DBA**
+group. The
+**ALTER … OWNER**
+query has the same role as the method. See
+`Changing Owner <#syntax_syntax_access_alter_htm>`_
+.
+
+-- Change the owner of table_1 to user_4
+
+CALL change_owner ('table_1', 'user_4') ON CLASS db_authorizations;
+
+**Example**
+
+The following example shows a
+**CALL**
+statement that calls the find_user method defined in the system table
+**db_user**
+. It is called to determine whether the database user entered as the
+**find_user**
+exists. The first statement calls the table method defined in the
+**db_user**
+class. The name (
+**db_user**
+in this case) is stored in x if the user is registered in the database. Otherwise,
+**NULL**
+is stored.
+
+The second statement outputs the value stored in the variable x. In this query statement, the
+**DB_ROOT**
+is a system class that can have only one record. It can be used to output the value of sys_date or other registered variables. For this purpose, the
+**DB_ROOT**
+can be replaced by another table having only one record.
+
+CALL find_user('dba') ON CLASS db_user to x;
+
+Result
+
+======================
+
+db_user
+
+ 
+
+SELECT x FROM db_root;
+
+x
+
+======================
+
+db_user
+
+With
+**find_user**
+, you can determine if the user exists in the database depending on whether the return value is
+**NULL**
+or not.

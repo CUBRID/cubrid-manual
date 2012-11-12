@@ -279,223 +279,148 @@ CUBRID는 트랜잭션이 수행하고자 하는 연산의 종류에 따라 획�
 
 **예제**
 
-+-------------------------------------------------------------------------------+---------------------------------------------------------------+
-| **session 1**                                                                 | **session 2**                                                 |
-|                                                                               |                                                               |
-+-------------------------------------------------------------------------------+---------------------------------------------------------------+
-| ;autocommit off                                                               | ;autocommit off                                               |
-|                                                                               |                                                               |
-| AUTOCOMMIT IS OFF                                                             | AUTOCOMMIT IS OFF                                             |
-|                                                                               |                                                               |
-| set transaction isolation level 4;                                            | set transaction isolation level 4;                            |
-|                                                                               |                                                               |
-| Isolation level set to:                                                       | Isolation level set to:                                       |
-|                                                                               |                                                               |
-| REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                             | REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.             |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               | /*                                                            |
-|                                                                               |                                                               |
-|                                                                               | C:\CUBRID>cubrid lockdb demodb                                |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               | *** Lock Table Dump ***                                       |
-|                                                                               |                                                               |
-|                                                                               | …                                                             |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               | Object Lock Table:                                            |
-|                                                                               |                                                               |
-|                                                                               |         Current number of objects which are locked    = 0     |
-|                                                                               |                                                               |
-|                                                                               |         Maximum number of objects which can be locked = 10000 |
-|                                                                               |                                                               |
-|                                                                               | …                                                             |
-|                                                                               |                                                               |
-|                                                                               | */                                                            |
-|                                                                               |                                                               |
-+-------------------------------------------------------------------------------+---------------------------------------------------------------+
-| SELECT nation_code, gold FROM participant WHERE nation_code='USA';            |                                                               |
-|                                                                               |                                                               |
-|  nation_code                  gold                                            |                                                               |
-|                                                                               |                                                               |
-| ======================================                                        |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          36                                             |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          37                                             |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          44                                             |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          37                                             |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          36                                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| /*                                                                            |                                                               |
-|                                                                               |                                                               |
-| C:\CUBRID>cubrid lockdb demodb                                                |                                                               |
-|                                                                               |                                                               |
-| *** Lock Table Dump ***                                                       |                                                               |
-|                                                                               |                                                               |
-| …                                                                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| Object type: Root class.                                                      |                                                               |
-|                                                                               |                                                               |
-| LOCK HOLDERS:                                                                 |                                                               |
-|                                                                               |                                                               |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   1, Nsubgranules =  1 |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| Object type: Class = participant.                                             |                                                               |
-|                                                                               |                                                               |
-| LOCK HOLDERS:                                                                 |                                                               |
-|                                                                               |                                                               |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   2, Nsubgranules =  0 |                                                               |
-|                                                                               |                                                               |
-| */                                                                            |                                                               |
-|                                                                               |                                                               |
-+-------------------------------------------------------------------------------+---------------------------------------------------------------+
-|                                                                               | UPDATE participant SET gold = 11 WHERE nation_code = 'USA' ;  |
-|                                                                               |                                                               |
-+-------------------------------------------------------------------------------+---------------------------------------------------------------+
-| SELECT nation_code, gold FROM participant WHERE nation_code='USA';            |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| /* no results until transaction 2 releases a lock                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| C:\CUBRID>cubrid lockdb demodb                                                |                                                               |
-|                                                                               |                                                               |
-| *** Lock Table Dump ***                                                       |                                                               |
-|                                                                               |                                                               |
-| …                                                                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| Object type: Instance of class ( 0|   551|   7) = participant.                |                                                               |
-|                                                                               |                                                               |
-| LOCK HOLDERS:                                                                 |                                                               |
-|                                                                               |                                                               |
-|     Tran_index =   3, Granted_mode =   X_LOCK, Count =   2                    |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| …                                                                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| Object type: Root class.                                                      |                                                               |
-|                                                                               |                                                               |
-| LOCK HOLDERS:                                                                 |                                                               |
-|                                                                               |                                                               |
-|     Tran_index =   3, Granted_mode =  IX_LOCK, Count =   1, Nsubgranules =  3 |                                                               |
-|                                                                               |                                                               |
-| NON_2PL_RELEASED:                                                             |                                                               |
-|                                                                               |                                                               |
-|     Tran_index =   2, Non_2_phase_lock =  IS_LOCK                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| …                                                                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| Object type: Class = participant.                                             |                                                               |
-|                                                                               |                                                               |
-| LOCK HOLDERS:                                                                 |                                                               |
-|                                                                               |                                                               |
-|     Tran_index =   3, Granted_mode =  IX_LOCK, Count =   3, Nsubgranules =  5 |                                                               |
-|                                                                               |                                                               |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   2, Nsubgranules =  0 |                                                               |
-|                                                                               |                                                               |
-| */                                                                            |                                                               |
-|                                                                               |                                                               |
-+-------------------------------------------------------------------------------+---------------------------------------------------------------+
-|                                                                               | COMMIT;                                                       |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               | Current transaction has been committed.                       |
-|                                                                               |                                                               |
-+-------------------------------------------------------------------------------+---------------------------------------------------------------+
-| nation_code                  gold                                             |                                                               |
-|                                                                               |                                                               |
-| =================================                                             |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          11                                             |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          11                                             |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          11                                             |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          11                                             |                                                               |
-|                                                                               |                                                               |
-| 'USA'                          11                                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| /*                                                                            |                                                               |
-|                                                                               |                                                               |
-| C:\CUBRID>cubrid lockdb demodb                                                |                                                               |
-|                                                                               |                                                               |
-| …                                                                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| Object type: Root class.                                                      |                                                               |
-|                                                                               |                                                               |
-| LOCK HOLDERS:                                                                 |                                                               |
-|                                                                               |                                                               |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   1, Nsubgranules =  1 |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| Object type: Class = participant.                                             |                                                               |
-|                                                                               |                                                               |
-| LOCK HOLDERS:                                                                 |                                                               |
-|                                                                               |                                                               |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   3, Nsubgranules =  0 |                                                               |
-|                                                                               |                                                               |
-| …                                                                             |                                                               |
-|                                                                               |                                                               |
-| */                                                                            |                                                               |
-|                                                                               |                                                               |
-+-------------------------------------------------------------------------------+---------------------------------------------------------------+
-| COMMIT;                                                                       |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| Current transaction has been committed.                                       |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| /*                                                                            |                                                               |
-|                                                                               |                                                               |
-| C:\CUBRID>cubrid lockdb demodb                                                |                                                               |
-|                                                                               |                                                               |
-| …                                                                             |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-|                                                                               |                                                               |
-| Object Lock Table:                                                            |                                                               |
-|                                                                               |                                                               |
-|         Current number of objects which are locked    = 0                     |                                                               |
-|                                                                               |                                                               |
-|         Maximum number of objects which can be locked = 10000                 |                                                               |
-|                                                                               |                                                               |
-| */                                                                            |                                                               |
-|                                                                               |                                                               |
-+-------------------------------------------------------------------------------+---------------------------------------------------------------+
++-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| session 1                                                                     | session 2                                                                  |
++===============================================================================+============================================================================+
+| ::                                                                            | ::                                                                         |
+|                                                                               |                                                                            |
+|   csql> ;autocommit off                                                       |   csql> ;autocommit off                                                    |
+|                                                                               |                                                                            |
+|   AUTOCOMMIT IS OFF                                                           |   AUTOCOMMIT IS OFF                                                        |
+|                                                                               |                                                                            |
+|   csql> set transaction isolation level 4;                                    |   csql> set transaction isolation level 4;                                 |
+|                                                                               |                                                                            |
+|   Isolation level set to:                                                     |   Isolation level set to:                                                  |
+|   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                           |   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                        |
+|                                                                               |                                                                            |
+|                                                                               | ::                                                                         |
+|                                                                               |                                                                            |
+|                                                                               |   $ cubrid lockdb demodb                                                   |
+|                                                                               |                                                                            |
+|                                                                               |   *** Lock Table Dump ***                                                  |
+|                                                                               |                                                                            |
+|                                                                               |   ...                                                                      |
+|                                                                               |                                                                            |
+|                                                                               |   Object Lock Table:                                                       |
+|                                                                               |         Current number of objects which are locked    = 0                  |
+|                                                                               |         Maximum number of objects which can be locked = 10000              |
+|                                                                               |                                                                            |
+|                                                                               |   ...                                                                      |
++-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                            |                                                                            |
+|                                                                               |                                                                            |
+|   csql> SELECT nation_code, gold FROM participant WHERE nation_code='USA';    |                                                                            |
+|                                                                               |                                                                            |
+|    nation_code                  gold                                          |                                                                            |
+|   ======================================                                      |                                                                            |
+|   'USA'                          36                                           |                                                                            |
+|   'USA'                          37                                           |                                                                            |
+|   'USA'                          44                                           |                                                                            |
+|   'USA'                          37                                           |                                                                            |
+|   'USA'                          36                                           |                                                                            |
+|                                                                               |                                                                            |
+| ::                                                                            |                                                                            |
+|                                                                               |                                                                            |
+|   $ cubrid lockdb demodb                                                      |                                                                            |
+|                                                                               |                                                                            |
+|   *** Lock Table Dump ***                                                     |                                                                            |
+|                                                                               |                                                                            |
+|   ...                                                                         |                                                                            |
+|                                                                               |                                                                            |
+|   Object type: Root class.                                                    |                                                                            |
+|   LOCK HOLDERS:                                                               |                                                                            |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   1, Nsubgranules =  1 |                                                                            |
+|                                                                               |                                                                            |
+|   Object type: Class = participant.                                           |                                                                            |
+|   LOCK HOLDERS:                                                               |                                                                            |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   2, Nsubgranules =  0 |                                                                            |
++-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                                               | ::                                                                         |
+|                                                                               |                                                                            |
+|                                                                               |   csql> UPDATE participant SET gold = 11 WHERE nation_code = 'USA';        |
++-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                            |                                                                            |
+|                                                                               |                                                                            |
+|   csql> SELECT nation_code, gold FROM participant WHERE nation_code='USA';    |                                                                            |
+|                                                                               |                                                                            |
+|   /* no results until transaction 2 releases a lock                           |                                                                            |
+|                                                                               |                                                                            |
+| ::                                                                            |                                                                            |
+|                                                                               |                                                                            |
+|   $ cubrid lockdb demodb                                                      |                                                                            |
+|                                                                               |                                                                            |
+|   *** Lock Table Dump ***                                                     |                                                                            |
+|                                                                               |                                                                            |
+|   ...                                                                         |                                                                            |
+|                                                                               |                                                                            |
+|   Object type: Instance of class ( 0|   551|   7) = participant.              |                                                                            |
+|   LOCK HOLDERS:                                                               |                                                                            |
+|       Tran_index =   3, Granted_mode =   X_LOCK, Count =   2                  |                                                                            |
+|                                                                               |                                                                            |
+|   ...                                                                         |                                                                            |
+|                                                                               |                                                                            |
+|   Object type: Root class.                                                    |                                                                            |
+|   LOCK HOLDERS:                                                               |                                                                            |
+|     Tran_index =   3, Granted_mode =  IX_LOCK, Count =   1, Nsubgranules =  3 |                                                                            |
+|                                                                               |                                                                            |
+|   NON_2PL_RELEASED:                                                           |                                                                            |
+|     Tran_index =   2, Non_2_phase_lock =  IS_LOCK                             |                                                                            |
+|                                                                               |                                                                            |
+|   ...                                                                         |                                                                            |
+|                                                                               |                                                                            |
+|   Object type: Class = participant.                                           |                                                                            |
+|   LOCK HOLDERS:                                                               |                                                                            |
+|     Tran_index =   3, Granted_mode =  IX_LOCK, Count =   3, Nsubgranules =  5 |                                                                            |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   2, Nsubgranules =  0 |                                                                            |
++-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                                               | ::                                                                         |
+|                                                                               |                                                                            |
+|                                                                               |   csql> COMMIT;                                                            |
+|                                                                               |                                                                            |
+|                                                                               |   Current transaction has been committed.                                  |
++-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                            |                                                                            |
+|                                                                               |                                                                            |
+|   nation_code                  gold                                           |                                                                            |
+|   =================================                                           |                                                                            |
+|   'USA'                          11                                           |                                                                            |
+|   'USA'                          11                                           |                                                                            |
+|   'USA'                          11                                           |                                                                            |
+|   'USA'                          11                                           |                                                                            |
+|   'USA'                          11                                           |                                                                            |
+|                                                                               |                                                                            |
+| ::                                                                            |                                                                            |
+|                                                                               |                                                                            |
+|   $ cubrid lockdb demodb                                                      |                                                                            |
+|                                                                               |                                                                            |
+|   ...                                                                         |                                                                            |
+|                                                                               |                                                                            |
+|   Object type: Root class.                                                    |                                                                            |
+|   LOCK HOLDERS:                                                               |                                                                            |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   1, Nsubgranules =  1 |                                                                            |
+|                                                                               |                                                                            |
+|   Object type: Class = participant.                                           |                                                                            |
+|   LOCK HOLDERS:                                                               |                                                                            |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   3, Nsubgranules =  0 |                                                                            |
+|                                                                               |                                                                            |
+|   ...                                                                         |                                                                            |
++-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                            |                                                                            |
+|                                                                               |                                                                            |
+|   csql> COMMIT;                                                               |                                                                            |
+|                                                                               |                                                                            |
+|   Current transaction has been committed.                                     |                                                                            |
+|                                                                               |                                                                            |
+| ::                                                                            |                                                                            |
+|                                                                               |                                                                            |
+|   $ cubrid lockdb demodb                                                      |                                                                            |
+|                                                                               |                                                                            |
+|   ...                                                                         |                                                                            |
+|                                                                               |                                                                            |
+|   Object Lock Table:                                                          |                                                                            |
+|           Current number of objects which are locked    = 0                   |                                                                            |
+|           Maximum number of objects which can be locked = 10000               |                                                                            |
++-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
 
 트랜잭션 교착 상태(deadlock)
@@ -523,134 +448,94 @@ CUBRID는 트랜잭션이 수행하고자 하는 연산의 종류에 따라 획�
 
 **예제**
 
-+--------------------------------------------------------------------------------------------------+--------------------------------------------+
-| **session 1**                                                                                    | **session 2**                              |
-|                                                                                                  |                                            |
-+--------------------------------------------------------------------------------------------------+--------------------------------------------+
-| ;autocommit off                                                                                  | ;autocommit off                            |
-|                                                                                                  |                                            |
-| AUTOCOMMIT IS OFF                                                                                | AUTOCOMMIT IS OFF                          |
-|                                                                                                  |                                            |
-| set transaction isolation level 6;                                                               | set transaction isolation level 6;         |
-|                                                                                                  |                                            |
-| Isolation level set to:                                                                          | Isolation level set to:                    |
-|                                                                                                  |                                            |
-| SERIALIZABLE                                                                                     | SERIALIZABLE                               |
-|                                                                                                  |                                            |
-+--------------------------------------------------------------------------------------------------+--------------------------------------------+
-| CREATE TABLE lock_tbl(host_year integer, nation_code char(3));                                   |                                            |
-|                                                                                                  |                                            |
-| INSERT INTO lock_tbl VALUES (2004, 'KOR');                                                       |                                            |
-|                                                                                                  |                                            |
-| INSERT INTO lock_tbl VALUES (2004, 'USA');                                                       |                                            |
-|                                                                                                  |                                            |
-| INSERT INTO lock_tbl VALUES (2004, 'GER');                                                       |                                            |
-|                                                                                                  |                                            |
-| INSERT INTO lock_tbl VALUES (2008, 'GER');                                                       |                                            |
-|                                                                                                  |                                            |
-| COMMIT;                                                                                          |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| SELECT * FROM lock_tbl;                                                                          |                                            |
-|                                                                                                  |                                            |
-|     host_year  nation_code                                                                       |                                            |
-|                                                                                                  |                                            |
-| ===================================                                                              |                                            |
-|                                                                                                  |                                            |
-|          2004  'KOR'                                                                             |                                            |
-|                                                                                                  |                                            |
-|          2004  'USA'                                                                             |                                            |
-|                                                                                                  |                                            |
-|          2004  'GER'                                                                             |                                            |
-|                                                                                                  |                                            |
-|          2008  'GER'                                                                             |                                            |
-|                                                                                                  |                                            |
-+--------------------------------------------------------------------------------------------------+--------------------------------------------+
-|                                                                                                  | SELECT * FROM lock_tbl;                    |
-|                                                                                                  |                                            |
-|                                                                                                  |     host_year  nation_code                 |
-|                                                                                                  |                                            |
-|                                                                                                  | ===================================        |
-|                                                                                                  |                                            |
-|                                                                                                  |          2004  'KOR'                       |
-|                                                                                                  |                                            |
-|                                                                                                  |          2004  'USA'                       |
-|                                                                                                  |                                            |
-|                                                                                                  |          2004  'GER'                       |
-|                                                                                                  |                                            |
-|                                                                                                  |          2008  'GER'                       |
-|                                                                                                  |                                            |
-+--------------------------------------------------------------------------------------------------+--------------------------------------------+
-| DELETE FROM lock_tbl WHERE host_year=2008;                                                       |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| /* no result until transaction 2 releases a lock                                                 |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| C:\CUBRID>cubrid lockdb demodb                                                                   |                                            |
-|                                                                                                  |                                            |
-| *** Lock Table Dump ***                                                                          |                                            |
-|                                                                                                  |                                            |
-| …                                                                                                |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| Object type: Class = lock_tbl.                                                                   |                                            |
-|                                                                                                  |                                            |
-| LOCK HOLDERS:                                                                                    |                                            |
-|                                                                                                  |                                            |
-|     Tran_index =   2, Granted_mode =   S_LOCK, Count =   2, Nsubgranules =  0                    |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| BLOCKED LOCK HOLDERS:                                                                            |                                            |
-|                                                                                                  |                                            |
-|     Tran_index =   1, Granted_mode =   S_LOCK, Count =   3, Nsubgranules =  0                    |                                            |
-|                                                                                                  |                                            |
-|     Blocked_mode = SIX_LOCK                                                                      |                                            |
-|                                                                                                  |                                            |
-|     Start_waiting_at = Fri Feb 12 14:22:58 2010                                                  |                                            |
-|                                                                                                  |                                            |
-|     Wait_for_nsecs = -1                                                                          |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| */                                                                                               |                                            |
-|                                                                                                  |                                            |
-+--------------------------------------------------------------------------------------------------+--------------------------------------------+
-|                                                                                                  | INSERT INTO lock_tbl VALUES (2004, 'AUS'); |
-|                                                                                                  |                                            |
-+--------------------------------------------------------------------------------------------------+--------------------------------------------+
-| ERROR: Your transaction (index 1, dba@ 090205|4760) has been unilaterally aborted by the system. |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| /*                                                                                               |                                            |
-|                                                                                                  |                                            |
-| System rolled back the transaction 1 to resolve a deadlock                                       |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| C:\CUBRID>cubrid lockdb demodb                                                                   |                                            |
-|                                                                                                  |                                            |
-| *** Lock Table Dump ***                                                                          |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| Object type: Class = lock_tbl.                                                                   |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-|                                                                                                  |                                            |
-| LOCK HOLDERS:                                                                                    |                                            |
-|                                                                                                  |                                            |
-|     Tran_index =   2, Granted_mode = SIX_LOCK, Count =   3, Nsubgranules =  0                    |                                            |
-|                                                                                                  |                                            |
-| */                                                                                               |                                            |
-|                                                                                                  |                                            |
-+--------------------------------------------------------------------------------------------------+--------------------------------------------+
++-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
+| session 1                                                                                           | session 2                                            |
++=====================================================================================================+======================================================+
+| ::                                                                                                  | ::                                                   |
+|                                                                                                     |                                                      |
+|   csql> ;autocommit off                                                                             |   csql> ;autocommit off                              |
+|                                                                                                     |                                                      |
+|   AUTOCOMMIT IS OFF                                                                                 |   AUTOCOMMIT IS OFF                                  |
+|                                                                                                     |                                                      |
+|   csql> set transaction isolation level 6;                                                          |   csql> set transaction isolation level 6;           |
+|                                                                                                     |                                                      |
+|   Isolation level set to:                                                                           |   Isolation level set to:                            |
+|   SERIALIZABLE                                                                                      |   SERIALIZABLE                                       |
++-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
+| ::                                                                                                  |                                                      |
+|                                                                                                     |                                                      |
+|   csql> CREATE TABLE lock_tbl(host_year integer, nation_code char(3));                              |                                                      |
+|   csql> INSERT INTO lock_tbl VALUES (2004, 'KOR');                                                  |                                                      |
+|   csql> INSERT INTO lock_tbl VALUES (2004, 'USA');                                                  |                                                      |
+|   csql> INSERT INTO lock_tbl VALUES (2004, 'GER');                                                  |                                                      |
+|   csql> INSERT INTO lock_tbl VALUES (2008, 'GER');                                                  |                                                      |
+|   csql> COMMIT;                                                                                     |                                                      |
+|                                                                                                     |                                                      |
+|   csql> SELECT * FROM lock_tbl;                                                                     |                                                      |
+|                                                                                                     |                                                      |
+|       host_year  nation_code                                                                        |                                                      |
+|   ===================================                                                               |                                                      |
+|            2004  'KOR'                                                                              |                                                      |
+|            2004  'USA'                                                                              |                                                      |
+|            2004  'GER'                                                                              |                                                      |
+|            2008  'GER'                                                                              |                                                      |
++-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
+|                                                                                                     | ::                                                   |
+|                                                                                                     |                                                      |
+|                                                                                                     |   csql> SELECT * FROM lock_tbl;                      |
+|                                                                                                     |                                                      |
+|                                                                                                     |       host_year  nation_code                         |
+|                                                                                                     |   ===================================                |
+|                                                                                                     |            2004  'KOR'                               |
+|                                                                                                     |            2004  'USA'                               |
+|                                                                                                     |            2004  'GER'                               |
+|                                                                                                     |            2008  'GER'                               |
++-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
+| ::                                                                                                  |                                                      |
+|                                                                                                     |                                                      |
+|   csql> DELETE FROM lock_tbl WHERE host_year=2008;                                                  |                                                      |
+|                                                                                                     |                                                      |
+|   /* no result until transaction 2 releases a lock                                                  |                                                      |
+|                                                                                                     |                                                      |
+| ::                                                                                                  |                                                      |
+|                                                                                                     |                                                      |
+|   $ cubrid lockdb demodb                                                                            |                                                      |
+|                                                                                                     |                                                      |
+|   *** Lock Table Dump ***                                                                           |                                                      |
+|                                                                                                     |                                                      |
+|   ...                                                                                               |                                                      |
+|                                                                                                     |                                                      |
+|                                                                                                     |                                                      |
+|   Object type: Class = lock_tbl.                                                                    |                                                      |
+|   LOCK HOLDERS:                                                                                     |                                                      |
+|       Tran_index =   2, Granted_mode =   S_LOCK, Count =   2, Nsubgranules =  0                     |                                                      |
+|                                                                                                     |                                                      |
+|   BLOCKED LOCK HOLDERS:                                                                             |                                                      |
+|       Tran_index =   1, Granted_mode =   S_LOCK, Count =   3, Nsubgranules =  0                     |                                                      |
+|       Blocked_mode = SIX_LOCK                                                                       |                                                      |
+|       Start_waiting_at = Fri Feb 12 14:22:58 2010                                                   |                                                      |
+|       Wait_for_nsecs = -1                                                                           |                                                      |
++-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
+|                                                                                                     | ::                                                   |
+|                                                                                                     |                                                      |
+|                                                                                                     |   csql> INSERT INTO lock_tbl VALUES (2004, 'AUS');   |
++-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
+| ::                                                                                                  |                                                      |
+|                                                                                                     |                                                      |
+|   ERROR: Your transaction (index 1, dba@ 090205|4760) has been unilaterally aborted by the system.  |                                                      |
+|                                                                                                     |                                                      |
+|   /* System rolled back the transaction 1 to resolve a deadlock */                                  |                                                      |
+|                                                                                                     |                                                      |
+| ::                                                                                                  |                                                      |
+|                                                                                                     |                                                      |
+|   $ cubrid lockdb demodb                                                                            |                                                      |
+|                                                                                                     |                                                      |
+|   *** Lock Table Dump ***                                                                           |                                                      |
+|                                                                                                     |                                                      |
+|   Object type: Class = lock_tbl.                                                                    |                                                      |
+|   LOCK HOLDERS:                                                                                     |                                                      |
+|       Tran_index =   2, Granted_mode = SIX_LOCK, Count =   3, Nsubgranules =  0                     |                                                      |
++-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
 
 트랜잭션 잠금 타임아웃
 ----------------------
@@ -821,129 +706,107 @@ SERIALIZABLE
 
 다음은 동시에 수행되는 트랜잭션의 격리 수준이 **SERIALIZABLE** 인 경우 한 트랜잭션에서 객체 읽기 또는 객체 갱신을 수행하는 동안 다른 트랜잭션이 테이블 또는 레코드에 접근할 수 없음을 보여주는 예제이다.
 
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| **session 1**                                                   | **session 2**                                                          |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| ;autocommit off                                                 | ;autocommit off                                                        |
-|                                                                 |                                                                        |
-| AUTOCOMMIT IS OFF                                               | AUTOCOMMIT IS OFF                                                      |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| SET TRANSACTION ISOLATION LEVEL 6;                              | SET TRANSACTION ISOLATION LEVEL 6;                                     |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| Isolation level set to:                                         | Isolation level set to:                                                |
-|                                                                 |                                                                        |
-| SERIALIZABLE                                                    | SERIALIZABLE                                                           |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| --creating a table                                              |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| CREATE TABLE isol6_tbl(host_year integer, nation_code char(3)); |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| INSERT INTO isol6_tbl VALUES (2008, 'AUS');                     |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| COMMIT;                                                         |                                                                        |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | --selecting records from the table                                     |
-|                                                                 |                                                                        |
-|                                                                 | SELECT * FROM isol6_tbl WHERE nation_code = 'AUS';                     |
-|                                                                 |                                                                        |
-|                                                                 |     host_year  nation_code                                             |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |          2008  'AUS'                                                   |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| INSERT INTO isol6_tbl VALUES (2004, 'AUS');                     |                                                                        |
-|                                                                 |                                                                        |
-| /* unable to insert a row until the tran 2 committed */         |                                                                        |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | COMMIT;                                                                |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol6_tbl WHERE nation_code = 'AUS';                     |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 | /* unable to select rows until tran 1 committed */                     |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| COMMIT;                                                         |     host_year  nation_code                                             |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |          2008  'AUS'                                                   |
-|                                                                 |                                                                        |
-|                                                                 |          2004  'AUS'                                                   |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| DELETE FROM isol6_tbl                                           |                                                                        |
-|                                                                 |                                                                        |
-| WHERE nation_code = 'AUS' and                                   |                                                                        |
-|                                                                 |                                                                        |
-| host_year=2008;                                                 |                                                                        |
-|                                                                 |                                                                        |
-| /* unable to delete rows until tran 2 committed */              |                                                                        |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | COMMIT;                                                                |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol6_tbl WHERE nation_code = 'AUS';                     |
-|                                                                 |                                                                        |
-|                                                                 | /* unable to select rows until tran 1 committed */                     |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| COMMIT;                                                         |     host_year  nation_code                                             |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |          2004  'AUS'                                                   |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| ALTER TABLE isol6_tbl                                           | /* repeatable read is ensured while tran_1 is altering table schema */ |
-|                                                                 |                                                                        |
-| ADD COLUMN gold INT;                                            |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 | SELECT * FROM isol6_tbl WHERE nation_code = 'AUS';                     |
-|                                                                 |                                                                        |
-| /* unable to alter the table schema until tran 2 committed */   |     host_year  nation_code                                             |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |          2004  'AUS'                                                   |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | COMMIT;                                                                |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol6_tbl WHERE nation_code = 'AUS';                     |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 | /* unable to access the table until tran_1 committed */                |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| COMMIT;                                                         | host_year  nation_code  gold                                           |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |   2004  'AUS'           NULL                                           |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| session 1                                                               | session 2                                                                  |
++=========================================================================+============================================================================+
+| ::                                                                      | ::                                                                         |
+|                                                                         |                                                                            |
+|   csql> ;autocommit off                                                 |   csql> ;autocommit off                                                    |
+|                                                                         |                                                                            |
+|   AUTOCOMMIT IS OFF                                                     |   AUTOCOMMIT IS OFF                                                        |
+|                                                                         |                                                                            |
+|   csql> SET TRANSACTION ISOLATION LEVEL 6;                              |   csql> SET TRANSACTION ISOLATION LEVEL 6;                                 |
+|                                                                         |                                                                            |
+|   Isolation level set to:                                               |   Isolation level set to:                                                  |
+|   SERIALIZABLE                                                          |   SERIALIZABLE                                                             |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                      |                                                                            |
+|                                                                         |                                                                            |
+|   csql> CREATE TABLE isol6_tbl(host_year integer, nation_code char(3)); |                                                                            |
+|                                                                         |                                                                            |
+|   csql> INSERT INTO isol6_tbl VALUES (2008, 'AUS');                     |                                                                            |
+|                                                                         |                                                                            |
+|   csql> COMMIT;                                                         |                                                                            |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                                         | ::                                                                         |
+|                                                                         |                                                                            |
+|                                                                         |   csql> SELECT * FROM isol6_tbl WHERE nation_code = 'AUS';                 |
+|                                                                         |                                                                            |
+|                                                                         |       host_year  nation_code                                               |
+|                                                                         |   ===================================                                      |
+|                                                                         |            2008  'AUS'                                                     |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                      |                                                                            |
+|                                                                         |                                                                            |
+|   csql> INSERT INTO isol6_tbl VALUES (2004, 'AUS');                     |                                                                            |
+|                                                                         |                                                                            |
+|   /* unable to insert a row until the tran 2 committed */               |                                                                            |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                                         | ::                                                                         |
+|                                                                         |                                                                            |
+|                                                                         |   csql> COMMIT;                                                            |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                                         | ::                                                                         |
+|                                                                         |                                                                            |
+|                                                                         |   csql> SELECT * FROM isol6_tbl WHERE nation_code = 'AUS';                 |
+|                                                                         |                                                                            |
+|                                                                         |   /* unable to select rows until tran 1 committed */                       |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| :                                                                       | ::                                                                         |
+|                                                                         |                                                                            |
+|   csql> COMMIT;                                                         |       host_year  nation_code                                               |
+|                                                                         |   ===================================                                      |
+|                                                                         |            2008  'AUS'                                                     |
+|                                                                         |            2004  'AUS'                                                     |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                      |                                                                            |
+|                                                                         |                                                                            |
+|   csql> DELETE FROM isol6_tbl                                           |                                                                            |
+|   csql> WHERE nation_code = 'AUS' and                                   |                                                                            |
+|   csql> host_year=2008;                                                 |                                                                            |
+|                                                                         |                                                                            |
+|   /* unable to delete rows until tran 2 committed */                    |                                                                            |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                                         | ::                                                                         |
+|                                                                         |                                                                            |
+|                                                                         |   csql> COMMIT;                                                            |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                                         | ::                                                                         |
+|                                                                         |                                                                            |
+|                                                                         |   csql> SELECT * FROM isol6_tbl WHERE nation_code = 'AUS';                 |
+|                                                                         |                                                                            |
+|                                                                         |   /* unable to select rows until tran 1 committed */                       |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                      | ::                                                                         |
+|                                                                         |                                                                            |
+|   csql> COMMIT;                                                         |       host_year  nation_code                                               |
+|                                                                         |   ===================================                                      |
+|                                                                         |            2004  'AUS'                                                     |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                      | ::                                                                         |
+|                                                                         |                                                                            |
+|   csql> ALTER TABLE isol6_tbl                                           |   /* repeatable read is ensured while tran_1 is altering table schema */   |
+|                                                                         |                                                                            |
+|   /* unable to alter the table schema until tran 2 committed */         |       host_year  nation_code                                               |
+|                                                                         |   ===================================                                      |
+|                                                                         |            2004  'AUS'                                                     |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                                         | ::                                                                         |
+|                                                                         |                                                                            |
+|                                                                         |   csql> COMMIT;                                                            |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                                         | ::                                                                         |
+|                                                                         |                                                                            |
+|                                                                         |   csql> SELECT * FROM isol6_tbl WHERE nation_code = 'AUS';                 |
+|                                                                         |                                                                            |
+|                                                                         |   /* unable to access the table until tran_1 committed */                  |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                                      | ::                                                                         |
+|                                                                         |                                                                            |
+|   csql> COMMIT;                                                         |   host_year  nation_code  gold                                             |
+|                                                                         |   ===================================                                      |
+|                                                                         |     2004  'AUS'           NULL                                             |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
 REPEATABLE READ CLASS with REPEATABLE READ INSTANCES
 ----------------------------------------------------
@@ -962,153 +825,119 @@ REPEATABLE READ CLASS with REPEATABLE READ INSTANCES
 
 다음은 동시에 수행되는 트랜잭션의 격리 수준이 **REPEATABLE READ CLASS** with **REPEATABLE READ INSTANCES** 인 경우 한 트랜잭션에서 객체 읽기를 수행하는 동안 다른 트랜잭션이 새로운 레코드를 추가할 수 있으므로 유령 읽기가 발생할 수 있음을 보여주는 예제이다.
 
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-| **session 1**                                                    | **session 2**                                                          |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-| ;autocommit off                                                  | ;autocommit off                                                        |
-|                                                                  |                                                                        |
-| AUTOCOMMIT IS OFF                                                | AUTOCOMMIT IS OFF                                                      |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-| SET TRANSACTION ISOLATION LEVEL 5;                               | SET TRANSACTION ISOLATION LEVEL 5;                                     |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-| Isolation level set to:                                          | Isolation level set to:                                                |
-|                                                                  |                                                                        |
-| REPEATABLE READ SCHEMA, REPEATABLE READ INSTANCES.               | REPEATABLE READ SCHEMA, REPEATABLE READ INSTANCES.                     |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-| --creating a table                                               |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-| CREATE TABLE isol5_tbl(host_year integer, nation_code char(3));  |                                                                        |
-|                                                                  |                                                                        |
-| CREATE UNIQUE INDEX on isol5_tbl(nation_code, host_year);        |                                                                        |
-|                                                                  |                                                                        |
-| INSERT INTO isol5_tbl VALUES (2008, 'AUS');                      |                                                                        |
-|                                                                  |                                                                        |
-| INSERT INTO isol5_tbl VALUES (2004, 'AUS');                      |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-| COMMIT;                                                          |                                                                        |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                  | --selecting records from the table                                     |
-|                                                                  |                                                                        |
-|                                                                  | SELECT * FROM isol5_tbl WHERE nation_code='AUS';                       |
-|                                                                  |                                                                        |
-|                                                                  |     host_year  nation_code                                             |
-|                                                                  |                                                                        |
-|                                                                  | ===================================                                    |
-|                                                                  |                                                                        |
-|                                                                  |          2004  'AUS'                                                   |
-|                                                                  |                                                                        |
-|                                                                  |          2008  'AUS'                                                   |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-| INSERT INTO isol5_tbl VALUES (2004, 'KOR');                      |                                                                        |
-|                                                                  |                                                                        |
-| INSERT INTO isol5_tbl VALUES (2000, 'AUS');                      |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-| /* able to insert new rows only when locks are not conflicted */ |                                                                        |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                  | SELECT * FROM isol5_tbl WHERE nation_code='AUS';                       |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  | /* phantom read may occur when tran 1 committed */                     |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-| COMMIT;                                                          |     host_year  nation_code                                             |
-|                                                                  |                                                                        |
-|                                                                  | ===================================                                    |
-|                                                                  |                                                                        |
-|                                                                  |          2000  'AUS'                                                   |
-|                                                                  |                                                                        |
-|                                                                  |          2004  'AUS'                                                   |
-|                                                                  |                                                                        |
-|                                                                  |          2008  'AUS'                                                   |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-| DELETE FROM isol5_tbl                                            |                                                                        |
-|                                                                  |                                                                        |
-| WHERE nation_code = 'AUS' and                                    |                                                                        |
-|                                                                  |                                                                        |
-| host_year=2008;                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-| /* unable to delete rows until tran 2 committed */               |                                                                        |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                  | COMMIT;                                                                |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                  | SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                     |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  | /* unable to select rows until tran 1 committed */                     |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-| COMMIT;                                                          |     host_year  nation_code                                             |
-|                                                                  |                                                                        |
-|                                                                  | ===================================                                    |
-|                                                                  |                                                                        |
-|                                                                  |          2000  'AUS'                                                   |
-|                                                                  |                                                                        |
-|                                                                  |          2004  'AUS'                                                   |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-| ALTER TABLE isol5_tbl                                            |                                                                        |
-|                                                                  |                                                                        |
-| ADD COLUMN gold INT;                                             |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-| /* unable to alter the table schema until tran 2 committed */    |                                                                        |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                  | /* repeatable read is ensured while tran_1 is altering table schema */ |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  |                                                                        |
-|                                                                  | SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                     |
-|                                                                  |                                                                        |
-|                                                                  |     host_year  nation_code                                             |
-|                                                                  |                                                                        |
-|                                                                  | ===================================                                    |
-|                                                                  |                                                                        |
-|                                                                  |          2000  'AUS'                                                   |
-|                                                                  |                                                                        |
-|                                                                  |          2004  'AUS'                                                   |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                  | COMMIT;                                                                |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                  | SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                     |
-|                                                                  |                                                                        |
-|                                                                  | /* unable to access the table until tran_1 committed */                |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
-| COMMIT;                                                          | host_year  nation_code  gold                                           |
-|                                                                  |                                                                        |
-|                                                                  | ===================================                                    |
-|                                                                  |                                                                        |
-|                                                                  |   2000  'AUS'           NULL                                           |
-|                                                                  |                                                                        |
-|                                                                  |   2004  'AUS'           NULL                                           |
-|                                                                  |                                                                        |
-+------------------------------------------------------------------+------------------------------------------------------------------------+
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| session 1                                                                  | session 2                                                                   |
++============================================================================+=============================================================================+
+| ::                                                                         | ::                                                                          |
+|                                                                            |                                                                             |
+|   csql> ;autocommit off                                                    |   csql> ;autocommit off                                                     |
+|                                                                            |                                                                             |
+|   AUTOCOMMIT IS OFF                                                        |   AUTOCOMMIT IS OFF                                                         |
+|                                                                            |                                                                             |
+|   csql> SET TRANSACTION ISOLATION LEVEL 5;                                 |   csql> SET TRANSACTION ISOLATION LEVEL 5;                                  |
+|                                                                            |                                                                             |
+|   Isolation level set to:                                                  |   Isolation level set to:                                                   |
+|   REPEATABLE READ SCHEMA, REPEATABLE READ INSTANCES.                       |   REPEATABLE READ SCHEMA, REPEATABLE READ INSTANCES.                        |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| ::                                                                         |                                                                             |
+|                                                                            |                                                                             |
+|   csql> CREATE TABLE isol5_tbl(host_year integer, nation_code char(3));    |                                                                             |
+|   csql> CREATE UNIQUE INDEX on isol5_tbl(nation_code, host_year);          |                                                                             |
+|                                                                            |                                                                             |
+|   csql> INSERT INTO isol5_tbl VALUES (2008, 'AUS');                        |                                                                             |
+|   csql> INSERT INTO isol5_tbl VALUES (2004, 'AUS');                        |                                                                             |
+|                                                                            |                                                                             |
+|   csql> COMMIT;                                                            |                                                                             |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+|                                                                            | ::                                                                          |
+|                                                                            |                                                                             |
+|                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code='AUS';                    |
+|                                                                            |                                                                             |
+|                                                                            |       host_year  nation_code                                                |
+|                                                                            |   ===================================                                       |
+|                                                                            |            2004  'AUS'                                                      |
+|                                                                            |            2008  'AUS'                                                      |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| ::                                                                         |                                                                             |
+|                                                                            |                                                                             |
+|   csql> INSERT INTO isol5_tbl VALUES (2004, 'KOR');                        |                                                                             |
+|   csql> INSERT INTO isol5_tbl VALUES (2000, 'AUS');                        |                                                                             |
+|                                                                            |                                                                             |
+|   /* able to insert new rows only when locks are not conflicted */         |                                                                             |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+|                                                                            | ::                                                                          |
+|                                                                            |                                                                             |
+|                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code='AUS';                    |
+|                                                                            |                                                                             |
+|                                                                            |   /* phantom read may occur when tran 1 committed */                        |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| ::                                                                         | ::                                                                          |
+|                                                                            |                                                                             |
+|   csql> COMMIT;                                                            |       host_year  nation_code                                                |
+|                                                                            |   ===================================                                       |
+|                                                                            |            2000  'AUS'                                                      |
+|                                                                            |            2004  'AUS'                                                      |
+|                                                                            |            2008  'AUS'                                                      |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| ::                                                                         |                                                                             |
+|                                                                            |                                                                             |
+|   csql> DELETE FROM isol5_tbl                                              |                                                                             |
+|   csql> WHERE nation_code = 'AUS' and                                      |                                                                             |
+|   csql> host_year=2008;                                                    |                                                                             |
+|                                                                            |                                                                             |
+|   /* unable to delete rows until tran 2 committed */                       |                                                                             |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+|                                                                            | ::                                                                          |
+|                                                                            |                                                                             |
+|                                                                            |   csql> COMMIT;                                                             |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+|                                                                            | ::                                                                          |
+|                                                                            |                                                                             |
+|                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                  |
+|                                                                            |                                                                             |
+|                                                                            |   /* unable to select rows until tran 1 committed */                        |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| ::                                                                         | ::                                                                          |
+|                                                                            |                                                                             |
+|   csql> COMMIT;                                                            |       host_year  nation_code                                                |
+|                                                                            |   ===================================                                       |
+|                                                                            |            2000  'AUS'                                                      |
+|                                                                            |            2004  'AUS'                                                      |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| ::                                                                         |                                                                             |
+|                                                                            |                                                                             |
+|   csql> ALTER TABLE isol5_tbl ADD COLUMN gold INT;                         |                                                                             |
+|                                                                            |                                                                             |
+|   /* unable to alter the table schema until tran 2 committed */            |                                                                             |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+|                                                                            | ::                                                                          |
+|                                                                            |                                                                             |
+|                                                                            |   /* repeatable read is ensured while tran_1 is altering table schema */    |
+|                                                                            |                                                                             |
+|                                                                            |   csql> SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                  |
+|                                                                            |                                                                             |
+|                                                                            |       host_year  nation_code                                                |
+|                                                                            |   ===================================                                       |
+|                                                                            |            2000  'AUS'                                                      |
+|                                                                            |            2004  'AUS'                                                      |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+|                                                                            | ::                                                                          |
+|                                                                            |                                                                             |
+|                                                                            | csql> COMMIT;                                                               |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+|                                                                            | ::                                                                          |
+|                                                                            |                                                                             |
+|                                                                            | csql> SELECT * FROM isol5_tbl WHERE nation_code = 'AUS';                    |
+|                                                                            |                                                                             |
+|                                                                            | /* unable to access the table until tran_1 committed */                     |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| ::                                                                         | ::                                                                          |
+|                                                                            |                                                                             |
+| csql> COMMIT;                                                              |   host_year  nation_code  gold                                              |
+|                                                                            |   ===================================                                       |
+|                                                                            |     2000  'AUS'           NULL                                              |
+|                                                                            |     2004  'AUS'           NULL                                              |
++----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
 
 REPEATABLE READ CLASS with READ COMMITTED INSTANCES
 ---------------------------------------------------
@@ -1129,157 +958,119 @@ REPEATABLE READ CLASS with READ COMMITTED INSTANCES
 
 다음은 동시에 수행되는 트랜잭션의 격리 수준이 **REPEATABLE READ CLASS** with **READ COMMITTED INSTANCES** 인 경우 한 트랜잭션에서 객체 읽기를 수행하는 동안 다른 트랜잭션이 새로운 레코드를 추가 또는 갱신할 수 있으므로 유령 읽기 및 반복 불가능한 읽기가 발생할 수 있으나, 테이블 스키마 갱신에 대해서는 반복 가능한 읽기를 보장함을 보여주는 예제이다.
 
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| **session 1**                                                   | **session 2**                                                          |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| ;autocommit off                                                 | ;autocommit off                                                        |
-|                                                                 |                                                                        |
-| AUTOCOMMIT IS OFF                                               | AUTOCOMMIT IS OFF                                                      |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| SET TRANSACTION ISOLATION LEVEL 4;                              | SET TRANSACTION ISOLATION LEVEL 4;                                     |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| Isolation level set to:                                         | Isolation level set to:                                                |
-|                                                                 |                                                                        |
-| REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.               | REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                      |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| --creating a table                                              |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| CREATE TABLE isol4_tbl(host_year integer, nation_code char(3)); |                                                                        |
-|                                                                 |                                                                        |
-| INSERT INTO isol4_tbl VALUES (2008, 'AUS');                     |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| COMMIT;                                                         |                                                                        |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | --selecting records from the table                                     |
-|                                                                 |                                                                        |
-|                                                                 | SELECT * FROM isol4_tbl;                                               |
-|                                                                 |                                                                        |
-|                                                                 |     host_year  nation_code                                             |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |          2008  'AUS'                                                   |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| INSERT INTO isol4_tbl VALUES (2004, 'AUS');                     |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| INSERT INTO isol4_tbl VALUES (2000, 'NED');                     |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| /* able to insert new rows even if tran 2 uncommitted */        |                                                                        |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol4_tbl;                                               |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 | /* phantom read may occur when tran 1 committed */                     |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| COMMIT;                                                         |     host_year  nation_code                                             |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |          2008  'AUS'                                                   |
-|                                                                 |                                                                        |
-|                                                                 |          2004  'AUS'                                                   |
-|                                                                 |                                                                        |
-|                                                                 |          2000  'NED'                                                   |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| INSERT INTO isol4_tbl VALUES (1994, 'FRA');                     |                                                                        |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol4_tbl;                                               |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 | /* unrepeatable read may occur when tran 1 committed */                |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| DELETE FROM isol4_tbl                                           |                                                                        |
-|                                                                 |                                                                        |
-| WHERE nation_code = 'AUS' and                                   |                                                                        |
-|                                                                 |                                                                        |
-| host_year=2008;                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| /* able to delete rows while tran 2 is selecting rows*/         |                                                                        |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| COMMIT;                                                         |     host_year  nation_code                                             |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |          2004  'AUS'                                                   |
-|                                                                 |                                                                        |
-|                                                                 |          2000  'NED'                                                   |
-|                                                                 |                                                                        |
-|                                                                 |          1994  'FRA'                                                   |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| ALTER TABLE isol4_tbl                                           |                                                                        |
-|                                                                 |                                                                        |
-| ADD COLUMN gold INT;                                            |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-| /* unable to alter the table schema until tran 2 committed */   |                                                                        |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | /* repeatable read is ensured while tran_1 is altering table schema */ |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 | SELECT * FROM isol4_tbl;                                               |
-|                                                                 |                                                                        |
-|                                                                 |     host_year  nation_code                                             |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |          2004  'AUS'                                                   |
-|                                                                 |                                                                        |
-|                                                                 |          2000  'NED'                                                   |
-|                                                                 |                                                                        |
-|                                                                 |          1994  'FRA'                                                   |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | COMMIT;                                                                |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol4_tbl;                                               |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 |                                                                        |
-|                                                                 | /* unable to access the table until tran_1 committed */                |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
-| COMMIT;                                                         | host_year  nation_code  gold                                           |
-|                                                                 |                                                                        |
-|                                                                 | ===================================                                    |
-|                                                                 |                                                                        |
-|                                                                 |   2004  'AUS'           NULL                                           |
-|                                                                 |                                                                        |
-|                                                                 |   2000  'NED'           NULL                                           |
-|                                                                 |                                                                        |
-|                                                                 |   1994  'FRA'           NULL                                           |
-|                                                                 |                                                                        |
-+-----------------------------------------------------------------+------------------------------------------------------------------------+
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+| session 1                                                               | session 2                                                                        |
++=========================================================================+==================================================================================+
+| ::                                                                      | ::                                                                               |
+|                                                                         |                                                                                  |
+|   csql> ;autocommit off                                                 |   csql> ;autocommit off                                                          |
+|                                                                         |                                                                                  |
+|   AUTOCOMMIT IS OFF                                                     |   AUTOCOMMIT IS OFF                                                              |
+|                                                                         |                                                                                  |
+|   csql> SET TRANSACTION ISOLATION LEVEL 4;                              |   csql> SET TRANSACTION ISOLATION LEVEL 4;                                       |
+|                                                                         |                                                                                  |
+|   Isolation level set to:                                               |   Isolation level set to:                                                        |
+|   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                     |   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                              |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+| ::                                                                      |                                                                                  |
+|                                                                         |                                                                                  |
+|   csql> CREATE TABLE isol4_tbl(host_year integer, nation_code char(3)); |                                                                                  |
+|                                                                         |                                                                                  |
+|   csql> INSERT INTO isol4_tbl VALUES (2008, 'AUS');                     |                                                                                  |
+|                                                                         |                                                                                  |
+|   csql> COMMIT;                                                         |                                                                                  |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+|                                                                         | ::                                                                               |
+|                                                                         |                                                                                  |
+|                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
+|                                                                         |                                                                                  |
+|                                                                         |       host_year  nation_code                                                     |
+|                                                                         |   ===================================                                            |
+|                                                                         |            2008  'AUS'                                                           |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+| ::                                                                      |                                                                                  |
+|                                                                         |                                                                                  |
+|   csql> INSERT INTO isol4_tbl VALUES (2004, 'AUS');                     |                                                                                  |
+|   csql> INSERT INTO isol4_tbl VALUES (2000, 'NED');                     |                                                                                  |
+|                                                                         |                                                                                  |
+|   /* able to insert new rows even if tran 2 uncommitted */              |                                                                                  |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+|                                                                         | ::                                                                               |
+|                                                                         |                                                                                  |
+|                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
+|                                                                         |                                                                                  |
+|                                                                         |   /* phantom read may occur when tran 1 committed */                             |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+| ::                                                                      | ::                                                                               |
+|                                                                         |                                                                                  |
+|   csql> COMMIT;                                                         |       host_year  nation_code                                                     |
+|                                                                         |   ===================================                                            |
+|                                                                         |            2008  'AUS'                                                           |
+|                                                                         |            2004  'AUS'                                                           |
+|                                                                         |            2000  'NED'                                                           |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+| ::                                                                      |                                                                                  |
+|                                                                         |                                                                                  |
+|   csql> INSERT INTO isol4_tbl VALUES (1994, 'FRA');                     |                                                                                  |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+|                                                                         | ::                                                                               |
+|                                                                         |                                                                                  |
+|                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
+|                                                                         |                                                                                  |
+|                                                                         |   /* unrepeatable read may occur when tran 1 committed */                        |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+| ::                                                                      |                                                                                  |
+|                                                                         |                                                                                  |
+|   csql> DELETE FROM isol4_tbl                                           |                                                                                  |
+|   csql> WHERE nation_code = 'AUS' and                                   |                                                                                  |
+|   csql> host_year=2008;                                                 |                                                                                  |
+|                                                                         |                                                                                  |
+|   /* able to delete rows while tran 2 is selecting rows*/               |                                                                                  |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+| ::                                                                      | ::                                                                               |
+|                                                                         |                                                                                  |
+|   csql> COMMIT;                                                         |       host_year  nation_code                                                     |
+|                                                                         |   ===================================                                            |
+|                                                                         |            2004  'AUS'                                                           |
+|                                                                         |            2000  'NED'                                                           |
+|                                                                         |            1994  'FRA'                                                           |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+| ::                                                                      |                                                                                  |
+|                                                                         |                                                                                  |
+|   csql> ALTER TABLE isol4_tbl ADD COLUMN gold INT;                      |                                                                                  |
+|                                                                         |                                                                                  |
+|   /* unable to alter the table schema until tran 2 committed */         |                                                                                  |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+|                                                                         | ::                                                                               |
+|                                                                         |                                                                                  |
+|                                                                         |   /* repeatable read is ensured while tran_1 is altering table schema */         |
+|                                                                         |                                                                                  |
+|                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
+|                                                                         |                                                                                  |
+|                                                                         |       host_year  nation_code                                                     |
+|                                                                         |   ===================================                                            |
+|                                                                         |            2004  'AUS'                                                           |
+|                                                                         |            2000  'NED'                                                           |
+|                                                                         |            1994  'FRA'                                                           |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+|                                                                         | ::                                                                               |
+|                                                                         |                                                                                  |
+|                                                                         |   csql> COMMIT;                                                                  |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+|                                                                         | ::                                                                               |
+|                                                                         |                                                                                  |
+|                                                                         |   csql> SELECT * FROM isol4_tbl;                                                 |
+|                                                                         |                                                                                  |
+|                                                                         |   /* unable to access the table until tran_1 committed */                        |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+| ::                                                                      | ::                                                                               |
+|                                                                         |                                                                                  |
+|   csql> COMMIT;                                                         |   host_year  nation_code  gold                                                   |
+|                                                                         |   ===================================                                            |
+|                                                                         |     2004  'AUS'           NULL                                                   |
+|                                                                         |     2000  'NED'           NULL                                                   |
+|                                                                         |     1994  'FRA'           NULL                                                   |
++-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
 
 REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES
 -----------------------------------------------------
@@ -1298,154 +1089,119 @@ CUBRID에서 기본으로 설정된 격리 수준(3)으로서 동시성이 높�
 
 다음은 동시에 수행되는 트랜잭션의 격리 수준이 **REPEATABLE READ CLASS** with **READ UNCOMMITTED INSTANCES** 인 경우 한 트랜잭션에서 커밋하지 않은 더티 데이터를 다른 트랜잭션에서 읽을 수 있는 한편, 테이블 스키마 갱신에 대해서는 반복 가능한 읽기를 보장함을 보여주는 예제이다.
 
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| **session 1**                                                   | **session 2**                                                                       |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ;autocommit off                                                 | ;autocommit off                                                                     |
-|                                                                 |                                                                                     |
-| AUTOCOMMIT IS OFF                                               | AUTOCOMMIT IS OFF                                                                   |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-| SET TRANSACTION ISOLATION LEVEL 3;                              | SET TRANSACTION ISOLATION LEVEL 3;                                                  |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-| Isolation level set to:                                         | Isolation level set to:                                                             |
-|                                                                 |                                                                                     |
-| REPEATABLE READ SCHEMA, READ UNCOMMITTED INSTANCES.             | REPEATABLE READ SCHEMA, READ UNCOMMITTED INSTANCES.                                 |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| --creating a table                                              |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-| CREATE TABLE isol3_tbl(host_year integer, nation_code char(3)); |                                                                                     |
-|                                                                 |                                                                                     |
-| CREATE UNIQUE INDEX on isol3_tbl(nation_code, host_year);       |                                                                                     |
-|                                                                 |                                                                                     |
-| INSERT INTO isol3_tbl VALUES (2008, 'AUS');                     |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-| COMMIT;                                                         |                                                                                     |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                 | --selecting records from the table                                                  |
-|                                                                 |                                                                                     |
-|                                                                 | SELECT * FROM isol3_tbl;                                                            |
-|                                                                 |                                                                                     |
-|                                                                 |     host_year  nation_code                                                          |
-|                                                                 |                                                                                     |
-|                                                                 | ===================================                                                 |
-|                                                                 |                                                                                     |
-|                                                                 |          2008  'AUS'                                                                |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| INSERT INTO isol3_tbl VALUES (2004, 'AUS');                     |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-| INSERT INTO isol3_tbl VALUES (2000, 'NED');                     |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-| /* able to insert new rows even if tran 2 uncommitted */        |                                                                                     |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol3_tbl;                                                            |
-|                                                                 |                                                                                     |
-|                                                                 |     host_year  nation_code                                                          |
-|                                                                 |                                                                                     |
-|                                                                 | ===================================                                                 |
-|                                                                 |                                                                                     |
-|                                                                 |          2008  'AUS'                                                                |
-|                                                                 |                                                                                     |
-|                                                                 |          2004  'AUS'                                                                |
-|                                                                 |                                                                                     |
-|                                                                 |          2000  'NED'                                                                |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 | /* dirty read may occur so that tran_2 can select new rows uncommitted by tran_1 */ |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ROLLBACK;                                                       |                                                                                     |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol3_tbl;                                                            |
-|                                                                 |                                                                                     |
-|                                                                 |     host_year  nation_code                                                          |
-|                                                                 |                                                                                     |
-|                                                                 | ===================================                                                 |
-|                                                                 |                                                                                     |
-|                                                                 |          2008  'AUS'                                                                |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 | /* unrepeatable read may occur so that selected results are different */            |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| INSERT INTO isol3_tbl VALUES (1994, 'FRA');                     |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-| DELETE FROM isol3_tbl                                           |                                                                                     |
-|                                                                 |                                                                                     |
-| WHERE nation_code = 'AUS' and                                   |                                                                                     |
-|                                                                 |                                                                                     |
-| host_year=2008;                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-| /* able to delete rows even if tran 2 uncommitted */            |                                                                                     |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol3_tbl;                                                            |
-|                                                                 |                                                                                     |
-|                                                                 |     host_year  nation_code                                                          |
-|                                                                 |                                                                                     |
-|                                                                 | ===================================                                                 |
-|                                                                 |                                                                                     |
-|                                                                 |          1994  'FRA'                                                                |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ALTER TABLE isol3_tbl                                           |                                                                                     |
-|                                                                 |                                                                                     |
-| ADD COLUMN gold INT;                                            |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-| /* unable to alter the table schema until tran 2 committed */   |                                                                                     |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                 | /* repeatable read is ensured while tran_1 is altering table schema */              |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 |                                                                                     |
-|                                                                 | SELECT * FROM isol3_tbl;                                                            |
-|                                                                 |                                                                                     |
-|                                                                 |     host_year  nation_code                                                          |
-|                                                                 |                                                                                     |
-|                                                                 | ===================================                                                 |
-|                                                                 |                                                                                     |
-|                                                                 |          1994  'FRA'                                                                |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                 | COMMIT;                                                                             |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                 | SELECT * FROM isol3_tbl;                                                            |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| COMMIT;                                                         | host_year  nation_code  gold                                                        |
-|                                                                 |                                                                                     |
-|                                                                 | ===================================                                                 |
-|                                                                 |                                                                                     |
-|                                                                 |   1994  'FRA'           NULL                                                        |
-|                                                                 |                                                                                     |
-+-----------------------------------------------------------------+-------------------------------------------------------------------------------------+
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| session 1                                                                 | session 2                                                                           |
++===========================================================================+=====================================================================================+
+| ::                                                                        | ::                                                                                  |
+|                                                                           |                                                                                     |
+|   csql> ;autocommit off                                                   |   csql> ;autocommit off                                                             |
+|                                                                           |                                                                                     |
+|   AUTOCOMMIT IS OFF                                                       |   AUTOCOMMIT IS OFF                                                                 |
+|                                                                           |                                                                                     |
+|   csql> SET TRANSACTION ISOLATION LEVEL 3;                                |   csql> SET TRANSACTION ISOLATION LEVEL 3;                                          |
+|                                                                           |                                                                                     |
+|   Isolation level set to:                                                 |   Isolation level set to:                                                           |
+|   REPEATABLE READ SCHEMA, READ UNCOMMITTED INSTANCES.                     |   REPEATABLE READ SCHEMA, READ UNCOMMITTED INSTANCES.                               |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                        |                                                                                     |
+|                                                                           |                                                                                     |
+|   csql> CREATE TABLE isol3_tbl(host_year integer, nation_code char(3));   |                                                                                     |
+|   csql> CREATE UNIQUE INDEX on isol3_tbl(nation_code, host_year);         |                                                                                     |
+|                                                                           |                                                                                     |
+|   csql> INSERT INTO isol3_tbl VALUES (2008, 'AUS');                       |                                                                                     |
+|                                                                           |                                                                                     |
+|   csql> COMMIT;                                                           |                                                                                     |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                           | ::                                                                                  |
+|                                                                           |                                                                                     |
+|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
+|                                                                           |                                                                                     |
+|                                                                           |       host_year  nation_code                                                        |
+|                                                                           |   ===================================                                               |
+|                                                                           |            2008  'AUS'                                                              |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                        | ::                                                                                  |
+|                                                                           |                                                                                     |
+|   csql> INSERT INTO isol3_tbl VALUES (2004, 'AUS');                       |                                                                                     |
+|   csql> INSERT INTO isol3_tbl VALUES (2000, 'NED');                       |                                                                                     |
+|                                                                           |                                                                                     |
+|   /* able to insert new rows even if tran 2 uncommitted */                |                                                                                     |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                           | ::                                                                                  |
+|                                                                           |                                                                                     |
+|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
+|                                                                           |                                                                                     |
+|                                                                           |       host_year  nation_code                                                        |
+|                                                                           |   ===================================                                               |
+|                                                                           |            2008  'AUS'                                                              |
+|                                                                           |            2004  'AUS'                                                              |
+|                                                                           |            2000  'NED'                                                              |
+|                                                                           |                                                                                     |
+|                                                                           |   /* dirty read may occur so that tran_2 can select new rows                        |
+|                                                                           |      uncommitted by tran_1 */                                                       |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                        |                                                                                     |
+|                                                                           |                                                                                     |
+|   csql> ROLLBACK;                                                         |                                                                                     |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                           | ::                                                                                  |
+|                                                                           |                                                                                     |
+|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
+|                                                                           |                                                                                     |
+|                                                                           |       host_year  nation_code                                                        |
+|                                                                           |   ===================================                                               |
+|                                                                           |            2008  'AUS'                                                              |
+|                                                                           |                                                                                     |
+|                                                                           |   /* unrepeatable read may occur so that selected results are different */          |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                        |                                                                                     |
+|                                                                           |                                                                                     |
+|   csql> INSERT INTO isol3_tbl VALUES (1994, 'FRA');                       |                                                                                     |
+|                                                                           |                                                                                     |
+|   csql> DELETE FROM isol3_tbl                                             |                                                                                     |
+|   csql> WHERE nation_code = 'AUS' and                                     |                                                                                     |
+|   csql> host_year=2008;                                                   |                                                                                     |
+|                                                                           |                                                                                     |
+|   /* able to delete rows even if tran 2 uncommitted */                    |                                                                                     |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                           | ::                                                                                  |
+|                                                                           |                                                                                     |
+|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
+|                                                                           |                                                                                     |
+|                                                                           |       host_year  nation_code                                                        |
+|                                                                           |   ===================================                                               |
+|                                                                           |            1994  'FRA'                                                              |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                        |                                                                                     |
+|                                                                           |                                                                                     |
+|   csql> ALTER TABLE isol3_tbl ADD COLUMN gold INT;                        |                                                                                     |
+|                                                                           |                                                                                     |
+|   /* unable to alter the table schema until tran 2 committed */           |                                                                                     |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                           | ::                                                                                  |
+|                                                                           |                                                                                     |
+|                                                                           |   /* repeatable read is ensured while tran_1 is altering table schema */            |
+|                                                                           |                                                                                     |
+|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
+|                                                                           |                                                                                     |
+|                                                                           |       host_year  nation_code                                                        |
+|                                                                           |   ===================================                                               |
+|                                                                           |            1994  'FRA'                                                              |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                           | ::                                                                                  |
+|                                                                           |                                                                                     |
+|                                                                           |   csql> COMMIT;                                                                     |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                           | ::                                                                                  |
+|                                                                           |                                                                                     |
+|                                                                           |   csql> SELECT * FROM isol3_tbl;                                                    |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                        | ::                                                                                  |
+|                                                                           |                                                                                     |
+|   csql> COMMIT;                                                           |   host_year  nation_code  gold                                                      |
+|                                                                           |   ===================================                                               |
+|                                                                           |     1994  'FRA'           NULL                                                      |
++---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
 
 .. note::
 
@@ -1468,103 +1224,104 @@ READ COMMITTED CLASS with READ COMMITTED INSTANCES
 
 다음은 동시에 수행되는 트랜잭션의 격리 수준이 **READ COMMITTED CLASS** with **READ COMMITTED INSTANCES** 인 경우 한 트랜잭션에서 객체 읽기를 수행하는 동안 다른 트랜잭션이 새로운 레코드를 추가 또는 갱신할 수 있으므로 유령 읽기 및 반복 불가능한 읽기가 발생할 수 있고, 테이블 스키마에 대해서도 반복 불가능한 읽기가 발생할 수 있음을 보여주는 예제이다.
 
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| **session 1**                                                         | **session 2**                                                           |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| ;autocommit off                                                       | ;autocommit off                                                         |
-|                                                                       |                                                                         |
-| AUTOCOMMIT IS OFF                                                     | AUTOCOMMIT IS OFF                                                       |
-|                                                                       |                                                                         |
-| SET TRANSACTION ISOLATION LEVEL 2;                                    | SET TRANSACTION ISOLATION LEVEL 2;                                      |
-|                                                                       |                                                                         |
-| Isolation level set to:                                               | Isolation level set to:                                                 |
-|                                                                       |                                                                         |
-| READ COMMITTED SCHEMA, READ COMMITTED INSTANCES.                      | READ COMMITTED SCHEMA, READ COMMITTED INSTANCES.                        |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| --creating a table                                                    |                                                                         |
-|                                                                       |                                                                         |
-| CREATE TABLE isol2_tbl(host_year integer, nation_code char(3));       |                                                                         |
-|                                                                       |                                                                         |
-| CREATE UNIQUE INDEX on isol2_tbl(nation_code, host_year);             |                                                                         |
-|                                                                       |                                                                         |
-| INSERT INTO isol2_tbl VALUES (2008, 'AUS');                           |                                                                         |
-|                                                                       |                                                                         |
-| COMMIT;                                                               |                                                                         |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-|                                                                       | --selecting records from the table                                      |
-|                                                                       |                                                                         |
-|                                                                       | SELECT * FROM isol2_tbl;                                                |
-|                                                                       |                                                                         |
-|                                                                       |     host_year  nation_code                                              |
-|                                                                       | ===================================                                     |
-|                                                                       |          2008  'AUS'                                                    |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| INSERT INTO isol2_tbl VALUES (2004, 'AUS');                           |                                                                         |
-|                                                                       |                                                                         |
-| INSERT INTO isol2_tbl VALUES (2000, 'NED');                           |                                                                         |
-|                                                                       |                                                                         |
-| /* able to insert new rows even if tran 2 uncommitted */              |                                                                         |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-|                                                                       | SELECT * FROM isol2_tbl;                                                |
-|                                                                       |                                                                         |
-|                                                                       | /* phantom read may occur when tran 1 committed */                      |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| COMMIT;                                                               |     host_year  nation_code                                              |
-|                                                                       | ===================================                                     |
-|                                                                       |          2008  'AUS'                                                    |
-|                                                                       |          2004  'AUS'                                                    |
-|                                                                       |          2000  'NED'                                                    |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| INSERT INTO isol2_tbl VALUES (1994, 'FRA');                           |                                                                         |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-|                                                                       | SELECT * FROM isol2_tbl;                                                |
-|                                                                       |                                                                         |
-|                                                                       | /* unrepeatable read may occur when tran 1 committed */                 |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| DELETE FROM isol2_tbl                                                 |                                                                         |
-|                                                                       |                                                                         |
-| WHERE nation_code = 'AUS' and                                         |                                                                         |
-|                                                                       |                                                                         |
-| host_year=2008;                                                       |                                                                         |
-|                                                                       |                                                                         |
-| /* able to delete rows even if tran 2 uncommitted */                  |                                                                         |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| COMMIT;                                                               |     host_year  nation_code                                              |
-|                                                                       | ===================================                                     |
-|                                                                       |          2004  'AUS'                                                    |
-|                                                                       |          2000  'NED'                                                    |
-|                                                                       |          1994  'FRA'                                                    |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| ALTER TABLE isol2_tbl                                                 |                                                                         |
-|                                                                       |                                                                         |
-| ADD COLUMN gold INT;                                                  |                                                                         |
-|                                                                       |                                                                         |
-| /* able to alter the table schema even if tran 2 is uncommitted yet*/ |                                                                         |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-|                                                                       | /* unrepeatable read may occur so that result shows different schema */ |
-|                                                                       |                                                                         |
-|                                                                       | SELECT * FROM isol2_tbl;                                                |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
-| COMMIT;                                                               | host_year  nation_code  gold                                            |
-|                                                                       | ===================================                                     |
-|                                                                       |   2004  'AUS'           NULL                                            |
-|                                                                       |   2000  'NED'           NULL                                            |
-|                                                                       |   1994  'FRA'           NULL                                            |
-|                                                                       |                                                                         |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------+
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| session 1                                                                       | session 2                                                                         |
++=================================================================================+===================================================================================+
+| ::                                                                              | ::                                                                                |
+|                                                                                 |                                                                                   |
+|   csql> ;autocommit off                                                         |   csql> ;autocommit off                                                           |
+|                                                                                 |                                                                                   |
+|   AUTOCOMMIT IS OFF                                                             |   AUTOCOMMIT IS OFF                                                               |
+|                                                                                 |                                                                                   |
+|   csql> SET TRANSACTION ISOLATION LEVEL 2;                                      |   csql> SET TRANSACTION ISOLATION LEVEL 2;                                        |
+|                                                                                 |                                                                                   |
+|   Isolation level set to:                                                       |   Isolation level set to:                                                         |
+|   READ COMMITTED SCHEMA, READ COMMITTED INSTANCES.                              |   READ COMMITTED SCHEMA, READ COMMITTED INSTANCES.                                |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                   |
+|                                                                                 |                                                                                   |
+|   csql> CREATE TABLE isol2_tbl(host_year integer, nation_code char(3));         |                                                                                   |
+|   csql> CREATE UNIQUE INDEX on isol2_tbl(nation_code, host_year);               |                                                                                   |
+|                                                                                 |                                                                                   |
+|   csql> INSERT INTO isol2_tbl VALUES (2008, 'AUS');                             |                                                                                   |
+|                                                                                 |                                                                                   |
+|   csql> COMMIT;                                                                 |                                                                                   |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+|                                                                                 | ::                                                                                |
+|                                                                                 |                                                                                   |
+|                                                                                 |   csql> SELECT * FROM isol2_tbl;                                                  |
+|                                                                                 |                                                                                   |
+|                                                                                 |       host_year  nation_code                                                      |
+|                                                                                 |   ===================================                                             |
+|                                                                                 |            2008  'AUS'                                                            |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                   |
+|                                                                                 |                                                                                   |
+|   csql> INSERT INTO isol2_tbl VALUES (2004, 'AUS');                             |                                                                                   |
+|   csql> INSERT INTO isol2_tbl VALUES (2000, 'NED');                             |                                                                                   |
+|                                                                                 |                                                                                   |
+|   /* able to insert new rows even if tran 2 uncommitted */                      |                                                                                   |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+|                                                                                 | ::                                                                                |
+|                                                                                 |                                                                                   |
+|                                                                                 |   csql> SELECT * FROM isol2_tbl;                                                  |
+|                                                                                 |                                                                                   |
+|                                                                                 |   /* phantom read may occur when tran 1 committed */                              |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| ::                                                                              | ::                                                                                |
+|                                                                                 |                                                                                   |
+|   csql> COMMIT;                                                                 |       host_year  nation_code                                                      |
+|                                                                                 |   ===================================                                             |
+|                                                                                 |            2008  'AUS'                                                            |
+|                                                                                 |            2004  'AUS'                                                            |
+|                                                                                 |            2000  'NED'                                                            |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                   |
+|                                                                                 |                                                                                   |
+|   csql> INSERT INTO isol2_tbl VALUES (1994, 'FRA');                             |                                                                                   |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+|                                                                                 | ::                                                                                |
+|                                                                                 |                                                                                   |
+|                                                                                 |   csql> SELECT * FROM isol2_tbl;                                                  |
+|                                                                                 |                                                                                   |
+|                                                                                 |   /* unrepeatable read may occur when tran 1 committed */                         |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                   |
+|                                                                                 |                                                                                   |
+|   csql> DELETE FROM isol2_tbl                                                   |                                                                                   |
+|   csql> WHERE nation_code = 'AUS' and                                           |                                                                                   |
+|   csql> host_year=2008;                                                         |                                                                                   |
+|                                                                                 |                                                                                   |
+|   /* able to delete rows even if tran 2 uncommitted */                          |                                                                                   |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| ::                                                                              | ::                                                                                |
+|                                                                                 |                                                                                   |
+|   csql> COMMIT;                                                                 |       host_year  nation_code                                                      |
+|                                                                                 |   ===================================                                             |
+|                                                                                 |            2004  'AUS'                                                            |
+|                                                                                 |            2000  'NED'                                                            |
+|                                                                                 |            1994  'FRA'                                                            |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                   |
+|                                                                                 |                                                                                   |
+|   csql> ALTER TABLE isol2_tbl ADD COLUMN gold INT;                              |                                                                                   |
+|                                                                                 |                                                                                   |
+|   /* able to alter the table schema even if tran 2 is uncommitted yet*/         |                                                                                   |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+|                                                                                 | ::                                                                                |
+|                                                                                 |                                                                                   |
+|                                                                                 |   /* unrepeatable read may occur so that result shows different schema */         |
+|                                                                                 |                                                                                   |
+|                                                                                 |   csql> SELECT * FROM isol2_tbl;                                                  |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+| ::                                                                              | ::                                                                                |
+|                                                                                 |                                                                                   |
+|   csql> COMMIT;                                                                 |   host_year  nation_code  gold                                                    |
+|                                                                                 |   ===================================                                             |
+|                                                                                 |     2004  'AUS'           NULL                                                    |
+|                                                                                 |     2000  'NED'           NULL                                                    |
+|                                                                                 |     1994  'FRA'           NULL                                                    |
++---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 
 READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES
 ----------------------------------------------------
@@ -1581,106 +1338,107 @@ READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES
 
 **예제**
 
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| **session 1**                                                         | **session 2**                                                                       |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ;autocommit off                                                       | ;autocommit off                                                                     |
-|                                                                       |                                                                                     |
-| AUTOCOMMIT IS OFF                                                     | AUTOCOMMIT IS OFF                                                                   |
-|                                                                       |                                                                                     |
-| SET TRANSACTION ISOLATION LEVEL 1;                                    | SET TRANSACTION ISOLATION LEVEL 1;                                                  |
-|                                                                       |                                                                                     |
-| Isolation level set to:                                               | Isolation level set to:                                                             |
-|                                                                       |                                                                                     |
-| READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES.                    | READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES.                                  |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| --creating a table                                                    |                                                                                     |
-|                                                                       |                                                                                     |
-| CREATE TABLE isol1_tbl(host_year integer, nation_code char(3));       |                                                                                     |
-|                                                                       |                                                                                     |
-| CREATE UNIQUE INDEX on isol1_tbl(nation_code, host_year);             |                                                                                     |
-|                                                                       |                                                                                     |
-| INSERT INTO isol1_tbl VALUES (2008, 'AUS');                           |                                                                                     |
-|                                                                       |                                                                                     |
-| COMMIT;                                                               |                                                                                     |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                       | --selecting records from the table                                                  |
-|                                                                       |                                                                                     |
-|                                                                       | SELECT * FROM isol1_tbl;                                                            |
-|                                                                       |                                                                                     |
-|                                                                       |     host_year  nation_code                                                          |
-|                                                                       | ===================================                                                 |
-|                                                                       |          2008  'AUS'                                                                |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| INSERT INTO isol1_tbl VALUES (2004, 'AUS');                           |                                                                                     |
-|                                                                       |                                                                                     |
-| INSERT INTO isol1_tbl VALUES (2000, 'NED');                           |                                                                                     |
-|                                                                       |                                                                                     |
-| /* able to insert new rows even if tran 2 uncommitted */              |                                                                                     |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                       | SELECT * FROM isol1_tbl;                                                            |
-|                                                                       |                                                                                     |
-|                                                                       |     host_year  nation_code                                                          |
-|                                                                       | ===================================                                                 |
-|                                                                       |          2008  'AUS'                                                                |
-|                                                                       |          2004  'AUS'                                                                |
-|                                                                       |          2000  'NED'                                                                |
-|                                                                       |                                                                                     |
-|                                                                       | /* dirty read may occur so that tran_2 can select new rows uncommitted by tran_1 */ |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ROLLBACK;                                                             |                                                                                     |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                       | SELECT * FROM isol1_tbl;                                                            |
-|                                                                       |                                                                                     |
-|                                                                       |     host_year  nation_code                                                          |
-|                                                                       | ===================================                                                 |
-|                                                                       |          2008  'AUS'                                                                |
-|                                                                       |                                                                                     |
-|                                                                       | /* unrepeatable read may occur so that selected results are different */            |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| INSERT INTO isol1_tbl VALUES (1994, 'FRA');                           |                                                                                     |
-|                                                                       |                                                                                     |
-| DELETE FROM isol1_tbl                                                 |                                                                                     |
-|                                                                       |                                                                                     |
-| WHERE nation_code = 'AUS' and                                         |                                                                                     |
-|                                                                       |                                                                                     |
-| host_year=2008;                                                       |                                                                                     |
-|                                                                       |                                                                                     |
-| /* able to delete rows while tran 2 is selecting rows*/               |                                                                                     |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                       | SELECT * FROM isol1_tbl;                                                            |
-|                                                                       |                                                                                     |
-|                                                                       |     host_year  nation_code                                                          |
-|                                                                       | ===================================                                                 |
-|                                                                       |          1994  'FRA'                                                                |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ALTER TABLE isol1_tbl                                                 |                                                                                     |
-|                                                                       |                                                                                     |
-| ADD COLUMN gold INT;                                                  |                                                                                     |
-|                                                                       |                                                                                     |
-| /* able to alter the table schema even if tran 2 is uncommitted yet*/ |                                                                                     |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-|                                                                       | /* unrepeatable read may occur so that result shows different schema */             |
-|                                                                       |                                                                                     |
-|                                                                       | SELECT * FROM isol1_tbl;                                                            |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| COMMIT;                                                               | host_year  nation_code  gold                                                        |
-|                                                                       | ====================================                                                |
-|                                                                       |   1994  'FRA'           NULL                                                        |
-|                                                                       |                                                                                     |
-+-----------------------------------------------------------------------+-------------------------------------------------------------------------------------+
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| session 1                                                                       | session 2                                                                           |
++=================================================================================+=====================================================================================+
+| ::                                                                              | ::                                                                                  |
+|                                                                                 |                                                                                     |
+|   csql> ;autocommit off                                                         |   csql> ;autocommit off                                                             |
+|                                                                                 |                                                                                     |
+|   AUTOCOMMIT IS OFF                                                             |   AUTOCOMMIT IS OFF                                                                 |
+|                                                                                 |                                                                                     |
+|   csql> SET TRANSACTION ISOLATION LEVEL 1;                                      |   csql> SET TRANSACTION ISOLATION LEVEL 1;                                          |
+|                                                                                 |                                                                                     |
+|   Isolation level set to:                                                       |   Isolation level set to:                                                           |
+|   READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES.                            |   READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES.                                |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                     |
+|                                                                                 |                                                                                     |
+|   csql> CREATE TABLE isol1_tbl(host_year integer, nation_code char(3));         |                                                                                     |
+|   csql> CREATE UNIQUE INDEX on isol1_tbl(nation_code, host_year);               |                                                                                     |
+|                                                                                 |                                                                                     |
+|   csql> INSERT INTO isol1_tbl VALUES (2008, 'AUS');                             |                                                                                     |
+|                                                                                 |                                                                                     |
+|   csql> COMMIT;                                                                 |                                                                                     |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                                 | ::                                                                                  |
+|                                                                                 |                                                                                     |
+|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
+|                                                                                 |                                                                                     |
+|                                                                                 |       host_year  nation_code                                                        |
+|                                                                                 |   ===================================                                               |
+|                                                                                 |            2008  'AUS'                                                              |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                     |
+|                                                                                 |                                                                                     |
+|   csql> INSERT INTO isol1_tbl VALUES (2004, 'AUS');                             |                                                                                     |
+|   csql> INSERT INTO isol1_tbl VALUES (2000, 'NED');                             |                                                                                     |
+|                                                                                 |                                                                                     |
+|   /* able to insert new rows even if tran 2 uncommitted */                      |                                                                                     |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                                 | ::                                                                                  |
+|                                                                                 |                                                                                     |
+|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
+|                                                                                 |                                                                                     |
+|                                                                                 |       host_year  nation_code                                                        |
+|                                                                                 |   ===================================                                               |
+|                                                                                 |            2008  'AUS'                                                              |
+|                                                                                 |            2004  'AUS'                                                              |
+|                                                                                 |            2000  'NED'                                                              |
+|                                                                                 |                                                                                     |
+|                                                                                 |   /* dirty read may occur so that tran_2 can select new rows                        |
+|                                                                                 |      uncommitted by tran_1 */                                                       |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                     |
+|                                                                                 |                                                                                     |
+|   csql> ROLLBACK;                                                               |                                                                                     |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                                 | ::                                                                                  |
+|                                                                                 |                                                                                     |
+|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
+|                                                                                 |                                                                                     |
+|                                                                                 |       host_year  nation_code                                                        |
+|                                                                                 |   ===================================                                               |
+|                                                                                 |            2008  'AUS'                                                              |
+|                                                                                 |                                                                                     |
+|                                                                                 |   /* unrepeatable read may occur so that selected results are different */          |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                     |
+|                                                                                 |                                                                                     |
+|   csql> INSERT INTO isol1_tbl VALUES (1994, 'FRA');                             |                                                                                     |
+|                                                                                 |                                                                                     |
+|   csql> DELETE FROM isol1_tbl                                                   |                                                                                     |
+|   csql> WHERE nation_code = 'AUS' and                                           |                                                                                     |
+|   csql> host_year=2008;                                                         |                                                                                     |
+|                                                                                 |                                                                                     |
+|   /* able to delete rows while tran 2 is selecting rows*/                       |                                                                                     |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                                 | ::                                                                                  |
+|                                                                                 |                                                                                     |
+|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
+|                                                                                 |                                                                                     |
+|                                                                                 |       host_year  nation_code                                                        |
+|                                                                                 |   ===================================                                               |
+|                                                                                 |            1994  'FRA'                                                              |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                              |                                                                                     |
+|                                                                                 |                                                                                     |
+|   csql> sALTER TABLE isol1_tbl ADD COLUMN gold INT;                             |                                                                                     |
+|                                                                                 |                                                                                     |
+|   /* able to alter the table schema even if tran 2 is uncommitted yet*/         |                                                                                     |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+|                                                                                 | ::                                                                                  |
+|                                                                                 |                                                                                     |
+|                                                                                 |   /* unrepeatable read may occur so that result shows different schema */           |
+|                                                                                 |                                                                                     |
+|                                                                                 |   csql> SELECT * FROM isol1_tbl;                                                    |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+| ::                                                                              | ::                                                                                  |
+|                                                                                 |                                                                                     |
+|   csql> COMMIT;                                                                 |   host_year  nation_code  gold                                                      |
+|                                                                                 |   ====================================                                              |
+|                                                                                 |     1994  'FRA'           NULL                                                      |
++---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
 
 UPDATE INCONSISTENCY
 --------------------

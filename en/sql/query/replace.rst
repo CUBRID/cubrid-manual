@@ -1,0 +1,222 @@
+*******
+REPLACE
+*******
+
+
+**REPLACE**
+
+**Description**
+
+The
+**REPLACE**
+statement is working like
+**INSERT**
+, but the difference is that it inserts a new record after deleting the existing record without displaying the error when a duplicate value is inserted into a column for which
+**PRIMARY KEY**
+and
+**UNIQUE**
+constraints have defined. You must have both
+**INSERT**
+and
+**DELETE**
+authorization to use the
+**REPLACE**
+statement, because it performs insertion or insertion after deletion operations.
+
+The
+**REPLACE**
+statement determines whether a new record causes the duplication of
+**PRIMARY KEY**
+or
+**UNIQUE**
+index column values. Therefore, for performance reasons, it is recommended to use the
+**INSERT**
+statement for a table for which a
+**PRIMARY KEY**
+or
+**UNIQUE**
+index has not been defined. The
+**REPLACE**
+statement is an extension of the SQL standard. See the following regarding the use of this statement.
+
+*   The
+    **REPLACE**
+    statement cannot contain subqueries.
+
+
+
+*   The
+    **REPLACE**
+    statement cannot be used for tables for which an
+    **INSERT**
+    or
+    **DELETE**
+    trigger has been set.
+
+
+
+*   An assignment statement such as
+    **SET**
+    *col_name*
+    =
+    *col_name*
+    + 1 is not valid. Change such a statement to
+    **SET**
+    *col_name*
+    =
+    **DEFAULT**
+    (
+    *col_name*
+    ) + 1. Here, a non-NULL default value should be set for the
+    *col_name*
+    column.
+
+
+
+**Syntax**
+
+<
+*REPLACE … VALUES statement*
+>
+
+**REPLACE**
+[
+**INTO**
+]
+*table_name*
+[(
+*column_name*
+, ...)]
+
+    {
+**VALUES**
+|
+**VALUE**
+}({
+*expr*
+|
+**DEFAULT**
+}, ...)[,({
+*expr*
+|
+**DEFAULT**
+}, ...),...]
+
+ 
+
+<
+*REPLACE … SET statement*
+>
+
+**REPLACE**
+[
+**INTO**
+]
+*table_name*
+
+    
+**SET**
+*column_name*
+ = {
+*expr*
+|
+**DEFAULT**
+}[,
+*column_name*
+ = {
+*expr*
+|
+**DEFAULT**
+},...]
+
+ 
+
+<
+*REPLACE … SELECT statement*
+>
+
+**REPLACE**
+[
+**INTO**
+]
+*table_name*
+[(
+*column_name*
+, ...)]
+
+    
+**SELECT**
+...
+
+*   *table_name*
+    : Specifies the name of the target table into which you want to insert a new record.
+
+
+
+*   *column_name*
+    : Specifies the name of the column into which you want to insert the value. If you omit to specify the column name, it is considered that all columns defined in the table have been specified. Therefore, you must specify the value for the column next to
+    **VALUES**
+    . If you do not specify all the columns defined in the table, a
+    **DEFAULT**
+    value is assigned to the non-specified columns; if the
+    **DEFAULT**
+    value is not defined, a NULL value is assigned.
+
+
+
+*   *expr*
+    |
+    **DEFAULT**
+    : Specifies values that correspond to the columns after
+    **VALUES**
+    . Expressions or the
+    **DEFAULT**
+    keyword can be specified as a value. At this time, the order and number of the specified column list must correspond to the column value list. The column value list for a single record is described in parentheses.
+
+
+
+**Example**
+
+--creating a new table having the same schema as a_tbl1
+
+CREATE TABLE a_tbl4 LIKE a_tbl1;
+
+INSERT INTO a_tbl4 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
+
+SELECT * FROM a_tbl4;
+
+           id  name                  phone
+
+=========================================================
+
+            1  'aaa'                 '000-0000'
+
+            2  'bbb'                 '000-0000'
+
+            3  'ccc'                 '333-3333'
+
+            6  'eee'                 '000-0000'
+
+ 
+
+--insert duplicated value violating UNIQUE constraint
+
+REPLACE INTO a_tbl4 VALUES(1, 'aaa', '111-1111'),(2, 'bbb', '222-2222');
+
+REPLACE INTO a_tbl4 SET id=6, name='fff', phone=DEFAULT;
+
+ 
+
+SELECT * FROM a_tbl4;
+
+           id  name                  phone
+
+=========================================================
+
+            3  'ccc'                 '333-3333'
+
+            1  'aaa'                 '111-1111'
+
+            2  'bbb'                 '222-2222'
+
+            6  'fff'                 '000-0000'

@@ -1,0 +1,2223 @@
+************
+CCI 드라이버
+************
+
+**CCI Driver**
+
+**CCI Overview**
+
+CUBRID CCI (CCI Client Interface) driver implements an interface to enable access from C-based application to CUBRID database server through broker. It is also used as back-end infrastructure for creating tools (PHP, ODBC, etc.) which use the CAS application servers. In this environment, the CUBRID broker sends queries received from applications to a database and transfers the result to applications.
+
+It is automatically installed upon CUBRID installation and can be found in the
+**$CUBRID/lib**
+directory. A header file as well as library files is required to use the driver.
+
++-----------------+-------------------+-------------------+
+| ** **           | **Windows**       | **UNIX/Linux**    |
+|                 |                   |                   |
++-----------------+-------------------+-------------------+
+| C hearder file  | include/cas_cci.h | include/cas_cci.h |
+|                 |                   |                   |
++-----------------+-------------------+-------------------+
+| Static library  | lib/cascci.lib    | lib/libcascci.a   |
+|                 |                   |                   |
++-----------------+-------------------+-------------------+
+| Dynamic library | bin/cascci.dll    | lib/libcascci.so  |
+|                 |                   |                   |
++-----------------+-------------------+-------------------+
+
+Because CUBRID CCI driver is connected through the CUBRID broker, you can manage it the same way as other interfaces such as JDBC, PHP, ODBC, etc. In fact, CCI provides back-end infrastructure to implement PHP, ODBC, Python, and Ruby interfaces.
+
+|image54_jpg|
+
+To download CCI driver or get the latest information, click
+`http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver>`_
+.
+
+**CCI Programming**
+
+**Writing CCI Applications**
+
+The applications using CCI interact with CUBRID in the process of connecting to CAS, preparing queries, executing queries, handling response, and disconnecting. In each process, CCI communicates with applications through connection handle, query handle, and response handle.
+
+The default value of auto-commit mode can be configured by using
+**CCI_DEFAULT_AUTOCOMMIT**
+(which is a broker parameter). If it is omitted, the default value is set to
+**ON**
+. To change auto-commit mode within applications, you should use the 
+`cci_set_autocommit <#api_api_cci_setautocommit_htm>`_
+() function. If auto-commit mode is
+**OFF**
+, you should explicitly commit or roll back transactions by using the
+`cci_end_tran <#api_api_cci_endtran_htm>`_
+() function.
+
+General process for writing applications is as follows. For using the prepared statement, additional step binding data to a variable is required; the examples 1 and 2 show the way to implement this.
+
+*   Opening a database connection handle (related functions:
+    `cci_connect <#api_api_cci_connect_htm>`_
+    (),
+    `cci_connect_with_url <#api_api_cci_connectwithurl_htm>`_
+    ())
+
+
+
+*   Getting the request handle for the prepared statement (related function:
+    `cci_prepare <#api_api_cci_prepare_htm>`_
+    ())
+
+
+
+*   Binding data to the prepared statement (related function:
+    `cci_bind_param <#api_api_cci_bindparam_htm>`_
+    ())
+
+
+
+*   Executing the prepared statement (related function:
+    `cci_execute <#api_api_cci_execute_htm>`_
+    ())
+
+
+
+*   Processing the exeuction result (related functions:
+    `cci_cursor <#api_api_cci_cursor_htm>`_
+    (),
+    `cci_fetch <#api_api_cci_fetch_htm>`_
+    (),
+    `cci_get_data <#api_api_cci_getdata_htm>`_
+    (),
+    `cci_get_result_info <#api_api_cci_getresultinfo_htm>`_
+    ())
+
+
+
+*   Closing the request handle (related function:
+    `cci_close_req_handle <#api_api_cci_closereqhandle_htm>`_
+    ())
+
+
+
+*   Closing the database connection handle (related function:
+    `cci_disconnect <#api_api_cci_disconnect_htm>`_
+    ())
+
+
+
+*   Using database connection pool (related functions:
+    `cci_property_create <#api_api_cci_propertycreate_htm>`_
+    (),
+    `cci_property_destroy <#api_api_cci_propertydestroy_htm>`_
+    (),
+    `cci_property_set <#api_api_cci_propertycreate_htm>`_
+    (),
+    `cci_datasource_create <#api_api_cci_datasourcecreate_htm>`_
+    (),
+    `cci_datasource_destroy <#api_api_cci_datasourcedestroy_ht_5686>`_
+    (),
+    `cci_datasource_borrow <#api_api_cci_datasourceborrow_htm>`_
+    (),
+    `cci_datasource_release <#api_api_cci_datasourcerelease_ht_568>`_
+    ())
+
+
+
+**Example 1**
+
+//Example to execute a simple query
+
+#include <stdio.h>
+
+#include "cas_cci.h"  
+
+#define BUFSIZE  (1024)
+
+ 
+
+int
+
+main (void)
+
+{
+
+  int con = 0, req = 0, col_count = 0, i, ind;
+
+  int error;
+
+  char *data;
+
+  T_CCI_ERROR cci_error;
+
+  T_CCI_COL_INFO *col_info;
+
+  T_CCI_CUBRID_STMT stmt_type;
+
+  char *query = "select * from code";
+
+ 
+
+//getting a connection handle for a connection with a server
+
+  con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+
+  if (con < 0)
+
+    {
+
+      printf ("cannot connect to database\n");
+
+      return 1;
+
+    }
+
+ 
+
+//preparing the SQL statement
+
+  req = cci_prepare (con, query, 0, &cci_error);
+
+  if (req < 0)
+
+    {
+
+      printf ("prepare error: %d, %s\n", cci_error.err_code,
+
+              cci_error.err_msg);
+
+      goto handle_error;
+
+    }
+
+ 
+
+//getting column information when the prepared statement is the SELECT query
+
+  col_info = cci_get_result_info (req, &stmt_type, &col_count);
+
+  if (col_info == NULL)
+
+    {
+
+      printf ("get_result_info error: %d, %s\n", cci_error.err_code,
+
+              cci_error.err_msg);
+
+      goto handle_error;
+
+    }
+
+ 
+
+//Executing the prepared SQL statement
+
+  error = cci_execute (req, 0, 0, &cci_error);
+
+  if (error < 0)
+
+    {
+
+      printf ("execute error: %d, %s\n", cci_error.err_code,
+
+              cci_error.err_msg);
+
+      goto handle_error;
+
+    }
+
+  while (1)
+
+    {
+
+ 
+
+//Moving the cursor to access a specific tuple of results
+
+      error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &cci_error);
+
+      if (error == CCI_ER_NO_MORE_DATA)
+
+        {
+
+          break;
+
+        }
+
+      if (error < 0)
+
+        {
+
+          printf ("cursor error: %d, %s\n", cci_error.err_code,
+
+                  cci_error.err_msg);
+
+          goto handle_error;
+
+        }
+
+ 
+
+//Fetching the query result into a client buffer
+
+      error = cci_fetch (req, &cci_error);
+
+      if (error < 0)
+
+        {
+
+          printf ("fetch error: %d, %s\n", cci_error.err_code,
+
+                  cci_error.err_msg);
+
+          goto handle_error;
+
+        }
+
+      for (i = 1; i <= col_count; i++)
+
+        {
+
+ 
+
+//Getting data from the fetched result
+
+          error = cci_get_data (req, i, CCI_A_TYPE_STR, &data, &ind);
+
+          if (error < 0)
+
+            {
+
+              printf ("get_data error: %d, %d\n", error, i);
+
+              goto handle_error;
+
+            }
+
+          printf ("%s\t|", data);
+
+        }
+
+      printf ("\n");
+
+    }
+
+ 
+
+//Closing the request handle
+
+  error = cci_close_req_handle (req);
+
+  if (error < 0)
+
+    {
+
+      printf ("close_req_handle error: %d, %s\n", cci_error.err_code,
+
+              cci_error.err_msg);
+
+      goto handle_error;
+
+    }
+
+ 
+
+//Disconnecting with the server
+
+  error = cci_disconnect (con, &cci_error);
+
+  if (error < 0)
+
+    {
+
+      printf ("error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+
+      goto handle_error;
+
+    }
+
+ 
+
+  return 0;
+
+ 
+
+handle_error:
+
+  if (req > 0)
+
+    cci_close_req_handle (req);
+
+  if (con > 0)
+
+    cci_disconnect (con, &cci_error);
+
+ 
+
+  return 1;
+
+}
+
+**Example 2**
+
+//Example to execute a query with a bind variable
+
+ 
+
+char *query = "select * from nation where name = ?";
+
+  char namebuf[128];
+
+ 
+
+//getting a connection handle for a connection with a server
+
+  con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+
+  if (con < 0)
+
+    {
+
+      printf ("cannot connect to database ");
+
+      return 1;
+
+    }
+
+ 
+
+//preparing the SQL statement
+
+  req = cci_prepare (con, query, 0, &cci_error);
+
+  if (req < 0)
+
+    {
+
+      printf ("prepare error: %d, %s ", cci_error.err_code,
+
+              cci_error.err_msg);
+
+      goto handle_error;
+
+    }
+
+ 
+
+//Binding date into a value
+
+  strcpy (namebuf, "Korea");
+
+  error =
+
+    cci_bind_param (req, 1, CCI_A_TYPE_STR, &namebuf, CCI_U_TYPE_STRING,
+
+                    CCI_BIND_PTR);
+
+  if (error < 0)
+
+    {
+
+      printf ("bind_param error: %d ", error);
+
+      goto handle_error;
+
+    }
+
+**Example 3**
+
+#include <stdio.h>
+
+#include "cas_cci.h"
+
+ 
+
+//Example to use connection/statement pool in CCI
+
+int main ()
+
+{
+
+  T_CCI_PROPERTIES *ps = NULL;
+
+  T_CCI_DATASOURCE *ds = NULL;
+
+  T_CCI_ERROR err;
+
+  T_CCI_CONN cons[20];
+
+  int rc = 1, i;
+
+ 
+
+  ps = cci_property_create ();
+
+  if (ps == NULL)
+
+    {
+
+      fprintf (stderr, "Could not create T_CCI_PROPERTIES.\n");
+
+      rc = 0;
+
+      goto cci_pool_end;
+
+    }
+
+ 
+
+  cci_property_set (ps, "user", "dba");
+
+  cci_property_set (ps, "url", "cci:cubrid:localhost:33000:demodb:::");
+
+  cci_property_set (ps, "pool_size", "10");
+
+  cci_property_set (ps, "max_wait", "1200");
+
+  cci_property_set (ps, "pool_prepared_statement", "true");
+
+  cci_property_set (ps, "default_autocommit", "false");
+
+  cci_property_set (ps, "default_isolation", "TRAN_REP_CLASS_UNCOMMIT_INSTANCE");
+
+  cci_property_set (ps, "default_lock_timeout", "10");
+
+  cci_property_set (ps, "login_timeout", "300000");
+
+  cci_property_set (ps, "query_timeout", "3000");
+
+ 
+
+  ds = cci_datasource_create (ps, &err);
+
+  if (ds == NULL)
+
+    {
+
+      fprintf (stderr, "Could not create T_CCI_DATASOURCE.\n");
+
+      fprintf (stderr, "E[%d,%s]\n", err.err_code, err.err_msg);
+
+      rc = 0;
+
+      goto cci_pool_end;
+
+    }
+
+ 
+
+  for (i = 0; i < 3; i++)
+
+    {
+
+      cons[i] = cci_datasource_borrow (ds, &err);
+
+      if (cons[i] < 0)
+
+        {
+
+          fprintf (stderr,
+
+                   "Could not borrow a connection from the data source.\n");
+
+          fprintf (stderr, "E[%d,%s]\n", err.err_code, err.err_msg);
+
+          continue;
+
+        }
+
+      // put working code here.
+
+      cci_work (cons[i]);
+
+    }
+
+ 
+
+  sleep (1);
+
+ 
+
+  for (i = 0; i < 3; i++)
+
+    {
+
+      if (cons[i] < 0)
+
+        {
+
+          continue;
+
+        }
+
+      cci_datasource_release (ds, cons[i], &err);
+
+    }
+
+cci_pool_end:
+
+  cci_property_destroy (ps);
+
+  cci_datasource_destroy (ds);
+
+ 
+
+  return 0;
+
+}
+
+ 
+
+// working code
+
+int cci_work (T_CCI_CONN con)
+
+{
+
+  T_CCI_ERROR err;
+
+  char sql[4096];
+
+  int req, res, error, ind;
+
+  int data;
+
+ 
+
+  cci_set_autocommit (con, CCI_AUTOCOMMIT_TRUE);
+
+  cci_set_lock_timeout (con, 100, &err);
+
+  cci_set_isolation_level (con, TRAN_REP_CLASS_COMMIT_INSTANCE, &err);
+
+ 
+
+  error = 0;
+
+  snprintf (sql, 4096, "SELECT host_year FROM record WHERE athlete_code=11744");
+
+  req = cci_prepare (con, sql, 0, &err);
+
+  if (req < 0)
+
+    {
+
+      printf ("prepare error: %d, %s\n", err.err_code, err.err_msg);
+
+      return error;
+
+    }
+
+ 
+
+  res = cci_execute (req, 0, 0, &err);
+
+  if (res < 0)
+
+    {
+
+      printf ("execute error: %d, %s\n", err.err_code, err.err_msg);
+
+      goto cci_work_end;
+
+    }
+
+ 
+
+  while (1)
+
+    {
+
+      error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &err);
+
+      if (error == CCI_ER_NO_MORE_DATA)
+
+        {
+
+          break;
+
+        }
+
+      if (error < 0)
+
+        {
+
+          printf ("cursor error: %d, %s\n", err.err_code, err.err_msg);
+
+          goto cci_work_end;
+
+        }
+
+ 
+
+      error = cci_fetch (req, &err);
+
+      if (error < 0)
+
+        {
+
+          printf ("fetch error: %d, %s\n", err.err_code, err.err_msg);
+
+          goto cci_work_end;
+
+        }
+
+ 
+
+      error = cci_get_data (req, 1, CCI_A_TYPE_INT, &data, &ind);
+
+      if (error < 0)
+
+        {
+
+          printf ("get data error: %d\n", error);
+
+          goto cci_work_end;
+
+        }
+
+      printf ("%d\n", data);
+
+    }
+
+ 
+
+  error = 1;
+
+cci_work_end:
+
+  cci_close_req_handle (req);
+
+  return error;
+
+}
+
+**Remark**
+
+*   The database connection in thread-based programming must be used independently each other.
+
+
+
+**Configuring Library**
+
+Once you have written applications using CCI, you should decide, according to its features, whether to execute CCI as static or dynamic link before you build it. See the table in
+`CCI Overview <#api_api_cci_overview_htm>`_
+ to decide which library will be used.
+
+The following is an example of Makefile, which makes a link by using the dynamic library on UNIX/Linux.
+
+CC=gcc
+
+CFLAGS = -g -Wall -I. -I$CUBRID/include
+
+LDFLAGS = -L$CUBRID/lib -lcascci -lnsl
+
+TEST_OBJS = test.o
+
+EXES = test
+
+all: $(EXES)
+
+test: $(TEST_OBJS)
+
+ $(CC) -o $@ $(TEST_OBJS) $(LDFLAGS)
+
+The following image shows configuration to use static library on Windows.
+
+|image55_png|
+
+**Using BLOB/CLOB**
+
+**Storing LOB Data**
+
+You can create
+**LOB**
+data file and bind the data by using the functions below in CCI applications.
+
+*   Creating
+    **LOB**
+    data files (related functions:
+    `cci_blob_new <#api_api_cci_blobnew_htm>`_
+    (),
+    `cci_blob_write <#api_api_cci_blobwrite_htm>`_
+    ())
+
+
+
+*   Binding
+    **LOB**
+    data (related function:
+    `cci_bind_param <#api_api_cci_bindparam_htm>`_
+    ())
+
+
+
+*   Freeing memory for
+    **LOB**
+    struct (related function:
+    `cci_blob_free <#api_api_cci_blobfree_htm>`_
+    ())
+
+
+
+**Example**
+
+int con = 0; /* connection handle */
+
+int req = 0; /* request handle */
+
+int res;
+
+int n_executed;
+
+int i;
+
+T_CCI_ERROR error;
+
+T_CCI_BLOB blob = NULL;
+
+char data[1024] = "bulabula";
+
+ 
+
+con = cci_connect ("localhost", 33000, "tdb", "PUBLIC", "");
+
+if (con < 0) {
+
+  goto handle_error;
+
+}
+
+req = cci_prepare (con, "insert into doc (doc_id, content) values (?,?)", 0, &error);
+
+if (req< 0)
+
+{
+
+goto handle_error;
+
+}
+
+ 
+
+res = cci_bind_param (req, 1 /* binding index*/, CCI_A_TYPE_STR, "doc-10", CCI_U_TYPE_STRING, CCI_BIND_PTR);
+
+ 
+
+/* Creating an empty LOB data file */
+
+res = cci_blob_new (con, &blob, &error);
+
+res = cci_blob_write (con, blob, 0 /* start position */, 1024 /* length */, data, &error);
+
+ 
+
+/* Binding BLOB data */
+
+res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_BLOB, (void *)blob, CCI_U_TYPE_BLOB, CCI_BIND_PTR);
+
+ 
+
+n_executed = cci_execute (req, 0, 0, &error);
+
+if (n_executed < 0)
+
+{
+
+  goto handle_error;
+
+}
+
+ 
+
+/* Commit */
+
+if (cci_end_tran(con, CCI_TRAN_COMMIT, &error) < 0)
+
+{
+
+goto handle_error;
+
+}
+
+ 
+
+/* Memory free */
+
+  cci_blob_free(blob);
+
+return 0;
+
+ 
+
+handle_error:
+
+if (blob != NULL)
+
+{
+
+cci_blob_free(blob);
+
+}
+
+if (req > 0)
+
+{
+
+  cci_close_req_handle (req);
+
+}
+
+if (con > 0)
+
+{
+
+  cci_disconnect(con, &error);
+
+}
+
+return -1;
+
+**Retrieving LOB Data**
+
+You can retrieve
+**LOB**
+data by using the following functions in CCI applications. Note that if you enter data in the
+**LOB**
+type column, the actual
+**LOB**
+data is stored in the file located in external storage and Locator value is stored in the
+**LOB**
+type column. Thus, to retrieve the
+**LOB**
+data stored in the file, you should call the
+`cci_blob_read <#api_api_cci_blobread_htm>`_
+() function but the
+`cci_get_data <#api_api_cci_getdata_htm>`_
+() function.
+
+*   Retrieving meata data (Locator) in the the
+    **LOB**
+    type column (related function:
+    `cci_get_data <#api_api_cci_getdata_htm>`_
+    ())
+
+
+
+*   Retrieving the
+    **LOB**
+    data (related function:
+    `cci_blob_read <#api_api_cci_blobread_htm>`_
+    ())
+
+
+
+*   Freeing memory for the
+    **LOB**
+    struct: (related function:
+    `cci_blob_free <#api_api_cci_blobfree_htm>`_
+    ())
+
+
+
+**Example**
+
+int con = 0; /* connection handle */
+
+int req = 0; /* request handle */
+
+int ind; /* NULL indicator, 0 if not NULL, -1 if NULL*/
+
+int res;
+
+int i;
+
+T_CCI_ERROR error;
+
+T_CCI_BLOB blob;
+
+char buffer[1024];
+
+ 
+
+con = cci_connect ("localhost", 33000, "image_db", "PUBLIC", "");
+
+if (con < 0)
+
+{
+
+  goto handle_error;
+
+}
+
+req = cci_prepare (con, "select content from doc_t", 0 /*flag*/, &error);
+
+if (req< 0)
+
+{
+
+  goto handle_error;
+
+}
+
+ 
+
+res = cci_execute (req, 0/*flag*/, 0/*max_col_size*/, &error);
+
+res = cci_fetch_size (req, 100 /* fetch size */);
+
+ 
+
+while (1) {
+
+  res = cci_cursor (req, 1/* offset */, CCI_CURSOR_CURRENT/* cursor position */, &error);
+
+  if (res == CCI_ER_NO_MORE_DATA)
+
+  {
+
+    break;
+
+  }
+
+  res = cci_fetch (req, &error);
+
+ 
+
+  /* Fetching CLOB Locator */
+
+  res = cci_get_data (req, 1 /* colume index */, CCI_A_TYPE_BLOB,
+
+  (void *)&blob /* BLOB handle */, &ind /* NULL indicator */);
+
+  /* Fetching CLOB data */
+
+  res = cci_blob_read (con, blob, 0 /* start position */, 1024 /* length */, buffer, &error);
+
+  printf ("content = %s\n", buffer);
+
+}
+
+ 
+
+/* Memory free */
+
+cci_blob_free(blob);
+
+res=cci_close_req_handle(req);
+
+res = cci_disconnect (con, &error);
+
+return 0;
+
+ 
+
+handle_error:
+
+if (req > 0)
+
+{
+
+  cci_close_req_handle (req);
+
+}
+
+if (con > 0)
+
+{
+
+  cci_disconnect(con, &error);
+
+}
+
+return -1;
+
+**CCI Error Codes and Error Messages**
+
+CCI API functions return a negative number as CCI or CAS (broker application server) error codes when an error occurs. The CCI error codes occur in CCI API functions and CAS error codes occur in CAS.
+
+*   The value of every error code is negative.
+
+
+
+*   If the value of error code is between -20002 and -20999, it is caused by CCI API functions. You can output CCI error messages which CCI error codes represent by using the
+    `cci_get_err_msg <#api_api_cci_geterrmsg_htm>`_
+    () function.
+
+
+
+*   If the value of error code is between -10000 and -10999, it is caused by CAS and transferred by CCI API functions.
+
+
+
+*   If the value of error code is between -11000 and -11999, it is caused by broker server and transferred by CCI API functions.
+
+
+
+*   If the value of error code is
+    **CCI_ER_DBMS**
+    (-20001), it is caused by database server. You can check server error codes in err_buf.err_code of the database error buffer (err_buf).
+
+
+
+**Wanring**
+If an error occurs in server, the value of
+**CCI_ER_DBMS**
+, which is error code returned by a function may be different from the value of the err_buf.err_code. Except server errors, every error code stored in err_buf is identical to that returned by a function.
+
+**Note**
+In the earlier version of CUBRID 9.0, the CCI and CAS error codes has values which are different in the version of CUBRID 9.0 or later. Therfore, the users who developed must complie applications after using them and the users who developed by directly assigning error codes must re-complie applications after changing the number values.
+
+For database server errors, see Administrator Guide > Controlling CUBRID > Database Server > Database Server Errors.
+
+The database error buffer (err_buf) is a struct variable of the
+**cas_cci.h**
+header file. For how to use it, see the example below.
+
+CCI error codes which starting with
+**CCI_ER**
+are defined in enum called
+**T_CCI_ERROR_CODE**
+under the
+**$CUBRID/include/cas_cci.h**
+file. Therefore, to use this error code name in program code, you should include a header file in the upper side of code by entering
+**#include "cas_cci.h"**
+.
+
+The following example shows how to display error messages. In the example, the error code value (req) returned by
+`cci_prepare <#api_api_cci_prepare_htm>`_
+() is
+**CCI_ER_DBMS**
+. -493 (server error code) is stored in
+**cci_error.err_code**
+and the error message 'Syntax: Unknown class "notable". select * from notableSyntax' is stored in
+**cci_error.err_msg**
+of the database error buffer.
+
+// gcc -o err err.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+
+#include <stdio.h>
+
+#include "cas_cci.h"
+
+ 
+
+#define BUFSIZE  (1024)
+
+ 
+
+int
+
+main (void)
+
+{
+
+  int con = 0, req = 0, col_count = 0, i, ind;
+
+  int error;
+
+  char *data;
+
+  T_CCI_ERROR err_buf;
+
+  char *query = "select * from notable";
+
+ 
+
+//getting a connection handle for a connection with a server
+
+  con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+
+  if (con < 0)
+
+    {
+
+      printf ("cannot connect to database\n");
+
+      return 1;
+
+    }
+
+ 
+
+//preparing the SQL statement
+
+  req = cci_prepare (con, query, 0, & err_buf);
+
+  if (req < 0)
+
+    {
+
+      if (req == CCI_ER_DBMS)
+
+{
+
+        printf ("error from server: %d, %s\n", err_buf.err_code, err_buf.err_msg);
+
+      }
+
+    else
+
+      {
+
+        char msg_buf[1024];
+
+        cci_get_err_msg(req, msg_buf, 1024);
+
+       printf ("error from cas: %d, %s\n", req, msg_buf);
+
+       }
+
+      goto handle_error;
+
+    }
+
+// ...
+
+}
+
+The following list shows CCI and CAS error codes.
+
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Error Code**                           | **Error Message**                                                | **Note**                                                                                                                                                             |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_DBMS                              | "CUBRID DBMS Error"                                              | Error codes returned by functions when an error occurs in server. The causes of the error can be checked with err_code and err_msg stored in the T_CCI_ERROR struct. |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_CON_HANDLE                        | "Invalid connection handle"#                                     |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_NO_MORE_MEMORY                    | "Memory allocation error"                                        | Insufficient memory                                                                                                                                                  |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_COMMUNICATION                     | "Cannot communicate with server"#                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_NO_MORE_DATA                      | "Invalid cursor position"#                                       |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_TRAN_TYPE                         | "Unknown transaction type"#                                      |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_STRING_PARAM                      | "Invalid string argument"                                        | An error occurred when sql_stmt is NULL in                                                                                                                           |
+|                                          |                                                                  | **cci_prepare**                                                                                                                                                      |
+|                                          |                                                                  | , and                                                                                                                                                                |
+|                                          |                                                                  | **cci_prepare_and_execute**                                                                                                                                          |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_TYPE_CONVERSION                   | "Type conversion error"                                          | Cannot convert the given value into an actual data type.                                                                                                             |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_BIND_INDEX                        | "Parameter index is out of range"                                | Index that binds data is not valid.                                                                                                                                  |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_ATYPE                             | "Invalid T_CCI_A_TYPE value"#                                    |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_NOT_BIND                          |                                                                  | Not available                                                                                                                                                        |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_PARAM_NAME                        | "Invalid T_CCI_DB_PARAM value"                                   |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_COLUMN_INDEX                      | "Column index is out of range"                                   |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_SCHEMA_TYPE                       |                                                                  | Not available                                                                                                                                                        |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_FILE                              | "Cannot open file"                                               | Fails to open/read/write a file.                                                                                                                                     |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_CONNECT                           | "Cannot connect to CUBRID CAS"                                   | "Cannot connect to CUBRID CAS"                                                                                                                                       |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_ALLOC_CON_HANDLE                  | "Cannot allocate connection handle"%                             |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_REQ_HANDLE                        | "Cannot allocate request handle"%                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_INVALID_CURSOR_POS                | "Invalid cursor position"                                        |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_OBJECT                            | "Invalid oid string"                                             |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_CAS                               |                                                                  | Not available                                                                                                                                                        |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_HOSTNAME                          | "Unknown host name"                                              |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_OID_CMD                           | "Invalid T_CCI_OID_CMD value"                                    |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_BIND_ARRAY_SIZE                   | "Array binding size is not specified"#                           |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_ISOLATION_LEVEL                   | "Unknown transaction isolation level"#                           |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_SET_INDEX                         | "Invalid set index"                                              | Invalid index is specified when a set element in the T_CCI_SET struct is retrieved.                                                                                  |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_DELETED_TUPLE                     | "Current row was deleted"%                                       |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_SAVEPOINT_CMD                     | "Invalid T_CCI_SAVEPOINT_CMD value"                              | Invalid T_CCI_SAVEPOINT_CMD value is used as an argument of the cci_savepoint() function.                                                                            |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_THREAD_RUNNING                    | "Thread is running"                                              | The thread is still executed when cci_execute() is executed with CCI_EXEC_THREAD flagged and check the result of thread execution through cci_get_thread_result().   |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_INVALID_URL                       | "Invalid url string"                                             |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_INVALID_LOB_READ_POS              | "Invalid lob read position"#                                     |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_INVALID_LOB_HANDLE                | "Invalid lob handle"#                                            |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_NO_PROPERTY                       | #                                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_PROPERTY_TYPE                     | #                                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_INVALID_DATASOURCE                | #                                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_DATASOURCE_TIMEOUT                | #                                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_DATASOURCE_TIMEDWAIT              | #                                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_LOGIN_TIMEOUT                     | #                                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_QUERY_TIMEOUT                     | #                                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_RESULT_SET_CLOSED                 | #                                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_INVALID_HOLDABILITY               | "Invalid holdability mode. The only accepted values are 0 or 1"# |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CCI_ER_NOT_UPDATABLE                     | "Request handle is not updatable"#                               |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_INTERNAL                          | #                                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_NO_MORE_MEMORY                    | "Memory allocation error"#                                       |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_COMMUNICATION                     | "Cannot receive data from client"#                               |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_ARGS                              | "Invalid argument"#                                              |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_TRAN_TYPE                         | "Invalid transaction type argument"#                             |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_SRV_HANDLE                        | "Server handle not found"#                                       |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_NUM_BIND                          | "Invalid parameter binding value argument"                       | The number of data to be bound does not match with the number of data to be transferred.                                                                             |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_UNKNOWN_U_TYPE                    | "Invalid T_CCI_U_TYPE value"#                                    |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_DB_VALUE                          | "Cannot make DB_VALUE"#                                          |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_TYPE_CONVERSION                   | "Type conversion error"#                                         |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_PARAM_NAME                        | "Invalid T_CCI_DB_PARAM value"                                   | The name of the system parameter is not valid.                                                                                                                       |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_NO_MORE_DATA                      | "Invalid cursor position"#                                       |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_OBJECT                            | "Invalid oid"#                                                   |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_OPEN_FILE                         | "Cannot open file"#                                              |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_SCHEMA_TYPE                       | "Invalid T_CCI_SCH_TYPE value"#                                  |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_VERSION                           | "Version mismatch"                                               | The DB server version does not compatible with the client (CAS) version.                                                                                             |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_FREE_SERVER                       | "Cannot process the request.  Try again later"                   | The CAS which handles connection request of applications cannot be assigned.                                                                                         |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_NOT_AUTHORIZED_CLIENT             | "Authorization error"                                            | Access is denied.                                                                                                                                                    |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_QUERY_CANCEL                      | "Cannot cancel the query"#                                       |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_NOT_COLLECTION                    | "The attribute domain must be the set type"#                     |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_COLLECTION_DOMAIN                 | "Heterogeneous set is not supported"#                            |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_NO_MORE_RESULT_SET                | "No More Result"#                                                |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_INVALID_CALL_STMT                 | "Illegal CALL statement"#                                        |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_STMT_POOLING                      | "Invalid plan"#                                                  |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_DBSERVER_DISCONNECTED             | "Cannot communicate with DB Server"#                             |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_MAX_PREPARED_STMT_COUNT_EXCEEDED  | "Cannot prepare more than MAX_PREPARED_STMT_COUNT statements"#   |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_HOLDABLE_NOT_ALLOWED              | "Holdable results may not be updatable or sensitive"#            |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CAS_ER_HOLDABLE_NOT_ALLOWED_KEEP_CON_OFF | "Holdable results are not allowed while KEEP_CONNECTION is off"# |                                                                                                                                                                      |
+|                                          |                                                                  |                                                                                                                                                                      |
++------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+**C Type Definition**
+
+ The following shows the construct used in CCI API functions.
+
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **Name**                 | **Type** | **Member**                              | **Description**                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_ERROR**          | struct   | char err_msg[1024]                      | Representation of database error info            |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | int err_code                            |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_BIT**            | struct   | int size                                | Representation of bit type                       |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | char *buf                               |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_DATE**           | struct   | short yr                                | Representation of timestamp, date, and time type |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | short mon                               |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | short day                               |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | short hh                                |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | short mm                                |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | short ss                                |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | short ms                                |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_SET**            | void*    |                                         | Representation of set type                       |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_COL_INFO**       | struct   | **T_CCI_U_TYPE**                        | Representation of column information for the     |
+|                          |          | type                                    | **SELECT**                                       |
+|                          |          |                                         | statement                                        |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | char is_non_null                        |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | short scale                             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | int precision                           |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | char *col_name                          |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | char *real_attr                         |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | char *class_name                        |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_QUERY_RESULT**   | struct   | int result_count                        | Results of batch execution                       |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | int stmt_type                           |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | char *err_msg                           |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | char oid[32]                            |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_PARAM_INFO**     | struct   | **T_CCI_PARAM_MODE**                    | Representation of input parameter info           |
+|                          |          | mode                                    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **T_CCI_U_TYPE**                        |                                                  |
+|                          |          | type                                    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | short scale                             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | int precision                           |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_U_TYPE**         | enum     | **CCI_U_TYPE_UNKNOWN**                  | Database type info                               |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_NULL**                     |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_CHAR**                     |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_STRING**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_NCHAR**                    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_VARNCHAR**                 |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_BIT**                      |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_VARBIT**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_NUMERIC**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_INT**                      |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_SHORT**                    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_MONETARY**                 |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_FLOAT**                    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_DOUBLE**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_DATE**                     |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_TIME**                     |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_TIMESTAMP**                |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_SET**                      |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_MULTISET**                 |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_SEQUENCE**                 |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_OBJECT**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_BIGINT**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_U_TYPE_DATETIME**                 |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_A_TYPE**         | enum     | **CCI_A_TYPE_STR**                      | Representation of type info used in API          |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_A_TYPE_INT**                      |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_A_TYPE_FLOAT**                    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_A_TYPE_DOUBLE**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_A_TYPE_BIT**                      |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_A_TYPE_DATE**                     |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_A_TYPE_SET**                      |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_A_TYPE_BIGINT**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_A_TYPE_BLOB**                     |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_A_TYPE_CLOB**                     |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_DB_PARAM**       | enum     | **CCI_PARAM_ISOLATION_LEVEL**           | System parameter names                           |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_PARAM_LOCK_TIMEOUT**              |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_PARAM_MAX_STRING_LENGTH**         |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_PARAM_AUTO_COMMIT**               |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_SCH_TYPE**       | enum     | **CCI_SCH_CLASS**                       |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_VCLASS**                      |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_QUERY_SPEC**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_ATTRIBUTE**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_CLASS_ATTRIBUTE**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_METHOD**                      |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_CLASS_METHOD**                |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_METHOD_FILE**                 |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_SUPERCLASS**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_SUBCLASS**                    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_CONSTRAIT**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_TRIGGER**                     |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_CLASS_PRIVILEGE**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_ATTR_PRIVILEGE**              |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_DIRECT_SUPER_CLASS**          |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_PRIMARY_KEY**                 |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_IMPORTED_KEYS**               |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_EXPORTED_KEYS**               |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_SCH_CROSS_REFERENCE**             |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_CUBRID_STMT**    | enum     | **CUBRID_STMT_ALTER_CLASS**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_ALTER_SERIAL**            |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_COMMIT_WORK**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_REGISTER_DATABASE**       |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_CREATE_CLASS**            |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_CREATE_INDEX**            |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_CREATE_TRIGGER**          |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_CREATE_SERIAL**           |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_DROP_DATABASE**           |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_DROP_CLASS**              |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_DROP_INDEX**              |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_DROP_LABEL**              |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_DROP_TRIGGER**            |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_DROP_SERIAL**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_EVALUATE**                |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_RENAME_CLASS**            |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_ROLLBACK_WORK**           |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_GRANT**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_REVOKE**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_STATISTICS**              |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_INSERT**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_SELECT**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_UPDATE**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_DELETE**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_CALL**                    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_GET_ISO_LVL**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_GET_TIMEOUT**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_GET_OPT_LVL**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_SET_OPT_LVL**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_SCOPE**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_GET_TRIGGER**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_SET_TRIGGER**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_SAVEPOINT**               |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_PREPARE**                 |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_ATTACH**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_USE**                     |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_REMOVE_TRIGGER**          |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_RENAME_TRIGGER**          |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_ON_LDB**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_GET_LDB**                 |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_SET_LDB**                 |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_GET_STATS**               |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_CREATE_USER**             |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_DROP_USER**               |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CUBRID_STMT_ALTER_USER**              |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_CURSOR_POS**     | enum     | **CCI_CURSOR_FIRST**                    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_CURSOR_CURRENT**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_CURSOR_LAST**                     |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_TRAN_ISOLATION** | enum     | **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **TRAN_COMMIT_CLASS_COMMIT_INSTANCE**   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **TRAN_REP_CLASS_UNCOMMIT_INSTANCE**    |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **TRAN_REP_CLASS_COMMIT_INSTANCE**      |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **TRAN_REP_CLASS_REP_INSTANCE**         |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **TRAN_SERIALIZABLE**                   |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+| **T_CCI_PARAM_MODE**     | enum     | **CCI_PARAM_MODE_UNKNOWN**              |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_PARAM_MODE_IN**                   |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_PARAM_MODE_OUT**                  |                                                  |
+|                          |          |                                         |                                                  |
+|                          |          +-----------------------------------------+                                                  |
+|                          |          | **CCI_PARAM_MODE_INOUT**                |                                                  |
+|                          |          |                                         |                                                  |
++--------------------------+----------+-----------------------------------------+--------------------------------------------------+
+
+**Note**
+If a string longer than defined max length is inserted (
+**INSERT**
+) or updated (
+**UPDATE**
+), the string will be truncated.
+
+**Note**
+To get the latest information about CCI driver, click
+`http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver>`_
+.
+
+**CCI Sample Program**
+
+**Description**
+
+The sample program shows how to write a CCI application by using the
+*demodb*
+database which is included with the CUBRID installation package. You can practice the ways to connect to CAS, prepare queries, execute queries, handle response, disconnect from CAS, etc. by following sample program below. In the sample program, the dynamic link on Linux environment is used.
+
+The code below shows information about
+*olympic*
+table schema in the
+*demodb*
+database which is used for sample program.
+
+csql> ;sc olympic
+
+ 
+
+=== <Help: Schema of a Class> ===
+
+ 
+
+ 
+
+ <Class Name>
+
+ 
+
+     olympic
+
+ 
+
+ <Attributes>
+
+ 
+
+     host_year            INTEGER NOT NULL
+
+     host_nation          CHARACTER VARYING(40) NOT NULL
+
+     host_city            CHARACTER VARYING(20) NOT NULL
+
+     opening_date         DATE NOT NULL
+
+     closing_date         DATE NOT NULL
+
+     mascot               CHARACTER VARYING(20)
+
+     slogan               CHARACTER VARYING(40)
+
+     introduction         CHARACTER VARYING(1500)
+
+ 
+
+ <Constraints>
+
+ 
+
+     PRIMARY KEY pk_olympic_host_year ON olympic (host_year)
+
+**Preparing**
+
+Make sure that the
+*demodb*
+database and the broker are running before you execute the sample program. You can start the
+*demodb*
+database and the broker by executing the
+**cubrid**
+utility. The code below shows how to run a database server and broker by executing the
+**cubrid**
+utility.
+
+[tester@testdb ~]$ cubrid server start demodb
+
+@ cubrid master start
+
+++ cubrid master start: success
+
+@ cubrid server start: demodb
+
+ 
+
+This may take a long time depending on the amount of recovery works to do.
+
+ 
+
+CUBRID 9.0
+
+ 
+
+++ cubrid server start: success
+
+[tester@testdb ~]$ cubrid broker start
+
+@ cubrid broker start
+
+++ cubrid broker start: success
+
+**Building**
+
+With the program source and the Makefile prepared, executing
+**make**
+will create an executable file named
+*test*
+. If you use a static library, there is no need to deploy additional files and the execution will be faster. However, it increases the program size and memory usage. If you use a dynamic library, there will be some performance overhead but the program size and memory usage can be optimized.
+
+The code below a command line that makes a test program build by using a dynamic library instead of using
+**make**
+on Linux.
+
+cc -o test test.c -I$CUBRID/include -L$CUBRID/lib -lnsl -lcascci
+
+**Sample Code**
+
+#include <stdio.h>
+
+#include <cas_cci.h>
+
+char *cci_client_name = "test";
+
+int main (int argc, char *argv[])
+
+{
+
+    int con = 0, req = 0, col_count = 0, res, ind, i;
+
+    T_CCI_ERROR error;
+
+    T_CCI_COL_INFO *res_col_info;
+
+    T_CCI_CUBRID_STMT stmt_type;
+
+    char *buffer, db_ver[16];
+
+    printf("Program started!\n");
+
+    if ((con=cci_connect("localhost", 30000, "demodb", "PUBLIC", ""))<0) {
+
+        printf( "%s(%d): cci_connect fail\n", __FILE__, __LINE__);
+
+        return -1;
+
+    }
+
+   
+
+    if ((res=cci_get_db_version(con, db_ver, sizeof(db_ver)))<0) {
+
+        printf( "%s(%d): cci_get_db_version fail\n", __FILE__, __LINE__);
+
+        goto handle_error;
+
+    }
+
+    printf("DB Version is %s\n",db_ver);
+
+    if ((req=cci_prepare(con, "select * from event", 0,&error))<0) {
+
+        if (req == CCI_ER_DBMS) {
+
+            printf( "%s(%d): cci_prepare fail(%d)\n", __FILE__, __LINE__,error.err_code);
+
+        }
+
+        else {
+
+            char msg_buf[1024];
+
+            cci_get_err_msg(req, msg_buf, 1024);
+
+            printf ("error from cas: %d, %s\n", req, msg_buf);
+
+        }
+
+        goto handle_error;
+
+    }
+
+    printf("Prepare ok!(%d)\n",req);
+
+    res_col_info = cci_get_result_info(req, &stmt_type, &col_count);
+
+    if (!res_col_info) {
+
+        printf( "%s(%d): cci_get_result_info fail\n", __FILE__, __LINE__);
+
+        goto handle_error;
+
+    }
+
+   
+
+    printf("Result column information\n"
+
+           "========================================\n");
+
+    for (i=1; i<=col_count; i++) {
+
+        printf("name:%s  type:%d(precision:%d scale:%d)\n",
+
+            CCI_GET_RESULT_INFO_NAME(res_col_info, i),
+
+            CCI_GET_RESULT_INFO_TYPE(res_col_info, i),
+
+            CCI_GET_RESULT_INFO_PRECISION(res_col_info, i),
+
+            CCI_GET_RESULT_INFO_SCALE(res_col_info, i));
+
+    }
+
+    printf("========================================\n");
+
+    if ((res=cci_execute(req, 0, 0, &error))<0) {
+
+        if (req == CCI_ER_DBMS) {
+
+            printf( "%s(%d): cci_execute fail(%d)\n", __FILE__, __LINE__,error.err_code);
+
+        }
+
+        else {
+
+            char msg_buf[1024];
+
+            cci_get_err_msg(req, msg_buf, 1024);
+
+            printf ("error from cas: %d, %s\n", req, msg_buf);
+
+        }
+
+        goto handle_error;
+
+    }
+
+    if ((res=cci_fetch_size(req, 100))<0) {
+
+        printf( "%s(%d): cci_fetch_size fail\n", __FILE__, __LINE__);
+
+        goto handle_error;
+
+    }
+
+   
+
+    while (1) {
+
+        res = cci_cursor(req, 1, CCI_CURSOR_CURRENT, &error);
+
+        if (res == CCI_ER_NO_MORE_DATA) {
+
+            printf("Query END!\n");
+
+            break;
+
+        }
+
+        if (res<0) {
+
+            if (req == CCI_ER_DBMS) {
+
+                printf( "%s(%d): cci_cursor fail(%d)\n", __FILE__, __LINE__,error.err_code);
+
+            }
+
+            else {
+
+                char msg_buf[1024];
+
+                cci_get_err_msg(req, msg_buf, 1024);
+
+                printf ("error from cas: %d, %s\n", req, msg_buf);
+
+            }
+
+            goto handle_error;
+
+        }
+
+       
+
+        if ((res=cci_fetch(req, &error))<0) {
+
+            if (res == CCI_ER_DBMS) {
+
+                printf( "%s(%d): cci_fetch fail(%d)\n", __FILE__, __LINE__,error.err_code);
+
+            else {
+
+                char msg_buf[1024];
+
+                cci_get_err_msg(req, msg_buf, 1024);
+
+                printf ("error from cas: %d, %s\n", req, msg_buf);
+
+            }
+
+            goto handle_error;
+
+        }
+
+       
+
+        for (i=1; i<=col_count; i++) {
+
+            if ((res=cci_get_data(req, i, CCI_A_TYPE_STR, &buffer, &ind))<0) {
+
+                printf( "%s(%d): cci_get_data fail\n", __FILE__, __LINE__);
+
+                goto handle_error;
+
+            }
+
+            printf("%s \t|", buffer);
+
+        }
+
+        printf("\n");
+
+    }
+
+    if ((res=cci_close_req_handle(req))<0) {
+
+        printf( "%s(%d): cci_close_req_handle fail", __FILE__, __LINE__);
+
+       goto handle_error;
+
+    }
+
+    if ((res=cci_disconnect(con, &error))<0) {
+
+        if (res == CCI_ER_DBMS) {
+
+            printf( "%s(%d): cci_disconnect fail(%d)", __FILE__, __LINE__,error.err_code);
+
+        else {
+
+            char msg_buf[1024];
+
+            cci_get_err_msg(req, msg_buf, 1024);
+
+            printf ("error from cas: %d, %s\n", req, msg_buf);
+
+        }
+
+        goto handle_error;
+
+    }
+
+    printf("Program ended!\n");
+
+    return 0;
+
+   
+
+    handle_error:
+
+    if (req > 0)
+
+        cci_close_req_handle(req);
+
+    if (con > 0)
+
+        cci_disconnect(con, &error);
+
+    printf("Program failed!\n");
+
+    return -1;
+
+}
+
+**Note**
+For latest information about CCI driver, visit
+`http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver>`_
+.
+
+.. toctree::
+	:maxdepth: 2
+
+	cciapi.rst

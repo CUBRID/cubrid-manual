@@ -8,23 +8,17 @@ The following are examples of comments supported in the CSQL Interpreter.
 
 **Example**
 
-*   How to use --
+* How to use -- ::
 
+	-- This is a SQL-style comment.
 
+* How to use // ::
 
--- This is a SQL-style comment.
+	This is a C++ style comment.
 
-*   How to use //
+* How to use /* \*/ ::
 
+	/* This is a C-style comment.*/
 
-
-This is a C++ style comment.
-
-*   How to use /* */
-
-
-
-/* This is a C-style comment.*/
-
-/* This is an example to use two lines
-as comment by using the C-style. */
+	/* This is an example to use two lines
+	as comment by using the C-style. */

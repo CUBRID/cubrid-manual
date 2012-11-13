@@ -201,9 +201,7 @@ CREATE TABLE
 
 동일한 칼럼에 **AUTO_INCREMENT** 속성과 **SHARED** 또는 **DEFAULT** 속성을 동시에 정의할 수 없으며, 사용자가 직접 입력한 값과 자동 증가 특성에 의해 입력된 값이 서로 충돌되지 않도록 주의해야 한다.
 
-**AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 `AUTO_INCREMENT 절 <#syntax_syntax_def_alttable_autoi_781>`_ 을 참고한다.
-
-::
+**AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 `AUTO_INCREMENT 절 <#syntax_syntax_def_alttable_autoi_781>`_ 을 참고한다. ::
 
 	CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]) |
 	CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
@@ -790,9 +788,7 @@ ADD COLUMN 절
 
 새로 추가되는 칼럼이 **NOT NULL** 제약 조건이 있으나 **DEFAULT** 제약 조건이 없는 경우, 데이터베이스 서버 설정 파라미터인 **add_column_update_hard_default** 가 yes이면 고정 기본값(hard default)을 갖게 되고, no이면 **NOT NULL** 제약 조건이 있어도 **NULL** 값을 갖게 된다. 새로 추가되는 칼럼에 **PRIMARY KEY** 혹은 **UNIQUE** 제약 조건을 지정하는 경우에 데이터베이스 서버 설정 파라미터인 **add_column_update_hard_default** 값이 yes이면 에러를 반환하고, no이면 모든 데이터는 **NULL** 값을 갖게 된다. **add_column_update_hard_default** 의 기본값은 **no** 이다.
 
-**add_column_update_hard_default** 및 고정 기본값에 대해서는 `CHANGE, MODIFY 절 <#syntax_syntax_def_alttable_chang_3554>`_ 을 참고한다.
-
-::
+**add_column_update_hard_default** 및 고정 기본값에 대해서는 `CHANGE, MODIFY 절 <#syntax_syntax_def_alttable_chang_3554>`_ 을 참고한다. ::
 
 	ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
 	ADD [ COLUMN | ATTRIBUTE ] [(]<column_definition>[)] [ FIRST | AFTER old_column_name ]
@@ -848,9 +844,7 @@ ADD CONSTRAINT 절
 
 **ADD CONSTRAINT** 절을 사용하여 새로운 제약 조건을 추가할 수 있다.
 
-**PRIMARY KEY** 제약 조건을 추가할 때 생성되는 인덱스는 기본적으로 오름차순으로 생성되며, 칼럼 이름 뒤에 **ASC** 또는 **DESC** 키워드를 명시하여 키의 정렬 순서를 지정할 수 있다.
-
-::
+**PRIMARY KEY** 제약 조건을 추가할 때 생성되는 인덱스는 기본적으로 오름차순으로 생성되며, 칼럼 이름 뒤에 **ASC** 또는 **DESC** 키워드를 명시하여 키의 정렬 순서를 지정할 수 있다. ::
 
 	ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
 	ADD CONSTRAINT < constraint_name > column_constraint ( column_name_comma_list )
@@ -925,9 +919,7 @@ ADD INDEX 절
 	Current transaction has been committed.
 
 ALTER COLUMN … SET DEFAULT 절
------------------------------
-
-**설명**
+------------------------------
 
 **ALTER COLUMN** ... **SET DEFAULT** 절은 기본값이 없는 칼럼에 기본값을 지정하거나 기존의 기본값을 변경할 수 있다. `CHANGE, MODIFY 절 <#syntax_syntax_def_alttable_chang_3554>`_ 을 이용하면, 단일 구문으로 여러 칼럼의 기본값을 변경할 수 있다. ::
 

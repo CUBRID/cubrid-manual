@@ -2,586 +2,220 @@
 SERIAL
 ******
 
-
-**CREATE SERIAL**
+CREATE SERIAL
+=============
 
 Serial is an object that creates a unique sequence number, and has the following characteristics.
 
 *   The serial is useful in creating a unique sequence number in multi-user environment.
-
-
-
 *   Generated serial numbers are not related with table so, you can use the same serial in multiple tables.
+*   All users including **PUBLIC** can create a serial object. Once it is created, all users can get the number by using **CURRENT_VALUE** and **NEXT_VALUE**.
+*   Only owner of a created serial object and **DBA** can update or delete a serial object. If an owner is **PUBLIC**, all users can update or delete it.
 
+You can create a serial object in the database by using the **CREATE SERIAL** statement. For how to write serial name, `Identifier <#syntax_csql_syntaxtype_identifie_2262>`_. ::
 
+	CREATE SERIAL serial_name
+	[ START WITH initial ]
+	[ INCREMENT BY interval ]
+	[ MINVALUE min | NOMINVALUE ]
+	[ MAXVALUE max | NOMAXVALUE ]
+	[ CACHE integer | NOCACHE ]
 
-*   All users including
-    **PUBLIC**
-    can create a serial object. Once it is created, all users can get the number by using
-    **CURRENT_VALUE**
-    and
-    **NEXT_VALUE**
-    .
+*   *serial_identifier* : Specifies the name of the serial to be generated.
+*   **START WITH** *initial* : Specifies the initial value of serial with 38 digits or less. The default value of ascending serial is 1 and that of descending serial is -1.
 
+*   **INCREMENT BY** *interval* : Specifies the increment of the serial. You can specify any integer with 38 digits or less except zero at *interval*. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order otherwise, it is in ascending order. The default value is **1**.
 
+*   **MINVALUE** : Specifies the minimum value of the serial, with 38 digits or less. **MINVALUE** must be smaller than or equal to the initial value and smaller than the maximum value.
+*   **NOMINVALUE** : 1 is set automatically as a minimum value for the ascending serial -(10) 38 for the descending serial.
+*   **MAXVALUE** : Specifies the maximum number of the serial with 38 digits or less. **MAXVALUE** must be smaller than or equal to the initial value and greater than the minimum value.
+*   **NOMAXVALUE** : (10) 37 is set automatically as a maximum value for the ascending serial -1 for the descending serial.
 
-*   Only owner of a created serial object and
-    **DBA**
-    can update or delete a serial object. If an owner is
-    **PUBLIC**
-    , all users can update or delete it.
+*   **CYCLE** : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. When a serial in ascending order reaches the maximum value, the minimum value is created as the next value; when a serial in descending order reaches the minimum value, the maximum value is created as the next value.
 
+*   **NOCYCLE** : Specifies that the serial will not be generated any more after reaching the maximum or minimum value. The default value is **NOCYCLE**.
 
+*   **CACHE** : Stores as many serials as the number specified by "integer" in the cache to improve the performance of the serials and fetches a serial value when one is requested. If all cached values are used up, as many serials as "integer" are fetched again from the disk to the memory. If the database server stops accidently, all cached serial values are deleted. For this reason, the serial values before and after the restart of the database server may be discontinuous. Because the transaction rollback dose not affect the cached serial values, the request for the next serial will return the next value of the value used (or fetched) lastly when the transaction is rolled back. The "integer" after the **CACHE** keyword cannot be omitted. If the "integer" is equal to or smaller than 1, the serial cache is not applied.
 
-**Description**
-
-You can create a serial object in the database by using the
-**CREATE SERIAL**
-statement. For how to write serial name,
-`Identifier <#syntax_csql_syntaxtype_identifie_2262>`_
-.
-
-**Syntax**
-
-**CREATE SERIAL**
-*serial_name*
-
-[
-**START WITH**
-*initial*
-]
-
-[
-**INCREMENT BY**
-*interval*
-]
-
-[
-**MINVALUE**
-*min*
-|
-**NOMINVALUE**
-]
-
-[
-**MAXVALUE**
-*max*
-|
-**NOMAXVALUE**
-]
-
-[
-**CACHE**
-*integer*
-|
-**NOCACHE**
-]
-
-*   *serial_identifier*
-    : Specifies the name of the serial to be generated.
-
-
-
-*   **START WITH**
-    *initial*
-    : Specifies the initial value of serial with 38 digits or less. The default value of ascending serial is 1 and that of descending serial is -1.
-
-
-
-*   **INCREMENT BY**
-    *interval*
-    : Specifies the increment of the serial. You can specify any integer with 38 digits or less except zero at
-    *interval*
-    . The absolute value of the
-    *interval*
-    must be smaller than the difference between
-    **MAXVALUE**
-    and
-    **MINVALUE**
-    . If a negative number is specified, the serial is in descending order otherwise, it is in ascending order. The default value is
-    **1**
-    .
-
-
-
-*   **MINVALUE**
-    : Specifies the minimum value of the serial, with 38 digits or less.
-    **MINVALUE**
-    must be smaller than or equal to the initial value and smaller than the maximum value.
-
-
-
-*   **NOMINVALUE**
-    : 1 is set automatically as a minimum value for the ascending serial -(10)
-    38
-    for the descending serial.
-
-
-
-*   **MAXVALUE**
-    : Specifies the maximum number of the serial with 38 digits or less.
-    **MAXVALUE**
-    must be smaller than or equal to the initial value and greater than the minimum value.
-
-
-
-*   **NOMAXVALUE**
-    : (10)
-    37
-    is set automatically as a maximum value for the ascending serial -1 for the descending serial.
-
-
-
-*   **CYCLE**
-    : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. When a serial in ascending order reaches the maximum value, the minimum value is created as the next value; when a serial in descending order reaches the minimum value, the maximum value is created as the next value.
-
-
-
-*   **NOCYCLE**
-    : Specifies that the serial will not be generated any more after reaching the maximum or minimum value. The default value is
-    **NOCYCLE**
-    .
-
-
-
-*   **CACHE**
-    : Stores as many serials as the number specified by "integer" in the cache to improve the performance of the serials and fetches a serial value when one is requested. If all cached values are used up, as many serials as "integer" are fetched again from the disk to the memory. If the database server stops accidently, all cached serial values are deleted. For this reason, the serial values before and after the restart of the database server may be discontinuous. Because the transaction rollback dose not affect the cached serial values, the request for the next serial will return the next value of the value used (or fetched) lastly when the transaction is rolled back. The "integer" after the
-    **CACHE**
-    keyword cannot be omitted. If the "integer" is equal to or smaller than 1, the serial cache is not applied.
-
-
-
-*   **NOCACHE**
-    : Specifies that the serial cache is not used, and serial values are updated and retrieved from a disk upon every request.
-
-
+*   **NOCACHE** : Specifies that the serial cache is not used, and serial values are updated and retrieved from a disk upon every request.
 
 **Example 1**
 
---creating serial with default values
+.. code-block:: sql
 
-CREATE SERIAL order_no;
-
- 
-
---creating serial within a specific range
-
-CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
-
---creating serial with specifying the number of cached serial values
-
-CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000 CACHE 3;
-
- 
-
---selecting serial information from the db_serial class
-
-SELECT * FROM db_serial;
-
- 
-
-  name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
-
-====================================================================================================================================================
-
-'order_no'      10006            2                     20000           10000                0            1                3            NULL
+	--creating serial with default values
+	CREATE SERIAL order_no;
+	 
+	--creating serial within a specific range
+	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+	--creating serial with specifying the number of cached serial values
+	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000 CACHE 3;
+	 
+	--selecting serial information from the db_serial class
+	SELECT * FROM db_serial;
+	 
+	  name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
+	====================================================================================================================================================
+	'order_no'      10006            2                     20000           10000                0            1                3            NULL
 
 **Example 2**
 
-The following example shows how to create the
-*athlete_idx*
-table to store athlete codes and names and then create an instance by using the
-*order_no*
-. NEXT_VALUE increases the serial number and returns its value.
+The following example shows how to create the *athlete_idx* table to store athlete codes and names and then create an instance by using the *order_no*. NEXT_VALUE increases the serial number and returns its value.
 
-CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
+.. code-block:: sql
 
-CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+	CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
+	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
+	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
+	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
+	INSERT INTO athlete_idx VALUES (order_no.CURRENT_VALUE, 'Lee');
+	SELECT * FROM athlete_idx;
+	 
+			 code  name
+	===================================
+			10000  'Park'
+			10002  'Kim'
+			10004  'Choo'
+			10004  'Lee'
 
-INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
+ALTER SERIAL
+============
 
-INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
+With the **ALTER SERIAL** statement, you can update the increment of the serial value, set or delete its initial or minimum/maximum values, and set its cycle attribute. ::
 
-INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
+	ALTER SERIAL serial_identifier
+	[ INCREMENT BY interval ]
+	[ START WITH initial_value ]
+	[ MINVALUE min | NOMINVALUE ]
+	[ MAXVALUE max | NOMAXVALUE ]
+	[ CACHE integer | NOCACHE ]
 
-INSERT INTO athlete_idx VALUES (order_no.CURRENT_VALUE, 'Lee');
+*   *serial_identifier* : Specifies the name of the serial to be created.
+*   **INCREMENT BY** *interval* : Specifies the increment of the serial. For the *interval*, you can specify any integer with 38 digits or less except zero. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order; otherwise, it is in ascending order. The default value is **1**.
 
-SELECT * FROM athlete_idx;
+*   **START WITH** *initial_value* : Changes the initial value of Serial.
+*   **MINVALUE** : Specifies the minimum value of the serial with 38 digits or less. **MINVALUE** must be smaller than or equal to the initial value and smaller than the maximum value.
+*   **NOMINVALUE** : 1 is set automatically as a minimum value for the ascending serial; -(10) 36 for the descending serial.
+*   **MAXVALUE** : Specifies the maximum number of the serial with 38 digits or less. **MAXVALUE** must be larger than or equal to the initial value and greater than the minimum value.
+*   **NOMAXVALUE** : (10) 37 is set automatically as a maximum value for the ascending serial; -1 for the descending serial.
 
- 
+*   **CYCLE** : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. If the ascending serial reaches the maximum value, the minimum value is generated as the next value. If the descending serial reaches the minimum value, the maximum value is generated as the next value.
 
-         code  name
+*   **NOCYCLE** : Specifies that the serial will not be generated any more after reaching the maximum or minimum value. The default is **NOCYCLE**.
 
-===================================
+*   **CACHE** : Stores as many serials as the number specified by *integer* in the cache to improve the performance of the serials and fetches a serial value when one is requested. The *integer* after the **CACHE** keyword cannot be omitted. If a number equal to or smaller than 1 is specified, the serial cache is not applied.
 
-        10000  'Park'
+*   **NOCACHE** : It does not use the serial cache feature. The serial value is updated every time and a new serial value is fetched from the disk upon each request.
 
-        10002  'Kim'
+.. warning::
 
-        10004  'Choo'
+	 In CUBRID 2008 R1.x version, the serial value can be modified by updating the db_serial table, a system catalog. However, in CUBRID 2008 R2.0 version or above, the modification of the db_serial table is not allowed but use of the **ALTER SERIAL** statement is allowed. Therefore, if an **ALTER SERIAL** statement is included in the data exported (unloaddb) from CUBRID 2008 R2.0 or above, it is not allowed to import (loaddb) the data in CUBRID 2008 R1.x or below.
 
-        10004  'Lee'
+.. warning::
 
-**ALTER SERIAL**
-
-**Description**
-
-With the
-**ALTER SERIAL**
-statement, you can update the increment of the serial value, set or delete its initial or minimum/maximum values, and set its cycle attribute.
-
-**Syntax**
-
-**ALTER SERIAL**
-*serial_identifier*
-
-[
-**INCREMENT BY**
-*interval*
-]
-
-[
-**START WITH**
-*initial_value*
-]
-
-[
-**MINVALUE**
-*min*
-|
-**NOMINVALUE**
-]
-
-[
-**MAXVALUE**
-*max*
-|
-**NOMAXVALUE**
-]
-
-[
-**CACHE**
-*integer*
-|
-**NOCACHE**
-]
-
-*   *serial_identifier*
-    : Specifies the name of the serial to be created.
-
-
-
-*   **INCREMENT BY**
-    *interval*
-    : Specifies the increment of the serial. For the
-    *interval*
-    , you can specify any integer with 38 digits or less except zero. The absolute value of the
-    *interval*
-    must be smaller than the difference between
-    **MAXVALUE**
-    and
-    **MINVALUE**
-    . If a negative number is specified, the serial is in descending order; otherwise, it is in ascending order. The default value is
-    **1**
-    .
-
-
-
-*   **START WITH**
-    *initial_value*
-    : Changes the initial value of Serial.
-
-
-
-*   **MINVALUE**
-    : Specifies the minimum value of the serial with 38 digits or less.
-    **MINVALUE**
-    must be smaller than or equal to the initial value and smaller than the maximum value.
-
-
-
-*   **NOMINVALUE**
-    : 1 is set automatically as a minimum value for the ascending serial; -(10)
-    36
-    for the descending serial.
-
-
-
-*   **MAXVALUE**
-    : Specifies the maximum number of the serial with 38 digits or less.
-    **MAXVALUE**
-    must be larger than or equal to the initial value and greater than the minimum value.
-
-
-
-*   **NOMAXVALUE**
-    : (10)
-    37
-    is set automatically as a maximum value for the ascending serial; -1 for the descending serial.
-
-
-
-*   **CYCLE**
-    : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. If the ascending serial reaches the maximum value, the minimum value is generated as the next value. If the descending serial reaches the minimum value, the maximum value is generated as the next value.
-
-
-
-*   **NOCYCLE**
-    : Specifies that the serial will not be generated any more after reaching the maximum or minimum value. The default is
-    **NOCYCLE**
-    .
-
-
-
-*   **CACHE**
-    : Stores as many serials as the number specified by
-    *integer*
-    in the cache to improve the performance of the serials and fetches a serial value when one is requested. The
-    *integer*
-    after the
-    **CACHE**
-    keyword cannot be omitted. If a number equal to or smaller than 1 is specified, the serial cache is not applied.
-
-
-
-*   **NOCACHE**
-    : It does not use the serial cache feature. The serial value is updated every time and a new serial value is fetched from the disk upon each request.
-
-
-
-**Warning 1**
- In CUBRID 2008 R1.x version, the serial value can be modified by updating the db_serial table, a system catalog. However, in CUBRID 2008 R2.0 version or above, the modification of the db_serial table is not allowed but use of the
-**ALTER SERIAL**
-statement is allowed. Therefore, if an
-**ALTER SERIAL**
-statement is included in the data exported (unloaddb) from CUBRID 2008 R2.0 or above, it is not allowed to import (loaddb) the data in CUBRID 2008 R1.x or below.
-
-**Warning 2**
-In version lower than CUBRID 9.0, the next value of the initial value set as
-**ALTER SERILAL**
-is returned when the first
-**NEXT_VALUE**
-value is calculated after
-**ALTER SERIAL**
-. However, in version of CUBRID 9.0 or higher, the setting value of
-**ALTER_SERILAL**
-is returned.
+	In version lower than CUBRID 9.0, the next value of the initial value set as **ALTER SERILAL** is returned when the first **NEXT_VALUE** value is calculated after **ALTER SERIAL**. However, in version of CUBRID 9.0 or higher, the setting value of **ALTER_SERILAL** is returned.
 
 **Example**
 
---altering serial by changing start and incremental values
+.. code-block:: sql
 
-ALTER SERIAL order_no START WITH 100 INCREMENT BY 2;
+	--altering serial by changing start and incremental values
+	ALTER SERIAL order_no START WITH 100 INCREMENT BY 2;
+	 
+	--altering serial to operate in cache mode
+	ALTER SERIAL order_no CACHE 5;
+	 
+	--altering serial to operate in common mode
+	ALTER SERIAL order_no NOCACHE;
 
- 
+DROP SERIAL
+===========
 
---altering serial to operate in cache mode
+With the **DROP SERIAL** statement, you can drop a serial object from the database. ::
 
-ALTER SERIAL order_no CACHE 5;
+	DROP SERIAL serial_identifier
 
- 
-
---altering serial to operate in common mode
-
-ALTER SERIAL order_no NOCACHE;
-
-**DROP SERIAL**
-
-**Description**
-
-With the
-**DROP SERIAL**
-statement, you can drop a serial object from the database.
-
-**Syntax**
-
-**DROP SERIAL**
-*serial_identifier*
-
-*   *serial_identifier*
-    : Specifies the name of the serial to be dropped.
-
-
+*   *serial_identifier* : Specifies the name of the serial to be dropped.
 
 **Example**
 
-The following example shows how to drop the
-*order_no*
-serial.
+The following example shows how to drop the *order_no* serial.
 
-DROP SERIAL order_no;
+.. code-block:: sql
 
-**Use SERIAL**
+	DROP SERIAL order_no;
 
-**Description**
+Use SERIAL
+==========
 
-You can access and update a serial by serial name and a reserved word pair.
+You can access and update a serial by serial name and a reserved word pair. ::
 
-**Syntax**
+	serial_identifier.CURRENT_VALUE
+	serial_identifier.NEXT_VALUE
 
-*serial_identifier*
-.
-**CURRENT_VALUE**
-
-*serial_identifier*
-.
-**NEXT_VALUE**
-
-*   *serial_identifier*
-    .
-    **CURRENT_VALUE**
-    : Returns the current serial value.
-
-
-
-*   *serial_identifier*
-    .
-    **NEXT_VALUE**
-    : Increments the serial value and returns the result.
-
-
+*   *serial_identifier*.**CURRENT_VALUE** : Returns the current serial value.
+*   *serial_identifier*.**NEXT_VALUE** : Increments the serial value and returns the result.
 
 **Example**
 
-The following example shows how to create a table
-*athlete_idx*
-where athlete numbers and names are stored and how to create the instances by using a serial
-*order_no*
-.
+The following example shows how to create a table *athlete_idx* where athlete numbers and names are stored and how to create the instances by using a serial *order_no*.
 
-CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
+.. code-block:: sql
 
-INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
+	CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
+	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
+	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
+	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
+	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');SELECT * FROM athlete_idx;
+	 
+			 code  name
+	===================================
+			10000  'Park'
+			10002  'Kim'
+			10004  'Choo'
+			10006  'Lee'
 
-INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
+.. warning:: When you use a serial for the first time after creating it, **NEXT_VALUE** returns the initial value. Subsequently, the sum of the current value and the increment are returned.
 
-INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
+Serial Function
+===============
 
-INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');SELECT * FROM athlete_idx;
+The **Serial** function consists of the **SERIAL_CURRENT_VALUE** and **SERIAL_NEXT_VALUE** functions.
 
- 
+The **SERIAL_CURRENT_VALUE** function returns the current serial value, which is the same value as *serial_name* **.current_value**.
 
-         code  name
+This function returns as much added value as interval specified. The serial interval is determined by the value of a **CREATE SERIAL ... INCREMENT BY** statement. **SERIAL_NEXT_VALUE** (*serial_name*, 1) returns the same value as *serial_name* **.next_value**.
 
-===================================
+To get a large amount of serials at once, specify the desired number as an argument to call the **SERIAL_NEXT_VALUE** function only once; which has an advantage over calling repeatedly *serial_name* **.next_value** in terms of performance.
 
-        10000  'Park'
+Assume that an application process is trying to get the number of n serials at once. To perform it, call **SERIAL_NEXT_VALUE** (*serial_name*, N) one time to store a return value and calculate a serial value between (a serial start value) and (the return value). (Serial value at the point of function call) is equal to the value of (return value) - (desired number of serials) * (serial interval).
 
-        10002  'Kim'
+For example, if you create a serial starting 101 and increasing by 1 and call **SERIAL_NEXT_VALUE** (*serial_name*, 10), it returns 110. The start value at the point is 110-(10-1)*1 = 101. Therefore, 10 serial values such as 101, 102, 103, ... 110 can be used by an application process. If **SERIAL_NEXT_VALUE** (*serial_name*, 10) is called in succession, 120 is returned; the start value at this point is 120-(10-1)*1 = 111.
 
-        10004  'Choo'
+::
 
-        10006  'Lee'
+	SERIAL_CURRENT_VALUE(serial_name)
+	SERIAL_NEXT_VALUE(serial_name, number)
 
-**Remark**
-
-When you use a serial for the first time after creating it,
-**NEXT_VALUE**
-returns the initial value. Subsequently, the sum of the current value and the increment are returned.
-
-**Serial Function**
-
-**Description**
-
-The
-**Serial**
-function consists of the
-**SERIAL_CURRENT_VALUE**
-and
-**SERIAL_NEXT_VALUE**
-functions.
-
-The
-**SERIAL_CURRENT_VALUE**
-function returns the current serial value, which is the same value as
-*serial_name*
-**.current_value**
-.
-
-This function returns as much added value as interval specified. The serial interval is determined by the value of a 
-**CREATE SERIAL ... INCREMENT BY**
-statement.
-**SERIAL_NEXT_VALUE**
-(
-*serial_name*
-, 1) returns the same value as
-*serial_name*
-**.next_value**
-.
-
-To get a large amount of serials at once, specify the desired number as an argument to call the
-**SERIAL_NEXT_VALUE**
-function only once; which has an advantage over calling repeatedly
-*serial_name*
-**.next_value**
-in terms of performance.
-
-Assume that an application process is trying to get the number of n serials at once. To perform it, call
-**SERIAL_NEXT_VALUE**
-(
-*serial_name*
-, N) one time to store a return value and calculate a serial value between (a serial start value) and (the return value). (Serial value at the point of function call) is equal to the value of (return value) - (desired number of serials) * (serial interval).
-
-For example, if you create a serial starting 101 and increasing by 1 and call
-**SERIAL_NEXT_VALUE**
-(
-*serial_name*
-, 10), it returns 110. The start value at the point is 110-(10-1)*1 = 101. Therefore, 10 serial values such as 101, 102, 103, ... 110 can be used by an application process. If
-**SERIAL_NEXT_VALUE**
-(
-*serial_name*
-, 10) is called in succession, 120 is returned; the start value at this point is 120-(10-1)*1 = 111.
-
-**Syntax**
-
-**SERIAL_CURRENT_VALUE**
-(
-*serial_name*
-)
-
-**SERIAL_NEXT_VALUE**
-(
-*serial_name*
-,
-*number*
-)
-
-*   *serial_name*
-    : Serial name
-
-
-
-*   *number*
-    : The number of serials to be obtained
-
-
+*   *serial_name* : Serial name
+*   *number* : The number of serials to be obtained
 
 **Example**
 
-CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+.. code-block:: sql
 
-SELECT SERIAL_CURRENT_VALUE(order_no);
+	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+	SELECT SERIAL_CURRENT_VALUE(order_no);
+	10000
+	 
+	-- At first, the first serial value starts with the initial serial value, 10000. So the l0'th serial value will be 10009.
+	SELECT SERIAL_NEXT_VALUE(order_no, 10);
+	10009
+	 
+	SELECT SERIAL_NEXT_VALUE(order_no, 10);
+	10019
 
-10000
+.. warning::
 
- 
-
--- At first, the first serial value starts with the initial serial value, 10000. So the l0'th serial value will be 10009.
-
-SELECT SERIAL_NEXT_VALUE(order_no, 10);
-
-10009
-
- 
-
-SELECT SERIAL_NEXT_VALUE(order_no, 10);
-
-10019
-
-**Remark**
-
-If you create a serial and calls the
-**SERIAL_NEXT_VALUE**
-function for the first time, a value of (serial interval) * (desired number of serials - 1) added to the current value is returned. If you call the
-**SERIAL_NEXT_VALUE**
-function in succession, a value of (serial interval) * (desired number of serials) added to the current is returned (see the example above).
+	If you create a serial and calls the **SERIAL_NEXT_VALUE** function for the first time, a value of (serial interval) * (desired number of serials - 1) added to the current value is returned. If you call the **SERIAL_NEXT_VALUE** function in succession, a value of (serial interval) * (desired number of serials) added to the current is returned (see the example above).

@@ -1232,1151 +1232,504 @@ The following example shows the CCI application.
 BLOB/CLOB Data Types
 ====================
 
-**Definition and Characteristics**
+An External **LOB** type is data to process Large Object, such as text or images. When LOB-type data is created and inserted, it will be stored in a file to an external storage, and the location information of the relevant file (**LOB** Locator) will be stored in the CUBRID database. If the **LOB** Locator is deleted from the database, the relevant file that was stored in the external storage will be deleted as well. CUBRID supports the following two types of **LOB** :
 
-**Definition**
-
-An External
-**LOB**
-type is data to process Large Object, such as text or images. When LOB-type data is created and inserted, it will be stored in a file to an external storage, and the location information of the relevant file (
-**LOB**
-Locator) will be stored in the CUBRID database. If the
-**LOB**
-Locator is deleted from the database, the relevant file that was stored in the external storage will be deleted as well. CUBRID supports the following two types of
-**LOB**
-:
-
-*   Binary Large Object (
-    **BLOB**
-    )
-
-
-
-*   Character Large Object (
-    **CLOB**
-    )
-
-
+*   Binary Large Object (**BLOB**)
+*   Character Large Object (**CLOB**)
 
 **Related Terms**
 
-*   **LOB**
-    (Large Object) : Large-sized objects such as binaries or text.
-
-
-
-*   **FBO**
-    (File Based Object) : An object that stores data of the database in an external file.
-
-
-
-*   **External LOB**
-    : An object better known as FBO, which stores
-    **LOB**
-    data in a file into an external DB. It is supported by CUBRID. Internal
-    **LOB**
-    is an object that stores
-    **LOB**
-    data inside the DB.
-
-
-
-*   **External Storage**
-    : An external storage to store LOB (example : POSIX file system).
-
-
-
-*   **LOB Locator**
-    : The path name of a file stored in external storage.
-
-
-
-*   **LOB Data**
-    : Details of a file in a specific location of LOB Locator.
-
-
+*   **LOB** (Large Object) : Large-sized objects such as binaries or text.
+*   **FBO** (File Based Object) : An object that stores data of the database in an external file.
+*   **External LOB** : An object better known as FBO, which stores **LOB** data in a file into an external DB. It is supported by CUBRID. Internal **LOB** is an object that stores **LOB** data inside the DB.
+*   **External Storage** : An external storage to store LOB (example : POSIX file system).
+*   **LOB Locator** : The path name of a file stored in external storage.
+*   **LOB Data** : Details of a file in a specific location of LOB Locator.
 
 **File Names**
 
-When storing LOB data in external storage, the following naming convention will be applied:
+When storing LOB data in external storage, the following naming convention will be applied: ::
 
-{
-*table_name*
-}_{
-*unique_name*
-}
-
-*   *table_name*
-    : It is inserted as a prefix and able to store the
-    **LOB**
-    data of many tables in one external storage.
-
-
-
-*   *unique_name*
-    : The random name created by the DB server.
-
-
+	{table_name}_{unique_name}
+	
+*   *table_name* : It is inserted as a prefix and able to store the **LOB** data of many tables in one external storage.
+*   *unique_name* : The random name created by the DB server.
 
 **Default Storage**
 
-*   **LOB**
-    data is stored in the local file system of the DB server. LOB data is stored in the path specified in the
-    **-lob-base-path option**
-    value of
-    **cubrid createdb**
-    ; if this value is omitted, the data will be stored in the [db-vol path]/lob path where the database volume will be created. For more details, see
-    `Database Creation <#admin_admin_db_create_create_htm>`_
-    and
-    `Storage Creation and Management <#syntax_syntax_datatype_lob_stora_7848>`_
-    .
+*   **LOB** data is stored in the local file system of the DB server. LOB data is stored in the path specified in the **-lob-base-path option** value of **cubrid createdb**; if this value is omitted, the data will be stored in the [db-vol path]/lob path where the database volume will be created. For more details, see `Database Creation <#admin_admin_db_create_create_htm>`_ and `Storage Creation and Management <#syntax_syntax_datatype_lob_stora_7848>`_.
 
+*   If the relevant path is deleted despite a **LOB** data file path being registered in the database location file (**databases.txt**), please note that the utility that operates in database server (**cub_server**) and standalone will not function normally.
 
-
-*   If the relevant path is deleted despite a
-    **LOB**
-    data file path being registered in the database location file (
-    **databases.txt**
-    ), please note that the utility that operates in database server (
-    **cub_server**
-    ) and standalone will not function normally.
-
-
-
-**BLOB/CLOB**
+BLOB/CLOB
+---------
 
 **BLOB**
 
 *   A type that stores binary data outside the database.
+*   The maximum length of **BLOB** data is the maximum file size creatable in an external storage.
+*   In SQL statements, the **BLOB** type expresses the input and output value in a bit array. That is, it is compatible with the **BIT** (n) and **BIT VARYING** (n) types, and only an explicit type change is allowed. If data lengths differ from one another, the maximum length is truncated to fit the smaller one.
 
-
-
-*   The maximum length of
-    **BLOB**
-    data is the maximum file size creatable in an external storage.
-
-
-
-*   In SQL statements, the
-    **BLOB**
-    type expresses the input and output value in a bit array. That is, it is compatible with the
-    **BIT**
-    (n) and
-    **BIT VARYING**
-    (n) types, and only an explicit type change is allowed. If data lengths differ from one another, the maximum length is truncated to fit the smaller one.
-
-
-
-*   When converting the
-    **BLOB**
-    type value to a binary value, the length of the converted data cannot exceed 1GB. When converting binary data to the
-    **BLOB**
-    type, the size of the converted data cannot exceed the maximum file size provided by the
-    **BLOB**
-    storage.
-
-
+*   When converting the **BLOB** type value to a binary value, the length of the converted data cannot exceed 1GB. When converting binary data to the **BLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **BLOB** storage.
 
 **CLOB**
 
 *   A type that stores character string data outside the database.
+*   The maximum length of **CLOB** data is the maximum file size creatable in an external storage.
+*   In SQL statements, the CLOB type expresses the input and output value in a character string. That is, it is compatible with the **CHAR** (n), **VARCHAR** (n), **NCHAR** (n), **NCHAR VARYING** (n) types. However, only an explicit type change is allowed, and if data lengths are different from one another, the maximum length is truncated to fit to the smaller one.
 
+*   When converting the **CLOB** type value to a character string, the length of the converted data cannot exceed 1 GB. When converting a character string to the **CLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **CLOB** storage.
 
+Creating and Altering Columns
+-----------------------------
 
-*   The maximum length of
-    **CLOB**
-    data is the maximum file size creatable in an external storage.
+**BLOB** / **CLOB** type columns can be created/added/deleted by using a **CREATE TABLE** statement or an **ALTER TABLE** statement.
 
+*   You cannot create the index file for a **LOB** type column.
+*   You cannot define the **PRIMARY KEY**, **FOREIGN KEY**, **UNIQUE**, **NOT NULL** constraints for a **LOB** type column. However, **SHARED** property cannot be defined and **DEFAULT** property can only be defined by the **NULL** value.
 
-
-*   In SQL statements, the CLOB type expresses the input and output value in a character string. That is, it is compatible with the
-    **CHAR**
-    (n),
-    **VARCHAR**
-    (n),
-    **NCHAR**
-    (n), and
-    **NCHAR VARYING**
-    (n) types. However, only an explicit type change is allowed, and if data lengths are different from one another, the maximum length is truncated to fit to the smaller one.
-
-
-
-*   When converting the
-    **CLOB**
-    type value to a character string, the length of the converted data cannot exceed 1 GB. When converting a character string to the
-    **CLOB**
-    type, the size of the converted data cannot exceed the maximum file size provided by the
-    **CLOB**
-    storage.
-
-
-
-**Creating and Altering Columns**
-
-**Description**
-
-**BLOB**
-/
-**CLOB**
-type columns can be created/added/deleted by using a
-**CREATE TABLE**
-statement or an
-**ALTER TABLE**
-statement.
-
-**Remark**
-
-*   You cannot create the index file for a
-    **LOB**
-    type column.
-
-
-
-*   You cannot define the
-    **PRIMARY KEY**
-    ,
-    **FOREIGN KEY**
-    ,
-    **UNIQUE**
-    , and
-    **NOT NULL**
-    constraints for a
-    **LOB**
-    type column. However,
-    **SHARED**
-    property cannot be defined and
-    **DEFAULT**
-    property can only be defined by the
-    **NULL**
-    value.
-
-
-
-*   **LOB**
-    type column/data cannot be the element of collection type.
-
-
-
-*   If you are deleting a record containing a
-    **LOB**
-    type column, all files located inside a
-    **LOB**
-    column value (Locator) and the external storage will be deleted. When a record containing a LOB type column is deleted in a basic key table, and a record of a foreign key table that refers to the foregoing details is deleted at once, all
-    **LOB**
-    files located in a
-    **LOB**
-    column value (Locator) and the external storage will be deleted. However, if the relevant table is deleted by using a
-    **DROP TABLE**
-    statement, or a
-    **LOB**
-    column is deleted by using an
-    **ALTER TABLE...DROP**
-    statement, only a
-    **LOB**
-    column value (
-    **LOB**
-    Locator) is deleted, and the
-    **LOB**
-    files inside the external storage which a
-    **LOB**
-    column refers to will not be deleted.
-
-
+*   **LOB** type column/data cannot be the element of collection type.
+*   If you are deleting a record containing a **LOB** type column, all files located inside a **LOB** column value (Locator) and the external storage will be deleted. When a record containing a LOB type column is deleted in a basic key table, and a record of a foreign key table that refers to the foregoing details is deleted at once, all **LOB** files located in a **LOB** column value (Locator) and the external storage will be deleted. However, if the relevant table is deleted by using a **DROP TABLE** statement, or a **LOB** column is deleted by using an **ALTER TABLE...DROP** statement, only a **LOB** column value (**LOB** Locator) is deleted, and the **LOB** files inside the external storage which a **LOB** column refers to will not be deleted.
 
 **Example**
 
--- creating a table and CLOB column
+.. code-block:: sql
 
-CREATE TABLE doc_t (doc_id VARCHAR(64) PRIMARY KEY, content CLOB);
+	-- creating a table and CLOB column
+	CREATE TABLE doc_t (doc_id VARCHAR(64) PRIMARY KEY, content CLOB);
+	 
+	-- an error occurs when UNIQUE constraint is defined on CLOB column
+	ALTER TABLE doc_t ADD CONSTRAINT content_unique UNIQUE(content);
+	 
+	-- an error occurs when creating an index on CLOB column
+	CREATE INDEX ON doc_t (content);
+	 
+	-- creating a table and BLOB column
+	CREATE TABLE image_t (image_id VARCHAR(36) PRIMARY KEY, doc_id VARCHAR(64) NOT NULL, image BLOB);
+	 
+	-- an error occurs when adding a BOLB column with NOT NULL constraint
+	ALTER TABLE image_t ADD COLUMN thumbnail BLOB NOT NULL;
+	 
+	-- an error occurs when adding a BLOB column with DEFAULT attribute
+	ALTER TABLE image_t ADD COLUMN thumbnail2 BLOB DEFAULT BIT_TO_BLOB(X'010101');	
 
- 
+Storing and Updating Columns
+----------------------------
 
--- an error occurs when UNIQUE constraint is defined on CLOB column
+In a **BLOB** / **CLOB** type column, each **BLOB** / **CLOB** type value is stored, and if binary or character string data is input, you must explicitly change the types by using each **BIT_TO_BLOB** / **CHAR_TO_CLOB** function.
 
-ALTER TABLE doc_t ADD CONSTRAINT content_unique UNIQUE(content);
+If a value is input in a **LOB** column by using an **INSERT** statement, a file is created in an external storage internally and the relevant data is stored; the relevant file path (Locator) is stored in an actual column value.
 
- 
+If a record containing a **LOB** column uses a **DELETE** statement, a file to which the relevant **LOB** column refers will be deleted simultaneously. If a **LOB** column value is changed using an **UPDATE** statement, the column value will be changed following the operation below, according to whether a new value is **NULL** or not.
 
--- an error occurs when creating an index on CLOB column
+*   If a **LOB** type column value is changed to a value that is not **NULL** : If a Locator that refers to an external file is already available in a **LOB** column, the relevant file will be deleted. A new file is created afterwards. After storing a value that is not **NULL**, a Locator for a new file will be stored in a **LOB** column value.
 
-CREATE INDEX ON doc_t (content);
-
- 
-
--- creating a table and BLOB column
-
-CREATE TABLE image_t (image_id VARCHAR(36) PRIMARY KEY, doc_id VARCHAR(64) NOT NULL, image BLOB);
-
- 
-
--- an error occurs when adding a BOLB column with NOT NULL constraint
-
-ALTER TABLE image_t ADD COLUMN thumbnail BLOB NOT NULL;
-
- 
-
--- an error occurs when adding a BLOB column with DEFAULT attribute
-
-ALTER TABLE image_t ADD COLUMN thumbnail2 BLOB DEFAULT BIT_TO_BLOB(X'010101');
-
-**Storing and Updating Columns**
-
-**Description**
-
-In a
-**BLOB**
-/
-**CLOB**
-type column, each
-**BLOB**
-/
-**CLOB**
-type value is stored, and if binary or character string data is input, you must explicitly change the types by using each
-**BIT_TO_BLOB**
-/
-**CHAR_TO_CLOB**
-function.
-
-If a value is input in a
-**LOB**
-column by using an
-**INSERT**
-statement, a file is created in an external storage internally and the relevant data is stored; the relevant file path (Locator) is stored in an actual column value.
-
-If a record containing a
-**LOB**
-column uses a
-**DELETE**
-statement, a file to which the relevant
-**LOB**
-column refers will be deleted simultaneously. If a
-**LOB**
-column value is changed using an
-**UPDATE**
-statement, the column value will be changed following the operation below, according to whether a new value is
-**NULL**
-or not.
-
-*   If a
-    **LOB**
-    type column value is changed to a value that is not
-    **NULL**
-    : If a Locator that refers to an external file is already available in a
-    **LOB**
-    column, the relevant file will be deleted. A new file is created afterwards. After storing a value that is not
-    **NULL**
-    , a Locator for a new file will be stored in a
-    **LOB**
-    column value.
-
-
-
-*   If changing a
-    **LOB**
-    type column value to
-    **NULL**
-    : If a Locator that refers to an external file is already available in a
-    **LOB**
-    column, the relevant file will be deleted. And then
-    **NULL**
-    is stored in a
-    **LOB**
-    column value.
-
-
+*   If changing a **LOB** type column value to **NULL** : If a Locator that refers to an external file is already available in a **LOB** column, the relevant file will be deleted. And then **NULL** is stored in a **LOB** column value.
 
 **Example**
 
--- inserting data after explicit type conversion into CLOB type column
+.. code-block:: sql
 
-INSERT INTO doc_t (doc_id, content) VALUES ('doc-1', CHAR_TO_CLOB('This is a Dog'));
+	-- inserting data after explicit type conversion into CLOB type column
+	INSERT INTO doc_t (doc_id, content) VALUES ('doc-1', CHAR_TO_CLOB('This is a Dog'));
+	INSERT INTO doc_t (doc_id, content) VALUES ('doc-2', CHAR_TO_CLOB('This is a Cat'));
+	 
+	-- inserting data after explicit type conversion into BLOB type column
+	INSERT INTO image_t VALUES ('image-0', 'doc-0', BIT_TO_BLOB(X'000001'));
+	INSERT INTO image_t VALUES ('image-1', 'doc-1', BIT_TO_BLOB(X'000010'));
+	INSERT INTO image_t VALUES ('image-2', 'doc-2', BIT_TO_BLOB(X'000100'));
+	 
+	-- inserting data from a sub-query result
+	INSERT INTO image_t SELECT 'image-1010', 'doc-1010', image FROM image_t WHERE image_id = 'image-0';
+	 
+	-- updating CLOB column value to NULL
+	UPDATE doc_t SET content = NULL WHERE doc_id = 'doc-1';
+	 
+	-- updating CLOB column value
+	UPDATE doc_t SET content = CHAR_TO_CLOB('This is a Dog') WHERE doc_id = 'doc-1';
+	 
+	-- updating BLOB column value
+	UPDATE image_t SET image = (SELECT image FROM image_t WHERE image_id = 'image-0') WHERE image_id = 'image-1';
+	 
+	-- deleting BLOB column value and its referencing files
+	DELETE FROM image_t WHERE image_id = 'image-1010';
 
-INSERT INTO doc_t (doc_id, content) VALUES ('doc-2', CHAR_TO_CLOB('This is a Cat'));
+Getting Column Values
+---------------------
 
- 
+When you get a **LOB** type column, the data stored in a file to which the column refers will be displayed. You can execute an explicit type change by using **CAST** operator, **CLOB_TO_CHAR** function, and **BLOB_TO_BIT** function.
 
--- inserting data after explicit type conversion into BLOB type column
+*   If the query is executed in CSQL, a column value (Locator) will be displayed, instead of the data stored in a file. To display the data to which a **BLOB** / **CLOB** column refers, it must be changed to strings by using **CLOB_TO_CHAR** function.
 
-INSERT INTO image_t VALUES ('image-0', 'doc-0', BIT_TO_BLOB(X'000001'));
+*   To use the string process function, the strings need to be converted by using the **CLOB_TO_CHAR** function.
+*   You cannot specify a **LOB** column in ** GROUP BY** clause and **ORDER BY** clause.
+*   Comparison operators, relational operators, **IN**, **NOT IN** operators cannot be used to compare **LOB** columns. However, **IS NULL** expression can be used to compare whether it is a **LOB** column value (Locator) or **NULL**. This means that **TRUE** will be returned when a column value is **NULL**, and if a column value is **NULL**, there is no file to store **LOB** data.
 
-INSERT INTO image_t VALUES ('image-1', 'doc-1', BIT_TO_BLOB(X'000010'));
-
-INSERT INTO image_t VALUES ('image-2', 'doc-2', BIT_TO_BLOB(X'000100'));
-
- 
-
--- inserting data from a sub-query result
-
-INSERT INTO image_t SELECT 'image-1010', 'doc-1010', image FROM image_t WHERE image_id = 'image-0';
-
- 
-
--- updating CLOB column value to NULL
-
-UPDATE doc_t SET content = NULL WHERE doc_id = 'doc-1';
-
- 
-
--- updating CLOB column value
-
-UPDATE doc_t SET content = CHAR_TO_CLOB('This is a Dog') WHERE doc_id = 'doc-1';
-
- 
-
--- updating BLOB column value
-
-UPDATE image_t SET image = (SELECT image FROM image_t WHERE image_id = 'image-0') WHERE image_id = 'image-1';
-
- 
-
--- deleting BLOB column value and its referencing files
-
-DELETE FROM image_t WHERE image_id = 'image-1010';
-
-**Getting Column Values**
-
-**Description**
-
-When you get a
-**LOB**
-type column, the data stored in a file to which the column refers will be displayed. You can execute an explicit type change by using
-**CAST**
-operator,
-**CLOB_TO_CHAR**
-( ) function, and
-**BLOB_TO_BIT**
-function.
-
-**Remark**
-
-*   If the query is executed in CSQL, a column value (Locator) will be displayed, instead of the data stored in a file. To display the data to which a
-    **BLOB**
-    /
-    **CLOB**
-    column refers, it must be changed to strings by using  
-    **CLOB_TO_CHAR**
-    ( ) function.
-
-
-
-*   To use the string process function, the strings need to be converted by using the
-    **CLOB_TO_CHAR**
-    ( ) function.
-
-
-
-*   You cannot specify a
-    **LOB**
-    column in
-    ** GROUP BY**
-    clause and
-    **ORDER BY**
-    clause.
-
-
-
-*   Comparison operators, relational operators,
-    **IN**
-    ,
-    **NOT IN**
-    operators cannot be used to compare
-    **LOB**
-    columns. However,
-    **IS NULL**
-    expression can be used to compare whether it is a
-    **LOB**
-    column value (Locator) or
-    **NULL**
-    .
-    This means that
-    **TRUE**
-    will be returned when a column value is
-    **NULL**
-    , and if a column value is
-    **NULL**
-    , there is no file to store
-    **LOB**
-    data.
-
-
-
-*   When a
-    **LOB**
-    column is created, and the file is deleted after data input, a
-    **LOB**
-    column value (Locator) will become a state that is referring to an invalid file. As such, using
-    **CLOB_TO_CHAR**
-    ( ),
-    **BLOB_TO_BIT**
-    ( ),
-    **CLOB_LENGTH**
-    ( ), and
-    **BLOB_LENGTH**
-    ( ) functions on the columns that have mismatching
-    **LOB**
-    Locator and a
-    **LOB**
-    data file enables them to display
-    **NULL**
-    .
-
-
+*   When a **LOB** column is created, and the file is deleted after data input, a **LOB** column value (Locator) will become a state that is referring to an invalid file. As such, using **CLOB_TO_CHAR**, **BLOB_TO_BIT**, **CLOB_LENGTH**, and **BLOB_LENGTH** functions on the columns that have mismatching **LOB** Locator and a **LOB** data file enables them to display **NULL**.
 
 **Example**
 
--- displaying locator value when selecting CLOB and BLOB column in CSQL interpreter
+.. code-block:: sql
 
-SELECT doc_t.doc_id, content, image FROM doc_t, image_t WHERE doc_t.doc_id = image_t.doc_id;
+	-- displaying locator value when selecting CLOB and BLOB column in CSQL interpreter
+	SELECT doc_t.doc_id, content, image FROM doc_t, image_t WHERE doc_t.doc_id = image_t.doc_id;
+	 
+	  doc_id                content               image
+	==================================================================
+	  'doc-1'               file:/home1/data1/ces_658/doc_t.00001282208855807171_7329  file:/ home1/data1/ces_318/image_t.00001282208855809474_7474
+	  'doc-2'               file:/home1/data1/ces_180/doc_t.00001282208854194135_5598  file:/
+	home1/data1/ces_519/image_t.00001282208854205773_1215
+	 
+	2 rows selected.
+	 
+	-- using string functions after coercing its type by CLOB_TO_CHAR( )
+	SELECT CLOB_TO_CHAR(content), SUBSTRING(CLOB_TO_CHAR(content), 10) FROM doc_t;
+	 
+	   clob_to_char(content)  substring( clob_to_char(content) from 10)
+	============================================
+	  'This is a Dog'       ' Dog'
+	  'This is a Cat'       ' Cat'
+	 
+	2 rows selected.
+	 
+	SELECT CLOB_TO_CHAR(content) FROM doc_t WHERE CLOB_TO_CHAR(content) LIKE '%Dog%';
+	 
+	   clob_to_char(content)
+	======================
+	  'This is a Dog'
+	 
+	SELECT CLOB_TO_CHAR(content) FROM doc_t ORDER BY CLOB_TO_CHAR(content)
+	 
+	   clob_to_char(content)
+	======================
+	  'This is a Cat'
+	  'This is a Dog'
+	 
+	-- an error occurs when LOB column specified in WHERE/ORDER BY/GROUP BY clauses
+	SELECT * FROM doc_t WHERE content LIKE 'This%';
+	SELECT * FROM doc_t ORDER BY content;
 
- 
-
-  doc_id                content               image
-
-==================================================================
-
-  'doc-1'               file:/home1/data1/ces_658/doc_t.00001282208855807171_7329  file:/ home1/data1/ces_318/image_t.00001282208855809474_7474
-
-  'doc-2'               file:/home1/data1/ces_180/doc_t.00001282208854194135_5598  file:/
-
-home1/data1/ces_519/image_t.00001282208854205773_1215
-
- 
-
-2 rows selected.
-
- 
-
--- using string functions after coercing its type by CLOB_TO_CHAR( )
-
-SELECT CLOB_TO_CHAR(content), SUBSTRING(CLOB_TO_CHAR(content), 10) FROM doc_t;
-
- 
-
-   clob_to_char(content)  substring( clob_to_char(content) from 10)
-
-============================================
-
-  'This is a Dog'       ' Dog'
-
-  'This is a Cat'       ' Cat'
-
- 
-
-2 rows selected.
-
- 
-
-SELECT CLOB_TO_CHAR(content) FROM doc_t WHERE CLOB_TO_CHAR(content) LIKE '%Dog%';
-
- 
-
-   clob_to_char(content)
-
-======================
-
-  'This is a Dog'
-
- 
-
-SELECT CLOB_TO_CHAR(content) FROM doc_t ORDER BY CLOB_TO_CHAR(content)
-
- 
-
-   clob_to_char(content)
-
-======================
-
-  'This is a Cat'
-
-  'This is a Dog'
-
- 
-
--- an error occurs when LOB column specified in WHERE/ORDER BY/GROUP BY clauses
-
-SELECT * FROM doc_t WHERE content LIKE 'This%';
-
-SELECT * FROM doc_t ORDER BY content;
-
-**Functions and Operators**
+Functions and Operators
+-----------------------
 
 **CAST Operator**
 
-By using
-**CAST**
-operator, you can execute an explicit type change between
-**BLOB**
-/
-**CLOB**
-type and binary type/string type. For more details, see
-`CAST Operator <#syntax_syntax_operator_cast_htm>`_
-.
+By using **CAST** operator, you can execute an explicit type change between **BLOB** / **CLOB** type and binary type/string type. For more details, see `CAST Operator <#syntax_syntax_operator_cast_htm>`_. ::
 
-**Syntax**
-
-**CAST**
-(<
-*bit_type_column_or_value*
->
-**AS CLOB**
-)
-
-**CAST**
-(<
-*bit_type_column_or_value*
->
-**AS BLOB**
-)
-
-**CAST**
-(<
-*char_type_column_or_value*
->
-**AS BLOB**
-)
-
-**CAST**
-(<
-*char_type_column_or_value*
->
-**AS CLOB**
-)  
-
+	CAST (<bit_type_column_or_value> AS CLOB)
+	CAST (<bit_type_column_or_value> AS BLOB)
+	CAST (<char_type_column_or_value> AS BLOB)
+	CAST (<char_type_column_or_value> AS CLOB)
 
 **LOB Data Process and Type Change Functions**
 
 The next table shows the functions provided to process and change BLOB/CLOB types.
 
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Functional Expression**    | **Description**                                                                                                                                                                                     |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **CLOB_TO_CHAR**             | Changes number type, date/time type, and                                                                                                                                                            |
-| (<                           | **CLOB**                                                                                                                                                                                            |
-| *clob_type_column*           | type to                                                                                                                                                                                             |
-| >)                           | **VARCHA**                                                                                                                                                                                          |
-|                              | R type.                                                                                                                                                                                             |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **BLOB_TO_BIT**              | Changes                                                                                                                                                                                             |
-| (<                           | **BLOB**                                                                                                                                                                                            |
-| *blob_type_column*           | type to                                                                                                                                                                                             |
-| >)                           | **VARYING BIT**                                                                                                                                                                                     |
-|                              | type.                                                                                                                                                                                               |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **CHAR_TO_CLOB**             | Changes text string type (                                                                                                                                                                          |
-| (<                           | **CHAR**                                                                                                                                                                                            |
-| *char_type_column_or_value*  | ,                                                                                                                                                                                                   |
-| >)                           | **VARCHAR**                                                                                                                                                                                         |
-|                              | ,                                                                                                                                                                                                   |
-|                              | **NCHAR**                                                                                                                                                                                           |
-|                              | ,                                                                                                                                                                                                   |
-|                              | **NVACHAR**                                                                                                                                                                                         |
-|                              | ) to                                                                                                                                                                                                |
-|                              | **CLOB**                                                                                                                                                                                            |
-|                              | type.                                                                                                                                                                                               |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **BIT_TO_BLOB**              | Changes bit array type (                                                                                                                                                                            |
-| (<                           | **BIT**                                                                                                                                                                                             |
-| *blob_type_column_or_value*  | ,                                                                                                                                                                                                   |
-| >)                           | **VARYING BIT**                                                                                                                                                                                     |
-|                              | ) to                                                                                                                                                                                                |
-|                              | **BLOB**                                                                                                                                                                                            |
-|                              | type.                                                                                                                                                                                               |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **CHAR_TO_BLOB**             | Changes text string type (                                                                                                                                                                          |
-| (<                           | **CHAR**                                                                                                                                                                                            |
-| *char_type_colulmn_or_value* | ,                                                                                                                                                                                                   |
-| >)                           | **VARCHAR**                                                                                                                                                                                         |
-|                              | ,                                                                                                                                                                                                   |
-|                              | **NCHAR**                                                                                                                                                                                           |
-|                              | ,                                                                                                                                                                                                   |
-|                              | **NVACHAR**                                                                                                                                                                                         |
-|                              | ) to                                                                                                                                                                                                |
-|                              | **BLOB**                                                                                                                                                                                            |
-|                              | type.                                                                                                                                                                                               |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **CLOB_FROM_FILE**           | Reads file details from the file path of                                                                                                                                                            |
-| (<                           | **VARCHAR**                                                                                                                                                                                         |
-| *file_pathname*              | type and changes to                                                                                                                                                                                 |
-| >)                           | **CLOB**                                                                                                                                                                                            |
-|                              | type data. <                                                                                                                                                                                        |
-|                              | *file_pathname*                                                                                                                                                                                     |
-|                              | > is analyzed to a path of server which is operated by the DB client, such as CAS or CSQL. If a path is specified targeting this, the upper path will be the current work direction of the process. |
-|                              | The statement that calls this function will not cache execution plans.                                                                                                                              |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **BLOB_FROM_FILE**           | Reads file details from the file path of                                                                                                                                                            |
-| (<                           | **VARCHAR**                                                                                                                                                                                         |
-| *file_pathname*              | type, and changes to BLOB type data. The file path specified in is interpreted using the same method as the                                                                                         |
-| >)                           | **CLOB_FROM_FILE**                                                                                                                                                                                  |
-|                              | function.                                                                                                                                                                                           |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **CLOB_LENGTH**              | Returns the length of LOB data stored in a                                                                                                                                                          |
-| (<                           | **CLOB**                                                                                                                                                                                            |
-| *clob_column*                | file in bytes.                                                                                                                                                                                      |
-| >)                           |                                                                                                                                                                                                     |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **BLOB_LENGTH**              | Returns the length of LOB data stored in a                                                                                                                                                          |
-| (<                           | **BLOB**                                                                                                                                                                                            |
-| *blob_column*                | file in bytes.                                                                                                                                                                                      |
-| >)                           |                                                                                                                                                                                                     |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| <                            | Use an                                                                                                                                                                                              |
-| *blob_or_clob_column*        | **IS NULL**                                                                                                                                                                                         |
-| >                            | expression to compare whether it is a                                                                                                                                                               |
-| **IS NUL**                   | **LOB**                                                                                                                                                                                             |
-| L                            | column value (Locator) or                                                                                                                                                                           |
-|                              | **NULL**                                                                                                                                                                                            |
-|                              | ; returns                                                                                                                                                                                           |
-|                              | **TRUE**                                                                                                                                                                                            |
-|                              | if                                                                                                                                                                                                  |
-|                              | **NULL**                                                                                                                                                                                            |
-|                              | .                                                                                                                                                                                                   |
-|                              |                                                                                                                                                                                                     |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| Functional Expression        | Description                                                                                                     |
+|                              |                                                                                                                 |
++==============================+=================================================================================================================+
+| **CLOB_TO_CHAR**             | Changes number type, date/time type, and                                                                        |
+| (<                           | **CLOB**                                                                                                        |
+| *clob_type_column*           | type to                                                                                                         |
+| >)                           | **VARCHA**                                                                                                      |
+|                              | R type.                                                                                                         |
+|                              |                                                                                                                 |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| **BLOB_TO_BIT**              | Changes                                                                                                         |
+| (<                           | **BLOB**                                                                                                        |
+| *blob_type_column*           | type to                                                                                                         |
+| >)                           | **VARYING BIT**                                                                                                 |
+|                              | type.                                                                                                           |
+|                              |                                                                                                                 |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| **CHAR_TO_CLOB**             | Changes text string type (                                                                                      |
+| (<                           | **CHAR**                                                                                                        |
+| *char_type_column_or_value*  | ,                                                                                                               |
+| >)                           | **VARCHAR**                                                                                                     |
+|                              | ,                                                                                                               |
+|                              | **NCHAR**                                                                                                       |
+|                              | ,                                                                                                               |
+|                              | **NVACHAR**                                                                                                     |
+|                              | ) to                                                                                                            |
+|                              | **CLOB**                                                                                                        |
+|                              | type.                                                                                                           |
+|                              |                                                                                                                 |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| **BIT_TO_BLOB**              | Changes bit array type (                                                                                        |
+| (<                           | **BIT**                                                                                                         |
+| *blob_type_column_or_value*  | ,                                                                                                               |
+| >)                           | **VARYING BIT**                                                                                                 |
+|                              | ) to                                                                                                            |
+|                              | **BLOB**                                                                                                        |
+|                              | type.                                                                                                           |
+|                              |                                                                                                                 |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| **CHAR_TO_BLOB**             | Changes text string type (                                                                                      |
+| (<                           | **CHAR**                                                                                                        |
+| *char_type_colulmn_or_value* | ,                                                                                                               |
+| >)                           | **VARCHAR**                                                                                                     |
+|                              | ,                                                                                                               |
+|                              | **NCHAR**                                                                                                       |
+|                              | ,                                                                                                               |
+|                              | **NVACHAR**                                                                                                     |
+|                              | ) to                                                                                                            |
+|                              | **BLOB**                                                                                                        |
+|                              | type.                                                                                                           |
+|                              |                                                                                                                 |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| **CLOB_FROM_FILE**           | Reads file details from the file path of                                                                        |
+| (<                           | **VARCHAR**                                                                                                     |
+| *file_pathname*              | type and changes to                                                                                             |
+| >)                           | **CLOB**                                                                                                        |
+|                              | type data. <                                                                                                    |
+|                              | *file_pathname*                                                                                                 |
+|                              | > is analyzed to a path of server which is operated by the DB client, such as CAS or CSQL.                      |
+|                              | If a path is specified targeting this, the upper path will be the current work direction of the process.        |
+|                              | The statement that calls this function will not cache execution plans.                                          |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| **BLOB_FROM_FILE**           | Reads file details from the file path of                                                                        |
+| (<                           | **VARCHAR**                                                                                                     |
+| *file_pathname*              | type, and changes to BLOB type data. The file path specified in is interpreted using the same method as the     |
+| >)                           | **CLOB_FROM_FILE**                                                                                              |
+|                              | function.                                                                                                       |
+|                              |                                                                                                                 |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| **CLOB_LENGTH**              | Returns the length of LOB data stored in a                                                                      |
+| (<                           | **CLOB**                                                                                                        |
+| *clob_column*                | file in bytes.                                                                                                  |
+| >)                           |                                                                                                                 |
+|                              |                                                                                                                 |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| **BLOB_LENGTH**              | Returns the length of LOB data stored in a                                                                      |
+| (<                           | **BLOB**                                                                                                        |
+| *blob_column*                | file in bytes.                                                                                                  |
+| >)                           |                                                                                                                 |
+|                              |                                                                                                                 |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
+| <                            | Use an                                                                                                          |
+| *blob_or_clob_column*        | **IS NULL**                                                                                                     |
+| >                            | expression to compare whether it is a                                                                           |
+| **IS NUL**                   | **LOB**                                                                                                         |
+| L                            | column value (Locator) or                                                                                       |
+|                              | **NULL**                                                                                                        |
+|                              | ; returns                                                                                                       |
+|                              | **TRUE**                                                                                                        |
+|                              | if                                                                                                              |
+|                              | **NULL**                                                                                                        |
+|                              | .                                                                                                               |
+|                              |                                                                                                                 |
++------------------------------+-----------------------------------------------------------------------------------------------------------------+
 
-**Creating and Managing Storage**
+Creating and Managing Storage
+-----------------------------
 
 **LOB File Path Specification**
 
-By default, the
-**LOB**
-data file is stored in the <db-volumn-path>/lob directory where database volume is created. However, if the
-**--lob-base-path**
-option of
-**cubrid createdb**
-utility is used when creating the database, a
-**LOB**
-data file can be stored in the directory specified by option value. However, if there is no directory specified by option value, attempt to create a directory, and display an error message if it fails to create the directory. For more details, see the
-**--lob-base-path**
-option in
-`Creating Database <#admin_admin_db_create_create_htm>`_
-.
+By default, the **LOB** data file is stored in the <db-volumn-path>/lob directory where database volume is created. However, if the **--lob-base-path** option of **cubrid createdb** utility is used when creating the database, a **LOB** data file can be stored in the directory specified by option value. However, if there is no directory specified by option value, attempt to create a directory, and display an error message if it fails to create the directory. For more details, see the **--lob-base-path** option in `Creating Database <#admin_admin_db_create_create_htm>`_. ::
 
-#
-image_db volume is created in the current work directory, and a LOB data file will be stored.
+	#image_db volume is created in the current work directory, and a LOB data file will be stored.
+	cubrid createdb image_db
 
-cubrid createdb image_db
+	#LOB data file is stored in the "/home1/data1" path within a local file system.
+	cubrid createdb --lob-base-path="file:/home1/data1" image_db
 
- 
+**Checking LOB File Store Directory** ::
 
-#
-LOB data file is stored in the "/home1/data1" path within a local file system.
+	#You can check a directory where a LOB file will be stored by executing the cubrid spacedb utility.
+	cubrid spacedb image_db
 
-cubrid createdb --lob-base-path="file:/home1/data1" image_db
+	Space description for database 'image_db' with pagesize 16.0K. (log pagesize: 16.0K)
 
-**Checking LOB File Store Directory**
+	Volid  Purpose  total_size  free_size  Vol Name
 
-#
-You can check a directory where a LOB file will be stored by executing the cubrid spacedb utility.
+	    0  GENERIC      512.0M     510.1M  /home1/data1/image_db
 
-cubrid spacedb image_db
+	Space description for temporary volumes for database 'image_db' with pagesize 16.0K.
 
- 
+	Volid  Purpose  total_size  free_size  Vol Name
 
-Space description for database 'image_db' with pagesize 16.0K. (log pagesize: 16.0K)
-
- 
-
-Volid  Purpose  total_size  free_size  Vol Name
-
- 
-
-    0  GENERIC      512.0M     510.1M  /home1/data1/image_db
-
-Space description for temporary volumes for database 'image_db' with pagesize 16.0K.
-
- 
-
-Volid  Purpose  total_size  free_size  Vol Name
-
- 
-
-LOB space description file:/home1/data1
+	LOB space description file:/home1/data1
 
 **Changing or Expanding LOB File Store Directory**
 
-Secure disk space to create additional file storage, expand the
-**lob-base-path**
-of
-**databases.txt**
-, and change to the disk location. Restart the database server to apply the changes made to
-**databases.txt**
-. However, even if you change the
-**lob-base-path**
-of
-**databases.txt**
-, access to the
-**LOB**
-data stored in a previous storage is possible.  
+Secure disk space to create additional file storage, expand the **lob-base-path** of **databases.txt**, and change to the disk location. Restart the database server to apply the changes made to **databases.txt**. However, even if you change the **lob-base-path** of **databases.txt**, access to the **LOB** data stored in a previous storage is possible. ::
 
-# You can change to a new directory from the lob-base-path of databases.txt file.
+	# You can change to a new directory from the lob-base-path of databases.txt file.
+	sh> cat $CUBRID_DATABASES/databases.txt
 
-sh> cat $CUBRID_DATABASES/databases.txt
-
-#db-name         vol-path             db-host         log-path         lob-base-path    
-
-image_db         /home1/data1         localhost       /home1/data1     file:/home1/data2
+	#db-name         vol-path             db-host         log-path         lob-base-path    
+	image_db         /home1/data1         localhost       /home1/data1     file:/home1/data2
 
 **Backing up and Recovering of LOB Files**
 
-While backup/recovery is not supported for
-**LOB**
-type columns, meta data (Locator) of the
-**LOB**
-type columns is supported with such service.
+While backup/recovery is not supported for **LOB** type columns, meta data (Locator) of the **LOB** type columns is supported with such service.
 
 **Copying Database with LOB Files**
 
-If you are copying a database by using the
-**cubrid copydb**
-utility, you must configure the
-**databases.txt**
-additionally, as the
-**LOB**
-file directory path will not be copied if the related option is not specified. For more details, see the
-**-B**
-and
-**--copy-lob-path**
-options in
-`Copying/Moving Database <#admin_admin_db_copy_htm>`_
-.
+If you are copying a database by using the **cubrid copydb** utility, you must configure the **databases.txt** additionally, as the **LOB** file directory path will not be copied if the related option is not specified. For more details, see the **-B** and **--copy-lob-path** options in `Copying/Moving Database <#admin_admin_db_copy_htm>`_.
 
-**Supporting and Recovering Transactions**
+Supporting and Recovering Transactions
+--------------------------------------
 
-**Description**
-
-Commit/rollback for
-**LOB**
-data changes are supported. That is, it ensures the validation of mapping between
-**LOB**
-Locator and actual
-**LOB**
-data within transactions, and it supports recovery during DB errors. This means that an error will be displayed in case of mapping errors between
-**LOB**
-Locator and
-**LOB**
-data due to the rollback of the relevant transactions, as the database is terminated during transactions. See the example below.
+Commit/rollback for **LOB** data changes are supported. That is, it ensures the validation of mapping between **LOB** Locator and actual **LOB** data within transactions, and it supports recovery during DB errors. This means that an error will be displayed in case of mapping errors between **LOB** Locator and **LOB** data due to the rollback of the relevant transactions, as the database is terminated during transactions. See the example below.
 
 **Example**
 
-;AUTOCOMMIT OFF
+.. code-block:: sql
 
- 
-
-CREATE TABLE doc_t (doc_id VARCHAR(64) PRIMARY KEY, content CLOB);
-
-INSERT INTO doc_t VALUES ('doc-10', CHAR_TO_CLOB('This is content'));
-
-COMMIT;
-
-UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 2') where doc_id = 'doc-10';
-
-ROLLBACK;
-
-SELECT doc_id, CLOB_TO_CHAR(content) FROM doc_t WHERE doc_id = 'doc-10';
-
-  doc_id   content                  
-
-=========================================================
-
-  'doc-10'  'This is content '
-
- 
-
-INSERT INTO doc_t VALUES ('doc-11', CHAR_TO_CLOB ('This is content'));
-
-COMMIT;
-
-UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 3') WHERE doc_id = 'doc-11';
-
- 
-
--- system crash occurred and then restart server
-
-SELECT doc_id, CLOB_TO_CHAR(content) FROM doc_t WHERE doc_id = 'doc-11';
-
- 
-
--- Error : LOB Locator references to the previous LOB data because only LOB Locator is rollbacked.
+	;AUTOCOMMIT OFF
+	 
+	CREATE TABLE doc_t (doc_id VARCHAR(64) PRIMARY KEY, content CLOB);
+	INSERT INTO doc_t VALUES ('doc-10', CHAR_TO_CLOB('This is content'));
+	COMMIT;
+	UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 2') where doc_id = 'doc-10';
+	ROLLBACK;
+	SELECT doc_id, CLOB_TO_CHAR(content) FROM doc_t WHERE doc_id = 'doc-10';
+	  doc_id   content                  
+	=========================================================
+	  'doc-10'  'This is content '
+	 
+	INSERT INTO doc_t VALUES ('doc-11', CHAR_TO_CLOB ('This is content'));
+	COMMIT;
+	UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 3') WHERE doc_id = 'doc-11';
+	 
+	-- system crash occurred and then restart server
+	SELECT doc_id, CLOB_TO_CHAR(content) FROM doc_t WHERE doc_id = 'doc-11';
+	 
+	-- Error : LOB Locator references to the previous LOB data because only LOB Locator is rollbacked.
 
 **Remark**
 
-*   When selecting
-    **LOB**
-    data in an application through a driver such as JDBC, the driver can get
-    **ResultSet**
-    from DB server and fetch the record while changing the cursor location on
-    **Resultset**
-    . That is, only Locator, the meta data of a
-    **LOB**
-    column, is stored at the time when 
-    **ResultSet**
-    is imported, and
-    **LOB**
-    data that is referred by a File Locator will be fetched from the file Locator at the time when a record is fetched. Therefore, if
-    **LOB**
-    data is updated between two different points of time, there could be an error, as the mapping of
-    **LOB**
-    Locator and actual
-    **LOB**
-    data will be invalid.
+*   When selecting **LOB** data in an application through a driver such as JDBC, the driver can get **ResultSet** from DB server and fetch the record while changing the cursor location on **Resultset**. That is, only Locator, the meta data of a **LOB** column, is stored at the time when **ResultSet** is imported, and **LOB** data that is referred by a File Locator will be fetched from the file Locator at the time when a record is fetched. Therefore, if **LOB** data is updated between two different points of time, there could be an error, as the mapping of **LOB** Locator and actual **LOB** data will be invalid.
 
+*   Since backup/recovery is supported only for meta data (Locator) of the **LOB** type columns, an error is likely to occur, as the mapping of **LOB** Locator and LOB data is invalid if recovery is performed based on a specific point of time.
 
+*   TO execute **INSERT** the **LOB** data into other device, LOB data referred by the meta data (Locator) of a **LOB** column must be read.
 
-*   Since backup/recovery is supported only for meta data (Locator) of the
-    **LOB**
-    type columns, an error is likely to occur, as the mapping of
-    **LOB**
-    Locator and LOB data is invalid if recovery is performed based on a specific point of time.
+*   In a CUBRID HA environment, the meta data (Locator) of a  **LOB** column is replicated and data of a **LOB** type is not replicated. Therefore, if storage of a **LOB** type is located on the local machine, no tasks on the columns in a slave node or a master node after failover are allowed.
 
+.. warning::
 
+	Up to CUBRID 2008 R3.0, Large Objects are processed by using **glo** (Generalized Large Object) classes. However, the **glo** classes has been deprecated since the CUBRID 2008 R3.1. Instead of it, **LOB** / **CLOB** data type is supported. Therefore, both DB schema and application must be modified when upgrading CUBRID in an environment using the previous version of **glo** classes.
 
-*   TO execute
-    **INSERT**
-    the
-    **LOB**
-    data into other device, LOB data referred by the meta data (Locator) of a
-    **LOB**
-    column must be read.
-
-
-
-*   In a CUBRID HA environment, the meta data (Locator) of a 
-    **LOB**
-    column is replicated and data of a
-    **LOB**
-    type is not replicated. Therefore, if storage of a
-    **LOB**
-    type is located on the local machine, no tasks on the columns in a slave node or a master node after failover are allowed.
-
-
-
-**Caution**
-Up to CUBRID 2008 R3.0, Large Objects are processed by using
-**glo**
-(Generalized Large Object) classes. However, the
-**glo**
-classes has been deprecated since the CUBRID 2008 R3.1. Instead of it,
-**LOB**
-/
-**CLOB**
-data type is supported. Therefore, both DB schema and application must be modified when upgrading CUBRID in an environment using the previous version of
-**glo**
-classes.
-
-**Collection Types**
-
-**Definition and Characteristics**
-
-**Definition**
+Collection Types
+================
 
 Allowing multiple data values to be stored in a single attribute is an extended feature of relational database. Each element of a collection is possible to have different data type each other except View.
 
 +--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
-| **Type**     | **Description**                                                       | **Definition**                  | **Input Data**             | **Stored Data**            |
-|              |                                                                       |                                 |                            |                            |
-+--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
+| Type         | Description                                                           | Definition                      | Input Data                 | Stored Data                |
++==============+=======================================================================+=================================+============================+============================+
 | **SET**      | A union which does not allow duplicates                               | col_name SET VARCHAR(20)        | {'c','c','c','b','b','a'}  | {'a','b','c'}              |
 |              |                                                                       | col_name SET (VARCHAR(20))      | {'c','c','c','b','b', 'a'} | {'a','b','c'}              |
-|              |                                                                       |                                 |                            |                            |
 +--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
 | **MULTISET** | A union which allows duplicates                                       | col_name MULTISET VARCHAR(20)   | {'c','c','c','b','b','a'}  | {'a','b','b','c','c','c'}  |
 |              |                                                                       | col_name MULTISET (VARCHAR(20)) | {'c','c','c','b','b','a'}  | {'a','b','b', 'c','c','c'} |
-|              |                                                                       |                                 |                            |                            |
 +--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
 | LIST         | A union which allows duplicates and stores data in the order of input | col_name LIST VARCHAR(20)       | {'c','c','c','b','b','a'}  | {'c','c','c','b','b','a'}  |
 | SEQUENCE     |                                                                       | col_name LIST (VARCHAR(20))     | {'c','c','c','b','b', 'a'} | {'c','c','c','b','b','a'}  |
-|              |                                                                       |                                 |                            |                            |
 +--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
 
 As you see the table above, the value specified as a collection type can be inputted with curly braces ('{', '}') each value is separated with a comma (,).
 
-**Characteristics**
-
 **Coercions**
 
-If the specified collection types are identical, the collection types can be cast explicitly by using the
-**CAST**
-operator. The following table shows the collection types that allow explicit coercions.
+If the specified collection types are identical, the collection types can be cast explicitly by using the **CAST** operator. The following table shows the collection types that allow explicit coercions.
 
 **Explicit Coercions**
 
 +----------+----------------------------------+
-| ** **    | **TO**                           |
-|          |                                  |
-+----------+----------+-----+----------+------+
-| **FROM** |          | SET | MULTISET | LIST |
-|          |          |     |          |      |
+|          | TO                               |
++==========+==========+=====+==========+======+
+| FROM     |          | SET | MULTISET | LIST |
 |          +----------+-----+----------+------+
 |          | SET      | -   | O        | O    |
-|          |          |     |          |      |
 |          +----------+-----+----------+------+
 |          | MULTISET | O   | -        | X    |
-|          |          |     |          |      |
 |          +----------+-----+----------+------+
 |          | LIST     | O   | O        | -    |
-|          |          |     |          |      |
 +----------+----------+-----+----------+------+
 
-**SET**
+SET
+---
 
-**Description**
-
-**SET**
-is a collection type in which each element has different values. Elements of a
-**SET**
-are allowed to have only one data type. It can have records of other tables.
+**SET** is a collection type in which each element has different values. Elements of a **SET** are allowed to have only one data type. It can have records of other tables.
 
 **Example**
 
-CREATE TABLE set_tbl ( col_1 set(CHAR(1)));
+.. code-block:: sql
 
-INSERT INTO set_tbl VALUES ({'c','c','c','b','b','a'});
-
-INSERT INTO set_tbl VALUES ({NULL});
-
-INSERT INTO set_tbl VALUES ({''});
-
-SELECT * FROM set_tbl;
-
-  col_1
-
-======================
-
-{'a', 'b', 'c'}
-
-{NULL}
-
-{' '}
-
- 
-
-SELECT CAST(col_1 AS MULTISET), CAST(col_1 AS LIST) FROM set_tbl;
-
-   cast(col_1 as multiset)   cast(col_1 as sequence)
-
-============================================
-
-  {'a', 'b', 'c'}  {'a', 'b', 'c'}
-
-  {NULL}  {NULL}
-
-  {' '}  {' '}
-
- 
-
-INSERT INTO set_tbl VALUES ('');
-
- 
-
-ERROR: Cannot coerce '' to type set.
+	CREATE TABLE set_tbl ( col_1 set(CHAR(1)));
+	INSERT INTO set_tbl VALUES ({'c','c','c','b','b','a'});
+	INSERT INTO set_tbl VALUES ({NULL});
+	INSERT INTO set_tbl VALUES ({''});
+	SELECT * FROM set_tbl;
+	  col_1
+	======================
+	{'a', 'b', 'c'}
+	{NULL}
+	{' '}
+	 
+	SELECT CAST(col_1 AS MULTISET), CAST(col_1 AS LIST) FROM set_tbl;
+	   cast(col_1 as multiset)   cast(col_1 as sequence)
+	============================================
+	  {'a', 'b', 'c'}  {'a', 'b', 'c'}
+	  {NULL}  {NULL}
+	  {' '}  {' '}
+	 
+	INSERT INTO set_tbl VALUES ('');
+	 
+	ERROR: Cannot coerce '' to type set.
 
 **MULTISET**
 
-**Description**
-
-**MULTISET**
-is a collection type in which duplicated elements are allowed. Elements of a
-**MULTISET**
-are allowed to have only one data type. It can have records of other tables.
+**MULTISET** is a collection type in which duplicated elements are allowed. Elements of a **MULTISET** are allowed to have only one data type. It can have records of other tables.
 
 **Example**
 
-CREATE TABLE multiset_tbl ( col_1 multiset(CHAR(1)));
+.. code-block:: sql
 
-INSERT INTO multiset_tbl VALUES ({'c','c','c','b','b', 'a'});
-
-SELECT * FROM multiset_tbl;
-
-  col_1
-
-======================
-
-  {'a', 'b', 'b', 'c', 'c', 'c'}
-
- 
-
-SELECT CAST(col_1 AS SET), CAST(col_1 AS LIST) FROM multiset_tbl;
-
-   cast(col_1 as set)   cast(col_1 as sequence)
-
-============================================
-
-  {'a', 'b', 'c'}  {'c', 'c', 'c', 'b', 'b', 'a'}
-
+	CREATE TABLE multiset_tbl ( col_1 multiset(CHAR(1)));
+	INSERT INTO multiset_tbl VALUES ({'c','c','c','b','b', 'a'});
+	SELECT * FROM multiset_tbl;
+	  col_1
+	======================
+	  {'a', 'b', 'b', 'c', 'c', 'c'}
+	 
+	SELECT CAST(col_1 AS SET), CAST(col_1 AS LIST) FROM multiset_tbl;
+	   cast(col_1 as set)   cast(col_1 as sequence)
+	============================================
+	  {'a', 'b', 'c'}  {'c', 'c', 'c', 'b', 'b', 'a'}
+  
 **LIST/SEQUENCE**
 
-**Description**
-
-**LIST**
-(=
-**SEQUENCE**
-) is a collection type in which the input order of elements is preserved, and duplications are allowed. Elements of a
-**LIST**
-are allowed to have only one data type. It can have records of other tables.
+**LIST** (= **SEQUENCE**) is a collection type in which the input order of elements is preserved, and duplications are allowed. Elements of a **LIST** are allowed to have only one data type. It can have records of other tables.
 
 **Example**
 
-CREATE TABLE list_tbl ( col_1 list(CHAR(1)));
+.. code-block:: sql
 
-INSERT INTO list_tbl VALUES ({'c','c','c','b','b', 'a'});
+	CREATE TABLE list_tbl ( col_1 list(CHAR(1)));
+	INSERT INTO list_tbl VALUES ({'c','c','c','b','b', 'a'});
+	SELECT * FROM list_tbl;
+	  col_1
+	======================
+	  {'c', 'c', 'c', 'b', 'b', 'a'}
+	 
+	SELECT CAST(col_1 AS SET), CAST(col_1 AS MULTISET) FROM list_tbl;
+	   cast(col_1 as set)  cast(col_1 as multiset)
+	============================================
+	  {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
 
-SELECT * FROM list_tbl;
+Implicit Type Conversion
+========================
 
-  col_1
+An implicit type conversion represents an automatic conversion of a type of expression to a corresponding type. 
 
-======================
+**SET**, **MULTISET**, **LIST** and **SEQUENCE** should be converted explicitly.
 
-  {'c', 'c', 'c', 'b', 'b', 'a'}
-
- 
-
-SELECT CAST(col_1 AS SET), CAST(col_1 AS MULTISET) FROM list_tbl;
-
-   cast(col_1 as set)  cast(col_1 as multiset)
-
-============================================
-
-  {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
-
-**Implicit Type Conversion**
-
-**Overview**
-
-An implicit type conversion represents an automatic conversion of a type of expression to a corresponding type.
-**SET**
-,
-**MULTISET**
-,
-**LIST**
-and
-**SEQUENCE**
-should be converted explicitly.
-
-If you convert the
-**DATETIME**
-and the 
-**TIMESTAMP**
-types to the
-**DATE**
-type or the 
-**TIME**
-type, data loss may occur. If you convert the
-**DATE**
- type to the
-**DATETIME**
- type or the 
-**TIMESTAMP**
- type, the time will be set to '12:00:00 AM.'
+If you convert the **DATETIME** and the **TIMESTAMP** types to the **DATE** type or the **TIME** type, data loss may occur. If you convert the **DATE** type to the **DATETIME** type or the **TIMESTAMP** type, the time will be set to '12:00:00 AM.'
 
 If you convert a string type or an exact numeric type to a floating-point numeric type, the value may not be accurate. Because a string type and an exact type use a decimal precision to represent the value, but a floating-point numeric type uses a binary precision.
 
@@ -2385,481 +1738,294 @@ The implicit type conversion executed by CUBRID is as follows:
 **Implicit Type Conversion Table 1**
 
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **From**      | **DATETIME** | **DATE** | **TIME** | **TIMESTAMP** | **DOUBLE** | **FLOAT** | **NUMERIC** | **BIGINT** |
-| **＼**         |              |          |          |               |            |           |             |            |
-| **To**        |              |          |          |               |            |           |             |            |
-|               |              |          |          |               |            |           |             |            |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+| From \ To     | DATETIME     | DATE     | TIME     | TIMESTAMP     | DOUBLE     | FLOAT     | NUMERIC     | BIGINT     |
++===============+==============+==========+==========+===============+============+===========+=============+============+
 | **DATETIME**  | -            | O        | O        | O             |            |           |             |            |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **DATE**      | O            | -        |          | O             |            |           |             |            |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **TIME**      |              |          | -        |               |            |           |             |            |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **TIMESTAMP** | O            | O        | O        | -             |            |           |             |            |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **DOUBLE**    |              |          |          |               | -          | O         | O           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **FLOAT**     |              |          |          |               | O          | -         | O           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **NUMERIC**   |              |          |          |               | O          | O         | -           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **BIGINT**    |              |          |          |               | O          | O         | O           | -          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **INT**       |              |          |          | O             | O          | O         | O           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **SHORT**     |              |          |          |               | O          | O         | O           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **MONETARY**  |              |          |          |               | O          | O         | O           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **BIT**       |              |          |          |               |            |           |             |            |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **VARBIT**    |              |          |          |               |            |           |             |            |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **CHAR**      | O            | O        | O        | O             | O          | O         | O           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **VARCHAR**   | O            | O        | O        | O             | O          | O         | O           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **NCHAR**     | O            | O        | O        | O             | O          | O         | O           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **VARNCHAR**  | O            | O        | O        | O             | O          | O         | O           | O          |
-|               |              |          |          |               |            |           |             |            |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 
 **Implicit Type Conversion Table 2**
 
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **From**      | **INT** | **SHORT** | **MONETARY** | **BIT** | **VARBIT** | **CHAR** | **VARCHAR** | **NCHAR** | **VARNCHAR** |
-| **＼**         |         |           |              |         |            |          |             |           |              |
-| **To**        |         |           |              |         |            |          |             |           |              |
-|               |         |           |              |         |            |          |             |           |              |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
+| From \ To     | INT     | SHORT     | MONETARY     | BIT     | VARBIT     | CHAR     | VARCHAR     | NCHAR     | VARNCHAR     |
++===============+=========+===========+==============+=========+============+==========+=============+===========+==============+
 | **DATETIME**  |         |           |              |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **DATE**      |         |           |              |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **TIME**      |         |           |              |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **TIMESTAMP** |         |           |              |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **DOUBLE**    | O       | O         | O            |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **FLOAT**     | O       | O         | O            |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **NUMERIC**   | O       | O         | O            |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **BIGINT**    | O       | O         | O            |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **INT**       | -       | O         | O            |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **SHORT**     | O       | -         | O            |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **MONETARY**  | O       | O         | -            |         |            | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **BIT**       |         |           |              | -       | O          | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **VARBIT**    |         |           |              | O       | -          | O        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **CHAR**      | O       | O         | O            | O       | O          | -        | O           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **VARCHAR**   | O       | O         | O            | O       | O          | O        | -           | O         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **NCHAR**     | O       | O         | O            | O       | O          | O        | O           | -         | O            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **VARNCHAR**  | O       | O         | O            | O       | O          | O        | O           | O         | -            |
-|               |         |           |              |         |            |          |             |           |              |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 
-**Conversation Rules**
+Conversation Rules
+------------------
 
 **INSERT and UPDATE**
 
 The type will be converted to the type of the column affected.
 
-CREATE TABLE t(i INT);
+.. code-block:: sql
 
-INSERT INTO t VALUES('123');
-
- 
-
-SELECT * FROM t;
-
- 
-
-            i
-
-=============
-
-          123
+	CREATE TABLE t(i INT);
+	INSERT INTO t VALUES('123');
+	 
+	SELECT * FROM t;
+	 
+				i
+	=============
+			  123
 
 **Function**
 
 If the parameter value entered in the function can be converted to the specified type, the parameter type will be converted. The strings are converted to numbers because the input parameter expected in the following function is a number.
 
-SELECT MOD('123','2');
+.. code-block:: sql
 
- 
-
-           mod('123', '2')
-
-==========================
-
-     1.000000000000000e+00
+	SELECT MOD('123','2');
+	 
+			   mod('123', '2')
+	==========================
+		 1.000000000000000e+00
 
 You can enter multiple type values in the function. If the type value not specified in the function is delivered, the type will be converted depending on the following priority order.
 
-*   Date/Time Type (
-    **DATETIME**
-    >
-    **TIMESTAMP**
-    >
-    **DATE**
-    >
-    **TIME**
-    )
-
-
-
-*   Approximate Numeric Type (
-    **MONETARY**
-    >
-    **DOUBLE**
-    >
-    **FLOAT**
-    )
-
-
-
-*   Exact Numeric Type (
-    **NUMERIC**
-    >
-    **BIGINT**
-    >
-    **INT**
-    >
-    **SHORT**
-    )
-
-
-
-*   String Type (
-    **CHAR**
-    /
-    **NCHAR**
-    >
-    **VARCHAR**
-    /
-    **VARNCHAR**
-    )
-
-
+*   Date/Time Type ( **DATETIME** > **TIMESTAMP** > **DATE** > **TIME** )
+*   Approximate Numeric Type ( **MONETARY** > **DOUBLE** > **FLOAT** )
+*   Exact Numeric Type ( **NUMERIC** > **BIGINT** > **INT** > **SHORT** )
+*   String Type ( **CHAR** / **NCHAR** > **VARCHAR** / **VARNCHAR** )
 
 **Comparison Operation**
 
 The following are the conversion rules according to an operand type of the comparison operator.
 
 +-------------------+-------------------+----------------------------------------------+----------------+
-| **operand1 Type** | **operand2 Type** | **Conversion**                               | **Comparison** |
-|                   |                   |                                              |                |
-+-------------------+-------------------+----------------------------------------------+----------------+
+| operand1 Type     | operand2 Type     | Conversion                                   | Comparison     |
++===================+===================+==============================================+================+
 | Numeric Type      | Numeric Type      | None                                         | NUMERIC        |
-|                   |                   |                                              |                |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | String Type       | Converts operand2 to                         | NUMERIC        |
 |                   |                   | **DOUBLE**                                   |                |
-|                   |                   |                                              |                |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | Date/Time Type    | None                                         | N/a            |
-|                   |                   |                                              |                |
 +-------------------+-------------------+----------------------------------------------+----------------+
 | String Type       | Numeric Type      | Converts operand1 to                         | NUMERIC        |
 |                   |                   | **DOUBLE**                                   |                |
-|                   |                   |                                              |                |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | String Type       | None                                         | String         |
-|                   |                   |                                              |                |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | Date/Time Type    | Converts operand1 to date/time type          | Date/Time      |
-|                   |                   |                                              |                |
 +-------------------+-------------------+----------------------------------------------+----------------+
 | Date/Time Type    | Numeric Type      | None                                         | N/A            |
-|                   |                   |                                              |                |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | String Type       | Converts operand2 to date/time type          | Date/Time      |
-|                   |                   |                                              |                |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | Date/Time Type    | Converts it to the type with higher priority | Date/Time      |
-|                   |                   |                                              |                |
 +-------------------+-------------------+----------------------------------------------+----------------+
 
 The following are the exceptions in the conversion rules for comparison operators:
 
 *   COLUMN <operator> value
 
-
-
 +-------------------+-------------------+--------------------------------------+----------------+
-| **operand1 Type** | **operand2 Type** | **Conversion**                       | **Comparison** |
-|                   |                   |                                      |                |
-+-------------------+-------------------+--------------------------------------+----------------+
+| operand1 Type     | operand2 Type     | Conversion                           | Comparison     |
++===================+===================+======================================+================+
 | String type       | Numeric type      | Converts operand2 to the string type | String         |
-|                   |                   |                                      |                |
 |                   +-------------------+--------------------------------------+----------------+
 |                   | Date/Time type    | Converts operand2 to the string type | String         |
-|                   |                   |                                      |                |
 +-------------------+-------------------+--------------------------------------+----------------+
 
-If operand2 is a set operator(
-**IS IN**
-,
-**IS NOT IN**
-,
-**= ALL**
-,
-**= ANY**
-,
-**< ALL**
-,
-**< ANY**
-,
-**<= ALL**
-,
-**<= ANY**
-,
-**>= ALL**
-,
-**>= ANY**
-), the exception above is not applied.
+If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, **< ALL**, **< ANY**, **<= ALL**, **<= ANY**, **>= ALL**, **>= ANY** ), the exception above is not applied.
 
 **Numeric Type & String Type Operands**
 
-The string type operand will be converted to
-**DOUBLE**
-.
+The string type operand will be converted to **DOUBLE**.
 
-CREATE TABLE t(i INT, s STRING);
+.. code-block:: sql
 
-INSERT INTO t VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
-
- 
-
-SELECT i FROM t WHERE i < '11.3';
-
- 
-
-            i
-
-=============
-
-            1
-
-            2
-
-            3
-
-            4
-
- 
-
-SELECT ('2' <= 11);
-
- 
-
-     ('2'<11)
-
-=============
-
-            1
+	CREATE TABLE t(i INT, s STRING);
+	INSERT INTO t VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
+	 
+	SELECT i FROM t WHERE i < '11.3';
+	 
+				i
+	=============
+				1
+				2
+				3
+				4
+	 
+	SELECT ('2' <= 11);
+	 
+		 ('2'<11)
+	=============
+				1
 
 **String Type & Date/Time Type Operands**
 
 The string type operand will be converted to the date/time type.
 
-SELECT ('2010-01-01' < date'2010-02-02');
+.. code-block:: sql
 
- 
-
-   ('2010-01-01'<date '2010-02-02')
-
-==================================
-
-                                1
-
- 
-
-SELECT (date'2010-02-02' >= '2010-01-01');
-
- 
-
-  (date '2010-02-02'>='2010-01-01')
-
-===================================
-
-                                1
+	SELECT ('2010-01-01' < date'2010-02-02');
+	 
+	   ('2010-01-01'<date '2010-02-02')
+	==================================
+									1
+	 
+	SELECT (date'2010-02-02' >= '2010-01-01');
+	 
+	  (date '2010-02-02'>='2010-01-01')
+	===================================
+									1
 
 **String Type & Numeric Type Host Variable Operands**
 
 The numeric type host variable will be converted to the string type.
 
-PREPARE s FROM 'SELECT s FROM t WHERE s < ?';
+.. code-block:: sql
 
-EXECUTE s USING 11;
-
-       s
-
-===================
-
-     '1'
+	PREPARE s FROM 'SELECT s FROM t WHERE s < ?';
+	EXECUTE s USING 11;
+		   s
+	===================
+		 '1'
 
 **String Type & Numeric Type value Operands**
 
 The numeric type value will be converted to the string type.
 
-SELECT s FROM t WHERE s > 11;
+.. code-block:: sql
 
-       s
-
-==================
-
-     '2'
-
-     '3'
-
-     '4'
-
-     '12'
-
- 
-
-SELECT s FROM t WHERE s BETWEEN 11 AND 33;
-
-        s
-
-======================
-
-      '2'
-
-      '3'
-
-      '12'
-
+	SELECT s FROM t WHERE s > 11;
+		   s
+	==================
+		 '2'
+		 '3'
+		 '4'
+		 '12'
+	 
+	SELECT s FROM t WHERE s BETWEEN 11 AND 33;
+			s
+	======================
+		  '2'
+		  '3'
+		  '12'
+	  
 **String Type Column & Date/Time Type Value Operands**
 
 The date/time type value will be converted to the string type.
 
-SELECT s FROM t;
+.. code-block:: sql
 
- 
-
-           s
-
-======================
-
-    '01/01/1998'
-
-    '01/01/1999'
-
-    '01/01/2000'
-
- 
-
-SELECT s FROM t WHERE s <= date'02/02/1998';
-
-            s
-
-======================
-
-    '01/01/1998'
-
-    '01/01/1999'
-
-    '01/01/2000'
+	SELECT s FROM t;
+	 
+			   s
+	======================
+		'01/01/1998'
+		'01/01/1999'
+		'01/01/2000'
+	 
+	SELECT s FROM t WHERE s <= date'02/02/1998';
+				s
+	======================
+		'01/01/1998'
+		'01/01/1999'
+		'01/01/2000'
 
 **Range Operation**
 
 **Numeric Type and String Type Operands**
 
-The string type operand will be converted to
-**DOUBLE**
-.
+The string type operand will be converted to **DOUBLE**.
 
-SELECT i FROM t WHERE i <= all {'11','12'};
+.. code-block:: sql
 
- 
-
-            i
-
-=============
-
-            1
-
-            2
-
-            3
-
-            4
+	SELECT i FROM t WHERE i <= all {'11','12'};
+	 
+				i
+	=============
+				1
+				2
+				3
+				4
 
 **String Type and Date/Time Type Operands**
 
 The string type operand will be converted to the date/time type.
 
-SELECT s FROM t2;
+.. code-block:: sql
 
- 
-
-          s
-
-======================
-
-      '01/01/2000'
-
-      '01/01/1999'
-
-      '01/01/1998'
-
- 
-
-SELECT s FROM t2 WHERE s <= ALL {date'02/02/1998',date'01/01/2000'};
-
- 
-
-          s
-
-======================
-
-       '01/01/1998'
+	SELECT s FROM t2;
+	 
+			  s
+	======================
+		  '01/01/2000'
+		  '01/01/1999'
+		  '01/01/1998'
+	 
+	SELECT s FROM t2 WHERE s <= ALL {date'02/02/1998',date'01/01/2000'};
+	 
+			  s
+	======================
+		   '01/01/1998'
 
 An error will be returned if it cannot be converted to the corresponding type.
 
@@ -2867,23 +2033,15 @@ An error will be returned if it cannot be converted to the corresponding type.
 
 **Date/Time Type Operand**
 
-If the date/time type operands are given to '-' operator and the types are different from each other, it will be converted to the type with a higher priority. The following example shows that the operand data type on the left is converted from
-**DATE**
-to
-**DATETIME**
-so that the result of '-' operation of
-**DATETIME**
-can be outputted in milliseconds.
+If the date/time type operands are given to '-' operator and the types are different from each other, it will be converted to the type with a higher priority. The following example shows that the operand data type on the left is converted from **DATE** to **DATETIME** so that the result of '-' operation of **DATETIME** can be outputted in milliseconds.
 
-SELECT date'2002-01-01' - datetime'2001-02-02 12:00:00 am';
+.. code-block:: sql
 
- 
+	SELECT date'2002-01-01' - datetime'2001-02-02 12:00:00 am';
 
-   date '2002-01-01'- datetime '2001-02-02 12:00:00 am'
-
-=====================================================
-
-                                          28771200000
+	   date '2002-01-01'- datetime '2001-02-02 12:00:00 am'
+	=====================================================
+											  28771200000
 
 **Numeric Type Operand**
 
@@ -2891,209 +2049,109 @@ If the numeric type operands are given and the types are different from each oth
 
 **Date/Time Type & Numeric Type Operands**
 
-If the date/time type and the numeric type operands are given to '+' or '-' operator, the numeric type operand is converted to either
-**BIGINT**
-,
-**INT**
-or
-**SHORT**
-.
+If the date/time type and the numeric type operands are given to '+' or '-' operator, the numeric type operand is converted to either **BIGINT**, **INT** or **SHORT**.
 
 **Date/Time Type & String Type Operands**
 
 If a date/time type and a string type are operands, only '+' and '-' operators are allowed. If the '+' operator is used, it will be applied according to the following rules.
 
-*   The string type will be converted to
-    **BIGINT**
-    with an interval value. The interval is the smallest unit for operands in the Date/Time type, and the interval for each type is as follows:
+*   The string type will be converted to **BIGINT** with an interval value. The interval is the smallest unit for operands in the Date/Time type, and the interval for each type is as follows:
 
-
-
-*   **DATE**
-    : Days
-
-
-
-*   **TIME**
-    ,
-    **TIMESTAMP**
-    : Seconds
-
-
-
-*   **DATETIME**
-    : Milliseconds
-
-
+    *   **DATE** : Days
+    *   **TIME**, **TIMESTAMP** : Seconds
+    *   **DATETIME** : Milliseconds
 
 *   Floating-point numbers are rounded.
 
-
-
 *   The result type is the type of an date/time operand.
 
+.. code-block:: sql
 
-
-SELECT date'2002-01-01' + '10';
-
- 
-
-  date '2002-01-01'+'10'
-
-======================
-
-  01/11/2002
+	SELECT date'2002-01-01' + '10';
+	 
+	  date '2002-01-01'+'10'
+	======================
+	  01/11/2002
 
 If the date/time type and a string type are operands and the '-' operator is used, they will be applied according to the following rules.
 
-*   If the date/time type operands are
-    **DATE**
-    ,
-    **DATETIME**
-    and
-    **TIMESTAMP**
-    , the string will be converted to
-    **DATETIME**
-    ; if the date/time operand is
-    **TIME**
-    , the string is converted to
-    **TIME**
-    .
+*   If the date/time type operands are **DATE**, **DATETIME** and **TIMESTAMP**, the string will be converted to **DATETIME**; if the date/time operand is **TIME**, the string is converted to **TIME**.
+*   The result type is always **BIGINT**.
 
+.. code-block:: sql
 
-
-*   The result type is always
-    **BIGINT**
-    .
-
-
-
-SELECT date'2002-01-01'-'2001-01-01';
-
+	SELECT date'2002-01-01'-'2001-01-01';
+	 
+	  date '2002-01-01'-'2001-01-01'
+	================================
+						31536000000
+	 
+	-- this causes an error
+	 
+	SELECT date'2002-01-01'-'10';
+	 
+	 In line 1, column 13,
+	 ERROR: Cannot coerce '10' to type datetime.    
  
-
-  date '2002-01-01'-'2001-01-01'
-
-================================
-
-                    31536000000
-
- 
-
--- this causes an error
-
- 
-
-SELECT date'2002-01-01'-'10';
-
- 
-
- In line 1, column 13,
-
- ERROR: Cannot coerce '10' to type datetime.    
-
- 
-
 **Numeric Type & String Type Operands**
 
 If a numeric type and a string type are operands, they will be applied according to the following rules.
 
-*   Strings will be converted to
-    **DOUBLE**
-    when possible.
+*   Strings will be converted to **DOUBLE** when possible.
+*   The result type is **DOUBLE** or **MONETARY** and depends on the type of the numeric operand.
 
+.. code-block:: sql
 
-
-*   The result type is
-    **DOUBLE**
-    or
-    **MONETARY**
-    and depends on the type of the numeric operand.
-
-
-
-SELECT 4 + '5.2';
-
- 
-
-                4+'5.2'
-
-==========================
-
-  9.199999999999999e+00
+	SELECT 4 + '5.2';
+	 
+					4+'5.2'
+	==========================
+	  9.199999999999999e+00
 
 Unlike CUBRID 2008 R3.1 and the earlier versions, the string in the date/time format, that is, the string such as '2010-09-15' is not converted to the date/time type. You can use a literal (DATE'2010-09-15') with the date/time type for addition and subtraction operations.
 
-SELECT '2002-01-01'+1;
+.. code-block:: sql
 
-   ERROR: Cannot coerce '2002-01-01' to type double.
-
-SELECT DATE'2002-01-01'+1;
-
-  date '2002-01-01'+1
-
-=====================
-
-  01/02/2002
+	SELECT '2002-01-01'+1;
+	   ERROR: Cannot coerce '2002-01-01' to type double.
+	
+	SELECT DATE'2002-01-01'+1;
+	  date '2002-01-01'+1
+	=====================
+	  01/02/2002
 
 **String Type Operand**
 
-If you multiply, divide or subtract both strings, the result returns a
-**DOUBLE**
-type value.
+If you multiply, divide or subtract both strings, the result returns a **DOUBLE** type value.
 
-SELECT '3'*'2';
+.. code-block:: sql
 
- 
+	SELECT '3'*'2';
+	 
+						 '3'*'2'
+	============================
+		   6.000000000000000e+00
 
-                     '3'*'2'
+The '+' operator action depends on how to set the system parameter **plus_as_concat** in the **cubrid.conf** file. For details, see `Syntax/Type Related Parameter <#pm_pm_db_classify_type_htm>`_.
 
-============================
+* If a value for **plus_as_concat** is yes (default value), the concatenation of two strings will be returned.
 
-       6.000000000000000e+00
+  .. code-block:: sql
 
-The '+' operator action depends on how to set the system parameter
-**plus_as_concat**
-in the
-**cubrid.conf**
-file. For details, see
-`Syntax/Type Related Parameter <#pm_pm_db_classify_type_htm>`_
-.
+	SELECT '1'+'1';
+	 
+				   '1'+'1'
+	======================
+					  '11'
 
-*   If a value for
-    **plus_as_concat**
-    is yes (default value), the concatenation of two strings will be returned.
+* If a value for **plus_as_concat** is no and two strings can be converted to numbers, the **DOUBLE** type value will be returned by adding the two numbers.
 
+  .. code-block:: sql
 
-
-SELECT '1'+'1';
-
- 
-
-               '1'+'1'
-
-======================
-
-                  '11'
-
-*   If a value for
-    **plus_as_concat**
-    is no and two strings can be converted to numbers, the
-    **DOUBLE**
-    type value will be returned by adding the two numbers.
-
-
-
-SELECT '1'+'1';
-
- 
-
-                   '1'+'1'
-
-==========================
-
-     2.000000000000000e+00
+	SELECT '1'+'1';
+	 
+					   '1'+'1'
+	==========================
+		 2.000000000000000e+00
 
 An error will be returned if it cannot be converted to the corresponding type.
-	 
-해당 타입으로 변환할 수 없으면 오류를 반환한다.

@@ -7,9 +7,7 @@
 
 병합 연산자는 피연산자로 문자열 또는 비트열 데이터 타입이 지정되며, 병합(concatenation)된 문자열 또는 비트열을 반환한다. 문자열 데이터의 병합 연산자로 덧셈 기호(**+**)와 두 개의 파이프 기호(**||**)가 제공된다. 피연산자로 **NULL** 이 지정된 경우는 **NULL** 값이 반환된다.
 
-SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: yes)가 no이면 이중 파이프 기호(||)가 부울린(Boolean) OR 연산자로 해석되며 **plus_as_concat** 파라미터(기본값: yes)가 no이면 덧셈 기호가 + 연산자로 해석되므로, 이러한 경우 **CONCAT** 함수를 사용하여 문자열 또는 비트열을 병합하는 것이 좋다.
-
-::
+SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: yes)가 no이면 이중 파이프 기호(||)가 부울린(Boolean) OR 연산자로 해석되며 **plus_as_concat** 파라미터(기본값: yes)가 no이면 덧셈 기호가 + 연산자로 해석되므로, 이러한 경우 **CONCAT** 함수를 사용하여 문자열 또는 비트열을 병합하는 것이 좋다. ::
 
 	concat_operand1   +  concat_operand1
 	concat_operand2   ||  concat_operand2
@@ -416,16 +414,16 @@ INSTR 함수
 .. function:: INSTR ( string , substring [, position] )
 
 	**INSTR** 함수는 **POSITION** 함수와 유사하게 문자열 *string* 내에서 문자열 *substring* 의 위치를 반환한다. 단, **INSTR** 함수는 *substring* 의 검색을 시작할 위치를 지정할 수 있으므로 중복된 *substring* 을 검색할 수 있다.
-	
-	.. note::
-	
-		CUBRID 9.0 미만 버전에서는 문자 단위가 아닌 바이트 단위로 위치를 반환한다는 점을 주의한다. CUBRID 9.0 미만 버전에서 멀티바이트 문자셋이면 한 문자를 표현하는 바이트 수가 다르므로 반환되는 결과 값이 다를 수 있다.
 
 	:param string: 입력 문자열을 지정한다.
 	:param substring: 위치를 반환할 문자열을 지정한다.
 	:param position: 선택 사항으로 탐색을 시작할 *string* 의 위치를 나타내며, 문자 개수 단위로 지정된다. 이 인자가 생략되면 기본값인 **1** 이 적용된다. *string* 의 첫 번째 위치는 1로 지정된다. 값이 음수이면 *string* 의 끝에서부터 지정된 값만큼 떨어진 위치에서 역방향으로 *string* 을 탐색한다.
 	:rtype: INT
     
+	.. note::
+	
+		CUBRID 9.0 미만 버전에서는 문자 단위가 아닌 바이트 단위로 위치를 반환한다는 점을 주의한다. CUBRID 9.0 미만 버전에서 멀티바이트 문자셋이면 한 문자를 표현하는 바이트 수가 다르므로 반환되는 결과 값이 다를 수 있다.
+
 	.. code-block:: sql
 
 		--character set is UTF-8 for Korean characters
@@ -1084,7 +1082,7 @@ SUBSTRING 함수
 ==============
 
 .. function:: SUBSTRING ( string, position [, substring_length]), 
-.. function:: SUBSTRING( string FROM position [FOR substring_length] )
+.. function:: SUBSTRING ( string FROM position [FOR substring_length] )
 
 	**SUBSTRING** 함수는 **SUBSTR** 함수와 유사하며, 문자열 *string* 내의 *position* 위치로부터 *substring_length* 길이의 문자열을 추출하여 반환한다. *position* 값에 음수가 지정되면, **SUBSTRING** 함수는 문자열의 처음으로 검색 위치를 산정하고, **SUBSTR** 함수는 문자열의 끝에서부터 역방향으로 위치를 산정한다. *substring_length* 값에 음수가 지정되면, **SUBSTRING** 함수는 해당 인자가 생략된 것으로 처리하지만, **SUBSTR** 함수는 **NULL** 을 반환한다.
 

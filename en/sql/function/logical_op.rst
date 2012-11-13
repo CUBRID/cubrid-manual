@@ -2,41 +2,20 @@
 Logical Operators
 *****************
 
-
-For logical operators, boolean expressions or expressions that evaluates to an
-**INTEGER**
-value are specified as operands;
-**TRUE**
-,
-**FALSE**
-or
-**NULL**
-is returned as a result. If the
-**INTEGER**
-value is used, 0 is evaluated to
-**FALSE**
-and the other values are evaluated to
-**TRUE**
-. If a boolean value is used, 1 is evaluated to
-**TRUE**
-and 0 is evaluated to
-**FALSE**
-.
+For logical operators, boolean expressions or expressions that evaluates to an **INTEGER** value are specified as operands; **TRUE**, **FALSE** or **NULL** is returned as a result. If the **INTEGER** value is used, 0 is evaluated to **FALSE** and the other values are evaluated to **TRUE**. If a boolean value is used, 1 is evaluated to **TRUE** and 0 is evaluated to **FALSE**.
 
 The following table shows the logic operators supported by CUBRID.
 
 **Logical Operators Supported by CUBRID**
 
 +----------------------+------------------------------------------------------------------------------------------+---------------+
-| **Logical Operator** | **Description**                                                                          | **Condition** |
-|                      |                                                                                          |               |
-+----------------------+------------------------------------------------------------------------------------------+---------------+
+| Logical Operator     | Description                                                                              | Condition     |
++======================+==========================================================================================+===============+
 | **AND**              | If all operands are                                                                      | a             |
 | ,                    | **TRUE**                                                                                 | **AND**       |
 | **&&**               | , it returns                                                                             | b             |
 |                      | **TRUE**                                                                                 |               |
 |                      | .                                                                                        |               |
-|                      |                                                                                          |               |
 +----------------------+------------------------------------------------------------------------------------------+---------------+
 | **OR, ||**           | If none of operands is                                                                   | a             |
 |                      | **NULL**                                                                                 | **OR**        |
@@ -49,14 +28,12 @@ The following table shows the logic operators supported by CUBRID.
 |                      | is no that is a parameter related to SQL statements, a double pipe symbol can be used as |               |
 |                      | **OR**                                                                                   |               |
 |                      | operator.                                                                                |               |
-|                      |                                                                                          |               |
 +----------------------+------------------------------------------------------------------------------------------+---------------+
 | **XOR**              | If none of operand is                                                                    | a             |
 |                      | **NULL**                                                                                 | **XOR**       |
 |                      | and each of operand has a different value, it returns                                    | b             |
 |                      | **TRUE**                                                                                 |               |
 |                      | .                                                                                        |               |
-|                      |                                                                                          |               |
 +----------------------+------------------------------------------------------------------------------------------+---------------+
 | **NOT**              | A unary operator. If a operand is                                                        | **NOT**       |
 | ,                    | **FALSE**                                                                                | a             |
@@ -67,49 +44,32 @@ The following table shows the logic operators supported by CUBRID.
 |                      | , returns                                                                                |               |
 |                      | **FALSE**                                                                                |               |
 |                      | .                                                                                        |               |
-|                      |                                                                                          |               |
 +----------------------+------------------------------------------------------------------------------------------+---------------+
 
 **True Table of Logical Operators**
 
 +-----------+-----------+-------------+------------+-----------+-------------+
-| **a**     | **b**     | **a AND b** | **a OR b** | **NOT a** | **a XOR b** |
-|           |           |             |            |           |             |
-+-----------+-----------+-------------+------------+-----------+-------------+
+| a         | b         | a AND b     | a OR b     | NOT a     | a XOR b     |
++===========+===========+=============+============+===========+=============+
 | **TRUE**  | **TRUE**  | TRUE        | TRUE       | FALSE     | FALSE       |
-|           |           |             |            |           |             |
 +-----------+-----------+-------------+------------+-----------+-------------+
 | **TRUE**  | **FALSE** | FALSE       | TRUE       | FALSE     | TRUE        |
-|           |           |             |            |           |             |
 +-----------+-----------+-------------+------------+-----------+-------------+
 | **TRUE**  | **NULL**  | NULL        | TRUE       | FALSE     | NULL        |
-|           |           |             |            |           |             |
 +-----------+-----------+-------------+------------+-----------+-------------+
 | **FALSE** | **FALSE** | FALSE       | FALSE      | TRUE      | FALSE       |
-|           |           |             |            |           |             |
 +-----------+-----------+-------------+------------+-----------+-------------+
 | **FALSE** | **NULL**  | FALSE       | NULL       | TRUE      | NULL        |
-|           |           |             |            |           |             |
 +-----------+-----------+-------------+------------+-----------+-------------+
 
-**Remark**
+You should put the logical expressions in brackets in the **SELECT** list.
 
-You should put the logical expressions in brackets in the
-**SELECT**
-list.
+.. code-block:: sql
 
-SELECT 1 = 1 FROM db_root;
-
-ERROR: syntax error, unexpected '='
-
- 
-
-SELECT (1 = 1) FROM db_root;
-
-        (1=1)
-
-=============
-
-            1
-
-			
+	SELECT 1 = 1 FROM db_root;
+	ERROR: syntax error, unexpected '='
+	 
+	SELECT (1 = 1) FROM db_root;
+			(1=1)
+	=============
+				1

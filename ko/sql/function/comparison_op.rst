@@ -148,6 +148,6 @@
 	SELECT ('cubrid' = 'CUBRID'); -- 대소문자를 구분하므로 0을 출력한다.
 	SELECT ('cubrid' = 'cubrid'); -- TRUE이므로 1을 출력한다.
 	SELECT (SYSTIMESTAMP = CAST(SYSDATETIME AS TIMESTAMP)); -- 명시적으로 타입을 변환하여 비교 연산을 수행한 결과, 1을 출력한다.
-	SELECT (SYSTIMESTAMP = SYSDATETIME)); -- 묵시적으로 타입을 변환하여 비교 연산을 수행한 결과, 0을 출력한다.
+	SELECT (SYSTIMESTAMP = SYSDATETIME); -- 묵시적으로 타입을 변환하여 비교 연산을 수행한 결과, 0을 출력한다.
 	SELECT (SYSTIMESTAMP <> NULL); -- NULL의 비교 연산을 수행하지 않고 NULL을 반환한다.
 	SELECT (SYSTIMESTAMP IS NOT NULL); -- NULL이 아니므로 1을 반환한다.

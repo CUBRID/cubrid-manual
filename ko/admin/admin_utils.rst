@@ -84,14 +84,13 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 *   **createdb**: 새로운 데이터베이스를 생성하기 위한 명령이다.
 
-*   *database_name*
-    : 데이터베이스가 생성될 디렉터리 경로명을 포함하지 않고, 생성하고자 하는 데이터베이스의 이름을 고유하게 부여한다. 이 때, 지정한 데이터베이스 이름이 이미 존재하는 데이터베이스 이름과 중복되는 경우, CUBRID는 기존 파일을 보호하기 위하여 데이터베이스 생성을 더 이상 진행하지 않는다.
+*   *database_name*: 데이터베이스가 생성될 디렉터리 경로명을 포함하지 않고, 생성하고자 하는 데이터베이스의 이름을 고유하게 부여한다. 이 때, 지정한 데이터베이스 이름이 이미 존재하는 데이터베이스 이름과 중복되는 경우, CUBRID는 기존 파일을 보호하기 위하여 데이터베이스 생성을 더 이상 진행하지 않는다.
 
 다음은 **cubrid createdb** 에 대한 <options>이다.
 
 .. program:: createdb
 	
-.. option:: --db-volume-size=size
+.. option:: --db-volume-size=SIZE
 
 	데이터베이스를 생성할 때 첫 번째 데이터베이스 볼륨의 크기를 지정하는 옵션으로, 기본값은 cubrid.conf에 지정된 시스템 파라미터 **db_volume_size** 의 값이다. 최소값은 20M이다. K, M, G, T로 단위를 설정할 수 있으며, 각각 KB(kilobytes), MB(megabytes), GB(gigabytes), TB(terabytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다.
 
@@ -99,7 +98,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid createdb --db-volume-size=512M testdb
 	
-.. option:: --db-page-size=size
+.. option:: --db-page-size=SIZE
 
 	데이터베이스 페이지 크기를 지정하는 옵션으로서, 기본값은 16K, 최소값은 4K, 최대값은 16K이다. K는 KB(kilobytes)를 의미한다. 데이터베이스 페이지 크기는 4K, 8K, 16K 중 하나의 값이 된다. 4K와 16K 사이의 값을 지정할 경우 지정한 값의 올림값으로 설정되며, 4K보다 작으면 4K로 설정되고 16K보다 크면 16K로 설정된다.
 
@@ -107,7 +106,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid createdb --db-page-size=16K testdb 
 
-.. option:: --log-volume-size=size 
+.. option:: --log-volume-size=SIZE 
 
 	생성되는 데이터베이스의 로그 볼륨 크기를 지정하는 옵션으로, 기본값은 데이터베이스 볼륨 크기와 같으며 최소값은 20M이다. K, M, G, T로 단위를 설정할 수 있으며, 각각 KB(kilobytes), MB(megabytes), GB(gigabytes), TB(terabytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다.
 
@@ -115,7 +114,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid createdb --log-volume-size=256M testdb
 
-.. option:: --log-page-size=size
+.. option:: --log-page-size=SIZE
 
 	생성되는 데이터베이스의 로그 볼륨 페이지 크기를 지정하는 옵션으로, 기본값은 데이터 페이지 크기와 같다. 최소값은 4K, 최대값은 16K이다. K는 KB(kilobytes)를 의미한다.
 	데이터베이스 페이지 크기는 4K, 8K, 16K 중 하나의 값이 된다. 4K와 16K 사이의 값을 지정할 경우 지정한 값의 올림값으로 설정되며, 4K보다 작으면 4K로 설정되고 16K보다 크면 16K로 설정된다.
@@ -133,7 +132,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 		cubrid createdb --comment "a new database for study" testdb
 
 	
-.. option:: -F, --file-path file_path
+.. option:: -F, --file-path=PATH
 
 	새로운 데이터베이스가 생성되는 디렉터리의 절대 경로를 지정하는 옵션으로, **-F** 옵션을 지정하지 않으면 현재 작업 디렉터리에 새로운 데이터베이스가 생성된다.
 
@@ -141,7 +140,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid createdb -F "/dbtemp/new_db/" testdb
 
-.. option:: -L, --log-path file_path
+.. option:: -L, --log-path=PATH
 
 	데이터베이스의 로그 파일이 생성되는 디렉터리의 절대 경로를 지정하는 옵션으로, **-L** 옵션을 지정하지 않으면 **-F** 옵션에서 지정한 디렉터리에 생성된다.
 	**-F** 옵션과 **-L** 옵션을 둘 다 지정하지 않으면 데이터베이스와 로그 파일이 현재 작업 디렉터리에 생성된다.
@@ -150,7 +149,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid createdb -F "/dbtemp/new_db/" -L "/dbtemp/db_log/" testdb
 	
-.. option:: -B, --lob-base-path file_path
+.. option:: -B, --lob-base-path=PATH
 	
 	**BLOB** / **CLOB**	데이터를 사용하는 경우,	**LOB**	데이터 파일이 저장되는 디렉터리의 경로를 지정하는 옵션으로, 이 옵션을 지정하지 않으면 <	*데이터베이스 볼륨이 생성되는 디렉터리*	> **/lob** 디렉터리에 **LOB** 데이터 파일이 저장된다.
 
@@ -158,7 +157,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid createdb --lob-base-path "file:/home1/data1" testdb
 	
-.. option:: --server-name host_name
+.. option:: --server-name=HOST
 
 	CUBRID의 클라이언트/서버 버전을 사용할 때 특정 데이터베이스에 대한 서버가 지정한 호스트 상에 구동되도록 하는 옵션이다. 이 옵션으로 지정된 서버 호스트의 정보는 데이터베이스 위치 정보 파일(	**databases.txt** )에 기록된다. 이 옵션이 지정되지 않으면 기본값은 현재 로컬 호스트이다.
 
@@ -174,7 +173,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid createdb -r testdb
 
-.. option:: --more-volume-file vol_file
+.. option:: --more-volume-file=FILE
 
 	데이터베이스가 생성되는 디렉터리에 추가 볼륨을 생성하는 옵션으로 지정된 파일에 저장된 명세에 따라 추가 볼륨을 생성한다. 이 옵션을 이용하지 않더라도, 	**cubrid addvoldb**	유틸리티를 이용하여 볼륨을 추가할 수 있다.
 
@@ -318,7 +317,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. program:: addvoldb
 
-.. option:: --db-volume-size=size
+.. option:: --db-volume-size=SIZE
 
 	추가되는 데이터베이스 볼륨의 크기를 지정하는 옵션으로, 기본값은 **cubrid.conf** 에 지정된 시스템 파라미터 **db_volume_size** 의 값이다. K, M, G, T로 단위를 설정할 수 있으며, 각각 KB(kilobytes), MB(megabytes), GB(gigabytes), TB(terabytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다.
 
@@ -338,7 +337,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 		cubrid addvoldb -S -n testdb_v1 --db-volume-size=256M testdb
 
 		
-.. option::  -F, --file-path path_name file_path
+.. option::  -F, --file-path=PATH
 
 	지정된 데이터베이스에 대하여 추가될 볼륨이 저장되는 디렉터리 경로를 지정하는 옵션이다.
 	**-F** 옵션을 생략하면, 시스템 파라미터인 **volume_extension_path** 의 값이 기본값으로 사용된다.
@@ -347,7 +346,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid addvoldb -S -F /dbtemp/addvol/ --db-volume-size=256M testdb
 
-.. option:: --comment vol_info
+.. option:: --comment=COMMENT
 
 	추가된 볼륨에 관한 정보 검색을 쉽게 하기 위하여 볼륨에 관한 정보를 주석으로 처리하는 옵션이다. 이때 주석의 내용은 볼륨을 추가하는
 	**DBA** 의 이름이나 볼륨 추가의 목적을 포함하는 것이 바람직하며, 큰따옴표로 감싸야 한다.
@@ -429,7 +428,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 **cubrid renamedb** 유틸리티는 존재하는 데이터베이스의 현재 이름을 변경한다. 정보 볼륨, 로그 볼륨, 제어 파일들이 새로운 이름과 일치되게 이름을 변경한다.
 
-**cubrid alterdbhost** 유틸리티는 지정된 데이터베이스의 호스트 이름을 설정하거나 변경한다. **databases.txt** 에 있는 호스트 이름을 변경한다. ::
+이에 비해 **cubrid alterdbhost** 유틸리티는 지정된 데이터베이스의 호스트 이름을 설정하거나 변경한다. 즉, **databases.txt** 에 있는 호스트 이름을 변경한다. ::
 
 	cubrid renamedb <options> <src_database_name> <dest_database_name> 
 
@@ -445,7 +444,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. program:: renamedb
 
-.. option:: -E, --extented-volume-path vol_path
+.. option:: -E, --extented-volume-path=PATH
 
 	확장 볼륨의 이름을 변경한 후 새 디렉터리 경로로 이동하는 명령으로서, **-E** 옵션을 이용하여 변경된 이름을 가지는 확장 볼륨을 이동시킬 새로운 디렉터리 경로(예: /dbtemp/newaddvols/)를 지정한다.
 
@@ -453,9 +452,9 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid renamedb -E /dbtemp/newaddvols/ testdb testdb_1
 
-.. option::	-i, --control-file rename_path
+.. option::	-i, --control-file FILE
 
-	각 볼륨 또는 파일에 대하여 일괄적으로 데이터베이스 이름을 변경하면서 디렉터리 경로를 상이하게 지정하기 위하여, 디렉터리 정보가 저장된 입력 파일을 지정하는 명령으로서, **-i** 옵션을 이용한다. 
+	각 볼륨 또는 파일에 대하여 일괄적으로 데이터베이스 이름을 변경하면서 디렉터리 경로를 상이하게 지정하기 위해 디렉터리 정보가 저장된 입력 파일을 지정하는 명령으로서, **-i** 옵션을 이용한다. 
 	이때, **-i** 옵션은 **-E** 옵션과 병행될 수 없다. ::
 
 		cubrid renamedb -i rename_path testdb testdb_1
@@ -488,7 +487,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 데이터베이스 호스트 변경
 ========================
 
-**cubrid alterdbhost** 유틸리티는 지정된 데이터베이스의 호스트 이름을 설정하거나 변경한다. **databases.txt** 에 있는 호스트 이름을 변경한다.
+**cubrid alterdbhost** 유틸리티는 지정된 데이터베이스의 호스트 이름을 설정하거나 변경한다. 즉, **databases.txt** 에 있는 호스트 이름을 변경한다.
 
 	cubrid alterdbhost [<option>] database_name 
 
@@ -528,31 +527,31 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. program:: copydb
 
-.. option:: --server-name host_name
+.. option:: --server-name=HOST
 
 	새로운 데이터베이스의 서버 호스트 이름을 명시하며, 이는 **databases.txt** 의 **db-host** 항목에 등록된다. 이 옵션을 생략하면, 로컬 호스트가 등록된다. ::
 
 		cubrid copydb --server-name=cub_server1 demodb new_demodb
 
-.. option:: -F, --file-path file_path
+.. option:: -F, --file-path=PATH
 
-	새로운 데이터베이스 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며,?존재하지 않는 디렉터리를 지정하면?에러를 출력한다. 이 옵션을 생략하면 현재 작업 디렉터리에 새로운 데이터베이스의 볼륨이 생성된다. 이 경로는 **databases.txt** 의 **vol-path** 항목에 등록된다. ::
+	새로운 데이터베이스 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 현재 작업 디렉터리에 새로운 데이터베이스의 볼륨이 생성된다. 이 경로는 **databases.txt** 의 **vol-path** 항목에 등록된다. ::
 	
 		cubrid copydb -F /home/usr/CUBRID/databases demodb new_demodb
 
-.. option:: -L, --log-path file_path
+.. option:: -L, --log-path=PATH
 
 	새로운 데이터베이스 로그 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면?에러를 출력한다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로에 로그 볼륨도 함께 생성된다. 이 경로는 **databases.txt** 의 **log-path** 항목에 등록된다. ::
 	
 		cubrid copydb -L /home/usr/CUBRID/databases/logs demodb new_demodb
 
-.. option:: -E 또는 --extended-volume-path file_path
+.. option:: -E 또는 --extended-volume-path=PATH
 
 	새로운 데이터베이스의 확장 정보 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로 또는 제어 파일에 등록된 경로에 확장 정보 볼륨이 저장된다. **-i** 옵션과 병행될 수 없다. ::
 
 	cubrid copydb -E home/usr/CUBRID/databases/extvols demodb new_demodb
 
-.. option:: -i 또는 --control-file file_path
+.. option:: -i 또는 --control-file=PATH
 
 	대상 데이터베이스에 대한 복수 개의 볼륨들을 각각 다른 디렉터리에 복사 또는 이동하기 위해서, 원본 볼륨의 경로 및 새로운 디렉터리 경로 정보를 포함하는 입력 파일을 지정할 수 있다. 이때, **-i** 옵션은 **-E** 옵션과 병행될 수 없다. 아래 예제에서는 copy_path라는 입력 파일을 예로 사용했다. ::
 
@@ -582,21 +581,21 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 	새로운 데이터베이스로 복사한 후, 원본 데이터베이스를 제거한다. 이 옵션이 주어지면 데이터베이스 복사 후 **cubrid deletedb** 를 수행하는 것과 동일하다. 단, 원본 데이터베이스에 **LOB** 데이터를 포함하는 경우, 원본 데이터베이스 대한 **LOB** 파일 디렉터리 경로가 새로운 데이터베이스로 복사되어 **databases.txt** 의 **lob-base-path** 항목에 등록된다. ::
 
-		cubrid copydb -d -o home/usr/CUBRID/databases demodb new_demodb
+		cubrid copydb -d -F /home/usr/CUBRID/databases demodb new_demodb
 
-.. option:: --copy-lob-path file_path
+.. option:: --copy-lob-path=PATH
 
 	원본 데이터베이스에 대한 **LOB** 파일 디렉터리 경로를 새로운 데이터베이스의 **LOB** 파일 경로로 복사하고, 원본 데이터베이스를 복사한다. 이 옵션을 생략하면, **LOB** 파일 디렉터리 경로를 복사하지 않으므로, **databases.txt** 파일의 **lob-base-path** 항목을 별도로 수정해야 한다. **-B** 옵션과 병행할 수 없다. ::
 
-		cubrid copydb --copy-lob-path demodb new_demodb
+		cubrid copydb --copy-lob-path=/home/usr/CUBRID/databases/new_demodb/lob demodb new_demodb
 
 
-.. option::	-B, --lob-base-path	file_path
+.. option::	-B, --lob-base-path=PATH
 
 	**-B** 옵션을 사용하여 특정 디렉터리를 새로운 데이터베이스에 대한 **LOB** 파일 디렉터리 경로를 지정하면서 원본 데이터베이스를 복사한다.
 	**--copy-lob-path** 옵션과 병행할 수 없다. ::
 
-	cubrid copydb -B /home/usr/CUBRID/databases/new_lob demodb new_demodb
+		cubrid copydb -B /home/usr/CUBRID/databases/new_lob demodb new_demodb
 
 데이터베이스 등록
 =================
@@ -619,19 +618,19 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. program:: installdb
 
-.. options:: --server-name host_name
+.. options:: --server-name=HOST
 
 	대상 데이터베이스의 서버 호스트 정보를 지정된 호스트 명으로 **databases.txt** 에 등록한다. 이 옵션을 생략하면, 현재의 호스트 정보가 등록된다.  ::
 
 		cubrid installdb --server-name=cub_server1 testdb
 
-.. options:: -F, --file-path
+.. options:: -F, --file-path=PATH
 		
 	대상 데이터베이스 볼륨의 디렉터리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 기본값인 현재 디렉터리 경로가 등록된다.  ::
 
 		cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
 
-.. options:: -L 또는 --log-path file_path
+.. options:: -L 또는 --log-path=PATH
 
 	대상 데이터베이스 로그 볼륨의 디렉터리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 데이터베이스 볼륨의 디렉터리 경로가 등록된다.  ::
 	
@@ -658,7 +657,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. program:: spacedb
 
-.. option:: -o file_name
+.. option:: -o FILE
 	데이터베이스의 공간 정보에 대한 결과를 지정한 파일에 저장한다. ::
 	
 		cubrid spacedb -o db_output testdb
@@ -676,7 +675,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid spacedb --CS-mode testdb
 
-.. option:: --size-unit=size_symbol
+.. option:: --size-unit={PAGE|M|G|T|H}
 
 	데이터베이스 볼륨의 공간을 지정한 크기 단위로 출력하기 위한 옵션이며, 기본값은 H이다.
 	단위를 PAGE, M, G, T, H로 설정할 수 있으며, 각각 페이지, MB(megabytes), GB(gigabytes), TB(terabytes), 자동 지정을 의미한다. 자동 지정을 의미하는 H로 설정하면 데이터베이스 크기가 1MB 이상 1024MB 미만일 때 MB 단위로, 1GB 이상 1024GB 미만일 때 GB 단위로 결정된다. ::
@@ -710,6 +709,8 @@ cubrid compactdb [<options>] database_name [ class_name1, class_name2, ...]
 *   *class_name_list*: 공간을 정리할 테이블 이름 리스트를 데이터베이스 이름 뒤에 직접 명시할 수 있으며,
     **-i** 옵션과 함께 사용할 수 없다. 클라이언트/서버 모드에서만 명시할 수 있다.
 
+클라이언트/서버 모드에서만 -I, -i, -c, -d, -p 옵션을 사용할 수 있다.
+	
 다음은 **cubrid compactdb** 에 대한 <options>이다.
 	
 .. program:: compactdb
@@ -1294,13 +1295,12 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 		  5(+)         public      myhost            6944              csql
 	-------------------------------------------------------------------------------
 
-**-p** 옵션 뒤에 오는 값은 **DBA**의 암호이며 생략하면 프롬프트에서 입력해야 한다.
 
 다음은 **cubrid killtran** 에 대한 <options>이다.
 
 .. program:: killtran
 
-.. option:: -i, --kill-transation-index tran_index_no
+.. option:: -i, --kill-transation-index=INDEX
 
 	지정한 인덱스에 해당하는 트랜잭션을 제거한다.  ::
 
@@ -1314,6 +1314,28 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 		-------------------------------------------------------------------------------
 		Do you wish to proceed ? (Y/N)y
 		Killing transaction associated with transaction index 1
+
+.. option:: --kill-user-name=ID
+
+	지정한 OS 사용자 ID에 해당하는 트랜잭션을 제거한다. ::
+
+		cubrid killtran --kill-user-name=os_user_id?testdb
+
+.. option:: --kill-host-name=HOST
+	
+	지정한 클라이언트 호스트의 트랜잭션을 제거한다. ::
+
+		cubrid killtran --kill-host-name=myhost testdb
+
+.. option:: --kill-program-name=NAME
+		
+	지정한 이름의 프로그램에 해당하는 트랜잭션을 제거한다. ::
+
+		cubrid killtran --kill-program-name=cub_cas testdb
+
+.. option:: -p PASS
+
+	**-p** 옵션 뒤에 오는 값은 **DBA**의 암호이며 생략하면 프롬프트에서 입력해야 한다.
 
 .. option:: -d, --display
 
@@ -1331,23 +1353,6 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 			  5(+)         public      myhost            6944              csql
 		-------------------------------------------------------------------------------
 
-.. option:: --kill-user-name os_user_id
-
-	지정한 OS 사용자 ID에 해당하는 트랜잭션을 제거한다. ::
-
-		cubrid killtran --kill-user-name=os_user_id?testdb
-
-.. option:: --kill-host-name myhost
-	
-	지정한 클라이언트 호스트의 트랜잭션을 제거한다. ::
-
-		cubrid killtran --kill-host-name=myhost testdb
-
-.. option:: --kill-program-name prog_name
-		
-	지정한 이름의 프로그램에 해당하는 트랜잭션을 제거한다. ::
-
-		cubrid killtran --kill-program-name=cub_cas testdb
 
 .. option:: -f, --force
 
@@ -1447,13 +1452,12 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 내보내기와 가져오기
 ===================
 
-신규 버전의 CUBRID 데이터베이스를 사용하기 위해서는 기존 버전의 CUBRID 데이터베이스를 신규 버전의 CUBRID 데이터베이스로 이전하는 작업을 진행해야 할 경우가 있다.?이때 CUBRID에서 제공하는 텍스트 파일로 내보내기와 텍스트 파일에서 가져오기 기능을 활용할 수 있다. 내보내기와 가져오기에 대한 보다 자세한 설명은 `데이터베이스 마이그레이션 <#admin_admin_migration_migration__1472>`_ 을 참고한다.
+신규 버전의 CUBRID 데이터베이스를 사용하기 위해서는 기존 버전의 CUBRID 데이터베이스를 신규 버전의 CUBRID 데이터베이스로 이전하는 작업을 진행해야 할 경우가 있다. 이때 CUBRID에서 제공하는 텍스트 파일로 내보내기와 텍스트 파일에서 가져오기 기능을 활용할 수 있다. 내보내기와 가져오기에 대한 보다 자세한 설명은 `데이터베이스 마이그레이션 <#admin_admin_migration_migration__1472>`_ 을 참고한다.
 
 서버/클라이언트에서 사용하는 파라미터 출력
 ==========================================
 
-**cubrid paramdump**
-유틸리티는 서버/클라이언트 프로세스에서 사용하는 파라미터 정보를 출력한다. ::
+**cubrid paramdump** 유틸리티는 서버/클라이언트 프로세스에서 사용하는 파라미터 정보를 출력한다. ::
 
 	cubrid paramdump [<options>] database_name
 

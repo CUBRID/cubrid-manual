@@ -1088,7 +1088,7 @@ The following example shows how to display error messages. In the example, the e
 **CCI_ER_DBMS**
 . -493 (server error code) is stored in
 **cci_error.err_code**
-and the error message 'Syntax: Unknown class "notable". select * from notableSyntax' is stored in
+and the error message 'Syntax: Unknown class "notable". select * from notable' is stored in
 **cci_error.err_msg**
 of the database error buffer.
 

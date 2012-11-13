@@ -637,7 +637,7 @@ You do not need to build PHP 5.3 from source code but configuring a project is r
 **config.w32.h**
 ) cannot be found.
 Read
-`http://wiki.php.net/internals/windows/stepbystepbuild <http://wiki.php.net/internals/windows/stepbystepbuild>`_
+`https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_
 to get more detailed information.
 
 **Building CUBRID PHP driver with VC9 for PHP 5.3**
@@ -750,7 +750,7 @@ in [Additional include directories] of the [C/C++] tab.
 If you build CUBRID PHP driver with PHP 5.3 source code, you need to make some configuration settings for PHP 5.3 on Windows. If you do not make these settings, you will get the message that a header file (
 **config.w32.h**
 ) cannot be found. Read
-`http://wiki.php.net/internals/windows/stepbystepbuild <http://wiki.php.net/internals/windows/stepbystepbuild>`_
+`https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_
 to get more detailed information.
 
 **Building CUBRID PHP driver**

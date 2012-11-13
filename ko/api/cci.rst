@@ -542,7 +542,7 @@ CCI API 함수는 에러 발생 시 반환 값이 음수인 CCI 에러 코드 �
 
 **CCI_ER** 로 시작되는 CCI 에러 코드는 **$CUBRID/include/cas_cci.h** 파일에 **T_CCI_ERROR_CODE** 라는 enum 구조체 내에 정의되어 있다. 따라서 프로그램 코드에서 이 에러 코드 명을 사용하려면 코드 상단에 **#include "cas_cci.h"** 를 입력하여 헤더 파일을 포함해야 한다.
 
-아래의 프로그램은 에러 메시지를 출력한다. 이때 :c:func:`cci_prepare` 가 리턴하는 에러 코드 값 req의 값은 **CCI_ER_DMBS** 이고, 데이터베이스 에러 버퍼의 **cci_error.err_code** 에는 서버 에러 코드인 -493이, **cci_error.err_msg** 에는 'Syntax: Unknown class "notable". select * from notableSyntax'라는 에러 메시지가 저장된다.
+아래의 프로그램은 에러 메시지를 출력한다. 이때 :c:func:`cci_prepare` 가 리턴하는 에러 코드 값 req의 값은 **CCI_ER_DMBS** 이고, 데이터베이스 에러 버퍼의 **cci_error.err_code** 에는 서버 에러 코드인 -493이, **cci_error.err_msg** 에는 'Syntax: Unknown class "notable". select * from notable'이라는 에러 메시지가 저장된다.
 
 .. code-block:: c
 

@@ -52,7 +52,7 @@ The CUBRID HA group consists of the nodes described above. You can configure the
 and
 **ha_replica_list**
 in the
-**cubrid.conf**
+**cubrid_ha.conf**
 file. Nodes in a group have the same information. They exchange status checking messages periodically and a failover will occurs when the master node fails.
 
 A node includes the master process (cub_master), the database server process (cub_server), the replication log copy process (copylogdb), the replication log reflection process (applylogdb), etc.

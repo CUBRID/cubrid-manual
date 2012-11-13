@@ -2051,7 +2051,7 @@ SELECT YEAR('12:34:56);
 
    NULL
 
-**string max_size_bytes**
+**string_max_size_bytes**
 
 **string_max_size_bytes**
 is a parameter used to define the maximum byte allowable in string functions or operators. The default value is

@@ -155,7 +155,7 @@ cci_bind_param_array()
 
 .. c:function:: int cci_bind_param_array(int req_handle, int index, T_CCI_A_TYPE a_type, void *value, int *null_ind, T_CCI_U_TYPE u_type)
 
-	prepare된 *req_handle* 에 대해서 파라미터 배열을 바인딩한다. 이 후, :c:func:`cci_execute_array` 가 발생할 때 저장된 *value* 포인터에 의해 데이터가 서버로 전송된다. 같은 *index* 에 대해서 여러 번 :c:func:`cci_bind_param_array` 이 호출될 경우 마지막 설정된 값이 유효하다. 데이터에 **NULL** 을 바인딩할 경우 *null_ind* 에 0이 아닌 값을 설정한다. *value* 값이 **NULL** 포인터인 경우, 또는 *u_type* 이 **CCI_U_TYPE_NULL** 인 경우 모든 데이터가 **NULL** 로 바인딩 되며 *value* 에 의해 사용되는 데이터 버퍼는 재사용될 수 없다. *a_type* 에 대한 *value* 의 데이터 타입은 :c:func:`cci_bind_param` 의 설명을 참조한다.
+	prepare된 *req_handle* 에 대해서 파라미터 배열을 바인딩한다. 이후, :c:func:`cci_execute_array` 가 발생할 때 저장된 *value* 포인터에 의해 데이터가 서버로 전송된다. 같은 *index* 에 대해서 여러 번 :c:func:`cci_bind_param_array` 이 호출될 경우 마지막 설정된 값이 유효하다. 데이터에 **NULL** 을 바인딩할 경우 *null_ind* 에 0이 아닌 값을 설정한다. *value* 값이 **NULL** 포인터인 경우, 또는 *u_type* 이 **CCI_U_TYPE_NULL** 인 경우 모든 데이터가 **NULL** 로 바인딩 되며 *value* 에 의해 사용되는 데이터 버퍼는 재사용될 수 없다. *a_type* 에 대한 *value* 의 데이터 타입은 :c:func:`cci_bind_param` 의 설명을 참조한다.
 
 	:param req_handle: (IN) prepared statement의 요청 핸들
 	:param index: (IN) 바인딩될 위치
@@ -2716,7 +2716,7 @@ cci_set_isolation_level
 
 .. c:function:: int cci_set_isolation_level(int conn_handle, T_CCI_TRAN_ISOLATION  new_isolation_level, T_CCI_ERROR *err_buf)
 
-	연결에 대한 트랜잭션 격리 수준(transaction isolation level)을 설정한다. 이 후 주어진 연결에 대한 모든 트랜잭션은 *new_isolation_level* 로서 동작한다.
+	연결에 대한 트랜잭션 격리 수준(transaction isolation level)을 설정한다. 이후 주어진 연결에 대한 모든 트랜잭션은 *new_isolation_level* 로서 동작한다.
 
 	:param conn_handle: (IN) 연결 핸들
 	:param new_isolation_level: (IN) 격리 수준(isolation level)

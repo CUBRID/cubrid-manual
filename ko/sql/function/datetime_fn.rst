@@ -2,9 +2,6 @@
 날짜/시간 함수와 연산자
 ***********************
 
-ADDDATE, DATE_ADD 함수
-======================
-
 .. function:: ADDDATE (date, INTERVAL expr unit)
 .. function:: ADDDATE (date, days)
 .. function:: DATE_ADD (date, INTERVAL expr unit)
@@ -32,64 +29,44 @@ ADDDATE, DATE_ADD 함수
 	|                    |                                           |                                                              |
 	+====================+===========================================+==============================================================+
 	| MILLISECOND        | MILLISECONDS                              | ADDDATE(SYSDATE, INTERVAL 123 MILLISECOND)                   |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| SECOND             | SECONDS                                   | ADDDATE(SYSDATE, INTERVAL 123 SECOND)                        |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| MINUTE             | MINUTES                                   | ADDDATE(SYSDATE, INTERVAL 123 MINUTE)                        |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| HOUR               | HOURS                                     | ADDDATE(SYSDATE, INTERVAL 123 HOUR)                          |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| DAY                | DAYS                                      | ADDDATE(SYSDATE, INTERVAL 123 DAYS)                          |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| WEEK               | WEEKS                                     | ADDDATE(SYSDATE, INTERVAL 123 WEEKS)                         |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| MONTH              | MONTHS                                    | ADDDATE(SYSDATE, INTERVAL 12 MONTH)                          |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| QUARTER            | QUARTERS                                  | ADDDATE(SYSDATE, INTERVAL 12 QUARTER)                        |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| YEAR               | YEARS                                     | ADDDATE(SYSDATE, INTERVAL 12 YEAR)                           |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| SECOND_MILLISECOND | 'SECONDS.MILLISECONDS'                    | ADDDATE(SYSDATE, INTERVAL '12.123' SECOND_MILLISECOND)       |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| MINUTE_MILLISECOND | 'MINUTES:SECONDS.MILLISECONDS'            | ADDDATE(SYSDATE, INTERVAL '12:12.123' MINUTE_MILLISECOND)    |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| MINUTE_SECOND      | 'MINUTES:SECONDS'                         | ADDDATE(SYSDATE, INTERVAL '12:12' MINUTE_SECOND)             |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| HOUR_MILLISECOND   | 'HOURS:MINUTES:SECONDS.MILLISECONDS'      | ADDDATE(SYSDATE, INTERVAL '12:12:12.123' HOUR_MILLISECOND)   |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| HOUR_SECOND        | 'HOURS:MINUTES:SECONDS'                   | ADDDATE(SYSDATE, INTERVAL '12:12:12' HOUR_SECOND)            |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| HOUR_MINUTE        | 'HOURS:MINUTES'                           | ADDDATE(SYSDATE, INTERVAL '12:12' HOUR_MINUTE)               |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| DAY_MILLISECOND    | 'DAYS HOURS:MINUTES:SECONDS.MILLISECONDS' | ADDDATE(SYSDATE, INTERVAL '12 12:12:12.123' DAY_MILLISECOND) |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| DAY_SECOND         | 'DAYS HOURS:MINUTES:SECONDS'              | ADDDATE(SYSDATE, INTERVAL '12 12:12:12' DAY_SECOND)          |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| DAY_MINUTE         | 'DAYS HOURS:MINUTES'                      | ADDDATE(SYSDATE, INTERVAL '12 12:12' DAY_MINUTE)             |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| DAY_HOUR           | 'DAYS HOURS'                              | ADDDATE(SYSDATE, INTERVAL '12 12' DAY_HOUR)                  |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 	| YEAR_MONTH         | 'YEARS-MONTHS'                            | ADDDATE(SYSDATE, INTERVAL '12-13' YEAR_MONTH)                |
-	|                    |                                           |                                                              |
 	+--------------------+-------------------------------------------+--------------------------------------------------------------+
 
 	.. code-block:: sql
@@ -124,9 +101,6 @@ ADDDATE, DATE_ADD 함수
 		======================
 		'12:00:00.000 AM 00/00/0000'
 
-ADDTIME 함수
-============
-
 .. function:: ADDTIME(expr1, expr2)
 
 	**ADDTIME** 함수는 특정 시간 값에 대해 덧셈 또는 뺄셈을 실행한다. 첫 번째 인자는 **DATE**, **DATETIME**, **TIMESTAMP** 또는 **TIME** 타입이며, 두 번째 인자는 **TIME**, **DATETIME** 또는 **TIMESTAMP** 타입이다. 두 번째 인자는 반드시 시간을 포함해야 하며, 두 번째 인자의 날짜는 무시된다. 각 인자의 타입에 따른 반환 타입은 다음과 같다.
@@ -159,9 +133,6 @@ ADDTIME 함수
 		============================================
 		03:00:01 AM
 
-ADD_MONTHS 함수
-===============
-
 .. function:: ADD_MONTHS ( date_argument , month )
 
 	**ADD_MONTHS** 함수는 **DATE** 타입의 연산식 *date_argument* 에 *month* 를 더한 후, **DATE** 타입의 값을 반환한다. 인자로 지정된 값의 일(*dd*)이 연산 결과값의 월에 존재하면 해당 일(*dd*)을 반환하고, 존재하지 않으면 해당 월의 마지막 날(<*dd*)을 반환한다. 또한, 연산 결과값이 **DATE** 타입의 표현 범위를 초과하는 경우, 에러를 반환한다.
@@ -188,9 +159,6 @@ ADD_MONTHS 함수
 		  add_months( cast( SYS_DATETIME  as date), 5)   add_months( cast( SYS_TIMESTAMP  as date), 5)
 		================================================================================
 		  07/03/2010                                     07/03/2010
-  
-CURDATE, CURRENT_DATE, CURRENT_DATE(), SYS_DATE, SYSDATE
-========================================================
 
 .. function:: CURDATE ()
 .. function:: CURRENT_DATE ()
@@ -217,9 +185,6 @@ CURDATE, CURRENT_DATE, CURRENT_DATE(), SYS_DATE, SYSDATE
 		   SYS_DATE +60
 		===============
 		   05/31/2010
-		   
-CURRENT_DATETIME, CURRENT_DATETIME(), NOW(), SYS_DATETIME, SYSDATETIME
-======================================================================
 
 .. function:: CURRENT_DATETIME ()
 .. function:: CURRENT_DATETIME
@@ -227,7 +192,7 @@ CURRENT_DATETIME, CURRENT_DATETIME(), NOW(), SYS_DATETIME, SYSDATETIME
 .. function:: SYS_DATETIME
 .. function:: SYSDATETIME
 
-	**CURRENT_DATETIME**, **CURRENT_DATETIME**(), **NOW**(), **SYS_DATETIME**, **SYSDATETIME** 는 동일하며, 현재 날짜를 **DATETIME** 타입으로 반환한다. 산술 연산의 단위는 밀리초(milli-sec)다. 테이블 생성 시 칼럼 초기값 설정을 위해 **DEFAULT** 속성을 정의하고 **SYS_DATETIME** 를 초기값으로 설정하면, 테이블 생성 시점의 타임스탬프 값이 기본값으로 지정된다. 즉, 데이터 **INSERT** 시점의 타임스탬프 값이 입력되지 않으므로 주의한다. 타임스탬프 값을 입력하려면 데이터 입력 시 **INSERT** 구문의 **VALUES** 에 **SYS_DATETIME** 값을 넣어야 한다.
+	**CURRENT_DATETIME**, **CURRENT_DATETIME**(), **NOW**(), **SYS_DATETIME**, **SYSDATETIME** 는 동일하며, 현재 날짜를 **DATETIME** 타입으로 반환한다. 산술 연산의 단위는 밀리초(milli-sec)다.
 
 	:rtype: DATETIME
 	
@@ -245,9 +210,6 @@ CURRENT_DATETIME, CURRENT_DATETIME(), NOW(), SYS_DATETIME, SYSDATETIME
 		  to_char( SYS_DATETIME +3600*1000, 'YYYY-MM-DD HH:MI', 'en_US')
 		======================
 		  '2010-02-04 04:08'
-  
-CURTIME(), CURRENT_TIME, CURRENT_TIME(), SYS_TIME, SYSTIME
-==========================================================
 
 .. function:: CURTIME ()
 .. function:: CURRENT_TIME
@@ -272,9 +234,6 @@ CURTIME(), CURRENT_TIME, CURRENT_TIME(), SYS_TIME, SYSTIME
 		   SYS_TIME +3600
 		=================
 		   05:37:34 PM
-   
-CURRENT_TIMESTAMP, CURRENT_TIMESTAMP(), SYS_TIMESTAMP, SYSTIMESTAMP, LOCALTIME, LOCATIME(), LOCALTIMESTAMP, LOCALTIMESTAMP()
-============================================================================================================================
 
 .. function:: CURRENT_TIMESTAMP
 .. function:: CURRENT_TIMESTAMP ()
@@ -286,8 +245,6 @@ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP(), SYS_TIMESTAMP, SYSTIMESTAMP, LOCALTIME, 
 .. function:: LOCALTIMESTAMP ()
 
 	CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP**(), **SYS_TIMESTAMP**, **SYSTIMESTAMP**, **LOCALTIME**, **LOCALTIME**(), **LOCALTIMESTAMP**, **LOCALTIMESTAMP**()는 동일하며, 현재 날짜와 시간을 **TIMESTAMP** 타입으로 반환한다. 산술 연산의 단위는 초(sec)다.
-
-	테이블 생성 시 칼럼 초기값 설정을 위해 **DEFAULT** 속성을 정의하고 **SYS_TIMESTAMP** 를 초기값으로 설정하면, 테이블 생성 시점의 타임스탬프 값이 기본값으로 지정된다. 즉, 데이터 **INSERT** 시점의 타임스탬프 값이 입력되지 않으므로 주의한다. 타임스탬프 값을 입력하려면 데이터 입력 시 **INSERT** 구문의 **VALUES** 에 **SYS_TIMESTAMP** 값을 넣어야 한다.
 
 	:rtype: TIMESTAMP
 	
@@ -304,9 +261,6 @@ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP(), SYS_TIMESTAMP, SYSTIMESTAMP, LOCALTIME, 
 		 SYS_TIMESTAMP +3600
 		===========================
 		  08:02:42 PM 04/01/2010
-  
-DATE 함수
-=========
 
 .. function:: DATE (date)
 
@@ -333,9 +287,6 @@ DATE 함수
 		 date('0000-00-00 00:00:00')
 		===============================
 		 '00/00/0000'
- 
-DATEDIFF 함수
-=============
 
 .. function:: DATEDIFF (date1, date2)
 
@@ -355,9 +306,6 @@ DATEDIFF 함수
 		 
 		SELECT DATEDIFF('0000-00-00 00:00:00', '2010-2-28 23:59:59');
 		ERROR: Conversion error in date format.
-
-DATE_SUB(), SUBDATE()
-=====================
 
 .. function:: DATE_SUB (date, INTERVAL expr unit)
 .. function:: SUBDATE(date, INTERVAL expr unit)
@@ -394,9 +342,6 @@ DATE_SUB(), SUBDATE()
 		 subdate('0001-01-01 00:00:00', 10)
 		==============================
 		 '12:00:00.000 AM 00/00/0000'
- 
-DAY 함수, DAYOFMONTH 함수
-=========================
 
 .. function:: DAY (date)
 .. function:: DAYOFMONTH (date)
@@ -425,9 +370,6 @@ DAY 함수, DAYOFMONTH 함수
 		====================================
 										   0
 
-DAYOFWEEK 함수
-==============
-
 .. function:: DAYOFWEEK (date)
 
 	**DAYOFWEEK** 함수는 지정된 인자로부터 1~7 범위의 요일(1: 일요일, 2: 월요일, ..., 7: 토요일)을 반환한다. 요일 인덱스는 ODBC 표준과 같다. 인자로 **DATE**, **TIMESTAMP**, **DATETIME** 타입을 지정할 수 있으며, **INTEGER** 타입을 반환한다.
@@ -452,9 +394,6 @@ DAYOFWEEK 함수
 		SELECT DAYOFWEEK('0000-00-00');
 		ERROR: Conversion error in date format.
 
-DAYOFYEAR 함수
-==============
-
 .. function:: DAYOFYEAR (date)
 
 	**DAYOFYEAR** 함수는 지정된 인자로부터 1~366 범위의 일(day of year)을 반환한다. 인자로 **DATE**, **TIMESTAMP**, **DATETIME** 타입을 지정할 수 있으며, **INTEGER** 타입을 반환한다.
@@ -478,9 +417,6 @@ DAYOFYEAR 함수
 		 
 		SELECT DAYOFYEAR('0000-00-00');
 		ERROR: Conversion error in date format.
-
-EXTRACT 연산자
-==============
 
 .. function:: EXTRACT ( field FROM date-time_argument )
 
@@ -515,9 +451,6 @@ EXTRACT 연산자
 		==========================================
 												 0
 
-FROM_DAYS 함수
-==============
-
 .. function:: FROM_DAYS (N)
 
 	**FROM_DAYS** 함수는 **INTEGER** 타입을 인자로 입력하면 **DATE** 타입의 날짜를 반환한다.
@@ -527,7 +460,6 @@ FROM_DAYS 함수
 	인자로 0~3,652,424 범위의 정수를 입력할 수 있다. 0~365 범위의 값을 인자로 입력하면 0을 반환한다. 최대값인 3,652,424는 9999년의 마지막 날을 의미한다.
 
 	:param N: 0~3,652,424 범위의 정수
-    이 지정된 경우에는 **NULL** 값이 반환된다.
 	:rtype: DATE
 
 	.. code-block:: sql
@@ -551,9 +483,6 @@ FROM_DAYS 함수
 		   from_days(0)
 		===============
 			00/00/0000
-	
-FROM_UNIXTIME 함수
-==================
 
 .. function:: FROM_UNIXTIME ( unix_timestamp[, format] )
 
@@ -595,9 +524,6 @@ FROM_UNIXTIME 함수
 		   from_unixtime(0)
 		===========================
 		   12:00:00 AM 00/00/0000
-   
-HOUR 함수
-=========
 
 .. function:: HOUR (time)
 
@@ -622,9 +548,6 @@ HOUR 함수
 		   time(datetime '2010-01-01 12:34:56')
 		======================
 						 12
-
-LAST_DAY 함수
-=============
 
 .. function:: LAST_DAY ( date_argument )
 
@@ -651,9 +574,6 @@ LAST_DAY 함수
 		 
 		SELECT LAST_DAY('0000-00-00');
 		ERROR: Conversion error in date format.
-
-MAKEDATE 함수
-=============
 
 .. function:: MAKEDATE (year, dayofyear)
 
@@ -695,9 +615,6 @@ MAKEDATE 함수
 		SELECT MAKEDATE(0,0);
 		ERROR: Conversion error in date format.
 
-MAKETIME 함수
-=============
-
 .. function:: MAKETIME(hour, min, sec)
 
 	**MAKETIME** 함수는 지정된 인자로부터 시간을 AM/PM 형태로 반환한다. 인자로 시각, 분, 초에 해당하는 **INTEGER** 타입을 지정할 수 있으며, **DATETIME** 타입을 반환한다.
@@ -723,9 +640,6 @@ MAKETIME 함수
 		 
 		ERROR: Conversion error in time format.
 
-MINUTE 함수
-===========
-
 .. function:: MINUTE (time)
 
 	**MINUTE** 함수는 지정된 인자로부터 0~59 범위의 분(minute)을 반환한다. 인자로 **TIME**, **TIMESTAMP**, **DATETIME** 타입을 지정할 수 있으며, **INTEGER** 타입을 반환한다.
@@ -749,9 +663,6 @@ MINUTE 함수
 		   minute('2010-01-01 12:34:56.7890')
 		=====================================
 										   34
-
-MONTH 함수
-==========
 
 .. function:: MONTH (date)
 
@@ -783,9 +694,6 @@ MONTH 함수
 		   month('0000-00-00')
 		======================
 							 0
-
-MONTHS_BETWEEN 함수
-===================
 
 .. function:: MONTHS_BETWEEN (date_argument, date_argument)
 
@@ -820,9 +728,6 @@ MONTHS_BETWEEN 함수
 		===================================================================
 													 1.332258064516129e+001
 
-QUARTER 함수
-============
-
 .. function:: QUARTER (date)
 
 	**QUARTER** 함수는 지정된 인자로부터 1~4 범위의 분기(quarter)를 반환한다. 인자로 **DATE**, **TIMESTAMP**, **DATETIME** 타입을 지정할 수 있으며, **INTEGER** 타입을 반환한다.
@@ -846,9 +751,6 @@ QUARTER 함수
 		  quarter('2010-05-05 12:34:56.7890')
 		==================================
 									  2
-
-SEC_TO_TIME 함수
-================
 
 .. function:: SEC_TO_TIME (second)
 
@@ -874,9 +776,6 @@ SEC_TO_TIME 함수
 		=====================
 		  11:59:59 PM
 
-SECOND 함수
-===========
-
 .. function:: SECOND (time)
 
 	**SECOND** 함수는 지정된 인자로부터 0~59 범위의 초(second)를 반환한다. 인자로 **TIME**, **TIMESTAMP**, **DATETIME** 타입을 지정할 수 있으며, **INTEGER** 타입을 반환한다.
@@ -901,9 +800,6 @@ SECOND 함수
 		=====================================
 										   56
 
-TIME 함수
-=========
-
 .. function:: TIME (time)
 
 	**TIME** 함수는 지정된 인자로부터 시간 부분을 추출하여 'HH:MM:SS' 형태의 **VARCHAR** 타입 문자열을 반환한다. 인자로 **TIME**, **TIMESTAMP**, **DATETIME** 타입을 지정할 수 있다.
@@ -927,9 +823,6 @@ TIME 함수
 		   time(datetime '2010-01-01 12:34:56')
 		======================
 		  '12:34:56'
-  
-TIME_TO_SEC 함수
-================
 
 .. function:: TIME_TO_SEC (time)
 
@@ -955,9 +848,6 @@ TIME_TO_SEC 함수
 		==========================================
 											 82800
 
-TIMEDIFF 함수
-=============
-
 .. function:: TIMEDIFF (expr1, expr2)
 
 	**TIMEDIFF** 함수는 지정된 두 개의 시간 인자의 시간 차를 반환한다. 날짜/시간 타입인 **TIME**, **DATE**, **TIMESTAMP**, **DATETIME** 타입을 인자로 입력할 수 있으며, 두 인자의 데이터 타입은 같아야 한다. **TIME** 타입을 반환하며, 따라서 두 인자의 시간 차이는 00:00:00~23:59:59 범위여야 한다. 이 범위를 벗어나면 에러를 반환한다.
@@ -981,9 +871,6 @@ TIMEDIFF 함수
 		   timediff('2010-01-01 06:53:45', '2010-01-01 03:04:05')
 		=========================================================
 		  03:49:40 AM              
-
-TIMESTAMP 함수
-==============
 
 .. function:: TIMESTAMP (date [,time])
 
@@ -1011,9 +898,6 @@ TIMESTAMP 함수
 		 timestamp('13:10:30 12/25/2008')
 		===================================
 		  01:10:30.000 PM 12/25/2008
-
-TO_DAYS 함수
-============
 
 .. function:: TO_DAYS (date)
 
@@ -1050,9 +934,6 @@ TO_DAYS 함수
 		========================
 						 3652424
 
-UNIX_TIMESTAMP 함수
-===================
-
 .. function:: UNIX_TIMESTAMP ( [date] )
 
 	**UNIX_TIMESTAMP** 함수는 인자를 생략할 수 있으며, 인자를 생략하면 '1970-01-01 00:00:00' UTC 이후 현재 시스템 날짜/시간까지의 초 단위 시간 간격(interval)을 **INTEGER** 타입의 리턴 값을 반환한다. *date* 인자가 지정되면 '1970-01-01 00:00:00' UTC 이후 지정된 날짜/시간까지의 초 단위 시간 간격을 반환한다.
@@ -1074,9 +955,6 @@ UNIX_TIMESTAMP 함수
 		========================================
 											   0
 
-UTC_DATE 함수
-=============
-
 .. function:: UTC_DATE ()
 
 	**UTC_DATE** 함수는 UTC 날짜를 'YYYY-MM-DD' 형태로 반환한다.
@@ -1089,10 +967,6 @@ UTC_DATE 함수
 		  utc_date()
 		==============
 		  01/12/2011
-  
-
-UTC_TIME 함수
-=============
 
 .. function:: UTC_TIME ()
 
@@ -1106,9 +980,6 @@ UTC_TIME 함수
 		  utc_time()
 		==============
 		  10:35:52 AM
-
-WEEK 함수
-=========
 
 .. function:: WEEK (date[, mode])
 
@@ -1175,9 +1046,6 @@ WEEK 함수
 		====================================
 										  14
 
-WEEKDAY 함수
-============
-
 .. function:: WEEKDAY (date)
 
 	**WEEKDAY** 함수는 지정된 인자로부터 0~6 범위의 요일(0: 월요일, 1: 화요일, ..., 6: 일요일)을 반환한다. 인자로 **DATE**, **TIMESTAMP**, **DATETIME** 타입을 지정할 수 있으며, **INTEGER** 타입을 반환한다.
@@ -1196,9 +1064,6 @@ WEEKDAY 함수
 		   weekday('2010-09-09 13:16:00')
 		=================================
 										3
-
-YEAR 함수
-=========
 
 .. function:: YEAR (date)
 

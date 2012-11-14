@@ -30,9 +30,6 @@
 *   <*query_partition_clause*> : 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
 *   <*order_by_clause*> : <*query_partition_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*query_partition_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 컬럼 값을 대상으로 함수를 적용하여 계산한다.
 
-AVG 함수
-========
-
 .. function:: AVG ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
 	**AVG** 함수는 모든 행에 대한 연산식 값의 산술 평균을 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 평균을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해서 평균을 구한다.
@@ -94,9 +91,6 @@ AVG 함수
 				 1992  'AUT'                           0     1.000000000000000e+00
 				 1988  'AUT'                           1     1.000000000000000e+00
 
-COUNT 함수
-==========
-
 .. function:: COUNT ( * | [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
 	**COUNT** 함수는 질의문이 반환하는 결과 행들의 개수를 반환한다. 별표(*)를 지정하면 조건을 만족하는 모든 행(**NULL** 값을 가지는 행 포함)의 개수를 반환하며, **DISTINCT** 또는 **UNIQUE** 키워드를 연산식 앞에 지정하면 중복을 제거한 후 유일한 값을 가지는 행(**NULL** 값을 가지는 행은 포함하지 않음)의 개수만 반환한다. 따라서, 반환되는 값은 항상 정수이며, **NULL** 은 반환되지 않는다.
@@ -146,9 +140,6 @@ COUNT 함수
 		  'AUT'                 'Shooting'            'Planer Christian'             17
 		  'AUT'                 'Swimming'            'Rogan Markus'                 18
  
-DENSE_RANK 함수
-===============
-
 .. function:: DENSE_RANK() OVER ( [partition_by_clause] [order_by_clause] )
 
 	**PARTITION BY** 절에 의한 칼럼 값의 그룹에서 값의 순위를 계산하여 **INTEGER** 로 출력하며, 분석 함수로만 사용된다. 공동 순위가 존재해도 그 다음 순위는 1을 더한다. 예를 들어, 13위에 해당하는 행이 3개여도 그 다음 행의 순위는 16위가 아니라 14위가 된다. 반면, :func:`RANK` 함수는 이와 달리 공동 순위의 개수만큼을 더해 다음 순위의 값을 계산한다.
@@ -214,9 +205,6 @@ DENSE_RANK 함수
 				 2004  'LAT'                           0           17
 				 2004  'PRK'                           0           17
 
-GROUP_CONCAT 함수
-=================
-
 .. function:: GROUP_CONCAT([DISTINCT] {col | expression} [ORDER BY {col | unsigned_int} [ASC | DESC]] [SEPARATOR str_val])
 
 	**GROUP_CONCAT** 함수는 그룹에서 **NULL** 이 아닌 값들을 연결하여 결과 문자열을 **VARCHAR** 타입으로 반환한다. 질의 결과 행이 없거나 **NULL** 값만 있으면 **NULL** 을 반환한다. 
@@ -258,9 +246,6 @@ GROUP_CONCAT 함수
 		  group_concat(i*2+1 order by 1 separator '')
 		======================
 		  '35791113'
-  
-MAX 함수
-========
 
 .. function:: MAX ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
@@ -301,9 +286,6 @@ MAX 함수
 				 2000  'AUT'                           2            2
 				 2004  'AUT'                           2            2
 
-MIN 함수
-========
-
 .. function:: MIN ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
 	**MIN** 함수는 모든 행에 대하여 연산식 값 중 최소?값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 앞에 나오는 문자열이 최소 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 작은 값이 최소 값이다.
@@ -342,9 +324,6 @@ MIN 함수
 				 1996  'AUT'                           0            0
 				 2000  'AUT'                           2            0
 				 2004  'AUT'                           2            0
-
-RANK 함수
-=========
 
 .. function:: RANK() OVER ( [partition_by_clause] [order_by_clause] )
 
@@ -411,9 +390,6 @@ RANK 함수
 				 2004  'LAT'                           0           57
 				 2004  'PRK'                           0           57
 
-ROW_NUMBER 함수
-===============
-
 .. function:: ROW_NUMBER() OVER ( [partition_by_clause] [order_by_clause] )
 
 	**PARTITION BY** 절에 의한 칼럼 값의 그룹에서 각 행에 고유한 일련번호를 1부터 순서대로 부여하여 **INTEGER** 로 출력하며, 분석 함수로만 사용된다.
@@ -475,9 +451,6 @@ ROW_NUMBER 함수
 				 2004  'VIN'                           0          200
 				 2004  'YEM'                           0          201
 				 2004  'ZAM'                           0          202
-
-STDDEV 함수, STDDEV_POP 함수
-============================
 
 .. function:: STDDEV( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL] expression )
 .. function:: STDDEV_POP( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL] expression )
@@ -549,9 +522,6 @@ STDDEV 함수, STDDEV_POP 함수
 					3  'Sara'                   4.300000000000000e+01     2.085185843036539e+01
 					3  'Wane'                   9.900000000000000e+01     2.085185843036539e+01
 
-STDDEV_SAMP 함수
-================
-
 .. function:: STDDEV_SAMP( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL] expression )
 
 	**STDDEV_SAMP** 함수는 표본 표준편차를 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 표준편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 표준편차를 구한다.
@@ -618,9 +588,6 @@ STDDEV_SAMP 함수
 					3  'Lee'                    9.300000000000000e+01     2.331308645374953e+01
 					3  'Sara'                   4.300000000000000e+01     2.331308645374953e+01
 					3  'Wane'                   9.900000000000000e+01     2.331308645374953e+01
-
-SUM 함수
-========
 
 .. function:: SUM ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
@@ -694,9 +661,6 @@ SUM 함수
 				 1992  'AUT'                           0            5
 				 1988  'AUT'                           1            5
 
-VAR_POP 함수, VARIANCE 함수
-===========================
-
 .. function:: VAR_POP( [ DISTINCT | UNIQUE | ALL] expression )
 .. function:: VARIANCE( [ DISTINCT | UNIQUE | ALL] expression )
 
@@ -767,9 +731,6 @@ VAR_POP 함수, VARIANCE 함수
 					3  'Lee'                    9.300000000000000e+01     4.348000000000002e+02
 					3  'Sara'                   4.300000000000000e+01     4.348000000000002e+02
 					3  'Wane'                   9.900000000000000e+01     4.348000000000002e+02
-
-VAR_SAMP 함수
-=============
 
 .. function:: VAR_SAMP( [ DISTINCT | UNIQUE | ALL] expression )
 

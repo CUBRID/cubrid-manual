@@ -511,6 +511,7 @@ EXISTS 조건식
 	There are no results.
 
 IN 조건식
+=========
 
 **IN** 조건식은 왼쪽의 단일 데이터 값이 오른쪽에 지정된 리스트 내에 포함되어 있는지 비교한다. 즉, 왼쪽의 단일 데이터 값이 오른쪽에 지정된 표현식의 원소이면 **TRUE** 를 반환한다. **IN** 키워드 앞에 **NOT** 이 있으면 **IN** 연산의 결과에 **NOT** 연산을 수행하여 결과를 반환한다. ::
 
@@ -581,14 +582,14 @@ ISNULL 함수
 	:param expression: 단일 값을 가지는 칼럼, 경로 표현식(예: *tbl_name.col_name*), 상수 값 또는 단일 값을 생성하는 산술 함수를 입력한다.
 	:rtype: INT
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	--Using ISNULL function to select rows with NULL value
-	SELECT * FROM condition_tbl WHERE ISNULL(salary);
-			   id  name                  dept_name                  salary
-	======================================================================
-				7  'Brown     '          'account'                    NULL
-			
+		--Using ISNULL function to select rows with NULL value
+		SELECT * FROM condition_tbl WHERE ISNULL(salary);
+				   id  name                  dept_name                  salary
+		======================================================================
+					7  'Brown     '          'account'                    NULL
+
 LIKE 조건식
 ===========
 

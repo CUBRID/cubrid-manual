@@ -2,9 +2,6 @@
 정보 함수
 *********
 
-CURRENT_USER, USER
-==================
-
 .. function:: CURRENT_USER
 .. function:: USER
 
@@ -37,9 +34,6 @@ CURRENT_USER, USER
 		  'ALMOST_DBA_USER'            NULL  db_password
 		  'SELECT_ONLY_USER2'          NULL  NULL
 
-DATABASE 함수, SCHEMA 함수
-==========================
-
 .. function:: DATABASE()
 .. function:: SCHEMA()
 
@@ -53,9 +47,6 @@ DATABASE 함수, SCHEMA 함수
 		   database()            schema()
 		============================================
 		  'demodb'              'demodb'
-
-DEFAULT, DEFAULT 함수
-=====================
 
 .. function:: DEFAULT (column_name)
 .. function:: DEFAULT
@@ -81,9 +72,6 @@ DEFAULT, DEFAULT 함수
 		UPDATE info_tbl SET id = DEFAULT WHERE id IS NULL;
 		DELETE FROM info_tbl WHERE id = DEFAULT(id);
 		INSERT INTO info_tbl VALUES (DEFAULT,'d');
-
-INDEX_CARDINALITY 함수
-======================
 
 .. function:: INDEX_CARDINALITY(table, index, key_pos)
 
@@ -140,9 +128,6 @@ INDEX_CARDINALITY 함수
 		=============================================
 												 NULL
 
-INET_ATON 함수
-==============
-
 .. function:: INET_ATON( ip_string )
 
 	**INET_ATON** 함수는 IPv4 주소의 문자열을 입력받아 이에 해당하는 숫자를 반환한다. 'a.b.c.d' 형식의 IP 주소 문자열을 입력하면 :math:a * 256 ^ 3 + b * 256 ^ 2 + c * 256 + d가 반환된다. 반환 타입은 **BIGINT** 이다.
@@ -160,9 +145,6 @@ INET_ATON 함수
 		============================
 						  3232235530
 
-INET_NTOA 함수
-==============
-
 .. function:: INET_NTOA( expr )
 
 	**INET_NTOA** 함수는 숫자를 입력받아 IPv4 주소 형식의 문자열을 반환한다. 반환 타입은 **VARCHAR** 이다.
@@ -177,9 +159,6 @@ INET_NTOA 함수
 		   inet_ntoa(3232235530)
 		======================
 		  '192.168.0.10'
-
-LAST_INSERT_ID 함수
-===================
 
 .. function:: LAST_INSERT_ID()
 
@@ -241,9 +220,6 @@ LAST_INSERT_ID 함수
 							 3
 							 4
 
-LIST_DBS 함수
-=============
-
 .. function:: LIST_DBS()
 
 	**LIST_DBS** 함수는 CUBRID 데이터베이스 서버에 존재하는 모든 데이터베이스 리스트를 공백 문자로 구분하여 출력한다.
@@ -256,9 +232,6 @@ LIST_DBS 함수
 		  dbs
 		======================
 		  'testdb demodb'
-
-ROW_COUNT 함수
-==============
 
 .. function:: ROW_COUNT()
 
@@ -286,9 +259,6 @@ ROW_COUNT 함수
 		   row_count()
 		===============
 					  4
-
-USER 함수, SYSTEM_USER 함수
-===========================
 
 .. function:: USER()
 .. function:: SYSTEM_USER()
@@ -321,9 +291,6 @@ USER 함수, SYSTEM_USER 함수
 		  'SELECT_ONLY_USER'           NULL  db_password
 		  'ALMOST_DBA_USER'            NULL  db_password
 		  'SELECT_ONLY_USER2'          NULL  NULL
-
-VERSION 함수
-============
 
 .. function:: VERSION()
 

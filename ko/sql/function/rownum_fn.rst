@@ -2,9 +2,6 @@
 ROWNUM 함수
 ***********
 
-ROWNUM/INST_NUM() 함수
-======================
-
 .. function:: ROWNUM
 .. function:: INST_NUM ()
 
@@ -64,9 +61,6 @@ ROWNUM/INST_NUM() 함수
 					3  'ZAI'
 					4  'YMD'
 
-GROUPBY_NUM() 함수
-==================
-
 .. function:: GROUPBY_NUM ()
 
 	**GROUPBY_NUM()** 함수는 **ROWNUM** 혹은 **INST_NUM()** 함수와 함께, 결과 행들의 개수를 제한하는 목적으로 사용된다. 단, 차이점은 **GROUP BY** ... **HAVING** 절 뒤에 결합되어 사용되며, 이미 정렬을 수행한 결과에 대해 순서를 부여한다는 점이다. 또한, **INST_NUM()** 함수는 스칼라(scalar) 함수이지만, **GROUPBY_NUM()** 함수는 집계 함수의 일종이다. 즉, **GROUP BY** 절이 포함된 **SELECT** 문장에서 조건 절에 **ROWNUM** 을 이용하여 일부 결과 행들만 조회하는 경우, **ROWNUM** 이 먼저 적용된 후 **GROUP BY** 에 의한 그룹 정렬이 수행된다. 반면, **GROUPBY_NUM()** 함수를 이용하여 일부 결과 행들만 조회하는 경우, **GROUP BY** 에 의한 그룹 정렬이 이루어진 결과에 대해서 **ROWNUM** 이 적용된다.
@@ -95,9 +89,6 @@ GROUPBY_NUM() 함수
 		===================================
 				 2000  '03:41.0'
 				 2004  '01:45.0'
-
-ORDERBY_NUM() 함수
-==================
 
 .. function:: ORDERBY_NUM ()
 

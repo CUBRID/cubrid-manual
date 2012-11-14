@@ -2,9 +2,6 @@
 클릭 카운터 함수
 ****************
 
-INCR과 DECR 함수
-================
-
 .. function:: INCR (path_expression)
 .. function:: DECR (path_expression)
 

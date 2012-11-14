@@ -46,9 +46,9 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 	 'CUBRID'||','+null
 	======================
 	  NULL
-  
-ASCII 함수
-==========
+
+문자열 함수
+===========  
 
 .. function:: ASCII (str)
 
@@ -64,9 +64,6 @@ ASCII 함수
 		SELECT ASCII('ab');
 		97
 	
-BIN 함수
-========
-
 .. function:: BIN (n)
 
 	**BIN** 함수는 **BIGINT** 타입의 숫자를 이진 문자열로 표현한다. 입력 인자가 **NULL** 이면 **NULL** 을 반환한다.
@@ -78,9 +75,6 @@ BIN 함수
    
 		SELECT BIN(12);
 		'1100'
-
-BIT_LENGTH 함수
-===============
 
 .. function:: BIT_LENGTH (string)
 
@@ -126,9 +120,6 @@ BIT_LENGTH 함수
 		8                   40                       8                       9
 		NULL                56                      24                       9
 		8                   40                      32                       9
-
-CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH 함수
-===================================================
 
 .. function:: CHAR_LENGTH (string)
 .. function:: CHARACTER_LENGTH (string)
@@ -182,9 +173,6 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH 함수
 		NULL                  5                        1             1
 		1                     5                        2             2
 
-CHR 함수
-========
-
 .. function:: CHR (number_operand)
 
 	**CHR** 함수는 인자로 지정된 연산식의 리턴 값에 대응하는 문자를 반환하는 함수이다. 문자 코드 범위를 초과하면 '0'을 반환한다.
@@ -199,9 +187,6 @@ CHR 함수
 		======================
 		  'DB'
   
-CONCAT 함수
-===========
-
 .. function:: CONCAT (string1, string2 [,string3 [, ... [, stringN]...]])
 
 	**CONCAT** 함수는 두 개 이상의 인자가 지정되며, 모든 인자 값을 연결한 문자열을 결과로 반환한다. 지정 가능한 인자의 개수는 제한이 없으며, 문자열 타입이 아닌 인자가 지정되는 경우 자동으로 타입 변환이 수행된다. 인자 중에 **NULL** 이 포함되면 결과로 **NULL** 을 반환한다.
@@ -231,9 +216,6 @@ CONCAT 함수
 		======================
 		  '20083.0'
 		  
-CONCAT_WS 함수
-==============
-
 .. function:: CONCAT_WS (string1, string2 [,string3 [, ... [, stringN]...]])
 
 	**CONCAT_WS** 함수는 두 개 이상의 인자가 지정되며, 첫 번째 인자 값을 구분자로 이용하여 나머지 인자 값을 연결한 문자열을 결과로 반환한다. 지정 가능한 인자의 개수에는 제한이 없으며, 문자열 타입이 아닌 인자가 지정되는 경우 자동으로 타입 변환이 수행된다. 만약, 구분자로 **NULL** 이 지정되면 **NULL** 을 반환하고, 구분자 다음에 위치하는 나머지 인자에 **NULL** 이 지정되면 이를 무시하고 문자열을 반환한다.
@@ -259,9 +241,6 @@ CONCAT_WS 함수
 		concat_ws(' ', 2008, 3.0)
 		======================
 		  '2008 3.0'
-
-ELT 함수
-========
 
 .. function:: ELT (N, string1, string2, ... )
 
@@ -306,9 +285,6 @@ ELT 함수
 		 
 		ERROR: Cannot coerce value of domain "character" to domain "bigint".
 
-FIELD 함수
-==========
-
 .. function:: FIELD ( search_string, string1 [,string2 [, ... [, stringN]...]])
 
 	**FIELD** 함수는 *string1* , *string2* 등의 인자 중 *search_string* 과 동일한 인자의 위치 인덱스 값(포지션)을 반환한다. *search_string* 과 동일한 인자가 없으면 0을 반환한다. *search_string* 이 **NULL** 이면 다른 인자와 비교 연산을 수행할 수 없으므로 0을 반환한다.
@@ -347,9 +323,6 @@ FIELD 함수
 		==============================================
 													 3
 
-FIND_IN_SET 함수
-================
-
 .. function:: FIND_IN_SET (str, strlist)
 
 	**FIND_IN_SET** 함수는 여러 개의 문자열을 쉼표(,)로 연결하여 구성한 문자열 리스트 *strlist* 에서 특정 문자열 *str* 이 존재하면 *str* 의 위치를 반환한다. *strlist* 에 *str* 이 존재하지 않거나 *strlist* 가 빈 문자열이면 0을 반환한다. 둘 중 하나의 인자가 **NULL** 이면 **NULL** 을 반환한다. *str* 이 쉼표를 포함하면 제대로 동작하지 않는다.
@@ -362,9 +335,6 @@ FIND_IN_SET 함수
 	
 		SELECT FIND_IN_SET('b','a,b,c,d');
 		2
-
-INSERT 함수
-===========
 
 .. function:: INSERT ( str, pos, len, string )
 
@@ -407,9 +377,6 @@ INSERT 함수
 		  insert('cubrid', 3, -1, 'db')
 		======================
 		  'cudb'
-
-INSTR 함수
-==========
 
 .. function:: INSTR ( string , substring [, position] )
 
@@ -463,9 +430,6 @@ INSTR 함수
 		====================================
 										   7
 
-LCASE, LOWER 함수
-=================
-
 .. function:: LCASE (string)
 .. function:: LOWER (string)
 
@@ -491,9 +455,6 @@ LCASE, LOWER 함수
 		======================
 		  'cubrid'
   
-LEFT 함수
-=========
-
 .. function:: LEFT ( string , length )
 
 	**LEFT** 함수는 *string* 의 가장 왼쪽에서부터 *length* 개의 문자를 반환한다. 어느 하나의 인자가 **NULL** 인 경우 **NULL** 이 반환되고, *string* 길이보다 큰 값이나 음수가 *length* 로 지정되면 문자열 전체를 반환한다. 문자열의 가장 오른쪽에서부터 *length* 길이의 문자열을 추출하려면 :func:`RIGHT` 를 사용한다.
@@ -514,9 +475,6 @@ LEFT 함수
 		======================
 		  'CUBRID'
   
-LOCATE 함수
-===========
-
 .. function:: LOCATE ( substring, string [, position] )
 
 	**LOCATE** 함수는 문자열 *string* 내에서 문자열 *substring* 의 위치 인덱스 값을 반환한다. 세 번째 인자 *position* 은 생략할 수 있으며, 이 인자가 지정되면 해당 위치에서부터 *substring* 을 검색하여 처음 검색한 위치 인덱스 값을 반환한다. *substring* 이 *string* 내에서 검색되지 않으면 0을 반환한다. **LOCATE** 함수는 :func:`POSITION` 와 유사하게 동작하지만, 비트열에 대해서는 **LOCATE** 함수를 적용할 수 없다.
@@ -551,9 +509,6 @@ LOCATE 함수
 		 locate('ABC', '12345abcdeabcde')
 		=================================
 										0
-
-LPAD 함수
-=========
 
 .. function:: LPAD ( char1, n, [, char2 ] )
 
@@ -607,9 +562,6 @@ LPAD 함수
 		======================
 		  '????큐브리드'
 
-LTRIM 함수
-==========
-
 .. function:: LTRIM ( string [, trim_string])
 
 	**LTRIM** 함수는 문자열의 왼쪽(앞 부분)에 위치한 특정 문자를 제거한다.
@@ -638,9 +590,6 @@ LTRIM 함수
 		======================
 		  'Olympiciiiii'
   
-MID 함수
-========
-
 .. function:: MID ( string, position, substring_length )
 
 	**MID** 함수는 문자열 *string* 내의 *position* 위치로부터 *substring_length* 길이의 문자열을 추출하여 반환한다. 만약, *position* 값으로 음수가 지정되면, 문자열의 끝에서부터 역방향으로 위치를 산정한다. *substring_length* 는 생략할 수 없으며, 음수가 지정되는 경우 이를 0으로 간주하여 공백 문자열을 반환한다.
@@ -680,9 +629,6 @@ MID 함수
 		  mid(a, -6, 4)         substr(a, -6, 4)      substring(a from -6 for 4)
 		==================================================================
 		  'eabc'                'eabc'                '1234'
-
-OCTET_LENGTH 함수
-=================
 
 .. function:: OCTET_LENGTH ( string )
 
@@ -728,9 +674,6 @@ OCTET_LENGTH 함수
 		1                      5                         1                       2
 		NULL                   7                         3                       2
 		1                      7                         4                       2
-
-POSITION 함수
-=============
 
 .. function:: POSITION ( substring IN string )
 
@@ -780,9 +723,6 @@ POSITION 함수
 		=================================
 										5
 
-REPEAT 함수
-===========
-
 .. function:: REPEAT( string, count )
 
 	**REPEAT** 함수는 입력 문자열에 대해 반복 횟수만큼의 문자열을 반환한다. 리턴 값은 **VARCHAR** 타입이다. 문자열의 최대 길이는 33,554,432이며, 이를 초과하면 **NULL** 을 반환한다. 입력 인자 중 하나가 **NULL** 이면 **NULL** 을 반환한다.
@@ -810,9 +750,6 @@ REPEAT 함수
 		 
 		SELECT REPEAT('cubrid','a');
 		ERROR: Cannot coerce value of domain "character" to domain "integer".
-
-REPLACE 함수
-============
 
 .. function:: REPLACE ( string, search_string [, replacement_string ] )
 
@@ -842,9 +779,6 @@ REPLACE 함수
 		replace('12345abcdeabcde', 'abcde')
 		======================
 		  '12345'
-  
-REVERSE 함수
-============
 
 .. function:: REVERSE( string )
 
@@ -859,9 +793,6 @@ REVERSE 함수
 		 reverse('CUBRID')
 		======================
 		  'DIRBUC'
-  
-RIGHT 함수
-==========
 
 .. function:: RIGHT ( string , length )
 
@@ -882,9 +813,6 @@ RIGHT 함수
 		 right('CUBRID', 10)
 		======================
 		  'CUBRID'
-
-RPAD 함수
-=========
 
 .. function:: RPAD( char1, n, [, char2 ] ) 
 
@@ -938,9 +866,6 @@ RPAD 함수
 		 rpad('',  char_length('')+4, '?')
 		======================
 		  '큐브리드????'
-  
-RTRIM 함수
-==========
 
 .. function:: RTRIM ( string [, trim_string])
 
@@ -968,9 +893,6 @@ RTRIM 함수
 		 rtrim('iiiiiOlympiciiiii', 'i')
 		======================
 		  'iiiiiOlympic'
-  
-SPACE 함수
-==========
 
 .. function:: SPACE (N)
 
@@ -1006,9 +928,6 @@ SPACE 함수
 		 
 		ERROR: Cannot coerce value of domain "character" to domain "bigint".
 
-STRCMP 함수
-===========
-
 .. function:: STRCMP( string1 , string2 )
 
 	**STRCMP** 함수는 두 개의 문자열 *string1*, *string2* 을 비교하여 동일하면?0을 반환하고, *string1* 이 더 크면 1을 반환하고, *string1* 이 더 작은 경우에는 -1을 반환한다. 어느 하나의 인자가 **NULL** 이면 **NULL** 을 반환한다.
@@ -1033,9 +952,6 @@ STRCMP 함수
 		 
 		=======================
 							  0
-
-SUBSTR 함수
-===========
 
 .. function:: SUBSTR ( string, position [, substring_length])
 
@@ -1077,9 +993,6 @@ SUBSTR 함수
 		 substr('12345가나다라마가나다라마', 11 , 4)
 		======================
 		  '가나다라'
-  
-SUBSTRING 함수
-==============
 
 .. function:: SUBSTRING ( string, position [, substring_length]), 
 .. function:: SUBSTRING ( string FROM position [FOR substring_length] )
@@ -1105,9 +1018,6 @@ SUBSTRING 함수
 		SELECT SUBSTRING('12345abcdeabcde', 6, -4), SUBSTR('12345abcdeabcde', 6, -4);
 		============================================
 		  'abcdeabcde'          NULL
-
-SUBSTRING_INDEX 함수
-====================
 
 .. function:: SUBSTRING_INDEX (string, delim, count)
 
@@ -1144,9 +1054,6 @@ SUBSTRING_INDEX 함수
 		  substring_index('www.cubrid.org', '.', 100)
 		======================
 		  'www.cubrid.org'
-  
-TRANSLATE 함수
-==============
 
 .. function:: TRANSLATE ( string, from_substring, to_substring )
 
@@ -1188,9 +1095,6 @@ TRANSLATE 함수
 		  translate('12345abcdeabcde', 'ABabc', '12345')
 		======================
 		  '12345345de345de'
-  
-TRIM 함수
-=========
 
 .. function:: TRIM ( [ [ LEADING | TRAILING | BOTH ] [ trim_string ] FROM ] string )
 
@@ -1234,9 +1138,6 @@ TRIM 함수
 		 trim(trailing 'i' from 'iiiiiOlympiciiiii')
 		======================
 		  'iiiiiOlympic'
-  
-UCASE, UPPER 함수
-=================
 
 .. function:: UCASE ( string )
 .. function:: UPPER ( string )

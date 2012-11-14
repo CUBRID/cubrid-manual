@@ -232,7 +232,7 @@ For details, see `Outputting Statistics Information of Server <#admin_admin_db_s
 
 ::
 
-SHOW EXEC STATISTICS [ALL]
+	SHOW EXEC STATISTICS [ALL]
 
 The following example shows the result of exeucting query in the *demodb* database.
 

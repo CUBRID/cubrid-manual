@@ -104,6 +104,8 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 
 	The following example shows how to retrieve the number of Olympic Games that have a mascot in the *demodb* database.
 
+	.. code-block:: sql
+
 		SELECT COUNT(*)
 		FROM olympic
 		WHERE mascot IS NOT NULL; 

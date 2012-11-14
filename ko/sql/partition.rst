@@ -34,7 +34,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 * 숫자 관련 연산자 함수
 
-  +, -, *, /, :func:`MOD`, :func:`STRCAT`, :func:`FLOOR`, :func:`CEIL`, :func:`POWER`, :func:`ROUND`, :func:`ABS`, :func:`TRUNC`
+  +, -, \*, /, :func:`MOD`, :func:`STRCAT`, :func:`FLOOR`, :func:`CEIL`, :func:`POWER`, :func:`ROUND`, :func:`ABS`, :func:`TRUNC`
 
 * 문자열 관련 연산자 함수
 
@@ -254,7 +254,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 **주의 사항**
 
 *   분할의 개수를 감소시키는 재편성 결합만 가능하다.
-*   분할의 수를 늘리고자 하는 경우에는?영역 분할에서와 같은 **ALTER TABLE** ... **ADD PARTITION** 구문을 이용한다(자세한 내용은 `영역 분할 추가 <#syntax_syntax_partition_range_ad_5248>`_ 참조).
+*   분할의 수를 늘리고자 하는 경우에는 영역 분할에서와 같은 **ALTER TABLE** ... **ADD PARTITION** 구문을 이용한다(자세한 내용은 `영역 분할 추가 <#syntax_syntax_partition_range_ad_5248>`_ 참조).
 *   분할 재정의 후에 최소 1개 이상의 분할이 남아 있어야 한다.
 
 리스트 분할
@@ -293,7 +293,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 	INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
 	INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
-	INSERT INTO?athlete2 VALUES ('Moon Dae-Sung','Taekwondo');
+	INSERT INTO athlete2 VALUES ('Moon Dae-Sung','Taekwondo');
 	INSERT INTO athlete2 VALUES ('Cho In-Chul', 'Judo');
 	INSERT INTO athlete2 VALUES ('Hong Kil-Dong', 'Volleyball');
 
@@ -467,6 +467,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 분할 프루닝(partition pruning)은 검색 조건을 통해 데이터 검색 범위를 한정시키는 기능이다. 질의에서 필요한 데이터를 포함하고 있지 않은 분할은 검색 과정에서 제외시킨다. 이를 통해 디스크로부터 인출되는 데이터의 양과 처리 시간을 크게 줄이고 질의 성능 및 자원 사용률을 개선할 수 있다.
 
 .. note::
+
 	CUBRID 9.0 미만 버전에서 분할 프루닝은 질의 컴파일 단계에서 수행되었으나, CUBRID 9.0 이상 버전에서는 질의 실행 단계에 서버 단에서 수행된다. 따라서 기존보다 더 복잡하고 다양한 질의들에 대해서 분할 프루닝을 수행할 수 있지만, 분할 프루닝 질의에 대해 질의 계획 정보를 출력할 수 없으며 **ORDER BY SKIP** 최적화, **GROUP BY SKIP** 최적화를 지원하지 않는다.
 
 다음은 참가한 올림픽의 개최연도에 따라 영역 분할하는 *olympic2* 테이블을 생성하고 2000년도 시드니 올림픽 이후의 올림픽에 참가한 국가를 조회하는 질의이다. **WHERE** 절에서 분할 키에 대하여 상수 값과 동등 비교하거나 범위 비교하는 경우 분할 프루닝이 발생한다.

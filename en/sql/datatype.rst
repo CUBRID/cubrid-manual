@@ -121,11 +121,11 @@ NUMERIC/DECIMAL
 
 **Example** ::
 
-If you specify 12345.6789 as NUMERIC, 12346 is stored (it rounds to the first place after the decimal point since 0 is the default value of scale).
-If you specify 12345.6789 as NUMERIC(4), an error occurs (precision must be equal to or greater than the number of integer digits).
-If you declare NUMERIC(3,4), an error occurs (precision must be equal to or greater than the scale).
-If you specify 0.12345678 as NUMERIC(4,4), .1235 is stored (it rounds to the fifth place after the decimal point).
-If you specify -0.123456789 as NUMERIC(4,4), -.1235 is stored (it rounds to the fifth place after decimal point and then prefixes a minus (-) sign).
+	If you specify 12345.6789 as NUMERIC, 12346 is stored (it rounds to the first place after the decimal point since 0 is the default value of scale).
+	If you specify 12345.6789 as NUMERIC(4), an error occurs (precision must be equal to or greater than the number of integer digits).
+	If you declare NUMERIC(3,4), an error occurs (precision must be equal to or greater than the scale).
+	If you specify 0.12345678 as NUMERIC(4,4), .1235 is stored (it rounds to the fifth place after the decimal point).
+	If you specify -0.123456789 as NUMERIC(4,4), -.1235 is stored (it rounds to the fifth place after decimal point and then prefixes a minus (-) sign).
 
 FLOAT/REAL
 ----------
@@ -1100,7 +1100,7 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
 
   +------------+---------------------------------+
   | Type       | Value (Index Number/String)     |
-  +============+================================+
+  +============+=================================+
   | SHORT      | Index Number                    |
   +------------+---------------------------------+
   | INTEGER    | Index Number                    |

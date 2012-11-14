@@ -133,7 +133,7 @@ Java 소스 작성 및 컴파일
 
 .. code-block:: sql
 
-	csql> create function hello() return string	as language java name 'SpCubrid.HelloCubrid() return java.lang.String';
+	create function hello() return string	as language java name 'SpCubrid.HelloCubrid() return java.lang.String';
 
 Java 저장 함수/프로시저 호출
 ----------------------------
@@ -142,7 +142,7 @@ Java 저장 함수/프로시저 호출
 
 .. code-block:: sql
 
-	csql> call hello() into :Hello;
+	call hello() into :Hello;
 	
 	  Result
 	======================

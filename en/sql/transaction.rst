@@ -1125,7 +1125,7 @@ The following example shows that another transaction can read dirty data uncommi
 |                                                                           |   ===================================                                               |
 |                                                                           |            2008  'AUS'                                                              |
 +---------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
-| ::                                                                        | ::                                                                                  |
+| ::                                                                        |                                                                                     |
 |                                                                           |                                                                                     |
 |   csql> INSERT INTO isol3_tbl VALUES (2004, 'AUS');                       |                                                                                     |
 |   csql> INSERT INTO isol3_tbl VALUES (2000, 'NED');                       |                                                                                     |

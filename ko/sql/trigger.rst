@@ -133,7 +133,6 @@ CREATE TRIGGER
 *   테이블 트리거를 정의하는 이벤트 타입은 인스턴스 이벤트와 문장 이벤트가 있다.
 
 
-
 트리거 이벤트 타입
 ------------------
 
@@ -228,13 +227,13 @@ CREATE TRIGGER
 	IF obj.record * 1.20  < 500
 	.......
 
-다음은 조건 영역 내의 표현식에 **SELECT** 문을 사용한 예제이다. 예제의 트리거는 집계함수 **COUNT** (*)를 사용하는 **SELECT** 문을 사용하여 그 값과 상수를 비교한다. **SELECT** 문은 반드시 괄호로 싸여 있어야 하고, 표현식의 마지막에 위치해야 한다.
+다음은 조건 영역 내의 표현식에 **SELECT** 문을 사용한 예제이다. 예제의 트리거는 집계함수 **COUNT** (\*)를 사용하는 **SELECT** 문을 사용하여 그 값과 상수를 비교한다. **SELECT** 문은 반드시 괄호로 싸여 있어야 하고, 표현식의 마지막에 위치해야 한다.
 
 .. code-block:: sql
 
 	CREATE TRIGGER example
 	......
-	IF 1000 >  (SELECT COUNT( * ) FROM participant)
+	IF 1000 >  (SELECT COUNT(*) FROM participant)
 	......
 
 **주의 사항**
@@ -412,8 +411,6 @@ RENAME TRIGGER
 
 지연된 트리거의 조건 영역과 실행 영역을 취소한다. ::
 
-**구문**
-
 	DROP DEFERRED TRIGGER trigger_identifier [ ; ]
 
 	trigger_option :
@@ -445,7 +442,7 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 +------------------------------------------+------------------+
 | 이벤트                                   | 트리거 동작 순서 |
-+------------------------------------------+------------------+
++==========================================+==================+
 | REPLACE                                  | BEFORE DELETE >  |
 | 레코드가 삭제되고 삽입될 때              | AFTER DELETE >   |
 |                                          | BEFORE INSERT >  |

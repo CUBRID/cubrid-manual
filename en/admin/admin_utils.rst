@@ -71,7 +71,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 .. option:: --db-volume-size=SIZE
 
-	The **--db-volume-size** option specifies the size of the database volume that will be created first. The default value is  the value of the system parameter
+	This option specifies the size of the database volume that will be created first. The default value is  the value of the system parameter
 	**db_volume_size**, and the minimum value is 20M. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied.
 
 	The following example shows how to create a database named *testdb* and assign 512 MB to its first volume. ::
@@ -80,7 +80,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 .. option:: --db-page-size=SIZE
 
-	The **--db-page-size** option specifies the size of the database page; the minimum value is 4K and the maximum value is
+	This option specifies the size of the database page; the minimum value is 4K and the maximum value is
 	**16K** (default). K stands for kilobytes (KB).
 
 	The value of page size is one of the followings: 4K, 8K, or 16K. If a value between 4K and 16K is specified, system rounds up the number. If a value greater than 16K or less than 4K, the specified number is used.
@@ -91,7 +91,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 .. option:: --log-volume-size=SIZE
 
-	The **--log-volume-size** option specifies the size of the database log volume. The default value is the same as database volume size, and the minimum value is 20M. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. 
+	This option  specifies the size of the database log volume. The default value is the same as database volume size, and the minimum value is 20M. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. 
 
 	The following example shows how to create a database named *testdb* and assign 256 MB to its log volume. ::
 
@@ -99,7 +99,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 .. option:: --log-page-size=SIZE
 
-	The **--log-page-size** option specifies the size of the log volume page. The default value is the same as data page size. The minimum value is 4K and the maximum value is 16K. K stands for kilobytes (KB).
+	This option specifies the size of the log volume page. The default value is the same as data page size. The minimum value is 4K and the maximum value is 16K. K stands for kilobytes (KB).
 
 	The value of page size is one of the followings: 4K, 8K, or 16K. If a value between 4K and 16K is specified, system rounds up the number. If a value greater than 16K or less than 4K, the specified number is used.
 
@@ -109,7 +109,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 .. option:: --comment=COMMENT
 
-	The **--comment** option specifies a comment to be included in the database volume header. If the character string contains spaces, the comment must be enclosed in double quotes.
+	This option specifies a comment to be included in the database volume header. If the character string contains spaces, the comment must be enclosed in double quotes.
 
 	The following example shows how to create a database named *testdb* and add a comment to the database volume. ::
 
@@ -132,25 +132,25 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 .. option:: -B, --lob-base-path=PATH
 
-	The **--lob-base-path** option specifies a directory where LOB data files are stored when BLOB/CLOB data is used. If the **--lob-base-path** option is not specified, LOB data files are store in < *location of database volumns created* >/ **lob** directory. The following example shows how to create a database named *testdb* in the working directory and specify /home/data1 of local file system as a location of LOB data files. ::
+	This option specifies a directory where LOB data files are stored when BLOB/CLOB data is used. If the **--lob-base-path** option is not specified, LOB data files are store in < *location of database volumns created* >/ **lob** directory. The following example shows how to create a database named *testdb* in the working directory and specify /home/data1 of local file system as a location of LOB data files. ::
 
 		cubrid createdb --lob-base-path "file:/home1/data1" testdb
 		
 .. option:: --server-name=HOST
 
-	The **--server-name** option enables the server of a specific database to run in the specified host when CUBRID client/server is used. The information of a host specified is stored in the **databases.txt** file. If this option is not specified, the current localhost is specified by default. The following example shows how to create a database named *testdb* and register it on the host *aa_host*. ::
+	This option enables the server of a specific database to run in the specified host when CUBRID client/server is used. The information of a host specified is stored in the **databases.txt** file. If this option is not specified, the current localhost is specified by default. The following example shows how to create a database named *testdb* and register it on the host *aa_host*. ::
 
 		cubrid createdb --server-name aa_host testdb
 
 .. option:: -r
 
-	The **-r** option creates a new database and overwrites an existing database if one with the same name exists. If the **-r** option is not specified, database creation is halted. The following example shows how to create a new database named *testdb* and overwrite the existing database with the same name. ::
+	This option creates a new database and overwrites an existing database if one with the same name exists. If the **-r** option is not specified, database creation is halted. The following example shows how to create a new database named *testdb* and overwrite the existing database with the same name. ::
 	
 		cubrid createdb -r testdb
 	
 .. option:: --more-volume-file=FILE
 
-	The **--more-volume-file** option creates an additional volume based on the specification contained in the file specified by the option. The volume is created in the same directory where the database is created. Instead of using this option, you can add a volume by using the **cubrid addvoldb** utility. The following example shows how to create a database named *testdb* as well as an additional volume based on the specification stored in the **vol_info.txt** file. ::
+	This option creates an additional volume based on the specification contained in the file specified by the option. The volume is created in the same directory where the database is created. Instead of using this option, you can add a volume by using the **cubrid addvoldb** utility. The following example shows how to create a database named *testdb* as well as an additional volume based on the specification stored in the **vol_info.txt** file. ::
 
 		cubrid createdb --more-volume-file vol_info.txt testdb
 
@@ -180,7 +180,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 .. option:: --user-definition-file=FILE
 
-	The **--user-definition-file** option adds users who have access to the database to be created. It adds a user based on the specification contained in the user information file specified by the parameter. Instead of using the **--user-definition-file** option, you can add a user by using the **CREATE USER** statement (for details, see `Managing USER <#syntax_syntax_access_manage_htm>`_ ).
+	This option adds users who have access to the database to be created. It adds a user based on the specification contained in the user information file specified by the parameter. Instead of using the **--user-definition-file** option, you can add a user by using the **CREATE USER** statement (for details, see `Managing USER <#syntax_syntax_access_manage_htm>`_ ).
 
 	The following example shows how to create a database named *testdb* and add users to *testdb* based on the user information defined in the **user_info.txt** file. ::
 
@@ -233,23 +233,23 @@ The following shows options available with the **cubrid** **createdb** utility.
 	
 .. option:: --csql-initialization-file=FILE
 
-	The **--csql-initialization-file** option executes an SQL statement on the database to be created by using the CSQL Interpreter. A schema can be created based on the SQL statement contained in the file specified by the parameter.
+	This option executes an SQL statement on the database to be created by using the CSQL Interpreter. A schema can be created based on the SQL statement contained in the file specified by the parameter.
 
 	The following example shows how to create a database named *testdb* and execute the SQL statement defined in table_schema.sql through the CSQL Interpreter. ::
 
 		cubrid createdb --csql-initialization-file table_schema.sql testdb
 
-.. option:: **Storing output messages to a file (-o)**
+.. option:: -o
 
-	The **-o** option stores messages related to the database creation to the file given as a parameter. The file is created in the same directory where the database was created. If the **-o** option is not specified, messages are displayed on the console screen. The **-o** option allows you to use information on the creation of a certain database by storing messages, generated during the database creation, to a specified file.
+	This option stores messages related to the database creation to the file given as a parameter. The file is created in the same directory where the database was created. If the **-o** option is not specified, messages are displayed on the console screen. The **-o** option allows you to use information on the creation of a certain database by storing messages, generated during the database creation, to a specified file.
 
 	The following example shows how to create a database named *testdb* and store the output of the utility to the **db_output** file instead of displaying it on the console screen. ::
 
 		cubrid createdb -o db_output testdb
 
-.. option:: **Verbose output (-v)**
+.. option:: -v
 
-	The **-v** option displays all information on the database creation operation onto the screen. Like the **-o** option, this option is useful in checking information related to the creation of a specific database. Therefore, if you specify the **-v** option together with the **-o** option, you can store the output messages in the file given as a parameter; the messages contain the operation information about the **cubrid createdb** utility and database creation process.
+	This option displays all information on the database creation operation onto the screen. Like the **-o** option, this option is useful in checking information related to the creation of a specific database. Therefore, if you specify the **-v** option together with the **-o** option, you can store the output messages in the file given as a parameter; the messages contain the operation information about the **cubrid createdb** utility and database creation process.
 
 	The following example shows how to create a database named *testdb* and display detailed information on the operation onto the screen. ::
 
@@ -290,7 +290,7 @@ The following shows options available with the **cubrid addvoldb** utility.
 
 .. program:: addvoldb
 
-.. option:: --db-volume-size SIZE
+.. option:: --db-volume-size=SIZE
 
 	**--db-volume-size** is an option that specifies the size of the volume to be added to a specified database. If the **--db-volume-size** option is omitted, the value of the system parameter **db_volume_size** is used by default. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied.
 
@@ -298,31 +298,31 @@ The following shows options available with the **cubrid addvoldb** utility.
 
 		cubrid addvoldb -p data --db-volume-size=256M testdb
 
-.. option:: -n vol_name
+.. option:: -n NAME
 
-	The **-n** option specifies the name of the volume to be added to a specified database. The volume name must follow the file name protocol of the operating system and be a simple one without including the directory path or spaces. If the **-n** option is omitted, the name of the volume to be added is configured by the system automatically as "database name_volume identifier." For example, if the database name is *testdb*, the volume name *testdb_x001* is automatically configured.
+	This option specifies the name of the volume to be added to a specified database. The volume name must follow the file name protocol of the operating system and be a simple one without including the directory path or spaces. If the **-n** option is omitted, the name of the volume to be added is configured by the system automatically as "database name_volume identifier." For example, if the database name is *testdb*, the volume name *testdb_x001* is automatically configured.
 	
 	The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode. The volume name *testdb_v1* will be created. ::
 
 		cubrid addvoldb -S -n testdb_v1 --db-volume-size=256M testdb
 
-.. option::  -F vol_path
+.. option::  -F, --file-path=PATH
 
-	The **-F** option is used to specify the directory path where the volume to be added will be stored. If the **-F** option is omitted, the value of the system parameter **volume_extension_path** is used by default.
+	This option specifies the directory path where the volume to be added will be stored. If the **-F** option is omitted, the value of the system parameter **volume_extension_path** is used by default.
 
 	The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode. The added volume is created in the /dbtemp/addvol directory. Because the **-n** option is not specified for the volume name, the volume name *testdb_x001* will be created. ::
 
 		cubrid addvoldb -S -F /dbtemp/addvol/ --db-volume-size=256M testdb
 
-.. option:: --comment comment_text
+.. option:: --comment COMMENT
 
-	The **--comment** option is used to facilitate to retrieve information on the added volume by adding such information in the form of comments. It is recommended that the contents of a comment include the name of **DBA** who adds the volume, or the purpose of adding the volume. The comment must be enclosed in double quotes.  The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode and inserts a comment about the volume. ::
+	This option facilitates to retrieve information on the added volume by adding such information in the form of comments. It is recommended that the contents of a comment include the name of **DBA** who adds the volume, or the purpose of adding the volume. The comment must be enclosed in double quotes.  The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode and inserts a comment about the volume. ::
 
 		cubrid addvoldb -S --comment "data volume added_cheolsoo kim" --db-volume-size=256M testdb
 
-.. option:: -p vol_purpose
+.. option:: -p PURPOSE
 
-	The **-p** option is used to specify the purpose of the volume to be added. The reason for specifying the purpose of the volume is to improve the I/O performance by storing volumes separately on different disk drives according to their purpose. Parameter values that can be used for the **-p** option are **data**, **index**, **temp** and **generic**. The default value is **generic**. For the purpose of each volume, see "`Database Volume Structure <#intro_intro_arch_volume_htm>`_ ."
+	This option specifies the purpose of the volume to be added. The reason for specifying the purpose of the volume is to improve the I/O performance by storing volumes separately on different disk drives according to their purpose. Parameter values that can be used for the **-p** option are **data**, **index**, **temp** and **generic**. The default value is **generic**. For the purpose of each volume, see "`Database Volume Structure <#intro_intro_arch_volume_htm>`_ ."
 
 	The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode. ::
 	
@@ -330,17 +330,15 @@ The following shows options available with the **cubrid addvoldb** utility.
 
 .. option::  (-S)**
 
-	The **-S** option is used to access the database in standalone mode without running the server process. This option has no parameter. If the **-S** option is not specified, the system assumes to be in client/server mode. ::
+	This option accesses the database in standalone mode without running the server process. This option has no parameter. If the **-S** option is not specified, the system assumes to be in client/server mode. ::
 
 		cubrid addvoldb -S --db-volume-size=256M testdb
 
 .. option::  (-C)**
 
-	The **-C** option is used to access the database in client/server mode by running the server and the client separately. There is no parameter. Even when the **-C** option is not specified, the system assumes to be in client/server mode by default. ::
+	This option accesses the database in client/server mode by running the server and the client separately. There is no parameter. Even when the **-C** option is not specified, the system assumes to be in client/server mode by default. ::
 
 		cubrid addvoldb -C --db-volume-size=256M testdb
-
-**Example**
 
 The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
 
@@ -406,15 +404,15 @@ The following shows [options] available with the **cubrid deleteldb** utility.
 	 
 .. program:: alterdbhost
 
-.. option:: -E, --extended-volume-path=FILE
+.. option:: -E, --extended-volume-path=PATH
 
-	The following example shows how to rename an extended volume created in a specific directory path (e.g. /dbtemp/addvol/) with a **-E** option, and then moves the volume to a new directory. The **-E** option is used to specify a new directory path (e.g. /dbtemp/newaddvols/) where the renamed extended volume will be moved. If the **-E** option is not specified, the extended volume is only renamed in the existing path without being moved. If a directory path outside the disk partition of the existing database volume or an invalid one is specified, the rename operation is not executed. This option cannot be used together with the **-i** option. ::
+	This option renames an extended volume created in a specific directory path (e.g. /dbtemp/addvol/), and then moves the volume to a new directory. This specifies a new directory path (e.g. /dbtemp/newaddvols/) where the renamed extended volume will be moved. If it is not specified, the extended volume is only renamed in the existing path without being moved. If a directory path outside the disk partition of the existing database volume or an invalid one is specified, the rename operation is not executed. This option cannot be used together with the **-i** option. ::
 
 		cubrid renamedb -E /dbtemp/newaddvols/ testdb testdb_1
 
-.. option:: -i or --control-file=FILE
+.. option:: -i, --control-file=FILE
 
-	The following example shows how to specify an input file in which directory information is stored to change all database name of volumes or files and assign different directory at once. To perform this work, the **-i** option is used. The **-i** option cannot be used together with the **-E** option. ::
+	The option specifies an input file in which directory information is stored to change all database name of volumes or files and assign different directory at once. To perform this work, the **-i** option is used. The **-i** option cannot be used together with the **-E** option. ::
 	
 		cubrid renamedb -i rename_path testdb testdb_1
 
@@ -439,12 +437,12 @@ The following shows [options] available with the **cubrid deleteldb** utility.
 
 .. option:: -d, --delete-backup
 
-	The **-d** option renames the *testdb* database and at once forcefully delete all backup volumes and backup information files that are in the same location as *testdb*. Note that you cannot use the backup files with the old names once the database is renamed. If the **-d** option is not specified, backup volumes and backup information files are not deleted. ::
+	This option renames the *testdb* database and at once forcefully delete all backup volumes and backup information files that are in the same location as *testdb*. Note that you cannot use the backup files with the old names once the database is renamed. If the **-d** option is not specified, backup volumes and backup information files are not deleted. ::
 	
 		cubrid renamedb -d testdb testdb_1
 
 Renaming Database Host
-=====================
+======================
 
 The **cubrid alterdbhost** utility sets or changes the host name of the specified database. It changes the host name set in the **databases.txt** file. ::
 
@@ -571,19 +569,19 @@ The following shows [options] available with the **cubrid installdb** utility.
 
 .. option:: --server-name=HOST
 
-	The following example shows how to register the server host information of a database to **databases.txt** with a specific host name. If this option is not specified, the current host information is registered. ::
+	This option registers the server host information of a database to **databases.txt** with a specific host name. If this is not specified, the current host information is registered. ::
 
 		cubrid installdb --server-name=cub_server1 testdb
 
 .. option::-F, --file-path=PATH
 
-	The following example shows how to register the directory path of a database volume to **databases.txt** by using the **-F** option. If this option is not specified, the path of a current directory is registered as default. ::
+	This option registers the directory path of a database volume to **databases.txt** by using the **-F** option. If this option is not specified, the path of a current directory is registered as default. ::
 
 		cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
 
 .. option:: -L, --log-path=PATH
 
-	The following example shows how to register the directory path of a database log volume to **databases.txt** by using the **-L** option. If this option is not specified, the directory path of a volume is registered. ::
+	This option registers the directory path of a database log volume to **databases.txt** by using the **-L** option. If this option is not specified, the directory path of a volume is registered. ::
 
 		cubrid installdb -L /home/cubrid/CUBRID/databases/logs/testdb testdb
 
@@ -594,14 +592,11 @@ The **cubrid spacedb** utility is used to check how much space of database volum
 
 	cubrid spacedb [options] database_name
 
-* **cubrid**
- : An integrated utility for the CUBRID service and database management.
+*  **cubrid** : An integrated utility for the CUBRID service and database management.
 
-* **spacedb**
- : A command that checks the space in the database. It executes successfully only when the database is in a stopped state.
+*  **spacedb** : A command that checks the space in the database. It executes successfully only when the database is in a stopped state.
 
-* *database_name*
- : The name of the database whose space is to be checked. The path-name to the directory where the database is to be created must not be included.
+*  *database_name* : The name of the database whose space is to be checked. The path-name to the directory where the database is to be created must not be included.
 
 The following shows [options] available with the **cubrid spacedb** utility.
  
@@ -609,32 +604,32 @@ The following shows [options] available with the **cubrid spacedb** utility.
 
 .. option:: -o FILE
 
-	The following syntax shows how to store the result of checking the space information of *testdb* to a file named *db_output*. ::
+	This option stores the result of checking the space information of *testdb* to a file named *db_output*. ::
 
 		cubrid spacedb -o db_output testdb
 
 .. option:: -S, --SA-mode
 
-	The **-S** option is used to access a database in standalone, which means it works without processing server; it does not have an argument. If **-S** is not specified, the system recognizes that a database is running in client/server mode. ::
+	This option is used to access a database in standalone, which means it works without processing server; it does not have an argument. If **-S** is not specified, the system recognizes that a database is running in client/server mode. ::
 
 		cubrid spacedb --SA-mode testdb
 
 .. option:: -C, --CS-mode
 
-	The **-C** option is used to access a database in client/server mode, which means it works in client/server process respectively; it does not have an argument. If **-C** is not specified, the system recognize that a database is running in client/server mode by default. ::
+	This option is used to access a database in client/server mode, which means it works in client/server process respectively; it does not have an argument. If **-C** is not specified, the system recognize that a database is running in client/server mode by default. ::
 
 		cubrid spacedb --CS-mode testdb
 
 .. option:: --size-unit={PAGE|M|G|T|H}
 
-	The **--size-unit** option is used to specify the size unit of the space information of the database to be one of PAGE, M(MB), G(GB), T(TB), H(print-friendly). The default value is **H**. If you set the value to H, the unit is automatically determined as follows: M if 1 MB = DB size < 1024 MB, G if 1 GB = DB size < 1024 GB. ::
+	This option specifies the size unit of the space information of the database to be one of PAGE, M(MB), G(GB), T(TB), H(print-friendly). The default value is **H**. If you set the value to H, the unit is automatically determined as follows: M if 1 MB = DB size < 1024 MB, G if 1 GB = DB size < 1024 GB. ::
 	
 		cubrid spacedb --size_unit=M testdb
 		cubrid spacedb --size_unit=H testdb
 
 .. option:: -s, --summarize
 
-	Aggregates total_pages, used_pages and free_pages by DATA, INDEX, GENERIC, TEMP and TEMP TEMP, and outputs it. ::
+	This option aggregates total_pages, used_pages and free_pages by DATA, INDEX, GENERIC, TEMP and TEMP TEMP, and outputs it. ::
 
 		cubrid spacedb –s testdb
 
@@ -648,38 +643,37 @@ The **cubrid compactdb** utility secures the space being taken by OIDs of delete
 
 ::
 
-	cubrid compactdb [options] database_name [class_name], class_name2,...]
+	cubrid compactdb [options] database_name [class_name], class_name2, ...]
 
 * **cubrid**: An integrated utility for the CUBRID service and database management.
 
 * **compactdb**: A command that compacts the space of the database so that OIDs assigned to deleted data can be reused.
 
-* *database_name*
- : The name of the database whose space is to be compacted. The path name to the directory where the database is to be created must not be included.
+* *database_name*: The name of the database whose space is to be compacted. The path name to the directory where the database is to be created must not be included.
 
-* *class_name_list*
- : You can specify the list of tables names that you want to compact space after a database name; the -i option cannot be used together. It is used in client/server mode only.
+* *class_name_list*: You can specify the list of tables names that you want to compact space after a database name; the -i option cannot be used together. It is used in client/server mode only.
 
 **-I**, **-i**, **-c**, **-d**, **-p** options are applied in client/server mode only.
 
 The following shows [options] available with the **cubrid spacedb** utility.
 
 .. program:: compactdb
+
 .. option:: -v
 
 	You can output messages that shows which class is currently being compacted and how many instances have been processed for the class by using the **-v** option. ::
 
 		cubrid compactdb -v testdb
 
-.. option:: -S or --SA mode
+.. option:: -S, --SA-mode
 
-	The **-S** option is specified to compact used space in standalone mode while database server is not running; no arugment is specified.  If the **-S** option is not specified, system recognizes that the job is executed in client/server mode. ::
+	This option specifies to compact used space in standalone mode while database server is not running; no arugment is specified.  If the **-S** option is not specified, system recognizes that the job is executed in client/server mode. ::
 
 		cubrid compactdb --SA-mode testdb
 
-.. option:: C or --CS mode
+.. option:: C, --CS-mode
 
-	The **-C** option is specified to compact used space in client/server mode while database server is running; no argument is specified. Even though this option is omitted, system recognizes that the job is executed in client/server mode. The following options can be used in client/server mode only.
+	This option specifies to compact used space in client/server mode while database server is running; no argument is specified. Even though this option is omitted, system recognizes that the job is executed in client/server mode. The following options can be used in client/server mode only.
 
 .. option:: - i, --input-class-file=FILE
 
@@ -739,7 +733,7 @@ Note that you must specify the parameter **communication_histogram** to **yes** 
 
 ::
 
-cubrid statdump [options] database_name
+	cubrid statdump [options] database_name
 
 * **cubrid**: An integrated utility for the CUBRID service and database management.
 
@@ -750,7 +744,9 @@ cubrid statdump [options] database_name
 The following shows [options] available with the **cubrid statdump** utility.
 
 .. program:: statdump
-.. option:: -i, --interval=NUMBER
+
+.. option:: -i, --interval=SECOND
+
 	The **-i** option specifies the periodic number of outputting statistics as seconds.
 
 	::
@@ -819,7 +815,7 @@ The following shows [options] available with the **cubrid statdump** utility.
 		Data_page_buffer_hit_ratio    =       0.00
 
 
-	The followings are the item explanation of the statistics information
+	The followings are the explanation about the above statistical informations
 
 	+------------------+----------------------------------------+--------------------------------------------------------------------------------------+
 	| Category         | Item                                   | Description                                                                          |
@@ -938,830 +934,454 @@ The following shows [options] available with the **cubrid statdump** utility.
 	|                  |                                        | (Num_data_page_fetches - Num_data_page_ioreads)*100 / Num_data_page_fetches          |
 	+------------------+----------------------------------------+--------------------------------------------------------------------------------------+
 
-**Storing statistics information to a file (-o or --output-file)**
+.. option:: -o, --output-file=FILE
 
-The
-**-o**
-options is used to store statistics information of server processing for the database to a specified file. 
 
-cubrid statdump -o statdump.log testdb
+	**-o** options is used to store statistics information of server processing for the database to a specified file.  ::
 
-**Displays the accumulated operation statistics information (-c or --cumulative)**
+		cubrid statdump -o statdump.log testdb
 
-You can display the accumulated operation statistics information of the target database server by using the
-**-c**
-option. By combining this with the -i option, you can check the operation statistics information at a specified interval. 
+.. option:: -c, --cumulative
 
-cubrid statdump -i 5 -c testdb
+	You can display the accumulated operation statistics information of the target database server by using the **-c** option. By combining this with the -i option, you can check the operation statistics information at a specified interval.  ::
 
-**Displays statistics that includes specified string (-s or --substr)**
+		cubrid statdump -i 5 -c testdb
 
-You can display statistics about items of which name include the specified string by using
-**-s**
-option.
+.. option::  -s, --substr
 
-The following example shows how to display statistics about items of which name include "data".
+	You can display statistics about items of which name include the specified string by using **-s** option. The following example shows how to display statistics about items of which name include "data".
+ 
+	::
+	
+		cubrid statdump -s data testdb
 
-cubrid statdump –s data testdb
+		*** SERVER EXECUTION STATISTICS ***
+		Num_data_page_fetches         =        135
+		Num_data_page_dirties         =          0
+		Num_data_page_ioreads         =          0
+		Num_data_page_iowrites        =          0
+		Num_data_page_victims         =          0
+		Num_data_page_iowrites_for_replacement =          0
+		 
+		 *** OTHER STATISTICS ***
+		Data_page_buffer_hit_ratio    =     100.00
 
  
 
-*** SERVER EXECUTION STATISTICS ***
+.. note::
 
-Num_data_page_fetches         =        135
+	Each status information consists of 64-bit INTEGER data and the corresponding statistics information can be lost if the accumulated value exceeds the limit.
 
-Num_data_page_dirties         =          0
+Checking Lock Status
+====================
 
-Num_data_page_ioreads         =          0
+The **cubrid lockdb** utility is used to check the information on the lock being used by the current transaction in the database. ::
 
-Num_data_page_iowrites        =          0
+	cubrid lockdb [options] database_name
 
-Num_data_page_victims         =          0
+*  **cubrid**: An integrated utility for the CUBRID service and database management.
 
-Num_data_page_iowrites_for_replacement =          0
+*  **lockdb**: A command used to check the information on the lock being used by the current transaction in the database.
 
- 
+*  *database_name*: The name of the database where lock information of the current transaction is to be checked.
 
- *** OTHER STATISTICS ***
+The following example shows how to display lock information of the *testdb* database on a screen without any option. ::
 
-Data_page_buffer_hit_ratio    =     100.00
+	cubrid lockdb testdb
 
-**Note**
-Each status information consists of 64-bit INTEGER data and the corresponding statistics information can be lost if the accumulated value exceeds the limit.
+The following shows [options] available with the **cubrid statdump** utility.
+	
+.. program:: lockdb
 
-**Checking Lock Status**
+.. option:: -o
+	
+	The **-o** option displays the lock information of the *testdb* database as a output.txt. ::
 
-**Description**
+		cubrid lockdb -o output.txt testdb
 
-The
-**cubrid lockdb**
-utility is used to check the information on the lock being used by the current transaction in the database.
+		
+Output Contents
+---------------
 
-**Syntax**
+The output contents of **cubrid lockdb** are divided into three logical sections.
 
-**cubrid**
-**lockdb**
-*options*
-*database_name*
+*  Server lock settings
 
-*options*
-: [{
-**-o**
-|
-**--output-file**
-=}
-*file*
-]
+*  Clients that are accessing the database
 
-* **cubrid**
- : An integrated utility for the CUBRID service and database management.
-
-
-
-* **lockdb**
- : A command used to check the information on the lock being used by the current transaction in the database.
-
-
-
-* *options*
- : The 
- **-o**
- option is supported.
-
-
-
-* *database_name*
- : The name of the database where lock information of the current transaction is to be checked.
-
-
-
-
-**Options**
-
-**Displaying lock information on a screen**
-
-The following example shows how to display lock information of the
-*testdb*
-database on a screen without any option.
-
-cubrid lockdb testdb
-
-**Displaying lock information to the specified file (-o)**
-
-The following example shows how to display lock information of the
-*testdb*
-database as a output.txt by using the
-**-o**
-option.
-
-cubrid lockdb -o output.txt testdb
-
-**Output Contents**
-
-The output contents of
-**cubrid lockdb**
-are divided into three logical sections:
-
-•   Server lock settings
-
-•   Clients that are accessing the database
-
-•   The contents of an object lock table
+*  The contents of an object lock table
 
 **Server lock settings**
 
-The first section of the output of
-**cubrid lockdb**
-is the database lock settings.
+The first section of the output of **cubrid lockdb** is the database lock settings.
 
-*** Lock Table Dump ***
+::
 
- Lock Escalation at = 100000, Run Deadlock interval = 0
+	*** Lock Table Dump ***
+	 Lock Escalation at = 100000, Run Deadlock interval = 0
 
-The lock escalation level is 100,000 records, and the interval to detect deadlock is set to 0 seconds (For a description of the related system parameters,
-**lock_escalation**
-and
-**deadlock_detection_interval**
-, see
-`Concurrency/Lock-Related Parameters <#pm_pm_db_classify_lock_htm>`_
-).
+The lock escalation level is 100,000 records, and the interval to detect deadlock is set to 0 seconds (For a description of the related system parameters, **lock_escalation** and **deadlock_detection_interval**, see `Concurrency/Lock-Related Parameters <#pm_pm_db_classify_lock_htm>`_ ).
 
 **Clients that are accessing the database**
 
-The second section of the output of
-**cubrid lockdb**
-includes information on all clients that are connected to the database. This includes the transaction index, program name, user ID, host name, process ID, isolation level and lock timeout settings of each client.
+The second section of the output of **cubrid lockdb** includes information on all clients that are connected to the database. This includes the transaction index, program name, user ID, host name, process ID, isolation level and lock timeout settings of each client.
 
-Transaction (index 1, csql, dba@cubriddb|12854)
+::
 
-Isolation READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES
-
-Timeout_period -1
+	Transaction (index 1, csql, dba@cubriddb|12854)
+	Isolation READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES
+	Timeout_period -1
 
 Here, the transaction index is 1, the program name is csql, the user ID is dba, the host name is cubriddb, the client process identifier is 12854, the isolation level is READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES, and the lock timeout is unlimited.
 
 A client for which transaction index is 0 is the internal system transaction. It can obtain the lock at a specific time, such as the processing of a checkpoint by a database. In most cases, however, this transaction will not obtain any locks.
 
-Because
-**cubrid lockdb**
-utility accesses the database to obtain the lock information, the
-**cubrid lockdb**
-is an independent client and will be output as such.
+Because **cubrid lockdb** utility accesses the database to obtain the lock information, the **cubrid lockdb** is an independent client and will be output as such.
 
 **Object lock table**
 
-The third section of the output of the
-**cubrid lockdb**
-includes the contents of the object lock table. It shows which client has the lock for which object in which mode, and which client is waiting for which object in which mode. The first part of the result of the object lock table shows how many objects are locked.
+The third section of the output of the **cubrid lockdb** includes the contents of the object lock table. It shows which client has the lock for which object in which mode, and which client is waiting for which object in which mode. The first part of the result of the object lock table shows how many objects are locked.
 
-Object lock Table:
+::
 
-    Current number of ojbects which are locked = 2001
+	Object lock Table:
+	    Current number of ojbects which are locked = 2001
 
-**cubrid lockdb**
-outputs the OID, object type and table name of each object that obtained lock. In addition, it outputs the number of transactions that hold lock for the object (Num holders), the number of transactions (Num blocked-holders) that hold lock but are blocked since it could not convert the lock to the upper lock (e.g., conversion from U_LOCK to X_LOCK), and the number of different transactions that are waiting for the lock of the object (Num waiters). It also outputs the list of client transactions that hold lock, blocked client transactions and waiting client transactions.
+**cubrid lockdb** outputs the OID, object type and table name of each object that obtained lock. In addition, it outputs the number of transactions that hold lock for the object (Num holders), the number of transactions (Num blocked-holders) that hold lock but are blocked since it could not convert the lock to the upper lock (e.g., conversion from U_LOCK to X_LOCK), and the number of different transactions that are waiting for the lock of the object (Num waiters). It also outputs the list of client transactions that hold lock, blocked client transactions and waiting client transactions.
 
 The example below shows an object in which the object type is an instance of a class, or record that will be blocked, because the OID( 2| 50| 1) object that has S_LOCK for transaction 1 and S_LOCK for transaction 2 cannot be converted into X_LOCK. It also shows that transaction 3 is blocked because transaction 2 is waiting for X_LOCK even when transaction 3 is wating for S_LOCK.
 
-OID = 2| 50| 1
+::
 
-Object type: instance of class ( 0| 62| 5) = athlete
-
-Num holders = 1, Num blocked-holders= 1, Num waiters = 1
-
-LOCK HOLDERS :
-
-    Tran_index = 2, Granted_mode = S_LOCK, Count = 1
-
-BLOCKED LOCK HOLDERS :
-
-    Tran_index = 1, Granted_mode = U_LOCK, Count = 3
-
-    Blocked_mode = X_LOCK
-
-                    Start_waiting_at = Fri May 3 14:44:31 2002
-
-                    Wait_for _nsecs = -1
-
-LOCK WAITERS :
-
-    Tran_index = 3, Blocked_mode = S_LOCK
-
-                    Start_waiting_at = Fri May 3 14:45:14 2002
-
-                    Wait_for_nsecs = -1
+	OID = 2| 50| 1
+	Object type: instance of class ( 0| 62| 5) = athlete
+	Num holders = 1, Num blocked-holders= 1, Num waiters = 1
+	LOCK HOLDERS :
+		Tran_index = 2, Granted_mode = S_LOCK, Count = 1
+	BLOCKED LOCK HOLDERS :
+		Tran_index = 1, Granted_mode = U_LOCK, Count = 3
+		Blocked_mode = X_LOCK
+						Start_waiting_at = Fri May 3 14:44:31 2002
+						Wait_for _nsecs = -1
+	LOCK WAITERS :
+		Tran_index = 3, Blocked_mode = S_LOCK
+						Start_waiting_at = Fri May 3 14:45:14 2002
+						Wait_for_nsecs = -1
 
 It outputs the lock information on the index of the table when the object type is the Index key of class (index key).
 
-OID = -662|   572|-32512
+::
 
-Object type: Index key of class ( 0|   319|  10) = athlete.
-
-Index name: pk_athlete_code
-
-Total mode of holders =   NX_LOCK, Total mode of waiters = NULL_LOCK.
-
-Num holders=  1, Num blocked-holders=  0, Num waiters=  0
-
-LOCK HOLDERS:
-
-    Tran_index =   1, Granted_mode =  NX_LOCK, Count =   1
+	OID = -662|   572|-32512
+	Object type: Index key of class ( 0|   319|  10) = athlete.
+	Index name: pk_athlete_code
+	Total mode of holders =   NX_LOCK, Total mode of waiters = NULL_LOCK.
+	Num holders=  1, Num blocked-holders=  0, Num waiters=  0
+	LOCK HOLDERS:
+		Tran_index =   1, Granted_mode =  NX_LOCK, Count =   1
 
 Granted_mode refers to the mode of the obtained lock, and Blocked_mode refers to the mode of the blocked lock. Starting_waiting_at refers to the time at which the lock was requested, and Wait_for_nsecs refers to the waiting time of the lock. The value of Wait_for_nsecs is determined by lock_timeout_in_secs, a system parameter.
 
 When the object type is a class (table), Nsubgranules is displayed, which is the sum of the record locks and the key locks obtained by a specific transaction in the table.
 
-OID = 0| 62| 5
+::
 
-Object type: Class = athlete
+	OID = 0| 62| 5
+	Object type: Class = athlete
+	Num holders = 2, Num blocked-holders= 0, Num waiters= 0
+	LOCK HOLDERS:
+	Tran_index = 3, Granted_mode = IS_LOCK, Count = 2, Nsubgranules = 0
+	Tran_index = 1, Granted_mode = IX_LOCK, Count = 3, Nsubgranules = 1
+	Tran_index = 2, Granted_mode = IS_LOCK, Count = 2, Nsubgranules = 1
+	
+Checking Database Consistency
+=============================
 
-Num holders = 2, Num blocked-holders= 0, Num waiters= 0
+The **cubrid checkdb** utility is used to check the consistency of a database. You can use **cubrid checkdb** to identify data structures that are different from indexes by checking the internal physical consistency of the data and log volumes. If the **cubrid checkdb** utility reveals any inconsistencies, you must try automatic repair by using the --**repair** option.
 
-LOCK HOLDERS:
+cubrid checkdb [options] database_name [class_name1 class_name2 ...]
 
-Tran_index = 3, Granted_mode = IS_LOCK, Count = 2, Nsubgranules = 0
+	* **cubrid**: An integrated utility for CUBRID service and database management.
 
-Tran_index = 1, Granted_mode = IX_LOCK, Count = 3, Nsubgranules = 1
+	* **checkdb**: A utility that checks the data consistency of a specific database.
 
-Tran_index = 2, Granted_mode = IS_LOCK, Count = 2, Nsubgranules = 1
+	* *database_name*: The name of the database whose consistency status will be either checked or restored.
 
-**Checking Database Consistency**
+	*table_list.txt*: A file name to store the list of the tables for consistency check or recovery
 
-**Description**
+	*class_name1 class_name2*: List the table names for consistency check or recovery
 
-The
-**cubrid checkdb**
-utility is used to check the consistency of a database. You can use
-**cubrid checkdb**
-to identify data structures that are different from indexes by checking the internal physical consistency of the data and log volumes. If the
-**cubrid checkdb**
-utility reveals any inconsistencies, you must try automatic repair by using the --
-**repair**
-option.
+	
+The following shows [options] available with the **cubrid checkdb** utility.
 
-**Syntax**
+.. program:: checkdb
 
-**cubrid**
-**checkdb**
+.. option::	-S, --SA-mode
+
+	The **-S** option is used to access a database in standalone, which means it works without processing server; it does not have an argument. If **-S** is not specified, the system recognizes that a database is running in client/server mode. ::
+
+		cubrid checkdb -S testdb
+
+.. option:: -C, --CS-mode
+
+	The **-C** option is used to access a database in client/server mode, which means it works in client/server process respectively; it does not have an argument. If
+	**-C** is not specified, the system recognize that a database is running in client/server mode by default. ::
+
+		cubrid checkdb -C testdb
+
+.. option:: -r, --repair
+
+	The **-r** option is used to restore an issue if a consistency error occurs in a database. ::
+
+		cubrid checkdb -r testdb
+
+.. option:: -i, --input-class-file or table name
+
+	You can specify a table in which consistency is check or restored by specifying the **-i** *table_list.txt* option or listing the table names after a database name. In this way, you can limit the target to be restored and both ways can be used. If a specific target is not specified, entire database will be a target of consistency check or restoration. ::
+
+		cubrid checkdb testdb tbl1 tbl2
+		cubrid checkdb -r testdb tbl1 tbl2
+		cubrid checkdb -r -i table_list.txt testdb tbl1 tbl2
+
+	Empty string, tab, carriage return and comma are separators among table names in the table list file specified by **-i** option. The following example shows the table list file; from t1 to t10, it is recognized as a table for consistency check or restoration. ::
+
+		t1 t2 t3,t4 t5
+		t6, t7 t8   t9
+		 
+			 t10
+
+Killing Database Transactions
+=============================
+
+The **cubrid killtran** is used to check transactions or abort specific transaction. Only a DBA can execute this utility. ::
+
+	cubrid killtran [options] database_name
+
+* **cubrid**: An integrated utility for the CUBRID service and database management
+
+* **killtran**: A utility that manages transactions for a specified database
+
+* *database_name*: The name of database whose transactions are to be killed
+
+Some options refer to killing specified transactions; others refer to outputting active transactions. If no option is specified, **-d** is specified by default so all transactions are displayed on the screen.
  
-*options*
-*database_name*
-[
-*class_name1 class_name2*
-...]
+::
 
-*options*
-: [
-**-S**
-|
-**--SA-mode**
-|
-**-C**
-|
-**--CS-mode**
-] [
-**-r**
-|
-**--repair**
-] | [
-**-i**
-*table_list.txt*
-|
-**--input-class-file**
-]
-
-* **cubrid**
- : An integrated utility for CUBRID service and database management.
+	cubrid killtran testdb 
+	 
+	Tran index      User name   Host name      Process id      Program name
+	-------------------------------------------------------------------------------
+		  1(+)            dba      myhost             664           cub_cas
+		  2(+)            dba      myhost            6700              csql
+		  3(+)            dba      myhost            2188           cub_cas
+		  4(+)            dba      myhost             696              csql
+		  5(+)         public      myhost            6944              csql
+	-------------------------------------------------------------------------------
 
 
+The following shows [options] available with the **cubrid killtran** utility.
 
-* **checkdb**
- : A utility that checks the data consistency of a specific database.
+.. program:: killtran
 
+.. option :: -i, --kill-transation-index=INDEX
 
+	This option kills transactions in a specified index. ::
 
-* *options*
- :
- **-S**
- ,
- **-C**
- ,
- **-r**
- , and
- **-i**
- options are supported.
-
-
-
-* *database_name*
- : The name of the database whose consistency status will be either checked or restored.
-
-
-
-*table_list.txt*
-: A file name to store the list of the tables for consistency check or recovery
-
-*class_name1 class_name2*
-: List the table names for consistency check or recovery
-
-**Options**
-
-**Checking the database consistency in standalone mode (-S or --SA-mode)**
-
-The
-**-S**
-option is used to access a database in standalone, which means it works without processing server; it does not have an argument. If
-**-S**
-is not specified, the system recognizes that a database is running in client/server mode.
-
-cubrid checkdb -S testdb
-
-**Checking the database consistency in client/server mode (-C or --CS-mode)**
-
-The
-**-C**
-option is used to access a database in client/server mode, which means it works in client/server process respectively; it does not have an argument. If
-**-C**
-is not specified, the system recognize that a database is running in client/server mode by default.
-
-cubrid checkdb -C testdb
-
-**Restoring in case of a database consistency problem (-r or --repair)**
-
-The
-**-r**
-option is used to restore an issue if a consistency error occurs in a database.
-
-cubrid checkdb -r testdb
-
-**Specifying a table in which consistency is checked or restored (-i, --input-class-file or table name)**
-
-You can specify a table in which consistency is check or restored by specifying the
-**-i**
-*table_list.txt*
-option or listing the table names after a database name. In this way, you can limit the target to be restored and both ways can be used. If a specific target is not specified, entire database will be a target of consistency check or restoration.
-
-cubrid checkdb testdb tbl1 tbl2
-
-cubrid checkdb -r testdb tbl1 tbl2
-
-cubrid checkdb -r -i tbl_list.txt testdb tbl1 tbl2
-
-Empty string, tab, carriage return and comma are separators among table names in the table list file specified by
-**-i**
-option. The following example shows the table list file; from t1 to t10, it is recognized as a table for consistency check or restoration.
-
-t1 t2 t3,t4 t5
-
-t6, t7 t8   t9
-
+		cubrid killtran -i 1 testdb
+		
+		Ready to kill the following transactions:
+		 
+		Tran index      User name      Host name      Process id      Program name
+		-------------------------------------------------------------------------------
+			  1(+)            dba      myhost            4760              csql
+		-------------------------------------------------------------------------------
+		Do you wish to proceed ? (Y/N)y
+		Killing transaction associated with transaction index 1
  
+.. option:: --kill-user-name=ID
 
-     t10
+	This option kills transactions for a specified OS user ID. ::
 
-**Killing Database Transactions**
+		cubrid killtran --kill-user-name=os_user_id testdb
 
-**Description**
+.. option::  --kill- host-name=HOST
 
-The
-**cubrid killtran**
-is used to check transactions or abort specific transaction. Only a DBA can execute this utility.
+	This opotion kills transactions of a specified client host. ::
 
-**Syntax**
+		cubrid killtran --kill-host-name=myhost testdb
 
-**cubrid killtran**
- 
-*options*
-*database_name*
+.. option:: --kill-program-name=NAME
 
-*options*
-:
+	This option kills transactions for a specified program.  ::
+	
+		cubrid killtran --kill-program-name=cub_cas testdb
 
-[{
-**-i**
-|
-**--kill-transaction-index**
-=}
-*index*
-] [
-**--kill-user-name**
-=
-*id*
-] [
-**--kill-host-name**
-=
-*host*
-] [
-**--kill-program-name**
-=
-*program_name*
-] [{
-**-p**
-|
-**--dba-password**
-=}
-*password*
-] [
-**-d**
-|
-**--display-information**
-] [
-**-f**
-|
-**--force**
-]
+.. option:: -p PASSWORD
+		
+	A value followed by the -p option is a password of the **DBA**, and should be entered in the prompt.
 
-* **cubrid**
-  : An integrated utility for the CUBRID service and database management
+.. option:: -d, --display
 
+	The **-d** option is specified, all transactions are displayed on the screen. 
+	
+	::
 
+		cubrid killtran -d testdb
+  
+		Tran index      User name      Host name      Process id      Program name
+		-------------------------------------------------------------------------------
+			  2(+)            dba      myhost            6700              csql
+			  3(+)            dba      myhost            2188           cub_cas
+			  4(+)            dba      myhost             696              csql
+			  5(+)         public      myhost            6944              csql
+		-------------------------------------------------------------------------------
 
-* **killtran**
- : A utility that manages transactions for a specified database
+.. option:: -f, --force
 
+	This option omits a prompt to check transactions to be stopped. ::
 
+		cubrid killtran -f -i 1 testdb
 
-* *options*
-  : Some options refer to killing specified transactions; others refer to outputting active transactions. If no option is specified,
- **-d**
- is specified by default so all transactions are displayed on the screen.
- **-p**
- A value followed by the -p option is a password of the
- **DBA**
- , and should be entered in the prompt.
+Checking the Query Plan Cache
+=============================
 
+The **cubrid plandump** utility is used to display information on the query plans stored (cached) on the server. ::
 
+	cubrid plandump options database_name 
 
-* *database_name*
- : The name of database whose transactions are to be killed
+* **cubrid**: An integrated utility for the CUBRID service and database management.
 
+* **plandump**: A utility that displays the query plans stored in the current cache of a specific database.
 
+* *database_name*: The name of the database where the query plans are to be checked or dropped from its sever cache.
 
-**Options**
+If no option is used, it checks the query plans stored in the cache. ::
 
-**Displaying all transactions (no option)**
+	cubrid plandump testdb
+ 
+The following shows [options] available with the **cubrid plandump** utility.
 
-cubrid killtran testdb 
+.. program :: plandump
 
- 
+.. option:: -d, --drop
+ 
+	This option drops the query plans stored in the cache. ::
 
-Tran index      User name      Host name      Process id      Program name
+		cubrid plandump -d testdb
 
--------------------------------------------------------------------------------
+.. option:: -o, --output-file=FILE
 
-      1(+)            dba      myhost             664           cub_cas
+	This option stores the results of the query plans stored in the cache to a file. ::
 
-      2(+)            dba      myhost            6700              csql
+		cubrid plandump -o output.txt testdb
 
-      3(+)            dba      myhost            2188           cub_cas
+Outputting Internal Database Information
+========================================
 
-      4(+)            dba      myhost             696              csql
+You can check various pieces of internal information on the database with the **cubrid diagdb** utility. Information provided by **cubrid diagdb** is helpful in diagnosing the current status of the database or figuring out a problem. ::
 
-      5(+)         public      myhost            6944              csql
+	cubrid diagdb options database_name
 
--------------------------------------------------------------------------------
+* **cubrid**: An integrated utility for the CUBRID service and database management.
 
-**Killing transactions in a specified index (-i or --kill-transation-index)**
+* **diagdb**: A command that is used to check the current storage state of the database by outputting the information contained in the binary file managed by CUBRID in text format. It normally executes only when the database is in a stopped state. You can check the whole database or the file table, file size, heap size, class name or disk bitmap selectively by using the provided option.
 
-cubrid killtran -i 1 testdb
+* *database_name*: The name of the database of which internal information is to be diagnosed.
 
- 
+The following shows [options] available with the **cubrid diagdb** utility.
 
-Ready to kill the following transactions:
+.. program:: diagdb
 
- 
+.. option:: -d, --dump-type=TYPE
 
-Tran index      User name      Host name      Process id      Program name
+	This option specifies the output range when you display the information of all files in the *testdb* database. If any option is not specified, the default value of 1 is used.
 
--------------------------------------------------------------------------------
+		cubrid diagdb -d 1 myhost testdb
 
-      1(+)            dba      myhost            4760              csql
+	The utility has 9 types of -d options as follows:
 
--------------------------------------------------------------------------------
+	+------+--------------------------------------+
+	| Type | Description                          |
+	+------+--------------------------------------+
+	| -1   | Displays all database information.   |
+	+------+--------------------------------------+
+	| 1    | Displays file table information.     |
+	+------+--------------------------------------+
+	| 2    | Displays file capacity information.  |
+	+------+--------------------------------------+
+	| 3    | Displays heap capacity information.  |
+	+------+--------------------------------------+
+	| 4    | Displays index capacity information. |
+	+------+--------------------------------------+
+	| 5    | Displays class name information.     |
+	+------+--------------------------------------+
+	| 6    | Displays disk bitmap information.    |
+	+------+--------------------------------------+
+	| 7    | Displays catalog information.        |
+	+------+--------------------------------------+
+	| 8    | Displays log information.            |
+	+------+--------------------------------------+
+	| 9    | Displays hip information.            |
+	+------+--------------------------------------+
 
-Do you wish to proceed ? (Y/N)y
+Backing up and Restoring
+========================
 
-Killing transaction associated with transaction index 1
+**DBA** must perform regular backups of the database so that it can be restored successfully to a state at a certain point in time in case of system failure. For details, see `Database Backup <#admin_admin_br_backup_htm>`_ .
 
-**Displaying all transactions (-d or --display)**
+Exporting and Importing
+=======================
 
-cubrid killtran -d testdb
+To use a newer version of CUBRID database, the existing version must be migrated to a new one. For this purpose, you can use "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. For details on export and import, see `Migrating Database <#admin_admin_migration_migration__1472>`_ .
 
- 
+Dumping Parameters Used in Server/Client
+=========================================
 
-Tran index      User name      Host name      Process id      Program name
+The **cubrid paramdump** utility outputs parameter information used in the server/client process.
 
--------------------------------------------------------------------------------
+	cubrid paramdump [options] database_name
 
-      2(+)            dba      myhost            6700              csql
+* **cubrid**: An integrated utility for the CUBRID service and database management
 
-      3(+)            dba      myhost            2188           cub_cas
+* **paramdump**: A utility that outputs parameter information used in the server/client process
 
-      4(+)            dba      myhost             696              csql
+* *options*: A short name option starts with a single dash ( **-** ) while a full name option starts with a double dash ( **--** ). **-o**, **-b**, **-S** and **-C** options are provided.
 
-      5(+)         public      myhost            6944              csql
+* *database_name*: The name of the database in which parameter information is to be displayed.
 
--------------------------------------------------------------------------------
+The following shows [options] available with the **cubrid paramdump** utility.
 
-**Killing transactions for a specified OS user ID (--kill-user-name)**
+.. program:: paramdump
 
-cubrid killtran --kill-user-name=os_user_id testdb
+.. option:: -o, --output-file=FILE
 
-**Killing transactions of a specified client host (--kill- host-name)**
+	The **-o** option is used to store information of the parameters used in the server/client process of the database into a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
 
-cubrid killtran --kill-host-name=myhost testdb
+		cubrid paramdump -o db_output testdb
 
-**Killing transactions for a specified program (--kill-program-name)**
+.. option:: -b, --both
 
-cubrid killtran --kill-program-name=cub_cas testdb
+	The **-b** option is used to display parameter information used in server/client process on a console screen. If the **-b** option is not specified, only server-side information is displayed. ::
+ 	
+		cubrid paramdump -b testdb
 
-**Omitting a prompt to check transactions to be stopped (-f or --force)**
+.. option:: -S, --SA-mode
 
-cubrid killtran -f -i 1 testdb
+	This option displays parameter information of the server process in standalone mode. ::
 
-**Checking the Query Plan Cache**
+		cubrid paramdump -S testdb
 
-**Description**
+.. option:: -C, --CS-mode
 
-The
-**cubrid plandump**
-utility is used to display information on the query plans stored (cached) on the server.
+	This option displays parameter information of the server process in client/server mode. ::
 
-**Syntax**
+		cubrid paramdump -C testdb
 
-**cubrid**
-**plandump**
- 
-*options*
-*database_name*
+Locale Compile/Output
+=====================
 
-*options*
-: [
-**-d**
-|
-**--drop**
-]  [{
-**-o**
-|
-**--output-file**
-=}
-*file*
-]
+**cubrid genlocale** utility compiles the locale information to use. This utility is executed in the **make_locale.sh** script ( **.bat** for Windows).
 
-* **cubrid**
- : An integrated utility for the CUBRID service and database management.
+**cubrid dumplocale** utility outputs the compiled binary locale file as a human-readable format on the console. The output value may be very large, so we recommend that you save the value as a file by redirecting.
 
-
-
-* **plandump**
- : A utility that displays the query plans stored in the current cache of a specific database.
-
-
-
-* *options*
- : The
- **-d**
- and
- **-o**
- options are supported.
-
-
-
-* *database_name*
- : The name of the database where the query plans are to be checked or dropped from its sever cache.
-
-
-
-**Options**
-
-**Checking the query plans stored in the cache**
-
-cubrid plandump testdb
-
-**Dropping the query plans stored in the cache (-d or --drop)**
-
-cubrid plandump -d testdb
-
-**Storing the results of the query plans stored in the cache to a file (-o or --output)**
-
-cubrid plandump -o output.txt testdb
-
-**Outputting Internal Database Information**
-
-**Description**
-
-You can check various pieces of internal information on the database with the
-**cubrid diagdb**
-utility. Information provided by
-**cubrid diagdb**
-is helpful in diagnosing the current status of the database or figuring out a problem.
-
-**Syntax**
-
-**cubrid diagdb**
-*options*
-*database_name*
-
-*options*
-: [{
-**-d**
-|
-**--dump-type**
-=}
-*type*
-]
-
-* **cubrid**
- : An integrated utility for the CUBRID service and database management.
-
-
-
-* **diagdb**
- : A command that is used to check the current storage state of the database by outputting the information contained in the binary file managed by CUBRID in text format. It normally executes only when the database is in a stopped state. You can check the whole database or the file table, file size, heap size, class name or disk bitmap selectively by using the provided option.
-
-
-
-* *options*
- : The
- **-d**
- option is provided.
-
-
-
-* *database_name*
- : The name of the database of which internal information is to be diagnosed.
-
-
-
-**Options**
-
-**Specifying the output range (-d or --dump-type)**
-
-The following example shows how to display the information of all files in the
-*testdb*
-database. If any option is not specified, the default value of 1 is used.
-
-cubrid diagdb -d 1 myhost testdb
-
-The utility has 9 types of -d options as follows:
-
-+----------+--------------------------------------+
-| **Type** | **Description** |
-| | |
-+----------+--------------------------------------+
-| -1 | Displays all database information. |
-| | |
-+----------+--------------------------------------+
-| 1 | Displays file table information. |
-| | |
-+----------+--------------------------------------+
-| 2 | Displays file capacity information. |
-| | |
-+----------+--------------------------------------+
-| 3 | Displays heap capacity information. |
-| | |
-+----------+--------------------------------------+
-| 4 | Displays index capacity information. |
-| | |
-+----------+--------------------------------------+
-| 5 | Displays class name information. |
-| | |
-+----------+--------------------------------------+
-| 6 | Displays disk bitmap information. |
-| | |
-+----------+--------------------------------------+
-| 7 | Displays catalog information. |
-| | |
-+----------+--------------------------------------+
-| 8 | Displays log information. |
-| | |
-+----------+--------------------------------------+
-| 9 | Displays hip information. |
-| | |
-+----------+--------------------------------------+
-
-**Backing up and Restoring**
-
-**DBA**
-must perform regular backups of the database so that it can be restored successfully to a state at a certain point in time in case of system failure. For details, see
-`Database Backup <#admin_admin_br_backup_htm>`_
-.
-
-**Exporting and Importing**
-
-To use a newer version of CUBRID database, the existing version must be migrated to a new one. For this purpose, you can use "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. For details on export and import, see
-`Migrating Database <#admin_admin_migration_migration__1472>`_
-.
-
-**Dumping Parameters Used in Server/Client**
-
-**Description**
-
-The
-**cubrid paramdump**
-utility outputs parameter information used in the server/client process.
-
-**Syntax**
-
-**cubrid paramdump**
-*options*
-*database_name*
-
-*options*
-: [{
-**-o**
-|
-**--output-file=**
-}
-*filename*
-]  [{
-**-b**
-|
-**--both**
-}]  [{
-**-S**
-|
-**--SA-mode**
-}]  [{
-**-C**
-|
-**--CS-mode**
-}]
-
-* **cubrid**
- : An integrated utility for the CUBRID service and database management
-
-
-
-* **paramdump**
- : A utility that outputs parameter information used in the server/client process
-
-
-
-* *options*
- : A short name option starts with a single dash (
- **-**
- ) while a full name option starts with a double dash (
- **--**
- ).
- **-o**
- ,
- **-b**
- ,
- **-S**
- and
- **-C**
- options are provided.
-
-
-
-* *database_name*
- : The name of the database in which parameter information is to be displayed
-
-
-
-**Options**
-
-**Storing output information to a file (-o)**
-
-The
-**-o**
-option is used to store information of the parameters used in the server/client process of the database into a specified file. The file is created in the current directory. If the
-**-o**
-option is not specified, the message is displayed on a console screen.
-
-cubrid paramdump -o db_output testdb
-
-**Displaying information of the server/client parameters (-b)**
-
-The
-**-b**
-option is used to display parameter information used in server/client process on a console screen. If the
-**-b**
-option is not specified, only server-side information is displayed.
-
-cubrid paramdump -b testdb
-
-**Displaying parameter information of the server process in standalone mode (-S or --SA-mode)**
-
-cubrid paramdump -S testdb
-
-**Displaying parameter information of the server process in client/server mode (-C or --CS-mode)**
-
-cubrid paramdump -C testdb
-
-**Locale Compile/Output**
-
-**cubrid genlocale**
-utility compiles the locale information to use. This utility is executed in the
-**make_locale.sh**
-script (
-**.bat**
-for Windows).
-
-**cubrid dumplocale**
-utility outputs the compiled binary locale file as a human-readable format on the console. The output value may be very large, so we recommend that you save the value as a file by redirecting.
-
-For more detailed usage, see
-`Locale Setting <#admin_admin_i18n_locale_htm>`_
-.
+For more detailed usage, see `Locale Setting <#admin_admin_i18n_locale_htm>`_ .

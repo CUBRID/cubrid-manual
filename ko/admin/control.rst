@@ -34,12 +34,14 @@ CUBRID 설정 파일에 등록된 서비스를 제어하기 위한 **cubrid** �
 -----------
 
 CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
-<command>로 올 수 있는 명령어는 브로커 프로세스 구동을 위한 **start**, 종료를 위한 **stop**, 재시작을 위한 **restart**, 상태 확인을 위한 **status** 가 있으며, 특정 브로커 구동을 위한 **on**, 종료를 위한 **off**가 있다. 
+<command>로 올 수 있는 명령어는 브로커 프로세스 구동을 위한 **start** , 종료를 위한 **stop**, 재시작을 위한 **restart**, 상태 확인을 위한 **status** 가 있으며, 특정 브로커 구동을 위한 **on**, 종료를 위한 **off** 가 있다. 
 
 ::
 
 	cubrid broker <command> 
-	<command>: {start|stop|restart|status[<broker_name>] |on<broker_name> |off<broker_name> |reset<broker_name> |acl{status|reload} <broker_name> }
+	<command>: {start|stop|restart|status [<broker_name>] 
+	           |on <broker_name> |off <broker_name> 
+			   |reset <broker_name> |acl{status|reload} <broker_name> }
 
 CUBRID 매니저 서버 제어
 -----------------------
@@ -104,6 +106,8 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
 	% cubrid service start
 	@ cubrid master start
 	++ cubrid master start: success
+	@ cubrid server start: demodb
+
 
 이미 마스터 프로세스가 구동 중이라면 다음과 같은 메시지가 표시된다. 
 
@@ -230,7 +234,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 ::
 
-	% $ cubrid service status
+	% cubrid service status
 	@ cubrid master status
 	++ cubrid master is running.
 	@ cubrid server status
@@ -428,14 +432,12 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	cubrid server acl reload <database_name>
-	<database_name>: 데이터베이스 이름
 
 현재 구동 중인 서버의 IP 설정 내용을 출력하려면 다음 명령어를 사용한다. 
 
 ::
 
 	cubrid server acl status <database_name>
-	<database_name>: 데이터베이스 이름
 
 데이터베이스 서버 로그
 ----------------------
@@ -497,40 +499,33 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 몇 가지 서버 에러 코드 이름 및 에러 코드 번호, 에러 메시지를 살펴보면 다음과 같다.
 
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| 에러 코드 이름                      | 에러 번호    | 에러 메시지                                                                                           |
-+=====================================+==============+=======================================================================================================+
-| ER_LK_OBJECT_TIMEOUT_SIMPLE_MSG     | -73          | Your transaction (index  ,  @ \|\| ) timed out waiting on   lock on object \|\| \|\| .                |
-|                                     |              | You are waiting for user(s)   to finish.                                                              |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_LK_OBJECT_TIMEOUT_CLASS_MSG      | -74          | Your transaction (index  ,  @ \| ) timed out waiting on   lock on class  .                            |
-|                                     |              | You are waiting for user(s)   to finish.                                                              |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_LK_OBJECT_TIMEOUT_CLASSOF_MSG    | -75          | Your transaction (index  ,  @ \| ) timed out waiting on   lock on instance  \| \|  of class  .        |
-|                                     |              | You are waiting for user(s)   to finish.                                                              |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_LK_PAGE_TIMEOUT                  | -76          | Your transaction (index  ,  @ \| ) timed out waiting on   on page  \| .                               |  
-|                                     |              | You are waiting for user(s)   to release the page lock.                                               |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_PT_SYNTAX                        | -493         | Syntax:                                                                                               |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_BTREE_UNIQUE_FAILED              | -670         | Operation would have caused one or more unique constraint violations.                                 |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_UNIQUE_VIOLATION_WITHKEY         | -886         | " " caused unique constraint violation.                                                               |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_LK_OBJECT_DL_TIMEOUT_SIMPLE_MSG  | -966         | Your transaction (index  ,  @ \| ) timed out waiting on   lock on object  \| \|  because of deadlock. |
-|                                     |              | You are waiting for user(s)   to finish.                                                              |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_LK_OBJECT_DL_TIMEOUT_CLASS_MSG   | -967         | Your transaction (index  ,  @ \| ) timed out waiting on   lock on class   because of deadlock.        |
-|                                     |              | You are waiting for user(s)   to finish.                                                              |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_LK_OBJECT_DL_TIMEOUT_CLASSOF_MSG | -968         | Your transaction (index  ,  @ \| ) timed out waiting on   lock on instance  \| \|  of class           |
-|                                     |              | because of deadlock. You are waiting for user(s)   to finish.                                         |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_LK_DEADLOCK_CYCLE_DETECTED       | -1021        | A deadlock cycle is detected.                                                                         |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
-| ER_LK_DEADLOCK_SPECIFIC_INFO        | -1083        | Specific information about deadlock.                                                                  |
-+-------------------------------------+--------------+-------------------------------------------------------------------------------------------------------+
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| 에러 코드 이름                      | 에러 번호             | 에러 메시지                                                                                                                                              |
++=====================================+=======================+==========================================================================================================================================================+
+| ER_LK_OBJECT_TIMEOUT_SIMPLE_MSG     | -73                   | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on object ?\|?\|?. You are waiting for user(s) ? to finish.                               |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_LK_OBJECT_TIMEOUT_CLASS_MSG      | -74                   | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on class ?. You are waiting for user(s) ? to finish.                                      |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_LK_OBJECT_TIMEOUT_CLASSOF_MSG    | -75                   | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on instance ?\|?\|? of class ?. You are waiting for user(s) ? to finish.                  |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_LK_PAGE_TIMEOUT                  | -76                   | Your transaction (index ?, ?@?\|?) timed out waiting on ? on page ?|?. You are waiting for user(s) ? to release the page lock.                           |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_PT_SYNTAX                        | -493                  | Syntax: ?                                                                                                                                                |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_BTREE_UNIQUE_FAILED              | -670                  | Operation would have caused one or more unique constraint violations.                                                                                    |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_UNIQUE_VIOLATION_WITHKEY         | -886                  | "?" caused unique constraint violation.                                                                                                                  |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_LK_OBJECT_DL_TIMEOUT_SIMPLE_MSG  | -966                  | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on object ?\|?\|? because of deadlock. You are waiting for user(s) ? to finish.           |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_LK_OBJECT_DL_TIMEOUT_CLASS_MSG   | -967                  | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on class ? because of deadlock. You are waiting for user(s) ? to finish.                  |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_LK_OBJECT_DL_TIMEOUT_CLASSOF_MSG | -968                  | Your transaction (index ?, ?@?\|?) timed out waiting on ? lock on instance ?\|?\|? of class ? because of deadlock. You are waiting for user(s) ? to      |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_LK_DEADLOCK_CYCLE_DETECTED       | -1021                 | A deadlock cycle is detected. ?.                                                                                                                         |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ER_LK_DEADLOCK_SPECIFIC_INFO        | -1083                 | Specific information about deadlock.                                                                                                                     |
++-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 브로커
 ======
@@ -542,11 +537,11 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 ::
 
-% cubrid broker start
-@ cubrid broker start
-++ cubrid broker start: success
+	% cubrid broker start
+	@ cubrid broker start
+	++ cubrid broker start: success
 
-이미 브로커가 구동 중이라면 다음과 같은 메시지가 출력된다..
+이미 브로커가 구동 중이라면 다음과 같은 메시지가 출력된다.
 
 ::
 
@@ -590,9 +585,11 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 ::
 
-	cubrid broker status <options> [<expr>] 
+	cubrid broker status [options] [expr]
 
-<expr>이 주어지면 이름이 <expr>을 포함하는 브로커에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID 브로커 환경 설정 파일( **cubrid_broker.conf** )에 등록된 전체 브로커에 대해 상태 모니터링을 수행한다. **cubrid broker status** 에서 사용하는 <options>는 다음과 같다.
+[expr]이 주어지면 이름이 [expr]을 포함하는 브로커에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID 브로커 환경 설정 파일( **cubrid_broker.conf** )에 등록된 전체 브로커에 대해 상태 모니터링을 수행한다. 
+
+**cubrid broker status** 에서 사용하는 [options]는 다음과 같다.
 
 .. program:: broker_status
 
@@ -600,11 +597,15 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
  
 	브로커 응용 서버(CAS)에 관한 정보는 포함하지 않고, 브로커에 관한 상태 정보만 출력한다.
 
-.. option:: -f [-l secs] 
+.. option:: -f
 
 	브로커가 접속한 DB 및 호스트 정보를 출력한다.
-	-b  옵션과 함께 쓰이는 경우, CAS 정보를 추가로 출력한다.
-	-l secs  옵션은 클라이언트 Waiting/Busy 상태인 CAS의 개수를 출력할 때 누적 주기(단위: 초)를 지정하기 위해 사용한다. -l secs 옵션을 생략하면 기본값은 1초이다.
+	
+	**-b**  옵션과 함께 쓰이는 경우, CAS 정보를 추가로 출력한다.
+
+.. option:: -l SECOND
+	
+	**-l** 옵션은 **-f** 옵션과만 함께 쓰이며, 클라이언트 Waiting/Busy 상태인 CAS의 개수를 출력할 때 누적 주기(단위: 초)를 지정하기 위해 사용한다. **-l** *SECOND* 옵션을 생략하면 기본값은 1초이다.
 
 .. option:: -q
 
@@ -614,14 +615,10 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 	
 	화면 출력시 tty mode 로 출력한다. 출력 내용을 리다이렉션하여 파일로 쓸 수 있다.
 	
-.. option:: -s secs	
+.. option:: -s SECOND	
 
 	브로커에 관한 상태 정보를 지정된 시간마다 주기적으로 출력한다. 
 	q를 입력하면 명령 프롬프트로 복귀한다.
-
-.. option:: -f
-
-	브로커가 접속한 DB 및 호스트 정보를 출력한다.
 
 전체 브로커 상태 정보를 확인하기 위하여 옵션 및 인수를 입력하지 않으면 다음과 같이 출력된다.
 
@@ -875,7 +872,6 @@ ip_list_file의 작성 형식은 다음과 같다.
 ::
 
 	<ip_addr>
-
 	…
 
 *   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 *로 입력하면 뒷자리의 모든 IP를 허용한다.
@@ -1100,7 +1096,7 @@ HA 환경에서 브로커의 **ACCESS_MODE** 를 Read Only로 변경하고 해�
 
 *   EID = 38: 에러 ID. SQL 문 처리 중 에러가 발생한 경우, 서버나 클라이언트 에러 로그와 관련이 있는 SQL 로그를 찾을 때 사용함.
 
-*   Syntax:…: 에러 메시지
+*   Syntax ...: 에러 메시지
 
 **SQL 로그 관리**
 
@@ -1144,32 +1140,30 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 
 **broker_log_top** 유틸리티는 특정 기간 동안 생성된 SQL 로그를 분석하여 실행 시간이 긴 순서대로 각 SQL 문과 실행 시간에 관한 정보를 파일에 출력하며, 분석된 결과는 각각 log.top.q 및 log.top.res에 저장된다.
 
-**broker_log_top** 유틸리티는 실행 시간이 긴 질의(long query)를 분석할 때 유용하며, 구문은 다음과 같다.
+**broker_log_top** 유틸리티는 실행 시간이 긴 질의(long duration query)를 분석할 때 유용하며, 구문은 다음과 같다.
 
 ::
-
 	broker_log_top [<options>] <sql_log_file_list>
 
 <sql_log_file_list>에는 분석할 로그 파일 이름을 입력한다. **broker_log_top** 에서 사용하는 <options>는 다음과 같다.
 	
-.. program::broker_log_top
+.. program:: broker_log_top
 
 .. option:: -t
 	
 	트랜잭션 단위로 결과를 출력한다.
 
-.. option:: -F from_date
+.. option:: -F DATE
 
 		분석 대상 SQL의 시작 날짜를 지정한다. 입력 형식은 MM[/DD[ hh[:mm[:ss[.msec]]]]]이며 []로 감싼 부분은 생략할 수 있다. 생략하면 DD는 01을 입력한 것과 같고, hh, mm, ss, msec은 0을 입력한 것과 같다.
 		
-.. option:: -T to_date
+.. option:: -T DATE
 
-		분석 대상 SQL의 끝 날짜를 지정한다. 입력 형식은 from_date와 같다.
+		분석 대상 SQL의 끝 날짜를 지정한다. 입력 형식은 **-F** 옵션의 *DATE* 와 같다.
+
+
 		
-::
-
 옵션을 모두 생략하면, 모든 로그에 대해 SQL 문 단위로 결과를 출력한다.
-
  
 다음은 밀리초까지 검색 범위를 설정하는 예제이다.
 
@@ -1245,19 +1239,21 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 
 **broker_log_converter** 유틸리티에 의해 생성된 질의 파일에 저장된 질의를 재실행하기 위하여 **broker_log_runner** 유틸리티를 실행한다.
 
+
+
 **broker_log_runner** 유틸리티의 구문은 다음과 같다. 
 
 ::
 
-	broker_log_runner -I <broker_ip> -P <broker_port> -d <dbname> [<options>] <input_file>
+	broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
 	
-* <broker_ip>: CUBRID 브로커의 IP주소 또는 호스트 이름
+* broker_ip: CUBRID 브로커의 IP주소 또는 호스트 이름
 
-* <broker_port>: CUBRID 브로커의 포트 번호
+* broker_port: CUBRID 브로커의 포트 번호
 
-* <dbname>: 질의를 실행할 데이터베이스 이름
+* dbname: 질의를 실행할 데이터베이스 이름
 
-* <input_file>: 입력 파일 이름
+* exec_script_file: 수행할 질의가 저장된 파일 이름
 
 **broker_log_runner** 에서 사용하는 <options>는 다음과 같다.
 	

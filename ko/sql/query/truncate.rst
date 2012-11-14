@@ -14,7 +14,7 @@ TRUNCATE
 
 ::
 
-TRUNCATE [ TABLE ] <table_name>
+	TRUNCATE [ TABLE ] <table_name>
 
 *   *table_name* : 삭제할 데이터가 포함되어 있는 테이블의 이름을 지정한다.
 

@@ -14,5 +14,4 @@ Data Manipulation
 	merge.rst
 	truncate.rst
 	prepare.rst
-	do.rst
 	show.rst

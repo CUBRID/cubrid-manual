@@ -33,30 +33,30 @@ cci_bind_param()
 
 	:c:type:`T_CCI_A_TYPE` 은 CCI 응용 프로그램 내에서 데이터 바인딩에 사용되는 C 언어의 타입을 의미하며, int, float 등의 primitive 타입과 :c:type:`T_CCI_BIT`, :c:type:`T_CCI_DATE` 등의 CCI 가 정의한 user-defined 타입으로 구성된다. 각 타입에 대한 식별자는 아래의 표와 같이 정의되어 있다.
 
-	+-----------------------+---------------------+
-	| a_type                | value 타입          |
-	+=======================+=====================+
-	| **CCI_A_TYPE_STR**    | char*               |
-	+-----------------------+---------------------+
-	| **CCI_A_TYPE_INT**    | int*                |
-	+-----------------------+---------------------+
-	| **CCI_A_TYPE_FLOAT**  | float*              |
-	+-----------------------+---------------------+
-	| **CCI_A_TYPE_DOUBLE** | double*             |
-	+-----------------------+---------------------+
-	| **CCI_A_TYPE_BIT**    | **T_CCI_BIT** *     |
-	+-----------------------+---------------------+
-	| **CCI_A_TYPE_SET**    | **T_CCI_SET** *     |
-	+-----------------------+---------------------+
-	| **CCI_A_TYPE_DATE**   | **T_CCI_DATE** *    |
-	+-----------------------+---------------------+
-	| **CCI_A_TYPE_BIGINT** | int64_t*            |
-	|                       | (Windows는 __int64*)|
-	+-----------------------+---------------------+
-	| **CCI_A_TYPE_BLOB**   | **T_CCI_BLOB**      |
-	+-----------------------+---------------------+
-	| **CCI_A_TYPE_CLOB**   | **T_CCI_CLOB**      |
-	+-----------------------+---------------------+
+	+-----------------------------+-----------------------------+
+	| a_type                      | value 타입                  |
+	+=============================+=============================+
+	| **CCI_A_TYPE_STR**          | char \*                     |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_INT**          | int \*                      |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_FLOAT**        | float \*                    |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_DOUBLE**       | double \*                   |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_BIT**          | **T_CCI_BIT** \*            |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_SET**          | **T_CCI_SET** \*            |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_DATE**         | **T_CCI_DATE** \*           |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_BIGINT**       | int64_t \*                  |
+	|                             | (For Windows: __int64 \*)   |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_BLOB**         | **T_CCI_BLOB**              |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_CLOB**         | **T_CCI_CLOB**              |
+	+-----------------------------+-----------------------------+
 
 	:c:type:`T_CCI_U_TYPE` 은 데이터베이스의 칼럼 타입으로, value 인자를 통해 바인딩된 데이터를 이 타입으로 변환한다.
 	:c:func:`cci_bind_param` 함수는 C 언어가 이해하는 A 타입의 데이터를 데이터베이스가 이해할 수 있는 U 타입의 데이터로 변환하기 위한 정보를 전달하기 위해서 두 가지 타입을 사용한다.
@@ -244,9 +244,6 @@ cci_blob_size()
 	*blob* 에 명시한 데이터 파일의 크기를 반환한다.
 
 	:param blob: (OUT) **LOB** Locator
-	:param start_pos: (IN) **LOB** 데이터 파일의 위치 인덱스
-	:param length: (IN) 파일로부터 가져올 **LOB** 데이터 길이
-	:param error_buf: (OUT) 에러 버퍼
 	:return: **BLOB** 데이터 파일의 크기(>=0 : 성공), 에러 코드(<0 : 에러)
 
 		*   **CCI_ER_INVALID_LOB_HANDLE**
@@ -558,6 +555,13 @@ cci_connect_ex
 	:param err_buf: (OUT) 에러 버퍼
 	:return: 연결 핸들 ID(성공), 에러 코드(실패)
 
+		*   **CCI_ER_NO_MORE_MEMORY**
+		*   **CCI_ER_HOSTNAME**
+		*   **CCI_ER_CON_HANDLE**
+		*   **CCI_ER_DBMS**
+		*   **CCI_ER_COMMUNICATION**
+		*   **CCI_ER_CONNECT**
+
 cci_connect_with_url
 ====================
 
@@ -602,44 +606,44 @@ cci_connect_with_url
 	
 	연결 대상과 관련된 속성은 **althosts** 이며, 타임아웃과 관련된 속성은 **loginTimeout**, **queryTimeout**, **disconnectOnQueryTimeout** 이다. 디버깅용 로그 정보 설정과 관련된 속성은 **logSlowQueries**, **logTraceApi**, **logTraceNetwork** 이다. *url* 인자에 입력하는 모든 속성(property) 이름은 대소문자 구별을 하지 않는다.
 
-    *   *host* : 마스터 데이터베이스의 호스트 이름 또는 IP 주소
-    *   *port* : 포트 번호
-    *   *db_name* : 데이터베이스 이름
-    *   *db_user* : 데이터베이스 사용자 이름
-    *   *db_password* : 데이터베이스 사용자 비밀번호
+	*   *host* : 마스터 데이터베이스의 호스트 이름 또는 IP 주소
+	*   *port* : 포트 번호
+	*   *db_name* : 데이터베이스 이름
+	*   *db_user* : 데이터베이스 사용자 이름
+	*   *db_password* : 데이터베이스 사용자 비밀번호
 	
-    *   **althosts** = *standby_broker1_host*, *standby_broker2_host*, ... : active 서버에 연결할 수 없는 경우, 그 다음으로 연결을 시도(failover)할 standby 서버의 브로커 정보를 나타낸다. failover할 브로커를 여러 개 지정할 수 있고, **althosts** 에 나열한 순서대로 연결을 시도한다.
+	*   **althosts** = *standby_broker1_host*, *standby_broker2_host*, ... : active 서버에 연결할 수 없는 경우, 그 다음으로 연결을 시도(failover)할 standby 서버의 브로커 정보를 나타낸다. failover할 브로커를 여러 개 지정할 수 있고, **althosts** 에 나열한 순서대로 연결을 시도한다.
 
-    *   **rctime** : 장애가 발생했던 active 브로커에 연결을 시도하는 주기이다. 장애 발생 후 **althosts** 에 명시한 브로커로 접속하여(failover) 트랜잭션을 종료한 후, **rctime**  만큼 시간이 경과할 때마다 마스터 데이터베이스의 active 브로커에 연결을 시도한다. 기본값은 600초이다.
+	*   **rctime** : 장애가 발생했던 active 브로커에 연결을 시도하는 주기이다. 장애 발생 후 **althosts** 에 명시한 브로커로 접속하여(failover) 트랜잭션을 종료한 후, **rctime**  만큼 시간이 경과할 때마다 마스터 데이터베이스의 active 브로커에 연결을 시도한다. 기본값은 600초이다.
 
-    *   **login_timeout** | **loginTimeout** : 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 에러를 반환한다. 기본값은 **0** 이며, 무한 대기를 의미한다.
+	*   **login_timeout** | **loginTimeout** : 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 에러를 반환한다. 기본값은 **0** 이며, 무한 대기를 의미한다.
 
-    *   **query_timeout** | **queryTimeout** : :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout** 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout** 을 참고한다.
+	*   **query_timeout** | **queryTimeout** : :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout** 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout** 을 참고한다.
 
-    *   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : 질의 요청 타임아웃 시 즉시 소켓 연결 종료 여부. :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 **query_timeout** 으로 설정한 시간이 지나면 질의 취소 요청 후 즉시 소켓 연결을 종료할 것인지, 아니면 질의 취소 요청을 받아들인다는 서버의 응답을 기다릴 것인지를 설정한다. 기본값은 **false** 로, 서버의 응답을 기다린다. 이 값이 **true** 이면 :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수 호출 도중 질의 타임아웃이 발생할 때 서버에 질의 취소 메시지를 보낸 후, 소켓을 닫고 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. (브로커가 아닌 데이터베이스 서버 쪽에서 에러가 발생한 경우 -1을 반환한다. 상세 에러를 확인하고 싶으면 "데이터베이스 에러 버퍼"의 에러 코드를 확인한다. 데이터베이스 에러 버퍼에서 에러 코드를 확인하는 방법은 `CCI 에러 코드와 에러 메시지 <#api_api_cci_programming_htm_err>`_ 를 참고한다.) 이 경우 사용자는 명시적으로 :c:func:`cci_disconnect` 함수를 통해 데이터베이스 연결 핸들을 닫아야 한다. 응용 프로그램이 질의 취소 메시지를 보낸 후 에러를 반환했음에도 불구하고, 데이터베이스 서버는 그 메시지를 받지 못하고 해당 질의를 수행할 수 있음을 주의한다. **false** 이면 서버에 취소 메시지를 보낸 후, 서버의 질의 요청에 대한 응답이 올 때 까지 대기한다.
+	*   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : 질의 요청 타임아웃 시 즉시 소켓 연결 종료 여부. :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 **query_timeout** 으로 설정한 시간이 지나면 질의 취소 요청 후 즉시 소켓 연결을 종료할 것인지, 아니면 질의 취소 요청을 받아들인다는 서버의 응답을 기다릴 것인지를 설정한다. 기본값은 **false** 로, 서버의 응답을 기다린다. 이 값이 **true** 이면 :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수 호출 도중 질의 타임아웃이 발생할 때 서버에 질의 취소 메시지를 보낸 후, 소켓을 닫고 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. (브로커가 아닌 데이터베이스 서버 쪽에서 에러가 발생한 경우 -1을 반환한다. 상세 에러를 확인하고 싶으면 "데이터베이스 에러 버퍼"의 에러 코드를 확인한다. 데이터베이스 에러 버퍼에서 에러 코드를 확인하는 방법은 `CCI 에러 코드와 에러 메시지 <#api_api_cci_programming_htm_err>`_ 를 참고한다.) 이 경우 사용자는 명시적으로 :c:func:`cci_disconnect` 함수를 통해 데이터베이스 연결 핸들을 닫아야 한다. 응용 프로그램이 질의 취소 메시지를 보낸 후 에러를 반환했음에도 불구하고, 데이터베이스 서버는 그 메시지를 받지 못하고 해당 질의를 수행할 수 있음을 주의한다. **false** 이면 서버에 취소 메시지를 보낸 후, 서버의 질의 요청에 대한 응답이 올 때 까지 대기한다.
 
-    *   **logFile** : 디버깅용 로그 파일 이름(기본값: **cci_**<*handle_id*>**.log**).<*handle_id*>는 이 함수가 반환하는 연결 핸들 ID이다.
+	*   **logFile** : 디버깅용 로그 파일 이름(기본값: **cci_**<*handle_id*>**.log**).<*handle_id*>는 이 함수가 반환하는 연결 핸들 ID이다.
 
-    *   **logBaseDir** : 디버깅용 로그 파일이 생성되는 디렉터리. 경로를 포함한 파일 이름의 형식은 logBaseDir/logFile이 되며, 상대 경로로 지정할 수 있다.
+	*   **logBaseDir** : 디버깅용 로그 파일이 생성되는 디렉터리. 경로를 포함한 파일 이름의 형식은 logBaseDir/logFile이 되며, 상대 경로로 지정할 수 있다.
 
-    *   **logSlowQueries** : 디버깅용 슬로우 쿼리 로깅 여부(기본값: **false**)
+	*   **logSlowQueries** : 디버깅용 슬로우 쿼리 로깅 여부(기본값: **false**)
 
-    *   **slowQueryThresholdMillis** : 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: **60000**). 단위는 밀리 초이다.
+	*   **slowQueryThresholdMillis** : 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: **60000**). 단위는 밀리 초이다.
 	
-    *   **logTraceApi** : CCI 함수 시작과 끝의 로깅 여부
+	*   **logTraceApi** : CCI 함수 시작과 끝의 로깅 여부
 
-    *   **logTraceNetwork** : CCI 함수 네트워크 데이터 전송 내용의 로깅 여부
+	*   **logTraceNetwork** : CCI 함수 네트워크 데이터 전송 내용의 로깅 여부
 
-**예제** ::
+	**예제** ::
 
-	--connection URL string when a property(althosts) is specified for HA
-	URL=cci:CUBRID:192.168.0.1:33000:demodb:::?althosts=192.168.0.2:33000,192.168.0.3:33000
-	 
-	--connection URL string when properties(althosts,rctime) is specified for HA
-	URL=cci:CUBRID:192.168.0.1:33000:demodb:::?althosts=192.168.0.2:33000,192.168.0.3:33000&rctime=600
-	 
-	--connection URL string when properties(logSlowQueries,slowQueryThresholdMills, logTraceApi, logTraceNetwork) are specified for interface debugging
-	URL = "cci:cubrid:192.168.0.1:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
+		--connection URL string when a property(althosts) is specified for HA
+		URL=cci:CUBRID:192.168.0.1:33000:demodb:::?althosts=192.168.0.2:33000,192.168.0.3:33000
+		 
+		--connection URL string when properties(althosts,rctime) is specified for HA
+		URL=cci:CUBRID:192.168.0.1:33000:demodb:::?althosts=192.168.0.2:33000,192.168.0.3:33000&rctime=600
+		 
+		--connection URL string when properties(logSlowQueries,slowQueryThresholdMills, logTraceApi, logTraceNetwork) are specified for interface debugging
+		URL = "cci:cubrid:192.168.0.1:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
 
 cci_connect_with_url_ex
 =======================
@@ -653,13 +657,22 @@ cci_connect_with_url_ex
 	:param db_passwd: (IN) 데이터베이스 사용자 비밀번호. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_password*>를 사용한다.
 	:param err_buf: (OUT) 에러 버퍼
 	:return: 연결 핸들 ID(성공), 에러 코드(실패)
-	
+
+		*   **CCI_ER_NO_MORE_MEMORY**
+		*   **CCI_ER_HOSTNAME**
+		*   **CCI_ER_INVALID_URL**
+		*   **CCI_ER_CON_HANDLE**
+		*   **CCI_ER_CONNECT**
+		*   **CCI_ER_DBMS**
+		*   **CCI_ER_COMMUNICATION**
+		*   **CCI_ER_LOGIN_TIMEOUT**
+
 cci_cursor
 ==========
 
 .. c:function:: int cci_cursor(int req_handle, int offset, T_CCI_CURSOR_POS origin, T_CCI_ERROR *err_buf)
 
-	:c:func:`cci_execute 로 실행한 질의 결과 내의 특정 레코드에 접근하기 위하여 요청 핸들에 설정된 커서를 이동시킨다. 인자로 지정되는 *origin* 변수 값과 *offset* 값을 통해 커서의 위치가 이동되며, 이동할 커서의 위치가 유효하지 않을 경우 **CCI_ER_NO_MORE_DATA** 를 반환한다.
+	:c:func:`cci_execute` 로 실행한 질의 결과 내의 특정 레코드에 접근하기 위하여 요청 핸들에 설정된 커서를 이동시킨다. 인자로 지정되는 *origin* 변수 값과 *offset* 값을 통해 커서의 위치가 이동되며, 이동할 커서의 위치가 유효하지 않을 경우 **CCI_ER_NO_MORE_DATA** 를 반환한다.
 
 	:param req_handle: (IN) 요청 핸들
 	:param offset: (IN) 이동할 오프셋
@@ -671,21 +684,21 @@ cci_cursor
 		*   **CCI_ER_NO_MORE_DATA**
 		*   **CCI_ER_COMMUNICATION**
 
-**예제**
+	**예제**
 
-.. code-block:: c
+	.. code-block:: c
 
-	//the cursor moves to the first record
-	cci_cursor(req, 1, CCI_CURSOR_FIRST, &err_buf);
-	 
-	//the cursor moves to the next record
-	cci_cursor(req, 1, CCI_CURSOR_CURRENT, &err_buf);
-	 
-	//the cursor moves to the last record
-	cci_cursor(req, 1, CCI_CURSOR_LAST, &err_buf);
-	 
-	//the cursor moves to the previous record
-	cci_cursor(req, -1, CCI_CURSOR_CURRENT, &err_buf);
+		//the cursor moves to the first record
+		cci_cursor(req, 1, CCI_CURSOR_FIRST, &err_buf);
+		 
+		//the cursor moves to the next record
+		cci_cursor(req, 1, CCI_CURSOR_CURRENT, &err_buf);
+		 
+		//the cursor moves to the last record
+		cci_cursor(req, 1, CCI_CURSOR_LAST, &err_buf);
+		 
+		//the cursor moves to the previous record
+		cci_cursor(req, -1, CCI_CURSOR_CURRENT, &err_buf);
 
 cci_cursor_update
 =================
@@ -708,30 +721,30 @@ cci_cursor_update
 	
 	*a_type* 에 대한 *value* 의 데이터 타입은 다음과 같다.
 
-	+---------------------+------------------------------+
-	| a_type              | value 타입                   |
-	+=====================+==============================+
-	| CCI_A_TYPE_STR      | char**                       |
-	+---------------------+------------------------------+
-	| CCI_A_TYPE_INT      | int*                         |
-	+---------------------+------------------------------+
-	| CCI_A_TYPE_FLOAT    | float*                       |
-	+---------------------+------------------------------+
-	| CCI_A_TYPE_DOUBLE   | double*                      |
-	+---------------------+------------------------------+
-	| CCI_A_TYPE_BIT      | **T_CCI_BIT** *              |
-	+---------------------+------------------------------+
-	| CCI_A_TYPE_SET      | **T_CCI_SET** *              |
-	+---------------------+------------------------------+
-	| CCI_A_TYPE_DATE     | **T_CCI_DATE** *             |
-	+---------------------+------------------------------+
-	| CCI_A_TYPE_BIGINT   | int64_t*                     |
-	|                     | (Windows는 __int64*)         |
-	+---------------------+------------------------------+
-	| **CCI_A_TYPE_BLOB** | **T_CCI_BLOB**               |
-	+---------------------+------------------------------+
-	| **CCI_A_TYPE_CLOB** | **T_CCI_CLOB**               |
-	+---------------------+------------------------------+
+	+-----------------------------+-----------------------------+
+	| a_type                      | value 타입                  |
+	+=============================+=============================+
+	| **CCI_A_TYPE_STR**          | char \*                     |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_INT**          | int \*                      |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_FLOAT**        | float \*                    |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_DOUBLE**       | double \*                   |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_BIT**          | **T_CCI_BIT** \*            |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_SET**          | **T_CCI_SET** \*            |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_DATE**         | **T_CCI_DATE** \*           |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_BIGINT**       | int64_t \*                  |
+	|                             | (For Windows: __int64 \*)   |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_BLOB**         | **T_CCI_BLOB**              |
+	+-----------------------------+-----------------------------+
+	| **CCI_A_TYPE_CLOB**         | **T_CCI_CLOB**              |
+	+-----------------------------+-----------------------------+
 
 cci_datasource_borrow
 =====================
@@ -838,8 +851,6 @@ cci_end_tran
 
 	현재 진행 중인 트랜잭션에 대해서 커밋(commit)이나 롤백(rollback)을 수행한다. 이때, 열려 있는 요청 핸들은 모두 종료되고, 데이터베이스 서버와 연결이 해제된다. 단, 서버와 연결이 끊어진 후에도 해당 연결 핸들은 유효하며, 이는 :c:func:`cci_connect` 함수로 연결 핸들을 하나 할당 받은 경우와 동일한 상태다. *type* 이 **CCI_TRAN_COMMIT** 으로 지정되면 트랜잭션을 커밋하고, **CCI_TRAN_ROLLBACK** 으로 지정되면 트랜잭션을 롤백한다.
 
-	브로커 파라미터인 **CCI_DEFAULT_AUTOCOMMIT** 으로 응용 프로그램 시작 시 자동 커밋 모드의 기본값을 설정할 수 있으며, 브로커 파라미터 설정을 생략하면 기본값은 **ON** 이다. 응용 프로그램 내에서 자동 커밋 모드를 변경하려면 :c:func:`cci_set_autocommit` 함수를 이용하며, 자동 커밋 모드가 **OFF** 이면 :c:func:`cci_end_tran` 함수를 이용하여 명시적으로 트랜잭션을 커밋하거나 롤백해야 한다.
-
 	:param conn_handle: (IN) 연결 핸들
 	:param type: (IN) **CCI_TRAN_COMMIT** 또는 **CCI_TRAN_ROLLBACK**
 	:param err_buf: (OUT) 에러 버퍼
@@ -849,6 +860,8 @@ cci_end_tran
 		*   **CCI_ER_DBMS**
 		*   **CCI_ER_COMMUNICATION**
 		*   **CCI_ER_TRAN_TYPE**
+
+	브로커 파라미터인 **CCI_DEFAULT_AUTOCOMMIT** 으로 응용 프로그램 시작 시 자동 커밋 모드의 기본값을 설정할 수 있으며, 브로커 파라미터 설정을 생략하면 기본값은 **ON** 이다. 응용 프로그램 내에서 자동 커밋 모드를 변경하려면 :c:func:`cci_set_autocommit` 함수를 이용하며, 자동 커밋 모드가 **OFF** 이면 :c:func:`cci_end_tran` 함수를 이용하여 명시적으로 트랜잭션을 커밋하거나 롤백해야 한다.
 
 cci_escape_string
 =================
@@ -938,10 +951,10 @@ cci_execute_array()
 
 	+--------------------------------+-----------------------+---------------+
 	| 매크로                         |  리턴 값 타입         |  의미         |
-	+--------------------------------+-----------------------+---------------+
+	+================================+=======================+===============+
 	| **CCI_QUERY_RESULT_RESULT**    | int                   | 결과 개수     |
 	+--------------------------------+-----------------------+---------------+
-	| **CCI_QUERY_RESULT_ERR_MSG**   | char*                 | 질의에 대한   |
+	| **CCI_QUERY_RESULT_ERR_MSG**   | char \*               | 질의에 대한   |
 	|                                |                       | 에러 메시지   |
 	+--------------------------------+-----------------------+---------------+
 	| **CCI_QUERY_RESULT_STMT_TYPE** | int (                 | 질의문의 타입 |
@@ -1160,15 +1173,7 @@ cci_fetch_sensitive
 
 	서버에서 클라이언트로 **SELECT** 질의의 결과가 전송될 때 sensitive column에 대해서 변경된 값으로 전송되도록 한다. *req_handle* 에 의한 결과가 sensitive result가 아닐 경우 :c:func`cci_fetch` 와 동일하다. 리턴 값이 **CCI_ER_DELETED_TUPLE** 일 경우 해당 레코드는 삭제된 경우이다.
 	
-	:param req_handle: (IN) 요청 핸들
-	:param err_buf: (OUT) 에러 버퍼
-	:return: 에러 코드(0: 성공)
 
-		*   **CCI_ER_REQ_HANDLE**
-		*   **CCI_ER_NO_MORE_DATA**
-		*   **CCI_ER_COMMUNICATION**
-		*   **CCI_ER_DBMS**
-		*   **CCI_ER_DELETED_TUPLE**
 
 	sensitive column이란 **SELECT** 리스트 항목 중 결과 재요청 시 업데이트된 값을 제공할 수 있는 항목을 말한다. 주로 어떠한 연산 없이, 예를 들면 집계 연산과 같은 과정이 없이 칼럼을 **SELECT** 리스트의 항목으로 그대로 쓰는 경우 그 칼럼을 sensitive column이라고 말할 수 있다.
 
@@ -1278,24 +1283,24 @@ cci_get_data
 	포인터 복사에 의해 반환된 포인터는 해제(free)하면 안 된다. 단, 타입이 **CCI_A_TYPE_SET** 인 경우 **T_CCI_SET** 타입의 set 포인터를 메모리에 할당한 후 이를 반환하므로, set 포인터를 사용한 후에는 :c:func:`cci_set_free` 함수를 이용하여 할당된 메모리를 해제해야 한다. 아래는 *type* 인자와 그에 대응하는 *value* 의 데이터 타입을 정리한 표이다.
 
 	+---------------------+------------------------------+-------------------------------------------+
-	| type                | value 타입                   | 의미                                      |
+	| type                | value Type                   | Meaning                                   |
 	+=====================+==============================+===========================================+
-	| CCI_A_TYPE_STR      | char**                       | pointer copy                              |
+	| CCI_A_TYPE_STR      | char \*\*                    | pointer copy                              |
 	+---------------------+------------------------------+-------------------------------------------+
-	| CCI_A_TYPE_INT      | int*                         | value copy                                |
+	| CCI_A_TYPE_INT      | int \*                       | value copy                                |
 	+---------------------+------------------------------+-------------------------------------------+
-	| CCI_A_TYPE_FLOAT    | float*                       | value copy                                |
+	| CCI_A_TYPE_FLOAT    | float \*                     | value copy                                |
 	+---------------------+------------------------------+-------------------------------------------+
-	| CCI_A_TYPE_DOUBLE   | double*                      | value copy                                |
+	| CCI_A_TYPE_DOUBLE   | double \*                    | value copy                                |
 	+---------------------+------------------------------+-------------------------------------------+
-	| CCI_A_TYPE_BIT      | **T_CCI_BIT** *              | value copy (pointer copy for each member) |
+	| CCI_A_TYPE_BIT      | **T_CCI_BIT** \*             | value copy (pointer copy for each member) |
 	+---------------------+------------------------------+-------------------------------------------+
-	| CCI_A_TYPE_SET      | **T_CCI_SET** *              | memory alloc and value copy               |
+	| CCI_A_TYPE_SET      | **T_CCI_SET** \*             | memory alloc and value copy               |
 	+---------------------+------------------------------+-------------------------------------------+
-	| CCI_A_TYPE_DATE     | **T_CCI_DATE** *             | value copy                                |
+	| CCI_A_TYPE_DATE     | **T_CCI_DATE** \*            | value copy                                |
 	+---------------------+------------------------------+-------------------------------------------+
-	| CCI_A_TYPE_BIGINT   | int64_t*                     | value copy                                |
-	|                     | (Windows는 __int64*)         |                                           |
+	| CCI_A_TYPE_BIGINT   | int64_t \*                   | value copy                                |
+	|                     | (For Windows: __int64 \*)    |                                           |
 	+---------------------+------------------------------+-------------------------------------------+
 	| **CCI_A_TYPE_BLOB** | **T_CCI_BLOB**               | memory alloc and value copy               |
 	+---------------------+------------------------------+-------------------------------------------+
@@ -1330,11 +1335,11 @@ cci_get_db_parameter
 	+---------------------------------+--------------+----------+
 	| param_name                      | value 타입   | note     |
 	+=================================+==============+==========+
-	| **CCI_PARAM_ISOLATION_LEVEL**   | int*         | get/set  |
+	| **CCI_PARAM_ISOLATION_LEVEL**   | int \*       | get/set  |
 	+---------------------------------+--------------+----------+
-	| **CCI_PARAM_LOCK_TIMEOUT**      | int*         | get/set  |
+	| **CCI_PARAM_LOCK_TIMEOUT**      | int \*       | get/set  |
 	+---------------------------------+--------------+----------+
-	| **CCI_PARAM_MAX_STRING_LENGTH** | int*         | get only |
+	| **CCI_PARAM_MAX_STRING_LENGTH** | int \*       | get only |
 	+---------------------------------+--------------+----------+
 
 	:c:func:`cci_get_db_parameter`, :c:func:`cci_set_db_parameter` 에서 **CCI_PARAM_LOCK_TIMEOUT** 의 입출력 단위는 밀리초이다.
@@ -1353,7 +1358,6 @@ cci_get_db_version
 	:param conn_handle: (IN) 연결 핸들
 	:param out_buf: (OUT) 결과 버퍼
 	:param out_buf_size: (IN) *oub_buf* 크기
-	:param err_buf: (OUT) 에러 버퍼	
 	:return: 에러 코드(0: 성공)
 
 		*   **CCI_ER_CON_HANDLE**
@@ -1432,11 +1436,11 @@ cci_get_result_info
 	+--------------------------------------------+------------------+----------------------+
 	| :c:macro:`CCI_GET_RESULT_INFO_PRECISION`   | int              | 칼럼의 precision     |
 	+--------------------------------------------+------------------+----------------------+
-	| :c:macro:`CCI_GET_RESULT_INFO_NAME`        | char*            | 칼럼의 이름          |
+	| :c:macro:`CCI_GET_RESULT_INFO_NAME`        | char \*          | 칼럼의 이름          |
 	+--------------------------------------------+------------------+----------------------+
-	| :c:macro:`CCI_GET_RESULT_INFO_ATTR_NAME`   | char*            | 칼럼의 속성 이름     |
+	| :c:macro:`CCI_GET_RESULT_INFO_ATTR_NAME`   | char \*          | 칼럼의 속성 이름     |
 	+--------------------------------------------+------------------+----------------------+
-	| :c:macro:`CCI_GET_RESULT_INFO_CLASS_NAME`  | char*            | 칼럼의 클래스 이름   |
+	| :c:macro:`CCI_GET_RESULT_INFO_CLASS_NAME`  | char \*          | 칼럼의 클래스 이름   |
 	+--------------------------------------------+------------------+----------------------+
 	| :c:macro:`CCI_GET_RESULT_INFO_IS_NON_NULL` | char (0 or 1)    | 칼럼이               |
 	|                                            |                  | **NULL**             |
@@ -1478,7 +1482,7 @@ CCI_GET_RESULT_INFO_ATTR_NAME
 
 	:param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
 	:param index: (IN) 칼럼 인덱스
-	:return: 속성 이름 (char*)
+	:return: 속성 이름 (char \*)
 
 CCI_GET_RESULT_INFO_CLASS_NAME
 ==============================
@@ -1489,7 +1493,7 @@ CCI_GET_RESULT_INFO_CLASS_NAME
 
 	:param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
 	:param index: (IN) 칼럼 인덱스
-	:return: 클래스 이름 (char*)
+	:return: 클래스 이름 (char \*)
 
 CCI_GET_RESULT_INFO_IS_NON_NULL
 ===============================
@@ -1511,7 +1515,7 @@ CCI_GET_RESULT_INFO_NAME
 
 	:param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
 	:param index: (IN) 칼럼 인덱스
-	:return: 칼럼 이름 (char*)
+	:return: 칼럼 이름 (char \*)
 
 CCI_GET_RESULT_INFO_PRECISION
 =============================
@@ -1743,29 +1747,29 @@ cci_oid_put2
 		*   **CCI_ER_CON_HANDLE**
 		*   **CCI_ER_CONNECT**
 	
-	*a_type* 에 대한 *new_val*[i]의 타입은 다음 표와 같다.
+	*a_type* 에 대한 *new_val* [i]의 타입은 다음 표와 같다.
 
 	**a_type에 대한 new_val[i]의 타입**
 
 	+-----------------------+------------------------------+
 	| Type                  | value type                   |
 	+=======================+==============================+
-	| **CCI_A_TYPE_STR**    | char**                       |
+	| **CCI_A_TYPE_STR**    | char \*\*                    |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_INT**    | int*                         |
+	| **CCI_A_TYPE_INT**    | int \*                       |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_FLOAT**  | float*                       |
+	| **CCI_A_TYPE_FLOAT**  | float \*                     |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_DOUBLE** | double*                      |
+	| **CCI_A_TYPE_DOUBLE** | double \*                    |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_BIT**    | **T_CCI_BIT** *              |
+	| **CCI_A_TYPE_BIT**    | **T_CCI_BIT** \*             |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_SET**    | **T_CCI_SET** *              |
+	| **CCI_A_TYPE_SET**    | **T_CCI_SET** \*             |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_DATE**   | **T_CCI_DATE** *             |
+	| **CCI_A_TYPE_DATE**   | **T_CCI_DATE** \*            |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_BIGINT** | int64_t*                     |
-	|                       | (Windows는 __int64*)         |
+	| **CCI_A_TYPE_BIGINT** | int64_t \*                   |
+	|                       | (Windows는 __int64 \*)       |
 	+-----------------------+------------------------------+
 
 	.. code-block:: c
@@ -1797,8 +1801,8 @@ cci_prepare
 	SQL 문에 관한 요청 핸들을 획득하여 SQL 실행을 준비한다. 단, SQL 문이 여러 개의 질의로 구성된 경우, 첫 번째 질의에 대해서만 실행을 준비한다. 이 함수의 인자로 연결 핸들, SQL문,	*flag*	, 오류 정보를 저장할	**T_CCI_ERROR**	구조체 변수의 주소가 지정된다.
 
 	:param conn_handle: (IN) 연결 핸들
-	:param sql_stmt : (IN) SQL 문
-	:param flag : (IN) prepare flag (CCI_PREPARE_UPDATABLE, CCI_PREPARE_INCLUDE_OID 또는 CCI_PREPARE_HOLDABLE)
+	:param sql_stmt: (IN) SQL 문
+	:param flag: (IN) prepare flag (CCI_PREPARE_UPDATABLE, CCI_PREPARE_INCLUDE_OID 또는 CCI_PREPARE_HOLDABLE)
 	:param err_buf: (OUT) 에러 버퍼		
 	:return: 성공 : 요청 핸들 ID , 실패 : 에러 코드
 	
@@ -1833,9 +1837,9 @@ cci_prepare_and_execute
 	SQL 문을 즉시 실행하고 SQL 문에 대한 요청 핸들을 반환한다. 이 함수의 인자로는 연결 핸들, SQL 문, fetch하는 칼럼의 문자열 최대 길이, 에러 코드, 오류 정보를 저장할 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다. *max_col_size* 는 SQL 문의 칼럼이 **CHAR**, **VARCHAR**, **NCHAR**, **VARNCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 설정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
 
 	:param conn_handle: (IN) 연결 핸들
-	:param sql_stmt : (IN) SQL 문
-	:param max_col_size : (IN) 문자열 타입인 경우 fetch하는 칼럼의 문자열 최대 길이(단위: 바이트). 이 값이 0이면 전체 길이를 fetch한다.
-	:param exec_retval : (OUT) 에러 코드
+	:param sql_stmt: (IN) SQL 문
+	:param max_col_size: (IN) 문자열 타입인 경우 fetch하는 칼럼의 문자열 최대 길이(단위: 바이트). 이 값이 0이면 전체 길이를 fetch한다.
+	:param exec_retval: (OUT) 에러 코드
 	:param err_buf: (OUT) 에러 버퍼		
 	:return: 성공 : 요청 핸들 ID , 실패 : 에러 코드
 
@@ -2047,7 +2051,7 @@ cci_savepoint
 		con = cci_connect( ... );
 		... /* query execute */
 
-		/* "savepoint1"이란 이름의 세이브포인트 설정
+		/* "savepoint1"이란 이름의 세이브포인트 설정 */
 		cci_savepoint(con, CCI_SP_SET, "savepoint1", err_buf);
 
 		... /* query execute */
@@ -2667,6 +2671,7 @@ cci_set_get
 	**T_CCI_SET** 타입 값에 대해 *index* 번째의 데이터를 가져온다. 
 	
 	:param set: (IN) cci set 포인터
+	:param index: (IN) set index (base: 1)
 	:param a_type: (IN) 타입
 	:param value: (OUT) 결과 버퍼
 	:param indicator: (OUT) null 표시(indicator)
@@ -2682,20 +2687,20 @@ cci_set_get
 	+-----------------------+------------------------------+
 	|   a_type              | value 타입                   |
 	+=======================+==============================+
-	| **CCI_A_TYPE_STR**    | char**                       |
+	| **CCI_A_TYPE_STR**    | char \*\*                    |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_INT**    | int*                         |
+	| **CCI_A_TYPE_INT**    | int \*                       |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_FLOAT**  | float*                       |
+	| **CCI_A_TYPE_FLOAT**  | float \*                     |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_DOUBLE** | double*                      |
+	| **CCI_A_TYPE_DOUBLE** | double \*                    |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_BIT**    | **T_CCI_BIT** *              |
+	| **CCI_A_TYPE_BIT**    | **T_CCI_BIT** \*             |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_DATE**   | **T_CCI_DATE** *             |
+	| **CCI_A_TYPE_DATE**   | **T_CCI_DATE** \*            |
 	+-----------------------+------------------------------+
-	| **CCI_A_TYPE_BIGINT** | int64_t*                     |
-	|                       | (Windows는 __int64*)         |
+	| **CCI_A_TYPE_BIGINT** | int64_t \*                   |
+	|                       | (Windows는 __int64 \*)       |
 	+-----------------------+------------------------------+
 
 cci_set_holdability

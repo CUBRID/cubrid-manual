@@ -328,13 +328,13 @@ The following shows options available with the **cubrid addvoldb** utility.
 	
 		cubrid addvoldb -S -p index --db-volume-size=256M testdb
 
-.. option::  (-S)**
+.. option::  -S, --SA-mode
 
 	This option accesses the database in standalone mode without running the server process. This option has no parameter. If the **-S** option is not specified, the system assumes to be in client/server mode. ::
 
 		cubrid addvoldb -S --db-volume-size=256M testdb
 
-.. option::  (-C)**
+.. option::  -C, --CS-mode
 
 	This option accesses the database in client/server mode by running the server and the client separately. There is no parameter. Even when the **-C** option is not specified, the system assumes to be in client/server mode by default. ::
 

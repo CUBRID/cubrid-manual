@@ -116,9 +116,11 @@
 
     *   cubrid dumplocale
 
-자세한 설명은 `데이터베이스 관리 <#admin_admin_service_server_comma_427>`_를 참조한다.
+자세한 설명은 `데이터베이스 관리 <#admin_admin_service_server_comma_427>`_ 를 참조한다.
 
-프롬프트에서 **cubrid** 를 입력하면 다음과 같은 구문 안내문이 출력된다. ::
+프롬프트에서 **cubrid** 를 입력하면 다음과 같은 구문 안내문이 출력된다. 
+
+::
 
 	% cubrid
 	 
@@ -161,7 +163,6 @@
 		applyinfo
 	 
 	cubrid is a tool for DBMS.
-	For additional information, see >http://www.cubrid.com
 
 .. note::
 

@@ -800,9 +800,9 @@ The format of **ACCESS_CONTROL_FILE** is as follows:
 
 *   <broker_name>: A broker name. It is the one of broker names specified in **cubrid_broker.conf** .
 
-*   <db_name>: A database name. If it is specified as *, all databases are allowed to access the broker server.
+*   <db_name>: A database name. If it is specified as \*, all databases are allowed to access the broker server.
 
-*   <db_user>: A database user ID. If it is specified as *, all database user IDs are allowed to access the broker server.
+*   <db_user>: A database user ID. If it is specified as \*, all database user IDs are allowed to access the broker server.
 
 *   <ip_list_file>: Names of files in which the list of accessible IPs are stored. Several files such as ip_list_file1, ip_list_file2, ... can be specified by using a comma (,).
 
@@ -815,7 +815,7 @@ The format of the ip_list_file is as follows:
 	<ip_addr>
 	…
 
-*   <ip_addr>: An IP address that is allowed to access the server. If the last digit of the address is specified as *, all IP addresses in that rage are allowed to access the broker server.
+*   <ip_addr>: An IP address that is allowed to access the server. If the last digit of the address is specified as \*, all IP addresses in that rage are allowed to access the broker server.
 
 If a value for **ACCESS_CONTROL** is set to ON and a value for **ACCESS_CONTROL_FILE** is not specified, the broker will only allow the access requests from the localhost. If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will only allow the access requests from the localhost.
 
@@ -956,7 +956,7 @@ The syntax for the **broker_changer** utility, which is used to change broker pa
 
 **broker_changer** ::
  
-broker_name [cas_id] parameters value
+	broker_name [cas_id] parameters value
 
 Enter the following to configure the **SQL_LOG** parameter to **ON** so that SQL logs can be written to the currently running broker. Such dynamic parameter change is effective only while the broker is running.
 
@@ -1012,21 +1012,20 @@ The following example and description show an access log file created in the log
 
 **Checking the Error Log**
 
-The error log file records information on errors that occurred during the client's request processing and is stored with the name of
-*<broker_name>_<app_server_num>.*
-err.
+The error log file records information on errors that occurred during the client's request processing and is stored with the name of *<broker_name>_<app_server_num>*.err.
 
 The following example and description show an error log:
 
-Time: 02/04/09 13:45:17.687 - SYNTAX ERROR *** ERROR CODE = -493, Tran = 1, EID = 38
+::
 
-Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
+	Time: 02/04/09 13:45:17.687 - SYNTAX ERROR *** ERROR CODE = -493, Tran = 1, EID = 38
+	Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
 
 *   Time: 02/04/09 13:45:17.687: Time when the error occurred
 
 *   - SYNTAX ERROR: Type of error (e.g. SYNTAX ERROR, ERROR, etc.)
 
-*   *** ERROR CODE = -493: Error code
+*   \*\*\* ERROR CODE = -493: Error code
 
 *   Tran = 1: Transaction ID. -1 indicates that no transaction ID is assigned.
 
@@ -1036,7 +1035,7 @@ Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
 
 **Managing the SQL Log**
 
-The SQL log file records SQL statements requested by the application client and is stored with the name of *<broker_name>_<app_server_num>.* sql.log. The SQL log is generated in the log/broker/sql_log directory when the SQL_LOG parameter is set to ON. Note that the size of the SQL log file to be generated cannot exceed the value set for the SQL_LOG_MAX_SIZE parameter. CUBRID offers the **broker_log_top**, **broker_log_converter**, and **broker_log_runner** utilities to manage SQL logs. Each utility should be executed in a directory where the corresponding SQL log exists.
+The SQL log file records SQL statements requested by the application client and is stored with the name of *<broker_name>_<app_server_num>*. sql.log. The SQL log is generated in the log/broker/sql_log directory when the SQL_LOG parameter is set to ON. Note that the size of the SQL log file to be generated cannot exceed the value set for the SQL_LOG_MAX_SIZE parameter. CUBRID offers the **broker_log_top**, **broker_log_converter**, and **broker_log_runner** utilities to manage SQL logs. Each utility should be executed in a directory where the corresponding SQL log exists.
 
 The following examples and descriptions show SQL log files:
 
@@ -1080,6 +1079,7 @@ The **broker_log_top** utility analyses the SQL logs which are generated for a s
 The **broker_log_top** utility is useful to analyse the query of which execution takes long. The syntax is as follows:
 
 ::
+
 	broker_log_top [options] <sql_log_file_list>
 
 <sql_log_file_list> lists the log file names to analyze.
@@ -1116,9 +1116,10 @@ The part where the time format is omitted is set to 0 by default. This means tha
 
 	broker_log_top -F "01/19" -T "01/20" log1.log
 
-The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "*.sql.log" is not recognized so the SQL logs should separated by a white space on Windows.
+The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should separated by a white space on Windows.
 
 ::
+
 	--Execution broker_log_top on Linux
 	% broker_log_top -F "11/11" -T "11/12" -t *.sql.log
 
@@ -1128,17 +1129,14 @@ The following logs are the results of executing the broker_log_top utility; logs
 	query_editor_4.sql.log
 	query_editor_5.sql.log
 
---Executing broker_log_top on Windows
-
-::
-
+	--Executing broker_log_top on Windows
 	% broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
 
 The log.top.q and log.top.res files are generated in the same directory where the analyzed logs are stored when executing the example above; In the log.top.q file, you can view each SQL statement, and its line number. In the log.top.res, you can the minimum, maximum and avg. time, and the number of execution queries for each SQL statement.
 
 ::
 
---log.top.q file
+	--log.top.q file
 	[Q1]-------------------------------------------
 	broker1_6.sql.log:137734
 	11/11 18:17:59.396 (27754) execute_all srv_h_id 34 select a.int_col, b.var_col from dml_v_view_6 a, dml_v_view_6 b, dml_v_view_6 c , dml_v_view_6 d, dml_v_view_6 e where a.int_col=b.int_col and b.int_col=c.int_col and c.int_col=d.int_col and d.int_col=e.int_col order by 1,2;
@@ -1150,7 +1148,7 @@ The log.top.q and log.top.res files are generated in the same directory where th
 	11/11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
 	11/11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
 
-	--log.top.res 파일의 내용
+	--log.top.res
 
 				  max       min        avg   cnt(err)
 	-----------------------------------------------------
@@ -1185,374 +1183,192 @@ To re-execute queries stored in the query file which has been created by the **b
 
 * *exec_script_file*: Name of the file where execution results are to be stored.
 
-	
-*options*: -**I** *broker_ip* -**P** *broker_port* -**d** *dbname* [-**u** *dbuser* [-**p** *dbpasswd* ]]  [-**t** *num_thread*] [-**r** *repeat_count*] [-**Q**] [ -**o** *result_file*] 
-
 The following is [options] used on **broker_log_runner** .
 
-+----------------+--------------------------------------------------------------------------+
-| **Option**     | **Description**                                                          |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
-| -              | IP address or host name of the CUBRID broker                             |
-| **I**          |                                                                          |
-| *broker_ip*    |                                                                          |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
-| -              | Port number of the CUBRID broker                                         |
-| **P**          |                                                                          |
-| *broker_port*  |                                                                          |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
-| -              | Name of the database against which queries are to be executed            |
-| **d**          |                                                                          |
-| *dbname*       |                                                                          |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
-| -              | Database user name (default:                                             |
-| **u**          | **PUBLIC**                                                               |
-| *dbuser*       | )                                                                        |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
-| -              | Database password                                                        |
-| **p**          |                                                                          |
-| *dbpasswd*     |                                                                          |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
-| -              | The number of threads (default value : 1)                                |
-| **t**          |                                                                          |
-| *numthread*    |                                                                          |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
-| -              | The number of times that the query is to be executed (default value : 1) |
-| **r**          |                                                                          |
-| *repeat_count* |                                                                          |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
-| -              | Stores the query plan in                                                 |
-| **Q**          | *result_file*                                                            |
-|                | .                                                                        |
-|                |                                                                          |
-|                | Name of the file where execution results are to be stored                |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
-| -              | Name of the file where execution results are to be stored                |
-| **o**          |                                                                          |
-| *result_file*  |                                                                          |
-|                |                                                                          |
-+----------------+--------------------------------------------------------------------------+
+.. program::broker_log_runner
 
-% broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
+.. option:: -u NAME
 
-broker_ip = 192.168.1.10
+	Database user name (default: **PUBLIC**)
+	
+.. option:: -p PASSWORD
 
-broker_port = 30000
+	Database password
+	
+.. option:: -r COUNT
 
-num_thread = 2
+	The number of times that the query is to be executed (default value : 1)
 
-repeat = 1
+.. option:: -o FILE
 
-dbname = demodb
+	Name of the file where execution results are to be stored 
+	
+.. option:: -Q
+	
+	Stores the query plan in the FILE specified in the **-o** option.
 
-dbuser = public
+The following example re-executes the queries saved on *query_convert.in* on *demodb*, and it assumes that the broker IP is specified in 192.168.1.10, and broker port is specified in 30000.
+	
+::
 
-dbpasswd =
+	% broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
+	broker_ip = 192.168.1.10
+	broker_port = 30000
+	num_thread = 2
+	repeat = 1
+	dbname = demodb
+	dbuser = public
+	dbpasswd =
+	exec_time : 0.001
+	exec_time : 0.000
+	0.000500 0.000500
 
-exec_time : 0.001
+The following example saves the query plan only without running the query.
+	
+::
+	
+	% broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
+	…
+	%cat result.0
+	-------------- query -----------------
+	SELECT * FROM athlete where code=10099;
+	cci_prepare exec_time : 0.000
+	cci_execute_exec_time : 0.000
+	cci_execute:1
+	---------- query plan --------------
+	Join graph segments (f indicates final):
+	seg[0]: [0]
+	seg[1]: code[0] (f)
+	seg[2]: name[0] (f)
+	seg[3]: gender[0] (f)
+	seg[4]: nation_code[0] (f)
+	seg[5]: event[0] (f)
+	Join graph nodes:
+	node[0]: athlete athlete(6677/107) (sargs 0)
+	Join graph terms:
+	term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
 
-exec_time : 0.000
+	Query plan:
 
-0.000500 0.000500 ?
+	iscan
+		class: athlete node[0]
+		index: pk_athlete_code term[0]
+		cost:  0 card 1
 
- 
+	Query stmt:
 
-% broker_log_runner -I 192.168.1.10  -P 30000 -d demodb ?o result ?Q query_convert.in
+	select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code=  :0 )
 
- …
+	---------- query result --------------
+	10099|Andersson Magnus|M|SWE|Handball|
+	-- 1 rows ----------------------------
 
-%cat result.0
+	cci_end_tran exec_time : 0.000
 
--------------- query -----------------
+CUBRID Manager Server
+=====================
 
-SELECT * FROM athlete where code=10099;
+Starting the CUBRID Manager Server
+----------------------------------
 
- 
+The following example shows how to start the CUBRID Manager server. 
 
-cci_prepare exec_time : 0.000
+::
 
-cci_execute_exec_time : 0.000
-
-cci_execute:1
-
----------- query plan --------------
-
-Join graph segments (f indicates final):
-
-seg[0]: [0]
-
-seg[1]: code[0] (f)
-
-seg[2]: name[0] (f)
-
-seg[3]: gender[0] (f)
-
-seg[4]: nation_code[0] (f)
-
-seg[5]: event[0] (f)
-
-Join graph nodes:
-
-node[0]: athlete athlete(6677/107) (sargs 0)
-
-Join graph terms:
-
-term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
-
- 
-
-Query plan:
-
- 
-
-iscan
-
-    class: athlete node[0]
-
-    index: pk_athlete_code term[0]
-
-    cost:  0 card 1
-
- 
-
-Query stmt:
-
- 
-
-select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code= ?:0 )
-
- 
-
- 
-
----------- query result --------------
-
-10099|Andersson Magnus|M|SWE|Handball|
-
--- 1 rows ----------------------------
-
- 
-
-cci_end_tran exec_time : 0.000
-
-**CUBRID Manager Server**
-
-**Starting and Stopping CUBRID Manager Server**
-
-**Starting the CUBRID Manager Server**
-
-The following example shows how to start the CUBRID Manager server.
-
-% cubrid manager start
+	% cubrid manager start
 
 The following message is returned if the CUBRID Manager server is already running.
 
-% cubrid manager start
+::
 
-@ cubrid manager server start
+	% cubrid manager start
+	@ cubrid manager server start
+	++ cubrid manager server is running.
 
-++ cubrid manager server is running.
-
-**Stopping the CUBRID Manager Server**
+Stopping the CUBRID Manager Server
+----------------------------------
 
 The following example shows how to stop the CUBRID Manager server.
 
-% cubrid manager stop
+::
 
-@ cubrid manager server stop
+	% cubrid manager stop
+	@ cubrid manager server stop
+	++ cubrid manager server stop: success
 
-++ cubrid manager server stop: success
-
-**CUBRID Manager Server Log**
+CUBRID Manager Server Log
+-------------------------
 
 The logs of CUBRID Manager server are stored in the log/manager directory under the installation directory. There are four types of log files depending on server process of CUBRID Manager.
 
 *   cub_auto.access.log: Access log of a client that has successfully logged into and out of the CUBRID Manager server
 
-
-
 *   cub_auto.error.log: Access log of a client that failed to log into or out of the CUBRID Manager Server
-
-
 
 *   cub_js.access.log: Job log processed by the CUBRID Manager server
 
-
-
 *   cub_js.error.log: Error log that occurred while the CUBRID Manager server has been processing jobs
-
-
 
 **Configuring CUBRID Manager Server**
 
-The configuration file name for the CUBRID Manager server is
-**cm.conf**
-and located in the
-**$CUBRID/conf**
-directory.
-
-In the CUBRID Manager server configuration file, where parameter names and values are stored, comments are prefaced by "#." Parameter names and values are separated by spaces or an equal sign (=). This page describes parameters that are specified in the
-**cm.conf**
-file.
+The configuration file name for the CUBRID Manager server is **cm.conf** and located in the **$CUBRID/conf** directory.
+In the CUBRID Manager server configuration file, where parameter names and values are stored, comments are prefaced by "#." Parameter names and values are separated by spaces or an equal sign (=). This page describes parameters that are specified in the **cm.conf** file.
 
 **cm_port**
 
-**cm_port**
-is a parameter used to configure a communication port for the connection between the CUBRID Manager server and the client. The default value is
-**8001**
-. It is used by
-**cub_auto**
-and
-**cm_js**
-automatically adds 1 to the value specified by
-**cub_auto**
-. For example, if
-**cm_port**
-is set to 8001,
-**cub_auto**
-uses the port 8001, and
-**cub_js**
-uses 8002. Therefore, to run the CUBRID Manager in an environment where a firewall has been installed, you must open two ports which will be actually used.
+**cm_port** is a parameter used to configure a communication port for the connection between the CUBRID Manager server and the client.
+The default value is **8001** . It is used by **cub_auto** and **cm_js** automatically adds 1 to the value specified by **cub_auto** . For example, if **cm_port**
+is set to 8001, **cub_auto** uses the port 8001, and **cub_js** uses 8002. Therefore, to run the CUBRID Manager in an environment where a firewall has been installed, you must open two ports which will be actually used.
 
 **monitor_interval**
 
-**monitor_interval**
-is a parameter used to configure the monitoring interval of
-**cub_auto**
-in seconds. The default value is
-**5**
-.
+**monitor_interval** is a parameter used to configure the monitoring interval of **cub_auto** in seconds. The default value is **5** .
 
 **allow_user_multi_connection**
 
-**allow_user_multi_connection**
-is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is
-**YES**
-. Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same user name.
+**allow_user_multi_connection** is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is **YES** . Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same user name.
 
 **server_long_query_time**
 
-**server_long_query_time**
-is a parameter used to configure delay reference time in seconds when configuring
-**slow_query**
-which is one of server diagnostics items. The default value is
-**10**
-. If the execution time of the query performed on the server exceeds this parameter value, the number of the
-**slow_query**
+**server_long_query_time** is a parameter used to configure delay reference time in seconds when configuring **slow_query** which is one of server diagnostics items. The default value is **10** . If the execution time of the query performed on the server exceeds this parameter value, the number of the **slow_query**
 parameters will increase.
 
 **cm_target**
 
-**cm_target**
-is a parameter used to display appropriate menus of the CUBRID Manager depending on the service being provided where the broker and the database server have been separated. The default value means the environment where both broker and database server have been installed. You can set required values as follows:
+**cm_target** is a parameter used to display appropriate menus of the CUBRID Manager depending on the service being provided where the broker and the database server have been separated. The default value means the environment where both broker and database server have been installed. You can set required values as follows:
 
-*   **cm_target broker, server**
-    : Both broker and database server exist.
+*   **cm_target broker, server**: Both broker and database server exist.
 
+*   **cm_target broker**: Only broker exists.
 
-
-*   **cm_target broker**
-    : Only broker exists.
-
-
-
-*   **cm_target server**
-    : Only database server exists.
-
-
+*   **cm_target server**: Only database server exists.
 
 If you set broker only, broker-related menus will be shown; if you set database server only, server-related menus will be displayed.
 
 If you right-click the host in the navigation tree and then select [Properties], you can check the setting information under [Host Information].
 
-|image10_jpg|
+.. image:: /images/image10.jpg
 
-**CUBRID Manager User Management Console**
+CUBRID Manager User Management Console
+--------------------------------------
 
 The account and password of CUBRID Manager user are used to access the CUBRID Manager server when starting the CUBRID Manager client, distinguishing this user from the database user. CUBRID Manager Administrator (cm_admin) is a CLI tool that manages user information and it executes commands in the console window to manage users.
+This utility only supports Linux OS.
 
 The following shows how to use the CUBRID Manager (hereafter, CM) Administrator utilities. The utilities can be used through GUI on the CUBRID Manager client.
 
-**cm_admin**
-*utility_name*
+::
 
-*utility_name*
-:
-
-  
-**adduser**
-[
-*option*
-] <
-*cmuser-name*
-> <
-*cmuser-password*
->   --- Adds a CM user
-
-  
-**deluser**
-<
-*cmuser-name*
->   --- Deletes a CM user
-
-  
-**viewuser**
-[
-*cmuser-name*
-]   --- Displays CM user information
-
-  
-**changeuserauth**
-[
-*option*
-] <
-*cmuser-name*
->  --- Changes the CM user authority
-
-  
-**changeuserpwd**
-[
-*option*
-] <
-*cmuser-name*
->  --- Changes the CM user password
-
-  
-**adddbinfo**
-[
-*option*
-] <
-*cmuser-name*
-> <
-*database-name*
->  --- Adds database information of the CM user
-
-  
-**deldbinfo**
-<
-*cmuser-name*
-> <
-*database-name*
->  --- Deletes database information of the CM user
-
-  
-**changedbinfo**
-[
-*option*
-] <
-*database-name*
->
-*number-of-pages*
- --- Changes database information of the CM user
+	cm_admin <utility_name>
+	<utility_name>:
+		adduser [<option>] <cmuser-name> <cmuser-password>   --- Adds a CM user
+		deluser <cmuser-name>   --- Deletes a CM user
+		viewuser [<cmuser-name>]   --- Displays CM user information
+		changeuserauth [<option>] <cmuser-name>  --- Changes the CM user authority
+		changeuserpwd [<option>] <cmuser-name>  --- Changes the CM user password
+		adddbinfo [<option>] <cmuser-name> <database-name>  --- Adds database information of the CM user
+		deldbinfo <cmuser-name> <database-name>  --- Deletes database information of the CM user
+		changedbinfo [<option>] <database-name> number-of-pages --- Changes database information of the CM user
 
 **CM Users**
 
@@ -1562,803 +1378,357 @@ Information about CM users consists of the followings:
 
     *   The permission to configure broker
 
-
-
-    *   The permission to create a database. For now, this authority is only given to the 
-        **admin**
-        user.
-
-
+    *   The permission to create a database. For now, this authority is only given to the **admin** user.
 
     *   The permission to monitor status
 
-
-
-
-
 *   Database information: A database that a CM user can use
-
-
 
 *   CM user password
 
-
-
-The default user authority of CUBRID Manager is
-**admin**
-and its password is admin. Users who has
-**admin**
-authority have full administrative controls.
+The default user authority of CUBRID Manager is **admin** and its password is admin. Users who has **admin** authority have full administrative controls.
 
 **Adding CM Users**
 
-**Description**
+The **cm_admin adduser** utility creates a CM user who has been granted a specific authority and has database information. The permissions to configure broker, create a database, and monitor status can be granted to the CM user. 
 
-The
-**cm_admin adduser**
-utility creates a CM user who has been granted a specific authority and has database information. The permissions to configure broker, create a database, and monitor status can be granted to the CM user.
+::
 
-**Syntax**
+	cm_admin adduser [options] cmuser-name cmuser-password
 
-**cm_admin adduser**
-*options*
-*cmuser-name cmuser-password*
+*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*options*
-:
+*   **adduser**: A command to create a new CM user
 
-[{
-**-b**
-|
-**--broker**
-}
-*authority*
-]
+*   *cmuser-name*: Specifies a unique name to a CM user. The name must have at least 4 characters in length. If the specified name in *cmuser-name* is identical to the existing one, **cm_admin** will stop creating a new CM user.
 
-[{
-**-c**
-|
-**--dbcreate**
-}
-*authority*
-]
+*   *cmuser-password*: A password of a CM user. The password must have at least 4 characters in length.
 
-[{
-**-m**
-|
-**--monitor**
-}
-*authority*
-]
+The following is [options] of **cm_admin adduser**.
 
-[{
-**-d**
-|
-**--dbinfo**
-}
-*database-info*
-]
+.. program:: cm_admin_adduser
 
-*   **cm_admin**
-    : An integrated utility to manage CUBRID Manager
+.. option:: -b, --broker AUTHORITY
 
+	Specifies the broker authority which will be granted to a new CM user.
 
+	You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
 
-*   **adduser**
-    : A command to create a new CM user
+	The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure broker authority to monitor.
 
+	::	cm_admin adduser -b monitor testcm testcmpwd
 
+	
+.. option:: -c, --dbcreate AUTHORITY
 
-*   *options*
-    : The 
-    **-b**
-    ,
-    **-c**
-    ,
-    **-m**
-    , and 
-    **-d**
-    options are given. For more information, see description and example of each option.
+	Specifies the authority to create a database which will be granted to a new CM user.
 
+	You can use **none** (default) and **admin** as *AUTHORITY*.
 
+	The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure database creation authority to admin.
 
-*   *cmuser-name*
-    : Specifies a unique name to a CM user. The name must have at least 4 characters in length. If the specified name in
-    *cmuser-name*
-    is identical to the existing one,
-    **cm_admin**
-    will stop creating a new CM user.
+	::
 
+		cm_admin adduser -c admin testcm testcmpwd
 
+.. option:: -m, monitor AUTHORITY
 
-*   *cmuser-password*
-    : A password of a CM user. The password must have at least 4 characters in length.
+	Specifies the authority to monitor status which will be granted to a new CM user. 
 
+	You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
 
+	The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure monitoring authority to admin.
 
-**Options**
+	::
 
-+------------+--------------------------------------------------------------------------------------+
-| **Option** | **Description**                                                                      |
-|            |                                                                                      |
-+------------+--------------------------------------------------------------------------------------+
-| -b         | Specifies the broker authority which will be granted to a new CM user.               |
-| --broker   | Options: admin, none (default), and monitor                                          |
-|            |                                                                                      |
-+------------+--------------------------------------------------------------------------------------+
-| -c         | Specifies the authority to create a database which will be granted to a new CM user. |
-| --dbcreate |                                                                                      |
-|            | Options: none (default) and admin                                                    |
-|            |                                                                                      |
-+------------+--------------------------------------------------------------------------------------+
-| -m         | Specifies the authority to monitor status which will be granted to a new CM user.    |
-| --monitor  | Options: admin, none (default), and monitor                                          |
-|            |                                                                                      |
-+------------+--------------------------------------------------------------------------------------+
-| -d         | Specifies database information of a new CM user.                                     |
-| --dbinfo   | The format of DBINFO must be "<dbname>;<uid>;<broker_ip>,<broker_port>".             |
-|            |                                                                                      |
-+------------+--------------------------------------------------------------------------------------+
+		cm_admin adduser -m admin testcm testcmpwd
 
-**Configuring broker authority (-b)**
+.. option:: -d, --dbinfo INFO_STRING
 
-The following example shows how to create a CM user whose name is
-*testcm*
-and password is
-*testcmpwd*
-and then configure broker authority to monitor
+	Specifies database information of a new CM user. 
+	
+	The format of *INFO_STRING* must be "<dbname>;<uid>;<broker_ip>,<broker_port>".
 
-cm_admin adduser -b monitor testcm testcmpwd
+	The following example shows how to add database information "testdb;dba;localhost,30000" to a CM user named *testcm* .
 
-**Configuring authority to create a database (-c)**
-
-The following example shows how to create a CM user whose name is
-*testcm*
-and password is
-*testcmpwd*
-and then configure database creation authority to admin.
-
-cm_admin adduser -c admin testcm testcmpwd
-
-**Configuring authority to monitor status (-m)**
-
-The following example shows how to create a CM user whose name is
-*testcm*
-and password is
-*testcmpwd*
-and then configure monitoring authority to admin.
-
-cm_admin adduser -m admin testcm testcmpwd
-
-**Adding database information (-d)**
-
-The following example shows how to add database information "testdb;dba;localhost,30000" to a CM user named
-*testcm*
-.
-
-cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
+	::
+		cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
 
 **Deleting CM Users**
 
-**Description**
+The **cm_admin deluser** utility deletes a CM user. 
 
-The
-**cm_admin deluser**
-utility deletes a CM user.
+::
 
-**Syntax**
+	cm_admin deluser cmuser-name
 
-**cm_admin deluser**
-*cmuser-name cmuser-password*
+*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*   **cm_admin**
-    : An integrated utility to manage CUBRID Manager
+*   **deluser**: A command to delete an existing CM user
 
+*   *cmuser-name*: The name of a CM user to be deleted
 
+The following example shows how to delete a CM user named *testcm*.
 
-*   **deluser**
-    : A command to delete an existing CM user
+::
 
-
-
-*   *cmuser-name*
-    : The name of a CM user to be deleted
-
-
-
-**Example**
-
-The following example shows how to delete a CM user named
-*testcm*
-.
-
-cm_admin deluser testcm
+	cm_admin deluser testcm
 
 **Displaying CM User information**
 
-**Description**
+The **cm_admin viewuser** utility displays information of a CM user.
 
-The
-**cm_admin viewuser**
-utility displays information of a CM user.
+::
 
-**Syntax**
+	cm_admin viewuser cmuser-name
 
-**cm_admin viewuser**
-*cmuser-name*
+*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*   **cm_admin**
-    : An integrated utility to manage CUBRID Manager
+*   **viewuser**: A command to display the CM user information
 
+*   *cmuser-name*: A CM user name. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.
 
+The following example shows how to display information of a CM user named *testcm* . ::
 
-*   **viewuser**
-    : A command to display the CM user information
-
-
-
-*   *cmuser-name*
-    : A CM user name. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.
-
-
-
-**Example**
-
-The following example shows how to display information of a CM user named
-*testcm*
-.
-
-cm_admin viewuser testcm
+	cm_admin viewuser testcm
 
 The information will be displayed as follows:
 
-CM USER: testcm
+::
 
-  Auth info:
-
-    broker: none
-
-    dbcreate: none
-
-    statusmonitorauth: none
-
-  DB info:
-
-    ==========================================================================================
-
-     DBNAME                                           UID               BROKER INFO             
-
-    ==========================================================================================
-
-     testdb                                           dba               localhost,30000  
+	CM USER: testcm
+	  Auth info:
+		broker: none
+		dbcreate: none
+		statusmonitorauth: none
+	  DB info:
+		==========================================================================================
+		 DBNAME                                           UID               BROKER INFO             
+		==========================================================================================
+		 testdb                                           dba               localhost,30000  
 
 **Changing the Authority of CM Users**
 
-**Description**
+The **cm_admin changeuserauth** utility changes the authority of a CM user.
 
-The
-**cm_admin changeuserauth**
-utility changes the authority of a CM user.
+::
 
-**Syntax**
+	cm_admin changeuserauth options cmuser-name
 
-**cm_admin changeuserauth**
-*options*
-*cmuser-name*
+*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*options*
-:
+*   **changeuserauth**: A command to change the authority of a CM user
 
-[{
-**-b**
-|
-**--broker**
-}
-*authority*
-]
+*   *cmuser-name*: The name of a CM user whose authority to be changed
 
-[{
-**-c**
-|
-**--dbcreate**
-}
-*authority*
-]
+The following is [options] of **cm_admin changeuserauth**.
 
-[{
-**-m**
-|
-**--monitor**
-}
-*authority*
-]
+.. program:: cm_admin_changeuserauth
 
-*   **cm_admin**
-    : An integrated utility to manage CUBRID Manager
+.. option:: -b, --broker AUTHORITY
+
+	Specifies the broker authority that will be granted to a CM user. 
+	You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
+
+	The following example shows how to change the broker authority of a CM user named *testcm* to monitor.
+
+	::
+	
+		cm_admin changeuserauth -b monitor testcm	
+	
+.. option:: -c, --dbcreate
+
+	Specifies the authority to create a database which will be granted to a CM user.
+	You can use **admin** and **none** as *AUTHORITY* .
+
+	The following example shows how to change the database creation authority of a CM user named *testcm* to admin.
+
+	::
+
+		cm_admin changeuserauth -c admin testcm
 
 
+.. option:: -m, --monitor 
 
-*   **changeuserauth**
-    : A command to change the authority of a CM user
+	Specifies the authority to monitor status which will be granted to a CM user.
+	You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
 
+	The following example shows how to change the monitoring authority of a CM user named *testcm* to admin.
 
+	::
 
-*   *options*
-    : The
-    **-b**
-    ,
-    **-c**
-    , and
-    **-m**
-    options are given. For more information, see description and example of each option.
+		cm_admin changeuserauth -m admin testcm
 
-
-
-*   *cmuser-name*
-    : The name of a CM user whose authority to be changed
-
-
-
-**Options**
-
-+------------+----------------------------------------------------------------------------------+
-| **Option** | **Description**                                                                  |
-|            |                                                                                  |
-+------------+----------------------------------------------------------------------------------+
-| -b         | Specifies the broker authority that will be granted to a CM user.                |
-| --broker   | Options: admin, none, and monitor                                                |
-|            |                                                                                  |
-+------------+----------------------------------------------------------------------------------+
-| -c         | Specifies the authority to create a database which will be granted to a CM user. |
-| --dbcreate | Options: none, and admin                                                         |
-|            |                                                                                  |
-+------------+----------------------------------------------------------------------------------+
-| -m         | Specifies the authority to monitor status which will be granted to a CM user.    |
-| --monitor  | Options: admin, none, and monitor                                                |
-|            |                                                                                  |
-+------------+----------------------------------------------------------------------------------+
-
-**Configuring broker authority (-b)**
-
-The following example shows how to change the broker authority of a CM user named
-*testcm*
-to monitor.
-
-cm_admin changeuserauth -b monitor testcm
-
-**Configuring authority to create database (-c)**
-
-The following example shows how to change the database creation authority of a CM user named
-*testcm*
-to admin.
-
-cm_admin changeuserauth -c admin testcm
-
-**Configuring authority to monitor status (-m)**
-
-The following example shows how to change the monitoring authority of a CM user named
-*testcm*
-to admin.
-
-cm_admin changeuserauth -m admin testcm
 
 **Changing the CM User Password**
 
-**Description**
+The **cm_admin changeuserpwd** utility changes the password of a CM user.
 
-The
-**cm_admin changeuserpwd**
-utility changes the password of a CM user.
+::
 
-**Syntax**
+	cm_admin changeuserpwd [options] cmuser-name  
 
-**cm_admin changeuserpwd**
-*old_pwd new_pwd*
-*cmuser-name*
+*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*old_pwd*
-:
+*   **changeuserpwd**: A command to change the password of a CM user
 
-{
-**-o**
-|
-**--oldpass**
-*oldpassword*
-} |
-**--adminpass**
-*adiminpassword*
+*   *cmuser-name*: The name of a CM user whose password to be changed
 
-*new_pwd*
-:
+The following is [options] of **cm_admin changeuserpwd**.
 
-{
-**-n**
-|
-**--newpass**
-}
-*newpassword*
+.. option:: -o, --oldpass PASSWORD
 
-*   **cm_admin**
-    : An integrated utility to manage CUBRID Manager
+	Specifies the existing password of a CM user.
 
+	The following example shows how to change a password of a CM user named *testcm* .
 
+	::
 
-*   **changeuserpwd**
-    : A command to change the password of a CM user
+		cm_admin changeuserpwd -o old_password -n new_password testcm
+	
+.. option:: --adminpass PASSWORD
 
+	The password of an admin user can be specified instead of old CM user's password that you don't know. 
 
+	The following example shows how to change a password of a CM user named *testcm* by using an admin password.
 
-*   *options*
-    : The
-    **-o**
-    ,
-    **-n**
-    , and 
-    **--adminpass**
-    options are given. Either
-    **--oldpass**
-    or
-    **--adminpass**
-    option must be used. For more information, see description and example of each option.
+	::
 
+		cm_admin changeuserauth --adminpass admin_password -n new_password testcm
+	
+.. option:: -n, --newpass PASSWORD
 
-
-*   *cmuser-name*
-    : The name of a CM user whose password to be changed
-
-
-
-
-**Options**
-
-+-------------+--------------------------------------------------------------+
-| **Option**  | **Description**                                              |
-|             |                                                              |
-+-------------+--------------------------------------------------------------+
-| -o          | Specifies the existing password of a CM user. Either this or |
-| --oldpass   | **--adminpass**                                              |
-|             | option must be used.                                         |
-|             |                                                              |
-+-------------+--------------------------------------------------------------+
-| -n          | Specifies a new password of a CM user.                       |
-| --newpass   |                                                              |
-|             |                                                              |
-+-------------+--------------------------------------------------------------+
-| --adminpass | Specifies the password of an admin user. Either this or      |
-|             | **--oldpass**                                                |
-|             | option must be used.                                         |
-|             |                                                              |
-+-------------+--------------------------------------------------------------+
-
-**Changing the existing password (-o) to a new password (-n)**
-
-The following example shows how to change a password of a CM user named
-*testcm*
-. Either
-**--oldpass**
-or
-**--adminpass**
-option must be used.
-
-cm_admin changeuserpwd -o old_password -n new_password testcm
-
-**Changing the existing password (-o) to a new password (-n) by using an admin password**
-
-The following example shows how to change a password of a CM user named
-*testcm*
-by using an admin password. Either
-**--oldpass**
-or
-**--adminpass**
-option must be used.
-
-cm_admin changeuserauth --adminpass admin_password -n new_password testcm
+	Specifies a new password of a CM user.
+	
 
 **Adding Database Information to CM Users**
 
-**Description**
+The **cm_admin adddbinfo** utility adds database information (database name, UID, broker IP, and broker port) to a CM user.
 
-The
-**cm_admin adddbinfo**
-utility adds database information (database name, UID, broker IP, and broker port) to a CM user.
+::
 
-**Syntax**
+	cm_admin adddbinfo options cmuser-name database-name
 
-**cm_admin adddbinfo**
-*options*
-*cmuser-name database-name*
+*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*options*
-:
+*   **adddbinfo**: A command to add database information to a CM user
 
-[{
-**-u**
-|
-**--uid**
-}
-*userid*
-]
+*   *cmuser-name*: CM user name
 
-[{
-**-h**
-|
-**--host**
-}
-*broker-ip*
-]
+*   *databse-name*: The name of a database to be added
 
-[{
-**-p**
-|
-**--port**
-}
-*broker-port*
-]
+The following example shows how to add a database without specifying any user-defined values to a CM user named *testcm* .
 
-*   **cm_admin**
-    : An integrated utility to manage CUBRID Manager
+::
+
+	cm_admin adddbinfo testcm testdb
 
 
+The following is [options] of **cm_admin adddbinfo**.
 
-*   **adddbinfo**
-    : A command to add database information to a CM user
+.. program:: cm_admin_adddbinfo
 
+.. option:: -u, --uid ID
 
+	Specifies the ID of a database user to be added. The default value is **dba** .
 
-*   *options*
-    : The
-    **-u**
-    ,
-    **-h**
-    , and 
-    **-p**
-    options are given. For more information, see description and example of each option.
+	The following example shows how to add a database of which name is *testdb* and user ID is *uid* to a CM user named *testcm* .
 
+	::
 
+		cm_admin adddbinfo -u uid testcm testdb
+	
+.. option:: -h, --host IP
 
-*   *cmuser-name*
-    : CM user name
+	Specifies the host IP of a broker used when clients access a database. The default value is **localhost** .
 
+	The following example shows how to add a database of which name is *testdb* and the host IP of is *127.0.0.1* to a CM user named *testcm* .
 
+	::
 
-*   *databse-name*
-    : The name of a database to be added
+		cm_admin adddbinfo -h 127.0.0.1 testcm testdb
 
+.. option:: -p, --port
 
+	Specifies the port number of a broker used when clients access a database. The default value: **30000** .
 
-**Options**
-
-+------------+----------------------------------------------------------------------------+
-| **Option** | **Description**                                                            |
-|            |                                                                            |
-+------------+----------------------------------------------------------------------------+
-| -u         | Specifies the ID of a database user.                                       |
-| --uid      | Default value:                                                             |
-|            | **dba**                                                                    |
-|            |                                                                            |
-+------------+----------------------------------------------------------------------------+
-| -h         | Specifies the host of a broker used when clients access a database.        |
-| --host     | Default value:                                                             |
-|            | **localhost**                                                              |
-|            |                                                                            |
-+------------+----------------------------------------------------------------------------+
-| -p         | Specifies the port number of a broker used when clients access a database. |
-| --port     | Default value:                                                             |
-|            | **30000**                                                                  |
-|            |                                                                            |
-+------------+----------------------------------------------------------------------------+
-
-**Adding database user ID (-u)**
-
-The following example shows how to add a database of which name is
-*testdb*
-and user ID is
-*uid*
-to a CM user named
-*testcm*
-.
-
-cm_admin adddbinfo -u uid testcm testdb
-
-**Adding a host IP of a broker (-h)**
-
-The following example shows how to add a database of which name is
-*testdb*
-and the host IP is
-*127.0.0.1*
-to a CM user named
-*testcm*
-.
-
-cm_admin adddbinfo -h 127.0.0.1 testcm testdb
 
 **Adding a broker port (-p)**
 
-The following example shows how to add a database of which name is
-*testdb*
-and the broker port
-*33000*
-to a CM user named
-*testcm*
-.
+The following example shows how to add a database of which name is *testdb* and the broker port *33000* to a CM user named *testcm* .
 
-cm_admin adddbinfo -p 33000 testcm testdb
+::
 
-**Creating a database with a default value**
-
-The following example shows how to add a database without specifying any user-defined values to a CM user named
-*testcm*
-.
-
-cm_admin adddbinfo testcm testdb
+	cm_admin adddbinfo -p 33000 testcm testdb
 
 **Deleting database information from CM Users**
 
-**Description**
+The **cm_admin deldbinfo** utility deletes database information of a specified CM user. 
 
-The
-**cm_admin deldbinfo**
-utility deletes database information of a specified CM user.
+::
 
-**Syntax**
+	cm_admin deldbinfo cmuser-name database-name
 
-**cm_admin deldbinfo**
-*options*
-*cmuser-name database-name*
+*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*   **cm_admin**
-    : An integrated utility to manage CUBRID Manager
+*   **deldbinfo**: A command to delete database information of a CM user
 
+*   *cmuser-name*: CM user name
 
+*   *databse-name*: The name of a database to be deleted
 
-*   **deldbinfo**
-    : A command to delete database information of a CM user
+The following example shows how to delete database information of which name is *testdb* from a CM user named *testcm* .
 
+::
 
-
-*   *cmuser-name*
-    : CM user name
-
-
-
-*   *databse-name*
-    : The name of a database to be deleted
-
-
-
-**Example**
-
-The following example shows how to delete database information of which name is
-*testdb*
-from a CM user named
-*testcm*
-.
-
-cm_admin deldbinfo  testcm testdb
+	cm_admin deldbinfo  testcm testdb
 
 **Changing Database Information of a CM user**
 
-**Description**
+The **cm_admin changedbinfo** utility changes database information of a specified CM user.
 
-The
-**cm_admin changedbinfo**
-utility changes database information of a specified CM user.
+::
 
-**Syntax**
+	cm_admin changedbinfo [options] cmuser-name database-name
 
-**cm_admin changedbinfo**
-*options*
-*cmuser-name database-name*
+*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*options*
-:
+*   **changedbinfo**: A command to change database information of a CM user
 
-[{
-**-u**
-|
-**--uid**
-}
-*userid*
-]
+*   *cmuser-name*: CM user name
 
-[{
-**-h**
-|
-**--host**
-}
-*broker-ip*
-]
+*   *databse-name*: The name of a database to be changed
 
-[{
-**-p**
-|
-**--port**
-}
-*broker-port*
-]
+The following is [options] of **cm_admin changedbinfo**.
 
-*   **cm_admin**
-    : An integrated utility to manage CUBRID Manager
+.. program:: cm_admin_changedbinfo
 
+.. option:: -u, --uid ID
 
+	Specifies the ID of a database user.
 
-*   **changedbinfo**
-    : A command to change database information of a CM user
+	The following example shows how to update user ID information to *uid* in the *testdb* database which belongs to a CM user named *testcm* .
 
+	::
+	
+		cm_admin changedbinfo -u uid testcm testdb
+	
+.. option:: -h, --host IP
 
+	Specifies the host of a broker used when clients access a database.
 
-*   *options*
-    : The
-    **-u**
-    ,
-    **-h**
-    , and 
-    **-p**
-    options are given. For more information, see description and example of each option.
+	The following example shows how to update host IP information to *10.34.63.132* in the *testdb* database which belongs to a CM user named *testcm* .
 
+	::
 
+		cm_admin changedbinfo -h 10.34.63.132 testcm testdb
 
-*   *cmuser-name*
-    : CM user name
+.. option:: -p, --port NUMBER
 
+	Specifies the port number of a broker used when clients access a database.
 
+	The following example shows how to update broker port information to *33000* in the *testdb* database which belongs to a CM user named *testcm* .
 
-*   *databse-name*
-    : The name of a database to be changed
+	::
 
-
-
-**Options**
-
-+------------+----------------------------------------------------------------------------+
-| **Option** | **Description**                                                            |
-|            |                                                                            |
-+------------+----------------------------------------------------------------------------+
-| -u         | Specifies the ID of a database user.                                       |
-| --uid      |                                                                            |
-|            |                                                                            |
-+------------+----------------------------------------------------------------------------+
-| -h         | Specifies the host of a broker used when clients access a database.        |
-| --host     |                                                                            |
-|            |                                                                            |
-+------------+----------------------------------------------------------------------------+
-| -p         | Specifies the port number of a broker used when clients access a database. |
-| --port     |                                                                            |
-|            |                                                                            |
-+------------+----------------------------------------------------------------------------+
-
-**Updating database user ID(-u)**
-
-The following example shows how to update user ID information to
-*uid*
-in the
-*testdb*
-database which belongs to a CM user named
-*testcm*
-.
-
-cm_admin changedbinfo -u uid testcm testdb
-
-**Updating a host IP of a broker (-h)**
-
-The following example shows how to update host IP information to
-*10.34.63.132*
-in the
-*testdb*
-database which belongs to a CM user named
-*testcm*
-.
-
-cm_admin changedbinfo -h 10.34.63.132 testcm testdb
-
-**Updating a broker port (-p)**
-
-The following example shows how to update broker port information to
-*33000*
-in the
-*testdb*
-database which belongs to a CM user named
-*testcm*
-.
-
-cm_admin changedbinfo -p 33000 testcm testdb
+		cm_admin changedbinfo -p 33000 testcm testdb

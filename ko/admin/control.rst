@@ -46,8 +46,7 @@ CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구
 CUBRID 매니저 서버 제어
 -----------------------
 
-CUBRID 매니저를 사용하기 위해서는 데이터베이스 서버가 실행된 곳에 매니저 서버가 실행되어야 한다. CUBRID 매니저 프로세스를 제어하기 위한 **cubrid**
-유틸리티 구문은 다음과 같다.
+CUBRID 매니저를 사용하기 위해서는 데이터베이스 서버가 실행된 곳에 매니저 서버가 실행되어야 한다. CUBRID 매니저 프로세스를 제어하기 위한 **cubrid** 유틸리티 구문은 다음과 같다.
 <command>로 올 수 있는 명령어는 매니저 서버 프로세스 구동을 위한 **start**, 종료를 위한 **stop**, 상태 확인을 위한 **status** 가 있다. 
 
 ::
@@ -59,7 +58,7 @@ CUBRID HA 제어
 ---------------
 
 CUBRID HA 기능을 사용하기 위한 **cubrid heartbeat** 유틸리티 구문은 다음과 같다.
-<command>로 올 수 있는 명령어는 HA 관련 프로세스 구동을 위한 **start**, 종료를 위한 **stop**, HA 구성정보를 다시 읽어서 새로운 구성에 맞게 실행하기 위한 **reload**, CUBRID HA 그룹에서 노드를 제외하기 위한 **deact**, 그룹에서 빠진 노드를 다시 포함시키기 위한 **act**가 있다. 자세한 내용은 `cubrid heartbeat 유틸리티 <#admin_admin_ha_util_heartbeat_ht_4412>`_를 참고한다. 
+<command>로 올 수 있는 명령어는 HA 관련 프로세스 구동을 위한 **start**, 종료를 위한 **stop**, HA 구성정보를 다시 읽어서 새로운 구성에 맞게 실행하기 위한 **reload**, CUBRID HA 그룹에서 노드를 제외하기 위한 **deact**, 그룹에서 빠진 노드를 다시 포함시키기 위한 **act** 가 있다. 자세한 내용은 `cubrid heartbeat 유틸리티 <#admin_admin_ha_util_heartbeat_ht_4412>`_ 를 참고한다. 
 
 ::
 
@@ -74,10 +73,10 @@ CUBRID 서비스
 
 사용자는 임의로 데이터베이스 서버, CUBRID 브로커, CUBRID 매니저, CUBRID HA 중 하나 이상을 데이터베이스 환경 설정 파일(cubrid.conf)에 CUBRID 서비스로 등록할 수 있다. 사용자가 별도로 서비스를 등록하지 않으면, 기본적으로 마스터 프로세스(cub_master)만 등록된다. CUBRID 서비스에 등록되어 있으면
 **cubrid service** 유틸리티를 사용해서 한 번에 관련된 프로세스들을 모두 구동, 정지하거나 상태를 알아볼 수 있어 편리하다. CUBRID HA를 설정하는 방법은
-`cubrid service 유틸리티 <#admin_admin_ha_util_service_htm>`_를 참고한다.
+`cubrid service 유틸리티 <#admin_admin_ha_util_service_htm>`_ 를 참고한다.
 
 다음은 데이터베이스 환경 설정 파일에서 데이터베이스 서버와 브로커를 서비스로 등록하고, CUBRID 서비스 구동과 함께
-*demodb*와 *testdb*라는 데이터베이스를 자동으로 시작하도록 설정한 예이다. 
+*demodb*와 *testdb* 라는 데이터베이스를 자동으로 시작하도록 설정한 예이다.
 
 ::
 
@@ -124,7 +123,7 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
 	cub_master: '/tmp/CUBRID1523' file for UNIX domain socket exist.... Operation not permitted
 	++ cubrid master start: fail
 
-`서비스 등록 <#admin_admin_service_conf_registe_6298>`_에 설명된 대로 서비스를 등록한 후, 서비스를 구동하기 위해 다음과 같이 입력한다. 마스터 프로세스, 데이터베이스 서버 프로세스, 브로커 및 등록된 *demodb*,*testdb*가 한 번에 구동됨을 확인할 수 있다. 
+`서비스 등록 <#admin_admin_service_conf_registe_6298>`_ 에 설명된 대로 서비스를 등록한 후, 서비스를 구동하기 위해 다음과 같이 입력한다. 마스터 프로세스, 데이터베이스 서버 프로세스, 브로커 및 등록된 *demodb*,*testdb*가 한 번에 구동됨을 확인할 수 있다. 
 
 ::
 
@@ -333,7 +332,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 	@ cubrid server stop: demodb
 	++ cubrid server 'demodb' is not running.
 
-**cubrid server stop** 명령은 HA 모드의 설정과는 상관없이 특정 데이터베이스의 cub_server 프로세스만 종료하며, 데이터베이스 서버가 재시작되거나 failover가 일어나지 않으므로 주의해야 한다. HA 환경에서 데이터베이스를 중지하려면 **cubrid heartbeat stop**를 사용해야 한다.
+**cubrid server stop** 명령은 HA 모드의 설정과는 상관없이 특정 데이터베이스의 cub_server 프로세스만 종료하며, 데이터베이스 서버가 재시작되거나 failover가 일어나지 않으므로 주의해야 한다. HA 환경에서 데이터베이스를 중지하려면 **cubrid heartbeat stop** 를 사용해야 한다.
 
 데이터베이스 서버 재구동
 ------------------------
@@ -450,7 +449,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 	Address(10.24.18.66) is not authorized.
 
 .. note::
-	브로커에서의 접속 제한을 위해서는 `브로커 접속 제한 <#admin_admin_service_broker_acces_9795>`_을 참고한다.
+	브로커에서의 접속 제한을 위해서는 `브로커 접속 제한 <#admin_admin_service_broker_acces_9795>`_ 을 참고한다.
 
 데이터베이스 서버 에러
 ----------------------
@@ -874,7 +873,7 @@ ip_list_file의 작성 형식은 다음과 같다.
 	<ip_addr>
 	…
 
-*   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 *로 입력하면 뒷자리의 모든 IP를 허용한다.
+*   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 \*로 입력하면 뒷자리의 모든 IP를 허용한다.
 
 **ACCESS_CONTROL** 값이 ON인 상태에서 **ACCESS_CONTROL_FILE** 이 지정되지 않으면 브로커는 localhost에서의 접속 요청만을 허용한다. 브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하면 브로커는 localhost에서의 접속 요청만을 허용한다.
 
@@ -893,7 +892,7 @@ ip_list_file의 작성 형식은 다음과 같다.
 	BROKER_PORT             =30000
 	......
 
-다음은 **ACCESS_CONTROL_FILE** 의 한 예이다. 파일 내에서 사용하는 *은 모든 것을 나타내며, 데이터베이스 이름, 데이터베이스 사용자 ID, 접속을 허용하는 IP 리스트 파일 내의 IP에 대해 지정할 때 사용할 수 있다.
+다음은 **ACCESS_CONTROL_FILE** 의 한 예이다. 파일 내에서 사용하는 \*은 모든 것을 나타내며, 데이터베이스 이름, 데이터베이스 사용자 ID, 접속을 허용하는 IP 리스트 파일 내의 IP에 대해 지정할 때 사용할 수 있다.
 
 ::
 
@@ -1013,7 +1012,7 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 브로커 파라미터의 동적 변경
 ---------------------------
 
-브로커 구동과 관련된 파라미터는 브로커 환경 설정 파일( **cubrid_broker.conf** )에서 설정할 수 있다. 그 밖에, **broker_changer** 유틸리티를 이용하여 구동 중에만 한시적으로 일부 브로커 파라미터를 동적으로 변경할 수 있다. 브로커 파라미터 설정 및 동적으로 변경 가능한 브로커 파라미터 등 기타 자세한 내용은 "성능 튜닝"의 `브로커 설정 <#pm_pm_broker_setting_htm>`_을 참조한다.
+브로커 구동과 관련된 파라미터는 브로커 환경 설정 파일( **cubrid_broker.conf** )에서 설정할 수 있다. 그 밖에, **broker_changer** 유틸리티를 이용하여 구동 중에만 한시적으로 일부 브로커 파라미터를 동적으로 변경할 수 있다. 브로커 파라미터 설정 및 동적으로 변경 가능한 브로커 파라미터 등 기타 자세한 내용은 "성능 튜닝"의 `브로커 설정 <#pm_pm_broker_setting_htm>`_ 을 참조한다.
 
 브로커 구동 중에 브로커 파라미터를 변경하기 위한 **broker_changer** 유틸리티의 구문은 다음과 같다. *broker_name* 에는 구동 중인 브로커 이름을 입력하면 되고 
 *parameter* 는 동적으로 변경할 수 있는 브로커 파라미터에 한정된다. 변경하고자 하는 파라미터에 따라 *value* 가 지정되어야 한다. 브로커 응용 서버 식별자( *cas_id* )를 지정하여 특정 브로커 응용 서버(CAS)에만 변경을 적용할 수도 있다.
@@ -1038,7 +1037,7 @@ HA 환경에서 브로커의 **ACCESS_MODE** 를 Read Only로 변경하고 해�
 	OK
 
 .. note::
-	Windows Vista 이상 버전에서 cubrid 유틸리티를 사용하여 서비스를 제어하려면 명령 프롬프트 창을 관리자 권한으로 구동한 후 사용하는 것을 권장한다. 자세한 내용은 `CUBRID 유틸리티 <#admin_admin_utility_htm>`_의 참고 사항을 참고한다.
+	Windows Vista 이상 버전에서 cubrid 유틸리티를 사용하여 서비스를 제어하려면 명령 프롬프트 창을 관리자 권한으로 구동한 후 사용하는 것을 권장한다. 자세한 내용은 `CUBRID 유틸리티 <#admin_admin_utility_htm>`_ 의 참고 사항을 참고한다.
 
 브로커 로그
 -----------
@@ -1090,7 +1089,7 @@ HA 환경에서 브로커의 **ACCESS_MODE** 를 Read Only로 변경하고 해�
 
 *   - SYNTAX ERROR: 에러의 종류(SYNTAX ERROR, ERROR 등)
 
-*   *** ERROR CODE = -493: 에러 코드
+*   \*\*\* ERROR CODE = -493: 에러 코드
 
 *   Tran = 1: 트랜잭션 ID. -1은 트랜잭션 ID를 할당 받지 못한 경우임.
 
@@ -1100,7 +1099,7 @@ HA 환경에서 브로커의 **ACCESS_MODE** 를 Read Only로 변경하고 해�
 
 **SQL 로그 관리**
 
-SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며, <broker_name>_<app_server_num>.sql.log라는 이름으로 저장된다. SQL 로그는 **SQL_LOG** 파라미터 값이  ON인 경우에 설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된다. 이 때, 생성되는 SQL 로그 파일의 크기는 **SQL_LOG_MAX_SIZE** 파라미터의 설정값을 초과할 수 없으므로 주의한다. CUBRID는 SQL 로그를 관리하기 위한 유틸리티로서 **broker_log_top**, **broker_log_converter**, **broker_log_runner** 를 제공하며, 이 유틸리티는 SQL 로그가 존재하는 디렉터리에서 실행해야 한다.
+SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며, *<broker_name>_<app_server_num>*.sql.log라는 이름으로 저장된다. SQL 로그는 **SQL_LOG** 파라미터 값이  ON인 경우에 설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된다. 이 때, 생성되는 SQL 로그 파일의 크기는 **SQL_LOG_MAX_SIZE** 파라미터의 설정값을 초과할 수 없으므로 주의한다. CUBRID는 SQL 로그를 관리하기 위한 유틸리티로서 **broker_log_top**, **broker_log_converter**, **broker_log_runner** 를 제공하며, 이 유틸리티는 SQL 로그가 존재하는 디렉터리에서 실행해야 한다.
 
 다음은 SQL 로그 파일의 예제와 설명이다.
 
@@ -1143,9 +1142,9 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 **broker_log_top** 유틸리티는 실행 시간이 긴 질의(long duration query)를 분석할 때 유용하며, 구문은 다음과 같다.
 
 ::
-	broker_log_top [<options>] <sql_log_file_list>
+	broker_log_top [options] sql_log_file_list
 
-<sql_log_file_list>에는 분석할 로그 파일 이름을 입력한다. **broker_log_top** 에서 사용하는 <options>는 다음과 같다.
+*sql_log_file_list* 에는 분석할 로그 파일 이름을 입력한다. **broker_log_top** 에서 사용하는 options는 다음과 같다.
 	
 .. program:: broker_log_top
 
@@ -1178,7 +1177,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 	broker_log_top -F "01/19" -T "01/20" log1.log
 
 
-다음 예는 11월 11일부터 11월 12일까지 생성된 SQL 로그에 대해 실행 시간이 긴 SQL문을 확인하기 위하여 **broker_log_top** 유틸리티를 실행한 화면이다. 기간을 지정할 때, 월과 일은 빗금(/)으로 구분한다. Windows에서는 "*.sql.log"를 인식하지 않으므로 SQL 로그 파일들을 공백(space)으로 구분해서 나열해야 한다.
+다음 예는 11월 11일부터 11월 12일까지 생성된 SQL 로그에 대해 실행 시간이 긴 SQL문을 확인하기 위하여 **broker_log_top** 유틸리티를 실행한 화면이다. 기간을 지정할 때, 월과 일은 빗금(/)으로 구분한다. Windows에서는 "\*.sql.log" 를 인식하지 않으므로 SQL 로그 파일들을 공백(space)으로 구분해서 나열해야 한다.
 
 ::
 
@@ -1191,9 +1190,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 	query_editor_4.sql.log
 	query_editor_5.sql.log
 
---Windows에서 broker_log_top 실행
-
-::
+	--Windows에서 broker_log_top 실행
 
 	% broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
 
@@ -1257,31 +1254,31 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 
 **broker_log_runner** 에서 사용하는 <options>는 다음과 같다.
 	
-.. program::broker_log_runner
+.. program:: broker_log_runner
 
-.. option:: -u <db_name>
+.. option:: -u NAME
 
 	데이터베이스 사용자 이름 지정(기본값: public)
 	
-.. option:: -p <dbpasswd>
+.. option:: -p PASSWORD
 
 	데이터베이스 암호 지정
 	
-.. option:: -t <num_thread>	
+.. option:: -t NUMBER	
 	
 	스레드의 개수 지정(기본값: 1)
 	
-.. option:: -r <repeat_count>
+.. option:: -r COUNT
 
 	질의가 수행될 횟수 지정(기본값: 1)
 	
-.. option:: -o <result_file>
+.. option:: -o FILE
 
 	수행 결과를 저장할 파일 이름 지정
 
 .. option:: -Q
 
-	<result_file>에 질의 계획을 포함하여 저장
+	**-o** 옵션에서 지정한 FILE에 질의 계획을 포함하여 저장
 
 다음 예제는 query_convert.in 파일에 저장된 질의를 demodb에서 재실행하며, 브로커 IP가 192.168.1.10이고, 브로커 포트는 30000인 환경임을 가정한다.
 	
@@ -1365,7 +1362,7 @@ CUBRID 매니저 서버를 구동하기 위하여 다음과 같이 입력한다.
 CUBRID 매니저 서버 종료
 -----------------------
 
-	CUBRID 매니저 서버를 종료하기 위하여 다음과 같이 입력한다.
+CUBRID 매니저 서버를 종료하기 위하여 다음과 같이 입력한다.
 
 ::	
 	
@@ -1386,7 +1383,8 @@ CUBRID 매니저 서버와 관련된 로그는 설치 디렉터리의 log/manage
 
 *   cub_js.error.log : 매니저 서버에 의해 작업 처리 도중 발생한 에러에 관한 로그
 
-**CUBRID 매니저 서버 환경 설정**
+CUBRID 매니저 서버 환경 설정
+----------------------------
 
 CUBRID 매니저 서버의 환경 설정 파일은 **$CUBRID/conf** 에 위치하며, 파일 이름은 **cm.conf** 이다.
 CUBRID 매니저 서버의 환경 설정 파일에서 주석은 "#"으로 처리되며, 매개 변수 이름과 값이 저장된다. 매개 변수 이름과 값 사이에는 공백 또는 등호 부호(=)로 구분한다.
@@ -1422,12 +1420,15 @@ CUBRID 매니저 서버에 클라이언트가 중복 접속하는 것을 허용�
 *   **cm_target server**: 데이터베이스 서버만 있을 경우
 
 브로커만 설정하면 매니저에서 브로커 관련 메뉴만 출력되고, 데이터베이스 서버만 설정하면 서버 관련 메뉴만 출력된다.
+
 탐색 트리에서 호스트를 마우스 오른쪽 버튼 클릭하고 [속성]을 선택하면, 설정된 정보를 [호스트 정보]에서 확인할 수 있다.
+
+.. image:: /images/image10.png
 
 CUBRID 매니저 사용자 관리 콘솔
 ------------------------------
 
-CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라이언트 구동을 시작할 때 CUBRID 매니저 서버에 접속하기 위해 사용하는 것이며, 데이터베이스 사용자와는 다른 개념이다. CUBRID 매니저 관리자(cm_admin)는 사용자 정보를 관리하는 CLI 도구로, 콘솔 창에서 명령어를 실행하여 사용자를 관리한다.
+CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라이언트 구동을 시작할 때 CUBRID 매니저 서버에 접속하기 위해 사용하는 것이며, 데이터베이스 사용자와는 다른 개념이다. CUBRID 매니저 관리자(cm_admin)는 사용자 정보를 관리하는 CLI 도구로, 콘솔 창에서 명령어를 실행하여 사용자를 관리한다. 이 유틸리티는 Linux OS만 지원한다.
 
 다음은 CUBRID 매니저(이하 CM) 관리자 유틸리티 구문 사용법이다. 아래 기능은 CUBRID 매니저 클라이언트에서 GUI를 통해 사용할 수도 있다.
 
@@ -1468,8 +1469,7 @@ CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin**
 
 ::
 
-	cm_admin adduser <options> <cmuser-name> <cmuser-password>
-	<options>: [{-b|--broker} authority] [{-c|--dbcreate} authority ][{-m |--monitor} authority] [{-d|--dbinfo} database-info]
+	cm_admin adduser [options] cmuser-name cmuser-password
 	
 *   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
 
@@ -1477,37 +1477,35 @@ CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin**
 
 *   *cmuser-name*: 생성할 CM 사용자의 고유한 이름을 지정한다. CM 사용자 이름은 4자 이상이어야 한다. 지정한 *cmuser-name* 이 기존 *cmuser-name* 과 같으면 **cm_admin** 은 CM 사용자 생성을 중지한다.
 
-*   *cmuser-password*: CM 사용자의 비밀번호이다. 비밀번호는 4자 이상이어야 한다.
+*   *cmuser-password*: 생성할 CM 사용자의 비밀번호이다. 비밀번호는 4자 이상이어야 한다.
 
-다음은 **cm_admin adduser** 에 대한 <options>이다.
+다음은 **cm_admin adduser** 에 대한 [options]이다.
 
-.. option:: -b, --broker
+.. program:: cm_admin_adduser
+
+.. option:: -b, --broker AUTHORITY
 
 	생성할 CM 사용자의 브로커 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor** 이며, 기본값은 **none** 이다.
 
-.. option:: -c, --dbcreate
+	다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 브로커 권한을 monitor로 설정하는 예이다.
+
+	::
+
+		cm_admin adduser -b monitor testcm testcmpwd
+	
+.. option:: -c, --dbcreate AUTHORITY
 
 	생성할 CM 사용자의 데이터베이스 생성 권한을 지정한다. 사용할 수 있는 값은 **none**, **admin** 이며, 기본값은 **none** 이다.
+
+	다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 데이터베이스 생성 권한을 admin으로 설정하는 예이다.
+
+	::
+
+		cm_admin adduser -c admin testcm testcmpwd
 	
-.. option:: -m, monitor
+.. option:: -m, monitor AUTHORITY
 
 	생성할 CM 사용자의 모니터링 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor**이며, 기본값은 **none** 이다.
-	
-.. option:: -d, --dbinfo
-
-	생성할 CM 사용자의 데이터베이스 정보를 지정한다. DBINFO는 "<dbname>;<uid>;<broker_ip>,<broker_port>"의 형식으로 지정해야 한다.
-
-다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 브로커 권한을 monitor로 설정하는 예이다.
-
-::
-
-	cm_admin adduser -b monitor testcm testcmpwd
-
-다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 데이터베이스 생성 권한을 admin으로 설정하는 예이다.
-
-::
-
-	cm_admin adduser -c admin testcm testcmpwd
 
 다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 상태 모니터링 권한을 admin으로 설정하는 예이다.
 
@@ -1515,11 +1513,15 @@ CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin**
 
 	cm_admin adduser -m admin testcm testcmpwd
 
-다음은 이름이 *testcm* 인 CM 사용자에게 "testdb;dba;localhost,30000"이라는 데이터베이스 정보를 추가하는 예이다.
+.. option:: -d, --dbinfo STRING
 
-::
+	생성할 CM 사용자의 데이터베이스 정보를 지정한다. DBINFO는 "<dbname>;<uid>;<broker_ip>,<broker_port>"의 형식으로 지정해야 한다.
 
-	cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
+	다음은 이름이 *testcm* 인 CM 사용자에게 "testdb;dba;localhost,30000"이라는 데이터베이스 정보를 추가하는 예이다.
+
+	::
+
+		cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
 
 **CM 사용자 삭제**
 
@@ -1527,13 +1529,14 @@ CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin**
 
 ::
 
-	cm_admin deluser <cmuser-name> <cmuser-password>
+	cm_admin deluser cmuser-name
 
 *   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
 
 *   **deluser**: 기존 CM 사용자를 삭제하는 명령어
 
 *   *cmuser-name*: 삭제할 CM 사용자 이름
+
 
 다음은 이름이 *testcm* 인 CM 사용자를 삭제하는 예이다.
 
@@ -1547,7 +1550,7 @@ CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin**
 
 ::
 
-	cm_admin viewuser <cmuser-name>
+	cm_admin viewuser cmuser-name
 
 *   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
 
@@ -1581,7 +1584,7 @@ CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin**
 
 ::
 
-	cm_admin changeuserauth <options> <cmuser-name>
+	cm_admin changeuserauth [options] cmuser-name
 
 *   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
 
@@ -1591,37 +1594,40 @@ CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin**
 
 **cm_admin changeuserauth** 에서 사용하는 <options>는 다음과 같다.
 
+.. program:: cm_admin_changeuserauth
+
 .. option:: -b, --broker
 
 	CM 사용자의 브로커 권한을 지정한다.
 	사용할 수 있는 값은 **admin**, **none**, **monitor** 이다.
+
+	다음은 이름이 *testcm* 인 CM 사용자의 브로커 권한을 **monitor** 로 변경하는 예이다.
+
+	::
+
+		cm_admin changeuserauth -b monitor testcm
 	
 .. option:: -c, --dbcreate
 
 	CM 사용자의 데이터베이스 생성 권한을 지정한다. 
 	사용할 수 있는 값은 **none**, **admin** 이다.
+
+	다음은 이름이 *testcm* 인 CM 사용자의 데이터베이스 생성 권한을 **admin** 으로 변경하는 예이다.
+
+	::
+
+		cm_admin changeuserauth -c admin testcm
 	
 .. option:: -m, --monitor 
 	
 	CM 사용자의 모니터링 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor** 이다.
 
-다음은 이름이 *testcm* 인 CM 사용자의 브로커 권한을 monitor로 변경하는 예이다.
+	
+	다음은 이름이 *testcm* 인 CM 사용자의 상태 모니터링 권한을 **admin** 으로 변경하는 예이다.
 
-::
+	::
 
-	cm_admin changeuserauth -b monitor testcm
-
-다음은 이름이 *testcm* 인 CM 사용자의 데이터베이스 생성 권한을 admin으로 변경하는 예이다.
-
-::
-
-	cm_admin changeuserauth -c admin testcm
-
-다음은 이름이 *testcm* 인 CM 사용자의 상태 모니터링 권한을 admin으로 변경하는 예이다.
-
-::
-
-	cm_admin changeuserauth -m admin testcm
+		cm_admin changeuserauth -m admin testcm
 
 **CM 사용자 비밀번호 변경**
 
@@ -1629,86 +1635,58 @@ CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin**
 
 ::
 
-	cm_admin changeuserpwd <options> <cmuser-name>
+	cm_admin changeuserpwd [options] cmuser-name
 
 *   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
 
 *   **changeuserpwd**: CM 사용자의 비밀번호를 변경하는 명령어
 
-**cm_admin changeuserpwd** 에서 사용하는 <options>는 다음과 같다.
+*   *cmuser-name*: 비밀번호를 변경할 CM 사용자의 이름
 
-.. option:: -o, --oldpass <old_password> 
+
+**cm_admin changeuserpwd** 에서 사용하는 [options]는 다음과 같다.
+
+.. option:: -o, --oldpass PASSWORD
 
 	CM 사용자의 이전 비밀번호를 지정한다.
 
-.. option:: --adminpass <admin_password>
+	다음은 이름이 *testcm* 인 CM 사용자의 비밀번호를 변경하는 예이다.
 
-	admin 사용자의 비밀번호를 지정한다. <old_password> 대신 지정할 수 있다.
+	::
+
+		cm_admin changeuserpwd -o old_password -n new_password testcm
+
+.. option:: --adminpass PASSWORD
+
+	사용자의 이전 비밀번호를 모를 때 **admin** 의 비밀번호를 대신 지정할 수 있다.
+
+	다음은 **admin** 비밀번호를 사용하여 이름이 *testcm* 인 CM 사용자의 비밀번호를 변경하는 예이다.
+
+	::
+
+		cm_admin changeuserauth --adminpass admin_password -n new_password testcm
 	
-.. option:: -n, --newpass <new_password>
+.. option:: -n, --newpass PASSWORD
 
 	CM 사용자의 새 비밀번호를 지정한다.
 
-다음은 이름이 *testcm* 인 CM 사용자의 비밀번호를 변경하는 예이다. **--oldpass** 옵션이나 **--adminpass** 옵션 중 하나는 사용해야 한다.
 
-::
 
-	cm_admin changeuserpwd -o old_password -n new_password testcm
-
-다음은 관리자 비밀번호를 사용하여 이름이 *testcm* 인 CM 사용자의 비밀번호를 변경하는 예이다. **--oldpass** 옵션이나 **--adminpass** 옵션 중 하나는 사용해야 한다.
-
-::
-
-	cm_admin changeuserauth --adminpass admin_password -n new_password testcm
-
-CM 사용자의 데이터베이스 정보 추가
-----------------------------------
+**CM 사용자의 데이터베이스 정보 추가**
 
 **cm_admin adddbinfo** 유틸리티는 데이터베이스 정보(데이터베이스 이름, UID, 브로커 IP 및 브로커 포트)를 CM 사용자에게 추가한다. 
 
 ::
 
-	cm_admin adddbinfo <options> <cmuser-name> <database-name> 
+	cm_admin adddbinfo [options] cmuser-name database-name
 	
 *   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
 
 *   **adddbinfo**: CM 사용자에게 데이터베이스 정보를 추가하는 명령어
 
-*   <cmuser-name>: CM 사용자 이름
+*   cmuser-name: CM 사용자 이름
 
-*   <databse-name>: 추가할 데이터베이스 이름
-
-다음은 **cm_admin adddbinfo** 에서 사용하는  <options> 이다.
-
-.. option:: -u, --uid 
-
-	데이터베이스의 사용자 ID를 지정한다. 기본값은 **dba** 이다.
-
-.. option:: -h, --host 
-
-	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 호스트를 지정한다. 기본값은 **localhost** 이다.
-
-.. option:: -p, --port
-	
-	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 포트 번호를 지정한다. 기본값은 **30000** 이다.
-
-다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 사용자 ID가 *uid* 인 데이터베이스를 추가하는 예이다.
-
-::
-
-	cm_admin adddbinfo -u uid testcm testdb
-
-다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 호스트 IP가 *127.0.0.1* 인 데이터베이스를 추가하는 예이다.
-
-::
-
-	cm_admin adddbinfo -h 127.0.0.1 testcm testdb
-
-다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 브로커 포트가 *33000* 인 데이터베이스를 추가하는 예이다.
-
-::
-
-	cm_admin adddbinfo -p 33000 testcm testdb
+*   databse-name: 추가할 데이터베이스 이름
 
 다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 기본값을 사용하는 데이터베이스를 추가하는 예이다.
 
@@ -1716,22 +1694,52 @@ CM 사용자의 데이터베이스 정보 추가
 
 	cm_admin adddbinfo testcm testdb
 
-CM 사용자의 데이터베이스 정보 삭제
-----------------------------------
+다음은 **cm_admin adddbinfo** 에서 사용하는 [options]이다.
+
+.. program:: cm_admin_adddbinfo
+
+.. option:: -u, --uid ID
+
+	추가할 데이터베이스의 사용자 ID를 지정한다. 기본값은 **dba** 이다.
+
+	다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 사용자 ID가 *cubriduser* 인 데이터베이스를 추가하는 예이다.
+
+	::
+
+		cm_admin adddbinfo -u cubriduser testcm testdb
+
+	
+.. option:: -h, --host IP
+
+	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 호스트 IP를 지정한다. 기본값은 **localhost** 이다.
+
+	다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 호스트 IP가 *127.0.0.1* 인 데이터베이스를 추가하는 예이다.
+
+	::
+
+		cm_admin adddbinfo -h 127.0.0.1 testcm testdb
+	
+.. option:: -p, --port NUMBER
+	
+	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 포트 번호를 지정한다. 기본값은 **30000** 이다.
+
+
+
+**CM 사용자의 데이터베이스 정보 삭제**
 
 **cm_admin deldbinfo** 유틸리티는 지정한 CM 사용자의 데이터베이스 정보를 삭제한다.
 
 ::
 
-	cm_admin deldbinfo <cmuser-name> <database-name>
+	cm_admin deldbinfo cmuser-name database-name
 
 *   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
 
 *   **deldbinfo**: CM 사용자의 데이터베이스 정보를 삭제하는 명령어
 
-*   <cmuser-name>: CM 사용자 이름
+*   cmuser-name: CM 사용자 이름
 
-*   <databse-name>: 삭제할 데이터베이스 이름
+*   databse-name: 삭제할 데이터베이스 이름
 
 다음은 이름이 *testcm* 인 CM 사용자에게서 이름이 *testdb* 인 데이터베이스 정보를 삭제하는 예이다.
 
@@ -1739,15 +1747,13 @@ CM 사용자의 데이터베이스 정보 삭제
 
 	cm_admin deldbinfo testcm testdb
 
-CM 사용자의 데이터베이스 정보 변경
-----------------------------------
+**CM 사용자의 데이터베이스 정보 변경**
 
 **cm_admin changedbinfo** 유틸리티는 지정한 CM 사용자의 데이터베이스 정보를 변경한다.
 
 ::
 
-	cm_admin changedbinfo <options> <cmuser-name> <database-name>
-	<options>: [{-u|--uid} <userid>][{-h|--host} <broker-ip>][{-p|--port} <broker-port>]
+	cm_admin changedbinfo [options] cmuser-name database-name
 
 *   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
 
@@ -1757,35 +1763,36 @@ CM 사용자의 데이터베이스 정보 변경
 
 *   <databse-name>: 변경할 데이터베이스 이름
 
-다음은 **cm_admin changedbinfo** 에서 사용하는 <options>이다.
+다음은 **cm_admin changedbinfo** 에서 사용하는 [options]이다.
 
-.. option:: -u, --uid 
+.. program:: cm_admin_changedbinfo
+
+.. option:: -u, --uid ID
 
 	데이터베이스의 사용자 ID를 지정한다.
 
-.. option:: -h, --host 
+	다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 사용자 ID 정보를 *uid* 로 업데이트하는 예이다. 
+
+	::
+
+		cm_admin changedbinfo -u uid testcm testdb
+
+.. option:: -h, --host IP
 
 	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 호스트를 지정한다.
+
+	다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 호스트 IP 정보를 *10.34.63.132* 로 업데이트하는 예이다.
+
+	::
+
+		cm_admin changedbinfo -h 10.34.63.132 testcm testdb
 	
-.. option:: -p, --port
+.. option:: -p, --port NUMBER
 	
 	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 포트 번호를 지정한다.
 
+	다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 브로커 포트 정보를 *33000* 로 업데이트하는 예이다.
 
-다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 사용자 ID 정보를 *uid* 로 업데이트하는 예이다. 
+	::
 
-::
-
-	cm_admin changedbinfo -u uid testcm testdb
-
-다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 호스트 IP 정보를 *10.34.63.132* 로 업데이트하는 예이다.
-
-::
-
-	cm_admin changedbinfo -h 10.34.63.132 testcm testdb
-
-다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 브로커 포트 정보를 *33000* 로 업데이트하는 예이다.
-
-::
-
-	cm_admin changedbinfo -p 33000 testcm testdb
+		cm_admin changedbinfo -p 33000 testcm testdb

@@ -62,7 +62,7 @@
 
 ::
 
-	cubrid unloaddb [<options>] database_name
+	cubrid unloaddb [options] database_name
 
 **cubrid unloaddb**  가 생성하는 파일은 다음과 같다.
 
@@ -73,16 +73,15 @@
 
 이러한 스키마, 객체, 인덱스, 트리거 파일은 같은 디렉터리에 생성된다.
 
-다음은 **cubrid unloaddb** 에서 사용하는 <options>이다.
+다음은 **cubrid unloaddb** 에서 사용하는 [options]이다.
 
 .. program:: unloaddb
 
-.. option:: -i, --input-class-file table_list.txt
+.. option:: -i, --input-class-file=FILE
 
 	인수로 지정된 입력 파일에 지정된 클래스만을 대상으로 데이터베이스를 언로드한다. ::
 	
 		cubrid unloaddb -i table_list.txt demodb
-
 
 	다음은 입력 파일 table_list.txt의 예이다. ::
 
@@ -106,8 +105,24 @@
 .. option:: --input-class-only
 
 	**-i** 옵션과 함께 사용되며, 입력 파일에 포함된 테이블에 관한 스키마 파일만 생성한다.
+
+.. option:: --lo-count=COUNT
+
+	한 디렉터리에 생성될 큰 객체(LO) 데이터 파일의 수를 설정한다(기본값: 0).
+
+.. option:: --estimated-size=NUMBER
+
+	언로드할 데이터베이스의 레코드 저장을 위한 해시 메모리를 사용자 임의로 할당하기 위한 옵션이다. 만약 **--estimated-size** 옵션이 지정되지 않으면 최근의 통계 정보를 기반으로 데이터베이스의 레코드 수를 결정하게 되는데, 만약 최근 통계 정보가 갱신되지 않았거나 해시 메모리를 크게 할당하고 싶은 경우 이 옵션을 이용할 수 있다. 따라서, 옵션의 인수로 너무 적은 레코드 개수를 정의한다면 해시 충돌로 인해 언로드 성능이 저하된다. ::
+
+		cubrid unloaddb --estimated-size=1000 demodb
+		
+.. option:: --cached-pages=NUMBER
+
+	메모리에 캐시되는 테이블의 페이지 수를 지정하기 위한 옵션이다. 각 페이지는 4,096 바이트이며, 관리자는 메모리의 크기와 속도를 고려하여 캐시되는 페이지 수를 지정할 수 있다. 만약, 이 옵션이 지정되지 않으면 기본값은 100페이지가 된다. ::
+
+		cubrid unloaddb --cached-pages 500 demodb
 	
-.. option:: -O, --output-path file_path
+.. option:: -O, --output-path=PATH
 
 	스키마와 객체 파일이 생성될 디렉터리를 지정한다. 옵션이 지정되지 않으면 현재 디렉터리에 생성된다. ::
 
@@ -123,93 +138,41 @@
 
 		cubrid unloaddb -s demodb
 
-.. option:: -d, --data-only
-
-	스키마 파일은 생성하지 않고, 데이터 파일만 생성한다.
-	
-.. option:: -v, --verbose
-
-	언로드되는 데이터베이스의 상세 정보를 화면에 출력한다.
-	
-.. option:: -S, --SA-mode
-
-	독립 모드에서 데이터베이스를 언로드한다. 
-
-.. option:: -C, --CS-mode
-
-	클라이언트/서버 모드에서 데이터베이스를 언로드한다.  
-
-.. option:: --lo-count
-
-	한 디렉터리에 생성될 큰 객체(LO) 데이터 파일의 수를 설정한다(기본값: 0).
-
-.. option:: --estimated-size
-
-	예상되는 레코드 수를 지정한다. 
-
-.. option:: --cached-pages
-
-	메모리에 캐시할 객체 테이블의 수를 설정한다(기본값 : 100).
-	
-.. option:: --output-prefix
-
-	스키마와 객체 파일명 앞에 붙이는 prefix를 지정한다.
-
-.. option:: --hash-file
-
-	해시 파일의 이름을 지정한다.
-
-.. option:: --datafile-per-class
-
-	각 테이블의 데이터 파일을 별도로 생성한다. 
-
-.. option:: -d, --data-only
-
-	**-d** 옵션은 언로드 작업을 통해 생성되는 출력 파일 중,?데이터 파일만 생성되도록 지정하는 옵션이다. ::
-
-		cubrid unloaddb -d demodb
-
-.. option:: --datafile-per-class
-
-	**--datafile-per-clas** 옵션은 언로드 작업으로?생성되는 데이터 파일을 각 테이블별로 생성되도록 지정하는 옵션이다. 파일 이름은 *<데이터베이스 이름>* **_** *<테이블 이름>* **_objects** 로 생성된다. 단, 객체 타입의 칼럼 값은 모두 **NULL** 로 언로드되며, 언로드된 파일에는 %id class_name class_id 부분이 작성되지 않는다. 자세한 내용은 `가져오기용 파일 작성 방법 <#admin_admin_migration_file_htm>`_ 을 참고한다. ::
-
-		cubrid unloaddb -d demodb
-
-.. option:: -v, --verbose
-
-	**-v** 옵션은 언로드 작업이 진행되는 동안 언로드되는 데이터베이스의 테이블 및 인스턴스에 관한 상세 정보를 화면에 출력하는 옵션이다. ::
-
-		cubrid unloaddb -v demodb
-
-.. option:: -S, --SA-mode)
-
-	**-S** 옵션은 지정된 데이터베이스에 독립 모드로 접근하여 언로드 작업을 수행하는 옵션이다. ::
-
-		cubrid unloaddb -S demodb
-
-.. option:: -C, --CS-mode
-
-	**-C** 옵션은 지정된 데이터베이스에 클라이언트/서버 모드로 접근하여 언로드 작업을 수행하는 옵션이다. ::
-
-		cubrid unloaddb -C demodb
-
-.. option:: --estimated-size
-
-	**--estimated-size** 옵션은 언로드할 데이터베이스의 레코드?저장을 위한 해시 메모리를 사용자 임의로 할당하기 위한 옵션이다. 만약 **--estimated-size** 옵션이 지정되지 않으면 최근의 통계 정보를 기반으로 데이터베이스의 레코드 수를 결정하게 되는데, 만약 최근 통계 정보가 갱신되지 않았거나 해시 메모리를 크게 할당하고 싶은 경우 이 옵션을 이용할 수 있다. 따라서, 옵션의 인수로 너무 적은 레코드 개수를 정의한다면 해시 충돌로 인해 언로드 성능이 저하된다. ::
-
-		cubrid unloaddb --estimated-size 1000 demodb
-
-.. option:: --cached-pages
-
-	**--cached-pages** 는 메모리에 캐시되는 테이블의 페이지 수를 지정하기 위한 옵션이다. 각 페이지는 4,096 바이트이며, 관리자는 메모리의 크기와 속도를 고려하여 캐시되는 페이지 수를 지정할 수 있다. 만약, 이 옵션이 지정되지 않으면 기본값은 100페이지가 된다. ::
-
-		cubrid unloaddb --cached-pages 500 demodb
-
-.. option:: --output-prefix
+.. option:: --output-prefix=PREFIX
 
 	**--output-prefix** 는 언로드 작업에 의해 생성되는 스키마 파일과 객체 파일의 이름 앞에 붙는 prefix를 지정하기 위한 옵션이다. 예제를 수행하면 스키마 파일명은 *abcd_schema* 가 되고, 객체 파일명은 *abcd_objects* 가 된다. 만약, **--output-prefix** 옵션을 지정하지 않으면 언로드할 데이터베이스 이름이 prefix로 사용된다. ::
 
 		cubrid unloaddb --output-prefix abcd demodb
+		
+.. option:: --hash-file=FILE
+
+	해시 파일의 이름을 지정한다.	
+	
+.. option:: -v, --verbose
+
+	언로드 작업이 진행되는 동안 언로드되는 데이터베이스의 테이블 및 인스턴스에 관한 상세 정보를 화면에 출력하는 옵션이다. ::
+
+		cubrid unloaddb -v demodb
+	
+.. option:: -S, --SA-mode
+
+	독립 모드에서 데이터베이스를 언로드한다.  ::
+	
+		cubrid unloaddb -S demodb
+
+
+.. option:: -C, --CS-mode
+
+	클라이언트/서버 모드에서 데이터베이스를 언로드한다. ::
+	
+		cubrid unloaddb -C demodb
+	
+.. option:: --datafile-per-class
+
+	**--datafile-per-clas** 옵션은 언로드 작업으로 생성되는 데이터 파일을 각 테이블별로 생성되도록 지정하는 옵션이다. 파일 이름은 *<데이터베이스 이름>* **_** *<테이블 이름>* **_objects** 로 생성된다. 단, 객체 타입의 칼럼 값은 모두 **NULL** 로 언로드되며, 언로드된 파일에는 %id class_name class_id 부분이 작성되지 않는다. 자세한 내용은 `가져오기용 파일 작성 방법 <#admin_admin_migration_file_htm>`_ 을 참고한다. ::
+
+		cubrid unloaddb -d demodb
+
 
 데이터베이스 가져오기(load)
 ===========================
@@ -222,7 +185,7 @@
 
 일반적으로 **cubrid loaddb** 유틸리티는 **cubrid unloaddb** 유틸리티가 생성한 파일(스키마 정의 파일, 객체 입력 파일, 인덱스 정의 파일)을 사용한다. ::
 
-	cubrid loaddb [ options ] database_name
+	cubrid loaddb [options] database_name
 
 **입력 파일**
 
@@ -236,7 +199,7 @@
 
 *   사용자 정의 객체 파일(*user_defined_object_file*) : 대용량 데이터 입력을 위해 사용자가 테이블 형식으로 작성한 입력 파일이다(`가져오기용 파일 작성 방법 <#admin_admin_migration_file_htm>`_ 참고).
 
-다음은 **cubrid loaddb** 유틸리티와 결합할 수 있는 옵션이다. 대소문자를 구별해서 사용해야 한다.
+다음은 **cubrid loaddb** 에서 사용하는 [options]이다. 
 
 .. program:: unloaddb
 

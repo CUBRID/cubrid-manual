@@ -299,7 +299,8 @@ VC9 버전을 컴파일하려면 Visual C++ 2008 Runtime이 필요하다. VC9 �
 
 *   CUBRID PHP 드라이버 소스코드: `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_ 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
-.. note:: 
+.. note::
+
 	PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트를 설정해야 한다. PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_
 
 **CUBRID PHP 드라이버 빌드**

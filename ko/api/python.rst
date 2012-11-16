@@ -112,7 +112,7 @@ Python 예제 프로그램
 
 	import CUBRIDdb
 
-#. localhost에 위치한 *demodb* 데이터베이스에 연결을 생성한다. ::
+#. localhost에 위치한 *demodb* 데이터베이스에 연결을 생성한다.
 
    .. code-block:: python
    

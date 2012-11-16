@@ -29,7 +29,9 @@ Ruby 설치 및 설정
 
 	gem install cubrid
 
-.. note:: Gem Installer가 설치되어 있지 않다면 `http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions>`_ 를 참고한다.
+.. note:: 
+
+	Gem Installer가 설치되어 있지 않다면 `http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions>`_ 를 참고한다.
 
 Ruby 예제 프로그램
 ==================

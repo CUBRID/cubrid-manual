@@ -291,10 +291,6 @@ Ruby API에 대한 자세한 내용은 CUBRID Ruby API Documentation(
     *   `[]=(col_name, obj) <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#.5b.5d.3d.28col_name.2c_obj.29>`_
     *   `drop <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#drop>`_
     *   `each <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#each_2>`_
-    *   `glo_drop <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_drop>`_
-    *   `glo_load <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_load>`_
-    *   `glo_save <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_save>`_
-    *   `glo_size <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_size>`_
     *   `lock <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#lock>`_
     *   `refresh <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#refresh>`_
     *   `save <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#save>`_

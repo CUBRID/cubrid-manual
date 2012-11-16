@@ -518,22 +518,6 @@ For more information about CUBRID Ruby API, see CUBRID Ruby API Documentation (
 
 
 
-    *   `glo_drop <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_drop>`_
-
-
-
-    *   `glo_load <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_load>`_
-
-
-
-    *   `glo_save <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_save>`_
-
-
-
-    *   `glo_size <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_size>`_
-
-
-
     *   `lock <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#lock>`_
 
 

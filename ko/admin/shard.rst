@@ -253,8 +253,10 @@ CUBRID SHARD는 ACID 중 Atomicity(원자성)을 보장하기 위한 내부적�
 
 	sh> # CUBRID SHARD DB 생성
 	sh> cubrid createdb shard1
+
 	sh> # CUBRID SHARD 사용자 계정 생성
 	sh> csql -S -u dba shard1 -c "create user shard password 'shard123'"
+
 	sh> # CUBRID SHARD DB 시작
 	sh> cubrid server start shard1
 
@@ -771,7 +773,9 @@ CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 �
 
 **라이브러리 구현 및 생성**
 
-사용자 정의 해시 함수는 실행 시간에 로딩 가능한 **.so** 형태의 라이브러리로 구현되어야 하며 프로토타입은 아래와 같다. ::
+사용자 정의 해시 함수는 실행 시간에 로딩 가능한 **.so** 형태의 라이브러리로 구현되어야 하며 프로토타입은 아래와 같다.
+
+.. code-block:: c
 
 	94 /*
 	95    return value :
@@ -784,7 +788,6 @@ CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 �
 	102                                    const void *val, int val_size);
 
 *   해시 함수의 반환 값은 **shard_key.txt** 설정 파일의 해시 결과 범위에 반드시 포함되어야 한다.
-
 *   라이브러리를 빌드하기 위해서는 반드시 **$CUBRID/include/shard_key.h** 파일을 include해야 한다. 이 파일에서 반환 가능한 에러 코드 등 자세한 내용도 확인할 수 있다.
 
 **shard.conf 설정 파일 변경**
@@ -979,7 +982,7 @@ CUBRID SHARD 구동 중에 파라미터를 변경하기 위한 **shard_broker_ch
 +--------+--------------------------------------------------------------------------+
 | 옵션   | 설명                                                                     |
 |        |                                                                          |
-+--------+--------------------------------------------------------------------------+
++========+==========================================================================+
 | <      | CUBRID SHARD                                                             |
 | *expr* | 이름이 <                                                                 |
 | >      | *expr*                                                                   |
@@ -1232,7 +1235,7 @@ shard proxy에 접속하는 응용 클라이언트를 제한하려면 **cubrid_s
 
 shard proxy별로 [%<*broker_name*>]과 <*db_name*>:<*db_user*>:<*ip_list_file*>을 추가로 지정할 수 있으며, 같은 <*db_name*>, 같은 <*db_user*>에 대해 별도의 라인으로 추가 지정할 수 있다.
 
-ip_list_file의 작성 형식은 다음과 같다. :;
+ip_list_file의 작성 형식은 다음과 같다. ::
 
 	<ip_addr>
 

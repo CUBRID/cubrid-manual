@@ -807,9 +807,8 @@ CUBRID는 칼럼(표현식)들이 서로 다른 콜레이션과 문자셋을 가
 
 .. code-block:: sql
 
-CREATE TABLE t1 (s1 VARCHAR(200) COLLATE utf8_ja_exp);
- 
-CREATE INDEX idx_t_s1 on t(s1(5));   -> not allowed : error
+	CREATE TABLE t1 (s1 VARCHAR(200) COLLATE utf8_ja_exp);
+	CREATE INDEX idx_t_s1 on t(s1(5));   -> not allowed : error
 
 **커버링 인덱스**
 

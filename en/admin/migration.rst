@@ -1,559 +1,207 @@
-*************************
-데이터베이스 마이그레이션
-*************************
+******************
+Database Migration
+******************
 
-**Migrating Database**
+Migrating Database
+==================
 
-To use a new version of CUBRID database, you may need to migrate an existing data to a new one. For this purpose, you can use the "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. The following section explains migration steps using the
-**cubrid unloaddb**
-and
-**cubrid loaddb**
-utilities.
+To use a new version of CUBRID database, you may need to migrate an existing data to a new one. For this purpose, you can use the "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. 
+
+The following section explains migration steps using the **cubrid unloaddb** and **cubrid loaddb** utilities.
 
 **Recommended Scenario and Procedures**
 
-The following steps describes migration scenario that can be applied while the existing version of CUBRID is running. For database migration, you should use the
-**cubrid unloaddb**
-and
-**cubrid loaddb**
-utilities. For details, see
-`Unloading Database <#admin_admin_migration_unload_htm>`_
-and
-`Loading Database <#admin_admin_migration_load_htm>`_
-.
+The following steps describes migration scenario that can be applied while the existing version of CUBRID is running. For database migration, you should use the **cubrid unloaddb** and **cubrid loaddb** utilities. For details, see `Unloading Database <#admin_admin_migration_unload_htm>`_ and `Loading Database <#admin_admin_migration_load_htm>`_ .
 
-#.  
-    *   
-        *   
-            *   
-                *   
-                    *   
-                        *   Stop the existing CUBRID service
+#. Stop the existing CUBRID service
 
+	Execute **cubrid service stop** to stop all service processes running on the existing CUBRID and then check whether all CUBRID-related processes have been successfully stopped. 
 
+	To verify whether all CUBRID-related processes have been successfully stopped, execute **ps -ef|grep cub_** in Linux. If there is no process starting with cub_, all CUBRID-related processes have been successfully stopped. In Windows, press the <Ctrl+Alt+Delete> key and select [Start Task Manager]. If there is no process starting with cub_ in the [Processes] tab, all CUBRID-related processes have been successfully stopped. In Linux, when the related processes remain even after the CUBRID service has been terminated, use **kill** command to forcibly terminate them, and use **ipcs -m** command to check and release the memory shard by CUBRID broker. To forcibly terminate related processes in Windows, go to the [Processes] tab of Task Manager, right-click the image name, and then select [End Process].
 
+#. Back up the existing database
 
+	Perform backup of the existing version of the database by using the **cubrid backupdb** utility. The purpose of this step is to safeguard against failures that might occur during the database unload/load operations. For details on the database backup, see `Database Backup <#admin_admin_br_backup_htm>`_ .
 
+#. Unload the existing database
 
+	Unload the database created for the existing version of CUBRID by using the **cubrid unloaddb** utility. For details on unloading a database, see `Unloading Database <#admin_admin_migration_unload_htm>`_ .
 
+#. Store the existing CUBRID configuration files
 
+	Store the configurations files such as **cubrid.conf**, **cubrid_broker.conf** and **cm.conf ** in the **CUBRID/conf** directory. The purpose of this step is to conveniently apply parameter values for the existing CUBRID database environment to the new one.
 
+#. Install a new version of CUBRID
 
+	Once backing up and unloading of the data created by the existing version of CUBRID have been completed, delete the existing version of CUBRID and its databases and then install the new version of CUBRID. For details on installing CUBRID, see `Installing and Running on Linux <#gs_gs_install_linux_htm>`_ in "Getting Started."
 
+#. Configure the new CUBRID environment
 
+	Configure the new version of CUBRID by referring to configuration files of the existing database stored in the step 3, " **Store the existing CUBRID configuration files** ." For details on configuring new environment, see `Installing and Running on Windows <#gs_gs_install_windows_htm>`_ in "Getting Started."
 
+#. Load the new database
+	Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. For details on creating a database, see `Creating Database <#admin_admin_db_create_create_htm>`_ in "Administrator's Guide." For details on loading a database, see `Loading Database <#admin_admin_migration_load_htm>`_ .
+	
+#. Back up the new database
 
+	Once the data has been successfully loaded into the new database, back up the database created for the new version of CUBRID by using the **cubrid backupdb** utility. The reason for this step is because you cannot restore the data backed up in the existing version of CUBRID when using the new version. For details on backing up the database, see `Database Backup <#admin_admin_br_backup_htm>`_ .
 
-Execute
-**cubrid service stop**
-to stop all service processes running on the existing CUBRID and then check whether all CUBRID-related processes have been successfully stopped.
+.. note:: 
 
-To verify whether all CUBRID-related processes have been successfully stopped, execute
-**ps -ef|grep cub_**
-in Linux. If there is no process starting with cub_, all CUBRID-related processes have been successfully stopped. In Windows, press the <Ctrl+Alt+Delete> key and select [Start Task Manager]. If there is no process starting with cub_ in the [Processes] tab, all CUBRID-related processes have been successfully stopped. In Linux, when the related processes remain even after the CUBRID service has been terminated, use
-**kill**
-command to forcibly terminate them, and use
-**ipcs -m**
-command to check and release the memory shard by CUBRID broker. To forcibly terminate related processes in Windows, go to the [Processes] tab of Task Manager, right-click the image name, and then select [End Process].
+	Even if the version is identical, the 32-bit database volume and the 64-bit database volume are not compatible for backup and recovery. Therefore, it is not recommended to recover a 32-bit database backup on the 64-bit CUBRID or vice versa.
 
-#.  
-    *   
-        *   
-            *   
-                *   
-                    *   
-                        *   Back up the existing database
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Perform backup of the existing version of the database by using the
-**cubrid backupdb**
-utility. The purpose of this step is to safeguard against failures that might occur during the database unload/load operations. For details on the database backup, see
-`Database Backup <#admin_admin_br_backup_htm>`_
-.
-
-#.  
-    *   
-        *   
-            *   
-                *   
-                    *   
-                        *   Unload the existing database
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Unload the database created for the existing version of CUBRID by using the
-**cubrid unloaddb**
-utility. For details on unloading a database, see
-`Unloading Database <#admin_admin_migration_unload_htm>`_
-.
-
-#.  
-    *   
-        *   
-            *   
-                *   
-                    *   
-                        *   Store the existing CUBRID configuration files
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Store the configurations files such as
-**cubrid.conf**
-,
-**cubrid_broker.conf**
-and
-**cm.conf **
-in the 
-**CUBRID/conf**
-directory. The purpose of this step is to conveniently apply parameter values for the existing CUBRID database environment to the new one.
-
-#.  
-    *   
-        *   
-            *   
-                *   
-                    *   
-                        *   Install a new version of CUBRID
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Once backing up and unloading of the data created by the existing version of CUBRID have been completed, delete the existing version of CUBRID and its databases and then install the new version of CUBRID. For details on installing CUBRID, see
-`Installing and Running on Linux <#gs_gs_install_linux_htm>`_
-in "Getting Started."
-
-#.  
-    *   
-        *   
-            *   
-                *   
-                    *   
-                        *   Configure the new CUBRID environment
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Configure the new version of CUBRID by referring to configuration files of the existing database stored in the step 3, "
-**Store the existing CUBRID configuration files**
-." For details on configuring new environment, see
-`Installing and Running on Windows <#gs_gs_install_windows_htm>`_
-in "Getting Started."
-
-#.  
-    *   
-        *   
-            *   
-                *   
-                    *   
-                        *   Load the new database
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Create a database by using the
-**cubrid createdb**
-utility and then load the data which had previously been unloaded into the new database by using the
-**cubrid loaddb**
-utility. For details on creating a database, see
-`Creating Database <#admin_admin_db_create_create_htm>`_
-in "Administrator's Guide." For details on loading a database, see
-`Loading Database <#admin_admin_migration_load_htm>`_
-.
-
-#.  
-    *   
-        *   
-            *   
-                *   
-                    *   
-                        *   Back up the new database
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Once the data has been successfully loaded into the new database, back up the database created for the new version of CUBRID by using the
-**cubrid backupdb**
-utility. The reason for this step is because you cannot restore the data backed up in the existing version of CUBRID when using the new version. For details on backing up the database, see
-`Database Backup <#admin_admin_br_backup_htm>`_
-.
-
-**Remark**
-
-Even if the version is identical, the 32-bit database volume and the 64-bit database volume are not compatible for backup and recovery. Therefore, it is not recommended to recover a 32-bit database backup on the 64-bit CUBRID or vice versa.
-
-**Unloading Database**
-
-**Description**
+Unloading Database
+==================
 
 The purposes of loading/unloading databases are as follows:
 
 *   To rebuild databases by volume reconfiguration
-
-
-
 *   To migrate database in different system environments
-
-
-
 *   To migrate database in different versions
 
+::
 
+	cubrid unloaddb [options] database_name
 
-**Syntax**
+**cubrid unloaddb** utility creates the following files:
 
-**cubrid unloaddb**
- [
-*options*
-]
-*database_name*
-
-[
-*options*
-]
-
-**-i**
-|
-**-O**
-|
-**-s**
-|
-**-d**
-|
-**-v**
-|
-**-S**
-|
-**-C**
-|
-
-**--input-class-file**
-|
-**--output-path**
-|
-**--schema-only**
-|
-**--data-only**
-|
-**--verbose**
-|
-**--SA-mode**
-|
-**--CS-mode**
-|
-**--include-reference**
-|
-**--input-class-only**
-|
-**--lo-count**
-|
-**--estimated-size**
-|
-**--cached-pages**
-|
-**--output-prefix**
-|
-**--hash-file**
-|
-**--datafile-per-class**
-
-*   **cubrid**
-    : An integrated utility for the CUBRID service and database management.
-
-
-
-*   **unloaddb**
-    : A utility that creates ASCII files from a database. It is used together with the
-    **cubrid loaddb**
-    utility for replacing system, upgrading product version or reorganizing database volumes. It can be used both in standalone and client/server modes. Data can be unloaded even when the database is running.
-
-
-
-*   *options*
-    : A short option starts with a single dash (
-    **-**
-    ) while a full name option starts with a double dash (
-    **--**
-    ). Note that options are case sensitive.
-
-
-
-*   *database_name*
-    : Specifies the name of the database to be unloaded.
-
-
-
-**Return Value**
-
-Return values of
-**cubrid unloaddb**
-utility are as follows:
-
-*   0: Success
-
-
-
-*   Non-zero: Failure
-
-
-
-**Created Files**
-
-*   Schema file (
-    *database-name*
-    **_schema**
-    ): A file that contains information on the schema defined in the database.
-
-
-
-*   Object file (
-    *database-name*
-    **_objects**
-    ): A file that contains information on the records in the database.
-
-
-
-*   Index file (
-    *database-name*
-    **_indexes**
-    ): A file that contains information on the indexes defined in the database.
-
-
-
-*   Trigger file (
-    *database-name*
-    **_trigger**
-    ): A file that contains information on the triggers defined in the database. If you don't want triggers to be running while loading the data, load the trigger definitions after the data loading has completed.
-
-
+*   Schema file (*database-name* **_schema**): A file that contains information on the schema defined in the database.
+*   Object file (*database-name* **_objects**): A file that contains information on the records in the database.
+*   Index file (*database-name* **_indexes**): A file that contains information on the indexes defined in the database.
+*   Trigger file (*database-name* **_trigger**): A file that contains information on the triggers defined in the database. If you don't want triggers to be running while loading the data, load the trigger definitions after the data loading has completed.
 
 The schema, object, index, and trigger files are created in the same directory.
 
-**Options**
+The following is [options] used in **cubrid unloaddb**.
 
-The following table shows options available with the
-**cubrid unloaddb**
-utility (options are case sensitive).
+.. program:: unloaddb
 
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Option**           | **Description**                                                                                                                                 |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| -i                   | Unloads the database class into the input file specified in an argument.                                                                        |
-| --input-class-file   |                                                                                                                                                 |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| -O                   | Specifies the directory in which to create schema and object files. If the option is not specified, files are created in the current directory. |
-| --output-path        |                                                                                                                                                 |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| -s                   | Creates only the schema file, not the data file.                                                                                                |
-| --schema-only        |                                                                                                                                                 |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| -d                   | Creates only the data file, not the schema file.                                                                                                |
-| --data-only          |                                                                                                                                                 |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| -v                   | Displays detailed information on the database being unloaded.                                                                                   |
-| --verbose            |                                                                                                                                                 |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| -S                   | Unloads the database in standalone mode.                                                                                                        |
-| --SA-mode            |                                                                                                                                                 |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| -C                   | Unloads the database in client/server mode.                                                                                                     |
-| --CS-mode            |                                                                                                                                                 |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| --include-reference  | Unloads the object reference as well when the specified database class is unloaded with the                                                     |
-|                      | **-i**                                                                                                                                          |
-|                      | option.                                                                                                                                         |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| --input-class-only   | Is used with the                                                                                                                                |
-|                      | **-i**                                                                                                                                          |
-|                      | option. Creates only the schema files which are related to tables included in the input file.                                                   |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| --lo-count           | Specifies the number of large object (LO) data files to be created in a single directory.                                                       |
-|                      | Default value : 0                                                                                                                               |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| --estimated-size     | Specifies the number of records expected.                                                                                                       |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| --cached-pages       | Configures the number of object tables to be cached in the memory.                                                                              |
-|                      | Default value : 100                                                                                                                             |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| --output-prefix      | Specifies the prefix for schema and object file names.                                                                                          |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| --hash-file          | Specifies the name of the hash file.                                                                                                            |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
-| --datafile-per-class | Generates a data file per each table.                                                                                                           |
-|                      |                                                                                                                                                 |
-+----------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+.. option:: -i, --input-class-file FILE
 
-**Input file with the list of tables to be unloaded (-i or --input-class-file)**
+	This option specifies the name of the file which stored the names of classes to unload.
 
-The following example shows an input file (table_list.txt).
+			cubrid unloaddb -i table_list.txt demodb
 
-table_1
+	The following example shows an input file (table_list.txt). ::
 
-table_2
+		table_1
+		table_2
+		..
+		table_n
 
-..
 
-table_n
+	This option can be used together with the **--input-class-only** option that creates the schema file related to only those tables included in the input file.
 
-The
-**-i**
-option specifies the input file where the list of tables to be unloaded is stored so that only specified part of the database can be unloaded.
+	::
 
-cubrid unloaddb -i table_list.txt demodb
+		cubrid unloaddb --input-class-only -i table_list.txt demodb
 
-The
-**-i**
-option can be used together with the
-**--input-class-only**
-option that creates the schema file related to only those tables included in the input file.
+	This option can be used together with the **--include-reference** option that creates the object reference as well.
 
-cubrid unloaddb --input-class-only -i table_list.txt demodb
+	::
 
-The
-**-i**
-option can be used together with the
-**--include-reference**
-option that creates the object reference as well.
+		cubrid unloaddb --include-reference -i table_list.txt demodb
 
-cubrid unloaddb --include-reference -i table_list.txt demodb
+.. option:: --include-reference
 
-**Specifying the directory where files created will be stored (-O or --output-path)**
+	This option is used together with the **-i** option, and also creates the object reference.
 
-The
-**-O**
-option specifies the directory where the output files generated by the unload operation is stored. If the
-**-O**
-option is not specified, output files are created in the current working directory.
 
-cubrid unloaddb -O ./CUBRID/Databases/demodb demodb
+.. option:: --input-class-only
 
-If the specified directory does not exist, the following error message will be displayed.
+	This option is used together with the **-i** option, and creates only the file of the schemas which are specified by the file of the **-i** option.
 
-unloaddb: No such file or directory.
+	
+	
+	
+.. option:: -O, --output-path PATH
 
-**Creating the schema file only (-s or --schema-only)**
+	This option specifies the directory in which to create schema and object files. If this is not specified, files are created in the current directory. ::
 
-The
-**-s**
-option specifies that only the schema file will be created from amongst all the output files which can be created by the unload operation.
+		cubrid unloaddb -O ./CUBRID/Databases/demodb demodb
 
-cubrid unloaddb -s demodb
+	If the specified directory does not exist, the following error message will be displayed. ::
 
-**Creating the data file only (-d or --data-only)**
+		unloaddb: No such file or directory.
 
-The
-**-d**
-option specifies that only the data file will be created from amongst all of the output files which can be created by the unload operation.
+.. option:: -s, --schema-only
 
-cubrid unloaddb -d demodb
+	This option specifies that only the schema file will be created from amongst all the output files which can be created by the unload operation.
 
-**Creates data files by table (--datafile-per-class)**
+	::
+		cubrid unloaddb -s demodb
 
-**--datafile-per-class**
-is the option specifying that the output file generated through unload operation creates a data file per each table. The file name is generated as
-*<Database Name>_<Table Name>*
-_
-**objects**
-for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see
-`How to Write a File to Load Database <#admin_admin_migration_file_htm>`_
-).
+.. option:: -d, --data-only
 
-cubrid unloaddb -d demodb
+
+	This option specifies that only the data file will be created from amongst all of the output files which can be created by the unload operation. 
+	
+	::
+
+		cubrid unloaddb -d demodb
+
+.. option:: -v, --verbose
+
+
+
+.. option:: -S, --SA-mode
+
+
+.. option:: -C, --CS-mode
+
+.. option:: --lo-count
+
+	This option specifies the number of large object (LO) data files to be created in a single. The default value is 0.
+
+.. option:: --estimated-size=NUMBER
+
+	This option allows you to assign hash memory to store records of the database to be unloaded. If the **--estimated-size** option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts. ::
+
+		cubrid unloaddb --estimated-size=1000 demodb
+
+
+.. option:: --cached-pages=NUMBER
+
+
+
+
+.. option:: --output-prefix
+
+
+.. option:: --hash-file
+
+.. option:: --datafile-per-class
+
+
+.. option:: -d, --data-only
+
+
+.. option:: --datafile-per-class
+
+	This option specifies that the output file generated through unload operation creates a data file per each table. The file name is generated as *<Database Name>_<Table Name>*\_**objects** for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see `How to Write a File to Load Database <#admin_admin_migration_file_htm>`_ ).
+	
+	::
+
+		cubrid unloaddb -d demodb
+
+.. option:: -v, --verbose
+
+
+.. option:: -S, --SA-mode
+
+.. option:: -C, --CS-mode
+
+.. option:: --estimated-size
+
+.. option:: --cached-pages
+
+
+.. option:: --output-prefix
+
+
+
+
+
 
 **Displaying the unload status information (-v or --verbose)**
 
@@ -579,15 +227,9 @@ option performs the unload operation by accessing the database in client/server 
 
 cubrid unloaddb -C demodb
 
-**Number of estimated records (--estimated-size)**
 
-The
-**--estimated-size**
-option allows you to assign hash memory to store records of the database to be unloaded. If the
-**--estimated-size**
-option is not specified, the number of records of the database is determined based on recent statistics information. This option can be used if the recent statistics information has not been updated or if a large amount of hash memory needs to be assigned. Therefore, if the number given as the argument for the option is too small, the unload performance deteriorates due to hash conflicts.
 
-cubrid unloaddb --estimated-size 1000 demodb
+
 
 **Number of pages to be cached (--cached-pages)**
 

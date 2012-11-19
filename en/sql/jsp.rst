@@ -13,8 +13,10 @@ The advantages of using Java stored functions/procedures are as follows:
 *   **Productivity and usability** : Java stored functions/procedures, once created, can be reused anytime. They can be called from SQL statements or from Java applications using JDBC.
 *   **Excellent interoperability and portability** : Java stored functions/procedures use the Java Virtual Machine. Therefore, they can be used on any system where the Java Virtual Machine is available.
 
-Environment Configuration
-=========================
+.. _jsp_environment-configuration:
+
+Environment Configuration for Java Stored Function/Procedure
+============================================================
 
 To use Java-stored functions/procedures in CUBRID, you must have JRE (Java Runtime Environment) 1.6 or better installed in the environment where the CUBRID server is installed. You can download JRE from the Developer Resources for Java Technology (`http://java.sun.com <http://java.sun.com>`_).
 

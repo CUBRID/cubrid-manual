@@ -7,9 +7,9 @@ CSQL Interpreter
 
 **Starting the CSQL Interpreter**
 
-The CSQL Interpreter is a program used to execute the SQL statements and retrieve results in a way that CUBRID supports. The entered SQL statements and the results can be stored as a file. For more information, see `Introduction to the CSQL Interpreter <#csql_csql_intro_htm>`_ and `CSQL Execution Mode <#csql_csql_exec_mode_htm>`_ .
+The CSQL Interpreter is a program used to execute the SQL statements and retrieve results in a way that CUBRID supports. The entered SQL statements and the results can be stored as a file. For more information, see :ref:`csql-intro` and :ref:`csql-exec-mode`.
 
-CUBRID also provides a GUI-based program called "CUBRID Manager" or "CUBRID Query Browser." By using these tools, you can execute all SQL statements and retrieve results in the query editor of CUBRID Manager. For more information, see `Using CUBRID Manager or Query Browser <#gs_gs_manager_htm>`_ .
+CUBRID also provides a GUI-based program called "CUBRID Manager" or "CUBRID Query Browser." By using these tools, you can execute all SQL statements and retrieve results in the query editor of CUBRID Manager. For more information, see :ref:`cm-cqb`.
 
 This section describes how to use the CSQL Interpreter on the Linux environment
 
@@ -74,7 +74,7 @@ You can start the CSQL program in the shell as shown below. At the initial insta
 
 **Executing the SQL with CSQL**
 
-After the CSQL has been executed, you can enter the SQL into the CSQL prompt. Each SQL statement must end with a semicolon (;). Multiple SQL statements can be entered in a single line. You can find the simple usage of the session commands with the ;help command. For more information, see `Session Commands <#csql_csql_sessioncommand_htm>`_ . ::
+After the CSQL has been executed, you can enter the SQL into the CSQL prompt. Each SQL statement must end with a semicolon (;). Multiple SQL statements can be entered in a single line. You can find the simple usage of the session commands with the ;help command. For more information, see :ref:`csql-session-commands`. ::
 
 	csql> select host_year, host_nation, host_city, opening_date, closing_date, mascot, slogan from olympic;
 
@@ -133,12 +133,14 @@ After the CSQL has been executed, you can enter the SQL into the CSQL prompt. Ea
 
 	csql> ;exit
 
+.. _cm-cqb:
+
 CUBRID Manager and Query Browser
 --------------------------------
 
 **Starting the CUBRID Manager Server**
 
-If you want to use the CUBRID Manager client, you should first run the CUBRID Manager server. To run the server, you just need to execute **cubrid service start** once you have CUBRID installed in your system. For more information, see `Starting and Stopping CUBRID Manager Server <#admin_admin_service_manager_star_151>`_ .
+If you want to use the CUBRID Manager client, you should first run the CUBRID Manager server. To run the server, you just need to execute **cubrid service start** once you have CUBRID installed in your system. For more information, see :ref:`cubrid-manager-server`.
 
 **Starting the CUBRID Manager Client**
 
@@ -162,24 +164,24 @@ CUBRID Drivers
 
 The drivers supported by CUBRID are as follows:
 
-*   CUBRID JDBC driver (Installing and Configuring JDBC, Programming, API References, `Downloads <http://www.cubrid.org/?mid=downloads&item=jdbc_driver>`_ )
+*   :doc:`CUBRID JDBC driver <api/jdbc>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=jdbc_driver>`_)
 
-*   CUBRID CCI driver (CCI Overview, Programming, API References, `Downloads <http://www.cubrid.org?mid=downloads&item=cci_driver>`_ )
+*   :doc:`CUBRID CCI driver <api/cci>` (`Downloads <http://www.cubrid.org?mid=downloads&item=cci_driver>`_)
 
-*   CUBRID PHP driver (Installing and Configuring PHP, Programming, API References, `Downloads <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=phpdr>`_ )
+*   :doc:`CUBRID PHP driver <api/php>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=phpdr>`_)
 
-*   CUBRID PDO driver (Installing and Configuring PDO, Programming, API References, `Downloads <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=pdo>`_ )
+*   :doc:`CUBRID PDO driver <api/pdo>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=php_driver&driver_type=pdo>`_)
 
-*   CUBRID ODBC driver (Installing and Configuring ODBC, Programming, API References, `Downloads <http://www.cubrid.org/?mid=downloads&item=odbc_driver>`_ )
+*   :doc:`CUBRID ODBC driver <api/odbc>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=odbc_driver>`_)
 
-*   CUBRID OLE DB driver (Installing and Configuring OLE DB, Programming, API References, `Downloads <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_ )
+*   :doc:`CUBRID OLE DB driver <api/oledb>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_)
 
-*   CUBRID ADO.NET driver (Installing and Configuring ADO.NET, Programming, API References, `Downloads <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_ )
+*   :doc:`CUBRID ADO.NET driver <api/adodotnet>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_)
 
-*   CUBRID Perl driver (Installing and Configuring Perl, API References, `Downloads <http://www.cubrid.org/?mid=downloads&item=perl_driver>`_ )
+*   :doc:`CUBRID Perl driver <api/perl>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=perl_driver>`_)
 
-*   CUBRID Python driver (Installing and Configuring Python, Programming, API References, `Downloads <http://www.cubrid.org/?mid=downloads&item=python_driver>`_ )
+*   :doc:`CUBRID Python driver <api/python>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=python_driver>`_)
 
-*   CUBRID Ruby driver (Installing and Configuring Ruby, API References, `Downloads <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_ )
+*   :doc:`CUBRID Ruby driver <api/ruby>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_)
 
 Among those of drivers, JDBC, ODBC, and CCI drivers are automatically downloaded while CUBRID is being installed. Thus, you do not have to download them manually.

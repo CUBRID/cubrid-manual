@@ -11,9 +11,9 @@ The following environment variables need to be set in order to use the CUBRID. T
 
 *   **CUBRID** : The default environment variable that designates the location where the CUBRID is installed. This variable must be set accurately since all programs included in the CUBRID system uses this environment variable as reference.
 
-*   **CUBRID_DATABASES** : The environment variable that designates the location of the **databases.txt** file. The CUBRID system stores the absolute path of database volumes in the **$CUBRID_DATABASES/databases.txt** file. See `databases.txt file <#admin_admin_db_create_file_htm>`_ .
+*   **CUBRID_DATABASES** : The environment variable that designates the location of the **databases.txt** file. The CUBRID system stores the absolute path of database volumes in the **$CUBRID_DATABASES/databases.txt** file. See :ref:`databases-txt-file`.
 
-*   **CUBRID_LANG** : The environment variable that specifies database locale (language+character set) and or error messages in CUBRID. The initial value upon start is **en_US**. If character set is omitted after language name, ISO-8859-1(.iso88591) will be specified by default. For more information, see `Language Setting <#gs_gs_must_langset_htm>`_ .
+*   **CUBRID_LANG** : The environment variable that specifies database locale (language+character set) and or error messages in CUBRID. The initial value upon start is **en_US**. If character set is omitted after language name, ISO-8859-1(.iso88591) will be specified by default. For more information, see :ref:`Language Setting <language-setting>`.
 
 *   **CUBRID_TMP** : The environment variable that specifies the location where the cub_master process and the cub_broker process store the UNIX domain socket file in CUBRID for Linux. If it is not specified, the cub_master process stores the UNIX domain socket file under the **/tmp** directory and the cub_broker process stores the UNIX domain socket file under the **$CUBRID/var/CUBRID_SOCK** directory (not used in CUBRID for Windows).
 
@@ -60,7 +60,7 @@ In Windows : ::
 *   Path: In the Windows environment, the **%CUBRID%\bin**, which is a directory that contains CUBRID system’s execution file, must be included in the **Path** environment variable.
 
 *   JAVA_HOME: To use the Java stored procedure in the CUBRID system, the Java Virtual Machine (JVM) version 1.6 or later must be installed, and the **JAVA_HOME** environment variable must designate the concerned directory.
-    See the `Environment Configuration for Java Stored Functions/Procedures <#syntax_syntax_javasp_settings_ht_8446>`_ .
+    See the :ref:`jsp_environment-configuration`.
 
 **Configuring the Environment Variable**
 
@@ -99,6 +99,8 @@ shell log-in script. The following is the contents of . **cubrid.sh** environmen
 	export LIBPATH
 	export PATH
 
+.. _language-setting:
+
 **Language Setting**
 
 The language that will be used in the CUBRID DBMS can be designated with the **CUBRID_LANG** environment variable. The following are examples of values that can currently be set in the **CUBRID_LANG** environment variable.
@@ -118,12 +120,12 @@ The language that will be used in the CUBRID DBMS can be designated with the **C
 
 Language and charset setting of CUBRID affects read and write data. The language is used for messages displayed by the program. The default value of **CUBRID_LANG** is **en_US** while installing the product.
 
-For more details related to charset, locale and collation settings, see `Globalization <#admin_admin_i18n_intro_htm>`_ .
+For more details related to charset, locale and collation settings, see :doc:`admin/i18n`.
 
 Starting the CUBRID Service
 ---------------------------
 
-Configure environment variables and language, and then start the CUBRID service. For more information on configuring environment variables and language, see `Registering Services <#admin_admin_service_conf_registe_6298>`_ or `Starting and Stopping Services <#admin_admin_service_conf_start_h_3702>`_ .
+Configure environment variables and language, and then start the CUBRID service. For more information on configuring environment variables and language, see :ref:`control-cubrid-services`.
 
 **Shell Command**
 
@@ -186,7 +188,7 @@ You can create databases by using the **cubrid createdb** utility and execute it
 
 In the above, *testdb* represents a generic volume file, testdb_lgar_t represents a background archive log file, testdb_lgat represents an active log file, testdb_lginf reoresents a log information file, and testdb_vinf represents a volume information file.
 
-For details on volumes, see `Database Volume Structure <#intro_intro_arch_volume_htm>`_ . For details on creating volumes, see `Creating Database <#admin_admin_db_create_create_htm>`_ . It is recommended to classify and add volumes based on its purpose by using the **cubrid addvoldb** utility. For details, see `Adding Database Volume <#admin_admin_db_addvol_htm>`_ .
+For details on volumes, see :ref:`database-volume-structure` . For details on creating volumes, see :ref:`creating-database`. It is recommended to classify and add volumes based on its purpose by using the **cubrid addvoldb** utility. For details, see :ref:`adding-database-volume`.
 
 **Starting Database**
 

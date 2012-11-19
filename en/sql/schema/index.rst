@@ -5,7 +5,7 @@ Index Definition
 CREATE INDEX
 ============
 
-Creates an index to a specified table by using the **CREATE INDEX** statement. For how to write index name, `Identifier <#syntax_csql_syntaxtype_identifie_2262>`_. ::
+Creates an index to a specified table by using the **CREATE INDEX** statement. For how to write index name, :doc:`/sql/identifier`. ::
 
 	CREATE [ REVERSE ] [ UNIQUE ] INDEX index_name
 	ON table_name <index_col_desc> [ ; ]

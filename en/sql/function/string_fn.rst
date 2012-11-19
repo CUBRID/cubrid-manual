@@ -79,7 +79,7 @@ String Functions
 
 .. function:: BIT_LENGTH (string)
 
-	The **BIT_LENGTH** function returns the length (bits) of a character string or bit string as an integer value. The return value of the **BIT_LENGTH** function may depend on the character set, because for the character string, the number of bytes taken up by a single character is different depending on the character set of the data input environment (e.g., UTF-8 Korean characters: one Korean character is 3*8 bits). For details about character sets supported by CUBRID, see `Definition and Characteristics <#syntax_syntax_datatype_string_de_1985>`_.
+	The **BIT_LENGTH** function returns the length (bits) of a character string or bit string as an integer value. The return value of the **BIT_LENGTH** function may depend on the character set, because for the character string, the number of bytes taken up by a single character is different depending on the character set of the data input environment (e.g., UTF-8 Korean characters: one Korean character is 3*8 bits). For details about character sets supported by CUBRID, see :ref:`char-data-type`.
 
 	:param string: Specifies the character string or bit string whose number of bits is to be calculated. If this value is **NULL**, **NULL** is returned. 
 	:rtype: INT
@@ -128,7 +128,7 @@ String Functions
 .. function:: LENGTH (string)
 
 	**CHAR_LENGTH**, **CHARACTER_LENGTH**, **LENGTHB**, and **LENGTH** are used interchangeably.
-	The number of characters is returned as an integer. For details on character set supported by CUBRID, see `Administrator Guide > Globalization > Overview <#admin_admin_i18n_intro_htm>`_.
+	The number of characters is returned as an integer. For details on character set supported by CUBRID, see :doc:`/admin/i18n`.
 
 	:param string: Specifies the string whose length will be calculated according to the number of characters. If the character string is **NULL**, **NULL** is returned.
 	:rtype: INT
@@ -191,7 +191,7 @@ String Functions
 
 	The	 **CONCAT** function has at least one argument specified for it and returns a string as a result of concatenating all argument values. The number of parameters that can be specified is unlimited. Automatic type casting takes place if a non-string type is specified as the argument. If any of the arguments is specified as **NULL**, **NULL** is returned.
 
-	If you want to insert separators between strings specified as arguments for concatenation, use the `CONCAT_WS Function <#syntax_syntax_operator_strfunc_c_2861>`_.
+	If you want to insert separators between strings specified as arguments for concatenation, use the :func:`CONCAT_WS` Function.
 
 	:param strings: character string
 	:rtype: STRING
@@ -437,7 +437,7 @@ String Functions
 .. function:: LCASE (string)
 .. function:: LOWER (string)
 
-	The functions **LCASE** and **LOWER** are used interchangeably. They convert uppercase characters included in string to lowercase characters. Note that these functions may not work properly in character sets which are not supported by CUBRID. For details on the character sets supported by CUBRID, see `Definition and Characteristics <#syntax_syntax_datatype_string_de_1985>`_.
+	The functions **LCASE** and **LOWER** are used interchangeably. They convert uppercase characters included in string to lowercase characters. Note that these functions may not work properly in character sets which are not supported by CUBRID. For details on the character sets supported by CUBRID, see :ref:`char-data-type`.
 
 	:param string: Specifies the string in which uppercase characters are to be converted to lowercase. If the value is **NULL**, **NULL** is returned.
 	:rtype: STRING
@@ -1155,7 +1155,7 @@ String Functions
 .. function:: UCASE ( string )
 .. function:: UPPER ( string )
 
-	The function **UCASE** or **UPPER** converts lowercase characters that are included in a character string to uppercase characters. Note that the **UPPER** function may not work properly in character sets that are not supported by CUBRID. For details about the character sets supported by CUBRID, see `Administrator Guide > Globalization > Overview <#admin_admin_i18n_intro_htm>`_.
+	The function **UCASE** or **UPPER** converts lowercase characters that are included in a character string to uppercase characters. Note that the **UPPER** function may not work properly in character sets that are not supported by CUBRID. For details about the character sets supported by CUBRID, see :doc:`/admin/i18n`.
 
 	:param string: Specifies the string in which lowercase characters are to be converted to uppercase. If the value is **NULL**, **NULL** is returned.
 	:rtype: STRING

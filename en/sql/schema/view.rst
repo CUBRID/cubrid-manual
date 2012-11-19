@@ -7,7 +7,7 @@ CREATE VIEW
 
 A view is a virtual table that does not exist physically. You can create a view by using an existing table or a query. **VIEW** and **VCLASS** are used interchangeably.
 
-Use **CREATE VIEW** statement to create a view. For how to write view name, see `Identifier <#syntax_csql_syntaxtype_identifie_2262>`_. ::
+Use **CREATE VIEW** statement to create a view. For how to write view name, see :doc:`/sql/identifier`. ::
 
 	CREATE [OR REPLACE] {VIEW | VCLASS} <view_name>
 							   [ <subclass_definition> ]
@@ -120,7 +120,7 @@ Even when all rules above are satisfied, columns that contains following content
 *   Path expressions (example: *tbl_name.col_name*)
 *   Numeric type column that includes an arithmetic operator
 
-Even though the column defined in the view is updatable, a view can be updated only when an appropriate update authorization is granted on the table included in the **FROM** clause. Also there must be an access authorization to a view. The way to grant an access authorization to a view is the same to grant an access authorization to a table. For details on granting authorization, see "`Granting Authorization <#syntax_syntax_access_authority_h_4540>`_ ".
+Even though the column defined in the view is updatable, a view can be updated only when an appropriate update authorization is granted on the table included in the **FROM** clause. Also there must be an access authorization to a view. The way to grant an access authorization to a view is the same to grant an access authorization to a table. For details on granting authorization, see :ref:`granting-authorization`.
 
 ALTER VIEW
 ==========

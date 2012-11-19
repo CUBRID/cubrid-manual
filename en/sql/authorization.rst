@@ -66,6 +66,8 @@ The following example shows how to create the same groups as above but use the *
 	CREATE USER design MEMBERS smith;
 	CREATE USER company MEMBERS engineering, marketing, design;
 
+.. _granting-authorization:
+
 Granting Authorization
 ======================
 

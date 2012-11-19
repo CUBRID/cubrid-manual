@@ -10,6 +10,7 @@ This chapter covers the following API:
 	jdbc.rst
 	cci.rst
 	php.rst
+	pdo.rst
 	odbc.rst
 	oledb.rst
 	adodotnet.rst

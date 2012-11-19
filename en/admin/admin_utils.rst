@@ -6,8 +6,32 @@ How to Use the CUBRID Management Utilities (Syntax)
 
 The following shows how to use the CUBRID management utilities. ::
 
-	cubrid utility_name	utility_name:
-		createdb [option] <database_name>   --- Creating a database		deletedb [option] <database_name>   --- Deleting a database		installdb [option] <database-name>   --- Installing a database 		renamedb [option] <source-database-name> <target-database-name>  --- Renaming a database 	  	copydb [option] <source-database-name> <target-database-name>  --- Copying a database 	  	backupdb [option] <database-name>  --- Backing up a database 	  	restoredb [option] <database-name>  --- Restoring a database 	  	addvoldb [option] <database-name>  --- Adding a database volume file 	  	spacedb [option] <database-name>  --- Displaying details of database space 	  	lockdb [option] <database-name>  --- Displaying details of database lock 	  	killtran [option] <database-name>  --- Removing transactions 	  	optimizedb [option] <database-name>  --- Updating database statistics 	  	statdump [option] <database-name>  --- Outputting statistic information of database server execution 	  	compactdb [option] <database-name>  --- Optimizing space by freeing unused space 	  	diagdb [option] <database-name>  --- Displaying internal information 	  	checkdb [option] <database-name>  --- Checking database consistency 	  	alterdbhost [option] <database-name>  --- Altering database host 	  	plandump [option] <database-name>  --- Displaying details of the query plan 	  	loaddb [option] <database-name>  --- Loading data and schema 	  	unloaddb [option] <database-name>  --- Unloading data and schema 	 	paramdump [option] <database-name>  --- Checking out the parameter values configured in a database 	  	changemode [option] <database-name>  --- Displaying or changing the server HA mode 	  	copylogdb [option] <database-name>  --- Multiplating transaction logs to configure HA 	  	applylogdb [option] <database-name>  --- Reading and applying replication logs from transaction logs to configure HA 
+	cubrid utility_name
+	utility_name:
+		createdb [option] <database_name>   --- Creating a database
+		deletedb [option] <database_name>   --- Deleting a database
+		installdb [option] <database-name>   --- Installing a database 
+		renamedb [option] <source-database-name> <target-database-name>  --- Renaming a database 
+	  	copydb [option] <source-database-name> <target-database-name>  --- Copying a database 
+	  	backupdb [option] <database-name>  --- Backing up a database 
+	  	restoredb [option] <database-name>  --- Restoring a database 
+	  	addvoldb [option] <database-name>  --- Adding a database volume file 
+	  	spacedb [option] <database-name>  --- Displaying details of database space 
+	  	lockdb [option] <database-name>  --- Displaying details of database lock 
+	  	killtran [option] <database-name>  --- Removing transactions 
+	  	optimizedb [option] <database-name>  --- Updating database statistics 
+	  	statdump [option] <database-name>  --- Outputting statistic information of database server execution 
+	  	compactdb [option] <database-name>  --- Optimizing space by freeing unused space 
+	  	diagdb [option] <database-name>  --- Displaying internal information 
+	  	checkdb [option] <database-name>  --- Checking database consistency 
+	  	alterdbhost [option] <database-name>  --- Altering database host 
+	  	plandump [option] <database-name>  --- Displaying details of the query plan 
+	  	loaddb [option] <database-name>  --- Loading data and schema 
+	  	unloaddb [option] <database-name>  --- Unloading data and schema 
+	 	paramdump [option] <database-name>  --- Checking out the parameter values configured in a database 
+	  	changemode [option] <database-name>  --- Displaying or changing the server HA mode 
+	  	copylogdb [option] <database-name>  --- Multiplating transaction logs to configure HA 
+	  	applylogdb [option] <database-name>  --- Reading and applying replication logs from transaction logs to configure HA 
 	
 Database Users
 ==============
@@ -19,6 +43,8 @@ CUBRID provides **DBA** and **PUBLIC** users by default.
 * **DBA** can access every object in the database, that is, it has authorization at the highest level. Only **DBA** has sufficient authorization to add, alter and delete the database users.
 
 * All users including **DBA** are members of **PUBLIC**. Therefore, all database users have the authorization granted to **PUBLIC** . For example, if authorization **B** is added to **PUBLIC** group, all database members will automatically have the **B** authorization.
+
+.. _databases-txt-file:
 
 databases.txt File
 ==================
@@ -49,6 +75,8 @@ directory under the installation directory. You can change the default directory
 	CUBRID_DATABASES=/home1/user/CUBRID/databases
 
 An error occurs if an invalid directory path is set in the **CUBRID_DATABASES** environment variable. If the directory path is valid but the database location file does not exist, a new location information file is created. If the **CUBRID_DATABASES** environment variable has not been configured at all, CUBRID retrieves the location information file in the current working directory.
+
+.. _creating-database:
 
 Creating Database
 =================
@@ -273,6 +301,8 @@ The following shows options available with the **cubrid** **createdb** utility.
 		cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
 		cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
 
+.. _adding-database-volume:
+
 Adding Database Volume
 ======================
 
@@ -478,7 +508,7 @@ If options are omitted, a target database is copied into the same directory of a
 
 The following shows [options] available with the **cubrid copydb** utility.
 
-.. program:: copydbdb
+.. program:: copydb
 
 .. option:: --server-name=HOST
 
@@ -723,6 +753,8 @@ The following shows [option] available with the **cubrid optimizedb** utility.
 The following example shows how to update the query statistics information of the given class by using the **-n** option. ::
 
 	cubrid optimizedb -n event_table testdb
+
+.. _statdump:
 
 Outputting Statistics Information of Server
 ===========================================

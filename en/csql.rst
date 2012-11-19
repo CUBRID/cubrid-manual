@@ -6,6 +6,8 @@ CSQL Interpreter
 To execute SQL statements in CUBRID, you need to use either a Graphical User Interface (GUI)-based CUBRID Manager or a console-based CSQL Interpreter.
 CSQL is an application that allows users to use SQL statements through a command-driven interface. This section briefly explains how to use the CSQL Interpreter and associated commands.
 
+.. _csql-intro:
+
 Introduction to the CSQL Interpreter
 ====================================
 
@@ -34,6 +36,8 @@ It is also possible to run the CSQL Interpreter in standalone mode. In this mode
 Executing CSQL
 ==============
 
+.. _csql-exec-mode:
+
 CSQL Execution Mode
 -------------------
 
@@ -43,7 +47,7 @@ With CSQL Interpreter, you can enter and execute SQL statements to handle schema
 
 **Batch Mode**
 
-You can store SQL statements in a file and execute them later to have the **csql** utility read the file. This is called the batch mode. For more information on the batch mode, see `CSQL Startup Options <#csql_csql_exec_option_htm>`_ .
+You can store SQL statements in a file and execute them later to have the **csql** utility read the file. This is called the batch mode..
 
 **Standalone Mode**
 
@@ -221,6 +225,8 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
 In addition to SQL statements, CSQL Interpreter provides special commands allowing you to control the Interpreter. These commands are called session commands. All the session commands must start with a semicolon (;).
 
+.. _csql-session-commands:
+
 Session Commands
 ================
 
@@ -397,7 +403,7 @@ This command executes the checkpoint within the CSQL session. This command can o
 
 **Checkpoint**
 
-is an operation of flushing all dirty pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval_in_mins** and **checkpoint_every_npages**). For more information, see `Logging-Related Parameters <#pm_pm_db_classify_logging_htm>`_ . ::
+is an operation of flushing all dirty pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval_in_mins** and **checkpoint_every_npages**). For more information, see :ref:`logging-parameters`. ::
 
 	csql> ;ch
 	Checkpoint has been issued.
@@ -474,7 +480,7 @@ You can check the parameter value currently set in the CSQL Interpreter using th
 
 **Setting the parameter value (;SEt)**
 
-You can use the **;Set** session command to set a specific parameter value. Note that changeable parameter values are only can be changed. To change the server parameter values, you must have DBA authorization. For information on list of changeable parameters, see `cubrid_broker.conf Configuration File and Default Parameters <#pm_pm_broker_setting_htm>`_ . ::
+You can use the **;Set** session command to set a specific parameter value. Note that changeable parameter values are only can be changed. To change the server parameter values, you must have DBA authorization. For information on list of changeable parameters, see :ref:`broker-configuration`. ::
 
 	csql> ;se block_ddl_statement=1
 	=== Set Param Input ===
@@ -513,7 +519,7 @@ This command is executable while the **communication_histogram** parameter in th
 *   **on** : Starts collecting statistics information for the current connection.
 *   **off** : Stops collecting statistics information of server.
 
-This example shows the server statistics information for current connection. For information on specific items, see `Outputting Statistics Information of Server <#admin_admin_db_statdump_htm>`_ . ::
+This example shows the server statistics information for current connection. For information on specific items, see :ref:`statdump`. ::
 
 	csql> ;.hist on
 	csql> ;.x

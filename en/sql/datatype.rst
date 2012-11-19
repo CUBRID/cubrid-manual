@@ -217,7 +217,7 @@ Date/time data types are used to represent the date or time (or both together). 
 
 **Coercions**
 
-The **Date** / **Time** types can be cast explicitly using the **CAST** operator only when they have the same field. For implicit coercion, see `Implicit Type Conversion <#syntax_syntax_datatype_implicit__7498>`_. The following table shows types that allows explicit coercions. For implicit coercion, see `Arithmetic Operation and Type Casting of DATE/TIME Data Types <#syntax_syntax_operator_math_date_3338>`_.
+The **Date** / **Time** types can be cast explicitly using the **CAST** operator only when they have the same field. For implicit coercion, see :ref:`implicit-type-conversion`. The following table shows types that allows explicit coercions. For implicit coercion, see :ref:`arithmetic-op-type-casting`.
 
 **Explicit Coercions**
 
@@ -241,7 +241,7 @@ In general, zero is not allowed in **DATE**, **DATETIME**, and **TIMESTAMP** typ
 
 *   The functions that return **DATE**, **DATETIME**, and **TIMESTAMP** types can return a value of 0 for date and time. However, these values cannot be stored in Date objects in Java applications. Therefore, it will be processed with one of the followings based on the configuration of zeroDateTimeBehavior, the connection URL property: being handled as an exception, returning **NULL**, or returning a minimum value (see "API Reference > JDBC API > JDBC Programming > Connection Configuration").
 
-*   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_DATETIME`, and :func:`TO_TIMESTAMP` functions follows the corresponding locale date format. For details, see `Statement/Type-Related Parameters <#pm_pm_db_classify_type_htm>`_.
+*   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_DATETIME`, and :func:`TO_TIMESTAMP` functions follows the corresponding locale date format. For details, see :ref:`stmt-type-parameters`.
 
 For details, see the description of each function.
 
@@ -355,6 +355,8 @@ The input format of **TIMESTAMP** is as follows: ::
 	DATETIME '2008-10-31 01:15:45 PM' is outputted as '01:15:45.000 PM 10/31/2008'.
 	DATETIME '2008-10-31 13:15:45' is outputted as '01:15:45.000 PM 10/31/2008'.
 	DATETIME '2099-10-31 01:15:45 PM' is outputted as '01:15:45.000 PM 10/31/2099'.
+
+.. _cast-string-to-datetime:
 
 Casting a String to Date/Time Type
 ----------------------------------
@@ -687,7 +689,8 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
 	 
 	ERROR: Data overflow coercing X'aaa' to type bit varying.
 
-	
+.. _char-data-type:
+
 Character Strings
 =================
 
@@ -700,7 +703,7 @@ CUBRID supports the following four types of character strings:
 
 The followings are the rules that are applied when using the character string types.
 
-*   In general, single quotations are used to enclose character string. Double quotations may be used as well depending on the value of **ansi_quotes**, which is a parameter related to SQL statement. If the **ansi_quotes** value is set to **no**, character string enclosed by double quotations is handled as character string, not as an identifier. The default value is **yes**. For details,`Statement/Type-Related Parameters <#pm_pm_db_classify_type_htm>`_.
+*   In general, single quotations are used to enclose character string. Double quotations may be used as well depending on the value of **ansi_quotes**, which is a parameter related to SQL statement. If the **ansi_quotes** value is set to **no**, character string enclosed by double quotations is handled as character string, not as an identifier. The default value is **yes**. For details, :ref:`stmt-type-parameters`.
 
 *   If there are characters that can be considered to be blank (e.g. spaces, tabs, or line breaks) between two character strings, these two character strings are treated as one according to ANSI standard. For example, the following example shows that a line break exists between two character string. ::
 
@@ -721,7 +724,7 @@ The followings are the rules that are applied when using the character string ty
 
 	N'Härder'
 
-  However, to enter the language of a specific country, we recommend that you to change the locale by using the **CUBRID_LANG** environment variable or introducer **CHARSET** (or **COLLATE** modifier) or by using the general string type (**VARCHAR** or **CHAR**) instead of the country string type. For a more detailed description, see `Administrator Guide > Globalization > Overview <#admin_admin_i18n_intro_htm>`_.
+  However, to enter the language of a specific country, we recommend that you to change the locale by using the **CUBRID_LANG** environment variable or introducer **CHARSET** (or **COLLATE** modifier) or by using the general string type (**VARCHAR** or **CHAR**) instead of the country string type. For a more detailed description, see :doc:`/admin/i18n`.
 
 For a **CHAR** or **VARCHAR** type, specify the length (bytes) of a character string for a **NCHAR** or **NCHAR VARYING** type, specify the number of character strings (number of characters).
 When the length of the character string entered exceeds the length specified, the characters in excess of the specified length are truncated.
@@ -734,11 +737,11 @@ The maximum length of a **CHAR** or **VARCHAR** type to be specified is 1,073,74
 
 A character set (charset) is a set in which rules are defined that relate to what kind of codes can be used for encoding when specified characters (symbols) are stored in the computer.
 
-The characted used by CUBRID can be configued as the as the **CUBRID_LANG** environment variable. For details, see `Administrator Guide > Globalization > Overview <#admin_admin_i18n_intro_htm>`_.
+The characted used by CUBRID can be configued as the as the **CUBRID_LANG** environment variable. For details, see :doc:`/admin/i18n`.
 
 **Collating Character Sets**
 
-A collation is a set of rules used for comparing characters to search or sort values stored in the database when a certain character set is specified. For details, see `Administrator Guide > Globalization > Overview <#admin_admin_i18n_intro_htm>`_.
+A collation is a set of rules used for comparing characters to search or sort values stored in the database when a certain character set is specified. For details, see :doc:`/admin/i18n`.
 
 Therefore, such rules are applied only to character string data types such as **CHAR** or **VARCHAR**. For a national character string type such as **NCAHR()** or **NCHAR VARYING()** , the sorting rules are determined according to the encoding algorithm of the specified character set.
 
@@ -746,7 +749,7 @@ Therefore, such rules are applied only to character string data types such as **
 
 Automatic coercion takes place between a fixed-length and a variable-length character string for the comparison of two characters, applicable only to characters that belong to the same character set.
 
-For example, when you extract a column value from a CHAR(5) data type and insert it into a column with a CHAR(10) data type, the data type is automatically coerced to CHAR(10). If you want to coerce a character string explicitly, use the **CAST** operator (See `CAST Operator <#syntax_syntax_operator_cast_htm>`_).
+For example, when you extract a column value from a CHAR(5) data type and insert it into a column with a CHAR(10) data type, the data type is automatically coerced to CHAR(10). If you want to coerce a character string explicitly, use the **CAST** operator (See :func:`CAST`).
 
 CHAR(n)
 -------
@@ -808,7 +811,7 @@ When the length of a character string exceeds *n*, they are truncated. When char
 STRING
 ------
 
-**STRING** is a variable-length character string data type. **STRING** is the same as the `VARCHAR <#syntax_syntax_datatype_string_va_6456>`_ with the length specified to the maximum value. That is, **STRING** and **VARCHAR** (1,073,741,823) have the same value.
+**STRING** is a variable-length character string data type. **STRING** is the same as the VARCHAR with the length specified to the maximum value. That is, **STRING** and **VARCHAR** (1,073,741,823) have the same value.
 
 NCHAR(n)
 --------
@@ -834,7 +837,7 @@ To store a Korean character string as a national character string type, you must
 NCHAR VARYING(n)
 ----------------
 
-**NCHAR VARYING** (*n*) is a variable-length character string type. For details, see description and note of `NCHAR(n) <#syntax_syntax_datatype_string_nc_8032>`_. The difference is that the right part (trailing space) of the character string is not filled with whitespace characters, even when the number of strings is smaller than n.
+**NCHAR VARYING** (*n*) is a variable-length character string type. For details, see description and note of NCHAR(n). The difference is that the right part (trailing space) of the character string is not filled with whitespace characters, even when the number of strings is smaller than n.
 
 **NCHAR VARYING** (*n*), **NATIONAL CHAR VARYING**(*n*), and **NATIONAL CHARACTER VARYING(n)** are used interchangeably.
 
@@ -875,7 +878,7 @@ You can use escape using backslash (\) only if you set no for the system paramet
 
 For all other escapes, the backslash will be ignored. For example, "\x" is the same as entering only "x".
 
-**\\%** and **\\_** are used in the pattern matching syntax such as **LIKE** to search percent signs and underbars and are used as a wildcard character if there is no backslash. Outside of the pattern matching syntax, "\\%"and "\\_" are recognized as normal strings not wildcard characters. For details, see `LIKE Predicate <#syntax_syntax_operator_where_lik_9691>`_.
+**\\%** and **\\_** are used in the pattern matching syntax such as **LIKE** to search percent signs and underbars and are used as a wildcard character if there is no backslash. Outside of the pattern matching syntax, "\\%"and "\\_" are recognized as normal strings not wildcard characters. For details, see :ref:`like-expr`.
 
 **Example 1**
 
@@ -1257,7 +1260,7 @@ When storing LOB data in external storage, the following naming convention will 
 
 **Default Storage**
 
-*   **LOB** data is stored in the local file system of the DB server. LOB data is stored in the path specified in the **-lob-base-path option** value of **cubrid createdb**; if this value is omitted, the data will be stored in the [db-vol path]/lob path where the database volume will be created. For more details, see `Database Creation <#admin_admin_db_create_create_htm>`_ and `Storage Creation and Management <#syntax_syntax_datatype_lob_stora_7848>`_.
+*   **LOB** data is stored in the local file system of the DB server. LOB data is stored in the path specified in the **-lob-base-path option** value of **cubrid createdb**; if this value is omitted, the data will be stored in the [db-vol path]/lob path where the database volume will be created. For more details, see :ref:`creating-database` and :ref:`lob_storage`.
 
 *   If the relevant path is deleted despite a **LOB** data file path being registered in the database location file (**databases.txt**), please note that the utility that operates in database server (**cub_server**) and standalone will not function normally.
 
@@ -1414,7 +1417,7 @@ Functions and Operators
 
 **CAST Operator**
 
-By using **CAST** operator, you can execute an explicit type change between **BLOB** / **CLOB** type and binary type/string type. For more details, see `CAST Operator <#syntax_syntax_operator_cast_htm>`_. ::
+By using **CAST** operator, you can execute an explicit type change between **BLOB** / **CLOB** type and binary type/string type. For more details, see :func:`CAST`. ::
 
 	CAST (<bit_type_column_or_value> AS CLOB)
 	CAST (<bit_type_column_or_value> AS BLOB)
@@ -1521,12 +1524,14 @@ The next table shows the functions provided to process and change BLOB/CLOB type
 |                              |                                                                                                                 |
 +------------------------------+-----------------------------------------------------------------------------------------------------------------+
 
+.. _lob_storage:
+
 Creating and Managing Storage
 -----------------------------
 
 **LOB File Path Specification**
 
-By default, the **LOB** data file is stored in the <db-volumn-path>/lob directory where database volume is created. However, if the **--lob-base-path** option of **cubrid createdb** utility is used when creating the database, a **LOB** data file can be stored in the directory specified by option value. However, if there is no directory specified by option value, attempt to create a directory, and display an error message if it fails to create the directory. For more details, see the **--lob-base-path** option in `Creating Database <#admin_admin_db_create_create_htm>`_. ::
+By default, the **LOB** data file is stored in the <db-volumn-path>/lob directory where database volume is created. However, if the **--lob-base-path** option of **cubrid createdb** utility is used when creating the database, a **LOB** data file can be stored in the directory specified by option value. However, if there is no directory specified by option value, attempt to create a directory, and display an error message if it fails to create the directory. For more details, see the **--lob-base-path** option in :option:`createdb -B`. ::
 
 	#image_db volume is created in the current work directory, and a LOB data file will be stored.
 	cubrid createdb image_db
@@ -1567,7 +1572,7 @@ While backup/recovery is not supported for **LOB** type columns, meta data (Loca
 
 **Copying Database with LOB Files**
 
-If you are copying a database by using the **cubrid copydb** utility, you must configure the **databases.txt** additionally, as the **LOB** file directory path will not be copied if the related option is not specified. For more details, see the **-B** and **--copy-lob-path** options in `Copying/Moving Database <#admin_admin_db_copy_htm>`_.
+If you are copying a database by using the **cubrid copydb** utility, you must configure the **databases.txt** additionally, as the **LOB** file directory path will not be copied if the related option is not specified. For more details, see the :option:`copydb -B` and :option:`copydb --copy-lob-path` options.
 
 Supporting and Recovering Transactions
 --------------------------------------
@@ -1721,6 +1726,8 @@ SET
 	   cast(col_1 as set)  cast(col_1 as multiset)
 	============================================
 	  {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
+
+.. _implicit-type-conversion:
 
 Implicit Type Conversion
 ========================
@@ -2132,7 +2139,7 @@ If you multiply, divide or subtract both strings, the result returns a **DOUBLE*
 	============================
 		   6.000000000000000e+00
 
-The '+' operator action depends on how to set the system parameter **plus_as_concat** in the **cubrid.conf** file. For details, see `Syntax/Type Related Parameter <#pm_pm_db_classify_type_htm>`_.
+The '+' operator action depends on how to set the system parameter **plus_as_concat** in the **cubrid.conf** file. For details, see :ref:`stmt-type-parameters`.
 
 * If a value for **plus_as_concat** is yes (default value), the concatenation of two strings will be returned.
 

@@ -12,7 +12,7 @@ Serial is an object that creates a unique sequence number, and has the following
 *   All users including **PUBLIC** can create a serial object. Once it is created, all users can get the number by using **CURRENT_VALUE** and **NEXT_VALUE**.
 *   Only owner of a created serial object and **DBA** can update or delete a serial object. If an owner is **PUBLIC**, all users can update or delete it.
 
-You can create a serial object in the database by using the **CREATE SERIAL** statement. For how to write serial name, `Identifier <#syntax_csql_syntaxtype_identifie_2262>`_. ::
+You can create a serial object in the database by using the **CREATE SERIAL** statement. For how to write serial name, :doc:`/sql/identifier`. ::
 
 	CREATE SERIAL serial_name
 	[ START WITH initial ]

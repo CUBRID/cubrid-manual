@@ -570,6 +570,8 @@ The **IS NULL** conditional expression compares to determine whether the express
 		======================================================================
 					7  'Brown     '          'account'                    NULL
 
+.. _like-expr:
+
 LIKE Conditional Expression
 ===========================
 

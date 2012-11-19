@@ -65,6 +65,8 @@ The following example shows how to configure the **block_ddl_statement** paramet
 	=== Set Param Input ===
 	block_ddl_statement=1
 
+.. _cubrid-conf-default-parameters:
+
 cubrid.conf Configuration File and Default Parameters
 -----------------------------------------------------
 
@@ -654,6 +656,8 @@ The following are parameters related to concurrency control and locks of the dat
 
 **lock_timeout_in_secs** is a client parameter used to configure the lock waiting time. If the lock is not permitted within the specified time period, the given transaction is canceled, and an error message is returned. If the parameter is configured to **-1**, which is the default value, the waiting time is infinite until the lock is permitted. If it is configured to 0, there is no waiting for locks.
 
+.. _logging-parameters:
+
 Logging-Related Parameters
 --------------------------
 
@@ -764,6 +768,8 @@ The following are parameters for improving transaction commit performance. The t
 **group_commit_interval_in_msecs**
 
 **group_commit_interval_in_msecs** is a parameter used to configure the interval (in milliseconds), at which the group commit is to be performed. If the parameter is configured to **0**, which is the default value, the group commit is not performed. The group commit is a functionality that improves commit performance by combining multiple commits that occurred in the specified time period into a group so that commit logs are flushed on the disk at once.
+
+.. _stmt-type-parameters:
 
 Statement/Type-Related Parameters
 ---------------------------------
@@ -1267,6 +1273,8 @@ The default value is **21600** seconds (6 hours).
 
 **use_orderby_sort_limit** is a parameter used to configure whether to keep the intermediate result of sorting and merging process in the statement including the **ORDER BY ... LIMIT** *row_count* clause as many as *row_count*. If it is set to **yes**, you can decrease unnecessary comparing and merging processes because as many as intermediate results will be kept as the value of *row_count*. The default value is **yes**.
 
+.. _broker-configuration:
+
 Broker Configuration
 ====================
 
@@ -1415,6 +1423,8 @@ The following are parameters commonly applied to entire brokers; it is written u
 **MASTER_SHM_ID**
 
 **MASTER_SHM_ID** is a parameter used to specify the identifier of shared memory which is used to manage the CUBRID broker. Its value must be unique in the system. The default value is **30001**.
+
+.. _parameter-by-broker:
 
 Parameter by Broker
 -------------------

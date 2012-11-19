@@ -4,13 +4,13 @@ Data Type Casting Functions and Operators
 
 .. function:: CAST (cast_operand AS cast_target)
 
-	The **CAST** operator can be used to explicitly cast one data type to another in the **SELECT** statement. A query list or a value expression in the **WHERE** clause can be cast to another data type. Depending on the situation, data type can be automatically converted without suing the **CAST** operator. For details, see `Implicit Type Conversion <#syntax_syntax_datatype_implicit__7498>`_.
+	The **CAST** operator can be used to explicitly cast one data type to another in the **SELECT** statement. A query list or a value expression in the **WHERE** clause can be cast to another data type. Depending on the situation, data type can be automatically converted without suing the **CAST** operator. For details, see :ref:`implicit-type-conversion`.
 
 	:param cast_operand: Declares the value to cast to a different data type.
 	:param cast_target: Specifies the type to cast to.
 	:rtype: cast_target
 	
-	See `Casting a String to Date/Time Type <#syntax_syntax_datatype_date_stri_3129>`_ regarding to convert the string of date/time type into date/time type.
+	See :ref:`cast-string-to-datetime` regarding to convert the string of date/time type into date/time type.
 	
 	The following table shows a summary of explicit type conversions (casts) using the **CAST** operator in CUBRID.
 
@@ -163,7 +163,7 @@ Data Type Casting Functions and Operators
 	
 .. function:: DATE_FORMAT (date, format)
 
-	The **DATE_FORMAT** function converts the value of strings with **DATE** format ('*YYYY*-*MM*-*DD*' or '*MM*/*DD*/*YYYY*') or that of date/time data type (**DATE**, **TIMESTAMP**, **DATETIME**) to specified date/time format and then return the value with the **VARCHAR** data type. For the format parameter to assign, refer to the `Date/Time Format 2 <#syntax_syntax_operator_to_datefo_3551>`_ table of the :func:`DATE_FORMAT`. The `Date/Time Format 2 <#syntax_syntax_operator_to_datefo_3551>`_ table is used in :func:`DATE_FORMAT`, :func:`TIME_FORMAT`, and :func:`STR_TO_DATE`.
+	The **DATE_FORMAT** function converts the value of strings with **DATE** format ('*YYYY*-*MM*-*DD*' or '*MM*/*DD*/*YYYY*') or that of date/time data type (**DATE**, **TIMESTAMP**, **DATETIME**) to specified date/time format and then return the value with the **VARCHAR** data type. For the format parameter to assign, refer to the "Date/Time Format 2" table of the :func:`DATE_FORMAT`. The :ref:`Date/Time Format 2 <datetime-format2>` table is used in :func:`DATE_FORMAT`, :func:`TIME_FORMAT`, and :func:`STR_TO_DATE`.
 
 	When the *format* argument is assigned, the string is interpreted according to the specified language. At that time, the language specified to the **intl_date_lang** system parameter is applied. For example, when the language is "de_DE" and the format is "%d %M %Y", the string "3 Oktober 2009" is interpreted as the DATE type of "2009-10-03". When the **intl_date_lang** value is not set, the language applied to the **CUBRID_LANG** environment variable is applied. When the *format* argument specified is not corresponding to the given string, an error is returned.
 
@@ -171,8 +171,10 @@ Data Type Casting Functions and Operators
 	:param format: Specifies the output format. The format specifier starting with ‘%’ is used.
 	:rtype: STRING
 
-	In the following `Date/Time Format 2 <#syntax_syntax_operator_to_datefo_3551>`_, the month/day, date, and AM/PM in characters are different by language.
+	In the following "Date/Time Format 2", the month/day, date, and AM/PM in characters are different by language.
 
+	.. _datetime-format2:
+	
 	**Date/Time Format 2**
 
 	+------------------+-------------------------------------------------------------------------------------------------------------------+
@@ -301,13 +303,13 @@ Data Type Casting Functions and Operators
 
 	When only the language is set to "en_US" (the initial value of **CUBRID_LANG** at installation of CUBRID) in the locale of the **CUBRID_LANG** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
 
-	When the charset is ISO-8859-1, the language that can be changed in :func:`TO_DATE` function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see `Remark <#syntax_syntax_operator_to_char_h_7074>`_ in the :func:`TO_CHAR`).
+	When the charset is ISO-8859-1, the language that can be changed in :func:`TO_DATE` function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`).
 
 .. function:: FORMAT ( x , dec )
 
 	The **FORMAT** function displays the number *x* by using digit grouping symbol as thousands delimiters, so that its format becomes '#,###,###.#####’ and performs rounding after the decimal symbol to express as many as *dec* digits after it. The return value is a **VARCHAR** type.
 
-	Cipher identifier and decimal point symbol is output in the format according to the specified language. The language used is the language specified in the **intl_number_lang** system parameter. When the value of **intl_number_lang** is not set, the language specified in the **CUBRID_LANG** environment variable is used. For example, when the language is one of the European languages, such as "de_DE" or "fr_FR" is interpreted as the cipher identifier and "," as the decimal point symbol (see `Default output of number by language <#syntax_syntax_operator_to_charnu_7393>`_ of the :func:`TO_CHAR`.
+	Cipher identifier and decimal point symbol is output in the format according to the specified language. The language used is the language specified in the **intl_number_lang** system parameter. When the value of **intl_number_lang** is not set, the language specified in the **CUBRID_LANG** environment variable is used. For example, when the language is one of the European languages, such as "de_DE" or "fr_FR" is interpreted as the cipher identifier and "," as the decimal point symbol (see :ref:`Default output of number by language <tochar-default-number-format>` of the :func:`TO_CHAR`.
 
 	:param x, dec: An expression that returns a numeric value
 	:rtype: STRING
@@ -335,10 +337,10 @@ Data Type Casting Functions and Operators
 	The **STR_TO_DATE** function converts the given character string to a date/time value by interpreting it according to the specified format and operates in the opposite way to the :func:`DATE_FORMAT`. The return value is determined by the date/time part included in the character string and it is one of the **DATETIME**, **DATE** and **TIME** types.
 
 	:param string: All character string types can be specified.
-	:param format: Specifies the format to interpret the character string. You should use character strings including % for the format specifiers. See the table, `date/time format 2 <#syntax_syntax_operator_to_datefo_3551>`_  of :func:`DATE_FORMAT`.
+	:param format: Specifies the format to interpret the character string. You should use character strings including % for the format specifiers. See the table, :ref:`date/time format 2 <datetime-format2>` of :func:`DATE_FORMAT`.
 	:rtype: DATETIME, DATE, TIME
 
-	For the *format* argument to assign, see `Date/Time Format 2 <#syntax_syntax_operator_to_datefo_3551>`_ table of the :func:`DATE_FORMAT`.
+	For the *format* argument to assign, see :ref:`date/time format 2 <datetime-format2>` table of the :func:`DATE_FORMAT`.
 
 	When the *format* argument is assigned, the *string* is interpreted according to the specified language. At that time, the language specified to the **intl_date_lang** system parameter is applied. For example, when the language is "de_DE" and the *format* is "%d %M %Y", the string "3 Oktober 2009" is interpreted as the **DATE** type of "2009-10-03". When the **intl_date_lang** value is not set, the language applied to the **CUBRID_LANG** environment variable is applied. When the *format* argument specified is not corresponding to the given *string*, an error is returned.
 	
@@ -393,7 +395,7 @@ Data Type Casting Functions and Operators
 	The **TIME_FORMAT** function converts the value of strings with **TIME** format ('*HH*-*MI*-*SS)* or that of date/time data type (**DATE**, **TIMESTAMP**, **DATETIME**) to specified date/time format and then return the value with the **VARCHAR** data type.
 
 	:param time: A value of string with **TIME** (*HH*:*MI*:*SS*) or that of date/time data type (**TIME**, **TIMESTAMP**, **DATETIME**) an be specified.
-	:param format: Specifies the output format. Use a string that contains ‘%’ as a specifier. See the table, `Date/Time Format 2 <#syntax_syntax_operator_to_datefo_3551>`_ of :func:`DATE_FORMAT`.
+	:param format: Specifies the output format. Use a string that contains ‘%’ as a specifier. See the table, :ref:`date/time format 2 <datetime-format2>` of :func:`DATE_FORMAT`.
 
 	:rtype: STRING
 
@@ -433,24 +435,26 @@ Data Type Casting Functions and Operators
 
 	When only the language is set to "en_US" (the initial value of **CUBRID_LANG** at installation of CUBRID) in the locale of the **CUBRID_LANG** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
 
-	When the charset is ISO-8859-1, the language that can be changed in :func:`TO_DATE` function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language suppored by CUBRID. For details, see `Remark <#syntax_syntax_operator_to_char_h_7074>`_ in the :func:`TO_CHAR`.
+	When the charset is ISO-8859-1, the language that can be changed in :func:`TO_DATE` function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language suppored by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`.
 
 .. function:: TO_CHAR ( date_time [, format[, date_lang_string_literal ]] )
 
-	The **TO_CHAR** (date_time) function converts the value of date/time types (**TIME**, **DATE**, **TIMESTAMP**, **DATETIME**) to based on `Date/Time Format 1 <#syntax_syntax_operator_to_char_h_500>`_ and then returns the value. The type of the return value is **VARCHAR**.
+	The **TO_CHAR** (date_time) function converts the value of date/time types (**TIME**, **DATE**, **TIMESTAMP**, **DATETIME**) to based on :ref:`date/time format 1 <datetime-format1>` and then returns the value. The type of the return value is **VARCHAR**.
 
 	:param date_time: Specifies an expression that returns date-time type string. If the value is **NULL**, **NULL** is returned.
 	:param format: Specifies a format of return value. If the value is **NULL**, **NULL** is returned.
-	:param date_lang_string_literal: Specifies a language applied to a return value (see the table, `date_lang_string_literal <#syntax_syntax_operator_to_char_h_2401>`_).
+	:param date_lang_string_literal: Specifies a language applied to a return value.
 	:rtype: STRING
 	
-	When the *format* argument is assigned, the *date_time* is output according to the specified language (see the `Date/Time Format 1 <#syntax_syntax_operator_to_char_h_500>`_ table). At this time, the language specified to the *intl_date_lang* argument is applied. For example, when the language is set to "de_DE" and the format is "HH:MI:SS:AM", "08:46:53 PM" is output as "08:46:53 Nachm.". When the **intl_date_lang** value is not set, the language applied to the **CUBRID_LANG** environment variable is applied. When the *format* argument specified does not correspond to the given *string*, an error is returned.
+	When the *format* argument is assigned, the *date_time* is output according to the specified language (see the :ref:`date/time format 1 <datetime-format1>` table). At this time, the language specified to the *intl_date_lang* argument is applied. For example, when the language is set to "de_DE" and the format is "HH:MI:SS:AM", "08:46:53 PM" is output as "08:46:53 Nachm.". When the **intl_date_lang** value is not set, the language applied to the **CUBRID_LANG** environment variable is applied. When the *format* argument specified does not correspond to the given *string*, an error is returned.
 
-	When the *format* argument is omitted, the *date_time* is output as a string according to the default output format of the language set by **intl_date_lang** or **CUBRID_LANG** (see the following table `Default output formats for date/time type by language <#syntax_syntax_operator_to_char_h_9923>`_).
+	When the *format* argument is omitted, the *date_time* is output as a string according to the default output format of the language set by **intl_date_lang** or **CUBRID_LANG** (see the following table **Default output formats for date/time type by language**).
 
 
 	.. note:: The **CUBRID_DATE_LANG** environment used in earlier version of CUBRID 9.0 is no longer supported.
 
+	.. _tochar-default-datetime-format:
+	
 	**Default Date/Time Output Format for Each Language**
 
 	+-------+----------------+---------------+---------------------------+------------------------------+
@@ -479,6 +483,8 @@ Data Type Casting Functions and Operators
 	| zh_CN | 'YYYY-MM-DD'   | 'HH24:MI:SS'  | 'HH24:MI:SS YYYY-MM-DD'   | 'HH24:MI:SS.FF YYYY-MM-DD'   |
 	+-------+----------------+---------------+---------------------------+------------------------------+
 
+	.. _datetime-format1:
+	
 	**Date/Time Format 1**
 
 	+--------------------+---------------------------------------------------------------------------+
@@ -660,6 +666,8 @@ Data Type Casting Functions and Operators
 		======================
 		  'Pazar     Ekim    2009'
 
+	.. _tochar-remark:
+	
 	**Remark**
 
 	When only the language is set to "en_US" (the initial value of **CUBRID_LANG** at installation of CUBRID) in the locale of the **CUBRID_LANG** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591). That is, setting the locale value of **CUBRID_LANG** to "en_US" is identical with setting to "en_US.iso88591".
@@ -690,14 +698,14 @@ Data Type Casting Functions and Operators
 
 .. function:: TO_CHAR(number[, format[, number_lang_string_literal ] ])
 
-	The **TO_CHAR** function converts a `Number Format <#syntax_syntax_operator_to_charnu_775>`_ or numeric data type to a character string according to the number format and returns it. The type of the return value is **VARCHAR** .
+	The **TO_CHAR** function converts a **Number Format** or numeric data type to a character string according to the number format and returns it. The type of the return value is **VARCHAR** .
 	
 	:param number: Specifies an expression that returns numeric data type string. If the input value is **NULL**, **NULL** is returned. If the input value is character type, the character itself is returned.
 	:param format: Specifies a format of return value. If format is not specified, all significant figures are returned as character string by default. If the value is **NULL**, **NULL** is returned.
 	:param number_lang_string_literal: Specifies the language to be applied to the input value.
 	:rtype: STRING
 	
-	If the number format has not been specified as an argument, all significant figures are converted to a character string according to the default format (see the table `Default Output of Number for Each Language <#syntax_syntax_operator_to_charnu_7393>`_).
+	If the number format has not been specified as an argument, all significant figures are converted to a character string according to the default format (see the table :ref:`Default Output of Number for Each Language <tochar-default-number-format>`).
 
 	**Number Format**
 
@@ -722,6 +730,8 @@ Data Type Casting Functions and Operators
 	+--------------------+-------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 	| **EEEE**           | 9.99EEEE    | Returns a scientific notation number.                                                                                                                                                    |
 	+--------------------+-------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+	
+	.. _tochar-default-number-format:	
 	
 	**Default Output of Number for Each Language**
 
@@ -829,7 +839,7 @@ Data Type Casting Functions and Operators
 
 	When the *format* argument is assigned, the *string* is interpreted according to the specified language. For example, when a language is "de_DE" and *string* is "12/mai/2012 12:10:00 Nachm.", and *format* is "DD/mon/YYYY", it is interpreted as May 12th, 2012. In this case, the language is set by *date_lang_string_literal* argument. If *date_lang_string_literal* argument is not set, the language used is the language specified in the **intl_number_lang** system parameter and when the value of **intl_number_lang** is not set, the language specified in the **CUBRID_LANG** environment variable is used. When the *format* parameter specified does not correspond to the given *string*, an error is returned.
 
-	When the *format* argument is not set, *string* is interpreted based on the default output format of the language set by **intl_date_lang** or **CUBRID_LANG** (see the table `Default Date/Time Output Format for Each Language <#syntax_syntax_operator_to_char_h_9923>`_ of the :func:`TO_CHAR`. For example, a language is "de_DE", the default *format* of the **DATE** type is "DD.MM.YYYY".
+	When the *format* argument is not set, *string* is interpreted based on the default output format of the language set by **intl_date_lang** or **CUBRID_LANG** (see the table :ref:`Default Date/Time Output Format for Each Language <tochar-default-datetime-format>` of the :func:`TO_CHAR`. For example, a language is "de_DE", the default *format* of the **DATE** type is "DD.MM.YYYY".
 
 
 	The following example shows execution of the database by setting the environment variable **CUBRID_LANG** to "en_US".
@@ -876,7 +886,7 @@ Data Type Casting Functions and Operators
 
 	When only the language is set to "en_US" (the initial value of **CUBRID_LANG** at installation of CUBRID) in the locale of the **CUBRID_LANG** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
 
-	When the charset is ISO-8859-1, the language that can be changed in **TO_DATE** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see `Remark <#syntax_syntax_operator_to_char_h_7074>`_ in the :func:`TO_CHAR`.
+	When the charset is ISO-8859-1, the language that can be changed in **TO_DATE** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`.
 
 .. function:: TO_DATETIME (string [,format [,date_lang_string_literal]])
 
@@ -889,7 +899,7 @@ Data Type Casting Functions and Operators
 
 	When the *format* argument is assigned, the *string* is interpreted according to the specified language. For example, when a language is "de_DE" and *string* is "12/mai/2012 12:10:00 Nachm.", and *format* is "DD/MON/YYYY HH:MI:SS AM", it is interpreted as May 12th, 2012, 12:10:00 PM. In this case, the language is set by *date_lang_string_literal* argument. If *date_lang_string_literal* argument is not set, the language used is the language specified in the **intl_number_lang** system parameter and when the value of **intl_number_lang** is not set, the language specified in the **CUBRID_LANG** environment variable is used. When the *format* parameter specified does not correspond to the given *string*, an error is returned.
 
-	When the *format* argument is not set, string is interpreted based on the default output format of the language set by **intl_date_lang** or **CUBRID_LANG** (see the table `Default Date/Time Output Format for Each Language <#syntax_syntax_operator_to_char_h_9923>`_ of the :func:`TO_CHAR`. For example, a language is "de_DE", the default *format* of the **DATETIME** type is "HH24:MI:SS.FF DD.MM.YYYY".
+	When the *format* argument is not set, string is interpreted based on the default output format of the language set by **intl_date_lang** or **CUBRID_LANG** (see the table :ref:`Default Date/Time Output Format for Each Language <tochar-default-datetime-format>` of the :func:`TO_CHAR`. For example, a language is "de_DE", the default *format* of the **DATETIME** type is "HH24:MI:SS.FF DD.MM.YYYY".
 
 	.. note:: The **CUBRID_DATE_LANG** environment used in earlier version of CUBRID 9.0 is no longer supported.
 
@@ -932,7 +942,7 @@ Data Type Casting Functions and Operators
 
 	When only the language is set to "en_US" (the initial value of**CUBRID_LANG** at installation of CUBRID) in the locale of the **CUBRID_LANG** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
 
-	When the charset is ISO-8859-1, the language that can be changed in **TO_DATETIME** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see `Remark <#syntax_syntax_operator_to_char_h_7074>`_ in the :func:`TO_CHAR`.
+	When the charset is ISO-8859-1, the language that can be changed in **TO_DATETIME** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`.
 
 .. function:: TO_NUMBER(string [, format ])
 
@@ -944,7 +954,7 @@ Data Type Casting Functions and Operators
 
 	When the *format* argument is assigned, the string is interpreted according to the specified language. The language used is the language specified in the **intl_number_lang** system parameter. When the **intl_number_lang** is not set, the language specified in the **CUBRID_LANG** environment variable is used. For example, when the language is one of the European languages, such as "de_DE" and "fr_FR", "." is interpreted as the cipher identifier and "," as the decimal point symbol. When the format parameter specified does not correspond to the given string, an error is returned.
 
-	If the *format* argument is omitted, string is interpreted according to default output format set by **intl_date_lang** or **CUBRID_LANG** (see `Default Output of Number for Each Language <#syntax_syntax_operator_to_charnu_7393>`_ of :func:`TO_CHAR`.
+	If the *format* argument is omitted, string is interpreted according to default output format set by **intl_date_lang** or **CUBRID_LANG** (see :ref:`Default Output of Number for Each Language <tochar-default-number-format>` of :func:`TO_CHAR`.
 
 	The following example shows execution of the database by setting the environment variable **CUBRID_LANG** to "en_US".
 
@@ -997,7 +1007,7 @@ Data Type Casting Functions and Operators
 
 	When the *format* argument is assigned, the *string* is interpreted according to the specified language. For example, when a language is "de_DE" and *string* is "10:23:00 Nachm.", and *format* is "HH/MI/SS/AM, it is interpreted as 10:23:00 PM. In this case, the language is set by *date_lang_string_literal*  argument. If *date_lang_string_literal* argument is not set, the language used is the language specified in the **intl_number_lang** system parameter and when the value of **intl_number_lang** is not set, the language specified in the **CUBRID_LANG** environment variable is used. When the *format* parameter specified does not correspond to the given *string*, an error is returned.
 
-	If the *format* argument is omitted, *string* is interpreted according to default output format set by **intl_date_lang** or **CUBRID_LANG** (see `Default Output of Number for Each Language <#syntax_syntax_operator_to_charnu_7393>`_ of :func:`TO_CHAR`. For example, when a language is "de_DE", the default *format* of the **TIME** type is "HH24:MI:SS".
+	If the *format* argument is omitted, *string* is interpreted according to default output format set by **intl_date_lang** or **CUBRID_LANG** (see :ref:`Default Output of Number for Each Language <tochar-default-number-format>` of :func:`TO_CHAR`. For example, when a language is "de_DE", the default *format* of the **TIME** type is "HH24:MI:SS".
 
 	.. note:: The **CUBRID_DATE_LANG** environment used in earlier version of CUBRID 9.0 is no longer supported.
 
@@ -1044,7 +1054,7 @@ Data Type Casting Functions and Operators
 
 	When only the language is set to "en_US" (the initial value of **CUBRID_LANG** at installation of CUBRID) in the locale of the **CUBRID_LANG** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
 
-	When the charset is ISO-8859-1, the language that can be changed in **TO_TIME** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see `Remark <#syntax_syntax_operator_to_char_h_7074>`_ in the :func:`TO_CHAR`.
+	When the charset is ISO-8859-1, the language that can be changed in **TO_TIME** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`.
 
 .. function:: TO_TIMESTAMP(string [, format [,date_lang_string_literal]])
 
@@ -1057,7 +1067,7 @@ Data Type Casting Functions and Operators
 
 	When the *format* argument is assigned, the *string* is interpreted according to the specified language. For example, when a language is "de_DE" and *string* is "12/mai/2012 12:10:00 Nachm.", and *format* is "DD/MON/YYYY HH:MI:SS AM", it is interpreted as May 12th, 2012, 12:10:00 AM. In this case, the language is set by *date_lang_string_literal*  argument. If *date_lang_string_literal* argument is not set, the language used is the language specified in the **intl_number_lang** system parameter and when the value of **intl_number_lang** is not set, the language specified in the **CUBRID_LANG** environment variable is used. When the *format* parameter specified does not correspond to the given string, an error is returned.
 
-	When the *format* argument is not set, *string* is interpreted according to default format set by **intl_date_lang** or **CUBRID_LANG** (see the table `Default Date/Time Output Format for Each Language <#syntax_syntax_operator_to_char_h_9923>`_ of the :func:`TO_CHAR`. For example, a language is "de_DE", the default *format* of the **DATETIME** type is "HH24:MI:SS.FF DD.MM.YYYY".
+	When the *format* argument is not set, *string* is interpreted according to default format set by **intl_date_lang** or **CUBRID_LANG** (see the table :ref:`Default Date/Time Output Format for Each Language <tochar-default-datetime-format>` of the :func:`TO_CHAR`. For example, a language is "de_DE", the default *format* of the **DATETIME** type is "HH24:MI:SS.FF DD.MM.YYYY".
 
 	The following example shows execution of the database by setting the environment variable **CUBRID_LANG** to "en_US".
 
@@ -1098,4 +1108,4 @@ Data Type Casting Functions and Operators
 
 	When only the language is set to "en_US" (the initial value of **CUBRID_LANG** at installation of CUBRID) in the locale of the **CUBRID_LANG** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
 
-	When the charset is ISO-8859-1, the language that can be changed in **TO_TIMESTAMP** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see `Remark <#syntax_syntax_operator_to_char_h_7074>`_ in the :func:`TO_CHAR`.
+	When the charset is ISO-8859-1, the language that can be changed in **TO_TIMESTAMP** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`.

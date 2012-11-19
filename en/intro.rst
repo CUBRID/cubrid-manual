@@ -29,6 +29,8 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 .. image:: /images/image1.png
 
+.. _database-volume-structure:
+
 Database Volume Structure
 -------------------------
 
@@ -91,7 +93,7 @@ Active log is a log that contains recent changes to the database. If a problem o
 Archive log is a volume to store logs continuously created after exhausting available active log space that contains recent changes. The archive log volume will be generated only after exhausting available active log volume space. Because archive log is not automatically destroyed, it is required to configure archive log to be deleted by system.
 
 **Note**
-To get information on the conditions in which archive log can be deleted, see `Managing Archive Log <#admin_admin_br_arlogfile_htm>`_ .
+To get information on the conditions in which archive log can be deleted, see :ref:`Managing_Archive_Logs`.
 
 **Background Archive Log**
 

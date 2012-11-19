@@ -159,7 +159,7 @@ Choose whether to overwrite the existing configuration files during the CUBRID i
 
 **Configuring Environment**
 
-You can modify the environment such as service ports etc. edit the parameters of a configuration file located in the **$CUBRID/conf** directory. See `Installing and Running on Windows <#gs_gs_install_windows_htm>`_ for more information.
+You can modify the environment such as service ports etc. edit the parameters of a configuration file located in the **$CUBRID/conf** directory. See :ref:`Installin-and-Running-on-Windows` for more information.
 
 **Installing CUBRID Interfaces**
 
@@ -168,6 +168,8 @@ You can see the latest information on interface modules such as CCI, JDBC, PHP, 
 **Installing CUBRID Tools**
 
 You can see the latest information on tools such as CUBRID Manager and CUBRID Query Browser and install them by downloading files from `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_ .
+
+.. _Installin-and-Running-on-Windows:
 
 Installing and Running on Windows
 ---------------------------------
@@ -207,7 +209,9 @@ If CUBRID Service Tray does not automatically run upon system startup, you shoul
 
 To install a new version of CUBRID in an environment in which a previous version has already been installed, select [CUBRID Service Tray] > [Exit] from the menu to stop currently running services, and then remove the previous version of CUBRID. Note that when you are prompted with "Do you want to delete all the existing version of databases and the configuration files?" you must select "No" to protect the existing databases.
 
-For more information on migrating a database from a previous version to a new version, see `Migrating Database <#admin_admin_migration_migration__1472>`_ .
+For more information on migrating a database from a previous version to a new version, see :doc:`admin/migration`.
+
+.. _Configuring-Environment-on-Windows:
 
 **Configuring Environment**
 
@@ -219,11 +223,11 @@ You can change configuration such as service ports to meet the user environment 
 
 * **cubrid.conf**
 
-  A configuration file for server. You can use it to configure the following values: database memory, the number threads based on the number of concurrent users, communication port between broker and server, etc.  The port that a master process uses is called cubrid_port_id and its default value is 1523. For details, see `cubrid.conf Configuration File and Default Parameters <#pm_pm_db_setting_htm>`_ .
+  A configuration file for server. You can use it to configure the following values: database memory, the number threads based on the number of concurrent users, communication port between broker and server, etc.  The port that a master process uses is called cubrid_port_id and its default value is 1523. For details, see :ref:`cubrid-conf-default-parameters`.
 
 * **cubrid_broker.conf**
 
-  A configuration file for broker. You can use it to configure the following values: broker port, the number of application servers (CAS), SQL LOG, etc. The port that a broker uses is called **BROKER_PORT** . A port you see in the drivers such as JDBC is its corresponding broker's port. **APPL_SERVER_PORT** is a port that a broker application server (CAS) uses and it is added only in Windows. The default value is  **BROKER_PORT** +1. The number of ports used is the same as the number of CAS, starting from the specified port's number plus 1. For details, see `Parameter by Broker <#pm_pm_broker_one_htm>`_ .
+  A configuration file for broker. You can use it to configure the following values: broker port, the number of application servers (CAS), SQL LOG, etc. The port that a broker uses is called **BROKER_PORT** . A port you see in the drivers such as JDBC is its corresponding broker's port. **APPL_SERVER_PORT** is a port that a broker application server (CAS) uses and it is added only in Windows. The default value is  **BROKER_PORT** +1. The number of ports used is the same as the number of CAS, starting from the specified port's number plus 1. For details, see :ref:`parameter-by-broker`.
   
   The **CCI_DEFAULT_AUTOCOMMIT** broker parameter is supported since 2008 R4.0. The default value in the version is **OFF** and it is later changed to **ON** .  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to **OFF** or configure the auto-commit mode to **OFF** .
 

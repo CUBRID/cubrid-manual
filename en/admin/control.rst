@@ -54,6 +54,8 @@ The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. On
 	cubrid heartbeat <command>
 	<command>: {start|stop|reload|deact|act}
 
+.. _control-cubrid-services:
+
 CUBRID Services
 ===============
 
@@ -1264,6 +1266,8 @@ The following example saves the query plan only without running the query.
 	-- 1 rows ----------------------------
 
 	cci_end_tran exec_time : 0.000
+
+.. _cubrid-manager-server:
 
 CUBRID Manager Server
 =====================

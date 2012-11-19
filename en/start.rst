@@ -10,7 +10,7 @@ This chapter covers the following topics:
 *   Configuring environment variables and starting CUBRID service
 *   Using the CSQL Interpreter
 
-For information about ports used by CUBRID, go to  > `Installing and Running on Windows > Configuring Environment <#gs_gs_install_windows_htm_config>`_ section; for Linux, every configuration except for **APPL_SERVER_PORT** is same for Windows.
+For information about ports used by CUBRID, go to  > :ref:`Installin-and-Running-on-Windows` > :ref:`Configuring Environment <Configuring-Environment-on-Windows>` section; for Linux, every configuration except for **APPL_SERVER_PORT** is same for Windows.
 
 CUBRID provides various tools for you to use easily through GUI. You can download them from `http://www.cubrid.org/downloads <http://www.cubrid.org/downloads>`_ .
 

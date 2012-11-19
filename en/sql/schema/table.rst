@@ -63,8 +63,8 @@ To create a table, use the **CREATE TABLE** statement. ::
 *   *table_name* : Specifies the name of the table to be created (maximum: 254 bytes).
 *   *column_name* : Specifies the name of the column to be created (maximum: 254 bytes).
 *   *column_type* : Specifies the data type of the column.
-*   [**SHARED** *value* | **DEFAULT** *value*] : Specifies the initial value of the column (see `Column Definition <#syntax_syntax_table_create_col_h_3802>`_ For details).
-*   *column_constraints* : Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see `Constraint Definition <#syntax_syntax_table_create_cond__9394>`_ For details).
+*   [**SHARED** *value* | **DEFAULT** *value*] : Specifies the initial value of the column.
+*   *column_constraints* : Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see :ref:`constraint-definition` For details).
 
 **Example**
 
@@ -98,7 +98,7 @@ A column is a set of data values of a particular simple type, one for each row o
 
 **Column Name**
 
-How to create a column name, see `Identifier <#syntax_csql_syntaxtype_identifie_2262>`_. You can alter created column name by using the **RENAME COLUMN** clause of the **ALTER TABLE** statement (see `RENAME COLUMN Clause <#syntax_syntax_def_alttable_renam_2189>`_).
+How to create a column name, see :doc:`identifier`. You can alter created column name by using the **RENAME COLUMN** clause of the **ALTER TABLE** statement (see :ref:`rename-column`).
 
 **Example**
 
@@ -201,7 +201,7 @@ You can define the **AUTO_INCREMENT** attribute for the column to automatically 
 
 **DEFAULT**, **SHARED**, and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
 
-You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see `AUTO_INCREMENT Clause <#syntax_syntax_def_alttable_autoi_781>`_ of **ALTER TABLE**. ::
+You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see :ref:`alter-auto-increment` of **ALTER TABLE**. ::
 
 	CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]) |
 	CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
@@ -258,6 +258,8 @@ For example, if a table is created as below, the maximum value of A is 32767. Be
   .. code-block:: sql
   
 	create table tb1(A smallint auto_increment, B char(5));
+
+.. _constraint-definition:
 
 Constraint Definition
 ---------------------
@@ -470,7 +472,7 @@ A foreign key is a column or a set of columns that references the primary key in
 *   In a referential constraint, the name of the primary key table to be referenced and the corresponding column names are defined. If the list of column names are is not specified, the primary key of the primary key table is specified in the defined order.
 *   The number of primary keys in a referential constraint must be identical to that of foreign keys. The same column name cannot be used multiple times for the primary key in the referential constraint.
 *   The actions cascaded by reference constraints do not activate the trigger action.
-*   It is not recommended to use *referential_triggered_action* in the CUBRID HA environment. In the CUBRID HA environment, the trigger action is not supported. Therefore, if you use *referential_triggered_action*, the data between the master database and the slave database can be inconsistent. For details, see `CUBRID HA <#admin_admin_ha_intro_htm>`_.
+*   It is not recommended to use *referential_triggered_action* in the CUBRID HA environment. In the CUBRID HA environment, the trigger action is not supported. Therefore, if you use *referential_triggered_action*, the data between the master database and the slave database can be inconsistent. For details, see :doc:`/admin/ha`.
 
 **KEY or INDEX**
 
@@ -783,7 +785,7 @@ You can also change the initial value of **AUTO_INCREMENT**. ::
 
 .. warning::
 
-	The table name can be changed only by the table owner, **DBA** and **DBA** members. The other users must be granted to change the name by the owner or **DBA** (see `Granting Authorization <#syntax_syntax_access_authority_h_4540>`_ For details on authorization).
+	The table name can be changed only by the table owner, **DBA** and **DBA** members. The other users must be granted to change the name by the owner or **DBA** (see :ref:`granting-authorization` For details on authorization).
 
 ADD COLUMN Clause
 -----------------
@@ -794,7 +796,7 @@ If the newly added column has the **NOT NULL** constraint but no **DEFAULT** con
 
 If the newly added column has the **PRIMARY KEY** or **UNIQUE** constraints, an error will be returned when the database server configuration parameter **add_column_update_hard_default** is set to yes. When the parameter is set to no, all data will have **NULL**. The default value of **add_column_update_hard_default** is **no**.
 
-For **add_column_update_hard_default** and the hard default, see `CHANGE Clause <#syntax_syntax_def_alttable_chang_3554>`_. ::
+For **add_column_update_hard_default** and the hard default, see :ref:`change-column`. ::
 
 	ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
 	ADD [ COLUMN | ATTRIBUTE ] [(]<column_definition>[)] [ FIRST | AFTER old_column_name ]
@@ -872,7 +874,7 @@ By default, the index created when you add **PRIMARY KEY** constraints is create
 *   *table_name* : Specifies the name of a table that has a constraint to be added.
 *   *constraint_name* : Specifies the name of a constraint to be added, or it can be omitted. If omitted, a name is automatically assigned.
 *   *foreign_key_name* : Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
-*   *column_constraint* : Defines a constraint for the specified column. For details, see `Constraint Definition <#syntax_syntax_table_create_cond__9394>`_.
+*   *column_constraint* : Defines a constraint for the specified column. For details, see :ref:`constraint-definition`.
 
 **Example**
 
@@ -927,7 +929,7 @@ You can define the index attributes for a specific column by using the **ADD IND
 ALTER COLUMN ... SET DEFAULT Clause
 -----------------------------------
 
-You can specify a new default value for a column that has no default value or modify the existing default value by using the **ALTER COLUMN** … **SET DEFAULT**. You can use the **CHANGE** clause to change the default value of multiple columns with a single statement. For details, see the `CHANGE Clause <#syntax_syntax_def_alttable_chang_3554>`_. ::
+You can specify a new default value for a column that has no default value or modify the existing default value by using the **ALTER COLUMN** … **SET DEFAULT**. You can use the **CHANGE** clause to change the default value of multiple columns with a single statement. For details, see the :ref:`change-column`. ::
 
 	ALTER [ TABLE | CLASS ] table_name ALTER [COLUMN] column_name SET DEFAULT value
 
@@ -987,6 +989,8 @@ You can specify a new default value for a column that has no default value or mo
 		 UNIQUE u_a_tbl_id ON a_tbl (id)
 
 
+.. _alter-auto-increment:
+
 AUTO_INCREMENT Clause
 ---------------------
 
@@ -1011,6 +1015,8 @@ The **AUTO_INCREMENT** clause can change the initial value of the increment valu
 	ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to have exactly one AUTO_INCREMENT column and no seed/increment specification.
 
 .. warning:: You must be careful not to violate constraints (such as a **PRIMARY KEY** or **UNIQUE**) due to changing the initial value of **AUTO_INCREMENT**.
+
+.. _change-column:
 
 CHANGE/MODIFY Clauses
 ---------------------
@@ -1297,6 +1303,8 @@ The hard default value is a value that will be used when you add columns with th
 | ELO       | No                                  |                                         |
 +-----------+-------------------------------------+-----------------------------------------+
 
+.. _rename-column:
+
 RENAME COLUMN Clause
 --------------------
 
@@ -1455,4 +1463,4 @@ You can change the name of a table by using the **RENAME TABLE** statement and s
 
 .. warning::
 
-	The table name can be changed only by the table owner, **DBA** and **DBA** members. The other users must be granted to change the name by the owner or **DBA** (see `Granting Authorization <#syntax_syntax_access_authority_h_4540>`_ For details on authorization).
+	The table name can be changed only by the table owner, **DBA** and **DBA** members. The other users must be granted to change the name by the owner or **DBA** (see :ref:`granting-authorization` For details on authorization).

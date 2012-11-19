@@ -194,6 +194,8 @@ The following table shows the total number of digits (*p*) and the number of dig
 	SELECT 100100/(100100-100100);
 	ERROR: Attempt to divide by zero.
 
+.. _arithmetic-op-type-casting:
+
 Arithmetic Operations and Type Casting of DATE/TIME Data Types
 ==============================================================
 

@@ -951,7 +951,7 @@ CUBRID SHARD 를 종료하기 위하여 다음과 같이 입력한다. ::
 
 **CUBRID SHARD 파라미터의 동적 변경**
 
-CUBRID SHARD의 구동과 관련된 파라미터는 CUBRID SHARD 환경 설정 파일(**shard.conf**) 에서 설정할 수 있다. 그 밖에, **shard_broker_changer** 유틸리티를 이용하여 구동 중에만 한시적으로 일부 CUBRID SHARD 파라미터를 동적으로 변경할 수 있다. CUBRID SHARD 파라미터 설정 및 동적으로 변경 가능한 파라미터 등 기타 자세한 내용은 `CUBRID SHARD> 구성 및 설정 <#admin_admin_shard_conf_comp_htm>`_을 참조한다.
+CUBRID SHARD의 구동과 관련된 파라미터는 CUBRID SHARD 환경 설정 파일(**shard.conf**) 에서 설정할 수 있다. 그 밖에, **shard_broker_changer** 유틸리티를 이용하여 구동 중에만 한시적으로 일부 CUBRID SHARD 파라미터를 동적으로 변경할 수 있다. CUBRID SHARD 파라미터 설정 및 동적으로 변경 가능한 파라미터 등 기타 자세한 내용은 `CUBRID SHARD> 구성 및 설정 <#admin_admin_shard_conf_comp_htm>`_ 을 참조한다.
 
 **구문**
 
@@ -1229,8 +1229,8 @@ shard proxy에 접속하는 응용 클라이언트를 제한하려면 **cubrid_s
 	...
 
 *   <*shard_name*> : shard proxy 이름. **cubrid_broker.conf** 에서 지정한 shard proxy 이름 중 하나이다.
-*   <*db_name*> : 데이터베이스 이름. *로 지정하면 모든 데이터베이스를 허용한다.
-*   <*db_user*> : 데이터베이스 사용자 ID. *로 지정하면 모든 데이터베이스 사용자 ID를 허용한다.
+*   <*db_name*> : 데이터베이스 이름.\* 로 지정하면 모든 데이터베이스를 허용한다.
+*   <*db_user*> : 데이터베이스 사용자 ID.\* 로 지정하면 모든 데이터베이스 사용자 ID를 허용한다.
 *   <*ip_list_file*> : 접속 가능한 IP 목록을 저장한 파일의 이름. ip_list_file1, ip_list_file2, ... 와 같이 파일 여러 개를 쉼표(,)로 구분하여 지정할 수 있다.
 
 shard proxy별로 [%<*broker_name*>]과 <*db_name*>:<*db_user*>:<*ip_list_file*>을 추가로 지정할 수 있으며, 같은 <*db_name*>, 같은 <*db_user*>에 대해 별도의 라인으로 추가 지정할 수 있다.
@@ -1241,7 +1241,7 @@ ip_list_file의 작성 형식은 다음과 같다. ::
 
 	...
 
-*   <*ip_addr*> : 접근을 허용할 IP 명. 뒷자리를 *로 입력하면 뒷자리의 모든 IP를 허용한다.
+*   <*ip_addr*> : 접근을 허용할 IP 명. 뒷자리를 \* 로 입력하면 뒷자리의 모든 IP를 허용한다.
 
 **ACCESS_CONTROL** 값이 ON인 상태에서 **ACCESS_CONTROL_FILE** 이 지정되지 않으면 shard proxy는 localhost에서의 접속 요청만을 허용한다. shard proxy 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하면 shard proxy 는 localhost에서의 접속 요청만을 허용한다.
 
@@ -1258,7 +1258,7 @@ shard proxy 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패
 	BROKER_PORT             =30000
 	......
 
-다음은 **ACCESS_CONTROL_FILE** 의 한 예이다. 파일 내에서 사용하는 *는 모든 것을 나타내며, 데이터베이스 이름, 데이터베이스 사용자 ID, 접속을 허용하는 IP 리스트 파일 내의 IP에 대해 지정할 때 사용할 수 있다. ::
+다음은 **ACCESS_CONTROL_FILE** 의 한 예이다. 파일 내에서 사용하는 \* 는 모든 것을 나타내며, 데이터베이스 이름, 데이터베이스 사용자 ID, 접속을 허용하는 IP 리스트 파일 내의 IP에 대해 지정할 때 사용할 수 있다. ::
 
 	[%QUERY_EDITOR]
 	dbname1:dbuser1:READIP.txt

@@ -247,7 +247,7 @@ Java 저장 함수/프로시저에서 데이터베이스에 접근하기 위해�
 loadjava 유틸리티
 =================
 
-컴파일된 Java 파일이나 JAR(Java Archive) 파일을 CUBRID로 로드하기 위해서 **loadjava** 유틸리티를 사용한다. **loadjava** 유틸리티를 사용하여 Java *.class 파일이나 *.jar 파일을 로드하면 해당 파일이 해당 데이터베이스 경로로 이동한다. ::
+컴파일된 Java 파일이나 JAR(Java Archive) 파일을 CUBRID로 로드하기 위해서 **loadjava** 유틸리티를 사용한다. **loadjava** 유틸리티를 사용하여 Java \*.class 파일이나 \*.jar 파일을 로드하면 해당 파일이 해당 데이터베이스 경로로 이동한다. ::
 
 	loadjava <option> database-name java-class-file
 

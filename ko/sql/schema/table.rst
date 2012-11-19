@@ -403,8 +403,7 @@ CREATE TABLE
 
     *   **ON UPDATE** : 외래키가 참조하는 기본키 값을 갱신하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT** 이다.
     *   **ON DELETE** : 외래키가 참조하는 기본키 값을 삭제하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **CASCADE**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT** 이다.
-    *   **ON CACHE OBJECT** : 객체 지향 모델링에서는 직접 객체 참조(object reference)를 이용한 객체 탐색이 가능한데, 이것을 참조 무결성 외래키와 연계하여 지원하는 것이 **ON CACHE OBJECT** 옵션이다. **ON CACHE OBJECT** 옵션은 외래키 설정에 OID 참조 관계를 부여하고, 설정된 OID는 기본키 테이블에 대한 외래키의 캐시(CACHE) 포인트 개념으로 사용된다. 이렇게 설정된 OID는 시스템 내부적으로만 관리되고, 사용자에 의해 변경될 수 없다.
-    **ON CACHE OBJECT** 를 정의하기 위해서는 기본키를 가진 테이블을 타입으로 하는 칼럼이 이미 정의되어 있어야 하며, *cache_object_column_name* 에 명시되어야 한다. **ON CACHE OBJECT** 로 정의된 속성은 기존 객체 타입의 OID와 동일하게 OID를 사용할 수 있다.
+    *   **ON CACHE OBJECT** : 객체 지향 모델링에서는 직접 객체 참조(object reference)를 이용한 객체 탐색이 가능한데, 이것을 참조 무결성 외래키와 연계하여 지원하는 것이 **ON CACHE OBJECT** 옵션이다. **ON CACHE OBJECT** 옵션은 외래키 설정에 OID 참조 관계를 부여하고, 설정된 OID는 기본키 테이블에 대한 외래키의 캐시(CACHE) 포인트 개념으로 사용된다. 이렇게 설정된 OID는 시스템 내부적으로만 관리되고, 사용자에 의해 변경될 수 없다. **ON CACHE OBJECT** 를 정의하기 위해서는 기본키를 가진 테이블을 타입으로 하는 칼럼이 이미 정의되어 있어야 하며, *cache_object_column_name* 에 명시되어야 한다. **ON CACHE OBJECT** 로 정의된 속성은 기존 객체 타입의 OID와 동일하게 OID를 사용할 수 있다.
 
 *   *referential_ action* : 기본키 값이 삭제 또는 갱신될 때 이를 참조하는 외래키의 값을 유지할 것인지 또는 변경할 것인지 지정할 수 있다.
 

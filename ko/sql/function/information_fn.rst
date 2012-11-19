@@ -7,7 +7,7 @@
 
 	**CURRENT_USER** 와 **USER** 는 동일하며, 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
 
-	기능이 비슷한 :func:`SYSTEM_USER`는 사용자 이름을 호스트 이름과 함께 반환한다.
+	기능이 비슷한 :func:`SYSTEM_USER` 는 사용자 이름을 호스트 이름과 함께 반환한다.
 
 	:rtype: STRING
 	

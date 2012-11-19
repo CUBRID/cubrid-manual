@@ -17,7 +17,7 @@ The following steps describes migration scenario that can be applied while the e
 
 	Execute **cubrid service stop** to stop all service processes running on the existing CUBRID and then check whether all CUBRID-related processes have been successfully stopped. 
 
-	To verify whether all CUBRID-related processes have been successfully stopped, execute **ps -ef|grep cub_** in Linux. If there is no process starting with cub_, all CUBRID-related processes have been successfully stopped. In Windows, press the <Ctrl+Alt+Delete> key and select [Start Task Manager]. If there is no process starting with cub_ in the [Processes] tab, all CUBRID-related processes have been successfully stopped. In Linux, when the related processes remain even after the CUBRID service has been terminated, use **kill** command to forcibly terminate them, and use **ipcs -m** command to check and release the memory shard by CUBRID broker. To forcibly terminate related processes in Windows, go to the [Processes] tab of Task Manager, right-click the image name, and then select [End Process].
+	To verify whether all CUBRID-related processes have been successfully stopped, execute **ps -ef | grep cub_** in Linux. If there is no process starting with cub\_, all CUBRID-related processes have been successfully stopped. In Windows, press the <Ctrl+Alt+Delete> key and select [Start Task Manager]. If there is no process starting with cub\_ in the [Processes] tab, all CUBRID-related processes have been successfully stopped. In Linux, when the related processes remain even after the CUBRID service has been terminated, use **kill** command to forcibly terminate them, and use **ipcs -m** command to check and release the memory shard by CUBRID broker. To forcibly terminate related processes in Windows, go to the [Processes] tab of Task Manager, right-click the image name, and then select [End Process].
 
 #. Back up the existing database
 
@@ -198,7 +198,7 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 
 The following table shows options available with the **cubrid loaddb** utility (options are case sensitive).
 
-.. program:: unloaddb
+.. program:: loaddb
 
 .. option:: -u, --user
 

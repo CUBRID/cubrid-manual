@@ -305,7 +305,7 @@ CREATE TRIGGER
 
 *   **INSERT** 이벤트가 정의된 트리거의 실행 영역에 **INSERT** 를 사용할 때는 트리거가 무한 루프에 빠질 수 있으므로 주의해야 한다.
 
-*   **UPDATE** 이벤트가 정의된 트리거가 분할된 테이블에서 동작하는 경우, 정의된 분할이 깨지거나 의도하지 않은 오동작이 발생할 수 있으므로 주의해야 한다. 이를 방지하기 위해 CUBRID는 트리거가 동작중인 경우 분할 변경을 야기하는 **UPDATE** 가 실행되지 않도록 오류 처리한다. **UPDATE** 이벤트가 정의된 트리거의 실행 영역에 **UPDATE**를 사용할 때는 무한 루프에 빠질 수 있으므로 주의해야 한다.
+*   **UPDATE** 이벤트가 정의된 트리거가 분할된 테이블에서 동작하는 경우, 정의된 분할이 깨지거나 의도하지 않은 오동작이 발생할 수 있으므로 주의해야 한다. 이를 방지하기 위해 CUBRID는 트리거가 동작중인 경우 분할 변경을 야기하는 **UPDATE** 가 실행되지 않도록 오류 처리한다. **UPDATE** 이벤트가 정의된 트리거의 실행 영역에 **UPDATE** 를 사용할 때는 무한 루프에 빠질 수 있으므로 주의해야 한다.
 
 ALTER TRIGGER
 =============
@@ -344,7 +344,7 @@ ALTER TRIGGER
 
 *   만약 테이블 트리거를 변경하려면, 해당 트리거의 소유자이거나, 해당 트리거가 있는 테이블에 대해 **ALTER** 권한이 부여되어 있어야 한다.
 
-*   사용자 트리거를 변경하기 위해서는 반드시 해당 트리거의 소유자여야 한다. *trigger_option* 에 대한 자세한 내용은 `CREATE TRIGGER (구문) #syntax_syntax_trigger_create_syn_1932>`_ 을 참조한다. **PRIORITY** 옵션과 같이 기술하는 key는 반드시 음이 아닌 부동 소수점 값(non-negative floating point value)이어야 한다.
+*   사용자 트리거를 변경하기 위해서는 반드시 해당 트리거의 소유자여야 한다. *trigger_option* 에 대한 자세한 내용은 `CREATE TRIGGER #syntax_syntax_trigger_create_syn_1932>`_ 을 참조한다. **PRIORITY** 옵션과 같이 기술하는 key는 반드시 음이 아닌 부동 소수점 값(non-negative floating point value)이어야 한다.
 
 DROP TRIGGER
 ============

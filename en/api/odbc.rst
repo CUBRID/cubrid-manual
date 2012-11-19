@@ -153,7 +153,7 @@ CUBRID ODBC driver is designed for relational DBMS so it does not support all ch
 
 **Using OIDs**
 
-Because CUBRID ODBC driver regards an OID as a string (char(32)), you can use **INSERT**, **UPDATE**, and **DELETE**statements containing OIDs as follows. The OID string should be used with single quotes (''). In the example below, the domain of the member attribute is treated as an object (OID).
+Because CUBRID ODBC driver regards an OID as a string (char(32)), you can use **INSERT**, **UPDATE**, and **DELETE** statements containing OIDs as follows. The OID string should be used with single quotes (''). In the example below, the domain of the member attribute is treated as an object (OID).
 
 .. code-block:: sql
 

@@ -180,10 +180,8 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
 
 트랜잭션 격리 수준 설정을 통해 트랜잭션 간 간섭을 허용할 수 있는 읽기 연산의 종류는 다음과 같다.
 
-*   **더티 읽기**(dirty read): 트랜잭션 T1가 데이터 D를 D’로 갱신한 후 커밋을 수행하기 전에 트랜잭션 T2가 D’를 읽을 수 있다.
-
+*   **더티 읽기** (dirty read): 트랜잭션 T1가 데이터 D를 D' 로 갱신한 후 커밋을 수행하기 전에 트랜잭션 T2가 D' 를 읽을 수 있다.
 *   **반복할 수 없는 읽기** (non-repeatable read, unrepeatable read): 트랜잭션 T1이 데이터를 여러 번 조회하는 중에 다른 트랜잭션 T2가 데이터를 수정하는 경우, 트랜잭션 T1은 다른 값을 읽을 수 있다.
-
 *   **유령 읽기** (phantom read): 트랜잭션 T1에서 데이터를 여러 번 조회하는 중에 다른 트랜잭션 T2가 새로운 레코드 E를 삽입한 경우, 트랜잭션 T1은 E를 읽을 수 있다.
 
 CUBRID에서 트랜잭션 격리 수준의 기본 설정은 `REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES <#syntax_syntax_tran_isolation_rep_4346>`_ (3)이다.

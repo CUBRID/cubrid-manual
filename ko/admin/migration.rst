@@ -90,7 +90,7 @@
 		..
 		table_n
 
-	**-i** 옵션이 **--input-class-only**와 결합되면, 입력 파일에 포함된 테이블에 관한 스키마 파일만 생성된다. ::
+	**-i** 옵션이 **--input-class-only** 와 결합되면, 입력 파일에 포함된 테이블에 관한 스키마 파일만 생성된다. ::
 
 		cubrid unloaddb --input-class-only -i table_list.txt demodb
 
@@ -201,7 +201,7 @@
 
 다음은 **cubrid loaddb** 에서 사용하는 [options]이다. 
 
-.. program:: unloaddb
+.. program:: loaddb
 
 .. option:: -u, --user
 

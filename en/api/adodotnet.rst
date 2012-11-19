@@ -164,7 +164,7 @@ or you can write as follows:
 *   The database connection in thread-based programming must be used independently each other.
 
 CUBRID Collections
------------------
+------------------
 
 Collections are specific CUBRID data type. If you are not familiar with them, you can read information in "CUBRID SQL Guide > Data Types > Collection Data Type." Because collections are not common to any database, the support for them is implemented in some specific CUBRID collection method.
 

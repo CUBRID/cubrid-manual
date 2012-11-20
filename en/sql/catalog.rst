@@ -101,7 +101,7 @@ Represents class information. An index for class_name is created.
 
 **Example**
 
-The following example shows how to retrieve all sub classes under the class owned by user '**PUBLIC**' (for the child class *female_event* in the result, see the example in `Adding a super class <#syntax_syntax_table_inherit_add__5365>`_).
+The following example shows how to retrieve all sub classes under the class owned by user '**PUBLIC**' (for the child class *female_event* in the result, see the example in :ref:`add-superclass`).
 
 .. code-block:: sql
 
@@ -117,6 +117,8 @@ The following example shows how to retrieve all sub classes under the class owne
 	All examples of system catalog classes have been written in the csql utility. In this example, **--no-auto-commit** (inactive mode of auto-commit) and **-u** (specifying user DBA) options are used. ::
 	
 		% csql --no-auto-commit -u dba demodb
+
+.. _db-attribute:
 
 _db_attribute
 -------------
@@ -260,8 +262,7 @@ Represents domain information. An index for object_of is created.
 |                    |                        |                                                                                                         |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 | data_type          | INTEGER                | Data type of the domain (a value in the "Value" column of the "Data Types Supported by CUBRID" table in |
-|                    |                        | `_db_attribute <#syntax_syntax_catalog_class_dbat_4222>`_                                               |
-|                    |                        | )                                                                                                       |
+|                    |                        | :ref:`db-attribute`)                                                                                    |
 |                    |                        |                                                                                                         |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 | prec               | INTEGER                | Precision of the data type. 0 is used if the precision is not specified.                                |
@@ -276,8 +277,8 @@ Represents domain information. An index for object_of is created.
 |                    |                        |                                                                                                         |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 | code_set           | INTEGER                | Character set (value of table "character sets supported by CUBRID" in                                   |
-|                    |                        | `_db_attribute <#syntax_syntax_catalog_class_dbat_4222>`_                                               |
-|                    |                        | ) if it is character data type. 0 otherwise.                                                            |
+|                    |                        | :ref:`db-attribute`)                                                                                    |
+|                    |                        | if it is character data type. 0 otherwise.                                                              |
 |                    |                        |                                                                                                         |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 | set_domains        | SEQUENCE OF _db_domain | Domain information about the data type of collection element if it is collection data type.             |
@@ -377,9 +378,7 @@ Represents method argument information. An index for meth_sig_of is created.
 |                    |                        |                                                                                                                                   |
 +--------------------+------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
 | data_type          | INTEGER                | Data type of the argument (a value in the "Value" column of the "Data Types Supported by CUBRID" in                               |
-|                    |                        | `_db_attribute <#syntax_syntax_catalog_class_dbat_4222>`_                                                                         |
-|                    |                        | )                                                                                                                                 |
-|                    |                        |                                                                                                                                   |
+|                    |                        | :ref:`db-attribute`)                                                                                                              |
 +--------------------+------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
 | index_of           | INTEGER                | Order of the argument listed in the function definition. Begins with 0 if it is a return value, and 1 if it is an input argument. |
 |                    |                        |                                                                                                                                   |
@@ -609,7 +608,7 @@ The following example shows how to retrieve authorization information defined in
 _db_data_type
 -------------
 
-Represents the data type supported by CUBRID (see the "Data Types Supported by CUBRID" table in `_db_attribute <#syntax_syntax_catalog_class_dbat_4222>`_).
+Represents the data type supported by CUBRID (see the "Data Types Supported by CUBRID" table in :ref:`db-attribute`).
 
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------+
 | **Attribute Name** | **Data Type** | **Description**                                                                                        |
@@ -1147,7 +1146,7 @@ Represents the names of super classes (if any) of the class for which the curren
 								where u.name = CURRENT_USER ) AND
 										au.auth_type = 'SELECT'));
 
-The following example shows how to retrieve super classes of the *female_event* class (see `ADD SUPERCLASS Clause <#syntax_syntax_table_inherit_add__5365>`_).
+The following example shows how to retrieve super classes of the *female_event* class (see :ref:`add-superclass`).
 
 .. code-block:: sql
 
@@ -1250,8 +1249,7 @@ Represents the attribute information of a class for which the current user has a
 |                    |               |                                                                                                                                                                           |
 +--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | data_type          | VARCHAR(9)    | Data type of the attribute (one in the "Meaning" column of the "Data Types Supported by CUBRID" table in                                                                  |
-|                    |               | `_db_attribute <#syntax_syntax_catalog_class_dbat_4222>`_                                                                                                                 |
-|                    |               | )                                                                                                                                                                         |
+|                    |               | :ref:`db-attribute`)                                                                                                                                                      |
 |                    |               |                                                                                                                                                                           |
 +--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | prec               | INTEGER       | Precision of the data type. 0 is used if the precision is not specified.                                                                                                  |
@@ -1261,7 +1259,7 @@ Represents the attribute information of a class for which the current user has a
 |                    |               |                                                                                                                                                                           |
 +--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | code_set           | INTEGER       | Character set (value of table "character sets supported by CUBRID" in                                                                                                     |
-|                    |               | `_db_attribute <#syntax_syntax_catalog_class_dbat_4222>`_                                                                                                                 |
+|                    |               | :ref:`db-attribute`                                                                                                                                                       |
 |                    |               | ) if it is string type. 0 otherwise.                                                                                                                                      |
 |                    |               |                                                                                                                                                                           |
 +--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1443,7 +1441,7 @@ If the set_attr attribute of class D is of a SET (A, B, C) type, the following t
 |               |                |               |               |          |           |              |                       |
 +---------------+----------------+---------------+---------------+----------+-----------+--------------+-----------------------+
 
-The following example shows how to retrieve collection type attributes and data types of the *city* class (the *city* table defined in `Containment Operators <#syntax_syntax_operator_contain_c_5562>`_ is created).
+The following example shows how to retrieve collection type attributes and data types of the *city* class (the *city* table defined in :doc:`/sql/function/containment_op` is created).
 
 .. code-block:: sql
 
@@ -2089,7 +2087,7 @@ Represents information of partitioned classes for which the current user has acc
 			 )
 		  )
 
-The following example shows how to retrieve the partition information currently configured for the participant2 class (see examples in `Defining Range Partitions <#syntax_syntax_partition_range_de_4841>`_).
+The following example shows how to retrieve the partition information currently configured for the participant2 class (see examples in :ref:`defining-range-partitions`).
 
 .. code-block:: sql
 

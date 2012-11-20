@@ -228,7 +228,7 @@ The **SHOW EXEC STATISTICS** statement outputs statistics information of executi
 
 *   The **SHOW EXEC STATISTICS ALL** statement outputs all items of statistics information.
 
-For details, see `Outputting Statistics Information of Server <#admin_admin_db_statdump_htm>`_.
+For details, see :ref:`statdump`.
 
 ::
 

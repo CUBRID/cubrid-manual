@@ -84,9 +84,9 @@ SQL hints are specified by using plus signs and comments. CUBRID interprets this
     *   **USE_MERGE** : Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
     *   **ORDERED** : Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
     *   **USE_IDX** : Related to a index, the query optimizer creates a index join execution plan corresponding to a specified table with this hint.
-    *   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see `Index Scan in Descending Order <#syntax_syntax_retreive_index_des_7514>`_.
+    *   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
     *   **NO_DESC_IDX** : This is a hint not to use the descending index.
-    *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see `Covering Index <#syntax_syntax_retreive_index_cov_7428>`_.
+    *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
     *   **NO_STATS** : Related to statistics information, the query optimizer does not update statistics information. Query performance for the corresponding queries can be improved; however, query plan is not optimized because the information is not updated.
     *   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
 
@@ -123,7 +123,7 @@ Viewing Query Plan
 
 To view a query plan for a CUBRID SQL query, change the value of the optimization level by using the **SET OPTIMIZATION** statement. You can get the current optimization level value by using the **GET OPTIMIZATION** statement. 
 
-The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referencing the optimization level value set by the user. The query plan is displayed as standard output; the following explanations are based on the assumption that the plan is used in a terminal-based program such as the CSQL Interpreter. In the CSQL query editor, you can view execution plan by executing the **;plan** command. See `Session Commands <#csql_csql_sessioncommand_htm>`_. For information on how to view a query plan, see the CUBRID Manager. ::
+The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referencing the optimization level value set by the user. The query plan is displayed as standard output; the following explanations are based on the assumption that the plan is used in a terminal-based program such as the CSQL Interpreter. In the CSQL query editor, you can view execution plan by executing the **;plan** command. See :ref:`csql-session-commands`. For information on how to view a query plan, see the CUBRID Manager. ::
 
 	SET OPTIMIZATION LEVEL opt-level [;]
 	GET OPTIMIZATION LEVEL [ { TO | INTO } variable ] [;]
@@ -543,6 +543,8 @@ Functions with the function-based indexes are as follows:
 | INET_ATON       | INET_NTOA       |                |
 +-----------------+-----------------+----------------+
 
+.. _covering-index:
+
 Covering Index
 --------------
 
@@ -742,6 +744,8 @@ The following example shows that *i* column exists, **ORDER BY** is executed by 
 				3            5            4
 				1            5            5
 				2            6            6
+
+.. _index-descending-scan:
 
 Index Scan in Descending Order
 ------------------------------

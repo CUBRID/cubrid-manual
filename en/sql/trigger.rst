@@ -2,6 +2,8 @@
 TRIGGER
 *******
 
+.. _create-trigger:
+
 CREATE TRIGGER
 ==============
 
@@ -76,16 +78,16 @@ A trigger is created by defining a trigger target, condition and action to be pe
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: Defines the state of the trigger (if not defined, the default value is **ACTIVE**).
 
     *   If **ACTIVE** state is specified, the trigger is executed every time the corresponding event occurs.
-    *   If **INACTIVE** state is specified, the trigger is not executed even when the corresponding event occurs. The state of the trigger can be modified. For details, see `Altering TRIGGER Definition <#syntax_syntax_trigger_mod_alter__1469>`_ section.
+    *   If **INACTIVE** state is specified, the trigger is not executed even when the corresponding event occurs. The state of the trigger can be modified. For details, see :ref:`alter-trigger` section.
 	
-*   [ **PRIORITY** *key* ]: Specifies a trigger priority if multiple triggers are called for an event. *key* must be a floating point value that is not negative. If the priority is not defined, the lowest priority 0 is assigned. Triggers having the same priority are executed in a random order. The priority of triggers can be modified. For details, see `Altering TRIGGER Definition <#syntax_syntax_trigger_mod_alter__1469>`_ section.
+*   [ **PRIORITY** *key* ]: Specifies a trigger priority if multiple triggers are called for an event. *key* must be a floating point value that is not negative. If the priority is not defined, the lowest priority 0 is assigned. Triggers having the same priority are executed in a random order. The priority of triggers can be modified. For details, see :ref:`alter-trigger` section.
 
-*   *event_time* : Specifies the point of time when the conditions and actions are executed. **BEFORE**, **AFTER** or **DEFERRED** can be specified. For details, see the `Event Time <#syntax_syntax_trigger_create_eve_3036>`_ section.
-*   *event_type* : Trigger types are divided into a user trigger and a table trigger. For details, see the `TRIGGER Event Type <#syntax_syntax_trigger_create_ety_4202>`_ section.
-*   *event_target* : An event target is used to specify the target for the trigger to be called. For details, see the `TRIGGER Event Target <#syntax_syntax_trigger_create_tar_1849>`_ section.
+*   *event_time* : Specifies the point of time when the conditions and actions are executed. **BEFORE**, **AFTER** or **DEFERRED** can be specified. For details, see the :ref:`trigger-event-time` section.
+*   *event_type* : Trigger types are divided into a user trigger and a table trigger. For details, see the :ref:`trigger-event-type` section.
+*   *event_target* : An event target is used to specify the target for the trigger to be called. For details, see the :ref:`trigger-event-target` section.
 
-*   *condition* : Specifies the trigger condition. For details, see the `TRIGGER Condition <#syntax_syntax_trigger_create_con_8153>`_ section.
-*   *action* : Specifies the trigger action. For details, see the `TRIGGER Action <#syntax_syntax_trigger_create_act_4789>`_ section.
+*   *condition* : Specifies the trigger condition. For details, see the :ref:`trigger-condition` section.
+*   *action* : Specifies the trigger action. For details, see the :ref:`trigger-action` section.
 
 The following example shows how to create a trigger that rejects the update if the number of medals won is smaller than 0 when an instance of the *participant* table is updated.
 As shown below, the update is rejected if you try to change the number of gold (*gold*) medals that Korea won in the 2004 Olympic Games to a negative number.
@@ -101,6 +103,8 @@ As shown below, the update is rejected if you try to change the number of gold (
 	AND host_year = 2004;
 	 
 	ERROR: The operation has been rejected by trigger "medal_trigger".
+
+.. _trigger-event-time:
 
 Event Time
 ----------
@@ -125,6 +129,8 @@ Trigger Type
 *   A trigger that has a table as the event target is called a table trigger (class trigger).
 *   A table trigger can be seen by all users who have the **SELECT** authorization on a target table.
 *   Event types that define a table trigger are instance and statement events.
+
+.. _trigger-event-type:
 
 TRIGGER Event Type
 ------------------
@@ -169,6 +175,8 @@ The following example shows how to use a statement event. If you define a statem
 *   You must specify the event target when you define an instance or statement event as the event type.
 *   **COMMIT** and **ROLLBACK** cannot have an event target.
 
+.. _trigger-event-target:
+
 TRIGGER Event Target
 --------------------
 
@@ -201,6 +209,8 @@ A database event calling triggers is identified by the trigger event type and ev
 +----------------+------------------+----------------------------------------------------------------------+
 | **ROLLBACK**   | None             | Trigger is called when database transaction is rolled back.          |
 +----------------+------------------+----------------------------------------------------------------------+
+
+.. _trigger-condition:
 
 TRIGGER Condition
 -----------------
@@ -266,6 +276,8 @@ As shown in the table below, the use of correlation names is further restricted 
 |                      | Once the trigger is completed, the **old** values get lost.                                                                                                     |
 +----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+.. _trigger-action:
+
 TRIGGER Action
 --------------
 
@@ -295,6 +307,8 @@ The following example shows how to define an action when a trigger is created. T
 
 *   Trigger may fall into an infinite loop when you use **INSERT** in an action of a trigger where an **INSERT** event is defined.
 *   If a trigger where an **UPDATE** event is defined runs on a partitioned table, you must be careful because the defined partition can be broken or unintended malfunction may occur. To prevent such situation, CUBRID outputs an error so that the **UPDATE** causing changes to the running partition is not executed. Trigger may fall into an infinite loop when you use **UPDATE** in an action of a trigger where an **UPDATE** event is defined.
+
+.. _alter-trigger:
 
 ALTER TRIGGER
 =============
@@ -330,7 +344,7 @@ The following example shows how to create the medal_trig trigger and then change
 
 *   Only one *trigger_option* can be specified in a single **ALTER TRIGGER** statement.
 *   To change a table trigger, you must be the trigger owner or granted the **ALTER** authorization on the table where the trigger belongs.
-*   A user trigger can only be changed by its owner. For details on *trigger_option*, see the `CREATE TRIGGER (Syntax) <#syntax_syntax_trigger_create_syn_1932>`_ section. The key specified together with the **PRIORITY** option must be a non-negative floating point value.
+*   A user trigger can only be changed by its owner. For details on *trigger_option*, see the :ref:`create-trigger` section. The key specified together with the **PRIORITY** option must be a non-negative floating point value.
 
 DROP TRIGGER
 ============

@@ -595,6 +595,8 @@ The following example shows how to configure the parameter so that call stacks w
 
 **error_log_size** is a parameter used to configure the maximum number of lines per an error log file. The default value is **8,000,000**. If it reaches up the specified number, the <*database_name*>_<*date*>_<*time*>.**err**.**bak** file is created. 
 
+.. _lock-parameters:
+
 Concurrency/Lock-Related Parameters
 -----------------------------------
 

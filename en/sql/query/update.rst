@@ -2,9 +2,9 @@
 UPDATE
 ******
 
-You can update the column value of a record stored in the target table to a new one by using the **UPDATE** statement. Specify the name of the column to update and a new value in the **SET** clause, and specify the condition to be used to extract the record to be updated in the `WHERE Clause <#syntax_syntax_retreive_where_htm>`_. You can one or more tables only with one **UPDATE** statement.
+You can update the column value of a record stored in the target table to a new one by using the **UPDATE** statement. Specify the name of the column to update and a new value in the **SET** clause, and specify the condition to be used to extract the record to be updated in the :ref:`where-clause`. You can one or more tables only with one **UPDATE** statement.
 
-In case of only one table is to be updated, you can specify `ORDER BY Clause <#syntax_syntax_retreive_order_htm>`_ or `LIMIT Clause <#syntax_syntax_retreive_limit_htm>`_. You can also limit the number of records to be updated in the `LIMIT Clause <#syntax_syntax_retreive_limit_htm>`_. You can use the update with the `ORDER BY Clause <#syntax_syntax_retreive_order_htm>`_ if you want to maintain the execution order or lock order of triggers. ::
+In case of only one table is to be updated, you can specify :ref:`order-by-clause` or :ref:`limit-clause`. You can also limit the number of records to be updated in the :ref:`limit-clause`. You can use the update with the :ref:`order-by-clause` if you want to maintain the execution order or lock order of triggers. ::
 
 	<UPDATE single table>
 	UPDATE table_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT}...]
@@ -19,9 +19,9 @@ In case of only one table is to be updated, you can specify `ORDER BY Clause <#
 *   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
 *   *column_name*: Specifies the column name to be updated. Columns for one or more tables can be specified.
 *   *expr* | **DEFAULT**: Specifies a new value for the column and expression or **DEFAULT** keyword can be specified as a value. The **SELECT** statement returning result record also can be specified.
-*   *search_condition*: Update only data that meets the *search_condition* if conditions are specified in the `WHERE Clause <#syntax_syntax_retreive_where_htm>`_.
+*   *search_condition*: Update only data that meets the *search_condition* if conditions are specified in the :ref:`where-clause`.
 *   *col_name | expr*: Specifies base column to be updated.
-*   *row_count*: Specifies the number of records to be updated after the `LIMIT Clause <#syntax_syntax_retreive_limit_htm>`_. An integer greater than 0 can be specified.
+*   *row_count*: Specifies the number of records to be updated after the :ref:`limit-clause`. An integer greater than 0 can be specified.
 
 .. note:: In 9.0 or lower versions, only one table can be entered in <*table_specifications*>.
 

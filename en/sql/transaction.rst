@@ -17,7 +17,7 @@ A database transaction groups CUBRID queries into a unit of consistency (for ens
 
 CUBRID allows multiple users to access the database simultaneously and manages accesses and updates to prevent inconsistency of the database. For example, if data is updated by one user, the changes made by this transaction are not seen to other users or the database until the updates are committed. This principle is important because the transaction can be rolled back without being committed.
 
-You can delay permanent updates to the database until you are confident of the transaction result. Also, you can remove (**ROLLBACK**) all updates in the database if an unsatisfactory result or failure occurs in the application or computer system during the transaction. The end of the transaction is determined by the **COMMIT WORK** or **ROLLBACK WORK** statement. The **COMMIT WORK** statement makes all updates permanent while the **ROLLBACK WORK** statement cancels all updates entered in the transaction. For details, see the `Transaction Commit <#syntax_syntax_tran_tran_commit_h_788>`_ and `Transaction Rollback <#syntax_syntax_tran_tran_rollback_7454>`_ sections.
+You can delay permanent updates to the database until you are confident of the transaction result. Also, you can remove (**ROLLBACK**) all updates in the database if an unsatisfactory result or failure occurs in the application or computer system during the transaction. The end of the transaction is determined by the **COMMIT WORK** or **ROLLBACK WORK** statement. The **COMMIT WORK** statement makes all updates permanent while the **ROLLBACK WORK** statement cancels all updates entered in the transaction.
 
 Transaction Commit
 ------------------
@@ -70,7 +70,7 @@ An auto-commit mode is a mode that commits or rolls back all SQL statements. The
 
 In CCI, PHP, ODBC and OLE DB interfaces, you can configure auto-commit mode by using **CCI_DEFAULT_AUTOCOMMIT** upon startup of an application. If configuration on broker parameter is omitted, the default value is set to **ON**. To change auto-commit mode, use the following functions by interface: **cci_set_autocommit**() for CCI inferface and **cubrid_set_autocommit** () for PHP interface.
 
-For session command (**;AUtocommit**) which enables auto-commit configuration in CSQL Interpreter, see `Session Commands <#csql_csql_sessioncommand_htm>`_.
+For session command (**;AUtocommit**) which enables auto-commit configuration in CSQL Interpreter, see :ref:`csql-session-commands`.
 
 Transaction Rollback
 --------------------
@@ -165,18 +165,18 @@ The following example shows how to roll back to SP1.
 	SELECT * FROM athlete2;
 	COMMIT WORK;
 
+.. _database-concurrency:
+
 Database Concurrency
 ====================
 
 If there are multiple users with read and write authorization to a database, possibility exists that more than one user will access the database simultaneously. Controlling access and update in multi-user environment is essential to protect database integrity and ensure that users and transactions should have accurate and consistent data. Without appropriate control, data could be updated incorrectly in the wrong order.
 
-Like most commercial database systems, CUBRID adopts serializability, an element that is essential to maintaining data concurrency within the database. Serializability ensures no interference between transactions when multiple transactions are executed at once. It is guaranteed more with the higher isolation level. This principle is based on the assumption that database consistency is guaranteed as long as transaction is executed automatically. This will be covered in the
-`Lock Protocol <#syntax_syntax_tran_lock_intro_ht_6018>`_
-section in detail.
+Like most commercial database systems, CUBRID adopts serializability, an element that is essential to maintaining data concurrency within the database. Serializability ensures no interference between transactions when multiple transactions are executed at once. It is guaranteed more with the higher isolation level. This principle is based on the assumption that database consistency is guaranteed as long as transaction is executed automatically.
 
 The transaction must ensure database concurrency, and each transaction must guarantee appropriate results. When multiple transactions are being executed at once, an event in transaction T1 should not affect an event in transaction T2. This means isolation. Transaction isolation level is the degree to which a transaction is separated from all other concurrent transactions. The higher isolation level means the lower interference from other transactions. The lower isolation level means the higher the concurrency. A database determines whether which lock is applied to tables and records based on these isolation levels. Therefore, can control the level of consistency and concurrency specific to a service by setting appropriate isolation level.
 
-You can set an isolation level by using the `SET TRANSACTION ISOLATION LEVEL <#syntax_syntax_tran_isolation_set_4219>`_ statement or system parameters provided by CUBRID. For details, see `Concurrency/Lock-Related Parameters <#pm_pm_db_classify_lock_htm>`_.
+You can set an isolation level by using the :ref:`set-transaction-isolation-level` statement or system parameters provided by CUBRID. For details, see :ref:`lock-parameters`.
 
 The read operations that allow interference between transactions with isolation levels are as follows:
 
@@ -184,26 +184,26 @@ The read operations that allow interference between transactions with isolation 
 *   **Non-repeatable read** : A transaction T1 can read other value, if a transaction T2 updates data while data is retrieved in the transaction T2 multiple times.
 *   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E while data is retrieved in the transaction T1 multiple times.
 
-The default value of CUBRID isolation level is `REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES <#syntax_syntax_tran_isolation_rep_4346>`_ (3).
+The default value of CUBRID isolation level is :ref:`isolation-level-3`.
 
 **Isolation Levels Provided by CUBRID**
 
-+-----------------------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| CUBRID Isolation Level(isolation_level)                   | Other DBMS Isolation Level  | DIRTY  | UNREPEATABLE  | PHANTOM  | Schema Changes of the  |
-|                                                           | (isolation_level)           | READ   | READ          | READ     | Table Being Retrieved  |
-+===========================================================+=============================+========+===============+==========+========================+
-| SERIALIZABLE (6)                                          | SERIALIZABLE (4)            | N      | N             | N        | N                      |
-+-----------------------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| REPEATABLE READ CLASS with REPEATABLE READ INSTANCES (5)  | REPEATABLE READ (3)         | N      | N             | Y        | N                      |
-+-----------------------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| REPEATABLE READ CLASS with READ COMMITTED INSTANCES (4)   | READ COMMITTED (2)          | N      | Y             | Y        | N                      |
-+-----------------------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES (3) | READ UNCOMMITTED (1)        | Y      | Y             | Y        | N                      |
-+-----------------------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| READ COMMITTED CLASS with READ COMMITTED INSTANCES (2)    |                             | N      | Y             | Y        | Y                      |
-+-----------------------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES (1)  |                             | Y      | Y             | Y        | Y                      |
-+-----------------------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
++------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
+| CUBRID Isolation Level(isolation_level)  | Other DBMS Isolation Level  | DIRTY  | UNREPEATABLE  | PHANTOM  | Schema Changes of the  |
+|                                          | (isolation_level)           | READ   | READ          | READ     | Table Being Retrieved  |
++==========================================+=============================+========+===============+==========+========================+
+| :ref:`isolation-level-6` (6)             | SERIALIZABLE (4)            | N      | N             | N        | N                      |
++------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-5` (5)             | REPEATABLE READ (3)         | N      | N             | Y        | N                      |
++------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-4` (4)             | READ COMMITTED (2)          | N      | Y             | Y        | N                      |
++------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-3` (3)             | READ UNCOMMITTED (1)        | Y      | Y             | Y        | N                      |
++------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-2` (2)             |                             | N      | Y             | Y        | Y                      |
++------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-1` (1)             |                             | Y      | Y             | Y        | Y                      |
++------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
 
 Lock Protocol
 =============
@@ -223,10 +223,12 @@ If the locking granularities overlap, effects of a finer granularity are propaga
 
 A mechanism called lock escalation is used to limit the number of locks being managed. If a transaction has more than a certain number of locks (a number which can be changed by the **lock_escalation** system parameter), the system begins to require locks at the next higher level of granularity. This escalates the locks to a coarser level of granularity. CUBRID performs lock escalation when no transactions have a higher level of granularity in order to avoid a deadlock caused by lock conversion.
 
+.. _lock-mode:
+
 Lock Mode Types And Compatibility
 ---------------------------------
 
-CUBRID determines the lock mode depending on the type of operation to be performed by the transaction, and determines whether or not to share the lock depending on the mode of the lock preoccupied by another transaction. Such decisions concerning the lock are made by the system automatically. Manual assignment by the user is not allowed. To check the lock information of CUBRID, use the **cubrid lockdb** *db_name* command. For details, see `Checking Lock Status <#admin_admin_db_lock_htm>`_.
+CUBRID determines the lock mode depending on the type of operation to be performed by the transaction, and determines whether or not to share the lock depending on the mode of the lock preoccupied by another transaction. Such decisions concerning the lock are made by the system automatically. Manual assignment by the user is not allowed. To check the lock information of CUBRID, use the **cubrid lockdb** *db_name* command. For details, see :ref:`lockdb`.
 
 *   **Shared lock (shared lock, S_LOCK)**
     : This lock is obtained before the read operation is executed on the object. It can be obtained by multiple transactions for the same object.
@@ -599,18 +601,20 @@ The following message is displayed if lock timeout occurs in a transaction that 
 	
 *   Your transaction(index 2 ...): This means that the index of the transaction that was rolled back due to timeout while waiting for the lock is 2. The transaction index is a number that is sequentially assigned when the client connects to the database server. You can also check this number by executing the **cubrid lockdb** utility.
 
-*   (... user1@host1|9808): *cub_user* is the login ID of the client and the part after @ is the name of the host where the client was running. The part after| is the process ID (PID) of the client.
+*   (... user1\@host1|9808): *cub_user* is the login ID of the client and the part after @ is the name of the host where the client was running. The part after| is the process ID (PID) of the client.
 
-*   IX_LOCK: This means the exclusive lock set on the object to perform data update. For details, see `Lock Mode Types And Compatibility <#syntax_syntax_tran_lock_determin_3105>`_.
+*   IX_LOCK: This means the exclusive lock set on the object to perform data update. For details, see :ref:`lock-mode`.
 *   user1@host1|csql(9807), user1@host1|csql(9805): Another transactions waiting for termination to lock **IX_LOCK**
 
 That is, the above lock error message can be interpreted as meaning that "Because another client is holding **X_LOCK** on a specific row in the *participant* table, transaction 3 which running on the host *cdbs006.cub* waited for the lock and was rolled back as the timeout has passed." 
 
-If you want to check the lock information of the transaction specified in the error message, you can do so by using the **cubrid lockdb** utility to search for the OID value (ex: 0|636|34) of a specific row where the **X_LOCK** is set currently to find the transaction ID currently holding the lock, the client program name and the process ID (PID). For details, see `Checking Lock Status <#admin_admin_db_lock_htm>`_. You can also check the transaction lock information in the CUBRID Manager.
+If you want to check the lock information of the transaction specified in the error message, you can do so by using the **cubrid lockdb** utility to search for the OID value (ex: 0|636|34) of a specific row where the **X_LOCK** is set currently to find the transaction ID currently holding the lock, the client program name and the process ID (PID). For details, see :ref:`lockdb`. You can also check the transaction lock information in the CUBRID Manager.
 
-You can organize the transactions by checking uncommitted queries through the SQL log after checking the transaction lock information in the manner described above. For information on checking the SQL log, see `Broker Log <#admin_admin_service_broker_log_h_7586>`_.
+You can organize the transactions by checking uncommitted queries through the SQL log after checking the transaction lock information in the manner described above. For information on checking the SQL log, see :ref:`broker-logs`.
 
-Also, you can forcefully stop problematic transactions by using the **cubrid killtran** utility. For details, see `Killing Transactions <#admin_admin_db_killtran_htm>`_.
+Also, you can forcefully stop problematic transactions by using the **cubrid killtran** utility. For details, see :ref:`killtran`.
+
+.. _transaction-isolation-level:
 
 Transaction Isolation Level
 ===========================
@@ -619,10 +623,12 @@ The transaction isolation level is determined based on how much interference occ
 
 .. note:: A transaction can be restored in all supported isolation levels because updates are not committed before the end of the transaction.
 
+.. _set-transaction-isolation-level:
+
 SET TRANSACTION ISOLATION LEVEL
 -------------------------------
 
-You can set the level of transaction isolation by using **isolation_level** and the **SET TRANSACTION** statement in the **$CUBRID/conf/cubrid.conf**. The level of **REPEATABLE READ CLASS** and **READ UNCOMMITTED INSTANCES** are set by default, which indicates the level 3 through level 1 to 6. For details, see `Database Concurrency <#syntax_syntax_tran_concurrency_h_1775>`_. ::
+You can set the level of transaction isolation by using **isolation_level** and the **SET TRANSACTION** statement in the **$CUBRID/conf/cubrid.conf**. The level of **REPEATABLE READ CLASS** and **READ UNCOMMITTED INSTANCES** are set by default, which indicates the level 3 through level 1 to 6. For details, see :ref:`database-concurrency`. ::
 
 	SET TRANSACTION ISOLATION LEVEL isolation_level_spec [ ; ]
 	isolation_level_spec:
@@ -654,7 +660,7 @@ You can set the level of transaction isolation by using **isolation_level** and 
 	-- or
 	SET TRANSACTION ISOLATION LEVEL READ COMMITTED CLASS,READ UNCOMMITTED INSTANCES;
 
-The following table shows the isolation levels from 1 to 6. It consists of table schema (row) and isolation level. For the unsupported isolation level, see `Unsupported Combination of Isolation Level <#syntax_syntax_tran_isolation_uns_3972>`_.
+The following table shows the isolation levels from 1 to 6. It consists of table schema (row) and isolation level. For the unsupported isolation level, see :ref:`unsupported-isolation-level`.
 
 **Levels of Isolation Supported by CUBRID**
 
@@ -695,6 +701,8 @@ You can assign the current isolation level to *variable* by using the **GET TRAN
 		   Result
 	=============
 	  READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES
+
+.. _isolation-level-6:
 
 SERIALIZABLE
 ------------
@@ -814,6 +822,8 @@ The following example shows that another transaction cannot access the table or 
 |                                                                         |   ===================================                                      |
 |                                                                         |     2004  'AUS'           NULL                                             |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------+
+
+.. _isolation-level-5:
 
 REPEATABLE READ CLASS with REPEATABLE READ INSTANCES
 ----------------------------------------------------
@@ -946,6 +956,8 @@ The following example shows that phantom read may occur because another transact
 |                                                                            |     2004  'AUS'           NULL                                              |
 +----------------------------------------------------------------------------+-----------------------------------------------------------------------------+
 
+.. _isolation-level-4:
+
 REPEATABLE READ CLASS with READ COMMITTED INSTANCES
 ---------------------------------------------------
 
@@ -1076,6 +1088,8 @@ The following example shows that a phantom or non-repeatable read may occur beca
 |                                                                         |     2000  'NED'           NULL                                                   |
 |                                                                         |     1994  'FRA'           NULL                                                   |
 +-------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+
+.. _isolation-level-3:
 
 REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES
 -----------------------------------------------------
@@ -1210,7 +1224,9 @@ The following example shows that another transaction can read dirty data uncommi
 
 .. note::
 
-	CUBRID flushes dirty data (or dirty records) in the client buffers to the database (server) such as the following situations. For details, see `How to Handle Dirty Record <#syntax_syntax_tran_isolation_han_5902>`_.
+	CUBRID flushes dirty data (or dirty records) in the client buffers to the database (server) such as the following situations. For details, see :ref:`dirty-record-flush`.
+
+.. _isolation-level-2:
 
 READ COMMITTED CLASS with READ COMMITTED INSTANCES
 --------------------------------------------------
@@ -1327,6 +1343,8 @@ The following example shows that phantom or non-repeatable read for the record a
 |                                                                                 |     2000  'NED'           NULL                                                    |
 |                                                                                 |     1994  'FRA'           NULL                                                    |
 +---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+
+.. _isolation-level-1:
 
 READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES
 ----------------------------------------------------
@@ -1456,6 +1474,8 @@ The following are the rules of this isolation level:
 
 .. note:: A transaction can be restored in all supported isolation levels because updates are not committed before the end of the transaction.
 
+.. _unsupported-isolation-level:
+
 Combination of Unsupported Isolation Level
 ------------------------------------------
 
@@ -1470,6 +1490,8 @@ Neither are isolation levels below supported because updating a row by a transac
 
 *   **READ UNCOMMITTED CLASS** with **READ COMMITTED INSTANCES**
 *   **READ UNCOMMITTED CLASS** with **READ UNCOMMITTED INSTANCES**
+
+.. _dirty-record-flush:
 
 How to Handle Dirty Record
 --------------------------
@@ -1510,7 +1532,7 @@ The user's intervention is somewhat needed to restart the database after media e
 
 .. note::
 
-	To minimize the possibility of losing database updates, it is recommended to create a snapshot and store it in the backup media before it is deleted from the disk. The DBA can backup and restore the database by using the **cubrid backupdb** and **cubrid restoredb** utilities. For details on these utilities, see `Database Backup <#admin_admin_br_backup_htm>`_.
+	To minimize the possibility of losing database updates, it is recommended to create a snapshot and store it in the backup media before it is deleted from the disk. The DBA can backup and restore the database by using the **cubrid backupdb** and **cubrid restoredb** utilities. For details on these utilities, see :ref:`db-backup`.
 
 Cursor Holdability
 ==================

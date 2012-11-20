@@ -142,9 +142,9 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
 
 *   *select_expressions* : One or more columns or expressions to query is specified. Use * to query all columns in the table. You can also specify an alias for a column or an expression to be queried by using the AS keyword. This keyword can be used in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of the column is given according to the order in which the column was specified. The starting value is 1.
 
-*   *table_specification* : At least one table name is specified after the **FROM** clause. Subqueries and derived tables can also be used in the **FROM** clause. For details on subquery derived tables, see `Subquery Derived Table <#syntax_syntax_retreive_from_htm__3386>`_.
+*   *table_specification* : At least one table name is specified after the **FROM** clause. Subqueries and derived tables can also be used in the **FROM** clause. For details on subquery derived tables, see :ref:`subquery-derived-table`.
 
-*   *lock_hint* : You can set **READ UNCOMMITTED** for the table isolation level. **READ UNCOMMITTED** is a level where dirty reads are allowed; see `Transaction Isolation Level <#syntax_syntax_tran_isolation_int_1007>`_ For details on the CUBRID transaction isolation level.
+*   *lock_hint* : You can set **READ UNCOMMITTED** for the table isolation level. **READ UNCOMMITTED** is a level where dirty reads are allowed; see :ref:`transaction-isolation-level` For details on the CUBRID transaction isolation level.
 
 .. code-block:: sql
 
@@ -171,6 +171,8 @@ Derived Table
 In the query statement, subqueries can be used in the table specification of the **FROM** clause. Such subqueries create derived tables where subquery results are treated as tables. A correlation specification must be used when a subquery that creates a derived table is used.
 
 Derived tables are also used to access the individual element of an attribute that has a set value. In this case, an element of the set value is created as an instance in the derived table.
+
+.. _subquery-derived-table:
 
 Subquery Derived Table
 ----------------------
@@ -213,6 +215,8 @@ The following example shows *nation_code*, *host_year* and *gold* records whose 
 	  'DEN'                       1996                 4
 	  'ESP'                       1992                13
 
+.. _where-clause:
+
 WHERE Clause
 ============
 
@@ -234,13 +238,13 @@ The **WHERE** clause specifies a condition that determines the data to be retrie
 
 *   *search_condition* : It is described in detail in the following sections.
 
-    *   `Basic Conditional Expression <#syntax_syntax_operator_where_bas_4679>`_
-    *   `BETWEEN Conditional Expression <#syntax_syntax_operator_where_bet_1685>`_
-    *   `EXISTS Conditional Expression <#syntax_syntax_operator_where_exi_7371>`_
-    *   `IN Conditional Expression <#syntax_syntax_operator_where_in__69>`_
-    *   `IS NULL Conditional Expression <#syntax_syntax_operator_where_isn_1426>`_
-    *   `LIKE Conditional Expression <#syntax_syntax_operator_where_lik_9691>`_
-    *   `ANY/SOME/ALL Conditional Expressions <#syntax_syntax_operator_where_any_5492>`_
+    *   :ref:`basic-cond-expr`
+    *   :ref:`between-expr`
+    *   :ref:`exists-expr`
+    *   :ref:`in-expr`
+    *   :ref:`is-null-expr`
+    *   :ref:`like-expr`
+    *   :ref:`any-some-all-expr`
 
 The logical operator **AND** or **OR** can be used for multiple conditions. If **AND** is specified, all conditions must be true. If **OR** is specified, only one needs to be true. If the keyword **NOT** is preceded by a condition, the meaning of the condition is reserved. The following table shows the order in which logical operators are evaluated.
 
@@ -256,6 +260,8 @@ The logical operator **AND** or **OR** can be used for multiple conditions. If *
 | 4            | **OR**       | One of the conditions in the logical expression must be true. |
 +--------------+--------------+---------------------------------------------------------------+
 
+.. _group-by-clause:
+
 GROUP BY ... HAVING Clause
 ==========================
 
@@ -263,7 +269,7 @@ The **GROUP BY** clause is used to group the result retrieved by the **SELECT** 
 
 You can also set a condition for group selection by including the **HAVING** clause after the **GROUP BY** clause. That is, only groups satisfying the condition specified by the **HAVING** clause are queried out of all groups that are grouped by the **GROUP BY** clause.
 
-By SQL standard, you cannot specify a column (hidden column) not defined in the **GROUP BY** clause to the SELECT column list. However, by using extended CUBRID grammars, you can specify the hidden column to the SELECT column list. If you do not use the extended CUBRID grammars, the **only_full_group_by** parameter should be set to **yes**. For details, see `Statement/Type-Related Parameters <#pm_pm_db_classify_type_htm>`_. ::
+By SQL standard, you cannot specify a column (hidden column) not defined in the **GROUP BY** clause to the SELECT column list. However, by using extended CUBRID grammars, you can specify the hidden column to the SELECT column list. If you do not use the extended CUBRID grammars, the **only_full_group_by** parameter should be set to **yes**. For details, see :ref:`stmt-type-parameters`. ::
 
 	SELECT ...
 	GROUP BY { col_name | expr | positoin } [ ASC | DESC ],...
@@ -345,6 +351,8 @@ By SQL standard, you cannot specify a column (hidden column) not defined in the 
 			  501  NULL                     1.900000000000000e+02
 			 NULL  NULL                     2.750000000000000e+02
 
+.. _order-by-clause:
+
 ORDER BY Clause
 ===============
 
@@ -403,6 +411,8 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
 			  201     3.250000000000000e+02
 			  301     3.000000000000000e+02
 			  501     1.750000000000000e+02
+
+.. _limit-clause:
 
 LIMIT Clause
 ============

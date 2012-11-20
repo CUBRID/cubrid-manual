@@ -849,6 +849,8 @@ NCHAR VARYING(n)
 	If you specify '큐브리드' as NCHAR VARYING(5) and then use CHAR_LENGTH() function in the EUC-KR encoding, 4 is stored.
 	If you specify '큐브리드' as HCHAR VARYING(5) in the utf-8 encoding, an error occurs (UTF-8 character set is not supported).
 
+.. _escape-characters:
+
 Escape Special Characters
 -------------------------
 

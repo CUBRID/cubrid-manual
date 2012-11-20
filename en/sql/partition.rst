@@ -14,6 +14,8 @@ Three types of partitioning methods are supported by CUBRID: range partitioning,
 
 The maximum number of partitions cannot exceed 1,024. Each partition of a table is created as its subtable. The subtables created by the partitioning process cannot be altered or deleted by users. The name of the subtable is stored in the system table in a '*class_name__p__partition_name*' format. Database users can check the partitioning information in the db_class and db_partition virtual tables. They can also check the information by using the ;sc <table name> command in the CUBRID Manager or the CSQL Interpreter.
 
+.. _partition-data-type:
+
 **Data Types Allowed in Partitioning Expressions**
 
 The data types of columns allowed as partitioning expressions are as follows:
@@ -50,6 +52,8 @@ The following shows operators and functions that can be used in partitioning exp
 
 Range Partitioning
 ==================
+
+.. _defining-range-partitions:
 
 Range Partitioning Definition
 -----------------------------
@@ -94,6 +98,8 @@ As shown below, the partition key value in a range partition is **NULL**, the da
 
 *   The maximum number of partitions possible for a given table is 1024.
 *   If the partition key value is **NULL**, the data is stored in the first partition (see Example 2).
+
+.. _range-partitioning-redefinition:
 
 Range Partitioning Redefinition
 -------------------------------
@@ -164,7 +170,7 @@ Currently, the partition before the 2008 Olympic Games is defined in the *partic
 
 *   When a range partition is added, only the partition by value greater than the existing partition value can be added. Therefore, as shown in the above example, if the maximum value is specified by **MAXVALUE**, no more partitions can be added (you can add partitions by changing the **MAXVALUE** value by redefining the partition).
 
-*   To add the partition by value smaller than the existing partition value, use the redefining partitions (see `Range Partitioning Redefinition <#syntax_syntax_partition_range_re_753>`_).
+*   To add the partition by value smaller than the existing partition value, use the redefining partitions (see :ref:`range-partitioning-redefinition`).
 
 Dropping Range Partitioning
 ---------------------------
@@ -270,7 +276,7 @@ You can define a list partition by using the **PARTITION BY LIST** statement. ::
 	PARTITION <partition_name> VALUES IN ( <partition_value_ list>, ...
 	);
 	
-*   *partition_expression* : Specifies a partition expression. The expression can be specified by the name of the column to be partitioned or by a function. For details on the data types and functions available, see `Data Types Available for Partition Expression <#syntax_syntax_partition_htm_data_3721>`_.
+*   *partition_expression* : Specifies a partition expression. The expression can be specified by the name of the column to be partitioned or by a function. For details on the data types and functions available, see :ref:`Data Types Available for Partition Expressions <partition-data-type>`.
 *   *partition_name* : Specifies the partition name.
 *   *partition_value_list* : Specifies the list of the partition by values.
 
@@ -531,7 +537,7 @@ To alter a regular table into a partitioned one, use the **ALTER TABLE** stateme
 	literal_
 
 *   *table_name* : Specifies the name of the table to be altered.
-*   *partition_expression* : Specifies a partition expression. The expression can be specified by the name of the column to be partitioned or by a function. For details on the data types and functions available, see `Data Types Available for Partition Expressions <#syntax_syntax_partition_htm_data_3721>`_.
+*   *partition_expression* : Specifies a partition expression. The expression can be specified by the name of the column to be partitioned or by a function. For details on the data types and functions available, see :ref:`Data Types Available for Partition Expressions <partition-data-type>`.
 *   *partition_name* : Specifies the name of the partition.
 *   *partition_value_option* : Specifies the value or the value list on which the partition is based.
 

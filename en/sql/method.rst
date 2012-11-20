@@ -16,12 +16,12 @@ The CSQL language supports the following two types of methods: class and instanc
 
 The method inheritance rules are similar to those of the attribute inheritance. The sub class inherits classes and instance methods from the super class. The sub class can follow the class or instance method definition from the super class.
 
-The rules for resolving method name conflicts are same as those for attribute name conflicts. For details about attribute/method inheritance conflicts, see `Overview <#syntax_syntax_table_conflict_int_5489>`_ in Class Conflict Resolution.
+The rules for resolving method name conflicts are same as those for attribute name conflicts. For details about attribute/method inheritance conflicts, see :ref:`class-conflict-resolution`.
 
 CALL Statement
 ==============
 
-The **CALL** statement is used to call a method defined in the database. Both class and instance methods can be called by the **CALL** statement. If you want to see example of using the CALL statement, see `User Authorization Management METHOD <#syntax_syntax_method_call_auth_h_3940>`_. ::
+The **CALL** statement is used to call a method defined in the database. Both class and instance methods can be called by the **CALL** statement. If you want to see example of using the CALL statement, see :ref:`authorization-method`. ::
 
 	CALL method_call [ ; ]
 

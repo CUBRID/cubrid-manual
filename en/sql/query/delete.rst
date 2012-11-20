@@ -2,10 +2,9 @@
 DELETE
 ******
 
-You can delete records in the table by using the **DELETE** statement. You can specify delete conditions by combining the statement with the `WHERE Clause <#syntax_syntax_retreive_where_htm>`_
-. You can delete multiple tables. You can delete one or more tables with one **DELETE** statement.
+You can delete records in the table by using the **DELETE** statement. You can specify delete conditions by combining the statement with the :ref:`where-clause`. You can delete multiple tables. You can delete one or more tables with one **DELETE** statement.
 
-If you want to delete one table, the `LIMIT Clause <#syntax_syntax_retreive_limit_htm>`_ can be specified. You can limit the number of records by specifying the `LIMIT Clause <#syntax_syntax_retreive_limit_htm>`_.  If the number of records satisfying the `WHERE Clause <#syntax_syntax_retreive_where_htm>`_ exceeds *row_count*, only the number of records specified in *row_count* will be deleted. ::
+If you want to delete one table, the :ref:`limit-clause` can be specified. You can limit the number of records by specifying the :ref:`limit-clause`.  If the number of records satisfying the :ref:`where-clause` exceeds *row_count*, only the number of records specified in *row_count* will be deleted. ::
 
 	<DELETE single table>
 	DELETE [FROM] table_name [ WHERE <search_condition> ] [LIMIT row_count]
@@ -18,8 +17,8 @@ If you want to delete one table, the `LIMIT Clause <#syntax_syntax_retreive_limi
 
 *   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
 *   *table_name* : Specifies the name of a table where the data to be deleted is contained. If the number of table is one, the **FROM** keyword can be omitted.
-*   *search_condition* : Deletes only data that meets *search_condition* by using `WHERE Clause <#syntax_syntax_retreive_where_htm>`_. If it is specified, all data in the specified tables will be deleted.
-*   *row_count* : Specifies the number of records to be deleted in the `LIMIT Clause <#syntax_syntax_retreive_limit_htm>`_. An integer greater than 0 can be specified.
+*   *search_condition* : Deletes only data that meets *search_condition* by using :ref:`where-clause`. If it is specified, all data in the specified tables will be deleted.
+*   *row_count* : Specifies the number of records to be deleted in the :ref:`limit-clause`. An integer greater than 0 can be specified.
 
 **Remark**
 

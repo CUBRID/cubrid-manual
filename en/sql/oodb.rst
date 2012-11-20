@@ -63,6 +63,8 @@ When a class is created as a sub class, the class inherits all attributes and me
 
 For the *attr_mthd_name* in the **INHERIT** clause, specify the name of the attribute or method of the super class to inherit. With the **ALIAS** clause, you can resolve a name conflict that occurs in multiple inheritance statements by inheriting a new name.
 
+.. _add-superclass:
+
 ADD SUPERCLASS Clause
 =====================
 
@@ -80,7 +82,7 @@ To extend class inheritance, add a super class to a class. A relationship betwee
 For the first *class_name*, specify the name of the class where a super class is to be added. Attributes and methods of the super class can be inherited by using the syntax above.
 
 Name conflicts can occur when adding a new super class. If a name conflict cannot be resolved by the database system, attributes or methods to inherit from the super class can be specified by using the **INHERIT** clause. You can use aliases to inherit all attributes or methods that cause the conflict. For details on super class name conflicts, see the
-`Resolving Class Conflict <#syntax_syntax_table_conflict_int_5489>`_ section.
+:ref:`class-conflict-resolution` section.
 
 The following example shows how to create the *female_event* class by inheriting the *event* class included in *demodb*.
 
@@ -103,7 +105,7 @@ Deleting a super class from a class means removing the relationship between two 
 	resolution:
 	{ column_name | method_name } OF superclass_name [ AS alias ]
 
-For the first *class_name*, specify the name of the class to be modified. For the second *class_name*, specify the name of the super class to be deleted. If a name conflict occurs after deleting a super class, see the `Resolving Class Conflict <#syntax_syntax_table_conflict_int_5489>`_ section for the resolution.
+For the first *class_name*, specify the name of the class to be modified. For the second *class_name*, specify the name of the super class to be deleted. If a name conflict occurs after deleting a super class, see the :ref:`class-conflict-resolution` section for the resolution.
 
 The following example shows how to inherit the *female_event* class from the *event* class.
 
@@ -116,6 +118,8 @@ The following example shows how to delete the super class *event* from the f *em
 .. code-block:: sql
 
 	ALTER CLASS female_event DROP SUPERCLASS event;
+
+.. _class-conflict-resolution:
 
 Class Conflict Resolution
 =========================
@@ -265,7 +269,7 @@ Invariants of a database schema are a property of the schema that must be preser
     *   A **domain qualifier** means that a domain of an inherited attribute can be converted to the domain's sub class.
 
 *   **Invariant of consistency**
-    means that the database schema must always follow the invariants of a schema and all rules (`Rules for Schema Changes <#syntax_syntax_table_schemachange_9055>`_) except when it is being changed.
+    means that the database schema must always follow the invariants of a schema and all rules except when it is being changed.
 
 Rule for Schema Changes
 -----------------------

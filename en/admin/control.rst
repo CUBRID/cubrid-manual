@@ -977,6 +977,8 @@ Enter the following to change the **ACCESS_MODE** to **Read Only** and automatic
 .. note::
 	If you want to control the service using Cubrid utilities on Windows Vista or the later versions of Window, you are recommended to open the command prompt window as an administrator. For details, see the notes of `CUBRID Utilities <#admin_admin_utility_htm>`_ .
 
+.. _broker-logs:
+
 Broker Logs
 -----------
 

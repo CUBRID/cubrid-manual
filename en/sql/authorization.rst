@@ -5,13 +5,13 @@ Database User Authorization
 Database User
 =============
 
-To create the user name, see `Identifier <#syntax_csql_syntaxtype_identifie_2262>`_.
+To create the user name, see :doc:`/sql/identifier`.
 
 CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial installation of the product, no password is set.
 
 *   All users have authorization granted to the **PUBLIC** user. All users of the database are automatically the members of **PUBLIC**. Granting authorization to the **PUBLIC** means granting it all users.
 
-*   The **DBA** user has the authorization of the database administrator. The **DBA** automatically becomes the member of all users and groups. That is, the **DBA** is granted the access for all tables. Therefore, there is no need to grant authorization explicitly to the **DBA** and **DBA** members. Each database user has a unique name. The database administrator can create multiple users simultaneously using the **cubrid createdb** utility (see `How to Use the Database Management Utilities <#admin_admin_service_server_comma_427>`_ for details). A database user cannot have a member who already has the same authorization. If authorization is granted to a user, all members of the user is automatically granted the same authorization.
+*   The **DBA** user has the authorization of the database administrator. The **DBA** automatically becomes the member of all users and groups. That is, the **DBA** is granted the access for all tables. Therefore, there is no need to grant authorization explicitly to the **DBA** and **DBA** members. Each database user has a unique name. The database administrator can create multiple users simultaneously using the **cubrid createdb** utility (see :ref:`cubrid-utilities` for details). A database user cannot have a member who already has the same authorization. If authorization is granted to a user, all members of the user is automatically granted the same authorization.
 
 Managing User
 =============
@@ -141,7 +141,7 @@ If the authorization (**WITH GRANT OPTION**) is revoked from the grantor, the au
 	REVOKE operation [ { , operation }_ ] ON table_name [ { , class_name }_ ]
 	FROM user [ { , user }_ ] [ ; ]
 
-*   *operation* : Indicates an operation that can be used when granting authorization (see **Syntax** in `Granting Authorization <#syntax_syntax_access_authority_h_4540>`_ for details).
+*   *operation* : Indicates an operation that can be used when granting authorization (see **Syntax** in :ref:`granting-authorization` for details).
 *   *table_name* : Specifies the name of the table or virtual table to be granted.
 *   *user* : Specifies the name of the user (group) to be granted.
 
@@ -169,6 +169,8 @@ The following example shows how to execute the **REVOKE** statement revoking all
 
 	REVOKE ALL PRIVILEGES ON nation, athlete FROM Fred;
 
+.. _change-owner:
+
 Changing Owner
 ==============
 
@@ -186,6 +188,8 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
 	ALTER TRIGGER test_trigger OWNER TO public;
 	ALTER FUNCTION test_function OWNER TO public;
 	ALTER PROCEDURE test_procedure OWNER TO public;
+
+.. _authorization-method:
 
 User Authorization Management METHOD
 ====================================
@@ -255,7 +259,7 @@ This method is an instance method that can call each user instance, and it is us
 
 **change_owner() method**
 
-As a class method of **db_authorizations** class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs. **change_owner( )** can be called only by **DBA** or members of **DBA** group. The **ALTER … OWNER** query has the same role as the method. See `Changing Owner <#syntax_syntax_access_alter_htm>`_.
+As a class method of **db_authorizations** class, this method is used to change the owner of a class. The name of a class for which you want to change the owner, and the name of a new owner are given as arguments. At this time, the class and owner that are specified as an argument must exist in a database. Otherwise, an error occurs. **change_owner( )** can be called only by **DBA** or members of **DBA** group. The **ALTER ... OWNER** query has the same role as the method. See :ref:`change-owner`.
 
 .. code-block:: sql
 

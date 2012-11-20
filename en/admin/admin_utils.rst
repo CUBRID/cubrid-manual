@@ -1,7 +1,10 @@
 ***********************
 Database Administration
 ***********************
-How to Use the CUBRID Management Utilities (Syntax)
+
+.. _cubrid-utilities:
+
+CUBRID Management Utilities
 ===================================================
 
 The following shows how to use the CUBRID management utilities. ::
@@ -1004,6 +1007,8 @@ The following shows [options] available with the **cubrid statdump** utility.
 
 	Each status information consists of 64-bit INTEGER data and the corresponding statistics information can be lost if the accumulated value exceeds the limit.
 
+.. _lockdb:
+
 Checking Lock Status
 ====================
 
@@ -1181,6 +1186,8 @@ The following shows [options] available with the **cubrid checkdb** utility.
 		t6, t7 t8   t9
 		 
 			 t10
+
+.. _killtran:
 
 Killing Database Transactions
 =============================

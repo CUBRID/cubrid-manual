@@ -6,7 +6,7 @@ Aggregate/Analysis Functions
 
 Aggregate function returns one result based on the group of rows. When the **GROUP BY** clause is included, a one-row aggregate result per group is returned. When the **GROUP BY** clause is omitted, a one-row aggregate result for all rows is returned. The **HAVING** clause is used to add a condition to the query which contains the **GROUP BY** clause.
 
-Most aggregate functions can use **DISTINCT**. For the **GROUP BY ... HAVING** clause, see `GROUP BY ... HAVING clause <#syntax_syntax_retreive_group_htm>`_.
+Most aggregate functions can use **DISTINCT**. For the **GROUP BY ... HAVING** clause, see :ref:`group-by-clause`.
 
 **Analytic Function**
 
@@ -535,7 +535,7 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 	:param DISTINCT, UNIQUE: Used used to calculate the standard variance for the unique values without duplicates.
 	:rtype: DOUBLE
 
-	The return value is the same as the square root of it's sample variance (`VAR_SAMP Function <#syntax_syntax_operator_multi_var_3046>`_) and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
+	The return value is the same as the square root of it's sample variance (:func:`VAR_SAMP`) and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
 
 	The following are the formulas applied to the function.
 

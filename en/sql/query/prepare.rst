@@ -19,7 +19,7 @@ In general, the prepared statement is executed through the interface functions o
 PREPARE Statement
 =================
 
-The **PREPARE** statement prepares the query specified in *preparable_stmt* of the **FROM** clause and assigns the name to be used later when the SQL statement is referenced to *stmt_name*. See `EXECUTE Statement <#syntax_syntax_prepared_execute_h_5018>`_ for example. ::
+The **PREPARE** statement prepares the query specified in *preparable_stmt* of the **FROM** clause and assigns the name to be used later when the SQL statement is referenced to *stmt_name*. See :ref:`execute-statement` for example. ::
 
 	PREPARE stmt_name FROM preparable_stmt
 
@@ -32,6 +32,8 @@ The **PREPARE** statement prepares the query specified in *preparable_stmt* of t
 The **PREPARE** statement starts by connecting an application to a server and will be maintained until the application terminates the connection. The connection maintained during this period is called a session. You can set the session time with the **session_state_timeout** parameter of **cubrid.conf**; the default value is **21600** seconds (=6 hours).
 
 The data managed by the session includes the **PREPARE** statement, user-defined variables, the last ID inserted (**LAST_INSERT_ID**), and the number of rows affected by the statement (**ROW_COUNT**) that you execute at the end.
+
+.. _execute-statement:
 
 EXECUTE Statement
 =================

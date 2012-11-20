@@ -346,13 +346,15 @@ Conditional Functions
 					3                      4
 				 NULL                     11
 
+.. _basic-cond-expr:
+
 Conditional Expressions
 =======================
 
 A conditional expression is an expression that is included in the **WHERE** clause of the **SELECT**, **UPDATE** and **DELETE** statements, and in the **HAVING** clause of the **SELECT** statement. There are simple comparison, **ANY** / **SOME** / **ALL**, **BETWEEN**, **EXISTS**, **IN** / **NOT IN**, **LIKE** and **IS NULL** conditional expressions, depending on the kinds of the operators combined.
 
 A simple comparison conditional expression compares two comparable data values. Expressions or subqueries are specified as operands, and the conditional expression always returns
-**NULL** if one of the operands is **NULL**. The following table shows operators that can be used in the simple comparison conditional expressions. For details, see `Comparison Operator <#syntax_syntax_operator_compare_h_4639>`_.
+**NULL** if one of the operands is **NULL**. The following table shows operators that can be used in the simple comparison conditional expressions. For details, see :doc:`/sql/function/comparison_op`.
 
 **Operators for Conditional Expressions**
 
@@ -373,6 +375,8 @@ A simple comparison conditional expression compares two comparable data values. 
 +-------------------------+----------------------------------------------------------------------------+----------------------------+------------------+
 | **<=**                  | A value of left operand is equal to or less than that of right operand.    | 1<=2                       | 1                |
 +-------------------------+----------------------------------------------------------------------------+----------------------------+------------------+
+
+.. _any-some-all-expr:
 
 ANY/SOME/ALL Conditional Expressions
 ====================================
@@ -434,6 +438,8 @@ When a comparison operation is performed on **NULL** in a conditional expression
 	======================================================================
 				6  'Smith     '          'devel'                   2400000
 
+.. _between-expr:
+
 BETWEEN Conditional Expression
 ==============================
 
@@ -470,6 +476,8 @@ The **BETWEEN** conditional expression makes a comparison to determine whether t
 	======================================================================
 				7  'Brown     '          'account'                    NULL
 
+.. _exists-expr:
+
 EXISTS Conditional Expression
 =============================
 
@@ -492,6 +500,8 @@ The **EXISTS** conditional expression returns **TRUE** if one or more results of
 	SELECT 'raise' FROM db_root WHERE NOT EXISTS(
 	SELECT * FROM condition_tbl WHERE salary < 2500000);
 	There are no results.
+
+.. _in-expr:
 
 IN Conditional Expression
 =========================
@@ -522,6 +532,8 @@ The **IN** conditional expression compares to determine whether the single data 
 	======================================================================
 				5  'Kim       '          'account'                 3800000
 				7  'Brown     '          'account'                    NULL
+
+.. _is-null-expr:
 
 IS NULL Conditional Expression
 ==============================
@@ -587,11 +599,11 @@ A wild card string corresponding to any character or character string can be inc
 
 **Remark**
 
-The **LIKE** conditional expression is case sensitive. To disable case sensitive, use the `REGEXP/RLIKE Conditional Expressions <#syntax_syntax_operator_where_reg_9878>`_.
+The **LIKE** conditional expression is case sensitive. To disable case sensitive, use the :ref:`regexp-rlike`.
 
-For details about character sets supported in CUBRID, see `Definition and Characteristics <#syntax_syntax_datatype_string_de_1985>`_.
+For details about character sets supported in CUBRID, see :ref:`char-data-type`.
 
-Whether to detect the escape characters of the LIKE conditional expression is determined depending on the configuration of **no_backslash_escapes** and **require_like_escape_character** in the **cubrid.conf** file. For details, see `Statement/Type-Related Parameters <#pm_pm_db_classify_type_htm>`_.
+Whether to detect the escape characters of the LIKE conditional expression is determined depending on the configuration of **no_backslash_escapes** and **require_like_escape_character** in the **cubrid.conf** file. For details, see :ref:`stmt-type-parameters`.
 
 .. note::
 
@@ -620,6 +632,8 @@ Whether to detect the escape characters of the LIKE conditional expression is de
 				2  'Moy       '          'sales'                   3000000
 				5  'Kim       '          'account'                 3800000
 
+.. _regexp-rlike:
+
 REGEXP/RLIKE Conditional Expressions
 ====================================
 
@@ -630,7 +644,7 @@ The following list describes basic characteristics of regular expressions.
 *   "." matches any single character(including new-line and carriage-return).
 *   "[...]" matches one of characters within square brackets. For example, "[abc]" matches "a", "b", or "c". To represent a range of characters, use a dash (-). "[a-z]" matches any alphabet letter whereas "[0-9]" matches any single number.
 *   "*" matches 0 or more instances of the thing proceeding it. For example, "xabc*" matches "xab", "xabc", "xabcc", and "xabcxabc" etc. "[0-9][0-9]*" matches any numbers, and ".*" matches every string.
-*   To match special characters such as "\n", "\t", "\r", and "\\", some must be escaped with the backslash (\) by specifying the value of **no_backslash_escapes** (default: yes) to **no**. For details on **no_backslash_escapes**, see `Escape Special Characters <#syntax_syntax_datatype_string_es_323>`_.
+*   To match special characters such as "\n", "\t", "\r", and "\\", some must be escaped with the backslash (\) by specifying the value of **no_backslash_escapes** (default: yes) to **no**. For details on **no_backslash_escapes**, see :ref:`escape-characters`.
 
 The difference between **REGEXP** and **LIKE** are as follows:
 

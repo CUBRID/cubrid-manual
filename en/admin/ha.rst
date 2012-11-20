@@ -731,6 +731,8 @@ The following example shows how to configure PHP.
 Running and Monitoring
 ======================
 
+.. _cubrid-heartbeat:
+
 Utilities of cubrid heartbeat
 -----------------------------
 
@@ -814,6 +816,8 @@ How to use this utility is as shown below. ::
 	   Server testdb (pid 2393, state registered_and_standby)
 
 .. note:: **act**, **deact**, and **deregister** commands which were used in versions lower than CUBRID 9.0 are no longer used.
+
+.. _cubrid-service-util:
 
 Utilities of cubrid service
 ---------------------------

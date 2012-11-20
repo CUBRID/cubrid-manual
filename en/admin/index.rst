@@ -172,6 +172,8 @@ The following result is displayed if **cubrid** is entered in a prompt.
 	 
 	cubrid is a tool for DBMS.
 
+.. _utility-on-windows:
+
 .. note::
 
 	If you want to control the service by using **cubrid** utility on Windows Vista or later, it is recommended that you run the command prompt with an administrator account. If you use **cubrid** utility without an administrator account, the result message is not displayed even though you can run it through the User Account Control (UAC) dialog.

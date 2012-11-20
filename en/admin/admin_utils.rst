@@ -211,7 +211,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 .. option:: --user-definition-file=FILE
 
-	This option adds users who have access to the database to be created. It adds a user based on the specification contained in the user information file specified by the parameter. Instead of using the **--user-definition-file** option, you can add a user by using the **CREATE USER** statement (for details, see `Managing USER <#syntax_syntax_access_manage_htm>`_ ).
+	This option adds users who have access to the database to be created. It adds a user based on the specification contained in the user information file specified by the parameter. Instead of using the **--user-definition-file** option, you can add a user by using the **CREATE USER** statement (for details, see :ref:`create-user`).
 
 	The following example shows how to create a database named *testdb* and add users to *testdb* based on the user information defined in the **user_info.txt** file. ::
 
@@ -291,10 +291,9 @@ The following shows options available with the **cubrid** **createdb** utility.
 	**temp_file_max_size_in_pages** is a parameter used to configure the maximum number of pages assigned to store the temporary temp volume - used for complicated queries or storing arrays - on the disk. 
 
 	While the default value is **-1**, the temporary temp volume may be increased up to the amount of extra space on the disk specified by the
-	**temp_volume_path** parameter. If the value is 0, the temporary temp volume cannot be created. In this case, the permanent temp volume should be added by using the `cubrid addvoldb <#admin_admin_db_addvol_htm>`_ utility.
+	**temp_volume_path** parameter. If the value is 0, the temporary temp volume cannot be created. In this case, the permanent temp volume should be added by using the :ref:`cubrid addvoldb <adding-database-volume>` utility.
 
-	For the efficient management of the volume, it is recommended to add a volume for each usage. By using the `cubrid spacedb <#admin_admin_db_space_htm>`_
-	utility, you can check the reaming space of each volume. By using the `cubrid addvoldb <#admin_admin_db_addvol_htm>`_ utility, you can add more volumes as needed while managing the database. When adding a volume while managing the database, you are advised to do so when there is less system load. Once the assigned volume for a usage is completely in use, a generic volume will be created, so it is suggested to add extra volume for a usage that is expected to require more space.
+	For the efficient management of the volume, it is recommended to add a volume for each usage. By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the reaming space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. When adding a volume while managing the database, you are advised to do so when there is less system load. Once the assigned volume for a usage is completely in use, a generic volume will be created, so it is suggested to add extra volume for a usage that is expected to require more space.
 
 	Next, we will look at how to add volumes for **data**, **index**, and **temp** by creating the database and separating the volume usage. ::
 
@@ -355,7 +354,7 @@ The following shows options available with the **cubrid addvoldb** utility.
 
 .. option:: -p PURPOSE
 
-	This option specifies the purpose of the volume to be added. The reason for specifying the purpose of the volume is to improve the I/O performance by storing volumes separately on different disk drives according to their purpose. Parameter values that can be used for the **-p** option are **data**, **index**, **temp** and **generic**. The default value is **generic**. For the purpose of each volume, see "`Database Volume Structure <#intro_intro_arch_volume_htm>`_ ."
+	This option specifies the purpose of the volume to be added. The reason for specifying the purpose of the volume is to improve the I/O performance by storing volumes separately on different disk drives according to their purpose. Parameter values that can be used for the **-p** option are **data**, **index**, **temp** and **generic**. The default value is **generic**. For the purpose of each volume, see :ref:`database-volume-structure`.
 
 	The following example shows how to add a volume for which 256 MB are assigned to the *testdb* database in standalone mode. ::
 	
@@ -617,6 +616,8 @@ The following shows [options] available with the **cubrid installdb** utility.
 	This option registers the directory path of a database log volume to **databases.txt** by using the **-L** option. If this option is not specified, the directory path of a volume is registered. ::
 
 		cubrid installdb -L /home/cubrid/CUBRID/databases/logs/testdb testdb
+
+.. _spacedb:
 
 Checking Used Space
 ===================
@@ -1057,7 +1058,7 @@ The first section of the output of **cubrid lockdb** is the database lock settin
 	*** Lock Table Dump ***
 	 Lock Escalation at = 100000, Run Deadlock interval = 0
 
-The lock escalation level is 100,000 records, and the interval to detect deadlock is set to 0 seconds (For a description of the related system parameters, **lock_escalation** and **deadlock_detection_interval**, see `Concurrency/Lock-Related Parameters <#pm_pm_db_classify_lock_htm>`_ ).
+The lock escalation level is 100,000 records, and the interval to detect deadlock is set to 0 seconds (For a description of the related system parameters, **lock_escalation** and **deadlock_detection_interval**, see :ref:`lock-parameters`).
 
 **Clients that are accessing the database**
 
@@ -1366,12 +1367,12 @@ The following shows [options] available with the **cubrid diagdb** utility.
 Backing up and Restoring
 ========================
 
-**DBA** must perform regular backups of the database so that it can be restored successfully to a state at a certain point in time in case of system failure. For details, see `Database Backup <#admin_admin_br_backup_htm>`_ .
+**DBA** must perform regular backups of the database so that it can be restored successfully to a state at a certain point in time in case of system failure. For details, see :ref:`db-backup`.
 
 Exporting and Importing
 =======================
 
-To use a newer version of CUBRID database, the existing version must be migrated to a new one. For this purpose, you can use "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. For details on export and import, see `Migrating Database <#admin_admin_migration_migration__1472>`_ .
+To use a newer version of CUBRID database, the existing version must be migrated to a new one. For this purpose, you can use "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. For details on export and import, see :doc:`/admin/migration`.
 
 Dumping Parameters Used in Server/Client
 =========================================
@@ -1423,4 +1424,4 @@ Locale Compile/Output
 
 **cubrid dumplocale** utility outputs the compiled binary locale file as a human-readable format on the console. The output value may be very large, so we recommend that you save the value as a file by redirecting.
 
-For more detailed usage, see `Locale Setting <#admin_admin_i18n_locale_htm>`_ .
+For more detailed usage, see :ref:`locale-setting`.

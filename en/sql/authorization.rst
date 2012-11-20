@@ -13,6 +13,8 @@ CUBRID has two types of users by default: **DBA** and **PUBLIC**. At initial ins
 
 *   The **DBA** user has the authorization of the database administrator. The **DBA** automatically becomes the member of all users and groups. That is, the **DBA** is granted the access for all tables. Therefore, there is no need to grant authorization explicitly to the **DBA** and **DBA** members. Each database user has a unique name. The database administrator can create multiple users simultaneously using the **cubrid createdb** utility (see :ref:`cubrid-utilities` for details). A database user cannot have a member who already has the same authorization. If authorization is granted to a user, all members of the user is automatically granted the same authorization.
 
+.. _create-user:
+
 Managing User
 =============
 

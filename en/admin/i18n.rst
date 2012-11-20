@@ -21,7 +21,7 @@ For example, canonical equivalence is applied in general NFC rule so codepoint 2
 
 For more details on Unicode normalization, see `http://unicode.org/reports/tr15/ <http://unicode.org/reports/tr15/>`_.
 
-The default value of the system parameter related to Unicode normalization is unicode_input_normalization=no and unicode_output_normalization=no. For a more detailed description on parameters, see `Syntax/Type Related Parameter <#pm_pm_db_classify_type_htm>`_.
+The default value of the system parameter related to Unicode normalization is unicode_input_normalization=no and unicode_output_normalization=no. For a more detailed description on parameters, see :ref:`stmt-type-parameters`.
 
 **Locale Attributes**
 
@@ -32,7 +32,7 @@ CUBRID locale is defined by following attributes.
 *   **Alphabet (casing rules)** : One locale data may have up 2 alphabets, one for identifer and one for user data. One locale data can have two types of alphabets.
 *   **Calendar** : Names of weekdays, months, day periods (AM/PM)
 *   **Numbering settings** : Symbols for digit grouping, monetary currency
-*   **Text conversion data (for CSQL conversion)** : Option. See `Text conversion for CSQL <#admin_admin_i18n_intro_htm_csql>`_.
+*   **Text conversion data (for CSQL conversion)** : Option.
 *   **Unicode normalization data** : Data converted by normalizing several characters with the same shape into one based on a specified rule. After normalization, characters with the same shape will have the same code value even though the locale is different. Each locale can activate/deactivate the normalization functionality.
 
 .. note::
@@ -64,7 +64,7 @@ Each column has a collation, so when applying :func:`LOWER`, :func:UPPER` functi
 Depending on collation properties some CUBRID optimizations may be disabled for some collations:
 
 *   **LIKE** rewrite: is disabled for collations which maps several different character to the same weight (case insensitive collations for example) and for collations with expansions.
-*   Covering index scan: disabled for collations which maps several different character to the same weight (see `Using Indexes > Covering Index <#syntax_syntax_retreive_index_cov_7428>`_).
+*   Covering index scan: disabled for collations which maps several different character to the same weight (see :ref:`Using Indexes > Covering Index <covering-index>`).
 *   Prefix index: cannot be created on columns using collation with expansions.
 
 **Locale Save Location**
@@ -90,6 +90,8 @@ CUBRID uses following directories and files to set the locales.
 *   **$CUBRID/bin/make_locale.sh** file or **%CUBRID%\bin\make_locale.bat** file: A script file used to generate shared libraries for locale data
 
 *   **$CUBRID/lib** directory: Shared libraries for generated locales will be stored here.
+
+.. _locale-setting:
 
 Locale Setting
 ==============
@@ -214,7 +216,7 @@ Several locales can be defined, but only one locale can be selected as the defau
 In addition to the possibility of specifying a default locale, one can override the default calendar settings with the calendar settings from another locale, using the **CUBRID_DATE_LANG** environment variable
 
 *   **CUBRID_LANG** will be in the format: <*locale_name*>.[**utf8** | **iso**] (e.g. tr_TR.utf8, en_EN.ISO, ko_KR.utf8)
-*   **CUBRID_DATE_LANG** : <*locale_name*> The possible values for <*locale_name*> are listed above, in `Step 1: Selecting a locale <#admin_admin_i18n_locale_htm_01>`_.
+*   **CUBRID_DATE_LANG** : <*locale_name*> The possible values for <*locale_name*> are listed above, in **Step 1: Selecting a locale**.
 
 By default, if no charset is included in **CUBRID_LANG**, the ISO charset is assumed.
 
@@ -379,6 +381,8 @@ For example, 1100 is a codepoint, [.313B.0020.0002.1100] is one collation elemen
 
 Expansion support, defined as a functional property, means supporting the interpretation of a composed character as a pair of the same characters which it's made of. A rather obvious example is interpreting the character ''æ'' in the same way as the two character string ''ae''. This is an expansion. In DUCET, expansions are represented by using more than one collation element for a codepoint or contraction. By default, CUBRID has expansions disabled. Handling collations with expansions requires when comparing two strings several passes (up to the collation strength/level).
 
+.. _collation-charset-column:
+
 Collation and Charset of Column
 -------------------------------
 
@@ -402,7 +406,7 @@ Supported character sets:
 
 **String Check**
 
-By default, all input data is assumed to be in the server character (set with **CUBRID_LANG** environment variable).  This may be overridden by **SET NAMES** or charset introducer (or **COLLATE** string literal modifier) (For more information, see `Globalization > Collation of Charset and String <#admin_admin_i18n_collation_strin_3003>`_.
+By default, all input data is assumed to be in the server character (set with **CUBRID_LANG** environment variable).  This may be overridden by **SET NAMES** or charset introducer (or **COLLATE** string literal modifier) (For more information, see :ref:`collation-charset-string`.
 
 Invalid data may lead to undefined behavior or even crashes if string checking is disabled (by default is disabled). This can be enabled by **intl_check_input_string** system parameter. However, if you are sure that only valid data is input, you can obtain better performance by disabling string check.
 
@@ -461,7 +465,7 @@ When CHARSET modifier is specificer without COLLATE, then the default collation 
 *   UTF-8 : utf8_bin
 *   EUC-KR: euckr_bin
 
-For more information on how to determine the collation among the expression parameters (operands) with different collations (and charsets), see `How to Determine Collation among Columns with Different Collations <#admin_admin_i18n_collation_colum_573>`_.
+For more information on how to determine the collation among the expression parameters (operands) with different collations (and charsets), see :ref:`How to Determine Collation among Columns with Different Collation <determine-collation-columns>`.
 
 **Syntax**
 
@@ -504,6 +508,8 @@ The following query (same sorting) is similar to the above but the output column
 .. code-block:: sql
 
 	SELECT c1 FROM t1 ORDER BY CAST (c1 as VARCHAR(5) COLLATE iso88591_en_ci);
+
+.. _determine-collation-columns:
 
 **How to Determine Collation among Columns with Different Collation**
 
@@ -637,6 +643,8 @@ In the following example, the collation of s2 and s3 is utf8_tr_cs. Therefore, t
 	CREATE TABLE t (s1 STRING COLLATE utf8_en_cs, s2 STRING COLLATE utf8_tr_cs, s3 STRING COLLATE utf8_tr_cs);
 	SELECT s1, s2 FROM t WHERE s1 > s2 + s3;
 
+.. _collation-charset-string:
+
 Charset and Collations of String Literals
 -----------------------------------------
 
@@ -653,7 +661,7 @@ The **SET NAMES** statement changes the default client charset and the collation
 	SET NAMES [ charset_name ] [{COLLATION | COLLATE} collation_name]
 
 *   *charset_name* : Valid charset name is iso88591, utf8 and euckr.
-*   *collation_name* : Collation setting can be omitted and all available collations can be set. The collation should be compatible with the charset; otherwise, an error occurs. To find the available collation names, look up the **db_collation** catalog VIEW (see `Collation and Charset of Column <#admin_admin_i18n_collation_colum_3602>`_).
+*   *collation_name* : Collation setting can be omitted and all available collations can be set. The collation should be compatible with the charset; otherwise, an error occurs. To find the available collation names, look up the **db_collation** catalog VIEW (see :ref:`collation-charset-column`).
 
 **CHARSET Introducer**
 
@@ -833,9 +841,9 @@ Covering index scan  is query optimization, in which if all values in query can
 
 For two strings values, ‘abc’ and ‘ABC’, only one value is stored in the BTREE+ index (this is either ‘abc’ or ‘ABC’ depending which one was inserted first), along with the count of heap values to which it corresponds (in this case, 2). A query using covering index optimization will return this index value twice instead of returning the two original values. As a generic rule, this may happen when at least two different strings produce the same sort key in a given collation. For this reason, for all UTF-8 collations with strength level less than 4 (quaternary) the index covering query optimization is disabled. This is controlled by strength="tertiary/quaternary" in <strength> tag of collation definition in LDML. Even with quaternary strength, there are some situations in which different strings produce same keys. These are acceptable cases in which different codepoints (but with similar graphical symbols) maps to the same weight value.
 
-For more information about collations, see `Globalization > Overview <#admin_admin_i18n_collation_intro_1033>`_.
+For more information about collations, see :doc:`/admin/i18n`.
 
-For more information about covering index, see `CUBRID SQL Guide > Query Optimization > Using INDEX > Covering Index <#syntax_syntax_retreive_index_cov_7428>`_.
+For more information about covering index, see :ref:`CUBRID SQL Guide > Query Optimization > Using INDEX > Covering Index <covering-index>`.
 
 **Remark**
 

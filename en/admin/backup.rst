@@ -2,6 +2,8 @@
 Database Backup and Restore
 ***************************
 
+.. _db-backup:
+
 Database Backup
 ===============
 

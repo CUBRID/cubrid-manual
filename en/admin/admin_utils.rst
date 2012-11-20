@@ -5,7 +5,7 @@ Database Administration
 .. _cubrid-utilities:
 
 CUBRID Management Utilities
-===================================================
+===========================
 
 The following shows how to use the CUBRID management utilities. ::
 
@@ -88,7 +88,7 @@ The **cubrid createdb** utility creates databases and initializes them with the 
 
 ::
 
-	cubrid createdb <options> database_name
+	cubrid createdb [options] database_name
 
 * **cubrid**: An integrated utility for the CUBRID service and database management.
 
@@ -96,7 +96,7 @@ The **cubrid createdb** utility creates databases and initializes them with the 
 
 * *database_name*: Specifies a unique name for the database to be created, without including the path name to the directory where the database will be created. If the specified database name is the same as that of an existing database name, CUBRID halts creation of the database to protect existing files.
 
-The following shows options available with the **cubrid** **createdb** utility.
+The following shows [options] available with the **cubrid** **createdb** utility.
 
 .. program:: createdb
 
@@ -173,15 +173,19 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 		cubrid createdb --server-name aa_host testdb
 
-.. option:: -r
+.. option:: -r, --replace
 
-	This option creates a new database and overwrites an existing database if one with the same name exists. If the **-r** option is not specified, database creation is halted. The following example shows how to create a new database named *testdb* and overwrite the existing database with the same name. ::
+	This option creates a new database and overwrites an existing database if one with the same name exists. 
+	
+	The following example shows how to create a new database named *testdb* and overwrite the existing database with the same name. ::
 	
 		cubrid createdb -r testdb
 	
 .. option:: --more-volume-file=FILE
 
-	This option creates an additional volume based on the specification contained in the file specified by the option. The volume is created in the same directory where the database is created. Instead of using this option, you can add a volume by using the **cubrid addvoldb** utility. The following example shows how to create a database named *testdb* as well as an additional volume based on the specification stored in the **vol_info.txt** file. ::
+	This option creates an additional volume based on the specification contained in the file specified by the option. The volume is created in the same directory where the database is created. Instead of using this option, you can add a volume by using the **cubrid addvoldb** utility. 
+	
+	The following example shows how to create a database named *testdb* as well as an additional volume based on the specification stored in the **vol_info.txt** file. ::
 
 		cubrid createdb --more-volume-file vol_info.txt testdb
 
@@ -215,7 +219,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 	The following example shows how to create a database named *testdb* and add users to *testdb* based on the user information defined in the **user_info.txt** file. ::
 
-		cubrid createdb --user-definition-file user_info.txt testdb
+		cubrid createdb --user-definition-file=user_info.txt testdb
 
 	The syntax of a user information file is as follows: ::
 
@@ -270,7 +274,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 		cubrid createdb --csql-initialization-file table_schema.sql testdb
 
-.. option:: -o
+.. option:: -o, --output-file=FILE
 
 	This option stores messages related to the database creation to the file given as a parameter. The file is created in the same directory where the database was created. If the **-o** option is not specified, messages are displayed on the console screen. The **-o** option allows you to use information on the creation of a certain database by storing messages, generated during the database creation, to a specified file.
 
@@ -278,7 +282,7 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 		cubrid createdb -o db_output testdb
 
-.. option:: -v
+.. option:: -v, --verbose
 
 	This option displays all information on the database creation operation onto the screen. Like the **-o** option, this option is useful in checking information related to the creation of a specific database. Therefore, if you specify the **-v** option together with the **-o** option, you can store the output messages in the file given as a parameter; the messages contain the operation information about the **cubrid createdb** utility and database creation process.
 
@@ -295,13 +299,13 @@ The following shows options available with the **cubrid** **createdb** utility.
 
 	For the efficient management of the volume, it is recommended to add a volume for each usage. By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the reaming space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. When adding a volume while managing the database, you are advised to do so when there is less system load. Once the assigned volume for a usage is completely in use, a generic volume will be created, so it is suggested to add extra volume for a usage that is expected to require more space.
 
-	Next, we will look at how to add volumes for **data**, **index**, and **temp** by creating the database and separating the volume usage. ::
+The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
 
-		cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
-		cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-		cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-		cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-		cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+	cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
+	cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+	cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
+	cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
+	cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
 
 .. _adding-database-volume:
 
@@ -318,7 +322,7 @@ Adds database volume. ::
 
 * *database_name*: Specifies the name of the database to which a volume is to be added without including the path name to the directory where the database is to be created.
 
-The following shows options available with the **cubrid addvoldb** utility.
+The following shows [options] available with the **cubrid addvoldb** utility.
 
 .. program:: addvoldb
 
@@ -330,7 +334,7 @@ The following shows options available with the **cubrid addvoldb** utility.
 
 		cubrid addvoldb -p data --db-volume-size=256M testdb
 
-.. option:: -n NAME
+.. option:: -n, --volume-name=NAME
 
 	This option specifies the name of the volume to be added to a specified database. The volume name must follow the file name protocol of the operating system and be a simple one without including the directory path or spaces. If the **-n** option is omitted, the name of the volume to be added is configured by the system automatically as "database name_volume identifier." For example, if the database name is *testdb*, the volume name *testdb_x001* is automatically configured.
 	
@@ -352,7 +356,7 @@ The following shows options available with the **cubrid addvoldb** utility.
 
 		cubrid addvoldb -S --comment "data volume added_cheolsoo kim" --db-volume-size=256M testdb
 
-.. option:: -p PURPOSE
+.. option:: -p, --purpose=PURPOSE
 
 	This option specifies the purpose of the volume to be added. The reason for specifying the purpose of the volume is to improve the I/O performance by storing volumes separately on different disk drives according to their purpose. Parameter values that can be used for the **-p** option are **data**, **index**, **temp** and **generic**. The default value is **generic**. For the purpose of each volume, see :ref:`database-volume-structure`.
 
@@ -434,7 +438,7 @@ In contrast, the **cubrid alterdbhost** utility configures or changes the host n
 
 The following shows [options] available with the **cubrid deleteldb** utility.
 	 
-.. program:: alterdbhost
+.. program:: renamedb
 
 .. option:: -E, --extended-volume-path=PATH
 
@@ -566,7 +570,7 @@ The following shows [options] available with the **cubrid copydb** utility.
 
 	If the **-d** option is specified, a source database is deleted after the database is copied. This execution brings the same the result as executing **cubrid deletedb** utility after copying a database. Note that if a source database contains LOB data, LOB file directory path of a source database is copied into a new database and it is registered in the **lob-base-path** of the **databases.txt** file. ::
 
-		cubrid copydb -d -opyhome/usr/CUBRID/databases demodb new_demodb
+		cubrid copydb -d -F /home/usr/CUBRID/databases demodb new_demodb
 
 .. option:: --copy-lob-path=PATH
 
@@ -583,7 +587,9 @@ The following shows [options] available with the **cubrid copydb** utility.
 Registering Database
 ====================
 
-The **cubrid installdb** utility is used to register the information of a newly installed database to **databases.txt**, which stores database location information. The execution of this utility does not affect the operation of the database to be registered. ::
+The **cubrid installdb** utility is used to register the information of a newly installed database to **databases.txt**, which stores database location information. The execution of this utility does not affect the operation of the database to be registered. 
+
+::
 
 	cubrid installdb [options] database_name 
 	
@@ -593,7 +599,7 @@ The **cubrid installdb** utility is used to register the information of a newly 
 
 * *database_name*: The name of database to be registered to **databases.txt**.
 
-If no option is used with a command, the command must be executed in the directory where the corresponding database exists.
+If no [options] are used, the command must be executed in the directory where the corresponding database exists.
 
 The following shows [options] available with the **cubrid installdb** utility.
 
@@ -622,7 +628,9 @@ The following shows [options] available with the **cubrid installdb** utility.
 Checking Used Space
 ===================
 
-The **cubrid spacedb** utility is used to check how much space of database volumes is being used. It shows a brief description of all permanent data volumes in the database. Information returned by the **cubrid spacedb** utility includes the ID, name, purpose and total/free space of each volume. You can also check the total number of volumes and used/unused database pages. ::
+The **cubrid spacedb** utility is used to check how much space of database volumes is being used. It shows a brief description of all permanent data volumes in the database. Information returned by the **cubrid spacedb** utility includes the ID, name, purpose and total/free space of each volume. You can also check the total number of volumes and used/unused database pages. 
+
+::
 
 	cubrid spacedb [options] database_name
 
@@ -693,7 +701,7 @@ The following shows [options] available with the **cubrid spacedb** utility.
 
 .. program:: compactdb
 
-.. option:: -v
+.. option:: -v, --verbose
 
 	You can output messages that shows which class is currently being compacted and how many instances have been processed for the class by using the **-v** option. ::
 
@@ -715,21 +723,21 @@ The following shows [options] available with the **cubrid spacedb** utility.
 
 .. option:: -p, --pages-commited-once=NUMBER
 
-	You can specify the number of maximum pages that can be commited once with this option. The default value is 10, the minimum value is 1, and the maximum value is 10. The less option value is specified, the more concurrency is enhanced because the value for class/instance lock is small; however, it causes slowdown on operation, and vice versa.
+	You can specify the number of maximum pages that can be commited once with this option. The default value is 10, the minimum value is 1, and the maximum value is 10. The less option value is specified, the more concurrency is enhanced because the value for class/instance lock is small; however, it causes slowdown on operation, and vice versa. ::
+
+		cubrid compactdb --CS-mode -p 10 testdb tbl1, tbl2, tbl5
 
 .. option:: -d, --delete-old-repr
 
 	You can delete an existing table representation (schema structure) from catalog with this option. When a column is added or deleted by the **ALTER** statement, if the existing record still refers to the previous schema, no additional cost to update the schema is required and the previous table is kept.
 
-.. option:: -I, --Instance-lock-timeout
+.. option:: -I, --Instance-lock-timeout=NUMBER 
 
 	You can specify a value of instance lock timeout with this option. The default value is 2 (seconds), the minimum value is 1, and the maximum value is 10. The less option value is specified, the more operation speeds up. However, the number of instances that can be processed becomes smaller, and vice versa.
 
-.. option:: -c, --class-lock-timeout
+.. option:: -c, --class-lock-timeout=NUMBER
 
-	You can specify a value of instance lock timeout with this option. The default value is 10 (seconds), the minimum value is 1, and the maximum value is 10. The less option value is specified, the more operation speeds up. However, the number of tables that can be processed becomes smaller, and vice versa. ::
-
-		cubrid compactdb --CS-mode -p 10 testdb tbl1, tbl2, tbl5
+	You can specify a value of instance lock timeout with this option. The default value is 10 (seconds), the minimum value is 1, and the maximum value is 10. The less option value is specified, the more operation speeds up. However, the number of tables that can be processed becomes smaller, and vice versa. 
 
 Updating Statistics
 ===================
@@ -763,7 +771,7 @@ The following example shows how to update the query statistics information of th
 Outputting Statistics Information of Server
 ===========================================
 
-The cubrid statdump utility checks statistics information processed by the CUBRID database server. The statistics information mainly consists of the followings: File I/O, Page buffer, Logs, Transactions, Concurrency/Lock, Index, and Network request
+The cubrid statdump utility checks statistics information processed by the CUBRID database server. The statistics information mainly consists of the followings: File I/O, Page buffer, Logs, Transactions, Concurrency/Lock, Index, and Network request.
 
 Note that you must specify the parameter **communication_histogram** to **yes** in the **cubrid.conf** before executing the utility. You can also check statistics information of server with session commands (**;.h on**) in the CSQL.
 
@@ -783,7 +791,7 @@ The following shows [options] available with the **cubrid statdump** utility.
 
 .. option:: -i, --interval=SECOND
 
-	The **-i** option specifies the periodic number of outputting statistics as seconds.
+	This option specifies the periodic number of outputting statistics as seconds.
 
 	::
 
@@ -983,7 +991,7 @@ The following shows [options] available with the **cubrid statdump** utility.
 
 		cubrid statdump -i 5 -c testdb
 
-.. option::  -s, --substr
+.. option::  -s, --substr=STRING
 
 	You can display statistics about items of which name include the specified string by using **-s** option. The following example shows how to display statistics about items of which name include "data".
  
@@ -1031,7 +1039,7 @@ The following shows [options] available with the **cubrid statdump** utility.
 	
 .. program:: lockdb
 
-.. option:: -o
+.. option:: -o, --output-file=FILE
 	
 	The **-o** option displays the lock information of the *testdb* database as a output.txt. ::
 
@@ -1058,7 +1066,9 @@ The first section of the output of **cubrid lockdb** is the database lock settin
 	*** Lock Table Dump ***
 	 Lock Escalation at = 100000, Run Deadlock interval = 0
 
-The lock escalation level is 100,000 records, and the interval to detect deadlock is set to 0 seconds (For a description of the related system parameters, **lock_escalation** and **deadlock_detection_interval**, see :ref:`lock-parameters`).
+The lock escalation level is 100,000 records, and the interval to detect deadlock is set to 0 seconds.
+
+For a description of the related system parameters, **lock_escalation** and **deadlock_detection_interval**, see :ref:`lock-parameters`.
 
 **Clients that are accessing the database**
 
@@ -1173,9 +1183,9 @@ The following shows [options] available with the **cubrid checkdb** utility.
 
 		cubrid checkdb -r testdb
 
-.. option:: -i, --input-class-file or table name
+.. option:: -i, --input-class-file=FILE or table_name
 
-	You can specify a table in which consistency is check or restored by specifying the **-i** *table_list.txt* option or listing the table names after a database name. In this way, you can limit the target to be restored and both ways can be used. If a specific target is not specified, entire database will be a target of consistency check or restoration. ::
+	You can specify a table in which consistency is check or restored by specifying the **-i** *FILE* option or listing the table names after a database name. In this way, you can limit the target to be restored and both ways can be used. If a specific target is not specified, entire database will be a target of consistency check or restoration. ::
 
 		cubrid checkdb testdb tbl1 tbl2
 		cubrid checkdb -r testdb tbl1 tbl2

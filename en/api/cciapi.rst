@@ -527,7 +527,7 @@ CCI API Reference
 
 	*   **query_timeout** | **queryTimeout** : If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
 
-	*   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : Whether to disconnect socket immediately after time for query request has expired. It determines whether to terminate a socket connection immediately or wait for server response after sending cancellation message for query request to a server when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. The default value is **false**, meaning that it will wait for server response. It this value is true, a socket will be closed immediately after sending a cancellation message to a server upon timeout and returns the **CCI_ER_QUERY_TIMEOUT** (-39) error. (If an error occurs on database server side, not on broker side, it returns -1. If you want to view error details, see error codes in "database error buffer." You can get information how to check error codes in `CCI Error Codes and Error Messages <#api_api_cci_programming_htm_err>`_.) In this case, you must explicitly close the database connection handle by using the :c:func:`cci_disconnect` function. Please note that there is a possibility that a database server does not get a cancellation message and execute a query even after an error is returned.
+	*   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : Whether to disconnect socket immediately after time for query request has expired. It determines whether to terminate a socket connection immediately or wait for server response after sending cancellation message for query request to a server when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. The default value is **false**, meaning that it will wait for server response. It this value is true, a socket will be closed immediately after sending a cancellation message to a server upon timeout and returns the **CCI_ER_QUERY_TIMEOUT** (-39) error. (If an error occurs on database server side, not on broker side, it returns -1. If you want to view error details, see error codes in "database error buffer." You can get information how to check error codes in :ref:`CCI Error Codes and Error Messages <cci-error-codes>`.) In this case, you must explicitly close the database connection handle by using the :c:func:`cci_disconnect` function. Please note that there is a possibility that a database server does not get a cancellation message and execute a query even after an error is returned.
 
 	*   **logFile** : A log file name for debugging (default value: **cci_** <*handle_id*> **.log**). <*handle_id*> indicates the ID of a connection handle returned by this function.
 	*   **logBaseDir** : A directory where a debug log file is created
@@ -907,7 +907,7 @@ CCI API Reference
 
 .. c:function:: int cci_execute_batch(int conn_handle, int num_sql_stmt, char **sql_stmt, T_CCI_QUERY_RESULT **query_result, T_CCI_ERROR *err_buf)
 
-	In CCI, multiple jobs can be processed simultaneously when using DML queries such as **INSERT** / **UPDATE** / **DELETE**. `CCI_QUERY_RESULT_RESULT <#api_api_cci_queryresultresult_ht_1623>`_ () and :c:func:`cci_execute_batch` functions can be used to execute such batch jobs. Note that prepared statements cannot be used in the :c:func:`cci_execute_batch` function.
+	In CCI, multiple jobs can be processed simultaneously when using DML queries such as **INSERT** / **UPDATE** / **DELETE**. :c:macro:`CCI_QUERY_RESULT_RESULT` and :c:func:`cci_execute_batch` functions can be used to execute such batch jobs. Note that prepared statements cannot be used in the :c:func:`cci_execute_batch` function.
 
 	:param conn_handle: (IN) Connection handle
 	:param num_sql_stmt: (IN)  The number of *sql_stmt*
@@ -924,7 +924,7 @@ CCI API Reference
 		*   **CCI_ER_QUERY_TIMEOUT**
 		*   **CCI_ER_LOGIN_TIMEOUT**
 
-	Executes *sql_stmt* as many times as *num_sql_stmt* specified as a parameter and returns the number of queries executed with the query_result variable. You can use the macro (`CCI_QUERY_RESULT_RESULT <#api_api_cci_queryresultresult_ht_1623>`_, `CCI_QUERY_RESULT_ERR_MSG <#api_api_cci_queryresulterrmsg_ht_870>`_, `CCI_QUERY_RESULT_STMT_TYPE <#api_api_cci_queryresultstmttype__9124>`_) available in the :c:func:`cci_execute_array` function to get the information about the execution result. For more information about each macro, see the :c:func:`cci_execute_array` function. However, note that the validity check is not performed for each parameter entered in the macro. After using the *query_result* variable, you must delete the query result by using the :c:func:`cci_query_result_free` function.
+	Executes *sql_stmt* as many times as *num_sql_stmt* specified as a parameter and returns the number of queries executed with the query_result variable. You can use the macro (:c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE`) available in the :c:func:`cci_execute_array` function to get the information about the execution result. For more information about each macro, see the :c:func:`cci_execute_array` function. However, note that the validity check is not performed for each parameter entered in the macro. After using the *query_result* variable, you must delete the query result by using the :c:func:`cci_query_result_free` function.
 
 	.. code-block:: c
 
@@ -969,7 +969,7 @@ CCI API Reference
 
 .. c:function:: int cci_execute_result(int req_handle, T_CCI_QUERY_RESULT **query_result, T_CCI_ERROR *err_buf)
 
-	The **cci_execute_result**  function gets the execution results (e.g. statement type, result count) performed by :c:func`cci_execute`. The results of each query are retrieved by `CCI_QUERY_RESULT_STMT_TYPE <#api_api_cci_queryresultstmttype__9124>`_ and `CCI_QUERY_RESULT_RESULT <#api_api_cci_queryresultresult_ht_1623>`_. The query results used must be deleted by :c:func:`cci_query_result_free`.
+	The **cci_execute_result**  function gets the execution results (e.g. statement type, result count) performed by :c:func`cci_execute`. The results of each query are retrieved by :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` and :c:macro:`CCI_QUERY_RESULT_RESULT`. The query results used must be deleted by :c:func:`cci_query_result_free`.
 
 	:param req_handle: (IN) Request handle of the prepared statement
 	:param query_result: (OUT) Query results
@@ -1198,7 +1198,7 @@ CCI API Reference
 
 .. c:function:: int cci_get_err_msg(int err_code, char *msg_buf, int msg_buf_size)
 
-	The **cci_get_err_msg** function stores error messages in the error message buffer. For details on error codes and error messages, see `CCI Error Codes and Error Messages <#api_api_cci_programming_htm_err>`_.
+	The **cci_get_err_msg** function stores error messages in the error message buffer. For details on error codes and error messages, see :ref:`CCI Error Codes and Error Messages <cci-error-codes>`.
 
 	:param err_code: (IN) Error code
 	:param msg_buf: (OUT) Error message buffer
@@ -1207,7 +1207,7 @@ CCI API Reference
 
 .. c:function:: int cci_get_error_msg(int err_code, T_CCI_ERROR *err_buf, char *msg_buf, int msg_buf_size)
 
-	Saves the error messages corresponding to the CCI error codes in the message buffer. If the value of CCI error code is **CCI_ER_DBMS**, the database error buffer (*err_buf*) receives the error message sent from the data server and saves it in the message buffer. For details on error codes and messages, see `CCI Error Codes and Error Messages <#api_api_cci_programming_htm_err>`_.
+	Saves the error messages corresponding to the CCI error codes in the message buffer. If the value of CCI error code is **CCI_ER_DBMS**, the database error buffer (*err_buf*) receives the error message sent from the data server and saves it in the message buffer. For details on error codes and messages, see :ref:`CCI Error Codes and Error Messages <cci-error-codes>`.
 
 	:param err_code: (IN) Error code
 	:param err_buf: (OUT) Database error buffer
@@ -2451,7 +2451,7 @@ CCI API Reference
 
 .. c:function:: int cci_set_max_row(int req_handle, int max)
 
-	The **cci_set_max_row** function configures the maximum number of records for the results of the **SELECT** statement executed by `cci_execute <#api_api_cci_execute_htm>`_. If the *max* value is 0, it is the same as not setting the value.
+	The **cci_set_max_row** function configures the maximum number of records for the results of the **SELECT** statement executed by :c:func`cci_execute`. If the *max* value is 0, it is the same as not setting the value.
 
 	:param req_handle: (IN) Connection handle
 	:param max: (IN) The maximum number of rows

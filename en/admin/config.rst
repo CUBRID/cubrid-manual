@@ -12,6 +12,8 @@ This chapter covers the following topics:
 Configuring the Database Server
 ===============================
 
+.. _scope-server-conf:
+
 Scope of Database Server Configuration
 --------------------------------------
 
@@ -43,7 +45,7 @@ The following parameter syntax rules are applied when configuring parameters in 
 
 **Using SQL Statements**
 
-You can configure a parameter value by using SQL statements in the CSQL Interpreter or CUBRID Manager's Query Editor. Note that you cannot change every parameter. For updatable parameters, see `cubrid.conf Configuration File and Default Parameters <#pm_pm_db_setting_htm>`_. ::
+You can configure a parameter value by using SQL statements in the CSQL Interpreter or CUBRID Manager's Query Editor. Note that you cannot change every parameter. For updatable parameters, see :ref:`cubrid-conf-default-parameters`. ::
 
 	SET SYSTEM PARAMETERS 'parameter_name=value [{; name=value}...]'
 
@@ -57,7 +59,7 @@ The following example shows how to retrieve the result of an index scan in OID o
 
 **Using Session Commands of the CSQL Interpreter**
 
-You can configure system parameter values by using session commands (;**SET**) in the CSQL Interpreter. Note that you cannot change every parameter. For updatable parameters, see `cubrid.conf Configuration File and Default Parameters <#pm_pm_db_setting_htm>`_.
+You can configure system parameter values by using session commands (;**SET**) in the CSQL Interpreter. Note that you cannot change every parameter. For updatable parameters, see :ref:`cubrid-conf-default-parameters`.
 
 The following example shows how to configure the **block_ddl_statement** parameter to 1 so that execution of DDL statements is not allowed. ::
 
@@ -80,30 +82,30 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
 
 **Database Server System Parameters**
 
-The following are database server system parameters that can be used in the **cubrid.conf** configuration file. For the scope of **client** and **server parameters**, see `Scope of Database Server Configuration <#pm_pm_server_general_htm>`_.
+The following are database server system parameters that can be used in the **cubrid.conf** configuration file. For the scope of **client** and **server parameters**, see :ref:`scope-server-conf`.
 
 You can change the parameters that are capable of dynamically changing the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** dynamically. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change client parameters.
 
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 | Category                                                         | Parameter Name                      | Applied                 | Type     | Default Value                  | Dynamicity     |
 +==================================================================+=====================================+=========================+==========+================================+================+
-| `Connection <#pm_pm_db_classify_connect_htm>`_                   | cubrid_port_id                      | client parameter        | int      | 1523                           |                |
+| :ref:`connection-parameters`                                     | cubrid_port_id                      | client parameter        | int      | 1523                           |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | db_hosts                            | client parameter        | string   | NULL                           | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | max_clients                         | server parameter        | int      | 100                            |                |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Memory <#pm_pm_db_classify_memory_htm>`_                        | data_buffer_size                    | server parameter        | int      | 512M                           |                |
+| :ref:`memory-parameters`                                         | data_buffer_size                    | server parameter        | int      | 512M                           |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | index_scan_oid_buffer_size          | server parameter        | int      | 64K                            |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | sort_buffer_size                    | server parameter        | int      | 2M                             |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | temp_file_memory_size_in_pages      | server parameter        | int      | 4                              |                |
+|                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
+|                                                                  | thread_stack_size                   | server parameter        | int      | 1048576                        |                |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| thread_stack_size                                                | server parameter                    | int                     | 1048576  |                                |                |
-+------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Disk <#pm_pm_db_classify_disk_htm>`_                            | db_volume_size                      | server parameter        | int      | 512M                           |                |
+| :ref:`disk-parameters`                                           | db_volume_size                      | server parameter        | int      | 512M                           |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | dont_reuse_heap_file                | server parameter        | bool     | no                             |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
@@ -117,7 +119,7 @@ You can change the parameters that are capable of dynamically changing the setti
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | log_volume_size                     | server parameter        | int      | 512M                           |                |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Error message <#pm_pm_db_classify_error_htm>`_                  | call_stack_dump_activation_list     | client/server parameter | string   | NULL                           | available      |
+| :ref:`error-parameters`                                          | call_stack_dump_activation_list     | client/server parameter | string   | NULL                           | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | call_stack_dump_deactivation_list   | client/server parameter | string   | NULL                           | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
@@ -131,7 +133,7 @@ You can change the parameters that are capable of dynamically changing the setti
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | error_log_size                      | client/server parameter | int      | 8000000                        | available      |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Concurrency/Lock <#pm_pm_db_classify_lock_htm>`_                | deadlock_detection_interval_in_secs | server parameter        | float    | 1.0                            | available      |
+| :ref:`lock-parameters`                                           | deadlock_detection_interval_in_secs | server parameter        | float    | 1.0                            | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | isolation_level                     | client parameter        | int      | 3                              | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
@@ -139,7 +141,7 @@ You can change the parameters that are capable of dynamically changing the setti
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | lock_timeout_in_secs                | client parameter        | int      | -1                             | available      |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Logging <#pm_pm_db_classify_logging_htm>`_                      | adaptive_flush_control              | server parameter        | bool     | yes                            | available      |
+| :ref:`logging-parameters`                                        | adaptive_flush_control              | server parameter        | bool     | yes                            | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | background_archiving                | server parameter        | bool     | yes                            | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
@@ -159,11 +161,11 @@ You can change the parameters that are capable of dynamically changing the setti
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | sync_on_nflush                      | server parameter        | int      | 200                            | available      |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Transaction handling <#pm_pm_db_classify_transaction_ht_3621>`_ | async_commit                        | server parameter        | bool     | no                             |                |
+| :ref:`transaction-parameters`                                    | async_commit                        | server parameter        | bool     | no                             |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | group_commit_interval_in_msecs      | server parameter        | int      | 0                              | available      |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Statement/Type <#pm_pm_db_classify_type_htm>`_                  | add_column_update_hard_default      | client parameter        | bool     | no                             | available      |
+| :ref:`stmt-type-parameters`                                      | add_column_update_hard_default      | client parameter        | bool     | no                             | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | alter_table_change_type_strict      | client/server parameter | bool     | no                             | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
@@ -205,11 +207,11 @@ You can change the parameters that are capable of dynamically changing the setti
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | unicode_output_normalization        | client/server parameter | bool     | no                             | available      |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Query cache <#pm_pm_db_classify_querycache_htm>`_               | max_plan_cache_entries              | client/server parameter | int      | 1000                           |                |
+| :ref:`plan-cache-parameters`                                     | max_plan_cache_entries              | client/server parameter | int      | 1000                           |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | max_filter_pred_cache_entries       | client/server parameter | int      | 1000                           |                |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Utility <#pm_pm_db_classify_utility_htm>`_                      | backup_volume_max_size_bytes        | server parameter        | int      | -1                             |                |
+| :ref:`utility-parameters`                                        | backup_volume_max_size_bytes        | server parameter        | int      | -1                             |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | communication_histogram             | client parameter        | bool     | no                             | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
@@ -217,9 +219,9 @@ You can change the parameters that are capable of dynamically changing the setti
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | csql_history_num                    | client parameter        | int      | 50                             | available      |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `HA <#pm_pm_db_classify_ha_htm>`_                                | ha_mode                             | server parameter        | string   | off                            |                |
+| :ref:`ha-parameters`                                             | ha_mode                             | server parameter        | string   | off                            |                |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
-| `Others <#pm_pm_db_classify_etc_htm>`_                           | access_ip_control                   | server parameter        | bool     | no                             |                |
+| :ref:`other-parameters`                                          | access_ip_control                   | server parameter        | bool     | no                             |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | access_ip_control_file              | server parameter        | string   |                                |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
@@ -305,6 +307,8 @@ The following is the content of the **cubrid.conf** file. ::
 	# TCP port id for the CUBRID programs (used by all clients).
 	cubrid_port_id=1523
 
+.. _connection-parameters:
+
 Connection-Related Parameters
 -----------------------------
 
@@ -338,7 +342,7 @@ To connect to the server, the client first tries to connect to the specified ser
 
 **max_clients** is a parameter used to configure the maximum number of clients (usually broker application processes (CAS)) which allow concurrent connections to the database server. The **max_clients** parameter refers to the number of concurrent transactions. The default value is **100**.
 
-To grantee performance while increasing the number of concurrent users in CUBRID environment, you need to make the appropriate value of the **max_clients** (**cubrid.conf**) parameter and the `MAX_NUM_APPL_SERVER <#pm_pm_broker_one_htm_max_num_app_7692>`_ (**cubrid_broker.conf**) parameter. That is, you are required to configure the number of concurrent connections allowed by databases with the **max_clients** parameter. You should also configure the number of concurrent connections allowed by brokers with the **MAX_NUM_APPL_SERVER** parameter.
+To grantee performance while increasing the number of concurrent users in CUBRID environment, you need to make the appropriate value of the **max_clients** (**cubrid.conf**) parameter and the :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` (**cubrid_broker.conf**) parameter. That is, you are required to configure the number of concurrent connections allowed by databases with the **max_clients** parameter. You should also configure the number of concurrent connections allowed by brokers with the **MAX_NUM_APPL_SERVER** parameter.
 
 For example, in the **cubrid_broker.conf** file, two node of a broker where the **MAX_NUM_APPL_SERVER** value of [%query_editor] is 50 and the **MAX_NUM_APPL_SERVER** value of [%BROKER1] is 50 is trying to connect one database server, the concurrent connections (**max_clients** value) allowed by the database server can be configured as follows:
 
@@ -347,6 +351,8 @@ For example, in the **cubrid_broker.conf** file, two node of a broker where the 
 Especially, in HA environment, the value must be greater than the sum specified in **MAX_NUM_APPL_SERVER** of every broker node which connects to the same database.
 
 Note that the memory usage is affected by the value specified in **max_clients**. That is, if the number of value is high, the memory usage will increase regardless of whether or not the clients actually access the database.
+
+.. _memory-parameters:
 
 Memory-Related Parameters
 -------------------------
@@ -399,7 +405,10 @@ The server assigns one sort buffer for each client request, and releases the ass
 
 **thread_stacksize** is a parameter used to configure the stack size of a thread. The default value is **1048576** bytes. The value of the **thread_stacksize** parameter must not exceed the stack size allowed by the operating system.
 
-**Disk-Related Parameters**
+.. _disk-parameters:
+
+Disk-Related Parameters
+-----------------------
 
 The following are disk-related parameters for defining database volumes and storing files. The type and value range for each parameter are as follows:
 
@@ -452,6 +461,8 @@ The following are disk-related parameters for defining database volumes and stor
 
 **volume_extension_path** is a parameter used to configure the directory where automatically extended volumes are to be created. The default value is the volume location configured during the database creation.
 
+.. _error-parameters:
+
 Error Message-Related Parameters
 --------------------------------
 
@@ -481,83 +492,83 @@ The following are parameters related to processing error messages recorded by CU
 
 The following errors are included in **call_stack_dump_activation_list**.
 
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| Error Number | Error Message                                                                                                                                 |
-+==============+===============================================================================================================================================+
-| -2           | Internal system failure: no more specific information is available.                                                                           |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -7           | Trying to format disk volume xxx with an incorrect value xxx for number of pages.                                                             |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -13          | An I/O error occurred while reading page xxx of volume xxx.                                                                                   |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -14          | An I/O error occurred while writing page xxx of volume xxx.                                                                                   |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -17          | Internal error: fetching deallocated pageid xxx of volume xxx.                                                                                |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -19          | Internal error: pageptr = xxx of page xxx of volume xxx is not fixed.                                                                         |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -21          | Internal error: unknown sector xxx of volume xxx.                                                                                             |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -22          | Internal error: unknown page xxx of volume xxx.                                                                                               |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -45          | Slot xxx on page xxx of volume xxx is allocated to an anchored record. A new record cannot be inserted here.                                  |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -46          | Internal error: slot xxx on page xxx of volume xxx is not allocated.                                                                          |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -48          | Accessing deleted object xxx|xxx|xxx.                                                                                                         |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -50          | Internal error: relocation record of object xxx|xxx|xxx may be corrupted.                                                                     |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -51          | Internal error: object xxx|xxx|xxx may be corrupted.                                                                                          |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -52          | Internal error: object overflow address xxx|xxx|xxx may be corrupted.                                                                         |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -76          | Your transaction (index xxx, xxx@xxx|xxx) timed out waiting on xxx on page xxx|xxx. You are waiting for user(s) xxx to release the page lock. |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -78          | Internal error: an I/O error occurred while reading logical log page xxx (physical page xxx) of xxx.                                          |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -79          | Internal error: an I/O error occurred while writing logical log page xxx (physical page xxx) of xxx.                                          |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -81          | Internal error: logical log page xxx may be corrupted.                                                                                        |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -90          | Redo logging is always a page level logging operation. A data page pointer must be given as part of the address.                              |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -96          | Media recovery may be needed on volume xxx.                                                                                                   |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -97          | Internal error: unable to find log page xxx in log archives.                                                                                  |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -313         | Object buffer underflow while reading.                                                                                                        |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -314         | Object buffer overflow while writing.                                                                                                         |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -407         | Unknown key xxx referenced in B+tree index {vfid: (xxx, xxx), rt_pgid: xxx, key_type: xxx}.                                                   |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -414         | Unknown class identifier: xxx|xxx|xxx.                                                                                                        |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -415         | Invalid class identifier: xxx|xxx|xxx.                                                                                                        |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -416         | Unknown representation identifier: xxx.                                                                                                       |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -417         | Invalid representation identifier: xxx.                                                                                                       |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -583         | Trying to allocate an invalid number (xxx) of pages.                                                                                          |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -603         | Internal Error: Sector/page table of file VFID xxx|xxx seems corrupted.                                                                       |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -836         | LATCH ON PAGE(xxx|xxx) TIMEDOUT                                                                                                               |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -859         | LATCH ON PAGE(xxx|xxx) ABORTED                                                                                                                |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -890         | Partition failed.                                                                                                                             |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -891         | Appropriate partition does not exist.                                                                                                         |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -976         | Internal error: Table size overflow (allocated size: xxx, accessed size: xxx) at file table page xxx|xxx(volume xxx)                          |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -1040        | HA generic: xxx.                                                                                                                              |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-| -1075        | Descending index scan aborted because of lower priority on B+tree with index identifier: (vfid = (xxx, xxx), rt_pgid: xxx).                   |
-+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| Error Number | Error Message                                                                                                                                   |
++==============+=================================================================================================================================================+
+| -2           | Internal system failure: no more specific information is available.                                                                             |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -7           | Trying to format disk volume xxx with an incorrect value xxx for number of pages.                                                               |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -13          | An I/O error occurred while reading page xxx of volume xxx.                                                                                     |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -14          | An I/O error occurred while writing page xxx of volume xxx.                                                                                     |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -17          | Internal error: fetching deallocated pageid xxx of volume xxx.                                                                                  |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -19          | Internal error: pageptr = xxx of page xxx of volume xxx is not fixed.                                                                           |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -21          | Internal error: unknown sector xxx of volume xxx.                                                                                               |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -22          | Internal error: unknown page xxx of volume xxx.                                                                                                 |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -45          | Slot xxx on page xxx of volume xxx is allocated to an anchored record. A new record cannot be inserted here.                                    |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -46          | Internal error: slot xxx on page xxx of volume xxx is not allocated.                                                                            |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -48          | Accessing deleted object xxx|xxx|xxx.                                                                                                           |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -50          | Internal error: relocation record of object xxx|xxx|xxx may be corrupted.                                                                       |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -51          | Internal error: object xxx|xxx|xxx may be corrupted.                                                                                            |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -52          | Internal error: object overflow address xxx|xxx|xxx may be corrupted.                                                                           |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -76          | Your transaction (index xxx, xxx\@xxx|xxx) timed out waiting on xxx on page xxx|xxx. You are waiting for user(s) xxx to release the page lock.  |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -78          | Internal error: an I/O error occurred while reading logical log page xxx (physical page xxx) of xxx.                                            |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -79          | Internal error: an I/O error occurred while writing logical log page xxx (physical page xxx) of xxx.                                            |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -81          | Internal error: logical log page xxx may be corrupted.                                                                                          |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -90          | Redo logging is always a page level logging operation. A data page pointer must be given as part of the address.                                |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -96          | Media recovery may be needed on volume xxx.                                                                                                     |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -97          | Internal error: unable to find log page xxx in log archives.                                                                                    |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -313         | Object buffer underflow while reading.                                                                                                          |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -314         | Object buffer overflow while writing.                                                                                                           |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -407         | Unknown key xxx referenced in B+tree index {vfid: (xxx, xxx), rt_pgid: xxx, key_type: xxx}.                                                     |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -414         | Unknown class identifier: xxx|xxx|xxx.                                                                                                          |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -415         | Invalid class identifier: xxx|xxx|xxx.                                                                                                          |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -416         | Unknown representation identifier: xxx.                                                                                                         |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -417         | Invalid representation identifier: xxx.                                                                                                         |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -583         | Trying to allocate an invalid number (xxx) of pages.                                                                                            |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -603         | Internal Error: Sector/page table of file VFID xxx|xxx seems corrupted.                                                                         |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -836         | LATCH ON PAGE(xxx|xxx) TIMEDOUT                                                                                                                 |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -859         | LATCH ON PAGE(xxx|xxx) ABORTED                                                                                                                  |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -890         | Partition failed.                                                                                                                               |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -891         | Appropriate partition does not exist.                                                                                                           |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -976         | Internal error: Table size overflow (allocated size: xxx, accessed size: xxx) at file table page xxx|xxx(volume xxx)                            |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -1040        | HA generic: xxx.                                                                                                                                |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -1075        | Descending index scan aborted because of lower priority on B+tree with index identifier: (vfid = (xxx, xxx), rt_pgid: xxx).                     |
++--------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
 
 If error numbers are configured in **call_stack_dump_activation_list** of **cubrid.conf**, it is working like configuration done including errors above.
 
@@ -620,7 +631,7 @@ The following are parameters related to concurrency control and locks of the dat
 
 **isolation_level**
 
-**isolation_level** is a parameter used to configure the isolation level of a transaction. The higher the isolation level, the less concurrency and the less interruption by other concurrent transactions. The **isolation_level** parameter can be configured to an integer value from 1 to 6, which represent isolation levels, or character strings. The default value is **TRAN_REP_CLASS_UNCOMMIT_INSTANCE**. For details about each isolation level and parameter values, see `Setting Isolation Level <#syntax_syntax_tran_isolation_set_4219>`_ and the following table.
+**isolation_level** is a parameter used to configure the isolation level of a transaction. The higher the isolation level, the less concurrency and the less interruption by other concurrent transactions. The **isolation_level** parameter can be configured to an integer value from 1 to 6, which represent isolation levels, or character strings. The default value is **TRAN_REP_CLASS_UNCOMMIT_INSTANCE**. For details about each isolation level and parameter values, see :ref:`transaction-isolation-level` and the following table.
 
 +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
 | Isolation Level                                                          | isolation_level Parameter Value                                                           |
@@ -638,17 +649,17 @@ The following are parameters related to concurrency control and locks of the dat
 | READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES                     | "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE" or 1                                                |
 +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
 
-*   **TRAN_SERIALIZABLE** : This isolation level ensures the highest level of consistency. For details, see `SERIALIZABLE <#syntax_syntax_tran_isolation_ser_6285>`_.
+*   **TRAN_SERIALIZABLE** : This isolation level ensures the highest level of consistency. For details, see :ref:`isolation-level-6`.
 
-*   **TRAN_REP_CLASS_REP_INSTANCE** : This isolation level can occur phantom read. For details, see `REPEATABLE READ CLASS with REPEATABLE READ INSTANCES <#syntax_syntax_tran_isolation_rep_7879>`_.
+*   **TRAN_REP_CLASS_REP_INSTANCE** : This isolation level can occur phantom read. For details, see :ref:`isolation-level-5`.
 
-*   **TRAN_REP_CLASS_COMMIT_INSTANCE** : This isolation level can occur unrepeatable read. For details, see `REPEATABLE READ CLASS with READ COMMITTED INSTANCES <#syntax_syntax_tran_isolation_rep_8779>`_.
+*   **TRAN_REP_CLASS_COMMIT_INSTANCE** : This isolation level can occur unrepeatable read. For details, see :ref:`isolation-level-4`.
 
-*   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : This isolation level can occur dirty read. For details, see `REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES <#syntax_syntax_tran_isolation_rep_4346>`_.
+*   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : This isolation level can occur dirty read. For details, see :ref:`isolation-level-3`.
 
-*   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : This isolation level can occur unrepeatable read. It allows modification of table schema by current transactions while data is being retrieved. For details, see `READ COMMITTED CLASS with READ COMMITTED INSTANCES <#syntax_syntax_tran_isolation_rea_875>`_.
+*   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : This isolation level can occur unrepeatable read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-2`.
 
-*   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : This isolation level can occur dirty read. It allows modification of table schema by current transactions while data is being retrieved. For details, see `READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES <#syntax_syntax_tran_isolation_rea_9641>`_.
+*   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : This isolation level can occur dirty read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-1`.
 
 **lock_escalation**
 
@@ -718,7 +729,7 @@ The **checkpoint_interval_in_mins** and **checkpoint_every_npages** parameters a
 
 If the value is set to yes, the files will be deleted other than the recent log archive files for which the number is specified by **log_max_archives**. If it is set to no, the log archive files will not be deleted. Exceptionally, if **ha_mode** is set to on, the files other than the log archive files required for the HA-related processes and the recent log archive files of which the number is specified by **log_max_archives** will be deleted.
 
-If you want to build the CUBRID HA environment, see `Configuration <#admin_admin_ha_conf_cubrid_htm>`_.
+If you want to build the CUBRID HA environment, see :ref:`ha-configuration`.
 
 **log_buffer_size**
 
@@ -734,7 +745,7 @@ If the value of the **log_buffer_size** parameter is large, performance can be i
 
 However, if an active transaction still refers to an existing archive log file, the archive log file will not be deleted. That is, if a transaction starts at the point that the first archive log file is generated, and it is still active until the fifth archive log is generated, the first archive log file cannot be deleted.
 
-For how to set up the CUBRID HA environment, see `Administrator > CUBRID HA > cubrid.conf <#admin_admin_ha_conf_cubrid_htm>`_.
+For how to set up the CUBRID HA environment, see :ref:`CUBRID HA > cubrid.conf <ha-configuration>`.
 
 **max_flush_pages_per_second**
 
@@ -749,6 +760,8 @@ If a large number of **INSERT** or **UPDATE** operations are concentrated at a c
 **sync_on_nflush**
 
 **sync_on_nflush** is a parameter used to configure the interval in pages between after data and log pages are flushed from buffer and before they are synchronized with FILE I/O of operating system. Its default value is **200**. That is, the CUBRID Server performs synchronization with the FILE I/O of the operating system whenever 200 pages have been flushed. This is also a parameter related to I/O load.
+
+.. _transaction-parameters:
 
 Transaction Processing-Related Parameters
 -----------------------------------------
@@ -828,7 +841,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **add_column_update_hard_default** is a parameter used to configure whether or not to provide the hard_default value as the input value for a column when you add a new column to the **ALTER TABLE ... ADD COLUMN** clause.
 
-If a value for this parameter is set to yes, enter a new input value of a column as a hard default value when you have **NOT NULL** constraints but no **DEFAULT** constraints. If the parameter value is set to no, enter **NULL**, even if **NOT NULL** constraints exist. If a value for this parameter is set to yes and there is no hard default value for the column type to add, an error message will be displayed and a roll-back occurs. For the hard default for each type, see the `CHANGE Clause <#syntax_syntax_def_alttable_chang_3554>`_ of the **ALTER TABLE** statement.
+If a value for this parameter is set to yes, enter a new input value of a column as a hard default value when you have **NOT NULL** constraints but no **DEFAULT** constraints. If the parameter value is set to no, enter **NULL**, even if **NOT NULL** constraints exist. If a value for this parameter is set to yes and there is no hard default value for the column type to add, an error message will be displayed and a roll-back occurs. For the hard default for each type, see the :ref:`change-column` of the **ALTER TABLE** statement.
 
 .. code-block:: sql
 
@@ -860,7 +873,7 @@ If a value for this parameter is set to yes, enter a new input value of a column
 
 **alter_table_change_type_strict**
 
-**alter_table_change_type_strict** is a parameter used to configure whether or not to allow the conversion of column values according to the type change, and the default value is **no**. If a value for this parameter is set to no, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to yes, the value is not changed. For details, see CHANGE Clause in the `CHANGE/MODIFY Clause <#syntax_syntax_def_alttable_chang_3554>`_.
+**alter_table_change_type_strict** is a parameter used to configure whether or not to allow the conversion of column values according to the type change, and the default value is **no**. If a value for this parameter is set to no, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to yes, the value is not changed. For details, see CHANGE Clause in the :ref:`change-column`.
 
 **ansi_quotes**
 
@@ -902,7 +915,7 @@ UTF-8 and EUC-KR can be checked; ISO-8859-1 is one-byte encoding so it does not 
 
 **intl_date_lang** is a parameter used to input/output the values of **TIME**, **DATE**, **DATETIME**, and **TIMESTAMP**. If language name is omitted, it specifies a locale format of string of localized calendar (month, weekday, and AM/PM).
 
-The values allowed are as follows: Note that to use all values, locale library should be configured except built-in locale. For configuring locale, see `Administrator Guide > Locale Setting <#admin_admin_i18n_locale_htm>`_.
+The values allowed are as follows: Note that to use all values, locale library should be configured except built-in locale. For configuring locale, see :ref:`locale-setting`.
 
 +--------------+-----------------------------+
 | Language     | Locale Name of Language     |
@@ -959,7 +972,7 @@ The function outputting string based on calendar format of specified language is
 
 **no_backslash_escapes**
 
-**no_backslash_escapes** is a parameter used to configure whether or not to use backslash (\) as an escape character, and the default value is **yes**. If a value for this parameter is set to no, backslash (\) will be used as an escape character; if it is set to yes, backslash (\) will be used as a normal character. For details, see `Escape Special Characters <#syntax_syntax_datatype_string_es_323>`_.
+**no_backslash_escapes** is a parameter used to configure whether or not to use backslash (\) as an escape character, and the default value is **yes**. If a value for this parameter is set to no, backslash (\) will be used as an escape character; if it is set to yes, backslash (\) will be used as a normal character. For details, see :ref:`escape-characters`.
 
 **only_full_group_by**
 
@@ -1007,7 +1020,7 @@ The default value is **no**. Therefore, specify the **only_full_group_by** param
 
 **require_like_escape_character**
 
-**require_like_escape_character** is parameter used to configure whether or not to use an ESCAPE character in the **LIKE** clause, and the default value is **no**. If a value for this parameter is set to yes and a value for **no_backslash_escapes** is set to no, backslash (\) will be used as an ESCAPE character in the strings of the LIKE clause, otherwise you should specify an ESCAPE character by using the **LIKE ... ESCAPE** clause. For details, see `LIKE Predicate <#syntax_syntax_operator_where_lik_9691>`_.
+**require_like_escape_character** is parameter used to configure whether or not to use an ESCAPE character in the **LIKE** clause, and the default value is **no**. If a value for this parameter is set to yes and a value for **no_backslash_escapes** is set to no, backslash (\) will be used as an ESCAPE character in the strings of the LIKE clause, otherwise you should specify an ESCAPE character by using the **LIKE ... ESCAPE** clause. For details, see :ref:`like-expr`.
 
 **return_null_on_function_errors**
 
@@ -1084,11 +1097,13 @@ CUBRID can work with fully composed unicode. For clients which have fully decomp
 
 *   In CUBRID, composition and decomposition for normalization does not work separately. It is generally used when **unicode_input_normalization** and **unicode_output_normalization** are yes. In this case, codes entered from clients are stored in composed mode and and output in decomposed mode.
 
-For details, see `Administrator Guide > Globalization > Overview <#admin_admin_i18n_intro_htm>`_.
+For details, see :doc:`/admin/i18n`.
 
 **unicode_output_normalization**
 
 **unicode_output_normalization** is a parameter used to whether to output unicode stored in system level. The default value is **no**. For details, see the **unicode_input_normalization** description above.
+
+.. _plan-cache-parameters:
 
 Query Cache-Related Parameters
 ------------------------------
@@ -1117,6 +1132,8 @@ The following example shows how to cache up to 1,000 queries. ::
 
 **max_filter_pred_cache_entries** is a parameter used to specify the maximum number of of filtered index expressions. The filtered index expressions are stored with them complied and can be immediately used in server. If it is not stored in cache, the process is required which filtered index expressions are fetched from database schema and interpreted.
 
+.. _utility-parameters:
+
 Utility-Related Parameters
 --------------------------
 
@@ -1140,7 +1157,7 @@ The following are parameters related to utilities used in CUBRID. The type and v
 
 **communication_histogram**
 
-**communication_histogram** is a parameter used to configure the **cubrid statdump** utility. It is related to `Session Commands <#csql_csql_sessioncommand_htm>`_ "**;.h**" of the CSQL Interpreter and the default value is **no**. For details, see `Outputting Statistics Information of Server <#admin_admin_db_statdump_htm>`_.
+**communication_histogram** is a parameter used to configure the **cubrid statdump** utility. It is related to :ref:`csql-session-commands` "**;.h**" of the CSQL Interpreter and the default value is **no**. For details, see :ref:`statdump`.
 
 **compactdb_page_reclaim_only**
 
@@ -1153,6 +1170,8 @@ The following are parameters related to utilities used in CUBRID. The type and v
 **csql_history_num**
 
 **csql_history_num** is a parameter used to configure the CSQL Interpreter and the number of SQL statements to be stored in the history of the CSQL Interpreter. The default value is **50**.
+
+.. _ha-parameters:
 
 HA-Related Parameters
 ---------------------
@@ -1173,7 +1192,9 @@ The **ha_mode** parameter is used to set CUBRID HA, and the default value is **o
 *   on : CUBRID HA is used using the configured node as a node for failover.
 *   replica : CUBRID HA is used without using the configured node as a node for failover.
 
-To use the CUBRID HA feature, you should set HA-related parameters in the **cubrid_ha.conf** file in addition to the **ha_mode** parameter. For details, see `CUBRID HA <#admin_admin_ha_intro_htm>`_.
+To use the CUBRID HA feature, you should set HA-related parameters in the **cubrid_ha.conf** file in addition to the **ha_mode** parameter. For details, see :doc:`/admin/ha`.
+
+.. _other-parameters:
 
 Other Parameters
 ----------------
@@ -1210,11 +1231,11 @@ The following are other parameters. The type and value range for each parameter 
 
 **access_ip_control**
 
-**access_ip_control** is a parameter used to configure whether to use feature limiting the IP addresses that allow server access. The default value is **no**. For details, see `Limiting Database Server Access <#admin_admin_service_server_acces_3933>`_.
+**access_ip_control** is a parameter used to configure whether to use feature limiting the IP addresses that allow server access. The default value is **no**. For details, see :ref:`limiting-server-access`.
 
 **access_ip_control_file**
 
-**access_ip_control_file** is a parameter used to configure the file name in which the list of IP addresses allowed by servers is stored. If **access_ip_control** value is set to **yes**, database server allows the list of IP addresses only stored in the file specified by this parameter. For details, see `Limiting Database Server Access <#admin_admin_service_server_acces_3933>`_.
+**access_ip_control_file** is a parameter used to configure the file name in which the list of IP addresses allowed by servers is stored. If **access_ip_control** value is set to **yes**, database server allows the list of IP addresses only stored in the file specified by this parameter. For details, see :ref:`limiting-server-access`.
 
 **auto_restart_server**
 
@@ -1285,12 +1306,12 @@ cubrid_broker.conf Configuration File and Default Parameters
 
 **Broker System Parameters**
 
-The following table shows the broker parameters available in the broker configuration file (**cubrid_broker.conf**). For details, see `Common Parameters <#pm_pm_broker_common_htm>`_ and `Parameter by Broker <#pm_pm_broker_one_htm>`_. You can temporarily change the parameter of which configuration values can be dynamically changed by using the **broker_changer** utility. To apply configuration values even after restarting all brokers with **cubrid broker restart**, you should change the values in the **cubrid_broker.conf** file.
+The following table shows the broker parameters available in the broker configuration file (**cubrid_broker.conf**). For details, see :ref:`broker-common-parameters` and :ref:`parameter-by-broker`. You can temporarily change the parameter of which configuration values can be dynamically changed by using the **broker_changer** utility. To apply configuration values even after restarting all brokers with **cubrid broker restart**, you should change the values in the **cubrid_broker.conf** file.
 
 +-------------------------------------------------+---------------------------------+----------+------------------------------+---------------------+
 | Category                                        | Parameter Name                  | Type     | Default Value                | Dynamic Changes     |
 +=================================================+=================================+==========+==============================+=====================+
-| `Common Parameters <#pm_pm_broker_common_htm>`_ | ACCESS_CONTROL                  | bool     | no                           |                     |
+| :ref:`broker-common-parameters`                 | ACCESS_CONTROL                  | bool     | no                           |                     |
 |                                                 +---------------------------------+----------+------------------------------+---------------------+
 |                                                 | ACCESS_CONTROL_FILE             | string   |                              |                     |
 |                                                 +---------------------------------+----------+------------------------------+---------------------+
@@ -1298,7 +1319,7 @@ The following table shows the broker parameters available in the broker configur
 |                                                 +---------------------------------+----------+------------------------------+---------------------+
 |                                                 | MASTER_SHM_ID                   | int      | 30001                        |                     |
 +-------------------------------------------------+---------------------------------+----------+------------------------------+---------------------+
-| `Parameter by Broker <#pm_pm_broker_one_htm>`_  | ACCESS_LIST                     | string   | -                            |                     |
+| :ref:`parameter-by-broker`                      | ACCESS_LIST                     | string   | -                            |                     |
 |                                                 +---------------------------------+----------+------------------------------+---------------------+
 |                                                 | ACCESS_LOG                      | string   | ON                           | available           |
 |                                                 +---------------------------------+----------+------------------------------+---------------------+
@@ -1405,6 +1426,8 @@ The following is the content of the **cubrid_broker.conf** file provided by defa
 
 You can specify the location of broker configuration file (**cubrid_broker.conf**) file by using the **CUBRID_BROKER_CONF_FILE** variable. The variable is used when executing several brokers with different configuration.
 
+.. _broker-common-parameters:
+
 Common Parameters
 -----------------
 
@@ -1412,11 +1435,11 @@ The following are parameters commonly applied to entire brokers; it is written u
 
 **ACCESS_CONTROL**
 
-**ACCESS_CONTROL** is a parameter used to limit applications which are trying to connect a broker. The default value is **OFF**. For details, see `Broker Server Access Limitation <#admin_admin_service_broker_acces_9795>`_.
+**ACCESS_CONTROL** is a parameter used to limit applications which are trying to connect a broker. The default value is **OFF**. For details, see :ref:`limiting-broker-access`.
 
 **ACCESS_CONTROL_FILE**
 
-**ACCESS_CONTROL_FILE** is a parameter used to configure the name of a file in which a database name, database user ID, and the list of IPs are stored. For details, see `Broker Server Access Limitation <#admin_admin_service_broker_acces_9795>`_.
+**ACCESS_CONTROL_FILE** is a parameter used to configure the name of a file in which a database name, database user ID, and the list of IPs are stored. For details, see :ref:`limiting-broker-access`.
 
 **ADMIN_LOG_FILE**
 
@@ -1443,7 +1466,7 @@ The following describes parameters to configure the environment variables of bro
 
 **ACCESS_MODE**
 
-**ACCESS_MODE** is a parameter used to configure default mode of the broker. The default value is **RW**. For details, see `cubrid_broker.conf <#admin_admin_ha_conf_broker_htm>`_ of "Administrator's Guide".
+**ACCESS_MODE** is a parameter used to configure default mode of the broker. The default value is **RW**. For details, see :ref:`ha-cubrid-broker-conf` of "Administrator's Guide".
 
 **APPL_SERVER**
 
@@ -1486,7 +1509,7 @@ On the Windows system, if firewall exists between an application and the CUBRID 
 
 .. note::
 
-	For the **CUBRID_TMP** environment variable that specifies the UNIX domain socket file path of **cub_master** and **cub_broker** processes, see `Configuring the Environment Variable <#gs_gs_must_envar_htm>`_.
+	For the **CUBRID_TMP** environment variable that specifies the UNIX domain socket file path of **cub_master** and **cub_broker** processes, see :doc:`/env`.
 
 **APPL_SERVER_SHM_ID**
 
@@ -1534,6 +1557,8 @@ If the **CCI_DEFAULT_AUTOCOMMIT** parameter value is **OFF**, the broker applica
 
 **LONG_TRANSACTION_TIME** is a parameter used to configure execution time of query which is evaluated as long-duration transaction. The default value is **60** (seconds) and can be value in msec. with a decimal separator. For example, the value should be configured into 0.5 to configure 500 msec. Note that a parameter is configured to 0, it is not evaluated as a long-duration transaction.
 
+.. _max-num-appl-server:
+
 **MAX_NUM_APPL_SERVER**
 
 **MAX_NUM_APPL_SERVER** is a parameter used to configure the maximum number of simultaneous connections allowed. The default value is **40**.
@@ -1564,7 +1589,7 @@ The default value is **0** (seconds) and it means infinite wait. The value range
 
 **PREFERRED_HOSTS**
 
-**PREFERRED_HOSTS** is a parameter that must be configured if the broker mode is set to PHRO. The default value is **NULL**. FOR details, see `cubrid_broker.conf <#admin_admin_ha_conf_broker_htm>`_ of "Administrator's Guide."
+**PREFERRED_HOSTS** is a parameter that must be configured if the broker mode is set to PHRO. The default value is **NULL**. FOR details, see :ref:`ha-cubrid-broker-conf` of "Administrator's Guide."
 
 **SERVICE**
 

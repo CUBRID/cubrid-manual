@@ -2,6 +2,8 @@
 JDBC Driver
 ***********
 
+.. _jdbc-overview:
+
 JDBC Overview
 =============
 
@@ -111,6 +113,8 @@ The CUBRID JDBC driver (**cubrid_jdbc.jar**) is located in the jdbc directory u
 
 JDBC Programming
 ================
+
+.. _jdbc-connection-conf:
 
 Configuration Connection
 ------------------------
@@ -769,7 +773,7 @@ The following sample shows how to connect to CUBRID by using the JDBC driver, a
 
 **Loading JDBC Driver**
 
-To connect to CUBRID, load the JDBC driver by using the **forName** () method of the **Class**. For more information, see `Overview <#api_api_jdbc_overview_htm>`_ of the JDBC driver.
+To connect to CUBRID, load the JDBC driver by using the **forName** () method of the **Class**. For more information, see :ref:`jdbc-overview` of the JDBC driver.
 
 .. code-block:: java
 
@@ -777,7 +781,7 @@ To connect to CUBRID, load the JDBC driver by using the **forName** () method of
 
 **Connecting to Database**
 
-After loading the JDBC driver, use the **getConnection** () method of the **DriverManager** to connect to the database. To create a **Connection** object, you must specify information such as the URL which indicates the location of a database, user name, password, etc. For more information, see `Connection Configuration <#api_api_jdbc_programming_htm_con_3849>`_.
+After loading the JDBC driver, use the **getConnection** () method of the **DriverManager** to connect to the database. To create a **Connection** object, you must specify information such as the URL which indicates the location of a database, user name, password, etc. For more information, see :ref:`jdbc-connection-conf`.
 
 .. code-block:: java
 
@@ -950,7 +954,7 @@ The following example shows how to execute the **INSERT** statement by connectin
 JDBC API
 ========
 
-For details about JDBC API, see Java API Specification (`http://docs.oracle.com/javase/7/docs/api/ <http://docs.oracle.com/javase/7/docs/api/>`_) and for details about Java, see Java SE Documentation (`http://www.oracle.com/technetwork/java/javase/documentation/index.html <http://www.oracle.com/technetwork/java/javase/documentation/index.html>`_`) <http://www.oracle.com/technetwork/java/javase/documentation/index.html>`_.
+For details about JDBC API, see Java API Specification (http://docs.oracle.com/javase/7/docs/api) and for details about Java, see Java SE Documentation (http://www.oracle.com/technetwork/java/javase/documentation/index.htm).
 
 If cursor holdability is not configured, a cursor is maintained by default. For more information about cursor holdability, see CUBRID SQL Guide > Locking Transaction > Cursor Holdability.
 

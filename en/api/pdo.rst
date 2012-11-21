@@ -93,6 +93,8 @@ After you download the driver, you will see the **php_cubrid.dll** file for CUBR
 PDO Programming
 ===============
 
+.. _pdo-dsn:
+
 Data Source Name (DSN)
 ----------------------
 
@@ -201,7 +203,7 @@ This script will output all the currently installed PDO drivers: ::
 Connecting to CUBRID
 --------------------
 
-Use the data source name (DSN) to connect to the database server. For details about DSN, see `Data Source Name (DSN) <#api_api_pdo_programming_htm_dsn>`_.
+Use the data source name (DSN) to connect to the database server. For details about DSN, see :ref:`pdo-dsn`.
 
 Below is a simple PHP example script which performs a PDO connection to the CUBRID *demodb* database. You can notice that errors are handling in PDO by using a try-catch mechanism and the connection is closed by assigning **NULL** to the connection object.
 

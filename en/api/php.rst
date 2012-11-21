@@ -133,7 +133,7 @@ Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are
 #. Agree with the BSD license terms and click the [Next] button.
 #. Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like like **C:\Program Files\CUBRID PHP API**.
 
-#. Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see `Add Environment Variables to System PATH <#api_api_php_install_htm_error_me_8941>`_ below.
+#. Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see "Configuring the environment" below.
 
 #. If no error message is displayed, this should install the CUBRID PHP extension and update your **php.ini** file. Click [Finish] to close the installer.
 #. For changes to take place, restart your web server and execute the phpinfo() to confirm CUBRID has successfully been installed.
@@ -213,7 +213,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 	$> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
 	$> cd php-<version>/ext 
 
-#. Run **phpize**. For more information about getting **phpize**, see `Remark <#api_api_php_build_htm_remark>`_. ::
+#. Run **phpize**. For more information about getting **phpize**, see :ref:`Remark <phpize-remark>`. ::
 
 	cubrid-php> /usr/bin/phpize
 
@@ -251,6 +251,8 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
    +------------+------------+
    | Version    | 9.0.0.XXXX |
    +------------+------------+
+
+.. _phpize-remark:
 
 **Remark**
 

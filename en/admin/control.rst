@@ -300,7 +300,9 @@ The following example shows the message when master process has stopped. ::
 	% cubrid server status
 	@ cubrid server status
 	++ cubrid master is not running.
-	
+
+.. _limiting-server-access:
+
 Limiting Database Server Access
 -------------------------------
 

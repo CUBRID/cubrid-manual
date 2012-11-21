@@ -44,15 +44,17 @@ A CUBRID HA node consists of one master process (cub_master), one or more databa
 
 *   **Master process (cub_master)** : Exchanges heartbeat messages to control the internal management processes of CUBRID HA.
 
-*   **Database server process (cub_server)** : Provides services such as read or write to the user. For details, see `Server <#admin_admin_ha_concept_server_ht_7541>`_.
+*   **Database server process (cub_server)** : Provides services such as read or write to the user. For details, see :ref:`ha-server`.
 
-*   **Replication log copy process (copylogdb)** : Copies all transaction logs in a group. When the replication log copy process requests a transaction log from the database server process of the target node, the database server process returns the corresponding log. The location of copied transaction logs can be configured in the **REPL_LOG_HOME** of **cubrid-ha**. Use `cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_ utility to verify the information of copied replication logs. The replication log copy process has following three modes: SYNC, SEMISYNC, and ASYNC. You can configure it with the **LW_SYNC_MODE** of **cubrid-ha**. For details on these modes, see `Multiplexing Logs <#admin_admin_ha_feat_log_htm>`_.
+*   **Replication log copy process (copylogdb)** : Copies all transaction logs in a group. When the replication log copy process requests a transaction log from the database server process of the target node, the database server process returns the corresponding log. The location of copied transaction logs can be configured in the **REPL_LOG_HOME** of **cubrid-ha**. Use :ref:`cubrid-applyinfo` utility to verify the information of copied replication logs. The replication log copy process has following three modes: SYNC, SEMISYNC, and ASYNC. You can configure it with the **LW_SYNC_MODE** of **cubrid-ha**. For details on these modes, see :ref:`log-multiplexing`.
 
 .. image:: /images/image15.png
 
-*   **Replication log reflection process (applylogdb)** : Reflects the log that has been copied by the replication log copy process to a node. The information of reflected replications is stored in the internal catalog (db_ha_apply_info). You can use the `cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_ utility to verify this information.
+*   **Replication log reflection process (applylogdb)** : Reflects the log that has been copied by the replication log copy process to a node. The information of reflected replications is stored in the internal catalog (db_ha_apply_info). You can use the :ref:`cubrid-applyinfo` utility to verify this information.
 
 .. image:: /images/image16.png
+
+.. _ha-server:
 
 Servers
 -------
@@ -62,7 +64,7 @@ Here, the word "server" is a logical representation of database server processes
 *   **Active server** : A server that belongs to a master node; the status is active. An active server provides all services, including read, write, etc. to the user.
 *   **Standby server** : A standby server that belongs to a non-master node; the status is standby. A standby server provides only the read service to the user.
 
-The server status changes based on the status of the node. You can use the `cubrid changemode <#admin_admin_ha_util_changemode_h_8053>`_ utility to verify server status. The maintenance mode exists for operational convenience and you can change it by using the **cubrid changemode** utility.
+The server status changes based on the status of the node. You can use the :ref:`cubrid-changemode` utility to verify server status. The maintenance mode exists for operational convenience and you can change it by using the **cubrid changemode** utility.
 
 .. image:: /images/image17.png
 
@@ -90,7 +92,9 @@ A failback means that the previously failed master node automatically becomes a 
 
 .. image:: /images/image19.png
 
-If a heartbeat message fails to deliver, a failover will occur. For this reason, servers with unstable connection may experience failover even though no actual failures occur. To prevent a failover from occurring in the situation described above, configure **ha_ping_ports**. Configuring **ha_ping_ports** will send a ping message to a node specified in **ha_ping_ports** in order to verify whether the network is stable or not when a heartbeat message fails to deliver. For details on configuring **ha_ping_ports**, see `cubrid_ha.conf <#admin_admin_ha_conf_ha_htm>`_.
+If a heartbeat message fails to deliver, a failover will occur. For this reason, servers with unstable connection may experience failover even though no actual failures occur. To prevent a failover from occurring in the situation described above, configure **ha_ping_ports**. Configuring **ha_ping_ports** will send a ping message to a node specified in **ha_ping_ports** in order to verify whether the network is stable or not when a heartbeat message fails to deliver. For details on configuring **ha_ping_ports**, see :ref:`cubrid-ha-conf`.
+
+.. _broker-mode:
 
 Broker Mode
 -----------
@@ -99,7 +103,7 @@ A broker can access a server with one of the following modes: **Read Write**, **
 
 A broker finds and connects to a suitable server by trying to establish a connection in the order of server connections; this is, if it fails to establish a connection, it tries another connection to the next server defined until it reaches the last server. If no connection is made even after trying all servers, the broker fails to connect to a server.
 
-For details on how to configure broker mode, see `cubrid_broker.conf <#admin_admin_ha_conf_broker_htm>`_.
+For details on how to configure broker mode, see :ref:`ha-cubrid-broker-conf`.
 
 **Read Write**
 
@@ -144,7 +148,7 @@ The order of server connection is described below:
 
 **Preferred Host Read Only**
 
-A broker that provides the read service. This works in the same manner as the Read Only broker except its server connection order and server selecting criteria. The server connection order and server selecting criteria can be configured in **PREFERRED_HOSTS**. For details on configuring these, see `cubrid_broker.conf <#admin_admin_ha_conf_broker_htm>`_.
+A broker that provides the read service. This works in the same manner as the Read Only broker except its server connection order and server selecting criteria. The server connection order and server selecting criteria can be configured in **PREFERRED_HOSTS**. For details on configuring these, see :ref:`ha-cubrid-broker-conf`.
 
 The order of server connection is described below:
 
@@ -164,7 +168,7 @@ Duplexing servers is building a system by configuring duplicate hardware equipme
 
 **Server failover**
 
-A broker defines server connection order and connects to a server according to the defined order. If the connected server fails, the broker connects to the server with the next highest priority. This requires no processing in the application side. The actions taken when the broker connects to another server may differ according to the current mode of the broker. For details on the server connection order and configuring broker mode, see `cubrid_broker.conf <#admin_admin_ha_conf_broker_htm>`_.
+A broker defines server connection order and connects to a server according to the defined order. If the connected server fails, the broker connects to the server with the next highest priority. This requires no processing in the application side. The actions taken when the broker connects to another server may differ according to the current mode of the broker. For details on the server connection order and configuring broker mode, see :ref:`ha-cubrid-broker-conf`.
 
 .. image:: /images/image24.png
 
@@ -173,6 +177,8 @@ A broker defines server connection order and connects to a server according to t
 CUBRID HA does not automatically support server failback. Therefore, to manually apply failback, restore the master node that has been abnormally terminated and run it as a slave node, terminate the node that has become the master from the slave due to failover, and finally, change the role of each node again.
 
 For example, when *nodeA* is the master and *nodeB* is the slave, *nodeB* becomes the master and *nodeA* becomes the slave after a failover. After terminating *nodeB* (**cubrid heartbeat stop**) check (**cubrid heartbeat status**) whether the status of *nodeA* has become active. Start (**cubrid heartbeat start**) *nodeB* and it will become the slave.
+
+.. _duplexing-brokers:
 
 Duplexing Brokers
 -----------------
@@ -203,7 +209,9 @@ The broker failover is not automatically failed over by the settings of system p
 
 **Broker failback**
 
-If the failed broker is recovered after a failover, the connection to the existing broker is terminated and a new connection is established with the recovered broker which has the highest priority. This requires no processing in the application side as it is processed within the JDBC, CCI, and PHP drivers. Exeuction time of failback depends on the value configured in JDBC connection URL. For details, see `JDBC Configuration <#admin_admin_ha_conf_jdbc_htm>`_.
+If the failed broker is recovered after a failover, the connection to the existing broker is terminated and a new connection is established with the recovered broker which has the highest priority. This requires no processing in the application side as it is processed within the JDBC, CCI, and PHP drivers. Exeuction time of failback depends on the value configured in JDBC connection URL. For details, see :ref:`ha-jdbc-conf`.
+
+.. _log-multiplexing:
 
 Log Multiplexing
 ----------------
@@ -212,7 +220,7 @@ CUBRID HA keeps every node in the CUBRID HA group with the identical structure b
 
 .. image:: /images/image28.png
 
-The transaction log copy modes include **SYNC**, **SEMISYNC**, and **ASYNC**. This value can be configured by the user in `cubrid_ha.conf <#admin_admin_ha_conf_ha_htm>`_ file.
+The transaction log copy modes include **SYNC**, **SEMISYNC**, and **ASYNC**. This value can be configured by the user in :ref:`cubrid-ha-conf` file.
 
 **SYNC Mode**
 
@@ -443,11 +451,13 @@ The following example shows how to execute a broker from the master node. ::
 
 **Configuring Applications**
 
-Specifies the host name (*nodeA_broker*, *nodeB_broker*) and port for an application to connect in the connection URL. The **altHosts** attribute defines the broker where the next connection will be made when the connection to a broker fails. The following is an example of a JDBC program. For more information on CCI and PHP, see `CCI Configuration <#admin_admin_ha_conf_cci_htm>`_ and `PHP Configuration <#admin_admin_ha_conf_php_htm>`_.
+Specifies the host name (*nodeA_broker*, *nodeB_broker*) and port for an application to connect in the connection URL. The **altHosts** attribute defines the broker where the next connection will be made when the connection to a broker fails. The following is an example of a JDBC program. For more information on CCI and PHP, see :ref:`ha-cci-conf` and :ref:`ha-php-conf`.
 
 .. code-block:: java
 
 	Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA_broker:33000:testdb:::?charSet=utf-8&altHosts=nodeB_broker:33000", "dba", "");
+
+.. _ha-configuration:
 
 Environment Configuration
 =========================
@@ -475,13 +485,13 @@ This parameter cannot be modified dynamically. To modify the value of this param
 
 **log_max_archives** is a parameter used to configure the minimum number of archive log files to be archived. The minimum value is 0 and the default is **INT_MAX** (2147483647). When CUBRID has installed for the first time, this value is set to 0 in the **cubrid.conf** file. The behavior of the parameter is affected by **force_remove_log_archives**.
 
-The existing archive log files to which the activated transaction refers or the archive log files of the master node not reflected to the slave node in HA environment will not be deleted. For details, see the following **force_remove_log_archives**. For details about **log_max_archives**, see `Logging-Related Parameters <#pm_pm_db_classify_logging_htm>`_.
+The existing archive log files to which the activated transaction refers or the archive log files of the master node not reflected to the slave node in HA environment will not be deleted. For details, see the following **force_remove_log_archives**. For details about **log_max_archives**, see :ref:`logging-parameters`.
 
 **force_remove_log_archives**
 
 It is recommended to configure **force_remove_archives** to **no** so that archive logs to be used by HA-related processes always can be maintained to set up HA environment by configuring **ha_mode** to **on**.
 
-If you configure the value for **force_remove_log_archives** to yes, the archive log files which will be used in the HA-related process can be deleted, and this may lead to an inconsistency between replicated databases. If you want to maintain free disk space even though doing this could lead to risk, you can configure the value to yes. For details about **force_remove_log_archives**, see `Logging-Related Parameters <#pm_pm_db_classify_logging_htm>`_.
+If you configure the value for **force_remove_log_archives** to yes, the archive log files which will be used in the HA-related process can be deleted, and this may lead to an inconsistency between replicated databases. If you want to maintain free disk space even though doing this could lead to risk, you can configure the value to yes. For details about **force_remove_log_archives**, see :ref:`logging-parameters`.
 
 .. note::
 
@@ -491,7 +501,7 @@ If you configure the value for **force_remove_log_archives** to yes, the archive
 
 **max_clients** is a parameter used to configure the maximum number of clients to be connected to a database server simultaneously. The default is **100**.
 
-Because the replication log copy and the replication log reflection processes start by default if CUBRID HA is used, you must configure the value to twice the number of all nodes in the CUBRID HA group, except the corresponding node. Furthermore, you must consider the case in which a client that is connected to another node at the time of failover attempts to connect to that node. For details about max_client, see `Connection-Related Parameters <#pm_pm_db_classify_connect_htm>`_.
+Because the replication log copy and the replication log reflection processes start by default if CUBRID HA is used, you must configure the value to twice the number of all nodes in the CUBRID HA group, except the corresponding node. Furthermore, you must consider the case in which a client that is connected to another node at the time of failover attempts to connect to that node. For details about max_client, see :ref:`connection-parameters`.
 
 **The Parameters That Must Have the Same Value for All Nodes**
 
@@ -533,6 +543,8 @@ The following example shows how to configure **cubrid.conf**. Please take cautio
 	ha_mode=on
 	log_max_archives=100
 
+.. _cubrid-ha-conf:
+
 cubrid_ha.conf
 --------------
 
@@ -544,7 +556,7 @@ The **cubrid_ha.conf** file that has generation information on CUBRID HA is loca
 
 The host name of the member nodes specified in this parameter cannot be replaced with the IP. When a host name is used, the name must be registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **on** must be specified in **ha_node_list**. The value of the **ha_node_list** of all nodes in the CUBRID HA group must be identical. When a failover occurs, a node becomes a master node in the order specified in the parameter.
 
-This parameter can be modified dynamically. If you modify the value of this parameter, you must execute `cubrid heartbeat reload <#admin_admin_ha_util_heartbeat_ht_125>`_ to apply the changes.
+This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
 **ha_replica_list**
 
@@ -552,7 +564,7 @@ This parameter can be modified dynamically. If you modify the value of this para
 
 The group name must be identical to the name specified in **ha_replica_list**. The host names of member nodes and the host names of nodes specified in this parameter must be registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **replica** must be specified in **ha_replica_list**. The **ha_node_list** values of all nodes in the CUBRID HA group must be identical.
 
-This parameter can be modified dynamically. If you modify the value of this parameter, you must execute `cubrid heartbeat reload <#admin_admin_ha_util_heartbeat_ht_125>`_ to apply the changes.
+This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
 **ha_port_id**
 
@@ -574,13 +586,13 @@ Configuring this parameter can prevent split-brain, a phenomenon in which two ma
 
 The value can be one of the followings: **SYNC**, **SEMISYNC**, or **ASYNC**. The number of values must be the same as the number of nodes specified in **ha_node_list**. They must be ordered by the specified value. You can specify multiple nodes by using a colon (:). The replica node is always working in **ASNYC** mode regardless of this value.
 
-For details, see `Multiplexing Logs <#admin_admin_ha_feat_log_htm>`_.
+For details, see :ref:`log-multiplexing`.
 
 **ha_copy_log_base**
 
 **ha_copy_log_base** is a parameter used to configure the location of storing the transaction log copy. The default is **$CUBRID_DATABASES**.
 
-For details, see `Multiplexing Logs <#admin_admin_ha_feat_log_htm>`_.
+For details, see :ref:`log-multiplexing`.
 
 **ha_db_list**
 
@@ -641,7 +653,10 @@ The following example shows how to configure the value of /etc/hosts (a host nam
 	127.0.0.1 localhost.localdomain localhost
 	192.168.0.1 nodeA
 
-**cubrid_broker.conf**
+.. _ha-cubrid-broker-conf:
+
+cubrid_broker.conf
+------------------
 
 The **cubrid_broker.conf** file that has general information on configuring CUBRID broker is located in the **$CUBRID/conf** directory. This section explains the parameters of **cubrid_broker.conf** that are used by CUBRID HA.
 
@@ -649,13 +664,13 @@ The **cubrid_broker.conf** file that has general information on configuring CUBR
 
 **ACCESS_MODE** is a parameter used to configure the mode of a broker. The default is **RW**.
 
-Its value can be one of the followings: **RW** (Read Write), **RO** (Read Only), **SO** (Slave Only), or **PHRO** (Preferred Host Read Only). For details, see `Broker Mode <#admin_admin_ha_concept_broker_ht_6042>`_.
+Its value can be one of the followings: **RW** (Read Write), **RO** (Read Only), **SO** (Slave Only), or **PHRO** (Preferred Host Read Only). For details, see :ref:`broker-mode`.
 
 **PREFERRED_HOSTS**
 
 **PREFERRED_HOSTS** is a parameter used only when the **ACCESS_MODE** parameter value is **PHRO**. The default value is **NULL**.
 
-You can specify multiple nodes by using a colon (:). First, it tries to connect to host in the following order: host specified in the **PREFERRED_HOSTS** parameter first and then host specified in **$CUBRID_DATABASES/databases.txt**. For details, see `Broker Mode <#admin_admin_ha_concept_broker_ht_6042>`_.
+You can specify multiple nodes by using a colon (:). First, it tries to connect to host in the following order: host specified in the **PREFERRED_HOSTS** parameter first and then host specified in **$CUBRID_DATABASES/databases.txt**. For details, see :ref:`broker-mode`.
 
 The following example shows how to configure **cubrid_broker.conf**. ::
 
@@ -677,7 +692,8 @@ The following example shows how to configure **cubrid_broker.conf**. ::
 	ACCESS_MODE             =PHRO
 	PREFERRED_HOSTS         =nodeA:nodeB:nodeC
 
-**databases.txt**
+databases.txt
+-------------
 
 The **databases.txt** file that has information on servers to be connected by a broker and their order is located in the **$CUBRID_DATABASES** (if not specified, $CUBRID/databases) directory; the information can be configured by using **db_hosts**. You can specify multiple nodes by using a colon (:).
 
@@ -686,7 +702,10 @@ The following example shows how to configure **databases.txt**. ::
 	#db-name    vol-path        db-host     log-path     lob-base-path
 	testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
-**JDBC Configuration**
+.. _ha-jdbc-conf:
+
+JDBC Configuration
+------------------
 
 To use CUBRID HA in JDBC, you must specify the connection information of another broker (*nodeB_broker*) to be connected when a failure occurs in broker (*nodeA_broker*). The attribute configured for CUBRID HA is **althosts** which represents information of one or more broker nodes to be connected. For details, see "API Reference > JDBC API > JDBC Programming > Connection Configuration."
 
@@ -696,7 +715,10 @@ The following example shows how to configure JDBC:
 
 	Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA_broker:33000:testdb:::?charSet=utf-8&altHosts=nodeB_broker:33000", "dba", "");
 
-**CCI Configuration**
+.. _ha-cci-conf:
+
+CCI Configuration
+-----------------
 
 To use CUBRID HA in CCI, you must use the :c:func:`cci_connect_with_url` function which additionally allows specifying connection information in connection URL; the connection information is used when a failure occurs in broker. The attribute configured for CUBRID HA is **altHosts** which represents information of one or more broker nodes to be connected.
 
@@ -711,7 +733,10 @@ The following example shows how to configure CCI.
 		  return 1;
 	}
 
-**PHP Configuration**
+.. _ha-php-conf:
+
+PHP Configuration
+-----------------
 
 To use the functions of CUBRID HA in PHP, connect it to the broker by using **cubrid_connect_with_url**, which is used to specify the connection information of the failover broker in the connection URL. The attribute specified for CUBRID HA is **altHosts**, the information on one or more broker nodes to be connected when a failover occurs.
 
@@ -844,6 +869,8 @@ How to configure **cubrid.conf** file is shown below. ::
 
 	ha_mode=on
 
+.. _cubrid-applyinfo:
+
 cubrid applyinfo
 ----------------
 
@@ -934,7 +961,7 @@ The items shown by each status are as follows:
     *   DB creation time: The creation time of a database copied through replication log copy process
     *   EOF LSA: Information of pageid and offset copied at the last time on the target node by the replication log copy process. There will be a delay in copying logs as much as difference with the EOF LSA value of "Active Info." and with the Append LSA value of "Copied Active Info."
     *   Append LSA: Information of pageid and offset written at the last time on the disk by the replication log copy process. This value can be less than or equal to EOF LSA. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
-    *   HA server state: Status of a database server process which replication log copy process receives logs from. For details on status, see `Server <#admin_admin_ha_concept_server_ht_7541>`_.
+    *   HA server state: Status of a database server process which replication log copy process receives logs from. For details on status, see :ref:`ha-server`.
 
 *   Active Info.
 
@@ -943,6 +970,8 @@ The items shown by each status are as follows:
     *   EOF LSA: The last information of pageid and offset of a database transaction log of a node that is configured in the **-r** option. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
     *   Append LSA: Information of pageid and offset written at the last time on the disk by the database of which node was configured in the **-r** option.
     *   HA server state: The server status of a database server of which node was configured in the **-r** option.
+
+.. _cubrid-changemode:
 
 cubrid changemode
 -----------------
@@ -1044,7 +1073,7 @@ Default Structure of HA
 
 The most basic structure of CUBRID HA consists of one master node and one slave node.
 
-The default configuration is one master node and one slave node. To distribute the write load, a multi-slave node or load-distributed configuration is recommended. In addition, to access a specific node such as a slave node or replica node in read-only mode, configure the Read Only broker or the Preferred Host Read Only broker. For details about broker configuration, see `Duplexing Brokers <#admin_admin_ha_feat_broker_htm>`_.
+The default configuration is one master node and one slave node. To distribute the write load, a multi-slave node or load-distributed configuration is recommended. In addition, to access a specific node such as a slave node or replica node in read-only mode, configure the Read Only broker or the Preferred Host Read Only broker. For details about broker configuration, see :ref:`duplexing-brokers`.
 
 **An Example of Node Configuration**
 
@@ -1083,7 +1112,7 @@ The example below shows that the RW broker is set in each node, and *node A* and
 
 **Connection Configuration of Applications**
 
-See `JDBC Configuration <#admin_admin_ha_conf_jdbc_htm>`_, `CCI Configuration <#admin_admin_ha_conf_cci_htm>`_, and `PHP Configuration <#admin_admin_ha_conf_php_htm>`_ in Environment Configuration.
+See :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, and :ref:`ha-php-conf` in Environment Configuration.
 
 **Remark**
 
@@ -1150,7 +1179,7 @@ Connect the application to access to the broker of *node A*, *node B*, or *node 
 	Connection connection = DriverManager.getConnection(
 		"jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000,nodeC:33000", "dba", "");
 
-For details, see `JDBC Configuration <#admin_admin_ha_conf_jdbc_htm>`_, `CCI Configuration <#admin_admin_ha_conf_cci_htm>`_, and `PHP Configuration <#admin_admin_ha_conf_php_htm>`_ in Environment Configuration.
+For details, see :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, and :ref:`ha-php-conf` in Environment Configuration.
 
 **Remark**
 
@@ -1161,7 +1190,7 @@ The data in the CUBRID HA group may lose integrity when there are multiple failu
 
 In addition, if the mode of replication log copy process is ASYNC, the data in the CUBRID HA group may lose integrity.
 
-If the data in the CUBRID HA group loses integrity for any of the reasons above, you can fix it by using `Rebuilding Replication <#admin_admin_ha_scenario_rebuild__8498>`_.
+If the data in the CUBRID HA group loses integrity for any of the reasons above, you can fix it by using :ref:`rebuilding-replication`.
 
 **Remark**
 
@@ -1272,7 +1301,7 @@ Connect the application to access in read-only mode to the broker of *node C* or
 	Connection connection = DriverManager.getConnection(
 		"jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&altHosts=nodeD:33000", "dba", "");
 
-For details, see `JDBC Configuration <#admin_admin_ha_conf_jdbc_htm>`_, `CCI Configuration <#admin_admin_ha_conf_cci_htm>`_, and `PHP Configuration <#admin_admin_ha_conf_php_htm>`_ in Environment Configuration.
+For details, see :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, and :ref:`ha-php-conf` in Environment Configuration.
 
 **Remark**
 
@@ -1628,9 +1657,9 @@ Detection of Replication Mismatch and Rebuild
 Detection of Replication Mismatch
 ---------------------------------
 
-Replication mismatch between replication nodes, indicating that data of the master node and the slave node is not identical, can be detected to some degree by the following process. However, please note that there is no more accurate way to detect a replication mismatch than by directly comparing the data of the master node to the data of the slave node. If it is determined that there has been a replication mismatch, you should rebuild the database of the master node to the slave node (see `Rebuilding Replications <#admin_admin_ha_scenario_rebuild__8498>`_.)
+Replication mismatch between replication nodes, indicating that data of the master node and the slave node is not identical, can be detected to some degree by the following process. However, please note that there is no more accurate way to detect a replication mismatch than by directly comparing the data of the master node to the data of the slave node. If it is determined that there has been a replication mismatch, you should rebuild the database of the master node to the slave node (see :ref:`rebuilding-replication`.)
 
-*   On the slave node, execute **cubrid applyinfo** to check the "Fail count" value. If the "Fail count" is 0, it can be determined that no transaction has failed in replication (see `cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_.) ::
+*   On the slave node, execute **cubrid applyinfo** to check the "Fail count" value. If the "Fail count" is 0, it can be determined that no transaction has failed in replication (see :ref:`cubrid-applyinfo`.) ::
 
 	[nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
 	 
@@ -1644,7 +1673,7 @@ Replication mismatch between replication nodes, indicating that data of the mast
 	Fail count                     : 0
 	...
 
-*   To check whether copying replication logs has been delayed or not on the slave node, execute **cubrid applyinfo** and compare the "Append LSA" value of "Copied Active Info." to the "Append LSA" value of "Active Info.". If there is a big difference between the two values, it means that delay has occurred while copying the replication logs to the slave node (see `cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_.) ::
+*   To check whether copying replication logs has been delayed or not on the slave node, execute **cubrid applyinfo** and compare the "Append LSA" value of "Copied Active Info." to the "Append LSA" value of "Active Info.". If there is a big difference between the two values, it means that delay has occurred while copying the replication logs to the slave node (see :ref:`cubrid-applyinfo`.) ::
 
 	[nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
  
@@ -1666,7 +1695,7 @@ Replication mismatch between replication nodes, indicating that data of the mast
 
 *   If a delay seems to occur when copying the replication logs, check whether the network line speed is slow, whether there is sufficient free disk space, disk I/O is normal, etc.
 
-*   To check the delay in applying the replication log in the slave node, execute **cubrid applyinfo** and compare the "Committed page" value of "Applied Info." to the "EOF LSA" value of "Copied Active Info.". If there is a big difference between the two values, it means that a delay has occurred while applying the replication logs to the slave database (see `cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_.) ::
+*   To check the delay in applying the replication log in the slave node, execute **cubrid applyinfo** and compare the "Committed page" value of "Applied Info." to the "EOF LSA" value of "Copied Active Info.". If there is a big difference between the two values, it means that a delay has occurred while applying the replication logs to the slave database (see :ref:`cubrid-applyinfo`.) ::
 
 	[nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
  
@@ -1698,7 +1727,7 @@ Error Messages
 
 **Replication Log Copy Process (copylogdb)**
 
-The error messages from the replication log copy process are stored in **$CUBRID/log/***db-name***@***remote-node-name***_copylogdb.err**. The severity levels of error messages found in the replication log copy process are as follows: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see `Error Message-Related Parameters <#pm_pm_db_classify_error_htm>`_.
+The error messages from the replication log copy process are stored in **$CUBRID/log/***db-name***@***remote-node-name***_copylogdb.err**. The severity levels of error messages found in the replication log copy process are as follows: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see :ref:`error-parameters`.
 
 **Initialization Error Messages**
 
@@ -1799,7 +1828,7 @@ Error messages that can be found in this stage are as follows:
 
 **Replication Log Reflection Process (applylogdb)**
 
-The error messages from the replication log reflection process are stored in **$CUBRID/log/***db-name***@***local-node-name***_applylogdb_***db-name***_***remote-node-name***.err**. The severity levels of error message found in the replication log reflection process are as follow: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see `Error Message-Related Parameters <#pm_pm_db_classify_error_htm>`_.
+The error messages from the replication log reflection process are stored in **$CUBRID/log/***db-name***@***local-node-name***_applylogdb_***db-name***_***remote-node-name***.err**. The severity levels of error message found in the replication log reflection process are as follow: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see :ref:`error-parameters`.
 
 **Initialization Error Messages**
 
@@ -1909,6 +1938,8 @@ The error messages that can be found in this stage are as follows:
 | 1036           | log applier: log applier is terminated by signal.                                                                                                                                                        | error        | The replication log reflection process has been terminated by a specified signal.                        | It will be recovered internally. |
 |                |                                                                                                                                                                                                          |              |                                                                                                          |                                  |
 +----------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+----------------------------------------------------------------------------------------------------------+----------------------------------+
+
+.. _rebuilding-replication:
 
 Rebuilding Replication
 ----------------------

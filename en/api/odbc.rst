@@ -99,7 +99,7 @@ After you filled out every field, click the [OK] button. You will notice that d
 
 **Connecting to a Database Directly without DSN**
 
-It is also possible to connect to a CUBRID database directly in the application source code by using the connecting string. Below shows the example of connection string. For more information, see `Configuring Connection String <#api_api_odbc_programming_htm_con_5232>`_. ::
+It is also possible to connect to a CUBRID database directly in the application source code by using the connecting string. Below shows the example of connection string. ::
 
 	conn = "driver={CUBRID Driver};server=localhost;port=33000;uid=dba;pwd=;db_name=demodb;"
 

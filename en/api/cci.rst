@@ -2,6 +2,8 @@
 CCI Driver
 **********
 
+.. _cci-overview:
+
 CCI Overview
 ============
 
@@ -345,7 +347,7 @@ General process for writing applications is as follows. For using the prepared s
 
 **Configuring Library**
 
-Once you have written applications using CCI, you should decide, according to its features, whether to execute CCI as static or dynamic link before you build it. See the table in `CCI Overview <#api_api_cci_overview_htm>`_ to decide which library will be used.
+Once you have written applications using CCI, you should decide, according to its features, whether to execute CCI as static or dynamic link before you build it. See the table in :ref:`cci-overview` to decide which library will be used.
 
 The following is an example of Makefile, which makes a link by using the dynamic library on UNIX/Linux. ::
 
@@ -502,6 +504,8 @@ You can retrieve **LOB** data by using the following functions in CCI applicatio
 	  cci_disconnect(con, &error);
 	}
 	return -1;
+
+.. _cci-error-codes:
 
 **CCI Error Codes and Error Messages**
 

@@ -30,6 +30,8 @@ The CUBRID SHARD is middleware for database sharding and its characteristics are
 
 More details on each characteristic will be described in the next chapter.
 
+.. _shard-terminologies:
+
 CUBRID SHARD Terminologies
 ==========================
 
@@ -96,12 +98,12 @@ With the hints and configuration data included in a SQL hint statement, the CUBR
 | **) */**             |                                                                                                                                    |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------+
 
-The terms are summarized as shown below: For more information on shard terms, see `CUBRID SHARD Terminologies <#admin_admin_shard_glossary_htm>`_.
+The terms are summarized as shown below: For more information on shard terms, see :ref:`shard-terminologies`.
 
 *   **shard key** : A column to distinguish shard DBs. In general, this column exists in all or most tables in a shard DB and has a unique value.
 *   **shard id** : An identifier that can be used to logically distinguish shards. For example, when one DB is split into four shard DBs, there are four shard IDs.
 
-For more information on the query process using hints and configuration information, see `General Procedure of Executing Queries by Using Shard SQL Hint <#admin_admin_shard_feature_hint_h_8545>`_.
+For more information on the query process using hints and configuration information, see :ref:`General Procedure of Executing Queries by Using Shard SQL Hint <using-shard-hint>`.
 
 **shard_key Hint**
 
@@ -138,6 +140,8 @@ Ex) When the query is performed in shard DB #3, queries students whose value of 
 .. code-block:: sql
 
 	SELECT * FROM student WHERE age > 17 /*+ shard_id(3) */
+
+.. _using-shard-hint:
 
 **General Procedure of Executing Queries by Using Shard SQL Hint**
 
@@ -532,6 +536,8 @@ Execute the query in each shard DB and check whether or not the partitioned info
 	195  'name_195'                     13
 	...
 
+.. _shard-configuration:
+
 Configuration and Setup
 =======================
 
@@ -544,12 +550,14 @@ The CUBRID SHARD is middleware, consisting of a shard broker, shard proxy, and s
 
 The **shard.conf** file is used for the default settings required for executing all processes in the CUBRID SHARD, and the configuration file is located in the **$CUBRID/conf** directory.
 
+.. _default-shard-conf:
+
 Default Configuration File, shard.conf
 --------------------------------------
 
 **shard.conf** is the default configuration file of the CUBRID SHARD, having a very similar format and content to **cubrid_broker.conf**, the configuration file of the existing CUBRID Broker/CAS.
 
-**shard.conf** contains all the parameter settings as **cubrid_broker.conf** in an identical manner. This document describes the settings added to **shard.conf**. For more information on the **cubrid_broker.conf**, see "`Performance Tuning > cubrid_broker.conf Configuration File and Default Parameters <#pm_pm_broker_setting_htm>`_.
+**shard.conf** contains all the parameter settings as **cubrid_broker.conf** in an identical manner. This document describes the settings added to **shard.conf**. For more information on the :ref:`broker-configuration`.
 
 +-------------------------------+----------+----------------------+--------------------+
 | Parameter Name                | Type     | Default Value        | Dynamic Change     |
@@ -612,15 +620,15 @@ Default Configuration File, shard.conf
 *   **MAX_CLIENT** : The number of applications that can be concurrently connected by using the shard proxy.
 *   **METADATA_SHM_ID** : Shared memory identifier of the shard metadata storage.
 
-*   **SHARD_CONNECTION_FILE** : The path of the shard connection configuration file. The shard connection configuration file should be located in **$CUBRID/conf**. For more information, see the `shard connection configuration file <#admin_admin_shard_conf_meta_htm__2489>`_.
+*   **SHARD_CONNECTION_FILE** : The path of the shard connection configuration file. The shard connection configuration file should be located in **$CUBRID/conf**. For more information, see the :ref:`shard connection configuration file <shard-connection-configuration-file>`.
 
-*   **SHARD_KEY_FILE** : The path of the shard key configuration file. The shard key configuration file should be located in **$CUBRID/conf**. For more information, see the `shard key configuration file <#admin_admin_shard_conf_meta_htm__8339>`_.
+*   **SHARD_KEY_FILE** : The path of the shard key configuration file. The shard key configuration file should be located in **$CUBRID/conf**. For more information, see the :ref:`shard key configuration file <shard-key-configuration-file>`.
 
-*   **SHARD_KEY_MODULAR** : The parameter to specify the range of results of the default shard key hash function. The result of the function is shard_key(integer) % SHARD_KEY_MODULAR. For related issues, see `shard key configuration file <#admin_admin_shard_conf_meta_htm__8339>`_ and `Setting user-defined hash function <#admin_admin_shard_conf_hash_htm>`_.
+*   **SHARD_KEY_MODULAR** : The parameter to specify the range of results of the default shard key hash function. The result of the function is shard_key(integer) % SHARD_KEY_MODULAR. For related issues, see :ref:`shard key configuration file <shard-key-configuration-file>` and :ref:`setting-user-defined-hash-function`.
 
-*   **SHARD_KEY_LIBRARY_NAME** : Specify the library path loadable at runtime to specify the user hash function for the shard key. If the **SHARD_KEY_LIBRARY_NAME** parameter is set, the **SHARD_KEY_FUNCTION_NAME** parameter should also be set. For more information, see `Setting user-defined hash function <#admin_admin_shard_conf_hash_htm>`_.
+*   **SHARD_KEY_LIBRARY_NAME** : Specify the library path loadable at runtime to specify the user hash function for the shard key. If the **SHARD_KEY_LIBRARY_NAME** parameter is set, the **SHARD_KEY_FUNCTION_NAME** parameter should also be set. For more information, see :ref:`setting-user-defined-hash-function`.
 
-*   **SHARD_KEY_FUNCTION_NAME** : The parameter to specify the name of the user hash function for shard key. For more information, see `Setting user-defined hash function <#admin_admin_shard_conf_hash_htm>`_.
+*   **SHARD_KEY_FUNCTION_NAME** : The parameter to specify the name of the user hash function for shard key. For more information, see :ref:`setting-user-defined-hash-function`.
 
 *   **PROXY_LOG_MAX_SIZE** : The maximum size of the shard proxy log file in KB. The maximum value is 1,000,000.
 *   **IGNORE_SHARD_HINT** : When this value is **ON**, the hint provided to connect to a specific shard is ignored and the database to connect is selected based on the defined rule. The default value is **OFF**. It can be used to balance the read load while all databases are copied with the same data. For example, to give the load of an application to only one node among several replication nodes, the shard proxy automatically determines the node (database) with one connection to a specific shard.
@@ -629,6 +637,8 @@ Setting Shard Metadata
 ----------------------
 
 In addition to **shard.conf**, the CUBRID SHARD has a configuration file for shard key and the shard connection configuration file for connection with the shard DB.
+
+.. _shard-connection-configuration-file:
 
 **Shard Connection Configuration File (SHARD_CONNECTION_FILE)**
 
@@ -692,6 +702,8 @@ When the backend shard DB is MySQL, the format of the connection configuration f
 	2           shard_db_3          host3:1234
 	3           shard_db_4          host4:1234
 
+.. _shard-key-configuration-file:
+
 **Configuration File for Shard Key (SHARD_KEY_FILE)**
 
 The CUBRID SHARD loads the shard key configuration file specified in the **SHARD_KEY_FILE** parameter of **shard.conf**, the default configuration file, to determine which backend shard DB should process the user requests.
@@ -732,6 +744,8 @@ The example and format of a shard key configuration file are as follows: ::
 *   No empty value between min and max is allowed.
 *   The default hash function should not exceed the value of the **SHARD_KEY_MODULAR** parameter.
 *   The result of shard key hashing should be within a range from 0 to (**SHARD_KEY_MODULAR** -1).
+
+.. _setting-user-defined-hash-function:
 
 Setting User-Defined Hash Function
 ----------------------------------
@@ -938,7 +952,7 @@ If the CUBRID SHARD has already been stopped, the following message will appear:
 
 **Description**
 
-You can configure the parameters related to running CUBRID SHARD in the environment configuration file (**shard.conf**). Additionally, you can some CUBRID SHARD parameters while it is running by using the **shard_broker_changer** utility. For details about configuration of CUBRID SHARD parameters and dynamically changeable parameters see `CUBRID SHARD > Configuration <#admin_admin_shard_conf_comp_htm>`_.
+You can configure the parameters related to running CUBRID SHARD in the environment configuration file (**shard.conf**). Additionally, you can some CUBRID SHARD parameters while it is running by using the **shard_broker_changer** utility. For details about configuration of CUBRID SHARD parameters and dynamically changeable parameters see :ref:`shard-configuration`.
 
 **Syntax**
 
@@ -1097,7 +1111,7 @@ Output TPS and QPS information to a file by using the **-t** option. To stop the
 
 	% cubrid shard status -b -s 1 -t  > log_file
 
-Output the metadata information by using the **-m** option. For details on the parameter of **shard.conf**, see `Default Configuration File shard.conf <#admin_admin_shard_conf_basic_htm>`_. ::
+Output the metadata information by using the **-m** option. For details on the parameter of **shard.conf**, see :ref:`default-shard-conf`. ::
 
 	$ cubrid shard status -m
 	@ cubrid shard status
@@ -1124,7 +1138,7 @@ Output the metadata information by using the **-m** option. For details on the p
     *   NUM-NO-HINT-Q: The number of requests handled by load balancing without hint when **IGNORE_SHARD_HINT** is configured
     *   SUM: NUM-KEY-Q + NUM-ID-Q
 
-Use the **-m -f** option to display more detailed metadata information. For details on the parameter of **shard.conf**, see `Default Configuration File shard.conf <#admin_admin_shard_conf_basic_htm>`_. ::
+Use the **-m -f** option to display more detailed metadata information. For details on the parameter of **shard.conf**, see :ref:`default-shard-conf`. ::
 
 	$ cubrid shard status –m -f
 	@ cubrid shard status
@@ -1288,7 +1302,7 @@ To output IP configuration of which database, database user ID, and IP allowed i
 
 *   *SP_NAME* : shard proxy name. If this value is specified, changes are applied to specific shard proxy; if it is omitted, changes are applied to every shard proxy.
 
-.. note:: For details, see `Limiting Database Server Access <#admin_admin_service_server_acces_3933>`_.
+.. note:: For details, see :ref:`limiting-server-access`.
 
 **Managing specific shard**
 

@@ -12,7 +12,7 @@ CREATE SERIAL
 *   **PUBLIC** 을 포함하여 모든 사용자가 시리얼 객체를 생성할 수 있다. 일단 생성되면 모든 사용자들이 **CURRENT_VALUE**, **NEXT_VALUE** 를 통해 시리얼 숫자를 가져갈 수 있다.
 *   시리얼 객체의 소유자와 **DBA** 만 시리얼 객체를 갱신하고 삭제할 수 있다. 소유자가 **PUBLIC** 이면 모든 사용자가 갱신하거나 삭제할 수 있다.
 
-**CREATE SERIAL** 문을 이용하여 데이터베이스에 시리얼 객체를 생성한다. 시리얼 이름 작성 원칙은 `식별자 <#syntax_csql_syntaxtype_identifie_2262>`_ 를 참고한다.
+**CREATE SERIAL** 문을 이용하여 데이터베이스에 시리얼 객체를 생성한다. 시리얼 이름 작성 원칙은 :doc:`/sql/identifier` 를 참고한다.
 
 ::
 

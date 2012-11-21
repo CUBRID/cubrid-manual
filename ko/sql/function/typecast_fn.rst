@@ -2,9 +2,6 @@
 데이터 타입 변환 함수와 연산자
 ******************************
 
-CAST 연산자
-===========
-
 .. function:: CAST (cast_operand AS cast_target)
 
 	**CAST** 연산자를 **SELECT** 문에서 어떤 값의 데이터 타입을 다른 데이터 타입으로 명시적으로 변환하는 데 사용할 수 있다. 조회 리스트 또는 **WHERE** 절의 값 수식을 다른 데이터 타입으로 변환할 수 있다.
@@ -13,9 +10,9 @@ CAST 연산자
 	:param cast_target: 변환할 타입을 지정한다.
 	:rtype: cast_target
 
-	경우에 따라 **CAST** 연산자를 쓰지 않고 데이터 타입이 자동으로 변환될 수 있다. 이에 대한 자세한 내용은 `묵시적 타입 변환 <#syntax_syntax_datatype_implicit__7659>`_ 을 참고한다.
+	경우에 따라 **CAST** 연산자를 쓰지 않고 데이터 타입이 자동으로 변환될 수 있다. 이에 대한 자세한 내용은 :ref:`implicit-type-conversion` 을 참고한다.
 
-	문자열을 날짜/시간 타입으로 변환하는 것에 대한 자세한 내용은 `문자열을 날짜/시간 타입으로 CAST <#syntax_syntax_datatype_date_stri_3129>`_ 을 참고한다.
+	문자열을 날짜/시간 타입으로 변환하는 것에 대한 자세한 내용은 :ref:`cast-string-to-datetime` 을 참고한다.
 
 	CUBRID에서 **CAST** 연산자를 사용한 명시적인 타입 변환에 대해서 정리하면 다음의 표와 같다.
 
@@ -166,12 +163,9 @@ CAST 연산자
 	*   문자열 타입 *A* 를 날짜/시간 데이터 타입 *B* 로 변환하는 경우, *A* 의 리터럴이 *B* 타입과 일치하는 경우에만 변환된다. 그렇지 않을 경우 에러가 발생한다.
 	*   문자열로 저장된 수치 데이터는 명시적으로 타입 변환을 해주어야 산술 연산이 가능하다.
 
-DATE_FORMAT 함수
-================
-
 .. function:: DATE_FORMAT (date, format)
 
-	**DATE_FORMAT** 함수는 **DATE** 형식('*YYYY*-*MM*-*DD*' 또는 '*MM*/*DD*/*YYYY*')를 포함하는 문자열 또는 날짜/시간 타입(**DATE**, **TIMESTAMP**, **DATETIME**) 값을 지정된 날짜/시간 형식으로 변환하여 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다. 지정할 *format* 인자는 아래의 `날짜/시간 형식 2 <#syntax_syntax_operator_to_datefo_3551>`_ 표를 참고한다. `날짜/시간 형식 2 <#syntax_syntax_operator_to_datefo_3551>`_ 표는 :func:`DATE_FORMAT` 함수, :func:`TIME_FORMAT` 함수, :func:`STR_TO_DATE` 함수에서 사용된다.
+	**DATE_FORMAT** 함수는 **DATE** 형식('*YYYY*-*MM*-*DD*' 또는 '*MM*/*DD*/*YYYY*')를 포함하는 문자열 또는 날짜/시간 타입(**DATE**, **TIMESTAMP**, **DATETIME**) 값을 지정된 날짜/시간 형식으로 변환하여 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다. 지정할 *format* 인자는 아래의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다. :ref:`날짜/시간 형식 2 <datetime-format2>` 표는 :func:`DATE_FORMAT` 함수, :func:`TIME_FORMAT` 함수, :func:`STR_TO_DATE` 함수에서 사용된다.
 
 	*format* 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "%d %M %Y"인 경우 "2009년 10월 3일"인 날짜를 "3 Oktober 2009"인 문자열로 출력한다. **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 	
@@ -179,7 +173,9 @@ DATE_FORMAT 함수
 	:param format: 출력 형식을 지정한다. '%'로 시작하는 형식 지정자(specifier)를 사용한다.
 	:rtype: STRING
 
-	아래 `날짜/시간 형식 2 <#syntax_syntax_operator_to_datefo_3551>`_ 표에서 월 이름, 요일 이름, 일 이름, 오전/오후 이름 등은 언어에 따라 다르다.
+	아래 :ref:`날짜/시간 형식 2 <datetime-format2>` 표에서 월 이름, 요일 이름, 일 이름, 오전/오후 이름 등은 언어에 따라 다르다.
+
+	.. _datetime-format2:
 
 	**날짜/시간 형식 2**
 
@@ -314,9 +310,6 @@ DATE_FORMAT 함수
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_LANG** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
-FORMAT 함수
-===========
-
 .. function:: FORMAT ( x , dec )
 
 	**FORMAT** 함수는 숫자 *x* 의 형식이 ‘*#*,*###*,*###*.*#####*’이 되도록, 소수점 위 세 자리마다 자릿수 구분 기호로 구분하고 소수점 기호 아래 숫자가 *dec* 만큼 표현되도록 *dec* 의 아랫자리에서 반올림을 수행하여 결과를 **VARCHAR** 타입으로 반환한다.
@@ -344,9 +337,6 @@ FORMAT 함수
 		   format(12000.123456, 3)   format(12000.123456, 0)
 		============================================
 		  '12.000,123'          '12.000'
-
-STR_TO_DATE 함수
-================
 
 .. function:: STR_TO_DATE (string, format)
 
@@ -408,9 +398,6 @@ STR_TO_DATE 함수
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_LANG** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
-TIME_FORMAT 함수
-================
-
 .. function:: TIME_FORMAT (time, format)
 
 	**TIME_FORMAT** 함수는 **TIME** 형식(*HH*:*MI*:*SS*)을 포함하는 문자열 또는 **TIME**을 포함하는 날짜/시간 타입(**TIME**, **TIMESTAMP**, **DATETIME**) 값을 지정된 시간 형식으로 변환하여 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다.
@@ -457,16 +444,13 @@ TIME_FORMAT 함수
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_LANG** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참조한다.
 
-TO_CHAR 함수(date_time)
-=======================
-
 .. function:: TO_CHAR ( date_time [, format[, date_lang_string_literal ]] )
 
 	**TO_CHAR** (date_time) 함수는 날짜/시간 타입(**TIME**, **DATE**, **TIMESTAMP**, **DATETIME**) 값을 "날짜/시간 형식 1" 에 따라 문자열로 변환하여 이를 반환하며, 리턴 값의 타입은 **VARCHAR** 이다.
 
 	:param date_time: 날짜/시간 타입의 연산식을 지정한다. 값이 **NULL** 인 경우에는 **NULL** 이 반환된다.
 	:param format: 리턴 값의 형식을 지정한다. 값이 **NULL** 인 경우에는 **NULL** 이 반환된다.
-	:param date_lang_string_literal: 리턴 값에 적용할 언어를 지정한다(`date_lang_string_literal <#syntax_syntax_operator_to_char_h_2401>`_ 표 참조).
+	:param date_lang_string_literal: 리턴 값에 적용할 언어를 지정한다.
 	:rtype: STRING
 	
 	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *date_time* 을 출력한다(아래 "날짜/시간 형식 1" 표 참고). 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "HH:MI:SS AM"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
@@ -474,6 +458,8 @@ TO_CHAR 함수(date_time)
 	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_LANG** 에 의해 설정된 언어의 기본 출력 형식을 따라 *date_time* 을 문자열로 출력한다(아래 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고).
 
 	.. note:: CUBRID 9.0 미만 버전에서 사용되었던 **CUBRID_DATE_LANG** 환경 변수는 더 이상 사용되지 않는다.
+
+	.. _tochar-default-datetime-format:
 
 	**날짜/시간 타입에 대한 언어별 기본 출력 형식**
 
@@ -502,6 +488,8 @@ TO_CHAR 함수(date_time)
 	+-------+----------------+---------------+---------------------------+------------------------------+
 	| zh_CN | 'YYYY-MM-DD'   | 'HH24:MI:SS'  | 'HH24:MI:SS YYYY-MM-DD'   | 'HH24:MI:SS.FF YYYY-MM-DD'   |
 	+-------+----------------+---------------+---------------------------+------------------------------+
+
+	.. _datetime-format1:
 
 	**날짜/시간 형식 1**
 
@@ -705,9 +693,6 @@ TO_CHAR 함수(date_time)
 		======================
 		  'Sonntag   Oktober 2009'
   
-TO_CHAR 함수(number)
-====================
-
 .. function:: TO_CHAR(number[, format[, number_lang_string_literal ] ])
 
 	**TO_CHAR** (number) 함수는 수치형 데이터 타입을 "숫자 형식" 에 맞는 문자열로 변환하여 **VARCHAR** 타입으로 반환한다.
@@ -744,6 +729,8 @@ TO_CHAR 함수(number)
 	+----------------+----------+-------------------------------------------------------------------------------------------------------------------------------+
 	| **EEEE**       | 9.99EEEE | 과학적 기수법(scientific notation)을 반환한다.                                                                                |
 	+----------------+----------+-------------------------------------------------------------------------------------------------------------------------------+
+
+	.. _tochar-default-number-format:	
 
 	**언어별 숫자의 기본 출력**
 
@@ -840,9 +827,6 @@ TO_CHAR 함수(number)
 		==================================================================
 		  '1.235E+00'           '1,235E+00'           '123,4567'
 
-TO_DATE 함수
-============
-
 .. function:: TO_DATE(string [,format [,date_lang_string_literal]])
 
 	**TO_DATE** 함수는 인자로 지정된 날짜 형식을 기준으로 문자열을 해석하여, 이를 **DATE** 타입의 값으로 변환하여 반환한다. 날짜 형식은 :func:`TO_CHAR` 의 설명 부분을 참고한다.
@@ -902,9 +886,6 @@ TO_DATE 함수
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_DATE** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
-TO_DATETIME 함수
-================
-
 .. function:: TO_DATETIME (string [,format [,date_lang_string_literal]])
 
 	**TO_DATETIME** 함수는 인자로 지정된 **DATETIME** 형식을 기준으로 문자열을 해석하여, 이를 DATETIME 타입의 값으로 변환하여 반환한다. **DATETIME** 형식은 :func:`TO_CHAR` 의 설명 부분을 참고한다.
@@ -961,9 +942,6 @@ TO_DATETIME 함수
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_DATETIME** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
-TO_NUMBER 함수
-==============
-
 .. function:: TO_NUMBER(string [, format ])
 
 	**TO_NUMBER** 함수는 인자로 지정된 숫자 형식을 기준으로 문자열을 해석하여, 이를 **NUMERIC** 타입으로 변환하여 반환한다.
@@ -1015,9 +993,6 @@ TO_NUMBER 함수
 		   to_number('12.345,67', '99.999,999')
 		======================
 		  12345.670
-
-TO_TIME 함수
-============
 
 .. function:: TO_TIME(string [,format [,date_lang_string_literal]])
 
@@ -1078,9 +1053,6 @@ TO_TIME 함수
 	환경 변수인 **CUBRID_LANG** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_LANG** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_TIME** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
-
-TO_TIMESTAMP 함수
-=================
 
 .. function:: TO_TIMESTAMP(string [, format [,date_lang_string_literal]])
 

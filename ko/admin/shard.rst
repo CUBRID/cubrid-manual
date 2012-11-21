@@ -28,6 +28,8 @@ CUBRID SHARD는 database sharding을 위한 미들웨어로, 다음과 같은 �
 *   CUBRID 외에 MySQL을 backend shard DB로 구성할 수 있다.
 *   일부 트랜잭션의 특성을 보장한다.
 
+.. _shard-terminologies:
+
 CUBRID SHARD 기본 용어
 ======================
 
@@ -99,13 +101,13 @@ CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용
 | **) */**             |                                                                        |
 +----------------------+------------------------------------------------------------------------+
 
-설명을 위해 간략하게 용어를 정리하면 다음과 같다. 용어에 대한 보다 자세한 설명은 `CUBRID SHARD기본 용어 <#admin_admin_shard_glossary_htm>`_ 를 참고한다.
+설명을 위해 간략하게 용어를 정리하면 다음과 같다. 용어에 대한 보다 자세한 설명은 :ref:`shard-terminologies` 를 참고한다.
 
 *   **shard key** : shard DB를 식별할 수 있는 칼럼. 일반적으로 shard DB 내의 모든 혹은 대부분의 테이블에 존재하는 칼럼으로서, DB 내에서 유일한 값을 갖는다.
 
 *   **shard id** : shard를 논리적으로 구분할 수 있는 식별자. 예를 들어, 하나의 DB가 4개의 shard DB로 분할되면 4개의 shard id가 존재한다.
 
-힌트와 설정 정보를 이용한 자세한 질의 처리 절차는 `shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차 <#admin_admin_shard_feature_hint_h_8545>`_ 를 참고한다.
+힌트와 설정 정보를 이용한 자세한 질의 처리 절차는 :ref:`shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차 <using-shard-hint>` 를 참고한다.
 
 **shard_key 힌트**
 
@@ -142,6 +144,8 @@ CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용
 .. code-block:: sql
 
 	SELECT * FROM student WHERE age > 17 /*+ shard_id(3) */
+
+.. _using-shard-hint:
 
 **shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차**
 
@@ -539,6 +543,7 @@ shard 구성 데이터베이스 설정 파일인 **shard_connection.txt** 파일
 	195  'name_195'                     13
 	...
 
+.. _shard-configuration:
 
 구성 및 설정
 ============
@@ -552,12 +557,14 @@ CUBRID SHARD는 미들웨어로서 아래의 그림과 같이 shard broker, shar
 
 CUBRID SHARD의 모든 프로세스의 실행에 필요한 기본적인 설정은 **shard.conf** 라는 파일을 이용하며, 이 설정 파일은 **$CUBRID/conf** 디렉터리에 위치한다.
 
+.. _default-shard-conf:
+
 기본 설정 파일 shard.conf
 -------------------------
 
 **shard.conf** 는 CUBRID SHARD의 기본 설정 파일로서, 기존 CUBRID 의 Broker/CAS의 설정 파일인 **cubrid_broker.conf** 와 형식과 내용 면에서 매우 유사하다.
 
-**shard.conf** 는 **cubrid_broker.conf** 의 파라미터 설정 내용을 모두 동일하게 포함하고 있으며, 이 문서에서는 **shard.conf** 에서 추가된 내용만을 설명한다. **cubrid_broker.conf** 에 대한 자세한 내용은 "성능 튜닝"의 `브로커 설정 <#pm_pm_broker_setting_htm>`_ 을 참조한다.
+**shard.conf** 는 **cubrid_broker.conf** 의 파라미터 설정 내용을 모두 동일하게 포함하고 있으며, 이 문서에서는 **shard.conf** 에서 추가된 내용만을 설명한다. **cubrid_broker.conf** 에 대한 자세한 내용은 "성능 튜닝"의 :ref:`broker-configuration` 을 참조한다.
 
 +-------------------------------+--------+----------------------+-----------+
 | 파라미터 이름                 | 타입   | 기본값               | 동적 변경 |
@@ -627,15 +634,15 @@ CUBRID SHARD의 모든 프로세스의 실행에 필요한 기본적인 설정�
 
 *   **METADATA_SHM_ID** : shard 메타데이터를 저장할 공유 메모리 식별자
 
-*   **SHARD_CONNECTION_FILE** : shard connection 설정 파일의 경로. shard connection 설정 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 `shard 연결 설정 파일 <#admin_admin_shard_conf_meta_htm__2489>`_ 을 참고한다. :
+*   **SHARD_CONNECTION_FILE** : shard connection 설정 파일의 경로. shard connection 설정 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 :ref:`shard 연결 설정 파일 <shard-connection-configuration-file>` 을 참고한다. :
 
-*   **SHARD_KEY_FILE** : shard key 설정 정보 파일의 경로. shard key 설정 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 `shard key 설정 파일 <#admin_admin_shard_conf_meta_htm__8339>`_ 을 참고한다. :
+*   **SHARD_KEY_FILE** : shard key 설정 정보 파일의 경로. shard key 설정 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 :ref:`shard key 설정 파일 <shard-key-configuration-file>` 을 참고한다. :
 
-*   **SHARD_KEY_MODULAR** : 내장된 shard key 해시 함수 결과의 범위를 지정하기 위한 파라미터로서, 기본 shard key 해시 함수의 결과는 shard_key(정수형) % SHARD_KEY_MODULAR이다. 관련된 내용은 `shard key 설정 파일 <#admin_admin_shard_conf_meta_htm__8339>`_ 과 `사용자 정의 해시 함수 설정 <#admin_admin_shard_conf_hash_htm>`_ 을 참고한다.
+*   **SHARD_KEY_MODULAR** : 내장된 shard key 해시 함수 결과의 범위를 지정하기 위한 파라미터로서, 기본 shard key 해시 함수의 결과는 shard_key(정수형) % SHARD_KEY_MODULAR이다. 관련된 내용은 :ref:`shard key 설정 파일 <shard-key-configuration-file>` 과 :ref:`setting-user-defined-hash-function` 을 참고한다.
 
-*   **SHARD_KEY_LIBRARY_NAME** : shard key에 대한 사용자 해시 함수를 지정하기 위해 실행 시간에 로딩 가능한 라이브러리 경로를 지정한다. **SHARD_KEY_LIBRARY_NAME** 파라미터가 설정된 경우 반드시 **SHARD_KEY_FUNCTION_NAME** 파라미터도 설정되어야 한다. 자세한 내용은 `사용자 정의 해시 함수 설정 <#admin_admin_shard_conf_hash_htm>`_ 을 참고한다.
+*   **SHARD_KEY_LIBRARY_NAME** : shard key에 대한 사용자 해시 함수를 지정하기 위해 실행 시간에 로딩 가능한 라이브러리 경로를 지정한다. **SHARD_KEY_LIBRARY_NAME** 파라미터가 설정된 경우 반드시 **SHARD_KEY_FUNCTION_NAME** 파라미터도 설정되어야 한다. 자세한 내용은 :ref:`setting-user-defined-hash-function` 을 참고한다.
 
-*   **SHARD_KEY_FUNCTION_NAME** : shard key에 대한 사용자 해시 함수의 이름을 지정하기 위한 파라미터이다. 자세한 내용은 `사용자 정의 해시 함수 설정 <#admin_admin_shard_conf_hash_htm>`_ 를 참고한다.
+*   **SHARD_KEY_FUNCTION_NAME** : shard key에 대한 사용자 해시 함수의 이름을 지정하기 위한 파라미터이다. 자세한 내용은 :ref:`setting-user-defined-hash-function` 를 참고한다.
 
 *   **PROXY_LOG_MAX_SIZE** : shard proxy 로그 파일의 최대크기로 kbyte 단위이다. 최대 1,000,000까지 설정할 수 있다.
 
@@ -645,6 +652,8 @@ shard 메타데이터 설정
 ---------------------
 
 CUBRID SHARD는 기본 설정 파일인 **shard.conf** 외에, 실제 shard DB와의 연결을 수행하기 위한 shard 연결 설정 파일과 shard key에 대한 설정 파일이 존재한다.
+
+.. _shard-connection-configuration-file:
 
 **shard 연결 설정 파일(SHARD_CONNECTION_FILE)**
 
@@ -708,6 +717,7 @@ backend shard DB가 MySQL인 경우 연결 설정 파일의 형식은 다음과 
 	2           shard_db_3          host3:1234
 	3           shard_db_4          host4:1234
 
+.. _shard-key-configuration-file:
 
 **shard key 설정 파일(SHARD_KEY_FILE)**
 
@@ -749,6 +759,8 @@ shard key 설정 파일의 예와 형식은 다음과 같다. ::
 *   min~max 사이에는 빈 값이 존재하면 안 된다.
 *   내장 해시 함수를 사용하는 경우 **SHARD_KEY_MODULAR** 파라미터 값을 초과할 수 없다.
 *   shard key 해시 결과는 0 ~ (**SHARD_KEY_MODULAR** - 1)의 범위에 반드시 포함되어야 한다.
+
+.. _setting-user-defined-hash-function:
 
 사용자 정의 해시 함수 설정
 --------------------------
@@ -951,7 +963,7 @@ CUBRID SHARD 를 종료하기 위하여 다음과 같이 입력한다. ::
 
 **CUBRID SHARD 파라미터의 동적 변경**
 
-CUBRID SHARD의 구동과 관련된 파라미터는 CUBRID SHARD 환경 설정 파일(**shard.conf**) 에서 설정할 수 있다. 그 밖에, **shard_broker_changer** 유틸리티를 이용하여 구동 중에만 한시적으로 일부 CUBRID SHARD 파라미터를 동적으로 변경할 수 있다. CUBRID SHARD 파라미터 설정 및 동적으로 변경 가능한 파라미터 등 기타 자세한 내용은 `CUBRID SHARD> 구성 및 설정 <#admin_admin_shard_conf_comp_htm>`_ 을 참조한다.
+CUBRID SHARD의 구동과 관련된 파라미터는 CUBRID SHARD 환경 설정 파일(**shard.conf**) 에서 설정할 수 있다. 그 밖에, **shard_broker_changer** 유틸리티를 이용하여 구동 중에만 한시적으로 일부 CUBRID SHARD 파라미터를 동적으로 변경할 수 있다. CUBRID SHARD 파라미터 설정 및 동적으로 변경 가능한 파라미터 등 기타 자세한 내용은 :ref:`shard-configuration` 을 참조한다.
 
 **구문**
 
@@ -1121,7 +1133,7 @@ shard broker에 관한 좀 더 상세한 상태 정보를 확인하려면 다음
 
 	% cubrid shard status -b -s 1 -t > log_file
 
-**-m** 옵션을 사용하여 메타데이터 정보를 출력한다. **shard.conf** 의 파라미터에 대한 내용은 `기본 설정 파일 shard.conf <#admin_admin_shard_conf_basic_htm>`_ 을 참고한다. ::
+**-m** 옵션을 사용하여 메타데이터 정보를 출력한다. **shard.conf** 의 파라미터에 대한 내용은 :ref:`default-shard-conf` 을 참고한다. ::
 
 	$ cubrid shard status -m
 	@ cubrid shard status
@@ -1148,7 +1160,7 @@ shard broker에 관한 좀 더 상세한 상태 정보를 확인하려면 다음
     *   NUM-NO-HINT-Q : **IGNORE_SHARD_HINT** 가 설정된 경우 hint 없이 load balancing되어 처리된 요청 수
     *   SUM : NUM-KEY-Q + NUM-ID-Q
 
-**-m -f** 옵션을 사용하면 좀 더 상세한 메타데이터 정보를 출력한다. **shard.conf** 의 파라미터에 대한 내용은 `기본 설정 파일 shard.conf <#admin_admin_shard_conf_basic_htm>`_ 을 참고한다. ::
+**-m -f** 옵션을 사용하면 좀 더 상세한 메타데이터 정보를 출력한다. **shard.conf** 의 파라미터에 대한 내용은 :ref:`default-shard-conf` 을 참고한다. ::
 
 	$ cubrid shard status –m -f
 	@ cubrid shard status
@@ -1311,7 +1323,7 @@ shard proxy에서 허용하는 데이터베이스, 데이터베이스 사용자 
 
 *   *SP_NAME* : shard proxy 이름. 이 값을 지정하면 특정 shard proxy의 설정을 출력할 수 있으며, 생략하면 전체 shard proxy의 설정을 출력한다.
 
-.. note:: 데이터베이스 서버의 접속 제한에 대한 자세한 내용은 `데이터베이스 서버 접속 제한 <#admin_admin_service_server_acces_3933>`_ 을 참고한다.
+.. note:: 데이터베이스 서버의 접속 제한에 대한 자세한 내용은 :ref:`limiting-server-access` 을 참고한다.
 
 **특정 shard 관리**
 

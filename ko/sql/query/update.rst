@@ -2,9 +2,9 @@
 UPDATE
 ******
 
-**UPDATE** 문을 사용하면 대상 테이블에 저장된 레코드의 칼럼 값을 새로운 값으로 업데이트할 수 있다. **SET** 절에는 업데이트할 칼럼 이름과 새로운 값을 명시하며, `WHERE 절 <#syntax_syntax_retreive_where_htm>`_ 에는 업데이트할 레코드를 추출하기 위한 조건을 명시한다. 하나의 **UPDATE** 문으로 하나 이상의 테이블을 업데이트할 수 있다.
+**UPDATE** 문을 사용하면 대상 테이블에 저장된 레코드의 칼럼 값을 새로운 값으로 업데이트할 수 있다. **SET** 절에는 업데이트할 칼럼 이름과 새로운 값을 명시하며, :ref:`where-clause` 에는 업데이트할 레코드를 추출하기 위한 조건을 명시한다. 하나의 **UPDATE** 문으로 하나 이상의 테이블을 업데이트할 수 있다.
 
-업데이트할 테이블이 한 개인 경우에 한하여, `ORDER BY 절 <#syntax_syntax_retreive_order_htm>`_ 이나 `LIMIT 절 <#syntax_syntax_retreive_limit_htm>`_ 을 지정할 수 있다. `LIMIT 절 <#syntax_syntax_retreive_limit_htm>`_ 을 명시하면 업데이트할 레코드 수를 한정할 수 있다. `ORDER BY 절 <#syntax_syntax_retreive_order_htm>`_ 을 명시하면 해당 칼럼의 순서로 레코드를 업데이트한다. `ORDER BY 절 <#syntax_syntax_retreive_order_htm>`_ 에 의한 업데이트는 트리거의 실행 순서나 잠금 순서를 유지하고자 할 때 유용하게 이용할 수 있다. ::
+업데이트할 테이블이 한 개인 경우에 한하여, :ref:`order-by-clause` 이나 :ref:`limit-clause` 을 지정할 수 있다. :ref:`limit-clause` 을 명시하면 업데이트할 레코드 수를 한정할 수 있다. :ref:`order-by-clause` 을 명시하면 해당 칼럼의 순서로 레코드를 업데이트한다. :ref:`order-by-clause` 에 의한 업데이트는 트리거의 실행 순서나 잠금 순서를 유지하고자 할 때 유용하게 이용할 수 있다. ::
 
 	<UPDATE single table>
 	UPDATE table_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT}...]
@@ -22,11 +22,11 @@ UPDATE
 
 *   *expr* | **DEFAULT** : 해당 칼럼의 새로운 값을 지정하며, 표현식 또는 **DEFAULT** 키워드를 값으로 지정할 수 있다. 단일 결과 레코드를 반환하는 **SELECT** 질의를 지정할 수도 있다.
 
-*   *search_condition* : `WHERE 절 <#syntax_syntax_retreive_where_htm>`_ 에 조건식을 명시하면, 조건식을 만족하는 레코드에 대해서만 칼럼 값을 업데이트한다.
+*   *search_condition* : :ref:`where-clause` 에 조건식을 명시하면, 조건식을 만족하는 레코드에 대해서만 칼럼 값을 업데이트한다.
 
 *   *col_name | expr* : 업데이트할 순서의 기준이 되는 칼럼을 지정한다.
 
-*   *row_count* : `LIMIT 절 <#syntax_syntax_retreive_limit_htm>`_ 에 업데이트할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
+*   *row_count* : :ref:`limit-clause` 에 업데이트할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
 
 .. note:: CUBRID 9.0 미만 버전에서는 <*table_specifications*>에 한 개의 테이블만 입력할 수 있다.
 

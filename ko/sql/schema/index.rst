@@ -5,9 +5,9 @@
 CREATE INDEX
 ============
 
-**CREATE INDEX** 구문을 이용하여 지정한 테이블에 인덱스를 생성한다. 인덱스 이름 작성 원칙은 `식별자 <#syntax_csql_syntaxtype_identifie_2262>`_ 를 참고한다.
+**CREATE INDEX** 구문을 이용하여 지정한 테이블에 인덱스를 생성한다. 인덱스 이름 작성 원칙은 :doc:`/sql/identifier` 를 참고한다.
 
-**USING INDEX**, 내림차순 인덱스, 커버링 인덱스, 인덱스 스킵 스캔, **ORDER BY** 최적화, **GROUP BY** 최적화 등 **SELECT** 문에서 인덱스를 이용하는 방법과 필터링된 인덱스, 함수 인덱스를 생성하는 방법에 대해서는 `인덱스 활용 <#syntax_syntax_retreive_index_htm>`_ 을 참고한다.
+**USING INDEX**, 내림차순 인덱스, 커버링 인덱스, 인덱스 스킵 스캔, **ORDER BY** 최적화, **GROUP BY** 최적화 등 **SELECT** 문에서 인덱스를 이용하는 방법과 필터링된 인덱스, 함수 인덱스를 생성하는 방법에 대해서는 :ref:`tuning-index` 을 참고한다.
 
 ::
 

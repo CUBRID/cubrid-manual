@@ -620,7 +620,7 @@ cci_connect_with_url
 
 	*   **query_timeout** | **queryTimeout** : :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout** 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout** 을 참고한다.
 
-	*   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : 질의 요청 타임아웃 시 즉시 소켓 연결 종료 여부. :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 **query_timeout** 으로 설정한 시간이 지나면 질의 취소 요청 후 즉시 소켓 연결을 종료할 것인지, 아니면 질의 취소 요청을 받아들인다는 서버의 응답을 기다릴 것인지를 설정한다. 기본값은 **false** 로, 서버의 응답을 기다린다. 이 값이 **true** 이면 :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수 호출 도중 질의 타임아웃이 발생할 때 서버에 질의 취소 메시지를 보낸 후, 소켓을 닫고 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. (브로커가 아닌 데이터베이스 서버 쪽에서 에러가 발생한 경우 -1을 반환한다. 상세 에러를 확인하고 싶으면 "데이터베이스 에러 버퍼"의 에러 코드를 확인한다. 데이터베이스 에러 버퍼에서 에러 코드를 확인하는 방법은 `CCI 에러 코드와 에러 메시지 <#api_api_cci_programming_htm_err>`_ 를 참고한다.) 이 경우 사용자는 명시적으로 :c:func:`cci_disconnect` 함수를 통해 데이터베이스 연결 핸들을 닫아야 한다. 응용 프로그램이 질의 취소 메시지를 보낸 후 에러를 반환했음에도 불구하고, 데이터베이스 서버는 그 메시지를 받지 못하고 해당 질의를 수행할 수 있음을 주의한다. **false** 이면 서버에 취소 메시지를 보낸 후, 서버의 질의 요청에 대한 응답이 올 때 까지 대기한다.
+	*   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : 질의 요청 타임아웃 시 즉시 소켓 연결 종료 여부. :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 **query_timeout** 으로 설정한 시간이 지나면 질의 취소 요청 후 즉시 소켓 연결을 종료할 것인지, 아니면 질의 취소 요청을 받아들인다는 서버의 응답을 기다릴 것인지를 설정한다. 기본값은 **false** 로, 서버의 응답을 기다린다. 이 값이 **true** 이면 :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수 호출 도중 질의 타임아웃이 발생할 때 서버에 질의 취소 메시지를 보낸 후, 소켓을 닫고 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. (브로커가 아닌 데이터베이스 서버 쪽에서 에러가 발생한 경우 -1을 반환한다. 상세 에러를 확인하고 싶으면 "데이터베이스 에러 버퍼"의 에러 코드를 확인한다. 데이터베이스 에러 버퍼에서 에러 코드를 확인하는 방법은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.) 이 경우 사용자는 명시적으로 :c:func:`cci_disconnect` 함수를 통해 데이터베이스 연결 핸들을 닫아야 한다. 응용 프로그램이 질의 취소 메시지를 보낸 후 에러를 반환했음에도 불구하고, 데이터베이스 서버는 그 메시지를 받지 못하고 해당 질의를 수행할 수 있음을 주의한다. **false** 이면 서버에 취소 메시지를 보낸 후, 서버의 질의 요청에 대한 응답이 올 때 까지 대기한다.
 
 	*   **logFile** : 디버깅용 로그 파일 이름(기본값: **cci_**<*handle_id*>**.log**).<*handle_id*>는 이 함수가 반환하는 연결 핸들 ID이다.
 
@@ -1059,7 +1059,7 @@ cci_execute_batch
 		*   **CCI_ER_QUERY_TIMEOUT**
 		*   **CCI_ER_LOGIN_TIMEOUT**
 	
-	인자로 지정된 *num_sql_stmt* 개의 *sql_stmt* 를 수행하며, *query_result* 변수로 수행된 질의 개수를 반환한다. 실행 결과에 대한 정보를 얻기 위해서 매크로(`CCI_QUERY_RESULT_RESULT <#api_api_cci_queryresultresult_ht_1623>`_ , `CCI_QUERY_RESULT_ERR_MSG <#api_api_cci_queryresulterrmsg_ht_870>`_ , `CCI_QUERY_RESULT_STMT_TYPE <#api_api_cci_queryresultstmttype__9124>`_)를 이용할 수 있다. 각 매크로에 대한 자세한 내용은 :c:func:`cci_execute_array` 함수를 참고한다. 매크로에서는 입력받은 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. *query_result* 변수의 사용이 끝나면 :c:func:`cci_query_result_free` 함수를 이용하여 질의 결과를 삭제해야 한다.
+	인자로 지정된 *num_sql_stmt* 개의 *sql_stmt* 를 수행하며, *query_result* 변수로 수행된 질의 개수를 반환한다. 실행 결과에 대한 정보를 얻기 위해서 매크로(:c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE`)를 이용할 수 있다. 각 매크로에 대한 자세한 내용은 :c:func:`cci_execute_array` 함수를 참고한다. 매크로에서는 입력받은 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. *query_result* 변수의 사용이 끝나면 :c:func:`cci_query_result_free` 함수를 이용하여 질의 결과를 삭제해야 한다.
 
 	.. code-block:: c
 
@@ -1107,7 +1107,7 @@ cci_execute_result
 
 .. c:function:: int cci_execute_result(int req_handle, T_CCI_QUERY_RESULT **query_result, T_CCI_ERROR *err_buf)
 
-	:c:func`cci_execute` 에 의해 수행된 질의의 수행 결과(statement type, result count)를 가져온다. 각각의 질의에 대한 결과는 `CCI_QUERY_RESULT_STMT_TYPE <#api_api_cci_queryresultstmttype__9124>`_, `CCI_QUERY_RESULT_RESULT <#api_api_cci_queryresultresult_ht_1623>`_ 를 통해서 가져온다. 사용된 질의 결과는 :c:func:`cci_query_result_free` 를 통해 삭제해야 한다.
+	:c:func`cci_execute` 에 의해 수행된 질의의 수행 결과(statement type, result count)를 가져온다. 각각의 질의에 대한 결과는 :c:macro:`CCI_QUERY_RESULT_STMT_TYPE`, :c:macro:`CCI_QUERY_RESULT_RESULT` 를 통해서 가져온다. 사용된 질의 결과는 :c:func:`cci_query_result_free` 를 통해 삭제해야 한다.
 
 	:param req_handle: (IN) prepared statement의 요청 핸들
 	:param query_result: (OUT) 쿼리 결과
@@ -1369,7 +1369,7 @@ cci_get_err_msg
 
 .. c:function:: int cci_get_err_msg(int err_code, char *msg_buf, int msg_buf_size)
 
-	CCI 에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. 에러 코드와 에러 메시지에 대한 내용은 `CCI 에러 코드와 에러 메시지 <#api_api_cci_programming_htm_err>`_ 를 참고한다.
+	CCI 에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. 에러 코드와 에러 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.
 
 	:param err_code: (IN) 에러 코드
 	:param msg_buf: (OUT) 에러 메시지 버퍼
@@ -1381,7 +1381,7 @@ cci_get_error_msg
 
 .. c:function:: int cci_get_error_msg(int err_code, T_CCI_ERROR *err_buf, char *msg_buf, int msg_buf_size)
 
-	CCI 에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. CCI 에러 코드의 값이 **CCI_ER_DBMS** 이면 데이터베이스 서버에서 발생한 에러 메시지를 데이터베이스 에러 버퍼(*err_buf*)에서 전달받아 메시지 버퍼에 저장한다. 에러 코드와 에러 메시지에 대한 내용은 `CCI 에러 코드와 에러 메시지 <#api_api_cci_programming_htm_err>`_ 를 참고한다.
+	CCI 에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. CCI 에러 코드의 값이 **CCI_ER_DBMS** 이면 데이터베이스 서버에서 발생한 에러 메시지를 데이터베이스 에러 버퍼(*err_buf*)에서 전달받아 메시지 버퍼에 저장한다. 에러 코드와 에러 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.
 
 	:param err_code: (IN) 에러 코드
 	:param err_buf: (OUT) 데이터베이스 에러 버퍼		

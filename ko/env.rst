@@ -12,9 +12,9 @@ CUBRID를 사용하기 위해서는 다음의 환경 변수들이 설정되어 �
 * **CUBRID** : CUBRID 시스템이 설치된 위치를 지정하는 기본 환경 변수이다. CUBRID 시스템에 포함된 모든 프로그램은 이 환경 변수를 참조하므로 정확히 설정되어 있어야 한다.
 
 * **CUBRID_DATABASES** : **databases.txt** 파일의 위치를 지정하는 환경 변수이다. CUBRID 시스템은 **$CUBRID_DATABASES/databases.txt**
-  파일에 데이터베이스 볼륨들의 절대 경로를 저장 관리한다. `databases.txt 파일 <#admin_admin_db_create_file_htm>`_ 을 참고한다.
+  파일에 데이터베이스 볼륨들의 절대 경로를 저장 관리한다. :ref:`databases-txt-file` 을 참고한다.
 
-* **CUBRID_LANG** : CUBRID 시스템이 데이터베이스의 로캘(언어+문자셋)과 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 **en_US** 이며, 언어 이름 뒤에 문자셋을 생략하면 ISO-8859-1(.iso88591)이 기본으로 지정된다. 자세한 내용은 `언어 설정 <#gs_gs_must_langset_htm>`_ 을 참고한다.
+* **CUBRID_LANG** : CUBRID 시스템이 데이터베이스의 로캘(언어+문자셋)과 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 **en_US** 이며, 언어 이름 뒤에 문자셋을 생략하면 ISO-8859-1(.iso88591)이 기본으로 지정된다. 자세한 내용은 :ref:`언어 설정 <language-setting>` 을 참고한다.
 
 * **CUBRID_TMP** : Linux용 CUBRID에서 cub_master 프로세스와 cub_broker 프로세스의 유닉스 도메인 소켓 파일을 저장하는 위치를 지정하는 환경 변수로, 지정하지 않으면 cub_master 프로세스는 **/tmp** 디렉터리에, cub_broker 프로세스는 **$CUBRID/var/CUBRID_SOCK** 디렉터리에 유닉스 도메인 소켓 파일을 저장한다(Windows용 CUBRID에서는 사용되지 않는다).
 
@@ -62,7 +62,7 @@ CUBRID를 사용하기 위해서는 다음의 환경 변수들이 설정되어 �
 
 * **Path** : Windows 환경에서 Path 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 %CUBRID%\bin이 포함되어 있어야 한다.
 
-* **JAVA_HOME** : CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 하고 JAVA_HOME 환경 변수에 해당 디렉터리가 지정되어야 한다. `Java 저장 함수/프로시저 사용을 위한 환경 설정 <#syntax_syntax_javasp_settings_ht_8446>`_ 을 참고한다.
+* **JAVA_HOME** : CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 하고 JAVA_HOME 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`jsp_environment-configuration` 을 참고한다.
 
 **환경 변수 설정**
 
@@ -100,6 +100,8 @@ Linux 환경에서 CUBRID 시스템을 설치한 경우는 설치 프로그램�
 	export LIBPATH
 	export PATH
 
+.. _language-setting:
+
 언어 설정
 ^^^^^^^^^
 
@@ -121,13 +123,12 @@ CUBRID 데이터베이스 관리 시스템은 사용할 언어를 **CUBRID_LANG*
 CUBRID의 언어와 문자셋 설정은 데이터를 쓰거나 읽을 때 영향을 미치며, 프로그램들이 출력하는 메시지에도 해당 언어가 사용된다. 제품 설치 시
 **CUBRID_LANG** 의 기본값은 **en_US** 이다.
 
-문자셋, 로캘 및 콜레이션 설정과 관련된 자세한 내용은 `관리자 안내서 > 다국어 지원 <#admin_admin_i18n_intro_htm>`_ 을 참고한다.
+문자셋, 로캘 및 콜레이션 설정과 관련된 자세한 내용은 :doc:`admin/i18n` 을 참고한다.
 
 CUBRID 서비스 시작
 ------------------
 
-환경 변수 및 언어 설정을 완료한 후, CUBRID 서비스를 시작한다. 이에 대한 자세한 설명은 `서비스 등록 <#admin_admin_service_conf_registe_6298>`_
-및 `서비스 구동 및 종료 <#admin_admin_service_conf_start_h_3702>`_ 를 참고한다.
+환경 변수 및 언어 설정을 완료한 후, CUBRID 서비스를 시작한다. 이에 대한 자세한 설명은 :ref:`control-cubrid-services` 를 참고한다.
 
 **셸 명령어**
 
@@ -193,8 +194,8 @@ Windows 환경에서는 다음과 같은 방법으로 CUBRID 서비스를 시작
 
 위에서 testdb는 범용 볼륨 파일, testdb_lgar_t는 백그라운드 보관 로그 파일, testdb_lgat는 활성 로그 파일, testdb_lginf는 로그 정보 파일, testdb_vinf는 볼륨 정보 파일이다.
 
-볼륨에 대한 자세한 정보는 `데이터베이스 볼륨 구조 <#intro_intro_arch_volume_htm>`_ 를 참고하고, 볼륨 생성에 대한 자세한 정보는
-`데이터베이스 볼륨 생성 <#admin_admin_db_create_create_htm>`_ 을 참고한다. 볼륨을 생성할 때에는 **cubrid addvoldb** 유틸리티를 이용하여 용도별로 볼륨을 추가하는 것을 권장하며, 이에 대한 자세한 정보는 `데이터베이스 볼륨 추가 <#admin_admin_db_addvol_htm>`_ 를 참고한다.
+볼륨에 대한 자세한 정보는 :ref:`database-volume-structure` 를 참고하고, 볼륨 생성에 대한 자세한 정보는
+:ref:`creating-database` 을 참고한다. 볼륨을 생성할 때에는 **cubrid addvoldb** 유틸리티를 이용하여 용도별로 볼륨을 추가하는 것을 권장하며, 이에 대한 자세한 정보는 :ref:`adding-database-volume` 를 참고한다.
 
 **데이터베이스 시작**
 

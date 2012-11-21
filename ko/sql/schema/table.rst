@@ -66,8 +66,8 @@ CREATE TABLE
 *   *table_name* : 생성할 테이블의 이름을 지정한다(최대 254바이트).
 *   *column_name* : 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type* : 칼럼의 데이터 타입을 지정한다.
-*   [**SHARED** *value* | **DEFAULT** *value*] : 칼럼의 초기값을 지정한다. (자세한 내용은 `칼럼 정의 <#syntax_syntax_table_create_col_h_3802>`_ 참조)
-*   *column_constraints* : 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다(자세한 내용은 `제약 조건 정의 <#syntax_syntax_table_create_cond__9394>`_ 참조).
+*   [**SHARED** *value* | **DEFAULT** *value*] : 칼럼의 초기값을 지정한다.
+*   *column_constraints* : 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다(자세한 내용은 :ref:`constraint-definition` 참조).
 
 **예제**
 
@@ -101,7 +101,7 @@ CREATE TABLE
 
 **칼럼 이름**
 
-칼럼 이름 작성 원칙은 `식별자 <#syntax_csql_syntaxtype_identifie_2262>`_ 를 참고한다. 생성한 칼럼의 이름은 **ALTER TABLE** 문의 **RENAME COLUMN** 절을 사용하여 변경할 수 있다. 자세한 내용은 `RENAME COLUMN 절 <#syntax_syntax_def_alttable_renam_2189>`_ 을 참고한다.
+칼럼 이름 작성 원칙은 :doc:`/sql/identifier` 를 참고한다. 생성한 칼럼의 이름은 **ALTER TABLE** 문의 **RENAME COLUMN** 절을 사용하여 변경할 수 있다. 자세한 내용은 :ref:`rename-column` 을 참고한다.
 
 **예제**
 
@@ -201,7 +201,7 @@ CREATE TABLE
 
 동일한 칼럼에 **AUTO_INCREMENT** 속성과 **SHARED** 또는 **DEFAULT** 속성을 동시에 정의할 수 없으며, 사용자가 직접 입력한 값과 자동 증가 특성에 의해 입력된 값이 서로 충돌되지 않도록 주의해야 한다.
 
-**AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 `AUTO_INCREMENT 절 <#syntax_syntax_def_alttable_autoi_781>`_ 을 참고한다. ::
+**AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 :ref:`alter-auto-increment` 을 참고한다. ::
 
 	CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]) |
 	CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
@@ -256,6 +256,8 @@ CREATE TABLE
   .. code-block:: sql
   
 	create table tb1(A smallint auto_increment, B char(5));
+
+.. _constraint-definition:
 
 제약 조건 정의
 --------------
@@ -464,7 +466,7 @@ CREATE TABLE
 *   참조 제약 조건에는 참조 대상이 되는 기본키 테이블의 이름 및 기본키와 일치하는 칼럼명들이 정의된다. 만약, 칼럼명 목록을 지정하지 않을 경우에는 기본키 테이블의 기본키가 원래 지정된 순서대로 지정된다.
 *   참조 제약 조건의 기본키의 개수는 외래키의 개수와 동일해야 한다. 참조 제약 조건의 기본키는 동일한 칼럼명이 중복될 수 없다.
 *   참조 제약 조건에 의해 CASCADE되는 작업은 트리거의 동작을 활성화하지 않는다.
-*   CUBRID HA 환경에서는 *referential_triggered_action* 을 사용하지 않는 것을 권장한다. CUBRID HA 환경에서는 트리거를 지원하지 않으므로, *referential_triggered_action* 을 사용하면 마스터 데이터베이스와 슬레이브 데이터베이스의 데이터가 일치하지 않을 수 있다. 자세한 내용은 `CUBRID HA <#admin_admin_ha_intro_htm>`_ 를 참고한다.
+*   CUBRID HA 환경에서는 *referential_triggered_action* 을 사용하지 않는 것을 권장한다. CUBRID HA 환경에서는 트리거를 지원하지 않으므로, *referential_triggered_action* 을 사용하면 마스터 데이터베이스와 슬레이브 데이터베이스의 데이터가 일치하지 않을 수 있다. 자세한 내용은 :doc:`/admin/ha` 를 참고한다.
 
 
 **KEY 또는 INDEX**
@@ -778,7 +780,7 @@ ALTER TABLE
 
 .. warning::
 
-	테이블의 소유자, **DBA**, **DBA**의 멤버만이 테이블 스키마를 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 `권한 부여 <#syntax_syntax_access_authority_h_4540>`_ 참조)
+	테이블의 소유자, **DBA**, **DBA**의 멤버만이 테이블 스키마를 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 :ref:`granting-authorization` 참조)
 
 ADD COLUMN 절
 -------------
@@ -787,7 +789,7 @@ ADD COLUMN 절
 
 새로 추가되는 칼럼이 **NOT NULL** 제약 조건이 있으나 **DEFAULT** 제약 조건이 없는 경우, 데이터베이스 서버 설정 파라미터인 **add_column_update_hard_default** 가 yes이면 고정 기본값(hard default)을 갖게 되고, no이면 **NOT NULL** 제약 조건이 있어도 **NULL** 값을 갖게 된다. 새로 추가되는 칼럼에 **PRIMARY KEY** 혹은 **UNIQUE** 제약 조건을 지정하는 경우에 데이터베이스 서버 설정 파라미터인 **add_column_update_hard_default** 값이 yes이면 에러를 반환하고, no이면 모든 데이터는 **NULL** 값을 갖게 된다. **add_column_update_hard_default** 의 기본값은 **no** 이다.
 
-**add_column_update_hard_default** 및 고정 기본값에 대해서는 `CHANGE, MODIFY 절 <#syntax_syntax_def_alttable_chang_3554>`_ 을 참고한다. ::
+**add_column_update_hard_default** 및 고정 기본값에 대해서는 :ref:`change-column` 을 참고한다. ::
 
 	ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
 	ADD [ COLUMN | ATTRIBUTE ] [(]<column_definition>[)] [ FIRST | AFTER old_column_name ]
@@ -865,7 +867,7 @@ ADD CONSTRAINT 절
 *   *table_name* : 제약 조건을 추가할 테이블의 이름을 지정한다.
 *   *constraint_name* : 새로 추가할 제약 조건의 이름을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
-*   *column_constraint* : 지정된 칼럼에 대해 제약 조건을 정의한다. 제약 조건에 대한 자세한 설명은 `제약 조건 정의 <#syntax_syntax_table_create_cond__9394>`_ 를 참고한다.
+*   *column_constraint* : 지정된 칼럼에 대해 제약 조건을 정의한다. 제약 조건에 대한 자세한 설명은 :ref:`constraint-definition` 를 참고한다.
 
 **예제**
 
@@ -920,7 +922,7 @@ ADD INDEX 절
 ALTER COLUMN … SET DEFAULT 절
 ------------------------------
 
-**ALTER COLUMN** ... **SET DEFAULT** 절은 기본값이 없는 칼럼에 기본값을 지정하거나 기존의 기본값을 변경할 수 있다. `CHANGE, MODIFY 절 <#syntax_syntax_def_alttable_chang_3554>`_ 을 이용하면, 단일 구문으로 여러 칼럼의 기본값을 변경할 수 있다. ::
+**ALTER COLUMN** ... **SET DEFAULT** 절은 기본값이 없는 칼럼에 기본값을 지정하거나 기존의 기본값을 변경할 수 있다. :ref:`change-column` 을 이용하면, 단일 구문으로 여러 칼럼의 기본값을 변경할 수 있다. ::
 
 	ALTER [ TABLE | CLASS ] table_name ALTER [COLUMN] column_name SET DEFAULT value
 
@@ -979,6 +981,8 @@ ALTER COLUMN … SET DEFAULT 절
 	 
 		 UNIQUE u_a_tbl_id ON a_tbl (id)
 
+.. _alter-auto-increment:
+
 AUTO_INCREMENT 절
 -----------------
 
@@ -1005,6 +1009,8 @@ AUTO_INCREMENT 절
 .. warning::
 
 	**AUTO_INCREMENT** 의 초기값 변경으로 인해 **PRIMARY KEY** 나 **UNIQUE** 와 같은 제약 조건에 위배되는 경우가 발생하지 않도록 주의한다.
+
+.. _change-column:
 
 CHANGE, MODIFY 절
 -----------------
@@ -1294,6 +1300,8 @@ CHANGE, MODIFY 절
 | ELO       | 무               |                                         |
 +-----------+------------------+-----------------------------------------+
 
+.. _rename-column:
+
 RENAME COLUMN 절
 ----------------
 
@@ -1450,4 +1458,4 @@ RENAME TABLE
 
 .. warning::
 
-	테이블의 소유자, **DBA**, **DBA** 의 멤버만이 테이블의 이름을 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 `권한 부여 <#syntax_syntax_access_authority_h_4540>`_ 참조).
+	테이블의 소유자, **DBA**, **DBA** 의 멤버만이 테이블의 이름을 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 :ref:`granting-authorization` 참조).

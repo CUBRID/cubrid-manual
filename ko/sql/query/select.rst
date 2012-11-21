@@ -145,9 +145,9 @@ FROM 절
 
 *   *select_expressions* : 조회하고자 하는 칼럼 또는 연산식을 하나 이상 지정할 수 있으며, 테이블 내 모든 칼럼을 조회할 때에는 *를 지정한다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY**, **FOR** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
 
-*   *table_specification* : **FROM** 절 뒤에 하나 이상의 테이블 이름이 명시되며, 부질의와 유도 테이블도 지정될 수 있다. 부질의 유도 테이블에 대한 설명은 `부질의 유도 테이블 <#syntax_syntax_retreive_from_htm__3386>`_ 을 참고한다.
+*   *table_specification* : **FROM** 절 뒤에 하나 이상의 테이블 이름이 명시되며, 부질의와 유도 테이블도 지정될 수 있다. 부질의 유도 테이블에 대한 설명은 :ref:`subquery-derived-table` 을 참고한다.
 
-*   *lock_hint* : 해당 테이블에 대한 격리 수준(isolation level)을 **READ UNCOMMITTED** 수준으로 설정할 수 있다. **READ UNCOMMITTED** 은 오손 읽기(dirty read)가 발생할 수 있는 격리 수준으로서, CUBRID 트랜잭션의 격리 수준에 관한 자세한 설명은 `트랜잭션 격리 수준 <#syntax_syntax_tran_isolation_int_1007>`_ 을 참고한다.
+*   *lock_hint* : 해당 테이블에 대한 격리 수준(isolation level)을 **READ UNCOMMITTED** 수준으로 설정할 수 있다. **READ UNCOMMITTED** 은 오손 읽기(dirty read)가 발생할 수 있는 격리 수준으로서, CUBRID 트랜잭션의 격리 수준에 관한 자세한 설명은 :ref:`transaction-isolation-level` 을 참고한다.
 
 .. code-block:: sql
 
@@ -167,13 +167,15 @@ FROM 절
 	  db_version
 	======================
 	  'CUBRID2008R3.0'
-	  
+
 유도 테이블
 -----------
 
 질의문에서 **FROM** 절의 테이블 명세 부분에 부질의가 사용될 수 있다. 이런 형태의 부질의는 부질의 결과가 테이블로 취급되는 유도 테이블(derived table)을 만든다. 유도 테이블을 만드는 부질의가 사용될 때 반드시 상관 명세가 사용되어야 한다.
 
 또한 유도 테이블은 집합 값을 갖는 속성의 개별 원소를 접근하는데 사용된다. 이 경우 집합 값의 한 원소는 유도 테이블에서 하나의 레코드로 생성된다.
+
+.. _subquery-derived-table:
 
 부질의 유도 테이블
 ------------------
@@ -213,7 +215,9 @@ FROM 절
 	  'CHN'                       2004                32
 	  'DEN'                       1996                 4
 	  'ESP'                       1992                13
-  
+
+.. _where-clause:
+
 WHERE 절
 ========
 
@@ -235,13 +239,13 @@ WHERE 절
 
 * *search_condition* : 자세한 내용은 다음의 항목을 참고한다.
 
-  *   `단순 비교 조건식 <#syntax_syntax_operator_where_bas_4679>`_
-  *   `BETWEEN 조건식 <#syntax_syntax_operator_where_bet_1685>`_
-  *   `EXISTS 조건식 <#syntax_syntax_operator_where_exi_7371>`_
-  *   `IN 조건식 <#syntax_syntax_operator_where_in__69>`_
-  *   `IS NULL 조건식 <#syntax_syntax_operator_where_isn_1426>`_
-  *   `LIKE 조건식 <#syntax_syntax_operator_where_lik_9691>`_
-  *   `ANY/SOME/ALL 조건식 <#syntax_syntax_operator_where_any_5492>`_
+  *   :ref:`basic-cond-expr`
+  *   :ref:`between-expr`
+  *   :ref:`exists-expr`
+  *   :ref:`in-expr`
+  *   :ref:`is-null-expr`
+  *   :ref:`like-expr`
+  *   :ref:`any-some-all-expr`
 
 복수의 조건은 논리연산자 **AND**, **OR** 를 사용할 수 있다. **AND** 가 지정된 경우 모든 조건이 참이어야 하고, **OR** 로 지정된 경우에는 하나의 조건만 참이어도 된다. 만약 키워드 **NOT** 이 조건 앞에 붙는다면 조건은 반대의 의미를 갖는다. 논리 연산이 평가되는 순서는 다음 표와 같다.
 
@@ -257,6 +261,8 @@ WHERE 절
 | 4        | **OR**  | 논리 표현식에 포함된 조건 중 하나의 조건은 참이어야 한다. |
 +----------+---------+-----------------------------------------------------------+
 
+.. _group-by-clause:
+
 GROUP BY ... HAVING 절
 ======================
 
@@ -264,7 +270,7 @@ GROUP BY ... HAVING 절
 
 **GROUP BY** 절 뒤에 **HAVING** 절을 결합하여 그룹 선택을 위한 조건식을 설정할 수 있다. 즉, **GROUP BY** 절로 구성되는 모든 그룹 중 **HAVING** 절에 명시된 조건식을 만족하는 그룹만 조회한다.
 
-SQL 표준에서는 **GROUP BY** 절에서 명시되지 않은 칼럼(hidden column)을 **SELECT** 칼럼 리스트에 명시할 수 없지만, CUBRID는 문법을 확장하여 **GROUP BY** 절에서 명시되지 않은 칼럼도 **SELECT** 칼럼 리스트에 명시할 수 있다. CUBRID에서 확장된 문법을 사용하지 않으려면 **only_full_group_by** 파라미터 값을 yes로 설정해야 한다. 이에 대한 자세한 내용은 `구문/타입 관련 파라미터 <#pm_pm_db_classify_type_htm>`_ 를 참고한다. ::
+SQL 표준에서는 **GROUP BY** 절에서 명시되지 않은 칼럼(hidden column)을 **SELECT** 칼럼 리스트에 명시할 수 없지만, CUBRID는 문법을 확장하여 **GROUP BY** 절에서 명시되지 않은 칼럼도 **SELECT** 칼럼 리스트에 명시할 수 있다. CUBRID에서 확장된 문법을 사용하지 않으려면 **only_full_group_by** 파라미터 값을 yes로 설정해야 한다. 이에 대한 자세한 내용은 :ref:`stmt-type-parameters` 를 참고한다. ::
 
 	SELECT ...
 	GROUP BY { col_name | expr | positoin } [ ASC | DESC ],...
@@ -346,6 +352,8 @@ SQL 표준에서는 **GROUP BY** 절에서 명시되지 않은 칼럼(hidden col
 			  501  NULL                     1.900000000000000e+02
 			 NULL  NULL                     2.750000000000000e+02
 
+.. _order-by-clause:
+
 ORDER BY 절
 ===========
 
@@ -404,6 +412,8 @@ ORDER BY 절
 			  201     3.250000000000000e+02
 			  301     3.000000000000000e+02
 			  501     1.750000000000000e+02
+
+.. _limit-clause:
 
 LIMIT 절
 ========

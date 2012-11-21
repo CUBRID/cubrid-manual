@@ -96,7 +96,7 @@ CUBRID ODBC Driver가 확인되었다면 응용 프로그램에서 접속하려�
 
 **DSN을 사용하지 않고 데이터베이스에 직접 연결**
 
-연결 문자열을 사용하여 CUBRID 데이터베이스에 직접 연결할 수도 있다. 연결 문자열의 예는 다음과 같다. 자세한 내용은 `연결 문자열(connection string) 구성 <#api_api_odbc_programming_htm_con_5232>`_ 을 참고한다. ::
+연결 문자열을 사용하여 CUBRID 데이터베이스에 직접 연결할 수도 있다. 연결 문자열의 예는 다음과 같다. ::
 
 	conn = "driver={CUBRID Driver};server=localhost;port=33000;uid=dba;pwd=;db_name=demodb;"
 

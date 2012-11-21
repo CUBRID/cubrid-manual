@@ -2,6 +2,11 @@
 JDBC 드라이버
 *************
 
+.. _jdbc-overview:
+
+JDBC 개요
+=========
+
 CUBRID JDBC 드라이버(cubrid_jdbc.jar)를 사용하면 Java로 작성된 응용 프로그램에서 CUBRID 데이터베이스에 접속할 수 있다. CUBRID JDBC 드라이버는 <*CUBRID 설치 디렉터리*> **/jdbc** 디렉터리에 위치한다. CUBRID JDBC 드라이버는 JDBC 2.0 스펙을 기준으로 개발되었으며, JDK 1.6에서 컴파일한 것을 기본으로 제공한다.
 
 별도로 JDBC?드라이버를 다운로드하거나 JDBC?드라이버에 대한 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver>`_ 에 접속한다.
@@ -107,6 +112,8 @@ CUBRID JDBC 드라이버(**cubrid_jdbc.jar**)는 CUBRID 설치 디렉터리 아�
 
 JDBC 프로그래밍
 ===============
+
+.. _jdbc-connection-conf:
 
 연결 설정
 ---------
@@ -790,7 +797,7 @@ JDBC 예제 프로그램
 
 **JDBC 드라이버 로드**
 
-CUBRID에 접속하기 위해서는 **Class** 의 **forName** () 메서드를 사용하여 JDBC 드라이버를 로드해야 한다. 자세한 내용은 `개요 <#api_api_jdbc_overview_htm>`_ 를 참고한다.
+CUBRID에 접속하기 위해서는 **Class** 의 **forName** () 메서드를 사용하여 JDBC 드라이버를 로드해야 한다. 자세한 내용은 :ref:`jdbc-overview` 를 참고한다.
 
 .. code-block:: java
 
@@ -799,7 +806,7 @@ CUBRID에 접속하기 위해서는 **Class** 의 **forName** () 메서드를 �
 **데이터베이스 연결**
 
 JDBC 드라이버를 로드한 후 **DriverManager** 의 **getConnection** () 메서드를 사용하여 데이터베이스와 연결한다.
-**Connection** 객체를 생성하기 위해서는 데이터베이스의 위치를 기술하기 위한 URL, 데이터베이스의 사용자 이름, 암호 등의 정보가 지정되어야 한다. 자세한 내용은 `연결 설정 <#api_api_jdbc_programming_htm_con_3849>`_ 을 참고한다.
+**Connection** 객체를 생성하기 위해서는 데이터베이스의 위치를 기술하기 위한 URL, 데이터베이스의 사용자 이름, 암호 등의 정보가 지정되어야 한다. 자세한 내용은 :ref:`jdbc-connection-conf` 을 참고한다.
 
 .. code-block:: java
 
@@ -974,7 +981,7 @@ JDBC 드라이버를 로드한 후 **DriverManager** 의 **getConnection** () �
 JDBC API
 ========
 
-JDBC API에 대한 자세한 내용은 Java API Specification 문서(`http://docs.oracle.com/javase/7/docs/api/ <http://docs.oracle.com/javase/7/docs/api/>`_)를 참고한다. 기타 Java에 대한 자세한 내용은 Java SE Documentation 문서(`http://www.oracle.com/technetwork/java/javase/documentation/index.html <http://www.oracle.com/technetwork/java/javase/documentation/index.html>`_)를 참고한다.
+JDBC API에 대한 자세한 내용은 Java API Specification 문서(http://docs.oracle.com/javase/7/docs/api)를 참고한다. 기타 Java에 대한 자세한 내용은 Java SE Documentation 문서(http://www.oracle.com/technetwork/java/javase/documentation/index.html)를 참고한다.
 
 커서 유지(cursor holdability)와 관련하여 설정을 명시하지 않으면 기본으로 커서가 유지된다. 커서 유지에 대한 자세한 설명은 CUBRID SQL 설명서 > 트랜잭션과 잠금 > 커서 유지를 참고한다.
 

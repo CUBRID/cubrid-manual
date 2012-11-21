@@ -2,7 +2,7 @@
 DELETE
 ******
 
-**DELETE** 문을 사용하여 테이블 내에 레코드를 삭제할 수 있으며, `WHERE 절 <#syntax_syntax_retreive_where_htm>`_ 과 결합하여 삭제 조건을 명시할 수 있다. 하나의 **DELETE** 문으로 하나 이상의 테이블을 삭제할 수 있다. 삭제할 테이블이 한 개인 경우에 한하여, `LIMIT 절 <#syntax_syntax_retreive_limit_htm>`_ 을 지정할 수 있다. `LIMIT 절 <#syntax_syntax_retreive_limit_htm>`_ 을 명시하면 삭제할 레코드 수를 한정할 수 있다. `WHERE 절 <#syntax_syntax_retreive_where_htm>`_ 을 만족하는 레코드 개수가 *row_count* 를 초과하면 *row_count* 개의 레코드만 삭제된다. ::
+**DELETE** 문을 사용하여 테이블 내에 레코드를 삭제할 수 있으며, :ref:`where-clause` 과 결합하여 삭제 조건을 명시할 수 있다. 하나의 **DELETE** 문으로 하나 이상의 테이블을 삭제할 수 있다. 삭제할 테이블이 한 개인 경우에 한하여, :ref:`limit-clause` 을 지정할 수 있다. :ref:`limit-clause` 을 명시하면 삭제할 레코드 수를 한정할 수 있다. :ref:`where-clause` 을 만족하는 레코드 개수가 *row_count* 를 초과하면 *row_count* 개의 레코드만 삭제된다. ::
 
 	<DELETE single table>
 	DELETE [FROM] table_name [ WHERE <search_condition> ] [LIMIT row_count]
@@ -17,9 +17,9 @@ DELETE
 
 *   *table_name* : 삭제할 데이터가 포함되어 있는 테이블의 이름을 지정한다. 테이블의 개수가 한 개일 경우 앞의 **FROM** 키워드를 생략할 수 있다.
 
-*   *search_condition* : `WHERE 절 <#syntax_syntax_retreive_where_htm>`_ 을 이용하여 *search_condition* 을 만족하는?데이터만 삭제한다. 생략할 경우 지정된 테이블의 모든 데이터를 삭제한다.
+*   *search_condition* : :ref:`where-clause` 을 이용하여 *search_condition* 을 만족하는?데이터만 삭제한다. 생략할 경우 지정된 테이블의 모든 데이터를 삭제한다.
 
-*   *row_count* : `LIMIT 절 <#syntax_syntax_retreive_limit_htm>`_ 에 삭제할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
+*   *row_count* : :ref:`limit-clause` 에 삭제할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
 
 **참고 사항**
 

@@ -164,6 +164,8 @@
 	 
 	cubrid is a tool for DBMS.
 
+.. _utility-on-windows:
+
 .. note::
 
 	Windows Vista 이상 버전에서 **cubrid** 유틸리티를 사용하여 서비스를 제어하려면 명령 프롬프트 창을 관리자 권한으로 실행하여 사용하는 것을 권장한다. 명령 프롬프트 창을 관리자 권한으로 구동하지 않고 **cubrid** 유틸리티를 사용하면 UAC(User Account Control) 대화 상자를 통하여 관리자 권한으로 수행할 수는 있으나 수행 결과 메시지를 확인할 수 없다.

@@ -44,15 +44,17 @@ CUBRID HA 노드는 하나의 마스터 프로세스(cub_master), 하나 이상�
 
 *   **마스터 프로세스(cub_master)** : heartbeat 메시지를 주고 받으며 CUBRID HA 내부 관리 프로세스들을 제어한다.
 
-*   **데이터베이스 서버 프로세스(cub_server)** : 사용자에게 읽기, 쓰기 등의 서비스를 제공한다. 자세한 내용은 `서버 <#admin_admin_ha_concept_server_ht_7541>`_ 를 참고한다.
+*   **데이터베이스 서버 프로세스(cub_server)** : 사용자에게 읽기, 쓰기 등의 서비스를 제공한다. 자세한 내용은 :ref:`ha-server` 를 참고한다.
 
-*   **복제 로그 복사 프로세스(copylogdb)** : 그룹 내의 모든 트랜잭션 로그를 복사한다. 복제 로그 복사 프로세스가 대상 노드의 데이터베이스 서버 프로세스에 트랜잭션 로그를 요청하면, 해당 데이터베이스 서버 프로세스는 적절한 로그를 전달한다. 트랜잭션 로그가 복사되는 위치는 **cubrid-ha** 의 **REPL_LOG_HOME** 으로 설정할 수 있다. 복사된 복제 로그의 정보는 `cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_ 유틸리티로 확인할 수 있다. 복제 로그 복사는 SYNC, SEMISYNC, ASYNC의 세 가지 모드가 있으며, 모드는 **cubrid-ha** 의 **LW_SYNC_MODE** 로 설정할 수 있다. 모드에 대한 자세한 내용은 `로그 다중화 <#admin_admin_ha_feat_log_htm>`_ 를 참고한다.
+*   **복제 로그 복사 프로세스(copylogdb)** : 그룹 내의 모든 트랜잭션 로그를 복사한다. 복제 로그 복사 프로세스가 대상 노드의 데이터베이스 서버 프로세스에 트랜잭션 로그를 요청하면, 해당 데이터베이스 서버 프로세스는 적절한 로그를 전달한다. 트랜잭션 로그가 복사되는 위치는 **cubrid-ha** 의 **REPL_LOG_HOME** 으로 설정할 수 있다. 복사된 복제 로그의 정보는 :ref:`cubrid-applyinfo` 유틸리티로 확인할 수 있다. 복제 로그 복사는 SYNC, SEMISYNC, ASYNC의 세 가지 모드가 있으며, 모드는 **cubrid-ha** 의 **LW_SYNC_MODE** 로 설정할 수 있다. 모드에 대한 자세한 내용은 :ref:`log-multiplexing` 를 참고한다.
 
 .. image:: /images/image15.png
 
-*   **복제 로그 반영 프로세스(applylogdb)** : 복제 로그 복사 프로세스에 의해 복사된 로그를 노드에 반영한다. 반영한 복제 정보는 내부 카탈로그(db_ha_apply_info)에 저장하며, 이 정보는 `cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_ 유틸리티로 확인할 수 있다.
+*   **복제 로그 반영 프로세스(applylogdb)** : 복제 로그 복사 프로세스에 의해 복사된 로그를 노드에 반영한다. 반영한 복제 정보는 내부 카탈로그(db_ha_apply_info)에 저장하며, 이 정보는 :ref:`cubrid-applyinfo` 유틸리티로 확인할 수 있다.
 
 .. image:: /images/image16.png
+
+.. _ha-server:
 
 서버
 ----
@@ -62,7 +64,7 @@ CUBRID HA 노드는 하나의 마스터 프로세스(cub_master), 하나 이상�
 *   **액티브 서버**  : 마스터 노드에 속하는 서버로, active?상태이다. 액티브 서버는 사용자에게 읽기, 쓰기 등 모든 서비스를 제공한다.
 *   **스탠바이 서버** : 마스터 노드 외의 노드에 속하는 서버로, standby?상태이다. 스탠바이 서버는 사용자에게 읽기 서비스만을 제공한다.
 
-서버 상태는 노드 상태에 따라 변경된다. `cubrid changemode <#admin_admin_ha_util_changemode_h_8053>`_ 유틸리티를 이용하면?서버 상태를 조회할 수 있다. maintenance 모드는 운영 편의를 위한 것으로, **cubrid changemode** 유틸리티를 통해 변경할 수 있다.
+서버 상태는 노드 상태에 따라 변경된다. :ref:`cubrid-changemode` 유틸리티를 이용하면?서버 상태를 조회할 수 있다. maintenance 모드는 운영 편의를 위한 것으로, **cubrid changemode** 유틸리티를 통해 변경할 수 있다.
 
 .. image:: /images/image17.png
 
@@ -94,7 +96,9 @@ failback은 마스터 노드였던 장애 노드가 복구되면 자동으로 �
 
 .. image:: /images/image19.png
 
-heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어나므로, 네트워크가 불안정한 환경에서는 장애가 발생하지 않아도 failover가 일어날 수 있다. 이와 같은 상황에서 failover가 일어나는 것을 막기 위해 **ha_ping_hosts** 를 설정할 수 있다. **ha_ping_hosts** 를 설정하면, heartbeat 메시지가 정상적으로 전달되지 못했을 때 **ha_ping_hosts** 로 설정한 노드로 ping 메시지를 보내서 원인이 네트워크 불안정인지 확인하는 절차를 거친다. **ha_ping_hosts** 설정에 대한 좀 더 자세한 설명은 `cubrid_ha.conf <#admin_admin_ha_conf_ha_htm>`_ 를 참고한다.
+heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어나므로, 네트워크가 불안정한 환경에서는 장애가 발생하지 않아도 failover가 일어날 수 있다. 이와 같은 상황에서 failover가 일어나는 것을 막기 위해 **ha_ping_hosts** 를 설정할 수 있다. **ha_ping_hosts** 를 설정하면, heartbeat 메시지가 정상적으로 전달되지 못했을 때 **ha_ping_hosts** 로 설정한 노드로 ping 메시지를 보내서 원인이 네트워크 불안정인지 확인하는 절차를 거친다. **ha_ping_hosts** 설정에 대한 좀 더 자세한 설명은 :ref:`cubrid-ha-conf` 를 참고한다.
+
+.. _broker-mode:
 
 브로커 모드
 -----------
@@ -103,7 +107,7 @@ heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어
 
 브로커는 서버 연결 순서에 의해 연결을 시도하여?자신의 모드에 맞는 서버를 선택하여 연결한다. 조건이 맞지 않아 연결되지 않으면 다음 순서의 연결을 시도하고, 모든 순서를 수행해도 적절한 서버를 찾지 못하면 해당 브로커는 서버 연결에 실패한다.
 
-브로커 모드 설정 방법은 `cubrid_broker.conf <#admin_admin_ha_conf_broker_htm>`_ 를 참고한다.
+브로커 모드 설정 방법은 :ref:`ha-cubrid-broker-conf` 를 참고한다.
 
 **Read Write**
 
@@ -146,7 +150,7 @@ heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어
 
 **Preferred Host Read Only**
 
-읽기 서비스를 제공하는 브로커이다. Read Only 브로커와 동일하고, 서버의 접속 순서 및?서버 선정 기준만 다르다. 서버의 접속 순서 및?서버 선정 기준은 **PREFERRED_HOSTS** 로 설정할 수 있으며, 설정 방법은 `cubrid_broker.conf <#admin_admin_ha_conf_broker_htm>`_ 를 참고한다.
+읽기 서비스를 제공하는 브로커이다. Read Only 브로커와 동일하고, 서버의 접속 순서 및?서버 선정 기준만 다르다. 서버의 접속 순서 및?서버 선정 기준은 **PREFERRED_HOSTS** 로 설정할 수 있으며, 설정 방법은 :ref:`ha-cubrid-broker-conf` 를 참고한다.
 
 서버 연결 순서는 다음과 같다.
 
@@ -166,7 +170,7 @@ CUBRID HA기능
 
 **서버 failover**
 
-브로커는 서버의 접속 순서를 정의하고 그 순서에 따라 서버에 접속한다. 접속한 서버에 장애가 발생하면 브로커는 다음 순위로 설정된 서버에 접속하며, 응용 프로그램에서는 별도의 처리가 필요 없다. 브로커가 다음 서버에 접속할 때의 동작은 브로커의 모드에 따라 다를 수 있다. 서버의 접속 순서 및 브로커의 모드의 설정 방법은 `cubrid_broker.conf <#admin_admin_ha_conf_broker_htm>`_ 를 참고한다.
+브로커는 서버의 접속 순서를 정의하고 그 순서에 따라 서버에 접속한다. 접속한 서버에 장애가 발생하면 브로커는 다음 순위로 설정된 서버에 접속하며, 응용 프로그램에서는 별도의 처리가 필요 없다. 브로커가 다음 서버에 접속할 때의 동작은 브로커의 모드에 따라 다를 수 있다. 서버의 접속 순서 및 브로커의 모드의 설정 방법은 :ref:`ha-cubrid-broker-conf` 를 참고한다.
 
 .. image:: /images/image24.png
 
@@ -175,6 +179,8 @@ CUBRID HA기능
 CUBRID HA는 자동으로 서버 failback을 지원하지 않는다. 따라서 failback을 수동으로 적용하려면 비정상 종료되었던 마스터 노드를 복구하여 슬레이브 노드로 구동한 후, failover로 인해 슬레이브에서 마스터로 역할이 바뀐 노드를 의도적으로 종료하여 다시 각 노드의 역할을 서로 바꾼다.
 
 예를 들어 *nodeA* 가 마스터, *nodeB* 가 슬레이브일 때 failover 이후에는 역할이 바뀌어 *nodeB* 가 마스터, *nodeA* 가 슬레이브가 된다. *nodeB* 를 종료(**cubrid heartbeat stop**)한 후, *nodeA* 가 마스터, 즉 노드 상태가 active로 바뀌었는지 확인(**cubrid heartbeat status**) 한다. 그리고 나서 *nodeB* 를 시작(**cubrid heartbeat start**) 하면, *nodeB* 는 슬레이브가 된다.
+
+.. _duplexing-brokers:
 
 브로커 이중화
 -------------
@@ -205,7 +211,9 @@ CUBRID는 3-tier DBMS로, 응용 프로그램과 데이터베이스 서버를 �
 
 **브로커 failback**
 
-브로커 failover 이후 장애 브로커가 복구되면 기존 브로커와 접속을 끊고 이전에 연결했던 우선순위가 가장 높은 브로커에 다시 접속한다. 응용 프로그램에서는 별도의 처리가 필요 없으며, JDBC, CCI, PHP?드라이버 내부에서 처리한다. 브로커 failback을 수행하는 시간은 JDBC 접속 URL에 설정한 값을 따른다. 이에 대한 설명은 `JDBC 설정 <#admin_admin_ha_conf_jdbc_htm>`_ 을 참고한다.
+브로커 failover 이후 장애 브로커가 복구되면 기존 브로커와 접속을 끊고 이전에 연결했던 우선순위가 가장 높은 브로커에 다시 접속한다. 응용 프로그램에서는 별도의 처리가 필요 없으며, JDBC, CCI, PHP?드라이버 내부에서 처리한다. 브로커 failback을 수행하는 시간은 JDBC 접속 URL에 설정한 값을 따른다. 이에 대한 설명은 :ref:`ha-jdbc-conf` 을 참고한다.
+
+.. _log-multiplexing:
 
 로그 다중화
 -----------
@@ -214,7 +222,7 @@ CUBRID HA는 CUBRID HA 그룹에 포함된 모든 노드에 트랜잭션 로그�
 
 .. image:: /images/image28.png
 
-트랜잭션 로그를 복사하는 모드는 **SYNC**, **SEMISYNC**, **ASYNC** 의 세 가지가 있으며, 사용자가 `cubrid_ha.conf <#admin_admin_ha_conf_ha_htm>`_ 로 설정할 수 있다.
+트랜잭션 로그를 복사하는 모드는 **SYNC**, **SEMISYNC**, **ASYNC** 의 세 가지가 있으며, 사용자가 :ref:`cubrid-ha-conf` 로 설정할 수 있다.
 
 **SYNC 모드**
 
@@ -446,11 +454,13 @@ CUBRID HA 그룹 내의 각 노드에서 **cubrid changemode** 유틸리티를 �
 
 **응용 프로그램 설정**
 
-응용 프로그램이 연결할 브로커의 호스트 이름(*nodeA_broker*, *nodeB_broker*)과 포트를 연결 URL에 명시한다. 브로커와의 연결 장애가 발생한 경우 다음으로 연결을 시도할 브로커는 **altHosts** 속성에 명시한다. 아래는 JDBC 프로그램의 예이며, CCI, PHP에 대한 예와 자세한 설명은 `CCI 설정 <#admin_admin_ha_conf_cci_htm>`_, `PHP 설정 <#admin_admin_ha_conf_php_htm>`_ 을 참고한다. 
+응용 프로그램이 연결할 브로커의 호스트 이름(*nodeA_broker*, *nodeB_broker*)과 포트를 연결 URL에 명시한다. 브로커와의 연결 장애가 발생한 경우 다음으로 연결을 시도할 브로커는 **altHosts** 속성에 명시한다. 아래는 JDBC 프로그램의 예이며, CCI, PHP에 대한 예와 자세한 설명은 :ref:`ha-cci-conf`, :ref:`ha-php-conf` 을 참고한다. 
 
 .. code-block:: java
 
 	Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA_broker:33000:testdb:::?charSet=utf-8&altHosts=nodeB_broker:33000", "dba", "");
+
+.. _ha-configuration:
 
 환경 설정
 =========
@@ -480,7 +490,7 @@ CUBRID HA 기능을 설정하는 파라미터이다. 기본값은 **off** 이다
 
 활성화된 트랜잭션이 참조하고 있는 기존 보관 로그 파일이나, HA 환경에서 슬레이브 노드에 반영되지 않은 마스터 노드의 보관 로그 파일은 삭제되지 않는다. 이에 대한 자세한 내용은 아래의 **force_remove_log_archives** 를 참고한다.
 
-**log_max_archives** 에 대한 자세한 내용은 `로깅 관련 파라미터 <#pm_pm_db_classify_logging_htm>`_ 를 참고한다.
+**log_max_archives** 에 대한 자세한 내용은 :ref:`logging-parameters` 를 참고한다.
 
 **force_remove_log_archives**
 
@@ -488,7 +498,7 @@ CUBRID HA 기능을 설정하는 파라미터이다. 기본값은 **off** 이다
 
 **force_remove_log_archives** 를 yes로 설정하면 HA 관련 프로세스가 사용할 보관 로그 파일까지 삭제될 수 있고, 이로 인해 데이터베이스 복제 노드 간 데이터 불일치가 발생할 수 있다. 이러한 위험성을 감수하더라도 디스크의 여유 공간을 유지하고 싶다면 **force_remove_log_archives** 를 yes로 설정한다.
 
-**force_remove_log_archives** 에 대한 자세한 내용은 `로깅 관련 파라미터 <#pm_pm_db_classify_logging_htm>`_ 를 참고한다.
+**force_remove_log_archives** 에 대한 자세한 내용은 :ref:`logging-parameters` 를 참고한다.
 
 .. note::
 
@@ -498,7 +508,7 @@ CUBRID HA 기능을 설정하는 파라미터이다. 기본값은 **off** 이다
 
 데이터베이스 서버에 동시에 연결할 수 있는?클라이언트의 최대 수를 지정하는?파라미터이다. 기본값은 **100** 이다.
 
-CUBRID HA 기능을 사용하면 기본적으로 복제 로그 복사 프로세스와 복제 로그 반영 프로세스가 구동되므로, 해당 노드를 제외한 CUBRID HA 그룹 내 노드 수의 두 배를 고려하여 설정해야 한다. 또한 failover가 일어날 때?다른 노드에 접속하고 있던 클라이언트가 해당 노드에 접속할 수 있으므로 이를 고려해야 한다. **max_clients** 에 대한 자세한 내용은 `접속 관련 파라미터 <#pm_pm_db_classify_connect_htm>`_ 를 참고한다.
+CUBRID HA 기능을 사용하면 기본적으로 복제 로그 복사 프로세스와 복제 로그 반영 프로세스가 구동되므로, 해당 노드를 제외한 CUBRID HA 그룹 내 노드 수의 두 배를 고려하여 설정해야 한다. 또한 failover가 일어날 때?다른 노드에 접속하고 있던 클라이언트가 해당 노드에 접속할 수 있으므로 이를 고려해야 한다. **max_clients** 에 대한 자세한 내용은 :ref:`connection-parameters` 를 참고한다.
 
 **노드 간 반드시 값이 동일해야 하는 시스템 파라미터**
 
@@ -541,6 +551,8 @@ CUBRID HA 기능을 사용하면 기본적으로 복제 로그 복사 프로세�
 	ha_mode=on
 	log_max_archives=100
 
+.. _cubrid-ha-conf:
+
 cubrid_ha.conf
 --------------
 
@@ -552,7 +564,7 @@ CUBRID HA 그룹 내에서 사용할 그룹 이름과 failover의 대상이 되�
 
 이 파라미터에서 명시한 멤버 노드들의 호스트 이름은 IP로 대체할 수 없으며, 반드시 **/etc/hosts** 에 등록되어 있어야 한다. **ha_mode** 를 **on** 으로 설정한 노드는 **ha_node_list** 에 해당 노드가 반드시 포함되어 있어야 한다. CUBRID HA 그룹 내의 모든 노드는 **ha_node_list** 의 값이 동일해야 한다. failover가 일어날 때 이 파라미터에 설정된 순서에 따라 마스터 노드가 된다.
 
-이 파라미터는 동적으로 변경할 수 있으며, 변경하면 `cubrid heartbeat reload <#admin_admin_ha_util_heartbeat_ht_125>`_ 를 실행해야 한다.
+이 파라미터는 동적으로 변경할 수 있으며, 변경하면 :ref:`cubrid heartbeat reload <cubrid-heartbeat>` 를 실행해야 한다.
 
 **ha_replica_list**
 
@@ -560,7 +572,7 @@ CUBRID HA 그룹 내에서 사용할 그룹 이름과 failover의 대상이 되�
 
 그룹 이름은 **ha_node_list** 에서 명시한 이름과 같아야 한다. 이 파라미터에서 명시한 멤버 노드들의 호스트 이름 및 해당 노드의 호스트 이름은 반드시 **/etc/hosts** 에 등록되어 있어야 한다. **ha_mode** 를 **replica** 로 설정한 노드는 **ha_replica_list** 에 해당 노드가 반드시 포함되어 있어야 한다. CUBRID HA 그룹 내의 모든 노드는 **ha_replica_list** 의 값이 동일해야 한다.
 
-이 파라미터는 동적으로 변경할 수 있으며, 변경하면 `cubrid heartbeat reload <#admin_admin_ha_util_heartbeat_ht_125>`_ 를 실행해야 한다.
+이 파라미터는 동적으로 변경할 수 있으며, 변경하면 :ref:`cubrid heartbeat reload <cubrid-heartbeat>` 를 실행해야 한다.
 
 **ha_port_id**
 
@@ -582,13 +594,13 @@ CUBRID HA 그룹 내의 노드들이 heartbeat 메시지를 주고 받으며 노
 
 **SYNC**, **SEMISYNC**, **ASYNC** 를 값으로 설정할 수 있다. **ha_node_list** 에 지정한 노드의 수만큼 설정해야 하고 순서가 같아야 한다. 콜론(:)으로 구분한다. 레플리카 노드는 이 값의 설정과 관계없이 항상 ASNYC 모드로 동작한다.
 
-자세한 내용은 `로그 다중화 <#admin_admin_ha_feat_log_htm>`_ 를 참고한다.
+자세한 내용은 :ref:`log-multiplexing` 를 참고한다.
 
 **ha_copy_log_base**
 
 트랜잭션 로그의 복사본을 저장할 위치를 지정한다. 기본값은 **$CUBRID_DATABASES** 이다.
 
-자세한 내용은 `로그 다중화 <#admin_admin_ha_feat_log_htm>`_ 를 참고한다.
+자세한 내용은 :ref:`log-multiplexing` 를 참고한다.
 
 **ha_db_list**
 
@@ -649,7 +661,10 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 	127.0.0.1 localhost.localdomain localhost
 	192.168.0.1 nodeA
 
-**cubrid_broker.conf**
+.. _ha-cubrid-broker-conf:
+
+cubrid_broker.conf
+------------------
 
 **cubrid_broker.conf** 파일은 **$CUBRID/conf** 디렉터리에 위치하며, 브로커의?전반적인 설정 정보를 담고 있다. 여기에서는 **cubrid_broker.conf** 중 CUBRID HA가 사용하는 파라미터를 설명한다.
 
@@ -657,13 +672,13 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 
 브로커의 모드를 설정한다. 기본값은 **RW** 이다.
 
-**RW** (Read Write), **RO** (Read Only), **SO** (Slave Only), **PHRO** (Preferred Host Read Only)를 값으로 설정할 수 있다. 자세한 내용은 `브로커 모드 <#admin_admin_ha_concept_broker_ht_6042>`_ 를 참고한다.
+**RW** (Read Write), **RO** (Read Only), **SO** (Slave Only), **PHRO** (Preferred Host Read Only)를 값으로 설정할 수 있다. 자세한 내용은 :ref:`broker-mode` 를 참고한다.
 
 **PREFERRED_HOSTS**
 
 **ACCESS_MODE** 파라미터의 값이 **PHRO** 일 때만 사용되는 파라미터이다. 기본값은 **NULL** 이다.
 
-여러 노드를 지정할 수 있으며 콜론(:)으로 구분한다. 먼저 **PREFERRED_HOSTS** 파라미터에 설정된 호스트 순서대로 연결을 시도한 후 **$CUBRID_DATABASES/databases.txt** 에 설정된 호스트 순서대로 연결을 시도한다. 자세한 내용은 `브로커 모드 <#admin_admin_ha_concept_broker_ht_6042>`_ 를 참고한다.
+여러 노드를 지정할 수 있으며 콜론(:)으로 구분한다. 먼저 **PREFERRED_HOSTS** 파라미터에 설정된 호스트 순서대로 연결을 시도한 후 **$CUBRID_DATABASES/databases.txt** 에 설정된 호스트 순서대로 연결을 시도한다. 자세한 내용은 :ref:`broker-mode` 를 참고한다.
 
 다음은 **cubrid_broker.conf** 설정의 예이다. ::
 
@@ -685,7 +700,8 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 	ACCESS_MODE             =PHRO
 	PREFERRED_HOSTS         =nodeA:nodeB:nodeC
 
-**databases.txt**
+databases.txt
+-------------
 
 **databases.txt** 파일은 **$CUBRID_DATABASES** (설정되어 있지 않은 경우 $CUBRID/databases) 디렉터리에 위치하며, **db_hosts** 값을 설정하여 브로커가 접속하는 서버의 순서를 결정할 수 있다. 여러 노드를 설정하려면 콜론(:)으로 구분한다.
 
@@ -694,7 +710,10 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 	#db-name    vol-path        db-host     log-path     lob-base-path
 	testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
-**JDBC 설정**
+.. _ha-jdbc-conf:
+
+JDBC 설정
+---------
 
 JDBC에서 CUBRID HA 기능을 사용하려면 브로커(*nodeA_broker*)에 장애가 발생했을 때 다음으로 연결할 브로커(*nodeB_broker*)의 연결 정보를 연결 URL에 추가로 지정해야 한다. CUBRID HA를 위해 지정되는 속성은 장애가 발생했을 때 연결할 하나 이상의 브로커 노드 정보인 **altHosts** 이다. 이에 대한 자세한 설명은 "API 레퍼런스 > JDBC API > JDBC 프로그래밍 > 연결 설정"을 참고한다.
 
@@ -704,7 +723,10 @@ JDBC에서 CUBRID HA 기능을 사용하려면 브로커(*nodeA_broker*)에 장�
 
 	Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA_broker:33000:testdb:::?charSet=utf-8&altHosts=nodeB_broker:33000", "dba", "");
 
-**CCI 설정**
+.. _ha-cci-conf:
+
+CCI 설정
+--------
 
 CCI에서 CUBRID HA 기능을 사용하려면 브로커에 장애가 발생했을 때 연결할 브로커의 연결 정보를 연결 URL에 추가로 지정할 수 있는 :c:func:`cci_connect_with_url` 함수를 사용하여 브로커와 연결해야 한다. CUBRID HA를 위해 지정되는 속성은 장애가 발생했을 때 연결할 하나 이상의 브로커 노드 정보인 **altHosts** 이다.
 
@@ -719,7 +741,10 @@ CCI에서 CUBRID HA 기능을 사용하려면 브로커에 장애가 발생했�
 		  return 1;
 	}
 
-**PHP 설정**
+.. _ha-php-conf:
+
+PHP 설정
+--------
 
 PHP에서 CUBRID HA 기능을 사용하려면 브로커에 장애가 발생했을 때 연결할 브로커의 연결 정보를 연결 URL에 추가로 지정할 수 있는 **cubrid_connect_with_url** 함수를 사용하여 브로커와 연결해야 한다. CUBRID HA를 위해 지정되는 속성은 장애가 발생했을 때 연결할 하나 이상의 브로커 노드 정보인 **altHosts** 이다.
 
@@ -738,6 +763,8 @@ PHP에서 CUBRID HA 기능을 사용하려면 브로커에 장애가 발생했�
 
 구동 및 모니터링
 ================
+
+.. _cubrid-heartbeat:
 
 cubrid heartbeat 유틸리티
 -------------------------
@@ -823,6 +850,8 @@ CUBRID HA 그룹 정보와 CUBRID HA 구성 요소의 정보를 확인할 수 �
 
 .. note:: CUBRID 9.0 미만 버전에서 사용되었던 **act**, **deact**, **deregister** 명령은 더 이상 사용되지 않는다.
 
+.. _cubrid-service-util:
+
 cubrid service 유틸리티
 -----------------------
 
@@ -847,6 +876,8 @@ CUBRID 서비스에 heartbeat를 등록하면 **cubrid service** 유틸리티를
 	...
 
 	ha_mode=on
+
+.. _cubrid-applyinfo:
 
 cubrid applyinfo
 ----------------
@@ -937,9 +968,7 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
 
     *   Append LSA : 복제 로그 복사 프로세스가 디스크에 실제로 쓴 로그의 마지막 pageid와 offset 정보. 이는 EOF LSA보다 작거나 같을 수 있다. 이 값과 "Copied Active Info"의 EOF LSA 값의 차이 만큼 로그 복사의 지연이 있다.
 
-    *   HA server state : 복제 로그 복사 프로세스가 로그를 받아오는 데이터베이스 서버 프로세스의 상태. 상태에 대한 자세한 설명은
-        `서버 <#admin_admin_ha_concept_server_ht_7541>`_
-        를 참고하도록 한다.
+    *   HA server state : 복제 로그 복사 프로세스가 로그를 받아오는 데이터베이스 서버 프로세스의 상태. 상태에 대한 자세한 설명은 :ref:`ha-server` 를 참고하도록 한다.
 
 *   Active Info.
 
@@ -950,6 +979,8 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
     *   Append LSA : **-r** 옵션에 설정한 노드의 데이터베이스 서버가 디스크에 실제로 쓴 트랜잭션 로그의 마지막 pageid와 offset 정보
 
     *   HA server state : **-r** 옵션에 설정한 노드의 데이터베이스 서버 상태
+
+.. _cubrid-changemode:
 
 cubrid changemode
 -----------------
@@ -1054,7 +1085,7 @@ HA 기본 구성
 
 CUBRID HA의 가장 기본적인 구성으로, 하나의 마스터 노드와 하나의 슬레이브 노드로 구성된다.
 
-CUBRID HA 고유의 기능인 장애 시 무중단(nonstop) 서비스 기능에 초점을 맞춘 구성으로, 작은 서비스에서 적은 리소스를 투입하여 구성할 수 있다. HA 기본 구성은 하나의 마스터 노드와 하나의 슬레이브 노드로 서비스를 제공하므로, 읽기 부하를 분산하려면 다중 슬레이브 노드 구성 또는 부하 분산 구성이 좋다. 또한, 슬레이브 노드 또는 레플리카 노드 등의 특정 노드에 읽기 전용으로 접속하려면 Read Only 브로커 또는 Preferred Host Read Only 브로커를 구성한다. 브로커 구성에 대한 설명은 `브로커 이중화 <#admin_admin_ha_feat_broker_htm>`_ 를 참고한다.
+CUBRID HA 고유의 기능인 장애 시 무중단(nonstop) 서비스 기능에 초점을 맞춘 구성으로, 작은 서비스에서 적은 리소스를 투입하여 구성할 수 있다. HA 기본 구성은 하나의 마스터 노드와 하나의 슬레이브 노드로 서비스를 제공하므로, 읽기 부하를 분산하려면 다중 슬레이브 노드 구성 또는 부하 분산 구성이 좋다. 또한, 슬레이브 노드 또는 레플리카 노드 등의 특정 노드에 읽기 전용으로 접속하려면 Read Only 브로커 또는 Preferred Host Read Only 브로커를 구성한다. 브로커 구성에 대한 설명은 :ref:`duplexing-brokers` 를 참고한다.
 
 **노드 설정 예시**
 
@@ -1093,7 +1124,7 @@ HA 기본 구성의 각 노드는 다음과 같이 설정한다.
 	
 **응용 프로그램 연결 설정**
 
-환경 설정의 `JDBC 설정 <#admin_admin_ha_conf_jdbc_htm>`_, `CCI 설정 <#admin_admin_ha_conf_cci_htm>`_, `PHP 설정 <#admin_admin_ha_conf_php_htm>`_ 을 참고한다.
+환경 설정의 :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, :ref:`ha-php-conf` 을 참고한다.
 
 **참고**
 
@@ -1158,7 +1189,7 @@ HA로 구성된 노드 수가 많으므로?CUBRID HA 그룹 내의 여러 노드
 	Connection connection = DriverManager.getConnection(
 		"jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000,nodeC:33000", "dba", "");
 
-기타 자세한 사항은 환경 설정의 `JDBC 설정 <#admin_admin_ha_conf_jdbc_htm>`_, `CCI 설정 <#admin_admin_ha_conf_cci_htm>`_, `PHP 설정 <#admin_admin_ha_conf_php_htm>`_ 을 참고한다.
+기타 자세한 사항은 환경 설정의 :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, :ref:`ha-php-conf` 을 참고한다.
 
 **주의 사항**
 
@@ -1169,7 +1200,7 @@ HA로 구성된 노드 수가 많으므로?CUBRID HA 그룹 내의 여러 노드
 
 이외에 복제 로그 복사 프로세스의 모드가 ASYNC이면 CUBRID HA 그룹 내의 데이터가 동일하지 않은 상황이 발생할 수 있다.
 
-이와 같이 CUBRID HA 그룹 내의 데이터가 동일하지 않은 상황이 발생하면, `복제 재구축 <#admin_admin_ha_scenario_rebuild__8498>`_ 을 통해 CUBRID HA 그룹 내의 데이터를 동일하게 맞춰야 한다.
+이와 같이 CUBRID HA 그룹 내의 데이터가 동일하지 않은 상황이 발생하면, :ref:`rebuilding-replication` 을 통해 CUBRID HA 그룹 내의 데이터를 동일하게 맞춰야 한다.
 
 **참고**
 
@@ -1282,7 +1313,7 @@ HA로 구성된 노드 수가 많으므로?CUBRID HA 그룹 내의 여러 노드
 	Connection connection = DriverManager.getConnection(
 		"jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&altHosts=nodeD:33000", "dba", "");
 
-기타 자세한 사항은 환경 설정의 `JDBC 설정 <#admin_admin_ha_conf_jdbc_htm>`_, `CCI 설정 <#admin_admin_ha_conf_cci_htm>`_, `PHP 설정 <#admin_admin_ha_conf_php_htm>`_ 을 참고한다.
+기타 자세한 사항은 환경 설정의 :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, :ref:`ha-php-conf` 을 참고한다.
 
 **참고**
 
@@ -1618,9 +1649,9 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 복제 불일치 감지
 ----------------
 
-마스터 노드와 슬레이브 노드의 데이터가 일치하지 않는 복제 노드 간 데이터 불일치 현상은 다음과 같은 과정을 통해 어느 정도 감지할 수 있다. 그러나, 마스터 노드와 슬레이브 노드의 데이터를 서로 직접 비교해보는 방법보다 더 정확한 확인 방법은 없음에 주의해야 한다. 복제 불일치 상태라는 판단이 서면, 마스터 노드의 데이터베이스를 슬레이브 노드에 새로 구축해야 한다(`복제 재구축 <#admin_admin_ha_scenario_rebuild__8498>`_ 참고).
+마스터 노드와 슬레이브 노드의 데이터가 일치하지 않는 복제 노드 간 데이터 불일치 현상은 다음과 같은 과정을 통해 어느 정도 감지할 수 있다. 그러나, 마스터 노드와 슬레이브 노드의 데이터를 서로 직접 비교해보는 방법보다 더 정확한 확인 방법은 없음에 주의해야 한다. 복제 불일치 상태라는 판단이 서면, 마스터 노드의 데이터베이스를 슬레이브 노드에 새로 구축해야 한다(:ref:`rebuilding-replication` 참고).
 
-*   슬레이브 노드에서 **cubrid applyinfo** 를 실행하여 "Fail count" 값을 확인한다. "Fail count"가 0이면, 복제에 실패한 트랜잭션이 없다고 볼 수 있다(`cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_ 참고). ::
+*   슬레이브 노드에서 **cubrid applyinfo** 를 실행하여 "Fail count" 값을 확인한다. "Fail count"가 0이면, 복제에 실패한 트랜잭션이 없다고 볼 수 있다(:ref:`cubrid-applyinfo` 참고). ::
 
 	[nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
 	 
@@ -1634,7 +1665,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 	Fail count                     : 0
 	...
 
-*   슬레이브 노드에서 복제 로그의 복사 지연 여부를 확인하기 위해, **cubrid applyinfo** 를 실행하여 "Copied Active Info."의 "Append LSA" 값과 "Active Info."의 "Append LSA" 값을 비교한다. 이 값이 큰 차이를 보인다면, 복제 로그가 슬레이브 노드에 복사되는데 지연이 있다는 의미이다(`cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_ 참고). ::
+*   슬레이브 노드에서 복제 로그의 복사 지연 여부를 확인하기 위해, **cubrid applyinfo** 를 실행하여 "Copied Active Info."의 "Append LSA" 값과 "Active Info."의 "Append LSA" 값을 비교한다. 이 값이 큰 차이를 보인다면, 복제 로그가 슬레이브 노드에 복사되는데 지연이 있다는 의미이다(:ref:`cubrid-applyinfo` 참고). ::
 
 	[nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
  
@@ -1656,7 +1687,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 
 *   복제 로그 복사 지연이 의심되는 경우 네트워크 회선 속도가 느려졌는지, 디스크 여유 공간이 충분한지, 디스크 I/O에는 이상이 없는지 등을 확인한다.
 
-*   슬레이브 노드에서 복제 로그의 반영 지연 여부를 확인하기 위해, **cubrid applyinfo** 를 실행하여 "Applied Info." 의 "Committed page" 값과 "Copied Active Info."의 "EOF LSA" 값을 비교한다. 이 값이 큰 차이를 보인다면, 복제 로그가 슬레이브 데이터베이스를 반영하는데 지연이 있다는 의미이다(`cubrid applyinfo <#admin_admin_ha_util_applyinfo_ht_8352>`_ 참고). ::
+*   슬레이브 노드에서 복제 로그의 반영 지연 여부를 확인하기 위해, **cubrid applyinfo** 를 실행하여 "Applied Info." 의 "Committed page" 값과 "Copied Active Info."의 "EOF LSA" 값을 비교한다. 이 값이 큰 차이를 보인다면, 복제 로그가 슬레이브 데이터베이스를 반영하는데 지연이 있다는 의미이다(:ref:`cubrid-applyinfo` 참고). ::
 
 	[nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
  
@@ -1688,7 +1719,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 
 **복제 로그 복사 프로세스(copylogdb)**
 
-복제 로그 복사 프로세스의 오류 메시지는 **$CUBRID/log/** *db-name* **@** *remote-node-name* **_copylogdb.err** 에 남는다. 복제 로그 복사 프로세스에서 남을 수 있는 오류?메시지의 severity는 fatal, error, notification이며 기본 severity는 error이다. 따라서 notification 오류 메시지를 남기려면 **cubrid.conf** 의 **error_log_level** 값을 변경해야 한다. 이에 대한 자세한 설명은 `오류 메시지 관련 파라미터 <#pm_pm_db_classify_error_htm>`_ 를 참고한다.
+복제 로그 복사 프로세스의 오류 메시지는 **$CUBRID/log/** *db-name* **@** *remote-node-name* **_copylogdb.err** 에 남는다. 복제 로그 복사 프로세스에서 남을 수 있는 오류?메시지의 severity는 fatal, error, notification이며 기본 severity는 error이다. 따라서 notification 오류 메시지를 남기려면 **cubrid.conf** 의 **error_log_level** 값을 변경해야 한다. 이에 대한 자세한 설명은 :ref:`error-parameters` 를 참고한다.
 
 **초기화 오류 메시지**
 
@@ -1781,7 +1812,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 
 **복제 로그 반영 프로세스(applylogdb)**
 
-복제 로그 반영 프로세스의 오류 메시지는 **$CUBRID/log/** *db-name* **@** *local-node-name* **_applylogdb_** *db-name* **_** *remote-node-name* **.err** 에 남는다. 복제 로그 반영?프로세스에서 남을 수 있는 오류?메시지의 severity는 fatal, error, notification이며 기본 severity는 error이다. 따라서 notification 오류?메시지를 남기려면 **cubrid.conf** 의 **error_log_level** 값을 변경해야 한다. 이에 대한 자세한 설명은 `오류 메시지 관련 파라미터 <#pm_pm_db_classify_error_htm>`_ 를 참고한다.
+복제 로그 반영 프로세스의 오류 메시지는 **$CUBRID/log/** *db-name* **@** *local-node-name* **_applylogdb_** *db-name* **_** *remote-node-name* **.err** 에 남는다. 복제 로그 반영?프로세스에서 남을 수 있는 오류?메시지의 severity는 fatal, error, notification이며 기본 severity는 error이다. 따라서 notification 오류?메시지를 남기려면 **cubrid.conf** 의 **error_log_level** 값을 변경해야 한다. 이에 대한 자세한 설명은 :ref:`error-parameters` 를 참고한다.
 
 **초기화 오류 메시지**
 
@@ -1885,6 +1916,8 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 | 1036      | log applier: log applier가 시그널에 의해 종료됩니다.                                       | error        | 지정된 시그널에 의해 복제 로그     | 내부적으로 복구된다. |
 |           |                                                                                            |              | 반영 프로세스 종료                 |                      |
 +-----------+--------------------------------------------------------------------------------------------+--------------+------------------------------------+----------------------+
+
+.. _rebuilding-replication:
 
 복제 재구축
 -----------

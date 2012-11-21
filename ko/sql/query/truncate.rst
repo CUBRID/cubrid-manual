@@ -10,7 +10,7 @@ TRUNCATE
 
 .. note:: 
 
-	**TRUNCATE** 문을 수행하려면 해당 테이블에 **ALTER**, **INDEX**, **DELETE** 권한이 필요하다. 권한을 부여하는 방법은 `권한 부여 <#syntax_syntax_access_authority_h_4540>`_ 를 참고한다.
+	**TRUNCATE** 문을 수행하려면 해당 테이블에 **ALTER**, **INDEX**, **DELETE** 권한이 필요하다. 권한을 부여하는 방법은 :ref:`granting-authorization` 를 참고한다.
 
 ::
 

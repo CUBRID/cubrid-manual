@@ -7,7 +7,7 @@
 집계 함수(aggregate functions)는 행들의 그룹에 기반하여 하나의 결과를 반환한다. **GROUP BY** 절을 포함하면 각 그룹마다 한 행의 집계 결과를 반환한다. **GROUP BY**
 절을 생략하면 전체 행에 대해 한 행의 집계 결과를 반환한다. **HAVING** 절은 **GROUP BY** 절이 있는 질의에 조건을 추가할 때 사용한다.
 
-대부분의 집계 함수는 **DISTINCT** 를 사용할 수 있다. **GROUP BY ... HAVING** 절에 대해서는 `GROUP BY ... HAVING 절 <#syntax_syntax_retreive_group_htm>`_ 을 참고한다.
+대부분의 집계 함수는 **DISTINCT** 를 사용할 수 있다. **GROUP BY ... HAVING** 절에 대해서는 :ref:`group-by-clause` 을 참고한다.
 
 **분석 함수**
 

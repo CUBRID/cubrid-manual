@@ -361,12 +361,14 @@ NVL2 함수
 					3                      4
 				 NULL                     11
 
+.. _basic-cond-expr:
+
 단순 비교 조건식
 ================
 
 조건식(conditional expression)은 **SELECT**, **UPDATE**, **DELETE** 문의 **WHERE** 절과 **SELECT** 문의 **HAVING** 절에 포함되는 표현식으로서, 결합되는 연산자의 종류에 따라 단순 비교 조건식, **ANY** / **SOME** / **ALL** 조건식, **BETWEEN** 조건식, **EXISTS** 조건식, **IN** / **NOT IN** 조건식, **LIKE** 조건식, **IS NULL** 조건식이 있다.
 
-먼저, 단순 비교 조건식(simple comparison codition)은 두 개의 비교 가능한 데이터 값을 비교한다. 피연산자로 일반 연산식(expression) 또는 부질의(sub-query)가 지정되며, 피연산자 중 어느 하나가 **NULL** 이면 항상 **NULL** 을 반환한다. 단순 비교 조건식에서 사용할 수 있는 연산자는 아래의 표와 같으며, 보다 자세한 내용은 `비교 연산자 <#syntax_syntax_operator_compare_h_4639>`_ 를 참고한다.
+먼저, 단순 비교 조건식(simple comparison codition)은 두 개의 비교 가능한 데이터 값을 비교한다. 피연산자로 일반 연산식(expression) 또는 부질의(sub-query)가 지정되며, 피연산자 중 어느 하나가 **NULL** 이면 항상 **NULL** 을 반환한다. 단순 비교 조건식에서 사용할 수 있는 연산자는 아래의 표와 같으며, 보다 자세한 내용은 :doc:`/sql/function/comparison_op` 를 참고한다.
 
 **단순 비교 조건식에서 사용할 수 있는 연산자**
 
@@ -387,6 +389,8 @@ NVL2 함수
 +-------------+-------------------------------------------------------+---------+----------+
 | **<=**      | 왼쪽 피연산자는 오른쪽 피연산자보다 값이 작거나 같다. | 1<=2    | 1        |
 +-------------+-------------------------------------------------------+---------+----------+
+
+.. _any-some-all-expr:
 
 ANY/SOME/ALL 수량어와 그룹 조건식
 =================================
@@ -449,6 +453,8 @@ ANY/SOME/ALL 수량어와 그룹 조건식
 	======================================================================
 				6  'Smith     '          'devel'                   2400000
 
+.. _between-expr:
+
 BETWEEN 조건식
 ==============
 
@@ -487,6 +493,8 @@ BETWEEN 조건식
 	======================================================================
 				7  'Brown     '          'account'                    NULL
 
+.. _exists-expr:
+
 EXISTS 조건식
 =============
 
@@ -509,6 +517,8 @@ EXISTS 조건식
 	SELECT 'raise' FROM db_root WHERE NOT EXISTS(
 	SELECT * FROM condition_tbl WHERE salary < 2500000);
 	There are no results.
+
+.. _in-expr:
 
 IN 조건식
 =========
@@ -539,6 +549,8 @@ IN 조건식
 	======================================================================
 				5  'Kim       '          'account'                 3800000
 				7  'Brown     '          'account'                    NULL
+
+.. _is-null-expr:
 
 IS NULL 조건식
 ==============
@@ -590,6 +602,8 @@ ISNULL 함수
 		======================================================================
 					7  'Brown     '          'account'                    NULL
 
+.. _like-expr:
+
 LIKE 조건식
 ===========
 
@@ -605,11 +619,11 @@ LIKE 조건식
 
 **참고 사항**
 
-**LIKE** 조건식은 대소문자를 구분한다. 대소문자를 구분하지 않게 하려면 `RLIKE 조건식 <#syntax_syntax_operator_where_reg_9878>`_ 을 이용한다.
+**LIKE** 조건식은 대소문자를 구분한다. 대소문자를 구분하지 않게 하려면 :ref:`regexp-rlike` 을 이용한다.
 
-CUBRID가 지원하는 문자셋에 관한 상세한 설명은 `문자열 데이터 타입 <#syntax_syntax_datatype_string_de_1985>`_ 을 참고한다.
+CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
 
-LIKE 조건식의 이스케이프 문자 인식은 **cubrid.conf** 파일의 **no_backslash_escapes** 파라미터와 **require_like_escape_character** 파라미터의 설정에 따라 달라진다. 이에 대한 상세한 설명은 `구문/타입 관련 파라미터 <#pm_pm_db_classify_type_htm>`_ 를 참고한다.
+LIKE 조건식의 이스케이프 문자 인식은 **cubrid.conf** 파일의 **no_backslash_escapes** 파라미터와 **require_like_escape_character** 파라미터의 설정에 따라 달라진다. 이에 대한 상세한 설명은 :ref:`stmt-type-parameters` 를 참고한다.
 
 .. note::
 
@@ -638,6 +652,8 @@ LIKE 조건식의 이스케이프 문자 인식은 **cubrid.conf** 파일의 **n
 				2  'Moy       '          'sales'                   3000000
 				5  'Kim       '          'account'                 3800000
 
+.. _regexp-rlike:
+
 REGEXP 조건식, RLIKE 조건식
 ===========================
 
@@ -651,7 +667,7 @@ REGEXP 조건식, RLIKE 조건식
 
 *   "*"은 앞의 문자 또는 문자열이 0번 이상 연속으로 나열된 문자열과 매칭된다. 예를 들어, "xabc*"는 "xab", "xabc", "xabcc", "xabcxabc" 등과 매칭되며, "[0-9][0-9]*" 는 어떤 숫자와도 매칭된다. 그리고 ".*" 은 모든 문자열과 매칭된다.
 
-*   "\n", "\t", "\r", "\\"의 특수 문자를 매칭하기 위해서는 시스템 파라미터 **no_backslash_escapes** (기본값: yes)를 no로 설정하여 백슬래시(\)를 이스케이프 문자로 허용해야 한다. **no_backslash_escapes** 에 대한 자세한 설명은 `특수 문자 이스케이프 <#syntax_syntax_datatype_string_es_323>`_ 를 참고한다.
+*   "\n", "\t", "\r", "\\"의 특수 문자를 매칭하기 위해서는 시스템 파라미터 **no_backslash_escapes** (기본값: yes)를 no로 설정하여 백슬래시(\)를 이스케이프 문자로 허용해야 한다. **no_backslash_escapes** 에 대한 자세한 설명은 :ref:`escape-characters` 를 참고한다.
 
 **REGEXP** 와 **LIKE** 의 차이는 다음과 같다.
 

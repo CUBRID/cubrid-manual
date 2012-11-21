@@ -10,7 +10,7 @@ CUBRID를 처음 사용하는데 참고할 수 있는 간략한 사용법을 설
 * 환경 변수 설정 및 CUBRID 서비스 시작
 * CSQL 인터프리터 사용
 
-CUBRID가 사용하는 포트에 대해서는 "Windows에서의 설치와 실행"의 `환경 설정 <#gs_gs_install_windows_htm_config>`_ 을 참고한다. 
+CUBRID가 사용하는 포트에 대해서는 "Windows에서의 설치와 실행"의 :ref:`환경 설정 <Configuring-Environment-on-Windows>` 을 참고한다. 
 Linux 환경에서는 **APPL_SERVER_PORT** 를 제외한 나머지 포트 설정이 Windows 환경에서의 포트 설정과 동일하다.
 
 CUBRID의 다양한 도구 및 드라이버는 `http://www.cubrid.org/downloads <http://www.cubrid.org/downloads>`_ 에서 다운로드할 수 있다. 

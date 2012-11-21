@@ -213,6 +213,8 @@
 	   -  2 to continue after changing the volume's directory or device.
 	******************************************************************
 
+.. _managing-archive-logs:
+
 보관 로그 관리
 ==============
 

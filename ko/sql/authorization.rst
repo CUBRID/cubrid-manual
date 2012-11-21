@@ -68,6 +68,8 @@ CUBRID는 기본적으로 **DBA** 와 **PUBLIC** 두 종류의 사용자를 제�
 	CREATE USER design MEMBERS smith;
 	CREATE USER company MEMBERS engineering, marketing, design;
 
+.. _granting-authorization:
+
 권한 부여
 =========
 
@@ -132,7 +134,7 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 	REVOKE operation [ { , operation }_ ] ON table_name [ { , class_name }_ ]
 	FROM user [ { , user }_ ] [ ; ]
 
-*   *operation* : 권한을 부여할 때 부여할 수 있는 연산의 종류이다(자세한 내용은 `권한 부여 <#syntax_syntax_access_authority_h_4540>`_ 참조).
+*   *operation* : 권한을 부여할 때 부여할 수 있는 연산의 종류이다(자세한 내용은 :ref:`granting-authorization` 참조).
 *   *table_name* : 권한을 부여할?테이블 혹은 뷰의 이름을 지정한다.
 *   *user* : 권한을 부여할 사용자나 그룹의 이름을 지정한다.
 
@@ -154,6 +156,8 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 	REVOKE ALL PRIVILEGES ON nation, athlete FROM Fred;
 
+.. _change-owner:
+
 소유자 변경
 ===========
 
@@ -171,6 +175,8 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 	ALTER TRIGGER test_trigger OWNER TO public;
 	ALTER FUNCTION test_function OWNER TO public;
 	ALTER PROCEDURE test_procedure OWNER TO public;
+
+.. _authorization-method:
 
 사용자 권한 관리 메서드
 =======================
@@ -237,7 +243,7 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 **change_owner( ) 메서드**
 
-**change_owner** ( ) 메서드는 **db_authorizations** 클래스의 클래스 메서드로서, 클래스 소유자를 변경할 때 사용된다. 소유자를 변경하고자 하는 클래스 이름과 새로운 소유자의 이름이 각각 인자로 주어진다. 이때, 데이터베이스에 존재하는 클래스와 소유자가 인자로 지정되어야 하며, 그렇지 않은 경우 에러가 발생한다. **change_owner** ( ) 메서드는 **DBA** 와 **DBA** 그룹의 멤버만 호출할 수 있다. 이 메서드와 같은 역할을 하는 질의로 **ALTER … OWNER** 가 있다. 이에 대한 내용은 `소유자 변경 <#syntax_syntax_access_alter_htm>`_ 을 참고한다.
+**change_owner** ( ) 메서드는 **db_authorizations** 클래스의 클래스 메서드로서, 클래스 소유자를 변경할 때 사용된다. 소유자를 변경하고자 하는 클래스 이름과 새로운 소유자의 이름이 각각 인자로 주어진다. 이때, 데이터베이스에 존재하는 클래스와 소유자가 인자로 지정되어야 하며, 그렇지 않은 경우 에러가 발생한다. **change_owner** ( ) 메서드는 **DBA** 와 **DBA** 그룹의 멤버만 호출할 수 있다. 이 메서드와 같은 역할을 하는 질의로 **ALTER … OWNER** 가 있다. 이에 대한 내용은 :ref:`change-owner` 을 참고한다.
 
 .. code-block:: sql
 

@@ -14,6 +14,8 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 한 테이블이 가질 수 있는 최대 분할 수는 1024이다. 테이블의 각 분할은 그 테이블의 서브 테이블로 생성된다. 분할 정의를 통해 생성된 서브 테이블은 사용자가 임의로 내용을 변경하거나 삭제할 수 없다. 서브 테이블의 이름은 '*class_name*__p__*partition_name*'의 형식으로 시스템 테이블에 등록된다. 데이터베이스 사용자는 db_class 뷰와 db_partition 뷰에서 분할의 정보를 확인할 수 있다. 또 다른 확인 방법은 CUBRID 매니저나 CSQL 인터프리터의 ;sc <테이블명> 명령을 사용하는 것이다.
 
+.. _partition-data-type:
+
 **분할 표현식에 사용할 수 있는 데이터 타입**
 
 분할 키로 사용할 수 있는 칼럼의 데이터 타입은 다음과 같다.
@@ -51,6 +53,8 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 영역 분할
 =========
 
+.. _defining-range-partitions:
+
 영역 분할 정의
 --------------
 
@@ -65,7 +69,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	... )
 	)
 
-*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 명을 지정하거나 함수를 사용하여 지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 설명은 `분할 표현식에 사용할 수 있는 데이터 타입 <#syntax_syntax_partition_htm_data_3721>`_ 을 참조한다.
+*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 명을 지정하거나 함수를 사용하여 지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 설명은 :ref:`분할 표현식에 사용할 수 있는 데이터 타입 <partition-data-type>` 을 참조한다.
 *   *partition_name* : 분할 명을 지정한다.
 *   *range_value* : 분할의 기준이 되는 값을 지정한다.
 
@@ -94,6 +98,8 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 *   한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
 *   분할 키 값이 **NULL** 이면, 첫 번째 분할에 저장된다
+
+.. _range-partitioning-redefinition:
 
 영역 분할 재정의
 ----------------
@@ -139,6 +145,8 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 *   **REORGANIZE PARTITION** 절을 사용해 테이블의 분할 종류를 변경할 수 없다. 예를 들어, 영역 분할을 해시 분할로 변경할 수 없으며, 그 반대도 마찬가지이다.
 *   분할 추가 후 최대 분할의 개수는 1,024개를 넘지 못하며, 분할 삭제 후 최소 1개 이상의 분할이 남아 있어야 한다. 영역 분할 테이블은 인접한 분할만 재정의할 수 있다.
 
+.. _range-partitioning-append:
+
 영역 분할 추가
 --------------
 
@@ -164,7 +172,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 *   영역 분할을 추가할 때는 분할 기준 값이 기존의 분할보다 큰 값만 추가할 수 있다. 따라서, 위의 예제처럼 **MAXVALUE** 로 최대값을 설정하면 더 이상 분할을 추가할 수 없다(분할 재정의를 통해서 **MAXVALUE** 를 다른 값으로 변경하면 분할 추가 가능).
 
-*   기존의 분할보다 작은 분할 기준 값을 추가하려면 분할 재정의를 이용한다(`영역 분할 재정의 <#syntax_syntax_partition_range_re_753>`_ 참조).
+*   기존의 분할보다 작은 분할 기준 값을 추가하려면 분할 재정의를 이용한다(:ref:`range-partitioning-redefinition` 참조).
 
 영역 분할 삭제
 --------------
@@ -187,8 +195,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 *   분할된 테이블을 삭제하면 해당 분할 내에 저장된 데이터도 모두 삭제된다.
 
-*   데이터는 유지한 채 테이블의 분할을 변경하는 경우 **ALTER TABLE** ... **REORGANIZE PARTITION** 문을 사용한다(`영역 분할 재정의 <#syntax_syntax_partition_range_re_753>`_
-    참조).
+*   데이터는 유지한 채 테이블의 분할을 변경하는 경우 **ALTER TABLE** ... **REORGANIZE PARTITION** 문을 사용한다(:ref:`range-partitioning-redefinition` 참조).
 
 *   분할을 삭제할 경우 삭제된 행의 수를 반환하지 않는다. 테이블과?분할을 유지한 채로?데이터만 삭제하고 싶은 경우 **DELETE** 문을 수행한다.
 
@@ -254,7 +261,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 **주의 사항**
 
 *   분할의 개수를 감소시키는 재편성 결합만 가능하다.
-*   분할의 수를 늘리고자 하는 경우에는 영역 분할에서와 같은 **ALTER TABLE** ... **ADD PARTITION** 구문을 이용한다(자세한 내용은 `영역 분할 추가 <#syntax_syntax_partition_range_ad_5248>`_ 참조).
+*   분할의 수를 늘리고자 하는 경우에는 영역 분할에서와 같은 **ALTER TABLE** ... **ADD PARTITION** 구문을 이용한다(자세한 내용은 :ref:`range-partitioning-append` 참조).
 *   분할 재정의 후에 최소 1개 이상의 분할이 남아 있어야 한다.
 
 리스트 분할
@@ -273,7 +280,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	PARTITION <partition_name> VALUES IN ( <partition_value_ list>, ...
 	);
 
-*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 명을 지정하거나 함수를 사용하여 지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 내용은 `분할 표현식에 사용할 수 있는 데이터 타입 <#syntax_syntax_partition_htm_data_3721>`_ 을 참조한다.
+*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 명을 지정하거나 함수를 사용하여 지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 내용은 :ref:`분할 표현식에 사용할 수 있는 데이터 타입 <partition-data-type>` 을 참조한다.
 *   *partition_name* : 분할 명을 지정한다.
 *   *partition_value_list* : 분할의 기준이 되는 값의 목록을 지정한다.
 
@@ -539,7 +546,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	literal_
 
 *   *table_name* : 변경하려는?테이블의 이름을 지정한다.
-*   *partition_expression* : 분할 표현식을?지정한다.?표현식은 분할 대상이 되는 칼럼?명을 지정하거나 함수를 사용하여?지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 내용은 `분할 표현식에 사용할 수 있는 데이터 타입 <#syntax_syntax_partition_htm_data_3721>`_ 을 참조한다.
+*   *partition_expression* : 분할 표현식을?지정한다.?표현식은 분할 대상이 되는 칼럼?명을 지정하거나 함수를 사용하여?지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 내용은 :ref:`분할 표현식에 사용할 수 있는 데이터 타입 <partition-data-type>` 을 참조한다.
 *   *partition_name* : 분할명을 지정한다.
 *   *partition_value_option* : 분할의 기준이 되는 값 또는 값의 목록을 지정한다.
 

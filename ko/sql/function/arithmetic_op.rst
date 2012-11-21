@@ -197,6 +197,8 @@
 	SELECT 100100/(100100-100100);
 	ERROR: Attempt to divide by zero.
 
+.. _arithmetic-op-type-casting:
+
 날짜/시간 데이터 타입의 산술 연산과 타입 변환
 =============================================
 

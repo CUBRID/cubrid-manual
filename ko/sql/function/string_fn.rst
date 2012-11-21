@@ -78,7 +78,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 
 .. function:: BIT_LENGTH (string)
 
-	**BIT_LENGTH** 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, **BIT_LENGTH** 함수의 리턴 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는?문자셋에 관한 상세한 설명은 `문자열 데이터 타입 <#syntax_syntax_datatype_string_de_1985>`_ 을 참고한다.
+	**BIT_LENGTH** 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, **BIT_LENGTH** 함수의 리턴 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는?문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
 
 	:param string: 비트 단위로 길이를 구할 문자열 또는 비트열을 지정한다.**NULL** 이 지정된 경우는 **NULL** 값이 반환된다. 
 	:rtype: INT
@@ -126,7 +126,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 .. function:: LENGTHB (string)
 .. function:: LENGTH (string)
 
-	문자의 개수를 정수 값으로 반환한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 `관리자 안내서 > 다국어 지원 <#admin_admin_i18n_intro_htm>`_ 을 참고한다.
+	문자의 개수를 정수 값으로 반환한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :doc:`/admin/i18n` 을 참고한다.
 	**CHAR_LENGTH**, **CHARACTER_LENGTH**, **LENGTHB**, **LENGTH** 함수는 동일하다.
 
 	:param string: 문자 개수 단위로 길이를 구할 문자열을 지정한다. **NULL** 이 지정된 경우는 **NULL** 값이 반환된다.
@@ -191,7 +191,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 
 	**CONCAT** 함수는 두 개 이상의 인자가 지정되며, 모든 인자 값을 연결한 문자열을 결과로 반환한다. 지정 가능한 인자의 개수는 제한이 없으며, 문자열 타입이 아닌 인자가 지정되는 경우 자동으로 타입 변환이 수행된다. 인자 중에 **NULL** 이 포함되면 결과로 **NULL** 을 반환한다.
 
-	인자로 지정된 문자열 사이에 구분자(separator)를 삽입하여 연결하려면, `CONCAT_WS 함수 <#syntax_syntax_operator_strfunc_c_2861>`_ 를 사용한다.
+	인자로 지정된 문자열 사이에 구분자(separator)를 삽입하여 연결하려면, :func:`CONCAT_WS` 함수를 사용한다.
 
 	:param strings: 연결할 문자열들
 	:rtype: STRING
@@ -433,7 +433,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 .. function:: LCASE (string)
 .. function:: LOWER (string)
 
-	**LCASE** 함수와 **LOWER** 함수는 동일하며, 문자열에 포함된 대문자를 소문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는?문자셋에 관한 상세한 설명은 `문자열 데이터 타입 <#syntax_syntax_datatype_string_de_1985>`_ 을 참고한다.
+	**LCASE** 함수와 **LOWER** 함수는 동일하며, 문자열에 포함된 대문자를 소문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는?문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
 
 	:param string: 소문자로 변환할 문자열을 지정한다. 값이 **NULL** 이면 결과는 **NULL** 이 반환된다.
 	:rtype: STRING
@@ -1142,7 +1142,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 .. function:: UCASE ( string )
 .. function:: UPPER ( string )
 
-	**UCASE** 함수와 **UPPER** 함수는 동일하며, 문자열에 포함된 소문자를 대문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는 문자셋에 관한 자세한 내용은 `관리자 안내서 > 다국어 지원 <#admin_admin_i18n_intro_htm>`_ 을 참고한다.
+	**UCASE** 함수와 **UPPER** 함수는 동일하며, 문자열에 포함된 소문자를 대문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는 문자셋에 관한 자세한 내용은 :doc:`/admin/i18n` 을 참고한다.
 
 	:param string: 대문자로 변환할 문자열을 지정한다. 값이 **NULL** 이면 결과는 **NULL** 이 반환된다.
 	:rtype: STRING

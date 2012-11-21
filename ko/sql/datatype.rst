@@ -227,7 +227,7 @@ MONETARY
 
 **변환(Coercion)**
 
-날짜/시간 데이터 타입의 값은 서로 똑같은 항목을 가지고 있는 경우에만 **CAST** 연산자를 이용한 명시적인 변환이 가능하며, 묵시적 변환은 `묵시적 타입 변환 <#syntax_syntax_datatype_implicit__7659>`_ 을 참고한다. 아래의 표는 명시적 변환이 가능한 타입을 설명한다. 날짜/시간 데이터 타입 간 산술 연산에 대한 내용은 `날짜/시간 데이터 타입의 산술 연산과 타입 변환 <#syntax_syntax_operator_math_date_3338>`_ 을 참고한다.
+날짜/시간 데이터 타입의 값은 서로 똑같은 항목을 가지고 있는 경우에만 **CAST** 연산자를 이용한 명시적인 변환이 가능하며, 묵시적 변환은 :ref:`implicit-type-conversion` 을 참고한다. 아래의 표는 명시적 변환이 가능한 타입을 설명한다. 날짜/시간 데이터 타입 간 산술 연산에 대한 내용은 :ref:`arithmetic-op-type-casting` 을 참고한다.
 
 **날짜/시간 데이터 타입의 명시적 변환**
 
@@ -249,8 +249,7 @@ MONETARY
 
 *   **DATE**, **DATETIME**, **TIMESTAMP** 타입이 인자인 일부 함수는 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
 *   **DATE**, **DATETIME**, **TIMESTAMP** 타입을 반환하는 함수들은 날짜와 시간 값이 모두 0인 값을 반환할 수 있지만 JAVA 응용 프로그램에서는 이러한 값을 Date 객체에 저장할 수 없다. 따라서 연결 URL 문자열의 zeroDateTimeBehavior 속성(Property) 설정에 따라서 예외로 처리하거나 **NULL** 을 반환하거나 또는 최소값을 반환한다("API 레퍼런스 > JDBC API > JDBC 프로그래밍 > 연결 설정" 참고).
-*   시스템 파라미터 **intl_date_lang** 을 설정하면 :func:`TO_DATE`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP` 함수의 입력 문자열 형식이 해당 로캘의 날짜 형식을 따른다. 자세한 내용은
-    `구문/타입 관련 파라미터 <#pm_pm_db_classify_type_htm>`_ 를 참고한다.
+*   시스템 파라미터 **intl_date_lang** 을 설정하면 :func:`TO_DATE`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP` 함수의 입력 문자열 형식이 해당 로캘의 날짜 형식을 따른다. 자세한 내용은 :ref:`stmt-type-parameters` 를 참고한다.
 
 자세한 사항은 각 함수의 설명을 참고한다.
 
@@ -362,6 +361,8 @@ DATETIME
 	DATETIME '2008-10-31 01:15:45 PM'은 '01:15:45.000 PM 10/31/2008'로 출력된다.
 	DATETIME '2008-10-31 13:15:45'는 '01:15:45.000 PM 10/31/2008'로 출력된다.
 	DATETIME '2099-10-31 01:15:45 PM'은 '01:15:45.000 PM 10/31/2099'로 출력된다.
+
+.. _cast-string-to-datetime:
 
 문자열을 날짜/시간 타입으로 CAST
 --------------------------------
@@ -679,6 +680,7 @@ BIT VARYING(n)
 	 
 	ERROR: Data overflow coercing X'aaa' to type bit varying.
 
+.. _char-data-type:
 
 문자열 데이터 타입
 ==================
@@ -692,7 +694,7 @@ CUBRID는 네 종류의 문자열(character string) 타입을 지원한다.
 
 다음은 문자열 타입을 사용할 때 적용되는 규칙이다.
 
-*   문자열은 작은 따옴표로 감싸서 표현한다. SQL 구문 관련 파라미터인 **ansi_quotes** 의 값에 따라 문자열을 감싸는 부호로 큰 따옴표도 사용할 수 있다. **ansi_quotes** 값을 no로 설정하면 큰 따옴표로 감싼 문자열을 식별자로 처리하지 않고 문자열로 처리한다. 기본값은 **yes** 이다. 자세한 설명은 `구문/타입 관련 파라미터 <#pm_pm_db_classify_type_htm>`_ 를 참고한다.
+*   문자열은 작은 따옴표로 감싸서 표현한다. SQL 구문 관련 파라미터인 **ansi_quotes** 의 값에 따라 문자열을 감싸는 부호로 큰 따옴표도 사용할 수 있다. **ansi_quotes** 값을 no로 설정하면 큰 따옴표로 감싼 문자열을 식별자로 처리하지 않고 문자열로 처리한다. 기본값은 **yes** 이다. 자세한 설명은 :ref:`stmt-type-parameters` 를 참고한다.
 
 *   ANSI 표준에 따라 두 개의 문자열 사이에 공간으로 취급할 수 있는 문자(예: 공백, 탭, 줄바꿈 등)가 있다면, 두 개의 문자열은 연속된 하나의 문자열로 취급된다. 예를 들면, 다음과 같이 두 개의 문자열 사이에 줄바꿈이 있는 경우가 있다. ::
 
@@ -713,7 +715,7 @@ CUBRID는 네 종류의 문자열(character string) 타입을 지원한다.
 
 	N'Härder'
 
- 하지만 특정 국가의 언어를 입력하고자 하는 경우 국가 문자열 타입보다는 **CUBRID_LANG** 환경 변수 또는 **CHARSET** 소개자(혹은 **COLLATE** 수정자)에 의해 로캘을 변경하거나 일반 문자열 타입(**VARCHAR** 또는 **CHAR**)을 사용하는 것을 권장한다. 문자셋에 대한 자세한 설명은 `관리자 안내서 > 다국어 지원 <#admin_admin_i18n_intro_htm>`_ 을 참고한다.
+ 하지만 특정 국가의 언어를 입력하고자 하는 경우 국가 문자열 타입보다는 **CUBRID_LANG** 환경 변수 또는 **CHARSET** 소개자(혹은 **COLLATE** 수정자)에 의해 로캘을 변경하거나 일반 문자열 타입(**VARCHAR** 또는 **CHAR**)을 사용하는 것을 권장한다. 문자셋에 대한 자세한 설명은 :doc:`/admin/i18n` 을 참고한다.
 
 **길이(Length)**
 
@@ -727,17 +729,17 @@ CUBRID는 네 종류의 문자열(character string) 타입을 지원한다.
 
 **문자셋(Character Set, charset)**
 
-문자셋(문자 집합)은 특정 문자(symbol)를 컴퓨터에 저장할 때, 어떠한 코드로 인코딩할 것인지에 대한 규칙이 정의된 집합을 의미한다. CUBRID가 사용할 문자셋은 **CUBRID_LANG** 환경 변수로 설정할 수 있다. 문자셋에 대한 자세한 설명은 `관리자 안내서 > 다국어 지원 <#admin_admin_i18n_intro_htm>`_ 을 참고한다.
+문자셋(문자 집합)은 특정 문자(symbol)를 컴퓨터에 저장할 때, 어떠한 코드로 인코딩할 것인지에 대한 규칙이 정의된 집합을 의미한다. CUBRID가 사용할 문자셋은 **CUBRID_LANG** 환경 변수로 설정할 수 있다. 문자셋에 대한 자세한 설명은 :doc:`/admin/i18n` 을 참고한다.
 
 **문자셋의 정렬(Collating Character Set)**
 
-콜레이션(collation)은 어느 문자셋이 설정된 상태에서 데이터베이스에 저장된 값들을 검색하거나 정렬하는 작업을 위해 문자들을 서로 비교할 때 사용하는 규칙들의 집합이다. 문자셋에 대한 자세한 설명은 `관리자 안내서 > 다국어 지원 <#admin_admin_i18n_intro_htm>`_ 을 참고한다.
+콜레이션(collation)은 어느 문자셋이 설정된 상태에서 데이터베이스에 저장된 값들을 검색하거나 정렬하는 작업을 위해 문자들을 서로 비교할 때 사용하는 규칙들의 집합이다. 문자셋에 대한 자세한 설명은 :doc:`/admin/i18n` 을 참고한다.
 
 **문자열 변환(Character String Coercion)**
 
 고정길이와 가변길이 문자열 사이에는 두 문자의 길이가 비교 가능할 수 있도록 자동 변환이 된다. 자동 변환은 동일한 문자셋에 속하는 문자열에만 적용된다.
 
-예를 들어, 데이터 타입이 CHAR(5)인 칼럼을 추출하여 데이터 타입이 CHAR(10)인 칼럼에 삽입하는 경우 자동으로 데이터 타입이 CHAR(10)으로 변환되어 삽입된다. 문자열을 명시적으로 변환할 수도 있는데, 이 때에는 **CAST** 연산자를 사용한다(`CAST 연산자 <#syntax_syntax_operator_cast_htm>`_ 참조).
+예를 들어, 데이터 타입이 CHAR(5)인 칼럼을 추출하여 데이터 타입이 CHAR(10)인 칼럼에 삽입하는 경우 자동으로 데이터 타입이 CHAR(10)으로 변환되어 삽입된다. 문자열을 명시적으로 변환할 수도 있는데, 이 때에는 **CAST** 연산자를 사용한다(:func:`CAST` 참조).
 
 CHAR(n)
 -------
@@ -785,7 +787,7 @@ VARCHAR(n) 또는 CHAR VARYING(n)
 STRING
 ------
 
-**STRING** 은 가변길이 문자열 데이터 타입이다. **STRING** 은 `VARCHAR <#syntax_syntax_datatype_string_va_6456>`_ 를 최대 길이로 지정한 것과 같다. 즉 **STRING** 은 **VARCHAR** (1,073,741,823)과 동일하다.
+**STRING** 은 가변길이 문자열 데이터 타입이다. **STRING** 은 **VARCHAR** 를 최대 길이로 지정한 것과 같다. 즉 **STRING** 은 **VARCHAR** (1,073,741,823)과 동일하다.
 
 NCHAR(n)
 --------
@@ -815,7 +817,7 @@ NCHAR(n)
 NCHAR VARYING(n)
 ----------------
 
-**NCHAR VARYING** (*n*)은 가변길이의 국가 문자열 타입이며, 이에 대한 설명은 `NCHAR(n) <#syntax_syntax_datatype_string_nc_8032>`_ 의 설명 및 참고 사항을 참고한다.
+**NCHAR VARYING** (*n*)은 가변길이의 국가 문자열 타입이며, 이에 대한 설명은 **NCHAR(n)** 의 설명 및 참고 사항을 참고한다.
 **NCHAR** (*n*)와의 차이점은 문자의 개수가 *n* 보다 작아도 오른쪽 부분에 공백 문자(trailing space)를 채우지 않는다는 것이다.
 
 **NCHAR VARYING** (*n*)와 **NATIONAL CHAR VARYING** (*n*), 그리고 **NATIONAL CHARACTER VARYING** (*n*)는 같은 의미로 사용된다.
@@ -828,6 +830,8 @@ NCHAR VARYING(n)
 	EUC-KR 환경에서 NCHAR VARYING(5)에 '큐브리드'를 저장하면 정상적으로 저장된다.
 	EUC-KR 환경에서 NCHAR VARYING(5)에 '큐브리드'를 저장한 후 CHAR_LENGTH() 함수를 사용하면 4가 출력된다.
 	UTF-8 환경에서 NCHAR VARYING(5)에 '큐브리드'를 저장하면 오류가 발생한다(UTF-8 문자셋을 지원하지 않음).
+
+.. _escape-characters:
 
 특수 문자 이스케이프
 --------------------
@@ -859,7 +863,7 @@ CUBRID는 특수 문자를 이스케이프(escape)하는 방법을 두 가지 �
 
 다른 모든 이스케이프에 대해서는 백슬래시가 무시된다. 예를 들어 "\x"는 그냥 "x"라고 입력한 것과 같다.
 
-**\\%** 와 **\\_** 는 **LIKE** 와 같은 패턴 매칭 구문에서 퍼센트 기호와 언더바를 찾을 때 쓰이며, 백슬래시가 없으면 와일드카드 문자(wildcard character)로 쓰인다. 패턴 매칭 구문 밖에서는 와일드카드 문자가 아닌 일반 문자열 "\\%"와 "\\_"로 그대로 쓰인다. 자세한 내용은 `LIKE 조건식 <#syntax_syntax_operator_where_lik_9691>`_ 을 참고한다.
+**\\%** 와 **\\_** 는 **LIKE** 와 같은 패턴 매칭 구문에서 퍼센트 기호와 언더바를 찾을 때 쓰이며, 백슬래시가 없으면 와일드카드 문자(wildcard character)로 쓰인다. 패턴 매칭 구문 밖에서는 와일드카드 문자가 아닌 일반 문자열 "\\%"와 "\\_"로 그대로 쓰인다. 자세한 내용은 :ref:`like-expr` 을 참고한다.
 
 **예제 1**
 
@@ -1239,7 +1243,7 @@ External LOB(Large Object) 타입은 텍스트 또는 이미지 등 크기가 �
 
 **기본 저장소**
 
-*   **LOB** 데이터의 저장소는 데이터베이스 서버 상의 로컬 파일 시스템이다. **LOB** 데이터는 **cubrid createdb** 유틸리티의 **-lob-base-path** 옵션 값으로 지정된 경로에 저장되며, 옵션이 생략될 경우 데이터베이스 볼륨이 생성되는 [db-vol path]/lob 경로에 저장된다. 보다 자세한 내용은 `데이터베이스 생성 <#admin_admin_db_create_create_htm>`_ 및 `저장소 생성 및 관리 <#syntax_syntax_datatype_lob_stora_7848>`_ 를 참고한다.
+*   **LOB** 데이터의 저장소는 데이터베이스 서버 상의 로컬 파일 시스템이다. **LOB** 데이터는 **cubrid createdb** 유틸리티의 **-lob-base-path** 옵션 값으로 지정된 경로에 저장되며, 옵션이 생략될 경우 데이터베이스 볼륨이 생성되는 [db-vol path]/lob 경로에 저장된다. 보다 자세한 내용은 :ref:`creating-database` 및 :ref:`lob_storage` 를 참고한다.
 
 *   CUBRID가 제공하는 API나 CUBRID 매니저를 사용하지 않고 사용자가 직접 **LOB** 파일 내용을 수정하면, 해당 내용의 일치성이 보장되지 않으므로 주의한다.
 
@@ -1400,7 +1404,7 @@ BLOB/CLOB
 
 **CAST 연산자**
 
-**CAST** 연산자를 사용하여 **BLOB** / **CLOB** 타입과 바이너리 타입/문자열 타입 간 명시적 타입 변환을 수행할 수 있다. 자세한 내용은 `CAST 연산자 <#syntax_syntax_operator_cast_htm>`_ 를 참고한다. ::
+**CAST** 연산자를 사용하여 **BLOB** / **CLOB** 타입과 바이너리 타입/문자열 타입 간 명시적 타입 변환을 수행할 수 있다. 자세한 내용은 :func:`CAST` 를 참고한다. ::
 
 	CAST (<bit_type_column_or_value> AS CLOB)
 	CAST (<bit_type_column_or_value> AS BLOB)
@@ -1508,12 +1512,14 @@ BLOB/CLOB
 |                             |                                                                                                |
 +-----------------------------+------------------------------------------------------------------------------------------------+
 
+.. _lob_storage:
+
 저장소 생성 및 관리
 -------------------
 
 **LOB 파일 경로 지정**
 
-**LOB** 데이터 파일은 기본적으로 데이터베이스 볼륨이 생성되는 <db-volume-path>/lob 디렉터리에 저장된다. 단, 데이터베이스 생성 시 **cubrid createdb** 유틸리티의 **--lob-base-path** 옵션을 사용하면, 옵션 값으로 지정된 디렉터리에 **LOB** 데이터 파일을 저장할 수 있다. 단, 옵션 값으로 지정한 디렉터리가 존재하지 않으면 디렉터리 생성을 시도하며, 생성 실패 시에는 에러를 출력한다. 자세한 내용은 **cubrid createdb** 유틸리티의 `--lob-base-path 옵션 <#admin_admin_db_create_create_htm_7928>`_ 을 참고한다. ::
+**LOB** 데이터 파일은 기본적으로 데이터베이스 볼륨이 생성되는 <db-volume-path>/lob 디렉터리에 저장된다. 단, 데이터베이스 생성 시 **cubrid createdb** 유틸리티의 **--lob-base-path** 옵션을 사용하면, 옵션 값으로 지정된 디렉터리에 **LOB** 데이터 파일을 저장할 수 있다. 단, 옵션 값으로 지정한 디렉터리가 존재하지 않으면 디렉터리 생성을 시도하며, 생성 실패 시에는 에러를 출력한다. 자세한 내용은 **cubrid createdb** 유틸리티의 :option:`createdb -B` 을 참고한다. ::
 
 	# 현재 작업 디렉터리에 image_db 볼륨이 생성되고 LOB 데이터 파일이 저장된다.
 	cubrid createdb image_db
@@ -1556,7 +1562,7 @@ BLOB/CLOB
 
 **LOB 파일이 존재하는 데이터베이스의 복사**
 
-**cubrid copydb** 유틸리티를 사용하여 데이터베이스를 복사하는 경우, 관련 옵션이 지정되지 않으면 **LOB** 파일 디렉터리 경로가 복사되지 않으므로 추가로 **databases.txt** 파일을 설정해야 한다. 자세한 내용은 **cubrid copydb** 유틸리티의 `--copy-lob-path 옵션 <#admin_admin_db_copy_htm_copy_lob_8638>`_ 및 `-B 옵션 <#admin_admin_db_copy_htm_lob_base_4849>`_ 을 참고한다.
+**cubrid copydb** 유틸리티를 사용하여 데이터베이스를 복사하는 경우, 관련 옵션이 지정되지 않으면 **LOB** 파일 디렉터리 경로가 복사되지 않으므로 추가로 **databases.txt** 파일을 설정해야 한다. 자세한 내용은 **cubrid copydb** 유틸리티의 :option:`copydb -B` 및 :option:`copydb --copy-lob-path` 을 참고한다.
 
 트랜잭션 지원 및 복구
 ---------------------
@@ -1711,6 +1717,7 @@ LIST 또는 SEQUENCE
 	============================================
 	  {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
 
+.. _implicit-type-conversion:
 
 묵시적 타입 변환
 ================
@@ -2120,7 +2127,7 @@ CUBRID 2008 R3.1 이하 버전과 달리, 날짜/시간 형태의 문자열, 즉
 	============================
 		   6.000000000000000e+00
 	   
-'+' 연산자의 동작은 **cubrid.conf** 의 시스템 파라미터인 **plus_as_concat** 을 어떻게 설정하느냐에 따라 결정된다. 자세한 내용은 `구문/타입 관련 파라미터 <#pm_pm_db_classify_type_htm>`_ 를 참고한다.
+'+' 연산자의 동작은 **cubrid.conf** 의 시스템 파라미터인 **plus_as_concat** 을 어떻게 설정하느냐에 따라 결정된다. 자세한 내용은 :ref:`stmt-type-parameters` 를 참고한다.
 
 * **plus_as_concat** 값이 yes(기본값)이면 두 개의 문자열을 연결한 값을 반환한다.
 

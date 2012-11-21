@@ -14,8 +14,10 @@ Java 저장 함수/프로시저를 사용할 때 얻을 수 있는 이점은 다
 
 *   **뛰어난 상호 운용성, 이식성** : Java 저장 함수/프로시저는 Java 가상 머신을 사용하므로, 시스템에 Java 가상 머신을 사용할 수만 있다면 언제 어디서나 사용할 수 있다.
 
-환경 설정
-=========
+.. _jsp_environment-configuration:
+
+Java 저장 함수/프로시저 환경 설정
+=================================
 
 CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 CUBRID 서버가 설치되는 환경에 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 한다. JRE는 Developer Resources for Java Technology 사이트(`http://java.sun.com <http://java.sun.com>`_)에서 다운로드할 수 있다.
 

@@ -92,11 +92,11 @@ SQL 힌트는 더하기 기호(+)와 주석을 사용하여 지정한다. CUBRID
 
     *   **USE_IDX** : 인덱스 관련한 힌트로서, 질의 최적화기는 명시된 테이블에 대해 인덱스 조인 실행 계획을 만든다.
 
-    *   **USE_DESC_IDX** : 내림차순 스캔을 위한 힌트이다. 자세한 내용은 `내림차순 인덱스 스캔 <#syntax_syntax_retreive_index_des_7514>`_ 을 참고한다.
+    *   **USE_DESC_IDX** : 내림차순 스캔을 위한 힌트이다. 자세한 내용은 :ref:`index-descending-scan` 을 참고한다.
 
     *   **NO_DESC_IDX** : 내림차순 스캔을 사용하지 않도록 하는 힌트이다.
 	
-    *   **NO_COVERING_IDX** : 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 `커버링 인덱스 <#syntax_syntax_retreive_index_cov_7428>`_ 를 참고한다.
+    *   **NO_COVERING_IDX** : 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index` 를 참고한다.
 
     *   **NO_STATS** : 통계 정보 관련 힌트로서, 질의 최적화기는 통계 정보를 갱신하지 않는다. 따라서, 해당 질의의 성능은 향상되나, 통계 정보를 갱신하지 않으므로 질의 계획이 최적화되지 않음에 유의한다.
 
@@ -137,7 +137,7 @@ SQL 힌트는 더하기 기호(+)와 주석을 사용하여 지정한다. CUBRID
 
 CUBRID SQL 질의에 대한 실행 계획(query plan)을 보기 위해서는 **SET OPTIMIZATION** 구문을 이용해서 최적화 수준(optimization level) 값을 변경시킨다. 현재의 최적화 수준 값은 **GET OPTIMIZATION** 구문으로 얻을 수 있다.
 
-CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값을 참조하여 최적화 여부와 질의 실행 계획의 출력 여부를 결정한다. 질의 실행 계획은 표준 출력으로 표시되므로 CSQL 인터프리터와 같은 터미널 기반의 프로그램에서 사용하는 것을 가정하고 설명한다. CSQL 질의 편집기에서는 **;plan** 명령어를 통해 질의 실행 계획을 볼 수 있다. 자세한 내용은 `세션 명령어 <#csql_csql_sessioncommand_htm>`_ 를 참고한다. CUBRID 매니저를 이용해서 질의 실행 계획을 보는 방법에 대해서는 `cubrid 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_ 을 참고한다. ::
+CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값을 참조하여 최적화 여부와 질의 실행 계획의 출력 여부를 결정한다. 질의 실행 계획은 표준 출력으로 표시되므로 CSQL 인터프리터와 같은 터미널 기반의 프로그램에서 사용하는 것을 가정하고 설명한다. CSQL 질의 편집기에서는 **;plan** 명령어를 통해 질의 실행 계획을 볼 수 있다. 자세한 내용은 :ref:`csql-session-commands` 를 참고한다. CUBRID 매니저를 이용해서 질의 실행 계획을 보는 방법에 대해서는 `cubrid 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_ 을 참고한다. ::
 
 	SET OPTIMIZATION LEVEL opt-level [;]
 	GET OPTIMIZATION LEVEL [ { TO | INTO } variable ] [;]
@@ -178,6 +178,7 @@ CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값
 	There are no results.
 	0 rows selected.
 
+.. _tuning-index:
 
 인덱스 활용
 ===========
@@ -564,6 +565,8 @@ USING INDEX 절
 | INET_ATON       | INET_NTOA       |                |
 +-----------------+-----------------+----------------+
 
+.. _covering-index:
+
 커버링 인덱스
 -------------
 
@@ -765,6 +768,7 @@ ORDER BY 절 최적화
 				1            5            5
 				2            6            6
 
+.. _index-descending-scan:
 
 내림차순 인덱스 스캔
 --------------------

@@ -19,7 +19,7 @@ prepared statement 기능은 보통 JDBC, PHP, ODBC 등의 인터페이스 함�
 PREPARE 문
 ==========
 
-**PREPARE** 문은 **FROM** 절의 *preparable_stmt* 에 지정된 질의문을 준비하고, 이후에 해당 SQL 문을 참조할 때 사용될 이름을 *stmt_name* 에 할당한다. 예제는 `EXECUTE 문 <#syntax_syntax_prepared_execute_h_5018>`_ 을 참고한다. ::
+**PREPARE** 문은 **FROM** 절의 *preparable_stmt* 에 지정된 질의문을 준비하고, 이후에 해당 SQL 문을 참조할 때 사용될 이름을 *stmt_name* 에 할당한다. 예제는 :ref:`execute-statement` 을 참고한다. ::
 
 	PREPARE stmt_name FROM preparable_stmt
 
@@ -32,6 +32,8 @@ PREPARE 문
 **PREPARE** 문은 응용 프로그램이 서버에 연결하면서 시작되며 응용 프로그램이 연결을 종료하거나 세션 기간이 만료되기 전까지 유지된다. 세션 기간은 시스템 파라미터의 **session_state_timeout** 파라미터로 설정할 수 있으며, 기본값은 **21600** 초(=6시간)이다. 
 
 세션에 의해 관리되는 데이터는 **PREPARE** 문 외에 사용자 정의 변수, 가장 마지막에 삽입한 ID(**LAST_INSERT_ID**), 가장 마지막에 실행한 문장에 의해 영향 받은 레코드의 개수(**ROW_COUNT**)를 포함한다.
+
+.. _execute-statement:
 
 EXECUTE 문
 ==========

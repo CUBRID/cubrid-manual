@@ -225,7 +225,7 @@ SHOW EXEC STATISTICS 문
 
     *   **SHOW EXEC STATISTICS ALL** 은 모든 항목의 통계 정보를 출력한다.
 
-통계 정보 각 항목에 대한 자세한 설명은 `데이터베이스 서버 실행 통계 정보 출력 <#admin_admin_db_statdump_htm>`_ 을 참고한다.
+통계 정보 각 항목에 대한 자세한 설명은 :ref:`statdump` 을 참고한다.
 
 ::
 

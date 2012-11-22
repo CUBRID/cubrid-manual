@@ -492,7 +492,7 @@ The output of the script is as follows: ::
 CUBRID PDO Extensions
 ---------------------
 
-In CUBRID, the `PDO::cubrid_schema <http://kr.php.net/manual/en/pdo.cubrid-schema.php>`_ () function is offered as an extension; the function is used to retrieve the database schema and metadata information. Below is an example script that returns information about primary key for the *nation* table by using the `PDO::cubrid_schema <http://kr.php.net/manual/en/pdo.cubrid-schema.php>`_ ()?function.
+In CUBRID, the `PDO::cubrid_schema <http://kr.php.net/manual/en/pdo.cubrid-schema.php>`_ () function is offered as an extension; the function is used to retrieve the database schema and metadata information. Below is an example script that returns information about primary key for the *nation* table by using the `PDO::cubrid_schema <http://kr.php.net/manual/en/pdo.cubrid-schema.php>`_ () function.
 
 .. code-block:: php
 

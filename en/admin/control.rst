@@ -29,9 +29,9 @@ Controlling Broker
 The following **cubrid** utility syntax shows how to control CUBRID broker process. One of the followings can be specified in *command*: **start**, **stop**, restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to checkstatus. In addition, **on** (to start a specific broker) and **off** (to stop a specific broker) are provided. ::
 
 	cubrid broker <command> 
-	<command>: {start|stop|restart|status [<broker_name>] 
-	           |on <broker_name> |off <broker_name> 
-			   |reset <broker_name> |acl{status|reload} <broker_name> }
+	<command>: {start|stop|restart|status [broker_name] 
+	           |on broker_name |off broker_name 
+			   |reset broker_name |acl{status|reload} broker_name }
 
 
 Controlling CUBRID Manager Server
@@ -85,28 +85,38 @@ Starting Services
 
 In Linux environment, you can enter the code below to start CUBRID after installation. If no server is registered in the configuration file, only master process (cub_master) runs by default. 
 
-In the Windows environment, the code below is normally executed only in case that a user with system permission has logged in. An administrator or general user can start or stop the CUBRID server by clicking its icon on the taskbar tray. ::
+In the Windows environment, the code below is normally executed only in case that a user with system permission has logged in. An administrator or general user can start or stop the CUBRID server by clicking its icon on the taskbar tray. 
+
+::
 
 	% cubrid service start
+	
 	@ cubrid master start
 	++ cubrid master start: success
 
-The following message is returned if master process is already running. ::
+The following message is returned if master process is already running. 
+
+::
 
 	% cubrid service start
+	
 	@ cubrid master start
 	++ cubrid master is running.
 
 The following message is returned if master process fails to run. The example shows that service fails to start due to conflicts of the **cubrid_port_id** parameter value specified in the cubrid.conf file. In a such case, you can resolve the problem by changing the port. If it fails to start even though no port is occupied by process, delete /tmp/CUBRID1523 file and then restart the process. ::
 
 	% cubrid service start
+	
 	@ cubrid master start
 	cub_master: '/tmp/CUBRID1523' file for UNIX domain socket exist.... Operation not permitted
 	++ cubrid master start: fail
 
-After registering service as explained in :ref:`control-cubrid-services`, enter the code below to start the service. You can verify that database server process and broker as well as registered *demodb* and *testdb* are starting at once. ::
+After registering service as explained in :ref:`control-cubrid-services`, enter the code below to start the service. You can verify that database server process and broker as well as registered *demodb* and *testdb* are starting at once. 
+
+::
 
 	% cubrid service start
+	
 	@ cubrid master start
 	++ cubrid master start: success
 	@ cubrid server start: demodb
@@ -156,6 +166,7 @@ Restarting Services
 Enter code below to restart CUBRID service. If no services are registered by a user, only master process stops and then restarts. ::
 
 	% cubrid service restart
+	
 	@ cubrid master stop
 	++ cubrid master stop: success
 	@ cubrid master start
@@ -165,6 +176,7 @@ Enter code below to restart CUBRID service. If no services are registered by a u
 Enter code below to restart registered CUBRID service. You can verify that server process, broker process, and master process as well as *demodb* and *testdb* stop and then restart at once. ::
 
 	% cubrid service restart
+	
 	@ cubrid server stop: demodb
 	Server demodb notified of shutdown.
 	This may take several minutes. Please wait.
@@ -202,6 +214,7 @@ Managing Service Status
 The following example shows how to check the status of master process and database server registered. ::
 
 	% cubrid service status
+	
 	@ cubrid master status
 	++ cubrid master is running.
 	@ cubrid server status
@@ -226,9 +239,40 @@ The following example shows how to check the status of master process and databa
 	@ cubrid manager server status
 	++ cubrid manager server is not running.
 
-If you start *demodb* server while master process has stopped, master process automatically runs at first and then a specified database server runs. ::
+The following message is returned if master process has stopped.
+
+::
+
+	% cubrid service status
+
+	@ cubrid master status	
+	++ cubrid master is not running.
+	
+Database Server
+===============
+
+Starting Database Server
+------------------------
+The following example shows how to run *demodb* server.
+
+::
 
 	% cubrid server start demodb
+	
+	@ cubrid server start: demodb
+
+	This may take a long time depending on the amount of recovery works to do.
+
+	CUBRID 9.0
+
+	++ cubrid server start: success
+	
+If you start *demodb* server while master process has stopped, master process automatically runs at first and then a specified database server runs.
+
+::
+
+	% cubrid server start demodb
+	
 	@ cubrid master start
 	++ cubrid master start: success
 	@ cubrid server start: demodb
@@ -239,13 +283,17 @@ If you start *demodb* server while master process has stopped, master process au
 
 	++ cubrid server start: success
 
-The following message is returned while *demodb* server is running. ::
+The following message is returned while *demodb* server is running.
+
+::
 
 	% cubrid server start demodb
+
 	@ cubrid server start: demodb
 	++ cubrid server 'demodb' is running.
 
-**cubrid server start** runs cub_server process of a specific database regardless of HA mode configuration. To run database in HA environment, you should use **cubrid heartbeat start**.
+**cubrid server start** runs cub_server process of a specific database regardless of HA mode configuration. To run database in HA environment, you should use
+**cubrid heartbeat start**.
 
 Stopping Database Server
 ------------------------
@@ -253,6 +301,7 @@ Stopping Database Server
 The following example shows how to stop *demodb* server. ::
 
 	% cubrid server stop demodb
+	
 	@ cubrid server stop: demodb
 	Server demodb notified of shutdown.
 	This may take several minutes. Please wait.
@@ -261,6 +310,7 @@ The following example shows how to stop *demodb* server. ::
 The following message is returned while *demodb* server has stopped. ::
 
 	% cubrid server stop demodb
+	
 	@ cubrid server stop: demodb
 	++ cubrid server 'demodb' is not running.
 
@@ -272,6 +322,7 @@ Restarting Database Server
 The following example shows how to restart *demodb* server. *demodb* server that has already run stops and the server restarts. ::
 
 	% cubrid server restart demodb
+	
 	@ cubrid server stop: demodb
 	Server demodb notified of shutdown.
 	This may take several minutes. Please wait.
@@ -290,6 +341,7 @@ Checking Database Server Status
 The following example shows how to check the status of a database server. Names of currently running database servers are displayed. ::
 
 	% cubrid server status
+	
 	@ cubrid server status
 	Server testdb (rel 9.0, pid 24465)
 	Server demodb (rel 9.0, pid 24342)
@@ -298,6 +350,7 @@ The following example shows how to check the status of a database server. Names 
 The following example shows the message when master process has stopped. ::
 
 	% cubrid server status
+	
 	@ cubrid server status
 	++ cubrid master is not running.
 
@@ -344,17 +397,23 @@ The example above shows that *dbname1* database allows the access of IP addresse
 
 For the database which has already been running, you can modify a configuration file or you can check the currently applied status by using the following commands.
 
-To change the contents of **access_ip_control_file** and apply it to server, use the following command. ::
+To change the contents of **access_ip_control_file** and apply it to server, use the following command. 
+
+::
 
 	cubrid server acl reload <database_name>
 
-To display the IP configuration of a sever which is currently running, use the following command. ::
+To display the IP configuration of a sever which is currently running, use the following command. 
+
+::
 
 	cubrid server acl status <database_name>
 
 Database Server Log
 -------------------
-The following log is created in the file of a server error log if an IP address that is not allowed to access is used. ::
+The following log is created in the file of a server error log if an IP address that is not allowed to access is used. 
+
+::
 
 	Time: 10/29/10 17:32:42.360 - ERROR *** ERROR CODE = -1022, Tran = 0, CLIENT = (unknown):(unknown)(-1), EID = 2
 	Address(10.24.18.66) is not authorized.
@@ -372,7 +431,9 @@ Database server error processes use the server error code when an error has occu
 
 *   All message groups under "$set 5 MSGCAT_SET_ERROR" in the **CUBRID/msg/en_US (in Korean, ko_KR.eucKR** or **ko_KR.utf8)/cubrid.msg** $ file indicates the server error messages.
 
-When you write code, it is recommended to use the error code name rather than the error code number. For example, the error code number for violating the unique key is -670 or -886. However, users can easily recognize the error when it is written as **ER_BTREE_UNIQUE_FAILED** or **ER_UNIQUE_VIOLATION_WITHKEY** . ::
+When you write code, it is recommended to use the error code name rather than the error code number. For example, the error code number for violating the unique key is -670 or -886. However, users can easily recognize the error when it is written as **ER_BTREE_UNIQUE_FAILED** or **ER_UNIQUE_VIOLATION_WITHKEY** .
+
+::
 
 	$ vi $CUBRID/include/dbi.h
 
@@ -436,8 +497,8 @@ The following are some of the server error code names, error code numbers, and e
 Broker
 ======
 
-Starting and Stopping Broker
-----------------------------
+Starting Broker
+---------------
 
 Enter the code below to start the broker. ::
 
@@ -452,6 +513,9 @@ The following message is returned if the broker is already running. ::
 	@ cubrid broker start
 	++ cubrid broker is running.
 
+Stopping Broker
+---------------
+
 Enter the code below to stop the broker. ::
 
 	% cubrid broker stop
@@ -464,9 +528,8 @@ The following message is returned if the broker has stopped. ::
 	@ cubrid broker stop
 	++ cubrid broker is not running.
 
-To restart the broker, enter command line as follows: ::
-
-	% cubrid broker restart
+Restarting Broker
+-----------------
 
 To restart all brokers, enter command line as follows: ::
 
@@ -475,11 +538,13 @@ To restart all brokers, enter command line as follows: ::
 Checking Broker Status
 ----------------------
 
-The **cubrid broker status** utility allows you to check the broker status such as number of completed jobs and the number of standby jobs by providing various options. ::
+The **cubrid broker status** utility allows you to check the broker status such as number of completed jobs and the number of standby jobs by providing various options. 
+
+::
 
 	cubrid broker status [options] [expr]
 	
-Specifying [expr] means that status of a specific broker is monitored; specifying no argument means that status of all brokers which are registered in the broker environment configuration file ( **cubrid_broker.conf** ) is monitored.  
+Specifying [expr] performs that the status of specific brokers which include [expr] in their names is monitored; specifying no argument means that status of all brokers which are registered in the broker environment configuration file ( **cubrid_broker.conf** ) is monitored.  
 
 The following [options] are available with the **cubrid broker status** utility.
 
@@ -514,6 +579,7 @@ The following [options] are available with the **cubrid broker status** utility.
 If you do not specify an option or argument to check the status of all brokers, the following result is displayed. ::
 
 	% cubrid broker status
+	
 	@ cubrid broker status
 	% query_editor  - cub_cas [28433,30000] /home/CUBRID/log/broker/query_editor.access /home/CUBRID/
 	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
@@ -581,9 +647,12 @@ If you do not specify an option or argument to check the status of all brokers, 
 
 *   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
 
-To check the status of broker, enter the code below. ::
+To check the status of broker, enter the code below. 
+
+::
 
 	% cubrid broker status -b
+	
 	@ cubrid broker status
 	  NAME           PID  PORT  AS  JQ      REQ  TPS  QPS  LONG-T  LONG-Q ERR-Q
 	===========================================================================
@@ -612,7 +681,9 @@ To check the status of broker, enter the code below. ::
 
 *   ERR-Q: The number of queries with errors found
 
-Enter code below to check the status of broker whose name includes broker1 with the **-q** option and job status of a specific broker in the job queue. If you do not specify broker1 as an argument, list of jobs in the job queue for all brokers is displayed. ::
+Enter code below to check the status of broker whose name includes broker1 with the **-q** option and job status of a specific broker in the job queue. If you do not specify broker1 as an argument, list of jobs in the job queue for all brokers is displayed. 
+
+::
 
 	% cubrid broker status -q broker1
 	@ cubrid broker status
@@ -645,11 +716,15 @@ Enter code below to input the monitoring interval of broker whose name includes 
 	 4 28447     0     0 50144 IDLE
 	 5 28448     0     0 50144 IDLE
 
-Display information of TPS and QPS to a file with the **-t** option. To cancel the process, press <Ctrl+C> to stop program. ::
+Display information of TPS and QPS to a file with the **-t** option. To cancel the process, press <Ctrl+C> to stop program. 
+
+::
 
 	% cubrid broker status -b -t -s 1 > log_file
 
-Enter code below to regularly monitor status of all brokers including TPS and QPS with the **-b** and **-s** options. ::
+Enter code below to regularly monitor status of all brokers including TPS and QPS with the **-b** and **-s** options. 
+
+::
 
 	% cubrid broker status -b -s 1
 	NAME           PID  PORT  AS  JQ      REQ  TPS  QPS  LONG-T  LONG-Q ERR-Q
@@ -657,7 +732,9 @@ Enter code below to regularly monitor status of all brokers including TPS and QP
 	* query_editor 28433 40820   5   0        0    0    0    0/60    0/60    0
 	* broker1      28443 40821   5   0        0    0    0    0/60    0/60    0
 
-Enter code below to view information of server/database accessed by broker, access time, the IP addresses accessed to CAS with the **-f** option. ::
+Enter code below to view information of server/database accessed by broker, access time, the IP addresses accessed to CAS with the **-f** option. 
+
+::
 
 	$ cubrid broker status -f broker1
 	@ cubrid broker status
@@ -740,7 +817,9 @@ The format of **ACCESS_CONTROL_FILE** is as follows: ::
 
 [%<broker_name>] and <db_name>:<db_user>:<ip_list_file> can be specified separately for each broker.
 
-The format of the ip_list_file is as follows: ::
+The format of the ip_list_file is as follows: 
+
+::
 
 	<ip_addr>
 	... 
@@ -749,7 +828,9 @@ The format of the ip_list_file is as follows: ::
 
 If a value for **ACCESS_CONTROL** is set to ON and a value for **ACCESS_CONTROL_FILE** is not specified, the broker will only allow the access requests from the localhost. If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will only allow the access requests from the localhost.
 
-If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will not run. ::
+If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will not run. 
+
+::
 
 	# cubrid_broker.conf
 	[broker]
@@ -762,7 +843,9 @@ If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker
 	BROKER_PORT             =30000
 	......
 
-The following example shows the content of **ACCESS_CONTROL_FILE**. The * symbol represents everything, and you can use it when you want to specify database names, database user IDs and IPs in the IP list file which are allowed to access the broker server. ::
+The following example shows the content of **ACCESS_CONTROL_FILE**. The * symbol represents everything, and you can use it when you want to specify database names, database user IDs and IPs in the IP list file which are allowed to access the broker server. 
+
+::
 
 	[%QUERY_EDITOR]
 	dbname1:dbuser1:READIP.txt
@@ -790,7 +873,9 @@ The QUERY_EDITOR broker only allows the following application access requests.
 
 *   When a user logging into every database with a **DBA** account connects from IPs registered in READIP.txt, WRITEIP1.txt, and WRITEIP2.txt
 
-The following example shows how to specify the IPs allowed in ip_list_file. ::
+The following example shows how to specify the IPs allowed in ip_list_file. 
+
+::
 
 	192.168.1.25
 	192.168.*
@@ -809,13 +894,17 @@ The descriptions for the IPs specified in the example above are as follows:
 
 For the broker which has already been running, you can modify the configuration file or check the currently applied status of configuration by using the following commands.
 
-To configure databases, database user IDs and IPs allowed to access the broker and then apply the modified configuration to the server, use the following command. ::
+To configure databases, database user IDs and IPs allowed to access the broker and then apply the modified configuration to the server, use the following command. 
+
+::
 
 	cubrid broker acl reload [<BR_NAME>]
 
 *   <BR_NAME>: A broker name. If you specify this value, you can apply the changes only to specified brokers. If you omit it, you can apply the changes to all brokers.
 
-To display the databases, database user IDs and IPs that are allowed to access the broker in running on the screen, use the following command. ::
+To display the databases, database user IDs and IPs that are allowed to access the broker in running on the screen, use the following command. 
+
+::
 
 	cubrid broker acl status [<BR_NAME>]
 
@@ -825,15 +914,21 @@ To display the databases, database user IDs and IPs that are allowed to access t
 
 If you try to access brokers through IP addresses that are not allowed, the following logs will be created.
 
-*   ACCESS_LOG ::
+*   ACCESS_LOG 
+
+::
 
 	1 192.10.10.10 - - 1288340944.198 1288340944.198 2010/10/29 17:29:04 ~ 2010/10/29 17:29:04 14942 - -1 db1 dba : rejected
 
-*   SQL LOG ::
+*   SQL LOG 
+
+::
 
 	10/29 10:28:57.591 (0) CLIENT IP 192.10.10.10 10/29 10:28:57.592 (0) connect db db1 user dba url jdbc:cubrid:192.10.10.10:30000:db1::: - rejected
 
-.. note:: For details on how to limit an access to the database server, see :ref:`limiting-broker-access`.
+.. note:: 
+
+	For details on how to limit an access to the database server, see :ref:`limiting-server-access`.
 
 Managing a Specific Broker
 --------------------------
@@ -842,31 +937,37 @@ Enter the code below to run *broker1* only. Note that *broker1* should have alre
 
 	% cubrid broker on broker1
 
-The following message is returned if *broker1* has not been configured in the shared memory. ::
+The following message is returned if *broker1* has not been configured in the shared memory. 
+
+::
 
 	% cubrid broker on broker1
 	Cannot open shared memory
 
-Enter the code below to stop *broker1* only. Note that service pool of *broker1* can also be removed. ::
+Enter the code below to stop *broker1* only. Note that service pool of *broker1* can also be removed. 
+
+::
 
 	% cubrid broker off broker1
 
 The broker reset feature enables broker application servers (CAS) to disconnect the existing connection and reconnect when the servers are connected to unwanted databases due to failover and etc in HA. For example, once Read Only broker is connected to active servers, it is not automatically connected to standby servers although standby servers are available. Connecting to standby servers is allowed only with the **cubrid broker reset** command.
 
-Enter the code below to reset broker1. ::
+Enter the code below to reset broker1. 
+
+::
 
 	% cubrid broker reset broker1
 
 Dynamically Changing Broker Parameters
 --------------------------------------
 
-You can configure the parameters related to running the broker in the configuration file ( **cubrid_broker.conf** ). You can also modify some broker parameters temporarily while the broker is running by using the **broker_changer** utility. For details, see :ref:`broker-configuration` in the "Performance Tuning" Guide.
+You can configure the parameters related to running the broker in the configuration file ( **cubrid_broker.conf** ). You can also modify some broker parameters temporarily while the broker is running by using the **broker_changer** utility. For details, see :ref:`broker-configuration`.
 
 The syntax for the **broker_changer** utility, which is used to change broker parameters while the broker is running, is as follows. Enter the name of the currently running broker for the *broker_name* . The *parameters* can be used only for dynamically modifiable parameters. The *value* must be specified based on the parameter to be modified. You can specify the broker CAS identifier ( *cas_id* ) to apply the changes to the specific broker CAS. *cas_id* is an ID to be output by **cubrid broker status** command.
 
-**broker_changer** ::
- 
-	broker_name [cas_id] parameters value
+::
+
+	broker_changer broker_name [cas_id] parameters value
 
 Enter the following to configure the **SQL_LOG** parameter to **ON** so that SQL logs can be written to the currently running broker. Such dynamic parameter change is effective only while the broker is running. ::
 

@@ -27,7 +27,7 @@ CUBRID 설정 파일에 등록된 서비스를 제어하기 위한 **cubrid** �
 
 ::
 
-	cubrid server <command> [<database_name>]
+	cubrid server <command> [database_name]
 	<command>: {start|stop|restart|status}
 	
 브로커 제어
@@ -39,9 +39,9 @@ CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구
 ::
 
 	cubrid broker <command> 
-	<command>: {start|stop|restart|status [<broker_name>] 
-	           |on <broker_name> |off <broker_name> 
-			   |reset <broker_name> |acl{status|reload} <broker_name> }
+	<command>: {start|stop|restart|status [broker_name] 
+	           |on broker_name |off broker_name 
+			   |reset broker_name |acl{status|reload} broker_name }
 
 CUBRID 매니저 서버 제어
 -----------------------
@@ -104,9 +104,9 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
 ::
 
 	% cubrid service start
+	
 	@ cubrid master start
 	++ cubrid master start: success
-	@ cubrid server start: demodb
 
 
 이미 마스터 프로세스가 구동 중이라면 다음과 같은 메시지가 표시된다. 
@@ -114,12 +114,14 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
 ::
 
 	% cubrid service start
+
 	@ cubrid master start
 	++ cubrid master is running.
 
 마스터 프로세스의 구동에 실패한 경우라면 다음과 같은 메시지가 표시된다. 다음은 데이터베이스 환경 설정 파일(cubrid.conf)에 설정된 **cubrid_port_id** 파라미터 값이 충돌하여 구동에 실패한 예이다. 이런 경우에는 해당 포트를 변경하여 충돌 문제를 해결할 수 있다. 해당 포트를 점유하고 있는 프로세스가 없는데도 구동에 실패한다면 /tmp/CUBRID1523 파일을 삭제한 후 재시작한다. ::
 
 	% cubrid service start
+	
 	@ cubrid master start
 	cub_master: '/tmp/CUBRID1523' file for UNIX domain socket exist.... Operation not permitted
 	++ cubrid master start: fail
@@ -129,18 +131,19 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
 ::
 
 	% cubrid service start
+	
 	@ cubrid master start
 	++ cubrid master start: success
 	@ cubrid server start: demodb
 
 	This may take a long time depending on the amount of recovery works to do.
-	CUBRID 9.0……
+	CUBRID 9.0
 
 	++ cubrid server start: success
 	@ cubrid server start: testdb
 
 	This may take a long time depending on the amount of recovery works to do.
-	CUBRID 9.0……
+	CUBRID 9.0
 
 	++ cubrid server start: success
 	@ cubrid broker start
@@ -185,6 +188,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid service restart
+	
 	@ cubrid master stop
 	++ cubrid master stop: success
 	@ cubrid master start
@@ -196,6 +200,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid service restart
+	
 	@ cubrid server stop: demodb
 	Server demodb notified of shutdown.
 	This may take several minutes. Please wait.
@@ -235,6 +240,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid service status
+	
 	@ cubrid master status
 	++ cubrid master is running.
 	@ cubrid server status
@@ -278,6 +284,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid server start demodb
+	
 	@ cubrid server start: demodb
 
 	This may take a long time depending on the amount of recovery works to do.
@@ -291,6 +298,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid server start demodb
+
 	@ cubrid master start
 	++ cubrid master start: success
 	@ cubrid server start: demodb
@@ -306,6 +314,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid server start demodb
+	
 	@ cubrid server start: demodb
 	++ cubrid server 'demodb' is running.
 
@@ -320,6 +329,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid server stop demodb
+	
 	@ cubrid server stop: demodb
 	Server demodb notified of shutdown.
 	This may take several minutes. Please wait.
@@ -330,6 +340,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid server stop demodb
+	
 	@ cubrid server stop: demodb
 	++ cubrid server 'demodb' is not running.
 
@@ -343,6 +354,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid server restart demodb
+	
 	@ cubrid server stop: demodb
 	Server demodb notified of shutdown.
 	This may take several minutes. Please wait.
@@ -363,6 +375,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid server status
+	
 	@ cubrid server status
 	Server testdb (rel 9.0, pid 24465)
 	Server demodb (rel 9.0, pid 24342)
@@ -372,6 +385,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid server status
+	
 	@ cubrid server status
 	++ cubrid master is not running.
 
@@ -627,6 +641,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid broker status
+	
 	@ cubrid broker status
 	% query_editor  - cub_cas [28433,30000] /home/CUBRID/log/broker/query_editor.access /home/CUBRID/
 	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
@@ -699,6 +714,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid broker status -b
+	
 	@ cubrid broker status
 	  NAME           PID  PORT  AS  JQ      REQ  TPS  QPS  LONG-T  LONG-Q ERR-Q
 	===========================================================================
@@ -981,7 +997,9 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 
 	10/29 10:28:57.591 (0) CLIENT IP 192.10.10.10 10/29 10:28:57.592 (0) connect db db1 user dba url jdbc:cubrid:192.10.10.10:30000:db1::: - rejected
 
-.. note:: 데이터베이스 서버에서의 접속 제한을 위해서는 :ref:`limiting-server-access` 을 참고한다.
+.. note:: 
+
+	데이터베이스 서버에서의 접속 제한을 위해서는 :ref:`limiting-server-access` 을 참고한다.
 
 특정 브로커 관리
 ----------------
@@ -1024,7 +1042,7 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 
 ::
 
-	broker_changer	<broker_name> [ <cas_id> ] <parameters> <value>
+	broker_changer	broker_name [cas_id] parameters value
 
 구동 중인 브로커에서 SQL 로그가 기록되도록 **SQL_LOG** 파라미터를 ON으로 설정하기 위하여 다음과 같이 입력한다. 이와 같은 파라미터의 동적 변경은 브로커 구동 중일 때만 한시적으로 효력이 있다.
 
@@ -1041,10 +1059,11 @@ HA 환경에서 브로커의 **ACCESS_MODE** 를 Read Only로 변경하고 해�
 	OK
 
 .. note::
-	Windows Vista 이상 버전에서 cubrid 유틸리티를 사용하여 서비스를 제어하려면 명령 프롬프트 창을 관리자 권한으로 구동한 후 사용하는 것을 권장한다. 자세한 내용은 :ref:`CUBRID 유틸리티 <utility-on-windows>` 의 참고 사항을 참고한다.
+
+	Windows Vista 이상 버전에서 cubrid 유틸리티를 사용하여 서비스를 제어하려면 명령 프롬프트 창을 관리자 권한으로 구동한 후 사용하는 것을 권장한다. 자세한 내용은 ref:`CUBRID 유틸리티 <utility-on-windows>`를 참고한다.
 
 .. _broker-logs:
-
+	
 브로커 로그
 -----------
 

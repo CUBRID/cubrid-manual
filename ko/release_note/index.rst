@@ -670,7 +670,9 @@ login() 메서드의 동작 변경(CUBRIDSUS-6307)
 
 	::
 
-		//수정 이전 버전에서는 Hibernate를 이용해서 엔티티 간 매핑 설정을 할 때 NUMERIC 타입의 칼럼을 지정하면  Caused by: org.hibernate.HibernateException: Wrong column type in mytbl_map for column col2. Found: decimal, expected: numeric(19,0)"  와 같은 오류가 발생했다.
+		//수정 이전 버전에서는 Hibernate를 이용해서 엔티티 간 매핑 설정을 할 때 NUMERIC 타입의 칼럼을 지정하면  
+		Caused by: org.hibernate.HibernateException: Wrong column type in mytbl_map for column col2. Found: decimal, expected: numeric(19,0)"  
+		와 같은 오류가 발생했다.
 
 		@ManyToMany
 		@JoinTable(name="mytbl", joinColumns={@JoinColumn(name="col1", columnDefinition="varchar(255)")}, inverseJoinColumns={@JoinColumn(name="col2", columnDefinition="numeric(19,0)")})
@@ -1286,7 +1288,9 @@ ANY, SOME 한정자의 인자로 ORDER BY 절이 있는 부질의 수행 시 오
 
 	::
 
-		String MULTI_SELECT = "SELECT A FROM T1 WHERE A = ?; UPDATE T1 SET A = 2 WHERE A = 2; SELECT A, B FROM T1 WHERE A = ?; SELECT A, B, A AS C FROM T1 WHERE A = ?;";
+		String MULTI_SELECT = "SELECT A FROM T1 WHERE A = ?
+		; UPDATE T1 SET A = 2 WHERE A = 2; SELECT A, B FROM T1 WHERE A = ?; SELECT A, B, A AS C FROM T1 WHERE A = ?;";
+		
 		PreparedStatement p = c.prepareStatement(MULTI_SELECT);
 		...
 		while(...)
@@ -3440,7 +3444,8 @@ SHARED 속성 칼럼에 인덱스 생성 시 부적절한 오류 메시지(CUBRI
 
 	::
 
-		Your transaction (index 2, user1@host1|9808) timed out waiting on IX_LOCK lock on class tbl. You are waiting for user(s) user1@host1|csql(9807), user1@host1|csql(9805) to finish.
+		Your transaction (index 2, user1@host1|9808) timed out waiting on IX_LOCK lock on class tbl. 
+		You are waiting for user(s) user1@host1|csql(9807), user1@host1|csql(9805) to finish.
 	
 잠금 대기 중에 질의 타임아웃이 발생했음에도 불구하고 잠금 타임 아웃 오류가 발생하는 문제(CUBRIDSUS-7215)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

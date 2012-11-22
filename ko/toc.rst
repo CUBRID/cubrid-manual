@@ -7,6 +7,8 @@
 
 CUBRID 데이터베이스 관리 시스템(Database Management System, DBMS) 매뉴얼의 구성은 다음과 같다.
 
+*   :doc:`release_note/index` : 이전 버전 대비 추가, 변경, 개선 및 버그 수정 등을 설명한다.
+
 *   :doc:`intro` : CUBRID 데이터베이스 관리 시스템의 구조 및 특징을 설명한다.
 
 *   :doc:`start` : CUBRID를 처음 시작하는데 참고할 수 있는 내용을 제공한다. 시스템 설치 및 실행 방법, CSQL 인터프리터의 간단한 사용 방법을 찾아볼 수 있다. 또한, JDBC나 PHP, ODBC, CCI 등을 이용한 응용 프로그램 작성 예제를 제공한다.

@@ -3,7 +3,7 @@ Table Definition
 ****************
 
 CREATE TABLE
-------------
+============
 
 To create a table, use the **CREATE TABLE** statement. ::
 
@@ -98,7 +98,7 @@ A column is a set of data values of a particular simple type, one for each row o
 
 **Column Name**
 
-How to create a column name, see :doc:`identifier`. You can alter created column name by using the **RENAME COLUMN** clause of the **ALTER TABLE** statement (see :ref:`rename-column`).
+How to create a column name, see :doc:`/sql/identifier`. You can alter created column name by using the **RENAME COLUMN** clause of the **ALTER TABLE** statement (see :ref:`rename-column`).
 
 **Example**
 

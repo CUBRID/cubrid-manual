@@ -6,6 +6,8 @@ Manual Contents
 ---------------
 The contents of the CUBRID Database Management System (CUBRID DBMS) product manual are as follows:
 
+*   :doc:`release_note/index` : This chapter provides a description of additions, changes, improvements and bug fixes.
+
 *   :doc:`intro` : This chapter provides a description of the structure and characteristics of the CUBRID DBMS.
 
 *   :doc:`start` : The "Getting Started with CUBRID" provides users with a brief explanation on what to do when first starting CUBRID. The chapter contains information on new features added to CUBRID, on how to install and execute the system, and provides a simple guide on how to use the CSQL Interpreter and CUBRID Manager. The chapter also includes examples of how to write application programs using JDBC, PHP, ODBC, CCI, etc.

@@ -10,7 +10,7 @@
 ================
 
 본 문서는 CUBRID 9.0(빌드번호 9.0.0.0478)에 관한 유용한 정보를 포함한다.
-9.0 이전 버전에 대한 정보는 `CUBRID 릴리스 노트 사이트 <http://release.cubrid.org/ko>`_ 에서 확인할 수 있다.
+9.0 이전 버전에 대한 정보는 `<http://release.cubrid.org/ko>`_ 에서 확인할 수 있다.
 
 CUBRID 9.0 이전 버전에 대한 자세한 내용은 CUBRID 2008 R4.3 릴리스 노트를 참조한다.
 
@@ -79,7 +79,7 @@ CUBRID 9.0 릴리스는 CUBRID 2008 R4.3 및 하위 버전의 수정 사항들�
 
 	SQL 함수, SQL 구문, 질의 계획, 인덱스, 트리거, 드라이버, 유틸리티 등에서 발견된 크고 작은 버그 및 기능들을 수정 또는 개선했다. 또한 질의 계획, 인덱스 스캔, 잠금, 삽입 및 삭제의 반복 수행, 메모리 누수, 디스크 사용량 등에서 발견된 이슈들을 수정 또는 개선했다. 아울러 HA 스키마 복제 및 데이터 복제 이슈들을 개선 또는 수정했다.
 
-보다 자세한 변경 사항은 아래의 CUBRID 9.0 Beta에서 변경된 사항을 참고한다.
+보다 자세한 변경 사항은 아래의 CUBRID 9.0에서 변경된 사항을 참고한다.
 
 
 기능 추가
@@ -132,7 +132,7 @@ ENUM 타입
 	::
 
 		CREATE TABLE tbl (
-		color ENUM('red', 'yellow', 'blue')
+			color ENUM('red', 'yellow', 'blue')
 		);
 
 		INSERT into tbl values ('yellow'), ('red'), (2), ('blue');
@@ -341,7 +341,7 @@ Sharding
 	::
 
 		CREATE INDEX idx_t_gen_name on t (gender, name);
-		SELECT * from t WHERE name = 'SMITH';
+		SELECT * FROM t WHERE name = 'SMITH';
 
 드라이버
 --------
@@ -508,7 +508,7 @@ HA 카탈로그 테이블에 칼럼 추가 및 삭제(CUBRIDSUS-5456)
 	+--------------+----------------------------------------+
 	| expansions   | 확장 지원 여부(0: 지원 안함, 1: 지원)  |
 	+--------------+----------------------------------------+
-	| contractions | 확장 지원 여부(0: 지원 안함, 1: 지원)  |
+	| contractions | 축약 지원 여부(0: 지원 안함, 1: 지원)  |
 	+--------------+----------------------------------------+
 	| checksum     | 콜레이션 파일의 체크섬                 |
 	+--------------+----------------------------------------+
@@ -531,7 +531,7 @@ HA 카탈로그 테이블에 칼럼 추가 및 삭제(CUBRIDSUS-5456)
 	+----------------+-------------------------------------------------------------------------------+
 	| has_expansions | 확장 포함 여부                                                                |
 	+----------------+-------------------------------------------------------------------------------+
-	| contractions   | 축소 포함 여부                                                                |
+	| contractions   | 축약 포함 여부                                                                |
 	+----------------+-------------------------------------------------------------------------------+
 	| uca_strength   | 가중치 세기(weight strength)                                                  |
 	|                |                                                                               |
@@ -608,7 +608,7 @@ TIME 타입의 값으로 유효하지 않은 시간을 바인딩하면 오류를
 	::
 
 		CREATE TABLE t1 (i1 INT);
-		INSERT INTO t1 VALUES (1),(-2147483648),(2147483647),(-2147483648),(2147483647);;
+		INSERT INTO t1 VALUES (1),(-2147483648),(2147483647),(-2147483648),(2147483647);
 		ALTER TABLE t1 CHANGE i1 s1 CHAR(4);
 
 내림차순 인덱스 스캔 도중 인터럽트 발생 시 ER_INTERRUPTED 오류를 반환하도록 변경(CUBRIDSUS-7316)
@@ -681,8 +681,11 @@ login() 메서드의 동작 변경(CUBRIDSUS-6307)
 
 	cci_connect_with_url() 함수의 URL 문자열에서 사용하는 autocommit 속성을 제거했다.
 
-기본 설정 변경  레플리카 노드에서는 항상 보관 로그를 삭제하도록 변경(CUBRIDSUS-8556)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+기본 설정 변경  
+--------------
+
+레플리카 노드에서는 항상 보관 로그를 삭제하도록 변경(CUBRIDSUS-8556)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	레플리카 노드에서 보관 로그 삭제를 위해서는 시스템 파라미터 force_remove_log_archives의 설정 값을 항상 yes로 변경해야 했다. 설정을 하지 않았을 경우 불필요한 보관 로그가 계속 쌓이면서 문제를 야기시킬 수 있었는데, 9.0 Beta부터 레플리카 노드는 force_remove_log_archives의 설정 값과 상관 없이 항상 보관 로그를 삭제하도록 변경했다. 
 
@@ -704,7 +707,8 @@ login() 메서드의 동작 변경(CUBRIDSUS-6307)
 
 	브로커 응용 서버(CAS), 브로커 서버, CCI 드라이버, JDBC 드라이버의 오류 번호 범위를 변경했다. CAS는 -10000부터 -10999, 브로커 서버는 -11000부터 -11999, CCI는 -20000부터 -20999, JDBC는 -21000부터 -21999 범위를 에러 번호로 사용한다.
 
-	lock_timeout값이 -1이나 0일 때 브로커 응용 서버(CAS)로그와 lockdb 유틸리티의 출력 형식 변경(CUBRIDSUS-8915)
+lock_timeout값이 -1이나 0일 때 브로커 응용 서버(CAS)로그와 lockdb 유틸리티의 출력 형식 변경(CUBRIDSUS-8915)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	시스템 파라미터인 lock_timeout 값이 -1(infinite wait)또는 0(no wait)으로 설정되어 있을 때, CAS 로그와 lockdb 유틸리티의 출력 형식을 각각 그 의미대로 "Infinite wait", "No wait"로 출력하도록 변경했다.
 
@@ -806,7 +810,7 @@ TRUNCATE 문을 빈번하게 수행한 이후 INSERT를 비롯한 접근 성능�
 			CONSTRAINT con2 FOREIGN KEY(a) REFERENCES foo (a));
 
 		-- INSERT records
-		
+		...
 		DROP TABLE bar;
 		DROP TABLE foo;
 
@@ -936,6 +940,7 @@ CONCAT 함수와 CONCAT_WS 함수의 입력 인자가 CHAR 타입만 있는 질�
 		SELECT concat(b) FROM t1;
 
 CLOB_TO_CHAR 함수 수행 시 오류(CUBRIDSUS-6520) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	CLOB 칼럼이 있는 테이블에, 고유 인덱스를 스캔하는 REPLACE 문을 수행하고 커밋한 후에 CLOB_TO_CHAR()를 수행하면 " ERROR: External file "xxxx" was not found. " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
@@ -1244,7 +1249,7 @@ UNION 절이 있는 부질의가 WHERE 절 조건에 사용되는 질의 수행 
 ROWNUM과 ORDERBY_NUM()이 같이 사용된 질의에서 ROWNUM의 행 개수보다 ORDERBY_NUM()의 행 개수가 크면 결과 개수가 잘못되는 현상(CUBRIDSUS-6676)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	ROWNM으로 행 개수를 제한한 후 정렬된 결과에서 ORDERBY_NUM()으로 행 개수를 제한 출력하는 조건에서 ROWNUM의 행 개수보다 ORDERBY_NUM()의 행 개수가 크면 잘못된 개수의 결과를 출력하는 현상을 수정했다.
+	ROWNUM으로 행 개수를 제한한 후 정렬된 결과에서 ORDERBY_NUM()으로 행 개수를 제한 출력하는 조건에서 ROWNUM의 행 개수보다 ORDERBY_NUM()의 행 개수가 크면 잘못된 개수의 결과를 출력하는 현상을 수정했다.
 
 	::
 
@@ -1488,7 +1493,7 @@ DECIMAL(p, s) 타입에서 허용 범위를 벗어나는 p와 s의 입력이 가
 	::
 
 		CREATE TABLE foo(a TIMESTAMP DEFAULT SYSTIMESTAMP - 9999);
-		Invalid DEFAULT clause. 'sys_timestamp ' cannot be used in a nested expression.
+		Error: Invalid DEFAULT clause. 'sys_timestamp ' cannot be used in a nested expression.
 
 호스트 변수들 간의 곱셈/나눗셈 연산 수행 시 바인딩되는 문자열이 숫자 타입으로 자동 형 변환이 되지 않는 오류(CUBRIDSUS-5506)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1773,8 +1778,8 @@ REUSE_OID 옵션으로 생성한 테이블을 DROP하는 경우 공간이 반환
 		// 아래의 질의문을 수행하면 슬레이브 노드에서는 위 예제의 첫번째 질의 형태로 재작성된다.
 		CREATE VIEW vw AS SELECT SQRT(100);
 
-db_user, db_trigger 시스템 카탈로그 테이블의 레코드를 사용자가 임의로 변경하지 못하도록 수정(CUBRIDSUS-8690)(CUBRIDSUS-8692)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+db_user, db_trigger 시스템 카탈로그 테이블의 레코드를 사용자가 임의로 변경하지 못하도록 수정(CUBRIDSUS-8690)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	사용자가 임의로 db_user, db_trigger 시스템 카탈로그 테이블의 레코드를 INSERT, UPDATE 또는 DELETE하지 못하도록 수정했다.
 
@@ -1888,10 +1893,10 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 		CREATE TABLE t2(col2 int); --Q2
 		CREATE TRIGGER trig1 AFTER INSERT ON t2 EXECUTE INSERT INTO t1(col1) VALUES(obj.col2); --Q3
 		COMMIT; -- Q4
-		INSERT INTO t1(col1) VALUES ('2012-04-30'); -- Q4
-		INSERT INTO t2(col2) VALUES (1); -- Q4
+		INSERT INTO t1(col1) VALUES ('2012-04-30'); -- Q5
+		INSERT INTO t2(col2) VALUES (1); -- Q6
 		ERROR: Error evaluating action for "trig1", Execute: Cannot coerce obj.cold2 to type date.
-		COMMIT; -- Q4
+		COMMIT; -- Q7
 	
 트리거 내에서 CLOB_TO_CHAR()를 호출하면 NULL을 반환하는 오류 수정(CUBRIDSUS-7246)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2138,6 +2143,8 @@ LIMIT 0인 경우 곧바로 결과를 반환하도록 수정(CUBRIDSUS-7420)
 
 	분할 테이블에서 OUTER JOIN 수행 시 잘못된 질의 결과를 출력하는 현상을 수정했다.
 
+	::
+	
 		CREATE TABLE pt1(i int,j int) PARTITION BY HASH(i) PARTITIONS 4;
 		CREATE TABLE pt2(i int,j int) PARTITION BY HASH(i) PARTITIONS 4;
 		INSERT INTO pt1 VALUES (1,1),(2,2),(3,3);
@@ -2146,6 +2153,7 @@ LIMIT 0인 경우 곧바로 결과를 반환하도록 수정(CUBRIDSUS-7420)
 
 		// 아래 질의 수행 시 수정 이전 버전에서는 첫번째 레코드가 "1, 1, NULL, NULL"로 잘못 출력되었다.
 		SELECT * FROM pt1 LEFT JOIN pt2 ON pt1.i=pt2.i USING INDEX idx(+);
+		
 		i j i    j
 		=============
 		1 1 1    1
@@ -2861,7 +2869,7 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 
 	::
 
-		cubrid.jdbc.driver.CUBRIDException: jdbc:cubrid:localhost:33300:testdb:dba::
+		cubrid.jdbc.driver.CUBRIDException: jdbc:cubrid:localhost:33300:testdb:dba:********:
 		Syntax: Syntax error: unexpected END OF STATEMENT
 	
 [JDBC] iBatis에서 자바 저장 프로시저의 Resultset을 조회할 수 없는 문제(CUBRIDSUS-7383)
@@ -3113,7 +3121,8 @@ CSQL에서 질의문과 ; 다음에 주석이 존재하면 질의 수행에 실�
 
 		SELECT 1; --
 		
-	CSQL 세션 명령어를 UP 커서 키로 재입력 가능하도록 개선(CUBRIDSUS-8646)
+CSQL 세션 명령어를 UP 커서 키로 재입력 가능하도록 개선(CUBRIDSUS-8646)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	CSQL 인터프리터에서 세션 명령어는 UP 커서 키로 재입력되지 않았으나, 이를 가능하도록 수정했다.
 
@@ -3195,7 +3204,8 @@ loaddb 유틸리티의 --error-control-file 옵션이 정상 동작하지 않는
 	::
 
 		cubrid loaddb -u dba -c 10000 -d tbl.ldb --error-control-file=error_lst testdb
-		 Time: 04/04/12 20:05:47.066 - WARNING * file ../../src/storage/heap_file.c, line 9678 CODE = -48 Tran = 1, EID = 16661
+		
+		Time: 04/04/12 20:05:47.066 - WARNING *** file ../../src/storage/heap_file.c, line 9678 CODE = -48 Tran = 1, EID = 16661
 		Accessing deleted object 2|607786|233.
 	
 loaddb 수행 중 서버에서 Warning이 발생하면 계속 수행하지 않고 종료하는 문제(CUBRIDSUS-6647)
@@ -3249,7 +3259,9 @@ DB 생성 직후 백업한 볼륨으로 -d 옵션을 사용하여 복구 시도 
 		cubrid backupdb -S demodb
 		csql -S demodb -c "create table x"
 		cubrid restoredb -d backuptime demodb
-		FATAL ERROR * No error message available.
+		
+		FATAL ERROR ***
+		No error message available.
 		Please consult error_log file = /home1/user1/CUBRID/log/demodb_restoredb.err for additional information
 		... ABORT/EXIT IMMEDIATELY ...<<<---
 	
@@ -3282,7 +3294,7 @@ CUBRID Manager에서 질의 편집기 수행 종료 이후, cubrid.conf에서 �
 Windows용 CUBRID에서 2G 초과 파일을 포함하는 볼륨을 백업한 데이터베이스 복구에 실패하는 문제(CUBRIDSUS-7588)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Windows용 CUBRID에서 2G 초과 파일을 포함하는 볼륨을 백업한 데이터베이스를 복구하는 경우 " Trying to format disk volume "xxx" with an incorrect value [xxx] for number of pages .", " Restoredb cancelled or an error occurred. " 오류 메시지와 함께 수행에 실패하는 문제를 수정했다.
+	Windows용 CUBRID에서 2G 초과 파일을 포함하는 볼륨을 백업한 데이터베이스를 복구하는 경우 " Trying to format disk volume xxx with an incorrect value [xxx] for number of pages .", " Restoredb cancelled or an error occurred. " 오류 메시지와 함께 수행에 실패하는 문제를 수정했다.
 
 CUBRID 유틸리티에서 나타나는 DB 사용자 이름이 항상 대문자로 출력되도록 수정(CUBRIDSUS-8198)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

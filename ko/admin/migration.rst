@@ -26,7 +26,7 @@
 
 #. 기존 데이터베이스 언로드
 
-   **cubrid unloaddb** 유틸리티를 이용하여 기존?버전의 CUBRID에서 생성된 데이터베이스를 언로드한다. 데이터베이스 언로드에 관한 자세한 내용은 :ref:`unload-db` 를 참조한다.
+   **cubrid unloaddb** 유틸리티를 이용하여 기존 버전의 CUBRID에서 생성된 데이터베이스를 언로드한다. 데이터베이스 언로드에 관한 자세한 내용은 :ref:`unload-db` 를 참조한다.
 
 #. 기존 CUBRID의 환경 설정 파일 보관
 
@@ -97,7 +97,7 @@
 
 	**-i** 옵션이 **--include-reference** 와 결합되면, 객체 참조도 함께 생성된다. ::
 	
-		cubrid unloaddb --include-reference -i table_list.txt?demodb
+		cubrid unloaddb --include-reference -i table_list.txt demodb
 
 .. option:: --include-reference
 

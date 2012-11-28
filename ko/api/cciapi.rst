@@ -947,7 +947,7 @@ cci_execute_array()
 	
 	데이터를 바인딩하기 위해서는 :c:func:`cci_bind_param_array_size` 함수를 호출하여 배열의 크기를 지정한 후, :c:func:`cci_bind_param_array` 함수를 이용하여 각각의 값을 변수에 바인딩하고, :c:func:`cci_execute_array` 함수를 호출하여 질의를 실행한다.
 
-	:c:func:`cci_execute` 함수를 호출하면 질의 수행 결과 셋을 가져올 수 있으나, :c:func:`cci_execute_array` 함수는 *query_result* 변수로 수행된 질의 개수를 반환한다. 실행 결과에 대한 정보를 얻기 위해서는 아래와 같은 매크로를 이용할 수 있다.?매크로에서는 입력받는 각 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. *query_result* 변수의 사용이 끝나면 :c:func:`cci_query_result_free` 함수를 이용하여 질의 결과를 삭제해야 한다.
+	:c:func:`cci_execute` 함수를 호출하면 질의 수행 결과 셋을 가져올 수 있으나, :c:func:`cci_execute_array` 함수는 *query_result* 변수로 수행된 질의 개수를 반환한다. 실행 결과에 대한 정보를 얻기 위해서는 아래와 같은 매크로를 이용할 수 있다. 매크로에서는 입력받는 각 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. *query_result* 변수의 사용이 끝나면 :c:func:`cci_query_result_free` 함수를 이용하여 질의 결과를 삭제해야 한다.
 
 	+--------------------------------+-----------------------+---------------+
 	| 매크로                         |  리턴 값 타입         |  의미         |
@@ -1500,7 +1500,7 @@ CCI_GET_RESULT_INFO_IS_NON_NULL
 
 .. c:macro:: #define CCI_GET_RESULT_INFO_IS_NON_NULL(T_CCI_COL_INFO* res_info, int index)
 
-	prepare된 **SELECT** 문의 *index* 번째 칼럼이 nullable인지에 대한 값을 가져오는?매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
+	prepare된 **SELECT** 문의 *index* 번째 칼럼이 nullable인지에 대한 값을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
 
 	:param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
 	:param index: (IN) 칼럼 인덱스
@@ -1975,7 +1975,7 @@ CCI_QUERY_RESULT_ERR_MSG
 
 .. c:macro:: #define CCI_QUERY_RESULT_ERR_MSG(T_CCI_QUERY_RESULT* query_result, int index)
 
-	:c:func:`cci_execute_batch`, :c:func:`cci_execute_array` 또는 :c:func:`cci_execute_result` 함수에 의해 수행된 질의 결과에 대한 에러 메시지를 가져오며, 에러 메시지가 없을 경우 ""(empty string)을?반환하는 매크로이다. 지정된 인자 *query_result* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
+	:c:func:`cci_execute_batch`, :c:func:`cci_execute_array` 또는 :c:func:`cci_execute_result` 함수에 의해 수행된 질의 결과에 대한 에러 메시지를 가져오며, 에러 메시지가 없을 경우 ""(empty string)을 반환하는 매크로이다. 지정된 인자 *query_result* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
 	
 	:param query_result: (IN) 조회할 질의 결과
 	:param index: (IN) 칼럼 인덱스(base : 1)

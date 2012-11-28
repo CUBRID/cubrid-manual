@@ -258,7 +258,7 @@ DROP QUERY 절
 DROP VIEW
 =========
 
-뷰는 **DROP VIEW** 문을 이용하여 삭제할 수 있다. 뷰를 삭제하는 방법은 일반 테이블을?삭제하는 방법과 동일하다. ::
+뷰는 **DROP VIEW** 문을 이용하여 삭제할 수 있다. 뷰를 삭제하는 방법은 일반 테이블을 삭제하는 방법과 동일하다. ::
 
 	DROP [ VIEW | VCLASS ] view_name [ { ,view_name , ... } ]
 

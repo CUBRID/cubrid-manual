@@ -20,7 +20,7 @@
 
 	* **INCR/DECR** 함수는 사용자 정의 트랜잭션과 별도로 시스템 내부에서 사용되는 top operation이 적용되어 트랜잭션의 **COMMIT/ROLLBACK** 과 상관없이 데이터베이스에 자동으로 적용된다.
 
-	* 하나의 **SELECT** 문에 **INCR/DECR** 함수를 여러 개 사용할 경우, 해당 질의 내의 각각의 **INCR/DECR** 함수 중 ?하나라도 실패하면 모두 실패한다.
+	* 하나의 **SELECT** 문에 **INCR/DECR** 함수를 여러 개 사용할 경우, 해당 질의 내의 각각의 **INCR/DECR** 함수 중 하나라도 실패하면 모두 실패한다.
 
 	* **INCR/DECR** 함수는 최상위 **SELECT** 문에만 적용된다. **INSERT** ... **SELECT** ... 구문과 **UPDATE** table **SET** col = **SELECT** ... 등과 같은 **SUB SELECT**  문은 지원하지 않는다. 다음은 **INCR** 함수가 허용되지 않는 예이다.
 

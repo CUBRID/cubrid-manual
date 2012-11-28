@@ -164,7 +164,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 .. code-block:: sql
 
-	ALTER TABLE participant2?ADD PARTITION (
+	ALTER TABLE participant2 ADD PARTITION (
 	PARTITION before_2012 VALUES LESS THAN (2012),
 	PARTITION before_2016 VALUES LESS THAN MAXVALUE );
 
@@ -197,7 +197,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 *   데이터는 유지한 채 테이블의 분할을 변경하는 경우 **ALTER TABLE** ... **REORGANIZE PARTITION** 문을 사용한다(:ref:`range-partitioning-redefinition` 참조).
 
-*   분할을 삭제할 경우 삭제된 행의 수를 반환하지 않는다. 테이블과?분할을 유지한 채로?데이터만 삭제하고 싶은 경우 **DELETE** 문을 수행한다.
+*   분할을 삭제할 경우 삭제된 행의 수를 반환하지 않는다. 테이블과 분할을 유지한 채로 데이터만 삭제하고 싶은 경우 **DELETE** 문을 수행한다.
 
 해시 분할
 =========
@@ -214,7 +214,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	 PATITIONS ( <number_of_partitions> )
 	)
 	
-*   *partition_expression* : 분할 표현식을?지정한다.?표현식은 분할 대상이 되는 칼럼?이름이나 함수를 사용하여?지정할 수 있다.
+*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 이름이나 함수를 사용하여 지정할 수 있다.
 *   *number_of_partitions* : 원하는 분할의 수를 지정한다.
 
 다음은 국가 코드와 국가 이름의 정보를 담은 *nation2* 테이블을 생성하고 *code* 값을 기준으로 4개의 해시 분할을 정의하는 예제이다. 해시 분할은 분할의 수만 지정하고 이름은 지정하지 않으므로 p0, p1과 같이 자동으로 이름이 부여된다.
@@ -226,7 +226,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	  name VARCHAR(50) )
 	PARTITION BY HASH ( code) PARTITIONS 4;
 
-다음은 예제 1에서 생성한 해시 분할에 데이터를 삽입하는 예제이다. 해시 분할에 값을 입력하면?분할 키의 해시 값에 따라 저장될 분할이 결정된다. 해시 분할에서 분할키 값이 **NULL** 이면 첫 번째 분할에 저장된다.
+다음은 예제 1에서 생성한 해시 분할에 데이터를 삽입하는 예제이다. 해시 분할에 값을 입력하면 분할 키의 해시 값에 따라 저장될 분할이 결정된다. 해시 분할에서 분할키 값이 **NULL** 이면 첫 번째 분할에 저장된다.
 
 .. code-block:: sql
 
@@ -499,7 +499,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 	SELECT host_nation FROM olympic2 WHERE opening_date >= '2000 - 01 - 01';
 
-	SELECT?host_nation FROM olympic2__p__before_max WHERE opening_date >= '2000 - 01 - 01';
+	SELECT host_nation FROM olympic2__p__before_max WHERE opening_date >= '2000 - 01 - 01';
 
 다음은 해시 분할 테이블인 *manager* 테이블에서 분할 프루닝이 발생하도록 검색 조건을 지정한 예제이다. 해시 분할의 경우 **WHERE** 절에서 분할 키에 대하여 상수 값과 동등 비교를 하는 경우에만 분할 프루닝이 발생한다.
 
@@ -545,12 +545,12 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	<partition_value_option>
 	literal_
 
-*   *table_name* : 변경하려는?테이블의 이름을 지정한다.
-*   *partition_expression* : 분할 표현식을?지정한다.?표현식은 분할 대상이 되는 칼럼?명을 지정하거나 함수를 사용하여?지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 내용은 :ref:`분할 표현식에 사용할 수 있는 데이터 타입 <partition-data-type>` 을 참조한다.
+*   *table_name* : 변경하려는 테이블의 이름을 지정한다.
+*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 명을 지정하거나 함수를 사용하여 지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 내용은 :ref:`분할 표현식에 사용할 수 있는 데이터 타입 <partition-data-type>` 을 참조한다.
 *   *partition_name* : 분할명을 지정한다.
 *   *partition_value_option* : 분할의 기준이 되는 값 또는 값의 목록을 지정한다.
 
-다음은 record 테이블을 영역,?리스트, 해시?분할로 각각 변경하는 예제이다.
+다음은 record 테이블을 영역, 리스트, 해시 분할로 각각 변경하는 예제이다.
 
 .. code-block:: sql
 

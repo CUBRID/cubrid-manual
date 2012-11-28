@@ -69,7 +69,7 @@ As shown in the example above, after installing the downloaded file (CUBRID-9.0.
 After the CUBRID Manager is installed, you can start the CUBRID Manager server and broker as follows: ::
 
 	$ ps -ef | grep cub_
-	cub_user 15200 1 0 18:57 ? 00:00:00 cub_master
+	cub_user 15200 1 0 18:57   00:00:00 cub_master
 	cub_user 15205 1 0 18:57 pts/17 00:00:00 cub_broker
 	cub_user 15210 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_1
 	cub_user 15211 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_2
@@ -82,8 +82,8 @@ After the CUBRID Manager is installed, you can start the CUBRID Manager server a
 	cub_user 15224 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_3
 	cub_user 15225 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_4
 	cub_user 15226 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_5
-	cub_user 15229 1 0 18:57 ? 00:00:00 cub_auto start
-	cub_user 15232 1 0 18:57 ? 00:00:00 cub_js start
+	cub_user 15229 1 0 18:57   00:00:00 cub_auto start
+	cub_user 15232 1 0 18:57   00:00:00 cub_js start
 
 **Installing CUBRID (rpm File)**
 

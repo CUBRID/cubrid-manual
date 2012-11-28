@@ -6,7 +6,7 @@ OLE DB(Object Linking and Embedding, Database)는 Microsoft에서 개발한 COM(
 
 .NET 프레임워크는 Windows 응용 프로그램 개발을 위한 프레임워크로, 언어 간 상호 운용성을 지원한다. .NET이 지원하는 모든 프로그래밍 언어는 .NET 라이브러리를 사용할 수 있다. .NET 프레임워크의 데이터 공급자는 데이터베이스에 연결하고 명령을 실행하며 결과를 검색하는 데 사용된다.
 
-CUBRID OLE DB?드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
+CUBRID OLE DB 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
 별도로 OLE DB 드라이버를 다운로드하거나 OLE DB 드라이버에 대한 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver>`_ 에 접속한다.
 
@@ -62,7 +62,7 @@ OLE DB 프로그래밍
 
 [데이터 연결 속성] 대화 상자에서는 현재 사용하고 있는 Windows 운영 체제에 있는 각종 OLE DB 공급자를 확인하고 연결 속성을 설정할 수 있다.
 
-Windows용 CUBRID OLE DB Provider를 올바르게 설치하였다면 다음?그림과 같이 [데이터 연결 속성] 대화 상자의 공급자 목록에 'CUBRID OLE DB Provider'가 나타난다.
+Windows용 CUBRID OLE DB Provider를 올바르게 설치하였다면 다음 그림과 같이 [데이터 연결 속성] 대화 상자의 공급자 목록에 'CUBRID OLE DB Provider'가 나타난다.
 
 .. image:: /images/image84.png
 

@@ -920,8 +920,8 @@ CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 �
 사용자 정의 해시 함수를 포함하기 위해 **SHARD_KEY_LIBRARY_NAME**, **SHARD_KEY_FUNCTION_NAME** 파라미터를 위 구현과 일치하도록 수정한다. ::
 
 	[%student_no]
-	SHARD_KEY_LIBRARY_NAME ????=$CUBRID/conf/shard_key_udf.so
-	SHARD_KEY_FUNCTION_NAME ?=fn_shard_key_udf
+	SHARD_KEY_LIBRARY_NAME =$CUBRID/conf/shard_key_udf.so
+	SHARD_KEY_FUNCTION_NAME =fn_shard_key_udf
 
 구동 및 모니터링
 ================

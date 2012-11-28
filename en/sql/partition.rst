@@ -162,7 +162,7 @@ Currently, the partition before the 2008 Olympic Games is defined in the *partic
 
 .. code-block:: sql
 
-	ALTER TABLE participant2?ADD PARTITION (
+	ALTER TABLE participant2 ADD PARTITION (
 	PARTITION before_2012 VALUES LESS THAN (2012),
 	PARTITION before_2016 VALUES LESS THAN MAXVALUE );
 
@@ -491,7 +491,7 @@ Therefore, you can use the same effect of partition pruning by specifying the ap
 
 	SELECT host_nation FROM olympic2 WHERE opening_date >= '2000 - 01 - 01';
 
-	SELECT?host_nation FROM olympic2__p__before_max WHERE opening_date >= '2000 - 01 - 01';
+	SELECT host_nation FROM olympic2__p__before_max WHERE opening_date >= '2000 - 01 - 01';
 
 The following example shows how to specify the search condition to make a partition pruning in the hash partitioned table, called the *manager* table. For hash partitioning, partition pruning occurs only when equality comparison is performed between a partition key and a constant value in the **WHERE** clause.
 

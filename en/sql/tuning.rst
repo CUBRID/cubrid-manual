@@ -589,7 +589,7 @@ The following is a detailed example of the above situation. First, create a tabl
 .. code-block:: sql
 
 	CREATE TABLE tab(c VARCHAR(32));
-	INSERT INTO tab VALUES('abcd'),('abcd ???'),('abcd ');
+	INSERT INTO tab VALUES('abcd'),('abcd    '),('abcd ');
 	CREATE INDEX i_tab_c ON tab(c);
 
 If you must use the index (the covering index applied), the query result is as follows:

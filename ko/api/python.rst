@@ -6,7 +6,7 @@ Python 드라이버
 
 CUBRID Python 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 Python?드라이버를 다운로드하거나 Python?드라이버에 대한 최신 정보를 확인하려면
+별도로 Python 드라이버를 다운로드하거나 Python 드라이버에 대한 최신 정보를 확인하려면
 `http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver>`_
 에 접속한다.
 
@@ -102,7 +102,7 @@ CUBRIDdb 패키지는 Python Database API 2.0에 따라 다음과 같은 상수�
 Python 예제 프로그램
 ====================
 
-여기에서는 Python으로 CUBRID 데이터베이스에 대한?작업을 수행하는 예제 프로그램을 작성한다. 예제로 다음과 같은 테이블을 생성한다. ::
+여기에서는 Python으로 CUBRID 데이터베이스에 대한 작업을 수행하는 예제 프로그램을 작성한다. 예제로 다음과 같은 테이블을 생성한다. ::
 
 	csql -u dba -c "CREATE TABLE posts( id integer, title varchar(255), body string, last_updated timestamp );" demodb
 

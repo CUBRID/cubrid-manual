@@ -17,7 +17,7 @@ DELETE
 
 *   *table_name* : 삭제할 데이터가 포함되어 있는 테이블의 이름을 지정한다. 테이블의 개수가 한 개일 경우 앞의 **FROM** 키워드를 생략할 수 있다.
 
-*   *search_condition* : :ref:`where-clause` 을 이용하여 *search_condition* 을 만족하는?데이터만 삭제한다. 생략할 경우 지정된 테이블의 모든 데이터를 삭제한다.
+*   *search_condition* : :ref:`where-clause` 을 이용하여 *search_condition* 을 만족하는 데이터만 삭제한다. 생략할 경우 지정된 테이블의 모든 데이터를 삭제한다.
 
 *   *row_count* : :ref:`limit-clause` 에 삭제할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
 

@@ -78,7 +78,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 
 .. function:: BIT_LENGTH (string)
 
-	**BIT_LENGTH** 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, **BIT_LENGTH** 함수의 리턴 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는?문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
+	**BIT_LENGTH** 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, **BIT_LENGTH** 함수의 리턴 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
 
 	:param string: 비트 단위로 길이를 구할 문자열 또는 비트열을 지정한다.**NULL** 이 지정된 경우는 **NULL** 값이 반환된다. 
 	:rtype: INT
@@ -433,7 +433,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 .. function:: LCASE (string)
 .. function:: LOWER (string)
 
-	**LCASE** 함수와 **LOWER** 함수는 동일하며, 문자열에 포함된 대문자를 소문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는?문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
+	**LCASE** 함수와 **LOWER** 함수는 동일하며, 문자열에 포함된 대문자를 소문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
 
 	:param string: 소문자로 변환할 문자열을 지정한다. 값이 **NULL** 이면 결과는 **NULL** 이 반환된다.
 	:rtype: STRING
@@ -930,7 +930,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 
 .. function:: STRCMP( string1 , string2 )
 
-	**STRCMP** 함수는 두 개의 문자열 *string1*, *string2* 을 비교하여 동일하면?0을 반환하고, *string1* 이 더 크면 1을 반환하고, *string1* 이 더 작은 경우에는 -1을 반환한다. 어느 하나의 인자가 **NULL** 이면 **NULL** 을 반환한다.
+	**STRCMP** 함수는 두 개의 문자열 *string1*, *string2* 을 비교하여 동일하면 0을 반환하고, *string1* 이 더 크면 1을 반환하고, *string1* 이 더 작은 경우에는 -1을 반환한다. 어느 하나의 인자가 **NULL** 이면 **NULL** 을 반환한다.
 
 	:param string1: 
 	:param string2: 
@@ -959,7 +959,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 
 	.. note::
 	
-		CUBRID 9.0 미만 버전에서는 문자 단위가 아닌 바이트 단위로 시작 위치와 문자열의 길이를 산정한다는?점을 주의한다. 멀티바이트 문자셋에서는 한 문자를 표현하는 바이트 수를 고려하여 인자를 지정해야 한다.
+		CUBRID 9.0 미만 버전에서는 문자 단위가 아닌 바이트 단위로 시작 위치와 문자열의 길이를 산정한다는 점을 주의한다. 멀티바이트 문자셋에서는 한 문자를 표현하는 바이트 수를 고려하여 인자를 지정해야 한다.
 
 	:param string: 입력 문자열을 지정한다. 입력 값이 **NULL** 이면 결과로 **NULL** 이 반환된다.
 	:param position: 문자열을 추출할 시작 위치를 지정한다. 첫 번째 문자의 위치는 1이며, 0으로 지정되더라도 1로 간주된다. string 길이보다 큰 값을 지정하거나 **NULL** 을 지정하면 결과로 **NULL** 이 반환된다.

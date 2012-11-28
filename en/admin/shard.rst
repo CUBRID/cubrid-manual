@@ -907,8 +907,8 @@ Build the user-defined function as a shared library. The following example is Ma
 To include the user-defined hash function, modify the **SHARD_KEY_LIBRARY_NAME** and **SHARD_KEY_FUNCTION_NAME** parameters as shown in the above implementation. ::
 
 	[%student_no]
-	SHARD_KEY_LIBRARY_NAME ????=$CUBRID/conf/shard_key_udf.so
-	SHARD_KEY_FUNCTION_NAME ?=fn_shard_key_udf
+	SHARD_KEY_LIBRARY_NAME =$CUBRID/conf/shard_key_udf.so
+	SHARD_KEY_FUNCTION_NAME =fn_shard_key_udf
 
 Running and Monitoring
 ======================

@@ -213,7 +213,7 @@ Linux
 #. PHP 소스코드를 압축 해제하여 해당 디렉터리로 이동한다. ::
 
 	$> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
-	$> cd php-<version>/ext?
+	$> cd php-<version>/ext 
 
 #. phpize를 실행한다. phpize에 대한 내용은 :ref:`참고 사항 <phpize-remark>` 을 참고한다. ::
 
@@ -500,7 +500,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 **질의 결과의 열 타입과 이름**
 
-`cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-types.php>`_ () 함수를 사용하여 열 타입이 들어있는 배열을 얻을 수 있고, `cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-types.php>`_ () 함수를 사용하여?열의 이름이 들어있는 배열을 얻을 수 있다.
+`cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-types.php>`_ () 함수를 사용하여 열 타입이 들어있는 배열을 얻을 수 있고, `cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-types.php>`_ () 함수를 사용하여 열의 이름이 들어있는 배열을 얻을 수 있다.
 
 .. code-block:: php
 
@@ -520,7 +520,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 **커서 조정**
 
-질의 결과의 위치를 설정할 수 있다. `cubrid_move_cursor <http://www.php.net/manual/en/function.cubrid-move-cursor.php>`_ () 함수를 사용하여?커서를 세 가지 포인트(질의 결과의 처음, 현재 커서 위치, 질의 결과의 끝) 중 한 포인트로부터 일정한 위치로 이동할 수 있다.
+질의 결과의 위치를 설정할 수 있다. `cubrid_move_cursor <http://www.php.net/manual/en/function.cubrid-move-cursor.php>`_ () 함수를 사용하여 커서를 세 가지 포인트(질의 결과의 처음, 현재 커서 위치, 질의 결과의 끝) 중 한 포인트로부터 일정한 위치로 이동할 수 있다.
 
 .. code-block:: php
 
@@ -573,7 +573,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 **에러 처리**
 
-에러가 발생하면 대부분의 PHP 인터페이스 함수는 에러 메시지를 출력하고 false나 -1을 반환한다. `cubrid_error_msg <http://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (), `cubrid_error_code <http://www.php.net/manual/en/function.cubrid-error-code.php>`_ () 그리고 `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수를 사용하면?각각 에러 메시지, 에러 코드, 에러 기능 코드를 확인할 수 있다.
+에러가 발생하면 대부분의 PHP 인터페이스 함수는 에러 메시지를 출력하고 false나 -1을 반환한다. `cubrid_error_msg <http://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (), `cubrid_error_code <http://www.php.net/manual/en/function.cubrid-error-code.php>`_ () 그리고 `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수를 사용하면 각각 에러 메시지, 에러 코드, 에러 기능 코드를 확인할 수 있다.
 
 `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () 함수의 결과 값은 **CUBRID_FACILITY_DBMS** (DBMS 에러), **CUBRID_FACILITY_CAS** (CAS 서버 에러), **CUBRID_FACILITY_CCI** (CCI 에러), **CUBRID_FACILITY_CLIENT** (PHP 모듈 에러) 중 하나이다.
 

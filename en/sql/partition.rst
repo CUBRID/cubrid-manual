@@ -36,7 +36,7 @@ The following shows operators and functions that can be used in partitioning exp
 
 *   Operator functions associated with number
 
-    +, -, \*, /, :func:`MOD`, :func:`STRCAT`, :func:`FLOOR`, :func:`CEIL`, :func:`POWER`, :func:`ROUND`, :func:`ABS`, :func:`TRUNC`
+    +, -, \*, /, :func:`MOD`, :func:`FLOOR`, :func:`CEIL`, :func:`POWER`, :func:`ROUND`, :func:`ABS`, :func:`TRUNC`
 
 *   Operator functions associated with literal
 

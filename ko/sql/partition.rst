@@ -36,7 +36,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 * 숫자 관련 연산자 함수
 
-  +, -, \*, /, :func:`MOD`, :func:`STRCAT`, :func:`FLOOR`, :func:`CEIL`, :func:`POWER`, :func:`ROUND`, :func:`ABS`, :func:`TRUNC`
+  +, -, \*, /, :func:`MOD`, :func:`FLOOR`, :func:`CEIL`, :func:`POWER`, :func:`ROUND`, :func:`ABS`, :func:`TRUNC`
 
 * 문자열 관련 연산자 함수
 

@@ -2,9 +2,9 @@
 
 .. contents::
 
-************
-Release Note
-************
+****************
+9.0 Release Note
+****************
 
 Release Note Information
 =========================

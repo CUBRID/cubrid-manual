@@ -287,10 +287,10 @@ Beta 버전
 	+------------------------------+---------------------------------------------------------------------------------------------------------+
 	| unicode_output_normalization | 저장된 유니코드를 분해된 코드로 출력할 것인지 여부를 설정. 기본값 no                                    |
 	+------------------------------+---------------------------------------------------------------------------------------------------------+
-	| use_locale_date_format       | 문자열을 날짜/시간 형식으로 변환하는 함수에서 입력 인자인 문자열에 대해 지역화된(localized) 날짜/시간   |
+	| intl_date_lang               | 문자열을 날짜/시간 형식으로 변환하는 함수에서 입력 인자인 문자열에 대해 지역화된(localized) 날짜/시간   |
 	|                              | 형식을 사용할 것인지 여부를 설정. 기본값 CUBRID_LANG 환경 변수.                                         |
 	+------------------------------+---------------------------------------------------------------------------------------------------------+
-	| use_locale_number_format     | 문자열을 숫자로 또는 숫자를 문자열로 변환하는 함수들에서 입력 또는 출력되는 문자열에 숫자 형식을        |
+	| intl_number_lang             | 문자열을 숫자로 또는 숫자를 문자열로 변환하는 함수들에서 입력 또는 출력되는 문자열에 숫자 형식을        |
 	|                              | 부여할 것인지 여부를 설정. 기본값 CUBRID_LANG 환경 변수.                                                |
 	+------------------------------+---------------------------------------------------------------------------------------------------------+
 
@@ -589,7 +589,7 @@ Beta 버전
 클라이언트/서버 시스템 파라미터 중 일부에 세션 파라미터 개념(CUBRIDSUS-8193)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-	클라이언트/서버 시스템 파라미터들 중 일부에 대해 어느 한쪽의 값이 변경되면 서버와 클라이언트에 같은 값이 반영되게 하는 세션 파라미터 개념을 추가했다. 추가된 세션 파라미터는 default_week_format, string_max_size_bytes, return_null_on_function_errors, alter_table_change_type_strict, plus_as_concat, compat_numeric_division_scale, use_locale_number_format, use_locale_date_format이다.
+	클라이언트/서버 시스템 파라미터들 중 일부에 대해 어느 한쪽의 값이 변경되면 서버와 클라이언트에 같은 값이 반영되게 하는 세션 파라미터 개념을 추가했다. 추가된 세션 파라미터는 default_week_format, string_max_size_bytes, return_null_on_function_errors, alter_table_change_type_strict, plus_as_concat, compat_numeric_division_scale, intl_number_lang, intl_date_lang이다.
 
 정식 버전
 ^^^^^^^^^
@@ -613,6 +613,17 @@ Beta 버전
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 	cubrid statdump 유틸리티와 SHOW EXEC STATISTICS ALL를 통해 확인할 수 있는 실행 통계 정보에 다중 범위 최적화(multi-range optimization)를 수행한 회수 항목을 추가했다.
+
+디버깅용 로그를 기록하도록 설정하는 연결 URL 속성 추가(CUBRIDSUS-6377)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+	CCI 연결 URL에 디버깅용 로그 기록을 설정하는 기능을 추가했다. logSlowQueries와 slowQueryThresholdMillis는 슬로우 쿼리의 로그 기록을, logTraceApi는 CCI 함수가 호출될 때 각 함수의 시작과 끝을, logTraceNetwork은 CCI 함수의 Network 데이터 전송 내용을 로그 파일에 기록한다.
+
+	::
+
+		url = "cci:cubrid:localhost:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
+		
+	아울러, CCI 연결 URL에 디버깅용 로그 파일의 경로를 지정하는 logBaseDir의 동작 방식을 수정했다. 이전 버전에서는 logBaseDir 값과 logFile이 같이 있으면 logBaseDir 프로퍼티를 무시했으나 수정 이후 경로를 포함한 파일 이름을 "logBaseDir/logFile"로 지정하도록 바뀌었다.
 
 정식 버전
 ^^^^^^^^^
@@ -662,17 +673,6 @@ Beta 버전
 	* Tran time: 현재 트랜잭션의 총 수행 시간(단위: 초)
 	* Wait for lock holder: 현재 트랜잭션이 잠금(lock) 대기중이면 해당 잠금을 소유하고 있는 트랜잭션의 리스트
 	* SQL Text: 수행중인 질의문(최대 30자)		
-
-디버깅용 로그를 기록하도록 설정하는 연결 URL 속성 추가(CUBRIDSUS-6377)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-	CCI 연결 URL에 디버깅용 로그 기록을 설정하는 기능을 추가했다. logSlowQueries와 slowQueryThresholdMillis는 슬로우 쿼리의 로그 기록을, logTraceApi는 CCI 함수가 호출될 때 각 함수의 시작과 끝을, logTraceNetwork은 CCI 함수의 Network 데이터 전송 내용을 로그 파일에 기록한다.
-
-	::
-
-		url = "cci:cubrid:localhost:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
-		
-	아울러, CCI 연결 URL에 디버깅용 로그 파일의 경로를 지정하는 logBaseDir의 동작 방식을 수정했다. 이전 버전에서는 logBaseDir 값과 logFile이 같이 있으면 logBaseDir 프로퍼티를 무시했으나 수정 이후 경로를 포함한 파일 이름을 "logBaseDir/logFile"로 지정하도록 바뀌었다.
 
 지정한 시간을 초과하는 질의문과 질의 실행 계획 정보를 로그에 기록하게 하는 기능 (CUBRIDSUS-6987)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -822,6 +822,7 @@ Beta 버전
 
 정식 버전
 ^^^^^^^^^
+
 [CCI][JDBC] 자동 커밋 모드에서, 배열 내 여러 개의 질의문을 일괄적으로 처리하는 함수가 각 질의문을 수행할 때마다 커밋하도록 수정 (CUBRIDSUS-6148)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 자동 커밋 모드에서 cci_execute_array 함수와 cci_execute_batch 함수, 그리고 JDBC의 Statement.executeBatch 메서드, PreparedStatement.executeBatch 메서드 등이 배열 내 여러 개의 질의문을 일괄적으로 처리할 때 모든 질의문을 수행한 이후에 커밋했으나 각 질의문을 수행할 때마다 커밋하도록 수정했다.
@@ -2079,7 +2080,9 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 		COMMIT; -- Q4
 		INSERT INTO t1(col1) VALUES ('2012-04-30'); -- Q5
 		INSERT INTO t2(col2) VALUES (1); -- Q6
+		
 		ERROR: Error evaluating action for "trig1", Execute: Cannot coerce obj.cold2 to type date.
+
 		COMMIT; -- Q7
 	
 트리거 내에서 CLOB_TO_CHAR()를 호출하면 NULL을 반환하는 오류 (CUBRIDSUS-7246)
@@ -2948,7 +2951,6 @@ DROP TABLE 문의 IF EXISTS 절이 슬레이브 노드에 반영되지 않는 �
 	::
 
 		CREATE TABLE vc_tb1(a INT PRIMARY KEY);
-		
 		// 수정 이전 버전에서 위의 뷰를 슬레이브 노드의 db_vclass에서 출력하면 WHERE 조건이 괄호로 감싸였다.
 		CREATE VIEW vtb1(a INT) AS SELECT * FROM vc_tb1 WHERE a>=1;
 	
@@ -3159,7 +3161,6 @@ ALTER ... CHANGE COLUMN 문이 슬레이브 노드에 반영되지 않는 현상
 Beta 버전
 ^^^^^^^^^
 
-
 [JDBC] 예외 오류 메시지 출력 시 연결 URL을 출력하도록 개선(CUBRIDSUS-7781)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -3265,6 +3266,9 @@ Beta 버전
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 	JDBC 응용프로그램에서 prepare한 질의에 유효하지 않은 값을 바인딩하여 실행한 후 다시 유효한 값을 바인딩하여 실행하면 Exception이 발생하는 현상을 수정했다.
+	
+	::
+	
 		// 수정 이전 버전에서는 다음과 같이 Exception이 발생했다.
 		No error message available.
 		cubrid.jdbc.driver.CUBRIDException: No error message available.
@@ -3381,7 +3385,7 @@ Beta 버전
 		printf("reverse_index");
 	
 [JDBC, CCI] 응용 프로그램에서 연결 URL이 잘못되었음에도 불구하고 오류가 발생하지 않는 문제 (CUBRIDSUS-7967)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 	JDBC/CCI 응용 프로그램에서 연결 URL이 잘못되는 경우 오류를 발생하도록 수정했다. 이 수정으로 인해, 수정 이전 버전에서는 DB 이름 뒤에 ":" 두 개가 생략될 수 있었으나, 수정 이후 버전에서는 이를 허용하지 않게 되었다.
 
@@ -3392,7 +3396,7 @@ Beta 버전
 	그리고, 수정 이후 Linux용 버전에서는 URL의 데이터베이스 이름에 "?"를 포함할 수 있게 되었다.
 
 [JDBC, CCI] Windows용 CUBRID에서 JDBC 또는 CCI 응용 프로그램으로 VARCHAR 칼럼에 ""인 값을 바인딩하면 발생하는 precision 오류 (CUBRIDSUS-9306)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 	JDBC 또는 CCI 응용 프로그램으로 VARCHAR 타입 칼럼에 공백 문자열("")을 바인딩하면 발생하는 precision 오류를 수정했다. 이 문제는 Windows 버전에서만 발생하는 문제이다.
 	

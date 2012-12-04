@@ -20,6 +20,8 @@ CUBRID가 제공하는 다음 도구를 사용하면 GUI를 통해 편리하게 
 
 * CUBRID 매니저 : `http://www.cubrid.org/wiki_tools/entry/cubrid-manager <http://www.cubrid.org/wiki_tools/entry/cubrid-manager>`_
 
+* CUBRID 웹 매니저: `http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager>`_
+
 * CUBRID 마이그레이션 툴킷 : `http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit <http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit>`_
 
 CUBRID는 JDBC, CCI, PHP, PDO, ODBC, OLE DB, ADO.NET, Perl, Python, Ruby 등 다양한 드라이버를 제공한다. 드라이버에 대한 자세한 내용은 API 레퍼런스를 참고한다.

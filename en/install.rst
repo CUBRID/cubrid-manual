@@ -123,7 +123,7 @@ You can install the CUBRID package you have desired based on the command you exe
 
 To install the earlier version, you should include version information in the command. ::
 
-	$ yum install cubrid-9.0.0
+	$ yum install cubrid-8.4.3
 
 After installation is complete, configure environment variables including installation path of CUBRID and then apply them to system.
 
@@ -140,7 +140,7 @@ To install the latest version, execute the command below. ::
 
 To install the earlier version, you should include version information in the command. ::
 
-	$ sudo apt-get install cubrid-8.3.1
+	$ sudo apt-get install cubrid-8.4.3
 
 After installation is complete, configure environment variables including installation path of CUBRID and then apply them to system.
 

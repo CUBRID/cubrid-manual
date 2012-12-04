@@ -57,6 +57,14 @@ In the standalone mode, CSQL Interpreter directly accesses database files and ex
 
 CSQL Interpreter usually operates as a client process and accesses the server process.
 
+**System Administration Mode(--sysadm)**
+
+You can use this mode when you  run checkpoint through CSQL interpreter or exit the transaction monitoring. Also, it allows one connection on CSQL interpreter even if the server  access count exceeds the value of max_client system parameter. In this mode, allowed connection count by CSQL interpreter is only one.
+
+::
+
+	csql -u dba --sysadm demodb
+
 Using CSQL (Syntax)
 -------------------
 
@@ -116,61 +124,61 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
 .. program:: csql
 
-.. option:: -S
+.. option:: -S, --SA-mode
 
 	The following example shows how to connect to a database in standalone mode and execute the **csql** utility. If you want to use the database exclusively, use the **-S** option. If both **-S** and **-C** options are omitted, the **-C** option will be specified. ::
 
 		csql -S demodb
 
-.. option:: -C
+.. option:: -C, --CS-mode
 
 	The following example shows how to connect to a database in client/server mode and execute the **csql** utility. In an environment where multiple clients connect to the database, use the **-C** option. Even when you connect to a database on a remote host in client/server mode, the error log created during **csql** execution will be stored in the **cub.err** file on the local host. ::
 
 		csql -C demodb
 
-.. option:: -i
+.. option:: -i, --input-file=ARG
 
 	The following example shows how to specify the name of the input file that will be used in a batch mode with the **-i** option. In the **infile** file, more than one SQL statement is stored. Without the **-i** option specified, the CSQL Interpreter will run in an interactive mode. ::
 
 		csql -i infile demodb
 
-.. option:: -o
+.. option:: -o, --output-file=ARG
 
 	The following example shows how to store the execution results to the specified file instead of displaying on the screen. It is useful to retrieve the results of the query performed by the CSQL Interpreter afterwards. ::
 
 		csql -o outfile demodb
 
-.. option:: -u
+.. option:: -u, --user=ARG
 
 	The following example shows how to specify the name of the user that will connect to the specified database with the **-u** option. If the **-u** option is not specified, **PUBLIC** that has the lowest level of authorization will be specified as a user. If the user name is not valid, an error message is displayed and the **csql** utility is terminated. If there is a password for the user name you specify, you will be prompted to enter the password. ::
 
 		csql -u DBA demodb
 
-.. option:: -p
+.. option:: -p, --password=ARG
 
 	The following example shows how to enter the password of the user specified with the **-p** option. Especially since there is no prompt to enter a password for the user you specify in a batch mode, you must enter the password using the **-p** option. When you enter an incorrect password, an error message is displayed and the **csql** utility is terminated. ::
 
 		csql -u DBA -p *** demodb
 
-.. option:: -s
+.. option:: -s, --single-line
 
 	As an option used with the **-i** option, it executes multiple SQL statement one by one in a file with the **-s** option. This option is useful to allocate less memory for query execution and each SQL statement is separated by semicolons (;). If it is not specified, multiple SQL statements are retrieved and executed at once. ::
 
 		csql -s -i infile demodb
 
-.. option:: -c
+.. option:: -c, --command=ARG
 
 	The following example shows how to execute more than one SQL statement from the shell with the **-c** option. Multiple statements are separated by semicolons (;). ::
 
 		csql -c "select * from olympic;select * from stadium" demodb
 
-.. option:: -l
+.. option:: -l, --line-output
 
-	The following example shows how to display the execution results of the SQL statement in a line format with the **-l** option. The execution results will be output in a column format if the **-l** option is not specified. ::
+	With **-l** option, you can display the values of SELECT lists by line. If **-l** option is omitted, all SELECT lists of the result record are displayed in one line. ::
 
 		csql -l demodb
 
-.. option:: -e
+.. option:: -e, --error-continue 
 
 	The following example shows how to ignore errors and keep execution even though semantic or runtime errors occur with the **-e** option. However, if any SQL statements have syntax errors, query execution stops after errors occur despite specifying the **-e** option. ::
 
@@ -197,7 +205,7 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
 		1 command(s) successfully processed.
 
-.. option:: -r
+.. option:: -r, --read-only
 
 	You can connect to the read-only database with the **-r** option. Retrieving data is only allowed in the read-only database; creating databases and entering data are not allowed. ::
 
@@ -221,64 +229,14 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
 		csql --no-single-line demodb
 
-**Session Commands**
-
-In addition to SQL statements, CSQL Interpreter provides special commands allowing you to control the Interpreter. These commands are called session commands. All the session commands must start with a semicolon (;).
-
 .. _csql-session-commands:
 
 Session Commands
 ================
 
+In addition to SQL statements, CSQL Interpreter provides special commands allowing you to control the Interpreter. These commands are called session commands. All the session commands must start with a semicolon (;).
+
 Enter the **;help** command to display a list of the session commands available in the CSQL Interpreter. Note that only the uppercase letters of each session command are required to make the CSQL Interpreter to recognize it. Session commands are not case-sensitive. ::
-
-	csql> ;help
-
-	=== <Help: Session Command Summary> ===
-
-
-	   All session commands should be prefixed by `;' and only blanks/tabs
-	   can precede the prefix. Capitalized characters represent the minimum
-	   abbreviation that you need to enter to execute the specified command.
-
-	   ;REAd   [<file-name>]       - read a file into command buffer.
-	   ;Write  [<file-name>]       - (over)write command buffer into a file.
-	   ;APpend [<file-name>]       - append command buffer into a file.
-	   ;PRINT                      - print command buffer.
-	   ;SHELL                      - invoke shell.
-	   ;CD                         - change current working directory.
-	   ;EXit                       - exit program.
-
-	   ;CLear                      - clear command buffer.
-	   ;EDIT                       - invoke system editor with command buffer.
-	   ;List                       - display the content of command buffer.
-
-	   ;RUn                        - execute sql in command buffer.
-	   ;Xrun                       - execute sql in command buffer,
-									 and clear the command buffer.
-	   ;COmmit                     - commit the current transaction.
-	   ;ROllback                   - roll back the current transaction.
-	   ;AUtocommit [ON|OFF]        - enable/disable auto commit mode.
-	   ;REStart                    - restart database.
-
-	   ;SHELL_Cmd  [shell-cmd]     - set default shell, editor, print and pager
-	   ;EDITOR_Cmd [editor-cmd]      command to new one, or display the current
-	   ;PRINT_Cmd  [print-cmd]       one, respectively.
-	   ;PAger_cmd  [pager-cmd]
-
-	   ;DATE                       - display the local time, date.
-	   ;DATAbase                   - display the name of database being accessed.
-	   ;SChema class-name          - display schema information of a class.
-	   ;TRigger [`*'|trigger-name] - display trigger definition.
-	   ;Get system_parameter       - get the value of a system parameter.
-	   ;SEt system_parameter=value - set the value of a system parameter.
-	   ;PLan [simple/detail/off]   - show query execution plan.
-	   ;Info <command>             - display internal information.
-	   ;TIme [ON/OFF]              - enable/disable to display the query
-									 execution time.
-	   ;HISTORYList                - display list of the executed queries.
-	   ;HISTORYRead <history_num>  - read entry on the history number into command buffer.
-	   ;HElp                       - display this help message.
 
 **Reading SQL statements from a file (;REAd)**
 
@@ -338,6 +296,41 @@ The **;SHELL_Cmd** command registers a shell command to execute with the **SHELL
 	drwxr-xr-x  4 DBA cubrid   4096 Jul 29 16:14 cubridmanager
 	csql>
 
+**Registering a pager command (;PAger_cmd)**
+
+The ;PAger_cmd command registers a pager command to display the query result. The way of displaying is decided by the registered command. The default is **more**. Also **cat** and **less** can be used. But ;Pager_cmd command works well only on Linux.
+
+When you register pager command as more, the query result shows by page and wait until you press the space key. ::
+
+	csql>;pa more
+	
+When you register pager command as cat, the query result shows all in one display without paging. ::
+ 	
+	csql>;pa cat
+
+When you redirect the output with a file, the total query result will be written on the file. ::
+
+	csql>;pa cat > output.txt
+
+If you register pager command as less, you can forward, backward the query result. Also pattern matching on the query result is possible. ::
+
+	csql>;pa less
+	
+The keyboard commands used on the **less** are as follows.
+
+* Page UP, b: go up to one page. (backwording)
+
+* Page Down, Space: go down to one page (forwarding)
+
+* /string: find a sting on the query results
+
+* n: find the next string
+
+* N: find the previous string
+
+* q: quit the paging mode.
+	
+	
 **Changing the current working directory (;CD)**
 
 This command changes the current working directory where the CSQL Interpreter is running to the specified directory. If you don't specify the path, the directory will be changed to the home directory. ::
@@ -593,7 +586,7 @@ This example shows the server statistics information for current connection. For
 
 **Displaying query execution time (;TIme)**
 
-The **;TIme** session command can be set to display the elapsed time to execute the query. It can be set to **ON** or **OFF**. The current setting is displayed if there is no value specified.
+The **;TIme** session command can be set to display the elapsed time to execute the query. It can be set to **ON** or **OFF**. The current setting is displayed if there is no value specified. The default value is **ON**.
 
 The **SELECT** query includes the time of outputting the fetched records. Therefore, to check the execution time of complete output of all records in the **SELECT** query, use the **--no-pager** option while executing the CSQC interpreter. ::
 
@@ -602,6 +595,27 @@ The **SELECT** query includes the time of outputting the fetched records. Theref
 	csql> ;ti
 	TIME IS ON
 
+**Displaying a column of result record in one line(;LINe-output)**
+
+If this value is set to ON, it would make the record display in several lines by column. The default value is OFF, which makes one record display in one line. ::
+
+	csql> ;LIN OFF
+	csql> select * from athlete;
+	 
+	=== <Result of SELECT Command in Line 1> ===
+	 
+	<00001> code       : 10999
+			name       : 'Fernandez Jesus'
+			gender     : 'M'
+			nation_code: 'ESP'
+			event      : 'Handball'
+	<00002> code       : 10998
+			name       : 'Fernandez Jaime'
+			gender     : 'M'
+			nation_code: 'AUS'
+			event      : 'Rowing'
+	...
+	
 **Displaying query history (;HISTORYList)**
 
 This command displays the list that contains previously executed commands (input) and their history numbers. ::

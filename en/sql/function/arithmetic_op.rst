@@ -60,6 +60,8 @@ For arithmetic operators, there are binary operators for addition, subtraction, 
 *   *set_arithmetic_operator* : A set arithmetic operator that performs operations such as union, difference and intersection on collection type operands.
 *   *arithmetic_operator* : An operator to perform the four fundamental arithmetic operations.
 
+.. _numeric-data-type-op-and-conversion:
+
 Arithmetic Operations and Type Casting of Numeric Data Types
 ============================================================
 

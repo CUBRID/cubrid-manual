@@ -94,10 +94,11 @@ As shown below, the partition key value in a range partition is **NULL**, the da
 
 	INSERT INTO participant2 VALUES(NULL, 'AAA', 0, 0, 0);
 	
-**Remark**
+.. note::
 
-*   The maximum number of partitions possible for a given table is 1024.
-*   If the partition key value is **NULL**, the data is stored in the first partition (see Example 2).
+	*   The maximum number of partitions possible for a given table is 1024.
+	
+	*   If the partition key value is **NULL**, the data is stored in the first partition (see Example 2).
 
 .. _range-partitioning-redefinition:
 
@@ -139,11 +140,13 @@ The following example shows how to combine two partitions redefined in Example 1
 	ALTER TABLE participant2 REORGANIZE PARTITION before_1996, before_2000 INTO
 	(PARTITION before_2000 VALUES LESS THAN (2000) );
 
-**Remark**
+.. note::
 
-*   When redefining a range or list partition, duplicate ranges or values are not allowed.
-*   The **REORGANIZE PARTITION** clause cannot be used to change the partition table type. For example, a range partition cannot be changed to a hash partition, or vice versa.
-*   The maximum number of partitions cannot exceed 1,024. There must be at least one partition remaining after deleting partitions. In a range-partitioned table, only adjacent partitions can be redefined.
+	*   When redefining a range or list partition, duplicate ranges or values are not allowed.
+	
+	*   The **REORGANIZE PARTITION** clause cannot be used to change the partition table type. For example, a range partition cannot be changed to a hash partition, or vice versa.
+	
+	*   The maximum number of partitions cannot exceed 1,024. There must be at least one partition remaining after deleting partitions. In a range-partitioned table, only adjacent partitions can be redefined.
 
 Adding Range Partitioning
 -------------------------
@@ -166,11 +169,11 @@ Currently, the partition before the 2008 Olympic Games is defined in the *partic
 	PARTITION before_2012 VALUES LESS THAN (2012),
 	PARTITION before_2016 VALUES LESS THAN MAXVALUE );
 
-**Remark**
+.. note::
 
-*   When a range partition is added, only the partition by value greater than the existing partition value can be added. Therefore, as shown in the above example, if the maximum value is specified by **MAXVALUE**, no more partitions can be added (you can add partitions by changing the **MAXVALUE** value by redefining the partition).
+	*   When a range partition is added, only the partition by value greater than the existing partition value can be added. Therefore, as shown in the above example, if the maximum value is specified by **MAXVALUE**, no more partitions can be added (you can add partitions by changing the **MAXVALUE** value by redefining the partition).
 
-*   To add the partition by value smaller than the existing partition value, use the redefining partitions (see :ref:`range-partitioning-redefinition`).
+	*   To add the partition by value smaller than the existing partition value, use the redefining partitions (see :ref:`range-partitioning-redefinition`).
 
 Dropping Range Partitioning
 ---------------------------
@@ -189,11 +192,13 @@ The following example shows how to drop the *before_2000* partition in the *part
 
 	ALTER TABLE participant2 DROP PARTITION before_2000;
 
-**Remark**
+.. note::
 
-*   When dropping a partitioned table, all stored data in the partition are also dropped.
-*   If you want to change the partitioning of a table without losing data, use the **ALTER TABLE** ... **REORGANIZE PARTITION** statement.
-*   The number of rows deleted is not returned when a partition is dropped. If you want to delete the data, but want to maintain the table and partitions, use the **DELETE** statement.
+	*   When dropping a partitioned table, all stored data in the partition are also dropped.
+	
+	*   If you want to change the partitioning of a table without losing data, use the **ALTER TABLE** ... **REORGANIZE PARTITION** statement.
+	
+	*   The number of rows deleted is not returned when a partition is dropped. If you want to delete the data, but want to maintain the table and partitions, use the **DELETE** statement.
 
 Hash Partitioning
 =================
@@ -233,9 +238,9 @@ The following example shows how to insert data to the hash partition created in 
 	INSERT INTO nation2 VALUES ('CHN','China');
 	INSERT INTO nation2 VALUES (NULL,'AAA');
 
-**Remark**
+.. note::
 
-The maximum number of partitions cannot exceed 1024.
+	The maximum number of partitions cannot exceed 1024.
 
 Hash Partitioning Redefinition
 ------------------------------
@@ -254,11 +259,13 @@ The following example shows how to decrease the number of partitions in the *nat
 
 	ALTER TABLE nation2 COALESCE PARTITION 1;
 
-**Remark**
+.. note::
 
-*   Decreasing the number of partitions is only available.
-*   To increase the number of partitions, use the **ALTER TABLE** ... **ADD PARTITION** statement as in range partitioning.
-*   There must be at least one partition remaining after redefining partitions.
+	*   Decreasing the number of partitions is only available.
+	
+	*   To increase the number of partitions, use the **ALTER TABLE** ... **ADD PARTITION** statement as in range partitioning.
+	
+	*   There must be at least one partition remaining after redefining partitions.
 
 List Partitioning
 =================
@@ -312,9 +319,9 @@ The following example shows in which an error occurs with no data inserted when 
 	PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
 	PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball', NULL));
 
-**Remark**
+.. note::
 
-*   The maximum number of partitions cannot exceed 1,024.
+	The maximum number of partitions cannot exceed 1,024.
 
 List Partitioning Redefinition
 ------------------------------
@@ -397,7 +404,7 @@ The following example shows how to create the *athlete2* table to be partitioned
 
 	INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
 	INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
-	INSERT INTO athlete2 VALUES ('Moon Dae-Sung','Taekwondo');
+	INSERT INTO athlete2 VALUES ('Lee Sun-Hee','Taekwondo');
 	INSERT INTO athlete2 VALUES ('Cho In-Chul', 'Judo');
 
 	SELECT * from athlete2__p__event1;
@@ -408,12 +415,12 @@ The following example shows how to create the *athlete2* table to be partitioned
 	SELECT * from athlete2__p__event2;
 	  name                  event
 	============================================
-	  'Moon Dae-Sung'       'Taekwondo'
+	  'Lee Sun-Hee'         'Taekwondo'
 	  'Cho In-Chul'         'Judo'
 
-**Remark**
+.. note::
 
-*   Data manipulation such as insert, update and delete for each partition of the partitioned table is not allowed.
+	Direct data manipulation such as insert, update and delete for each partition of the partitioned table is not allowed.
 
 Moving Data by Changing Partitioning Key Value
 ----------------------------------------------
@@ -446,9 +453,9 @@ The following example shows how to move the instance to another partition by cha
 	  'Lee Seung-Yuop'      'Baseball'
 	  'Hwang Young-Cho'     'Football'
 
-**Remark**
+.. note::
 
-Be aware that when moving data between partitions by changing a partition key value, it can cause performance degradation due to internal deletions and insertions.
+	Be aware that when moving data between partitions by changing a partition key value, it can cause performance degradation due to internal deletions and insertions.
 
 Local Index and Global Index for Partitioning
 ---------------------------------------------
@@ -504,18 +511,19 @@ The following example shows how to specify the search condition to make a partit
 	 
 	SELECT * FROM manager WHERE code = 10053;
 
-**Remark**
+.. note::
 
-*   The partition expression and the value compared must be in the same format.
-*   To enable pruning for hash partitioning and list partitioning, use the following partitioning key expression in the **WHERE** clause. The following constant expression does not include any table columns and any other conditions are not allowed.
+	*   The partition expression and the value compared must be in the same format.
+	
+	*   To enable pruning for hash partitioning and list partitioning, use the following partitioning key expression in the **WHERE** clause. The following constant expression does not include any table columns and any other conditions are not allowed.
 
-    *   <*partitioning key*> = <*constant expression*>
-    *   <*partitioning key*> { IN | = SOME | = ANY } ( <*constant expression list*> )
+		*   <*partitioning key*> = <*constant expression*>
+		*   <*partitioning key*> { IN | = SOME | = ANY } ( <*constant expression list*> )
 
-*   To enable pruning for range partitioning, use the following partitioning key expression in the **WHERE** clause.
+	*   To enable pruning for range partitioning, use the following partitioning key expression in the **WHERE** clause.
 
-    *   <*partitioning key*> { < | > | = | <= | >= | } <*constant expression*>
-    *   <*partitioning key*> BETWEEN <*constant expression*> AND <*constant expression*>
+		*   <*partitioning key*> { < | > | = | <= | >= | } <*constant expression*>
+		*   <*partitioning key*> BETWEEN <*constant expression*> AND <*constant expression*>
 
 Partitioning Management
 =======================
@@ -558,9 +566,9 @@ The following are examples of altering the record table into a range, list and h
 	ALTER TABLE record
 	PARTITION BY HASH (score) PARTITIONS 4;
 
-**Remark**
+.. note::
 
-If there is data that does not satisfy the partition condition, partitions cannot be defined.
+	If there is data that does not satisfy the partition condition, partitions cannot be defined.
 
 Altering Partitioning Table into Regular Table
 ----------------------------------------------

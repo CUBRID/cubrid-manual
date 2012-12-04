@@ -53,7 +53,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
     *   **ALL** : Retrieves all records of the table.
     *   **DISTINCT** : Retrieves only records with unique values without allowing duplicates. **DISTINCT**, **DISTINCTROW**, and **UNIQUE** are used interchangeably.
 
-*   *select_expression* :
+*   <*select_expressions*> :
 
     *   *: By using **SELECT** * statement, you can retrieve all the columns from the table specified in the **FROM** clause.
 	*   *expression_comma_list* : *expression* can be a path expression (ex.: *tbl_name.col_name*), variable or table name. All general expressions including arithmetic operations can also be used. Use a comma (,) to separate each expression in the list. You can specify aliases by using the **AS** keyword for columns or expressions to be queried. Specified aliases are used as column names in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of a column is assigned based on the order in which the column was specified. The starting value is 1.

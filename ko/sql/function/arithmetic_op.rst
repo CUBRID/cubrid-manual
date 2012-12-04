@@ -60,6 +60,8 @@
 *   *set_arithmetic_operator* : 컬렉션 타입의 피연산자에 대해 합집합, 차집합, 교집합을 수행하는 집합 산술 연산자이다.
 *   *arithmetic_operator* : 사칙 연산을 수행하기 위한 연산자이다.
 
+.. _numeric-data-type-op-and-conversion:
+
 수치형 데이터 타입의 산술 연산과 타입 변환
 ==========================================
 

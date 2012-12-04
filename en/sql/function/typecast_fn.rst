@@ -311,7 +311,7 @@ Data Type Casting Functions and Operators
 
 	Cipher identifier and decimal point symbol is output in the format according to the specified language. The language used is the language specified in the **intl_number_lang** system parameter. When the value of **intl_number_lang** is not set, the language specified in the **CUBRID_LANG** environment variable is used. For example, when the language is one of the European languages, such as "de_DE" or "fr_FR" is interpreted as the cipher identifier and "," as the decimal point symbol (see :ref:`Default output of number by language <tochar-default-number-format>` of the :func:`TO_CHAR`.
 
-	:param x, dec: An expression that returns a numeric value
+	:param x,dec: An expression that returns a numeric value
 	:rtype: STRING
 
 	The following example shows command execution by setting the value of the **intl_number_lang system** parameter to "en_US".

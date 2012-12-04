@@ -12,7 +12,7 @@ CREATE INDEX
 ::
 
 	CREATE [ REVERSE ] [ UNIQUE ] INDEX index_name
-	ON table_name <index_col_desc> [ ; ]
+	ON table_name <index_col_desc>
 	 
 	<index_col_desc> ::=
 		( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]

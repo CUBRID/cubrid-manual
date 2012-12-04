@@ -129,7 +129,7 @@ yum 명령어를 사용하여 CUBRID를 설치하려면, CUBRID 패키지의 위
 
 이전 버전을 설치하려면 다음과 같이 명령에 버전을 포함해야 한다. ::
 
-	$ yum install cubrid-9.0.0
+	$ yum install cubrid-8.4.3
 
 설치를 완료하면 CUBRID 경로를 포함한 환경 변수들을 설정하고, 이를 시스템에 적용한다.
 
@@ -146,7 +146,7 @@ CUBRID 최신 버전을 설치하려면 다음 명령을 실행한다. ::
 
 이전 버전을 설치하려면 다음과 같이 명령에 버전을 포함해야 한다. ::
 
-	$ sudo apt-get install cubrid-9.0.0
+	$ sudo apt-get install cubrid-8.4.3
 
 설치를 완료하면 CUBRID 경로를 포함한 환경 변수들을 설정하고, 이를 시스템에 적용한다.
 

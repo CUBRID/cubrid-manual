@@ -40,7 +40,7 @@ Numeric data types are divided into exact and approximate types. Exact numeric d
 
 CUBRID does not support the UNSIGNED type for numeric data types.
 
-On the above table, two types on the same cell are identical types but it always prints the above type name when you execute **SHOW COLUMNS** statement. For example, you can use both **SHORT** and **SMALLINT** and it prints "SHORT" when you execute **SHOW COLUMNS** statement.
+On the above table, two types on the same cell are identical types but it always prints the above type name when you execute **SHOW COLUMNS** statement. For example, you can use both **SHORT** and **SMALLINT** when you create a table, but it prints "SHORT" when you execute **SHOW COLUMNS** statement.
 
 **Precision and Scale**
 
@@ -118,6 +118,7 @@ NUMERIC/DECIMAL
 *   Precision must be equal to or greater than scale.
 *   Precision must be equal to or greater than the number of integer digits + scale.
 *   **NUMERIC**, **DECIMAL**, and **DEC** are used interchangeably.
+*   To check how the precision and the scale became changed when you operate with **NUMERIC** typed values, see :ref:`numeric-data-type-op-and-conversion`.
 
 **Example** ::
 
@@ -211,7 +212,7 @@ Date/time data types are used to represent the date or time (or both together). 
 
 *   From the CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 00 to 69 is converted into a number from 2000 to 2069; a number from 70 to 99 is converted into a number from 1970 to 1999. In earlier than CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 01 to 99 is converted into a number from 0001 to 0099.
 
-*   The range of **TIMESTAMP** is between 1970-01-01 00:00:01 - 2038-01-19 03 03:14:07 (GMT). For KST (GMT+9), values from 1970-01-01 00:00:01 to 2038-01-19 12:14:07 can be stored.
+*   The range of **TIMESTAMP** is between 1970-01-01 00:00:01 - 2038-01-19 03 03:14:07 (GMT). For KST (GMT+9), values from 1970-01-01 00:00:01 to 2038-01-19 12:14:07 can be stored. timestamp'1970-01-01 00:00:00' (GMT) is the same as timestamp'0000-00-00 00:00:00'.
 
 *   The results of date, time and timestamp operations may depend on the rounding mode. In these cases, for Time and Timestamp, the most approximate second is used as the minimum resolution; for Date, the most approximate date is used as the minimum resolution.
 
@@ -629,7 +630,7 @@ Automatic coercion is performed between a fixed-length and a variable-length bit
 BIT(n)
 ------
 
-Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1. If *n* is not specified, the length is set to 1. The bit string is filled with 4-bit values from the left side. For example, the value of B'1' is the same as of B'1000'.
+Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1. If *n* is not specified, the length is set to 1. The bit string is filled with 4-bit values from the left side. For example, the value of B'1' is the same as the value of B'1000'.
 
 *   *n* must be a number greater than 0.
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
@@ -659,7 +660,7 @@ Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*),
 BIT VARYING(n)
 --------------
 
-A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1,073,741,823 (maximum value). *n* is the maximum number of bits. If *n* is not specified, the maximum length is set to 1,073,741,823. The bit string is filled with 4-bit values from the left side. For example, the value of B'1' is the same as B'1000'.
+A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1,073,741,823 (maximum value). *n* is the maximum number of bits. If *n* is not specified, the maximum length is set to 1,073,741,823. The bit string is filled with 4-bit values from the left side. For example, the value of B'1' is the same as the value of B'1000'.
 
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
 *   The remainder of the string is not filled with 0s even if a bit string smaller than *n* is stored.
@@ -737,7 +738,7 @@ The maximum length of a **CHAR** or **VARCHAR** type to be specified is 1,073,74
 
 A character set (charset) is a set in which rules are defined that relate to what kind of codes can be used for encoding when specified characters (symbols) are stored in the computer.
 
-The characted used by CUBRID can be configued as the as the **CUBRID_LANG** environment variable. For details, see :doc:`/admin/i18n`.
+The characted used by CUBRID can be configued as the **CUBRID_LANG** environment variable. For details, see :doc:`/admin/i18n`.
 
 **Collating Character Sets**
 
@@ -1634,8 +1635,8 @@ Allowing multiple data values to be stored in a single attribute is an extended 
 | **MULTISET** | A union which allows duplicates                                       | col_name MULTISET VARCHAR(20)   | {'c','c','c','b','b','a'}  | {'a','b','b','c','c','c'}  |
 |              |                                                                       | col_name MULTISET (VARCHAR(20)) | {'c','c','c','b','b','a'}  | {'a','b','b', 'c','c','c'} |
 +--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
-| LIST         | A union which allows duplicates and stores data in the order of input | col_name LIST VARCHAR(20)       | {'c','c','c','b','b','a'}  | {'c','c','c','b','b','a'}  |
-| SEQUENCE     |                                                                       | col_name LIST (VARCHAR(20))     | {'c','c','c','b','b', 'a'} | {'c','c','c','b','b','a'}  |
+| **LIST** or  | A union which allows duplicates and stores data in the order of input | col_name LIST VARCHAR(20)       | {'c','c','c','b','b','a'}  | {'c','c','c','b','b','a'}  |
+| **SEQUENCE   |                                                                       | col_name LIST (VARCHAR(20))     | {'c','c','c','b','b', 'a'} | {'c','c','c','b','b','a'}  |
 +--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
 
 As you see the table above, the value specified as a collection type can be inputted with curly braces ('{', '}') each value is separated with a comma (,).

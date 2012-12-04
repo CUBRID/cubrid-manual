@@ -289,11 +289,11 @@ Date/Time Functions and Operators
 
 .. function:: DATEDIFF (date1, date2)
 
-	The **DATEDIFF** function returns the difference between two arguments as an integer representing the number of days. Arguments that can be specified are **DATE**, **TIMESTAMP** and **DATETIME** types and it return value is only **INTEGER** type.
+	The **DATEDIFF** function returns the difference between two arguments as an integer representing the number of days. Arguments that can be specified are **DATE**, **TIMESTAMP** and **DATETIME** types and it's return value is only **INTEGER** type.
 
 	If every input argument value of date and time is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
-	:param date1, date2: Specifies the types that include date (**DATE**, **TIMESTAMP** or **DATETIME**) type or string that represents the value of corresponding type. If invalid string is specified, an error is returned.
+	:param date1,date2: Specifies the types that include date (**DATE**, **TIMESTAMP** or **DATETIME**) type or string that represents the value of corresponding type. If invalid string is specified, an error is returned.
 	:rtype: INT
 
 	.. code-block:: sql
@@ -318,7 +318,7 @@ Date/Time Functions and Operators
 
 	:param date: It is a **DATE** or **TIMESTAMP** expression that represents the start date. If an invalid **DATE** value such as '2006-07-00' is specified, **NULL** is returned.
 	:param expr: It represents the interval value to be subtracted from the start date. If a negative number is specified next to the **INTERVAL** keyword, the interval value is added to the start date.
-	:param date: It represents the unit of the interval value specified in the *exp* expression. To check the expr argument for the unit value, see the table of :func:`ADDDATE`.
+	:param unit: It represents the unit of the interval value specified in the *exp* expression. To check the expr argument for the unit value, see the table of :func:`ADDDATE`.
 	:rtype: DATE or DATETIME
 
 	.. code-block:: sql

@@ -94,10 +94,11 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 	INSERT INTO participant2 VALUES(NULL, 'AAA', 0, 0, 0);
 
-**주의 사항**
+.. note::
 
-*   한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
-*   분할 키 값이 **NULL** 이면, 첫 번째 분할에 저장된다
+	*   한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
+	
+	*   분할 키 값이 **NULL** 이면, 첫 번째 분할에 저장된다
 
 .. _range-partitioning-redefinition:
 
@@ -139,11 +140,13 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	ALTER TABLE participant2 REORGANIZE PARTITION before_1996, before_2000 INTO
 	(PARTITION before_2000 VALUES LESS THAN (2000) );
 
-**주의 사항**
+.. note::
 
-*   영역 및 리스트 분할 테이블을 재정의할 때, 새로운 분할 테이블에는 중복된 영역이나 값은 허용되지 않는다.
-*   **REORGANIZE PARTITION** 절을 사용해 테이블의 분할 종류를 변경할 수 없다. 예를 들어, 영역 분할을 해시 분할로 변경할 수 없으며, 그 반대도 마찬가지이다.
-*   분할 추가 후 최대 분할의 개수는 1,024개를 넘지 못하며, 분할 삭제 후 최소 1개 이상의 분할이 남아 있어야 한다. 영역 분할 테이블은 인접한 분할만 재정의할 수 있다.
+	*   영역 및 리스트 분할 테이블을 재정의할 때, 새로운 분할 테이블에는 중복된 영역이나 값은 허용되지 않는다.
+	
+	*   **REORGANIZE PARTITION** 절을 사용해 테이블의 분할 종류를 변경할 수 없다. 예를 들어, 영역 분할을 해시 분할로 변경할 수 없으며, 그 반대도 마찬가지이다.
+	
+	*   분할 추가 후 최대 분할의 개수는 1,024개를 넘지 못하며, 분할 삭제 후 최소 1개 이상의 분할이 남아 있어야 한다. 영역 분할 테이블은 인접한 분할만 재정의할 수 있다.
 
 .. _range-partitioning-append:
 
@@ -168,11 +171,11 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	PARTITION before_2012 VALUES LESS THAN (2012),
 	PARTITION before_2016 VALUES LESS THAN MAXVALUE );
 
-**주의 사항**
+.. note::
 
-*   영역 분할을 추가할 때는 분할 기준 값이 기존의 분할보다 큰 값만 추가할 수 있다. 따라서, 위의 예제처럼 **MAXVALUE** 로 최대값을 설정하면 더 이상 분할을 추가할 수 없다(분할 재정의를 통해서 **MAXVALUE** 를 다른 값으로 변경하면 분할 추가 가능).
+	*   영역 분할을 추가할 때는 분할 기준 값이 기존의 분할보다 큰 값만 추가할 수 있다. 따라서, 위의 예제처럼 **MAXVALUE** 로 최대값을 설정하면 더 이상 분할을 추가할 수 없다(분할 재정의를 통해서 **MAXVALUE** 를 다른 값으로 변경하면 분할 추가 가능).
 
-*   기존의 분할보다 작은 분할 기준 값을 추가하려면 분할 재정의를 이용한다(:ref:`range-partitioning-redefinition` 참조).
+	*   기존의 분할보다 작은 분할 기준 값을 추가하려면 분할 재정의를 이용한다(:ref:`range-partitioning-redefinition` 참조).
 
 영역 분할 삭제
 --------------
@@ -191,13 +194,13 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 	ALTER TABLE participant2 DROP PARTITION before_2000;
 
-**주의 사항**
+.. note::
 
-*   분할된 테이블을 삭제하면 해당 분할 내에 저장된 데이터도 모두 삭제된다.
-
-*   데이터는 유지한 채 테이블의 분할을 변경하는 경우 **ALTER TABLE** ... **REORGANIZE PARTITION** 문을 사용한다(:ref:`range-partitioning-redefinition` 참조).
-
-*   분할을 삭제할 경우 삭제된 행의 수를 반환하지 않는다. 테이블과 분할을 유지한 채로 데이터만 삭제하고 싶은 경우 **DELETE** 문을 수행한다.
+	*   분할된 테이블을 삭제하면 해당 분할 내에 저장된 데이터도 모두 삭제된다.
+	
+	*   데이터는 유지한 채 테이블의 분할을 변경하는 경우 **ALTER TABLE** ... **REORGANIZE PARTITION** 문을 사용한다(:ref:`range-partitioning-redefinition` 참조).
+	
+	*   분할을 삭제할 경우 삭제된 행의 수를 반환하지 않는다. 테이블과 분할을 유지한 채로 데이터만 삭제하고 싶은 경우 **DELETE** 문을 수행한다.
 
 해시 분할
 =========
@@ -237,9 +240,9 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	INSERT INTO nation2 VALUES ('CHN','China');
 	INSERT INTO nation2 VALUES (NULL,'AAA');
 
-**주의 사항**
+.. note::
 
-*   한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
+	한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
 
 해시 분할 재정의
 ----------------
@@ -258,11 +261,13 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 	ALTER TABLE nation2 COALESCE PARTITION 1;
 	
-**주의 사항**
+.. note::
 
-*   분할의 개수를 감소시키는 재편성 결합만 가능하다.
-*   분할의 수를 늘리고자 하는 경우에는 영역 분할에서와 같은 **ALTER TABLE** ... **ADD PARTITION** 구문을 이용한다(자세한 내용은 :ref:`range-partitioning-append` 참조).
-*   분할 재정의 후에 최소 1개 이상의 분할이 남아 있어야 한다.
+	*   분할의 개수를 감소시키는 재편성 결합만 가능하다.
+	
+	*   분할의 수를 늘리고자 하는 경우에는 영역 분할에서와 같은 **ALTER TABLE** ... **ADD PARTITION** 구문을 이용한다(자세한 내용은 :ref:`range-partitioning-append` 참조).
+	
+	*   분할 재정의 후에 최소 1개 이상의 분할이 남아 있어야 한다.
 
 리스트 분할
 ===========
@@ -316,9 +321,9 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
 	PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball', NULL));
 
-**주의 사항**
+.. note::
 
-*   한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
+	한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
 
 리스트 분할 재정의
 ------------------
@@ -401,7 +406,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 	INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
 	INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
-	INSERT INTO athlete2 VALUES ('Moon Dae-Sung','Taekwondo');
+	INSERT INTO athlete2 VALUES ('Lee Sun-Hee','Taekwondo');
 	INSERT INTO athlete2 VALUES ('Cho In-Chul', 'Judo');
 
 	SELECT * from athlete2__p__event1;
@@ -412,12 +417,12 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	SELECT * from athlete2__p__event2;
 	  name                  event
 	============================================
-	  'Moon Dae-Sung'       'Taekwondo'
+	  'Lee Sun-Hee'         'Taekwondo'
 	  'Cho In-Chul'         'Judo'
   
-**주의 사항**
+.. note:
 
-*   분할 테이블의 각 분할에 대해서 직접적인 데이터 삽입, 갱신, 삭제 등 데이터 조작은 허용되지 않는다.
+	분할 테이블의 각 분할에 대해서 직접적인 데이터 삽입, 갱신, 삭제 등 데이터 조작은 허용되지 않는다.
 
 분할 키 값의 변경에 의한 데이터 이동
 ------------------------------------
@@ -454,9 +459,9 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	  'Lee Seung-Yuop'      'Baseball'
 	  'Hwang Young-Cho'     'Football'
   
-**주의 사항**
+.. note::
 
-분할 키 값의 변경에 의한 분할 간 데이터 이동은 내부적으로 삭제와 삽입을 수반하여 성능 저하의 원인이 될 수 있으므로 사용에 주의한다.
+	분할 키 값의 변경에 의한 분할 간 데이터 이동은 내부적으로 삭제와 삽입을 수반하여 성능 저하의 원인이 될 수 있으므로 사용에 주의한다.
 
 분할에 대한 로컬 인덱스와 글로벌 인덱스
 ---------------------------------------
@@ -512,19 +517,19 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	 
 	SELECT * FROM manager WHERE code = 10053;
 
-**주의 사항**
+.. note::
 
-*   분할 표현식의 결과와 비교되는 값은 같은 형식이어야 한다.
-
-*   해시 분할과 리스트 분할에서 프루닝이 가능하려면 **WHERE** 절에 다음의 분할 키 표현식을 사용해야 한다. 아래의 상수 표현식은 테이블 칼럼을 포함하지 않는 표현식이며, 다른 조건은 사용할 수 없다.
-
-    *   < *분할 키* > = < *상수 표현식* >
-    *   < *분할 키* > { IN | = SOME | = ANY } ( < *상수 표현식 리스트* > )
-
-*   영역 분할에서 프루닝이 가능하려면 **WHERE** 절에 다음의 분할 키 표현식을 사용해야 한다.
-
-    *   < *분할 키* > { < | > | = | <= | >= | } < *상수 표현식* >
-    *   < *분할 키* > BETWEEN < *상수 표현식* > AND < *상수 표현식* >
+	* 분할 표현식과 비교되는 값은 서로 같은 형식이어야 한다.
+	
+	* 해시 분할과 리스트 분할에서 프루닝이 가능하려면 **WHERE** 절에 다음의 분할 키 표현식을 사용해야 한다. 아래의 상수 표현식은 테이블 칼럼을 포함하지 않는 표현식이며, 다른 조건은 사용할 수 없다.
+	
+		* < *분할 키* > = < *상수 표현식* >
+		* < *분할 키* > { IN | = SOME | = ANY } ( < *상수 표현식 리스트* > )
+		
+	* 영역 분할에서 프루닝이 가능하려면 **WHERE** 절에 다음의 분할 키 표현식을 사용해야 한다.
+	
+		* < *분할 키* > { < | > | = | <= | >= | } < *상수 표현식* >
+		* < *분할 키* > BETWEEN < *상수 표현식* > AND < *상수 표현식* >
 
 분할 관리
 =========
@@ -567,9 +572,9 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	ALTER TABLE record
 	PARTITION BY HASH (score) PARTITIONS 4;
 
-**주의 사항**
+.. note::
 
-*   분할 조건을 충족하지 않는 데이터가 존재하는 경우에는 분할이 정의되지 않는다.
+	분할 조건을 충족하지 않는 데이터가 존재하는 경우에는 분할이 정의되지 않는다.
 
 분할 테이블을 일반 테이블로 변경
 --------------------------------

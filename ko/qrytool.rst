@@ -16,8 +16,7 @@ CSQL 인터프리터는 셸에서 다음과 같이 시작할 수 있다. 처음 
 
 	% csql demodb
 
-			CUBRID SQL Interpreter
-
+	CUBRID SQL Interpreter
 
 	Type `;help' for help messages.
 
@@ -40,7 +39,7 @@ CSQL 인터프리터는 셸에서 다음과 같이 시작할 수 있다. 처음 
 
 	   ;CLear                      - clear command buffer.
 	   ;EDIT                       - invoke system editor with command buffer.
-	   ;List                       - display the content of command buffer.
+	   ;LISt                       - display the content of command buffer.
 
 	   ;RUn                        - execute sql in command buffer.
 	   ;Xrun                       - execute sql in command buffer,
@@ -58,6 +57,7 @@ CSQL 인터프리터는 셸에서 다음과 같이 시작할 수 있다. 처음 
 	   ;DATE                       - display the local time, date.
 	   ;DATAbase                   - display the name of database being accessed.
 	   ;SChema class-name          - display schema information of a class.
+	   ;SYntax [sql-cmd-name]      - display syntax of a command.
 	   ;TRigger [`*'|trigger-name] - display trigger definition.
 	   ;Get system_parameter       - get the value of a system parameter.
 	   ;SEt system_parameter=value - set the value of a system parameter.
@@ -65,54 +65,17 @@ CSQL 인터프리터는 셸에서 다음과 같이 시작할 수 있다. 처음 
 	   ;Info <command>             - display internal information.
 	   ;TIme [ON/OFF]              - enable/disable to display the query
 									 execution time.
+	   ;LINe-output [ON/OFF]       - enable/disable to display each value in a line
 	   ;HISTORYList                - display list of the executed queries.
 	   ;HISTORYRead <history_num>  - read entry on the history number into command buffer.
 	   ;HElp                       - display this help message.
-
 
 **CSQL에서 SQL 실행**
 
 csql을 실행하고 난 후에는 csql> 프롬프트에서 원하는 SQL문을 입력해서 실행할 수 있다. 하나의 SQL 문은 세미콜론(;)으로 끝나도록 입력하며, 여러 개의 SQL문을 한 줄에 입력할 수도 있다. 세션 명령어는 ;help 명령으로 간단한 사용법을 찾아 볼 수 있으며 상세한 내용은 :ref:`csql-session-commands` 를 참고한다. ::
 
-	csql> select host_year, host_nation, host_city, opening_date, closing_date, mascot, slogan from olympic;
-
-	=== <Result of SELECT Command in Line 1> ===
-
-		host_year  host_nation           host_city             opening_date  closing_date  mascot                slogan              
-	=================================================================================================================================
-			 2004  'Greece'              'Athens'              08/13/2004    08/29/2004    'Athena  Phevos'      'Welcome Home'      
-			 2000  'Australia'           'Sydney'              09/15/2000    10/01/2000    'Olly Syd Millie'     'Share the Spirit'  
-			 1996  'USA'                 'Atlanta'             07/19/1996    08/09/1996    'Izzy'                'The Celebration of the Century'
-			 1992  'Spain'               'Barcelona'           07/25/1992    08/09/1992    'Cobi'                'Friends Forever'   
-			 1988  'Korea'               'Seoul'               09/17/1988    10/02/1988    'HODORI'              'Harmony and progress'
-			 1984  'USA'                 'Los Angeles'         07/28/1984    08/12/1984    'Sam'                 'Play part in History'
-			 1980  'USSR'                'Moscow'              07/19/1980    08/03/1980    'Misha'               NULL                
-			 1976  'Canada'              'Montreal'            07/17/1976    08/01/1976    'Amik'                NULL                
-			 1972  'Germany'             'Munich'              08/26/1972    09/10/1972    'Waldi'               NULL                
-			 1968  'Mexico'              'Mexico City'         10/12/1968    10/27/1968    NULL                  NULL                
-			 1964  'Japan'               'Tokyo'               10/10/1964    10/24/1964    NULL                  NULL                
-			 1960  'Italy'               'Rome'                08/25/1960    09/11/1960    NULL                  NULL                
-			 1956  'Australia'           'Melbourne'           11/22/1956    12/08/1956    NULL                  NULL                
-			 1952  'Finland'             'Helsinki'            07/19/1952    08/03/1952    NULL                  NULL                
-			 1948  'England'             'London'              07/29/1948    08/14/1948    NULL                  NULL                
-			 1936  'Germany'             'Berlin'              08/01/1936    08/16/1936    NULL                  NULL                
-			 1932  'USA'                 'Los Angeles'         07/30/1932    08/14/1932    NULL                  NULL                
-			 1928  'Netherlands'         'Amsterdam'           07/28/1928    08/12/1928    NULL                  NULL                
-			 1924  'France'              'Paris'               05/04/1924    07/27/1924    NULL                  NULL                
-			 1920  'Belgium'             'Antwerp'             04/20/1920    08/12/1920    NULL                  NULL                
-			 1912  'Sweden'              'Stockholm'           05/05/1912    07/22/1912    NULL                  NULL                
-			 1908  'United Kingdom'      'London'              04/27/1908    10/31/1908    NULL                  NULL                
-			 1904  'USA'                 'St. Louis'           07/01/1904    11/23/1904    NULL                  NULL                
-			 1900  'France'              'Paris'               05/14/1900    10/28/1900    NULL                  NULL                
-			 1896  'Greece'              'Athens'              04/06/1896    04/15/1896    NULL                  NULL                
-
-
-	25 rows selected.
-
-	Current transaction has been committed.
-
-	1 command(s) successfully processed.
-
+	% csql demodb
+	
 	csql> SELECT SUM(n) FROM (SELECT gold FROM participant WHERE nation_code='KOR'
 	csql> UNION ALL SELECT silver FROM participant WHERE nation_code='JPN') AS t(n);
 
@@ -124,7 +87,8 @@ csql을 실행하고 난 후에는 csql> 프롬프트에서 원하는 SQL문을 
 
 
 	1 row selected.
-
+	SQL statement execution time:     0.106504 sec
+	
 	Current transaction has been committed.
 
 	1 command(s) successfully processed.
@@ -133,28 +97,159 @@ csql을 실행하고 난 후에는 csql> 프롬프트에서 원하는 SQL문을 
 
 .. _cm-cqb:
 
-CUBRID 매니저, 쿼리 브라우저 사용
----------------------------------
+CUBRID 관리 도구
+----------------
 
-**CUBRID 매니저 서버 시작**
++--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
+|                          | 특징 요약                                                                   | 최신 파일 다운로드                                          | 최신 문서 바로가기                                              |
++==========================+=============================================================================+=============================================================+=================================================================+
+| CUBRID Web Manager       | SQL 실행 및 DB 운영을 위한 웹 기반 도구이다.                                | http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Web_Manager       | http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager       | 
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 1) 웹 브라우저로 접속 가능                                                  |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 2) CUBRID 설치 패키지에 내장되어 즉시 사용 가능(CUBRID 2008 R4.3 버전 이상) |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 3) 싱글 호스트 관리에 적합                                                  |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 4) CUBRID Manager 서버를 통해 DB 접속                                       |                                                             |                                                                 |
++--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
+| CUBRID Manager           | SQL 실행 및 DB 운영을 위한 Java 클라이언트 도구이다.                        | http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager           | http://www.cubrid.org/wiki_tools/entry/cubrid-manager           |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 1) JAVA 기반 관리 도구(JRE 1.6이상 요구)                                    |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 2) 최초 다운로드 후 이후 버전 업데이트는 자동 실행                          |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 3) 멀티 호스트 관리에 적합                                                  |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 4) CUBRID Manager 서버를 통해 DB 접속                                       |                                                             |                                                                 |
++--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
+| CUBRID Query Browser     | SQL 실행 전용 Java 클라이언트 도구이다.                                     | http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Query_Browser     | http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser     |
+|                          |                                                                             |                                                             |                                                                 |  
+|                          | 1) JAVA 기반 관리 도구(JRE 1.6이상 요구)                                    |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |  
+|                          | 2) 최초 다운로드 후 이후 버전 업데이트는 자동 실행                          |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |  
+|                          | 3) 멀티 호스트 환경에 적합                                                  |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |  
+|                          | 4) JDBC로 DB에 직접 접속                                                    |                                                             |                                                                 |
++--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
+| CUBRID Migration Toolkit | 소스 DB(MySQL, Oracle, CUBRID)에서 CUBRID로 데이터 및 스키마를 이전하는     | http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Migration_Toolkit | http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit | 
+|                          | Java 기반 클라이언트 도구이다.                                              |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |
+|                          | 1) JAVA 기반 관리 도구(JRE 1.6 이상 요구)                                   |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 2) 최초 다운로드 후 이후 버전 업데이트는 자동 실행                          |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 3) 다중 SQL문 실행 결과만 이전 가능, 작업 시나리오 재사용 가능하여          |                                                             |                                                                 |
+|                          | 배치 작업에 유리                                                            |                                                             |                                                                 |
+|                          |                                                                             |                                                             |                                                                 |   
+|                          | 4) JDBC로 DB에 직접 접속                                                    |                                                             |                                                                 |
++--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
 
-CUBRID 매니저 클라이언트를 사용하기 위해서는 CUBRID 매니저 서버가 반드시 구동되어야 하며, 이를 위해서는 CUBRID가 설치된 상태에서 **cubrid service start** 를 실행하면 된다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server` 를 참고한다.
+CUBRID 웹 매니저로 SQL 실행하기
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**CUBRID 매니저 클라이언트 시작**
+CUBRID 2008 R4.3 이상 버전부터는 설치 패키지에 웹 매니저가 포함되어 있으므로, DB 엔진 파일을 설치한 이후 즉시 웹 매니저를 사용할 수 있다.
 
-CUBRID 매니저는 CUBRID 데이터베이스 관리 및 질의 기능을 GUI 환경에서 제공하는 CUBRID 데이터베이스 전용 관리 도구로, 데이터베이스 서버 쪽에 존재하는 매니저 서버와 구분하기 위해 CUBRID 매니저 클라이언트라고도 한다. CUBRID 매니저 클라이언트는 Java 응용 프로그램으로 JRE 혹은 JDK 1.6 이상 버전에서만 실행된다.
+#. CUBRID Service를 시작한다. CUBRID Manager 서버가 구동되어야 웹 매니저가 정상 동작한다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server`  참고한다. ::
 
-CUBRID 매니저는 기본 사용자로 **admin** 이 설정되어 있으며, 비밀번호는 **admin** 이다. CUBRID 매니저의 사용자와 데이터베이스의 사용자는 분리되어 있음을 주의한다. CUBRID 매니저 사용자는 여러 개의 데이터베이스들을 구동/종료하거나, 브로커를 관리하는 등의 작업을 수행할 수 있다. 데이터베이스 사용자는 특정 데이터베이스에 대해 질의를 수행할 수 있다. 데이터베이스를 처음 설치하면 기본 사용자로 **PUBLIC** 과 **DBA** 가 설정되어 있으며, 둘 다 처음에는 비밀번호가 설정되어 있지 않다.
+	C:\CUBRID>cubrid service start
+	++ cubrid service is running.
+		
+#. 웹 브라우저 주소창에 https\://localhost:8282/로 접속한다. 기본 TCP 포트는 8282(HTTPS/SSL)를 사용하며, CUBRID/conf/cm_httpd.conf 파일을 편집하여 포트를 변경할 수 있다. 이때, http가 아니라 https로 입력해야만 하므로 주의한다.
 
-CUBRID 매니저 클라이언트 프로그램을 다운로드하거나 자세한 정보를 얻으려면 `http://www.cubrid.org/wiki_tools/entry/cubrid-manager <http://www.cubrid.org/wiki_tools/entry/cubrid-manager>`_ 를 참조한다.
+#. 먼저 호스트 로그인을 수행한다. 호스트 접속을 위해서 1차로 CM 서버 사용자(=호스트 사용자) 인증을 수행하며, 기본 사용자 이름/암호는 admin/admin이다.
 
-**CUBRID 쿼리 브라우저 시작**
+	.. image:: /images/gs_manager_login.png
 
-CUBRID 쿼리 브라우저는 CUBRID 매니저의 기능을 경량화하여 데이터베이스 운영 기능을 제외한 질의 기능만 제공하는 도구로, 이를 이용하여 질의문을 실행하거나 DDL을 메뉴로 실행할 수 있다.
+#. DB 서버에 접속한다. 왼쪽 트리에서 해당 호스트 내에 생성된 데이터베이스 목록을 확인할 수 있으며, 접속하고자 하는 DB를 클릭하고 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
 
-CUBRID 쿼리 브라우저와 CUBRID 매니저 클라이언트의 가장 큰 차이점은, CUBRID 쿼리 브라우저는 매니저 서버의 구동 여부와 관계없이 사용할 수 있다는 점이다. 따라서 CUBRID 쿼리 브라우저는 CUBRID 매니저용 사용자 계정이 필요없다. 하지만 CUBRID 쿼리 브라우저는 데이터베이스의 시작/ 종료, 데이터베이스/브로커/HA 모니터링 등을 수행할 수 없다.
+	.. image:: /images/gs_manager_db.png
 
-CUBRID 쿼리 브라우저 프로그램을 다운로드하거나 자세한 정보를 얻으려면 `http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_ 를 참조한다.
+#. 접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 접속한 데이터베이스에 존재하는 테이블 목록이 출력되고, SQL 탭에서 질의를 작성, 실행하고 결과를 확인할 수 있다.
+
+	.. image:: /images/gs_manager_screen.png
+
+보다 자세한 정보는 http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual 을 참고한다.
+
+CUBRID Manager 클라이언트로 SQL 실행하기
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CUBRID 매니저는 별도로 다운로드 한 후 실행해야 하는 클라이언트 도구이며, JRE 혹은 JDK 1.6 이상 버전에서 실행되는 Java 애플리케이션이다.
+
+#. CUBRID 매니저 최신 파일을 다운로드한 후 설치한다. CUBRID 매니저는 CUBRID 엔진 버전 2008 R2.2 이상부터 호환된다. 또한, 자동 업데이트 기능을 지원하므로 주기적으로 최신 버전을 유지하는 것이 좋다. 
+
+	(CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager )
+
+#. 서버에서 CUBRID Service를 시작한다. CUBRID Manager 서버가 구동되어야 CUBRID 매니저 클라이언트가 접속할 수 있다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server` 를 참고한다.
+
+::
+
+	C:\CUBRID>cubrid service start
+	++ cubrid service is running.
+	
+#. CUBRID Manager를 설치한 후 [파일 > 호스트 추가] 메뉴에서 호스트 정보를 등록한다. 호스트 등록 시에는 호스트 주소, 연결 포트(기본: 8001), CM 사용자 및 비밀번호를 입력해야 하며, 해당 서버의 엔진과 버전이 동일한 JDBC 드라이버를 설치해야 한다(자동 드라이버 검색/자동 업데이트 지원).
+
+#. 왼쪽에 노드 트리에서 호스트를 선택하고 CM 사용자(=호스트 사용자) 인증을 수행한다. 기본 사용자 계정은 admin/admin이다.
+
+#. 데이터베이스 노드에서 마우스 우클릭을 하여 새로운 데이터베이스를 생성하거나, 호스트 노드 하위에 있는 기존 데이터베이스를 선택하여 접속을 시도한다. 이때에는 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
+
+#. 접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 호스트, 데이터베이스, 테이블 목록이 출력되고, 오른쪽에는 질의 편집기와 질의 결과 창이 있다. [SQL 실행 이력] 탭에서는 DB별로 실행 성공한 SQL 리스트를 재사용할 수 있으며, [질의 다중 실행] 탭에서 결과 비교를 위한 DB를 추가하여 여러 데이터베이스에서 결과값을 쉽게 비교할 수 있다.
+
+	.. image:: /images/gs_manager_sql.png
+
+보다 자세한 정보는 http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr 을 참고한다.
+
+CUBRID 쿼리 브라우저로 SQL 실행하기
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CUBRID 쿼리 브라우저는 SQL 실행에만 중점을 둔 개발 도구로, CUBRID 매니저의 기능을 경량화한 도구이다. CUBRID 쿼리 브라우저가 CUBRID 매니저와 다른 점은 다음과 같다.
+
+
+* CUBRID 매니저 서버를 경유하지 않고 오직 JDBC만으로 통신한다.
+
+* 따라서 DB/브로커 운영 및 모니터링 기능이 지원되지 않는다.
+
+* 따라서 오직 DB 사용자 로그인만 수행하고 CM 사용자(=호스트 사용자) 로그인 과정이 필요 없다.
+
+* 서버 측 CUBRID 매니저 서버 구동이 필요 없다.
+
+CUBRID 쿼리 브라우저 역시 별도로 다운로드한 후 실행해야 하는 클라이언트 도구이며, JRE 혹은 JDK 1.6 이상 버전에서 실행되는 Java 애플리케이션이다.
+
+#. CUBRID 쿼리 브라우저 최신 파일을 다운로드한 후 설치한다. 서버측과 동일한 JDBC 드라이버만 추가하면 어느 버전의 엔진과도 호환된다. 또한, 자동 업데이트 기능을 지원하므로 주기적으로 최신 버전을 유지하는 것이 좋다. (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Query_Browser )
+
+#. CUBRID 쿼리 브라우저를 설치한 후 [파일 > 연결 정보 등록] 메뉴에서 데이터베이스 접속 정보를 등록한다. 이때, 브로커 주소, 브로커 연결 포트(기본: 33,000), DB 사용자 및 비밀번호를 입력해야 하며, 해당 서버의 엔진과 버전이 동일한 JDBC 드라이버를 설치해야 한다(자동 드라이버 검색/자동 업데이트 지원).
+
+#. 데이터베이스를 선택하여 접속을 시도한다. 이때에는 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
+
+#. 접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 호스트, 데이터베이스, 테이블 목록이 출력되고, 오른쪽에는 질의 편집기와 질의 결과 창이 있다. [SQL 실행 이력] 탭에서는 DB별로 실행 성공한 SQL 리스트를 재사용할 수 있으며, [질의 다중 실행] 탭에서 결과 비교를 위한 DB를 추가하여 여러 데이터베이스에서 결과값을 쉽게 비교할 수 있다.
+
+	.. image:: /images/gs_manager_qb.png
+
+보다 자세한 정보는 http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual_kr 을 참고한다.
+
+CUBRID 마이그레이션 툴킷으로 스키마/데이터 이전하기
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CUBRID 마이그레이션 툴킷은 소스 데이터베이스(MySQL, Oracle, CUBRID)에서 타겟 데이터베이스(CUBRID)로 데이터 및 스키마를 이전하는 도구이다. 역시 JRE 혹은 JDK 1.6 이상 버전에서 실행되는 Java 애플리케이션이며, 별도로 다운받아야 한다 (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Migration_Toolkit )
+
+DB를 CUBRID로 전환하는 경우, 장비를 이전하는 경우, 운영 DB로부터 일부 스키마와 일부 데이터를 이전하고자 하는 경우, CUBRID 버전 업그레이드를 하는 경우, 배치 작업을 수행하는 경우 유용하다. 주요 기능은 다음과 같다.
+
+* 전체/일부 스키마 및 데이터 마이그레이션 지원
+
+* 여러 개의 SQL을 실행하여 원하는 결과 데이터만 마이그레이션 가능
+
+* JDBC를 통한 온라인 마이그레이션 지원하여 운영 중단 없이 실행 가능
+
+* CSV, SQL, CUBRID loaddb 포맷으로 출력 후 오프라인 마이그레이션 가능
+
+* 마이그레이션 실행 스크립트를 추출하여 타겟 서버에서 직접 실행 가능
+
+* 마이그레이션 실행 스크립트를 재사용할 수 있어 배치 작업 시간 단축
+
+.. image:: /images/gs_manager_migration.png
+
+보다 자세한 정보는 http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit-manual 을 참고한다.
 
 CUBRID 드라이버의 사용
 ----------------------

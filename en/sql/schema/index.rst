@@ -5,10 +5,14 @@ Index Definition
 CREATE INDEX
 ============
 
-Creates an index to a specified table by using the **CREATE INDEX** statement. For how to write index name, :doc:`/sql/identifier`. ::
+Creates an index to a specified table by using the **CREATE INDEX** statement. For how to write index name, :doc:`/sql/identifier`.
+
+For how to use indexes on the **SELECT** statement like **USING INDEX**, Descending Index, Covering Index, Index Skip Scan, **ORDER BY** Optimization and **GROUP BY** Optimization, and how to create Filtered Index and Function-based Index, see :ref:`tuning-index`.
+
+::
 
 	CREATE [ REVERSE ] [ UNIQUE ] INDEX index_name
-	ON table_name <index_col_desc> [ ; ]
+	ON table_name <index_col_desc>
 	 
 	<index_col_desc> ::=
 		( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
@@ -68,8 +72,8 @@ The **ALTER INDEX** statement rebuilds an index. In other words, it drops and re
 *   **REVERSE** : Creates an index in the reverse order. A reverse index helps to increase sorting speed in descending order.
 *   **UNIQUE** : Creates an index with unique values.
 *   *index_name* : Specifies the name of the index to be recreated. The index name must be unique in the table.
-*   *table_name* : Specifies the name of the table where the index is to be recreated.
-*   *column_name* : Specifies the name of the column where the index is to be applied. To create a multiple column index, specify two or more column names.
+*   *table_name* : Specifies the name of the table where the index is recreated.
+*   *column_name* : Specifies the name of the column where the index is applied. To create a multiple column index, specify two or more column names.
 
 *   <*filter_predicate*>: Defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**.
 
@@ -96,9 +100,9 @@ Use the **DROP INDEX** statement to drop an index. ::
 	[ON table_name] [ ; ]
 
 *   **REVERSE** : Specifies that the index to be dropped is a reverse index.
-*   **UNIQUE** : Specifies that the index to be dropped is a unique index.
+*   **UNIQUE** : Specifies that the index to be dropped is a unique index. This also can be dropped with **DROP CONSTRAINT** clause.
 *   *index_name* : Specifies the name of the index to be dropped. If omitted, a name is automatically assigned as *i_<table_name>_<column_names>*.
-*   *table_name* : Specifies the name of the table whose index is to be dropped.
+*   *table_name* : Specifies the name of the table whose index is dropped.
 
 **Example**
 

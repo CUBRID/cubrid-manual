@@ -319,7 +319,7 @@ CUBRID HA에 포함할 데이터베이스를 모든 CUBRID HA 노드에서 동�
 
 **cubrid_ha.conf**
 
-**$CUBRID/conf/cubrid_ha.conf** 의 **ha_port_id**, **ha_node_list**, **ha_db_list** 를 모든 HA 노드에 동일하게 설정한다. ::
+**$CUBRID/conf/cubrid_ha.conf** 의 **ha_port_id**, **ha_node_list**, **ha_db_list** 를 모든 HA 노드에 동일하게 설정한다. 다음 예에서 마스터 노드의 호스트 이름은 *nodeA*, 슬레이브 노드의 호스트 이름은 *nodeB*\라고 가정한다.::
 
 	[common]
 	ha_port_id=59901
@@ -340,7 +340,7 @@ CUBRID HA 시작 및 확인
 
 **CUBRID HA 시작**
 
-CUBRID HA 그룹 내의 각 노드에서 **cubrid heartbeat start** 를 수행한다. **cubrid heartbeat start** 를 가장 먼저 수행한 노드가 마스터 노드가 되므로 유의해야 한다. 이하의 예에서 마스터 노드의 호스트 이름은 *nodeA*, 슬레이브 노드의 호스트 이름은 *nodeB* 이다.
+CUBRID HA 그룹 내의 각 노드에서 **cubrid heartbeat start** 를 수행한다. **cubrid heartbeat start** 를 가장 먼저 수행한 노드가 마스터 노드가 되므로 유의해야 한다. 이하의 예에서 마스터 노드의 호스트 이름은 *nodeA*, 슬레이브 노드의 호스트 이름은 *nodeB*\라고 가정한다.
 
 *   마스터 노드 ::
 
@@ -502,7 +502,7 @@ CUBRID HA 기능을 설정하는 파라미터이다. 기본값은 **off** 이다
 
 .. note::
 
-	레플리카 노드에서는 **force_remove_log_archives** 값의 설정과 무관하게 **log_max_archives** 파라미터에 설정된 개수의 보관 로그 파일을 제외하고는 항상 삭제한다.
+	2008 R4.3 버전부터, 레플리카 노드에서는 **force_remove_log_archives** 값의 설정과 무관하게 **log_max_archives** 파라미터에 설정된 개수의 보관 로그 파일을 제외하고는 항상 삭제한다.
 
 **max_clients**
 
@@ -562,7 +562,7 @@ cubrid_ha.conf
 
 CUBRID HA 그룹 내에서 사용할 그룹 이름과 failover의 대상이 되는 멤버 노드들의 호스트 이름을 명시한다. @ 구분자로 나누어 @ 앞이 그룹 이름, @ 뒤가 멤버 노드들의 호스트 이름이다. 여러 개의 호스트 이름은 콜론(:)으로 구분한다. 기본값은 **localhost@localhost** 이다.
 
-이 파라미터에서 명시한 멤버 노드들의 호스트 이름은 IP로 대체할 수 없으며, 반드시 **/etc/hosts** 에 등록되어 있어야 한다. **ha_mode** 를 **on** 으로 설정한 노드는 **ha_node_list** 에 해당 노드가 반드시 포함되어 있어야 한다. CUBRID HA 그룹 내의 모든 노드는 **ha_node_list** 의 값이 동일해야 한다. failover가 일어날 때 이 파라미터에 설정된 순서에 따라 마스터 노드가 된다.
+이 파라미터에서 명시한 멤버 노드들의 호스트 이름은 IP로 대체할 수 없으며, 사용자는 반드시 **/etc/hosts** 에 등록되어 있는 것을 사용해야 한다. **ha_mode** 를 **on** 으로 설정한 노드는 **ha_node_list** 에 해당 노드가 반드시 포함되어 있어야 한다. CUBRID HA 그룹 내의 모든 노드는 **ha_node_list** 의 값이 동일해야 한다. failover가 일어날 때 이 파라미터에 설정된 순서에 따라 마스터 노드가 된다.
 
 이 파라미터는 동적으로 변경할 수 있으며, 변경하면 :ref:`cubrid heartbeat reload <cubrid-heartbeat>` 를 실행해야 한다.
 
@@ -570,7 +570,7 @@ CUBRID HA 그룹 내에서 사용할 그룹 이름과 failover의 대상이 되�
 
 CUBRID HA 그룹 내에서 사용할 그룹 이름과 failover의 대상이 되지 않는 멤버 노드들의 호스트 이름을 명시한다. @ 구분자로 나누어 @ 앞이 그룹 이름, @ 뒤가 멤버 노드들의 호스트 이름이다. 여러 개의 호스트 이름은 콜론(:)으로 구분한다. 기본값은 **NULL** 이다.
 
-그룹 이름은 **ha_node_list** 에서 명시한 이름과 같아야 한다. 이 파라미터에서 명시한 멤버 노드들의 호스트 이름 및 해당 노드의 호스트 이름은 반드시 **/etc/hosts** 에 등록되어 있어야 한다. **ha_mode** 를 **replica** 로 설정한 노드는 **ha_replica_list** 에 해당 노드가 반드시 포함되어 있어야 한다. CUBRID HA 그룹 내의 모든 노드는 **ha_replica_list** 의 값이 동일해야 한다.
+그룹 이름은 **ha_node_list** 에서 명시한 이름과 같아야 한다. 이 파라미터에서 명시하는 멤버 노드들의 호스트 이름 및 해당 노드의 호스트 이름을 지정할 때는 반드시 **/etc/hosts** 에 등록되어 있는 것을 사용해야 한다. **ha_mode** 를 **replica** 로 설정한 노드는 **ha_replica_list** 에 해당 노드가 반드시 포함되어 있어야 한다. CUBRID HA 그룹 내의 모든 노드는 **ha_replica_list** 의 값이 동일해야 한다.
 
 이 파라미터는 동적으로 변경할 수 있으며, 변경하면 :ref:`cubrid heartbeat reload <cubrid-heartbeat>` 를 실행해야 한다.
 
@@ -884,29 +884,38 @@ cubrid applyinfo
 
 CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
 
-	cubrid applyinfo [option] <database-name>
+	cubrid applyinfo [options] <database-name>
 	
-*   *database-name* : 확인하려는 서버의 이름을 명시한다. 노드 이름은 포함하지 않는다.
+*   *database-name* : 확인하려는 서버의 데이터베이스 이름을 명시한다. 노드 이름은 입력하지 않는다.
 
-**옵션**
+**cubrid applyinfo**\에서 사용하는 [options]는 다음과 같다.
 
-+--------+---------+----------------------------------------------------------------------------------------------------+
-| 옵션   | 기본값  | 설명                                                                                               |
-+========+=========+====================================================================================================+
-| -r     | none    | 트랜잭션 로그를 복사하는 대상 노드의 이름을 설정한다. 이 옵션을 설정하면 대상 노드의 액티브        |
-|        |         | 로그 정보(Active Info.)를 출력한다.                                                                |
-+--------+---------+----------------------------------------------------------------------------------------------------+
-| -a     |         | cubrid applyinfo를 수행한 노드(localhost)의 복제 반영 정보(Applied Info.)를 출력한다.              |
-|        |         | 이 옵션을 사용하기 위해서는 반드시 **L** 옵션이 필요하다.                                          |
-+--------+---------+----------------------------------------------------------------------------------------------------+
-| -L     | none    | 상대 노드의 트랜잭션 로그를 복사해 온 위치를 설정한다. 이 옵션이 설정된 경우 상대 노드에서 복사해  |
-|        |         | 온 트랜잭션 로그의 정보(Copied Active Info.)를 출력한다.                                           |
-+--------+---------+----------------------------------------------------------------------------------------------------+
-| -p     | 0       | **L** 옵션을 설정한 경우 설정 가능한 것으로 복사해 온 로그의 특정 페이지 정보를 출력한다.          |
-+--------+---------+----------------------------------------------------------------------------------------------------+
-| -v     |         | 더 자세한 내용을 출력한다.                                                                         |
-+--------+---------+----------------------------------------------------------------------------------------------------+
+.. program:: applyinfo
 
+.. option:: -r, --remote-host-name=HOSTNAME
+
+	트랜잭션 로그를 복사하는 대상 노드의 호스트 이름을 설정한다. 이 옵션을 설정하면 대상 노드의 액티브 로그 정보(Active Info.)를 출력한다.
+
+.. option:: -a, --applied-info
+
+	cubrid applyinfo를 수행한 노드(localhost)의 복제 반영 정보(Applied Info.)를 출력한다. 이 옵션을 사용하기 위해서는 반드시 **-L** 옵션이 필요하다.
+
+.. option:: -L, --copied-log-path=PATH
+
+	상대 노드의 트랜잭션 로그를 복사해 온 위치를 설정한다. 이 옵션이 설정된 경우 상대 노드에서 복사해 온 트랜잭션 로그의 정보(Copied Active Info.)를 출력한다.
+
+.. option:: -p, --pageid=ID
+
+	**-L** 옵션을 설정한 경우 설정 가능하며, 복사해 온 로그의 특정 페이지 정보를 출력한다. 기본값은 0으로, 활성 페이지(active page)를 의미한다.
+	
+.. option:: -v
+
+	더 자세한 내용을 출력한다.
+	
+.. option:: -i, --interval=SECOND
+
+	트랜잭션 로그 복사 또는 반영 상태 정보를 지정한 초마다 주기적으로 출력한다. 복제가 지연되는 상태를 확인하려면 이 옵션을 반드시 지정해야 한다
+	
 **예시**
 
 다음은 슬레이브 노드에서 **applyinfo** 를 실행하여 마스터 노드의 트랜잭션 로그 정보(Active Info.), 슬레이브 노드의 로그 복사 상태 정보(Copied Active Info.)와 로그 반영 상태 정보(Applied Info.)를 확인하는 예이다.
@@ -914,72 +923,84 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
 *   Applied Info. : 슬레이브 노드가 복제 로그를 반영한 상태 정보를 나타낸다.
 *   Copied Active Info. : 슬레이브 노드가 복제 로그를 복사한 상태 정보를 나타낸다.
 *   Active Info. : 마스터 노드가 트랜잭션 로그를 기록한 상태 정보를 나타낸다.
+*   Delay in Copying Active Log: 트랜잭션 로그 복사 지연 상태를 나타낸다. 
+*	Delay in Applying Copied Log: 트랜잭션 로그 반영 지연 상태를 나타낸다. 
 
 ::
 
-	[nodeB] $ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
+	[nodeB] $ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a -i 3 testdb
 	 
-	 *** Applied Info. ***
-	Committed page                 : 1913 | 2904
-	Insert count                   : 645
-	Update count                   : 0
-	Delete count                   : 0
-	Schema count                   : 60
-	Commit count                   : 15
+	 *** Applied Info. *** 
+	Insert count                   : 289492
+	Update count                   : 71192
+	Delete count                   : 280312
+	Schema count                   : 20
+	Commit count                   : 124917
 	Fail count                     : 0
-	 
-	 *** Copied Active Info. ***
+
+	 *** Copied Active Info. *** 
 	DB name                        : testdb
-	DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-	EOF LSA                        : 1913 | 2976
-	Append LSA                     : 1913 | 2976
-	HA server state                : active
-	 
-	 ***  Active Info. ***
-	DB name                        : testdb
-	DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-	EOF LSA                        : 1913 | 2976
-	Append LSA                     : 1913 | 2976
+	DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+	EOF LSA                        : 27722 | 10088
+	Append LSA                     : 27722 | 10088
 	HA server state                : active
 
+	 ***  Active Info. *** 
+	DB name                        : testdb
+	DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+	EOF LSA                        : 27726 | 2512
+	Append LSA                     : 27726 | 2512
+	HA server state                : active
 
-마스터 노드에서 슬레이브 노드로 복사가 얼마나 지연되는지는 Active Info.의 EOF LSA와 Copied Active Applied Info.의 EOF LSA의 차이로 확인할 수 있다.
+	 *** Delay in Copying Active Log *** 
+	Delayed log page count         : 4
+	Estimated Delay                : 0 second(s)
 
-슬레이브 노드에 복사된 로그를 슬레이브 데이터베이스에 반영하는 것이 얼마나 지연되는지는 Copied Active Info.의 EOF LSA와 Applied Info.의 Committed page의 차이로 확인할 수 있다.
+	 *** Delay in Applying Copied Log *** 
+	Delayed log page count         : 1459
+	Estimated Delay                : 22 second(s)
 
 각 상태 정보가 나타내는 항목을 살펴보면 다음과 같다.
 
-*   Applied Info.
+*	Applied Info.
 
-    *   Committed page : 복제 로그 반영 프로세스에 의해 마지막으로 반영된 트랜잭션의 커밋된 pageid와 offset 정보. 이 값과 "Copied Active Info."의 EOF LSA 값의 차이만큼 복제 반영의 지연이 있다.
-    *   Insert Count : 복제 로그 반영 프로세스가 반영한 Insert 쿼리의 개수
-    *   Update Count : 복제 로그 반영 프로세스가 반영한 Update 쿼리의 개수
-    *   Delete Count : 복제 로그 반영 프로세스가 반영한 Delete 쿼리의 개수
-    *   Schema Count : 복제 로그 반영 프로세스가 반영한 DDL 문의 개수
-    *   Commit Count : 복제 로그 반영 프로세스가 반영한 트랜잭션의 개수
-    *   Fail Count : 복제 로그 반영 프로세스가 반영에 실패한 DML 및 DDL 문의 개수
+	*   Committed page : 복제 로그 반영 프로세스에 의해 마지막으로 반영된 트랜잭션의 커밋된 pageid와 offset 정보. 이 값과 "Copied Active Info."의 EOF LSA 값의 차이만큼 복제 반영의 지연이 있다.
+	*	Insert Count : 복제 로그 반영 프로세스가 반영한 Insert 쿼리의 개수
+	*	Update Count : 복제 로그 반영 프로세스가 반영한 Update 쿼리의 개수
+	*	Delete Count : 복제 로그 반영 프로세스가 반영한 Delete 쿼리의 개수
+	*	Schema Count : 복제 로그 반영 프로세스가 반영한 DDL 문의 개수
+	*	Commit Count : 복제 로그 반영 프로세스가 반영한 트랜잭션의 개수
+	*	Fail Count : 복제 로그 반영 프로세스가 반영에 실패한 DML 및 DDL 문의 개수
 
-*   Copied Active Info.
+*	Copied Active Info.
 
-    *   DB name : 복제 로그 복사 프로세스가 로그를 복사하는 대상 데이터베이스의 이름
-    *   DB creation time : 복제 로그 복사 프로세스가 복사하는 데이터베이스의 생성 시간
+    *	DB name : 복제 로그 복사 프로세스가 로그를 복사하는 대상 데이터베이스의 이름
+    *	DB creation time : 복제 로그 복사 프로세스가 복사하는 데이터베이스의 생성 시간
+		
+    *	EOF LSA : 복제 로그 복사 프로세스가 대상 노드에서 복사한 로그의 마지막 pageid와 offset 정보. 이 값과 "Active Info."의 EOF LSA 값의 차이 및 "Copied Active Info."의 Append LSA 값의 차이만큼 로그 복사의 지연이 있다.
 	
-    *   EOF LSA : 복제 로그 복사 프로세스가 대상 노드에서 복사한 로그의 마지막 pageid와 offset 정보. 이 값과 "Active Info."의 EOF LSA 값의 차이 및 "Copied Active Info."의 Append LSA 값의 차이만큼 로그 복사의 지연이 있다.
+    *	Append LSA : 복제 로그 복사 프로세스가 디스크에 실제로 쓴 로그의 마지막 pageid와 offset 정보. 이는 EOF LSA보다 작거나 같을 수 있다. 이 값과 "Copied Active Info"의 EOF LSA 값의 차이 만큼 로그 복사의 지연이 있다.
+	
+    *	HA server state : 복제 로그 복사 프로세스가 로그를 받아오는 데이터베이스 서버 프로세스의 상태. 상태에 대한 자세한 설명은 :ref:`ha-server` 를 참고하도록 한다.
 
-    *   Append LSA : 복제 로그 복사 프로세스가 디스크에 실제로 쓴 로그의 마지막 pageid와 offset 정보. 이는 EOF LSA보다 작거나 같을 수 있다. 이 값과 "Copied Active Info"의 EOF LSA 값의 차이 만큼 로그 복사의 지연이 있다.
+*	Active Info.
 
-    *   HA server state : 복제 로그 복사 프로세스가 로그를 받아오는 데이터베이스 서버 프로세스의 상태. 상태에 대한 자세한 설명은 :ref:`ha-server` 를 참고하도록 한다.
+	*	DB name : **-r** 옵션에 설정한 노드의 데이터베이스의 이름
+	*	DB creation time : **-r** 옵션에 설정한 노드의 데이터베이스 생성 시간
+	*	EOF LSA : **-r** 옵션에 설정한 노드의 데이터베이스 트랜잭션 로그의 마지막 pageid와 offset 정보. 이 값과 "Copied Active Info."의 EOF LSA 값의 차이 만큼 복제 로그 복사의 지연이 있다.
+	
+	*	Append LSA : **-r** 옵션에 설정한 노드의 데이터베이스 서버가 디스크에 실제로 쓴 트랜잭션 로그의 마지막 pageid와 offset 정보
+	
+	*	HA server state : **-r** 옵션에 설정한 노드의 데이터베이스 서버 상태
+	
+*	Delay in Copying Active Log
+	*	Delayed log page count: 복사가 지연된 트랜잭션 로그 페이지 개수
+	*	Estimated Delay: 트랜잭션 로그 복사 예상 완료 시간
+*	Delay in Applying Copied Log
+	*	Delayed log page count:  반영이 지연된 트랜잭션 로그 페이지 개수
+	*	Estimated Delay: 트랜잭션 로그 반영 예상 완료 시간
 
-*   Active Info.
-
-    *   DB name : **-r** 옵션에 설정한 노드의 데이터베이스의 이름
-    *   DB creation time : **-r** 옵션에 설정한 노드의 데이터베이스 생성 시간
-    *   EOF LSA : **-r** 옵션에 설정한 노드의 데이터베이스 트랜잭션 로그의 마지막 pageid와 offset 정보. 이 값과 "Copied Active Info."의 EOF LSA 값의 차이 만큼 복제 로그 복사의 지연이 있다.
-
-    *   Append LSA : **-r** 옵션에 설정한 노드의 데이터베이스 서버가 디스크에 실제로 쓴 트랜잭션 로그의 마지막 pageid와 offset 정보
-
-    *   HA server state : **-r** 옵션에 설정한 노드의 데이터베이스 서버 상태
-
+	
 .. _cubrid-changemode:
 
 cubrid changemode
@@ -987,37 +1008,32 @@ cubrid changemode
 
 CUBRID HA의 서버 상태를 확인하고 변경한다. ::
 
-	cubrid changemode [option] <database-name>
+	cubrid changemode [option] <database-name@node-name>
 
-*   *database-name* : 확인 또는 변경하고자 하는 서버의 이름을 명시하고 @으로 구분하여 노드 이름을 명시한다.
+*   *database-name@node-name* : 확인 또는 변경하고자 하는 서버의 이름을 명시하고 @으로 구분하여 노드 이름을 명시한다.
 
-**옵션**
+**cubrid changemode**\에서 사용하는 [options]는 다음과 같다.
 
-+--------+---------+-----------------------------------------------------------------------------------------------------------------------------+
-| 옵션   | 기본값  | 설명                                                                                                                        |
-+========+=========+=============================================================================================================================+
-| -m     | none    | 서버 상태를 변경한다. 옵션 값으로                                                                                           |
-|        |         | **standby**                                                                                                                 |
-|        |         | ,                                                                                                                           |
-|        |         | **maintenance**                                                                                                             |
-|        |         | ,                                                                                                                           |
-|        |         | **active**                                                                                                                  |
-|        |         | 중 하나를 입력할 수 있다.                                                                                                   |
-+--------+---------+-----------------------------------------------------------------------------------------------------------------------------+
-| -f     |         | 서버의 상태를 강제로 변경할지 여부를 설정한다. 현재 서버가 to-be-active 상태일 때 active 상태로 강제 변경하려고 하는        |
-|        |         | 경우에는 반드시 사용하며, 이를 설정하지 않으면 active 상태로 변경되지 않는다.                                               |
-|        |         | 강제 변경 시 복제 노드 간 데이터 불일치가 발생할 수 있으므로 사용하지 않는 것을 권장한다.                                   |
-+--------+---------+-----------------------------------------------------------------------------------------------------------------------------+
-| -t     | 5(초)   | 노드 상태를                                                                                                                 |
-|        |         | **standby**                                                                                                                 |
-|        |         | 에서                                                                                                                        |
-|        |         | **maintenance**                                                                                                             |
-|        |         | 로 변경할 때 진행 중이던 트랜잭션이 정상 종료되기까지 대기하는 시간을 설정한다. 설정한 시간이 지나도 트랜잭션이 진행 중이면 |
-|        |         | 강제 종료 후 **maintenance**                                                                                                |
-|        |         | 상태로 변경하고, 설정한 시간 이내에 모든 트랜잭션이 정상 종료되면 즉시                                                      |
-|        |         | **maintenance**                                                                                                             |
-|        |         | 상태로 변경한다.                                                                                                            |
-+--------+---------+-----------------------------------------------------------------------------------------------------------------------------+
+.. program:: changemode
+
+.. option:: -m, --mode=MODE
+
+	서버 상태를 변경한다. 
+	
+	옵션 값으로 **standby**, **maintenance**,  **active** 중 하나를 입력할 수 있다.
+	
+.. option:: -f, --force
+
+	서버의 상태를 강제로 변경할지 여부를 설정한다. 
+	
+	현재 서버가 to-be-active 상태일 때 active 상태로 강제 변경하려고 하는 경우에는 반드시 사용하며, 이를 설정하지 않으면 active 상태로 변경되지 않는다. 
+	강제 변경 시 복제 노드 간 데이터 불일치가 발생할 수 있으므로 사용하지 않는 것을 권장한다. 
+	
+.. option:: -t, --timeout=SECOND
+	
+	기본값 5(초). 노드 상태를 **standby**\에서 **maintenance**\로 변경할 때 진행 중이던 트랜잭션이 정상 종료되기까지 대기하는 시간을 설정한다. 
+	
+	설정한 시간이 지나도 트랜잭션이 진행 중이면 강제 종료 후 **maintenance**  상태로 변경하고, 설정한 시간 이내에 모든 트랜잭션이 정상 종료되면 즉시 **maintenance** 상태로 변경한다. 
 
 **상태 변경 가능 표**
 

@@ -91,6 +91,8 @@ You can change the parameters that are capable of dynamically changing the setti
 +==================================================================+=====================================+=========================+==========+================================+================+
 | :ref:`connection-parameters`                                     | cubrid_port_id                      | client parameter        | int      | 1523                           |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
+|                                                                  | check_peer_alive                    | client/server parameter | string   | both                           | available      |
+|                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | db_hosts                            | client parameter        | string   | NULL                           | available      |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | max_clients                         | server parameter        | int      | 100                            |                |
@@ -243,6 +245,10 @@ You can change the parameters that are capable of dynamically changing the setti
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | session_state_timeout               | server parameter        | int      | 21600                          |                |
 |                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
+|                                                                  | sql_trace_slow_msec                 | server parameter        | int      | -1                             | available      |
+|                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
+|                                                                  | sql_trace_execution_plan            | server parameter        | bool     | no                             | available      |
+|                                                                  +-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 |                                                                  | use_orderby_sort_limit              | server parameter        | bool     | yes                            | available      |
 +------------------------------------------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+----------------+
 
@@ -287,7 +293,7 @@ The following is the content of the **cubrid.conf** file. ::
 	[common]
 	 
 	# Read the manual for detailed description of system parameters
-	# Manual > Performance Tuning > Database Server Configuration > Default Parameters
+	# Manual > System Configuration > Database Server Configuration > Default Parameters
 	 
 	# Size of data buffer are using K, M, G, T unit
 	data_buffer_size=512M
@@ -319,6 +325,8 @@ The following are parameters related to the database server. The type and value 
 +====================+==========+===================+=========+=========+
 | cubrid_port_id     | int      | 1523              | 1       |         |
 +--------------------+----------+-------------------+---------+---------+
+| check_peer_alive   | string   | both              |         |         |
++--------------------+----------+-------------------+---------+---------+
 | db_hosts           | string   | NULL              |         |         |
 +--------------------+----------+-------------------+---------+---------+
 | max_clients        | int      | 100               | 10      | 10000   |
@@ -327,6 +335,21 @@ The following are parameters related to the database server. The type and value 
 **cubrid_port_id**
 
 **cubrid_port_id** is a parameter used to configure the port to be used by the master process. The default value is **1,523**. If the port 1,523 is already being used on the server where CUBRID is installed or it is blocked by a firewall, an error message, which means the master server is not connected because the master process cannot be running properly, is displayed. If such port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
+
+**check_peer_alive**
+
+**check_peer_alive** is a parameter to decide whether you execute the function checking that the client/server processes work well. The default is both. 
+
+The client processes connecting with a server process are the broker application server(cub_cas) process, the process copying replication logs(copylogdb), the process applying replication logs. (applylogdb), CSQL interpreter(csql), etc. The server process and the client process which connected with it wait each other’s response. But if one of them cannot get the data for a long time(example: exceeding 5 sec), it will check or not if the other works well based on the configuration of check_peer_alive parameter. During this processes, if it is judged  that the process doesn’t work properly, it disconnect forcibly.
+
+The values and the working methods are as follows.
+
+*	both: As the server process access to the client process by ECHO(7) port, it checks if the client process works well..The client process also do the same thing to the sever process(The default value).
+*	server_only: Only the server process checks if the client process works well.
+*	client_only: Only the client rocess checks if the server process works well.
+*	none: Both of the server and client processes do not check if the other process works well.
+
+Specially, if ECHO(7) port is blocked by the firewall configuration, each process can mistake that the other process  was exit.Therefore, you should avoid this problem by setting this parameter’s value as none.
 
 **db_hosts**
 
@@ -1226,6 +1249,10 @@ The following are other parameters. The type and value range for each parameter 
 +--------------------------------+----------+-------------------+---------------+-------------------+
 | session_state_timeout          | int      | 21600 (6 hours)   | 60 (1 minute) | 31536000 (1 year) |
 +--------------------------------+----------+-------------------+---------------+-------------------+
+| sql_trace_slow_msec	         | int      | -1                | 0             | 86400000(24hour)  |
++--------------------------------+----------+-------------------+---------------+-------------------+
+| sql_trace_execution_plan       | bool     | no                |               |                   |
++--------------------------------+----------+-------------------+---------------+-------------------+
 | use_orderby_sort_limit         | bool     | yes               |               |                   |
 +--------------------------------+----------+-------------------+---------------+-------------------+
 
@@ -1286,11 +1313,28 @@ Depending on the setting value, the differences are made between collecting the 
 
 **session_state_timeout**
 
-**session_state_timeout** is a parameter used to define how long the CUBRID session data will be kept. The session data will be deleted when the driver terminates the connection or the session time is expired. The session time will expire if a client does not have any requests until a value specified in **session_state_timeout**.
+**session_state_timeout** is a parameter used to define how long the CUBRID session data will be kept. The session data will be deleted when the driver terminates the connection or the session time expires. The session time will expire after the specified time if a client terminates abnormally.
 
 Custom variables defined by **SET** and **PREPARE** statements can be deleted by **DROP** / **DEALLOCATE** statements before session timeout.
 
 The default value is **21600** seconds (6 hours).
+
+**sql_trace_slow_msec**
+
+**sql_trace_slow_msec** is a parameter used to configure the execution time of a query which will be judged as a long time execution. The default value is -1 and the maximum value is 86400000 msec (24 hour). -1 means that the infinite time, so any queries will not be judged as a long duration query. For details, see the below sql_trace_execution_plan.
+
+.. note::
+	the system parameter **sql_trace_slow_msec** judges the query execution time based on the server, but the broker parameter **MAX_QUERY_TIMEOUT** judges the query execution time based on the broker.
+	
+**sql_trace_execution_plan**
+
+**sql_trace_execution_plan** is a parameter used to configure if the query plan of the long-duration-execution query is written to the log or not. The default value is no.
+
+If it is set to yes, a long-duration-execution SQL, a query plan and the output of cubrid statdump command  are written to the server error log file(located on CUBRID/log/server directory) and the broker application server log file(located on CUBRID/log/broker/sql_log directory) .
+
+If it is set to no, only a long-duration-execution SQL is written, and the output of cubrid statdump command  is shown only when you do that command. 
+
+But, on the server error log file, the related informations are written only when the value of error_log_level is NOTIFICATION. 
 
 **use_orderby_sort_limit**
 
@@ -1454,7 +1498,7 @@ The following are parameters commonly applied to entire brokers; it is written u
 Parameter by Broker
 -------------------
 
-The following describes parameters to configure the environment variables of brokers; each parameter is located under [%*broker_name*].
+The following describes parameters to configure the environment variables of brokers; each parameter is located under [%*broker_name*]. The maximum length of *broker_name* is 63 characters in English.
 
 **ACCESS_LIST**
 

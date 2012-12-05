@@ -322,6 +322,15 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 *   *database_name*: 데이터베이스가 생성될 디렉터리 경로명을 포함하지 않고, 볼륨을 추가하고자 하는 데이터베이스의 이름을 지정한다.
 
+		
+다음은 데이터베이스를 생성하고 볼륨 용도를 구분하여 데이터(**data**), 인덱스(**index**), 임시(**temp**) 볼륨을 추가하는 예이다. ::
+
+	cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
+	cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+	cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
+	cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
+	cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+
 다음은 cubrid addvoldb에 대한 [options]이다.
 
 .. program:: addvoldb
@@ -388,13 +397,13 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid addvoldb -C --db-volume-size=256M testdb
 
-다음은 데이터베이스를 생성하고 볼륨 용도를 구분하여 데이터(**data**), 인덱스(**index**), 임시(**temp**) 볼륨을 추가하는 예이다. ::
+.. option:: --max_writesize-in-sec=SIZE
 
-	cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
-	cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-	cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-	cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-	cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+	데이터베이스에 볼륨을 추가할 때 디스크 출력량을 제한하여 시스템 운영 영향을 줄이도록 하는 옵션이다. 이 옵션을 통해 1초당 쓸 수 있는 최대 크기를 지정할 수 있으며, 단위는 K(kilobytes), M(megabytes)이다. 최소값은 160K이며, 이보다 작게 값을 설정하면 160K로 바뀐다. 단, 클라이언트/서버 모드(-C)에서만 사용 가능하다.
+	
+	다음은 2GB 볼륨을 초당 1MB씩 쓰도록 하는 예이다. 소요 시간은 35분( = (2048MB / 1MB)  / 60초 )  정도가 예상된다. ::
+	
+		cubrid addvoldb -C --db-volume-size=2G --max-writesize-in-sec=1M testdb
 
 데이터베이스 삭제
 =================
@@ -555,13 +564,13 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 	
 		cubrid copydb -L /home/usr/CUBRID/databases/logs demodb new_demodb
 
-.. option:: -E 또는 --extended-volume-path=PATH
+.. option:: -E, --extended-volume-path=PATH
 
 	새로운 데이터베이스의 확장 정보 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로 또는 제어 파일에 등록된 경로에 확장 정보 볼륨이 저장된다. **-i** 옵션과 병행될 수 없다. ::
 
 		cubrid copydb -E home/usr/CUBRID/databases/extvols demodb new_demodb
 
-.. option:: -i 또는 --control-file=FILE
+.. option:: -i, --control-file=FILE
 
 	대상 데이터베이스에 대한 복수 개의 볼륨들을 각각 다른 디렉터리에 복사 또는 이동하기 위해서, 원본 볼륨의 경로 및 새로운 디렉터리 경로 정보를 포함하는 입력 파일을 지정할 수 있다. 이때, **-i** 옵션은 **-E** 옵션과 병행될 수 없다. 아래 예제에서는 copy_path라는 입력 파일을 예로 사용했다. ::
 
@@ -640,7 +649,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 		cubrid installdb -F /home/cubrid/CUBRID/databases/testdb testdb
 
-.. option:: -L 또는 --log-path=PATH
+.. option:: -L, --log-path=PATH
 
 	대상 데이터베이스 로그 볼륨의 디렉터리 경로를 **databases.txt** 에 등록한다. 이 옵션을 생략하면 데이터베이스 볼륨의 디렉터리 경로가 등록된다.  ::
 	
@@ -759,7 +768,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. option:: -d, --delete-old-repr
 
-	카탈로그에서 과거 테이블 표현(스키마 구조)을 삭제할 수 있다. **ALTER** 문에 의해 칼럼이 추가되거나 삭제되는 경우 기존의 레코드에 대해 과거의 스키마를 참조하고 있는 상태로 두면, 스키마를 업데이트하는 비용을 들이지 않기 때문에 평소에는 과거의 테이블 표현을 유지한다.
+	카탈로그에서 과거 테이블 표현(스키마 구조)을 삭제할 수 있다. **ALTER** 문에 의해 칼럼이 추가되거나 삭제되는 경우 기존의 레코드에 대해 과거의 스키마를 참조하고 있는 상태로 두면, 스키마를 업데이트하는 비용을 들이지 않기 때문에 평소에는 과거의 테이블 표현을 유지하는 것이 좋다.
 
 .. option:: -I, --Instance-lock-timeout=NUMBER
 
@@ -1234,7 +1243,7 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 ::
 
-	cubrid checkdb [options] database_name [class_name1 class_name2 ...]
+	cubrid checkdb [options] database_name [table_name1 table_name2 ...]
 
 *   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티
 
@@ -1242,7 +1251,7 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 *   *database_name*: 일관성을 확인하거나 복구하려는 데이터베이스 이름
 
-*    *class_name1 class_name2*: 일관성을 확인하거나 복구하려는 테이블 이름을 나열한다.
+*    *table_name1 table_name2*: 일관성을 확인하거나 복구하려는 테이블 이름을 나열한다.
 
 다음은 **cubrid checkdb** 에 대한 [options]이다.
 
@@ -1268,9 +1277,9 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 		cubrid checkdb -r testdb
 
-.. option:: -i, --input-class-file=FILE 또는 table_name
+.. option:: -i, --input-class-file=FILE
 
-	**-i** *FILE* 옵션을 지정하거나 데이터베이스 이름 뒤에 테이블의 이름을 나열하여 일관성 확인 또는 복구 대상을 한정할 수 있다. 두 가지 방법을 같이 사용할 수도 있으며, 대상을 지정하지 않으면 전체 데이트베이스를 대상으로 일관성을 확인하거나 복구를 수행한다. 특정 대상이 지정되지 않으면 전체 데이터베이스가 일관성 확인  또는 복구의 대상이 된다. ::
+	**-i** *FILE* 옵션을 지정하거나, 데이터베이스 이름 뒤에 테이블의 이름을 나열하여 일관성 확인 또는 복구 대상을 한정할 수 있다. 두 가지 방법을 같이 사용할 수도 있으며, 대상을 지정하지 않으면 전체 데이터베이스를 대상으로 일관성을 확인하거나 복구를 수행한다. 특정 대상이 지정되지 않으면 전체 데이터베이스가 일관성 확인  또는 복구의 대상이 된다. ::
 
 		cubrid checkdb testdb tbl1 tbl2
 		cubrid checkdb -r testdb tbl1 tbl2
@@ -1371,6 +1380,53 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 			  5(+)         public      myhost            6944              csql
 		-------------------------------------------------------------------------------
 
+.. option:: -q, --query-exec-info
+
+	트랜잭션의 질의 수행 상태를 출력한다. 상태 정보를 출력하는 예는 다음과 같다.
+
+	::
+
+		cubrid killtran --query-exec-info testdb
+		 
+		Tran index Process id Program name Query time Tran time  Wait for lock holder   SQL Text
+		---------------------------------------------------------------------------------------------
+			  1(+)       8536    b1_cub_cas_1    0.00      0.00  -1                     *** empty ***
+			  2(+)       8538    b1_cub_cas_3    0.00      0.00  -1                     *** empty ***
+			  3(+)       8537    b1_cub_cas_2    0.00      0.00  -1                     *** empty ***
+			  4(+)       8543    b1_cub_cas_4    1.80      1.80  3, 2, 1                update [ta] [ta] set [a]=5 wher
+			  5(+)       8264    b1_cub_cas_5    0.00      0.60  -1                     *** empty ***
+			  6(+)       8307    b1_cub_cas_6    0.00      0.00  -1                     select [a].[index_name], ( cast
+			  7(+)       8308    b1_cub_cas_7    0.00      0.20  -1                     select [a].[index_name], ( cast
+			  .....
+		 
+		---------------------------------------------------------------------------------------------
+
+	* Tran index : 트랜잭션 인덱스
+	* Process id : 클라이언트 프로세스 ID
+	* Program name : 클라이언트 프로그램 이름
+	* Query time : 수행중인 질의의 총 수행 시간(단위: 초)
+	* Tran time : 현재 트랜잭션의 총 수행 시간(단위: 초)
+	* Wait for lock holder : 현재 트랜잭션이 락 대기중이면 해당 락을 소유하고 있는 트랜잭션의 리스트
+	* SQL Text : 수행중인 질의문(최대 30자)
+
+	위와 같이 트랜잭션 전체 정보가 출력된 후, 잠금 대기를 유발한 질의문이 다음과 같이 출력된다.
+
+	::
+
+		Tran index : 4
+		update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
+		Tran index : 5, 6, 7
+		select [a].[index_name], ( cast(case when [a].[is_unique]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [a].[is_reverse]=0 then 'NO' else 'YES' end as varchar(3))), [a].[class_of].[class_name], [a].[key_count], ( cast(case when [a].[is_primary_key]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [a].[is_foreign_key]=0 then 'NO' else 'YES' end as varchar(3))), [b].[index_name], ( cast(case when [b].[is_unique]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [b].[is_reverse]=0 then 'NO' else 'YES' end as varchar(3))), [b].[class_of].[class_name], [b].[key_count], ( cast(case when [b].[is_primary_key]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [b].[is_foreign_key]=0 then 'NO' else 'YES' end as varchar(3))) from [_db_index] [a], [_db_index] [b] where (( CURRENT_USER ='DBA' or {[a].[class_of].[owner].[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) or {[a].[class_of]} subseteq (select sum(set{[au].[class_of]}) from [_db_auth] [au] where ({[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) and [au].[auth_type]= ?:0 ))) and ( CURRENT_USER ='DBA' or {[b].[class_of].[owner].[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) or {[b].[class_of]} subseteq (select sum(set{[au].[class_of]}) from [_db_auth] [au] where ({[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) and [au].[auth_type]= ?:1 ))))
+
+	화면에 출력되는 질의문은 질의 계획 캐시에 저장되어 있는 것으로, 응용 프로그램에서 수행되는 INSERT 문이나 질의 계획이 캐시되지 않는 질의문은 출력되지 않는다. 또한 출력 형태도 질의 파싱이 완료된 후의 질의문이 출력되므로, 사용자가 입력한 질의문과는 다른 형태일 수 있다.
+
+	예를 들어 사용자가 아래와 같은 질의문을 수행하면 ::
+
+		UPDATE ta SET a=5 WHERE a > 0
+
+	출력되는 질의문은 다음과 같다. ::
+
+		update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
 
 .. option:: -f, --force
 

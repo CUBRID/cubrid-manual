@@ -9,7 +9,7 @@ JDBC 개요
 
 CUBRID JDBC 드라이버(cubrid_jdbc.jar)를 사용하면 Java로 작성된 응용 프로그램에서 CUBRID 데이터베이스에 접속할 수 있다. CUBRID JDBC 드라이버는 <*CUBRID 설치 디렉터리*> **/jdbc** 디렉터리에 위치한다. CUBRID JDBC 드라이버는 JDBC 2.0 스펙을 기준으로 개발되었으며, JDK 1.6에서 컴파일한 것을 기본으로 제공한다.
 
-별도로 JDBC 드라이버를 다운로드하거나 JDBC 드라이버에 대한 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver>`_ 에 접속한다.
+별도로 JDBC 드라이버를 다운로드하거나 JDBC 드라이버에 대한 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver`\에 접속한다.
 
 **CUBRID JDBC 드라이버 버전 확인**
 
@@ -126,11 +126,11 @@ JDBC 프로그래밍
 	<host> ::=
 	hostname | ip_address
 	 
-	<property> ::= althosts=<alternative_hosts>
-				 | rctime=<second>
+	<property> ::= altHosts=<alternative_hosts>
+				 | rcTime=<second>
 				 | connectTimeout=<second>
 				 | queryTimeout=<second>
-				 | charset=<character_set>
+				 | charSet=<character_set>
 				 | zeroDateTimeBehavior=<behavior_type>
 				 | logFile=<file_name>
 				 | logOnException=<bool_type>
@@ -151,17 +151,19 @@ JDBC 프로그래밍
 
 *   [*password*] : 데이터베이스에 접속할 사용자의 암호이다. 해당 사용자에 암호가 설정되어 있지 않으면, 빈 문자열("")을 입력한다.
 
-*   **althosts** : HA 환경에서 장애 시 fail-over할 하나 이상의 standby 브로커의 호스트 IP와 접속 포트이다.
+*   **altHosts** : HA 환경에서 장애 시 fail-over할 하나 이상의 standby 브로커의 호스트 IP와 접속 포트이다.
 
-*   **rctime** : HA 환경에서 장애 복구 시 active 브로커로 연결을 시도하는 주기를 초 단위로 입력한다. 이에 관한 상세한 설명은 "관리자 안내서 > CUBRID HA > 환경 설정 > JDBC 설정" 및 아래 예제를 참고한다.
+*   **rcTime** : HA 환경에서 장애 복구 시 active 브로커로 연결을 시도하는 주기를 초 단위로 입력한다. 이에 관한 상세한 설명은 "관리자 안내서 > CUBRID HA > 환경 설정 > JDBC 설정" 및 아래 예제를 참고한다.
 
 *   **connectTimeout** : 데이터베이스 접속에 대한 타임아웃 시간을 초 단위로 설정한다(기본값: 0). **DriverManger.setLoginTimeout** () 메서드로 설정할 수도 있으나, 연결 URL에 이 값을 설정하면 메서드로 설정한 값은 무시된다.
 
 *   **queryTimeout** : 질의 수행에 대한 타임아웃 시간을 초 단위로 설정한다(기본값: 0, 무제한). 이 값은 **DriverManger.setQueryTimeout** () 메서드에 의해 변경될 수 있다.
 
-*   **charset** : 접속하고자 하는 DB의 문자셋(charset)이다.
+*   **charSet** : 접속하고자 하는 DB의 문자셋(charSet)이다.
 
-*   **zeroDateTimeBehavior** : JDBC에서는 java.sql.Date 형 객체에 날짜와 시간 값이 모두 0인 값을 허용하지 않으므로 이 값을 출력해야 할 때 어떻게 처리할 것인지를 정하는 속성. 기본 동작은 **exception** 이다. 설정값에 따른 동작은 다음과 같다.
+*   **zeroDateTimeBehavior** : JDBC에서는 java.sql.Date 형 객체에 날짜와 시간 값이 모두 0인 값을 허용하지 않으므로 이 값을 출력해야 할 때 어떻게 처리할 것인지를 정하는 속성. 기본 동작은 **exception** 이다. 날짜와 시간 값이 모두 0인 값에 대한 설명은 :ref:`date-time-type` 을 참고한다.
+
+	설정값에 따른 동작은 다음과 같다.
 
     *   **exception** : 기본 동작. SQLException 예외로 처리한다.
 	
@@ -169,7 +171,6 @@ JDBC 프로그래밍
 
     *   **convertToNull** : **NULL** 로 변환한다.
 
-	날짜와 시간 값이 모두 0인 값에 대한 설명은 "CUBRID SQL 설명서 > 데이터 타입 > 날짜/시간 데이터 타입 > 정의와 특성" 을 참고한다.
 
 *   **logFile** : 디버깅용 로그 파일 이름(기본값: cubrid_jdbc.log). 별도의 경로 설정이 없으면 응용 프로그램을 실행하는 위치에 저장된다.
 
@@ -188,22 +189,22 @@ JDBC 프로그래밍
 	--connection URL string when zeroDateTimeBehavior property specified
 	URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?zeroDateTimeBehavior=convertToNull
 	 
-	--connection URL string when charset property specified
+	--connection URL string when charSet property specified
 	 
-	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?charset=utf-8
+	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?charSet=utf-8
 	 
-	--connection URL string when queryTimeout and charset property specified
+	--connection URL string when queryTimeout and charSet property specified
 	 
-	URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?queryTimeout=1&charset=utf-8
+	URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?queryTimeout=1&charSet=utf-8
 	 
-	--connection URL string when a property(althosts) specified for HA
-	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?althosts=192.168.0.2:33000,192.168.0.3:33000
+	--connection URL string when a property(altHosts) specified for HA
+	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000
 	 
-	--connection URL string when properties(althosts,rctime, connectTimeout) specified for HA
-	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?althosts=192.168.0.2:33000,192.168.0.3:33000&rctime=600&connectTimeout=5
+	--connection URL string when properties(altHosts,rcTime, connectTimeout) specified for HA
+	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&connectTimeout=5
 	 
-	--connection URL string when properties(althosts,rctime, charset) specified for HA
-	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?althosts=192.168.0.2:33000,192.168.0.3:33000&rctime=600&charset=utf-8
+	--connection URL string when properties(altHosts,rcTime, charSet) specified for HA
+	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&charSet=utf-8
 
 **예제 2**
 
@@ -226,14 +227,11 @@ JDBC 프로그래밍
 	   }
 	   ...
    
-.. warning::
+.. note::
 
 	*   URL 문자열에서 콜론(:)과 물음표(?)는 구분자로 사용되므로, URL 문자열에 암호를 포함하는 경우 암호의 일부에 콜론이나 물음표를 사용할 수 없다. 암호에 콜론이나 물음표를 사용하려면 getConnection 함수에서 사용자 이름(*user-id*)과 암호(*password*)를 별도의 인자로 지정해야 한다.
 	*   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
-
-.. note::
-
-	트랜잭션 롤백을 요청하는 rollback 메서드는 서버가 롤백 작업을 완료한 후 종료된다.
+	*   트랜잭션 롤백을 요청하는 rollback 메서드는 서버가 롤백 작업을 완료한 후 종료된다.
 
 외래 키 정보 확인
 -----------------
@@ -1018,3 +1016,7 @@ JDBC API에 대한 자세한 내용은 Java API Specification 문서(http://docs
 | java.sql.SQLInput          |                                  |                                     |
 | java.sql.Struct            |                                  |                                     |
 +----------------------------+----------------------------------+-------------------------------------+
+
+.. warning::
+	
+	2008 R4.3부터 질의문을 일괄 처리하는 메서드가 자동 커밋 모드에서 동작하는 방식이 변경되었음에 주의한다. 질의문을 일괄 처리하는 메서드는 PreparedStatement.executeBatch와 Statement.executeBatch이다. 이들은 2008 R4.1 버전까지 자동 커밋 모드에서 배열 내의 모든 질의를 수행한 후에 커밋했으나, 2008 R4.3버전부터는 각 질의를 수행할 때마다 커밋하도록 변경되었다.

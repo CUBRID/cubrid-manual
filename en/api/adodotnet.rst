@@ -159,9 +159,7 @@ or you can write as follows:
 		conn.Open();
 	}
 
-**Remark**
-
-*   The database connection in thread-based programming must be used independently each other.
+.. note:: The database connection in thread-based programming must be used independently each other.
 
 CUBRID Collections
 ------------------

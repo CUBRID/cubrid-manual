@@ -54,13 +54,14 @@ Data volume is a space for storing data such as instances, tables and multimedia
 
 Temp volume is a space where the intermediate and final results of query processing and sorting are temporarily stored. It is also called the permanent temp volume to distinguish it from the temporary temp volume that will be described below. The temp volume is a permanently-occupied space, meaning that data in the space is temporary stored and later destroyed. Therefore, when CUBRID restarts, the data in the temp volume space is initialized and the related log information is removed.
 
-The example of query that can use permanent temp volume or temporary temp volume is as follows:
+The examples of queries that can use permanent temp volume or temporary temp volume are as follows:
 
-*   Query in which its result of the **SELECT** statement is generated
-*   Query in which **GROUP BY** or **ORDER BY** is included
-*   Query in which a subquery is included
-*   Query in which sort-merge join is sorted
-*   Query in which the **CREATE INDEX** statement is included
+*   Queries creating the resultset like SELECT
+*	Queries including GROUP BY or ORDER BY
+*	Queries including a subquery
+*	Queries executing sort-merge join
+*	Queries including the CREATE INDEX statement
+
 
 When executing the queries above, the temp volume is used after exhausting the memory space (the space size is determined by the system parameter **temp_file_memory_size_in_pages** specified in **cubrid.conf**) assigned to store **SELECT** results or sort the data. The order in which the storage space is used to store the results of query processing and sorting is as follows: When the current storage space is exhausted, the next storage space is used.
 

@@ -322,6 +322,14 @@ Adds database volume. ::
 
 * *database_name*: Specifies the name of the database to which a volume is to be added without including the path name to the directory where the database is to be created.
 
+The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
+
+	cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
+	cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+	cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
+	cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
+	cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+
 The following shows [options] available with the **cubrid addvoldb** utility.
 
 .. program:: addvoldb
@@ -376,14 +384,13 @@ The following shows [options] available with the **cubrid addvoldb** utility.
 
 		cubrid addvoldb -C --db-volume-size=256M testdb
 
-The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
-
-	cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
-	cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-	cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-	cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-	cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
-
+.. option:: --max_writesize-in-sec=SIZE
+	The --max_writesize-in-sec is used to limit the impact of  system operating when you add a volumn to the database. This can limit the maximum writing size per second. The unit of this option is K(kilobytes) and M(megabytes). The minimum value is 160K. If you set this value as less than 160K, it is changed as 160K. It can be used only in client/server mode.
+	
+	The below is an example to limit the writing size of the 2GB volume as 1MB. Consuming time will be about 35 minutes(= (2048MB/1MB) /60 sec.). ::
+	
+		cubrid addvoldb -C --db-volume-size=2G --max-writesize-in-sec=1M testdb
+		
 Deleting Database
 =================
 
@@ -729,7 +736,7 @@ The following shows [options] available with the **cubrid spacedb** utility.
 
 .. option:: -d, --delete-old-repr
 
-	You can delete an existing table representation (schema structure) from catalog with this option. When a column is added or deleted by the **ALTER** statement, if the existing record still refers to the previous schema, no additional cost to update the schema is required and the previous table is kept.
+	You can delete an existing table representation (schema structure) from catalog with this option. Generally you’d better keep the existing table representation because schema updating cost will be saved when you keep the status as referring the past schema for the old records.
 
 .. option:: -I, --Instance-lock-timeout=NUMBER 
 
@@ -1147,7 +1154,7 @@ Checking Database Consistency
 
 The **cubrid checkdb** utility is used to check the consistency of a database. You can use **cubrid checkdb** to identify data structures that are different from indexes by checking the internal physical consistency of the data and log volumes. If the **cubrid checkdb** utility reveals any inconsistencies, you must try automatic repair by using the --**repair** option.
 
-cubrid checkdb [options] database_name [class_name1 class_name2 ...]
+cubrid checkdb [options] database_name [table_name1 table_name2 ...]
 
 	* **cubrid**: An integrated utility for CUBRID service and database management.
 
@@ -1157,7 +1164,7 @@ cubrid checkdb [options] database_name [class_name1 class_name2 ...]
 
 	*table_list.txt*: A file name to store the list of the tables for consistency check or recovery
 
-	*class_name1 class_name2*: List the table names for consistency check or recovery
+	*table_name1 table_name2*: List the table names for consistency check or recovery
 
 	
 The following shows [options] available with the **cubrid checkdb** utility.
@@ -1183,9 +1190,9 @@ The following shows [options] available with the **cubrid checkdb** utility.
 
 		cubrid checkdb -r testdb
 
-.. option:: -i, --input-class-file=FILE or table_name
+.. option:: -i, --input-class-file=FILE
 
-	You can specify a table in which consistency is check or restored by specifying the **-i** *FILE* option or listing the table names after a database name. In this way, you can limit the target to be restored and both ways can be used. If a specific target is not specified, entire database will be a target of consistency check or restoration. ::
+	You can specify tables to check the consistency or to restore, by specifying the **-i** *FILE* option or listing the table names after a database name. Both ways can be used together. If a target is not specified, entire database will be a target of consistency check or restoration. ::
 
 		cubrid checkdb testdb tbl1 tbl2
 		cubrid checkdb -r testdb tbl1 tbl2
@@ -1286,6 +1293,60 @@ The following shows [options] available with the **cubrid killtran** utility.
 			  5(+)         public      myhost            6944              csql
 		-------------------------------------------------------------------------------
 
+
+.. option:: -q, --query-exec-info
+
+	Displays the query-running status of transactions. The following shows to display the query-running status.
+
+	::
+	
+		cubrid killtran --query-exec-info testdb
+		 
+		Tran index Process id Program name Query time Tran time  Wait for lock holder   SQL Text
+		---------------------------------------------------------------------------------------------
+			  1(+)       8536    b1_cub_cas_1    0.00      0.00  -1                     *** empty ***
+			  2(+)       8538    b1_cub_cas_3    0.00      0.00  -1                     *** empty ***
+			  3(+)       8537    b1_cub_cas_2    0.00      0.00  -1                     *** empty ***
+			  4(+)       8543    b1_cub_cas_4    1.80      1.80  3, 2, 1                update [ta] [ta] set [a]=5 wher
+			  5(+)       8264    b1_cub_cas_5    0.00      0.60  -1                     *** empty ***
+			  6(+)       8307    b1_cub_cas_6    0.00      0.00  -1                     select [a].[index_name], ( cast
+			  7(+)       8308    b1_cub_cas_7    0.00      0.20  -1                     select [a].[index_name], ( cast
+			  .....
+		 
+		---------------------------------------------------------------------------------------------
+		
+	* Tran index : the index of transaction.
+	* Process id :  client’s process id
+	* Program name : program name of a client.
+	* Query time : total execution time for the running query (unit: second)
+	* Tran time : total run time for the current transaction (unit: second)
+	* Wait for lock holder : the list of transactions which own the lock when the current transaction is waiting for a lock.
+	* SQL Text : running  SQL text (maximum 30 characters)
+	
+	After the total information of transactions is displayed as above, the query which occurred the lock waiting is displayed as follows.
+
+	::
+	
+		Tran index : 4
+
+		update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
+
+		Tran index : 5, 6, 7
+
+		select [a].[index_name], ( cast(case when [a].[is_unique]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [a].[is_reverse]=0 then 'NO' else 'YES' end as varchar(3))), [a].[class_of].[class_name], [a].[key_count], ( cast(case when [a].[is_primary_key]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [a].[is_foreign_key]=0 then 'NO' else 'YES' end as varchar(3))), [b].[index_name], ( cast(case when [b].[is_unique]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [b].[is_reverse]=0 then 'NO' else 'YES' end as varchar(3))), [b].[class_of].[class_name], [b].[key_count], ( cast(case when [b].[is_primary_key]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [b].[is_foreign_key]=0 then 'NO' else 'YES' end as varchar(3))) from [_db_index] [a], [_db_index] [b] where (( CURRENT_USER ='DBA' or {[a].[class_of].[owner].[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) or {[a].[class_of]} subseteq (select sum(set{[au].[class_of]}) from [_db_auth] [au] where ({[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) and [au].[auth_type]= ?:0 ))) and ( CURRENT_USER ='DBA' or {[b].[class_of].[owner].[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) or {[b].[class_of]} subseteq (select sum(set{[au].[class_of]}) from [_db_auth] [au] where ({[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) and [au].[auth_type]= ?:1 ))))
+		
+	As displayed queries are came from the query plan cache, they cannot be displayed if their plan is not cached or they are INSERT statements.
+	Also, because the displayed query is came after the query parsing has been completed, it can be different from the original query which the user wrote.
+
+	For example, if you run below query, ::
+
+		UPDATE ta SET a=5 WHERE a > 0
+		
+	Below query is displayed. ::
+
+		update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
+
+		
 .. option:: -f, --force
 
 	This option omits a prompt to check transactions to be stopped. ::

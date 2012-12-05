@@ -141,10 +141,10 @@ The following shows the result of using connection strings above. ::
 
 	"DRIVER=CUBRID Driver;UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8"
 
-**Remark**
+.. note::
 
-*   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection strings.
-*   The database connection in thread-based programming must be used independently each other.
+	*   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection strings.
+	*   The database connection in thread-based programming must be used independently each other.
 
 Using Object Identifiers (OIDs) and Collections
 -----------------------------------------------

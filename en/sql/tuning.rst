@@ -162,6 +162,8 @@ The following example shows how to view query plan by using the example retrievi
 	There are no results.
 	0 rows selected.
 
+.. _tuning-index:
+	
 Using Indexes
 =============
 

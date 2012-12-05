@@ -427,7 +427,7 @@ The following example program is to enter student information from 0 to 1023 to 
 					Connection connection = null;
 	 
 					try {
-							connection = DriverManager.getConnection("jdbc:cubrid:localhost:45511:shard1:::?charset=utf8", "shard", "shard123");
+							connection = DriverManager.getConnection("jdbc:cubrid:localhost:45511:shard1:::?charSet=utf8", "shard", "shard123");
 							connection.setAutoCommit(false);
 	 
 							for (int i=0; i < 1024; i++) {
@@ -576,6 +576,8 @@ Default Configuration File, shard.conf
 +-------------------------------+----------+----------------------+--------------------+
 | PROXY_MAX_PREPARED_STMT_COUNT | int      | 2000                 |                    |
 +-------------------------------+----------+----------------------+--------------------+
+| PROXY_TIMEOUT                 | int      | 30(seconds)          |                    |
++-------------------------------+----------+----------------------+--------------------+
 | MAX_CLIENT                    | int      | 10                   |                    |
 +-------------------------------+----------+----------------------+--------------------+
 | METADATA_SHM_ID               | int      | -                    |                    |
@@ -616,7 +618,10 @@ Default Configuration File, shard.conf
     *   **NONE** : No log is recorded.
     *   **OFF** : No log is recorded.
 
+*   **PROXY_LOG_MAX_SIZE** : The maximum size of the shard proxy log file in KB. The maximum value is 1,000,000.
 *   **PROXY_MAX_PREPARED_STMT_COUNT** : The maximum size of statement pool managed by shard proxy
+*	**PROXY_TIMEOUT** : The maximum waiting time by which the statement is prepared or shard(cas) is available to use. The default value is 30(seconds).
+
 *   **MAX_CLIENT** : The number of applications that can be concurrently connected by using the shard proxy.
 *   **METADATA_SHM_ID** : Shared memory identifier of the shard metadata storage.
 
@@ -630,7 +635,6 @@ Default Configuration File, shard.conf
 
 *   **SHARD_KEY_FUNCTION_NAME** : The parameter to specify the name of the user hash function for shard key. For more information, see :ref:`setting-user-defined-hash-function`.
 
-*   **PROXY_LOG_MAX_SIZE** : The maximum size of the shard proxy log file in KB. The maximum value is 1,000,000.
 *   **IGNORE_SHARD_HINT** : When this value is **ON**, the hint provided to connect to a specific shard is ignored and the database to connect is selected based on the defined rule. The default value is **OFF**. It can be used to balance the read load while all databases are copied with the same data. For example, to give the load of an application to only one node among several replication nodes, the shard proxy automatically determines the node (database) with one connection to a specific shard.
 
 Setting Shard Metadata
@@ -933,6 +937,8 @@ If the CUBRID SHARD has already been started, the following message will appear:
 	++ cubrid shard is running.
 
 While executing **cubrid shard start**, the information of the CUBRID SHARD configuration file (**shard.conf**) are read to start all components of the configuration. All metadata DBs and shard DBs should be started before starting the CUBRID SHARD because it accesses them.
+
+CUBRID SHARD cannot be started even if one thing like DB connection is failed among all configured items; you can find the cause of failure through the SHARD error logs written on the $CUBRID/log/broker/ directory.
 
 **Stopping CUBRID SHARD**
 

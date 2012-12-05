@@ -130,12 +130,12 @@ Information Functions
 
 .. function:: INET_ATON( ip_string )
 
-	The **INET_ATON** function receives the string of an IP address and returns a number. When an IP address string such as 'a.b.c.d' is entered, the function returns :math:a * 256 ^ 3 + b * 256 ^ 2 + c * 256 + d. The return type is **BIGINT**.
+	The **INET_ATON** function receives the string of an IPv4 address and returns a number. When an IP address string such as 'a.b.c.d' is entered, the function returns "a * 256 ^ 3 + b * 256 ^ 2 + c * 256 + d". The return type is **BIGINT**.
 
 	:param ip_string: IPv4 address string
 	:rtype: BIGINT
 
-	In the following example, 192.168.0.10 is calculated as 192 * 256 ^ 3 + 168 * 256 ^ 2 + 0 * 256 + 10.
+	In the following example, 192.168.0.10 is calculated as "192 * 256 ^ 3 + 168 * 256 ^ 2 + 0 * 256 + 10".
 
 	.. code-block:: sql
 	
@@ -147,7 +147,7 @@ Information Functions
 
 .. function:: INET_NTOA( expr )
 
-	The **INET_NTOA** function receives a number and an IPv4 address string and returns them. The return type is VARCHAR.
+	The **INET_NTOA** function receives a number and returns an IPv4 address string. The return type is VARCHAR.
 
 	:param expr: Numeric expression
 	:rtype: STRING

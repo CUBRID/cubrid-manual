@@ -109,11 +109,11 @@ A connection string using the example above is as follows: ::
 
 	"Provider=CUBRIDProvider;Data Source=demodb;Location=127.0.0.1;User ID=PUBLIC;Password=xxx;Port= 33000;Fetch Size=100"
 
-**Remark**
+.. note::
 
-*   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection string.
-*   If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
-*   The database connection in thread-based programming must be used independently each other.
+	*   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection string.
+	*   If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
+	*   The database connection in thread-based programming must be used independently each other.
 
 Multi-Threaded Programming in .NET Environment
 ----------------------------------------------

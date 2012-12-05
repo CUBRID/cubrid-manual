@@ -434,7 +434,7 @@ shard 구성 데이터베이스 설정 파일인 **shard_connection.txt** 파일
 					Connection connection = null;
 	 
 					try {
-							connection = DriverManager.getConnection("jdbc:cubrid:localhost:45511:shard1:::?charset=utf8", "shard", "shard123");
+							connection = DriverManager.getConnection("jdbc:cubrid:localhost:45511:shard1:::?charSet=utf8", "shard", "shard123");
 							connection.setAutoCommit(false);
 	 
 							for (int i=0; i < 1024; i++) {
@@ -583,6 +583,8 @@ CUBRID SHARD의 모든 프로세스의 실행에 필요한 기본적인 설정�
 +-------------------------------+--------+----------------------+-----------+
 | PROXY_MAX_PREPARED_STMT_COUNT | int    | 2000                 |           |
 +-------------------------------+--------+----------------------+-----------+
+| PROXY_TIMEOUT                 | int    | 30(초)               |           |
++-------------------------------+--------+----------------------+-----------+
 | MAX_CLIENT                    | int    | 10                   |           |
 +-------------------------------+--------+----------------------+-----------+
 | METADATA_SHM_ID               | int    | -                    |           |
@@ -628,10 +630,11 @@ CUBRID SHARD의 모든 프로세스의 실행에 필요한 기본적인 설정�
     *   **NONE** : 로그 기록하지 않음
     *   **OFF** : 로그 기록하지 않음
 
+*   **PROXY_LOG_MAX_SIZE** : shard proxy 로그 파일의 최대크기로 kbyte 단위이다. 최대 1,000,000까지 설정할 수 있다.
 *   **PROXY_MAX_PREPARED_STMT_COUNT** : shard proxy가 관리하는 statement pool의 최대 크기
+*   **PROXY_TIMEOUT** : shard proxy에서 shard(cas)가 사용 가능해지기를 기다리거나 statement가 준비(prepare)되기를 기다리는 최대 시간. 대기 시간이 만료되면 드라이버의 요청을 에러 처리함. 기본값: 30(초).
 
 *   **MAX_CLIENT** : shard proxy로 동시에 연결 가능한 응용의 수
-
 *   **METADATA_SHM_ID** : shard 메타데이터를 저장할 공유 메모리 식별자
 
 *   **SHARD_CONNECTION_FILE** : shard connection 설정 파일의 경로. shard connection 설정 파일은 **$CUBRID/conf** 내에 위치해야 한다. 자세한 설명은 :ref:`shard 연결 설정 파일 <shard-connection-configuration-file>` 을 참고한다. :
@@ -643,8 +646,6 @@ CUBRID SHARD의 모든 프로세스의 실행에 필요한 기본적인 설정�
 *   **SHARD_KEY_LIBRARY_NAME** : shard key에 대한 사용자 해시 함수를 지정하기 위해 실행 시간에 로딩 가능한 라이브러리 경로를 지정한다. **SHARD_KEY_LIBRARY_NAME** 파라미터가 설정된 경우 반드시 **SHARD_KEY_FUNCTION_NAME** 파라미터도 설정되어야 한다. 자세한 내용은 :ref:`setting-user-defined-hash-function` 을 참고한다.
 
 *   **SHARD_KEY_FUNCTION_NAME** : shard key에 대한 사용자 해시 함수의 이름을 지정하기 위한 파라미터이다. 자세한 내용은 :ref:`setting-user-defined-hash-function` 를 참고한다.
-
-*   **PROXY_LOG_MAX_SIZE** : shard proxy 로그 파일의 최대크기로 kbyte 단위이다. 최대 1,000,000까지 설정할 수 있다.
 
 *   **IGNORE_SHARD_HINT** : 이 값이 ON이면 특정 shard로 연결하기 위해 제공되는 힌트가 무시되고, 정해진 규칙에 따라 접속할 데이터베이스를 선택한다. 기본값은 **OFF** 이다. 모든 데이터베이스가 같은 데이터로 복제되어 있는 상태에서 읽기 부하를 자동으로 로드 밸런싱하여 처리하고자 할 때 사용할 수 있는 방식이다. 예를 들어 응용 프로그램의 부하를 여러 개의 복제 노드 중 하나에 접속하고자 할 때 특정 shard 하나의 연결만 제공하면 어느 노드(데이터베이스)에 연결할지는 shard proxy가 자동으로 결정한다.
 
@@ -946,6 +947,8 @@ CUBRID SHARD를 구동하기 위해서는 다음과 같이 입력한다. ::
 	++ cubrid shard is running.
 
 **cubrid shard start** 수행 시 CUBRID SHARD 환경 설정 파일(**shard.conf**) 의 설정을 읽어 설정 상의 모든 구성 요소를 구동한다. 구동 시 메타데이터 DB 및 shard DB에 접속을 하므로, CUBRID SHARD의 구동 전 메타데이터 DB 및 shard DB 들이 모두 구동되어 있어야 한다.
+
+DB와의 접속에 실패하는 등 설정 상의 모든 구성 요소들 중 하나라도 실패하면 CUBRID SHARD는 구동되지 못하며, $CUBRID/log/broker/ 디렉터리 이하에 저장되는 SHARD 에러 로그를 통해 실패 원인을 확인할 수 있다.
 
 **CUBRID SHARD 정지**
 

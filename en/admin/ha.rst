@@ -315,9 +315,9 @@ Ensure **ha_mode** of **$CUBRID/conf/cubrid.conf** in every CUBRID HA node has t
 	# Adds when configuring HA (HA mode)
 	ha_mode=on
 
-**Configuring cubrid_ha.conf**
+**cubrid_ha.conf**
 
-Ensure **ha_port_id**, **ha_node_list**, **ha_db_list** of **$CUBRID/conf/cubrid_ha.conf** in every CUBRID HA node has the same value. ::
+Ensure **ha_port_id**, **ha_node_list**, **ha_db_list** of **$CUBRID/conf/cubrid_ha.conf** in every CUBRID HA node has the same value. In the example below, we assume that the host name of a master node is *nodeA* and that of a slave node is *nodeB*. ::
 
 	[common]
 	ha_port_id=59901
@@ -338,7 +338,7 @@ Starting and Verifying CUBRID HA
 
 **Starting CUBRID HA**
 
-Execute the **cubrid heartbeat** **start** at each node in the CUBRID HA group. Note that the node executing **cubrid heartbeat start** first will become a master node. In the example below, the host name of a master node is *nodeA* and that of a slave node is *nodeB*.
+Execute the **cubrid heartbeat** **start** at each node in the CUBRID HA group. Note that the node executing **cubrid heartbeat start** first will become a master node. In the example below, we assume that the host name of a master node is *nodeA* and that of a slave node is *nodeB*.
 
 *   Master node ::
 
@@ -350,7 +350,7 @@ Execute the **cubrid heartbeat** **start** at each node in the CUBRID HA group. 
 
 **Verifying CUBRID HA Status**
 
-Execute **cubrid heartbeat status** at each node in the CUBRID HA group to verify its configuration status. In the example below, the host name of a master node is *nodeA* and that of a slave node is *nodeB*. ::
+Execute **cubrid heartbeat status** at each node in the CUBRID HA group to verify its configuration status. ::
 
 	[nodeA]$ cubrid heartbeat status
 	@ cubrid heartbeat list
@@ -495,7 +495,7 @@ If you configure the value for **force_remove_log_archives** to yes, the archive
 
 .. note::
 
-	In replica mode, it will be always deleted except for archive logs as many as specified in the **log_max_archives** parameter, regardless the **force_remove_log_archives** value specified.
+	From 2008 R4.3 in replica mode, it will be always deleted except for archive logs as many as specified in the **log_max_archives** parameter, regardless the **force_remove_log_archives** value specified.
 
 **max_clients**
 
@@ -554,7 +554,7 @@ The **cubrid_ha.conf** file that has generation information on CUBRID HA is loca
 
 **ha_node_list** is a parameter used to configure the group name to be used in the CUBRID HA group and the host name of member nodes in which failover is supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A colon (:) is used to separate individual host names. The default is **localhost@localhost**.
 
-The host name of the member nodes specified in this parameter cannot be replaced with the IP. When a host name is used, the name must be registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **on** must be specified in **ha_node_list**. The value of the **ha_node_list** of all nodes in the CUBRID HA group must be identical. When a failover occurs, a node becomes a master node in the order specified in the parameter.
+The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **on** must be specified in **ha_node_list**. The value of the **ha_node_list** of all nodes in the CUBRID HA group must be identical. When a failover occurs, a node becomes a master node in the order specified in the parameter.
 
 This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
@@ -562,7 +562,7 @@ This parameter can be modified dynamically. If you modify the value of this para
 
 **ha_replica_list** is parameter used to configure the group name to be used in the CUBRID HA group and the host name of member nodes in which failover is not supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A colon (:) is used to separate individual host names. The default is **NULL**.
 
-The group name must be identical to the name specified in **ha_replica_list**. The host names of member nodes and the host names of nodes specified in this parameter must be registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **replica** must be specified in **ha_replica_list**. The **ha_node_list** values of all nodes in the CUBRID HA group must be identical.
+The group name must be identical to the name specified in **ha_replica_list**. The host names of member nodes and the host names of nodes specified in this parameter must be registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **replica** must be specified in **ha_replica_list**. The **ha_replica_list** values of all nodes in the CUBRID HA group must be identical.
 
 This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
@@ -763,7 +763,7 @@ Utilities of cubrid heartbeat
 
 **start**
 
-This utility is used to enable the CUBRID HA features and run the component processes (database server process, replication log copy process, and replication log reflection process). Note that a master node or a slave node is determined based on the execution order of **cubrid heartbeat start**.
+This utility is used to activate CUBRID HA feature and start all processes of CUBRID HA in the node(database server process, replication log copy process, and replication log reflection process). Note that a master node or a slave node is determined based on the execution order of **cubrid heartbeat start**.
 
 How to execute the command is as shown below. ::
 
@@ -874,32 +874,42 @@ How to configure **cubrid.conf** file is shown below. ::
 cubrid applyinfo
 ----------------
 
-This utility is used to copy and monitor the status of replication logs. ::
+This utility is used to check the copied and applied status of replication logs by CUBRID HA. ::
 
 	cubrid applyinfo [option] <database-name>
 
 *   *database-name* : Specifies the name of a server to monitor. A node name is not included.
 
-**Options**
+The following shows the [options] used on **cubrid applyinfo**.
 
-+------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Option     | Default     | Description                                                                                                                                                                                 |
-+============+=============+=============================================================================================================================================================================================+
-| -r         | none        | Configures the name of a target node in which transaction logs are copied. Using this option will output the information of active logs (Active Info.) of a target node.                    |
-+------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| -a         |             | Outputs the information of replication reflection of a node executing cubrid applyinfo. The                                                                                                 |
-|            |             | **-L**                                                                                                                                                                                      |
-|            |             | option is required to use this option.                                                                                                                                                      |
-+------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| -L         | none        | Configures the location of transaction logs copied from the other node. Using this option will output the information of transaction logs copied (Copied Active Info.) from the other node. |
-+------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| -p         | 0           | Outputs the information of a specific page in the copied logs. This is available only when the                                                                                              |
-|            |             | **-L**                                                                                                                                                                                      |
-|            |             | option is enabled.                                                                                                                                                                          |
-+------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| -v         |             | Outputs detailed information.                                                                                                                                                               |
-+------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. program:: applyinfo
 
+.. option:: -r, --remote-host-name=HOSTNAME
+
+	Configures the name of a target node in which transaction logs are copied. Using this option will output the information of active logs (Active Info.) of a target node.
+	
+.. option:: -a, --applied-info
+
+	Outputs the information of replication reflection of a node executing cubrid applyinfo. 
+	The **-L** option is required to use this option.
+	
+.. option:: -L, --copied-log-path=PATH
+
+	Configures the location of transaction logs copied from the other node. Using this option will output the information of transaction logs copied (Copied Active Info.) from the other node.
+	
+.. option:: -p, --pageid=ID
+
+	Outputs the information of a specific page in the copied logs. 
+	This is available only when the  **-L** option is enabled.  The default is 0, it means the active page. 
+		
+.. option:: -v
+
+	Outputs detailed information.                        
+
+.. option:: -i, --interval=SECOND
+
+	Outputs the copied status and applied status of transaction logs per specified seconds. To see the delayed status of the replicated log, this option is mandatory.
+	
 **Example**
 
 The following example shows how to check log information (Active Info.) of the master node, the status information of log copy (Copied Active Info.) of the slave node, and the applylogdb info (Applied Info.) of the slave node by executing **applyinfo** in the slave node.
@@ -907,70 +917,81 @@ The following example shows how to check log information (Active Info.) of the m
 *   Applied Info.: Shows the status information after the slave node applies the replication log.
 *   Copied Active Info.: Shows the status information after the slave node copies the replication log.
 *   Active Info.: Shows the status information after the master node records the transaction log.
+*	Delay in Copying Active Log: Shows the status information which the transaction logs’ copy is delayed.
+*	Delay in Applying Copied Log: Shows the status information which the transaction logs’ application is delayed.
 
 ::
 
-	[nodeB] $ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
+	[nodeB] $ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a -i 3 testdb
 	 
-	 *** Applied Info. ***
-	Committed page                 : 1913 | 2904
-	Insert count                   : 645
-	Update count                   : 0
-	Delete count                   : 0
-	Schema count                   : 60
-	Commit count                   : 15
+	 *** Applied Info. *** 
+	Insert count                   : 289492
+	Update count                   : 71192
+	Delete count                   : 280312
+	Schema count                   : 20
+	Commit count                   : 124917
 	Fail count                     : 0
-	 
-	 *** Copied Active Info. ***
+
+	 *** Copied Active Info. *** 
 	DB name                        : testdb
-	DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-	EOF LSA                        : 1913 | 2976
-	Append LSA                     : 1913 | 2976
-	HA server state                : active
-	 
-	 ***  Active Info. ***
-	DB name                        : testdb
-	DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-	EOF LSA                        : 1913 | 2976
-	Append LSA                     : 1913 | 2976
+	DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+	EOF LSA                        : 27722 | 10088
+	Append LSA                     : 27722 | 10088
 	HA server state                : active
 
-You can see the delay in applying from the master node to the slave node by checking the difference between the EOF LSA of Active Info. and the EOF LSA of the Copies Active Applied Info.
+	 ***  Active Info. *** 
+	DB name                        : testdb
+	DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+	EOF LSA                        : 27726 | 2512
+	Append LSA                     : 27726 | 2512
+	HA server state                : active
 
-You can see the delay in applying the log copied to the slave node to the slave database by checking the difference between the EOF LSA of the Copied Active Info. and the committed page of the Applied Info.
+	 *** Delay in Copying Active Log *** 
+	Delayed log page count         : 4
+	Estimated Delay                : 0 second(s)
 
-You can check delay time of copying from mast node to slave node with EOF LSA in Active Info. and EOF LSA of Applied Info.
-
-You can check delay time of applying to the slave node which was copied from the master node with EOF LSA of Copied Active Info. and Committed page of Applied Info.
+	 *** Delay in Applying Copied Log *** 
+	Delayed log page count         : 1459
+	Estimated Delay                : 22 second(s)
 
 The items shown by each status are as follows:
 
-*   Applied Info.
+*	Applied Info.
+	
+	*	Committed page: The information of committed pageid and offset of a transaction reflected last through replication log reflection process. The difference between this value and the EOF LSA of "Copied Active Info. represents the amount of replication delay.
+	*	Insert Count: The number of Insert queries reflected through replication log reflection process.
+	*	Update Count: The number of Update queries reflected through replication log reflection process.
+	*	Delete Count: The number of Delete queries reflected through replication log reflection process.
+	*	Schema Count: The number of DDL statements reflected through replication log reflection process.
+	*	Commit Count: The number of transactions reflected through replication log reflection process.
+	*	Fail Count: The number of DML and DDL statements in which log reflection through replication log reflection process fails.
+	
+*	Copied Active Info.
+	
+	*	DB name: Name of a target database in which the replication log copy process copies logs
+	*	DB creation time: The creation time of a database copied through replication log copy process
+	*	EOF LSA: Information of pageid and offset copied at the last time on the target node by the replication log copy process. There will be a delay in copying logs as much as difference with the EOF LSA value of "Active Info." and with the Append LSA value of "Copied Active Info."
+	*	Append LSA: Information of pageid and offset written at the last time on the disk by the replication log copy process. This value can be less than or equal to EOF LSA. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
+	*	HA server state: Status of a database server process which replication log copy process receives logs from. For details on status, see :ref:`ha-server`.
+	
+*	Active Info.
+	
+	*	DB name: Name of a database of which node was configured in the **-r** option.
+	*	DB creation time: Database creation time of a node that is configured in the **-r** option.
+	*	EOF LSA: The last information of pageid and offset of a database transaction log of a node that is configured in the **-r** option. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
+	*	Append LSA: Information of pageid and offset written at the last time on the disk by the database of which node was configured in the **-r** option.
+	*	HA server state: The server status of a database server of which node was configured in the **-r** option.
+	
+*	Delay in Copying Active Log
+	
+	*	Delayed log page count: the count of transaction log pages which the copy is delayed.
+	*	Estimated Delay: the expected time which the logs copying is completed.
+	
+*	Delay in Applying Copied Log
 
-    *   Committed page: The information of committed pageid and offset of a transaction reflected last through replication log reflection process. The difference between this value and the EOF LSA of "Copied Active Info. represents the amount of replication delay.
-    *   Insert Count: The number of Insert queries reflected through replication log reflection process.
-    *   Update Count: The number of Update queries reflected through replication log reflection process.
-    *   Delete Count: The number of Delete queries reflected through replication log reflection process.
-    *   Schema Count: The number of DDL statements reflected through replication log reflection process.
-    *   Commit Count: The number of transactions reflected through replication log reflection process.
-    *   Fail Count: The number of DML and DDL statements in which log reflection through replication log reflection process fails.
-
-*   Copied Active Info.
-
-    *   DB name: Name of a target database in which the replication log copy process copies logs
-    *   DB creation time: The creation time of a database copied through replication log copy process
-    *   EOF LSA: Information of pageid and offset copied at the last time on the target node by the replication log copy process. There will be a delay in copying logs as much as difference with the EOF LSA value of "Active Info." and with the Append LSA value of "Copied Active Info."
-    *   Append LSA: Information of pageid and offset written at the last time on the disk by the replication log copy process. This value can be less than or equal to EOF LSA. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
-    *   HA server state: Status of a database server process which replication log copy process receives logs from. For details on status, see :ref:`ha-server`.
-
-*   Active Info.
-
-    *   DB name: Name of a database of which node was configured in the **-r** option.
-    *   DB creation time: Database creation time of a node that is configured in the **-r** option.
-    *   EOF LSA: The last information of pageid and offset of a database transaction log of a node that is configured in the **-r** option. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
-    *   Append LSA: Information of pageid and offset written at the last time on the disk by the database of which node was configured in the **-r** option.
-    *   HA server state: The server status of a database server of which node was configured in the **-r** option.
-
+	*	Delayed log page count: the count of transaction log pages which the application is delayed.
+	*	Estimated Delay: the expected time which the logs applying is completed.
+	
 .. _cubrid-changemode:
 
 cubrid changemode
@@ -978,37 +999,33 @@ cubrid changemode
 
 This utility is used to check and change the server status of CUBRID HA. ::
 
-	cubrid changemode [option] <database-name>
+	cubrid changemode [option] <database-name@node-name>
 
-*   *database-name* : Specifies the name of a server to be checked or changed and separates each node name by using @.
+*   *database-name@node-name* : Specifies the name of a server to be checked or changed and separates each node name by using @.
 
-**Options**
 
-+------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Option     | Default        | Description                                                                                                                                                           |
-+============+================+=======================================================================================================================================================================+
-| -m         | none           | Changes the server status. You can enter one of the followings:                                                                                                       |
-|            |                | **standby**                                                                                                                                                           |
-|            |                | ,                                                                                                                                                                     |
-|            |                | **maintenance**                                                                                                                                                       |
-|            |                | , or                                                                                                                                                                  |
-|            |                | **active**                                                                                                                                                            |
-|            |                | .                                                                                                                                                                     |
-+------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| -f         |                | Configures whether or not to forcibly change the server status. This option must be configured if you want to change the server status from to-be-active to active.   |
-|            |                | If it is not configured, the status will not be changed to active.                                                                                                    |
-|            |                | Forcibly change may cause data inconsistency among replication nodes; so it is not recommended.                                                                       |
-+------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| -t         | 5 (in seconds) | Configures the waiting time for the normal completion of the transaction that is being processed when the node status switches from                                   |
-|            |                | **standby**                                                                                                                                                           |
-|            |                | to                                                                                                                                                                    |
-|            |                | **maintenance**                                                                                                                                                       |
-|            |                | . If the transaction is still in progress beyond the configured time, it will be forced to terminate and switch to                                                    |
-|            |                | **maintenance**                                                                                                                                                       |
-|            |                | status; if all transactions have completed normally within the configured time, it will switch to                                                                     |
-|            |                | **maintenance**                                                                                                                                                       |
-|            |                | status immediately.                                                                                                                                                   |
-+------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. program:: changemode
+
+.. option:: -m, --mode=MODE
+
+	Changes the server status. You can enter one of the followings:                                                                                                       
+	
+	**standby**, **maintenance** or **active**.
+	
+.. option:: -f, --force
+
+	Configures whether or not to forcibly change the server status. This option must be configured if you want to change the server status from to-be-active to active.   |
+	
+	If it is not configured, the status will not be changed to active. 
+	Forcibly change may cause data inconsistency among replication nodes; so it is not recommended.                                                                       |
+
+.. option:: -t, --timeout=SECOND
+	
+	The default is 5(seconds). 
+
+	Configures the waiting time for the normal completion of the transaction that is being processed when the node status switches from **standby** to **maintenance**. 
+	
+	If the transaction is still in progress beyond the configured time, it will be forced to terminate and switch to **maintenance** status; if all transactions have completed normally within the configured time, it will switch to **maintenance** status immediately. 
 
 **Status Changeable**
 
@@ -1393,11 +1410,11 @@ It is not recommended to use triggers and java stored procedures in CUBRID HA.
 
 **Method and CUBRID Manager**
 
-CUBRID HA synchronizes data among nodes within CUBRID HA groups based on replication logs. Therefore, using method that does not generate replication logs or configuring **NOT NULL** through CUBRID Manager may cause data inconsistency among nodes within CUBRID HA groups. Therefore, it is not recommended to use method and other menus in CUBRID HA environment except for the query processor CUBRID Manager.
+CUBRID HA synchronizes data among nodes within CUBRID HA groups based on replication logs. Therefore, using method that does not generate replication logs or configuring **NOT NULL** through CUBRID Manager may cause data inconsistency among nodes within CUBRID HA groups. Therefore, in CUBRID HA environment, it is not recommended to use method and other menus of CUBRID Manager except for the query processor.
 
 **UPDATE STATISTICS Statement**
 
-The **UPDATE STATISTICS** statement which updates statistics does not replicate in the slave node.
+The **UPDATE STATISTICS** statement which updates statistics is not replicated to the slave node.
 
 **Standalone Mode**
 
@@ -1419,8 +1436,8 @@ If you use **INCR** / **DECR** (click counter functions) in a slave node of HA c
 
 In a CUBRID HA environment, the meta data (Locator) of a **LOB** column is replicated and **LOB** data is not replicated. Therefore, if storage of a **LOB** type is located on the local machine, no tasks corresponding to columns are allowed in slave nodes or master nodes after failover.
 
-Optional Scenarios
-==================
+Operational Scenarios
+=====================
 
 Scenario of Building New Slave Node
 -----------------------------------
@@ -1533,44 +1550,44 @@ The operation scenario written in this page is not affected by read/write servic
 
 You can perform the following operations without stopping and restarting nodes in CUBRID HA groups.
 
-+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **General Operation**                                                          | **Scenario**                                                                                                                          | **Consideration**                                                                                                                                      |
-|                                                                                |                                                                                                                                       |                                                                                                                                                        |
-+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Online Backup                                                                  | Operation task is performed at each master node and slave node each during operation.                                                 | Note that there may be a delay in the transaction of master node due to the operation task.                                                            |
-|                                                                                |                                                                                                                                       |                                                                                                                                                        |
-+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Schema change (excluding basic key change), index change, authorization change | When an operation task occurs at a master node, it is automatically replication reflected to a slave node.                            | Because replication log is copied and reflected to a slave node after an operation task is completed in a master node, operation task time is doubled. |
-|                                                                                |                                                                                                                                       | Changing schema must be processed without any failover.                                                                                                |
-|                                                                                |                                                                                                                                       | Index change and authority change other than the schema change can be performed by stopping each node and executing standalone mode (ex: the           |
-|                                                                                |                                                                                                                                       | **-S**                                                                                                                                                 |
-|                                                                                |                                                                                                                                       | option of the                                                                                                                                          |
-|                                                                                |                                                                                                                                       | **csql**                                                                                                                                               |
-|                                                                                |                                                                                                                                       | utility) when the operation time is important.                                                                                                         |
-|                                                                                |                                                                                                                                       |                                                                                                                                                        |
-+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Add volume                                                                     | Operation task is performed at each DB regardless of HA structure.                                                                    | Note that there may be a delay in the transaction of master node due to the operation task.                                                            |
-|                                                                                |                                                                                                                                       | If operation task time is an issue, operation task can be performed by stopping each node and executing standalone mode (ex: the                       |
-|                                                                                |                                                                                                                                       | **-S**                                                                                                                                                 |
-|                                                                                |                                                                                                                                       | of the                                                                                                                                                 |
-|                                                                                |                                                                                                                                       | **cubrid addvoldb**                                                                                                                                    |
-|                                                                                |                                                                                                                                       | utility).                                                                                                                                              |
-|                                                                                |                                                                                                                                       |                                                                                                                                                        |
-+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Failure node server replacement                                                | It can be replaced without restarting the CUBRID HA group when a failure occurs.                                                      | The failure node must be registered in the ha_node_list of CUBRID HA group, and the node name must not be changed during replacement.                  |
-|                                                                                |                                                                                                                                       |                                                                                                                                                        |
-+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Failure broker server replacement                                              | It can be replaced without restarting the broker when a failure occurs.                                                               | The connection to a broker replaced at a client can be made by rcTime which is configured in URL string.                                               |
-|                                                                                |                                                                                                                                       |                                                                                                                                                        |
-+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DB server expansion                                                            | You can execute                                                                                                                       | Starts or stops the                                                                                                                                    |
-|                                                                                | **cubrid heartbeat reload**                                                                                                           | **copylogdb/applylogdb**                                                                                                                               |
-|                                                                                | in each node after configuration change (ha_node_list, ha_replica_list) without restarting the previously configured CUBRID HA group. | processes which were added or deleted by loading changed configuration information.                                                                    |
-|                                                                                |                                                                                                                                       |                                                                                                                                                        |
-+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Broker server expansion                                                        | Run additional brokers without restarting existing brokers.                                                                           | Modify the URL string to connect to a broker where a client is added.                                                                                  |
-|                                                                                |                                                                                                                                       |                                                                                                                                                        |
-+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
++----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **General Operation**                        | **Scenario**                                                            | **Consideration**                                                                                                                                      |
+|                                              |                                                                         |                                                                                                                                                        |
++----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Online Backup                                | Operation task is performed at each master node and slave node          | Note that there may be a delay in the transaction of master node due to the operation task.                                                            |
+|                                              | each during operation.                                                  |                                                                                                                                                        |
++----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Schema change (excluding basic key change),  | When an operation task occurs at a master node, it is automatically     | Because replication log is copied and reflected to a slave node after an operation task is completed in a master node, operation task time is doubled. |
+| index change, authorization change           | replication reflected to a slave node.                                  | Changing schema must be processed without any failover.                                                                                                |
+|                                              |                                                                         | Index change and authority change other than the schema change can be performed by stopping each node and executing standalone mode (ex: the           |
+|                                              |                                                                         | **-S**                                                                                                                                                 |
+|                                              |                                                                         | option of the                                                                                                                                          |
+|                                              |                                                                         | **csql**                                                                                                                                               |
+|                                              |                                                                         | utility) when the operation time is important.                                                                                                         |
+|                                              |                                                                         |                                                                                                                                                        |
++----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Add volume                                   | Operation task is performed at each DB regardless of HA structure.      | Note that there may be a delay in the transaction of master node due to the operation task.                                                            |
+|                                              |                                                                         | If operation task time is an issue, operation task can be performed by stopping each node and executing standalone mode (ex: the                       |
+|                                              |                                                                         | **-S**                                                                                                                                                 |
+|                                              |                                                                         | of the                                                                                                                                                 |
+|                                              |                                                                         | **cubrid addvoldb**                                                                                                                                    |
+|                                              |                                                                         | utility).                                                                                                                                              |
+|                                              |                                                                         |                                                                                                                                                        |
++----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Failure node server replacement              | It can be replaced without restarting the CUBRID HA group when          | The failure node must be registered in the ha_node_list of CUBRID HA group, and the node name must not be changed during replacement.                  |
+|                                              | a failure occurs.                                                       |                                                                                                                                                        |
++----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Failure broker server replacement            | It can be replaced without restarting the broker when a failure occurs. | The connection to a broker replaced at a client can be made by rcTime which is configured in URL string.                                               |
+|                                              |                                                                         |                                                                                                                                                        |
++----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| DB server expansion                          | You can execute                                                         | Starts or stops the                                                                                                                                    |
+|                                              | **cubrid heartbeat reload**                                             | **copylogdb/applylogdb**                                                                                                                               |
+|                                              | in each node after configuration change (ha_node_list, ha_replica_list) | processes which were added or deleted by loading changed configuration information.                                                                    |
+|                                              | without restarting the previously configured CUBRID HA group.           |                                                                                                                                                        |
++----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Broker server expansion                      | Run additional brokers without restarting existing brokers.             | Modify the URL string to connect to a broker where a client is added.                                                                                  |
+|                                              |                                                                         |                                                                                                                                                        |
++----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 **When Failover Occurs**
 

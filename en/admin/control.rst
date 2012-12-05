@@ -420,6 +420,8 @@ The following log is created in the file of a server error log if an IP address 
 
 .. note:: For details on how to limit an access to the broker server, see :ref:`limiting-broker-access`.
 
+.. _database-server-error:
+
 Database Server Errors
 ----------------------
 
@@ -500,7 +502,7 @@ Broker
 Starting Broker
 ---------------
 
-Enter the code below to start the broker. ::
+Enter the command below to start the broker. ::
 
 	% cubrid broker start
 	@ cubrid broker start
@@ -516,7 +518,7 @@ The following message is returned if the broker is already running. ::
 Stopping Broker
 ---------------
 
-Enter the code below to stop the broker. ::
+Enter the command below to stop the broker. ::
 
 	% cubrid broker stop
 	@ cubrid broker stop
@@ -531,7 +533,7 @@ The following message is returned if the broker has stopped. ::
 Restarting Broker
 -----------------
 
-To restart all brokers, enter command line as follows: ::
+Enter the command below to restart the whole brokers.
 
 	% cubrid broker restart
 
@@ -1081,7 +1083,7 @@ The following examples and descriptions show SQL log files: ::
 The **broker_log_top** utility analyses the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in
 **log.top.res**, respectively.
 
-The **broker_log_top** utility is useful to analyse the query of which execution takes long. The syntax is as follows: ::
+The **broker_log_top** utility is useful to analyse a long running query. The syntax is as follows: ::
 
 	broker_log_top [options] <sql_log_file_list>
 

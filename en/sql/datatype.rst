@@ -184,6 +184,8 @@ You can use a dollar sign or a decimal point, but a comma is not allowed.
 	If you specify 12345.67898934 as MONETARY, $12,345.68 is stored (it is rounded to third decimal place).
 	If you specify 123456789 as MONETARY, $123,456.789.00 is stored.
 
+.. _date-time-type:
+
 Date/Time Types
 ===============
 
@@ -359,7 +361,7 @@ The input format of **TIMESTAMP** is as follows: ::
 
 .. _cast-string-to-datetime:
 
-Casting a String to Date/Time Type
+CASTing a String to Date/Time Type
 ----------------------------------
 
 **Recommended Format for Strings in Date/Time Type**
@@ -1636,7 +1638,7 @@ Allowing multiple data values to be stored in a single attribute is an extended 
 |              |                                                                       | col_name MULTISET (VARCHAR(20)) | {'c','c','c','b','b','a'}  | {'a','b','b', 'c','c','c'} |
 +--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
 | **LIST** or  | A union which allows duplicates and stores data in the order of input | col_name LIST VARCHAR(20)       | {'c','c','c','b','b','a'}  | {'c','c','c','b','b','a'}  |
-| **SEQUENCE   |                                                                       | col_name LIST (VARCHAR(20))     | {'c','c','c','b','b', 'a'} | {'c','c','c','b','b','a'}  |
+| **SEQUENCE** |                                                                       | col_name LIST (VARCHAR(20))     | {'c','c','c','b','b', 'a'} | {'c','c','c','b','b','a'}  |
 +--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
 
 As you see the table above, the value specified as a collection type can be inputted with curly braces ('{', '}') each value is separated with a comma (,).

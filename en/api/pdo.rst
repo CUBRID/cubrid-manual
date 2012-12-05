@@ -5,7 +5,7 @@ PDO Driver
 PDO Overview
 ============
 
-The official CUBRID PHP Data Objects (PDO) driver is available as a PECL package and it implements the PDO interface to enable access from PDO to CUBRID.?PDO is available with PHP 5.1. For PHP 5.0, you can use it as a PECL extension. PDO cannot run with earlier versions of PHP 5.0 because it requires the new OO features in the core of PHP 5.0.
+The official CUBRID PHP Data Objects (PDO) driver is available as a PECL package and it implements the PDO interface to enable access from PDO to CUBRID.PDO is available with PHP 5.1. For PHP 5.0, you can use it as a PECL extension. PDO cannot run with earlier versions of PHP 5.0 because it requires the new OO features in the core of PHP 5.0.
 
 PDO provides a data-access abstraction layer, which means that, regardless of which database you are using, you use the same functions to issue queries and fetch data; PDO does not provide a database abstraction. Using PDO as a database interface layer can have important advantages over "direct" PHP database drivers as follows:
 

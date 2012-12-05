@@ -292,6 +292,17 @@ CCI API Reference
 		*   **CCI_ER_DBMS**
 		*   **CCI_ER_INVALID_LOB_HANDLE**
 
+		
+.. c:function::  int cci_close_query_result(int req_handle)
+
+	The **cci_close_query_result** funciton closes the resultset returned by :c:func:`cci_execute`, :c:func:`cci_execute_array` or :c:func:`cci_execute_batch`.
+	
+	:param req_handle: (IN) Request handle
+	:return: Error code (0: success)
+	
+		*	**CCI_ER_REQ_HANDLE**
+		*	**CCI_ER_COMMUNICATION**
+		
 .. c:function:: int cci_close_req_handle(int req_handle)
 
 	The **cci_close_req_handle** function closes the request handle obtained by :c:func:`cci_prepare`.
@@ -472,7 +483,7 @@ CCI API Reference
 
 .. c:function:: int cci_connect_with_url (char *url, char *db_user, char *db_password)
 
-	The **cci_connect_with_url** function connects a database by using connection information passed with a *url* argument. If CUBRID HA of broker is enabled in CCI, you must specify the connection information of the standby broker server, which is used for failover in althost property when failure occurs, in the *url* argument of this function. If it has succeeded, the ID of connection handle is returned; it returns an error code on failure. For details about HA features of broker, see Administrator Guide > CUBRID HA > CUBRID Features > Duplexing Brokers.
+	The **cci_connect_with_url** function connects a database by using connection information passed with a *url* argument. If broker's HA feature is used in CCI, you must specify the connection information of the standby broker server with altHosts property, which is used for the failover, in the *url* argument of this function. It returns the ID of a connection handle on success; it returns an error code on failure. For details about HA features of broker, see :ref:`duplexing-brokers`.
 
 	:param url: (IN) A string that contains server connection information
 	:param db_user: (IN) Database user name. If it is NULL or an empty string, use <*db_user*> in *url*.
@@ -493,7 +504,7 @@ CCI API Reference
 		<url> ::= cci:CUBRID:<host>:<port>:<db_name>:<db_user>:<db_password>:[?<properties>]
 		 
 		<properties> ::= <property> [&<property>]
-		<property> ::= althosts=<alternative_hosts> [ &rctime=<time>]
+		<property> ::= altHosts=<alternative_hosts> [ &rcTime=<time>] [ &loadBalance=true|false]
 					 |{login_timeout|loginTimeout}=<milli_sec>
 					 |{query_timeout|queryTimeout}=<milli_sec>
 					 |{disconnect_on_query_timeout|disconnectOnQueryTimeout}=true|false
@@ -509,7 +520,7 @@ CCI API Reference
 		<time> := SECOND
 		<milli_sec> := MILLI SECOND	
 
-	**althosts** is the property related to connection target and **loginTimeout**, **queryTimeout**, and **disconnectOnQueryTimeout** are the properties related to timeout; **logSlowQueries**, **logTraceApi**, and **logTraceNetwork** are the properties related to log information configuration for debugging.
+	**altHosts** is the property related to connection target and **loginTimeout**, **queryTimeout**, and **disconnectOnQueryTimeout** are the properties related to timeout; **logSlowQueries**, **logTraceApi**, and **logTraceNetwork** are the properties related to log information configuration for debugging.
 
 	Note that a property name which is a value to be entered in the *url* argument is not case sensitive.
 
@@ -519,10 +530,12 @@ CCI API Reference
 	*   *db_user* : A name of the database user
 	*   *db_password* : A database user password
 
-	*   **althosts** = *standby_broker1_host*, *standby_broker2_host,* . . .: Specifies the broker information of the standby server, which is used for failover when it is impossible to connect to the active server. You can specify multiple brokers for failover, and the connection to the brokers is attempted in the order listed in **alhosts**.
+	*   **altHosts** = *standby_broker1_host*, *standby_broker2_host,* . . .: Specifies the broker information of the standby server, which is used for failover when it is impossible to connect to the active server. You can specify multiple brokers for failover, and the connection to the brokers is attempted in the order listed in **alhosts**.
 
-	*   **rctime** : An interval between the attempts to connect to the active broker in which failure occurred. After a failure occurs, the system connects to the broker specified by **althosts** (failover), terminates the transaction, and then attempts to connect to the active broker of the master database at every **rctime**. The default value is 600 seconds.
+	*   **rcTime** : An interval between the attempts to connect to the active broker in which failure occurred. After a failure occurs, the system connects to the broker specified by **altHosts** (failover), terminates the transaction, and then attempts to connect to the active broker of the master database at every **rcTime**. The default value is 600 seconds.
 
+	*	**loadBalance** : When this value is true, the applications try to connect to the main host and alternative hosts specified with the **altHosts** property as a random order. (default value: false).
+	
 	*   **login_timeout** | **loginTimeout** : Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is 0, which means infinite postponement. 
 
 	*   **query_timeout** | **queryTimeout** : If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
@@ -530,7 +543,9 @@ CCI API Reference
 	*   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : Whether to disconnect socket immediately after time for query request has expired. It determines whether to terminate a socket connection immediately or wait for server response after sending cancellation message for query request to a server when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. The default value is **false**, meaning that it will wait for server response. It this value is true, a socket will be closed immediately after sending a cancellation message to a server upon timeout and returns the **CCI_ER_QUERY_TIMEOUT** (-39) error. (If an error occurs on database server side, not on broker side, it returns -1. If you want to view error details, see error codes in "database error buffer." You can get information how to check error codes in :ref:`CCI Error Codes and Error Messages <cci-error-codes>`.) In this case, you must explicitly close the database connection handle by using the :c:func:`cci_disconnect` function. Please note that there is a possibility that a database server does not get a cancellation message and execute a query even after an error is returned.
 
 	*   **logFile** : A log file name for debugging (default value: **cci_** <*handle_id*> **.log**). <*handle_id*> indicates the ID of a connection handle returned by this function.
-	*   **logBaseDir** : A directory where a debug log file is created
+	
+	*   **logBaseDir** : A directory where a debug log file is created. The file name including the path will be logBaseDir/logFile, and the relative path is possible.
+	
 	*   **logSlowQueries** : Whether to log slow query for debugging (default value: **false**)
 	*   **slowQueryThresholdMillis** : Timeout for slow query logging if slow query logging is enabled (default value: **60000**, unit: milliseconds)
 	*   **logTraceApi** : Whether to log the start and end of CCI functions
@@ -538,18 +553,14 @@ CCI API Reference
 
 	**Example** ::
 
-		--connection URL string when a property(althosts) is specified for HA
-		URL=cci:CUBRID:192.168.0.1:33000:demodb:::?althosts=192.168.0.2:33000,192.168.0.3:33000
+		--connection URL string when a property(altHosts) is specified for HA
+		URL=cci:CUBRID:192.168.0.1:33000:demodb:::?altHosts=192.168.0.2:33000,192.168.0.3:33000
 		 
-		--connection URL string when properties(althosts,rctime) is specified for HA
-		URL=cci:CUBRID:192.168.0.1:33000:demodb:::?althosts=192.168.0.2:33000,192.168.0.3:33000&rctime=600
+		--connection URL string when properties(altHosts,rcTime) is specified for HA
+		URL=cci:CUBRID:192.168.0.1:33000:demodb:::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600
 		 
 		--connection URL string when properties(logSlowQueries,slowQueryThresholdMills, logTraceApi, logTraceNetwork) are specified for interface debugging
 		URL = "cci:cubrid:192.168.0.1:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
-
-	**Remark**
-
-	*   Because a colon (:) and a question mark (?) are used as a separator in URL string, it is not allowed to include them for password of URL string. To use them, you must specify a user name (*db_user*) and a password (*db_passwd*) as a separate parameter.
 
 .. c:function:: int cci_connect_with_url_ex (char *url, char *db_user, char *db_password, T_CCI_ERROR * err_buf)
 
@@ -792,10 +803,18 @@ CCI API Reference
 	    *   **CCI_ER_LOGIN_TIMEOUT**
 
 	The function of retrieving the query result from the server by configuring *flag* can be classified as synchronous or asynchronous. Or it can be determined whether to execute multiple queries or one query. If the flag is set to **CCI_EXEC_QUERY_ALL**, a synchronous mode (sync_mode) is used to retrieve query results immediately after executing prepared queries if it is set to **CCI_EXEC_ASYNC**, an asynchronous mode (async_mode) is used to retrieve the result immediately each time a query result is created. The *flag* is set to **CCI_EXEC_QUERY_ALL** by default, and in such cases the following rules are applied.
-
+	
+	Through a *flag*, the behavior of retrieving the query result from the server can be set as synchronous or asynchronous, and the way of query execution can be set as all queries or the first one.
+	
+	If the *flag* is set as **CCI_EXEC_ASYNC**, an asynchronous mode is used to retrieve the result immediately each time a query result is created. If not, a synchronous mode is used to retrieve query results after executing prepared queries all.
+	
+	If the *flag* is set to **CCI_EXEC_QUERY_ALL**, all prepared queries(separated by semicolon) are executed. If not, only the first query is executed.
+	
+	If the *flag* is set to **CCI_EXEC_QUERY_ALL**, the following rules are applied.
+	
 	*   The return value is the result of the first query.
 	*   If an error occurs in any query, the execution is processed as a failure.
-	*   For a query composed of in a query composed of q1; q2; q3 if an error occurs in q2 after q1 succeeds the execution, the result of q1 remains valid. That is, the previous successful query executions are not rolled back when an error occurs.
+	*   For a query composed of in a query composed of q1; q2; q3, even if an error occurs in q2 after q1 succeeds the execution, the result of q1 remains valid. That is, the previous successful query executions are not rolled back when an error occurs.
 	*   If a query is executed successfully, the result of the second query can be obtained using :c:func:`cci_next_result`.
 
 	*max_col_size* is a value that is used to determine the maximum length of a column to be sent to a client when the columns of the prepared statement are **CHAR**, **VARCHAR**, **NCHAR**, **VARNCHAR**, **BIT** or **VARBIT**. If this value is 0, full length is fetched.
@@ -816,24 +835,37 @@ CCI API Reference
 		*   **CCI_ER_QUERY_TIMEOUT**
 		*   **CCI_ER_LOGIN_TIMEOUT**
 
-	To bind the data, call the :c:func:`cci_bind_param_array_size` function to specify the size of the array, bind each value to the variable by using the :c:func:`cci_bind_param_array` function, and execute the query by calling the :c:func:`cci_execute_array` function.
+	To bind the data, call the :c:func:`cci_bind_param_array_size` function to specify the size of the array, bind each value to the variable by using the :c:func:`cci_bind_param_array` function, and execute the query by calling the :c:func:`cci_execute_array` function. The query result will be stored on the array of **T_CCI_QUERY_RESULT** structure.
 
-	You can get three execution results by calling the :c:func:`cci_execute` function. However, the :c:func:`cci_execute_array` function returns the number of queries executed by the query_result variable. You can use the following macro to get the information about the execution result. However, note that the validity check is not performed for each parameter entered in the macro. After using the query_result variable, you must delete the query_result by using the :c:func:`cci_query_result_free` function.
+	You can get three execution results by calling the :c:func:`cci_execute` function. However, the :c:func:`cci_execute_array` function returns the number of queries executed by the query_result variable. You can use :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG` and :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` macros to get the esult of each query. 
+	
+	Note that the validity check is not performed for each parameter entered in the macro. 
+	
+	After using the query_result variable, you must delete the query_result by using the :c:func:`cci_query_result_free` function.
 
-	+-----------------------------+-----------------------------+---------------------------+
-	| Marco                       | Return Type                 | Meaning                   |
-	+=============================+=============================+===========================+
-	| **CCI_QUERY_RESULT_RESULT** | int                         | the number of results     |
-	+-----------------------------+-----------------------------+---------------------------+
-	| CCI_QUERY_RESULT_ERR_MSG    | char \*                     | error message about query |
-	+-----------------------------+-----------------------------+---------------------------+
-	| CCI_QUERY_RESULT_STMT_TYPE  | int(T_CCI_CUBRID_STMT enum) | type of query statement   |
-	+-----------------------------+-----------------------------+---------------------------+
+	+---------------------------------------+---------------------------------+---------------------------------+
+	| Macro                                 | Return Type                     | Meaning                         |
+	+=======================================+=================================+=================================+
+	| :c:macro:`CCI_QUERY_RESULT_RESULT`    | int                             | the number of results           |
+	|                                       |                                 | or error identifier             |
+	|                                       |                                 | (-1: CAS error, -2: DBMS error) |    
+	+---------------------------------------+---------------------------------+---------------------------------+
+	| :c:macro:`CCI_QUERY_RESULT_ERR_NO`    | int                             | error number about query        |
+	+---------------------------------------+---------------------------------+---------------------------------+
+	| :c:macro:`CCI_QUERY_RESULT_ERR_MSG`   | char \*                         | error message about query       |
+	+---------------------------------------+---------------------------------+---------------------------------+
+	| :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` | int(**T_CCI_CUBRID_STMT** enum) | type of query statement         |
+	+---------------------------------------+---------------------------------+---------------------------------+
+	
 
+	If autocommit mode is on, each query in the array is committed after executing.
+	
+	..	note:: In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. 
+	
 	.. code-block:: c
 
 		char *query =
-		  "update participant set gold = ? where host_year = ? and nation_code = 'KOR'";
+			"update participant set gold = ? where host_year = ? and nation_code = 'KOR'";
 		int gold[2];
 		char *host_year[2];
 		int null_ind[2];
@@ -844,8 +876,8 @@ CCI API Reference
 		req = cci_prepare (con, query, 0, &cci_error);
 		if (req < 0)
 		{
-		  printf ("prepare error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
-		  goto handle_error;
+			printf ("prepare error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+			goto handle_error;
 		}
 		 
 		gold[0] = 20;
@@ -858,56 +890,55 @@ CCI API Reference
 		error = cci_bind_param_array_size (req, 2);
 		if (error < 0)
 		{
-		  printf ("bind_param_array_size error: %d\n", error);
-		  goto handle_error;
+			printf ("bind_param_array_size error: %d\n", error);
+			goto handle_error;
 		}
 		 
 		error =
-		  cci_bind_param_array (req, 1, CCI_A_TYPE_INT, gold, null_ind, CCI_U_TYPE_INT);
+			cci_bind_param_array (req, 1, CCI_A_TYPE_INT, gold, null_ind, CCI_U_TYPE_INT);
 		if (error < 0)
 		{
-		  printf ("bind_param_array error: %d\n", error);
-		  goto handle_error;
+			printf ("bind_param_array error: %d\n", error);
+			goto handle_error;
 		}
 		error =
-		  cci_bind_param_array (req, 2, CCI_A_TYPE_STR, host_year, null_ind, CCI_U_TYPE_INT);
+			cci_bind_param_array (req, 2, CCI_A_TYPE_STR, host_year, null_ind, CCI_U_TYPE_INT);
 		if (error < 0)
-		  {
-		  printf ("bind_param_array error: %d\n", error);
-		  goto handle_error;
+		{
+			printf ("bind_param_array error: %d\n", error);
+			goto handle_error;
 		}
 		 
 		n_executed = cci_execute_array (req, &result, &cci_error);
 		if (n_executed < 0)
 		{
-		  printf ("execute error: %d, %s\n", cci_error.err_code,
-					cci_error.err_msg);
-		  goto handle_error;
+			printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+			goto handle_error;
 		}
 		for (i = 1; i <= n_executed; i++)
 		{
-		  printf ("query %d\n", i);
-		  printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-		  printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-		  printf ("statement type = %d\n",
-				  CCI_QUERY_RESULT_STMT_TYPE (result, i));
+			printf ("query %d\n", i);
+			printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
+			printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
+			printf ("statement type = %d\n",
+					CCI_QUERY_RESULT_STMT_TYPE (result, i));
 		}
 		error = cci_query_result_free (result, n_executed);
 		if (error < 0)
 		{
-		  printf ("query_result_free: %d\n", error);
-		  goto handle_error;
+			printf ("query_result_free: %d\n", error);
+			goto handle_error;
 		}
 		error = cci_end_tran(con, CCI_TRAN_COMMIT, &cci_error);
 		if (error < 0)
 		{
-		  printf ("end_tran: %d, %s\n", cci_error.err_code, cci_error.err_msg);
-		  goto handle_error;
+			printf ("end_tran: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+			goto handle_error;
 		}
 
 .. c:function:: int cci_execute_batch(int conn_handle, int num_sql_stmt, char **sql_stmt, T_CCI_QUERY_RESULT **query_result, T_CCI_ERROR *err_buf)
 
-	In CCI, multiple jobs can be processed simultaneously when using DML queries such as **INSERT** / **UPDATE** / **DELETE**. :c:macro:`CCI_QUERY_RESULT_RESULT` and :c:func:`cci_execute_batch` functions can be used to execute such batch jobs. Note that prepared statements cannot be used in the :c:func:`cci_execute_batch` function.
+	In CCI, multiple jobs can be processed simultaneously when using DML queries such as **INSERT** / **UPDATE** / **DELETE**. :c:macro:`CCI_QUERY_RESULT_RESULT` and :c:func:`cci_execute_batch` functions can be used to execute such batch jobs. Note that prepared statements cannot be used in the :c:func:`cci_execute_batch` function. The query result will be stored on the array of **T_CCI_QUERY_RESULT** structure.
 
 	:param conn_handle: (IN) Connection handle
 	:param num_sql_stmt: (IN)  The number of *sql_stmt*
@@ -924,52 +955,63 @@ CCI API Reference
 		*   **CCI_ER_QUERY_TIMEOUT**
 		*   **CCI_ER_LOGIN_TIMEOUT**
 
-	Executes *sql_stmt* as many times as *num_sql_stmt* specified as a parameter and returns the number of queries executed with the query_result variable. You can use the macro (:c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE`) available in the :c:func:`cci_execute_array` function to get the information about the execution result. For more information about each macro, see the :c:func:`cci_execute_array` function. However, note that the validity check is not performed for each parameter entered in the macro. After using the *query_result* variable, you must delete the query result by using the :c:func:`cci_query_result_free` function.
+	Executes *sql_stmt* as many times as *num_sql_stmt* specified as a parameter and returns the number of queries executed with the query_result variable. You can use :c:macro:`CCI_QUERY_RESULT_RESULT`, c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG` and :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` macros to get the result of each query. Regarding the summary of these macros, see the :c:func:`cci_execute_array` function.
+	
+	Note that the validity check is not performed for each parameter entered in the macro.
+	
+	After using the *query_result* variable, you must delete the query result by using the :c:func:`cci_query_result_free` function.
+	
+	If autocommit mode is on, each query in the array is committed after executing.
+	
+	.. note:: In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. 
 
 	.. code-block:: c
 
 		char **queries;
-		  T_CCI_QUERY_RESULT *result;
-		  int n_queries, n_executed;
+		T_CCI_QUERY_RESULT *result;
+		int n_queries, n_executed;
 		...
-		 
-		  count = 3;
-		  queries = (char **) malloc (count * sizeof (char *));
-		  queries[0] =
+		count = 3;
+		queries = (char **) malloc (count * sizeof (char *));
+		queries[0] =
 			"insert into athlete(name, gender, nation_code, event) values('Ji-sung Park', 'M', 'KOR', 'Soccer')";
-		  queries[1] =
+		queries[1] =
 			"insert into athlete(name, gender, nation_code, event) values('Joo-young Park', 'M', 'KOR', 'Soccer')";
-		  queries[2] =
+		queries[2] =
 			"select * from athlete order by code desc for orderby_num() < 3";
+			
 		//calling cci_execute_batch()
-		  n_executed = cci_execute_batch (con, count, queries, &result, &cci_error);
-		  if (n_executed < 0)
-			{
-			  printf ("execute_batch: %d, %s\n", cci_error.err_code,
-					  cci_error.err_msg);
-			  goto handle_error;
-			}
-		  printf ("%d statements were executed.\n", n_executed);
-		 
-		  for (i = 1; i <= n_executed; i++)
-			{
-			  printf ("query %d\n", i);
-			  printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-			  printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-			  printf ("statement type = %d\n",
-					  CCI_QUERY_RESULT_STMT_TYPE (result, i));
-			}
-		 
-		  error = cci_query_result_free (result, n_executed);
-		  if (error < 0)                                                                                                                            
-			{                                                                                                                                       
-			  printf ("query_result_free: %d\n", error);   
-			  goto handle_error;
-			}
+		n_executed = cci_execute_batch (con, count, queries, &result, &cci_error);
+		if (n_executed < 0)
+		{
+			printf ("execute_batch: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+			goto handle_error;
+		}
+		printf ("%d statements were executed.\n", n_executed);
+		
+		for (i = 1; i <= n_executed; i++)
+		{
+			printf ("query %d\n", i);
+			printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
+			printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
+			printf ("statement type = %d\n",
+					CCI_QUERY_RESULT_STMT_TYPE (result, i));
+		}
+		
+		error = cci_query_result_free (result, n_executed);
+		if (error < 0)                                                                                                                            
+		{                                                                                                                                       
+			printf ("query_result_free: %d\n", error);   
+			goto handle_error;
+		}
 
 .. c:function:: int cci_execute_result(int req_handle, T_CCI_QUERY_RESULT **query_result, T_CCI_ERROR *err_buf)
 
-	The **cci_execute_result**  function gets the execution results (e.g. statement type, result count) performed by :c:func`cci_execute`. The results of each query are retrieved by :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` and :c:macro:`CCI_QUERY_RESULT_RESULT`. The query results used must be deleted by :c:func:`cci_query_result_free`.
+	The **cci_execute_result**  function stores the execution results (e.g. statement type, result count) performed by :c:func`cci_execute` to the array of **T_CCI_QUERY_RESULT** structure. You can use :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` macros to get the results of each query. Regarding the summary of these macros, see the :c:func:`cci_execute_array` function.
+
+	Note that the validity check is not performed for each parameter entered in the macro.
+	
+	The query results used must be deleted by the :c:func:`cci_query_result_free` function.
 
 	:param req_handle: (IN) Request handle of the prepared statement
 	:param query_result: (OUT) Query results
@@ -986,15 +1028,18 @@ CCI API Reference
 		 
 		cci_execute( ... );
 		res = cci_execute_result(req_h, &qr, &err_buf);
-		if (res < 0) {
-		  /* error */
+		if (res < 0) 
+		{
+			/* error */
 		}
-		else {
-		  for (i=1 ; i <= res ; i++) {
-			result_count = CCI_QUERY_RESULT_RESULT(qr, i);
-			stmt_type = CCI_QUERY_RESULT_STMT_TYPE(qr, i);
-		  }
-		  cci_query_result_free(qr, res);
+		else 
+		{
+			for (i=1 ; i <= res ; i++) 
+			{
+				result_count = CCI_QUERY_RESULT_RESULT(qr, i);
+				stmt_type = CCI_QUERY_RESULT_STMT_TYPE(qr, i);
+			}
+			cci_query_result_free(qr, res);
 		}
 
 .. c:function:: int cci_fetch(int req_handle, T_CCI_ERROR *err_buf)
@@ -1024,7 +1069,7 @@ CCI API Reference
 
 .. c:function:: int cci_fetch_sensitive(int req_handle, T_CCI_ERROR *err_buf)
 
-	The **cci_fetch_sensitive** function sends changed values for sensitive column. If the results by *req_handle* are not sensitive (**), they are same as the ones by :c:func`cci_fetch`. The return value of **CCI_ER_DELETED_TUPLE** means that the given row has been deleted. 
+	The **cci_fetch_sensitive** function sends changed values for sensitive column when the **SELECT** query result is delivered. If the results by *req_handle* are not sensitive, they are same as the ones by :c:func`cci_fetch`. The return value of **CCI_ER_DELETED_TUPLE** means that the given row has been deleted. 
 	
 	:param req_handle: (IN) Request handle
 	:param err_buf: (OUT) Database error buffer
@@ -1036,9 +1081,11 @@ CCI API Reference
 		*   **CCI_ER_DBMS**
 		*   **CCI_ER_DELETED_TUPLE**
 
-	sensitive column means items that can provide updated values in the **SELECT** list upon the re-request of results. For example, a column is directly used as an item of the **SELECT** list without aggregation operation, the colum can be called sensitive column. sensitive result does not receive from the server, not records stored in the client buffer when it is fetch is again.
+	sensitive column means the item that can provide updated value in the **SELECT** list when you re-request the results. For example, if a column is directly used as an item of the **SELECT** list without aggregation operation, this column can be called a sensitive column. 
+	
+	When you fetch the result again, the sensitive result receive the data from the server, not from the client buffer.
 
-.. c:function:: int cci_fetch_size(int req_handle, int fetch_size)
+	.. c:function:: int cci_fetch_size(int req_handle, int fetch_size)
 
 	The **cci_fetch_size** function determines the number of records sent by :c:func:`cci_fetch` from the server to the client.
 
@@ -1290,7 +1337,7 @@ CCI API Reference
 
 .. c:macro:: #define CCI_GET_RESULT_INFO_ATTR_NAME(T_CCI_COL_INFO* res_info, int index)
 
-	The **CCI_GET_RESULT_INFO_ATTR_NAME** macro gets the actual attribute name of the *index*-th column of a prepared **SELECT** statement. If there is no name for the attribute (constant, function, etc), " " (empty string) is returned. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. You cannot delete the returned memory pointer with **free** ().
+	The **CCI_GET_RESULT_INFO_ATTR_NAME** macro gets the actual attribute name of the *index*-th column of a prepared **SELECT** list. If there is no name for the attribute (constant, function, etc), " " (empty string) is returned. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. You cannot delete the returned memory pointer with **free** ().
 
 	:param res_info: (IN) A pointer to the column information fetched by :c:func:`cci_get_result_info`
 	:param index: (IN) Column index
@@ -1298,7 +1345,7 @@ CCI API Reference
 
 .. c:macro:: #define CCI_GET_RESULT_INFO_CLASS_NAME(T_CCI_COL_INFO* res_info, int index)
 
-	The **CCI_GET_RESULT_INFO_CLASS_NAME** macro gets the *index*-th class name of a prepared **SELECT** statement. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. You cannot delete the returned memory pointer with **free** (). The return value can be **NULL**.
+	The **CCI_GET_RESULT_INFO_CLASS_NAME** macro gets the *index*-th column's class name of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. You cannot delete the returned memory pointer with **free** (). The return value can be **NULL**.
 
 	:param res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
 	:param index: (IN) Column index
@@ -1306,7 +1353,7 @@ CCI API Reference
 
 .. c:macro:: #define CCI_GET_RESULT_INFO_IS_NON_NULL(T_CCI_COL_INFO* res_info, int index)
 
-	The **CCI_GET_RESULT_INFO_IS_NON_NULL** macro gets a value indicating whether the *index*-th column of a prepared **SELECT** statement is nullable. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
+	The **CCI_GET_RESULT_INFO_IS_NON_NULL** macro gets a value indicating whether the *index*-th column of a prepared **SELECT** list is nullable. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
 
 	:param res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
 	:param index: (IN) Column index
@@ -1314,7 +1361,7 @@ CCI API Reference
 
 .. c:macro:: #define CCI_GET_RESULT_INFO_NAME(T_CCI_COL_INFO* res_info, int index)
 
-	The **CCI_GET_RESULT_INFO_NAME** macro gets the *index*-th column name of a prepared **SELECT** statement. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. You cannot delete the returned memory pointer with **free** ().
+	The **CCI_GET_RESULT_INFO_NAME** macro gets the *index*-th column's name of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. You cannot delete the returned memory pointer with **free** ().
 
 	:param res_info: (IN) Column info pointer to :c:func:`cci_get_result_info`
 	:param index: (IN) Column index
@@ -1322,7 +1369,7 @@ CCI API Reference
 
 .. c:macro:: #define CCI_GET_RESULT_INFO_PRECISION(T_CCI_COL_INFO* res_info, int index)
 
-	The **CCI_GET_RESULT_INFO_PRECISION** macro gets the *index*-th precision of a prepared **SELECT** statement. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
+	The **CCI_GET_RESULT_INFO_PRECISION** macro gets the *index*-th column's precision of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
 
 	:param res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
 	:param index: (IN) Column index
@@ -1330,7 +1377,7 @@ CCI API Reference
 
 .. c:macro:: #define CCI_GET_RESULT_INFO_SCALE(T_CCI_COL_INFO* res_info, int index)
 
-	The **CCI_GET_RESULT_INFO_SCALE** macro gets the *index*-th column's scale of a prepared **SELECT** statement. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. 
+	The **CCI_GET_RESULT_INFO_SCALE** macro gets the *index*-th column's scale of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid. 
 	
 	:param res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
 	:param index: (IN) Column index
@@ -1338,7 +1385,7 @@ CCI API Reference
 
 .. c:macro:: #define CCI_GET_RESULT_INFO_TYPE(T_CCI_COL_INFO* res_info, int index)
 
-	The **CCI_GET_RESULT_INFO_TYPE** macro gets the *index*-th column type of a prepared **SELECT** statement. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
+	The **CCI_GET_RESULT_INFO_TYPE** macro gets the *index*-th column's type of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
 
 	:param res_info: (IN) pointer to the column information fetched by :c:func:`cci_get_result_info`
 	:param index: (IN) Column index
@@ -1666,6 +1713,7 @@ CCI API Reference
 	*   **pool_size** : Maximum number of connection (default value: 10)
 	*   **max_wait** : Maximum waiting time to get connection (default value: 1000 msec.)
 	*   **pool_prepared_statement** : Whether to enable statement pooling (default value: false)
+	*	**max_open_prepared_statement** : The maximum value of prepared statement  to maintain in statement pool.(default value: 1000)
 	*   **login_timeout** : Login timeout time (default value: 0 (unlimited))
 	*   **query_timeout** : Query timeout time (default value: 0 (unlimited))
 	*   **disconnect_on_query_timeout** : Whether to terminate connection when execution is discarded due to query execution timeout (default value: no)
@@ -1673,6 +1721,8 @@ CCI API Reference
 	*   **default_isolation** : Transaction isolation level refreshed whenever **cci_datasource_borrow** is called
 	*   **default_lock_timeout** : lock_timeout refreshed whenever **cci_datasource_borrow** is called
 
+	If the number of prepared statemet exceeds **max_open_prepared_statement value**, the oldest prepared statement is released from statement pool. If you reuse it later, it is added to statement pool again.
+	
 	If you configure **default_autocommit**, **default_isolation**, or **default_lock_timeout** value, connection for autocommit, isolation, or lock_timeout based on current configured value is returned when **cci_datasource_borrow** is called. If you do not configure it, connection for autocommit, isolation, or lock_timeout is returned with keeping the value that a user changed before.
 
 	**default_isolation** has one of the following configuration values. For details on isolation level, see "CUBRID SQL Guide > Transaction and Lock > Transaction Isolation Level."
@@ -1709,19 +1759,11 @@ CCI API Reference
 		:c:func:`cci_datasource_destroy`,
 		:c:func:`cci_datasource_release`
 
-.. c:macro:: #define CCI_QUERY_RESULT_ERR_MSG(T_CCI_QUERY_RESULT* query_result, int index)
-
-	The **CCI_QUERY_RESULT_ERR_MSG** macro gets error messages about query results executed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function. If there is non error message, this macro returns ""(empty string). It does not check whether the specified argument, *query_result*, is **NULL**, and whether *index* is valid.
-
-	:param query_result: (IN) Query results of to be executed
-	:param index: (IN) Column index (base: 1)
-	:return: Error message
-
 .. c:function:: int cci_query_result_free(T_CCI_QUERY_RESULT* query_result, int num_query)
 
-	The **cci_query_result_free** function deletes query results created by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function.
+	The **cci_query_result_free** function releases query results created by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function from memory.
 
-	:param query_result: (IN) Query results to be deleted
+	:param query_result: (IN) Query results to release from memory
 	:param num_query: (IN) The number of arrays in *query_result*
 	:return: 0: success
 
@@ -1738,6 +1780,25 @@ CCI API Reference
 		 
 		cci_query_result_free(qr, res);
 
+.. c:macro:: #define CCI_QUERY_RESULT_ERR_NO(T_CCI_QUERY_RESULT* query_result, int index)
+
+	Since query results performed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array`, or :c:func:`cci_execute_result` fuctions are stored as an array of **T_CCI_QUERY_RESULT** structure, you need to check the query result for each item of the array.
+	
+	**CCI_QUERY_RESULT_ERR_NO** fetches the error number for the array item specified as *index*, if it is not an error, it returns 0. 
+
+	:param query_result: (IN) Query result to retrieve
+	:param index: (IN) Index of the result array(base :1). It represents a specific location of the result array.
+	
+	:return: Error number
+		
+.. c:macro:: #define CCI_QUERY_RESULT_ERR_MSG(T_CCI_QUERY_RESULT* query_result, int index)
+
+	The **CCI_QUERY_RESULT_ERR_MSG** macro gets error messages about query results executed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function. If there is non error message, this macro returns ""(empty string). It does not check whether the specified argument, *query_result*, is **NULL**, and whether *index* is valid.
+
+	:param query_result: (IN) Query results of to be executed
+	:param index: (IN) Column index (base: 1)
+	:return: Error message
+
 .. c:macro:: #define CCI_QUERY_RESULT_RESULT(T_CCI_QUERY_RESULT* query_result, int index)
 
 	The **CCI_QUERY_RESULT_RESULT** macro gets the result count executed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function. It does not check whether the specified argument, *query_result*, is **NULL** and whether *index* is valid.
@@ -1748,7 +1809,11 @@ CCI API Reference
 
 .. c:macro:: #define CCI_QUERY_RESULT_STMT_TYPE(T_CCI_QUERY_RESULT* query_result, int index)
 
-	The **CCI_QUERY_RESULT_STMT_TYPE** macro gets the statement type executed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function. It does not check whether the specified argument, *query_result*, is **NULL** and whether *index* is valid.
+	Since query results performed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` fuction are stored as an array of T_CCI_QUERY_RESULT  type, you need to check the query result for each item of the array. 
+	
+	The **CCI_QUERY_RESULT_STMT_TYPE** macro gets the statement type for the array items specified as *index*.
+	
+	It does not check whether the specified argument, *query_result*, is **NULL** and whether *index* is valid.
 
 	:param query_result: (IN) Query results to be retrieved
 	:param index: (IN) Column index (base: 1)
@@ -2180,161 +2245,149 @@ CCI API Reference
 		#include <stdlib.h>
 		#include "cas_cci.h"
 		 
-		void *
-		my_malloc(size_t size)
+		void *my_malloc(size_t size)
 		{
-		  printf ("my malloc: size: %ld\n", size);
-		  return malloc (size);
+			printf ("my malloc: size: %ld\n", size);
+			return malloc (size);
 		}
 		 
-		void *
-		my_calloc(size_t nm, size_t size)
+		void *my_calloc(size_t nm, size_t size)
 		{
-		  printf ("my calloc: nm: %ld, size: %ld\n", nm, size);
-		  return calloc (nm, size);
+			printf ("my calloc: nm: %ld, size: %ld\n", nm, size);
+			return calloc (nm, size);
 		}
 		 
-		void *
-		my_realloc(void *ptr, size_t size)
+		void *my_realloc(void *ptr, size_t size)
 		{
-		  printf ("my realloc: ptr: %p, size: %ld\n", ptr, size);
-		  return realloc (ptr, size);
+			printf ("my realloc: ptr: %p, size: %ld\n", ptr, size);
+			return realloc (ptr, size);
 		}
 		 
-		void
-		my_free(void *ptr)
+		void my_free(void *ptr)
 		{
-		  printf ("my free: ptr: %p\n", ptr);
-		  return free (ptr);
+			printf ("my free: ptr: %p\n", ptr);
+			return free (ptr);
 		}
 		 
 		 
-		int
-		test_simple (int con)
+		int test_simple (int con)
 		{
-		  int req = 0, col_count = 0, i, ind;
-		  int error;
-		  char *data;
-		  T_CCI_ERROR cci_error;
-		  T_CCI_COL_INFO *col_info;
-		  T_CCI_CUBRID_STMT stmt_type;
-		  char *query = "select * from db_class";
-		 
-		//preparing the SQL statement
-		  req = cci_prepare (con, query, 0, &cci_error);
-		  if (req < 0)
+			int req = 0, col_count = 0, i, ind;
+			int error;
+			char *data;
+			T_CCI_ERROR cci_error;
+			T_CCI_COL_INFO *col_info;
+			T_CCI_CUBRID_STMT stmt_type;
+			char *query = "select * from db_class";
+			
+			//preparing the SQL statement
+			req = cci_prepare (con, query, 0, &cci_error);
+			if (req < 0)
 			{
-			  printf ("prepare error: %d, %s\n", cci_error.err_code,
-					  cci_error.err_msg);
-			  goto handle_error;
+				printf ("prepare error: %d, %s\n", cci_error.err_code,
+					cci_error.err_msg);
+				goto handle_error;
+			}
+			
+			//getting column information when the prepared statement is the SELECT query
+			col_info = cci_get_result_info (req, &stmt_type, &col_count);
+			if (col_info == NULL)
+			{
+				printf ("get_result_info error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+				goto handle_error;
 			}
 		 
-		//getting column information when the prepared statement is the SELECT query
-		  col_info = cci_get_result_info (req, &stmt_type, &col_count);
-		  if (col_info == NULL)
+			//Executing the prepared SQL statement
+			error = cci_execute (req, 0, 0, &cci_error);
+			if (error < 0)
 			{
-			  printf ("get_result_info error: %d, %s\n", cci_error.err_code,
-					  cci_error.err_msg);
-			  goto handle_error;
+				printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+				goto handle_error;
 			}
-		 
-		//Executing the prepared SQL statement
-		  error = cci_execute (req, 0, 0, &cci_error);
-		  if (error < 0)
+			while (1)
 			{
-			  printf ("execute error: %d, %s\n", cci_error.err_code,
-					  cci_error.err_msg);
-			  goto handle_error;
-			}
-		  while (1)
-			{
-		 
-		//Moving the cursor to access a specific tuple of results
-			  error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &cci_error);
-			  if (error == CCI_ER_NO_MORE_DATA)
+				//Moving the cursor to access a specific tuple of results
+				error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &cci_error);
+				if (error == CCI_ER_NO_MORE_DATA)
 				{
-				  break;
+					break;
 				}
-			  if (error < 0)
+				if (error < 0)
 				{
-				  printf ("cursor error: %d, %s\n", cci_error.err_code,
-						  cci_error.err_msg);
-				  goto handle_error;
+					printf ("cursor error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+					goto handle_error;
 				}
-		 
-		//Fetching the query result into a client buffer
-			  error = cci_fetch (req, &cci_error);
-			  if (error < 0)
+			
+				//Fetching the query result into a client buffer
+				error = cci_fetch (req, &cci_error);
+				if (error < 0)
 				{
-				  printf ("fetch error: %d, %s\n", cci_error.err_code,
-						  cci_error.err_msg);
-				  goto handle_error;
+					printf ("fetch error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+					goto handle_error;
 				}
-			  for (i = 1; i <= col_count; i++)
+				for (i = 1; i <= col_count; i++)
 				{
-		 
-		//Getting data from the fetched result
-				  error = cci_get_data (req, i, CCI_A_TYPE_STR, &data, &ind);
-				  if (error < 0)
+			 
+					//Getting data from the fetched result
+					error = cci_get_data (req, i, CCI_A_TYPE_STR, &data, &ind);
+					if (error < 0)
 					{
-					  printf ("get_data error: %d, %d\n", error, i);
-					  goto handle_error;
+						printf ("get_data error: %d, %d\n", error, i);
+						goto handle_error;
 					}
-				  printf ("%s\t|", data);
+					printf ("%s\t|", data);
 				}
-			  printf ("\n");
+				 printf ("\n");
 			}
 		 
-		//Closing the request handle
-		  error = cci_close_req_handle (req);
-		  if (error < 0)
+			//Closing the request handle
+			error = cci_close_req_handle (req);
+			if (error < 0)
 			{
-			  printf ("close_req_handle error: %d, %s\n", cci_error.err_code,
-					  cci_error.err_msg);
-			  goto handle_error;
+				printf ("close_req_handle error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+				goto handle_error;
 			}
-		 
-		//Disconnecting with the server
-		  error = cci_disconnect (con, &cci_error);
-		  if (error < 0)
+			
+			//Disconnecting with the server
+			error = cci_disconnect (con, &cci_error);
+			if (error < 0)
 			{
-			  printf ("error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
-			  goto handle_error;
+				printf ("error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+				goto handle_error;
 			}
-		 
-		  return 0;
-		 
+			return 0;
+
 		handle_error:
-		  if (req > 0)
-			cci_close_req_handle (req);
-		  if (con > 0)
-			cci_disconnect (con, &cci_error);
-		 
-		  return 1;
+			if (req > 0)
+				cci_close_req_handle (req);
+			if (con > 0)
+				cci_disconnect (con, &cci_error);
+			
+			return 1;
 		}
-		 
-		 
+		
 		int main()
 		{
-		  int con = 0;
-		 
-		  if (cci_set_allocators (my_malloc, my_free, my_realloc, my_calloc) != 0)
-		  {
-			  printf ("cannot register allocators\n");
-			  return 1;
-		  };
-		 
-		  //getting a connection handle for a connection with a server
-		  con = cci_connect ("localhost", 33000, "demodb", "dba", "");
-		  if (con < 0)
-		  {
-			  printf ("cannot connect to database\n");
-			  return 1;
-		  }
-		 
-		  test_simple (con);
-		  return 0;
+			int con = 0;
+			
+			if (cci_set_allocators (my_malloc, my_free, my_realloc, my_calloc) != 0)
+			{
+				printf ("cannot register allocators\n");
+				return 1;
+			};
+			
+			//getting a connection handle for a connection with a server
+			con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+			if (con < 0)
+			{
+				printf ("cannot connect to database\n");
+				return 1;
+			}
+			
+			test_simple (con);
+			return 0;
 		}
+
 
 .. c:function:: int cci_set_autocommit (int conn_handle, CCI_AUTOCOMMIT_MODE  autocommit_mode)
 
@@ -2477,7 +2530,7 @@ CCI API Reference
 
 	These functions can return the **CCI_ER_LOGIN_TIMEOUT** error in case that **login_timeout** is configured in the connection URL, which is an argument of :c:func:`cci_connect_with_url` function; this means that login timeout happens between application client and CAS during re-connection.
 
-	It is going through the process of re-connection between application client and CAS when an application restarts or it is re-scheduled. Re-scheduling is a process that CAS chooses an application client, and starts and stops connection in the unit of transaction. If **KEEP_CONNECTION**, broker parameter, is OFF, it always happens; if AUTO, it can happen depending on its situation. For details, see the description of **KEEP_CONNECTION** in the "Performance Tuning > Broker Configuration > Parameter by Broker."
+	It is going through the process of re-connection between application client and CAS when an application restarts or it is re-scheduled. Re-scheduling is a process that CAS chooses an application client, and starts and stops connection in the unit of transaction. If **KEEP_CONNECTION**, broker parameter, is OFF, it always happens; if AUTO, it can happen depending on its situation. For details, see the description of **KEEP_CONNECTION** in the :ref:`parameter-by-broker`
 
 .. c:function:: int cci_set_size(T_CCI_SET set)
 

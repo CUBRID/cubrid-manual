@@ -11,9 +11,9 @@ CUBRID Perl driver is written based on CCI API so affected by CCI configurations
 
 To download Perl driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver. <http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver.>`_.
 
-**Remark**
+.. note::
 
-*   The database connection in thread-based programming must be used independently each other.
+	The database connection in thread-based programming must be used independently each other.
 
 Installing and Configuring Perl
 ===============================

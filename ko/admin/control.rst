@@ -468,6 +468,8 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 .. note::
 	브로커에서의 접속 제한을 위해서는 :ref:`limiting-broker-access` 을 참고한다.
 
+.. _database-server-error:
+	
 데이터베이스 서버 에러
 ----------------------
 
@@ -1164,7 +1166,7 @@ SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며,
 
 **broker_log_top** 유틸리티는 특정 기간 동안 생성된 SQL 로그를 분석하여 실행 시간이 긴 순서대로 각 SQL 문과 실행 시간에 관한 정보를 파일에 출력하며, 분석된 결과는 각각 log.top.q 및 log.top.res에 저장된다.
 
-**broker_log_top** 유틸리티는 실행 시간이 긴 질의(long duration query)를 분석할 때 유용하며, 구문은 다음과 같다.
+**broker_log_top** 유틸리티는 실행 시간이 긴 질의를 분석할 때 유용하며, 구문은 다음과 같다.
 
 ::
 	broker_log_top [options] sql_log_file_list

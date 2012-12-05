@@ -10,7 +10,7 @@ JDBC Overview
 CUBRID JDBC driver (**cubrid_jdbc.jar**) implements an interface to enable access from applications in Java to CUBRID database server. CUBRID JDBC driver is installed in the <
 *directory where CUBRID is installed*>/**jdbc** directory. The driver has been developed based on the JDBC 2.0 specification and the default driver provided is complied with JDK 1.6.
 
-To download JDBC driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver>`_.
+To download JDBC driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver`.
 
 **Verifying CUBRID JDBC Driver Version**
 
@@ -109,7 +109,7 @@ The CUBRID JDBC driver (**cubrid_jdbc.jar**) is located in the jdbc directory u
 
 .. note::
 
-	To get the latest information about JDBC driver, click `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver>`_.
+	To get the latest information about JDBC driver, click `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver`.
 
 JDBC Programming
 ================
@@ -126,11 +126,11 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 	<host> ::=
 	hostname | ip_address
 	 
-	<property> ::= althosts=<alternative_hosts>
-				 | rctime=<second>
+	<property> ::= altHosts=<alternative_hosts>
+				 | rcTime=<second>
 				 | connectTimeout=<second>
 				 | queryTimeout=<second>
-				 | charset=<character_set>
+				 | charSet=<character_set>
 				 | zeroDateTimeBehavior=<behavior_type>
 				 | logFile=<file_name>
 				 | logOnException=<bool_type>
@@ -148,22 +148,22 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 *   [*user-id*]: The user ID which is connected to a database. There are two types of users in a database by default: **DBA** and **PUBLIC**. If an empty string ("") is entered, a database is connected by the **PUBLIC** user.
 *   [*password*]: The password of a user who is to be connected to a database. If no password is set, enter an empty string ("").
 
-*   **althosts** : The host IP addresses and connection ports of one or more stand by brokers which will perform failover in the HA environment.
-*   **rctime** : Interval time (in seconds) to try to connect active brokers during failover in the HA environment. For more information, see the example in "Administrator's Guide > CUBRID HA > Environment Configuration > JDBC Configuration."
+*   **altHosts** : The host IP addresses and connection ports of one or more stand by brokers which will perform failover in the HA environment.
+*   **rcTime** : Interval time (in seconds) to try to connect active brokers during failover in the HA environment. For more information, see the example in "Administrator's Guide > CUBRID HA > Environment Configuration > JDBC Configuration."
 
 *   **connectTimeout** : Timeout value (in seconds) for database connection (default value: 0). The **DriverManger.setLoginTimeout** () method can be used to configure it; however, value configured in this method will be ignored if a value is configured in the connection URL.
 
 *   **queryTimeout** : Timeout value (in seconds) for query execution (default value: 0, infinite). This value can be changed by the **DriverManger.setQueryTimeout** () method.
 
-*   **charset** : The character set of a database to be connected
+*   **charSet** : The character set of a database to be connected
 
-*   **zeroDateTimeBehavior** : The property used to determine the way to handle an output value; because JDBC does not allow a value having zero for both date and time regardless of date and time in the object with the **java.sql.Date** type. The default operation is **exception**. The operation for each configuration is as follows:
+*   **zeroDateTimeBehavior** : The property used to determine the way to handle an output value; because JDBC does not allow a value having zero for both date and time regardless of date and time in the object with the **java.sql.Date** type. For information about the value having zero for both date and date, see :ref:`date-time-type`.
+
+	The default operation is **exception**. The operation for each configuration is as follows:
 
     *   **exception** : Default operation. It is handled as an SQLException exception.
     *   **round** : Converts to the minimum value allowed for a type to be returned.
     *   **convertToNull** : Converts to **NULL**.
-
-    For information about the value having zero for both date and date, see "CUBRID SQL Guide > Data Type > Date/Time Data Type > Definition and Characteristics."
 
 *   **logFile** : The name of a log file for debugging (default value: cubrid_jdbc.log). If a path is not configured, it is stored the location where applications are running.
 *   **logOnException** : Whether to log exception handling for debugging (default value: false)
@@ -179,22 +179,22 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 	--connection URL string when zeroDateTimeBehavior property specified
 	URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?zeroDateTimeBehavior=convertToNull
 	 
-	--connection URL string when charset property specified
+	--connection URL string when charSet property specified
 	 
-	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?charset=utf-8
+	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?charSet=utf-8
 	 
-	--connection URL string when queryTimeout and charset property specified
+	--connection URL string when queryTimeout and charSet property specified
 	 
-	URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?queryTimeout=1&charset=utf-8
+	URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?queryTimeout=1&charSet=utf-8
 	 
-	--connection URL string when a property(althosts) specified for HA
-	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?althosts=192.168.0.2:33000,192.168.0.3:33000
+	--connection URL string when a property(altHosts) specified for HA
+	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000
 	 
-	--connection URL string when properties(althosts,rctime, connectTimeout) specified for HA
-	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?althosts=192.168.0.2:33000,192.168.0.3:33000&rctime=600&connectTimeout=5
+	--connection URL string when properties(altHosts,rcTime, connectTimeout) specified for HA
+	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&connectTimeout=5
 	 
-	--connection URL string when properties(althosts,rctime, charset) specified for HA
-	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?althosts=192.168.0.2:33000,192.168.0.3:33000&rctime=600&charset=utf-8
+	--connection URL string when properties(altHosts,rcTime, charSet) specified for HA
+	URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&charSet=utf-8
 
 **Example 2**
 
@@ -217,12 +217,11 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 	   }
 	   ...
 
-.. warning::
+.. note::
 
 	*   Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a user name (*user-id*) and a password (*password*) as a separate argument in the **getConnection** method.
 	*   The database connection in thread-based programming must be used independently each other.
-
-.. note:: The rollback method requesting transaction rollback will exit after a server complete the rollback job.
+	*   The rollback method requesting transaction rollback will exit after a server complete the rollback job.
 
 Checking Foreign Key Information
 --------------------------------
@@ -988,3 +987,7 @@ The following table shows the JDBC standard and extended interface supported by 
 | java.sql.SQLInput                             |                                  |                                                         |
 | java.sql.Struct                               |                                  |                                                         |
 +-----------------------------------------------+----------------------------------+---------------------------------------------------------+
+
+.. warning::
+
+	From CUBRID 2008 R4.3 version, the behavior of batching the queries on the autocommit mode was changed. The methods that batch the queries are PreparedStatement.executeBatch and Statement.executeBatch. Until 2008 R4.1 version, these methods had  committed the transaction after executing all queries on the array. From 2008 R4.3, they commit each query on the array.

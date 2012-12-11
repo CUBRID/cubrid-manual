@@ -784,7 +784,7 @@ Based on DUCET, the concatenated lists of collation elements for the strings fro
 	Ar [.15A3.0020.0008.0041][.1770.0020.0002.0072]
 	Är [.15A3.0020.0008.0041][.0000.0047.0002.0308][.1770.0020.0002.0072]
 
-It is rather obvious that on the first pass, for level 1 weights, 0x15A3 will be compared with 0x15A3. In the second iteration, the 0x0000 weight will be skipped, and 0x1770 will be compared with 0x1770. Since the strings are declared identical so far, the comparison will continue on the level 2 weights, first comparing 0x0020 with 0x0020, then 0x0020 with 0x0047, yielding "Är" > "Ar". The example above was meant to show how strings comparison is done when using a collation with expansion support.
+It is rather obvious that on the first pass, for level 1 weights, 0x15A3 will be compared with 0x15A3. In the second iteration, the 0x0000 weight will be skipped, and 0x1770 will be compared with 0x1770. Since the strings are declared identical so far, the comparison will continue on the level 2 weights, first comparing 0x0020 with 0x0020, then 0x0020 with 0x0047, yielding "Ar" < "Är". The example above was meant to show how strings comparison is done when using a collation with expansion support.
 
 Let us change the collation settings, and show how one may obtain a different order for the same strings when using a collation for German, where "Ä" is supposed to be interpreted as the character group "AE".
 
@@ -800,7 +800,7 @@ When comparing the strings "Är" and "Ar", the algorithm for string comparison w
 	Ar [.15A3.0020.0008.0041][.1770.0020.0002.0072]
 	Är [.15A3.0020.0008.0041][.15FF.0020.0008.0045][.1770.0020.0002.0072]
 
-On the first pass, when comparing level 1 weights, 0x15A3 will be compared with 0x15A3, then 0x1770 with 0x15FF, where a difference is found. This comparison yields "Är" < "Ar", a result completely different than the one for the previous example.
+On the first pass, when comparing level 1 weights, 0x15A3 will be compared with 0x15A3, then 0x1770 with 0x15FF, where a difference is found. This comparison yields "Ar" > "Är", a result completely different than the one for the previous example.
 
 **Specific Operations Related to Collation**
 

@@ -759,7 +759,7 @@ Three types of settings for the collation will be illustrated:
 *   Secondary stregth, no casing (levels 1 and 2)
 *   Tertiary strength, uppercase first (levels 1, 2 and 3)
 
-Sorting of the strings ''Ar'' and ''r'' will be attempted.
+Sorting of the strings "Ar" and "Är" will be attempted.
 
 **Collation without Expansions Support**
 
@@ -771,9 +771,9 @@ When expansions are disabled, each codepoint is reassigning a new single valued 
 
 The sort order for the chosen strings is easy to decide, since there are computed weights for each codepoint.
 
-*   Primary strength: ''Ar'' = ''Är''
-*   Secondary strength: ''Ar'' < ''Är''
-*   Tertiary strength: ''Ar'' < ''Är''
+*   Primary strength: "Ar" = "Är"
+*   Secondary strength: "Ar" < "Är"
+*   Tertiary strength: "Ar" < "Är"
 
 **Collation with Expansions**
 
@@ -784,13 +784,9 @@ Based on DUCET, the concatenated lists of collation elements for the strings fro
 	Ar [.15A3.0020.0008.0041][.1770.0020.0002.0072]
 	Är [.15A3.0020.0008.0041][.0000.0047.0002.0308][.1770.0020.0002.0072]
 
-It is rather obvious that on the first pass, for level 1 weights, 0x15A3 will be compared with 0x15A3. In the second iteration, the 0x0000 weight will be skipped, and 0x1770 will be compared with 0x1770. Since the strings are declared identical so far, the comparison will continue on the level 2 weights, first comparing 0x0020 with 0x0020, then 0x0020 with 0x0047, yielding ''
-Ä
-r'' > ''Ar''. The example above was meant to show how strings comparison is done when using a collation with expansion support.
+It is rather obvious that on the first pass, for level 1 weights, 0x15A3 will be compared with 0x15A3. In the second iteration, the 0x0000 weight will be skipped, and 0x1770 will be compared with 0x1770. Since the strings are declared identical so far, the comparison will continue on the level 2 weights, first comparing 0x0020 with 0x0020, then 0x0020 with 0x0047, yielding "Är" > "Ar". The example above was meant to show how strings comparison is done when using a collation with expansion support.
 
-Let us change the collation settings, and show how one may obtain a different order for the same strings when using a collation for German, where ''
-Ä
-'' is supposed to be interpreted as the character group ''AE''.
+Let us change the collation settings, and show how one may obtain a different order for the same strings when using a collation for German, where "Ä" is supposed to be interpreted as the character group "AE".
 
 The codepoints and collation elements of the characters involved in this example are as follows. ::
 
@@ -799,16 +795,12 @@ The codepoints and collation elements of the characters involved in this example
 	0072  ; [.1770.0020.0002.0072] # LATIN SMALL LETTER R
 	00C4  ; [.15A3.0020.0008.0041][.15FF.0020.0008.0045] # LATIN CAPITAL LETTER A WITH DIAERESIS; EXPANSION
 
-When comparing the strings ''
-Ä
-r'' and ''Ar'', the algorithm for string comparison when using a collation with expansion support will involve comparing the simulated concatenation of collation element lists for the characters in the two strings. ::
+When comparing the strings "Är" and "Ar", the algorithm for string comparison when using a collation with expansion support will involve comparing the simulated concatenation of collation element lists for the characters in the two strings. ::
 
 	Ar [.15A3.0020.0008.0041][.1770.0020.0002.0072]
 	Är [.15A3.0020.0008.0041][.15FF.0020.0008.0045][.1770.0020.0002.0072]
 
-On the first pass, when comparing level 1 weights, 0x15A3 will be compared with 0x15A3, then 0x1770 with 0x15FF, where a difference is found. This comparison yields ''
-Ä
-r'' < ''Ar'', a result completely different than the one for the previous example.
+On the first pass, when comparing level 1 weights, 0x15A3 will be compared with 0x15A3, then 0x1770 with 0x15FF, where a difference is found. This comparison yields "Är" < "Ar", a result completely different than the one for the previous example.
 
 **Specific Operations Related to Collation**
 
@@ -816,11 +808,11 @@ r'' < ''Ar'', a result completely different than the one for the previous exampl
 
 The **LIKE** conditional expression compares patterns between string data, and returns TRUE if a string whose pattern matches the search word is found.
 
-As already proven above, when using a '''collation without expansion support''', each codepoint will receive a single integer value, representing its weight in the comparison process. This weight value is computed based on collation settings (strength, casing etc.). Due to the fact that characters can always be regarded as single entities, trying to match a string with a pattern using the **LIKE** predicate is equivalent to checking if the string can be found in a certain range of strings. For example in order to process a predicate such as ''s LIKE 'abc%' '', Cubrid will first rewrite it as a range restriction for the string ''s''. ''s LIKE 'abc%'' means that ''s'' must start with the string ''abc''. In terms of string comparison, this is equvalent, in expansion-free collations, with ''s'' being greater than ''abc'', but smaller than its successor (using the English alphabet, ''abc''s successor would be ''abd''). ::
+As already proven above, when using a "collation without expansion support", each codepoint will receive a single integer value, representing its weight in the comparison process. This weight value is computed based on collation settings (strength, casing etc.). Due to the fact that characters can always be regarded as single entities, trying to match a string with a pattern using the **LIKE** predicate is equivalent to checking if the string can be found in a certain range of strings. For example in order to process a predicate such as ''s LIKE 'abc%' '', Cubrid will first rewrite it as a range restriction for the string "s". "s LIKE 'abc%'" means that "s" must start with the string "abc". In terms of string comparison, this is equvalent, in expansion-free collations, with "s" being greater than "abc", but smaller than its successor (using the English alphabet, the successor of "abc" would be "abd"). ::
 
 	s LIKE 'abc%' → s ≥ 'abc' AND s < 'abd' (if using strictly the English aphabet)
 
-This way, the actual interpretation of **LIKE** is replaced with simple comparisons, but ''Collations with expansion support'' behave differently. As described above, if a collation supporting expansions is used, single weight values are no longer calculated for each codepoint based on DUCET, but the information from their corresponding collation element list is stored with original values (even though it is compressed). To compare strings when using such a collation means comparing the concatenated lists of collation elements for each codepoint or expansion, level by level.
+This way, the actual interpretation of **LIKE** is replaced with simple comparisons, but "Collations with expansion support" behave differently. As described above, if a collation supporting expansions is used, single weight values are no longer calculated for each codepoint based on DUCET, but the information from their corresponding collation element list is stored with original values (even though it is compressed). To compare strings when using such a collation means comparing the concatenated lists of collation elements for each codepoint or expansion, level by level.
 
 If the **LIKE** predicate rewrite method is kept the same as in a collation with no expansion support as above example, the comparison result can be wrong. To ensure the right query result, the **LIKE** predicate rewrite method is ran differently as the below example. That is, the **LIKE** predicate is added as a filter to exclude the wrong data which can be added in a collation with expansion. ::
 
@@ -839,7 +831,7 @@ A prefix index can be created on the collation without expansion; however, it ca
 
 Covering index scan  is query optimization, in which if all values in query can be computed using only the values found BTREE+ index, without requiring additional row lookup in heap file.
 
-For two strings values, ‘abc’ and ‘ABC’, only one value is stored in the BTREE+ index (this is either ‘abc’ or ‘ABC’ depending which one was inserted first), along with the count of heap values to which it corresponds (in this case, 2). A query using covering index optimization will return this index value twice instead of returning the two original values. As a generic rule, this may happen when at least two different strings produce the same sort key in a given collation. For this reason, for all UTF-8 collations with strength level less than 4 (quaternary) the index covering query optimization is disabled. This is controlled by strength="tertiary/quaternary" in <strength> tag of collation definition in LDML. Even with quaternary strength, there are some situations in which different strings produce same keys. These are acceptable cases in which different codepoints (but with similar graphical symbols) maps to the same weight value.
+For two strings values, 'abc' and 'ABC', only one value is stored in the BTREE+ index (this is either 'abc' or 'ABC' depending which one was inserted first), along with the count of heap values to which it corresponds (in this case, 2). A query using covering index optimization will return this index value twice instead of returning the two original values. As a generic rule, this may happen when at least two different strings produce the same sort key in a given collation. For this reason, for all UTF-8 collations with strength level less than 4 (quaternary) the index covering query optimization is disabled. This is controlled by strength="tertiary/quaternary" in <strength> tag of collation definition in LDML. Even with quaternary strength, there are some situations in which different strings produce same keys. These are acceptable cases in which different codepoints (but with similar graphical symbols) maps to the same weight value.
 
 For more information about collations, see :doc:`/admin/i18n`.
 

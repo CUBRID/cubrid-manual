@@ -478,7 +478,7 @@ Functions with the function-based indexes are as follows:
 +-----------------+-----------------+-----------------+
 | ADDDATE         | ASIN            | ATAN            |
 +-----------------+-----------------+-----------------+
-| ATAN2           |  BIT_COUNT      | BIT_LENGTH      |
+| ATAN2           | BIT_COUNT       | BIT_LENGTH      |
 +-----------------+-----------------+-----------------+
 | CEIL            | CHAR_LENGTH     | CHR             |
 +-----------------+-----------------+-----------------+
@@ -486,7 +486,7 @@ Functions with the function-based indexes are as follows:
 +-----------------+-----------------+-----------------+
 | DATE_ADD        | DATE_FORMAT     | DATE_SUB        |
 +-----------------+-----------------+-----------------+
-| DATEDIFF        | DAYF            | DAYOFMONTH      |
+| DATEDIFF        | DAY             | DAYOFMONTH      |
 +-----------------+-----------------+-----------------+
 | DAYOFWEEK       | DAYOFYEAR       | DEGREES         |
 +-----------------+-----------------+-----------------+
@@ -514,7 +514,7 @@ Functions with the function-based indexes are as follows:
 +-----------------+-----------------+-----------------+
 | NVL             | NVL2            | OCTET_LENGTH    |
 +-----------------+-----------------+-----------------+
-| POSITION        | POWER           | QUARTERF        |
+| POSITION        | POWER           | QUARTER         |
 +-----------------+-----------------+-----------------+
 | RADIANS         | REPEAT          | REPLACE         |
 +-----------------+-----------------+-----------------+
@@ -522,7 +522,7 @@ Functions with the function-based indexes are as follows:
 +-----------------+-----------------+-----------------+
 | RPAD            | RTRIM           | SECOND          |
 +-----------------+-----------------+-----------------+
-| SECTOTIME       | SIN| SPACE                        |
+| SECTOTIME       | SIN             | SPACE           |
 +-----------------+-----------------+-----------------+
 | SQRT            | STR_TO_DATE     | STRCMP          |
 +-----------------+-----------------+-----------------+

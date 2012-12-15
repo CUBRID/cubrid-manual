@@ -2406,6 +2406,7 @@ NUMERIC타입 컬럼에 호스트 변수를 이용하여 INSERT 수행 시 실�
 		===============================
 		  12:00:00.000 AM 00/00/0000
 		  12:00:00.000 AM 00/00/0000
+		  
 [검토]
 """"""
 AUTO_INCREMENT 칼럼이 있는 테이블을 RENAME할 수 없는 문제(CUBRIDSUS-9691)
@@ -3583,8 +3584,8 @@ COLLATE 수정자가 표현식에 대해 적용될 수 있도록 수정(CUBRIDSU
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 	COLLATE 수정자가 표현식에 대해 적용될 수 있도록 수정했다. 다음 예에서 첫 번째 질의와 두 번째 질의는 같은 결과를 수행한다. ::
 	
-	SELECT * FROM t WHERE (col > 'a') COLLATE utf8_en_ci;
-	SELECT * FROM t WHERE col COLLATE utf8_en_ci > 'a' COLLATE utf8_en_ci;
+		SELECT * FROM t WHERE (col > 'a') COLLATE utf8_en_ci;
+		SELECT * FROM t WHERE col COLLATE utf8_en_ci > 'a' COLLATE utf8_en_ci;
 	
 [검토]
 """"""

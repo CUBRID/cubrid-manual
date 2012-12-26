@@ -1234,7 +1234,4 @@ CCI 예제 프로그램
 		return -1;
 	}
 
-.. toctree::
-	:maxdepth: 2
-
-	cciapi.rst
+.. include:: cciapi.rst

@@ -1,6 +1,5 @@
-*****************
 CCI API Reference
-*****************
+=================
 
 .. c:function::	int cci_bind_param (int req_handle, int index, T_CCI_A_TYPE a_type, void *value, T_CCI_U_TYPE u_type, char flag)
 

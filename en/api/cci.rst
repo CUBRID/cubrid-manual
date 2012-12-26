@@ -1214,7 +1214,5 @@ The code below a command line that makes a test program build by using a dynamic
 		return -1;
 	}
 
-.. toctree::
-	:maxdepth: 2
+.. include:: cciapi.rst
 
-	cciapi.rst

@@ -267,10 +267,26 @@ INET_ATON 함수, INET_NTOA 함수(CUBRIDSUS-8230)
 
 [검토]
 """"""
-SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수 추가(CUBRIDSUS-9404)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수(CUBRIDSUS-9404)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 	콜레이션 정보를 출력하는 SHOW COLLATION 문, 지정한 문자열의 문자셋, 콜레이션, 콜레이션 변환도를 각각  반환하는 CHARSET 함수, COLLATION 함수, COERCIBILITY 함수를 추가했다.
+	
+[검토]
+""""""
+히스토그램 값을 출력하는 SQL 함수(CUBRIDSUS-4209)
+"""""""""""""""""""""""""""""""""""""""""""""""""
+	주어진 범위와 단계에 따라 히스토그램 값을 출력하는 WIDTH_BUCKET SQL 함수를 추가했다. ::
+
+		SELECT salary,WIDTH_BUCKET(salary,200,300,10)
+		from employees
+		ORDER BY salary;
+
+			SALARY WIDTH_BUCKET(SALARY,200,300,10)
+		---------- -------------------------------
+			   220                               3
+			   240                               5
+			   250                               6
+			   250                               6	
 
 [검토]
 """"""
@@ -285,6 +301,19 @@ SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수 추가(CUBRIDSUS-
 		SELECT TRUNC(TO_DATE('2012-10-26'), 'YYYY');
 
 		01/01/2012
+		
+LEAD와 LAG 분석 함수 추가(CUBRIDSUS-9414)
+"""""""""""""""""""""""""""""""""""""""""
+	한 행 내에서 다음 행과 이전 행의 칼럼 정보를 가져올 수 있는 LEAD, LAG 분석 함수를 추가했다.	::
+		
+		SELECT * FROM
+		(
+			SELECT num, title, 
+			LEAD(title,1,'no next page') OVER (ORDER BY num) next_title,
+			LAG(title,1,'no previous page') OVER (ORDER BY num) prev_title,
+			FROM tbl_board
+		) 
+		WHERE num=10;
 
 다국어
 ------
@@ -342,6 +371,14 @@ Beta 버전
 	 데이터베이스 콜레이션(로캘 라이브러리에 정의된 콜레이션)을 시스템 콜레이션($CUBRID/conf/cubrid_locales.txt에 정의된 콜레이션)으로 동기화하는 명령이 추가되었다. ::
 	 
 		cubrid synccolldb testdb
+		
+[검토]
+""""""
+테이블에 대한 콜레이션 지원(CUBRIDSUS-9403)
+"""""""""""""""""""""""""""""""""""""""""""
+	9.0 베타 버전에서는 컬럼에 대한 콜레이션만을 지원했으나, 테이블에 대한 콜레이션을 지원하도록 수정했다. ::
+	
+		CREATE TABLE tbl(i1 INTEGER, s STRING) COLLATE utf8_en_cs;
 		
 Sharding
 --------
@@ -873,6 +910,32 @@ login() 메서드의 동작 변경(CUBRIDSUS-6307)
 		% csql -u dba demodb
 		csql> CALL login ('test1', '') ON CLASS db_user; -- dba가 test1에 login()하므로 패스워드 확인 없이 허용 
 		csql> CALL login ('test2', '') ON CLASS db_user; -- test1으로 login()한 이후 test2로 login() 시 패스워드 확인 없이는 허용되지 않음
+
+정식 버전
+^^^^^^^^^
+
+[검토]
+""""""
+두 개 이상의 문자열 인자가 요구되는 SQL 함수에서 입력 인자가 어느 한 쪽으로 변환이 가능한 콜레이션인 경우에만 함수 수행이 가능하도록 수정(CUBRIDSUS-9920)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	IF, CASE, DECODE, FIELD 함수 등에서 두 개 이상의 인자가 입력되면 어느 한 쪽으로 변환이 가능한 콜레이션인 경우에만 함수 수행이 가능하도록 수정했다.
+	
+	입력 인자의 콜레이션이 바이너리인 경우는 호환이 가능하다. utf8_bin 문자열과과 iso88591_bin 문자열이 입력되면 utf8_bin 문자열은 iso88591_bin 문자셋으로 변환된다. ::
+	
+		SELECT IF(1, _utf8'a', _iso88591'b'), CHARSET(IF(1, _utf8'a', _iso88591'b'));
+		
+		   if(1<>0, _utf8'a', 'b')   charset( if(1<>0, _utf8'a', 'b'))
+		============================================
+		  'a'                   'iso88591'		
+		
+	입력 인자의 콜레이션이 바이너리가 아닌 경우는 어느 한 쪽으로 변환 가능하지 않으므로 오류가 발생한다. ::
+	
+		SELECT * FROM t1 
+		WHERE IF(id%2, _utf8'a' collate utf8_en_cs, _utf8'b' collate utf8_en_ci) = concat(a, '');
+		
+		ERROR: before '  = concat(a, ''); '
+		'if ' requires arguments with compatible collations.
+		
 		
 드라이버
 --------
@@ -965,9 +1028,18 @@ Beta 버전
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 	시스템 파라미터인 sort_buffer_size의 최대 크기를 2G로 제한했다. 수정 이전 버전에서 sort_buffer_size의 크기를 2G보다 크게 설정하는 경우, 인덱스 생성과 같은 정렬이 필요한 작업에서 2G보다 큰 sort_buffer를 사용하게 되면 해당 작업이 비정상 종료되었다.
+
+[검토]
+""""""
+브로커 파라미터 KEEP_CONNECTION에서 OFF 값 설정 제거(CUBRIDSUS-5316)	
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	브로커 파라미터 KEEP_CONNECTION에서 OFF 값 설정을 제거했다. 2008 R4.x 이하 버전에서 해당 파라미터의 값을 OFF로 설정하면 사용자 정의 변수, LAST_INSERT_ID, ROW_COUNT, PREPARE 문이 정상 수행되지 않는다.
 	
 HA 기능
-^^^^^^^
+-------
+
+정식 버전
+^^^^^^^^^
 
 HA 환경에서 특정 노드가 to-be-active 상태인 경우 SELECT 문을 처리할 수 있도록 수정(CUBRIDSUS-8896)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1181,9 +1253,9 @@ UPDATE STATISTICS 문 수행으로 인해 다른 트랜잭션의 UPDATE 문이 �
 	브로커를 구동하면 처음에는 브로커 파라미터 MIN_NUM_APPL_SERVER 값만큼 CAS가 구동되어 있으며, 해당 CAS와 접속하는 응용 프로그램의 개수가 늘어나면서 최대 MAX_NUM_APPL_SERVER 값까지 CAS가 구동된다. 이때, MIN_NUM_APPL_SERVER부터 MAX_NUM_APPL_SERVER까지 CAS가 구동되는데 소요되는 시간을 개선했다.
 	
 	예를 들어 MIN_NUM_APPL_SERVER이 100이고 MAX_NUM_APPL_SERVER가 400일 때, 접속을 400개까지 늘리면 브로커가 101번째 접속부터 CAS를 400개까지 하나씩 늘어 나는데, 기존에는 30초가 소요되었으나 수정 이후 3초로 줄어들었다.	
-	
-연산자와 SQL 함수
------------------
+		
+SQL
+---
 
 Beta 버전
 ^^^^^^^^^
@@ -1330,50 +1402,7 @@ SELECT 리스트에 INSERT 함수 혹은 ELT 함수가 있고 그 뒤에 값이 
 부질의 내에 집계 함수가 있는 질의문에 USING INDEX 구문을 포함하면 비정상 종료되는 현상(CUBRIDSUS-8057)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 	SELECT 리스트의 부질의(sub-query) 내에 집계 함수를 포함하는 질의문에 USING INDEX 구문을 포함하면 비정상 종료되는 현상을 수정했다. 
-
-정식 버전
-^^^^^^^^^
-
-[검토]
-""""""
-분석 함수에서 PARTITION BY 절 뒤에 상수가 아닌 표현식이 올 때 오류 발생(CUBRIDSUS-9579)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-	분석 함수에서 PARTITION BY 절 뒤에 상수가 아닌 표현식이 올 때 오류가 발생하는 문제를 수정했다. ::
 	
-		SELECT v.a, ROW_NUMBER() over(PARTITION BY 1 + 0) r
-		FROM (VALUES (1), (2), (3)) v (a)
-
-	수정 이전 버전에서는 아래의 오류가 발생한다. ::
-
-		Semantic: System error (generate order_by) in ..\..\src\parser\xasl_generation.c (line: 5466) 
-		select [v].[a], row_number() over (partition by 1+0) from (values (1),(2),(3)) [v] ([a]) 
-		where (rownum>= ?:0  and rownum<= ?:1 )?171="en_US";172="en_US";
-
-	수정 이후, 분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY 절 뒤에 오는 표현식에 따른 동작 방식은 다음과 같다.
-	PARTITION BY 절의 동작 방식도 ORDRE BY 절과 동일하다.
-		
-	* ORDER BY 상수 (예: 1): 상수는 SELECT 리스트의 칼럼 위치로 다루어짐.
-	* ORDER BY 상수 표현식 (예: 1+0): 상수 표현식은 무시되어, 정렬/분할(ordering/partitioning)에 사용되지 않음.
-	* ORDER BY 상수가 아닌 표현식(예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용됨.	
-
-STR_TO_DATE 함수가 밀리초를 항상 0으로 리턴하는 문제 (CUBRIDSUS-9553)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-	STR_TO_DATE 함수가 밀리초를 항상 0으로 리턴하는 문제를 수정했다. ::
-	
-		SELECT STR_TO_DATE('2012-10-31 23:49:29.123', '%Y-%m-%d %H:%i:%s.%f');
-		
-[검토]
-""""""
-BLOB_FROM_FILE 혹은 CLOB_FROM_FILE 함수 수행 시 오류가 발생하는 문제(CUBRIDSUS-7596)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-	BLOB_FROM_FILE 혹은 CLOB_FROM_FILE 함수 수행 시 "Semantic: Cannot coerce blob to type unknown data type." 오류가 발생하는 문제를 수정했다.
-
-SQL 문
-------
-
-Beta 버전
-^^^^^^^^^
-
 SELECT ALL/DISTINCT 상수 또는 DISTINCT (칼럼)이 가능해짐(CUBRIDSUS-6080) 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -2241,6 +2270,80 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 정식 버전
 ^^^^^^^^^
 
+[검토]
+""""""
+CLOB_TO_CHAR 함수의 인자에 문자셋을 지정할 수 있도록 개선(CUBRIDSUS-9467)	
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+	::
+		CLOB_TO_CHAR(col_clob USING utf8);
+
+[검토]
+""""""
+UPDATE JOIN 또는 DELETE JOIN 시 힌트 지원하도록 개선(CUBRIDSUS-9491)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	UPDATE JOIN 또는 DELETE JOIN 시 ORDERED, USE_DESC_IDX, NO_COVERING_INDEX, NO_DESC_IDX, USE_NL, USE_IDX, USE_MERGE, NO_MULTI_RANGE_OPT, RECOMPILE와 같은 힌트를 지원하도록 개선했다.
+		
+[검토]
+""""""
+분석 함수에서 PARTITION BY 절 뒤에 상수가 아닌 표현식이 올 때 오류 발생(CUBRIDSUS-9579)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	분석 함수에서 PARTITION BY 절 뒤에 상수가 아닌 표현식이 올 때 오류가 발생하는 문제를 수정했다. ::
+	
+		SELECT v.a, ROW_NUMBER() over(PARTITION BY 1 + 0) r
+		FROM (VALUES (1), (2), (3)) v (a)
+
+	수정 이전 버전에서는 아래의 오류가 발생한다. ::
+
+		Semantic: System error (generate order_by) in ..\..\src\parser\xasl_generation.c (line: 5466) 
+		select [v].[a], row_number() over (partition by 1+0) from (values (1),(2),(3)) [v] ([a]) 
+		where (rownum>= ?:0  and rownum<= ?:1 )?171="en_US";172="en_US";
+
+	수정 이후, 분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY 절 뒤에 오는 표현식에 따른 동작 방식은 다음과 같다.
+	PARTITION BY 절의 동작 방식도 ORDRE BY 절과 동일하다.
+		
+	* ORDER BY 상수 (예: 1): 상수는 SELECT 리스트의 칼럼 위치로 다루어짐.
+	* ORDER BY 상수 표현식 (예: 1+0): 상수 표현식은 무시되어, 정렬/분할(ordering/partitioning)에 사용되지 않음.
+	* ORDER BY 상수가 아닌 표현식(예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용됨.	
+
+STR_TO_DATE 함수가 밀리초를 항상 0으로 리턴하는 문제 (CUBRIDSUS-9553)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	STR_TO_DATE 함수가 밀리초를 항상 0으로 리턴하는 문제를 수정했다. ::
+	
+		SELECT STR_TO_DATE('2012-10-31 23:49:29.123', '%Y-%m-%d %H:%i:%s.%f');
+		
+[검토]
+""""""
+BLOB_FROM_FILE 혹은 CLOB_FROM_FILE 함수 수행 시 오류가 발생하는 문제(CUBRIDSUS-7596)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	BLOB_FROM_FILE 혹은 CLOB_FROM_FILE 함수 수행 시 "Semantic: Cannot coerce blob to type unknown data type." 오류가 발생하는 문제를 수정했다.
+	
+[검토]
+""""""
+BIGINT 타입의 최대값에 TIME 타입의 값을 더할 때 잘못된 결과를 출력하는 현상(CUBRIDSUS-3735)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	BIGINT 타입의 최대값에 TIME 타입의 값을 더할 때 잘못된 결과를 출력했으나, 오류를 출력하도록 수정했다. ::
+	
+		SELECT CAST(9223372036854775807 as bigint) + TIME '11:59:59 pm';
+	
+[검토]
+""""""
+데이터베이스 이름을 변경한 후 LOB 타입의 연산 수행에 실패하는 현상(CUBRIDSUS-8905)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	데이터베이스 이름을 변경하면 lob 타입에 대한 디렉터리가 설정되지 않아 CHAR_TO_BLOB 함수와 같은 LOB 타입 연산 수행에 실패하는 현상을 수정했다. ::
+	
+		cubrid createdb --db-volume-size=20m testdb
+		cubrid renamedb testdb testdb2
+		cubrid server start testdb2
+
+		csql -u dba testdb2
+		
+		csql> CREATE TABLE tbl(b BLOB);
+		csql> INSERT INTO tbl VALUES(CHAR_TO_BLOB('1'));
+		
+		ERROR: before ' )); '
+		External storage is not initialized because the path is not specified in "databases.txt".
+
 네트워크 장애나 HA 절체 또는 데이터베이스 서버의 재시작 이후 LAST_INSERT_ID와 같이 세션 데이터를 사용하는 작업 요청이 정상 처리되지 않을 수 있는 현상 (CUBRIDSUS-7549)(CUBRIDSUS-7669)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -2378,6 +2481,19 @@ WITH CHECK OPTION 절로 생성한 뷰에 MERGE 문 수행 시 실패하는 문�
 
 		CREATE TABLE foo (i INT, j INT);
 		CREATE VIEW v AS SELECT i FROM foo ORDER BY j;
+		
+[검토]
+""""""
+뷰에서 DISTINCT 질의 수행 시 잘못된 값을 출력하는 문제(CUBRIDSUS-9880)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	::
+
+		CREATE TABLE t (s CHAR(10), i INT);
+		INSERT INTO t VALUES ('xxxx', 1);
+		INSERT INTO t VALUES ('yyyy', 2);
+		CREATE VIEW v AS SELECT s s_v, i i_v FROM t ORDER BY s;
+
+		SELECT DISTINCT t1.i_v FROM v t1, v t2;
 
 NUMERIC타입 컬럼에 호스트 변수를 이용하여 INSERT 수행 시 실패하는 문제(CUBRIDSUS-9500)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -2453,7 +2569,107 @@ ON DUPLICATE KEY UPDATE(ODKU) 절에서 SELECT 문의 칼럼을 참조할 때 �
 		ERROR: t2.field_c is not defined.
 		
 	또한, ODKU 절과 REPLACE 문에서 분할 테이블을 지원하도록 수정했다.
+	
+[검토]
+""""""
+ORDERY BY 절 뒤에 질의문이 이어질 경우 문법 오류가 발생하는 문제(CUBRIDSUS-6920)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	ORDERY BY 절이 질의문의 가장 뒤에 위치하는 것으로 다루어져 "SELECT~ORDER BY~UNION SELECT"처럼 ORDER BY 절 뒤에 문장이 이어지는 경우 문법 오류로 처리하는 문제를 수정했다. ::
 
+		SELECT * FROM tbl1 ORDER BY a UNION SELECT * FROM tbl2 ORDER BY b;
+
+	참고로, 수정 이전 버전에서도 UNION 절 사이를 괄호로 묶으면 오류를 회피할 수 있다. ::
+	
+		(SELECT * FROM tbl1 ORDER BY a) UNION (SELECT * FROM tbl2 ORDER BY b);
+		
+[검토]
+""""""
+SUM 함수 혹은 AVG 함수의 호스트 변수 인자에 double 타입으로 변환 가능한  문자열을 입력하는 경우 오류 발생 현상(CUBRIDSUS-8789)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	SUM 함수 혹은 AVG 함수의 호스트 변수 인자로 double 타입으로 변환 가능한 문자열을 입력하는 경우 "ERROR: Invalid data type referenced." 오류를 출력하는 현상을 수정했다. ::
+	
+		CREATE TABLE tbl(a INT);
+		INSERT INTO tbl VALUES(1),(2);
+		PREPARE STMT FROM 'SELECT AVG(?) FROM tbl';
+		EXECUTE STMT USING '1.1';
+
+[검토]
+""""""
+두 개 이상의 응용 프로그램이 번갈아 INCR 함수 수행 시 교착 상태가 발생하는 현상(CUBRIDSUS-5009)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	두 개 이상의 응용 프로그램이 번갈아 INCR 함수 수행 시 교착 상태가 발생한 후 비정상적으로 동작하는 현상을 수정했다. 
+	
+	::
+	
+		+---------------------------------------+---------------------------------------+
+		| T1                                    | T2                                    |
+		+=======================================+=======================================+
+		| // autocommit off                     | // autocommit off                     |
+		|                                       |                                       |   
+		| CREATE TABLE t1(a INT);               |                                       |
+		| CREATE UNIQUE INDEX ON t1 (a);        |                                       |
+		| INSERT INTO t1 VALUES (1),(4),(7);    |                                       |
+		| COMMIT;                               |                                       |
+		+---------------------------------------+---------------------------------------+
+		| INSERT INTO t1 VALUES (3);            |                                       |
+		+---------------------------------------+---------------------------------------+
+		|                                       | DELETE FROM t1 WHERE a=4;             |
+		+---------------------------------------+---------------------------------------+
+		| SELECT INCR(a) FROM t1 WHERE a=3;     |                                       |
+		| --BLOCKED                             |                                       |
+		+---------------------------------------+---------------------------------------+
+		| 0 rows selected.                      | SELECT INCR(a) FROM t1 WHERE a=1;     |
+		|                                       | --BLOCKED                             |
+		+---------------------------------------+---------------------------------------+
+		| SELECT INCR(a) FROM t1 WHERE a=3;     |                                       |
+		| 0 rows selected.                      |                                       |
+		+---------------------------------------+---------------------------------------+
+		| SELECT INCR(a) FROM t1 WHERE a=3;     |                                       |
+		| 0 rows selected.                      |                                       |
+		+---------------------------------------+---------------------------------------+
+		| // the same as above                  |                                       |
+		+---------------------------------------+---------------------------------------+		
+
+[검토]
+""""""
+GROUP BY 절을 가진 구문에서 분석 함수를 사용하면 오류가 발생하는 문제(CUBRIDSUS-7270)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	GROUP BY 절을 가진 구문에서 분석 함수를 사용하면 오류가 발생하는 문제를 수정했다. ::
+	
+		
+		SELECT a, ROW_NUMBER() OVER(ORDER BY a) FROM tbl GROUP BY a;
+		
+		// 수정 이전 버전에서는 다음의 오류가 발생했다.
+		ERROR:  before '  from tbl group by a; '
+		Nested or invalid use of aggregate function.
+
+[검토]
+""""""
+EUC-KR 문자셋 DB에서 LIKE 절을 포함한 질의의 출력 결과가 잘못된 문제(CUBRIDSUS-9199)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	EUC-KR 문자셋 DB에서 LIKE 절에 '_' 혹은 '%'와 같이 와일드 카드 문자를 포함하는 경우 질의 출력 결과가 잘못된 문제를 수정했다.
+
+	::
+
+		SELECT * FROM tbl WHERE col LIKE '_乖a';
+		
+[검토]
+""""""
+DELETE, UPDATE 범위 질의에서 키 잠금 오류로 인한 고유 키 위반 현상(CUBRIDSUS-9382)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	DELETE, UPDATE의 범위 질의에서 키 잠금 오류로 인해 여러 개의 응용 프로그램이 동시에 수행될 때 고유 키 위반이 발생하는 현상을 수정했다.
+	
+[검토]
+""""""	
+분할 테이블에서 칼럼과 다른 문자셋을 가진 분할 키를 허용하지 않도록 수정(CUBRIDSUS-9904)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+	다음 예와 같이 칼럼과 다른 문자셋을 가진 분할 키를 허용하지 않도록 수정했다. ::
+
+		CREATE TABLE t(c CHAR(50) COLLATION utf8_bin) PARTITION BY LIST(c) (
+			PARTITION p0 VALUES IN(_utf8'xxx'),
+			PARTITION p1 VALUES IN(_iso88591'yyy'));
+			
 질의 계획 및 최적화
 -------------------
 
@@ -2656,12 +2872,29 @@ LIMIT 절 질의 최적화 개선 (CUBRIDSUS-7661)
 		
 [검토]
 """"""		
-ORDER BY 칼럼이 2개 이상이라도 다중 범위 최적화가 가능하도록 개선(CUBRIDSUS-7441)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-	ORDER BY 칼럼이 2개 이상이라도 중간 값의 정렬을 진행하면서 결과를 수집하는 다중 범위 최적화(multi-range optimization)가 가능하도록 개선했다. ::
+ORDER BY 칼럼이 2개 이상이라도, orderby_num()에 의해 범위가 주어져도 다중 범위 최적화가 가능하도록 개선(CUBRIDSUS-7441)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	ORDER BY 칼럼이 2개 이상이라도, orderby_num()에 의해 범위가 주어져도 중간 값의 정렬을 진행하면서 결과를 수집하는 다중 범위 최적화(multi-range optimization)가 가능하도록 개선했다. ::
 	
 		SELECT * FROM table WHERE a IN (1,2,3) USING INDEX idx ORDER BY col1 DESC, col2 DESC LIMIT 2;
+		SELECT * FROM t WHERE a IN (1,3) ORDER BY b, c DESC FOR orderby_num() > 2 and orderby_num() <= 5;
+		
+[검토]
+""""""
+GROUP BY LIMIT 절을 포함한 질의의 최적화(CUBRIDSUS-6400)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	GROUP BY LIMIT 절을 포한한 질의에서 인덱스 스캔 도중에 그룹핑에 대한 LIMIT 절을 수행할 수 있도록 수정했다. ::
 
+		SELECT DISTINCT rdate
+		FROM tbl
+		WHERE rdate > -20111121
+		GROUP BY rdate LIMIT 4;
+
+[검토]
+""""""
+분석 함수의 수행 성능이 느린 문제 개선(CUBRIDSUS-8487)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+		
 분할
 ----
 
@@ -3190,6 +3423,14 @@ ALTER ... CHANGE COLUMN 구문 수행 시 기본 키 칼럼의 NOT NULL 제약 �
 		
 		 SELECT * FROM tbl  WHERE col1 < 4 USING INDEX idx1(-);
 
+[검토]
+""""""
+테이블에 대한 콜레이션 지원(CUBRIDSUS-9403)
+"""""""""""""""""""""""""""""""""""""""""""
+	9.0 베타 버전에서는 컬럼에 대한 콜레이션만을 지원했으나, 테이블에 대한 콜레이션을 지원하도록 수정했다. ::
+	
+		CREATE TABLE tbl(i1 INTEGER, s STRING) COLLATE utf8_en_cs;
+		 
 HA 기능 및 HA 데이터 복제
 -------------------------
 
@@ -3581,6 +3822,14 @@ ALTER ... CHANGE COLUMN 문이 슬레이브 노드에 반영되지 않는 현상
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 	자동 커밋 모드가 OFF일 때 AUTO_INCREMENT 칼럼이 있는 테이블에 INSERT를 수행하면 해당 AUTO_INCREMENT를 관리하는 시리얼에 복제 불일치가 발생하는 현상을 수정했다. AUTO_INCREMENT는 db_serial 시스템 카탈로그 테이블에서 시리얼 값으로 관리되는 것을 확인할 수 있다.
+
+[검토]
+""""""
+함수 기반 인덱스 중 일부 함수에 대해 복제에 실패하는 문제(CUBRIDSUS-8977)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	함수 기반 인덱스 생성 시 함수 부분이 잘못된 값으로 복제되는 일부 함수들은 함수 기반 인덱스 생성 시 사용할 수 없도록 제한했다.
+	
+	함수 기반 인덱스 생성 시 허용하는 함수는 :ref:`allowed-function-in-function-index` 을 참고한다.
 	
 Sharding
 --------
@@ -3620,20 +3869,7 @@ COLLATE 수정자가 표현식에 대해 적용될 수 있도록 수정(CUBRIDSU
 	
 		SELECT * FROM t WHERE (col > 'a') COLLATE utf8_en_ci;
 		SELECT * FROM t WHERE col COLLATE utf8_en_ci > 'a' COLLATE utf8_en_ci;
-	
-[검토]
-""""""
-대소문자 구분 없는 콜레이션에서 LIKE 조건이 정상 동작하지 않는 문제(CUBRIDSUS-8391)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-	대소문자 구분 없는 콜레이션에서 LIKE 조건이 정상 동작하지 않는 문제를 수정했다. ::
-
-		CREATE TABLE t(v STRING COLLATE utf8_en_ci);
-		INSERT INTO t VALUES('I'),('i');
-
-		-- 수정 이전 버전에서 대문자 "I"는 질의 결과에서 제외되었다.
-		SELECT * FROM t WHERE v LIKE '%i%';
-
+		
 [검토]
 """"""
 POSITION, REPLACE, INSTR, LOCATE, SUBSTRING_INDEX 함수에서 콜레이션 지원(CUBRIDSUS-8393)
@@ -3665,6 +3901,20 @@ CHR 함수의 멀티바이트 문자셋 변경 지원(CUBRIDSUS-8934)
 		======================
 		  'ま'
 		  
+	
+[검토]
+""""""
+대소문자 구분 없는 콜레이션에서 LIKE 조건이 정상 동작하지 않는 문제(CUBRIDSUS-8391)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+	대소문자 구분 없는 콜레이션에서 LIKE 조건이 정상 동작하지 않는 문제를 수정했다. ::
+
+		CREATE TABLE t(v STRING COLLATE utf8_en_ci);
+		INSERT INTO t VALUES('I'),('i');
+
+		-- 수정 이전 버전에서 대문자 "I"는 질의 결과에서 제외되었다.
+		SELECT * FROM t WHERE v LIKE '%i%';
+		
 [검토]
 """"""		  
 바이너리 콜레이션 외의 일부 콜레이션의 칼럼 인덱스에서 검색 결과가 잘못되는 문제(CUBRIDSUS-7737)
@@ -3678,6 +3928,25 @@ CHR 함수의 멀티바이트 문자셋 변경 지원(CUBRIDSUS-8934)
 		CREATE REVERSE INDEX ix1 on tbl(s);
 	
 	참고로, 확장이 있는 콜레이션으로는 prefix 인덱스를 생성할 수 없다.
+	
+[검토]
+""""""
+유니코드 정규화가 수행되지 않는 문제(CUBRDISUS-8685)
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+	출력 시 유니코드 정규화를 수행하게 하는 파라미터 unicode_output_normalization의 값을 yes로 설정했는데도 유니코드 정규화가 수행되지 않는 문제를 수정했다.
+	
+[검토]
+""""""
+콜레이션이 서로 다른 테이블끼리 외래 키 속성 설정할 수 없도록 수정(CUBRIDSUS-8742)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	
+	::
+	
+		CREATE TABLE dim(s STRING COLLATE utf8_en_ci PRIMARY KEY);
+		CREATE TABLE fact(s STRING COLLATE utf8_en_cs PRIMARY KEY);
+		
+		// 수정 이후 아래 질의를 수행하면 오류를 출력한다.
+		ALTER TABLE fact ADD CONSTRAINT FOREIGN KEY(s) REFERENCES dim(s);
 		
 드라이버
 --------
@@ -4193,7 +4462,17 @@ CSQL의 --line-output 설정을 CSQL 세션 명령으로 설정 가능하도록 
 	::
 	
 		csql -u dba --sysadm testdb
+		
+[검토]
+""""""		
+CSQL에서 커멘트에 작은 따옴표가 홀수 개 존재하면 다음 줄에서 CSQL 세션 명령어가 동작하지 않는 현상(CUBRIDSUS-8999)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+	::
+	
+		csql> --it's a test
+		csql> ;exit
+		
 loaddb 스키마 파일에 백슬래시("\")가 마지막 글자인 문자열이 포함되면 loaddb가 실패하거나 잘못된 값으로 로딩되는 현상 (CUBRIDSUS-9109)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -4618,6 +4897,14 @@ Windows에서 브로커 파라미터의 경로 구분자로 /를 쓸 수 없는 
 정의되지 않은 시스템 파라미터가 cubrid.conf에 존재하면 서버 구동 시 비정상 종료하는 현상(CUBRIDSUS-9765)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+정식 버전
+^^^^^^^^^
+
+CUBRID 소스 파일에서 CCI 드라이버만 빌드하는 옵션 추가(CUBRIDSUS-8247)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	CUBRID 소스 파일에서 CCI 드라이버만 빌드할 수 있도록 configure 스크립트에 --with-cci-only 옵션을 추가했다.
+	또한, CCI 드라이버만 빌드할 수 있는 소스 패키지를 별도로 배포하게 되었다.
+
 기타
 ----
 
@@ -4670,7 +4957,19 @@ Windows 서비스 프로세스인 CUBRIDService에 설명 추가(CUBRIDSUS-8917)
 		Service to execute master,broker,database server and manager server processes for CUBRID.
 		Service start/stop menu is equal to the command of "cubrid service start/stop".
 		If you setup "startup type" of this service to "Disabled", you can't use "cubrid service" command.
+
+[검토]
+""""""
+로캘 라이브러리를 생성하는 스크립트 실행 이후 cubrid synccolldb를 수행하도록 하는 메시지를 출력하도록 수정(CUBRIDSUS-8543)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	로캘 라이브러리를 생성하는 스크립트(Linux에서는 make_locale.sh, Windows에서는 make_locale.bat) 실행 이후 기존에 생성된 데이터베이스의 콜레이션과 로캘 라이브러리의 콜레이션을 동기화하는 cubrid synccolldb를 수행할 것을 요구하는 메시지를 출력하도록 수정했다.
 	
+	::
+	
+		To check compatibility and synchronize your existing databases, run:
+			cubrid synccolldb <database-name>
+
+		
 주의 사항
 =========
 

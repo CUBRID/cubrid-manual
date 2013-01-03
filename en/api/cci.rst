@@ -1171,6 +1171,7 @@ The code below a command line that makes a test program build by using a dynamic
 			if ((res=cci_fetch(req, &error))<0) {
 				if (res == CCI_ER_DBMS) {
 					printf( "%s(%d): cci_fetch fail(%d)\n", __FILE__, __LINE__,error.err_code);
+				}
 				else {
 					char msg_buf[1024];
 					cci_get_err_msg(req, msg_buf, 1024);
@@ -1195,6 +1196,7 @@ The code below a command line that makes a test program build by using a dynamic
 		if ((res=cci_disconnect(con, &error))<0) {
 			if (res == CCI_ER_DBMS) {
 				printf( "%s(%d): cci_disconnect fail(%d)", __FILE__, __LINE__,error.err_code);
+			}
 			else {
 				char msg_buf[1024];
 				cci_get_err_msg(req, msg_buf, 1024);

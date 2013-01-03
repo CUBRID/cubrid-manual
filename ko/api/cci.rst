@@ -1191,6 +1191,7 @@ CCI 예제 프로그램
 			if ((res=cci_fetch(req, &error))<0) {
 				if (res == CCI_ER_DBMS) {
 					printf( "%s(%d): cci_fetch fail(%d)\n", __FILE__, __LINE__,error.err_code);
+				}
 				else {
 					char msg_buf[1024];
 					cci_get_err_msg(req, msg_buf, 1024);
@@ -1215,6 +1216,7 @@ CCI 예제 프로그램
 		if ((res=cci_disconnect(con, &error))<0) {
 			if (res == CCI_ER_DBMS) {
 				printf( "%s(%d): cci_disconnect fail(%d)", __FILE__, __LINE__,error.err_code);
+			}
 			else {
 				char msg_buf[1024];
 				cci_get_err_msg(req, msg_buf, 1024);

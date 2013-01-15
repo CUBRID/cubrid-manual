@@ -204,7 +204,7 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
 	//Binding date into a value
 	strcpy (namebuf, "Korea");
 	error =
-		cci_bind_param (req, 1, CCI_A_TYPE_STR, &namebuf, CCI_U_TYPE_STRING,
+		cci_bind_param (req, 1, CCI_A_TYPE_STR, namebuf, CCI_U_TYPE_STRING,
 						CCI_BIND_PTR);
 	if (error < 0)
 	{
@@ -1236,4 +1236,4 @@ CCI 예제 프로그램
 		return -1;
 	}
 
-.. include:: cciapi.rst
+.. include:: cciapi.txt

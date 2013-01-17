@@ -290,9 +290,9 @@ Change **shard.conf**, the default configuration file, as shown below:
 	SHARD_DB_NAME           =shard1
 	SHARD_DB_USER           =shard
 	SHARD_DB_PASSWORD       =shard123
-	NUM_PROXY_MIN           =1  
-	NUM_PROXY_MAX           =1  
-	PROXY_LOG_FILE          =log/broker/proxy_log
+	MIN_NUM_PROXY           =1  
+	MAX_NUM_PROXY           =1  
+	PROXY_LOG_DIR           =log/broker/proxy_log
 	PROXY_LOG               =ALL
 	MAX_CLIENT              =10
 	METADATA_SHM_ID         =45591
@@ -1336,7 +1336,7 @@ The shard proxy reset feature disconnects exiting connection and makes new conne
 CUBRID SHARD Log
 ----------------
 
-There are four types of logs that relate to starting the shard: access, proxy, error and SQL logs. Changing the directory of each log is available through **LOG_DIR**, **ERROR_LOG_DIR**, and **PROXY_LOG_FILE** parameter of the shard configuration file (**shard.conf**).
+There are four types of logs that relate to starting the shard: access, proxy, error and SQL logs. Changing the directory of each log is available through **LOG_DIR**, **ERROR_LOG_DIR**, and **PROXY_LOG_DIR** parameter of the shard configuration file (**shard.conf**).
 
 **SHARD PROXY Log**
 

@@ -296,9 +296,9 @@ shard 설정 변경
 	SHARD_DB_NAME           =shard1
 	SHARD_DB_USER           =shard
 	SHARD_DB_PASSWORD       =shard123
-	NUM_PROXY_MIN           =1  
-	NUM_PROXY_MAX           =1  
-	PROXY_LOG_FILE          =log/broker/proxy_log
+	MIN_NUM_PROXY           =1  
+	MAX_NUM_PROXY           =1  
+	PROXY_LOG_DIR           =log/broker/proxy_log
 	PROXY_LOG               =ALL
 	MAX_CLIENT              =10
 	METADATA_SHM_ID         =45591
@@ -1143,12 +1143,12 @@ shard broker에 관한 좀 더 상세한 상태 정보를 확인하려면 다음
 	% test_shard [299009]
 	MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
 	SHARD STATISTICS
-			   ID  NUM-KEY-Q  NUM-ID-Q   NUM-NO-HINT-Q       SUM
-			-----------------------------------------------------
-				0          0         0               0         0
-				1          0         0               0         0
-				2          0         0               0         0
-				3          0         0               0         0
+	   ID  NUM-KEY-Q  NUM-ID-Q   NUM-NO-HINT-Q       SUM
+	-----------------------------------------------------
+	    0          0         0               0         0
+	    1          0         0               0         0
+	    2          0         0               0         0
+	    3          0         0               0         0
 
 *   test_shard : proxy의 이름
 *   [299009] : **shard.conf** 의 **METADATA_SHM_ID** 파라미터의 decimal 값
@@ -1355,7 +1355,7 @@ shard proxy 리셋 기능은 HA에서 failover 등으로 shard proxy가 원하�
 CUBRID SHARD 로그
 -----------------
 
-shard 구동과 관련된 로그에는 접속 로그, 프록시 로그, SQL 로그, 에러 로그가 있다. 각각 로그의 저장 디렉터리 변경은 shard 환경 설정 파일(**shard.conf**) 의 **LOG_DIR**, **ERROR_LOG_DIR**, **PROXY_LOG_FILE** 파라미터를 통해 설정할 수 있다.
+shard 구동과 관련된 로그에는 접속 로그, 프록시 로그, SQL 로그, 에러 로그가 있다. 각각 로그의 저장 디렉터리 변경은 shard 환경 설정 파일(**shard.conf**) 의 **LOG_DIR**, **ERROR_LOG_DIR**, **PROXY_LOG_DIR** 파라미터를 통해 설정할 수 있다.
 
 **SHARD PROXY 로그**
 

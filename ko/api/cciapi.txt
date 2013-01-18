@@ -1,10 +1,6 @@
 CCI API 레퍼런스
 ================
 
-.. toctree::
-
-	:c:function:
-
 .. c:function::	int cci_bind_param (int req_handle, int index, T_CCI_A_TYPE a_type, void *value, T_CCI_U_TYPE u_type, char flag)
 	
 	prepared statement에서 *bind* 변수에 데이터를 바인딩하기 위하여 사용되는 함수이다. 이때, 주어진 *a_type* 의 *value* 의 값을 실제 바인딩되어야 하는 타입으로 변환하여 저장한다. 이후, :c:func:`cci_execute` 가 호출될 때 저장된 데이터가 서버로 전송된다. 같은 *index* 에 대해서 여러 번 :c:func:`cci_bind_param` 을 호출할 경우 마지막으로 설정한 값이 유효하다. 

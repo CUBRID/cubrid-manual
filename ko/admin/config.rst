@@ -1350,7 +1350,7 @@ HA 관련 파라미터
 
 **sql_trace_slow_msecs**
 
-	**sql_trace_slow_msecs** 는 장기 실행 질의(long running query)로 판단될 질의 실행 시간을 설정하는 파라미터이다. 기본값은 -1이고 최대값은 86400000 msec (24 hour) 이다. -1은 무한대 시간을 의미하며 어떤 질의도 장기 실행 질의로 판단되지 않는다. 자세한 내용은 아래의 **sql_trace_execution_plan**의 설명을 참고한다.
+	**sql_trace_slow_msecs** 는 장기 실행 질의(long running query)로 판단될 질의 실행 시간을 설정하는 파라미터이다. 기본값은 -1이고 최대값은 86400000 msec (24 hour) 이다. -1은 무한대 시간을 의미하며 어떤 질의도 장기 실행 질의로 판단되지 않는다. 자세한 내용은 아래의 **sql_trace_execution_plan** 의 설명을 참고한다.
 
 .. note::
 	
@@ -1648,6 +1648,8 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 **MIN_NUM_APPL_SERVER**
 
 	**MIN_NUM_APPL_SERVER** 는 해당 브로커에 대한 연결 요청이 없더라도 기본적으로 대기하고 있는 CAS 프로세스의 최소 개수를 설정하는 파라미터로, 기본값은 **5** 이다.
+
+.. _max-prepared-stmt-count:
 
 **MAX_PREPARED_STMT_COUNT**
 

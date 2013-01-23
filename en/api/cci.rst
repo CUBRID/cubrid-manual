@@ -30,7 +30,8 @@ To download CCI driver or get the latest information, click `http://www.cubrid.o
 CCI Programming
 ===============
 
-**Writing CCI Applications**
+Writing CCI Applications
+------------------------
 
 The applications using CCI interact with CUBRID in the process of connecting to CAS, preparing queries, executing queries, handling response, and disconnecting. In each process, CCI communicates with applications through connection handle, query handle, and response handle.
 
@@ -197,7 +198,7 @@ General process for writing applications is as follows. For using the prepared s
 	//Binding date into a value
 	strcpy (namebuf, "Korea");
 	error =
-		cci_bind_param (req, 1, CCI_A_TYPE_STR, &namebuf, CCI_U_TYPE_STRING,
+		cci_bind_param (req, 1, CCI_A_TYPE_STR, namebuf, CCI_U_TYPE_STRING,
 						CCI_BIND_PTR);
 	if (error < 0)
 	{
@@ -346,7 +347,8 @@ General process for writing applications is as follows. For using the prepared s
 
 .. note:: The database connection in thread-based programming must be used independently each other.
 
-**Configuring Library**
+Configuring Library
+-------------------
 
 Once you have written applications using CCI, you should decide, according to its features, whether to execute CCI as static or dynamic link before you build it. See the table in :ref:`cci-overview` to decide which library will be used.
 
@@ -365,7 +367,8 @@ The following image shows configuration to use static library on Windows.
 
 .. image:: /images/image55.png
 
-**Using BLOB/CLOB**
+Using BLOB/CLOB
+---------------
 
 **Storing LOB Data**
 
@@ -508,7 +511,8 @@ You can retrieve **LOB** data by using the following functions in CCI applicatio
 
 .. _cci-error-codes:
 
-**CCI Error Codes and Error Messages**
+CCI Error Codes and Error Messages
+----------------------------------
 
 CCI API functions return a negative number as CCI or CAS (broker application server) error codes when an error occurs. The CCI error codes occur in CCI API functions and CAS error codes occur in CAS.
 
@@ -1216,5 +1220,5 @@ The code below a command line that makes a test program build by using a dynamic
 		return -1;
 	}
 
-.. include:: cciapi.rst
+.. include:: cciapi.txt
 

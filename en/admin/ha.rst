@@ -71,8 +71,8 @@ The server status changes based on the status of the node. You can use the :ref:
 *   **active** : The status of servers that run on a master node is usually active. In this status, all services including read, write, etc. are provided.
 *   **standby** : The status of servers that run on a slave node or a replica node is standby. In this status, only the read service is provided.
 *   **maintenanc** : The status of servers can be manually changed for operational convenience is maintenance. In this status, only a csql can access and no service is provided to the user.
-*   **to-be-active** : The status in which a standby server will become active for reasons such as failover, etc. is to-be-active. In this status, servers prepare to become active by reflecting transaction logs from the existing master node to its own server.
-*   Other : This status internally used.
+*   **to-be-active** : The status in which a standby server will become active for reasons such as failover, etc. is to-be-active. In this status, servers prepare to become active by reflecting transaction logs from the existing master node to its own server. The node in this status can accept only SELECT query.
+*   Other : This status is internally used.
 
 heartbeat Message
 -----------------
@@ -268,6 +268,8 @@ Linux and CUBRID version 2008 R2.2 or later must be installed on the equipment t
 
 	This document describes the HA configuration in CUBRID 2008 R4.1 Patch 2 or later versions. Note that the previous versions have different settings. For example, **cubrid_ha.conf** is only available in CUBRID 2008 R4.0 or later. **ha_make_slavedb.sh** describes CUBRID 2008 R4.1 Patch 2 or later.
 
+.. _quick-server-config:
+
 Creating Databases and Configuring Servers
 ------------------------------------------
 
@@ -280,7 +282,7 @@ Create databases to be included in CUBRID HA at each node of the CUBRID HA in th
 	[nodeA]$ cd testdb
 	[nodeA]$ mkdir log
 	[nodeA]$ cubrid createdb -L ./log testdb
-	Creating database with 512.0M size.
+	Creating database with 512.0M size. The total amount of disk space needed is 1.5G.
 	 
 	CUBRID 9.0
 	 
@@ -398,6 +400,8 @@ Verify that action is properly applied to standby server of the slave node after
 	
 	[nodeB]$
 
+.. _quick-broker-config:
+
 Configuring and Starting Broker, and Verifying the Broker Status
 ----------------------------------------------------------------
 
@@ -440,10 +444,7 @@ The following example shows how to execute a broker from the master node. ::
 	++ cubrid broker start: success
 	[nodeA]$ cubrid broker status
 	@ cubrid broker status
-	% testdb_RWbroker  - cub_cas [9531,33000] /home1/cubrid1/CUBRID/log/broker//testdb.access /home1/cubrid1/CUBRID/log/broker//testdb.err
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000
-	 LONG_TRANSACTION_TIME:60.00, LONG_QUERY_TIME:60.00, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW
+	% testdb_RWbroker
 	---------------------------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	---------------------------------------------------------
@@ -707,7 +708,7 @@ The following example shows how to configure **databases.txt**. ::
 JDBC Configuration
 ------------------
 
-To use CUBRID HA in JDBC, you must specify the connection information of another broker (*nodeB_broker*) to be connected when a failure occurs in broker (*nodeA_broker*). The attribute configured for CUBRID HA is **althosts** which represents information of one or more broker nodes to be connected. For details, see "API Reference > JDBC API > JDBC Programming > Connection Configuration."
+To use CUBRID HA in JDBC, you must specify the connection information of another broker (*nodeB_broker*) to be connected when a failure occurs in broker (*nodeA_broker*). The attribute configured for CUBRID HA is **altHosts** which represents information of one or more broker nodes to be connected. For details, see :ref:`jdbc-connection-conf`.
 
 The following example shows how to configure JDBC:
 
@@ -738,7 +739,7 @@ The following example shows how to configure CCI.
 PHP Configuration
 -----------------
 
-To use the functions of CUBRID HA in PHP, connect it to the broker by using **cubrid_connect_with_url**, which is used to specify the connection information of the failover broker in the connection URL. The attribute specified for CUBRID HA is **altHosts**, the information on one or more broker nodes to be connected when a failover occurs.
+To use the functions of CUBRID HA in PHP, connect to the broker by using `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ , which is used to specify the connection information of the failover broker in the connection URL. The attribute specified for CUBRID HA is **altHosts**, the information on one or more broker nodes to be connected when a failover occurs.
 
 The following example shows how to configure PHP.
 
@@ -753,6 +754,10 @@ The following example shows how to configure PHP.
 	}
 	?>
 
+[번역]
+.. note:: altHosts를 설정하여 브로커 절체(failover)가 가능하도록 설정한 환경에서, 브로커 절체가 원활하게 되려면 URL에 **disconnectOnQueryTimeout** 값을 **true** 로 설정해야 한다.
+	이 값이 true면 질의 타임아웃 발생 시 응용 프로그램은 즉시 기존에 접속되었던 브로커와의 접속을 해제하고 altHosts에 지정한 브로커로 접속한다.
+	
 Running and Monitoring
 ======================
 
@@ -1444,7 +1449,7 @@ Scenario of Building New Slave Node
 
 This scenario involves building a new slave node while operating a single master node, making a 1:1 master-slave scheme. Please note that only tables with a default key can be replicated. In addition, all of the volume directories of the master node and the slave node must be identical.
 
-This scenario assumes that the database has been created using the **cubrid createdb testdb -L $CUBRID_DATABASES/testdb/log** command. At this time, the backup file is saved in the log directory by default if the location is not specified.
+This scenario assumes that the database has been created using the **cubrid createdb testdb -L $CUBRID_DATABASES/testdb/log** command. At this time, the backup file is saved in the $CUBRID_DATABASES/testdb directory by default if the location is not specified.
 
 Using the above instructions, build a new slave node by following these steps, in the order specified.
 
@@ -1487,7 +1492,13 @@ Using the above instructions, build a new slave node by following these steps, i
 		#db-name    vol-path        db-host     log-path     lob-base-path
 		testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
-    *   Create the log directory in the slave node (only when the log directory has been specified while creating the database) ::
+		
+	*   Create a database directory to the slave node. ::
+	
+		[nodeB]$ cd $CUBRID_DATABASES
+		[nodeB]$ mkdir testdb
+
+    *   Create the log directory to the slave node(same location with the master node). ::
 
 		[nodeB]$ cd $CUBRID_DATABASES/testdb
 		[nodeB]$ mkdir log
@@ -1497,15 +1508,15 @@ Using the above instructions, build a new slave node by following these steps, i
 	[nodeA]$ cubrid backupdb -z -S testdb
 	Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 16:05:18 2012
 	[nodeA]$ cd $CUBRID_DATABASES/testdb/log
-	[nodeA]$ scp testdb_bk*cubrid_usr@nodeB:/home/cubrid_usr/CUBRID/databases/testdb/log
+	[nodeA]$ scp testdb_bk* cubrid_usr@nodeB:/home/cubrid_usr/CUBRID/databases/testdb/log
 	cubrid_usr@nodeB's password:
 	testdb_bk0v000                            100% 6157KB   6.0MB/s   00:00
 	testdb_bkvinf                             100%   66     0.1KB/s   00:00
 
 #.  Recover the database in the slave node. At this time, the volume path of the master node must be identical to that of the slave node. ::
 
-	[nodeB]$ cubrid restoredb -B bk demodb
-
+	[nodeB]$ cubrid restoredb -B $CUBRID_DATABASES/testdb/log demodb
+	
 #.  Start the master node ::
 
 	[nodeA]$ cubrid heartbeat start

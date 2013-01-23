@@ -74,7 +74,7 @@ CUBRID HA 노드는 하나의 마스터 프로세스(cub_master), 하나 이상�
 
 *   **maintenance** : 운영 편의를 위해 수동으로 변경 가능한 상태로, 로컬 호스트의 csql만 접속할 수 있으며, 사용자에게는 서비스를 제공할 수 없다.
 
-*   **to-be-active** : 스탠바이 서버가 failover 등의 이유로 인해 액티브 서버가 되기 전의 상태이다. 기존의 마스터 노드로부터 받은 트랜잭션 로그를 자신의 서버에 반영하는 등 액티브 서버가 되기 위한 준비를 한다.
+*   **to-be-active** : 스탠바이 서버가 failover 등의 이유로 인해 액티브 서버가 되기 전의 상태이다. 기존의 마스터 노드로부터 받은 트랜잭션 로그를 자신의 서버에 반영하는 등 액티브 서버가 되기 위한 준비를 한다. 해당 상태의 노드에는 SELECT 질의만 수행할 수 있다.
 
 *   기타: 내부적으로 사용하는 상태이다.
 
@@ -270,6 +270,8 @@ CUBRID HA를 처음 접하는 사용자가 CUBRID HA를 쉽게 사용할 수 있
 
 	이 문서는 2008 R4.1 Patch 2 이상 버전의 HA 구성에 대해 설명하고 있으며, 그 이전 버전과는 설정 방법이 조금 다르므로 주의한다. 예를 들어, **cubrid_ha.conf** 는 2008 R4.0 이상 버전에서 도입되었다. **ha_make_slavedb.sh** 는 2008 R4.1 Patch 2 이상 버전에 대해 설명하고 있다.
 
+.. _quick-server-config:
+
 데이터베이스 생성 및 서버 설정
 ------------------------------
 
@@ -282,7 +284,7 @@ CUBRID HA에 포함할 데이터베이스를 모든 CUBRID HA 노드에서 동�
 	[nodeA]$ cd testdb
 	[nodeA]$ mkdir log
 	[nodeA]$ cubrid createdb -L ./log testdb
-	Creating database with 512.0M size.
+	Creating database with 512.0M size. The total amount of disk space needed is 1.5G.
 	 
 	CUBRID 9.0
 	 
@@ -398,6 +400,8 @@ CUBRID HA 그룹 내의 각 노드에서 **cubrid changemode** 유틸리티를 �
 			b: 1
 			c: 1
 	[nodeB]$
+
+.. _quick-broker-config:
 
 브로커 설정, 시작 및 확인
 -------------------------
@@ -715,7 +719,7 @@ databases.txt
 JDBC 설정
 ---------
 
-JDBC에서 CUBRID HA 기능을 사용하려면 브로커(*nodeA_broker*)에 장애가 발생했을 때 다음으로 연결할 브로커(*nodeB_broker*)의 연결 정보를 연결 URL에 추가로 지정해야 한다. CUBRID HA를 위해 지정되는 속성은 장애가 발생했을 때 연결할 하나 이상의 브로커 노드 정보인 **altHosts** 이다. 이에 대한 자세한 설명은 "API 레퍼런스 > JDBC API > JDBC 프로그래밍 > 연결 설정"을 참고한다.
+JDBC에서 CUBRID HA 기능을 사용하려면 브로커(*nodeA_broker*)에 장애가 발생했을 때 다음으로 연결할 브로커(*nodeB_broker*)의 연결 정보를 연결 URL에 추가로 지정해야 한다. CUBRID HA를 위해 지정되는 속성은 장애가 발생했을 때 연결할 하나 이상의 브로커 노드 정보인 **altHosts** 이다. 이에 대한 자세한 설명은 :ref:`jdbc-connection-conf` 를 참고한다.
 
 다음은 JDBC 설정의 예이다.
 
@@ -746,7 +750,7 @@ CCI에서 CUBRID HA 기능을 사용하려면 브로커에 장애가 발생했�
 PHP 설정
 --------
 
-PHP에서 CUBRID HA 기능을 사용하려면 브로커에 장애가 발생했을 때 연결할 브로커의 연결 정보를 연결 URL에 추가로 지정할 수 있는 **cubrid_connect_with_url** 함수를 사용하여 브로커와 연결해야 한다. CUBRID HA를 위해 지정되는 속성은 장애가 발생했을 때 연결할 하나 이상의 브로커 노드 정보인 **altHosts** 이다.
+PHP에서 CUBRID HA 기능을 사용하려면 브로커에 장애가 발생했을 때 연결할 브로커의 연결 정보를 연결 URL에 추가로 지정할 수 있는 `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ 함수를 사용하여 브로커와 연결해야 한다. CUBRID HA를 위해 지정되는 속성은 장애가 발생했을 때 연결할 하나 이상의 브로커 노드 정보인 **altHosts** 이다.
 
 다음은 PHP 설정의 예이다.
 
@@ -760,6 +764,9 @@ PHP에서 CUBRID HA 기능을 사용하려면 브로커에 장애가 발생했�
 		  return 1;
 	}
 	?>
+
+.. note:: altHosts를 설정하여 브로커 절체(failover)가 가능하도록 설정한 환경에서, 브로커 절체가 원활하게 되려면 URL에 **disconnectOnQueryTimeout** 값을 **true** 로 설정해야 한다.
+	이 값이 true면 질의 타임아웃 발생 시 응용 프로그램은 즉시 기존에 접속되었던 브로커와의 접속을 해제하고 altHosts에 지정한 브로커로 접속한다.
 
 구동 및 모니터링
 ================
@@ -1457,7 +1464,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 
 이 시나리오는 마스터 노드 한 대로만 운영하는 도중 슬레이브 노드를 새로 구축하여 마스터 노드와 슬레이브 노드를 1:1로 구성하는 시나리오이다. 기본 키가 있는 테이블만 복제된다는 점에 반드시 주의한다. 그리고, 마스터 노드와 슬레이브 노드의 볼륨 디렉터리들은 모두 일치해야 한다는 점에 주의한다.
 
-데이터베이스는 **cubrid createdb testdb -L $CUBRID_DATABASES/testdb/log** 명령으로 생성되었다고 가정한다. 이때 백업 파일의 저장 위치는 별도의 옵션으로 지정하지 않으면 log 디렉터리가 기본이 된다.
+데이터베이스는 **cubrid createdb testdb -L $CUBRID_DATABASES/testdb/log** 명령으로 생성되었다고 가정한다. 이때 백업 파일의 저장 위치는 별도의 옵션으로 지정하지 않으면 $CUBRID_DATABASES/testdb 디렉터리가 기본이 된다.
 
 위의 사항들을 염두에 두고 다음의 순서로 작업한다.
 
@@ -1467,7 +1474,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 
 #.   마스터 노드 HA 설정, 슬레이브 노드 HA 설정
 
-     *   마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID/conf/cubrid.conf** 설정 ::
+    *   마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID/conf/cubrid.conf** 설정 ::
 
 		…
 		[common]
@@ -1483,7 +1490,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 		ha_mode=on
 
 
-     *   마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID/conf/cubrid_ha.conf** 설정 ::
+    *   마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID/conf/cubrid_ha.conf** 설정 ::
 
 		[common]
 		ha_port_id=59901
@@ -1497,7 +1504,12 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 		#db-name    vol-path        db-host     log-path     lob-base-path
 		testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
-    *   슬레이브 노드에 로그 디렉터리 생성(데이터베이스 생성 시 로그 디렉터리를 별도로 지정한 경우에만 해당) ::
+    *	슬레이브 노드에 데이터베이스 디렉터리 생성 ::
+	
+		[nodeB]$ cd $CUBRID_DATABASES
+		[nodeB]$ mkdir testdb
+	
+	*   슬레이브 노드에 로그 디렉터리 생성(마스터 노드와 같은 위치에 생성) ::
 
 		[nodeB]$ cd $CUBRID_DATABASES/testdb
 		[nodeB]$ mkdir log
@@ -1507,15 +1519,14 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 	[nodeA]$ cubrid backupdb -z -S testdb
 	Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 16:05:18 2012
 	[nodeA]$ cd $CUBRID_DATABASES/testdb/log
-	[nodeA]$ scp testdb_bk*cubrid_usr@nodeB:/home/cubrid_usr/CUBRID/databases/testdb/log
+	[nodeA]$ scp testdb_bk* cubrid_usr@nodeB:/home/cubrid_usr/CUBRID/databases/testdb/log
 	cubrid_usr@nodeB's password:
 	testdb_bk0v000                            100% 6157KB   6.0MB/s   00:00
 	testdb_bkvinf                             100%   66     0.1KB/s   00:00
 
-
 #.   슬레이브 노드에서 데이터베이스 복구. 이때, 마스터 노드와 슬레이브 노드의 볼륨 경로가 반드시 같아야 한다. ::
 
-	[nodeB]$ cubrid restoredb -B bk demodb
+	[nodeB]$ cubrid restoredb -B $CUBRID_DATABASES/testdb/log demodb
 
 #.   마스터 노드 시작 ::
 

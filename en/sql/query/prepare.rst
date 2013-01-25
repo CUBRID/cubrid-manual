@@ -16,10 +16,10 @@ In general, the prepared statement is executed through the interface functions o
 
 	{DEALLOCATE | DROP} PREPARE stmt_name
 
-[¹ø¿ª]
+[ë²ˆì—­]
 .. note: 
-	* SQL ¼öÁØÀÇ PREPARE ¹®Àº DB ¿¬°á ´ç °³¼ö°¡ ÃÖ´ë 20°³·Î Á¦ÇÑµÇ¾î ÀÖ´Ù. ÀÌ´Â SQL ¼öÁØÀÇ PREPARE ¹®Àº DB ¼­¹öÀÇ ¸Þ¸ð¸® ÀÚ¿øÀ» »ç¿ëÇÏ¹Ç·Î DB ¼­¹ö ¸Þ¸ð¸®ÀÇ ¿À¿ëÀ¸·Î ÀÎÇÑ ¸®¼Ò½º ³²¿ëÀ» ¹æÁöÇÏ±â À§ÇØ Á¦ÇÑµÇ¾î ÀÖ´Ù.
-	* ÀÎÅÍÆäÀÌ½º ÇÔ¼öÀÇ prepared statement´Â ºê·ÎÄ¿ ÆÄ¶ó¹ÌÅÍÀÎ :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` ¸¦ ÅëÇØ DB ¿¬°á ´ç prepared statement °³¼ö¸¦ Á¦ÇÑÇÑ´Ù. CUBRID SHARD ¸¦ »ç¿ëÇÏ´Â °æ¿ì :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` ¸¦ ÅëÇØ shard poolÀÇ prepared statement °³¼ö¸¦ Á¦ÇÑÇÑ´Ù.
+	* SQL ìˆ˜ì¤€ì˜ PREPARE ë¬¸ì€ DB ì—°ê²° ë‹¹ ê°œìˆ˜ê°€ ìµœëŒ€ 20ê°œë¡œ ì œí•œë˜ì–´ ìžˆë‹¤. ì´ëŠ” SQL ìˆ˜ì¤€ì˜ PREPARE ë¬¸ì€ DB ì„œë²„ì˜ ë©”ëª¨ë¦¬ ìžì›ì„ ì‚¬ìš©í•˜ë¯€ë¡œ DB ì„œë²„ ë©”ëª¨ë¦¬ì˜ ì˜¤ìš©ìœ¼ë¡œ ì¸í•œ ë¦¬ì†ŒìŠ¤ ë‚¨ìš©ì„ ë°©ì§€í•˜ê¸° ìœ„í•´ ì œí•œë˜ì–´ ìžˆë‹¤.
+	* ì¸í„°íŽ˜ì´ìŠ¤ í•¨ìˆ˜ì˜ prepared statementëŠ” ë¸Œë¡œì»¤ íŒŒë¼ë¯¸í„°ì¸ :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` ë¥¼ í†µí•´ DB ì—°ê²° ë‹¹ prepared statement ê°œìˆ˜ë¥¼ ì œí•œí•œë‹¤. CUBRID SHARD ë¥¼ ì‚¬ìš©í•˜ëŠ” ê²½ìš° :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` ë¥¼ í†µí•´ shard poolì˜ prepared statement ê°œìˆ˜ë¥¼ ì œí•œí•œë‹¤.
 
 PREPARE Statement
 =================

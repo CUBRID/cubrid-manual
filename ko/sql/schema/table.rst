@@ -44,9 +44,7 @@ CREATE TABLE
 	 
 	<referential_triggered_action> ::=
 	{ ON UPDATE <referential_action> } |
-	{ ON DELETE <referential_action> } |
-	{ ON CACHE OBJECT cache_object_column_name }
-	 
+	{ ON DELETE <referential_action> } 
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION | SET NULL
 	 
@@ -282,8 +280,7 @@ CREATE TABLE
 	 
 	<referential_triggered_action> ::=
 	{ ON UPDATE <referential_action> } |
-	{ ON DELETE <referential_action> } |
-	{ ON CACHE OBJECT cache_object_column_name }
+	{ ON DELETE <referential_action> }
 	 
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION  | SET NULL
@@ -391,7 +388,7 @@ CREATE TABLE
 	 
 	<referential_triggered_action> :
 	ON UPDATE <referential_action>
-	[ ON DELETE <referential_action> [ ON CACHE OBJECT cache_object_column_name ]]
+	[ ON DELETE <referential_action> ]
 	 
 	<referential_action> :
 	CASCADE | RESTRICT | NO ACTION | SET NULL
@@ -401,11 +398,10 @@ CREATE TABLE
 *   *column_name* : **FOREIGN KEY** 키워드 뒤에 외래키로 정의하고자 하는 칼럼 이름을 명시한다. 정의되는 외래키의 칼럼 개수는 참조되는 기본키의 칼럼 개수와 동일해야 한다.
 *   *referenced_table_name* : 참조되는 테이블의 이름을 지정한다.
 *   *column_name* : **REFERENCES** 키워드 뒤에 참조되는 기본키 칼럼 이름을 지정한다.
-*   *referential_triggered_action* : 참조 무결성이 유지되도록 특정 연산에 따라 대응하는 트리거 동작을 정의하는 것이며, **ON UPDATE**, **ON DELETE**, **ON CACHE OBJECT** 가 올 수 있다. 각각의 동작은 중복하여 정의 가능하며, 정의 순서는 무관하다.
+*   *referential_triggered_action* : 참조 무결성이 유지되도록 특정 연산에 따라 대응하는 트리거 동작을 정의하는 것이며, **ON UPDATE**, **ON DELETE** 가 올 수 있다. 각각의 동작은 중복하여 정의 가능하며, 정의 순서는 무관하다.
 
     *   **ON UPDATE** : 외래키가 참조하는 기본키 값을 갱신하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT** 이다.
     *   **ON DELETE** : 외래키가 참조하는 기본키 값을 삭제하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **CASCADE**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT** 이다.
-    *   **ON CACHE OBJECT** : 객체 지향 모델링에서는 직접 객체 참조(object reference)를 이용한 객체 탐색이 가능한데, 이것을 참조 무결성 외래키와 연계하여 지원하는 것이 **ON CACHE OBJECT** 옵션이다. **ON CACHE OBJECT** 옵션은 외래키 설정에 OID 참조 관계를 부여하고, 설정된 OID는 기본키 테이블에 대한 외래키의 캐시(CACHE) 포인트 개념으로 사용된다. 이렇게 설정된 OID는 시스템 내부적으로만 관리되고, 사용자에 의해 변경될 수 없다. **ON CACHE OBJECT** 를 정의하기 위해서는 기본키를 가진 테이블을 타입으로 하는 칼럼이 이미 정의되어 있어야 하며, *cache_object_column_name* 에 명시되어야 한다. **ON CACHE OBJECT** 로 정의된 속성은 기존 객체 타입의 OID와 동일하게 OID를 사용할 수 있다.
 
 *   *referential_ action* : 기본키 값이 삭제 또는 갱신될 때 이를 참조하는 외래키의 값을 유지할 것인지 또는 변경할 것인지 지정할 수 있다.
 
@@ -539,12 +535,6 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 	ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
 	 
 	--an error occurs when a table references a OID reusable table
-	CREATE TABLE tbl_2
-	(b int, FOREIGN KEY(b) REFERENCES reuse_tbl(a) ON CACHE OBJECT oid_value);
-	INSERT INTO tbl_2(b) VALUES(1);
-	SELECT oid_value.a FROM tbl_2;
-	 
-	ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
 
 **주의 사항**
 
@@ -559,7 +549,7 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 CREATE TABLE LIKE
 -----------------
 
-**CREATE TABLE … LIKE** 문을 사용하면, 이미 존재하는 테이블의 스키마와 동일한 스키마를 갖는 테이블을 생성할 수 있다. 기존 테이블에서 정의된 칼럼 속성, 테이블 제약 조건, 인덱스도 그대로 복제된다. 원본 테이블에서 자동 생성된 인덱스의 이름은 새로 생성된 테이블의 이름에 맞게 새로 생성되지만, 사용자에 의해 지어진 인덱스 이름은 그대로 복제된다. 그러므로 **USING INDEX** 문으로 특정 인덱스를 사용하도록 작성된 질의문이 있다면 주의해야 한다.
+**CREATE TABLE … LIKE** 문을 사용하면, 이미 존재하는 테이블의 스키마와 동일한 스키마를 갖는 테이블을 생성할 수 있다. 기존 테이블에서 정의된 칼럼 속성, 테이블 제약 조건, 인덱스도 그대로 복제된다. 원본 테이블에서 자동 생성된 인덱스의 이름은 새로 생성된 테이블의 이름에 맞게 새로 생성되지만, 사용자에 의해 지어진 인덱스 이름은 그대로 복제된다. 그러므로 인덱스 힌트 구문(:ref:`index-hint-syntax` 참고)으로 특정 인덱스를 사용하도록 작성된 질의문이 있다면 주의해야 한다.
 
 **CREATE TABLE … LIKE** 문은 스키마만 복제하므로 칼럼 정의문을 작성할 수 없다. ::
 
@@ -808,14 +798,12 @@ ADD COLUMN 절
 	 
 	<referential_triggered_action> ::=
 	{ ON UPDATE <referential_action> } |
-	{ ON DELETE <referential_action> } |
-	{ ON CACHE OBJECT cache_object_column_name }
-	 
+	{ ON DELETE <referential_action> }  
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : 칼럼을 추가할 테이블의 이름을 지정한다.
-*   *column_definition* : 새로 추가할 칼럼의 이름, 데이터 타입, 제약 조건을 정의한다.
+*   *column_definition* : 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
 *   **AFTER** *old_column_name* : 새로 추가할 칼럼 앞에 위치하는 기존 칼럼 이름을 명시한다.
 
 **예제**
@@ -858,14 +846,13 @@ ADD CONSTRAINT 절
 	 
 	<referential_triggered_action> ::=
 	{ ON UPDATE <referential_action> } |
-	{ ON DELETE <referential_action> } |
-	{ ON CACHE OBJECT cache_object_column_name }
-	 
+	{ ON DELETE <referential_action> } 
+	
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : 제약 조건을 추가할 테이블의 이름을 지정한다.
-*   *constraint_name* : 새로 추가할 제약 조건의 이름을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
+*   *constraint_name* : 새로 추가할 제약 조건의 이름(최대 254 바이트)을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
 *   *column_constraint* : 지정된 칼럼에 대해 제약 조건을 정의한다. 제약 조건에 대한 자세한 설명은 :ref:`constraint-definition` 를 참고한다.
 
@@ -888,7 +875,7 @@ ADD INDEX 절
 	column_name [(length)] [ ASC | DESC ]
 
 *   *table_name* : 변경하고자 하는 테이블의 이름을 지정한다.
-*   *index_name* : 인덱스의 이름을 지정한다.
+*   *index_name* : 인덱스의 이름을 지정한다(최대 254 바이트).
 *   *index_col_name* : 인덱스를 정의할 대상 칼럼을 지정하며, 이때 칼럼 옵션으로 인덱스 키의 *prefix_length* 와 **ASC** 또는 **DESC** 을 함께 지정할 수 있다.
 
 **예제**
@@ -1312,7 +1299,7 @@ RENAME COLUMN 절
 
 *   *table_name* : 이름을 변경할 칼럼의 테이블 이름을 지정한다.
 *   *old_column_name* : 현재의 칼럼 이름을 지정한다.
-*   *new_column_name* : 새로운 칼럼 이름을 **AS** 키워드 뒤에 명시한다.
+*   *new_column_name* : 새로운 칼럼 이름을 **AS** 키워드 뒤에 명시한다(최대 254 바이트).
 
 **예제**
 
@@ -1447,7 +1434,7 @@ RENAME TABLE
 	RENAME  [ TABLE | CLASS | VIEW | VCLASS ] old_table_name { AS | TO } new_table_name [, old_table_name { AS | TO } new_table_name, ... ]
 
 *   *old_table_name* : 변경할 테이블의 이름을 지정한다.
-*   *new_table_name* : 새로운 테이블 이름을 지정한다.
+*   *new_table_name* : 새로운 테이블 이름을 지정한다(최대 254 바이트).
 
 **예제**
 

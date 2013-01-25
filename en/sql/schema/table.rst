@@ -41,8 +41,7 @@ To create a table, use the **CREATE TABLE** statement. ::
 	 
 	<referential_triggered_action> ::=
 	{ ON UPDATE <referential_action> } |
-	{ ON DELETE <referential_action> } |
-	{ ON CACHE OBJECT cache_object_column_name }
+	{ ON DELETE <referential_action> }
 	 
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION | SET NULL
@@ -284,8 +283,7 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 	 
 	<referential_triggered_action> ::=
 	{ ON UPDATE <referential_action> } |
-	{ ON DELETE <referential_action> } |
-	{ ON CACHE OBJECT cache_object_column_name }
+	{ ON DELETE <referential_action> }
 	 
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION  | SET NULL
@@ -394,7 +392,7 @@ A foreign key is a column or a set of columns that references the primary key in
 	 
 	<referential_triggered_action> :
 	ON UPDATE <referential_action>
-	[ ON DELETE <referential_action> [ ON CACHE OBJECT cache_object_column_name ]]
+	[ ON DELETE <referential_action> ]
 	 
 	<referential_action> :
 	CASCADE | RESTRICT | NO ACTION | SET NULL
@@ -406,13 +404,11 @@ A foreign key is a column or a set of columns that references the primary key in
 *   *referenced_table_name* : Specifies the name of the table to be referenced.
 *   *column_name* : Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
 
-*   *referential_triggered_action* : Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE**, **ON DELETE** or **ON CACHE OBJECT** can be specified. Each action can be defined multiple times, and the definition order is not significant.
+*   *referential_triggered_action* : Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
 
 *   **ON UPDATE** : Defines the action to be performed when attempting to update the primary key referenced by the foreign key. You can use either **NO ACTION**, **RESTRICT**, or **SET NULL** option. The default is **RESTRICT**.
 
 *   **ON DELETE** : Defines the action to be performed when attempting to delete the primary key referenced by the foreign key. You can use **NO ACTION**, **RESTRICT**, **CASCADE**, or **SET NULL** option. The default is **RESTRICT**.
-
-*   **ON CACHE OBJECT** : You can search an object using a direct object reference in object-oriented model. **ON CACHE OBJECT** option supports this feature in association with referential integrity (foreign key). **ON CACHE OBJECT** option adds an OID reference to a foreign key configuration. The OID is used as a CACHE point for the foreign key to the primary key table. Such OID is managed by the system internally; it cannot be changed by users. To define the **ON CACHE OBJECT** option, you must have defined a column whose type is the table with a primary key and specified the column in the *cache_object_column_name*. The attribute defined with **ON CACHE OBJECT** can use the OID the same way as the one of the existing object type.
 
 *   *referential_ action* : You can define an option that determines whether to maintain the value of the foreign key when the primary key value is deleted or updated.
 *   **CASCADE** : If the primary key is deleted, the foreign key is deleted as well. This option is supported only for the **ON DELETE** operation.
@@ -541,12 +537,6 @@ If you specify the **REUSE_OID** option when creating a table, the OID is also d
 	ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
 	 
 	--an error occurs when a table references a OID reusable table
-	CREATE TABLE tbl_2
-	(b int, FOREIGN KEY(b) REFERENCES reuse_tbl(a) ON CACHE OBJECT oid_value);
-	INSERT INTO tbl_2(b) VALUES(1);
-	SELECT oid_value.a FROM tbl_2;
-	 
-	ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
 
 **Remark**
 
@@ -815,8 +805,7 @@ For **add_column_update_hard_default** and the hard default, see :ref:`change-co
 	 
 	<referential_triggered_action> ::=
 	{ ON UPDATE <referential_action> } |
-	{ ON DELETE <referential_action> } |
-	{ ON CACHE OBJECT cache_object_column_name }
+	{ ON DELETE <referential_action> }
 	 
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION | SET NULL
@@ -865,8 +854,7 @@ By default, the index created when you add **PRIMARY KEY** constraints is create
 	 
 	<referential_triggered_action> ::=
 	{ ON UPDATE <referential_action> } |
-	{ ON DELETE <referential_action> } |
-	{ ON CACHE OBJECT cache_object_column_name }
+	{ ON DELETE <referential_action> }
 	 
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION | SET NULL

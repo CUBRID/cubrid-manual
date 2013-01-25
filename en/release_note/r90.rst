@@ -383,25 +383,6 @@ Driver
 		connection = cci_connect_ex ("localhost", 33000, "demodb", "dba", "pwd", &error);
 		connection = cci_connect_with_url_ex ("cci:cubrid:localhost:33000:demodb:::", "dba", "pwd", &error);
 
-GA(Generally Available) version
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		
-		
-[CCI] Added a function to close Resultset (CUBRIDSUS-9269)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	Different from the JDBC driver which provided two methods to close resultset and statement respectively, the CCI driver had one function, cci_close_req_handle, to close both. The cci_close_query_result function has been added to close resultset. When a new function is not called, the memory for resultset is occupied until the statement is closed. So, the memory usage may be increased.
-
-	In the revised version, when the cci_close_req_handle function is called without calling the cci_close_query_result function, both resultset and the statement are closed like the previous version.
-
-[CCI][JDBC] Added the load balancing functionality (CUBRIDSUS-8675)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	Added a functionality to connect an application to the main host and the hosts specified in althosts in a random order when althosts was added to the connection URL of CCI and JDBC. In the following example of a connection URL, this functionality is activated when the value of loadBalance is set to true.
-
-	::
-	
-		jdbc:cubrid:host1:port1:demodb:::?althosts=host2:port2,host3:port3&loadBalance=true
-
 System Catalog
 --------------
 
@@ -3730,8 +3711,8 @@ The DB volume is not compatible with the previous versions (CUBRIDSUS-5238)
 
 	As the DB volume is not compatible with the versions before 9.0 Beta, it is necessary to migrate data by using cubrid unloaddb/loaddb. For more information, see the Manual and the "How to upgrade to CUBRID 9.0 Beta."
 
-Cautions for 9.0 Beta and Preceding Versions
---------------------------------------------
+Cautions for 9.0 Beta and Previous Versions
+-------------------------------------------
 
 Since the 2008 R4.1 version, the default value of CCI_DEFAULT_AUTOCOMMIT has been ON(CUBRIDSUS-5879)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

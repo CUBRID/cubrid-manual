@@ -375,25 +375,6 @@ Sharding
 		connection = cci_connect_ex ("localhost", 33000, "demodb", "dba", "pwd", &error);
 		connection = cci_connect_with_url_ex ("cci:cubrid:localhost:33000:demodb:::", "dba", "pwd", &error);
 
-정식 버전
-^^^^^^^^^		
-		
-[CCI] resultset을 닫는 함수 추가 (CUBRIDSUS-9269)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	CCI 드라이버는 resultset과 statement를 각각 닫는 메소드를 제공하는 JDBC 드라이버와 달리 이 둘을 모두 닫는 cci_close_req_handle 함수만 존재했으나 resultset을 닫는 cci_close_query_result 함수를 추가했다. 새로운 함수를 호출하지 않으면 statement를 닫을 때까지 resultset의 메모리를 유지하므로 메모리 사용량이 증가하는 현상이 발생할 수 있다.
-
-	수정 이후 버전에서도 cci_close_query_result 함수 호출 없이 cci_close_req_handle 함수를 호출하면 이전 버전과 마찬가지로 resultset과 statement를 모두 닫는다.
-
-[CCI][JDBC] 로드 밸런싱 기능 추가 (CUBRIDSUS-8675)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	CCI, JDBC의 연결 URL에 althosts를 포함하는 경우 응용 프로그램이 메인 호스트와 althosts에 지정한 호스트들에 임의의 순서로 연결하게 하는 기능을 추가했다. 아래 연결 URL의 예에서 loadBalance의 값을 true로 설정하는 경우 해당 기능이 동작된다.
-
-	::
-	
-		jdbc:cubrid:host1:port1:demodb:::?althosts=host2:port2,host3:port3&loadBalance=true
-	
 시스템 카탈로그
 ---------------
 
@@ -3623,24 +3604,6 @@ CAS에 보낸 SIGTERM이 다른 응용 프로그램에 전달될 수 있는 문�
 		// 수정 이후 정상 출력
 		52 rows affected.
 
-정식 버전
-^^^^^^^^^		
-
-브로커 및 데이터베이스 서버의 에러 로그를 임의로 삭제하면 재생성되지 않는 문제 (CUBRIDSUS-8351)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	브로커 및 데이터베이스 서버의 에러 로그를 임의로 삭제하면 재생성되도록 수정했다.
-
-브로커 이름이 길면 응용 프로그램에서 브로커 접속시 브로커가 비정상 종료되는 문제 (CUBRIDSUS-9392)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	브로커 이름의 길이가 32자 이상이면 응용 프로그램에서 브로커에 접속 시 브로커가 비정상 종료되었으나, 브로커 이름의 길이를 63자까지만 허용하고 또한 브로커 이름이 이보다 길면 브로커를 시작하지 않도록 수정했다. 
-
-브로커 응용 서버에서 인터럽트 발생 시 DB 서버에서 발생한 에러가 잘못 전달되는 문제 (CUBRIDSUS-9450)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	브로커 응용 서버(CAS)에서 인터럽트가 발생할 때 DB 서버에서 발생한 에러가 다른 에러로 전달되는 문제를 수정했다.
-
 주의 사항
 =========
 
@@ -3652,69 +3615,6 @@ CAS에 보낸 SIGTERM이 다른 응용 프로그램에 전달될 수 있는 문�
 
 	9.0 Beta 이전 버전과 DB 볼륨이 호환되지 않으므로 cubrid unloaddb/loaddb를 이용하여 데이터를 마이그레이션해야 한다. 보다 자세한 사항은 매뉴얼 및 본 릴리스 노트의 "CUBRID 9.0 Beta로 업그레이드하는 방법" 절을 참고한다.
 
-CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결과의 배열에 대한 에러 처리 방식 수정 (CUBRIDSUS-9364)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	CCI 응용에서 여러 개의 질의를 한 번에 수행할 때 2008 R3.0부터 2008 R4.1 버전까지는 cci_execute_array 함수, cci_execute_batch 함수 또는 cci_execute_result 함수에 의한 질의 수행 결과들 중 하나만 에러가 발생해도 해당 질의의 에러 코드를 반환했으나, 2008 R4.3 버전 및 2008 R9.0 정식 버전부터는 전체 질의 개수를 반환하고 CCI_QUERY_RESULT_* 매크로들을 통해 개별 질의에 대한 에러를 확인할 수 있도록 수정했다.
-
-	수정 이전 버전에서는 에러가 발생한 경우에도 배열 내 각각의 질의들의 성공 실패 여부를 알 수 없으므로, 이를 판단해야 한다.
-
-	::
-	
-		...
-		char *query = "INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)";
-		...
-		req = cci_prepare (con, query, 0, &cci_error);
-		...
-		error = cci_bind_param_array_size (req, 3);
-		...
-		error = cci_bind_param_array (req, 1, CCI_A_TYPE_INT, co_ex, null_ind, CCI_U_TYPE_INT);
-		...
-		n_executed = cci_execute_array (req, &result, &cci_error);
-
-		if (n_executed < 0)
-		{
-		  printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
-
-		  for (i = 1; i <= 3; i++)
-		  {
-			printf ("query %d\n", i);
-			printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-			printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-			printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
-		  }
-		}
-		...
-		
-	수정 이후 버전에서는 에러가 발생하면 전체 질의가 실패한 것이며, 에러가 발생하지 않은 경우에 대해 배열 내 각 질의들의 성공 실패 여부를 판단한다.
-
-	::
-	
-		...
-		char *query = "INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)";
-		...
-		req = cci_prepare (con, query, 0, &cci_error);
-		...
-		error = cci_bind_param_array_size (req, 3);
-		...
-		error = cci_bind_param_array (req, 1, CCI_A_TYPE_INT, co_ex, null_ind, CCI_U_TYPE_INT);
-		...
-		n_executed = cci_execute_array (req, &result, &cci_error);
-		if (n_executed < 0)
-		{
-		  printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
-		}
-		else {
-		  for (i = 1; i <= 3; i++)
-		  {
-			printf ("query %d\n", i);
-			printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-			printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-			printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
-		  }
-		}
-		...	
-	
 기존 주의 사항
 --------------
 
@@ -3881,8 +3781,4 @@ CUBRID 소스 빌드 후 실행 시, 매니저 서버 프로세스 관련 오류
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	사용자가 직접 빌드하여 설치하는 경우, CUBRID와 CUBRID 매니저를 각각 빌드하여 설치해야 한다. 만약, CUBRID 소스만 checkout하여 빌드 후 cubrid service start 또는 cubrid manager start를 실행하면, cubrid manager server is not installed라는 오류가 발생한다.
-
-	
-.. ....................................................................................................................	
-.. 2012-11-30 추가
 

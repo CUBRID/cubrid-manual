@@ -450,7 +450,6 @@ prepared statement는 PDO가 제공하는 유용한 기능 중 하나로, 사용
 	S - Silver
 	G - Goldie
 
-
 PDO::getAttribute() 사용
 ------------------------
 

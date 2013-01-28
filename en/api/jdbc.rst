@@ -141,15 +141,16 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 	<behavior_type> ::= exception | round | convertToNull
 	<bool_type> ::= true | false
 
-*   <*host*>: IP address or host name where the CUBRID broker is running
-*   <*port*>: The CUBRID broker port number (default value: 33,000)
-*   <*db-name*>: The name of the database to connect
+*   *host*: IP address or host name where the CUBRID broker is running
+*   *port*: The CUBRID broker port number (default value: 33,000)
+*   *db-name*: The name of the database to connect
 
-*   [*user-id*]: The user ID which is connected to a database. There are two types of users in a database by default: **DBA** and **PUBLIC**. If an empty string ("") is entered, a database is connected by the **PUBLIC** user.
-*   [*password*]: The password of a user who is to be connected to a database. If no password is set, enter an empty string ("").
+*   *user-id*: The user ID which is connected to a database. There are two types of users in a database by default: **DBA** and **PUBLIC**. If an empty string ("") is entered, a database is connected by the **PUBLIC** user.
+*   *password*: The password of a user who is to be connected to a database. If no password is set, enter an empty string ("").
 
-*   **altHosts** : The host IP addresses and connection ports of one or more stand by brokers which will perform failover in the HA environment.
-*   **rcTime** : Interval time (in seconds) to try to connect active brokers during failover in the HA environment. For more information, see the example in "Administrator's Guide > CUBRID HA > Environment Configuration > JDBC Configuration."
+*   **altHosts**: The host IP addresses and connection ports of one or more stand by brokers which will perform failover in the HA environment.
+*   **rcTime**: Interval time (in seconds) to try to connect active brokers during failover in the HA environment. See the below URL example.
+*   **loadBalance** : If this value is true, the application tries to connect with main host and althosts in random order(default value: false). 
 
 *   **connectTimeout** : Timeout value (in seconds) for database connection (default value: 0). The **DriverManger.setLoginTimeout** () method can be used to configure it; however, value configured in this method will be ignored if a value is configured in the connection URL.
 

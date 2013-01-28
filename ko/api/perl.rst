@@ -10,7 +10,8 @@ CUBRID Perl 드라이버는 CCI API를 기반으로 작성되었으므로, CCI A
 `http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver>`_
 에 접속한다.
 
-.. note:: 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+.. note:: 
+	* 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
 
 Perl 설치 및 설정
 =================

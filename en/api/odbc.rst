@@ -208,7 +208,7 @@ The following example shows how to create cubrid.asp and store it in a virtual d
 		 <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB USER</font></td>
 		 <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB PASS</font></td>
 		 <td width="80" height="37" rowspan="4" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED">　
-		   <p><input type="submit" value="실행하기" name="B1" tabindex="7"></p></td>
+		   <p><input type="submit" value="Run" name="B1" tabindex="7"></p></td>
 	   </tr>
 	   <tr>
 		 <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="server_ip" size="20" tabindex="1" maxlength="15" value="<%=Request("server_ip")%>"></font></td>
@@ -231,7 +231,7 @@ The following example shows how to create cubrid.asp and store it in a virtual d
 	</HTML>
 
 	<%
-		' DSN과 SQL문을 가져온다.
+		' get DSN and SQL statement.
 		strIP = Request( "server_ip" )
 		strPort = Request( "cas_port" )
 		strUser = Request( "db_user" )
@@ -240,57 +240,57 @@ The following example shows how to create cubrid.asp and store it in a virtual d
 		strQuery = Request( "query" )
 	   
 	if strIP = "" then
-	   Response.Write "SERVER_IP를 입력하세요"
-			Response.End ' IP가 없으면 페이지 종료
+	   Response.Write "Input SERVER_IP."
+			Response.End ' exit if no SERVER_IP's input.
 		end if
 		if strPort = "" then
-		   Response.Write "Port 번호를 입력하세요"
-			Response.End ' Port가 없으면 페이지 종료
+		   Response.Write "Input port number."
+			Response.End ' exit if no Port's input.
 		end if
 		if strUser = "" then
-		   Response.Write "DB_USER를 입력하세요"
-			Response.End ' DB_User가 없으면 페이지 종료
+		   Response.Write "Input DB_USER."
+			Response.End ' exit if no DB_User's input.
 		end if
 		if strName = "" then
-		   Response.Write "DB_NAME을 입력하세요"
-			Response.End ' DB_NAME이 없으면 페이지 종료
+		   Response.Write "Input DB_NAME"
+			Response.End ' exit if no DB_NAME's input.
 		end if
 		if strQuery = "" then
-		   Response.Write "확인하고자 하는 Query를 입력하세요"
-			Response.End ' Query가 없으면 페이지 종료
+		   Response.Write "Input the query you want"
+			Response.End ' exit if no query's input.
 		end if
-	 ' 연결 객체 생성
+	 ' create connection object.
 	  strDsn = "driver={CUBRID Driver};server=" & strIP & ";port=" & strPort & ";uid=" & strUser & ";pwd=" & strPass & ";db_name=" & strName & ";"
-	' DB연결
+	' DB connection.
 	Set DBConn = Server.CreateObject("ADODB.Connection")
 		   DBConn.Open strDsn
-		' SQL 실행
+		' run SQL.
 		Set rs = DBConn.Execute( strQuery )
-		' SQL문에 따라 메시지 보이기
+		' show the message by SQL.
 		if InStr(Ucase(strQuery),"INSERT")>0 then
-			Response.Write "레코드가 추가되었습니다."
+			Response.Write "A recored is added."
 			Response.End
 		end if
 		   
 		if InStr(Ucase(strQuery),"DELETE")>0  then
-			Response.Write "레코드가 삭제되었습니다."
+			Response.Write "A recored is deleted."
 			Response.End
 		end if
 		   
 		if InStr(Ucase(strQuery),"UPDATE")>0  then
-			Response.Write "레코드가 수정되었습니다."
+			Response.Write "A recored is updated."
 			Response.End
 		end if   
 	%>
 	<table>
 	<%   
-		' 필드 이름 보여주기
+		' show the field name.
 		Response.Write "<tr bgColor=#f3f3f3>"
 		For index =0 to ( rs.fields.count-1 )
 			Response.Write "<td><b>" & rs.fields(index).name & "</b></td>"
 		Next
 		Response.Write "</tr>"
-		' 필드 값 보여주기
+		' show the field value
 		Do While Not rs.EOF
 			Response.Write "<tr bgColor=#f3f3f3>"
 			For index =0 to ( rs.fields.count-1 )
@@ -474,9 +474,3 @@ Backward compatibility is not supported for some CUBRID functions. Refer to info
 +---------------------------+------------------------+
 | SQLTransact               | SQLEndTran             |
 +---------------------------+------------------------+
-
-
-**Note**
-To get the latest information about ODBC driver, click
-`http://www.cubrid.org/wiki_apis/entry/cubrid-odbc-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-odbc-driver>`_
-.

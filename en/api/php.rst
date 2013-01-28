@@ -466,7 +466,8 @@ Connecting to a Database
 The first step of database applications is to use `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function which provides database connection. Once `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function is executed successfully, you can use any functions available in the database. It is very important to call the`cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function before applications are  terminated. The `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function terminates the current transaction as well as the connection handle and all request handles created by the
 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
 
-.. note:: The database connection in thread-based programming must be used independently each other.
+.. note:: 
+	*   The database connection in thread-based programming must be used independently each other.
 
 Transactions and Auto-Commit
 ----------------------------

@@ -665,6 +665,71 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 				 1992  'AUT'                           0            5
 				 1988  'AUT'                           1            5
 
+[번역]
+
+.. function:: NTILE(expression) OVER ([partition_by_clause] [order_by_clause])
+
+	**NTILE** 함수는 분석 함수이다. 순차적인 데이터 집합을 입력 인자 값에 의해 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다.
+	반환되는 값은 정수이다. 이 함수는 주어진 버킷 개수로 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 행의 개수는 균등하다.
+	
+	( :func:`WIDTH_BUCKET` 함수는 이에 반해 주어진 버킷 개수로 주어진 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.)
+	
+	각 버킷에 있는 행의 개수는 최대 1개까지 차이가 생길 수 있다. 나머지 값(행의 개수를 버킷 개수로 나눈 나머지)이 각 버킷에 대해 1번 버킷부터 하나씩 배포된다.
+		
+	:param expression: 버킷의 개수. 숫자 값을 반환하는 임의의 연산식을 지정한다. 
+	:rtype: INT
+	
+	다음은 8명의 학생을 점수가 높은 순으로 5개의 버킷으로 나눈 후, 이름 순으로 출력하는 예이다. score 테이블의 score 칼럼에는 8개의 행이 존재하므로, 8을 5로 나눈 나머지 3개 행이 1번 버킷부터 각각 할당되어 1,2,3번 버킷은 4,5번 버킷에 비해 1개의 행이 더 존재한다.
+	NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으로 균등하게 grade를 나눈다.
+	
+	.. code-block:: sql
+	
+		CREATE TABLE t_score(NAME VARCHAR(10), score INT);
+		INSERT INTO t_score VALUES
+			('Amie', 60),
+			('Jane', 80),
+			('Lora', 60),
+			('James', 75),
+			('Peter', 70),
+			('Ralph', 30),
+			('Ralph', 99),
+			('David', 55);
+
+		SELECT name, score, NTILE(5) OVER (ORDER BY score DESC) grade FROM t_score ORDER BY name;
+
+		  name                        score        grade
+		================================================
+		  'Ralph'                        99            1
+		  'Jane'                         80            1
+		  'James'                        75            2
+		  'Peter'                        70            2
+		  'Amie'                         60            3
+		  'Lora'                         60            3
+		  'David'                        55            4
+		  'Ralph'                        30            5
+
+
+	이에 비해, :func:`WIDTH_BUCKET` 함수는 점수의 범위를 균등하게 나누고 이를 기준으로 grade를 나눈다.
+	다음 예에서 범위는 [100, 0)이며 범위에 따른 각 버킷 번호는 [100, 80)이 1, [80, 60)이 2, [60, 40)이 3, [40, 20)이 4, [20, 0)이 5가 된다.  
+	
+	.. code-block:: sql
+	
+		SELECT name, score, WIDTH_BUCKET(score, 100, 0, 5) grade FROM t_score ORDER BY grade ASC, score DESC;
+
+		=== <Result of SELECT Command in Line 1> ===
+
+		  name                        score        grade
+		================================================
+		  'Ralph'                        99            1
+		  'Jane'                         80            2
+		  'James'                        75            2
+		  'Peter'                        70            2
+		  'Amie'                         60            3
+		  'Lora'                         60            3
+		  'David'                        55            3
+		  'Ralph'                        30            4
+	  
+
 .. function:: VAR_POP( [ DISTINCT | UNIQUE | ALL] expression )
 .. function:: VARIANCE( [ DISTINCT | UNIQUE | ALL] expression )
 

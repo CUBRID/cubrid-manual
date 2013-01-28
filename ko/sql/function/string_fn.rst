@@ -173,11 +173,12 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 		NULL                  5                        1             1
 		1                     5                        2             2
 
-.. function:: CHR (number_operand)
+.. function:: CHR (number_operand [USING charset_name])
 
 	**CHR** 함수는 인자로 지정된 연산식의 리턴 값에 대응하는 문자를 반환하는 함수이다. 문자 코드 범위를 초과하면 '0'을 반환한다.
 
-	:param number_operand: 수치값을 반환하는 임의의 연산식을 지정한다.
+	:param number_operand: 수치값을 반환하는 임의의 연산식을 지정한다. 
+	:param charset_name: 문자셋 이름. 지원하는 문자셋은 utf8과 iso88591이다.
 	:rtype: STRING
 
 	.. code-block:: sql
@@ -186,7 +187,15 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 		   chr(68)|| chr(68-2)
 		======================
 		  'DB'
-  
+				
+		SELECT CHR(14909886 USING utf8); 
+		// Below query's result is the same as above.
+		SET NAMES utf8; 
+		SELECT CHR(14909886); 
+		   chr(14909886 using utf8) 
+		====================== 
+		  'ま' 
+
 .. function:: CONCAT (string1, string2 [,string3 [, ... [, stringN]...]])
 
 	**CONCAT** 함수는 두 개 이상의 인자가 지정되며, 모든 인자 값을 연결한 문자열을 결과로 반환한다. 지정 가능한 인자의 개수는 제한이 없으며, 문자열 타입이 아닌 인자가 지정되는 경우 자동으로 타입 변환이 수행된다. 인자 중에 **NULL** 이 포함되면 결과로 **NULL** 을 반환한다.

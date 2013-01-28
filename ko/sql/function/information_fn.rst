@@ -73,6 +73,9 @@
 		DELETE FROM info_tbl WHERE id = DEFAULT(id);
 		INSERT INTO info_tbl VALUES (DEFAULT,'d');
 
+	.. note::
+		CUBRID 9.0 미만 버전에서는 테이블 생성 시 DATE, DATETIME, TIME, TIMESTAMP 칼럼의 DEFAULT 값을 SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP로 지정하면, CREATE TABLE 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 INSERT되는 시점의 값을 입력하려면 INSERT 구문의 VALUES 절에 해당 함수를 입력해야 했다.
+		
 .. function:: INDEX_CARDINALITY(table, index, key_pos)
 
 	**INDEX_CARDINALITY** 함수는 테이블에서 인덱스 카디널리티(cardinality)를 반환한다. 인덱스 카디널리티는 인덱스를 정의하는 고유한 값의 개수이다. 인덱스 카디널리티는 다중 칼럼 인덱스의 부분 키에 대해서도 적용할 수 있는데, 이때 세 번째 인자로 칼럼의 위치를 지정하여 부분 키에 대한 고유 값의 개수를 나타낸다.

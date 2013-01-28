@@ -173,11 +173,12 @@ String Functions
 		NULL                  5                        1             1
 		1                     5                        2             2
 
-.. function:: CHR (number_operand)
+.. function:: CHR (number_operand  [USING charset_name])
 
 	The **CHR** function returns a character that corresponds to the return value of the expression specified as an argument. It returns 0 if it exceeds range of character code.
 
 	:param number_operand: Specifies an expression that returns a numeric value.
+	:param charset_name: Characterset name. It supports utf8 and iso88591.
 	:rtype: STRING
 
 	.. code-block:: sql
@@ -186,6 +187,14 @@ String Functions
 		   chr(68)|| chr(68-2)
 		======================
 		  'DB'
+		 
+		SELECT CHR(14909886 USING utf8); 
+		// Below query's result is the same as above.
+		SET NAMES utf8; 
+		SELECT CHR(14909886); 
+		   chr(14909886 using utf8) 
+		====================== 
+		  'ま' 
 
 .. function:: CONCAT (string1, string2 [,string3 [, ... [, stringN]...]])
 

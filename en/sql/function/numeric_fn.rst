@@ -627,3 +627,58 @@ The **POW** function returns *x* to the power of *y*. The functions **POW** and 
 		  trunc(34567.34567, -3)   trunc(-34567.34567, -3)
 		============================================
 		  34000.00000           -34000.00000
+
+[번역]
+
+
+.. function:: WIDTH_BUCKET(expression, min, max, num_buckets)
+
+	**WIDTH_BUCKET** 함수는 순차적인 데이터 집합을 균등한 범위로 부여된 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다.
+	반환되는 값은 정수이다.
+	이 함수는 주어진 버킷 개수로 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
+	( :func:`NTILE` 함수는 이에 비해 주어진 버킷 개수로 전체 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 행의 개수는 균등하다.)
+
+	전체 범위에서 min은 범위에 포함되지만 max는 범위 밖에 존재한다.	예를 들어 WIDTH_BUCKET(score, 100, 0, 5)이 반환하는 값은
+	score가 
+	
+		* 100보다 크면 0, 
+		* [100,80)이면  1, 
+		* [80, 60)이면  2, 
+		* [60, 40)이면 3, 
+		* [40, 20)이면 4, 
+		* [20, 0)이면 5, 
+		* 0또는 0보다 작으면 6이 된다.
+	
+	:param expression: 버킷 번호를 부여받기 위한 입력 값. 수치 값을 반환하는 임의의 연산식을 지정한다.
+	:param min: expression이 취할 수 있는 범위의 최소값으로, 이 값은 전체 범위 안에 포함된다.
+	:param max: expression이 취할 수 있는 범위보다 큰 값 중 가장 작은 값으로, 이 값은 전체 범위 안에 포함되지 않는다.
+	:param num_buckets: 버킷의 개수
+	:rtype: INT
+
+	.. code-block:: sql
+	
+		CREATE TABLE t_score(NAME VARCHAR(10), score INT);
+		INSERT INTO t_score VALUES
+			('Amie', 60),
+			('Jane', 80),
+			('Lora', 60),
+			('James', 75),
+			('Peter', 70),
+			('Ralph', 30),
+			('Ralph', 99),
+			('David', 55);
+
+		SELECT name, score, WIDTH_BUCKET(score, 80, 50, 5) grade FROM t_score ORDER BY grade ASC, score DESC;
+		
+			  name                        score        grade
+		================================================
+		  'Ralph'                        99            0
+		  'Jane'                         80            1
+		  'James'                        75            1
+		  'Peter'                        70            2
+		  'Amie'                         60            4
+		  'Lora'                         60            4
+		  'David'                        55            5
+		  'Ralph'                        30            6
+
+	NTILE 함수와 비교한 예제는 :func:`NTILE` 함수를 참고한다.

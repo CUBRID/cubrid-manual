@@ -22,37 +22,23 @@ MERGE
 		VALUES (<expr_list>) [WHERE <insert_condition>]
 	
 *   <*target*> : 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있다.
-
 *   <*source*> : 데이터를 가져올 원본 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
-
 *   <*join_condition*> : 갱신할 조건을 명시한다.
-
 *   <*merge_update_clause*> : <*join_condition*> 조건이 TRUE이면 대상 테이블의 새로운 칼럼 값들을 지정한다.
 
     *   **UPDATE** 절이 실행되면, <*target*>에 정의된 **UPDATE** 트리거가 활성화된다.
-
     *   <*col*> : 업데이트할 칼럼은 반드시 대상 테이블의 칼럼이어야 한다.
-
     *   <*expr*> : <*source*>와 <*target*>의 칼럼들을 포함하는 표현식도 가능하다. 또는 **DEFAULT** 키워드도 될 수 있다. <*expr*>은 집계 함수를 포함할 수 없다.
-
     *   <*update_condition*> : 특정 조건이 TRUE일 때만 **UPDATE** 연산을 수행한다. 조건은 원본 테이블과 대상 테이블 둘 다 참조할 수 있다. 이 조건을 만족하지 않는 행들은 업데이트하지 않는다.
-
     *   <*delete_condition*> : 갱신 이후 삭제할 대상을 지정한다. 이때 **DELETE** 조건은 갱신된 결과 값을 가지고 수행된다. **DELETE** 절이 실행되면 <*target*>에 정의된 **DELETE** 트리거가 활성화된다.
-
     *   **ON** 조건 절에서 참조된 칼럼은 업데이트할 수 없다.
-	
     *   뷰를 업데이트할 때에는 **DEFAULT** 를 명시할 수 없다.
 
 *   <*merge_insert_clause*> : <*join_condition*> 조건이 FALSE이면 대상 테이블의 칼럼으로 값을 삽입한다.
-
     *   **INSERT** 절이 실행되면, <*target*>에 정의된 **INSERT** 트리거들이 활성화된다.
-
     *   <*insert_condition*> : 지정한 조건이 TRUE일 때 삽입 연산을 실행한다. <*source*>의 칼럼만 조건에 포함할 수 있다.
-
     *   <*attribute_list*>: <*target*>에 삽입될 칼럼들이다.
-
     *   <*expr_list*>: 상수 필터 조건은 모든 원본 테이블의 행들을 대상 테이블에 삽입하는 데 사용될 수 있다. 상수 필터 조건의 예로 ON (1=1)과 같은 것이 있다.
-
     *   <*merge_update_clause*>만 지정하거나 <*merge_update_clause*>와 함께 지정할 수 있다. 둘 다 명시한다면 순서는 바뀌어도 된다.
 
 다음은 source_table의 값을 target_table에 합치는 예이다.

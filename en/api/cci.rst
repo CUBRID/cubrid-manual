@@ -1220,5 +1220,5 @@ The code below a command line that makes a test program build by using a dynamic
 		return -1;
 	}
 
-.. include:: cciapi.txt
+.. include:: cciapi.inc
 

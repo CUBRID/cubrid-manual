@@ -1,4 +1,12 @@
 updated history.: use this when something to synchronize between Korean and English, or to tag some updated information is requried.
 
+2013.1.25: release_note/r90.rst & r91.rst are divided
+
+2013.1.25: sql/schema/table.rst sync.:
+
+2013.1.23: admin/config.rst sync.: At revision: 25635 , admin/ha.rst sync. : At revision: 25642
+  sql/query/prepare.rst, admin/config.rst, admin/shard.rst sync.: At revision: 25682
+  api/cci.rst, cciapi.txt(2013.1.28: renamed as cciapi.inc) sync.: At revision: 25688  
+
 2012.12.10: English and Korean are synchronized; including 2008 R4.3 manual & release note.
 

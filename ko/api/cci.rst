@@ -1239,4 +1239,4 @@ CCI 예제 프로그램
 		return -1;
 	}
 
-.. include:: cciapi.txt
+.. include:: cciapi.inc

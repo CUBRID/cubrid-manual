@@ -221,6 +221,189 @@ CCI API Reference
 		*   **CCI_ER_DBMS**
 		*   **CCI_ER_INVALID_LOB_HANDLE**
 
+[번역]
+.. c:function:: int cci_cancel(int conn_handle)
+
+	다른 스레드에서 실행 중인 질의를 취소시킨다. Java의 Statement.cancel() 메서드와 같은 기능을 수행한다.
+	
+	다음은 main 함수에서 스레드의 질의 실행을 취소하는 예이다.
+	
+	::
+
+		/* gcc -o pthr pthr.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+		*/
+
+
+		#include <stdio.h>
+		#include <cas_cci.h>
+		#include <unistd.h>
+		#include <pthread.h>
+		#include <string.h>
+		#include <time.h>
+		#include <sys/time.h>
+		#include <sys/timeb.h>
+
+		#define QUERY "select * from db_class A, db_class B, db_class C, db_class D, db_class E"
+
+		static void *thread_main (void *arg);
+		static void *execute_statement (int con, char *sql_stmt);
+
+		int
+		main (int argc, char *argv[])
+		{
+			int thr_id = 0, conn_handle = 0, res = 0;
+			void *jret;
+			pthread_t th;
+			char url[1024];
+			T_CCI_ERROR error;
+			snprintf (url, 1024, "cci:CUBRID:localhost:33000:demodb:PUBLIC::");
+	
+			conn_handle = cci_connect_with_url_ex (url, NULL, NULL, &error);
+
+			if (conn_handle < 0)
+			{
+				printf ("ERROR: %s\n", error.err_msg);
+				return -1;
+			}
+
+			res = pthread_create (&th, NULL, &thread_main, (void *) &conn_handle);
+
+			if (res < 0)
+			{
+				printf ("thread fork failed.\n");
+				return -1;
+			}
+			else
+			{
+				printf ("thread started\n");
+			}
+			sleep (5);
+			// If thread_main is still running, below cancels the query of thread_main.
+			res = cci_cancel (conn_handle);
+			if (res < 0)
+			{
+				printf ("cci_cancel failed\n");
+				return -1;
+			}
+			else
+			{
+				printf ("The query was canceled by cci_cancel.\n");
+			}
+			res = pthread_join (th, &jret);
+			if (res < 0)
+			{
+				printf ("thread join failed.\n");
+				return -1;
+			}
+
+			printf ("thread_main was cancelled with\n\t%s\n", (char *) jret);
+			free (jret);
+	
+			res = cci_disconnect (conn_handle, &error);
+			if (res < 0)
+			{
+				printf ("ERROR: %s\n", error.err_msg);
+			  return res;
+			}
+
+			return 0;
+		}
+
+		void *
+		thread_main (void *arg)
+		{
+			int con = *((int *) arg);
+			int ret_val;
+			void *ret_ptr;
+			T_CCI_ERROR error;
+
+			cci_set_autocommit (con, CCI_AUTOCOMMIT_TRUE);
+			ret_ptr = execute_statement (con, QUERY);
+			return ret_ptr;
+		}
+
+		static void *
+		execute_statement (int con, char *sql_stmt)
+		{
+			int col_count = 1, ind, i, req;
+			T_CCI_ERROR error;
+			char *buffer;
+			char *error_msg;
+			int res = 0;
+	
+			error_msg = (char *) malloc (128);
+			if ((req = cci_prepare (con, sql_stmt, 0, &error)) < 0)
+			{
+				snprintf (error_msg, 128, "cci_prepare ERROR: %s\n", error.err_msg);
+				goto conn_err;
+			}
+
+			if ((res = cci_execute (req, 0, 0, &error)) < 0)
+			{
+				snprintf (error_msg, 128, "cci_execute ERROR: %s\n", error.err_msg);
+				goto execute_error;
+			}
+	
+			if (res >= 0)
+			{
+				if ((res = cci_fetch_size (req, 100)) < 0)
+				{
+					snprintf (error_msg, 128, "cci_fetch_size ERROR\n");
+					goto execute_error;
+				}
+
+				while (1)
+				{
+					res = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &error);
+					if (res == CCI_ER_NO_MORE_DATA)
+					{
+						break;
+					}
+					if (res < 0)
+					{
+						snprintf (error_msg, 128, "cci_cursor ERROR: %s\n",
+							error.err_msg);
+						return error_msg;
+					}
+
+					if ((res = cci_fetch (req, &error)) < 0)
+					{
+						snprintf (error_msg, 128, "cci_fetch ERROR: %s\n",
+							error.err_msg);
+						return error_msg;
+					}
+
+					for (i = 1; i <= col_count; i++)
+					{
+						if ((res = cci_get_data (req, i, CCI_A_TYPE_STR, &buffer, &ind)) < 0)
+						{
+							snprintf (error_msg, 128, "cci_get_data ERROR\n");
+							return error_msg;
+						}
+					}
+				}
+			}
+			
+			if ((res = cci_close_query_result (req)) < 0)
+			{
+				snprintf (error_msg, 128, "cci_close_query_result ERROR\n");
+				return error_msg;
+			}
+		execute_error:
+			if ((res = cci_close_req_handle (req)) < 0)
+			{
+				snprintf (error_msg, 128, "cci_close_req_handle ERROR\n");
+			}
+		conn_err:
+			return error_msg;
+		}
+
+	:param conn_handle: (IN) 연결 핸들
+	
+	:return: 에러 코드
+		
+		*	**CCI_ER_CON_HANDLE**
+
 .. c:function:: int cci_clob_free(T_CCI_CLOB clob)
 
 	The **cci_clob_free** function frees memory of **CLOB** struct.
@@ -295,6 +478,7 @@ CCI API Reference
 .. c:function::  int cci_close_query_result(int req_handle)
 
 	The **cci_close_query_result** funciton closes the resultset returned by :c:func:`cci_execute`, :c:func:`cci_execute_array` or :c:func:`cci_execute_batch`.
+	If you run :c:func:`cci_prepare` repeatedly without closing the request handle(req_handle), it is recommended to call this function before calling :c:func:`cci_close_req_handle`.
 	
 	:param req_handle: (IN) Request handle
 	:return: Error code (0: success)
@@ -859,7 +1043,7 @@ CCI API Reference
 
 	If autocommit mode is on, each query in the array is committed after executing.
 	
-	..	note:: In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. 
+	.. note:: In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. 
 	
 	.. code-block:: c
 
@@ -966,6 +1150,7 @@ CCI API Reference
 
 	.. code-block:: c
 
+		...
 		char **queries;
 		T_CCI_QUERY_RESULT *result;
 		int n_queries, n_executed;
@@ -1003,6 +1188,7 @@ CCI API Reference
 			printf ("query_result_free: %d\n", error);   
 			goto handle_error;
 		}
+		...
 
 .. c:function:: int cci_execute_result(int req_handle, T_CCI_QUERY_RESULT **query_result, T_CCI_ERROR *err_buf)
 
@@ -1010,7 +1196,7 @@ CCI API Reference
 
 	Note that the validity check is not performed for each parameter entered in the macro.
 	
-	The query results used must be deleted by the :c:func:`cci_query_result_free` function.
+	The memory of used query results must be released by the :c:func:`cci_query_result_free` function.
 
 	:param req_handle: (IN) Request handle of the prepared statement
 	:param query_result: (OUT) Query results
@@ -1022,6 +1208,7 @@ CCI API Reference
 
 	.. code-block:: c
 	
+		...
 		T_CCI_QUERY_RESULT *qr;
 		...
 		 
@@ -1040,6 +1227,7 @@ CCI API Reference
 			}
 			cci_query_result_free(qr, res);
 		}
+		...
 
 .. c:function:: int cci_fetch(int req_handle, T_CCI_ERROR *err_buf)
 
@@ -1270,6 +1458,49 @@ CCI API Reference
 	
 		*   **CCI_ER_CON_HANDLE**
 
+[번역]
+.. c:function:: int cci_get_query_plan(int req_handle, char **out_buf_p)
+
+	cci_prepare 함수가 리턴한 요청 핸들(req_handle)에 대한 질의 계획을 결과 버퍼에 출력한다. cci_execute 함수의 호출 여부와 상관 없이 cci_get_query_plan 함수를 호출할 수 있다.
+	cci_get_query_plan 함수 호출 후 결과 버퍼의 사용이 끝나면 :c:func:`cci_query_info_free` 함수를 이용하여 cci_get_query_plan 함수에서 생성된 결과 버퍼를 해제해야 한다.
+
+	::
+		
+		char *out_buf;
+		...
+		req = cci_prepare (con, query, 0, &cci_error);
+		...
+		ret = cci_get_query_plan(req, &out_buf); 
+		...
+		printf("plan = %s", out_buf);
+		cci_query_info_free(out_buf);
+		
+	:param req_handle: (IN) 요청 핸들
+	:param out_buf_p: (OUT) 결과 버퍼 포인터의 주소
+	:return: 에러 코드
+		
+		*	**CCI_ER_REQ_HANDLE**
+		*	**CCI_ER_CON_HANDLE**
+		*	**CCI_ER_USED_CONNECTION**
+	
+	.. seealso:: 
+	
+		:c:func:`cci_query_info_free`
+
+.. c:function:: int cci_query_info_free(char *out_buf)
+
+	cci_get_query_plan 함수에서 할당된 결과 버퍼 메모리를 해제한다.
+
+	:param req_handle: (IN) 요청 핸들
+	:param out_buf: (OUT) 결과 버퍼 포인터의 주소
+	:return: 에러 코드
+	
+		*	**CCI_ER_NO_MORE_MEMORY**
+		
+	.. seealso:: 
+	
+		:c:func:`cci_get_query_plan`
+
 .. c:function:: int cci_get_query_timeout (int req_handle)
 
 	The **cci_get_query_timeout** function returns timeout configured for query execution.
@@ -1434,6 +1665,24 @@ CCI API Reference
 			$ strings /home/usr1/CUBRID/lib/libcascci.so | grep VERSION
 			VERSION=9.0.0.1
 
+[번역]
+.. c:function::  void cci_init()
+
+	Windows용 CCI 응용 프로그램을 static linking library(.lib)로 컴파일하는 경우에는 반드시 호출해야 하고, 그 이외의 경우는 이 함수를 사용할 필요가 없다.
+
+.. c:function:: int cci_is_holdable(int req_handle)
+
+	**cci_is_holdable** 함수는 요청 핸들의 연결 유지(holdable) 여부를 리턴한다.
+
+	:param req_handle: (IN) prepared statement에 대한 요청 핸들
+	:return: 1 : 연결 유지, 0 : 연결 유지 안 됨
+
+		*   **CCI_ER_REQ_HANDLE**
+
+	.. seealso:: 
+	
+		:c:func:`cci_prepare`
+
 .. c:function:: int cci_is_holdable(int req_handle)
 
 	The **cci_is_holdable** function returns whether the request handle(req_handle) is holdable or not.
@@ -1455,6 +1704,20 @@ CCI API Reference
 	:return: 1 : updatable, 0 : not updatable
 
 		*   **CCI_ER_REQ_HANDLE**
+
+[번역]
+.. c:function:: int cci_last_insert_id(int conn_handle, void *value, T_CCI_ERROR * err_buf)
+
+	가장 마지막에 수행한 INSERT 문의 기본 키 값을 얻는다.
+	
+	:param conn_handle: (IN) 연결 핸들
+	:param value: (OUT) 결과 버퍼. 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 함수 내에서 메모리를 할당하므로 사용 후 반드시 free(value)를 수행해야 함.
+	:param err_buf: (OUT) 에러 버퍼
+
+	:return: 에러 코드
+
+		*   **CCI_ER_CON_HANDLE**
+		* 	**CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_next_result(int req_handle, T_CCI_ERROR *err_buf)
 
@@ -1725,7 +1988,7 @@ CCI API Reference
 	*   **pool_size** : Maximum number of connection (default value: 10)
 	*   **max_wait** : Maximum waiting time to get connection (default value: 1000 msec.)
 	*   **pool_prepared_statement** : Whether to enable statement pooling (default value: false)
-	*	**max_open_prepared_statement** : The maximum value of prepared statement to maintain in statement pool.(default value: 1000)
+	*	**max_open_prepared_statement** : The maximum number of prepared statements to maintain in the statement pool.(default value: 1000)
 	*   **login_timeout** : Login timeout time (default value: 0 (unlimited))
 	*   **query_timeout** : Query timeout time (default value: 0 (unlimited))
 	*   **disconnect_on_query_timeout** : Whether to terminate connection when execution is discarded due to query execution timeout (default value: no)
@@ -1733,7 +1996,7 @@ CCI API Reference
 	*   **default_isolation** : Transaction isolation level refreshed whenever **cci_datasource_borrow** is called
 	*   **default_lock_timeout** : lock_timeout refreshed whenever **cci_datasource_borrow** is called
 
-	If the number of prepared statemet exceeds **max_open_prepared_statement value**, the oldest prepared statement is released from statement pool. If you reuse it later, it is added to statement pool again.
+	If the number of prepared statemets exceeds **max_open_prepared_statement** value, the oldest prepared statement is released from statement pool. If you reuse it later, it is added to the statement pool again.
 	
 	If you configure **default_autocommit**, **default_isolation**, or **default_lock_timeout** value, connection for autocommit, isolation, or lock_timeout based on current configured value is returned when **cci_datasource_borrow** is called. If you do not configure it, connection for autocommit, isolation, or lock_timeout is returned with keeping the value that a user changed before.
 
@@ -1830,6 +2093,175 @@ CCI API Reference
 	:param query_result: (IN) Query results to be retrieved
 	:param index: (IN) Column index (base: 1)
 	:return: statement type (**T_CCI_CUBRID_STMT**)
+
+[번역]
+.. c:function:: int cci_register_out_param(int req_handle, int index)
+
+	자바 저장 프로시저에서 아웃 바인드로 정의한 파라미터를 바인딩하기 위해 사용하며, index는 1부터 시작한다.
+	이 함수를 호출하기 전에 cci_prepare 함수의 플래그에 CCI_PREPARE_CALL을 설정해야 한다.
+	
+	다음은 "Hello, CUBRID"라는 문자열을 출력하는 자바 저장 프로시저의 예이다.
+	
+	먼저 cubrid.conf에 있는 java_stored_procedure 파라미터의 값을 yes로 설정하고, 데이터베이스를 구동한다.
+	
+	::
+	
+		$ vi cubrid.conf
+		java_stored_procedure=yes
+	
+		$ cubrid service start
+		$ cubrid server start demodb
+	
+	자바 저장 프로시저로 등록할 클래스를 구현하고 컴파일한다.
+	
+	::
+	
+		public class SpCubrid{
+			public static void outTest(String[] o) {
+				o[0] = "Hello, CUBRID";
+			}
+		}
+		
+		%javac SpCubrid.java
+	
+	컴파일된 자바 클래스를 CUBRID로 로딩한다.
+	
+	::
+		
+		$ loadjava demodb SpCubrid.class
+		
+	로딩한 Java 클래스를 등록한다.
+	
+	::
+		
+		csql> CREATE PROCEDURE test_out(x OUT STRING)
+		AS LANGUAGE JAVA
+		NAME 'SpCubrid.outTest(java.lang.String[] o)';
+		
+	CCI 응용 프로그램에서 cci_prepare 함수의 플래그에 CCI_PREPARE_CALL을 지정하고, cci_register_out_param 함수로 아웃 바인드 파라미터 위치를 지정한 후 실행 결과를 페치하여 가져온다. 
+	
+	::
+
+		// On Linux, compile with "gcc -g -o jsp jsp.c -I$CUBRID/include/ -L$CUBRID/lib/ -lcascci -lpthread"
+		
+		#include <stdio.h>
+		#include <unistd.h>
+		#include <cas_cci.h>
+		char *cci_client_name = "test";
+
+		int
+		main (int argc, char *argv[])
+		{
+			int con = 0, req = 0, res, ind, i, col_count;
+			T_CCI_ERROR error;
+			T_CCI_COL_INFO *res_col_info;
+			T_CCI_SQLX_CMD cmd_type;
+			char *buffer, db_ver[16];;
+	
+			if ((con = cci_connect ("localhost", 33000, "demodb", "dba", "")) < 0)
+			{
+				printf ("%s(%d): cci_connect fail\n", __FILE__, __LINE__);
+				return -1;
+			}
+
+			if ((req = cci_prepare (con, "call test_out(?)", CCI_PREPARE_CALL, &error)) < 0)
+			{
+				printf ("%s(%d): cci_prepare fail(%d)\n", __FILE__, __LINE__,
+					error.err_code);
+				goto handle_error;
+			}
+			if ((res = cci_register_out_param (req, 1)) < 0)
+			{
+				printf ("%s(%d): cci_register_out_param fail(%d)\n", __FILE__, __LINE__,
+					error.err_code);
+				goto handle_error;
+			}
+			if ((res = cci_execute (req, 0, 0, &error)) < 0)
+			{
+			  printf ("%s(%d): cci_execute fail(%d)\n", __FILE__, __LINE__,
+					error.err_code);
+			  goto handle_error;
+			}
+			res = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &error);
+			if (res == CCI_ER_NO_MORE_DATA)
+			{
+				printf ("%s(%d): cci_cursor fail(%d)\n", __FILE__, __LINE__,
+					error.err_code);
+				goto handle_error;
+			}
+
+			if ((res = cci_fetch (req, &error) < 0))
+			{
+				printf ("%s(%d): cci_fetch(%d, %s)\n", __FILE__, __LINE__,
+					error.err_code, error.err_msg);
+			  goto handle_error;
+			}
+			if ((res = cci_get_data (req, 1, CCI_A_TYPE_STR, &buffer, &ind)) < 0)
+			{
+				printf ("%s(%d): cci_get_data fail\n", __FILE__, __LINE__);
+				goto handle_error;
+			}
+			// ind: string length, buffer: a string which came from the out binding parameter of test_out(?) Java SP.
+			printf ("%d, (%s)\n", ind, buffer);
+
+			if ((res = cci_close_query_result (req)) < 0)
+			{
+				printf ("%s(%d): cci_close_query_result fail", __FILE__, __LINE__);
+				goto handle_error;
+			}
+			
+			if ((res = cci_close_req_handle (req)) < 0)
+			{
+				printf ("%s(%d): cci_close_req_handle fail", __FILE__, __LINE__);
+				goto handle_error;
+			}
+			res = cci_disconnect (con, &error);
+			if (res < 0)
+			{
+				printf ("%s(%d): cci_disconnect fail(%d)", __FILE__, __LINE__,
+					error.err_code);
+				goto handle_error;
+			}
+			printf ("Program ended!\n");
+			return 0;
+
+		handle_error:
+			if (req > 0)
+				cci_close_req_handle (req);
+			if (con > 0)
+				cci_disconnect (con, &error);
+			printf ("Program failed!\n");
+			return -1;
+		}
+
+	.. seealso:: 
+
+		:c:func:`cci_prepare`
+		
+	:param req_handle: (IN) 요청 핸들
+	 int cci_register_out_param(int req_handle, int index)
+	
+	:return: 에러 코드
+			
+		*	**CCI_ER_BIND_INDEX**
+		*	**CCI_ER_REQ_HANDLE**
+		*	**CCI_ER_CON_HANDLE**
+		*	**CCI_ER_USED_CONNECTION**
+
+.. c:function:: int cci_row_count(int conn_handle, int *row_count, T_CCI_ERROR * err_buf)
+
+	가장 마지막에 수행한 질의에 영향을 끼친 행의 개수를 얻는다.
+	
+	:param conn_handle: (IN) 연결 핸들
+	:param row_count: (OUT) 가장 마지막에 수행한 질의에 영향을 끼친 행의 개수
+	:param err_buf: (OUT) 에러 버퍼
+	
+	:return: 에러 코드
+	
+		*	**CCI_ER_COMMUNICATION**
+		*	**CCI_ER_LOGIN_TIMEOUT**
+		*	**CCI_ER_NO_MORE_MEMORY**
+		*	**CCI_ER_DBMS**
 
 .. c:function:: int cci_savepoint(int conn_handle, T_CCI_SAVEPOINT_CMD cmd, char* savepoint_name, T_CCI_ERROR *err_buf)
 
@@ -2159,17 +2591,17 @@ CCI API Reference
 	
 			conn = cci_connect ("localhost", 33000, "demodb", "dba", "");
 		 
-		// get all columns’ information of table "athlete"
+			// get all columns’ information of table "athlete"
 			req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", NULL, CCI_ATTR_NAME_PATTERN_MATCH, &error);
 		 
-		// get info. of table "athlete"’s column "code".
-		//req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", "code", 0, &error);
+			// get info. of table "athlete"’s column "code".
+			//req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", "code", 0, &error);
 			if (req < 0 )
 			{
 				fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
 				goto _END;
 			}
-		res_col_info = cci_get_result_info(req, &cmd_type, &col_count);
+			res_col_info = cci_get_result_info(req, &cmd_type, &col_count);
 			if (!res_col_info && col_count == 0)
 			{
 				fprintf(stdout, "(%s, %d) ERROR : cci_get_result_info\n\n", __FILE__, __LINE__);
@@ -2219,6 +2651,12 @@ CCI API Reference
 				}
 			}
 		_END_WHILE:
+			res = cci_close_query_result(req);
+			if (res < 0)
+			{
+				fprintf (stdout, "(%s, %d) ERROR : cci_close_query_result\n", __FILE__, __LINE__);
+				goto handle_error;
+			}
 			res = cci_close_req_handle(req);
 			if (res <  0)
 				goto _END;
@@ -2231,7 +2669,7 @@ CCI API Reference
 			if (res < 0)
 				fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
 		 
-				fprintf(stdout, "Result : %s\n", query_result_buffer);
+			fprintf(stdout, "Result : %s\n", query_result_buffer);
 		 
 			return 0;
 
@@ -2351,12 +2789,20 @@ CCI API Reference
 				}
 				 printf ("\n");
 			}
-		 
+			
+			//Closing the query result
+			error = cci_close_query_result(req);
+		 	if (error < 0)
+			{
+				printf ("cci_close_query_result error\n");
+				goto handle_error;
+			}
+			
 			//Closing the request handle
 			error = cci_close_req_handle (req);
 			if (error < 0)
 			{
-				printf ("close_req_handle error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+				printf ("cci_close_req_handle error\n");
 				goto handle_error;
 			}
 			
@@ -2364,7 +2810,7 @@ CCI API Reference
 			error = cci_disconnect (con, &cci_error);
 			if (error < 0)
 			{
-				printf ("error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+				printf ("cci_disconnect error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
 				goto handle_error;
 			}
 			return 0;
@@ -2502,6 +2948,15 @@ CCI API Reference
 		*   **CCI_ER_DBMS**
 
 	**Note** If the transaction isolation level is set by cci_set_db_parameter(), only the current transaction is affected. When the transaction is complete, the transaction isolation level returns to the one set by CAS. You must use **cci_set_isolation_level** () to set the isolation level for the entire connection.
+
+[번역]
+.. c:function:: int cci_set_lock_timeout(int conn_handle, int locktimeout, T_CCI_ERROR * err_buf)
+
+	연결에 대한 잠금 타임아웃을 밀리초 단위로 설정한다.
+	cci_set_db_parameter(conn_id, CCI_PARAM_LOCK_TIMEOUT, &val, err_buf)를 호출한 것과 동일하며, :c:func:`cci_set_db_parameter` 함수를 참고한다.
+	
+	:param conn_handle: (IN) 연결 핸들
+	:param locktimeout: (IN) 잠금 타임아웃 시간(단위: 밀리 초).
 
 .. c:function:: int cci_set_make(T_CCI_SET *set, T_CCI_U_TYPE u_type, int size, void *value, int *indicator)
 

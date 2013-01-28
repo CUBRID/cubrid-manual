@@ -650,9 +650,9 @@ _db_collation
 | contractions | INTEGER     | 축약 지원 여부                       |
 |              |             | (0: 지원 안 함, 1: 지원)             |
 +--------------+-------------+--------------------------------------+
-| checksum     | VARCHAR(32) | 콜레이션 파일의 체크섬               |
-+--------------+-------------+--------------------------------------+
 | uca_strength | INTEGER     | 가중치 세기(weight strength)         |
++--------------+-------------+--------------------------------------+
+| checksum     | VARCHAR(32) | 콜레이션 파일의 체크섬               |
 +--------------+-------------+--------------------------------------+
 
 db_user
@@ -1931,14 +1931,14 @@ DB_COLLATION
 +----------------+--------------+-------------------------------------------------------------------------------+
 | charset_name   | VARCHAR(256) | 문자셋 이름                                                                   |
 +----------------+--------------+-------------------------------------------------------------------------------+
-| is_builtin     | VARCHAR(3)   | 설치 시 제품 내 포함 여부                                                     |
+| is_builtin     | VARCHAR(3)   | 설치 시 제품 내 포함 여부(Yes, No)                                            |
 +----------------+--------------+-------------------------------------------------------------------------------+
-| has_expansions | VARCHAR(3)   | 확장 포함 여부                                                                |
+| has_expansions | VARCHAR(3)   | 확장 포함 여부(Yes, No)                                                       |
 +----------------+--------------+-------------------------------------------------------------------------------+
 | contractions   | INTEGER      | 축약 포함 여부                                                                |
 +----------------+--------------+-------------------------------------------------------------------------------+
 | uca_strength   | VARCHAR(255) | 가중치 세기(weight strength)                                                  |
-|                |              | (NOT APPLICABLE, PRIMARY, SECONDARY, TERTIARY, QUATERNARY, IDENTITY, UNKNOWN) |
+|                |              | (Not applicable, Primary, Secondary, Tertiary, Quaternary, Identity, Unknown) |
 +----------------+--------------+-------------------------------------------------------------------------------+
 
 **정의**
@@ -1949,30 +1949,30 @@ DB_COLLATION
 	AS
 	SELECT c.coll_id, c.coll_name,
 	CASE c.charset_id
-		WHEN 3 THEN 'ISO8859-1'
-		WHEN 5 THEN 'UTF-8'
-		WHEN 4 THEN 'KSC-EUC'  
-		WHEN 0 THEN 'ASCII'  
-		WHEN 1 THEN 'RAW-BITS'  
-		WHEN 2 THEN 'RAW-BYTES'  
+		WHEN 3 THEN 'iso8859-1'
+		WHEN 5 THEN 'utf-8'
+		WHEN 4 THEN 'euckr'  
+		WHEN 0 THEN 'ascii'  
+		WHEN 1 THEN 'raw-bits'  
+		WHEN 2 THEN 'raw-bytes'  
 		WHEN -1 THEN 'NONE'  
 	ELSE 'OTHER' END,
 	CASE c.built_in  
-		WHEN 0 THEN 'NO'  
-		WHEN 1 THEN 'YES'  
+		WHEN 0 THEN 'No'  
+		WHEN 1 THEN 'Yes'  
 	ELSE 'ERROR' END,
 	CASE c.expansions  
-		WHEN 0 THEN 'NO'  
-		WHEN 1 THEN 'YES'  
+		WHEN 0 THEN 'No'  
+		WHEN 1 THEN 'Yes'  
 	ELSE 'ERROR' END, c.contractions,
 	CASE c.uca_strength  
-		WHEN 0 THEN 'NOT APPLICABLE'  
-		WHEN 1 THEN 'PRIMARY'  
-		WHEN 2 THEN 'SECONDARY'  
-		WHEN 3 THEN 'TERTIARY'
-		WHEN 4 THEN 'QUATERNARY'  
-		WHEN 5 THEN 'IDENTITY'  
-	ELSE 'UNKNOWN' END
+		WHEN 0 THEN 'Not applicable'  
+		WHEN 1 THEN 'Primary'  
+		WHEN 2 THEN 'Secondary'  
+		WHEN 3 THEN 'Tertiary'
+		WHEN 4 THEN 'Quaternary'  
+		WHEN 5 THEN 'Identity'  
+	ELSE 'Unknown' END
 	FROM _db_collation c ORDER BY c.coll_id;
 
 카탈로그 클래스/가상 클래스 사용 권한
@@ -1992,7 +1992,7 @@ DB_COLLATION
 카탈로그에 대한 질의
 ====================
 
-클래스, 가상 클래스, 속성, 트리거, 메서드, 인덱스명 등과 같은 식별자(identifier)는 모두 소문자로 변경되어 시스템 카탈로그에 저장된다. 따라서 시스템 카탈로그 클래스에 대해 대상 식별자를 검색하려면 소문자를 사용해야 한다.
+클래스, 가상 클래스, 속성, 트리거, 메서드, 인덱스 이름 등과 같은 식별자(identifier)는 모두 소문자로 변경되어 시스템 카탈로그에 저장된다. 따라서 시스템 카탈로그 클래스에 대해 대상 식별자를 검색하려면 소문자를 사용해야 한다. 반면, DB 사용자 이름은 대문자로 변경되어 db_user 시스템 카탈로그 테이블에 저장된다.
 
 .. code-block:: sql
 
@@ -2002,6 +2002,17 @@ DB_COLLATION
 	There are no results.
 	 
 	SELECT class_name, partitioned FROM db_class WHERE class_name = 'foo';
+	
 	  class_name   partitioned
 	============================
 	  'foo'       'NO'    
+
+	CREATE USER tester PASSWORD 'testpwd';
+	SELECT name, password FROM db_user;
+	
+	  name                  password
+	============================================
+	  'DBA'                 NULL
+	  'PUBLIC'              NULL
+	  'TESTER'              db_password
+

@@ -759,10 +759,10 @@ The information on collation.
 | contractions       | INTEGER       | Contraction support (0: Not supported, 1: Supported)                        |
 |                    |               |                                                                             |
 +--------------------+---------------+-----------------------------------------------------------------------------+
-| checksum           | VARCHAR(32)   | Checksum of a collation file                                                |
+| uca_strength       | INTEGER       | Weight strength                                                             |
 |                    |               |                                                                             |
 +--------------------+---------------+-----------------------------------------------------------------------------+
-| uca_strength       | INTEGER       | Weight strength                                                             |
+| checksum           | VARCHAR(32)   | Checksum of a collation file                                                |
 |                    |               |                                                                             |
 +--------------------+---------------+-----------------------------------------------------------------------------+
 
@@ -2233,17 +2233,17 @@ The information on collation.
 | charset_name       | VARCHAR(256)  | Charset name                                                                  |
 |                    |               |                                                                               |
 +--------------------+---------------+-------------------------------------------------------------------------------+
-| is_builtin         | VARCHAR(3)    | Built-in or not while installing the product                                  |
+| is_builtin         | VARCHAR(3)    | Built-in or not while installing the product(Yes, No)                         |
 |                    |               |                                                                               |
 +--------------------+---------------+-------------------------------------------------------------------------------+
-| has_expansions     | VARCHAR(3)    | Having expansion or not                                                       |
+| has_expansions     | VARCHAR(3)    | Having expansion or not(Yes, No)                                              |
 |                    |               |                                                                               |
 +--------------------+---------------+-------------------------------------------------------------------------------+
 | contractions       | INTEGER       | Whether to include abbreviation                                               |
 |                    |               |                                                                               |
 +--------------------+---------------+-------------------------------------------------------------------------------+
 | uca_strength       | VARCHAR(255)  | Weight strength                                                               |
-|                    |               | (NOT APPLICABLE, PRIMARY, SECONDARY, TERTIARY, QUATERNARY, IDENTITY, UNKNOWN) |
+|                    |               | (Not applicable, Primary, Secondary, Tertiary, Quaternary, Identity, Unknown) |
 |                    |               |                                                                               |
 +--------------------+---------------+-------------------------------------------------------------------------------+
 
@@ -2255,30 +2255,30 @@ The information on collation.
 	AS
 	SELECT c.coll_id, c.coll_name,
 	CASE c.charset_id
-		WHEN 3 THEN 'ISO8859-1'
-		WHEN 5 THEN 'UTF-8'
-		WHEN 4 THEN 'KSC-EUC'  
-		WHEN 0 THEN 'ASCII'  
-		WHEN 1 THEN 'RAW-BITS'  
-		WHEN 2 THEN 'RAW-BYTES'  
+		WHEN 3 THEN 'iso8859-1'
+		WHEN 5 THEN 'utf-8'
+		WHEN 4 THEN 'ksc-euc'  
+		WHEN 0 THEN 'ascii'  
+		WHEN 1 THEN 'raw-bits'  
+		WHEN 2 THEN 'raw-bytes'  
 		WHEN -1 THEN 'NONE'  
 	ELSE 'OTHER' END,
 	CASE c.built_in  
-		WHEN 0 THEN 'NO'  
-		WHEN 1 THEN 'YES'  
+		WHEN 0 THEN 'No'  
+		WHEN 1 THEN 'Yes'  
 	ELSE 'ERROR' END,
 	CASE c.expansions  
-		WHEN 0 THEN 'NO'  
-		WHEN 1 THEN 'YES'  
+		WHEN 0 THEN 'No'  
+		WHEN 1 THEN 'Yes'  
 	ELSE 'ERROR' END, c.contractions,
 	CASE c.uca_strength  
-		WHEN 0 THEN 'NOT APPLICABLE'  
-		WHEN 1 THEN 'PRIMARY'  
-		WHEN 2 THEN 'SECONDARY'  
-		WHEN 3 THEN 'TERTIARY'
-		WHEN 4 THEN 'QUATERNARY'  
-		WHEN 5 THEN 'IDENTITY'  
-	ELSE 'UNKNOWN' END
+		WHEN 0 THEN 'Not applicable'  
+		WHEN 1 THEN 'Primary'  
+		WHEN 2 THEN 'Secondary'  
+		WHEN 3 THEN 'Tertiary'
+		WHEN 4 THEN 'Quaternary'  
+		WHEN 5 THEN 'Identity'  
+	ELSE 'Unknown' END
 	FROM _db_collation c ORDER BY c.coll_id;
 
 Catalog Class/Virtual Class Authorization
@@ -2298,7 +2298,7 @@ Catalog information is represented by the instance of a catalog class/virtual cl
 Querying on Catalog
 ===================
 
-To query on catalog classes, you must convert identifiers such as class, virtual class, attribute, trigger, method and index names to lowercases, and create them. Therefore, you must use lowercases when querying on catalog classes.
+To query on catalog classes, you must convert identifiers such as class, virtual class, attribute, trigger, method and index names to lowercases, and create them. Therefore, you must use lowercases when querying on catalog classes. But, DB user name is changed as uppercases and stored into db_user system catalog table.
 
 .. code-block:: sql
 
@@ -2311,3 +2311,16 @@ To query on catalog classes, you must convert identifiers such as class, virtual
 	  class_name   partitioned
 	============================
 	  'foo'       'NO'    
+
+	CREATE USER tester PASSWORD 'testpwd';
+	SELECT name, password FROM db_user;
+	
+	  name                  password
+	============================================
+	  'DBA'                 NULL
+	  'PUBLIC'              NULL
+	  'TESTER'              db_password
+
+ 
+	  
+	  

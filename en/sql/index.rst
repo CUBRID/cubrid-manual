@@ -16,7 +16,7 @@ The main topics covered in this chapter are as follows:
 *   SERIAL: Describes how to create, alter, and drop serial numbers managed by a database.
 *   Operators and functions: Describes the operators and functions used for query statements.
 *   Data retrieval and manipulation: Describes the SELECT, INSERT, UPDATE, and DELETE statements.
-*   Query optimization: Describes query optimization by using the index, hint, and the USING INDEX statement.
+*   Query optimization: Describes query optimization by using the index, hint, and the index hint syntax.
 *   Trigger: Describes how to create, alter, drop, and rename a trigger that is automatically executed in response to certain events.
 *   Java stored functions/procedures: Describes how to create a Java method and call it in the query statement.
 *   Method: Describes the method, a built-in function of the CUBRID database system.

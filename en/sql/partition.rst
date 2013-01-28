@@ -211,8 +211,8 @@ You can define a hash partition by using the **PARTITION BY HASH** clause. ::
 	CREATE TABLE (
 	...
 	)
-	( PATITION BY HASH ( <partition_expression> )
-	 PATITIONS ( <number_of_partitions> )
+	( PARTITION BY HASH ( <partition_expression> )
+	 PARTITIONS ( <number_of_partitions> )
 	)
 
 *   *partition_expression* : Specifies a partition expression. The expression can be specified by the name of the column to be partitioned or by a function.

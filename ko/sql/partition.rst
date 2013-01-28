@@ -213,8 +213,8 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	CREATE TABLE (
 	...
 	)
-	( PATITION BY HASH ( <partition_expression> )
-	 PATITIONS ( <number_of_partitions> )
+	( PARTITION BY HASH ( <partition_expression> )
+	 PARTITIONS ( <number_of_partitions> )
 	)
 	
 *   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 이름이나 함수를 사용하여 지정할 수 있다.

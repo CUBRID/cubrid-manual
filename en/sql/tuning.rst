@@ -104,6 +104,9 @@ The following example shows how to retrieve the years when Sim Kwon Ho won medal
 	  'Sim Kwon Ho'                1996  'G'
 	2 rows selected.
 
+.. note::
+	For how to specify the index to use in the query, see :ref:`index-hint-syntax`.
+
 The following example shows how to retrieve query execution time with **NO_STAT** hint to improve the functionality of drop partitioned table (*before_2008*); any data is not stored in the table. Assuming that there are more than 1 million data in the *participant2* table. The execution time in the example depends on system performance and database configuration.
 
 .. code-block:: sql
@@ -167,33 +170,46 @@ The following example shows how to view query plan by using the example retrievi
 Using Indexes
 =============
 
-USING INDEX Clause
-------------------
+Index Hint Syntax
+-----------------
 
-The **USING INDEX** clause allows the query processor to select a proper index by specifying the index in the query.
+The index hint syntax allows the query processor to select a proper index by specifying the index in the query.
 
-The **USING INDEX** clause should be specified after the **WHERE** clause of the **SELECT** statement, the **DELETE** statement, and the **UPDATE** statement.
+{USE|FORCE|IGNORE} INDEX syntax is specified after "FROM table" clause.
 
-**USING INDEX** clause forces a sequential/index scan to be used or an index that can improve the performance to be included.
+::
 
-If the **USING INDEX** clause is specified with the list of index names, the query optimizer creates the optimized execution plan by calculating the query execution cost based on the specified indexes only and comparing the index scan cost and the sequential scan cost of the specified indexes. (CUBRID performs cost-based query optimization to select an execution plan).
-
-The **USING INDEX** clause is useful to get the results in the desired order without **ORDER BY**. When index scan is performed by CUBRID, the results are created in the order they were saved in the index. When there are more than one indexes in one table, you can use **USING INDEX** to get the query results in a given order of indexes. ::
-
-	SELECT . . . FROM . . . WHERE . . .
-	[USING INDEX { NONE | index_spec [ {, index_spec } ...] } ] [ ; ]
+	SELECT ... FROM ...
+	  USE INDEX  (index_spec [, index_spec  ...] ) 
+	| FORCE INDEX ( index_spec [, index_spec ...] ) 
+	| IGNORE INDEX ( index_spec [, index_spec ...] )
+	WHERE ...
 	
-	DELETE FROM . . . WHERE . . .
-	[USING INDEX { NONE | index_spec [ {, index_spec } ...] } ] [ ; ]
-	
-	UPDATE . . . SET . . . WHERE . . .
-	[USING INDEX { NONE | index_spec [ {, index_spec } ...] } ] [ ; ] 
+	index_spec :
+	 [table_name.]index_name
+
+*	**USE INDEX** ( *index_spec*, *index_spec*, ... ): forces to use only one index among specified indexes.
+*	**FORCE INDEX** ( *index_spec*, *index_spec*, ... ): works like **USING INDEX** clause, but it assumes that a cost of sequential scanning cost is very expensive. In other words, sequential scanning is executed only if there is no method to use the specified indexes to find the rows on the table.
+*	**IGNORE INDEX** ( *index_spec*, *index_spec*, ... ): forces not to use the specified indexes when scanning.
+
+The **USING INDEX** *index_name* clause should be specified after the **WHERE** clause of the **SELECT** statement; it works like **USE INDEX** (*index_name*). If (+) is specified after the index name, it works like **FORCE INDEX**;if (-) is specified after the index name, it works like **IGNORE INDEX**.
+
+**USING INDEX NONE** syntax forces not to use the all indexes.
+
+**USING ALL EXCEPT** syntax forces not to use only the specified indexes.
+
+::
+
+	SELECT ... FROM . . . WHERE . . .
+	  USING INDEX { [table_name.]NONE | [ ALL EXCEPT ] index_spec [ {, index_spec } ...] }  
 
 	index_spec :
-	 [table_name.]index_name [(+)]
+	 [table_name.]index_name [{(+)|(-)}]
 
-*   If **NONE** : **NONE** is specified, a sequential scan is selected.
-*   (+) : If (+) is specified at the end of the index name, the corresponding index scan is used.
+*   **NONE** : All indexes are not used and sequential scanning is executed.
+*   **ALL EXCEPT** : All indexes except the specified index can be used on query execution.
+*   (+) : When (+) is specified after the index name, the possibility to use that index is increased.
+*   (-) : When (-) is specified after the index name, that index is not used on the query execution.
 
 The following example is creating an index based on the table creation statement of the *athlete* table.
 
@@ -216,32 +232,47 @@ For the following query, the query optimizer can select the index scan that uses
 
 	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA';
 
-As shown in the following query, the query optimizer calculates the index scan cost based on the indexes specified by **USING INDEX** when **USING INDEX** *char_idx* is specified.
-
-When the index scan cost is less than the sequential scan cost, an index scan is performed.
+	
+If the index scanning cost is lower than the sequantial scanning cost, the index scanning is executed.
+Below two queries do the same behavior and they use always char_idx index to execute.
 
 .. code-block:: sql
 
-	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
+	SELECT /*+ RECOMPILE */ * FROM athlete USE INDEX (char_idx) WHERE gender='M' AND nation_code='USA';
+
+	SELECT /*+ RECOMPILE */ * FROM athlete WHERE gender='M' AND nation_code='USA'
 	USING INDEX char_idx;
 
-To forcibly specify the index scan that uses the *char_idx* index, specify (+) at the end of the index name as shown below.
+Below two queries do the same behavior and they don't use char_idx index to execute.
 
 .. code-block:: sql
+	
+	SELECT /*+ RECOMPILE */ * FROM athlete IGNORE INDEX (char_idx) WHERE gender='M' AND nation_code='USA';
 
-	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
-	USING INDEX char_idx(+);
+	SELECT /*+ RECOMPILE */ * FROM athlete WHERE gender='M' AND nation_code='USA'
+	USING INDEX char_idx(-);
 
-To select the sequential scan, specify **NONE** on the **USING INDEX** clause as shown below.
+Below query always forces to do the sequential scanning.
 
 .. code-block:: sql
 
 	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
 	USING INDEX NONE;
 
+Below query forces to be possible to use all indexes execept char_idex index.
+
+.. code-block:: sql
+
+	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
+	USING INDEX ALL EXCEPT char_idx;
+
+	
+	
 When two or more indexes have been specified in the **USING INDEX** clause, the query optimizer selects the proper one of the specified indexes.
 
 .. code-block:: sql
+
+	SELECT * FROM athlete USE INDEX (char_idx, athlete_idx) WHERE gender='M' AND nation_code='USA';
 
 	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
 	USING INDEX char_idx, athlete_idx;
@@ -252,10 +283,11 @@ When a query is made for several tables, you can specify a table to perform inde
 
 	SELECT ... FROM tab1, tab2 WHERE ... USING INDEX tab1.idx1, tab2.NONE;
 
-When executing a query with the **USING INDEX** clause, the query optimizer considers all available indexes on the table for which no index has been specified. For example, when the *tab1* table includes *idx1* and *idx2* and the *tab2* table includes *idx3*, *idx4*, and *idx5*, if indexes for only *tab1* are specified but no indexes are specified for *tab2*, the query optimizer considers the indexes of *tab2*.
+When executing a query with the index hint syntax, the query optimizer considers all available indexes on the table for which no index has been specified. For example, when the *tab1* table includes *idx1* and *idx2* and the *tab2* table includes *idx3*, *idx4*, and *idx5*, if indexes for only *tab1* are specified but no indexes are specified for *tab2*, the query optimizer considers the indexes of *tab2*.
 
 .. code-block:: sql
 
+	SELECT ... FROM tab1, tab2 USE INDEX(tab1.idx1) WHERE ... ;
 	SELECT ... FROM tab1, tab2 WHERE ... USING INDEX tab1.idx1;
 
 *   The sequential scan of table *tab1* and *idx1* index scan are compared, and the optimal query plan is selected.
@@ -324,7 +356,7 @@ To process queries that are interested in open bugs, specify the index in the US
 
 .. warning::
 
-	If you execute queries by specifying indexes with **USING INDEX**, you may have incorrect query results as output even though the conditions of creating filtered indexes does not meet the query conditions.
+	If you execute queries by specifying indexes with index hint syntax, you may have incorrect query results as output even though the conditions of creating filtered indexes does not meet the query conditions.
 
 **Constraints**
 
@@ -464,86 +496,58 @@ Function-based indexes cannot be used with filtered indexes. The example will ca
 	CREATE INDEX my_idx ON tbl ( TRIM(col) ) WHERE col > 'SQL';
 
 Function-based indexes cannot become multiple-columns indexes. The example will cause an error.
-
 .. code-block:: sql
 
 	CREATE INDEX my_idx ON tbl ( TRIM(col1), col2, LEFT(col3, 5) );
 
-**Remark**
+.. _allowed-function-in-function-index:
 
-Functions with the function-based indexes are as follows:
+Functions which can be used on the function-based indexes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-+-----------------+-----------------+-----------------+
-| ABS             | ACOS            | ADD_MONTHS      |
-+-----------------+-----------------+-----------------+
-| ADDDATE         | ASIN            | ATAN            |
-+-----------------+-----------------+-----------------+
-| ATAN2           | BIT_COUNT       | BIT_LENGTH      |
-+-----------------+-----------------+-----------------+
-| CEIL            | CHAR_LENGTH     | CHR             |
-+-----------------+-----------------+-----------------+
-| COS             | COT             | DATE            |
-+-----------------+-----------------+-----------------+
-| DATE_ADD        | DATE_FORMAT     | DATE_SUB        |
-+-----------------+-----------------+-----------------+
-| DATEDIFF        | DAY             | DAYOFMONTH      |
-+-----------------+-----------------+-----------------+
-| DAYOFWEEK       | DAYOFYEAR       | DEGREES         |
-+-----------------+-----------------+-----------------+
-| EXP             | FLOOR           | FORMAT          |
-+-----------------+-----------------+-----------------+
-| FROM_UNIXTIME   | FROMDAYS        | FUNCTION_HOLDER |
-+-----------------+-----------------+-----------------+
-| GREATEST        | HOUR            | IFNULL          |
-+-----------------+-----------------+-----------------+
-| INET_ATON       | INET_NTOA       | INSTR           |
-+-----------------+-----------------+-----------------+
-| LAST_DAY        | LEAST           | LEFT            |
-+-----------------+-----------------+-----------------+
-| LN              | LOCATE          | LOG             |
-+-----------------+-----------------+-----------------+
-| LOG10           | LOG2            | LOWER           |
-+-----------------+-----------------+-----------------+
-| LPAD            | LTRIM           | MAKEDATE        |
-+-----------------+-----------------+-----------------+
-| MAKETIME        | MD5             | MID             |
-+-----------------+-----------------+-----------------+
-| MINUTE          | MOD             | MODULUS         |
-+-----------------+-----------------+-----------------+
-| MONTH           | MONTHS_BETWEEN  | NULLIF          |
-+-----------------+-----------------+-----------------+
-| NVL             | NVL2            | OCTET_LENGTH    |
-+-----------------+-----------------+-----------------+
-| POSITION        | POWER           | QUARTER         |
-+-----------------+-----------------+-----------------+
-| RADIANS         | REPEAT          | REPLACE         |
-+-----------------+-----------------+-----------------+
-| REVERSE         | RIGHT           | ROUND           |
-+-----------------+-----------------+-----------------+
-| RPAD            | RTRIM           | SECOND          |
-+-----------------+-----------------+-----------------+
-| SECTOTIME       | SIN             | SPACE           |
-+-----------------+-----------------+-----------------+
-| SQRT            | STR_TO_DATE     | STRCMP          |
-+-----------------+-----------------+-----------------+
-| SUBDATE         | SUBSTR          | SUBSTRING       |
-+-----------------+-----------------+-----------------+
-| SUBSTRING_INDEX | TAN             | TIME            |
-+-----------------+-----------------+-----------------+
-| TIME_FORMAT     | TIMEDIFF        | TIMESTAMP       |
-+-----------------+-----------------+-----------------+
-| TIMETOSEC       | TO_CHAR         | TO_DATE         |
-+-----------------+-----------------+-----------------+
-| TO_DATETIME     | TO_NUMBER       | TO_TIME         |
-+-----------------+-----------------+-----------------+
-| TO_TIMESTAMP    | TODAYS          | TRANSLATE       |
-+-----------------+-----------------+-----------------+
-| TRIM            | TRUNC           | UNIX_TIMESTAMP  |
-+-----------------+-----------------+-----------------+
-| UPPER           | WEEKDAY         | WEEK            |
-+-----------------+-----------------+-----------------+
-| YEAR            |                 |                 |
-+-----------------+-----------------+-----------------+
+	Functions with the function-based indexes are as follows:
+
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| ABS               | ACOS              | ADD_MONTHS        | ADDDATE           | ASIN              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| ATAN              | ATAN2             | BIT_COUNT         | BIT_LENGTH        | CEIL              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| CHAR_LENGTH       | CHR               | COS               | COT               | DATE              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| DATE_ADD          | DATE_FORMAT       | DATE_SUB          | DATEDIFF          | DAY               |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| DAYOFMONTH        | DAYOFWEEK         | DAYOFYEAR         | DEGREES           | EXP               |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| FLOOR             | FORMAT            | FROM_DAYS         | FROM_UNIXTIME     | GREATEST          |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| HOUR              | IFNULL            | INET_ATON         | INET_NTOA         | INSTR             |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| LAST_DAY          | LEAST             | LEFT              | LN                | LOCATE            |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| LOG               | LOG10             | LOG2              | LOWER             | LPAD              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| LTRIM             | MAKEDATE          | MAKETIME          | MD5               | MID               |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| MINUTE            | MOD               | MONTH             | MONTHS_BETWEEN    | NULLIF            |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| NVL               | NVL2              | OCTET_LENGTH      | POSITION          | POWER             |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| QUARTER           | RADIANS           | REPEAT            | REPLACE           | REVERSE           |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| RIGHT             | ROUND             | RPAD              | RTRIM             | SECOND            |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| SECTOTIME         | SIN               | SQRT              | STR_TO_DATE       | STRCMP            |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| SUBDATE           | SUBSTR            | SUBSTRING         | SUBSTRING_INDEX   | TAN               |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| TIME              | TIME_FORMAT       | TIMEDIFF          | TIMESTAMP         | TIMETOSEC         |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| TO_CHAR           | TO_DATE           | TO_DATETIME       | TO_DAYS           | TO_NUMBER         |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| TO_TIME           | TO_TIMESTAMP      | TRANSLATE         | TRIM              | TRUNC             |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| UNIX_TIMESTAMP    | UPPER             | WEEK              | WEEKDAY           | YEAR              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
 
 .. _covering-index:
 
@@ -580,57 +584,58 @@ The following example shows that the index is used as a covering index because c
 				1            2            3
 				4            5            6
 
-**Remark**
+.. warning::
 
-If the covering index is applied when you get the values from the **VARCHAR** type column, the empty strings that follow will be truncated. If the covering index is applied to the execution of query optimization, the resulting query value will be retrieved. This is because the value will be stored in the index with the empty string being truncated.
+	If the covering index is applied when you get the values from the **VARCHAR** type column, the empty strings that follow will be truncated. If the covering index is applied to the execution of query optimization, the resulting query value will be retrieved. This is because the value will be stored in the index with the empty string being truncated.
 
-If you don't want this, use the **NO_COVERING_IDX** hint, which does not use the covering index function. If you use the hint, you can get the result value from the data area rather than from the index area.
+	If you don't want this, use the **NO_COVERING_IDX** hint, which does not use the covering index function. If you use the hint, you can get the result value from the data area rather than from the index area.
 
-The following is a detailed example of the above situation. First, create a table with columns in **VARCHAR** types, and then **INSERT** the value with the same start character string value but the number of empty characters. Next, create an index in the column.
+	The following is a detailed example of the above situation. First, create a table with columns in **VARCHAR** types, and then **INSERT** the value with the same start character string value but the number of empty characters. Next, create an index in the column.
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	CREATE TABLE tab(c VARCHAR(32));
-	INSERT INTO tab VALUES('abcd'),('abcd    '),('abcd ');
-	CREATE INDEX i_tab_c ON tab(c);
+		CREATE TABLE tab(c VARCHAR(32));
+		INSERT INTO tab VALUES('abcd'),('abcd    '),('abcd ');
+		CREATE INDEX i_tab_c ON tab(c);
 
-If you must use the index (the covering index applied), the query result is as follows:
+	If you must use the index (the covering index applied), the query result is as follows:
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	csql>;plan simple
-	SELECT * FROM tab where c='abcd    ' USING INDEX i_tab_c(+);
-	 
-	Query plan:
-	 Index scan(tab tab, i_tab_c, (tab.c='abcd    ') (covers))
-	 
-	 c
-	======================
-	'abcd'
-	'abcd'
-	'abcd'
+		csql>;plan simple
+		SELECT * FROM tab where c='abcd    ' USING INDEX i_tab_c(+);
+		 
+		Query plan:
+		 Index scan(tab tab, i_tab_c, (tab.c='abcd    ') (covers))
+		 
+		 c
+		======================
+		'abcd'
+		'abcd'
+		'abcd'
 
-The following is the query result when you don't use the index.
+	The following is the query result when you don't use the index.
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	SELECT * FROM tab WHERE c='abcd    ' USING INDEX tab.NONE;
-	 
-	Query plan:
-	 Sequential scan(tab tab)
-	 
-	 c
-	======================
-	'abcd'
-	'abcd    '
-	'abcd '
+		SELECT * FROM tab WHERE c='abcd    ' USING INDEX tab.NONE;
+		 
+		Query plan:
+		 Sequential scan(tab tab)
+		 
+		 c
+		======================
+		'abcd'
+		'abcd    '
+		'abcd '
 
-As you can see in the above comparison result, the value in the **VARCHAR** type retrieved from the index will appear with the following empty string truncated when the covering index has been applied.
+	As you can see in the above comparison result, the value in the **VARCHAR** type retrieved from the index will appear with the following empty string truncated when the covering index has been applied.
 
 Optimizing ORDER BY Clause
 --------------------------
 
-The index including all columns in the **ORDER BY** clause is referred to as the ordered index. In general, for an ordered index, the columns in the **ORDER BY** clause should be located at the front of the index.
+The index including all columns in the **ORDER BY** clause is referred to as the ordered index.
+ Optimizing the query with ORDER BY clause is no need for the additional sorting process(skip order by), because the query results are searched by the ordered index. In general, for an ordered index, the columns in the **ORDER BY** clause should be located at the front of the index.
 
 .. code-block:: sql
 
@@ -746,6 +751,27 @@ The following example shows that *i* column exists, **ORDER BY** is executed by 
 				3            5            4
 				1            5            5
 				2            6            6
+
+.. note::
+	Even if the type of a column in the ORDER BY clause is converted, ORDER BY optimization is executed when the sorting order is the same as before.
+	
+	+---------------------------------+
+	| Before         | After          |
+	+================+================+
+	| numeric type   | numeric type   |
+	+----------------+----------------+
+	| string type    | string type    |
+	+----------------+----------------+
+	| DATETIME       | TIMESTAMP      |
+	+----------------+----------------+
+	| TIMESTAMP      | DATETIME       |
+	+----------------+----------------+
+	| DATETIME       | DATE           |
+	+----------------+----------------+
+	| TIMESTAMP      | DATE           |
+	+----------------+----------------+
+	| DATE           | DATETIME       |
+	+----------------+----------------+
 
 .. _index-descending-scan:
 

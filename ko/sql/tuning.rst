@@ -104,6 +104,9 @@ SQL 힌트는 더하기 기호(+)와 주석을 사용하여 지정한다. CUBRID
 
 *   *spec_name* : *spec_name* 이 **USE_NL**, **USE_IDX**, **USE_MERGE** 와 함께 지정될 경우 해당 조인 방법은 *spec_name* 에 대해서만 적용된다. 만약 **USE_NL** 과 **USE_MERGE** 가 함께 지정된 경우 주어진 힌트는 무시된다. 일부 경우에 질의 최적화기는 주어진 힌트에 따라 질의 실행 계획을 만들지 못할 수 있다. 예를 들어 오른쪽 외부 조인에 대해 **USE_NL** 을 지정한 경우 이 질의는 내부적으로 왼쪽 외부 조인 질의로 변환이 되어 조인 순서는 보장되지 않을 수 있다.
 
+.. note::
+	질의문에서 사용할 인덱스를 지정하는 방법에 대해서는 :ref:`index-hint-syntax` 를 참고한다.
+
 다음은 심권호 선수가 메달을 획득한 연도와 메달 종류를 구하는 예제이다. 단, *athlete* 테이블을 외부 테이블로 하고 *game* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만들어야 한다. 다음과 같은 질의로 표현이 되는데, 질의최적화기는 *game* 테이블을 외부 테이블로 하고, *athlete* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만든다.
 
 .. code-block:: sql
@@ -183,32 +186,49 @@ CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값
 인덱스 활용
 ===========
 
-USING INDEX 절
---------------
+.. _index-hint-syntax:
 
-**USING INDEX** 절은 질의에서 인덱스를 지정할 수 있도록 해서 질의 처리기가 적절한 인덱스를 선택할 수 있게 한다. **USING INDEX** 절은 **SELECT**, **DELETE**, **UPDATE** 문의 **WHERE** 절 다음에 지정되어야 한다.
+인덱스 힌트 구문
+----------------
 
-**USING INDEX** 절은 강제로 순차 스캔 또는 인덱스 스캔이 사용되게 하거나, 성능에 유리한 인덱스가 포함되도록 한다.
+인덱스 힌트 구문은 질의에서 인덱스를 지정할 수 있도록 해서 질의 처리기가 적절한 인덱스를 선택할 수 있게 한다. 
 
-**USING INDEX** 절에 인덱스 이름의 리스트가 지정된다면 질의 최적화기는 지정된 인덱스만을 대상으로 질의 실행 비용을 계산하고, 지정된 인덱스의 인덱스 스캔 비용과 순차 스캔 비용을 비교하여 최적의 실행 계획을 만든다(CUBRID는 실행 계획을 선택할 때 비용 기반의 질의 최적화를 수행한다).
+{USE|FORCE|IGNORE} INDEX 구문이 FROM 테이블 절 다음에 지정된다. 
 
-**USING INDEX** 절은 **ORDER BY** 없이 원하는 순서로 결과를 얻고자 할 때 유용하게 사용될 수 있다. CUBRID는 인덱스 스캔을 하면 인덱스에 저장된 순서로 결과가 생성되는데, 한 테이블에 여러 인덱스가 있을 경우 특정 인덱스의 순서로 질의 결과를 얻고자 할 때 **USING INDEX** 를 사용할 수 있다. ::
+::
 
-	SELECT . . . FROM . . . WHERE . . .
-	[USING INDEX { NONE | index_spec [ {, index_spec } ...] } ] [ ; ]
+	SELECT ... FROM ...
+	  USE INDEX  (index_spec [, index_spec  ...] ) 
+	| FORCE INDEX ( index_spec [, index_spec ...] ) 
+	| IGNORE INDEX ( index_spec [, index_spec ...] )
+	WHERE ...
 	
-	DELETE FROM . . . WHERE . . .
-	[USING INDEX { NONE | index_spec [ {, index_spec } ...] } ] [ ; ]
-	
-	UPDATE . . . SET . . . WHERE . . .
-	[USING INDEX { NONE | index_spec [ {, index_spec } ...] } ] [ ; ] 
+	index_spec :
+	 [table_name.]index_name
+
+*	**USE INDEX** ( *index_spec*, *index_spec*, ... ): 스캔할 때 지정한 인덱스 들 중 하나만 사용하게 한다. 
+*	**FORCE INDEX** ( *index_spec*, *index_spec*, ... ): **USING INDEX** 절과 비슷하게 동작하지만, 순차 스캔(sequential scan) 비용이 매우 비쌀 것이라고 가정한다. 즉, 테이블에서 행을 찾기 위해 지정한 인덱스들을 사용할 방법이 없을 때만 순차 스캔이 수행된다.
+*	**IGNORE INDEX** ( *index_spec*, *index_spec*, ... ): 스캔할 때 지정한 인덱스들을 사용하지 못하게 한다. 
+
+	 
+**USING INDEX** *index_name* 구문은 **WHERE** 조건 절 다음에 지정되며 **USE INDEX** (*index_name*)과 같게 동작한다. 인덱스의 이름 뒤에 (+)를 지정하면 **FORCE INDEX** 와 같게 동작하고, (-)를 지정하면 **IGNORE INDEX** 와 같게 동작한다.
+
+**USING INDEX NONE** 구문은 모든 인덱스를 사용하지 않게 한다.
+
+**USING ALL EXCEPT** 구문은 스캔 시 지정한 인덱스만 사용하지 않게 한다.
+
+::
+
+	SELECT ... FROM . . . WHERE . . .
+	  USING INDEX { [table_name.]NONE | [ ALL EXCEPT ] index_spec [ {, index_spec } ...] }  
 
 	index_spec :
-	 [table_name.]index_name [(+)]
- 
-
-*   **NONE** : **NONE** 을 지정한 경우 순차 스캔이 사용된다.
-*   (+) : 인덱스 이름 뒤에 (+)를 지정하면 해당 인덱스 스캔이 사옹된다.
+	 [table_name.]index_name [{(+)|(-)}]
+	 
+*   **NONE** : 질의 수행에 모든 인덱스가 사용되지 않으며, 순차 스캔이 수행된다.
+*   **ALL EXCEPT** : 질의 수행 시 지정한 인덱스를 제외한 모든 인덱스가 사용될 수 있다.
+*   (+) : 인덱스 이름 뒤에 (+)를 지정하면 지정한 인덱스가 질의 수행에 사용될 가능성이 높아진다.
+*   (-) : 인덱스 이름 뒤에 (-)를 지정하면 지정한 인덱스가 질의 수행에 사용되지 않는다.
 
 다음은 *athlete* 테이블의 생성문에 맞추어 인덱스를 생성한 예제이다.
 
@@ -230,32 +250,52 @@ USING INDEX 절
 
 	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA';
 
-다음 질의에서와 같이 **USING INDEX** *char_idx* 를 지정하면 질의 최적화기는 **USING INDEX** 에서 지정한 인덱스만을 대상으로 인덱스 스캔 비용을 산출한다.
-
-인덱스 스캔 비용이 순차 스캔 비용보다 작을 경우 인덱스 스캔을 하게 된다.
+인덱스 스캔 비용이 순차 스캔 비용보다 작을 경우 인덱스 스캔을 하게 된다. 아래 2개의 질의는 같은 동작을 수행하며, 질의 수행 시 char_idx 인덱스를 사용하게 된다.
 
 .. code-block:: sql
 
-	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
+	SELECT /*+ RECOMPILE */ * FROM athlete USE INDEX (char_idx) WHERE gender='M' AND nation_code='USA';
+
+	SELECT /*+ RECOMPILE */ * FROM athlete WHERE gender='M' AND nation_code='USA'
 	USING INDEX char_idx;
 
-*char_idx* 인덱스를 사용하는 인덱스 스캔을 강제로 지정할 경우에는 다음과 같이 인덱스 이름 뒤에 (+)를 지정한다.
+아래 2개의 질의는 같은 동작을 수행하며, 항상 char_idx를 사용한다.
 
 .. code-block:: sql
+	
+	SELECT /*+ RECOMPILE */ * FROM athlete FORCE INDEX (char_idx) WHERE gender='M' AND nation_code='USA';
 
-	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
+	SELECT /*+ RECOMPILE */ * FROM athlete WHERE gender='M' AND nation_code='USA'
 	USING INDEX char_idx(+);
 
-순차 스캔을 선택하도록 할 경우 다음과 같이 **USING INDEX** 절에서 **NONE** 을 지정한다.
+아래 2개의 질의는 같은 동작을 수행하며, 질의 수행 시 char_idx을 사용하지 않는다.
+
+.. code-block:: sql
+	
+	SELECT /*+ RECOMPILE */ * FROM athlete IGNORE INDEX (char_idx) WHERE gender='M' AND nation_code='USA';
+
+	SELECT /*+ RECOMPILE */ * FROM athlete WHERE gender='M' AND nation_code='USA'
+	USING INDEX char_idx(-);
+
+다음 질의는 수행 시 항상 순차 스캔하도록 한다.
 
 .. code-block:: sql
 
 	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
 	USING INDEX NONE;
 
-다음과 같이 **USING INDEX** 절에서 두 개 이상의 인덱스를 지정한 경우 질의 최적화기는 지정된 인덱스 중 적절한 하나를 선택한다.
+다음 질의는 수행 시 char_idx를 제외한 모든 인덱스의 사용이 가능하도록 한다.
 
 .. code-block:: sql
+
+	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
+	USING INDEX ALL EXCEPT char_idx;
+
+다음과 같이 **USE INDEX** 구문 또는 **USING INDEX** 구문에서 두 개 이상의 인덱스를 지정한 경우 질의 최적화기는 지정된 인덱스 중 적절한 하나를 선택한다.
+
+.. code-block:: sql
+
+	SELECT * FROM athlete USE INDEX (char_idx, athlete_idx) WHERE gender='M' AND nation_code='USA';
 
 	SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
 	USING INDEX char_idx, athlete_idx;
@@ -266,10 +306,12 @@ USING INDEX 절
 
 	SELECT ... FROM tab1, tab2 WHERE ... USING INDEX tab1.idx1, tab2.NONE;
 
-**USING INDEX** 절이 있는 질의를 수행할 때 질의 최적화기는 인덱스가 지정되지 않는 테이블에 대해서는 해당 테이블의 사용 가능한 모든 인덱스를 고려한다. 예를 들어, *tab1* 테이블에는 인덱스 *idx1*, *idx2* 이 있고 *tab2* 테이블에는 인덱스 *idx3*, *idx4*, *idx5* 가 있는 경우, *tab1* 에 대한 인덱스만 지정하고 *tab2* 에 대한 인덱스를 지정하지 않으면 질의 최적화기는 *tab2* 의 인덱스도 고려하여 동작한다.
+인덱스 힌트 구문이 있는 질의를 수행할 때 질의 최적화기는 인덱스가 지정되지 않는 테이블에 대해서는 해당 테이블의 사용 가능한 모든 인덱스를 고려한다. 예를 들어, *tab1* 테이블에는 인덱스 *idx1*, *idx2* 이 있고 *tab2* 테이블에는 인덱스 *idx3*, *idx4*, *idx5* 가 있는 경우, *tab1* 에 대한 인덱스만 지정하고 *tab2* 에 대한 인덱스를 지정하지 않으면 질의 최적화기는 *tab2* 의 인덱스도 고려하여 동작한다.
 
 .. code-block:: sql
 
+
+	SELECT ... FROM tab1, tab2 USE INDEX(tab1.idx1) WHERE ... ;
 	SELECT ... FROM tab1, tab2 WHERE ... USING INDEX tab1.idx1;
 
 *   테이블 *tab1* 의 순차 스캔과 *idx1* 인덱스 스캔을 비교하여, 최상의 질의 계획을 선택한다.
@@ -336,10 +378,9 @@ USING INDEX 절
 	WHERE CreationDate > CURRENT_DATE - 10 AND Closed = 0;
 	USING INDEX idx_open_bugs;
 
-
 .. warning::
 
-	필터링된 인덱스 생성 조건과 질의 조건이 부합되지 않음에도 불구하고 **USING INDEX** 로 인덱스를 명시하여 질의를 수행하면 잘못된 질의 결과를 출력할 수 있음에 주의한다.
+	필터링된 인덱스 생성 조건과 질의 조건이 부합되지 않음에도 불구하고 인덱스 힌트 구문으로 인덱스를 명시하여 질의를 수행하면 잘못된 질의 결과를 출력할 수 있음에 주의한다.
 
 **제약 사항**
 
@@ -433,7 +474,6 @@ USING INDEX 절
 			[ ON table_name (function_name (argument_list)) ]
 			REBUILD;
 
-
 다음 인덱스가 생성된 이후 **SELECT** 질의는 자동으로 함수 기반 인덱스를 사용한다.
 
 .. code-block:: sql
@@ -489,81 +529,54 @@ USING INDEX 절
 
 	CREATE INDEX my_idx ON tbl ( TRIM(col1), col2, LEFT(col3, 5) );
 
-**참고 사항**
+.. _allowed-function-in-function-index:
 
-함수 기반 인덱스로 사용할 수 있는 함수는 다음과 같다.
+함수 기반 인덱스가 허용하는 함수 목록
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-+-----------------+-----------------+-----------------+
-| ABS             | ACOS            | ADD_MONTHS      |
-+-----------------+-----------------+-----------------+
-| ADDDATE         | ASIN            | ATAN            |
-+-----------------+-----------------+-----------------+
-| ATAN2           | BIT_COUNT       | BIT_LENGTH      |
-+-----------------+-----------------+-----------------+
-| CEIL            | CHAR_LENGTH     | CHR             |
-+-----------------+-----------------+-----------------+
-| COS             | COT             | DATE            |
-+-----------------+-----------------+-----------------+
-| DATE_ADD        | DATE_FORMAT     | DATE_SUB        |
-+-----------------+-----------------+-----------------+
-| DATEDIFF        | DAY             | DAYOFMONTH      |
-+-----------------+-----------------+-----------------+
-| DAYOFWEEK       | DAYOFYEAR       | DEGREES         |
-+-----------------+-----------------+-----------------+
-| EXP             | FLOOR           | FORMAT          |
-+-----------------+-----------------+-----------------+
-| FROM_UNIXTIME   | FROMDAYS        | FUNCTION_HOLDER |
-+-----------------+-----------------+-----------------+
-| GREATEST        | HOUR            | IFNULL          |
-+-----------------+-----------------+-----------------+
-| INET_ATON       | INET_NTOA       | INSTR           |
-+-----------------+-----------------+-----------------+
-| LAST_DAY        | LEAST           | LEFT            |
-+-----------------+-----------------+-----------------+
-| LN              | LOCATE          | LOG             |
-+-----------------+-----------------+-----------------+
-| LOG10           | LOG2            | LOWER           |
-+-----------------+-----------------+-----------------+
-| LPAD            | LTRIM           | MAKEDATE        |
-+-----------------+-----------------+-----------------+
-| MAKETIME        | MD5             | MID             |
-+-----------------+-----------------+-----------------+
-| MINUTE          | MOD             | MODULUS         |
-+-----------------+-----------------+-----------------+
-| MONTH           | MONTHS_BETWEEN  | NULLIF          |
-+-----------------+-----------------+-----------------+
-| NVL             | NVL2            | OCTET_LENGTH    |
-+-----------------+-----------------+-----------------+
-| POSITION        | POWER           | QUARTER         |
-+-----------------+-----------------+-----------------+
-| RADIANS         | REPEAT          | REPLACE         |
-+-----------------+-----------------+-----------------+
-| REVERSE         | RIGHT           | ROUND           |
-+-----------------+-----------------+-----------------+
-| RPAD            | RTRIM           | SECOND          |
-+-----------------+-----------------+-----------------+
-| SECTOTIME       | SIN             | SPACE           |
-+-----------------+-----------------+-----------------+
-| SQRT            | STR_TO_DATE     | STRCMP          |
-+-----------------+-----------------+-----------------+
-| SUBDATE         | SUBSTR          | SUBSTRING       |
-+-----------------+-----------------+-----------------+
-| SUBSTRING_INDEX | TAN             | TIME            |
-+-----------------+-----------------+-----------------+
-| TIME_FORMAT     | TIMEDIFF        | TIMESTAMP       |
-+-----------------+-----------------+-----------------+
-| TIMETOSEC       | TO_CHAR         | TO_DATE         |
-+-----------------+-----------------+-----------------+
-| TO_DATETIME     | TO_NUMBER       | TO_TIME         |
-+-----------------+-----------------+-----------------+
-| TO_TIMESTAMP    | TODAYS          | TRANSLATE       |
-+-----------------+-----------------+-----------------+
-| TRIM            | TRUNC           | UNIX_TIMESTAMP  |
-+-----------------+-----------------+-----------------+
-| UPPER           | WEEKDAY         | WEEK            |
-+-----------------+-----------------+-----------------+
-| YEAR            |                 |                 |
-+-----------------+-----------------+-----------------+
+	함수 기반 인덱스로 사용할 수 있는 함수는 다음과 같다. 
+	
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| ABS               | ACOS              | ADD_MONTHS        | ADDDATE           | ASIN              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| ATAN              | ATAN2             | BIT_COUNT         | BIT_LENGTH        | CEIL              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| CHAR_LENGTH       | CHR               | COS               | COT               | DATE              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| DATE_ADD          | DATE_FORMAT       | DATE_SUB          | DATEDIFF          | DAY               |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| DAYOFMONTH        | DAYOFWEEK         | DAYOFYEAR         | DEGREES           | EXP               |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| FLOOR             | FORMAT            | FROM_DAYS         | FROM_UNIXTIME     | GREATEST          |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| HOUR              | IFNULL            | INET_ATON         | INET_NTOA         | INSTR             |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| LAST_DAY          | LEAST             | LEFT              | LN                | LOCATE            |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| LOG               | LOG10             | LOG2              | LOWER             | LPAD              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| LTRIM             | MAKEDATE          | MAKETIME          | MD5               | MID               |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| MINUTE            | MOD               | MONTH             | MONTHS_BETWEEN    | NULLIF            |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| NVL               | NVL2              | OCTET_LENGTH      | POSITION          | POWER             |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| QUARTER           | RADIANS           | REPEAT            | REPLACE           | REVERSE           |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| RIGHT             | ROUND             | RPAD              | RTRIM             | SECOND            |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| SECTOTIME         | SIN               | SQRT              | STR_TO_DATE       | STRCMP            |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| SUBDATE           | SUBSTR            | SUBSTRING         | SUBSTRING_INDEX   | TAN               |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| TIME              | TIME_FORMAT       | TIMEDIFF          | TIMESTAMP         | TIMETOSEC         |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| TO_CHAR           | TO_DATE           | TO_DATETIME       | TO_DAYS           | TO_NUMBER         |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| TO_TIME           | TO_TIMESTAMP      | TRANSLATE         | TRIM              | TRUNC             |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
+	| UNIX_TIMESTAMP    | UPPER             | WEEK              | WEEKDAY           | YEAR              |
+	+-------------------+-------------------+-------------------+-------------------+-------------------+
 
 .. _covering-index:
 
@@ -600,57 +613,57 @@ USING INDEX 절
 				1            2            3
 				4            5            6
 
-**주의 사항**
+.. warning::
 
-**VARCHAR** 타입의 칼럼에서 값을 가져올 때 커버링 인덱스가 적용되는 경우, 뒤에 따라오는 공백 문자열은 잘리게 된다. 질의 최적화 수행 시 커버링 인덱스가 적용되면 질의 결과 값을 인덱스에서 가져오는데, 인덱스에는 뒤이어 나타나는 공백 문자열을 제거한 채로 값을 저장하기 때문이다.
+	**VARCHAR** 타입의 칼럼에서 값을 가져올 때 커버링 인덱스가 적용되는 경우, 뒤에 따라오는 공백 문자열은 잘리게 된다. 질의 최적화 수행 시 커버링 인덱스가 적용되면 질의 결과 값을 인덱스에서 가져오는데, 인덱스에는 뒤이어 나타나는 공백 문자열을 제거한 채로 값을 저장하기 때문이다.
 
-이러한 현상을 원하지 않는다면 커버링 인덱스 기능을 사용하지 않도록 하는 **NO_COVERING_IDX** 힌트를 사용한다. 이 힌트를 사용하면 결과값을 인덱스 영역이 아닌 데이터 영역에서 가져오도록 한다.
+	이러한 현상을 원하지 않는다면 커버링 인덱스 기능을 사용하지 않도록 하는 **NO_COVERING_IDX** 힌트를 사용한다. 이 힌트를 사용하면 결과값을 인덱스 영역이 아닌 데이터 영역에서 가져오도록 한다.
 
-다음은 위의 상황의 자세한 예이다. 먼저 **VARCHAR** 타입의 칼럼을 갖는 테이블을 생성하고, 여기에 시작 문자열의 값이 같고 문자열 뒤에 따르는 공백 문자의 개수가 다른 값을 **INSERT** 한다. 그리고 해당 칼럼에 인덱스를 생성한다.
+	다음은 위의 상황의 자세한 예이다. 먼저 **VARCHAR** 타입의 칼럼을 갖는 테이블을 생성하고, 여기에 시작 문자열의 값이 같고 문자열 뒤에 따르는 공백 문자의 개수가 다른 값을 **INSERT** 한다. 그리고 해당 칼럼에 인덱스를 생성한다.
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	CREATE TABLE tab(c VARCHAR(32));
-	INSERT INTO tab VALUES('abcd'),('abcd    '),('abcd ');
-	CREATE INDEX i_tab_c ON tab(c);
+		CREATE TABLE tab(c VARCHAR(32));
+		INSERT INTO tab VALUES('abcd'),('abcd    '),('abcd ');
+		CREATE INDEX i_tab_c ON tab(c);
 
-인덱스를 반드시 사용하도록(커버링 인덱스가 적용되도록) 했을 때의 질의 결과는 다음과 같다.
+	인덱스를 반드시 사용하도록(커버링 인덱스가 적용되도록) 했을 때의 질의 결과는 다음과 같다.
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	csql>;plan simple
-	SELECT * FROM tab where c='abcd    ' USING INDEX i_tab_c(+);
-	 
-	Query plan:
-	 Index scan(tab tab, i_tab_c, (tab.c='abcd    ') (covers))
-	 
-	 c
-	======================
-	'abcd'
-	'abcd'
-	'abcd'
+		csql>;plan simple
+		SELECT * FROM tab where c='abcd    ' USING INDEX i_tab_c(+);
+		 
+		Query plan:
+		 Index scan(tab tab, i_tab_c, (tab.c='abcd    ') (covers))
+		 
+		 c
+		======================
+		'abcd'
+		'abcd'
+		'abcd'
 
-다음은 인덱스를 사용하지 않도록 했을 때의 질의 결과이다.
+	다음은 인덱스를 사용하지 않도록 했을 때의 질의 결과이다.
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	SELECT * FROM tab WHERE c='abcd    ' USING INDEX tab.NONE;
-	 
-	Query plan:
-	 Sequential scan(tab tab)
-	 
-	 c
-	======================
-	'abcd'
-	'abcd    '
-	'abcd '
+		SELECT * FROM tab WHERE c='abcd    ' USING INDEX tab.NONE;
+		 
+		Query plan:
+		 Sequential scan(tab tab)
+		 
+		 c
+		======================
+		'abcd'
+		'abcd    '
+		'abcd '
 
-위의 두 결과 비교에서 알 수 있듯이, 커버링 인덱스가 적용되면 **VARCHAR** 타입에서는 인덱스로부터 값을 가져오면서 뒤이어 나타나는 공백 문자열이 잘린 채로 나타난다.
+	위의 두 결과 비교에서 알 수 있듯이, 커버링 인덱스가 적용되면 **VARCHAR** 타입에서는 인덱스로부터 값을 가져오면서 뒤이어 나타나는 공백 문자열이 잘린 채로 나타난다.
 
 ORDER BY 절 최적화
 ------------------
 
-**ORDER BY** 절에 있는 모든 칼럼을 포함하는 인덱스를 정렬된 인덱스(ordered index)라고 한다. 정렬된 인덱스가 되기 위한 일반적인 조건은 **ORDER BY** 절에 있는 칼럼들이 인덱스의 가장 앞부분에 위치하는 경우이다.
+**ORDER BY** 절에 있는 모든 칼럼을 포함하는 인덱스를 정렬된 인덱스(ordered index)라고 한다. ORDER BY 절이 있는 질의를 최적화하면 정렬된 인덱스를 통해 질의 결과를 탐색하므로 별도의 정렬 과정을 거치지 않는다(skip order by). 정렬된 인덱스가 되기 위한 일반적인 조건은 **ORDER BY** 절에 있는 칼럼들이 인덱스의 가장 앞부분에 위치하는 경우이다.
 
 .. code-block:: sql
 
@@ -767,6 +780,27 @@ ORDER BY 절 최적화
 				3            5            4
 				1            5            5
 				2            6            6
+
+.. note::
+	ORDER BY 절의 칼럼이 타입 변환되더라도, 타입 변환 이전의 정렬 순서와 타입 변환 이후의 정렬 순서가 같다면 ORDERY BY 절 최적화가 수행된다.
+	
+	+---------------------------------+
+	| 변환 이전      | 변환 이후      |
+	+================+================+
+	| 수치형 타입    | 수치형 타입    |
+	+----------------+----------------+
+	| 문자열 타입    | 문자열 타입    |
+	+----------------+----------------+
+	| DATETIME       | TIMESTAMP      |
+	+----------------+----------------+
+	| TIMESTAMP      | DATETIME       |
+	+----------------+----------------+
+	| DATETIME       | DATE           |
+	+----------------+----------------+
+	| TIMESTAMP      | DATE           |
+	+----------------+----------------+
+	| DATE           | DATETIME       |
+	+----------------+----------------+
 
 .. _index-descending-scan:
 

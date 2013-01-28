@@ -1534,6 +1534,8 @@ The user's intervention is somewhat needed to restart the database after media e
 
 	To minimize the possibility of losing database updates, it is recommended to create a snapshot and store it in the backup media before it is deleted from the disk. The DBA can backup and restore the database by using the **cubrid backupdb** and **cubrid restoredb** utilities. For details on these utilities, see :ref:`db-backup`.
 
+.. _cursor-holding:
+
 Cursor Holdability
 ==================
 
@@ -1577,7 +1579,6 @@ The result sets that hold the cursor are closed in the following cases:
 When the connection between an application and the CAS is closed, all result sets are automatically closed even if you have set cursor holdability in the application. The setting value of
 **KEEP_CONNECTION**, the broker parameter, affects cursor holdability of the result set.
 
-*   KEEP_CONNECTION = OFF: Cursor holdability is not allowed.
 *   KEEP_CONNECTION = ON: Cursor holdability is not affected.
 *   KEEP_CONNECTION = AUTO: The CAS cannot be restarted while the result set with cursor holdability is open.
 

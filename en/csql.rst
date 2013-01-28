@@ -236,7 +236,10 @@ Session Commands
 
 In addition to SQL statements, CSQL Interpreter provides special commands allowing you to control the Interpreter. These commands are called session commands. All the session commands must start with a semicolon (;).
 
-Enter the **;help** command to display a list of the session commands available in the CSQL Interpreter. Note that only the uppercase letters of each session command are required to make the CSQL Interpreter to recognize it. Session commands are not case-sensitive. ::
+Enter the **;help** command to display a list of the session commands available in the CSQL Interpreter. Note that only the uppercase letters of each session command are required to make the CSQL Interpreter to recognize it. Session commands are not case-sensitive.
+
+[번역]
+"질의 버퍼"는 질의문을 실행하기 전까지 질의문을 저장하는 버퍼이다. **--no-single-line** 옵션을 부여하여 CSQL을 실행하는 경우 **;xr** 명령으로 질의를 실행하기 전까지는 질의문을 버퍼에 유지한다.
 
 **Reading SQL statements from a file (;REAd)**
 
@@ -253,14 +256,14 @@ The **;REAd** command reads the contents of a file into the buffer. This command
 
 **Storing SQL statements into a file (;Write)**
 
-The **;Write** command stores the contents of the command buffer into a file. This command is used to store SQL commands that you entered or modified in the CSQL Interpreter. ::
+The **;Write** command stores the contents of the query buffer into a file. This command is used to store queries that you entered or modified in the CSQL Interpreter. ::
 
 	csql> ;w outfile
 	Command buffer has been saved.
 
 **Appending to a file (;APpend)**
 
-This command appends the contents of the current command buffer to an **outfile** file. ::
+This command appends the contents of the current query buffer to an **outfile** file. ::
 
 	csql> ;ap outfile
 	Command buffer has been saved.
@@ -344,28 +347,28 @@ This command exits the CSQL Interpreter. ::
 
 	csql> ;ex
 
-**Clearing the command buffer (;CLear)**
+**Clearing the query buffer (;CLear)**
 
-The **;CLear** session command clears the contents of the command buffer. ::
+The **;CLear** session command clears the contents of the query buffer. ::
 
 	csql> ;cl
 	csql> ;list
 
-**Displaying the contents of the command buffer (;List)**
+**Displaying the contents of the query buffer (;List)**
 
-The **;List** session command lists the contents of the command buffer that have been entered or modified. The command buffer can be modified by **;READ** or **;Edit** command. ::
+The **;List** session command lists the contents of the query buffer that have been entered or modified. The query buffer can be modified by **;READ** or **;Edit** command. ::
 
 	csql> ;l
 
 **Executing SQL statements (;RUn)**
 
-This command executes SQL statements in the command buffer. Unlike the **;Xrun** session command described below, the buffer will not be cleared even after the query execution. ::
+This command executes SQL statements in the query buffer. Unlike the **;Xrun** session command described below, the buffer will not be cleared even after the query execution. ::
 
 	csql> ;ru
 
-**Clearing the command buffer after executing the SQL statement (;Xrun)**
+**Clearing the query buffer after executing the SQL statement (;Xrun)**
 
-This command executes SQL statements in the command buffer. The buffer will be cleared after the query execution. ::
+This command executes SQL statements in the query buffer. The buffer will be cleared after the query execution. ::
 
 	csql> ;x
 
@@ -436,7 +439,7 @@ The **;DATE** command displays the current date and time in the CSQL Interpreter
 This command displays the database name and host name where the CSQL Interpreter is working. If the database is running, the HA mode (one of those followings: active, standby, or maintenance) will be displayed as well.  ::
 
 	csql> ;data
-	     demodb@localhost (active)
+	     demodb@cubridhost (active)
 
 **Displaying schema information of a class (;SChema)**
 

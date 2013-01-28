@@ -10,7 +10,7 @@ The contents of the CUBRID Database Management System (CUBRID DBMS) product manu
 
 *   :doc:`intro` : This chapter provides a description of the structure and characteristics of the CUBRID DBMS.
 
-*   :doc:`start` : The "Getting Started with CUBRID" provides users with a brief explanation on what to do when first starting CUBRID. The chapter contains information on new features added to CUBRID, on how to install and execute the system, and provides a simple guide on how to use the CSQL Interpreter and CUBRID Manager. The chapter also includes examples of how to write application programs using JDBC, PHP, ODBC, CCI, etc.
+*   :doc:`start` : The "Getting Started with CUBRID" provides users with a brief explanation on what to do when first starting CUBRID. The chapter contains information on how to install and execute the system, used ports on accessing to CUBRID and provides simple explanations on the CUBRID query tools. 
 
 *   :doc:`csql` : CSQL is an application that allows you to use SQL statements through a command-driven interface. This chapter explains how to use the CSQL Interpreter and associated commands.
 
@@ -88,3 +88,22 @@ The following table provides conventions on definitions used in the CUBRID Datab
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Angle brackets(< >)                  | Angle brackets represents a single key or a series of key strokes.                                                                                      | <Ctrl+n>             |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
+
+Version Name and Version String Conventions
+-------------------------------------------
+
+Rules for version naming and string since CUBRID 9.0 are as follows:
+
+*  Version name: CUBRID x.x Patch x (major version, minor version, patch version if necessary)
+   CUBRID 9.0 Patch 1 (CUBRID 9.0 P1 in short)
+
+*  Version string: x.x.x.x (major version, minor version, patch version, build number)
+   9.0.1.0012
+   
+Rules for version naming and string before CUBRID 9.0 are as follows:
+
+*  Version name: CUBRID 2008 Rx.x Patch x (2008 for major version, minor version, patch version, build number)
+   CUBRID 2008 R4.1 Patch 1
+   
+*  Version string: 8.x.x.x (major version, minor version, patch version, build number)
+   8.4.1.1001

@@ -15,7 +15,9 @@ CUBRID 환경 변수
 * **CUBRID_DATABASES** : **databases.txt** 파일의 위치를 지정하는 환경 변수이다. CUBRID 시스템은 **$CUBRID_DATABASES/databases.txt**
   파일에 데이터베이스 볼륨들의 절대 경로를 저장 관리한다. :ref:`databases-txt-file` 을 참고한다.
 
-* **CUBRID_CHARSET** : CUBRID 시스템이 데이터베이스의 로캘(언어+문자셋)과 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 **en_US** 이며, 언어 이름 뒤에 문자셋을 생략하면 ISO-8859-1(.iso88591)이 기본으로 지정된다. 자세한 내용은 :ref:`언어 설정 <language-setting>` 을 참고한다.
+* **CUBRID_CHARSET** : CUBRID 시스템이 데이터베이스의 로캘(언어+문자셋)로 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 **en_US** 이며, 언어 이름 뒤에 문자셋을 생략하면 ISO-8859-1(.iso88591)이 기본으로 지정된다. 자세한 내용은 :ref:`언어 설정 <language-setting>` 을 참고한다.
+
+* **CUBRID_MSG_LANG** : CUBRID 시스템이 명령어 사용법 메시지와 오류 메시지를 출력할 때 사용할 언어를 지정하는 환경 변수이다. 제품 설치 시 초기 설정 값은 없으며, 설정 값이 없으면 **CUBRID_CHARSET** 의 설정을 따른다. 언어 이름 뒤에 문자셋을 생략하면 ISO-8859-1(.iso88591)이 기본으로 지정된다. 자세한 내용은 :ref:`언어 설정 <language-setting>` 을 참고한다.
 
 * **CUBRID_TMP** : Linux용 CUBRID에서 cub_master 프로세스와 cub_broker 프로세스의 유닉스 도메인 소켓 파일을 저장하는 위치를 지정하는 환경 변수로, 지정하지 않으면 cub_master 프로세스는 **/tmp** 디렉터리에, cub_broker 프로세스는 **$CUBRID/var/CUBRID_SOCK** 디렉터리에 유닉스 도메인 소켓 파일을 저장한다(Windows용 CUBRID에서는 사용되지 않는다).
 

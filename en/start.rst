@@ -28,4 +28,5 @@ CUBRID also provides various drivers such as JDBC, CCI, PHP, PDO, ODBC, OLE DB, 
 
 	install.rst
 	env.rst
+	upgrade.rst
 	qrytool.rst

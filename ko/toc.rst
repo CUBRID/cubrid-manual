@@ -11,7 +11,7 @@ CUBRID 데이터베이스 관리 시스템(Database Management System, DBMS) 매
 
 *   :doc:`intro` : CUBRID 데이터베이스 관리 시스템의 구조 및 특징을 설명한다.
 
-*   :doc:`start` : CUBRID를 처음 시작하는데 참고할 수 있는 내용을 제공한다. 시스템 설치 및 실행 방법, CSQL 인터프리터의 간단한 사용 방법을 찾아볼 수 있다. 또한, JDBC나 PHP, ODBC, CCI 등을 이용한 응용 프로그램 작성 예제를 제공한다.
+*   :doc:`start` : CUBRID를 처음 시작하는데 참고할 수 있는 내용을 제공한다. 시스템 설치 및 실행 방법, CUBRID 서버에 연결 시 사용하는 포트, 질의 도구의 간단한 설명을 찾아볼 수 있다.
 
 *   :doc:`csql` : CSQL은 CUBRID에서 명령어 방식으로 SQL 문을 사용할 수 있는 프로그램이다. CSQL 인터프리터의 간단한 사용법과 관련 명령어들을 설명한다.
 

@@ -175,11 +175,11 @@ Sharding
 --------
 
 
-Shard ID로 shard key 값을 얻는 명령 추가(CUBRIDSUS-9547)
+Shard key로 shard ID 값을 얻는 명령 추가(CUBRIDSUS-9547)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	Shard key로 shard id를 얻는 명령을 추가했다.
 
-	다음은 shard1이라는 shard proxy에서 shard 키 1에 대한 shard id 정보를 출력하는 명령이다. ::
+	다음은 shard1이라는 shard proxy에서 shard key 1에 대한 shard ID 정보를 출력하는 명령이다. ::
 	
 		$ cubrid shard getid -b shard1 1
 		

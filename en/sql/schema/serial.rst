@@ -21,7 +21,7 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 	[ MAXVALUE max | NOMAXVALUE ]
 	[ CACHE integer | NOCACHE ]
 
-*   *serial_identifier* : Specifies the name of the serial to be generated.
+*   *serial_identifier* : Specifies the name of the serial to be generated(maximum: 254 bytes).
 *   **START WITH** *initial* : Specifies the initial value of serial with 38 digits or less. The default value of ascending serial is 1 and that of descending serial is -1.
 
 *   **INCREMENT BY** *interval* : Specifies the increment of the serial. You can specify any integer with 38 digits or less except zero at *interval*. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order otherwise, it is in ascending order. The default value is **1**.

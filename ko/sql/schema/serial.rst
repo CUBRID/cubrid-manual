@@ -23,7 +23,7 @@ CREATE SERIAL
 	[ MAXVALUE max | NOMAXVALUE ]
 	[ CACHE integer | NOCACHE ]
 
-*   *serial_identifier* : 생성할 시리얼의 이름을 지정한다.
+*   *serial_identifier* : 생성할 시리얼의 이름을 지정한다(최대 254 바이트).
 
 *   **START WITH** *initial* : 처음 생성되는 시리얼 숫자를 지정한다. 이 값은 38자리 이하의 숫자이다. 오름차순 시리얼의 경우 기본값은 1이며 내림차순 시리얼의 경우 기본값은 -1이다.
 
@@ -97,7 +97,7 @@ ALTER SERIAL
 	[ MAXVALUE max | NOMAXVALUE ]
 	[ CACHE integer | NOCACHE ]
 
-*   *serial_identifier* : 생성할 시리얼의 이름을 지정한다.
+*   *serial_identifier* : 생성할 시리얼의 이름을 지정한다(최대 254 바이트).
 
 *   **INCREMENT BY** *interval* : 시리얼 숫자간의 간격을 지정한다. *interval* 값으로 0을 제외한 38자리 이하의 어떤 정수도 지정할 수 있다. *interval* 의 절대값은 **MAXVALUE** 와 **MINVALUE** 의 차이보다 작아야 한다. 음수가 설정되면 시리얼은 내림차순이 되고 양수가 설정되면 오름차순이 된다. 기본값은 **1** 이다.
 

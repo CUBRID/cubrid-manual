@@ -1,5 +1,6 @@
 updated history.: use this when something to synchronize between Korean and English, or to tag some updated information is requried.
 
+2013.1.28: all files are synchronized, but contents with [¹ø¿ª] tags requires translation.
 2013.1.28: admin/migration.rst sync.
 2013.1.28: admin/i18n.rst, env.rst, sql/datatype.rst, sql/function/typecast_fn.rst sync.
 

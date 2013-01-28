@@ -167,13 +167,13 @@
 
 	**DATE_FORMAT** 함수는 **DATE** 형식('*YYYY*-*MM*-*DD*' 또는 '*MM*/*DD*/*YYYY*')를 포함하는 문자열 또는 날짜/시간 타입(**DATE**, **TIMESTAMP**, **DATETIME**) 값을 지정된 날짜/시간 형식으로 변환하여 문자열로 출력하며, 리턴 값은 **VARCHAR** 타입이다. 지정할 *format* 인자는 아래의 :ref:`날짜/시간 형식 2 <datetime-format2>` 표를 참고한다. :ref:`날짜/시간 형식 2 <datetime-format2>` 표는 :func:`DATE_FORMAT` 함수, :func:`TIME_FORMAT` 함수, :func:`STR_TO_DATE` 함수에서 사용된다.
 
-	*format* 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "%d %M %Y"인 경우 "2009년 10월 3일"인 날짜를 "3 Oktober 2009"인 문자열로 출력한다. **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+	*format* 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "%d %M %Y"인 경우 "2009년 10월 3일"인 날짜를 "3 Oktober 2009"인 문자열로 출력한다. **intl_date_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 	
 	:param date: **DATE** 형식('*YYYY*-*MM*-*DD*' 또는 '*MM*/*DD*/*YYYY*')를 포함하는 문자열 또는 날짜/시간 타입(**DATE**, **TIMESTAMP**, **DATETIME**) 값이 지정될 수 있다.
 	:param format: 출력 형식을 지정한다. '%'로 시작하는 형식 지정자(specifier)를 사용한다.
 	:rtype: STRING
 
-	아래 :ref:`날짜/시간 형식 2 <datetime-format2>` 표에서 월 이름, 요일 이름, 일 이름, 오전/오후 이름 등은 언어에 따라 다르다.
+	아래 "날짜/시간 형식 2" 표에서 월 이름, 요일 이름, 일 이름, 오전/오후 이름 등은 언어에 따라 다르다.
 
 	.. _datetime-format2:
 
@@ -306,15 +306,15 @@
 
 	**참고 사항**
 
-	환경 변수인 **CUBRID_LANG** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_LANG** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
 
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_LANG** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
+	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_CHARSET** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
 .. function:: FORMAT ( x , dec )
 
 	**FORMAT** 함수는 숫자 *x* 의 형식이 ‘*#*,*###*,*###*.*#####*’이 되도록, 소수점 위 세 자리마다 자릿수 구분 기호로 구분하고 소수점 기호 아래 숫자가 *dec* 만큼 표현되도록 *dec* 의 아랫자리에서 반올림을 수행하여 결과를 **VARCHAR** 타입으로 반환한다.
 	
-	자릿수 구분 기호와 소수점 기호는 지정한 언어에 맞는 형식으로 출력한다. 이때 언어는 **intl_number_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_number_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 해석하고 ","를 소수점 기호로 해석한다(:func:`TO_CHAR` 참고).
+	자릿수 구분 기호와 소수점 기호는 지정한 언어에 맞는 형식으로 출력한다. 이때 언어는 **intl_number_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_number_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 해석하고 ","를 소수점 기호로 해석한다(:func:`TO_CHAR` 참고).
 
 	:param x,dec: 수치 값을 반환하는 임의의 연산식이다.
 	:rtype: STRING
@@ -350,7 +350,7 @@
 
 	*string* 에 유효하지 않은 날짜/시간 값이 포함되거나, *format* 에 지정된 형식 지정자를 적용하여 문자열을 해석할 수 없으면 에러를 리턴한다.
 
-	*format* 인자가 지정되면 지정된 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "%d %M %Y"인 경우 "3 Oktober 2009"인 문자열을 "2009년 10월 3일"인 **DATE** 타입으로 해석한다. **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+	*format* 인자가 지정되면 지정된 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "%d %M %Y"인 경우 "3 Oktober 2009"인 문자열을 "2009년 10월 3일"인 **DATE** 타입으로 해석한다. **intl_date_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 
 	인자의 연, 월, 일에는 0을 입력할 수 없으나, 예외적으로 날짜와 시간이 모두 0인 값을 입력한 경우에는 날짜와 시간 값이 모두 0인 **DATE**, **DATETIME** 타입의 값을 반환한다. 그러나 JDBC 프로그램에서는 연결 URL 속성인 zeroDateTimeBehavior의 설정에 따라 동작이 달라진다("API 레퍼런스 > JDBC API > JDBC 프로그래밍 > 연결 설정" 참고).
 
@@ -394,9 +394,9 @@
 
 	**참고 사항**
 
-	환경 변수인 **CUBRID_LANG** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_LANG** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
 
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_LANG** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
+	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_CHARSET** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
 .. function:: TIME_FORMAT (time, format)
 
@@ -406,7 +406,7 @@
 	:param format: 문자열 해석을 위한 형식을 지정한다. %를 포함하는 문자열을 형식 지정자(specifier)로 사용한다. :func:`DATE_FORMAT` 의 "날짜/시간 형식 2" 표를 참고한다.
 	:rtype: STRING
 	
-	*format* 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "%h:%i:%s %p"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+	*format* 인자가 지정되면 지정된 언어에 맞는 형식으로 날짜를 출력한다. 이때 언어는 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "%h:%i:%s %p"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. **intl_date_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 
 	다음은 시스템 파라미터 **intl_date_lang** 의 값이 "en_US"인 경우의 예이다.
 
@@ -440,9 +440,9 @@
 
 	**참고 사항**
 
-	환경 변수인 **CUBRID_LANG** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_LANG** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
 
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_LANG** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참조한다.
+	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_CHARSET** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참조한다.
 
 .. function:: TO_CHAR ( date_time [, format[, date_lang_string_literal ]] )
 
@@ -453,9 +453,9 @@
 	:param date_lang_string_literal: 리턴 값에 적용할 언어를 지정한다.
 	:rtype: STRING
 	
-	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *date_time* 을 출력한다(아래 "날짜/시간 형식 1" 표 참고). 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "HH:MI:SS AM"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *date_time* 을 출력한다(아래 "날짜/시간 형식 1" 표 참고). 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. 예를 들어 언어가 "de_DE"일 때 *format* 이 "HH:MI:SS AM"인 경우 "08:46:53 PM"인 시간을 "08:46:53 Nachm."으로 출력한다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 	
-	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_LANG** 에 의해 설정된 언어의 기본 출력 형식을 따라 *date_time* 을 문자열로 출력한다(아래 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고).
+	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_CHARSET** 에 의해 설정된 언어의 기본 출력 형식을 따라 *date_time* 을 문자열로 출력한다(아래 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고).
 
 	.. note:: CUBRID 9.0 미만 버전에서 사용되었던 **CUBRID_DATE_LANG** 환경 변수는 더 이상 사용되지 않는다.
 
@@ -615,12 +615,12 @@
 	|                         | 길이와 같음    | 길이와 같음    |
 	+-------------------------+----------------+----------------+
 
-	다음은 환경 변수 **CUBRID_LANG** 을 "en_US.iso88591"로 설정하여 생성한 데이터베이스에서 수행한 예이다.
+	다음은 환경 변수 **CUBRID_CHARSET** 을 "en_US.iso88591"로 설정하여 생성한 데이터베이스에서 수행한 예이다.
 
 	.. code-block:: sql
 	
 		--set the initial locale as en_US.iso88591
-		export CUBRID_LANG=en_US.iso88591
+		export CUBRID_CHARSET=en_US.iso88591
 		 
 		--creating a table having date/time type columns
 		CREATE TABLE datetime_tbl(a TIME, b DATE, c TIMESTAMP, d DATETIME);
@@ -667,7 +667,7 @@
 
 	**참고 사항**
 
-	환경 변수인 **CUBRID_LANG** 의 로캘 값을 "en_US"(CUBRID 제품 설치 시 **CUBRID_LANG** 의 초기 값)로 설정하고 "." 이하의 문자셋 정보를 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다. 즉, **CUBRID_LANG** 의 로캘 값으로 "en_US"를 설정하는 것과 "en_US.iso88591"을 설정하는 것은 같다.
+	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋 정보를 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다. 즉, **CUBRID_CHARSET** 의 로캘 값으로 "en_US"를 설정하는 것과 "en_US.iso88591"을 설정하는 것은 같다.
 
 	언어에 따라 월 이름, 일 이름, 요일 이름, 오전/오후 이름의 해석이 변경되는 함수에서 문자셋이 ISO-8859-1인 경우 "en_US" 외에 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다(위의 예 참고). 다만, 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 시스템 파라미터 **intl_date_lang** 을 설정하거나 **TO_CHAR** 함수의 언어 인자를 지정하여 CUBRID가 지원하는 모든 언어(위 구문의 *date_lang_string_literal* 참고) 중 하나로 변경할 수 있다. 언어에 따라 날짜/시간 형식의 해석이 변경되는 함수들의 목록은 시스템 파라미터 **intl_date_lang** 의 설명을 참고한다.
 
@@ -683,7 +683,7 @@
 		ERROR: before ' , 'Day Month yyyy','de_DE'); '
 		Locales for language 'de_DE' are not available with charset 'iso8859-1'.
 
-	다음은 환경 변수 **CUBRID_LANG** 을 "en_US.utf8"로 설정하고 생성한 데이터베이스에서 **TO_CHAR** 함수에 언어 인자를 "de_DE"로 지정하고 실행한 예이다.
+	다음은 환경 변수 **CUBRID_CHARSET** 을 "en_US.utf8"로 설정하고 생성한 데이터베이스에서 **TO_CHAR** 함수에 언어 인자를 "de_DE"로 지정하고 실행한 예이다.
 
 	.. code-block:: sql
 
@@ -702,9 +702,9 @@
 	:param number_lang_string_literal: 입력 숫자를 출력할 때 적용할 언어를 지정한다.
 	:rtype: STRING
 
-	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *number* 를 출력한다. 이때 언어는 *number_lang_string_literal* 인자에 의해 정해진다. *number_lang_string_literal* 인자가 생략되면 **intl_number_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_number_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 출력하고 ","를 소수점 기호로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *number* 를 출력한다. 이때 언어는 *number_lang_string_literal* 인자에 의해 정해진다. *number_lang_string_literal* 인자가 생략되면 **intl_number_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_number_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 출력하고 ","를 소수점 기호로 출력한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 
-	*format* 인자가 생략되면 **intl_number_lang** 또는 **CUBRID_LANG** 에 의해 설정된 언어의 기본 출력에 따라 *number* 를 문자열로 출력한다(아래 "언어별 숫자의 기본 출력" 표 참고).
+	*format* 인자가 생략되면 **intl_number_lang** 또는 **CUBRID_CHARSET** 에 의해 설정된 언어의 기본 출력에 따라 *number* 를 문자열로 출력한다(아래 "언어별 숫자의 기본 출력" 표 참고).
 
 	**숫자 형식**
 
@@ -760,7 +760,7 @@
 	| 중국어     | zh_CN            | ,(쉼표)          | .(마침표)   | 123,456,789.012  |
 	+------------+------------------+------------------+-------------+------------------+
 
-	다음은 환경 변수 **CUBRID_LANG** 의 로캘 값을 "en_US.utf8"로 설정하여 생성한 데이터베이스에서 수행한 예이다.
+	다음은 환경 변수 **CUBRID_CHARSET** 의 로캘 값을 "en_US.utf8"로 설정하여 생성한 데이터베이스에서 수행한 예이다.
 
 	.. code-block:: sql
 	
@@ -836,11 +836,11 @@
 	:param date_lang_string_literal: 입력 값에 적용할 언어를 지정한다.
 	:rtype: DATE
 	
-	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 예를 들어 언어가 "de_DE"일 때 *string* 이 "12.mai.2012"이고 *format* 이 "DD.mon.YYYY"인 경우 "2012년 5월 12일"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 예를 들어 언어가 "de_DE"일 때 *string* 이 "12.mai.2012"이고 *format* 이 "DD.mon.YYYY"인 경우 "2012년 5월 12일"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 
-	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_LANG** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 의 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고). 예를 들어 언어가 "de_DE"일 때 **DATE** 타입의 기본 *format* 은 "DD.MM.YYYY"이다.
+	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_CHARSET** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 의 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고). 예를 들어 언어가 "de_DE"일 때 **DATE** 타입의 기본 *format* 은 "DD.MM.YYYY"이다.
 	
-	다음은 환경 변수 **CUBRID_LANG** 을 "en_US"로 설정하여 수행하는 예이다.
+	다음은 환경 변수 **CUBRID_CHARSET** 을 "en_US"로 설정하여 수행하는 예이다.
 
 	.. code-block:: sql
 	
@@ -882,7 +882,7 @@
    
 	**참고 사항**
 
-	환경 변수인 **CUBRID_LANG** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_LANG** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_DATE** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
@@ -895,13 +895,13 @@
 	:param date_lang_string_literal: 입력 값에 적용할 언어를 지정한다.
 	:rtype: DATETIME
 	
-	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 예를 들어 언어가 "de_DE"일 때 *string* 이 "12/mai/2012 12:10:00 Nachm."이고 *format* 이 "DD/MON/YYYY HH:MI:SS AM"인 경우 "2012년 5월 12일 오후 12시 10분 0초"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다. 
+	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 예를 들어 언어가 "de_DE"일 때 *string* 이 "12/mai/2012 12:10:00 Nachm."이고 *format* 이 "DD/MON/YYYY HH:MI:SS AM"인 경우 "2012년 5월 12일 오후 12시 10분 0초"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다. 
 	
-	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_LANG** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 의 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고). 예를 들어 언어가 "de_DE"일 때 **DATETIME** 타입의 기본 *format* 은 "HH24:MI:SS.FF DD.MM.YYYY"이다.
+	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_CHARSET** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 의 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고). 예를 들어 언어가 "de_DE"일 때 **DATETIME** 타입의 기본 *format* 은 "HH24:MI:SS.FF DD.MM.YYYY"이다.
 
 	.. note:: CUBRID 9.0 미만 버전에서 사용되었던 **CUBRID_DATE_LANG** 환경 변수는 더 이상 사용되지 않는다.
 
-	다음은 환경 변수 **CUBRID_LANG** 의 로캘 값을 "en_US"로 설정하여 생성된 데이터베이스에서 수행하는 예이다.
+	다음은 환경 변수 **CUBRID_CHARSET** 의 로캘 값을 "en_US"로 설정하여 생성된 데이터베이스에서 수행하는 예이다.
 
 	.. code-block:: sql
 	
@@ -938,7 +938,7 @@
 
 	**참고 사항**
 
-	환경 변수인 **CUBRID_LANG** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_LANG** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_DATETIME** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
@@ -950,11 +950,11 @@
 	:param format: 숫자로 반환할 값의 형식을 지정하며, :func:`TO_CHAR` 의 숫자 형식 표를 참고한다. 값이 **NULL** 이면 결과로 **NULL** 이 반환된다.
 	:rtype: NUMERIC
 
-	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 해석하고 ","를 소수점 기호로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 예를 들어 언어가 "de_DE"나 "fr_FR"과 같은 유럽 국가의 언어이면 "."를 숫자의 자릿수 구분 기호로 해석하고 ","를 소수점 기호로 해석한다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 
-	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_LANG** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 함수의 "언어별 숫자의 기본 출력" 참고).
+	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_CHARSET** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 함수의 "언어별 숫자의 기본 출력" 참고).
 
-	다음은 환경 변수 **CUBRID_LANG** 의 로캘 값이 "en_US"인 데이터베이스에서 수행하는 예이다.
+	다음은 환경 변수 **CUBRID_CHARSET** 의 로캘 값이 "en_US"인 데이터베이스에서 수행하는 예이다.
 
 	.. code-block:: sql
 	
@@ -1003,13 +1003,13 @@
 	:param date_lang_string_literal: 입력 값에 적용할 언어를 지정한다.
 	:rtype: TIME
 
-	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 예를 들어 언어가 "de_DE"일 때 *string* 이 "10:23:00 Nachm."이고 *format* 이 "HH:MI:SS AM"인 경우 "오후 10시 23분 0초"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 예를 들어 언어가 "de_DE"일 때 *string* 이 "10:23:00 Nachm."이고 *format* 이 "HH:MI:SS AM"인 경우 "오후 10시 23분 0초"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 
-	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_LANG** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 의 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고). 예를 들어 언어가 "de_DE"일 때 **TIME** 타입의 기본 *format* 은 "HH24:MI:SS"이다.
+	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_CHARSET** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 의 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고). 예를 들어 언어가 "de_DE"일 때 **TIME** 타입의 기본 *format* 은 "HH24:MI:SS"이다.
 
 	.. note:: CUBRID 9.0 미만 버전에서 사용되었던 **CUBRID_DATE_LANG** 환경 변수는 더 이상 사용되지 않는다.
 
-	다음은 환경 변수 **CUBRID_LANG** 의 로캘 값을 "en_US"로 설정하여 생성된 데이터베이스에서 수행하는 예이다.
+	다음은 환경 변수 **CUBRID_CHARSET** 의 로캘 값을 "en_US"로 설정하여 생성된 데이터베이스에서 수행하는 예이다.
 
 	.. code-block:: sql
 	
@@ -1050,7 +1050,7 @@
 
 	**참고 사항**
 
-	환경 변수인 **CUBRID_LANG** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_LANG** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_TIME** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
@@ -1063,11 +1063,11 @@
 	:param date_lang_string_literal: 입력 값에 적용할 언어를 지정한다.
 	:rtype: TIMESTAMP
 
-	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 예를 들어 언어가 "de_DE"일 때 *string* 이 "12/mai/2012 12:10:00 Nachm."이고 *format* 이 "DD/MON/YYYY HH:MI:SS AM"인 경우 "2012년 5월 12일 오후 12시 10분 0초"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_LANG** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
+	*format* 인자가 지정되면 지정한 언어에 맞는 형식으로 *string* 을 해석한다. 예를 들어 언어가 "de_DE"일 때 *string* 이 "12/mai/2012 12:10:00 Nachm."이고 *format* 이 "DD/MON/YYYY HH:MI:SS AM"인 경우 "2012년 5월 12일 오후 12시 10분 0초"로 해석한다. 이때 언어는 *date_lang_string_literal* 인자에 의해 정해진다. *date_lang_string_literal* 인자가 생략되면 **intl_date_lang** 시스템 파라미터에 지정한 언어가 적용되며, **intl_date_lang** 값의 설정이 생략되면 **CUBRID_CHARSET** 환경변수에 지정한 언어가 적용된다. 주어진 문자열과 대응하지 않는 *format* 인자가 지정되면 에러를 반환한다.
 
-	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_LANG** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 의 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고). 예를 들어 언어가 "de_DE"일 때 **DATETIME** 타입의 기본 *format* 은 "HH24:MI:SS.FF DD.MM.YYYY"이다.
+	*format* 인자가 생략되면 **intl_date_lang** 또는 **CUBRID_CHARSET** 에 의해 설정된 언어의 기본 출력 형식을 따라 *string* 을 해석한다(:func:`TO_CHAR` 의 "날짜/시간 타입에 대한 언어별 기본 출력 형식" 표 참고). 예를 들어 언어가 "de_DE"일 때 **DATETIME** 타입의 기본 *format* 은 "HH24:MI:SS.FF DD.MM.YYYY"이다.
 
-	다음은 환경 변수 **CUBRID_LANG** 값을 "en_US"로 설정하여 생성된 데이터베이스에서 수행하는 예이다.
+	다음은 환경 변수 **CUBRID_CHARSET** 값을 "en_US"로 설정하여 생성된 데이터베이스에서 수행하는 예이다.
 
 	.. code-block:: sql
 	
@@ -1104,6 +1104,6 @@
   
 	**참고 사항**
 
-	환경 변수인 **CUBRID_LANG** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_LANG** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
 
 	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_TIMESTAMP** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.

@@ -296,7 +296,7 @@ The input format of **TIME** is as follows: ::
 TIMESTAMP
 ---------
 
-The **TIMESTAMP** data type is used to represent a data value in which the date (year, month, date) and time (hour, minute, second) are combined. The range of representable value is between GMT 1970-01-01 00:00:01 and 2038-01-19 03:14:07. The **DATETIME** type can be used if the value is out of range or data in milliseconds is stored. The input format of **TIMESTAMP** is as follows: ::
+The **TIMESTAMP** data type is used to represent a data value in which the date (year, month, date) and time (hour, minute, second) are combined. The range of representable value is between GMT '1970-01-01 00:00:01' and '2038-01-19 03:14:07'. The **DATETIME** type can be used if the value is out of range or data in milliseconds is stored. The input format of **TIMESTAMP** is as follows: ::
  
 	timestamp'hh:mi [:ss] [am|pm] mm/dd [/yyyy]'
 	timestamp'hh:mi [:ss] [am|pm] [yyyy-]mm-dd'
@@ -310,7 +310,7 @@ The **TIMESTAMP** data type is used to represent a data value in which the date 
 *   You can store the timestamp value of the system in the **TIMESTAMP** type by using the :func:`SYS_TIMESTAMP` (or :func:`SYSTIMESTAMP`, :func:`CURRENT_TIMESTAMP`) function. Note that the timestamp value is specified as a default value at the time of creating the table, not at the time of **INSERT** the data, if :func:`SYS_TIMESTAMP` is specified as a **DEFAULT** value for a **TIMESTAMP** column when creating a table.
 
 *   The :func:`TIMESTAMP` or :func:`TO_TIMESTAMP` function is used to cast a character string type into a **TIMESTAMP** type.
-*   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception.
+*   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception. GMT timestamp'1970-01-01 12:00:00 AM' or KST timestamp'1970-01-01 09:00:00 AM' is translated into timestamp'0000-00-00 00:00:00'.
 
 **Example** ::
 
@@ -366,7 +366,7 @@ CASTing a String to Date/Time Type
 
 **Recommended Format for Strings in Date/Time Type**
 
-When you casting a string to Date/Time type by using the :func:`CAST` function, it is recommended to write the string in the following format: Note that date/time string formats used in the :func:`CAST` function are not affected by locale (which is specified as the **CUBRID_LANG** environment variable).
+When you casting a string to Date/Time type by using the :func:`CAST` function, it is recommended to write the string in the following format: Note that date/time string formats used in the :func:`CAST` function are not affected by locale (which is specified as the **CUBRID_CHARSET** environment variable).
 
 *   **DATE** Type ::
 
@@ -727,7 +727,7 @@ The followings are the rules that are applied when using the character string ty
 
 	N'Härder'
 
-  However, to enter the language of a specific country, we recommend that you to change the locale by using the **CUBRID_LANG** environment variable or introducer **CHARSET** (or **COLLATE** modifier) or by using the general string type (**VARCHAR** or **CHAR**) instead of the country string type. For a more detailed description, see :doc:`/admin/i18n`.
+  However, to enter the language of a specific country, we recommend that you to change the locale by using the **CUBRID_CHARSET** environment variable or introducer **CHARSET** (or **COLLATE** modifier) or by using the general string type (**VARCHAR** or **CHAR**) instead of the country string type. For a more detailed description, see :doc:`/admin/i18n`.
 
 For a **CHAR** or **VARCHAR** type, specify the length (bytes) of a character string for a **NCHAR** or **NCHAR VARYING** type, specify the number of character strings (number of characters).
 When the length of the character string entered exceeds the length specified, the characters in excess of the specified length are truncated.
@@ -740,7 +740,7 @@ The maximum length of a **CHAR** or **VARCHAR** type to be specified is 1,073,74
 
 A character set (charset) is a set in which rules are defined that relate to what kind of codes can be used for encoding when specified characters (symbols) are stored in the computer.
 
-The characted used by CUBRID can be configued as the **CUBRID_LANG** environment variable. For details, see :doc:`/admin/i18n`.
+The characted used by CUBRID can be configued as the **CUBRID_CHARSET** environment variable. For details, see :doc:`/admin/i18n`.
 
 **Collating Character Sets**
 
@@ -821,7 +821,7 @@ NCHAR(n)
 
 **NCHAR** (*n*) is used to store non-English character strings. It can be used only for character sets supported by CUBRID described above. n is the number of characters. If *n* is omitted, the length is specified as the default value 1. When the length of a character string exceeds *n*, they are truncated. When character string which is shorter than *n* is stored, whitespace characters are used to fill up the  space.
 
-To store a Korean character string as a national character string type, you must set the locale of the operating system to Korean, or set the value of the **CUBRID_LANG** environment variable to **ko_KR.euckr** before creating the table.
+To store a Korean character string as a national character string type, you must set the locale of the operating system to Korean, or set the value of the **CUBRID_CHARSET** environment variable to **ko_KR.euckr** before creating the table.
 
 .. note:: In the earlier versions of CUBRID 9.0, *n* represents bite length, not the number of characters.
 
@@ -870,7 +870,7 @@ If you set **no** for the system parameter **ansi_quotes** in the **cubrid.conf*
 
 **Escape with Backslash**
 
-You can use escape using backslash (\) only if you set no for the system parameter **no_backslash_escapes** in the **cubrid.conf** file. The default value for the **no_backslash_escapes** parameter is **yes**. Depending on the input value, the following are the special characters.
+You can use escape using backslash (\) only if you set no for the system parameter **no_backslash_escapes** in the **cubrid.conf** file. The default value for the **no_backslash_escapes** parameter is **yes**. If the value of **no_backslash_escapes** is **no**, the following are the special characters.
 
 *   \\' : Single quotes (')
 *   \\" : Double quotes (")

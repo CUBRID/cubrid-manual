@@ -21,6 +21,7 @@ CUBRID 관리 유틸리티의 사용법(구문)은 다음과 같다. ::
 		addvoldb [option] <database-name>  --- 데이터베이스 볼륨 파일 추가
 		spacedb [option] <database-name>  --- 데이터베이스 공간 정보 출력
 		lockdb [option] <database-name>  --- 데이터베이스의 lock 정보 출력
+		tranlist [option] <database-name>  --- 트랜잭션 확인
 		killtran [option] <database-name>  --- 트랜잭션 제거
 		optimizedb [option] <database-name>  --- 데이터베이스 통계 정보 갱신
 		statdump [option] <database-name>  --- 데이터베이스 서버 실행 통계 정보 출력
@@ -814,7 +815,7 @@ CUBRID의 질의 최적화기가 사용하는 테이블에 있는 객체들의 �
 
 **cubrid statdump** 유틸리티를 이용해 CUBRID 데이터베이스 서버가 실행한 통계 정보를 확인할 수 있으며, 통계 정보 항목은 크게 File I/O 관련, 페이지 버퍼 관련, 로그 관련, 트랜잭션 관련, 동시성 관련, 인덱스 관련, 쿼리 수행 관련, 네트워크 요청 관련으로 구분된다. 
 
-단, 유틸리티 실행 전에 **cubrid.conf** 파일에 **communication_histogram** 파라미터를 **yes** 로 설정해야 한다. 또한, csql에서 세션 명령어( **;.h on** )을 이용하여 서버의 통계 정보를 확인할 수 있다. ::
+또한, csql에서 세션 명령어( **;.h on** )을 이용하여 서버의 통계 정보를 확인할 수 있다. 단, 유틸리티 실행 전에 **cubrid.conf** 파일에 **communication_histogram** 파라미터를 **yes** 로 설정하거나, csql에서 ";se communication_histogram=yes"를 실행해야 한다. ::
 	
 	cubrid statdump [options] database_name
 	
@@ -830,9 +831,25 @@ CUBRID의 질의 최적화기가 사용하는 테이블에 있는 객체들의 �
 
 .. option:: -i, --interval=SECOND
 
-	실행 통계 정보를 초 단위로 주기적으로 출력한다.
+	지정한 초 단위로 주기적으로 출력한다. **-i** 옵션이 주어질 때만 정보가 갱신된다.
 	
-	::
+	다음은 1초마다 누적된 정보 값을 출력한다. ::
+	
+		cubrid statdump -i 1 -c demodb
+		
+	다음은 1초 마다 0으로 리셋하고 1초 동안 누적된 값을 출력한다. ::
+	
+		cubrid statdump -i 1 demodb
+		
+	다음은 -i 옵션으로 가장 마지막에 실행한 값을 출력한다. ::
+	
+		cubrid statdump demodb
+		
+	다음은 위와 같은 결과를 출력한다. **-c** 옵션은 **-i** 옵션과 같이 쓰이지 않으면 옵션을 설정하지 않은 것과 동일하다.
+	
+		cubrid statdump -c demodb
+
+	다음은 5초마다 결과를 출력한다. ::
 
 		cubrid statdump -i 5 testdb
 		 
@@ -1294,6 +1311,71 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 		 
 			 t10
 
+.. _tranlist:
+
+데이터베이스 트랜잭션 확인
+==========================
+
+**cubrid tranlist** 는 대상 데이터베이스의 트랜잭션 정보를 확인하는 유틸리티로서, DBA 또는 DBA그룹 사용자만 수행할 수 있다. ::
+
+	cubrid tranlist [options] database_name
+
+옵션을 생략하면 각 트랜잭션에 대한 전체 정보를 출력한다. 
+
+"cubrid tranlist demodb"는 "cubrid killtran -q demodb"와 비슷한 결과를 출력하나, 후자에 비해 "User name"과 "Host name"을 더 출력한다.
+"cubrid tranlist -s demodb"는 "cubrid killtran -d demodb"와 동일한 결과를 출력한다.
+
+다음은 **cubrid tranlist** 에 대한 [options]이다.
+
+.. program:: tranlist
+
+.. option:: -u, --user=USER
+
+	로그인할 사용자 ID. DBA및 DBA그룹 사용자만 허용한다.(기본값 : DBA)
+	
+.. option:: -p, --password=PASSWORD
+
+	사용자 비밀번호
+	
+.. option:: -s, --summary
+
+	요약 정보만 출력한다(질의 수행 정보 또는 잠금 관련 정보를 생략).
+
+	::
+	
+		$ cubrid tranlist demodb
+		
+		Tran index         User name      Host name      Process id    Program name              Query time    Tran time              Wait for lock holder      SQL_ID       SQL Text
+		---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		   1(ACTIVE)         PUBLIC          myhost           20080    query_editor_cub_cas_1          0.00         0.00                              -1     *** empty ***
+		   2(ACTIVE)         PUBLIC          myhost           20082    query_editor_cub_cas_3          0.00         0.00                              -1     *** empty ***
+		   3(ABORTED)        PUBLIC          myhost           20081    query_editor_cub_cas_2          0.00         0.00                              -1     *** empty ***
+		   4(ACTIVE)         PUBLIC          myhost           20083    query_editor_cub_cas_4          1.80         1.80                         2, 3, 1     cdcb58552e320   update [ta] [ta] set [ta].[a]=
+		---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		Tran index : 2
+		update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
+	
+	::
+	
+		$ cubrid tranlist -s tdb
+		
+		Tran index         User name      Host name      Process id              Program name
+		-------------------------------------------------------------------------------------
+		   1(ACTIVE)         PUBLIC          myhost            1822         broker1_cub_cas_1
+		   2(ACTIVE)            dba          myhost            1823         broker1_cub_cas_2
+		   3(COMMITTED)         dba          myhost            1824         broker1_cub_cas_3
+		-------------------------------------------------------------------------------------
+	
+	**tran index에 보여지는 transaction 상태 메시지**
+	
+		* ACTIVE : 활성
+		* RECOVERY : 복구중인 트랜젝션
+		* COMMITTED : 커밋완료되어 종료될 트랜젝션
+		* COMMITTING : 커밋중인 트랜젝션
+		* ABORTED : 롤백되어 종료될 트랜젝션
+		* KILLED : 서버에 의해 강제 종료 중인 트랜잭션
+
 .. _killtran:
 
 데이터베이스 트랜잭션 제거
@@ -1309,40 +1391,40 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 *   *database_name*: 대상 데이터베이스의 이름이다.
 
-[options]에 따라 특정 트랜잭션을 지정하여 제거하거나, 현재 활성화된 트랜잭션을 화면 출력할 수 있다. 옵션이 지정되지 않으면, **-d** 옵션이 기본으로 적용되어 모든 트랜잭션을 화면 출력한다.
+[options]에 따라 특정 트랜잭션을 지정하여 제거하거나, 현재 활성화된 트랜잭션을 화면 출력할 수 있다. 옵션이 지정되지 않으면, **-d** 옵션이 기본으로 적용되어 모든 트랜잭션을 화면 출력하며, cubrid tranlist 명령에 **-s** 옵션을 준 것과 동일하다.
 
 ::
 
-	cubrid killtran testdb 
+	$ cubrid killtran testdb 
 	 
 	Tran index      User name   Host name      Process id      Program name
 	-------------------------------------------------------------------------------
-		  1(+)            dba      myhost             664           cub_cas
-		  2(+)            dba      myhost            6700              csql
-		  3(+)            dba      myhost            2188           cub_cas
-		  4(+)            dba      myhost             696              csql
-		  5(+)         public      myhost            6944              csql
+	   1(ACTIVE)          dba      myhost             664           cub_cas
+	   2(ACTIVE)          dba      myhost            6700              csql
+	   3(ACTIVE)          dba      myhost            2188           cub_cas
+	   4(ACTIVE)          dba      myhost             696              csql
+	   5(ACTIVE)       public      myhost            6944              csql
 	-------------------------------------------------------------------------------
-
 
 다음은 **cubrid killtran** 에 대한 [options]이다.
 
 .. program:: killtran
 
-.. option:: -i, --kill-transation-index=INDEX
+.. option:: -i, --kill-transation-index=ID1,ID2,ID3
 
-	지정한 인덱스에 해당하는 트랜잭션을 제거한다.  ::
+	지정한 인덱스에 해당하는 트랜잭션을 제거한다.  쉼표(,)로 구분하여 제거하고자 하는 트랜잭션 ID 여러 개를 지정할 수 있다. 제거할 트랜잭션 리스트에 유효하지 않은 트랜잭션 ID가 지정되면 무시된다.::
 
-		cubrid killtran -i 1 testdb
-		 
+		$ cubrid killtran -i 1,2 demodb
 		Ready to kill the following transactions:
-		 
-		Tran index      User name      Host name      Process id      Program name
+
+		Tran index          User name      Host name      Process id      Program name
 		-------------------------------------------------------------------------------
-			  1(+)            dba      myhost            4760              csql
+		   1(ACTIVE)              DBA    cdbs006.cub           15771              csql
+		   2(ACTIVE)              DBA    cdbs006.cub            2171              csql
 		-------------------------------------------------------------------------------
 		Do you wish to proceed ? (Y/N)y
 		Killing transaction associated with transaction index 1
+		Killing transaction associated with transaction index 2
 
 .. option:: --kill-user-name=ID
 
@@ -1362,54 +1444,62 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 		cubrid killtran --kill-program-name=cub_cas testdb
 
-.. option:: -p PASSWORD
+.. option:: --kill-sql-id=SQL_ID
+		
+	지정한 SQL ID에 해당하는 트랜잭션을 제거한다. ::
 
-	**-p** 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
+		cubrid killtran --kill-sql-id=5377225ebc75a testdb
+		
+		
+.. option:: -p, --dba-password=PASSWORD
+
+	이 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
 
 .. option:: -d, --display
 
-	기본 지정되는 옵션으로 모든 트랜잭션의 정보를 출력한다. 
+	기본 지정되는 옵션으로 트랜잭션의 요약 정보를 출력한다. 아래의 예는 cubrid tranlist -s demodb를 실행한 것과 동일한 결과를 출력한다.
 		
 	::
 	
-		cubrid killtran -d testdb
-		 
+		$ cubrid killtran -d testdb 
+				 
 		Tran index      User name      Host name      Process id      Program name
 		-------------------------------------------------------------------------------
-			  2(+)            dba      myhost            6700              csql
-			  3(+)            dba      myhost            2188           cub_cas
-			  4(+)            dba      myhost             696              csql
-			  5(+)         public      myhost            6944              csql
+		  2(ACTIVE)           dba         myhost            6700              csql
+		  3(ACTIVE)           dba         myhost            2188           cub_cas
+		  4(ACTIVE)           dba         myhost             696              csql
+		  5(ACTIVE)        public         myhost            6944              csql
 		-------------------------------------------------------------------------------
 
 .. option:: -q, --query-exec-info
 
-	트랜잭션의 질의 수행 상태를 출력한다. 상태 정보를 출력하는 예는 다음과 같다.
+	SQL Text를 포함하여 트랜잭션의 질의 수행 상태를 출력한다. 상태 정보를 출력하는 예는 다음과 같다. 출력 정보 중 SQL_ID는 --kill-sql-id 옵션에서 사용될 수 있다.
 
 	::
 
-		cubrid killtran --query-exec-info testdb
+		$ cubrid killtran --query-exec-info testdb
 		 
-		Tran index Process id Program name Query time Tran time  Wait for lock holder   SQL Text
-		---------------------------------------------------------------------------------------------
-			  1(+)       8536    b1_cub_cas_1    0.00      0.00  -1                     *** empty ***
-			  2(+)       8538    b1_cub_cas_3    0.00      0.00  -1                     *** empty ***
-			  3(+)       8537    b1_cub_cas_2    0.00      0.00  -1                     *** empty ***
-			  4(+)       8543    b1_cub_cas_4    1.80      1.80  3, 2, 1                update [ta] [ta] set [a]=5 wher
-			  5(+)       8264    b1_cub_cas_5    0.00      0.60  -1                     *** empty ***
-			  6(+)       8307    b1_cub_cas_6    0.00      0.00  -1                     select [a].[index_name], ( cast
-			  7(+)       8308    b1_cub_cas_7    0.00      0.20  -1                     select [a].[index_name], ( cast
-			  .....
+		Tran index   Process id  Program name  Query time Tran time  Wait for lock holder         SQL_ID     SQL Text
+		-------------------------------------------------------------------------------------------------------------------
+		  1(ACTIVE)      8536    b1_cub_cas_1        0.00      0.00  -1                                      *** empty ***
+		  2(ACTIVE)      8538    b1_cub_cas_3        0.00      0.00  -1                                      *** empty ***
+		  3(ACTIVE)      8537    b1_cub_cas_2        0.00      0.00  -1                                      *** empty ***
+		  4(ACTIVE)      8543    b1_cub_cas_4        1.80      1.80  3, 2, 1               5377225ebc75a     update [ta] [ta] set [a]=5 wher
+		  5(ACTIVE)      8264    b1_cub_cas_5        0.00      0.60  -1                                      *** empty ***
+		  6(ACTIVE)      8307    b1_cub_cas_6        0.00      0.00  -1                    cdcb58552e320     select [a].[index_name], ( cast
+		  7(ACTIVE)      8308    b1_cub_cas_7        0.00      0.20  -1                    cdcb58552e320     select [a].[index_name], ( cast
+		  .....
 		 
 		---------------------------------------------------------------------------------------------
 
-	* Tran index : 트랜잭션 인덱스
-	* Process id : 클라이언트 프로세스 ID
-	* Program name : 클라이언트 프로그램 이름
-	* Query time : 수행중인 질의의 총 수행 시간(단위: 초)
-	* Tran time : 현재 트랜잭션의 총 수행 시간(단위: 초)
-	* Wait for lock holder : 현재 트랜잭션이 락 대기중이면 해당 락을 소유하고 있는 트랜잭션의 리스트
-	* SQL Text : 수행중인 질의문(최대 30자)
+	* Tran index: 트랜잭션 인덱스
+	* Process id: 클라이언트 프로세스 ID
+	* Program name: 클라이언트 프로그램 이름
+	* Query time: 수행중인 질의의 총 수행 시간(단위: 초)
+	* Tran time: 현재 트랜잭션의 총 수행 시간(단위: 초)
+	* Wait for lock holder: 현재 트랜잭션이 락 대기중이면 해당 락을 소유하고 있는 트랜잭션의 리스트
+	* SQL ID: SQL Text에 대한 ID
+	* SQL Text: 수행중인 질의문(최대 30자)
 
 	위와 같이 트랜잭션 전체 정보가 출력된 후, 잠금 대기를 유발한 질의문이 다음과 같이 출력된다.
 

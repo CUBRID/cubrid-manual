@@ -40,8 +40,9 @@ CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구
 
 	cubrid broker <command> 
 	<command>: {start|stop|restart|status [broker_name] 
+	           |info
 	           |on broker_name |off broker_name 
-			   |reset broker_name |acl{status|reload} broker_name }
+	           |reset broker_name |acl{status|reload} broker_name }
 
 CUBRID 매니저 서버 제어
 -----------------------
@@ -249,10 +250,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 	Server demodb (rel 9.0, pid 30950)
 
 	@ cubrid broker status
-	% query_editor - cub_cas [15464,40000] /home1/cubrid1/CUBRID/log/broker//query_editor.access /home1/cubrid1/CUBRID/log/broker//query_editor.err
-	JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000
-	LONG_TRANSACTION_TIME:60.00, LONG_QUERY_TIME:60.00, SESSION_TIMEOUT:300
-	KEEP_CONNECTION:AUTO, ACCESS_MODE:RW
+	% query_editor
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -555,7 +553,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 ::
 
-	% cubrid broker start
+	$ cubrid broker start
 	@ cubrid broker start
 	++ cubrid broker start: success
 
@@ -574,7 +572,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 ::
 
-	% cubrid broker stop
+	$ cubrid broker stop
 	@ cubrid broker stop
 	++ cubrid broker stop: success
 
@@ -582,7 +580,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 ::
 
-	% cubrid broker stop
+	$ cubrid broker stop
 	@ cubrid broker stop
 	++ cubrid broker is not running.
 
@@ -593,8 +591,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 ::
 
-	% cubrid broker restart
-
+	$ cubrid broker restart
 
 브로커 상태 확인
 ----------------
@@ -642,13 +639,9 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 ::
 
-	% cubrid broker status
-	
+	$ cubrid broker status
 	@ cubrid broker status
-	% query_editor  - cub_cas [28433,30000] /home/CUBRID/log/broker/query_editor.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% query_editor
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -658,10 +651,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 	 4 28437     0     0 50140 IDLE
 	 5 28438     0     0 50144 IDLE
 	 
-	% broker1  - cub_cas [28443,30000] /home/CUBRID/log/broker/broker1.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% broker1
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -672,78 +662,43 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 	 5 28448     0     0 50144 IDLE
 	 
 *   % query_editor: 브로커의 이름
-
-*   cub_cas: 브로커 응용 서버(CAS)를 나타냄
-
-*   [28433, 30000]: 브로커 프로세스 ID와 브로커 접속 포트 번호
-
-*   /home/CUBRID/log/broker/query_editor.access: query_editor의 접속 로그 파일의 위치 정보
-
-*   JOB QUEUE: 작업 큐에 대기 중인 작업 개수
-
-*   AUTO_ADD_APPL_SERVER: 자동으로 CAS가 추가되도록 **cubrid_broker.conf** 의 AUTO_ADD_APPL_SERVER 파라미터 값이 ON이다.
-
-*   SQL_LOG_MODE: 모든 SQL에 대해 로그를 기록하기 위해 **cubrid_broker.conf** 파일의 SQL_LOG 파라미터 값을 ALL로 지정하였다.
-
-*   SLOW_LOG: 장기 실행 질의문 또는 에러가 발생한 질의문을 SLOW SQL LOG 파일에 기록하기 위해 **cubrid_broker.conf** 파일의 SLOW_LOG 파라미터 값을 ON으로 지정하였다.
-
-*   LONG_TRANSACTION_TIME: 장기 실행(long-duration) 트랜잭션으로 판단하는 트랜잭션의 실행 시간. 트랜잭션의 실행시간이 60초를 넘으면 장기 실행 트랜잭션이다.
-
-*   LONG_QUERY_TIME: 장기 실행 질의(long-duration query)으로 판단하는 질의의 실행 시간. 질의의 실행 시간이 60초를 넘으면 장기 실행 질의이다.
-
-*   SESSION_TIMEOUT: 트랜잭션 시작 이후 커밋 혹은 롤백하지 않은 채로 아무런 요청이 없는 상태의 CAS 세션을 종료하기 위한 타임아웃 값. 이 상태에서 이 시간을 초과하면 응용 클라이언트와 CAS 간의 접속이 종료된다. **cubrid_broker.conf** 의 SESSION_TIMEOUT 파라미터 값이 300(초)이다.
-
-*   KEEP_CONNECTION: CAS와 클라이언트의 연결이 AUTO가 되도록 **cubrid_broker.conf** 파일의 KEEP_CONNECTION 파라미터 값을 AUTO로 지정하였다.
-
-*   ACCESS_MODE: 브로커의 동작 모드. RW는 데이터베이스 조회 뿐만 아니라 수정도 가능한 모드이다.
-
-*   MAX_QUERY_TIMEOUT: 질의 수행의 타임아웃 시간. 설정한 시간을 초과하면 수행되던 질의가 롤백된다. 이 값이 0인 경우 시간 제한이 없음을 의미한다.
-
 *   ID: 브로커 내에서 순차적으로 부여한 CAS의 일련 번호
-
 *   PID: 브로커 내 CAS 프로세스의 ID
-
 *   QPS: 초당 처리된 질의의 수
-
 *   LQS: 초당 처리되는 장기 실행 질의의 수
-
 *   PSIZE: CAS 프로세스 크기
-
 *   STATUS: CAS의 현재 상태로서, BUSY/IDLE/CLIENT_WAIT/CLOSE_WAIT가 있다.
 
-브로커에 관한 상태 정보를 확인하려면 다음과 같이 입력한다.
+브로커에 관해 5초 간격으로 상세한 상태 정보를 확인하려면 다음과 같이 입력한다. 화면이 5초 간격마다 새로운 상태 정보로 갱신되며, 상태 정보 화면을 벗어나려면 <Q>를 누른다.
 
 ::
 
-	% cubrid broker status -b
-	
+	$ cubrid broker status -b -s 5
 	@ cubrid broker status
-	  NAME           PID  PORT  AS  JQ      REQ  TPS  QPS  LONG-T  LONG-Q ERR-Q
-	===========================================================================
-	* query_editor  4094 30000   5   0        0    0    0    0/60    0/60    0
-	* broker1       4104 33000   5   0        0    0    0    0/60    0/60    0
 
+	 NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT
+	=================================================================================================================================================================================================
+	* query_editor         13200 30000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0
+	* broker1              13269 33000     5    0                   70                   60       10       20       10       10       10     0/60.0     0/60.0            30            10       213
+	
 *   NAME: 브로커 이름
-
 *   PID: 브로커의 프로세스 ID
-
 *   PORT: 브로커의 포트 번호
-
 *   AS: CAS 개수
-
 *   JQ: 작업 큐에서 대기 중인 작업 개수
-
 *   REQ: 브로커가 처리한 클라이언트 요청 개수
-
-*   TPS: 초당 처리된 트랜잭션의 수(옵션이 "-b -s < sec >"일 때만 계산)
-
-*   QPS: 초당 처리된 질의의 수(옵션이 "-b -s < sec >"일 때만 계산)
-
-*   LONG-T: LONG_TRANSACTION_TIME 시간을 초과한 트랜잭션 수 / LONG_TRANSACTION_TIME 파라미터의 값
-
-*   LONG-Q: LONG_QUERY_TIME 시간을 초과한 질의의 수 / LONG_QUERY_TIME 파라미터의 값
-
-*   ERR-Q: 에러가 발생한 질의의 수
+*   TPS: 초당 처리된 트랜잭션의 수(옵션이 "-b -s <sec>"일 때만 해당 구간 계산)
+*   QPS: 초당 처리된 질의의 수(옵션이 "-b -s <sec>"일 때만 해당 구간 계산)
+*   SELECT: 브로커 시작 이후 SELECT 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 SELECT 개수로 매번 갱신됨. 
+*   INSERT: 브로커 시작 이후 INSERT 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 INSERT 개수로 매번 갱신됨.
+*   UPDATE: 브로커 시작 이후 UPDATE 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 UPDATE 개수로 매번 갱신됨.
+*   DELETE: 브로커 시작 이후 DELETE 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 DELETE 개수로 매번 갱신됨.
+*   OTHERS: 브로커 시작 이후 SELECT, INSERT, UPDATE, DELETE를 제외한 CREATE, DROP 등의 질의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 질의 개수로 매번 갱신됨. 
+*   LONG-T: LONG_TRANSACTION_TIME 시간을 초과한 트랜잭션 개수 / LONG_TRANSACTION_TIME 파라미터의 값. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 트랜잭션 개수로 매번 갱신됨.
+*   LONG-Q: LONG_QUERY_TIME 시간을 초과한 질의의 개수 / LONG_QUERY_TIME 파라미터의 값. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 질의 개수로 매번 갱신됨.
+*   ERR-Q: 에러가 발생한 질의의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 에러 개수로 매번 갱신됨.
+*   UNIQUE-ERR-Q: 고유 키 에러가 발생한 질의의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 고유 키 에러 개수로 매번 갱신됨.
+*   #CONNECT: 브로커 시작 후 응용 클라이언트가 CAS에 접속한 회수.
 
 **-q** 옵션을 이용하여 broker1을 포함하는 이름을 가진 브로커의 상태 정보를 확인하고, 해당 브로커의 작업 큐에 대기 중인 작업 상태를 확인하기 위하여 다음과 같이 입력한다. 인수로 broker1을 입력하지 않으면 모든 브로커에 대하여 작업 큐에 대기 중인 작업 리스트가 출력된다.
 
@@ -751,10 +706,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 	% cubrid broker status -q broker1
 	@ cubrid broker status
-	% broker1  - cub_cas [28443,40821] /home/CUBRID/log/broker/broker1.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% broker1
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -769,10 +721,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 ::
 
 	% cubrid broker status -s 5 broker1
-	% broker1  - cub_cas [28443,40821] /home/CUBRID/log/broker/broker1.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% broker1
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -788,7 +737,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 	% cubrid broker status -b -t -s 1 > log_file
 
-**-b** 옵션과 **-s** 옵션을 이용하여 모든 브로커의 TPS와 QPS를 포함한 상태 모니터링을 주기적으로 수행할 경우 다음과 같이 입력한다.
+**-b** 옵션과 **-s** 옵션을 이용하여 모든 브로커의 질의 개수, TPS와 QPS를 포함한 상태 모니터링을 주기적으로 수행할 경우 다음과 같이 입력한다.
 
 ::
 
@@ -804,10 +753,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
 	$ cubrid broker status -f broker1
 	@ cubrid broker status
-	% broker1  - cub_cas [28443,40821] /home/CUBRID/log/broker/broker1.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% broker1 
 	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS         LAST ACCESS TIME      DB       HOST   LAST CONNECT TIME       CLIENT IP   SQL_LOG_MODE   TRANSACTION STIME # CONNECT # RESTART
 	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -820,21 +766,13 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 각 칼럼에 대한 설명은 다음과 같다.
 
 *   LAST ACCESS TIME: CAS가 구동한 시각 또는 응용 클라이언트의 CAS에 최근 접속한 시각
-
 *   DB: CAS의 최근 접속 데이터베이스 이름
-
 *   HOST: CAS의 최근 접속 호스트 이름
-
 *   LAST CONNECT TIME: CAS의 DB 서버 최근 접속 시각
-
 *   CLIENT IP: 현재 CAS에 접속 중인 응용 클라이언트의 IP 주소. 현재 접속 중인 응용 클라이언트가 없으면 0.0.0.0으로 출력
-
 *   SQL_LOG_MODE: CAS의 SQL 로그 기록 모드. 브로커에 설정된 모드와 동일한 경우 "-"으로 출력
-
 *   TRANSACTION STIME: 트랜잭션 시작 시간
-
 *   # CONNECT: 브로커 시작 후 응용 클라이언트가 CAS에 접속한 회수
-
 *   # RESTART: 브로커 시작 후 CAS의 재구동 회수
 
 **-b** 옵션과 **-f** 옵션을 이용하여 AS(T W B Ns-W Ns-B), CANCELED 정보를 출력한다.
@@ -880,18 +818,13 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 	…
 
 *   <broker_name>: 브로커 이름. **cubrid_broker.conf** 에서 지정한 브로커 이름 중 하나이다.
-
 *   <db_name>: 데이터베이스 이름. \*로 지정하면 모든 데이터베이스를 허용한다.
-
 *   <db_user>: 데이터베이스 사용자 ID. \*로 지정하면 모든 데이터베이스 사용자 ID를 허용한다.
-
 *   <ip_list_file>: 접속 가능한 IP 목록을 저장한 파일의 이름. ip_list_file1, ip_list_file2, …와 같이 파일 여러 개를 쉼표(,)로 구분하여 지정할 수 있다.
 
 브로커별로 [%<broker_name>]과 <db_name>:<db_user>:<ip_list_file>을 추가 지정할 수 있으며, 같은 <db_name>, 같은 <db_user>에 대해 별도의 라인으로 추가 지정할 수 있다.
 
-ip_list_file의 작성 형식은 다음과 같다.
-
-::
+ip_list_file의 작성 형식은 다음과 같다. ::
 
 	<ip_addr>
 	…
@@ -900,9 +833,7 @@ ip_list_file의 작성 형식은 다음과 같다.
 
 **ACCESS_CONTROL** 값이 ON인 상태에서 **ACCESS_CONTROL_FILE** 이 지정되지 않으면 브로커는 localhost에서의 접속 요청만을 허용한다. 브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하면 브로커는 localhost에서의 접속 요청만을 허용한다.
 
-브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하는 경우 브로커는 구동되지 않는다.
-
-::
+브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하는 경우 브로커는 구동되지 않는다. ::
 
 	# cubrid_broker.conf
 	[broker]
@@ -915,9 +846,7 @@ ip_list_file의 작성 형식은 다음과 같다.
 	BROKER_PORT             =30000
 	......
 
-다음은 **ACCESS_CONTROL_FILE** 의 한 예이다. 파일 내에서 사용하는 \*은 모든 것을 나타내며, 데이터베이스 이름, 데이터베이스 사용자 ID, 접속을 허용하는 IP 리스트 파일 내의 IP에 대해 지정할 때 사용할 수 있다.
-
-::
+다음은 **ACCESS_CONTROL_FILE** 의 한 예이다. 파일 내에서 사용하는 \*은 모든 것을 나타내며, 데이터베이스 이름, 데이터베이스 사용자 ID, 접속을 허용하는 IP 리스트 파일 내의 IP에 대해 지정할 때 사용할 수 있다. ::
 
 	[%QUERY_EDITOR]
 	dbname1:dbuser1:READIP.txt
@@ -940,15 +869,11 @@ ip_list_file의 작성 형식은 다음과 같다.
 QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용한다.
 
 *   *dbname1* 에 *dbuser1* 으로 로그인하는 사용자가 READIP.txt에 등록된 IP에서 접속
-
 *   *dbname1* 에 *dbuser2* 로 로그인하는 사용자가 WRITEIP1.txt나 WRITEIP2.txt에 등록된 IP에서 접속
-
 *   모든 데이터베이스에 **DBA** 로 로그인하는 사용자가 READIP.txt나 WRITEIP1.txt 또는 WRITEIP2.txt에 등록된 IP에서 접속
 
 
-다음은 ip_list_file에서 허용하는 IP를 설정하는 예이다.
-
-::
+다음은 ip_list_file에서 허용하는 IP를 설정하는 예이다. ::
 
 	192.168.1.25
 	192.168.*
@@ -958,26 +883,19 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 위의 예에서 지정한 IP를 보면 다음과 같다.
 
 *   첫 번째 줄의 설정은 192.168.1.25을 허용한다.
-
 *   두 번째 줄의 설정은 192.168 로 시작하는 모든 IP를 허용한다.
-
 *   세 번째 줄의 설정은 10으로 시작하는 모든 IP를 허용한다.
-
 *   네 번째 줄의 설정은 모든 IP를 허용한다.
 
 이미 구동되어 있는 브로커에 대해서는 다음 명령어를 통해 설정 파일을 다시 적용하거나 현재 적용 상태를 확인할 수 있다.
 
-브로커에서 허용하는 데이터베이스, 데이터베이스 사용자 ID, IP를 설정한 후 변경된 내용을 서버에 적용하려면 다음 명령어를 사용한다.
-
-::
+브로커에서 허용하는 데이터베이스, 데이터베이스 사용자 ID, IP를 설정한 후 변경된 내용을 서버에 적용하려면 다음 명령어를 사용한다. ::
 
 	cubrid broker acl reload [<BR_NAME>]
 
 *   <BR_NAME>: 브로커 이름. 이 값을 지정하면 특정 브로커만 변경 내용을 적용할 수 있으며, 생략하면 전체 브로커에 변경 내용을 적용한다.
 
-현재 구동 중인 브로커에서 허용하는 데이터베이스, 데이터베이스 사용자 ID, IP의 설정을 화면에 출력하려면 다음 명령어를 사용한다.
-
-::
+현재 구동 중인 브로커에서 허용하는 데이터베이스, 데이터베이스 사용자 ID, IP의 설정을 화면에 출력하려면 다음 명령어를 사용한다. ::
 
 	cubrid broker acl status [<BR_NAME>]
 
@@ -985,19 +903,19 @@ QUERY_EDITOR 브로커는 다음과 같은 응용의 접속 요청만을 허용�
 
 **브로커 로그**
 
-허용되지 않는 IP에서 접근하면 다음과 같은 로그가 남는다.
+		허용되지 않는 IP에서 접근하면 다음과 같은 로그가 남는다.
 
-*   ACCESS_LOG
+		*   ACCESS_LOG
 
-::
+		::
 
-	1 192.10.10.10 - - 1288340944.198 1288340944.198 2010/10/29 17:29:04 ~ 2010/10/29 17:29:04 14942 - -1 db1 dba : rejected
+			1 192.10.10.10 - - 1288340944.198 1288340944.198 2010/10/29 17:29:04 ~ 2010/10/29 17:29:04 14942 - -1 db1 dba : rejected
 
-*   SQL LOG
+		*   SQL LOG
 
-::
+		::
 
-	10/29 10:28:57.591 (0) CLIENT IP 192.10.10.10 10/29 10:28:57.592 (0) connect db db1 user dba url jdbc:cubrid:192.10.10.10:30000:db1::: - rejected
+			10/29 10:28:57.591 (0) CLIENT IP 192.10.10.10 10/29 10:28:57.592 (0) connect db db1 user dba url jdbc:cubrid:192.10.10.10:30000:db1::: - rejected
 
 .. note:: 
 
@@ -1064,6 +982,15 @@ HA 환경에서 브로커의 **ACCESS_MODE** 를 Read Only로 변경하고 해�
 
 	Windows Vista 이상 버전에서 cubrid 유틸리티를 사용하여 서비스를 제어하려면 명령 프롬프트 창을 관리자 권한으로 구동한 후 사용하는 것을 권장한다. 자세한 내용은 :ref:`CUBRID 유틸리티 <utility-on-windows>` 를 참고한다.
 
+브로커 설정 정보 확인
+---------------------
+
+**cubrid broker info** 는 현재 "실행 중"인 브로커 파라미터의 설정 정보(cubrid_broker.conf)를 출력한다.  **broker_changer** 명령에 의해 브로커 파라미터의 설정 정보가 동적으로 변경될 수 있는데, **cubrid broker info** 명령으로 동작 중인 브로커의 설정 정보를 확인할 수 있다. ::
+
+	% cubrid broker info
+
+참고로 현재 "실행 중"인 시스템 파라미터의 설정 정보(cubrid.conf)를 확인하려면 **cubrid paramdump** *database_name* 명령을 사용한다. **SET SYSTEM PARAMETERS** 구문에 의해 시스템 파라미터의 설정 정보가 동적으로 변경될 수 있는데, **cubrid broker info** 명령으로 동작 중인 시스템의 설정 정보를 확인할 수 있다.
+
 .. _broker-logs:
 	
 브로커 로그
@@ -1073,297 +1000,308 @@ HA 환경에서 브로커의 **ACCESS_MODE** 를 Read Only로 변경하고 해�
 
 **접속 로그 확인**
 
-접속 로그 파일은 응용 클라이언트 접속에 관한 정보를 기록하며, <broker_name>.access의 이름으로 **log/broker/** 디렉터리에 저장된다. 또한, 브로커 환경 설정 파일에서 **LOG_BACKUP** 파라미터가 ON으로 설정된 경우, 브로커의 구동이 정상적으로 종료되면 접속 로그 파일에 종료된 날짜와 시간 정보가 추가되어 로그 파일이 저장된다. 예를 들어, broker1이 2008년 6월 17일 오후 12시 27분에 정상 종료되었다면, broker1.access.20080617.1227 이라는 접속 로그 파일이 생성된다. 
+	접속 로그 파일은 응용 클라이언트 접속에 관한 정보를 기록하며, <broker_name>.access의 이름으로 **log/broker/** 디렉터리에 저장된다. 또한, 브로커 환경 설정 파일에서 **LOG_BACKUP** 파라미터가 ON으로 설정된 경우, 브로커의 구동이 정상적으로 종료되면 접속 로그 파일에 종료된 날짜와 시간 정보가 추가되어 로그 파일이 저장된다. 예를 들어, broker1이 2008년 6월 17일 오후 12시 27분에 정상 종료되었다면, broker1.access.20080617.1227 이라는 접속 로그 파일이 생성된다. 
 
-다음은 log 디렉터리에 생성된 접속 로그 파일의 예제와 설명이다.
+	다음은 log 디렉터리에 생성된 접속 로그 파일의 예제와 설명이다.
 
-::
+	::
 
-	1 192.168.1.203 - - 972523031.298 972523032.058 2008/06/17 12:27:46~2008/06/17 12:27:47 7118 - -1
-	2 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:47~2008/06/17 12:27:47 7119 ERR 1025
-	1 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:49~2008/06/17 12:27:49 7118 - -1
+		1 192.168.1.203 - - 972523031.298 972523032.058 2008/06/17 12:27:46~2008/06/17 12:27:47 7118 - -1
+		2 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:47~2008/06/17 12:27:47 7119 ERR 1025
+		1 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:49~2008/06/17 12:27:49 7118 - -1
 
-*   1 : 브로커의 응용서버에 부여된 ID
-
-*   192.168.1.203 : 응용 클라이언트의 IP 주소
-
-*   972523031.298 : 클라이언트의 요청 처리를 시작한 시각의 UNIX 타임스탬프 값
-
-*   2008/06/17 12:27:46 : 클라이언트 요청을 처리 시작한 시각
-
-*   972523032.058 : 클라이언트의 요청 처리를 완료한 시각의 UNIX 타임스탬프 값
-
-*   2008/06/17 12:27:47 : 클라이언트의 요청을 처리 완료한 시각
-
-*   7118 : 응용서버의 프로세스 ID
-
-*   -1 : 요청 처리 중 발생한 에러가 없음
-
-*   ERR 1025 : 요청 처리 중 발생한 에러가 있고, 에러 정보는 에러 로그 파일의 offset=1025에 존재함
+	*   1 : 브로커의 응용서버에 부여된 ID
+	*   192.168.1.203 : 응용 클라이언트의 IP 주소
+	*   972523031.298 : 클라이언트의 요청 처리를 시작한 시각의 UNIX 타임스탬프 값
+	*   2008/06/17 12:27:46 : 클라이언트 요청을 처리 시작한 시각
+	*   972523032.058 : 클라이언트의 요청 처리를 완료한 시각의 UNIX 타임스탬프 값
+	*   2008/06/17 12:27:47 : 클라이언트의 요청을 처리 완료한 시각
+	*   7118 : 응용서버의 프로세스 ID
+	*   -1 : 요청 처리 중 발생한 에러가 없음
+	*   ERR 1025 : 요청 처리 중 발생한 에러가 있고, 에러 정보는 에러 로그 파일의 offset=1025에 존재함
 
 **에러 로그 확인**
 
-에러 로그 파일은 응용 클라이언트의 요청을 처리하는 도중에 발생한 에러에 관한 정보를 기록하며, <broker_name>_<app_server_num>.err의 이름으로 저장된다.
+	에러 로그 파일은 응용 클라이언트의 요청을 처리하는 도중에 발생한 에러에 관한 정보를 기록하며, <broker_name>_<app_server_num>.err의 이름으로 저장된다.
 
-다음은 에러 로그의 예제와 설명이다.
+	다음은 에러 로그의 예제와 설명이다.
 
-::
+	::
 
-	Time: 02/04/09 13:45:17.687 - SYNTAX ERROR *** ERROR CODE = -493, Tran = 1, EID = 38
-	Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
+		Time: 02/04/09 13:45:17.687 - SYNTAX ERROR *** ERROR CODE = -493, Tran = 1, EID = 38
+		Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
 
-*   Time: 02/04/09 13:45:17.687: 에러 발생 시각
+	*   Time: 02/04/09 13:45:17.687: 에러 발생 시각
 
-*   - SYNTAX ERROR: 에러의 종류(SYNTAX ERROR, ERROR 등)
+	*   - SYNTAX ERROR: 에러의 종류(SYNTAX ERROR, ERROR 등)
 
-*   \*\*\* ERROR CODE = -493: 에러 코드
+	*   \*\*\* ERROR CODE = -493: 에러 코드
 
-*   Tran = 1: 트랜잭션 ID. -1은 트랜잭션 ID를 할당 받지 못한 경우임.
+	*   Tran = 1: 트랜잭션 ID. -1은 트랜잭션 ID를 할당 받지 못한 경우임.
 
-*   EID = 38: 에러 ID. SQL 문 처리 중 에러가 발생한 경우, 서버나 클라이언트 에러 로그와 관련이 있는 SQL 로그를 찾을 때 사용함.
+	*   EID = 38: 에러 ID. SQL 문 처리 중 에러가 발생한 경우, 서버나 클라이언트 에러 로그와 관련이 있는 SQL 로그를 찾을 때 사용함.
 
-*   Syntax ...: 에러 메시지
+	*   Syntax ...: 에러 메시지
 
 **SQL 로그 관리**
 
-SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며, *<broker_name>_<app_server_num>*.sql.log라는 이름으로 저장된다. SQL 로그는 **SQL_LOG** 파라미터 값이  ON인 경우에 설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된다. 이 때, 생성되는 SQL 로그 파일의 크기는 **SQL_LOG_MAX_SIZE** 파라미터의 설정값을 초과할 수 없으므로 주의한다. CUBRID는 SQL 로그를 관리하기 위한 유틸리티로서 **broker_log_top**, **broker_log_converter**, **broker_log_runner** 를 제공하며, 이 유틸리티는 SQL 로그가 존재하는 디렉터리에서 실행해야 한다.
+	SQL 로그 파일은 응용 클라이언트가 요청하는 SQL을 기록하며, *<broker_name>_<app_server_num>*.sql.log라는 이름으로 저장된다. SQL 로그는 **SQL_LOG** 파라미터 값이  ON인 경우에 설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된다. 이 때, 생성되는 SQL 로그 파일의 크기는 **SQL_LOG_MAX_SIZE** 파라미터의 설정값을 초과할 수 없으므로 주의한다. CUBRID는 SQL 로그를 관리하기 위한 유틸리티로서 **broker_log_top**, **broker_log_converter**, **broker_log_runner** 를 제공하며, 이 유틸리티는 SQL 로그가 존재하는 디렉터리에서 실행해야 한다.
 
-다음은 SQL 로그 파일의 예제와 설명이다.
+	다음은 SQL 로그 파일의 예제와 설명이다.
 
-::
+	::
 
-	02/04 13:45:17.687 (38) prepare 0 insert into unique_tbl values (1)
-	02/04 13:45:17.687 (38) prepare srv_h_id 1
-	02/04 13:45:17.687 (38) execute srv_h_id 1 insert into unique_tbl values (1)
-	02/04 13:45:17.687 (38) execute error:-670 tuple 0 time 0.000, EID = 39
-	02/04 13:45:17.687 (0) auto_rollback
-	02/04 13:45:17.687 (0) auto_rollback 0
-	*** 0.000
+		02/04 13:45:17.687 (38) prepare 0 insert into unique_tbl values (1)
+		02/04 13:45:17.687 (38) prepare srv_h_id 1
+		02/04 13:45:17.687 (38) execute srv_h_id 1 insert into unique_tbl values (1)
+		02/04 13:45:17.687 (38) execute error:-670 tuple 0 time 0.000, EID = 39
+		02/04 13:45:17.687 (0) auto_rollback
+		02/04 13:45:17.687 (0) auto_rollback 0
+		*** 0.000
 
-	02/04 13:45:17.687 (39) prepare 0 select * from unique_tbl
-	02/04 13:45:17.687 (39) prepare srv_h_id 1 (PC)
-	02/04 13:45:17.687 (39) execute srv_h_id 1 select * from unique_tbl
-	02/04 13:45:17.687 (39) execute 0 tuple 1 time 0.000
-	02/04 13:45:17.687 (0) auto_commit
-	02/04 13:45:17.687 (0) auto_commit 0
-	*** 0.000
+		02/04 13:45:17.687 (39) prepare 0 select * from unique_tbl
+		02/04 13:45:17.687 (39) prepare srv_h_id 1 (PC)
+		02/04 13:45:17.687 (39) execute srv_h_id 1 select * from unique_tbl
+		02/04 13:45:17.687 (39) execute 0 tuple 1 time 0.000
+		02/04 13:45:17.687 (0) auto_commit
+		02/04 13:45:17.687 (0) auto_commit 0
+		*** 0.000
 
-*   02/04 13:45:17.687 : 응용 클라이언트의 요청 시각
+	*   02/04 13:45:17.687 : 응용 클라이언트의 요청 시각
 
-*   (39) : SQL 문 그룹의 시퀀스 번호이며, prepared statement pooling을 사용하는 경우, 파일 내에서 SQL 문마다 고유(unique)하게 부여된다.
+	*   (39) : SQL 문 그룹의 시퀀스 번호이며, prepared statement pooling을 사용하는 경우, 파일 내에서 SQL 문마다 고유(unique)하게 부여된다.
 
-*   prepare 0 : prepared statement인지 여부
+	*   prepare 0 : prepared statement인지 여부
 
-*   prepare srv_h_id 1 : 해당 SQL 문을 srv_h_id 1로 prepare한다.
+	*   prepare srv_h_id 1 : 해당 SQL 문을 srv_h_id 1로 prepare한다.
 
-*   (PC) : 플랜 캐시에 저장되어 있는 내용을 사용하는 경우에 출력된다.
+	*   (PC) : 플랜 캐시에 저장되어 있는 내용을 사용하는 경우에 출력된다.
 
-*   SELECT... : 실행 SQL 문. Statement pooling한 경우, WHERE 절의 binding 변수가  로 표시된다.
+	*   SELECT... : 실행 SQL 문. Statement pooling한 경우, WHERE 절의 binding 변수가  로 표시된다.
 
-*   Execute 0 tuple 1 time 0.000 : 1개의 row가 실행되고, 소요 시간은 0.000초
+	*   Execute 0 tuple 1 time 0.000 : 1개의 row가 실행되고, 소요 시간은 0.000초
 
-*   auto_commit/auto_rollback : 자동으로 커밋되거나, 롤백되는 것을 의미한다. 두 번째 auto_commit/auto_rollback은 에러 코드이며, 0은 에러가 없이 트랜잭션이 완료되었음을 뜻한다.
+	*   auto_commit/auto_rollback : 자동으로 커밋되거나, 롤백되는 것을 의미한다. 두 번째 auto_commit/auto_rollback은 에러 코드이며, 0은 에러가 없이 트랜잭션이 완료되었음을 뜻한다.
 
-**broker_log_top** 유틸리티는 특정 기간 동안 생성된 SQL 로그를 분석하여 실행 시간이 긴 순서대로 각 SQL 문과 실행 시간에 관한 정보를 파일에 출력하며, 분석된 결과는 각각 log.top.q 및 log.top.res에 저장된다.
+	**broker_log_top** 유틸리티는 특정 기간 동안 생성된 SQL 로그를 분석하여 실행 시간이 긴 순서대로 각 SQL 문과 실행 시간에 관한 정보를 파일에 출력하며, 분석된 결과는 각각 log.top.q 및 log.top.res에 저장된다.
 
-**broker_log_top** 유틸리티는 실행 시간이 긴 질의를 분석할 때 유용하며, 구문은 다음과 같다.
+	**broker_log_top** 유틸리티는 실행 시간이 긴 질의를 분석할 때 유용하며, 구문은 다음과 같다.
 
-::
-	broker_log_top [options] sql_log_file_list
+	::
 
-*sql_log_file_list* 에는 분석할 로그 파일 이름을 입력한다. **broker_log_top** 에서 사용하는 options는 다음과 같다.
-	
-.. program:: broker_log_top
+		broker_log_top [options] sql_log_file_list
 
-.. option:: -t
-	
-	트랜잭션 단위로 결과를 출력한다.
+	* *sql_log_file_list*: 분석할 로그 파일 이름
 
-.. option:: -F DATE
-
-		분석 대상 SQL의 시작 날짜를 지정한다. 입력 형식은 MM[/DD[ hh[:mm[:ss[.msec]]]]]이며 []로 감싼 부분은 생략할 수 있다. 생략하면 DD는 01을 입력한 것과 같고, hh, mm, ss, msec은 0을 입력한 것과 같다.
+	**broker_log_top** 에서 사용하는 [options]는 다음과 같다.
 		
-.. option:: -T DATE
+	.. program:: broker_log_top
 
-		분석 대상 SQL의 끝 날짜를 지정한다. 입력 형식은 **-F** 옵션의 *DATE* 와 같다.
-
-
+	.. option:: -t
 		
-옵션을 모두 생략하면, 모든 로그에 대해 SQL 문 단위로 결과를 출력한다.
- 
-다음은 밀리초까지 검색 범위를 설정하는 예제이다.
+		트랜잭션 단위로 결과를 출력한다.
 
-::
+	.. option:: -F DATE
 
-	broker_log_top -F "01/19 15:00:25.000" -T "01/19 15:15:25.180" log1.log
+			분석 대상 SQL의 시작 날짜를 지정한다. 입력 형식은 MM[/DD[ hh[:mm[:ss[.msec]]]]]이며 []로 감싼 부분은 생략할 수 있다. 생략하면 DD는 01을 입력한 것과 같고, hh, mm, ss, msec은 0을 입력한 것과 같다.
+			
+	.. option:: -T DATE
 
-다음 예에서 시간 형식이 생략된 부분은 기본값 0으로 정해진다. 즉, -F "01/19 00:00:00.000" -T "01/20 00:00:00.000"을 입력한 것과 같다.
+			분석 대상 SQL의 끝 날짜를 지정한다. 입력 형식은 **-F** 옵션의 *DATE* 와 같다.
 
-::
+	옵션을 모두 생략하면, 모든 로그에 대해 SQL 문 단위로 결과를 출력한다.
+	 
+	다음은 밀리초까지 검색 범위를 설정하는 예제이다.
 
-	broker_log_top -F "01/19" -T "01/20" log1.log
+	::
 
+		broker_log_top -F "01/19 15:00:25.000" -T "01/19 15:15:25.180" log1.log
 
-다음 예는 11월 11일부터 11월 12일까지 생성된 SQL 로그에 대해 실행 시간이 긴 SQL문을 확인하기 위하여 **broker_log_top** 유틸리티를 실행한 화면이다. 기간을 지정할 때, 월과 일은 빗금(/)으로 구분한다. Windows에서는 "\*.sql.log" 를 인식하지 않으므로 SQL 로그 파일들을 공백(space)으로 구분해서 나열해야 한다.
+	다음 예에서 시간 형식이 생략된 부분은 기본값 0으로 정해진다. 즉, -F "01/19 00:00:00.000" -T "01/20 00:00:00.000"을 입력한 것과 같다.
 
-::
+	::
 
-	--Linux에서 broker_log_top 실행
-	% broker_log_top -F "11/11" -T "11/12" -t *.sql.log
+		broker_log_top -F "01/19" -T "01/20" log1.log
 
-	query_editor_1.sql.log
-	query_editor_2.sql.log
-	query_editor_3.sql.log
-	query_editor_4.sql.log
-	query_editor_5.sql.log
+	다음 예는 11월 11일부터 11월 12일까지 생성된 SQL 로그에 대해 실행 시간이 긴 SQL문을 확인하기 위하여 **broker_log_top** 유틸리티를 실행한 화면이다. 기간을 지정할 때, 월과 일은 빗금(/)으로 구분한다. Windows에서는 "\*.sql.log" 를 인식하지 않으므로 SQL 로그 파일들을 공백(space)으로 구분해서 나열해야 한다.
 
-	--Windows에서 broker_log_top 실행
+	::
 
-	% broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
+		--Linux에서 broker_log_top 실행
+		% broker_log_top -F "11/11" -T "11/12" -t *.sql.log
 
-위 예제를 실행하면 SQL 로그 분석 결과가 저장되는 **log.top.q** 및 **log.top.res** 파일이 동일한 디렉터리에 생성된다.
-**log.top.q** 에서 각 SQL 문 및 SQL 로그 상의 라인 번호를 확인할 수 있고, **log.top.res** 에서 각 SQL 문에 대한 최소 실행 시간, 최대 실행 시간, 평균 실행 시간, 쿼리 실행 수를 확인할 수 있다.
+		query_editor_1.sql.log
+		query_editor_2.sql.log
+		query_editor_3.sql.log
+		query_editor_4.sql.log
+		query_editor_5.sql.log
 
-::
+		--Windows에서 broker_log_top 실행
 
-	--log.top.q 파일의 내용
-	[Q1]-------------------------------------------
-	broker1_6.sql.log:137734
-	11/11 18:17:59.396 (27754) execute_all srv_h_id 34 select a.int_col, b.var_col from dml_v_view_6 a, dml_v_view_6 b, dml_v_view_6 c , dml_v_view_6 d, dml_v_view_6 e where a.int_col=b.int_col and b.int_col=c.int_col and c.int_col=d.int_col and d.int_col=e.int_col order by 1,2;
-	11/11 18:18:58.378 (27754) execute_all 0 tuple 497664 time 58.982
-	.
-	.
-	[Q4]-------------------------------------------
-	broker1_100.sql.log:142068
-	11/11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
-	11/11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
+		% broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
 
-	--log.top.res 파일의 내용
+	위 예제를 실행하면 SQL 로그 분석 결과가 저장되는 **log.top.q** 및 **log.top.res** 파일이 동일한 디렉터리에 생성된다.
+	**log.top.q** 에서 각 SQL 문 및 SQL 로그 상의 라인 번호를 확인할 수 있고, **log.top.res** 에서 각 SQL 문에 대한 최소 실행 시간, 최대 실행 시간, 평균 실행 시간, 쿼리 실행 수를 확인할 수 있다.
 
-				  max       min        avg   cnt(err)
-	-----------------------------------------------------
-	[Q1]        58.982    30.371    44.676    2 (0)
-	[Q2]        49.556    24.023    32.688    6 (0)
-	[Q3]        35.548    25.650    30.599    2 (0)
-	[Q4]        30.469     0.001     0.103 1050 (0)
+	::
 
-설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된 SQL 로그 파일에 기록된 질의를 별도의 입력 파일로 저장하기 위하여
-**broker_log_converter** 유틸리티를 실행한다. **broker_log_converter** 유틸리티의 구문은 다음과 같다.
+		--log.top.q 파일의 내용
+		[Q1]-------------------------------------------
+		broker1_6.sql.log:137734
+		11/11 18:17:59.396 (27754) execute_all srv_h_id 34 select a.int_col, b.var_col from dml_v_view_6 a, dml_v_view_6 b, dml_v_view_6 c , dml_v_view_6 d, dml_v_view_6 e where a.int_col=b.int_col and b.int_col=c.int_col and c.int_col=d.int_col and d.int_col=e.int_col order by 1,2;
+		11/11 18:18:58.378 (27754) execute_all 0 tuple 497664 time 58.982
+		.
+		.
+		[Q4]-------------------------------------------
+		broker1_100.sql.log:142068
+		11/11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
+		11/11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
 
-::
+		--log.top.res 파일의 내용
 
-	broker_log_converter <SQL_log_file> <output_file>
+					  max       min        avg   cnt(err)
+		-----------------------------------------------------
+		[Q1]        58.982    30.371    44.676    2 (0)
+		[Q2]        49.556    24.023    32.688    6 (0)
+		[Q3]        35.548    25.650    30.599    2 (0)
+		[Q4]        30.469     0.001     0.103 1050 (0)
 
-다음 예제는 query_editor_1.sql.log 파일에 저장된 질의를 query_convert.in 파일로 변경한다.
+	설치 디렉터리의 log/broker/sql_log 디렉터리에 생성된 SQL 로그 파일에 기록된 질의를 별도의 입력 파일로 저장하기 위하여
+	**broker_log_converter** 유틸리티를 실행한다. **broker_log_converter** 유틸리티의 구문은 다음과 같다.
 
-::
+	::
 
-	% cd CUBRID/log/broker/sql_log
-	% broker_log_converter query_editor_1.sql.log query_convert.in
+		broker_log_converter [option] SQL_log_file output_file
 
-**broker_log_converter** 유틸리티에 의해 생성된 질의 파일에 저장된 질의를 재실행하기 위하여 **broker_log_runner** 유틸리티를 실행한다.
+	* *SQL_log_file*: $CUBRID/log/broker/sql_log 디렉터리 이하에 존재하는 SQL 로그 파일. 응용 프로그램에서 드라이버를 통해 질의를 전달하는 경우에만 SQL 로그가 저장되며, CSQL 인터프리터에서 질의하는 경우에는 해당 위치에 SQL 로그가 저장되지 않는다.
+	* *output_file*: **broker_log_runner** 의 입력 포맷에 맞게 출력되는 파일
 
+	**broker_log_converter** 에서 사용하는 [option]은 다음과 같다.
 
+	.. program:: broker_log_top
 
-**broker_log_runner** 유틸리티의 구문은 다음과 같다. 
+	.. option:: -i
+		
+		질의문 앞에 QUERY_ID 커멘트를 출력
+		
+	QUERY_ID 커멘트가 있으면 broker_log_runner를 사용하여 **output_file** 을 재현할 때 해당 QUERY_ID 정보가 브로커의 SQL 로그($CUBRID/log/broker/sql_log에 위치)에 출력되므로 추적이 용이하다.
 
-::
+	다음 예제는 query_editor_1.sql.log 파일에 저장된 질의를 query_convert.in 파일로 변경한다. 이때 각 질의에는 QUERY_ID 정보가 저장된다.
 
-	broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
-	
-* broker_ip: CUBRID 브로커의 IP주소 또는 호스트 이름
+	::
 
-* broker_port: CUBRID 브로커의 포트 번호
+		% cd CUBRID/log/broker/sql_log
+		% broker_log_converter query_editor_1.sql.log -i query_convert.in
 
-* dbname: 질의를 실행할 데이터베이스 이름
+	**broker_log_converter** 유틸리티에 의해 생성된 질의 파일에 저장된 질의를 재실행하기 위하여 **broker_log_runner** 유틸리티를 실행한다.
 
-* exec_script_file: 수행할 질의가 저장된 파일 이름
+	**broker_log_runner** 유틸리티의 구문은 다음과 같다. 
 
-**broker_log_runner** 에서 사용하는 <options>는 다음과 같다.
-	
-.. program:: broker_log_runner
+	::
 
-.. option:: -u NAME
+		broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
+		
+	* *broker_host*: CUBRID 브로커의 IP주소 또는 호스트 이름
 
-	데이터베이스 사용자 이름 지정(기본값: public)
-	
-.. option:: -p PASSWORD
+	* *broker_port*: CUBRID 브로커의 포트 번호
 
-	데이터베이스 암호 지정
-	
-.. option:: -t NUMBER	
-	
-	스레드의 개수 지정(기본값: 1)
-	
-.. option:: -r COUNT
+	* *dbname*: 질의를 실행할 데이터베이스 이름
 
-	질의가 수행될 횟수 지정(기본값: 1)
-	
-.. option:: -o FILE
+	* *exec_script_file*: 수행할 질의가 저장된 파일 이름
 
-	수행 결과를 저장할 파일 이름 지정
+	*broker_log_runner* 에서 사용하는 [options]는 다음과 같다.
+		
+	.. program:: broker_log_runner
 
-.. option:: -Q
+	.. option:: -u NAME
 
-	**-o** 옵션에서 지정한 FILE에 질의 계획을 포함하여 저장
+		데이터베이스 사용자 이름 지정(기본값: public)
+		
+	.. option:: -p PASSWORD
 
-다음 예제는 query_convert.in 파일에 저장된 질의를 demodb에서 재실행하며, 브로커 IP가 192.168.1.10이고, 브로커 포트는 30000인 환경임을 가정한다.
-	
-::
+		데이터베이스 암호 지정
 
-	% broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
-	broker_ip = 192.168.1.10
-	broker_port = 30000
-	num_thread = 2
-	repeat = 1
-	dbname = demodb
-	dbuser = public
-	dbpasswd =
-	exec_time : 0.001
-	exec_time : 0.000
-	0.000500 0.000500 
+	.. option:: -t NUMBER	
 
-다음 예제는 질의 실행 없이 result 파일에 질의 계획만 저장한다.
-	
-::
-	
-	% broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
-	…
-	%cat result.0
-	-------------- query -----------------
-	SELECT * FROM athlete where code=10099;
-	cci_prepare exec_time : 0.000
-	cci_execute_exec_time : 0.000
-	cci_execute:1
-	---------- query plan --------------
-	Join graph segments (f indicates final):
-	seg[0]: [0]
-	seg[1]: code[0] (f)
-	seg[2]: name[0] (f)
-	seg[3]: gender[0] (f)
-	seg[4]: nation_code[0] (f)
-	seg[5]: event[0] (f)
-	Join graph nodes:
-	node[0]: athlete athlete(6677/107) (sargs 0)
-	Join graph terms:
-	term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
+		스레드의 개수 지정(기본값: 1)
+		
+	.. option:: -r COUNT
 
-	Query plan:
+		질의가 수행될 횟수 지정(기본값: 1)
+		
+	.. option:: -o FILE
 
-	iscan
-		class: athlete node[0]
-		index: pk_athlete_code term[0]
-		cost:  0 card 1
+		수행 결과를 저장할 파일 이름 지정
 
-	Query stmt:
+	.. option:: -Q
 
-	select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code=  :0 )
+		**-o** 옵션에서 지정한 FILE에 질의 계획을 포함하여 저장
 
-	---------- query result --------------
-	10099|Andersson Magnus|M|SWE|Handball|
-	-- 1 rows ----------------------------
+	.. option:: -s
+		
+		각 질의 당 "cubrid statdump" 명령에 의한 정보를 출력. :ref:`statdump` 참고.
+		
+	.. option:: -a
 
-	cci_end_tran exec_time : 0.000
+		자동 커밋 모드 ON으로 수행
+		
+	다음 예제는 query_convert.in 파일에 저장된 질의를 demodb에서 재실행하며, 브로커 IP가 192.168.1.10이고, 브로커 포트는 30000인 환경임을 가정한다.
+		
+	::
+
+		% broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
+		broker_ip = 192.168.1.10
+		broker_port = 30000
+		num_thread = 2
+		repeat = 1
+		dbname = demodb
+		dbuser = public
+		dbpasswd =
+		exec_time : 0.001
+		exec_time : 0.000
+		0.000500 0.000500 
+
+	다음 예제는 질의 실행 없이 result 파일에 질의 계획만 저장한다.
+		
+	::
+		
+		% broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
+		…
+		%cat result.0
+		-------------- query -----------------
+		SELECT * FROM athlete where code=10099;
+		cci_prepare exec_time : 0.000
+		cci_execute_exec_time : 0.000
+		cci_execute:1
+		---------- query plan --------------
+		Join graph segments (f indicates final):
+		seg[0]: [0]
+		seg[1]: code[0] (f)
+		seg[2]: name[0] (f)
+		seg[3]: gender[0] (f)
+		seg[4]: nation_code[0] (f)
+		seg[5]: event[0] (f)
+		Join graph nodes:
+		node[0]: athlete athlete(6677/107) (sargs 0)
+		Join graph terms:
+		term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
+
+		Query plan:
+
+		iscan
+			class: athlete node[0]
+			index: pk_athlete_code term[0]
+			cost:  0 card 1
+
+		Query stmt:
+
+		select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code=  :0 )
+
+		---------- query result --------------
+		10099|Andersson Magnus|M|SWE|Handball|
+		-- 1 rows ----------------------------
+
+		cci_end_tran exec_time : 0.000
 
 .. _cubrid-manager-server:
 
@@ -1392,7 +1330,7 @@ CUBRID 매니저 서버 종료
 
 CUBRID 매니저 서버를 종료하기 위하여 다음과 같이 입력한다.
 
-::	
+::
 	
 	% cubrid manager stop
 	@ cubrid manager server stop
@@ -1404,11 +1342,8 @@ CUBRID 매니저 서버 로그
 CUBRID 매니저 서버와 관련된 로그는 설치 디렉터리의 log/manager 디렉터리에 저장되며, 매니저 서버 프로세스에 따라 다음과 같이 네 종류의 로그 파일로 저장된다.
 
 *   cub_auto.access.log : 서버에 로그인, 로그 아웃을 정상적으로 수행한 클라이언트의 접속 로그
-
 *   cub_auto.error.log : 서버에 로그인, 로그 아웃을 실패한 클라이언트의 접속 로그
-
 *   cub_js.access.log : 매니저 서버에 의해 처리된 작업에 관한 로그
-
 *   cub_js.error.log : 매니저 서버에 의해 작업 처리 도중 발생한 에러에 관한 로그
 
 CUBRID 매니저 서버 환경 설정
@@ -1421,37 +1356,35 @@ CUBRID 매니저 서버의 환경 설정 파일에서 주석은 "#"으로 처리
 
 **cm_port**
 
-CUBRID 매니저 서버와 클라이언트 사이의 통신 포트를 설정하는 매개 변수로, 기본값은 **8001**
-로 설정된다.
-**cm_port** 는 **cub_auto** 가 사용하는 포트이며, **cm_js** 는 자동으로 **cm_port** 로 설정한 값보다 1만큼 큰 값을 사용한다. 예를 들어, **cm_port** 가 8001로 설정된 경우 **cub_auto** 는 8001 포트를 사용하고, **cub_js** 는 8002 포트를 사용한다. 따라서 방화벽이 설정된 환경에서 CUBRID 매니저를 구동하려면 반드시 실제로 사용되는 두 개의 포트를 열어야 한다.
+	CUBRID 매니저 서버와 클라이언트 사이의 통신 포트를 설정하는 매개 변수로, 기본값은 **8001**
+	로 설정된다.
+	**cm_port** 는 **cub_auto** 가 사용하는 포트이며, **cm_js** 는 자동으로 **cm_port** 로 설정한 값보다 1만큼 큰 값을 사용한다. 예를 들어, **cm_port** 가 8001로 설정된 경우 **cub_auto** 는 8001 포트를 사용하고, **cub_js** 는 8002 포트를 사용한다. 따라서 방화벽이 설정된 환경에서 CUBRID 매니저를 구동하려면 반드시 실제로 사용되는 두 개의 포트를 열어야 한다.
 
 **monitor_interval**
 
-**cub_auto** 의 모니터링 주기를 초 단위로 설정하는 매개 변수로, 기본값은 **5** 이다.
+	**cub_auto** 의 모니터링 주기를 초 단위로 설정하는 매개 변수로, 기본값은 **5** 이다.
 
 **allow_user_multi_connection**
 
-CUBRID 매니저 서버에 클라이언트가 중복 접속하는 것을 허용하기 위한 매개 변수로, 기본값은 **YES** 이다. 따라서 CUBRID 매니저 서버에는 두 개 이상의 CUBRID 매니저 클라이언트가 접속할 수 있으며, 같은 사용자 이름으로 접속할 수도 있다.
+	CUBRID 매니저 서버에 클라이언트가 중복 접속하는 것을 허용하기 위한 매개 변수로, 기본값은 **YES** 이다. 따라서 CUBRID 매니저 서버에는 두 개 이상의 CUBRID 매니저 클라이언트가 접속할 수 있으며, 같은 사용자 이름으로 접속할 수도 있다.
 
 **server_long_query_time**
 
-서버의 진단 항목 중 **slow_query** 항목을 설정할 경우 몇 초 이상을 늦은 질의로 판별할지 결정하는 매개 변수로, 기본 값은 **10** 이다. 서버에서 수행된 질의 수행 시간이 매개 변수 설정 값보다 큰 경우, **slow_query** 의 개수가 증가한다.
+	서버의 진단 항목 중 **slow_query** 항목을 설정할 경우 몇 초 이상을 늦은 질의로 판별할지 결정하는 매개 변수로, 기본 값은 **10** 이다. 서버에서 수행된 질의 수행 시간이 매개 변수 설정 값보다 큰 경우, **slow_query** 의 개수가 증가한다.
 
 **cm_target**
 
-브로커와 데이터베이스 서버가 분리된 구조에서 매니저의 메뉴를 해당 서비스에 맞게 출력할 목적으로 지원되는 매개 변수이다. 기본값은 브로커와 데이터베이스 서버가 같이 설치되어 있는 환경을 의미하며, 다음과 같이 설정할 수 있다.
+	브로커와 데이터베이스 서버가 분리된 구조에서 매니저의 메뉴를 해당 서비스에 맞게 출력할 목적으로 지원되는 매개 변수이다. 기본값은 브로커와 데이터베이스 서버가 같이 설치되어 있는 환경을 의미하며, 다음과 같이 설정할 수 있다.
 
-*   **cm_target broker, server**: 브로커와 데이터베이스 서버가 같이 있을 경우
+	*   **cm_target broker, server**: 브로커와 데이터베이스 서버가 같이 있을 경우
+	*   **cm_target broker**: 브로커만 있을 경우
+	*   **cm_target server**: 데이터베이스 서버만 있을 경우
 
-*   **cm_target broker**: 브로커만 있을 경우
+	브로커만 설정하면 매니저에서 브로커 관련 메뉴만 출력되고, 데이터베이스 서버만 설정하면 서버 관련 메뉴만 출력된다.
 
-*   **cm_target server**: 데이터베이스 서버만 있을 경우
+	탐색 트리에서 호스트를 마우스 오른쪽 버튼 클릭하고 [속성]을 선택하면, 설정된 정보를 [호스트 정보]에서 확인할 수 있다.
 
-브로커만 설정하면 매니저에서 브로커 관련 메뉴만 출력되고, 데이터베이스 서버만 설정하면 서버 관련 메뉴만 출력된다.
-
-탐색 트리에서 호스트를 마우스 오른쪽 버튼 클릭하고 [속성]을 선택하면, 설정된 정보를 [호스트 정보]에서 확인할 수 있다.
-
-.. image:: /images/image10.png
+	.. image:: /images/image10.png
 
 CUBRID 매니저 사용자 관리 콘솔
 ------------------------------
@@ -1475,352 +1408,306 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
 
 **CM 사용자**
 
-CM 사용자 정보는 다음과 같은 정보로 구성된다.
+	CM 사용자 정보는 다음과 같은 정보로 구성된다.
 
-*   CM 사용자 권한: 다음과 같은 권한 정보를 포함한다.
+	*   CM 사용자 권한: 다음과 같은 권한 정보를 포함한다.
 
-    *   브로커 권한
+		*   브로커 권한
+		*   데이터베이스 생성 권한. 현재는 **admin** 사용자만 이 권한을 가질 수 있다.
+		*   상태 모니터링 권한
 
-    *   데이터베이스 생성 권한. 현재는 **admin** 사용자만 이 권한을 가질 수 있다.
+	*   데이터베이스 정보: CM 사용자가 사용할 수 있는 데이터베이스
 
-    *   상태 모니터링 권한
+	*   CM 사용자 비밀번호
 
-*   데이터베이스 정보: CM 사용자가 사용할 수 있는 데이터베이스
-
-*   CM 사용자 비밀번호
-
-CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin** 사용자이며 기본 비밀번호는 admin이다.
+	CUBRID 매니저의 기본 사용자는 모든 관리 권한을 가진 **admin** 사용자이며 기본 비밀번호는 admin이다.
 
 **CM 사용자 추가**
 
-**cm_admin adduser** 유틸리티는 특정 권한과 데이터베이스 정보를 갖는 CM 사용자를 생성한다. 브로커 권한, 데이터베이스 생성 권한 및 상태 모니터링 권한 등을 CM 사용자에게 부여할 수 있다.
-
-::
-
-	cm_admin adduser [options] cmuser-name cmuser-password
-	
-*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
-
-*   **adduser**: 새 CM 사용자를 생성하는 명령어
-
-*   *cmuser-name*: 생성할 CM 사용자의 고유한 이름을 지정한다. CM 사용자 이름은 4자 이상이어야 한다. 지정한 *cmuser-name* 이 기존 *cmuser-name* 과 같으면 **cm_admin** 은 CM 사용자 생성을 중지한다.
-
-*   *cmuser-password*: 생성할 CM 사용자의 비밀번호이다. 비밀번호는 4자 이상이어야 한다.
-
-다음은 **cm_admin adduser** 에 대한 [options]이다.
-
-.. program:: cm_admin_adduser
-
-.. option:: -b, --broker AUTHORITY
-
-	생성할 CM 사용자의 브로커 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor** 이며, 기본값은 **none** 이다.
-
-	다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 브로커 권한을 monitor로 설정하는 예이다.
+	**cm_admin adduser** 유틸리티는 특정 권한과 데이터베이스 정보를 갖는 CM 사용자를 생성한다. 브로커 권한, 데이터베이스 생성 권한 및 상태 모니터링 권한 등을 CM 사용자에게 부여할 수 있다.
 
 	::
 
-		cm_admin adduser -b monitor testcm testcmpwd
-	
-.. option:: -c, --dbcreate AUTHORITY
+		cm_admin adduser [options] cmuser-name cmuser-password
+		
+	*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	*   **adduser**: 새 CM 사용자를 생성하는 명령어
+	*   *cmuser-name*: 생성할 CM 사용자의 고유한 이름을 지정한다. CM 사용자 이름은 4자 이상이어야 한다. 지정한 *cmuser-name* 이 기존 *cmuser-name* 과 같으면 **cm_admin** 은 CM 사용자 생성을 중지한다.
+	*   *cmuser-password*: 생성할 CM 사용자의 비밀번호이다. 비밀번호는 4자 이상이어야 한다.
 
-	생성할 CM 사용자의 데이터베이스 생성 권한을 지정한다. 사용할 수 있는 값은 **none**, **admin** 이며, 기본값은 **none** 이다.
+	다음은 **cm_admin adduser** 에 대한 [options]이다.
 
-	다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 데이터베이스 생성 권한을 admin으로 설정하는 예이다.
+	.. program:: cm_admin_adduser
+
+	.. option:: -b, --broker AUTHORITY
+
+		생성할 CM 사용자의 브로커 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor** 이며, 기본값은 **none** 이다.
+
+		다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 브로커 권한을 monitor로 설정하는 예이다.
+
+		::
+
+			cm_admin adduser -b monitor testcm testcmpwd
+		
+	.. option:: -c, --dbcreate AUTHORITY
+
+		생성할 CM 사용자의 데이터베이스 생성 권한을 지정한다. 사용할 수 있는 값은 **none**, **admin** 이며, 기본값은 **none** 이다.
+
+		다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 데이터베이스 생성 권한을 admin으로 설정하는 예이다.
+
+		::
+
+			cm_admin adduser -c admin testcm testcmpwd
+		
+	.. option:: -m, monitor AUTHORITY
+
+		생성할 CM 사용자의 모니터링 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor**이며, 기본값은 **none** 이다.
+
+	다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 상태 모니터링 권한을 admin으로 설정하는 예이다.
 
 	::
 
-		cm_admin adduser -c admin testcm testcmpwd
-	
-.. option:: -m, monitor AUTHORITY
+		cm_admin adduser -m admin testcm testcmpwd
 
-	생성할 CM 사용자의 모니터링 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor**이며, 기본값은 **none** 이다.
+	.. option:: -d, --dbinfo STRING
 
-다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 상태 모니터링 권한을 admin으로 설정하는 예이다.
+		생성할 CM 사용자의 데이터베이스 정보를 지정한다. DBINFO는 "<dbname>;<uid>;<broker_ip>,<broker_port>"의 형식으로 지정해야 한다.
 
-::
+		다음은 이름이 *testcm* 인 CM 사용자에게 "testdb;dba;localhost,30000"이라는 데이터베이스 정보를 추가하는 예이다.
 
-	cm_admin adduser -m admin testcm testcmpwd
+		::
 
-.. option:: -d, --dbinfo STRING
-
-	생성할 CM 사용자의 데이터베이스 정보를 지정한다. DBINFO는 "<dbname>;<uid>;<broker_ip>,<broker_port>"의 형식으로 지정해야 한다.
-
-	다음은 이름이 *testcm* 인 CM 사용자에게 "testdb;dba;localhost,30000"이라는 데이터베이스 정보를 추가하는 예이다.
-
-	::
-
-		cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
+			cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
 
 **CM 사용자 삭제**
 
-**cm_admin deluser** 유틸리티는 지정한 CM 사용자 이름을 기준으로 CM 사용자를 삭제한다.
+	**cm_admin deluser** 유틸리티는 지정한 CM 사용자 이름을 기준으로 CM 사용자를 삭제한다. ::
 
-::
+		cm_admin deluser cmuser-name
 
-	cm_admin deluser cmuser-name
-
-*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
-
-*   **deluser**: 기존 CM 사용자를 삭제하는 명령어
-
-*   *cmuser-name*: 삭제할 CM 사용자 이름
+	*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	*   **deluser**: 기존 CM 사용자를 삭제하는 명령어
+	*   *cmuser-name*: 삭제할 CM 사용자 이름
 
 
-다음은 이름이 *testcm* 인 CM 사용자를 삭제하는 예이다.
+	다음은 이름이 *testcm* 인 CM 사용자를 삭제하는 예이다. ::
 
-::
-
-	cm_admin deluser testcm
+		cm_admin deluser testcm
 
 **CM 사용자 정보 출력**
 
-**cm_admin viewuser** 유틸리티는 지정한 CM 사용자 이름을 기준으로 CM 사용자를 삭제한다.
+	**cm_admin viewuser** 유틸리티는 지정한 CM 사용자 이름을 기준으로 CM 사용자를 삭제한다.
 
-::
+	::
 
-	cm_admin viewuser cmuser-name
+		cm_admin viewuser cmuser-name
 
-*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	*   **viewuser**: CM 사용자의 권한 및 데이터베이스 정보를 출력하는 명령어
+	*   *cmuser-name*: CM 사용자 이름. 이 값을 입력하면 해당 사용자의 정보만 출력하고, 생략하면 모든 기존 CM 사용자 정보를 표시한다.
 
-*   **viewuser**: CM 사용자의 권한 및 데이터베이스 정보를 출력하는 명령어
+	다음은 이름이 *testcm* 인 CM 사용자의 정보를 출력하는 예이다. ::
 
-*   *cmuser-name*: CM 사용자 이름. 이 값을 입력하면 해당 사용자의 정보만 출력하고, 생략하면 모든 기존 CM 사용자 정보를 표시한다.
+		cm_admin viewuser testcm
 
-다음은 이름이 *testcm* 인 CM 사용자의 정보를 출력하는 예이다. ::
+		
+	다음과 같이 정보가 출력된다.
 
-	cm_admin viewuser testcm
+	::
 
-	
-다음과 같이 정보가 출력된다.
-
-::
-
-	CM USER: testcm
-	  Auth info:
-		broker: none
-		dbcreate: none
-		statusmonitorauth: none
-	  DB info:
-		==========================================================================================
-		 DBNAME                                           UID               BROKER INFO             
-		==========================================================================================
-		 testdb                                           dba               localhost,30000  
+		CM USER: testcm
+		  Auth info:
+			broker: none
+			dbcreate: none
+			statusmonitorauth: none
+		  DB info:
+			==========================================================================================
+			 DBNAME                                           UID               BROKER INFO             
+			==========================================================================================
+			 testdb                                           dba               localhost,30000  
 
 **CM 사용자 권한 변경**
 
-**cm_admin changeuserauth** 유틸리티는 CM 사용자의 권한을 변경한다.
+	**cm_admin changeuserauth** 유틸리티는 CM 사용자의 권한을 변경한다. ::
 
-::
+		cm_admin changeuserauth [options] cmuser-name
 
-	cm_admin changeuserauth [options] cmuser-name
+	*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	*   **changeuserauth**: CM 사용자의 권한 정보를 변경하는 명령어
+	*   *cmuser-name*: 권한을 변경할 CM 사용자의 이름
 
-*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	**cm_admin changeuserauth** 에서 사용하는 [options]는 다음과 같다.
 
-*   **changeuserauth**: CM 사용자의 권한 정보를 변경하는 명령어
+	.. program:: cm_admin_changeuserauth
 
-*   *cmuser-name*: 권한을 변경할 CM 사용자의 이름
+	.. option:: -b, --broker
 
-**cm_admin changeuserauth** 에서 사용하는 <options>는 다음과 같다.
+		CM 사용자의 브로커 권한을 지정한다.
+		사용할 수 있는 값은 **admin**, **none**, **monitor** 이다.
 
-.. program:: cm_admin_changeuserauth
+		다음은 이름이 *testcm* 인 CM 사용자의 브로커 권한을 **monitor** 로 변경하는 예이다.
 
-.. option:: -b, --broker
+		::
 
-	CM 사용자의 브로커 권한을 지정한다.
-	사용할 수 있는 값은 **admin**, **none**, **monitor** 이다.
+			cm_admin changeuserauth -b monitor testcm
+		
+	.. option:: -c, --dbcreate
 
-	다음은 이름이 *testcm* 인 CM 사용자의 브로커 권한을 **monitor** 로 변경하는 예이다.
+		CM 사용자의 데이터베이스 생성 권한을 지정한다. 
+		사용할 수 있는 값은 **none**, **admin** 이다.
 
-	::
+		다음은 이름이 *testcm* 인 CM 사용자의 데이터베이스 생성 권한을 **admin** 으로 변경하는 예이다.
 
-		cm_admin changeuserauth -b monitor testcm
-	
-.. option:: -c, --dbcreate
+		::
 
-	CM 사용자의 데이터베이스 생성 권한을 지정한다. 
-	사용할 수 있는 값은 **none**, **admin** 이다.
+			cm_admin changeuserauth -c admin testcm
+		
+	.. option:: -m, --monitor 
+		
+		CM 사용자의 모니터링 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor** 이다.
 
-	다음은 이름이 *testcm* 인 CM 사용자의 데이터베이스 생성 권한을 **admin** 으로 변경하는 예이다.
+		
+		다음은 이름이 *testcm* 인 CM 사용자의 상태 모니터링 권한을 **admin** 으로 변경하는 예이다.
 
-	::
+		::
 
-		cm_admin changeuserauth -c admin testcm
-	
-.. option:: -m, --monitor 
-	
-	CM 사용자의 모니터링 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor** 이다.
-
-	
-	다음은 이름이 *testcm* 인 CM 사용자의 상태 모니터링 권한을 **admin** 으로 변경하는 예이다.
-
-	::
-
-		cm_admin changeuserauth -m admin testcm
+			cm_admin changeuserauth -m admin testcm
 
 **CM 사용자 비밀번호 변경**
 
-**cm_admin changeuserpwd** 유틸리티는 CM 사용자의 비밀번호를 변경한다.
-
-::
-
-	cm_admin changeuserpwd [options] cmuser-name
-
-*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
-
-*   **changeuserpwd**: CM 사용자의 비밀번호를 변경하는 명령어
-
-*   *cmuser-name*: 비밀번호를 변경할 CM 사용자의 이름
-
-
-**cm_admin changeuserpwd** 에서 사용하는 [options]는 다음과 같다.
-
-.. option:: -o, --oldpass PASSWORD
-
-	CM 사용자의 이전 비밀번호를 지정한다.
-
-	다음은 이름이 *testcm* 인 CM 사용자의 비밀번호를 변경하는 예이다.
+	**cm_admin changeuserpwd** 유틸리티는 CM 사용자의 비밀번호를 변경한다.
 
 	::
 
-		cm_admin changeuserpwd -o old_password -n new_password testcm
+		cm_admin changeuserpwd [options] cmuser-name
 
-.. option:: --adminpass PASSWORD
+	*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	*   **changeuserpwd**: CM 사용자의 비밀번호를 변경하는 명령어
+	*   *cmuser-name*: 비밀번호를 변경할 CM 사용자의 이름
 
-	사용자의 이전 비밀번호를 모를 때 **admin** 의 비밀번호를 대신 지정할 수 있다.
 
-	다음은 **admin** 비밀번호를 사용하여 이름이 *testcm* 인 CM 사용자의 비밀번호를 변경하는 예이다.
+	**cm_admin changeuserpwd** 에서 사용하는 [options]는 다음과 같다.
 
-	::
+	.. option:: -o, --oldpass PASSWORD
 
-		cm_admin changeuserauth --adminpass admin_password -n new_password testcm
-	
-.. option:: -n, --newpass PASSWORD
+		CM 사용자의 이전 비밀번호를 지정한다.
 
-	CM 사용자의 새 비밀번호를 지정한다.
+		다음은 이름이 *testcm* 인 CM 사용자의 비밀번호를 변경하는 예이다.
+
+		::
+
+			cm_admin changeuserpwd -o old_password -n new_password testcm
+
+	.. option:: --adminpass PASSWORD
+
+		사용자의 이전 비밀번호를 모를 때 **admin** 의 비밀번호를 대신 지정할 수 있다.
+
+		다음은 **admin** 비밀번호를 사용하여 이름이 *testcm* 인 CM 사용자의 비밀번호를 변경하는 예이다.
+
+		::
+
+			cm_admin changeuserauth --adminpass admin_password -n new_password testcm
+		
+	.. option:: -n, --newpass PASSWORD
+
+		CM 사용자의 새 비밀번호를 지정한다.
 
 
 
 **CM 사용자의 데이터베이스 정보 추가**
 
-**cm_admin adddbinfo** 유틸리티는 데이터베이스 정보(데이터베이스 이름, UID, 브로커 IP 및 브로커 포트)를 CM 사용자에게 추가한다. 
+	**cm_admin adddbinfo** 유틸리티는 데이터베이스 정보(데이터베이스 이름, UID, 브로커 IP 및 브로커 포트)를 CM 사용자에게 추가한다.  ::
 
-::
+		cm_admin adddbinfo [options] cmuser-name database-name
+		
+	*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	*   **adddbinfo**: CM 사용자에게 데이터베이스 정보를 추가하는 명령어
+	*   cmuser-name: CM 사용자 이름
+	*   databse-name: 추가할 데이터베이스 이름
 
-	cm_admin adddbinfo [options] cmuser-name database-name
-	
-*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 기본값을 사용하는 데이터베이스를 추가하는 예이다. ::
 
-*   **adddbinfo**: CM 사용자에게 데이터베이스 정보를 추가하는 명령어
+		cm_admin adddbinfo testcm testdb
 
-*   cmuser-name: CM 사용자 이름
+	다음은 **cm_admin adddbinfo** 에서 사용하는 [options]이다.
 
-*   databse-name: 추가할 데이터베이스 이름
+	.. program:: cm_admin_adddbinfo
 
-다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 기본값을 사용하는 데이터베이스를 추가하는 예이다.
+	.. option:: -u, --uid ID
 
-::
+		추가할 데이터베이스의 사용자 ID를 지정한다. 기본값은 **dba** 이다.
 
-	cm_admin adddbinfo testcm testdb
+		다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 사용자 ID가 *cubriduser* 인 데이터베이스를 추가하는 예이다. ::
 
-다음은 **cm_admin adddbinfo** 에서 사용하는 [options]이다.
+			cm_admin adddbinfo -u cubriduser testcm testdb
 
-.. program:: cm_admin_adddbinfo
+		
+	.. option:: -h, --host IP
 
-.. option:: -u, --uid ID
+		클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 호스트 IP를 지정한다. 기본값은 **localhost** 이다.
 
-	추가할 데이터베이스의 사용자 ID를 지정한다. 기본값은 **dba** 이다.
+		다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 호스트 IP가 *127.0.0.1* 인 데이터베이스를 추가하는 예이다. ::
 
-	다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 사용자 ID가 *cubriduser* 인 데이터베이스를 추가하는 예이다.
-
-	::
-
-		cm_admin adddbinfo -u cubriduser testcm testdb
-
-	
-.. option:: -h, --host IP
-
-	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 호스트 IP를 지정한다. 기본값은 **localhost** 이다.
-
-	다음은 이름이 *testcm* 인 CM 사용자에게 이름이 *testdb* 이고 호스트 IP가 *127.0.0.1* 인 데이터베이스를 추가하는 예이다.
-
-	::
-
-		cm_admin adddbinfo -h 127.0.0.1 testcm testdb
-	
-.. option:: -p, --port NUMBER
-	
-	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 포트 번호를 지정한다. 기본값은 **30000** 이다.
+			cm_admin adddbinfo -h 127.0.0.1 testcm testdb
+		
+	.. option:: -p, --port NUMBER
+		
+		클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 포트 번호를 지정한다. 기본값은 **30000** 이다.
 
 
 
 **CM 사용자의 데이터베이스 정보 삭제**
 
-**cm_admin deldbinfo** 유틸리티는 지정한 CM 사용자의 데이터베이스 정보를 삭제한다.
+	**cm_admin deldbinfo** 유틸리티는 지정한 CM 사용자의 데이터베이스 정보를 삭제한다. ::
 
-::
+		cm_admin deldbinfo cmuser-name database-name
 
-	cm_admin deldbinfo cmuser-name database-name
+	*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	*   **deldbinfo**: CM 사용자의 데이터베이스 정보를 삭제하는 명령어
+	*   cmuser-name: CM 사용자 이름
+	*   databse-name: 삭제할 데이터베이스 이름
 
-*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	다음은 이름이 *testcm* 인 CM 사용자에게서 이름이 *testdb* 인 데이터베이스 정보를 삭제하는 예이다. ::
 
-*   **deldbinfo**: CM 사용자의 데이터베이스 정보를 삭제하는 명령어
-
-*   cmuser-name: CM 사용자 이름
-
-*   databse-name: 삭제할 데이터베이스 이름
-
-다음은 이름이 *testcm* 인 CM 사용자에게서 이름이 *testdb* 인 데이터베이스 정보를 삭제하는 예이다.
-
-::
-
-	cm_admin deldbinfo testcm testdb
+		cm_admin deldbinfo testcm testdb
 
 **CM 사용자의 데이터베이스 정보 변경**
 
-**cm_admin changedbinfo** 유틸리티는 지정한 CM 사용자의 데이터베이스 정보를 변경한다.
-
-::
-
-	cm_admin changedbinfo [options] cmuser-name database-name
-
-*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
-
-*   **changedbinfo**: CM 사용자의 데이터베이스 정보를 변경하는 명령어
-
-*   <cmuser-name>: CM 사용자 이름
-
-*   <databse-name>: 변경할 데이터베이스 이름
-
-다음은 **cm_admin changedbinfo** 에서 사용하는 [options]이다.
-
-.. program:: cm_admin_changedbinfo
-
-.. option:: -u, --uid ID
-
-	데이터베이스의 사용자 ID를 지정한다.
-
-	다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 사용자 ID 정보를 *uid* 로 업데이트하는 예이다. 
+	**cm_admin changedbinfo** 유틸리티는 지정한 CM 사용자의 데이터베이스 정보를 변경한다.
 
 	::
 
-		cm_admin changedbinfo -u uid testcm testdb
+		cm_admin changedbinfo [options] cmuser-name database-name
 
-.. option:: -h, --host IP
+	*   **cm_admin**: CUBRID 매니저를 관리하는 통합 유틸리티
+	*   **changedbinfo**: CM 사용자의 데이터베이스 정보를 변경하는 명령어
+	*   <cmuser-name>: CM 사용자 이름
+	*   <databse-name>: 변경할 데이터베이스 이름
 
-	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 호스트를 지정한다.
+	다음은 **cm_admin changedbinfo** 에서 사용하는 [options]이다.
 
-	다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 호스트 IP 정보를 *10.34.63.132* 로 업데이트하는 예이다.
+	.. program:: cm_admin_changedbinfo
 
-	::
+	.. option:: -u, --uid ID
 
-		cm_admin changedbinfo -h 10.34.63.132 testcm testdb
-	
-.. option:: -p, --port NUMBER
-	
-	클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 포트 번호를 지정한다.
+		데이터베이스의 사용자 ID를 지정한다.
 
-	다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 브로커 포트 정보를 *33000* 로 업데이트하는 예이다.
+		다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 사용자 ID 정보를 *uid* 로 업데이트하는 예이다.  ::
 
-	::
+			cm_admin changedbinfo -u uid testcm testdb
 
-		cm_admin changedbinfo -p 33000 testcm testdb
+	.. option:: -h, --host IP
+
+		클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 호스트를 지정한다.
+
+		다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 호스트 IP 정보를 *10.34.63.132* 로 업데이트하는 예이다. ::
+
+			cm_admin changedbinfo -h 10.34.63.132 testcm testdb
+		
+	.. option:: -p, --port NUMBER
+		
+		클라이언트가 데이터베이스에 접속할 때 사용하는 브로커의 포트 번호를 지정한다.
+
+		다음은 이름이 *testcm* 인 CM 사용자의 *testdb* 데이터베이스에서 브로커 포트 정보를 *33000* 로 업데이트하는 예이다. ::
+
+			cm_admin changedbinfo -p 33000 testcm testdb

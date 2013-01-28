@@ -14,6 +14,8 @@
 *   데이터베이스 마이그레이션
 *   데이터베이스 백업 및 복구
 *   CUBRID HA
+*   CUBRID SHARD
+*   시스템 설정
 
 **cubrid 유틸리티**
 
@@ -23,22 +25,22 @@
 
 *   서비스 유틸리티: 마스터 프로세스를 구동 및 관리한다.
 
-    *   cubrid service
+	*   cubrid service
 
 *   서버 유틸리티: 서버 프로세스를 구동 및 관리한다.
 
-    *   cubrid server
+	*   cubrid server
 	
 *   브로커 유틸리티: 브로커 프로세스 및 응용서버(CAS) 프로세스를 구동 및 관리한다.
 
-    *   cubrid broker
+	*   cubrid broker
 *   매니저 유틸리티: 매니저 서버 프로세스를 구동 및 관리한다.
 
-    *   cubrid manager
+	*   cubrid manager
 	
 *   HA 유틸리티: HA 관련 프로세스를 구동 및 관리한다.
 
-    *   cubrid heartbeat
+	*   cubrid heartbeat
 
 자세한 설명은 CUBRID 서비스를 참조한다.
 
@@ -46,11 +48,11 @@
 
 *   데이터베이스 생성/볼륨 추가/삭제 유틸리티
 
-    *   cubrid createdb
+	*   cubrid createdb
 	
-    *   cubrid addvoldb
+	*   cubrid addvoldb
 	
-    *   cubrid deletedb
+	*   cubrid deletedb
 	
 *   데이터베이스 이름 변경/호스트 변경/복사/설치 유틸리티
 
@@ -63,60 +65,64 @@
     *   cubrid installdb
 	
 *   데이터베이스 공간 확인/공간 정리 유틸리티
-    *   cubrid spacedb
+
+	*   cubrid spacedb
 	
-    *   cubrid compactdb
+	*   cubrid compactdb
 	
 *   데이터베이스 질의 계획 확인/최적화 유틸리티
-    *   cubrid plandump
-	
-    *   cubrid optimizedb
-	
-    *   cubrid statdump
-	
-*   데이터베이스 잠금 확인/트랜잭션 제거/일관성 확인 유틸리티
 
-    *   cubrid lockdb
+	*   cubrid plandump
 	
-    *   cubrid killtran
+	*   cubrid optimizedb
+	
+	*   cubrid statdump
+	
+*   데이터베이스 잠금 확인/트랜잭션 확인/트랜잭션 제거/일관성 확인 유틸리티
+
+	*   cubrid lockdb
+	
+	*   cubrid tranlist
+	
+	*   cubrid killtran
 	
     *   cubrid checkdb
 	
 *   데이터베이스 진단/파라미터 출력 유틸리티
 
-    *   cubrid diagdb
+	*   cubrid diagdb
 	
-    *   cubrid paramdump
+	*   cubrid paramdump
 	
 *   데이터베이스 적재 유틸리티
 
-    *   cubrid loaddb
+	*   cubrid loaddb
 	
-    *   cubrid unloaddb
+	*   cubrid unloaddb
 	
 *   데이터베이스 백업/복구 유틸리티
 
-    *   cubrid backupdb
+	*   cubrid backupdb
 
-    *   cubrid restoredb
+	*   cubrid restoredb
 
 *   HA 유틸리티
 
-    *   cubrid changemode
-
-    *   cubrid copylogdb
-
-    *   cubrid applylogdb
-
-    *   cubrid applyinfo
+	*   cubrid changemode
+	
+	*   cubrid copylogdb
+	
+	*   cubrid applylogdb
+	
+	*   cubrid applyinfo
 
 *   로캘 유틸리티
 
-    *   cubrid genlocale
+	*   cubrid genlocale
+	
+	*   cubrid dumplocale
 
-    *   cubrid dumplocale
-
-자세한 설명은 `데이터베이스 관리 <#admin_admin_service_server_comma_427>`_ 를 참조한다.
+자세한 설명은 :ref:`cubrid-utilities` 를 참조한다.
 
 프롬프트에서 **cubrid** 를 입력하면 다음과 같은 구문 안내문이 출력된다. 
 
@@ -146,6 +152,7 @@
 		deletedb
 		diagdb
 		installdb
+		tranlist
 		killtran
 		loaddb
 		lockdb

@@ -30,6 +30,7 @@ The following **cubrid** utility syntax shows how to control CUBRID broker proce
 
 	cubrid broker <command> 
 	<command>: {start|stop|restart|status [broker_name] 
+	           |info
 	           |on broker_name |off broker_name 
 			   |reset broker_name |acl{status|reload} broker_name }
 
@@ -223,10 +224,7 @@ The following example shows how to check the status of master process and databa
 	Server demodb (rel 9.0, pid 30950)
 
 	@ cubrid broker status
-	% query_editor - cub_cas [15464,40000] /home1/cubrid1/CUBRID/log/broker//query_editor.access /home1/cubrid1/CUBRID/log/broker//query_editor.err
-	JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000
-	LONG_TRANSACTION_TIME:60.00, LONG_QUERY_TIME:60.00, SESSION_TIMEOUT:300
-	KEEP_CONNECTION:AUTO, ACCESS_MODE:RW
+	% query_editor
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -504,14 +502,14 @@ Starting Broker
 
 Enter the command below to start the broker. ::
 
-	% cubrid broker start
+	$ cubrid broker start
 	@ cubrid broker start
 	++ cubrid broker start: success
 
 
 The following message is returned if the broker is already running. ::
 
-	cubrid broker start
+	$ cubrid broker start
 	@ cubrid broker start
 	++ cubrid broker is running.
 
@@ -520,13 +518,13 @@ Stopping Broker
 
 Enter the command below to stop the broker. ::
 
-	% cubrid broker stop
+	$ cubrid broker stop
 	@ cubrid broker stop
 	++ cubrid broker stop: success
 
 The following message is returned if the broker has stopped. ::
 
-	% cubrid broker stop
+	$ cubrid broker stop
 	@ cubrid broker stop
 	++ cubrid broker is not running.
 
@@ -535,7 +533,7 @@ Restarting Broker
 
 Enter the command below to restart the whole brokers.
 
-	% cubrid broker restart
+	$ cubrid broker restart
 
 Checking Broker Status
 ----------------------
@@ -580,13 +578,9 @@ The following [options] are available with the **cubrid broker status** utility.
 
 If you do not specify an option or argument to check the status of all brokers, the following result is displayed. ::
 
-	% cubrid broker status
-	
+	$ cubrid broker status
 	@ cubrid broker status
-	% query_editor  - cub_cas [28433,30000] /home/CUBRID/log/broker/query_editor.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% query_editor
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -596,10 +590,7 @@ If you do not specify an option or argument to check the status of all brokers, 
 	 4 28437     0     0 50140 IDLE
 	 5 28438     0     0 50144 IDLE
 	 
-	% broker1  - cub_cas [28443,30000] /home/CUBRID/log/broker/broker1.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% broker1
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -610,78 +601,43 @@ If you do not specify an option or argument to check the status of all brokers, 
 	 5 28448     0     0 50144 IDLE
 
 *   % query_editor: The broker name
-
-*   cub_cas: Type of the CUBRID broker application server (CAS)
-
-*   [28433, 30000]: The broker process ID and connection port number of the broker
-
-*   /home/CUBRID/log/broker/query_editor.access: Path of the access log file of query_editor
-
-*   JOB QUEUE: The number of standby jobs in the job queue
-
-*   AUTO_ADD_APPL_SERVER: The value of the AUTO_ADD_APPL_SERVER parameter in **cubrid_broker.conf** is ON, which enables CAS to be added automatically.
-
-*   SQL_LOG_MODE: The value of the SQL_LOG parameter in the **cubrid_broker.conf** file is ALL, which enables logs for all SQLs to be stored.
-
-*   SLOW_LOG: The value of the SQL_LOG parameter in the **cubrid_broker.conf** file is ON, which enables long-duration queries or queries where an error occurred to be recorded in the SLOW SQL LOG file.
-
-*   LONG_TRANSACTION_TIME: Execution time of transactions determined by long-duration transaction. It is regarded as long-duration transaction if transaction execution time exceeds 60 seconds.
-
-*   LONG_QUERY_TIME: Execution time of queries determined by long-duration query. It is regarded as long-duration query if query execution time exceeds 60 seconds.
-
-*   SESSION_TIMEOUT: The timeout value specified to disconnect CAS sessions in idle state (which any commit or rollback happens) after the transaction has started. If it exceeds specified time in this state, connection between application client and CAS is closed. The value of SESSION_TIMEOUT parameter in the  **cubrid_broker.conf** file is 300 seconds.
-
-*   KEEP_CONNECTION: The value of KEEP_CONNECTION parameter in the **cubrid_broker.conf** file is AUTO, which enables an application client to be connected to CAS automatically.
-
-*   ACCESS_MODE: The broker action mode; both manipulation and looking up database are allowed in RW mode.
-
-*   MAX_QUERY_TIMEOUT: Timeout value of query execution. If it exceeds specified time, the executed query is rolled back. No time limits if the value is 0.
-
 *   ID: Serial number of CAS within the broker
-
 *   PID: CAS process ID within the broker
-
 *   QPS:  The number of queries processed per second
-
 *   LQS: The number of long-duration queries processed per second
-
 *   PSIZE: Size of CAS
-
 *   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
 
-To check the status of broker, enter the code below. 
+To check the detail status of broker for 5 seconds, enter the command as below. The display will reset per 5 seconds as the new status information. To escape the display of the status, press <Q>.
 
 ::
 
-	% cubrid broker status -b
-	
+	$ cubrid broker status -b -s 5
 	@ cubrid broker status
-	  NAME           PID  PORT  AS  JQ      REQ  TPS  QPS  LONG-T  LONG-Q ERR-Q
-	===========================================================================
-	* query_editor  4094 30000   5   0        0    0    0    0/60    0/60    0
-	* broker1       4104 33000   5   0        0    0    0    0/60    0/60    0
+
+	 NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT
+	=================================================================================================================================================================================================
+	* query_editor         13200 30000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0
+	* broker1              13269 33000     5    0                   70                   60       10       20       10       10       10     0/60.0     0/60.0            30            10       213
 
 *   NAME: The broker name
-
 *   PID: Process ID of the broker
-
 *   PORT: Port number of the broker
-
 *   AS: The number of CAS
-
 *   JQ: The number of standby jobs in the job queue
-
 *   REQ: The number of client requests processed by the broker
-
 *   TPS: The number of transactions processed per second (calculated only when the option is configured to "-b -s <sec>")
-
 *   QPS: The number of queries processed per second (calculated only when the option is configured to "-b -s <sec>")
-
-*   LONG-T: The number of transactions which exceed LONG_TRANSACTION_TIME; the value of the LONG_TRANSACTION_TIME parameter
-
-*   LONG-Q: The number of queries which exceed LONG_QUERY_TIME; the value of the LONG_QUERY_TIME parameter
-
-*   ERR-Q: The number of queries with errors found
+*   SELECT: The number of SELECT queries after staring of the broker. When there is an option of "-b -s <sec>", it is updated every time with the number of SELECTs which have been executed during the seconds specified by this option.
+*   INSERT: The number of INSERT queries after staring of the broker. When there is an option of "-b -s <sec>", it is updated every time with the number of INSERTs which have been executed during the seconds specified by this option.
+*   UPDATE: The number of UPDATE queries after staring of the broker. When there is an option of "-b -s <sec>", it is updated every time with the number of UPDATEs which have been executed during the seconds specified by this option.
+*   DELETE: The number of DELETE queries after staring of the broker. When there is an option of "-b -s <sec>", it is updated every time with the number of DELETEs which have been executed during the seconds specified by this option.
+*   OTHERS: The number of queries like CREATE and DROP except for SELECT, INSERT, UPDATE, DELETE. When there is an option of "-b -s <sec>", it is updated every time with the number of queries which have been executed during the seconds specified by this option.
+*   LONG-T: The number of transactions which exceed LONG_TRANSACTION_TIME. / the value of the LONG_TRANSACTION_TIME parameter. When there is an option of "-b -s <sec>", it is updated every time with the number of transactions which have been executed during the seconds specified by this option.
+*   LONG-Q: The number of queries which exceed LONG_QUERY_TIME. / the value of the LONG_QUERY_TIME parameter. When there is an option of "-b -s <sec>", it is updated every time with the number of queries which have been executed during the seconds specified by this option.
+*   ERR-Q: The number of queries with errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of erros which have occurred during the seconds specified by this option.
+*   UNIQUE-ERR-Q: The number of queries with unique key errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of unique key erros which have occurred during the seconds specified by this option.
+*   #CONNECT: The number of connections that an application client accesses to CAS after starting the broker. 
 
 Enter code below to check the status of broker whose name includes broker1 with the **-q** option and job status of a specific broker in the job queue. If you do not specify broker1 as an argument, list of jobs in the job queue for all brokers is displayed. 
 
@@ -689,10 +645,7 @@ Enter code below to check the status of broker whose name includes broker1 with 
 
 	% cubrid broker status -q broker1
 	@ cubrid broker status
-	% broker1  - cub_cas [28443,40821] /home/CUBRID/log/broker/broker1.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% broker1
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -705,10 +658,7 @@ Enter code below to check the status of broker whose name includes broker1 with 
 Enter code below to input the monitoring interval of broker whose name includes broker1 with the **-s** option and monitor broker status regularly. If you do not specify broker1 as an argument, monitoring status for all brokers is performed regularly. It returns to a command prompt if q is not entered. ::
 
 	% cubrid broker status -s 5 broker1
-	% broker1  - cub_cas [28443,40821] /home/CUBRID/log/broker/broker1.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% broker1
 	----------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS
 	----------------------------------------
@@ -740,10 +690,7 @@ Enter code below to view information of server/database accessed by broker, acce
 
 	$ cubrid broker status -f broker1
 	@ cubrid broker status
-	% broker1  - cub_cas [28443,40821] /home/CUBRID/log/broker/broker1.access /home/CUBRID/
-	 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-	 LONG_TRANSACTION_TIME:60, LONG_QUERY_TIME:60, SESSION_TIMEOUT:300
-	 KEEP_CONNECTION:AUTO, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+	% broker1
 	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	ID   PID   QPS   LQS PSIZE STATUS         LAST ACCESS TIME      DB       HOST   LAST CONNECT TIME       CLIENT IP   SQL_LOG_MODE   TRANSACTION STIME # CONNECT # RESTART
 	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -756,21 +703,13 @@ Enter code below to view information of server/database accessed by broker, acce
 Meaning of every column in code above is as follows:
 
 *   LAST ACCESS TIME: Time when CAS runs or the latest time when an application client accesses CAS
-
 *   DB: Name of a database which CAS accesses most recently    
-
 *   HOST: Name of a which CAS accesses most recently
-
 *   LAST CONNECT TIME: Most recent time when CAS accesses a database
-
 *   CLIENT IP: IP of an application clients currently being connected to an application server (CAS). If no application client is connected, 0.0.0.0 is displayed.
-
 *   SQL_LOG_MODE: SQL logging mode of CAS. If the mode is same as the mode configured in the broker, "-" is displayed.
-
 *   TRANSACTION STIME: Transaction start time
-
 *   # CONNECT: The number of connections that an application client accesses to CAS after starting the broker
-
 *   # RESTART: The number of connection that CAS is re-running after starting the broker
 
 Enter code below to display information on AS (T W B Ns-W Ns-B) and CANCELED with the **-b** and **-f** options. ::
@@ -785,15 +724,11 @@ Enter code below to display information on AS (T W B Ns-W Ns-B) and CANCELED wit
 Meaning of every column in code above is as follows:
 
 *   AS(T): Total number of CAS being executed
-
 *   AS(W): The number of CAS in the status of Waiting
-
 *   AS(B): The number of CAS in the status of Busy
-
 *   AS(Ns-W): The number of CAS that the client belongs to has been waited for N seconds.
-
 *   AS(Ns-B): The number of CAS that the client belongs to has been Busy for N seconds.
-
+*   CANCELED: The number of queries have canceled by user interruption since the broker starts (if it is used with the **-l** **N** option, it specifies the number of accumulations for N seconds).
 *   CANCELED: The number of queries have canceled by user interruption since the broker starts (if it is used with the **-l** **N** option, it specifies the number of accumulations for N seconds).
 
 .. _limiting-broker-access:
@@ -810,18 +745,13 @@ The format of **ACCESS_CONTROL_FILE** is as follows: ::
 	... 
 
 *   <broker_name>: A broker name. It is the one of broker names specified in **cubrid_broker.conf** .
-
 *   <db_name>: A database name. If it is specified as \*, all databases are allowed to access the broker server.
-
 *   <db_user>: A database user ID. If it is specified as \*, all database user IDs are allowed to access the broker server.
-
 *   <ip_list_file>: Names of files in which the list of accessible IPs are stored. Several files such as ip_list_file1, ip_list_file2, ... can be specified by using a comma (,).
 
 [%<broker_name>] and <db_name>:<db_user>:<ip_list_file> can be specified separately for each broker.
 
-The format of the ip_list_file is as follows: 
-
-::
+The format of the ip_list_file is as follows:  ::
 
 	<ip_addr>
 	... 
@@ -830,9 +760,7 @@ The format of the ip_list_file is as follows:
 
 If a value for **ACCESS_CONTROL** is set to ON and a value for **ACCESS_CONTROL_FILE** is not specified, the broker will only allow the access requests from the localhost. If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will only allow the access requests from the localhost.
 
-If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will not run. 
-
-::
+If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will not run.  ::
 
 	# cubrid_broker.conf
 	[broker]
@@ -845,9 +773,7 @@ If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker
 	BROKER_PORT             =30000
 	......
 
-The following example shows the content of **ACCESS_CONTROL_FILE**. The * symbol represents everything, and you can use it when you want to specify database names, database user IDs and IPs in the IP list file which are allowed to access the broker server. 
-
-::
+The following example shows the content of **ACCESS_CONTROL_FILE**. The * symbol represents everything, and you can use it when you want to specify database names, database user IDs and IPs in the IP list file which are allowed to access the broker server.  ::
 
 	[%QUERY_EDITOR]
 	dbname1:dbuser1:READIP.txt
@@ -870,14 +796,10 @@ The brokers specified above are QUERY_EDITOR, BROKER2, BROKER3, and BROKER4.
 The QUERY_EDITOR broker only allows the following application access requests.
 
 *   When a user logging into *dbname1* with a *dbuser1* account connects from IPs registered in READIP.txt
-
 *   When a user logging into *dbname1* with a *dbuser2* account connects from IPs registered in WRITEIP1.txt and WRITEIP2.txt
-
 *   When a user logging into every database with a **DBA** account connects from IPs registered in READIP.txt, WRITEIP1.txt, and WRITEIP2.txt
 
-The following example shows how to specify the IPs allowed in ip_list_file. 
-
-::
+The following example shows how to specify the IPs allowed in ip_list_file.  ::
 
 	192.168.1.25
 	192.168.*
@@ -887,26 +809,19 @@ The following example shows how to specify the IPs allowed in ip_list_file.
 The descriptions for the IPs specified in the example above are as follows:
 
 *   The first line setting allows an access from 192.168.1.25.
-
 *   The second line setting allows an access from all IPs starting with 192.168.
-
 *   The third line setting allows an access from all IPs starting with 10.
-
 *   The fourth line setting allows an access from all IPs.
 
 For the broker which has already been running, you can modify the configuration file or check the currently applied status of configuration by using the following commands.
 
-To configure databases, database user IDs and IPs allowed to access the broker and then apply the modified configuration to the server, use the following command. 
-
-::
+To configure databases, database user IDs and IPs allowed to access the broker and then apply the modified configuration to the server, use the following command.  ::
 
 	cubrid broker acl reload [<BR_NAME>]
 
 *   <BR_NAME>: A broker name. If you specify this value, you can apply the changes only to specified brokers. If you omit it, you can apply the changes to all brokers.
 
-To display the databases, database user IDs and IPs that are allowed to access the broker in running on the screen, use the following command. 
-
-::
+To display the databases, database user IDs and IPs that are allowed to access the broker in running on the screen, use the following command.  ::
 
 	cubrid broker acl status [<BR_NAME>]
 
@@ -914,19 +829,19 @@ To display the databases, database user IDs and IPs that are allowed to access t
 
 **Broker Logs**
 
-If you try to access brokers through IP addresses that are not allowed, the following logs will be created.
+	If you try to access brokers through IP addresses that are not allowed, the following logs will be created.
 
-*   ACCESS_LOG 
+	*   ACCESS_LOG 
 
-::
+	::
 
-	1 192.10.10.10 - - 1288340944.198 1288340944.198 2010/10/29 17:29:04 ~ 2010/10/29 17:29:04 14942 - -1 db1 dba : rejected
+		1 192.10.10.10 - - 1288340944.198 1288340944.198 2010/10/29 17:29:04 ~ 2010/10/29 17:29:04 14942 - -1 db1 dba : rejected
 
-*   SQL LOG 
+	*   SQL LOG 
 
-::
+	::
 
-	10/29 10:28:57.591 (0) CLIENT IP 192.10.10.10 10/29 10:28:57.592 (0) connect db db1 user dba url jdbc:cubrid:192.10.10.10:30000:db1::: - rejected
+		10/29 10:28:57.591 (0) CLIENT IP 192.10.10.10 10/29 10:28:57.592 (0) connect db db1 user dba url jdbc:cubrid:192.10.10.10:30000:db1::: - rejected
 
 .. note:: 
 
@@ -983,9 +898,18 @@ Enter the following to change the **ACCESS_MODE** to **Read Only** and automatic
 
 .. note::
 
-	If you want to control the service using Cubrid utilities on Windows Vista or the later versions of Window, you are recommended to open the command prompt window as an administrator. For details, see the notes of :ref:`CUBRID Utilities <utility-on-windows>`.
+	If you want to control the service using cubrid utilities on Windows Vista or the later versions of Window, you are recommended to open the command prompt window as an administrator. For details, see the notes of :ref:`CUBRID Utilities <utility-on-windows>`.
 
 .. _broker-logs:
+
+Broker configuration information
+--------------------------------
+
+**cubrid broker info** dumps the currently "working" broker parameters' configuration information(cubrid_broker.conf). broker parameters' information can be dynamically changed by **broker_changer** command; with **cubrid broker info** command, you can see the configuration information of the working broker. ::
+
+	% cubrid broker info
+
+As a reference, to see the configuration information of the currently "working" system(cubrid.conf), use **cubrid paramdump** *database_name* command. By **SET SYSTEM PARAMETERS** syntax, the configuration information of the system parameters can be changed dynamically; with **cubrid broker info** command, you can see the configuration information of the system parameters.
 
 Broker Logs
 -----------
@@ -994,263 +918,247 @@ There are three types of logs that relate to starting the broker: access, error 
 
 **Checking the Access Log**
 
-The access log file records information on the application client and is stored with the name of *broker_name.access* . If the **LOG_BACKUP** parameter is configured to **ON** in the broker configuration file, when the broker stops properly, the access log file is stored with the date and time that the broker has stopped. For example, if broker1 stopped at 12:27 P.M. on June 17, 2008, an access file named broker1.access.20080617.1227 is generated in the **log/broker**
-directory. The following example shows an access log.
+	The access log file records information on the application client and is stored with the name of *broker_name.access* . If the **LOG_BACKUP** parameter is configured to **ON** in the broker configuration file, when the broker stops properly, the access log file is stored with the date and time that the broker has stopped. For example, if broker1 stopped at 12:27 P.M. on June 17, 2008, an access file named broker1.access.20080617.1227 is generated in the **log/broker**
+	directory. The following example shows an access log.
 
-The following example and description show an access log file created in the log directory: ::
+	The following example and description show an access log file created in the log directory: ::
 
-	1 192.168.1.203 - - 972523031.298 972523032.058 2008/06/17 12:27:46~2008/06/17 12:27:47 7118 - -1
-	2 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:47~2008/06/17 12:27:47 7119 ERR 1025
-	1 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:49~2008/06/17 12:27:49 7118 - -1
+		1 192.168.1.203 - - 972523031.298 972523032.058 2008/06/17 12:27:46~2008/06/17 12:27:47 7118 - -1
+		2 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:47~2008/06/17 12:27:47 7119 ERR 1025
+		1 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:49~2008/06/17 12:27:49 7118 - -1
 
-*   1: ID assigned to the application server of the broker
-
-*   192.168.1.203: IP address of the application client
-
-*   972523031.298: UNIX timestamp value when the client's request processing started
-
-*   2008/06/17 12:27:46: Time when the client's request processing started
-
-*   972523032.058: UNIX timestamp value when the client's request processing finished
-
-*   2008/06/17 12:27:47: Time when the client's request processing finished
-
-*   7118: Process ID of the application server
-
-*   -1: No error occurred during the request processing
-
-*   ERR 1025: Error occurred during the request processing. Error information exists in offset=1025 of the error log file
+	*   1: ID assigned to the application server of the broker
+	*   192.168.1.203: IP address of the application client
+	*   972523031.298: UNIX timestamp value when the client's request processing started
+	*   2008/06/17 12:27:46: Time when the client's request processing started
+	*   972523032.058: UNIX timestamp value when the client's request processing finished
+	*   2008/06/17 12:27:47: Time when the client's request processing finished
+	*   7118: Process ID of the application server
+	*   -1: No error occurred during the request processing
+	*   ERR 1025: Error occurred during the request processing. Error information exists in offset=1025 of the error log file
 
 **Checking the Error Log**
 
-The error log file records information on errors that occurred during the client's request processing and is stored with the name of *<broker_name>_<app_server_num>*.err.
+	The error log file records information on errors that occurred during the client's request processing and is stored with the name of *<broker_name>_<app_server_num>*.err.
 
-The following example and description show an error log: ::
+	The following example and description show an error log: ::
 
-	Time: 02/04/09 13:45:17.687 - SYNTAX ERROR *** ERROR CODE = -493, Tran = 1, EID = 38
-	Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
+		Time: 02/04/09 13:45:17.687 - SYNTAX ERROR *** ERROR CODE = -493, Tran = 1, EID = 38
+		Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
 
-*   Time: 02/04/09 13:45:17.687: Time when the error occurred
-
-*   - SYNTAX ERROR: Type of error (e.g. SYNTAX ERROR, ERROR, etc.)
-
-*   \*\*\* ERROR CODE = -493: Error code
-
-*   Tran = 1: Transaction ID. -1 indicates that no transaction ID is assigned.
-
-*   EID = 38: Error ID. This ID is used to find the SQL log related to the server or client logs when an error occurs during SQL statement processing.
-
-*   Syntax ...: Error message (An ellipsis ( ... ) indicates omission.)
+	*   Time: 02/04/09 13:45:17.687: Time when the error occurred
+	*   - SYNTAX ERROR: Type of error (e.g. SYNTAX ERROR, ERROR, etc.)
+	*   \*\*\* ERROR CODE = -493: Error code
+	*   Tran = 1: Transaction ID. -1 indicates that no transaction ID is assigned.
+	*   EID = 38: Error ID. This ID is used to find the SQL log related to the server or client logs when an error occurs during SQL statement processing.
+	*   Syntax ...: Error message (An ellipsis ( ... ) indicates omission.)
 
 **Managing the SQL Log**
 
-The SQL log file records SQL statements requested by the application client and is stored with the name of *<broker_name>_<app_server_num>*. sql.log. The SQL log is generated in the log/broker/sql_log directory when the SQL_LOG parameter is set to ON. Note that the size of the SQL log file to be generated cannot exceed the value set for the SQL_LOG_MAX_SIZE parameter. CUBRID offers the **broker_log_top**, **broker_log_converter**, and **broker_log_runner** utilities to manage SQL logs. Each utility should be executed in a directory where the corresponding SQL log exists.
+	The SQL log file records SQL statements requested by the application client and is stored with the name of *<broker_name>_<app_server_num>*. sql.log. The SQL log is generated in the log/broker/sql_log directory when the SQL_LOG parameter is set to ON. Note that the size of the SQL log file to be generated cannot exceed the value set for the SQL_LOG_MAX_SIZE parameter. CUBRID offers the **broker_log_top**, **broker_log_converter**, and **broker_log_runner** utilities to manage SQL logs. Each utility should be executed in a directory where the corresponding SQL log exists.
 
-The following examples and descriptions show SQL log files: ::
+	The following examples and descriptions show SQL log files: ::
 
-	02/04 13:45:17.687 (38) prepare 0 insert into unique_tbl values (1)
-	02/04 13:45:17.687 (38) prepare srv_h_id 1
-	02/04 13:45:17.687 (38) execute srv_h_id 1 insert into unique_tbl values (1)
-	02/04 13:45:17.687 (38) execute error:-670 tuple 0 time 0.000, EID = 39
-	02/04 13:45:17.687 (0) auto_rollback
-	02/04 13:45:17.687 (0) auto_rollback 0
-	*** 0.000
+		02/04 13:45:17.687 (38) prepare 0 insert into unique_tbl values (1)
+		02/04 13:45:17.687 (38) prepare srv_h_id 1
+		02/04 13:45:17.687 (38) execute srv_h_id 1 insert into unique_tbl values (1)
+		02/04 13:45:17.687 (38) execute error:-670 tuple 0 time 0.000, EID = 39
+		02/04 13:45:17.687 (0) auto_rollback
+		02/04 13:45:17.687 (0) auto_rollback 0
+		*** 0.000
 
-	02/04 13:45:17.687 (39) prepare 0 select * from unique_tbl
-	02/04 13:45:17.687 (39) prepare srv_h_id 1 (PC)
-	02/04 13:45:17.687 (39) execute srv_h_id 1 select * from unique_tbl
-	02/04 13:45:17.687 (39) execute 0 tuple 1 time 0.000
-	02/04 13:45:17.687 (0) auto_commit
-	02/04 13:45:17.687 (0) auto_commit 0
-	*** 0.000
+		02/04 13:45:17.687 (39) prepare 0 select * from unique_tbl
+		02/04 13:45:17.687 (39) prepare srv_h_id 1 (PC)
+		02/04 13:45:17.687 (39) execute srv_h_id 1 select * from unique_tbl
+		02/04 13:45:17.687 (39) execute 0 tuple 1 time 0.000
+		02/04 13:45:17.687 (0) auto_commit
+		02/04 13:45:17.687 (0) auto_commit 0
+		*** 0.000
 
-*   02/04 13:45:17.687: Time when the application sent the request
+	*   02/04 13:45:17.687: Time when the application sent the request
 
-*   (39): Sequence number of the SQL statement group. If prepared statement pooling is used, it is uniquely assigned to each SQL statement in the file.
+	*   (39): Sequence number of the SQL statement group. If prepared statement pooling is used, it is uniquely assigned to each SQL statement in the file.
 
-*   prepare 0: Whether or not it is a prepared statement
+	*   prepare 0: Whether or not it is a prepared statement
 
-*   prepare srv_h_id 1: Prepares the SQL statement as srv_h_id 1.
+	*   prepare srv_h_id 1: Prepares the SQL statement as srv_h_id 1.
 
-*   (PC): It is displayed if the data in the plan cache is used.
+	*   (PC): It is displayed if the data in the plan cache is used.
 
-*   SELECT...: SQL statement to be executed. (An ellipsis ( ... ) indicates omission.) For statement pooling, the binding variable of the WHERE clause is represented as a question mark (?).
+	*   SELECT...: SQL statement to be executed. (An ellipsis ( ... ) indicates omission.) For statement pooling, the binding variable of the WHERE clause is represented as a question mark (?).
 
-*   Execute 0 tuple 1 time 0.000: One row is executed. The time spent is 0.000 seconds.
+	*   Execute 0 tuple 1 time 0.000: One row is executed. The time spent is 0.000 seconds.
 
-*   auto_commit/auto_rollback: Automatically committed or rolled back. The second auto_commit/auto_rollback is an error code. 0 indicates that the transaction has been completed without an error.
+	*   auto_commit/auto_rollback: Automatically committed or rolled back. The second auto_commit/auto_rollback is an error code. 0 indicates that the transaction has been completed without an error.
 
-The **broker_log_top** utility analyses the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in
-**log.top.res**, respectively.
+	The **broker_log_top** utility analyses the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in
+	**log.top.res**, respectively.
 
-The **broker_log_top** utility is useful to analyse a long running query. The syntax is as follows: ::
+	The **broker_log_top** utility is useful to analyse a long running query. The syntax is as follows: ::
 
-	broker_log_top [options] <sql_log_file_list>
+		broker_log_top [options] <sql_log_file_list>
 
-<sql_log_file_list> lists the log file names to analyze.
+	<sql_log_file_list> lists the log file names to analyze.
 
-The following is [options] used on **broker_log_top**.
+	The following is [options] used on **broker_log_top**.
 
-.. program:: broker_log_top
+	.. program:: broker_log_top
 
-.. option:: -t
+	.. option:: -t
 
-	The result is displayed in transaction unit.
+		The result is displayed in transaction unit.
 
-.. option:: -F DATE
+	.. option:: -F DATE
 
-	This option specifies the execution start date of the SQL statements to be analyzed.
-	The input format is MM[/DD[ hh[:mm[:ss[.msec]]]]], and the part enclosed by [] can be omitted. If you omit the value, it is regarded as that 01 is input for DD, and 0 is input for hh, mm, ss and msec.
+		This option specifies the execution start date of the SQL statements to be analyzed.
+		The input format is MM[/DD[ hh[:mm[:ss[.msec]]]]], and the part enclosed by [] can be omitted. If you omit the value, it is regarded as that 01 is input for DD, and 0 is input for hh, mm, ss and msec.
 
-:: option:: -T DATE
+	:: option:: -T DATE
 
-	This option specifies the exectuon end date of the SQL statements to be analyzed.
-	The input format is the same with the *DATE* in the **-F** options.
+		This option specifies the exectuon end date of the SQL statements to be analyzed.
+		The input format is the same with the *DATE* in the **-F** options.
 
-All logs are displayed by SQL statement if any option is not specified.
-	
-The following sets the search range to milliseconds ::
+	All logs are displayed by SQL statement if any option is not specified.
+		
+	The following sets the search range to milliseconds ::
 
-	broker_log_top -F "01/19 15:00:25.000" -T "01/19 15:15:25.180" log1.log
-	
-The part where the time format is omitted is set to 0 by default. This means that -F "01/19 00:00:00.000" -T "01/20 00:00:00.000" is input. ::
+		broker_log_top -F "01/19 15:00:25.000" -T "01/19 15:15:25.180" log1.log
+		
+	The part where the time format is omitted is set to 0 by default. This means that -F "01/19 00:00:00.000" -T "01/20 00:00:00.000" is input. ::
 
-	broker_log_top -F "01/19" -T "01/20" log1.log
+		broker_log_top -F "01/19" -T "01/20" log1.log
 
-The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should separated by a white space on Windows. ::
+	The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should separated by a white space on Windows. ::
 
-	--Execution broker_log_top on Linux
-	% broker_log_top -F "11/11" -T "11/12" -t *.sql.log
+		--Execution broker_log_top on Linux
+		% broker_log_top -F "11/11" -T "11/12" -t *.sql.log
 
-	query_editor_1.sql.log
-	query_editor_2.sql.log
-	query_editor_3.sql.log
-	query_editor_4.sql.log
-	query_editor_5.sql.log
+		query_editor_1.sql.log
+		query_editor_2.sql.log
+		query_editor_3.sql.log
+		query_editor_4.sql.log
+		query_editor_5.sql.log
 
-	--Executing broker_log_top on Windows
-	% broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
+		--Executing broker_log_top on Windows
+		% broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
 
-The log.top.q and log.top.res files are generated in the same directory where the analyzed logs are stored when executing the example above; In the log.top.q file, you can view each SQL statement, and its line number. In the log.top.res, you can the minimum, maximum and avg. time, and the number of execution queries for each SQL statement. ::
+	The log.top.q and log.top.res files are generated in the same directory where the analyzed logs are stored when executing the example above; In the log.top.q file, you can view each SQL statement, and its line number. In the log.top.res, you can the minimum, maximum and avg. time, and the number of execution queries for each SQL statement. ::
 
-	--log.top.q file
-	[Q1]-------------------------------------------
-	broker1_6.sql.log:137734
-	11/11 18:17:59.396 (27754) execute_all srv_h_id 34 select a.int_col, b.var_col from dml_v_view_6 a, dml_v_view_6 b, dml_v_view_6 c , dml_v_view_6 d, dml_v_view_6 e where a.int_col=b.int_col and b.int_col=c.int_col and c.int_col=d.int_col and d.int_col=e.int_col order by 1,2;
-	11/11 18:18:58.378 (27754) execute_all 0 tuple 497664 time 58.982
-	.
-	.
-	[Q4]-------------------------------------------
-	broker1_100.sql.log:142068
-	11/11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
-	11/11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
+		--log.top.q file
+		[Q1]-------------------------------------------
+		broker1_6.sql.log:137734
+		11/11 18:17:59.396 (27754) execute_all srv_h_id 34 select a.int_col, b.var_col from dml_v_view_6 a, dml_v_view_6 b, dml_v_view_6 c , dml_v_view_6 d, dml_v_view_6 e where a.int_col=b.int_col and b.int_col=c.int_col and c.int_col=d.int_col and d.int_col=e.int_col order by 1,2;
+		11/11 18:18:58.378 (27754) execute_all 0 tuple 497664 time 58.982
+		.
+		.
+		[Q4]-------------------------------------------
+		broker1_100.sql.log:142068
+		11/11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
+		11/11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
 
-	--log.top.res
+		--log.top.res
 
-				  max       min        avg   cnt(err)
-	-----------------------------------------------------
-	[Q1]        58.982    30.371    44.676    2 (0)
-	[Q2]        49.556    24.023    32.688    6 (0)
-	[Q3]        35.548    25.650    30.599    2 (0)
-	[Q4]        30.469     0.001     0.103 1050 (0)
+					  max       min        avg   cnt(err)
+		-----------------------------------------------------
+		[Q1]        58.982    30.371    44.676    2 (0)
+		[Q2]        49.556    24.023    32.688    6 (0)
+		[Q3]        35.548    25.650    30.599    2 (0)
+		[Q4]        30.469     0.001     0.103 1050 (0)
 
-To store SQL logs created in log/broker/sql_log under the installation directory to a separate file, the **broker_log_converter** utility is executed. The syntax of the **broker_log_converter** utility is as follows. The example shows how to store queries in the query_editor_1.sql.log file to the query_convert.in file. ::
+	To store SQL logs created in log/broker/sql_log under the installation directory to a separate file, the **broker_log_converter** utility is executed. The syntax of the **broker_log_converter** utility is as follows. The example shows how to store queries in the query_editor_1.sql.log file to the query_convert.in file. ::
 
-	broker_log_converter <SQL_log_file> <output_file>
+		broker_log_converter <SQL_log_file> <output_file>
 
-The following example shows how to convert the query in the query_editor_1.sql.log file into the query_convert.in file. ::
+	The following example shows how to convert the query in the query_editor_1.sql.log file into the query_convert.in file. ::
 
-	% broker_log_converter query_editor_1.sql.log query_convert.in
+		% broker_log_converter query_editor_1.sql.log query_convert.in
 
-To re-execute queries stored in the query file which has been created by the **broker_log_converter** utility, the **broker_log_runner** utility is executed. The syntax of the **broker_log_runner** utility is as follows: The example shows how to re-executes queries store in the query_convert.in of demodb. It is assumed that the IP address of the broker is 192.168.1.10 and its port number is 30,000. ::
+	To re-execute queries stored in the query file which has been created by the **broker_log_converter** utility, the **broker_log_runner** utility is executed. The syntax of the **broker_log_runner** utility is as follows: The example shows how to re-executes queries store in the query_convert.in of demodb. It is assumed that the IP address of the broker is 192.168.1.10 and its port number is 30,000. ::
 
-	broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
-	
-* *broker_host*: IP address or host name of the CUBRID broker
+		broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
+		
+	* *broker_host*: IP address or host name of the CUBRID broker
+	* *broker_port*: Port number of the CUBRID broker
+	* *dbname*: Name of the database against which queries are to be executed  
+	* *exec_script_file*: Name of the file where execution results are to be stored.
 
-* *broker_port*: Port number of the CUBRID broker
+	The following is [options] used on **broker_log_runner** .
 
-* *dbname*: Name of the database against which queries are to be executed  
+	.. program::broker_log_runner
 
-* *exec_script_file*: Name of the file where execution results are to be stored.
+	.. option:: -u NAME
 
-The following is [options] used on **broker_log_runner** .
+		Database user name (default: **PUBLIC**)
+		
+	.. option:: -p PASSWORD
 
-.. program::broker_log_runner
+		Database password
+		
+	.. option:: -r COUNT
 
-.. option:: -u NAME
+		The number of times that the query is to be executed (default value : 1)
 
-	Database user name (default: **PUBLIC**)
-	
-.. option:: -p PASSWORD
+	.. option:: -o FILE
 
-	Database password
-	
-.. option:: -r COUNT
+		Name of the file where execution results are to be stored 
+		
+	.. option:: -Q
+		
+		Stores the query plan in the FILE specified in the **-o** option.
 
-	The number of times that the query is to be executed (default value : 1)
+	The following example re-executes the queries saved on *query_convert.in* on *demodb*, and it assumes that the broker IP is specified in 192.168.1.10, and broker port is specified in 30000. ::
 
-.. option:: -o FILE
+		% broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
+		broker_ip = 192.168.1.10
+		broker_port = 30000
+		num_thread = 2
+		repeat = 1
+		dbname = demodb
+		dbuser = public
+		dbpasswd =
+		exec_time : 0.001
+		exec_time : 0.000
+		0.000500 0.000500
 
-	Name of the file where execution results are to be stored 
-	
-.. option:: -Q
-	
-	Stores the query plan in the FILE specified in the **-o** option.
+	The following example saves the query plan only without running the query. ::
+		
+		% broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
+		... 
+		%cat result.0
+		-------------- query -----------------
+		SELECT * FROM athlete where code=10099;
+		cci_prepare exec_time : 0.000
+		cci_execute_exec_time : 0.000
+		cci_execute:1
+		---------- query plan --------------
+		Join graph segments (f indicates final):
+		seg[0]: [0]
+		seg[1]: code[0] (f)
+		seg[2]: name[0] (f)
+		seg[3]: gender[0] (f)
+		seg[4]: nation_code[0] (f)
+		seg[5]: event[0] (f)
+		Join graph nodes:
+		node[0]: athlete athlete(6677/107) (sargs 0)
+		Join graph terms:
+		term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
 
-The following example re-executes the queries saved on *query_convert.in* on *demodb*, and it assumes that the broker IP is specified in 192.168.1.10, and broker port is specified in 30000. ::
+		Query plan:
 
-	% broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
-	broker_ip = 192.168.1.10
-	broker_port = 30000
-	num_thread = 2
-	repeat = 1
-	dbname = demodb
-	dbuser = public
-	dbpasswd =
-	exec_time : 0.001
-	exec_time : 0.000
-	0.000500 0.000500
+		iscan
+			class: athlete node[0]
+			index: pk_athlete_code term[0]
+			cost:  0 card 1
 
-The following example saves the query plan only without running the query. ::
-	
-	% broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
-	... 
-	%cat result.0
-	-------------- query -----------------
-	SELECT * FROM athlete where code=10099;
-	cci_prepare exec_time : 0.000
-	cci_execute_exec_time : 0.000
-	cci_execute:1
-	---------- query plan --------------
-	Join graph segments (f indicates final):
-	seg[0]: [0]
-	seg[1]: code[0] (f)
-	seg[2]: name[0] (f)
-	seg[3]: gender[0] (f)
-	seg[4]: nation_code[0] (f)
-	seg[5]: event[0] (f)
-	Join graph nodes:
-	node[0]: athlete athlete(6677/107) (sargs 0)
-	Join graph terms:
-	term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
+		Query stmt:
 
-	Query plan:
+		select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code=  :0 )
 
-	iscan
-		class: athlete node[0]
-		index: pk_athlete_code term[0]
-		cost:  0 card 1
+		---------- query result --------------
+		10099|Andersson Magnus|M|SWE|Handball|
+		-- 1 rows ----------------------------
 
-	Query stmt:
-
-	select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code=  :0 )
-
-	---------- query result --------------
-	10099|Andersson Magnus|M|SWE|Handball|
-	-- 1 rows ----------------------------
-
-	cci_end_tran exec_time : 0.000
+		cci_end_tran exec_time : 0.000
 
 .. _cubrid-manager-server:
 
@@ -1285,52 +1193,47 @@ CUBRID Manager Server Log
 The logs of CUBRID Manager server are stored in the log/manager directory under the installation directory. There are four types of log files depending on server process of CUBRID Manager.
 
 *   cub_auto.access.log: Access log of a client that has successfully logged into and out of the CUBRID Manager server
-
 *   cub_auto.error.log: Access log of a client that failed to log into or out of the CUBRID Manager Server
-
 *   cub_js.access.log: Job log processed by the CUBRID Manager server
-
 *   cub_js.error.log: Error log that occurred while the CUBRID Manager server has been processing jobs
 
 **Configuring CUBRID Manager Server**
 
-The configuration file name for the CUBRID Manager server is **cm.conf** and located in the **$CUBRID/conf** directory.
-In the CUBRID Manager server configuration file, where parameter names and values are stored, comments are prefaced by "#." Parameter names and values are separated by spaces or an equal sign (=). This page describes parameters that are specified in the **cm.conf** file.
+	The configuration file name for the CUBRID Manager server is **cm.conf** and located in the **$CUBRID/conf** directory.
+	In the CUBRID Manager server configuration file, where parameter names and values are stored, comments are prefaced by "#." Parameter names and values are separated by spaces or an equal sign (=). This page describes parameters that are specified in the **cm.conf** file.
 
 **cm_port**
 
-**cm_port** is a parameter used to configure a communication port for the connection between the CUBRID Manager server and the client.
-The default value is **8001** . It is used by **cub_auto** and **cm_js** automatically adds 1 to the value specified by **cub_auto** . For example, if **cm_port**
-is set to 8001, **cub_auto** uses the port 8001, and **cub_js** uses 8002. Therefore, to run the CUBRID Manager in an environment where a firewall has been installed, you must open two ports which will be actually used.
+	**cm_port** is a parameter used to configure a communication port for the connection between the CUBRID Manager server and the client.
+	The default value is **8001** . It is used by **cub_auto** and **cm_js** automatically adds 1 to the value specified by **cub_auto** . For example, if **cm_port**
+	is set to 8001, **cub_auto** uses the port 8001, and **cub_js** uses 8002. Therefore, to run the CUBRID Manager in an environment where a firewall has been installed, you must open two ports which will be actually used.
 
 **monitor_interval**
 
-**monitor_interval** is a parameter used to configure the monitoring interval of **cub_auto** in seconds. The default value is **5** .
+	**monitor_interval** is a parameter used to configure the monitoring interval of **cub_auto** in seconds. The default value is **5** .
 
 **allow_user_multi_connection**
 
-**allow_user_multi_connection** is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is **YES** . Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same user name.
+	**allow_user_multi_connection** is a parameter used to have multiple client connections allowed to the CUBRID Manager server. The default value is **YES** . Therefore, more than one CUBRID Manager client can connect to the CUBRID Manager server, even with the same user name.
 
 **server_long_query_time**
 
-**server_long_query_time** is a parameter used to configure delay reference time in seconds when configuring **slow_query** which is one of server diagnostics items. The default value is **10** . If the execution time of the query performed on the server exceeds this parameter value, the number of the **slow_query**
-parameters will increase.
+	**server_long_query_time** is a parameter used to configure delay reference time in seconds when configuring **slow_query** which is one of server diagnostics items. The default value is **10** . If the execution time of the query performed on the server exceeds this parameter value, the number of the **slow_query**
+	parameters will increase.
 
 **cm_target**
 
-**cm_target** is a parameter used to display appropriate menus of the CUBRID Manager depending on the service being provided where the broker and the database server have been separated. The default value means the environment where both broker and database server have been installed. You can set required values as follows:
+	**cm_target** is a parameter used to display appropriate menus of the CUBRID Manager depending on the service being provided where the broker and the database server have been separated. The default value means the environment where both broker and database server have been installed. You can set required values as follows:
 
-*   **cm_target broker, server**: Both broker and database server exist.
+	*   **cm_target broker, server**: Both broker and database server exist.
+	*   **cm_target broker**: Only broker exists.
+	*   **cm_target server**: Only database server exists.
 
-*   **cm_target broker**: Only broker exists.
+	If you set broker only, broker-related menus will be shown; if you set database server only, server-related menus will be displayed.
 
-*   **cm_target server**: Only database server exists.
+	If you right-click the host in the navigation tree and then select [Properties], you can check the setting information under [Host Information].
 
-If you set broker only, broker-related menus will be shown; if you set database server only, server-related menus will be displayed.
-
-If you right-click the host in the navigation tree and then select [Properties], you can check the setting information under [Host Information].
-
-.. image:: /images/image10.jpg
+	.. image:: /images/image10.jpg
 
 CUBRID Manager User Management Console
 --------------------------------------
@@ -1353,314 +1256,296 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
 **CM Users**
 
-Information about CM users consists of the followings:
+	Information about CM users consists of the followings:
 
-*   CM user authority: Includes the following information.
+	*   CM user authority: Includes the following information.
 
-    *   The permission to configure broker
+		*   The permission to configure broker
+		*   The permission to create a database. For now, this authority is only given to the **admin** user.
+		*   The permission to monitor status
 
-    *   The permission to create a database. For now, this authority is only given to the **admin** user.
+	*   Database information: A database that a CM user can use
+	*   CM user password
 
-    *   The permission to monitor status
-
-*   Database information: A database that a CM user can use
-
-*   CM user password
-
-The default user authority of CUBRID Manager is **admin** and its password is admin. Users who has **admin** authority have full administrative controls.
+	The default user authority of CUBRID Manager is **admin** and its password is admin. Users who has **admin** authority have full administrative controls.
 
 **Adding CM Users**
 
-The **cm_admin adduser** utility creates a CM user who has been granted a specific authority and has database information. The permissions to configure broker, create a database, and monitor status can be granted to the CM user. ::
+	The **cm_admin adduser** utility creates a CM user who has been granted a specific authority and has database information. The permissions to configure broker, create a database, and monitor status can be granted to the CM user. ::
 
-	cm_admin adduser [options] cmuser-name cmuser-password
+		cm_admin adduser [options] cmuser-name cmuser-password
 
-*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*   **adduser**: A command to create a new CM user
+	*   **adduser**: A command to create a new CM user
 
-*   *cmuser-name*: Specifies a unique name to a CM user. The name must have at least 4 characters in length. If the specified name in *cmuser-name* is identical to the existing one, **cm_admin** will stop creating a new CM user.
+	*   *cmuser-name*: Specifies a unique name to a CM user. The name must have at least 4 characters in length. If the specified name in *cmuser-name* is identical to the existing one, **cm_admin** will stop creating a new CM user.
 
-*   *cmuser-password*: A password of a CM user. The password must have at least 4 characters in length.
+	*   *cmuser-password*: A password of a CM user. The password must have at least 4 characters in length.
 
-The following is [options] of **cm_admin adduser**.
+	The following is [options] of **cm_admin adduser**.
 
-.. program:: cm_admin_adduser
+	.. program:: cm_admin_adduser
 
-.. option:: -b, --broker AUTHORITY
+	.. option:: -b, --broker AUTHORITY
 
-	Specifies the broker authority which will be granted to a new CM user.
+		Specifies the broker authority which will be granted to a new CM user.
 
-	You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
+		You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
 
-	The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure broker authority to monitor. ::
-	
-		cm_admin adduser -b monitor testcm testcmpwd
+		The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure broker authority to monitor. ::
+		
+			cm_admin adduser -b monitor testcm testcmpwd
 
-	
-.. option:: -c, --dbcreate AUTHORITY
+		
+	.. option:: -c, --dbcreate AUTHORITY
 
-	Specifies the authority to create a database which will be granted to a new CM user.
+		Specifies the authority to create a database which will be granted to a new CM user.
 
-	You can use **none** (default) and **admin** as *AUTHORITY*.
+		You can use **none** (default) and **admin** as *AUTHORITY*.
 
-	The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure database creation authority to admin.	::
+		The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure database creation authority to admin.	::
 
-		cm_admin adduser -c admin testcm testcmpwd
+			cm_admin adduser -c admin testcm testcmpwd
 
-.. option:: -m, monitor AUTHORITY
+	.. option:: -m, monitor AUTHORITY
 
-	Specifies the authority to monitor status which will be granted to a new CM user. 
+		Specifies the authority to monitor status which will be granted to a new CM user. 
 
-	You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
+		You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
 
-	The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure monitoring authority to admin. ::
+		The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure monitoring authority to admin. ::
 
-		cm_admin adduser -m admin testcm testcmpwd
+			cm_admin adduser -m admin testcm testcmpwd
 
-.. option:: -d, --dbinfo INFO_STRING
+	.. option:: -d, --dbinfo INFO_STRING
 
-	Specifies database information of a new CM user. 
-	
-	The format of *INFO_STRING* must be "<dbname>;<uid>;<broker_ip>,<broker_port>".
+		Specifies database information of a new CM user. 
+		
+		The format of *INFO_STRING* must be "<dbname>;<uid>;<broker_ip>,<broker_port>".
 
-	The following example shows how to add database information "testdb;dba;localhost,30000" to a CM user named *testcm* . ::
-	
-		cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
+		The following example shows how to add database information "testdb;dba;localhost,30000" to a CM user named *testcm* . ::
+		
+			cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
 
 **Deleting CM Users**
 
-The **cm_admin deluser** utility deletes a CM user. ::
+	The **cm_admin deluser** utility deletes a CM user. ::
 
-	cm_admin deluser cmuser-name
+		cm_admin deluser cmuser-name
 
-*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*   **deluser**: A command to delete an existing CM user
+	*   **deluser**: A command to delete an existing CM user
 
-*   *cmuser-name*: The name of a CM user to be deleted
+	*   *cmuser-name*: The name of a CM user to be deleted
 
-The following example shows how to delete a CM user named *testcm*. ::
+	The following example shows how to delete a CM user named *testcm*. ::
 
-	cm_admin deluser testcm
+		cm_admin deluser testcm
 
 **Displaying CM User information**
 
-The **cm_admin viewuser** utility displays information of a CM user. ::
+	The **cm_admin viewuser** utility displays information of a CM user. ::
 
-	cm_admin viewuser cmuser-name
+		cm_admin viewuser cmuser-name
 
-*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **cm_admin**: An integrated utility to manage CUBRID Manager
 
-*   **viewuser**: A command to display the CM user information
+	*   **viewuser**: A command to display the CM user information
 
-*   *cmuser-name*: A CM user name. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.
+	*   *cmuser-name*: A CM user name. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.
 
-The following example shows how to display information of a CM user named *testcm* . ::
+	The following example shows how to display information of a CM user named *testcm* . ::
 
-	cm_admin viewuser testcm
+		cm_admin viewuser testcm
 
-The information will be displayed as follows: ::
+	The information will be displayed as follows: ::
 
-	CM USER: testcm
-	  Auth info:
-		broker: none
-		dbcreate: none
-		statusmonitorauth: none
-	  DB info:
-		==========================================================================================
-		 DBNAME                                           UID               BROKER INFO             
-		==========================================================================================
-		 testdb                                           dba               localhost,30000  
+		CM USER: testcm
+		  Auth info:
+			broker: none
+			dbcreate: none
+			statusmonitorauth: none
+		  DB info:
+			==========================================================================================
+			 DBNAME                                           UID               BROKER INFO             
+			==========================================================================================
+			 testdb                                           dba               localhost,30000  
 
 **Changing the Authority of CM Users**
 
-The **cm_admin changeuserauth** utility changes the authority of a CM user. ::
+	The **cm_admin changeuserauth** utility changes the authority of a CM user. ::
 
-	cm_admin changeuserauth options cmuser-name
+		cm_admin changeuserauth options cmuser-name
 
-*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **changeuserauth**: A command to change the authority of a CM user
+	*   *cmuser-name*: The name of a CM user whose authority to be changed
 
-*   **changeuserauth**: A command to change the authority of a CM user
+	The following is [options] of **cm_admin changeuserauth**.
 
-*   *cmuser-name*: The name of a CM user whose authority to be changed
+	.. program:: cm_admin_changeuserauth
 
-The following is [options] of **cm_admin changeuserauth**.
+	.. option:: -b, --broker AUTHORITY
 
-.. program:: cm_admin_changeuserauth
+		Specifies the broker authority that will be granted to a CM user. 
+		You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
 
-.. option:: -b, --broker AUTHORITY
+		The following example shows how to change the broker authority of a CM user named *testcm* to monitor. ::
+		
+			cm_admin changeuserauth -b monitor testcm	
+		
+	.. option:: -c, --dbcreate
 
-	Specifies the broker authority that will be granted to a CM user. 
-	You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
+		Specifies the authority to create a database which will be granted to a CM user.
+		You can use **admin** and **none** as *AUTHORITY* .
 
-	The following example shows how to change the broker authority of a CM user named *testcm* to monitor. ::
-	
-		cm_admin changeuserauth -b monitor testcm	
-	
-.. option:: -c, --dbcreate
+		The following example shows how to change the database creation authority of a CM user named *testcm* to admin. ::
 
-	Specifies the authority to create a database which will be granted to a CM user.
-	You can use **admin** and **none** as *AUTHORITY* .
-
-	The following example shows how to change the database creation authority of a CM user named *testcm* to admin. ::
-
-		cm_admin changeuserauth -c admin testcm
+			cm_admin changeuserauth -c admin testcm
 
 
-.. option:: -m, --monitor 
+	.. option:: -m, --monitor 
 
-	Specifies the authority to monitor status which will be granted to a CM user.
-	You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
+		Specifies the authority to monitor status which will be granted to a CM user.
+		You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
 
-	The following example shows how to change the monitoring authority of a CM user named *testcm* to admin. ::
+		The following example shows how to change the monitoring authority of a CM user named *testcm* to admin. ::
 
-		cm_admin changeuserauth -m admin testcm
+			cm_admin changeuserauth -m admin testcm
 
 
 **Changing the CM User Password**
 
-The **cm_admin changeuserpwd** utility changes the password of a CM user. ::
+	The **cm_admin changeuserpwd** utility changes the password of a CM user. ::
 
-	cm_admin changeuserpwd [options] cmuser-name  
+		cm_admin changeuserpwd [options] cmuser-name  
 
-*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **changeuserpwd**: A command to change the password of a CM user
+	*   *cmuser-name*: The name of a CM user whose password to be changed
 
-*   **changeuserpwd**: A command to change the password of a CM user
+	The following is [options] of **cm_admin changeuserpwd**.
 
-*   *cmuser-name*: The name of a CM user whose password to be changed
+	.. option:: -o, --oldpass PASSWORD
 
-The following is [options] of **cm_admin changeuserpwd**.
+		Specifies the existing password of a CM user.
 
-.. option:: -o, --oldpass PASSWORD
+		The following example shows how to change a password of a CM user named *testcm* . ::
 
-	Specifies the existing password of a CM user.
+			cm_admin changeuserpwd -o old_password -n new_password testcm
+		
+	.. option:: --adminpass PASSWORD
 
-	The following example shows how to change a password of a CM user named *testcm* . ::
+		The password of an admin user can be specified instead of old CM user's password that you don't know. 
 
-		cm_admin changeuserpwd -o old_password -n new_password testcm
-	
-.. option:: --adminpass PASSWORD
+		The following example shows how to change a password of a CM user named *testcm* by using an admin password. ::
 
-	The password of an admin user can be specified instead of old CM user's password that you don't know. 
+			cm_admin changeuserauth --adminpass admin_password -n new_password testcm
+		
+	.. option:: -n, --newpass PASSWORD
 
-	The following example shows how to change a password of a CM user named *testcm* by using an admin password. ::
-
-		cm_admin changeuserauth --adminpass admin_password -n new_password testcm
-	
-.. option:: -n, --newpass PASSWORD
-
-	Specifies a new password of a CM user.
+		Specifies a new password of a CM user.
 	
 
 **Adding Database Information to CM Users**
 
-The **cm_admin adddbinfo** utility adds database information (database name, UID, broker IP, and broker port) to a CM user. ::
+	The **cm_admin adddbinfo** utility adds database information (database name, UID, broker IP, and broker port) to a CM user. ::
 
-	cm_admin adddbinfo options cmuser-name database-name
+		cm_admin adddbinfo options cmuser-name database-name
 
-*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **adddbinfo**: A command to add database information to a CM user
+	*   *cmuser-name*: CM user name
+	*   *databse-name*: The name of a database to be added
 
-*   **adddbinfo**: A command to add database information to a CM user
+	The following example shows how to add a database without specifying any user-defined values to a CM user named *testcm* . ::
 
-*   *cmuser-name*: CM user name
-
-*   *databse-name*: The name of a database to be added
-
-The following example shows how to add a database without specifying any user-defined values to a CM user named *testcm* . ::
-
-	cm_admin adddbinfo testcm testdb
+		cm_admin adddbinfo testcm testdb
 
 
-The following is [options] of **cm_admin adddbinfo**.
+	The following is [options] of **cm_admin adddbinfo**.
 
-.. program:: cm_admin_adddbinfo
+	.. program:: cm_admin_adddbinfo
 
-.. option:: -u, --uid ID
+	.. option:: -u, --uid ID
 
-	Specifies the ID of a database user to be added. The default value is **dba**.
+		Specifies the ID of a database user to be added. The default value is **dba**.
 
-	The following example shows how to add a database of which name is *testdb* and user ID is *uid* to a CM user named *testcm*. ::
+		The following example shows how to add a database of which name is *testdb* and user ID is *uid* to a CM user named *testcm*. ::
 
-		cm_admin adddbinfo -u uid testcm testdb
-	
-.. option:: -h, --host IP
+			cm_admin adddbinfo -u uid testcm testdb
+		
+	.. option:: -h, --host IP
 
-	Specifies the host IP of a broker used when clients access a database. The default value is **localhost** .
+		Specifies the host IP of a broker used when clients access a database. The default value is **localhost**.
 
-	The following example shows how to add a database of which name is *testdb* and the host IP of is *127.0.0.1* to a CM user named *testcm*. ::
+		The following example shows how to add a database of which name is *testdb* and the host IP of is *127.0.0.1* to a CM user named *testcm*. ::
 
-		cm_admin adddbinfo -h 127.0.0.1 testcm testdb
+			cm_admin adddbinfo -h 127.0.0.1 testcm testdb
 
-.. option:: -p, --port
+	.. option:: -p, --port
 
-	Specifies the port number of a broker used when clients access a database. The default value: **30000** .
+		Specifies the port number of a broker used when clients access a database. The default value: **30000** .
 
 
 **Adding a broker port (-p)**
 
-The following example shows how to add a database of which name is *testdb* and the broker port *33000* to a CM user named *testcm* . ::
+	The following example shows how to add a database of which name is *testdb* and the broker port *33000* to a CM user named *testcm*. ::
 
-	cm_admin adddbinfo -p 33000 testcm testdb
+		cm_admin adddbinfo -p 33000 testcm testdb
 
 **Deleting database information from CM Users**
 
-The **cm_admin deldbinfo** utility deletes database information of a specified CM user. 
+	The **cm_admin deldbinfo** utility deletes database information of a specified CM user. ::
 
-::
+		cm_admin deldbinfo cmuser-name database-name
 
-	cm_admin deldbinfo cmuser-name database-name
+	*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **deldbinfo**: A command to delete database information of a CM user
+	*   *cmuser-name*: CM user name
+	*   *databse-name*: The name of a database to be deleted
 
-*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	The following example shows how to delete database information of which name is *testdb* from a CM user named *testcm* . ::
 
-*   **deldbinfo**: A command to delete database information of a CM user
-
-*   *cmuser-name*: CM user name
-
-*   *databse-name*: The name of a database to be deleted
-
-The following example shows how to delete database information of which name is *testdb* from a CM user named *testcm* . ::
-
-	cm_admin deldbinfo  testcm testdb
+		cm_admin deldbinfo  testcm testdb
 
 **Changing Database Information of a CM user**
 
-The **cm_admin changedbinfo** utility changes database information of a specified CM user. ::
+	The **cm_admin changedbinfo** utility changes database information of a specified CM user. ::
 
-	cm_admin changedbinfo [options] cmuser-name database-name
+		cm_admin changedbinfo [options] cmuser-name database-name
 
-*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **cm_admin**: An integrated utility to manage CUBRID Manager
+	*   **changedbinfo**: A command to change database information of a CM user
+	*   *cmuser-name*: CM user name
+	*   *databse-name*: The name of a database to be changed
 
-*   **changedbinfo**: A command to change database information of a CM user
+	The following is [options] of **cm_admin changedbinfo**.
 
-*   *cmuser-name*: CM user name
+	.. program:: cm_admin_changedbinfo
 
-*   *databse-name*: The name of a database to be changed
+	.. option:: -u, --uid ID
 
-The following is [options] of **cm_admin changedbinfo**.
+		Specifies the ID of a database user.
 
-.. program:: cm_admin_changedbinfo
+		The following example shows how to update user ID information to *uid* in the *testdb* database which belongs to a CM user named *testcm* . ::
+		
+			cm_admin changedbinfo -u uid testcm testdb
+		
+	.. option:: -h, --host IP
 
-.. option:: -u, --uid ID
+		Specifies the host of a broker used when clients access a database.
 
-	Specifies the ID of a database user.
+		The following example shows how to update host IP information to *10.34.63.132* in the *testdb* database which belongs to a CM user named *testcm* . ::
 
-	The following example shows how to update user ID information to *uid* in the *testdb* database which belongs to a CM user named *testcm* . ::
-	
-		cm_admin changedbinfo -u uid testcm testdb
-	
-.. option:: -h, --host IP
+			cm_admin changedbinfo -h 10.34.63.132 testcm testdb
 
-	Specifies the host of a broker used when clients access a database.
+	.. option:: -p, --port NUMBER
 
-	The following example shows how to update host IP information to *10.34.63.132* in the *testdb* database which belongs to a CM user named *testcm* . ::
+		Specifies the port number of a broker used when clients access a database.
 
-		cm_admin changedbinfo -h 10.34.63.132 testcm testdb
+		The following example shows how to update broker port information to *33000* in the *testdb* database which belongs to a CM user named *testcm* . ::
 
-.. option:: -p, --port NUMBER
-
-	Specifies the port number of a broker used when clients access a database.
-
-	The following example shows how to update broker port information to *33000* in the *testdb* database which belongs to a CM user named *testcm* . ::
-
-		cm_admin changedbinfo -p 33000 testcm testdb
+			cm_admin changedbinfo -p 33000 testcm testdb

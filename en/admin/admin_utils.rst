@@ -96,6 +96,8 @@ The **cubrid createdb** utility creates databases and initializes them with the 
 
 * *database_name*: Specifies a unique name for the database to be created, without including the path name to the directory where the database will be created. If the specified database name is the same as that of an existing database name, CUBRID halts creation of the database to protect existing files.
 
+The maximun length of database name is 17 in English.
+
 The following shows [options] available with the **cubrid** **createdb** utility.
 
 .. program:: createdb

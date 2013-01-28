@@ -105,6 +105,15 @@ Selecting a Shard DB through the Shard SQL Hint
 
 	For more information on the query process using hints and configuration information, see :ref:`General Procedure of Executing Queries by Using Shard SQL Hint <using-shard-hint>`.
 
+	[번역]
+	
+	.. note::
+		두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다. 
+		
+		예) SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
+		
+		위와 같은 경우 250과 22가 같은 shard를 가리키면 정상 처리, 다른 shard를 가리키면 오류 처리한다.
+
 **shard_key Hint**
 
 	The **shard_key** hint is to specify the position of a bind or literal variable. This hint should be positioned in front of either of them.

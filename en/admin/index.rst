@@ -9,16 +9,13 @@ It also includes instructions on how to use the **cubrid** utility, which starts
 This chapter contains the following:
 
 *   How to use CUBRID utilities
-
 *   How to control the CUBRID (service, database server, broker, manager server)
-
 *   How to use the database administrative utilities
-
 *   Database migration
-
 *   Database backup and restore
-
 *   CUBRID HA
+*   CUBRID SHARD
+*   System configuration
 
 **CUBRID Utilities**
 

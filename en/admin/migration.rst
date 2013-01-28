@@ -33,11 +33,11 @@ The following steps describes migration scenario that can be applied while the e
 
 #. Install a new version of CUBRID
 
-	Once backing up and unloading of the data created by the existing version of CUBRID have been completed, delete the existing version of CUBRID and its databases and then install the new version of CUBRID. For details on installing CUBRID, see :doc:`../start` in "Getting Started."
+	Once backing up and unloading of the data created by the existing version of CUBRID have been completed, delete the existing version of CUBRID and its databases and then install the new version of CUBRID. For details on installing CUBRID, see :doc:`/start`.
 
 #. Configure the new CUBRID environment
 
-	Configure the new version of CUBRID by referring to configuration files of the existing database stored in the step 3, " **Store the existing CUBRID configuration files** ." For details on configuring new environment, see :doc:`../install` in "Getting Started."
+	Configure the new version of CUBRID by referring to configuration files of the existing database stored in the step 3, " **Store the existing CUBRID configuration files** ." For details on configuring new environment, see :doc:`/install` in "Getting Started."
 
 #. Load the new database
 	Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. For details on creating a database, see :ref:`creating-database` in "Administrator's Guide." For details on loading a database, see :ref:`load-db` .

@@ -34,7 +34,7 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
 **응용 프로그램의 호환성**
 
-* 이전 버전의 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 9.1 DB에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 9.1 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다.
+* 2008 R2.0 또는 그 이상 버전에서 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 9.1 DB에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 9.1 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다.
 
 * 새로운 예약어 추가 및 일부 질의에 대한 스펙 변경으로 인해 질의 결과가 이전 버전과 다를 수 있으므로 주의한다.
 
@@ -56,7 +56,9 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
 * CUBRID DB 서버와 브로커 서버(또는 CUBRID SHARD 서버)를 분리하여 운영하는 경우, 서버 장비의 운영 체제가 다르더라도 상호 운용성을 보장한다. 단, DB 서버의 Bit 버전과 브로커 서버의 Bit 버전은 서로 동일해야 한다. 예를 들어, Linux용 64Bit 버전 DB 서버는 Windows용 64Bit 버전 브로커 서버와 상호 운용이 가능하지만, 32Bit 버전 브로커 서버와는 상호 운용이 불가능하다.
 
-DB 서버와 브로커 서버 사이의 관계에 대한 설명은 :doc:`intro` 를 참고한다. CUBRID SHARD에 대한 설명은 :doc:`admin/shard` 를 참고한다.
+	DB 서버와 브로커 서버 사이의 관계에 대한 설명은 :doc:`intro` 를 참고한다. CUBRID SHARD에 대한 설명은 :doc:`admin/shard` 를 참고한다.
+
+* CUBRID DB 서버와 브로커 서버(또는 CUBRID SHARD 서버)를 분리하여 운영하는 경우, DB 서버와 브로커 서버의 시스템 로캘은 동일해야 한다. 예를 들어 DB 서버의 CUBRID_CHARSET이 en_US.utf8이면 브로커 서버의 CUBRID_CHARSET도 en_US.utf8이어야 한다.
 
 Linux에서의 설치와 실행
 -----------------------
@@ -139,7 +141,7 @@ cubrid service를 구동시킨 후 정상적으로 구동되었는지 확인하�
 
 CentOS5 환경에서 생성한 RPM 파일을 사용하여 CUBRID를 설치할 수 있으며, 일반적인 RPM 유틸리티와 동일한 방법으로 설치하고 삭제할 수 있다. 설치하면 새로운 시스템 그룹(cubrid) 및 사용자 계정(cubrid)이 생성되며, 설치 후에는 cubrid 사용자 계정으로 로그인하여 CUBRID 서비스를 시작해야 한다. ::
 
-	$ rpm -Uvh CUBRID-9.0.0.0470-el5.x86_64.rpm
+	$ rpm -Uvh cubrid-9.0.0.0470-el5.x86_64.rpm
 
 RPM을 실행하면 CUBRID는 cubrid 홈 디렉터리(/opt/cubrid)에 설치되고, CUBRID 관련 환경 설정 파일(cubrid.[c]sh)이 /etc/profile.d 디렉터리에 설치된다. 단, demodb는 자동으로 설치되지 않으므로 /opt/cubrid/demo/make_cubrid_demo.sh를 실행하여야 한다. CUBRID가 설치 완료되면 cubrid 사용자 계정으로 로그인하여 CUBRID 서비스를 다음과 같이 시작한다. ::
 
@@ -152,9 +154,9 @@ RPM을 실행하면 CUBRID는 cubrid 홈 디렉터리(/opt/cubrid)에 설치되�
 
 .. note::
 
-	**service나 chkconfig 명령을 사용하는 방법**
+	**Linux에서 시스템 구동 시 CUBRID 자동 구동하기**
 	
-	SH 패키지나 RPM 패키지로 CUBRID를 설치했다면 $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **CUBRID_USER** 라는 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용할 수 있다.
+	SH 패키지나 RPM 패키지로 CUBRID를 설치했다면 $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **CUBRID_USER** 라는 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용하여 Linux 시스템 구동 시 CUBRID를 자동으로 구동할 수 있다.
 
 **Fedora/CentOS에서 CUBRID 설치**
 

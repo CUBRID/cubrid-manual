@@ -2,6 +2,59 @@
 정보 함수
 *********
 
+.. function:: CHARSET(expr)
+
+	*expr* 의 문자셋을 반환한다.
+	
+	:param expr: 문자셋을 구할 대상 표현식
+	
+	:rtype: STRING
+
+	.. code-block:: sql
+
+		SELECT CHARSET('abc');
+		'iso88591'
+		
+		SELECT CHARSET(_utf8'abc');
+		'utf8'
+		
+		SET NAMES utf8;
+		SELECT CHARSET('abc');
+		'utf8'
+		
+		
+.. function:: COERCIBILITY(expr)
+	
+	*expr* 의 콜레이션 변환도(coercibility)를 반환한다. 콜레이션 변환도는 칼럼(표현식)들이 서로 다른 콜레이션과 문자셋을 가지고 있을 때 어떤 콜레이션과 문자셋으로 변환할 것인지를 결정한다. 어떤 연산을 수행하는 두 개의 칼럼(표현식)이 있을 때, 높은 변환도를 가진 인자는 더 낮은 변환도를 가진 인자의 콜레이션으로 변환된다. 이와 관련하여 :ref:`콜레이션 변환도 <collation-coercibility>` 를 참고한다.
+
+	:param expr: 콜레이션 변환도를 구할 대상 표현식
+
+	:rtype: INT
+	
+	.. code-block:: sql
+	
+		SELECT COERCIBILITY(USER());
+		7
+		
+		SELECT COERCIBILITY(_utf8'abc');
+		10
+
+.. function:: COLLATION(expr)
+
+	*expr* 의 콜레이션을 반환한다.
+	
+	:param expr: 콜레이션을 구할 대상 표현식
+
+	:rtype: STRING
+	
+	.. code-block:: sql
+	
+		SELECT COLLATION('abc');
+		'iso88591_bin'
+		
+		SELECT COLLATION(_utf8'abc');
+		'utf8_bin'
+
 .. function:: CURRENT_USER
 .. function:: USER
 
@@ -48,7 +101,7 @@
 		============================================
 		  'demodb'              'demodb'
 
-.. function:: DEFAULT (column_name)
+.. function:: DEFAULT(column_name)
 .. function:: DEFAULT
 
 	**DEFAULT** 와 **DEFAULT** 함수는 칼럼에 정의된 기본값을 반환한다. 해당 칼럼에 기본값이 지정되지 않으면 **NULL** 또는 에러를 출력한다. **DEFAULT** 는 인자가 없는 반면, **DEFAULT** 함수는 칼럼 이름을 입력 인자로 하는 차이가 있다. **DEFAULT** 는 **INSERT** 문의 입력 데이터, **UPDATE** 문의 **SET** 절에서 사용될 수 있고, **DEFAULT** 함수는 모든 곳에서 사용될 수 있다.
@@ -84,14 +137,12 @@
 	:param index: *table* 내에 존재하는 인덱스 이름
 	:param key_pos: 부분 키의 위치. *key_pos* 는 0부터 시작하여 키를 구성하는 칼럼 개수보다 작은 범위를 갖는다. 즉, 첫 번째 칼럼의 *key_pos* 는 0이다. 단일 칼럼 인덱스의 경우에는 0이다. 다음 타입 중 하나가 될 수 있다.
 	
-		* 숫자형 타입으로 변환할 수 있는 문자열. NCHAR나 VARNCHAR는 지원하지 않는다.
+		* 숫자형 타입으로 변환할 수 있는 문자열. 
 		* 정수형으로 변환할 수 있는 숫자형 타입. FLOAT나 DOUBLE 타입은 ROUND 함수로 변환한 값이 된다.
 
 	:rtype: INT
 	
 	리턴 값은 0 또는 양의 정수이며, 입력 인자 중 하나라도 **NULL** 이면 **NULL** 을 반환한다. 입력 인자인 테이블이나 인덱스가 발견되지 않거나 *key_pos* 가 지정된 범위를 벗어나면 **NULL** 을 리턴한다.
-
-	첫 번째와 두 번째 입력 인자인 테이블, 인덱스 이름은 **NCHAR** 나 **VARNCHAR** 타입으로 전달할 수 없다.
 
 	.. code-block:: sql
 
@@ -101,7 +152,7 @@
 		s1 VARCHAR(10),
 		s2 VARCHAR(10),
 		s3 VARCHAR(10) UNIQUE);
-						  
+		  
 		CREATE INDEX i_t1_i1 ON t1(i1 DESC);
 		CREATE INDEX i_t1_s1 ON t1(s1(7));
 		CREATE INDEX i_t1_i1_s1 on t1(i1,s1);
@@ -114,22 +165,22 @@
 		SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',0);
 		   index_cardinality('t1', 'i_t1_i1_s1', 0)
 		===========================================
-												  2
+		                                          2
 		 
 		SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',1);
 		   index_cardinality('t1', 'i_t1_i1_s1', 1)
 		===========================================
-												  3
+		                                          3
 		 
 		SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',2);
 		   index_cardinality('t1', 'i_t1_i1_s1', 2)
-		===========================================
-											   NULL
+		=============================================
+		                                         NULL
 		 
 		SELECT INDEX_CARDINALITY('t123','i_t1_i1_s1',1);
 		  index_cardinality('t123', 'i_t1_i1_s1', 1)
 		=============================================
-												 NULL
+		                                         NULL
 
 .. function:: INET_ATON( ip_string )
 
@@ -146,7 +197,7 @@
 		 
 		   inet_aton('192.168.0.10')
 		============================
-						  3232235530
+		                  3232235530
 
 .. function:: INET_NTOA( expr )
 

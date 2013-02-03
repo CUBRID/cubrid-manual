@@ -104,11 +104,13 @@ shard SQL 힌트를 이용한 shard DB 선택
 	힌트와 설정 정보를 이용한 자세한 질의 처리 절차는 :ref:`shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차 <using-shard-hint>` 를 참고한다.
 
 	.. note::
-		두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다. 
+		* 하나의 질의 안에 두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다. ::
 		
-		예) SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
+			예) SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
 		
-		위와 같은 경우 250과 22가 같은 shard를 가리키면 정상 처리, 다른 shard를 가리키면 오류 처리한다.
+			위와 같은 경우 250과 22가 같은 shard를 가리키면 정상 처리, 다른 shard를 가리키면 오류 처리한다.
+		
+		* 배열로 여러 개의 값을 바인딩하여 일괄 처리하는 드라이버 함수(예: JDBC의 executeBatch, CCI의 cci_execute_array, cci_execute_batch)에서 여러 개의 질의 중 하나라도 다른 shard에 접근하는 질의가  있으면 모두 오류 처리한다. 
 		
 **shard_key 힌트**
 
@@ -200,7 +202,10 @@ shard SQL 힌트를 이용한 shard DB 선택
 		.. image:: /images/image46.png
 
 		*   shard DB #1 에서 수행한 처리 결과를 수신하여, 요청한 응용으로 결과를 반환한다.
-
+		
+.. note::
+	배열로 여러 개의 값을 바인딩하여 일괄 처리하는 드라이버 함수(예: JDBC의 executeBatch, CCI의 cci_execute_array, cci_execute_batch)에서 다른 shard에 접근하는 값이 존재하면 오류 처리한다.
+	
 다양한 DBMS 사용 가능
 ---------------------
 
@@ -366,31 +371,25 @@ shard 설정 변경
 
 		sh> cubrid shard status
 		@ cubrid shard status
-		% shard1  - shard_cas [21265,45511] /home1/cubrid_user/SHARD/log/broker//shard1.err
-		 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-		 LONG_TRANSACTION_TIME:60.00, LONG_QUERY_TIME:60.00, SESSION_TIMEOUT:300
-		 KEEP_CONNECTION:ON, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+		% shard1
 		----------------------------------------------------------------
 		PROXY_ID SHARD_ID   CAS_ID   PID   QPS   LQS PSIZE STATUS       
 		----------------------------------------------------------------
-			   1        0        1 21272     0     0 53292 IDLE         
-			   1        1        1 21273     0     0 53292 IDLE         
-			   1        2        1 21274     0     0 53292 IDLE         
-			   1        3        1 21275     0     0 53292 IDLE
+		       1        0        1 21272     0     0 53292 IDLE         
+		       1        1        1 21273     0     0 53292 IDLE         
+		       1        2        1 21274     0     0 53292 IDLE         
+		       1        3        1 21275     0     0 53292 IDLE
 		 
 		sh> cubrid shard status -f
 		@ cubrid shard status
-		% shard1  - shard_cas [21265,45511] /home1/cubrid_user/SHARD/log/broker//shard1.err
-		 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-		 LONG_TRANSACTION_TIME:60.00, LONG_QUERY_TIME:60.00, SESSION_TIMEOUT:300
-		 KEEP_CONNECTION:ON, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+		% shard1
 		----------------------------------------------------------------------------------------------------------------------------------------------------------
 		PROXY_ID SHARD_ID   CAS_ID   PID   QPS   LQS PSIZE STATUS          LAST ACCESS TIME               DB             HOST   LAST CONNECT TIME    SQL_LOG_MODE
 		----------------------------------------------------------------------------------------------------------------------------------------------------------
-			   1        0        1 21272     0     0 53292 IDLE         2012/02/29 15:00:24    shard1@HostA           HostA 2012/02/29 15:00:25               -
-			   1        1        1 21273     0     0 53292 IDLE         2012/02/29 15:00:24    shard1@HostB           HostB 2012/02/29 15:00:25               -
-			   1        2        1 21274     0     0 53292 IDLE         2012/02/29 15:00:24    shard1@HostC           HostC 2012/02/29 15:00:25               -
-			   1        3        1 21275     0     0 53292 IDLE         2012/02/29 15:00:24    shard1@HostD           HostD 2012/02/29 15:00:25               -
+		       1        0        1 21272     0     0 53292 IDLE         2013/01/31 15:00:24    shard1@HostA           HostA 2013/01/31 15:00:25               -
+		       1        1        1 21273     0     0 53292 IDLE         2013/01/31 15:00:24    shard1@HostB           HostB 2013/01/31 15:00:25               -
+		       1        2        1 21274     0     0 53292 IDLE         2013/01/31 15:00:24    shard1@HostC           HostC 2013/01/31 15:00:25               -
+		       1        3        1 21275     0     0 53292 IDLE         2013/01/31 15:00:24    shard1@HostD           HostD 2013/01/31 15:00:25               -
 	   
 응용 예제 프로그램 작성
 -----------------------
@@ -493,55 +492,49 @@ shard 설정 변경
 		 
 		=== <Result of SELECT Command in Line 1> ===
 		 
-				 s_no  s_name                      s_age
+		         s_no  s_name                      s_age
 		================================================
-					0  'name_0'                       10
-					1  'name_1'                       11
-					2  'name_2'                       12
-					3  'name_3'                       13
-					...
+		            0  'name_0'                       10
+		            1  'name_1'                       11
+		            2  'name_2'                       12
+		            3  'name_3'                       13
+		            ...
 
 	*   shard #1 ::
 
 		sh> $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
 		 
-		=== <Result of SELECT Command in Line 1> ===
-		 
-				 s_no  s_name                      s_age
+		         s_no  s_name                      s_age
 		================================================
-				   64  'name_64'                      10
-				   65  'name_65'                      11
-				   66  'name_66'                      12
-				   67  'name_67'                      13  
-				   ...
+		           64  'name_64'                      10
+		           65  'name_65'                      11
+		           66  'name_66'                      12
+		           67  'name_67'                      13  
+		           ...
 
 	*   shard #2 ::
 
 		sh> $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
 		 
-		=== <Result of SELECT Command in Line 1> ===
-		 
-				 s_no  s_name                      s_age
-		================================================
-		128  'name_128'                     10
-		129  'name_129'                     11
-		130  'name_130'                     12
-		131  'name_131'                     13
-		...
-
+		          s_no  s_name                      s_age
+		=================================================
+		           128  'name_128'                     10
+		           129  'name_129'                     11
+		           130  'name_130'                     12
+		           131  'name_131'                     13
+		           ...
+                   
 	*   shard #3 ::
 
 		sh> $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
 		 
-		=== <Result of SELECT Command in Line 1> ===
-		 
-				 s_no  s_name                      s_age
+		         s_no  s_name                      s_age
 		================================================
-		192  'name_192'                     10
-		193  'name_193'                     11
-		194  'name_194'                     12
-		195  'name_195'                     13
-		...
+		          192  'name_192'                     10
+		          193  'name_193'                     11
+		          194  'name_194'                     12
+		          195  'name_195'                     13
+		          ...
 
 .. _shard-configuration:
 
@@ -987,13 +980,54 @@ CUBRID SHARD 설정 정보 확인
 
 참고로 현재 "실행 중"인 시스템 파라미터의 설정 정보(cubrid.conf)를 확인하려면 **cubrid paramdump** *database_name* 명령을 사용한다. **SET SYSTEM PARAMETERS** 구문에 의해 시스템 파라미터의 설정 정보가 동적으로 변경될 수 있는데, 이 명령으로 동작 중인 시스템의 설정 정보를 확인할 수 있다.
 
+CUBRID SHARD ID 확인
+--------------------
+**cubrid shard getid** 는 특정 키가 어느 샤드 DB에 접근하는지 알고 싶을 때 사용하는 명령으로, shard key에 대한 SHARD ID를 출력한다. :: 
+
+	cubrid shard getid -b <broker-name> [-f] shard-key
+	
+* -b <*broker-name*> : shard broker 이름
+* -f  : 상세 정보 출력
+* *shard-key* : shard key
+
+다음은 shard1 브로커에서 키 1에 대한 SHARD ID를 출력하는 예이다.
+
+::
+
+	$ cubrid shard getid -b shard1 1
+	@ cubrid shard getid
+	% shard1
+	 SHARD_ID : 0, SHARD_KEY: 1
+
+다음은 -f 옵션을 사용하여 상세 정보를 출력하는 예이다.
+
+::
+	
+	$ cubrid shard getid -b shard1 -f 1
+	@ cubrid shard getid
+	% shard1
+	 SHARD_ID : 0, SHARD_KEY : 1, KEY_COLUMN : student_no
+	 MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
+	 RANGE STATISTICS : student_no
+	      MIN ~   MAX :      SHARD
+	    ---------------------------
+	        0 ~    31 :          0
+
+	 SHARD CONNECTION :
+	    SHARD_ID          DB NAME          CONNECTION_INFO
+	    ---------------------------------------------------
+	           0           shard1                192.168.10.1
+	           1           shard4                192.168.10.2
+	           2           shard2                192.168.10.3
+	           3           shard3                192.168.10.4
+
 CUBRID SHARD 상태 확인
 ----------------------
 
 **cubrid shard status** 는 여러 옵션을 제공하며, 각 shard broker 및 shard proxy, shard cas의 상태 정보를 확인할 수 있도록 한다. 또한 메타데이터 정보 및 shard proxy에 접속한 클라이언트의 정보를 확인 가능하다. ::
 
-	cubrid shard status options [<expr>]
-	options : [-b | -f [-l sec] | -t | -c | -m | -s <sec>]
+	cubrid shard status [options] [<expr>]
+	options : -b | -f [-l sec] | -t | -c | -m | -s <sec>
 
 <*expr*>이 주어지면 해당 CUBRID SHARD에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID SHARD 환경 설정 파일(**shard.conf**)에 등록된 전체 CUBRID SHARD에 대해 상태 모니터링을 수행한다.
 
@@ -1471,3 +1505,8 @@ SHARD CAS 로그
 **auto increment**
 
 	auto increment 속성 또는 SERIAL 등의 값이 각 shard DB 내에서만 유효하므로, 의도한 것과 다른 값을 반환할 수 있다.
+
+**Windows용 SHARD DB와 응용 드라이버 사이의 접속**
+	
+	Windows용 SHARD DB 서버는 같은 버전의 드라이버를 사용하는 응용 프로그램만 접속이 가능하다. Linux용 SHARD DB 서버는 다른 버전의 드라이버를 사용하는 응용 프로그램과도 접속이 가능하다.
+	

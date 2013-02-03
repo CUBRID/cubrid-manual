@@ -70,12 +70,6 @@ CCI API 레퍼런스
 	| **CCI_U_TYPE_STRING**    | **CCI_A_TYPE_STR**    |
 	|                          |                       |
 	+--------------------------+-----------------------+
-	| **CCI_U_TYPE_NCHAR**     | **CCI_A_TYPE_STR**    |
-	|                          |                       |
-	+--------------------------+-----------------------+
-	| **CCI_U_TYPE_VARNCHAR**  | **CCI_A_TYPE_STR**    |
-	|                          |                       |
-	+--------------------------+-----------------------+
 	| **CCI_U_TYPE_BIT**       | **CCI_A_TYPE_BIT**    |
 	|                          |                       |
 	+--------------------------+-----------------------+
@@ -122,6 +116,9 @@ CCI API 레퍼런스
 	|                          |                       |
 	+--------------------------+-----------------------+
 	| **CCI_U_TYPE_CLOB**      | **CCI_A_TYPE_CLOB**   |
+	|                          |                       |
+	+--------------------------+-----------------------+
+	| **CCI_U_TYPE_ENUM**      | **CCI_A_TYPE_STR**    |
 	|                          |                       |
 	+--------------------------+-----------------------+
 
@@ -649,13 +646,13 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_connect(char *ip, int port, char *db_name, char *db_user, char *db_password)
 
-	데이터베이스 서버에 대한 연결 핸들을 할당받고 해당 서버와 연결을 시도한다. 서버 연결에 성공하면 연결 핸들 ID를 반환하고, 실패하면 에러 코드를 반환한다.
+	DB 서버에 대한 연결 핸들을 할당받고 해당 서버와 연결을 시도한다. 서버 연결에 성공하면 연결 핸들 ID를 반환하고, 실패하면 에러 코드를 반환한다.
 
 	:param ip: (IN) 서버 IP 문자 스트링 (호스트 이름)
 	:param port: (IN) 브로커 포트( **$CUBRID/conf/cubrid_broker.conf** 파일에 설정된 포트를 사용)
-	:param db_name: (IN) 데이터베이스 이름
-	:param db_user: (IN) 데이터베이스 사용자 이름
-	:param db_passwd: (IN) 데이터베이스 사용자 비밀번호
+	:param db_name: (IN) DB 이름
+	:param db_user: (IN) DB 사용자 이름
+	:param db_passwd: (IN) DB 사용자 비밀번호
 	:return: 연결 핸들 ID(성공), 에러 코드(실패)
 
 		*   **CCI_ER_NO_MORE_MEMORY**
@@ -667,13 +664,13 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_connect_ex(char *ip, int port, char *db_name, char *db_user, char *db_password, T_CCI_ERROR * err_buf)
 
-	**CCI_ER_DBMS** 에러를 반환하면 세부 에러 내용을 데이터베이스 에러 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect` 와 다르고 나머지는 동일하다.
+	**CCI_ER_DBMS** 에러를 반환하면 세부 에러 내용을 DB 에러 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect` 와 다르고 나머지는 동일하다.
 
 	:param ip: (IN) 서버 IP 문자 스트링 (호스트 이름)
 	:param port: (IN) 브로커 포트( **$CUBRID/conf/cubrid_broker.conf** 파일에 설정된 포트를 사용)
-	:param db_name: (IN) 데이터베이스 이름
-	:param db_user: (IN) 데이터베이스 사용자 이름
-	:param db_passwd: (IN) 데이터베이스 사용자 비밀번호
+	:param db_name: (IN) DB 이름
+	:param db_user: (IN) DB 사용자 이름
+	:param db_passwd: (IN) DB 사용자 비밀번호
 	:param err_buf: (OUT) 에러 버퍼
 	:return: 연결 핸들 ID(성공), 에러 코드(실패)
 
@@ -689,8 +686,8 @@ CCI API 레퍼런스
 	*url* 인자로 전달된 접속 정보를 이용하여 데이터베이스로 연결을 시도한다. CCI에서 브로커의 HA 기능을 사용하는 경우 이 함수의 *url* 인자 내의 altHosts 속성을 이용하여, 장애 발생 시 failover할 standby 브로커 서버의 연결 정보를 명시해야 한다. 서버 연결에 성공하면 연결 핸들 ID를 반환하고, 실패하면 에러 코드를 반환한다. 브로커의 HA 기능에 대한 자세한 내용은 :ref:`duplexing-brokers`\를 참고한다.
 	
 	:param url: (IN) 서버 연결 정보 문자 스트링
-	:param db_user: (IN) 데이터베이스 사용자 이름. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_user*>를 사용한다.
-	:param db_passwd: (IN) 데이터베이스 사용자 비밀번호. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_password*>를 사용한다.
+	:param db_user: (IN) DB 사용자 이름. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_user*>를 사용한다. 이 값과 *url* 내의 <*db_user*>가 모두 정의되지 않은 경우 DB 사용자 이름은 **PUBLIC** 이 된다.
+	:param db_passwd: (IN) DB 사용자 비밀번호. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_password*>를 사용한다. 이 값과 *url* 내의 <*db_password*>가 모두 정의되지 않은 경우 비밀번호는 NULL이 된다.
 	:return: 연결 핸들 ID(성공), 에러 코드(실패)
 
 		*   **CCI_ER_NO_MORE_MEMORY**
@@ -880,7 +877,7 @@ CCI API 레퍼런스
 
 	CCI의 DATASOURCE를 생성한다.
 
-	:param properties: (IN) 설정이 저장된 **T_CCI_PROPERTIES** 구조체 포인터
+	:param properties: (IN) 설정이 저장된 **T_CCI_PROPERTIES** 구조체 포인터. :c:func:`cci_property_set` 으로 속성 값들을 설정한다.
 	:param err_buf: (OUT) 에러 버퍼 (에러가 발생하면 에러 코드와 메시지를 반환)
 	:return: 생성된 **T_CCI_DATASOURCE** 구조체 포인터 (성공), NULL (실패)
 
@@ -913,7 +910,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * date_source, T_CCI_CONN conn)
 
-	**T_CCI_DATASOURCE** 구조체에 사용을 끝낸 CCI 연결을 반환한다.
+	**T_CCI_DATASOURCE** 구조체에 사용을 끝낸 CCI 연결을 반환한다. 연결이 연결 풀에 반환된 이후 재사용하려면 반드시 :func:cci_datasource_borrow 함수를 재호출해야 한다.
 
 	:param datasource: (IN) CCI 연결을 반환할 **T_CCI_DATASOURCE** 구조체 포인터
 	:param conn: (IN) 사용을 끝낸 CCI 연결의 핸들 식별자
@@ -1018,7 +1015,7 @@ CCI API 레퍼런스
 	*   q1; q2; q3와 같이 구성된 질의에 대해서 q1을 성공하고 q2에서 에러가 발생해도 q1의 수행 결과는 유효하다. 즉, 에러가 발생했을 때 이전에 성공한 질의 수행에 대해서 롤백하지 않는다.
 	*   질의가 성공적으로 수행된 경우 두 번째 질의에 대한 결과는 :c:func:`cci_next_result` 를 통해서 얻을 수 있다.
 
-	*max_col_size* 는 prepared statement의 칼럼이 **CHAR**, **VARCHAR**, **NCHAR**, **VARNCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 결정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
+	*max_col_size* 는 prepared statement의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 결정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
 
 .. c:function:: int cci_execute_array(int req_handle, T_CCI_QUERY_RESULT **query_result, T_CCI_ERROR *err_buf)
 
@@ -1056,10 +1053,14 @@ CCI API 레퍼런스
 	| :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` | int(**T_CCI_CUBRID_STMT** enum) | 질의문의 타입                 |
 	+---------------------------------------+---------------------------------+-------------------------------+
 
-	자동 커밋 모드인 경우 배열 내의 각 질의가 수행될 때마다 커밋된다.
+	자동 커밋이 ON인 경우 배열 내의 각 질의가 수행될 때마다 커밋된다.
 
-	.. note :: 2008 R4.3 이전 버전에서는 자동 커밋 모드인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었다.
+	.. note :: 
 	
+		* 2008 R4.3 이전 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
+		
+		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_array 함수에서 배열 내의 질의 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
+		
 	.. code-block:: c
 
 		char *query =
@@ -1159,9 +1160,12 @@ CCI API 레퍼런스
 
 	*query_result* 변수의 사용이 끝나면 :c:func:`cci_query_result_free` 함수를 이용하여 질의 결과를 삭제해야 한다.
 
-	자동 커밋 모드인 경우 배열 내의 각 질의가 수행될 때마다 커밋된다.
+	자동 커밋이 ON인 경우 배열 내의 각 질의가 수행될 때마다 커밋된다.
 	
-	.. note:: 2008 R4.3 이전 버전에서는 자동 커밋 모드인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었다.
+	.. note :: 
+
+		* 2008 R4.3 이전 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
+		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_batch 함수에서 배열 내의 질의 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
 
 	.. code-block:: c
 
@@ -1356,7 +1360,7 @@ CCI API 레퍼런스
 	:param indicator: (OUT) **NULL** indicator. (-1 : **NULL**)
 	
 	 * *type* 이 **CCI_A_TYPE_STR** 인 경우 : **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 *value* 에 저장된 문자열의 길이를 반환
-	 * *type* 이 **CCI_A_TYPE_STR** 이 아닌 경우 : **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 0을반환
+	 * *type* 이 **CCI_A_TYPE_STR** 이 아닌 경우 : **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 0을 반환
 	 
 	:return: 에러 코드(0: 성공)
 	
@@ -1707,12 +1711,12 @@ CCI API 레퍼런스
 
 		*   **CCI_ER_REQ_HANDLE**
 
-.. c:function:: int cci_last_insert_id(int conn_handle, void *value, T_CCI_ERROR * err_buf)
+.. c:function:: int cci_get_last_insert_id(int conn_handle, void *value, T_CCI_ERROR *err_buf)
 
 	가장 마지막에 수행한 INSERT 문의 기본 키 값을 얻는다.
 	
 	:param conn_handle: (IN) 연결 핸들
-	:param value: (OUT) 결과 버퍼. 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 함수 내에서 메모리를 할당하므로 사용 후 반드시 free(value)를 수행해야 함.
+	:param value: (OUT) 결과 버퍼에 대한 포인터. 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
 	:param err_buf: (OUT) 에러 버퍼
 
 	:return: 에러 코드
@@ -1909,7 +1913,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_prepare_and_execute(int conn_handle, char *sql_stmt, int max_col_size, int *exec_retval, T_CCI_ERROR *err_buf)
 
-	SQL 문을 즉시 실행하고 SQL 문에 대한 요청 핸들을 반환한다. 이 함수의 인자로는 연결 핸들, SQL 문, fetch하는 칼럼의 문자열 최대 길이, 에러 코드, 오류 정보를 저장할 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다. *max_col_size* 는 SQL 문의 칼럼이 **CHAR**, **VARCHAR**, **NCHAR**, **VARNCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 설정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
+	SQL 문을 즉시 실행하고 SQL 문에 대한 요청 핸들을 반환한다. 이 함수의 인자로는 연결 핸들, SQL 문, fetch하는 칼럼의 문자열 최대 길이, 에러 코드, 오류 정보를 저장할 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다. *max_col_size* 는 SQL 문의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 설정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
 
 	:param conn_handle: (IN) 연결 핸들
 	:param sql_stmt: (IN) SQL 문
@@ -1987,12 +1991,15 @@ CCI API 레퍼런스
 	
 	구조체에 설정할 수 있는 속성의 이름 및 의미는 다음과 같다.
 
-	*   **pool_size** : 연결 풀이 가질 수 있는 최대 연결 개수(기본값: 10)
-	*   **max_wait** : 연결을 가져오기 위해 대기하는 최대 시간(기본값: 1000 msec)
-	*   **pool_prepared_statement** : statement 풀링 가능 여부(기본값: false)
-	*   **max_open_prepared_statement** : statement pool에 유지할 prepared statement의 최대 개수(기본값 1000)
-	*   **login_timeout** : 로그인 타임아웃 시간(기본값: 0(무제한))
-	*   **query_timeout** : 질의 타임아웃 시간(기본값: 0(무제한))
+	*   **user**: DB 사용자 이름
+	*   **password**: DB 사용자 암호
+	*   **url**: 연결 URL. 연결 URL 문자열을 정의하는 방법은 :c:func:`cci_connect_with_url` 참고
+	*   **pool_size**: 연결 풀이 가질 수 있는 최대 연결 개수(기본값: 10)
+	*   **max_wait**: 연결을 가져오기 위해 대기하는 최대 시간(기본값: 1000 msec)
+	*   **pool_prepared_statement**: statement 풀링 가능 여부(기본값: false)
+	*   **max_open_prepared_statement**: statement pool에 유지할 prepared statement의 최대 개수(기본값 1000)
+	*   **login_timeout**: 로그인 타임아웃 시간(기본값: 0(무제한))
+	*   **query_timeout**: 질의 타임아웃 시간(기본값: 0(무제한))
 	*   **disconnect_on_query_timeout** : 질의 실행이 타임아웃 시간을 초과하여 실행이 취소될 때 연결의 종료 여부(기본값: no)
 	*   **default_autocommit** : :c:func:`cci_datasource_borrow` 가 호출될 때마다 재설정되는 자동 커밋 모드. true 또는 false
 	*   **default_isolation** : :c:func:`cci_datasource_borrow` 호출될 때마다 재설정되는 트랜잭션 격리 수준
@@ -2026,6 +2033,23 @@ CCI API 레퍼런스
 	| READ UNCOMMITTED INSTANCES |                                       |
 	+----------------------------+---------------------------------------+
 
+	DB 사용자 이름과 암호는 **user** 와 **password** 값을 직접 지정하는 방식을 사용하거나 **url** 속성 내에서 **user**와 **password** 값을 지정하는 방식을 사용한다. 두 가지 경우가 같이 사용되는 경우  우선 순위는 다음과 같다.
+	
+	* 둘다 입력되면 직접 지정하는 방식의 값이 우선한다. 
+	* 둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다. 
+	* 둘 다 NULL이면 NULL 값으로 사용된다. 
+	* DB 사용자를 직접 지정한 값이 NULL이면 "public", 암호를 직접 지정한 값이 NULL이면 NULL로 설정된다.
+	* 암호를 직접 지정한 값이 NULL이면 URL의 설정을 따른다. 
+	
+	다음 예제에서 DB 사용자 이름은 "dba", 암호는 "cubridpwd" 가 된다.
+	
+	::
+	
+		cci_property_set(ps, "user", "dba");
+		cci_property_set(ps, "password", "cubridpwd");
+		  ...
+		cci_property_set(ps, "url", "cci:cubrid:192.168.0.1:33000:demodb:public:mypwd:?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
+		
 	.. seealso:: 
 	
 		:c:func:`cci_property_create`,

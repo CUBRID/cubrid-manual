@@ -18,6 +18,8 @@
 	upper_case_letter : A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P| Q | R | S | T | U | V | W | X | Y | Z
 	lower_case_letter : a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p| q | r | s | t | u | v | w | x | y | z
 
+이외에도, 문자셋에 따라 해당 국가의 알파벳을 허용한다.
+
 **허용되는 식별자**
 
 **문자로 시작되는 식별자**

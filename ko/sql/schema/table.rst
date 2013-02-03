@@ -309,9 +309,7 @@ CREATE TABLE
 
 **UNIQUE** 제약 조건은 단일 칼럼뿐만 아니라 하나 이상의 다중 칼럼에 대해서도 정의가 가능하다. **UNIQUE** 제약 조건이 다중 칼럼에 대해 정의되면 각 칼럼 값에 대해 고유성이 보장되는 것이 아니라, 다중 칼럼 값의 조합에 대해 고유성이 보장된다.
 
-**예제**
-
-**UNIQUE** 제약 조건이 다중 칼럼에 대해 정의되면 칼럼 전체 값의 조합에 대해 고유성이 보장된다. 아래의 예와 같이 두 번째 입력 구문은 *a* 칼럼의 값은 같지만 *b* 칼럼의 값이 고유하므로 성공한다. 세 번째 입력 구문은 *a*, *b* 전체에 대해 첫 번째 값과 동일하므로 오류가 발생한다.
+아래 예에서 두 번째 INSERT 문의 *id* 칼럼의 값은 첫번째 INSERT 문의 *id* 칼럼 값과 동일하므로 오류가 발생한다.
 
 .. code-block:: sql
 
@@ -330,7 +328,10 @@ CREATE TABLE
 	INSERT INTO const_tbl5 VALUES (1, '111-1111');
 	 
 	ERROR: Operation would have caused one or more unique constraint violations.
-	 
+
+아래 예에서 **UNIQUE** 제약 조건이 다중 칼럼에 대해 정의되면 칼럼 전체 값의 조합에 대해 고유성이 보장된다. 
+
+.. code-block:: sql
 	 
 	--UNIQUE constraint is defined on several columns
 	CREATE TABLE const_tbl6(id INT, phone VARCHAR, CONSTRAINT UNIQUE(id,phone));
@@ -343,6 +344,8 @@ CREATE TABLE
 				2  NULL
 				1  '000-0000'
 				1  '111-1111'
+
+
 
 **PRIMARY KEY 제약**
 
@@ -519,8 +522,6 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 
 테이블 생성 시 **REUSE_OID** 옵션을 명시하면, 해당 테이블 내의 데이터 삭제 시 해당 OID가 함께 삭제되며, **INSERT** 된 다른 데이터가 해당 OID를 재사용할 수 있다. 단, OID 재사용 테이블을 다른 테이블이 참조할 수 없고, OID 재사용 테이블 내 객체들의 OID 값을 조회할 수 없다.
 
-**예제**
-
 .. code-block:: sql
 
 	--creating table with REUSE_OID option specified
@@ -534,7 +535,12 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 	 
 	ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
 	 
-	--an error occurs when a table references a OID reusable table
+테이블의 콜레이션과 같이 지정하는 경우 REUSE_OID를 콜레이션 앞 또는 뒤에 지정할 수 있다. 
+	 
+.. code-block:: sql
+	
+	CREATE TABLE t3(a VARCHAR(20)) REUSE_OID COLLATE euckr_bin;
+	CREATE TABLE t4(a VARCHAR(20)) COLLATE euckr_bin REUSE_OID;
 
 **주의 사항**
 
@@ -1003,17 +1009,15 @@ CHANGE, MODIFY 절
 -----------------
 
 **CHANGE** 절은 칼럼의 이름, 타입, 크기 및 속성을 변경한다. 기존 칼럼의 이름과 새 칼럼의 이름이 같으면 타입, 크기 및 속성만 변경한다.
-
 **MODIFY** 절은 칼럼의 타입, 크기 및 속성을 변경할 수 있으며, 칼럼의 이름은 변경할 수 없다.
-
 **CHANGE** 절이나 **MODIFY** 절로 새 칼럼에 적용할 타입, 크기 및 속성을 설정할 때 기존에 정의된 속성은 새 칼럼의 속성에 전달되지 않는다.
-
 **CHANGE** 절이나 **MODIFY** 절로 칼럼에 데이터 타입을 변경할 때, 기존의 칼럼 값이 변경되면서 데이터가 변형될 수 있다. 예를 들어 문자열 칼럼의 길이를 줄이면 문자열이 잘릴 수 있으므로 주의해야 한다.
 
 .. warning::
 
 	* CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> 구문은 더 이상 지원하지 않는다.
 	* 숫자를 문자 타입으로 변환할 때 해당 문자열의 길이가 숫자의 길이보다 짧으면, 변환되는 문자 타입의 길이에 맞추어 문자열이 잘린 상태로 저장된다.
+	* 테이블의 칼럼 타입, 콜레이션 등 칼럼 속성을 변경하는 경우 변경된 속성이 해당 테이블을 이용하여 생성한 뷰에 반영되지는 않는다. 따라서 테이블의 칼럼 속성을 변경하는 경우 뷰를 재생성할 것을 권장한다.
 
 ::
 
@@ -1033,6 +1037,8 @@ CHANGE, MODIFY 절
 *   *new_col_name* : 변경할 칼럼의 이름을 지정한다.
 *   *column_definition* : 변경할 칼럼의 타입, 크기 및 속성을 지정한다.
 *   *col_name* : 변경할 칼럼의 타입, 크기 및 속성을 적용할 칼럼의 이름을 지정한다.
+
+
 
 **예제 1**
 
@@ -1261,10 +1267,6 @@ CHANGE, MODIFY 절
 | CHAR      | 유               | ''                                      |
 +-----------+------------------+-----------------------------------------+
 | VARCHAR   | 유               | ''                                      |
-+-----------+------------------+-----------------------------------------+
-| NCHAR     | 유               | N''                                     |
-+-----------+------------------+-----------------------------------------+
-| VARNCHAR  | 유               | N''                                     |
 +-----------+------------------+-----------------------------------------+
 | SET       | 유               | {}                                      |
 +-----------+------------------+-----------------------------------------+

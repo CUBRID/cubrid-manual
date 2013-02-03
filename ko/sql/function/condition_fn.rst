@@ -107,7 +107,6 @@ COALESCE 함수
 	**COALESCE** 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 **VARCHAR** 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.
 
 	*   **CHAR** < **VARCHAR**
-	*   **NCHAR** < **NCHAR VARING**
 	*   **BIT** < **VARBIT**
 	*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
 	*   **DATE** < **TIMESTAMP** < **DATETIME**
@@ -237,7 +236,6 @@ IFNULL, NVL 함수
 	**IFNULL** 함수와 **NVL** 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 **VARCHAR** 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.
 
 	*   **CHAR** < **VARCHAR**
-	*   **NCHAR** < **NCHAR VARING**
 	*   **BIT** < **VARBIT**
 	*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
 	*   **DATE** < **TIMESTAMP** < **DATETIME**
@@ -335,7 +333,6 @@ NVL2 함수
 	**NVL2** 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 **VARCHAR** 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.
 
 	*   **CHAR** < **VARCHAR**
-	*   **NCHAR** < **NCHAR VARING**
 	*   **BIT** < **VARBIT**
 	*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
 	*   **DATE** < **TIMESTAMP** < **DATETIME**
@@ -607,7 +604,7 @@ ISNULL 함수
 LIKE 조건식
 ===========
 
-**LIKE** 조건식은 문자열 데이터 간의 패턴을 비교하는 연산을 수행하여, 검색어와 일치하는 패턴의 문자열이 검색되면 **TRUE** 를 반환한다. 패턴 비교 대상이 되는 타입은 **CHAR**, **VARCHAR**, **STRING** 이며, **NCHAR** 또는 **BIT** 타입에 대해서는 **LIKE** 검색을 수행할 수 없다. **LIKE** 키워드 앞에 **NOT** 이 있으면 **LIKE** 연산의 결과에 **NOT** 연산을 수행하여 결과를 반환한다.
+**LIKE** 조건식은 문자열 데이터 간의 패턴을 비교하는 연산을 수행하여, 검색어와 일치하는 패턴의 문자열이 검색되면 **TRUE** 를 반환한다. 패턴 비교 대상이 되는 타입은 **CHAR**, **VARCHAR**, **STRING** 이며, **BIT** 타입에 대해서는 **LIKE** 검색을 수행할 수 없다. **LIKE** 키워드 앞에 **NOT** 이 있으면 **LIKE** 연산의 결과에 **NOT** 연산을 수행하여 결과를 반환한다.
 
 **LIKE** 연산자 오른쪽에 오는 검색어에는 임의의 문자 또는 문자열에 대응되는 와일드 카드(wild card) 문자열을 포함할 수 있으며, **%** (percent)와 **_** (underscore)를 사용할 수 있다. **%** 는 길이가 0 이상인 임의의 문자열에 대응되며, **_** 는 1개의 문자에 대응된다. 또한, 이스케이프 문자(escape character)는 와일드 카드 문자 자체에 대한 검색을 수행할 때 사용되는 문자로서, 사용자에 의해 길이가 1인 다른 문자(**NULL**, 알파벳 또는 숫자)로 지정될 수 있다. 와일드 카드 문자 또는 이스케이프 문자를 포함하는 문자열을 검색어로 사용하는 예제는 아래를 참고한다. ::
 
@@ -672,11 +669,22 @@ REGEXP 조건식, RLIKE 조건식
 **REGEXP** 와 **LIKE** 의 차이는 다음과 같다.
 
 *   **LIKE** 절은 입력값 전체가 패턴과 매칭되어야 성공한다.
-
 *   **REGEXP** 는 입력값의 일부가 패턴과 매칭되면 성공한다. **REGEXP** 에서 전체 값에 대한 패턴 매칭을 하려면, 패턴의 시작에는 "^"을, 끝에는 "$"을 사용해야 한다.
-
 *   **LIKE** 절의 패턴은 대소문자를 구분하지만 **REGEXP** 에서 정규 표현식의 패턴은 대소문자를 구분하지 않는다. 대소문자를 구분하려면 **REGEXP BINARY** 구문을 사용해야 한다.
-
+*   **REGEXP**, **REGEXP BINARY** 는 피연산자의 콜레이션을 고려하지 않고 ASCII 인코딩으로 동작한다. ::
+	
+	SELECT ('a' collate utf8_en_ci REGEXP BINARY 'A' collate utf8_en_ci); 
+	0
+	
+	SELECT ('a' collate utf8_en_cs REGEXP BINARY 'A' collate utf8_en_cs); 
+	0
+	
+	SELECT ('a' COLLATE iso88591_bin REGEXP 'A' COLLATE iso88591_bin);
+	1
+	
+	SELECT ('a' COLLATE iso88591_bin REGEXP BINARY 'A' COLLATE iso88591_bin);
+	0
+	
 아래 구문에서 *expr* 에 매칭되는 패턴 *pat* 이 존재하면 1을 반환하며, 그렇지 않은 경우 0을 반환한다. *expr* 과 *pat* 중 하나가 **NULL** 이면 **NULL** 을 반환한다.
 
 **NOT** 을 사용하는 두 번째 구문과 세 번째 구문은 같은 의미이다.

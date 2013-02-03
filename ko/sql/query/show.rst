@@ -54,10 +54,10 @@ SHOW TABLES 문
 	  'code'                'BASE TABLE'
 	  'record'              'BASE TABLE'
 
-SHOW COLUMN 문
+SHOW COLUMNS 문
 ==============
 
-테이블의 칼럼 정보를 출력한다. **LIKE** 절을 사용하면 이와 매칭되는 칼럼 이름을 검색할 수 있다. **WHERE** 절을 사용하면 "모든 **SHOW** 문에 대한 일반적인 고려 사항"과 같이 좀더 일반적인 조건으로 칼럼 이름을 검색할 수 있다. **FULL** 키워드가 사용되면 다음과 같은 칼럼의 추가 정보가 출력된다.
+테이블의 칼럼 정보를 출력한다. **LIKE** 절을 사용하면 이와 매칭되는 칼럼 이름을 검색할 수 있다. **WHERE** 절을 사용하면 "모든 **SHOW** 문에 대한 일반적인 고려 사항"과 같이 좀더 일반적인 조건으로 칼럼 이름을 검색할 수 있다. 
 
 * Field : 칼럼 이름
 * Type : 칼럼의 데이터 타입.
@@ -70,38 +70,48 @@ SHOW COLUMN 문
 * Default : 칼럼에 정의된 기본값
 * Extra : 주어진 칼럼에 대해 가능한 추가 정보. **AUTO_INCREMENT** 속성인 칼럼은 auto_increment라는 값을 갖는다.
 
-**SHOW FIELDS** 는 **SHOW COLUMNS** 와 같은 명령어이다.
+**FULL** 키워드가 사용되면 Collation 정보를 추가로 출력한다.
+
+**SHOW FIELDS** 는 **SHOW COLUMNS** 와 같은 구문이다.
 
 **DESCRIBE** (또는 줄여서 **DESC**) 문과 **EXPLAIN** 문은 **SHOW COLUMNS** 와 비슷한 정보를 제공한다.
 
 ::
 
-	SHOW COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr]
+	SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr]
 
-다음은 해당 질의를 실행한 결과이다.
+
+다음은 해당 질의들을 수행한 예이다.
 
 .. code-block:: sql
 
 	SHOW COLUMNS FROM athlete;
-	  Field                 Type                  Null                  Key                   Default               Extra
-	====================================================================================================================================
-	  'code'                'INTEGER'             'NO'                  'PRI'                 NULL                  'auto_increment'
-	  'name'                'VARCHAR(40)'          'NO'                  ''                    NULL                  ''
-	  'gender'              'CHAR(1)'             'YES'                 ''                    NULL                  ''
-	  'nation_code'         'CHAR(3)'             'YES'                 ''                    NULL                  ''
-	  'event'               'VARCHAR(30)'          'YES'                 ''                    NULL                  ''
+	  Field                 Type                  Null       Key          Default               Extra
+	================================================================================================================
+	  'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
+	  'name'                'VARCHAR(40)'         'NO'       ''           NULL                  ''
+	  'gender'              'CHAR(1)'             'YES'      ''           NULL                  ''
+	  'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
+	  'event'               'VARCHAR(30)'         'YES'      ''           NULL                  ''
 	 
 	SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
-	  Field                 Type                  Null                  Key                   Default               Extra
-	====================================================================================================================================
-	  'code'                'INTEGER'             'NO'                  'PRI'                 NULL                  'auto_increment'
-	  'nation_code'         'CHAR(3)'             'YES'                 ''                    NULL                  ''
+	  Field                 Type                  Null       Key          Default               Extra
+	================================================================================================================
+	  'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
+	  'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
 	 
 	SHOW COLUMNS FROM athlete  WHERE "type" = 'INTEGER' and "key"='PRI' AND extra='auto_increment';
-	  Field                 Type                  Null                  Key                   Default               Extra
+	  Field                 Type                  Null       Key          Default               Extra
+	================================================================================================================
+	  'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
+	
+	SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
+	  Field                 Type                  Collation             Null      Key         Default               Extra
 	====================================================================================================================================
-	  'code'                'INTEGER'             'NO'                  'PRI'                 NULL                  'auto_increment'
+	  'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
+	  'nation_code'         'CHAR(3)'             'iso88591_bin'        'YES'     ''          NULL                  ''
 
+	
 SHOW INDEX 문
 =============
 
@@ -152,7 +162,64 @@ SHOW INDEX 문
 	  't1'           1  'i_t1_i1_s1'              1      'i1'          'A'            0               NULL        NULL     'YES'   'BTREE'
 	  't1'           1  'i_t1_i1_s1'              2      's1'          'A'            0               NULL        NULL     'YES'   'BTREE'
 	  't1'           1  'i_t1_s1'                 1      's1'          'A'            0                  7        NULL     'YES'   'BTREE'
-  
+
+.. _show-collation:
+ 
+SHOW COLLATION 문
+=================
+
+**SHOW COLLATION** 문은 데이터베이스에서 지원하는 콜레이션 리스트를 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
+해당 질의는 다음과 같은 칼럼을 가진다.
+
+* Collation: 콜레이션 이름
+* Charset: 문자셋 이름
+* Id: 콜레이션 ID
+* Built_in: 내장 콜레이션 여부
+* Expansions: 확장이 있는 콜레이션인지 여부. 확장이 있는 콜레이션에서 일부 결합 문자(코드포인트)들은 다른 문자들로 구성된 순서 있는 리스트(ordered list)로 해석된다. 예를 들어, 'æ'는 'ae'로 해석된다.
+* Strength: 문자 간 비교를 위한 기준인데, 이 기준에 따라 문자 순서가 달라질 수 있다. 이에 대한 설명은 :ref:`collation-cont-exp` 를 참고한다.
+
+다음은 해당 질의를 실행한 결과이다. 
+
+.. code_block:: sql
+
+	SHOW COLLATION;
+
+	  Collation             Charset                        Id  Built_in              Expansions            Strength
+	===========================================================================================================================
+	  'euckr_bin'           'euckr'                         8  'Yes'                 'No'                  'Not applicable'
+	  'iso88591_bin'        'iso88591'                      0  'Yes'                 'No'                  'Not applicable'
+	  'iso88591_en_ci'      'iso88591'                      3  'Yes'                 'No'                  'Not applicable'
+	  'iso88591_en_cs'      'iso88591'                      2  'Yes'                 'No'                  'Not applicable'
+	  'utf8_bin'            'utf8'                          1  'Yes'                 'No'                  'Not applicable'
+	  'utf8_de_exp'         'utf8'                         76  'No'                  'Yes'                 'Tertiary'
+	  'utf8_de_exp_ai_ci'   'utf8'                         72  'No'                  'Yes'                 'Primary'
+	  'utf8_en_ci'          'utf8'                          5  'Yes'                 'No'                  'Not applicable'
+	  'utf8_en_cs'          'utf8'                          4  'Yes'                 'No'                  'Not applicable'
+	  'utf8_es_cs'          'utf8'                         85  'No'                  'No'                  'Quaternary'
+	  'utf8_fr_exp_ab'      'utf8'                         94  'No'                  'Yes'                 'Tertiary'
+	  'utf8_gen'            'utf8'                         32  'No'                  'No'                  'Quaternary'
+	  'utf8_gen_ai_ci'      'utf8'                         37  'No'                  'No'                  'Primary'
+	  'utf8_gen_ci'         'utf8'                         44  'No'                  'No'                  'Secondary'
+	  'utf8_ja_exp'         'utf8'                        124  'No'                  'Yes'                 'Tertiary'
+	  'utf8_ja_exp_cbm'     'utf8'                        125  'No'                  'Yes'                 'Tertiary'
+	  'utf8_km_exp'         'utf8'                        132  'No'                  'Yes'                 'Quaternary'
+	  'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
+	  'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
+	  'utf8_tr_cs'          'utf8'                          6  'Yes'                 'No'                  'Not applicable'
+	  'utf8_tr_cs_uca'      'utf8'                        205  'No'                  'No'                  'Quaternary'
+	  'utf8_vi_cs'          'utf8'                        221  'No'                  'No'                  'Quaternary'
+
+	SHOW COLLATION LIKE '%_ko_%';
+	
+	  Collation             Charset                        Id  Built_in              Expansions            Strength
+	===========================================================================================================================
+	  'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
+	  'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
+
+각 칼럼이 나타내는 의미는 다음과 같다.
+
+
+
 SHOW GRANTS 문
 ==============
 

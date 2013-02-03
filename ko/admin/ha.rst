@@ -2,8 +2,6 @@
 CUBRID HA
 *********
 
-**CUBRID HA**
-
 High Availability(HA)란, 하드웨어, 소프트웨어, 네트워크 등에 장애가 발생해도 지속적인 서비스를 제공하는 기능이다. 이 기능은 하루 24시간 1년 내내 서비스를 제공해야 하는 네트워킹 컴퓨팅 부분에서 필수적인 요소이다. HA 시스템은 두 대 이상의 서버 시스템으로 구성하여 시스템 구성 요소 중의 한 요소에 장애가 발생해 서비스를 중단 없이 제공할 수 있다.
 
 High Availability 기능을 CUBRID에 적용한 것이 CUBRID HA 기능이다. CUBRID HA 기능은 여러 서버 시스템에서 데이터베이스를 항상 동기화된 상태로 유지하여 서비스를 제공한다. 서비스를 수행 중인 시스템에 예상치 못한 장애가 발생하면 자동으로 다른 시스템이 서비스를 수행하도록 하여 서비스 중단 시간을 최소화한다.
@@ -77,6 +75,19 @@ CUBRID HA 노드는 하나의 마스터 프로세스(cub_master), 하나 이상�
 *   **to-be-active** : 스탠바이 서버가 failover 등의 이유로 인해 액티브 서버가 되기 전의 상태이다. 기존의 마스터 노드로부터 받은 트랜잭션 로그를 자신의 서버에 반영하는 등 액티브 서버가 되기 위한 준비를 한다. 해당 상태의 노드에는 SELECT 질의만 수행할 수 있다.
 
 *   기타: 내부적으로 사용하는 상태이다.
+
+노드 상태가 변경되면 cub_master 프로세스 로그와 cub_server 프로세스 로그에 각각 다음과 같은 에러 메시지가  저장된다. 단, cubrid.conf의 error_log_level의 값이 error 이하인 경우에 저장된다.
+
+* cub_master 프로세스의 로그 정보는 $CUBRID/log/<hostname>_master.err 파일에 저장되며 다음의 내용이 기록된다. ::
+
+	HA generic: Send changemode request to the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+	HA generic: Receive changemode response from the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+
+* cub_server 프로세스의 로그 정보는 $CUBRID/log/server/<db_name>_<date>_<time>.err 파일에 저장되며 다음의 내용이 기록된다. ::
+
+	Server HA mode is changed from 'to-be-active' to 'active'.
+
+
 
 heartbeat 메시지
 ----------------

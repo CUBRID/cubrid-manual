@@ -50,6 +50,28 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
   :func:`EXTRACT`, :func:`CAST`
 
+** 분할 테이블과 콜레이션**
+
+분할 테이블에도 콜레이션을 지정할 수 있다. 다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다.::
+
+	CREATE TABLE TBL(str STRING) COLLATE utf8_en_ci PARTITION BY LIST(str) 
+	(
+	    PARTITION p0 VALUES IN ('test'), 
+	    PARTITION p1 VALUES IN ('TEST')
+	);
+	
+	ERROR: Partition definition is duplicated. 'p1'
+ 
+현재 바이너리가 아닌 콜레이션 테이블에 대해 해시 분할 키를 적용할 수 없다. ::
+
+	CREATE TABLE tbl ( code VARCHAR(10)) COLLATE utf8_de_exp_ai_ci PARTITION BY HASH (code) PARTITIONS 4;
+
+	ERROR: before ' ; '
+	Unsupported partition column type.
+
+
+
+ 
 영역 분할
 =========
 
@@ -388,10 +410,10 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 분할에서 데이터 조회와 조작
 ===========================
 
-분할에서 데이터 조회
---------------------
+분할에서 데이터 SELECT/INSERT/UPDATE
+------------------------------------
 
-데이터를 조회할 때에는 분할 테이블뿐만 아니라 각 분할에 대해서도 **SELECT** 문을 이용하여 조회가 가능하다.
+데이터를 SELECT/INSERT/UPDATE할 때 각 분할에 대해서도 **PARTITION** (분할 이름) 구문을 이용하여 접근이 가능하다.
 
 다음은 종목에 따라 리스트 분할한 *athlete2* 테이블을 생성하고 데이터를 삽입한 뒤 *event1* 분할과 *event2* 분할을 조회하는 예제이다.
 
@@ -399,7 +421,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 	CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
 	PARTITION BY LIST (event) (
-	PARTITION event1 VALUES IN ('Swimming', 'Athletics ' ),
+	PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
 	PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
 	PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
 	);
@@ -407,22 +429,30 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
 	INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
 	INSERT INTO athlete2 VALUES ('Lee Sun-Hee','Taekwondo');
-	INSERT INTO athlete2 VALUES ('Cho In-Chul', 'Judo');
+	INSERT INTO athlete2 VALUES ('Kim In-Chul', 'Judo');
 
-	SELECT * from athlete2__p__event1;
+	SELECT * FROM athlete2 PARTITION (event1);
 	  name                  event
 	============================================
 	  'Hwang Young-Cho'     'Athletics'
 
-	SELECT * from athlete2__p__event2;
+	SELECT * FROM athlete2 PARTITION (event2);
 	  name                  event
 	============================================
 	  'Lee Sun-Hee'         'Taekwondo'
-	  'Cho In-Chul'         'Judo'
-  
-.. note:
+	  'Kim In-Chul'         'Judo'
 
-	분할 테이블의 각 분할에 대해서 직접적인 데이터 삽입, 갱신, 삭제 등 데이터 조작은 허용되지 않는다.
+다음은 *athlete2* 테이블의 event1 분할에 한 행을 INSERT하는 예제이다. 
+
+.. code-block:: sql
+
+	INSERT INTO athlete2 PARTITION(event1) VALUES ('Lee Bong-Ju', 'Athletics');
+
+다음은 *athlete2* 테이블의 *event2* 분할에 한 행을 UPDATE하는 예제이다. 
+
+.. code-block:: sql
+
+	UPDATE athlete2 PARTITION(event2) SET name='Cho In-Chul' WHERE name='Kim In-Chul';
 
 분할 키 값의 변경에 의한 데이터 이동
 ------------------------------------
@@ -711,9 +741,9 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 분할 테이블을 이용하여 VIEW 생성
 --------------------------------
 
-분할 테이블의 각 분할을 이용하여 뷰를 정의할 수 있다. 이 때, 생성된 뷰를 이용하여 데이터를 조회할 수 있지만, 데이터 삽입, 삭제, 갱신은 할 수 없다.
+분할 테이블의 각 분할을 이용하여 뷰를 정의할 수 있다.
 
-다음은 참가연도에 따라 영역 분할된 *participant2* 테이블을 생성하고 *participant2__p__before_2000* 분할을 이용하여 뷰를 생성, 조회하는 예제이다.
+다음은 참가연도에 따라 영역 분할된 *participant2* 테이블을 생성하고 *participant2* 테이블의 *before_2000* 분할을 이용하여 뷰를 생성, 조회하는 예제이다.
 
 .. code-block:: sql
 
@@ -729,7 +759,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	INSERT INTO participant2 VALUES (2004, 'JPN', 16, 9, 12);
 
 	CREATE VIEW v_2000 AS
-	SELECT * FROM participant2__p__before_2000
+	SELECT * FROM participant2 PARTITION(before_2000)
 	WHERE host_year = 1988;
 
 	SELECT * FROM v_2000;
@@ -752,3 +782,18 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 ----------------
 
 분할들(partitions)은 계층 구조 체인의 일부가 될 수 없으며, 분할 테이블(partitioned table)과 하위 클래스(subclass) 관계를 가지는 것과 다르다. 실제로 분할 테이블은 상위 클래스(superclass)와 하위 클래스(subclass)를 갖게 되지만, CUBRID는 하나의 분할이 오직 하나의 상위 클래스(superclass), 즉 하나의 분할 테이블만 가지며 여러 개의 하위 클래스(subclasses)를 가지지 않도록 보장한다.
+
+분할 키와 문자셋
+----------------
+
+분할 테이블의 분할 키들은 칼럼과 같은 문자셋을 가져야 한다. 
+따라서 아래와 같은 경우는 허용하지 않는다. 
+
+.. code-block:: sql
+
+	CREATE TABLE t(c CHAR(50) COLLATE utf8_bin) PARTITION BY LIST(c)
+	(
+	    PARTITION p0 VALUES IN(_utf8'xxx'),
+	    PARTITION p1 VALUES IN(_iso88591'yyy')
+	);
+

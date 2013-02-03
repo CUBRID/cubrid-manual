@@ -62,6 +62,10 @@ CUBRID 2008 R4.0 이하 버전 사용자는 CUBRID 9.1 버전을 별도의 디�
 
 	* CUBRID 설치 패키지에 포함 또는 http://ftp.cubrid.org 에서 배포되는 CUBRID 9.1 버전용 예약어 검출 스크립트인 check_reserved.sql을 이용하여 예약어 사용 여부를 검사할 수 있으며, 예약어로 지정된 식별자를 사용하고 있을 경우 식별자를 수정해야 한다. :doc:`sql/identifier` 를 참고한다.
 
+**환경 변수 CUBRID_CHARSET, CUBRID_MSG_LANG 설정**
+
+	* CUBRID_LANG 환경 변수는 더 이상 사용되지 않으며, 데이터베이스를 생성하거나 구동할 때 CUBRID_CHARSET 환경 변수를 통해 어떤 문자셋을 사용할 지 결정하므로 CUBRID_CHARSET 환경 변수를 반드시 설정해야 한다. 유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용하며 설정하지 않으면 en_US가 기본으로 설정된다. 
+
 DB 마이그레이션
 ---------------
 

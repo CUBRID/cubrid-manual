@@ -751,6 +751,55 @@
 		==================================
 									  2
 
+.. _round-date:
+
+.. function:: ROUND(date, fmt)
+
+	*fmt* 에서 지정한 단위의 값을 반올림한다.
+	*fmt* 의 'yyyy', 'yy'는 년도를 나타내며, 년도를 반올림한다. 'mm', 'month'는 월을 나타내며, 월을 반올림한다. 'dd' 일을 나타내며, 일을 반올림한다. 'q'는 사분기를 나타내며, 사분기 단위로 반올림한다. 'day'는 *date* 를 한 주 안에서 반올림하여 해당 주 혹은 그 다음 주의 일요일에 해당하는 날짜를 반환한다.
+	
+	'hh'는 시를 반올림한다. 'mi'는 분을 반올림한다. 'ss'는 초를 반올림한다.
+
+	:param date: **DATE** 타입, **TIMESTAMP** 타입 또는 **DATE** 타입의 값.
+	:param fmt: 반올림할 단위에 대한 포맷을 지정. 생략되면 "dd"
+	
+	:rtype: DATE
+
+	.. code-block:: sql
+	
+		SELECT ROUND(date'2012-10-26', 'yyyy');
+		01/01/2013
+
+		SELECT ROUND(timestamp'2012-10-26 12:10:10', 'mm');
+		11/01/2012
+		
+		SELECT ROUND(datetime'2012-12-26 12:10:10', 'dd');
+		12/27/2012
+		
+		// 
+		SELECT ROUND(datetime'2012-12-26 12:10:10', 'day');
+		12/30/2012
+
+		SELECT ROUND(datetime'2012-08-26 12:10:10', 'q');
+		10/01/2012
+		
+		SELECT TRUNC(datetime'2012-08-26 12:10:10', 'q');
+		07/01/2012
+		
+		SELECT ROUND(datetime'2012-02-28 23:10:00', 'hh');
+		02/28/2012
+		
+		SELECT ROUND(datetime'2012-02-28 23:58:59', 'hh');
+		02/29/2012
+		
+		SELECT ROUND(datetime'2012-02-28 23:59:59', 'mi');
+		02/29/2012
+		
+		SELECT ROUND(datetime'2012-02-28 23:59:59.500', 'ss');
+		02/29/2012
+		
+	:ref:`TRUNC(date, fmt) <trunc-date>` 를 참고한다.
+
 .. function:: SEC_TO_TIME (second)
 
 	**SEC_TO_TIME** 함수는 지정된 인자로부터 시, 분, 초를 포함한 시간을 반환한다. 인자로 0~86399 범위의 **INTEGER** 타입을 지정할 수 있으며, **TIME** 타입을 반환한다.
@@ -932,6 +981,38 @@
 		   to_days('9999-12-31')
 		========================
 						 3652424
+
+.. _trunc-date:
+
+.. function:: TRUNC( date[, fmt] )
+
+	*fmt* 에서 지정한 단위 아래의 값을 절삭한다.
+	*fmt* 의 'yyyy', 'yy'는 년도를 나타내며, 월을 절삭하여 같은 년도 1월 1일을 반환한다. 'mm', 'month'는 월을 나타내며, 일을 절삭하여 같은 년도, 같은 월의 1일을 반환한다. 'q'는 사분기를 나타내며, 사분기 이하를 절삭하여 사분기의 첫째날을 반환한다. 'dd'는 뒤의 시간 값을 절삭한다. 'day'는 한 주를 절삭하여 *date* 가 있는 주의 시작일인 일요일에 해당하는 날짜를 반환한다.
+
+	:param date: **DATE** 타입, **TIMESTAMP** 타입 또는 **DATE** 타입의 값
+	:param fmt: 절삭할 단위에 대한 포맷을 지정. 생략되면 "dd"
+	
+	:rtype: DATE
+
+	.. code-block:: sql
+	
+		SELECT TRUNC(date'2012-12-26', 'yyyy');
+		01/01/2012
+
+		SELECT TRUNC(timestamp'2012-12-26 12:10:10', 'mm');
+		12/01/2012
+		
+		SELECT TRUNC(datetime'2012-12-26 12:10:10', 'q');
+		10/01/2012
+
+		SELECT TRUNC(datetime'2012-12-26 12:10:10', 'dd');
+		12/26/2012
+		
+		// 26일이 있는 주의 일요일 날짜를 반환한다.
+		SELECT TRUNC(datetime'2012-12-26 12:10:10', 'day');
+		12/23/2012
+				
+	:ref:`ROUND(date, fmt) <round-date>` 를 참고한다.
 
 .. function:: UNIX_TIMESTAMP ( [date] )
 

@@ -30,6 +30,12 @@
 *   <*query_partition_clause*> : 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
 *   <*order_by_clause*> : <*query_partition_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*query_partition_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 컬럼 값을 대상으로 함수를 적용하여 계산한다.
 
+분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
+
+* ORDER BY/PARTITION BY <상수> (예: 1): 상수는 SELECT 리스트의 칼럼 위치로 다루어짐.
+* ORDER BY/PARTITION BY <상수 표현식> (예: 1+0): 상수 표현식은 무시되어, 정렬/분할(ordering/partitioning)에 사용되지 않음.
+* ORDER BY/PARTITION BY <상수가 아닌 표현식> (예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용됨.
+	
 .. function:: AVG ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
 	**AVG** 함수는 모든 행에 대한 연산식 값의 산술 평균을 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 평균을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해서 평균을 구한다.
@@ -205,11 +211,11 @@
 				 2004  'LAT'                           0           17
 				 2004  'PRK'                           0           17
 
-.. function:: GROUP_CONCAT([DISTINCT] {col | expression} [ORDER BY {col | unsigned_int} [ASC | DESC]] [SEPARATOR str_val])
+.. function:: GROUP_CONCAT([DISTINCT] expression [ORDER BY {col | unsigned_int} [ASC | DESC]] [SEPARATOR str_val])
 
 	**GROUP_CONCAT** 함수는 그룹에서 **NULL** 이 아닌 값들을 연결하여 결과 문자열을 **VARCHAR** 타입으로 반환한다. 질의 결과 행이 없거나 **NULL** 값만 있으면 **NULL** 을 반환한다. 
 	
-	:param expression: 수치 또는 문자열을 반환하는 하나의 연산식
+	:param expression: 수치 또는 문자열을 반환하는 칼럼 또는 연산식
 	:param str_val: 구분자로 쓰일 문자열
 	:param DISTINCT: 결과에서 중복되는 값을 제거한다.
 	:param ORDER BY: 결과 값의 순서를 지정한다.
@@ -246,6 +252,64 @@
 		  group_concat(i*2+1 order by 1 separator '')
 		======================
 		  '35791113'
+
+.. function:: LAG (expression[, offset[, default]]) OVER ( [partition_by_clause] [order_by_clause] )
+	
+	LAG 함수는 현재 행을 기준으로 *offset* 이전 행의 expression 값을 반환하며, 분석 함수로만 사용된다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
+	
+	:param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
+	:param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
+	:param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+	:rtype: NUMBER or STRING
+	
+	사용 예제는 LEAD 함수를 참고한다.
+	
+.. function:: LEAD (expression, offset, default) OVER ( [partition_by_clause] [order_by_clause] )
+
+	LEAD 함수는 현재 행을 기준으로 *offset* 이후 행의 expression 값을 반환하며, 분석 함수로만 사용된다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
+
+	:param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
+	:param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
+	:param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+	:rtype: NUMBER or STRING
+
+	다음은 현재 행을 기준으로 이전 행과 이후 행의 title을 같이 출력하는 예이다. 
+	
+	..  code-block:: sql
+
+		CREATE TABLE tbl_board(num INT, title VARCHAR(50));
+		INSERT INTO tbl_board VALUES(1, 'title 1'), (2, 'title 2'), (3, 'title 3'), (4, 'title 4'), (5, 'title 5'), (6, 'title 6'), , (7, 'title 7');
+
+		SELECT num, title,
+		LEAD(title,1,'no next page') OVER (ORDER BY num) next_title,
+		LAG(title,1,'no previous page') OVER (ORDER BY num) prev_title
+		FROM tbl_board;
+		
+				  num  title                 next_title            prev_title
+		===============================================================================
+					1  'title 1'             'title 2'             NULL
+					2  'title 2'             'title 3'             'title 1'
+					3  'title 3'             'title 4'             'title 2'
+					4  'title 4'             'title 5'             'title 3'
+					5  'title 5'             'title 6'             'title 4'
+					6  'title 6'             'title 7'             'title 5'
+					7  'title 7'             NULL                  'title 6'
+
+		다음은 특정 행을 기준으로 이전 행과 이후 행의 타이틀을 같이 출력하는 예이다.
+		WHERE 조건이 괄호 안에 있으면 하나의 행만 선택되고, 이전 행과 이후 행이 존재하지 않게 되어 next_title과 prev_title의 값이 NULL이 됨에 유의한다.
+		
+		SELECT * FROM 
+		(
+			SELECT num, title,
+			LEAD(title,1,'no next page') OVER (ORDER BY num) next_title,
+			LAG(title,1,'no previous page') OVER (ORDER BY num) prev_title
+			FROM tbl_board
+		) 
+		WHERE num=5;
+		
+				  num  title                 next_title            prev_title
+		===============================================================================
+					5  'title 5'             'title 6'             'title 4'
 
 .. function:: MAX ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 

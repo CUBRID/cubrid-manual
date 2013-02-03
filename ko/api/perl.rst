@@ -20,7 +20,7 @@ Perl 설치 및 설정
 
 *   Perl: 시스템에 적합한 버전의 Perl을 사용하는 것을 권장한다. 모든 Linux와 FreeBSD에는 Perl이 포함되어 있으며, Windows에서는 ActivePerl을 권장한다. Active Perl에 대한 자세한 내용은 `http://www.activestate.com/activeperl <http://www.activestate.com/activeperl>`_ 을 참고한다.
 
-*   CUBRID: 드라이버를 빌드하기 위해 CUBRID를 설치할 필요는 없다. 소스코드는 `http://www.cubrid.org/downloads <http://www.cubrid.org/downloads>`_ 에서 다운로드한다.
+*   CUBRID: Perl 드라이버를 빌드하기 위해 CCI 드라이버가 필요하며, 이를 위해 CUBRID를 설치해야 한다. CUBRID는 `http://www.cubrid.org/downloads <http://www.cubrid.org/downloads>`_ 에서 다운로드한다.
 
 *   DBI: `http://code.activestate.com/ppm/DBI/ <http://code.activestate.com/ppm/DBI/>`_
 

@@ -34,9 +34,13 @@ CUBRID 관리 유틸리티의 사용법(구문)은 다음과 같다. ::
 		unloaddb [option] <database-name>  --- 데이터 및 스키마 내보내기(언로드)
 		paramdump [option] <database-name>  --- 데이터베이스의 설정된 파라미터 값 확인
 		changemode [option] <database-name>  --- 서버의 HA 모드 출력 또는 변경
-		copylogdb [option] <database-name>  --- HA구성을 위해 트랜잭션 로그를 다중화하는 도구
+		copylogdb [option] <database-name>  --- HA 구성을 위해 트랜잭션 로그를 다중화하는 도구
 		applylogdb [option] <database-name>  --- HA 구성을 위해 트랜잭션 로그에서 복제 로그를 읽고 적용하는 도구
-	  
+		applyinfo [option] <database-name>   --- HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 도구
+		synccolldb [option] <database-name>  --- DB 콜레이션을 시스템 콜레이션에 맞게 변경하는 도구
+		genlocale [option] <database-name>  --- 사용하고자 하는 로캘 정보를 컴파일하는 도구
+		dumplocale [option] <database-name>   --- 컴파일된 바이너리 로캘 정보를 사람이 읽을 수 있는 텍스트로 출력하는 도구
+		
 데이터베이스 사용자
 ===================
 
@@ -1637,7 +1641,7 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 .. program:: paramdump
 
-.. option:: -o --output-file=FILE
+.. option:: -o, --output-file=FILE
 
 	데이터베이스의 서버/클라이언트 프로세스에서 사용하는 파라미터 정보를 지정된 파일에 저장하는 옵션이며, 파일은 현재 디렉터리에 생성된다.
 	**-o** 옵션이 지정되지 않으면 메시지는 콘솔 화면에 출력한다. ::
@@ -1662,6 +1666,19 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 		cubrid paramdump -C testdb
 
+HA 모드 변경/로그 복제/반영
+===========================
+
+**cubrid changemode** 유틸리티는 서버의 HA 모드 출력 또는 변경하는 유틸리티이다. 
+
+**cubrid copylogdb** 유틸리티는 HA 구성을 위해 트랜잭션 로그를 다중화하는 유틸리티이다. 이 유틸리티는 cubrid heartbeat 유틸리티를 이용하여 실행된다.
+
+**cubrid applylogdb** 유틸리티는 HA 구성을 위해 트랜잭션 로그에서 복제 로그를 읽고 적용하는 유틸리티이다. 이 유틸리티는 cubrid heartbeat 유틸리티를 이용하여 실행된다.
+
+**cubrid applyinfo** 유틸리티는 HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 유틸리티이다.
+
+자세한 사용법은 :ref:`cubrid-service-util` 을 참고한다.
+
 로캘 컴파일/출력
 ================
 
@@ -1669,4 +1686,7 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 **cubrid dumplocale** 유틸리티는 컴파일된 바이너리 로캘 파일을 사람이 읽을 수 있는 형태로 콘솔에 출력한다. 출력 값이 매우 클 수 있으므로, 리다이렉션을 이용하여 특정 파일로 저장할 것을 권장한다.
 
+**cubrid synccolldb** 유틸리티는 데이터베이스와 로캘 라이브러리 사이의 콜레이션 불일치 여부를 체크하고, 불일치하는 경우 동기화한다.
+
 자세한 사용법은 :ref:`locale-setting` 을 참고한다.
+

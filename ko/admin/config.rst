@@ -1137,6 +1137,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 	*   :func:`GROUP_CONCAT` : 이 함수는 **string_max_size_bytes** 파라미터뿐만 아니라 **group_concat_max_len** 파라미터의 영향도 받는다.
 	*   :func:`INSERT` 함수
 
+.. _unicode_input_normalization:
+
 **unicode_input_normalization**
 
 	시스템 수준에서 입력할 유니코드를 결합된 코드로 저장할지 여부를 설정하는 파라미터로 기본값은 **no** 이다.
@@ -1155,13 +1157,17 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 	*   CUBRID에서 유니코드 정규화를 위한 결합(composition)과 분해(decomposition)는 별개로 동작하지 않는다.
 
-	주로 사용되는 경우는 **unicode_input_normalization** 과 **unicode_output_normalization** 이 둘 다 yes인 경우로, 응용 클라이언트로부터 입력되는 코드를 결합된 코드로 저장하고 분해된 코드로 출력한다. 두 번째로 사용되는 경우는 **unicode_input_normalization** = yes이고 **unicode_output_normalization** = no인 경우로, 응용 클라이언트로부터 입력되는 코드를 결합된 코드로 저장하고 결합된 코드로 출력한다.
+	클라이언트 응용 프로그램이 텍스트 데이터를 분해된 형태로 CUBRID에 보낸다면, **unicode_input_normalization** 을 yes로 설정하여 CUBRID가 결합된 코드로 다루게 한다.
+	
+	클라이언트 응용 프로그램이 분해된 형태로만 데이터를 다룰 수 있다면 **unicode_output_normalization** 을 yes로 설정하여 CUBRID가 항상 분해된 코드로 데이터를 보내도록 한다.
+	
+	클라이언트 응용 프로그램이 입력과 출력의 형태에 대해 모두 알고 있다면, **unicode_output_normalization** 을 no인 상태로 둔다. 
 
 	로캘과 콜레이션에 대한 자세한 설명은 :doc:`/admin/i18n` 을 참고한다.
 
 **unicode_output_normalization**
 
-	시스템 수준에서 저장된 유니코드를 분해된 코드로 출력할 것인지 여부를 설정하는 파라미터로 기본값은 **no** 이다. 보다 자세한 설명은 위 **unicode_input_normalization** 의 설명을 참고한다.
+	시스템 수준에서 저장된 유니코드를 분해된 코드로 출력할 것인지 여부를 설정하는 파라미터로 기본값은 **no** 이다. 보다 자세한 설명은 위의 **unicode_input_normalization** 설명을 참고한다.
 
 .. _plan-cache-parameters:
 
@@ -1358,12 +1364,14 @@ HA 관련 파라미터
 
 **sql_trace_execution_plan**
 
-	**sql_trace_execution_plan**은 **sql_trace_slow_msecs** 파라미터 값의 설정 시간을 초과한 질의의 SQL 문과 함께 질의 실행 계획을 출력할지 여부를 설정하는 파라미터이다. 기본값은 no이다.
+	**sql_trace_execution_plan**은 **sql_trace_slow_msecs** 파라미터 값의 설정 시간을 초과한 장기 실행 질의(long running query)의 실행 계획을 출력할지 여부를 설정하는 파라미터이다. 기본값은 no이다.
 
-	이 값이 yes이면 서버 에러 로그 파일($CUBRID/log/server 이하의 파일), 브로커 응용 서버 로그 파일($CUBRID/log/broker/sql_log 이하의 파일)에 해당 SQL 문, 질의 실행 계획, cubrid statdump 명령의 출력 정보를 기록하며, cubrid plandump를 실행할 때 해당 SQL 문과 질의 실행 계획을 출력한다. 
+	이 값이 yes이면 서버 에러 로그 파일($CUBRID/log/server 이하의 파일), CAS 로그 파일($CUBRID/log/broker/sql_log 이하의 파일)에 해당 SQL 문, 질의 실행 계획, cubrid statdump 명령의 출력 정보를 기록하며, cubrid plandump를 실행할 때 해당 SQL 문과 질의 실행 계획을 출력한다. 
 
-	이 값이 no면 해당 SQL문만 기록하며, cubrid plandump를 실행할 때 해당 SQL 문만 출력한다.
+	이 값이 no면 서버 에러 로그 파일, CAS 로그 파일에 해당 SQL문만 기록하며, cubrid plandump를 실행할 때 해당 SQL 문만 출력한다.
 
+	예를 들어 5초를 초과하면 느린 질의(slow query)로 규정하고 해당 질의의 실행 계획을 로그 파일에 출력하고 싶은 경우, **sql_trace_slow_msecs** 의 값을 5000(ms)로 설정하고 **sql_trace_execution_plan** 의 값을 yes로 설정한다. 
+		
 	단, 서버 에러 로그 파일에는 error_log_level 파라미터의 값이 NOTIFICATION인 경우에만 해당 정보를 기록한다.
 
 **use_orderby_sort_limit**
@@ -1399,7 +1407,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 	|                                 |                         +---------------------------------+--------+------------------------------+-----------+
 	|                                 |                         | ACCESS_MODE                     | string | RW                           | 가능      |
 	|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-	|                                 |                         | BROKER_PORT                     | int    | 30000(최대값 : 65535)        |           |
+	|                                 |                         | BROKER_PORT                     | int    | 30000(최대값: 65535)         |           |
 	|                                 |                         +---------------------------------+--------+------------------------------+-----------+
 	|                                 |                         | ENABLE_MONITOR_HANG             | string | OFF                          |           |
 	|                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -1413,7 +1421,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 	|                                 |                         |                                 |        | Windows 64비트: 80           |           |
 	|                                 |                         |                                 |        | Linux: 0                     |           |
 	|                                 |                         +---------------------------------+--------+------------------------------+-----------+
-	|                                 |                         | APPL_SERVER_MAX_SIZE_HARD_LIMIT | int    | 1024                         | 가능      |
+	|                                 |                         | APPL_SERVER_MAX_SIZE_HARD_LIMIT | int    | 1024(최대값: 2,097,151)      | 가능      |
 	|                                 |                         +---------------------------------+--------+------------------------------+-----------+
 	|                                 |                         | APPL_SERVER_PORT                | int    | BROKER_PORT+1                |           |
 	|                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -1568,7 +1576,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 
 **APPL_SERVER_MAX_SIZE_HARD_LIMIT**
 
-	**APPL_SERVER_MAX_SIZE_HARD_LIMIT** 는 CAS가 처리하는 프로세스 메모리 사용량의 최대 크기를 지정하는 파라미터로 단위는 MB이고, 기본값은 **1024** (MB)이다. 이 파라미터는 진행 중인 트랜잭션이 있어도 이를 강제 종료(롤백)하고 CAS를 재구동하는 동작에 영향을 준다. **APPL_SERVER_MAX_SIZE** 는 **APPL_SERVER_MAX_SIZE_HARD_LIMIT** 와 비슷하지만, 진행 중인 트랜잭션이 있을 경우 사용자에 의해 정상 종료(커밋 혹은 롤백)되기를 기다렸다가 CAS를 재구동하는 동작에 영향을 준다는 점이 다르다.
+	**APPL_SERVER_MAX_SIZE_HARD_LIMIT** 는 CAS가 처리하는 프로세스 메모리 사용량의 최대 크기를 지정하는 파라미터로 단위는 MB이고, 기본값은 **1024** (MB)이며, 최대값은 2,097,151 (MB)이다. 이 파라미터는 진행 중인 트랜잭션이 있어도 이를 강제 종료(롤백)하고 CAS를 재구동하는 동작에 영향을 준다. **APPL_SERVER_MAX_SIZE** 는 **APPL_SERVER_MAX_SIZE_HARD_LIMIT** 와 비슷하지만, 진행 중인 트랜잭션이 있을 경우 사용자에 의해 정상 종료(커밋 혹은 롤백)되기를 기다렸다가 CAS를 재구동하는 동작에 영향을 준다는 점이 다르다.
 
 	.. note:: 
 
@@ -1665,7 +1673,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 
 **MAX_STRING_LENGTH**
 
-	**MAX_STRING_LENGTH** 는 bit, varbit, char, varchar, nchar, nchar varying인 데이터 타입에 대해서 최대 문자열 길이를 지정하는 파라미터이다. 기본값인 **-1** 로 설정되면 데이터베이스에서 정의된 문자열 길이가 그대로 사용되고, 파라미터의 값이 **100** 으로 설정되면 임의의 속성이 varchar(1000)으로 정의되었어도 100으로 정의된 것처럼 동작한다.
+	**MAX_STRING_LENGTH** 는 bit, varbit, char, varchar인 데이터 타입에 대해서 최대 문자열 길이를 지정하는 파라미터이다. 기본값인 **-1** 로 설정되면 데이터베이스에서 정의된 문자열 길이가 그대로 사용되고, 파라미터의 값이 **100** 으로 설정되면 임의의 속성이 varchar(1000)으로 정의되었어도 100으로 정의된 것처럼 동작한다.
 
 **PREFERRED_HOSTS**
 

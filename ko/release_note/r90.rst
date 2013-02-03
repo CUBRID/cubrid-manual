@@ -637,7 +637,7 @@ TIME 타입의 값으로 유효하지 않은 시간을 바인딩하면 오류를
 SHOW COLUMNS FROM 문의 출력 타입 문자열 변경(CUBRIDSUS-8533)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	SHOW COLUMNS FROM 문에서 STRING(n), VARBIT(n), VARNCHAR(n)로 출력되는 타입의 문자열들이 각각 VARCHAR(n), BIT VARYING(n), NCHAR VARYING(n)으로 변경되었다.
+	SHOW COLUMNS FROM 문에서 STRING(n), VARBIT(n)로 출력되는 타입의 문자열들이 각각 VARCHAR(n), BIT VARYING(n)로 변경되었다.
 
 SHOW COLUMNS ... 결과 출력 시 특정 타입의 DEFALUT 값 출력에 포함된 홑따옴표 제거(CUBRIDSUS-5921)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

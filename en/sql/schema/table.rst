@@ -551,7 +551,7 @@ If you specify the **REUSE_OID** option when creating a table, the OID is also d
 CREATE TABLE LIKE
 -----------------
 
-You can create a table that has the same schema as an existing table by using the **CREATE TABLE...LIKE** statement. Column attribute, table constraint, and index are replicated from the existing table. An index name created from the existing table changes according to a new table name, but an index name defined by a user is replicated as it is. Therefore, you should be careful at a query statement that is supposed to use a specific index created by using the **USING INDEX**.
+You can create a table that has the same schema as an existing table by using the **CREATE TABLE...LIKE** statement. Column attribute, table constraint, and index are replicated from the existing table. An index name created from the existing table changes according to a new table name, but an index name defined by a user is replicated as it is. Therefore, you should be careful at a query statement that is supposed to use a specific index created by using the index hint syntax(see ref:`index-hint-syntax`).
 
 You cannot create the column definition because the **CREATE TABLE ... LIKE** statement replicates the schema only. ::
 

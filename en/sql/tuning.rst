@@ -170,6 +170,8 @@ The following example shows how to view query plan by using the example retrievi
 Using Indexes
 =============
 
+.. _index-hint-syntax:
+
 Index Hint Syntax
 -----------------
 

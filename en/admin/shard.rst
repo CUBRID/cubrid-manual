@@ -108,9 +108,10 @@ Selecting a Shard DB through the Shard SQL Hint
 	[번역]
 	
 	.. note::
-		두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다. 
+	
+		두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다.  ::
 		
-		예) SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
+			예) SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
 		
 		위와 같은 경우 250과 22가 같은 shard를 가리키면 정상 처리, 다른 shard를 가리키면 오류 처리한다.
 
@@ -993,6 +994,49 @@ Checking CUBRID SHARD configuration information
 
 As a reference, to see the configuration information of the currently "working" system(cubrid.conf), use **cubrid paramdump** *database_name* command. By **SET SYSTEM PARAMETERS** syntax, the configuration information of the system parameters can be changed dynamically; with **cubrid broker info** command, you can see the configuration information of the system parameters.
 
+[번역]
+
+CUBRID SHARD ID 확인
+--------------------
+**cubrid shard getid** 는 특정 키가 어느 샤드 DB에 접근하는지 알고 싶을 때 사용하는 명령으로, shard key에 대한 SHARD ID를 출력한다. :: 
+
+	cubrid shard getid -b <broker-name> [-f] shard-key
+	
+* -b <*broker-name*> : shard broker 이름
+* -f  : 상세 정보 출력
+* *shard-key* : shard key
+
+다음은 shard1 브로커에서 키 1에 대한 SHARD ID를 출력하는 예이다.
+
+::
+
+	$ cubrid shard getid -b shard1 1
+	@ cubrid shard getid
+	% shard1
+	 SHARD_ID : 0, SHARD_KEY: 1
+
+다음은 -f 옵션을 사용하여 상세 정보를 출력하는 예이다.
+
+::
+	
+	$ cubrid shard getid -b shard1 -f 1
+	@ cubrid shard getid
+	% shard1
+	 SHARD_ID : 0, SHARD_KEY : 1, KEY_COLUMN : student_no
+	 MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
+	 RANGE STATISTICS : student_no
+	      MIN ~   MAX :      SHARD
+	    ---------------------------
+	        0 ~    31 :          0
+
+	 SHARD CONNECTION :
+	    SHARD_ID          DB NAME          CONNECTION_INFO
+	    ---------------------------------------------------
+	           0           shard1                192.168.10.1
+	           1           shard4                192.168.10.2
+	           2           shard2                192.168.10.3
+	           3           shard3                192.168.10.4
+
 Checking CUBRID SHARD status Information
 ----------------------------------------
 
@@ -1000,8 +1044,8 @@ Checking CUBRID SHARD status Information
 
 	provides a variety of options to check the status information of each shard broker, shard proxy, and shard cas. In addition, it is possible to check the metadata information and the information on the client who has accessed the shard proxy. ::
 
-		cubrid shard status options [<expr>]
-		options : [-b | -f [-l sec] | -t | -c | -m | -s <sec>]
+		cubrid shard status [options] [<expr>]
+		options : -b | -f [-l sec] | -t | -c | -m | -s <sec>
 
 	When <*expr*> is given, the status monitoring is performed for the corresponding CUBRID SHARD. When it is omitted, status monitoring is performed for all CUBRID SHARDs registered to the CUBRID SHARD configuration file (**shard.conf**).
 
@@ -1452,3 +1496,10 @@ Constraints
 **auto increment**
 
 	The auto increment attribute or SERIAL is valid within each shard DB only. So a result different from the intended result may be returned.
+
+[번역]
+
+**Windows용 SHARD DB와 응용 드라이버 사이의 접속**
+	
+	Windows용 SHARD DB 서버는 같은 버전의 드라이버를 사용하는 응용 프로그램만 접속이 가능하다. Linux용 SHARD DB 서버는 다른 버전의 드라이버를 사용하는 응용 프로그램과도 접속이 가능하다.
+	

@@ -1132,7 +1132,7 @@ The following are parameters related to SQL statements and data types supported 
 
 	**unicode_input_normalization** is a parameter used to whether to input unicode stored in system level. The default value is **no**.
 
-	In gernal, unicode text can be stored in "fully composed" or "fully decomposed". When character 'Ä' has 00C4 (if it is encoded in UTF-8, it becomes 2 bytes of C3 84) which is only one code point. In "fully decomposed" mode, it has tow code points/characters. It is 0041 (character "A" and 0308(COMBINING DIAERESIS). In case of UTF-8 encoding, it becomes 3 bytes of 41 CC 88.
+	In gernal, unicode text can be stored in "fully composed" or "fully decomposed". When character 'Ä' has 00C4 (if it is encoded in UTF-8, it becomes 2 bytes of C3 84) which is only one code point. In "fully decomposed" mode, it has tow code points/characters. It is 0041 (character "A") and 0308(COMBINING DIAERESIS). In case of UTF-8 encoding, it becomes 3 bytes of 41 CC 88.
 
 	CUBRID can work with fully composed unicode. For clients which have fully decomposed texts, configure the value of **unicode_input_normalization** to yes so that it can be converted to fully composed mode; and then it can be reverted to fully decomposed mode. For normalization of unicode encapsulation of CUBRID, compatibility equivalence is not applied. In general, normalization of unicode is not possible to revert after composition, CUBRID supports revert for characters an many as possible, it applies normalization of unicode encapsulation. The characteristics of CUBRID normalization are as follows:
 
@@ -1350,11 +1350,14 @@ The following are other parameters. The type and value range for each parameter 
 		
 **sql_trace_execution_plan**
 
-	**sql_trace_execution_plan** is a parameter used to configure if the query plan of the long-duration-execution query is written to the log or not. The default value is no.
+	**sql_trace_execution_plan** is a parameter used to configure if the query plan of the long running query is written to the log or not. The default value is no.
 
-	If it is set to yes, a long-duration-execution SQL, a query plan and the output of cubrid statdump command  are written to the server error log file(located on $CUBRID/log/server directory) and the broker application server log file(located on $CUBRID/log/broker/sql_log directory) .
+	If it is set to yes, a long running SQL, a query plan and the output of cubrid statdump command  are written to the server error log file(located on $CUBRID/log/server directory) and CAS log file(located on $CUBRID/log/broker/sql_log directory) .
 
-	If it is set to no, only a long-duration-execution SQL is written, and the output of cubrid statdump command  is shown only when you do that command. 
+	If it is set to no, only a long running SQL is written to the server error log file and CAS log file, and this SQL is displayed when you execute **cubrid statdump** command.
+
+	[번역]
+	예를 들어 5초를 초과하면 느린 질의(slow query)로 규정하고 해당 질의의 실행 계획을 로그 파일에 출력하고 싶은 경우, **sql_trace_slow_msecs** 의 값을 5000(ms)로 설정하고 **sql_trace_execution_plan** 의 값을 yes로 설정한다. 
 
 	But, on the server error log file, the related informations are written only when the value of error_log_level is NOTIFICATION. 
 

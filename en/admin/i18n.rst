@@ -771,21 +771,21 @@ Collation of charset and string literal is determined based on the following pri
 
 	Contractions are supported in both collation variants : with expansions and without expansions. Contractions support requires changes in a significant number of key areas. It also involves storing a contraction table inside the collation data. The handling of contractions is controlled by LDML parameters **DUCETContractions="ignore/use"** **TailoringContractions="ignore/use"** in <settings> tag of collation definition. The first one controls if contractions in DUCET file are loaded into collation, the second one controls if contractions defined by rules in LDML are ignore or not (easier way then adding-deleting all rules introducing contractions).
 
-**Expansion**
+	**Expansion**
 
 	Expansions refer to codepoints which have more than one collation element. Enabling expansions in CUBRID radically changes the collation's behavior as described below. The CUBRIDExpansions="use" parameter controls the this behavior.
 
-**Collation without Expansion**
+	**Collation without Expansion**
 
 	In a collation without expansions, each codepoint is treated independently. Based on the strength of the collation, the alphabet may or may not be fully sorted. A collation algorithm will sort the codepoints by comparing the weights in a set of levels, and then will generate a single value, representing the weight of the codepoint. String comparison will be rather straight-forward. Comparing two strings in an expansion-free collation means comparing codepoint by codepoint using the computed weight  values.
 
-**Collation with Expansion**
+	**Collation with Expansion**
 
 	In a collation with expansions, some composed characters (codepoints) are to be interpreted as an ordered list of other characters (codepoints). For example, 'æ' might require to be interpreted the same way as 'ae', or 'ä' as ''ae'' or ''aa''. In DUCET, the collation element list of 'æ' will be the concatenation of collation element lists of both 'a' and 'e', in this order. Deciding a particular order for the codepoints is no longer possible, and neither is computing new weight values for each character/codepoint.
 
 	In a collation with expansions, string comparison is done by concatenating the collation elements for the codepoints/contractions in two lists (for the two strings) and then comparing the weights in those lists for each level.
 
-**Example**
+	**Example**
 
 	The purpose of these examples is to show that under different collation settings (with or without expansion support), string comparison might yield different results.
 
@@ -806,9 +806,9 @@ Collation of charset and string literal is determined based on the following pri
 
 	Sorting of the strings "Ar" and "Är" will be attempted.
 
-**Collation without Expansions Support**
+		**Collation without Expansions Support**
 
-	When expansions are disabled, each codepoint is reassigning a new single valued weight. Based on the algorithms described above the weights for A, , , R and their lowercase correspondents, the order of the codepoints for these characters, for each collation settings example above, will be as follows.
+	When expansions are disabled, each codepoint is reassigning a new single valued weight. Based on the algorithms described above the weights for A, Ä, R and their lowercase correspondents, the order of the codepoints for these characters, for each collation settings example above, will be as follows.
 
 	*   Primary strength: A = Ä < R = r
 	*   Secondary strength: A < Ä < R = r
@@ -820,7 +820,7 @@ Collation of charset and string literal is determined based on the following pri
 	*   Secondary strength: "Ar" < "Är"
 	*   Tertiary strength: "Ar" < "Är"
 
-**Collation with Expansions**
+		**Collation with Expansions**
 
 	The sorting order is changed for collation with expansion.
 

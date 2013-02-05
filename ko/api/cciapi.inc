@@ -1716,13 +1716,67 @@ CCI API 레퍼런스
 	가장 마지막에 수행한 INSERT 문의 기본 키 값을 얻는다.
 	
 	:param conn_handle: (IN) 연결 핸들
-	:param value: (OUT) 결과 버퍼에 대한 포인터. 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
+	:param value: (OUT) 결과 버퍼에 대한 포인터로 (char **). 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
 	:param err_buf: (OUT) 에러 버퍼
 
 	:return: 에러 코드
 
 		*   **CCI_ER_CON_HANDLE**
-		* 	**CCI_ER_USED_CONNECTION**
+		*   **CCI_ER_USED_CONNECTION**
+		*   **CCI_ER_INVALID_ARGS**
+
+	.. code-block:: c
+	
+		#include <stdio.h>
+		#include "cas_cci.h"
+
+		int main ()
+		{
+			int con = 0;
+			int req = 0;
+	
+			int error;
+			T_CCI_ERROR cci_error;
+	
+	
+			char *query = "insert into t1 values(NULL);";
+			char *value = NULL;
+	
+			con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+	
+			if (con < 0)
+			{
+				printf ("con error\n");
+				return;
+			}
+
+			req = cci_prepare (con, query, 0, &cci_error);
+			if (req < 0)
+			{
+				printf ("cci_prepare error: %d\n", req);
+				printf ("cci_error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+				return;
+			}
+			error = cci_execute (req, 0, 0, &cci_error);
+			if (error < 0)
+			{
+				printf ("cci_execute error: %d\n", error);
+				return;
+			}
+
+			error = cci_get_last_insert_id (con, &value, &cci_error);
+			if (error < 0)
+			{
+				printf ("cci_get_last_insert_id error: %d\n", error);
+				return;
+			}
+
+			printf ("## last insert id: %s\n", value);
+
+			error = cci_close_req_handle (req);
+			error = cci_disconnect (con, &cci_error);
+			return 0;
+		}
 
 .. c:function:: int cci_next_result(int req_handle, T_CCI_ERROR *err_buf)
 
@@ -2699,6 +2753,8 @@ CCI API 레퍼런스
 .. c:function:: int cci_set_allocators(CCI_MALLOC_FUNCTION malloc_func, CCI_FREE_FUNCTION free_func, CCI_REALLOC_FUNCTION realloc_func, CCI_CALLOC_FUNCTION calloc_func)
 
 	사용자가 정의한 메모리 할당 및 해제 함수들을 등록하여 사용할 수 있게 한다. 이 함수를 실행하면 CCI API 내부에서 사용되는 모든 메모리 할당 및 해제 작업은 사용자가 정의한 메모리 할당 함수들을 사용하게 된다. 이를 사용하지 않으면 기본적인 시스템 함수들(malloc, free, realloc, calloc)이 사용된다.
+
+	.. note:: 이 함수는 Linux 전용으로, Windows에서는 사용할 수 없다.
 
 	:param malloc_func: (IN) malloc에 해당하는 외부 정의 함수에 대한 포인터
 	:param free_func: (IN) free에 해당하는 외부 정의 함수에 대한 포인터

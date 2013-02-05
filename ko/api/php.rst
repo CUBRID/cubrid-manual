@@ -456,7 +456,9 @@ PHP 프로그래밍
 
 데이터베이스 응용에서 첫 단계는 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () 함수 또는 `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () 함수를 사용하는 것으로 데이터베이스 연결을 제공한다. `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ 함수 또는 `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () 함수가 성공적으로 수행되면, 데이터베이스를 사용할 수 있는 모든 함수를 사용할 수 있다. 응용을 완전히 끝내기 전에 `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수를 호출하는 것은 매우 중요하다. `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수는 현재 발생한 트랜잭션을 끝마치고 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () 함수에 의해 생성된 연결 핸들과 모든 요청 핸들을 종료한다.
 
-.. note:: 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+.. note:: 
+	*   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
 트랜잭션과 자동 커밋
 --------------------

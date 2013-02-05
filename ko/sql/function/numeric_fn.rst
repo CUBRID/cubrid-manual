@@ -506,7 +506,7 @@
 					3  'c'
 					8  'h'
 
-.. function:: ROUND ( number_operand, integer )
+.. function:: ROUND( number_operand, integer )
 
 	**ROUND** 함수는 지정된 인자 *number_operand* 를 소수점 아래 *integer* 자리까지 반올림한 값을 반환한다. 반올림할 자릿수를 지정하는 *integer* 인자가 생략되거나 0인 경우에는 소수점 아래 첫째 자리에서 반올림한다. 그리고 *integer* 인자가 음수이면, 소수점 위 자리, 즉 정수부에서 반올림한다.
 

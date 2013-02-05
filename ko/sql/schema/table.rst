@@ -1350,9 +1350,8 @@ DROP INDEX 절
 
 **DROP INDEX** 절을 사용하여 인덱스를 삭제할 수 있다. ::
 
-	ALTER [ TABLE | CLASS ] table_name DROP [ REVERSE ] [ UNIQUE ] INDEX index_name
+	ALTER [ TABLE | CLASS ] table_name DROP [ UNIQUE ] INDEX index_name
 
-*   **REVERSE** : 삭제하려는 인덱스가 역순 인덱스임을 지정한다.
 *   **UNIQUE** : 삭제하려는 인덱스가 고유 인덱스임을 지정한다. 고유 인덱스는 **DROP CONSTRAINT** 절로도 삭제할 수 있다.
 *   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *index_name* : 삭제할 인덱스의 이름을 지정한다.

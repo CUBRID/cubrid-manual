@@ -66,10 +66,6 @@ CCI API Reference
 	+--------------------------+------------------------------------+
 	| **CCI_U_TYPE_STRING**    | **CCI_A_TYPE_STR**                 |
 	+--------------------------+------------------------------------+
-	| **CCI_U_TYPE_NCHAR**     | **CCI_A_TYPE_STR**                 |
-	+--------------------------+------------------------------------+
-	| **CCI_U_TYPE_VARNCHAR**  | **CCI_A_TYPE_STR**                 |
-	+--------------------------+------------------------------------+
 	| **CCI_U_TYPE_BIT**       | **CCI_A_TYPE_BIT**                 |
 	+--------------------------+------------------------------------+
 	| **CCI_U_TYPE_VARBIT**    | **CCI_A_TYPE_BIT**                 |
@@ -101,6 +97,8 @@ CCI API Reference
 	| **CCI_U_TYPE_BLOB**      | **CCI_A_TYPE_BLOB**                |
 	+--------------------------+------------------------------------+
 	| **CCI_U_TYPE_CLOB**      | **CCI_A_TYPE_CLOB**                |
+	+--------------------------+------------------------------------+
+	| **CCI_U_TYPE_ENUM**      | **CCI_A_TYPE_STR**                 |
 	+--------------------------+------------------------------------+
 
 	When the string including the date is used as an input parameter of **DATE**, **DATETIME**, or **TIMESTAMP**, only "YYYY/MM/DD" is allowed for the date string type. Therefore, "2012/01/31" is valid, but "01/31/2012" or "2012-01-31" is invalid. The following is an example of having the string that includes the date as an input parameter of the date type.
@@ -668,9 +666,10 @@ CCI API Reference
 
 	The **cci_connect_with_url** function connects a database by using connection information passed with a *url* argument. If broker's HA feature is used in CCI, you must specify the connection information of the standby broker server with altHosts property, which is used for the failover, in the *url* argument of this function. It returns the ID of a connection handle on success; it returns an error code on failure. For details about HA features of broker, see :ref:`duplexing-brokers`.
 
-	:param url: (IN) A string that contains server connection information
-	:param db_user: (IN) Database user name. If it is NULL or an empty string, use <*db_user*> in *url*.
-	:param db_passwd: (IN) Database user password. If it is NULL or an empty string, use <*db_password*> in *url*.
+	:param url: (IN) A string that contains server connection information. 
+	:param db_user: (IN) Database user name. If it is NULL or an empty string, it becomes <*db_user*> in *url*. If both of this value and <*db_user*> in *url* are not specified, DB user name becomes **PUBLIC**.
+	:param db_passwd: (IN) Database user password. If it is NULL or an empty string, use <*db_password*> in *url*. If both of this value and <*db_password*> in *url* are not specified, DB password becomes NULL.
+
 	:return: Success: Connection handle ID (int), Failure: Error code
 
 		*   **CCI_ER_NO_MORE_MEMORY**
@@ -857,7 +856,7 @@ CCI API Reference
 
 	The **cci_datasource_create** function creates DATASOURCE of CCI.
 
-	:param properties: (IN) **T_CCI_PROPERTIES** struct pointer in which configuration of struct pointer is stored
+	:param properties: (IN) **T_CCI_PROPERTIES** struct pointer in which configuration of struct pointer is stored. Values of properties will be set with :c:func:`cci_property_set`.
 	:param err_buf: (OUT) Error code and message returned upon error occurrence
 	:return: Success: **T_CCI_DATASOURCE** struct pointer created, Failure: **NULL**
 
@@ -890,9 +889,7 @@ CCI API Reference
 
 .. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * date_source, T_CCI_CONN conn)
 
-	The **cci_datasource_release** function returns CCI connection released in **T_CCI_DATASOURCE** struct.
-
-	**T_CCI_DATASOURCE** 구조체에 사용을 끝낸 CCI 연결을 반환한다.
+	The **cci_datasource_release** function returns CCI connection released in **T_CCI_DATASOURCE** struct. If you want to reuse the coonection after calling this function, recall :func:cci_datasource_borrow.
 
 	:param datasource: (IN) **T_CCI_DATASOURCE** struct pointer which returns CCI connection
 	:param conn: (IN) CCI connection handler identifier released
@@ -1000,7 +997,7 @@ CCI API Reference
 	*   For a query composed of in a query composed of q1; q2; q3, even if an error occurs in q2 after q1 succeeds the execution, the result of q1 remains valid. That is, the previous successful query executions are not rolled back when an error occurs.
 	*   If a query is executed successfully, the result of the second query can be obtained using :c:func:`cci_next_result`.
 
-	*max_col_size* is a value that is used to determine the maximum length of a column to be sent to a client when the columns of the prepared statement are **CHAR**, **VARCHAR**, **NCHAR**, **VARNCHAR**, **BIT** or **VARBIT**. If this value is 0, full length is fetched.
+	*max_col_size* is a value that is used to determine the maximum length of a column to be sent to a client when the columns of the prepared statement are **CHAR**, **VARCHAR**, **BIT** or **VARBIT**. If this value is 0, full length is fetched.
 
 .. c:function:: int cci_execute_array(int req_handle, T_CCI_QUERY_RESULT **query_result, T_CCI_ERROR *err_buf)
 
@@ -1040,10 +1037,16 @@ CCI API Reference
 	| :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` | int(**T_CCI_CUBRID_STMT** enum) | type of query statement         |
 	+---------------------------------------+---------------------------------+---------------------------------+
 	
-
 	If autocommit mode is on, each query in the array is committed after executing.
 	
-	.. note:: In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. 
+	.. note:: 
+	
+		* In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed.  [번역] 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
+		
+		[번역]
+		
+		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_array 함수에서 배열 내의 질의 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
+
 	
 	.. code-block:: c
 
@@ -1146,7 +1149,12 @@ CCI API Reference
 	
 	If autocommit mode is on, each query in the array is committed after executing.
 	
-	.. note:: In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. 
+	.. note:: 
+	
+		* In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. [번역] 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
+
+		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_batch 함수에서 배열 내의 질의 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
+
 
 	.. code-block:: c
 
@@ -1459,6 +1467,7 @@ CCI API Reference
 		*   **CCI_ER_CON_HANDLE**
 
 [번역]
+
 .. c:function:: int cci_get_query_plan(int req_handle, char **out_buf_p)
 
 	cci_prepare 함수가 리턴한 요청 핸들(req_handle)에 대한 질의 계획을 결과 버퍼에 출력한다. cci_execute 함수의 호출 여부와 상관 없이 cci_get_query_plan 함수를 호출할 수 있다.
@@ -1706,18 +1715,73 @@ CCI API Reference
 		*   **CCI_ER_REQ_HANDLE**
 
 [번역]
-.. c:function:: int cci_last_insert_id(int conn_handle, void *value, T_CCI_ERROR * err_buf)
+
+.. c:function:: int cci_get_last_insert_id(int conn_handle, void *value, T_CCI_ERROR *err_buf)
 
 	가장 마지막에 수행한 INSERT 문의 기본 키 값을 얻는다.
 	
 	:param conn_handle: (IN) 연결 핸들
-	:param value: (OUT) 결과 버퍼. 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 함수 내에서 메모리를 할당하므로 사용 후 반드시 free(value)를 수행해야 함.
+	:param value: (OUT) 결과 버퍼에 대한 포인터로 (char \*\*). 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
 	:param err_buf: (OUT) 에러 버퍼
 
 	:return: 에러 코드
 
 		*   **CCI_ER_CON_HANDLE**
-		* 	**CCI_ER_USED_CONNECTION**
+		*   **CCI_ER_USED_CONNECTION**
+		*   **CCI_ER_INVALID_ARGS**
+
+	.. code-block:: c
+	
+		#include <stdio.h>
+		#include "cas_cci.h"
+
+		int main ()
+		{
+			int con = 0;
+			int req = 0;
+	
+			int error;
+			T_CCI_ERROR cci_error;
+	
+	
+			char *query = "insert into t1 values(NULL);";
+			char *value = NULL;
+	
+			con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+	
+			if (con < 0)
+			{
+				printf ("con error\n");
+				return;
+			}
+
+			req = cci_prepare (con, query, 0, &cci_error);
+			if (req < 0)
+			{
+				printf ("cci_prepare error: %d\n", req);
+				printf ("cci_error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+				return;
+			}
+			error = cci_execute (req, 0, 0, &cci_error);
+			if (error < 0)
+			{
+				printf ("cci_execute error: %d\n", error);
+				return;
+			}
+
+			error = cci_get_last_insert_id (con, &value, &cci_error);
+			if (error < 0)
+			{
+				printf ("cci_get_last_insert_id error: %d\n", error);
+				return;
+			}
+
+			printf ("## last insert id: %s\n", value);
+
+			error = cci_close_req_handle (req);
+			error = cci_disconnect (con, &cci_error);
+			return 0;
+		}
 
 .. c:function:: int cci_next_result(int req_handle, T_CCI_ERROR *err_buf)
 
@@ -1907,7 +1971,7 @@ CCI API Reference
 	
 .. c:function:: int cci_prepare_and_execute(int conn_handle, char *sql_stmt, int max_col_size, int *exec_retval, T_CCI_ERROR *err_buf)
 
-	The **cci_prepare_and_execute** function executes the SQL statement immediately and returns a request handle for the SQL statement. A request handle, SQL statement, the maximum length of a column to be fetched, error code, and the address of a **T_CCI_ERROR** construct variable in which error information being stored are specified as arguments. *max_col_size* is a value to configure the maximum length of a column to be sent to a client when the column of a SQL statement is **CHAR**, **VARCHAR**, **NCHAR**, **VARNCHAR**, **BIT**, or **VARBIT**. If this value is 0, full length is fetched.
+	The **cci_prepare_and_execute** function executes the SQL statement immediately and returns a request handle for the SQL statement. A request handle, SQL statement, the maximum length of a column to be fetched, error code, and the address of a **T_CCI_ERROR** construct variable in which error information being stored are specified as arguments. *max_col_size* is a value to configure the maximum length of a column to be sent to a client when the column of a SQL statement is **CHAR**, **VARCHAR**, **BIT**, or **VARBIT**. If this value is 0, full length is fetched.
 
 	:param conn_handle: (IN) Connection handle
 	:param sql_stmt: (IN) SQL statement
@@ -1984,7 +2048,10 @@ CCI API Reference
 	:return: Success: 1, Failure: 0
 
 	The property names and its meanings that can be configured in the struct are as follows:
-
+	
+	*   **user**: DB user name
+	*   **password**: DB user password
+	*   **url**: connection URL. For specifying connnection URL string, refer :c:func:`cci_connect_with_url`.
 	*   **pool_size** : Maximum number of connection (default value: 10)
 	*   **max_wait** : Maximum waiting time to get connection (default value: 1000 msec.)
 	*   **pool_prepared_statement** : Whether to enable statement pooling (default value: false)
@@ -2023,6 +2090,25 @@ CCI API Reference
 	| READ COMMITTED CLASS with  | "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE" |
 	| READ UNCOMMITTED INSTANCES |                                       |
 	+----------------------------+---------------------------------------+
+
+	[번역]
+	DB 사용자 이름과 암호는 **user** 와 **password** 값을 직접 지정하는 방식을 사용하거나 **url** 속성 내에서 **user**와 **password** 값을 지정하는 방식을 사용한다. 두 가지 경우가 같이 사용되는 경우  우선 순위는 다음과 같다.
+	
+	* 둘다 입력되면 직접 지정하는 방식의 값이 우선한다. 
+	* 둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다. 
+	* 둘 다 NULL이면 NULL 값으로 사용된다. 
+	* DB 사용자를 직접 지정한 값이 NULL이면 "public", 암호를 직접 지정한 값이 NULL이면 NULL로 설정된다.
+	* 암호를 직접 지정한 값이 NULL이면 URL의 설정을 따른다. 
+	
+	다음 예제에서 DB 사용자 이름은 "dba", 암호는 "cubridpwd" 가 된다.
+	
+	::
+	
+		cci_property_set(ps, "user", "dba");
+		cci_property_set(ps, "password", "cubridpwd");
+		  ...
+		cci_property_set(ps, "url", "cci:cubrid:192.168.0.1:33000:demodb:public:mypwd:?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
+		
 
 	.. seealso:: 
 	
@@ -2676,6 +2762,8 @@ CCI API Reference
 .. c:function:: int cci_set_allocators(CCI_MALLOC_FUNCTION malloc_func, CCI_FREE_FUNCTION free_func, CCI_REALLOC_FUNCTION realloc_func, CCI_CALLOC_FUNCTION calloc_func)
 
 	The **cci_set_allocators** function registers the memory allocation/release functions used by users. By executing this function, you can use user-defined functions for every memory allocation/release jobs being processed in CCI API. If you do not use this function, system functions (malloc, free, realloc, and calloc) are used.
+
+	.. note:: This function can be used only on Linux, so cannot be used on Windows.
 
 	:param malloc_func: (IN) Pointer of externally defined function corresponding to malloc
 	:param free_func: (IN) Pointer of externally defined function corresponding to free

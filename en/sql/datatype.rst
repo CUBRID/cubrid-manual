@@ -69,7 +69,7 @@ The **INTEGER** data type is used to represent integers. The value range is avai
 *   If a real number is entered for an **INT** type, the number is rounded to zero decimal place and the integer value is stored.
 *   **INTEGER** and **INT** are used interchangeably.
 
-**Example** ::
+::
 
 	If you specify 8934 as INTEGER, 8934 is stored.
 	If you specify 7823467 as INTEGER, 7823467 is stored.
@@ -84,7 +84,7 @@ The **SMALLINT** data type is used to represent a small integer type. The value 
 *   If a real number is entered for an **SMALLINT** type, the number is rounded to zero decimal place and the integer value is stored.
 *   **SMALLINT** and **SHORT** are used interchangeably.
 
-**Example** ::
+::
 
 	If you specify 8934 as SMALLINT, 8934 is stored.
 	If you specify 34.5 as SMALLINT, 35 is stored (all digits after the decimal point are rounded).
@@ -101,7 +101,7 @@ The **BIGINT** data type is used to represent big integers. The value range is a
 
   **SMALLINT** ⊂ **INTEGER** ⊂ **BIGINT** ⊂ **NUMERIC** 
 
-**Example** ::
+::
 
 	If you specify 8934 as BIGINT, 8934 is stored.
 	If you specify 89.1 as BIGINT, 89 is stored.
@@ -120,7 +120,7 @@ NUMERIC/DECIMAL
 *   **NUMERIC**, **DECIMAL**, and **DEC** are used interchangeably.
 *   To check how the precision and the scale became changed when you operate with **NUMERIC** typed values, see :ref:`numeric-data-type-op-and-conversion`.
 
-**Example** ::
+::
 
 	If you specify 12345.6789 as NUMERIC, 12346 is stored (it rounds to the first place after the decimal point since 0 is the default value of scale).
 	If you specify 12345.6789 as NUMERIC(4), an error occurs (precision must be equal to or greater than the number of integer digits).
@@ -145,7 +145,7 @@ The minimum value for the precision *p* is 1 and the maximum value is 38. When t
 *   Extra cautions are required when comparing data because the **FLOAT** type stores approximate numeric.
 *   **FLOAT** and **REAL** are used interchangeably.
 
-**Example** ::
+::
 
 	If you specify 16777217 as FLOAT, 16777216 is stored and 1.677722e+07 is displayed (if precision is omitted, 8-th digit is rounded up because it is represented as 7 significant figures).
 	If you specify 16777217 as FLOAT(5), 16777216 is stored and 1.677722e+07 is displayed (if precision is in seven or less, 8-th digit is rounded up because it is represented as 7 significant figures).
@@ -167,7 +167,7 @@ The precision *p* is not specified. The data specified as this data type is repr
 *   Extra caution is required when comparing data because the **DOUBLE** type stores approximate numeric.
 *   **DOUBLE** and **DOUBLE PRECISION** are used interchangeably.
 
-**Example** ::
+::
 
 	If you specify 1234.56789 as DOUBLE, 1234.56789 is stored and 1.234567890000000e+03 is displayed.
 	If you specify 9007199254740993 as DOUBLE, 9007199254740992 is stored and 9.007199254740992e+15 is displayed.
@@ -179,7 +179,7 @@ The **MONETARY** data type is an approximate numeric data type. The range of val
 
 You can use a dollar sign or a decimal point, but a comma is not allowed.
 
-**Example** ::
+::
 
 	If you specify 12345.67898934 as MONETARY, $12,345.68 is stored (it is rounded to third decimal place).
 	If you specify 123456789 as MONETARY, $123,456.789.00 is stored.
@@ -261,7 +261,7 @@ The **DATE** data type is used to represent the year (yyyy), month (mm) and day 
 *   The :func:`TO_DATE` function is used to convert a character string type into a **DATE** type. 
 *   0 is not allowed to input in year, month, and day; however, '0000-00-00', which every digit consisting of year, month, and day is 0, is allowed as an exception.
 
-**Example** ::
+::
 
 	DATE '2008-10-31' is displayed as '10/31/2008'.
 	DATE '10/31' is displayed as '10/31/2011'(if a value for year is omitted, the current year is automatically specified).
@@ -285,7 +285,7 @@ The input format of **TIME** is as follows: ::
 *   Every time value is stored in the 24-hour notation. **db_time_decode**, one of C API functions, is used to return a value in the 24-hour notation.
 *   The :func:`TO_TIME` function is used to return a character string type into a TIME type.
 
-**Example** ::
+::
 
 	TIME '00:00:00’ is outputted as '12:00:00 AM'.
 	TIME '1:15' is regarded as '01:15:00 AM'.
@@ -312,7 +312,7 @@ The **TIMESTAMP** data type is used to represent a data value in which the date 
 *   The :func:`TIMESTAMP` or :func:`TO_TIMESTAMP` function is used to cast a character string type into a **TIMESTAMP** type.
 *   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception. GMT timestamp'1970-01-01 12:00:00 AM' or KST timestamp'1970-01-01 09:00:00 AM' is translated into timestamp'0000-00-00 00:00:00'.
 
-**Example** ::
+::
 
 	TIMESTAMP '10/31' is outputted as '12:00:00 AM 10/31/2011' (if the value for year/time is omitted, a default value is outputted ).
 	TIMESTAMP '10/31/2008' is outputted as '12:00:00 AM 10/31/2008' (if the value for time is omitted, a default value is outputted ).
@@ -346,7 +346,7 @@ The input format of **TIMESTAMP** is as follows: ::
 *   The :func:`TO_DATETIME:func:` function is used to convert a string type into a **DATETIME** type.
 *   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception.
 
-**Example** ::
+::
 
 	DATETIME '10/31' is outputted as '12:00:00.000 AM 10/31/2011' (if the value for year/time is omitted, a default value is outputted).
 	DATETIME '10/31/2008' is outputted as '12:00:00.000 AM 10/31/2008'.
@@ -364,242 +364,240 @@ The input format of **TIMESTAMP** is as follows: ::
 CASTing a String to Date/Time Type
 ----------------------------------
 
-**Recommended Format for Strings in Date/Time Type**
+	**Recommended Format for Strings in Date/Time Type**
 
-When you casting a string to Date/Time type by using the :func:`CAST` function, it is recommended to write the string in the following format: Note that date/time string formats used in the :func:`CAST` function are not affected by locale (which is specified as the **CUBRID_CHARSET** environment variable).
+	When you casting a string to Date/Time type by using the :func:`CAST` function, it is recommended to write the string in the following format: Note that date/time string formats used in the :func:`CAST` function are not affected by locale (which is specified as the **CUBRID_CHARSET** environment variable).
 
-*   **DATE** Type ::
+	*   **DATE** Type ::
 
-	YYYY-MM-DD
-	MM/DD/YYYY
+		YYYY-MM-DD
+		MM/DD/YYYY
 
-*   **TIME** Type ::
+	*   **TIME** Type ::
 
-	HH:MM:SS ["AM"|"PM"]
+		HH:MM:SS ["AM"|"PM"]
 
-*   **DATETIME** Type ::
+	*   **DATETIME** Type ::
 
-	YYYY-MM-DD HH:MM:SS[.msec] ["AM"|"PM"]
+		YYYY-MM-DD HH:MM:SS[.msec] ["AM"|"PM"]
 
-*   **TIMESTAMP** Type ::
+	*   **TIMESTAMP** Type ::
 
-	YYYY-MM-DD HH:MM:SS ["AM"|"PM"]
+		YYYY-MM-DD HH:MM:SS ["AM"|"PM"]
 
-**Available DATE String Format** ::
+	**Available DATE String Format** ::
 
-	[year sep] month sep day
-	
-*   2011-04-20: April 20th, 2011
-*   04-20: April 20th of this year
+		[year sep] month sep day
+		
+	*   2011-04-20: April 20th, 2011
+	*   04-20: April 20th of this year
 
-If a separator (*sep*) is a slash (/), strings are recognized in the following order: ::
+	If a separator (*sep*) is a slash (/), strings are recognized in the following order: ::
 
-	month/day[/year]
-	
-*   04/20/2011: April 20th, 2011
-*   04/20: April 20th of this year
+		month/day[/year]
+		
+	*   04/20/2011: April 20th, 2011
+	*   04/20: April 20th of this year
 
-If you do not use a separator (*sep*), strings are recognized in the following format. It is allowed to use 1, 2, and 4 digits for years and 1 and 2 digits for months. For day, you should always enter 2 digits. ::
+	If you do not use a separator (*sep*), strings are recognized in the following format. It is allowed to use 1, 2, and 4 digits for years and 1 and 2 digits for months. For day, you should always enter 2 digits. ::
 
-	YYYYMMDD
-	YYMMDD
-	YMMDD
-	MMDD
-	MDD
+		YYYYMMDD
+		YYMMDD
+		YMMDD
+		MMDD
+		MDD
 
-*   20110420: April 20th, 2011
-*   110420: April 20th, 2011
-*   420: April 20th of this year
+	*   20110420: April 20th, 2011
+	*   110420: April 20th, 2011
+	*   420: April 20th of this year
 
-**Available TIME String Format** ::
+	**Available TIME String Format** ::
 
-	[hour]:min[:[sec]] [.[msec]] [am|pm]
-	
-*   09:10:15.359 am: 9 hours 10 minutes 15 seconds AM (0.359 seconds will be truncated)
-*   09:10:15: 9 hours 10 minutes 15 seconds AM
-*   09:10: 9 hours 10 minutes AM
-*   \:10: 12 hours 10 minutes AM
+		[hour]:min[:[sec]] [.[msec]] [am|pm]
+		
+	*   09:10:15.359 am: 9 hours 10 minutes 15 seconds AM (0.359 seconds will be truncated)
+	*   09:10:15: 9 hours 10 minutes 15 seconds AM
+	*   09:10: 9 hours 10 minutes AM
+	*   \:10: 12 hours 10 minutes AM
 
-::
+	::
 
-	[[[[[[Y]Y]Y]Y]M]MDD]HHMMSS[.[msec]] [am|pm]
-	
-*   20110420091015.359 am: 9 hours 10 minutes 15 seconds AM
-*   0420091015: 9 hours 10 minutes 15 seconds AM
+		[[[[[[Y]Y]Y]Y]M]MDD]HHMMSS[.[msec]] [am|pm]
+		
+	*   20110420091015.359 am: 9 hours 10 minutes 15 seconds AM
+	*   0420091015: 9 hours 10 minutes 15 seconds AM
 
-::
+	::
 
-	[H]HMMSS[.[msec]] [am|pm]
+		[H]HMMSS[.[msec]] [am|pm]
 
-*   091015.359 am: 9 hours 10 minutes 15 seconds AM
-*   91015: 9 hours 10 minutes 15 seconds AM
+	*   091015.359 am: 9 hours 10 minutes 15 seconds AM
+	*   91015: 9 hours 10 minutes 15 seconds AM
 
-::
+	::
 
-	[M]MSS[.[msec]] [am|pm]
-	
-*   1015.359 am: 12 hours 10 minutes 15 seconds AM
-*   1015: 12 hours 10 minutes 15 seconds AM
+		[M]MSS[.[msec]] [am|pm]
+		
+	*   1015.359 am: 12 hours 10 minutes 15 seconds AM
+	*   1015: 12 hours 10 minutes 15 seconds AM
 
-::
+	::
 
-	[S]S[.[
-	*msec*
-	]] [am|pm]
+		[S]S[.[
+		*msec*
+		]] [am|pm]
 
-*   15.359 am: 12 hours 15 seconds AM
-*   15: 12 hours 15 seconds AM
+	*   15.359 am: 12 hours 15 seconds AM
+	*   15: 12 hours 15 seconds AM
 
 
-.. note::
+	.. note::
 
-	: The [H]H format was allowed in CUBRID 2008 R3.1 and the earlier versions. That is, the string '10' was converted to **TIME** '10:00:00' in the R3.1 and the earlier versions, and will be converted to **TIME** '00:00:10' in version R4.0 and later.
+		: The [H]H format was allowed in CUBRID 2008 R3.1 and the earlier versions. That is, the string '10' was converted to **TIME** '10:00:00' in the R3.1 and the earlier versions, and will be converted to **TIME** '00:00:10' in version R4.0 and later.
 
-**Available DATETIME String Format** ::
+	**Available DATETIME String Format** ::
 
-	[year sep] month sep day [sep] [sep] hour [sep min[sep sec[.[msec]]]]
-	
-*   04-20 09: April 20th of this year, 9 hours AM
+		[year sep] month sep day [sep] [sep] hour [sep min[sep sec[.[msec]]]]
+		
+	*   04-20 09: April 20th of this year, 9 hours AM
 
-::
+	::
 
-	month/day[/year] [sep] hour [sep min [sep sec[.[msec]]]]
+		month/day[/year] [sep] hour [sep min [sep sec[.[msec]]]]
 
-*   04/20 09: April 20th of this year, 9 hours AM
+	*   04/20 09: April 20th of this year, 9 hours AM
 
-::
+	::
 
-	year sep month sep day sep hour [sep min[sep sec[.[msec]]]]
-	
-*   2011-04-20 09: April 20th, 2011, 9 hours AM
+		year sep month sep day sep hour [sep min[sep sec[.[msec]]]]
+		
+	*   2011-04-20 09: April 20th, 2011, 9 hours AM
 
-::
+	::
 
-	month/day/year sep hour [sep min[sep sec [.[msec]]]]
+		month/day/year sep hour [sep min[sep sec [.[msec]]]]
 
-*   04/20/2011 09: April 20th, 2011, 9 hours AM
+	*   04/20/2011 09: April 20th, 2011, 9 hours AM
 
-::
+	::
 
-	YYMMDDH (It is allowed only when time format is one digit.)
+		YYMMDDH (It is allowed only when time format is one digit.)
 
-*   1104209: April 20th, 2011, 9 hours AM
+	*   1104209: April 20th, 2011, 9 hours AM
 
-::
+	::
 
-	YYMMDDHHMM[SS[.msec]]
-	
-*   1104200910.359: April 20th, 2011, 9 hours 10 minutes AM (0.359 seconds will be truncated)
-*   110420091000.359: April 20th, 2011, 9 hours 10 minutes 0.359 seconds AM
+		YYMMDDHHMM[SS[.msec]]
+		
+	*   1104200910.359: April 20th, 2011, 9 hours 10 minutes AM (0.359 seconds will be truncated)
+	*   110420091000.359: April 20th, 2011, 9 hours 10 minutes 0.359 seconds AM
 
-::
+	::
 
-	YYYYMMDDHHMMSS[.msec]
+		YYYYMMDDHHMMSS[.msec]
 
-*   201104200910.359: November 4th, 2020 8 hours 9 minutes 10.359 seconds PM
-*   20110420091000.359: April 20th, 2011, 9 hours 10 minutes 0.359 seconds AM
+	*   201104200910.359: November 4th, 2020 8 hours 9 minutes 10.359 seconds PM
+	*   20110420091000.359: April 20th, 2011, 9 hours 10 minutes 0.359 seconds AM
 
-**Available Time-Date String Format** ::
+	**Available Time-Date String Format** ::
 
-	[hour]:min[:sec[.msec]] [am|pm] [year-]month-day
-	
-*   09:10:15.359 am 2011-04-20: April 20th, 2011, 9 hours 10 minutes 15.359 seconds AM
-*   \:10 04-20: April 20th of this year, 12 hours 10 minutes AM
+		[hour]:min[:sec[.msec]] [am|pm] [year-]month-day
+		
+	*   09:10:15.359 am 2011-04-20: April 20th, 2011, 9 hours 10 minutes 15.359 seconds AM
+	*   \:10 04-20: April 20th of this year, 12 hours 10 minutes AM
 
-::
+	::
 
-	[hour]:min[:sec[.msec]] [am|pm] month/day[/[year]]
+		[hour]:min[:sec[.msec]] [am|pm] month/day[/[year]]
 
-*   09:10:15.359 am 04/20/2011: April 20th, 2011, 9 hours 10 minutes 15.359 seconds AM
-*   \:10 04/20: April 20th of this year, 12 hours 10 minutes AM
+	*   09:10:15.359 am 04/20/2011: April 20th, 2011, 9 hours 10 minutes 15.359 seconds AM
+	*   \:10 04/20: April 20th of this year, 12 hours 10 minutes AM
 
-::
+	::
 
-	hour[:min[:sec[.[msec]]]] [am|pm] [year-]month-day
-	
-*   09:10:15.359 am 04-20: April 20th of this year, 9 hours 10 minutes 15.359 seconds AM
-*   09 04-20: April 20th of this year, 9 hours AM
+		hour[:min[:sec[.[msec]]]] [am|pm] [year-]month-day
+		
+	*   09:10:15.359 am 04-20: April 20th of this year, 9 hours 10 minutes 15.359 seconds AM
+	*   09 04-20: April 20th of this year, 9 hours AM
 
-::
+	::
 
-	hour[:min[:sec[.[msec]]]] [am|pm] month/day[/[year]]
-	
-*   09:10:15.359 am 04/20: April 20th of this year, 9 hours 10 minutes, 15.359 seconds AM
-*   09 04/20: April 20th of this year, 9 hours AM
+		hour[:min[:sec[.[msec]]]] [am|pm] month/day[/[year]]
+		
+	*   09:10:15.359 am 04/20: April 20th of this year, 9 hours 10 minutes, 15.359 seconds AM
+	*   09 04/20: April 20th of this year, 9 hours AM
 
-**Rules**
+	**Rules**
 
-*msec* is a series of numbers representing milliseconds. The numbers after the fourth digit will be ignored.
-The rules for the separator string are as follows:
+	*msec* is a series of numbers representing milliseconds. The numbers after the fourth digit will be ignored.
+	The rules for the separator string are as follows:
 
-*   You should always use one colon (:) as a separator for the **TIME** separator.
+	*   You should always use one colon (:) as a separator for the **TIME** separator.
 
-*   **DATE** and **DATETIME** strings can be represented as a series of numbers without the separator sep), and non-alphanumeric characters can be used as separators. The **DATETIME** string can be divided into Time and Date with a space.
+	*   **DATE** and **DATETIME** strings can be represented as a series of numbers without the separator sep), and non-alphanumeric characters can be used as separators. The **DATETIME** string can be divided into Time and Date with a space.
 
-*   Separators should be identical in the input string.
+	*   Separators should be identical in the input string.
 
-*   For the Time-Date string, you can only use colon (:) for a Time separator and hyphen (-) or slash (/) for a Date separator. If you use a hyphen when entering date, you should enter like yyyy-mm-dd; in case of  a slash, enter like mm/dd/yyyy.
+	*   For the Time-Date string, you can only use colon (:) for a Time separator and hyphen (-) or slash (/) for a Date separator. If you use a hyphen when entering date, you should enter like yyyy-mm-dd; in case of  a slash, enter like mm/dd/yyyy.
 
-The following rules will be applied in the part of date.
+	The following rules will be applied in the part of date.
 
-*   You can omit the year as long as the syntax allows it.
+	*   You can omit the year as long as the syntax allows it.
 
-*   If you enter the year as two digits, it represents the range from 1970-2069. That is, if YY<70, it is treated as 2000+YY; if YY>=70, it is treated as 1900+YY. If you enter one, three or four digit numbers for the year, the numbers will be represented as they are.
+	*   If you enter the year as two digits, it represents the range from 1970-2069. That is, if YY<70, it is treated as 2000+YY; if YY>=70, it is treated as 1900+YY. If you enter one, three or four digit numbers for the year, the numbers will be represented as they are.
 
-*   A space before and after a string and the string next to the space are ignored. The am/pm identifier for the **DATETIME** and **TIME** strings can be recognized as part of TIME value, but are not recognized as the am/pm identifier if non-space characters are added to it.
+	*   A space before and after a string and the string next to the space are ignored. The am/pm identifier for the **DATETIME** and **TIME** strings can be recognized as part of TIME value, but are not recognized as the am/pm identifier if non-space characters are added to it.
 
-The **TIMESTAMP** type of CUBRID consists of **DATE** type and **TIME** type, and **DATETIME** type consists of **DATE** type and **TIME** type with milliseconds being added to them. Input strings can include Date (**DATE** string), Time (**TIME** string), or both (**DATETIME** strings). You can convert a string including a specific type of data to another type, and the following rules will be applied for the conversion.
+	The **TIMESTAMP** type of CUBRID consists of **DATE** type and **TIME** type, and **DATETIME** type consists of **DATE** type and **TIME** type with milliseconds being added to them. Input strings can include Date (**DATE** string), Time (**TIME** string), or both (**DATETIME** strings). You can convert a string including a specific type of data to another type, and the following rules will be applied for the conversion.
 
-*   If you convert the **DATE** string to the **DATETIME** type, the time value will be '00:00:00.'
+	*   If you convert the **DATE** string to the **DATETIME** type, the time value will be '00:00:00.'
 
-*   If you convert the **TIME** string to the **DATETIME** type, colon (:) is recognized as a date separator, so that the **TIME** string can be recognized as a date string and the time value will be '00:00:00.'
+	*   If you convert the **TIME** string to the **DATETIME** type, colon (:) is recognized as a date separator, so that the **TIME** string can be recognized as a date string and the time value will be '00:00:00.'
 
-*   If you convert the **DATETIME** string to the **DATE** type, the time part will be ignored from the result but the time input value format should be valid.
+	*   If you convert the **DATETIME** string to the **DATE** type, the time part will be ignored from the result but the time input value format should be valid.
 
-*   You can covert the **DATETIME** string to the **TIME** type, and you must follow the following rules.
+	*   You can covert the **DATETIME** string to the **TIME** type, and you must follow the following rules.
 
-    *   The date and time in the string must be divided by at least one blank.
+		*   The date and time in the string must be divided by at least one blank.
 
-    *   The date part of the result value is ignored but the date input value format should be valid.
+		*   The date part of the result value is ignored but the date input value format should be valid.
 
-    *   The year in the date part must be over 4 digits (available to start with 0) or the time part must include hours and minutes ([H]H:[M]M) at least. Otherwise the date pate are recognized as the TIME type of the [MM]SS format, and the following string will be ignored.
+		*   The year in the date part must be over 4 digits (available to start with 0) or the time part must include hours and minutes ([H]H:[M]M) at least. Otherwise the date pate are recognized as the TIME type of the [MM]SS format, and the following string will be ignored.
 
-*   If the one of the units (year, month, date, hour, minute and second) of the **DATETIME** string is greater than 999999, it is not recognized as a number, so the string including the corresponding unit will be ignored. For example, in '2009-10-21 20:9943:10', an error occurs because the value in minutes is out of the range. However, if '2009-10-21 20:1000123:10' is entered,'2009' is recognized as the the **TIME** type of the MMSS format, so that **TIME** '00:20:09' will be returned.
+	*   If the one of the units (year, month, date, hour, minute and second) of the **DATETIME** string is greater than 999999, it is not recognized as a number, so the string including the corresponding unit will be ignored. For example, in '2009-10-21 20:9943:10', an error occurs because the value in minutes is out of the range. However, if '2009-10-21 20:1000123:10' is entered,'2009' is recognized as the the **TIME** type of the MMSS format, so that **TIME** '00:20:09' will be returned.
 
-*   If you convert the time-date sting to the **TIME** type, the date part of the string is ignored but the date part format must be valid.
+	*   If you convert the time-date sting to the **TIME** type, the date part of the string is ignored but the date part format must be valid.
 
-*   All input strings including the time part allow [.*msec*] on conversion, but only the **DATETIME** type can be maintained. If you convert this to a type such as **DATE**, **TIMESTAMP** or **TIME**, the *msec* value is discarded.
+	*   All input strings including the time part allow [.*msec*] on conversion, but only the **DATETIME** type can be maintained. If you convert this to a type such as **DATE**, **TIMESTAMP** or **TIME**, the *msec* value is discarded.
 
-*   All conversions in the **DATETIME**, **TIME** string allow English locale following after time value or am/pm specifier written in the current locale of a server.
+	*   All conversions in the **DATETIME**, **TIME** string allow English locale following after time value or am/pm specifier written in the current locale of a server.
 
-**Example**
+	.. code-block:: sql
 
-.. code-block:: sql
-
-	SELECT CAST('420' AS DATE);
-	 
-	   cast('420' as date)
-	======================
-	  04/20/2012
-	 
-	SELECT CAST('91015' AS TIME);
-	 
-	   cast('91015' as time)
-	========================
-	  09:10:15 AM
-	 
-	 
-	SELECT CAST('110420091035.359' AS DATETIME);
-	 
-	   cast('110420091035.359' as datetime)
-	=======================================
-	  09:10:35.359 AM 04/20/2011
-	 
-	SELECT CAST('110420091035.359' AS TIMESTAMP);
-	 
-	   cast('110420091035.359' as timestamp)
-	========================================
-	  09:10:35 AM 04/20/2011
+		SELECT CAST('420' AS DATE);
+		 
+		   cast('420' as date)
+		======================
+		  04/20/2012
+		 
+		SELECT CAST('91015' AS TIME);
+		 
+		   cast('91015' as time)
+		========================
+		  09:10:15 AM
+		 
+		 
+		SELECT CAST('110420091035.359' AS DATETIME);
+		 
+		   cast('110420091035.359' as datetime)
+		=======================================
+		  09:10:35.359 AM 04/20/2011
+		 
+		SELECT CAST('110420091035.359' AS TIMESTAMP);
+		 
+		   cast('110420091035.359' as timestamp)
+		========================================
+		  09:10:35 AM 04/20/2011
 
 Bit Strings
 ===========
@@ -638,7 +636,7 @@ Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*),
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
 *   If a bit string smaller than *n* is stored, the remainder of the string is filled with 0s.
 
-**Example** 
+
 
 .. code-block:: sql
 
@@ -668,8 +666,6 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
 *   The remainder of the string is not filled with 0s even if a bit string smaller than *n* is stored.
 *   *n* must be a number greater than 0.
 
-**Example**
-
 .. code-block:: sql
 
 	CREATE TABLE bitvar_tbl(a1 BIT VARYING, a2 BIT VARYING(8));
@@ -697,12 +693,12 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
 Character Strings
 =================
 
-CUBRID supports the following four types of character strings:
+CUBRID supports the following two types of character strings:
 
 *   Fixed-length character string: **CHAR** (*n*)
 *   Variable-length character string: **VARCHAR** (*n*)
-*   Fixed-length national character string: **NCHAR** (*n*)
-*   Variable-length national character string: **NCHAR VARYING** (*n*)
+
+.. note:: From CUBRID 9.0 version, **NCHAR**, **NCHAR VARYING** is the same with **CHAR**, **VARCHAR**.
 
 The followings are the rules that are applied when using the character string types.
 
@@ -723,36 +719,36 @@ The followings are the rules that are applied when using the character string ty
 
 *   The maximum size of the token for all the character strings is 16 KB.
 
-* National character strings are used to store national (except English alphabet) character strings in a multilingual environment. Note that **N** (uppercase) should be followed by a single quote which encloses character strings. ::
+To enter the language of a specific country, we recommend that you to change the locale by using the **CUBRID_CHARSET** environment variable or introducer **CHARSET** (or **COLLATE** modifier). For a more information, see :doc:`/admin/i18n`.
 
-	N'Härder'
+	**Length**
+ 
+	Specify the number of a character string.
+	When the length of the character string entered exceeds the length specified, the excess characters are truncated.
 
-  However, to enter the language of a specific country, we recommend that you to change the locale by using the **CUBRID_CHARSET** environment variable or introducer **CHARSET** (or **COLLATE** modifier) or by using the general string type (**VARCHAR** or **CHAR**) instead of the country string type. For a more detailed description, see :doc:`/admin/i18n`.
+	For a fixed-length character string type such as **CHAR**, the length is fixed at the declared length. Therefore, the right part (trailing space) of the character string is filled with space characters when the string is stored. For a variable-length character string type such as **VARCHAR**, only the entered character string is stored, and the space is not filled with space characters.
 
-For a **CHAR** or **VARCHAR** type, specify the length (bytes) of a character string for a **NCHAR** or **NCHAR VARYING** type, specify the number of character strings (number of characters).
-When the length of the character string entered exceeds the length specified, the characters in excess of the specified length are truncated.
+	The maximum length of a **CHAR** or **VARCHAR** type to be specified is 1,073,741,823 the maximum length of a **NCHAR** or **NCHAR VARYING** type to be specified is 536,870,911. The maximum length that can be input or output in a CSQL statement is 8,192 KB.
 
-For a fixed-length character string type such as **CHAR** or **NCHAR**, the length is fixed at the declared length. Therefore, the right part (trailing space) of the character string is filled with space characters when the string is stored. For a variable-length character string type such as **VARCHAR** or **NCHAR VARYING**, only the entered character string is stored, and the space is not filled with space characters.
+	.. note:: In the CUBRID version less than 9.0, the length of **CHAR** or **VARCHAR** was not the number of characters, but the byte size.
 
-The maximum length of a **CHAR** or **VARCHAR** type to be specified is 1,073,741,823 the maximum length of a **NCHAR** or **NCHAR VARYING** type to be specified is 536,870,911. The maximum length that can be input or output in a CSQL statement is 8,192 KB.
+	**Character Set, charset**
 
-**Character Set, charset**
+	A character set (charset) is a set in which rules are defined that relate to what kind of codes can be used for encoding when specified characters (symbols) are stored in the computer.
 
-A character set (charset) is a set in which rules are defined that relate to what kind of codes can be used for encoding when specified characters (symbols) are stored in the computer.
+	The characted used by CUBRID can be configued as the **CUBRID_CHARSET** environment variable. For details, see :doc:`/admin/i18n`.
 
-The characted used by CUBRID can be configued as the **CUBRID_CHARSET** environment variable. For details, see :doc:`/admin/i18n`.
+	**Collating Character Sets**
 
-**Collating Character Sets**
+	A collation is a set of rules used for comparing characters to search or sort values stored in the database when a certain character set is specified. For details, see :doc:`/admin/i18n`.
 
-A collation is a set of rules used for comparing characters to search or sort values stored in the database when a certain character set is specified. For details, see :doc:`/admin/i18n`.
+	Therefore, such rules are applied only to character string data types such as **CHAR** or **VARCHAR**. For a national character string type such as **NCAHR()** or **NCHAR VARYING()** , the sorting rules are determined according to the encoding algorithm of the specified character set.
 
-Therefore, such rules are applied only to character string data types such as **CHAR** or **VARCHAR**. For a national character string type such as **NCAHR()** or **NCHAR VARYING()** , the sorting rules are determined according to the encoding algorithm of the specified character set.
+	**Character String Coercion**
 
-**Character String Coercion**
+	Automatic coercion takes place between a fixed-length and a variable-length character string for the comparison of two characters, applicable only to characters that belong to the same character set.
 
-Automatic coercion takes place between a fixed-length and a variable-length character string for the comparison of two characters, applicable only to characters that belong to the same character set.
-
-For example, when you extract a column value from a CHAR(5) data type and insert it into a column with a CHAR(10) data type, the data type is automatically coerced to CHAR(10). If you want to coerce a character string explicitly, use the **CAST** operator (See :func:`CAST`).
+	For example, when you extract a column value from a CHAR(5) data type and insert it into a column with a CHAR(10) data type, the data type is automatically coerced to CHAR(10). If you want to coerce a character string explicitly, use the **CAST** operator (See :func:`CAST`).
 
 CHAR(n)
 -------
@@ -773,7 +769,7 @@ When the length of a character string exceeds *n*, they are truncated. When char
 
 *   Space characters used as filling characters are considered to be smaller than any other characters, including special characters.
 
-**Example** ::
+::
 
 	If you specify 'pacesetter' as CHAR(12), 'pacesetter ' is stored (a 10-character string plus two whitespace characters).
 	If you specify 'pacesetter ' as CHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters are truncated).
@@ -796,7 +792,7 @@ When the length of a character string exceeds *n*, they are truncated. When char
 *   Empty quotes (' ') are used to represent a blank string. In this case, the return value of the **LENGTH** function is not 0.
 
 
-**Example 1** ::
+::
 
 	If you specify 'pacesetter' as CHAR(4), 'pace' is stored (truncated as the length of the character string is greater than 4).
 	If you specify 'pacesetter' as VARCHAR(12), 'pacesetter' is stored (a 10-character string).
@@ -804,7 +800,7 @@ When the length of a character string exceeds *n*, they are truncated. When char
 	If you specify 'pacesetter ' as VARCHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters are truncated).
 	If you specify 'p ' as VARCHAR, 'p' is stored (if n is not specified, the default value 1,073,741,823 is used, and the trailing space is not filled with whitespace characters).
 
-**Example 2** ::
+::
 
 	If you specify '큐브리드' as VARCHAR(10) in the EUC-KR encoding, it is processed normally.
 	If you specify '큐브리드' as CHAR(10) and then use CHAR_LENGTH() function in the EUC-KR encoding, 8 is stored.
@@ -818,39 +814,23 @@ STRING
 
 NCHAR(n)
 --------
+**NCHAR** (*n*) is the same with **CHAR** (*n*).
 
-**NCHAR** (*n*) is used to store non-English character strings. It can be used only for character sets supported by CUBRID described above. n is the number of characters. If *n* is omitted, the length is specified as the default value 1. When the length of a character string exceeds *n*, they are truncated. When character string which is shorter than *n* is stored, whitespace characters are used to fill up the  space.
+[번역]
 
-To store a Korean character string as a national character string type, you must set the locale of the operating system to Korean, or set the value of the **CUBRID_CHARSET** environment variable to **ko_KR.euckr** before creating the table.
-
-.. note:: In the earlier versions of CUBRID 9.0, *n* represents bite length, not the number of characters.
-
-*   *n* is an integer between 1 and 536,870,911.
-*   The number of national character sets that can be used in a single database is set to be one. For example, 8-bit ISO 8889-1 (Latin-1) and EUC code sets cannot be used simultaneously in the same database.
-
-*   An error occurs if a non-national character string (whether it is fixed-length or variable-length) is specified for an attribute declared as a national character string.
-*   Using two different character code sets at once also causes an error.
-
-**Example** ::
-
-	If you specify ‘큐브리드’ as NCHAR(5) in the EUC-KR encoding, it is processed normally.
-	If you specify '큐브리드' as NCHAR(5) and then use the CHAR_LENGTH() function in the EUC-KR encoding, 5 is stored.
-	If you specify '큐브리드' as NCHAR(5) in the utf-8 encoding, an error occurs (utf-8 character set is not supported).
+.. note::
+	CUBRID 9.0 미만 버전에서 영어 외 국가 언어의 데이터를 입력하기 위한 용도로 사용되었으나 로캘 설정에 따른 문자셋과 콜레이션을 지원하면서 이 타입은 syntax 호환을 위해서만 남게 되었다. 따라서 새로 스키마를 작성하는 경우에는 이 타입 대신 **CHAR** 타입을 사용할 것을 권장한다.
 
 NCHAR VARYING(n)
 ----------------
 
-**NCHAR VARYING** (*n*) is a variable-length character string type. For details, see description and note of NCHAR(n). The difference is that the right part (trailing space) of the character string is not filled with whitespace characters, even when the number of strings is smaller than n.
+**NCHAR VARYING** (*n*) is the same with **VARCHAR** (*n*).
 
-**NCHAR VARYING** (*n*), **NATIONAL CHAR VARYING**(*n*), and **NATIONAL CHARACTER VARYING(n)** are used interchangeably.
+[번역]
 
-.. note:: In the earlier versions of CUBRID 9.0, n represents bite length, not the number of characters.
+.. note::
+	CUBRID 9.0 미만 버전에서 영어 외 국가 언어의 데이터를 입력하기 위한 용도로 사용되었으나 로캘 설정에 따른 문자셋과 콜레이션을 지원하면서 이 타입은 syntax 호환을 위해서만 남게 되었다. 따라서 새로 스키마를 작성하는 경우에는 이 타입대신 **VARCHAR** 타입을 사용할 것을 권장한다.
 
-**Example** ::
-
-	If you specify '큐브리드' as NCHAR VARYING(5) in the EUC-KR encoding, it is processed normally.
-	If you specify '큐브리드' as NCHAR VARYING(5) and then use CHAR_LENGTH() function in the EUC-KR encoding, 4 is stored.
-	If you specify '큐브리드' as HCHAR VARYING(5) in the utf-8 encoding, an error occurs (UTF-8 character set is not supported).
 
 .. _escape-characters:
 
@@ -885,8 +865,6 @@ For all other escapes, the backslash will be ignored. For example, "\x" is the s
 
 **\\%** and **\\_** are used in the pattern matching syntax such as **LIKE** to search percent signs and underbars and are used as a wildcard character if there is no backslash. Outside of the pattern matching syntax, "\\%"and "\\_" are recognized as normal strings not wildcard characters. For details, see :ref:`like-expr`.
 
-**Example 1**
-
 The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is no, and a value for **no_backslash_escapes** is no.
 
 .. code-block:: sql
@@ -910,8 +888,6 @@ The following is the result of executing Escape if a value for the system parame
 	   char_length('\')
 	===================
 					  1
-
-**Example 2**
 
 The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is yes, and a value for **no_backslash_escapes** is yes.
 
@@ -940,8 +916,6 @@ The following is the result of executing Escape if a value for the system parame
 	====================
 					   2
 
-**Example 3**
-
 The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is yes, and a value for **no_backslash_escapes** is no.
 
 .. code-block:: sql
@@ -960,15 +934,17 @@ ENUM Data Type
 
 The **ENUM** type is defined as the enumerated string constants. Only the specified string elements are allowed as the value of the column defined as **ENUM** and the maximum number of the ENUM elements is 65535. In the column of the **ENUM** type, each value is saved as 1 byte when the number of the ENUM elements is less than 256 and 2 bytes when the number is 256 or more. **ENUM** value allows numeric data type or string type.
 
-**ENUM** type column is handled as a number and considered as an index number value, which corresponds to the **ENUM** type when the compared value is **CHAR** / **VARCHAR** in the query. ::
+**ENUM** type column is handled as a number and considered as an index number value, which corresponds to the **ENUM** type when the compared value is **CHAR** / **VARCHAR** in the query. 
+
+** ENUM** type cannot have duplicated values in the string elements.
+
+::
 
 	<enum_type>
 		: ENUM '(' <char_string_literal_list> ')'
 	<char_string_literal_list>
 		: <char_string_literal_list> ',' CHAR_STRING
 		| CHAR_STRING
-
-**Example**
 
 The following example shows the definition of the **ENUM** column.
 
@@ -1284,7 +1260,7 @@ BLOB/CLOB
 
 *   A type that stores character string data outside the database.
 *   The maximum length of **CLOB** data is the maximum file size creatable in an external storage.
-*   In SQL statements, the CLOB type expresses the input and output value in a character string. That is, it is compatible with the **CHAR** (n), **VARCHAR** (n), **NCHAR** (n), **NCHAR VARYING** (n) types. However, only an explicit type change is allowed, and if data lengths are different from one another, the maximum length is truncated to fit to the smaller one.
+*   In SQL statements, the CLOB type expresses the input and output value in a character string. That is, it is compatible with the **CHAR** (n), **VARCHAR** (n) types. However, only an explicit type change is allowed, and if data lengths are different from one another, the maximum length is truncated to fit to the smaller one.
 
 *   When converting the **CLOB** type value to a character string, the length of the converted data cannot exceed 1 GB. When converting a character string to the **CLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **CLOB** storage.
 
@@ -1298,8 +1274,6 @@ Creating and Altering Columns
 
 *   **LOB** type column/data cannot be the element of collection type.
 *   If you are deleting a record containing a **LOB** type column, all files located inside a **LOB** column value (Locator) and the external storage will be deleted. When a record containing a LOB type column is deleted in a basic key table, and a record of a foreign key table that refers to the foregoing details is deleted at once, all **LOB** files located in a **LOB** column value (Locator) and the external storage will be deleted. However, if the relevant table is deleted by using a **DROP TABLE** statement, or a **LOB** column is deleted by using an **ALTER TABLE...DROP** statement, only a **LOB** column value (**LOB** Locator) is deleted, and the **LOB** files inside the external storage which a **LOB** column refers to will not be deleted.
-
-**Example**
 
 .. code-block:: sql
 
@@ -1333,8 +1307,6 @@ If a record containing a **LOB** column uses a **DELETE** statement, a file to w
 *   If a **LOB** type column value is changed to a value that is not **NULL** : If a Locator that refers to an external file is already available in a **LOB** column, the relevant file will be deleted. A new file is created afterwards. After storing a value that is not **NULL**, a Locator for a new file will be stored in a **LOB** column value.
 
 *   If changing a **LOB** type column value to **NULL** : If a Locator that refers to an external file is already available in a **LOB** column, the relevant file will be deleted. And then **NULL** is stored in a **LOB** column value.
-
-**Example**
 
 .. code-block:: sql
 
@@ -1375,7 +1347,6 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 
 *   When a **LOB** column is created, and the file is deleted after data input, a **LOB** column value (Locator) will become a state that is referring to an invalid file. As such, using **CLOB_TO_CHAR**, **BLOB_TO_BIT**, **CLOB_LENGTH**, and **BLOB_LENGTH** functions on the columns that have mismatching **LOB** Locator and a **LOB** data file enables them to display **NULL**.
 
-**Example**
 
 .. code-block:: sql
 
@@ -1431,103 +1402,18 @@ By using **CAST** operator, you can execute an explicit type change between **BL
 
 **LOB Data Process and Type Change Functions**
 
-The next table shows the functions provided to process and change BLOB/CLOB types.
+The following shows the functions provided to process and change BLOB/CLOB types.
+For more details, refer :doc:`/sql/function/lob_fn`.
 
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| Functional Expression        | Description                                                                                                     |
-|                              |                                                                                                                 |
-+==============================+=================================================================================================================+
-| **CLOB_TO_CHAR**             | Changes number type, date/time type, and                                                                        |
-| (<                           | **CLOB**                                                                                                        |
-| *clob_type_column*           | type to                                                                                                         |
-| >)                           | **VARCHA**                                                                                                      |
-|                              | R type.                                                                                                         |
-|                              |                                                                                                                 |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| **BLOB_TO_BIT**              | Changes                                                                                                         |
-| (<                           | **BLOB**                                                                                                        |
-| *blob_type_column*           | type to                                                                                                         |
-| >)                           | **VARYING BIT**                                                                                                 |
-|                              | type.                                                                                                           |
-|                              |                                                                                                                 |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| **CHAR_TO_CLOB**             | Changes text string type (                                                                                      |
-| (<                           | **CHAR**                                                                                                        |
-| *char_type_column_or_value*  | ,                                                                                                               |
-| >)                           | **VARCHAR**                                                                                                     |
-|                              | ,                                                                                                               |
-|                              | **NCHAR**                                                                                                       |
-|                              | ,                                                                                                               |
-|                              | **NVACHAR**                                                                                                     |
-|                              | ) to                                                                                                            |
-|                              | **CLOB**                                                                                                        |
-|                              | type.                                                                                                           |
-|                              |                                                                                                                 |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| **BIT_TO_BLOB**              | Changes bit array type (                                                                                        |
-| (<                           | **BIT**                                                                                                         |
-| *blob_type_column_or_value*  | ,                                                                                                               |
-| >)                           | **VARYING BIT**                                                                                                 |
-|                              | ) to                                                                                                            |
-|                              | **BLOB**                                                                                                        |
-|                              | type.                                                                                                           |
-|                              |                                                                                                                 |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| **CHAR_TO_BLOB**             | Changes text string type (                                                                                      |
-| (<                           | **CHAR**                                                                                                        |
-| *char_type_colulmn_or_value* | ,                                                                                                               |
-| >)                           | **VARCHAR**                                                                                                     |
-|                              | ,                                                                                                               |
-|                              | **NCHAR**                                                                                                       |
-|                              | ,                                                                                                               |
-|                              | **NVACHAR**                                                                                                     |
-|                              | ) to                                                                                                            |
-|                              | **BLOB**                                                                                                        |
-|                              | type.                                                                                                           |
-|                              |                                                                                                                 |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| **CLOB_FROM_FILE**           | Reads file details from the file path of                                                                        |
-| (<                           | **VARCHAR**                                                                                                     |
-| *file_pathname*              | type and changes to                                                                                             |
-| >)                           | **CLOB**                                                                                                        |
-|                              | type data. <                                                                                                    |
-|                              | *file_pathname*                                                                                                 |
-|                              | > is analyzed to a path of server which is operated by the DB client, such as CAS or CSQL.                      |
-|                              | If a path is specified targeting this, the upper path will be the current work direction of the process.        |
-|                              | The statement that calls this function will not cache execution plans.                                          |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| **BLOB_FROM_FILE**           | Reads file details from the file path of                                                                        |
-| (<                           | **VARCHAR**                                                                                                     |
-| *file_pathname*              | type, and changes to BLOB type data. The file path specified in is interpreted using the same method as the     |
-| >)                           | **CLOB_FROM_FILE**                                                                                              |
-|                              | function.                                                                                                       |
-|                              |                                                                                                                 |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| **CLOB_LENGTH**              | Returns the length of LOB data stored in a                                                                      |
-| (<                           | **CLOB**                                                                                                        |
-| *clob_column*                | file in bytes.                                                                                                  |
-| >)                           |                                                                                                                 |
-|                              |                                                                                                                 |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| **BLOB_LENGTH**              | Returns the length of LOB data stored in a                                                                      |
-| (<                           | **BLOB**                                                                                                        |
-| *blob_column*                | file in bytes.                                                                                                  |
-| >)                           |                                                                                                                 |
-|                              |                                                                                                                 |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
-| <                            | Use an                                                                                                          |
-| *blob_or_clob_column*        | **IS NULL**                                                                                                     |
-| >                            | expression to compare whether it is a                                                                           |
-| **IS NUL**                   | **LOB**                                                                                                         |
-| L                            | column value (Locator) or                                                                                       |
-|                              | **NULL**                                                                                                        |
-|                              | ; returns                                                                                                       |
-|                              | **TRUE**                                                                                                        |
-|                              | if                                                                                                              |
-|                              | **NULL**                                                                                                        |
-|                              | .                                                                                                               |
-|                              |                                                                                                                 |
-+------------------------------+-----------------------------------------------------------------------------------------------------------------+
+* **CLOB_TO_CHAR** ( *clob_type_column* )
+* **BLOB_TO_BIT** ( *blob_type_column* )
+* **CHAR_TO_CLOB** ( *char_type_column_or_value* )
+* **BIT_TO_BLOB** ( *blob_type_column_or_value* )
+* **CHAR_TO_BLOB** ( *char_type_column_or_value* )
+* **CLOB_FROM_FILE** ( *file_pathname* )
+* **BLOB_FROM_FILE** ( *file_pathname* )
+* **CLOB_LENGTH** ( *clob_column* )
+* **BLOB_LENGTH** ( *blob_column* )                          
 
 .. _lob_storage:
 
@@ -1584,8 +1470,6 @@ Supporting and Recovering Transactions
 
 Commit/rollback for **LOB** data changes are supported. That is, it ensures the validation of mapping between **LOB** Locator and actual **LOB** data within transactions, and it supports recovery during DB errors. This means that an error will be displayed in case of mapping errors between **LOB** Locator and **LOB** data due to the rollback of the relevant transactions, as the database is terminated during transactions. See the example below.
 
-**Example**
-
 .. code-block:: sql
 
 	;AUTOCOMMIT OFF
@@ -1623,10 +1507,12 @@ Commit/rollback for **LOB** data changes are supported. That is, it ensures the 
 
 	Up to CUBRID 2008 R3.0, Large Objects are processed by using **glo** (Generalized Large Object) classes. However, the **glo** classes has been deprecated since the CUBRID 2008 R3.1. Instead of it, **LOB** / **CLOB** data type is supported. Therefore, both DB schema and application must be modified when upgrading CUBRID in an environment using the previous version of **glo** classes.
 
+.. _collection-data-type:
+
 Collection Types
 ================
 
-Allowing multiple data values to be stored in a single attribute is an extended feature of relational database. Each element of a collection is possible to have different data type each other except View.
+Allowing multiple data values to be stored in a single attribute is an extended feature of relational database. Each element of a collection is possible to have different data type each other except View. Rest types except BLOB and CLOB can be an element of collection types.
 
 +--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
 | Type         | Description                                                           | Definition                      | Input Data                 | Stored Data                |
@@ -1643,30 +1529,34 @@ Allowing multiple data values to be stored in a single attribute is an extended 
 
 As you see the table above, the value specified as a collection type can be inputted with curly braces ('{', '}') each value is separated with a comma (,).
 
-**Coercions**
+	**Coercions**
 
-If the specified collection types are identical, the collection types can be cast explicitly by using the **CAST** operator. The following table shows the collection types that allow explicit coercions.
+	If the specified collection types are identical, the collection types can be cast explicitly by using the **CAST** operator. 
+	The following table shows the collection types that allow explicit coercions.
 
-**Explicit Coercions**
+	+-----------+----------------------------------+
+	|           | **TO**                           |
+	+===========+==========+=====+==========+======+
+	| **FROM**  |          | SET | MULTISET | LIST |
+	|           +----------+-----+----------+------+
+	|           | SET      | -   | Yes      | Yes  |
+	|           +----------+-----+----------+------+
+	|           | MULTISET | Yes | -        | No   |
+	|           +----------+-----+----------+------+
+	|           | LIST     | Yes | Yes      | -    |
+	+-----------+----------+-----+----------+------+
 
-+----------+----------------------------------+
-|          | TO                               |
-+==========+==========+=====+==========+======+
-| FROM     |          | SET | MULTISET | LIST |
-|          +----------+-----+----------+------+
-|          | SET      | -   | O        | O    |
-|          +----------+-----+----------+------+
-|          | MULTISET | O   | -        | X    |
-|          +----------+-----+----------+------+
-|          | LIST     | O   | O        | -    |
-+----------+----------+-----+----------+------+
+	**Collection Types and Collations**
+
+	Collection Types do not support collations. Therefore, Below query returns error. ::
+
+		CREATE TABLE tbl(str SET(string) COLLATE utf8_en_ci);
+		Syntax error: unexpected 'COLLATE', expecting ',' or ')'
 
 SET
 ---
 
 **SET** is a collection type in which each element has different values. Elements of a **SET** are allowed to have only one data type. It can have records of other tables.
-
-**Example**
 
 .. code-block:: sql
 
@@ -1692,11 +1582,10 @@ SET
 	 
 	ERROR: Cannot coerce '' to type set.
 
-**MULTISET**
+MULTISET
+--------
 
 **MULTISET** is a collection type in which duplicated elements are allowed. Elements of a **MULTISET** are allowed to have only one data type. It can have records of other tables.
-
-**Example**
 
 .. code-block:: sql
 
@@ -1712,11 +1601,11 @@ SET
 	============================================
 	  {'a', 'b', 'c'}  {'c', 'c', 'c', 'b', 'b', 'a'}
   
-**LIST/SEQUENCE**
+LIST/SEQUENCE
+-------------
 
 **LIST** (= **SEQUENCE**) is a collection type in which the input order of elements is preserved, and duplications are allowed. Elements of a **LIST** are allowed to have only one data type. It can have records of other tables.
 
-**Example**
 
 .. code-block:: sql
 
@@ -1782,10 +1671,6 @@ The implicit type conversion executed by CUBRID is as follows:
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 | **VARCHAR**   | O            | O        | O        | O             | O          | O         | O           | O          |
 +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **NCHAR**     | O            | O        | O        | O             | O          | O         | O           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **VARNCHAR**  | O            | O        | O        | O             | O          | O         | O           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
 
 **Implicit Type Conversion Table 2**
 
@@ -1821,10 +1706,6 @@ The implicit type conversion executed by CUBRID is as follows:
 | **CHAR**      | O       | O         | O            | O       | O          | -        | O           | O         | O            |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 | **VARCHAR**   | O       | O         | O            | O       | O          | O        | -           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **NCHAR**     | O       | O         | O            | O       | O          | O        | O           | -         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **VARNCHAR**  | O       | O         | O            | O       | O          | O        | O           | O         | -            |
 +---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
 
 Conversation Rules
@@ -1862,7 +1743,7 @@ You can enter multiple type values in the function. If the type value not specif
 *   Date/Time Type ( **DATETIME** > **TIMESTAMP** > **DATE** > **TIME** )
 *   Approximate Numeric Type ( **MONETARY** > **DOUBLE** > **FLOAT** )
 *   Exact Numeric Type ( **NUMERIC** > **BIGINT** > **INT** > **SHORT** )
-*   String Type ( **CHAR** / **NCHAR** > **VARCHAR** / **VARNCHAR** )
+*   String Type ( **CHAR** > **VARCHAR** )
 
 **Comparison Operation**
 

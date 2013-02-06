@@ -49,60 +49,67 @@ The following is the result of executing the query in the *demodb* database.
 	  'participant'         'BASE TABLE'
 	  'record'              'BASE TABLE'
 	 
-	SHOW FULL TABLES  WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';   Tables_in_demodb      Table_type
+	SHOW FULL TABLES  WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';
+	  Tables_in_demodb      Table_type
 	============================================
 	  'code'                'BASE TABLE'
 	  'record'              'BASE TABLE'
 
-SHOW COLUMN Statement
-=====================
+SHOW COLUMNS Statement
+======================
 
-Displays the column information of a table. You can use the **LIKE** clause to search the column names matching it. If you use the **WHERE** clause, you can search column names with more general terms like, "General Considerations for All **SHOW** Statements."  If you use the **FULL** keyword, the additional information of a column will be displayed as follows:
+Displays the column information of a table. You can use the **LIKE** clause to search the column names matching it. If you use the **WHERE** clause, you can search column names with more general terms like, "General Considerations for All **SHOW** Statements."  :
 
 *   Field: Column name
 *   Type: Column data type
 *   Null: If you can store **NULL**, the value is YES and if not, it is NO
 *   Key: Whether a column has an index or not. If there is more than one key value in the given column of a table, this displays only the one that appears first in the order of PRI, UNI and MUL.
-
-*   If the key is a space, the column doesn't have an index, it is not the first column in the multiple column index or the index is non-unique.
-*   If the value is PRI, it is a primary key or the primary key of multiple columns.
-*   If the value is UNI, it is a unique index. (The unique index allows multiple NULL values but you can also set a NOT NULL constraint.)
-*   If the value is MUL, it is the first column of the non-unique index that allows the given value to be displayed in the column several times. If the column composes a composite unique index, the value will be MUL. The combination of column values can be unique but the value of each column can appear several times.
-
+	*   If the key is a space, the column doesn't have an index, it is not the first column in the multiple column index or the index is non-unique.
+	*   If the value is PRI, it is a primary key or the primary key of multiple columns.
+	*   If the value is UNI, it is a unique index. (The unique index allows multiple NULL values but you can also set a NOT NULL constraint.)
+	*   If the value is MUL, it is the first column of the non-unique index that allows the given value to be displayed in the column several times. If the column composes a composite unique index, the value will be MUL. The combination of column values can be unique but the value of each column can appear several times.
 *   Default : Default value defined in the column
 *   Extra : Additional information available about the given column. **AUTO_INCREMENT** The column attribute must have the auto_increment value.
 
-**SHOW FIELDS** is the same command as **SHOW COLUMNS**.
+If a **FULL** keyword is used, it displays the additional information, collation.
+
+**SHOW FIELDS** is the same statement as **SHOW COLUMNS**.
 
 The **DESCRIBE** (abbreviated **DESC**) statement and the **EXPLAIN** statement provide similar information to **SHOW COLUMNS**.
 
 ::
 
-	SHOW COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr]
+	SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr]
 
 The following is the result of a query in the *demodb* database.
 
 .. code-block:: sql
 
 	SHOW COLUMNS FROM athlete;
-	  Field                 Type                  Null                  Key                   Default               Extra
-	====================================================================================================================================
-	  'code'                'INTEGER'             'NO'                  'PRI'                 NULL                  'auto_increment'
-	  'name'                'VARCHAR(40)'          'NO'                  ''                    NULL                  ''
-	  'gender'              'CHAR(1)'             'YES'                 ''                    NULL                  ''
-	  'nation_code'         'CHAR(3)'             'YES'                 ''                    NULL                  ''
-	  'event'               'VARCHAR(30)'          'YES'                 ''                    NULL                  ''
+	  Field                 Type                  Null       Key          Default               Extra
+	================================================================================================================
+	  'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
+	  'name'                'VARCHAR(40)'         'NO'       ''           NULL                  ''
+	  'gender'              'CHAR(1)'             'YES'      ''           NULL                  ''
+	  'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
+	  'event'               'VARCHAR(30)'         'YES'      ''           NULL                  ''
 	 
 	SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
-	  Field                 Type                  Null                  Key                   Default               Extra
-	====================================================================================================================================
-	  'code'                'INTEGER'             'NO'                  'PRI'                 NULL                  'auto_increment'
-	  'nation_code'         'CHAR(3)'             'YES'                 ''                    NULL                  ''
+	  Field                 Type                  Null       Key          Default               Extra
+	================================================================================================================
+	  'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
+	  'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
 	 
 	SHOW COLUMNS FROM athlete  WHERE "type" = 'INTEGER' and "key"='PRI' AND extra='auto_increment';
-	  Field                 Type                  Null                  Key                   Default               Extra
+	  Field                 Type                  Null       Key          Default               Extra
+	================================================================================================================
+	  'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
+	
+	SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
+	  Field                 Type                  Collation             Null      Key         Default               Extra
 	====================================================================================================================================
-	  'code'                'INTEGER'             'NO'                  'PRI'                 NULL                  'auto_increment'
+	  'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
+	  'nation_code'         'CHAR(3)'             'iso88591_bin'        'YES'     ''          NULL                  ''
 
 SHOW INDEX Statement
 ====================
@@ -156,7 +163,72 @@ The following is the result of a query in the *demodb* database.
 	  't1'           1  'i_t1_i1_s1'              1      'i1'          'A'            0               NULL        NULL     'YES'   'BTREE'
 	  't1'           1  'i_t1_i1_s1'              2      's1'          'A'            0               NULL        NULL     'YES'   'BTREE'
 	  't1'           1  'i_t1_s1'                 1      's1'          'A'            0                  7        NULL     'YES'   'BTREE'
-  
+
+[번역]
+
+
+.. _show-collation:
+ 
+SHOW COLLATION 문
+=================
+
+**SHOW COLLATION** 문은 데이터베이스에서 지원하는 콜레이션 리스트를 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
+해당 질의는 다음과 같은 칼럼을 가진다.
+
+* Collation: 콜레이션 이름
+* Charset: 문자셋 이름
+* Id: 콜레이션 ID
+* Built_in: 내장 콜레이션 여부
+* Expansions: 확장이 있는 콜레이션인지 여부. 확장이 있는 콜레이션에서 일부 결합 문자(코드포인트)들은 다른 문자들로 구성된 순서 있는 리스트(ordered list)로 해석된다. 예를 들어, 'æ'는 'ae'로 해석된다.
+* Strength: 문자 간 비교를 위한 기준인데, 이 기준에 따라 문자 순서가 달라질 수 있다. 이에 대한 설명은 :ref:`collation-cont-exp` 를 참고한다.
+
+다음은 해당 질의를 실행한 결과이다. 
+
+::
+
+	SHOW COLLATION;
+
+	  Collation             Charset                        Id  Built_in              Expansions            Strength
+	===========================================================================================================================
+	  'euckr_bin'           'euckr'                         8  'Yes'                 'No'                  'Not applicable'
+	  'iso88591_bin'        'iso88591'                      0  'Yes'                 'No'                  'Not applicable'
+	  'iso88591_en_ci'      'iso88591'                      3  'Yes'                 'No'                  'Not applicable'
+	  'iso88591_en_cs'      'iso88591'                      2  'Yes'                 'No'                  'Not applicable'
+	  'utf8_bin'            'utf8'                          1  'Yes'                 'No'                  'Not applicable'
+	  'utf8_de_exp'         'utf8'                         76  'No'                  'Yes'                 'Tertiary'
+	  'utf8_de_exp_ai_ci'   'utf8'                         72  'No'                  'Yes'                 'Primary'
+	  'utf8_en_ci'          'utf8'                          5  'Yes'                 'No'                  'Not applicable'
+	  'utf8_en_cs'          'utf8'                          4  'Yes'                 'No'                  'Not applicable'
+	  'utf8_es_cs'          'utf8'                         85  'No'                  'No'                  'Quaternary'
+	  'utf8_fr_exp_ab'      'utf8'                         94  'No'                  'Yes'                 'Tertiary'
+	  'utf8_gen'            'utf8'                         32  'No'                  'No'                  'Quaternary'
+	  'utf8_gen_ai_ci'      'utf8'                         37  'No'                  'No'                  'Primary'
+	  'utf8_gen_ci'         'utf8'                         44  'No'                  'No'                  'Secondary'
+	  'utf8_ja_exp'         'utf8'                        124  'No'                  'Yes'                 'Tertiary'
+	  'utf8_ja_exp_cbm'     'utf8'                        125  'No'                  'Yes'                 'Tertiary'
+	  'utf8_km_exp'         'utf8'                        132  'No'                  'Yes'                 'Quaternary'
+	  'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
+	  'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
+	  'utf8_tr_cs'          'utf8'                          6  'Yes'                 'No'                  'Not applicable'
+	  'utf8_tr_cs_uca'      'utf8'                        205  'No'                  'No'                  'Quaternary'
+	  'utf8_vi_cs'          'utf8'                        221  'No'                  'No'                  'Quaternary'
+
+	SHOW COLLATION LIKE '%_ko_%';
+	
+	  Collation             Charset                        Id  Built_in              Expansions            Strength
+	===========================================================================================================================
+	  'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
+	  'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
+
+각 칼럼이 나타내는 의미는 다음과 같다.
+
+* Collation: 콜레이션 이름
+* Charset: 문자셋 이름
+* Id: 콜레이션 ID
+* Built_in: 콜레이션이 CUBRID 제품 안에 내장되었는지 여부. 해당 콜레이션들은 하드 코딩되어 있어 추가 혹은 삭제가 불가능하다.
+* Expansions: 콜레이션의 확장 여부
+* Strength: 콜레이션의 세기
+
 SHOW GRANTS Statement
 =====================
 

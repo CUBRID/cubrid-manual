@@ -311,9 +311,7 @@ The **UNIQUE** constraint enforces a column to have a unique value. An error occ
 
 You can place a **UNIQUE** constraint on either a column or a set of columns. If the **UNIQUE** constraint is defined for multiple columns, the uniqueness is ensured not for each column, but the combination of multiple columns.
 
-**Example**
-
-If a **UNIQUE** constraint is defined on a set of columns, this ensures the uniqueness of the values in all the columns. As shown below, the second INSERT statement succeeds because the value of column *a* is the same, but the value of column *b* is unique. The third INSERT statement causes an error because the values of column *a* and *b* are the same as those in the first INSERT statement.
+In the following example, , the third INSERT statement fails because the value of *id* column is the same with the value of *id* column in the second INSERT statement.
 
 .. code-block:: sql
 
@@ -332,9 +330,11 @@ If a **UNIQUE** constraint is defined on a set of columns, this ensures the uniq
 	INSERT INTO const_tbl5 VALUES (1, '111-1111');
 	 
 	ERROR: Operation would have caused one or more unique constraint violations.
-	 
-	 
-	--UNIQUE constraint is defined on several columns
+ 
+In the following example, if a **UNIQUE** constraint is defined on several columns, this ensures the uniqueness of the values in all the columns.
+
+.. code-block:: sql
+
 	CREATE TABLE const_tbl6(id INT, phone VARCHAR, CONSTRAINT UNIQUE(id,phone));
 	INSERT INTO const_tbl6 VALUES (1,NULL), (2,NULL), (1,'000-0000'), (1,'111-1111');
 	SELECT * FROM const_tbl6;
@@ -537,6 +537,13 @@ If you specify the **REUSE_OID** option when creating a table, the OID is also d
 	ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
 	 
 	--an error occurs when a table references a OID reusable table
+
+If you specify REUSE_OID together with the collation of table, it can be placed on before or after **COLLATE** syntax.
+	 
+.. code-block:: sql
+	
+	CREATE TABLE t3(a VARCHAR(20)) REUSE_OID COLLATE euckr_bin;
+	CREATE TABLE t4(a VARCHAR(20)) COLLATE euckr_bin REUSE_OID;
 
 **Remark**
 
@@ -1021,6 +1028,10 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 
 	* **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.
 	* When converting a number type to character type, if the length of the string is shorter than that of the number, the string is truncated and saved according to the length of the converted character type.
+	
+	[번역]
+	
+	* 테이블의 칼럼 타입, 콜레이션 등 칼럼 속성을 변경하는 경우 변경된 속성이 해당 테이블을 이용하여 생성한 뷰에 반영되지는 않는다. 따라서 테이블의 칼럼 속성을 변경하는 경우 뷰를 재생성할 것을 권장한다.
 
 ::
 
@@ -1266,10 +1277,6 @@ The hard default value is a value that will be used when you add columns with th
 +-----------+-------------------------------------+-----------------------------------------+
 | VARCHAR   | Yes                                 | ''                                      |
 +-----------+-------------------------------------+-----------------------------------------+
-| NCHAR     | Yes                                 | N''                                     |
-+-----------+-------------------------------------+-----------------------------------------+
-| VARNCHAR  | Yes                                 | N''                                     |
-+-----------+-------------------------------------+-----------------------------------------+
 | SET       | Yes                                 | {}                                      |
 +-----------+-------------------------------------+-----------------------------------------+
 | MULTISET  | Yes                                 | {}                                      |
@@ -1352,9 +1359,8 @@ DROP INDEX Clause
 
 You can delete an index defined for a column by using the **DROP INDEX** clause. ::
 
-	ALTER [ TABLE | CLASS ] table_name DROP [ REVERSE ] [ UNIQUE ] INDEX index_name
+	ALTER [ TABLE | CLASS ] table_name DROP [ UNIQUE ] INDEX index_name
 
-*   **REVERSE** : Specifies that the index to be dropped is a reverse index.
 *   **UNIQUE** : Specifies that the index to be dropped is a unique index. The unique index can be dropped by using the **DROP CONSTRAINT** statement.
 *   *table_name* : Specifies the name of a table of which constraints will be deleted.
 *   *index_name* : Specifies the name of an index to be deleted.

@@ -80,7 +80,7 @@ The CUBRID SHARD middleware consists of three processes (broker/proxy/cas) and t
 Selecting a Shard DB through the Shard SQL Hint
 -----------------------------------------------
 
-**Shard SQL Hint**
+	**Shard SQL Hint**
 
 	With the hints and configuration data included in a SQL hint statement, the CUBRID SHARD selects a shard DB that will process the requests from applications. The types of available SQL hints are as follows:
 
@@ -108,14 +108,20 @@ Selecting a Shard DB through the Shard SQL Hint
 	[번역]
 	
 	.. note::
-	
-		두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다.  ::
-		
-			예) SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
-		
-		위와 같은 경우 250과 22가 같은 shard를 가리키면 정상 처리, 다른 shard를 가리키면 오류 처리한다.
 
-**shard_key Hint**
+		* 하나의 질의 안에 두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다. ::
+	
+			예) SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
+	
+			위와 같은 경우 250과 22가 같은 shard를 가리키면 정상 처리, 다른 shard를 가리키면 오류 처리한다.
+	
+		* 배열로 여러 개의 값을 바인딩하여 일괄 처리하는 드라이버 함수(예: JDBC의 PreparedStatement.executeBatch, CCI의 cci_execute_array)에서 여러 개의 질의 중 하나라도 다른 shard에 접근하는 질의가  있으면 모두 오류 처리한다. 
+	
+		* shard 환경에서 여러 문장을 동시에 실행하는 함수(예: JDBC의 Statement.executeBatch, CCI의 cci_execute_batch)는 추후 지원할 예정이다.
+
+
+
+	**shard_key Hint**
 
 	The **shard_key** hint is to specify the position of a bind or literal variable. This hint should be positioned in front of either of them.
 
@@ -131,7 +137,7 @@ Selecting a Shard DB through the Shard SQL Hint
 
 		SELECT name FROM student WHERE student_no = /*+ shard_key */ 123
 
-**shard_val Hint**
+	**shard_val Hint**
 
 	The **shard_val** hint is used when there is no shard column that can be used to identify the shard DB in the query. It sets the shard key column as the value of the **shard_val** hint. The **shard_val** hint can be positioned anywhere in an SQL statement.
 
@@ -141,7 +147,7 @@ Selecting a Shard DB through the Shard SQL Hint
 
 		SELECT age FROM student WHERE name =? /*+ shard_val(123) */
 
-**shard_id Hint**
+	**shard_id Hint**
 
 	Regardless of the shard key column value, the **shard_id** hint can be used when the user specifies a shard for query execution. The **shard_id** hint can be positioned anywhere in an SQL statement.
 
@@ -153,7 +159,7 @@ Selecting a Shard DB through the Shard SQL Hint
 
 .. _using-shard-hint:
 
-**General Procedure of Executing Queries by Using Shard SQL Hint**
+	**General Procedure of Executing Queries by Using Shard SQL Hint**
 
 	#. Executing Queries
 
@@ -205,19 +211,25 @@ Selecting a Shard DB through the Shard SQL Hint
 		.. image:: /images/image46.png
 
 		*   Receives the query execution result from the shard DB #1 and then returns it to the requested application.
+		
+		
+		.. note::
+		
+			[번역]
+			배열로 여러 개의 값을 바인딩하여 일괄 처리하는 드라이버 함수(예: JDBC의 executeBatch, CCI의 cci_execute_array, cci_execute_batch)에서 다른 shard에 접근하는 값이 존재하면 오류 처리한다.
 
 Various DBMSs Available
 -----------------------
 
 The CUBRID SHARD can be used on a variety of DBMSs such as CUBRID and MySQL.
 
-**CUBRID SHARD with CUBRID**
+	**CUBRID SHARD with CUBRID**
 
 	The following image shows the structure of CUBRID SHARD when using three CUBRID SHARD DBs.
 
 	.. image:: /images/image47.png
 
-**CUBRID SHARD with MySQL**
+	**CUBRID SHARD with MySQL**
 
 	The following image shows the structure of CUBRID SHARD when using three MySQL shard DBs.
 
@@ -230,13 +242,13 @@ The CUBRID SHARD can be used on a variety of DBMSs such as CUBRID and MySQL.
 Transaction Support
 -------------------
 
-**Transaction Processing**
+	**Transaction Processing**
 
 	The CUBRID SHARD executes an internal processing procedure to guarantee atomicity among ACID. For example, when an exception such as abnormal termination of an application occurs, the CUBRID SHARD sends a request to rollback to the shard DB which has been processing the request from the application in order to invalidate all changes in the transaction.
 
 	The ACID, the characteristic of general transactions, is guaranteed, based on the characteristics and settings of the backend DBMS.
 
-**Constraints**
+	**Constraints**
 
 	2 Phase Commit (2PC) is unavailable; therefore, an error occurs when a query is executed by using several shard DBs in a single transaction.
 
@@ -248,9 +260,9 @@ Configuration Example
 
 The CUBRID SHARD to be explained consists of four CUBRID SHARD DBs as shown below. The application uses the JDBC interface to process user requests.
 
-.. image:: /images/image49.png
+	.. image:: /images/image49.png
 
-**Start after creating the shard DB and user account**
+	**Start after creating the shard DB and user account**
 
 	As shown in the example above, after each shard DB node creates a shard DB and a user account, it starts the instance of the database.
 
@@ -272,7 +284,7 @@ The CUBRID SHARD to be explained consists of four CUBRID SHARD DBs as shown belo
 Changing the shard Configurations
 ---------------------------------
 
-**shard.conf**
+	**shard.conf**
 
 	Change **shard.conf**, the default configuration file, as shown below:
 
@@ -314,7 +326,7 @@ Changing the shard Configurations
 		# TCP port id for the CUBRID programs (used by all clients).
 		cubrid_port_id=41523
 
-**shard_key.txt**
+	**shard_key.txt**
 
 	Set **shard_key.txt**, the shard DB mapping configuration file, for the shard key hash value as follows:
 
@@ -333,7 +345,7 @@ Changing the shard Configurations
 		128     191     2
 		192     255     3
 
-**shard_connection.txt**
+	**shard_connection.txt**
 
 	Configure the **shard_connection.txt** file which is shard database configuration file, as follows:
 
@@ -355,7 +367,7 @@ Changing the shard Configurations
 Starting Service and Monitoring
 -------------------------------
 
-**Starting CUBRID SHARD**
+	**Starting CUBRID SHARD**
 
 	Start the CUBRID SHARD as shown below: ::
 
@@ -363,16 +375,13 @@ Starting Service and Monitoring
 		@ cubrid shard start
 		++ cubrid shard start: success
 
-**Retrieving the CUBRID SHARD Status**
+	**Retrieving the CUBRID SHARD Status**
 
 	Retrieve the CUBRID SHARD status as follows to check the parameter and the status of the process. ::
 
 		sh> cubrid shard status
 		@ cubrid shard status
-		% shard1  - shard_cas [21265,45511] /home1/cubrid_user/SHARD/log/broker//shard1.err
-		 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-		 LONG_TRANSACTION_TIME:60.00, LONG_QUERY_TIME:60.00, SESSION_TIMEOUT:300
-		 KEEP_CONNECTION:ON, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+		% shard1
 		----------------------------------------------------------------
 		PROXY_ID SHARD_ID   CAS_ID   PID   QPS   LQS PSIZE STATUS       
 		----------------------------------------------------------------
@@ -383,30 +392,27 @@ Starting Service and Monitoring
 		 
 		sh> cubrid shard status -f
 		@ cubrid shard status
-		% shard1  - shard_cas [21265,45511] /home1/cubrid_user/SHARD/log/broker//shard1.err
-		 JOB QUEUE:0, AUTO_ADD_APPL_SERVER:ON, SQL_LOG_MODE:ALL:100000, SLOW_LOG:ON
-		 LONG_TRANSACTION_TIME:60.00, LONG_QUERY_TIME:60.00, SESSION_TIMEOUT:300
-		 KEEP_CONNECTION:ON, ACCESS_MODE:RW, MAX_QUERY_TIMEOUT:0
+		% shard1
 		----------------------------------------------------------------------------------------------------------------------------------------------------------
 		PROXY_ID SHARD_ID   CAS_ID   PID   QPS   LQS PSIZE STATUS          LAST ACCESS TIME               DB             HOST   LAST CONNECT TIME    SQL_LOG_MODE
 		----------------------------------------------------------------------------------------------------------------------------------------------------------
-			   1        0        1 21272     0     0 53292 IDLE         2012/02/29 15:00:24    shard1@HostA           HostA 2012/02/29 15:00:25               -
-			   1        1        1 21273     0     0 53292 IDLE         2012/02/29 15:00:24    shard1@HostB           HostB 2012/02/29 15:00:25               -
-			   1        2        1 21274     0     0 53292 IDLE         2012/02/29 15:00:24    shard1@HostC           HostC 2012/02/29 15:00:25               -
-			   1        3        1 21275     0     0 53292 IDLE         2012/02/29 15:00:24    shard1@HostD           HostD 2012/02/29 15:00:25               -
+			   1        0        1 21272     0     0 53292 IDLE         2013/01/31 15:00:24    shard1@HostA           HostA 2013/01/31 15:00:25               -
+			   1        1        1 21273     0     0 53292 IDLE         2013/01/31 15:00:24    shard1@HostB           HostB 2013/01/31 15:00:25               -
+			   1        2        1 21274     0     0 53292 IDLE         2013/01/31 15:00:24    shard1@HostC           HostC 2013/01/31 15:00:25               -
+			   1        3        1 21275     0     0 53292 IDLE         2013/01/31 15:00:24    shard1@HostD           HostD 2013/01/31 15:00:25               -
 
 Writing a Sample
 ----------------
 
 Check that the CUBRID SHARD operates normally by using a simple Java program.
 
-**Writing a Sample Table**
+	**Writing a Sample Table**
 
 	Write a temporary table for the example in all shard DBs. ::
 
 		sh> csql -C -u shard -p 'shard123' shard1@localhost -c "create table student (s_no int, s_name varchar, s_age int, primary key(s_no))"
 
-**Writing Code**
+	**Writing Code**
 
 	The following example program is to enter student information from 0 to 1023 to the shard DB. Check the **shard.conf** modified in the previous procedure and then set the address/port information and the user information in the connection url.
 
@@ -479,14 +485,14 @@ Check that the CUBRID SHARD operates normally by using a simple Java program.
 				}
 		}
 
-**Executing a Sample**
+	**Executing a Sample**
 
 	Execute the sample program as follows: ::
 
 		sh> javac -cp ".:$CUBRID/jdbc/cubrid_jdbc.jar" *.java
 		sh> java -cp ".:$CUBRID/jdbc/cubrid_jdbc.jar" TestInsert
 
-**Checking the result**
+	**Checking the Result**
 
 	Execute the query in each shard DB and check whether or not the partitioned information has been correctly entered.
 
@@ -494,29 +500,26 @@ Check that the CUBRID SHARD operates normally by using a simple Java program.
 
 		sh> csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
 		 
-		=== <Result of SELECT Command in Line 1> ===
-		 
-				 s_no  s_name                      s_age
+		         s_no  s_name                      s_age
 		================================================
-					0  'name_0'                       10
-					1  'name_1'                       11
-					2  'name_2'                       12
-					3  'name_3'                       13
-					...
+		            0  'name_0'                       10
+		            1  'name_1'                       11
+		            2  'name_2'                       12
+		            3  'name_3'                       13
+		            ...
+
 
 	*   shard #1 ::
 
 		sh> $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
 		 
-		=== <Result of SELECT Command in Line 1> ===
-		 
-				 s_no  s_name                      s_age
+		         s_no  s_name                      s_age
 		================================================
-				   64  'name_64'                      10
-				   65  'name_65'                      11
-				   66  'name_66'                      12
-				   67  'name_67'                      13  
-				   ...
+		           64  'name_64'                      10
+		           65  'name_65'                      11
+		           66  'name_66'                      12
+		           67  'name_67'                      13  
+		           ...
 
 	*   shard #2 ::
 
@@ -524,27 +527,25 @@ Check that the CUBRID SHARD operates normally by using a simple Java program.
 		 
 		=== <Result of SELECT Command in Line 1> ===
 		 
-				 s_no  s_name                      s_age
-		================================================
-		128  'name_128'                     10
-		129  'name_129'                     11
-		130  'name_130'                     12
-		131  'name_131'                     13
-		...
+		          s_no  s_name                      s_age
+		=================================================
+		           128  'name_128'                     10
+		           129  'name_129'                     11
+		           130  'name_130'                     12
+		           131  'name_131'                     13
+		           ...
 
 	*   shard #3 ::
 
 		sh> $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
 		 
-		=== <Result of SELECT Command in Line 1> ===
-		 
-				 s_no  s_name                      s_age
+		         s_no  s_name                      s_age
 		================================================
-		192  'name_192'                     10
-		193  'name_193'                     11
-		194  'name_194'                     12
-		195  'name_195'                     13
-		...
+		          192  'name_192'                     10
+		          193  'name_193'                     11
+		          194  'name_194'                     12
+		          195  'name_195'                     13
+		          ...
 
 .. _shard-configuration:
 
@@ -656,34 +657,34 @@ In addition to **shard.conf**, the CUBRID SHARD has a configuration file for sha
 
 .. _shard-connection-configuration-file:
 
-**Shard Connection Configuration File (SHARD_CONNECTION_FILE)**
+	**Shard Connection Configuration File (SHARD_CONNECTION_FILE)**
 
-To connect to the backend shard DB, the CUBRID SHARD loads the shard connection configuration file specified in the **SHARD_CONNECTION_FILE** parameter of **shard.conf**, the default configuration file. If **SHARD_CONNECTION_FILE** is not specified in **shard.conf**, it loads the **shard_connection.txt** file by default.
+	To connect to the backend shard DB, the CUBRID SHARD loads the shard connection configuration file specified in the **SHARD_CONNECTION_FILE** parameter of **shard.conf**, the default configuration file. If **SHARD_CONNECTION_FILE** is not specified in **shard.conf**, it loads the **shard_connection.txt** file by default.
 
-**Format**
+	**Format**
 
-	The basic example and format of a shard connection configuration file are as follows: ::
+		The basic example and format of a shard connection configuration file are as follows: ::
 
-		#
-		# shard-id      real-db-name    connection-info
-		#                               * cubrid : hostname, hostname, ...
-		#                               * mysql  : hostname:port
-		 
-		# CUBRID
-		0               shard1          HostA  
-		1               shard1          HostB
-		2               shard1          HostC
-		3               shard1          HostD
-		 
-		# mysql
-		#0              shard1         HostA:3306
-		#1              shard1         HostB:3306
-		#2              shard1         HostC:3306
-		#3              shard1         HostD:3306
+			#
+			# shard-id      real-db-name    connection-info
+			#                               * cubrid : hostname, hostname, ...
+			#                               * mysql  : hostname:port
+			 
+			# CUBRID
+			0               shard1          HostA  
+			1               shard1          HostB
+			2               shard1          HostC
+			3               shard1          HostD
+			 
+			# mysql
+			#0              shard1         HostA:3306
+			#1              shard1         HostB:3306
+			#2              shard1         HostC:3306
+			#3              shard1         HostD:3306
 
-	.. note:: As shown in the general CUBRID settings, the content after # is converted to comment.
+		.. note:: As shown in the general CUBRID settings, the content after # is converted to comment.
 
-**CUBRID**
+	**CUBRID**
 
 	When the backend shard DB is CUBRID, the format of the connection configuration file is as follows: ::
 
@@ -705,7 +706,7 @@ To connect to the backend shard DB, the CUBRID SHARD loads the shard connection 
 		# TCP port id for the CUBRID programs (used by all clients).
 		cubrid_port_id=41523
 
-**MySQL**
+	**MySQL**
 
 	When the backend shard DB is MySQL, the format of the connection configuration file is as follows: ::
 
@@ -720,13 +721,13 @@ To connect to the backend shard DB, the CUBRID SHARD loads the shard connection 
 
 .. _shard-key-configuration-file:
 
-**Configuration File for Shard Key (SHARD_KEY_FILE)**
+	**Configuration File for Shard Key (SHARD_KEY_FILE)**
 
 	The CUBRID SHARD loads the shard key configuration file specified in the **SHARD_KEY_FILE** parameter of **shard.conf**, the default configuration file, to determine which backend shard DB should process the user requests.
 
 	If **SHARD_KEY_FILE** is not specified in **shard.conf**, it loads the **shard_key.txt** file by default.
 
-**Format**
+	**Format**
 
 	The example and format of a shard key configuration file are as follows: ::
 
@@ -768,7 +769,7 @@ Setting User-Defined Hash Function
 
 To select a shard that will perform queries, the CUBRID SHARD uses the results of hashing the shard key and the metadata configuration information. For this, users can use the default hash function or define a hash function.
 
-**Default Hash Function**
+	**Default Hash Function**
 
 	When the **SHARD_KEY_LIBRARY_NAME** and **SHARD_KEY_FUNCTION_NAME** parameters of **shard.conf** are not set, the shard key is hashed by using the default hash function. The default hash function is as follows:
 
@@ -780,11 +781,11 @@ To select a shard that will perform queries, the CUBRID SHARD uses the results o
 
 		Default hash function (shard_key) = shard_key[0] mod SHARD_KEY_MODULAR parameter (default value: 256)
 
-**Setting User-Defined Hash Function**
+	**Setting User-Defined Hash Function**
 
 	The CUBRID SHARD can hash the shard key by using the user-defined hash function, in addition to the default hash function.
 
-**Implementing and Creating a Library**
+	**Implementing and Creating a Library**
 
 	The user-defined hash function must be implemented as a **.so** library loadable at runtime. Its prototype is as shown below:
 
@@ -810,7 +811,7 @@ To select a shard that will perform queries, the CUBRID SHARD uses the results o
 	*   **SHARD_KEY_LIBRARY_NAME** : The (absolute) path of the user-defined hash library.
 	*   **SHARD_KEY_FUNCTION_NAME** : The name of the user-defined hash function.
 
-**Example**
+	**Example**
 
 	The following example shows how to use a user-defined hash.
 
@@ -968,17 +969,17 @@ Stopping CUBRID SHARD
 Dynamic change of CUBRID SHARD parameters
 -----------------------------------------
 
-**Description**
+	**Description**
 
 	You can configure the parameters related to running CUBRID SHARD in the environment configuration file (**shard.conf**). Additionally, you can some CUBRID SHARD parameters while it is running by using the **shard_broker_changer** utility. For details about configuration of CUBRID SHARD parameters and dynamically changeable parameters see :ref:`shard-configuration`.
 
-**Syntax**
+	**Syntax**
 
 	The **shard_broker_changer** syntax used to change parameter while CUBRID SHARD is running is as follows: Enter the name of CUBRID SHARD running in *shard-name* and enter dynamically changeable parameters in *parameter*. *value* must be specified based on the parameter to be modified. You can apply changes in a specific CUBRID SHARD by specifying an identifier of CUBRID SHARD. *proxy-number* represents PROXY-ID displayed in the **cubrid shard status** command. ::
 
 		shard_broker_changer shard-name [proxy-number] parameter value
 
-**Example**
+	**Example**
 
 	Even though SQL logs are recorded in CUBRID SHARD which is running, you need to enter as follows to configure the **SQL_LOG** parameter to ON so that SQL logs are recorded in CUBRID SHARD running. Such dynamic parameter change is effective only while CUBRID SHARD is running. ::
 
@@ -994,19 +995,17 @@ Checking CUBRID SHARD configuration information
 
 As a reference, to see the configuration information of the currently "working" system(cubrid.conf), use **cubrid paramdump** *database_name* command. By **SET SYSTEM PARAMETERS** syntax, the configuration information of the system parameters can be changed dynamically; with **cubrid broker info** command, you can see the configuration information of the system parameters.
 
-[번역]
-
-CUBRID SHARD ID 확인
---------------------
-**cubrid shard getid** 는 특정 키가 어느 샤드 DB에 접근하는지 알고 싶을 때 사용하는 명령으로, shard key에 대한 SHARD ID를 출력한다. :: 
+Checking CUBRID SHARD ID
+------------------------
+**cubrid shard getid** prints SHARD ID to know in what DB a specific key is included. :: 
 
 	cubrid shard getid -b <broker-name> [-f] shard-key
 	
-* -b <*broker-name*> : shard broker 이름
-* -f  : 상세 정보 출력
+* -b <*broker-name*>: shard broker name
+* -f: prints detail information
 * *shard-key* : shard key
 
-다음은 shard1 브로커에서 키 1에 대한 SHARD ID를 출력하는 예이다.
+The following shows how to print the SHARD ID for the key 1 within the shard1 shard broker.
 
 ::
 
@@ -1015,7 +1014,7 @@ CUBRID SHARD ID 확인
 	% shard1
 	 SHARD_ID : 0, SHARD_KEY: 1
 
-다음은 -f 옵션을 사용하여 상세 정보를 출력하는 예이다.
+The following shows how to print the detail information using the **-f** option.
 
 ::
 	
@@ -1040,7 +1039,7 @@ CUBRID SHARD ID 확인
 Checking CUBRID SHARD status Information
 ----------------------------------------
 
-**cubrid shard status**
+	**cubrid shard status**
 
 	provides a variety of options to check the status information of each shard broker, shard proxy, and shard cas. In addition, it is possible to check the metadata information and the information on the client who has accessed the shard proxy. ::
 
@@ -1049,7 +1048,7 @@ Checking CUBRID SHARD status Information
 
 	When <*expr*> is given, the status monitoring is performed for the corresponding CUBRID SHARD. When it is omitted, status monitoring is performed for all CUBRID SHARDs registered to the CUBRID SHARD configuration file (**shard.conf**).
 
-**Options**
+	**Options**
 
 	The following table shows options that can be used together with cubrid broker status.
 
@@ -1079,7 +1078,7 @@ Checking CUBRID SHARD status Information
 	|            | is entered.                                                                                                             |
 	+------------+-------------------------------------------------------------------------------------------------------------------------+
 
-**Example**
+	**Example**
 
 	If no options or parameters are given to check the status of all CUBRID SHARDs, the following will be displayed as a result: ::
 
@@ -1409,7 +1408,7 @@ There are four types of logs that relate to starting the shard: access, proxy, e
 SHARD PROXY Log
 ---------------
 
-**Access Log**
+	**Access Log**
 
 	*   Parameter: **ACCESS_LOG**
 	*   Description: Log the client access (the existing broker logs at the cas).
@@ -1424,7 +1423,7 @@ SHARD PROXY Log
 		10.24.18.67 - - 1340243446.791 1340243446.791 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
 		10.24.18.67 - - 1340243446.821 1340243446.821 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
 
-**Proxy Log Level**
+	**Proxy Log Level**
 
 	*   Parameter: **PROXY_LOG**
 	*   Proxy log level policy: When the upper level is set, all logs of the lower level will be left.
@@ -1444,7 +1443,7 @@ SHARD PROXY Log
 SHARD CAS Log
 -------------
 
-**SQL Log**
+	**SQL Log**
 
 	*   Parameter: **SQL_LOG**
 	*   Description: Log queries such as prepare/execute/fetch and other cas information.
@@ -1462,7 +1461,7 @@ SHARD CAS Log
 		06/21 10:50:28.259 (0) auto_rollback
 		06/21 10:50:28.259 (0) auto_rollback 0
 
-**Error log**
+	**Error log**
 
 	*   Parameter: **ERROR_LOG_DIR**
 	*   Description: For CUBRID, the cs library logs EID and error strings to the corresponding file. For cas4o/m, the cas logs errors to the corresponding file.
@@ -1481,7 +1480,7 @@ SHARD CAS Log
 Constraints
 ===========
 
-**Changing or retrieving data in several shard DBs within one transaction**
+	**Changing or retrieving data in several shard DBs within one transaction**
 
 	One transaction should be performed within only one shard DB, so the following constraints exist.
 
@@ -1489,17 +1488,17 @@ Constraints
 
 	*   When a query, such as join, sub-query, or, union, group by, between, like, in, exist, or any/some/all, for several shard DB data, a result different from the intended one may be returned.
 
-**Session**
+	**Session**
 
 	Session information is valid within each shard DB only. Therefore, the results from session-related functions such as **last_insert_id** () may be different from the intended result.
 
-**auto increment**
+	**auto increment**
 
 	The auto increment attribute or SERIAL is valid within each shard DB only. So a result different from the intended result may be returned.
 
 [번역]
 
-**Windows용 SHARD DB와 응용 드라이버 사이의 접속**
+	**Windows용 SHARD DB와 응용 드라이버 사이의 접속**
 	
 	Windows용 SHARD DB 서버는 같은 버전의 드라이버를 사용하는 응용 프로그램만 접속이 가능하다. Linux용 SHARD DB 서버는 다른 버전의 드라이버를 사용하는 응용 프로그램과도 접속이 가능하다.
 	

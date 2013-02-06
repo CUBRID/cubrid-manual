@@ -115,6 +115,10 @@ A connection string using the example above is as follows: ::
 	*   If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
 	*   The database connection in thread-based programming must be used independently each other.
 
+	[번역]
+	
+	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
+
 Multi-Threaded Programming in .NET Environment
 ----------------------------------------------
 

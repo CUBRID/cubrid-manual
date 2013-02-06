@@ -15,27 +15,32 @@ The following shows how to use the CUBRID management utilities. ::
 		deletedb [option] <database_name>   --- Deleting a database
 		installdb [option] <database-name>   --- Installing a database 
 		renamedb [option] <source-database-name> <target-database-name>  --- Renaming a database 
-	  	copydb [option] <source-database-name> <target-database-name>  --- Copying a database 
-	  	backupdb [option] <database-name>  --- Backing up a database 
-	  	restoredb [option] <database-name>  --- Restoring a database 
-	  	addvoldb [option] <database-name>  --- Adding a database volume file 
-	  	spacedb [option] <database-name>  --- Displaying details of database space 
-	  	lockdb [option] <database-name>  --- Displaying details of database lock 
-	  	killtran [option] <database-name>  --- Removing transactions 
-	  	optimizedb [option] <database-name>  --- Updating database statistics 
-	  	statdump [option] <database-name>  --- Outputting statistic information of database server execution 
-	  	compactdb [option] <database-name>  --- Optimizing space by freeing unused space 
-	  	diagdb [option] <database-name>  --- Displaying internal information 
-	  	checkdb [option] <database-name>  --- Checking database consistency 
-	  	alterdbhost [option] <database-name>  --- Altering database host 
-	  	plandump [option] <database-name>  --- Displaying details of the query plan 
-	  	loaddb [option] <database-name>  --- Loading data and schema 
-	  	unloaddb [option] <database-name>  --- Unloading data and schema 
-	 	paramdump [option] <database-name>  --- Checking out the parameter values configured in a database 
-	  	changemode [option] <database-name>  --- Displaying or changing the server HA mode 
-	  	copylogdb [option] <database-name>  --- Multiplating transaction logs to configure HA 
-	  	applylogdb [option] <database-name>  --- Reading and applying replication logs from transaction logs to configure HA 
-	
+		copydb [option] <source-database-name> <target-database-name>  --- Copying a database 
+		backupdb [option] <database-name>  --- Backing up a database 
+		restoredb [option] <database-name>  --- Restoring a database 
+		addvoldb [option] <database-name>  --- Adding a database volume file 
+		spacedb [option] <database-name>  --- Displaying details of database space 
+		lockdb [option] <database-name>  --- Displaying details of database lock 
+		killtran [option] <database-name>  --- Removing transactions 
+		optimizedb [option] <database-name>  --- Updating database statistics 
+		statdump [option] <database-name>  --- Outputting statistic information of database server execution 
+		compactdb [option] <database-name>  --- Optimizing space by freeing unused space 
+		diagdb [option] <database-name>  --- Displaying internal information 
+		checkdb [option] <database-name>  --- Checking database consistency 
+		alterdbhost [option] <database-name>  --- Altering database host 
+		plandump [option] <database-name>  --- Displaying details of the query plan 
+		loaddb [option] <database-name>  --- Loading data and schema 
+		unloaddb [option] <database-name>  --- Unloading data and schema 
+		paramdump [option] <database-name>  --- Checking out the parameter values configured in a database 
+		changemode [option] <database-name>  --- Displaying or changing the server HA mode 
+		copylogdb [option] <database-name>  --- Multiplating transaction logs to configure HA 
+		applylogdb [option] <database-name>  --- Reading and applying replication logs from transaction logs to configure HA 
+		[번역]
+		applyinfo [option] <database-name>   --- HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 도구
+		synccolldb [option] <database-name>  --- DB 콜레이션을 시스템 콜레이션에 맞게 변경하는 도구
+		genlocale [option] <database-name>  --- 사용하고자 하는 로캘 정보를 컴파일하는 도구
+		dumplocale [option] <database-name>   --- 컴파일된 바이너리 로캘 정보를 사람이 읽을 수 있는 텍스트로 출력하는 도구
+
 Database Users
 ==============
 
@@ -1489,6 +1494,20 @@ The following shows [options] available with the **cubrid paramdump** utility.
 	This option displays parameter information of the server process in client/server mode. ::
 
 		cubrid paramdump -C testdb
+
+[번역]
+HA 모드 변경/로그 복제/반영
+===========================
+
+**cubrid changemode** 유틸리티는 서버의 HA 모드 출력 또는 변경하는 유틸리티이다. 
+
+**cubrid copylogdb** 유틸리티는 HA 구성을 위해 트랜잭션 로그를 다중화하는 유틸리티이다. 이 유틸리티는 cubrid heartbeat 유틸리티를 이용하여 실행된다.
+
+**cubrid applylogdb** 유틸리티는 HA 구성을 위해 트랜잭션 로그에서 복제 로그를 읽고 적용하는 유틸리티이다. 이 유틸리티는 cubrid heartbeat 유틸리티를 이용하여 실행된다.
+
+**cubrid applyinfo** 유틸리티는 HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 유틸리티이다.
+
+자세한 사용법은 :ref:`cubrid-service-util` 을 참고한다.
 
 Locale Compile/Output
 =====================

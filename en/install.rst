@@ -1,13 +1,13 @@
 .. _install-execute:
 
 Installing and Running on Linux
--------------------------------
+===============================
 
-개요
-----
+Overview
+--------
 
-지원 플랫폼 및 설치 권장 사양
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Supported Platforms and System Requirements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The platforms supported by CUBRID and hardware/software requirements for the installation are as follows:
 
@@ -19,12 +19,12 @@ The platforms supported by CUBRID and hardware/software requirements for the ins
 	| * Linux family 32/64 Bit(Linux kernel 2.4 및 glibc 2.3.4 or higher) |                  |                     | is required)                         |
 	+---------------------------------------------------------------------+------------------+---------------------+--------------------------------------+
 	
-	(\*): 처음 설치 시 약 500MB의 디스크 공간이 필요하며, 하나의 DB를 기본 옵션으로 생성할 경우 약 1.5GB의 디스크 공간이 필요하다.
+	(\*): Requires a 500 MB of free disk space on the initial installation; requires approximately 1.5 GB of free disk space with a database creating with default options.
 
 
-Beginning with 2008 R4.0, CUBRID Manager Client is not automatically installed when installing the CUBRID package. For this reason, if you require CUBRID Manager you must install it separately. The CUBRID can be downloaded from the http://ftp.cubrid.org.
+Beginning with 2008 R4.0, CUBRID Manager Client is not automatically installed when installing the CUBRID package. For this reason, if you require CUBRID Manager you must install it separately. The CUBRID can be downloaded from http://ftp.cubrid.org.
 
-Including CUBRID Query Browser, a variety of drivers such as PHP, ODBC, OLE, and DB can also be downloaded from the http://ftp.cubrid.org.
+Including CUBRID Query Browser, a variety of drivers such as PHP, ODBC, OLE, and DB can also be downloaded from http://ftp.cubrid.org.
 
 For more information on the CUBRID engine, tools, and drivers, see http://www.cubrid.org.
 
@@ -34,7 +34,7 @@ Version Compatibility and Operability
 
 **Application Compatibility**
 
-* Applications that use JDBC, PHP or CCI APIs from the earlier version of CUBRID can access the CUBRID 2008 R4.1 database. However, you must link the CUBRID 2008 R4.1 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces.
+* Applications that use JDBC, PHP or CCI APIs from 2008 R2.0 or higher version of CUBRID can access the CUBRID 2008 R4.1 database. However, you must link the CUBRID 2008 R4.1 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces.
 
 * Note that query results may differ from those given in the earlier version because new reserved words have been added, and the specifications for some queries have been changed.
 
@@ -56,7 +56,11 @@ Interoperability
 
 * If the CUBRID DB server and its broker server are operated separately, their interoperability is guaranteed, even when the operating systems are different. However, the bit version of a DB server must be identical to the bit version of a broker server. For example, the 64-bit DB server for Linux is interoperable with the 64-bit broker server for Windows, but it is not interoperable with a 32-bit broker server.
 
-For the relation between DB server and broker, see :doc:`intro`.For CUBRID SHARD, see :doc:`admin/shard`.
+	For the relation between DB server and broker, see :doc:`intro`.For CUBRID SHARD, see :doc:`admin/shard`.
+
+[번역]
+* CUBRID DB 서버와 브로커 서버(또는 CUBRID SHARD 서버)를 분리하여 운영하는 경우, DB 서버와 브로커 서버의 시스템 로캘은 동일해야 한다. 예를 들어 DB 서버의 CUBRID_CHARSET이 en_US.utf8이면 브로커 서버의 CUBRID_CHARSET도 en_US.utf8이어야 한다.
+
 
 
 **Details to Check when Installing**
@@ -131,7 +135,7 @@ After the CUBRID Manager is installed, you can start the CUBRID Manager server a
 
 You can install CUBRID by using rpm file that is created on CentOS5. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
 
-	$ rpm -Uvh CUBRID-9.0.0.0470-el5.x86_64.rpm
+	$ rpm -Uvh cubrid-9.0.0.0470-el5.x86_64.rpm
 
 When rmp is executed, CUBRID is installed in the cubrid home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh. When installation is complete, enter the code below to start CUBRID. ::
 
@@ -139,12 +143,14 @@ When rmp is executed, CUBRID is installed in the cubrid home directory (/opt/cub
 
 .. note::
 
+	**RPM and dependency**
+	
 	You must check RPM dependency when installing with RPM. If you ignore (--nodeps) dependency, it may not be executed. Even if you remove RPM, user accounts and databases that are created after installing, you must remove it manually, if needed.
-
-.. note::
-
-	How to use service or chkconfig command If you use SH or RPM package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, **CUBRID_USER**. If you change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command.
-
+	
+	**Running CUBRID automatically in Linux when the system is started**
+	
+	How to use service or chkconfig command If you use SH or RPM package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, **CUBRID_USER**. If you change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command to run CUBRID automatically when the Linux system is started.
+	
 **Installing CUBRID on Fedora/CentOS**
 
 To install CUBRID using the yum command, you should know where the CUBRID package is located. Choose appropriate location based on your operating system.

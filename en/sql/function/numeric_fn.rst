@@ -652,7 +652,8 @@ The **POW** function returns *x* to the power of *y*. The functions **POW** and 
 	:param expression: 버킷 번호를 부여받기 위한 입력 값. 수치 값을 반환하는 임의의 연산식을 지정한다.
 	:param min: expression이 취할 수 있는 범위의 최소값으로, 이 값은 전체 범위 안에 포함된다.
 	:param max: expression이 취할 수 있는 범위보다 큰 값 중 가장 작은 값으로, 이 값은 전체 범위 안에 포함되지 않는다.
-	:param num_buckets: 버킷의 개수
+	:param num_buckets: 버킷의 개수. 추가로 범위 밖의 내용을 담기 위한 0번 버킷과 (num_buckets + 1)번 버킷이 생성된다.
+
 	:rtype: INT
 
 	.. code-block:: sql

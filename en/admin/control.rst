@@ -234,9 +234,13 @@ The following example shows how to check the status of master process and databa
 	 4 15468     0     0 48036 IDLE
 	 5 15469     0     0 48032 IDLE
 
+	% broker1 OFF
+
 	@ cubrid manager server status
 	++ cubrid manager server is not running.
 
+
+	
 The following message is returned if master process has stopped.
 
 ::
@@ -552,14 +556,13 @@ The following [options] are available with the **cubrid broker status** utility.
 
 .. option:: -b
 
-	Displays the status information of a broker but does not display information on broker application server.
-
+	Displays the status information of a broker but does not display information on broker application server. the name of a broker is displayed until 20 characters; if the length is over 20, by adding "..." after the name.
 .. option:: -f
 
 	Displays information of DB and host accessed by broker.
 	
-	If it is used with the **-b** option, additional information on CAS is displayed.
-
+	If it is used with the **-b** option, additional information on CAS is displayed. But SELECT, INSERT, UPDATE, DELETE, OTHERS items which shown on **-b** option are excluded.
+	
 .. option:: -l SECOND
 
 	The **-l** option is only used with -f option together. It specifies accumulation period (unit : sec.) when displaying the number of application servers whose client status is Waiting or Busy. If it is omitted, the default value (1 second) is specified. 
@@ -590,15 +593,7 @@ If you do not specify an option or argument to check the status of all brokers, 
 	 4 28437     0     0 50140 IDLE
 	 5 28438     0     0 50144 IDLE
 	 
-	% broker1
-	----------------------------------------
-	ID   PID   QPS   LQS PSIZE STATUS
-	----------------------------------------
-	 1 28444     0     0 50144 IDLE
-	 2 28445     0     0 50140 IDLE
-	 3 28446     0     0 50144 IDLE
-	 4 28447     0     0 50144 IDLE
-	 5 28448     0     0 50144 IDLE
+	% broker1 OFF
 
 *   % query_editor: The broker name
 *   ID: Serial number of CAS within the broker
@@ -607,6 +602,7 @@ If you do not specify an option or argument to check the status of all brokers, 
 *   LQS: The number of long-duration queries processed per second
 *   PSIZE: Size of CAS
 *   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
+*   % broker1 OFF: broker1's SERVICE parmeter is set to OFF. So, broker1 is not started.
 
 To check the detail status of broker for 5 seconds, enter the command as below. The display will reset per 5 seconds as the new status information. To escape the display of the status, press <Q>.
 
@@ -625,7 +621,6 @@ To check the detail status of broker for 5 seconds, enter the command as below. 
 *   PORT: Port number of the broker
 *   AS: The number of CAS
 *   JQ: The number of standby jobs in the job queue
-*   REQ: The number of client requests processed by the broker
 *   TPS: The number of transactions processed per second (calculated only when the option is configured to "-b -s <sec>")
 *   QPS: The number of queries processed per second (calculated only when the option is configured to "-b -s <sec>")
 *   SELECT: The number of SELECT queries after staring of the broker. When there is an option of "-b -s <sec>", it is updated every time with the number of SELECTs which have been executed during the seconds specified by this option.

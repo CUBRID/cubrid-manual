@@ -14,7 +14,11 @@ To download Perl driver or get the latest information, click `http://www.cubrid.
 .. note::
 
 	* The database connection in thread-based programming must be used independently each other.
-
+	
+	[번역]
+	
+	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
+	
 Installing and Configuring Perl
 ===============================
 
@@ -22,7 +26,7 @@ Installing and Configuring Perl
 
 *   Perl: It is recommended to use an appropriate version of Perl based on your system environment. For example, all Linux and FreeBSD distributions come with Perl. For Windows, ActivePerl is recommended. For details, see `http://www.activestate.com/activeperl <http://www.activestate.com/activeperl>`_.
 
-*   CUBRID: You don't have to install CUBRID to build CUBRID Perl driver. You can download from `http://www.cubrid.org/downloads <http://www.cubrid.org/downloads>`_.
+*   CUBRID: To build CUBRID Perl driver, you need to get the CCI driver. You can get it from installing CUBRID. You can download the CUBRID Perl driver's source code from `http://www.cubrid.org/downloads <http://www.cubrid.org/downloads>`_.
 
 *   DBI: `http://code.activestate.com/ppm/DBI/ <http://code.activestate.com/ppm/DBI/>`_.
 

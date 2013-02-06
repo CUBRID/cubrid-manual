@@ -486,34 +486,34 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 문자열 타입과 비트 타입 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
 ;ST 뒤에 값을 주지 않으면 현재의 출력 길이를 보여준다. 값이 0이면, 해당 칼럼의 값을 모두 출력한다. 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다. ::
 
-csql> SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
-  'Arab Republic of Egypt'
-  'Aruba'
-  'Armenia'
-  'Argentina'
+	csql> SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
+	  'Arab Republic of Egypt'
+	  'Aruba'
+	  'Armenia'
+	  'Argentina'
 
-csql> ;ST 5
-csql>  SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
-  'Arab '
-  'Aruba'
-  'Armen'
-  'Argen'
+	csql> ;ST 5
+	csql>  SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
+	  'Arab '
+	  'Aruba'
+	  'Armen'
+	  'Argen'
 
-csql> ;ST
-STRING-WIDTH : 5
+	csql> ;ST
+	STRING-WIDTH : 5
  
 **지정한 칼럼의 출력 길이 지정(;COLumn-width)**
 
 타입과 상관없이 특정 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
-;COL 뒤에 값을 주지 않으면 현재 설정된 칼럼의 출력 길이를 보여준다.  뒤에 값이 0이면, 해당 칼럼의 값을 모두 출력하며, 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다. 
+;COL 뒤에 값을 주지 않으면 현재 설정된 칼럼의 출력 길이를 보여준다.  뒤에 값이 0이면, 해당 칼럼의 값을 모두 출력하며, 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다.  ::
 
-csql> CREATE TABLE tbl(a BIGINT, b BIGINT);
-csql> INSERT INTO tbl VALUES(12345678890, 1234567890)
-csql> ;COL a=5
-csql> SELECT * FROM tbl;
-      12345            1234567890
-csql> ;COL
-COLUMN-WIDTH a : 5
+	csql> CREATE TABLE tbl(a BIGINT, b BIGINT);
+	csql> INSERT INTO tbl VALUES(12345678890, 1234567890)
+	csql> ;COL a=5
+	csql> SELECT * FROM tbl;
+	      12345            1234567890
+	csql> ;COL
+	COLUMN-WIDTH a : 5
 
 **질의 실행 계획 보기 수준 설정(;PLan)**
 

@@ -14,6 +14,7 @@ Operators and Functions
 	string_fn.rst
 	numeric_fn.rst
 	datetime_fn.rst
+	lob_fn.rst
 	typecast_fn.rst
 	analysis_fn.rst
 	clickcounter_fn.rst
@@ -21,5 +22,3 @@ Operators and Functions
 	information_fn.rst
 	encryption_fn.rst
 	condition_fn.rst
-
-	

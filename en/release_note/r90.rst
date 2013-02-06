@@ -13,7 +13,7 @@ This document contains information about CUBRID 9.0 Beta(Build Number 9.0.0.0478
 
 For a more detailed description about the previous version of CUBRID 9.0 Beta, see the release notes of the **CUBRID 2008 R4.1 Patch 7**.
 
-If you are using 9.0 Beta, we strongly recommend that you should upgrade to 9.1. Please migrate the DB volume using "migrate_90beta_to_91 <db_name>" tool after upgrade,  because 9.0 Beta and 9.1 are not compatible. For 9.1 release note, See :doc:`r91.rst`.
+If you are using 9.0 Beta, we strongly recommend that you should upgrade to 9.1. Please migrate the DB volume using "migrate_90beta_to_91 <db_name>" tool after upgrade,  because 9.0 Beta and 9.1 are not compatible. For 9.1 release note, See :doc:`r91`.
 
 Features of This Version
 ========================
@@ -696,7 +696,7 @@ In the previous version, if an interrupt occurs during index scan in descending 
 Changed output type character strings of the SHOW COLUMNS FROM statement (CUBRIDSUS-8533)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	In the SHOW COLUMNS FROM statement, character strings that were outputted as STRING(n), VARBIT(n), and VARNCHAR(n) have been changed to VARCHAR(n), BIT VARYING(n), and NCHAR VARYING(n), respectively.
+	In the SHOW COLUMNS FROM statement, character strings that were outputted as STRING(n) and VARBIT(n) have been changed to VARCHAR(n) and BIT VARYING(n) respectively.
 
 SHOW COLUMNS ... Changed to remove single quotation marks included in the output of the default value of a specific type when outputting results (CUBRIDSUS-5921)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3183,17 +3183,6 @@ Driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	Fixed a problem in which incorrect values with regard to in which column an index was created were outputted when fetching the result of the execution of cci_schema_info().
-
-[CCI] Fixed a problem in which incorrect information about whether a reverse index exists in the return values of cci_get_result_info() was outputted (CUBRIDSUS-7178)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	
-	The new version has fixed a problem in which incorrect information about whether a reverse index exists in the return values of cci_get_result_info() was outputted.
-
-	::
-	
-		col_info = cci_get_result_info(req, &cmd_type, &col_count);
-		if (col_info[i].is_reverse_index)
-			printf("reverse_index");
 
 [JDBC, CCI] Fixed a problem in which no error occurred even when a connection URL was incorrect in applications (CUBRIDSUS-7967)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

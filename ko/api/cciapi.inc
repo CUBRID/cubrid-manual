@@ -686,7 +686,7 @@ CCI API 레퍼런스
 	*url* 인자로 전달된 접속 정보를 이용하여 데이터베이스로 연결을 시도한다. CCI에서 브로커의 HA 기능을 사용하는 경우 이 함수의 *url* 인자 내의 altHosts 속성을 이용하여, 장애 발생 시 failover할 standby 브로커 서버의 연결 정보를 명시해야 한다. 서버 연결에 성공하면 연결 핸들 ID를 반환하고, 실패하면 에러 코드를 반환한다. 브로커의 HA 기능에 대한 자세한 내용은 :ref:`duplexing-brokers`\를 참고한다.
 	
 	:param url: (IN) 서버 연결 정보 문자 스트링
-	:param db_user: (IN) DB 사용자 이름. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_user*>를 사용한다. 이 값과 *url* 내의 <*db_user*>가 모두 정의되지 않은 경우 DB 사용자 이름은 **PUBLIC** 이 된다.
+	:param db_user: (IN) DB 사용자 이름. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_user*>가 사용된다. 이 값과 *url* 내의 <*db_user*>가 모두 정의되지 않은 경우 DB 사용자 이름은 **PUBLIC** 이 된다.
 	:param db_passwd: (IN) DB 사용자 비밀번호. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_password*>를 사용한다. 이 값과 *url* 내의 <*db_password*>가 모두 정의되지 않은 경우 비밀번호는 NULL이 된다.
 	:return: 연결 핸들 ID(성공), 에러 코드(실패)
 
@@ -1716,7 +1716,7 @@ CCI API 레퍼런스
 	가장 마지막에 수행한 INSERT 문의 기본 키 값을 얻는다.
 	
 	:param conn_handle: (IN) 연결 핸들
-	:param value: (OUT) 결과 버퍼에 대한 포인터로 (char **). 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
+	:param value: (OUT) 결과 버퍼에 대한 포인터로 (char \*\*). 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
 	:param err_buf: (OUT) 에러 버퍼
 
 	:return: 에러 코드

@@ -1159,19 +1159,19 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 	*   정규화는 언어 특징적인 요소가 아니며 로캘에 의존하지 않는다.
 
-	일단 하나 이상의 로캘을 사용할 수 있다면, 모든 CAS/CSQL 프로세스에서 이를 사용할 수 있다. 하지만 정규화는 CUBRID 서버 프로세스에 적용되는 것이 아니다. **unicode_input_normalization** 시스템 파라미터는 시스템 수준에서 정규화에 의한 입력 코드의 결합 여부를 지정한다. **unicode_output_normalization** 시스템 파라미터는 시스템 수준에서 정규화에 의한 출력 코드의 분해 여부를 지정한다.
+		일단 하나 이상의 로캘을 사용할 수 있다면, 모든 CAS/CSQL 프로세스에서 이를 사용할 수 있다. 하지만 정규화는 CUBRID 서버 프로세스에 적용되는 것이 아니다. **unicode_input_normalization** 시스템 파라미터는 시스템 수준에서 정규화에 의한 입력 코드의 결합 여부를 지정한다. **unicode_output_normalization** 시스템 파라미터는 시스템 수준에서 정규화에 의한 출력 코드의 분해 여부를 지정한다.
 
 	*   콜레이션과 정규화는 직접 관련이 없다.
 
-	**unicode_input_normalization** 값이 no임에도 불구하고, 확장이 있는 콜레이션(utf8_de_exp, utf8_jap_exp, utf8_km_exp) 문자열이 완전히 분해된 상태에서 제대로 정렬되지만 이는 의도한 사항이 아니며 UCA(Unicode Collation Algorithm)의 우연한 효과(side-effect)일 뿐이다. 확장이 있는 콜레이션은 오직 완전히 결합된 텍스트만 가지고 동작하도록 구현되었다.
+		**unicode_input_normalization** 값이 no임에도 불구하고, 확장이 있는 콜레이션(utf8_de_exp, utf8_jap_exp, utf8_km_exp) 문자열이 완전히 분해된 상태에서 제대로 정렬되지만 이는 의도한 사항이 아니며 UCA(Unicode Collation Algorithm)의 우연한 효과(side-effect)일 뿐이다. 확장이 있는 콜레이션은 오직 완전히 결합된 텍스트만 가지고 동작하도록 구현되었다.
 
 	*   CUBRID에서 유니코드 정규화를 위한 결합(composition)과 분해(decomposition)는 별개로 동작하지 않는다.
 
-	클라이언트 응용 프로그램이 텍스트 데이터를 분해된 형태로 CUBRID에 보낸다면, **unicode_input_normalization** 을 yes로 설정하여 CUBRID가 결합된 코드로 다루게 한다.
+	클라이언트 응용 프로그램이 텍스트 데이터를 분해된 형태로 CUBRID에 보낸다면, **unicode_input_normalization** 을 **yes** 로 설정하여 CUBRID가 결합된 코드로 다루게 한다.
 	
-	클라이언트 응용 프로그램이 분해된 형태로만 데이터를 다룰 수 있다면 **unicode_output_normalization** 을 yes로 설정하여 CUBRID가 항상 분해된 코드로 데이터를 보내도록 한다.
+	클라이언트 응용 프로그램이 분해된 형태로만 데이터를 다룰 수 있다면 **unicode_output_normalization** 을 **yes** 로 설정하여 CUBRID가 항상 분해된 코드로 데이터를 보내도록 한다.
 	
-	클라이언트 응용 프로그램이 입력과 출력의 형태에 대해 모두 알고 있다면, **unicode_output_normalization** 을 no인 상태로 둔다. 
+	클라이언트 응용 프로그램이 입력과 출력의 형태에 대해 모두 알고 있다면, **unicode_input_normalization**과 **unicode_output_normalization** 을 **no** 인 상태로 둔다(기본 설정). 
 
 	로캘과 콜레이션에 대한 자세한 설명은 :doc:`/admin/i18n` 을 참고한다.
 

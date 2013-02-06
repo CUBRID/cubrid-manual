@@ -483,7 +483,43 @@ You can use the **;Set** session command to set a specific parameter value. Note
 	block_ddl_statement=1
 
 	-- Dynamically change the log_max_archives value in the csql accessed by dba account
-	csql>;se log_max_archives=5
+	csql> ;se log_max_archives=5
+
+[번역]
+**문자열 타입과 비트 타입 칼럼의 출력 길이 지정(;STring-width)** 
+
+문자열 타입과 비트 타입 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
+;ST 뒤에 값을 주지 않으면 현재의 출력 길이를 보여준다. 값이 0이면, 해당 칼럼의 값을 모두 출력한다. 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다. ::
+
+	csql> SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
+	  'Arab Republic of Egypt'
+	  'Aruba'
+	  'Armenia'
+	  'Argentina'
+
+	csql> ;ST 5
+	csql>  SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
+	  'Arab '
+	  'Aruba'
+	  'Armen'
+	  'Argen'
+
+	csql> ;ST
+	STRING-WIDTH : 5
+
+[번역] 
+**지정한 칼럼의 출력 길이 지정(;COLumn-width)**
+
+타입과 상관없이 특정 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
+;COL 뒤에 값을 주지 않으면 현재 설정된 칼럼의 출력 길이를 보여준다.  뒤에 값이 0이면, 해당 칼럼의 값을 모두 출력하며, 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다. ::
+
+	csql> CREATE TABLE tbl(a BIGINT, b BIGINT);
+	csql> INSERT INTO tbl VALUES(12345678890, 1234567890)
+	csql> ;COL a=5
+	csql> SELECT * FROM tbl;
+	      12345            1234567890
+	csql> ;COL
+	COLUMN-WIDTH a : 5
 
 **Setting the view level of executing query plan (;PLan)**
 

@@ -49,13 +49,14 @@ SHOW TABLES 문
 	  'participant'         'BASE TABLE'
 	  'record'              'BASE TABLE'
 	 
-	SHOW FULL TABLES  WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';   Tables_in_demodb      Table_type
+	SHOW FULL TABLES  WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';
+	  Tables_in_demodb      Table_type
 	============================================
 	  'code'                'BASE TABLE'
 	  'record'              'BASE TABLE'
 
 SHOW COLUMNS 문
-==============
+===============
 
 테이블의 칼럼 정보를 출력한다. **LIKE** 절을 사용하면 이와 매칭되는 칼럼 이름을 검색할 수 있다. **WHERE** 절을 사용하면 "모든 **SHOW** 문에 대한 일반적인 고려 사항"과 같이 좀더 일반적인 조건으로 칼럼 이름을 검색할 수 있다. 
 
@@ -111,7 +112,6 @@ SHOW COLUMNS 문
 	  'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
 	  'nation_code'         'CHAR(3)'             'iso88591_bin'        'YES'     ''          NULL                  ''
 
-	
 SHOW INDEX 문
 =============
 
@@ -180,7 +180,7 @@ SHOW COLLATION 문
 
 다음은 해당 질의를 실행한 결과이다. 
 
-.. code_block:: sql
+::
 
 	SHOW COLLATION;
 
@@ -218,6 +218,12 @@ SHOW COLLATION 문
 
 각 칼럼이 나타내는 의미는 다음과 같다.
 
+* Collation: 콜레이션 이름
+* Charset: 문자셋 이름
+* Id: 콜레이션 ID
+* Built_in: 콜레이션이 CUBRID 제품 안에 내장되었는지 여부. 해당 콜레이션들은 하드 코딩되어 있어 추가 혹은 삭제가 불가능하다.
+* Expansions: 콜레이션의 확장 여부
+* Strength: 콜레이션의 세기
 
 
 SHOW GRANTS 문

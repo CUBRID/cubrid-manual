@@ -710,7 +710,7 @@ The following are parameters related to concurrency control and locks of the dat
 
 	**lock_escalation** is a parameter used to configure the maximum number of locks permitted before row level locking is extended to table level locking. The default value is **100,000**. If the value of the **lock_escalation** parameter is small, the overhead by memory lock management is small as well; however, the concurrency decreases. On the other hand, if the configured value is large, the overhead is large as well; however, the concurrency increases.
 
-**lock_timeout_in_secs*
+**lock_timeout_in_secs**
 
 	**lock_timeout_in_secs** is a client parameter used to configure the lock waiting time. If the lock is not permitted within the specified time period, the given transaction is canceled, and an error message is returned. If the	 parameter is configured to **-1**, which is the default value, the waiting time is infinite until the lock is permitted. If it is configured to 0, there is no waiting for locks.
 
@@ -1128,6 +1128,8 @@ The following are parameters related to SQL statements and data types supported 
 	*   :func:`GROUP_CONCAT` : This function is affected not only by **string_max_size_bytes** parameter but also by **group_concat_max_len**.
 	*   :func:`INSERT` function
 
+.. _unicode_input_normalization:
+
 **unicode_input_normalization**
 
 	**unicode_input_normalization** is a parameter used to whether to input unicode stored in system level. The default value is **no**.
@@ -1136,17 +1138,29 @@ The following are parameters related to SQL statements and data types supported 
 
 	CUBRID can work with fully composed unicode. For clients which have fully decomposed texts, configure the value of **unicode_input_normalization** to yes so that it can be converted to fully composed mode; and then it can be reverted to fully decomposed mode. For normalization of unicode encapsulation of CUBRID, compatibility equivalence is not applied. In general, normalization of unicode is not possible to revert after composition, CUBRID supports revert for characters an many as possible, it applies normalization of unicode encapsulation. The characteristics of CUBRID normalization are as follows:
 
-	*   In case of language specific, normalization does not depend on locale. If one or more locale cana be used, this means every CAS/CSQL process, not CUBRID server. The **unicode_input_normalization** system parameter determines whether composition of input codes by normalization in system level. The **unicode_output_normalization** system parameter determines whether composition of output codes by normalization in system level.
+	*   In case of language specific, normalization does not depend on locale. 
+	
+		If one or more locale cana be used, this means every CAS/CSQL process, not CUBRID server. The **unicode_input_normalization** system parameter determines whether composition of input codes by normalization in system level. The **unicode_output_normalization** system parameter determines whether composition of output codes by normalization in system level.
 
-	*   Collation and normalization does not have direct relationship. Even though the value of **unicode_input_normalization** is no, the string of extensible collation (utf8_de_exp, utf8_jap_exp, utf8_km_exp) is properly sorted fully decomposed mode, it is not intended; it is side-effect of UCA(Unicode Collation Algorithm). The extensible collation is implemented only with fully composed texts.
+	*   Collation and normalization does not have direct relationship. 
+	
+		Even though the value of **unicode_input_normalization** is no, the string of extensible collation (utf8_de_exp, utf8_jap_exp, utf8_km_exp) is properly sorted fully decomposed mode, it is not intended; it is side-effect of UCA(Unicode Collation Algorithm). The extensible collation is implemented only with fully composed texts.
 
-	*   In CUBRID, composition and decomposition for normalization does not work separately. It is generally used when **unicode_input_normalization** and **unicode_output_normalization** are yes. In this case, codes entered from clients are stored in composed mode and and output in decomposed mode.
+	*   In CUBRID, composition and decomposition for normalization does not work separately. 
+	
+		It is generally used when **unicode_input_normalization** and **unicode_output_normalization** are yes. In this case, codes entered from clients are stored in composed mode and output in decomposed mode.
+
+	If the application client sends the decomposed text data into CUBRID, let CUBRID deal with the composed code, by setting **unicode_input_normalization** as **yes**.
+	
+	If the application client can deal with the decomposed text data only, let CUBRID always send the decomposed code, by setting **unicode_output_normalization** as **yes**.
+
+	If the application client knows both of input and output, leave the setting **unicode_input_normalization** and **unicode_output_normalization** as **no**.
 
 	For details, see :doc:`/admin/i18n`.
 
 **unicode_output_normalization**
 
-	**unicode_output_normalization** is a parameter used to whether to output unicode stored in system level. The default value is **no**. For details, see the **unicode_input_normalization** description above.
+	**unicode_output_normalization** is a parameter used to whether to output unicode stored in system level. The default value is **no**. For details, see the above **unicode_input_normalization** description.
 
 .. _plan-cache-parameters:
 

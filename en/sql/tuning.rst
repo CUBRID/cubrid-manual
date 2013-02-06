@@ -75,11 +75,15 @@ Using hints can affect the performance of query execution. you can allow the que
 	USE_DESC_IDX
 	NO_DESC_IDX
 	NO_COVERING_IDX
+	NO_MULTI_RANGE_OPT
+	RECOMPILE
 
 SQL hints are specified by using plus signs and comments. CUBRID interprets this comment as a list of hints separated by blanks. The hint comment must appear after the **SELECT**, **CREATE**, or **ALTER** keyword, and the comment must begin with a plus sign (+), following the comment delimiter.
 
-*   *hint* : The following hints can be specified.
+The following hints can be specified on CREATE statement.
+	*   **NO_STATS** : 통계 정보 관련 힌트로서, 질의 최적화기는 통계 정보를 갱신하지 않는다. 따라서, 해당 질의의 성능은 향상되나, 통계 정보를 갱신하지 않으므로 질의 계획이 최적화되지 않음에 유의한다.
 
+The following hints can be specified on UPDATE, DELETE and SELECT statements.
     *   **USE_NL** : Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
     *   **USE_MERGE** : Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
     *   **ORDERED** : Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
@@ -139,12 +143,16 @@ The CUBRID query optimizer determines whether to perform query optimization and 
 	
     *   257: Performs query optimization and outputs the created query plan. This value works for displaying the query plan by internally interpreting the value as 256+1 related with the value 1.
 	
-    *   258: Performs query optimization and outputs the created query plan. The difference from the value 257 is that the query is not executed. That is, this value works for displaying the query plan by internally interpreting the value as 256+2 related with the value 2. This setting is useful to examine the query plan but not to intend to see the query results.
+    *   258: Performs query optimization and outputs the created query plan, but does not execute the query.  That is, this value works for displaying the query plan by internally interpreting the value as 256+2 related with the value 2. This setting is useful to examine the query plan but not to intend to see the query results.
 	
     *   513: Performs query optimization and outputs the detailed query plan. This value works for displaying more detailed query plan than the value 257 by internally interpreting the value as 512+1.
 	
     *   514: Performs query optimization and outputs the detailed query plan. However, the query is not executed. This value works for displaying more detailed query plan than the value 258 by internally interpreting the value as 512+2.
 
+	If you config the optimization level as not executing the query like 2, 258, or 514, all queries are not executed not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.
+	
+
+	
 The following example shows how to view query plan by using the example retrieving year when Sim Kwon Ho won medal and metal type.
 
 .. code-block:: sql
@@ -442,9 +450,9 @@ Function-based Index
 
 Function-based index is used to sort or find the data based on the combination of values of table rows by using a specific function. For example, to find the space-ignored string, it can be used to optimize the query by using the function that provides the feature. In addition, it is useful to search the non-case-sensitive names. ::
 
-	CREATE /* hints */ [REVERSE] [UNIQUE] INDEX index_name
+	CREATE /* hints */ [UNIQUE] INDEX index_name
 			ON table_name (function_name (argument_list));
-	ALTER /* hints */ [REVERSE] [UNIQUE] INDEX index_name
+	ALTER /* hints */ [UNIQUE] INDEX index_name
 			[ ON table_name (function_name (argument_list)) ]
 			REBUILD;
 
@@ -780,7 +788,7 @@ The following example shows that *i* column exists, **ORDER BY** is executed by 
 Index Scan in Descending Order
 ------------------------------
 
-When a query is executed by sorting in descending order as follows, it usually creates a reverse index. In this way, you do not have to go through addition procedure.
+When a query is executed by sorting in descending order as follows, it usually creates a descending index. In this way, you do not have to go through addition procedure.
 
 .. code-block:: sql
 
@@ -987,3 +995,64 @@ ISS is not applied in the following cases:
 *   The first column of an index is a range filter or key filter
 *   Hierarchical query
 *   Aggregate function included
+
+[번역]
+
+.. _multi-key-range-opt:
+
+다중 키 범위 최적화
+-------------------
+
+LIMIT 필터(ROWNUM, ORDERBY_NUM, GROUPBY_NUM)가 있는 질의는 질의 결과의 일부만 취하기 때문에 질의 전체를 최적화하는 것은 대부분 성능에 부담이 된다. 
+다중 키 범위 최적화(multiple key range optimization)는 전체 인덱스 스캔(full index scan)을 수행하기 보다는 인덱스 내 일부 키 범위만 스캔하는 Top N 정렬(Top N sort) 방식이 사용된다. Top N 정렬은 항상 모든 레코드를 선택하기 보다는 최적의 N개의 레코드를 선택하여 정렬한다. 
+
+다중 키 범위 최적화를 사용할 수 있는 예는 다음과 같다. 
+
+.. code-block:: sql
+
+	CREATE TABLE table(a int, b int); 
+	CREATE INDEX i_t_a_b ON table(a,b); 
+	SELECT * FROM table WHERE a IN (1,2,3) ORDER BY b LIMIT 2; 
+
+	Query plan: 
+	iscan 
+	class: t node[0] 
+	index: i_t_a_b term[0] (covers) (multi_range_opt) 
+	sort: 1 asc, 2 asc 
+	cost: 1 card 0 
+
+다중 키 범위 최적화는 단일 테이블 질의 뿐만 아니라 여러 테이블을 JOIN하는 질의에서도 사용될 수 있다. 
+단일 테이블에서는 다음의 경우 최적화가 수행된다. 
+
+인덱스를 구성하는 칼럼들 중 
+
+* 앞의 칼럼들이 동일 조건으로 표현된다. 
+
+* 범위 조건을 가진 칼럼이 중간에 존재한다. 
+* 이후 칼럼들은 키 필터로 존재한다. 
+* 인덱스는 WHERE 절에서 사용되는 모든 칼럼을 포함해야 한다. 즉, 데이터 필터링 조건이 없어야 한다. 
+* 키 필터 이후의 칼럼들은 ORDER BY 절에 존재한다. 
+* 키 필터 조건의 칼럼들은 반드시 ORDER BY 절의 칼럼이 아니어야 한다. 
+
+예를 들면 다음의 질의에서 최적화가 수행된다. 
+
+.. code-block:: sql
+
+	CREATE TABLE table(a int, b int, c int, d int, e int); 
+	CREATE INDEX i_t_a_b ON table(a,b,c,d,e); 
+	SELECT * FROM table WHERE 
+	a=1 AND b=3 
+	AND c IN (1,2,3) 
+	AND d=3 
+	ORDER BY e LIMIT 2; 
+
+
+다중 테이블을 포함하는 JOIN 질의에서는 다음의 경우 최적화가 수행된다. 
+
+인덱스를 구성하는 칼럼들 중 
+
+* ORDER BY 절에 존재하는 칼럼들은 하나의 테이블에만 존재하는 칼럼들이며, 이 테이블은 단일 테이블 질의에서 다중 키 범위 최적화에 의해 요구되는 조건을 모두 만족해야 한다. 이 테이블을 정렬 테이블(sort table)이라고 하자. 
+*  JOIN 조건에서 정렬 테이블과 외부 테이블들(outer tables)에 대해, 정렬 테이블의 칼럼들은 모두 인덱스에 포함되어야 한다. 즉, 데이터 필터링 조건이 없어야 한다. 
+*  JOIN 조건에서 정렬 테이블과 내부 테이블들(inner tables)에 대해, 정렬 테이블의 칼럼들은 WHERE 조건에 포함되어서는 안 된다. 
+
+어떤 질의에서는 다중 키 범위 최적화가 최상의 선택이 아닐 수 있으므로, 최적화를 원하지 않는다면 질의에 **NO_MULTI_RANGE_OPT** 힌트를 추가한다.

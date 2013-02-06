@@ -50,6 +50,29 @@ The following shows operators and functions that can be used in partitioning exp
 
     :func:`EXTRACT`, :func:`CAST`
 
+[번역]
+
+** 분할 테이블과 콜레이션**
+
+분할 테이블에도 콜레이션을 지정할 수 있다. 다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다.::
+
+	CREATE TABLE tbl(str STRING) COLLATE utf8_en_ci PARTITION BY LIST(str) 
+	(
+	    PARTITION p0 VALUES IN ('test'), 
+	    PARTITION p1 VALUES IN ('TEST')
+	);
+	
+	ERROR: Partition definition is duplicated. 'p1'
+ 
+현재 바이너리가 아닌 콜레이션 테이블에 대해 해시 분할 키를 적용할 수 없다. ::
+
+	CREATE TABLE tbl ( code VARCHAR(10)) COLLATE utf8_de_exp_ai_ci PARTITION BY HASH (code) PARTITIONS 4;
+
+	ERROR: before ' ; '
+	Unsupported partition column type.
+
+
+
 Range Partitioning
 ==================
 
@@ -345,9 +368,10 @@ The following example shows how to create the *athlete2* table partitioned by th
 
 	CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
 	PARTITION BY LIST (event) (
-	PARTITION event1 VALUES IN ('Swimming', 'Athletics ' ),
-	PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
-	PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball'));
+		PARTITION event1 VALUES IN ('Swimming', 'Athletics ' ),
+		PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
+		PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
+	);
 
 	ALTER TABLE athlete2 REORGANIZE PARTITION event2 INTO
 	(PARTITION event2_1 VALUES IN ('Judo'),
@@ -383,13 +407,13 @@ The following example shows how to create the *athlete2* table partitioned by th
 	
 	ALTER TABLE athlete2 DROP PARTITION event3;
 
-Partitioning Management
-=======================
-
 Retrieving and Manipulating Data in Partitioning
-------------------------------------------------
+================================================
 
-When retrieving data, the **SELECT** statement can be used not only for partitioned tables but also for each partition.
+SELECT/UPDATE/DELETE Data in Partitioning
+-----------------------------------------
+
+When SELECT/UPDATE/DELETE data, it is possible to access for each partition with "**PARTITION** (partition_name)" syntax.
 
 The following example shows how to create the *athlete2* table to be partitioned by the list of sport events, insert data, and retrieve the *event1* and *event2* partitions.
 
@@ -397,7 +421,7 @@ The following example shows how to create the *athlete2* table to be partitioned
 
 	CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
 	PARTITION BY LIST (event) (
-	PARTITION event1 VALUES IN ('Swimming', 'Athletics ' ),
+	PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
 	PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
 	PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
 	);
@@ -405,18 +429,32 @@ The following example shows how to create the *athlete2* table to be partitioned
 	INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
 	INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
 	INSERT INTO athlete2 VALUES ('Lee Sun-Hee','Taekwondo');
-	INSERT INTO athlete2 VALUES ('Cho In-Chul', 'Judo');
+	INSERT INTO athlete2 VALUES ('Kim In-Chul', 'Judo');
 
-	SELECT * from athlete2__p__event1;
+	SELECT * FROM athlete2 PARTITION (event1);
 	  name                  event
 	============================================
 	  'Hwang Young-Cho'     'Athletics'
 
-	SELECT * from athlete2__p__event2;
+	SELECT * FROM athlete2 PARTITION (event2);
 	  name                  event
 	============================================
 	  'Lee Sun-Hee'         'Taekwondo'
-	  'Cho In-Chul'         'Judo'
+	  'Kim In-Chul'         'Judo'
+
+[검토]
+다음은 *athlete2* 테이블의 event1 분할에 한 행을 INSERT하는 예제이다. 
+
+.. code-block:: sql
+
+	INSERT INTO athlete2 PARTITION(event1) VALUES ('Lee Bong-Ju', 'Athletics');
+
+다음은 *athlete2* 테이블의 *event2* 분할에 한 행을 UPDATE하는 예제이다. 
+
+.. code-block:: sql
+
+	UPDATE athlete2 PARTITION(event2) SET name='Cho In-Chul' WHERE name='Kim In-Chul';
+
 
 .. note::
 
@@ -705,9 +743,9 @@ After promotion, the partition of the *t* table has *p0* and *p3* only and *p1* 
 Creating VIEW with Partitioning Table
 -------------------------------------
 
-You can define a virtual table by using each partition of a partitioned table. Retrieving data from the virtual table created is possible, but data insert, delete and update operations are not allowed.
+You can define a virtual table(VIEW) by using each partition of a partitioned table.
 
-The following example shows how to create the *participant2* table partitioned based on the participating year, and create and retrieve a virtual table with the *participant2__p__before_2000* partition.
+The following example shows how to create the *participant2* table partitioned based on the participating year, and create and retrieve a virtual table with the *before_2000* partition of the *participant2* table.
 
 .. code-block:: sql
 
@@ -723,7 +761,7 @@ The following example shows how to create the *participant2* table partitioned b
 	INSERT INTO participant2 VALUES (2004, 'JPN', 16, 9, 12);
 
 	CREATE VIEW v_2000 AS
-	SELECT * FROM participant2__p__before_2000
+	SELECT * FROM participant2 PARTITION(before_2000)
 	WHERE host_year = 1988;
 
 	SELECT * FROM v_2000;
@@ -745,3 +783,19 @@ Partitions and Inheritance
 --------------------------
 
 Partitions cannot be a part of the hierarchy chain and CUBRID has a different inheritance relationship for a partitioned table and a subclass. In fact, a partitioned table has superclasses and subclasses. However, in CUBRID, one partition has just one superclass (in other words, a partitioned table) only and does not have several subclasses.
+
+[번역]
+
+분할 키와 문자셋
+----------------
+
+분할 테이블의 분할 키들은 칼럼과 같은 문자셋을 가져야 한다. 
+따라서 아래와 같은 경우는 허용하지 않는다. 
+
+.. code-block:: sql
+
+	CREATE TABLE t(c CHAR(50) COLLATE utf8_bin) PARTITION BY LIST(c)
+	(
+	    PARTITION p0 VALUES IN(_utf8'xxx'),
+	    PARTITION p1 VALUES IN(_iso88591'yyy')
+	);

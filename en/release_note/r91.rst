@@ -2273,6 +2273,7 @@ CUBRID Manager에서 DB 사용자를 편집하지 못하는 현상(CUBRIDSUS-997
 
 .. note:: 9.0 Beta 버전 사용자는 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 하며, DB 볼륨이 9.1과 호환되지 않으므로 반드시 데이터 마이그레이션을 해야 한다.
 	업그레이드 및 데이터 마이그레이션은 :doc:`/upgrade` 를 참고한다.
+
 The DB volume is not compatible with the previous versions (CUBRIDSUS-5238)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

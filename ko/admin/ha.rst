@@ -76,7 +76,7 @@ CUBRID HA 노드는 하나의 마스터 프로세스(cub_master), 하나 이상�
 
 *   기타: 내부적으로 사용하는 상태이다.
 
-노드 상태가 변경되면 cub_master 프로세스 로그와 cub_server 프로세스 로그에 각각 다음과 같은 에러 메시지가  저장된다. 단, cubrid.conf의 error_log_level의 값이 error 이하인 경우에 저장된다.
+노드 상태가 변경되면 cub_master 프로세스 로그와 cub_server 프로세스 로그에 각각 다음과 같은 에러 메시지가 저장된다. 단, cubrid.conf의 error_log_level의 값이 error 이하인 경우에 저장된다.
 
 * cub_master 프로세스의 로그 정보는 $CUBRID/log/<hostname>_master.err 파일에 저장되며 다음의 내용이 기록된다. ::
 

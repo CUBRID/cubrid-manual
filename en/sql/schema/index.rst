@@ -11,21 +11,20 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 
 ::
 
-	CREATE [ REVERSE ] [ UNIQUE ] INDEX index_name
+	CREATE [ UNIQUE ] INDEX index_name
 	ON table_name <index_col_desc>
 	 
 	<index_col_desc> ::=
 		( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
 		| (function_name (argument_list) )
 
-*   **REVERSE** : Creates an index in the reverse order. A reverse index helps to increase sorting speed in descending order.
 *   **UNIQUE** : Creates an index with unique values.
 *   *index_name* : Specifies the name of the index to be created. The index name must be unique in the table.
 *   *prefix_length* : When you specify an index for character- or bit string-type column, you can create an index by specifying the beginning part of the column name as a prefix. You can specify the length of the prefix as the number of characters in parentheses next to the column name. You cannot specify *prefix_length* in a multiple column index or a **UNIQUE** index. It is impossible to create an index by specifying *prefix_length* as a host variable. If you want to guarantee the query result order in the index in which *prefix_length* is specified, you must specify the **ORDER BY** clause.
 
 *   *table_name* : Specifies the name of the table where the index is to be created.
 *   *column_name* : Specifies the name of the column where the index is to be applied. To create a composite index, specify two or more column names.
-*   **ASC** | **DESC** : Specifies the sorting order of columns. In case of a **REVERSE** index, **ASC** is ignored and **DESC** is applied.
+*   **ASC** | **DESC** : Specifies the sorting order of columns. 
 
 *   <*filter_predicate*>: Defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**.
 
@@ -33,23 +32,17 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 
 .. warning:: In versions lower than CUBRID 9.0, index names can be deleted; however, from the CUBRID 9.0 version, it is no longer supported.
 
-**Example 1**
-
-The following example shows how to create a reverse index.
+The following example shows how to create a descending index.
 
 .. code-block:: sql
 
-	CREATE REVERSE INDEX gold_index ON participant(gold);
-
-**Example 2**
+	CREATE INDEX gold_index ON participant(gold DESC);
 
 The following example shows how to create a multiple column index.
 
 .. code-block:: sql
 
 	CREATE INDEX name_nation_idx ON athlete(name, nation_code);
-
-**Example 3**
 
 The following example shows how to create a single column index. In this example, 1-byte long prefix is specified for the *nation_code* column when creating an index.
 
@@ -62,14 +55,13 @@ ALTER INDEX
 
 The **ALTER INDEX** statement rebuilds an index. In other words, it drops and rebuilds an index. If a table name and a column name are added at the end of the **ON** clause, a new index is re-created with the table and column names. ::
 
-	ALTER [ REVERSE ] [ UNIQUE ] INDEX index_name
+	ALTER [ UNIQUE ] INDEX index_name
 	ON { ONLY } table_name <index_col_desc> REBUILD [ ; ]
 	 
 	<index_col_desc> ::=
 		( column_name[ {, column_name} ...] ) [ WHERE <filter_predicate> ]
 		| (function_name (argument_list) )
 
-*   **REVERSE** : Creates an index in the reverse order. A reverse index helps to increase sorting speed in descending order.
 *   **UNIQUE** : Creates an index with unique values.
 *   *index_name* : Specifies the name of the index to be recreated. The index name must be unique in the table.
 *   *table_name* : Specifies the name of the table where the index is recreated.
@@ -80,8 +72,6 @@ The **ALTER INDEX** statement rebuilds an index. In other words, it drops and re
 *   *function_name* (*argument_list*): Defines the conditions to create function-based indexes.
 
 .. warning:: In versions lower than CUBRID 9.0, index names can be deleted; however, from the CUBRID 9.0 version, it is no longer supported.
-
-**Example**
 
 The following is an example of re-creating indexes in various ways:
 
@@ -96,19 +86,15 @@ DROP INDEX
 
 Use the **DROP INDEX** statement to drop an index. ::
 
-	DROP [ REVERSE ] [ UNIQUE ] INDEX index_name
+	DROP [ UNIQUE ] INDEX index_name
 	[ON table_name] [ ; ]
 
-*   **REVERSE** : Specifies that the index to be dropped is a reverse index.
 *   **UNIQUE** : Specifies that the index to be dropped is a unique index. This also can be dropped with **DROP CONSTRAINT** clause.
 *   *index_name* : Specifies the name of the index to be dropped. If omitted, a name is automatically assigned as *i_<table_name>_<column_names>*.
 *   *table_name* : Specifies the name of the table whose index is dropped.
-
-**Example**
 
 The following are examples of many ways of dropping indexes:
 
 .. code-block:: sql
 
 	DROP INDEX game_date_idx ON game;
-	DROP REVERSE INDEX gold_index ON participant;

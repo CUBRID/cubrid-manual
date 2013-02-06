@@ -107,7 +107,6 @@ Conditional Functions
 	Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
 
 	*   **CHAR** < **VARCHAR**
-	*   **NCHAR** < **NCHAR VARING**
 	*   **BIT** < **VARBIT**
 	*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
 	*   **DATE** < **TIMESTAMP** < **DATETIME**
@@ -228,7 +227,6 @@ Conditional Functions
 	Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
 
 	*   **CHAR** < **VARCHAR**
-	*   **NCHAR** < **NCHAR VARING**
 	*   **BIT** < **VARBIT**
 	*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
 	*   **DATE** < **TIMESTAMP** < **DATETIME**
@@ -320,7 +318,6 @@ Conditional Functions
 	Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
 
 	*   **CHAR** < **VARCHAR**
-	*   **NCHAR** < **NCHAR VARING**
 	*   **BIT** < **VARBIT**
 	*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
 	*   **DATE** < **TIMESTAMP** < **DATETIME**
@@ -587,7 +584,7 @@ The **IS NULL** conditional expression compares to determine whether the express
 LIKE Conditional Expression
 ===========================
 
-The **LIKE** conditional expression compares patterns between character string data, and returns **TRUE** if a character string whose pattern matches the search word is found. Pattern comparison target types are **CHAR**, **VARCHAR** and **STRING**. The **LIKE** search cannot be performed on an **NCHAR** or **BIT** type. If **NOT** comes before the **LIKE** keyword, the result of a **NOT** operation on the result of the **LIKE** operation is returned.
+The **LIKE** conditional expression compares patterns between character string data, and returns **TRUE** if a character string whose pattern matches the search word is found. Pattern comparison target types are **CHAR**, **VARCHAR** and **STRING**. The **LIKE** search cannot be performed on an **BIT** type. If **NOT** comes before the **LIKE** keyword, the result of a **NOT** operation on the result of the **LIKE** operation is returned.
 
 A wild card string corresponding to any character or character string can be included in the search word on the right of the **LIKE** operator. % (percent) and _ (underscore) can be used. .% corresponds to any character string whose length is 0 or greater, and _ corresponds to one character. An escape character is a character that is used to search for a wild card character itself, and can be specified by the user as another character (**NULL**, alphabet, or number whose length is 1. See below for an example of using a character string that includes wild card or escape characters. ::
 
@@ -651,6 +648,19 @@ The difference between **REGEXP** and **LIKE** are as follows:
 *   The **LIKE** operator succeeds only if the pattern matches the entire value.
 *   The **REGEXP** operator succeeds if the pattern matches anywhere in the value. To match the entire value, you should use "^" at the beginning and "$" at the end.
 *   The **LIKE** operator is case sensitive, but patterns of regular expressions in **REGEXP** is not case sensitive. To enable case sensitive, you should use **REGEXP BINARY** statement.
+*   **REGEXP**, **REGEXP BINARY** works as ASCII encoding without considering the collation of operands. ::
+	
+	SELECT ('a' collate utf8_en_ci REGEXP BINARY 'A' collate utf8_en_ci); 
+	0
+	
+	SELECT ('a' collate utf8_en_cs REGEXP BINARY 'A' collate utf8_en_cs); 
+	0
+	
+	SELECT ('a' COLLATE iso88591_bin REGEXP 'A' COLLATE iso88591_bin);
+	1
+	
+	SELECT ('a' COLLATE iso88591_bin REGEXP BINARY 'A' COLLATE iso88591_bin);
+	0
 
 In the syntax below, if *expr* matches *pat*, 1 is returned; otherwise, 0 is returned. If either *expr* or *pat* is **NULL**, **NULL** is returned.
 
@@ -745,27 +755,27 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
 	('strike' regexp '^[^a-dXYZ]+$')
 	================================
 
-**Remark**
+.. note::
 
-The following shows RegEx-Specer's license, which is library used to implement the **REGEXP** conditional expression. ::
+	The following shows RegEx-Specer's license, which is library used to implement the **REGEXP** conditional expression. ::
 
-	Copyright 1992, 1993, 1994 Henry Spencer. All rights reserved.
-	This software is not subject to any license of the American Telephone
-	and Telegraph Company or of the Regents of the University of California.
-	 
-	Permission is granted to anyone to use this software for any purpose on
-	any computer system, and to alter it and redistribute it, subject
-	to the following restrictions:
-	 
-	1. The author is not responsible for the consequences of use of this
-	software, no matter how awful, even if they arise from flaws in it.
-	 
-	2. The origin of this software must not be misrepresented, either by
-	explicit claim or by omission. Since few users ever read sources,
-	credits must appear in the documentation.
-	 
-	3. Altered versions must be plainly marked as such, and must not be
-	misrepresented as being the original software. Since few users
-	ever read sources, credits must appear in the documentation.
-	 
-	4. This notice may not be removed or altered.
+		Copyright 1992, 1993, 1994 Henry Spencer. All rights reserved.
+		This software is not subject to any license of the American Telephone
+		and Telegraph Company or of the Regents of the University of California.
+		 
+		Permission is granted to anyone to use this software for any purpose on
+		any computer system, and to alter it and redistribute it, subject
+		to the following restrictions:
+		 
+		1. The author is not responsible for the consequences of use of this
+		software, no matter how awful, even if they arise from flaws in it.
+		 
+		2. The origin of this software must not be misrepresented, either by
+		explicit claim or by omission. Since few users ever read sources,
+		credits must appear in the documentation.
+		 
+		3. Altered versions must be plainly marked as such, and must not be
+		misrepresented as being the original software. Since few users
+		ever read sources, credits must appear in the documentation.
+		 
+		4. This notice may not be removed or altered.

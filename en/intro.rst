@@ -216,7 +216,7 @@ Partitioning is a method by which a table is divided into multiple independent l
 
 CUBRID supports the following index functions to utilize indexes while executing a variety of conditional queries.
 
-*   Descending Index Scan: Descending Index Scan is available only with Ascending Index Scan, without creating separate reverse indexes.
+*   Descending Index Scan: Descending Index Scan is available only with Ascending Index Scan, without creating separate descending indexes.
 *   Covering Index: When the column of a **SELECT** list is included in the index, the requested data can be obtained with an index scan.
 *   **ORDER BY** clause optimization: If the required record sorting order is identical to the order of indexes, no additional sorting is required (Skip ORDER BY).
 *   **GROUP BY** clause optimization: If all columns in the **GROUP BY** clause are included in the indexes, they are available to use while executing queries. Therefore, no additional sorting is required (Skip GROUP BY).

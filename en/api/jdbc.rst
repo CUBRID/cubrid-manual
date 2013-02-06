@@ -223,6 +223,11 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 	*   Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a user name (*user-id*) and a password (*password*) as a separate argument in the **getConnection** method.
 	*   The database connection in thread-based programming must be used independently each other.
 	*   The rollback method requesting transaction rollback will exit after a server complete the rollback job.
+	
+	[번역]
+	
+	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
+	
 
 Checking Foreign Key Information
 --------------------------------
@@ -989,6 +994,10 @@ The following table shows the JDBC standard and extended interface supported by 
 | java.sql.Struct                               |                                  |                                                         |
 +-----------------------------------------------+----------------------------------+---------------------------------------------------------+
 
-.. warning::
+.. note::
 
-	From CUBRID 2008 R4.3 version, the behavior of batching the queries on the autocommit mode was changed. The methods that batch the queries are PreparedStatement.executeBatch and Statement.executeBatch. Until 2008 R4.1 version, these methods had  committed the transaction after executing all queries on the array. From 2008 R4.3, they commit each query on the array.
+	* From CUBRID 2008 R4.3 version, the behavior of batching the queries on the autocommit mode was changed. The methods that batch the queries are PreparedStatement.executeBatch and Statement.executeBatch. Until 2008 R4.1 version, these methods had  committed the transaction after executing all queries on the array. From 2008 R4.3, they commit each query on the array.
+	
+	[번역]
+	
+	* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 메서드에서 배열 내의 질의 수행 중 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.

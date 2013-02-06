@@ -174,13 +174,13 @@
 		 
 		SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',2);
 		   index_cardinality('t1', 'i_t1_i1_s1', 2)
-		=============================================
-		                                         NULL
+		===========================================
+		                                       NULL
 		 
 		SELECT INDEX_CARDINALITY('t123','i_t1_i1_s1',1);
 		  index_cardinality('t123', 'i_t1_i1_s1', 1)
-		=============================================
-		                                         NULL
+		============================================
+		                                       NULL
 
 .. function:: INET_ATON( ip_string )
 
@@ -237,15 +237,15 @@
 		 
 			 last_insert_id()
 		=======================
-							 1
+		                     1
 		 
 		INSERT INTO ss VALUES(NULL,’database’),(NULL,’manager’);
 		SELECT LAST_INSERT_ID();
 		 
 			 last_insert_id()
 		=======================
-							 3
-							 
+		                     3
+
 	.. code-block:: sql
 	
 		CREATE TABLE tbl (id INT AUTO_INCREMENT);
@@ -254,25 +254,25 @@
 		 
 			 last_insert_id()
 		=======================
-							 1
+		                     1
 		 
 		INSERT INTO tbl values (500), (NULL), (NULL);
 		SELECT LAST_INSERT_ID();
 		 
 			 last_insert_id()
 		=======================
-							 3
+		                     3
 		 
 		SELECT * FROM tbl;
 		 
 							id
 		=======================
-						   500
-							 1
-							 2
-						   500
-							 3
-							 4
+		                   500
+		                     1
+		                     2
+		                   500
+		                     3
+		                     4
 
 .. function:: LIST_DBS()
 
@@ -300,19 +300,19 @@
 		SELECT ROW_COUNT();
 		   row_count()
 		===============
-					  7
-		 
+		              7
+		
 		UPDATE rc SET i = 0 WHERE i >  3;
 		SELECT ROW_COUNT();
 		   row_count()
 		===============
-					  4
+		              4
 		 
 		DELETE FROM rc WHERE i = 0;
 		SELECT ROW_COUNT();
 		   row_count()
 		===============
-					  4
+		              4
 
 .. function:: USER()
 .. function:: SYSTEM_USER()

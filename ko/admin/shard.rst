@@ -77,7 +77,7 @@ CUBRID SHARD middleware는 broker/proxy/cas 세 개의 프로세스로 구성되
 shard SQL 힌트를 이용한 shard DB 선택
 -------------------------------------
 
-**shard SQL 힌트**
+	**shard SQL 힌트**
 
 	CUBRID SHARD는 SQL 힌트 구문에 포함된 힌트와 설정 정보를 이용하여, 응용으로부터 요청된 질의를 실제로 처리할 shard DB를 선택한다. 사용 가능한 SQL 힌트의 종류는 다음과 같다.
 
@@ -114,7 +114,7 @@ shard SQL 힌트를 이용한 shard DB 선택
 		
 		* shard 환경에서 여러 문장을 동시에 실행하는 함수(예: JDBC의 Statement.executeBatch, CCI의 cci_execute_batch)는 추후 지원할 예정이다.
 		
-**shard_key 힌트**
+	**shard_key 힌트**
 
 	**shard_key** 힌트는 바인드 변수나 리터럴 값의 위치를 지정하기 위한 힌트로서, 반드시 바인드 변수나 리터럴 값의 앞에 위치해야 한다.
 
@@ -130,7 +130,7 @@ shard SQL 힌트를 이용한 shard DB 선택
 
 		SELECT name FROM student WHERE student_no = /*+ shard_key */ 123
 
-**shard_val 힌트**
+	**shard_val 힌트**
 
 	**shard_val** 힌트는 질의 내에 shard DB를 식별할 수 있는 shard key 칼럼이 존재하지 않는 경우 사용하며, 실제 질의 처리 시 무시되는 shard key 칼럼을 **shard_val** 힌트의 값으로 설정한다. **shard_val** 힌트는 SQL 구문의 어느 곳에나 위치할 수 있다.
 
@@ -140,7 +140,7 @@ shard SQL 힌트를 이용한 shard DB 선택
 
 		SELECT age FROM student WHERE name =? /*+ shard_val(123) */
 
-**shard_id 힌트**
+	**shard_id 힌트**
 
 	**shard_id** 힌트는 shard key 칼럼의 값과 무관하게 사용자가 특정 shard를 지정하여 질의를 수행하고자 할 때 사용한다. **shard_id** 힌트는 SQL 구문의 어느 곳에나 위치할 수 있다.
 
@@ -152,7 +152,7 @@ shard SQL 힌트를 이용한 shard DB 선택
 
 	.. _using-shard-hint:
 
-**shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차**
+	**shard SQL 힌트를 이용하여 질의가 수행되는 일반적인 절차**
 
 	#. 질의 수행
 
@@ -213,13 +213,13 @@ shard SQL 힌트를 이용한 shard DB 선택
 
 CUBRID SHARD는 CUBRID와 MySQL에서 사용할 수 있다.
 
-**CUBRID SHARD with CUBRID**
+	**CUBRID SHARD with CUBRID**
 
 	아래의 그림은 3개의 CUBRID SHARD DB를 사용하는 경우 CUBRID SHARD 의 구조이다.
 
 	.. image:: /images/image47.png
 
-**CUBRID SHARD with MySQL**
+	**CUBRID SHARD with MySQL**
 
 	아래의 그림은 3개의 MySQL shard DB를 사용하는 경우 CUBRID SHARD 의 구조이다.
 
@@ -232,13 +232,13 @@ CUBRID SHARD는 CUBRID와 MySQL에서 사용할 수 있다.
 트랜잭션 지원
 -------------
 
-**트랜잭션 처리**
+	**트랜잭션 처리**
 
 	CUBRID SHARD는 ACID 중 Atomicity(원자성)을 보장하기 위한 내부적인 처리 절차를 수행한다. 예를 들어, 트랜잭션 중 응용이 비정상 종료하는 등의 예외가 발생하면 해당 응용의 질의를 처리하던 shard DB로 롤백 요청을 전달하여 해당 트랜잭션 중 변경된 내용을 모두 무효화한다.
 
 	그 외 일반적인 트랜잭션의 특성인 ACID는 backend DBMS의 특성과 설정에 따라 보장된다.
 
-**제약 사항**
+	**제약 사항**
 
 	2PC(2 Phase commit)는 불가능하며, 이 때문에 하나의 트랜잭션 중 여러 개의 shard DB로 질의를 수행하는 경우 에러 처리된다.
 
@@ -250,9 +250,9 @@ CUBRID SHARD는 CUBRID와 MySQL에서 사용할 수 있다.
 
 예로 설명될 CUBRID SHARD는 아래 그림과 같이 4개의 CUBRID SHARD DB로 구성되었으며, 응용은 JDBC 인터페이스를 사용하여 사용자 요청을 처리한다.
 
-.. image:: /images/image49.png
+	.. image:: /images/image49.png
 
-**shard DB 및 사용자 계정 생성 후 시작**
+	**shard DB 및 사용자 계정 생성 후 시작**
 
 	위 구성의 예와 같이 각 shard DB 노드에서 shard DB 및 사용자 계정을 생성한 후 데이터베이스를 인스턴스를 시작한다.
 
@@ -275,7 +275,7 @@ CUBRID SHARD는 CUBRID와 MySQL에서 사용할 수 있다.
 shard 설정 변경
 ---------------
 
-**shard.conf**
+	**shard.conf**
 
 	기본 설정 파일인 **shard.conf** 를 아래와 같이 변경한다.
 
@@ -337,7 +337,7 @@ shard 설정 변경
 		128     191     2
 		192     255     3
 
-**shard_connection.txt**
+	**shard_connection.txt**
 
 	shard 구성 데이터베이스 설정 파일인 **shard_connection.txt** 파일을 아래와 같이 설정한다.
 
@@ -359,7 +359,7 @@ shard 설정 변경
 서비스 시작 및 모니터링
 -----------------------
 
-**CUBRID SHARD 시작**
+	**CUBRID SHARD 시작**
 
 	아래와 같이 CUBRID SHARD를 시작한다. ::
 
@@ -367,7 +367,7 @@ shard 설정 변경
 		@ cubrid shard start
 		++ cubrid shard start: success
 
-**CUBRID SHARD 상태 조회**
+	**CUBRID SHARD 상태 조회**
 
 	아래와 같이 CUBRID SHARD의 상태를 조회하여, 설정된 파라미터와 프로세스의 상태를 확인한다. ::
 
@@ -398,13 +398,13 @@ shard 설정 변경
 
 간단한 Java 프로그램을 이용하여 CUBRID SHARD가 정상 동작함을 확인한다.
 
-**예제 테이블 생성**
+	**예제 테이블 생성**
 
 	모든 shard DB에서 예제 프로그램을 위한 임시 테이블을 아래와 같이 생성한다. ::
 
 		sh> csql -C -u shard -p 'shard123' shard1@localhost -c "create table student (s_no int, s_name varchar, s_age int, primary key(s_no))"	
 
-**예제 프로그램 작성**
+	**예제 프로그램 작성**
 
 	다음은 0~1023번의 학생 정보를 shard DB로 입력하는 예제 프로그램이다. 이전 절차에서 수정한 **shard.conf** 를 확인하여 주소/포트 및 사용자 정보를 connection url에 설정한다.
 
@@ -477,22 +477,20 @@ shard 설정 변경
 				}
 		}
 
-**예제 프로그램 수행**
+	**예제 프로그램 수행**
 
 	위에서 작성한 예제 프로그램을 다음과 같이 수행한다. ::
 
 		sh> javac -cp ".:$CUBRID/jdbc/cubrid_jdbc.jar" *.java
 		sh> java -cp ".:$CUBRID/jdbc/cubrid_jdbc.jar" TestInsert
 
-**결과 확인**
+	**결과 확인**
 
 	각 shard DB에서 질의를 수행하여 의도한 대로 분할된 정보가 정확하게 입력되었는지 확인한다.
 
 	*   shard #0 ::
 
 		sh> csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
-		 
-		=== <Result of SELECT Command in Line 1> ===
 		 
 		         s_no  s_name                      s_age
 		================================================
@@ -655,7 +653,7 @@ CUBRID SHARD는 기본 설정 파일인 **shard.conf** 외에, 실제 shard DB�
 
 	**shard.conf** 에 **SHARD_CONNECTION_FILE** 을 별도로 지정하지 않은 경우에는 기본값인 **shard_connection.txt** 파일을 로딩한다.
 
-**형식**
+	**형식**
 
 	shard 연결 설정 파일의 기본적인 예와 형식은 아래와 같다. ::
 
@@ -678,7 +676,7 @@ CUBRID SHARD는 기본 설정 파일인 **shard.conf** 외에, 실제 shard DB�
 
 	.. note:: 일반적인 CUBRID 설정과 마찬가지로 # 이후 내용은 주석으로 처리된다.
 
-**CUBRID**
+	**CUBRID**
 
 	backend shard DB가 CUBRID인 경우 연결 설정 파일의 형식은 다음과 같다. ::
 
@@ -698,7 +696,7 @@ CUBRID SHARD는 기본 설정 파일인 **shard.conf** 외에, 실제 shard DB�
 		# TCP port id for the CUBRID programs (used by all clients).
 		cubrid_port_id=41523
 
-**MySQL**
+	**MySQL**
 
 	backend shard DB가 MySQL인 경우 연결 설정 파일의 형식은 다음과 같다. ::
 
@@ -713,13 +711,13 @@ CUBRID SHARD는 기본 설정 파일인 **shard.conf** 외에, 실제 shard DB�
 
 	.. _shard-key-configuration-file:
 
-**shard key 설정 파일(SHARD_KEY_FILE)**
+	**shard key 설정 파일(SHARD_KEY_FILE)**
 
 	CUBRID SHARD는 시작 시 기본 설정 파일인 **shard.conf** 의 **SHARD_KEY_FILE** 파라미터에 지정된 shard key 설정 파일을 로딩하여 사용자 요청을 어떤 backend shard DB에서 처리해야 할지 결정하는 데 사용한다.
 
 	**shard.conf** 에 **SHARD_KEY_FILE** 을 별도로 지정하지 않은 경우에는 기본값인 **shard_key.txt** 파일을 로딩한다.
 
-**형식**
+	**형식**
 
 	shard key 설정 파일의 예와 형식은 다음과 같다. ::
 
@@ -761,7 +759,7 @@ CUBRID SHARD는 기본 설정 파일인 **shard.conf** 외에, 실제 shard DB�
 
 CUBRID SHARD는 질의를 수행할 shard를 선택하기 위해 shard key를 해싱한 결과와 메타데이터 설정 정보를 이용한다. 이를 위해 기본 내장된 해시 함수를 사용하거나, 또는 사용자가 별도로 해시 함수를 정의할 수 있다.
 
-**내장된 기본 해시 함수**
+	**내장된 기본 해시 함수**
 
 	**shard.conf** 의 **SHARD_KEY_LIBRARY_NAME**, **SHARD_KEY_FUNCTION_NAME** 파라미터를 설정하지 않는 경우 기본 내장된 해시 함수를 이용하여 shard key를 해시하며, 기본 해시 함수의 내용은 아래와 같다.
 
@@ -773,11 +771,11 @@ CUBRID SHARD는 질의를 수행할 shard를 선택하기 위해 shard key를 �
 
 		기본 해시 함수(shard_key) = shard_key[0] mod SHARD_KEY_MODULAR 파라미터(기본값 256)
 
-**사용자 해시 함수 설정**
+	**사용자 해시 함수 설정**
 
 	CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 함수를 이용하여 질의에 포함된 shard key를 해싱할 수 있다.
 
-**라이브러리 구현 및 생성**
+	**라이브러리 구현 및 생성**
 
 	사용자 정의 해시 함수는 실행 시간에 로딩 가능한 **.so** 형태의 라이브러리로 구현되어야 하며 프로토타입은 아래와 같다.
 
@@ -796,14 +794,14 @@ CUBRID SHARD는 질의를 수행할 shard를 선택하기 위해 shard key를 �
 	*   해시 함수의 반환 값은 **shard_key.txt** 설정 파일의 해시 결과 범위에 반드시 포함되어야 한다.
 	*   라이브러리를 빌드하기 위해서는 반드시 **$CUBRID/include/shard_key.h** 파일을 include해야 한다. 이 파일에서 반환 가능한 에러 코드 등 자세한 내용도 확인할 수 있다.
 
-**shard.conf 설정 파일 변경**
+	**shard.conf 설정 파일 변경**
 
 	생성한 사용자 정의 해시 함수를 반영하기 위해서는 **shard.conf** 의 **SHARD_KEY_LIBRARY_NAME**, **SHARD_KEY_FUNCTION_NAME** 파라미터를 구현 내용에 맞도록 설정해야 한다.
 
 	*   **SHARD_KEY_LIBRARY_NAME** : 사용자 정의 해시 라이브러리의 (절대) 경로
 	*   **SHARD_KEY_FUNCTION_NAME** : 사용자 정의 해시 함수의 이름
 
-**예제**
+	**예제**
 
 	다음은 사용자 정의 해시 함수를 사용한 예이다. 먼저 **shard_key.txt** 설정 파일을 확인한다. ::
 
@@ -960,13 +958,13 @@ CUBRID SHARD 파라미터의 동적 변경
 
 CUBRID SHARD의 구동과 관련된 파라미터는 CUBRID SHARD 환경 설정 파일(**shard.conf**) 에서 설정할 수 있다. 그 밖에, **shard_broker_changer** 유틸리티를 이용하여 구동 중에만 한시적으로 일부 CUBRID SHARD 파라미터를 동적으로 변경할 수 있다. CUBRID SHARD 파라미터 설정 및 동적으로 변경 가능한 파라미터 등 기타 자세한 내용은 :ref:`shard-configuration` 을 참조한다.
 
-**구문**
+	**구문**
 
 	CUBRID SHARD 구동 중에 파라미터를 변경하기 위한 **shard_broker_changer** 유틸리티의 구문은 다음과 같다. *shard-name* 에는 구동 중인 CUBRID SHARD 이름을 입력하고 *parameter* 에는 동적으로 변경할 수 있는 파라미터를 입력한다. 변경하고자 하는 파라미터에 따라 *value* 가 지정되어야 한다. CUBRID SHARD의 식별 번호를 지정하여 특정 CUBRID SHARD에만 변경을 적용할 수 있다. *proxy-number* 는 **cubrid shard status** 명령에서 출력되는 PROXY-ID이다. ::
 
 		shard_broker_changer shard-name [proxy-number] parameter value
 
-**예제**
+	**예제**
 
 	구동 중인 CUBRID SHARD에서 SQL 로그가 기록되도록 **SQL_LOG** 파라미터를 ON으로 설정하기 위하여 다음과 같이 입력한다. 이와 같은 파라미터의 동적 변경은 CUBRID SHARD가 구동 중일 때만 한시적으로 효력이 있다. ::
 
@@ -984,7 +982,7 @@ CUBRID SHARD 설정 정보 확인
 
 CUBRID SHARD ID 확인
 --------------------
-**cubrid shard getid** 는 특정 키가 어느 샤드 DB에 접근하는지 알고 싶을 때 사용하는 명령으로, shard key에 대한 SHARD ID를 출력한다. :: 
+**cubrid shard getid** 는 특정 키가 어느 샤드 DB에 속하는지 알고 싶을 때 사용하는 명령으로, shard key에 대한 SHARD ID를 출력한다. :: 
 
 	cubrid shard getid -b <broker-name> [-f] shard-key
 	
@@ -992,7 +990,7 @@ CUBRID SHARD ID 확인
 * -f  : 상세 정보 출력
 * *shard-key* : shard key
 
-다음은 shard1 브로커에서 키 1에 대한 SHARD ID를 출력하는 예이다.
+다음은 shard1 샤드 브로커에서 키 1에 대한 SHARD ID를 출력하는 예이다.
 
 ::
 
@@ -1033,7 +1031,7 @@ CUBRID SHARD 상태 확인
 
 <*expr*>이 주어지면 해당 CUBRID SHARD에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID SHARD 환경 설정 파일(**shard.conf**)에 등록된 전체 CUBRID SHARD에 대해 상태 모니터링을 수행한다.
 
-**옵션**
+	**옵션**
 
 	다음은 결합할 수 있는 옵션에 관해 설명한 표이다.
 
@@ -1074,7 +1072,7 @@ CUBRID SHARD 상태 확인
 	|        |                                                                          |
 	+--------+--------------------------------------------------------------------------+
 
-**예제**
+	**예제**
 
 	전체 CUBRID SHARD 상태 정보를 확인하기 위하여 옵션 및 인수를 입력하지 않으면 다음과 같이 출력된다. ::
 
@@ -1405,7 +1403,7 @@ shard 구동과 관련된 로그에는 접속 로그, 프록시 로그, SQL 로�
 SHARD PROXY 로그
 ----------------
 
-**접속 로그**
+	**접속 로그**
 
 	*   파라미터 : **ACCESS_LOG**
 	*   설명 : 클라이언트의 접속을 logging한다(기존 broker는 cas에서 로그를 남긴다).
@@ -1420,7 +1418,7 @@ SHARD PROXY 로그
 		10.24.18.67 - - 1340243446.791 1340243446.791 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
 		10.24.18.67 - - 1340243446.821 1340243446.821 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
 
-**프록시 로그**
+	**프록시 로그**
 
 	*   파라미터 : **PROXY_LOG_DIR**
 	*   설명 : proxy 내부의 동작을 logging한다.
@@ -1434,7 +1432,7 @@ SHARD PROXY 로그
 		06/21 10:50:46.825 [DBG] ../../src/broker/shard_proxy_io.c(3298): Shard status. (num_cas_in_tran=1, shard_id=2).
 		06/21 10:50:46.827 [DBG] ../../src/broker/shard_proxy_io.c(3385): Shard status. (num_cas_in_tran=0, shard_id=2).
 
-**프록시 로그 레벨**
+	**프록시 로그 레벨**
 
 	*   파라미터 : **PROXY_LOG**
 	*   프록시 로그 레벨 정책 : 상위 level을 설정하면 하위의 모든 로그가 남는다.
@@ -1454,7 +1452,7 @@ SHARD PROXY 로그
 SHARD CAS 로그
 --------------
 
-**SQL 로그**
+	**SQL 로그**
 
 	*   파라미터 : **SQL_LOG**
 	*   설명 : prepare/exeucte/fetch 등의 query 및 기타 cas 정보를 logging한다.
@@ -1473,7 +1471,7 @@ SHARD CAS 로그
 		06/21 10:50:28.259 (0) auto_rollback 0
 
 
-**에러 로그**
+	**에러 로그**
 
 	*   파라미터 : **ERROR_LOG_DIR**
 	*   설명 : cubrid의 경우 cs library에서 EID 및 error string을 해당 파일에 logging한다. cas4o/m의 경우 cas에서 해당 파일에 error를 logging한다.
@@ -1492,7 +1490,7 @@ SHARD CAS 로그
 제약 사항
 =========
 
-**한 트랜잭션 내에서 다수의 shard DB의 데이터 변경 또는 조회**
+	**한 트랜잭션 내에서 다수의 shard DB의 데이터 변경 또는 조회**
 
 	하나의 트랜잭션은 오직 하나의 shard DB에서만 수행되어야 하며, 따라서 아래와 같은 제약사항이 존재한다.
 
@@ -1500,15 +1498,15 @@ SHARD CAS 로그
 
 	*   여러 shard DB 데이터에 대한 join, sub-query, or, union, group by, between, like, in, exist, any/some/all 등 질의를 수행하면, 의도한 것과 다른 결과가 반환될 수 있다.
 
-**세션**
+	**세션**
 
 	세션 정보가 각 shard DB 내에서만 유효하므로, :func:`LAST_INSERT_ID` 와 같은 세션 관련 함수의 결과가 의도한 바와 다를 수 있다.
 
-**auto increment**
+	**auto increment**
 
 	auto increment 속성 또는 SERIAL 등의 값이 각 shard DB 내에서만 유효하므로, 의도한 것과 다른 값을 반환할 수 있다.
 
-**Windows용 SHARD DB와 응용 드라이버 사이의 접속**
+	**Windows용 SHARD DB와 응용 드라이버 사이의 접속**
 	
 	Windows용 SHARD DB 서버는 같은 버전의 드라이버를 사용하는 응용 프로그램만 접속이 가능하다. Linux용 SHARD DB 서버는 다른 버전의 드라이버를 사용하는 응용 프로그램과도 접속이 가능하다.
 	

@@ -358,7 +358,7 @@ The following table shows options available with the **cubrid loaddb** utility (
 
 .. warning::
 
-	The **--no-logging** option enables to load data file quickly when **loaddb** is executed by not storing transaction logs; however, it has risk, which data cannot be recovered in case of errors occurred such as incorrect file format or system failure. In this case, you must rebuild database to solve the problem. Thus, in general, it is not recommended to use this option exception of building a new database which does not require data recovery.
+	The **--no-logging** option enables to load data file quickly when **loaddb** is executed by not storing transaction logs; however, it has risk, which data cannot be recovered in case of errors occurred such as incorrect file format or system failure. In this case, you must rebuild database to solve the problem. Thus, in general, it is not recommended to use this option exception of building a new database which does not require data recovery. If you use this option, **loaddb** does not check the errors like unique violation. To use this option, you should consider these issues.
 
 .. _howtowrite-loadfile:
 

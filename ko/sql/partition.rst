@@ -54,7 +54,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 분할 테이블에도 콜레이션을 지정할 수 있다. 다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다.::
 
-	CREATE TABLE TBL(str STRING) COLLATE utf8_en_ci PARTITION BY LIST(str) 
+	CREATE TABLE tbl(str STRING) COLLATE utf8_en_ci PARTITION BY LIST(str) 
 	(
 	    PARTITION p0 VALUES IN ('test'), 
 	    PARTITION p1 VALUES IN ('TEST')
@@ -413,7 +413,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 분할에서 데이터 SELECT/INSERT/UPDATE
 ------------------------------------
 
-데이터를 SELECT/INSERT/UPDATE할 때 각 분할에 대해서도 **PARTITION** (분할 이름) 구문을 이용하여 접근이 가능하다.
+데이터를 SELECT/INSERT/UPDATE할 때 각 분할에 대해서도 "**PARTITION** (분할 이름)" 구문을 이용하여 접근이 가능하다.
 
 다음은 종목에 따라 리스트 분할한 *athlete2* 테이블을 생성하고 데이터를 삽입한 뒤 *event1* 분할과 *event2* 분할을 조회하는 예제이다.
 
@@ -421,9 +421,9 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 	CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
 	PARTITION BY LIST (event) (
-	PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
-	PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
-	PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
+		PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
+		PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
+		PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
 	);
 
 	INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');

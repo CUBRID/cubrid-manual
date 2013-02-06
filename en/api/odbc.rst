@@ -24,10 +24,6 @@ The following table shows the data type mapping relationship between CUBRID and 
 +-------------------------+--------------------------------+
 | String                  | SQL_LONGVARCHAR                |
 +-------------------------+--------------------------------+
-| Nchar                   | SQL_CHAR                       |
-+-------------------------+--------------------------------+
-| Varnchar                | SQL_VARCHAR                    |
-+-------------------------+--------------------------------+
 | Bit                     | SQL_BINARY                     |
 +-------------------------+--------------------------------+
 | varying bit             | SQL_VARBINARY                  |
@@ -145,6 +141,10 @@ The following shows the result of using connection strings above. ::
 
 	*   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection strings.
 	*   The database connection in thread-based programming must be used independently each other.
+
+	[번역]
+
+	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
 Using Object Identifiers (OIDs) and Collections
 -----------------------------------------------

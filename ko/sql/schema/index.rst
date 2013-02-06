@@ -32,23 +32,17 @@ CREATE INDEX
 
 	CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
 
-**예제 1**
-
-다음은 역순으로 정렬된 인덱스를 생성하는 예제이다.
+다음은 내림차순으로 정렬된 인덱스를 생성하는 예제이다.
 
 .. code-block:: sql
 
 	CREATE INDEX gold_index ON participant(gold DESC);
-
-**예제 2**
 
 다음은 다중 칼럼 인덱스를 생성하는 예제이다.
 
 .. code-block:: sql
 
 	CREATE INDEX name_nation_idx ON athlete(name, nation_code);
-
-**예제 3**
 
 다음은 단일 칼럼 인덱스를 생성하는 예제이다. 문자열 타입으로 정의한 *nation_code* 칼럼에 대해서 1바이트 길이만큼 prefix를 지정하여 인덱스를 생성한다.
 
@@ -79,8 +73,6 @@ ALTER INDEX
 
 	CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
 
-**예제**
-
 다음은 인덱스를 재생성하는 여러 가지 방법을 보여주는 예제이다.
 
 .. code-block:: sql
@@ -100,8 +92,6 @@ DROP INDEX
 *   **UNIQUE** : 삭제하려는 인덱스가 고유 인덱스임을 지정한다. 고유 인덱스는 **DROP CONSTRAINT** 절로도 삭제할 수 있다.
 *   *index_name* : 삭제할 인덱스의 이름을 지정한다.
 *   *table_name* : 삭제할 인덱스가 지정된 테이블 이름을 지정한다.
-
-**예제**
 
 다음은 인덱스를 삭제하는 여러 가지 방법을 보여주는 예제이다.
 

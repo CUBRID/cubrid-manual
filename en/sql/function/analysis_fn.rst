@@ -30,6 +30,12 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 
 *   <*order_by_clause*> : defines the data sorting method in the partition made by <*query_partition_clause*>. The result can be sorted with several keys. <When *query_partition_clause*> is omitted, the data is sorted within the overall result sets. Based on the sorting order, the function is applied to the column values of accumulated records, including the previous values.
 
+분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
+
+* ORDER BY/PARTITION BY <상수> (예: 1): 상수는 SELECT 리스트의 칼럼 위치로 다루어짐.
+* ORDER BY/PARTITION BY <상수 표현식> (예: 1+0): 상수 표현식은 무시되어, 정렬/분할(ordering/partitioning)에 사용되지 않음.
+* ORDER BY/PARTITION BY <상수가 아닌 표현식> (예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용됨.
+
 .. function:: AVG ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
 	The **AVG** function calculates the arithmetic average of the value of an expression representing all rows. Only one *expression* is specified as a parameter. You can get the average without duplicates by using the **DISTINCT** or **UNIQUE** keyword in front of the expression or the average of all values by omitting the keyword or by using **ALL**.
@@ -209,7 +215,7 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 
 	The **GROUP_CONCAT** function connects the values that are not **NULL** in the group and returns the character string in the **VARCHAR** type. If there are no rows of query result or there are only **NULL** values, **NULL** will be returned.
 
-	:param expression: Operation returning numerical values or character strings
+	:param expression: Column or operation returning numerical values or character strings
 	:param str_val: Character string to use as a separator
 	:param DISTINCT: Removes duplicate values from the result.
 	:param ORDER BY: Specifies the order of result values.
@@ -247,6 +253,66 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 		  group_concat(i*2+1 order by 1 separator '')
 		======================
 		  '35791113'
+		  
+[번역]
+
+.. function:: LAG (expression[, offset[, default]]) OVER ( [partition_by_clause] [order_by_clause] )
+	
+	LAG 함수는 현재 행을 기준으로 *offset* 이전 행의 expression 값을 반환하며, 분석 함수로만 사용된다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
+	
+	:param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
+	:param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
+	:param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+	:rtype: NUMBER or STRING
+	
+	사용 예제는 LEAD 함수를 참고한다.
+	
+.. function:: LEAD (expression, offset, default) OVER ( [partition_by_clause] [order_by_clause] )
+
+	LEAD 함수는 현재 행을 기준으로 *offset* 이후 행의 expression 값을 반환하며, 분석 함수로만 사용된다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
+
+	:param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
+	:param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
+	:param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+	:rtype: NUMBER or STRING
+
+	다음은 현재 행을 기준으로 이전 행과 이후 행의 title을 같이 출력하는 예이다. 
+	
+	..  code-block:: sql
+
+		CREATE TABLE tbl_board(num INT, title VARCHAR(50));
+		INSERT INTO tbl_board VALUES(1, 'title 1'), (2, 'title 2'), (3, 'title 3'), (4, 'title 4'), (5, 'title 5'), (6, 'title 6'), , (7, 'title 7');
+
+		SELECT num, title,
+		LEAD(title,1,'no next page') OVER (ORDER BY num) next_title,
+		LAG(title,1,'no previous page') OVER (ORDER BY num) prev_title
+		FROM tbl_board;
+		
+				  num  title                 next_title            prev_title
+		===============================================================================
+					1  'title 1'             'title 2'             NULL
+					2  'title 2'             'title 3'             'title 1'
+					3  'title 3'             'title 4'             'title 2'
+					4  'title 4'             'title 5'             'title 3'
+					5  'title 5'             'title 6'             'title 4'
+					6  'title 6'             'title 7'             'title 5'
+					7  'title 7'             NULL                  'title 6'
+
+		다음은 특정 행을 기준으로 이전 행과 이후 행의 타이틀을 같이 출력하는 예이다.
+		WHERE 조건이 괄호 안에 있으면 하나의 행만 선택되고, 이전 행과 이후 행이 존재하지 않게 되어 next_title과 prev_title의 값이 NULL이 됨에 유의한다.
+		
+		SELECT * FROM 
+		(
+			SELECT num, title,
+			LEAD(title,1,'no next page') OVER (ORDER BY num) next_title,
+			LAG(title,1,'no previous page') OVER (ORDER BY num) prev_title
+			FROM tbl_board
+		) 
+		WHERE num=5;
+		
+				  num  title                 next_title            prev_title
+		===============================================================================
+					5  'title 5'             'title 6'             'title 4'
 
 .. function:: MAX ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 

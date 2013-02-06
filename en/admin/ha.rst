@@ -2,8 +2,6 @@
 CUBRID HA
 *********
 
-**CUBRID HA**
-
 High Availability (HA) refers to a feature to provide uninterrupted service in the event of hardware, software, or network failure. This ability is a critical element in the network computing area where services should be provided 24/7. An HA system consists of more than two server systems, each of which provides uninterrupted services, even when a failure occurs in one of them.
 
 CUBRID HA is an implementation of High Availability. CUBRID HA ensures database synchronization among multiple servers when providing service. When an unexpected failure occurs in the system which is operating services, this feature minimizes the service down time by allowing the other system to carry out the service automatically.
@@ -73,6 +71,18 @@ The server status changes based on the status of the node. You can use the :ref:
 *   **maintenanc** : The status of servers can be manually changed for operational convenience is maintenance. In this status, only a csql can access and no service is provided to the user.
 *   **to-be-active** : The status in which a standby server will become active for reasons such as failover, etc. is to-be-active. In this status, servers prepare to become active by reflecting transaction logs from the existing master node to its own server. The node in this status can accept only SELECT query.
 *   Other : This status is internally used.
+
+When the node status is changed, on cub_master process log and cub_server process log, following error messages are saved. But, they are saved only when the value of **error_log_level** in cubrid.conf is **error** or less.
+
+* The following log information of cub_master process is saved on $CUBRID/log/<hostname>_master.err file. ::
+
+	HA generic: Send changemode request to the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+	HA generic: Receive changemode response from the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+
+* The following log information of cub_server is saved on $CUBRID/log/server/<db_name>_<date>_<time>.err file. ::
+
+	Server HA mode is changed from 'to-be-active' to 'active'.
+
 
 heartbeat Message
 -----------------
@@ -755,6 +765,7 @@ The following example shows how to configure PHP.
 	?>
 
 [번역]
+
 .. note:: altHosts를 설정하여 브로커 절체(failover)가 가능하도록 설정한 환경에서, 브로커 절체가 원활하게 되려면 URL에 **disconnectOnQueryTimeout** 값을 **true** 로 설정해야 한다.
 	이 값이 true면 질의 타임아웃 발생 시 응용 프로그램은 즉시 기존에 접속되었던 브로커와의 접속을 해제하고 altHosts에 지정한 브로커로 접속한다.
 	

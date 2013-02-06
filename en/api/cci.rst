@@ -48,6 +48,13 @@ General process for writing applications is as follows. For using the prepared s
 *   Closing the database connection handle (related function: :c:func:`cci_disconnect`)
 *   Using database connection pool (related functions: :c:func:`cci_property_create`), :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`)
 
+[번역]
+
+.. note::
+	* Windows에서 CCI 응용 프로그램을 컴파일하려면 "WINDOWS"가 define되어야 하므로 "DWINDOWS" 옵션을 컴파일러에 반드시 포함하도록 한다.
+	* 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+	* 자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 :c:func:`cci_end_tran` 을 호출하여 트랜잭션을 종료 처리하도록 한다. 
+
 **Example 1**
 
 .. code-block:: c
@@ -344,8 +351,6 @@ General process for writing applications is as follows. For using the prepared s
 		cci_close_req_handle (req);
 		return error;
 	}
-
-.. note:: The database connection in thread-based programming must be used independently each other.
 
 Configuring Library
 -------------------
@@ -804,10 +809,6 @@ The following list shows CCI and CAS error codes.
 |                          |          | **CCI_U_TYPE_CHAR**                     |                                                  |
 |                          |          +-----------------------------------------+                                                  |
 |                          |          | **CCI_U_TYPE_STRING**                   |                                                  |
-|                          |          +-----------------------------------------+                                                  |
-|                          |          | **CCI_U_TYPE_NCHAR**                    |                                                  |
-|                          |          +-----------------------------------------+                                                  |
-|                          |          | **CCI_U_TYPE_VARNCHAR**                 |                                                  |
 |                          |          +-----------------------------------------+                                                  |
 |                          |          | **CCI_U_TYPE_BIT**                      |                                                  |
 |                          |          +-----------------------------------------+                                                  |

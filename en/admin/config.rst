@@ -1164,12 +1164,10 @@ The following are parameters related to SQL statements and data types supported 
 
 .. _plan-cache-parameters:
 
-Query Cache-Related Parameters
-------------------------------
+Query Plan Cache-Related Parameters
+-----------------------------------
 
-The following are parameters related to the query cache functionality that provides execution results cached for the same
-**SELECT**
-statement. The type and value range for each parameter are as follows:
+The following are parameters related to the query plan cache functionality. The type and value range for each parameter are as follows:
 
 +-------------------------------+----------+-------------------+---------+---------+
 | Parameter Name                | Type     | Default Value     | Min     | Max     |

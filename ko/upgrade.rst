@@ -8,7 +8,7 @@ CUBRID 9.0 Beta에서 CUBRID 9.1로 업그레이드하기
 
 CUBRID 2008 R4.1 버전 사용자는 CUBRID 9.1 버전을 별도의 디렉터리에 설치한 후 기존의 환경 설정 파일에서 파라미터들의 값을 다음과 같이 변경해야 한다.
 
-9.1 버전과 9.0 베타 버전 사이에 DB 볼륨이 호환되지 않으므로, CUBRID 9.1 설치 이후 기존의 DB 볼륨을 9.1용으로 반드시 변환해야 한다. 
+9.1 버전과 9.0 Beta 버전 사이에 DB 볼륨이 호환되지 않으므로, CUBRID 9.1 설치 이후 기존의 DB 볼륨을 9.1용으로 반드시 변환해야 한다. 
 
 환경 설정 이후 DB 마이그레이션은 :ref:`db-migration` 을 참고한다.
 
@@ -64,7 +64,15 @@ CUBRID 2008 R4.0 이하 버전 사용자는 CUBRID 9.1 버전을 별도의 디�
 
 **환경 변수 CUBRID_CHARSET, CUBRID_MSG_LANG 설정**
 
-	* CUBRID_LANG 환경 변수는 더 이상 사용되지 않으며, 데이터베이스를 생성하거나 구동할 때 CUBRID_CHARSET 환경 변수를 통해 어떤 문자셋을 사용할 지 결정하므로 CUBRID_CHARSET 환경 변수를 반드시 설정해야 한다. 유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용하며 설정하지 않으면 en_US가 기본으로 설정된다. 
+	* CUBRID_LANG 환경 변수는 더 이상 사용되지 않으며, 데이터베이스를 생성하거나 구동할 때 CUBRID_CHARSET 환경 변수를 통해 어떤 문자셋을 사용할지 결정하므로 CUBRID_CHARSET 환경 변수를 반드시 설정해야 한다. 유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용하며 설정하지 않으면 CUBRID_CHARSET을 따른다.
+
+**스키마 변환**
+
+	* 9.0 Beta 이전 버전에서 ISO-8859-1이 아닌 EUC-KR, UTF-8 문자셋을 사용하던 사용자는 스키마를 반드시 변경해야 한다. 9.0 Beta 이전 버전에서는 CHAR, VARCHAR의 자릿수(precision)를 바이트 크기로 지정했으나 9.0 Beta 버전부터는 글자의 개수로 지정한다.
+
+**시스템 로캘 추가**
+
+	* 추가하고 싶은 시스템 로캘이 있는 경우 $CUBRID/conf/cubrid_locales.txt 파일에 해당 로캘을 추가한 후 make_locale 스크립트를 실행한다. :ref:`locale-setting` 을 참고한다.
 
 DB 마이그레이션
 ---------------

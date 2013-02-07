@@ -15,7 +15,7 @@ The following environment variables need to be set in order to use the CUBRID. T
 
 *   **CUBRID_CHARSET** : The environment variable that specifies database locale (language+character set) in CUBRID. The initial value upon CUBRID installation is **en_US**. If character set is omitted after language name, ISO-8859-1(.iso88591) will be specified by default. For more information, see :ref:`Language Setting <language-setting>`.
 
-*   **CUBRID_MSG_LANG** : The environment variable that specifies usage messages and error messages  in CUBRID. The initial value upon start is not defined. If it's not defined, it follows the value of **CUBRID_CHARESET**. If character set is omitted after language name, ISO-8859-1(.iso88591) will be specified by default. For more information, see :ref:`Language Setting <language-setting>`.
+*   **CUBRID_MSG_LANG** : The environment variable that specifies usage messages and error messages in CUBRID. The initial value upon start is not defined. If it's not defined, it follows the value of **CUBRID_CHARESET**. If character set is omitted after **en_US**, ISO-8859-1(.iso88591) will be specified by default. For more information, see :ref:`Language Setting <language-setting>`.
 
 *   **CUBRID_TMP** : The environment variable that specifies the location where the cub_master process and the cub_broker process store the UNIX domain socket file in CUBRID for Linux. If it is not specified, the cub_master process stores the UNIX domain socket file under the **/tmp** directory and the cub_broker process stores the UNIX domain socket file under the **$CUBRID/var/CUBRID_SOCK** directory (not used in CUBRID for Windows).
 

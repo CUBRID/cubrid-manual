@@ -162,54 +162,54 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 		 
 		host_year  nation_code                  gold       d_rank
 		=============================================================
-				 1988  'URS'                          55            1
-				 1988  'GDR'                          37            2
-				 1988  'USA'                          36            3
-				 1988  'KOR'                          12            4
-				 1988  'HUN'                          11            5
-				 1988  'FRG'                          11            5
-				 1988  'BUL'                          10            6
-				 1988  'ROU'                           7            7
-				 1988  'ITA'                           6            8
-				 1988  'FRA'                           6            8
-				 1988  'KEN'                           5            9
-				 1988  'GBR'                           5            9
-				 1988  'CHN'                           5            9
+		     1988  'URS'                          55            1
+		     1988  'GDR'                          37            2
+		     1988  'USA'                          36            3
+		     1988  'KOR'                          12            4
+		     1988  'HUN'                          11            5
+		     1988  'FRG'                          11            5
+		     1988  'BUL'                          10            6
+		     1988  'ROU'                           7            7
+		     1988  'ITA'                           6            8
+		     1988  'FRA'                           6            8
+		     1988  'KEN'                           5            9
+		     1988  'GBR'                           5            9
+		     1988  'CHN'                           5            9
 		...
-				 1988  'CHI'                           0           14
-				 1988  'ARG'                           0           14
-				 1988  'JAM'                           0           14
-				 1988  'SUI'                           0           14
-				 1988  'SWE'                           0           14
-				 1992  'EUN'                          45            1
-				 1992  'USA'                          37            2
-				 1992  'GER'                          33            3
+		     1988  'CHI'                           0           14
+		     1988  'ARG'                           0           14
+		     1988  'JAM'                           0           14
+		     1988  'SUI'                           0           14
+		     1988  'SWE'                           0           14
+		     1992  'EUN'                          45            1
+		     1992  'USA'                          37            2
+		     1992  'GER'                          33            3
 		...
-				 2000  'RSA'                           0           15
-				 2000  'NGR'                           0           15
-				 2000  'JAM'                           0           15
-				 2000  'BRA'                           0           15
-				 2004  'USA'                          36            1
-				 2004  'CHN'                          32            2
-				 2004  'RUS'                          27            3
-				 2004  'AUS'                          17            4
-				 2004  'JPN'                          16            5
-				 2004  'GER'                          13            6
-				 2004  'FRA'                          11            7
-				 2004  'ITA'                          10            8
-				 2004  'UKR'                           9            9
-				 2004  'CUB'                           9            9
-				 2004  'GBR'                           9            9
-				 2004  'KOR'                           9            9
+		     2000  'RSA'                           0           15
+		     2000  'NGR'                           0           15
+		     2000  'JAM'                           0           15
+		     2000  'BRA'                           0           15
+		     2004  'USA'                          36            1
+		     2004  'CHN'                          32            2
+		     2004  'RUS'                          27            3
+		     2004  'AUS'                          17            4
+		     2004  'JPN'                          16            5
+		     2004  'GER'                          13            6
+		     2004  'FRA'                          11            7
+		     2004  'ITA'                          10            8
+		     2004  'UKR'                           9            9
+		     2004  'CUB'                           9            9
+		     2004  'GBR'                           9            9
+		     2004  'KOR'                           9            9
 		...
-				 2004  'EST'                           0           17
-				 2004  'SLO'                           0           17
-				 2004  'SCG'                           0           17
-				 2004  'FIN'                           0           17
-				 2004  'POR'                           0           17
-				 2004  'MEX'                           0           17
-				 2004  'LAT'                           0           17
-				 2004  'PRK'                           0           17
+		     2004  'EST'                           0           17
+		     2004  'SLO'                           0           17
+		     2004  'SCG'                           0           17
+		     2004  'FIN'                           0           17
+		     2004  'POR'                           0           17
+		     2004  'MEX'                           0           17
+		     2004  'LAT'                           0           17
+		     2004  'PRK'                           0           17
 
 .. function:: GROUP_CONCAT([DISTINCT] {col | expression} [ORDER BY {col | unsigned_int} [ASC | DESC]] [SEPARATOR str_val])
 
@@ -265,7 +265,37 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 	:param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
 	:rtype: NUMBER or STRING
 	
-	사용 예제는 LEAD 함수를 참고한다.
+	다음은 사번 순으로 정렬하여 같은 행에 이전 사번을 같이 출력하는 예이다.
+
+	..  code-block:: sql
+	
+		CREATE TABLE t_emp(name VARCHAR(10), empno INT);
+		INSERT INTO t_emp VALUES
+			('Amie', 11011),
+			('Jane', 13077),
+			('Lora', 12045),
+			('James', 12006),
+			('Peter', 14006),
+			('Tom', 12786),
+			('Ralph', 23518),
+			('David', 55);
+		
+		SELECT name, empno,
+		LAG(empno,1) OVER (ORDER BY empno) prev_empno
+		FROM t_emp;
+
+		  name                        empno   prev_empno
+		================================================
+		  'David'                        55         NULL
+		  'Amie'                      11011           55
+		  'James'                     12006        11011
+		  'Lora'                      12045        12006
+		  'Tom'                       12786        12045
+		  'Jane'                      13077        12786
+		  'Peter'                     14006        13077
+		  'Ralph'                     23518        14006
+
+	이와는 반대로, 현재 행을 기준으로 *offset* 이후 행의 expression 값을 반환하는 :func:LEAD 함수를 참고한다.
 	
 .. function:: LEAD (expression, offset, default) OVER ( [partition_by_clause] [order_by_clause] )
 
@@ -276,7 +306,37 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 	:param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
 	:rtype: NUMBER or STRING
 
-	다음은 현재 행을 기준으로 이전 행과 이후 행의 title을 같이 출력하는 예이다. 
+	다음은 사번 순으로 정렬하여 같은 행에 다음 사번을 같이 출력하는 예이다.
+
+	..  code-block:: sql
+	
+		CREATE TABLE t_emp(name VARCHAR(10), empno INT);
+		INSERT INTO t_emp VALUES
+			('Amie', 11011),
+			('Jane', 13077),
+			('Lora', 12045),
+			('James', 12006),
+			('Peter', 14006),
+			('Tom', 12786),
+			('Ralph', 23518),
+			('David', 55);
+		
+		SELECT name, empno,
+		LEAD(empno,1) OVER (ORDER BY empno) next_empno
+		FROM t_emp;
+
+		  name                        empno   next_empno
+		================================================
+		  'David'                        55        11011
+		  'Amie'                      11011        12006
+		  'James'                     12006        12045
+		  'Lora'                      12045        12786
+		  'Tom'                       12786        13077
+		  'Jane'                      13077        14006
+		  'Peter'                     14006        23518
+		  'Ralph'                     23518         NULL
+	
+	다음은 tbl_board 테이블에서 현재 행을 기준으로 이전 행과 이후 행의 title을 같이 출력하는 예이다. 
 	
 	..  code-block:: sql
 
@@ -288,19 +348,21 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 		LAG(title,1,'no previous page') OVER (ORDER BY num) prev_title
 		FROM tbl_board;
 		
-				  num  title                 next_title            prev_title
+		  num  title                 next_title            prev_title
 		===============================================================================
-					1  'title 1'             'title 2'             NULL
-					2  'title 2'             'title 3'             'title 1'
-					3  'title 3'             'title 4'             'title 2'
-					4  'title 4'             'title 5'             'title 3'
-					5  'title 5'             'title 6'             'title 4'
-					6  'title 6'             'title 7'             'title 5'
-					7  'title 7'             NULL                  'title 6'
+		    1  'title 1'             'title 2'             NULL
+		    2  'title 2'             'title 3'             'title 1'
+		    3  'title 3'             'title 4'             'title 2'
+		    4  'title 4'             'title 5'             'title 3'
+		    5  'title 5'             'title 6'             'title 4'
+		    6  'title 6'             'title 7'             'title 5'
+		    7  'title 7'             NULL                  'title 6'
 
-		다음은 특정 행을 기준으로 이전 행과 이후 행의 타이틀을 같이 출력하는 예이다.
-		WHERE 조건이 괄호 안에 있으면 하나의 행만 선택되고, 이전 행과 이후 행이 존재하지 않게 되어 next_title과 prev_title의 값이 NULL이 됨에 유의한다.
-		
+	다음은 tbl_board 테이블에서 특정 행을 기준으로 이전 행과 이후 행의 타이틀을 같이 출력하는 예이다.
+	WHERE 조건이 괄호 안에 있으면 하나의 행만 선택되고, 이전 행과 이후 행이 존재하지 않게 되어 next_title과 prev_title의 값이 NULL이 됨에 유의한다. 
+	
+	..  code-block:: sql
+
 		SELECT * FROM 
 		(
 			SELECT num, title,
@@ -310,9 +372,9 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 		) 
 		WHERE num=5;
 		
-				  num  title                 next_title            prev_title
+		  num  title                 next_title            prev_title
 		===============================================================================
-					5  'title 5'             'title 6'             'title 4'
+		    5  'title 5'             'title 6'             'title 4'
 
 .. function:: MAX ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
@@ -745,19 +807,65 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 	:param expression: 버킷의 개수. 숫자 값을 반환하는 임의의 연산식을 지정한다. 
 	:rtype: INT
 	
-	다음은 8명의 학생을 점수가 높은 순으로 5개의 버킷으로 나눈 후, 이름 순으로 출력하는 예이다. score 테이블의 score 칼럼에는 8개의 행이 존재하므로, 8을 5로 나눈 나머지 3개 행이 1번 버킷부터 각각 할당되어 1,2,3번 버킷은 4,5번 버킷에 비해 1개의 행이 더 존재한다.
+	다음은 8명의 고객을 생년월일을 기준으로 5개의 버킷으로 나누되, 각 버킷의 수가 균등하도록 나누는  예이다. 1, 2, 3번 버킷에는 2개의 행이, 4,5번 버킷에는 2개의 행이 존재한다.
+
+	.. code-block:: sql
+	
+		CREATE TABLE t_customer(name VARCHAR(10), birthdate DATE);
+		INSERT INTO t_customer VALUES
+			('Amie', date'1978-03-18'),
+			('Jane', date'1983-05-12'),
+			('Lora', date'1987-03-26'),
+			('James', date'1948-12-28'),
+			('Peter', date'1988-10-25'),
+			('Tom', date'1980-07-28'),
+			('Ralph', date'1995-03-17'),
+			('David', date'1986-07-28');
+		
+		SELECT name, birthdate, NTILE(5) OVER (ORDER BY birthdate) age_group FROM t_customer;
+		
+		  name                  birthdate     age_group
+		===============================================
+		  'James'               12/28/1948            1
+		  'Amie'                03/18/1978            1
+		  'Tom'                 07/28/1980            2
+		  'Jane'                05/12/1983            2
+		  'David'               07/28/1986            3
+		  'Lora'                03/26/1987            3
+		  'Peter'               10/25/1988            4
+		  'Ralph'               03/17/1995            5
+
+	이에 비해, :func:`WIDTH_BUCKET` 함수는 birthdate의 지정 범위를 균등하게 나누고 이를 기준으로 버킷 번호를 부여한다. birthdate 값이 범위를 벗어나면 0 또는 버킷 개수 + 1인 6을 반환한다. 
+	다음은 8명의 고객을 생년월일을 기준으로 '1950-01-01'부터 '1999-12-31'까지의 범위를 5개로 균등 분할하는 예이다. 이때 WIDTH_BUCKET 함수의 범위를 지정하는 입력값의 시작값은 '1950-01-01'이 되고, 끝 값은 '2000-1-1'이 된다. 끝 값인 '2000-1-1'은 범위에 포함되지 않는다.
+
+	.. code-block:: sql
+
+		SELECT name, birthdate, WIDTH_BUCKET(birthdate, date'1950-01-01', date'2000-1-1', 5) age_group FROM t_customer ORDER BY birthdate;
+
+		  name                  birthdate     age_group
+		===============================================
+		  'James'               12/28/1948            0
+		  'Amie'                03/18/1978            4
+		  'Tom'                 07/28/1980            4
+		  'Jane'                05/12/1983            5
+		  'David'               07/28/1986            5
+		  'Lora'                03/26/1987            5
+		  'Peter'               10/25/1988            5
+		  'Ralph'               03/17/1995            6
+
+	다음은 8명의 학생을 점수가 높은 순으로 5개의 버킷으로 나눈 후, 이름 순으로 출력하되, 각 버킷의 행의 개수는 균등하게 나누는 예이다. t_score 테이블의 score 칼럼에는 8개의 행이 존재하므로, 8을 5로 나눈 나머지 3개 행이 1번 버킷부터 각각 할당되어 1,2,3번 버킷은 4,5번 버킷에 비해 1개의 행이 더 존재한다.
 	NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으로 균등하게 grade를 나눈다.
 	
 	.. code-block:: sql
 	
-		CREATE TABLE t_score(NAME VARCHAR(10), score INT);
+		CREATE TABLE t_score(name VARCHAR(10), score INT);
 		INSERT INTO t_score VALUES
 			('Amie', 60),
 			('Jane', 80),
 			('Lora', 60),
 			('James', 75),
 			('Peter', 70),
-			('Ralph', 30),
+			('Tom', 30),
 			('Ralph', 99),
 			('David', 55);
 
@@ -772,8 +880,7 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 		  'Amie'                         60            3
 		  'Lora'                         60            3
 		  'David'                        55            4
-		  'Ralph'                        30            5
-
+		  'Tom'                          30            5
 
 	이에 비해, :func:`WIDTH_BUCKET` 함수는 점수의 범위를 균등하게 나누고 이를 기준으로 grade를 나눈다.
 	다음 예에서 범위는 [100, 0)이며 범위에 따른 각 버킷 번호는 [100, 80)이 1, [80, 60)이 2, [60, 40)이 3, [40, 20)이 4, [20, 0)이 5가 된다.  
@@ -793,9 +900,8 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 		  'Amie'                         60            3
 		  'Lora'                         60            3
 		  'David'                        55            3
-		  'Ralph'                        30            4
-	  
-
+		  'Tom'                          30            4
+		  
 .. function:: VAR_POP( [ DISTINCT | UNIQUE | ALL] expression )
 .. function:: VARIANCE( [ DISTINCT | UNIQUE | ALL] expression )
 

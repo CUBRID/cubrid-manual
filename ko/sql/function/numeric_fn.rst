@@ -631,15 +631,13 @@
 
 	expression은 버킷 번호를 부여받기 위한 입력 데이터이다. *from* 과 *to* 값으로 숫자형 타입과 날짜/시간 타입의 값 또는 날짜/시간 타입으로 변환 가능한 문자열이 입력될 수 있다.
 	
-	전체 범위에서 *from* 은 범위에 포함되지만 *to* 는 범위 밖에 존재한다. 예를 들어 WIDTH_BUCKET(score, 100, 0, 5)이 반환하는 값은 score가 
+	전체 범위에서 *from* 은 범위에 포함되지만 *to* 는 범위 밖에 존재한다. 예를 들어 WIDTH_BUCKET(score, 80, 50, 3)이 반환하는 값은 score가 
 	
-		* 100보다 크면 0, 
-		* [100,80)이면  1, 
-		* [80, 60)이면  2, 
-		* [60, 40)이면 3, 
-		* [40, 20)이면 4, 
-		* [20, 0)이면 5, 
-		* 0또는 0보다 작으면 6이 된다.
+		* 80보다 크면 0, 
+		* [80,70)이면  1, 
+		* [70, 60)이면  2, 
+		* [60, 50)이면 3, 
+		* 50 또는 50보다 작으면 4가 된다.
 	
 	:param expression: 버킷 번호를 부여받기 위한 입력 값. 수치 값을 반환하는 임의의 연산식을 지정한다.
 	:param from: expression이 취할 수 있는 범위의 시작값으로, 이 값은 전체 범위 안에 포함된다. 
@@ -647,22 +645,22 @@
 	:param num_buckets: 버킷의 개수. 추가로 범위 밖의 내용을 담기 위한 0번 버킷과 (num_buckets + 1)번 버킷이 생성된다.
 	:rtype: INT
 
-	다음 예제는 80점보다 작거나 같고 50점보다 큰 범위를 1부터 5까지 균등한 점수 범위로 나누어 등급을 부여한다. 해당 범위를 벗어나는 경우 80점보다 크면 0, 50점이거나 50점보다 작으면 6등급을 부여한다.
+	다음 예제는 80점보다 작거나 같고 50점보다 큰 범위를 1부터 3까지 균등한 점수 범위로 나누어 등급을 부여한다. 해당 범위를 벗어나는 경우 80점보다 크면 0, 50점이거나 50점보다 작으면 4등급을 부여한다.
 	
 	.. code-block:: sql
 	
-		CREATE TABLE t_score(NAME VARCHAR(10), score INT);
+		CREATE TABLE t_score(name VARCHAR(10), score INT);
 		INSERT INTO t_score VALUES
 			('Amie', 60),
 			('Jane', 80),
 			('Lora', 60),
 			('James', 75),
 			('Peter', 70),
-			('Ralph', 30),
+			('Tom', 50),
 			('Ralph', 99),
 			('David', 55);
 
-		SELECT name, score, WIDTH_BUCKET(score, 80, 50, 5) grade FROM t_score ORDER BY grade ASC, score DESC;
+		SELECT name, score, WIDTH_BUCKET(score, 80, 50, 3) grade FROM t_score ORDER BY grade ASC, score DESC;
 		
 		  name                        score        grade
 		================================================
@@ -670,10 +668,10 @@
 		  'Jane'                         80            1
 		  'James'                        75            1
 		  'Peter'                        70            2
-		  'Amie'                         60            4
-		  'Lora'                         60            4
-		  'David'                        55            5
-		  'Ralph'                        30            6
+		  'Amie'                         60            3
+		  'Lora'                         60            3
+		  'David'                        55            3
+		  'Tom'                          50            4
 
 	.. code-block:: sql
 

@@ -9,6 +9,8 @@
 릴리스 노트 정보
 ================
 
+[번역]
+
 본 문서는 CUBRID 9.1(빌드번호 9.1.)에 관한 정보를 포함한다.
 CUBRID 9.1은 CUBRID 9.0 Beta에서 발견된 오류 수정 및 기능 개선과 CUBRID 2008 R4.3에 반영된 오류 수정 및 기능 개선을 포함한다.
 
@@ -20,11 +22,50 @@ CUBRID 9.0 Beta에 대한 정보는 :doc:`r90` 를 참조한다.
 ===========
 
 CUBRID 9.1은 9.0 Beta의 안정화 버전이다.
-CUBRID 9.1은  ....
+뿐만 아니라, CUBRID 9.1은 질의 수행에 관련된 다양한 기능들을 추가하고, 다국어 관련 기능들을 추가했으며, Windows에서 Sharding 기능을 지원하게 되었고, 모니터링 기능을 개선했다.
 
+9.1은 9.0 Beta와 DB 볼륨이 호환되지 않으므로, 9.0 Beta 및 이전 버전 사용자는 반드시 DB를 마이그레이션해야 한다. 이와 관련하여 :doc:`/upgrade` 를 참고한다.
 
-보다 자세한 변경 사항은 아래의 CUBRID 9.1에서 변경된 사항을 참고한다.
-
+다양한 SQL 함수 추가 및 다중 인덱스 힌트 지원
+---------------------------------------------
+	* NTILIE, WIDTH_BUCKET, LEAD, LAG 함수를 추가했다.
+	* 날짜 타입을 인자로하는 TRUNC, ROUND 함수를 추가했다.
+	* 하나의 질의문에 여러 개의 인덱스 힌트 지정이 가능하게 되었다.
+	
+다국어 관련 기능 추가
+---------------------
+	* SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수를 추가했다.
+	* 확장이 있는 콜레이션에서 액센트에 따라 역순으로 프랑스어를 정렬하는 콜레이션을 지원하게 되었다.
+	* 테이블에 대한 콜레이션을 지원하게 되었다.
+	
+Sharding 기능 개선 
+------------------
+	* Shard key에 해당하는 shard ID를 확인할 수 있도록 하는 명령을 추가했다.
+	* Windows에서 sharding 기능을 사용할 수 있게 되었다.
+	
+모니터링
+--------
+	* applyinfo 유틸리티로 복제 로그 반영 상태를 출력할 때 복제 지연 상태를 출력하도록 개선했다.
+	* killtran 유틸리티에 각 트랜잭션마다 질의의 수행 상태를 출력하는 기능을 추가했다.
+	* killtran 유틸리티에 특정 SQL을 수행하는 트랜잭션을 지정하여 트랜잭션을 제거하는 기능을 추가했다.
+	* 질의 수행이 지정한 시간을 초과하면 서버 에러 로그 및 CAS 로그 파일에 질의 실행 정보를 기록하게 하는 기능을 추가했다.
+	
+동작 변경
+---------
+	* cci_execute_array 함수, cci_execute_batch 함수, JDBC의 Statement.executeBatch 메서드, PreparedStatement.executeBatch 메서드 등 배열 내 여러 개의 질의문을 일괄적으로 처리할 때 모든 질의문을 수행한 이후에 커밋했으나 각 질의문을 수행할 때마다 커밋하도록 변경되었다.
+	* cci_execute_array 함수, cci_execute_batch 함수 또는 cci_execute_result 함수에서 여러 개의 질의 수행 도중 에러 발생 시 동작 방식이 바뀌었다. 수정 이전에는 중간에 에러가 발생하면 해당 함수가 에러를 반환하고 종료했으나 수정 이후에는 질의를 끝까지 수행하고 CCI_QUERY_RESULT_* 매크로들을 통해 개별 질의에 대한 에러를 확인할 수 있게 변경되었다.
+	* 브로커 파라미터 KEEP_CONNECTION에서 OFF 값 설정이 제거되었다.
+	* CUBRID_LANG 환경 변수가 제거되었고, 데이터베이스 문자셋을 설정하는 CUBRID_CHARSET 환경 변수 및 유틸리티 메시지 및 오류 메시지에 대한 문자셋을 설정하는 CUBRID_MSG_LANG 환경 변수가 추가되었다.
+	* 브로커 파라미터 SELECT_AUTO_COMMIT 파라미터가 제거되었다.
+	* 브로커 파라미터 APPL_SERVER_MAX_SIZE_HARD_LIMIT의 값의 범위가 1과 2,097,151 사이의 값으로 제한되었다.
+	* call_stack_dump_activation_list 파라미터의 동작 방식이 변경되었다.
+	* SQL 로그 파일 크기를 지정하는 브로커 파라미터의 기본 설정값이 100MB에서 10MB로 변경되었다.
+	
+200여 개의 개선 및 수정
+-----------------------
+	* 성능, SQL, 다국어, 질의 최적화, 분할, HA, Sharding, 유틸리티, 드라이버, 오류 메시지 등 200여 개의 다양한 이슈들을 개선 또는 수정했다.
+	
+보다 자세한 변경 사항은 아래의 내용을 참고하며, 이전 버전 사용자는 :ref:`changed-behaviors` 와 :ref:`new-cautions` 를 반드시 확인하도록 한다.
 
 기능 추가
 =========
@@ -32,57 +73,50 @@ CUBRID 9.1은  ....
 SQL
 ---
 
-
-[검토]
-^^^^^^
-SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수(CUBRIDSUS-9404)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	콜레이션 정보를 출력하는 SHOW COLLATION 문을 추가했다.
-	그리고, 지정한 문자열의 문자셋, 콜레이션, 콜레이션 변환도를 각각 반환하는 CHARSET 함수, COLLATION 함수, COERCIBILITY 함수를 추가했다.
-	
 [검토]
 ^^^^^^
 주어진 범위를 균등 분할하는 WIDTH_BUCKET 함수 추가(CUBRIDSUS-4209)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	범위를 개수로 균등 분할하여 각 버킷마다 순차적으로 번호를 부여하는 WIDTH_BUCKET 함수를 추가했다. 
+	범위를 지정한 개수로 균등 분할하여 각 버킷마다 순차적으로 번호를 부여하는 WIDTH_BUCKET 함수를 추가했다. 
 	범위는 최소값과 최대값으로 부여하며, 해당 범위를 균등 분할하여 버킷 번호를 순차적으로 1부터 할당한다. 
-
-	다음 예에서 범위는 [100, 0)이며 범위에 따른 각 버킷 번호는 [100, 80)이 1, [80, 60)이 2, [60, 40)이 3, [40, 20)이 4, [20, 0)이 5가 된다.
 	
-	::
+	다음은 8명의 고객을 생년월일을 기준으로 '1950-01-01'부터 '1999-12-31'까지의 범위를 5개로 균등 분할하는 예이다. 범위를 벗어나면 0 또는 최대 버킷 번호+1을 리턴한다. ::
 	
-		SELECT name, score, WIDTH_BUCKET(score, 100, 0, 5) grade FROM t_score ORDER BY grade ASC, score DESC;
+		SELECT name, birthdate, WIDTH_BUCKET(birthdate, date'1950-01-01', date'2000-1-1', 5) age_group FROM t_customer ORDER BY birthdate;
 
-		  name                        score        grade
-		================================================
-		  'Ralph'                        99            1
-		  'Jane'                         80            2
-		  'James'                        75            2
-		  'Peter'                        70            2
-		  'Amie'                         60            3
-		  'Lora'                         60            3
-		  'David'                        55            3
-		  'Ralph'                        30            4
+		
+		  name                  birthdate     age_group
+		===============================================
+		  'James'               12/28/1948            0
+		  'Amie'                03/18/1978            4
+		  'Tom'                 07/28/1980            4
+		  'Jane'                05/12/1983            5
+		  'David'               07/28/1986            5
+		  'Lora'                03/26/1987            5
+		  'Peter'               10/25/1988            5
+		  'Ralph'               03/17/1995            6
 
 [검토]
 ^^^^^^
 행의 개수를 균등 분할하는 NTILE 분석 함수 추가(CUBRIDSUS-9688)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	행의 개수를 균등 분할하여 각 버킷마다 순차적으로 번호를 부여하는 NTILE 분석 함수를 추가했다. ::
-	
-		SELECT name, score, NTILE(5) OVER (ORDER BY score DESC) grade FROM t_score;
+	행의 개수를 균등 분할하여 각 버킷마다 순차적으로 번호를 부여하는 NTILE 분석 함수를 추가했다.
 
-		  name                        score        grade
-		================================================
-		  'Ralph'                        99            1
-		  'Jane'                         80            1
-		  'James'                        75            2
-		  'Peter'                        70            2
-		  'Amie'                         60            3
-		  'Lora'                         60            3
-		  'David'                        55            4
-		  'Ralph'                        30            5
-			   
+	다음은 8명의 고객을 생년월일을 기준으로 5개의 버킷으로 행의 개수를 균등 분할하는 예이다. 1, 2, 3번 버킷에는 2개의 행이, 4,5번 버킷에는 2개의 행이 존재한다. ::
+
+		SELECT name, birthdate, NTILE(5) OVER (ORDER BY birthdate) age_group FROM t_customer;
+		
+		  name                  birthdate     age_group
+		===============================================
+		  'James'               12/28/1948            1
+		  'Amie'                03/18/1978            1
+		  'Tom'                 07/28/1980            2
+		  'Jane'                05/12/1983            2
+		  'David'               07/28/1986            3
+		  'Lora'                03/26/1987            3
+		  'Peter'               10/25/1988            4
+		  'Ralph'               03/17/1995            5
+
 [검토]
 ^^^^^^
 TRUNC 함수에 DATE, DATETIME, TIMESTAMP 타입을 입력 인자로 사용하는 기능 추가(CUBRIDSUS-9413)
@@ -92,10 +126,6 @@ TRUNC 함수에 DATE, DATETIME, TIMESTAMP 타입을 입력 인자로 사용하�
 		
 		// 다음 예에서 지정 단위는 'YYYY'이므로, 월 이하는 최소 값으로 출력된다.
 		SELECT TRUNC(TO_DATE('2012-10-26'), 'YYYY');
-
-		01/01/2012
-
-.. 9953 참고	
 
 [검토]
 ^^^^^^		
@@ -122,10 +152,10 @@ LEAD와 LAG 분석 함수 추가(CUBRIDSUS-9414)
 
 [검토]
 ^^^^^^
-여러 개의 인덱스 힌트 지정이 가능하도록 구문 지원(CUBRIDSUS-6675)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	USE, FORCE, IGNORE 등의 인덱스 힌트를 여러 개 지정할 수 있게 되었다. ::
-	
+하나의 질의문에 여러 개의 인덱스 힌트 지정이 가능하도록 구문 지원(CUBRIDSUS-6675)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	하나의 질의문에 USE, FORCE, IGNORE 등의 인덱스 힌트를 여러 개 지정할 수 있게 되었다. ::
+
 		SELECT * FROM tbl USE INDEX(idx1), IGNORE INDEX (idx2) WHERE col1 < 4;
 
 	또한, IGNORE 힌트와 같은 기능을 하는 "USING INDEX index_name(-)" 구문을 지원하게 되었다.	 ::
@@ -135,13 +165,19 @@ LEAD와 LAG 분석 함수 추가(CUBRIDSUS-9414)
 다국어
 ------
 
+[검토]
+^^^^^^
+SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수(CUBRIDSUS-9404)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	콜레이션 정보를 출력하는 SHOW COLLATION 문을 추가했다.
+	그리고, 지정한 문자열의 문자셋, 콜레이션, 콜레이션 변환도를 각각 반환하는 CHARSET 함수, COLLATION 함수, COERCIBILITY 함수를 추가했다.
 
 [검토]
 ^^^^^^
-확장이 있는 콜레이션에서 액센트에 따라 역순으로 프랑스어를 정렬하는 콜레이션 지원(CUBRIDSUS-9407)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	확장이 있는 콜레이션에서 액센트에 따라 역순으로 프랑스어를 정렬하는 콜레이션(utf8_fr_exp_ab)을 지원하도록 수정했다.
-	액센트에 따른 역순 프랑스어 정렬(french order)이란, 문자열 뒤에 액센트가 오는 순서를 우선으로 하여 문자열의 순서를 결정하는 것을 말한다. 가중치가 문자열의 끝에서부터 확인된다.
+역순 액센트에 따라 캐나다 프랑스어를 정렬하는 콜레이션 지원(CUBRIDSUS-9407)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	역순 액센트에 따라 캐나다 프랑스어를 정렬하는 확장 콜레이션(utf8_fr_exp_ab)을 지원하도록 수정했다.
+	역순 액센트에 따른 캐나다 프랑스어 정렬(canadian french by backward accents)이란, 문자열 뒤에 액센트가 오는 순서를 우선으로 하여 문자열의 순서를 결정하는 것을 말하며 가중치가 문자열의 끝에서부터 확인된다.
 
 	::
 	
@@ -195,8 +231,8 @@ Windows용 CUBRID에서 SHARD 기능 지원(CUBRISUS-9549)
 --------
 
 
-[CCI][JDBC] Added the load balancing functionality (CUBRIDSUS-8675)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[JDBC][CCI]Added the load balancing functionality (CUBRIDSUS-8675)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	Added a functionality to connect an application to the main host and the hosts specified in althosts in a random order when althosts was added to the connection URL of CCI and JDBC. In the following example of a connection URL, this functionality is activated when the value of loadBalance is set to true.
 
@@ -210,7 +246,7 @@ Windows용 CUBRID에서 SHARD 기능 지원(CUBRISUS-9549)
 	Different from the JDBC driver which provided two methods to close resultset and statement respectively, the CCI driver had one function, cci_close_req_handle, to close both. The cci_close_query_result function has been added to close resultset. When a new function is not called, the memory for resultset is occupied until the statement is closed. So, the memory usage may be increased.
 
 	In the revised version, when the cci_close_req_handle function is called without calling the cci_close_query_result function, both resultset and the statement are closed like the previous version.
-	
+
 설정
 ----
 
@@ -230,8 +266,8 @@ Set whether to execute the procedure to check if the database server process and
 	
 	브로커 프로세스는 CAS의 멈춤(hang)이 1분 이상 지속되는 경우 CAS를 멈춘(hang) 상태로 판단하고, 해당 CAS의 개수에 따라 해당 브로커 프로세스가 비정상으로 판단되면 정상화되기 전까지 해당 브로커로 접속을 시도하는 응용 프로그램을 차단하여, 접속 URL에 설정한 대체 호스트(altHosts)로의 접속을 유도한다.
 
-모니터링
---------
+Monitoring
+----------
 
 Improved to output the replication delay information (CUBRIDSUS-9525)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -342,12 +378,11 @@ Added a function to log the query statements which exceeded the specified time a
 		
 		cubrid killtran -i ID1,ID2,ID3, ... testdb
 
-동작 변경
-=========
+Changed Behaviors
+=================
 
-SQL
----
-
+Globalization
+-------------
 
 [검토]
 ^^^^^^
@@ -370,10 +405,6 @@ SQL
 		
 		ERROR: before '  = concat(a, ''); '
 		'if ' requires arguments with compatible collations.
-
-다국어
-------
-
 
 [검토]		
 ^^^^^^ 

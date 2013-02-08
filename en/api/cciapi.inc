@@ -1041,7 +1041,7 @@ CCI API Reference
 	
 	.. note:: 
 	
-		* In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed.  [번역] 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
+		* In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed.  From 2008 R4.3 version, the trasaction is committed everytime when a query is executed.
 		
 		[번역]
 		

@@ -109,17 +109,17 @@ Selecting a Shard DB through the Shard SQL Hint
 	
 	.. note::
 
-		* 하나의 질의 안에 두 개 이상의 shard 힌트가 존재할 경우 서로 같은 shard를 가리키면 정상 처리하고, 다른 shard를 가리키면 오류 처리한다. ::
+		* When more than one shard hints exist on a query, it works normally if shard hints indicate the same shards, or it fails if they indicates the different shards. 
+		
+			::
 	
-			예) SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
+				SELECT * FROM student WHERE shard_key = /*+ shard_key */ 250 OR shard_key = /*+ shard_key */ 22;
 	
-			위와 같은 경우 250과 22가 같은 shard를 가리키면 정상 처리, 다른 shard를 가리키면 오류 처리한다.
+			On the above case, it works normally if the shard keys 250 and 22 indicate the same shard, but it fails if they indicate the different shards.
 	
-		* 배열로 여러 개의 값을 바인딩하여 일괄 처리하는 드라이버 함수(예: JDBC의 PreparedStatement.executeBatch, CCI의 cci_execute_array)에서 여러 개의 질의 중 하나라도 다른 shard에 접근하는 질의가  있으면 모두 오류 처리한다. 
+		* On some driver functions which batches the queries with an array by binding the several values(ex. PreparedStatement.executeBatch in JDBC, cci_execute_array in CCI), if at least the one which accesses to the other shard exists, all executions of the queries fail.
 	
-		* shard 환경에서 여러 문장을 동시에 실행하는 함수(예: JDBC의 Statement.executeBatch, CCI의 cci_execute_batch)는 추후 지원할 예정이다.
-
-
+		* Functions to run several statements at one time on shard environment(ex. Statement.executeBatch in JDBC, cci_execute_batch in CCI) will be supported later.
 
 	**shard_key Hint**
 

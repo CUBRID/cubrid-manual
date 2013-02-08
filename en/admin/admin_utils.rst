@@ -35,11 +35,10 @@ The following shows how to use the CUBRID management utilities. ::
 		changemode [option] <database-name>  --- Displaying or changing the server HA mode 
 		copylogdb [option] <database-name>  --- Multiplating transaction logs to configure HA 
 		applylogdb [option] <database-name>  --- Reading and applying replication logs from transaction logs to configure HA 
-		[번역]
-		applyinfo [option] <database-name>   --- HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 도구
-		synccolldb [option] <database-name>  --- DB 콜레이션을 시스템 콜레이션에 맞게 변경하는 도구
-		genlocale [option] <database-name>  --- 사용하고자 하는 로캘 정보를 컴파일하는 도구
-		dumplocale [option] <database-name>   --- 컴파일된 바이너리 로캘 정보를 사람이 읽을 수 있는 텍스트로 출력하는 도구
+		applyinfo [option] <database-name>   --- Displaying the status of being applied transaction log to the other node in HA replication environment
+		synccolldb [option] <database-name>  --- Synchronizing the DB collation with the system collation
+		genlocale [option] <database-name>  --- Compiling the locale information to use
+		dumplocale [option] <database-name>   --- Printing human readable text for the compiled binary locale information
 
 Database Users
 ==============
@@ -1495,19 +1494,18 @@ The following shows [options] available with the **cubrid paramdump** utility.
 
 		cubrid paramdump -C testdb
 
-[번역]
-HA 모드 변경/로그 복제/반영
-===========================
+Changing HA Mode/Log Replication/Applying
+=========================================
 
-**cubrid changemode** 유틸리티는 서버의 HA 모드 출력 또는 변경하는 유틸리티이다. 
+**cubrid changemode** utility prints or changes the HA mode.
 
-**cubrid copylogdb** 유틸리티는 HA 구성을 위해 트랜잭션 로그를 다중화하는 유틸리티이다. 이 유틸리티는 cubrid heartbeat 유틸리티를 이용하여 실행된다.
+**cubrid copylogdb** utility mutiplies transaction logs to build the HA environment. This can be executed by **cubrid heartbeat** utility.
 
-**cubrid applylogdb** 유틸리티는 HA 구성을 위해 트랜잭션 로그에서 복제 로그를 읽고 적용하는 유틸리티이다. 이 유틸리티는 cubrid heartbeat 유틸리티를 이용하여 실행된다.
+**cubrid applylogdb** utility reads and applies the replicated logs from the transaction logs to build HA environment. This can be executed by **cubrid heartbeat** utility.
 
-**cubrid applyinfo** 유틸리티는 HA 환경에서 트랜잭션 로그 반영 정보를 확인하는 유틸리티이다.
+**cubrid applyinfo** utility prints the information of applied transaction logs in the HA environment.
 
-자세한 사용법은 :ref:`cubrid-service-util` 을 참고한다.
+For more details, see :ref:`cubrid-service-util`.
 
 Locale Compile/Output
 =====================

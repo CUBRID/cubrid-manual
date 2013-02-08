@@ -222,12 +222,8 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 
 	*   Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a user name (*user-id*) and a password (*password*) as a separate argument in the **getConnection** method.
 	*   The database connection in thread-based programming must be used independently each other.
-	*   The rollback method requesting transaction rollback will exit after a server complete the rollback job.
-	
-	[번역]
-	
-	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
-	
+	*   The rollback method requesting transaction rollback will be ended after a server completes the rollback job.
+	* In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
 
 Checking Foreign Key Information
 --------------------------------

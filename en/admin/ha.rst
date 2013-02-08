@@ -764,11 +764,10 @@ The following example shows how to configure PHP.
 	}
 	?>
 
-[번역]
-
-.. note:: altHosts를 설정하여 브로커 절체(failover)가 가능하도록 설정한 환경에서, 브로커 절체가 원활하게 되려면 URL에 **disconnectOnQueryTimeout** 값을 **true** 로 설정해야 한다.
-	이 값이 true면 질의 타임아웃 발생 시 응용 프로그램은 즉시 기존에 접속되었던 브로커와의 접속을 해제하고 altHosts에 지정한 브로커로 접속한다.
+.. note:: If you want to activate well the broker's failover in the environment which the broker's failover is enabled by setting **altHosts**, you should the value of *disconnectOnQueryTimeout** in URL as *true**.
 	
+	If this value is **true*, an application program releases the existing connection from a broker and reconnect to the other broker which is specified on **altHosts**.
+
 Running and Monitoring
 ======================
 

@@ -1368,8 +1368,7 @@ The following are other parameters. The type and value range for each parameter 
 
 	If it is set to no, only a long running SQL is written to the server error log file and CAS log file, and this SQL is displayed when you execute **cubrid statdump** command.
 
-	[번역]
-	예를 들어 5초를 초과하면 느린 질의(slow query)로 규정하고 해당 질의의 실행 계획을 로그 파일에 출력하고 싶은 경우, **sql_trace_slow_msecs** 의 값을 5000(ms)로 설정하고 **sql_trace_execution_plan** 의 값을 yes로 설정한다. 
+	For example, if you want to write the execution plan of the slow query to the log file, and specify the query which executes more than 5 seconds as the slow query, then configure the value of the **sql_trace_slow_msecs** parameter as 5000(ms) and configure the value of the **sql_trace_execution_plan** parameter as yes.
 
 	But, on the server error log file, the related informations are written only when the value of error_log_level is NOTIFICATION. 
 
@@ -1622,11 +1621,12 @@ The following describes parameters to configure the environment variables of bro
 
 	**ERROR_LOG_DIR** is a parameter used to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log file name for the broker error is *broker_ name_id*.**err**.
 
-[번역]
 **ENABLE_MONITOR_HANG**
 
-	**ENABLE_MONITOR_HANG** 은 일정 비율 이상의 CAS가 멈춘(hang) 것으로 판단되면 응용 프로그램이 해당 브로커로의 접속을 차단할 것인지 지정하는 파라미터이다. 이 값이 ON이면 해당 동작을 수행한다. 기본값은 OFF로, 해당 기능을 수행하지 않는다. 
-	브로커 프로세스는 CAS의 멈춤(hang)이 1분 이상 지속되는 경우 CAS를 멈춘(hang) 상태로 판단하고, 해당 CAS의 개수에 따라 해당 브로커 프로세스가 비정상으로 판단되면 정상화되기 전까지 해당 브로커로 접속을 시도하는 응용 프로그램을 차단하여, 접속 URL에 설정한 대체 호스트(altHosts)로의 접속을 유도한다.
+	**ENABLE_MONITOR_HANG** is a parameter used to configure whether to block the access from the application to the broker or not, when more than a certain ratio of CASs on that broker are hung. If the **ENABLE_MONITOR_HANG** parameter value is **ON**, blocking feature is processed. The default value is **OFF**. If it's **OFF**, don't do the behavior.
+	
+	The broker process judges the CAS as hung if the hanging status of the CAS keeps more than one minute, then block the access from applications to that broker; it brings the behavior which the applications try to access to the alternative hosts(altHosts) configured by the connection URL.
+	
 
 **KEEP_CONNECTION**
 

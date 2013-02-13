@@ -52,7 +52,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
 ** 분할 테이블과 콜레이션**
 
-분할 테이블에도 콜레이션을 지정할 수 있다. 다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다.::
+분할 테이블에도 콜레이션을 지정할 수 있다. 다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다. ::
 
 	CREATE TABLE tbl(str STRING) COLLATE utf8_en_ci PARTITION BY LIST(str) 
 	(
@@ -62,7 +62,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	
 	ERROR: Partition definition is duplicated. 'p1'
  
-현재 바이너리가 아닌 콜레이션 테이블에 대해 해시 분할 키를 적용할 수 없다. ::
+하지만, 비 바이너리(non-binary) 콜레이션이 지정된 테이블에는 해시 분할 키가 적용될 수 없다. ::
 
 	CREATE TABLE tbl ( code VARCHAR(10)) COLLATE utf8_de_exp_ai_ci PARTITION BY HASH (code) PARTITIONS 4;
 

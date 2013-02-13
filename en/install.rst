@@ -58,10 +58,7 @@ Interoperability
 
 	For the relation between DB server and broker, see :doc:`intro`.For CUBRID SHARD, see :doc:`admin/shard`.
 
-[번역]
-* CUBRID DB 서버와 브로커 서버(또는 CUBRID SHARD 서버)를 분리하여 운영하는 경우, DB 서버와 브로커 서버의 시스템 로캘은 동일해야 한다. 예를 들어 DB 서버의 CUBRID_CHARSET이 en_US.utf8이면 브로커 서버의 CUBRID_CHARSET도 en_US.utf8이어야 한다.
-
-
+* If the CUBRID DB server and its broker server are operated separately, their system locales should be the same. For example, if CUBRID_CHARSET of DB server is en_US.utf8, CUBRID_CHARSET of broker server should be en_US.utf8, too.
 
 **Details to Check when Installing**
 
@@ -257,10 +254,9 @@ You can change configuration such as service ports to meet the user environment 
 
   A configuration file for CUBRID Manager. The port that the Manager server process uses is called  **cm_port**and its default value is **8001** . Two ports are used and the port number is determined by the **cm_port** parameter. If 8001 is specified, 8001 and 8002 (configured number plus 1) ports will be used. For details, see `CUBRID Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual>`_ .
 
-[번역]
 * **cm_httpd.conf**
  
-  CUBRID 웹 매니저용 설정 파일이다. **listen**\은 웹 매니저 서버 프로세스가 사용하는 포트로 기본값은 **8282** 이다. 자세한 내용은 `CUBRID 웹 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ 을 참고한다.
+  A configuration file for CUBRID Web Manager. **listen** is the port to be used in the web manager server process, and it's default value is **8282**. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ .
 
 * **cubrid.conf**
 
@@ -270,10 +266,8 @@ You can change configuration such as service ports to meet the user environment 
 
   A configuration file for broker. You can use it to configure the following values: broker port, the number of application servers (CAS), SQL LOG, etc. The port that a broker uses is called **BROKER_PORT**. A port you see in the drivers such as JDBC is its corresponding broker's port. **APPL_SERVER_PORT** is a port that a broker application server (CAS) uses and it is added only in Windows. The default value is  **BROKER_PORT** +1. The number of ports used is the same as the number of CAS, starting from the specified port's number plus 1. For details, see :ref:`parameter-by-broker`.
 
-  [번역]  
-  예를 들어 **APPL_SERVER_PORT** 값이 35000이고 MAX_NUM_APPL_SERVER 값에 의한 CAS의 최대 개수가 50이면 CAS에서 listen하는 포트는 35000, 35001, ..., 35049이다.
-  자세한 내용은 :ref:`parameter-by-broker` 를 참조한다. 
-
+  For example, if the value of **APPL_SERVER_PORT** is 35000 and the maximum number of CASs by **MAX_NUM_APPL_SERVER** is 50, then listening ports on CASs are 35000, 35001, ..., 35049.
+  For more details, see :ref:`parameter-by-broker`. 
   
   The **CCI_DEFAULT_AUTOCOMMIT** broker parameter is supported since 2008 R4.0. The default value in the version is **OFF** and it is later changed to **ON** .  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to **OFF** or configure the auto-commit mode to **OFF** .
 

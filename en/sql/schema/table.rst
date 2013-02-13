@@ -1028,10 +1028,7 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 
 	* **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.
 	* When converting a number type to character type, if the length of the string is shorter than that of the number, the string is truncated and saved according to the length of the converted character type.
-	
-	[번역]
-	
-	* 테이블의 칼럼 타입, 콜레이션 등 칼럼 속성을 변경하는 경우 변경된 속성이 해당 테이블을 이용하여 생성한 뷰에 반영되지는 않는다. 따라서 테이블의 칼럼 속성을 변경하는 경우 뷰를 재생성할 것을 권장한다.
+	* If the column attributs like a type, a collation, etc. are changed, the changed attributes are not applied into the view created with the table before the change. Therefore, if you change the attributes of a table, it is recommended to recreate the related views.
 
 ::
 

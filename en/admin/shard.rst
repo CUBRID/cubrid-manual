@@ -105,11 +105,9 @@ Selecting a Shard DB through the Shard SQL Hint
 
 	For more information on the query process using hints and configuration information, see :ref:`General Procedure of Executing Queries by Using Shard SQL Hint <using-shard-hint>`.
 
-	[번역]
-	
 	.. note::
 
-		* When more than one shard hints exist on a query, it works normally if shard hints indicate the same shards, or it fails if they indicates the different shards. 
+		* When more than one shard hints exist on a query, it works normally if shard hints indicate the same shards, but it fails if each of them indicates the different shard. 
 		
 			::
 	
@@ -215,8 +213,7 @@ Selecting a Shard DB through the Shard SQL Hint
 		
 		.. note::
 		
-			[번역]
-			배열로 여러 개의 값을 바인딩하여 일괄 처리하는 드라이버 함수(예: JDBC의 executeBatch, CCI의 cci_execute_array, cci_execute_batch)에서 다른 shard에 접근하는 값이 존재하면 오류 처리한다.
+			On the driver functions which do a batch query processing with the array which binds several values(ex. executeBatch in JDBC, cci_execute_array and cci_execute_batch in CCI ), they fail to run if there is a value which accesses to a different shard.
 
 Various DBMSs Available
 -----------------------
@@ -1496,9 +1493,8 @@ Constraints
 
 	The auto increment attribute or SERIAL is valid within each shard DB only. So a result different from the intended result may be returned.
 
-[번역]
-
-	**Windows용 SHARD DB와 응용 드라이버 사이의 접속**
+	**The access between SHARD DB for Windows and application drivers**
 	
-	Windows용 SHARD DB 서버는 같은 버전의 드라이버를 사용하는 응용 프로그램만 접속이 가능하다. Linux용 SHARD DB 서버는 다른 버전의 드라이버를 사용하는 응용 프로그램과도 접속이 가능하다.
+	SHARD DB server for Windows can be accessed to the application with the drivers which use the same version with the DB server's version. 
+	SHARD DB server for Linux can be accessed to the application with the drivers which use the different version with the DB server's version. 
 	

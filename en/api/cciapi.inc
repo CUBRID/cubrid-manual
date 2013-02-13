@@ -219,12 +219,11 @@ CCI API Reference
 		*   **CCI_ER_DBMS**
 		*   **CCI_ER_INVALID_LOB_HANDLE**
 
-[번역]
 .. c:function:: int cci_cancel(int conn_handle)
 
-	다른 스레드에서 실행 중인 질의를 취소시킨다. Java의 Statement.cancel() 메서드와 같은 기능을 수행한다.
+	Cancel the running query on the other thread. This function executes the same behavior as Statement.cancel() method in JAVA.
 	
-	다음은 main 함수에서 스레드의 질의 실행을 취소하는 예이다.
+	The following shows how to calcel the query execution of the thread.
 	
 	::
 
@@ -1041,12 +1040,8 @@ CCI API Reference
 	
 	.. note:: 
 	
-		* In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed.  From 2008 R4.3 version, the trasaction is committed everytime when a query is executed.
-		
-		[번역]
-		
-		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_array 함수에서 배열 내의 질의 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
-
+		* In the previous version of 2008 R4.3, if the autocommit mode is on, all queries in the array were committed after all of them are executed.  From 2008 R4.3 version, the trasaction is committed everytime when a query is executed.
+		* In autocommit mode off, in case that the general error occurs during executing one of the queries in the array on the cci_execute_array function which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 
 	
 	.. code-block:: c
 
@@ -1151,10 +1146,8 @@ CCI API Reference
 	
 	.. note:: 
 	
-		* In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. [번역] 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
-
-		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_batch 함수에서 배열 내의 질의 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
-
+		* In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. From 2008 R4.3 version, each query in the array is committed right after each running.
+		*  With autocommit OFF, in case that the general error occurs during executing one of the queries in the array on the cci_execute_batch function which does a batch processing of the queries, the query with an error is ignored and the next query is executed. But if the deadlock occurs, the error occurs as rolling back the transaction. 
 
 	.. code-block:: c
 
@@ -1466,12 +1459,13 @@ CCI API Reference
 	
 		*   **CCI_ER_CON_HANDLE**
 
-[번역]
-
 .. c:function:: int cci_get_query_plan(int req_handle, char **out_buf_p)
 
-	cci_prepare 함수가 리턴한 요청 핸들(req_handle)에 대한 질의 계획을 결과 버퍼에 출력한다. cci_execute 함수의 호출 여부와 상관 없이 cci_get_query_plan 함수를 호출할 수 있다.
-	cci_get_query_plan 함수 호출 후 결과 버퍼의 사용이 끝나면 :c:func:`cci_query_info_free` 함수를 이용하여 cci_get_query_plan 함수에서 생성된 결과 버퍼를 해제해야 한다.
+	Saves the query plan to the result buffer; the query plan about the request handle which the cci_prepare function returned.
+
+	You can call this function whether to call the cci_execute function or not. 
+	
+	After calling the cci_get_query_plan function, if the use of a result buffer ends, you should call the :c:func:`cci_query_info_free` function to release the result buffer created by cci_get_query_plan function.
 
 	::
 		
@@ -1484,9 +1478,9 @@ CCI API Reference
 		printf("plan = %s", out_buf);
 		cci_query_info_free(out_buf);
 		
-	:param req_handle: (IN) 요청 핸들
-	:param out_buf_p: (OUT) 결과 버퍼 포인터의 주소
-	:return: 에러 코드
+	:param req_handle: (IN) Request handle
+	:param out_buf_p: (OUT) The pointer of a result buffer pointer
+	:return: Error code
 		
 		*	**CCI_ER_REQ_HANDLE**
 		*	**CCI_ER_CON_HANDLE**
@@ -1498,11 +1492,11 @@ CCI API Reference
 
 .. c:function:: int cci_query_info_free(char *out_buf)
 
-	cci_get_query_plan 함수에서 할당된 결과 버퍼 메모리를 해제한다.
+	Releases the result buffer memory allocated from the c:func:`cci_get_query_plan` function.
 
-	:param req_handle: (IN) 요청 핸들
-	:param out_buf: (OUT) 결과 버퍼 포인터의 주소
-	:return: 에러 코드
+	:param req_handle: (IN) Request handle
+	:param out_buf: (OUT) Result buffer pointer
+	:return: Error code
 	
 		*	**CCI_ER_NO_MORE_MEMORY**
 		
@@ -1674,17 +1668,16 @@ CCI API Reference
 			$ strings /home/usr1/CUBRID/lib/libcascci.so | grep VERSION
 			VERSION=9.0.0.1
 
-[번역]
 .. c:function::  void cci_init()
 
-	Windows용 CCI 응용 프로그램을 static linking library(.lib)로 컴파일하는 경우에는 반드시 호출해야 하고, 그 이외의 경우는 이 함수를 사용할 필요가 없다.
+	If you compile the CCI application program for Windows with static linking library(.lib), this function should be called always. In the other cases, this does not need to be called. 
 
 .. c:function:: int cci_is_holdable(int req_handle)
 
-	**cci_is_holdable** 함수는 요청 핸들의 연결 유지(holdable) 여부를 리턴한다.
+	**cci_is_holdable** function returns whether to be able to hold the connection of the request handle or not.
 
-	:param req_handle: (IN) prepared statement에 대한 요청 핸들
-	:return: 1 : 연결 유지, 0 : 연결 유지 안 됨
+	:param req_handle: (IN) Request handle about the prepared statement.
+	:return: 1 : holdable, 0 : not holdable
 
 		*   **CCI_ER_REQ_HANDLE**
 
@@ -1714,17 +1707,15 @@ CCI API Reference
 
 		*   **CCI_ER_REQ_HANDLE**
 
-[번역]
-
 .. c:function:: int cci_get_last_insert_id(int conn_handle, void *value, T_CCI_ERROR *err_buf)
 
-	가장 마지막에 수행한 INSERT 문의 기본 키 값을 얻는다.
+	Gets the primary key of the INSERT statement which executed at the last time.
 	
-	:param conn_handle: (IN) 연결 핸들
-	:param value: (OUT) 결과 버퍼에 대한 포인터로 (char \*\*). 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
-	:param err_buf: (OUT) 에러 버퍼
+	:param conn_handle: (IN) Request handle
+	:param value: (OUT) The pointer of the result buffer pointer(char \*\*). It stores the last primary key of INSERT statement executed on the last time. The memory which this pointer indicates doesn't need to be released, because it is the fixed buffer inside the connection handle.
+	:param err_buf: (OUT) Error buffer
 
-	:return: 에러 코드
+	:return: Error code
 
 		*   **CCI_ER_CON_HANDLE**
 		*   **CCI_ER_USED_CONNECTION**
@@ -2067,7 +2058,7 @@ CCI API Reference
 	
 	If you configure **default_autocommit**, **default_isolation**, or **default_lock_timeout** value, connection for autocommit, isolation, or lock_timeout based on current configured value is returned when **cci_datasource_borrow** is called. If you do not configure it, connection for autocommit, isolation, or lock_timeout is returned with keeping the value that a user changed before.
 
-	**default_isolation** has one of the following configuration values. For details on isolation level, see "CUBRID SQL Guide > Transaction and Lock > Transaction Isolation Level."
+	**default_isolation** has one of the following configuration values. For details on isolation level, see :ref:`set-transaction-isolation-level`.
 
 	+----------------------------+---------------------------------------+
 	| isolation_level            | Configuration Value                   |
@@ -2091,16 +2082,17 @@ CCI API Reference
 	| READ UNCOMMITTED INSTANCES |                                       |
 	+----------------------------+---------------------------------------+
 
-	[번역]
-	DB 사용자 이름과 암호는 **user** 와 **password** 값을 직접 지정하는 방식을 사용하거나 **url** 속성 내에서 **user**와 **password** 값을 지정하는 방식을 사용한다. 두 가지 경우가 같이 사용되는 경우  우선 순위는 다음과 같다.
+	DB user's name and password can be specified by the setting of **user** and **password** directly, or by the setting of **user** and **password** in **url**.
+
+	The following shows how to work as the first priority if both are specified.
 	
-	* 둘다 입력되면 직접 지정하는 방식의 값이 우선한다. 
-	* 둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다. 
-	* 둘 다 NULL이면 NULL 값으로 사용된다. 
-	* DB 사용자를 직접 지정한 값이 NULL이면 "public", 암호를 직접 지정한 값이 NULL이면 NULL로 설정된다.
-	* 암호를 직접 지정한 값이 NULL이면 URL의 설정을 따른다. 
+	* If both are specified, the value of direct setting will be first.
+	* If one of them is NULL, the value which is not NULL is used.
+	* If both are NULL, they are used as NULL value.
+	* If the direct setting value of DB user is NULL then "public" is used, else if the direct setting value of the password is NULL then NULL is used.
+	* If the direct setting value of the password is NULL, it follows the setting of URL.
 	
-	다음 예제에서 DB 사용자 이름은 "dba", 암호는 "cubridpwd" 가 된다.
+	The following shows that the DB user's name becomes "dba" and the password becomes "cubridpwd".
 	
 	::
 	
@@ -2180,15 +2172,14 @@ CCI API Reference
 	:param index: (IN) Column index (base: 1)
 	:return: statement type (**T_CCI_CUBRID_STMT**)
 
-[번역]
 .. c:function:: int cci_register_out_param(int req_handle, int index)
 
-	자바 저장 프로시저에서 아웃 바인드로 정의한 파라미터를 바인딩하기 위해 사용하며, index는 1부터 시작한다.
-	이 함수를 호출하기 전에 cci_prepare 함수의 플래그에 CCI_PREPARE_CALL을 설정해야 한다.
+	The **cci_register_out_param** function is used to bind the parameters as outbind in Java Stored Procedure. The index value begins from 1.
+	To call this function, **CCI_PREPARE_CALL** flag of **cci_prepare** function should be specified.
 	
-	다음은 "Hello, CUBRID"라는 문자열을 출력하는 자바 저장 프로시저의 예이다.
+	The following shows to print out "Hello, CUBRID" string with Java Stored Procedure.
 	
-	먼저 cubrid.conf에 있는 java_stored_procedure 파라미터의 값을 yes로 설정하고, 데이터베이스를 구동한다.
+	To use Java Stored Procedure, firstly specify **java_stored_procedure** parameter in cubrid.conf as **yes**, then start the database.
 	
 	::
 	
@@ -2198,7 +2189,7 @@ CCI API Reference
 		$ cubrid service start
 		$ cubrid server start demodb
 	
-	자바 저장 프로시저로 등록할 클래스를 구현하고 컴파일한다.
+	Implement and compile the class to be used as Java Stored Procedure.
 	
 	::
 	
@@ -2210,13 +2201,13 @@ CCI API Reference
 		
 		%javac SpCubrid.java
 	
-	컴파일된 자바 클래스를 CUBRID로 로딩한다.
+	Load the compliled Java class into CUBRID.
 	
 	::
 		
 		$ loadjava demodb SpCubrid.class
 		
-	로딩한 Java 클래스를 등록한다.
+	Register the loaded Java class.
 	
 	::
 		
@@ -2224,7 +2215,7 @@ CCI API Reference
 		AS LANGUAGE JAVA
 		NAME 'SpCubrid.outTest(java.lang.String[] o)';
 		
-	CCI 응용 프로그램에서 cci_prepare 함수의 플래그에 CCI_PREPARE_CALL을 지정하고, cci_register_out_param 함수로 아웃 바인드 파라미터 위치를 지정한 후 실행 결과를 페치하여 가져온다. 
+	 On the CCI application program, specify **CCI_PREPARE_CALL** flag into the **cci_prepare** function, and bring the fetching result after setting the position of the outbind parameter by calling **cci_register_out_param**.
 	
 	::
 
@@ -2324,10 +2315,10 @@ CCI API Reference
 
 		:c:func:`cci_prepare`
 		
-	:param req_handle: (IN) 요청 핸들
+	:param req_handle: (IN) Reqeust handle
 	 int cci_register_out_param(int req_handle, int index)
 	
-	:return: 에러 코드
+	:return: Error code
 			
 		*	**CCI_ER_BIND_INDEX**
 		*	**CCI_ER_REQ_HANDLE**
@@ -2336,13 +2327,13 @@ CCI API Reference
 
 .. c:function:: int cci_row_count(int conn_handle, int *row_count, T_CCI_ERROR * err_buf)
 
-	가장 마지막에 수행한 질의에 영향을 끼친 행의 개수를 얻는다.
+	The **cci_row_count** function gets the number of rows affected by the last executed query.
 	
-	:param conn_handle: (IN) 연결 핸들
-	:param row_count: (OUT) 가장 마지막에 수행한 질의에 영향을 끼친 행의 개수
-	:param err_buf: (OUT) 에러 버퍼
+	:param conn_handle: (IN) Connection handle
+	:param row_count: (OUT)  The number of rows affected by the last executed query
+	:param err_buf: (OUT) Error buffer
 	
-	:return: 에러 코드
+	:return: Error code
 	
 		*	**CCI_ER_COMMUNICATION**
 		*	**CCI_ER_LOGIN_TIMEOUT**
@@ -3037,14 +3028,13 @@ CCI API Reference
 
 	**Note** If the transaction isolation level is set by cci_set_db_parameter(), only the current transaction is affected. When the transaction is complete, the transaction isolation level returns to the one set by CAS. You must use **cci_set_isolation_level** () to set the isolation level for the entire connection.
 
-[번역]
 .. c:function:: int cci_set_lock_timeout(int conn_handle, int locktimeout, T_CCI_ERROR * err_buf)
 
-	연결에 대한 잠금 타임아웃을 밀리초 단위로 설정한다.
-	cci_set_db_parameter(conn_id, CCI_PARAM_LOCK_TIMEOUT, &val, err_buf)를 호출한 것과 동일하며, :c:func:`cci_set_db_parameter` 함수를 참고한다.
+	The **cci_set_lock_timeout** function specifies the connection lock timeout as milliseconds.
+	This is the same with calling **cci_set_db_parameter** (conn_id, CCI_PARAM_LOCK_TIMEOUT, &val, err_buf). See :c:func:`cci_set_db_parameter`.
 	
-	:param conn_handle: (IN) 연결 핸들
-	:param locktimeout: (IN) 잠금 타임아웃 시간(단위: 밀리 초).
+	:param conn_handle: (IN) Connection handle
+	:param locktimeout: (IN) lock timeout value(Unit: milliseconds).
 
 .. c:function:: int cci_set_make(T_CCI_SET *set, T_CCI_U_TYPE u_type, int size, void *value, int *indicator)
 

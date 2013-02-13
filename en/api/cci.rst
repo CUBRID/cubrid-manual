@@ -48,8 +48,6 @@ General process for writing applications is as follows. For using the prepared s
 *   Closing the database connection handle (related function: :c:func:`cci_disconnect`)
 *   Using database connection pool (related functions: :c:func:`cci_property_create`), :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`)
 
-[번역]
-
 .. note::
 	* If you want to compile the CCI application on Windows, "WINDOWS" should be defined. Therefore, "-DWINDOWS" option should be defined on the compiler.
 	* The database connection in thread-based programming must be used independently each other.

@@ -49,7 +49,7 @@ Sharding 기능 개선
 	* killtran 유틸리티에 각 트랜잭션마다 질의의 수행 상태를 출력하는 기능을 추가했다.
 	* killtran 유틸리티에 특정 SQL을 수행하는 트랜잭션을 지정하여 트랜잭션을 제거하는 기능을 추가했다.
 	* 질의 수행이 지정한 시간을 초과하면 서버 에러 로그 및 CAS 로그 파일에 질의 실행 정보를 기록하게 하는 기능을 추가했다.
-	
+
 동작 변경
 ---------
 	* cci_execute_array 함수, cci_execute_batch 함수, JDBC의 Statement.executeBatch 메서드, PreparedStatement.executeBatch 메서드 등 배열 내 여러 개의 질의문을 일괄적으로 처리할 때 모든 질의문을 수행한 이후에 커밋했으나 각 질의문을 수행할 때마다 커밋하도록 변경되었다.
@@ -65,7 +65,7 @@ Sharding 기능 개선
 -----------------------
 	* 성능, SQL, 다국어, 질의 최적화, 분할, HA, Sharding, 유틸리티, 드라이버, 오류 메시지 등 200여 개의 다양한 이슈들을 개선 또는 수정했다.
 	
-보다 자세한 변경 사항은 아래의 내용을 참고하며, 이전 버전 사용자는 :ref:`changed-behaviors` 와 :ref:`new-cautions` 를 반드시 확인하도록 한다.
+보다 자세한 변경 사항은 아래의 내용을 참고하며, 이전 버전 사용자는 :ref:`changed-behaviors91` 와 :ref:`new-cautions91` 를 반드시 확인하도록 한다.
 
 기능 추가
 =========
@@ -378,6 +378,8 @@ Added a function to log the query statements which exceeded the specified time a
 		
 		cubrid killtran -i ID1,ID2,ID3, ... testdb
 
+.. _changed-behaviors91:
+
 Changed Behaviors
 =================
 
@@ -515,6 +517,8 @@ Globalization
 	수정 이전 버전에서 cci_property_set 함수로 DATASOURCE에 대한 DB 사용자와 암호 설정 시 DB 사용자 인자는 반드시 설정해야 되며, 암호 인자를 설정하지 않으면 NULL로 인식했다. 또한, 암호 인자가 NULL이면 URL의 암호를 사용했다.
 	
 	수정 이전 버전에서 cci_connect_with_url 함수에 DB 사용자와 암호 설정 시 DB 사용자 인자가 NULL이면 "public"으로 지정되었으며, 암호 인자가 NULL이면 URL의 암호를 사용했다.
+
+.. _changed-config91:
 
 기본 설정 변경  
 --------------
@@ -2286,6 +2290,8 @@ CUBRID Manager에서 DB 사용자를 편집하지 못하는 현상(CUBRIDSUS-997
 
 주의 사항
 =========
+
+.. _new-cautions91:
 
 신규 주의 사항
 --------------

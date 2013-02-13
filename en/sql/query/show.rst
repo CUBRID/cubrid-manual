@@ -114,7 +114,7 @@ The following is the result of a query in the *demodb* database.
 SHOW INDEX Statement
 ====================
 
-The **SHOW INDEX** statement displays the index information. The query must have the following columns:
+The **SHOW INDEX** statement displays the index information. This query has the following columns:
 
 *   Table: Table Name
 *   Non_unique
@@ -164,25 +164,22 @@ The following is the result of a query in the *demodb* database.
 	  't1'           1  'i_t1_i1_s1'              2      's1'          'A'            0               NULL        NULL     'YES'   'BTREE'
 	  't1'           1  'i_t1_s1'                 1      's1'          'A'            0                  7        NULL     'YES'   'BTREE'
 
-[번역]
-
-
 .. _show-collation:
  
-SHOW COLLATION 문
-=================
+SHOW COLLATION Statement
+========================
 
-**SHOW COLLATION** 문은 데이터베이스에서 지원하는 콜레이션 리스트를 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
-해당 질의는 다음과 같은 칼럼을 가진다.
+**SHOW COLLATION** statement lists collations supported by the database. If LIKE clause is present, it indicates which collation names to match. 
+This query has the following columns:
 
-* Collation: 콜레이션 이름
-* Charset: 문자셋 이름
-* Id: 콜레이션 ID
-* Built_in: 내장 콜레이션 여부
-* Expansions: 확장이 있는 콜레이션인지 여부. 확장이 있는 콜레이션에서 일부 결합 문자(코드포인트)들은 다른 문자들로 구성된 순서 있는 리스트(ordered list)로 해석된다. 예를 들어, 'æ'는 'ae'로 해석된다.
-* Strength: 문자 간 비교를 위한 기준인데, 이 기준에 따라 문자 순서가 달라질 수 있다. 이에 대한 설명은 :ref:`collation-cont-exp` 를 참고한다.
+* Collation: Collation name
+* Charset: Charset name
+* Id: Collation ID
+* Built_in: Built-in collation or not. Built-in collations are impossible to add or remove because they are hard-coded.
+* Expansions: Collation with expansion or not. In the collation with expansion, some composed characters(codepoints) are interpreted as oerdered list with other characters. For example, 'æ' is interpreted as 'ae'.
+* Strength: The number of levels that are to be considered in comparison, and the character order can be different by this number. For details, see :ref:`collation-cont-exp`.
 
-다음은 해당 질의를 실행한 결과이다. 
+The following shows the result of executing the query.
 
 ::
 
@@ -219,15 +216,6 @@ SHOW COLLATION 문
 	===========================================================================================================================
 	  'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
 	  'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
-
-각 칼럼이 나타내는 의미는 다음과 같다.
-
-* Collation: 콜레이션 이름
-* Charset: 문자셋 이름
-* Id: 콜레이션 ID
-* Built_in: 콜레이션이 CUBRID 제품 안에 내장되었는지 여부. 해당 콜레이션들은 하드 코딩되어 있어 추가 혹은 삭제가 불가능하다.
-* Expansions: 콜레이션의 확장 여부
-* Strength: 콜레이션의 세기
 
 SHOW GRANTS Statement
 =====================

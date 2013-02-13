@@ -1,13 +1,13 @@
-*****************
-LOB 함수와 연산자
-*****************
+********
+LOB 함수
+********
 
 .. function:: CLOB_TO_CHAR ( clob_type_column [USING charset] )
 
 	**CLOB** 타입을 **VARCHAR** 타입으로 변환한다.           
 
 	:param clob_type_column: 변환 대상 칼럼
-	:param charset: 변환할 문자열의 문자셋을 정의한다. utf8, euckr, iso88591이 올 수 있다.
+	:param charset: 변환할 문자열의 문자셋. utf8, euckr, iso88591이 올 수 있다.
 	:rtype: VARCHAR
 	
 .. function:: BLOB_TO_BIT ( blob_type_column )
@@ -75,7 +75,7 @@ LOB 함수와 연산자
  
 	**CLOB** 파일에 저장된 **LOB** 데이터의 길이를 바이트 단위로 반환한다. 
 	
-	:param clob_column: 길이를 구하고자 하는 CLOB 타입의 칼럼
+	:param clob_column: 길이를 구하고자 하는 **CLOB** 타입의 칼럼
 	:rtype: INT
  
 .. function:: BLOB_LENGTH ( blob_column )                                            

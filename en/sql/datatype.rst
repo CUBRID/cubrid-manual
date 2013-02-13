@@ -816,21 +816,18 @@ NCHAR(n)
 --------
 **NCHAR** (*n*) is the same with **CHAR** (*n*).
 
-[번역]
-
 .. note::
-	CUBRID 9.0 미만 버전에서 영어 외 국가 언어의 데이터를 입력하기 위한 용도로 사용되었으나 로캘 설정에 따른 문자셋과 콜레이션을 지원하면서 이 타입은 syntax 호환을 위해서만 남게 되었다. 따라서 새로 스키마를 작성하는 경우에는 이 타입 대신 **CHAR** 타입을 사용할 것을 권장한다.
+	This type had been used to input the data for the languages except English 
+	before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you newly create the schema, it is recommended to use **CHAR** instead of this type.
 
 NCHAR VARYING(n)
 ----------------
 
 **NCHAR VARYING** (*n*) is the same with **VARCHAR** (*n*).
 
-[번역]
-
 .. note::
-	CUBRID 9.0 미만 버전에서 영어 외 국가 언어의 데이터를 입력하기 위한 용도로 사용되었으나 로캘 설정에 따른 문자셋과 콜레이션을 지원하면서 이 타입은 syntax 호환을 위해서만 남게 되었다. 따라서 새로 스키마를 작성하는 경우에는 이 타입대신 **VARCHAR** 타입을 사용할 것을 권장한다.
-
+	This type had been used to input the data for the languages except English 
+	before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you newly create the schema, it is recommended to use **VARCHAR** instead of this type.
 
 .. _escape-characters:
 
@@ -873,7 +870,7 @@ The following is the result of executing Escape if a value for the system parame
 	 
 	   strcmp('single quotes test('')', 'single quotes test('')')
 	=============================================================
-																0
+	                                                            0
 	 
 	SELECT STRCMP("\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z", "a\bcdefghijklm\nopq\rs\tuvwxyz");
 	 
@@ -881,13 +878,12 @@ The following is the result of executing Escape if a value for the system parame
 	s       uvwxyz', 'abcdefghijklm
 	s       uvwxyz')
 	=====================================================================
-																		0
-	 
+	                                                                    0 
 	SELECT LENGTH('\\');
 	 
 	   char_length('\')
 	===================
-					  1
+	                  1
 
 The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is yes, and a value for **no_backslash_escapes** is yes.
 
@@ -914,7 +910,7 @@ The following is the result of executing Escape if a value for the system parame
 	 
 	   char_length('\\')
 	====================
-					   2
+	                   2
 
 The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is yes, and a value for **no_backslash_escapes** is no.
 

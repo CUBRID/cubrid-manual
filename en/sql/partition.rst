@@ -50,11 +50,9 @@ The following shows operators and functions that can be used in partitioning exp
 
     :func:`EXTRACT`, :func:`CAST`
 
-[번역]
+** Partitioning and Collation**
 
-** 분할 테이블과 콜레이션**
-
-분할 테이블에도 콜레이션을 지정할 수 있다. 다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다.::
+You can specify the collation on the partition table. The following example shows that *tbl* is defined as the case insensitive utf8_en_ci collation; therefore, it is considered that partitioning key 'test' and 'TEST' are the same, so table creation is failed.::
 
 	CREATE TABLE tbl(str STRING) COLLATE utf8_en_ci PARTITION BY LIST(str) 
 	(
@@ -64,7 +62,7 @@ The following shows operators and functions that can be used in partitioning exp
 	
 	ERROR: Partition definition is duplicated. 'p1'
  
-현재 바이너리가 아닌 콜레이션 테이블에 대해 해시 분할 키를 적용할 수 없다. ::
+But, you cannot apply the hash partition key on the table specified by the non-binary collation. ::
 
 	CREATE TABLE tbl ( code VARCHAR(10)) COLLATE utf8_de_exp_ai_ci PARTITION BY HASH (code) PARTITIONS 4;
 
@@ -784,13 +782,10 @@ Partitions and Inheritance
 
 Partitions cannot be a part of the hierarchy chain and CUBRID has a different inheritance relationship for a partitioned table and a subclass. In fact, a partitioned table has superclasses and subclasses. However, in CUBRID, one partition has just one superclass (in other words, a partitioned table) only and does not have several subclasses.
 
-[번역]
+Partitioning key and Charset
+----------------------------
 
-분할 키와 문자셋
-----------------
-
-분할 테이블의 분할 키들은 칼럼과 같은 문자셋을 가져야 한다. 
-따라서 아래와 같은 경우는 허용하지 않는다. 
+Partitioning keys of partition table should have the same character set with the column. Therefore, the following case is not allowed.
 
 .. code-block:: sql
 

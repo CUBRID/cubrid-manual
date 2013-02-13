@@ -744,19 +744,21 @@ Date/Time Functions and Operators
 		==================================
 									  2
 
-[번역]
-
 .. _round-date:
 
 .. function:: ROUND(date, fmt)
 
-	*fmt* 에서 지정한 단위의 값을 반올림한다.
-	*fmt* 의 'yyyy', 'yy'는 년도를 나타내며, 년도를 반올림한다. 'mm', 'month'는 월을 나타내며, 월을 반올림한다. 'dd' 일을 나타내며, 일을 반올림한다. 'q'는 사분기를 나타내며, 사분기 단위로 반올림한다. 'day'는 *date* 를 한 주 안에서 반올림하여 해당 주 혹은 그 다음 주의 일요일에 해당하는 날짜를 반환한다.
+	This function rounds date to the unit specified by the format string, *fmt*.
+	In *fmt*, 'yyyy' or 'yy' indicates year, and it rounds the year. 'mm' or 'month' indicates month, and it rounds the month. 'q' indicats the quarter, and it rounds the quarter. 'dd' indicates the day, and it rounds the day. 'day' rounds the *date* on that week, by returning the Sunday of that week including that *date* or the Sunday of the next week.
 	
-	'hh'는 시를 반올림한다. 'mi'는 분을 반올림한다. 'ss'는 초를 반올림한다.
+	'hh' rounds the hour. 'mi' rounds the minute. 'ss' rounds the second.
 
-	:param date: **DATE** 타입, **TIMESTAMP** 타입 또는 **DATE** 타입의 값.
-	:param fmt: 반올림할 단위에 대한 포맷을 지정. 생략되면 "dd"
+	:param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
+	:param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
+
+	
+	:param date: The value of **DATE**, **TIMESTAMP** or **DATE**.
+	:param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
 	
 	:rtype: DATE
 
@@ -981,17 +983,15 @@ Date/Time Functions and Operators
 		========================
 						 3652424
 
-[번역]
-
 .. _trunc-date:
 
 .. function:: TRUNC( date[, fmt] )
 
-	*fmt* 에서 지정한 단위 아래의 값을 절삭한다.
-	*fmt* 의 'yyyy', 'yy'는 년도를 나타내며, 월을 절삭하여 같은 년도 1월 1일을 반환한다. 'mm', 'month'는 월을 나타내며, 일을 절삭하여 같은 년도, 같은 월의 1일을 반환한다. 'q'는 사분기를 나타내며, 사분기 이하를 절삭하여 사분기의 첫째날을 반환한다. 'dd'는 뒤의 시간 값을 절삭한다. 'day'는 한 주를 절삭하여 *date* 가 있는 주의 시작일인 일요일에 해당하는 날짜를 반환한다.
+	This function truncates date to the unit specified by the format string, *fmt*.
+	In *fmt*, 'yyyy' or 'yy' indicates the year, and it truncates the month by returning the date with the same year and January 1st. 'mm' or 'month' indicates the month, and it truncates the day by returning the same year and the same month with 1st. 'q' indicats the quarter, and it truncates the below of quarter by returning the 1st day of that quarter. 'dd' truncates the hour. 'day' truncates the week, by returning the Sunday of the week including that *date*.
 
-	:param date: **DATE** 타입, **TIMESTAMP** 타입 또는 **DATE** 타입의 값
-	:param fmt: 절삭할 단위에 대한 포맷을 지정. 생략되면 "dd"
+	:param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
+	:param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
 	
 	:rtype: DATE
 
@@ -1009,11 +1009,11 @@ Date/Time Functions and Operators
 		SELECT TRUNC(datetime'2012-12-26 12:10:10', 'dd');
 		12/26/2012
 		
-		// 26일이 있는 주의 일요일 날짜를 반환한다.
+		// It returns the date of Sunday of the week which includes date'2012-12-26'
 		SELECT TRUNC(datetime'2012-12-26 12:10:10', 'day');
 		12/23/2012
 				
-	:ref:`ROUND(date, fmt) <round-date>` 를 참고한다.
+	Refer :ref:`ROUND(date, fmt) <round-date>`.
 
 .. function:: UNIX_TIMESTAMP ( [date] )
 

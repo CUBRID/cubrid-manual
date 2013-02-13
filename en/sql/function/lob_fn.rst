@@ -1,53 +1,51 @@
-*****************
-LOB 함수와 연산자
-*****************
-[번역]
+*************
+LOB Functions
+*************
 
 .. function:: CLOB_TO_CHAR ( clob_type_column [USING charset] )
 
-	**CLOB** 타입을 **VARCHAR** 타입으로 변환한다.           
+	This function converts **CLOB** type into **VARCHAR** type.
 
-	:param clob_type_column: 변환 대상 칼럼
-	:param charset: 변환할 문자열의 문자셋을 정의한다. utf8, euckr, iso88591이 올 수 있다.
+	:param clob_type_column: Target column to convert
+	:param charset: The character set of string to convert. It can be utf8, euckr or iso88591.
 	:rtype: VARCHAR
 	
 .. function:: BLOB_TO_BIT ( blob_type_column )
 
-	**BLOB** 타입을 **VARYING BIT** 타입으로 변환한다.           
+	This function converts **BLOB** type to **VARYING BIT** type.           
 
-	:param blob_type_column: 변환 대상 칼럼
+	:param blob_type_column: Target column to convert
 	:rtype: VARYING BIT
 	
 .. function:: CHAR_TO_CLOB ( char_type_column_or_value )
 
-	**CHAR**, **VARCHAR** 타입을 **CLOB** 타입으로 변환한다.           
+	This function converts **CHAR** or **VARCHAR** type into **CLOB** type.
 
-	:param char_type_column_or_value: 변환 대상 칼럼 또는 값
+	:param char_type_column_or_value: Target column or value to convert
 	:rtype: CLOB
 
 .. function:: BIT_TO_BLOB ( blob_type_column_or_value )
 
-	**BIT**, **VARYING BIT** 타입을 **BLOB** 타입으로 변환한다.           
+	This function converts **BIT** or **VARYING BIT** type into **BLOB** type.
 
-	:param blob_type_column_or_value: 변환 대상 칼럼 또는 값
+	:param blob_type_column_or_value: Target column or value to convert
 	:rtype: BLOB
 
 .. function:: CHAR_TO_BLOB ( char_type_column_or_value )
 
-	**CHAR**, **VARCHAR** 타입을 **BLOB** 타입으로 변환한다.           
+	This function converts **CHAR** or **VARCHAR** type into **BLOB**  type.           
 
-	:param char_type_column_or_value: 변환 대상 칼럼 또는 값
+	:param char_type_column_or_value: Target column or value to convert
 	:rtype: BLOB
 
 .. function:: CLOB_FROM_FILE ( file_pathname )
 
-	**VARCHAR** 타입의 파일 경로에서 파일 내용을 읽어 **CLOB** 타입 데이터로 반환한다.
+	This function read the contents from the file with **VARCHAR** type data and returns **CLOB** type data.
 
-	:param file_pathname: CAS나 CSQL과 같은 DB 클라이언트가 구동하는 서버 상의 경로
+	:param file_pathname: the path on the server which DB clients like CAS or CSQL are started
 	:rtype: CLOB
 
-	file_pathname을 상대 경로로 명시한 경우, 상위 경로는 프로세스의 현재 작업 디렉터리가 된다. 
-	이 함수가 호출된 구문에 대해서는 실행 계획을 캐싱하지 않는다.
+	If you specify the *file_pathname* as the relative path, the parent path will be the current working directory. For the statement including this function, the query plan is not cached.
 	
 	.. code-block:: sql
 	
@@ -59,9 +57,9 @@ LOB 함수와 연산자
 
 .. function:: BLOB_FROM_FILE ( file_pathname )
 
-	**VARCHAR** 타입의 파일 경로에서 파일 내용을 읽어 **BLOB** 타입 데이터로 반환한다. 
+	This function read the contents from the file with **VARCHAR** type data and returns **BLOB** type data.
 
-	:param file_pathname: CAS나 CSQL과 같은 DB 클라이언트가 구동하는 서버 상의 경로
+	:param file_pathname: the path on the server which DB clients like CAS or CSQL are started
 	:rtype: BLOB
 
 	.. code-block:: sql
@@ -74,15 +72,15 @@ LOB 함수와 연산자
 
 .. function:: CLOB_LENGTH ( clob_column )
  
-	**CLOB** 파일에 저장된 **LOB** 데이터의 길이를 바이트 단위로 반환한다. 
+	The length of **LOB** data stored in **CLOB** file is returned.
 	
-	:param clob_column: 길이를 구하고자 하는 CLOB 타입의 칼럼
+	:param clob_column: The column to get the length of **CLOB**
 	:rtype: INT
  
 .. function:: BLOB_LENGTH ( blob_column )                                            
  
-	**BLOB** 파일에 저장된 **LOB** 데이터의 길이를 바이트 단위로 반환한다. 
+		The length of **LOB** data stored in **BLOB** file is returned.
 	
-	:param clob_column: 길이를 구하고자 하는 BLOB 타입의 칼럼
+	:param clob_column: The column to get the length of **BLOB**
 	:rtype: INT
  

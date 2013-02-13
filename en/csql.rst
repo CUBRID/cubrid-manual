@@ -238,8 +238,7 @@ In addition to SQL statements, CSQL Interpreter provides special commands allowi
 
 Enter the **;help** command to display a list of the session commands available in the CSQL Interpreter. Note that only the uppercase letters of each session command are required to make the CSQL Interpreter to recognize it. Session commands are not case-sensitive.
 
-[번역]
-"질의 버퍼"는 질의문을 실행하기 전까지 질의문을 저장하는 버퍼이다. **--no-single-line** 옵션을 부여하여 CSQL을 실행하는 경우 **;xr** 명령으로 질의를 실행하기 전까지는 질의문을 버퍼에 유지한다.
+"Query buffer" is a buffer to store the query before running it. If you run CSQL as giving the **--no-single-line** option, the query string is kept on the buffer until running **;xr** command.
 
 **Reading SQL statements from a file (;REAd)**
 
@@ -485,11 +484,11 @@ You can use the **;Set** session command to set a specific parameter value. Note
 	-- Dynamically change the log_max_archives value in the csql accessed by dba account
 	csql> ;se log_max_archives=5
 
-[번역]
-**문자열 타입과 비트 타입 칼럼의 출력 길이 지정(;STring-width)** 
+**Setting the displaying width of string (;STring-width)** 
 
-문자열 타입과 비트 타입 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
-;ST 뒤에 값을 주지 않으면 현재의 출력 길이를 보여준다. 값이 0이면, 해당 칼럼의 값을 모두 출력한다. 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다. ::
+You can use the **;STring-width** command to set the displaying width of character string or BIT string.
+
+If you don't give a value after the **;ST** command, it shows the current setting length. If it is 0, all values of the columns are displayed. If it's bigger than 0, the specified length is displayed. ::
 
 	csql> SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
 	  'Arab Republic of Egypt'
@@ -507,11 +506,11 @@ You can use the **;Set** session command to set a specific parameter value. Note
 	csql> ;ST
 	STRING-WIDTH : 5
 
-[번역] 
-**지정한 칼럼의 출력 길이 지정(;COLumn-width)**
+**Setting the displaying width of the column (;COLumn-width)**
 
-타입과 상관없이 특정 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
-;COL 뒤에 값을 주지 않으면 현재 설정된 칼럼의 출력 길이를 보여준다.  뒤에 값이 0이면, 해당 칼럼의 값을 모두 출력하며, 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다. ::
+You can use the **;COLumn-width** command to set the displaying width without caring the type.
+
+If you don't give a value after **;COL** command, it shows the current setting length. If it is 0, all values of of the columns are displayed. If it's bigger than 0, the specified length is displayed. ::
 
 	csql> CREATE TABLE tbl(a BIGINT, b BIGINT);
 	csql> INSERT INTO tbl VALUES(12345678890, 1234567890)

@@ -1,4 +1,5 @@
 ******************
+******************
 PREPARED STATEMENT
 ******************
 
@@ -17,8 +18,8 @@ prepared statement 기능은 보통 JDBC, PHP, ODBC 등의 인터페이스 함�
 	{DEALLOCATE | DROP} PREPARE stmt_name
 
 .. note: 
-	* SQL 수준의 PREPARE 문은 DB 연결 당 개수가 최대 20개로 제한되어 있다. 이는 SQL 수준의 PREPARE 문은 DB 서버의 메모리 자원을 사용하므로 DB 서버 메모리의 오용으로 인한 리소스 남용을 방지하기 위해 제한되어 있다.
-	* 인터페이스 함수의 prepared statement는 브로커 파라미터인 :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` 를 통해 DB 연결 당 prepared statement 개수를 제한한다. CUBRID SHARD 를 사용하는 경우 :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` 를 통해 shard pool의 prepared statement 개수를 제한한다.
+	* SQL 수준의 PREPARE 문은 DB 연결 당 개수가 최대 20개로 제한된다. 이는 SQL 수준의 PREPARE 문은 DB 서버의 메모리 자원을 사용하므로 DB 서버 메모리의 오용으로 인한 리소스 남용을 방지하기 위해 제한된다.
+	* 인터페이스 함수의 prepared statement는 브로커 파라미터인 :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` 를 통해 DB 연결 당 prepared statement 개수가 제한된다. CUBRID SHARD 를 사용하는 경우 :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` 를 통해 shard pool 하나 당 prepared statement 개수가 제한된다.
 
 PREPARE 문
 ==========

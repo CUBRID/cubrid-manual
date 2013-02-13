@@ -1,12 +1,12 @@
 *********************
 Information Functions
 *********************
-[번역]
+
 .. function:: CHARSET(expr)
 
-	*expr* 의 문자셋을 반환한다.
+	This function returns the character set of *expr* .
 	
-	:param expr: 문자셋을 구할 대상 표현식
+	:param expr: Target expression to get the character set.
 	
 	:rtype: STRING
 
@@ -25,9 +25,11 @@ Information Functions
 		
 .. function:: COERCIBILITY(expr)
 	
-	*expr* 의 콜레이션 변환도(coercibility)를 반환한다. 콜레이션 변환도는 칼럼(표현식)들이 서로 다른 콜레이션과 문자셋을 가지고 있을 때 어떤 콜레이션과 문자셋으로 변환할 것인지를 결정한다. 어떤 연산을 수행하는 두 개의 칼럼(표현식)이 있을 때, 높은 변환도를 가진 인자는 더 낮은 변환도를 가진 인자의 콜레이션으로 변환된다. 이와 관련하여 :ref:`콜레이션 변환도 <collation-coercibility>` 를 참고한다.
+	This function returns the collation coercibility level of *expr*. the collation coercibility level determins what collation or charset should be used when each column(expression) has different collation or charset.
+	
+	If there are two columns(expressions) to do an operation, lower coercibility levels take precedence over higher ones when the server is determining what collation to use. For more details, see :ref:`Collation Coercibility <collation-coercibility>`.
 
-	:param expr: 콜레이션 변환도를 구할 대상 표현식
+	:param expr: Target expression to get the collation coercibility level.
 
 	:rtype: INT
 	
@@ -41,9 +43,9 @@ Information Functions
 
 .. function:: COLLATION(expr)
 
-	*expr* 의 콜레이션을 반환한다.
+	This function returns the collation of *expr*.
 	
-	:param expr: 콜레이션을 구할 대상 표현식
+	:param expr: Target expression to get the collation.
 
 	:rtype: STRING
 	
@@ -126,11 +128,9 @@ Information Functions
 		DELETE FROM info_tbl WHERE id = DEFAULT(id);
 		INSERT INTO info_tbl VALUES (DEFAULT,'d');
 
-[번역]
-
 	.. note::
-		CUBRID 9.0 미만 버전에서는 테이블 생성 시 DATE, DATETIME, TIME, TIMESTAMP 칼럼의 DEFAULT 값을 SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP로 지정하면, CREATE TABLE 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 INSERT되는 시점의 값을 입력하려면 INSERT 구문의 VALUES 절에 해당 함수를 입력해야 했다.
-
+		In version lower than CUBRID 9.0, the value at the time of CREATE TABLE has been saved when the DATE value of the DATE, DATETIME, TIME, TIMESTAMP column has been specified to SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP while creating a table. Therefore, to enter the value at the time of data INSERT in version lower than CUBRID 9.0, the function should be entered to the VALUES clause of the INSERT syntax.
+		
 .. function:: INDEX_CARDINALITY(table, index, key_pos)
 
 	The **INDEX_CARDINALITY** function returns the index cardinality in a table. The index cardinality is the number of unique values defining the index. The index cardinality can be applied even to the partial key of the multiple column index and displays the number of the unique value for the partial key by specifying the column location with the third parameter.

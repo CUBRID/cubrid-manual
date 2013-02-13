@@ -16,11 +16,9 @@ In general, the prepared statement is executed through the interface functions o
 
 	{DEALLOCATE | DROP} PREPARE stmt_name
 
-[번역]
-
 .. note:: 
-	* SQL 수준의 PREPARE 문은 DB 연결 당 개수가 최대 20개로 제한되어 있다. 이는 SQL 수준의 PREPARE 문은 DB 서버의 메모리 자원을 사용하므로 DB 서버 메모리의 오용으로 인한 리소스 남용을 방지하기 위해 제한되어 있다.
-	* 인터페이스 함수의 prepared statement는 브로커 파라미터인 :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` 를 통해 DB 연결 당 prepared statement 개수를 제한한다. CUBRID SHARD 를 사용하는 경우 :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` 를 통해 shard pool의 prepared statement 개수를 제한한다.
+	* The number of PREPARE statements in SQL level is limited as 20 per DB connection. It is limited to protect abusing DB server memory, because PREPARE statement in SQL level uses the memory of DB server.
+	* The number of prepared statements in the interface function is limited as the broker parameter, :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` per DB connection. If you use CUBRID SHARD, the number of prepared statements in the shard pool is limited as shard proxy parameter, :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` per shard proxy.
 
 PREPARE Statement
 =================

@@ -1059,7 +1059,7 @@ CCI API 레퍼런스
 	
 		* 2008 R4.3 이전 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
 		
-		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_array 함수에서 배열 내의 질의 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
+		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_array 함수에서 배열 내의 질의 일부에 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
 		
 	.. code-block:: c
 
@@ -1165,7 +1165,7 @@ CCI API 레퍼런스
 	.. note :: 
 
 		* 2008 R4.3 이전 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
-		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_batch 함수에서 배열 내의 질의 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
+		* 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_batch 함수에서 배열 내의 질의 일부에 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
 
 	.. code-block:: c
 
@@ -1494,7 +1494,7 @@ CCI API 레퍼런스
 		cci_query_info_free(out_buf);
 		
 	:param req_handle: (IN) 요청 핸들
-	:param out_buf_p: (OUT) 결과 버퍼 포인터의 주소
+	:param out_buf_p: (OUT) 결과 버퍼 포인터의 포인터
 	:return: 에러 코드
 		
 		*	**CCI_ER_REQ_HANDLE**
@@ -1510,7 +1510,7 @@ CCI API 레퍼런스
 	cci_get_query_plan 함수에서 할당된 결과 버퍼 메모리를 해제한다.
 
 	:param req_handle: (IN) 요청 핸들
-	:param out_buf: (OUT) 결과 버퍼 포인터의 주소
+	:param out_buf: (OUT) 결과 버퍼 포인터
 	:return: 에러 코드
 	
 		*	**CCI_ER_NO_MORE_MEMORY**
@@ -1691,7 +1691,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_is_holdable(int req_handle)
 
-	**cci_is_holdable** 함수는 요청 핸들의 연결 유지(holdable) 여부를 리턴한다.
+	**cci_is_holdable** 함수는 요청 핸들의 연결 유지(holdable) 가능 여부를 리턴한다.
 
 	:param req_handle: (IN) prepared statement에 대한 요청 핸들
 	:return: 1 : 연결 유지, 0 : 연결 유지 안 됨
@@ -1716,7 +1716,7 @@ CCI API 레퍼런스
 	가장 마지막에 수행한 INSERT 문의 기본 키 값을 얻는다.
 	
 	:param conn_handle: (IN) 연결 핸들
-	:param value: (OUT) 결과 버퍼에 대한 포인터로 (char \*\*). 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
+	:param value: (OUT) 결과 버퍼 포인터의 포인터(char \*\*). 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
 	:param err_buf: (OUT) 에러 버퍼
 
 	:return: 에러 코드
@@ -2063,7 +2063,7 @@ CCI API 레퍼런스
 	
 	**default_autocommit**, **default_isolation**, **default_lock_timeout** 의 값을 설정하면 :c:func:`cci_datasource_borrow` 를 호출할 때 각각 autocommit, isolation, lock_timeout에 대하여 설정한 값에 따라 연결을 반환한다. 설정하지 않으면 :c:func:`cci_datasource_borrow` 를 호출할 때 각각 autocommit, isolation, lock_timeout에 대하여 사용자가 이전에 변경했던 값을 유지한 채로 연결을 반환한다.
 
-	**default_isolation** 은 다음 값 중 하나의 설정값을 가지며, 격리 수준에 대한 자세한 내용은 "CUBRID SQL 설명서 > 트랜잭션과 잠금 > 트랜잭션 격리 수준 > 격리 수준 설정"을 참조한다.
+	**default_isolation** 은 다음 값 중 하나의 설정값을 가지며, 격리 수준에 대한 자세한 내용은 :ref:`set-transaction-isolation-level` 을 참조한다.
 
 	+----------------------------+---------------------------------------+
 	| isolation_level            | 설정값                                |
@@ -2087,9 +2087,9 @@ CCI API 레퍼런스
 	| READ UNCOMMITTED INSTANCES |                                       |
 	+----------------------------+---------------------------------------+
 
-	DB 사용자 이름과 암호는 **user** 와 **password** 값을 직접 지정하는 방식을 사용하거나 **url** 속성 내에서 **user**와 **password** 값을 지정하는 방식을 사용한다. 두 가지 경우가 같이 사용되는 경우  우선 순위는 다음과 같다.
+	DB 사용자 이름과 암호는 **user** 와 **password** 값을 직접 지정하거나 **url** 속성 내에서 **user**와 **password** 값을 지정한다. 두 가지 경우가 같이 사용되는 경우 우선 순위는 다음과 같다.
 	
-	* 둘다 입력되면 직접 지정하는 방식의 값이 우선한다. 
+	* 둘다 입력되면 직접 지정하는 값이 우선한다. 
 	* 둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다. 
 	* 둘 다 NULL이면 NULL 값으로 사용된다. 
 	* DB 사용자를 직접 지정한 값이 NULL이면 "public", 암호를 직접 지정한 값이 NULL이면 NULL로 설정된다.
@@ -2329,10 +2329,10 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_row_count(int conn_handle, int *row_count, T_CCI_ERROR * err_buf)
 
-	가장 마지막에 수행한 질의에 영향을 끼친 행의 개수를 얻는다.
+	가장 최근 수행한 질의에 의해 영향을 받은 행의 개수를 얻는다.
 	
 	:param conn_handle: (IN) 연결 핸들
-	:param row_count: (OUT) 가장 마지막에 수행한 질의에 영향을 끼친 행의 개수
+	:param row_count: (OUT) 가장 최근 수행한 질의에 의해 영향을 받은 행의 개수
 	:param err_buf: (OUT) 에러 버퍼
 	
 	:return: 에러 코드

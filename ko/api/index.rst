@@ -17,5 +17,6 @@ API 레퍼런스
 	perl.rst
 	python.rst
 	ruby.rst
-
+	node_js.rst
+	
 CUBRID가 지원하는 드라이버의 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-apis-wiki <http://www.cubrid.org/wiki_apis/entry/cubrid-apis-wiki>`_ 를 참고한다.

@@ -107,7 +107,7 @@ Selecting a Shard DB through the Shard SQL Hint
 
 	.. note::
 
-		* When more than one shard hints exist on a query, it works normally if shard hints indicate the same shards, but it fails if each of them indicates the different shard. 
+		* When more than one shard hint exist on a query, it works normally if shard hints indicate the same shards, but it fails if each of them indicates the different shard. 
 		
 			::
 	

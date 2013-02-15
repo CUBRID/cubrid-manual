@@ -32,7 +32,7 @@ The following **cubrid** utility syntax shows how to control CUBRID broker proce
 	<command>: {start|stop|restart|status [broker_name] 
 	           |info
 	           |on broker_name |off broker_name 
-			   |reset broker_name |acl{status|reload} broker_name }
+			   |reset broker_name |acl {status|reload} broker_name }
 
 
 Controlling CUBRID Manager Server
@@ -86,7 +86,7 @@ Starting Services
 
 In Linux environment, you can enter the code below to start CUBRID after installation. If no server is registered in the configuration file, only master process (cub_master) runs by default. 
 
-In the Windows environment, the code below is normally executed only in case that a user with system permission has logged in. An administrator or general user can start or stop the CUBRID server by clicking its icon on the taskbar tray. 
+In the Windows environment, the code below is normally executed only if a user with system permission has logged in. An administrator or general user can start or stop the CUBRID server by clicking its icon on the taskbar tray. 
 
 ::
 

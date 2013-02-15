@@ -42,7 +42,7 @@ CUBRID 브로커 프로세스를 제어하기 위한 **cubrid** 유틸리티 구
 	<command>: {start|stop|restart|status [broker_name] 
 	           |info
 	           |on broker_name |off broker_name 
-	           |reset broker_name |acl{status|reload} broker_name }
+	           |reset broker_name |acl {status|reload} broker_name }
 
 CUBRID 매니저 서버 제어
 -----------------------

@@ -65,8 +65,6 @@ To create a table, use the **CREATE TABLE** statement. ::
 *   [**SHARED** *value* | **DEFAULT** *value*] : Specifies the initial value of the column.
 *   *column_constraints* : Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see :ref:`constraint-definition` For details).
 
-**Example**
-
 .. code-block:: sql
 
 	CREATE TABLE olympic (
@@ -95,170 +93,158 @@ A column is a set of data values of a particular simple type, one for each row o
 	<column_constraint> ::=
 	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
 
-**Column Name**
+	**Column Name**
 
-How to create a column name, see :doc:`/sql/identifier`. You can alter created column name by using the **RENAME COLUMN** clause of the **ALTER TABLE** statement (see :ref:`rename-column`).
+	How to create a column name, see :doc:`/sql/identifier`. You can alter created column name by using the **RENAME COLUMN** clause of the **ALTER TABLE** statement (see :ref:`rename-column`).
 
-**Example**
+	The following example shows how to create the *manager2* table that has the following two columns: *full_name* and *age*.
 
-The following example shows how to create the *manager2* table that has the following two columns: *full_name* and *age*.
+	.. code-block:: sql
 
-.. code-block:: sql
+		CREATE TABLE manager2 (full_name VARCHAR(40), age INT );
 
-	CREATE TABLE manager2 (full_name VARCHAR(40), age INT );
+	.. warning::
 
-.. warning::
+		*   The first character of a column name must be an alphabet.
+		*   The column name must be unique in the table.
 
-	*   The first character of a column name must be an alphabet.
-	*   The column name must be unique in the table.
+	**Setting the Column Initial Value (SHARED, DEFAULT)**
 
-**Setting the Column Initial Value (SHARED, DEFAULT)**
+	**SHARED** and **DEFAULT** are attributes related to the initial value of the column. You can change the value of **SHARED** and **DEFAULT** in the **ALTER TABLE** statement.
 
-**Description**
+	*   **SHARED** : Column values are identical in all rows. If a value different from the initial value is **INSERT** ed, the column value is updated to a new one in every row.
+	*   **DEFAULT** : The initial value set when the **DEFAULT** attribute was defined is stored even if the column value is not specified when a new row is inserted.
 
-**SHARED** and **DEFAULT** are attributes related to the initial value of the column. You can change the value of **SHARED** and **DEFAULT** in the **ALTER TABLE** statement.
+	The pseudocolumn (a special function which has no element) allows for the **DEFAULT** value as follows.
 
-*   **SHARED** : Column values are identical in all rows. If a value different from the initial value is **INSERT** ed, the column value is updated to a new one in every row.
-*   **DEFAULT** : The initial value set when the **DEFAULT** attribute was defined is stored even if the column value is not specified when a new row is inserted.
+	+-------------------+---------------+
+	| DEFAULT Value     | Data Type     |
+	+===================+===============+
+	| SYS_TIMESTAMP     | TIMESTAMP     |
+	+-------------------+---------------+
+	| SYS_DATETIME      | DATETIME      |
+	+-------------------+---------------+
+	| SYS_DATE          | DATE          |
+	+-------------------+---------------+
+	| SYS_TIME          | TIME          |
+	+-------------------+---------------+
+	| USER, USER()      | STRING        |
+	+-------------------+---------------+
 
-The pseudocolumn (a special function which has no element) allows for the **DEFAULT** value as follows.
+	.. note::
 
-+-------------------+---------------+
-| DEFAULT Value     | Data Type     |
-+===================+===============+
-| SYS_TIMESTAMP     | TIMESTAMP     |
-+-------------------+---------------+
-| SYS_DATETIME      | DATETIME      |
-+-------------------+---------------+
-| SYS_DATE          | DATE          |
-+-------------------+---------------+
-| SYS_TIME          | TIME          |
-+-------------------+---------------+
-| USER, USER()      | STRING        |
-+-------------------+---------------+
+		In version lower than CUBRID 9.0, the value at the time of **CREATE TABLE** has been saved when the **DATE** value of the **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** column has been specified to **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** while creating a table. Therefore, to enter the value at the time of data **INSERT** in version lower than CUBRID 9.0, the function should be entered to the **VALUES** clause of the **INSERT** syntax.
 
-.. note::
+	.. code-block:: sql
 
-	In version lower than CUBRID 9.0, the value at the time of **CREATE TABLE** has been saved when the **DATE** value of the **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** column has been specified to **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** while creating a table. Therefore, to enter the value at the time of data **INSERT** in version lower than CUBRID 9.0, the function should be entered to the **VALUES** clause of the **INSERT** syntax.
+		CREATE TABLE colval_tbl
+		( id INT, name VARCHAR SHARED 'AAA', phone VARCHAR DEFAULT '000-0000');
+		INSERT INTO colval_tbl(id) VALUES (1),(2);
+		SELECT * FROM colval_tbl;
+		 
+				   id  name                  phone
+		=========================================================
+					1  'AAA'                 '000-0000'
+					2  'AAA'                 '000-0000'
+		 
+		--updating column values on every row
+		INSERT INTO colval_tbl(id, name) VALUES (3,'BBB');
+		INSERT INTO colval_tbl(id) VALUES (4),(5);
+		SELECT * FROM colval_tbl;
+		 
+				   id  name                  phone
+		=========================================================
+					1  'BBB'                 '000-0000'
+					2  'BBB'                 '000-0000'
+					3  'BBB'                 '000-0000'
+					4  'BBB'                 '000-0000'
+					5  'BBB'                 '000-0000'
+		 
+		--changing DEFAULT value in the ALTER TABLE statement
+		ALTER TABLE colval_tbl CHANGE phone DEFAULT '111-1111'
+		INSERT INTO colval_tbl(id) VALUES (6);
+		SELECT * FROM colval_tbl;
+		 
+				   id  name                  phone
+		=========================================================
+					1  'BBB'                 '000-0000'
+					2  'BBB'                 '000-0000'
+					3  'BBB'                 '000-0000'
+					4  'BBB'                 '000-0000'
+					5  'BBB'                 '000-0000'
+					6  'BBB'                 '111-1111'
 
-**Example 1**
+	The **DEFAULT** value of the pseudocolumn can be specified to one or more columns.
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	CREATE TABLE colval_tbl
-	( id INT, name VARCHAR SHARED 'AAA', phone VARCHAR DEFAULT '000-0000');
-	INSERT INTO colval_tbl(id) VALUES (1),(2);
-	SELECT * FROM colval_tbl;
-	 
-			   id  name                  phone
-	=========================================================
-				1  'AAA'                 '000-0000'
-				2  'AAA'                 '000-0000'
-	 
-	--updating column values on every row
-	INSERT INTO colval_tbl(id, name) VALUES (3,'BBB');
-	INSERT INTO colval_tbl(id) VALUES (4),(5);
-	SELECT * FROM colval_tbl;
-	 
-			   id  name                  phone
-	=========================================================
-				1  'BBB'                 '000-0000'
-				2  'BBB'                 '000-0000'
-				3  'BBB'                 '000-0000'
-				4  'BBB'                 '000-0000'
-				5  'BBB'                 '000-0000'
-	 
-	--changing DEFAULT value in the ALTER TABLE statement
-	ALTER TABLE colval_tbl CHANGE phone DEFAULT '111-1111'
-	INSERT INTO colval_tbl(id) VALUES (6);
-	SELECT * FROM colval_tbl;
-	 
-			   id  name                  phone
-	=========================================================
-				1  'BBB'                 '000-0000'
-				2  'BBB'                 '000-0000'
-				3  'BBB'                 '000-0000'
-				4  'BBB'                 '000-0000'
-				5  'BBB'                 '000-0000'
-				6  'BBB'                 '111-1111'
+		CREATE TABLE t (date1 date default SYSDATE, date2 date default SYSDATE);
+		CREATE TABLE t (date1 DATE default SYSDATE,
+						ts1   TIMESTAMP default CURRENT_TIMESTAMP);
 
-**Example 2**
+	**AUTO INCREMENT**
 
-The **DEFAULT** value of the pseudocolumn can be specified to one or more columns.
+	You can define the **AUTO_INCREMENT** attribute for the column to automatically give serial numbers to column values. This can be defined only for **SMALLINT**, **INTEGER**, **BIGINT**, and **NUMERIC** (*p*, 0) types.
 
-.. code-block:: sql
+	**DEFAULT**, **SHARED**, and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
 
-	CREATE TABLE t (date1 date default SYSDATE, date2 date default SYSDATE);
-	CREATE TABLE t (date1 DATE default SYSDATE,
-					ts1   TIMESTAMP default CURRENT_TIMESTAMP);
+	You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see :ref:`alter-auto-increment` of **ALTER TABLE**. ::
 
-**AUTO INCREMENT**
+		CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]) |
+		CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
 
-**Description**
+	*   *seed* : The initial value from which the number starts. All integers (positive, negative, and zero) are allowed. The default value is **1**.
+	*   *increment* : The increment value of each row. Only positive integers are allowed. The default value is **1**.
 
-You can define the **AUTO_INCREMENT** attribute for the column to automatically give serial numbers to column values. This can be defined only for **SMALLINT**, **INTEGER**, **BIGINT**, and **NUMERIC** (*p*, 0) types.
+	When you use the **CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; statement, the constraints are as follows:
 
-**DEFAULT**, **SHARED**, and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
+	*   You should define only one column with the **AUTO_INCREMENT** attribute.
+	*   Don't use (*seed*, *increment*) and AUTO_INCREMENT = *seed* together.
 
-You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see :ref:`alter-auto-increment` of **ALTER TABLE**. ::
+	.. code-block:: sql
 
-	CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]) |
-	CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
+		CREATE TABLE auto_tbl(id INT AUTO_INCREMENT, name VARCHAR);
+		INSERT INTO auto_tbl VALUES(NULL, 'AAA'),(NULL, 'BBB'),(NULL, 'CCC');
+		INSERT INTO auto_tbl(name) VALUES ('DDD'),('EEE');
+		SELECT * FROM auto_tbl;
+		 
+				   id  name
+		===================================
+					1  'AAA'
+					2  'BBB'
+					3  'CCC'
+					4  'DDD'
+					5  'EEE'
+		 
+		CREATE TABLE tbl (id int AUTO_INCREMENT, val string) AUTO_INCREMENT = 3;
+		INSERT INTO tbl VALUES (NULL,'cubrid');
+		 
+		SELECT * FROM tbl;
+				   id  val
+		===================================
+					3  'cubrid'
+		 
+		CREATE TABLE t (id int AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
+		ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to  have exactly one AUTO_INCREMENT column and no seed/increment specification.
+		 
+		CREATE TABLE t (i int AUTO_INCREMENT(100, 2)) AUTO_INCREMENT = 3;
+		ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to  have exactly one AUTO_INCREMENT column and no seed/increment specification.
 
-*   *seed* : The initial value from which the number starts. All integers (positive, negative, and zero) are allowed. The default value is **1**.
-*   *increment* : The increment value of each row. Only positive integers are allowed. The default value is **1**.
+	.. note::
 
-When you use the **CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; statement, the constraints are as follows:
+		*   Even if a column has auto increment, the **UNIQUE** constraint is not satisfied.
+		*   If **NULL** is specified in the column where auto increment is defined, the value of auto increment is stored.
+		*   **SHARED** or **DEFAULT** attribute cannot be specified in the column in which AUTO_INCREMENT is defined.
+		*   The initial value and the final value obtained by auto increment cannot exceed the minimum and maximum values allowed in the given type.
+		* Because auto increment has no cycle, an error occurs when the maximum value of the type exceeds, and no rollback is executed. Therefore, you must delete and recreate the column in such cases.
 
-*   You should define only one column with the **AUTO_INCREMENT** attribute.
-*   Don't use (*seed*, *increment*) and AUTO_INCREMENT = *seed* together.
+		For example, if a table is created as below, the maximum value of A is 32767. Because an error occurs if the value exceeds 32767, you must make sure that the maximum value of the column A does not exceed the maximum value of the type when creating the initial table.
 
-**Example**
+	  .. code-block:: sql
+	  
+		create table tb1(A smallint auto_increment, B char(5));
 
-.. code-block:: sql
-
-	CREATE TABLE auto_tbl(id INT AUTO_INCREMENT, name VARCHAR);
-	INSERT INTO auto_tbl VALUES(NULL, 'AAA'),(NULL, 'BBB'),(NULL, 'CCC');
-	INSERT INTO auto_tbl(name) VALUES ('DDD'),('EEE');
-	SELECT * FROM auto_tbl;
-	 
-			   id  name
-	===================================
-				1  'AAA'
-				2  'BBB'
-				3  'CCC'
-				4  'DDD'
-				5  'EEE'
-	 
-	CREATE TABLE tbl (id int AUTO_INCREMENT, val string) AUTO_INCREMENT = 3;
-	INSERT INTO tbl VALUES (NULL,'cubrid');
-	 
-	SELECT * FROM tbl;
-			   id  val
-	===================================
-				3  'cubrid'
-	 
-	CREATE TABLE t (id int AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
-	ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to  have exactly one AUTO_INCREMENT column and no seed/increment specification.
-	 
-	CREATE TABLE t (i int AUTO_INCREMENT(100, 2)) AUTO_INCREMENT = 3;
-	ERROR: To avoid ambiguity, the AUTO_INCREMENT table option requires the table to  have exactly one AUTO_INCREMENT column and no seed/increment specification.
-
-**Remark**
-
-*   Even if a column has auto increment, the **UNIQUE** constraint is not satisfied.
-*   If **NULL** is specified in the column where auto increment is defined, the value of auto increment is stored.
-*   **SHARED** or **DEFAULT** attribute cannot be specified in the column in which AUTO_INCREMENT is defined.
-*   The initial value and the final value obtained by auto increment cannot exceed the minimum and maximum values allowed in the given type.
-* Because auto increment has no cycle, an error occurs when the maximum value of the type exceeds, and no rollback is executed. Therefore, you must delete and recreate the column in such cases.
-
-For example, if a table is created as below, the maximum value of A is 32767. Because an error occurs if the value exceeds 32767, you must make sure that the maximum value of the column A does not exceed the maximum value of the type when creating the initial table.
-
-  .. code-block:: sql
-  
-	create table tb1(A smallint auto_increment, B char(5));
-
-.. _constraint-definition:
+	.. _constraint-definition:
 
 Constraint Definition
 ---------------------
@@ -288,199 +274,191 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION  | SET NULL
 
-**NOT NULL Constraint**
+	**NOT NULL Constraint**
 
-A column for which the **NOT NULL** constraint has been defined must have a certain value that is not **NULL**. The **NOT NULL** constraint can be defined for all columns. An error occurs if you try to insert a **NULL** value into a column with the **NOT NULL** constraint by using the **INSERT** or **UPDATE** statement.
+	A column for which the **NOT NULL** constraint has been defined must have a certain value that is not **NULL**. The **NOT NULL** constraint can be defined for all columns. An error occurs if you try to insert a **NULL** value into a column with the **NOT NULL** constraint by using the **INSERT** or **UPDATE** statement.
 
-**Example**
+	In the following example, if you input NULL value on the ID column, it occurs an error because id column cannot have NULL value.
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	CREATE TABLE const_tbl1(id INT NOT NULL, INDEX i_index(id ASC), phone VARCHAR);
+		CREATE TABLE const_tbl1(id INT NOT NULL, INDEX i_index(id ASC), phone VARCHAR);
+		 
+		CREATE TABLE const_tbl2(id INT NOT NULL PRIMARY KEY, phone VARCHAR);
+		INSERT INTO const_tbl2 (NULL,'000-0000');
+		 
+		In line 2, column 25,
+		 
+		ERROR: syntax error, unexpected Null
+
+	**UNIQUE Constraint**
+
+	The **UNIQUE** constraint enforces a column to have a unique value. An error occurs if a new record that has the same value as the existing one is added by this constraint.
+
+	You can place a **UNIQUE** constraint on either a column or a set of columns. If the **UNIQUE** constraint is defined for multiple columns, the uniqueness is ensured not for each column, but the combination of multiple columns.
+
+	In the following example, the second INSERT statement fails because the value of *id* column is the same as 1 with the value of *id* column in the fist INSERT statement.
+
+	.. code-block:: sql
+
+		--UNIQUE constraint is defined on a single column only
+		CREATE TABLE const_tbl5(id INT UNIQUE, phone VARCHAR);
+		INSERT INTO const_tbl5(id) VALUES (NULL), (NULL);
+		INSERT INTO const_tbl5 VALUES (1, '000-0000');
+		SELECT * FROM const_tbl5;
+		 
+				   id  phone
+		===================================
+				 NULL  NULL
+				 NULL  NULL
+					1  '000-0000'
+		 
+		INSERT INTO const_tbl5 VALUES (1, '111-1111');
+		 
+		ERROR: Operation would have caused one or more unique constraint violations.
 	 
-	CREATE TABLE const_tbl2(id INT NOT NULL PRIMARY KEY, phone VARCHAR);
-	INSERT INTO const_tbl2 (NULL,'000-0000');
-	 
-	In line 2, column 25,
-	 
-	ERROR: syntax error, unexpected Null
+	In the following example, if a **UNIQUE** constraint is defined on several columns, this ensures the uniqueness of the values in all the columns.
 
-**UNIQUE Constraint**
+	.. code-block:: sql
 
-The **UNIQUE** constraint enforces a column to have a unique value. An error occurs if a new record that has the same value as the existing one is added by this constraint.
+		CREATE TABLE const_tbl6(id INT, phone VARCHAR, CONSTRAINT UNIQUE(id,phone));
+		INSERT INTO const_tbl6 VALUES (1,NULL), (2,NULL), (1,'000-0000'), (1,'111-1111');
+		SELECT * FROM const_tbl6;
+		 
+				   id  phone
+		===================================
+					1  NULL
+					2  NULL
+					1  '000-0000'
+					1  '111-1111'
 
-You can place a **UNIQUE** constraint on either a column or a set of columns. If the **UNIQUE** constraint is defined for multiple columns, the uniqueness is ensured not for each column, but the combination of multiple columns.
+	**PRIMARY KEY Constraint**
 
-In the following example, , the third INSERT statement fails because the value of *id* column is the same with the value of *id* column in the second INSERT statement.
+	A key in a table is a set of column(s) that uniquely identifies each row. A candidate key is a set of columns that uniquely identifies each row of the table. You can define one of such candidate keys a primary key. That is, the column defined as a primary key is uniquely identified in each row.
 
-.. code-block:: sql
+	By default, the index created by defining the primary key is created in ascending order, and you can define the order by specifying **ASC** or **DESC** keyword next to the column. ::
 
-	--UNIQUE constraint is defined on a single column only
-	CREATE TABLE const_tbl5(id INT UNIQUE, phone VARCHAR);
-	INSERT INTO const_tbl5(id) VALUES (NULL), (NULL);
-	INSERT INTO const_tbl5 VALUES (1, '000-0000');
-	SELECT * FROM const_tbl5;
-	 
-			   id  phone
-	===================================
-			 NULL  NULL
-			 NULL  NULL
-				1  '000-0000'
-	 
-	INSERT INTO const_tbl5 VALUES (1, '111-1111');
-	 
-	ERROR: Operation would have caused one or more unique constraint violations.
- 
-In the following example, if a **UNIQUE** constraint is defined on several columns, this ensures the uniqueness of the values in all the columns.
+		CREATE TABLE pk_tbl (a INT, b INT, PRIMARY KEY (a, b DESC));
 
-.. code-block:: sql
+	.. code-block:: sql
 
-	CREATE TABLE const_tbl6(id INT, phone VARCHAR, CONSTRAINT UNIQUE(id,phone));
-	INSERT INTO const_tbl6 VALUES (1,NULL), (2,NULL), (1,'000-0000'), (1,'111-1111');
-	SELECT * FROM const_tbl6;
-	 
-			   id  phone
-	===================================
-				1  NULL
-				2  NULL
-				1  '000-0000'
-				1  '111-1111'
+		CREATE TABLE const_tbl7(
+		id INT NOT NULL,
+		phone VARCHAR,
+		CONSTRAINT pk_id PRIMARY KEY(id));
+		 
+		--CONSTRAINT keyword
+		CREATE TABLE const_tbl8(
+		id INT NOT NULL PRIMARY KEY,
+		phone VARCHAR);
+		 
+		--primary key is defined on multiple columns
+		CREATE TABLE const_tbl8 (
+		host_year    INT NOT NULL,
+		event_code   INT NOT NULL,
+		athlete_code INT NOT NULL,
+		medal        CHAR(1)  NOT NULL,
+		score        VARCHAR(20),
+		unit         VARCHAR(5),
+		PRIMARY KEY(host_year, event_code, athlete_code, medal)
+		);
 
-**PRIMARY KEY Constraint**
+	**FOREIGN KEY Constraint**
 
-A key in a table is a set of column(s) that uniquely identifies each row. A candidate key is a set of columns that uniquely identifies each row of the table. You can define one of such candidate keys a primary key. That is, the column defined as a primary key is uniquely identified in each row.
+	A foreign key is a column or a set of columns that references the primary key in other tables in order to maintain reference relationship. The foreign key and the referenced primary key must have the same data type. Consistency between two tables is maintained by the foreign key referencing the primary key, which is called referential integrity. ::
 
-By default, the index created by defining the primary key is created in ascending order, and you can define the order by specifying **ASC** or **DESC** keyword next to the column. ::
+		[ CONSTRAINT < constraint_name > ]
+		FOREIGN KEY [ <foreign_key_name> ] ( column_name_comma_list1 )
+		REFERENCES [ referenced_table_name ] ( column_name_comma_list2 )
+		[ <referential_triggered_action> ]
+		 
+		<referential_triggered_action> :
+		ON UPDATE <referential_action>
+		[ ON DELETE <referential_action> ]
+		 
+		<referential_action> :
+		CASCADE | RESTRICT | NO ACTION | SET NULL
 
-	CREATE TABLE pk_tbl (a INT, b INT, PRIMARY KEY (a, b DESC));
+	*   *constraint_name* : Specifies the name of the table to be created.
+	*   *foreign_key_name* : Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
 
-**Example**
+	*   *column_name_comma_list1* : Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
+	*   *referenced_table_name* : Specifies the name of the table to be referenced.
+	*   *column_name_comma_list2* : Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
 
-.. code-block:: sql
+	*   *referential_triggered_action* : Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
 
-	CREATE TABLE const_tbl7(
-	id INT NOT NULL,
-	phone VARCHAR,
-	CONSTRAINT pk_id PRIMARY KEY(id));
-	 
-	--CONSTRAINT keyword
-	CREATE TABLE const_tbl8(
-	id INT NOT NULL PRIMARY KEY,
-	phone VARCHAR);
-	 
-	--primary key is defined on multiple columns
-	CREATE TABLE const_tbl8 (
-	host_year    INT NOT NULL,
-	event_code   INT NOT NULL,
-	athlete_code INT NOT NULL,
-	medal        CHAR(1)  NOT NULL,
-	score        VARCHAR(20),
-	unit         VARCHAR(5),
-	PRIMARY KEY(host_year, event_code, athlete_code, medal)
-	);
+	*   **ON UPDATE** : Defines the action to be performed when attempting to update the primary key referenced by the foreign key. You can use either **NO ACTION**, **RESTRICT**, or **SET NULL** option. The default is **RESTRICT**.
 
-**FOREIGN KEY Constraint**
+	*   **ON DELETE** : Defines the action to be performed when attempting to delete the primary key referenced by the foreign key. You can use **NO ACTION**, **RESTRICT**, **CASCADE**, or **SET NULL** option. The default is **RESTRICT**.
 
-**Description**
+	*   *referential_ action* : You can define an option that determines whether to maintain the value of the foreign key when the primary key value is deleted or updated.
+	*   **CASCADE** : If the primary key is deleted, the foreign key is deleted as well. This option is supported only for the **ON DELETE** operation.
+	*   **RESTRICT** : Prevents the value of the primary key from being deleted or updated, and rolls back any transaction that has been attempted.
+	*   **SET NULL** : When a specific record is being deleted or updated, the column value of the foreign key is updated to **NULL**.
+	*   **NO ACTION** : Its behavior is the same as that of the **RESTRICT** option.
 
-A foreign key is a column or a set of columns that references the primary key in other tables in order to maintain reference relationship. The foreign key and the referenced primary key must have the same data type. Consistency between two tables is maintained by the foreign key referencing the primary key, which is called referential integrity. ::
+	.. code-block:: sql
 
-	[ CONSTRAINT < constraint_name > ]
-	FOREIGN KEY [ <foreign_key_name> ] ( column_name_comma_list )
-	REFERENCES [ referenced_table_name ] ( column_name_comma_list )
-	[ <referential_triggered_action> ]
-	 
-	<referential_triggered_action> :
-	ON UPDATE <referential_action>
-	[ ON DELETE <referential_action> ]
-	 
-	<referential_action> :
-	CASCADE | RESTRICT | NO ACTION | SET NULL
+		--creaing two tables where one is referencing the other
+		CREATE TABLE a_tbl(
+		id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+		phone VARCHAR(10));
+		 
+		CREATE TABLE b_tbl(
+		ID INT NOT NULL,
+		name VARCHAR(10) NOT NULL,
+		CONSTRAINT pk_id PRIMARY KEY(id),
+		CONSTRAINT fk_id FOREIGN KEY(id) REFERENCES a_tbl(id)
+		ON DELETE CASCADE ON UPDATE RESTRICT);
+		 
+		INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
+		INSERT INTO b_tbl VALUES(1,'George'),(2,'Laura'),(3,'Max');
+		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
+		 
+		           id           id                   phone                 name
+		==============================================================================
+		            1            1                   '111-1111'            'George'
+		            2            2                   '222-2222'            'Laura'
+		            3            3                   '333-3333'            'Max'
+		 
+		--when deleting primay key value, it cascades foreign key value  
+		DELETE FROM a_tbl WHERE id=3;
+		 
+		1 rows affected.
+		 
+		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
+		 
+		           id           id                   phone                 name
+		==============================================================================
+		            1            1                   '111-1111'            'George'
+		            2            2                   '222-2222'            'Laura'
+		 
+		--when attempting to update primay key value, it restricts the operation
+		UPDATE  a_tbl SET id = 10 WHERE phone = '111-1111';
+		 
+		In the command from line 1,
+		 
+		ERROR: Update/Delete operations are restricted by the foreign key 'fk_id'.
+		 
+		0 command(s) successfully processed.
 
-*   *constraint_name* : Specifies the name of the table to be created.
-*   *foreign_key_name* : Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
+	.. note::
 
-*   *column_name* : Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
-*   *referenced_table_name* : Specifies the name of the table to be referenced.
-*   *column_name* : Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
+		*   In a referential constraint, the name of the primary key table to be referenced and the corresponding column names are defined. If the list of column names are is not specified, the primary key of the primary key table is specified in the defined order.
+		*   The number of primary keys in a referential constraint must be identical to that of foreign keys. The same column name cannot be used multiple times for the primary key in the referential constraint.
+		*   The actions cascaded by reference constraints do not activate the trigger action.
+		*   It is not recommended to use *referential_triggered_action* in the CUBRID HA environment. In the CUBRID HA environment, the trigger action is not supported. Therefore, if you use *referential_triggered_action*, the data between the master database and the slave database can be inconsistent. For details, see :doc:`/admin/ha`.
 
-*   *referential_triggered_action* : Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
+	**KEY or INDEX**
 
-*   **ON UPDATE** : Defines the action to be performed when attempting to update the primary key referenced by the foreign key. You can use either **NO ACTION**, **RESTRICT**, or **SET NULL** option. The default is **RESTRICT**.
+	**KEY** and **INDEX** are used interchangeably. They create an index that uses the corresponding column as a key.
 
-*   **ON DELETE** : Defines the action to be performed when attempting to delete the primary key referenced by the foreign key. You can use **NO ACTION**, **RESTRICT**, **CASCADE**, or **SET NULL** option. The default is **RESTRICT**.
+	.. note:: In versions lower than CUBRID 9.0, index name can be omitted; however, in version of CUBRID 9.0 or higher, it is no longer supported.
 
-*   *referential_ action* : You can define an option that determines whether to maintain the value of the foreign key when the primary key value is deleted or updated.
-*   **CASCADE** : If the primary key is deleted, the foreign key is deleted as well. This option is supported only for the **ON DELETE** operation.
-*   **RESTRICT** : Prevents the value of the primary key from being deleted or updated, and rolls back any transaction that has been attempted.
-*   **SET NULL** : When a specific record is being deleted or updated, the column value of the foreign key is updated to **NULL**.
-*   **NO ACTION** : Its behavior is the same as that of the **RESTRICT** option.
+	.. code-block:: sql
 
-**Example**
-
-.. code-block:: sql
-
-	--creaing two tables where one is referencing the other
-	CREATE TABLE a_tbl(
-	id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-	phone VARCHAR(10));
-	 
-	CREATE TABLE b_tbl(
-	ID INT NOT NULL,
-	name VARCHAR(10) NOT NULL,
-	CONSTRAINT pk_id PRIMARY KEY(id),
-	CONSTRAINT fk_id FOREIGN KEY(id) REFERENCES a_tbl(id)
-	ON DELETE CASCADE ON UPDATE RESTRICT);
-	 
-	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
-	INSERT INTO b_tbl VALUES(1,'George'),(2,'Laura'),(3,'Max');
-	SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
-	 
-			   id           id                   phone                 name
-	==============================================================================
-				1            1                   '111-1111'            'George'
-				2            2                   '222-2222'            'Laura'
-				3            3                   '333-3333'            'Max'
-	 
-	--when deleting primay key value, it cascades foreign key value  
-	DELETE FROM a_tbl WHERE id=3;
-	 
-	1 rows affected.
-	 
-	SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
-	 
-			   id           id                   phone                 name
-	==============================================================================
-				1            1                   '111-1111'            'George'
-				2            2                   '222-2222'            'Laura'
-	 
-	--when attempting to update primay key value, it restricts the operation
-	UPDATE  a_tbl SET id = 10 WHERE phone = '111-1111';
-	 
-	In the command from line 1,
-	 
-	ERROR: Update/Delete operations are restricted by the foreign key 'fk_id'.
-	 
-	0 command(s) successfully processed.
-
-**Remark**
-
-*   In a referential constraint, the name of the primary key table to be referenced and the corresponding column names are defined. If the list of column names are is not specified, the primary key of the primary key table is specified in the defined order.
-*   The number of primary keys in a referential constraint must be identical to that of foreign keys. The same column name cannot be used multiple times for the primary key in the referential constraint.
-*   The actions cascaded by reference constraints do not activate the trigger action.
-*   It is not recommended to use *referential_triggered_action* in the CUBRID HA environment. In the CUBRID HA environment, the trigger action is not supported. Therefore, if you use *referential_triggered_action*, the data between the master database and the slave database can be inconsistent. For details, see :doc:`/admin/ha`.
-
-**KEY or INDEX**
-
-**KEY** and **INDEX** are used interchangeably. They create an index that uses the corresponding column as a key.
-
-.. note:: In versions lower than CUBRID 9.0, index name can be omitted; however, in version of CUBRID 9.0 or higher, it is no longer supported.
-
-**Example**
-
-.. code-block:: sql
-
-	CREATE TABLE const_tbl4(id INT, phone VARCHAR, KEY i_key(id DESC, phone ASC));
+		CREATE TABLE const_tbl4(id INT, phone VARCHAR, KEY i_key(id DESC, phone ASC));
 
 Column Option
 -------------
@@ -488,8 +466,6 @@ Column Option
 You can specify options such as **ASC** or **DESC** after the column name when defining **UNIQUE** or **INDEX** for a specific column. This keyword is specified to store the index value in ascending or descending order. ::
 
 	column_name [ASC|DESC]
-
-**Example**
 
 .. code-block:: sql
 
@@ -503,14 +479,15 @@ You can specify options such as **ASC** or **DESC** after the column name when d
 	INSERT INTO const_tbl VALUES('1001', 'johnny'), ('1001','john'), ('1001', 'jone');
 	 
 	SELECT * FROM const_tbl WHERE id > '100';
-	===================================================
-			  id    name    
-			  1001     john     
-			  1001     johnny     
-			  1001     jone     
-			  1000     john     
-			  1000     johnny     
-			  1000     jone
+	
+	  id    name    
+	=================
+	  1001     john     
+	  1001     johnny     
+	  1001     jone     
+	  1000     john     
+	  1000     johnny     
+	  1000     jone
 
 Table Option (REUSE_OID)
 ------------------------
@@ -520,8 +497,6 @@ You can specify the **REUSE_OID** option when creating a table, so that OIDs tha
 OID (Object Identifier) is an object identifier represented by physical location information such as the volume number, page number and slot number. By using such OIDs, CUBRID manages the reference relationships of objects and searches, stores or deletes them. When an OID is used, accessibility is improved because the object in the heap file can be directly accessed without referring to the table. However, the problem of decreased reusability of the storage occurs when there are many **DELETE/ INSERT** operations because the object's OID is kept to maintain the reference relationship with the object even if it is deleted.
 
 If you specify the **REUSE_OID** option when creating a table, the OID is also deleted when data in the table is deleted, so that another **INSERT** ed data can use it. OID reusable tables cannot be referred to by other tables, and OID values of the objects in the OID reusable tables cannot be viewed.
-
-**Example**
 
 .. code-block:: sql
 
@@ -545,15 +520,15 @@ If you specify REUSE_OID together with the collation of table, it can be placed 
 	CREATE TABLE t3(a VARCHAR(20)) REUSE_OID COLLATE euckr_bin;
 	CREATE TABLE t4(a VARCHAR(20)) COLLATE euckr_bin REUSE_OID;
 
-**Remark**
+.. note::
 
-*   OID reusable tables cannot be referred to by other tables.
-*   Updatable views cannot be created for OID reusable tables.
-*   OID reusable tables cannot be specified as table column type.
-*   OID values of the objects in the OID reusable tables cannot be read.
-*   Instance methods cannot be called from OID reusable tables. Also, instance methods cannot be called if a sub class inherited from the class where the method is defined is defined as an OID reusable table.
-*   OID reusable tables are supported only by CUBRID 2008 R2.2 or above, and backward compatibility is not ensured. That is, the database in which the OID reusable table is located cannot be accessed from a lower version database.
-*   OID reusable tables can be managed as partitioned tables and can be replicated.
+	*   OID reusable tables cannot be referred to by other tables.
+	*   Updatable views cannot be created for OID reusable tables.
+	*   OID reusable tables cannot be specified as table column type.
+	*   OID values of the objects in the OID reusable tables cannot be read.
+	*   Instance methods cannot be called from OID reusable tables. Also, instance methods cannot be called if a sub class inherited from the class where the method is defined is defined as an OID reusable table.
+	*   OID reusable tables are supported only by CUBRID 2008 R2.2 or above, and backward compatibility is not ensured. That is, the database in which the OID reusable table is located cannot be accessed from a lower version database.
+	*   OID reusable tables can be managed as partitioned tables and can be replicated.
 
 CREATE TABLE LIKE
 -----------------
@@ -566,12 +541,9 @@ You cannot create the column definition because the **CREATE TABLE ... LIKE** st
 
 *   *new_table_name* : A table name to be created
 *   *old_table_name* : The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE … LIKE** statement.
-
     * Partition table
     * Table that contains an **AUTO_INCREMENT** column
     * Table that uses inheritance or methods
-
-**Example**
 
 .. code-block:: sql
 
@@ -652,8 +624,6 @@ You can create a new table that contains the result records of the **SELECT** st
 *   *column_definition* : Defines a column. If it is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
 *   *table_constraint* : Defines table constraint.
 *   *select_statement* : A **SELECT** statement targeting a source table that already exists in the database.
-
-**Example**
 
 .. code-block:: sql
 
@@ -821,8 +791,6 @@ For **add_column_update_hard_default** and the hard default, see :ref:`change-co
 *   *column_definition* : Specifies the name, data type, and constraints of a column to be added.
 *   **AFTER** *oid_column_name* : Specifies the name of an existing column before the column to be added.
 
-**Example**
-
 .. code-block:: sql
 
 	CREATE TABLE a_tbl;
@@ -867,11 +835,9 @@ By default, the index created when you add **PRIMARY KEY** constraints is create
 	CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : Specifies the name of a table that has a constraint to be added.
-*   *constraint_name* : Specifies the name of a constraint to be added, or it can be omitted. If omitted, a name is automatically assigned.
+*   *constraint_name* : Specifies the name of a constraint to be added, or it can be omitted. If omitted, a name is automatically assigned(maximum: 254 bytes).
 *   *foreign_key_name* : Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
 *   *column_constraint* : Defines a constraint for the specified column. For details, see :ref:`constraint-definition`.
-
-**Example**
 
 .. code-block:: sql
 
@@ -890,10 +856,8 @@ You can define the index attributes for a specific column by using the **ADD IND
 	column_name [(length)] [ ASC | DESC ]
 
 *   *table_name* : Specifies the name of a table to be modified.
-*   *index_name* : Specifies the name of an index. If omitted, a name is automatically assigned.
+*   *index_name* : Specifies the name of an index(maximum: 254 bytes). If omitted, a name is automatically assigned.
 *   *index_col_name* : Specifies the column that has an index to be defined. **ASC** or **DESC** can be specified for a column option; *prefix_length* of an index key also can be specified for a column option.
-
-**Example**
 
 .. code-block:: sql
 
@@ -931,8 +895,6 @@ You can specify a new default value for a column that has no default value or mo
 *   *table_name* : Specifies the name of a table that has a column whose default value is to be modified.
 *   *column_name* : Specifies the name of a column whose default value is to be modified.
 *   *value* : Specifies a new default value.
-
-**Example**
 
 .. code-block:: sql
 
@@ -1049,8 +1011,6 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 *   *column_definition* : Specifies the type, size, and attribute of the column to change.
 *   *col_name* : Specifies the column name to which the type, size, and attribute of the column to apply changes.
 
-**Example 1**
-
 .. code-block:: sql
 
 	CREATE TABLE t1 (a INTEGER);
@@ -1074,8 +1034,6 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 	-- changing column b's size
 	ALTER TABLE t1 MODIFY b VARCHAR(20);
 
-**Example 2**
-
 .. code-block:: sql
 
 	-- changing the name and position of a column  
@@ -1096,8 +1054,6 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 				22            2
 				33            3
 
-**Example 3**
-
 .. code-block:: sql
 
 	-- adding NOT NULL constraint (strict)
@@ -1111,8 +1067,6 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 	In the command from line 1,
 	 
 	ERROR: Cannot add NOT NULL constraint for attribute "i1": there are existing NULL values for this attribute.
-
-**Example 4**
 
 .. code-block:: sql
 
@@ -1132,8 +1086,6 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 				0
 			   11
 
-**Example 5**
-
 .. code-block:: sql
 
 	-- change the column's data type (no errors)
@@ -1150,8 +1102,6 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 	  '2147483647 '
 	  '-2147483648'
 	  '1          '
-
-**Example 6**
 
 .. code-block:: sql
 
@@ -1185,115 +1135,115 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 	 
 	-- hard default values have been placed instead of signaling overflow
 
-**Note - Changes of Table Attributes based on Changes of Column Type**
+	**Changes of Table Attributes based on Changes of Column Type**
 
-*   Type Change : If the value of the system parameter **alter_table_change_type_strict** is set to no, then changing values to other types is allowed, but if it is set to yes then changing is not allowed. The default value of the parameter is **no**. You can change values to all types allowed by the **CAST** operator. Changing object types is allowed only by the upper classes (tables) of the objects.
+	*   Type Change : If the value of the system parameter **alter_table_change_type_strict** is set to no, then changing values to other types is allowed, but if it is set to yes then changing is not allowed. The default value of the parameter is **no**. You can change values to all types allowed by the **CAST** operator. Changing object types is allowed only by the upper classes (tables) of the objects.
 
-*   **NOT NULL**
+	*   **NOT NULL**
 
-    *   If the **NOT NULL** constraint is not specified, it will be removed from a new table even though it is present in the existing table.
-    *   If the **NOT NULL** constraint is specified in the column to change, the result varies depending on the configuration of the system parameter, **alter_table_change_type_strict**.
+		*   If the **NOT NULL** constraint is not specified, it will be removed from a new table even though it is present in the existing table.
+		*   If the **NOT NULL** constraint is specified in the column to change, the result varies depending on the configuration of the system parameter, **alter_table_change_type_strict**.
 
-        *   If **alter_table_change_type_strict** is set to yes, the column values will be checked. If **NULL** exists, an error will occur, and the change will not be executed.
-        *   If the **alter_table_change_type_strict** is set to no, every existing **NULL** value will be changed to a hard default value of the type to change.
+			*   If **alter_table_change_type_strict** is set to yes, the column values will be checked. If **NULL** exists, an error will occur, and the change will not be executed.
+			*   If the **alter_table_change_type_strict** is set to no, every existing **NULL** value will be changed to a hard default value of the type to change.
 
-*   **DEFAULT** : If the **DEFAULT** attribute is not specified in the column to change, it will be removed from a new table even though the attribute is present in the existing table.
+	*   **DEFAULT** : If the **DEFAULT** attribute is not specified in the column to change, it will be removed from a new table even though the attribute is present in the existing table.
 
-*   **AUTO_INCREMENT** : If the **AUTO_INCREMENT** attribute is not specified in the column to change, it will be removed from a new table even though the attribute is present in the existing table.
+	*   **AUTO_INCREMENT** : If the **AUTO_INCREMENT** attribute is not specified in the column to change, it will be removed from a new table even though the attribute is present in the existing table.
 
-*   **FOREIGN KEY** : You cannot change the column with the foreign key constraint that is referred to or refers to.
+	*   **FOREIGN KEY** : You cannot change the column with the foreign key constraint that is referred to or refers to.
 
-*   Single Column **PRIMARY KEY**
+	*   Single Column **PRIMARY KEY**
 
-    *   If the **PRIMARY KEY** constraint is specified in the column to change, a **PRIMARY KEY** is re-created only in which a **PRIMARY KEY** constraint exists in the existing column and the type is upgraded.
-    *   If the **PRIMARY KEY** constraint is specified in the column to change but doesn't exist in the existing column, a **PRIMARY KEY** will be created.
-    *   If a **PRIMARY KEY** constraint exists but is not specified in the column to change, the **PRIMARY KEY** will be maintained.
+		*   If the **PRIMARY KEY** constraint is specified in the column to change, a **PRIMARY KEY** is re-created only in which a **PRIMARY KEY** constraint exists in the existing column and the type is upgraded.
+		*   If the **PRIMARY KEY** constraint is specified in the column to change but doesn't exist in the existing column, a **PRIMARY KEY** will be created.
+		*   If a **PRIMARY KEY** constraint exists but is not specified in the column to change, the **PRIMARY KEY** will be maintained.
 
-*   Multicolumn **PRIMARY KEY** : If the **PRIMARY KEY** constraint is specified and the type is upgraded, a **PRIMARY KEY** will be re-created.
+	*   Multicolumn **PRIMARY KEY** : If the **PRIMARY KEY** constraint is specified and the type is upgraded, a **PRIMARY KEY** will be re-created.
 
-*   Single Column **UNIQUE KEY**
+	*   Single Column **UNIQUE KEY**
 
-    *   If the type is upgraded, a **UNIQUE KEY** will be re-created.
-    *   If a **UNIQUE KEY** exists in the existing column and it is not specified in the column to change, it will be maintained.
-    *   If a **UNIQUE KEY** exists in the existing column to change, it will be created.
+		*   If the type is upgraded, a **UNIQUE KEY** will be re-created.
+		*   If a **UNIQUE KEY** exists in the existing column and it is not specified in the column to change, it will be maintained.
+		*   If a **UNIQUE KEY** exists in the existing column to change, it will be created.
 
-*   Multicolumn **UNIQUE KEY** : If the column type is changed, an index will be re-created.
-*   Column with a Non-unique Index : If the column type is changed, an index will be re-created.
-*   Partition Column: If a table is partitioned by a column, the column cannot be changed. Partitions cannot be added.
+	*   Multicolumn **UNIQUE KEY** : If the column type is changed, an index will be re-created.
+	*   Column with a Non-unique Index : If the column type is changed, an index will be re-created.
+	*   Partition Column: If a table is partitioned by a column, the column cannot be changed. Partitions cannot be added.
 
-*   Column with a Class Hierarchy : You can only change the tables that do not have a lower class. You cannot change the lower class that inherits from an upper class. You cannot change the inherited attributes.
+	*   Column with a Class Hierarchy : You can only change the tables that do not have a lower class. You cannot change the lower class that inherits from an upper class. You cannot change the inherited attributes.
 
-*   Trigger and View : You must redefine triggers and views directly because they are not changed according to the definition of the column to change.
-*   Column Sequence : You can change the sequence of columns.
-*   Name Change : You can change names as long as they do not conflict.
+	*   Trigger and View : You must redefine triggers and views directly because they are not changed according to the definition of the column to change.
+	*   Column Sequence : You can change the sequence of columns.
+	*   Name Change : You can change names as long as they do not conflict.
 
-**Note - Changes of Values based on Changes of Column Type**
+	**Note - Changes of Values based on Changes of Column Type**
 
-The **alter_table_change_type_strict** parameter determines whether the value conversion is allowed according to the type change. If the value is no, it can be changed when you change a column type or add a **NOT NULL** constraint. The default value is **no**.
+	The **alter_table_change_type_strict** parameter determines whether the value conversion is allowed according to the type change. If the value is no, it can be changed when you change a column type or add a **NOT NULL** constraint. The default value is **no**.
 
-When the value of the parameter, **alter_table_change_type_strict** is no, it will operate depending on the conditions as follows:
+	When the value of the parameter, **alter_table_change_type_strict** is no, it will operate depending on the conditions as follows:
 
-*   Overflow occurred while converting numbers or character strings to Numbers: It is determined based on symbol of the result type. If it is negative value, it is specified as a minimum value or positive value, specified as the maximum value and a warning message for records where overflow occurred is recorded in the log. For strings, it will follow the rules stated above after it is converted to **DOUBLE** type.
+	*   Overflow occurred while converting numbers or character strings to Numbers: It is determined based on symbol of the result type. If it is negative value, it is specified as a minimum value or positive value, specified as the maximum value and a warning message for records where overflow occurred is recorded in the log. For strings, it will follow the rules stated above after it is converted to **DOUBLE** type.
 
-*   Character strings to convert to shorter ones: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log.
+	*   Character strings to convert to shorter ones: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log.
 
-*   Conversion failure due to other reasons: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log.
+	*   Conversion failure due to other reasons: The record will be updated to the hard default value of the type that is defined and the warning message will be recorded in a log.
 
-If the value of the **alter_table_change_type_strict** parameter is yes, an error message will be displayed and the changes will be rolled back.
+	If the value of the **alter_table_change_type_strict** parameter is yes, an error message will be displayed and the changes will be rolled back.
 
-The **ALTER CHANGE** statement checks the possibility of type conversion before updating a record but the type conversion of specific values may fail. For example, if the value format is not correct when you convert **VARCHAR** to **DATE**, the conversion may fail. In this case, the hard default value of the **DATE** type will be assigned.
+	The **ALTER CHANGE** statement checks the possibility of type conversion before updating a record but the type conversion of specific values may fail. For example, if the value format is not correct when you convert **VARCHAR** to **DATE**, the conversion may fail. In this case, the hard default value of the **DATE** type will be assigned.
 
-The hard default value is a value that will be used when you add columns with the **ALTER TABLE ... ADD  COLUMN** statement, add or change by converting types with the **ALTER TABLE ... CHANGE/MODIFY** statement. The operation will vary depending on the system parameter, **add_column_update_hard_default** in the **ADD COLUMN** statement.
+	The hard default value is a value that will be used when you add columns with the **ALTER TABLE ... ADD  COLUMN** statement, add or change by converting types with the **ALTER TABLE ... CHANGE/MODIFY** statement. The operation will vary depending on the system parameter, **add_column_update_hard_default** in the **ADD COLUMN** statement.
 
-**Hard Default Value by Type**
+	**Hard Default Value by Type**
 
-+-----------+-------------------------------------+-----------------------------------------+
-| Type      | Existence of Hard Default Value     | Hard Default Value                      |
-+===========+=====================================+=========================================+
-| INTEGER   | Yes                                 | 0                                       |
-+-----------+-------------------------------------+-----------------------------------------+
-| FLOAT     | Yes                                 | 0                                       |
-+-----------+-------------------------------------+-----------------------------------------+
-| DOUBLE    | Yes                                 | 0                                       |
-+-----------+-------------------------------------+-----------------------------------------+
-| SMALLINT  | Yes                                 | 0                                       |
-+-----------+-------------------------------------+-----------------------------------------+
-| DATE      | Yes                                 | date'01/01/0001'                        |
-+-----------+-------------------------------------+-----------------------------------------+
-| TIME      | Yes                                 | time'00:00'                             |
-+-----------+-------------------------------------+-----------------------------------------+
-| DATETIME  | Yes                                 | datetime'01/01/0001 00:00'              |
-+-----------+-------------------------------------+-----------------------------------------+
-| TIMESTAMP | Yes                                 | timestamp'00:00:01 AM 01/01/1970' (GMT) |
-+-----------+-------------------------------------+-----------------------------------------+
-| MONETARY  | Yes                                 | 0                                       |
-+-----------+-------------------------------------+-----------------------------------------+
-| NUMERIC   | Yes                                 | 0                                       |
-+-----------+-------------------------------------+-----------------------------------------+
-| CHAR      | Yes                                 | ''                                      |
-+-----------+-------------------------------------+-----------------------------------------+
-| VARCHAR   | Yes                                 | ''                                      |
-+-----------+-------------------------------------+-----------------------------------------+
-| SET       | Yes                                 | {}                                      |
-+-----------+-------------------------------------+-----------------------------------------+
-| MULTISET  | Yes                                 | {}                                      |
-+-----------+-------------------------------------+-----------------------------------------+
-| SEQUENCE  | Yes                                 | {}                                      |
-+-----------+-------------------------------------+-----------------------------------------+
-| BIGINT    | Yes                                 | 0                                       |
-+-----------+-------------------------------------+-----------------------------------------+
-| BIT       | Yes                                 |                                         |
-+-----------+-------------------------------------+-----------------------------------------+
-| VARBIT    | No                                  |                                         |
-+-----------+-------------------------------------+-----------------------------------------+
-| OBJECT    | No                                  |                                         |
-+-----------+-------------------------------------+-----------------------------------------+
-| BLOB      | No                                  |                                         |
-+-----------+-------------------------------------+-----------------------------------------+
-| CLOB      | No                                  |                                         |
-+-----------+-------------------------------------+-----------------------------------------+
-| ELO       | No                                  |                                         |
-+-----------+-------------------------------------+-----------------------------------------+
+	+-----------+-------------------------------------+-----------------------------------------+
+	| Type      | Existence of Hard Default Value     | Hard Default Value                      |
+	+===========+=====================================+=========================================+
+	| INTEGER   | Yes                                 | 0                                       |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| FLOAT     | Yes                                 | 0                                       |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| DOUBLE    | Yes                                 | 0                                       |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| SMALLINT  | Yes                                 | 0                                       |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| DATE      | Yes                                 | date'01/01/0001'                        |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| TIME      | Yes                                 | time'00:00'                             |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| DATETIME  | Yes                                 | datetime'01/01/0001 00:00'              |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| TIMESTAMP | Yes                                 | timestamp'00:00:01 AM 01/01/1970' (GMT) |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| MONETARY  | Yes                                 | 0                                       |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| NUMERIC   | Yes                                 | 0                                       |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| CHAR      | Yes                                 | ''                                      |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| VARCHAR   | Yes                                 | ''                                      |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| SET       | Yes                                 | {}                                      |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| MULTISET  | Yes                                 | {}                                      |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| SEQUENCE  | Yes                                 | {}                                      |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| BIGINT    | Yes                                 | 0                                       |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| BIT       | Yes                                 |                                         |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| VARBIT    | No                                  |                                         |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| OBJECT    | No                                  |                                         |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| BLOB      | No                                  |                                         |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| CLOB      | No                                  |                                         |
+	+-----------+-------------------------------------+-----------------------------------------+
+	| ELO       | No                                  |                                         |
+	+-----------+-------------------------------------+-----------------------------------------+
 
 .. _rename-column:
 
@@ -1307,9 +1257,7 @@ You can change the name of the column by using the **RENAME COLUMN** clause. ::
 
 *   *table_name* : Specifies the name of a table that has a column to be renamed.
 *   *old_column_name* : Specifies the name of a column.
-*   *new_column_name* : Specifies a new column name after the **AS** keyword.
-
-**Example**
+*   *new_column_name* : Specifies a new column name after the **AS** keyword(maximum: 254 bytes).
 
 .. code-block:: sql
 
@@ -1326,8 +1274,6 @@ You can delete a column in a table by using the **DROP COLUMN** clause. You can 
 *   *table_name* : Specifies the name of a table that has a column to be deleted.
 *   *column_ name* : Specifies the name of a column to be deleted. Multiple columns can be specified by separating them with commas (,).
 
-**Example**
-
 .. code-block:: sql
 
 	ALTER TABLE a_tbl DROP COLUMN age1,age2,age3;
@@ -1342,8 +1288,6 @@ You can drop the constraints pre-defined for the table, such as **UNIQUE**, **PR
 
 *   *table_name* : Specifies the name of a table that has a constraint to be dropped.
 *   *constraint_name* : Specifies the name of a constraint to be dropped.  
-
-**Example**
 
 .. code-block:: sql
 
@@ -1362,8 +1306,6 @@ You can delete an index defined for a column by using the **DROP INDEX** clause.
 *   *table_name* : Specifies the name of a table of which constraints will be deleted.
 *   *index_name* : Specifies the name of an index to be deleted.
 
-**Example**
-
 .. code-block:: sql
 
 	ALTER TABLE a_tbl DROP INDEX i_a_tbl_age;
@@ -1376,8 +1318,6 @@ You can delete a primary key constraint defined for a table by using the **DROP 
 	ALTER [ TABLE | CLASS ] table_name DROP PRIMARY KEY
 
 *   *table_name* : Specifies the name of a table that has a primary key constraint to be deleted.
-
-**Example**
 
 .. code-block:: sql
 
@@ -1392,8 +1332,6 @@ You can drop a foreign key constraint defined for a table using the **DROP FOREI
 
 *   *table_name* : Specifies the name of a table whose constraint is to be deleted.
 *   *constraint_name* : Specifies the name of foreign key constraint to be deleted.
-
-**Example**
 
 .. code-block:: sql
 
@@ -1421,8 +1359,6 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
 
 *   Specifies the list of subclasses which are not to be deleted after the **EXCEPT** keyword.
 
-**Example**
-
 .. code-block:: sql
 
 	DROP TABLE history ;
@@ -1443,9 +1379,7 @@ You can change the name of a table by using the **RENAME TABLE** statement and s
 	RENAME  [ TABLE | CLASS | VIEW | VCLASS ] old_table_name { AS | TO } new_table_name [, old_table_name { AS | TO } new_table_name, ... ]
 
 *   *old_table_name* : Specifies the old table name to be renamed.
-*   *new_table_name* : Specifies a new table name.
-
-**Example**
+*   *new_table_name* : Specifies a new table name(maximum: 254 bytes).
 
 .. code-block:: sql
 

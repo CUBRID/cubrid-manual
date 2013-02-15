@@ -79,7 +79,7 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
 
 **cubrid.conf** is a configuration file that sets system parameters for the CUBRID database server and determines overall performance and operation of the database system. In the **cubrid.conf** file, some important parameters needed for system installation are provided, having their default values.
 
-**Database Server System Parameters**
+	**Database Server System Parameters**
 
 	The following are database server system parameters that can be used in the **cubrid.conf** configuration file. For the scope of **client** and **server parameters**, see :ref:`scope-server-conf`.
 
@@ -261,7 +261,7 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
 
 	Where <*database*> is the name of the database to which each parameter applies. If a parameter configured in [common] is the same as the one configured in [@<*database*>], the one configured in [@<*database*>] is applied.
 
-**Default Parameters**
+	**Default Parameters**
 
 	**cubrid.conf**, a default database configuration file created during the CUBRID installation, includes some default database server parameters that must be changed. You can change the value of a parameter that is not included as a default parameter by manually adding or editing one.
 
@@ -1156,7 +1156,7 @@ The following are parameters related to SQL statements and data types supported 
 
 	If the application client knows both of input and output, leave the setting **unicode_input_normalization** and **unicode_output_normalization** as **no**.
 
-	For details, see :doc:`/admin/i18n`.
+	For more details, see :doc:`/admin/i18n`.
 
 **unicode_output_normalization**
 
@@ -1678,7 +1678,7 @@ The following describes parameters to configure the environment variables of bro
 
 **MAX_STRING_LENGTH**
 
-	**MAX_STRING_LENGTH** is a parameter used to configure the maximum string length for bit, varbit, char, varchar, nchar, nchar varying data types. If the value is **-1**, which is the default value, the length defined in the database is used. If the value is **100**, the value acts like 100 being applied even when a certain attribute is defined as varchar(1000).
+	**MAX_STRING_LENGTH** is a parameter used to configure the maximum string length for BIT, VARBIT, CHAR and VARCHAR data types. If the value is **-1**, which is the default value, the length defined in the database is used. If the value is **100**, the value acts like 100 being applied even when a certain attribute is defined as varchar(1000).
 
 **PREFERRED_HOSTS**
 

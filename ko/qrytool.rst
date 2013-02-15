@@ -156,7 +156,7 @@ CUBRID 2008 R4.3 이상 버전부터는 설치 패키지에 웹 매니저가 포
 	C:\CUBRID>cubrid service start
 	++ cubrid service is running.
 		
-#. 웹 브라우저 주소창에 https\://localhost:8282/로 접속한다. 기본 TCP 포트는 8282(HTTPS/SSL)를 사용하며, CUBRID/conf/cm_httpd.conf 파일을 편집하여 포트를 변경할 수 있다. 이때, http가 아니라 https로 입력해야만 하므로 주의한다.
+#. 웹 브라우저 주소창에 https://localhost:8282/  로 접속한다. 기본 TCP 포트는 8282(HTTPS/SSL)를 사용하며, $CUBRID/conf/cm_httpd.conf 파일을 편집하여 포트를 변경할 수 있다. 이때, http가 아니라 https로 입력해야만 하므로 주의한다.
 
 #. 먼저 호스트 로그인을 수행한다. 호스트 접속을 위해서 1차로 CM 서버 사용자(=호스트 사용자) 인증을 수행하며, 기본 사용자 이름/암호는 admin/admin이다.
 
@@ -275,5 +275,8 @@ CUBRID가 지원하는 드라이버는 다음과 같다.
 * :doc:`CUBRID Python 드라이버 <api/python>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=python_driver>`_)
 
 * :doc:`CUBRID Ruby 드라이버 <api/ruby>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_)
+
+* :doc:`CUBRID Node.js 드라이버 <api/node_js>` (`다운로드 <http://www.cubrid.org/?mid=downloads&item=nodejs_driver>`_)
+
 
 위 드라이버 중 JDBC, ODBC, CCI 드라이버는 CUBRID를 설치할 때 자동으로 다운로드되므로 따로 다운로드하지 않아도 된다.

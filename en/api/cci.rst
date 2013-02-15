@@ -737,7 +737,7 @@ The following list shows CCI and CAS error codes.
 
 **C Type Definition**
 
- The following shows the construct used in CCI API functions.
+ The following shows the structs used in CCI API functions.
 
 +--------------------------+----------+-----------------------------------------+--------------------------------------------------+
 | Name                     | Type     | Member                                  | Description                                      |

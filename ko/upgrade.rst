@@ -99,7 +99,7 @@ CUBRID 2008 R4.0 이하 버전 사용자는 CUBRID 9.1 버전을 별도의 디�
 
 **새로 추가된 예약어 검사**
 
-	* CUBRID 설치 패키지에 포함 또는 `http://ftp.cubrid.org <http://ftp.cubrid.org>`_ 에서 배포되는 CUBRID 9.1 버전용 예약어 검출 스크립트인 check_reserved.sql을 이용하여 예약어 사용 여부를 검사할 수 있으며, 예약어로 지정된 식별자를 사용하고 있을 경우 식별자를 수정해야 한다. :doc:`sql/identifier` 를 참고한다.
+	* CUBRID 설치 패키지에 포함 또는 http://ftp.cubrid.org 에서 배포되는 CUBRID 9.1 버전용 예약어 검출 스크립트인 check_reserved.sql을 이용하여 예약어 사용 여부를 검사할 수 있으며, 예약어로 지정된 식별자를 사용하고 있을 경우 식별자를 수정해야 한다. :doc:`sql/identifier` 를 참고한다.
 
 **환경 변수 CUBRID_CHARSET, CUBRID_MSG_LANG 설정**
 
@@ -178,7 +178,7 @@ CUBRID 9.1로 마이그레이션
 
 * CUBRID 9.0 Beta 이전 버전에서 DB를 마이그레이션하는 경우는 다음의 절차대로 수행한다.
 * CUBRID 2008 R3.0 Beta 이하 사용자의 경우, 기존의 GLO 클래스를 사용하고 있는 경우에는 추가 작업이 필요하다(:ref:`glo-users-migration` 참고).
-* 아래는 cubrid unloaddb/loaddb 유틸리티와 `http://ftp.cubrid.org <http://ftp.cubrid.org>`에서 별도 배포되는 check_reserved.sql 예약어 검출 스크립트를 이용하여 마이그레이션을 수행하는 방법이다. (cubrid unloaddb/loaddb는 매뉴얼의 :doc:`/admin/migration` 참고)
+* 아래는 cubrid unloaddb/loaddb 유틸리티와 http://ftp.cubrid.org 에서 별도 배포되는 check_reserved.sql 예약어 검출 스크립트를 이용하여 마이그레이션을 수행하는 방법이다. (cubrid unloaddb/loaddb는 매뉴얼의 :doc:`/admin/migration` 참고)
 
 	+------------------------------------+---------------------------------------------+---------------------------------------------+
 	| 단계                               | Linux 환경                                  | Windows 환경                                |

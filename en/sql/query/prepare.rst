@@ -17,8 +17,8 @@ In general, the prepared statement is executed through the interface functions o
 	{DEALLOCATE | DROP} PREPARE stmt_name
 
 .. note:: 
-	* The number of PREPARE statements in SQL level is limited as 20 per DB connection. It is limited to protect abusing DB server memory, because PREPARE statement in SQL level uses the memory of DB server.
-	* The number of prepared statements in the interface function is limited as the broker parameter, :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` per DB connection. If you use CUBRID SHARD, the number of prepared statements in the shard pool is limited as shard proxy parameter, :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` per shard proxy.
+	* In SQL level, the number of PREPARE statements is limited to 20 per DB connection. It is limited to protect abusing DB server memory, because PREPARE statement in SQL level uses the memory of DB server.
+	* In the interface function, the number of prepared statements is limited to :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>`(broker parameter) per DB connection.  If you use CUBRID SHARD, the number of prepared statements is limited to :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>`(shard proxy parameter) per shard proxy.
 
 PREPARE Statement
 =================

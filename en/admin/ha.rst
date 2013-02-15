@@ -764,7 +764,7 @@ The following example shows how to configure PHP.
 	}
 	?>
 
-.. note:: If you want to activate well the broker's failover in the environment which the broker's failover is enabled by setting **altHosts**, you should the value of *disconnectOnQueryTimeout** in URL as *true**.
+.. note:: If you want to run smoothly the broker's failover in the environment which the broker's failover is enabled by setting **altHosts**, you should set the value of *disconnectOnQueryTimeout** in URL as *true**.
 	
 	If this value is **true*, an application program releases the existing connection from a broker and reconnect to the other broker which is specified on **altHosts**.
 

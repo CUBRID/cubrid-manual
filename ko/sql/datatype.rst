@@ -1368,7 +1368,7 @@ BLOB/CLOB
 	* **CLOB_LENGTH** ( *clob_column* )
 	* **BLOB_LENGTH** ( *blob_column* )                          
 
-	.. note:: " *blob_or_clob_column* **IS NULL** "은 **IS NULL** 조건식을 사용하여 **LOB** 칼럼 값(Locator)이 **NULL** 인지 비교하고, **NULL** 이면  **TRUE** 를 반환한다.     
+	.. note:: " <*blob_or_clob_column*> **IS NULL** ": **IS NULL** 조건식을 사용하여 **LOB** 칼럼 값(Locator)이 **NULL** 인지 비교하고, **NULL** 이면  **TRUE** 를 반환한다.     
 
 .. _lob_storage:
 

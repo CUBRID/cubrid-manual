@@ -730,7 +730,7 @@ CCI API 레퍼런스
 	
 	*   **altHosts** = *standby_broker1_host*, *standby_broker2_host*, ... : active 서버에 연결할 수 없는 경우, 그 다음으로 연결을 시도(failover)할 standby 서버의 브로커 정보를 나타낸다. failover할 브로커를 여러 개 지정할 수 있고, **altHosts** 에 나열한 순서대로 연결을 시도한다.
 
-	*   **rcTime** : 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts에 명시한 브로커로 접속한다(failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초).
+	*   **rcTime** : 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts에 명시한 브로커로 접속한다(브로커 failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초).
 
 	*   **loadBalance** : 이 값이 true면 응용 프로그램이 메인 호스트와 **altHosts**\에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false)
 	
@@ -910,7 +910,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * date_source, T_CCI_CONN conn)
 
-	**T_CCI_DATASOURCE** 구조체에 사용을 끝낸 CCI 연결을 반환한다. 연결이 연결 풀에 반환된 이후 재사용하려면 반드시 :func:cci_datasource_borrow 함수를 재호출해야 한다.
+	**T_CCI_DATASOURCE** 구조체에 사용을 끝낸 CCI 연결을 반환한다. 연결이 연결 풀에 반환된 이후 재사용하려면 반드시 c:func:`cci_datasource_borrow` 함수를 재호출해야 한다.
 
 	:param datasource: (IN) CCI 연결을 반환할 **T_CCI_DATASOURCE** 구조체 포인터
 	:param conn: (IN) 사용을 끝낸 CCI 연결의 핸들 식별자
@@ -2648,16 +2648,10 @@ CCI API 레퍼런스
 	| CCI_SCH_TRIGGER                     | 문자열 또는 NULL  | 항상 NULL                                                                     |
 	+-------------------------------------+-------------------+-------------------------------------------------------------------------------+
 
-	class_name이 "항상 NULL"인 type은 테이블 이름에 대해 패턴 매칭을 지원하지 않는다.
-	
-	attr_name이 "항상 NULL"인 type은 칼럼 이름에 대해 패턴 매칭을 지원하지 않는다.
-	
-	패턴 *flag* 가 설정되지 않을 경우 주어진 테이블 이름 또는 칼럼 이름은 동등 조건(=) 매칭을 사용하므로 **NULL** 이 주어지면 결과는 없다. 
-	
-	패턴 *flag* 가 설정되어 있을 경우 테이블 이름 또는 칼럼 이름이 **NULL** 이면 **LIKE** 절의 "%"와 동일한 결과, 즉 모든 테이블 또는 칼럼에 대한 결과를 얻는다.
-
-	
-
+	* class_name이 "항상 NULL"인 type은 테이블 이름에 대해 패턴 매칭을 지원하지 않는다.
+	* attr_name이 "항상 NULL"인 type은 칼럼 이름에 대해 패턴 매칭을 지원하지 않는다.
+	* 패턴 *flag* 가 설정되지 않을 경우 주어진 테이블 이름 또는 칼럼 이름은 동등 조건(=) 매칭을 사용하므로 **NULL** 이 주어지면 결과는 없다. 
+	* 패턴 *flag* 가 설정되어 있을 경우 테이블 이름 또는 칼럼 이름이 **NULL** 이면 **LIKE** 절의 "%"와 동일한 결과, 즉 모든 테이블 또는 칼럼에 대한 결과를 얻는다.
 
 	.. note::
 

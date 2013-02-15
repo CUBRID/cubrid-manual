@@ -81,7 +81,7 @@ Using hints can affect the performance of query execution. you can allow the que
 SQL hints are specified by using plus signs and comments. CUBRID interprets this comment as a list of hints separated by blanks. The hint comment must appear after the **SELECT**, **CREATE**, or **ALTER** keyword, and the comment must begin with a plus sign (+), following the comment delimiter.
 
 The following hints can be specified on CREATE statement.
-	*   **NO_STATS** : 통계 정보 관련 힌트로서, 질의 최적화기는 통계 정보를 갱신하지 않는다. 따라서, 해당 질의의 성능은 향상되나, 통계 정보를 갱신하지 않으므로 질의 계획이 최적화되지 않음에 유의한다.
+	*   **NO_STATS** : Related to a statistical information hint. If it is specified, query optimizaer does not update the statistical information. Therefore, the query performance is improved, but note that the query plan is not optimized.
 
 The following hints can be specified on UPDATE, DELETE and SELECT statements.
     *   **USE_NL** : Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.

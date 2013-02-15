@@ -97,7 +97,7 @@ Cautions During Upgrade
 
 **Checking New Reserved Words**
 
-	* You can check whether reserved words are being used or not by applying the CUBRID 9.1 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or `http://ftp.cubrid.org <http://ftp.cubrid.org>`_. If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
+	* You can check whether reserved words are being used or not by applying the CUBRID 9.1 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org . If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
 	
 **Configuring environment variables of CUBRID_CHARSET, CUBRID_MSG_LANG**
 
@@ -182,7 +182,7 @@ Migration to CUBRID 9.1
 
 * To migrate DB from the version less than 9.0 Beta, do the following procedures.
 * If you are using CUBRID 2008 R3.0 Beta or less and GLO classes, you have to do the additional works(see :ref:`glo-users-migration`).
-* The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from `http://ftp.cubrid.org <http://ftp.cubrid.org>`_ and the cubrid unloaddb/loaddb utilities. See :doc:`/admin/migration`)
+* The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org and the cubrid unloaddb/loaddb utilities. See :doc:`/admin/migration`)
 
 	+------------------------------------+---------------------------------------------+---------------------------------------------+
 	| Step                               | Linux Environment                           | Windows Environment                         |

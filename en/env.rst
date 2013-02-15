@@ -7,7 +7,8 @@ Configuring the Environment Variable
 
 The following environment variables need to be set in order to use the CUBRID. The necessary environment variables are automatically set when the CUBRID system is installed or can be changed, as needed, by the user.
 
-**CUBRID Environment Variables**
+CUBRID Environment Variables
+----------------------------
 
 *   **CUBRID** : The default environment variable that designates the location where the CUBRID is installed. This variable must be set accurately since all programs included in the CUBRID system uses this environment variable as reference.
 
@@ -53,7 +54,8 @@ In Windows : ::
 
 	C:\> set CUBRID
 
-**OS Environment and Java Environment Variables**
+OS Environment and Java Environment Variables
+---------------------------------------------
 
 *   PATH: In the Linux environment, the directory **$CUBRID/bin**, which includes a CUBRID system executable file, must be included in the PATH environment variable.
 
@@ -103,7 +105,8 @@ shell log-in script. The following is the contents of . **cubrid.sh** environmen
 
 .. _language-setting:
 
-**Language Setting**
+Language Setting
+----------------
 
 The language that will be used in the CUBRID DBMS can be designated with the **CUBRID_CHARSET** environment variable. The following are examples of values that can currently be set in the **CUBRID_CHARSET** environment variable.
 
@@ -125,7 +128,7 @@ Language and charset setting of CUBRID affects read and write data. The language
 For more details related to charset, locale and collation settings, see :doc:`admin/i18n`.
 
 Starting the CUBRID Service
----------------------------
+===========================
 
 Configure environment variables and language, and then start the CUBRID service. For more information on configuring environment variables and language, see :ref:`control-cubrid-services`.
 

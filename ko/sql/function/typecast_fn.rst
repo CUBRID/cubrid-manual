@@ -308,11 +308,10 @@
 		======================
 		  '4 00 Do. 04 10 Okt 277'
 
-	**참고 사항**
+	.. note::
 
-	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
-
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_CHARSET** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
+		* 환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+		* 문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_CHARSET** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
 
 .. function:: FORMAT ( x , dec )
@@ -397,11 +396,10 @@
 		============================================
 		  10/03/2009
 
-	**참고 사항**
+	.. note::
 
-	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
-
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_CHARSET** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
+		* 환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+		* 문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_CHARSET** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
 .. function:: TIME_FORMAT (time, format)
 
@@ -443,11 +441,10 @@
 		===================================
 		  08:46:53 PM  'Nachm.'
 
-	**참고 사항**
+	.. note::
 
-	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
-
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_CHARSET** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참조한다.
+		* 환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+		* 문자셋이 ISO-8859-1인 경우 "en_US" 외에 시스템 파라미터 **intl_date_lang** 또는 환경 변수 **CUBRID_CHARSET** 에 의해 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참조한다.
 
 .. function:: TO_CHAR ( date_time [, format[, date_lang_string_literal ]] )
 
@@ -670,11 +667,10 @@
 		======================
 		  'Pazar     Ekim    2009'
 
-	**참고 사항**
+	.. note::
 
-	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋 정보를 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다. 즉, **CUBRID_CHARSET** 의 로캘 값으로 "en_US"를 설정하는 것과 "en_US.iso88591"을 설정하는 것은 같다.
-
-	언어에 따라 월 이름, 일 이름, 요일 이름, 오전/오후 이름의 해석이 변경되는 함수에서 문자셋이 ISO-8859-1인 경우 "en_US" 외에 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다(위의 예 참고). 다만, 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 시스템 파라미터 **intl_date_lang** 을 설정하거나 **TO_CHAR** 함수의 언어 인자를 지정하여 CUBRID가 지원하는 모든 언어(위 구문의 *date_lang_string_literal* 참고) 중 하나로 변경할 수 있다. 언어에 따라 날짜/시간 형식의 해석이 변경되는 함수들의 목록은 시스템 파라미터 **intl_date_lang** 의 설명을 참고한다.
+		* 환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋 정보를 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다. 즉, **CUBRID_CHARSET** 의 로캘 값으로 "en_US"를 설정하는 것과 "en_US.iso88591"을 설정하는 것은 같다.
+		* 언어에 따라 월 이름, 일 이름, 요일 이름, 오전/오후 이름의 해석이 변경되는 함수에서 문자셋이 ISO-8859-1인 경우 "en_US" 외에 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다(위의 예 참고). 다만, 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 시스템 파라미터 **intl_date_lang** 을 설정하거나 **TO_CHAR** 함수의 언어 인자를 지정하여 CUBRID가 지원하는 모든 언어(위 구문의 *date_lang_string_literal* 참고) 중 하나로 변경할 수 있다. 언어에 따라 날짜/시간 형식의 해석이 변경되는 함수들의 목록은 시스템 파라미터 **intl_date_lang** 의 설명을 참고한다.
 
 	.. code-block:: sql
 	
@@ -885,11 +881,10 @@
 		========================================
 		   05/12/2012
    
-	**참고 사항**
+	.. note::
 
-	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
-
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_DATE** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
+		* 환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+		* 문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_DATE** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
 .. function:: TO_DATETIME (string [,format [,date_lang_string_literal]])
 
@@ -941,11 +936,10 @@
 		=================================================================================
 		  12:10:00.000 PM 05/12/2012
 
-	**참고 사항**
+	.. note::
 
-	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
-
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_DATETIME** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
+		* 환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+		* 문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_DATETIME** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
 .. function:: TO_NUMBER(string [, format ])
 
@@ -1053,11 +1047,10 @@
 		==============================================
 		  10:23:00 PM
 
-	**참고 사항**
+	.. note::
 
-	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
-
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_TIME** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
+		* 환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+		* 문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_TIME** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
 
 .. function:: TO_TIMESTAMP(string [, format [,date_lang_string_literal]])
 
@@ -1107,8 +1100,7 @@
 		===================================================
 		  10:23:00 PM 08/01/2012
   
-	**참고 사항**
+	.. note::
 
-	환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
-
-	문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_TIMESTAMP** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.
+		* 환경 변수인 **CUBRID_CHARSET** 의 로캘 값을 언어만 "en_US"(CUBRID 제품 설치 시 **CUBRID_CHARSET** 의 초기 값)로 설정하고 "." 이하의 문자셋을 생략하는 경우, 문자셋은 ISO-8859-1(.iso88591)로 정해진다.
+		* 문자셋이 ISO-8859-1인 경우 "en_US" 외에 **TO_TIMESTAMP** 함수에서 변경할 수 있는 언어는 "ko_KR"과 "tr_TR"뿐이다. 문자셋이 UTF-8인 경우 CUBRID가 지원하는 모든 언어 중 하나로 변경할 수 있다. 보다 자세한 설명은 :func:`TO_CHAR` 를 참고한다.

@@ -223,7 +223,7 @@ CCI API Reference
 
 	Cancel the running query on the other thread. This function executes the same behavior as Statement.cancel() method in JAVA.
 	
-	The following shows how to calcel the query execution of the thread.
+	The following shows how to calcel the query execution of a thread.
 	
 	::
 
@@ -713,8 +713,8 @@ CCI API Reference
 
 	*   **altHosts** = *standby_broker1_host*, *standby_broker2_host,* . . .: Specifies the broker information of the standby server, which is used for failover when it is impossible to connect to the active server. You can specify multiple brokers for failover, and the connection to the brokers is attempted in the order listed in **alhosts**.
 
-	*   **rcTime** : An interval between the attempts to connect to the active broker in which failure occurred. After a failure occurs, the system connects to the broker specified by **altHosts** (failover), terminates the transaction, and then attempts to connect to the active broker of the master database at every **rcTime**. The default value is 600 seconds.
-
+	*   **rcTime** : After the failure occurred on the first connected broker, the application connects to the broker specified by **altHosts**(broker failover). Then it attempts to reconnect to the first connected broker at every **rcTime**(default value: 600 seconds).
+	
 	*	**loadBalance** : When this value is true, the applications try to connect to the main host and alternative hosts specified with the **altHosts** property as a random order. (default value: false).
 	
 	*   **login_timeout** | **loginTimeout** : Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is 0, which means infinite postponement. 
@@ -888,7 +888,7 @@ CCI API Reference
 
 .. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * date_source, T_CCI_CONN conn)
 
-	The **cci_datasource_release** function returns CCI connection released in **T_CCI_DATASOURCE** struct. If you want to reuse the coonection after calling this function, recall :func:cci_datasource_borrow.
+	The **cci_datasource_release** function returns CCI connection released in **T_CCI_DATASOURCE** struct. If you want to reuse the coonection after calling this function, recall c:func:`cci_datasource_borrow`.
 
 	:param datasource: (IN) **T_CCI_DATASOURCE** struct pointer which returns CCI connection
 	:param conn: (IN) CCI connection handler identifier released
@@ -1041,7 +1041,7 @@ CCI API Reference
 	.. note:: 
 	
 		* In the previous version of 2008 R4.3, if the autocommit mode is on, all queries in the array were committed after all of them are executed.  From 2008 R4.3 version, the trasaction is committed everytime when a query is executed.
-		* In autocommit mode off, in case that the general error occurs during executing one of the queries in the array on the cci_execute_array function which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 
+		* In autocommit mode off, if the general error occurs during executing one of the queries in the array on the cci_execute_array function which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 
 	
 	.. code-block:: c
 
@@ -1147,7 +1147,7 @@ CCI API Reference
 	.. note:: 
 	
 		* In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. From 2008 R4.3 version, each query in the array is committed right after each running.
-		*  With autocommit OFF, in case that the general error occurs during executing one of the queries in the array on the cci_execute_batch function which does a batch processing of the queries, the query with an error is ignored and the next query is executed. But if the deadlock occurs, the error occurs as rolling back the transaction. 
+		* If autocommit mode is off, after the general error occurs during executing one of the queries in the array on the cci_execute_batch function which does a batch processing of the queries, the query with an error is ignored and the next query is executed. But if the deadlock occurs, the error occurs as rolling back the transaction. 
 
 	.. code-block:: c
 
@@ -1947,7 +1947,8 @@ CCI API Reference
 		*   **CCI_ER_LOGIN_TIMEOUT**
 
 	**CCI_PREPARE_UPDATABLE**, **CCI_PREPARE_INCLUDE_OID**, or **CCI_PREPARE_HOLDABLE** can be configured in *flag*. If **CCI_PREPARE_UPDATABLE** is configured, updatable resultset is created and **CCI_PREPARE_INCLUDE_OID** is automatically configured. **CCI_PREPARE_UPDATABLE** and **CCI_PREPARE_HOLDABLE** can not be used simultaneously in *flag*.
-
+	If you want to call the Java Stored Procedure, specify **CCI_PREPARE_CALL** flag into the **cci_prepare** function. You can see an related example on c:func:`cci_register_out_param`.
+	
 	The default value of whether to keep result set after commit is cursor holdability. Thus, if you want to configure **CCI_PREPARE_UPDATABLE** in *flag* of :c:func:`cci_prepare`, you should call :c:func:`cci_set_holdable` first before calling :c:func:`cci_prepare` so that cursor cannot be maintained.
 
 	However, not all updatable resultsets are created even though **CCI_PREPARE_UPDATABLE** is configured. So you need to check if the results are updatable by using :c:func:`cci_is_updatable` after preparation. You can use :c:func:`cci_oid_put` or :c:func:`cci_oid_put2` to update result sets.
@@ -2054,7 +2055,7 @@ CCI API Reference
 	*   **default_isolation** : Transaction isolation level refreshed whenever **cci_datasource_borrow** is called
 	*   **default_lock_timeout** : lock_timeout refreshed whenever **cci_datasource_borrow** is called
 
-	If the number of prepared statemets exceeds **max_open_prepared_statement** value, the oldest prepared statement is released from statement pool. If you reuse it later, it is added to the statement pool again.
+	If the number of prepared statemets exceeds **max_open_prepared_statement** value, the oldest prepared statement is released from the statement pool. If you reuse it later, it is added to the statement pool again.
 	
 	If you configure **default_autocommit**, **default_isolation**, or **default_lock_timeout** value, connection for autocommit, isolation, or lock_timeout based on current configured value is returned when **cci_datasource_borrow** is called. If you do not configure it, connection for autocommit, isolation, or lock_timeout is returned with keeping the value that a user changed before.
 
@@ -2638,27 +2639,28 @@ CCI API Reference
 
 	In the **cci_schema_info** function, the *type* argument supports the pattern matching of the **LIKE** statement for the *class_name* and *attr_name*.
 
-	**type, class_name, and attr_name That Supports Pattern Matching**
+	**type, class_name(table name), and attr_name(column name) That Supports Pattern Matching**
 
 	+-------------------------------------+----------------+------------------------------------------------------------------------+
 	| type                                | class_name     | attr_name                                                              |
 	+=====================================+================+========================================================================+
-	| CCI_SCH_CLASS (VCLASS)              | string         | NULL                                                                   |
+	| CCI_SCH_CLASS (VCLASS)              | string or NULL | always NULL                                                            |
 	+-------------------------------------+----------------+------------------------------------------------------------------------+
-	| CCI_SCH_ATTRIBUTE (CLASS ATTRIBUTE) | string         | string or NULL                                                         |
-	|                                     |                | (If the value is NULL and the flag is CCI_ATTR_NAME_PATTERN_MATCH,     |
-	|                                     |                | information on all columns of the table will be displayed.)            |
+	| CCI_SCH_ATTRIBUTE (CLASS ATTRIBUTE) | string or NULL | string or NULL                                                         |
 	+-------------------------------------+----------------+------------------------------------------------------------------------+
-	| CCI_SCH_CLASS_PRIVILEGE             | string         | NULL                                                                   |
+	| CCI_SCH_CLASS_PRIVILEGE             | string or NULL | always NULL                                                            |
 	+-------------------------------------+----------------+------------------------------------------------------------------------+
-	| CCI_SCH_ATTR_PRIVILEGE              | NULL           | string                                                                 |
+	| CCI_SCH_ATTR_PRIVILEGE              | always NULL    | string or NULL                                                         |
 	+-------------------------------------+----------------+------------------------------------------------------------------------+
-	| CCI_SCH_PRIMARY_KEY                 | string         | NULL                                                                   |
+	| CCI_SCH_PRIMARY_KEY                 | string or NULL | always NULL                                                            |
 	+-------------------------------------+----------------+------------------------------------------------------------------------+
-	| CCI_SCH_TRIGGER                     | string         | NULL                                                                   |
+	| CCI_SCH_TRIGGER                     | string or NULL | always NULL                                                            |
 	+-------------------------------------+----------------+------------------------------------------------------------------------+
 
-	If the pattern *flag* is not configured, exact matching will be used for the given table and column names; in this case, no result will be returned if the value is **NULL**. If *flag* is configured and the value is **NULL**, the result will be the same as when "%" is given in the **LIKE** statement.
+	* The type with "NULL" in class_name doesn't support the pattern matching about the table name.
+	* The type with "NULL" in attr_name doesn't support the pattern matching about the column name.
+	* If the pattern *flag* is not configured, exact matching will be used for the given table and column names; in this case, no result will be returned if the value is **NULL**.
+	* If *flag* is configured and the value is **NULL**, the result will be the same as when "%" is given in the **LIKE** statement. In other words, the result about all tables or all columns will be returned.
 
 	.. note::
 	
@@ -3073,7 +3075,7 @@ CCI API Reference
 
 	The timeout value configured by **cci_set_query_timeout** affects :c:func:`cci_prepare`, :c:func:`cci_execute`, :c:func:`cci_execute_array`, :c:func:`cci_execute_batch` functions. When timeout occurs in the function and if the **disconnect_on_query_timeout** value configured in :c:func:`cci_connect_with_url` connection URL is yes, it returns the **CCI_ER_QUERY_TIMEOUT** error.
 
-	These functions can return the **CCI_ER_LOGIN_TIMEOUT** error in case that **login_timeout** is configured in the connection URL, which is an argument of :c:func:`cci_connect_with_url` function; this means that login timeout happens between application client and CAS during re-connection.
+	These functions can return the **CCI_ER_LOGIN_TIMEOUT** error if **login_timeout** is configured in the connection URL, which is an argument of :c:func:`cci_connect_with_url` function; this means that login timeout happens between application client and CAS during re-connection.
 
 	It is going through the process of re-connection between application client and CAS when an application restarts or it is re-scheduled. Re-scheduling is a process that CAS chooses an application client, and starts and stops connection in the unit of transaction. If **KEEP_CONNECTION**, broker parameter, is OFF, it always happens; if AUTO, it can happen depending on its situation. For details, see the description of **KEEP_CONNECTION** in the :ref:`parameter-by-broker`
 

@@ -14,7 +14,7 @@ SHOW TABLES 문
 .. code-block:: sql
 
 	SHOW TABLES;
-	  Tables_in_demodb
+	tables_in_demodb
 	======================
 	  'athlete'
 	  'code'

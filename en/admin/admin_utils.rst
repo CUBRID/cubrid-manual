@@ -21,6 +21,7 @@ The following shows how to use the CUBRID management utilities. ::
 		addvoldb [option] <database-name>  --- Adding a database volume file 
 		spacedb [option] <database-name>  --- Displaying details of database space 
 		lockdb [option] <database-name>  --- Displaying details of database lock 
+		tranlist [option] <database-name>  --- Checking transactions
 		killtran [option] <database-name>  --- Removing transactions 
 		optimizedb [option] <database-name>  --- Updating database statistics 
 		statdump [option] <database-name>  --- Outputting statistic information of database server execution 
@@ -806,6 +807,25 @@ The following shows [options] available with the **cubrid statdump** utility.
 
 	This option specifies the periodic number of outputting statistics as seconds.
 
+	[번역]
+	다음은 1초마다 누적된 정보 값을 출력한다. ::
+	
+		cubrid statdump -i 1 -c demodb
+		
+	다음은 1초 마다 0으로 리셋하고 1초 동안 누적된 값을 출력한다. ::
+	
+		cubrid statdump -i 1 demodb
+		
+	다음은 -i 옵션으로 가장 마지막에 실행한 값을 출력한다. ::
+	
+		cubrid statdump demodb
+		
+	다음은 위와 같은 결과를 출력한다. **-c** 옵션은 **-i** 옵션과 같이 쓰이지 않으면 옵션을 설정하지 않은 것과 동일하다.
+	
+		cubrid statdump -c demodb
+
+	다음은 5초마다 결과를 출력한다.
+	
 	::
 
 		cubrid statdump -i 5 testdb
@@ -1210,6 +1230,72 @@ The following shows [options] available with the **cubrid checkdb** utility.
 		t6, t7 t8   t9
 		 
 			 t10
+
+[번역]
+.. _tranlist:
+
+데이터베이스 트랜잭션 확인
+==========================
+
+**cubrid tranlist** 는 대상 데이터베이스의 트랜잭션 정보를 확인하는 유틸리티로서, DBA 또는 DBA그룹 사용자만 수행할 수 있다. ::
+
+	cubrid tranlist [options] database_name
+
+옵션을 생략하면 각 트랜잭션에 대한 전체 정보를 출력한다. 
+
+"cubrid tranlist demodb"는 "cubrid killtran -q demodb"와 비슷한 결과를 출력하나, 후자에 비해 "User name"과 "Host name"을 더 출력한다.
+"cubrid tranlist -s demodb"는 "cubrid killtran -d demodb"와 동일한 결과를 출력한다.
+
+다음은 **cubrid tranlist** 에 대한 [options]이다.
+
+.. program:: tranlist
+
+.. option:: -u, --user=USER
+
+	로그인할 사용자 ID. DBA및 DBA그룹 사용자만 허용한다.(기본값 : DBA)
+	
+.. option:: -p, --password=PASSWORD
+
+	사용자 비밀번호
+	
+.. option:: -s, --summary
+
+	요약 정보만 출력한다(질의 수행 정보 또는 잠금 관련 정보를 생략).
+
+	::
+	
+		$ cubrid tranlist demodb
+		
+		Tran index         User name      Host name      Process id    Program name              Query time    Tran time              Wait for lock holder      SQL_ID       SQL Text
+		---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		   1(ACTIVE)         PUBLIC          myhost           20080    query_editor_cub_cas_1          0.00         0.00                              -1     *** empty ***
+		   2(ACTIVE)         PUBLIC          myhost           20082    query_editor_cub_cas_3          0.00         0.00                              -1     *** empty ***
+		   3(ABORTED)        PUBLIC          myhost           20081    query_editor_cub_cas_2          0.00         0.00                              -1     *** empty ***
+		   4(ACTIVE)         PUBLIC          myhost           20083    query_editor_cub_cas_4          1.80         1.80                         2, 3, 1     cdcb58552e320   update [ta] [ta] set [ta].[a]=
+		---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		Tran index : 2
+		update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
+	
+	::
+	
+		$ cubrid tranlist -s tdb
+		
+		Tran index         User name      Host name      Process id              Program name
+		-------------------------------------------------------------------------------------
+		   1(ACTIVE)         PUBLIC          myhost            1822         broker1_cub_cas_1
+		   2(ACTIVE)            dba          myhost            1823         broker1_cub_cas_2
+		   3(COMMITTED)         dba          myhost            1824         broker1_cub_cas_3
+		-------------------------------------------------------------------------------------
+	
+	**tran index에 보여지는 transaction 상태 메시지**
+	
+		* ACTIVE : 활성
+		* RECOVERY : 복구중인 트랜젝션
+		* COMMITTED : 커밋완료되어 종료될 트랜젝션
+		* COMMITTING : 커밋중인 트랜젝션
+		* ABORTED : 롤백되어 종료될 트랜젝션
+		* KILLED : 서버에 의해 강제 종료 중인 트랜잭션
 
 .. _killtran:
 

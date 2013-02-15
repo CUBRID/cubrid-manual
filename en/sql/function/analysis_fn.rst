@@ -30,11 +30,11 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 
 *   <*order_by_clause*> : defines the data sorting method in the partition made by <*query_partition_clause*>. The result can be sorted with several keys. <When *query_partition_clause*> is omitted, the data is sorted within the overall result sets. Based on the sorting order, the function is applied to the column values of accumulated records, including the previous values.
 
-분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
+The behavior of a query with the expression of ORDER BY/PARTITION BY clause which is used together after the OVER clause is as follows.
 
-* ORDER BY/PARTITION BY <상수> (예: 1): 상수는 SELECT 리스트의 칼럼 위치로 다루어짐.
-* ORDER BY/PARTITION BY <상수 표현식> (예: 1+0): 상수 표현식은 무시되어, 정렬/분할(ordering/partitioning)에 사용되지 않음.
-* ORDER BY/PARTITION BY <상수가 아닌 표현식> (예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용됨.
+* ORDER BY/PARTITION BY <constant> (ex: 1): Constant is considered as the column position of SELECT list.
+* ORDER BY/PARTITION BY <constant expression> (ex: 1+0): Constant is ignored and it is not used to do ordering/partitioning.
+* ORDER BY/PARTITION BY <expression with non-constant> (ex: i, sin(i+1)): The expression is used to do ordering/partitioning.
 
 .. function:: AVG ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
@@ -215,7 +215,7 @@ The analytic function is used along with a new analytic clause, **OVER**, for th
 
 	The **GROUP_CONCAT** function connects the values that are not **NULL** in the group and returns the character string in the **VARCHAR** type. If there are no rows of query result or there are only **NULL** values, **NULL** will be returned.
 
-	:param expression: Column or operation returning numerical values or character strings
+	:param expression: Column or expression returning numerical values or character strings
 	:param str_val: Character string to use as a separator
 	:param DISTINCT: Removes duplicate values from the result.
 	:param ORDER BY: Specifies the order of result values.

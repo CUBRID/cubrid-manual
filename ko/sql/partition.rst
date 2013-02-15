@@ -442,7 +442,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 	  'Lee Sun-Hee'         'Taekwondo'
 	  'Kim In-Chul'         'Judo'
 
-다음은 *athlete2* 테이블의 event1 분할에 한 행을 INSERT하는 예제이다. 
+다음은 *athlete2* 테이블의 *event1* 분할에 한 행을 INSERT하는 예제이다. 
 
 .. code-block:: sql
 

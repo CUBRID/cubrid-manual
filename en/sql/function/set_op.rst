@@ -5,7 +5,7 @@ Set Operators
 Set Arithmetic Operators
 ========================
 
-To compute union, difference or intersection of collections types (**SET**, **MULTISET**, and **LIST (SEQUENCE)**), you can use +, -, or * operators, respectively. The following table shows a result data type by operator in case that collection type is an operand.
+To compute union, difference or intersection of collections types (**SET**, **MULTISET**, and **LIST (SEQUENCE)**), you can use +, -, or * operators, respectively. The following table shows a result data type by the operator if collection type is an operand.
 
 **Result Data Type by Operand Type**
 

@@ -211,7 +211,9 @@ Step 1: Selecting a Locale
 
 	Configure locales to use on **$CUBRID/conf/cubrid_locales.txt**. You can select all or some of locales which are supported.
 	
-	CUBRID supports locales as follows: en_US, de_DE, es_ES, fr_FR, it_IT, ja_JP, km_KH, ko_KR, tr_TR, vi_VN, zh_CN. The language and country for each locale are shown in the following table.
+	CUBRID supports locales as follows: en_US, de_DE, es_ES, fr_FR, it_IT, ja_JP, km_KH, ko_KR, tr_TR, vi_VN, zh_CN. 
+	
+	The language and country for each locale are shown in the following table.
 
 	+-----------------+------------------------+
 	| Locale Name     | Language - Country     |

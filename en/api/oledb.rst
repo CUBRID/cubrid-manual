@@ -47,7 +47,7 @@ Before you start developing applications with CUBRID, you will need the Provider
 
     http://svn.cubrid.org/cubridapis/oledb/branches/RB-*<CUBRID version>*/Source/
 
-In case that you do not use the CUBRID OLED DB Provider installer, you should execute the command below to register the driver. The version of the driver should match the version of your operating system. For 32 bit, the **regsvr32** command should be executed in the **C:\Windows\system32** directory; for 64 bit, the **regsvr32** command should be executed in the **C:\Windows\SysWOW64** directory. ::
+If you do not use the CUBRID OLED DB Provider installer, you should execute the command below to register the driver. The version of the driver should match the version of your operating system. For 32 bit, the **regsvr32** command should be executed in the **C:\Windows\system32** directory; for 64 bit, the **regsvr32** command should be executed in the **C:\Windows\SysWOW64** directory. ::
 
 	regsvr32 CUBRIDProvider.dll
 

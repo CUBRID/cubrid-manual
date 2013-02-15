@@ -2,7 +2,8 @@
 Identifier
 **********
 
-**Guidelines for Creating Identifiers**
+Guidelines for Creating Identifiers
+===================================
 
 Table name, index name, view name, column name name, user name etc. are included in identifier. The guidelines for creating identifiers in the CSQL Interpreter are as follows:
 
@@ -18,7 +19,8 @@ Table name, index name, view name, column name name, user name etc. are included
 	upper_case_letter : A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P| Q | R | S | T | U | V | W | X | Y | Z
 	lower_case_letter : a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p| q | r | s | t | u | v | w | x | y | z
 
-**Legal Identifiers**
+Legal Identifiers
+=================
 
 	**Beginning with a Letter**
 
@@ -39,7 +41,8 @@ Table name, index name, view name, column name name, user name etc. are included
 		" abc" " def"
 		[position]
 
-**Illegal Identifiers**
+Illegal Identifiers
+===================
 
 	**Beginning with special characters or numbers**
 
@@ -65,7 +68,8 @@ Table name, index name, view name, column name name, user name etc. are included
 		col~
 		col& &
 
-**The maximum length of an identifier name**
+The maximum length of an identifier name
+========================================
 
 The following table summarizes the maximum byte length allowable for each identifier name. Note that the unit is byte and the number of characters and the bytes are different by the character set used (for example, the length of one Korean character in UTF-8 is 3 bytes).
 

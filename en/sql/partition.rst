@@ -419,9 +419,9 @@ The following example shows how to create the *athlete2* table to be partitioned
 
 	CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
 	PARTITION BY LIST (event) (
-	PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
-	PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
-	PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
+		PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
+		PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
+		PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
 	);
 
 	INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
@@ -440,23 +440,17 @@ The following example shows how to create the *athlete2* table to be partitioned
 	  'Lee Sun-Hee'         'Taekwondo'
 	  'Kim In-Chul'         'Judo'
 
-[검토]
-다음은 *athlete2* 테이블의 event1 분할에 한 행을 INSERT하는 예제이다. 
+The following shows to INSERT one row on the *event1* partition of the *athlete2* table.
 
 .. code-block:: sql
 
 	INSERT INTO athlete2 PARTITION(event1) VALUES ('Lee Bong-Ju', 'Athletics');
 
-다음은 *athlete2* 테이블의 *event2* 분할에 한 행을 UPDATE하는 예제이다. 
+The following shows to UPDATE one row on the *event2* partition of the *athlete2* table.
 
 .. code-block:: sql
 
 	UPDATE athlete2 PARTITION(event2) SET name='Cho In-Chul' WHERE name='Kim In-Chul';
-
-
-.. note::
-
-	Direct data manipulation such as insert, update and delete for each partition of the partitioned table is not allowed.
 
 Moving Data by Changing Partitioning Key Value
 ----------------------------------------------
@@ -741,7 +735,7 @@ After promotion, the partition of the *t* table has *p0* and *p3* only and *p1* 
 Creating VIEW with Partitioning Table
 -------------------------------------
 
-You can define a virtual table(VIEW) by using each partition of a partitioned table.
+You can define a VIEW by using each partition of a partitioned table.
 
 The following example shows how to create the *participant2* table partitioned based on the participating year, and create and retrieve a virtual table with the *before_2000* partition of the *participant2* table.
 

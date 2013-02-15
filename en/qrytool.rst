@@ -107,9 +107,9 @@ CUBRID Management Tools
 +==========================+=============================================================================+=============================================================+=================================================================+
 | CUBRID Web Manager       | Web based tool for SQL execution and DB operation.                          | http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Web_Manager       | http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager       | 
 |                          |                                                                             |                                                             |                                                                 |   
-|                          | 1) Possible to access DB by a web browser                                   |                                                             |                                                                 |
+|                          | 1) Possible to access to DB with a web browser                              |                                                             |                                                                 |
 |                          |                                                                             |                                                             |                                                                 |   
-|                          | 2) Possible to use directly after installing CUBRID                         |                                                             |                                                                 |
+|                          | 2) Possible to use instantly after installing CUBRID                        |                                                             |                                                                 |
 |                          | (CUBRID 2008 R4.3 or higher)                                                |                                                             |                                                                 |
 |                          |                                                                             |                                                             |                                                                 |   
 |                          | 3) Useful to manage a single host                                           |                                                             |                                                                 |
@@ -152,16 +152,16 @@ CUBRID Management Tools
 Running SQL with CUBRID Web Manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Because CUBRID 2008 R4.3 or higher version includes Web Manager into the installation package, you can use the Web Manager instantly after the installation of CUBRID DBMS.
+Because CUBRID 2008 R4.3 or higher version includes Web Manager on the installation package, you can use the Web Manager instantly after the installation of CUBRID DBMS.
 
 #. Start CUBRID Service. Web Manager works normally only when CUBRID Manager server is started. For more information, see :ref:`cubrid-manager-server`. ::
 
 	C:\CUBRID>cubrid service start
 	++ cubrid service is running.
 		
-#. Access to https\://localhost:8282 which is written on the address bar. The default TCP port is 8282 (HTTPS/SSL) and it is possible to change by editing the cm_httpd.conf file at CUBRID/conf/. Note that the header of address is not http, but https.
+#. Access to https://localhost:8282/ which is written on the address bar. The default TCP port is 8282 (HTTPS/SSL) and it is possible to change by editing the cm_httpd.conf file at $CUBRID/conf/. Note that the header of address is not http, but https.
 
-#. First, log in to the host. To access to the host, you should perform the CUBRID Manager server user (=the host user)'s authentication primarily. The default user ID/password is admin/admin.
+#. First, log-in to the host. To access to the host, you should perform the CUBRID Manager server user (=the host user)'s authentication primarily. The default user ID/password is admin/admin.
 
 	.. image:: /images/gs_manager_login.png
 
@@ -278,5 +278,7 @@ The drivers supported by CUBRID are as follows:
 *   :doc:`CUBRID Python driver <api/python>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=python_driver>`_)
 
 *   :doc:`CUBRID Ruby driver <api/ruby>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=ruby_driver>`_)
+
+* :doc:`CUBRID Node.js driver <api/node_js>` (`Downloads <http://www.cubrid.org/?mid=downloads&item=nodejs_driver>`_)
 
 Among above drivers, JDBC, ODBC and CCI drivers are automatically downloaded while CUBRID is being installed. Thus, you do not have to download them manually.

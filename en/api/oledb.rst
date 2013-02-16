@@ -11,7 +11,7 @@ OLE DB (Object Linking and Embedding, Database) is an API designed by Microsoft 
 
 CUBRID OLE DB driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-To download OLD DB driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver>`_.
+To download OLD DB driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver .
 
 Installing and Configuring OLE DB
 =================================
@@ -20,8 +20,8 @@ Installing and Configuring OLE DB
 
 *   Microsoft Windows Vista or Windows 7 (32-bit version)
 *   CUBRID 2008 R4.1 (8.4.1.) or later (32-bit version)
-*   Microsoft Visual Studio 2010 Express Edition (`http://www.microsoft.com/visualstudio/en-us/products/2010-editions/express <http://www.microsoft.com/visualstudio/en-us/products/2010-editions/express>`_)
-*   Microsoft .NET Framework 3.5 or later (`http://www.microsoft.com/download/en/details.aspx?id=21 <http://www.microsoft.com/download/en/details.aspx?id=21>`_)
+*   Microsoft Visual Studio 2010 Express Edition (http://www.microsoft.com/visualstudio/en-us/products/2010-editions/express)
+*   Microsoft .NET Framework 3.5 or later (http://www.microsoft.com/download/en/details.aspx?id=21)
 
 **CUBRID OLE DB Provider**
 
@@ -29,21 +29,21 @@ Before you start developing applications with CUBRID, you will need the Provider
 
 *   **Using an official installer** : Use the official CUBRID OLE DB Data Provider installer. You can download it below.
 
-    `http://www.cubrid.org/?mid=downloads&item=oledb_driver <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_
+    http://www.cubrid.org/?mid=downloads&item=oledb_driver
 
     We provide brief video tutorial to see how to install CUBRID Provider using the installer; to watch that video, go to the website below.
 
-    `http://www.youtube.com/watch?v=FN_6c9x9UOA <http://www.youtube.com/watch?v=FN_6c9x9UOA>`_
+    http://www.youtube.com/watch?v=FN_6c9x9UOA
 
 *   **Modifying the official installer** : If you want to modify the official installer, you can build the CUBRID OLE DB Provide installer by compiling source code yourself. For information about modifying an installer, see the link below.
 
-    `http://www.cubrid.org/wiki_apis/entry/compiling-the-cubrid-ole-db-installer <http://www.cubrid.org/wiki_apis/entry/compiling-the-cubrid-ole-db-installer>`_
+    http://www.cubrid.org/wiki_apis/entry/compiling-the-cubrid-ole-db-installer
 
 *   **Installing the driver** : Download the CUBRID OLE DB driver at the location below. You should choose the appropriate version of the driver depending on your operating system (32 bit or 64 bit).
 
-    `http://www.cubrid.org/?mid=downloads&item=oledb_driver <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_
+    http://www.cubrid.org/?mid=downloads&item=oledb_driver
 
-*   **Building from source code** : Compile the driver source code. You can check out the source code at the SVN storage below. To compile the source code, the Visual Studio Express Edition (`http://www.microsoft.com/express/Downloads/#2010-Visual-CPP <http://www.microsoft.com/express/Downloads/#2010-Visual-CPP>`_) is required. If you are using CUBRID 9.0.0 version, enter 9.0.0 in <*CUBRID version*>.
+*   **Building from source code** : Compile the driver source code. You can check out the source code at the SVN storage below. To compile the source code, the Visual Studio Express Edition ( http://www.microsoft.com/express/Downloads/#2010-Visual-CPP ) is required. If you are using CUBRID 9.0.0 version, enter 9.0.0 in <*CUBRID version*>.
 
     http://svn.cubrid.org/cubridapis/oledb/branches/RB-*<CUBRID version>*/Source/
 
@@ -132,4 +132,4 @@ Without any changes of given values, the default value of the attribute in the T
 OLE DB API
 ==========
 
-For more information about OLE DB API, see Micorosoft OLE DB documentation at `http://msdn.microsoft.com/en-us/library/ms722784%28VS.85%29.aspx <http://msdn.microsoft.com/en-us/library/ms722784%28vs.85%29.aspx>`_.
+For more information about OLE DB API, see Micorosoft OLE DB documentation at  http://msdn.microsoft.com/en-us/library/ms722784%28vs.85%29.aspx .

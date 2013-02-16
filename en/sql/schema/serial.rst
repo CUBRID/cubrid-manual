@@ -91,7 +91,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial
 	[ MAXVALUE max | NOMAXVALUE ]
 	[ CACHE integer | NOCACHE ]
 
-*   *serial_identifier* : Specifies the name of the serial to be created.
+*   *serial_identifier* : Specifies the name of the serial to be created(maximum: 254 bytes).
 *   **INCREMENT BY** *interval* : Specifies the increment of the serial. For the *interval*, you can specify any integer with 38 digits or less except zero. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order; otherwise, it is in ascending order. The default value is **1**.
 
 *   **START WITH** *initial_value* : Changes the initial value of Serial.

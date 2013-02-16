@@ -7,7 +7,7 @@ Python 드라이버
 CUBRID Python 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
 별도로 Python 드라이버를 다운로드하거나 Python 드라이버에 대한 최신 정보를 확인하려면
-`http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver>`_
+http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver
 에 접속한다.
 
 Python 설치 및 설정
@@ -28,8 +28,8 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
 #. Yum을 이용하여 CUBRID Python 드라이버를 설치하려면, CUBRID 패키지의 위치를 Yum에 알려야 한다. 운영체제에 따라 다음 주소에 접속하여 사용하는 운영체제와 CUBRID 버전에 해당하는 명령어를 찾아 사용한다.
 
-   *   CentOS: `http://www.cubrid.org/?mid=yum_repository&os=centos <http://www.cubrid.org/?mid=yum_repository&os=centos>`_
-   *   Fedora: `http://www.cubrid.org/?mid=yum_repository&os=fedora <http://www.cubrid.org/?mid=yum_repository&os=fedora>`_
+   *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
+   *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
 
    예를 들어 Fedora 17에 CUBRID 9.0을 설치한 경우에 해당하는 명령어는 다음과 같다. ::
 
@@ -42,12 +42,12 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 **소스코드로 설치(Linux)**
 
 소스코드를 컴파일하여 CUBRID Python 드라이버를 설치하려면 Python Development Package가 필요하다. Python Development Package가 설치되어 있지 않다면
-`http://www.cubrid.org/wiki_apis/entry/install-python-development-package <http://www.cubrid.org/wiki_apis/entry/install-python-development-package>`_
+http://www.cubrid.org/wiki_apis/entry/install-python-development-package
 를 참고하여 설치한다.
 
 #. 소스코드를 다음 주소에서 다운로드한다.
 
-   `http://www.cubrid.org/?mid=downloads&item=python_driver <http://www.cubrid.org/?mid=downloads&item=python_driver>`_
+   http://www.cubrid.org/?mid=downloads&item=python_driver
 
 #. 다음 명령어를 실행하여 원하는 위치에 다운로드한 파일의 압축을 해제한다. ::
 
@@ -80,7 +80,7 @@ Windows에 CUBRID Python 드라이버를 설치하려면 다음과 같이 CUBRID
 
 * 다음 주소에서 운영체제와 Python의 버전에 맞는 드라이버를 다운로드한다.
 
-  `http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect <http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect>`_
+  http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect
 
 * 다운로드한 파일의 압축을 해제하여 Python이 설치된 경로의 **Lib** 폴더( **C:\Program Files\Python\Lib** ) 안에 복사한다.
 
@@ -244,7 +244,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 	(column_name, data_type, display_size, internal_size, precision, scale, nullable)
 
-데이터 타입을 나타내는 숫자에 대한 자세한 내용은 `http://packages.python.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html <http://packages.python.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html>`_ 을 참고한다.
+데이터 타입을 나타내는 숫자에 대한 자세한 내용은 http://packages.python.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html 을 참고한다.
 
 **자원 해제**
 
@@ -260,4 +260,4 @@ Python API
 
 Python Database API는 connect() 모듈 클래스와 Connection 객체, Cursor 객체, 그리고 그 밖의 보조적인 함수들로 이루어진다. 이에 대한 자세한 내용은 `http://www.python.org/dev/peps/pep-0249/ <http://www.python.org/dev/peps/pep-0249/>`_ 를 참고한다.
 
-CUBRID Python API에 대한 자세한 내용은 `http://packages.python.org/CUBRID-Python/ <http://packages.python.org/CUBRID-Python/>`_ 을 참고한다.
+CUBRID Python API에 대한 자세한 내용은 http://packages.python.org/CUBRID-Python/ 을 참고한다.

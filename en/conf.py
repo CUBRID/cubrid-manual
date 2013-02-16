@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CUBRID'
-copyright = u'2008, Search Solution Corporation'
+copyright = u'2013, Search Solution Corporation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -91,16 +91,22 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#html_theme = 'default'
+html_theme = 'default' # 3
 #html_theme = 'nature'
-html_theme = 'sphinxdoc'
-#html_theme = 'haiku'
-#html_theme = 'pyramid'
+#html_theme = 'sphinxdoc' # 2
+#html_theme = 'haiku'   # 2
+#html_theme = 'pyramid' # 3
+#html_theme = 'agogo' # 2
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #html_theme_options = {}
+html_theme_options = {
+	"rightsidebar": "true",
+	"stickysidebar": "true",
+	"codebgcolor": "#E8E8E8"
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -128,7 +134,7 @@ html_static_path = ['_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
+html_last_updated_fmt = '%b %d, %Y'
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.

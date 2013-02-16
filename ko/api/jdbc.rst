@@ -9,7 +9,7 @@ JDBC 개요
 
 CUBRID JDBC 드라이버(cubrid_jdbc.jar)를 사용하면 Java로 작성된 응용 프로그램에서 CUBRID 데이터베이스에 접속할 수 있다. CUBRID JDBC 드라이버는 <*CUBRID 설치 디렉터리*> **/jdbc** 디렉터리에 위치한다. CUBRID JDBC 드라이버는 JDBC 2.0 스펙을 기준으로 개발되었으며, JDK 1.6에서 컴파일한 것을 기본으로 제공한다.
 
-별도로 JDBC 드라이버를 다운로드하거나 JDBC 드라이버에 대한 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver`\에 접속한다.
+별도로 JDBC 드라이버를 다운로드하거나 JDBC 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver 에 접속한다.
 
 **CUBRID JDBC 드라이버 버전 확인**
 
@@ -57,7 +57,7 @@ JDBC 설치 및 설정
 
 **Java 설치 및 환경 변수 설정**
 
-	시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트(`http://java.sun.com <http://java.sun.com>`_ )에서 다운로드할 수 있다. 이에 대한 자세한 설명은 "홈 > CUBRID SQL 설명서 > Java 저장 함수/프로시저 > Java 저장 함수/프로시저 사용을 위한 환경 설정"을 참고한다.
+	시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( http://java.sun.com )에서 다운로드할 수 있다. 이에 대한 자세한 설명은 "홈 > CUBRID SQL 설명서 > Java 저장 함수/프로시저 > Java 저장 함수/프로시저 사용을 위한 환경 설정"을 참고한다.
 
 **Windows 환경에서 환경 변수 설정**
 
@@ -108,7 +108,7 @@ JDBC 설치 및 설정
 
 .. note::
 
-	JDBC 드라이버에 대한 최신 정보를 확인하려면	`http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver>`_ 	에 접속한다.
+	JDBC 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver 에 접속한다.
 
 JDBC 프로그래밍
 ===============

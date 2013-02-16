@@ -25,7 +25,7 @@ Because CUBRID CCI driver is connected through the CUBRID broker, you can manage
 
 .. image:: /images/image54.jpg
 
-To download CCI driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver>`_.
+To download CCI driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-cci-driver .
 
 CCI Programming
 ===============

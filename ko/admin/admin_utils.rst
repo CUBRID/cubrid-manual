@@ -1371,7 +1371,7 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 		   3(COMMITTED)         dba          myhost            1824         broker1_cub_cas_3
 		-------------------------------------------------------------------------------------
 	
-	**tran index에 보여지는 transaction 상태 메시지**
+	**"Tran index"에 보여지는 transaction 상태 메시지**
 	
 		* ACTIVE : 활성
 		* RECOVERY : 복구중인 트랜젝션

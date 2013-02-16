@@ -9,7 +9,7 @@ CUBRID ODBC driver supports ODBC version 3.52. It also ODBC core and some parts 
 
 CUBRID ODBC driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-To download ODBC driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-odbc-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-odbc-driver>`_.
+To download ODBC driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-odbc-driver .
 
 **Data Type Mapping Between CUBRID and ODBC**
 
@@ -310,7 +310,7 @@ You can check the result of the sample program by connecting to http://localhost
 ODBC API
 ========
 
-For ODBC API, see ODBC API Reference (`http://msdn.microsoft.com/en-us/library/windows/desktop/ms714562%28v=vs.85%29.aspx <http://msdn.microsoft.com/en-us/library/windows/desktop/ms714562%28v=vs.85%29.aspx>`_) on the MSDN page. See the table below to get information about the list of functions, ODBC Spec version, and compatibility that CUBRID supports.
+For ODBC API, see ODBC API Reference ( http://msdn.microsoft.com/en-us/library/windows/desktop/ms714562%28v=vs.85%29.aspx ) on the MSDN page. See the table below to get information about the list of functions, ODBC Spec version, and compatibility that CUBRID supports.
 
 +---------------------+------------------------+--------------------------+--------------------------+
 | API                 | Version Introduced     | Standards Compliance     | Support                  |

@@ -4,16 +4,16 @@ PHP 드라이버
 
 CUBRID PHP 드라이버는 PHP로 작성한 응용 프로그램에서 CUBRID 데이터베이스를 사용할 수 있는 API를 제공한다. CUBRID PHP 드라이버가 제공하는 모든 함수는 앞에 **cubrid_** 가 붙는다 (예: cubrid_connect(), cubrid_connect_with_url()).
 
-공식 CUBRID PHP 드라이버는 PECL 패키지로 제공한다. PECL은 PHP 확장 저장소로, PHP 확장 개발 및 다운로드를 위한 편의 기능을 제공한다. PECL에 대한 자세한 내용은 `http://pecl.php.net/ <http://pecl.php.net/>`_ 을 참고한다.
+공식 CUBRID PHP 드라이버는 PECL 패키지로 제공한다. PECL은 PHP 확장 저장소로, PHP 확장 개발 및 다운로드를 위한 편의 기능을 제공한다. PECL에 대한 자세한 내용은 http://pecl.php.net/ 을 참고한다.
 
 CUBRID PHP 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 PHP 드라이버를 다운로드하거나 PHP 드라이버에 대한 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-php-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-php-driver>`_ 에 접속한다.
+별도로 PHP 드라이버를 다운로드하거나 PHP 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-php-driver 에 접속한다.
 
 PHP 설치 및 설정
 ================
 
-가장 쉽고 빠르게 응용 프로그램을 시스템에 설치하려면 Ubuntu에 CUBRID와 Apache, PHP를 설치한다. 설치 방법은 `http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu <http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu>`_ 를 참고한다.
+가장 쉽고 빠르게 응용 프로그램을 시스템에 설치하려면 Ubuntu에 CUBRID와 Apache, PHP를 설치한다. 설치 방법은 http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu 를 참고한다.
 
 Linux
 -----
@@ -23,12 +23,12 @@ Linux
 *   CUBRID: 2008 R3.0(8.3.0) 이상
 *   운영체제: Linux: 32 비트 또는 64비트
 *   웹 서버: Apache
-*   PHP: 5.2 또는 5.3(`http://php.net/downloads.php <http://php.net/downloads.php>`_)
+*   PHP: 5.2 또는 5.3( http://php.net/downloads.php )
 
 **PECL을 이용한 설치**
 
 **PECL** 이 설치되어 있다면, **PECL** 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PHP 드라이버를 설치할 수 있다.
-**PECL** 이 설치되어있지 않다면 `http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl <http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl>`_ 을 참고하여 PECL을 설치한다.
+**PECL** 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl 을 참고하여 PECL을 설치한다.
 
 #. 다음과 같은 명령어를 입력하여 CUBRID PHP 드라이버 최신 버전을 설치한다. ::
 
@@ -83,8 +83,8 @@ Linux
 
 #. **Yum** 을 이용하여 CUBRID PHP 드라이버를 설치하려면 **Yum** 에 CUBRID 패키지의 위치를 알려야 한다. 사용하는 운영체제에 따라 다음 주소에 접속한다.
 
-   * CentOS: `http://www.cubrid.org/?mid=yum_repository&os=centos <http://www.cubrid.org/?mid=yum_repository&os=centos>`_
-   * Fedora: `http://www.cubrid.org/?mid=yum_repository&os=fedora <http://www.cubrid.org/?mid=yum_repository&os=fedora>`_
+   * CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos 
+   * Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora 
 
 #. 위 주소에서 운영체제와 CUBRID의 버전에 맞는 명령을 찾아 실행한다. 예를 들어 Fedora 16과 CBURID 9.0에 해당하는 드라이버를 설치하려면 다음 명령을 실행한다. **Yum** 저장소 주소의 fc16은 Fedora 16을 의미한다. ::
 
@@ -124,7 +124,7 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 
 #. 다음 주소에서 CUBRID PHP API Installer를 다운로드한다. 아래 주소에서는 모든 CUBRID 버전에 대한 CUBRID PHP 드라이버를 제공한다.
 
-   `http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows <http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows>`_
+   http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows
 
 #. CUBRID PHP API Installer를 실행하고 [다음]을 클릭하여 설치를 진행한다.
 
@@ -173,7 +173,7 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 
 **빌드된 드라이버 다운로드 및 설치**
 
-운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 `http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=phpdr <http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=phpdr>`_ 에서 다운로드한다.
+운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=phpdr 에서 다운로드한다.
 
 PHP 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 **php_pdo_cubrid.dll** 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.
 
@@ -204,9 +204,9 @@ Linux
 **환경 설정**
 
 * CUBRID: CUBRID를 설치한다. 시스템에 환경 변수 **%CUBRID%** 가 정의되어 있는지 확인한다.
-* PHP 5.3 소스코드: PHP 5.3 소스코드를 다음 주소에서 다운로드한다. `http://php.net/downloads.php <http://php.net/downloads.php>`_
+* PHP 5.3 소스코드: PHP 5.3 소스코드를 다음 주소에서 다운로드한다. http://php.net/downloads.php
 * Apache 2: PHP 테스트에 Apache 2를 사용할 수 있다.
-* CUBRID PHP 드라이버 소스코드: `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_ 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+* CUBRID PHP 드라이버 소스코드: http://www.cubrid.org/?mid=downloads&item=php_driver 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
 **CUBRID PHP 드라이브 빌드**
 
@@ -281,7 +281,7 @@ Windows
 
 VC6 버전은 기존 Visual Studio 6 컴파일러로 컴파일된다. VC9 버전은 Visual Studio 2008 컴파일러로 컴파일되며, 성능과 안정성이 개선되었다.
 
-VC9 버전을 컴파일하려면 Visual C++ 2008 Runtime이 필요하다. VC9 버전은 Apache Software Foundation( `http://www.apache.org/ <http://www.apache.org/>`_ )에서 제공하는 바이너리와 함께 사용해선 안 된다.
+VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 버전은 Apache Software Foundation( http://www.apache.org/ )에서 제공하는 바이너리와 함께 사용해선 안 된다.
 
 **VC9를 이용하여 PHP 5.3용 CUBRID PHP 드라이버 빌드**
 
@@ -299,11 +299,11 @@ VC9 버전을 컴파일하려면 Visual C++ 2008 Runtime이 필요하다. VC9 �
 
   .. image:: /images/image58.png
 
-*   CUBRID PHP 드라이버 소스코드: `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_ 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스코드: http://www.cubrid.org/?mid=downloads&item=php_driver 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
 .. note::
 
-	PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트를 설정해야 한다. PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_
+	PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트를 설정해야 한다. PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild 
 
 **CUBRID PHP 드라이버 빌드**
 
@@ -340,11 +340,11 @@ VC9 버전을 컴파일하려면 Visual C++ 2008 Runtime이 필요하다. VC9 �
 
   .. image:: /images/image62.png
 
-* CUBRID PHP 드라이버 소스코드: `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_ 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+* CUBRID PHP 드라이버 소스코드: http://www.cubrid.org/?mid=downloads&item=php_driver 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
 .. note::
 
-	PHP 5.3 소스코드로 CUBRID PHP 드라이버를 빌드한다면, Windows에서 PHP 5.3를 설정해야 한다. PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_
+	PHP 5.3 소스코드로 CUBRID PHP 드라이버를 빌드한다면, Windows에서 PHP 5.3를 설정해야 한다. PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
 
 **CUBRID PHP 드라이버 빌드**
 
@@ -368,13 +368,13 @@ VC9 버전을 컴파일하려면 Visual C++ 2008 Runtime이 필요하다. VC9 �
 
 **x64 PHP**
 
-Windows x64 CUBRID PHP 드라이버는 제공되지 않는다. windows.php.net에도 Windows 32비트용 PHP만 있고 공식적인 Windows x64 PHP는 없지만, Windows x64 PHP가 필요하다면 직접 소스코드를 컴파일할 수 있다(다른 사용자가 빌드한 비공식 PHP는 `http://www.anindya.com/ <http://www.anindya.com/>`_ 에서 다운로드할 수 있다). 여기에서는 x64 PHP를 빌드하는 방법은 자세히 설명하지 않는다.
+Windows x64 CUBRID PHP 드라이버는 제공되지 않는다. windows.php.net에도 Windows 32비트용 PHP만 있고 공식적인 Windows x64 PHP는 없지만, Windows x64 PHP가 필요하다면 직접 소스코드를 컴파일할 수 있다(다른 사용자가 빌드한 비공식 PHP는 http://www.anindya.com/ 에서 다운로드할 수 있다). 여기에서는 x64 PHP를 빌드하는 방법은 자세히 설명하지 않는다.
 
-Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 `https://wiki.php.net/internals/windows/compiler <https://wiki.php.net/internals/windows/compiler>`_ 에서 제공하며, x64 PHP를 빌드할 때에는 Visual C++ 8(2005)와 Visual C++ 9(2008 SP1 only)을 사용할 수 있다는 것을 확인할 수 있다. Visual C++ 2005 미만 버전에서 x64 PHP를 빌드하려면 Windows Server Feb. 2003 SDK를 사용해야 한다.
+Windows에서 PHP 빌드를 지원하는 컴파일러 목록은 https://wiki.php.net/internals/windows/compiler 에서 제공하며, x64 PHP를 빌드할 때에는 Visual C++ 8(2005)와 Visual C++ 9(2008 SP1 only)을 사용할 수 있다는 것을 확인할 수 있다. Visual C++ 2005 미만 버전에서 x64 PHP를 빌드하려면 Windows Server Feb. 2003 SDK를 사용해야 한다.
 
 **x64 Apache**
 
-http://www.apachelounge.com/에서는 VC9 x86 버전 Apache만 있고 공식 Windows x64 Apache는 없다. 대신에 64비트 Windows를 사용하는 Windows 서버에서는 IIS를 사용할 수 있다. 반드시 VC9 x64 버전 Apache를 사용하고 싶다면, `http://www.anindya.com/ <http://www.anindya.com/>`_ 에서 다운로드할 수 있다.
+http://www.apachelounge.com/에서는 VC9 x86 버전 Apache만 있고 공식 Windows x64 Apache는 없다. 대신에 64비트 Windows를 사용하는 Windows 서버에서는 IIS를 사용할 수 있다. 반드시 VC9 x64 버전 Apache를 사용하고 싶다면, http://www.anindya.com/ 에서 다운로드할 수 있다.
 
 **환경 설정**
 
@@ -384,15 +384,15 @@ http://www.apachelounge.com/에서는 VC9 x86 버전 Apache만 있고 공식 Win
 
 *   SDK 6.1: VC9을 사용한다면 Windows SDK for Windows Server 2008 and .NET Framework 3.5(또는 SDK 6.1)가 필요하다.
 
-*   PHP 5.3 x64 바이너리: SDK 6.1을 이용하여 VC9 x64 PHP를 직접 빌드하거나, `http://www.anindya.com/ <http://www.anindya.com/>`_ 에서 VC9 x64 Non Thread Safe 또는 VC9 x64 Thread Safe 버전을 다운로드할 수 있다. 시스템 환경 변수 **%PHPRC%** 가 제대로 정의되어 있어야 한다.
+*   PHP 5.3 x64 바이너리: SDK 6.1을 이용하여 VC9 x64 PHP를 직접 빌드하거나, http://www.anindya.com/ 에서 VC9 x64 Non Thread Safe 또는 VC9 x64 Thread Safe 버전을 다운로드할 수 있다. 시스템 환경 변수 **%PHPRC%** 가 제대로 정의되어 있어야 한다.
 
 *   PHP 5.3 소스코드: 바이너리 버전에 맞는 소스코드를 다운로드해야 한다. PHP 5.3 소스코드를 다운로드한 후 압축 해제하고, 시스템 환경 변수 **%PHP5_SRC%** 를 추가하여 PHP 5.3 소스코드의 경로를 값으로 설정한다. VC9 프로젝트 속성에서 [C/C++] > [General]을 선택하면 [Additional Library Directories]에서 **$(PHP5_SRC)** 가 사용되는 것을 볼 수 있다.
 
-*   CUBRID PHP 드라이버 소스코드: `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_ 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
+*   CUBRID PHP 드라이버 소스코드: http://www.cubrid.org/?mid=downloads&item=php_driver 에서 CUBRID 버전에 맞는 CUBRID PHP 드라이버의 소스코드를 다운로드한다.
 
 .. note::
 
-	PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트를 설정해야 한다.PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_
+	PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트를 설정해야 한다.PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
 
 **PHP 5.3 설정**
 

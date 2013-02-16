@@ -7,17 +7,17 @@ PHP Overview
 
 CUBRID PHP driver implements an interface to enable access from application in PHP to CUBRID database. Every function offered by CUBRID PHP driver has a prefix **cubrid_** such as cubrid_connect() and cubrid_connect_with_url().
 
-The official one is available as a PECL package. PECL is a repository for PHP extensions, providing a directory of all known extensions and holding facilities for downloading and development of PHP extensions. For more information about PECL, visit `http://pecl.php.net/ <http://pecl.php.net/>`_.
+The official one is available as a PECL package. PECL is a repository for PHP extensions, providing a directory of all known extensions and holding facilities for downloading and development of PHP extensions. For more information about PECL, visit http://pecl.php.net/ .
 
 CUBRID PHP driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-To download PHP driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-php-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-php-driver>`_.
+To download PHP driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-php-driver .
 
 Installing and Configuring PHP
 ==============================
 
 The easiest and fastest way to get all applications installed on your system is to install CUBRID, Apache web server, PHP, and CUBRID PHP driver at the same time. For details, see
-`http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu <http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu>`_.
+http://www.cubrid.org/wiki_apis/entry/install-cubrid-with-apache-and-php-on-ubuntu .
 
 For Linux
 ---------
@@ -27,11 +27,11 @@ For Linux
 *   CUBRID: 2008 R3.0 (8.3.0) or later
 *   Operating system: 32-bit or 64-bit Linux
 *   Web server: Apache
-*   PHP: 5.2 or 5.3 (`http://php.net/downloads.php <http://php.net/downloads.php>`_)
+*   PHP: 5.2 or 5.3 (http://php.net/downloads.php)
 
 **Installing CUBRID PHP Driver using PECL**
 
-If **PECL** package has been installed on your system, the installation of CUBRID PHP driver is straightforward. **PECL** will download and compile the driver for you. If you do not have **PECL** installed, follow the instructions at `http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl <http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl>`_ to get it installed.
+If **PECL** package has been installed on your system, the installation of CUBRID PHP driver is straightforward. **PECL** will download and compile the driver for you. If you do not have **PECL** installed, follow the instructions at http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl to get it installed.
 
 #. Enter the following command to install the latest version of CUBRID PHP driver. ::
 
@@ -86,8 +86,8 @@ If **PECL** package has been installed on your system, the installation of CUBRI
 
 #. To install CUBRID PHP driver using **yum** command, we need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
 
-   *   CentOS: `http://www.cubrid.org/?mid=yum_repository&os=centos <http://www.cubrid.org/?mid=yum_repository&os=centos>`_
-   *   Fedora: `http://www.cubrid.org/?mid=yum_repository&os=fedora <http://www.cubrid.org/?mid=yum_repository&os=fedora>`_
+   *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
+   *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
 
 #. Choose CUBRID version. You will be given a list of links for your particular version. For example, the following link is provided for Fedora 16 where fc16 means this operating system version. ::
 
@@ -115,7 +115,7 @@ For Windows
 *   CUBRID: 2008 R3.0 (8.3.0) or later
 *   Operating system: 32-bit or 64 bit Windows
 *   Web server: Apache or IIS
-*   PHP: 5.2 or 5.3 (`http://windows.php.net/download/ <http://windows.php.net/download/>`_)
+*   PHP: 5.2 or 5.3 (http://windows.php.net/download/)
 
 **Using CUBRID PHP Driver Installer**
 
@@ -127,7 +127,7 @@ Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are
 
 #. Download the CUBRID PHP API installer for Windows from the link below. The current installer includes the drivers for all CUBRID versions.
 
-   `http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows <http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows>`_
+   http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows
 
 #. To install the PHP extension, run the installer. Once the installer starts, click the [Next] button.
 #. Agree with the BSD license terms and click the [Next] button.
@@ -173,7 +173,7 @@ If you can not get the result like above, it is highly likely that your PHP and 
 
 **Downloading and Installing Compiled CUBRID PHP Driver**
 
-First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed from `http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&php=detect&driver=detect <http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&php=detect&driver=detect>`_.
+First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed from http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&php=detect&driver=detect .
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
@@ -202,9 +202,9 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 **Configuring the environment**
 
 *   CUBRID: Install CUBRID. Make sure the environment variable **%CUBRID%** is defined in your system.
-*   PHP 5.3 source code: You can download PHP source code from `http://php.net/downloads.php <http://php.net/downloads.php>`_.
+*   PHP 5.3 source code: You can download PHP source code from http://php.net/downloads.php .
 *   Apache 2: It can be used to test PHP.
-*   CUBRID PHP driver source code: You can download the source code from `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_. Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.
+*   CUBRID PHP driver source code: You can download the source code from http://www.cubrid.org/?mid=downloads&item=php_driver . Make sure that the version you download is the same as the version of CUBRID which has been installed on your system.
 
 **Compiling CUBRID PHP driver**
 
@@ -283,7 +283,7 @@ If you have no idea of which version you choose, read the following contents fir
 
 VC6 versions are compiled with the legacy Visual Studio 6 compiler; VC9 versions are compiled with the Visual Studio 2008 compiler. The VC9 versions have more improvements in performance and stability.
 
-The VC9 versions require you to have the Microsoft 2008 C++ Runtime (x86) or the Microsoft 2008 C++ Runtime (x64) installed. Do not use VC9 versions with binaries provided by the Apache Software Foundation (`http://www.apache.org/ <http://www.apache.org/>`_).
+The VC9 versions require you to have the Microsoft 2008 C++ Runtime (x86) or the Microsoft 2008 C++ Runtime (x64) installed. Do not use VC9 versions with binaries provided by the Apache Software Foundation ( http://www.apache.org/ ).
 
 **Building CUBRID PHP Driver with VC9 for PHP 5.3**
 
@@ -305,11 +305,11 @@ In the [Property Pages] dialog box, select [General] under the [C/C++] tree node
 
   .. image:: /images/image58.jpg
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which version is the same as the version of CUBRID that have been installed on your system. You can get it from `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_.
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which version is the same as the version of CUBRID that have been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
 
 .. note::
 
-	You do not need to build PHP 5.3 from source code but configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_ to get more detailed information.
+	You do not need to build PHP 5.3 from source code but configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
 
 **Building CUBRID PHP driver with VC9 for PHP 5.3**
 
@@ -347,11 +347,11 @@ You can configure the default settings without using this SDK; however, there is
 
   .. image:: /images/image62.jpg
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which version is the same as the version of CUBRID that has been installed on your system. You can get it from `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_.
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which version is the same as the version of CUBRID that has been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
 
 .. note::
 
-	If you build CUBRID PHP driver with PHP 5.3 source code, you need to make some configuration settings for PHP 5.3 on Windows. If you do not make these settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_ to get more detailed information.
+	If you build CUBRID PHP driver with PHP 5.3 source code, you need to make some configuration settings for PHP 5.3 on Windows. If you do not make these settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
 
 **Building CUBRID PHP driver**
 
@@ -375,13 +375,13 @@ You can configure the default settings without using this SDK; however, there is
 
 **PHP for 64-bit Windows**
 
-We do not provide 64-bit Windows CUBRID PHP driver, mainly because there is no official 64-bit Windows PHP at windows.php.net (only x86 versions are available). But sometimes you need 64-bit Windows binaries for PHP. In that case you can build it from source codes. Best of all, some guys have already done this (see `http://www.anindya.com/ <http://www.anindya.com/>`_). Here, we will not describe how to build x64 PHP itself.
+We do not provide 64-bit Windows CUBRID PHP driver, mainly because there is no official 64-bit Windows PHP at windows.php.net (only x86 versions are available). But sometimes you need 64-bit Windows binaries for PHP. In that case you can build it from source codes. Best of all, some guys have already done this (see http://www.anindya.com/). Here, we will not describe how to build x64 PHP itself.
 
-You can find the supported compilers to build PHP on Windows at `https://wiki.php.net/internals/windows/compiler <https://wiki.php.net/internals/windows/compiler>`_. You can see that both VC++ 8 (2005) and VC++ 9 (2008 SP1 only) can be used to build 64-bit PHP. Earlier versions of Visual C++ 2005, the Windows Server Fed. 2003 SDK was the only way to build 64-bit Windows applications.
+You can find the supported compilers to build PHP on Windows at https://wiki.php.net/internals/windows/compiler . You can see that both VC++ 8 (2005) and VC++ 9 (2008 SP1 only) can be used to build 64-bit PHP. Earlier versions of Visual C++ 2005, the Windows Server Fed. 2003 SDK was the only way to build 64-bit Windows applications.
 
 **Apache for 64-bit Windows**
 
-There is no official Apache for 64-bit Windows either. Instead, you can use IIS as your Windows Web Server on 64-bit Windows. If you really need VC9 x64 versions of Apache, you can find it at `http://www.anindya.com/ <http://www.anindya.com/>`_.
+There is no official Apache for 64-bit Windows either. Instead, you can use IIS as your Windows Web Server on 64-bit Windows. If you really need VC9 x64 versions of Apache, you can find it at http://www.anindya.com/ .
 
 **Configuring the environment**
 
@@ -391,11 +391,11 @@ There is no official Apache for 64-bit Windows either. Instead, you can use IIS 
 
 *   SDK 6.1: If you are using VC9, you need Microsoft Windows SDK for Windows Server 2008 and .NET Framework 3.5 (also known as the SDK 6.1).
 
-*   PHP 5.3 binaries for 64-bit Windows: You can build your own VC9 x64 PHP with SDK 6.1 or you can get it at `http://www.anindya.com/ <http://www.anindya.com>`_. Both VC9 x64 Non Thread Safe and VC9 x64 Thread Safe are available. After you have installed it, check if the value of system environment variable **%PHPRC%** is correctly set.
+*   PHP 5.3 binaries for 64-bit Windows: You can build your own VC9 x64 PHP with SDK 6.1 or you can get it at http://www.anindya.com . Both VC9 x64 Non Thread Safe and VC9 x64 Thread Safe are available. After you have installed it, check if the value of system environment variable **%PHPRC%** is correctly set.
 
 *   PHP 5.3 source code: Remember to get the src package that matches your binary version. After you extract the PHP 5.3 src, add system environment variable **%PHP5_SRC%** and set its value to the path of PHP 5.3 source code. In the VC9 [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP5_SRC)** in [Additional Include Directories].
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which version is the same as the version of CUBRID that is installed on your system. You can get it from `http://www.cubrid.org/?mid=downloads&item=php_driver <http://www.cubrid.org/?mid=downloads&item=php_driver>`_.
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which version is the same as the version of CUBRID that is installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
 
 .. note::
 
@@ -659,7 +659,7 @@ You can directly update values of collection types by using cubrid_set_add() or 
 PHP API
 =======
 
-For more information about PHP API, see PHP CUBRID Functions document at `http://www.php.net/manual/en/ref.cubrid.php <http://www.php.net/manual/en/ref.cubrid.php>`_.
+For more information about PHP API, see PHP CUBRID Functions document at http://www.php.net/manual/en/ref.cubrid.php .
 
 *   `cubrid_bind <http://www.php.net/manual/en/function.cubrid-bind.php>`_
 *   `cubrid_close_prepare <http://www.php.net/manual/en/function.cubrid-close-prepare.php>`_

@@ -9,7 +9,7 @@ CUBRID Ruby driver implements the interface to enable access from applications i
 
 CUBRID Ruby driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-To download Ruby driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver>`_.
+To download Ruby driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver .
 
 Installing and Configuring Ruby
 ===============================
@@ -34,7 +34,7 @@ Enter the command line below to install the latest version of CUBRID Ruby driver
 
 .. note:: 
 
-	If you do not have RubyInstaller, see `http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions>`_.
+	If you do not have RubyInstaller, see http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions .
 
 Ruby Sample Program
 ===================
@@ -257,7 +257,7 @@ Due to the way CUBRID is functioning, you cannot programmatically create a schem
 Ruby API
 ========
 
-For more information about CUBRID Ruby API, see CUBRID Ruby API Documentation (`http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#Ruby_API <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#ruby_api>`_).
+For more information about CUBRID Ruby API, see CUBRID Ruby API Documentation ( http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#ruby_api ).
 
 *   `Connection Class <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#connection_class>`_
 

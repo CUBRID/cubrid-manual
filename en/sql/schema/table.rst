@@ -244,7 +244,7 @@ A column is a set of data values of a particular simple type, one for each row o
 	  
 		create table tb1(A smallint auto_increment, B char(5));
 
-	.. _constraint-definition:
+.. _constraint-definition:
 
 Constraint Definition
 ---------------------

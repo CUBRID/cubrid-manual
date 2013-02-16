@@ -12,12 +12,12 @@ Node.js는 다음의 특징을 가지고 있다.
 * 동시에 여러 종류의 많은 I/O를 다루는데 적합하다.
 * 블로킹 없는(non-blocking) I/O 모델이라 경량이며 효율적이다.
 
-보다 자세한 사항은 `http://nodejs.org/ <http://nodejs.org/>`_ 를 참고한다.
+보다 자세한 사항은 http://nodejs.org/ 를 참고한다.
 
 CUBRRID Node.js 드라이버를 다운로드하거나 CUBRID Node.js 드라이버에 대한 최신 정보는 아래 사이트에서 확인할 수 있다.
  
-* 프로젝트 소개: `http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver>`_
-* 소스코드 메인 저장소: `https://github.com/CUBRID/node-cubrid <https://github.com/CUBRID/node-cubrid>`_
+* 프로젝트 소개: http://www.cubrid.org/wiki_apis/entry/cubrid-node-js-driver
+* 소스코드 메인 저장소: https://github.com/CUBRID/node-cubrid 
  
 Node.js 설치
 ============

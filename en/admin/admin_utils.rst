@@ -807,24 +807,23 @@ The following shows [options] available with the **cubrid statdump** utility.
 
 	This option specifies the periodic number of outputting statistics as seconds.
 
-	[번역]
-	다음은 1초마다 누적된 정보 값을 출력한다. ::
+	The following outputs the accumulated values per second. ::
 	
 		cubrid statdump -i 1 -c demodb
 		
-	다음은 1초 마다 0으로 리셋하고 1초 동안 누적된 값을 출력한다. ::
+	The following outputs the accumulated values during 1 second, as starting with 0 value per every 1 second. 다음은 1초 마다 0으로 리셋하고 1초 동안 누적된 값을 출력한다. ::
 	
 		cubrid statdump -i 1 demodb
 		
-	다음은 -i 옵션으로 가장 마지막에 실행한 값을 출력한다. ::
+	The following outputs the last values which were executed with -i option. ::
 	
 		cubrid statdump demodb
 		
-	다음은 위와 같은 결과를 출력한다. **-c** 옵션은 **-i** 옵션과 같이 쓰이지 않으면 옵션을 설정하지 않은 것과 동일하다.
+	The following ouputs the same values with the above. **-c** option doesn't work if it is not used with **-i** option together.
 	
 		cubrid statdump -c demodb
 
-	다음은 5초마다 결과를 출력한다.
+	The following outputs the values per every 5 seconds.
 	
 	::
 
@@ -1231,36 +1230,35 @@ The following shows [options] available with the **cubrid checkdb** utility.
 		 
 			 t10
 
-[번역]
 .. _tranlist:
 
-데이터베이스 트랜잭션 확인
-==========================
+Checking Database Transaction
+=============================
 
-**cubrid tranlist** 는 대상 데이터베이스의 트랜잭션 정보를 확인하는 유틸리티로서, DBA 또는 DBA그룹 사용자만 수행할 수 있다. ::
+The **cubrid tranlist** is used to check the transaction information of the target database. Only DBA or DBA group can use this utility. ::
 
 	cubrid tranlist [options] database_name
 
-옵션을 생략하면 각 트랜잭션에 대한 전체 정보를 출력한다. 
+If you omit the [options], it displays the total information about each transaction.
 
-"cubrid tranlist demodb"는 "cubrid killtran -q demodb"와 비슷한 결과를 출력하나, 후자에 비해 "User name"과 "Host name"을 더 출력한다.
+"cubrid tranlist demodb" outputs the similar result with "cubrid killtran -q demodb", but tranlist outputs more items; "User name" and "Host name".
 "cubrid tranlist -s demodb"는 "cubrid killtran -d demodb"와 동일한 결과를 출력한다.
 
-다음은 **cubrid tranlist** 에 대한 [options]이다.
+The following shows [options] available with the **cubrid tranlist** utility.
 
 .. program:: tranlist
 
 .. option:: -u, --user=USER
 
-	로그인할 사용자 ID. DBA및 DBA그룹 사용자만 허용한다.(기본값 : DBA)
+	*USER* is DB user's ID to log-in. It only allows DBA and DBA group users.(The default: DBA)
 	
 .. option:: -p, --password=PASSWORD
 
-	사용자 비밀번호
+	*PASSWORD* is DB user's password.
 	
 .. option:: -s, --summary
 
-	요약 정보만 출력한다(질의 수행 정보 또는 잠금 관련 정보를 생략).
+	This option outputs only summarized information(it omits query execution information or locking information).
 
 	::
 	
@@ -1288,7 +1286,7 @@ The following shows [options] available with the **cubrid checkdb** utility.
 		   3(COMMITTED)         dba          myhost            1824         broker1_cub_cas_3
 		-------------------------------------------------------------------------------------
 	
-	**tran index에 보여지는 transaction 상태 메시지**
+	**Transaction status messages whihch are shown on "Tran index"**
 	
 		* ACTIVE : 활성
 		* RECOVERY : 복구중인 트랜젝션

@@ -1393,10 +1393,10 @@ Functions and Operators
 
 	By using **CAST** operator, you can execute an explicit type change between **BLOB** / **CLOB** type and binary type/string type. For more details, see :func:`CAST`. ::
 
-	CAST (<bit_type_column_or_value> AS CLOB)
-	CAST (<bit_type_column_or_value> AS BLOB)
-	CAST (<char_type_column_or_value> AS BLOB)
-	CAST (<char_type_column_or_value> AS CLOB)
+		CAST (<bit_type_column_or_value> AS CLOB)
+		CAST (<bit_type_column_or_value> AS BLOB)
+		CAST (<char_type_column_or_value> AS BLOB)
+		CAST (<char_type_column_or_value> AS CLOB)
 
 	**LOB Data Process and Type Change Functions**
 

@@ -9,7 +9,7 @@ Python Overview
 
 CUBRID Python driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-If you want to download Python driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver>`_.
+If you want to download Python driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-python-driver .
 
 Installing and Configuring Python
 =================================
@@ -23,14 +23,14 @@ There are three ways to install CUBRID Python driver on Linux, UNIX, and UNIX-li
 
 *   CUBRID: 2008 R4.0 (8.4.0) or later
 *   Operating system: 32-bit or 64-bit Linux, UNIX, or UNIX-like operating systems
-*   Python: 2.4 or later (`http://www.python.org/download/ <http://www.python.org/download/>`_)
+*   Python: 2.4 or later (http://www.python.org/download/)
 
 **Installing CUBRID Python Driver using Yum (Fedora or CentOS)**
 
 *   To install CUBRID Python driver by using the **yum** command, you need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
 
-    *   CentOS: `http://www.cubrid.org/?mid=yum_repository&os=centos <http://www.cubrid.org/?mid=yum_repository&os=centos>`_
-    *   Fedora: `http://www.cubrid.org/?mid=yum_repository&os=fedora <http://www.cubrid.org/?mid=yum_repository&os=fedora>`_
+    *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
+    *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
 
 For the example to install CUBRID 9.0 on Fedora 17 is as folllows: (fc17 means this operating system version). ::
 
@@ -42,9 +42,9 @@ For the example to install CUBRID 9.0 on Fedora 17 is as folllows: (fc17 means t
 
 **Building CUBRID Python Driver from Source Code (Linux)**
 
-To install CUBRID Python driver by compiling source code, you should have Python Development Package installed on your system. If you do not have the package, follow the instructions stated at `http://www.cubrid.org/wiki_apis/entry/install-python-development-package <http://www.cubrid.org/wiki_apis/entry/install-python-development-package>`_.
+To install CUBRID Python driver by compiling source code, you should have Python Development Package installed on your system. If you do not have the package, follow the instructions stated at http://www.cubrid.org/wiki_apis/entry/install-python-development-package .
 
-*   Download the source code from `http://www.cubrid.org/?mid=downloads&item=python_driver <http://www.cubrid.org/?mid=downloads&item=python_driver>`_.
+*   Download the source code from http://www.cubrid.org/?mid=downloads&item=python_driver .
 
 *   Extract the archive to the desired location. ::
 
@@ -64,7 +64,7 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 **Using a Package Manager (EasyInstall) of CUBRID Python Driver (Linux)**
 
-EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see `http://packages.python.org/distribute/easy_install.html <http://packages.python.org/distribute/easy_install.html>`_.
+EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see http://packages.python.org/distribute/easy_install.html .
 
 Enter the command below to install CUBRID Python driver by using EasyInstall. ::
 
@@ -77,7 +77,7 @@ To install CUBRID Python driver on Windows, first download CUBRID Python driver 
 
 *   Visit the website below to download the driver. You will be given to select your operating system and Python version installed on your system.
 
-    `http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect <http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect>`_
+    http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect
 
 *   Extract the archive you downloaded. You should see a folder and two files in the folder. Copy these files to the **Lib** folder where your Python has been installed; by default, it is **C:\Program Files\Python\Lib**.
 
@@ -240,7 +240,7 @@ Each of row has the following information. ::
 
 	(column_name, data_type, display_size, internal_size, precision, scale, nullable)
 
-For more information about numbers representing data types, see `http://packages.python.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html <http://packages.python.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html>`_.
+For more information about numbers representing data types, see http://packages.python.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html .
 
 **Releasing Resource**
 
@@ -254,6 +254,6 @@ After you have done using any cursor or connection to the database, you must rel
 Python API
 ==========
 
-Python Database API is composed of connect() module class, Connection object, Cursor object, and many other auxiliary functions. For more information, see Python DB API 2.0 Official Documentation at `http://www.python.org/dev/peps/pep-0249/ <http://www.python.org/dev/peps/pep-0249/>`_.
+Python Database API is composed of connect() module class, Connection object, Cursor object, and many other auxiliary functions. For more information, see Python DB API 2.0 Official Documentation at  http://www.python.org/dev/peps/pep-0249/ .
 
-You can find the information about CUBRID Python API at `http://packages.python.org/CUBRID-Python/ <http://packages.python.org/CUBRID-Python/>`_.
+You can find the information about CUBRID Python API at http://packages.python.org/CUBRID-Python/ .

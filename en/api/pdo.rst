@@ -18,7 +18,7 @@ In particular, having a CUBRID PDO driver means that any application that uses P
 
 CUBRID PDO driver is based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-To download PDO driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver>`_.
+To download PDO driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver .
 
 Installing and Configuring PDO
 ==============================
@@ -31,11 +31,11 @@ Linux
 *   CUBRID: 2008 R3.0 (8.3.0) or later
 *   Operating system: 32-bit or 64-bit Linux
 *   Web server: Apache
-*   PHP: 5.2 or 5.3 (`http://php.net/downloads.php <http://php.net/downloads.php>`_)
+*   PHP: 5.2 or 5.3 ( http://php.net/downloads.php )
 
 **Installing CUBRID PHP Driver using PECL**
 
-If **PECL** package has bee installed on your system, the installation of CUBRID PDO driver is straightforward. **PECL** will download and compile the driver for you.?If you do not have **PECL** installed, follow the instructions at `http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl <http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl>`_ to get it installed.
+If **PECL** package has bee installed on your system, the installation of CUBRID PDO driver is straightforward. **PECL** will download and compile the driver for you.?If you do not have **PECL** installed, follow the instructions at http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl to get it installed.
 
 #. Enter the following command to install the latest version of CUBRID PDO driver. ::
 
@@ -66,11 +66,12 @@ Windows
 *   CUBRID: 2008 R3.0 (8.3.0) or later
 *   Operating system: 32-bit or 64-bit Windows
 *   Web server: Apache or IIS
-*   PHP: 5.2 or 5.3 (`http://windows.php.net/download/ <http://windows.php.net/download/>`_)
+*   PHP: 5.2 or 5.3 ( http://windows.php.net/download )
 
 **Downloading and Installing Compiled CUBRID PDO Driver**
 
-First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed at `http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo <http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo>`_.
+First, download CUBRID PHP/PDO driver of which versions match the versions of your operating system and PHP installed at
+http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo .
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
@@ -520,7 +521,7 @@ The output of the script is as follows: ::
 PDO API
 =======
 
-For more information about PHP Data Objects (PDO) API, see `http://docs.php.net/manual/en/book.pdo.php <http://docs.php.net/manual/en/book.pdo.php>`_. The API provided by CUBRID PDO driver is as follows:
+For more information about PHP Data Objects (PDO) API, see http://docs.php.net/manual/en/book.pdo.php . The API provided by CUBRID PDO driver is as follows:
 
 *   `PDO_CUBRID DSN <http://www.php.net/manual/en/ref.pdo-cubrid.connection.php>`_
 *   `PDO::cubrid_schema <http://www.php.net/manual/en/pdo.cubrid-schema.php>`_

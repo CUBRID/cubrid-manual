@@ -7,7 +7,7 @@ ADO.NET Overview
 
 ADO.NET is a set of classes that expose data access services to the .NET programmer. ADO.NET provides a rich set of components for creating distributed, data-sharing applications. It is an integral part of the .NET Framework, providing access to relational, XML, and application data. ADO.NET supports a variety of development needs, including the creation of front-end database clients and middle-tier business objects used by applications, tools, languages, or Internet browsers.
 
-To download ADO.NET driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver>`_.
+To download ADO.NET driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ado-net-driver .
 
 Installing and Configuring ADO.NET
 ==================================
@@ -16,7 +16,7 @@ Installing and Configuring ADO.NET
 
 *   Windows (Windows Vista or Windows 7 recommended)
 *   .NET Framework 2.0 or later (4.0 or later versions recommended)
-*   Microsoft Visual Studio Express edition (`http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express <http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express>`_)
+*   Microsoft Visual Studio Express edition ( http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express )
 
 **Installing and Configuring CUBRID ADO.NET Driver**
 
@@ -24,7 +24,7 @@ Before you start developing .NET applications with CUBRID, you will need the CUB
 
 *   Download the complied library along with other files from:
 
-    `http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver <http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver>`_
+    http://www.cubrid.org/?mid=downloads&item=ado_dot_net_driver
 
 *   Compile it yourself from source code. You can check out the code from the SVN repository. If you are using CUBRID 9.0.0 version, enter 9.0.0 in *<CUBRID version>*.
 
@@ -34,7 +34,7 @@ The CUBRID .NET Data Provider is 100% full-managed .NET code and it does not rel
 
 The easiest way to install CUBRID ADO.NET Data Provider is to use the official installer. If you choose to install using the default option (x86), the driver will be installed in the **Program Files\CUBRID\CUBRID ADO.NET Data Provider 8.4.1** directory.
 
-You can also choose to install the driver in GAC (`http://en.wikipedia.org/wiki/Global_Assembly_Cache <http://en.wikipedia.org/wiki/global_assembly_cache>`_). The best way to install the driver is to use the tblimp (`http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx <http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx>`_) tool. See the below to import the required namespaces.
+You can also choose to install the driver in GAC ( http://en.wikipedia.org/wiki/global_assembly_cache ). The best way to install the driver is to use the tblimp ( http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx ) tool. See the below to import the required namespaces.
 
 .. image:: /images/image88.png
 
@@ -89,7 +89,8 @@ To retrieve specific CUBRID data types, you need to use `CUBRIDDataReader <http:
 batch Commands
 --------------
 
-When using CUBRID ADO.NET Data Provider library, you can execute more than one query against the data service in a single batch. For more information, see `http://msdn.microsoft.com/en-us/library/dd744839%28v=vs.90%29.aspx <http://msdn.microsoft.com/en-us/library/dd744839%28v=vs.90%29.aspx>`_.
+When using CUBRID ADO.NET Data Provider library, you can execute more than one query against the data service in a single batch. For more information, see 
+http://msdn.microsoft.com/en-us/library/dd744839%28v=vs.90%29.aspx .
 
 For example, in CUBRID, you can write the code like:
 
@@ -493,14 +494,14 @@ The following list displays the error code and messages shown up when using CUBR
 NHibernate
 ----------
 
-CUBRID will be accessed from NHibernate using CUBRID ADO.NET Data Provider. For more information, see `http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial <http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial>`_.
+CUBRID will be accessed from NHibernate using CUBRID ADO.NET Data Provider. For more information, see http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial .
 
 Java Stored Prcedure
 --------------------
 
-For how to call Java stored procedure in .NET, see `http://www.cubrid.org/?mid=forum&category=195532&document_srl=358924 <http://www.cubrid.org/?mid=forum&category=195532&document_srl=358924>`_.
+For how to call Java stored procedure in .NET, see http://www.cubrid.org/?mid=forum&category=195532&document_srl=358924 .
 
 ADO.NET API
 ===========
 
-For more information about ADO.NET API, see CUBRID ADO.NET Driver documentation (`http://www.cubrid.org/manual/api/ado.net/8.4.1/Index.html <http://www.cubrid.org/manual/api/ado.net/8.4.1/Index.html>`_).
+For more information about ADO.NET API, see CUBRID ADO.NET Driver documentation ( http://www.cubrid.org/manual/api/ado.net/8.4.1/Index.html ).

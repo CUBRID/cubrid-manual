@@ -10,7 +10,7 @@ JDBC Overview
 CUBRID JDBC driver (**cubrid_jdbc.jar**) implements an interface to enable access from applications in Java to CUBRID database server. CUBRID JDBC driver is installed in the <
 *directory where CUBRID is installed*>/**jdbc** directory. The driver has been developed based on the JDBC 2.0 specification and the default driver provided is complied with JDK 1.6.
 
-To download JDBC driver or get the latest information, click `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver`.
+To download JDBC driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver .
 
 **Verifying CUBRID JDBC Driver Version**
 
@@ -58,7 +58,7 @@ Installing and Configuring JDBC
 
 **Installing Java and Configuring Environment**
 
-You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website (`http://java.sun.com <http://java.sun.com>`_). For more information, see Environment Settings for Java Stored Functions/Procedures.
+You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( http://java.sun.com ). For more information, see Environment Settings for Java Stored Functions/Procedures.
 
 **Configuring the environment variables for Windows**
 
@@ -109,7 +109,7 @@ The CUBRID JDBC driver (**cubrid_jdbc.jar**) is located in the jdbc directory u
 
 .. note::
 
-	To get the latest information about JDBC driver, click `http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver`.
+	To get the latest information about JDBC driver, click http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver .
 
 JDBC Programming
 ================
@@ -128,6 +128,7 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 	 
 	<property> ::= altHosts=<alternative_hosts>
 				 | rcTime=<second>
+				 | loadBalance=<bool_type>
 				 | connectTimeout=<second>
 				 | queryTimeout=<second>
 				 | charSet=<character_set>
@@ -220,9 +221,9 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 
 .. note::
 
-	*   Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a user name (*user-id*) and a password (*password*) as a separate argument in the **getConnection** method.
-	*   The database connection in thread-based programming must be used independently each other.
-	*   The rollback method requesting transaction rollback will be ended after a server completes the rollback job.
+	* Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a user name (*user-id*) and a password (*password*) as a separate argument in the **getConnection** method.
+	* The database connection in thread-based programming must be used independently each other.
+	* The rollback method requesting transaction rollback will be ended after a server completes the rollback job.
 	* In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
 
 Checking Foreign Key Information
@@ -239,9 +240,7 @@ You can check foreign key information by using **getImportedKeys**, **getExporte
 	getCrossReference(String parentCatalog, String parentSchema, String parentTable, String foreignCatalog, String foreignSchema, String foreignTable)
 
 *   **getImportedKeys** method: Retrieves information of primary key columns which are referred by foreign key columns in a given table. The results are sorted by **PKTABLE_NAME** and **KEY_SEQ**.
-
 *   **getExportedKeys** method: Retrieves information of all foreign key columns which refer to primary key columns in a given table. The results are sorted by **FKTABLE_NAME** and **KEY_SEQ**.
-
 *   **getCrossReference** method: Retrieves information of primary key columns which are referred by foreign key columns in a given table. The results are sorted by **PKTABLE_NAME** and **KEY_SEQ**.
 
 **Return Value**
@@ -327,7 +326,8 @@ To use these methods, you must import **cubrid.sql.*;** as well as the CUBRID JD
 
 	If extended API is used, transactions won't be automatically committed even though **AUTOCOMMIT** is set to TRUE. Therefore, you must explicitly commit transactions for open connections. The extended API of CUBRID is method that handle OIDs, collections, etc.
 
-**Using OIDs**
+Using OIDs
+^^^^^^^^^^
 
 You must follow the rules below when using OIDs.
 
@@ -443,7 +443,8 @@ You must follow the rules below when using OIDs.
 	   }
 	}
 
-**Using Collections**
+Using Collections
+^^^^^^^^^^^^^^^^^
 
 The line "a" in the example 1 is where data of collection types (**SET**, **MULTISET**, and **LIST**) is fetched from **CUBRIDResultSet**. The results are returned as array format. Note that this can be used only when data types of all elements defined in the collection types are same.
 

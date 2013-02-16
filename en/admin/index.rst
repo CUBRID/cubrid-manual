@@ -50,78 +50,62 @@ The database management utilities are as follows:
 *   Creating database, adding volume, and deleting datbase
 
 	*   cubrid createdb
-
 	*   cubrid addvoldb
-
 	*   cubrid deletedb
 
 *   Renaming database, altering host, copying database, and installing database
 
 	*   cubrid renamedb
-
 	*   cubrid alterdbhost
-
 	*   cubrid copydb
-
 	*   cubrid installdb
 
 *   Checking and compacting database space
 
 	*   cubrid spacedb
-
 	*   cubrid compactdb
 
 *   Checking query plan and optimizing database
 
 	*   cubrid plandump
-
 	*   cubrid optimizedb
-
 	*   cubrid statdump
 
-*   Checking database lock, killing transaction, and checking consistency
+*   Checking database lock, checking transaction, killing transaction, and checking consistency
 
 	*   cubrid lockdb
-
+	*   cubrid tranlist
 	*   cubrid killtran
-
 	*   cubrid checkdb
 
 *   Diagnosing database and dumping parameter
 
 	*   cubrid diagdb
-
 	*   cubrid paramdump
 
 *   Loading and unloading database
 
 	*   cubrid loaddb
-
 	*   cubrid unloaddb
 
 *   Backing up and restoring database
 
 	*   cubrid backupdb
-
 	*   cubrid restoredb
 
 *   HA utilities
 
 	*   cubrid changemode
-
 	*   cubrid copylogdb
-
 	*   cubrid applylogdb
-
 	*   cubrid applyinfo
 
 *   Locale utilities
 
 	*   cubrid genlocale
-
 	*   cubrid dumplocale
 
-See `How to Use the CUBRID Management Utilities (Syntax) <#admin_admin_service_server_comma_427>`_ for details.
+See :ref:`cubrid-utilities` for details.
 
 The following result is displayed if **cubrid** is entered in a prompt.
 
@@ -151,6 +135,7 @@ The following result is displayed if **cubrid** is entered in a prompt.
 		deletedb
 		diagdb
 		installdb
+		tranlist
 		killtran
 		loaddb
 		lockdb

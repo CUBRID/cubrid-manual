@@ -6,7 +6,7 @@ CUBRID Ruby 드라이버는 Ruby로 작성한 응용 프로그램에서 CUBRID �
 
 CUBRID Ruby 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 Ruby 드라이버를 다운로드하거나 Ruby 드라이버에 대한 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver>`_ 에 접속한다.
+별도로 Ruby 드라이버를 다운로드하거나 Ruby 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver 에 접속한다.
 
 Ruby 설치 및 설정
 =================
@@ -31,7 +31,7 @@ Ruby 설치 및 설정
 
 .. note:: 
 
-	Gem Installer가 설치되어 있지 않다면 `http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions>`_ 를 참고한다.
+	Gem Installer가 설치되어 있지 않다면 http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver-installation-instructions 를 참고한다.
 
 Ruby 예제 프로그램
 ==================
@@ -255,7 +255,7 @@ Ruby API
 ========
 
 Ruby API에 대한 자세한 내용은 CUBRID Ruby API Documentation(
-`http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#Ruby_API <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#ruby_api>`_
+http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#ruby_api 
 )을 참고한다.
 
 *   `Connection Class <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#connection_class>`_

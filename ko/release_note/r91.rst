@@ -19,35 +19,47 @@ CUBRID 9.0 Beta에 대한 정보는 :doc:`r90` 에서, CUBRID 2008 R4.3에 대�
 릴리스 특징
 ===========
 
-CUBRID 9.1은 CUBRID 9.0 Beta의 안정화 버전이다.
-뿐만 아니라, CUBRID 9.1은 질의 수행에 관련된 다양한 기능들을 추가하였으며, 다국어 관련 기능들을 강화하였다. 또한, Windows에서 Sharding 기능을 지원하며, 모니터링 기능을 개선했다.
+CUBRID 9.1은 CUBRID 9.0 Beta의 안정화 버전 및 업그레이드 버전이다.
+9.0 Beta 버전에서 발견된 이슈들을 수정하여 안정화 시켰을 뿐만 아니라 CUBRID 9.1은 질의 수행에 관련된 다양한 기능들을 추가하였으며, 질의 처리 성능이 향상되었고 질의 최적화가 개선되었다. 다국어 관련 기능들을 강화하였으며, 운영 도구를 개선했다.
 
-CUBRID 9.1은 CUBRID 9.0 Beta와 데이터베이스 볼륨이 호환되지 않으므로, CUBRID 9.0 Beta 및 이전 버전 사용자는 반드시 데이터베이스를 마이그레이션해야 한다. 이와 관련하여 :doc:`/upgrade` 절을 참고한다.
+CUBRID 9.1은 CUBRID 9.0 Beta와 데이터베이스 볼륨이 호환되지 않으므로, CUBRID 9.0 Beta 및 이전 버전 사용자는 반드시 **데이터베이스를  마이그레이션** 해야 한다. 이와 관련하여 :doc:`/upgrade` 절을 참고한다.
 
-다양한 SQL 함수 추가 및 인덱스 힌트 확장
-----------------------------------------
+SQL 함수 추가 및 인덱스 힌트 확장
+---------------------------------
 	* NTILIE, WIDTH_BUCKET, LEAD, LAG 함수를 추가했다.
 	* TRUNC, ROUND 함수에 날짜 타입을 인자를 사용할 수 있도록 확장했다.
 	* 새로운 인덱스 힌트 지정 구문을 지원한다.
+	* Multi UPDATE, DELETE 문에 SQL 힌트를 사용할 수 있도록 확장했다.
 	
-다국어 관련 기능 추가
----------------------
+성능 및 최적화 개선
+-------------------
+	* HA 복제 반영 성능을 크게 개선하였다.
+	* 다중 키 범위 최적화를 대폭 개선하였다.
+	* ORDER BY 절 최적화 및 GROUP BY 절 최적화를 더욱 개선하였다.
+	* 분석 함수 성능을 향상시켰다.
+	* INSERT ON DUPLICATE KEY UPDATE 문과 REPLACE 문의 성능을 개선하였다.
+	* 중복 키가 많은 인덱스에 대한 탐색 및 삭제 성능을 개선했다.
+	* 입력 삭제가 반복될 때 삭제 성능을 개선했다.
+	
+다국어 관련 기능 추가 및 안정화
+-------------------------------
+	* 테이블에 대한 콜레이션을 지원한다.
 	* SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수를 추가했다.
 	* 확장이 있는 콜레이션에서 액센트에 따라 역순으로 프랑스어를 정렬하는 콜레이션을 지원한다.
-	* 테이블에 대한 콜레이션을 지원한다.
+	* 9.0 베타 버전의 다국어 관련 제약 사항과 이슈들을 수정, 개선하였다.
 	
 Sharding 기능 개선 
 ------------------
 	* Shard key에 해당하는 shard ID를 확인할 수 있도록 하는 명령을 추가했다.
 	* Windows에서 Sharding 기능을 사용할 수 있게 되었다.
 	
-모니터링
---------
+운영 도구 개선
+--------------
 	* applyinfo 유틸리티로 복제 로그 반영 상태를 출력할 때 복제 지연 상태를 출력하도록 개선했다.
 	* killtran 유틸리티에 각 트랜잭션마다 질의의 수행 상태를 출력하는 기능을 추가했다.
 	* killtran 유틸리티에 특정 SQL을 수행하는 트랜잭션을 지정하여 트랜잭션을 제거하는 기능을 추가했다.
 	* 질의 수행이 지정한 시간을 초과하면 서버 에러 로그 및 CAS 로그 파일에 질의 실행 정보를 기록하게 하는 기능을 추가했다.
-	
+
 동작 변경
 ---------
 	* CUBRID_LANG 환경 변수가 제거되었고, 데이터베이스 문자셋을 설정하는 CUBRID_CHARSET 환경 변수 및 유틸리티 메시지 및 오류 메시지에 대한 문자셋을 설정하는 CUBRID_MSG_LANG 환경 변수가 추가되었다.
@@ -59,11 +71,12 @@ Sharding 기능 개선
 	* SQL 로그 파일 크기를 지정하는 브로커 파라미터의 기본 설정값이 100MB에서 10MB로 변경되었다.
 	* call_stack_dump_activation_list 파라미터의 동작 방식이 변경되었다.
 	
-그 외에 수많은 개선 및 수정
-----------------------------
-	* 성능, SQL, 다국어, 질의 최적화, 분할, HA, Sharding, 유틸리티, 드라이버, 오류 메시지 등 많은 이슈들을 개선 또는 수정했다.
+수많은 개선 및 수정
+-------------------
+	* 기존 버전에 존재했던 중대한 안정성 이슈들을 다수 수정하였다.
+	* 그 외에 안정성, SQL, 분할, HA, Sharding, 유틸리티, 드라이버 등 여러 부분에서 수많은 이슈들을 개선, 수정했다.
 	
-보다 자세한 변경 사항은 아래의 내용을 참고하며, 이전 버전 사용자는 :ref:`changed-behaviors91` 와 :ref:`new-cautions91` 를 반드시 확인하도록 한다.
+보다 자세한 변경 사항은 아래의 내용을 참고하며, 이전 버전 사용자는 :ref:`changed-behaviors91` 절과 :ref:`new-cautions91` 절을 반드시 확인하도록 한다.
 
 기능 추가
 =========
@@ -72,7 +85,8 @@ SQL
 ---
 
 WIDTH_BUCKET 함수 추가(CUBRIDSUS-4209)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	WIDTH_BUCKET 함수는 범위를 개수로 균등 분할하여 각 버킷마다 순차적으로 번호를 부여해준다. 즉, WIDTH_BUCKET 함수는 equiwidth histogram을 생성한다. 
 	범위는 최소값과 최대값으로 부여하며, 해당 범위를 균등 분할하여 버킷 번호를 순차적으로 1부터 할당한다. 
 
@@ -95,6 +109,7 @@ WIDTH_BUCKET 함수 추가(CUBRIDSUS-4209)
 
 NTILE 분석 함수 추가(CUBRIDSUS-9688)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	NTILE 분석 함수는 값을 균등 분할하여 각 버킷마다 순차적으로 번호를 부여해준다. 즉, NTILE 함수는 equiheight histogram을 생성해준다. 
 	
 	다음은 8명의 고객을 생년월일을 기준으로 5개의 버킷으로 행의 개수를 균등 분할하는 예이다. 1, 2, 3번 버킷에는 2개의 행이, 4,5번 버킷에는 1개의 행이 존재한다. ::
@@ -170,7 +185,6 @@ TRUNC 함수에 DATE, DATETIME, TIMESTAMP 타입을 인자로 사용할 수 있�
 		============
 		 01/01/2012
 
-
 ROUND 함수에 DATE, DATETIME, TIMESTAMP 타입을 인자로 사용할 수 있도록 확장(CUBRIDSUS-9488)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	ROUND 함수에 DATE, DATETIME, TIMESTAMP 타입을 입력하면 지정한 단위 미만을 반올림(rounding)하도록 확장했다. ::
@@ -180,7 +194,6 @@ ROUND 함수에 DATE, DATETIME, TIMESTAMP 타입을 인자로 사용할 수 있�
 		  d         
 		============
 		 01/01/2013
-
 
 새로운 인덱스 힌트 지정 구문 지원(CUBRIDSUS-6675)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -192,25 +205,33 @@ ROUND 함수에 DATE, DATETIME, TIMESTAMP 타입을 인자로 사용할 수 있�
 		
 		 SELECT * FROM tbl  WHERE col1 < 4 USING INDEX idx1(-);
 		 
+UPDATE JOIN, DELETE JOIN 문에 SQL 힌트 지정할 수 있도록 확장(CUBRIDSUS-9491)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	UPDATE JOIN, DELETE JOIN 문에 대해 ORDERED, USE_DESC_IDX, NO_COVERING_INDEX, NO_DESC_IDX, USE_NL, USE_IDX, USE_MERGE, NO_MULTI_RANGE_OPT, RECOMPILE과 같은 SQL 힌트를 사용할 수 있도록 개선했다.
+		
 다국어
 ------
 
 SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수 지원(CUBRIDSUS-9404)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	콜레이션 정보를 출력하는 SHOW COLLATION 문을 추가했다.
-	그리고, 지정한 문자열의 문자셋, 콜레이션, 콜레이션 변환도를 각각 반환하는 CHARSET 함수, COLLATION 함수, COERCIBILITY 함수를 추가했다.
+	또한 각각 지정한 문자열의 문자셋, 콜레이션, 콜레이션 변환도를 반환하는 CHARSET 함수, COLLATION 함수, COERCIBILITY 함수를 추가했다.
 
 테이블에 대한 콜레이션 지원(CUBRIDSUS-9403)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	9.0 베타 버전에서는 컬럼에 대한 콜레이션만을 지정할 수 있었으나, 9.1 버전부터 테이블에 대한 콜레이션을 지정할 수 있다. ::
 	
 		CREATE TABLE address_book (id INTEGER, name STRING, address1 STRING, address2 STRING) COLLATE utf8_en_cs;
 		
 데이터베이스 콜레이션을 시스템 콜레이션에 맞게 변경하는 유틸리티 제공(CUBRIDSUS-9495)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	데이터베이스 콜레이션(시스템 카탈로그 테이블에 정의된 콜레이션)을 시스템 콜레이션($CUBRID/conf/cubrid_locales.txt에 정의된 콜레이션)에 맞게 변경하는 유틸리티를 제공한다. ::
 	 
-		cubrid synccolldb testdb
+		% cubrid synccolldb testdb
 	
 	이와 함께, 로캘 라이브러리를 생성하는 스크립트(Linux에서는 make_locale.sh, Windows에서는 make_locale.bat) 실행 이후 기존에 생성된 데이터베이스의 콜레이션과 로캘 라이브러리의 콜레이션을 동기화하도록 cubrid synccolldb 유틸리티 실행을  요구하는 메시지를 출력하도록 수정했다.	::
 	
@@ -221,6 +242,7 @@ SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수 지원(CUBRIDSUS-
 
 역순 액센트에 따라 정렬하는 콜레이션 지원(CUBRIDSUS-9407)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	역순 액센트에 따라 캐나다 프랑스어를 정렬하는 확장 콜레이션(utf8_fr_exp_ab)을 지원한다.
 	역순 액센트에 따른 캐나다 프랑스어 정렬(Canadian French sorting by backward accents)이란 문자열 뒤에 액센트가 오는 순서를 기준으로 정렬하는 것을 의미하며, 가중치가 문자열의 끝에서부터 확인된다.
 
@@ -235,26 +257,27 @@ Sharding
 
 Shard key로 해당 shard ID 값을 얻는 명령 추가(CUBRIDSUS-9547)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	Shard key로 해당 shard id를 얻는 명령을 추가했다.
 
 	다음은 shard1이라는 shard proxy에서 shard key 1에 대한 shard ID 정보를 출력하는 명령이다. ::
 	
-		$ cubrid shard getid -b shard1 1
+		% cubrid shard getid -b shard1 1
 		
 	-f 옵션을 통해 shard id에 대한 전체 정보를 출력할 수 있다. ::
 	
-		$ cubrid shard getid -b shard1 -f 1
+		% cubrid shard getid -b shard1 -f 1
 	
 Windows 버전에서 SHARD 기능 지원(CUBRISUS-9549)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	Windows 버전에서 SHARD 기능을 지원한다. SHARD 기능을 이용하기 위해서는 9.1 버전의 드라이버를 사용해야한다. 
 
 드라이버
 --------
 
-
-[JDBC][CCI]로드 밸런싱 기능 추가(CUBRIDSUS-8675)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[JDBC][CCI] 로드 밸런싱 기능 추가(CUBRIDSUS-8675)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	CCI, JDBC의 연결 URL에 althosts를 포함하는 경우 응용 프로그램이 메인 호스트와 althosts에 지정한 호스트들에 임의의 순서로 연결되게 하는 기능을 추가했다. 아래의 예와 같이 연결 URL의 loadBalance의 값을 true로 설정하는 경우 해당 기능이 동작된다.
 
@@ -288,8 +311,8 @@ Windows 버전에서 SHARD 기능 지원(CUBRISUS-9549)
 	
 	브로커 프로세스는 CAS의 멈춤(hang)이 1분 이상 지속되는 경우 CAS를 멈춘(hang) 상태로 판단하고, 해당 CAS의 개수에 따라 해당 브로커 프로세스가 비정상으로 판단되면 정상화되기 전까지 해당 브로커로 접속을 시도하는 응용 프로그램을 차단하여, 접속 URL에 설정한 대체 호스트(altHosts)로의 접속을 유도한다.
 
-모니터링
---------
+운영 도구
+---------
 
 복제 지연 정보를 출력하도록 개선(CUBRIDSUS-9525)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -306,17 +329,18 @@ Windows 버전에서 SHARD 기능 지원(CUBRISUS-9549)
 		Delayed log page count         : 4
 		Estimated Delay                : 0 second(s)
 
-		 *** Delay in Applying Copied Log *** 
+		*** Delay in Applying Copied Log *** 
 		Delayed log page count         : 1459
 		Estimated Delay                : 22 second(s)
 
 
 트랜잭션 정보를 출력하는 tranlist 유틸리티 추가(CUBRIDSUS-9601)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	데이터베이스의 트랜잭션 정보를 출력하는 cubrid tranlist 유틸리티를 추가했다. DBA 또는 DBA 그룹에 속한 사용자만 사용할 수 있다.
 	::
 	
-		$ cubrid tranlist -s testdb
+		% cubrid tranlist -s testdb
 		
 		Tran index         User name      Host name      Process id          Program name
 		-------------------------------------------------------------------------------
@@ -353,11 +377,12 @@ killtran 유틸리티에 질의 수행 상태를 출력하는 기능 추가(CUBR
 
 killtran 유틸리티에 특정 SQL을 수행 중인 트랜잭션을 제거하는 기능 추가(CUBRIDSUS-9653)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	cubrid killtran 유틸리티에 SQL ID를 통해 특정 트랜잭션을 제거하는 기능을 추가했다.
 	
 	::
 	
-		$ cubrid killtran --query-exec-info testdb
+		% cubrid killtran --query-exec-info testdb
 	
 			Tran index     Process id    Program name              Query time    Tran time              Wait for lock holder      SQL_ID       SQL Text
 		--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -371,15 +396,16 @@ killtran 유틸리티에 특정 SQL을 수행 중인 트랜잭션을 제거하�
 		Tran index : 4
 		update [ta] [ta] set [ta].[a]= ?:1  where ([ta].[a]> ?:0 )
 
-		$ cubrid killtran --kill-sql-id=cdcb58552e320 -f testdb	
+		% cubrid killtran --kill-sql-id=cdcb58552e320 -f testdb	
 		
 killtran 유틸리티에 여러 트랜잭션을 한꺼번에 강제 종료할 수 있는 기능 추가(CUBRIDSUS-9601)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	cubrid killtran 유틸리티의 -i 옵션에 강제 종료하고자 하는 트랜잭션 ID들을 쉼표로 구분하여 입력할 수 있도록 확장하였다.
 	
 	::
 	
-		cubrid killtran -i 1,3,8 testdb
+		% cubrid killtran -i 1,3,8 testdb
 
 지정한 시간을 초과하는 질의문과 질의 실행 계획 정보를 로그에 기록하게 하는 기능(CUBRIDSUS-6987)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -390,13 +416,12 @@ killtran 유틸리티에 여러 트랜잭션을 한꺼번에 강제 종료할 �
 
 브로커 및 샤드의 실행중인 파라미터 정보를 확인하는 명령 추가(CUBRIDSUS-7771)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	브로커의 실행 중인 파라미터 정보를 확인하는 "cubrid broker info", "cubrid shard info" 명령을 추가했다.
 
-기타
-----
+	브로커의 실행 중인 파라미터 정보를 확인하는 "cubrid broker info", "cubrid shard info" 명령을 추가했다.
 
 브로커 로그 변환 및 브로커 로그 실행 유틸리티 확장(CUBRIDSUS-8804)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	브로커 로그 변환 유틸리티인 cubrid broker_log_converter에 질의문 앞에 질의 ID 커멘트를 출력하는 -i 옵션을 추가했다.
 	또한, cubrid broker_log_converter 유틸리티에 의해 변환된 출력 파일을 가지고 질의를 재수행하는 명령인 cubrid broker_log_runner 유틸리티에 질의 당 statdump 정보를 출력하는 -s, 자동 커밋 모드로 질의를 실행하게 하는 -a 옵션을 추가했다.
 
@@ -410,10 +435,11 @@ killtran 유틸리티에 여러 트랜잭션을 한꺼번에 강제 종료할 �
 
 콜레이션 변환도 변경(CUBRIDSUS-10057)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	높은 변환도가 낮은 변환도의 콜레이션으로 변환되는 정도를 나타내는 콜레이션 변환도(coercibility level)가 다음 표와 같이 변경되었다. 특히, 바이너리 콜레이션은 변환도를 낮추어, 호스트 변수와 문자열 상수에 대한 LIKE 질의 시 결과가 서로 불일치되는 일이 없도록 했다.
 	::
 	
-		CREATE TABLE tbl(s STRING COLLATE utf8_bin);
+		CREATE TABLE tbl (s STRING COLLATE utf8_bin);
 		INSERT INTO tbl VALUES('bbb');
 		SET NAMES utf8 COLLATE utf8_gen_ci;
 
@@ -458,6 +484,7 @@ killtran 유틸리티에 여러 트랜잭션을 한꺼번에 강제 종료할 �
 
 두 개 이상의 문자열 인자가 요구되는 SQL 함수에서 입력 인자가 어느 한 쪽으로 변환이 가능한 콜레이션인 경우에만 함수 수행이 가능하도록 수정(CUBRIDSUS-9920)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 	IF, CASE, DECODE, FIELD 함수 등에 두 개 이상의 인자가 주어진 경우에, 어느 한 쪽으로 변환이 가능한 콜레이션이 주어진 경우에만 함수 수행이 가능하도록 변경하였다.
 	
 	입력 인자의 콜레이션이 바이너리인 경우는 호환이 가능하다. 아래 예와 같이 utf8_bin 문자열과 iso88591_bin 문자열이 입력되면 utf8_bin 문자열은 iso88591_bin 문자셋으로 변환된다. ::
@@ -479,7 +506,8 @@ killtran 유틸리티에 여러 트랜잭션을 한꺼번에 강제 종료할 �
 
 바이너리가 아닌 콜레이션 문자열로 해시 분할 테이블을 허용하지 않도록 수정(CUBRIDSUS-10156)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	바이너리가 아닌(non-binary) 콜레이션 문자열을 사용하여 테이블을 해시 분할(hash partioning)할 수 없도록 수정했다. 	
+
+	바이너리가 아닌(non-binary) 콜레이션 문자열을 사용하여 테이블을 해시 분할(hash partitioning)할 수 없도록 수정했다. 	
 	::
 	
 		SET NAMES utf8 COLLATE utf8_de_exp_ai_ci; 
@@ -514,11 +542,19 @@ killtran 유틸리티에 여러 트랜잭션을 한꺼번에 강제 종료할 �
 
 	이와 관련하여 전체 질의 결과에서 실패한 특정 질의의 에러 번호를 확인할 수 있도록 CCI_QUERY_RESULT_ERR_NO 매크로를, 실패한 위치가 CAS인지 DBMS인지 알 수 있도록 CCI_QUERY_RESULT_RESULT 매크로의 반환 값에 에러 인식자(CAS 에러 -1, DBMS 에러 -2)를 추가했다.
 	
+	관련된 CCI_QUERY_RESULT_* 매크로들은 다음과 같다. 
+	
+	* CCI_QUERY_RESULT_RESULT
+	* CCI_QUERY_RESULT_ERR_NO
+	* CCI_QUERY_RESULT_ERR_MSG
+	* CCI_QUERY_RESULT_STMT_TYPE
+	* CCI_QUERY_RESULT_OID
+	
 [CCI] cci_property_set 함수와 cci_connect_with_url 함수의 DB 사용자와 암호 설정에 대한 동작 방식 변경(CUBRIDSUS-9393)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	cci_property_set 함수와 cci_connect_with_url 함수의 DB 사용자와 암호 설정 시 동작 방식을 통일했다. 수정 이후 다음과 같이 동작한다.
 	
-	* 인자와 URL에 둘다 값이 지정되면 인자의 값이 우선한다.
+	* 인자와 URL에 둘 다 값이 지정되면 인자의 값이 우선한다.
 	* 둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다.
 	* 둘 다 NULL이면 NULL 값으로 사용된다.
 	* DB 사용자 인자 값이 NULL이면 "public", 암호 인자 값이 NULL이면 NULL로 설정된다.
@@ -568,9 +604,8 @@ SQL 로그 파일 크기를 지정하는 브로커 파라미터의 기본 설정
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	cubrid_broker.conf의 SQL_LOG_MAX_SIZE의 기본 설정값을 100MB에서 10MB로 줄였다. 기존 버전 사용자가 새 버전으로 업그레이드 한 이후에도 기존과 동일한 양의 SQL 로그를 남기고 싶다면 SQL_LOG_MAX_SIZE의 값을 100,000(단위: KB)으로 설정해야 한다.
 
-HA 기능
--------
-
+HA
+--
 
 HA 환경에서 노드가 to-be-active 상태에서도 SELECT 문을 처리할 수 있도록 수정(CUBRIDSUS-8896)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -587,7 +622,7 @@ HA 환경에서 노드가 to-be-active 상태에서도 SELECT 문을 처리할 �
  
 	* 브로커의 SERVICE 파라미터 값을 ON으로 설정하면 구동 중인 브로커의 상태만 출력하게 되었다. ::
  
-		cubrid broker status SERVICE=ON
+		% cubrid broker status SERVICE=ON
 		
 	* -b 옵션으로 브로커 상태 출력 시
 		* 브로커 이름은 최대 20자까지만 출력하고, 이를 초과하는 경우 이름 뒤에 ...을 출력한다.
@@ -607,10 +642,25 @@ HA 환경에서 노드가 to-be-active 상태에서도 SELECT 문을 처리할 �
 개선 및 오류 수정 
 =================
 
-성능 및 리소스 
+성능 및 최적화
 --------------
 
+HA 복제 성능 개선(CUBRIDSUS-8114)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+	HA 환경에서 복제 반영 성능이 대폭 개선되었다.
+	대량의 YCSB 벤치마크 워크로드를 마스터 서버에 주었을 때 슬레이브 서버에 반영 완료되는 복제 지연 시간을 측정한 결과는 다음과 같다.
+	
+		+-------------------+-------------------+
+		| Version           | Delay Time (sec)  |
+		+===================+===================+
+		| CUBRID 2008 R4.1  |          2366.65  |
+		+-------------------+-------------------+
+		| CUBRID 9.0 Beta   |          2238.73  |
+		+-------------------+-------------------+
+		| CUBRID 9.1        |             1.18  |
+		+-------------------+-------------------+
+	
 INSERT/DELETE 반복 수행 시 DELETE 성능 저하 개선(CUBRIDSUS-5222)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -624,6 +674,131 @@ TRUNCATE 테이블 또는 인덱스 재생성 반복 수행 이후 INSERT 등 �
 
 	TRUNCATE 테이블 또는 인덱스 재생성을 반복 수행한 이후에 INSERT 등 해당 테이블에 대한 접근 성능이 저하되는 문제를 개선했다.
 
+INSERT ON DUPLICATE KEY UPDATE, REPLACE 문의 성능 개선(CUBRIDSUS-8337)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	유일성을 위반한 레코드를 찾기 위해서 내부적으로 SELECT 문을 실행하던 기존 방식 대신 직접 인덱스를 검색하는 방법으로 수정하여 성능을 높였다. 또한, INSERT ON DUPLICATE KEY UPDATE 문을 서버에서 실행할 때 UPDATE 문을 실행하던 방식 대신 직접 수정하도록 하여 성능을 개선했다.
+
+분석 함수 성능 개선(CUBRIDSUS-8487)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	분석 함수의 성능을 개선하였다.
+	
+	* 질의에 명시된 분석 함수들이 같은 윈도우를 공유하는 경우에 대한 성능 향상
+	* 많은 그룹으로 구성되는 데이터에 대한 분석 함수 처리 성능 향상
+	* 일부분이 정렬된 데이터에 대한 분석 함수 처리 성능 향상
+	
+	::
+		
+		-- Q1: 2배 향상
+		SELECT * 
+		FROM (SELECT ROWNUM AS rn, 
+		             AVG (c1) OVER (PARTITION BY p1) a1, 
+		             AVG (c1) OVER (PARTITION BY p1) a2 
+		      FROM t) x 
+		WHERE x.rn > 999999;
+		
+		-- Q2: 2.45배 향상
+		SELECT * 
+		FROM (SELECT ROWNUM AS rn, 
+		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a1, 
+		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a2 
+		      FROM t) x 
+		WHERE x.rn > 999999;
+
+		-- Q3: 5.6배 향상
+		SELECT * 
+		FROM (SELECT ROWNUM AS rn, 
+		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a1, 
+		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a2, 
+		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a3 
+		      FROM t) x 
+		WHERE x.rn > 999999;
+		
+		-- Q4: 약 15% 향상
+		SELECT * 
+		FROM (SELECT ROWNUM AS rn, 
+		             AVG (c1) OVER (PARTITION BY p1) a1
+		      FROM t) x 
+		WHERE x.rn > 999999;
+		
+		-- Q5: 약 25% 향상
+		SELECT * 
+		FROM (SELECT ROWNUM AS rn, 
+		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a1
+		      FROM t) x 
+		WHERE x.rn > 999999;
+
+다중 키 범위 최적화 개선(CUBRIDSUS-10278)(CUBRIDSUS-6091)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	다중 키 범위 최적화(multi-key range optimization)가 대폭 개선되었다.
+	
+	* ORDER BY 칼럼이 2개 이상이라도, orderby_num()에 의해 범위가 주어져도 중간 값의 정렬을 진행하면서 결과를 수집하는 다중 키 범위 최적화가 가능하도록 개선했다. 
+	
+		::
+	
+			SELECT * 
+			FROM tbl 
+			WHERE a IN (1, 2, 3) 
+			USING INDEX idx 
+			ORDER BY col1 DESC, col2 DESC 
+			LIMIT 2;
+			
+			SELECT * 
+			FROM tbl 
+			WHERE a IN (1,3) 
+			ORDER BY b, c DESC 
+			FOR orderby_num() BETWEEN 5 AND 10;
+	
+	* 일부 JOIN 질의에서도 다중 키 범위 최적화가 가능해졌다. 
+	
+		::
+	
+			SELECT * 
+			FROM tbl1 t JOIN tbl2 s
+			ON s.b = t.b
+			WHERE t.a in (1,3) AND t.b = 1
+			ORDER BY t.c DESC, d 
+			LIMIT 10;
+
+	* 다중 키 범위 최적화를 질의 실행 계획 생성 단계에서 수행하도록 변경하여 질의 플랜을 통해서 볼 수 있다. 다중 키 범위 최적화 적용 여부는 LIMIT 절 또는 orderby_num()을 통해서 정의되는 최종 결과 크기에 따라서 결정된다. 예를 들어, 파라미터를 통해서 설정된 크기보다 큰 최종 결과를 얻고자 하는 경우에는 다중 키 범위 최적화 실행 계획은 적용되지 않는다.
+	
+ORDER BY 절의 칼럼을 타입 변환해도 결과 순서에 영향이 없으면 ORDER BY 절 최적화를 적용하도록 개선(CUBRIDSUS-7418)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	ORDER BY 절의 칼럼을 타입 변환해도 타입 변환 이전과 이후의 결과 순서가 동일한 경우, 정렬 작업을 수행하지 않고 인덱스에 의해 정렬된 값의 순서대로 가져오는 ORDER BY 절 최적화(skip order by)를 적용하도록 개선했다. ::
+	
+		CREATE TABLE t (a datetime);
+		CREATE INDEX i ON t (a);
+		
+		SELECT * FROM t 
+		WHERE a > '0000-00-00 00:00:00'
+		ORDER BY cast (a AS DATE);
+
+LIMIT 절을 포함한 GROUP BY 질의의 최적화 개선(CUBRIDSUS-6400)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	LIMIT 절을 포함한 GROUP BY 질의에 GROUP BY 생략 최적화가 적용될 때, LIMIT 절의 결과 갯수에 도달하면 곧바로 스캔을 종료하도록 개선했다. ::
+
+		CREATE TABLE t (i INT, j INT);
+		CREATE INDEX idx ON t (i);
+		
+		SELECT i, j
+		FROM t
+		WHERE i > 0
+		GROUP BY i 
+		LIMIT 5;
+
+LIMIT 절 질의 최적화 개선(CUBRIDSUS-7661)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	LIMIT N 처리 과정 중에 N+1번째 레코드까지 탐색한 후 질의 수행을 종료하지 않고 N번째 레코드를 탐색한 직후에 곧바로 질의 수행을 종료하도록 개선하였다.
+
+	::
+	
+		SELECT * FROM t1 WHERE a > 0 AND b = 1 LIMIT 3;	
+		
 브로커 응용 서버(CAS)를 최대 접속 개수까지 구동하는데 소요되는 시간 개선(CUBRIDSUS-9067)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -631,6 +806,8 @@ TRUNCATE 테이블 또는 인덱스 재생성 반복 수행 이후 INSERT 등 �
 	
 	예를 들어 MIN_NUM_APPL_SERVER이 100이고 MAX_NUM_APPL_SERVER가 400일 때, 접속을 400개까지 늘리면 브로커가 101번째 접속부터 CAS를 400개까지 하나씩 늘어나는데 기존에는 30초가 소요되었으나 수정 이후 3초로 줄어들었다.
 
+리소스
+------
 
 cubrid addvoldb 유틸리티에 디스크 출력량을 제한하는 옵션 추가(CUBRIDSUS-9521)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -658,44 +835,50 @@ cubrid addvoldb 유틸리티에 디스크 출력량을 제한하는 옵션 추�
 
 	질의 결과 정렬 시 필요한 메모리 사용 공간을 보다 정확히 예측하여 디스크를 사용해야 하는 외부 정렬(external sorting)의 가능성을 줄이도록 개선했다.
 
-INSERT ON DUPLICATE KEY UPDATE, REPLACE 문의 성능 개선(CUBRIDSUS-8337)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	유일성을 위반한 레코드를 찾기 위해서 내부적으로 SELECT 문을 실행하던 기존 방식 대신 직접 인덱스를 검색하는 방법으로 수정하여 성능을 높였다. 또한, INSERT ON DUPLICATE KEY UPDATE 문을 서버에서 실행할 때 UPDATE 문을 실행하던 방식 대신 직접 수정하도록 하여 성능을 개선했다.
-
 자동으로 볼륨이 증가될 때 한 번에 여러 개의 볼륨이 생성되는 문제(CUBRIDSUS-10295)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	여러 클라이언트가 자동 볼륨 확장을 동시에 요구했을 때 한 번에 여러 개의 볼륨이 추가되는 문제를 수정했다.
 
-SQL
----
+안정성
+------
 
-다중 왼쪽 조인 질의에 WHERE 절 조건이 있으면 잘못된 질의 결과를 출력하는 문제 수정(CUBRIDSUS-8867) 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+잠금 관리자의 내부 문제로 인해 DB 서버 프로세스의 동작이 멈추는(hang) 현상(CUBRIDSUS-10329)(CUBRIDSUS-10009)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	아래의 예와 같이 왼쪽 조인(left outer join)이 세 번 이상 중첩된 질의에 WHERE 절 조건이 있으면 잘못된 질의 결과를 출력하는 문제를 수정했다. 
-	::
+	잠금 관리자의 문제로 인해서 잠금 획득 과정에서 서버 프로세스가 더 이상 진행하지 못하고 멈출 수 있는 문제점과 잠금 대기 과정에서의 내부 오류로 인해서 잠금을 잘못 대기하여 결국 서버가 진행하지 못하는 문제점들을 수정했다. 
 	
-		SELECT *
-		FROM tblA LEFT OUTER JOIN tblB ON tblA.pkey = tblB.pkey
-		          LEFT OUTER JOIN tblC ON tblB.p2key = tblC.p2key
-		          LEFT OUTER JOIN tblD ON tblC.p3key = tblD.p3key 
-		WHERE tblD.p3key = 1;
-		
-CLOB_TO_CHAR 함수의 인자에 변환될 문자열의 문자셋을 지정할 수 있도록 확장(CUBRIDSUS-9467)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+교착 상태 감지시 발생 가능한 메모리 누수와 서버가 비정상 종료될 수 있는 문제(CUBRIDSUS-10378)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	CLOB_TO_CHAR 함수를 통해서 변환될 문자열의 문자셋을 지정할 수 있도록 확장하였다. 
-	::
+	교착 상태 감지시 특정 상황에서 발생할 수 있는 메모리 누수 문제와 서버가 비정상 종료될 수 있는 문제를 수정했다.
+
+체크포인트 이후에도 보관 로그가 정리되지 않는 현상(CUBRIDSUS-9848)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	복구 시간 단축을 위해 데이터를 DB 볼륨에 갱신(flush)하는 체크포인트 수행 이후에도 보관 로그가 정리되지 않는 현상을 수정했다.
+	데이터의 갱신이 빈번한 상황에서 체크포인트가 수행되면 이 현상이 발생할 가능성이 높다.
+	수정 이전 버전에서는 해당 현상 발생 시 체크포인트 발생 시점이 갱신되지 않아 보관 로그를 유지해야 했으나, 수정 이후 체크포인트 발생 시점 이전의 보관 로그는 정리될 수 있도록 수정했다. 
+
+독립 모드에서 새로운 페이지 할당 도중에 체크포인트가 발생하면 오류가 발생할 수 있는 문제(CUBRIDSUS-10444)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	독립(Stand Alone) 모드에서 데이터가 입력되는 등으로 인해 새로운 페이지가 할당되는 도중에 체크포인트가 발생하면 "Skip invalid page in checkpoint." 오류가 발생할 수 있는 문제를 수정했다.
+
+CAS가 CLIENT WAIT인 상태에서 동작을 멈출 수 있는 문제(CUBRIDSUS-10238)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	CAS가 특정 시점에 시그널로 인해 종료되거나 비정상 종료되면 그 이후로 해당 번호의 CAS 또는 브로커 프로세스가 정상적으로 동작하지 못하고 무한히 대기할 수 있는 문제를 수정했다.
 	
-		SELECT CLOB_TO_CHAR(contents USING utf8) FROM documents;
+CAS에서 DB 서버 에러 수신 도중 네트워크 소켓 에러가 발생하면 CAS가 비정상 종료하는 현상(CUBRIDSUS-10401) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-UPDATE JOIN 또는 DELETE JOIN 문에 SQL 힌트 지정할 수 있도록 확장(CUBRIDSUS-9491)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	CAS에서 DB 서버 에러를 수신하는 도중에 네트워크 소켓 에러가 발생하는 경우 CAS가 비정상 종료하는 현상을 수정했다.
+	수정 이전 버전에서 이러한 현상이 발생할 수 있는 예로, 샤드 환경에서 shard CAS 프로세스의 개수를 설정하는 cubrid_shard.conf의 MAX_NUM_APPL_SERVER 값이 서버가 허용하는 최대 접속 개수를 설정하는 cubrid.conf의 max_clients 값보다 크도록 설정한 상태에서 "cubrid shard start"를 수행하면 SHARD CAS가 비정상 종료하는 현상이 발생한다.
 
-	UPDATE JOIN 또는 DELETE JOIN 문에 대해 ORDERED, USE_DESC_IDX, NO_COVERING_INDEX, NO_DESC_IDX, USE_NL, USE_IDX, USE_MERGE, NO_MULTI_RANGE_OPT, RECOMPILE과 같은 SQL 힌트를 사용할 수 있도록 개선했다.
-		
+SQL 함수와 연산자
+-----------------
+
 분석 함수의 PARTITION BY 절에 표현식을 지정하면 오류 발생하는 문제 수정(CUBRIDSUS-9579)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -735,16 +918,101 @@ BIGINT 타입에 TIME 타입의 값을 더할 때 오버플로우 발생시 오�
 	
 		SELECT CAST(9223372036854775807 as bigint) + TIME'11:59:59 pm';
 	
+SUM, AVG 함수의 호스트 변수 인자에 double 타입으로 변환 가능한 문자열을 입력하는 경우 오류 발생 현상(CUBRIDSUS-8789)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	SUM, AVG 함수의 호스트 변수 인자로 double 타입으로 변환 가능한 문자열을 입력하는 경우 "ERROR: Invalid data type referenced." 오류를 출력하는 현상을 수정했다. ::
+	
+		CREATE TABLE tbl (a INT);
+		INSERT INTO tbl VALUES (1),(2);
+		
+		PREPARE STMT FROM 'SELECT AVG(?) FROM tbl';
+		EXECUTE STMT USING '1.1';
+
+GROUP BY 절을 포함한 질의문에서 분석 함수를 사용하면 오류가 발생하는 문제(CUBRIDSUS-7270)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	GROUP BY 절을 포함한 질의문에서 분석 함수를 사용할 수 있도록 수정했다. ::
+			
+		SELECT a, ROW_NUMBER() OVER(ORDER BY a) FROM tbl GROUP BY a;
+		
+		-- 수정 이전 버전에서는 다음의 오류가 발생했다.
+		ERROR:  before '  from tbl group by a; '
+		Nested or invalid use of aggregate function.
+
+FROM 절을 생략한 질의문에서 SQL 함수의 입력 인자로 부질의가 지정되면 오류가 발생하는 현상(CUBRIDSUS-9949)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	FROM 절을 생략한 질의문에서 SQL 함수의 입력 인자로 부질의가 지정되면 "ERROR: syntax is ambiguous" 오류가 발생하는 현상을 수정했다. ::
+	
+		SELECT INET_NTOA((SELECT 3232235530));
+
+SQL 함수나 연산자에 NULL이 주어지면 NULL을 반환하도록 수정(CUBRIDSUS-10324)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	NULL을 특수하게 처리하는 연산자(예를 들어, IS NULL 등)과 SQL 함수(예를 들어, NVL 등) 외에는 피연산자나 인자로 NULL이 주어지면 결과로 항상 NULL을 반환하도록 수정했다. ::
+	
+		SELECT POW('a', NULL);
+
+		-- 수정 이전 버전에서 위의 질의를 수행하면 아래와 같은 오류가 발생하지만, 9.1 버전부터는 NULL을 반환한다.
+		
+		ERROR: before ' , null); '
+		Cannot coerce 'a' to type double.
+		
+SPACE 함수에 대해 함수 인덱스를 생성할 수 없도록 수정(CUBRIDSUS-10419)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	SPACE 함수는 인덱스 스캔 입장에서 무의미한 일련의 공백 문자를 반환하므로 SPACE 함수에 대한 함수 인덱스 생성을 허용하지 않도록 수정했다. ::
+	
+		CREATE INDEX i_tbl_col ON tbl(SPACE(col1));
+
+		-- 수정 이후 위의 질의를 수행하면 아래 오류 메시지를 출력한다.
+		'space ' function cannot be used for function based index.
+
+TO_CHAR 함수의 인자가 문자열 타입인 경우 함수 기반 인덱스를 허용하지 않도록 제한(CUBRIDSUS-8977)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	TO_CHAR 함수의 첫번째 인자가 문자열 타입인 경우에 주어진 인자가 함수 결과로 그대로 반환된다. 이와 같은 경우에 함수 기반 인덱스를 생성할 수 없도록 제한했다.
+
+IN 연산자에 ENUM 타입 칼럼과 문자열이 피연산자로 주어지면 서버 프로세스가 비정상 종료되는 문제(CUBRIDSUS-10586)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	IN 연산자의 피연산자로 ENUM 타입 칼럼과 집합이 아닌 단순 문자열이 주어지면 오류를 반환하지 않고 서버 프로세스가 비정상 종료하는 문제를 수정했다. IN 연산자의 RHS 피연산자는 집합이나 부질의가 주어져야 하므로, 이 경우에는 문자열을 괄호로 묶어 집합 타입을 지정해야 한다. ::
+
+		CREATE TABLE t1 (fruit ENUM ('apple', 'orange', 'peach', 'banana', 'strawberry'));
+		INSERT INTO t1 VALUES ('orange');
+
+		-- 아래 질의를 수행하면 9.0 베타 버전의 서버 프로세스가 비정상 종료된다.
+		SELECT * FROM t1 WHERE fruit IN 'apple';
+		
+		-- 정상적인 질의는 다음과 같다.
+		SELECT * FROM t1 WHERE fruit IN ('apple');
+
+SQL
+---
+
+다중 왼쪽 조인 질의에 WHERE 절 조건이 있으면 잘못된 질의 결과를 출력하는 문제 수정(CUBRIDSUS-8867) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	아래의 예와 같이 왼쪽 조인(left outer join)이 세 번 이상 중첩된 질의에 WHERE 절 조건이 있으면 잘못된 질의 결과를 출력하는 문제를 수정했다. 
+	::
+	
+		SELECT *
+		FROM tblA LEFT OUTER JOIN tblB ON tblA.pkey = tblB.pkey
+		          LEFT OUTER JOIN tblC ON tblB.p2key = tblC.p2key
+		          LEFT OUTER JOIN tblD ON tblC.p3key = tblD.p3key 
+		WHERE tblD.p3key = 1;
+		
 데이터베이스 이름을 변경한 후 LOB 타입의 연산 수행에 실패하는 문제 수정(CUBRIDSUS-8905)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	데이터베이스 이름 변경 과정에서 BLOC/CLOB 타입에 대한 디렉터리 정보가 설정되지 않아, CHAR_TO_BLOB 함수와 같은 LOB 타입 연산 수행에 실패하는 문제를 수정했다. ::
 	
-		cubrid createdb --db-volume-size=20m testdb
-		cubrid renamedb testdb testdb2
-		cubrid server start testdb2
+		% cubrid createdb --db-volume-size=20m testdb
+		% cubrid renamedb testdb testdb2
+		% cubrid server start testdb2
 
-		csql -u dba testdb2
+		% csql -u dba testdb2
 		
 		csql> CREATE TABLE tbl(b BLOB);
 		csql> INSERT INTO tbl VALUES(CHAR_TO_BLOB('1'));
@@ -770,6 +1038,11 @@ BIGINT 타입에 TIME 타입의 값을 더할 때 오버플로우 발생시 오�
 		PREPARE s FROM 'SELECT col1,col2 FROM foo WHERE col1=? AND ((col2=? AND col3<?) OR col2>?);';
 		EXECUTE s USING 1, 10, 100, 10;
 
+자동 커밋 모드에서 다중 질의를 한 번에 수행하면 자동 커밋되지 않는 문제(CUBRIDSUS-7606)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	자동 커밋 모드에서, 예를 들어 "CREATE TABLE a(col int); INSERT INTO a VALUES (1);"와 같이 한 번에 여러 개의 질의를 수행하면 자동 커밋되지 않는 문제를 수정했다.
+
 ORDER BY 절을 포함한 뷰를 SELECT할 때 서버가 비정상 종료하는 현상(CUBRIDSUS-9331)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -788,11 +1061,6 @@ ORDER BY 절을 포함한 뷰를 SELECT할 때 서버가 비정상 종료하는 
 
 		SELECT u_name FROM au;
 
-자동 커밋 모드에서 다중 질의를 한 번에 수행하면 자동 커밋되지 않는 문제(CUBRIDSUS-7606)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	자동 커밋 모드에서, 예를 들어 "CREATE TABLE a(col int); INSERT INTO a VALUES (1);"와 같이 한 번에 여러 개의 질의를 수행하면 자동 커밋되지 않는 문제를 수정했다.
-
 테이블과 같은 이름을 가지는 뷰를 생성하는 오류(CUBRIDSUS-3091)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -803,67 +1071,6 @@ ORDER BY 절을 포함한 뷰를 SELECT할 때 서버가 비정상 종료하는 
 		
 		ERROR: Class t1 already exists.
 		
-자식 테이블의 기본 키를 참조하는 외래 키에 설정한 "ON DELETE CASCADE" 속성이 동작하지 않는 오류(CUBRIDSUS-3493)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	특정 테이블로부터 상속받은 자식 테이블의 기본 키를 참조하는 외래 키에 "ON DELETE CASCADE" 속성이 있음에도 불구하고
-	해당 자식 테이블에 대해 DELETE를 수행해도 이를 참조하는 테이블의 레코드가 삭제되지 않는 오류를 수정했다. ::
-
-		CREATE TABLE pk_super10 (id INT PRIMARY KEY);
-		CREATE TABLE pk20 UNDER pk_super10 (A INT);
-		CREATE TABLE fk20 (id INT);
-		ALTER TABLE fk20 ADD CONSTRAINT FOREIGN KEY(id) REFERENCES pk20(id) ON DELETE CASCADE;
-
-		INSERT INTO pk20 VALUES (1,1), (2,2), (3,3);
-		INSERT INTO fk20 VALUES (1), (1), (2);
-
-		DELETE FROM pk20 WHERE a = 1;
-		SELECT COUNT(*) FROM fk20;  -- 수정 이전에는 DELETE CASCADE가 동작하지 않아 3건, 수정 이후 정상 동작하여 1건
-
-MERGE 문의 대상 테이블의 레코드가 여러 번 수정될 수 있는 잘못된 MERGE 문을 허용하는 문제 수정(CUBRIDSUS-7489)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	MERGE 문의 대상 테이블에서 UPDATE 대상이 되는 레코드를 잘못 지정한 경우에도 오류를 반환하지 않고 해당 레코드를 여러 번 반복해서 UPDATE하는 문제를 수정했다. 전체 MERGE 문장 수행 과정 중에 각 레코드가 한번만 수정될 수 있도록 질의가 주어져야 한다. ::
-
-		CREATE TABLE t1 (a INT, b INT);
-		INSERT INTO t1 VALUES (1, 100);
-
-		CREATE TABLE t2 (a INT, b INT);
-		INSERT INTO t2 VALUES (1, 200);
-		INSERT INTO t2 VALUES (1, 300);
-
-		-- 수정 이후 아래 질의 수행 시 오류를 반환한다.
-		MERGE INTO t1 USING t2 ON (t1.a = t2.a)
-		WHEN MATCHED THEN UPDATE SET t1.b = t2.b;
-
-부질의에 사용되는 ORDER BY 절의 칼럼이 부질의의 SELECT 리스트에 없는 경우 잘못된 결과를 출력하는 문제(CUBRIDSUS-8931)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	부질의(subquery)에 사용되는 ORDER BY 절의 칼럼이 부질의의 SELECT 리스트에 명시되지 않은 경우에 잘못된 결과를 출력하거나 오류를 출력(9.0 Beta만 해당)하는 문제를 수정했다. ::
-
-		SELECT a FROM foo WHERE a IN (SELECT a FROM foo WHERE b = 'AAA' ORDER BY b, c);
-	
-WITH CHECK OPTION 절을 포함하는 뷰에 대해 MERGE 문 수행 시 실패하는 문제(CUBRIDSUS-9174)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	WITH CHECK OPTION 절을 포함한 뷰에 대해 MERGE 문 수행 시 오류가 발생되는 문제를 수정했다. ::
-
-		CREATE TABLE t1 (a INT, b INT);
-		INSERT INTO t1 VALUES (1, 100);
-		INSERT INTO t1 VALUES (2, 200);
-		
-		CREATE TABLE t2 (a INT, b INT);
-		INSERT INTO t2 VALUES (1, 99);
-		INSERT INTO t2 VALUES (2, 999);
-		
-		CREATE VIEW v as SELECT * FROM t1 WHERE b < 150 WITH CHECK OPTION;
-
-		MERGE INTO v USING t2 ON (t2.a=v.a)
-		WHEN MATCHED THEN UPDATE SET v.b=t2.b;
-
-		-- 위의 질의 수행이 성공해야 하나 수정 이전 버전에서는 아래의 오류 메시지가 출력되었다.
-		ERROR: Check option exception on view v.
-
 뷰 생성 시 SELECT 리스트에 명시되지 않은 칼럼을 ORDER BY 절에서 참조하면 뷰 생성하지 못하는 문제(CUBRIDSUS-9345)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -905,6 +1112,175 @@ ORDER BY 절을 포함한 뷰에 대해서 DISTINCT 질의 수행 시 잘못된 
 		SELECT b FROM foo; -- Q1
 		SELECT b FROM v1;  -- Q2
 		
+자기 자신을 참조하는 뷰가 생성되는 문제(CUBRIDSUS-3090)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	자기 자신을 참조하는 뷰 생성이 불가능하도록 수정했다. 이전 버전에서는 이와 같은 뷰가 생성되고, 해당 뷰에 대한 질의 시에 오류가 반환되었다. ::
+	
+		CREATE VIEW v2 AS SELECT * FROM t1;
+		-- 수정 이후에는 아래의 질의 수행을 허용하지 않는다.
+		CREATE OR REPLACE VIEW v2 AS SELECT * FROM v2;
+		
+LIMIT 절을 포함한 뷰에 대해 INSERT 수행 시 응용 프로그램이 비정상 종료하는 현상(CUBRIDSUS-9940)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	::
+	
+		CREATE TABLE t (s string);
+		CREATE VIEW tv AS SELECT s FROM t ORDER BY s LIMIT 2;
+		
+		INSERT INTO tv VALUES ('a');
+
+WITH CHECK OPTION 절을 포함한 뷰에 대해 MERGE 문 수행 시 조건 위배를 검출하지 못하는 문제(CUBRIDSUS-10219)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	
+	9.0 베타 버전에서는 아래와 같은 MERGE 문 수행 중에 WITH CHECK OPTION 조건을 위배하는 것을 검출하지 못하고 질의를 수행하는 문제가 있었다. ::
+	
+		CREATE TABLE t1 (a INT, b INT);
+		INSERT INTO t1 VALUES (1, 500);
+		
+		CREATE TABLE t2 (a INT, b INT);
+		INSERT INTO t2 VALUES (1, 400);
+		INSERT INTO t2 VALUES (2, 200);
+
+		CREATE VIEW v AS SELECT * FROM t1 WHERE b < 300 WITH CHECK OPTION;
+
+		MERGE INTO v USING t2 ON (t2.a = v.a)
+		WHEN NOT MATCHED THEN INSERT VALUES (t2.a, t2.b);
+		
+VALUES 절을 이용하여 생성한 뷰에 대한 SELECT 질의가 오류를 발생시키는 문제(CUBRIDSUS-9982)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	::
+	
+		CREATE VIEW vw as VALUES (1 AS col1, 'first' AS col2); 
+		SELECT * FROM vw;
+		
+		-- 9.0 Beta 버전에서는 다음 오류가 발생했다.
+		ERROR: There are more attributes in class vw than columns in the query specification.
+
+WITH CHECK OPTION 절을 포함하는 뷰에 대해 MERGE 문 수행 시 실패하는 문제(CUBRIDSUS-9174)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	WITH CHECK OPTION 절을 포함한 뷰에 대해 MERGE 문 수행 시 오류가 발생되는 문제를 수정했다. ::
+
+		CREATE TABLE t1 (a INT, b INT);
+		INSERT INTO t1 VALUES (1, 100);
+		INSERT INTO t1 VALUES (2, 200);
+		
+		CREATE TABLE t2 (a INT, b INT);
+		INSERT INTO t2 VALUES (1, 99);
+		INSERT INTO t2 VALUES (2, 999);
+		
+		CREATE VIEW v as SELECT * FROM t1 WHERE b < 150 WITH CHECK OPTION;
+
+		MERGE INTO v USING t2 ON (t2.a=v.a)
+		WHEN MATCHED THEN UPDATE SET v.b=t2.b;
+
+		-- 위의 질의 수행이 성공해야 하나 수정 이전 버전에서는 아래의 오류 메시지가 출력되었다.
+		ERROR: Check option exception on view v.
+
+MERGE 문의 대상 테이블의 레코드가 여러 번 수정될 수 있는 잘못된 MERGE 문을 허용하는 문제 수정(CUBRIDSUS-7489)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	MERGE 문의 대상 테이블에서 UPDATE 대상이 되는 레코드를 잘못 지정한 경우에도 오류를 반환하지 않고 해당 레코드를 여러 번 반복해서 UPDATE하는 문제를 수정했다. 전체 MERGE 문장 수행 과정 중에 각 레코드가 한번만 수정될 수 있도록 질의가 주어져야 한다. ::
+
+		CREATE TABLE t1 (a INT, b INT);
+		INSERT INTO t1 VALUES (1, 100);
+
+		CREATE TABLE t2 (a INT, b INT);
+		INSERT INTO t2 VALUES (1, 200);
+		INSERT INTO t2 VALUES (1, 300);
+
+		-- 수정 이후 아래 질의 수행 시 오류를 반환한다.
+		MERGE INTO t1 USING t2 ON (t1.a = t2.a)
+		WHEN MATCHED THEN UPDATE SET t1.b = t2.b;
+
+MERGE 문이 오동작하는 문제(CUBRIDSUS-9158)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	MERGE 문에서 원본 테이블을 참조하는 부질의를 대상 테이블로 사용할 때 오동작하는 현상을 수정했다. ::
+
+		MERGE INTO t1 USING (SELECT * FROM t1 WHERE b < 3) t2 ON (t1.a = t2.a) 
+		WHEN MATCHED THEN UPDATE SET t1.b = 1000 DELETE WHERE t1.a > 1;
+		WHEN MATCHED THEN UPDATE SET t1.b = 1000 DELETE WHERE t1.a > 1;
+		
+	또한 MERGE 문에서 분할 테이블을 UPDATE한 이후 해당 데이터가 DELETE되지 않는 현상을 수정했다. ::
+	
+		MERGE INTO t2 USING t1 ON (t1.id1 = t2.id2) 
+		WHEN MATCHED THEN UPDATE SET t2.col1 = 'updated', t2.col2 = t1.col1
+		DELETE WHERE t2.col1 = 'updated';
+		
+원본과 대상 테이블이 같으면 MERGE 문을 허용하지 않는 문제(CUBRIDSUS-10207)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	9.0 베타 버전에서는 아래와 같이 원본과 대상 테이블이 같은 경우에 "Cannot affect the source table in a MERGE statement." 오류를 반환하였다. ::
+	
+		MERGE INTO tbl t USING tbl s ON (t.a = s.a)
+		WHEN MATCHED THEN UPDATE SET t.b='updated';
+
+UPDATE JOIN 수행 시 영향을 받는 레코드 개수가 잘못 출력되는 현상(CUBRIDSUS-7185)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	UPDATE JOIN 질의가 한 레코드를 여러 번 UPDATE하고, 이로 인해서 영향을 받는 레코드(affected rows) 수가 잘못 출력되는 현상을 수정했다. ::
+	
+		CREATE TABLE t1 (a INT);
+		INSERT INTO t1 VALUES (1), (1), (1), (1);
+
+		CREATE TABLE t2 (b INT);
+		INSERT INTO t2 VALUES (1), (1), (1), (1);
+		
+		UPDATE t1 m1, t2 m2 SET m1.a = 100, m2.b = 100 WHERE m1.a = m2.b;
+		
+		-- 수정 이후 8 rows가 정상 출력된다. 9.0 베타 버전에서는 32 rows가 출력되었다.
+		8 rows affected.
+
+서로 연관이 없는 다중 테이블 DELETE 질의 성능 개선(CUBRIDSUS-8144)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	서로 연관이 없는 다중 테이블 DELETE 질의 수행 시 불필요한 JOIN 연산을 수행하지 않도록 하여 성능을 개선했다. ::
+
+		DELETE m1, m2, m3, m4, m5, m6, m7, m8, m9, m10 
+		FROM m1, m2, m3, m4, m5, m6, m7, m8, m9, m10;
+		
+OUTER 조인 및 explicit INNER 조인의 ON 절에 ROWNUM, INST_NUM 조건을 명시할 수 없도록 수정(CUBRIDSUS-10366) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	OUTER 조인 및 explicit INNER 조인의 ON 절에 ROWNUM, INST_NUM 조건을 명시할 수 없도록 수정했다. 질의의 WHERE 절에 ROWNUM, INST_NUM 조건을 명시하는 것은 무방하다. ::
+	
+		DELETE t1, t2 FROM t1 LEFT OUTER JOIN t2 ON t1.b = t2.b AND ROWNUM < 100;
+		
+		-- 9.0 베타 버전에서는 다음과 같은 오류가 발생되었다. 
+		ERROR: System error (generate inst_num or orderby_num) in ../../src/parser/xasl_generation.c (line: 6889)
+		
+		-- 9.1 버전부터는 다음과 같은 오류가 반환된다.
+		ERROR: before ' ; '
+		INST_NUM()/ROWNUM expression not allowed in join condition.
+
+자식 테이블의 기본 키를 참조하는 외래 키에 설정한 "ON DELETE CASCADE" 속성이 동작하지 않는 오류(CUBRIDSUS-3493)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	특정 테이블로부터 상속받은 자식 테이블의 기본 키를 참조하는 외래 키에 "ON DELETE CASCADE" 속성이 있음에도 불구하고
+	해당 자식 테이블에 대해 DELETE를 수행해도 이를 참조하는 테이블의 레코드가 삭제되지 않는 오류를 수정했다. ::
+
+		CREATE TABLE pk_super10 (id INT PRIMARY KEY);
+		CREATE TABLE pk20 UNDER pk_super10 (A INT);
+		CREATE TABLE fk20 (id INT);
+		ALTER TABLE fk20 ADD CONSTRAINT FOREIGN KEY(id) REFERENCES pk20(id) ON DELETE CASCADE;
+
+		INSERT INTO pk20 VALUES (1,1), (2,2), (3,3);
+		INSERT INTO fk20 VALUES (1), (1), (2);
+
+		DELETE FROM pk20 WHERE a = 1;
+		SELECT COUNT(*) FROM fk20;  -- 수정 이전에는 DELETE CASCADE가 동작하지 않아 3건, 수정 이후 정상 동작하여 1건
+
+부질의에 사용되는 ORDER BY 절의 칼럼이 부질의의 SELECT 리스트에 없는 경우 잘못된 결과를 출력하는 문제(CUBRIDSUS-8931)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	부질의(subquery)에 사용되는 ORDER BY 절의 칼럼이 부질의의 SELECT 리스트에 명시되지 않은 경우에 잘못된 결과를 출력하거나 오류를 출력(9.0 Beta만 해당)하는 문제를 수정했다. ::
+
+		SELECT a FROM foo WHERE a IN (SELECT a FROM foo WHERE b = 'AAA' ORDER BY b, c);
+	
 NUMERIC 타입 컬럼에 호스트 변수를 이용하여 INSERT 수행 시 실패하는 문제(CUBRIDSUS-9500)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -986,17 +1362,6 @@ ORDERY BY 절 뒤에 질의문이 이어질 경우 문법 오류가 발생하는
 	
 		(SELECT * FROM tbl1 ORDER BY a) UNION (SELECT * FROM tbl2 ORDER BY b);
 		
-SUM, AVG 함수의 호스트 변수 인자에 double 타입으로 변환 가능한 문자열을 입력하는 경우 오류 발생 현상(CUBRIDSUS-8789)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	SUM, AVG 함수의 호스트 변수 인자로 double 타입으로 변환 가능한 문자열을 입력하는 경우 "ERROR: Invalid data type referenced." 오류를 출력하는 현상을 수정했다. ::
-	
-		CREATE TABLE tbl (a INT);
-		INSERT INTO tbl VALUES (1),(2);
-		
-		PREPARE STMT FROM 'SELECT AVG(?) FROM tbl';
-		EXECUTE STMT USING '1.1';
-
 click counter 질의로 인한 교착 상태 발생 후에 질의 결과 잘못되는 문제(CUBRIDSUS-5009)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1035,28 +1400,12 @@ click counter 질의로 인한 교착 상태 발생 후에 질의 결과 잘못�
 		| -- the same as above                  |                                       |
 		+---------------------------------------+---------------------------------------+
 
-GROUP BY 절을 포함한 질의문에서 분석 함수를 사용하면 오류가 발생하는 문제(CUBRIDSUS-7270)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	GROUP BY 절을 포함한 질의문에서 분석 함수를 사용할 수 있도록 수정했다. ::
-			
-		SELECT a, ROW_NUMBER() OVER(ORDER BY a) FROM tbl GROUP BY a;
-		
-		-- 수정 이전 버전에서는 다음의 오류가 발생했다.
-		ERROR:  before '  from tbl group by a; '
-		Nested or invalid use of aggregate function.
-
-DELETE, UPDATE 범위 질의에서 키 잠금 오류로 인한 고유 키 위반 오류 발생 현상(CUBRIDSUS-9382)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	여러 개의 응용 프로그램이 동시에 DELETE, UPDATE의 범위 질의를 수행할 때 키 잠금 오류로 인해 고유 키 위반 오류가 발생하는 현상을 수정했다.
-
 자동 커밋 OFF인 상태에서 테이블 생성 후 고유 키 위반 오류 이후 INSERT 문 재수행 시 -96 오류가 발생하는 현상(CUBRIDSUS-10239)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	자동 커밋 OFF인 상태에서 테이블 생성 후 INSERT 문 수행 도중 고유 키 위반 오류가 발생한 이후, INSERT 문을 재수행하면 -96번 오류가 발생하는 현상을 수정했다. ::
 
-		$ csql testdb --no-auto-commit 
+		% csql testdb --no-auto-commit 
 		
 		CREATE TABLE tbl(col1 int unique);
 		INSERT INTO tbl SELECT 500 + ROWNUM FROM db_class a, db_class b;
@@ -1068,176 +1417,10 @@ DELETE, UPDATE 범위 질의에서 키 잠금 오류로 인한 고유 키 위반
 
 		ERROR: Media recovery may be needed on volume "/home1/cubrid1/CUBRID/databases/testdb/testdb".
 
-자기 자신을 참조하는 뷰가 생성되는 문제(CUBRIDSUS-3090)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+DELETE, UPDATE 범위 질의에서 키 잠금 오류로 인한 고유 키 위반 오류 발생 현상(CUBRIDSUS-9382)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	자기 자신을 참조하는 뷰 생성이 불가능하도록 수정했다. 이전 버전에서는 이와 같은 뷰가 생성되고, 해당 뷰에 대한 질의 시에 오류가 반환되었다. ::
-	
-		CREATE VIEW v2 AS SELECT * FROM t1;
-		-- 수정 이후에는 아래의 질의 수행을 허용하지 않는다.
-		CREATE OR REPLACE VIEW v2 AS SELECT * FROM v2;
-		
-UPDATE JOIN 수행 시 영향을 받는 레코드 개수가 잘못 출력되는 현상(CUBRIDSUS-7185)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	UPDATE JOIN 질의가 한 레코드를 여러 번 UPDATE하고, 이로 인해서 영향을 받는 레코드(affected rows) 수가 잘못 출력되는 현상을 수정했다. ::
-	
-		CREATE TABLE t1 (a INT);
-		INSERT INTO t1 VALUES (1), (1), (1), (1);
-
-		CREATE TABLE t2 (b INT);
-		INSERT INTO t2 VALUES (1), (1), (1), (1);
-		
-		UPDATE t1 m1, t2 m2 SET m1.a = 100, m2.b = 100 WHERE m1.a = m2.b;
-		
-		-- 수정 이후 8 rows가 정상 출력된다. 9.0 베타 버전에서는 32 rows가 출력되었다.
-		8 rows affected.
-
-논리 표현식을 괄호 없이 사용할 수 있도록 확장(CUBRIDSUS-7392)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	논리 표현식(logical expression)을 괄호 없이 사용할 수 있도록 수정했다. ::
-	
-		-- 수정 이전 버전에서는 아래 질의의 논리 표현식에서 반드시 괄호를 명시해야 했다. 
-		SELECT * FROM t1 ORDER BY (code > 10);
-		SELECT SUM((code>10)) FROM t1;
-
-서로 연관이 없는 다중 테이블 DELETE 질의 성능 개선(CUBRIDSUS-8144)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	서로 연관이 없는 다중 테이블 DELETE 질의 수행 시 불필요한 JOIN 연산을 수행하지 않도록 하여 성능을 개선했다. ::
-
-		DELETE m1, m2, m3, m4, m5, m6, m7, m8, m9, m10 
-		FROM m1, m2, m3, m4, m5, m6, m7, m8, m9, m10;
-		
-MERGE 문이 오동작하는 문제(CUBRIDSUS-9158)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	MERGE 문에서 원본 테이블을 참조하는 부질의를 대상 테이블로 사용할 때 오동작하는 현상을 수정했다. ::
-
-		MERGE INTO t1 USING (SELECT * FROM t1 WHERE b < 3) t2 ON (t1.a = t2.a) 
-		WHEN MATCHED THEN UPDATE SET t1.b = 1000 DELETE WHERE t1.a > 1;
-		WHEN MATCHED THEN UPDATE SET t1.b = 1000 DELETE WHERE t1.a > 1;
-		
-	또한 MERGE 문에서 분할 테이블을 UPDATE한 이후 해당 데이터가 DELETE되지 않는 현상을 수정했다. ::
-	
-		MERGE INTO t2 USING t1 ON (t1.id1 = t2.id2) 
-		WHEN MATCHED THEN UPDATE SET t2.col1 = 'updated', t2.col2 = t1.col1
-		DELETE WHERE t2.col1 = 'updated';
-		
-LIMIT 절을 포함한 뷰에 대해 INSERT 수행 시 응용 프로그램이 비정상 종료하는 현상(CUBRIDSUS-9940)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	::
-	
-		CREATE TABLE t (s string);
-		CREATE VIEW tv AS SELECT s FROM t ORDER BY s LIMIT 2;
-		
-		INSERT INTO tv VALUES ('a');
-
-FROM 절을 생략한 질의문에서 SQL 함수의 입력 인자로 부질의가 지정되면 오류가 발생하는 현상(CUBRIDSUS-9949)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	FROM 절을 생략한 질의문에서 SQL 함수의 입력 인자로 부질의가 지정되면 "ERROR: syntax is ambiguous" 오류가 발생하는 현상을 수정했다. ::
-	
-		SELECT INET_NTOA((SELECT 3232235530));
-
-SQL 함수나 연산자에 NULL이 주어지면 NULL을 반환하도록 수정(CUBRIDSUS-10324)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	NULL을 특수하게 처리하는 연산자(예를 들어, IS NULL 등)과 SQL 함수(예를 들어, NVL 등) 외에는 피연산자나 인자로 NULL이 주어지면 결과로 항상 NULL을 반환하도록 수정했다. ::
-	
-		SELECT POW('a', NULL);
-
-		-- 수정 이전 버전에서 위의 질의를 수행하면 아래와 같은 오류가 발생하지만, 9.1 버전부터는 NULL을 반환한다.
-		
-		ERROR: before ' , null); '
-		Cannot coerce 'a' to type double.
-		
-WITH CHECK OPTION 절을 포함한 뷰에 대해 MERGE 문 수행 시 조건 위배를 검출하지 못하는 문제(CUBRIDSUS-10219)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	
-	9.0 베타 버전에서는 아래와 같은 MERGE 문 수행 중에 WITH CHECK OPTION 조건을 위배하는 것을 검출하지 못하고 질의를 수행하는 문제가 있었다. ::
-	
-		CREATE TABLE t1 (a INT, b INT);
-		INSERT INTO t1 VALUES (1, 500);
-		
-		CREATE TABLE t2 (a INT, b INT);
-		INSERT INTO t2 VALUES (1, 400);
-		INSERT INTO t2 VALUES (2, 200);
-
-		CREATE VIEW v AS SELECT * FROM t1 WHERE b < 300 WITH CHECK OPTION;
-
-		MERGE INTO v USING t2 ON (t2.a = v.a)
-		WHEN NOT MATCHED THEN INSERT VALUES (t2.a, t2.b);
-		
-원본과 대상 테이블이 같으면 MERGE 문을 허용하지 않는 문제(CUBRIDSUS-10207)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	9.0 베타 버전에서는 아래와 같이 원본과 대상 테이블이 같은 경우에 "Cannot affect the source table in a MERGE statement." 오류를 반환하였다. ::
-	
-		MERGE INTO tbl t USING tbl s ON (t.a = s.a)
-		WHEN MATCHED THEN UPDATE SET t.b='updated';
-
-VALUES 절을 이용하여 생성한 뷰에 대한 SELECT 질의가 오류를 발생시키는 문제(CUBRIDSUS-9982)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	::
-	
-		CREATE VIEW vw as VALUES (1 AS col1, 'first' AS col2); 
-		SELECT * FROM vw;
-		
-		-- 9.0 Beta 버전에서는 다음 오류가 발생했다.
-		ERROR: There are more attributes in class vw than columns in the query specification.
-
-SPACE 함수에 대해 함수 인덱스를 생성할 수 없도록 수정(CUBRIDSUS-10419)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	SPACE 함수는 인덱스 스캔 입장에서 무의미한 일련의 공백 문자를 반환하므로 SPACE 함수에 대한 함수 인덱스 생성을 허용하지 않도록 수정했다. ::
-	
-		CREATE INDEX i_tbl_col ON tbl(SPACE(col1));
-
-		-- 수정 이후 위의 질의를 수행하면 아래 오류 메시지를 출력한다.
-		'space ' function cannot be used for function based index.
-
-OUTER 조인 및 explicit INNER 조인의 ON 절에 ROWNUM, INST_NUM 조건을 명시할 수 없도록 수정(CUBRIDSUS-10366) 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	OUTER 조인 및 explicit INNER 조인의 ON 절에 ROWNUM, INST_NUM 조건을 명시할 수 없도록 수정했다. 질의의 WHERE 절에 ROWNUM, INST_NUM 조건을 명시하는 것은 무방하다. ::
-	
-		DELETE t1, t2 FROM t1 LEFT OUTER JOIN t2 ON t1.b = t2.b AND ROWNUM < 100;
-		
-		-- 9.0 베타 버전에서는 다음과 같은 오류가 발생되었다. 
-		ERROR: System error (generate inst_num or orderby_num) in ../../src/parser/xasl_generation.c (line: 6889)
-		
-		-- 9.1 버전부터는 다음과 같은 오류가 반환된다.
-		ERROR: before ' ; '
-		INST_NUM()/ROWNUM expression not allowed in join condition.
-
-		
-OR 연산자의 피연산자로 항상 거짓인 조건들이 주어졌을 때 질의 결과가 잘못되는 문제(CUBRIDSUS-10475)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	::
-	
-		CREATE TABLE tab0 (col1 INT);                                        
-		INSERT INTO tab0 VALUES (514);                                             
-		INSERT INTO tab0 VALUES (698);
-		
-		-- 아래 질의는 0건을 출력해야 하나 수정 이전 버전에서 2건을 출력하는 오류가 존재한다.
-		SELECT * FROM tab0 WHERE (col1 BETWEEN 9 AND 2) OR (col1 BETWEEN 5 AND 4);
-		
-IN 연산자에 ENUM 타입 칼럼과 문자열이 피연산자로 주어지면 서버 프로세스가 비정상 종료되는 문제(CUBRIDSUS-10586)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	IN 연산자의 피연산자로 ENUM 타입 칼럼과 집합이 아닌 단순 문자열이 주어지면 오류를 반환하지 않고 서버 프로세스가 비정상 종료하는 문제를 수정했다. IN 연산자의 RHS 피연산자는 집합이나 부질의가 주어져야 하므로, 이 경우에는 문자열을 괄호로 묶어 집합 타입을 지정해야 한다. ::
-
-		CREATE TABLE t1 (fruit ENUM ('apple', 'orange', 'peach', 'banana', 'strawberry'));
-		INSERT INTO t1 VALUES ('orange');
-
-		-- 아래 질의를 수행하면 9.0 베타 버전의 서버 프로세스가 비정상 종료된다.
-		SELECT * FROM t1 WHERE fruit IN 'apple';
-		
-		-- 정상적인 질의는 다음과 같다.
-		SELECT * FROM t1 WHERE fruit IN ('apple');
+	여러 개의 응용 프로그램이 동시에 DELETE, UPDATE의 범위 질의를 수행할 때 키 잠금 오류로 인해 고유 키 위반 오류가 발생하는 현상을 수정했다.
 
 중복되는 키가 많아지면서 인덱스 노드의 분할 오류로 인해 INSERT 문 수행에 실패하는 문제(CUBRIDSUS-9829)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1258,6 +1441,27 @@ IN 연산자에 ENUM 타입 칼럼과 문자열이 피연산자로 주어지면 
  
 		ERROR: Schema manager internal corruption detected.
 
+논리 표현식을 괄호 없이 사용할 수 있도록 확장(CUBRIDSUS-7392)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	논리 표현식(logical expression)을 괄호 없이 사용할 수 있도록 수정했다. ::
+	
+		-- 수정 이전 버전에서는 아래 질의의 논리 표현식에서 반드시 괄호를 명시해야 했다. 
+		SELECT * FROM t1 ORDER BY (code > 10);
+		SELECT SUM((code>10)) FROM t1;
+
+		
+OR 연산자의 피연산자로 항상 거짓인 조건들이 주어졌을 때 질의 결과가 잘못되는 문제(CUBRIDSUS-10475)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	::
+	
+		CREATE TABLE tab0 (col1 INT);                                        
+		INSERT INTO tab0 VALUES (514);                                             
+		INSERT INTO tab0 VALUES (698);
+		
+		-- 아래 질의는 0건을 출력해야 하나 수정 이전 버전에서 2건을 출력하는 오류가 존재한다.
+		SELECT * FROM tab0 WHERE (col1 BETWEEN 9 AND 2) OR (col1 BETWEEN 5 AND 4);
+		
 문장 집합 연산자를 포함한 CREATE 문으로 생성된 테이블을 조회할 때 NULL로 조회되는 문제(CUBRIDSUS-10105)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	
@@ -1283,18 +1487,23 @@ Windows에서 "0x"로 시작하는 16진수 숫자를 나타내는 문자열을 
 		--수정 이전 버전에서 위의 질의들을 수행하면 아래의 오류 메시지를 출력했다.
 		ERROR: Cannot coerce value of domain "character" to domain "float".
 
-TO_CHAR 함수의 인자가 문자열 타입인 경우 함수 기반 인덱스를 허용하지 않도록 제한(CUBRIDSUS-8977)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	TO_CHAR 함수의 첫번째 인자가 문자열 타입인 경우에 주어진 인자가 함수 결과로 그대로 반환된다. 이와 같은 경우에 함수 기반 인덱스를 생성할 수 없도록 제한했다.
-
 32비트 버전에서 LOB 타입의 데이터를 읽어들일 때 오류 발생하는 문제(CUBRIDSUS-10437)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-::
+	::
 
-	UPDATE tbl SET b = CHAR_TO_CLOB ('2test') WHERE a = 1;
+		UPDATE tbl SET b = CHAR_TO_CLOB ('2test') WHERE a = 1;
 
+질의 계획만 보도록 설정했음에도 불구하고 SELECT 문을 제외한 나머지 질의문들이 실행되는 문제(CUBRIDSUS-9771)(CUBRIDSUS-10352)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	질의 최적화 수준을 질의 계획만 보도록 설정했음에도 불구하고 SELECT문을 제외한 INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL 문 등이 실행되는 문제가 9.0 베타 버전에 존재했으나 실행이 되지 않게 수정했다. 이전 버전에서는 일부 SQL에 대해서는 비정상 종료되는 문제가 존재했다. SELECT 문을 제외한 나머지 질의문은 질의 계획이 출력되지 않는다. ::
+		
+		SET OPTIMIZATION LEVEL 514;
+		REPLACE INTO tbl (col1, col2, col3) VALUES (1, 2, 3);
+		
+Windows 버전에서 자바 저장 프로시저를 수행하면서 질의 실행 계획을 출력할 때 실행 계획이 누적되어 출력되는 현상(CUBRIDSUS-10489)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 다국어
 ------
@@ -1438,6 +1647,14 @@ CHR 함수에 COLLATE 수정자를 사용할 수 있도록 확장(CUBRIDSUS-9939
 	
 		SELECT * FROM tbl WHERE CHR(65) COLLATE utf8_bin > 'a';
 
+CLOB_TO_CHAR 함수의 인자에 변환될 문자열의 문자셋을 지정할 수 있도록 확장(CUBRIDSUS-9467)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	CLOB_TO_CHAR 함수를 통해서 변환될 문자열의 문자셋을 지정할 수 있도록 확장하였다. 
+	::
+	
+		SELECT CLOB_TO_CHAR(contents USING utf8) FROM documents;
+
 로캘 라이브러리 생성 시 LDML 파일의 속성 값 설정 오류를 검증하도록 수정(CUBRIDSUS-10000)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	make_locale 도구(Linux 확장자는 .sh, Windows 확장자는 .bat)를 사용하여 로캘 라이브러리 생성 시 입력으로 주어진 LDML(Locale Data Markup Language) 파일의 속성 값 설정 오류를 검증하여 오류 발견 시 적절한 메시지를 출력하도록 수정했다.
@@ -1573,147 +1790,41 @@ ISO-8859-1 문자셋에서 확장 ASCII 코드에 대한 대소문자 변환이 
 		-- 9.0 베타 버전에서 아래 질의 수행 시 실패
 		SELECT s1 || s2 FROM t;
 
+허용 한계를 초과하여 PREPARE 문을 수행할 때 발생하는 오류 메시지를 잘못 출력하는 문제(CUBRIDSUS-8998)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-질의 계획 및 최적화
--------------------
+	하나의 응용 프로그램에 허용되는 최대 개수(20개)를 초과하여 PREPARE 문을 수행할 때 "ERROR: Too many prepared statements." 오류 메시지를 출력해야 하나, "ERROR: No error message available."로 잘못 출력하는 문제를 수정했다.
 
+CLOB_FROM_FILE과 BLOB_FROM_FILE 함수에 잘못된 경로의 파일이 주어지면 부정확한 오류 메시지를 출력하는 문제(CUBRIDSUS-10320)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-질의 계획만 보도록 설정했음에도 불구하고 SELECT 문을 제외한 나머지 질의문들이 실행되는 문제(CUBRIDSUS-9771)(CUBRIDSUS-10352)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	질의 최적화 수준을 질의 계획만 보도록 설정했음에도 불구하고 SELECT문을 제외한 INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL 문 등이 실행되는 문제가 9.0 베타 버전에 존재했으나 실행이 되지 않게 수정했다. 이전 버전에서는 일부 SQL에 대해서는 비정상 종료되는 문제가 존재했다. SELECT 문을 제외한 나머지 질의문은 질의 계획이 출력되지 않는다. ::
-		
-		SET OPTIMIZATION LEVEL 514;
-		REPLACE INTO tbl (col1, col2, col3) VALUES (1, 2, 3);
-		
-ORDER BY 절의 칼럼을 타입 변환해도 결과 순서에 영향이 없으면 ORDER BY 절 최적화를 적용하도록 개선(CUBRIDSUS-7418)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	ORDER BY 절의 칼럼을 타입 변환해도 타입 변환 이전과 이후의 결과 순서가 동일한 경우, 정렬 작업을 수행하지 않고 인덱스에 의해 정렬된 값의 순서대로 가져오는 ORDER BY 절 최적화(skip order by)를 적용하도록 개선했다. ::
-	
-		CREATE TABLE t (a datetime);
-		CREATE INDEX i ON t (a);
-		
-		SELECT * FROM t 
-		WHERE a > '0000-00-00 00:00:00'
-		ORDER BY cast (a AS DATE);
-
-LIMIT 절 질의 최적화 개선(CUBRIDSUS-7661)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	LIMIT N 처리 과정 중에 N+1번째 레코드까지 탐색한 후 질의 수행을 종료하지 않고 N번째 레코드를 탐색한 직후에 곧바로 질의 수행을 종료하도록 개선하였다.
-
+	CLOB_FROM_FILE과 BLOB_FROM_FILE 함수에 잘못된 경로의 파일이 입력되면 "해당 경로가 유효하지 않다"는 오류 메시지를 출력하도록 수정했다.
 	::
 	
-		SELECT * FROM t1 WHERE a > 0 AND b = 1 LIMIT 3;	
+		SELECT CLOB_FROM_FILE ('file:/home/cubrid/databases/lob/ces_722/image_t.00001357286783349177_590');
+
+		-- 2008 R4.3 이하 버전에서는 다음 오류를 출력했다.
+		ERROR: Cannot coerce clob to type unknown data type.
+
+		-- 9.0 Beta에서는 다음 오류를 출력했다.
+		Attempted to create string with illegal length - 1545942208
+
+FORMAT 함수의 인자가 숫자가 아닌 경우 부적절한 오류를 출력하는 현상(CUBRIDSUS-10426)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	FORMAT 함수의 인자가 숫자가 아닌 경우 부적절한 오류를 출력하는 문제를 수정했다. ::
+	
+		SELECT  FORMAT ('nan', 2);
 		
-다중 키 범위 최적화 개선(CUBRIDSUS-10278)(CUBRIDSUS-6091)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+		-- 수정 이전 버전에서 위의 질의를 실행하면 아래 오류를 출력했다.
+		ERROR: No error message available.
 
-	다중 키 범위 최적화(multi-key range optimization)가 대폭 개선되었다.
-	
-	* ORDER BY 칼럼이 2개 이상이라도, orderby_num()에 의해 범위가 주어져도 중간 값의 정렬을 진행하면서 결과를 수집하는 다중 키 범위 최적화가 가능하도록 개선했다. 
-	
-		::
-	
-			SELECT * 
-			FROM tbl 
-			WHERE a IN (1, 2, 3) 
-			USING INDEX idx 
-			ORDER BY col1 DESC, col2 DESC LIMIT 2;
-			
-			SELECT * 
-			FROM tbl 
-			WHERE a IN (1,3) 
-			ORDER BY b, c DESC 
-			FOR orderby_num() BETWEEN 5 AND 10;
-	
-	* 일부 JOIN 질의에서도 다중 키 범위 최적화가 가능해졌다. 
-	
-		::
-	
-			SELECT * 
-			FROM tbl1 t JOIN tbl2 s
-			ON s.b = t.b
-			WHERE t.a in (1,3) AND t.b = 1
-			ORDER BY t.c DESC, d LIMIT 10;
-
-	* orderby_num()에 최소값 조건이 있어도 다중 키 범위 최적화가 가능해졌다. 
-	
-		::
+		SELECT  FORMAT (CAST('nan' as double), 2);
 		
-			SELECT * 
-			FROM tbl
-			WHERE a in (1,3) and b = 1 and c = 1
-			ORDER BY d, e desc for orderby_num() >= 5;
+		-- 수정 이전 버전에서 위의 질의를 실행하면 아래 오류를 출력했다.
+		ERROR: Execute: Query execution failure #1326.
 
-LIMIT 절을 포함한 GROUP BY 질의의 최적화 개선(CUBRIDSUS-6400)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	LIMIT 절을 포함한 GROUP BY 질의에 GROUP BY 생략 최적화가 적용될 때, LIMIT 절의 결과 갯수에 도달하면 곧바로 스캔을 종료하도록 개선했다. ::
-
-		CREATE TABLE t (i INT, j INT);
-		CREATE INDEX idx ON t (i);
 		
-		SELECT i, j
-		FROM t
-		WHERE i > 0
-		GROUP BY i 
-		LIMIT 5;
-
-분석 함수 성능 개선(CUBRIDSUS-8487)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	분석 함수의 성능을 개선하였다.
-	
-	* 질의에 명시된 분석 함수들이 같은 윈도우를 공유하는 경우에 대한 성능 향상
-	* 많은 그룹으로 구성되는 데이터에 대한 분석 함수 처리 성능 향상
-	* 일부분이 정렬된 데이터에 대한 분석 함수 처리 성능 향상
-	
-	::
-		
-		-- Q1: 2배 향상
-		SELECT * 
-		FROM (SELECT ROWNUM AS rn, 
-		             AVG (c1) OVER (PARTITION BY p1) a1, 
-		             AVG (c1) OVER (PARTITION BY p1) a2 
-		      FROM t) x 
-		WHERE x.rn > 999999;
-		
-		-- Q2: 2.45배 향상
-		SELECT * 
-		FROM (SELECT ROWNUM AS rn, 
-		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a1, 
-		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a2 
-		      FROM t) x 
-		WHERE x.rn > 999999;
-
-		-- Q3: 5.6배 향상
-		SELECT * 
-		FROM (SELECT ROWNUM AS rn, 
-		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a1, 
-		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a2, 
-		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a3 
-		      FROM t) x 
-		WHERE x.rn > 999999;
-		
-		-- Q4: 약 15% 향상
-		SELECT * 
-		FROM (SELECT ROWNUM AS rn, 
-		             AVG (c1) OVER (PARTITION BY p1) a1
-		      FROM t) x 
-		WHERE x.rn > 999999;
-		
-		-- Q5: 약 25% 향상
-		SELECT * 
-		FROM (SELECT ROWNUM AS rn, 
-		             AVG (c1) OVER (PARTITION BY p1 ORDER BY o1) a1
-		      FROM t) x 
-		WHERE x.rn > 999999;
-		
-Windows 버전에서 자바 저장 프로시저를 수행하면서 질의 실행 계획을 출력할 때 실행 계획이 누적되어 출력되는 현상(CUBRIDSUS-10489)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 분할
 ----
 
@@ -1769,8 +1880,8 @@ Windows 버전에서 자바 저장 프로시저를 수행하면서 질의 실행
 		-- 수정 이후 아래의 조건은 위의 조건과 같이 취급하여 분할 프루닝이 수행된다.
 		SELECT * FROM t WHERE i > 20;
 
-분할 테이블에서 파티션을 제거하면 데이터가 존재함에도 불구하고 COUNT(*) 값으로 0을 출력하는 현상(CUBRIDSUS-9338)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+분할 테이블에서 분할을 제거하면 데이터가 존재함에도 불구하고 COUNT(*) 값으로 0을 출력하는 현상(CUBRIDSUS-9338)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	분할 테이블에 여러 건의 INSERT, UPDATE 또는 DELETE를 수행한 이후에 분할을 제거하면 데이터가 존재함에도 불구하고 COUNT(*) 값으로 0을 출력하는 현상을 수정했다.
 	::
@@ -1795,10 +1906,10 @@ Windows 버전에서 자바 저장 프로시저를 수행하면서 질의 실행
 		Some inconsistencies were detected in your database.
 		 Please consult error_log_file /home/CUBRID/log/testdb_checkdb.err for additional information.
 
-특정 파티션을 대상으로 하는 뷰가 updatable하지 못한 문제(CUBRIDSUS-10264)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+특정 분할을 대상으로 하는 뷰가 updatable하지 못한 문제(CUBRIDSUS-10264)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	특정 파티션을 대상으로 하는 뷰가 updatable하지 못한 문제를 수정했다.
+	특정 분할을 대상으로 하는 뷰가 updatable하지 못한 문제를 수정했다.
 	::
 	
 		CREATE TABLE tbl (col1 int, col2 int) 
@@ -1822,6 +1933,22 @@ Windows 버전에서 자바 저장 프로시저를 수행하면서 질의 실행
 		  PARTITION p0 VALUES IN (_utf8'x'),
 		  PARTITION p1 VALUES IN (_iso88591'y')
 		);
+
+뷰를 통해 분할 테이블을 업데이트할 때 에러 발생해도 영향받는 레코드 수를 잘못 출력하는 현상(CUBRIDSUS-9011)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	뷰를 통해 분할 테이블을 업데이트할 때 에러가 발생했음에도 불구하고 UPDATE 문의 영향받은 레코드(affected rows) 수를 잘못 반환되는 문제를 수정했다.
+
+	::
+	
+		CREATE TABLE t (i INT) PARTITION BY RANGE (i) (PARTITION p0 VALUES LESS THAN(3));
+		INSERT INTO t VALUES (1), (2);
+		CREATE VIEW v as SELECT * FROM t;
+		UPDATE v SET i = i + 1;
+
+		-- incorrect affected rows
+		2 rows affected.
+		ERROR: Appropriate partition does not exist.
 
 HA
 --
@@ -1936,6 +2063,13 @@ prepare 요청이 많아지면서 응답이 오지 않는 현상(CUBRIDSUS-10041
 shard proxy의 부하가 많은데 비해 CAS 개수가 적은 경우 응용 프로그램의 요청이 계속 실패하는 현상(CUBRIDSUS-10012)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+CUBRID SHARD proxy에서 인증 실패 시 적절한 에러 메시지를 출력하도록 수정(CUBRIDSUS-8839)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	CUBRID SHARD proxy에서 인증 실패 시에도 에러 메시지를 출력하지 않았으나, 다음의 예와 같이 적절한 에러 메시지를 출력하도록 수정했다.
+	::
+	
+		Authorization error.(Address is rejected)
 
 드라이버
 --------
@@ -2151,7 +2285,7 @@ CSQL에서 SQL 실행 시간을 기본으로 출력하도록 변경(CUBRIDSUS-95
 
 	::
 	
-		csql -u dba --sysadm testdb
+		% csql -u dba --sysadm testdb
 
 Windows에서 CSQL의 ;historylist와 ;historyread 명령 수행 시 지원하지 않는다는 오류를 출력하도록 수정(CUBRIDSUS-10190)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2330,108 +2464,15 @@ createdb 유틸리티가 데이터베이스 생성 시 요구되는 디스크 �
 		Couldn't create database.
 		Unable to create volumes for database "testdb". Please refer "/home/CUBRID/log/testdb_createdb.err" for additional information.
 		
-오류 메시지
------------
-
-Warning을 에러 로그에 출력하도록 설정하면 잘못된 warning 메시지를 출력하는 현상(CUBRIDSUS-9458)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	Warning을 에러 로그에 출력하도록 설정하면 정상적인 INSERT/UPDATE/DELETE를 수행함에도 불구하고 잘못된 warning 메시지를 출력되는 문제를 수정했다.
-
-일부 에러 메시지에서 32비트 int 범위를 넘는 64비트 int 값을 잘못 출력하는 문제(CUBRIDSUS-8379)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	일부 에러 메시지에서 32비트 int 범위를 넘는 64비트 int 값을 잘못 출력하는 문제를 수정했다.
-
-데이터베이스 접속 요청에 대한 notification 메시지를 한번만 기록하도록 수정(CUBRIDSUS-9885)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	데이터베이스 서버에 대한 접속 요청 시에 접속 요청에 대한 처리 시작과 끝을 나타내는 각각의 notification 메시지를 출력하던 것을 하나의 notification 메시지만 출력하도록 수정했다.
-
-CUBRID SHARD proxy에서 인증 실패 시 적절한 에러 메시지를 출력하도록 수정(CUBRIDSUS-8839)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	CUBRID SHARD proxy에서 인증 실패 시에도 에러 메시지를 출력하지 않았으나, 다음의 예와 같이 적절한 에러 메시지를 출력하도록 수정했다.
-	::
-	
-		Authorization error.(Address is rejected)
-
-허용 한계를 초과하여 PREPARE 문을 수행할 때 발생하는 오류 메시지를 잘못 출력하는 문제(CUBRIDSUS-8998)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	하나의 응용 프로그램에 허용되는 최대 개수(20개)를 초과하여 PREPARE 문을 수행할 때 "ERROR: Too many prepared statements." 오류 메시지를 출력해야 하나, "ERROR: No error message available."로 잘못 출력하는 문제를 수정했다.
-
-뷰를 통해 분할 테이블을 업데이트할 때 에러 발생해도 영향받는 레코드 수를 잘못 출력하는 현상(CUBRIDSUS-9011)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	뷰를 통해 분할 테이블을 업데이트할 때 에러가 발생했음에도 불구하고 UPDATE 문의 영향받은 레코드(affected rows) 수를 잘못 반환되는 문제를 수정했다.
-
-	::
-	
-		CREATE TABLE t (i INT) PARTITION BY RANGE (i) (PARTITION p0 VALUES LESS THAN(3));
-		INSERT INTO t VALUES (1), (2);
-		CREATE VIEW v as SELECT * FROM t;
-		UPDATE v SET i = i + 1;
-
-		-- incorrect affected rows
-		2 rows affected.
-		ERROR: Appropriate partition does not exist.
-
 DB 생성 시 범위를 벗어난 볼륨 크기를 입력하면 출력하는 오류 메시지 개선(CUBRIDSUS-9761)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	DB 생성 시 허용 범위를 벗어난 볼륨 크기를 입력 단위 없이 입력하면 Byte(B) 단위로 입력되었다는 것을 오류 메시지에 포함하여 출력하도록 수정했다.
 	::
 	
-		cubrid createdb testdb --db-volume-size=1121
+		% cubrid createdb testdb --db-volume-size=1121
 		Couldn't create database.
 		The given 'db_volume_size', 1121B is out of range. Choose a size between 20.0M and 20.0G.
-
-CLOB_FROM_FILE과 BLOB_FROM_FILE 함수에 잘못된 경로의 파일이 주어지면 부정확한 오류 메시지를 출력하는 문제(CUBRIDSUS-10320)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	CLOB_FROM_FILE과 BLOB_FROM_FILE 함수에 잘못된 경로의 파일이 입력되면 "해당 경로가 유효하지 않다"는 오류 메시지를 출력하도록 수정했다.
-	::
-	
-		SELECT CLOB_FROM_FILE ('file:/home/cubrid/databases/lob/ces_722/image_t.00001357286783349177_590');
-
-		-- 2008 R4.3 이하 버전에서는 다음 오류를 출력했다.
-		ERROR: Cannot coerce clob to type unknown data type.
-
-		-- 9.0 Beta에서는 다음 오류를 출력했다.
-		Attempted to create string with illegal length - 1545942208
-
-Windows에서 서비스가 정상 종료되지 않는 경우에도 정상 종료된 것으로 메시지를 잘못 출력하는 문제(CUBRIDSUS-10143)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	Windows에서 "cubrid service stop" 명령을 수행하면 cubrid.conf의 services에 등록된 프로세스들이 모두 정상 종료되지 않았음에도 "++ cubrid service stop: success" 라는 메시지를 출력하는 문제를 수정했다.
-
-Windows에서 서버가 구동된 상태에서 서버 시작을 실행하면 잘못된 메시지가 출력되는 현상(CUBRIDSUS-10216)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	Windows에서 서버가 구동된 상태에서 또 다시 서버를 구동하려고 하면 "cubrid server start: success" 메시지가 출력되었으나, "cubrid server is already running" 메시지가 출력되도록 수정했다.
-
-메모리 사용량 초과로 브로커 응용 서버(CAS)가 재시작될 때 메모리 사용량을 CAS 로그에 출력하도록 수정(CUBRIDSUS-10181)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	브로커 응용 서버(CAS)가 메모리 사용량 최대값인 cubrid_broker.conf의 APPL_SERVER_MAX_SIZE 초과로 인해 재시작할 때 해당 프로세스의 메모리 사용량을 CAS 로그에 출력하도록 수정했다. ::
- 
-		01/10 18:43:42.217 (0) CAS MEMORY USAGE (101M) HAS EXCEEDED MAX SIZE (101M)
-
-FORMAT 함수의 인자가 숫자가 아닌 경우 부적절한 오류를 출력하는 현상(CUBRIDSUS-10426)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	FORMAT 함수의 인자가 숫자가 아닌 경우 부적절한 오류를 출력하는 문제를 수정했다. ::
-	
-		SELECT  FORMAT ('nan', 2);
-		
-		-- 수정 이전 버전에서 위의 질의를 실행하면 아래 오류를 출력했다.
-		ERROR: No error message available.
-
-		SELECT  FORMAT (CAST('nan' as double), 2);
-		
-		-- 수정 이전 버전에서 위의 질의를 실행하면 아래 오류를 출력했다.
-		ERROR: Execute: Query execution failure #1326.
 
 -t 옵션을 사용하는 loaddb 명령에서 테이블 접근 권한이 없거나 해당 테이블이 존재하지 않음에도 불구하고 오류를 출력하지 않는 문제 수정(CUBRIDSUS-10326)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2439,18 +2480,6 @@ FORMAT 함수의 인자가 숫자가 아닌 경우 부적절한 오류를 출력
 설정, 빌드 및 설치
 ------------------
 
-Windows에서 브로커 파라미터의 경로 구분자로 '/'도 쓸 수 있도록 수정(CUBRIDSUS-9318)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	Windows에서 브로커 파라미터의 경로 구분자로 '/'를 쓸 수 있게 수정했다. ::
-	
-		D:/dir/dir/file
-
-Windows에서 ACCESS_CONTROL_FILE 파일 내용 중 "드라이브명:"이 잘못 인식되는 문제(CUBRIDSUS-9318)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	ACCESS_CONTROL_FILE 파일 내용을 "db_name:db_user_id:IP_file" 포맷으로 기록할 때 IP_file 경로가 "드라이브명:\경로\파일명"과 같이 기록될 경우, 드라이브명 뒤의 ":"을 값의 구분자로 오인하여 파일을 제대로 인식하지 못하는 문제를 수정했다.
-	
 정의되지 않은 시스템 파라미터를 cubrid.conf에 명시하면 클라이언트 및 서버 구동 시 비정상 종료하는 문제(CUBRIDSUS-9765)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2459,19 +2488,19 @@ Windows에서 ACCESS_CONTROL_FILE 파일 내용 중 "드라이브명:"이 잘못
 일부 시스템 파라미터를 시스템 운영 중에 변경할 수 있도록 수정(CUBRIDSUS-7625)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	다음의 시스템 파라미터들은 시스템 운영 도중 변경할 수 있도록 수정했다. ::
+	다음의 시스템 파라미터들은 시스템 운영 도중 변경할 수 있도록 수정했다.
 
-		index_scan_oid_buffer_size
-		sort_buffer_size
-		temp_file_memory_size_in_pages
-		unfill_factor
-		volume_extension_path
-		lock_escalation
-		checkpoint_every_npages
-		async_commit
-		access_ip_control
-		access_ip_control_file
-		index_unfill_factor
+	* index_scan_oid_buffer_size
+	* sort_buffer_size
+	* temp_file_memory_size_in_pages
+	* unfill_factor
+	* volume_extension_path
+	* lock_escalation
+	* checkpoint_every_npages
+	* async_commit
+	* access_ip_control
+	* access_ip_control_file
+	* index_unfill_factor
 
 	또한, CSQL에서 ;get 세션 명령으로 시스템 파라미터 값을 구할 때 발생하는 다음 현상들을 수정했다.
 	
@@ -2490,6 +2519,21 @@ CUBRID 소스 파일에서 CCI 드라이버만 빌드하는 옵션 추가 및 CC
 
 	cubrid_broker.conf의 SQL_LOG 값이 NOTICE로 설정되어 있어도 정상 수행된 질의가 가끔 출력되는 현상이 발생할 수 있는데, 이러한 가능성을 줄이도록 수정했다. 
 
+JDK 7으로 JDBC 드라이버를 빌드할 수 있도록 수정(CUBRIDSUS-10660)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Windows에서 브로커 파라미터의 경로 구분자로 '/'도 쓸 수 있도록 수정(CUBRIDSUS-9318)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	Windows에서 브로커 파라미터의 경로 구분자로 '/'를 쓸 수 있게 수정했다. ::
+	
+		D:/dir/dir/file
+
+Windows에서 ACCESS_CONTROL_FILE 파일 내용 중 "드라이브명:"이 잘못 인식되는 문제(CUBRIDSUS-9318)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	ACCESS_CONTROL_FILE 파일 내용을 "db_name:db_user_id:IP_file" 포맷으로 기록할 때 IP_file 경로가 "드라이브명:\경로\파일명"과 같이 기록될 경우, 드라이브명 뒤의 ":"을 값의 구분자로 오인하여 파일을 제대로 인식하지 못하는 문제를 수정했다.
+	
 Windows에서 브로커 파라미터 값이 잘못되었음에도 불구하고 브로커 구동 시 정상 구동되었다는 메시지가 출력되는 문제(CUBRIDSUS-9992)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2506,47 +2550,69 @@ Windows에서 CUBRID 엔진 설치 중 Java 설치 여부에 따른 알림 메�
 
 	Windows에서 CUBRID 엔진 설치 중 Java 1.6 이상 버전이 설치되지 않았으면 CUBRID Manager를 사용할 수 없다는 메시지를 출력했으나, 이 메시지는 CUBRID 엔진과는 무관한 메시지이므로 이 메시지 대신 자바 저장 프로시저를 사용할 수 없다는 메시지를 출력하도록 수정했다.
 
-JDK 7으로 JDBC 드라이버를 빌드할 수 있도록 수정(CUBRIDSUS-10660)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 기타
 ----
 
-텔넷으로 CUBRID 서버 포트에 접속하면 서버 프로세스가 동작을 멈추는 현상(CUBRIDS-9736)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning을 에러 로그에 출력하도록 설정하면 잘못된 warning 메시지를 출력하는 현상(CUBRIDSUS-9458)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CAS에서 DB 서버 에러를 받다가 네트워크 소켓 에러가 발생하면 CAS가 비정상 종료하는 현상(CUBRIDSUS-10401) 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	Warning을 에러 로그에 출력하도록 설정하면 정상적인 INSERT/UPDATE/DELETE를 수행함에도 불구하고 잘못된 warning 메시지를 출력되는 문제를 수정했다.
 
-	CAS에서 DB 서버 에러를 받다가 네트워크 소켓 에러가 발생하는 경우 CAS가 비정상 종료하는 현상을 수정했다.
-	수정 이전 버전에서 이러한 현상이 발생할 수 있는 예로, 샤드 환경에서 shard CAS 프로세스의 개수를 설정하는 cubrid_shard.conf의 MAX_NUM_APPL_SERVER 값이 서버가 허용하는 최대 접속 개수를 설정하는 cubrid.conf의 max_clients 값보다 크도록 설정한 상태에서 "cubrid shard start"를 수행하면 SHARD CAS가 비정상 종료하는 현상이 발생한다.
+일부 에러 메시지에서 32비트 int 범위를 넘는 64비트 int 값을 잘못 출력하는 문제(CUBRIDSUS-8379)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-독립 모드에서 새로운 페이지 할당 도중에 체크포인트가 발생하면 오류가 발생하는 현상(CUBRIDSUS-10444)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	일부 에러 메시지에서 32비트 int 범위를 넘는 64비트 int 값을 잘못 출력하는 문제를 수정했다.
 
-	독립(Stand Alone) 모드에서 데이터가 입력되는 등으로 인해 새로운 페이지가 할당되는 도중에 체크포인트가 발생하면 "Skip invalid page in checkpoint." 오류가 발생하는 현상을 수정했다.
+데이터베이스 접속 요청에 대한 notification 메시지를 한번만 기록하도록 수정(CUBRIDSUS-9885)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-잠금 관리자의 버그로 인해 DB 서버 프로세스의 동작이 멈추는(hang) 현상(CUBRIDSUS-10329)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	데이터베이스 서버에 대한 접속 요청 시에 접속 요청에 대한 처리 시작과 끝을 나타내는 각각의 notification 메시지를 출력하던 것을 하나의 notification 메시지만 출력하도록 수정했다.
+
+응용 클라이언트의 접속 정보는 에러 로그에서 제거하고 접속 로그에 기록하도록 수정(CUBRIDSUS-5962)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	응용 클라이언트의 접속 정보가 에러 로그에 너무 많이 기록되어 실제 에러를 파악하기 어려운 문제를 해결하기 위해, 응용 클라이언트의 접속 정보를 에러 로그 대신 접속 로그에 기록하도록 수정했다.
+
+인터럽트 발생 시 인터럽트 에러 외에 다른 에러가 반환되는 문제(CUBRIDSUS-9450)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	인터럽트가 발생했을 때 인터럽트 에러 외에 다른 에러가 반환될 수 있는 문제를 수정했다.
+
+여러 클라이언트가 동일한 테이블에 대한 UPDATE 수행 시 -495번 오류가 발생할 수 있는 문제(CUBRIDSUS-10651)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	여러 클라이언트가 동시에 같은 테이블에 대해 UPDATE를 수행하고 질의 타임아웃이 자주 발생하는 상황에서, 몇 가지 원인으로 인해 -495번 오류("Execute: Query execution failure #8560")가 발생하는 문제를 수정했다. 
+	
+	하지만 부하가 집중되어 특정 서버 스레드가 UPDATE를 위한 페이지 접근에 여러 번 실패하게 되면 수정 이전 버전에서는 -495번 오류가 발생했는데, 수정 이후 -2번 오류("Internal system failure: no more specific information is available.")가 발생한다. 이런 상황은 동일한 페이지에 대한 UPDATE 요청이 집중되는 상황에서 발생할 수 있는 문제로 사용자는 실패한 질의를 다시 시도해야 한다.  
+	
+메모리 사용량 초과로 브로커 응용 서버(CAS)가 재시작될 때 메모리 사용량을 CAS 로그에 출력하도록 수정(CUBRIDSUS-10181)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	브로커 응용 서버(CAS)가 메모리 사용량 최대값인 cubrid_broker.conf의 APPL_SERVER_MAX_SIZE 초과로 인해 재시작할 때 해당 프로세스의 메모리 사용량을 CAS 로그에 출력하도록 수정했다. ::
+ 
+		01/10 18:43:42.217 (0) CAS MEMORY USAGE (101M) HAS EXCEEDED MAX SIZE (101M)
 
 브로커 및 데이터베이스 서버의 에러 로그를 임의로 삭제하면 재생성되지 않는 문제(CUBRIDSUS-8351)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	브로커 및 데이터베이스 서버의 에러 로그를 임의로 삭제하면 재생성되도록 수정했다.
+	브로커 및 데이터베이스 서버의 에러 로그 파일을 임의로 삭제하더라도 재생성되도록 수정했다.
 
 브로커 이름이 길면 응용 프로그램에서 브로커 접속시 브로커가 비정상 종료되는 문제(CUBRIDSUS-9392)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	브로커 이름의 길이가 32자 이상이면 응용 프로그램에서 브로커에 접속 시 브로커가 비정상 종료되었으나, 브로커 이름의 길이를 63자까지만 허용하고 또한 브로커 이름이 이보다 길면 브로커를 시작하지 않도록 수정했다. 
+	브로커 이름의 길이가 32자 이상이면 응용 프로그램에서 브로커에 접속 시 브로커가 비정상 종료되었으나, 브로커 이름의 길이를 63자까지만 허용하고 또한 브로커 이름이 이보다 길면 브로커를 구동할 수 없도록 수정했다. 
 
-브로커 응용 서버에서 인터럽트 발생 시 DB 서버에서 발생한 에러가 잘못 전달되는 문제(CUBRIDSUS-9450)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Windows에서 서비스가 정상 종료되지 않는 경우에도 정상 종료된 것으로 메시지를 잘못 출력하는 문제(CUBRIDSUS-10143)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	브로커 응용 서버(CAS)에서 인터럽트가 발생할 때 DB 서버에서 발생한 에러가 다른 에러로 전달되는 문제를 수정했다.
+	Windows에서 "cubrid service stop" 명령을 수행하면 cubrid.conf의 services에 등록된 프로세스들이 모두 정상 종료되지 않았음에도 "++ cubrid service stop: success" 라는 메시지를 출력하는 문제를 수정했다.
 
-CAS가 CLIENT WAIT인 상태에서 동작을 멈추는 현상(CUBRIDSUS-10238)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	
+Windows에서 서버가 구동된 상태에서 서버 시작을 실행하면 잘못된 메시지가 출력되는 현상(CUBRIDSUS-10216)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	Windows에서 서버가 구동된 상태에서 또 다시 서버를 구동하려고 하면 "cubrid server start: success" 메시지가 출력되었으나, "cubrid server is already running" 메시지가 출력되도록 수정했다.
+
 Windows 서비스 프로세스인 CUBRIDService에 설명 추가(CUBRIDSUS-8917)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2557,40 +2623,11 @@ Windows 서비스 프로세스인 CUBRIDService에 설명 추가(CUBRIDSUS-8917)
 		Service start/stop menu is equal to the command of "cubrid service start/stop".
 		If you setup "startup type" of this service to "Disabled", you can't use "cubrid service" command.
 
-응용 클라이언트의 접속 정보는 에러 로그에서 제거하고 접속 로그에 기록하도록 수정(CUBRIDSUS-5962)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	에러 로그에 너무 많은 정보가 기록되어 실제 에러를 파악하기 용이하게 하기 위해, 응용 클라이언트의 접속 정보는 에러 로그에서 제거하고 접속 로그에 기록하도록 수정했다.
-
-교착 상태를 감지하지 못하고 동작을 멈추는 현상(CUBRIDSUS-10009)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	INSERT와 UPDATE를 동시에 수행하는 도중 교착 상태(deadlock)가 발생하면 이를 감지하지 못하고 모든 트랜잭션이 동작을 멈추는(hang) 현상을 수정했다.
-
-교착 상태 감지시 잘못된 메모리를 읽어서 서버가 비정상 종료되는 문제(CUBRIDSUS-10378)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	교착 상태 감지시 오류로 인해 잘못된 메모리를 읽어서 서버가 비정상 종료되는 문제를 수정했다.
-
 CUBRID Manager를 통해 DB 사용자를 편집하지 못하는 현상(CUBRIDSUS-9971)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	9.0 Beta 버전에서 CUBRID Manager를 통해 DB 사용자의 비밀번호 또는 그룹 변경과 같은 편집 기능을 수행하지 못하는 문제를 수정했다. 
 
-체크포인트 이후에도 보관 로그가 정리되지 않는 현상(CUBRIDSUS-9848)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	복구 시간 단축을 위해 데이터를 DB 볼륨에 갱신(flush)하는 체크포인트 수행 이후에도 보관 로그가 정리되지 않는 현상을 수정했다.
-	데이터의 갱신이 빈번한 상황에서 체크포인트가 수행되면 이 현상이 발생할 가능성이 높다.
-	수정 이전 버전에서는 해당 현상 발생 시 체크포인트 발생 시점이 갱신되지 않아 보관 로그를 유지해야 했으나 수정 이후 체크포인트 발생 시점 이전의 보관 로그는 정리되고 체크포인트 발생 시점은 갱신되게 되었다. 		
-
-여러 클라이언트가 동일한 테이블에 대한 UPDATE 수행 시 -495번 오류가 발생할 수 있는 문제(CUBRIDSUS-10651)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	여러 클라이언트가 동시에 같은 테이블에 대해 UPDATE를 수행하고 질의 타임아웃이 자주 발생하는 상황에서, 몇 가지 원인으로 인해 -495번 오류("Execute: Query execution failure #8560")가 발생하는 문제를 수정했다. 
-	
-	하지만 부하가 집중되어 특정 서버 스레드가 UPDATE를 위한 페이지 접근에 여러 번 실패하게 되면 수정 이전 버전에서는 -495번 오류가 발생했는데, 수정 이후 -2번 오류("Internal system failure: no more specific information is available.")가 발생한다. 이런 상황은 동일한 페이지에 대한 UPDATE 요청이 집중되는 상황에서 발생할 수 있는 문제로 사용자는 실패한 질의를 다시 시도해야 한다.  
-	
 주의 사항
 =========
 
@@ -2602,12 +2639,12 @@ CUBRID Manager를 통해 DB 사용자를 편집하지 못하는 현상(CUBRIDSUS
 9.1 버전과 9.0 베타 버전 사이에 DB 볼륨 호환 안 됨(CUBRIDSUS-10147)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	9.1 버전과 9.0 베타 버전 사이에 DB 볼륨이 호환되지 않게 됨에 따라 CUBRID 9.0 Beta를 9.1로 업그레이드하는 사용자는 CUBRID 9.1 설치 이후 기존의 DB 볼륨을 9.1용으로 반드시 변환해야 한다.
+	9.1 버전과 9.0 베타 버전 사이에 DB 볼륨이 호환되지 않게 됨에 따라 CUBRID 9.0 Beta를 9.1로 업그레이드하는 사용자는 CUBRID 9.1 설치 이후 기존의 DB 볼륨을 9.1용으로 반드시 변환해야 한다. 볼륨 마이그레이션을 위해서 9.1 버전에 제공되는 migrate_90beta_to_91 유틸리티를 제공한다. ::
 
-		migrate_90beta_to_91 <db_name>
+		% migrate_90beta_to_91 <db_name>
 
-9.0 Beta 이전 버전과 DB 볼륨이 호환되지 않음(CUBRIDSUS-5238)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+9.1 버전과 9.0 Beta 이전 버전 간에 DB 볼륨이 호환되지 않음(CUBRIDSUS-5238)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	9.0 Beta 이전 버전과 DB 볼륨이 호환되지 않으므로 cubrid unloaddb/loaddb를 이용하여 데이터를 마이그레이션해야 한다. 보다 자세한 사항은 매뉴얼의 "업그레이드" 절을 참고한다.
 
@@ -2615,12 +2652,12 @@ CUBRID Manager를 통해 DB 사용자를 편집하지 못하는 현상(CUBRIDSUS
 	업그레이드 및 데이터 마이그레이션은 :doc:`/upgrade` 를 참고한다.
 
 
-CUBRID_LANG 이 제거되고, DB 생성에 CUBRID_CHARSET 및 메시지 출력에 CUBRID_MSG_LANG 사용
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CUBRID_LANG 환경 변수 대신에 CUBRID_CHARSET 및 CUBRID_MSG_LANG 환경 변수로 변경
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	9.1 버전부터 CUBRID_LANG 환경 변수는 더 이상 사용되지 않으며, 
-	데이터베이스를 생성하거나 구동할 때 CUBRID_CHARSET 환경 변수를 통해 어떤 문자셋을 사용할 지 결정하므로 CUBRID_CHARSET 환경 변수를 반드시 설정해야 함에 주의한다.
-	유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용하며 설정하지 않으면 CUBRID_CHARSET을 따른다.
+	데이터베이스를 생성하거나 구동할 때 CUBRID_CHARSET 환경 변수를 통해 어떤 문자셋을 사용할 지 결정하므로 CUBRID_CHARSET 환경 변수를 반드시 설정해야 한다. 
+	유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용하며 생략되면 CUBRID_CHARSET 환경 변수 설정을 따른다.
 
 CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결과의 배열에 대한 에러 처리 방식 수정(CUBRIDSUS-9364)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2643,17 +2680,17 @@ CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결�
 		n_executed = cci_execute_array (req, &result, &cci_error);
 
 		if (n_executed < 0)
-		{
-		  printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
-
-		  for (i = 1; i <= 3; i++)
 		  {
-			printf ("query %d\n", i);
-			printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-			printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-			printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
+		    printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+
+		    for (i = 1; i <= 3; i++)
+		      {
+			    printf ("query %d\n", i);
+			    printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
+			    printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
+			    printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
+		      }
 		  }
-		}
 		...
 		
 	수정 이후 버전에서는 에러가 발생하면 전체 질의가 실패한 것이며, 에러가 발생하지 않은 경우에 대해 배열 내 각 질의들의 성공 실패 여부를 판단한다.
@@ -2671,18 +2708,19 @@ CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결�
 		...
 		n_executed = cci_execute_array (req, &result, &cci_error);
 		if (n_executed < 0)
-		{
-		  printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
-		}
-		else {
-		  for (i = 1; i <= 3; i++)
 		  {
-			printf ("query %d\n", i);
-			printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-			printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-			printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
+		    printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
 		  }
-		}
+		else
+		  {
+		    for (i = 1; i <= 3; i++)
+		      {
+			    printf ("query %d\n", i);
+			    printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
+			    printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
+			    printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
+		      }
+		  }
 		...
 
 기존 주의 사항

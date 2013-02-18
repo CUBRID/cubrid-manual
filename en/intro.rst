@@ -56,11 +56,11 @@ Temp volume is a space where the intermediate and final results of query process
 
 The examples of queries that can use permanent temp volume or temporary temp volume are as follows:
 
-*   Queries creating the resultset like SELECT
-*	Queries including GROUP BY or ORDER BY
+*   Queries creating the resultset like **SELECT**
+*	Queries including **GROUP BY** or **ORDER BY**
 *	Queries including a subquery
 *	Queries executing sort-merge join
-*	Queries including the CREATE INDEX statement
+*	Queries including the **CREATE INDEX** statement
 
 
 When executing the queries above, the temp volume is used after exhausting the memory space (the space size is determined by the system parameter **temp_file_memory_size_in_pages** specified in **cubrid.conf**) assigned to store **SELECT** results or sort the data. The order in which the storage space is used to store the results of query processing and sorting is as follows: When the current storage space is exhausted, the next storage space is used.
@@ -152,7 +152,7 @@ The broker is a middleware that allows various application clients to connect to
 
 **Application Client**
 
-The interfaces that can be used in application clients include C-API (CCI, CUBRID Call Interface), ODBC, JDBC, PHP, Tcl/Tk, Python, and Ruby, OLE DB, and ADO.NET.
+The interfaces that can be used in application clients include C-API (CCI, CUBRID Call Interface), ODBC, JDBC, PHP, Python, and Ruby, OLE DB, ADO.NET, Node.js, etc.
 
 **cub_cas**
 
@@ -221,9 +221,9 @@ CUBRID supports the following index functions to utilize indexes while executing
 *   **ORDER BY** clause optimization: If the required record sorting order is identical to the order of indexes, no additional sorting is required (Skip ORDER BY).
 *   **GROUP BY** clause optimization: If all columns in the **GROUP BY** clause are included in the indexes, they are available to use while executing queries. Therefore, no additional sorting is required (Skip GROUP BY).
 
-**HA**
+**HA feature**
 
-CUBRID provides High Availability (HA) to minimize system down time while continuing normal operation of server in the event of hardware, software, or network failure. The structure of CUBRID HA is shared-nothing. CUBRID monitors its system and status on a real time basis with the CUBRID Heartbeat and performs failover when failure occurs. It follows the two steps below to synchronize data from the master database server to slave database server.
+CUBRID provides High Availability(HA) feature to minimize system down time while continuing normal operation of server in the event of hardware, software, or network failure. The structure of CUBRID HA is shared-nothing. CUBRID monitors its system and status on a real time basis with the CUBRID Heartbeat and performs failover when failure occurs. It follows the two steps below to synchronize data from the master database server to slave database server.
 
 *   A transaction log multiplication step where the transaction log created in the database server is replicated in real time to another node
 *   A transaction log reflection step where data is applied to the slave database server through the analysis of the transaction log being replicated in real time
@@ -261,10 +261,4 @@ For the relational data model, it is not allowed that a single column has multip
 **Inheritance**
 
 Inheritance is a concept to reuse columns and methods of a super class (table) in those of a sub class. CUBRID supports reusability through inheritance. By using inheritance provided by CUBRID, you can create a super class with some common columns and then create a sub class inherited from the super class with some unique columns added. In this way, you can create a database model which can minimize the number of columns.
-
-**Composition**
-
-In a relational database, the reference relationship between tables is defined as a foreign key. If the foreign key consists of multiple columns or the size of the key is significantly large, the performance of join operations between tables will be degraded. However, CUBRID allows the direct use of the physical address (OID) where the records of the referred table are located, so you can define the reference relationship between tables without using join operations.
-
-That is, in an object-oriented database, you can create a composition relation where one record has a reference value to another by using the column displayed in the referred table as a domain (type), instead of referring to the primary key column from the referred table.
 

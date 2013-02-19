@@ -1374,10 +1374,10 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 	**"Tran index"에 보여지는 transaction 상태 메시지**
 	
 		* ACTIVE : 활성
-		* RECOVERY : 복구중인 트랜젝션
-		* COMMITTED : 커밋완료되어 종료될 트랜젝션
-		* COMMITTING : 커밋중인 트랜젝션
-		* ABORTED : 롤백되어 종료될 트랜젝션
+		* RECOVERY : 복구중인 트랜잭션
+		* COMMITTED : 커밋완료되어 종료될 트랜잭션
+		* COMMITTING : 커밋중인 트랜잭션
+		* ABORTED : 롤백되어 종료될 트랜잭션
 		* KILLED : 서버에 의해 강제 종료 중인 트랜잭션
 
 .. _killtran:

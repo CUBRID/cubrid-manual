@@ -4,37 +4,37 @@
 
 **집계 함수**
 
-집계 함수(aggregate functions)는 행들의 그룹에 기반하여 하나의 결과를 반환한다. **GROUP BY** 절을 포함하면 각 그룹마다 한 행의 집계 결과를 반환한다. **GROUP BY**
-절을 생략하면 전체 행에 대해 한 행의 집계 결과를 반환한다. **HAVING** 절은 **GROUP BY** 절이 있는 질의에 조건을 추가할 때 사용한다.
+	집계 함수(aggregate functions)는 행들의 그룹에 기반하여 하나의 결과를 반환한다. **GROUP BY** 절을 포함하면 각 그룹마다 한 행의 집계 결과를 반환한다. **GROUP BY**
+	절을 생략하면 전체 행에 대해 한 행의 집계 결과를 반환한다. **HAVING** 절은 **GROUP BY** 절이 있는 질의에 조건을 추가할 때 사용한다.
 
-대부분의 집계 함수는 **DISTINCT** 를 사용할 수 있다. **GROUP BY ... HAVING** 절에 대해서는 :ref:`group-by-clause` 을 참고한다.
+	대부분의 집계 함수는 **DISTINCT** 를 사용할 수 있다. **GROUP BY ... HAVING** 절에 대해서는 :ref:`group-by-clause` 을 참고한다.
 
 **분석 함수**
 
-분석 함수(analytic functions)는 행들의 결과에 기반하여 집계 값을 계산한다. 분석 함수는 **OVER** 절 뒤의 *query_partition_clause* 에 의해 지정된 그룹들(이 절이 생략되면 모든 행을 하나의 그룹으로 봄)을 기준으로 한 개 이상의 행을 반환할 수 있다는 점에서 집계 함수와 다르다.
+	분석 함수(analytic functions)는 행들의 결과에 기반하여 집계 값을 계산한다. 분석 함수는 **OVER** 절 뒤의 *query_partition_clause* 에 의해 지정된 그룹들(이 절이 생략되면 모든 행을 하나의 그룹으로 봄)을 기준으로 한 개 이상의 행을 반환할 수 있다는 점에서 집계 함수와 다르다.
 
-분석 함수는 특정 행 집합에 대해 다양한 통계를 허용하기 위해 기존의 집계 함수들 일부에 **OVER** 라는 새로운 분석 절이 함께 사용된다. ::
+	분석 함수는 특정 행 집합에 대해 다양한 통계를 허용하기 위해 기존의 집계 함수들 일부에 **OVER** 라는 새로운 분석 절이 함께 사용된다. ::
 
-	function_name ( [argument_list ] ) OVER (<analytic_clause>)
-	 
-	<analytic_clause>::=
-		 [ <query_partition_clause> ] [ <order_by_clause> ]
-		
-	<query_partition_clause>::=
-		PARTITION BY value_expr [, value_expr ]...
-	 
-	<order_by_clause>::=
-		ORDER BY { expr | position | column_alias } [ ASC | DESC ]
-			[, { expr | position | column_alias } [ ASC | DESC ] ] ...
+		function_name ( [argument_list ] ) OVER (<analytic_clause>)
+		 
+		<analytic_clause>::=
+			 [ <query_partition_clause> ] [ <order_by_clause> ]
+			
+		<query_partition_clause>::=
+			PARTITION BY value_expr [, value_expr ]...
+		 
+		<order_by_clause>::=
+			ORDER BY { expr | position | column_alias } [ ASC | DESC ]
+				[, { expr | position | column_alias } [ ASC | DESC ] ] ...
 
-*   <*query_partition_clause*> : 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
-*   <*order_by_clause*> : <*query_partition_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*query_partition_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 컬럼 값을 대상으로 함수를 적용하여 계산한다.
+	*   <*query_partition_clause*> : 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
+	*   <*order_by_clause*> : <*query_partition_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*query_partition_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 컬럼 값을 대상으로 함수를 적용하여 계산한다.
 
-분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
+	분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
 
-* ORDER BY/PARTITION BY <상수> (예: 1): 상수는 SELECT 리스트의 칼럼 위치로 간주됨.
-* ORDER BY/PARTITION BY <상수 표현식> (예: 1+0): 상수 표현식은 무시되어, 정렬/분할(ordering/partitioning)에 사용되지 않음.
-* ORDER BY/PARTITION BY <상수가 아닌 표현식> (예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용됨.
+	* ORDER BY/PARTITION BY <상수> (예: 1): 상수는 SELECT 리스트의 칼럼 위치로 간주됨.
+	* ORDER BY/PARTITION BY <상수 표현식> (예: 1+0): 상수 표현식은 무시되어, 정렬/분할(ordering/partitioning)에 사용되지 않음.
+	* ORDER BY/PARTITION BY <상수가 아닌 표현식> (예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용됨.
 	
 .. function:: AVG ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
@@ -117,7 +117,7 @@
 		WHERE mascot IS NOT NULL; 
 			 count(*)
 		=============
-					9
+		            9
 
 	다음은 *demodb* 에서 nation_code가 'AUT'인 국가의 참가 선수의 종목(event)별 인원 수를 종목이 바뀔 때마다 누적하여 출력한 예제이다. 가장 마지막 줄에는 모든 인원 수가 출력된다.
 

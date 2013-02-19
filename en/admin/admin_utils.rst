@@ -1288,12 +1288,12 @@ The following shows [options] available with the **cubrid tranlist** utility.
 	
 	**Transaction status messages whihch are shown on "Tran index"**
 	
-		* ACTIVE : 활성
-		* RECOVERY : 복구중인 트랜젝션
-		* COMMITTED : 커밋완료되어 종료될 트랜젝션
-		* COMMITTING : 커밋중인 트랜젝션
-		* ABORTED : 롤백되어 종료될 트랜젝션
-		* KILLED : 서버에 의해 강제 종료 중인 트랜잭션
+		* ACTIVE : The transaction is active
+		* RECOVERY : The transaction is recovering
+		* COMMITTED : The transaction is committed and will be ended
+		* COMMITTING : The transactin is being committed
+		* ABORTED : The transaction is rollbacked and will be ended 
+		* KILLED : The transaction is forcefully killed by server and will be ended
 
 .. _killtran:
 

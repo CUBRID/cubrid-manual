@@ -15,7 +15,7 @@ PDO는 어떤 데이터베이스를 사용하든 같은 함수를 사용할 수 
 
 CUBRID PDO 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 PDO 드라이버를 다운로드하거나 PDO 드라이버에 대한 최신 정보를 확인하려면 `http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver <http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver>`_ 에 접속한다.
+별도로 PDO 드라이버를 다운로드하거나 PDO 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver 에 접속한다.
 
 PDO 설치 및 설정
 ================
@@ -27,11 +27,11 @@ Linux
 
 *   운영체제: Linux: 32 비트 또는 64비트
 *   웹 서버: Apache
-*   PHP: 5.2 또는 5.3(`http://php.net/downloads.php <http://php.net/downloads.php>`_ )
+*   PHP: 5.2 또는 5.3(http://php.net/downloads.php )
 
 **PECL을 이용한 설치**
 
-**PECL** 이 설치되어 있다면, **PECL** 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PDO 드라이버를 설치할 수 있다. **PECL** 이 설치되어있지 않다면 `http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl <http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl>`_ 을 참고하여 PECL을 설치한다.
+**PECL** 이 설치되어 있다면, **PECL** 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PDO 드라이버를 설치할 수 있다. **PECL** 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl 을 참고하여 PECL을 설치한다.
 
 #. 다음과 같은 명령어를 입력하여 CUBRID PDO 드라이버 최신 버전을 설치한다. ::
 
@@ -61,11 +61,11 @@ Windows
 
 *   운영체제: Windows 32 비트 또는 64비트
 *   웹 서버: Apache 또는 IIS
-*   PHP: 5.2 또는 5.3(`http://windows.php.net/download/ <http://windows.php.net/download/>`_)
+*   PHP: 5.2 또는 5.3(http://windows.php.net/download/)
 
 **빌드된 드라이버 다운로드 및 설치**
 
-운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 `http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo <http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo>`_ 에서 다운로드한다.
+운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo 에서 다운로드한다.
 
 PDO 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 **php_pdo_cubrid.dll** 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.
 

@@ -246,11 +246,11 @@ CREATE TABLE
 		*   자동 증가 특성이 정의된 칼럼에 **NULL** 을 입력하면 자동 증가된 값이 저장된다.
 		*   자동 증가 특성이 정의된 칼럼에 **SHARED** 또는 **DEFAULT** 속성을 설정할 수 없다.
 		*   초기값 및 자동 증가 특성에 의해 증가된 최종 값은 해당 타입에서 허용되는 최소/최대값을 넘을 수 없다.
-		* 자동 증가 특성은 순환되지 않으므로 타입의 최대값을 넘어갈 경우 오류가 발생하며, 이에 대한 롤백이 일어나지 않는다. 따라서 이와 같은 경우 해당 칼럼을 삭제 후 다시 생성해야 한다. 예를 들어, 아래와 같이 테이블을 생성했다면, A의 최대값은 32767이다. 32767이 넘어가는 경우 에러가 발생하므로, 초기 테이블 생성시에 칼럼 A의 최대값이 해당 타입의 최대값을 넘지 않는다는 것을 감안해야 한다.
+		*   자동 증가 특성은 순환되지 않으므로 타입의 최대값을 넘어갈 경우 오류가 발생하며, 이에 대한 롤백이 일어나지 않는다. 따라서 이와 같은 경우 해당 칼럼을 삭제 후 다시 생성해야 한다. 예를 들어, 아래와 같이 테이블을 생성했다면, A의 최대값은 32767이다. 32767이 넘어가는 경우 에러가 발생하므로, 초기 테이블 생성시에 칼럼 A의 최대값이 해당 타입의 최대값을 넘지 않는다는 것을 감안해야 한다.
 
-		  .. code-block:: sql
-		  
-			CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR (5));
+			.. code-block:: sql
+			  
+				CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR (5));
 
 .. _constraint-definition:
 
@@ -433,11 +433,11 @@ CREATE TABLE
 		INSERT INTO b_tbl VALUES (1,'George'),(2,'Laura'), (3,'Max');
 		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id = b.id;
 		 
-				   id           id                   phone                 name
-		==============================================================================
-					1            1                   '111-1111'            'George'
-					2            2                   '222-2222'            'Laura'
-					3            3                   '333-3333'            'Max'
+		   id           id                   phone                 name
+		======================================================================
+		    1            1                   '111-1111'            'George'
+		    2            2                   '222-2222'            'Laura'
+		    3            3                   '333-3333'            'Max'
 		 
 		-- when deleting primay key value, it cascades foreign key value  
 		DELETE FROM a_tbl WHERE id=3;
@@ -446,11 +446,11 @@ CREATE TABLE
 		 
 		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id = b.id;
 		 
-				   id           id                   phone                 name
-		==============================================================================
-					1            1                   '111-1111'            'George'
-					2            2                   '222-2222'            'Laura'
-		 
+		   id           id                   phone                 name
+		======================================================================
+		    1            1                   '111-1111'            'George'
+		    2            2                   '222-2222'            'Laura'
+
 		-- when attempting to update primay key value, it restricts the operation
 		UPDATE  a_tbl SET id = 10 WHERE phone = '111-1111';
 		 
@@ -499,14 +499,14 @@ CREATE TABLE
 	 
 	SELECT * FROM const_tbl WHERE id > '100';
 	
-			  id    name    
-	===================================================
-			  1001     john     
-			  1001     johnny     
-			  1001     jone     
-			  1000     john     
-			  1000     johnny     
-			  1000     jone
+	  id    name    
+	===========================================
+	  1001     john     
+	  1001     johnny     
+	  1001     jone     
+	  1000     john     
+	  1000     johnny     
+	  1000     jone
 
 
 테이블 옵션(REUSE_OID)

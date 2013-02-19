@@ -80,7 +80,7 @@ The CUBRID SHARD middleware consists of three processes (broker/proxy/cas) and t
 Selecting a Shard DB through the Shard SQL Hint
 -----------------------------------------------
 
-	**Shard SQL Hint**
+**Shard SQL Hint**
 
 	With the hints and configuration data included in a SQL hint statement, the CUBRID SHARD selects a shard DB that will process the requests from applications. The types of available SQL hints are as follows:
 
@@ -119,7 +119,7 @@ Selecting a Shard DB through the Shard SQL Hint
 	
 		* Functions to run several statements at one time on shard environment(ex. Statement.executeBatch in JDBC, cci_execute_batch in CCI) will be supported later.
 
-	**shard_key Hint**
+**shard_key Hint**
 
 	The **shard_key** hint is to specify the position of a bind or literal variable. This hint should be positioned in front of either of them.
 
@@ -135,7 +135,7 @@ Selecting a Shard DB through the Shard SQL Hint
 
 		SELECT name FROM student WHERE student_no = /*+ shard_key */ 123
 
-	**shard_val Hint**
+**shard_val Hint**
 
 	The **shard_val** hint is used when there is no shard column that can be used to identify the shard DB in the query. It sets the shard key column as the value of the **shard_val** hint. The **shard_val** hint can be positioned anywhere in an SQL statement.
 
@@ -145,7 +145,7 @@ Selecting a Shard DB through the Shard SQL Hint
 
 		SELECT age FROM student WHERE name =? /*+ shard_val(123) */
 
-	**shard_id Hint**
+**shard_id Hint**
 
 	Regardless of the shard key column value, the **shard_id** hint can be used when the user specifies a shard for query execution. The **shard_id** hint can be positioned anywhere in an SQL statement.
 
@@ -157,7 +157,7 @@ Selecting a Shard DB through the Shard SQL Hint
 
 .. _using-shard-hint:
 
-	**General Procedure of Executing Queries by Using Shard SQL Hint**
+**General Procedure of Executing Queries by Using Shard SQL Hint**
 
 	#. Executing Queries
 
@@ -220,13 +220,13 @@ Various DBMSs Available
 
 The CUBRID SHARD can be used on a variety of DBMSs such as CUBRID and MySQL.
 
-	**CUBRID SHARD with CUBRID**
+**CUBRID SHARD with CUBRID**
 
 	The following image shows the structure of CUBRID SHARD when using three CUBRID SHARD DBs.
 
 	.. image:: /images/image47.png
 
-	**CUBRID SHARD with MySQL**
+**CUBRID SHARD with MySQL**
 
 	The following image shows the structure of CUBRID SHARD when using three MySQL shard DBs.
 
@@ -239,13 +239,13 @@ The CUBRID SHARD can be used on a variety of DBMSs such as CUBRID and MySQL.
 Transaction Support
 -------------------
 
-	**Transaction Processing**
+**Transaction Processing**
 
 	The CUBRID SHARD executes an internal processing procedure to guarantee atomicity among ACID. For example, when an exception such as abnormal termination of an application occurs, the CUBRID SHARD sends a request to rollback to the shard DB which has been processing the request from the application in order to invalidate all changes in the transaction.
 
 	The ACID, the characteristic of general transactions, is guaranteed, based on the characteristics and settings of the backend DBMS.
 
-	**Constraints**
+**Constraints**
 
 	2 Phase Commit (2PC) is unavailable; therefore, an error occurs when a query is executed by using several shard DBs in a single transaction.
 
@@ -259,7 +259,7 @@ The CUBRID SHARD to be explained consists of four CUBRID SHARD DBs as shown belo
 
 	.. image:: /images/image49.png
 
-	**Start after creating the shard DB and user account**
+**Start after creating the shard DB and user account**
 
 	As shown in the example above, after each shard DB node creates a shard DB and a user account, it starts the instance of the database.
 
@@ -281,7 +281,7 @@ The CUBRID SHARD to be explained consists of four CUBRID SHARD DBs as shown belo
 Changing the shard Configurations
 ---------------------------------
 
-	**shard.conf**
+**shard.conf**
 
 	Change **shard.conf**, the default configuration file, as shown below:
 
@@ -323,7 +323,7 @@ Changing the shard Configurations
 		# TCP port id for the CUBRID programs (used by all clients).
 		cubrid_port_id=41523
 
-	**shard_key.txt**
+**shard_key.txt**
 
 	Set **shard_key.txt**, the shard DB mapping configuration file, for the shard key hash value as follows:
 
@@ -342,7 +342,7 @@ Changing the shard Configurations
 		128     191     2
 		192     255     3
 
-	**shard_connection.txt**
+**shard_connection.txt**
 
 	Configure the **shard_connection.txt** file which is shard database configuration file, as follows:
 
@@ -364,7 +364,7 @@ Changing the shard Configurations
 Starting Service and Monitoring
 -------------------------------
 
-	**Starting CUBRID SHARD**
+**Starting CUBRID SHARD**
 
 	Start the CUBRID SHARD as shown below: ::
 
@@ -372,7 +372,7 @@ Starting Service and Monitoring
 		@ cubrid shard start
 		++ cubrid shard start: success
 
-	**Retrieving the CUBRID SHARD Status**
+**Retrieving the CUBRID SHARD Status**
 
 	Retrieve the CUBRID SHARD status as follows to check the parameter and the status of the process. ::
 
@@ -403,13 +403,13 @@ Writing a Sample
 
 Check that the CUBRID SHARD operates normally by using a simple Java program.
 
-	**Writing a Sample Table**
+**Writing a Sample Table**
 
 	Write a temporary table for the example in all shard DBs. ::
 
 		sh> csql -C -u shard -p 'shard123' shard1@localhost -c "create table student (s_no int, s_name varchar, s_age int, primary key(s_no))"
 
-	**Writing Code**
+**Writing Code**
 
 	The following example program is to enter student information from 0 to 1023 to the shard DB. Check the **shard.conf** modified in the previous procedure and then set the address/port information and the user information in the connection url.
 
@@ -482,14 +482,14 @@ Check that the CUBRID SHARD operates normally by using a simple Java program.
 				}
 		}
 
-	**Executing a Sample**
+**Executing a Sample**
 
 	Execute the sample program as follows: ::
 
 		sh> javac -cp ".:$CUBRID/jdbc/cubrid_jdbc.jar" *.java
 		sh> java -cp ".:$CUBRID/jdbc/cubrid_jdbc.jar" TestInsert
 
-	**Checking the Result**
+**Checking the Result**
 
 	Execute the query in each shard DB and check whether or not the partitioned information has been correctly entered.
 
@@ -654,7 +654,7 @@ In addition to **shard.conf**, the CUBRID SHARD has a configuration file for sha
 
 .. _shard-connection-configuration-file:
 
-	**Shard Connection Configuration File (SHARD_CONNECTION_FILE)**
+**Shard Connection Configuration File (SHARD_CONNECTION_FILE)**
 
 	To connect to the backend shard DB, the CUBRID SHARD loads the shard connection configuration file specified in the **SHARD_CONNECTION_FILE** parameter of **shard.conf**, the default configuration file. If **SHARD_CONNECTION_FILE** is not specified in **shard.conf**, it loads the **shard_connection.txt** file by default.
 
@@ -683,42 +683,42 @@ In addition to **shard.conf**, the CUBRID SHARD has a configuration file for sha
 
 	**CUBRID**
 
-	When the backend shard DB is CUBRID, the format of the connection configuration file is as follows: ::
+		When the backend shard DB is CUBRID, the format of the connection configuration file is as follows: ::
 
-		# CUBRID
-		# shard-id      real-db-name            connection-info
-		# shard identifier( >0 )        The real name of backend shard DB    host name
+			# CUBRID
+			# shard-id      real-db-name            connection-info
+			# shard identifier( >0 )        The real name of backend shard DB    host name
 
-		0           shard_db_1          host1
-		1           shard_db_2          host2
-		2           shard_db_3          host3
-		3           shard_db_4          host4
+			0           shard_db_1          host1
+			1           shard_db_2          host2
+			2           shard_db_3          host3
+			3           shard_db_4          host4
 
-	For CUBRID, a separate backend shard DB port number is not specified in the above configuration file, but the **CUBRID_PORT_ID** parameter in the **cubrid.conf** file (the default configuration file of CUBRID) is used. The **cubrid.conf** file is by default located in the **$CUBRID/conf**. ::
+		For CUBRID, a separate backend shard DB port number is not specified in the above configuration file, but the **CUBRID_PORT_ID** parameter in the **cubrid.conf** file (the default configuration file of CUBRID) is used. The **cubrid.conf** file is by default located in the **$CUBRID/conf**. ::
 
-		$ vi cubrid.conf
+			$ vi cubrid.conf
 
-		...
+			...
 
-		# TCP port id for the CUBRID programs (used by all clients).
-		cubrid_port_id=41523
+			# TCP port id for the CUBRID programs (used by all clients).
+			cubrid_port_id=41523
 
 	**MySQL**
 
-	When the backend shard DB is MySQL, the format of the connection configuration file is as follows: ::
+		When the backend shard DB is MySQL, the format of the connection configuration file is as follows: ::
 
-		# mysql
-		# shard-id      real-db-name            connection-info
-		# shard identifier (>0 )        Actual name of each backend shard DB    Host name: port number
+			# mysql
+			# shard-id      real-db-name            connection-info
+			# shard identifier (>0 )        Actual name of each backend shard DB    Host name: port number
 
-		0           shard_db_1          host1:1234
-		1           shard_db_2          host2:1234
-		2           shard_db_3          host3:1234
-		3           shard_db_4          host4:1234
+			0           shard_db_1          host1:1234
+			1           shard_db_2          host2:1234
+			2           shard_db_3          host3:1234
+			3           shard_db_4          host4:1234
 
 .. _shard-key-configuration-file:
 
-	**Configuration File for Shard Key (SHARD_KEY_FILE)**
+**Configuration File for Shard Key (SHARD_KEY_FILE)**
 
 	The CUBRID SHARD loads the shard key configuration file specified in the **SHARD_KEY_FILE** parameter of **shard.conf**, the default configuration file, to determine which backend shard DB should process the user requests.
 
@@ -726,30 +726,30 @@ In addition to **shard.conf**, the CUBRID SHARD has a configuration file for sha
 
 	**Format**
 
-	The example and format of a shard key configuration file are as follows: ::
+		The example and format of a shard key configuration file are as follows: ::
 
-		[%student_no]
-		#min    max     shard_id
-		0       31      0   
-		32      63      1   
-		64      95      2   
-		96      127     3   
-		128     159     0
-		160     191     1
-		192     223     2
-		224     255     3
-		 
-		#[%another_key_column]
-		#min    max     shard_id
-		#0      127     0   
-		#128    255     1
+			[%student_no]
+			#min    max     shard_id
+			0       31      0   
+			32      63      1   
+			64      95      2   
+			96      127     3   
+			128     159     0
+			160     191     1
+			192     223     2
+			224     255     3
+			 
+			#[%another_key_column]
+			#min    max     shard_id
+			#0      127     0   
+			#128    255     1
 
-	*   [%shard_key_name]: Specifies the name of the shard key.
-	*   min: The minimum value range of the shard key hash results.
-	*   max: The maximum range of the shard key hash results.
-	*   shard_id: The shard identifier
+		*   [%shard_key_name]: Specifies the name of the shard key.
+		*   min: The minimum value range of the shard key hash results.
+		*   max: The maximum range of the shard key hash results.
+		*   shard_id: The shard identifier
 
-	.. note:: As shown in the general CUBRID settings, the content after # is converted to comment.
+		.. note:: As shown in the general CUBRID settings, the content after # is converted to comment.
 
 .. warning::
 
@@ -766,7 +766,7 @@ Setting User-Defined Hash Function
 
 To select a shard that will perform queries, the CUBRID SHARD uses the results of hashing the shard key and the metadata configuration information. For this, users can use the default hash function or define a hash function.
 
-	**Default Hash Function**
+**Default Hash Function**
 
 	When the **SHARD_KEY_LIBRARY_NAME** and **SHARD_KEY_FUNCTION_NAME** parameters of **shard.conf** are not set, the shard key is hashed by using the default hash function. The default hash function is as follows:
 
@@ -778,151 +778,151 @@ To select a shard that will perform queries, the CUBRID SHARD uses the results o
 
 		Default hash function (shard_key) = shard_key[0] mod SHARD_KEY_MODULAR parameter (default value: 256)
 
-	**Setting User-Defined Hash Function**
+**Setting User-Defined Hash Function**
 
 	The CUBRID SHARD can hash the shard key by using the user-defined hash function, in addition to the default hash function.
 
 	**Implementing and Creating a Library**
 
-	The user-defined hash function must be implemented as a **.so** library loadable at runtime. Its prototype is as shown below:
+		The user-defined hash function must be implemented as a **.so** library loadable at runtime. Its prototype is as shown below:
 
-	.. code-block:: c
+		.. code-block:: c
 
-		94 /*
-		95    return value :
-		96         success - shard key id(>0)
-		97         fail    - invalid argument(ERROR_ON_ARGUMENT), shard key id make fail(ERROR_ON_MAKE_SHARD_KEY)
-		98    type         : shard key value type
-		99    val          : shard key value
-		100 */
-		101 typedef int (*FN_GET_SHARD_KEY) (const char *shard_key, T_SHARD_U_TYPE type,
-		102                                    const void *val, int val_size);
+			94 /*
+			95    return value :
+			96         success - shard key id(>0)
+			97         fail    - invalid argument(ERROR_ON_ARGUMENT), shard key id make fail(ERROR_ON_MAKE_SHARD_KEY)
+			98    type         : shard key value type
+			99    val          : shard key value
+			100 */
+			101 typedef int (*FN_GET_SHARD_KEY) (const char *shard_key, T_SHARD_U_TYPE type,
+			102                                    const void *val, int val_size);
 
-	*   The return value of the hash function should be within the range of the hash results of the **shard_key.txt** configuration file.
-	*   To build a library, the **$CUBRID/include/shard_key.h** file of the CUBRID source must be included. The file lets you know the details such as error code that can be returned.
+		*   The return value of the hash function should be within the range of the hash results of the **shard_key.txt** configuration file.
+		*   To build a library, the **$CUBRID/include/shard_key.h** file of the CUBRID source must be included. The file lets you know the details such as error code that can be returned.
 
 	**Changing the shard.conf Configuration File**
 
-	To apply a user-defined hash function, the **SHARD_KEY_LIBRARY_NAME** and **SHARD_KEY_FUNCTION_NAME** parameters of **shard.conf** should be set according to the implementation.
+		To apply a user-defined hash function, the **SHARD_KEY_LIBRARY_NAME** and **SHARD_KEY_FUNCTION_NAME** parameters of **shard.conf** should be set according to the implementation.
 
-	*   **SHARD_KEY_LIBRARY_NAME** : The (absolute) path of the user-defined hash library.
-	*   **SHARD_KEY_FUNCTION_NAME** : The name of the user-defined hash function.
+		*   **SHARD_KEY_LIBRARY_NAME** : The (absolute) path of the user-defined hash library.
+		*   **SHARD_KEY_FUNCTION_NAME** : The name of the user-defined hash function.
 
 	**Example**
 
-	The following example shows how to use a user-defined hash.
+		The following example shows how to use a user-defined hash.
 
-	First, check the **shard_key.txt** configuration file. ::
+		First, check the **shard_key.txt** configuration file. ::
 
-		[%student_no]
-		#min    max     shard_id
-		0       31      0   
-		32      63      1   
-		64      95      2   
-		96      127     3   
-		128     159     0
-		160     191     1
-		192     223     2
-		224     255     3
+			[%student_no]
+			#min    max     shard_id
+			0       31      0   
+			32      63      1   
+			64      95      2   
+			96      127     3   
+			128     159     0
+			160     191     1
+			192     223     2
+			224     255     3
 
-	To set the user-defined hash function, implement a **.so** shared library that is loadable at runtime. The result of the hash function should be within the range of hash function results defined in the **shard_key.txt** configuration file. The following example shows a simple implementation.
+		To set the user-defined hash function, implement a **.so** shared library that is loadable at runtime. The result of the hash function should be within the range of hash function results defined in the **shard_key.txt** configuration file. The following example shows a simple implementation.
 
-	*   When the shard_key is an integer
+		*   When the shard_key is an integer
 
-		*   Select shard #0 when the shard_key is an odd number
-		*   Select shard #1 when the shard_key is an even number
+			*   Select shard #0 when the shard_key is an odd number
+			*   Select shard #1 when the shard_key is an even number
 
-	*   When the shard_key is a string
+		*   When the shard_key is a string
 
-		*   Select shard #0 when the shard_key string starts with 'a' or 'A'.
-		*   Select shard #1 when the shard_key string starts with 'b' or 'B'.
-		*   Select shard #2 when the shard_key string starts with 'c' or 'C'.
-		*   Select shard #3 when the shard_key string starts with 'd' or 'D'.
+			*   Select shard #0 when the shard_key string starts with 'a' or 'A'.
+			*   Select shard #1 when the shard_key string starts with 'b' or 'B'.
+			*   Select shard #2 when the shard_key string starts with 'c' or 'C'.
+			*   Select shard #3 when the shard_key string starts with 'd' or 'D'.
 
-	.. code-block:: c
-		
-		// <shard_key_udf.c>
-		 
-		1 #include <string.h>
-		2 #include <stdio.h>
-		3 #include <unistd.h>
-		4 #include "shard_key.h"
-		5
-		6 int
-		7 fn_shard_key_udf (const char *shard_key, T_SHARD_U_TYPE type,
-		8                   const void *value, int value_len)
-		9 {
-		10   unsigned int ival;
-		11   unsigned char c;
-		12
-		13   if (value == NULL)
-		14     {
-		15       return ERROR_ON_ARGUMENT;
-		16     }
-		17
-		18   switch (type)
-		19     {
-		20     case SHARD_U_TYPE_INT:
-		21       ival = (unsigned int) (*(unsigned int *) value);
-		22       if (ival % 2)
-		23         {
-		24           return 32;            // shard #1
-		25         }
-		26       else
-		27         {
-		28           return 0;             // shard #0
-		29         }
-		30       break;
-		31
-		32     case SHARD_U_TYPE_STRING:
-		33       c = (unsigned char) (((unsigned char *) value)[0]);
-		34       switch (c)
-		36         case 'a':
-		37         case 'A':
-		38           return 0;             // shard #0
-		39         case 'b':
-		40         case 'B':
-		41           return 32;            // shard #1
-		42         case 'c':
-		43         case 'C':
-		44           return 64;            // shard #2
-		45         case 'd':
-		46         case 'D':
-		47           return 96;            // shard #3
-		48         default:
-		49           return ERROR_ON_ARGUMENT;
-		50         }
-		51
-		52       break;
-		53
-		54     default:
-		55       return ERROR_ON_ARGUMENT;
-		56     }
-		57   return ERROR_ON_MAKE_SHARD_KEY;
-		58 }
+		.. code-block:: c
+			
+			// <shard_key_udf.c>
+			 
+			1 #include <string.h>
+			2 #include <stdio.h>
+			3 #include <unistd.h>
+			4 #include "shard_key.h"
+			5
+			6 int
+			7 fn_shard_key_udf (const char *shard_key, T_SHARD_U_TYPE type,
+			8                   const void *value, int value_len)
+			9 {
+			10   unsigned int ival;
+			11   unsigned char c;
+			12
+			13   if (value == NULL)
+			14     {
+			15       return ERROR_ON_ARGUMENT;
+			16     }
+			17
+			18   switch (type)
+			19     {
+			20     case SHARD_U_TYPE_INT:
+			21       ival = (unsigned int) (*(unsigned int *) value);
+			22       if (ival % 2)
+			23         {
+			24           return 32;            // shard #1
+			25         }
+			26       else
+			27         {
+			28           return 0;             // shard #0
+			29         }
+			30       break;
+			31
+			32     case SHARD_U_TYPE_STRING:
+			33       c = (unsigned char) (((unsigned char *) value)[0]);
+			34       switch (c)
+			36         case 'a':
+			37         case 'A':
+			38           return 0;             // shard #0
+			39         case 'b':
+			40         case 'B':
+			41           return 32;            // shard #1
+			42         case 'c':
+			43         case 'C':
+			44           return 64;            // shard #2
+			45         case 'd':
+			46         case 'D':
+			47           return 96;            // shard #3
+			48         default:
+			49           return ERROR_ON_ARGUMENT;
+			50         }
+			51
+			52       break;
+			53
+			54     default:
+			55       return ERROR_ON_ARGUMENT;
+			56     }
+			57   return ERROR_ON_MAKE_SHARD_KEY;
+			58 }
 
-	Build the user-defined function as a shared library. The following example is Makefile for building a hash function. ::
+		Build the user-defined function as a shared library. The following example is Makefile for building a hash function. ::
 
-		# Makefile
-		 
-		CC = gcc
-		LIBS = $(LIB_FLAG)
-		CFLAGS = $(CFLAGS_COMMON) -fPIC -I$(CUBRID)/include –I$(CUBRID_SRC)/src/broker
-		 
-		SHARD_CC = gcc -g -shared -Wl,-soname,shard_key_udf.so
-		SHARD_KEY_UDF_OBJS = shard_key_udf.o
-		 
-		all:$(SHARD_KEY_UDF_OBJS)
-				$(SHARD_CC) $(CFLAGS) -o shard_key_udf.so $(SHARD_KEY_UDF_OBJS) $(LIBS)
-		 
-		clean:
-				-rm -f *.o core shard_key_udf.so
+			# Makefile
+			 
+			CC = gcc
+			LIBS = $(LIB_FLAG)
+			CFLAGS = $(CFLAGS_COMMON) -fPIC -I$(CUBRID)/include –I$(CUBRID_SRC)/src/broker
+			 
+			SHARD_CC = gcc -g -shared -Wl,-soname,shard_key_udf.so
+			SHARD_KEY_UDF_OBJS = shard_key_udf.o
+			 
+			all:$(SHARD_KEY_UDF_OBJS)
+					$(SHARD_CC) $(CFLAGS) -o shard_key_udf.so $(SHARD_KEY_UDF_OBJS) $(LIBS)
+			 
+			clean:
+					-rm -f *.o core shard_key_udf.so
 
-	To include the user-defined hash function, modify the **SHARD_KEY_LIBRARY_NAME** and **SHARD_KEY_FUNCTION_NAME** parameters as shown in the above implementation. ::
+		To include the user-defined hash function, modify the **SHARD_KEY_LIBRARY_NAME** and **SHARD_KEY_FUNCTION_NAME** parameters as shown in the above implementation. ::
 
-		[%student_no]
-		SHARD_KEY_LIBRARY_NAME =$CUBRID/conf/shard_key_udf.so
-		SHARD_KEY_FUNCTION_NAME =fn_shard_key_udf
+			[%student_no]
+			SHARD_KEY_LIBRARY_NAME =$CUBRID/conf/shard_key_udf.so
+			SHARD_KEY_FUNCTION_NAME =fn_shard_key_udf
 
 Running and Monitoring
 ======================
@@ -966,17 +966,17 @@ Stopping CUBRID SHARD
 Dynamic change of CUBRID SHARD parameters
 -----------------------------------------
 
-	**Description**
+**Description**
 
 	You can configure the parameters related to running CUBRID SHARD in the environment configuration file (**shard.conf**). Additionally, you can some CUBRID SHARD parameters while it is running by using the **shard_broker_changer** utility. For details about configuration of CUBRID SHARD parameters and dynamically changeable parameters see :ref:`shard-configuration`.
 
-	**Syntax**
+**Syntax**
 
 	The **shard_broker_changer** syntax used to change parameter while CUBRID SHARD is running is as follows: Enter the name of CUBRID SHARD running in *shard-name* and enter dynamically changeable parameters in *parameter*. *value* must be specified based on the parameter to be modified. You can apply changes in a specific CUBRID SHARD by specifying an identifier of CUBRID SHARD. *proxy-number* represents PROXY-ID displayed in the **cubrid shard status** command. ::
 
 		shard_broker_changer shard-name [proxy-number] parameter value
 
-	**Example**
+**Example**
 
 	Even though SQL logs are recorded in CUBRID SHARD which is running, you need to enter as follows to configure the **SQL_LOG** parameter to ON so that SQL logs are recorded in CUBRID SHARD running. Such dynamic parameter change is effective only while CUBRID SHARD is running. ::
 
@@ -1036,7 +1036,7 @@ The following shows how to print the detail information using the **-f** option.
 Checking CUBRID SHARD status Information
 ----------------------------------------
 
-	**cubrid shard status**
+**cubrid shard status**
 
 	provides a variety of options to check the status information of each shard broker, shard proxy, and shard cas. In addition, it is possible to check the metadata information and the information on the client who has accessed the shard proxy. ::
 
@@ -1045,7 +1045,7 @@ Checking CUBRID SHARD status Information
 
 	When <*expr*> is given, the status monitoring is performed for the corresponding CUBRID SHARD. When it is omitted, status monitoring is performed for all CUBRID SHARDs registered to the CUBRID SHARD configuration file (**shard.conf**).
 
-	**Options**
+**Options**
 
 	The following table shows options that can be used together with cubrid broker status.
 
@@ -1075,7 +1075,7 @@ Checking CUBRID SHARD status Information
 	|            | is entered.                                                                                                             |
 	+------------+-------------------------------------------------------------------------------------------------------------------------+
 
-	**Example**
+**Example**
 
 	If no options or parameters are given to check the status of all CUBRID SHARDs, the following will be displayed as a result: ::
 
@@ -1405,7 +1405,7 @@ There are four types of logs that relate to starting the shard: access, proxy, e
 SHARD PROXY Log
 ---------------
 
-	**Access Log**
+**Access Log**
 
 	*   Parameter: **ACCESS_LOG**
 	*   Description: Log the client access (the existing broker logs at the cas).
@@ -1420,7 +1420,7 @@ SHARD PROXY Log
 		10.24.18.67 - - 1340243446.791 1340243446.791 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
 		10.24.18.67 - - 1340243446.821 1340243446.821 2012/06/21 10:50:46 ~ 2012/06/21 10:50:46 23377 - -1 shard1     shard1
 
-	**Proxy Log Level**
+**Proxy Log Level**
 
 	*   Parameter: **PROXY_LOG**
 	*   Proxy log level policy: When the upper level is set, all logs of the lower level will be left.
@@ -1440,7 +1440,7 @@ SHARD PROXY Log
 SHARD CAS Log
 -------------
 
-	**SQL Log**
+**SQL Log**
 
 	*   Parameter: **SQL_LOG**
 	*   Description: Log queries such as prepare/execute/fetch and other cas information.
@@ -1458,7 +1458,7 @@ SHARD CAS Log
 		06/21 10:50:28.259 (0) auto_rollback
 		06/21 10:50:28.259 (0) auto_rollback 0
 
-	**Error log**
+**Error log**
 
 	*   Parameter: **ERROR_LOG_DIR**
 	*   Description: For CUBRID, the cs library logs EID and error strings to the corresponding file. For cas4o/m, the cas logs errors to the corresponding file.
@@ -1477,7 +1477,7 @@ SHARD CAS Log
 Constraints
 ===========
 
-	**Changing or retrieving data in several shard DBs within one transaction**
+**Changing or retrieving data in several shard DBs within one transaction**
 
 	One transaction should be performed within only one shard DB, so the following constraints exist.
 
@@ -1485,15 +1485,15 @@ Constraints
 
 	*   When a query, such as join, sub-query, or, union, group by, between, like, in, exist, or any/some/all, for several shard DB data, a result different from the intended one may be returned.
 
-	**Session**
+**Session**
 
 	Session information is valid within each shard DB only. Therefore, the results from session-related functions such as **last_insert_id** () may be different from the intended result.
 
-	**auto increment**
+**auto increment**
 
 	The auto increment attribute or SERIAL is valid within each shard DB only. So a result different from the intended result may be returned.
 
-	**The access between SHARD DB for Windows and application drivers**
+**The access between SHARD DB for Windows and application drivers**
 	
 	SHARD DB server for Windows can be accessed to the application with the drivers which use the same version with the DB server's version. 
 	SHARD DB server for Linux can be accessed to the application with the drivers which use the different version with the DB server's version. 

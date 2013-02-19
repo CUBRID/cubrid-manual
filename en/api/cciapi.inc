@@ -713,7 +713,7 @@ CCI API Reference
 
 	*   **altHosts** = *standby_broker1_host*, *standby_broker2_host,* . . .: Specifies the broker information of the standby server, which is used for failover when it is impossible to connect to the active server. You can specify multiple brokers for failover, and the connection to the brokers is attempted in the order listed in **alhosts**.
 
-	*   **rcTime** : After the failure occurred on the first connected broker, the application connects to the broker specified by **altHosts**(broker failover). Then it attempts to reconnect to the first connected broker at every **rcTime**(default value: 600 seconds).
+	*   **rcTime** : After the failure occurred on the first connected broker, the application connects to the broker specified by **altHosts**\(broker failover). Then it attempts to reconnect to the first connected broker at every **rcTime**\(default value: 600 seconds).
 	
 	*	**loadBalance** : When this value is true, the applications try to connect to the main host and alternative hosts specified with the **altHosts** property as a random order. (default value: false).
 	

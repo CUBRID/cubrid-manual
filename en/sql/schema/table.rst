@@ -93,7 +93,7 @@ A column is a set of data values of a particular simple type, one for each row o
 	<column_constraint> ::=
 	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
 
-	**Column Name**
+**Column Name**
 
 	How to create a column name, see :doc:`/sql/identifier`. You can alter created column name by using the **RENAME COLUMN** clause of the **ALTER TABLE** statement (see :ref:`rename-column`).
 
@@ -108,7 +108,7 @@ A column is a set of data values of a particular simple type, one for each row o
 		*   The first character of a column name must be an alphabet.
 		*   The column name must be unique in the table.
 
-	**Setting the Column Initial Value (SHARED, DEFAULT)**
+**Setting the Column Initial Value (SHARED, DEFAULT)**
 
 	**SHARED** and **DEFAULT** are attributes related to the initial value of the column. You can change the value of **SHARED** and **DEFAULT** in the **ALTER TABLE** statement.
 
@@ -178,20 +178,24 @@ A column is a set of data values of a particular simple type, one for each row o
 
 	.. code-block:: sql
 
-		CREATE TABLE t (date1 date default SYSDATE, date2 date default SYSDATE);
-		CREATE TABLE t (date1 DATE default SYSDATE,
-						ts1   TIMESTAMP default CURRENT_TIMESTAMP);
+		CREATE TABLE t (date1 DATE DEFAULT SYSDATE, date2 DATE DEFAULT SYSDATE);
+		CREATE TABLE t (date1 DATE DEFAULT SYSDATE,
+						ts1   TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
-	**AUTO INCREMENT**
+**AUTO INCREMENT**
 
 	You can define the **AUTO_INCREMENT** attribute for the column to automatically give serial numbers to column values. This can be defined only for **SMALLINT**, **INTEGER**, **BIGINT**, and **NUMERIC** (*p*, 0) types.
 
 	**DEFAULT**, **SHARED**, and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
 
-	You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see :ref:`alter-auto-increment` of **ALTER TABLE**. ::
-
-		CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]) |
+	You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see :ref:`alter-auto-increment` of **ALTER TABLE**. 
+	
+	.. code-block:: sql
+	
+		CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]);
+		
 		CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
+
 
 	*   *seed* : The initial value from which the number starts. All integers (positive, negative, and zero) are allowed. The default value is **1**.
 	*   *increment* : The increment value of each row. Only positive integers are allowed. The default value is **1**.
@@ -220,6 +224,7 @@ A column is a set of data values of a particular simple type, one for each row o
 		INSERT INTO tbl VALUES (NULL,'cubrid');
 		 
 		SELECT * FROM tbl;
+		
 				   id  val
 		===================================
 					3  'cubrid'
@@ -236,20 +241,22 @@ A column is a set of data values of a particular simple type, one for each row o
 		*   If **NULL** is specified in the column where auto increment is defined, the value of auto increment is stored.
 		*   **SHARED** or **DEFAULT** attribute cannot be specified in the column in which AUTO_INCREMENT is defined.
 		*   The initial value and the final value obtained by auto increment cannot exceed the minimum and maximum values allowed in the given type.
-		* Because auto increment has no cycle, an error occurs when the maximum value of the type exceeds, and no rollback is executed. Therefore, you must delete and recreate the column in such cases.
+		*   Because auto increment has no cycle, an error occurs when the maximum value of the type exceeds, and no rollback is executed. Therefore, you must delete and recreate the column in such cases.
 
 		For example, if a table is created as below, the maximum value of A is 32767. Because an error occurs if the value exceeds 32767, you must make sure that the maximum value of the column A does not exceed the maximum value of the type when creating the initial table.
 
-	  .. code-block:: sql
-	  
-		create table tb1(A smallint auto_increment, B char(5));
+			.. code-block:: sql
+			  
+				CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR(5));
 
 .. _constraint-definition:
 
 Constraint Definition
 ---------------------
 
-You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the constraints. You can also create an index by using **INDEX** or **KEY**. ::
+You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the constraints. You can also create an index by using **INDEX** or **KEY**. 
+
+::
 
 	<column_constraint> ::=
 	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
@@ -274,11 +281,11 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION  | SET NULL
 
-	**NOT NULL Constraint**
+**NOT NULL Constraint**
 
 	A column for which the **NOT NULL** constraint has been defined must have a certain value that is not **NULL**. The **NOT NULL** constraint can be defined for all columns. An error occurs if you try to insert a **NULL** value into a column with the **NOT NULL** constraint by using the **INSERT** or **UPDATE** statement.
 
-	In the following example, if you input NULL value on the ID column, it occurs an error because id column cannot have NULL value.
+	In the following example, if you input NULL value on the *id* column, it occurs an error because *id* column cannot have NULL value.
 
 	.. code-block:: sql
 
@@ -291,7 +298,7 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 		 
 		ERROR: syntax error, unexpected Null
 
-	**UNIQUE Constraint**
+**UNIQUE Constraint**
 
 	The **UNIQUE** constraint enforces a column to have a unique value. An error occurs if a new record that has the same value as the existing one is added by this constraint.
 
@@ -332,11 +339,13 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 					1  '000-0000'
 					1  '111-1111'
 
-	**PRIMARY KEY Constraint**
+**PRIMARY KEY Constraint**
 
 	A key in a table is a set of column(s) that uniquely identifies each row. A candidate key is a set of columns that uniquely identifies each row of the table. You can define one of such candidate keys a primary key. That is, the column defined as a primary key is uniquely identified in each row.
 
-	By default, the index created by defining the primary key is created in ascending order, and you can define the order by specifying **ASC** or **DESC** keyword next to the column. ::
+	By default, the index created by defining the primary key is created in ascending order, and you can define the order by specifying **ASC** or **DESC** keyword next to the column. 
+	
+	.. code-block:: sql
 
 		CREATE TABLE pk_tbl (a INT, b INT, PRIMARY KEY (a, b DESC));
 
@@ -363,7 +372,7 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 		PRIMARY KEY(host_year, event_code, athlete_code, medal)
 		);
 
-	**FOREIGN KEY Constraint**
+**FOREIGN KEY Constraint**
 
 	A foreign key is a column or a set of columns that references the primary key in other tables in order to maintain reference relationship. The foreign key and the referenced primary key must have the same data type. Consistency between two tables is maintained by the foreign key referencing the primary key, which is called referential integrity. ::
 
@@ -402,25 +411,27 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 
 		--creaing two tables where one is referencing the other
 		CREATE TABLE a_tbl(
-		id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-		phone VARCHAR(10));
+		  id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+		  phone VARCHAR(10)
+		);
 		 
 		CREATE TABLE b_tbl(
-		ID INT NOT NULL,
-		name VARCHAR(10) NOT NULL,
-		CONSTRAINT pk_id PRIMARY KEY(id),
-		CONSTRAINT fk_id FOREIGN KEY(id) REFERENCES a_tbl(id)
-		ON DELETE CASCADE ON UPDATE RESTRICT);
+		  id INT NOT NULL,
+		  name VARCHAR(10) NOT NULL,
+		  CONSTRAINT pk_id PRIMARY KEY(id),
+		  CONSTRAINT fk_id FOREIGN KEY(id) REFERENCES a_tbl(id)
+		  ON DELETE CASCADE ON UPDATE RESTRICT
+		);
 		 
 		INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
 		INSERT INTO b_tbl VALUES(1,'George'),(2,'Laura'),(3,'Max');
 		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
 		 
-		           id           id                   phone                 name
-		==============================================================================
-		            1            1                   '111-1111'            'George'
-		            2            2                   '222-2222'            'Laura'
-		            3            3                   '333-3333'            'Max'
+		   id           id                   phone                 name
+		======================================================================
+		    1            1                   '111-1111'            'George'
+		    2            2                   '222-2222'            'Laura'
+		    3            3                   '333-3333'            'Max'
 		 
 		--when deleting primay key value, it cascades foreign key value  
 		DELETE FROM a_tbl WHERE id=3;
@@ -429,10 +440,10 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 		 
 		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
 		 
-		           id           id                   phone                 name
-		==============================================================================
-		            1            1                   '111-1111'            'George'
-		            2            2                   '222-2222'            'Laura'
+		   id           id                   phone                 name
+		======================================================================
+		    1            1                   '111-1111'            'George'
+		    2            2                   '222-2222'            'Laura'
 		 
 		--when attempting to update primay key value, it restricts the operation
 		UPDATE  a_tbl SET id = 10 WHERE phone = '111-1111';
@@ -450,7 +461,7 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 		*   The actions cascaded by reference constraints do not activate the trigger action.
 		*   It is not recommended to use *referential_triggered_action* in the CUBRID HA environment. In the CUBRID HA environment, the trigger action is not supported. Therefore, if you use *referential_triggered_action*, the data between the master database and the slave database can be inconsistent. For details, see :doc:`/admin/ha`.
 
-	**KEY or INDEX**
+**KEY or INDEX**
 
 	**KEY** and **INDEX** are used interchangeably. They create an index that uses the corresponding column as a key.
 
@@ -537,7 +548,7 @@ You can create a table that has the same schema as an existing table by using th
 
 You cannot create the column definition because the **CREATE TABLE ... LIKE** statement replicates the schema only. ::
 
-	CREATE {TABLE | CLASS} <new_table_name> LIKE <old_table_name>
+	CREATE {TABLE | CLASS} <new_table_name> LIKE <old_table_name>;
 
 *   *new_table_name* : A table name to be created
 *   *old_table_name* : The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE … LIKE** statement.
@@ -548,8 +559,9 @@ You cannot create the column definition because the **CREATE TABLE ... LIKE** st
 .. code-block:: sql
 
 	CREATE TABLE a_tbl(
-	id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-	phone VARCHAR(10));
+	  id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+	  phone VARCHAR(10)
+	);
 	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
 	 
 	--creating an empty table with the same schema as a_tbl
@@ -616,9 +628,8 @@ You can create a new table that contains the result records of the **SELECT** st
 
 ::
 
-	CREATE {TABLE | CLASS} <table_name>
-					   [( <column_definition> [,<table_constraint>]... )]
-					   [REPLACE] AS <select_statement>
+	CREATE {TABLE | CLASS} <table_name> [( <column_definition> [,<table_constraint>]... )]
+	[REPLACE] AS <select_statement>
 
 *   *table_name* : A name of the table to be created.
 *   *column_definition* : Defines a column. If it is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
@@ -628,34 +639,40 @@ You can create a new table that contains the result records of the **SELECT** st
 .. code-block:: sql
 
 	CREATE TABLE a_tbl(
-	id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-	phone VARCHAR(10));
+	  id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+	  phone VARCHAR(10));
 	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
 	 
 	--creating a table without column definition
 	CREATE TABLE new_tbl1 AS SELECT * FROM a_tbl;
 	SELECT * FROM new_tbl1;
 	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
+	   id  phone
+	===========================
+	    1  '111-1111'
+	    2  '222-2222'
+	    3  '333-3333'
 	 
 	--all of column values are replicated from a_tbl
-	CREATE TABLE new_tbl2
-	(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, phone VARCHAR) AS SELECT * FROM a_tbl;
+	CREATE TABLE new_tbl2(
+	  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	  phone VARCHAR
+	) AS SELECT * FROM a_tbl;
+	
 	SELECT * FROM new_tbl2;
 	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
+	   id  phone
+	===========================
+	    1  '111-1111'
+	    2  '222-2222'
+	    3  '333-3333'
 	 
 	--some of column values are replicated from a_tbl and the rest is NULL
-	CREATE TABLE new_tbl3
-	(id INT, name VARCHAR) AS SELECT id, phone FROM a_tbl;
+	CREATE TABLE new_tbl3 (
+	  id INT, 
+	  name VARCHAR
+	) AS SELECT id, phone FROM a_tbl;
+	
 	SELECT * FROM new_tbl3
 	 
 	  name                           id  phone
@@ -665,31 +682,35 @@ You can create a new table that contains the result records of the **SELECT** st
 	  NULL                            3  '333-3333'
 	 
 	--column alias in the select statement should be used in the column definition
-	CREATE TABLE new_tbl4
-	(id1 int, id2 int)AS SELECT t1.id id1, t2.id id2 FROM new_tbl1 t1, new_tbl2 t2;
+	CREATE TABLE new_tbl4 (
+	  id1 int,
+	  id2 int
+	) AS SELECT t1.id id1, t2.id id2 FROM new_tbl1 t1, new_tbl2 t2;
+	
 	SELECT * FROM new_tbl4;
 	 
-			  id1          id2
-	==========================
-				1            1
-				1            2
-				1            3
-				2            1
-				2            2
-				2            3
-				3            1
-				3            2
-				3            3
+	  id1          id2
+	==================
+	    1            1
+	    1            2
+	    1            3
+	    2            1
+	    2            2
+	    2            3
+	    3            1
+	    3            2
+	    3            3
 	 
 	--REPLACE is used on the UNIQUE column
 	CREATE TABLE new_tbl5(id1 int UNIQUE) REPLACE AS SELECT * FROM new_tbl4;
+	
 	SELECT * FROM new_tbl5;
 	 
-			  id1          id2
-	==========================
-				1            3
-				2            3
-				3            3
+	  id1          id2
+	==================
+	    1            3
+	    2            3
+	    3            3
 
 
 ALTER TABLE
@@ -1135,7 +1156,7 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 	 
 	-- hard default values have been placed instead of signaling overflow
 
-	**Changes of Table Attributes based on Changes of Column Type**
+**Changes of Table Attributes based on Changes of Column Type**
 
 	*   Type Change : If the value of the system parameter **alter_table_change_type_strict** is set to no, then changing values to other types is allowed, but if it is set to yes then changing is not allowed. The default value of the parameter is **no**. You can change values to all types allowed by the **CAST** operator. Changing object types is allowed only by the upper classes (tables) of the objects.
 
@@ -1177,7 +1198,9 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 	*   Column Sequence : You can change the sequence of columns.
 	*   Name Change : You can change names as long as they do not conflict.
 
-	**Note - Changes of Values based on Changes of Column Type**
+.. note:: \
+
+	**Changes of Values based on Changes of Column Type**
 
 	The **alter_table_change_type_strict** parameter determines whether the value conversion is allowed according to the type change. If the value is no, it can be changed when you change a column type or add a **NOT NULL** constraint. The default value is **no**.
 

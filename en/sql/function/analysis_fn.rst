@@ -4,37 +4,37 @@ Aggregate/Analysis Functions
 
 **Aggregate Function**
 
-Aggregate function returns one result based on the group of rows. When the **GROUP BY** clause is included, a one-row aggregate result per group is returned. When the **GROUP BY** clause is omitted, a one-row aggregate result for all rows is returned. The **HAVING** clause is used to add a condition to the query which contains the **GROUP BY** clause.
+	Aggregate function returns one result based on the group of rows. When the **GROUP BY** clause is included, a one-row aggregate result per group is returned. When the **GROUP BY** clause is omitted, a one-row aggregate result for all rows is returned. The **HAVING** clause is used to add a condition to the query which contains the **GROUP BY** clause.
 
-Most aggregate functions can use **DISTINCT**. For the **GROUP BY ... HAVING** clause, see :ref:`group-by-clause`.
+	Most aggregate functions can use **DISTINCT**. For the **GROUP BY ... HAVING** clause, see :ref:`group-by-clause`.
 
 **Analytic Function**
 
-Analytic function calculates the aggregate value based on the result of rows. The analytic function is different from the aggregate function since it can return one or more rows based on the groups specified by the *query_partition_clause* after the **OVER** clause (when this clause is omitted, all rows are regarded as a group).
+	Analytic function calculates the aggregate value based on the result of rows. The analytic function is different from the aggregate function since it can return one or more rows based on the groups specified by the *query_partition_clause* after the **OVER** clause (when this clause is omitted, all rows are regarded as a group).
 
-The analytic function is used along with a new analytic clause, **OVER**, for the existing aggregate functions to allow a variety of statistics for a group of specific rows. ::
+	The analytic function is used along with a new analytic clause, **OVER**, for the existing aggregate functions to allow a variety of statistics for a group of specific rows. ::
 
-	function_name ( [argument_list ] ) OVER (<analytic_clause>)
-	 
-	<analytic_clause>::=
-		 [ <query_partition_clause> ] [ <order_by_clause> ]
-		
-	<query_partition_clause>::=
-		PARTITION BY value_expr [, value_expr ]...
-	 
-	<order_by_clause>::=
-		ORDER BY { expr | position | column_alias } [ ASC | DESC ]
-			[, { expr | position | column_alias } [ ASC | DESC ] ] ...
+		function_name ( [argument_list ] ) OVER (<analytic_clause>)
+		 
+		<analytic_clause>::=
+			 [ <query_partition_clause> ] [ <order_by_clause> ]
+			
+		<query_partition_clause>::=
+			PARTITION BY value_expr [, value_expr ]...
+		 
+		<order_by_clause>::=
+			ORDER BY { expr | position | column_alias } [ ASC | DESC ]
+				[, { expr | position | column_alias } [ ASC | DESC ] ] ...
 
-*   <*query_partition_clause*> : Groups based on one or more *value_expr*. It uses the **PARTITION BY** clause to partition the query result.
+	*   <*query_partition_clause*> : Groups based on one or more *value_expr*. It uses the **PARTITION BY** clause to partition the query result.
 
-*   <*order_by_clause*> : defines the data sorting method in the partition made by <*query_partition_clause*>. The result can be sorted with several keys. <When *query_partition_clause*> is omitted, the data is sorted within the overall result sets. Based on the sorting order, the function is applied to the column values of accumulated records, including the previous values.
+	*   <*order_by_clause*> : defines the data sorting method in the partition made by <*query_partition_clause*>. The result can be sorted with several keys. <When *query_partition_clause*> is omitted, the data is sorted within the overall result sets. Based on the sorting order, the function is applied to the column values of accumulated records, including the previous values.
 
-The behavior of a query with the expression of ORDER BY/PARTITION BY clause which is used together after the OVER clause is as follows.
+	The behavior of a query with the expression of ORDER BY/PARTITION BY clause which is used together after the OVER clause is as follows.
 
-* ORDER BY/PARTITION BY <constant> (ex: 1): Constant is considered as the column position of SELECT list.
-* ORDER BY/PARTITION BY <constant expression> (ex: 1+0): Constant is ignored and it is not used to do ordering/partitioning.
-* ORDER BY/PARTITION BY <expression with non-constant> (ex: i, sin(i+1)): The expression is used to do ordering/partitioning.
+	* ORDER BY/PARTITION BY <constant> (ex: 1): Constant is considered as the column position of SELECT list.
+	* ORDER BY/PARTITION BY <constant expression> (ex: 1+0): Constant is ignored and it is not used to do ordering/partitioning.
+	* ORDER BY/PARTITION BY <expression with non-constant> (ex: i, sin(i+1)): The expression is used to do ordering/partitioning.
 
 .. function:: AVG ( [ { DISTINCT | DISTINCTROW } | UNIQUE | ALL ] expression )
 
@@ -117,7 +117,7 @@ The behavior of a query with the expression of ORDER BY/PARTITION BY clause whic
 		WHERE mascot IS NOT NULL; 
 			 count(*)
 		=============
-					9
+		            9
 
 	The following example shows how to output the number of players whose nation_code is 'AUT' in *demodb* by accumulating the number of events when the event is changed. The last row shows the number of all players.
 

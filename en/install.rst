@@ -31,7 +31,7 @@ For more information on the CUBRID engine, tools, and drivers, see http://www.cu
 Version Compatibility and Operability
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	**Application Compatibility**
+**Application Compatibility**
 
 	* Applications that use JDBC, PHP or CCI APIs from 2008 R2.0 or higher version of CUBRID can access the CUBRID 2008 R4.1 database. However, you must link the CUBRID 2008 R4.1 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces.
 
@@ -39,7 +39,7 @@ Version Compatibility and Operability
 
 	* An application that is developed by using the GLO class can be used after it is converted to an application or schema suitable to the BLOB or CLOB type.
 
-	**CUBRID Manager Compatibility**
+**CUBRID Manager Compatibility**
 
 	* CUBRID Manager guarantees backward compatibility with the servers using CUBRID 2008 R2.1 or higher and uses the CUBRID JDBC driver that matches each server version. However, you must use a CUBRID Manager that is higher than CUBRID servers in version in order to utilize all the features of CUBRID Manager. The CUBRID JDBC driver is included in the $CUBRID/jdbc directory when CUBRID is installed.($CUBRID on Linux, %CUBRID% on Windows).
 
@@ -47,8 +47,8 @@ Version Compatibility and Operability
 
 	* Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the http://www.cubrid.org Website.
 
-	.. note:: 9.0 Beta version user should upgrade all of driver, broker, DB server; Data migration should be done because it's DB volume is not compatible with 9.1 version.
-		For upgrade and data migration, see :doc:`/upgrade`.
+.. note:: 9.0 Beta version user should upgrade all of driver, broker, DB server; Data migration should be done because it's DB volume is not compatible with 9.1 version.
+	For upgrade and data migration, see :doc:`/upgrade`.
 
 Interoperability
 ^^^^^^^^^^^^^^^^
@@ -59,7 +59,10 @@ Interoperability
 
 * If the CUBRID DB server and its broker server are operated separately, their system locales should be the same. For example, if CUBRID_CHARSET of DB server is en_US.utf8, CUBRID_CHARSET of broker server should be en_US.utf8, too.
 
-	**Details to Check when Installing**
+Installing and Running on Linux
+-------------------------------
+
+**Details to Check when Installing**
 
 	Check the following before installing CUBRID for Linux.
 
@@ -83,16 +86,16 @@ Interoperability
 	  * gcrypt Library (rpm -q libgcrypt)
 	  * stdc++ Library (rpm -q libstdc++)
   
-	**Installing CUBRID**
+**Installing CUBRID**
 
-	The installation program consists shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-9.0.0.0470-linux.x86_64.sh" file on the Linux. ::
+	The installation program consists shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-9.1.0.0201-linux.x86_64.sh" file on the Linux. ::
 
-		$ sh CUBRID-9.0.0.0470-linux.x86_64.sh
+		$ sh CUBRID-9.1.0.0201-linux.x86_64.sh
 		Do you agree to the above license terms? (yes or no) : yes
 		Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
 		Install CUBRID to '/home1/cub_user/CUBRID' ...
 		In case a different version of the CUBRID product is being used in other machines, 
-		please note that the CUBRID 9.0 servers are only compatible with the CUBRID 9.0 clients and vice versa.
+		please note that the CUBRID 9.1 servers are only compatible with the CUBRID 9.1 clients and vice versa.
 		Do you want to continue? (yes or no) [Default: yes] : yes
 		Copying old .cubrid.sh to .cubrid.sh.bak ...
 
@@ -104,11 +107,15 @@ Interoperability
 		$ . /home1/cub_user/.cubrid.sh
 		$ cubrid service start
 
-	As shown in the example above, after installing the downloaded file (CUBRID-9.0.0.0470-linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
+	As shown in the example above, after installing the downloaded file (CUBRID-9.1.0.0201-linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
 
-		[cub_user@cubrid ~]$ . /home1/cub_user/.cubrid.sh
+		$ . /home1/cub_user/.cubrid.sh
 
-	After the CUBRID Manager is installed, you can start the CUBRID Manager server and broker as follows: ::
+	After CUBRID is installed, you can start CUBRID Manager server and CUBRID broker as follows. ::
+
+		$ cubrid service start
+
+	When you want to check whether CUBRID Manager server and CUBRID broker works well, you can use **grep** command in Linux as follows. ::
 
 		$ ps -ef | grep cub_
 		cub_user 15200 1 0 18:57   00:00:00 cub_master
@@ -127,17 +134,17 @@ Interoperability
 		cub_user 15229 1 0 18:57   00:00:00 cub_auto start
 		cub_user 15232 1 0 18:57   00:00:00 cub_js start
 
-	**Installing CUBRID (rpm File)**
+**Installing CUBRID (rpm File)**
 
 	You can install CUBRID by using rpm file that is created on CentOS5. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
 
-		$ rpm -Uvh cubrid-9.0.0.0470-el5.x86_64.rpm
+		$ rpm -Uvh cubrid-9.1.0.0201-el5.x86_64.rpm
 
-	When rmp is executed, CUBRID is installed in the cubrid home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh. When installation is complete, enter the code below to start CUBRID. ::
+	When rmp is executed, CUBRID is installed in the "cubrid" home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with "cubrid" Linux ID. When installation is complete, enter the code below to start CUBRID with "cubrid" Linux ID. ::
 
-		[cubrid@cubrid ~]$ cubrid service start
+		$ cubrid service start
 
-	.. note::
+	.. note:: \
 
 		**RPM and dependency**
 		
@@ -147,7 +154,7 @@ Interoperability
 		
 		How to use service or chkconfig command If you use SH or RPM package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, **CUBRID_USER**. If you change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command to run CUBRID automatically when the Linux system is started.
 	
-	**Installing CUBRID on Fedora/CentOS**
+**Installing CUBRID on Fedora/CentOS**
 
 	To install CUBRID using the yum command, you should know where the CUBRID package is located. Choose appropriate location based on your operating system.
 
@@ -171,7 +178,7 @@ Interoperability
 
 	After installation is complete, configure environment variables including installation path of CUBRID and then apply them to system.
 
-	**Installing CUBRID on Ubuntu**
+**Installing CUBRID on Ubuntu**
 
 	To install CUBRID using the apt-get command on Ubuntu, add the CUBRID storage first and then update the apt index. ::
 
@@ -188,7 +195,7 @@ Interoperability
 
 	After installation is complete, configure environment variables including installation path of CUBRID and then apply them to system.
 
-	**Upgrading CUBRID**
+**Upgrading CUBRID**
 
 	When you specify an installation directory where the previous version of CUBRID is already installed, a message which asks to overwrite files in the directory will appear. Entering **no** will stop the installation. ::
 
@@ -203,17 +210,17 @@ Interoperability
 
 	For more information on upgrading a database from a previous version to a new version, see :doc:`upgrade`.
 
-	**Configuring Environment**
+**Configuring Environment**
 
 	You can modify the environment such as service ports etc. edit the parameters of a configuration file located in the **$CUBRID/conf** directory. See :ref:`Installin-and-Running-on-Windows` for more information.
 
-	**Installing CUBRID Interfaces**
+**Installing CUBRID Interfaces**
 
 	You can see the latest information on interface modules such as CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python and Node.js and install them by downloading files from `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_ .
 
 	A simple description on each driver can be found on :doc:`/api/index`.
 
-	**Installing CUBRID Tools**
+**Installing CUBRID Tools**
 
 	You can see the latest information on tools such as CUBRID Manager and CUBRID Query Browser and install them by downloading files from `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_ .
 
@@ -224,10 +231,10 @@ Interoperability
 Installing and Running on Windows
 ---------------------------------
 
-	**Details to Check when Install**
+**Details to Check when Install**
 
-	CUBRID 2008 R2.0 supports both 32-bit and 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install the CUBRID 32-bit version on 32-bit Windows and the CUBRID 64-bit version on 64-bit Windows.
-
+	You should check belows before installing CUBRID for Windows.
+	
 	* 64-bit
 
 	  Since version 2008 R2.0, CUBRID supports both 32-bit and 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install the CUBRID 32-bit version on 32-bit Windows and the CUBRID 64-bit version on 64-bit Windows.
@@ -236,29 +243,29 @@ Installing and Running on Windows
 
 	* On the popup menu after clicking right mouse button on the CUBRID installation file, choose [Execute as an administrator (A)].
 
-	**Installation Process**
+**Installation Process**
 	
-		**Step 1: Specifying the directory to install**
-		
-		**Step 2: Selecting Setup Type**
+	**Step 1: Specifying the directory to install**
+	
+	**Step 2: Selecting Setup Type**
 
 		*   **Server and Driver Installation** : CUBRID Server, CSQL (a command line tool), interface drivers (OLE DB Provider, ODBC, JDBC, C API) are all installed.
 
 		*   **Driver Installation** : Only the interface drivers (OLE DB Provider, ODBC, JDBC, C API) are  installed. You can select this type of installation if development or operation is performed by remote connection to the computer in which the CUBRID database server is installed.
 
-		**Step 3: Creating a sample database**
-			
-			To craete a sample database, it requires 300MB disk space. 
+	**Step 3: Creating a sample database**
 		
-		**Step 4: Completing the installation**
-		
-			CUBRID Service Tray appears on the right bottom.
+		To craete a sample database, it requires 300MB disk space. 
 	
+	**Step 4: Completing the installation**
+	
+		CUBRID Service Tray appears on the right bottom.
+
 	.. note:: 
 	
 		CUBRID Service is automatically started when the system is rebooted. If you want to stop the  when the system is rebooted, change the "Start parameters" of "CUBRIDService" as "Stop"; "Control Panel > Adminstrative Tools > Services" and double-clicking "CUBRIDService", then pop-up window will be shown.
 
-	**Upgrading CUBRID**
+**Upgrading CUBRID**
 
 	To install a new version of CUBRID in an environment in which a previous version has already been installed, select [CUBRID Service Tray] > [Exit] from the menu to stop currently running services, and then remove the previous version of CUBRID. Note that when you are prompted with "Do you want to delete all the existing version of databases and the configuration files?" you must select "No" to protect the existing databases.
 
@@ -266,7 +273,7 @@ Installing and Running on Windows
 
 	.. _Configuring-Environment-on-Windows:
 
-	**Configuring Environment**
+**Configuring Environment**
 
 	You can change configuration such as service ports to meet the user environment by changing the parameter values of following files which are located in the **%CUBRID%\\conf** directory. If a firewall has been configured, the ports used in CUBRID need to be opened.
 
@@ -291,13 +298,13 @@ Installing and Running on Windows
 	  
 	  The **CCI_DEFAULT_AUTOCOMMIT** broker parameter is supported since 2008 R4.0. The default value in the version is **OFF** and it is later changed to **ON** .  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to **OFF** or configure the auto-commit mode to **OFF** .
 
-	**Installing CUBRID Interfaces**
+**Installing CUBRID Interfaces**
 
 	You can see the latest information on interface modules such as JDBC, PHP, ODBC, and OLE DB and install them by downloading files from `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_ .
 
 	A simple description on each driver can be found on :doc:`/api/index`.
 
-	**Installing CUBRID Tools**
+**Installing CUBRID Tools**
 
 	You can see the latest information on tools such as CUBRID Manager and CUBRID Query Browser and install them by downloading files from `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_ .
 	
@@ -315,8 +322,6 @@ CUBRID 서버에 연결하기
 다음은 CUBRID가 사용하는 포트에 대해 하나의 표로 정리한 것이다. 각 포트는 상대방의 접속을 대기하는 listener 쪽에서 개방되어야 한다.
 
 Linux 방화벽에서 특정 프로세스에 대한 포트를 개방하려면 해당 방화벽 프로그램의 설명을 따른다.
-
-.. 
 
 Windows에서 임의의 가용 포트를 사용하는 경우는 어떤 포트를 개방할 지 알 수 없으므로  Windows 메뉴의 "제어판" 검색창에서  "방화벽"을 입력한 후, "Windows 방화벽 > Windows 방화벽을 통해 프로그램 또는 기능 허용"에서 포트 개방을 원하는 프로그램을 추가한다. 
 =>
@@ -598,7 +603,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 		* shard proxy: CUBRID SHARD 프록시 프로세스. 어떤 shard DB를 선택할 지 결정하는 역할을 수행
 		* shard CAS: CUBRID SHARD CAS 프로세스. shard proxy와 cub_server를 중계
 	
-	**프로세스 간 관계 기호 및 의미**
+	프로세스 간 관계 기호 및 의미는 다음과 같다.
 	
 		* \- 기호: 최초 한 번만 연결됨을 나타낸다.
 		* ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.

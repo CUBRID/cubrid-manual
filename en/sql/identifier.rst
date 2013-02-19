@@ -22,7 +22,7 @@ Table name, index name, view name, column name name, user name etc. are included
 Legal Identifiers
 =================
 
-	**Beginning with a Letter**
+**Beginning with a Letter**
 
 	An identifier must begin with a letter. All other special characters except operator characters are allowed. The following are examples of legal identifiers. ::
 
@@ -31,7 +31,7 @@ Legal Identifiers
 		ssn#
 		this_is_an_example_#
 
-	**Enclosing in Double Quotes, Square Brackets, or Backtick Symbol**
+**Enclosing in Double Quotes, Square Brackets, or Backtick Symbol**
 
 	Identifiers or reserved keywords shown as below are not allowed. However, if they are enclosed in double quotes, square brackets, or backtick symbol, they are allowed as an exception. Especially, the double quotations can be used as a symbol enclosing identifiers when the **ansi_quotes** parameter is set to **yes**. If this value is set to **no** double quotations are used as a symbol enclosing character strings. The followings are examples of legal identifiers. ::
 
@@ -44,7 +44,7 @@ Legal Identifiers
 Illegal Identifiers
 ===================
 
-	**Beginning with special characters or numbers**
+**Beginning with special characters or numbers**
 
 	An identifier starting with a special character or a number is not allowed. As an exception, a underline (_) and a sharp symbol (#) are allowed for the first character. ::
 
@@ -54,13 +54,13 @@ Illegal Identifiers
 		2fer
 		88abs
 
-	**An identifier containing a space**
+**An identifier containing a space**
 
 	An identifier that a space within characters is not allowed. ::
 
 		col1 t1
 
-	**An identifier containing operator special characters **
+**An identifier containing operator special characters **
 
 	An identifier which contains operator special characters (+, -, \*, /, %, ||, !, < , > , =, \|, ^, & , ~ ) is not allowed. ::
 

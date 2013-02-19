@@ -730,7 +730,7 @@ CCI API 레퍼런스
 	
 	*   **altHosts** = *standby_broker1_host*, *standby_broker2_host*, ... : active 서버에 연결할 수 없는 경우, 그 다음으로 연결을 시도(failover)할 standby 서버의 브로커 정보를 나타낸다. failover할 브로커를 여러 개 지정할 수 있고, **altHosts** 에 나열한 순서대로 연결을 시도한다.
 
-	*   **rcTime** : 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts에 명시한 브로커로 접속한다(브로커 failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초).
+	*   **rcTime** : 첫 번째로 접속했던 브로커에 장애가 발생한 이후 **altHosts** 에 명시한 브로커로 접속한다(브로커 failover). 이후, **rcTime** 만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초).
 
 	*   **loadBalance** : 이 값이 true면 응용 프로그램이 메인 호스트와 **altHosts**\에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false)
 	

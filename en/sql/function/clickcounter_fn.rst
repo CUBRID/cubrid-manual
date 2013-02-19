@@ -53,7 +53,7 @@ Click Counter Functions
 
 		*   The **INCR** / **DECR** functions returns an error in the write-protected broker mode such as slave mode of HA configuration, CSQL Interpreter (csql -r) of read-only, Read Only, Slave Only or Preferred Host Read Only mode.
 
-	**Example**
+**Example**
 
 	Suppose that the following three rows of data are inserted into the 'board' table.
 

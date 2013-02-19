@@ -53,7 +53,7 @@
 
 		* **INCR** / **DECR** 함수는 HA 구성의 슬레이브 노드나 read-only 모드의 CSQL 인터프리터(csql -r) 또는 Read Only, Slave Only, Preferred Host Read Only 모드처럼 쓰기가 금지된 모드의 브로커에서 사용 시 오류를 반환한다.
 
-	**예제**
+**예제**
 
 	먼저, board 테이블에는 아래와 같이 3건의 데이터가 입력되었다고 가정한다.
 

@@ -22,61 +22,75 @@ CUBRID 9.0은 다양한 언어의 문자셋과 콜레이션을 지원하여 국�
 
 CUBRID 9.0 릴리스는 CUBRID 2008 R4.1 Patch 7 및 하위 버전의 수정 사항들을 모두 포함하며, 주요 특징은 다음과 같다.
 
-**다국어 지원**
+다국어 지원
+-----------
 
 	현지화에 적합한 데이터베이스 환경을 제공하기 위해 한국어, 영어, 일본어, 중국어, 베트남어, 캄보디아어, 터키어, 독일어, 스페인어, 프랑스어, 이탈리어어 등 다양한 국가 언어의 문자셋, 콜레이션, 캘린더 및 숫자 표기 규칙을 추가했다.
 
-**데이터베이스 sharding을 위한 미들웨어 기능 지원**
+데이터베이스 sharding을 위한 미들웨어 기능 지원
+-----------------------------------------------
 
 	다수의 장비로 수평 분할된 데이터베이스 환경을 용이하게 접근하기 위한 미들웨어인 CUBRID SHARD 기능을 제공한다. CUBRID SHARD 기능은 응용 프로그램이 여러 장비에 분산된 데이터베이스를 하나의 데이터베이스로 보이도록 단일 뷰(single view)를 제공하며, 이들을 인지하고 특정 데이터베이스를 접근할 필요 없도록 투명성(transparency)을 제공한다.
 
-**OVER 절을 이용한 분석 함수 지원**
+OVER 절을 이용한 분석 함수 지원
+-------------------------------
 
 	특정 행 집합에 대해 다양한 통계를 얻을 수 있도록 OVER라는 새로운 분석 절을 함께 사용하는 분석 함수들을 추가했다.
 
-**INSERT, UPDATE, DELETE 질의를 하나로 통합하는 MERGE 문 지원**
+INSERT, UPDATE, DELETE 질의를 하나로 통합하는 MERGE 문 지원
+-----------------------------------------------------------
 
 	하나 이상의 원본 테이블로부터 하나의 대상 테이블에 데이터를 입력, 수정 또는 삭제할 수 있는 MERGE 문을 추가했다.
 
-**UPDATE 문과 DELETE 문의 JOIN 지원**
+UPDATE 문과 DELETE 문의 JOIN 지원
+---------------------------------
 
 	UPDATE 문과 DELETE 문에서 JOIN을 지원하게 되었다.
 
-**ENUM 타입 지원**
+ENUM 타입 지원
+--------------
 
 	열거형 문자열 상수들로 정의하는 ENUM 타입을 추가했다. 
 
-**함수 기반 인덱스, 필터링된 인덱스, 인덱스 스킵 스캔 등 다양한 인덱스 기능 지원**
+함수 기반 인덱스, 필터링된 인덱스, 인덱스 스킵 스캔 등 다양한 인덱스 기능 지원
+------------------------------------------------------------------------------
 
 	인덱스를 구성하는 칼럼에 함수 표현을 포함하는 함수 기반 인덱스 기능을 제공하며, 인덱스 구성에 검색 조건을 포함하는 필터링된 인덱스 기능을 추가했다. 다중 컬럼 인덱스의 첫번째 컬럼이 명시되지 않아도 인덱스의 두 번째 컬럼부터 인덱스를 사용할 수 있는 인덱스 스킵 스캔(index skip scan) 최적화를 제공한다.
 
-**분할 테이블 기능 안정화, 성능 개선 및 PROMOTE 문 지원**
+분할 테이블 기능 안정화, 성능 개선 및 PROMOTE 문 지원
+-----------------------------------------------------
 
 	분할 기능의 안정화와 성능 개선을 위해 근본적으로 개선하였다. 질의 컴파일 과정이 아니라 질의 수행 과정에서 분할 프루닝되도록 하여 성능을 개선하였고, 분할 키를 포함하는 기본 키 및 고유 인덱스를 분할 전체에 대해서 유지하지 않고 각 분할별로 유지되도록 변경하였다. 그 외에 많은 안정성 개선 및 성능 개선이 있었다.
 
 	또한, 분할 테이블에서 특정 분할 부분을 일반 테이블로 승격시키는 PROMOTE 문을 추가했다.
 
-**HA 안정성 개선 및 운영 편이성 향상**
+HA 안정성 개선 및 운영 편이성 향상
+----------------------------------
 
 	데이터 및 스키마의 HA 복제 불일치 등 여러 안정성 이슈를 해결하였으며, HA 관리 프로세스들을 개별적으로 제어할 수 있도록 하였고 HA 운영 과정에서 노드의 동적 추가 및 삭제를 용이하게 수행할 수 있도록 개선하였다.
 
-**DEFALUT에 pseudo column 지원**
+DEFALUT에 pseudo column 지원
+----------------------------
 
 	칼럼의 DEFAULT 속성으로 SYSDATE, USER 등의 시스템 함수를 지정하면 질의 수행 시점을 기준으로 결과 값을 얻어올 수 있도록 했다.
 
-**CURSOR HOLDABILITY 지원**
+CURSOR HOLDABILITY 지원
+-----------------------
 
 	CURSOR HOLDABILITY가 기본으로 동작하게 하여 커밋 이후에도 커서가 유지되게 하여 결과 셋을 유지하면서 DML 커밋이 가능하게 했다.
 
-**VALUES 절 추가**
+VALUES 절 추가
+--------------
 
 	주로 상수 값으로 구성된 테이블을 표현하기 위해 VALUES 문 이하 표현식에 명시된 행 값들을 출력하는 VALUES 문을 추가했다.
 
-**오류 메시지 개선**
+오류 메시지 개선
+----------------
 
 	오류 발생 위치를 쉽게 찾아갈 수 있도록 오류 메시지를 강화하였고, 구체적이지 않은 오류 메시지들을 개선하여 오류 원인을 찾기 쉽게 했다.
 
-**크고 작은 버그 및 기능들을 수정 또는 개선**
+크고 작은 버그 및 기능들을 수정 또는 개선
+-----------------------------------------
 
 	SQL 함수, SQL 구문, 질의 계획, 인덱스, 트리거, 드라이버, 유틸리티 등에서 발견된 크고 작은 버그 및 기능들을 수정 또는 개선했다. 또한 질의 계획, 인덱스 스캔, 잠금, 삽입 및 삭제의 반복 수행, 메모리 누수, 디스크 사용량 등에서 발견된 이슈들을 수정 또는 개선했다. 아울러 HA 스키마 복제 및 데이터 복제 이슈들을 개선 또는 수정했다.
 
@@ -92,12 +106,14 @@ SQL
 MERGE문(CUBRIDSUS-7080)
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-	하나 또는 그 이상의 원본으로부터 행들을 선택하여 하나의 테이블 또는 뷰로 갱신이나 삽입을 수행하기 위해 사용하는 MERGE 문을 추가했다. 대상 테이블 또는 뷰에 갱신할지 또는 삽입할지를 결정하는 조건을 지정할 수 있다. ::
+	하나 또는 그 이상의 원본으로부터 행들을 선택하여 하나의 테이블 또는 뷰로 갱신이나 삽입을 수행하기 위해 사용하는 MERGE 문을 추가했다. 대상 테이블 또는 뷰에 갱신할지 또는 삽입할지를 결정하는 조건을 지정할 수 있다.
 
+	.. code-block:: sql
+	
 		MERGE INTO target_table tt USING source_table st
-			ON (st.a=tt.a AND st.b=tt.b)
-				WHEN MATCHED THEN UPDATE SET tt.c=st.c
-				WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
+		ON (st.a = tt.a AND st.b = tt.b)
+		WHEN MATCHED THEN UPDATE SET tt.c = st.c
+		WHEN NOT MATCHED THEN INSERT VALUES (st.a, st.b, st.c);
 
 OVER 절을 이용하는 분석 함수(CUBRIDSUS-6112)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -106,9 +122,9 @@ OVER 절을 이용하는 분석 함수(CUBRIDSUS-6112)
 
 	다음은 demodb에서 nation_code가 'AU'로 시작하는 국가에 대해 연도 별로 획득한 금메달 수와 해당 연도까지의 금메달 누적에 대한 평균 합계를 출력하는 예제이다.
 
-	::
+	.. code-block:: sql
 
-		SELECT host_year, nation_code, gold, AVG(gold) OVER (PARTITION BY nation_code ORDER BY host_year) avg_gold
+		SELECT host_year, nation_code, gold, AVG (gold) OVER (PARTITION BY nation_code ORDER BY host_year) avg_gold
 		FROM participant WHERE nation_code LIKE 'AU%';
 
 UPDATE JOIN, DELETE JOIN 문(CUBRIDSUS-5646)
@@ -116,29 +132,31 @@ UPDATE JOIN, DELETE JOIN 문(CUBRIDSUS-5646)
 
 	하나 이상의 테이블에 대해 갱신하거나 삭제할 수 있는 UPDATE JOIN, DELETE JOIN 문을 추가했다.
 
-	::
+	.. code-block:: sql
 
-		UPDATE a_tbl INNER JOIN b_tbl ON a_tbl.id=b_tbl.rate_id
+		UPDATE a_tbl INNER JOIN b_tbl ON a_tbl.id = b_tbl.rate_id
 		SET a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
 		WHERE a_tbl.charge > 900.0;
 
 		DELETE a, b FROM tbl1 a INNER JOIN tbl2 b
-		WHERE a.idx=b.p_idx AND b.p_idx=5 AND b.flag=1
+		WHERE a.idx=b.p_idx AND b.p_idx = 5 AND b.flag = 1;
 
 ENUM 타입
 ^^^^^^^^^
 
 	열거형 문자열 상수들로 정의하는 ENUM 타입을 추가했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE tbl (
-			color ENUM('red', 'yellow', 'blue')
+			color ENUM ('red', 'yellow', 'blue')
 		);
 
-		INSERT into tbl values ('yellow'), ('red'), (2), ('blue');
+		INSERT into tbl VALUES ('yellow'), ('red'), (2), ('blue');
 		SELECT color FROM tbl ORDER BY color ASC;
 
+	::
+	
 		color
 		======================
 		red
@@ -151,22 +169,23 @@ UPDATE 문에 ORDER BY 명시(CUBRIDSUS-6605)
 
 	UPDATE 문의 ORDER BY 절에 따라 순서대로 갱신하는 것이 가능하도록 수정했다. 다음 질의에서 UPDATE문을 수행하면 a 칼럼의 값이 큰 순서대로 b의 값이 갱신된다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(a int, b int);
-		INSERT INTO t1 VALUES (1,1), (2,2),(3,3),(4,4);
-		SET @tmp=100;
+		CREATE TABLE t1 (a INT, b INT);
+		INSERT INTO t1 VALUES (1, 1), (2, 2), (3, 3), (4, 4);
+		SET @tmp = 100;
 
-		UPDATE t1 SET b=(@tmp:=@tmp+1) ORDER BY a DESC;
+		UPDATE t1 SET b = (@tmp := @tmp + 1) 
+		ORDER BY a DESC;
 
 VALUES 절(CUBRIDSUS-7553)
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	주로 임시로 실제 테이블을 생성하지 않고 상수 테이블을 생성할 때 사용하는 VALUES 절을 추가했다. VALUES 절은 UNION ALL 문을 연결하여 같은 결과를 얻을 수 있지만 훨씬 간편하다. 대개 SELECT, UPDATE, DELETE 질의 내에서 다른 테이블과 조인되는 형태로 많이 활용된다.
 
-	::
+	.. code-block:: sql
 
-		VALUES (1 AS col1, 'first' AS col2), (2, 'second'), (3, 'third'), (4, 'forth');
+		VALUES (1 AS col1, 'first' AS col2), (2, 'second'), (3, 'third'), (4, 'fourth');
 
 		SELECT 1 AS col1, 'first' AS col2
 		UNION ALL
@@ -174,17 +193,19 @@ VALUES 절(CUBRIDSUS-7553)
 		UNION ALL
 		SELECT 3, 'third'
 		UNION ALL
-		SELECT 4,'forth';
+		SELECT 4,'fourth';
 
 SHOW CREATE TABLE 문(CUBRIDSUS-6996)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	테이블을 생성하는 SQL 문을 출력해주는 SHOW CREATE TABLE 문을 추가했다.
 
-	::
+	.. code-block:: sql
 
 		SHOW CREATE TABLE tbl;
-		
+
+	::
+	
 		TABLE	CREATE TABLE
 		============================================
 		'tbl'	'CREATE TABLE [tbl]
@@ -195,7 +216,7 @@ SHOW CREATE TABLE 문(CUBRIDSUS-6996)
 
 	분할 테이블에서 사용자가 지정한 분할 일부를 일반 테이블로 승격시키는 PROMOTE 구문을 추가했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t(i int) PARTITION BY LIST(i) (
 			PARTITION p0 VALUES IN (1, 2, 3),
@@ -211,7 +232,7 @@ SHOW CREATE TABLE 문(CUBRIDSUS-6996)
 
 	테이블, 뷰, 트리거, 저장 프로시저의 소유자를 지정하는 ALTER 문을 추가했다. 
 
-	::
+	.. code-block:: sql
 
 		ALTER TABLE test_tbl OWNER TO PUBLIC;
 		ALTER VIEW test_view OWNER TO PUBLIC;
@@ -224,7 +245,7 @@ CONNECT BY 절에 LEVEL 칼럼 지원(CUBRIDSUS-7526)
 
 	CONNECT BY 절에서 LEVEL 칼럼을 사용할 수 있게 되었다.
 
-	::
+	.. code-block:: sql
 
 		SELECT LEVEL FROM db_root CONNECT BY LEVEL <= 10;
 
@@ -233,7 +254,7 @@ LIMIT 절에 OFFSET 키워드 지원(CUBRIDSUS-7439)
 
 	LIMIT 절에 OFFSET 키워드를 사용할 수 있게 되었다. 아래 두 개의 질의는 같은 결과를 수행한다.
 
-	::
+	.. code-block:: sql
 
 		SELECT * FROM tab LIMIT 2, 1;
 
@@ -245,15 +266,22 @@ INET_ATON 함수, INET_NTOA 함수(CUBRIDSUS-8230)
 
 	INET_ATON 함수, INET_NTOA 함수를 추가했다. INET_ATON 함수는 IP 주소를 입력하면 숫자 값을 반환하며, INET_NTOA 함수는 숫자를 입력하면 IP 주소 값을 반환한다.
 
-	::
+	.. code-block:: sql
 
 		SELECT INET_ATON('192.168.0.10');
 
+	::
+	
 		inet_aton('192.168.0.10')
 		============================
 		3232235530
 
+	.. code-block:: sql
+
 		SELECT INET_NTOA(3232235530);
+		
+	::
+	
 		inet_ntoa(3232235530)
 		======================
 		'192.168.0.10'
@@ -314,14 +342,14 @@ Sharding
 ------
 
 
-필터링된 인덱스 (CUBRIDSUS-6112)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+필터링된 인덱스(CUBRIDSUS-6112)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	특정 조건을 포함하는 필터링된 인덱스(filtered index)를 지원하게 되었다. 전체 인덱스에서 조건에 부합하는 일부 인덱스만 사용되므로 부분 인덱스(partial index)라고도 하며, 필요한 조건의 행만 인덱스를 생성하므로 인덱스의 갱신 부담이 적고 탐색 범위가 작아 검색 성능 향상에 도움이 된다.
 
-	::
+	.. code-block:: sql
 
-		CREATE UNIQUE INDEX bugs_per_dev ON bugs(Author) WHERE Closed = 0;
+		CREATE INDEX bugs_per_dev ON bugs(Author) WHERE Closed = 0;
 
 		SELECT * FROM bugs
 		WHERE Author= 'madden' AND Subject LIKE '%fopen%' AND Closed = 0
@@ -334,18 +362,18 @@ Sharding
 
 	특정 함수의 결과 값을 포함하는 함수 기반 인덱스(function-based index)를 지원하게 되었다. 특정 함수를 통해 데이터를 정렬하거나 찾고 싶을 때 사용된다.
 
-	::
+	.. code-block:: sql
 
 		CREATE INDEX idx_upper_post ON posts_table(UPPER(keyword));
 
-인덱스 스킵 스캔 (CUBRIDSUS-5646)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+인덱스 스킵 스캔(CUBRIDSUS-5646)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	인덱스의 첫 번째 칼럼이 조건에 없어도 뒤따라오는 칼럼이 조건(주로 =)에 있으면 인덱스의 뒷 부분이 사용되는 것을 허용하는 인덱스 스킵 스캔(index skip scan, ISS) 기능을 추가했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE INDEX idx_t_gen_name on t (gender, name);
+		CREATE INDEX idx_t_gen_name ON t (gender, name);
 		SELECT * FROM t WHERE name = 'SMITH';
 
 드라이버
@@ -369,9 +397,10 @@ Sharding
 	오류 메시지 출력용 버퍼를 입력 인자로 하는 연결 함수인 cci_connect_ex(), cci_connect_with_url_ex()를 추가했다.
 	기존의 연결 함수는 오류 발생 시 하나의 오류 번호를 반환해서 상세한 오류가 무엇인지 알 수 없었으나, 수정 이후 오류 메시지 버퍼를 통해 상세 오류 번호를 확인할 수 있게 되었다. 
 
-	::
+	.. code-block:: c
 
 		T_CCI_ERROR error;
+		
 		connection = cci_connect_ex ("localhost", 33000, "demodb", "dba", "pwd", &error);
 		connection = cci_connect_with_url_ex ("cci:cubrid:localhost:33000:demodb:::", "dba", "pwd", &error);
 
@@ -584,11 +613,11 @@ SQL
 
 	칼럼의 DEFAULT 속성 값으로 SYSTIMESTAMP, SYSDATE, SYSDATETIME, USER 함수를 지정했을 때 이전 버전에서는 DEFAULT 값이 테이블 생성 시점의 함수 결과 값으로 고정되었으나, 질의가 수행될 때마다 결과 값을 계산하여 얻어오도록 변경했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t (ID int, col TIMESTAMP DEFAULT SYSTIMESTAMP);
 		ALTER TABLE t add column (uid STRING DEFAULT USER);
-		INSERT INTO t(ID) VALUES(1); -- col의 값은 질의 수행 시점에 SYSTIMESTAMP를 수행한 결과 값이 된다.
+		INSERT INTO t (ID) VALUES (1); -- col의 값은 질의 수행 시점에 SYSTIMESTAMP를 수행한 결과 값이 된다.
 	
 MINUTE, HOUR, SECOND, TIME_TO_SEC 함수들의 입력 인자가 시간 형태의 문자열이 아닌 경우를 허용하지 않도록 수정(CUBRIDSUS-7535)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -597,10 +626,10 @@ MINUTE, HOUR, SECOND, TIME_TO_SEC 함수들의 입력 인자가 시간 형태의
 
 	수정 이후 아래와 같은 질의는 허용하지 않는다.
 
-	::
+	.. code-block:: sql
 
-		SELECT TIME_TO_SEC('2010-01-01');
-		CREATE TABLE foo(col TIME DEFAULT '2000-01-01');
+		SELECT TIME_TO_SEC ('2010-01-01');
+		CREATE TABLE foo (col TIME DEFAULT '2000-01-01');
 
 TIME 타입의 값으로 유효하지 않은 시간을 바인딩하면 오류를 출력하도록 수정(CUBRIDSUS-7159)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -612,22 +641,21 @@ TIME 타입의 값으로 유효하지 않은 시간을 바인딩하면 오류를
 
 	시리얼의 시작값을 변경하면 시리얼의 NEXTVAL을 "설정 값 + 1"부터 반환했으나 "설정 값"부터 반환하도록 변경했다.
 
-	::
+	.. code-block:: sql
 
 		ALTER SERIAL s1 START WITH 10;
-		SELECT s1.NEXTVAL;
-		10
+		SELECT s1.NEXTVAL; -- return 10
 
 칼럼의 숫자 타입에 저장된 숫자 값의 길이보다 작은 길이의 문자 타입으로 칼럼을 변경할 때 그 값이 문자 타입의 지정 길이를 초과하면 해당 길이만큼을 저장하도록 변경(CUBRIDSUS-8009)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	칼럼의 숫자 타입에 저장된 숫자 값의 길이보다 작은 길이의 문자 타입으로 ALTER TABLE ... CHANGE COLUMN... 을 수행할 때, 해당 칼럼의 값이 문자 타입의 지정 길이를 초과하면 빈 문자열로 처리했으나 해당 길이만큼을 저장하도록 변경했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t1 (i1 INT);
-		INSERT INTO t1 VALUES (1),(-2147483648),(2147483647),(-2147483648),(2147483647);
-		ALTER TABLE t1 CHANGE i1 s1 CHAR(4);
+		INSERT INTO t1 VALUES (1), (-2147483648), (2147483647), (-2147483648), (2147483647);
+		ALTER TABLE t1 CHANGE i1 s1 CHAR (4);
 
 내림차순 인덱스 스캔 도중 인터럽트 발생 시 ER_INTERRUPTED 오류를 반환하도록 변경(CUBRIDSUS-7316)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -674,7 +702,7 @@ login() 메서드의 동작 변경(CUBRIDSUS-6307)
 
 	DatabaseMetaData.getColumns() 메서드가 NUMERIC 타입의 이름을 DECIMAL로 반환하던 것을 NUMERIC으로 반환한다.
 
-	::
+	.. code-block:: java
 
 		//수정 이전 버전에서는 Hibernate를 이용해서 엔티티 간 매핑 설정을 할 때 NUMERIC 타입의 칼럼을 지정하면  
 		Caused by: org.hibernate.HibernateException: Wrong column type in mytbl_map for column col2. Found: decimal, expected: numeric(19,0)"  
@@ -755,11 +783,11 @@ INSERT ON DUPLICATE KEY UPDATE문의 수행 성능 개선(CUBRIDSUS-8287)
 
 	INSERT ON DUPLICATE KEY UPDATE 문의 대상 테이블에 기본 키를 포함한 고유 키가 두 개 이상 존재하는 경우 수행이 느려질 수 있는 현상을 개선했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE x (a INT PRIMARY KEY, b INT, c INT, d INT, UNIQUE(b), UNIQUE(c));
+		CREATE TABLE x (a INT PRIMARY KEY, b INT, c INT, d INT, UNIQUE (b), UNIQUE (c));
 		CREATE SERIAL s;
-		INSERT INTO x VALUES (s.NEXT_VALUE, 0, 0, 0) ON DUPLICATE KEY UPDATE d = d+1;
+		INSERT INTO x VALUES (s.NEXT_VALUE, 0, 0, 0) ON DUPLICATE KEY UPDATE d = d + 1;
 
 커버링 인덱스 스캔 성능 개선(CUBRIDSUS-7466)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -779,9 +807,9 @@ UNION ALL 질의문의 수행 성능 개선(CUBRIDSUS-8130)
 
 	UNION ALL 질의문의 결과를 만들 때 앞쪽 질의문의 중간 결과 튜플을 복사하지 않고 재사용하여 성능을 개선했다. 
 
-	::
+	.. code-block:: sql
 
-		// 다음의 예에서 t1 테이블의 건수가 클수록 수정으로 인한 성능 개선폭이 증가한다. 
+		-- 다음의 예에서 t1 테이블의 건수가 클수록 수정으로 인한 성능 개선폭이 증가한다. 
 		SELECT * FROM t1 UNION ALL SELECT * FROM t2;
 
 DATE_ADD()의 성능 개선(CUBRIDSUS-7464)
@@ -792,7 +820,7 @@ DATE_ADD()의 성능 개선(CUBRIDSUS-7464)
 
 	테이블 DROP과 CREATE를 반복할수록 CREATE 시간이 오래 걸리는 문제를 수정했다. 참고로 수정 이전 버전에서도 테이블 생성 시 아래의 예와 같이 REUSE_OID 옵션을 지정하면 이러한 현상이 발생하지 않았다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID
 
@@ -824,7 +852,7 @@ TRUNCATE 문을 빈번하게 수행한 이후 INSERT를 비롯한 접근 성능�
 
 	하나의 칼럼에 이름만 다른 외래 키를 두 개 이상 정의하고 테이블을 DROP하면 일부 공간이 재사용되지 못하는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE foo (a INT, PRIMARY KEY (a));
 		CREATE TABLE bar (a INT,
@@ -832,7 +860,7 @@ TRUNCATE 문을 빈번하게 수행한 이후 INSERT를 비롯한 접근 성능�
 			CONSTRAINT con2 FOREIGN KEY(a) REFERENCES foo (a));
 
 		-- INSERT records
-		...
+
 		DROP TABLE bar;
 		DROP TABLE foo;
 
@@ -846,18 +874,19 @@ INSERT 문의 값으로 질의문 또는 함수를 인자로 사용한 CONCAT_WS
 
 	INSERT 문의 값으로 질의문 또는 함수를 인자로 사용한 CONCAT_WS 함수를 입력하는 경우 " ERROR: Cannot evaluate ' concat_ws('a', cast ( SYS_DATE as varchar))' " 오류가 발생하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		INSERT INTO tbl VALUES (1,concat_ws('a',SYS_DATE()));
+		INSERT INTO tbl VALUES (1, CONCAT_WS ('a', SYS_DATE()));
 
 OR 절에 부질의가 중첩되어 나타나는 질의 수행 시 장시간 소요되는 현상(CUBRIDSUS-6031) 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	OR 절에 부질의(subquery)가 포함된 질의 수행 시 장시간 소요되는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT col2 FROM tab0
+		SELECT col2 
+		FROM tab0
 		WHERE (A AND B) OR (col3 IN (SELECT i FROM t WHERE X AND Y OR Z AND W) AND D);
 
 DELETE FROM ALL 문이 LOB 파일을 삭제하지 못하는 오류(CUBRIDSUS-5596)
@@ -865,7 +894,7 @@ DELETE FROM ALL 문이 LOB 파일을 삭제하지 못하는 오류(CUBRIDSUS-559
 
 	DELETE FROM ALL 문으로 상속 계층에 대해서 삭제할 때 해당 테이블 및 이를 상속받는 테이블들의 LOB 파일이 삭제되지 않는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		DELETE FROM ALL parent_tbl;
 
@@ -907,14 +936,22 @@ UPDATE STATISTICS 문 수행으로 인해 다른 트랜잭션의 UPDATE 문이 �
 
 	TIME , TO_DATETIME 과 같은 날짜/시간 함수에서 입력 인자로 YYYYMMDDH 형식을 지원하도록 수정했다.  
 
-	::
+	.. code-block:: sql
 
-		SELECT TIME('1104209');
+		SELECT TIME ('1104209');
+		
+	::
+	
 		   time('1104209')  
 		======================
 		  '09:00:00'
+
+	.. code-block:: sql
+		  
+		SELECT TO_DATETIME ('1104209','YYMMDDH');
 		
-		SELECT TO_DATETIME('1104209','YYMMDDH');
+	::
+	
 		   to_datetime('1104209', 'YYMMDDH', 'en_US')  
 		=============================================  
 		   09:00:00.000 AM 04/20/2011  
@@ -924,28 +961,29 @@ ADDTIME 함수가 잘못된 결과를 반환하는 문제(CUBRIDSUS-8568)
 
 	ADDTIME 함수가 잘못된 결과를 반환하는 문제를 수정했다.  
 
-	::
+	.. code-block:: sql
 
-		SELECT ADDTIME('2012-02-02','9:9:9');  
+		SELECT ADDTIME ('2012-02-02','9:9:9');  
 
 INT 타입의 최소값이 저장된 칼럼에 % 연산, BIT_AND 함수 혹은 BIT_OR 함수 수행 시 오버플로우 오류(CUBRIDSUS-6203)  
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	INT 타입의 최소값인 -2147483648 이 저장된 칼럼에 % 연산, BIT_AND 함수 또는 BIT_OR 함수를 수행하면 " ERROR: Overflow occurred in ... " 오류가 발생하는 문제를 수정했다.  
 
-	::
+	.. code-block:: sql
 
 		INSERT INTO tbl VALUES (-2147483648);  
-		SELECT i%1009 FROM tbl;  SELECT BIT_AND(i) FROM tbl;  
+		SELECT i % 1009 FROM tbl;  
+		SELECT BIT_AND (i) FROM tbl;  
 
 TRIM 함수가 잘못된 결과를 출력하는 오류(CUBRIDSUS-6591)  
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	SQL 함수인 TRIM 함수가 지정한 삭제 대상 문자열보다 한 글자를 더 삭제하는 오류를 수정했다. 다음 예와 같이 "foook"에서 "foo"를 TRIM하면 "ok"를 출력해야 한다.  
 
-	::
+	.. code-block:: sql
 
-		SELECT TRIM('foo' FROM 'foook');  
+		SELECT TRIM ('foo' FROM 'foook');  
 
 INDEX_CARDINALITY 함수의 입력 인자로 소문자인 테이블 이름만 인식하는 오류(CUBRIDSUS-6264)  
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -957,49 +995,51 @@ CONCAT 함수와 CONCAT_WS 함수의 입력 인자가 CHAR 타입만 있는 질�
 
 	CONCAT 함수와 CONCAT_WS 함수의 입력 인자가 CHAR 타입만 주어진 경우 " ERROR: No error message available. " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t1 (a int , b char (20) );
 		INSERT INTO t1 VALUES (-1, '');
 
 		--below statement will throw "ERROR: No error message available." message.
-		SELECT concat(b) FROM t1;
+		SELECT CONCAT (b) FROM t1;
 
 CLOB_TO_CHAR 함수 수행 시 오류(CUBRIDSUS-6520) 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	CLOB 칼럼이 있는 테이블에, 고유 인덱스를 스캔하는 REPLACE 문을 수행하고 커밋한 후에 CLOB_TO_CHAR()를 수행하면 " ERROR: External file "xxxx" was not found. " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT id, CLOB_TO_CHAR(text) FROM tbl ORDER BY id;
+		SELECT id, CLOB_TO_CHAR (text) FROM tbl ORDER BY id;
 
 TIMEDIFF 함수의 입력 인자가 DATE 타입인 질의 수행 시 오류(CUBRIDSUS-8692)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	TIMEDIFF 함수의 입력 인자가 DATE 타입인 경우 " ERROR: Conversion error in time format. " 오류 메시지와 함께 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT TIMEDIFF(TO_DATE('2012-12-2'), TO_DATE('2012-11-2'));
+		SELECT TIMEDIFF (TO_DATE ('2012-12-2'), TO_DATE ('2012-11-2'));
 
 CONCAT_WS 함수가 LEFT OUTER JOIN의 조건으로 존재할 때 조인 결과를 적게 출력하는 현상(CUBRIDSUS-6590)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	CONCAT_WS 함수가 LEFT OUTER JOIN의 조건으로 존재할 때 LEFT OUTER JOIN 질의를 최적화하는 과정의 오류로 인해 CONCAT_WS 함수의 입력 인자 값 하나만 NULL이어도 함수의 결과 값을 항상 NULL로 간주하여 조인 결과를 적게 출력하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT * FROM t1 LEFT JOIN t2 ON t1.id = t2.id WHERE CONCAT_WS(' ', t1_name, t2_name) LIKE '%In%';
+		SELECT * 
+		FROM t1 LEFT JOIN t2 ON t1.id = t2.id 
+		WHERE CONCAT_WS (' ', t1_name, t2_name) LIKE '%In%';
 
 DATE_ADD 함수의 INTERVAL 값을 호스트 변수로 사용하면 질의 수행 시 서버가 비정상 종료되는 현상(CUBRIDSUS-7610)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	질의를 PREPARE할 때 SQL 함수인 DATE_ADD 함수의 INTERVAL 값을 호스트 변수로 사용하면, EXECUTE할 때 서버가 비정상 종료되는 현상을 수정했다. 이와 함께 DATE_ADD 함수의 INTERVAL 단위에 따라 입력 값의 타입으로 INTERGER만 가능했던 동작을 VARCHAR도 가능하게 수정했다.
 
-	::
+	.. code-block:: sql
 
-		PREPARE s FROM 'SELECT DATE_ADD(?, INTERVAL ? YEAR_MONTH)';
+		PREPARE s FROM 'SELECT DATE_ADD (?, INTERVAL ? YEAR_MONTH)';
 		EXECUTE s USING '2010-01-01', 1;
 		EXECUTE s USING '2010-01-01', '1-1';
 
@@ -1013,7 +1053,7 @@ DATE_ADD 함수의 INTERVAL 값을 호스트 변수로 사용하면 질의 수�
 
 	NULLIF, LEAST, GREATEST 등 일부 SQL 함수에서 모든 인자가 호스트 변수일 때 값을 바인딩하면서 DOUBLE로 타입 변환을 시도하게 되어 질의 수행에 실패하는 현상을 수정했다. 
 
-	::
+	.. code-block:: java
 
 		preStmt = conn.prepareStatement("select nullif (?, ?)");
 		preStmt.setString(1, "A");
@@ -1025,7 +1065,7 @@ PREPARE 문에서 DEFAULT 지정 인자를 생략한 DECODE 함수 수행 시 �
 
 	PREPARE 문에서 DECODE 함수 수행 시 DEFAULT 값을 지정하는 세 번째 입력 인자를 생략하면 " ERROR: Attribute "val" cannot be made NULL. " 오류 메시지와 함께 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		PREPARE stmt1 FROM 'UPDATE foo SET del_ts = 100, val=DECODE(name,?,val + ?) WHERE name IN (?)';
 		EXECUTE stmt1 USING 'seo', 1, 'seo';
@@ -1035,7 +1075,7 @@ SELECT 리스트에 INSERT 함수 혹은 ELT 함수가 있고 그 뒤에 값이 
 
 	SELECT 리스트에 INSERT 함수 혹은 ELT 함수가 있고 그 뒤에 값이 오면 " ERROR: System error (query result) in ../../src/parser/query_result.c " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT INSERT('test',2,1,'hi'), 5;
 		SELECT ELT(2, 1), 5;
@@ -1055,31 +1095,33 @@ SELECT ALL/DISTINCT 상수 또는 DISTINCT (칼럼)이 가능해짐(CUBRIDSUS-60
 
 	"SELECT ALL 상수" 혹은 "SELECT DISTINCT 상수"가 가능하도록 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT ALL 1;
 		SELECT DISTINCT 1;
 
 	아울러, 칼럼을 괄호로 감싸거나 상수를 DISTINCT하여 집계 함수를 수행하는 것이 가능하도록 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT SUM(DISTINCT(i)) FROM t;
-		SELECT SUM(DISTINCT 4) FROM t;
+		SELECT SUM (DISTINCT (i)) FROM t;
+		SELECT SUM (DISTINCT 4) FROM t;
 
 FROM 절의 유도 테이블(derived table) 이름 생략이 가능해짐(CUBRIDSUS-6546) 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	반드시 명시해야 했던 FROM 절의 유도 테이블 이름을 생략할 수 있도록 개선했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT * FROM (SELECT sysdate FROM db_root);
 
-		// 수정 이전 구문
+	.. code-block:: sql
+	
+		-- 수정 이전 구문
 		FROM (subquery) [ AS ] derived_table_name [( column_name [ {, column_name } ... ] )]
 
-		// 수정 이후 구문 
+		-- 수정 이후 구문 
 		FROM (subquery) [ [ AS ] derived_table_name [( column_name [ {, column_name } ... ] )] ]
 
 사용하지 않는 예약어 제거(CUBRIDSUS-6250) 
@@ -1107,7 +1149,7 @@ DO 문에 SELECT 질의문의 입력이 가능해짐(CUBRIDSUS-6528)
 
 	DO문에 SELECT 질의문의 입력이 가능하도록 수정했다. 
 
-	::
+	.. code-block:: sql
 
 		DO (SELECT count(*) FROM athlete);
 
@@ -1121,9 +1163,9 @@ UTF-8 문자셋을 테이블 이름이나 칼럼 이름 등의 식별자로 사�
 
 	컬럼 이름 변경 시 AS만 사용 가능했으나 AS 대신 TO도 사용할 수 있도록 추가했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t ( a int);
+		CREATE TABLE t (a INT);
 		ALTER TABLE t RENAME COLUMN a TO b;
 
 IN, NOT IN 조건의 스칼라 부질의에, ORDER BY 절이 사용되거나 SELECT 리스트의 칼럼 개수가 여러 개인 경우 잘못된 질의 결과를 출력하는 현상(CUBRIDSUS-7700)
@@ -1131,12 +1173,12 @@ IN, NOT IN 조건의 스칼라 부질의에, ORDER BY 절이 사용되거나 SEL
 
 	IN, NOT IN 조건의 스칼라 부질의(scalar subquery)에 ORDER BY 절이 사용되거나 해당 질의에 대한 SELECT 리스트의 칼럼 개수가 여러 개인 경우 잘못된 질의 결과를 출력하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		// 수정 이전 버전에서 스칼라 부질의에 ORDER BY 절이 사용되면 질의 결과가 항상 0건이 되었다.
+		-- 수정 이전 버전에서 스칼라 부질의에 ORDER BY 절이 사용되면 질의 결과가 항상 0건이 되었다.
 		SELECT * FROM tbl WHERE col IN (SELECT col FROM tbl2 ORDER BY b);
 
-		// 수정 이전 버전에서 스칼라 부질의에 대한 SELECT 리스트의 칼럼이 두 개 이상 사용되면 문법(semantic) 오류가 발생해야 하나, 질의 결과가 0건이 되었다.
+		-- 수정 이전 버전에서 스칼라 부질의에 대한 SELECT 리스트의 칼럼이 두 개 이상 사용되면 문법(semantic) 오류가 발생해야 하나, 질의 결과가 0건이 되었다.
 		SELECT * FROM tbl WHERE col IN (SELECT a, b FROM tbl2);
 		SELECT * FROM tbl WHERE col NOT IN (select a,b from tbl2);
 
@@ -1147,7 +1189,7 @@ IN 절의 호스트 변수 타입이 날짜/시간인 경우 정상 수행되지
 
 	수정 이전 버전에서 바인딩할 값의 타입이 날짜 / 시간 타입인 경우 아래의 Q1 은 데이터가 삭제되어 정상 동작했으나 Q2 는 데이터가 삭제되지 않아 비정상적으로 동작했다 .
 
-	::
+	.. code-block:: sql
 
 		DELETE FROM TBL WHERE D = ?;	-- Q1
 
@@ -1158,35 +1200,36 @@ GROUP BY 절과 연관 부질의, SELECT 리스트에 없는 칼럼으로 정렬
 
 	GROUP BY와 연관 부질의(correlated subquery) 그리고 ORDER BY 절에 SELECT 리스트에 없는 칼럼이 지정되었을 때 잘못된 결과를 출력하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT (SELECT f1.a FROM foo f1 WHERE f1.b=f2.b) as t
+		SELECT (SELECT f1.a FROM foo f1 WHERE f1.b = f2.b) as t
 		FROM foo f2
 		WHERE f2.b >= 1 and f2.b < 10
-			GROUP BY f2.c
-			ORDER BY f2.c;
+		GROUP BY f2.c
+		ORDER BY f2.c;
 
 GROUP BY 절의 WITH ROLLUP 수정자 지정 시 수행 결과가 잘못될 수 있는 문제(CUBRIDSUS-6518)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	GROUP BY 절의 WITH ROLLUP 수정자를 지정하면 수행 결과가 잘못될 수 있는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		// 수정 이전 버전에서 다음 질의 수행 시, ROLLUP된 결과 값이 출력되지 않았다.
+		-- 수정 이전 버전에서 다음 질의 수행 시, ROLLUP된 결과 값이 출력되지 않았다.
 
 		SELECT a FROM t1
 		GROUP BY A WITH ROLLUP;
 
-		// 수정 이전 버전에서 다음 질의 수행 시, ROLLUP된 결과 레코드의 a 칼럼 값이 NULL인데 a>1 이므로 출력되지 않아야 하나 출력되었다. 
-		SELECT a, COUNT(*) FROM t1 GROUP BY a WITH ROLLUP HAVING a>1;
+		-- 수정 이전 버전에서 다음 질의 수행 시, ROLLUP된 결과 레코드의 a 칼럼 값이 NULL인데 a>1 이므로 출력되지 않아야 하나 출력되었다. 
+		SELECT a, COUNT(*) FROM t1 
+		GROUP BY a WITH ROLLUP HAVING a > 1;
 
 부질의의 SELECT 리스트 형식이 "\*, 칼럼"인 경우 "," 뒤의 칼럼들을 출력하지 않는 문제(CUBRIDSUS-6589)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	부질의의 SELECT 리스트 형식이 "\*, 칼럼"인 경우 "," 뒤에 명시된 칼럼들을 출력하지 않는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT b FROM (SELECT *, 'hello' AS b FROM t1) t;
 
@@ -1195,10 +1238,13 @@ ESCAPE 절에 명시된 이스케이프 문자가 LIKE 패턴의 마지막 문�
 
 	ESCAPE 절에 명시된 이스케이프 문자가 LIKE 패턴의 마지막 문자인 경우에 " System error " 오류 메시지와 함께 질의 수행에 실패하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE foo(a char(10));
+		CREATE TABLE foo (a char (10));
 		SELECT * FROM foo WHERE a LIKE 'ab' ESCAPE 'b';
+
+	::
+	
 		ERROR: System error (db_compress_like_pattern) in ../../src/optimizer/query_rewrite.c (line: 3291)
 
 SELECT 리스트에 \*를 지정한 질의문과 칼럼 명을 명시한 질의문을 UNION할 때 오류 (CUBRIDSUS-6588)
@@ -1206,7 +1252,7 @@ SELECT 리스트에 \*를 지정한 질의문과 칼럼 명을 명시한 질의�
 
 	SELECT 리스트에 와일드카드(\*)를 지정한 질의문과 칼럼 명을 명시한 질의문을 UNION 등 문장 집합 연산자로 연결한 경우 칼럼 개수가 같음에도 불구하고 " ERROR: The number of columns, 0, in the left query do not match the number of columns, N, in the right query. " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		(SELECT * FROM t1) UNION (SELECT a, b FROM t2 );
 
@@ -1215,21 +1261,27 @@ SELECT 리스트에 \*를 지정한 질의문과 칼럼 명을 명시한 질의�
 
 	질의의 비교 조건 절에 호스트 변수가 있는 경우, 해당 호스트 변수에 입력되는 값의 타입이 변환되어 질의의 기대와 다르게 결과가 출력되는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		// 수정 이전 버전에서도 호스트 변수가 아닌 상수를 쓰는 경우에는 결과값이 정상 출력되었다.
+		-- 수정 이전 버전에서도 호스트 변수가 아닌 상수를 쓰는 경우에는 결과값이 정상 출력되었다.
 		SELECT * FROM foo WHERE a > 2.5;
 
+	::
+	
 		a
 		=============
 		3
 		4
 		5
 
-		// 칼럼 a의 타입은 INT일 때, 수정 이전 버전에서는 입력되는 값이 2.5이면 INT인 3으로 변환되어 비교되는 오류가 발생했다. 
+	.. code-block:: sql
+
+		-- 칼럼 a의 타입은 INT일 때, 수정 이전 버전에서는 입력되는 값이 2.5이면 INT인 3으로 변환되어 비교되는 오류가 발생했다. 
 		PREPARE stmt FROM 'SELECT * FROM foo WHERE a > ?';
 		EXECUTE stmt USING 2.5;
 
+	::
+	
 		a
 		=============
 		4
@@ -1240,70 +1292,77 @@ UNION과 LIMIT 절을 포함한 부질의가 있는 질의 수행 시 잘못된 
 
 	UNION과 LIMIT 절을 포함한 부질의가 있는 질의를 수행하면 잘못된 결과를 출력하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t1 (a INT);
 		INSERT INTO t1 VALUES (1);
 
 		--수정 이전 버전에서는 다음 질의에 대해 0건을 출력했다.
-		SELECT * FROM ((SELECT a from t1) UNION (SELECT a from t1) LIMIT 1) s1;
+		SELECT * 
+		FROM ((SELECT a from t1) UNION (SELECT a from t1) LIMIT 1) s1;
 
 UNION 절이 있는 부질의가 WHERE 절 조건에 사용되는 질의 수행 시 오류(CUBRIDSUS-6530)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	UNION 절이 있는 부질의가 WHERE 절 조건에 존재하면 " ERROR: '(select t1.i from t1 t1)<>0' is not union compatible with '(select t2.i from t2 t2)'. " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT * FROM t1 WHERE EXISTS ((SELECT i FROM t1) UNION ALL (SELECT i FROM t2));
+		SELECT * 
+		FROM t1 
+		WHERE EXISTS ((SELECT i FROM t1) UNION ALL (SELECT i FROM t2));
 
 병합 조인 방식으로 OUTER JOIN 질의 수행 시 잘못된 질의 결과를 출력하는 오류(CUBRIDSUS-5703)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	병합 조인(merge join) 방식으로 OUTER JOIN 질의를 수행하면 잘못된 질의 결과를 출력하는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT /*+ USE_MERGE */ * FROM tab t
-		LEFT OUTER JOIN idx i on t.t = i.t
-		LEFT OUTER JOIN col c on i.i = c.i AND c.c = t.c;
+		LEFT OUTER JOIN idx i ON t.t = i.t
+		LEFT OUTER JOIN col c ON i.i = c.i AND c.c = t.c;
 
 ROWNUM과 ORDERBY_NUM()이 같이 사용된 질의에서 ROWNUM의 행 개수보다 ORDERBY_NUM()의 행 개수가 크면 결과 개수가 잘못되는 현상(CUBRIDSUS-6676)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	ROWNUM으로 행 개수를 제한한 후 정렬된 결과에서 ORDERBY_NUM()으로 행 개수를 제한 출력하는 조건에서 ROWNUM의 행 개수보다 ORDERBY_NUM()의 행 개수가 크면 잘못된 개수의 결과를 출력하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT * FROM foo f, bar b WHERE f.a > 0 AND f.a = b.a AND ROWNUM <=4 ORDER BY f.a FOR ORDERYBY_NUM()<=10;
+		SELECT * 
+		FROM foo f, bar b 
+		WHERE f.a > 0 AND f.a = b.a AND ROWNUM <= 4 
+		ORDER BY f.a FOR ORDERYBY_NUM() <= 10;
 
 TIMESTAMP 타입에서 오버플로우 오류 처리가 잘못되는 문제(CUBRIDSUS-6004)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	TIMESTAMP 타입에 대해 아래와 같은 질의에서 오버플로우 오류 처리가 되지 않는 문제를 수정했다. 수정된 버전에서는 아래의 질의를 수행하면 오버플로우 오류를 반환한다.
 
-	::
+	.. code-block:: sql
 
-		SELECT timestamp'01/19/2038 12:14:07 pm' - CAST(-32768 as smallint);
+		SELECT timestamp'01/19/2038 12:14:07 pm' - CAST (-32768 AS SMALLINT);
 
 ANY, SOME 한정자의 인자로 ORDER BY 절이 있는 부질의 수행 시 오류(CUBRIDSUS-7799)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	ANY, SOME 한정자의 인자로 ORDER BY 절이 있는 부질의를 수행하면 " ERROR: Aggregate function must have 1 argument: min(t2.id, t2.a). " 오류가 발생하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT * FROM t1 WHERE id > ANY(SELECT id FROM t2 ORDER BY a);
+		SELECT * 
+		FROM t1 
+		WHERE id > ANY(SELECT id FROM t2 ORDER BY a);
 
 다중 질의를 한 번에 PREPARE한 이후 반복 실행하면 첫 번째 수행만 정상 수행되는 현상(CUBRIDSUS-7455)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	다중 질의를 한 번에 PREPARE한 이후 반복 실행하면 첫 번째 수행만 정상 수행되고, 두 번째 수행부터는 오류가 발생하는 현상을 수정했다.
 
-	::
+	.. code-block:: java
 
-		String MULTI_SELECT = "SELECT A FROM T1 WHERE A = ?
-		; UPDATE T1 SET A = 2 WHERE A = 2; SELECT A, B FROM T1 WHERE A = ?; SELECT A, B, A AS C FROM T1 WHERE A = ?;";
+		String MULTI_SELECT = "SELECT A FROM T1 WHERE A = ?; UPDATE T1 SET A = 2 WHERE A = 2; SELECT A, B FROM T1 WHERE A = ?; SELECT A, B, A AS C FROM T1 WHERE A = ?;";
 		
 		PreparedStatement p = c.prepareStatement(MULTI_SELECT);
 		...
@@ -1320,26 +1379,27 @@ EXISTS 조건과 FOR ORDERBY_NUM() BETWEEN 조건이 있는 질의에서 key lim
 
 	EXISTS 조건과 FOR ORDERBY_NUM() BETWEEN 조건이 있는 질의에서 적용되지 않아야 할 key limit 최적화가 적용되면서 잘못된 결과 건수를 출력하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT cd, tcd, nm
 		FROM a
 		WHERE EXISTS (SELECT 1 FROM b WHERE a.cd = b.cd
-				AND (b.no = 10000 OR b.uno =10000))
+				AND (b.no = 10000 OR b.uno = 10000))
 		ORDER BY a.nm
 		FOR ORDERBY_NUM() BETWEEN 1 AND 50;
 
 UNION 질의에서 앞쪽 VARCHAR 타입 칼럼의 크기가 뒤쪽 칼럼의 크기보다 작을 때 발생하는 오류(CUBRIDSUS-9148)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	UNION 질의에서 앞쪽 VARCHAR 타입 칼럼의 크기가 뒤쪽 칼럼의 크기보다 작으면 " ERROR: Execute: Query execution failure #1336. " 오류 메시지와 함께 수행에 실패하는 현상을 수정했다. 
+	UNION 질의에서 앞쪽 VARCHAR 타입 칼럼의 크기가 뒤쪽 칼럼의 크기보다 작으면 "ERROR: Execute: Query execution failure #1336. " 오류 메시지와 함께 수행에 실패하는 현상을 수정했다. 
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE u1 (a varchar(1));
-		CREATE TABLE u2 (a varchar(2));
-		INSERT INTO u1 values ('1');
-		INSERT INTO u2 values ('22');
+		CREATE TABLE u1 (a VARCHAR (1));
+		CREATE TABLE u2 (a VARCHAR (2));
+		INSERT INTO u1 VALUES ('1');
+		INSERT INTO u2 VALUES ('22');
+		
 		SELECT a FROM (SELECT a FROM u1 UNION ALL SELECT a FROM u2) t(a);
 
 PREPARE 구문으로 CASE 또는 DECODE 문 수행 시 오류(CUBRIDSUS-6847)
@@ -1347,26 +1407,27 @@ PREPARE 구문으로 CASE 또는 DECODE 문 수행 시 오류(CUBRIDSUS-6847)
 
 	PREPARE 구문으로 CASE 또는 DECODE 문 수행 시 모든 인자들이 호수트 변수로 주어지는 등 타입을 결정할 수 없을 때, " ERROR: Semantic: System error (generate var) in ../../src/parser/xasl_generation.c " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		PREPARE ST FROM 'SELECT CASE WHEN col=? THEN ? ELSE ? END FROM tbl;'
+		PREPARE ST FROM 'SELECT CASE WHEN col = ? THEN ? ELSE ? END FROM tbl;'
 
 '%' 문자를 LIKE 문의 이스케이프 문자로 사용할 때의 오동작(CUBRIDSUS-7211)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	'%' 문자를 LIKE 문의 이스케이프 문자로 사용하면 오동작하는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		// 다음 질의 수행 시 첫번째 문자는 '%'이며, 두번째 문자 '_'는 아무 문자나 하나가 오고, 세번째 문자 이후는 'cab'인 문자열이 검색된다.
-		SELECT * FROM foo WHERE a LIKE '%%_cab' escape '%';
+		-- 다음 질의 수행 시 첫번째 문자는 '%'이며, 두번째 문자 '_'는 아무 문자나 하나가 오고, 세번째 문자 이후는 'cab'인 문자열이 검색된다.
+		SELECT * FROM foo 
+		WHERE a LIKE '%%_cab' escape '%';
 
 NUMERIC 타입의 범위 내의 피연산자로 나누기 연산을 수행함에도 불구하고 발생하는 오버플로우 오류(CUBRIDSUS-6506)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	NUMERIC 타입의 피연산자로 나누기 연산을 수행할 때, 입력 인자 값이 NUMVER 타입이 허용하는 범위 내의 숫자임에도 불구하고 " ERROR: Data overflow on data type numeric " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.  // 수정 이전 버전에서는 다음의 경우에도 오류를 발생했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT 9/1.2345678901211111111;
 		SELECT -9/1.2345678901211111111;
@@ -1386,20 +1447,20 @@ NOT 과 단항 연산자 +, -를 이용한 조건 질의 수행 시 오류(CUBRI
 
 	NOT과 단항 연산자 -를 이용하여 다음과 같은 조건 질의 수행 시 " ERROR: 'unknown opcode' operator is not defined on types integer and integer. " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT * FROM tab WHERE NOT - col0 = - col0;  
 
 	아울러 질의문에 단항 연산자 + 와 - 를 같이 사용하는 경우 발생하는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT * FROM tab0 WHERE col0 IN (+ - col0);
 
 ORDER BY 절을 포함한 뷰에 대해 특정 칼럼만 조회하는 SELECT 질의를 수행하면 서버 프로세스가 비정상 종료될 수 있는 현상(CUBRIDSUS-7140)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	::
+	.. code-block:: sql
 
 		CREATE VIEW va AS SELECT code, name, gender, nation_code FROM athlete ORDER BY nation_code;
 		SELECT code, name FROM va;
@@ -1409,49 +1470,55 @@ CHAR 타입 칼럼에 INT 타입을 바인딩하여 INSERT INTO ... SELECT ? ...
 
 	INSERT INTO ... SELECT ? FROM db_root 질의 수행 시 CHAR 타입 칼럼에 INT 타입을 바인딩하면 " ERROR: A domain conflict exists on attribute *noname* " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t ( a CHAR(1));
+		CREATE TABLE t (a CHAR (1));
 		PREPARE s FROM 'INSERT INTO t SELECT ? FROM db_root';
 		EXECUTE s USING 1;
 
-		The "foreign key" key is optional in inline_constraint in Create Table and alter table statement:
+		-- The "foreign key" key is optional in inline_constraint in Create Table and alter table statement:
 
 		CREATE TABLE t1 (id_1 INT CONSTRAINT pk_id PRIMARY KEY);
-		--create with inline constraint
+		
+		-- create with inline constraint
+		CREATE TABLE t21 (id_2 INT CONSTRAINT fk_21 REFERENCES t1 (id_1));
 
-		CREATE TABLE t21 (id_2 INT CONSTRAINT fk_21 REFERENCES t1(id_1));
-		--alter column with inline constraint
-
+		-- alter column with inline constraint
 		CREATE TABLE t23 (ID_2 INT);
-		ALTER TABLE t23 ADD (id_3 INT CONSTRAINT fk_231 REFERENCES t1(id_1));
+		ALTER TABLE t23 ADD (id_3 INT CONSTRAINT fk_231 REFERENCES t1 (id_1));
 
 IN 또는 EXISTS 표현식의 한 쪽 조건이 조건식으로 된 SELECT 리스트를 가진 부질의인 경우 서버 프로세스가 비정상 종료되는 문제(CUBRIDSUS-6482)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  
 	IN 또는 EXISTS 표현식의 조건이 단순 비교, ALL, BETWEEN, LIKE, ISNULL 등 조건식으로 된 SELECT 리스트인 경우 서버 프로세스가 비정상 종료되는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT * FROM t1 WHERE v IN (SELECT (1 = 1));
-		SELECT * FROM t1 WHERE v IN (SELECT (aaa' LIKE 'bbb'));
-		SELECT * FROM t1 WHERE EXISTS (SELECT (1 < ALL{1,3,4} );
+		SELECT * FROM t1 WHERE v IN (SELECT ('aaa' LIKE 'bbb'));
+		SELECT * FROM t1 WHERE EXISTS (SELECT (1 < ALL{1,3,4} ));
 
 스키마 변경 이전으로 부분 롤백 수행 이후 USING INDEX 절을 포함한 질의 수행 시 오류(CUBRIDSUS-6458)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	스키마를 변경하기 전으로 부분 롤백(partial rollback)을 수행한 이후 USING INDEX 절을 포함한 질의를 수행하면 " ERROR: Execute: Query execution failure #10842. " 오류 메시지와 함께 질의 수행에 실패하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		;autocommit off
+		-- ;autocommit off
+		
 		CREATE TABLE t (id INTEGER, textlabel VARCHAR(255), description VARCHAR(4096));
-		CREATE INDEX i_t_id_text ON t(id, textlabel);
+		CREATE INDEX i_t_id_text ON t (id, textlabel);
 		COMMIT;
+		
 		SAVEPOINT sp4;
+		
 		TRUNCATE t;
+		
 		SELECT * FROM t WHERE id > -1 USING INDEX i_t_id_text(+);
+		
 		ROLLBACK TO SAVEPOINT sp4;
+		
 		SELECT * FROM t WHERE id > -1 USING INDEX i_t_id_text(+);
 
 CASE 연산식에 정의되지 않은 칼럼을 사용하거나 서버 프로세스 종료 후 LAST_INSERT_ID() 호출 시 CSQL, CAS가 비정상 종료되는 현상(CUBRIDSUS-5759)
@@ -1459,12 +1526,12 @@ CASE 연산식에 정의되지 않은 칼럼을 사용하거나 서버 프로세
 
 	CASE 연산식에 정의되지 않은 칼럼이 있는 경우 CSQL, CAS가 비정상 종료되는 현상을 수정했다.  
 
-	::
+	.. code-block:: sql
 
-		//아래 구문에서 a는 정의되지 않은 칼럼이다.
-		UPDATE tbl SET col1 = (CASE WHEN EXISTS (SELECT * FROM tbl2 WHERE LENGTH(a)>0 )
-									THEN (SELECT col2 FROM tbl2 WHERE colx='1' )
-									ELSE (SELECT col1 FROM tbl2 WHERE colx='1' ) END )
+		-- 아래 구문에서 a는 정의되지 않은 칼럼이다.
+		UPDATE tbl SET col1 = (CASE WHEN EXISTS (SELECT * FROM tbl2 WHERE LENGTH (a) > 0)
+						THEN (SELECT col2 FROM tbl2 WHERE colx = '1')
+						ELSE (SELECT col1 FROM tbl2 WHERE colx = '1') END)
 
 	아울러 서버 프로세스 종료 후 LAST_INSERT_ID() 호출 시 CSQL, CAS가 비정상 종료될 수 있는 문제를 수정했다.
 
@@ -1473,7 +1540,7 @@ CASE 연산식에 정의되지 않은 칼럼을 사용하거나 서버 프로세
 
 	중첩 깊이가 128을 초과하는 부질의(subquery)를 수행하면 응용 프로그램이 비정상 종료되는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT * FROM (SELECT * FROM (... (SELECT 1)...)...);
 
@@ -1484,13 +1551,14 @@ DESCRIBE 문 수행 시 STRING 타입에 대해 길이를 잘못 출력하는 �
 
 	참고로, STRING(n)으로 출력되는 것은 VARCHAR(n) 타입을 의미한다.
 
+	.. code-block:: sql
+	
+		DESCRIBE test_tbl;
+
 	::
-
-		csql> DESCRIBE test_tbl;
-
-
+	
 		Field		Type			Null Key 	Default 	Extra
-		=======================================
+		================================================================
 		's_name' 	'CHAR(1)' 		'YES' '		' NULL 		''
 		'f_name' 	'STRING(30)' 	'YES' '		' NULL 		''
 		'name' 		'STRING' 		'YES' '		' NULL 		''
@@ -1500,11 +1568,11 @@ DECIMAL(p, s) 타입에서 허용 범위를 벗어나는 p와 s의 입력이 가
 
 	DECIMAL(p, s) 타입의 정밀도 p와 스케일 s를 벗어나는 값의 입력이 허용되는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1 (col1 decimal (5, 2));
+		CREATE TABLE t1 (col1 DECIMAL (5, 2));
 
-		// 수정 이전 버전에서는 아래의 질의 수행에 성공하여 1000.00이라는 값이 저장되는 오류가 존재했다.
+		-- 수정 이전 버전에서는 아래의 질의 수행에 성공하여 1000.00이라는 값이 저장되는 오류가 존재했다.
 		INSERT INTO t1 VALUES (999.999);
 
 테이블 생성 시 DEFAULT 표현식에 대한 문법 검사 없이 수행되는 문제(CUBRIDSUS-6761)
@@ -1512,9 +1580,12 @@ DECIMAL(p, s) 타입에서 허용 범위를 벗어나는 p와 s의 입력이 가
 
 	테이블 생성 시 DEFAULT 표현식에 대한 문법 검사가 되도록 수정했다. 아래의 예에서 수정 이전에는 SYSTIMESTAMP 뒤의 - 9999의 입력을 무시하고 테이블이 생성되는 현상이 발생했으나, 수정 이후에는 문법에 맞지 않기 때문에 오류를 출력한다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE foo(a TIMESTAMP DEFAULT SYSTIMESTAMP - 9999);
+		CREATE TABLE foo (a TIMESTAMP DEFAULT SYSTIMESTAMP - 9999);
+		
+	::
+	
 		Error: Invalid DEFAULT clause. 'sys_timestamp ' cannot be used in a nested expression.
 
 호스트 변수들 간의 곱셈/나눗셈 연산 수행 시 바인딩되는 문자열이 숫자 타입으로 자동 형 변환이 되지 않는 오류(CUBRIDSUS-5506)
@@ -1522,9 +1593,9 @@ DECIMAL(p, s) 타입에서 허용 범위를 벗어나는 p와 s의 입력이 가
 
 	호스트 변수들 간의 곱셈/나눗셈 연산 수행 시 바인딩되는 문자열이 숫자 타입으로 자동 형 변환이 되지 않는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1 (i1 integer);
+		CREATE TABLE t1 (i1 INTEGER);
 		PREPARE st FROM 'INSERT INTO t1(i1) VALUES (? * ?)'
 		EXECUTE st USING '4', '2.2';
 
@@ -1533,26 +1604,26 @@ UNIQUE 키 위반으로 INSERT 문 수행이 실패한 이후 LAST_INSERT_ID 함
 
 	UNIQUE 키 위반으로 INSERT 문 수행이 실패한 이후 LAST_INSERT_ID 함수의 결과 값이 잘못 출력될 수 있는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1 ( k int(11) PRIMARY KEY AUTO_INCREMENT, a INT(11) DEFAULT NULL UNIQUE);
-		INSERT INTO t1 ( a ) VALUES ( 1 );
-		INSERT INTO t1 ( a ) VALUES ( 2 );
+		CREATE TABLE t1 (k int(11) PRIMARY KEY AUTO_INCREMENT, a INT(11) DEFAULT NULL UNIQUE);
+		INSERT INTO t1 (a) VALUES (1);
+		INSERT INTO t1 (a) VALUES (2);
 
 		--below sql will fail because of unique constrain in a column.
-		INSERT INTO t1 ( a ) VALUES ( 1 );
+		INSERT INTO t1 (a) VALUES (1);
 
 		--below should return an old value(2) because of failed insert operation.
-		SELECT LAST_INSERT_ID();
+		SELECT LAST_INSERT_ID ();
 
 유효하지 않은 ALTER COLUMN 문 수행 시 오류를 출력하지 않는 문제(CUBRIDSUS-6759)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	유효하지 않은 ALTER COLUMN ... SET DEFAULT 문 수행 시 오류를 출력하지 않는 문제를 수정했다. 다음 예에서 칼럼 a는 TIMESTAMP 이므로 DEFAULT 값으로 'aaa'와 같은 문자열을 사용할 수 없다. 
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE foo(a TIMESTAMP);
+		CREATE TABLE foo (a TIMESTAMP);
 		ALTER TABLE foo ALTER COLUMN a SET DEFAULT 'aaa';
 
 BIT 타입 칼럼에 setBytes() 메서드로 값을 설정하여 INSERT하면 잘못된 값이 저장되는 문제(CUBRIDSUS-6628)
@@ -1560,39 +1631,40 @@ BIT 타입 칼럼에 setBytes() 메서드로 값을 설정하여 INSERT하면 �
 
 	JDBC 응용 프로그램에서 BIT 타입 칼럼에 setBytes() 메서드로 호스트 변수의 값을 설정하여 INSERT하면 잘못된 값이 저장되는 현상을 수정했다.
 
-INSERT ... ON DUPLICATE KEY UPDATE 문 수행 시 기본 키에 NULL 값이 입력될 수 있는 문제(CUBRIDSUS-6448)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+INSERT ON DUPLICATE KEY UPDATE 문 수행 시 기본 키에 NULL 값이 입력될 수 있는 문제(CUBRIDSUS-6448)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	아래의 예와 같이 INSERT ... ON DUPLICATE KEY UPDATE 문을 수행하면 기본 키에 NULL 값이 입력되는 문제를 수정했다.
+	아래의 예와 같이 INSERT ON DUPLICATE KEY UPDATE 문을 수행하면 기본 키에 NULL 값이 입력되는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1( id int AUTO_INCREMENT NOT NULL, c CHAR(1) NOT NULL , counter int NOT NULL DEFAULT 1, PRIMARY KEY(id), UNIQUE KEY(c) ) ;
-		INSERT INTO t1 (id, c) VALUES (NULL, 'a'), (NULL, 'a') ON DUPLICATE KEY UPDATE id = null, counter = counter + 1;
+		CREATE TABLE t1(id int AUTO_INCREMENT NOT NULL, c CHAR(1) NOT NULL, counter INT NOT NULL DEFAULT 1, PRIMARY KEY(id), UNIQUE KEY(c));
+		INSERT INTO t1 (id, c) VALUES (NULL, 'a'), (NULL, 'a') 
+		ON DUPLICATE KEY UPDATE id = NULL, counter = counter + 1;
 
 INSERT ... SELECT 구문 수행 시 UNIQUE 칼럼의 값이 NULL로 들어갈 경우 COUNT(*) 질의의 결과가 잘못 출력되는 현상(CUBRIDSUS-8338)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	INSERT ... SELECT 구문 수행 시 UNIQUE 칼럼의 값으로 NULL이 입력되는 경우 COUNT(*) 질의의 결과가 잘못되는 현상을 수정했다. COUNT(칼럼 이름)과 같이 칼럼 이름을 명시하여 COUNT를 수행하는 경우에는 이전 버전에서도 정상 동작했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(id INT AUTO_INCREMENT, mgrid INT UNIQUE, dummy INT);
-		INSERT INTO t1(dummy) VALUES (1);
-		INSERT INTO t1(dummy) SELECT dummy FROM t1;
-		INSERT INTO t1(dummy) SELECT dummy FROM t1;
-		SELECT count(*) FROM t1;
+		CREATE TABLE t1 (id INT AUTO_INCREMENT, mgrid INT UNIQUE, dummy INT);
+		INSERT INTO t1 (dummy) VALUES (1);
+		INSERT INTO t1 (dummy) SELECT dummy FROM t1;
+		INSERT INTO t1 (dummy) SELECT dummy FROM t1;
+		SELECT COUNT(*) FROM t1;
 	
 AUTO_INCREMENT 칼럼으로 리스트 분할된 테이블에 INSERT 수행 시 오류(CUBRIDSUS-6522)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	AUTO_INCREMENT 칼럼으로 리스트 분할된 테이블에 INSERT를 수행하면 " ERROR: Appropriate partition does not exist ." 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1 (a int AUTO_INCREMENT PRIMARY KEY)
+		CREATE TABLE t1 (a INT AUTO_INCREMENT PRIMARY KEY)
 		PARTITION BY LIST (a) (PARTITION p0 VALUES IN (1, 2));
-		INSERT INTO t1 VALUES (NULL),(NULL);
+		INSERT INTO t1 VALUES (NULL), (NULL);
 
 한 칼럼에 대한 제약조건이 100개 이상인 테이블에 INSERT 혹은 UPDATE 수행 시 서버 프로세스가 비정상 종료되는 현상(CUBRIDSUS-6437)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1604,51 +1676,67 @@ Windows 64 비트 환경에서 BLOB, CLOB 타입에 문자열 INSERT 시 오류(
 
 	Windows 64 비트 환경에서 BLOB, CLOB 타입에 문자열을 INSERT하면 " ERROR: Cannot coerce '123' to type clob. " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE table alltypes(blob_col blob,clob_col clob);
-		INSERT into alltypes values('123', '123')
+		CREATE TABLE alltypes (blob_col BLOB, clob_col CLOB);
+		INSERT INTO alltypes VALUES ('123', '123')
 
 REPLACE 문과 DELETE 문이 각각 다른 트랜잭션으로 수행될 때 데드락 현상이 발생할 수 있는 문제(CUBRIDSUS-5016)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	REPLACE 문과 DELETE 문이 각각 다른 트랜잭션으로 수행될 때 데드락 현상이 발생할 수 있는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(a int);
-		CREATE UNIQUE INDEX ON t1 (a);
-		INSERT INTO t1 VALUES (1),(4),(7);
+		CREATE TABLE t1 (a INT);
+		CREATE UNIQUE INDEX i1 ON t1 (a);
+		INSERT INTO t1 VALUES (1), (4), (7);
 		
-		// set autocommit off
-		T1: REPLACE t1 (a) VALUE (6);
-		T2: REPLACE t1 (a) VALUE (7);
-		T1: DELETE FROM t1 WHERE a=6
-		T2: REPLACE t1 (a) VALUE (5);
+		-- set autocommit off
+		
+		-- T1
+		REPLACE t1 (a) VALUES (6);
+		
+		-- T2
+		REPLACE t1 (a) VALUES (7);
+		
+		-- T1
+		DELETE FROM t1 WHERE a = 6;
+		
+		-- T2
+		REPLACE t1 (a) VALUES (5);
 
 REPLACE 문 사용 시 고유 키 위반 오류가 발생할 수 있는 문제(CUBRIDSUS-5786)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	REPLACE 문 사용 시 고유 키 위반(unique key violation) 오류가 발생할 수 있는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(id1 VARCHAR(10) UNIQUE);
-		INSERT INTO t1 VALUES ('a'),('b'),('f'),('k');
+		CREATE TABLE t1 (id1 VARCHAR(10) UNIQUE);
+		INSERT INTO t1 VALUES ('a'), ('b'), ('f'), ('k');
 		COMMIT;	
-		T1: DELETE FROM t1 WHERE id1 = 'f';
+		
+		-- T1
+		DELETE FROM t1 WHERE id1 = 'f';
 		INSERT INTO t1 VALUES ('g');
-		T2: INSERT INTO t1 VALUES ('f');
+		
+		-- T2
+		INSERT INTO t1 VALUES ('f');
 		COMMIT;
-		T1: ROLLBACK;
-		T3 : REPLACE INTO t1 SET id1 = 'f';
+		
+		-- T1
+		ROLLBACK;
+		
+		-- T3
+		REPLACE INTO t1 SET id1 = 'f';
 
 DELETE 문에서 FROM 키워드의 생략이 가능해짐(CUBRIDSUS-6547)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	DELETE 문에서 FROM 절 이하의 테이블이 하나인 경우 키워드의 생략이 가능하도록 수정했다.
 
-	::
+	.. code-block:: sql
 
 		DELETE tbl;
 
@@ -1689,7 +1777,7 @@ CREATE TABLE ... LIKE 문으로 REUSE_OID 테이블을 복사 생성하면 REUSE
 
 	CREATE TABLE ... LIKE 문으로 REUSE_OID 테이블을 복사 생성할 때, 새로 생성된 테이블에 REUSE_OID 속성이 누락되는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE src_tbl (i INT) REUSE_OID;
 		CREATE TABLE dest_tbl LIKE src_tbl;
@@ -1699,11 +1787,13 @@ AUTO_INCREMENT 속성이 설정된 칼럼에 ALTER 문으로 DEFAULT 속성이 �
 
 	AUTO_INCREMENT 속성과 DEFAULT 속성이 같은 칼럼에 동시에 설정될 수 없음에도 불구하고 ALTER 문으로 DEFAULT 속성을 추가할 수 있었던 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE tbl (x INT SHARED 3);
 		ALTER TABLE tbl ALTER COLUMN x SET DEFAULT 100;
 
+	::
+	
 		-- 수정한 버전에서는 다음의 오류를 출력한다.
 		SHARED, DEFAULT and AUTO_INCREMENT cannot be defined with each other.
 	
@@ -1712,9 +1802,9 @@ ALTER SERIAL문으로 시리얼의 캐시 옵션 설정을 변경하지 못하�
 
 	ALTER SERIAL 문으로 캐시 옵션을 활성화 또는 비활성화하지 못하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE SERIAL s2 STARt WITH 5 INCREMENT BY 6 CACHE 5;
+		CREATE SERIAL s2 START WITH 5 INCREMENT BY 6 CACHE 5;
 		ALTER SERIAL s2 NOCACHE;
 
 기본 키 칼럼에 DEFAULT NULL 제약조건 부여가 가능한 문제(CUBRIDSUS-7348)
@@ -1722,20 +1812,20 @@ ALTER SERIAL문으로 시리얼의 캐시 옵션 설정을 변경하지 못하�
 
 	기본 키 칼럼에 DEFAULT NULL 제약조건을 부여하지 못하도록 수정했다.
 
-	::
+	.. code-block:: sql
 
-		// 이전 버전에서는 아래 질의가 수행되는 문제가 존재한다.
-		CREATE TABLE t(a INT PRIMARY KEY DEFAULT NULL);
+		-- 이전 버전에서는 아래 질의가 수행되는 문제가 존재한다.
+		CREATE TABLE t (a INT PRIMARY KEY DEFAULT NULL);
 
 상위 클래스와 서브 클래스에 둘 다 기본 키 선언이 가능한 문제(CUBRIDSUS-9207)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	상위 클래스에 기본 키가 있으면 서브 클래스는 이미 상위 클래스의 기본 키를 상속받으므로 기본 키를 선언할 수 없어야 하나, 이를 허용했던 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE student (std_id INT PRIMARY KEY);
-		CREATE TABLE time_table as subclass of student (std_id INT PRIMARY KEY);
+		CREATE TABLE time_table AS SUBCLASS OF student (std_id INT PRIMARY KEY);
 	
 REUSE_OID 옵션으로 생성한 테이블을 DROP하는 경우 공간이 반환되지 않을 수 있는 현상(CUBRIDSUS-8140)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1752,13 +1842,16 @@ REUSE_OID 옵션으로 생성한 테이블을 DROP하는 경우 공간이 반환
 
 	호스트 변수를 포함한 뷰에 대한 질의 수행 시 서버 프로세스가 비정상 종료되는 현상을 수정했다. 호스트 변수를 포함한 DDL은 허용되지 않는다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE tree(node INT,parentnode INT,name VARCHAR(30));
-		INSERT INTO TREE VALUES (1, NULL,'1'),(2, 1,'2'),(3, 1,'3'),(4,2,'4');
+		CREATE TABLE tree (node INT, parentnode INT, name VARCHAR (30));
+		INSERT INTO TREE VALUES (1, NULL, '1'), (2, 1, '2'), (3, 1, '3'), (4, 2, '4');
+		
 		PREPARE stmt FROM 'CREATE VIEW v as SELECT parentnode,node,name FROM tree WHERE node < ? START
 		WITH parentnode IS NULL CONNECT BY parentnode=PRIOR node ORDER BY node';
+		
 		EXECUTE stmt USING 3;
+		
 		SELECT * FROM v;
 
 뷰 생성 시 DEFAULT 값이 뷰에 복사되지 않는 오류(CUBRIDSUS-6772)
@@ -1766,18 +1859,18 @@ REUSE_OID 옵션으로 생성한 테이블을 DROP하는 경우 공간이 반환
 
 	CREATE VIEW AS SELECT ... 문 수행 시 원본 테이블의 DEFAULT 값이 뷰에 복사되지 않는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE foo(a INT DEFAULT 222);
+		CREATE TABLE foo (a INT DEFAULT 222);
 		CREATE VIEW voo AS SELECT * FROM foo;
-		INSERT INTO voo VALUES(DEFAULT);
+		INSERT INTO voo VALUES (DEFAULT);
 
 뷰를 구성하는 질의에 FROM 절이 없는 경우 SELECT 질의 수행 시 오류 (CUBRIDSUS-6592)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	뷰를 구성하는 질의에 FROM 절이 없으면 SELECT 질의 수행 시 " ERROR: There are more attributes in class v1 than columns in the query specification. " 오류 메시지와 함께 질의 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE VIEW v1 AS (SELECT 1 a) UNION (SELECT 1 a);
 		SELECT * FROM v1;
@@ -1787,17 +1880,17 @@ REUSE_OID 옵션으로 생성한 테이블을 DROP하는 경우 공간이 반환
 
 	뷰 생성 또는 뷰 변경 시 SELECT 리스트에 복잡한 수식이 나타나는 경우 질의 수행에 실패할 수 있는 문제를 수정했다. 다음 예처럼 SELECT 리스트 중 복잡한 수식에 대해 칼럼 별칭(alias)을 명시하지 않으면 "SQRT(CAST(100 as double))"이 칼럼 별칭이 되는데, 이와 같은 수식을 식별자로 허용하지 않으므로 식별자를 감싸는 부호(큰따옴표, 대괄호 혹은 백틱)가 필요하다. 수정 이후에는 질의 수행 시 내부적으로 식별자를 감싸는 부호를 추가하여 해당 현상이 발생하지 않는다.
 
-	::
+	.. code-block:: sql
 
-		CREATE VIEW vw AS SELECT SQRT(CAST(100 as double));
-		// 위의 질의를 수행하면 내부적으로 아래와 같이 수행된다.
-		CREATE VIEW vw AS SELECT SQRT(CAST(100 as double)) AS [ SQRT(CAST(100 as double)) ];
+		CREATE VIEW vw AS SELECT SQRT (CAST(100 as double));
+		-- 위의 질의를 수행하면 내부적으로 아래와 같이 수행된다.
+		CREATE VIEW vw AS SELECT SQRT (CAST(100 as double)) AS [ SQRT(CAST(100 as double)) ];
 	
 	수정 이전 버전의 HA 환경에서는 마스터 노드에서 해당 현상이 발생하지 않게 질의문을 작성하더라도, 슬레이브 노드에서 함수 내의 인자 값을 CAST하도록 질의문이 재작성되면서 해당 현상이 발생했다.
 
-	::
+	.. code-block:: sql
 
-		// 아래의 질의문을 수행하면 슬레이브 노드에서는 위 예제의 첫번째 질의 형태로 재작성된다.
+		-- 아래의 질의문을 수행하면 슬레이브 노드에서는 위 예제의 첫번째 질의 형태로 재작성된다.
 		CREATE VIEW vw AS SELECT SQRT(100);
 
 db_user, db_trigger 시스템 카탈로그 테이블의 레코드를 사용자가 임의로 변경하지 못하도록 수정(CUBRIDSUS-8690)
@@ -1820,10 +1913,12 @@ db_user, db_trigger 시스템 카탈로그 테이블의 레코드를 사용자�
 
 	사용자 이름의 길이가 32bytes를 초과하면 이후 해당 사용자로 접속하지 못하는 문제가 발생했다. 수정된 버전에서는 DB 사용자 계정 생성 시 계정의 길이를 32bytes로 제한했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE USER a12345678901234567890123456789012345678901234567890;
-		
+
+	::
+	
 		$ csql -u a1234567890123456789012345678901234567890123456
 		ERROR: User "a12345678901234567890123456789012345" is invalid.
 	
@@ -1832,16 +1927,19 @@ CONNECT BY 절이 START WITH 절 뒤에 오는 것을 허용하게 됨(CUBRIDSUS
 
 	계층 질의문에서 CONNECT BY 절이 START WITH 절 뒤에 오는 것을 허용하도록 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT * FROM a CONNECT BY PRIOR id = pid START WITH id = 1;
+		SELECT * 
+		FROM a 
+		CONNECT BY PRIOR id = pid 
+		START WITH id = 1;
 	
 ORDER SIBLINGS BY 절을 가진 계층 질의가 부질의로 사용되면 잘못된 질의 결과를 출력하는 문제(CUBRIDSUS-7748)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	ORDER SIBLINGS BY 절이 포함된 계층 질의가 부질의로 사용되면 질의 최적화기에서 질의가 잘못 재작성되어 질의 결과가 잘못되는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT * FROM tbl
 		WHERE id IN (SELECT id FROM tbl WHERE yn = 'Y'
@@ -1854,12 +1952,12 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 
 	ROWNUM 조건이 있는 계층 질의가 인덱스 스캔으로 처리될 때 질의 결과의 개수가 ROWNUM 조건에 의해 제한되지 못하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT oid FROM foo
 		WHERE ROWNUM = 1
-			START WITH oid = '1234567'
-			CONNECT BY PRIOR poid = oid
+		START WITH oid = '1234567'
+		CONNECT BY PRIOR poid = oid;
 
 일시적 임시 볼륨을 사용하는 질의 수행 중 DB 서버 재시작 시 서버 프로세스가 비정상 종료될 수 있는 문제(CUBRIDSUS-5684)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1878,25 +1976,33 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 
 	Case 1) 이전 버전에서 다음과 같은 질의를 수행하면 오류가 발생했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(a INT);
-		INSERT INTO t1 VALUES(1), (2), (3), (4);
+		CREATE TABLE t1 (a INT);
+		INSERT INTO t1 VALUES (1), (2), (3), (4);
+		
 		CREATE TRIGGER TRIGG1 BEFORE UPDATE ON t1 EXECUTE DELETE FROM t1;
-		 UPDATE t1 SET a=6;
+		
+		UPDATE t1 SET a = 6;
+		
+	::
+	
 		ERROR: Error evaluating action for "trigg1", Accessing deleted object 0|1100|16.
 
 	Case 2) 이전 버전에서 다음과 같은 질의를 수행하면 응용 프로그램이 비정상 종료되었다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(a INT, b INT);
-		INSERT INTO t1 VALUES (2,2), (3,3);
+		CREATE TABLE t1 (a INT, b INT);
+		INSERT INTO t1 VALUES (2, 2), (3, 3);
+		
 		CREATE VIEW v1 AS SELECT * FROM t1;
+		
 		CREATE TRIGGER tri_t1_before_update1 BEFORE UPDATE ON t1 EXECUTE DELETE FROM v1;
 		CREATE TRIGGER tri_t2_before_update2 BEFORE UPDATE ON t1 EXECUTE DELETE FROM t1;
-		 --Test: crash happens.
-		UPDATE t1 SET t1.a=10;
+		
+		--Test: crash happens.
+		UPDATE t1 SET t1.a = 10;
 
 다른 사용자가 생성한 테이블에 트리거가 있으면 해당 테이블에 대한 질의 오류가 무시되는 현상(CUBRIDSUS-7336)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1908,16 +2014,20 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 
 	자동 커밋 모드가 OFF일 때 트리거에 의한 UPDATE/INSERT 질의가 실패했음에도 불구하고, 트리거를 유발한 질의가 롤백되지 않는 문제를 수정했다. 아래 예에서, Q6을 수행하면 t2 테이블의 trig1 트리거가 발동하는데, 이때 t1 테이블에 int 타입의 값을 입력할 수 없으므로 에러가 발생하고 이 트리거를 유발한 Q6은 롤백된 상태여야 한다. 즉, Q7 수행 이후에 t1 테이블의 레코드 건수는 1건, t2 테이블의 레코드 건수는 0건이어야 한다. 이전 버전에서는 에러가 발생하면 trig1 트리거를 유발한 Q6 질의가 롤백되지 않는 문제가 존재했다.
 
-	::
+	.. code-block:: sql
 
-		;autocommit off
-		CREATE TABLE t1(col1 date); -- Q1
-		CREATE TABLE t2(col2 int); --Q2
-		CREATE TRIGGER trig1 AFTER INSERT ON t2 EXECUTE INSERT INTO t1(col1) VALUES(obj.col2); --Q3
+		-- ;autocommit off
+		
+		CREATE TABLE t1 (col1 DATE); -- Q1
+		CREATE TABLE t2 (col2 INT); --Q2
+		CREATE TRIGGER trig1 AFTER INSERT ON t2 EXECUTE INSERT INTO t1 (col1) VALUES (obj.col2); --Q3
 		COMMIT; -- Q4
-		INSERT INTO t1(col1) VALUES ('2012-04-30'); -- Q5
-		INSERT INTO t2(col2) VALUES (1); -- Q6
+		
+		INSERT INTO t1 (col1) VALUES ('2012-04-30'); -- Q5
+		INSERT INTO t2 (col2) VALUES (1); -- Q6
+		
 		ERROR: Error evaluating action for "trig1", Execute: Cannot coerce obj.cold2 to type date.
+		
 		COMMIT; -- Q7
 	
 트리거 내에서 CLOB_TO_CHAR()를 호출하면 NULL을 반환하는 오류 (CUBRIDSUS-7246)
@@ -1939,23 +2049,23 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 
 	질의 최적화 과정에서 불필요한 ORDER BY 절을 제거할 때 orderby_num()은 그대로 남아있어 값이 항상 0으로 출력되는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT orderby_num(), history.*
+		SELECT ORDERBY_NUM(), history.*
 		FROM history
 		WHERE host_year = '2004'
-		ORDER BY host_year FOR orderby_num() BETWEEN 1 AND 10;
+		ORDER BY host_year FOR ORDERBY_NUM() BETWEEN 1 AND 10;
 	
 질의 계획 캐시를 사용 안 하도록 설정하고 PREPARE 문 수행 시 응용 프로그램이 비정상 종료되는 현상(CUBRIDSUS-8094)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	시스템 파라미터 max_plan_cache_entries의 값을-1로 설정하여 질의 계획 캐시(plan cache)를 사용 안 하는 경우에 PREPARE 문을 수행하면 응용 프로그램이 비정상 종료되는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t(a INT);
+		CREATE TABLE t (a INT);
 		INSERT INTO t VALUES (1), (2), (3);
-		PREPARE STMT FROM 'select count(?) from t';
+		PREPARE STMT FROM 'SELECT COUNT(?) FROM t';
 		EXECUTE STMT USING 1;
 	
 질의 계획 정보 출력 이후 질의 수행 시 잘못된 결과를 출력할 수 있는 문제(CUBRIDSUS-7818)
@@ -1964,11 +2074,13 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 	;plan simple 명령어를 실행하여 질의 계획을 출력하면 입력 값에 대응되는 칼럼의 타입으로 입력 값이 변환되어 잘못된 결과를 출력할 수 있는 문제를 수정했다.
 	아래의 예제에서 수정 이전 버전에서는 질의 계획을 출력하면서 2.3이라는 입력 값이 2로 변환되어 서버에 전달되어 결국 2가 결과에 포함되지 못하는 문제가 있었다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE foo(col INT);
-		INSERT INTO foo VALUES (1),(2);
+		CREATE TABLE foo (col INT);
+		INSERT INTO foo VALUES (1), (2);
+		
 		;plan simple
+		
 		SELECT * FROM foo WHERE col < 2.3;
 	
 질의 계획 캐시를 사용하지 않는 질의에서 테이블 이름을 변경한 후 질의 수행 시 이전 테이블에 대해서 질의가 수행되는 문제(CUBRIDSUS-7637)
@@ -1976,14 +2088,14 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 
 	테이블 이름을 변경한 후 질의 수행 시 해당 이름을 가지는 새 테이블이 아니라 이름이 변경된 이전 테이블에 대해 질의가 수행되는 문제를 수정했다. 이전 버전에서 INSERT 문은 질의 계획 캐시를 사용하지 않으므로 항상 문제가 발생했으며, 나머지 질의의 경우 시스템 파라미터 max_plan_cache_entries의 값을 -1로 설정하여 질의 계획 캐시 기능을 끄는 경우 문제가 발생했다.
 
-	::
+	.. code-block:: sql
 
-		// insert의 예
+		-- insert의 예
 		INSERT INTO tbl VALUES (...);
 		RENAME TABLE tbl AS tbl_old;
 		RENAME TABLE tbl2 AS tbl;
 		
-		// 아래 질의 수행 시 tbl_old에 값이 INSERT됨.
+		-- 아래 질의 수행 시 tbl_old에 값이 INSERT됨.
 		INSERT INTO tbl VALUES (...);
 	
 특정 OUTER JOIN 질의에 대해서 커버링 인덱스 스캔 질의 실행 시에 발생할 수 있는 오류(CUBRIDSUS-7868)
@@ -1991,7 +2103,7 @@ ROWNUM 조건이 있는 계층 질의에서 질의 결과의 개수가 틀린 �
 
 	OUTER JOIN 조건을 포함한 특정 질의에 대해서 커버링 인덱스 스캔 질의 실행 계획이 잘못되어 실행 과정에서 " Query execution failure #10946. " 오류가 발생하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT foo.obj_id, foo.h_id
 		FROM foo
@@ -2006,49 +2118,50 @@ IN 절에 호스트 변수가 있으면 질의 실행 계획이 출력되지 않
 
 	IN 절이 (?, ?, ...) 형태의 호스트 변수를 포함하면 질의 실행 계획이 출력되지 않는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		csql> ;plan detail
-		csql> SELECT * FROM tbl WHERE id IN (?, ?, ?);
+		;plan detail
+		
+		SELECT * FROM tbl WHERE id IN (?, ?, ?);
 	
 AND와 OR 조건이 여러 개 결합된 질의 수행 시 조건 일부가 누락된 결과를 출력할 수 있는 문제(CUBRIDSUS-9193)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	AND와 OR 조건이 여러 개 결합된 질의 수행 시 질의 계획 버그로 인해 조건 일부가 누락된 결과를 출력할 수 있는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT *
 		FROM it, p
 		WHERE
 		(
-		p_pkey = l_pkey
-		and p_br = 'Br12'
-		and p_ct in ('CS', 'BX', 'PK', 'PG')
-		and l_qty >= 1 and l_qty <= 1 + 10
-		and p_sz between 1 and 5
-		and l_sm in ('A', 'RG')
-		and l_st = 'DIP'
+		  p_pkey = l_pkey
+		  AND p_br = 'Br12'
+		  AND p_ct IN ('CS', 'BX', 'PK', 'PG')
+		  AND l_qty >= 1 AND l_qty <= 1 + 10
+		  AND p_sz BETWEEN 1 AND 5
+		  AND l_sm IN ('A', 'RG')
+		  AND l_st = 'DIP'
 		)
 		OR
 		(
-		p_pkey = l_pkey
-		and p_br = 'Br12'
-		and p_ct in ('MG', 'MB', 'MPK', 'MPC')
-		and l_qty >= 10 and l_qty <= 10 + 10
-		and p_sz between 1 and 10
-		and l_sm in ('A', 'RG')
-		and l_st = 'DIP'
+		  p_pkey = l_pkey
+		  AND p_br = 'Br12'
+		  AND p_ct IN ('MG', 'MB', 'MPK', 'MPC')
+		  AND l_qty >= 10 AND l_qty <= 10 + 10
+		  AND p_sz between 1 AND 10
+		  AND l_sm IN ('A', 'RG')
+		  AND l_st = 'DIP'
 		)
 		OR
 		(
-		p_pkey = l_pkey
-		and p_br = 'Br12'
-		and p_ct in ('LG', 'LB', 'LPK', 'LPC')
-		and l_qty >= 20 and l_qty <= 20 + 10
-		and p_sz between 1 and 15
-		and l_sm in ('A', 'RG')
-		and l_st = 'DIP'
+		  p_pkey = l_pkey
+		  AND p_br = 'Br12'
+		  AND p_ct IN ('LG', 'LB', 'LPK', 'LPC')
+		  AND l_qty >= 20 AND l_qty <= 20 + 10
+		  AND p_sz BETWEEN 1 AND 15
+		  AND l_sm IN ('A', 'RG')
+		  AND l_st = 'DIP'
 		);
 	
 AUTO_INCREMENT가 포함된 칼럼 또는 테이블이 삭제될 때 관련 질의문이 질의 계획 캐시에서 삭제되지 않는 문제(CUBRIDSUS-7872)
@@ -2056,11 +2169,12 @@ AUTO_INCREMENT가 포함된 칼럼 또는 테이블이 삭제될 때 관련 질�
 
 	AUTO_INCREMENT가 포함된 칼럼 또는 테이블이 삭제될 때 관련 질의문이 질의 계획 캐시에서 삭제되지 않아 이후 AUTO_INCREMENT와 같은 이름으로 시리얼을 생성하여 해당 시리얼로 질의를 수행하면 " ERROR: Cannot fetch serial object. " 오류 메시지와 함께 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE tbl ( a INT AUTO_INCREMENT); 
+		CREATE TABLE tbl (a INT AUTO_INCREMENT); 
 		SELECT tbl_ai_a.NEXT_VALUE; 
 		DROP TABLE tbl; 
+		
 		CREATE SERIAL tbl_ai_a; 
 		SELECT tbl_ai_a.NEXT_VALUE;
 
@@ -2069,30 +2183,31 @@ AUTO_INCREMENT가 포함된 칼럼 또는 테이블이 삭제될 때 관련 질�
 
 	OPTIMIZATION LEVEL을 질의 수행 없이 계획만 생성하도록 2, 258 혹은 514 중 하나로 설정하고 REPLACE 문을 수행하면 응용 프로그램이 비정상 종료되는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SET OPTIMIZATION LEVEL 2;
 		DROP TABLE t;
-		CREATE TABLE t( col1 INTEGER UNIQUE, col2 VARCHAR(128));
-		INSERT INTO t(col1, col2) VALUES (17, 'operators list');
-		REPLACE t(col1, col2) VALUES (17, 'personnel list');
+		
+		CREATE TABLE t (col1 INTEGER UNIQUE, col2 VARCHAR(128));
+		INSERT INTO t (col1, col2) VALUES (17, 'operators list');
+		REPLACE t (col1, col2) VALUES (17, 'personnel list');
 
 뷰 재생성 이후 해당 뷰의 UPDATE 수행에 실패하는 현상(CUBRIDSUS-6942)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	뷰를 재생성한 이후 UPDATE할 때 이전과 같은 UPDATE 문을 수행했을 경우, 이전 질의 계획을 사용하여 DROP했던 뷰를 참조하면서 UPDATE에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE foo(a int);
+		CREATE TABLE foo (a INT);
 		INSERT INTO foo VALUES (3);
 		
-		CREATE VIEW v AS SELECT * FROM foo WHERE a <2;
-		UPDATE v SET a=3;
+		CREATE VIEW v AS SELECT * FROM foo WHERE a < 2;
+		UPDATE v SET a = 3;
 		
 		DROP VIEW v;
-		CREATE v AS * FROM foo WHERE a <2;
-		UPDATE v SET a=3;
+		CREATE v AS * FROM foo WHERE a < 2;
+		UPDATE v SET a = 3;
 
 ORDER BY 최적화나 GROUP BY 최적화가 가능한 질의 계획들 중 최선을 선택하도록 수정(CUBRIDSUS-6957)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2104,12 +2219,12 @@ LIMIT 0인 경우 곧바로 결과를 반환하도록 수정(CUBRIDSUS-7420)
 
 	LIMIT 0인 경우 질의 수행 없이 곧바로 결과를 반환하도록 수정했다. 이전 버전에서는 질의를 수행한 후에 LIMIT 절을 평가하므로 경우에 따라서 질의 처리에 많은 시간이 소요되었다.
 
-	::
+	.. code-block:: sql
 
-		SELECT CAST(dt_col AS DATE)
+		SELECT CAST (dt_col AS DATE)
 		FROM article
-		WHERE id = '001' AND dt_col < TO_DATE('20120201', 'YYYYMMDD')
-		ORDER BY CAST(dt_col AS DATE) DESC
+		WHERE id = '001' AND dt_col < TO_DATE ('20120201', 'YYYYMMDD')
+		ORDER BY CAST (dt_col AS DATE) DESC
 		LIMIT 0;
 
 분할
@@ -2136,17 +2251,17 @@ LIMIT 0인 경우 곧바로 결과를 반환하도록 수정(CUBRIDSUS-7420)
 
 	자동 커밋 모드가 OFF일 때, 영역 분할 테이블에 INSERT 하는 도중에 SELECT하고 추가로 INSERT한 후 다시 SELECT하면, 추가로 INSERT했던 레코드가 출력되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		csql>; autocommit off
-		CREATE TABLE foo (id1 BIGINT) PARTITION BY RANGE(id1) (
+		;autocommit off
+		CREATE TABLE foo (id1 BIGINT) PARTITION BY RANGE (id1) (
 			PARTITION p1 VALUES LESS THAN (3),
 			PARTITION p2 VALUES LESS THAN (5),
 			PARTITION p3 VALUES LESS THAN (8)
 		);
 		INSERT INTO foo VALUES (1);
 		
-		// 수정 이전 버전에서는 Q1 질의 수행 후 Q2 질의를 수행하면 Q1 수행 이전에 INSERT한 1건의 레코드만 출력되는 현상이 나타났다.
+		-- 수정 이전 버전에서는 Q1 질의 수행 후 Q2 질의를 수행하면 Q1 수행 이전에 INSERT한 1건의 레코드만 출력되는 현상이 나타났다.
 		SELECT * FROM foo; -- Q1
 		INSERT INTO foo VALUES (1);
 		INSERT INTO foo VALUES (1);
@@ -2157,7 +2272,7 @@ LIMIT 0인 경우 곧바로 결과를 반환하도록 수정(CUBRIDSUS-7420)
 
 	영역 분할 테이블에서 SELECT 수행 시 IS NULL OR IS NOT NULL 조건이 존재하면 잘못된 결과를 출력하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT * FROM tbl
 		WHERE a IS NULL OR a IS NOT NULL;
@@ -2167,17 +2282,19 @@ LIMIT 0인 경우 곧바로 결과를 반환하도록 수정(CUBRIDSUS-7420)
 
 	분할 테이블에서 OUTER JOIN 수행 시 잘못된 질의 결과를 출력하는 현상을 수정했다.
 
+	.. code-block:: sql
+	
+		CREATE TABLE pt1 (i INT, j INT) PARTITION BY HASH (i) PARTITIONS 4;
+		CREATE TABLE pt2 (i INT, j INT) PARTITION BY HASH (i) PARTITIONS 4;
+		INSERT INTO pt1 VALUES (1, 1), (2, 2), (3, 3);
+		INSERT INTO pt2 VALUES (1, 1);
+		CREATE INDEX idx ON pt2 (i);
+
+		-- 아래 질의 수행 시 수정 이전 버전에서는 첫번째 레코드가 "1, 1, NULL, NULL"로 잘못 출력되었다.
+		SELECT * FROM pt1 LEFT JOIN pt2 ON pt1.i = pt2.i USING INDEX idx(+);
+		
 	::
 	
-		CREATE TABLE pt1(i int,j int) PARTITION BY HASH(i) PARTITIONS 4;
-		CREATE TABLE pt2(i int,j int) PARTITION BY HASH(i) PARTITIONS 4;
-		INSERT INTO pt1 VALUES (1,1),(2,2),(3,3);
-		INSERT INTO pt2 VALUES (1,1);
-		CREATE INDEX idx ON pt2(i);
-
-		// 아래 질의 수행 시 수정 이전 버전에서는 첫번째 레코드가 "1, 1, NULL, NULL"로 잘못 출력되었다.
-		SELECT * FROM pt1 LEFT JOIN pt2 ON pt1.i=pt2.i USING INDEX idx(+);
-		
 		i j i    j
 		=============
 		1 1 1    1
@@ -2189,23 +2306,28 @@ LIMIT 0인 경우 곧바로 결과를 반환하도록 수정(CUBRIDSUS-7420)
 
 	분할 테이블에서 외래 키 생성 시 제약 조건을 검사하지 않는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(i INT PRIMARY KEY);
+		CREATE TABLE t1 (i INT PRIMARY KEY);
 		INSERT INTO t1 VALUES(1);
-		CREATE TABLE t2(i int,j int) PARTITION BY HASH(i) PARTITIONS 4;
+
+		CREATE TABLE t2 (i INT, j INT) PARTITION BY HASH (i) PARTITIONS 4;
 		INSERT INTO t2 VALUES (2,2);
-		ALTER TABLE t2 ADD CONSTRAINT FOREIGN KEY t2(i) REFERENCES t1(i);
+		
+		ALTER TABLE t2 ADD CONSTRAINT FOREIGN KEY t2 (i) REFERENCES t1 (i);
 	
 AUTO_INCREMENT 칼럼을 분할 키로 하여 해시 분할한 테이블에 데이터 입력 시 하나의 분할 테이블에만 입력되는 문제(CUBRIDSUS-5622)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	AUTO_INCREMENT 칼럼을 분할 키로 하여 해시 분할한 테이블에 데이터를 입력하면 하나의 분할 테이블에만 입력되는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t(i INT AUTO_INCREMENT) PARTITION BY HASH(i) PARTITIONS 3;
-		INSERT INTO t(i) VALUES (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL);
+		CREATE TABLE t (i INT AUTO_INCREMENT) 
+		PARTITION BY HASH (i) PARTITIONS 3;
+		
+		INSERT INTO t (i) 
+		VALUES (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL);
 
 리스트 분할 테이블에서 분할 키 값을 함수로 입력하면 분할 프루닝이 동작하지 않는 문제(CUBRIDSUS-5777)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2222,15 +2344,15 @@ CLOB 칼럼을 가지는 분할 테이블에 대해서 생성된 뷰로 레코�
 
 	CLOB 칼럼이 있는 분할 테이블에 대해서 생성된 뷰로 레코드를 삭제하는데 오류가 발생하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t(i INT,c CLOB) PARTITION BY HASH(i) PARTITIONS 4;
-		INSERT INTO t SELECT ROWNUM,'1' FROM db_class LIMIT 40;
+		CREATE TABLE t (i INT, c CLOB) PARTITION BY HASH (i) PARTITIONS 4;
+		INSERT INTO t SELECT ROWNUM, '1' FROM db_class LIMIT 40;
 		CREATE VIEW v AS SELECT * FROM t;
 		
-		// 수정 이전 버전에서 다음 질의를 수행하면 "ERROR: Semantic: ..." 오류가 발생한다.
+		-- 수정 이전 버전에서 다음 질의를 수행하면 "ERROR: Semantic: ..." 오류가 발생한다.
 		DELETE FROM v;
-		CREATE TABLE t(i INT,c VARCHAR(10)) ;
+		CREATE TABLE t (i INT, c VARCHAR (10)) ;
 		CREATE VIEW v AS SELECT * FROM t;
 
 HA 환경에서 분할 테이블 생성 시 슬레이브 노드에 반영되지 않는 현상(CUBRIDSUS-7724)
@@ -2238,7 +2360,7 @@ HA 환경에서 분할 테이블 생성 시 슬레이브 노드에 반영되지 
 
 	HA 환경에서 분할 테이블을 생성할 때 분할 테이블 생성문이 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t1 (a int PRIMARY KEY)
 		PARTITION BY HASH (a) PARTITIONS 2;
@@ -2248,14 +2370,16 @@ HA 환경에서 분할 테이블 생성 시 슬레이브 노드에 반영되지 
 
 	분할 테이블에서 INSERT한 레코드가 트리거의 UPDATE문으로 인해 INSERT한 분할(partition)과 다른 곳으로 이동하지 못하면서 " ERROR: Error evaluating action for "tr2", Not allowed access to partition. " 오류가 발생하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE emp (store_id INT NOT NULL)
 		PARTITION BY RANGE (store_id) (
-			PARTITION P1 VALUES LESS THAN (10 ),
-			PARTITION P2 VALUES LESS THAN (20 )
+			PARTITION P1 VALUES LESS THAN (10),
+			PARTITION P2 VALUES LESS THAN (20)
 		);
-		CREATE TRIGGER tr2 AFTER INSERT ON emp EXECUTE UPDATE emp SET store_id = store_id + 10 WHERE store_id = obj.store_id;
+		
+		CREATE TRIGGER tr2 AFTER INSERT ON emp 
+		EXECUTE UPDATE emp SET store_id = store_id + 10 WHERE store_id = obj.store_id;
 		INSERT INTO emp VALUES (5);
 	
 인덱스가 있는 분할 테이블을 생성, 롤백한 이후 재생성을 시도하면 실패하는 현상(CUBRIDSUS-7560)
@@ -2263,11 +2387,11 @@ HA 환경에서 분할 테이블 생성 시 슬레이브 노드에 반영되지 
 
 	인덱스가 있는 분할 테이블을 생성하고 롤백한 이후 같은 분할 테이블을 재생성하려고 시도하면 " ERROR: Partition failed. " 오류를 출력하면서 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE tbl(col1 varchar(10), index (col1))
-		PARTYTION BY LIST(col1) (
-			PARTITION p1 values in ('cubrid', 'mysql', 'abc')
+		CREATE TABLE tbl (col1 VARCHAR (10), INDEX (col1))
+		PARTYTION BY LIST (col1) (
+			PARTITION p1 VALUES IN ('cubrid', 'database', 'DBMS')
 		);
 
 분할 테이블의 데이터 파일을 가지고 loaddb 수행 시 발생하는 오류(CUBRIDSUS-5815)
@@ -2275,18 +2399,22 @@ HA 환경에서 분할 테이블 생성 시 슬레이브 노드에 반영되지 
 
 	분할 테이블을 포함하는 데이터 파일을 가지고 loaddb 수행 시 분할 테이블 위치에 데이터가 존재하면 " Partitioned failed " 오류 메시지와 함께 수행에 실패하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		// 분할 테이블
-		CREATE TABLE record
-		(host_year INTEGER NOT NULL,
-		 event_code INTEGER NOT NULL,
-		 score VARCHAR(20)
+		-- 분할 테이블
+		CREATE TABLE record (
+		  host_year INTEGER NOT NULL,
+		  event_code INTEGER NOT NULL,
+		  score VARCHAR(20)
 		)
-		PARTITION BY RANGE (host_year)
-		( PARTITION before_1996 VALUES LESS THAN (1996),
-		  PARTITION after_1996 VALUES LESS THAN MAXVALUE);
-		 // loaddb 용 데이터 파일. class [record] 이하에 데이터가 존재할 수 있도록 수정되었다.
+		PARTITION BY RANGE (host_year) (
+		  PARTITION before_1996 VALUES LESS THAN (1996),
+		  PARTITION after_1996 VALUES LESS THAN MAXVALUE
+		);
+		
+	::
+	
+		-- loaddb 용 데이터 파일. class [record] 이하에 데이터가 존재할 수 있도록 수정되었다.
 		%class [record] ([host_year] [event_code] [score])
 		1992 20288 '22.3'
 		2000 20101 '04:04.5'
@@ -2297,14 +2425,15 @@ HA 환경에서 분할 테이블 생성 시 슬레이브 노드에 반영되지 
 
 	영역 분할 재정의 수행 시 기존 분할에 LESS THAN MAXVALUE 조건이 있으면 재정의에 실패하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(id int) PARTITION BY RANGE (id)
-		(PARTITION l10 VALUES LESS THAN (10),
-		 PARTITION l100 VALUES LESS THAN (100),
-		 PARTITION lar VALUES LESS THAN MAXVALUE);
+		CREATE TABLE t1(id int) PARTITION BY RANGE (id) (
+		  PARTITION l10 VALUES LESS THAN (10),
+		  PARTITION l100 VALUES LESS THAN (100),
+		  PARTITION lar VALUES LESS THAN MAXVALUE
+		);
 		
-		ALTER TABLE t1 REORGANIZE PARTITION l100,lar
+		ALTER TABLE t1 REORGANIZE PARTITION l100, lar
 		INTO (PARTITION lar VALUES LESS THAN MAXVALUE);
 
 리스트 분할 테이블에서 IN 조건절에 대해 분할 프루닝 오류(CUBRIDSUS-9189)
@@ -2317,33 +2446,43 @@ HA 환경에서 분할 테이블 생성 시 슬레이브 노드에 반영되지 
 
 	DELETE CASCADE 동작을 지정한 외래 키가 있는 분할 테이블이 존재할 때, 기본 키가 있는 테이블의 레코드를 삭제하면 외래 키가 있는 분할 테이블 쪽에서 " ERROR: The instance having the foreign key 'f' cannot be dropped. " 오류가 발생하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE dp(i INT PRIMARY KEY);
+		CREATE TABLE dp (i INT PRIMARY KEY);
 		INSERT INTO dp SELECT ROWNUM FROM db_class LIMIT 40;
 		
-		CREATE TABLE f(i INTEGER , orderdatekey INTEGER NOT NULL) PARTITION BY range(i) (
-		PARTITION p0 VALUES LESS THAN (200), PARTITION p1 VALUES LESS THAN (400),
-		PARTITION p2 VALUES LESS THAN (600), PARTITION p3 VALUES LESS THAN maxvalue);
-		 ALTER TABLE f ADD CONSTRAINT FOREIGN KEY f(i) REFERENCES dp(i) ON DELETE CASCADE;
+		CREATE TABLE f (i INTEGER, orderdatekey INTEGER NOT NULL) PARTITION BY RANGE (i) (
+		  PARTITION p0 VALUES LESS THAN (200), 
+		  PARTITION p1 VALUES LESS THAN (400),
+		  PARTITION p2 VALUES LESS THAN (600), 
+		  PARTITION p3 VALUES LESS THAN MAXVALUE
+		);
+		
+		ALTER TABLE f ADD CONSTRAINT FOREIGN KEY f (i) REFERENCES dp (i) ON DELETE CASCADE;
 		INSERT INTO f SELECT ROWNUM , ROWNUM FROM db_class LIMIT 40;
-		 -- record (4) should be deleted in both table dp and f;
-		DELETE FROM dp WHERE i=4;
+		
+		-- record (4) should be deleted in both table dp and f;
+		DELETE FROM dp WHERE i = 4;
 	
 AUTO_INCREMENT 칼럼으로 영역 분할된 테이블이 있는 데이터베이스를 백업한 이후 SELECT 수행 시 서버 프로세스가 비정상 종료되는 현상(CUBRIDSUS-6390)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	AUTO_INCREMENT 칼럼으로 영역 분할된 테이블이 있는 데이터베이스를 백업한 이후 SELECT를 수행하면 서버 프로세스가 비정상 종료되는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE u1(id INT AUTO_INCREMENT,v VARCHAR(5))
-		PARTITION BY RANGE(id)
-		(PARTITION l5 VALUES LESS THAN (5),
-		 PARTITION l10 VALUES LESS THAN (10),
-		 PARTITION l20 VALUES LESS THAN (20),
-		 PARTITION l100 VALUES LESS THAN (100));
-		INSERT INTO u1 VALUES (NULL,''),(6,''),(NULL,'');
+		CREATE TABLE u1 (id INT AUTO_INCREMENT, v VARCHAR(5))
+		PARTITION BY RANGE (id) (
+		  PARTITION l5 VALUES LESS THAN (5),
+		  PARTITION l10 VALUES LESS THAN (10),
+		  PARTITION l20 VALUES LESS THAN (20),
+		  PARTITION l100 VALUES LESS THAN (100)
+		);
+		
+		INSERT INTO u1 VALUES (NULL, ''), (6, ''), (NULL, '');
+	
+	::
+	
 		$ cubrid backupdb testdb
 	
 AUTO_INCREMENT 칼럼으로 영역 분할된 테이블에 질의 수행 시 서버 프로세스가 비정상 종료되는 문제(CUBRIDSUS-6373)
@@ -2351,15 +2490,17 @@ AUTO_INCREMENT 칼럼으로 영역 분할된 테이블에 질의 수행 시 서�
 
 	AUTO_INCREMENT 칼럼으로 영역 분할된 테이블에 질의를 수행하면 서버 프로세스가 비정상 종료되는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE u(id int AUTO_INCREMENT,v varchar(5))
-		PARTITION BY RANGE (id)
-		(PARTITION l5 VALUES LESS THAN (5),
-		PARTITION l10 VALUES LESS than (10),
-		PARTITION l20 VALUES LESS than (20),
-		PARTITION l100 VALUES LESS than (100));
-		INSERT INTO u VALUES(0,';jf;dfj iouer'),(5,' fdfd'),(10,'dfd '),(15,'fdf'),(20,'a');
+		CREATE TABLE u (id int AUTO_INCREMENT, v VARCHAR (5))
+		PARTITION BY RANGE (id) (
+		  PARTITION l5 VALUES LESS THAN (5),
+		  PARTITION l10 VALUES LESS than (10),
+		  PARTITION l20 VALUES LESS than (20),
+		  PARTITION l100 VALUES LESS than (100)
+		);
+		
+		INSERT INTO u VALUES (0,';jf;dfj iouer'), (5,' fdfd'), (10, 'dfd '), (15, 'fdf'), (20, 'a');
 
 테이블의 분할에 대한 통계 정보가 업데이트되지 않아 인덱스 스캔이 되지 않는 현상 (CUBRIDSUS-7741)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2371,24 +2512,28 @@ AUTO_INCREMENT 칼럼으로 영역 분할된 테이블에 질의 수행 시 서�
 
 	자동 커밋 모드가 OFF일 때 분할 테이블에서 값을 삭제한 이후 OID(Object ID)로 해당 레코드를 검색하면 삭제 이전의 값이 출력되는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		csql> ;autocommit off
+		;autocommit off
+		
 		CREATE TABLE tbl (id INT)
-		PARTITION BY RANGE (id + 1)
-		(PARTITION p0 VALUES LESS THAN (2),
-		 PARTITION p1 VALUES LESS THAN MAXVALUE);
+		PARTITION BY RANGE (id + 1) (
+		  PARTITION p0 VALUES LESS THAN (2),
+		  PARTITION p1 VALUES LESS THAN MAXVALUE
+		);
 
-		 INSERT INTO tbl VALUES (-1);
+		INSERT INTO tbl VALUES (-1);
 		INSERT INTO tbl values (3);
 		INSERT INTO tbl values (99) into :xx;
+		
 		SELECT :xx.id FROM db_root;
 		COMMIT;
 
 		SELECT :xx.id FROM db_root;
 		DELETE FROM tbl WHERE id = 99;
 		SELECT :xx.id FROM db_root;
-		 // 수정 이전 버전에서는 위에서 레코드를 삭제했는데도 아래 질의를 수행하면 삭제 이전의 값이 출력된다.
+		
+		-- 수정 이전 버전에서는 위에서 레코드를 삭제했는데도 아래 질의를 수행하면 삭제 이전의 값이 출력된다.
 		SELECT :xx.id FROM db_root;
 
 ALTER TABLE ... PARTITION으로 테이블 재분할 시 정상 수행되지 않는 문제(CUBRIDSUS-1408)
@@ -2396,9 +2541,9 @@ ALTER TABLE ... PARTITION으로 테이블 재분할 시 정상 수행되지 않�
 
 	ALTER TABLE ... PARTITION으로 테이블 재분할을 수행하면 기존의 분할 정보가 제거되지 않고 유지되는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE participant2 ( host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
+		CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
 		PARTITION BY RANGE (host_year)	(
 			PARTITION before_2000 VALUES LESS THAN (2000),
 			PARTITION before_2008 VALUES LESS THAN (2008)
@@ -2414,11 +2559,11 @@ loaddb 유틸리티로 많은 분할을 가진 테이블의 생성을 시도하�
 
 	loaddb 유틸리티로 많은 분할을 가진 테이블을 생성하려고 시도하면 정상적으로 분할이 생성되지 않는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		ALTER CLASS [col_day]
-		PARTITION BY LIST ( [yyyymmdd] )
-		(	PARTITION [p_20110701] VALUES IN ('20110701'),
+		PARTITION BY LIST ( [yyyymmdd] ) (
+		    PARTITION [p_20110701] VALUES IN ('20110701'),
 			PARTITION [p_20110702] VALUES IN ('20110702'),
 			PARTITION [p_20110703] VALUES IN ('20110703'),
 			PARTITION [p_20110704] VALUES IN ('20110704'),
@@ -2439,27 +2584,29 @@ loaddb 유틸리티로 많은 분할을 가진 테이블의 생성을 시도하�
 
 	테이블에 데이터가 존재하는 상태에서 인덱스 생성하고 데이터를 모두 삭제한 이후, 이 테이블에 MAX 함수나 ORDER BY DESC를 사용하는 등 인덱스의 마지막 리프 페이지를 찾는 질의를 수행하면 " ERROR: An I/O error occurred while reading page 65536 of volume (null).... Bad file descriptor " 오류가 발생하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE tb2 ( col1 INT PRIMARY KEY, col2 VARCHAR(16));
+		CREATE TABLE tb2 (col1 INT PRIMARY KEY, col2 VARCHAR (16));
 		INSERT INTO tb2 VALUES (1, '1');
-		CREATE INDEX i_tb2 ON tb2(col1, col2);
+		
+		CREATE INDEX i_tb2 ON tb2 (col1, col2);
 		DELETE FROM tb2;
-		SELECT * FROM tb2 ORDER BY 1 DESC,2 DESC;
+		
+		SELECT * FROM tb2 ORDER BY 1 DESC, 2 DESC;
 	
 PREFIX 인덱스가 생성된 칼럼에서 집계 함수 수행 시 오동작(CUBRIDSUS-6579)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	PREFIX 인덱스가 생성된 칼럼에서 집계 함수를 수행하면 집계 대상 칼럼의 타입이 CHAR인 경우 " ERROR: No error message available. " 오류가 발생하고, VARCHAR인 경우 잘못된 결과를 출력하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1 (id int PRIMARY KEY, b char(16), INDEX(b(4)));
+		CREATE TABLE t1 (id INT PRIMARY KEY, b CHAR (16), INDEX (b (4)));
 		INSERT INTO t1 VALUES (1, 'xxxxbbbb'), (2, 'xxxxaaaa');
 		
 		-- 수정 이전 버전에서 다음 질의 수행 시 오류 발생
 		SELECT MAX(b) FROM t1;
-		CREATE TABLE t1 (id int PRIMARY KEY, b varchar(16), INDEX(b(4)));
+		CREATE TABLE t1 (id int PRIMARY KEY, b VARCHAR (16), INDEX (b (4)));
 		INSERT INTO t1 VALUES (1, 'xxxxbbbb'), (2, 'xxxxaaaa');
 		
 		-- 수정 이전 버전에서 다음 질의 수행 시 'xxxx'가 결과 값으로 나옴
@@ -2470,11 +2617,12 @@ PREFIX 인덱스가 생성된 칼럼에서 집계 함수 수행 시 오동작(CU
 
 	인덱스 생성 시 동일한 키의 인덱스가 이미 생성되어 있으면 인덱스를 생성할 수 없다는 오류가 발생했으나, 물리적으로 인덱스를 중복하여 생성하지 않고 기존 인덱스를 공유하도록 변경했다. 아래 예에서 외래 키를 생성하는 b 칼럼에는 이미 인덱스가 정의되어 있어 외래 키를 위한 B-Tree를 별도로 생성할 필요가 없다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t1 (
 			a INT PRIMARY KEY,
-			b INT, KEY(b),
+			b INT, 
+			KEY(b),
 			CONSTRAINT fk FOREIGN KEY (b) REFERENCES t1 (a)
 		);
 	
@@ -2483,52 +2631,52 @@ PREFIX 인덱스가 생성된 칼럼에서 집계 함수 수행 시 오동작(CU
 
 	검색 조건에 클래스 OID로 검색하는 조건이 있고 그 외 나머지 조건들은 모두 커버링 인덱스 조건(인덱스에 SELECT 리스트의 칼럼과 WHERE 조건의 칼럼을 모두 포함)을 만족할 때 질의 수행 과정에서 서버가 비정상 종료되는 오류를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE a (class_of object, class_name varchar(200));
-		CREATE TABLE c (class_name varchar(200), i int);
-		CREATE INDEX ON c (class_name);
-		INSERT INTO a VALUES (INSERT INTO c VALUES('aa', 1), 'aa');
+		CREATE TABLE a (class_of OBJECT, class_name VARCHAR (200));
+		CREATE TABLE c (class_name VARCHAR (200), i INT);
+		CREATE INDEX i ON c (class_name);
+		INSERT INTO a VALUES (INSERT INTO c VALUES ('aa', 1), 'aa');
 		
 		SELECT c.class_name
 		FROM a, c
-		WHERE a.class_of=c AND c.class_name=a.class_name;
+		WHERE a.class_of = c AND c.class_name = a.class_name;
 
 USING INDEX 절이 유효하지 않은 경우 응용 프로그램이 비정상 종료될 수 있는 현상 (CUBRIDSUS-7672)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	다음 예와 같이 USING INDEX 절이 유효하지 않은 경우 응용 프로그램이 비정상 종료될 수 있는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t1 (a INT, b CHAR(3), c INT);
 		CREATE TABLE t2 (a INT, b CHAR(3), c INT);
-		CREATE INDEX ON t1 (a, c);
-		CREATE INDEX ON t2 (a, c);
+		CREATE INDEX i1 ON t1 (a, c);
+		CREATE INDEX i2 ON t2 (a, c);
 		
-		SELECT * FROM (t1,t2) s WHERE c=9 USING INDEX i1;
+		SELECT * FROM (t1, t2) s WHERE c = 9 USING INDEX i1;
 
 외래 키 생성 시 CONSTRAINT ... REFERENCES ... 구문 사용이 가능해짐(CUBRIDSUS-6556)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	외래 키 생성 시 이전 버전에서는 FOREIGN KEY REFERENCES ... 형태의 구문만 사용 가능했으나, CONSTRAINT constraint_이름 REFERENCES ...도 사용 가능하도록 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE tbl (id INT CONSTRAINT pk_id PRIMARY KEY);
-		CREATE TABLE tbl2 (id INT FOREIGN KEY REFERENCES tbl(id))
-		CREATE TABLE tbl3 (id INT CONSTRAINT fk_id REFERENCES tbl(id));
+		CREATE TABLE tbl2 (id INT FOREIGN KEY REFERENCES tbl (id))
+		CREATE TABLE tbl3 (id INT CONSTRAINT fk_id REFERENCES tbl (id));
 	
 ALTER ... CHANGE COLUMN 구문 수행 시 기본 키 칼럼의 NOT NULL 제약 조건이 제거되는 문제(CUBRIDSUS-7966)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	ALTER ... CHANGE COLUMN 구문을 수행하면 기본 키 칼럼의 NOT NULL 제약 조건이 제거되는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t1_add_default (a INT PRIMARY KEY, b INT);
 		ALTER TABLE t1_add_default CHANGE COLUMN a a INT DEFAULT 2;
-		INSERT INTO t1_add_default(a, b) VALUES(NULL, 1);
+		INSERT INTO t1_add_default (a, b) VALUES (NULL, 1);
 	
 다수의 트랜잭션이 오버 플로우 키가 존재하는 인덱스에 대한 입력/삭제를 동시에 수행하는 도중, 한 트랜잭션의 롤백으로 다른 트랜잭션이 실패하는 오류(CUBRIDSUS-8838)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2609,11 +2757,11 @@ failover 후 마스터가 된 노드에서 CUBRID HA 기능을 정지하면 이�
 
 	HA 환경에서 테이블의 분할 조건에 음수가 포함된 경우 조건이 양수로 바뀌는 문제를 수정했다. 수정 이전 버전에서 아래의 예를 수행하면 분할 조건 (-2, 1)이 (2, 1)로 잘못 생성되었다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1 (a INT AUTO_INCREMENT(-2,3) PRIMARY KEY) 
-		PARTITION BY LIST(a) 
-			(PARTITION p0 VALUES IN (-2, 1));
+		CREATE TABLE t1 (a INT AUTO_INCREMENT (-2, 3) PRIMARY KEY) 
+		PARTITION BY LIST (a) 
+		(PARTITION p0 VALUES IN (-2, 1));
 
 슬레이브 노드에 쓰기 요청 시 실패한 요청을 무한히 재시도하는 현상(CUBRIDSUS-6266)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2664,17 +2812,17 @@ WITH CHECK OPTION 절이 슬레이브 노드에 반영되지 않는 현상(CUBRI
 
 	HA 환경에서 뷰의 WITH CHECK OPTION 절이 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE vc_tb(a INT PRIMARY KEY);
-		CREATE VIEW fbo_view AS SELECT * FROM vc_tb WHERE a >5 WITH CHECK OPTION;
+		CREATE TABLE vc_tb (a INT PRIMARY KEY);
+		CREATE VIEW fbo_view AS SELECT * FROM vc_tb WHERE a > 5 WITH CHECK OPTION;
 	
 DROP TABLE 문의 IF EXISTS 절이 슬레이브 노드에 반영되지 않는 현상(CUBRIDSUS-8901)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	HA 환경에서 DROP TABLE 문의 IF EXISTS 절이 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		DROP TABLE IF EXISTS tbl1;
 	
@@ -2683,34 +2831,34 @@ DROP TABLE 문의 IF EXISTS 절이 슬레이브 노드에 반영되지 않는 �
 
 	HA 환경에서 뷰의 SELECT 리스트에 논리 표현식이 포함된 경우 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE VIEW v(a,b,c) AS SELECT a,b, (b='aaa') c FROM t;
+		CREATE VIEW v(a, b, c) AS SELECT a, b, (b = 'aaa') c FROM t;
 	
 뷰가 마스터 노드와 슬레이브 노드에서 서로 다르게 보이는 문제(CUBRIDSUS-8366)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	마스터 노드에서 생성한 뷰를 슬레이브 노드에서 시스템 카탈로그 테이블 db_vclass로 출력하면 WHERE 조건 일부에 괄호가 추가되어 보이는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE vc_tb1(a INT PRIMARY KEY);
+		CREATE TABLE vc_tb1 (a INT PRIMARY KEY);
 		
-		// 수정 이전 버전에서 위의 뷰를 슬레이브 노드의 db_vclass에서 출력하면 WHERE 조건이 괄호로 감싸였다.
-		CREATE VIEW vtb1(a INT) AS SELECT * FROM vc_tb1 WHERE a>=1;
+		-- 수정 이전 버전에서 위의 뷰를 슬레이브 노드의 db_vclass에서 출력하면 WHERE 조건이 괄호로 감싸였다.
+		CREATE VIEW vtb1 (a INT) AS SELECT * FROM vc_tb1 WHERE a >= 1;
 	
 CREATE .... AS SELECT 문으로 테이블 생성 시 슬레이브 노드에 잘못된 칼럼 순서로 복제될 수 있는 문제(CUBRIDSUS-8071)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	HA 환경에서 CREATE .... AS SELECT 문으로 테이블 생성 시 슬레이브 노드에 잘못된 칼럼 순서로 복제될 수 있는 문제를 수정했다.
 	
-	::
+	.. code-block:: sql
 
-		// 마스터 노드에서 다음을 수행
+		-- 마스터 노드에서 다음을 수행
 		CREATE TABLE t2 (a INT PRIMARY KEY, b INT, c INT)
 		AS SELECT t1.c AS a, t1.a AS b, t1.b AS c FROM t1;
 
-		// 슬레이브 노드에서 다음과 같이 칼럼 순서가 잘못 복제됨
+		-- 슬레이브 노드에서 다음과 같이 칼럼 순서가 잘못 복제됨
 		CREATE TABLE [t2] ( [a] INTEGER, [b] INTEGER, [c] INTEGER, PRIMARY KEY ([a]) )
 		AS SELECT [t1].[c], [t1].[a], [t1].[b] FROM [t1];
 	
@@ -2724,29 +2872,29 @@ SELECT 문을 동반한 DDL 문이 슬레이브 노드에 복제되지 않는 �
 
 	HA 환경에서 CREATE TABLE ... SELECT, CREATE VIEW ... SELECT 와 같이 SELECT 문을 동반한 DDL 문이 복제되지 않는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1 (a int primary key, b int)
-		AS SELECT * FROM (SELECT 1 as a, (SELECT 1) b from db_root ) tt; 
+		CREATE TABLE t1 (a INT PRIMARY KEY, b INT)
+		AS SELECT * FROM (SELECT 1 AS a, (SELECT 1) b FROM db_root) tt; 
 
 인덱스 생성 시 슬레이브 노드에 반영되지 않는 문제(CUBRIDSUS-6818)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	HA 환경에서 인덱스를 생성할 때 인덱스 생성문이 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE tab(a INT AUTO_INCREMENT(1,1) PRIMARY KEY, c VARCHAR(32));
-		CREATE INDEX i_tab_c ON tab(c);
+		CREATE TABLE tab (a INT AUTO_INCREMENT(1, 1) PRIMARY KEY, c VARCHAR (32));
+		CREATE INDEX i_tab_c ON tab (c);
 	
 생성하려는 인덱스의 이름이 예약어인 경우 슬레이브 노드에 반영되지 않는 현상 수정(CUBRIDSUS-8054)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	HA 환경에서 생성하려는 인덱스의 이름이 예약어인 경우 " Internal system failure: [t2,'create class [t2] ( [a] integer, [b] integer, index none ([a]) ) '] In line 1, column 44 before ' ([a]) ) ' " 오류 메시지와 함께 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t2(a INT, b INT, INDEX "none" (a));
+		CREATE TABLE t2 (a INT, b INT, INDEX "none" (a));
 
 AUTO_INCREMENT 필드가 있는 테이블에 대해 TRUNCATE 수행 시 슬레이브 노드에 반영되지 않는 현상(CUBRIDSUS-7810)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2758,24 +2906,24 @@ AUTO_INCREMENT 칼럼이 있는 테이블의 DROP 이후에도 슬레이브 노�
 
 	HA 환경의 마스터 노드에서 AUTO_INCREMENT 칼럼이 있는 테이블의 DROP 이후에도 슬레이브 노드에 AUTO_INCREMENT에 의한 시리얼이 남아있는 오류로 인해, 마스터 노드에서 같은 테이블 이름과 칼럼 이름으로 AUTO_INCREMENT를 재생성을 시도하면 슬레이브 노드에 테이블이 생성되지 않는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1( id INT PRIMARY KEY AUTO_INCREMENT a INT);
+		CREATE TABLE t1 (id INT PRIMARY KEY AUTO_INCREMENT, a INT);
 		DROP TABLE t1;
-		CREATE TABLE t1(id INT PRIMARY KEY AUTO_INCREMENT, b INT);
+		CREATE TABLE t1 (id INT PRIMARY KEY AUTO_INCREMENT, b INT);
 	
 AUTO_INCREMENT 칼럼 속성 또는 이름을 변경하면 슬레이브 노드에 반영되지 않는 현상(CUBRIDSUS-7830)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	HA 환경에서 AUTO_INCREMENT 칼럼 속성 변경 또는 AUTO_INCREMENT 칼럼 속성 추가와 함께 이름을 변경하면 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		// 속성 변경
-		CREATE TABLE foo ( a INTEGER PRIMARY KEY AUTO_INCREMENT , b CHAR(10), c DATETIME );
+		-- 속성 변경
+		CREATE TABLE foo (a INTEGER PRIMARY KEY AUTO_INCREMENT, b CHAR(10), c DATETIME);
 		ALTER TABLE foo MODIFY ATTRIBUTE a BIGINT AUTO_INCREMENT;
 
-		// 이름 변경
+		-- 이름 변경
 		CREATE TABLE boo (i int PRIMARY KEY);
 		ALTER TABLE boo ADD COLUMN ai INT AUTO_INCREMENT, RENAME TO u, AUTO_INCREMENT = 100;
 
@@ -2784,7 +2932,7 @@ ALTER SERIAL 문이 슬레이브 노드에 반영되지 않는 현상(CUBRIDSUS-
 
 	HA 환경에서 ALTER SERIAL 문이 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		ALTER SERIAL s1 START WITH 2;
 	
@@ -2803,7 +2951,7 @@ ALTER INDEX ... REBUILD 구문이 슬레이브 노드에 반영되지 않는 현
 
 	HA 환경에서 ALTER INDEX ... REBUILD 구문 수행 시 " log applier: failed to apply schema replication log. class: "-", schema: 'alter index i_t_b on () rebuild', internal error: -492. " 오류 메시지와 함께 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		ALTER INDEX i_t_b REBUILD;
 	
@@ -2812,14 +2960,22 @@ ALTER... CHANGE COLUMN 구문이 슬레이브 노드에 반영되지 않는 현�
 
 	HA 환경에서 ALTER... CHANGE COLUMN 구문이 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		ALTER TABLE coo CHANGE col1 col1 INT AFTER col3;
-		// 위의 질의를 수행하면 슬레이브 노드에서 아래와 같은 오류가 발생했다.
+		
+	::
+	
+		-- 위의 질의를 수행하면 슬레이브 노드에서 아래와 같은 오류가 발생했다.
 		log applier: failed to apply schema replication log. class: "coo", schema: "'alter class [coo] change attribute [col1] [col1] integerafter [col3] '", internal error: -492.
 		
+	.. code-block:: sql
+
 		ALTER TABLE t1 ALTER COLUMN a set DEFAULT 1;
-		// 위의 질의를 수행하면 슬레이브 노드에서 아래와 같은 오류가 발생했다.
+	
+	::
+	
+		-- 위의 질의를 수행하면 슬레이브 노드에서 아래와 같은 오류가 발생했다.
 		"alter class [t1] alter column [b] set default default 1", this SQL statement is illegal. So there is something wrong with the "parser_print_xxx" function.
 	
 ALTER .. CHANGE 문으로 칼럼의 DEFAULT 값을 변경하면 슬레이브 노드에 반영되지 않는 현상(CUBRIDSUS-8021)
@@ -2827,7 +2983,7 @@ ALTER .. CHANGE 문으로 칼럼의 DEFAULT 값을 변경하면 슬레이브 노
 
 	HA 환경에서 ALTER .. CHANGE 문으로 DEFAULT 값을 변경하면 " log applier: failed to apply schema replication log. class: "t1", schema: "'alter class [t1] alter column [a] set default default 1'", internal error: -492. " 오류 메시지와 함께 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		ALTER TABLE t1 ALTER COLUMN a SET DEFAULT 1;
 	
@@ -2836,7 +2992,7 @@ ALTER .... AUTO_INCREMENT 구문이 슬레이브 노드에 반영되지 않는 �
 
 	HA 환경에서 ALTER .... AUTO_INCREMENT 구문이 " log applier: failed to apply schema replication log. class: "t", schema: "'alter class [t] auto_increment = 5'", internal error: -1056. " 오류 메시지와 함께 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		ALTER TABLE t AUTO_INCREMENT = 5;
 
@@ -2845,20 +3001,20 @@ ALTER 문으로 테이블 분할 시 슬레이브 노드에 반영되지 않는 
 
 	HA 환경에서 ALTER 문으로 테이블 분할을 수행하는 경우 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		ALTER TABLE range_tbl
 		REORGANIZE PARTITION p2 INTO
-		( PARTITION p3 VALUES LESS THAN (25), PARTITION p4 VALUES LESS THAN (30));
+		(PARTITION p3 VALUES LESS THAN (25), PARTITION p4 VALUES LESS THAN (30));
 
 PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않는 현상(CUBRIDSUS-8980)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	HA 환경에서 PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
-		ALTER TABLE c2 ADD INDEX i_c (c(5) DESC);
+		ALTER TABLE c2 ADD INDEX i_c (c (5) DESC);
 	
 트리거, 시리얼, 저장 함수 및 프로시저의 소유자가 슬레이브 노드에 잘못 반영되는 현상(CUBRIDSUS-8723)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2870,10 +3026,10 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 
 	자동 커밋 모드가 OFF일 때 DROP TABLE IF EXISTS 문을 수행하면 " SYNTAX ERROR ... ERROR CODE = -493 " 오류 메시지와 함께 슬레이브 노드에 반영되지 않는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		DROP TABLE IF EXISTS m1;
-		CREATE TABLE m1(i INT,j INT PRIMARY KEY);
+		CREATE TABLE m1 (i INT, j INT PRIMARY KEY);
 		COMMIT;
 	
 분할 테이블이 슬레이브 노드에 반영되지 않을 수 있는 문제(CUBRIDSUS-8985)
@@ -2881,12 +3037,14 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 
 	HA 환경에서 분할 테이블의 파티션 데이터가 내부적으로 타입 변환이 일어나는 경우, 슬레이브 노드에 복제되지 않는 문제를 수정했다. 
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(i int PRIMARY KEY ) PARTITION BY RANGE (i) ( 
-		    PARTITION p1 VALUES LESS THAN (-2147483648), 
-		    PARTITION p2 VALUES LESS THAN maxvalue 
+		CREATE TABLE t1 (i INT PRIMARY KEY)
+		PARTITION BY RANGE (i) (
+		  PARTITION p1 VALUES LESS THAN (-2147483648),
+		  PARTITION p2 VALUES LESS THAN MAXVALUE
 		);
+
 
 드라이버
 --------
@@ -2926,7 +3084,7 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 
 	java.sql.Date나 java.sql.Time 객체의 값이 밀리초 부분의 값이 0으로 리셋되지 않은 상태로 반환되는 문제를 수정했다.
 
-	::
+	.. code-block:: java
 
 		ResultSet rs = connection.createStatement().executeQuery("select time '12:15:00'");
 		rs.next();
@@ -2947,7 +3105,7 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 
 	JDBC 응용 프로그램에서 같은 Statement 객체를 반복 사용하여 여러 개의 질의를 수행하면 도중에 예외 발생 시 사용 중이던 서버 핸들을 종료하지 못하여 에러 코드 -26번이 반복하여 발생할 수 있는 문제를 수정했다.
 
-	::
+	.. code-block:: java
 
 		public void run(ArrayList<String> sqlList, int max) throws SQLException {
 			this.sqlList = sqlList;
@@ -2986,7 +3144,7 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 
 	JDBC 응용 프로그램에서 2.4E+2와 같은 과학적 표기법(scientific notation)으로 표현된 값을 BigDecimal로 바인딩하는데 실패하는 문제를 수정했다.
 
-	::
+	.. code-block:: java
 
 		BigDecimal x = new BigDecimal("240.0");
 		x = x.stripTrailingZeros(); // 과학 형식의 값으로 지정
@@ -2996,6 +3154,8 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	JDBC 응용프로그램에서 prepare한 질의에 유효하지 않은 값을 바인딩하여 실행한 후 다시 유효한 값을 바인딩하여 실행하면 Exception이 발생하는 현상을 수정했다.
+	::
+	
 		// 수정 이전 버전에서는 다음과 같이 Exception이 발생했다.
 		No error message available.
 		cubrid.jdbc.driver.CUBRIDException: No error message available.
@@ -3011,7 +3171,7 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 
 	시스템 파라미터 no_backslash_escape 의 값을 no로 설정하여 백슬래시를 이스케이프 문자로 사용하도록 설정하면 getColumns() 메서드로 테이블의 칼럼 정보를 얻을 때 " unterminated string " 오류가 발생하는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t2 (col1 INT, col2 VARCHAR(20));
 	
@@ -3037,7 +3197,7 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 
 	cci_schema_info()에서 트리거 정보를 얻을 때 테이블 이름을 지정했는데도 전체 데이터베이스의 트리거 정보를 출력하는 오류를 수정했다. 이와 함께, 트리거 정보를 얻을 때 입력할 테이블 이름 또는 칼럼 이름을 LIKE 절의 패턴 매칭으로 검색할 수 있는 기능을 추가했다.
 
-	::
+	.. code-block:: c
 
 		req = cci_schema_info(conn, CCI_SCH_TRIGGER, "tbl%", NULL, CCI_CLASS_NAME_PATTERN_MATCH, &error);
 	
@@ -3046,7 +3206,7 @@ PREFIX 칼럼에 DESC INDEX 생성 시 슬레이브 노드에 반영되지 않�
 
 	cci_get_attr_type_str()의 반환 값에서 제일 마지막 문자가 잘리는 문제를 수정했다.
 
-	::
+	.. code-block:: c
 
 		// 소스 예제
 		char *attr_infos[][2] =
@@ -3124,7 +3284,7 @@ CSQL에서 질의문과 ; 다음에 주석이 존재하면 질의 수행에 실�
 
 	CSQL 인터프리터에서 질의문과 세미콜론(;) 다음에 주석이 존재할 때 주석 제일 뒤에 세미콜론을 추가하지 않으면 질의 수행에 실패하는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT 1; --
 		
@@ -3164,7 +3324,7 @@ Windows 용 CSQL에서 테이블 혹은 칼럼 명에 특수문자가 포함된 
 
 	Windows 버전의 CSQL 인터프리터에서 테이블 혹은 칼럼 명에 '%'와 같은 특수문자가 포함된 질의를 수행하면 CSQL 인터프리터가 비정상 종료되는 현상을 수정했다.
 
-	::
+	.. code-block:: sql
 
 		SELECT * FROM [as%];
 
@@ -3329,15 +3489,20 @@ CUBRID 유틸리티에서 나타나는 DB 사용자 이름이 항상 대문자�
 
 	시리얼 이름으로 예약어를 사용하거나 범위를 벗어난 값을 사용하는 등 잘못된 구문으로 시리얼 생성 시 출력되는 오류 메시지에서 잘못된 부분의 위치를 가리킬 수 있도록 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE SERIAL s START WITH 5 INCREMENT BY 3 cache -10;
+	
+	::
+	
 		 -- 수정 이전 버전의 오류 메시지
 		In line 1, column 52,
 		ERROR: invalid create serial
 		CREATE SERIAL identifier {START WITH integer} {INCREMENT BY integer}
 		serial_min_max {CYCLE|NOCYCLE} {CACHE unsigned_integer|NOCACHE}
 
+	::
+	
 		 -- 수정 이후 버전의 오류 메시지
 		ERROR: In line 1, column 52 before '10; '
 		Syntax error: unexpected '-', expecting UNSIGNED_INTEGER
@@ -3347,10 +3512,13 @@ CUBRID 유틸리티에서 나타나는 DB 사용자 이름이 항상 대문자�
 
 	인덱스를 생성할 때 출력되는 인덱스 이름이 잘못된 경우 출력되는 오류 메시지에 오류 원인이 되는 인덱스 이름을 출력하도록 수정했다.
 
-	::
+	.. code-block:: sql
 
 		CREATE TABLE t(i int);
 		CREATE INDEX INDEX ON t(i);
+		
+	::
+	
 		ERROR: In line 1, column 14 before ' on t(i); '
 		Syntax error: unexpected 'index'
 	
@@ -3374,15 +3542,19 @@ DDL문 방지 파라미터 혹은 WHERE 절이 있는 질의 방지 파라미터
 
 	분할 테이블 이름을 이미 존재하는 다른 분할 테이블 이름으로 RENAME 할 때 오류 메시지의 분할 테이블 이름이 잘못 출력되는 문제를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE pt1(i int) PARTITION BY hash(i) PARTITION 5;
-		CREATE TABLE pt2(i int) PARTITION BY hash(i) PARTITION 5;
+		CREATE TABLE pt1 (i INT) PARTITION BY HASH (i) PARTITION 5;
+		CREATE TABLE pt2 (i INT) PARTITION BY HASH (i) PARTITION 5;
 		RENAME pt1 AS pt2;
-		
+
+	::
+	
 		-- 수정 이전 버전에서 위의 질의 수행 시 분할 테이블 이름을 출력했다.
 		ERROR: Class "pt2__p__p0" already exists
-		
+	
+	::
+	
 		-- 수정 이후 다음과 같이 테이블 이름을 정상 출력한다.
 		ERROR: Class "pt2" already exists
 	
@@ -3404,15 +3576,23 @@ ADDDATE, SUBDATE 함수에 적합하지 않은 인자 입력 시 부적절한 �
 
 	ADDDATE , SUBDATE 함수에 적합하지 않은 인자를 입력하면 출력하는 상황에 맞지 않는 오류 메시지를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		SELECT ADDDATE('1991-01-01 00:00:00', -10000000);
-		// 수정 이전 버전에서는 아래와 같이 부적절한 오류 메시지를 출력했다.
+		SELECT ADDDATE ('1991-01-01 00:00:00', -10000000);
+
+	::
+	
+		-- 수정 이전 버전에서는 아래와 같이 부적절한 오류 메시지를 출력했다.
 		ERROR: before ' , -10000000); '
 		No error message available.
 
-		SELECT SUBDATE(SYSDATE, 9999999);
-		// 수정 이전 버전에서는 아래와 같이 부적절한 오류 메시지를 출력했다.
+	.. code-block:: sql
+	
+		SELECT SUBDATE (SYSDATE, 9999999);
+		
+	::
+	
+		-- 수정 이전 버전에서는 아래와 같이 부적절한 오류 메시지를 출력했다.
 		ERROR: Execute: Query execution failure #931.
 	
 SHARED 속성 칼럼에 인덱스 생성 시 부적절한 오류 메시지(CUBRIDSUS-7132)
@@ -3420,14 +3600,19 @@ SHARED 속성 칼럼에 인덱스 생성 시 부적절한 오류 메시지(CUBRI
 
 	SHARED 속성 칼럼에 인덱스 생성 시 출력하는 상황에 맞지 않는 오류 메시지를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		CREATE TABLE t1(i INT SAHRED 10);
-		CREATE INDEX ON t1(i);
-		 // 수정 이전 에러 메시지
+		CREATE TABLE t1 (i INT SAHRED 10);
+		CREATE INDEX i1 ON t1 (i);
+		
+	::
+	
+		-- 수정 이전 에러 메시지
 		ERROR: before ' ); ' i is not defined.
 		
-		 // 수정 이후 에러 메시지
+	::
+	
+		-- 수정 이후 에러 메시지
 		ERROR: Cannot create index on attribute "i", defined with a shared value.
 	
 유효하지 않은 최대값 또는 최소값으로 시리얼 생성 시도 시 잘못된 오류 메시지(CUBRIDSUS-7150)
@@ -3435,12 +3620,12 @@ SHARED 속성 칼럼에 인덱스 생성 시 부적절한 오류 메시지(CUBRI
 
 	유효하지 않은 최대값 또는 최소값으로 시리얼 생성을 시도하면 출력하는 잘못된 오류 메시지를 수정했다.
 
-	::
+	.. code-block:: sql
 
-		// 수정 이전 버전에서 무효한 최대값인 경우 "Minimum value is invalid" 라고 오류를 잘못 출력했다.
+		-- 수정 이전 버전에서 무효한 최대값인 경우 "Minimum value is invalid" 라고 오류를 잘못 출력했다.
 		CREATE SERIAL s START WITH 3 INCREMENT BY 1 MAXVALUE 1;
 
-		// 수정 이전 버전에서 무효한 최소값인 경우 "Maximum value is invalid" 라고 오류를 잘못 출력했다.
+		-- 수정 이전 버전에서 무효한 최소값인 경우 "Maximum value is invalid" 라고 오류를 잘못 출력했다.
 		CREATE SERIAL s START WITH 3 INCREMENT BY 1 MINVALUE 5;
 	
 잠금 타임아웃 발생 시 서버 오류 메시지에 한 트랜잭션의 종료를 대기 중이던 전체 트랜잭션 정보를 출력하도록 개선(CUBRIDSUS-7272)
@@ -3510,9 +3695,9 @@ Windows 용 CUBRID에서 ha_mode 파라미터의 값을 yes로 설정하면 CUBR
 cubrid_broker.conf 파일 없이 브로커 유틸리티를 수행하면 잘못된 오류 메시지를 출력하는 문제(CUBRIDSUS-8932)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	cubrid_broker.conf 파일 없이 브로커를 시작하면 브로커의 구동에 실패하면서 " The socket p ath is too long (>108): /home/CUBRID/var/CUBRID_SOCK/ "이라는 비정상적인 오류 메시지를 출력했으나 정상적인 오류 메시지를 출력하도록 수정했다.
+	cubrid_broker.conf 파일 없이 브로커를 시작하면 브로커의 구동에 실패하면서 "The socket path is too long (>108): /home/CUBRID/var/CUBRID_SOCK/ "이라는 비정상적인 오류 메시지를 출력했으나 정상적인 오류 메시지를 출력하도록 수정했다.
 
-	cubrid_broker.conf 파일 없이 cubrid broker stauts, cubrid broker stop 를 수행하면 오류 메시지를 " cubrid broker is not running. "으로 잘못 출력했으나, 정상적인 오류 메시지를 출력하도록 수정했다.
+	cubrid_broker.conf 파일 없이 cubrid broker stauts, cubrid broker stop 를 수행하면 오류 메시지를 "cubrid broker is not running."으로 잘못 출력했으나, 정상적인 오류 메시지를 출력하도록 수정했다.
 
 데이터베이스 서버에 동시 접속을 허용하는 최대 접속 개수를 10000개로 늘림(CUBRIDSUS-7233)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3522,7 +3707,7 @@ cubrid_broker.conf 파일 없이 브로커 유틸리티를 수행하면 잘못�
 브로커 파라미터 값이 잘못되었을 때 부적절한 오류 메시지를 출력하는 문제(CUBRIDSUS-9280)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	브로커 파라미터 값이 잘못되었을 때 " Error: can't find cubrid_broker.conf "라는 부적절한 오류 메시지를 출력하는 문제를 수정했다.
+	브로커 파라미터 값이 잘못되었을 때 "Error: can't find cubrid_broker.conf"라는 부적절한 오류 메시지를 출력하는 문제를 수정했다.
 
 브로커 파라미터의 SLOW_LOG 설정을 동적으로 변경하면 각 CAS의 SQL_LOG 설정이 변경되는 문제(CUBRIDSUS-7592)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3531,7 +3716,7 @@ cubrid_broker.conf 파일 없이 브로커 유틸리티를 수행하면 잘못�
 
 	::
 
-		broker_changer query_editor SLOW_LOG ON
+		% broker_changer query_editor SLOW_LOG ON
 	
 브로커 접속을 제한하는 ACCESS_CONTROL_FILE파일의 작성 형식 확장(CUBRIDSUS-5449)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3584,13 +3769,18 @@ CAS에 보낸 SIGTERM이 다른 응용 프로그램에 전달될 수 있는 문�
 
 	질의 수행 시 영향을 받는 행의 개수를 잘못 출력하는 경우가 존재했으나 이를 수정했다.
 
-	::
+	.. code-block:: sql
 
 		INSERT INTO t1 SELECT ROWNUM FROM db_class;
-		// 수정 이전 1 출력
+		
+	::
+	
+		-- 수정 이전 1 출력
 		1 row affected.
 
-		// 수정 이후 정상 출력
+	::
+	
+		-- 수정 이후 정상 출력
 		52 rows affected.
 
 주의 사항

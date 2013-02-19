@@ -83,19 +83,21 @@ CREATE TABLE
 칼럼 정의
 ---------
 
-칼럼은 테이블에서 각 열에 해당하는 항목이며, 칼럼은 칼럼 이름과 데이터 타입을 명시하여 정의한다. ::
+칼럼은 테이블에서 각 열에 해당하는 항목이며, 칼럼은 칼럼 이름과 데이터 타입을 명시하여 정의한다. 
 
-	<column_definition> ::=
-	column_name column_type [ [ <default_or_shared> ] | [ <column_constraint> ] ]...
-	 
-	<default_or_shared> ::=
-	{ SHARED <value_specification> | DEFAULT <value_specification> } |
-	AUTO_INCREMENT [ (seed, increment) ]
-	 
-	<column_constraint> ::=
-	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+	::
 
-	**칼럼 이름**
+		<column_definition> ::=
+		column_name column_type [ [ <default_or_shared> ] | [ <column_constraint> ] ]...
+		 
+		<default_or_shared> ::=
+		{ SHARED <value_specification> | DEFAULT <value_specification> } |
+		AUTO_INCREMENT [ (seed, increment) ]
+		 
+		<column_constraint> ::=
+		NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+
+**칼럼 이름**
 
 	칼럼 이름 작성 원칙은 :doc:`/sql/identifier` 를 참고한다. 생성한 칼럼의 이름은 **ALTER TABLE** 문의 **RENAME COLUMN** 절을 사용하여 변경할 수 있다. 자세한 내용은 :ref:`rename-column` 을 참고한다.
 
@@ -110,7 +112,7 @@ CREATE TABLE
 		*   칼럼 이름의 첫 글자는 반드시 알파벳이어야 한다.
 		*   칼럼 이름은 테이블 내에서 고유해야 한다.
 
-	**칼럼의 초기 값 설정(SHARED, DEFAULT)**
+**칼럼의 초기 값 설정(SHARED, DEFAULT)**
 
 	**SHARED**, **DEFAULT** 는 칼럼 초기 값과 관련된 속성이다. **SHARED**, **DEFAULT** 값은 **ALTER TABLE** 문에서 변경할 수 있다.
 
@@ -141,8 +143,8 @@ CREATE TABLE
 	.. code-block:: sql
 
 		CREATE TABLE colval_tbl
-		( id INT, name VARCHAR SHARED 'AAA', phone VARCHAR DEFAULT '000-0000');
-		INSERT INTO colval_tbl(id) VALUES (1),(2);
+		(id INT, name VARCHAR SHARED 'AAA', phone VARCHAR DEFAULT '000-0000');
+		INSERT INTO colval_tbl (id) VALUES (1), (2);
 		SELECT * FROM colval_tbl;
 		 
 				   id  name                  phone
@@ -165,7 +167,7 @@ CREATE TABLE
 		 
 		--changing DEFAULT value in the ALTER TABLE statement
 		ALTER TABLE colval_tbl CHANGE phone DEFAULT '111-1111'
-		INSERT INTO colval_tbl(id) VALUES (6);
+		INSERT INTO colval_tbl (id) VALUES (6);
 		SELECT * FROM colval_tbl;
 		 
 				   id  name                  phone
@@ -182,19 +184,22 @@ CREATE TABLE
 
 	.. code-block:: sql
 
-		CREATE TABLE t (date1 date default SYSDATE, date2 date default SYSDATE);
-		CREATE TABLE t (date1 DATE default SYSDATE,
-						ts1   TIMESTAMP default CURRENT_TIMESTAMP);
+		CREATE TABLE t (date1 DATE DEFAULT SYSDATE, date2 DATE DEFAULT SYSDATE);
+		CREATE TABLE t (date1 DATE DEFAULT SYSDATE,
+						ts1   TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
-	**자동 증가 특성(AUTO INCREMENT)**
+**자동 증가 특성(AUTO INCREMENT)**
 
 	칼럼 값에 자동으로 일련 번호를 부여하기 위해 칼럼에 **AUTO_INCREMENT** 속성을 정의할 수 있다. **SMALLINT**, **INTEGER**, **BIGINT**, **NUMERIC** (*p*, 0) 타입에 한정하여 정의할 수 있다.
 
 	동일한 칼럼에 **AUTO_INCREMENT** 속성과 **SHARED** 또는 **DEFAULT** 속성을 동시에 정의할 수 없으며, 사용자가 직접 입력한 값과 자동 증가 특성에 의해 입력된 값이 서로 충돌되지 않도록 주의해야 한다.
 
-	**AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 :ref:`alter-auto-increment` 을 참고한다. ::
+	**AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 :ref:`alter-auto-increment` 을 참고한다.
 
-		CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]) |
+	.. code-block:: sql
+	
+		CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]);
+		
 		CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
 
 	*   *seed* : 번호가 시작하는 초기값이다. 모든 정수가 허용되며 기본값은 **1** 이다.
@@ -207,9 +212,9 @@ CREATE TABLE
 
 	.. code-block:: sql
 
-		CREATE TABLE auto_tbl(id INT AUTO_INCREMENT, name VARCHAR);
-		INSERT INTO auto_tbl VALUES(NULL, 'AAA'),(NULL, 'BBB'),(NULL, 'CCC');
-		INSERT INTO auto_tbl(name) VALUES ('DDD'),('EEE');
+		CREATE TABLE auto_tbl (id INT AUTO_INCREMENT, name VARCHAR);
+		INSERT INTO auto_tbl VALUES (NULL, 'AAA'), (NULL, 'BBB'), (NULL, 'CCC');
+		INSERT INTO auto_tbl (name) VALUES ('DDD'), ('EEE');
 		SELECT * FROM auto_tbl;
 		 
 				   id  name
@@ -221,9 +226,10 @@ CREATE TABLE
 					5  'EEE'
 		 
 		CREATE TABLE tbl (id int AUTO_INCREMENT, val string) AUTO_INCREMENT = 3;
-		INSERT INTO tbl VALUES (NULL,'cubrid');
+		INSERT INTO tbl VALUES (NULL, 'cubrid');
 		 
 		SELECT * FROM tbl;
+		
 				   id  val
 		===================================
 					3  'cubrid'
@@ -242,16 +248,18 @@ CREATE TABLE
 		*   초기값 및 자동 증가 특성에 의해 증가된 최종 값은 해당 타입에서 허용되는 최소/최대값을 넘을 수 없다.
 		* 자동 증가 특성은 순환되지 않으므로 타입의 최대값을 넘어갈 경우 오류가 발생하며, 이에 대한 롤백이 일어나지 않는다. 따라서 이와 같은 경우 해당 칼럼을 삭제 후 다시 생성해야 한다. 예를 들어, 아래와 같이 테이블을 생성했다면, A의 최대값은 32767이다. 32767이 넘어가는 경우 에러가 발생하므로, 초기 테이블 생성시에 칼럼 A의 최대값이 해당 타입의 최대값을 넘지 않는다는 것을 감안해야 한다.
 
-	  .. code-block:: sql
-	  
-		create table tb1(A smallint auto_increment, B char(5));
+		  .. code-block:: sql
+		  
+			CREATE TABLE tb1(A SMALLINT AUTO_INCREMENT, B CHAR (5));
 
 .. _constraint-definition:
 
 제약 조건 정의
 --------------
 
-제약 조건으로 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 를 정의할 수 있다. 또한 제약 조건은 아니지만 **INDEX** 또는 **KEY** 를 사용하여 인덱스를 생성할 수도 있다. ::
+제약 조건으로 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 를 정의할 수 있다. 또한 제약 조건은 아니지만 **INDEX** 또는 **KEY** 를 사용하여 인덱스를 생성할 수도 있다. 
+
+::
 
 	<column_constraint> ::=
 	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
@@ -276,24 +284,24 @@ CREATE TABLE
 	<referential_action> ::=
 	CASCADE | RESTRICT | NO ACTION  | SET NULL
 
-	**NOT NULL 제약**
+**NOT NULL 제약**
 
 	**NOT NULL** 제약 조건이 정의된 칼럼은 반드시 **NULL** 이 아닌 값을 가져야 한다. 모든 칼럼에 대해 **NOT NULL** 제약 조건을 정의할 수 있다. **INSERT**, **UPDATE** 구문을 통해 **NOT NULL** 속성 칼럼에 **NULL** 값을 입력하거나 갱신하면 에러가 발생한다.
 
-	아래 예에서 id 칼럼은 NULL 값을 가질 수 없으므로, INSERT 문에서 id 칼럼에 NULL을 입력하면 오류가 발생한다.
+	아래 예에서 *id* 칼럼은 NULL 값을 가질 수 없으므로, INSERT 문에서 *id* 칼럼에 NULL을 입력하면 오류가 발생한다.
 
 	.. code-block:: sql
 
-		CREATE TABLE const_tbl1(id INT NOT NULL, INDEX i_index(id ASC), phone VARCHAR);
+		CREATE TABLE const_tbl1 (id INT NOT NULL, INDEX i_index (id ASC), phone VARCHAR);
 		 
-		CREATE TABLE const_tbl2(id INT NOT NULL PRIMARY KEY, phone VARCHAR);
-		INSERT INTO const_tbl2 (NULL,'000-0000');
+		CREATE TABLE const_tbl2 (id INT NOT NULL PRIMARY KEY, phone VARCHAR);
+		INSERT INTO const_tbl2 (NULL, '000-0000');
 		 
 		In line 2, column 25,
 		 
 		ERROR: syntax error, unexpected Null
 
-	**UNIQUE 제약**
+**UNIQUE 제약**
 
 	**UNIQUE** 제약 조건은 정의된 칼럼이 고유한 값을 갖도록 하는 제약 조건이다. 기존 레코드와 동일한 칼럼 값을 갖는 레코드가 추가되면 에러가 발생한다.
 
@@ -303,7 +311,7 @@ CREATE TABLE
 
 	.. code-block:: sql
 
-		--UNIQUE constraint is defined on a single column only
+		-- UNIQUE constraint is defined on a single column only
 		CREATE TABLE const_tbl5(id INT UNIQUE, phone VARCHAR);
 		INSERT INTO const_tbl5(id) VALUES (NULL), (NULL);
 		INSERT INTO const_tbl5 VALUES (1, '000-0000');
@@ -323,9 +331,9 @@ CREATE TABLE
 
 	.. code-block:: sql
 		 
-		--UNIQUE constraint is defined on several columns
-		CREATE TABLE const_tbl6(id INT, phone VARCHAR, CONSTRAINT UNIQUE(id,phone));
-		INSERT INTO const_tbl6 VALUES (1,NULL), (2,NULL), (1,'000-0000'), (1,'111-1111');
+		-- UNIQUE constraint is defined on several columns
+		CREATE TABLE const_tbl6(id INT, phone VARCHAR, CONSTRAINT UNIQUE (id, phone));
+		INSERT INTO const_tbl6 VALUES (1, NULL), (2, NULL), (1, '000-0000'), (1, '111-1111');
 		SELECT * FROM const_tbl6;
 		 
 				   id  phone
@@ -337,38 +345,42 @@ CREATE TABLE
 
 
 
-	**PRIMARY KEY 제약**
+**PRIMARY KEY 제약**
 
 	테이블에서 키(key)란 각 행을 고유하게 식별할 수 있는 하나 이상의 칼럼들의 집합을 말한다. 후보키(candidate key)는 테이블 내의 각 행을 고유하게 식별하는 칼럼들의 집합을 의미하며, 사용자는 이러한 후보 키 중 하나를 기본키(primary key)로 정의할 수 있다. 즉, 기본키로 정의된 칼럼 값은 각 행에서 고유하게 식별된다.
 
-	기본키를 정의하여 생성되는 인덱스는 기본적으로 오름차순으로 생성되며, 칼럼 뒤에 **ASC** 또는 **DESC** 키워드를 명시하여 키의 순서를 지정할 수 있다. ::
+	기본키를 정의하여 생성되는 인덱스는 기본적으로 오름차순으로 생성되며, 칼럼 뒤에 **ASC** 또는 **DESC** 키워드를 명시하여 키의 순서를 지정할 수 있다. 
+	
+	.. code-block:: sql
 
 		CREATE TABLE pk_tbl (a INT, b INT, PRIMARY KEY (a, b DESC));
 
 	.. code-block:: sql
 
-		CREATE TABLE const_tbl7(
-		id INT NOT NULL,
-		phone VARCHAR,
-		CONSTRAINT pk_id PRIMARY KEY(id));
+		CREATE TABLE const_tbl7 (
+		  id INT NOT NULL,
+		  phone VARCHAR,
+		  CONSTRAINT pk_id PRIMARY KEY (id)
+		);
 		 
-		--CONSTRAINT keyword
-		CREATE TABLE const_tbl8(
-		id INT NOT NULL PRIMARY KEY,
-		phone VARCHAR);
-		 
-		--primary key is defined on multiple columns
+		-- CONSTRAINT keyword
 		CREATE TABLE const_tbl8 (
-		host_year    INT NOT NULL,
-		event_code   INT NOT NULL,
-		athlete_code INT NOT NULL,
-		medal        CHAR(1)  NOT NULL,
-		score        VARCHAR(20),
-		unit         VARCHAR(5),
-		PRIMARY KEY(host_year, event_code, athlete_code, medal)
+		  id INT NOT NULL PRIMARY KEY,
+		  phone VARCHAR
+		);
+		 
+		-- primary key is defined on multiple columns
+		CREATE TABLE const_tbl8 (
+		  host_year    INT NOT NULL,
+		  event_code   INT NOT NULL,
+		  athlete_code INT NOT NULL,
+		  medal        CHAR (1)  NOT NULL,
+		  score        VARCHAR (20),
+		  unit         VARCHAR (5),
+		  PRIMARY KEY (host_year, event_code, athlete_code, medal)
 		);
 
-	**FOREIGN KEY 제약**
+**FOREIGN KEY 제약**
 
 	외래키(foreign key)란 참조 관계에 있는 다른 테이블의 기본키를 참조하는 칼럼 또는 칼럼들의 집합을 말한다. 외래키와 참조되는 기본키는 동일한 데이터 타입을 가져야 한다. 외래키가 기본키를 참조함에 따라 연관되는 두 테이블 사이에는 일관성이 유지되는데, 이를 참조 무결성(referential integrity)이라 한다. ::
 
@@ -403,21 +415,23 @@ CREATE TABLE
 
 	.. code-block:: sql
 
-		--creaing two tables where one is referencing the other
-		CREATE TABLE a_tbl(
-		id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-		phone VARCHAR(10));
+		-- creaing two tables where one is referencing the other
+		CREATE TABLE a_tbl (
+		  id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+		  phone VARCHAR(10)
+		);
 		 
-		CREATE TABLE b_tbl(
-		ID INT NOT NULL,
-		name VARCHAR(10) NOT NULL,
-		CONSTRAINT pk_id PRIMARY KEY(id),
-		CONSTRAINT fk_id FOREIGN KEY(id) REFERENCES a_tbl(id)
-		ON DELETE CASCADE ON UPDATE RESTRICT);
+		CREATE TABLE b_tbl (
+		  ID INT NOT NULL,
+		  name VARCHAR (10) NOT NULL,
+		  CONSTRAINT pk_id PRIMARY KEY (id),
+		  CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES a_tbl (id)
+		  ON DELETE CASCADE ON UPDATE RESTRICT
+		);
 		 
-		INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
-		INSERT INTO b_tbl VALUES(1,'George'),(2,'Laura'),(3,'Max');
-		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
+		INSERT INTO a_tbl VALUES (1,'111-1111'), (2,'222-2222'), (3, '333-3333');
+		INSERT INTO b_tbl VALUES (1,'George'),(2,'Laura'), (3,'Max');
+		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id = b.id;
 		 
 				   id           id                   phone                 name
 		==============================================================================
@@ -425,19 +439,19 @@ CREATE TABLE
 					2            2                   '222-2222'            'Laura'
 					3            3                   '333-3333'            'Max'
 		 
-		--when deleting primay key value, it cascades foreign key value  
+		-- when deleting primay key value, it cascades foreign key value  
 		DELETE FROM a_tbl WHERE id=3;
 		 
 		1 rows affected.
 		 
-		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
+		SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id = b.id;
 		 
 				   id           id                   phone                 name
 		==============================================================================
 					1            1                   '111-1111'            'George'
 					2            2                   '222-2222'            'Laura'
 		 
-		--when attempting to update primay key value, it restricts the operation
+		-- when attempting to update primay key value, it restricts the operation
 		UPDATE  a_tbl SET id = 10 WHERE phone = '111-1111';
 		 
 		In the command from line 1,
@@ -453,7 +467,7 @@ CREATE TABLE
 		*   참조 제약 조건에 의해 CASCADE되는 작업은 트리거의 동작을 활성화하지 않는다.
 		*   CUBRID HA 환경에서는 *referential_triggered_action* 을 사용하지 않는 것을 권장한다. CUBRID HA 환경에서는 트리거를 지원하지 않으므로, *referential_triggered_action* 을 사용하면 마스터 데이터베이스와 슬레이브 데이터베이스의 데이터가 일치하지 않을 수 있다. 자세한 내용은 :doc:`/admin/ha` 를 참고한다.
 
-	**KEY 또는 INDEX**
+**KEY 또는 INDEX**
 
 	**KEY** 와 **INDEX** 는 동일하며, 해당 칼럼을 키로 하는 인덱스를 생성한다.
 
@@ -463,29 +477,30 @@ CREATE TABLE
 
 	.. code-block:: sql
 
-		CREATE TABLE const_tbl4(id INT, phone VARCHAR, KEY i_key(id DESC, phone ASC));
+		CREATE TABLE const_tbl4  (id INT, phone VARCHAR, KEY i_key (id DESC, phone ASC));
 
 칼럼 옵션
 ---------
 
 특정 칼럼에 **UNIQUE** 또는 **INDEX** 를 정의할 때, 해당 칼럼 이름 뒤에 **ASC** 또는 **DESC** 옵션을 명시할 수 있다. 이 키워드는 오름차순 또는 내림차순 인덱스 값 저장을 위해 명시된다. ::
 
-	column_name [ASC|DESC]
+	column_name [ASC | DESC]
 
 .. code-block:: sql
 
-	CREATE TABLE const_tbl(
-	id VARCHAR,
-	name VARCHAR,
-	CONSTRAINT UNIQUE INDEX(id DESC, name ASC)
+	CREATE TABLE const_tbl (
+	  id VARCHAR,
+	  name VARCHAR,
+	  CONSTRAINT UNIQUE INDEX (id DESC, name ASC)
 	);
 	 
-	INSERT INTO const_tbl VALUES('1000', 'john'), ('1000','johnny'), ('1000', 'jone');
-	INSERT INTO const_tbl VALUES('1001', 'johnny'), ('1001','john'), ('1001', 'jone');
+	INSERT INTO const_tbl VALUES ('1000', 'john'), ('1000','johnny'), ('1000', 'jone');
+	INSERT INTO const_tbl VALUES ('1001', 'johnny'), ('1001','john'), ('1001', 'jone');
 	 
 	SELECT * FROM const_tbl WHERE id > '100';
-	===================================================
+	
 			  id    name    
+	===================================================
 			  1001     john     
 			  1001     johnny     
 			  1001     jone     
@@ -505,13 +520,13 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 
 .. code-block:: sql
 
-	--creating table with REUSE_OID option specified
+	-- creating table with REUSE_OID option specified
 	CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID;
 	INSERT INTO reuse_tbl VALUES (1);
 	INSERT INTO reuse_tbl VALUES (2);
 	INSERT INTO reuse_tbl VALUES (3);
 	 
-	--an error occurs when column type is a OID reusable table itself
+	-- an error occurs when column type is a OID reusable table itself
 	CREATE TABLE tbl_1 ( a reuse_tbl);
 	 
 	ERROR: The class 'reuse_tbl' is marked as REUSE_OID and is non-referable. Non-referable classes can't be the domain of an attribute and their instances' OIDs cannot be returned.
@@ -520,8 +535,8 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
 	 
 .. code-block:: sql
 	
-	CREATE TABLE t3(a VARCHAR(20)) REUSE_OID COLLATE euckr_bin;
-	CREATE TABLE t4(a VARCHAR(20)) COLLATE euckr_bin REUSE_OID;
+	CREATE TABLE t3 (a VARCHAR (20)) REUSE_OID COLLATE euckr_bin;
+	CREATE TABLE t4 (a VARCHAR (20)) COLLATE euckr_bin REUSE_OID;
 
 .. note::
 
@@ -540,22 +555,23 @@ CREATE TABLE LIKE
 
 **CREATE TABLE … LIKE** 문은 스키마만 복제하므로 칼럼 정의문을 작성할 수 없다. ::
 
-	CREATE {TABLE | CLASS} <new_table_name> LIKE <old_table_name>
+	CREATE {TABLE | CLASS} <new_table_name> LIKE <old_table_name>;
 	
 *   *new_table_name* : 새로 생성할 테이블 이름이다.
 *   *old_table_name* : 데이터베이스에 이미 존재하는 원본 테이블 이름이다. **CREATE TABLE ... LIKE**   문에서 아래의 테이블은 원본 테이블로 지정될 수 없다.
-    *   분할 테이블
-    *   **AUTO_INCREMENT** 칼럼이 포함된 테이블
-    *   상속 또는 메서드를 사용하는 테이블
+		*   분할 테이블
+		*   **AUTO_INCREMENT** 칼럼이 포함된 테이블
+		*   상속 또는 메서드를 사용하는 테이블
 
 .. code-block:: sql
 
-	CREATE TABLE a_tbl(
-	id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-	phone VARCHAR(10));
-	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
+	CREATE TABLE a_tbl (
+	  id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+	  phone VARCHAR(10)
+	);
+	INSERT INTO a_tbl VALUES (1,'111-1111'), (2,'222-2222'), (3, '333-3333');
 	 
-	--creating an empty table with the same schema as a_tbl
+	-- creating an empty table with the same schema as a_tbl
 	CREATE TABLE new_tbl LIKE a_tbl;
 	SELECT * FROM new_tbl;
 	 
@@ -619,9 +635,8 @@ CREATE TABLE AS SELECT
 
 ::
 
-	CREATE {TABLE | CLASS} <table_name>
-					   [( <column_definition> [,<table_constraint>]... )]
-					   [REPLACE] AS <select_statement>
+	CREATE {TABLE | CLASS} <table_name> [( <column_definition> [,<table_constraint>]... )]
+	[REPLACE] AS <select_statement>;
 
 *   *table_name* : 새로 생성할 테이블 이름이다.
 *   *column_definition*, *table_constraint* : 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성은 복제되지 않는다.
@@ -630,35 +645,42 @@ CREATE TABLE AS SELECT
 
 .. code-block:: sql
 
-	CREATE TABLE a_tbl(
-	id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-	phone VARCHAR(10));
-	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333');
+	CREATE TABLE a_tbl (
+	  id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+	  phone VARCHAR(10)
+	);
+	INSERT INTO a_tbl VALUES (1,'111-1111'), (2,'222-2222'), (3, '333-3333');
 	 
-	--creating a table without column definition
+	-- creating a table without column definition
 	CREATE TABLE new_tbl1 AS SELECT * FROM a_tbl;
 	SELECT * FROM new_tbl1;
 	 
-			   id  phone
+	   id  phone
 	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
+		1  '111-1111'
+		2  '222-2222'
+		3  '333-3333'
 	 
-	--all of column values are replicated from a_tbl
-	CREATE TABLE new_tbl2
-	(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, phone VARCHAR) AS SELECT * FROM a_tbl;
+	-- all of column values are replicated from a_tbl
+	CREATE TABLE new_tbl2 (
+	  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	  phone VARCHAR
+	) AS SELECT * FROM a_tbl;
+	
 	SELECT * FROM new_tbl2;
 	 
-			   id  phone
+	   id  phone
 	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
+		1  '111-1111'
+		2  '222-2222'
+		3  '333-3333'
 	 
-	--some of column values are replicated from a_tbl and the rest is NULL
-	CREATE TABLE new_tbl3
-	(id INT, name VARCHAR) AS SELECT id, phone FROM a_tbl;
+	-- some of column values are replicated from a_tbl and the rest is NULL
+	CREATE TABLE new_tbl3 (
+	  id INT, 
+	  name VARCHAR
+	) AS SELECT id, phone FROM a_tbl;
+	
 	SELECT * FROM new_tbl3
 	 
 	  name                           id  phone
@@ -667,32 +689,36 @@ CREATE TABLE AS SELECT
 	  NULL                            2  '222-2222'
 	  NULL                            3  '333-3333'
 	 
-	--column alias in the select statement should be used in the column definition
-	CREATE TABLE new_tbl4
-	(id1 int, id2 int)AS SELECT t1.id id1, t2.id id2 FROM new_tbl1 t1, new_tbl2 t2;
+	-- column alias in the select statement should be used in the column definition
+	CREATE TABLE new_tbl4 (
+	  id1 INT, 
+	  id2 INT
+	) AS SELECT t1.id id1, t2.id id2 FROM new_tbl1 t1, new_tbl2 t2;
+	
 	SELECT * FROM new_tbl4;
 	 
-			  id1          id2
+	  id1          id2
 	==========================
-				1            1
-				1            2
-				1            3
-				2            1
-				2            2
-				2            3
-				3            1
-				3            2
-				3            3
+		1            1
+		1            2
+		1            3
+		2            1
+		2            2
+		2            3
+		3            1
+		3            2
+		3            3
 	 
-	--REPLACE is used on the UNIQUE column
-	CREATE TABLE new_tbl5(id1 int UNIQUE) REPLACE AS SELECT * FROM new_tbl4;
+	-- REPLACE is used on the UNIQUE column
+	CREATE TABLE new_tbl5 (id1 int UNIQUE) REPLACE AS SELECT * FROM new_tbl4;
+	
 	SELECT * FROM new_tbl5;
 	 
-			  id1          id2
+	  id1          id2
 	==========================
-				1            3
-				2            3
-				3            3
+		1            3
+		2            3
+		3            3
 
 
 ALTER TABLE
@@ -753,7 +779,7 @@ ALTER TABLE
 
 .. warning::
 
-	테이블의 소유자, **DBA**, **DBA**의 멤버만이 테이블 스키마를 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 :ref:`granting-authorization` 참조)
+	테이블의 소유자, **DBA**, **DBA** 의 멤버만이 테이블 스키마를 변경할 수 있으며, 그 밖의 사용자는 소유자나 **DBA** 로부터 이름을 변경할 수 있는 권한을 받아야 한다(권한 관련 사항은 :ref:`granting-authorization` 참조)
 
 ADD COLUMN 절
 -------------
@@ -1130,7 +1156,7 @@ CHANGE/MODIFY 절
 	 
 	-- hard default values have been placed instead of signaling overflow
 
-	**칼럼의 타입 변경에 따른 테이블 속성의 변경**
+**칼럼의 타입 변경에 따른 테이블 속성의 변경**
 
 	*   타입 변경 : 시스템 파라미터 **alter_table_change_type_strict** 의 값이 no이면 다른 타입으로 값 변경을 허용하고, yes이면 허용하지 않는다. 기본값은 **no** 이며, **CAST** 연산자로 허용되는 모든 타입으로 변경이 허용된다. 객체 타입의 변경은 객체의 상위 클래스(테이블)에 의해서만 허용된다.
 
@@ -1175,7 +1201,7 @@ CHANGE/MODIFY 절
 
 	*   이름 변경 : 이름이 충돌하지 않는 한 이름을 변경할 수 있다.
 
-	**칼럼의 타입 변경에 따른 값의 변경**
+**칼럼의 타입 변경에 따른 값의 변경**
 
 	**alter_table_change_type_strict** 파라미터는 타입 변경에 따른 값의 변환을 허용하는지 여부를 결정한다. 값이 no이면 칼럼의 타입을 변경하거나 **NOT NULL** 제약 조건을 추가할 때 값이 변경될 수 있다. 기본값은 **no** 이다.
 

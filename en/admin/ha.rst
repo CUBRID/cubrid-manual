@@ -2226,7 +2226,7 @@ When any error occurs while executing the script in step-by-step order, or if th
 	 
 	- 1. remove old copy log.
 	 
-	[nodeA]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb\_nodeB/*
+	[nodeA]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeB/*
 	cubrid_usr@nodeA's password:
 	Connection to nodeA closed.
 	 

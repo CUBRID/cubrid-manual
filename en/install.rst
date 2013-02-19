@@ -201,6 +201,8 @@ Interoperability
 
 		The configuration file (.conf or .pass) already exists. Do you want to overwrite it? (yes or no) : yes
 
+	For more information on upgrading a database from a previous version to a new version, see :doc:`upgrade`.
+
 	**Configuring Environment**
 
 	You can modify the environment such as service ports etc. edit the parameters of a configuration file located in the **$CUBRID/conf** directory. See :ref:`Installin-and-Running-on-Windows` for more information.
@@ -252,17 +254,21 @@ Installing and Running on Windows
 		
 			CUBRID Service Tray appears on the right bottom.
 	
+	.. note:: 
+	
+		CUBRID Service is automatically started when the system is rebooted. If you want to stop the  when the system is rebooted, change the "Start parameters" of "CUBRIDService" as "Stop"; "Control Panel > Adminstrative Tools > Services" and double-clicking "CUBRIDService", then pop-up window will be shown.
+
 	**Upgrading CUBRID**
 
 	To install a new version of CUBRID in an environment in which a previous version has already been installed, select [CUBRID Service Tray] > [Exit] from the menu to stop currently running services, and then remove the previous version of CUBRID. Note that when you are prompted with "Do you want to delete all the existing version of databases and the configuration files?" you must select "No" to protect the existing databases.
 
-	For more information on migrating a database from a previous version to a new version, see :doc:`/admin/migration`.
+	For more information on upgrading a database from a previous version to a new version, see :doc:`upgrade`.
 
 	.. _Configuring-Environment-on-Windows:
 
 	**Configuring Environment**
 
-	You can change configuration such as service ports to meet the user environment by changing the parameter values of following files which are located in the **%CUBRID%\conf** directory. If a firewall has been configured, the ports used in CUBRID need to be opened.
+	You can change configuration such as service ports to meet the user environment by changing the parameter values of following files which are located in the **%CUBRID%\\conf** directory. If a firewall has been configured, the ports used in CUBRID need to be opened.
 
 	* **cm.conf**
 
@@ -318,12 +324,12 @@ Windows에서 임의의 가용 포트를 사용하는 경우는 어떤 포트를
 
 Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법을 사용할 수 있다. 일반적으로 Windows 방화벽에서 특정 프로그램을 지정하지 않고 포트를 여는 것보다 허용되는 프로그램 목록에 프로그램을 추가하는 것이 보다 안전하므로 이 방식을 권장한다.
 
-	* cub_broker에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_broker.exe"를 추가한다.
-	* CAS에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_cas.exe"를 추가한다.
-	* cub_master에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_master.exe"를 추가한다.
-	* cub_server에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_server.exe"를 추가한다.
-	* CUBRID Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_cmserver.exe"를 추가한다.
-	* CUBRID Web Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_cmhttpd.exe"를 추가한다.
+	* cub_broker에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_broker.exe"를 추가한다.
+	* CAS에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cas.exe"를 추가한다.
+	* cub_master에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_master.exe"를 추가한다.
+	* cub_server에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_server.exe"를 추가한다.
+	* CUBRID Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cmserver.exe"를 추가한다.
+	* CUBRID Web Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cmhttpd.exe"를 추가한다.
 	
 브로커 장비 또는 DB 서버 장비에서 Linux용 CUBRID를 사용한다면 Linux 포트가 모두 개방되어 있어야 한다.
 브로커 장비 또는 DB 서버 장비에서 Windows용 CUBRID를 사용한다면 Windows 포트가 모두 개방되어 있거나, 관련 프로세스들이 모두 Windows 방화벽에서 허용되는 목록에 추가되어 있어야 한다.

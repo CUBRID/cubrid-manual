@@ -2211,7 +2211,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
 	 
 	- 1. remove old copy log.
 	 
-	[nodeA]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb\_nodeB/*
+	[nodeA]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeB/*
 	cubrid_usr@nodeA's password:
 	Connection to nodeA closed.
 	 

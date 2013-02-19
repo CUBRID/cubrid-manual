@@ -2,7 +2,7 @@
 ODBC 드라이버
 *************
 
-CUBRID ODBC 드라이버는 ODBC 3.52 버전을 지원하며, ODBC 코어 부분과 Level 1과 Level 2 일부 API를 지원한다. CUBRID ODBC 드라이버는 ODBC Spec 3.x를 기반으로 구현되었으므로 ODBC Spec 2.x을 이용하여 작성한 프로그램에 대해서 하위 호환성을 완벽하게 보장하지는 않는다. 32비트만 지원하므로, Windows 64비트 환경이라도 CUBRID 32비트 버전을 설치해야 한다. Windows 64비트 환경에서 CUBRID 32비트의 ODBC 드라이버는 **C:\Windows\SysWOW64\odbcad32.exe** 를 실행하여 확인할 수 있다.
+CUBRID ODBC 드라이버는 ODBC 3.52 버전을 지원하며, ODBC 코어 부분과 Level 1과 Level 2 일부 API를 지원한다. CUBRID ODBC 드라이버는 ODBC Spec 3.x를 기반으로 구현되었으므로 ODBC Spec 2.x을 이용하여 작성한 프로그램에 대해서 하위 호환성을 완벽하게 보장하지는 않는다. 32비트만 지원하므로, Windows 64비트 환경이라도 CUBRID 32비트 버전을 설치해야 한다. Windows 64비트 환경에서 CUBRID 32비트의 ODBC 드라이버는 **C:\\Windows\\SysWOW64\\odbcad32.exe** 를 실행하여 확인할 수 있다.
 
 CUBRID ODBC 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 

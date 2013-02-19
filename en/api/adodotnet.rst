@@ -32,7 +32,7 @@ Before you start developing .NET applications with CUBRID, you will need the CUB
 
 The CUBRID .NET Data Provider is 100% full-managed .NET code and it does not rely on any CUBRID library files. This means that the usage of the driver does not require any kind of CUBRID installation or files on the local machine.
 
-The easiest way to install CUBRID ADO.NET Data Provider is to use the official installer. If you choose to install using the default option (x86), the driver will be installed in the **Program Files\CUBRID\CUBRID ADO.NET Data Provider 8.4.1** directory.
+The easiest way to install CUBRID ADO.NET Data Provider is to use the official installer. If you choose to install using the default option (x86), the driver will be installed in the **Program Files\\CUBRID\\CUBRID ADO.NET Data Provider 8.4.1** directory.
 
 You can also choose to install the driver in GAC ( http://en.wikipedia.org/wiki/global_assembly_cache ). The best way to install the driver is to use the tblimp ( http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx ) tool. See the below to import the required namespaces.
 

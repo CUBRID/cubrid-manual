@@ -834,7 +834,7 @@ NCHAR VARYING(n)
 Escape Special Characters
 -------------------------
 
-CUBRID supports two kinds of methods to escape special characters. One is using quotes and the other is using backslash (\).
+CUBRID supports two kinds of methods to escape special characters. One is using quotes and the other is using backslash (\\).
 
 **Escape with Quotes**
 
@@ -847,7 +847,7 @@ If you set **no** for the system parameter **ansi_quotes** in the **cubrid.conf*
 
 **Escape with Backslash**
 
-You can use escape using backslash (\) only if you set no for the system parameter **no_backslash_escapes** in the **cubrid.conf** file. The default value for the **no_backslash_escapes** parameter is **yes**. If the value of **no_backslash_escapes** is **no**, the following are the special characters.
+You can use escape using backslash (\\) only if you set no for the system parameter **no_backslash_escapes** in the **cubrid.conf** file. The default value for the **no_backslash_escapes** parameter is **yes**. If the value of **no_backslash_escapes** is **no**, the following are the special characters.
 
 *   \\' : Single quotes (')
 *   \\" : Double quotes (")
@@ -856,7 +856,7 @@ You can use escape using backslash (\) only if you set no for the system paramet
 *   \\t : Tab character
 *   \\\\ : Backslash
 *   \\% : Percent sign (%). For details, see the following description.
-*   \\_ : Underbar (_). For details, see the following description.
+*   \\_ : Underbar (\_). For details, see the following description.
 
 For all other escapes, the backslash will be ignored. For example, "\x" is the same as entering only "x".
 

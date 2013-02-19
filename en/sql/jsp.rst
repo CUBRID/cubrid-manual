@@ -42,13 +42,13 @@ You can configure the **JAVA_HOME** environment variable and add the directory i
 
 *   An example of installing 64 Bit JDK 1.6 and configuring the environment variables ::
 
-	% set JAVA_HOME=C:\jdk1.6.0
-	% set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
+	% set JAVA_HOME=C:\\jdk1.6.0
+	% set PATH=%PATH%;%JAVA_HOME%\\jre\\bin\\server
 
 *   An example of installing 32 Bit JDK 1.6 and configuring the environment variables ::
 
-	% set JAVA_HOME=C:\jdk1.6.0
-	% set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
+	% set JAVA_HOME=C:\\jdk1.6.0
+	% set PATH=%PATH%;%JAVA_HOME%\\jre\\bin\\client
 
 To use other vendor's implementation instead of Sun's Java Virtual Machine, add the path of the **jvm.dll** file to the **PATH** variable during the installation.
 

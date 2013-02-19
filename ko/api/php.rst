@@ -116,7 +116,7 @@ Windows
 
 **CUBRID PHP API Installer를 사용한 설치**
 
-CUBRID PHP API Installer는 자동으로 CUBRID와 PHP의 버전을 인식하여 해당 버전에 맞는 드라이버를 설치하는 Windows 설치 관리자이다. 드라이버를 기본 PHP 확장 디렉터리( **C:\Program Files\PHP\ext** )에 복사하고 **php.ini** 파일을 수정한다. 여기에서는 CUBRID PHP API Installer를 이용하여 Windows에 CUBRID PHP 확장을 설치하는 방법을 설명한다.
+CUBRID PHP API Installer는 자동으로 CUBRID와 PHP의 버전을 인식하여 해당 버전에 맞는 드라이버를 설치하는 Windows 설치 관리자이다. 드라이버를 기본 PHP 확장 디렉터리( **C:\\Program Files\\PHP\\ext** )에 복사하고 **php.ini** 파일을 수정한다. 여기에서는 CUBRID PHP API Installer를 이용하여 Windows에 CUBRID PHP 확장을 설치하는 방법을 설명한다.
 
 CUBRID PHP 드라이버를 제거하려면 CUBRID PHP API Installer를 다시 실행하여 프로그램 제거를 선텍한다. 이 방법으로 CUBRID PHP 드라이버를 제거하면 설치할 때 발생한 모든 변경 사항이 복구된다.
 
@@ -130,7 +130,7 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 
 #. BSD 라이선스 조항에 동의하고 [다음]을 클릭한다.
 
-#. CUBRID PHP API Installer를 설치할 경로를 지정하고 [다음]을 클릭한다. PHP를 설치한 경로가 아니라 예를 들면 **C:\Program Files\CUBRID PHP API** 와 같은 새로운 경로를 입력해야 한다.
+#. CUBRID PHP API Installer를 설치할 경로를 지정하고 [다음]을 클릭한다. PHP를 설치한 경로가 아니라 예를 들면 **C:\\Program Files\\CUBRID PHP API** 와 같은 새로운 경로를 입력해야 한다.
 
 #. Windows [시작] 메뉴의 폴더 이름을 지정하고 [설치]를 클릭한다. 설치에 실패하면 아래의 **환경 변수 설정** 을 참고한다.
 
@@ -167,7 +167,7 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 #.   [내 컴퓨터]를 마우스 오른쪽 버튼으로 클릭하여 [속성]을 선택하면 [시스템 속성] 대화 상자가 나타난다.
 #.   [고급] 탭을 선택하고 [환경 변수]를 클릭한다.
 #.   [시스템 변수]에서 **Path** 를 선택하고 [편집]을 클릭한다.
-#.   변수 값에 CUBRID와 PHP의 설치 경로를 추가한다. 각 경로는 세미콜론(;)으로 구분한다. 만약 PHP를 **C:\Program Files\PHP** 디렉터리에 설치하고 CUBRID를 **C:\CUBRID\bin** 디렉터리에 설치했다면, 변수 값의 끝에 **C:\CUBRID\bin;C:\Program Files\PHP** 를 덧붙인다.
+#.   변수 값에 CUBRID와 PHP의 설치 경로를 추가한다. 각 경로는 세미콜론(;)으로 구분한다. 만약 PHP를 **C:\\Program Files\\PHP** 디렉터리에 설치하고 CUBRID를 **C:\\CUBRID\\bin** 디렉터리에 설치했다면, 변수 값의 끝에 **C:\\CUBRID\\bin;C:\\Program Files\\PHP** 를 덧붙인다.
 #.   [확인]을 클릭한다.
 #.   앞에서 설명한 방법으로 시스템 환경 변수가 제대로 설정되었는지 확인한다.
 
@@ -177,11 +177,11 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 
 PHP 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 **php_pdo_cubrid.dll** 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.
 
-#. 드라이버 파일을 기본 PHP 확장 디렉터리( **C:\Program Files\PHP\ext** )에 복사한다.
+#. 드라이버 파일을 기본 PHP 확장 디렉터리( **C:\\Program Files\\PHP\\ext** )에 복사한다.
 
-#. 시스템 환경 변수를 설정한다. 시스템 환경 변수 **PHPRC** 의 값으로 **C:\Program Files\PHP** 가 설정되고, **Path** 에 **%PHPRC%** 와 **%PHPRC\ext** 가 추가되었는지 확인한다.
+#. 시스템 환경 변수를 설정한다. 시스템 환경 변수 **PHPRC** 의 값으로 **C:\\Program Files\\PHP** 가 설정되고, **Path** 에 **%PHPRC%** 와 **%PHPRC\\ext** 가 추가되었는지 확인한다.
 
-#. **php.ini** ( **C:\Program Files\PHP\php.ini** ) 파일을 열어 끝에 다음 두 줄을 추가한다. ::
+#. **php.ini** ( **C:\\Program Files\\PHP\\php.ini** ) 파일을 열어 끝에 다음 두 줄을 추가한다. ::
 
 	[PHP_CUBRID]
 	extension=php_cubrid.dll
@@ -307,7 +307,7 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
 
 **CUBRID PHP 드라이버 빌드**
 
-#. 다운로드한 CUBRID PHP 드라이버 소스코드의 **\win** 디렉터리에 있는 **php_cubrid.vcproj** 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 **php_cubrid** 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.
+#. 다운로드한 CUBRID PHP 드라이버 소스코드의 **\\win** 디렉터리에 있는 **php_cubrid.vcproj** 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 **php_cubrid** 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.
 
    .. image:: /images/image59.png
 
@@ -319,7 +319,7 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
 
 #. **php_cubrid.dll** 파일을 빌드한 후에는 PHP가 **php_cubrid.dll** 파일을 PHP 확장으로 인식하도록 다음 작업을 수행한다.
 
-   * PHP를 설치한 폴더에 **cubrid** 폴더를 생성하고 해당 폴더에 **php_cubrid.dll** 파일을 복사한다. **%PHPRC%\ext** 디렉터리가 있다면 이 디렉터리에 **php_cubrid.dll** 파일을 복사해도 된다.
+   * PHP를 설치한 폴더에 **cubrid** 폴더를 생성하고 해당 폴더에 **php_cubrid.dll** 파일을 복사한다. **%PHPRC%\\ext** 디렉터리가 있다면 이 디렉터리에 **php_cubrid.dll** 파일을 복사해도 된다.
    * In **php.ini** 파일의 **extension_dir** 변수의 값으로 **php_cubrid.dll** 파일의 경로를 입력하고, **extension** 변수의 값으로 **php_cubrid.dll** 을 입력한다.
 
 **VC6을 이용하여 PHP 5.2/5.3용 CUBRID PHP 드라이버 빌드**
@@ -360,7 +360,7 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
 
 #. **php_cubrid.dll** 파일을 빌드한 후에는 PHP가 **php_cubrid.dll** 파일을 PHP 확장으로 인식하도록 다음 작업을 수행한다.
 
-   * PHP를 설치한 폴더에 **cubrid** 폴더를 생성하고 해당 폴더에 **php_cubrid.dll** 파일을 복사한다. **%PHPRC%\ext** 디렉터리가 있다면 이 디렉터리에 **php_cubrid.dll** 파일을 복사해도 된다.
+   * PHP를 설치한 폴더에 **cubrid** 폴더를 생성하고 해당 폴더에 **php_cubrid.dll** 파일을 복사한다. **%PHPRC%\\ext** 디렉터리가 있다면 이 디렉터리에 **php_cubrid.dll** 파일을 복사해도 된다.
 
    * In **php.ini** 파일의 **extension_dir** 변수의 값으로 **php_cubrid.dll** 파일의 경로를 입력하고, **extension** 변수의 값으로 **php_cubrid.dll** 을 입력한다.
 
@@ -420,7 +420,7 @@ http://www.apachelounge.com/에서는 VC9 x86 버전 Apache만 있고 공식 Win
 
 **CUBRID PHP 드라이버 빌드**
 
-#. 다운로드한 CUBRID PHP 드라이버 소스코드의 **\win** 디렉터리에 있는 **php_cubrid.vcproj** 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 **php_cubrid** 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.
+#. 다운로드한 CUBRID PHP 드라이버 소스코드의 **\\win** 디렉터리에 있는 **php_cubrid.vcproj** 파일을 열고, 왼쪽의 [Solution Explorer] 창에서 **php_cubrid** 를 마우스 오른쪽 버튼으로 클릭하여 [Properties]를 선택한다.
 
 #. [Property Page] 대화 상자에서 [Configuration Manager]을 클릭한다.
 

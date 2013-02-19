@@ -210,6 +210,8 @@ Linux에서의 설치와 실행
 
 		The configuration file (.conf or .pass) already exists. Do you want to overwrite it? (yes or no) : yes
 
+	이전 버전에서 새 버전으로 데이터베이스를 업그레이드하는 방법에 대한 보다 자세한 내용은 :doc:`upgrade` 를 참고한다.
+
 	**환경 설정**
 
 	서비스 포트 등 사용자 환경에 맞춰 설정을 변경하려면 **$CUBRID/conf** 디렉터리에서 설정 파일의 파라미터를 수정한다. 
@@ -271,18 +273,23 @@ Windows에서의 설치와 실행
 		**4단계: 설치 완료**
 		
 			우측 하단에 CUBRID Service Tray가 나타난다. 
+			
+	.. note:: 
+	
+		CUBRID는 설치하고 나면 시스템 재구동 시 자동으로 실행하게 되어 있다. 시스템 재구동 시 자동 실행을 중단하려면 "제어판 > 시스템 및 보안 > 관리 도구 > 서비스 > CUBRIDService" 에서 더블클릭한 후 나타난 팝업 창에서 시작 유형을 수동으로 변경한다.
+
 	
 	**CUBRID 업그레이드**
 
 	이전 버전의 CUBRID가 이미 설치된 환경에 새로운 버전의 CUBRID를 설치하는 경우, 시스템 트레이에서 [CUBRID Service Tray] > [Exit]를 선택하여 운영 중인 서비스를 종료한 후 이전 버전의 CUBRID를 제거해야 한다. "데이터베이스와 설정 파일을 모두 삭제하겠습니까?"라고 묻는 대화 상자가 나타나면, 이전 버전의 데이터베이스가 삭제되지 않도록?[아니오]를 클릭한다.
 
-	이전 버전의 데이터베이스를 새로운 버전으로 마이그레이션하는 작업은 :doc:`/admin/migration` 을 참고한다.
+	이전 버전에서 새 버전으로 데이터베이스를 업그레이드하는 방법에 대한 보다 자세한 내용은 :doc:`upgrade` 를 참고한다.
 
 .. _Configuring-Environment-on-Windows:
 
 	**환경 설정**
 
-	서비스 포트 등 사용자 환경에 맞춰 설정을 변경하려면 **%CUBRID%\conf** 디렉터리에서 다음 설정 파일의 파라미터 값을 변경한다. 방화벽이 설정되어 있다면 CUBRID에서 사용하는 포트들을 열어두어야(open) 한다. CUBRID가 사용하는 포트에 대한 자세한 내용은 :ref:`connect-to-cubrid-server` 를 참고한다.
+	서비스 포트 등 사용자 환경에 맞춰 설정을 변경하려면 **%CUBRID%\\conf** 디렉터리에서 다음 설정 파일의 파라미터 값을 변경한다. 방화벽이 설정되어 있다면 CUBRID에서 사용하는 포트들을 열어두어야(open) 한다. CUBRID가 사용하는 포트에 대한 자세한 내용은 :ref:`connect-to-cubrid-server` 를 참고한다.
 
 	* **cm.conf**
 
@@ -332,12 +339,12 @@ Linux 방화벽에서 특정 프로세스에 대한 포트를 개방하려면 �
 Windows에서 임의의 가용 포트를 사용하는 경우는 어떤 포트를 개방할 지 알 수 없으므로  Windows 메뉴의 "제어판" 검색창에서  "방화벽"을 입력한 후, "Windows 방화벽 > Windows 방화벽을 통해 프로그램 또는 기능 허용"에서 포트 개방을 원하는 프로그램을 추가한다. 
 Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법을 사용할 수 있다. 일반적으로 Windows 방화벽에서 특정 프로그램을 지정하지 않고 포트를 여는 것보다 허용되는 프로그램 목록에 프로그램을 추가하는 것이 보다 안전하므로 이 방식을 권장한다.
 
-	* cub_broker에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_broker.exe"를 추가한다.
-	* CAS에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_cas.exe"를 추가한다.
-	* cub_master에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_master.exe"를 추가한다.
-	* cub_server에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_server.exe"를 추가한다.
-	* CUBRID Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_cmserver.exe"를 추가한다.
-	* CUBRID Web Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\bin\cub_cmhttpd.exe"를 추가한다.
+	* cub_broker에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_broker.exe"를 추가한다.
+	* CAS에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cas.exe"를 추가한다.
+	* cub_master에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_master.exe"를 추가한다.
+	* cub_server에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_server.exe"를 추가한다.
+	* CUBRID Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cmserver.exe"를 추가한다.
+	* CUBRID Web Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cmhttpd.exe"를 추가한다.
 	
 브로커 장비 또는 DB 서버 장비에서 Linux용 CUBRID를 사용한다면 Linux 포트가 모두 개방되어 있어야 한다.
 브로커 장비 또는 DB 서버 장비에서 Windows용 CUBRID를 사용한다면 Windows 포트가 모두 개방되어 있거나, 관련 프로세스들이 모두 Windows 방화벽에서 허용되는 목록에 추가되어 있어야 한다.
@@ -440,7 +447,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 		
 		(**): cub_server가 존재하는 장비
 		
-	.. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다. 따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\bin\cub_server.exe"을 추가해야 한다.
+	.. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다. 따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\\bin\\cub_server.exe"을 추가해야 한다.
 		
 	서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
 
@@ -592,7 +599,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
 		
 		(\*\*\*): cub_server가 존재하는 장비
 		
-		.. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다.  따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\bin\cub_server.exe"을 추가해야 한다.
+		.. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다.  따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\\bin\\cub_server.exe"을 추가해야 한다.
 		
 	서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
 

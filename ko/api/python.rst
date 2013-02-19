@@ -82,7 +82,7 @@ Windows에 CUBRID Python 드라이버를 설치하려면 다음과 같이 CUBRID
 
   http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect
 
-* 다운로드한 파일의 압축을 해제하여 Python이 설치된 경로의 **Lib** 폴더( **C:\Program Files\Python\Lib** ) 안에 복사한다.
+* 다운로드한 파일의 압축을 해제하여 Python이 설치된 경로의 **Lib** 폴더( **C:\\Program Files\\Python\\Lib** ) 안에 복사한다.
 
 Python 프로그래밍
 =================

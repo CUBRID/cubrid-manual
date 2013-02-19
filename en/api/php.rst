@@ -131,7 +131,7 @@ Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are
 
 #. To install the PHP extension, run the installer. Once the installer starts, click the [Next] button.
 #. Agree with the BSD license terms and click the [Next] button.
-#. Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like like **C:\Program Files\CUBRID PHP API**.
+#. Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like like **C:\\Program Files\\CUBRID PHP API**.
 
 #. Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see "Configuring the environment" below.
 
@@ -167,7 +167,7 @@ If you can not get the result like above, it is highly likely that your PHP and 
 #. Right-click [My Computer] and select [Properties]. The [System Properties] dialog box will appear.
 #. Go to [Advanced] tab and click on [Environment Variables].
 #. Select the variable called **Path** in the [System variables] box and click [Edit] button. You will notice that the value of that variable contains system paths separated by semi-colon.
-#. Add the paths for CUBRID and PHP in that variable. For example, if PHP is installed in **C:\Program Files\PHP** and also CUBRID in **C:\CUBRID\bin**, you will have to append (do not overwrite, just append) these values to the path like **C:\CUBRID\bin;C:\Program Files\PHP**.
+#. Add the paths for CUBRID and PHP in that variable. For example, if PHP is installed in **C:\\Program Files\\PHP** and also CUBRID in **C:\\CUBRID\\bin**, you will have to append (do not overwrite, just append) these values to the path like **C:\\CUBRID\\bin;C:\\Program Files\\PHP**.
 #. Click [OK] to save and close the dialog box.
 #. To confirm you have done everything correct, check the variable presence in the command prompt.
 
@@ -177,9 +177,9 @@ First, download CUBRID PHP/PDO driver of which versions match the versions of yo
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
-#. Copy this driver to the default PHP extensions directory (usually located at **C:\Program Files\PHP\ext**).
-#. Set your system environment. Check if the environment variable **PHPRC** is **C:\Program Files\PHP** and system variable path is added with **%PHPRC%** and **%PHPRC\ext**.
-#. Edit **php.ini** (**C:\Program Files\PHP\php.ini**) and add the following two command lines at the end of the **php.ini** file. ::
+#. Copy this driver to the default PHP extensions directory (usually located at **C:\\Program Files\\PHP\\ext**).
+#. Set your system environment. Check if the environment variable **PHPRC** is **C:\\Program Files\\PHP** and system variable path is added with **%PHPRC%** and **%PHPRC\\ext**.
+#. Edit **php.ini** (**C:\\Program Files\\PHP\\php.ini**) and add the following two command lines at the end of the **php.ini** file. ::
 
 	[PHP_CUBRID]
 	extension=php_cubrid.dll
@@ -313,7 +313,7 @@ In the [Property Pages] dialog box, select [General] under the [C/C++] tree node
 
 **Building CUBRID PHP driver with VC9 for PHP 5.3**
 
-#. Open the **php_cubrid.vcproj** file under the **\win** directory. In the [Solution Explorer] pane, right-click on the **php_cubrid** (project name) and select [Properties].
+#. Open the **php_cubrid.vcproj** file under the **\\win** directory. In the [Solution Explorer] pane, right-click on the **php_cubrid** (project name) and select [Properties].
 
    .. image:: /images/image59.jpg
 
@@ -325,7 +325,7 @@ In the [Property Pages] dialog box, select [General] under the [C/C++] tree node
 
 #. You need to make PHP recognize the **php_cubrid.dll** file as an extension. To do this:
 
-   *   Create a new folder named **cubrid** where PHP has been installed and copy the  **php_cubrid.dll** file to the **cubrid** folder. You can also put the **php_cubrid.dll** file in **%PHPRC%\ext** if this directory exists.
+   *   Create a new folder named **cubrid** where PHP has been installed and copy the  **php_cubrid.dll** file to the **cubrid** folder. You can also put the **php_cubrid.dll** file in **%PHPRC%\\ext** if this directory exists.
 
    *   In the php.ini file, enter the path of the **php_cubrid.dll** file as an extension_dir variable value and enter **php_cubrid.dll** as an extension value.
 
@@ -367,7 +367,7 @@ You can configure the default settings without using this SDK; however, there is
 
 #. You need to make PHP recognize the **php_cubrid.dll** file as an extension. To do this:
 
-   * Create a new folder named  **cubrid** where PHP is installed and copy **php_cubrid.dll** to the **cubrid** folder. You can also put **php_cubrid.dll** in **%PHPRC%\ext** if this directory exists.
+   * Create a new folder named  **cubrid** where PHP is installed and copy **php_cubrid.dll** to the **cubrid** folder. You can also put **php_cubrid.dll** in **%PHPRC%\\ext** if this directory exists.
 
    * Set the **extension_dir** variable and add CUBRID PHP driver to **extension** variable in the **php.ini** file.
 
@@ -427,7 +427,7 @@ There is no official Apache for 64-bit Windows either. Instead, you can use IIS 
 
 **Building CUBRID PHP dirver**
 
-#. Open the **php_cubrid.vcproj** file under the **\win** directory. In the [Solution Explorer] on the left, right-click on the **php_cubrid** project name and select [Properties].
+#. Open the **php_cubrid.vcproj** file under the **\\win** directory. In the [Solution Explorer] on the left, right-click on the **php_cubrid** project name and select [Properties].
 
 #. On the top right corner of the [Property Pages] dialog box, click [Configuration Manager].
 

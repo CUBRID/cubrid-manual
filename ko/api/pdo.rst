@@ -69,11 +69,11 @@ Windows
 
 PDO 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 **php_pdo_cubrid.dll** 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.
 
-#. 드라이버 파일을 기본 PHP 확장 디렉터리( **C:\Program Files\PHP\ext** )에 복사한다.
+#. 드라이버 파일을 기본 PHP 확장 디렉터리( **C:\\Program Files\\PHP\\ext** )에 복사한다.
 
-#. 시스템 환경 변수를 설정한다. 시스템 환경 변수 **PHPRC** 의 값으로 **C:\Program Files\PHP** 가 설정되고, **Path** 에 **%PHPRC%** 와 **%PHPRC\ext** 가 추가되었는지 확인한다.
+#. 시스템 환경 변수를 설정한다. 시스템 환경 변수 **PHPRC** 의 값으로 **C:\\Program Files\\PHP** 가 설정되고, **Path** 에 **%PHPRC%** 와 **%PHPRC\\ext** 가 추가되었는지 확인한다.
 
-#. **php.ini** ( **C:\Program Files\PHP\php.ini** ) 파일을 열어 끝에 다음 두 줄을 추가한다. ::
+#. **php.ini** ( **C:\\Program Files\\PHP\\php.ini** ) 파일을 열어 끝에 다음 두 줄을 추가한다. ::
 
 	[PHP_CUBRID]
 	extension=php_cubrid.dll

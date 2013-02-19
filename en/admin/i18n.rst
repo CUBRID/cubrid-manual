@@ -198,7 +198,7 @@ Files For Locale Setting
 	*   **$CUBRID/locales/data/unicodedata.txt** file: Text file containing information about each Unicode codepoint regarding casing, decomposition, normalization etc. CUBRID uses this to determine casing. For more information, see `http://www.ksu.ru/eng/departments/ktk/test/perl/lib/unicode/UCDFF301.html <http://www.ksu.ru/eng/departments/ktk/test/perl/lib/unicode/UCDFF301.html>`_.
 	*   **$CUBRID/locales/data/ldml** directory: XML files, name with the convention **cubrid**_*<locale_name>.* **xml**, containing locale information presented in human-readable XML format (LDML Locale Data Markup Language); a file for each of the supported language.
 	*   **$CUBRID/locales/data/codepages** directory: contains codepage console conversion for single byte codepages(8859-1.txt , 8859-15.txt , 8859-9.txt) and codepage console conversion for double byte codepages(CP1258.txt , CP923.txt, CP936.txt , CP949.txt).
-	*   **$CUBRID/bin/make_locale.sh** file or **%CUBRID%\bin\make_locale.bat** file: A script file used to generate shared libraries for locale data
+	*   **$CUBRID/bin/make_locale.sh** file or **%CUBRID%\\bin\\make_locale.bat** file: A script file used to generate shared libraries for locale data
 	*   **$CUBRID/lib** directory: Shared libraries for generated locales will be stored here.
 
 .. _locale-setting:
@@ -729,7 +729,7 @@ By default, all string data types inherit the default database collation and cha
 	Rules for conversion of values from one charset to another:
 
 	+------------------------+-----------------------------------------------------------+---------------------------------------------------------------+-------------+
-	| Source \ Destination   | ISO-8859-1                                                | UTF-8                                                         | EUC-KR      |
+	| Source \\ Destination  | ISO-8859-1                                                | UTF-8                                                         | EUC-KR      |
 	+========================+===========================================================+===============================================================+=============+
 	| **ISO-8859-1**         | No change                                                 | Byte conversion.                                              | Not allowed |
 	|                        |                                                           | The byte size increases but the character length is the same. |             |

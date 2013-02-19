@@ -79,7 +79,7 @@ To install CUBRID Python driver on Windows, first download CUBRID Python driver 
 
     http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect
 
-*   Extract the archive you downloaded. You should see a folder and two files in the folder. Copy these files to the **Lib** folder where your Python has been installed; by default, it is **C:\Program Files\Python\Lib**.
+*   Extract the archive you downloaded. You should see a folder and two files in the folder. Copy these files to the **Lib** folder where your Python has been installed; by default, it is **C:\\Program Files\\Python\\Lib**.
 
 Python Programming
 ==================

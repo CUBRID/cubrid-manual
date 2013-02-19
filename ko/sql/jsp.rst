@@ -43,13 +43,13 @@ CUBRID는 Windows 환경에서 **jvm.dll** 파일을 로딩하여 Java 가상 �
 
 * JDK 1.6 64비트 버전을 설치하고, 환경 변수를 설정한 예 ::
 
-	% set JAVA_HOME=C:\jdk1.6.0
-	% set PATH=%PATH%;%JAVA_HOME%\jre\bin\server
+	% set JAVA_HOME=C:\\jdk1.6.0
+	% set PATH=%PATH%;%JAVA_HOME%\\jre\\bin\\server
 
 * JDK 1.6 32비트 버전을 설치하고, 환경 변수를 설정한 예 ::
   
-	% set JAVA_HOME=C:\jdk1.6.0
-	% set PATH=%PATH%;%JAVA_HOME%\jre\bin\client
+	% set JAVA_HOME=C:\\jdk1.6.0
+	% set PATH=%PATH%;%JAVA_HOME%\\jre\\bin\\client
 
 SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사용하려면 해당 벤더의 설치에서 **jvm.dll** 파일의 경로를 **PATH** 에 추가해 주어야 한다.
 

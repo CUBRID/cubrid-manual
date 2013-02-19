@@ -75,11 +75,11 @@ http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=a
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
-#. Copy this driver to the default PHP extensions directory (usually located at **C:\Program Files\PHP\ext**).
+#. Copy this driver to the default PHP extensions directory (usually located at **C:\\Program Files\\PHP\\ext**).
 
-#. Set your system environment. Check if the environment variable **PHPRC** is **C:\Program Files\PHP** and system variable path is added with **%PHPRC%** and **%PHPRC\ext**.?
+#. Set your system environment. Check if the environment variable **PHPRC** is **C:\\Program Files\\PHP** and system variable path is added with **%PHPRC%** and **%PHPRC\\ext**.?
 
-#. Edit **php.ini** (**C:\Program Files\PHP\php.ini**) and add the following two lines at the end of the **php.ini** file. ::
+#. Edit **php.ini** (**C:\\Program Files\\PHP\\php.ini**) and add the following two lines at the end of the **php.ini** file. ::
 
 	[PHP_PDO_CUBRID]
 	extension=php_pdo_cubrid.dll

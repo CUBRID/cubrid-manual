@@ -5,7 +5,7 @@ ODBC Driver
 ODBC Overview
 =============
 
-CUBRID ODBC driver supports ODBC version 3.52. It also ODBC core and some parts of Level 1 and Level 2 API. Because CUBRID ODBC driver has been developed based on the ODBC Spec 3.x, backward compatibility is not completely ensured for programs written based on the ODBC Spec 2.x. Only 32-bit CUBRID is supported so you must install 32-bit CUBRID even on the 64-bit Windows environment. To verify the 32-bit CUBRID ODBC driver on the 64-bit Windows environment, execute **C:\Windows\SysWOW64\odbcad32.exe**.
+CUBRID ODBC driver supports ODBC version 3.52. It also ODBC core and some parts of Level 1 and Level 2 API. Because CUBRID ODBC driver has been developed based on the ODBC Spec 3.x, backward compatibility is not completely ensured for programs written based on the ODBC Spec 2.x. Only 32-bit CUBRID is supported so you must install 32-bit CUBRID even on the 64-bit Windows environment. To verify the 32-bit CUBRID ODBC driver on the 64-bit Windows environment, execute **C:\\Windows\\SysWOW64\\odbcad32.exe**.
 
 CUBRID ODBC driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 

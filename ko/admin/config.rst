@@ -1031,7 +1031,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **no_backslash_escapes**
 
-	**no_backslash_escapes** 은 이스케이프 문자로 백슬래시(\) 사용 여부에 관한 파라미터로서, 기본값은 **yes** 이다. 이 파라미터 값이 no이면 백슬래시(\)가 이스케이프 문자로 사용되며, yes이면 백슬래시는 일반 문자로 사용된다. 예를 들어, 이 값이 no 일 때 "\\n"은 개행(new line) 문자를 의미한다. 그러나 이 값이 yes이면 "\\n"은 "\\"과 "n" 두 개의 문자를 의미한다.
+	**no_backslash_escapes** 은 이스케이프 문자로 백슬래시(\\) 사용 여부에 관한 파라미터로서, 기본값은 **yes** 이다. 이 파라미터 값이 no이면 백슬래시(\\)가 이스케이프 문자로 사용되며, yes이면 백슬래시는 일반 문자로 사용된다. 예를 들어, 이 값이 no 일 때 "\\n"은 개행(new line) 문자를 의미한다. 그러나 이 값이 yes이면 "\\n"은 "\\"과 "n" 두 개의 문자를 의미한다.
 
 	백슬래시가 이스케이프 문자로 사용되는 경우에 대한 자세한 설명은 :ref:`escape-characters` 를 참고한다.
 
@@ -1082,7 +1082,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **require_like_escape_character**
 
-	**require_like_escape_character** 는 **LIKE** 절의 이스케이프 문자 사용 여부에 관한 파라미터로서, 기본값은 **no** 이다. 이 파라미터 값이 yes이고 **no_backslash_escapes** 가 no이면 **LIKE** 절의 문자열에서 백슬래시(\)가 이스케이프 문자로 사용되며, 그렇지 않으면 **LIKE… ESCAPE** 절을 사용하여 이스케이프 문자를 명시해야 한다. 자세한 내용은 :ref:`like-expr` 을 참고한다.
+	**require_like_escape_character** 는 **LIKE** 절의 이스케이프 문자 사용 여부에 관한 파라미터로서, 기본값은 **no** 이다. 이 파라미터 값이 yes이고 **no_backslash_escapes** 가 no이면 **LIKE** 절의 문자열에서 백슬래시(\\)가 이스케이프 문자로 사용되며, 그렇지 않으면 **LIKE… ESCAPE** 절을 사용하여 이스케이프 문자를 명시해야 한다. 자세한 내용은 :ref:`like-expr` 을 참고한다.
 
 **return_null_on_function_errors**
 

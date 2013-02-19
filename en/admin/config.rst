@@ -1017,7 +1017,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **no_backslash_escapes**
 
-	**no_backslash_escapes** is a parameter used to configure whether or not to use backslash (\) as an escape character, and the default value is **yes**. If a value for this parameter is set to no, backslash (\) will be used as an escape character; if it is set to yes, backslash (\) will be used as a normal character. For example, if ths value is set to no, "\\n" means a newline character. For details, see :ref:`escape-characters`.
+	**no_backslash_escapes** is a parameter used to configure whether or not to use backslash (\\) as an escape character, and the default value is **yes**. If a value for this parameter is set to no, backslash (\\) will be used as an escape character; if it is set to yes, backslash (\\) will be used as a normal character. For example, if ths value is set to no, "\\n" means a newline character. For details, see :ref:`escape-characters`.
 
 **only_full_group_by**
 
@@ -1065,7 +1065,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **require_like_escape_character**
 
-	**require_like_escape_character** is parameter used to configure whether or not to use an ESCAPE character in the **LIKE** clause, and the default value is **no**. If a value for this parameter is set to yes and a value for **no_backslash_escapes** is set to no, backslash (\) will be used as an ESCAPE character in the strings of the LIKE clause, otherwise you should specify an ESCAPE character by using the **LIKE ... ESCAPE** clause. For details, see :ref:`like-expr`.
+	**require_like_escape_character** is parameter used to configure whether or not to use an ESCAPE character in the **LIKE** clause, and the default value is **no**. If a value for this parameter is set to yes and a value for **no_backslash_escapes** is set to no, backslash (\\) will be used as an ESCAPE character in the strings of the LIKE clause, otherwise you should specify an ESCAPE character by using the **LIKE ... ESCAPE** clause. For details, see :ref:`like-expr`.
 
 **return_null_on_function_errors**
 

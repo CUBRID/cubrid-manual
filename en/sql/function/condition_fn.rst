@@ -592,7 +592,7 @@ A wild card string corresponding to any character or character string can be inc
 
 *   *expression* (left): Specifies the data type column of the character string. Pattern comparison, which is case-sensitive, starts from the first character of the column.
 *   *expression* (right): Enters the search word. A character string with a length of 0 or greater is required. Wild card characters (% or _) can be included as the pattern of the search word. The length of the character string is 0 or greater.
-*   **ESCAPE** *char* : **NULL**, alphabet, or number is allowed for *char*. If the string pattern of the search word includes "_" or "%" itself, an ESCAPE character must be specified. For example, if you want to search for the character string "10%" after specifying backslash (\) as the ESCAPE character, you must specify "10\%" for the expression (right). If you want to search for the character string "C:\", you can specify "C:\\" for the expression (right).
+*   **ESCAPE** *char* : **NULL**, alphabet, or number is allowed for *char*. If the string pattern of the search word includes "_" or "%" itself, an ESCAPE character must be specified. For example, if you want to search for the character string "10%" after specifying backslash (\\) as the ESCAPE character, you must specify "10\%" for the expression (right). If you want to search for the character string "C:\\", you can specify "C:\\" for the expression (right).
 
 **Remark**
 
@@ -641,7 +641,7 @@ The following list describes basic characteristics of regular expressions.
 *   "." matches any single character(including new-line and carriage-return).
 *   "[...]" matches one of characters within square brackets. For example, "[abc]" matches "a", "b", or "c". To represent a range of characters, use a dash (-). "[a-z]" matches any alphabet letter whereas "[0-9]" matches any single number.
 *   "*" matches 0 or more instances of the thing proceeding it. For example, "xabc*" matches "xab", "xabc", "xabcc", and "xabcxabc" etc. "[0-9][0-9]*" matches any numbers, and ".*" matches every string.
-*   To match special characters such as "\n", "\t", "\r", and "\\", some must be escaped with the backslash (\) by specifying the value of **no_backslash_escapes** (default: yes) to **no**. For details on **no_backslash_escapes**, see :ref:`escape-characters`.
+*   To match special characters such as "\\n", "\\t", "\\r", and "\\", some must be escaped with the backslash (\\) by specifying the value of **no_backslash_escapes** (default: yes) to **no**. For details on **no_backslash_escapes**, see :ref:`escape-characters`.
 
 The difference between **REGEXP** and **LIKE** are as follows:
 

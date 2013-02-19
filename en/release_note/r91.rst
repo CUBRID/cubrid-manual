@@ -22,7 +22,7 @@ SQL
 ---
 
 
-		 
+         
 다국어
 ------
 
@@ -38,18 +38,18 @@ Sharding
 [JDBC][CCI]Added the load balancing functionality (CUBRIDSUS-8675)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Added a functionality to connect an application to the main host and the hosts specified in althosts in a random order when althosts was added to the connection URL of CCI and JDBC. In the following example of a connection URL, this functionality is activated when the value of loadBalance is set to true.
+    Added a functionality to connect an application to the main host and the hosts specified in althosts in a random order when althosts was added to the connection URL of CCI and JDBC. In the following example of a connection URL, this functionality is activated when the value of loadBalance is set to true.
 
-	::
-	
-		jdbc:cubrid:host1:port1:demodb:::?althosts=host2:port2,host3:port3&loadBalance=true
+    ::
+    
+        jdbc:cubrid:host1:port1:demodb:::?althosts=host2:port2,host3:port3&loadBalance=true
 
 [CCI]Added a function to close Resultset (CUBRIDSUS-9269)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Different from the JDBC driver which provided two methods to close resultset and statement respectively, the CCI driver had one function, cci_close_req_handle, to close both. The cci_close_query_result function has been added to close resultset. When a new function is not called, the memory for resultset is occupied until the statement is closed. So, the memory usage may be increased.
+    Different from the JDBC driver which provided two methods to close resultset and statement respectively, the CCI driver had one function, cci_close_req_handle, to close both. The cci_close_query_result function has been added to close resultset. When a new function is not called, the memory for resultset is occupied until the statement is closed. So, the memory usage may be increased.
 
-	In the revised version, when the cci_close_req_handle function is called without calling the cci_close_query_result function, both resultset and the statement are closed like the previous version.
+    In the revised version, when the cci_close_req_handle function is called without calling the cci_close_query_result function, both resultset and the statement are closed like the previous version.
 
 설정
 ----
@@ -57,11 +57,11 @@ Sharding
 Set whether to execute the procedure to check if the database server process and the client process that connected to the database server process, such as the broker application server, have run normally or not(CUBRIDSUS-9308)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Added the check_peer_alive system parameter to set whether to execute the procedure to check if the database server process (cub_server) and the client process that connected to the database server process have run normally or not. The types of client processes are including the broker application server (cub_cas) process, the replication log reflection server (copylogdb), the replication log copy process (applylogdb), and the CSQL interpreter (csql).
+    Added the check_peer_alive system parameter to set whether to execute the procedure to check if the database server process (cub_server) and the client process that connected to the database server process have run normally or not. The types of client processes are including the broker application server (cub_cas) process, the replication log reflection server (copylogdb), the replication log copy process (applylogdb), and the CSQL interpreter (csql).
 
-	When a server process and a client process do not receive any response for a long time (e.g., 5 seconds or longer) while waiting for data via the network after they have been connected, they check if the opponent normally operates or not based on the configuration. If they decide that the opponent does not normally operate, they disconnect the connection by force.
+    When a server process and a client process do not receive any response for a long time (e.g., 5 seconds or longer) while waiting for data via the network after they have been connected, they check if the opponent normally operates or not based on the configuration. If they decide that the opponent does not normally operate, they disconnect the connection by force.
 
-	When the ECHO(7) port is blocked by the firewall configuration, the server process or the client process may mistake the opponent process as terminated. Set the parameter to none to avoid this problem.
+    When the ECHO(7) port is blocked by the firewall configuration, the server process or the client process may mistake the opponent process as terminated. Set the parameter to none to avoid this problem.
 
 
 Monitoring
@@ -70,53 +70,53 @@ Monitoring
 Improved to output the replication delay information (CUBRIDSUS-9525)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Improved to output the replication delay information when copying the transaction logs and outputting the transaction log reflection information by using the applylogdb command in the HA environment. The following example shows how to output the replication delay information:
+    Improved to output the replication delay information when copying the transaction logs and outputting the transaction log reflection information by using the applylogdb command in the HA environment. The following example shows how to output the replication delay information:
 
-	::
+    ::
 
-		% cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a -i 3 testdb
+        % cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a -i 3 testdb
 
-		...
+        ...
 
-		*** Delay in Copying Active Log *** 
-		Delayed log page count         : 4
-		Estimated Delay                : 0 second(s)
+        *** Delay in Copying Active Log *** 
+        Delayed log page count         : 4
+        Estimated Delay                : 0 second(s)
 
-		 *** Delay in Applying Copied Log *** 
-		Delayed log page count         : 1459
-		Estimated Delay                : 22 second(s)
+         *** Delay in Applying Copied Log *** 
+        Delayed log page count         : 1459
+        Estimated Delay                : 22 second(s)
 
 
 Added a functionality to output the query execution status of transactions(CUBRIDSUS-9588)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Added a functionality to output the query execution status of transactions to cubrid killtran with –q(--query-exec-info) option.
+    Added a functionality to output the query execution status of transactions to cubrid killtran with –q(--query-exec-info) option.
 
-	::
-	
-		% cubrid killtran -q testdb
-		Tran index  Process id  Program name  Query time   Tran timeWait for lock holder      SQL Text
-		-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-			  1(+)     22982   b1_cub_cas_1        0.00       0.00                    -1         *** empty ***
-			  2(+)     22983   b1_cub_cas_2        1.80       1.80                     1         update [ta] [ta] set [a]=5 wh
-		-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		The status of a query execution includes the following information:
+    ::
+    
+        % cubrid killtran -q testdb
+        Tran index  Process id  Program name  Query time   Tran timeWait for lock holder      SQL Text
+        -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+              1(+)     22982   b1_cub_cas_1        0.00       0.00                    -1         *** empty ***
+              2(+)     22983   b1_cub_cas_2        1.80       1.80                     1         update [ta] [ta] set [a]=5 wh
+        -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        The status of a query execution includes the following information:
 
-	* Tran index: Transaction index
-	* Process id: Client process ID
-	* Program name: Client program name
-	* Query time: Total execution time of a query being executed (unit: seconds)
-	* Tran time: Total execution time of the current transaction (unit: seconds)
-	* Wait for lock holder: The list of transactions which hold the lock when the current transaction is in lock waiting
-	* SQL Text: The query statement being executed (up to 30 characters)
+    * Tran index: Transaction index
+    * Process id: Client process ID
+    * Program name: Client program name
+    * Query time: Total execution time of a query being executed (unit: seconds)
+    * Tran time: Total execution time of the current transaction (unit: seconds)
+    * Wait for lock holder: The list of transactions which hold the lock when the current transaction is in lock waiting
+    * SQL Text: The query statement being executed (up to 30 characters)
 
 
 Added a function to log the query statements which exceeded the specified time and the query execution plan information to a log(CUBRIDSUS-6987)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	With the system parameter sql_trace_slow_msecs, added a function to log the query statements which exceeded the specified time and the query execution plan information to a log. When the value of the system parameter sql_trace_execution_plan is yes, the SQL statement, query execution plan, and the cubrid statdump information are recorded in the server error log file and the broker application server (CAS) log file. When the cubrid plandump is executed, the corresponding SQL statement and the query execution plan are output.
+    With the system parameter sql_trace_slow_msecs, added a function to log the query statements which exceeded the specified time and the query execution plan information to a log. When the value of the system parameter sql_trace_execution_plan is yes, the SQL statement, query execution plan, and the cubrid statdump information are recorded in the server error log file and the broker application server (CAS) log file. When the cubrid plandump is executed, the corresponding SQL statement and the query execution plan are output.
 
-	However, the corresponding information is recorded in the server error log file only when the value of the error_log_level parameter is NOTIFICATION.
+    However, the corresponding information is recorded in the server error log file only when the value of the error_log_level parameter is NOTIFICATION.
 
 
 
@@ -133,27 +133,27 @@ Globalization
 -------------
 
 
-		
+        
 드라이버
 --------
 
 [JDBC][CCI]Modified to commit whenever a function which executed several query statements in the array at once executes each query statement in the auto commit mode(CUBRIDSUS-6148)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	In the auto commit mode, when the cci_execute_array function and the cci_execute_batch function, and the Statement.executeBatch method and the PreparedStatement.executeBatch method of JDBC have processed several query statements in the array at once, commit has been executed after executing all query statements. It was fixed to commit whenever each query statement is executed.
+    In the auto commit mode, when the cci_execute_array function and the cci_execute_batch function, and the Statement.executeBatch method and the PreparedStatement.executeBatch method of JDBC have processed several query statements in the array at once, commit has been executed after executing all query statements. It was fixed to commit whenever each query statement is executed.
 
 [JDBC]Problem in which only the BIT type values were allowed as binding the values for the PreparedStatement object by using the setBoolean method in JDBC(CUBRIDSUS-9205)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	There was a problem in which only the BIT type values were allowed as binding the values for the PreparedStatement object by using the setBoolean method in JDBC. Now, the BIT type values are excluded but all numeric types such as SMALLINT, INTEGER, BIGINT, DECIMAL, REAL, DOUBLE, and MONETARY or all character types such as CHAR and VARCHAR can be bound.
+    There was a problem in which only the BIT type values were allowed as binding the values for the PreparedStatement object by using the setBoolean method in JDBC. Now, the BIT type values are excluded but all numeric types such as SMALLINT, INTEGER, BIGINT, DECIMAL, REAL, DOUBLE, and MONETARY or all character types such as CHAR and VARCHAR can be bound.
 
 
 [CCI]Modified the way to process an error for the array of the result of executing several queries at once in the CCI application(CUBRIDSUS-9364)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	When executing several queries at once in the CCI application, if an error has occurs from at least one query among the results of executing queries by using the cci_execute_array function, the cci_execute_batch function, the error code of the corresponding query was returned from 2008 R3.0 to 2008 R4.1. This problem has been fixed to return the number of the entire queries and check the error of each query by using the CCI_QUERY_RESULT_* macros from 2008 R4.3 version.
+    When executing several queries at once in the CCI application, if an error has occurs from at least one query among the results of executing queries by using the cci_execute_array function, the cci_execute_batch function, the error code of the corresponding query was returned from 2008 R3.0 to 2008 R4.1. This problem has been fixed to return the number of the entire queries and check the error of each query by using the CCI_QUERY_RESULT_* macros from 2008 R4.3 version.
 
-	In regard to this, the CCI_QUERY_RESULT_ERR_NO macro to check the error number of a specific query failed among the entire query results has been added, and the error identifiers (CAS error -1 and DBMS error -2) have been added to the return value of the CCI_QUERY_RESULT_RESULT macro.
+    In regard to this, the CCI_QUERY_RESULT_ERR_NO macro to check the error number of a specific query failed among the entire query results has been added, and the error identifiers (CAS error -1 and DBMS error -2) have been added to the return value of the CCI_QUERY_RESULT_RESULT macro.
 
 
 .. _changed-config91:
@@ -171,7 +171,7 @@ HA 기능
 기타
 ----
 
-		
+        
 개선 및 오류 수정 
 =================
 
@@ -182,11 +182,11 @@ HA 기능
 Added a function to limit the disk output volume to reduce the affect caused by adding the database volume on system operation (CUBRIDSUS-9521)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Added a function to limit the disk output volume to reduce the effect caused by adding the database volume on system operation. This function uses the --max_writesize-in-sec option to the addvoldb command and specifies the volume size used per second.
+    Added a function to limit the disk output volume to reduce the effect caused by adding the database volume on system operation. This function uses the --max_writesize-in-sec option to the addvoldb command and specifies the volume size used per second.
 
-	::
-	
-		% cubrid addvoldb -C --db-volume-size=2G --max-writesize-in-sec=1M testdb
+    ::
+    
+        % cubrid addvoldb -C --db-volume-size=2G --max-writesize-in-sec=1M testdb
 
 
 SQL
@@ -195,53 +195,53 @@ SQL
 
 Modified a problem in which the str_to_date function always returned the millisecond as 0 (CUBRIDSUS-9553)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	Modified a problem in which the STR_TO_DATE function always returned the millisecond as 0.
+    Modified a problem in which the STR_TO_DATE function always returned the millisecond as 0.
 
-	::
-		SELECT STR_TO_DATE('2012-10-31 23:49:29.123', '%Y-%m-%d %H:%i:%s.%f');
+    ::
+        SELECT STR_TO_DATE('2012-10-31 23:49:29.123', '%Y-%m-%d %H:%i:%s.%f');
 
 
 Fixed a Problem in which session operations, such as LAST_INSERT_ID function, Could continuously fail under network failure or HA failover(CUBRIDSUS-7549)(CUBRIDSUS-7669)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	Fixed a problem in which, although CASs were not supposed to share session ID for normal actions, when one of the CASs sharing the session ID due to a network failure or HA failover was terminated earlier than the others, session operation execution continuously failed in the applications connected to the remaining CASs. Session operations include: LAST_INSERT_ID functions, PREPARE statements, user session variables defined through SET, and ROW_COUNT() functions.
+    Fixed a problem in which, although CASs were not supposed to share session ID for normal actions, when one of the CASs sharing the session ID due to a network failure or HA failover was terminated earlier than the others, session operation execution continuously failed in the applications connected to the remaining CASs. Session operations include: LAST_INSERT_ID functions, PREPARE statements, user session variables defined through SET, and ROW_COUNT() functions.
 
 Fixed a problem in which a query result would be wrong when there is a DESC column in the multi-column index with OR conditions(CUBRIDSUS-9314)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Previously, a query result would be wrong when there was a DESC column in the multi-column index, and the OR condition was given for the part of keys. This problem has been fixed.
+    Previously, a query result would be wrong when there was a DESC column in the multi-column index, and the OR condition was given for the part of keys. This problem has been fixed.
 
-	::
-	
-		CREATE TABLE foo(col1 INT, col2 INT, col3 INT);
-		CREATE INDEX idx_foo ON foo(col1,col2 DESC, col3);
-		INSERT INTO foo VALUES(1,10,100);
-		INSERT INTO foo VALUES (1,11,100);
-		PREPARE s FROM 'SELECT col1,col2 FROM foo WHERE col1=? AND ((col2=? AND col3<?) OR col2>?);';
-		EXECUTE s USING 1, 10, 100, 10;
+    ::
+    
+        CREATE TABLE foo(col1 INT, col2 INT, col3 INT);
+        CREATE INDEX idx_foo ON foo(col1,col2 DESC, col3);
+        INSERT INTO foo VALUES(1,10,100);
+        INSERT INTO foo VALUES (1,11,100);
+        PREPARE s FROM 'SELECT col1,col2 FROM foo WHERE col1=? AND ((col2=? AND col3<?) OR col2>?);';
+        EXECUTE s USING 1, 10, 100, 10;
 
 Fixed a phenomenon in which a server was abnormally terminated when executing select for the view that included the ORDER BY clause (CUBRIDSUS-9331)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Fixed a phenomenon in which a server was abnormally terminated when executing SELECT for the view that included the ORDER BY clause, except the case that an asterisk (*) has been used for the SELECT list.
+    Fixed a phenomenon in which a server was abnormally terminated when executing SELECT for the view that included the ORDER BY clause, except the case that an asterisk (*) has been used for the SELECT list.
 
-	::
+    ::
 
-		CREATE VIEW au AS 
-		SELECT 
-			tbla.a_id AS a_id, 
-			tbla.u_id AS u_id, 
-			tbla.a_date AS a_date, 
-			tblu.u_name AS u_name, 
-		FROM 
-			tbla LEFT JOIN tblu ON tbla.u_id = tblu.u_id 
-		ORDER BY tbla.a_date ASC;
+        CREATE VIEW au AS 
+        SELECT 
+            tbla.a_id AS a_id, 
+            tbla.u_id AS u_id, 
+            tbla.a_date AS a_date, 
+            tblu.u_name AS u_name, 
+        FROM 
+            tbla LEFT JOIN tblu ON tbla.u_id = tblu.u_id 
+        ORDER BY tbla.a_date ASC;
 
-		SELECT u_name FROM au;
-		
+        SELECT u_name FROM au;
+        
 Fixed a Problem in Which Auto Commit Was Not Executed When Multiple Queries Have Been Executed at Once in the Auto Commit Mode (CUBRIDSUS-7606)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Fixed a problem in which auto commit was not executed when multiple queries have been executed at once in the auto commit mode, for example, when executing multiple queries as "CREATE TABLE a(col int);INSERT INTO a VALUES (1);".
+    Fixed a problem in which auto commit was not executed when multiple queries have been executed at once in the auto commit mode, for example, when executing multiple queries as "CREATE TABLE a(col int);INSERT INTO a VALUES (1);".
 
 
 다국어
@@ -251,16 +251,16 @@ Fixed a Problem in Which Auto Commit Was Not Executed When Multiple Queries Have
 Improved to apply optimization of the ORDER BY clause if there was no affect on the result order when the column type of the ORDER BY clause was converted (CUBRIDSUS-7418)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Improved to apply 'skip order by' (optimization of the ORDER BY clause that retrieved the value in the order sorted by index, not by executing sorting) if the result order before converting the column type of the ORDER BY clause was same with the result order after the conversion. 
+    Improved to apply 'skip order by' (optimization of the ORDER BY clause that retrieved the value in the order sorted by index, not by executing sorting) if the result order before converting the column type of the ORDER BY clause was same with the result order after the conversion. 
 
 Improved query optimization of the LIMIT clause (CUBRIDSUS-7661)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Improved the inefficiency of terminating a query after navigating the N+1st record when a query was executed by using LIMIT N.
+    Improved the inefficiency of terminating a query after navigating the N+1st record when a query was executed by using LIMIT N.
 
-	::
-	
-		SELECT * FROM t1 WHERE a > 0 AND b = 1 LIMIT 3;
+    ::
+    
+        SELECT * FROM t1 WHERE a > 0 AND b = 1 LIMIT 3;
 
 
 HA 기능 및 HA 데이터 복제
@@ -269,7 +269,7 @@ HA 기능 및 HA 데이터 복제
 
 Fixed a problem of repeating restart of the replication log reflection process of a master node when a slave node was changed to the maintenance mode (CUBRIDSUS-9380)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	Fixed a problem of repeating restart of the replication log reflection process of a master node when a slave node was changed to the maintenance mode in the HA environment.
+    Fixed a problem of repeating restart of the replication log reflection process of a master node when a slave node was changed to the maintenance mode in the HA environment.
 
 
 
@@ -279,9 +279,9 @@ HA 스키마 복제
 Fixed a phenomenon in which the ALTER ... CHANGE COLUMN statement has not been reflected to the slave node (CUBRIDSUS-9649)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Fixed a phenomenon in which the ALTER ... CHANGE COLUMN statement has not been reflected to the slave node. ::
-	
-		ALTER TABLE t1 CHANGE i2 i0 INTEGER FIRST;
+    Fixed a phenomenon in which the ALTER ... CHANGE COLUMN statement has not been reflected to the slave node. ::
+    
+        ALTER TABLE t1 CHANGE i2 i0 INTEGER FIRST;
 
 
 
@@ -293,15 +293,15 @@ Fixed a phenomenon in which the ALTER ... CHANGE COLUMN statement has not been r
 [JDBC]Fixed a phenomenon in which the executeBatch method has failed to be executed(CUBRIDSUS-9496)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Fixed a phenomenon in which the executeBatch method of JDBC has failed to be executed and the "Cannot communicate with the broker or received invalid packet" error message was returned.
+    Fixed a phenomenon in which the executeBatch method of JDBC has failed to be executed and the "Cannot communicate with the broker or received invalid packet" error message was returned.
 
 [CCI]Modified a phenomenon in which the statement has not been removed from the statement pool when an SQL was prepared twice (CUBRIDSUS-9397)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	When a SQL statement has been prepared twice on one DB connection, the second statement was not closed on the statement pool being used even if the statement was closed. This problem has been fixed.
+    When a SQL statement has been prepared twice on one DB connection, the second statement was not closed on the statement pool being used even if the statement was closed. This problem has been fixed.
 
 [CCI]Fixed a phenomenon in which the CCI application has been abnormally terminated when NULL has been entered as the pointer value in the function which used the T_CCI_ERROR structure pointer in the CCI application (CUBRIDSUS-9435)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	Fixed a phenomenon in which the CCI application has been abnormally terminated when NULL has been entered as the pointer value in the function which used the T_CCI_ERROR structure pointer in the CCI application such as cci_datasource_release.
+    Fixed a phenomenon in which the CCI application has been abnormally terminated when NULL has been entered as the pointer value in the function which used the T_CCI_ERROR structure pointer in the CCI application such as cci_datasource_release.
 
 
 [CCI] Fixed a phenomenon in which the CCI application for windows infinitely waited when there was no DB server to connect (CUBRIDSUS-9361)
@@ -314,18 +314,18 @@ Fixed a phenomenon in which the ALTER ... CHANGE COLUMN statement has not been r
 
 Changed the CSQL line-output setting to be configurable with the CSQL session command and the SQL execution time to be printed out by default (CUBRIDSUS-9537)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	Changed the CSQL --line-output setting to be configurable with the CSQL session command. ::
-	
-		csql> ;line-output on
-		csql> ;line-output off
-		
-	And, changed to output the query execution time as default.
+    Changed the CSQL --line-output setting to be configurable with the CSQL session command. ::
+    
+        csql> ;line-output on
+        csql> ;line-output off
+        
+    And, changed to output the query execution time as default.
 
 Fixed to allow additional connection by using --sysadm in the CSQL even when the maximum number of connection to server has been exceeded (CUBRIDSUS-9478)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	Fixed to allow only one connection with the system administrator mode (--sysadm) in the CSQL even when the maximum number of connection to server, which has been set by the value of the system parameter max_clients has been exceeded. ::
-	
-		csql -u dba --sysadm testdb
+    Fixed to allow only one connection with the system administrator mode (--sysadm) in the CSQL even when the maximum number of connection to server, which has been set by the value of the system parameter max_clients has been exceeded. ::
+    
+        csql -u dba --sysadm testdb
 
 Fixed a problem in which the broker is abnormally terminated as executing broker_log_top when ')' came in front of the string binding value as the first character (CUBRIDSUS-9245)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -334,12 +334,12 @@ Fixed a problem in which the broker is abnormally terminated as executing broker
 
 Fixed a problem in which backup could not be stopped when the checkpoint operation was being executed (CUBRIDSUS-9337)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	Fixed a problem in which backup could not be stopped by using INTERRUPT (Ctrl+C) when the checkpoint operation was being executed while executing the backup.
+    Fixed a problem in which backup could not be stopped by using INTERRUPT (Ctrl+C) when the checkpoint operation was being executed while executing the backup.
 
 Modified to cancel the checkpoint when it took 1 minute or more to execute termination of the database because of the checkpoint (CUBRIDSUS-6867)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	The database was set to be terminated by force when it took 1 minute or more to execute termination of the database by using the cubrid server stop command. When it took a long time to operate the checkpoint during shutdown, the database server was terminated by force, causing a long time to recover the database when restarting the database. This was fixed to cancel the checkpoint process and terminate the database when a timeout occurred during shutdown.
+    The database was set to be terminated by force when it took 1 minute or more to execute termination of the database by using the cubrid server stop command. When it took a long time to operate the checkpoint during shutdown, the database server was terminated by force, causing a long time to recover the database when restarting the database. This was fixed to cancel the checkpoint process and terminate the database when a timeout occurred during shutdown.
 
 
 
@@ -347,7 +347,7 @@ Modified to cancel the checkpoint when it took 1 minute or more to execute termi
 -----------
 Modified a phenomenon of outputting a warning message When DML is executed in the environment configured to output a warning(CUBRIDSUS-9458)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	Modified a phenomenon of outputting a warning message when normal INSERT/UPDATE/DELETE was executed in the environment configured to output a warning.
+    Modified a phenomenon of outputting a warning message when normal INSERT/UPDATE/DELETE was executed in the environment configured to output a warning.
 
 
 설정, 빌드 및 설치
@@ -358,16 +358,16 @@ Modified a phenomenon of outputting a warning message When DML is executed in th
 
 A problem in which an error log of the broker and the database server was not recreated when it was randomly deleted (CUBRIDSUS-8351)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	There was a problem in which an error log of the broker and the database server was not recreated when it was randomly deleted. It has been fixed and the deleted error log is recreated.
+    There was a problem in which an error log of the broker and the database server was not recreated when it was randomly deleted. It has been fixed and the deleted error log is recreated.
 
 Fixed a problem in which a broker was abnormally terminated when an application connected to the broker with a long broker name (CUBRIDSUS-9392)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	A broker was abnormally terminated when an application connected to the broker with a long broker name (32 characters or longer). The problem was fixed by allowing the length of a broker name to 63 characters and making the broker not to be started when the broker name was longer than 63 characters. 
+    A broker was abnormally terminated when an application connected to the broker with a long broker name (32 characters or longer). The problem was fixed by allowing the length of a broker name to 63 characters and making the broker not to be started when the broker name was longer than 63 characters. 
 
 
 Modified a problem of sending a wrong error instead of the error which has occurred in the db server when an INTERRUPT has occurred in the broker application server (CUBRIDSUS-9450)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	When an INTERRUPT occurred in the broker application server (CAS), the error which has occurred in the DB server was sent as another error. This problem has been fixed.
+    When an INTERRUPT occurred in the broker application server (CAS), the error which has occurred in the DB server was sent as another error. This problem has been fixed.
 
 주의 사항
 =========
@@ -383,156 +383,156 @@ Modified a problem of sending a wrong error instead of the error which has occur
 Since the 2008 R4.1 version, the default value of CCI_DEFAULT_AUTOCOMMIT has been ON(CUBRIDSUS-5879)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the auto commit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application's auto commit mode is suitable for this.
+    The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the auto commit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application's auto commit mode is suitable for this.
 
 From the 2008 R4.0 version, the options and parameters that use the unit of pages were changed to use the unit of volume size (CUBRIDSUS-5136)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (--db-volume-size, --log-volume-size, --db-page-size, --log-page-size), are used.
+    The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (--db-volume-size, --log-volume-size, --db-page-size, --log-page-size), are used.
 
-	To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (--db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
-	It is recommended to use the new system parameters in bytes because the page-unit system parameters will be removed. For details on the related system parameters, see the below.
+    To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (--db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
+    It is recommended to use the new system parameters in bytes because the page-unit system parameters will be removed. For details on the related system parameters, see the below.
 
 Be cautious when setting DB volume size if you are a user of a version before 2008 R4.0 Beta (CUBRIDSUS-4222)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	From the 2008 R4.0 Beta version, the default value of data page size and log page size in creating the database was changed from 4 KB to 16 KB. If you specify the database volume to the page count, the byte size of the volume may differ from your expectations. If you did not set any options, 100MB-database volume with 4KB-page size was created in the previous version. However, starting from the 2008 R4.0, 512MB-database volume with 16KB-page size is created.
+    From the 2008 R4.0 Beta version, the default value of data page size and log page size in creating the database was changed from 4 KB to 16 KB. If you specify the database volume to the page count, the byte size of the volume may differ from your expectations. If you did not set any options, 100MB-database volume with 4KB-page size was created in the previous version. However, starting from the 2008 R4.0, 512MB-database volume with 16KB-page size is created.
 
-	In addition, the minimum size of the available database volume is limited to 20 MB. Therefore, a database volume less than this size cannot be created.
+    In addition, the minimum size of the available database volume is limited to 20 MB. Therefore, a database volume less than this size cannot be created.
 
 The change of the default value of some system parameters of the versions before 2008 R4.0 (CUBRIDSUS-4095)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Starting from 2008 R4.0, the default values of some system parameters have been changed.
+    Starting from 2008 R4.0, the default values of some system parameters have been changed.
 
-	Now, the default value of max_clients, which specifies the number of concurrent connections allowed by a DB server, and the default value of index_unfill_factor that specifies the ratio of reserved space for future updates while creating an index page, have been changed. Furthermore, the default values of the system parameters in bytes now use more memory when they exceed the default values of the previous system parameters per page.
+    Now, the default value of max_clients, which specifies the number of concurrent connections allowed by a DB server, and the default value of index_unfill_factor that specifies the ratio of reserved space for future updates while creating an index page, have been changed. Furthermore, the default values of the system parameters in bytes now use more memory when they exceed the default values of the previous system parameters per page.
 
-	+-----------------------------+----------------------------+----------------------+--------------------+ 
-	| Previous System             | Added System               | 기존                 | Changed Default    | 
-	| Parameter                   | Parameter                  | 기본값               | Value (unit: byte) |
-	|                             |                            |                      |                    | 
-	+=============================+============================+======================+====================+ 
-	| max_clients                 |  -                         | 50                   | 100                | 
-	+-----------------------------+----------------------------+----------------------+--------------------+ 
-	| index_unfill_factor         |  -                         | 0.2                  | 0.05               | 
-	+-----------------------------+----------------------------+----------------------+--------------------+
-	| data_buffer_pages           | data_buffer_size           | 100M(page size=4K)   | 512M               | 
-	+-----------------------------+----------------------------+----------------------+--------------------+
-	| log_buffer_pages            | log_buffer_size            | 200K(page size=4K)   | 4M                 | 
-	|                             |                            |                      |                    |
-	+-----------------------------+----------------------------+----------------------+--------------------+
-	| sort_buffer_pages           | sort_buffer_size           | 64K(page size=4K)    | 2M                 | 
-	|                             |                            |                      |                    | 
-	+-----------------------------+----------------------------+----------------------+--------------------+
-	| index_scan_oid_buffer_pages | index_scan_oid_buffer_size | 16K(page size=4K)    | 64K                | 
-	|                             |                            |                      |                    | 
-	+-----------------------------+----------------------------+----------------------+--------------------+
+    +-----------------------------+----------------------------+----------------------+--------------------+ 
+    | Previous System             | Added System               | 기존                 | Changed Default    | 
+    | Parameter                   | Parameter                  | 기본값               | Value (unit: byte) |
+    |                             |                            |                      |                    | 
+    +=============================+============================+======================+====================+ 
+    | max_clients                 |  -                         | 50                   | 100                | 
+    +-----------------------------+----------------------------+----------------------+--------------------+ 
+    | index_unfill_factor         |  -                         | 0.2                  | 0.05               | 
+    +-----------------------------+----------------------------+----------------------+--------------------+
+    | data_buffer_pages           | data_buffer_size           | 100M(page size=4K)   | 512M               | 
+    +-----------------------------+----------------------------+----------------------+--------------------+
+    | log_buffer_pages            | log_buffer_size            | 200K(page size=4K)   | 4M                 | 
+    |                             |                            |                      |                    |
+    +-----------------------------+----------------------------+----------------------+--------------------+
+    | sort_buffer_pages           | sort_buffer_size           | 64K(page size=4K)    | 2M                 | 
+    |                             |                            |                      |                    | 
+    +-----------------------------+----------------------------+----------------------+--------------------+
+    | index_scan_oid_buffer_pages | index_scan_oid_buffer_size | 16K(page size=4K)    | 64K                | 
+    |                             |                            |                      |                    | 
+    +-----------------------------+----------------------------+----------------------+--------------------+
  
-	In addition, when a database is created using cubrid createdb, the minimum value of the data page size and the log page size has been changed from 1K to 4K.
+    In addition, when a database is created using cubrid createdb, the minimum value of the data page size and the log page size has been changed from 1K to 4K.
  
 Changed so that database services, utilities, and applications cannot be executed when the system parameter is incorrectly configured (CUBRIDSUS-5375)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	It has been changed so that now the related database services, utilities, and applications are not executed when configuring system parameters that are not defined in cubrid.conf or cubrid_ha.conf, when the value of system parameters exceed the threshold, or when the system parameters per page and the system parameters in bytes are used simultaneously.
+    It has been changed so that now the related database services, utilities, and applications are not executed when configuring system parameters that are not defined in cubrid.conf or cubrid_ha.conf, when the value of system parameters exceed the threshold, or when the system parameters per page and the system parameters in bytes are used simultaneously.
 
 Database fails to start if the data_buffer_size is configured with a value that exceeds 2G in CUBRID 32-bit version (CUBRIDSUS-5349)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	In the CUBRID 32-bit version, if the value of data_buffer_size exceeds 2G, the running database fails. Note that the configuration value cannot exceed 2G in the 32-bit version because of the OS limit.
+    In the CUBRID 32-bit version, if the value of data_buffer_size exceeds 2G, the running database fails. Note that the configuration value cannot exceed 2G in the 32-bit version because of the OS limit.
 
 Recommendations for controlling services with the CUBRID utility in Windows Vista and higher (CUBRIDSUS-4186)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	To control services using cubrid utility from Windows Vista and higher, it is recommended to start the command prompt window with administrative privileges.
+    To control services using cubrid utility from Windows Vista and higher, it is recommended to start the command prompt window with administrative privileges.
 
-	If you don't start the command prompt window with administrative privileges and use the cubrid utility, you can still execute it with administrative privileges through the User Account Control (UAC) dialog box, but you will not be able to verify the resulting messages.
+    If you don't start the command prompt window with administrative privileges and use the cubrid utility, you can still execute it with administrative privileges through the User Account Control (UAC) dialog box, but you will not be able to verify the resulting messages.
 
-	The procedures for starting the command prompt window as an administrator in Windows Vista and higher are as follows:
+    The procedures for starting the command prompt window as an administrator in Windows Vista and higher are as follows:
 
-	* Right-click [Start > All Programs > Accessories > Command Prompt].
-	* When [Execute as an administrator (A)] is selected, a dialog box to verify the privilege escalation is activated. Click “YES” to start with administrative privileges.
-	
+    * Right-click [Start > All Programs > Accessories > Command Prompt].
+    * When [Execute as an administrator (A)] is selected, a dialog box to verify the privilege escalation is activated. Click “YES” to start with administrative privileges.
+    
 A Manager Server process-related error occurs in the execution of the CUBRID source after its build (CUBRIDSUS-3553)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	
-	If users want to build the CUBRID source and install it themselves, they must build and install CUBRID and the CUBRID Manager respectively. If you check out only CUBRID source and run cubrid service start or cubrid manager start after build, the error "cubrid manager server is not installed" will occur.
+    
+    If users want to build the CUBRID source and install it themselves, they must build and install CUBRID and the CUBRID Manager respectively. If you check out only CUBRID source and run cubrid service start or cubrid manager start after build, the error "cubrid manager server is not installed" will occur.
 
 
 GLO Class which is used in 2008 R3.0 or before is not supported any longer (CUBRIDSUS-3826)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. (See CUBRID SQL Guide > Data Types > BLOC/CLOB Data Type in the manual).
+    CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. (See CUBRID SQL Guide > Data Types > BLOC/CLOB Data Type in the manual).
 
-	glo class users are recommended to carry out tasks as follows:
-	
-	* After saving GLO data as a file, modify to not use GLO in any application and DB schema.
-	* Implement DB migration by using the unloaddb and loaddb utilities.
-	* Perform tasks to load files into LOB data according to the modified application.
-	* Verify the application that you modified operates normally.
-	
-	For reference, if the cubrid loaddb utility loads a table that inherits the GLO class or has the GLO class type, it stops the data from loading by displaying an error message, "Error occurred during schema loading."
+    glo class users are recommended to carry out tasks as follows:
+    
+    * After saving GLO data as a file, modify to not use GLO in any application and DB schema.
+    * Implement DB migration by using the unloaddb and loaddb utilities.
+    * Perform tasks to load files into LOB data according to the modified application.
+    * Verify the application that you modified operates normally.
+    
+    For reference, if the cubrid loaddb utility loads a table that inherits the GLO class or has the GLO class type, it stops the data from loading by displaying an error message, "Error occurred during schema loading."
 
-	With the discontinued support of GLO class, the deleted functions for each interface are as follows:
-	
-	+------------+----------------------------+
-	| Interface  | Deleted Functions          |
-	+============+============================+
-	| CCI        | cci_glo_append_data        |
-	|            |                            |
-	|            | cci_glo_compress_data      |
-	|            |                            |
-	|            | cci_glo_data_size          |
-	|            |                            |
-	|            | cci_glo_delete_data        |
-	|            |                            |
-	|            | cci_glo_destroy_data       |
-	|            |                            |
-	|            | cci_glo_insert_data        |
-	|            |                            |
-	|            | cci_glo_load               |
-	|            |                            |
-	|            | cci_glo_new                |
-	|            |                            |
-	|            | cci_glo_read_data          |
-	|            |                            |
-	|            | cci_glo_save               |
-	|            |                            |
-	|            | cci_glo_truncate_data      |
-	|            |                            |
-	|            | cci_glo_write_data         |
-	|            |                            |
-	+------------+----------------------------+
-	| JDBC       | CUBRIDConnection.getNewGLO |
-	|            |                            |
-	|            | CUBRIDOID.loadGLO          |
-	|            |                            |
-	|            | CUBRIDOID.saveGLO          |
-	|            |                            |
-	+------------+----------------------------+
-	| PHP        | cubrid_new_glo             |
-	|            |                            |
-	|            | cubrid_save_to_glo         |
-	|            |                            |
-	|            | cubrid_load_from_glo       |
-	|            |                            |
-	|            | cubrid_send_glo            |
-	|            |                            |
-	+------------+----------------------------+
+    With the discontinued support of GLO class, the deleted functions for each interface are as follows:
+    
+    +------------+----------------------------+
+    | Interface  | Deleted Functions          |
+    +============+============================+
+    | CCI        | cci_glo_append_data        |
+    |            |                            |
+    |            | cci_glo_compress_data      |
+    |            |                            |
+    |            | cci_glo_data_size          |
+    |            |                            |
+    |            | cci_glo_delete_data        |
+    |            |                            |
+    |            | cci_glo_destroy_data       |
+    |            |                            |
+    |            | cci_glo_insert_data        |
+    |            |                            |
+    |            | cci_glo_load               |
+    |            |                            |
+    |            | cci_glo_new                |
+    |            |                            |
+    |            | cci_glo_read_data          |
+    |            |                            |
+    |            | cci_glo_save               |
+    |            |                            |
+    |            | cci_glo_truncate_data      |
+    |            |                            |
+    |            | cci_glo_write_data         |
+    |            |                            |
+    +------------+----------------------------+
+    | JDBC       | CUBRIDConnection.getNewGLO |
+    |            |                            |
+    |            | CUBRIDOID.loadGLO          |
+    |            |                            |
+    |            | CUBRIDOID.saveGLO          |
+    |            |                            |
+    +------------+----------------------------+
+    | PHP        | cubrid_new_glo             |
+    |            |                            |
+    |            | cubrid_save_to_glo         |
+    |            |                            |
+    |            | cubrid_load_from_glo       |
+    |            |                            |
+    |            | cubrid_send_glo            |
+    |            |                            |
+    +------------+----------------------------+
 
 Port configuration is required if the protocol between the master and server processes is changed, or if two versions are running at the same time (CUBRIDSUS-3564)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	Because the communication protocol between a master process (cub_master) and a server process (cub_server) has been changed, the master process of CUBRID 2008 R3.0 or later cannot communicate with the server process of a lower version, and the master process of a lower version cannot communicate with a server process of 2008 R3.0 version or later. Therefore, if you run two versions of CUBRID at the same time by adding a new version in an environment where a lower version has already been installed, you should modify the cubrid_port_id system parameter of cubrid.conf so that different ports are used by the different versions.
+    Because the communication protocol between a master process (cub_master) and a server process (cub_server) has been changed, the master process of CUBRID 2008 R3.0 or later cannot communicate with the server process of a lower version, and the master process of a lower version cannot communicate with a server process of 2008 R3.0 version or later. Therefore, if you run two versions of CUBRID at the same time by adding a new version in an environment where a lower version has already been installed, you should modify the cubrid_port_id system parameter of cubrid.conf so that different ports are used by the different versions.
 
 Specifying a question mark when entering connection information as a URL string in JDBC (CUBRIDSUS-3217)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	When entering connection information as a URL string in JDBC, property information was applied even if you did not enter a question mark (?) in the earlier version. However, you must specify a question mark depending on syntax in this CUBRID 2008 R3.0 version. If not, an error is displayed. In addition, you must specify colon (:) even if there is no username or password in the connection information. ::
+    When entering connection information as a URL string in JDBC, property information was applied even if you did not enter a question mark (?) in the earlier version. However, you must specify a question mark depending on syntax in this CUBRID 2008 R3.0 version. If not, an error is displayed. In addition, you must specify colon (:) even if there is no username or password in the connection information. ::
 
-		URL=jdbc:CUBRID:127.0.0.1:31000:db1:::althosts=127.0.0.2:31000,127.0.0.3:31000 – Error
-		URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?althosts=127.0.0.2:31000,127.0.0.3:31000 – Normal
+        URL=jdbc:CUBRID:127.0.0.1:31000:db1:::althosts=127.0.0.2:31000,127.0.0.3:31000 – Error
+        URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?althosts=127.0.0.2:31000,127.0.0.3:31000 – Normal
 
 Not allowed to include @ in a database name (CUBRIDSUS-2828)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	If @ is included in a database name, it can be interpreted that a host name has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.
+    If @ is included in a database name, it can be interpreted that a host name has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.

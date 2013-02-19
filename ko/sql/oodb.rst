@@ -52,14 +52,14 @@ INHERIT 절
 
 한 클래스의 서브클래스로 클래스를 생성하면 자동으로 클래스 계층 구조의 상위 클래스들의 모든 속성과 메서드를 상속받는다. 상속 시 발생할 수 있는 이름 충돌은 시스템에 의해 자동으로 처리되거나 사용자가 직접 해결할 수 있다. 사용자가 이름 충돌을 해결하고자 한다면 **CREATE CLASS** 구문에 **INHERIT** 구문을 추가하여 해결할 수 있다. ::
 
-	CREATE CLASS
-	.
-	.
-	.
-	INHERIT resolution [ {, resolution }_ ]
+    CREATE CLASS
+    .
+    .
+    .
+    INHERIT resolution [ {, resolution }_ ]
 
-	resolution:
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    resolution:
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 **INHERIT** 구문의 *attr_mthd_name* 위치에 상속하고 싶은 수퍼클래스의 속성이나 메서드 이름을 지정한다. **AS** 절을 사용하여 새로운 이름으로 상속받을 수도 있으므로, 다중 상속 구문에서 이름 충돌이 발생할 경우에서 충돌을 해결할 수 있다.
 
@@ -70,14 +70,14 @@ ADD SUPERCLASS 절
 
 클래스의 상속은 클래스에 수퍼클래스를 추가하여 확장할 수 있다. 이미 존재하는 클래스에 수퍼클래스를 추가하여 두 클래스 사이에 관계를 생성한다. 수퍼클래스를 추가한다는 것이 새로운 클래스를 추가한다는 것을 의미하지는 않는다. ::
 
-	ALTER CLASS
-	.
-	.
-	.
-	ADD SUPERCLASS [ user_name.]class_name [ { , [ user_name.]class_name }_ ]
-	[ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
-	resolution:
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    ALTER CLASS
+    .
+    .
+    .
+    ADD SUPERCLASS [ user_name.]class_name [ { , [ user_name.]class_name }_ ]
+    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+    resolution:
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 수퍼클래스를 추가할 클래스의 이름을 첫 번째 *class_name* 에 지정한다. 위 구문을 사용하여 수퍼클래스의 속성과 메서드를 상속할 수 있다.
 
@@ -87,22 +87,22 @@ ADD SUPERCLASS 절
 
 .. code-block:: sql
 
-	CREATE CLASS female_event UNDER event;
+    CREATE CLASS female_event UNDER event;
 
 DROP SUPERCLASS 절
 ==================
 
 클래스로부터 수퍼클래스를 삭제하는 것은 두 클래스 사이의 관계를 제거하는 것이다. 클래스에서 수퍼클래스를 삭제하면, 해당 클래스뿐만 아니라 그 클래스의 모든 서브클래스의 상속 관계 수정을 의미한다. ::
 
-	ALTER CLASS
-	.
-	.
-	.
-	DROP SUPERCLASS class_name [ { , class_name }_ ]
-	[ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
-	 
-	resolution:
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    ALTER CLASS
+    .
+    .
+    .
+    DROP SUPERCLASS class_name [ { , class_name }_ ]
+    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+     
+    resolution:
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 첫 번째 *class_name* 에는 수정할 클래스의 이름을 지정하고 두 번째 *class_name* 에는 삭제할 수퍼클래스의 이름을 지정한다. 수퍼클래스의 삭제에 의해 이름 충돌이 발생할 경우, 해결 방법은 :ref:`class-conflict-resolution` 을 참조한다.
 
@@ -110,13 +110,13 @@ DROP SUPERCLASS 절
 
 .. code-block:: sql
 
-	CREATE CLASS female_event UNDER event;
+    CREATE CLASS female_event UNDER event;
 
 다음 **ALTER** 구문은 *female_event* 클래스에서 수퍼클래스 *event* 를 삭제하는 예이다. *female_event* 클래스가 *event* 클래스로부터 상속받은 모든 속성은 더 이상 존재하지 않는다.
 
 .. code-block:: sql
 
-	ALTER CLASS female_event DROP SUPERCLASS event;
+    ALTER CLASS female_event DROP SUPERCLASS event;
 
 .. _class-conflict-resolution:
 
@@ -144,11 +144,11 @@ DROP SUPERCLASS 절
 
 다음에서 충돌과 관련하여 논의하고 있는 사항은 속성과 메서드에 공통적으로 적용된다. ::
 
-	ALTER [ class_type ] class_name alter_clause
-	[ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+    ALTER [ class_type ] class_name alter_clause
+    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
 
-	resolution:
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    resolution:
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 수퍼클래스 충돌
 ---------------
@@ -163,8 +163,8 @@ DROP SUPERCLASS 절
 
 .. code-block:: sql
 
-	CREATE CLASS soccer_stadium UNDER event, stadium
-	INHERIT name OF stadium, code OF stadium;
+    CREATE CLASS soccer_stadium UNDER event, stadium
+    INHERIT name OF stadium, code OF stadium;
 
 두 수퍼클래스 *event*, *stadium* 가 *name* 이라는 속성을 가지고 있고, *soccer_stadium* 클래스가 두 속성을 모두 상속받으려면, *stadium* 의 *name* 은 그대로 상속 받고 *event* 클래스의 *name* 은 **INHERIT** 의 **alias** 절을 사용하여 이름을 변경하여 상속받을 수 있다.
 
@@ -172,8 +172,8 @@ DROP SUPERCLASS 절
 
 .. code-block:: sql
 
-	ALTER CLASS soccer_stadium
-	INHERIT name OF event AS purpose;
+    ALTER CLASS soccer_stadium
+    INHERIT name OF event AS purpose;
 
 **수퍼클래스 삭제**
 
@@ -183,12 +183,12 @@ DROP SUPERCLASS 절
 
 .. code-block:: sql
 
-	CREATE CLASS seoul_1988_soccer UNDER game, participant, stadium
-	INHERIT nation_code OF participant, host_year OF participant;
-	
-	ALTER CLASS seoul_1988_soccer
-	DROP SUPERCLASS participant
-	INHERIT nation_code OF stadium;
+    CREATE CLASS seoul_1988_soccer UNDER game, participant, stadium
+    INHERIT nation_code OF participant, host_year OF participant;
+    
+    ALTER CLASS seoul_1988_soccer
+    DROP SUPERCLASS participant
+    INHERIT nation_code OF stadium;
 
 **호환되는 도메인**
 
@@ -213,8 +213,8 @@ DROP SUPERCLASS 절
 
 .. code-block:: sql
 
-	ALTER CLASS event
-	ADD ATTRIBUTE nation_code CHAR(3);
+    ALTER CLASS event
+    ADD ATTRIBUTE nation_code CHAR(3);
 
 만약 *event* 가 *soccer_stadium* 의 수퍼클래스에서 제거되면, *stadium* 클래스의 *cost* 속성이 자동으로 상속될 것이다. 
 
@@ -228,8 +228,8 @@ DROP SUPERCLASS 절
 
 .. code-block:: sql
 
-	create class E under B, C, D
-	inherit place of C;
+    create class E under B, C, D
+    inherit place of C;
 
 이 경우의 상속 계층 구조는 다음과 같다:
 
@@ -239,12 +239,12 @@ DROP SUPERCLASS 절
 
 .. code-block:: sql
 
-	ALTER CLASS E INHERIT game OF D;
-	ALTER CLASS C DROP game;
+    ALTER CLASS E INHERIT game OF D;
+    ALTER CLASS C DROP game;
 
 .. note::
 
-	한 수퍼클래스의 *game* 속성의 도메인이 *event* 이고, 또 다른 수퍼클래스의 속성이 *team_event* 인 경우, *team_event* 가 *event* 에 비해 더 상세하므로(상속 계층 구조상 더 하위에 존재하므로) *team_event* 를 도메인으로 가지는 속성이 상속될 것이다. 이 경우 사용자가 강제적으로 *event* 를 도메인으로 가지는 속성을 상속할 수는 없다. *event* 클래스는 *team_event* 보다 상속 계층 구조의 상위에 존재하기 때문이다.
+    한 수퍼클래스의 *game* 속성의 도메인이 *event* 이고, 또 다른 수퍼클래스의 속성이 *team_event* 인 경우, *team_event* 가 *event* 에 비해 더 상세하므로(상속 계층 구조상 더 하위에 존재하므로) *team_event* 를 도메인으로 가지는 속성이 상속될 것이다. 이 경우 사용자가 강제적으로 *event* 를 도메인으로 가지는 속성을 상속할 수는 없다. *event* 클래스는 *team_event* 보다 상속 계층 구조의 상위에 존재하기 때문이다.
 
 스키마 불변성
 -------------

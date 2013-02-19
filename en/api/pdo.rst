@@ -39,11 +39,11 @@ If **PECL** package has bee installed on your system, the installation of CUBRID
 
 #. Enter the following command to install the latest version of CUBRID PDO driver. ::
 
-	sudo pecl install pdo_cubrid
+    sudo pecl install pdo_cubrid
 
    If you need earlier versions of the driver, you can install exact versions as follows: ::
 
-	sudo pecl install pdo_cubrid-8.3.1.0003
+    sudo pecl install pdo_cubrid-8.3.1.0003
 
    During the installation, you will be prompted to enter **CUBRID base install dir autodetect :**. Just to make sure your installation goes smootyly, enter the full path to the directory where you have CUBRID installed. For example, if CUBRID has been installed at **/home/cubridtest/CUBRID**, then enter **/home/cubridtest/CUBRID**.
 
@@ -53,8 +53,8 @@ If **PECL** package has bee installed on your system, the installation of CUBRID
 
    *   If you are using earlier versions of Cent0S or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2** or **/etc/**) and add the following two command lines at the end of the file. ::
 
-	[CUBRID]
-	extension=pdo_cubrid.so
+    [CUBRID]
+    extension=pdo_cubrid.so
 
 #. Restart the web server to apply changes.
 
@@ -81,13 +81,13 @@ After you download the driver, you will see the **php_cubrid.dll** file for CUBR
 
 #. Edit **php.ini** (**C:\\Program Files\\PHP\\php.ini**) and add the following two lines at the end of the **php.ini** file. ::
 
-	[PHP_PDO_CUBRID]
-	extension=php_pdo_cubrid.dll
+    [PHP_PDO_CUBRID]
+    extension=php_pdo_cubrid.dll
 
    For CUBRID PHP driver, add command lines below. ::
 
-	[PHP_CUBRID]
-	extension = php_cubrid.dll
+    [PHP_CUBRID]
+    extension = php_cubrid.dll
 
 #. Restart your web server to apply changes.
 
@@ -115,7 +115,7 @@ The PDO_CUBRID data source name (DSN) consists of the following elements:
 
 **Example** ::
 
-	"cubrid:host=127.0.0.1;port=33000;dbname=demodb"
+    "cubrid:host=127.0.0.1;port=33000;dbname=demodb"
 
 Predefined Constants
 --------------------
@@ -177,29 +177,29 @@ If you want to verify that the CUBRID PDO driver is accessible, you can use the 
 
 .. code-block:: php
 
-	<?php
-	echo'PDO Drivers available:
-	';
-	foreach(PDO::getAvailableDrivers()as $driver)
-	{
-	if($driver =="cubrid"){
-	echo" - Driver: <b>".$driver.'</b>
-	';
-	}else{
-	echo" - Driver: ".$driver.'
-	';
-	}
-	}
-	?>
+    <?php
+    echo'PDO Drivers available:
+    ';
+    foreach(PDO::getAvailableDrivers()as $driver)
+    {
+    if($driver =="cubrid"){
+    echo" - Driver: <b>".$driver.'</b>
+    ';
+    }else{
+    echo" - Driver: ".$driver.'
+    ';
+    }
+    }
+    ?>
 
 This script will output all the currently installed PDO drivers: ::
 
-	PDO Drivers available:
-	- Driver: mysql
-	- Driver: pgsql
-	- Driver: sqlite
-	- Driver: sqlite2
-	- Driver: cubrid
+    PDO Drivers available:
+    - Driver: mysql
+    - Driver: pgsql
+    - Driver: sqlite
+    - Driver: sqlite2
+    - Driver: cubrid
 
 Connecting to CUBRID
 --------------------
@@ -210,32 +210,32 @@ Below is a simple PHP example script which performs a PDO connection to the CUBR
 
 .. code-block:: php
 
-	<?php
-	$database ="demodb";
-	$host ="localhost";
-	$port ="30000";//use default value
-	$username ="dba";
-	$password ="";
-	 
-	try{
-	//cubrid:host=localhost;port=33000;dbname=demodb
-	$conn_str ="cubrid:dbname=".$database.";host=".$host.";port=".$port;
-	echo"PDO connect string: ".$conn_str."
-	";
-	$db =new PDO($conn_str, $username, $password );
-	echo"PDO connection created ok!"."
-	";
-	$db = null;//disconnect
-	}catch(PDOException $e){
-	echo"Error: ".$e->getMessage()."
-	";
-	}
-	?>
+    <?php
+    $database ="demodb";
+    $host ="localhost";
+    $port ="30000";//use default value
+    $username ="dba";
+    $password ="";
+     
+    try{
+    //cubrid:host=localhost;port=33000;dbname=demodb
+    $conn_str ="cubrid:dbname=".$database.";host=".$host.";port=".$port;
+    echo"PDO connect string: ".$conn_str."
+    ";
+    $db =new PDO($conn_str, $username, $password );
+    echo"PDO connection created ok!"."
+    ";
+    $db = null;//disconnect
+    }catch(PDOException $e){
+    echo"Error: ".$e->getMessage()."
+    ";
+    }
+    ?>
 
 If connection succeeds, the output of this script is as follows: ::
 
-	PDO connect string: cubrid:dbname=demodb;host=localhost;port=30000
-	PDO connection created ok!
+    PDO connect string: cubrid:dbname=demodb;host=localhost;port=30000
+    PDO connection created ok!
 
 Executing a SELECT Statement
 ----------------------------
@@ -252,38 +252,38 @@ Note that when you use the `query <http://docs.php.net/manual/en/pdo.exec.php>`_
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	 
-	$sql ="SELECT * FROM code";
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	echo'
-	';
-	 
-	try{
-	foreach($db->query($sql)as $row){
-	echo $row['s_name'].' - '. $row['f_name'].'
-	';
-	}
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+     
+    $sql ="SELECT * FROM code";
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+    echo'
+    ';
+     
+    try{
+    foreach($db->query($sql)as $row){
+    echo $row['s_name'].' - '. $row['f_name'].'
+    ';
+    }
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+     
+    $db = null;//disconnect
+    ?>
 
 The output of the script is as follows: ::
 
-	Executing SQL: SELECT * FROM code
-	 
-	X - Mixed
-	W - Woman
-	M - Man
-	B - Bronze
-	S - Silver
-	G - Goldie
+    Executing SQL: SELECT * FROM code
+     
+    X - Mixed
+    W - Woman
+    M - Man
+    B - Bronze
+    S - Silver
+    G - Goldie
 
 Executing an UPDATE Statement
 -----------------------------
@@ -292,65 +292,65 @@ The following example shows how to execute an?UPDATE statement by using a prepar
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	 
-	$s_name ='X';
-	$f_name ='test';
-	$sql ="UPDATE code SET f_name=:f_name WHERE s_name=:s_name";
-	 
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	echo'
-	';
-	 
-	echo":f_name: <b>".$f_name.'</b>
-	';
-	echo'
-	';
-	echo":s_name: <b>".$s_name.'</b>
-	';
-	echo'
-	';
-	 
-	$qe = $db->prepare($sql);
-	$qe->execute(array(':s_name'=>$s_name,':f_name'=>$f_name));
-	 
-	$sql ="SELECT * FROM code";
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	echo'
-	';
-	 
-	try{
-	foreach($db->query($sql)as $row){
-	echo $row['s_name'].' - '. $row['f_name'].'
-	';
-	}
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+     
+    $s_name ='X';
+    $f_name ='test';
+    $sql ="UPDATE code SET f_name=:f_name WHERE s_name=:s_name";
+     
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+    echo'
+    ';
+     
+    echo":f_name: <b>".$f_name.'</b>
+    ';
+    echo'
+    ';
+    echo":s_name: <b>".$s_name.'</b>
+    ';
+    echo'
+    ';
+     
+    $qe = $db->prepare($sql);
+    $qe->execute(array(':s_name'=>$s_name,':f_name'=>$f_name));
+     
+    $sql ="SELECT * FROM code";
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+    echo'
+    ';
+     
+    try{
+    foreach($db->query($sql)as $row){
+    echo $row['s_name'].' - '. $row['f_name'].'
+    ';
+    }
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+     
+    $db = null;//disconnect
+    ?>
 
 The output of the script is as follows: ::
 
-	Executing SQL: UPDATE code SET f_name=:f_name WHERE s_name=:s_name
-	 
-	:f_name: test
-	 
-	:s_name: X
-	 
-	Executing SQL: SELECT * FROM code
-	 
-	X - test
-	W - Woman
-	M - Man
-	B - Bronze
-	S - Silver
-	G ? Goldie
+    Executing SQL: UPDATE code SET f_name=:f_name WHERE s_name=:s_name
+     
+    :f_name: test
+     
+    :s_name: X
+     
+    Executing SQL: SELECT * FROM code
+     
+    X - test
+    W - Woman
+    M - Man
+    B - Bronze
+    S - Silver
+    G ? Goldie
 
 Using prepare and bind
 ----------------------
@@ -364,92 +364,92 @@ The example script below shows how to retrieve data by using a prepared statemen
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	 
-	$sql ="SELECT * FROM code WHERE s_name NOT LIKE :s_name";
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	 
-	$s_name ='xyz';
-	echo":s_name: <b>".$s_name.'</b>
-	';
-	 
-	echo'
-	';
-	 
-	try{
-	$stmt = $db->prepare($sql);
-	 
-	$stmt->bindParam(':s_name', $s_name, PDO::PARAM_STR);
-	$stmt->execute();
-	 
-	$result = $stmt->fetchAll();
-	foreach($result as $row)
-	{
-	echo $row['s_name'].' - '. $row['f_name'].'
-	';
-	}
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	echo'
-	';
-	 
-	$sql ="SELECT * FROM code WHERE s_name NOT LIKE :s_name";
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	 
-	$s_name ='X';
-	echo":s_name: <b>".$s_name.'</b>
-	';
-	 
-	echo'
-	';
-	 
-	try{
-	$stmt = $db->prepare($sql);
-	 
-	$stmt->bindParam(':s_name', $s_name, PDO::PARAM_STR);
-	$stmt->execute();
-	 
-	$result = $stmt->fetchAll();
-	foreach($result as $row)
-	{
-	echo $row['s_name'].' - '. $row['f_name'].'
-	';
-	}
-	$stmt->closeCursor();
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	echo'
-	';
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+     
+    $sql ="SELECT * FROM code WHERE s_name NOT LIKE :s_name";
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+     
+    $s_name ='xyz';
+    echo":s_name: <b>".$s_name.'</b>
+    ';
+     
+    echo'
+    ';
+     
+    try{
+    $stmt = $db->prepare($sql);
+     
+    $stmt->bindParam(':s_name', $s_name, PDO::PARAM_STR);
+    $stmt->execute();
+     
+    $result = $stmt->fetchAll();
+    foreach($result as $row)
+    {
+    echo $row['s_name'].' - '. $row['f_name'].'
+    ';
+    }
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+    echo'
+    ';
+     
+    $sql ="SELECT * FROM code WHERE s_name NOT LIKE :s_name";
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+     
+    $s_name ='X';
+    echo":s_name: <b>".$s_name.'</b>
+    ';
+     
+    echo'
+    ';
+     
+    try{
+    $stmt = $db->prepare($sql);
+     
+    $stmt->bindParam(':s_name', $s_name, PDO::PARAM_STR);
+    $stmt->execute();
+     
+    $result = $stmt->fetchAll();
+    foreach($result as $row)
+    {
+    echo $row['s_name'].' - '. $row['f_name'].'
+    ';
+    }
+    $stmt->closeCursor();
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+    echo'
+    ';
+     
+    $db = null;//disconnect
+    ?>
 
 The output of the script is as follows: ::
 
-	Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
-	:s_name: xyz
-	 
-	X - Mixed
-	W - Woman
-	M - Man
-	B - Bronze
-	S - Silver
-	G - Goldie
-	 
-	Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
-	:s_name: X
-	 
-	W - Woman
-	M - Man
-	B - Bronze
-	S - Silver
-	G - Goldie
+    Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
+    :s_name: xyz
+     
+    X - Mixed
+    W - Woman
+    M - Man
+    B - Bronze
+    S - Silver
+    G - Goldie
+     
+    Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
+    :s_name: X
+     
+    W - Woman
+    M - Man
+    B - Bronze
+    S - Silver
+    G - Goldie
 
 Using the PDO::getAttribute() Function
 --------------------------------------
@@ -467,28 +467,28 @@ The following example script shows how to retrieve the current versions of clien
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	 
-	echo"Driver name: <b>".$db->getAttribute(PDO::ATTR_DRIVER_NAME)."</b>";
-	echo"
-	";
-	echo"Client version: <b>".$db->getAttribute(PDO::ATTR_CLIENT_VERSION)."</b>";
-	echo"
-	";
-	echo"Server version: <b>".$db->getAttribute(PDO::ATTR_SERVER_VERSION)."</b>";
-	echo"
-	";
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+     
+    echo"Driver name: <b>".$db->getAttribute(PDO::ATTR_DRIVER_NAME)."</b>";
+    echo"
+    ";
+    echo"Client version: <b>".$db->getAttribute(PDO::ATTR_CLIENT_VERSION)."</b>";
+    echo"
+    ";
+    echo"Server version: <b>".$db->getAttribute(PDO::ATTR_SERVER_VERSION)."</b>";
+    echo"
+    ";
+     
+    $db = null;//disconnect
+    ?>
 
 The output of the script is as follows: ::
 
-	Driver name: cubrid
-	Client version: 8.3.0
-	Server version: 8.3.0.0337
+    Driver name: cubrid
+    Client version: 8.3.0
+    Server version: 8.3.0.0337
 
 CUBRID PDO Extensions
 ---------------------
@@ -497,26 +497,26 @@ In CUBRID, the `PDO::cubrid_schema <http://kr.php.net/manual/en/pdo.cubrid-schem
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	try{
-	echo"Get PRIMARY KEY for table: <b>nation</b>:
-	 
-	";
-	$pk_list = $db->cubrid_schema(PDO::CUBRID_SCH_PRIMARY_KEY,"nation");
-	print_r($pk_list);
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+    try{
+    echo"Get PRIMARY KEY for table: <b>nation</b>:
+     
+    ";
+    $pk_list = $db->cubrid_schema(PDO::CUBRID_SCH_PRIMARY_KEY,"nation");
+    print_r($pk_list);
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+     
+    $db = null;//disconnect
+    ?>
 
 The output of the script is as follows: ::
 
-	Get PRIMARY KEY for table: nation:
-	Array ( [0] => Array ( [CLASS_NAME] => nation [ATTR_NAME] => code [KEY_SEQ] => 1 [KEY_NAME] => pk_nation_code ) )
+    Get PRIMARY KEY for table: nation:
+    Array ( [0] => Array ( [CLASS_NAME] => nation [ATTR_NAME] => code [KEY_SEQ] => 1 [KEY_NAME] => pk_nation_code ) )
 
 PDO API
 =======

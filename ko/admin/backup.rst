@@ -11,7 +11,7 @@
 
 **cubrid backupdb** 유틸리티는 모든 데이터베이스 페이지들, 제어 파일들, 데이터베이스를 백업 시와 일치된 상태로 복구하기 위해 필요한 로그 레코드들을 복사한다. ::
 
-	cubrid backupdb [options] database_name
+    cubrid backupdb [options] database_name
 
 다음은 **cubrid backupdb** 유틸리티와 결합할 수 있는 옵션을 정리한 표이다. 대소문자가 구분됨을 주의한다.
 
@@ -19,95 +19,95 @@
 
 .. option:: -D, --destination-path=PATH
 
-	지정된 디렉터리에 백업 파일이 저장되도록 하며, 현재 존재하는 디렉터리가 지정되어야 한다. 그렇지 않으면 지정한 이름의 백업 파일이 생성된다. **-D** 옵션이 지정되지 않으면 백업 파일은 해당 데이터베이스의 위치 정보를 저장하는 파일인 **databases.txt** 에 명시된 디렉터리에 생성된다. ::
-	
-		cubrid backupdb -D /home/cubrid/backup demodb
+    지정된 디렉터리에 백업 파일이 저장되도록 하며, 현재 존재하는 디렉터리가 지정되어야 한다. 그렇지 않으면 지정한 이름의 백업 파일이 생성된다. **-D** 옵션이 지정되지 않으면 백업 파일은 해당 데이터베이스의 위치 정보를 저장하는 파일인 **databases.txt** 에 명시된 디렉터리에 생성된다. ::
+    
+        cubrid backupdb -D /home/cubrid/backup demodb
 
-	**-D** 옵션을 이용하여 현재 디렉터리에 백업 파일이 저장되도록 한다. **-D** 옵션의 인수로 "."을 입력하면 현재 디렉터리가 지정된다. ::
+    **-D** 옵션을 이용하여 현재 디렉터리에 백업 파일이 저장되도록 한다. **-D** 옵션의 인수로 "."을 입력하면 현재 디렉터리가 지정된다. ::
 
-		cubrid backupdb -D . demodb
+        cubrid backupdb -D . demodb
 
 .. option:: -r, --remove-archive
 
-	활성 로그(active log)가 꽉 차면 활성 로그를 새로운 보관 로그 파일에 기록한다. 이때 백업을 수행하여 백업 볼륨이 생성되면, 백업 시점 이전의 보관 로그는 추후 복구 작업에 필요 없다. **-r** 옵션은 백업을 수행한 후에, 추후 복구 작업에 더 이상 사용되지 않을 보관 로그 파일을 제거하는 옵션이다. **-r** 옵션은 백업 시점 이전의 불필요한 보관 로그만 제거하므로 복구 작업에는 영향을 끼치지 않지만, 관리자가 백업 시점 이후의 보관 로그까지 제거하는 경우 전체 복구가 불가능할 수도 있다. 따라서 보관 로그를 제거할 때에는 추후 복구 작업에 필요한 것인지 반드시 검토해야 한다.
+    활성 로그(active log)가 꽉 차면 활성 로그를 새로운 보관 로그 파일에 기록한다. 이때 백업을 수행하여 백업 볼륨이 생성되면, 백업 시점 이전의 보관 로그는 추후 복구 작업에 필요 없다. **-r** 옵션은 백업을 수행한 후에, 추후 복구 작업에 더 이상 사용되지 않을 보관 로그 파일을 제거하는 옵션이다. **-r** 옵션은 백업 시점 이전의 불필요한 보관 로그만 제거하므로 복구 작업에는 영향을 끼치지 않지만, 관리자가 백업 시점 이후의 보관 로그까지 제거하는 경우 전체 복구가 불가능할 수도 있다. 따라서 보관 로그를 제거할 때에는 추후 복구 작업에 필요한 것인지 반드시 검토해야 한다.
 
-	**-r** 옵션을 사용하여 증분 백업(백업 수준 1 또는 2)을 수행하는 경우, 추후 데이터베이스의 정상 복구가 불가능할 수도 있으므로 **-r** 옵션은 전체 백업 수행 시에만 사용하는 것을 권장한다. ::
+    **-r** 옵션을 사용하여 증분 백업(백업 수준 1 또는 2)을 수행하는 경우, 추후 데이터베이스의 정상 복구가 불가능할 수도 있으므로 **-r** 옵션은 전체 백업 수행 시에만 사용하는 것을 권장한다. ::
 
-		cubrid backupdb -r demodb
+        cubrid backupdb -r demodb
 
 .. option:: -l, --level=LEVEL
 
-	지정된 백업 수준으로 증분 백업을 수행한다. **-l** 옵션이 지정되지 않으면 전체 백업이 수행된다. 백업 수준에 대한 자세한 내용은 :ref:`증분 백업 <incremental-backup>` 을 참조한다. ::
+    지정된 백업 수준으로 증분 백업을 수행한다. **-l** 옵션이 지정되지 않으면 전체 백업이 수행된다. 백업 수준에 대한 자세한 내용은 :ref:`증분 백업 <incremental-backup>` 을 참조한다. ::
 
-		cubrid backupdb -l 1 demodb
+        cubrid backupdb -l 1 demodb
 
 .. option:: -o, --output-file=FILE
 
-	대상 데이터베이스의 백업에 관한 진행 정보를 info_backup이라는 파일에 기록한다. ::
+    대상 데이터베이스의 백업에 관한 진행 정보를 info_backup이라는 파일에 기록한다. ::
 
-		cubrid backupdb -o info_backup demodb
+        cubrid backupdb -o info_backup demodb
 
-	다음은 info_backup 파일 내용의 예시로서, 스레드 개수, 압축 방법, 백업 시작 시간, 영구 볼륨의 개수, 백업 진행 정보, 백업 완료 시간 등의 정보를 확인할 수 있다. ::
+    다음은 info_backup 파일 내용의 예시로서, 스레드 개수, 압축 방법, 백업 시작 시간, 영구 볼륨의 개수, 백업 진행 정보, 백업 완료 시간 등의 정보를 확인할 수 있다. ::
 
-		[ Database(demodb) Full Backup start ]
-		- num-threads: 1
-		- compression method: NONE
-		- backup start time: Mon Jul 21 16:51:51 2008
-		- number of permanent volumes: 1
-		- backup progress status
-		-----------------------------------------------------------------------------
-		 volume name                  | # of pages | backup progress status    | done
-		-----------------------------------------------------------------------------
-		 demodb_vinf                  |          1 | ######################### | done
-		 demodb                       |      25000 | ######################### | done
-		 demodb_lginf                 |          1 | ######################### | done
-		 demodb_lgat                  |      25000 | ######################### | done
-		-----------------------------------------------------------------------------
-		# backup end time: Mon Jul 21 16:51:53 2008
-		[Database(demodb) Full Backup end]
+        [ Database(demodb) Full Backup start ]
+        - num-threads: 1
+        - compression method: NONE
+        - backup start time: Mon Jul 21 16:51:51 2008
+        - number of permanent volumes: 1
+        - backup progress status
+        -----------------------------------------------------------------------------
+         volume name                  | # of pages | backup progress status    | done
+        -----------------------------------------------------------------------------
+         demodb_vinf                  |          1 | ######################### | done
+         demodb                       |      25000 | ######################### | done
+         demodb_lginf                 |          1 | ######################### | done
+         demodb_lgat                  |      25000 | ######################### | done
+        -----------------------------------------------------------------------------
+        # backup end time: Mon Jul 21 16:51:53 2008
+        [Database(demodb) Full Backup end]
 
 
 .. option:: -S, --SA-mode
 
-	독립 모드, 즉 오프라인으로 백업을 수행한다. **-S** 옵션이 생략되면 클라이언트/서버 모드에서 백업이 수행된다. ::
+    독립 모드, 즉 오프라인으로 백업을 수행한다. **-S** 옵션이 생략되면 클라이언트/서버 모드에서 백업이 수행된다. ::
 
-		cubrid backupdb -S demodb
+        cubrid backupdb -S demodb
 
 .. option :: -C, --CS-mode
 
-	클라이언트/서버 모드에서 백업을 수행하며, demodb를 온라인 백업한다. **-C** 옵션이 생략되면 클라이언트/서버 모드에서 백업이 수행된다. ::
+    클라이언트/서버 모드에서 백업을 수행하며, demodb를 온라인 백업한다. **-C** 옵션이 생략되면 클라이언트/서버 모드에서 백업이 수행된다. ::
 
-		cubrid backupdb -C demodb
+        cubrid backupdb -C demodb
 
 .. option:: --no-check
 
-	대상 데이터베이스의 일관성을 체크하지 않고 백업을 수행한다. ::
+    대상 데이터베이스의 일관성을 체크하지 않고 백업을 수행한다. ::
 
-		cubrid backupdb --no-check demodb
+        cubrid backupdb --no-check demodb
 
 .. option:: -t, --thread-count=COUNT
 
-	관리자가 임의로 스레드의 개수를 지정함으로써 병렬 백업을 수행한다. **-t** 옵션의 인수를 지정하지 않더라도 시스템의 CPU 개수만큼 스레드를 자동 부여하여 병렬 백업을 수행한다. ::
+    관리자가 임의로 스레드의 개수를 지정함으로써 병렬 백업을 수행한다. **-t** 옵션의 인수를 지정하지 않더라도 시스템의 CPU 개수만큼 스레드를 자동 부여하여 병렬 백업을 수행한다. ::
 
-		cubrid backupdb -t 4 demodb
+        cubrid backupdb -t 4 demodb
 
 .. option:: -z, --compress
 
-	대상 데이터베이스를 압축하여 백업 파일에 저장한다. **-z** 옵션을 사용하면, 백업 파일의 크기 및 백업 시간을 단축시킬 수 있다. ::
+    대상 데이터베이스를 압축하여 백업 파일에 저장한다. **-z** 옵션을 사용하면, 백업 파일의 크기 및 백업 시간을 단축시킬 수 있다. ::
 
-		cubrid backupdb -z demodb
+        cubrid backupdb -z demodb
 
 .. option:: -e, --except-active-log
 
-	대상 데이터베이스의 활성 로그(active log)를 포함하지 않고 백업을 수행한다. **-e** 옵션을 이용하면 활성 로그를 생성하지 않고 백업이 이루어지므로 백업 시간을 단축시킬 수 있으나, 백업 시점 이후 최근 시점까지의 데이터를 복구할 수 없으므로 상당한 주의를 요한다. ::
+    대상 데이터베이스의 활성 로그(active log)를 포함하지 않고 백업을 수행한다. **-e** 옵션을 이용하면 활성 로그를 생성하지 않고 백업이 이루어지므로 백업 시간을 단축시킬 수 있으나, 백업 시점 이후 최근 시점까지의 데이터를 복구할 수 없으므로 상당한 주의를 요한다. ::
 
-		cubrid backupdb -e demodb
+        cubrid backupdb -e demodb
 
 .. option:: --sleep-msecs=NUMBER
 
-	대상 데이터베이스를 백업하는 도중 쉬는 시간을 설정한다. 단위는 밀리초이며, 기본값은 **0** 이다. 1MB의 파일을 읽을 때마다 설정한 시간만큼 쉰다. 백업 작업이 과도한 디스크 I/O를 유발하기 때문에, 운영 중인 서비스에 백업 작업으로 인한 영향을 줄이고자 할 때 이 옵션이 사용된다. ::
+    대상 데이터베이스를 백업하는 도중 쉬는 시간을 설정한다. 단위는 밀리초이며, 기본값은 **0** 이다. 1MB의 파일을 읽을 때마다 설정한 시간만큼 쉰다. 백업 작업이 과도한 디스크 I/O를 유발하기 때문에, 운영 중인 서비스에 백업 작업으로 인한 영향을 줄이고자 할 때 이 옵션이 사용된다. ::
 
-		cubrid backupdb --sleep-msecs=5 demodb
+        cubrid backupdb --sleep-msecs=5 demodb
 
 백업 정책 및 방식
 =================
@@ -200,18 +200,18 @@
 
 ::
 
-	******************************************************************
-	Backup destination is full, a new destination is required to continue:
-	Database Name: /local1/testing/demodb
-		 Volume Name: /dev/rst1
-			Unit Num: 1
-		Backup Level: 0 (FULL LEVEL)
-	Enter one of the following options:
-	Type
-	   -  0 to quit.
-	   -  1 to continue after the volume is mounted/loaded. (retry)
-	   -  2 to continue after changing the volume's directory or device.
-	******************************************************************
+    ******************************************************************
+    Backup destination is full, a new destination is required to continue:
+    Database Name: /local1/testing/demodb
+         Volume Name: /dev/rst1
+            Unit Num: 1
+        Backup Level: 0 (FULL LEVEL)
+    Enter one of the following options:
+    Type
+       -  0 to quit.
+       -  1 to continue after the volume is mounted/loaded. (retry)
+       -  2 to continue after changing the volume's directory or device.
+    ******************************************************************
 
 .. _managing-archive-logs:
 
@@ -236,11 +236,11 @@
 
 **cubrid restoredb** 유틸리티는 백업이 수행된 이후에 모든 보관 및 활동 로그들에 기록된 정보들을 이용하여 데이터베이스 백업으로부터 데이터베이스를 복구한다. ::
 
-	cubrid restoredb [options] database_name
+    cubrid restoredb [options] database_name
 
 어떠한 옵션도 지정되지 않은 경우 기본적으로 마지막 커밋 시점까지 데이터베이스가 복구된다. 만약, 마지막 커밋 시점까지 복구하기 위해 필요한 활성 로그/보관 로그 파일이 없다면 마지막 백업 시점까지만 부분 복구된다. ::
 
-		cubrid restoredb demodb
+        cubrid restoredb demodb
 
 다음은 **cubrid restoredb** 유틸리티와 결합할 수 있는 옵션을 정리한 표이다. 대소문자가 구분됨을 주의한다.
 
@@ -249,99 +249,99 @@
 .. option:: -d, --up-to-date=DATE
 
 
-	**-d** 옵션으로 지정된 날짜-시간까지 데이터베이스를 복구한다. 사용자는 dd-mm-yyyy:hh:mi:ss(예: 14-10-2008:14:10:00)의 형식으로 복구 시점을 직접 지정할 수 있다. 만약 지정한 복구 시점까지 복구하기 위해 필요한 활성 로그/보관 로그 파일이 없다면 마지막 백업 시점까지만 부분 복구된다. ::
+    **-d** 옵션으로 지정된 날짜-시간까지 데이터베이스를 복구한다. 사용자는 dd-mm-yyyy:hh:mi:ss(예: 14-10-2008:14:10:00)의 형식으로 복구 시점을 직접 지정할 수 있다. 만약 지정한 복구 시점까지 복구하기 위해 필요한 활성 로그/보관 로그 파일이 없다면 마지막 백업 시점까지만 부분 복구된다. ::
 
-		cubrid restoredb -d 14-10-2008:14:10:00 demodb
+        cubrid restoredb -d 14-10-2008:14:10:00 demodb
 
-	**backuptime** 이라는 키워드를 복구 시점으로 지정하면 데이터베이스를 마지막 백업이 수행된 시점까지 복구한다. ::
+    **backuptime** 이라는 키워드를 복구 시점으로 지정하면 데이터베이스를 마지막 백업이 수행된 시점까지 복구한다. ::
 
-		cubrid restoredb -d backuptime demodb
+        cubrid restoredb -d backuptime demodb
 
 .. option:: --list
 
-	대상 데이터베이스의 백업 파일에 관한 정보를 화면에 출력하며 복구는 수행하지 않는다. ::
+    대상 데이터베이스의 백업 파일에 관한 정보를 화면에 출력하며 복구는 수행하지 않는다. ::
 
-		cubrid restoredb --list demodb
+        cubrid restoredb --list demodb
 
-	다음은 **--list** 옵션에 의해 출력되는 백업 정보의 예로서, 복구 작업을 수행하기 이전에 대상 데이터베이스의 백업 파일이 최초 저장된 경로와 백업 수준을 검증할 수 있다. ::
+    다음은 **--list** 옵션에 의해 출력되는 백업 정보의 예로서, 복구 작업을 수행하기 이전에 대상 데이터베이스의 백업 파일이 최초 저장된 경로와 백업 수준을 검증할 수 있다. ::
 
-		*** BACKUP HEADER INFORMATION ***
-		Database Name: /local1/testing/demodb
-		 DB Creation Time: Mon Oct 1 17:27:40 2008
-				 Pagesize: 4096
-		Backup Level: 1 (INCREMENTAL LEVEL 1)
-				Start_lsa: 513|3688
-				 Last_lsa: 513|3688
-		Backup Time: Mon Oct 1 17:32:50 2008
-		 Backup Unit Num: 0
-		Release: 8.1.0
-			 Disk Version: 8
-		Backup Pagesize: 4096
-		Zip Method: 0 (NONE)
-				Zip Level: 0 (NONE)
-		Previous Backup level: 0 Time: Mon Oct 1 17:31:40 2008
-		(start_lsa was -1|-1)
-		Database Volume name: /local1/testing/demodb_vinf
-			 Volume Identifier: -5, Size: 308 bytes (1 pages)
-		Database Volume name: /local1/testing/demodb
-			 Volume Identifier: 0, Size: 2048000 bytes (500 pages)
-		Database Volume name: /local1/testing/demodb_lginf
-			 Volume Identifier: -4, Size: 165 bytes (1 pages)
-		Database Volume name: /local1/testing/demodb_bkvinf
-			 Volume Identifier: -3, Size: 132 bytes (1 pages)
-	 
-	**--list** 옵션을 이용하여 출력된 백업 정보를 확인하면, 백업 파일이 백업 수준 1로 생성되었고, 이전 백업 수준 0의 전체 백업이 수행된 시점을 확인할 수 있다. 따라서, 예시된 데이터베이스의 복구를 위해서는 백업 수준 0인 백업 파일과 백업 수준 1인 백업 파일이 준비되어야 한다.
+        *** BACKUP HEADER INFORMATION ***
+        Database Name: /local1/testing/demodb
+         DB Creation Time: Mon Oct 1 17:27:40 2008
+                 Pagesize: 4096
+        Backup Level: 1 (INCREMENTAL LEVEL 1)
+                Start_lsa: 513|3688
+                 Last_lsa: 513|3688
+        Backup Time: Mon Oct 1 17:32:50 2008
+         Backup Unit Num: 0
+        Release: 8.1.0
+             Disk Version: 8
+        Backup Pagesize: 4096
+        Zip Method: 0 (NONE)
+                Zip Level: 0 (NONE)
+        Previous Backup level: 0 Time: Mon Oct 1 17:31:40 2008
+        (start_lsa was -1|-1)
+        Database Volume name: /local1/testing/demodb_vinf
+             Volume Identifier: -5, Size: 308 bytes (1 pages)
+        Database Volume name: /local1/testing/demodb
+             Volume Identifier: 0, Size: 2048000 bytes (500 pages)
+        Database Volume name: /local1/testing/demodb_lginf
+             Volume Identifier: -4, Size: 165 bytes (1 pages)
+        Database Volume name: /local1/testing/demodb_bkvinf
+             Volume Identifier: -3, Size: 132 bytes (1 pages)
+     
+    **--list** 옵션을 이용하여 출력된 백업 정보를 확인하면, 백업 파일이 백업 수준 1로 생성되었고, 이전 백업 수준 0의 전체 백업이 수행된 시점을 확인할 수 있다. 따라서, 예시된 데이터베이스의 복구를 위해서는 백업 수준 0인 백업 파일과 백업 수준 1인 백업 파일이 준비되어야 한다.
 
 .. option:: -B, --backup-file-path=PATH
 
-	 백업 파일이 위치하는 디렉터리를 지정할 수 있다. 만약, 이 옵션이 지정되지 않으면 시스템은 데이터베이스 위치 정보 파일인 **databases.txt** 에 지정된 **log-path** 디렉터리에서 대상 데이터베이스를 백업했을 때 생성된 백업 정보 파일(*dbname* **_bkvinf**)을 검색하고, 백업 정보 파일에 지정된 디렉터리 경로에서 백업 파일을 찾는다. 그러나, 백업 정보 파일이 손상되거나 백업 파일의 위치 정보가 삭제된 경우라면 시스템이 백업 파일을 찾을 수 없으므로, 관리자가 **-B** 옵션을 이용하여 백업 파일이 위치하는 디렉터리 경로를 직접 지정해야 한다. ::
+     백업 파일이 위치하는 디렉터리를 지정할 수 있다. 만약, 이 옵션이 지정되지 않으면 시스템은 데이터베이스 위치 정보 파일인 **databases.txt** 에 지정된 **log-path** 디렉터리에서 대상 데이터베이스를 백업했을 때 생성된 백업 정보 파일(*dbname* **_bkvinf**)을 검색하고, 백업 정보 파일에 지정된 디렉터리 경로에서 백업 파일을 찾는다. 그러나, 백업 정보 파일이 손상되거나 백업 파일의 위치 정보가 삭제된 경우라면 시스템이 백업 파일을 찾을 수 없으므로, 관리자가 **-B** 옵션을 이용하여 백업 파일이 위치하는 디렉터리 경로를 직접 지정해야 한다. ::
 
-		cubrid restoredb -B /home/cubrid/backup demodb
+        cubrid restoredb -B /home/cubrid/backup demodb
 
-	데이터베이스의 백업 파일이 현재 디렉터리에 있는 경우, 관리자는 **-B** 옵션을 이용하여 백업 파일이 위치하는 디렉터리를 지정할 수 있다. ::
+    데이터베이스의 백업 파일이 현재 디렉터리에 있는 경우, 관리자는 **-B** 옵션을 이용하여 백업 파일이 위치하는 디렉터리를 지정할 수 있다. ::
 
-		cubrid restoredb -B . demodb
+        cubrid restoredb -B . demodb
 
 .. option:: -l, --level=LEVEL
 
-	대상 데이터베이스의 백업 수준(0, 1, 2)을 지정하여 복구를 수행한다. 백업 수준에 대한 자세한 내용은 :ref:`증분 백업 <incremental-backup>` 을 참조한다. ::
+    대상 데이터베이스의 백업 수준(0, 1, 2)을 지정하여 복구를 수행한다. 백업 수준에 대한 자세한 내용은 :ref:`증분 백업 <incremental-backup>` 을 참조한다. ::
 
-		cubrid restoredb -l 1 demodb
+        cubrid restoredb -l 1 demodb
 
 .. option:: -p, --partial-recovery
 
-	사용자 응답을 요청하지 않고 부분 복구를 수행하라는 명령이다. 백업 시점 이후에 기록된 활성 로그나 보관 로그가 완전하지 않을 때 기본적으로 시스템은 로그 파일이 필요하다는 것을 알리면서 실행 옵션을 입력하라는 요청 메시지를 출력하는데, **-p** 옵션을 이용하면 이러한 요청 메시지의 출력 없이 직접 부분 복구를 수행할 수 있다. 따라서, **-p** 옵션을 이용하여 복구를 수행하면 언제나 마지막 백업 시점까지 데이터가 복구된다. ::
+    사용자 응답을 요청하지 않고 부분 복구를 수행하라는 명령이다. 백업 시점 이후에 기록된 활성 로그나 보관 로그가 완전하지 않을 때 기본적으로 시스템은 로그 파일이 필요하다는 것을 알리면서 실행 옵션을 입력하라는 요청 메시지를 출력하는데, **-p** 옵션을 이용하면 이러한 요청 메시지의 출력 없이 직접 부분 복구를 수행할 수 있다. 따라서, **-p** 옵션을 이용하여 복구를 수행하면 언제나 마지막 백업 시점까지 데이터가 복구된다. ::
 
-		cubrid restoredb -p demodb
+        cubrid restoredb -p demodb
 
-	**-p** 옵션이 지정되지 않은 경우, 사용자에게 실행 옵션을 선택하라는 요청 메시지는 다음과 같다. ::
+    **-p** 옵션이 지정되지 않은 경우, 사용자에게 실행 옵션을 선택하라는 요청 메시지는 다음과 같다. ::
 
-		***********************************************************
-		Log Archive /home/cubrid/test/log/demodb_lgar002
-		 is needed to continue normal execution.
-		   Type
-		   -  0 to quit.
-		   -  1 to continue without present archive. (Partial recovery)
-		   -  2 to continue after the archive is mounted/loaded. 
-		   -  3 to continue after changing location/name of archive.
-		***********************************************************
+        ***********************************************************
+        Log Archive /home/cubrid/test/log/demodb_lgar002
+         is needed to continue normal execution.
+           Type
+           -  0 to quit.
+           -  1 to continue without present archive. (Partial recovery)
+           -  2 to continue after the archive is mounted/loaded. 
+           -  3 to continue after changing location/name of archive.
+        ***********************************************************
 
-	*   옵션 0 : 복구 작업을 더이상 진행하지 않을 경우, 0을 입력한다.
-	*   옵션 1 : 로그 파일 없이 부분 복구를 진행하려면, 1을 입력한다.
-	*   옵션 2 : 복구 작업을 진행하기 위해 관리자는 현재 장치에 보관 로그를 위치시킨 후 2를 입력한다.
-	*   옵션 3 : 복구 작업을 계속하기 위해 관리자는 로그 위치를 변경한 후 3을 입력한다.
+    *   옵션 0 : 복구 작업을 더이상 진행하지 않을 경우, 0을 입력한다.
+    *   옵션 1 : 로그 파일 없이 부분 복구를 진행하려면, 1을 입력한다.
+    *   옵션 2 : 복구 작업을 진행하기 위해 관리자는 현재 장치에 보관 로그를 위치시킨 후 2를 입력한다.
+    *   옵션 3 : 복구 작업을 계속하기 위해 관리자는 로그 위치를 변경한 후 3을 입력한다.
 
 .. option:: -o, --output-file=FILE
 
-	대상 데이터베이스의 복구에 관한 진행 정보를 info_restore라는 파일에 기록하는 명령이다. ::
+    대상 데이터베이스의 복구에 관한 진행 정보를 info_restore라는 파일에 기록하는 명령이다. ::
 
-		cubrid restoredb -o info_restore demodb
+        cubrid restoredb -o info_restore demodb
 
 .. option:: -u, --use-database-location-path
 
-	데이터베이스 위치 정보 파일(**databases.txt**)에 지정된 경로에서 대상 데이터베이스를 복구하는 구문이다. **-u** 옵션은 A 서버에서 백업을 수행하고 B 서버에서 백업 파일을 복구하고자 할 때 사용할 수 있는 유용한 옵션이다. ::
+    데이터베이스 위치 정보 파일(**databases.txt**)에 지정된 경로에서 대상 데이터베이스를 복구하는 구문이다. **-u** 옵션은 A 서버에서 백업을 수행하고 B 서버에서 백업 파일을 복구하고자 할 때 사용할 수 있는 유용한 옵션이다. ::
 
-		cubrid restoredb -u demodb
+        cubrid restoredb -u demodb
 
 
 
@@ -423,7 +423,7 @@
 
     *A* 서버에서 *demodb* 를 백업한다. 이전에 백업을 수행하였다면 이후 변경된 부분만 증분 백업을 수행할 수 있다. 백업 파일이 생성되는 디렉터리는 **-D** 옵션에 의해 지정하지 않으면, 기본적으로 로그 볼륨이 저장되는 위치에 생성된다. 다음은 권장되는 옵션을 사용한 백업 명령이며, 옵션에 관한 보다 자세한 내용은 :ref:`db-backup` 을 참조한다. ::
 
-		cubrid backupdb -z demodb
+        cubrid backupdb -z demodb
 
 #.  B 서버에서 데이터베이스 위치 정보 파일 편집
 
@@ -431,7 +431,7 @@
 
     데이터베이스 위치 정보는 한 라인으로 작성하고, 각 항목은 공백으로 구분한다. 한 라인은 [데이터베이스명] [데이터볼륨경로] [호스트명] [로그볼륨경로]의 형식으로 작성한다. 따라서 다음과 같이 *demodb* 의 위치 정보를 작성한다. ::
 
-		demodb /home/cubrid/data/demodb pmlinux /home/cubrid/data/demodb
+        demodb /home/cubrid/data/demodb pmlinux /home/cubrid/data/demodb
 
 #.  B 서버로 백업 파일 및 로그 파일 전송
 
@@ -440,12 +440,12 @@
 #.  B 서버에서 복구
 
     *B* 서버로 전송한 백업 파일, 백업 정보 파일, 활성 로그 파일, 보관 로그 파일이 있는 디렉터리에서 **cubrid restoredb** 유틸리티를 호출하여 데이터베이스 복구 작업을 수행한다. **-u** 옵션에 의해 **databases.txt** 에 지정된 디렉터리 경로에 *demodb* 가 복구된다. ::
-	
-		cubrid restoredb -u demodb
+    
+        cubrid restoredb -u demodb
 
     만약, 다른 위치에서 **cubrid restoredb** 유틸리티를 호출하려면, 다음과 같이 **-B** 옵션을 이용하여 백업 파일이 위치하는 디렉터리 경로를 지정해야 한다. ::
 
-		cubrid restoredb -u -B /home/cubrid/temp demodb
+        cubrid restoredb -u -B /home/cubrid/temp demodb
 
 #.  B 서버에서 복구한 데이터베이스를 다시 백업
 

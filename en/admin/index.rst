@@ -25,23 +25,23 @@ The service management utilities are as follows:
 
 *   Service utility : Operates and manages the master process.
 
-	*   cubrid service
+    *   cubrid service
 
 *   Server utility : Operates and manages the server process.
 
-	*   cubrid server
+    *   cubrid server
 
 *   Broker utility : Operates and manages the broker process and application server (CAS) process.
 
-	*   cubrid broker
+    *   cubrid broker
 
 *   Manager utility : Operates and manages the manager server process.
 
-	*   cubrid manager
+    *   cubrid manager
 
 *   HA utility : Operates and manages the HA-related processes.
 
-	*   cubrid heartbeat
+    *   cubrid heartbeat
 
 See `Registering Services <#admin_admin_service_conf_registe_6298>`_ for details.
 
@@ -49,61 +49,61 @@ The database management utilities are as follows:
 
 *   Creating database, adding volume, and deleting datbase
 
-	*   cubrid createdb
-	*   cubrid addvoldb
-	*   cubrid deletedb
+    *   cubrid createdb
+    *   cubrid addvoldb
+    *   cubrid deletedb
 
 *   Renaming database, altering host, copying database, and installing database
 
-	*   cubrid renamedb
-	*   cubrid alterdbhost
-	*   cubrid copydb
-	*   cubrid installdb
+    *   cubrid renamedb
+    *   cubrid alterdbhost
+    *   cubrid copydb
+    *   cubrid installdb
 
 *   Checking and compacting database space
 
-	*   cubrid spacedb
-	*   cubrid compactdb
+    *   cubrid spacedb
+    *   cubrid compactdb
 
 *   Checking query plan and optimizing database
 
-	*   cubrid plandump
-	*   cubrid optimizedb
-	*   cubrid statdump
+    *   cubrid plandump
+    *   cubrid optimizedb
+    *   cubrid statdump
 
 *   Checking database lock, checking transaction, killing transaction, and checking consistency
 
-	*   cubrid lockdb
-	*   cubrid tranlist
-	*   cubrid killtran
-	*   cubrid checkdb
+    *   cubrid lockdb
+    *   cubrid tranlist
+    *   cubrid killtran
+    *   cubrid checkdb
 
 *   Diagnosing database and dumping parameter
 
-	*   cubrid diagdb
-	*   cubrid paramdump
+    *   cubrid diagdb
+    *   cubrid paramdump
 
 *   Loading and unloading database
 
-	*   cubrid loaddb
-	*   cubrid unloaddb
+    *   cubrid loaddb
+    *   cubrid unloaddb
 
 *   Backing up and restoring database
 
-	*   cubrid backupdb
-	*   cubrid restoredb
+    *   cubrid backupdb
+    *   cubrid restoredb
 
 *   HA utilities
 
-	*   cubrid changemode
-	*   cubrid copylogdb
-	*   cubrid applylogdb
-	*   cubrid applyinfo
+    *   cubrid changemode
+    *   cubrid copylogdb
+    *   cubrid applylogdb
+    *   cubrid applyinfo
 
 *   Locale utilities
 
-	*   cubrid genlocale
-	*   cubrid dumplocale
+    *   cubrid genlocale
+    *   cubrid dumplocale
 
 See :ref:`cubrid-utilities` for details.
 
@@ -111,65 +111,65 @@ The following result is displayed if **cubrid** is entered in a prompt.
 
 ::
 
-	% cubrid
-	 
-	cubrid utility, version 9.0
-	usage: cubrid <utility-name> [args]
-	Type 'cubrid <utility-name>' for help on a specific utility.
-	 
-	Available service's utilities:
-		service
-		server
-		broker
-		manager
-		heartbeat
-	 
-	Available administrator's utilities:
-		addvoldb
-		alterdbhost
-		backupdb
-		checkdb
-		compactdb
-		copydb
-		createdb
-		deletedb
-		diagdb
-		installdb
-		tranlist
-		killtran
-		loaddb
-		lockdb
-		optimizedb
-		plandump
-		renamedb
-		restoredb
-		spacedb
-		unloaddb
-		paramdump
-		statdump
-		changemode
-		copylogdb
-		applylogdb
-		applyinfo
-	 
-	cubrid is a tool for DBMS.
+    % cubrid
+     
+    cubrid utility, version 9.0
+    usage: cubrid <utility-name> [args]
+    Type 'cubrid <utility-name>' for help on a specific utility.
+     
+    Available service's utilities:
+        service
+        server
+        broker
+        manager
+        heartbeat
+     
+    Available administrator's utilities:
+        addvoldb
+        alterdbhost
+        backupdb
+        checkdb
+        compactdb
+        copydb
+        createdb
+        deletedb
+        diagdb
+        installdb
+        tranlist
+        killtran
+        loaddb
+        lockdb
+        optimizedb
+        plandump
+        renamedb
+        restoredb
+        spacedb
+        unloaddb
+        paramdump
+        statdump
+        changemode
+        copylogdb
+        applylogdb
+        applyinfo
+     
+    cubrid is a tool for DBMS.
 
 .. _utility-on-windows:
 
 .. note::
 
-	If you want to control the service by using **cubrid** utility on Windows Vista or later, it is recommended that you run the command prompt with an administrator account. If you use **cubrid** utility without an administrator account, the result message is not displayed even though you can run it through the User Account Control (UAC) dialog.
+    If you want to control the service by using **cubrid** utility on Windows Vista or later, it is recommended that you run the command prompt with an administrator account. If you use **cubrid** utility without an administrator account, the result message is not displayed even though you can run it through the User Account Control (UAC) dialog.
 
-	To run the command prompt on Windows Vista or later with an administrator account, right-click [Start] > [All Programs] > [Accessories] > [Command Prompt] and select [Run as Administrator]. In the dialog verifying authorization, click [Yes]; then the command prompt runs with an administrator account.
+    To run the command prompt on Windows Vista or later with an administrator account, right-click [Start] > [All Programs] > [Accessories] > [Command Prompt] and select [Run as Administrator]. In the dialog verifying authorization, click [Yes]; then the command prompt runs with an administrator account.
 
 .. toctree::
-	:maxdepth: 2
+    :maxdepth: 2
 
-	control.rst
-	admin_utils.rst
-	migration.rst
-	backup.rst
-	i18n.rst
-	ha.rst
-	shard.rst
-	config.rst
+    control.rst
+    admin_utils.rst
+    migration.rst
+    backup.rst
+    i18n.rst
+    ha.rst
+    shard.rst
+    config.rst

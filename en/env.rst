@@ -24,17 +24,17 @@ CUBRID Environment Variables
 
 * Since the maximum length of the UNIX socket path is 108, when a path longer than 108 is entered in **$CUBRID_TMP**, an error is displayed. ::
 
-	$ export CUBRID_TMP=/home1/siwankim/cubrid=/tmp/123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+    $ export CUBRID_TMP=/home1/siwankim/cubrid=/tmp/123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
 
-	$ cubrid server start apricot
+    $ cubrid server start apricot
 
-	The $CUBRID_TMP is too long. (/home1/siwankim/cubrid=/tmp/123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789)
+    The $CUBRID_TMP is too long. (/home1/siwankim/cubrid=/tmp/123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789)
 
 * When the relative path is entered, an error is displayed. ::
 
-	$ export CUBRID_TMP=./var $ cubrid server start apricot
+    $ export CUBRID_TMP=./var $ cubrid server start apricot
 
-	The $CUBRID_TMP should be an absolute path. (./var)
+    The $CUBRID_TMP should be an absolute path. (./var)
 
 **CUBRID_TMP** can be used to avoid the following problems that can occur at the default path of the UNIX domain socket that CUBRID uses.
 
@@ -45,14 +45,14 @@ The above mentioned environment variables are set when the CUBRID is installed. 
 
 For Linux : ::
 
-	% printenv CUBRID
-	% printenv CUBRID_DATABASES
-	% printenv CUBRID_CHARSET
-	% printenv CUBRID TMP
+    % printenv CUBRID
+    % printenv CUBRID_DATABASES
+    % printenv CUBRID_CHARSET
+    % printenv CUBRID TMP
 
 In Windows : ::
 
-	C:\> set CUBRID
+    C:\> set CUBRID
 
 OS Environment and Java Environment Variables
 ---------------------------------------------
@@ -79,29 +79,29 @@ If the CUBRID system has been installed on Windows, then the installation progra
 If the CUBRID system has been installed on Linux, the installation program automatically creates the **.cubrid.sh** or **.cubrid.csh** file and makes configurations so that the files are automatically called from the installation account’s
 shell log-in script. The following is the contents of . **cubrid.sh** environment variable configuration that was created in an environment that uses sh, bash, etc. ::
 
-	CUBRID=/home1/cub_user/CUBRID
-	CUBRID_DATABASES=/home1/cub_user/CUBRID/databases
-	CUBRID_CHARSET=en_US
-	ld_lib_path=`printenv LD_LIBRARY_PATH`
-	
-	if [ "$ld_lib_path" = "" ]
-	then
-	    LD_LIBRARY_PATH=$CUBRID/lib
-	else
-	    LD_LIBRARY_PATH=$CUBRID/lib:$LD_LIBRARY_PATH
-	fi
-	
-	SHLIB_PATH=$LD_LIBRARY_PATH
-	LIBPATH=$LD_LIBRARY_PATH
-	PATH=$CUBRID/bin:$CUBRID/cubridmanager:$PATH
-	
-	export CUBRID
-	export CUBRID_DATABASES
-	export CUBRID_CHARSET
-	export LD_LIBRARY_PATH
-	export SHLIB_PATH
-	export LIBPATH
-	export PATH
+    CUBRID=/home1/cub_user/CUBRID
+    CUBRID_DATABASES=/home1/cub_user/CUBRID/databases
+    CUBRID_CHARSET=en_US
+    ld_lib_path=`printenv LD_LIBRARY_PATH`
+    
+    if [ "$ld_lib_path" = "" ]
+    then
+        LD_LIBRARY_PATH=$CUBRID/lib
+    else
+        LD_LIBRARY_PATH=$CUBRID/lib:$LD_LIBRARY_PATH
+    fi
+    
+    SHLIB_PATH=$LD_LIBRARY_PATH
+    LIBPATH=$LD_LIBRARY_PATH
+    PATH=$CUBRID/bin:$CUBRID/cubridmanager:$PATH
+    
+    export CUBRID
+    export CUBRID_DATABASES
+    export CUBRID_CHARSET
+    export LD_LIBRARY_PATH
+    export SHLIB_PATH
+    export LIBPATH
+    export PATH
 
 .. _language-setting:
 
@@ -136,30 +136,30 @@ Configure environment variables and language, and then start the CUBRID service.
 
 The following shell command can be used to start the CUBRID service and the *demodb* included in the installation package. ::
 
-	% cubrid service start
+    % cubrid service start
 
-	@ cubrid master start
-	++ cubrid master start: success
+    @ cubrid master start
+    ++ cubrid master start: success
 
-	@ cubrid broker start
-	++ cubrid broker start: success
+    @ cubrid broker start
+    ++ cubrid broker start: success
 
-	@ cubrid manager server start
-	++ cubrid manager server start: success
+    @ cubrid manager server start
+    ++ cubrid manager server start: success
 
-	% cubrid server start demodb
+    % cubrid server start demodb
 
-	@ cubrid server start: demodb
+    @ cubrid server start: demodb
 
-	This may take a long time depending on the amount of recovery works to do.
+    This may take a long time depending on the amount of recovery works to do.
 
-	CUBRID 9.0
+    CUBRID 9.0
 
-	++ cubrid server start: success
+    ++ cubrid server start: success
 
-	@ cubrid server status
+    @ cubrid server status
 
-	Server demodb (rel 9.0, pid 31322)
+    Server demodb (rel 9.0, pid 31322)
 
 **CUBRIDService or CUBRID Service Tray**
 
@@ -167,7 +167,7 @@ On the Windows environment, you can start or stop a service as follows:
 
 *   Go to [Control Panel] > [Performance and Maintenance] > [Administrator Tools] > [Services] and select the CUBRIDService to start or stop the service.
 
-	.. image:: /images/image5.png
+    .. image:: /images/image5.png
 
 *   In the system tray, right-click the CUBRID Service Tray. To start CUBRID, select [Service Start]; to stop it, select [Service Stop]. Selecting [Service Start] or [Service Stop] menu would be like executing cubrid service start or cubrid service stop in a command prompt; this command runs or stops the processes configured in service parameters of cubrid.conf.
 
@@ -175,21 +175,21 @@ On the Windows environment, you can start or stop a service as follows:
 
 .. note::
 
-	An administrator level (SYSTEM) authorization is required to start/stop CUBRID processes through the CUBRID Service tray; a login level user authorization is required to start/stop them with shell commands. If you cannot control the CUBRID processes on the Windows Vista or later version environment, select [Execute as an administrator (A)] in the [Start] > [All Programs] > [Accessories] > [Command Prompt]) or execute it by using the CUBRID Service Tray. When all processes of CUBRID Server stops, an icon on the CUBRID Service tray turns out gray.
+    An administrator level (SYSTEM) authorization is required to start/stop CUBRID processes through the CUBRID Service tray; a login level user authorization is required to start/stop them with shell commands. If you cannot control the CUBRID processes on the Windows Vista or later version environment, select [Execute as an administrator (A)] in the [Start] > [All Programs] > [Accessories] > [Command Prompt]) or execute it by using the CUBRID Service Tray. When all processes of CUBRID Server stops, an icon on the CUBRID Service tray turns out gray.
 
 **Creating Databases**
 
 You can create databases by using the **cubrid createdb** utility and execute it where database volumes and log volumes are located. If you do not specify additional options such as **--db-volume-size** or **--log-volume-size**, 1.5 GB volume files are created by default (generic volume is set to 512 MB, active log is set to 512 MB, and background archive log is set to 512 MB). ::
 
-	% cd testdb
-	% cubrid createdb testdb
-	% ls -l
+    % cd testdb
+    % cubrid createdb testdb
+    % ls -l
 
-	-rw------- 1 cubrid dbms 536870912 Jan 11 15:04 testdb
-	-rw------- 1 cubrid dbms 536870912 Jan 11 15:04 testdb_lgar_t
-	-rw------- 1 cubrid dbms 536870912 Jan 11 15:04 testdb_lgat
-	-rw------- 1 cubrid dbms       176 Jan 11 15:04 testdb_lginf
-	-rw------- 1 cubrid dbms       183 Jan 11 15:04 testdb_vinf
+    -rw------- 1 cubrid dbms 536870912 Jan 11 15:04 testdb
+    -rw------- 1 cubrid dbms 536870912 Jan 11 15:04 testdb_lgar_t
+    -rw------- 1 cubrid dbms 536870912 Jan 11 15:04 testdb_lgat
+    -rw------- 1 cubrid dbms       176 Jan 11 15:04 testdb_lginf
+    -rw------- 1 cubrid dbms       183 Jan 11 15:04 testdb_vinf
 
 In the above, *testdb* represents a generic volume file, testdb_lgar_t represents a background archive log file, testdb_lgat represents an active log file, testdb_lginf reoresents a log information file, and testdb_vinf represents a volume information file.
 
@@ -199,15 +199,15 @@ For details on volumes, see :ref:`database-volume-structure` . For details on cr
 
 You can start a database process by using the **cubrid server** utility. ::
 
-	% cubrid server start testdb
+    % cubrid server start testdb
 
 To have *testdb* started upon startup of the CUBRID service (cubrid service start), configure *testdb* in the **server**  parameter of the **cubrid.conf**  file. ::
 
-	% vi cubrid.conf
+    % vi cubrid.conf
 
-	[service]
+    [service]
 
-	service=server,broker,manager
-	server=testdb
+    service=server,broker,manager
+    server=testdb
 
-	...
+    ...

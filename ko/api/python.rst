@@ -33,11 +33,11 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
    예를 들어 Fedora 17에 CUBRID 9.0을 설치한 경우에 해당하는 명령어는 다음과 같다. ::
 
-	rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
+    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
 
 #. 다음 명령어를 실행하여 CUBRID Python 드라이버를 설치한다. ::
 
-	yum install python-cubrid
+    yum install python-cubrid
 
 **소스코드로 설치(Linux)**
 
@@ -51,19 +51,19 @@ http://www.cubrid.org/wiki_apis/entry/install-python-development-package
 
 #. 다음 명령어를 실행하여 원하는 위치에 다운로드한 파일의 압축을 해제한다. ::
 
-	tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
+    tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
 
 #. 압축을 해제한 디렉터리로 이동한다. ::
 
-	cd cubrid-python-src
+    cd cubrid-python-src
 
 #. 드라이버를 빌드한다. 이 단계와 다음 단계는 루트 사용자 계정으로 실행해야 한다. ::
 
-	python setup.py build
+    python setup.py build
 
 #. 빌드한 드라이버를 설치한다. ::
 
-	python setup.py install
+    python setup.py install
 
 **Easy Install을 이용한 설치(Linux)**
 
@@ -71,7 +71,7 @@ Easy Install은 자동으로 Python 패키지를 다운로드/빌드/설치/관�
 
 Easy Install을 이용하여 CUBRID Python 드라이버를 설치하려면 다음 명령어를 입력한다. ::
 
-	easy_install CUBRID-Python
+    easy_install CUBRID-Python
 
 Windows
 -------
@@ -104,46 +104,46 @@ Python 예제 프로그램
 
 여기에서는 Python으로 CUBRID 데이터베이스에 대한 작업을 수행하는 예제 프로그램을 작성한다. 예제로 다음과 같은 테이블을 생성한다. ::
 
-	csql -u dba -c "CREATE TABLE posts( id integer, title varchar(255), body string, last_updated timestamp );" demodb
+    csql -u dba -c "CREATE TABLE posts( id integer, title varchar(255), body string, last_updated timestamp );" demodb
 
 **Python에서 demodb에 연결**
 
 #. 새 Python 콘솔을 열어 다음과 같이 Python에 CUBRID Python 드라이버를 import한다. ::
 
-	import CUBRIDdb
+    import CUBRIDdb
 
 #. localhost에 위치한 *demodb* 데이터베이스에 연결을 생성한다.
 
    .. code-block:: python
    
-	conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
+    conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
 
 *demodb* 데이터베이스는 비밀번호가 필요하지 않으므로 비밀번호를 입력하지 않았다. 그러나 실제 데이터베이스에 연결할 때에는 비밀번호가 필요하다면 비밀번호를 입력해야 한다.
 `connect <http://packages.python.org/CUBRID-Python/_cubrid-module.html#connect>`_ () 함수의 구문은 다음과 같다. ::
 
-	connect (url[,user[password]])
+    connect (url[,user[password]])
 
 연결하려는 데이터베이스가 시작되지 않았다면 다음과 같은 오류가 발생한다. ::
 
-	Traceback (most recent call last):
-	  File "tutorial.py", line 3, in ‹module›
-		con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','public')
-	  File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
-		return Connection(*args, **kwargs)
-	  File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
-		self._db = _cubrid.connect(*args, **kwargs)
-	_cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
+    Traceback (most recent call last):
+      File "tutorial.py", line 3, in ‹module›
+        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','public')
+      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
+        return Connection(*args, **kwargs)
+      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
+        self._db = _cubrid.connect(*args, **kwargs)
+    _cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
 
 자격이 잘못되었다면 다음과 같은 오류가 발생한다. ::
 
-	Traceback (most recent call last):
-	  File "tutorial.py", line 3, in ‹module›
-		con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','a','b')
-	  File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
-		return Connection(*args, **kwargs)
-	  File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
-		self._db = _cubrid.connect(*args, **kwargs)
-	_cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
+    Traceback (most recent call last):
+      File "tutorial.py", line 3, in ‹module›
+        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','a','b')
+      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
+        return Connection(*args, **kwargs)
+      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
+        self._db = _cubrid.connect(*args, **kwargs)
+    _cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
 
 **INSERT 문 실행**
 
@@ -151,9 +151,9 @@ Python 예제 프로그램
 
 .. code-block:: python
 
-	cur = conn.cursor()
-	cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
-	conn.commit()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
+    conn.commit()
 
 CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비활성화되어 있다. 따라서 SQL문을 실행한 후에는 수동으로 `commit <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#commit>`_ () 함수를 사용하여 커밋을 수행해야 한다. 이 함수는 **cur.execute("COMMIT")** 와 같은 동작을 수행한다. 반대로 현재 트랜잭션을 중단하고 롤백하려면 `rollback <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#rollback>`_ () 함수를 사용한다.
 
@@ -161,25 +161,25 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 .. code-block:: python
 
-	args = (2, 'Title 2', 'Test body #2')
-	cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
+    args = (2, 'Title 2', 'Test body #2')
+    cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
 
 여기까지 작성한 코드는 다음과 같다.
 
 .. code-block:: python
 
-	import CUBRIDdb
-	conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb', 'public', '')
-	cur = conn.cursor()
-	 
-	# Plain insert statement
-	cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
-	 
-	# Parametrized insert statement
-	args = (2, 'Title 2', 'Test body #2')
-	cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
-	 
-	conn.commit()
+    import CUBRIDdb
+    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb', 'public', '')
+    cur = conn.cursor()
+     
+    # Plain insert statement
+    cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
+     
+    # Parametrized insert statement
+    args = (2, 'Title 2', 'Test body #2')
+    cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
+     
+    conn.commit()
 
 
 **데이터베이스에서 데이터 조회**
@@ -190,15 +190,15 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 .. code-block:: python
 
-	cur.execute("SELECT * FROM posts ORDER BY last_updated")
-	rows = cur.fetchall()
-	for row in rows:
-		print row
-	
+    cur.execute("SELECT * FROM posts ORDER BY last_updated")
+    rows = cur.fetchall()
+    for row in rows:
+        print row
+    
 위 코드는 다음과 같은 내용을 출력한다. ::
 
-	[1, 'Title 1', 'Test body #1', '2011-4-7 14:34:46']
-	[2, 'Title 2', 'Test body #2', '2010-4-7 14:34:46']
+    [1, 'Title 1', 'Test body #1', '2011-4-7 14:34:46']
+    [2, 'Title 2', 'Test body #2', '2010-4-7 14:34:46']
 
 **하나의 레코드를 조회**
 
@@ -206,22 +206,22 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 .. code-block:: python
 
-	cur.execute("SELECT * FROM posts")
-	row = cur.fetchone()
-	while row:
-		print row
-		row = cur.fetchone()
-	
+    cur.execute("SELECT * FROM posts")
+    row = cur.fetchone()
+    while row:
+        print row
+        row = cur.fetchone()
+    
 **레코드 개수를 지정하여 조회**
 
 다음과 같이 `fetchmany <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#fetchmany>`_ () 함수를 사용하면 조회할 레코드의 개수를 지정할 수 있다.
 
 .. code-block:: python
 
-	cur.execute("SELECT * FROM posts")
-	rows = cur.fetchmany(3)
-	for row in rows:
-		print row
+    cur.execute("SELECT * FROM posts")
+    rows = cur.fetchmany(3)
+    for row in rows:
+        print row
 
 **반환된 데이터의 메타데이터에 접근**
 
@@ -229,20 +229,20 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 .. code-block:: python
 
-	for description in cur.description:
-		print description
-	
+    for description in cur.description:
+        print description
+    
 
 위 코드는 다음과 같은 내용을 출력한다. ::
 
-	('id', 8, 0, 0, 0, 0, 0)
-	('title', 2, 0, 0, 255, 0, 0)
-	('body', 2, 0, 0, 1073741823, 0, 0)
-	('last_updated', 15, 0, 0, 0, 0, 0)
+    ('id', 8, 0, 0, 0, 0, 0)
+    ('title', 2, 0, 0, 255, 0, 0)
+    ('body', 2, 0, 0, 1073741823, 0, 0)
+    ('last_updated', 15, 0, 0, 0, 0, 0)
 
 각 튜플은 다음과 같은 정보를 포함한다. ::
 
-	(column_name, data_type, display_size, internal_size, precision, scale, nullable)
+    (column_name, data_type, display_size, internal_size, precision, scale, nullable)
 
 데이터 타입을 나타내는 숫자에 대한 자세한 내용은 http://packages.python.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html 을 참고한다.
 
@@ -252,8 +252,8 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
 
 .. code-block:: python
 
-	cur.close()
-	conn.close()
+    cur.close()
+    conn.close()
 
 Python API
 ==========

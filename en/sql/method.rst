@@ -23,21 +23,21 @@ CALL Statement
 
 The **CALL** statement is used to call a method defined in the database. Both class and instance methods can be called by the **CALL** statement. If you want to see example of using the CALL statement, see :ref:`authorization-method`. ::
 
-	CALL method_call [ ; ]
+    CALL method_call [ ; ]
 
-	method_call :
-	• method_name ( [ arg_value [ {, arg_value }_ ] ] ) ON call_target [ to_variable ]
-	• method_name ( call_target [, arg_value [ {, arg_value }_ ] ] ) [ to_variable ]
+    method_call :
+    • method_name ( [ arg_value [ {, arg_value }_ ] ] ) ON call_target [ to_variable ]
+    • method_name ( call_target [, arg_value [ {, arg_value }_ ] ] ) [ to_variable ]
 
-	arg_value :
-	• any CSQL expression
+    arg_value :
+    • any CSQL expression
 
-	call_target :
-	• an object-valued expression
+    call_target :
+    • an object-valued expression
 
-	to_variable :
-	• INTO variable
-	• TO variable
+    to_variable :
+    • INTO variable
+    • TO variable
 
 *   The *method_name* is either the method name defined in the table or the system-defined method name. A method requires one or more parameters. If there is no parameter for the method, a set of blank parentheses must be used.
 

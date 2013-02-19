@@ -11,41 +11,41 @@ CREATE VIEW
 
 ::
 
-	CREATE [OR REPLACE] {VIEW | VCLASS} <view_name>
-							   [ <subclass_definition> ]
-							   [ ( <view_column_def_comma_list> ) ]
-							   [ CLASS ATTRIBUTE
-								 ( <column_definition_comma_list> ) ]
-							   [ METHOD <method_definition_comma_list> ]
-							   [ FILE <method_file_comma_list> ]
-							   [ INHERIT <resolution_comma_list> ]
-							   [ AS <select_statement> ]
-							   [ WITH CHECK OPTION ]
-	 
-	<view_column_definition> ::= <column_definition> | <column_name>
-	 
-	<column_definition> :
-	column_name column_type [ <default_or_shared> ] [ <column_constraint_list>]
-	 
-	<default_or_shared> :
-	{SHARED [ <value_specification> ] | DEFAULT <value_specification> } |
-	AUTO_INCREMENT [ (seed, increment) ]
-	 
-	<column_constraint> :
-	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY REFERENCES...
-	 
-	<subclass_definition> :
-	{ UNDER | AS SUBCLASS OF } table_name_comma_list
-	 
-	<method_definition> :
-	[ CLASS ] method_name
-	[ ( [ argument_type_comma_list ] ) ]
-	[ result_type ]
-	[ FUNCTION function_name ]
-	 
-	<resolution> :
-	[ CLASS ] { column_name | method_name } OF superclass_name
-	[ AS alias ]
+    CREATE [OR REPLACE] {VIEW | VCLASS} <view_name>
+                               [ <subclass_definition> ]
+                               [ ( <view_column_def_comma_list> ) ]
+                               [ CLASS ATTRIBUTE
+                                 ( <column_definition_comma_list> ) ]
+                               [ METHOD <method_definition_comma_list> ]
+                               [ FILE <method_file_comma_list> ]
+                               [ INHERIT <resolution_comma_list> ]
+                               [ AS <select_statement> ]
+                               [ WITH CHECK OPTION ]
+     
+    <view_column_definition> ::= <column_definition> | <column_name>
+     
+    <column_definition> :
+    column_name column_type [ <default_or_shared> ] [ <column_constraint_list>]
+     
+    <default_or_shared> :
+    {SHARED [ <value_specification> ] | DEFAULT <value_specification> } |
+    AUTO_INCREMENT [ (seed, increment) ]
+     
+    <column_constraint> :
+    NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY REFERENCES...
+     
+    <subclass_definition> :
+    { UNDER | AS SUBCLASS OF } table_name_comma_list
+     
+    <method_definition> :
+    [ CLASS ] method_name
+    [ ( [ argument_type_comma_list ] ) ]
+    [ result_type ]
+    [ FUNCTION function_name ]
+     
+    <resolution> :
+    [ CLASS ] { column_name | method_name } OF superclass_name
+    [ AS alias ]
 
 *   **OR REPLACE** : **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name* 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
 *   *view_name* : 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
@@ -59,43 +59,43 @@ CREATE VIEW
 
 .. code-block:: sql
 
-	CREATE TABLE a_tbl(
-	id INT NOT NULL,
-	phone VARCHAR(10));
-	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
-	 
-	 
-	--creating a new view based on AS select_statement from a_tbl
-	CREATE VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL WITH CHECK OPTION;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-	 
-	--WITH CHECK OPTION doesn’t allow to update column value which violates WHERE clause
-	UPDATE b_view SET phone=NULL;
-	 
-	In line 1, column 72,
-	 
-	ERROR: Check option exception on view b_view.
-	 
-	 
-	--creating view which name is as same as existing view name
-	CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC;
-	 
-	--the existing view has been replaced as a new view by OR REPLACE keyword
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				5  NULL
-				4  NULL
-				3  '333-3333'
-				2  '222-2222'
-				1  '111-1111'
+    CREATE TABLE a_tbl(
+    id INT NOT NULL,
+    phone VARCHAR(10));
+    INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
+     
+     
+    --creating a new view based on AS select_statement from a_tbl
+    CREATE VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL WITH CHECK OPTION;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+     
+    --WITH CHECK OPTION doesn’t allow to update column value which violates WHERE clause
+    UPDATE b_view SET phone=NULL;
+     
+    In line 1, column 72,
+     
+    ERROR: Check option exception on view b_view.
+     
+     
+    --creating view which name is as same as existing view name
+    CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC;
+     
+    --the existing view has been replaced as a new view by OR REPLACE keyword
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                5  NULL
+                4  NULL
+                3  '333-3333'
+                2  '222-2222'
+                1  '111-1111'
 
 업데이트 가능한 VIEW의 생성 조건
 --------------------------------
@@ -126,12 +126,12 @@ ADD QUERY 절
 
 **ALTER VIEW** 문에 **ADD QUERY** 절을 사용하여 뷰의 질의 명세부에 질의를 추가할 수 있다. 뷰 생성 시 정의된 질의문에는 1이 부여되고, **ADD QUERY** 절에서 추가한 질의문에는 2가 부여된다. ::
 
-	ALTER [ VIEW | VCLASS ] view_name
-	ADD QUERY select_statement
-	[ INHERIT resolution [ {, resolution }_ ] ]
-	 
-	resolution :
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    ALTER [ VIEW | VCLASS ] view_name
+    ADD QUERY select_statement
+    [ INHERIT resolution [ {, resolution }_ ] ]
+     
+    resolution :
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 *   *view_name* : 질의를 추가할 뷰의 이름 명시한다.
 *   *select_statement* : 추가할 질의를 명시한다.
@@ -140,29 +140,29 @@ ADD QUERY 절
 
 .. code-block:: sql
 
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
-	 
-	 
-	ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
-				1  '111-1111'
-				2  '222-2222'
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
+     
+     
+    ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
+                1  '111-1111'
+                2  '222-2222'
 
 
 AS SELECT 절
@@ -170,7 +170,7 @@ AS SELECT 절
 
 **ALTER VIEW** 문에 **AS SELECT** 절을 사용하여 가상 테이블에 정의된 **SELECT** 질의를 변경할 수 있다. 이는 **CREATE OR REPLACE** 문과 유사하게 동작한다. **ALTER VIEW** 문의 **CHANGE QUERY** 절에 질의 번호 1을 명시하여 질의를 변경할 수도 있다. ::
 
-	ALTER [ VIEW | VCLASS ] view_name AS select_statement
+    ALTER [ VIEW | VCLASS ] view_name AS select_statement
 
 *   *view_name* : 변경할 가상 테이블의 이름을 명시한다.
 *   *select_statement* : 가상 테이블 생성 시 정의된 **SELECT** 문을 대체할 새로운 질의문을 명시한다.
@@ -179,23 +179,23 @@ AS SELECT 절
 
 .. code-block:: sql
 
-	ALTER VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
+    ALTER VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
 
 CHANGE QUERY 절
 ---------------
 
 **ALTER VIEW** 문의 **CHANGE QUERY** 절을 사용하여 뷰 질의 명세부에 정의된 질의를 변경할 수 있다. ::
 
-	ALTER [ VIEW | VCLASS ] view_name
-		CHANGE QUERY [ integer ] select_statement [ ; ]
-	
+    ALTER [ VIEW | VCLASS ] view_name
+        CHANGE QUERY [ integer ] select_statement [ ; ]
+    
 *   *view_name* : 변경할 뷰의 이름을 명시한다.
 *   *interger* : 변경할 질의의 번호를 명시한다. 기본값은 1이다.
 *   *select_statement* : 질의 번호가 *integer* 인 질의를 대치할 새로운 질의를 명시한다.
@@ -204,36 +204,36 @@ CHANGE QUERY 절
 
 .. code-block:: sql
 
-	--adding select_statement which query number is 2 and 3 for each
-	ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
-	ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id = 3;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-	 
-	--altering view changing query number 2
-	ALTER VIEW b_view CHANGE QUERY 2 SELECT * FROM a_tbl WHERE phone IS NULL;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
-				4  NULL
-				5  NULL
-				3  '333-3333'
+    --adding select_statement which query number is 2 and 3 for each
+    ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
+    ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id = 3;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+     
+    --altering view changing query number 2
+    ALTER VIEW b_view CHANGE QUERY 2 SELECT * FROM a_tbl WHERE phone IS NULL;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
+                4  NULL
+                5  NULL
+                3  '333-3333'
 
 DROP QUERY 절
 -------------
@@ -244,23 +244,23 @@ DROP QUERY 절
 
 .. code-block:: sql
 
-	ALTER VIEW b_view DROP QUERY 2,3;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
+    ALTER VIEW b_view DROP QUERY 2,3;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
 
 DROP VIEW
 =========
 
 뷰는 **DROP VIEW** 문을 이용하여 삭제할 수 있다. 뷰를 삭제하는 방법은 일반 테이블을 삭제하는 방법과 동일하다. ::
 
-	DROP [ VIEW | VCLASS ] view_name [ { ,view_name , ... } ]
+    DROP [ VIEW | VCLASS ] view_name [ { ,view_name , ... } ]
 
 *   *view_name* : 삭제하려는 뷰의 이름을 지정한다.
 
@@ -268,14 +268,14 @@ DROP VIEW
 
 .. code-block:: sql
 
-	DROP VIEW b_view;
+    DROP VIEW b_view;
 
 RENAME VIEW
 ===========
 
 뷰의 이름은 **RENAME VIEW** 문을 사용하여 변경할 수 있다. ::
 
-	RENAME [ TABLE |CLASS | VIEW | VCLASS ] old_view_name AS new_view_name [ ; ]
+    RENAME [ TABLE |CLASS | VIEW | VCLASS ] old_view_name AS new_view_name [ ; ]
 
 *   *old_view_name* : 변경할 뷰의 이름을 지정한다.
 *   *new_view_name* : 뷰의 새로운 이름을 지정한다.
@@ -286,4 +286,4 @@ RENAME VIEW
 
 .. code-block:: sql
 
-	RENAME VIEW game_2004 AS info_2004;
+    RENAME VIEW game_2004 AS info_2004;

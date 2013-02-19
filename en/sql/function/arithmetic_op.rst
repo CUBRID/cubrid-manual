@@ -29,31 +29,31 @@ For arithmetic operators, there are binary operators for addition, subtraction, 
 
 ::
 
-	expression  mathematical_operator  expression 
-	 
-	expression :
-	•  bit string
-	•  character string
-	•  numeric value
-	•  date-time value
-	•  collection value
-	•  NULL
-	 
-	mathematical_operator :
-	•  set_arithmetic_operator
-	•  arithmetic_operator
-	 
-	arithmetic_operator :
-	•  +
-	•  -
-	•  *
-	•  /, DIV
-	•  %, MOD
-	 
-	set_arithmetic_operator :
-	• UNION           (Union)
-	• DIFFERENCE      (Difference)
-	• INTERSECT | INTERSECTION    (Intersection)
+    expression  mathematical_operator  expression 
+     
+    expression :
+    •  bit string
+    •  character string
+    •  numeric value
+    •  date-time value
+    •  collection value
+    •  NULL
+     
+    mathematical_operator :
+    •  set_arithmetic_operator
+    •  arithmetic_operator
+     
+    arithmetic_operator :
+    •  +
+    •  -
+    •  *
+    •  /, DIV
+    •  %, MOD
+     
+    set_arithmetic_operator :
+    • UNION           (Union)
+    • DIFFERENCE      (Difference)
+    • INTERSECT | INTERSECTION    (Intersection)
 
 *   *expression* : Declares the mathematical operation to be calculated.
 *   *mathematical_operator* : A operator that performs an operation the arithmetic and the set operators are applicable.
@@ -116,85 +116,85 @@ The following table shows the total number of digits (*p*) and the number of dig
 
 .. code-block:: sql
 
-	--int * int
-	SELECT 123*123;
-		  123*123
-	=============
-			15129
-	 
-	-- int * int returns overflow error
-	SELECT (1234567890123*1234567890123);
-	 
-	ERROR: Data overflow on data type bigint.
-	 
-	-- int * numeric returns numeric type  
-	SELECT (1234567890123*CAST(1234567890123 AS NUMERIC(15,2)));
-	 (1234567890123* cast(1234567890123 as numeric(15,2)))
-	======================
-	  1524157875322755800955129.00
-	 
-	-- int * float returns float type
-	SELECT (1234567890123*CAST(1234567890123 AS FLOAT));
-	 (1234567890123* cast(1234567890123 as float))
-	===============================================
-									  1.524158e+024
-	 
-	-- int * double returns double type
-	SELECT (1234567890123*CAST(1234567890123 AS DOUBLE));
-	 (1234567890123* cast(1234567890123 as double))
-	================================================
-							  1.524157875322756e+024
-	 
-	-- numeric * numeric returns numeric type   
-	SELECT (CAST(1234567890123 AS NUMERIC(15,2))*CAST(1234567890123 AS NUMERIC(15,2)));
-	 ( cast(1234567890123 as numeric(15,2))* cast(1234567890123 as numeric(15,2)))
-	======================
-	  1524157875322755800955129.0000
-	 
-	-- numeric * float returns double type  
-	SELECT (CAST(1234567890123 AS NUMERIC(15,2))*CAST(1234567890123 AS FLOAT));
-	 ( cast(1234567890123 as numeric(15,2))* cast(1234567890123 as float))
-	=======================================================================
-													 1.524157954716582e+024
-	 
-	-- numeric * double returns double type  
-	SELECT (CAST(1234567890123 AS NUMERIC(15,2))*CAST(1234567890123 AS DOUBLE));
-	 ( cast(1234567890123 as numeric(15,2))* cast(1234567890123 as double))
-	========================================================================
-													  1.524157875322756e+024
-	 
-	-- float * float returns float type  
-	SELECT (CAST(1234567890123 AS FLOAT)*CAST(1234567890123 AS FLOAT));
-	 ( cast(1234567890123 as float)* cast(1234567890123 as float))
-	===============================================================
-													  1.524158e+024
-	-- float * double returns float type  
-	SELECT (CAST(1234567890123 AS FLOAT)*CAST(1234567890123 AS DOUBLE));
-	 ( cast(1234567890123 as float)* cast(1234567890123 as double))
-	================================================================
-											  1.524157954716582e+024
-	 
-	-- double * double returns float type  
-	SELECT (CAST(1234567890123 AS DOUBLE)*CAST(1234567890123 AS DOUBLE));
-	 ( cast(1234567890123 as double)* cast(1234567890123 as double))
-	=================================================================
-											   1.524157875322756e+024
-	 
-	-- int / int returns int type without type conversion or rounding
-	SELECT 100100/100000;
-	  100100/100000
-	===============
-				  1
-	 
-	-- int / int returns int type without type conversion or rounding
-	SELECT 100100/200200;
-	  100100/200200
-	===============
-				  0
-	 
-	-- int / zero returns error
-	SELECT 100100/(100100-100100);
-	ERROR: Attempt to divide by zero.
+    --int * int
+    SELECT 123*123;
+          123*123
+    =============
+            15129
+     
+    -- int * int returns overflow error
+    SELECT (1234567890123*1234567890123);
+     
+    ERROR: Data overflow on data type bigint.
+     
+    -- int * numeric returns numeric type  
+    SELECT (1234567890123*CAST(1234567890123 AS NUMERIC(15,2)));
+     (1234567890123* cast(1234567890123 as numeric(15,2)))
+    ======================
+      1524157875322755800955129.00
+     
+    -- int * float returns float type
+    SELECT (1234567890123*CAST(1234567890123 AS FLOAT));
+     (1234567890123* cast(1234567890123 as float))
+    ===============================================
+                                      1.524158e+024
+     
+    -- int * double returns double type
+    SELECT (1234567890123*CAST(1234567890123 AS DOUBLE));
+     (1234567890123* cast(1234567890123 as double))
+    ================================================
+                              1.524157875322756e+024
+     
+    -- numeric * numeric returns numeric type   
+    SELECT (CAST(1234567890123 AS NUMERIC(15,2))*CAST(1234567890123 AS NUMERIC(15,2)));
+     ( cast(1234567890123 as numeric(15,2))* cast(1234567890123 as numeric(15,2)))
+    ======================
+      1524157875322755800955129.0000
+     
+    -- numeric * float returns double type  
+    SELECT (CAST(1234567890123 AS NUMERIC(15,2))*CAST(1234567890123 AS FLOAT));
+     ( cast(1234567890123 as numeric(15,2))* cast(1234567890123 as float))
+    =======================================================================
+                                                     1.524157954716582e+024
+     
+    -- numeric * double returns double type  
+    SELECT (CAST(1234567890123 AS NUMERIC(15,2))*CAST(1234567890123 AS DOUBLE));
+     ( cast(1234567890123 as numeric(15,2))* cast(1234567890123 as double))
+    ========================================================================
+                                                      1.524157875322756e+024
+     
+    -- float * float returns float type  
+    SELECT (CAST(1234567890123 AS FLOAT)*CAST(1234567890123 AS FLOAT));
+     ( cast(1234567890123 as float)* cast(1234567890123 as float))
+    ===============================================================
+                                                      1.524158e+024
+    -- float * double returns float type  
+    SELECT (CAST(1234567890123 AS FLOAT)*CAST(1234567890123 AS DOUBLE));
+     ( cast(1234567890123 as float)* cast(1234567890123 as double))
+    ================================================================
+                                              1.524157954716582e+024
+     
+    -- double * double returns float type  
+    SELECT (CAST(1234567890123 AS DOUBLE)*CAST(1234567890123 AS DOUBLE));
+     ( cast(1234567890123 as double)* cast(1234567890123 as double))
+    =================================================================
+                                               1.524157875322756e+024
+     
+    -- int / int returns int type without type conversion or rounding
+    SELECT 100100/100000;
+      100100/100000
+    ===============
+                  1
+     
+    -- int / int returns int type without type conversion or rounding
+    SELECT 100100/200200;
+      100100/200200
+    ===============
+                  0
+     
+    -- int / zero returns error
+    SELECT 100100/(100100-100100);
+    ERROR: Attempt to divide by zero.
 
 .. _arithmetic-op-type-casting:
 
@@ -234,42 +234,42 @@ The following table shows operations allowed for each operand type, and their re
 
 .. code-block:: sql
 
-	-- initial systimestamp value
-	SELECT SYSDATETIME;
-	  SYSDATETIME
-	===============================
-	  07:09:52.115 PM 01/14/2010
-	 
-	-- time type + 10(seconds) returns time type
-	SELECT (CAST (SYSDATETIME AS TIME) + 10);
-	 ( cast( SYS_DATETIME  as time)+10)
-	====================================
-	  07:10:02 PM
-	 
-	-- date type + 10 (days) returns date type
-	SELECT (CAST (SYSDATETIME AS DATE) + 10);
-	 ( cast( SYS_DATETIME  as date)+10)
-	====================================
-	  01/24/2010
-	 
-	-- timestamp type + 10(seconds) returns timestamp type
-	SELECT (CAST (SYSDATETIME AS TIMESTAMP) + 10);
-	 ( cast( SYS_DATETIME  as timestamp)+10)
-	=========================================
-	  07:10:02 PM 01/14/2010
-	 
-	-- systimestamp type + 10(milliseconds) returns systimestamp type
-	SELECT (SYSDATETIME  + 10);
-	 ( SYS_DATETIME +10)
-	===============================
-	  07:09:52.125 PM 01/14/2010
-	 
-	SELECT DATETIME '09/01/2009 03:30:30.001 pm'- TIMESTAMP '08/31/2009 03:30:30 pm';
-	 datetime '09/01/2009 03:30:30.001 pm'-timestamp '08/31/2009 03:30:30 pm'
-	=======================================
-	  86400001
-	 
-	SELECT TIMESTAMP '09/01/2009 03:30:30 pm'- TIMESTAMP '08/31/2009 03:30:30 pm';
-	 timestamp '09/01/2009 03:30:30 pm'-timestamp '08/31/2009 03:30:30 pm'
-	=======================================
-	  86400
+    -- initial systimestamp value
+    SELECT SYSDATETIME;
+      SYSDATETIME
+    ===============================
+      07:09:52.115 PM 01/14/2010
+     
+    -- time type + 10(seconds) returns time type
+    SELECT (CAST (SYSDATETIME AS TIME) + 10);
+     ( cast( SYS_DATETIME  as time)+10)
+    ====================================
+      07:10:02 PM
+     
+    -- date type + 10 (days) returns date type
+    SELECT (CAST (SYSDATETIME AS DATE) + 10);
+     ( cast( SYS_DATETIME  as date)+10)
+    ====================================
+      01/24/2010
+     
+    -- timestamp type + 10(seconds) returns timestamp type
+    SELECT (CAST (SYSDATETIME AS TIMESTAMP) + 10);
+     ( cast( SYS_DATETIME  as timestamp)+10)
+    =========================================
+      07:10:02 PM 01/14/2010
+     
+    -- systimestamp type + 10(milliseconds) returns systimestamp type
+    SELECT (SYSDATETIME  + 10);
+     ( SYS_DATETIME +10)
+    ===============================
+      07:09:52.125 PM 01/14/2010
+     
+    SELECT DATETIME '09/01/2009 03:30:30.001 pm'- TIMESTAMP '08/31/2009 03:30:30 pm';
+     datetime '09/01/2009 03:30:30.001 pm'-timestamp '08/31/2009 03:30:30 pm'
+    =======================================
+      86400001
+     
+    SELECT TIMESTAMP '09/01/2009 03:30:30 pm'- TIMESTAMP '08/31/2009 03:30:30 pm';
+     timestamp '09/01/2009 03:30:30 pm'-timestamp '08/31/2009 03:30:30 pm'
+    =======================================
+      86400

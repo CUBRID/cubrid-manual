@@ -32,11 +32,11 @@ Linux
 
 #. 다음과 같은 명령어를 입력하여 CUBRID PHP 드라이버 최신 버전을 설치한다. ::
 
-	sudo pecl install cubrid
+    sudo pecl install cubrid
 
    하위 버전의 드라이버가 필요하면 다음과 같이 설치할 버전을 지정할 수 있다. ::
 
-	sudo pecl install cubrid-8.3.0.0005
+    sudo pecl install cubrid-8.3.0.0005
 
    설치가 진행되는 중에 **CUBRID base install dir autodetect :** 라는 프롬프트가 표시된다. 설치를 원활하게 진행하기 위해서 CUBRID를 설치한 디렉터리의 전체 경로를 입력한다. 예를 들어 CUBRID가 **/home/cubridtest/CUBRID** 디렉터리에 설치되었다면, **/home/cubridtest/CUBRID** 를 입력한다.
 
@@ -46,8 +46,8 @@ Linux
 
    * 다른 운영체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. ::
 
-	[CUBRID]
-	extension=cubrid.so
+    [CUBRID]
+    extension=cubrid.so
 
 #. 변경된 내용을 반영하려면 웹 서버를 재시작한다.
 
@@ -55,29 +55,29 @@ Linux
 
 #. PHP가 설치되어 있지 않다면, 다음 명령어로 PHP를 설치한다. ::
 
-	sudo apt-get install php5
+    sudo apt-get install php5
 
 #. **apt-get** 를 이용하여 CUBRID PHP 드라이버를 설치하려면, Unbuntu가 패키지 다운로드 위치를 알고 인덱스를 업데이트하도록 CUBRID 저장소를 추가해야 한다. ::
 
-	sudo add-apt-repository ppa:cubrid/cubrid
-	sudo apt-get update
+    sudo add-apt-repository ppa:cubrid/cubrid
+    sudo apt-get update
 
 #. 다음과 같이 드라이버를 설치한다. ::
 
-	sudo apt-get install php5-cubrid
+    sudo apt-get install php5-cubrid
 
    최신 버전보다 하위 버전을 설치하려면 다음과 같이 버전을 명시한다. ::
 
-	sudo apt-get install php5-cubrid-8.3.1
+    sudo apt-get install php5-cubrid-8.3.1
 
    위 명령어는 **cubrid.so** 드라이버를 **/usr/lib/php5/2009*** 디렉터리에 복사하고 다음과 같은 설정을 **/etc/php5/apache2/php.ini** 파일에 추가한다. ::
    
-	[PHP_CUBRID]
-	extension=cubrid.so
+    [PHP_CUBRID]
+    extension=cubrid.so
 
 #. PHP가 모듈을 읽어들이도록 Apache 서버를 재시작한다. ::
 
-	service apache2 restart
+    service apache2 restart
 
 **Yum을 이용하여 Fedora/CentOS에 설치**
 
@@ -88,21 +88,21 @@ Linux
 
 #. 위 주소에서 운영체제와 CUBRID의 버전에 맞는 명령을 찾아 실행한다. 예를 들어 Fedora 16과 CBURID 9.0에 해당하는 드라이버를 설치하려면 다음 명령을 실행한다. **Yum** 저장소 주소의 fc16은 Fedora 16을 의미한다. ::
 
-	rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
+    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
 
    CentOS의 예는 다음과 같다. el6.2는 CentOS 6.2를 의미한다. ::
 
-	rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
+    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
 
    위 명령어를 실행하면 **Yum** 은 CUBRID 패키지의 위치를 알게 된다.
 
 #. CUBRID PHP 드라이버를 설치하려면 다음 명령을 실행한다. ::
 
-	yum install php-cubrid
+    yum install php-cubrid
 
 #. 웹 서버를 재시작한다. ::
 
-	service httpd restart
+    service httpd restart
 
 Windows
 -------
@@ -146,21 +146,21 @@ CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스
 
 #. 다음 명령을 입력한다. ::
 
-	php --version
+    php --version
 
    시스템 환경 변수가 제대로 설정되었다면 아래와 같이 PHP 버전을 확인할 수 있다. ::
 
-	C:\Users\Administrator>php --version
-	PHP 5.2.9 <cli> <built: Feb 25 2009 15:52:24>
+    C:\Users\Administrator>php --version
+    PHP 5.2.9 <cli> <built: Feb 25 2009 15:52:24>
 
 #. 다음 명령을 입력한다. ::
 
-	cubrid --version
+    cubrid --version
 
    시스템 환경 변수가 제대로 설정되었다면 아래와 같이 CUBRID 버전을 확인할 수 있다. ::
 
-	C:\Users\Administrator>cubrid --version
-	cubrid <cubrid utilities> R2.1
+    C:\Users\Administrator>cubrid --version
+    cubrid <cubrid utilities> R2.1
 
 위와 같은 결과가 출력되지 않는다면 PHP와 CUBRID가 설치되지 않았을 가능성이 높으므로 PHP와 CUBRID를 다시 설치한다. 만약 다시 설치해도 시스템 환경 변수가 제대로 설정되지 않는다면, 다음과 같이 수동으로 시스템 환경 변수를 설정한다.
 
@@ -183,13 +183,13 @@ PHP 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있�
 
 #. **php.ini** ( **C:\\Program Files\\PHP\\php.ini** ) 파일을 열어 끝에 다음 두 줄을 추가한다. ::
 
-	[PHP_CUBRID]
-	extension=php_cubrid.dll
+    [PHP_CUBRID]
+    extension=php_cubrid.dll
 
    PDO 드라이버의 경우에는 다음 내용을 추가한다. ::
 
-	[PHP_PDO_CUBRID]
-	extension = php_pdo_cubrid.dll
+    [PHP_PDO_CUBRID]
+    extension = php_pdo_cubrid.dll
 
 #. 웹 서버를 재시작한다.
 
@@ -212,16 +212,16 @@ Linux
 
 #. PHP 소스코드를 압축 해제하여 해당 디렉터리로 이동한다. ::
 
-	$> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
-	$> cd php-<version>/ext 
+    $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
+    $> cd php-<version>/ext 
 
 #. phpize를 실행한다. phpize에 대한 내용은 :ref:`참고 사항 <phpize-remark>` 을 참고한다. ::
 
-	cubrid-php> /usr/bin/phpize
+    cubrid-php> /usr/bin/phpize
 
 #. 프로젝트를 설정한다. 설정을 실행하기 전에 먼저 **./configure -h** 를 실행하여 설정 옵션을 확인하는 것을 권장한다. 설정 방법은 다음과 같다(Apache 2가 **/usr/local** 에 설치되어 있다고 가정한다). ::
 
-	cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
+    cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
 
    * --with-cubrid=shared: CUBRID 지원을 포함한다.
    * --with-php-config=PATH: 절대 경로를 포함한 php-config의 파일 이름을 입력한다.
@@ -230,13 +230,13 @@ Linux
 
 #. **cubrid.so** 파일을 **/usr/local/php/lib/php/extensions** 디렉터리에 복사한다. ::
 
-	cubrid-php> mkdir /usr/local/php/lib/php/extensions
-	cubrid-php> cp modules/cubrid.so /usr/local/php/lib/php/extensions
+    cubrid-php> mkdir /usr/local/php/lib/php/extensions
+    cubrid-php> cp modules/cubrid.so /usr/local/php/lib/php/extensions
 
 #. **php.ini** 파일에 **extension_dir** 변수에 PHP 확장의 경로를 입력하고 **extension** 변수에 CUBRID PHP 드라이버 파일 이름을 입력한다. ::
 
-	extension_dir = "/usr/local/php/lib/php/extension/no-debug-zts-xxx"
-	extension = cubrid.so
+    extension_dir = "/usr/local/php/lib/php/extension/no-debug-zts-xxx"
+    extension = cubrid.so
 
 **CUBRID PHP 드라이버 설치 확인**
 
@@ -244,7 +244,7 @@ Linux
 
    .. code-block:: php
 
-	<?php phpinfo(); ?>
+    <?php phpinfo(); ?>
 
 #. 웹 브라우저로 http://localhost/test.php에 접속하여 다음 내용이 보이는지 확인한다. 다음 내용이 보이면 설치가 완료된 것이다.
 
@@ -262,12 +262,12 @@ phpize는 PHP 확장의 컴파일을 준비하는 셸 스크립트로, 일반적
 
 #. PHP 소스코드를 다운로드한다. PHP 확장을 사용할 버전과 일치하는 버전을 다운로드해야 한다. 다운로드한 PHP 소스코드를 압축 해제하고 소스코드의 최상위 디렉터리로 이동한다. ::
 
-	$> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
-	$> cd php-<version>
+    $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
+    $> cd php-<version>
 
 #. 프로젝트를 설정하고, 빌드한 후 설치한다. **prefix** 옵션으로 PHP를 설치할 디렉터리를 지정할 수 있다. ::
 
-	php-root> ./configure --prefix=prefix_dir; make; make install
+    php-root> ./configure --prefix=prefix_dir; make; make install
 
 #. phpize는 **prefix_dir/bin** 디렉터리에 위치한다.
 
@@ -303,7 +303,7 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
 
 .. note::
 
-	PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트를 설정해야 한다. PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild 
+    PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트를 설정해야 한다. PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild 
 
 **CUBRID PHP 드라이버 빌드**
 
@@ -344,7 +344,7 @@ VC9 버전을 컴파일하려면 Visual C++ 2008이 필요하다. 하지만 VC9 
 
 .. note::
 
-	PHP 5.3 소스코드로 CUBRID PHP 드라이버를 빌드한다면, Windows에서 PHP 5.3를 설정해야 한다. PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
+    PHP 5.3 소스코드로 CUBRID PHP 드라이버를 빌드한다면, Windows에서 PHP 5.3를 설정해야 한다. PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
 
 **CUBRID PHP 드라이버 빌드**
 
@@ -392,7 +392,7 @@ http://www.apachelounge.com/에서는 VC9 x86 버전 Apache만 있고 공식 Win
 
 .. note::
 
-	PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트를 설정해야 한다.PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
+    PHP 5.3을 소스코드에서 빌드할 필요는 없지만 PHP 5.3 프로젝트를 설정해야 한다.PHP 5.3 프로젝트를 설정하지 않으면 VC9에서 config.w32.h 헤더 파일을 찾을 수 없다는 메시지가 출력된다. 설정 방법은 다음 주소를 참고한다. https://wiki.php.net/internals/windows/stepbystepbuild
 
 **PHP 5.3 설정**
 
@@ -457,8 +457,8 @@ PHP 프로그래밍
 데이터베이스 응용에서 첫 단계는 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () 함수 또는 `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () 함수를 사용하는 것으로 데이터베이스 연결을 제공한다. `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ 함수 또는 `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () 함수가 성공적으로 수행되면, 데이터베이스를 사용할 수 있는 모든 함수를 사용할 수 있다. 응용을 완전히 끝내기 전에 `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수를 호출하는 것은 매우 중요하다. `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수는 현재 발생한 트랜잭션을 끝마치고 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () 함수에 의해 생성된 연결 핸들과 모든 요청 핸들을 종료한다.
 
 .. note:: 
-	*   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
-	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
+    *   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+    *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
 트랜잭션과 자동 커밋
 --------------------
@@ -469,7 +469,7 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 .. code-block:: php
 
-	$con = cubrid_connect_with_url("cci:CUBRID:localhost:33000:demodb:dba::?autocommit=true");
+    $con = cubrid_connect_with_url("cci:CUBRID:localhost:33000:demodb:dba::?autocommit=true");
 
 `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () 함수에서 자동 커밋 모드를 OFF로 설정하면 커밋 또는 롤백을 명시하여 트랜잭션을 처리할 수 있다. 트랜잭션을 커밋하려면 `cubrid_commit <http://www.php.net/manual/en/function.cubrid-commit.php>`_ () 함수를 사용하고 트랜잭션을 롤백하려면 `cubrid_rollback <http://www.php.net/manual/en/function.cubrid-rollback.php>`_ () 함수를 사용한다. `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수는 트랜잭션을 종료하고 커밋되지 않은 작업을 롤백한다.
 
@@ -487,18 +487,18 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 .. code-block:: php
 
-	$con = cubrid_connect("192.168.0.10", 33000, "demodb");
-	if($con) {
-		$req = cubrid_execute($con, "select * from code");
-		if($req) {
-			while ($row = cubrid_fetch($req)) {
-				echo $row["s_name"];
-				echo $row["f_name"];
-			}
-			cubrid_close_request($req);
-		}
-		cubrid_disconnect($con);
-	}
+    $con = cubrid_connect("192.168.0.10", 33000, "demodb");
+    if($con) {
+        $req = cubrid_execute($con, "select * from code");
+        if($req) {
+            while ($row = cubrid_fetch($req)) {
+                echo $row["s_name"];
+                echo $row["f_name"];
+            }
+            cubrid_close_request($req);
+        }
+        cubrid_disconnect($con);
+    }
 
 **질의 결과의 열 타입과 이름**
 
@@ -506,19 +506,19 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 .. code-block:: php
 
-	$req = cubrid_execute($con, "select host_year, host_city from olympic");
-	if($req) {
-		$col_types = cubrid_column_types($req);
-		$col_names = cubrid_column_names($req);
-	 
-		while (list($key, $col_type) = each($col_types)) {
-			echo $col_type;
-		}
-		while (list($key, $col_name) = each($col_names))
-			echo $col_name;
-		}
-		cubrid_close_request($req);
-	}
+    $req = cubrid_execute($con, "select host_year, host_city from olympic");
+    if($req) {
+        $col_types = cubrid_column_types($req);
+        $col_names = cubrid_column_names($req);
+     
+        while (list($key, $col_type) = each($col_types)) {
+            echo $col_type;
+        }
+        while (list($key, $col_name) = each($col_names))
+            echo $col_name;
+        }
+        cubrid_close_request($req);
+    }
 
 **커서 조정**
 
@@ -526,14 +526,14 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 .. code-block:: php
 
-	$req = cubrid_execute($con, "select host_year, host_city from olympic order by host_year");
-	if($req) {
-		cubrid_move_cursor($req, 20, CUBRID_CURSOR_CURRENT)
-		while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
-			echo $row["host_year"].” “;
-			echo $row["host_city"].”\n”;
-		}
-	}
+    $req = cubrid_execute($con, "select host_year, host_city from olympic order by host_year");
+    if($req) {
+        cubrid_move_cursor($req, 20, CUBRID_CURSOR_CURRENT)
+        while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
+            echo $row["host_year"].” “;
+            echo $row["host_city"].”\n”;
+        }
+    }
 
 **결과 배열 타입**
 
@@ -543,19 +543,19 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
   .. code-block:: php
 
-	while (list($id, $name) = cubrid_fetch($req, CUBRID_NUM)) {
-		echo $id;
-		echo $name;
-	}
+    while (list($id, $name) = cubrid_fetch($req, CUBRID_NUM)) {
+        echo $id;
+        echo $name;
+    }
 
 * 연관배열
 
   .. code-block:: php
 
-	while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
-		echo $row["id"];
-		echo $row["name"];
-	}
+    while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
+        echo $row["id"];
+        echo $row["name"];
+    }
 
 **카탈로그 연산**
 
@@ -563,15 +563,15 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 .. code-block:: php
 
-	$pk = cubrid_schema($con, CUBRID_SCH_PRIMARY_KEY, "game");
-	if ($pk) {
-		print_r($pk);
-	}
-	 
-	$fk = cubrid_schema($con, CUBRID_SCH_IMPORTED_KEYS, "game");
-	if ($fk) {
-		print_r($fk);
-	}
+    $pk = cubrid_schema($con, CUBRID_SCH_PRIMARY_KEY, "game");
+    if ($pk) {
+        print_r($pk);
+    }
+     
+    $fk = cubrid_schema($con, CUBRID_SCH_IMPORTED_KEYS, "game");
+    if ($fk) {
+        print_r($fk);
+    }
 
 **에러 처리**
 
@@ -585,15 +585,15 @@ CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커�
 
 .. code-block:: php
 
-	$req = cubrid_execute($con, "select * from person where id = 1", CUBRID_INCLUDE_OID);
-	if ($req) {
-		while ($row = cubrid_fetch($req)) {
-			echo cubrid_current_oid($req);
-			echo $row["id"];
-			echo $row["name"];
-		}
-		cubrid_close_request($req);
-	}
+    $req = cubrid_execute($con, "select * from person where id = 1", CUBRID_INCLUDE_OID);
+    if ($req) {
+        while ($row = cubrid_fetch($req)) {
+            echo cubrid_current_oid($req);
+            echo $row["id"];
+            echo $row["name"];
+        }
+        cubrid_close_request($req);
+    }
 
 OID를 사용하여 인스턴스의 모든 속성, 지정한 속성 또는 한 속성의 값을 얻을 수 있다.
 
@@ -601,16 +601,16 @@ OID를 사용하여 인스턴스의 모든 속성, 지정한 속성 또는 한 �
 
 .. code-block:: php
 
-	$attrarray = cubrid_get ($con, $oid); // (a)
-	$attrarray = cubrid_get ($con, $oid, array("id", "name")); // (b)
-	$attrarray = cubrid_get ($con, $oid, "id"); // (c)
+    $attrarray = cubrid_get ($con, $oid); // (a)
+    $attrarray = cubrid_get ($con, $oid, array("id", "name")); // (b)
+    $attrarray = cubrid_get ($con, $oid, "id"); // (c)
 
 OID를 사용하여 인스턴스의 속성 값을 갱신할 수도 있다. 하나의 속성의 값을 갱신하려면 속성 이름을 문자열 타입으로 명시하고 값을 명시한다(a). 다중 속성의 값을 설정하려면 속성 명과 값을 연관배열로 명시해야 한다(b).
 
 .. code-block:: php
 
-	$cubrid_put ($con, $oid, "id", 1); // (a)
-	$cubrid_put ($con, $oid, array("id"=>1, "name"=>"Tomas")); // (b)
+    $cubrid_put ($con, $oid, "id", 1); // (a)
+    $cubrid_put ($con, $oid, array("id"=>1, "name"=>"Tomas")); // (b)
 
 **컬렉션 사용**
 
@@ -618,31 +618,31 @@ OID를 사용하여 인스턴스의 속성 값을 갱신할 수도 있다. 하�
 
 .. code-block:: php
 
-	$row = cubrid_fetch ($req);
-	$col = $row["customer"];
-	while (list ($key, $cust) = each ($col)) {
-	   echo $cust;
-	}
+    $row = cubrid_fetch ($req);
+    $col = $row["customer"];
+    while (list ($key, $cust) = each ($col)) {
+       echo $cust;
+    }
 
 컬렉션 속성의 값도 얻을 수 있다. 다음은 `cubrid_col_get <http://www.php.net/manual/en/function.cubrid-col-get.php>`_ () 함수를 사용하여 컬렉션 속성 값을 가져오는 예제이다.
 
 .. code-block:: php
 
-	$tels = cubrid_col_get ($con, $oid, "tels");
-	while (list ($key, $tel) = each ($tels)) {
-	   echo $tel."\n";
-	}
+    $tels = cubrid_col_get ($con, $oid, "tels");
+    while (list ($key, $tel) = each ($tels)) {
+       echo $tel."\n";
+    }
 
 cubrid_set_add() 함수와 cubrid_set_drop() 함수를 사용하면 컬렉션 타입의 값을 직접적으로 갱신할 수 있다.
 
 .. code-block:: php
 
-	$tels = cubrid_col_get ($con, $oid, "tels");
-	while (list ($key, $tel) = each ($tels)) {
-	   $res = cubrid_set_drop ($con, $oid, "tel", $tel);
-	}
+    $tels = cubrid_col_get ($con, $oid, "tels");
+    while (list ($key, $tel) = each ($tels)) {
+       $res = cubrid_set_drop ($con, $oid, "tel", $tel);
+    }
 
-	cubrid_commit ($con);
+    cubrid_commit ($con);
 
 .. note:: 칼럼에서 정의한 크기보다 큰 문자열을 **INSERT** / **UPDATE** 하면 문자열이 잘려서 입력된다.
 

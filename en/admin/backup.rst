@@ -11,7 +11,7 @@ A database backup is the procedure of storing CUBRID database volumes, control f
 
 To recover all database pages, control files and the database to the state at the time of backup, the **cubrid backupdb** utility copies all necessary log records. ::
 
-	cubrid backupdb [options] database_name
+    cubrid backupdb [options] database_name
 
 The following table shows options available with the **cubrid backupdb** utility (options are case sensitive).
 
@@ -19,94 +19,94 @@ The following table shows options available with the **cubrid backupdb** utility
 
 .. option:: -D, --destination-path=PATH
 
-	The following shows how to use the **-D** option to store backup files in the specified directory. The backup file directory must be specified before performing this job. If the **-D** option is not specified, backup files are stored in the directory specified in the **databases.txt** file which stores database location information. ::
+    The following shows how to use the **-D** option to store backup files in the specified directory. The backup file directory must be specified before performing this job. If the **-D** option is not specified, backup files are stored in the directory specified in the **databases.txt** file which stores database location information. ::
 
-		cubrid backupdb -D /home/cubrid/backup demodb
+        cubrid backupdb -D /home/cubrid/backup demodb
 
-	The following shows how to store backup files in the current directory by using the **-D** option. If you enter a period (.) following the **-D** option as an argument, the current directory is specified. ::
+    The following shows how to store backup files in the current directory by using the **-D** option. If you enter a period (.) following the **-D** option as an argument, the current directory is specified. ::
 
-		cubrid backupdb -D . demodb
+        cubrid backupdb -D . demodb
 
 .. option:: -r, --remove-archive
 
-	Writes an active log to a new archive log file when the active log is full. If a backup is performed in such a situation and backup volumes are created, backup logs created before the backup will not be used in subsequent backups. The **-r** option is used to remove archive log files that will not be used any more in subsequent backups after the current one is complete. The **-r** option only removes unnecessary archive log files that were created before backup, and does not have any impact on backup; however, if an administrator removes the archive log file after a backup, it may become impossible to restore everything. For this reason, archive logs should be removed only after careful consideration.
+    Writes an active log to a new archive log file when the active log is full. If a backup is performed in such a situation and backup volumes are created, backup logs created before the backup will not be used in subsequent backups. The **-r** option is used to remove archive log files that will not be used any more in subsequent backups after the current one is complete. The **-r** option only removes unnecessary archive log files that were created before backup, and does not have any impact on backup; however, if an administrator removes the archive log file after a backup, it may become impossible to restore everything. For this reason, archive logs should be removed only after careful consideration.
 
-	If you perform an incremental backup (backup level 1 or 2) with the **-r** option, there is the risk that normal recovery of the database will be impossible later on. Therefore, it is recommended that the **-r** option only be used when a full backup is performed. ::
+    If you perform an incremental backup (backup level 1 or 2) with the **-r** option, there is the risk that normal recovery of the database will be impossible later on. Therefore, it is recommended that the **-r** option only be used when a full backup is performed. ::
 
-		cubrid backupdb -r demodb
+        cubrid backupdb -r demodb
 
 .. option:: -l, --level=LEVEL
 
-	The following shows how to execute an incremental backup of the level specified by using the **-l** option. If the **-l** option is not specified, a full backup is performed. For details on backup levels, see :ref:`Incremental Backup <incremental-backup>` . ::
+    The following shows how to execute an incremental backup of the level specified by using the **-l** option. If the **-l** option is not specified, a full backup is performed. For details on backup levels, see :ref:`Incremental Backup <incremental-backup>` . ::
 
-		cubrid backupdb -l 1 demodb
+        cubrid backupdb -l 1 demodb
 
 .. option:: -o, --output-file=FILE
 
-	The following shows how to write the progress of the database backup to the info_backup file by using the **-o** option. ::
+    The following shows how to write the progress of the database backup to the info_backup file by using the **-o** option. ::
 
-		cubrid backupdb -o info_backup demodb
+        cubrid backupdb -o info_backup demodb
 
-	The following shows the contents of the info_backup file. You can check the information on the number of threads, compression method, backup start time, the number of permanent volumes, backup progress and backup end time. ::
+    The following shows the contents of the info_backup file. You can check the information on the number of threads, compression method, backup start time, the number of permanent volumes, backup progress and backup end time. ::
 
-		[ Database(demodb) Full Backup start ]
-		- num-threads: 1
-		- compression method: NONE
-		- backup start time: Mon Jul 21 16:51:51 2008
-		- number of permanent volumes: 1
-		- backup progress status
-		-----------------------------------------------------------------------------
-		 volume name                  | # of pages | backup progress status    | done
-		-----------------------------------------------------------------------------
-		 demodb_vinf                  |          1 | ######################### | done
-		 demodb                       |      25000 | ######################### | done
-		 demodb_lginf                 |          1 | ######################### | done
-		 demodb_lgat                  |      25000 | ######################### | done
-		-----------------------------------------------------------------------------
-		# backup end time: Mon Jul 21 16:51:53 2008
-		[Database(demodb) Full Backup end]
+        [ Database(demodb) Full Backup start ]
+        - num-threads: 1
+        - compression method: NONE
+        - backup start time: Mon Jul 21 16:51:51 2008
+        - number of permanent volumes: 1
+        - backup progress status
+        -----------------------------------------------------------------------------
+         volume name                  | # of pages | backup progress status    | done
+        -----------------------------------------------------------------------------
+         demodb_vinf                  |          1 | ######################### | done
+         demodb                       |      25000 | ######################### | done
+         demodb_lginf                 |          1 | ######################### | done
+         demodb_lgat                  |      25000 | ######################### | done
+        -----------------------------------------------------------------------------
+        # backup end time: Mon Jul 21 16:51:53 2008
+        [Database(demodb) Full Backup end]
 
 .. option:: -S, --SA-mode
 
-	The following shows how to perform backup in standalone mode (that is, backup offline) by using the **-S** option. If the **-S** option is not specified, the backup is performed in client/server mode. ::
+    The following shows how to perform backup in standalone mode (that is, backup offline) by using the **-S** option. If the **-S** option is not specified, the backup is performed in client/server mode. ::
 
-		cubrid backupdb -S demodb
+        cubrid backupdb -S demodb
 
 .. option :: -C, --CS-mode
 
-	The following shows how to perform backup in client/server mode by using the **-C** option and the *demodb* database is backed up online. If the **-C** option is not specified, a backup is performed in client/server mode. ::
+    The following shows how to perform backup in client/server mode by using the **-C** option and the *demodb* database is backed up online. If the **-C** option is not specified, a backup is performed in client/server mode. ::
 
-		cubrid backupdb -C demodb
+        cubrid backupdb -C demodb
 
 .. option:: --no-check
 
-	The following shows how to execute backup without checking the consistency of the database by using the **--no-check** option. ::
+    The following shows how to execute backup without checking the consistency of the database by using the **--no-check** option. ::
 
-		cubrid backupdb --no-check demodb
+        cubrid backupdb --no-check demodb
 
 .. option:: -t, --thread-count=COUNT
 
-	The following shows how to execute parallel backup with the number of threads specified by the administrator by using the **-t** option. Even when the argument of the **-t** option is not specified, a parallel backup is performed by automatically assigning as many threads as CPUs in the system. ::
+    The following shows how to execute parallel backup with the number of threads specified by the administrator by using the **-t** option. Even when the argument of the **-t** option is not specified, a parallel backup is performed by automatically assigning as many threads as CPUs in the system. ::
 
-		cubrid backupdb -t 4 demodb
+        cubrid backupdb -t 4 demodb
 
 .. option:: -z, --compress
 
-	The following shows how to compress the database and stores it in the backup file by using the **-z** option. The size of the backup file and the time required for backup can be reduced by using the **-z** option. ::
+    The following shows how to compress the database and stores it in the backup file by using the **-z** option. The size of the backup file and the time required for backup can be reduced by using the **-z** option. ::
 
-		cubrid backupdb -z demodb
+        cubrid backupdb -z demodb
 
 .. option:: -e, --except-active-log
 
-	The following shows how to execute backup excluding active logs of the database by using the **-e** option. You can reduce the time required for backup by using the **-e** option. However, extra caution is required because active logs needed for completing a restore to the state of a certain point from the backup point are not included in the backup file, which may lead to an unsuccessful restore. ::
+    The following shows how to execute backup excluding active logs of the database by using the **-e** option. You can reduce the time required for backup by using the **-e** option. However, extra caution is required because active logs needed for completing a restore to the state of a certain point from the backup point are not included in the backup file, which may lead to an unsuccessful restore. ::
 
-		cubrid backupdb -e demodb
+        cubrid backupdb -e demodb
 
 .. option:: --sleep-msecs=NUMBER
 
-	This option allows you to specify the interval of idle time during the database backup. The default value is 0 in milliseconds. The system becomes idle for the specified amount of time whenever it reads 1 MB of data from a file. This option is used to reduce the performance degradation of an active server during a live backup. The idle time will prevent excessive disk I/O operations. ::
+    This option allows you to specify the interval of idle time during the database backup. The default value is 0 in milliseconds. The system becomes idle for the specified amount of time whenever it reads 1 MB of data from a file. This option is used to reduce the performance degradation of an active server during a live backup. The idle time will prevent excessive disk I/O operations. ::
 
-		cubrid backupdb --sleep-msecs=5 demodb
+        cubrid backupdb --sleep-msecs=5 demodb
 
 Backup Strategy and Method
 ==========================
@@ -199,18 +199,18 @@ During the backup process, if there is not enough space on the disk to store the
 
 ::
 
-	******************************************************************
-	Backup destination is full, a new destination is required to continue:
-	Database Name: /local1/testing/demodb
-		 Volume Name: /dev/rst1
-			Unit Num: 1
-		Backup Level: 0 (FULL LEVEL)
-	Enter one of the following options:
-	Type
-	   -  0 to quit.
-	   -  1 to continue after the volume is mounted/loaded. (retry)
-	   -  2 to continue after changing the volume's directory or device.
-	******************************************************************
+    ******************************************************************
+    Backup destination is full, a new destination is required to continue:
+    Database Name: /local1/testing/demodb
+         Volume Name: /dev/rst1
+            Unit Num: 1
+        Backup Level: 0 (FULL LEVEL)
+    Enter one of the following options:
+    Type
+       -  0 to quit.
+       -  1 to continue after the volume is mounted/loaded. (retry)
+       -  2 to continue after changing the volume's directory or device.
+    ******************************************************************
 
 
 .. _Managing_Archive_Logs:
@@ -235,11 +235,11 @@ A database restore is the procedure of restoring the database to its state at a 
 
 The **cubrid restoredb** utility (restordb.exe on Windows) restores the database from the database backup by using the information written to all the active and archive logs since the execution of the last backup. ::
 
-	cubrid restoredb [options] database_name
+    cubrid restoredb [options] database_name
 
 If no option is specified, a database is restored to the point of the last commit by default. If no active/archive log files are required to restore to the point of the last commit, the database is restored only to the point of the last backup. ::
 
-	cubrid restoredb demodb
+    cubrid restoredb demodb
 
 The following table shows options available with the **cubrid restoredb** utility (options are case sensitive).
 
@@ -247,99 +247,99 @@ The following table shows options available with the **cubrid restoredb** utilit
 
 .. option:: -d, --up-to-date=DATE
 
-	A database can be restored to the given point by the date-time specified by the **-d** option. The user can specify the restoration point manually in the dd-mm-yyyy:hh:mm:ss (e.g. 14-10-2008:14:10:00) format. If no active log/archive log files are required to restore to the point specified, the database is restored only to the point of the last backup. ::
+    A database can be restored to the given point by the date-time specified by the **-d** option. The user can specify the restoration point manually in the dd-mm-yyyy:hh:mm:ss (e.g. 14-10-2008:14:10:00) format. If no active log/archive log files are required to restore to the point specified, the database is restored only to the point of the last backup. ::
 
-		cubrid restoredb -d 14-10-2008:14:10:00 demodb
+        cubrid restoredb -d 14-10-2008:14:10:00 demodb
 
-	If the user specifies the restoration point by using the **backuptime** keyword, it restores a database to the point of the last backup. ::
+    If the user specifies the restoration point by using the **backuptime** keyword, it restores a database to the point of the last backup. ::
 
-		cubrid restoredb -d backuptime demodb
+        cubrid restoredb -d backuptime demodb
 
 .. option:: --list
 
-	This option displays information on backup files of a database; restoration procedure is not performed. ::
+    This option displays information on backup files of a database; restoration procedure is not performed. ::
 
-		cubrid restoredb --list demodb
+        cubrid restoredb --list demodb
 
-	The following example shows how to display backup information by using the **--list** option. You can specify the path to which backup files of the database are originally stored as well as backup levels. ::
+    The following example shows how to display backup information by using the **--list** option. You can specify the path to which backup files of the database are originally stored as well as backup levels. ::
 
-		*** BACKUP HEADER INFORMATION ***
-		Database Name: /local1/testing/demodb
-		 DB Creation Time: Mon Oct 1 17:27:40 2008
-				 Pagesize: 4096
-		Backup Level: 1 (INCREMENTAL LEVEL 1)
-				Start_lsa: 513|3688
-				 Last_lsa: 513|3688
-		Backup Time: Mon Oct 1 17:32:50 2008
-		 Backup Unit Num: 0
-		Release: 8.1.0
-			 Disk Version: 8
-		Backup Pagesize: 4096
-		Zip Method: 0 (NONE)
-				Zip Level: 0 (NONE)
-		Previous Backup level: 0 Time: Mon Oct 1 17:31:40 2008
-		(start_lsa was -1|-1)
-		Database Volume name: /local1/testing/demodb_vinf
-			 Volume Identifier: -5, Size: 308 bytes (1 pages)
-		Database Volume name: /local1/testing/demodb
-			 Volume Identifier: 0, Size: 2048000 bytes (500 pages)
-		Database Volume name: /local1/testing/demodb_lginf
-			 Volume Identifier: -4, Size: 165 bytes (1 pages)
-		Database Volume name: /local1/testing/demodb_bkvinf
-			 Volume Identifier: -3, Size: 132 bytes (1 pages)
+        *** BACKUP HEADER INFORMATION ***
+        Database Name: /local1/testing/demodb
+         DB Creation Time: Mon Oct 1 17:27:40 2008
+                 Pagesize: 4096
+        Backup Level: 1 (INCREMENTAL LEVEL 1)
+                Start_lsa: 513|3688
+                 Last_lsa: 513|3688
+        Backup Time: Mon Oct 1 17:32:50 2008
+         Backup Unit Num: 0
+        Release: 8.1.0
+             Disk Version: 8
+        Backup Pagesize: 4096
+        Zip Method: 0 (NONE)
+                Zip Level: 0 (NONE)
+        Previous Backup level: 0 Time: Mon Oct 1 17:31:40 2008
+        (start_lsa was -1|-1)
+        Database Volume name: /local1/testing/demodb_vinf
+             Volume Identifier: -5, Size: 308 bytes (1 pages)
+        Database Volume name: /local1/testing/demodb
+             Volume Identifier: 0, Size: 2048000 bytes (500 pages)
+        Database Volume name: /local1/testing/demodb_lginf
+             Volume Identifier: -4, Size: 165 bytes (1 pages)
+        Database Volume name: /local1/testing/demodb_bkvinf
+             Volume Identifier: -3, Size: 132 bytes (1 pages)
 
-	With the backup information displayed by using the **--list** option, you can check that backup files have been created at the backup level 1 as well as the point where the full backup of backup level 0 has been performed. Therefore, to restore the database in the example, you must prepare backup files for backup levels 0 and 1.
+    With the backup information displayed by using the **--list** option, you can check that backup files have been created at the backup level 1 as well as the point where the full backup of backup level 0 has been performed. Therefore, to restore the database in the example, you must prepare backup files for backup levels 0 and 1.
 
 .. option:: -B, --backup-file-path=PATH
 
-	You can specify the directory where backup files are to be located by using the **-B** option. If this option is not specified, the system retrieves the backup information file (*dbname* **_bkvinf**) generated upon a database backup; the backup information file in located in the **log-path** directory specified in the database location information file (**databases.txt**). And then it searches the backup files in the directory path specified in the backup information file. However, if the backup information file has been damaged or the location information of the backup files has been deleted, the system will not be able to find the backup files. Therefore, the administrator must manually specify the directory where the backup files are located by using the **-B** option. ::
+    You can specify the directory where backup files are to be located by using the **-B** option. If this option is not specified, the system retrieves the backup information file (*dbname* **_bkvinf**) generated upon a database backup; the backup information file in located in the **log-path** directory specified in the database location information file (**databases.txt**). And then it searches the backup files in the directory path specified in the backup information file. However, if the backup information file has been damaged or the location information of the backup files has been deleted, the system will not be able to find the backup files. Therefore, the administrator must manually specify the directory where the backup files are located by using the **-B** option. ::
 
-		cubrid restoredb -B /home/cubrid/backup demodb
+        cubrid restoredb -B /home/cubrid/backup demodb
 
-	If the backup files of a database is in the current directory, the administrator can specify the directory where the backup files are located by using the **-B** option. ::
+    If the backup files of a database is in the current directory, the administrator can specify the directory where the backup files are located by using the **-B** option. ::
 
-		cubrid restoredb -B . demodb
+        cubrid restoredb -B . demodb
 
 .. option:: -l, --level=LEVEL
 
-	You can perform restoration by specifying the backup level of the database to 0, 1, or 2. For details on backup levels, see :ref:`Incremental Backup <incremental-backup>` . ::
+    You can perform restoration by specifying the backup level of the database to 0, 1, or 2. For details on backup levels, see :ref:`Incremental Backup <incremental-backup>` . ::
 
-		cubrid restoredb -l 1 demodb
+        cubrid restoredb -l 1 demodb
 
 .. option:: -p, --partial-recovery
 
-	Yo can perform partial restoration without requesting for the user's response by using the **-p** option. If active or archive logs written after the backup point are not complete, by default the system displays a request message informing that log files are needed and prompting the user to enter an execution option. The partial restoration can be performed directly without such a request message by using the **-p** option. Therefore, if the **-p** option is used when performing restoration, data is always restored to the point of the last backup. ::
+    Yo can perform partial restoration without requesting for the user's response by using the **-p** option. If active or archive logs written after the backup point are not complete, by default the system displays a request message informing that log files are needed and prompting the user to enter an execution option. The partial restoration can be performed directly without such a request message by using the **-p** option. Therefore, if the **-p** option is used when performing restoration, data is always restored to the point of the last backup. ::
 
-		cubrid restoredb -p demodb
+        cubrid restoredb -p demodb
 
-	When the **-p** option is not specified, the message requesting the user to select the execution option is as follows: ::
+    When the **-p** option is not specified, the message requesting the user to select the execution option is as follows: ::
 
-		***********************************************************
-		Log Archive /home/cubrid/test/log/demodb_lgar002
-		 is needed to continue normal execution.
-		   Type
-		   -  0 to quit.
-		   -  1 to continue without present archive. (Partial recovery)
-		   -  2 to continue after the archive is mounted/loaded. 
-		   -  3 to continue after changing location/name of archive.
-		***********************************************************
+        ***********************************************************
+        Log Archive /home/cubrid/test/log/demodb_lgar002
+         is needed to continue normal execution.
+           Type
+           -  0 to quit.
+           -  1 to continue without present archive. (Partial recovery)
+           -  2 to continue after the archive is mounted/loaded. 
+           -  3 to continue after changing location/name of archive.
+        ***********************************************************
 
-	*   Option 0: Stops restoring
-	*   Option 1: Performing partial restoration without log files.
-	*   Option 2: Performing restoration after locating a log to the current device.
-	*   Option 3: Resuming restoration after changing the location of a log
+    *   Option 0: Stops restoring
+    *   Option 1: Performing partial restoration without log files.
+    *   Option 2: Performing restoration after locating a log to the current device.
+    *   Option 3: Resuming restoration after changing the location of a log
 
 .. option:: -o, --output-file=FILE
 
-	The following syntax shows how to write the restoration progress of a database to the info_restore file by using the **-o** option. ::
+    The following syntax shows how to write the restoration progress of a database to the info_restore file by using the **-o** option. ::
 
-		cubrid restoredb -o info_restore demodb
+        cubrid restoredb -o info_restore demodb
 
 .. option:: -u, --use-database-location-path
 
-	This option restores a database to the path specified in the database location file(**databases.txt**).  The **-u** option is useful when you perform a backup on server A and store the backup file on server B. ::
+    This option restores a database to the path specified in the database location file(**databases.txt**).  The **-u** option is useful when you perform a backup on server A and store the backup file on server B. ::
 
-		cubrid restoredb -u demodb
+        cubrid restoredb -u demodb
 
 Restoring Strategy and Procedure
 ================================
@@ -421,15 +421,15 @@ Suppose that *demodb* is backed up in the /home/cubrid/db/demodb directory on se
 
     Back up *demodb* on server *A*. If a backup has been performed earlier, you can perform an incremental backup for data only that have changed since the last backup. The directory where the backup files are created, if not specified in the **-D** option, is created by default in the location where the log volume is stored. The following is a backup command with recommended options. For details on the options, see :ref:`db-backup` . ::
 
-		cubrid backupdb -z demodb
+        cubrid backupdb -z demodb
 
 #.  Editing the database location file on Server B
 
     Unlike a general scenario where a backup and restore are performed on the same server, in a scenario where backup files are restored using a different server, you need to add the location information on database restore in the database location file (**databases.txt**) on server *B*. In the diagram above, it is supposed that *demodb* is restored in the /home/cubrid/data/demodb directory on server *B* (hostname: pmlinux); edit the location information file accordingly and create the directory on server *B*.
 
     Put the database location information in one single line. Separate each item with a space. The line should be written in [database name]. [data volume path] [host name] [log volume path] format; that is, write the location information of *demodb* as follows: ::
-	
-		demodb /home/cubrid/data/demodb pmlinux /home/cubrid/data/demodb
+    
+        demodb /home/cubrid/data/demodb pmlinux /home/cubrid/data/demodb
 
 #.  Transferring backup/log files to server B
 
@@ -439,11 +439,11 @@ Suppose that *demodb* is backed up in the /home/cubrid/db/demodb directory on se
 
     Perform database restore by calling the **cubrid restoredb** utility from the directory into which the backup, backup information, active log and archive log files which were transferred to server *B* had been stored. With the **-u** option, *demodb* is restored in the directory path from the **databases.txt** file. ::
 
-		cubrid restoredb -u demodb
+        cubrid restoredb -u demodb
 
     To call the **cubrid restoredb** utility from a different path, specify the directory path to the backup file by using the **-B** option as follows: ::
 
-		cubrid restoredb -u -B /home/cubrid/temp demodb
+        cubrid restoredb -u -B /home/cubrid/temp demodb
 
 #.  Backing up the restored database on server B
 

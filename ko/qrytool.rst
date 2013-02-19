@@ -14,86 +14,86 @@ CUBRID는 CSQL 인터프리터 이외에도 편리한 GUI 방식의 "CUBRID 매�
 
 CSQL 인터프리터는 셸에서 다음과 같이 시작할 수 있다. 처음 설치한 상태에서는 **PUBLIC** 과 **DBA** 사용자가 제공되며, 이들의 비밀번호는 설정되어 있지 않다. CSQL 인터프리터 실행 시 사용자를 지정하지 않으면 **PUBLIC** 으로 로그인된다. ::
 
-	% csql demodb
+    % csql demodb
 
-	CUBRID SQL Interpreter
+    CUBRID SQL Interpreter
 
-	Type `;help' for help messages.
+    Type `;help' for help messages.
 
-	csql> ;help
+    csql> ;help
 
-	=== <Help: Session Command Summary> ===
+    === <Help: Session Command Summary> ===
 
 
-	   All session commands should be prefixed by `;' and only blanks/tabs
-	   can precede the prefix. Capitalized characters represent the minimum
-	   abbreviation that you need to enter to execute the specified command.
+       All session commands should be prefixed by `;' and only blanks/tabs
+       can precede the prefix. Capitalized characters represent the minimum
+       abbreviation that you need to enter to execute the specified command.
 
-	   ;REAd   [<file-name>]       - read a file into command buffer.
-	   ;Write  [<file-name>]       - (over)write command buffer into a file.
-	   ;APpend [<file-name>]       - append command buffer into a file.
-	   ;PRINT                      - print command buffer.
-	   ;SHELL                      - invoke shell.
-	   ;CD                         - change current working directory.
-	   ;EXit                       - exit program.
+       ;REAd   [<file-name>]       - read a file into command buffer.
+       ;Write  [<file-name>]       - (over)write command buffer into a file.
+       ;APpend [<file-name>]       - append command buffer into a file.
+       ;PRINT                      - print command buffer.
+       ;SHELL                      - invoke shell.
+       ;CD                         - change current working directory.
+       ;EXit                       - exit program.
 
-	   ;CLear                      - clear command buffer.
-	   ;EDIT                       - invoke system editor with command buffer.
-	   ;LISt                       - display the content of command buffer.
+       ;CLear                      - clear command buffer.
+       ;EDIT                       - invoke system editor with command buffer.
+       ;LISt                       - display the content of command buffer.
 
-	   ;RUn                        - execute sql in command buffer.
-	   ;Xrun                       - execute sql in command buffer,
-									 and clear the command buffer.
-	   ;COmmit                     - commit the current transaction.
-	   ;ROllback                   - roll back the current transaction.
-	   ;AUtocommit [ON|OFF]        - enable/disable auto commit mode.
-	   ;REStart                    - restart database.
+       ;RUn                        - execute sql in command buffer.
+       ;Xrun                       - execute sql in command buffer,
+                                     and clear the command buffer.
+       ;COmmit                     - commit the current transaction.
+       ;ROllback                   - roll back the current transaction.
+       ;AUtocommit [ON|OFF]        - enable/disable auto commit mode.
+       ;REStart                    - restart database.
 
-	   ;SHELL_Cmd  [shell-cmd]     - set default shell, editor, print and pager
-	   ;EDITOR_Cmd [editor-cmd]      command to new one, or display the current
-	   ;PRINT_Cmd  [print-cmd]       one, respectively.
-	   ;PAger_cmd  [pager-cmd]
+       ;SHELL_Cmd  [shell-cmd]     - set default shell, editor, print and pager
+       ;EDITOR_Cmd [editor-cmd]      command to new one, or display the current
+       ;PRINT_Cmd  [print-cmd]       one, respectively.
+       ;PAger_cmd  [pager-cmd]
 
-	   ;DATE                       - display the local time, date.
-	   ;DATAbase                   - display the name of database being accessed.
-	   ;SChema class-name          - display schema information of a class.
-	   ;SYntax [sql-cmd-name]      - display syntax of a command.
-	   ;TRigger [`*'|trigger-name] - display trigger definition.
-	   ;Get system_parameter       - get the value of a system parameter.
-	   ;SEt system_parameter=value - set the value of a system parameter.
-	   ;PLan [simple/detail/off]   - show query execution plan.
-	   ;Info <command>             - display internal information.
-	   ;TIme [ON/OFF]              - enable/disable to display the query
-									 execution time.
-	   ;LINe-output [ON/OFF]       - enable/disable to display each value in a line
-	   ;HISTORYList                - display list of the executed queries.
-	   ;HISTORYRead <history_num>  - read entry on the history number into command buffer.
-	   ;HElp                       - display this help message.
+       ;DATE                       - display the local time, date.
+       ;DATAbase                   - display the name of database being accessed.
+       ;SChema class-name          - display schema information of a class.
+       ;SYntax [sql-cmd-name]      - display syntax of a command.
+       ;TRigger [`*'|trigger-name] - display trigger definition.
+       ;Get system_parameter       - get the value of a system parameter.
+       ;SEt system_parameter=value - set the value of a system parameter.
+       ;PLan [simple/detail/off]   - show query execution plan.
+       ;Info <command>             - display internal information.
+       ;TIme [ON/OFF]              - enable/disable to display the query
+                                     execution time.
+       ;LINe-output [ON/OFF]       - enable/disable to display each value in a line
+       ;HISTORYList                - display list of the executed queries.
+       ;HISTORYRead <history_num>  - read entry on the history number into command buffer.
+       ;HElp                       - display this help message.
 
 **CSQL에서 SQL 실행**
 
 csql을 실행하고 난 후에는 csql> 프롬프트에서 원하는 SQL문을 입력해서 실행할 수 있다. 하나의 SQL 문은 세미콜론(;)으로 끝나도록 입력하며, 여러 개의 SQL문을 한 줄에 입력할 수도 있다. 세션 명령어는 ;help 명령으로 간단한 사용법을 찾아 볼 수 있으며 상세한 내용은 :ref:`csql-session-commands` 를 참고한다. ::
 
-	% csql demodb
-	
-	csql> SELECT SUM(n) FROM (SELECT gold FROM participant WHERE nation_code='KOR'
-	csql> UNION ALL SELECT silver FROM participant WHERE nation_code='JPN') AS t(n);
+    % csql demodb
+    
+    csql> SELECT SUM(n) FROM (SELECT gold FROM participant WHERE nation_code='KOR'
+    csql> UNION ALL SELECT silver FROM participant WHERE nation_code='JPN') AS t(n);
 
-	=== <Result of SELECT Command in Line 2> ===
+    === <Result of SELECT Command in Line 2> ===
 
-		   sum(n)
-	=============
-			   82
+           sum(n)
+    =============
+               82
 
 
-	1 row selected.
-	SQL statement execution time:     0.106504 sec
-	
-	Current transaction has been committed.
+    1 row selected.
+    SQL statement execution time:     0.106504 sec
+    
+    Current transaction has been committed.
 
-	1 command(s) successfully processed.
+    1 command(s) successfully processed.
 
-	csql> ;exit
+    csql> ;exit
 
 .. _cm-cqb:
 
@@ -153,22 +153,22 @@ CUBRID 2008 R4.3 이상 버전부터는 설치 패키지에 웹 매니저가 포
 
 #. CUBRID Service를 시작한다. CUBRID Manager 서버가 구동되어야 웹 매니저가 정상 동작한다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server`  참고한다. ::
 
-	C:\CUBRID>cubrid service start
-	++ cubrid service is running.
-		
+    C:\CUBRID>cubrid service start
+    ++ cubrid service is running.
+        
 #. 웹 브라우저 주소창에 https://localhost:8282/  로 접속한다. 기본 TCP 포트는 8282(HTTPS/SSL)를 사용하며, $CUBRID/conf/cm_httpd.conf 파일을 편집하여 포트를 변경할 수 있다. 이때, http가 아니라 https로 입력해야만 하므로 주의한다.
 
 #. 먼저 호스트 로그인을 수행한다. 호스트 접속을 위해서 1차로 CM 서버 사용자(=호스트 사용자) 인증을 수행하며, 기본 사용자 이름/암호는 admin/admin이다.
 
-	.. image:: /images/gs_manager_login.png
+    .. image:: /images/gs_manager_login.png
 
 #. DB 서버에 접속한다. 왼쪽 트리에서 해당 호스트 내에 생성된 데이터베이스 목록을 확인할 수 있으며, 접속하고자 하는 DB를 클릭하고 DB 사용자 인증을 수행한다. 기본 사용자 이름은 dba이며 암호는 없다.
 
-	.. image:: /images/gs_manager_db.png
+    .. image:: /images/gs_manager_db.png
 
 #. 접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 접속한 데이터베이스에 존재하는 테이블 목록이 출력되고, SQL 탭에서 질의를 작성, 실행하고 결과를 확인할 수 있다.
 
-	.. image:: /images/gs_manager_screen.png
+    .. image:: /images/gs_manager_screen.png
 
 보다 자세한 정보는 http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual 을 참고한다.
 
@@ -179,15 +179,15 @@ CUBRID 매니저는 별도로 다운로드 한 후 실행해야 하는 클라이
 
 #. CUBRID 매니저 최신 파일을 다운로드한 후 설치한다. CUBRID 매니저는 CUBRID 엔진 버전 2008 R2.2 이상부터 호환된다. 또한, 자동 업데이트 기능을 지원하므로 주기적으로 최신 버전을 유지하는 것이 좋다. 
 
-	(CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager )
+    (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager )
 
 #. 서버에서 CUBRID Service를 시작한다. CUBRID Manager 서버가 구동되어야 CUBRID 매니저 클라이언트가 접속할 수 있다. CUBRID 매니저 서버의 실행 및 설정에 대한 자세한 내용은 :ref:`cubrid-manager-server` 를 참고한다.
 
 ::
 
-	C:\CUBRID>cubrid service start
-	++ cubrid service is running.
-	
+    C:\CUBRID>cubrid service start
+    ++ cubrid service is running.
+    
 #. CUBRID Manager를 설치한 후 [파일 > 호스트 추가] 메뉴에서 호스트 정보를 등록한다. 호스트 등록 시에는 호스트 주소, 연결 포트(기본: 8001), CM 사용자 및 비밀번호를 입력해야 하며, 해당 서버의 엔진과 버전이 동일한 JDBC 드라이버를 설치해야 한다(자동 드라이버 검색/자동 업데이트 지원).
 
 #. 왼쪽에 노드 트리에서 호스트를 선택하고 CM 사용자(=호스트 사용자) 인증을 수행한다. 기본 사용자 계정은 admin/admin이다.
@@ -196,7 +196,7 @@ CUBRID 매니저는 별도로 다운로드 한 후 실행해야 하는 클라이
 
 #. 접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 호스트, 데이터베이스, 테이블 목록이 출력되고, 오른쪽에는 질의 편집기와 질의 결과 창이 있다. [SQL 실행 이력] 탭에서는 DB별로 실행 성공한 SQL 리스트를 재사용할 수 있으며, [질의 다중 실행] 탭에서 결과 비교를 위한 DB를 추가하여 여러 데이터베이스에서 결과값을 쉽게 비교할 수 있다.
 
-	.. image:: /images/gs_manager_sql.png
+    .. image:: /images/gs_manager_sql.png
 
 보다 자세한 정보는 http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr 을 참고한다.
 
@@ -224,7 +224,7 @@ CUBRID 쿼리 브라우저 역시 별도로 다운로드한 후 실행해야 하
 
 #. 접속한 DB에서 SQL을 실행하고, 결과를 확인한다. 왼쪽에는 호스트, 데이터베이스, 테이블 목록이 출력되고, 오른쪽에는 질의 편집기와 질의 결과 창이 있다. [SQL 실행 이력] 탭에서는 DB별로 실행 성공한 SQL 리스트를 재사용할 수 있으며, [질의 다중 실행] 탭에서 결과 비교를 위한 DB를 추가하여 여러 데이터베이스에서 결과값을 쉽게 비교할 수 있다.
 
-	.. image:: /images/gs_manager_qb.png
+    .. image:: /images/gs_manager_qb.png
 
 보다 자세한 정보는 http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual_kr 을 참고한다.
 

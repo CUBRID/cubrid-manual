@@ -16,12 +16,12 @@ CREATE SERIAL
 
 ::
 
-	CREATE SERIAL serial_name
-	[ START WITH initial ]
-	[ INCREMENT BY interval ]
-	[ MINVALUE min | NOMINVALUE ]
-	[ MAXVALUE max | NOMAXVALUE ]
-	[ CACHE integer | NOCACHE ]
+    CREATE SERIAL serial_name
+    [ START WITH initial ]
+    [ INCREMENT BY interval ]
+    [ MINVALUE min | NOMINVALUE ]
+    [ MAXVALUE max | NOMAXVALUE ]
+    [ CACHE integer | NOCACHE ]
 
 *   *serial_identifier* : 생성할 시리얼의 이름을 지정한다(최대 254 바이트).
 
@@ -49,20 +49,20 @@ CREATE SERIAL
 
 .. code-block:: sql
 
-	--creating serial with default values
-	CREATE SERIAL order_no;
-	 
-	--creating serial within a specific range
-	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
-	--creating serial with specifying the number of cached serial values
-	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000 CACHE 3;
-	 
-	--selecting serial information from the db_serial class
-	SELECT * FROM db_serial;
-	 
-	  name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
-	====================================================================================================================================================
-	'order_no'      10006            2                     20000           10000                0            1                3            NULL
+    --creating serial with default values
+    CREATE SERIAL order_no;
+     
+    --creating serial within a specific range
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+    --creating serial with specifying the number of cached serial values
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000 CACHE 3;
+     
+    --selecting serial information from the db_serial class
+    SELECT * FROM db_serial;
+     
+      name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
+    ====================================================================================================================================================
+    'order_no'      10006            2                     20000           10000                0            1                3            NULL
 
 **예제 2**
 
@@ -70,32 +70,32 @@ CREATE SERIAL
 
 .. code-block:: sql
 
-	CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
-	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
-	INSERT INTO athlete_idx VALUES (order_no.CURRENT_VALUE, 'Lee');
-	SELECT * FROM athlete_idx;
-	 
-			 code  name
-	===================================
-			10000  'Park'
-			10002  'Kim'
-			10004  'Choo'
-			10004  'Lee'
+    CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
+    INSERT INTO athlete_idx VALUES (order_no.CURRENT_VALUE, 'Lee');
+    SELECT * FROM athlete_idx;
+     
+             code  name
+    ===================================
+            10000  'Park'
+            10002  'Kim'
+            10004  'Choo'
+            10004  'Lee'
 
 ALTER SERIAL
 ============
 
 **ALTER SERIAL** 문을 이용하면 시리얼 값의 증가치를 갱신하고 시작 값, 최소 값, 최대 값을 설정하거나 제거할 수 있으며, 순환 속성을 설정할 수 있다. ::
 
-	ALTER SERIAL serial_identifier
-	[ INCREMENT BY interval ]
-	[ START WITH initial_value ]
-	[ MINVALUE min | NOMINVALUE ]
-	[ MAXVALUE max | NOMAXVALUE ]
-	[ CACHE integer | NOCACHE ]
+    ALTER SERIAL serial_identifier
+    [ INCREMENT BY interval ]
+    [ START WITH initial_value ]
+    [ MINVALUE min | NOMINVALUE ]
+    [ MAXVALUE max | NOMAXVALUE ]
+    [ CACHE integer | NOCACHE ]
 
 *   *serial_identifier* : 생성할 시리얼의 이름을 지정한다(최대 254 바이트).
 
@@ -121,30 +121,30 @@ ALTER SERIAL
 
 .. warning::
 
-	CUBRID 2008 R1.x 버전에서는 시스템 카탈로그인 db_serial 테이블을 업데이트하는 방식으로 시리얼 값을 변경할 수 있었으나, CUBRID 2008 R2.0 이상 버전부터는 db_serial 테이블의 수정은 허용되지 않고 **ALTER SERIAL** 구문을 이용하는 방식만 허용된다. 따라서 CUBRID 2008 R2.0 이상 버전에서 내보내기(unloaddb)한 데이터에 **ALTER SERIAL** 구문이 포함된 경우에는 이를 CUBRID 2008 R1.x 이하 버전에서 가져오기(loaddb)할 수 없다.
+    CUBRID 2008 R1.x 버전에서는 시스템 카탈로그인 db_serial 테이블을 업데이트하는 방식으로 시리얼 값을 변경할 수 있었으나, CUBRID 2008 R2.0 이상 버전부터는 db_serial 테이블의 수정은 허용되지 않고 **ALTER SERIAL** 구문을 이용하는 방식만 허용된다. 따라서 CUBRID 2008 R2.0 이상 버전에서 내보내기(unloaddb)한 데이터에 **ALTER SERIAL** 구문이 포함된 경우에는 이를 CUBRID 2008 R1.x 이하 버전에서 가져오기(loaddb)할 수 없다.
 
 .. warning::
-	CUBRID 9.0 미만 버전에서는 **ALTER SERIAL** 이후 첫번째 **NEXT_VALUE** 값을 구하면 **ALTER SERILAL** 로 설정한 초기값의 다음 값을 반환했으나, CUBRID 9.0 이상 버전에서는 **ALTER_SERILAL의** 설정값을 반환한다.
+    CUBRID 9.0 미만 버전에서는 **ALTER SERIAL** 이후 첫번째 **NEXT_VALUE** 값을 구하면 **ALTER SERILAL** 로 설정한 초기값의 다음 값을 반환했으나, CUBRID 9.0 이상 버전에서는 **ALTER_SERILAL의** 설정값을 반환한다.
 
 **예제**
 
 .. code-block:: sql
 
-	--altering serial by changing start and incremental values
-	ALTER SERIAL order_no START WITH 100 INCREMENT BY 2;
-	 
-	--altering serial to operate in cache mode
-	ALTER SERIAL order_no CACHE 5;
-	 
-	--altering serial to operate in common mode
-	ALTER SERIAL order_no NOCACHE;
+    --altering serial by changing start and incremental values
+    ALTER SERIAL order_no START WITH 100 INCREMENT BY 2;
+     
+    --altering serial to operate in cache mode
+    ALTER SERIAL order_no CACHE 5;
+     
+    --altering serial to operate in common mode
+    ALTER SERIAL order_no NOCACHE;
 
 DROP SERIAL
 ===========
 
 **DROP SERIAL** 문으로 시리얼 객체를 데이터베이스에서 삭제할 수 있다. ::
 
-	DROP SERIAL serial_identifier
+    DROP SERIAL serial_identifier
 
 *   *serial_identifier* : 삭제할 시리얼의 이름을 지정한다.
 
@@ -154,16 +154,16 @@ DROP SERIAL
 
 .. code-block:: sql
 
-	DROP SERIAL order_no;
+    DROP SERIAL order_no;
 
 시리얼 사용
 ===========
 
 시리얼은 시리얼 이름과 예약어를 질의 안에 삽입하여 읽고 갱신할 수 있다. ::
 
-	serial_identifier.CURRENT_VALUE
-	serial_identifier.NEXT_VALUE
-	
+    serial_identifier.CURRENT_VALUE
+    serial_identifier.NEXT_VALUE
+    
 *   *serial_identifier*.**CURRENT_VALUE** : 시리얼의 현재 값을 반환한다.
 *   *serial_identifier*.**NEXT_VALUE** : 시리얼 값을 증가시키고 그 값을 반환한다.
 
@@ -173,22 +173,22 @@ DROP SERIAL
 
 .. code-block:: sql
 
-	CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');SELECT * FROM athlete_idx;
-	 
-			 code  name
-	===================================
-			10000  'Park'
-			10002  'Kim'
-			10004  'Choo'
-			10006  'Lee'
+    CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');SELECT * FROM athlete_idx;
+     
+             code  name
+    ===================================
+            10000  'Park'
+            10002  'Kim'
+            10004  'Choo'
+            10006  'Lee'
 
 .. warning::
 
-	시리얼을 생성하고 처음 사용할 때 **NEXT_VALUE** 를 이용하면 초기 값을 반환한다. 그 이후에는 현재 값에 증가 값이 추가되어 반환된다.
+    시리얼을 생성하고 처음 사용할 때 **NEXT_VALUE** 를 이용하면 초기 값을 반환한다. 그 이후에는 현재 값에 증가 값이 추가되어 반환된다.
 
 시리얼 함수
 ===========
@@ -207,8 +207,8 @@ DROP SERIAL
 
 ::
 
-	SERIAL_CURRENT_VALUE(serial_name)
-	SERIAL_NEXT_VALUE(serial_name, number)
+    SERIAL_CURRENT_VALUE(serial_name)
+    SERIAL_NEXT_VALUE(serial_name, number)
 
 *   *serial_name* : 시리얼 이름
 *   *number* : 얻고자 하는 시리얼 개수
@@ -217,17 +217,17 @@ DROP SERIAL
 
 .. code-block:: sql
 
-	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
-	SELECT SERIAL_CURRENT_VALUE(order_no);
-	10000
-	 
-	-- At first, the first serial value starts with the initial serial value, 10000. So the l0'th serial value will be 10009.
-	SELECT SERIAL_NEXT_VALUE(order_no, 10);
-	10009
-	 
-	SELECT SERIAL_NEXT_VALUE(order_no, 10);
-	10019
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+    SELECT SERIAL_CURRENT_VALUE(order_no);
+    10000
+     
+    -- At first, the first serial value starts with the initial serial value, 10000. So the l0'th serial value will be 10009.
+    SELECT SERIAL_NEXT_VALUE(order_no, 10);
+    10009
+     
+    SELECT SERIAL_NEXT_VALUE(order_no, 10);
+    10019
 
 .. warning::
 
-	시리얼을 생성하고 **SERIAL_NEXT_VALUE** 함수를 처음 호출하면, 첫 번째 값은 초기값을 반환하므로 한 개의 값이 빠져 현재의 시리얼 값에 (시리얼 간격) * (얻고자 하는 시리얼 개수-1)만큼 증가한 값이 반환된다. 이후 **SERIAL_NEXT_VALUE** 함수를 호출하면 현재 값에 (시리얼 간격) * (얻고자 하는 시리얼 개수)만큼 증가한 값이 반환된다. 위의 예제를 참고한다.
+    시리얼을 생성하고 **SERIAL_NEXT_VALUE** 함수를 처음 호출하면, 첫 번째 값은 초기값을 반환하므로 한 개의 값이 빠져 현재의 시리얼 값에 (시리얼 간격) * (얻고자 하는 시리얼 개수-1)만큼 증가한 값이 반환된다. 이후 **SERIAL_NEXT_VALUE** 함수를 호출하면 현재 값에 (시리얼 간격) * (얻고자 하는 시리얼 개수)만큼 증가한 값이 반환된다. 위의 예제를 참고한다.

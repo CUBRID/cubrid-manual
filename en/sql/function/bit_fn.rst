@@ -32,72 +32,72 @@ Bit Functions
 
 .. function:: BIT_AND (expr)
 
-	As an aggregate function, it performs **AND** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned. 
+    As an aggregate function, it performs **AND** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned. 
 
-	:param expr: An expression of integer type
-	:rtype: BIGINT
+    :param expr: An expression of integer type
+    :rtype: BIGINT
 
-	.. code-block:: sql
+    .. code-block:: sql
 
-		CREATE TABLE bit_tbl(id int);
-		INSERT INTO bit_tbl VALUES (1), (2), (3), (4), (5);
-		SELECT 1&3&5, BIT_AND(id) FROM bit_tbl WHERE id in(1,3,5);
+        CREATE TABLE bit_tbl(id int);
+        INSERT INTO bit_tbl VALUES (1), (2), (3), (4), (5);
+        SELECT 1&3&5, BIT_AND(id) FROM bit_tbl WHERE id in(1,3,5);
 
-	::
+    ::
 
-			 1&3&5           bit_and(id)
-		============================================
-				 1                     1	
+             1&3&5           bit_and(id)
+        ============================================
+                 1                     1    
 
 .. function:: BIT_OR (expr)
 
-	As an aggregate function, it performs **OR** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned. 
+    As an aggregate function, it performs **OR** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned. 
 
-	:param expr: An expression of integer type
-	:rtype: BIGINT
+    :param expr: An expression of integer type
+    :rtype: BIGINT
 
-	.. code-block:: sql
+    .. code-block:: sql
 
-		SELECT 1|3|5, BIT_OR(id) FROM bit_tbl WHERE id in(1,3,5);
+        SELECT 1|3|5, BIT_OR(id) FROM bit_tbl WHERE id in(1,3,5);
 
-	::
+    ::
 
-			 1|3|5            bit_or(id)
-		============================================
-			 	 7                     7
+             1|3|5            bit_or(id)
+        ============================================
+                  7                     7
 
 .. function:: BIT_XOR (expr)
 
-	As an aggregate function, it performs **XOR** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned.
+    As an aggregate function, it performs **XOR** operations in bits on every bit of *expr*. The return value is a **BIGINT** type. If there is no row that satisfies the expression, **NULL** is returned.
 
-	:param expr: An expression of integer type
-	:rtype: BIGINT
+    :param expr: An expression of integer type
+    :rtype: BIGINT
 
-	.. code-block:: sql
+    .. code-block:: sql
 
-		SELECT 1^2^3, BIT_XOR(id) FROM bit_tbl WHERE id in(1,3,5);
+        SELECT 1^2^3, BIT_XOR(id) FROM bit_tbl WHERE id in(1,3,5);
 
-	::
-	
-			 1^3^5            bit_xor(id)
-		============================================
-			 	 7                     7
+    ::
+    
+             1^3^5            bit_xor(id)
+        ============================================
+                  7                     7
 
 .. function:: BIT_COUNT (expr)
 
-	The **BIT_COUNT** function returns the number of bits of *expr* that have been set to 1; it is not an aggregate function. The return value is a **BIGINT** type.
+    The **BIT_COUNT** function returns the number of bits of *expr* that have been set to 1; it is not an aggregate function. The return value is a **BIGINT** type.
 
-	:param expr: An expression of integer type
-	:rtype: BIGINT
+    :param expr: An expression of integer type
+    :rtype: BIGINT
 
-	.. code-block:: sql
+    .. code-block:: sql
 
-		SELECT BIT_COUNT(id) FROM bit_tbl WHERE id in(1,3,5);
+        SELECT BIT_COUNT(id) FROM bit_tbl WHERE id in(1,3,5);
 
-	::
-	
-		   bit_count(id)
-		================
-			   1
-			   2
-			   2
+    ::
+    
+           bit_count(id)
+        ================
+               1
+               2
+               2

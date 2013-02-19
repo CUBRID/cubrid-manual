@@ -13,9 +13,9 @@ To download Perl driver or get the latest information, click http://www.cubrid.o
 
 .. note::
 
-	* The database connection in thread-based programming must be used independently each other.
-	* In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset. 
-	
+    * The database connection in thread-based programming must be used independently each other.
+    * In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset. 
+    
 Installing and Configuring Perl
 ===============================
 
@@ -33,15 +33,15 @@ Installing and Configuring Perl
 
 You can automatically install the driver from source code by using the CPAN module. ::
 
-	cpan
-	install DBD::cubrid
+    cpan
+    install DBD::cubrid
 
 If you are using the CPAN module for the first time, it is recommended to accept default settings.
 
 If you are using an older version, you might enter the command line below, instead of command line above. ::
 
-	perl -MCPAN -e shell
-	install DBD::cubrid
+    perl -MCPAN -e shell
+    install DBD::cubrid
 
 **Manual Installation**
 
@@ -51,13 +51,13 @@ http://www.cubrid.org/?mid=downloads&item=perl_driver
 
 The file name is typically something like this: **DBD-cubrid-X.X.X.tar.gz**. After extracting the archive, enter the command line below under the **DBD-cubrid-X.X.X** directory. (On Windows, you may need to replace **make** with **nmake** or **dmake**.) ::
 
-	Perl Makefile.PL
-	make
-	make test
+    Perl Makefile.PL
+    make
+    make test
 
 If test seems to look fine, execute the command to build a driver. ::
 
-	make install
+    make install
 
 Perl API
 ========

@@ -14,12 +14,12 @@ Serial is an object that creates a unique sequence number, and has the following
 
 You can create a serial object in the database by using the **CREATE SERIAL** statement. For how to write serial name, :doc:`/sql/identifier`. ::
 
-	CREATE SERIAL serial_name
-	[ START WITH initial ]
-	[ INCREMENT BY interval ]
-	[ MINVALUE min | NOMINVALUE ]
-	[ MAXVALUE max | NOMAXVALUE ]
-	[ CACHE integer | NOCACHE ]
+    CREATE SERIAL serial_name
+    [ START WITH initial ]
+    [ INCREMENT BY interval ]
+    [ MINVALUE min | NOMINVALUE ]
+    [ MAXVALUE max | NOMAXVALUE ]
+    [ CACHE integer | NOCACHE ]
 
 *   *serial_identifier* : Specifies the name of the serial to be generated(maximum: 254 bytes).
 *   **START WITH** *initial* : Specifies the initial value of serial with 38 digits or less. The default value of ascending serial is 1 and that of descending serial is -1.
@@ -43,20 +43,20 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 
 .. code-block:: sql
 
-	--creating serial with default values
-	CREATE SERIAL order_no;
-	 
-	--creating serial within a specific range
-	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
-	--creating serial with specifying the number of cached serial values
-	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000 CACHE 3;
-	 
-	--selecting serial information from the db_serial class
-	SELECT * FROM db_serial;
-	 
-	  name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
-	====================================================================================================================================================
-	'order_no'      10006            2                     20000           10000                0            1                3            NULL
+    --creating serial with default values
+    CREATE SERIAL order_no;
+     
+    --creating serial within a specific range
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+    --creating serial with specifying the number of cached serial values
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000 CACHE 3;
+     
+    --selecting serial information from the db_serial class
+    SELECT * FROM db_serial;
+     
+      name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
+    ====================================================================================================================================================
+    'order_no'      10006            2                     20000           10000                0            1                3            NULL
 
 **Example 2**
 
@@ -64,32 +64,32 @@ The following example shows how to create the *athlete_idx* table to store athle
 
 .. code-block:: sql
 
-	CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
-	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
-	INSERT INTO athlete_idx VALUES (order_no.CURRENT_VALUE, 'Lee');
-	SELECT * FROM athlete_idx;
-	 
-			 code  name
-	===================================
-			10000  'Park'
-			10002  'Kim'
-			10004  'Choo'
-			10004  'Lee'
+    CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
+    INSERT INTO athlete_idx VALUES (order_no.CURRENT_VALUE, 'Lee');
+    SELECT * FROM athlete_idx;
+     
+             code  name
+    ===================================
+            10000  'Park'
+            10002  'Kim'
+            10004  'Choo'
+            10004  'Lee'
 
 ALTER SERIAL
 ============
 
 With the **ALTER SERIAL** statement, you can update the increment of the serial value, set or delete its initial or minimum/maximum values, and set its cycle attribute. ::
 
-	ALTER SERIAL serial_identifier
-	[ INCREMENT BY interval ]
-	[ START WITH initial_value ]
-	[ MINVALUE min | NOMINVALUE ]
-	[ MAXVALUE max | NOMAXVALUE ]
-	[ CACHE integer | NOCACHE ]
+    ALTER SERIAL serial_identifier
+    [ INCREMENT BY interval ]
+    [ START WITH initial_value ]
+    [ MINVALUE min | NOMINVALUE ]
+    [ MAXVALUE max | NOMAXVALUE ]
+    [ CACHE integer | NOCACHE ]
 
 *   *serial_identifier* : Specifies the name of the serial to be created(maximum: 254 bytes).
 *   **INCREMENT BY** *interval* : Specifies the increment of the serial. For the *interval*, you can specify any integer with 38 digits or less except zero. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order; otherwise, it is in ascending order. The default value is **1**.
@@ -110,31 +110,31 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial
 
 .. warning::
 
-	 In CUBRID 2008 R1.x version, the serial value can be modified by updating the db_serial table, a system catalog. However, in CUBRID 2008 R2.0 version or above, the modification of the db_serial table is not allowed but use of the **ALTER SERIAL** statement is allowed. Therefore, if an **ALTER SERIAL** statement is included in the data exported (unloaddb) from CUBRID 2008 R2.0 or above, it is not allowed to import (loaddb) the data in CUBRID 2008 R1.x or below.
+     In CUBRID 2008 R1.x version, the serial value can be modified by updating the db_serial table, a system catalog. However, in CUBRID 2008 R2.0 version or above, the modification of the db_serial table is not allowed but use of the **ALTER SERIAL** statement is allowed. Therefore, if an **ALTER SERIAL** statement is included in the data exported (unloaddb) from CUBRID 2008 R2.0 or above, it is not allowed to import (loaddb) the data in CUBRID 2008 R1.x or below.
 
 .. warning::
 
-	In version lower than CUBRID 9.0, the next value of the initial value set as **ALTER SERILAL** is returned when the first **NEXT_VALUE** value is calculated after **ALTER SERIAL**. However, in version of CUBRID 9.0 or higher, the setting value of **ALTER_SERILAL** is returned.
+    In version lower than CUBRID 9.0, the next value of the initial value set as **ALTER SERILAL** is returned when the first **NEXT_VALUE** value is calculated after **ALTER SERIAL**. However, in version of CUBRID 9.0 or higher, the setting value of **ALTER_SERILAL** is returned.
 
 **Example**
 
 .. code-block:: sql
 
-	--altering serial by changing start and incremental values
-	ALTER SERIAL order_no START WITH 100 INCREMENT BY 2;
-	 
-	--altering serial to operate in cache mode
-	ALTER SERIAL order_no CACHE 5;
-	 
-	--altering serial to operate in common mode
-	ALTER SERIAL order_no NOCACHE;
+    --altering serial by changing start and incremental values
+    ALTER SERIAL order_no START WITH 100 INCREMENT BY 2;
+     
+    --altering serial to operate in cache mode
+    ALTER SERIAL order_no CACHE 5;
+     
+    --altering serial to operate in common mode
+    ALTER SERIAL order_no NOCACHE;
 
 DROP SERIAL
 ===========
 
 With the **DROP SERIAL** statement, you can drop a serial object from the database. ::
 
-	DROP SERIAL serial_identifier
+    DROP SERIAL serial_identifier
 
 *   *serial_identifier* : Specifies the name of the serial to be dropped.
 
@@ -144,15 +144,15 @@ The following example shows how to drop the *order_no* serial.
 
 .. code-block:: sql
 
-	DROP SERIAL order_no;
+    DROP SERIAL order_no;
 
 Use SERIAL
 ==========
 
 You can access and update a serial by serial name and a reserved word pair. ::
 
-	serial_identifier.CURRENT_VALUE
-	serial_identifier.NEXT_VALUE
+    serial_identifier.CURRENT_VALUE
+    serial_identifier.NEXT_VALUE
 
 *   *serial_identifier*.**CURRENT_VALUE** : Returns the current serial value.
 *   *serial_identifier*.**NEXT_VALUE** : Increments the serial value and returns the result.
@@ -163,18 +163,18 @@ The following example shows how to create a table *athlete_idx* where athlete nu
 
 .. code-block:: sql
 
-	CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
-	INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');SELECT * FROM athlete_idx;
-	 
-			 code  name
-	===================================
-			10000  'Park'
-			10002  'Kim'
-			10004  'Choo'
-			10006  'Lee'
+    CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
+    INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');SELECT * FROM athlete_idx;
+     
+             code  name
+    ===================================
+            10000  'Park'
+            10002  'Kim'
+            10004  'Choo'
+            10006  'Lee'
 
 .. warning:: When you use a serial for the first time after creating it, **NEXT_VALUE** returns the initial value. Subsequently, the sum of the current value and the increment are returned.
 
@@ -195,8 +195,8 @@ For example, if you create a serial starting 101 and increasing by 1 and call *
 
 ::
 
-	SERIAL_CURRENT_VALUE(serial_name)
-	SERIAL_NEXT_VALUE(serial_name, number)
+    SERIAL_CURRENT_VALUE(serial_name)
+    SERIAL_NEXT_VALUE(serial_name, number)
 
 *   *serial_name* : Serial name
 *   *number* : The number of serials to be obtained
@@ -205,17 +205,17 @@ For example, if you create a serial starting 101 and increasing by 1 and call *
 
 .. code-block:: sql
 
-	CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
-	SELECT SERIAL_CURRENT_VALUE(order_no);
-	10000
-	 
-	-- At first, the first serial value starts with the initial serial value, 10000. So the l0'th serial value will be 10009.
-	SELECT SERIAL_NEXT_VALUE(order_no, 10);
-	10009
-	 
-	SELECT SERIAL_NEXT_VALUE(order_no, 10);
-	10019
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+    SELECT SERIAL_CURRENT_VALUE(order_no);
+    10000
+     
+    -- At first, the first serial value starts with the initial serial value, 10000. So the l0'th serial value will be 10009.
+    SELECT SERIAL_NEXT_VALUE(order_no, 10);
+    10009
+     
+    SELECT SERIAL_NEXT_VALUE(order_no, 10);
+    10019
 
 .. warning::
 
-	If you create a serial and calls the **SERIAL_NEXT_VALUE** function for the first time, a value of (serial interval) * (desired number of serials - 1) added to the current value is returned. If you call the **SERIAL_NEXT_VALUE** function in succession, a value of (serial interval) * (desired number of serials) added to the current is returned (see the example above).
+    If you create a serial and calls the **SERIAL_NEXT_VALUE** function for the first time, a value of (serial interval) * (desired number of serials - 1) added to the current value is returned. If you call the **SERIAL_NEXT_VALUE** function in succession, a value of (serial interval) * (desired number of serials) added to the current is returned (see the example above).

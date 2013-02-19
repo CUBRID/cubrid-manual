@@ -26,42 +26,42 @@ CUBRID는 많은 사용자가 동시에 데이터베이스에 접근하도록 �
 
 트랜잭션이 커밋된 후에는 트랜잭션에서 획득한 모든 잠금이 해제된다. ::
 
-	COMMIT [ WORK ]
+    COMMIT [ WORK ]
 
 아래 예제의 데이터베이스 트랜잭션은 3개의 **UPDATE** 문으로 구성되는데, 3개의 stadium의 seats 칼럼 값을 변경한다. 결과를 검토하기 위해 갱신이 일어나기 전에 현재의 값과 이름을 검색한다. 기본적으로 csql은 자동으로 autocommit으로 작동되므로, 예제에서는 autocommit 모드를 off로 설정한 후 동작을 시험한다.
 
 .. code-block:: sql
 
-	;autocommit off
-	AUTOCOMMIT IS OFF
-	SELECT name, seats
-	FROM stadium WHERE code IN (30138, 30139, 30140);
-	   name                        seats
-	==================================
-		'Athens Olympic Tennis Centre'         3200
-		'Goudi Olympic Hall'         5000
-		'Vouliagmeni Olympic Centre'         3400
+    ;autocommit off
+    AUTOCOMMIT IS OFF
+    SELECT name, seats
+    FROM stadium WHERE code IN (30138, 30139, 30140);
+       name                        seats
+    ==================================
+        'Athens Olympic Tennis Centre'         3200
+        'Goudi Olympic Hall'         5000
+        'Vouliagmeni Olympic Centre'         3400
 
 3개의 **UPDATE** 문은 각각의 stadium의 현재 seats을 가지고 있도록 한다. 명령이 수행되면 정확하게 입력이 되었는지 확인하기 위해 seats 테이블의 관련된 칼럼을 검색할 수 있다.
 
 .. code-block:: sql
 
-	UPDATE stadium
-	SET seats = seats + 1000
-	WHERE code IN (30138, 30139, 30140);
-	 
-	SELECT name, seats FROM stadium WHERE code in (30138, 30139, 30140);
-		name                        seats
-	===================================
-		'Athens Olympic Tennis Centre'         4200
-		'Goudi Olympic Hall'         6000
-		'Vouliagmeni Olympic Centre'         4400
+    UPDATE stadium
+    SET seats = seats + 1000
+    WHERE code IN (30138, 30139, 30140);
+     
+    SELECT name, seats FROM stadium WHERE code in (30138, 30139, 30140);
+        name                        seats
+    ===================================
+        'Athens Olympic Tennis Centre'         4200
+        'Goudi Olympic Hall'         6000
+        'Vouliagmeni Olympic Centre'         4400
 
 만약 갱신이 제대로 이루어 졌다면 변경을 영구적으로 만들 수 있다. 이때 아래처럼 **COMMIT WORK** 문을 사용한다.
 
 .. code-block:: sql
 
-	COMMIT WORK;
+    COMMIT WORK;
 
 .. note:: CUBRID에서는 트랜잭션 관리를 위하여 자동 커밋 모드를 설정할 수 있다.
 
@@ -76,31 +76,31 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
 
 **ROLLBACK WORK** 문은 마지막 트랜잭션 이후의 모든 데이터베이스의 갱신을 제거한다. **WORK** 키워드는 생략 가능하다. 이것은 데이터베이스에 영구적으로 입력하기 전에 부정확하고 불필요한 갱신을 무효화할 수 있다. 트랜잭션 동안 획득한 모든 잠금은 해제된다. ::
 
-	ROLLBACK [ WORK ]
+    ROLLBACK [ WORK ]
 
 다음 예제는 동일한 테이블의 정의와 행을 수정하는 두 개의 명령을 보여주고 있다.
 
 .. code-block:: sql
 
-	ALTER TABLE code DROP s_name;
-	INSERT INTO code (s_name, f_name) VALUES ('D','Diamond');
-	 
-	ERROR: s_name is not defined.
+    ALTER TABLE code DROP s_name;
+    INSERT INTO code (s_name, f_name) VALUES ('D','Diamond');
+     
+    ERROR: s_name is not defined.
 
 *code* 테이블의 정의에서 *s_name* 칼럼이 이전에 제거되었기 때문에 **INSERT** 문의 실행은 실패한다. *code* 테이블에 입력하려고 했던 데이터는 틀리지 않으나 테이블에서 칼럼이 잘못 제거되었다. 이 시점에서 *code* 테이블의 원래 정의를 복원하기 위해서 **ROLLBACK WORK** 문을 사용할 수 있다.
 
 .. code-block:: sql
 
-	ROLLBACK WORK;
+    ROLLBACK WORK;
 
 이후에 **ALTER CLASS** 명령을 다시 입력하여 *s_name* 칼럼을 제거하며, **INSERT** 문을 수정한다. 트랜잭션이 중단되었기 때문에 **INSERT** 명령은 다시 입력되어야 한다. 데이터베이스 갱신이 의도한 대로 이루어졌으면 변경을 영구화하기 위해 트랜잭션을 커밋한다.
 
 .. code-block:: sql
 
-	ALTER TABLE code drop s_name;
-	INSERT INTO code (f_name) VALUES ('Diamond');
+    ALTER TABLE code drop s_name;
+    INSERT INTO code (f_name) VALUES ('Diamond');
 
-	COMMIT WORK;
+    COMMIT WORK;
 
 세이브포인트와 부분 롤백
 ------------------------
@@ -111,17 +111,17 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
 
 세이브포인트는 길고 복잡한 프로그램을 통제할 수 있도록 중간 단계를 만들고 이름을 붙일 수 있기 때문에 유용하다. 예를 들어, 많은 갱신 연산 수행 시 세이브포인트를 사용하면 실수를 했을 때 모든 문장을 다시 수행할 필요가 없다. ::
 
-	SAVEPOINT mark;
-	mark:
-	_ a SQL identifier
-	_ a host variable (starting with :)
+    SAVEPOINT mark;
+    mark:
+    _ a SQL identifier
+    _ a host variable (starting with :)
 
 같은 트랜잭션 내에 여러 개의 세이브포인트를 지정할 때 *mark* 를 같은 값으로 하면 마지막 세이브포인트만 부분 롤백에 나타난다. 그리고 이전의 세이브포인트는 제일 마지막 세이브포인트로 부분 롤백할 때까지 감춰졌다가 제일 마지막 세이브포인트가 사용된 후 없어지면 나타난다. ::
 
-	ROLLBACK [ WORK ] [ TO [ SAVEPOINT ] mark ] [ ; ]
-	mark:
-	_ a SQL identifier
-	_ a host variable (starting with :)
+    ROLLBACK [ WORK ] [ TO [ SAVEPOINT ] mark ] [ ; ]
+    mark:
+    _ a SQL identifier
+    _ a host variable (starting with :)
 
 앞에서는 **ROLLBACK WORK** 문이 마지막 트랜잭션 이후로 입력된 모든 데이터베이스의 갱신을 제거하였다. **ROLLBACK WORK** 문은 특정 세이브포인트 이후로 트랜잭션의 갱신을 되돌리는 부분 롤백에도 사용된다.
 
@@ -132,40 +132,40 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
 
 .. code-block:: sql
 
-	CREATE TABLE athlete2 (name VARCHAR(40), gender CHAR(1), nation_code CHAR(3), event VARCHAR(30));
-	INSERT INTO athlete2(name, gender, nation_code, event)
-	VALUES ('Lim Kye-Sook', 'W', 'KOR', 'Hockey');
-	SAVEPOINT SP1;
-	 
-	SELECT * from athlete2;
-	INSERT INTO athlete2(name, gender, nation_code, event)
-	VALUES ('Lim Jin-Suk', 'M', 'KOR', 'Handball');
-	 
-	SELECT * FROM athlete2;
-	SAVEPOINT SP2;
-	 
-	RENAME TABLE athlete2 AS sportsman;
-	SELECT * FROM sportsman;
-	ROLLBACK WORK TO SP2;
+    CREATE TABLE athlete2 (name VARCHAR(40), gender CHAR(1), nation_code CHAR(3), event VARCHAR(30));
+    INSERT INTO athlete2(name, gender, nation_code, event)
+    VALUES ('Lim Kye-Sook', 'W', 'KOR', 'Hockey');
+    SAVEPOINT SP1;
+     
+    SELECT * from athlete2;
+    INSERT INTO athlete2(name, gender, nation_code, event)
+    VALUES ('Lim Jin-Suk', 'M', 'KOR', 'Handball');
+     
+    SELECT * FROM athlete2;
+    SAVEPOINT SP2;
+     
+    RENAME TABLE athlete2 AS sportsman;
+    SELECT * FROM sportsman;
+    ROLLBACK WORK TO SP2;
 
 위에서 *athlete2* 테이블의 이름 변경은 위의 부분 롤백에 의해서 롤백된다. 다음의 문장은 원래의 이름으로 질의를 수행하여 이것을 검증하고 있다.
 
 .. code-block:: sql
 
-	SELECT * FROM athlete2;
-	DELETE FROM athlete2 WHERE name = 'Lim Jin-Suk';
-	SELECT * FROM athlete2;
-	ROLLBACK WORK TO SP2;
+    SELECT * FROM athlete2;
+    DELETE FROM athlete2 WHERE name = 'Lim Jin-Suk';
+    SELECT * FROM athlete2;
+    ROLLBACK WORK TO SP2;
 
 위에서 'Lim Jin-Suk' 을 삭제한 것은 이후에 진행되는 rollback work to SP2 명령문에 의해서 취소되었다.
 다음은 SP1으로 롤백하는 경우이다.
 
 .. code-block:: sql
 
-	SELECT * FROM athlete2;
-	ROLLBACK WORK TO SP1;
-	SELECT * FROM athlete2;
-	COMMIT WORK;
+    SELECT * FROM athlete2;
+    ROLLBACK WORK TO SP1;
+    SELECT * FROM athlete2;
+    COMMIT WORK;
 
 .. _database-concurrency:
 
@@ -436,17 +436,17 @@ CUBRID는 트랜잭션이 수행하고자 하는 연산의 종류에 따라 획�
 
 다음의 에러 로그 파일 정보에서 (1)은 교착상태를 유발한 테이블 이름을, (2)는 인덱스 이름을 나타낸다. ::
 
-	demodb_20111102_1811.err
-		...
-		OID = -532| 520| 1
-	(1) Object type: Index key of class ( 0| 417| 7) = tbl.
-		BTID = 0| 123| 530
-	(2) Index Name : i_tbl_col1
-		Total mode of holders = NS_LOCK, Total mode of waiters = NULL_LOCK.
-		Num holders= 1, Num blocked-holders= 0, Num waiters= 0
-		LOCK HOLDERS:
-		Tran_index = 2, Granted_mode = NS_LOCK, Count = 1
-	...
+    demodb_20111102_1811.err
+        ...
+        OID = -532| 520| 1
+    (1) Object type: Index key of class ( 0| 417| 7) = tbl.
+        BTID = 0| 123| 530
+    (2) Index Name : i_tbl_col1
+        Total mode of holders = NS_LOCK, Total mode of waiters = NULL_LOCK.
+        Num holders= 1, Num blocked-holders= 0, Num waiters= 0
+        LOCK HOLDERS:
+        Tran_index = 2, Granted_mode = NS_LOCK, Count = 1
+    ...
 
 **예제**
 
@@ -550,12 +550,12 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
 
 **$CUBRID/conf/cubrid.conf** 파일 내의 시스템 파라미터 **lock_timeout_in_secs** 또는 **SET TRANSACTION** 구문을 통해 응용 프로그램이 잠금을 대기하는 타임아웃 시간(초 단위)을 설정하며, 설정된 시간이 경과된 이후에는 해당 트랜잭션을 롤백시키고 에러를 출력한다. **lock_timeout_in_secs** 파라미터의 기본값은 **-1** 이며, 이는 트랜잭션 잠금이 허용되는 시점까지 무한정 대기한다는 의미이다. 따라서, 사용자는 응용 프로그램의 트랜잭션 패턴에 맞게 이 값을 변경할 수 있다. 만약, 잠금 타임아웃 값이 0으로 설정되면 잠금이 발생하는 즉시 에러 메시지가 출력될 것이다. ::
 
-	SET TRANSACTION LOCK TIMEOUT timeout_spec [ ; ]
-	timeout_spec:
-	- INFINITE
-	- OFF
-	- unsigned_integer
-	- variable
+    SET TRANSACTION LOCK TIMEOUT timeout_spec [ ; ]
+    timeout_spec:
+    - INFINITE
+    - OFF
+    - unsigned_integer
+    - variable
 
 
 *   **INFINITE** : 트랜잭션 잠금이 허용될 때까지 무한정 대기한다. 시스템 파라미터 **lock_timeout_in_secs** 를 -1로 설정한 것과 같다.
@@ -565,34 +565,34 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
 
 **예제 1** ::
 
-	vi $CUBRID/conf/cubrid.conf
-	…
-	lock_timeout_in_secs = 10
-	…
+    vi $CUBRID/conf/cubrid.conf
+    …
+    lock_timeout_in_secs = 10
+    …
 
 **예제 2** ::
 
-	SET TRANSACTION LOCK TIMEOUT 10;
+    SET TRANSACTION LOCK TIMEOUT 10;
 
 **잠금 타임아웃 값 확인**
 
 **GET TRANSACTION** 문을 이용하여 현재 응용 프로그램이 설정된 잠금 타임아웃 값을 확인할 수 있고, 이 값을 변수에 저장할 수도 있다. ::
 
-	GET TRANSACTION LOCK TIMEOUT [ { INTO | TO } variable ] [ ; ]
+    GET TRANSACTION LOCK TIMEOUT [ { INTO | TO } variable ] [ ; ]
 
 **예제** ::
 
-	GET TRANSACTION LOCK TIMEOUT;
-			 Result
-	===============
-	  1.000000e+001
+    GET TRANSACTION LOCK TIMEOUT;
+             Result
+    ===============
+      1.000000e+001
   
 **잠금 타임아웃 에러 메시지 확인과 조치 방법**
 
 다른 트랜잭션의 잠금이 해제되기를 대기하던 트랜잭션에 대해 잠금 타임아웃이 발생하면, 아래와 같은 에러 메시지를 출력한다. ::
 
-	Your transaction (index 2, user1@host1|9808) timed out waiting on IX_LOCK lock on class tbl. You are waiting for
-	user(s) user1@host1|csql(9807), user1@host1|csql(9805) to finish.
+    Your transaction (index 2, user1@host1|9808) timed out waiting on IX_LOCK lock on class tbl. You are waiting for
+    user(s) user1@host1|csql(9807), user1@host1|csql(9805) to finish.
 
 *   Your transaction(index 2 ...) : 잠금을 대기하다가 타임아웃으로 롤백된 트랜잭션의 인덱스가 2라는 의미이다. 트랜잭션 인덱스는 클라이언트가 데이터베이스 서버에 접속하였을 때 순차적으로 할당되는 번호이다. 이는 **cubrid lockdb** 유틸리티 실행을 통해서도 확인할 수 있다.
 
@@ -624,35 +624,35 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
 
 **$CUBRID/conf/cubrid.conf** 파일 내의 시스템 파라미터 **isolation_level** 과 **SET TRANSACTION** 문을 사용하면, 응용 프로그램에서 수행되는 트랜잭션 격리 수준을 설정할 수 있다. 기본으로 설정된 격리 수준은 **REPEATABLE READ CLASS**, **READ UNCOMMITTED INSTANCES** 이며, CUBRID가 제공하는 1부터 6까지의 격리 수준 중에 3에 해당한다. 이에 관한 상세한 설명은 :ref:`database-concurrency` 을 참고한다. ::
 
-	SET TRANSACTION ISOLATION LEVEL isolation_level_spec [ ; ]
-	isolation_level_spec:
-	_ SERIALIZABLE
-	_ CURSOR STABILITY
-	_ isolation_level [ { CLASS | SCHEMA } [ , isolation_level INSTANCES ] ]
-	_ isolation_level [ INSTANCES [ , isolation_level { CLASS | SCHEMA } ] ]
-	_ variable
-	isolation_level:
-	_ REPEATABLE READ
-	_ READ COMMITTED
-	_ READ UNCOMMITTED
+    SET TRANSACTION ISOLATION LEVEL isolation_level_spec [ ; ]
+    isolation_level_spec:
+    _ SERIALIZABLE
+    _ CURSOR STABILITY
+    _ isolation_level [ { CLASS | SCHEMA } [ , isolation_level INSTANCES ] ]
+    _ isolation_level [ INSTANCES [ , isolation_level { CLASS | SCHEMA } ] ]
+    _ variable
+    isolation_level:
+    _ REPEATABLE READ
+    _ READ COMMITTED
+    _ READ UNCOMMITTED
 
 **예제 1** ::
 
-	vi $CUBRID/conf/cubrid.conf
-	...
+    vi $CUBRID/conf/cubrid.conf
+    ...
 
-	isolation_level = 1
-	...
-	 
-	또는
-	 
-	isolation_level = "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE"
+    isolation_level = 1
+    ...
+     
+    또는
+     
+    isolation_level = "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE"
 
 **예제 2** ::
 
-	SET TRANSACTION ISOLATION LEVEL 1;
-	-- 또는
-	SET TRANSACTION ISOLATION LEVEL READ COMMITTED CLASS,READ UNCOMMITTED INSTANCES;
+    SET TRANSACTION ISOLATION LEVEL 1;
+    -- 또는
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED CLASS,READ UNCOMMITTED INSTANCES;
 
 아래의 표는 CUBRID에서 지원하는 1에서 6까지의 격리 수준에 관한 설명이다. 이는 테이블 스키마와 행(row)에 대한 격리 수준 조합으로 구성되며, CUBRID에서 허용되지 않는 격리 수준의 조합은 :ref:`unsupported-isolation-level` 을 참고한다.
 
@@ -687,14 +687,14 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
 
 **GET TRANSACTION** 문을 이용하여 현재 클라이언트에 설정된 격리 수준 값을 출력하거나 *variable* 에 할당할 수 있다. 아래는 격리 수준을 확인하기 위한 구문이다. ::
 
-	GET TRANSACTION ISOLATION LEVEL [ { INTO | TO } variable ] [ ; ]
+    GET TRANSACTION ISOLATION LEVEL [ { INTO | TO } variable ] [ ; ]
 
 .. code-block:: sql
 
-	GET TRANSACTION ISOLATION LEVEL;
-		   Result
-	=============
-	  READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES
+    GET TRANSACTION ISOLATION LEVEL;
+           Result
+    =============
+      READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES
 
 .. _isolation-level-6:
 
@@ -1220,7 +1220,7 @@ CUBRID에서 기본으로 설정된 격리 수준(3)으로서 동시성이 높�
 
 .. note::
 
-	CUBRID는 다양한 상황에서 워크 스페이스에 있는 더티 데이터를 데이터베이스로 내려쓰기(flush)한다. 이에 관한 설명은 :ref:`dirty-record-flush` 을 참고한다.
+    CUBRID는 다양한 상황에서 워크 스페이스에 있는 더티 데이터를 데이터베이스로 내려쓰기(flush)한다. 이에 관한 설명은 :ref:`dirty-record-flush` 을 참고한다.
 
 .. _isolation-level-2:
 
@@ -1528,10 +1528,10 @@ CUBRID는 활성 로그가 꽉 차면 보관 로그로 복사하여 디스크에
 
 .. note::
 
-	데이터베이스의 정보를 잃어버릴 가능성을 줄이기 위해서 보관 로그가 디스크에서 삭제되기 전에 보관 로그의 스냅샷을 만들고 이를 백업 장치에 보관할 것을 권장한다. DBA는 **cubrid backupdb**, **cubrid restoredb** 유틸리티를 사용하여 데이터베이스를 백업하고 복원할 수 있다. 이 유틸리티에 대한 상세한 내용을 보려면 :ref:`db-backup` 를 참조한다.
+    데이터베이스의 정보를 잃어버릴 가능성을 줄이기 위해서 보관 로그가 디스크에서 삭제되기 전에 보관 로그의 스냅샷을 만들고 이를 백업 장치에 보관할 것을 권장한다. DBA는 **cubrid backupdb**, **cubrid restoredb** 유틸리티를 사용하여 데이터베이스를 백업하고 복원할 수 있다. 이 유틸리티에 대한 상세한 내용을 보려면 :ref:`db-backup` 를 참조한다.
 
 .. _cursor-holding:
-	
+    
 커서 유지
 =========
 
@@ -1541,14 +1541,14 @@ CUBRID는 활성 로그가 꽉 차면 보관 로그로 복사하여 디스크에
 
 .. code-block:: java
 
-	// set cursor holdability at the connection level
-	conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
-	 
-	// set cursor holdability at the statement level which can override the connection’s
-	PreparedStatement pStmt = conn.prepareStatement(sql,
-										 ResultSet.TYPE_SCROLL_SENSITIVE,
-										 ResultSet.CONCUR_UPDATABLE,
-	 ResultSet.HOLD_CURSORS_OVER_COMMIT);
+    // set cursor holdability at the connection level
+    conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
+     
+    // set cursor holdability at the statement level which can override the connection’s
+    PreparedStatement pStmt = conn.prepareStatement(sql,
+                                         ResultSet.TYPE_SCROLL_SENSITIVE,
+                                         ResultSet.CONCUR_UPDATABLE,
+     ResultSet.HOLD_CURSORS_OVER_COMMIT);
  
 커밋 시점에 커서를 유지하지 않고 커서를 닫도록 설정하고 싶으면, 위의 예제에서 **ResultSet.HOLD_CURSORS_OVER_COMMIT** 대신 **ResultSet.CLOSE_CURSORS_AT_COMMIT** 를 설정한다.
 

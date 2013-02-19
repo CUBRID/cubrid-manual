@@ -32,11 +32,11 @@ Installing Node.js
 
 You can install CUBRID Node.js driver with "npm(Node Packaged Modules) install" command, but firstly you need to install node.js on http://nodejs.org/download/ . ::
 
-	npm install node-cubrid
+    npm install node-cubrid
 
 If you uninstall CUBRID Node.js driver, do the following command. ::
 
-	npm uninstall node-cubrid
+    npm uninstall node-cubrid
 
 CUBRID Node.js Programming
 ==========================

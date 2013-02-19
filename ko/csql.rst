@@ -63,7 +63,7 @@ CSQL 인터프리터는 데이터베이스에서 스키마 또는 데이터를 �
 
 ::
 
-	csql -u dba --sysadm demodb 
+    csql -u dba --sysadm demodb 
 
 CSQL 사용 방법
 --------------
@@ -72,13 +72,13 @@ CSQL 사용 방법
 
 **csql** 유틸리티를 사용하여 CSQL 인터프리터를 실행한다. 이 때, 필요에 따라 옵션을 설정할 수 있으며, 옵션을 설정하려면 접속하려는 데이터베이스 이름을 인수로 지정한다. 다음은 로컬 서버에 위치한 데이터베이스에 접속하는 **csql** 유틸리티 구문이다. ::
 
-	csql [options] database_name
+    csql [options] database_name
 
 **원격 호스트 접속**
 
 다음은 원격 호스트에 위치한 데이터베이스에 접속하는 **csql** 유틸리티 구문이다. ::
 
-	csql [options] database_name@remote_host_name
+    csql [options] database_name@remote_host_name
 
 단, 원격 호스트에서 CSQL 인터프리터를 실행하려면 다음 조건을 만족해야 한다.
 
@@ -90,144 +90,144 @@ CSQL 사용 방법
 
 다음은 192.168.1.3 위치의 원격 호스트에 존재하는 **demodb** 에 접속하여 **csql** 유틸리티를 호출하는 예제이다. ::
 
-	csql -C demodb@192.168.1.3
+    csql -C demodb@192.168.1.3
 
 CSQL 시작 옵션
 --------------
 
 프롬프트 상에서 옵션 목록을 보려면, 다음과 같이 옵션을 적용할 데이터베이스를 지정하지 않고 **csql** 유틸리티를 실행한다. ::
 
-	$ csql
-	A database-name is missing.
-	interactive SQL utility, version 9.0
-	usage: csql [OPTION] database-name[@host]
+    $ csql
+    A database-name is missing.
+    interactive SQL utility, version 9.0
+    usage: csql [OPTION] database-name[@host]
 
-	valid options:
-	  -S, --SA-mode                standalone mode execution
-	  -C, --CS-mode                client-server mode execution
-	  -u, --user=ARG               alternate user name
-	  -p, --password=ARG           password string, give "" for none
-	  -e, --error-continue         don't exit on statement error
-	  -i, --input-file=ARG         input-file-name
-	  -o, --output-file=ARG        output-file-name
-	  -s, --single-line            single line oriented execution
-	  -c, --command=ARG            CSQL-commands
-	  -l, --line-output            display each value in a line
-	  -r, --read-only              read-only mode
-		  --no-auto-commit         disable auto commit mode execution
-		  --no-pager               do not use pager
-		  --no-single-line         turn off single line oriented execution
+    valid options:
+      -S, --SA-mode                standalone mode execution
+      -C, --CS-mode                client-server mode execution
+      -u, --user=ARG               alternate user name
+      -p, --password=ARG           password string, give "" for none
+      -e, --error-continue         don't exit on statement error
+      -i, --input-file=ARG         input-file-name
+      -o, --output-file=ARG        output-file-name
+      -s, --single-line            single line oriented execution
+      -c, --command=ARG            CSQL-commands
+      -l, --line-output            display each value in a line
+      -r, --read-only              read-only mode
+          --no-auto-commit         disable auto commit mode execution
+          --no-pager               do not use pager
+          --no-single-line         turn off single line oriented execution
 
-	For additional information, see http://www.cubrid.com
+    For additional information, see http://www.cubrid.com
 
 **옵션**
 
 .. program:: csql
-	
+    
 .. option:: -S, --SA-mode
 
-	**-S** 옵션을 이용하여 독립 모드로 데이터베이스에 접속하여 **csql** 을 실행한다. 데이터베이스를 독점적으로 사용하고자 할 때 **-S** 옵션을 이용한다. **-S** 옵션과 **-C** 옵션을 둘 다 생략하면 **-C** 옵션으로 동작한다. ::
+    **-S** 옵션을 이용하여 독립 모드로 데이터베이스에 접속하여 **csql** 을 실행한다. 데이터베이스를 독점적으로 사용하고자 할 때 **-S** 옵션을 이용한다. **-S** 옵션과 **-C** 옵션을 둘 다 생략하면 **-C** 옵션으로 동작한다. ::
 
-		csql -S demodb
+        csql -S demodb
 
 .. option:: -C, --CS-mode
 
-	**-C** 옵션을 이용하여 클라이언트/서버 모드로 데이터베이스에 접속하여 **csql** 유틸리티를 실행한다. 데이터베이스에 여러 클라이언트가 동시 접속하는 환경에서 **-C** 옵션을 이용한다. 만약 클라이언트/서버 모드로 원격 호스트의 데이터베이스에 접속한 경우라도 **csql** 유틸리티를 실행하는 도중에 발생한 에러 로그는 로컬 호스트의 **csql.err** 파일에 기록된다. ::
+    **-C** 옵션을 이용하여 클라이언트/서버 모드로 데이터베이스에 접속하여 **csql** 유틸리티를 실행한다. 데이터베이스에 여러 클라이언트가 동시 접속하는 환경에서 **-C** 옵션을 이용한다. 만약 클라이언트/서버 모드로 원격 호스트의 데이터베이스에 접속한 경우라도 **csql** 유틸리티를 실행하는 도중에 발생한 에러 로그는 로컬 호스트의 **csql.err** 파일에 기록된다. ::
 
-		csql -C demodb
+        csql -C demodb
 
 .. option:: -i, --input-file=ARG
 
-	**-i** 옵션을 이용하여 배치 모드에서 사용할 입력 파일의 이름을 지정한다. **infile** 파일에는 하나 이상의 SQL 문이 저장되어 있으며, **-i** 옵션이 지정되지 않으면 CSQL 인터프리터는 대화형 모드로 실행된다. ::
+    **-i** 옵션을 이용하여 배치 모드에서 사용할 입력 파일의 이름을 지정한다. **infile** 파일에는 하나 이상의 SQL 문이 저장되어 있으며, **-i** 옵션이 지정되지 않으면 CSQL 인터프리터는 대화형 모드로 실행된다. ::
 
-		csql -i infile demodb
+        csql -i infile demodb
 
 .. option:: -o, --output-file=ARG
 
-	**-o** 옵션을 이용하여 질의 수행 결과를 화면에 출력하지 않고 지정된 파일에 저장한다. 이는 CSQL 인터프리터에 의한 질의 수행 결과를 추후 조회하고자 할 때 유용하게 사용될 수 있다. ::
+    **-o** 옵션을 이용하여 질의 수행 결과를 화면에 출력하지 않고 지정된 파일에 저장한다. 이는 CSQL 인터프리터에 의한 질의 수행 결과를 추후 조회하고자 할 때 유용하게 사용될 수 있다. ::
 
-		csql -o outfile demodb
+        csql -o outfile demodb
 
 .. option:: -u, --user=ARG
 
-	**-u** 옵션을 이용하여 지정된 데이터베이스에 접속하려는 사용자 이름을 지정한다. 만약 **-u** 옵션이 지정되지 않으면 가장 낮은 사용자 권한을 가지는 **PUBLIC** 이 사용자로 지정된다. 또한 사용자 이름이 유효하지 않은 경우에는 오류가 출력되고 **csql** 유틸리티는 종료된다. 암호가 설정된 사용자 이름이 지정된 경우에는 암호를 입력받기 위한 프롬프트가 출력된다. ::
+    **-u** 옵션을 이용하여 지정된 데이터베이스에 접속하려는 사용자 이름을 지정한다. 만약 **-u** 옵션이 지정되지 않으면 가장 낮은 사용자 권한을 가지는 **PUBLIC** 이 사용자로 지정된다. 또한 사용자 이름이 유효하지 않은 경우에는 오류가 출력되고 **csql** 유틸리티는 종료된다. 암호가 설정된 사용자 이름이 지정된 경우에는 암호를 입력받기 위한 프롬프트가 출력된다. ::
 
-		csql -u DBA demodb
+        csql -u DBA demodb
 
 .. option:: -p, --password=ARG
 
-	**-p** 옵션을 이용하여 지정된 사용자의 암호를 입력한다. 특히, 배치 모드에서는 지정한 사용자에 대한 암호 입력을 요청하는 프롬프트가 출력되지 않으므로 **-p** 옵션을 이용하여 암호를 입력해야 한다. 잘못된 암호를 입력하면, 오류가 출력되고 **csql** 유틸리티는 종료된다. ::
+    **-p** 옵션을 이용하여 지정된 사용자의 암호를 입력한다. 특히, 배치 모드에서는 지정한 사용자에 대한 암호 입력을 요청하는 프롬프트가 출력되지 않으므로 **-p** 옵션을 이용하여 암호를 입력해야 한다. 잘못된 암호를 입력하면, 오류가 출력되고 **csql** 유틸리티는 종료된다. ::
 
-		csql -u DBA -p *** demodb
+        csql -u DBA -p *** demodb
 
 .. option:: -s, --single-line
 
-	**-i** 옵션과 함께 사용하는 옵션으로, **-s** 옵션을 지정하면 파일에 입력된 여러 개의 SQL 문을 하나씩 나누어 수행한다. 이 옵션은 질의 수행에 메모리를 적게 할당하고 싶을 때 유용하게 이용할 수 있다. 각 SQL 문은 세미콜론(;)으로 구분한다. 옵션을 생략하면 여러 개의 SQL 문을 한꺼번에 읽어들인 후 수행한다. ::
+    **-i** 옵션과 함께 사용하는 옵션으로, **-s** 옵션을 지정하면 파일에 입력된 여러 개의 SQL 문을 하나씩 나누어 수행한다. 이 옵션은 질의 수행에 메모리를 적게 할당하고 싶을 때 유용하게 이용할 수 있다. 각 SQL 문은 세미콜론(;)으로 구분한다. 옵션을 생략하면 여러 개의 SQL 문을 한꺼번에 읽어들인 후 수행한다. ::
 
-		csql -s -i infile demodb
+        csql -s -i infile demodb
 
 .. option:: -c, --command=ARG
 
-	**-c** 옵션을 이용하여 셸 상에서 하나 이상의 SQL 문을 직접 수행한다. 이 때, 각 문장은 세미콜론(;)으로 구분한다. ::
+    **-c** 옵션을 이용하여 셸 상에서 하나 이상의 SQL 문을 직접 수행한다. 이 때, 각 문장은 세미콜론(;)으로 구분한다. ::
 
-		csql -c 'select * from olympic;select * from stadium' demodb
+        csql -c 'select * from olympic;select * from stadium' demodb
 
 .. option:: -l, --line-output
 
-	**-l** 옵션을 이용하여 SQL 문을 실행한 결과 레코드의 SELECT 리스트 값들을 라인 단위로 나누어서 출력한다. **-l** 옵션을 지정하지 않으면 결과 레코드의 모든 SELECT 리스트 값들을 한 라인에 출력한다. ::
+    **-l** 옵션을 이용하여 SQL 문을 실행한 결과 레코드의 SELECT 리스트 값들을 라인 단위로 나누어서 출력한다. **-l** 옵션을 지정하지 않으면 결과 레코드의 모든 SELECT 리스트 값들을 한 라인에 출력한다. ::
 
-		csql -l demodb
+        csql -l demodb
 
 .. option:: -e, --error-continue 
 
-	SQL 문 여러 개를 연속으로 나열하여 실행할 때 **-e** 옵션을 이용하면 SQL 문 중간에 의미상(semantic) 오류 또는 런타임 에러가 발생하여도 이를 무시하고 계속 SQL 문을 실행한다. 이때 SQL 문에 문법상(syntax) 오류가 있다면 **-e** 옵션이 지정되어 있어도 오류가 발생한 후의 질의를 실행하지 않는다. ::
+    SQL 문 여러 개를 연속으로 나열하여 실행할 때 **-e** 옵션을 이용하면 SQL 문 중간에 의미상(semantic) 오류 또는 런타임 에러가 발생하여도 이를 무시하고 계속 SQL 문을 실행한다. 이때 SQL 문에 문법상(syntax) 오류가 있다면 **-e** 옵션이 지정되어 있어도 오류가 발생한 후의 질의를 실행하지 않는다. ::
 
-		$ csql -e demodb
+        $ csql -e demodb
 
-		csql> SELECT * FROM aaa;SELECT * FROM athlete WHERE code=10000;
+        csql> SELECT * FROM aaa;SELECT * FROM athlete WHERE code=10000;
 
-		In line 1, column 1,
+        In line 1, column 1,
 
-		ERROR: before ' ;SELECT * FROM athlete WHERE code=10000; '
-		Unknown class "aaa".
-
-
-		=== <Result of SELECT Command in Line 1> ===
-
-				 code  name                  gender                nation_code           event               
-		=====================================================================================================
-				10000  'Aardewijn Pepijn'    'M'                   'NED'                 'Rowing'            
+        ERROR: before ' ;SELECT * FROM athlete WHERE code=10000; '
+        Unknown class "aaa".
 
 
-		1 row selected.
+        === <Result of SELECT Command in Line 1> ===
 
-		Current transaction has been committed.
+                 code  name                  gender                nation_code           event               
+        =====================================================================================================
+                10000  'Aardewijn Pepijn'    'M'                   'NED'                 'Rowing'            
 
-		1 command(s) successfully processed.
+
+        1 row selected.
+
+        Current transaction has been committed.
+
+        1 command(s) successfully processed.
 
 .. option:: -r, --read-only
 
-	**-r** 옵션을 이용하여 읽기 전용으로 데이터베이스에 접속한다. 데이터베이스에 읽기 전용으로 접속하면 테이블을 만들거나 데이터를 입력할 수 없고 데이터를 조회만 할 수 있다. ::
+    **-r** 옵션을 이용하여 읽기 전용으로 데이터베이스에 접속한다. 데이터베이스에 읽기 전용으로 접속하면 테이블을 만들거나 데이터를 입력할 수 없고 데이터를 조회만 할 수 있다. ::
 
-		$ csql -r demodb
+        $ csql -r demodb
 
 .. option:: --no-auto-commit
 
-	**--no-auto-commit** 옵션을 이용하여 자동 커밋 모드를 중지한다. **--no-auto-commit** 옵션을 지정하지 않으면 기본적으로 CSQL 인터프리터는 자동 커밋 모드로 작동되고, 입력된 SQL 문이 실행될 때마다 자동으로 커밋된다. 또한, CSQL 인터프리터를 시작한 후 **;AUtocommit** 세션 명령을 수행해도 동일한 결과를 얻을 수 있다. ::
+    **--no-auto-commit** 옵션을 이용하여 자동 커밋 모드를 중지한다. **--no-auto-commit** 옵션을 지정하지 않으면 기본적으로 CSQL 인터프리터는 자동 커밋 모드로 작동되고, 입력된 SQL 문이 실행될 때마다 자동으로 커밋된다. 또한, CSQL 인터프리터를 시작한 후 **;AUtocommit** 세션 명령을 수행해도 동일한 결과를 얻을 수 있다. ::
 
-		csql --no-auto-commit demodb
+        csql --no-auto-commit demodb
 
 .. option:: --no-pager
 
-	**--no-pager** 옵션을 이용하여 CSQL 인터프리터에서 수행한 질의 결과를 페이지 단위로 출력하지 않고, 일괄적으로 출력한다. **--no-pager** 옵션을 지정하지 않으면 페이지 단위로 질의 수행 결과를 출력한다. ::
+    **--no-pager** 옵션을 이용하여 CSQL 인터프리터에서 수행한 질의 결과를 페이지 단위로 출력하지 않고, 일괄적으로 출력한다. **--no-pager** 옵션을 지정하지 않으면 페이지 단위로 질의 수행 결과를 출력한다. ::
 
-		csql --no-pager demodb
+        csql --no-pager demodb
 
 .. option:: --no-single-line
 
-	**--no-single-line** 옵션을 이용하면 SQL 문 여러 개를 저장해 두었다가 **;xr** 혹은 **;r** 세션 명령어로 한꺼번에 수행한다. 이 옵션을 지정하지 않으면 **;xr** 혹은 **;r** 세션 명령어 없이 SQL 문이 바로 실행된다. ::
+    **--no-single-line** 옵션을 이용하면 SQL 문 여러 개를 저장해 두었다가 **;xr** 혹은 **;r** 세션 명령어로 한꺼번에 수행한다. 이 옵션을 지정하지 않으면 **;xr** 혹은 **;r** 세션 명령어 없이 SQL 문이 바로 실행된다. ::
 
-		csql --no-single-line demodb
+        csql --no-single-line demodb
 
 .. _csql-session-commands:
 
@@ -244,59 +244,59 @@ CSQL 인터프리터에는 SQL 문 이외에 CSQL 인터프리터를 제어하�
 
 **;REAd** 명령어는 파일의 내용을 질의 버퍼로 읽는 세션 명령어로, 지정된 입력 파일에 저장된 질의문들을 실행하는데 사용할 수 있다. 질의 버퍼에 올려진 파일 내용을 보기 위해서는 **;List** 명령어를 사용한다. ::
 
-	csql> ;rea nation.sql
-	The file has been read into the command buffer.
-	csql> ;list
-	insert into "sport_event" ("event_code", "event_name", "gender_type", "num_player") values
-	(20001, 'Archery Individual', 'M', 1);
-	insert into "sport_event" ("event_code", "event_name", "gender_type", "num_player") values
-	20002, 'Archery Individual', 'W', 1);
-	....
+    csql> ;rea nation.sql
+    The file has been read into the command buffer.
+    csql> ;list
+    insert into "sport_event" ("event_code", "event_name", "gender_type", "num_player") values
+    (20001, 'Archery Individual', 'M', 1);
+    insert into "sport_event" ("event_code", "event_name", "gender_type", "num_player") values
+    20002, 'Archery Individual', 'W', 1);
+    ....
 
 **파일에 질의 저장(;Write)**
 
 **;Write** 는 질의 버퍼의 내용을 파일에 저장하는 세션 명령어로 사용자가 CSQL 인터프리터에서 입력 혹은 수정한 질의문을 파일에 저장할 때 사용된다. ::
 
-	csql> ;w outfile
-	Command buffer has been saved.
+    csql> ;w outfile
+    Command buffer has been saved.
 
 **파일에 덧붙이기(;APpend)**
 
 현재 질의 버퍼의 내용을 출력 파일인 **outfile** 에 추가한다. ::
 
-	csql> ;ap outfile
-	Command buffer has been saved.
+    csql> ;ap outfile
+    Command buffer has been saved.
 
 **셸 명령어를 실행(;SHELL)**
 
 **;SHELL** 세션 명령어로 외부 셸을 호출할 수 있다. CSQL 인터프리터가 실행된 환경에서 새로운 셸이 시작되고, 셸을 마치면 다시 CSQL 인터프리터로 돌아온다. 만약에 **;SHELL_Cmd** 명령어로 수행할 셸 명령어가 지정되어 있다면 셸을 구동하여 지정된 명령어를 실행하고 CSQL 인터프리터로 복귀하게 된다. ::
 
-	csql> ;shell
-	% ls -al
-	total 2088
-	drwxr-xr-x 16 DBA cubrid   4096 Jul 29 16:51 .
-	drwxr-xr-x  6 DBA cubrid   4096 Jul 29 16:17 ..
-	drwxr-xr-x  2 DBA cubrid   4096 Jul 29 02:49 audit
-	drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 bin
-	drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 conf
-	drwxr-xr-x  4 DBA cubrid   4096 Jul 29 16:14 cubridmanager
-	% exit
-	csql>
+    csql> ;shell
+    % ls -al
+    total 2088
+    drwxr-xr-x 16 DBA cubrid   4096 Jul 29 16:51 .
+    drwxr-xr-x  6 DBA cubrid   4096 Jul 29 16:17 ..
+    drwxr-xr-x  2 DBA cubrid   4096 Jul 29 02:49 audit
+    drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 bin
+    drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 conf
+    drwxr-xr-x  4 DBA cubrid   4096 Jul 29 16:14 cubridmanager
+    % exit
+    csql>
 
 **셸 명령어 등록(;SHELL_Cmd)**
 
 ;SHELL_Cmd를 사용하여 ;SHELL 세션 명령어로 실행할 셸 명령어를 등록한다. 등록된 명령어를 실행하기 위해서는 예제와 같이 ;shell 명령어를 입력한다. ::
 
-	csql> ;shell_c ls -la
-	csql> ;shell
-	total 2088
-	drwxr-xr-x 16 DBA cubrid   4096 Jul 29 16:51 .
-	drwxr-xr-x  6 DBA cubrid   4096 Jul 29 16:17 ..
-	drwxr-xr-x  2 DBA cubrid   4096 Jul 29 02:49 audit
-	drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 bin
-	drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 conf
-	drwxr-xr-x  4 DBA cubrid   4096 Jul 29 16:14 cubridmanager
-	csql>
+    csql> ;shell_c ls -la
+    csql> ;shell
+    total 2088
+    drwxr-xr-x 16 DBA cubrid   4096 Jul 29 16:51 .
+    drwxr-xr-x  6 DBA cubrid   4096 Jul 29 16:17 ..
+    drwxr-xr-x  2 DBA cubrid   4096 Jul 29 02:49 audit
+    drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 bin
+    drwxr-xr-x  2 DBA cubrid   4096 Jul 29 16:17 conf
+    drwxr-xr-x  4 DBA cubrid   4096 Jul 29 16:14 cubridmanager
+    csql>
 
 **페이저 명령어 등록(;PAger_cmd)**
 
@@ -304,20 +304,20 @@ CSQL 인터프리터에는 SQL 문 이외에 CSQL 인터프리터를 제어하�
 
 페이저 명령어를 **more** 로 등록하는 경우 질의 결과를 페이지 단위로 출력하고, 스페이스 키가 눌려질 때까지 다음 페이지의 출력을 대기한다. ::
 
-	csql>;pa more
-	
+    csql>;pa more
+    
 페이저 명령어를 cat으로 등록하는 경우 페이징 없이 질의 결과 전체를 출력한다. ::
 
-	csql>;pa cat
+    csql>;pa cat
 
 output.txt로 출력을 리다이렉션하면 질의 결과 전체를 output.txt에 기록한다. ::
 
-	csql>;pa cat > output.txt
+    csql>;pa cat > output.txt
 
 페이저 명령어를 **less** 로 등록하는 경우 질의 결과에 대해 포워딩, 백워딩을 할 수 있고 패턴 검색도 할 수 있다. ::
 
-	csql>;pa less
-	
+    csql>;pa less
+    
 **less** 에서 사용하는 키보드 명령은 다음과 같다.
 
 * Page UP, b: 한 페이지 뒤로 가기(백워딩)
@@ -331,65 +331,65 @@ output.txt로 출력을 리다이렉션하면 질의 결과 전체를 output.txt
 * N: 이전 문자열 찾기
 
 * q: 질의 결과 보기 종료하기
-	
+    
 **현재 작업 디렉터리 변경(;CD)**
 
 CSQL 인터프리터를 실행한 현재 작업 디렉터리를 지정된 디렉터리로 변경한다. 경로를 지정하지 않으면 홈 디렉터리로 변경된다. ::
 
-	csql> ;cd /home1/DBA/CUBRID
-	Current directory changed to  /home1/DBA/CUBRID.
+    csql> ;cd /home1/DBA/CUBRID
+    Current directory changed to  /home1/DBA/CUBRID.
 
 **CSQL 인터프리터 종료(;EXit)**
 
 CSQL 인터프리터를 종료한다. ::
 
-	csql> ;ex
+    csql> ;ex
 
 **질의 버퍼 초기화(;CLear)**
 
 **;CLear** 세션 명령어는 질의 버퍼의 내용을 초기화한다. ::
 
-	csql> ;cl
-	csql> ;list
+    csql> ;cl
+    csql> ;list
 
 **질의 버퍼의 내용 보여주기(;List)**
 
 현재까지 입력 수정된 질의 버퍼의 내용을 화면에 출력하기 위해서는 **;List** 세션 명령어를 사용한다. 질의 버퍼는 사용자의 SQL 입력, **;REAd** 명령어, **;EDIT** 명령어 등으로 수정될 수 있다. ::
 
-	csql> ;l
+    csql> ;l
 
 **SQL 문 실행(;RUn)**
 
 질의 버퍼에 있는 SQL 문을 실행하는 명령어이다. 다음에서 설명하는 **;Xrun** 세션 명령어와 달리 질의 실행 후에도 버퍼는 초기화되지 않는다. ::
 
-	csql> ;ru
+    csql> ;ru
 
 **SQL 문 실행 후 질의 버퍼 초기화(;Xrun)**
 
 질의 버퍼에 있는 SQL 문을 실행하는 명령어이다. 질의 실행 후 질의 버퍼는 초기화된다. ::
 
-	csql> ;x
+    csql> ;x
 
 **트랜잭션 커밋(;COmmit)**
 
 현재 수행되고 있는 트랜잭션을 커밋(commit)하는 세션 명령어이다. 자동 커밋(auto-commit) 모드가 아닌 경우, 명시적으로 커밋 명령어를 입력해야 CSQL 인터프리터에서 수행 중이던 트랜잭션이 커밋된다. 자동 커밋(auto-commit) 모드인 경우는 SQL을 실행할 때마다 트랜잭션이 자동으로 커밋된다. ::
 
-	csql> ;co
-	Current transaction has been committed.
+    csql> ;co
+    Current transaction has been committed.
 
 **트랜잭션 롤백(;ROllback)**
 
 현재 수행되고 있는 트랜잭션을 롤백(rollback)하는 세션 명령어이다. **;COmmit** 과 마찬가지로 자동 커밋(auto-commit) 모드가 아닐 경우(OFF)에만 의미가 있다. ::
 
-	csql> ;ro
-	Current transaction has been rolled back.
+    csql> ;ro
+    Current transaction has been rolled back.
 
 **자동 커밋 모드 설정(;AUtocommit)**
 
 자동 커밋(auto-commit) 모드를 **ON** 또는 **OFF** 로 설정하는 명령어이다. 만약, **ON** 또는 **OFF** 를 지정하지 않으면 현재 설정된 값을 보여준다. 참고로 CSQL 인터프리터는 기본값이 **ON** 이다. ::
 
-	csql> ;au off
-	AUTOCOMMIT IS OFF
+    csql> ;au off
+    AUTOCOMMIT IS OFF
 
 **체크포인트 수행(;CHeckpoint)**
 
@@ -397,123 +397,123 @@ CSQL 세션 내에서 체크포인트 수행을 지시하는 명령어이다. CS
 
 체크포인트는 현재 데이터 버퍼에 존재하는 모든 더티 페이지를 디스크로 내려쓰기(flush)하는 작업이며, CSQL 세션 내에서 파라미터 값을 설정하는 명령어(**;set** *parameter_name value*)를 통해서도 체크포인트 주기를 변경할 수 있다. 체크포인트 수행 주기와 관련된 파라미터는 **checkpoint_interval_in_mins** 와 **checkpoint_every_npages** 가 있다. 이에 대한 자세한 내용은 :ref:`logging-parameters` 를 참고한다. ::
 
-	csql> ;ch
-	Checkpoint has been issued.
+    csql> ;ch
+    Checkpoint has been issued.
 
 **트랜잭션 모니터링 또는 종료(;Killtran)**
 
 CSQL 세션 내에서 트랜잭션 상태 정보를 확인하거나 특정 트랜잭션을 종료시키는 명령어이다. CSQL 인터프리터 접속 시 사용자 지정 옵션(**-u** *user_name*)에 **DBA** 그룹 멤버가 지정되고 시스템 관리자 모드(**--sysadm**)로 접속한 경우에만 수행할 수 있다. 인자가 생략되면 모든 트랜잭션 상태 정보를 화면 출력하고, 인자로 특정 트랜잭션 ID가 지정되면 해당 트랜잭션을 종료시킨다. ::
 
-	csql> ;k
-	Tran index      User name      Host name      Process id      Program name
-	-------------------------------------------------------------------------------
-		  1(+)            dba      myhost             664           cub_cas
-		  2(+)            dba      myhost            6700              csql
-		  3(+)            dba      myhost            2188           cub_cas
-		  4(+)            dba      myhost             696              csql
-		  5(+)         public      myhost            6944              csql
-	 
-	csql> ;k 3
-	The specified transaction has been killed.
+    csql> ;k
+    Tran index      User name      Host name      Process id      Program name
+    -------------------------------------------------------------------------------
+          1(+)            dba      myhost             664           cub_cas
+          2(+)            dba      myhost            6700              csql
+          3(+)            dba      myhost            2188           cub_cas
+          4(+)            dba      myhost             696              csql
+          5(+)         public      myhost            6944              csql
+     
+    csql> ;k 3
+    The specified transaction has been killed.
 
 **데이터베이스 재접속(;REStart)**
 
 CSQL 세션 내에세 대상 데이터베이스에 재접속을 시도하는 명령어이다. CSQL 인터프리터를 클라이언트/서버 모드(CS 모드)로 수행하는 경우에는 서버와의 접속이 해제되므로 유의한다. 이 명령어는 HA 환경에서 장애로 인해 다른 서버로 절체가 이루어짐에 따라 도중에 서버와의 연결이 해제되는 경우, 세션을 유지하면서 절체된 서버로 재접속할 때 유용하게 사용할 수 있다. ::
 
-	csql> ;res
-	The database has been restarted.
+    csql> ;res
+    The database has been restarted.
 
 **현재 날짜 출력(;DATE)**
 
 **;DATE** 는 CSQL 인터프리터에서 현재 날짜 및 시간 정보를 출력한다. ::
 
-	csql> ;date
-		 Tue July 29 18:58:12 KST 2008
+    csql> ;date
+         Tue July 29 18:58:12 KST 2008
  
 **대상 데이터베이스 정보 출력(;DATAbase)**
 
 CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트 이름을 출력한다. 만약, 대상 데이터베이스가 HA모드로 동작 중이라면 현재 HA모드(active, standby, 또는 maintenance)도 함께 출력될 것이다. ::
 
-	csql> ;data
-		 demodb@cubridhost (active)
-	 
+    csql> ;data
+         demodb@cubridhost (active)
+     
 **지정한 테이블의 스키마 정보 출력(;SChema)**
 
 **;SChema** 세션 명령어로 지정한 테이블의 스키마 정보를 확인할 수 있다. 해당 테이블의 이름, 칼럼명, 제약 사항 등의 정보가 출력된다. ::
 
-	csql> ;sc event
-	=== <Help: Schema of a Class> ===
-	 <Class Name>
-		 event
-	 <Attributes>
-		 code           INTEGER NOT NULL
-		 sports         CHARACTER VARYING(50)
-		 name           CHARACTER VARYING(50)
-		 gender         CHARACTER(1)
-		 players        INTEGER
-	 <Constraints>
-		 PRIMARY KEY pk_event_event_code ON event (code)
+    csql> ;sc event
+    === <Help: Schema of a Class> ===
+     <Class Name>
+         event
+     <Attributes>
+         code           INTEGER NOT NULL
+         sports         CHARACTER VARYING(50)
+         name           CHARACTER VARYING(50)
+         gender         CHARACTER(1)
+         players        INTEGER
+     <Constraints>
+         PRIMARY KEY pk_event_event_code ON event (code)
 
 **트리거 출력(;TRigger)**
 
 지정한 트리거 명을 검색하여 출력하는 명령어이다. 트리거 명을 지정하지 않으면 정의된 모든 트리거를 보여준다. ::
 
-	csql> ;tr
-	=== <Help: All Triggers> ===
-		trig_delete_contents
+    csql> ;tr
+    === <Help: All Triggers> ===
+        trig_delete_contents
 
 **파라미터 값 확인(;Get)**
 
 **;Get** 세션 명령어를 이용해 현재 CSQL 인터프리터에 설정된 파라미터 값을 확인할 수 있다. 지정된 파라미터 명이 정확하지 않으면 오류가 발생한다. ::
 
-	csql> ;g isolation_level
-	=== Get Param Input ===
-	isolation_level=4
+    csql> ;g isolation_level
+    === Get Param Input ===
+    isolation_level=4
 
 **파라미터 값 설정(;SEt)**
 
 특정 파라미터의 값을 설정하기 위해서는 **;Set** 세션 명령어를 사용한다. 동적 변경이 가능한 파라미터만 값을 변경할 수 있으며, 서버 파라미터는 DBA 권한이 있어야만 값을 변경할 수 있다. 동적 변경이 가능한 파라미터 목록은 :ref:`broker-configuration` 를 참고한다. ::
 
-	csql> ;se block_ddl_statement=1
-	=== Set Param Input ===
-	block_ddl_statement=1
-	 
-	-- dba 계정으로 실행한 csql에서 log_max_archives 값을 동적으로 변경
-	csql> ;se log_max_archives=5
+    csql> ;se block_ddl_statement=1
+    === Set Param Input ===
+    block_ddl_statement=1
+     
+    -- dba 계정으로 실행한 csql에서 log_max_archives 값을 동적으로 변경
+    csql> ;se log_max_archives=5
 
 **문자열 타입과 비트 타입 칼럼의 출력 길이 지정(;STring-width)** 
 
 문자열 타입과 비트 타입 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
 ;ST 뒤에 값을 주지 않으면 현재의 출력 길이를 보여준다. 값이 0이면, 해당 칼럼의 값을 모두 출력한다. 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다. ::
 
-	csql> SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
-	  'Arab Republic of Egypt'
-	  'Aruba'
-	  'Armenia'
-	  'Argentina'
+    csql> SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
+      'Arab Republic of Egypt'
+      'Aruba'
+      'Armenia'
+      'Argentina'
 
-	csql> ;ST 5
-	csql>  SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
-	  'Arab '
-	  'Aruba'
-	  'Armen'
-	  'Argen'
+    csql> ;ST 5
+    csql>  SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
+      'Arab '
+      'Aruba'
+      'Armen'
+      'Argen'
 
-	csql> ;ST
-	STRING-WIDTH : 5
+    csql> ;ST
+    STRING-WIDTH : 5
  
 **지정한 칼럼의 출력 길이 지정(;COLumn-width)**
 
 타입과 상관없이 특정 칼럼의 출력 길이를 제한하기 위해서 사용할 수 있다. 
 ;COL 뒤에 값을 주지 않으면 현재 설정된 칼럼의 출력 길이를 보여준다.  뒤에 값이 0이면, 해당 칼럼의 값을 모두 출력하며, 값이 0보다 크다면, 해당 길이만큼 칼럼의 값을 출력한다.  ::
 
-	csql> CREATE TABLE tbl(a BIGINT, b BIGINT);
-	csql> INSERT INTO tbl VALUES(12345678890, 1234567890)
-	csql> ;COL a=5
-	csql> SELECT * FROM tbl;
-	      12345            1234567890
-	csql> ;COL
-	COLUMN-WIDTH a : 5
+    csql> CREATE TABLE tbl(a BIGINT, b BIGINT);
+    csql> INSERT INTO tbl VALUES(12345678890, 1234567890)
+    csql> ;COL a=5
+    csql> SELECT * FROM tbl;
+          12345            1234567890
+    csql> ;COL
+    COLUMN-WIDTH a : 5
 
 **질의 실행 계획 보기 수준 설정(;PLan)**
 
@@ -527,14 +527,14 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 **;Info** 세션 명령어는 스키마, 트리거, 작업 환경, 잠금, 통계 등의 정보를 확인할 수 있는 명령어이다. ::
 
-	csql> ;i lock
-	*** Lock Table Dump ***
-	 Lock Escalation at = 100000, Run Deadlock interval = 1
-	Transaction (index  0, unknown, unknown@unknown|-1)
-	Isolation REPEATABLE CLASSES AND READ UNCOMMITTED INSTANCES
-	State TRAN_ACTIVE
-	Timeout_period -1
-	......
+    csql> ;i lock
+    *** Lock Table Dump ***
+     Lock Escalation at = 100000, Run Deadlock interval = 1
+    Transaction (index  0, unknown, unknown@unknown|-1)
+    Isolation REPEATABLE CLASSES AND READ UNCOMMITTED INSTANCES
+    State TRAN_ACTIVE
+    Timeout_period -1
+    ......
 
 **서버 실행 통계 정보 출력(;.Hist)**
 
@@ -547,75 +547,75 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 다음 예제는 현재 연결에 대한 서버 실행 통계 정보를 확인하는 예제이며, 출력되는 통계 정보 항목에 관한 설명은 :ref:`statdump` 을 참고한다. ::
 
-	csql> ;.hist on
-	csql> ;.x
-	Histogram of client requests:
-	Name                            Rcount   Sent size  Recv size , Server time
-	 No server requests made
-	 
-	 *** CLIENT EXECUTION STATISTICS ***
-	System CPU (sec)              =          0
-	User CPU (sec)                =          0
-	Elapsed (sec)                 =         20
-	 
-	 *** SERVER EXECUTION STATISTICS ***
-	Num_file_creates              =          0
-	Num_file_removes              =          0
-	Num_file_ioreads              =          0
-	Num_file_iowrites             =          0
-	Num_file_iosynches            =          0
-	Num_data_page_fetches         =         56
-	Num_data_page_dirties         =         14
-	Num_data_page_ioreads         =          0
-	Num_data_page_iowrites        =          0
-	Num_data_page_victims         =          0
-	Num_data_page_iowrites_for_replacement =          0
-	Num_log_page_ioreads          =          0
-	Num_log_page_iowrites         =          0
-	Num_log_append_records        =          0
-	Num_log_archives              =          0
-	Num_log_checkpoints           =          0
-	Num_log_wals                  =          0
-	Num_page_locks_acquired       =          2
-	Num_object_locks_acquired     =          2
-	Num_page_locks_converted      =          0
-	Num_object_locks_converted    =          0
-	Num_page_locks_re-requested   =          0
-	Num_object_locks_re-requested =          1
-	Num_page_locks_waits          =          0
-	Num_object_locks_waits        =          0
-	Num_tran_commits              =          1
-	Num_tran_rollbacks            =          0
-	Num_tran_savepoints           =          0
-	Num_tran_start_topops         =          3
-	Num_tran_end_topops           =          3
-	Num_tran_interrupts           =          0
-	Num_btree_inserts             =          0
-	Num_btree_deletes             =          0
-	Num_btree_updates             =          0
-	Num_btree_covered             =          0
-	Num_btree_noncovered          =          0
-	Num_btree_resumes             =          0
-	Num_query_selects             =          1
-	Num_query_inserts             =          0
-	Num_query_deletes             =          0
-	Num_query_updates             =          0
-	Num_query_sscans              =          1
-	Num_query_iscans              =          0
-	Num_query_lscans              =          0
-	Num_query_setscans            =          0
-	Num_query_methscans           =          0
-	Num_query_nljoins             =          0
-	Num_query_mjoins              =          0
-	Num_query_objfetches          =          0
-	Num_network_requests          =          8
-	Num_adaptive_flush_pages      =          0
-	Num_adaptive_flush_log_pages  =          0
-	Num_adaptive_flush_max_pages  =          0
-	 
-	 *** OTHER STATISTICS ***
-	Data_page_buffer_hit_ratio    =     100.00
-	csql> ;.h off
+    csql> ;.hist on
+    csql> ;.x
+    Histogram of client requests:
+    Name                            Rcount   Sent size  Recv size , Server time
+     No server requests made
+     
+     *** CLIENT EXECUTION STATISTICS ***
+    System CPU (sec)              =          0
+    User CPU (sec)                =          0
+    Elapsed (sec)                 =         20
+     
+     *** SERVER EXECUTION STATISTICS ***
+    Num_file_creates              =          0
+    Num_file_removes              =          0
+    Num_file_ioreads              =          0
+    Num_file_iowrites             =          0
+    Num_file_iosynches            =          0
+    Num_data_page_fetches         =         56
+    Num_data_page_dirties         =         14
+    Num_data_page_ioreads         =          0
+    Num_data_page_iowrites        =          0
+    Num_data_page_victims         =          0
+    Num_data_page_iowrites_for_replacement =          0
+    Num_log_page_ioreads          =          0
+    Num_log_page_iowrites         =          0
+    Num_log_append_records        =          0
+    Num_log_archives              =          0
+    Num_log_checkpoints           =          0
+    Num_log_wals                  =          0
+    Num_page_locks_acquired       =          2
+    Num_object_locks_acquired     =          2
+    Num_page_locks_converted      =          0
+    Num_object_locks_converted    =          0
+    Num_page_locks_re-requested   =          0
+    Num_object_locks_re-requested =          1
+    Num_page_locks_waits          =          0
+    Num_object_locks_waits        =          0
+    Num_tran_commits              =          1
+    Num_tran_rollbacks            =          0
+    Num_tran_savepoints           =          0
+    Num_tran_start_topops         =          3
+    Num_tran_end_topops           =          3
+    Num_tran_interrupts           =          0
+    Num_btree_inserts             =          0
+    Num_btree_deletes             =          0
+    Num_btree_updates             =          0
+    Num_btree_covered             =          0
+    Num_btree_noncovered          =          0
+    Num_btree_resumes             =          0
+    Num_query_selects             =          1
+    Num_query_inserts             =          0
+    Num_query_deletes             =          0
+    Num_query_updates             =          0
+    Num_query_sscans              =          1
+    Num_query_iscans              =          0
+    Num_query_lscans              =          0
+    Num_query_setscans            =          0
+    Num_query_methscans           =          0
+    Num_query_nljoins             =          0
+    Num_query_mjoins              =          0
+    Num_query_objfetches          =          0
+    Num_network_requests          =          8
+    Num_adaptive_flush_pages      =          0
+    Num_adaptive_flush_log_pages  =          0
+    Num_adaptive_flush_max_pages  =          0
+     
+     *** OTHER STATISTICS ***
+    Data_page_buffer_hit_ratio    =     100.00
+    csql> ;.h off
 
 **질의 수행 시간을 출력(;TIme)**
 
@@ -623,57 +623,57 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 **SELECT** 질의에서는 페치(fetch)한 레코드를 출력하는 시간까지 포함한다. 따라서, **SELECT** 질의에서 모든 레코드의 출력이 한 번에 끝난 수행 시간을 보려면 CSQL 인터프리터 수행 시 **--no-pager** 옵션을 사용해야 한다. ::
 
-	$ csql -u dba --no-pager demodb
-	csql> ;ti ON
-	csql> ;ti
-	TIME IS ON
+    $ csql -u dba --no-pager demodb
+    csql> ;ti ON
+    csql> ;ti
+    TIME IS ON
 
 **질의 결과를 칼럼 당 한 라인으로 출력(;LINe-output)**
 
 이 값을 **ON** 으로 설정하면 질의 결과 레코드를 칼럼 당 한 라인으로 출력한다. 기본 설정은 OFF로서, 한 레코드는 한 라인으로 출력한다. ::
 
-	csql> ;LIN OFF
-	csql> select * from athlete;
+    csql> ;LIN OFF
+    csql> select * from athlete;
 
-	=== <Result of SELECT Command in Line 1> ===
+    === <Result of SELECT Command in Line 1> ===
 
-	<00001> code       : 10999
-			name       : 'Fernandez Jesus'
-			gender     : 'M'
-			nation_code: 'ESP'
-			event      : 'Handball'
-	<00002> code       : 10998
-			name       : 'Fernandez Jaime'
-			gender     : 'M'
-			nation_code: 'AUS'
-			event      : 'Rowing'
-	...
+    <00001> code       : 10999
+            name       : 'Fernandez Jesus'
+            gender     : 'M'
+            nation_code: 'ESP'
+            event      : 'Handball'
+    <00002> code       : 10998
+            name       : 'Fernandez Jaime'
+            gender     : 'M'
+            nation_code: 'AUS'
+            event      : 'Rowing'
+    ...
 
 **질의 수행 이력 확인(;HISTORYList)**
 
 이전에 수행된 명령어(입력 내용)를 수행 번호를 포함한 리스트로 보여준다. ::
 
-	csql> ;historyl
-	----< 1 >----
-	select * from nation;
-	----< 2 >----
-	select * from athlete;
+    csql> ;historyl
+    ----< 1 >----
+    select * from nation;
+    ----< 2 >----
+    select * from athlete;
 
 **지정된 수행 번호에 해당하는 입력 내용을 버퍼로 불러오기(;HISTORYRead)**
 
 **;HISTORYRead** 세션 명령어를 사용해 지정된 **;HISTORYList** 에서 확인한 수행 번호에 해당하는 내용을 명령어 버퍼로 불러올 수 있다. 해당 SQL 문을 직접 입력한 것과 같은 상태이므로 바로 **;ru** 나 **;x** 를 입력할 수 있다. ::
 
-	csql> ;historyr 1
+    csql> ;historyr 1
 
 **기본 편집기를 호출(;EDIT)**
 
 지정된 편집기를 호출하는 세션 명령어이다. 기본 편집기는 Linux에서는 vi이고, Windows에서는 메모장이다. 다른 편집기로 지정하려면 **;EDITOR_Cmd** 명령어를 이용한다. ::
 
-	csql> ;edit
+    csql> ;edit
 
 **편집기 설정(;EDITOR_Cmd)**
 
 **;EDIT** 세션 명령어에서 사용될 편집기를 지정한다. 예제와 같이 기본 편집기인 vi 대신에 해당 시스템에 설치된 다른 편집기(예: emacs)를 설정할 수 있다. ::
 
-	csql> ;editor_c emacs
-	csql> ;edit
+    csql> ;editor_c emacs
+    csql> ;edit

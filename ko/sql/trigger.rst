@@ -37,49 +37,49 @@ CREATE TRIGGER
 
 **CREATE TRIGGER** 문을 사용하여 새로운 트리거를 생성하고, 트리거 대상, 실행 조건과 수행할 내용을 정의할 수 있다. 트리거는 데이터베이스 객체로서, 특정 이벤트가 대상 테이블에 대해 발생하면정의된 동작을 수행한다. ::
 
-	CREATE TRIGGER trigger_name
-	[ STATUS { ACTIVE | INACTIVE } ]
-	[ PRIORITY key ]
-	event_time event_type[ event_target ]
-	[ IF condition ]
-	EXECUTE [ AFTER | DEFERRED ] action [ ; ]
-	 
-	event_time:
-	   • BEFORE
-	   • AFTER
-	   • DEFERRED
-	 
-	event_type: 
-	   • INSERT
-	   • STATEMENT INSERT 
-	   • UPDATE
-	   • STATEMENT UPDATE 
-	   • DELETE
-	   • STATEMENT DELETE
-	   • ROLLBACK
-	   • COMMIT
-	 
-	event_target: 
-	   • ONtable_name
-	   • ONtable_name [ (column_name) ]
-	 
-	condition: 
-	   • expression
-	 
-	action: 
-	 • REJECT    
-	 • INVALIDATE TRANSACTION 
-	  •  PRINT message_string
-	  •  INSERT statement
-	  •  UPDATE statement
-	  •  DELETE statement 
+    CREATE TRIGGER trigger_name
+    [ STATUS { ACTIVE | INACTIVE } ]
+    [ PRIORITY key ]
+    event_time event_type[ event_target ]
+    [ IF condition ]
+    EXECUTE [ AFTER | DEFERRED ] action [ ; ]
+     
+    event_time:
+       • BEFORE
+       • AFTER
+       • DEFERRED
+     
+    event_type: 
+       • INSERT
+       • STATEMENT INSERT 
+       • UPDATE
+       • STATEMENT UPDATE 
+       • DELETE
+       • STATEMENT DELETE
+       • ROLLBACK
+       • COMMIT
+     
+    event_target: 
+       • ONtable_name
+       • ONtable_name [ (column_name) ]
+     
+    condition: 
+       • expression
+     
+    action: 
+     • REJECT    
+     • INVALIDATE TRANSACTION 
+      •  PRINT message_string
+      •  INSERT statement
+      •  UPDATE statement
+      •  DELETE statement 
 
 *   *trigger_name* : 정의하려는 트리거의 이름을 지정한다.
 
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ] : 트리거의 상태를 정의한다(정의하지 않을 경우 기본값은 **ACTIVE** ).
 
     *   **ACTIVE** 상태인 경우 관련 이벤트가 발생할 때마다 트리거를 실행한다.
-	
+    
     *   **INACTIVE** 상태인 경우 관련 이벤트가 발생하여도 트리거를 실행하지 않는다. 트리거의 활성 여부는 변경할 수 있다. 자세한 내용은 :ref:`alter-trigger` 을 참조한다.
 
 *   [ **PRIORITY** *key* ] : 하나의 이벤트에 대해서 다수의 트리거가 불려질 경우 실행되는 우선순위를 부여한다. *key* 값은 반드시 음수가 아닌 부동 소수점 값이어야 한다. 우선순위를 정의하지 않을 경우 가장 낮은 우선순위인 0을 할당한다. 같은 우선순위를 가지는 트리거는 임의의 순서로 실행된다. 트리거의 우선순위는 변경할 수 있다. 자세한 내용은 :ref:`alter-trigger` 을 참조한다.
@@ -99,15 +99,15 @@ CREATE TRIGGER
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trigger
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
-	 
-	UPDATE participant SET gold = -5 WHERE nation_code = 'KOR'
-	AND host_year = 2004;
-	 
-	ERROR: The operation has been rejected by trigger "medal_trigger".
+    CREATE TRIGGER medal_trigger
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
+     
+    UPDATE participant SET gold = -5 WHERE nation_code = 'KOR'
+    AND host_year = 2004;
+     
+    ERROR: The operation has been rejected by trigger "medal_trigger".
 
 .. _trigger-event-time:
 
@@ -161,19 +161,19 @@ CREATE TRIGGER
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	...
-	BEFORE UPDATE ON history(score)
-	...
+    CREATE TRIGGER example
+    ...
+    BEFORE UPDATE ON history(score)
+    ...
 
 다음은 문장 이벤트를 사용하는 예제이다. 문장 이벤트를 지정하면 갱신의 영향을 받는 인스턴스가 많더라도, 첫 번째 인스턴스가 갱신되기 전에 트리거가 한 번만 불려지게 된다.
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	...
-	BEFORE STATEMENT UPDATE ON history(score)
-	...
+    CREATE TRIGGER example
+    ...
+    BEFORE STATEMENT UPDATE ON history(score)
+    ...
 
 **주의 사항**
 
@@ -191,10 +191,10 @@ CREATE TRIGGER
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	...
-	BEFORE UPDATE ON history(score)
-	...
+    CREATE TRIGGER example
+    ...
+    BEFORE UPDATE ON history(score)
+    ...
 
 이벤트 타입과 대상 조합
 -----------------------
@@ -230,19 +230,19 @@ CREATE TRIGGER
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	........
-	IF obj.record * 1.20  < 500
-	.......
+    CREATE TRIGGER example
+    ........
+    IF obj.record * 1.20  < 500
+    .......
 
 다음은 조건 영역 내의 표현식에 **SELECT** 문을 사용한 예제이다. 예제의 트리거는 집계함수 **COUNT** (\*)를 사용하는 **SELECT** 문을 사용하여 그 값과 상수를 비교한다. **SELECT** 문은 반드시 괄호로 싸여 있어야 하고, 표현식의 마지막에 위치해야 한다.
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	......
-	IF 1000 >  (SELECT COUNT(*) FROM participant)
-	......
+    CREATE TRIGGER example
+    ......
+    IF 1000 >  (SELECT COUNT(*) FROM participant)
+    ......
 
 **주의 사항**
 
@@ -306,10 +306,10 @@ CREATE TRIGGER
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trig
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
+    CREATE TRIGGER medal_trig
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
 
 **주의 사항**
 
@@ -324,11 +324,11 @@ ALTER TRIGGER
 
 트리거 정의에서 **STATUS** 와 **PRIORITY** 옵션에 대해 **ALTER** 구문을 이용하여 변경할 수 있다. 만약 트리거의 다른 부분에 대해 변경(이벤트 대상 또는 조건 표현식)이 필요하면, 트리거를 삭제한 후 재생성해야 한다. ::
 
-	ALTER TRIGGER trigger_name  trigger_option [ ; ]
+    ALTER TRIGGER trigger_name  trigger_option [ ; ]
 
-	trigger_option :
-	• STATUS { ACTIVE | INACTIVE }
-	• PRIORITY key
+    trigger_option :
+    • STATUS { ACTIVE | INACTIVE }
+    • PRIORITY key
 
 
 *   *trigger_name* : 변경할 트리거의 이름을 지정한다.
@@ -340,14 +340,14 @@ ALTER TRIGGER
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trig
-	STATUS ACTIVE
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
+    CREATE TRIGGER medal_trig
+    STATUS ACTIVE
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
 
-	ALTER TRIGGER medal_trig STATUS INACTIVE;
-	ALTER TRIGGER medal_trig PRIORITY 0.7;
+    ALTER TRIGGER medal_trig STATUS INACTIVE;
+    ALTER TRIGGER medal_trig PRIORITY 0.7;
 
 
 **주의 사항**
@@ -363,7 +363,7 @@ DROP TRIGGER
 
 **DROP TRIGGER** 구문을 이용하여 트리거를 삭제한다. ::
 
-	DROP TRIGGER trigger_name [ ; ] 
+    DROP TRIGGER trigger_name [ ; ] 
 
 *   *trigger_name* : 삭제할 트리거의 이름을 지정한다.
 
@@ -371,7 +371,7 @@ DROP TRIGGER
 
 .. code-block:: sql
 
-	DROP TRIGGER medal_trig;
+    DROP TRIGGER medal_trig;
 
 **주의 사항**
 
@@ -383,14 +383,14 @@ RENAME TRIGGER
 
 트리거의 이름은 **RENAME** 구문의 **TRIGGER** 예약어를 이용해서 변경한다. ::
 
-	RENAME TRIGGER old_trigger_name AS new_trigger_name [ ; ]
+    RENAME TRIGGER old_trigger_name AS new_trigger_name [ ; ]
 
 *   *old_trigger_name* : 트리거의 현재 이름을 입력한다.
 *   *new_trigger_name* : 변경할 트리거의 이름을 지정한다.
 
 .. code-block:: sql
 
-	RENAME TRIGGER medal_trigger AS medal_trig;
+    RENAME TRIGGER medal_trigger AS medal_trig;
 
 **주의 사항**
 
@@ -407,11 +407,11 @@ RENAME TRIGGER
 
 지연된 트리거의 조건 영역이나 실행 영역을 즉시 실행시킨다. ::
 
-	EXECUTE DEFERRED TRIGGER trigger_identifier [ ; ]
+    EXECUTE DEFERRED TRIGGER trigger_identifier [ ; ]
 
-	trigger_identifier :
-	• trigger_name
-	• ALL TRIGGERS
+    trigger_identifier :
+    • trigger_name
+    • ALL TRIGGERS
 
 
 *   *trigger_identifier* :
@@ -423,11 +423,11 @@ RENAME TRIGGER
 
 지연된 트리거의 조건 영역과 실행 영역을 취소한다. ::
 
-	DROP DEFERRED TRIGGER trigger_identifier [ ; ]
+    DROP DEFERRED TRIGGER trigger_identifier [ ; ]
 
-	trigger_option :
-	• trigger_name
-	• ALL TRIGGERS
+    trigger_option :
+    • trigger_name
+    • ALL TRIGGERS
 
 *   *trigger_option* :
     *   *trigger_name* : 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 취소된다.
@@ -471,30 +471,30 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 .. code-block:: sql
 
-	CREATE TABLE with_trigger (id INT UNIQUE);
-	INSERT INTO with_trigger VALUES (11);
-	 
-	CREATE TABLE trigger_actions (val INT);
-	 
-	CREATE TRIGGER trig_1 BEFORE INSERT ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (1);
-	CREATE TRIGGER trig_2 BEFORE UPDATE ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (2);
-	CREATE TRIGGER trig_3 BEFORE DELETE ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (3);
-	 
-	INSERT INTO with_trigger VALUES (11) ON DUPLICATE KEY UPDATE id=22;
-	 
-	SELECT * FROM trigger_actions;
-			  va
-	==============
-				2
-	 
-	REPLACE INTO with_trigger VALUES (22);
-	 
-	SELECT * FROM trigger_actions;
-			  va
-	==============
-				2
-				3
-				1
+    CREATE TABLE with_trigger (id INT UNIQUE);
+    INSERT INTO with_trigger VALUES (11);
+     
+    CREATE TABLE trigger_actions (val INT);
+     
+    CREATE TRIGGER trig_1 BEFORE INSERT ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (1);
+    CREATE TRIGGER trig_2 BEFORE UPDATE ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (2);
+    CREATE TRIGGER trig_3 BEFORE DELETE ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (3);
+     
+    INSERT INTO with_trigger VALUES (11) ON DUPLICATE KEY UPDATE id=22;
+     
+    SELECT * FROM trigger_actions;
+              va
+    ==============
+                2
+     
+    REPLACE INTO with_trigger VALUES (22);
+     
+    SELECT * FROM trigger_actions;
+              va
+    ==============
+                2
+                3
+                1
 
 
 트리거 디버깅
@@ -506,23 +506,23 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 .. code-block:: sql
 
-	CREATE TRIGGER loop_tgr
-	BEFORE UPDATE ON participant(gold)
-	IF new.gold > 0
-	EXECUTE UPDATE participant
-			SET gold = new.gold - 1
-			WHERE nation_code = obj.nation_code AND host_year = obj.host_year;
-		
+    CREATE TRIGGER loop_tgr
+    BEFORE UPDATE ON participant(gold)
+    IF new.gold > 0
+    EXECUTE UPDATE participant
+            SET gold = new.gold - 1
+            WHERE nation_code = obj.nation_code AND host_year = obj.host_year;
+        
 트리거 실행 로그 보기
 ---------------------
 
 **SET TRIGGER TRACE** 문을 이용하여 터미널에서 트리거의 실행 로그를 볼 수 있다. ::
 
-	SET TRIGGER TRACE switch [ ; ]
+    SET TRIGGER TRACE switch [ ; ]
 
-	switch:
-	• ON
-	• OFF
+    switch:
+    • ON
+    • OFF
 
 *   *switch* :
     *   **ON** : **TRACE** 가 작동되며 **OFF** 하거나 현재 데이터베이스 세션을 종료할 때까지 계속 유지된다.
@@ -532,23 +532,23 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 .. code-block:: sql
 
-	SET TRIGGER TRACE ON;
-	UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
+    SET TRIGGER TRACE ON;
+    UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
 
 ::
 
-	TRACE: Evaluating condition for trigger "loop".
-	TRACE: Executing action for trigger "loop".
+    TRACE: Evaluating condition for trigger "loop".
+    TRACE: Executing action for trigger "loop".
 
 중첩된 트리거 제한
 ------------------
 
 **SET TRIGGER** 문의 **MAXIMUM DEPTH** 키워드를 이용하여 단계적으로 발동되는 트리거 수를 제한할 수 있다. 이를 이용하면 재귀적으로 호출되는 트리거가 무한루프에 빠지는 것을 막을 수 있다. ::
 
-	SET TRIGGER [ MAXIMUM ] DEPTH count [ ; ]
+    SET TRIGGER [ MAXIMUM ] DEPTH count [ ; ]
 
-	count:
-	• unsigned_integer_literal
+    count:
+    • unsigned_integer_literal
 
 *   *unsigned_integer_literal* : 양의 정수값으로 트리거가 다른 트리거나 자신을 재귀적으로 발동할 수 있는 횟수를 지정한다. 트리거의 수가 최대 깊이에 도달하면 데이터베이스 요청은 중단되고 트랜잭션은 유효하지 않은 것처럼 표시된다. 설정된 **DEPTH** 는 현재 세션을 제외한 나머지 모든 트리거에 적용된다. 최대값은 32이다.
 
@@ -556,10 +556,10 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 .. code-block:: sql
 
-	SET TRIGGER MAXIMUM DEPTH 10;
-	UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
-	 
-	ERROR: Maximum trigger depth 10 exceeded at trigger "loop_tgr".
+    SET TRIGGER MAXIMUM DEPTH 10;
+    UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
+     
+    ERROR: Maximum trigger depth 10 exceeded at trigger "loop_tgr".
 
 트리거를 이용한 응용
 ====================
@@ -574,18 +574,18 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trigger
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
+    CREATE TRIGGER medal_trigger
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
 
 국가코드가 'BLA'인 나라의 금메달(*gold*) 수를 업데이트 할 때, *medal_trigger* 트리거가 발동한다. 금메달 수가 음수인 경우를 허용하지 않도록 트리거를 생성하였으므로, 업데이트를 허용하지 않는다.
 
 .. code-block:: sql
 
-	UPDATE participant
-	SET gold = -10
-	WHERE nation_code = 'BLA';
+    UPDATE participant
+    SET gold = -10
+    WHERE nation_code = 'BLA';
 
 **예제 2**
 
@@ -593,14 +593,14 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trig
-	STATUS ACTIVE
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
-	 
-	ALTER TRIGGER medal_trig
-	STATUS INACTIVE;
+    CREATE TRIGGER medal_trig
+    STATUS ACTIVE
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
+     
+    ALTER TRIGGER medal_trig
+    STATUS INACTIVE;
 
 **예제 3**
 
@@ -608,11 +608,11 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 .. code-block:: sql
 
-	CREATE TRIGGER check_null_first
-	BEFORE COMMIT
-	IF 0 < (SELECT count(*) FROM athlete WHERE gender IS NULL)
-	OR 0 < (SELECT count(*) FROM game WHERE nation_code IS NULL)
-	EXECUTE REJECT;
+    CREATE TRIGGER check_null_first
+    BEFORE COMMIT
+    IF 0 < (SELECT count(*) FROM athlete WHERE gender IS NULL)
+    OR 0 < (SELECT count(*) FROM game WHERE nation_code IS NULL)
+    EXECUTE REJECT;
 
 **예제 4**
 
@@ -620,23 +620,23 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 .. code-block:: sql
 
-	CREATE TRIGGER deferred_check_on_record
-	DEFERRED UPDATE ON record
-	IF obj.score = '100'
-	EXECUTE INVALIDATE TRANSACTION;
+    CREATE TRIGGER deferred_check_on_record
+    DEFERRED UPDATE ON record
+    IF obj.score = '100'
+    EXECUTE INVALIDATE TRANSACTION;
 
 *record* 테이블에서 업데이트가 완료되었을 때, 해당 업데이트는 현재 트랜잭션의 마지막(커밋이나 롤백할 때)에 확인하게 된다. 상관명 **old** 는 **DEFERRED UPDATE** 를 사용하는 트리거의 조건 절에 사용할 수 없다. 따라서 아래와 같은 트리거는 생성할 수 없다.
 
 .. code-block:: sql
 
-	CREATE CLASS foo (n int);
-	CREATE TRIGGER foo_trigger
-		DEFERRED UPDATE ON foo
-		IF old.n = 100
-		EXECUTE PRINT 'foo_trigger';
+    CREATE CLASS foo (n int);
+    CREATE TRIGGER foo_trigger
+        DEFERRED UPDATE ON foo
+        IF old.n = 100
+        EXECUTE PRINT 'foo_trigger';
 
 위와 같이 트리거를 생성하려고 하면 다음과 같은 에러 메시지를 보여주고, 실패한다. ::
 
-	ERROR: Error compiling condition for 'foo_trigger' : old.n is not defined.
+    ERROR: Error compiling condition for 'foo_trigger' : old.n is not defined.
 
 상관명 **old** 는 트리거의 조건 시간이 **AFTER** 일 때에만 사용될 수 있다.

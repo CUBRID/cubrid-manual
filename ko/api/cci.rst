@@ -56,306 +56,306 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
 *   데이터베이스 연결 풀 사용하기(관련 함수: :c:func:`cci_property_create`), :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`)
 
 .. note::
-	* Windows에서 CCI 응용 프로그램을 컴파일하려면 "WINDOWS"가 define되어야 하므로 "-DWINDOWS" 옵션을 컴파일러에 반드시 포함하도록 한다.
-	* 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
-	* 자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 :c:func:`cci_end_tran` 을 호출하여 트랜잭션을 종료 처리하도록 한다. 
+    * Windows에서 CCI 응용 프로그램을 컴파일하려면 "WINDOWS"가 define되어야 하므로 "-DWINDOWS" 옵션을 컴파일러에 반드시 포함하도록 한다.
+    * 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+    * 자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 :c:func:`cci_end_tran` 을 호출하여 트랜잭션을 종료 처리하도록 한다. 
 
 **예제 1**
 
 .. code-block:: c
 
-	//Example to execute a simple query
-	#include <stdio.h>
-	#include "cas_cci.h"  
-	#define BUFSIZE  (1024)
-	 
-	int
-	main (void)
-	{
-		int con = 0, req = 0, col_count = 0, i, ind;
-		int error;
-		char *data;
-		T_CCI_ERROR cci_error;
-		T_CCI_COL_INFO *col_info;
-		T_CCI_CUBRID_STMT stmt_type;
-		char *query = "select * from code";
-		
-		//getting a connection handle for a connection with a server
-		con = cci_connect ("localhost", 33000, "demodb", "dba", "");
-		if (con < 0)
-		{
-			printf ("cannot connect to database\n");
-			return 1;
-		}
-	 
-		//preparing the SQL statement
-		req = cci_prepare (con, query, 0, &cci_error);
-		if (req < 0)
-		{
-			printf ("prepare error: %d, %s\n", cci_error.err_code,
-					cci_error.err_msg);
-			goto handle_error;
-		}
-	 
-		//getting column information when the prepared statement is the SELECT query
-		col_info = cci_get_result_info (req, &stmt_type, &col_count);
-		if (col_info == NULL)
-		{
-			printf ("get_result_info error: %d, %s\n", cci_error.err_code,
-					cci_error.err_msg);
-			goto handle_error;
-		}
-	 
-		//Executing the prepared SQL statement
-		error = cci_execute (req, 0, 0, &cci_error);
-		if (error < 0)
-		{
-			printf ("execute error: %d, %s\n", cci_error.err_code,
-					cci_error.err_msg);
-			goto handle_error;
-		}
-		while (1)
-		{
-	 
-			//Moving the cursor to access a specific tuple of results
-			error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &cci_error);
-			if (error == CCI_ER_NO_MORE_DATA)
-			{
-				break;
-			}
-			if (error < 0)
-			{
-				printf ("cursor error: %d, %s\n", cci_error.err_code,
-						cci_error.err_msg);
-				goto handle_error;
-			}
-	 
-			//Fetching the query result into a client buffer
-			error = cci_fetch (req, &cci_error);
-			if (error < 0)
-			{
-				printf ("fetch error: %d, %s\n", cci_error.err_code,
-						cci_error.err_msg);
-				goto handle_error;
-			}
-			for (i = 1; i <= col_count; i++)
-			{
-	 
-				//Getting data from the fetched result
-				error = cci_get_data (req, i, CCI_A_TYPE_STR, &data, &ind);
-				if (error < 0)
-				{
-					printf ("get_data error: %d, %d\n", error, i);
-					goto handle_error;
-				}
-				printf ("%s\t|", data);
-			}
-			printf ("\n");
-		}
-	 
-		//Closing the request handle
-		error = cci_close_req_handle (req);
-		if (error < 0)
-		{
-			printf ("close_req_handle error: %d, %s\n", cci_error.err_code,
-					cci_error.err_msg);
-			goto handle_error;
-		}
-	 
-		//Disconnecting with the server
-		error = cci_disconnect (con, &cci_error);
-		if (error < 0)
-		{
-			printf ("error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
-			goto handle_error;
-		}
-	 
-		return 0;
-	 
-	handle_error:
-		if (req > 0)
-			cci_close_req_handle (req);
-		if (con > 0)
-		cci_disconnect (con, &cci_error);
-	 
-		return 1;
-	}
+    //Example to execute a simple query
+    #include <stdio.h>
+    #include "cas_cci.h"  
+    #define BUFSIZE  (1024)
+     
+    int
+    main (void)
+    {
+        int con = 0, req = 0, col_count = 0, i, ind;
+        int error;
+        char *data;
+        T_CCI_ERROR cci_error;
+        T_CCI_COL_INFO *col_info;
+        T_CCI_CUBRID_STMT stmt_type;
+        char *query = "select * from code";
+        
+        //getting a connection handle for a connection with a server
+        con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+        if (con < 0)
+        {
+            printf ("cannot connect to database\n");
+            return 1;
+        }
+     
+        //preparing the SQL statement
+        req = cci_prepare (con, query, 0, &cci_error);
+        if (req < 0)
+        {
+            printf ("prepare error: %d, %s\n", cci_error.err_code,
+                    cci_error.err_msg);
+            goto handle_error;
+        }
+     
+        //getting column information when the prepared statement is the SELECT query
+        col_info = cci_get_result_info (req, &stmt_type, &col_count);
+        if (col_info == NULL)
+        {
+            printf ("get_result_info error: %d, %s\n", cci_error.err_code,
+                    cci_error.err_msg);
+            goto handle_error;
+        }
+     
+        //Executing the prepared SQL statement
+        error = cci_execute (req, 0, 0, &cci_error);
+        if (error < 0)
+        {
+            printf ("execute error: %d, %s\n", cci_error.err_code,
+                    cci_error.err_msg);
+            goto handle_error;
+        }
+        while (1)
+        {
+     
+            //Moving the cursor to access a specific tuple of results
+            error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &cci_error);
+            if (error == CCI_ER_NO_MORE_DATA)
+            {
+                break;
+            }
+            if (error < 0)
+            {
+                printf ("cursor error: %d, %s\n", cci_error.err_code,
+                        cci_error.err_msg);
+                goto handle_error;
+            }
+     
+            //Fetching the query result into a client buffer
+            error = cci_fetch (req, &cci_error);
+            if (error < 0)
+            {
+                printf ("fetch error: %d, %s\n", cci_error.err_code,
+                        cci_error.err_msg);
+                goto handle_error;
+            }
+            for (i = 1; i <= col_count; i++)
+            {
+     
+                //Getting data from the fetched result
+                error = cci_get_data (req, i, CCI_A_TYPE_STR, &data, &ind);
+                if (error < 0)
+                {
+                    printf ("get_data error: %d, %d\n", error, i);
+                    goto handle_error;
+                }
+                printf ("%s\t|", data);
+            }
+            printf ("\n");
+        }
+     
+        //Closing the request handle
+        error = cci_close_req_handle (req);
+        if (error < 0)
+        {
+            printf ("close_req_handle error: %d, %s\n", cci_error.err_code,
+                    cci_error.err_msg);
+            goto handle_error;
+        }
+     
+        //Disconnecting with the server
+        error = cci_disconnect (con, &cci_error);
+        if (error < 0)
+        {
+            printf ("error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+            goto handle_error;
+        }
+     
+        return 0;
+     
+    handle_error:
+        if (req > 0)
+            cci_close_req_handle (req);
+        if (con > 0)
+        cci_disconnect (con, &cci_error);
+     
+        return 1;
+    }
 
 **예제 2**
 
 .. code-block:: c
 
-	//Example to execute a query with a bind variable
-	 
-	char *query = "select * from nation where name = ?";
-	char namebuf[128];
-	 
-	//getting a connection handle for a connection with a server
-	con = cci_connect ("localhost", 33000, "demodb", "dba", "");
-	if (con < 0)
-	{
-		printf ("cannot connect to database ");
-		return 1;
-	}
-	 
-	//preparing the SQL statement
-	req = cci_prepare (con, query, 0, &cci_error);
-	if (req < 0)
-	{
-		printf ("prepare error: %d, %s ", cci_error.err_code,
-			cci_error.err_msg);
-		goto handle_error;
-	}
-	 
-	//Binding date into a value
-	strcpy (namebuf, "Korea");
-	error =
-		cci_bind_param (req, 1, CCI_A_TYPE_STR, namebuf, CCI_U_TYPE_STRING,
-						CCI_BIND_PTR);
-	if (error < 0)
-	{
-		printf ("bind_param error: %d ", error);
-		goto handle_error;
-	}
-	
+    //Example to execute a query with a bind variable
+     
+    char *query = "select * from nation where name = ?";
+    char namebuf[128];
+     
+    //getting a connection handle for a connection with a server
+    con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+    if (con < 0)
+    {
+        printf ("cannot connect to database ");
+        return 1;
+    }
+     
+    //preparing the SQL statement
+    req = cci_prepare (con, query, 0, &cci_error);
+    if (req < 0)
+    {
+        printf ("prepare error: %d, %s ", cci_error.err_code,
+            cci_error.err_msg);
+        goto handle_error;
+    }
+     
+    //Binding date into a value
+    strcpy (namebuf, "Korea");
+    error =
+        cci_bind_param (req, 1, CCI_A_TYPE_STR, namebuf, CCI_U_TYPE_STRING,
+                        CCI_BIND_PTR);
+    if (error < 0)
+    {
+        printf ("bind_param error: %d ", error);
+        goto handle_error;
+    }
+    
 **예제 3**
 
 .. code-block:: c
 
-	#include <stdio.h>
-	#include "cas_cci.h"
-	 
-	//Example to use connection/statement pool in CCI
-	int main ()
-	{
-		T_CCI_PROPERTIES *ps = NULL;
-		T_CCI_DATASOURCE *ds = NULL;
-		T_CCI_ERROR err;
-		T_CCI_CONN cons[20];
-		int rc = 1, i;
-		
-		ps = cci_property_create ();
-		if (ps == NULL)
-		{
-			fprintf (stderr, "Could not create T_CCI_PROPERTIES.\n");
-			rc = 0;
-			goto cci_pool_end;
-		}
-		
-		cci_property_set (ps, "user", "dba");
-		cci_property_set (ps, "url", "cci:cubrid:localhost:33000:demodb:::");
-		cci_property_set (ps, "pool_size", "10");
-		cci_property_set (ps, "max_wait", "1200");
-		cci_property_set (ps, "pool_prepared_statement", "true");
-		cci_property_set (ps, "default_autocommit", "false");
-		cci_property_set (ps, "default_isolation", "TRAN_REP_CLASS_UNCOMMIT_INSTANCE");
-		cci_property_set (ps, "default_lock_timeout", "10");
-		cci_property_set (ps, "login_timeout", "300000");
-		cci_property_set (ps, "query_timeout", "3000");
-		
-		ds = cci_datasource_create (ps, &err);
-		if (ds == NULL)
-		{
-			fprintf (stderr, "Could not create T_CCI_DATASOURCE.\n");
-			fprintf (stderr, "E[%d,%s]\n", err.err_code, err.err_msg);
-			rc = 0;
-			goto cci_pool_end;
-		}
-		
-		for (i = 0; i < 3; i++)
-		{
-			cons[i] = cci_datasource_borrow (ds, &err);
-			if (cons[i] < 0)
-			{
-				fprintf (stderr,
-						"Could not borrow a connection from the data source.\n");
-				fprintf (stderr, "E[%d,%s]\n", err.err_code, err.err_msg);
-				continue;
-			}
-			// put working code here.
-			cci_work (cons[i]);
-		}
-		
-		sleep (1);
-		
-		for (i = 0; i < 3; i++)
-		{
-			if (cons[i] < 0)
-			{
-				continue;
-			}
-			cci_datasource_release (ds, cons[i], &err);
-		}
-		
-	cci_pool_end:
-	  cci_property_destroy (ps);
-	  cci_datasource_destroy (ds);
-	 
-	  return 0;
-	}
-	 
-	// working code
-	int cci_work (T_CCI_CONN con)
-	{
-		T_CCI_ERROR err;
-		char sql[4096];
-		int req, res, error, ind;
-		int data;
-		
-		cci_set_autocommit (con, CCI_AUTOCOMMIT_TRUE);
-		cci_set_lock_timeout (con, 100, &err);
-		cci_set_isolation_level (con, TRAN_REP_CLASS_COMMIT_INSTANCE, &err);
-		
-		error = 0;
-		snprintf (sql, 4096, "SELECT host_year FROM record WHERE athlete_code=11744");
-		req = cci_prepare (con, sql, 0, &err);
-		if (req < 0)
-		{
-			printf ("prepare error: %d, %s\n", err.err_code, err.err_msg);
-			return error;
-		}
-		
-		res = cci_execute (req, 0, 0, &err);
-		if (res < 0)
-		{
-			printf ("execute error: %d, %s\n", err.err_code, err.err_msg);
-			goto cci_work_end;
-		}
-		
-		while (1)
-		{
-		error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &err);
-		if (error == CCI_ER_NO_MORE_DATA)
-		{
-			break;
-		}
-		if (error < 0)
-		{
-			printf ("cursor error: %d, %s\n", err.err_code, err.err_msg);
-			goto cci_work_end;
-		}
-		
-		error = cci_fetch (req, &err);
-		if (error < 0)
-		{
-			printf ("fetch error: %d, %s\n", err.err_code, err.err_msg);
-			goto cci_work_end;
-		}
-		
-		error = cci_get_data (req, 1, CCI_A_TYPE_INT, &data, &ind);
-		if (error < 0)
-		{
-			printf ("get data error: %d\n", error);
-			goto cci_work_end;
-		}
-		printf ("%d\n", data);
-		}
-		
-		error = 1;
-	cci_work_end:
-	  cci_close_req_handle (req);
-	  return error;
-	}
+    #include <stdio.h>
+    #include "cas_cci.h"
+     
+    //Example to use connection/statement pool in CCI
+    int main ()
+    {
+        T_CCI_PROPERTIES *ps = NULL;
+        T_CCI_DATASOURCE *ds = NULL;
+        T_CCI_ERROR err;
+        T_CCI_CONN cons[20];
+        int rc = 1, i;
+        
+        ps = cci_property_create ();
+        if (ps == NULL)
+        {
+            fprintf (stderr, "Could not create T_CCI_PROPERTIES.\n");
+            rc = 0;
+            goto cci_pool_end;
+        }
+        
+        cci_property_set (ps, "user", "dba");
+        cci_property_set (ps, "url", "cci:cubrid:localhost:33000:demodb:::");
+        cci_property_set (ps, "pool_size", "10");
+        cci_property_set (ps, "max_wait", "1200");
+        cci_property_set (ps, "pool_prepared_statement", "true");
+        cci_property_set (ps, "default_autocommit", "false");
+        cci_property_set (ps, "default_isolation", "TRAN_REP_CLASS_UNCOMMIT_INSTANCE");
+        cci_property_set (ps, "default_lock_timeout", "10");
+        cci_property_set (ps, "login_timeout", "300000");
+        cci_property_set (ps, "query_timeout", "3000");
+        
+        ds = cci_datasource_create (ps, &err);
+        if (ds == NULL)
+        {
+            fprintf (stderr, "Could not create T_CCI_DATASOURCE.\n");
+            fprintf (stderr, "E[%d,%s]\n", err.err_code, err.err_msg);
+            rc = 0;
+            goto cci_pool_end;
+        }
+        
+        for (i = 0; i < 3; i++)
+        {
+            cons[i] = cci_datasource_borrow (ds, &err);
+            if (cons[i] < 0)
+            {
+                fprintf (stderr,
+                        "Could not borrow a connection from the data source.\n");
+                fprintf (stderr, "E[%d,%s]\n", err.err_code, err.err_msg);
+                continue;
+            }
+            // put working code here.
+            cci_work (cons[i]);
+        }
+        
+        sleep (1);
+        
+        for (i = 0; i < 3; i++)
+        {
+            if (cons[i] < 0)
+            {
+                continue;
+            }
+            cci_datasource_release (ds, cons[i], &err);
+        }
+        
+    cci_pool_end:
+      cci_property_destroy (ps);
+      cci_datasource_destroy (ds);
+     
+      return 0;
+    }
+     
+    // working code
+    int cci_work (T_CCI_CONN con)
+    {
+        T_CCI_ERROR err;
+        char sql[4096];
+        int req, res, error, ind;
+        int data;
+        
+        cci_set_autocommit (con, CCI_AUTOCOMMIT_TRUE);
+        cci_set_lock_timeout (con, 100, &err);
+        cci_set_isolation_level (con, TRAN_REP_CLASS_COMMIT_INSTANCE, &err);
+        
+        error = 0;
+        snprintf (sql, 4096, "SELECT host_year FROM record WHERE athlete_code=11744");
+        req = cci_prepare (con, sql, 0, &err);
+        if (req < 0)
+        {
+            printf ("prepare error: %d, %s\n", err.err_code, err.err_msg);
+            return error;
+        }
+        
+        res = cci_execute (req, 0, 0, &err);
+        if (res < 0)
+        {
+            printf ("execute error: %d, %s\n", err.err_code, err.err_msg);
+            goto cci_work_end;
+        }
+        
+        while (1)
+        {
+        error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &err);
+        if (error == CCI_ER_NO_MORE_DATA)
+        {
+            break;
+        }
+        if (error < 0)
+        {
+            printf ("cursor error: %d, %s\n", err.err_code, err.err_msg);
+            goto cci_work_end;
+        }
+        
+        error = cci_fetch (req, &err);
+        if (error < 0)
+        {
+            printf ("fetch error: %d, %s\n", err.err_code, err.err_msg);
+            goto cci_work_end;
+        }
+        
+        error = cci_get_data (req, 1, CCI_A_TYPE_INT, &data, &ind);
+        if (error < 0)
+        {
+            printf ("get data error: %d\n", error);
+            goto cci_work_end;
+        }
+        printf ("%d\n", data);
+        }
+        
+        error = 1;
+    cci_work_end:
+      cci_close_req_handle (req);
+      return error;
+    }
 
 
 라이브러리 적용
@@ -365,14 +365,14 @@ CCI를 이용한 응용 프로그램을 작성했다면 프로그램 특성에 �
 
 다음은 유닉스/Linux에서 동적인 라이브러리를 사용하여 링크하는 Makefile의 예제이다. ::
 
-	CC=gcc
-	CFLAGS = -g -Wall -I. -I$CUBRID/include
-	LDFLAGS = -L$CUBRID/lib -lcascci -lnsl
-	TEST_OBJS = test.o
-	EXES = test
-	all: $(EXES)
-	test: $(TEST_OBJS)
-		$(CC) -o $@ $(TEST_OBJS) $(LDFLAGS)
+    CC=gcc
+    CFLAGS = -g -Wall -I. -I$CUBRID/include
+    LDFLAGS = -L$CUBRID/lib -lcascci -lnsl
+    TEST_OBJS = test.o
+    EXES = test
+    all: $(EXES)
+    test: $(TEST_OBJS)
+        $(CC) -o $@ $(TEST_OBJS) $(LDFLAGS)
 
 다음은 Windows에서 정적 라이브러리를 적용하기 위한 설정이다.
 
@@ -392,64 +392,64 @@ CCI 응용 프로그램에서 다음 함수를 사용하여 **LOB** 데이터 �
 
 .. code-block:: c
 
-	int con = 0; /* connection handle */
-	int req = 0; /* request handle */
-	int res;
-	int n_executed;
-	int i;
-	T_CCI_ERROR error;
-	T_CCI_BLOB blob = NULL;
-	char data[1024] = "bulabula";
-	 
-	con = cci_connect ("localhost", 33000, "tdb", "PUBLIC", "");
-	if (con < 0) {
-		goto handle_error;
-	}
-	req = cci_prepare (con, "insert into doc (doc_id, content) values (?,?)", 0, &error);
-	if (req< 0)
-	{
-		goto handle_error;
-	}
-	 
-	res = cci_bind_param (req, 1 /* binding index*/, CCI_A_TYPE_STR, "doc-10", CCI_U_TYPE_STRING, CCI_BIND_PTR);
-	 
-	/* Creating an empty LOB data file */
-	res = cci_blob_new (con, &blob, &error);
-	res = cci_blob_write (con, blob, 0 /* start position */, 1024 /* length */, data, &error);
-	 
-	/* Binding BLOB data */
-	res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_BLOB, (void *)blob, CCI_U_TYPE_BLOB, CCI_BIND_PTR);
-	 
-	n_executed = cci_execute (req, 0, 0, &error);
-	if (n_executed < 0)
-	{
-		goto handle_error;
-	}
-	 
-	/* Commit */
-	if (cci_end_tran(con, CCI_TRAN_COMMIT, &error) < 0)
-	{
-		goto handle_error;
-	}
-	 
-	/* Memory free */
-	cci_blob_free(blob);
-	return 0;
-	 
-	handle_error:
-	if (blob != NULL)
-	{
-		cci_blob_free(blob);
-	}
-	if (req > 0)
-	{
-		cci_close_req_handle (req);
-	}
-	if (con > 0)
-	{
-		cci_disconnect(con, &error);
-	}
-	return -1;
+    int con = 0; /* connection handle */
+    int req = 0; /* request handle */
+    int res;
+    int n_executed;
+    int i;
+    T_CCI_ERROR error;
+    T_CCI_BLOB blob = NULL;
+    char data[1024] = "bulabula";
+     
+    con = cci_connect ("localhost", 33000, "tdb", "PUBLIC", "");
+    if (con < 0) {
+        goto handle_error;
+    }
+    req = cci_prepare (con, "insert into doc (doc_id, content) values (?,?)", 0, &error);
+    if (req< 0)
+    {
+        goto handle_error;
+    }
+     
+    res = cci_bind_param (req, 1 /* binding index*/, CCI_A_TYPE_STR, "doc-10", CCI_U_TYPE_STRING, CCI_BIND_PTR);
+     
+    /* Creating an empty LOB data file */
+    res = cci_blob_new (con, &blob, &error);
+    res = cci_blob_write (con, blob, 0 /* start position */, 1024 /* length */, data, &error);
+     
+    /* Binding BLOB data */
+    res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_BLOB, (void *)blob, CCI_U_TYPE_BLOB, CCI_BIND_PTR);
+     
+    n_executed = cci_execute (req, 0, 0, &error);
+    if (n_executed < 0)
+    {
+        goto handle_error;
+    }
+     
+    /* Commit */
+    if (cci_end_tran(con, CCI_TRAN_COMMIT, &error) < 0)
+    {
+        goto handle_error;
+    }
+     
+    /* Memory free */
+    cci_blob_free(blob);
+    return 0;
+     
+    handle_error:
+    if (blob != NULL)
+    {
+        cci_blob_free(blob);
+    }
+    if (req > 0)
+    {
+        cci_close_req_handle (req);
+    }
+    if (con > 0)
+    {
+        cci_disconnect(con, &error);
+    }
+    return -1;
 
 **LOB 데이터 조회**
 
@@ -463,61 +463,61 @@ CCI 응용 프로그램에서 다음 함수를 사용하여 **LOB** 데이터를
 
 .. code-block:: c
 
-	int con = 0; /* connection handle */
-	int req = 0; /* request handle */
-	int ind; /* NULL indicator, 0 if not NULL, -1 if NULL*/
-	int res;
-	int i;
-	T_CCI_ERROR error;
-	T_CCI_BLOB blob;
-	char buffer[1024];
-	 
-	con = cci_connect ("localhost", 33000, "image_db", "PUBLIC", "");
-	if (con < 0)
-	{
-	  goto handle_error;
-	}
-	req = cci_prepare (con, "select content from doc_t", 0 /*flag*/, &error);
-	if (req< 0)
-	{
-		goto handle_error;
-	}
-	 
-	res = cci_execute (req, 0/*flag*/, 0/*max_col_size*/, &error);
-	res = cci_fetch_size (req, 100 /* fetch size */);
-	 
-	while (1) {
-		res = cci_cursor (req, 1/* offset */, CCI_CURSOR_CURRENT/* cursor position */, &error);
-		if (res == CCI_ER_NO_MORE_DATA)
-		{
-			break;
-		}
-		res = cci_fetch (req, &error);
-		
-		/* Fetching CLOB Locator */
-		res = cci_get_data (req, 1 /* colume index */, CCI_A_TYPE_BLOB,
-		(void *)&blob /* BLOB handle */, &ind /* NULL indicator */);
-		/* Fetching CLOB data */
-		res = cci_blob_read (con, blob, 0 /* start position */, 1024 /* length */, buffer, &error);
-		printf ("content = %s\n", buffer);
-	}
-	 
-	/* Memory free */
-	cci_blob_free(blob);
-	res=cci_close_req_handle(req);
-	res = cci_disconnect (con, &error);
-	return 0;
-	 
-	handle_error:
-	if (req > 0)
-	{
-		cci_close_req_handle (req);
-	}
-	if (con > 0)
-	{
-		cci_disconnect(con, &error);
-	}
-	return -1;
+    int con = 0; /* connection handle */
+    int req = 0; /* request handle */
+    int ind; /* NULL indicator, 0 if not NULL, -1 if NULL*/
+    int res;
+    int i;
+    T_CCI_ERROR error;
+    T_CCI_BLOB blob;
+    char buffer[1024];
+     
+    con = cci_connect ("localhost", 33000, "image_db", "PUBLIC", "");
+    if (con < 0)
+    {
+      goto handle_error;
+    }
+    req = cci_prepare (con, "select content from doc_t", 0 /*flag*/, &error);
+    if (req< 0)
+    {
+        goto handle_error;
+    }
+     
+    res = cci_execute (req, 0/*flag*/, 0/*max_col_size*/, &error);
+    res = cci_fetch_size (req, 100 /* fetch size */);
+     
+    while (1) {
+        res = cci_cursor (req, 1/* offset */, CCI_CURSOR_CURRENT/* cursor position */, &error);
+        if (res == CCI_ER_NO_MORE_DATA)
+        {
+            break;
+        }
+        res = cci_fetch (req, &error);
+        
+        /* Fetching CLOB Locator */
+        res = cci_get_data (req, 1 /* colume index */, CCI_A_TYPE_BLOB,
+        (void *)&blob /* BLOB handle */, &ind /* NULL indicator */);
+        /* Fetching CLOB data */
+        res = cci_blob_read (con, blob, 0 /* start position */, 1024 /* length */, buffer, &error);
+        printf ("content = %s\n", buffer);
+    }
+     
+    /* Memory free */
+    cci_blob_free(blob);
+    res=cci_close_req_handle(req);
+    res = cci_disconnect (con, &error);
+    return 0;
+     
+    handle_error:
+    if (req > 0)
+    {
+        cci_close_req_handle (req);
+    }
+    if (con > 0)
+    {
+        cci_disconnect(con, &error);
+    }
+    return -1;
 
 .. _cci-error-codes:
 
@@ -542,11 +542,11 @@ CCI API 함수는 에러 발생 시 반환 값이 음수인 CCI 에러 코드 �
 
 .. warning::
 
-	서버에서 에러가 발생한 경우 함수가 리턴하는 에러 코드인 **CCI_ER_DBMS** 와 err_buf.err_code 값이 서로 다름에 주의한다. 서버 에러 외에 err_buf에 저장되는 모든 에러 코드는 함수가 리턴하는 에러 코드와 동일하다.
+    서버에서 에러가 발생한 경우 함수가 리턴하는 에러 코드인 **CCI_ER_DBMS** 와 err_buf.err_code 값이 서로 다름에 주의한다. 서버 에러 외에 err_buf에 저장되는 모든 에러 코드는 함수가 리턴하는 에러 코드와 동일하다.
 
 .. note::
 
-	CUBRID 9.0 미만 버전에서의 CCI, CAS 에러 코드는 CUBRID 9.0 이상 버전의 에러 코드와 다른 값을 가진다. 따라서 에러 코드명을 사용하여 개발한 사용자는 응용 프로그램을 재컴파일하여 사용해야 하며, 에러 코드 번호를 직접 부여하여 개발한 사용자는 번호 값을 바꾼 후 응용 프로그램을 재컴파일해야 한다.
+    CUBRID 9.0 미만 버전에서의 CCI, CAS 에러 코드는 CUBRID 9.0 이상 버전의 에러 코드와 다른 값을 가진다. 따라서 에러 코드명을 사용하여 개발한 사용자는 응용 프로그램을 재컴파일하여 사용해야 하며, 에러 코드 번호를 직접 부여하여 개발한 사용자는 번호 값을 바꾼 후 응용 프로그램을 재컴파일해야 한다.
 
 데이터베이스 서버 에러와 관련한 내용은 :ref:`database-server-error`\를 참고한다.
 
@@ -558,47 +558,47 @@ CCI API 함수는 에러 발생 시 반환 값이 음수인 CCI 에러 코드 �
 
 .. code-block:: c
 
-	// gcc -o err err.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
-	#include <stdio.h>
-	#include "cas_cci.h"
-	 
-	#define BUFSIZE  (1024)
-	 
-	int
-	main (void)
-	{
-		int con = 0, req = 0, col_count = 0, i, ind;
-		int error;
-		char *data;
-		T_CCI_ERROR err_buf;
-		char *query = "select * from notable";
-	 
-		//getting a connection handle for a connection with a server
-		con = cci_connect ("localhost", 33000, "demodb", "dba", "");
-		if (con < 0)
-			{
-			printf ("cannot connect to database\n");
-			return 1;
-			}
-		
-		//preparing the SQL statement
-		req = cci_prepare (con, query, 0, & err_buf);
-		if (req < 0)
-		{
-			if (req == CCI_ER_DBMS)
-			{
-				printf ("error from server: %d, %s\n", err_buf.err_code, err_buf.err_msg);
-			}
-			else
-			{
-				char msg_buf[1024];
-				cci_get_err_msg(req, msg_buf, 1024);
-				printf ("error from cas: %d, %s\n", req, msg_buf);
-			}
-			goto handle_error;
-		}
-		// ...
-	}
+    // gcc -o err err.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    #include <stdio.h>
+    #include "cas_cci.h"
+     
+    #define BUFSIZE  (1024)
+     
+    int
+    main (void)
+    {
+        int con = 0, req = 0, col_count = 0, i, ind;
+        int error;
+        char *data;
+        T_CCI_ERROR err_buf;
+        char *query = "select * from notable";
+     
+        //getting a connection handle for a connection with a server
+        con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+        if (con < 0)
+            {
+            printf ("cannot connect to database\n");
+            return 1;
+            }
+        
+        //preparing the SQL statement
+        req = cci_prepare (con, query, 0, & err_buf);
+        if (req < 0)
+        {
+            if (req == CCI_ER_DBMS)
+            {
+                printf ("error from server: %d, %s\n", err_buf.err_code, err_buf.err_msg);
+            }
+            else
+            {
+                char msg_buf[1024];
+                cci_get_err_msg(req, msg_buf, 1024);
+                printf ("error from cas: %d, %s\n", req, msg_buf);
+            }
+            goto handle_error;
+        }
+        // ...
+    }
 
 다음은 CCI 함수의 에러 코드 및 CAS 에러 코드를 나타낸다.
 
@@ -1043,7 +1043,7 @@ CCI API 함수는 에러 발생 시 반환 값이 음수인 CCI 에러 코드 �
 
 .. note::
 
-	칼럼에서 정의한 크기보다 큰 문자열을 **INSERT** / **UPDATE** 하면 문자열이 잘려서 입력된다.
+    칼럼에서 정의한 크기보다 큰 문자열을 **INSERT** / **UPDATE** 하면 문자열이 잘려서 입력된다.
 
 CCI 예제 프로그램
 =================
@@ -1054,47 +1054,47 @@ CCI 예제 프로그램
 
 다음은 예제에서 사용하는 *demodb* 데이터베이스의 *olympic* 테이블의 스키마 정보이다. ::
 
-	csql> ;sc olympic
-	 
-	=== <Help: Schema of a Class> ===
-	 
-	 
-	 <Class Name>
-	 
-		 olympic
-	 
-	 <Attributes>
-	 
-		 host_year            INTEGER NOT NULL
-		 host_nation          CHARACTER VARYING(40) NOT NULL
-		 host_city            CHARACTER VARYING(20) NOT NULL
-		 opening_date         DATE NOT NULL
-		 closing_date         DATE NOT NULL
-		 mascot               CHARACTER VARYING(20)
-		 slogan               CHARACTER VARYING(40)
-		 introduction         CHARACTER VARYING(1500)
-	 
-	 <Constraints>
-	 
-		 PRIMARY KEY pk_olympic_host_year ON olympic (host_year)
-	 
+    csql> ;sc olympic
+     
+    === <Help: Schema of a Class> ===
+     
+     
+     <Class Name>
+     
+         olympic
+     
+     <Attributes>
+     
+         host_year            INTEGER NOT NULL
+         host_nation          CHARACTER VARYING(40) NOT NULL
+         host_city            CHARACTER VARYING(20) NOT NULL
+         opening_date         DATE NOT NULL
+         closing_date         DATE NOT NULL
+         mascot               CHARACTER VARYING(20)
+         slogan               CHARACTER VARYING(40)
+         introduction         CHARACTER VARYING(1500)
+     
+     <Constraints>
+     
+         PRIMARY KEY pk_olympic_host_year ON olympic (host_year)
+     
 **준비**
 
 예제 프로그램을 수행하기 전에 반드시 확인해야 할 사항은 *demodb* 데이터베이스와 브로커의 가동 여부이다. *demodb* 데이터베이스와 브로커는 **cubrid** 유틸리티를 이용하여 시작할 수 있다. 다음은 **cubrid** 유틸리티를 이용하여 데이터베이스 서버와 브로커를 가동하는 예제이다. ::
 
-	[tester@testdb ~]$ cubrid server start demodb
-	@ cubrid master start
-	++ cubrid master start: success
-	@ cubrid server start: demodb
-	 
-	This may take a long time depending on the amount of recovery works to do.
-	 
-	CUBRID 9.0
-	 
-	++ cubrid server start: success
-	[tester@testdb ~]$ cubrid broker start
-	@ cubrid broker start
-	++ cubrid broker start: success
+    [tester@testdb ~]$ cubrid server start demodb
+    @ cubrid master start
+    ++ cubrid master start: success
+    @ cubrid server start: demodb
+     
+    This may take a long time depending on the amount of recovery works to do.
+     
+    CUBRID 9.0
+     
+    ++ cubrid server start: success
+    [tester@testdb ~]$ cubrid broker start
+    @ cubrid broker start
+    ++ cubrid broker start: success
 
 **빌드**
 
@@ -1102,141 +1102,141 @@ CCI 예제 프로그램
 
 다음은 Linux에서 **make** 를 사용하지 않고 동적인 라이브러리를 사용하여 테스트 프로그램을 빌드하는 명령 행의 예제이다. ::
 
-	cc -o test test.c -I$CUBRID/include -L$CUBRID/lib -lnsl -lcascci
+    cc -o test test.c -I$CUBRID/include -L$CUBRID/lib -lnsl -lcascci
 
 **예제 코드**
 
 .. code-block:: c
 
-	#include <stdio.h>
-	#include <cas_cci.h>
-	char *cci_client_name = "test";
-	int main (int argc, char *argv[])
-	{
-		int con = 0, req = 0, col_count = 0, res, ind, i;
-		T_CCI_ERROR error;
-		T_CCI_COL_INFO *res_col_info;
-		T_CCI_CUBRID_STMT stmt_type;
-		char *buffer, db_ver[16];
-		printf("Program started!\n");
-		if ((con=cci_connect("localhost", 30000, "demodb", "PUBLIC", ""))<0) {
-			printf( "%s(%d): cci_connect fail\n", __FILE__, __LINE__);
-			return -1;
-		}
-	   
-		if ((res=cci_get_db_version(con, db_ver, sizeof(db_ver)))<0) {
-			printf( "%s(%d): cci_get_db_version fail\n", __FILE__, __LINE__);
-			goto handle_error;
-		}
-		printf("DB Version is %s\n",db_ver);
-		if ((req=cci_prepare(con, "select * from event", 0,&error))<0) {
-			if (req == CCI_ER_DBMS) {
-				printf( "%s(%d): cci_prepare fail(%d)\n", __FILE__, __LINE__,error.err_code);
-			}
-			else {
-				char msg_buf[1024];
-				cci_get_err_msg(req, msg_buf, 1024);
-				printf ("error from cas: %d, %s\n", req, msg_buf);
-			}
-			goto handle_error;
-		}
-		printf("Prepare ok!(%d)\n",req);
-		res_col_info = cci_get_result_info(req, &stmt_type, &col_count);
-		if (!res_col_info) {
-			printf( "%s(%d): cci_get_result_info fail\n", __FILE__, __LINE__);
-			goto handle_error;
-		}
-	   
-		printf("Result column information\n"
-			   "========================================\n");
-		for (i=1; i<=col_count; i++) {
-			printf("name:%s  type:%d(precision:%d scale:%d)\n",
-				CCI_GET_RESULT_INFO_NAME(res_col_info, i),
-				CCI_GET_RESULT_INFO_TYPE(res_col_info, i),
-				CCI_GET_RESULT_INFO_PRECISION(res_col_info, i),
-				CCI_GET_RESULT_INFO_SCALE(res_col_info, i));
-		}
-		printf("========================================\n");
-		if ((res=cci_execute(req, 0, 0, &error))<0) {
-			if (req == CCI_ER_DBMS) {
-				printf( "%s(%d): cci_execute fail(%d)\n", __FILE__, __LINE__,error.err_code);
-			}
-			else {
-				char msg_buf[1024];
-				cci_get_err_msg(req, msg_buf, 1024);
-				printf ("error from cas: %d, %s\n", req, msg_buf);
-			}
-			goto handle_error;
-		}
-		if ((res=cci_fetch_size(req, 100))<0) {
-			printf( "%s(%d): cci_fetch_size fail\n", __FILE__, __LINE__);
-			goto handle_error;
-		}
-	   
-		while (1) {
-			res = cci_cursor(req, 1, CCI_CURSOR_CURRENT, &error);
-			if (res == CCI_ER_NO_MORE_DATA) {
-				printf("Query END!\n");
-				break;
-			}
-			if (res<0) {
-				if (req == CCI_ER_DBMS) {
-					printf( "%s(%d): cci_cursor fail(%d)\n", __FILE__, __LINE__,error.err_code);
-				}
-				else {
-					char msg_buf[1024];
-					cci_get_err_msg(req, msg_buf, 1024);
-					printf ("error from cas: %d, %s\n", req, msg_buf);
-				}
-				goto handle_error;
-			}
-		   
-			if ((res=cci_fetch(req, &error))<0) {
-				if (res == CCI_ER_DBMS) {
-					printf( "%s(%d): cci_fetch fail(%d)\n", __FILE__, __LINE__,error.err_code);
-				}
-				else {
-					char msg_buf[1024];
-					cci_get_err_msg(req, msg_buf, 1024);
-					printf ("error from cas: %d, %s\n", req, msg_buf);
-				}
-				goto handle_error;
-			}
-		   
-			for (i=1; i<=col_count; i++) {
-				if ((res=cci_get_data(req, i, CCI_A_TYPE_STR, &buffer, &ind))<0) {
-					printf( "%s(%d): cci_get_data fail\n", __FILE__, __LINE__);
-					goto handle_error;
-				}
-				printf("%s \t|", buffer);
-			}
-			printf("\n");
-		}
-		if ((res=cci_close_req_handle(req))<0) {
-			printf( "%s(%d): cci_close_req_handle fail", __FILE__, __LINE__);
-		   goto handle_error;
-		}
-		if ((res=cci_disconnect(con, &error))<0) {
-			if (res == CCI_ER_DBMS) {
-				printf( "%s(%d): cci_disconnect fail(%d)", __FILE__, __LINE__,error.err_code);
-			}
-			else {
-				char msg_buf[1024];
-				cci_get_err_msg(req, msg_buf, 1024);
-				printf ("error from cas: %d, %s\n", req, msg_buf);
-			}
-			goto handle_error;
-		}
-		printf("Program ended!\n");
-		return 0;
-	   
-		handle_error:
-		if (req > 0)
-			cci_close_req_handle(req);
-		if (con > 0)
-			cci_disconnect(con, &error);
-		printf("Program failed!\n");
-		return -1;
-	}
+    #include <stdio.h>
+    #include <cas_cci.h>
+    char *cci_client_name = "test";
+    int main (int argc, char *argv[])
+    {
+        int con = 0, req = 0, col_count = 0, res, ind, i;
+        T_CCI_ERROR error;
+        T_CCI_COL_INFO *res_col_info;
+        T_CCI_CUBRID_STMT stmt_type;
+        char *buffer, db_ver[16];
+        printf("Program started!\n");
+        if ((con=cci_connect("localhost", 30000, "demodb", "PUBLIC", ""))<0) {
+            printf( "%s(%d): cci_connect fail\n", __FILE__, __LINE__);
+            return -1;
+        }
+       
+        if ((res=cci_get_db_version(con, db_ver, sizeof(db_ver)))<0) {
+            printf( "%s(%d): cci_get_db_version fail\n", __FILE__, __LINE__);
+            goto handle_error;
+        }
+        printf("DB Version is %s\n",db_ver);
+        if ((req=cci_prepare(con, "select * from event", 0,&error))<0) {
+            if (req == CCI_ER_DBMS) {
+                printf( "%s(%d): cci_prepare fail(%d)\n", __FILE__, __LINE__,error.err_code);
+            }
+            else {
+                char msg_buf[1024];
+                cci_get_err_msg(req, msg_buf, 1024);
+                printf ("error from cas: %d, %s\n", req, msg_buf);
+            }
+            goto handle_error;
+        }
+        printf("Prepare ok!(%d)\n",req);
+        res_col_info = cci_get_result_info(req, &stmt_type, &col_count);
+        if (!res_col_info) {
+            printf( "%s(%d): cci_get_result_info fail\n", __FILE__, __LINE__);
+            goto handle_error;
+        }
+       
+        printf("Result column information\n"
+               "========================================\n");
+        for (i=1; i<=col_count; i++) {
+            printf("name:%s  type:%d(precision:%d scale:%d)\n",
+                CCI_GET_RESULT_INFO_NAME(res_col_info, i),
+                CCI_GET_RESULT_INFO_TYPE(res_col_info, i),
+                CCI_GET_RESULT_INFO_PRECISION(res_col_info, i),
+                CCI_GET_RESULT_INFO_SCALE(res_col_info, i));
+        }
+        printf("========================================\n");
+        if ((res=cci_execute(req, 0, 0, &error))<0) {
+            if (req == CCI_ER_DBMS) {
+                printf( "%s(%d): cci_execute fail(%d)\n", __FILE__, __LINE__,error.err_code);
+            }
+            else {
+                char msg_buf[1024];
+                cci_get_err_msg(req, msg_buf, 1024);
+                printf ("error from cas: %d, %s\n", req, msg_buf);
+            }
+            goto handle_error;
+        }
+        if ((res=cci_fetch_size(req, 100))<0) {
+            printf( "%s(%d): cci_fetch_size fail\n", __FILE__, __LINE__);
+            goto handle_error;
+        }
+       
+        while (1) {
+            res = cci_cursor(req, 1, CCI_CURSOR_CURRENT, &error);
+            if (res == CCI_ER_NO_MORE_DATA) {
+                printf("Query END!\n");
+                break;
+            }
+            if (res<0) {
+                if (req == CCI_ER_DBMS) {
+                    printf( "%s(%d): cci_cursor fail(%d)\n", __FILE__, __LINE__,error.err_code);
+                }
+                else {
+                    char msg_buf[1024];
+                    cci_get_err_msg(req, msg_buf, 1024);
+                    printf ("error from cas: %d, %s\n", req, msg_buf);
+                }
+                goto handle_error;
+            }
+           
+            if ((res=cci_fetch(req, &error))<0) {
+                if (res == CCI_ER_DBMS) {
+                    printf( "%s(%d): cci_fetch fail(%d)\n", __FILE__, __LINE__,error.err_code);
+                }
+                else {
+                    char msg_buf[1024];
+                    cci_get_err_msg(req, msg_buf, 1024);
+                    printf ("error from cas: %d, %s\n", req, msg_buf);
+                }
+                goto handle_error;
+            }
+           
+            for (i=1; i<=col_count; i++) {
+                if ((res=cci_get_data(req, i, CCI_A_TYPE_STR, &buffer, &ind))<0) {
+                    printf( "%s(%d): cci_get_data fail\n", __FILE__, __LINE__);
+                    goto handle_error;
+                }
+                printf("%s \t|", buffer);
+            }
+            printf("\n");
+        }
+        if ((res=cci_close_req_handle(req))<0) {
+            printf( "%s(%d): cci_close_req_handle fail", __FILE__, __LINE__);
+           goto handle_error;
+        }
+        if ((res=cci_disconnect(con, &error))<0) {
+            if (res == CCI_ER_DBMS) {
+                printf( "%s(%d): cci_disconnect fail(%d)", __FILE__, __LINE__,error.err_code);
+            }
+            else {
+                char msg_buf[1024];
+                cci_get_err_msg(req, msg_buf, 1024);
+                printf ("error from cas: %d, %s\n", req, msg_buf);
+            }
+            goto handle_error;
+        }
+        printf("Program ended!\n");
+        return 0;
+       
+        handle_error:
+        if (req > 0)
+            cci_close_req_handle(req);
+        if (con > 0)
+            cci_disconnect(con, &error);
+        printf("Program failed!\n");
+        return -1;
+    }
 
 .. include:: cciapi.inc

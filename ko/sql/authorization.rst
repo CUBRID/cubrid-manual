@@ -20,12 +20,12 @@ CUBRID는 기본적으로 **DBA** 와 **PUBLIC** 두 종류의 사용자를 제�
 
 **DBA** 와 **DBA** 의 멤버는 SQL 문을 사용하여 사용자를 생성, 변경, 삭제할 수 있다. ::
 
-	CREATE USER user_name
-	[ PASSWORD password ]
-	[ GROUPS user_name [ {, user_name } ... ] ]
-	[ MEMBERS user_name [ {, user_name } ... ] ] ;
-	DROP USER user_name;
-	ALTER USER user_name PASSWORD password;
+    CREATE USER user_name
+    [ PASSWORD password ]
+    [ GROUPS user_name [ {, user_name } ... ] ]
+    [ MEMBERS user_name [ {, user_name } ... ] ] ;
+    DROP USER user_name;
+    ALTER USER user_name PASSWORD password;
 
 *   *user_name* : 생성, 삭제, 변경할 사용자 이름을 지정한다.
 *   *password* : 생성 혹은 변경할 사용자의 비밀번호를 지정한다.
@@ -36,9 +36,9 @@ CUBRID는 기본적으로 **DBA** 와 **PUBLIC** 두 종류의 사용자를 제�
 
 .. code-block:: sql
 
-	CREATE USER Fred;
-	ALTER USER Fred PASSWORD '1234';
-	DROP USER Fred;
+    CREATE USER Fred;
+    ALTER USER Fred PASSWORD '1234';
+    DROP USER Fred;
 
 **예제 2**
 
@@ -46,13 +46,13 @@ CUBRID는 기본적으로 **DBA** 와 **PUBLIC** 두 종류의 사용자를 제�
 
 .. code-block:: sql
 
-	CREATE USER company;
-	CREATE USER engineering GROUPS company;
-	CREATE USER marketing GROUPS company;
-	CREATE USER design GROUPS company;
-	CREATE USER smith GROUPS design, marketing;
-	CREATE USER jones GROUPS marketing;  
-	CREATE USER brown GROUPS engineering;
+    CREATE USER company;
+    CREATE USER engineering GROUPS company;
+    CREATE USER marketing GROUPS company;
+    CREATE USER design GROUPS company;
+    CREATE USER smith GROUPS design, marketing;
+    CREATE USER jones GROUPS marketing;  
+    CREATE USER brown GROUPS engineering;
 
 **예제 3**
 
@@ -60,13 +60,13 @@ CUBRID는 기본적으로 **DBA** 와 **PUBLIC** 두 종류의 사용자를 제�
 
 .. code-block:: sql
 
-	CREATE USER smith;
-	CREATE USER brown;
-	CREATE USER jones;
-	CREATE USER engineering MEMBERS brown;
-	CREATE USER marketing MEMBERS smith, jones;
-	CREATE USER design MEMBERS smith;
-	CREATE USER company MEMBERS engineering, marketing, design;
+    CREATE USER smith;
+    CREATE USER brown;
+    CREATE USER jones;
+    CREATE USER engineering MEMBERS brown;
+    CREATE USER marketing MEMBERS smith, jones;
+    CREATE USER design MEMBERS smith;
+    CREATE USER company MEMBERS engineering, marketing, design;
 
 .. _granting-authorization:
 
@@ -77,8 +77,8 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 권한이 부여된 그룹에 속한 모든 멤버는 같은 권한을 소유하므로 모든 멤버에게 개별적으로 권한을 부여할 필요는 없다. **PUBLIC** 사용자가 생성한 (가상) 테이블은 다른 모든 사용자에게 접근이 허용된다. **GRANT** 문을 사용하여 사용자에게 접근 권한을 부여할 수 있다. ::
 
-	GRANT operation [ { ,operation }_ ] ON table_name [ { ,table_name }_ ]
-	TO user [ { ,user }_ ] [ WITH GRANT OPTION ] [ ; ]
+    GRANT operation [ { ,operation }_ ] ON table_name [ { ,table_name }_ ]
+    TO user [ { ,user }_ ] [ WITH GRANT OPTION ] [ ; ]
 
 * *operation* : 권한을 부여할 때 사용 가능한 연산을 나타낸다.
   *   **SELECT** : 테이블 정의 내용을 읽을 수 있고 인스턴스 조회가 가능. 가장 일반적인 유형의 권한.
@@ -98,25 +98,25 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 .. code-block:: sql
 
-	GRANT SELECT ON olympic TO Fred;
+    GRANT SELECT ON olympic TO Fred;
 
 다음은 *Jeniffer* 와 *Daniel* (두 사용자에 속한 모든 멤버)에게 *nation* 과 *athlete* 테이블에 대해 **SELECT**, **INSERT**, **UPDATE**, **DELETE** 권한을 부여한 예제이다.
 
 .. code-block:: sql
 
-	GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jeniffer, Daniel;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jeniffer, Daniel;
 
 다음은 모든 사용자에게 *game*, *event* 테이블에 대해 모든 권한을 부여한 예제이다.
 
 .. code-block:: sql
 
-	GRANT ALL PRIVILEGES ON game, event TO public;
+    GRANT ALL PRIVILEGES ON game, event TO public;
 
 다음 **GRANT** 문은 *Ross* 에게 *record*, *history* 테이블에 대한 검색 권한을 부여하고 *Ross* 가 다른 사용자에게 검색 권한을 부여하는 것을 허용하도록 **WITH GRANT OPTION** 을 사용한 예제이다. 이후 *Ross* 는 다른 사용자에게 자신이 받은 권한 내에서 권한을 부여할 수 있다.
 
 .. code-block:: sql
 
-	GRANT SELECT ON record, history TO Ross WITH GRANT OPTION;
+    GRANT SELECT ON record, history TO Ross WITH GRANT OPTION;
 
 **주의 사항**
 
@@ -131,8 +131,8 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 권한을 부여한 사용자에게서 권한(**WITH GRANT OPTION**)을 해지하면, 권한을 해지당한 사용자로부터 권한을 받은 사용자도 권한을 해지당한다. ::
 
-	REVOKE operation [ { , operation }_ ] ON table_name [ { , class_name }_ ]
-	FROM user [ { , user }_ ] [ ; ]
+    REVOKE operation [ { , operation }_ ] ON table_name [ { , class_name }_ ]
+    FROM user [ { , user }_ ] [ ; ]
 
 *   *operation* : 권한을 부여할 때 부여할 수 있는 연산의 종류이다(자세한 내용은 :ref:`granting-authorization` 참조).
 *   *table_name* : 권한을 부여할 테이블 혹은 뷰의 이름을 지정한다.
@@ -142,19 +142,19 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 .. code-block:: sql
 
-	GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO Fred, John;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO Fred, John;
 
 다음은 *Fred* 에게 부여된 모든 권한은 남겨두고, *John* 에게는 조회 권한만을 부여하기 위해 **REVOKE** 문장을 수행하는 예제이다. 만약 *John* 이 다른 사용자에게 권한을 부여했다면 권한받은 사용자 또한 조회만 가능하다.
 
 .. code-block:: sql
 
-	REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM John;
+    REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM John;
 
 다음은 *Fred* 에게 부여한 모든 권한을 해지하기 위해 **REVOKE** 문을 수행하는 예제이다. 이 문장이 수행되면 *Fred* 는 *nation*, *athlete* 테이블에 대한 어떠한 연산도 허용되지 않는다.
 
 .. code-block:: sql
 
-	REVOKE ALL PRIVILEGES ON nation, athlete FROM Fred;
+    REVOKE ALL PRIVILEGES ON nation, athlete FROM Fred;
 
 .. _change-owner:
 
@@ -163,18 +163,18 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 데이터베이스 관리자(**DBA**) 또는 **DBA** 그룹의 멤버는 다음의 질의를 통해 테이블, 뷰, 트리거, Java 저장 함수/프로시저의 소유자를 변경할 수 있다. ::
 
-	ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] name OWNER TO user_id;
+    ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] name OWNER TO user_id;
 
 *   *name* : 소유자를 변경할 스키마 객체의 이름
 *   *user_id* : 사용자 ID
 
 .. code-block:: sql
 
-	ALTER TABLE test_tbl OWNER TO public;
-	ALTER VIEW test_view OWNER TO public;
-	ALTER TRIGGER test_trigger OWNER TO public;
-	ALTER FUNCTION test_function OWNER TO public;
-	ALTER PROCEDURE test_procedure OWNER TO public;
+    ALTER TABLE test_tbl OWNER TO public;
+    ALTER VIEW test_view OWNER TO public;
+    ALTER TRIGGER test_trigger OWNER TO public;
+    ALTER FUNCTION test_function OWNER TO public;
+    ALTER PROCEDURE test_procedure OWNER TO public;
 
 .. _authorization-method:
 
@@ -187,8 +187,8 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 ::
 
-	CALL method_definition ON CLASS auth_class [ TO variable ] [ ; ]
-	CALL method_definition ON variable [ ; ]
+    CALL method_definition ON CLASS auth_class [ TO variable ] [ ; ]
+    CALL method_definition ON variable [ ; ]
 
 **login( ) 메서드**
 
@@ -196,10 +196,10 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 .. code-block:: sql
 
-	-- 비밀번호가 없는 DBA 사용자로 접속하기
-	CALL login ('dba', '') ON CLASS db_user;
-	-- 비밀번호가 cubrid인 user_1 사용자로 접속하기
-	CALL login ('user_1', 'cubrid') ON CLASS db_user;
+    -- 비밀번호가 없는 DBA 사용자로 접속하기
+    CALL login ('dba', '') ON CLASS db_user;
+    -- 비밀번호가 cubrid인 user_1 사용자로 접속하기
+    CALL login ('user_1', 'cubrid') ON CLASS db_user;
 
 **add_user( ) 메서드**
 
@@ -207,10 +207,10 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 .. code-block:: sql
 
-	-- 비밀번호가 없는 user_2 추가하기
-	CALL add_user ('user_2', '') ON CLASS db_user;
-	-- 비밀번호가 없는 user_3 추가하고, 메서드 리턴 값을 admin 변수에 저장하기
-	CALL add_user ('user_3', '') ON CLASS db_user to admin;
+    -- 비밀번호가 없는 user_2 추가하기
+    CALL add_user ('user_2', '') ON CLASS db_user;
+    -- 비밀번호가 없는 user_3 추가하고, 메서드 리턴 값을 admin 변수에 저장하기
+    CALL add_user ('user_3', '') ON CLASS db_user to admin;
 
 **drop_user( ) 메서드**
 
@@ -218,8 +218,8 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 .. code-block:: sql
 
-	-- user_2 삭제하기
-	CALL drop_user ('user_2') ON CLASS db_user;
+    -- user_2 삭제하기
+    CALL drop_user ('user_2') ON CLASS db_user;
 
 **find_user( ) 메서드**
 
@@ -227,8 +227,8 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 .. code-block:: sql
 
-	-- user_2를 찾아서 admin이라는 변수에 저장하기
-	CALL find_user ('user_2') ON CLASS db_user TO admin;
+    -- user_2를 찾아서 admin이라는 변수에 저장하기
+    CALL find_user ('user_2') ON CLASS db_user TO admin;
 
 **set_password( ) 메서드**
 
@@ -236,10 +236,10 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 .. code-block:: sql
 
-	-- user_4 를 추가하고 user_common 변수에 저장하기
-	CALL add_user ('user_4', '') ON CLASS db_user to user_common;
-	-- user_4의 비밀번호를 'abcdef'로 변경하기
-	CALL set_password('abcdef') on user_common;
+    -- user_4 를 추가하고 user_common 변수에 저장하기
+    CALL add_user ('user_4', '') ON CLASS db_user to user_common;
+    -- user_4의 비밀번호를 'abcdef'로 변경하기
+    CALL set_password('abcdef') on user_common;
 
 **change_owner( ) 메서드**
 
@@ -247,8 +247,8 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 .. code-block:: sql
 
-	-- table_1의 소유자를 user_4로 변경하기
-	CALL change_owner ('table_1', 'user_4') ON CLASS db_authorizations;
+    -- table_1의 소유자를 user_4로 변경하기
+    CALL change_owner ('table_1', 'user_4') ON CLASS db_authorizations;
 
 **예제**
 
@@ -258,15 +258,15 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
 .. code-block:: sql
 
-	CALL find_user('dba') ON CLASS db_user to x;
-	Result
-	======================
-	db_user
-	 
-	SELECT x FROM db_root;
-	x
-	======================
-	db_user
+    CALL find_user('dba') ON CLASS db_user to x;
+    Result
+    ======================
+    db_user
+     
+    SELECT x FROM db_root;
+    x
+    ======================
+    db_user
 
 
 **find_user** 를 이용하면 결과값이 **NULL** 인지 아닌지에 따라 해당 사용자가 데이터베이스에 존재하는지 여부를 판단할 수 있다.

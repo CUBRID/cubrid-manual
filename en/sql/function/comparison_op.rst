@@ -72,44 +72,44 @@ The following table shows the comparison operators supported by CUBRID and their
 
 ::
 
-	expression  comparison_operator  expression
-	 
-	expression :
-	• bit string
-	• character string
-	• numeric value
-	• date-time value
-	• collection value
-	• NULL
-	 
-	comparison_operator :
-	=
-	| <=>
-	| <>
-	| !=
-	| >
-	| <
-	| >=
-	| <=
+    expression  comparison_operator  expression
+     
+    expression :
+    • bit string
+    • character string
+    • numeric value
+    • date-time value
+    • collection value
+    • NULL
+     
+    comparison_operator :
+    =
+    | <=>
+    | <>
+    | !=
+    | >
+    | <
+    | >=
+    | <=
 
 **Syntax 2**
 
 ::
 
-	expression IS [NOT] boolean_value
-	 
-	expression :
-	• bit string
-	• character string
-	• numeric value
-	• date-time value
-	• collection value
-	• NULL
-	 
-	boolean_value :
-	< UNKNOWN | NULL>
-	| TRUE
-	| FALSE
+    expression IS [NOT] boolean_value
+     
+    expression :
+    • bit string
+    • character string
+    • numeric value
+    • date-time value
+    • collection value
+    • NULL
+     
+    boolean_value :
+    < UNKNOWN | NULL>
+    | TRUE
+    | FALSE
 
 *   *expression* : Declares an expression to be compared.
 
@@ -129,16 +129,16 @@ The following table shows the comparison operators supported by CUBRID and their
 
 .. code-block:: sql
 
-	SELECT (1 <> 0); -- 1 is displayed because it is TRUE.
-	SELECT (1 != 0); -- 1 is displayed because it is TRUE.  
-	SELECT (0.01 = '0.01'); -- An error occurs because a numeric data type is compared with a character string type.
-	SELECT (1 = NULL); -- NULL is displayed.
-	SELECT (1 <=> NULL); -- 0 is displayed because it is FALSE. 
-	SELECT (1.000 = 1); -- 1 is displayed because it is TRUE.
-	SELECT ('cubrid' = 'CUBRID'); -- 0 is displayed because it is case sensitive.
-	SELECT ('cubrid' = 'cubrid'); -- 1 is displayed because it is TRUE.
-	SELECT (SYSTIMESTAMP = CAST(SYSDATETIME AS TIMESTAMP)); -- 1 is displayed after casting the type explicitly and then performing comparison operator. 
-	SELECT (SYSTIMESTAMP = SYSDATETIME); --0 is displayed after casting the type implicitly and then performing comparison operator. 
-	SELECT (SYSTIMESTAMP <> NULL); -- NULL is returned without performing comparison operator.
-	SELECT (SYSTIMESTAMP IS NOT NULL); -- 1 is returned because it is not NULL.
-	
+    SELECT (1 <> 0); -- 1 is displayed because it is TRUE.
+    SELECT (1 != 0); -- 1 is displayed because it is TRUE.  
+    SELECT (0.01 = '0.01'); -- An error occurs because a numeric data type is compared with a character string type.
+    SELECT (1 = NULL); -- NULL is displayed.
+    SELECT (1 <=> NULL); -- 0 is displayed because it is FALSE. 
+    SELECT (1.000 = 1); -- 1 is displayed because it is TRUE.
+    SELECT ('cubrid' = 'CUBRID'); -- 0 is displayed because it is case sensitive.
+    SELECT ('cubrid' = 'cubrid'); -- 1 is displayed because it is TRUE.
+    SELECT (SYSTIMESTAMP = CAST(SYSDATETIME AS TIMESTAMP)); -- 1 is displayed after casting the type explicitly and then performing comparison operator. 
+    SELECT (SYSTIMESTAMP = SYSDATETIME); --0 is displayed after casting the type implicitly and then performing comparison operator. 
+    SELECT (SYSTIMESTAMP <> NULL); -- NULL is returned without performing comparison operator.
+    SELECT (SYSTIMESTAMP IS NOT NULL); -- 1 is returned because it is not NULL.
+    

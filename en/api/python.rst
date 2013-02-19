@@ -34,11 +34,11 @@ There are three ways to install CUBRID Python driver on Linux, UNIX, and UNIX-li
 
 For the example to install CUBRID 9.0 on Fedora 17 is as folllows: (fc17 means this operating system version). ::
 
-	rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
+    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
 
 *   Enter the command below to install CUBRID Python driver. ::
 
-	yum install python-cubrid
+    yum install python-cubrid
 
 **Building CUBRID Python Driver from Source Code (Linux)**
 
@@ -48,19 +48,19 @@ To install CUBRID Python driver by compiling source code, you should have Python
 
 *   Extract the archive to the desired location. ::
 
-	tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
+    tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
 
 *   Navigate to the directory where you have extracted the source code. ::
 
-	cd cubrid-python-src
+    cd cubrid-python-src
 
 *   Build the driver. At this and next step, make sure you are still under the root user. ::
 
-	python setup.py build
+    python setup.py build
 
 *   Install the driver. Here you also need root privileges. ::
 
-	python setup.py install
+    python setup.py install
 
 **Using a Package Manager (EasyInstall) of CUBRID Python Driver (Linux)**
 
@@ -68,7 +68,7 @@ EasyInstall is a Python module (**easy_install**) bundled with **setuptools** th
 
 Enter the command below to install CUBRID Python driver by using EasyInstall. ::
 
-	easy_install CUBRID-Python
+    easy_install CUBRID-Python
 
 Windows
 -------
@@ -101,7 +101,7 @@ Python Sample Program
 
 This sample program will show steps that you need to perform in order to connect to the CUBRID database and run SQL statements from Python programming language. Enter the command line below to create a new table in your database. ::
 
-	csql -u dba -c "CREATE TABLE posts( id integer, title varchar(255), body string, last_updated timestamp );" demodb
+    csql -u dba -c "CREATE TABLE posts( id integer, title varchar(255), body string, last_updated timestamp );" demodb
 
 **Connecting to demodb from Python**
 
@@ -109,39 +109,39 @@ This sample program will show steps that you need to perform in order to connect
 
    .. code-block:: python
    
-		import CUBRIDdb
+        import CUBRIDdb
 
 #. Establish a connection to the *demodb* database located on localhost.
 
    .. code-block:: python
    
-		conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
+        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
 
 For the *demodb* database, it is not required to enter any password. In a real-world scenario, you will have to provide the password to successfully connect. The syntax to use the `connect <http://packages.python.org/CUBRID-Python/_cubrid-module.html#connect>`_ () function is as follows: ::
 
-	connect (url[,user[password]])
+    connect (url[,user[password]])
 
 If the database has not started and you try to connect to it, you will receive an error such as this: ::
 
-	Traceback (most recent call last):
-	  File "tutorial.py", line 3, in ‹module›
-		con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','public')
-	  File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
-		return Connection(*args, **kwargs)
-	  File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
-		self._db = _cubrid.connect(*args, **kwargs)
-	_cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
+    Traceback (most recent call last):
+      File "tutorial.py", line 3, in ‹module›
+        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','public')
+      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
+        return Connection(*args, **kwargs)
+      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
+        self._db = _cubrid.connect(*args, **kwargs)
+    _cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
 
 If you provide wrong credentials, you will receive an error such as this: ::
 
-	Traceback (most recent call last):
-	  File "tutorial.py", line 3, in ‹module›
-		con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','a','b')
-	  File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
-		return Connection(*args, **kwargs)
-	  File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
-		self._db = _cubrid.connect(*args, **kwargs)
-	_cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
+    Traceback (most recent call last):
+      File "tutorial.py", line 3, in ‹module›
+        con = CUBRIDdb.connect('CUBRID:localhost:33000:demodb','a','b')
+      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/__init__.py", line 48, in Connect
+        return Connection(*args, **kwargs)
+      File "/usr/local/lib/python2.6/site-packages/CUBRIDdb/connections.py", line 19, in __init__
+        self._db = _cubrid.connect(*args, **kwargs)
+    _cubrid.Error: (-1, 'ERROR: DBMS, 0, Unknown DBMS Error')
 
 **Executing an INSERT Statement**
 
@@ -149,9 +149,9 @@ Now that the table is empty, insert data for the test. First, you have to obtain
 
 .. code-block:: python
 
-	cur = conn.cursor()
-	cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
-	conn.commit()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
+    conn.commit()
 
 The auto-commit in CUBRID Python driver is disabled by default. Therefore, you have to manually perform commit by using the `commit <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#commit>`_ () function after executing any SQL statement. This is equivalent to executing **cur.execute("COMMIT")** . The opposite to executing commit() is executing `rollback <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#rollback>`_ (), which aborts the current transaction.
 
@@ -159,25 +159,25 @@ Another way to insert data is to use prepared statements. You can safely insert 
 
 .. code-block:: python
 
-	args = (2, 'Title 2', 'Test body #2')
-	cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
+    args = (2, 'Title 2', 'Test body #2')
+    cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
 
 The entire script up to now looks like this:
 
 .. code-block:: python
 
-	import CUBRIDdb
-	conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb', 'public', '')
-	cur = conn.cursor()
-	 
-	# Plain insert statement
-	cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
-	 
-	# Parametrized insert statement
-	args = (2, 'Title 2', 'Test body #2')
-	cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
-	 
-	conn.commit()
+    import CUBRIDdb
+    conn = CUBRIDdb.connect('CUBRID:localhost:33000:demodb', 'public', '')
+    cur = conn.cursor()
+     
+    # Plain insert statement
+    cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
+     
+    # Parametrized insert statement
+    args = (2, 'Title 2', 'Test body #2')
+    cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
+     
+    conn.commit()
 
 **Fetching Data from Database**
 
@@ -187,15 +187,15 @@ You can fetch entire records at a time by using the `fetchall <http://packages.p
 
 .. code-block:: python
 
-	cur.execute("SELECT * FROM posts ORDER BY last_updated")
-	rows = cur.fetchall()
-	for row in rows:
-		print row
+    cur.execute("SELECT * FROM posts ORDER BY last_updated")
+    rows = cur.fetchall()
+    for row in rows:
+        print row
 
 This will return the two rows inserted earlier in the following form: ::
 
-	[1, 'Title 1', 'Test body #1', '2011-4-7 14:34:46']
-	[2, 'Title 2', 'Test body #2', '2010-4-7 14:34:46']
+    [1, 'Title 1', 'Test body #1', '2011-4-7 14:34:46']
+    [2, 'Title 2', 'Test body #2', '2010-4-7 14:34:46']
 
 **Fetching a single record at a time**
 
@@ -203,11 +203,11 @@ In a scenario where a lot of data must be returned into the cursor, you can fetc
 
 .. code-block:: python
 
-	cur.execute("SELECT * FROM posts")
-	row = cur.fetchone()
-	while row:
-		print row
-		row = cur.fetchone()
+    cur.execute("SELECT * FROM posts")
+    row = cur.fetchone()
+    while row:
+        print row
+        row = cur.fetchone()
 
 **Fetching as many as records desired at a time**
 
@@ -215,10 +215,10 @@ You can fetch a specified number of records at a time by using the `fetchmany <h
 
 .. code-block:: python
 
-	cur.execute("SELECT * FROM posts")
-	rows = cur.fetchmany(3)
-	for row in rows:
-		print row
+    cur.execute("SELECT * FROM posts")
+    rows = cur.fetchmany(3)
+    for row in rows:
+        print row
 
 **Accessing Metadata on the Returned Data**
 
@@ -226,19 +226,19 @@ If it is necessary to get information about column attributes of the obtained re
 
 .. code-block:: python
 
-	for description in cur.description:
-		print description
+    for description in cur.description:
+        print description
 
 The output of the script is as follows: ::
 
-	('id', 8, 0, 0, 0, 0, 0)
-	('title', 2, 0, 0, 255, 0, 0)
-	('body', 2, 0, 0, 1073741823, 0, 0)
-	('last_updated', 15, 0, 0, 0, 0, 0)
+    ('id', 8, 0, 0, 0, 0, 0)
+    ('title', 2, 0, 0, 255, 0, 0)
+    ('body', 2, 0, 0, 1073741823, 0, 0)
+    ('last_updated', 15, 0, 0, 0, 0, 0)
 
 Each of row has the following information. ::
 
-	(column_name, data_type, display_size, internal_size, precision, scale, nullable)
+    (column_name, data_type, display_size, internal_size, precision, scale, nullable)
 
 For more information about numbers representing data types, see http://packages.python.org/CUBRID-Python/toc-CUBRIDdb.FIELD_TYPE-module.html .
 
@@ -248,8 +248,8 @@ After you have done using any cursor or connection to the database, you must rel
 
 .. code-block:: python
 
-	cur.close()
-	conn.close()
+    cur.close()
+    conn.close()
 
 Python API
 ==========

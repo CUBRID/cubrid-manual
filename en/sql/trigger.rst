@@ -37,49 +37,49 @@ TRIGGER Definition
 
 A trigger is created by defining a trigger target, condition and action to be performed in the **CREATE TRIGGER** statement. A trigger is a database object that performs a defined action when a specific event occurs in the target table. ::
 
-	CREATE TRIGGER trigger_name
-	[ STATUS { ACTIVE | INACTIVE } ]
-	[ PRIORITY key ]
-	event_time event_type[ event_target ]
-	[ IF condition ]
-	EXECUTE [ AFTER | DEFERRED ] action [ ; ]
-	 
-	event_time:
-	   • BEFORE
-	   • AFTER
-	   • DEFERRED
-	 
-	event_type: 
-	   • INSERT
-	   • STATEMENT INSERT 
-	   • UPDATE
-	   • STATEMENT UPDATE 
-	   • DELETE
-	   • STATEMENT DELETE
-	   • ROLLBACK
-	   • COMMIT
-	 
-	event_target: 
-	   • ONtable_name
-	   • ONtable_name [ (column_name) ]
-	 
-	condition: 
-	   • expression
-	 
-	action: 
-	 • REJECT    
-	 • INVALIDATE TRANSACTION 
-	  •  PRINT message_string
-	  •  INSERT statement
-	  •  UPDATE statement
-	  •  DELETE statement 
+    CREATE TRIGGER trigger_name
+    [ STATUS { ACTIVE | INACTIVE } ]
+    [ PRIORITY key ]
+    event_time event_type[ event_target ]
+    [ IF condition ]
+    EXECUTE [ AFTER | DEFERRED ] action [ ; ]
+     
+    event_time:
+       • BEFORE
+       • AFTER
+       • DEFERRED
+     
+    event_type: 
+       • INSERT
+       • STATEMENT INSERT 
+       • UPDATE
+       • STATEMENT UPDATE 
+       • DELETE
+       • STATEMENT DELETE
+       • ROLLBACK
+       • COMMIT
+     
+    event_target: 
+       • ONtable_name
+       • ONtable_name [ (column_name) ]
+     
+    condition: 
+       • expression
+     
+    action: 
+     • REJECT    
+     • INVALIDATE TRANSACTION 
+      •  PRINT message_string
+      •  INSERT statement
+      •  UPDATE statement
+      •  DELETE statement 
 
 *   *trigger_name * : Specifies the name of the trigger to be defined.
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: Defines the state of the trigger (if not defined, the default value is **ACTIVE**).
 
     *   If **ACTIVE** state is specified, the trigger is executed every time the corresponding event occurs.
     *   If **INACTIVE** state is specified, the trigger is not executed even when the corresponding event occurs. The state of the trigger can be modified. For details, see :ref:`alter-trigger` section.
-	
+    
 *   [ **PRIORITY** *key* ]: Specifies a trigger priority if multiple triggers are called for an event. *key* must be a floating point value that is not negative. If the priority is not defined, the lowest priority 0 is assigned. Triggers having the same priority are executed in a random order. The priority of triggers can be modified. For details, see :ref:`alter-trigger` section.
 
 *   *event_time* : Specifies the point of time when the conditions and actions are executed. **BEFORE**, **AFTER** or **DEFERRED** can be specified. For details, see the :ref:`trigger-event-time` section.
@@ -94,15 +94,15 @@ As shown below, the update is rejected if you try to change the number of gold (
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trigger
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
-	 
-	UPDATE participant SET gold = -5 WHERE nation_code = 'KOR'
-	AND host_year = 2004;
-	 
-	ERROR: The operation has been rejected by trigger "medal_trigger".
+    CREATE TRIGGER medal_trigger
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
+     
+    UPDATE participant SET gold = -5 WHERE nation_code = 'KOR'
+    AND host_year = 2004;
+     
+    ERROR: The operation has been rejected by trigger "medal_trigger".
 
 .. _trigger-event-time:
 
@@ -156,19 +156,19 @@ The following example shows how to use an instance event. The *example* trigger 
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	...
-	BEFORE UPDATE ON history(score)
-	...
+    CREATE TRIGGER example
+    ...
+    BEFORE UPDATE ON history(score)
+    ...
 
 The following example shows how to use a statement event. If you define a statement event, the trigger is called only once before the first instance gets updated even when there are multiple instances affected by the update.
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	...
-	BEFORE STATEMENT UPDATE ON history(score)
-	...
+    CREATE TRIGGER example
+    ...
+    BEFORE STATEMENT UPDATE ON history(score)
+    ...
 
 **Remark**
 
@@ -186,10 +186,10 @@ The following example shows how to specify the *score* column of the *history* t
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	...
-	BEFORE UPDATE ON history(score)
-	...
+    CREATE TRIGGER example
+    ...
+    BEFORE UPDATE ON history(score)
+    ...
 
 Combination of Event Type and Target
 ------------------------------------
@@ -225,19 +225,19 @@ The following example shows how to use a correlation name in an expression withi
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	........
-	IF obj.record * 1.20  < 500
-	.......
+    CREATE TRIGGER example
+    ........
+    IF obj.record * 1.20  < 500
+    .......
 
 The following example shows how to use the **SELECT** statement in an expression within a condition. The trigger in this example uses the **SELECT** statement that contains an aggregate function **COUNT** (\*) to compare the value with a constant. The **SELECT** statement must be enclosed in parentheses and must be placed at the end of the expression.
 
 .. code-block:: sql
 
-	CREATE TRIGGER example
-	......
-	IF 1000 >  (SELECT COUNT(*) FROM participant)
-	......
+    CREATE TRIGGER example
+    ......
+    IF 1000 >  (SELECT COUNT(*) FROM participant)
+    ......
 
 **Remark**
 
@@ -298,10 +298,10 @@ The following example shows how to define an action when a trigger is created. T
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trig
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
+    CREATE TRIGGER medal_trig
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
 
 **Remark**
 
@@ -315,11 +315,11 @@ ALTER TRIGGER
 
 In the trigger definition, **STATUS** and **PRIORITY** options can be changed by using the **ALTER** statement. If you need to alter other parts of the trigger (event targets or conditional expressions), you must delete and then re-create the trigger. ::
 
-	ALTER TRIGGER trigger_name  trigger_option [ ; ]
+    ALTER TRIGGER trigger_name  trigger_option [ ; ]
 
-	trigger_option :
-	• STATUS { ACTIVE | INACTIVE }
-	• PRIORITY key
+    trigger_option :
+    • STATUS { ACTIVE | INACTIVE }
+    • PRIORITY key
 
 *   *trigger_name* : Specifies the name of the trigger to be changed.
 *   *trigger_option* :
@@ -331,14 +331,14 @@ The following example shows how to create the medal_trig trigger and then change
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trig
-	STATUS ACTIVE
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
+    CREATE TRIGGER medal_trig
+    STATUS ACTIVE
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
 
-	ALTER TRIGGER medal_trig STATUS INACTIVE;
-	ALTER TRIGGER medal_trig PRIORITY 0.7;
+    ALTER TRIGGER medal_trig STATUS INACTIVE;
+    ALTER TRIGGER medal_trig PRIORITY 0.7;
 
 **Remark**
 
@@ -351,7 +351,7 @@ DROP TRIGGER
 
 You can drop a trigger by using the **DROP TRIGGER** statement. ::
 
-	DROP TRIGGER trigger_name [ ; ] 
+    DROP TRIGGER trigger_name [ ; ] 
 
 *   *trigger_name* : Specifies the name of the trigger to be dropped.
 
@@ -359,7 +359,7 @@ The following example shows how to drop the medal_trig trigger.
 
 .. code-block:: sql
 
-	DROP TRIGGER medal_trig;
+    DROP TRIGGER medal_trig;
 
 **Remark**
 
@@ -371,14 +371,14 @@ RENAME TRIGGER
 
 You can change a trigger name by using the **TRIGGER** reserved word in the **RENAME** statement. ::
 
-	RENAME TRIGGER old_trigger_name AS new_trigger_name [ ; ]
+    RENAME TRIGGER old_trigger_name AS new_trigger_name [ ; ]
 
 *   *old_trigger_name* : Specifies the current name of the trigger.
 *   *new_trigger_name* : Specifies the name of the trigger to be modified.
 
 .. code-block:: sql
 
-	RENAME TRIGGER medal_trigger AS medal_trig;
+    RENAME TRIGGER medal_trigger AS medal_trig;
 
 **Remark**
 
@@ -395,11 +395,11 @@ Executing Deferred Condition and Action
 
 Executes the deferred condition or action of a trigger immediately. ::
 
-	EXECUTE DEFERRED TRIGGER trigger_identifier [ ; ]
+    EXECUTE DEFERRED TRIGGER trigger_identifier [ ; ]
 
-	trigger_identifier :
-	• trigger_name
-	• ALL TRIGGERS
+    trigger_identifier :
+    • trigger_name
+    • ALL TRIGGERS
 
 *   *trigger_identifier* :
 
@@ -411,11 +411,11 @@ Dropping Deferred Condition and Action
 
 Drops the deferred condition and action of a trigger. ::
 
-	DROP DEFERRED TRIGGER trigger_identifier [ ; ]
+    DROP DEFERRED TRIGGER trigger_identifier [ ; ]
 
-	trigger_option :
-	• trigger_name
-	• ALL TRIGGERS
+    trigger_option :
+    • trigger_name
+    • ALL TRIGGERS
 
 *   *trigger_option* :
 
@@ -460,30 +460,30 @@ The following example shows that **INSERT ... ON DUPLICATE KEY UPDATE** and **RE
 
 .. code-block:: sql
 
-	CREATE TABLE with_trigger (id INT UNIQUE);
-	INSERT INTO with_trigger VALUES (11);
-	 
-	CREATE TABLE trigger_actions (val INT);
-	 
-	CREATE TRIGGER trig_1 BEFORE INSERT ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (1);
-	CREATE TRIGGER trig_2 BEFORE UPDATE ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (2);
-	CREATE TRIGGER trig_3 BEFORE DELETE ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (3);
-	 
-	INSERT INTO with_trigger VALUES (11) ON DUPLICATE KEY UPDATE id=22;
-	 
-	SELECT * FROM trigger_actions;
-			  va
-	==============
-				2
-	 
-	REPLACE INTO with_trigger VALUES (22);
-	 
-	SELECT * FROM trigger_actions;
-			  va
-	==============
-				2
-				3
-				1
+    CREATE TABLE with_trigger (id INT UNIQUE);
+    INSERT INTO with_trigger VALUES (11);
+     
+    CREATE TABLE trigger_actions (val INT);
+     
+    CREATE TRIGGER trig_1 BEFORE INSERT ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (1);
+    CREATE TRIGGER trig_2 BEFORE UPDATE ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (2);
+    CREATE TRIGGER trig_3 BEFORE DELETE ON with_trigger EXECUTE INSERT INTO trigger_actions VALUES (3);
+     
+    INSERT INTO with_trigger VALUES (11) ON DUPLICATE KEY UPDATE id=22;
+     
+    SELECT * FROM trigger_actions;
+              va
+    ==============
+                2
+     
+    REPLACE INTO with_trigger VALUES (22);
+     
+    SELECT * FROM trigger_actions;
+              va
+    ==============
+                2
+                3
+                1
 
 TRIGGER Debugging
 =================
@@ -494,23 +494,23 @@ The following example shows a trigger that was defined to fall into a recursive 
 
 .. code-block:: sql
 
-	CREATE TRIGGER loop_tgr
-	BEFORE UPDATE ON participant(gold)
-	IF new.gold > 0
-	EXECUTE UPDATE participant
-			SET gold = new.gold - 1
-			WHERE nation_code = obj.nation_code AND host_year = obj.host_year;
+    CREATE TRIGGER loop_tgr
+    BEFORE UPDATE ON participant(gold)
+    IF new.gold > 0
+    EXECUTE UPDATE participant
+            SET gold = new.gold - 1
+            WHERE nation_code = obj.nation_code AND host_year = obj.host_year;
 
 Viewing TRIGGER Execution Log
 -----------------------------
 
 You can view the execution log of the trigger from a terminal by using the **SET TRIGGER TRACE** statement. ::
 
-	SET TRIGGER TRACE switch [ ; ]
+    SET TRIGGER TRACE switch [ ; ]
 
-	switch:
-	• ON
-	• OFF
+    switch:
+    • ON
+    • OFF
 
 *   *switch* :
 
@@ -521,23 +521,23 @@ The following example shows how to execute the **TRACE** and the *loop_tgr* trig
 
 .. code-block:: sql
 
-	SET TRIGGER TRACE ON;
-	UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
+    SET TRIGGER TRACE ON;
+    UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
 
 ::
 
-	TRACE: Evaluating condition for trigger "loop".
-	TRACE: Executing action for trigger "loop".
+    TRACE: Evaluating condition for trigger "loop".
+    TRACE: Executing action for trigger "loop".
 
 Limiting Nested TRIGGER
 -----------------------
 
 With the **MAXIMUM DEPTH** keyword of the **SET TRIGGER** statement, you can limit the number of triggers to be initiated at each step. By doing so, you can prevent a recursively called trigger from falling into an infinite loop. ::
 
-	SET TRIGGER [ MAXIMUM ] DEPTH count [ ; ]
+    SET TRIGGER [ MAXIMUM ] DEPTH count [ ; ]
 
-	count:
-	• unsigned_integer_literal
+    count:
+    • unsigned_integer_literal
 
 *   *unsigned_integer_literal* : A positive integer value that specifies the number of times that a trigger can recursively start another trigger or itself. If the number of triggers reaches the maximum depth, the database request stops(aborts) and the transaction is marked as invalid. The specified **DEPTH** applies to all other triggers except the current session. The maximum value is 32.
 
@@ -545,10 +545,10 @@ The following example shows how to configure the maximum number of times of recu
 
 .. code-block:: sql
 
-	SET TRIGGER MAXIMUM DEPTH 10;
-	UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
-	 
-	ERROR: Maximum trigger depth 10 exceeded at trigger "loop_tgr".
+    SET TRIGGER MAXIMUM DEPTH 10;
+    UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
+     
+    ERROR: Maximum trigger depth 10 exceeded at trigger "loop_tgr".
 
 TRIGGER Example
 ===============
@@ -563,18 +563,18 @@ The following trigger created in the *participant* table rejects an update to th
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trigger
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
+    CREATE TRIGGER medal_trigger
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
 
 The trigger *medal_trigger* starts when the number of gold (*gold*) medals of the country whose nation code is 'BLA' is updated. Since the trigger created does not allow negative numbers, the example below will not be updated.
 
 .. code-block:: sql
 
-	UPDATE participant
-	SET gold = -10
-	WHERE nation_code = 'BLA';
+    UPDATE participant
+    SET gold = -10
+    WHERE nation_code = 'BLA';
 
 **Example 2**
 
@@ -584,14 +584,14 @@ You can specify whether or not to execute the trigger depending on the **STATUS*
 
 .. code-block:: sql
 
-	CREATE TRIGGER medal_trig
-	STATUS ACTIVE
-	BEFORE UPDATE ON participant
-	IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
-	EXECUTE REJECT;
-	 
-	ALTER TRIGGER medal_trig
-	STATUS INACTIVE;
+    CREATE TRIGGER medal_trig
+    STATUS ACTIVE
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
+     
+    ALTER TRIGGER medal_trig
+    STATUS INACTIVE;
 
 **Example 3**
 
@@ -599,11 +599,11 @@ The following trigger shows how integrity constraint is enforced when a transact
 
 .. code-block:: sql
 
-	CREATE TRIGGER check_null_first
-	BEFORE COMMIT
-	IF 0 < (SELECT count(*) FROM athlete WHERE gender IS NULL)
-	OR 0 < (SELECT count(*) FROM game WHERE nation_code IS NULL)
-	EXECUTE REJECT;
+    CREATE TRIGGER check_null_first
+    BEFORE COMMIT
+    IF 0 < (SELECT count(*) FROM athlete WHERE gender IS NULL)
+    OR 0 < (SELECT count(*) FROM game WHERE nation_code IS NULL)
+    EXECUTE REJECT;
 
 **Example 4**
 
@@ -611,23 +611,23 @@ The following trigger delays the update integrity constraint check for the *reco
 
 .. code-block:: sql
 
-	CREATE TRIGGER deferred_check_on_record
-	DEFERRED UPDATE ON record
-	IF obj.score = '100'
-	EXECUTE INVALIDATE TRANSACTION;
+    CREATE TRIGGER deferred_check_on_record
+    DEFERRED UPDATE ON record
+    IF obj.score = '100'
+    EXECUTE INVALIDATE TRANSACTION;
 
 Once completed, the update in the *record* table can be confirmed at the last point (commit or rollback) of the current transaction. The correlation name **old** cannot be used in the conditional clause of the trigger where **DEFERRED UPDATE** is used. Therefore, you cannot create a trigger as the following.
 
 .. code-block:: sql
 
-	CREATE CLASS foo (n int);
-	CREATE TRIGGER foo_trigger
-		DEFERRED UPDATE ON foo
-		IF old.n = 100
-		EXECUTE PRINT 'foo_trigger';
+    CREATE CLASS foo (n int);
+    CREATE TRIGGER foo_trigger
+        DEFERRED UPDATE ON foo
+        IF old.n = 100
+        EXECUTE PRINT 'foo_trigger';
 
 If you try to create a trigger as shown above, an error message is displayed and the trigger fails. ::
 
-	ERROR: Error compiling condition for 'foo_trigger' : old.n is not defined.
+    ERROR: Error compiling condition for 'foo_trigger' : old.n is not defined.
 
 The correlation name **old** can be used only with **AFTER**.

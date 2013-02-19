@@ -52,14 +52,14 @@ INHERIT Clause
 
 When a class is created as a sub class, the class inherits all attributes and methods of the super class. A name conflict that occurs during inheritance can be handled by either a system or a user. To resolve the name conflict directly, add the **INHERIT** clause to the **CREATE CLASS** statement. ::
 
-	CREATE CLASS
-	.
-	.
-	.
-	INHERIT resolution [ {, resolution }_ ]
+    CREATE CLASS
+    .
+    .
+    .
+    INHERIT resolution [ {, resolution }_ ]
 
-	resolution:
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    resolution:
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 For the *attr_mthd_name* in the **INHERIT** clause, specify the name of the attribute or method of the super class to inherit. With the **ALIAS** clause, you can resolve a name conflict that occurs in multiple inheritance statements by inheriting a new name.
 
@@ -70,14 +70,14 @@ ADD SUPERCLASS Clause
 
 To extend class inheritance, add a super class to a class. A relationship between two classes is created when a super class is added to an existing class. Adding a super class does not mean adding a new class. ::
 
-	ALTER CLASS
-	.
-	.
-	.
-	ADD SUPERCLASS [ user_name.]class_name [ { , [ user_name.]class_name }_ ]
-	[ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
-	resolution:
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    ALTER CLASS
+    .
+    .
+    .
+    ADD SUPERCLASS [ user_name.]class_name [ { , [ user_name.]class_name }_ ]
+    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+    resolution:
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 For the first *class_name*, specify the name of the class where a super class is to be added. Attributes and methods of the super class can be inherited by using the syntax above.
 
@@ -88,22 +88,22 @@ The following example shows how to create the *female_event* class by inheriting
 
 .. code-block:: sql
 
-	CREATE CLASS female_event UNDER event;
+    CREATE CLASS female_event UNDER event;
 
 DROP SUPERCLASS Clause
 ======================
 
 Deleting a super class from a class means removing the relationship between two classes. If a super class is deleted from a class, it changes inheritance relationship of the classes as well as of all their sub classes. ::
 
-	ALTER CLASS
-	.
-	.
-	.
-	DROP SUPERCLASS class_name [ { , class_name }_ ]
-	[ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
-	 
-	resolution:
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    ALTER CLASS
+    .
+    .
+    .
+    DROP SUPERCLASS class_name [ { , class_name }_ ]
+    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+     
+    resolution:
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 For the first *class_name*, specify the name of the class to be modified. For the second *class_name*, specify the name of the super class to be deleted. If a name conflict occurs after deleting a super class, see the :ref:`class-conflict-resolution` section for the resolution.
 
@@ -111,13 +111,13 @@ The following example shows how to inherit the *female_event* class from the *ev
 
 .. code-block:: sql
 
-	CREATE CLASS female_event UNDER event
+    CREATE CLASS female_event UNDER event
 
 The following example shows how to delete the super class *event* from the f *emale_event* class. Attributes that the *female_event* class inherited from the even *class* no longer exist.
 
 .. code-block:: sql
 
-	ALTER CLASS female_event DROP SUPERCLASS event;
+    ALTER CLASS female_event DROP SUPERCLASS event;
 
 .. _class-conflict-resolution:
 
@@ -145,11 +145,11 @@ When the system resolves the conflict automatically, basically, the existing inh
 
 What will be discussed concerning conflicts is applied commonly to both attributes and methods. ::
 
-	ALTER [ class_type ] class_name alter_clause
-	[ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
+    ALTER [ class_type ] class_name alter_clause
+    [ INHERIT resolution [ {, resolution }_ ] ] [ ; ]
 
-	resolution:
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    resolution:
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 Superclass Conflict
 -------------------
@@ -164,8 +164,8 @@ The following example shows how to create the *soccer_stadium* class by inheriti
 
 .. code-block:: sql
 
-	CREATE CLASS soccer_stadium UNDER event, stadium
-	INHERIT name OF stadium, code OF stadium;
+    CREATE CLASS soccer_stadium UNDER event, stadium
+    INHERIT name OF stadium, code OF stadium;
 
 
 When the two super classes (*event* and *stadium*) have the *name* attribute, if the *soccer_stadium* class needs to inherit both attributes, it can inherit the *name* unchanged from the *stadium* class and the *name* changed from the *event* class by using the **alias** clause of the **INHERIT**.
@@ -174,8 +174,8 @@ The following example shows in which the *name* attribute of the *stadium* class
 
 .. code-block:: sql
 
-	ALTER CLASS soccer_stadium
-	INHERIT name OF event AS purpose;
+    ALTER CLASS soccer_stadium
+    INHERIT name OF event AS purpose;
 
 **Deleting a super class**
 
@@ -185,12 +185,12 @@ The following example shows how to create the *seoul_1988_soccer* class by inher
 
 .. code-block:: sql
 
-	CREATE CLASS seoul_1988_soccer UNDER game, participant, stadium
-	INHERIT nation_code OF participant, host_year OF participant;
-	
-	ALTER CLASS seoul_1988_soccer
-	DROP SUPERCLASS participant
-	INHERIT nation_code OF stadium;
+    CREATE CLASS seoul_1988_soccer UNDER game, participant, stadium
+    INHERIT nation_code OF participant, host_year OF participant;
+    
+    ALTER CLASS seoul_1988_soccer
+    DROP SUPERCLASS participant
+    INHERIT nation_code OF stadium;
 
 **Compatible Domains**
 
@@ -215,8 +215,8 @@ The following example shows how to add an attribute to the *event* class. The su
 
 .. code-block:: sql
 
-	ALTER CLASS event
-	ADD ATTRIBUTE nation_code CHAR(3);
+    ALTER CLASS event
+    ADD ATTRIBUTE nation_code CHAR(3);
 
 If the *event* class is dropped from the *soccer_stadium* super class, the *cost* attribute of the *stadium* class will be inherited automatically.
 
@@ -230,8 +230,8 @@ The following example shows sub class conflict. Classes *B*, *C* and *D* are sup
 
 .. code-block:: sql
 
-	create class E under B, C, D
-	inherit place of C;
+    create class E under B, C, D
+    inherit place of C;
 
 In this case, the inheritance hierarchy is as follows:
 
@@ -241,12 +241,12 @@ Suppose that you decide to delete class *C* from the super class. This drop will
 
 .. code-block:: sql
 
-	ALTER CLASS E INHERIT game OF D;
-	ALTER CLASS C DROP game;
+    ALTER CLASS E INHERIT game OF D;
+    ALTER CLASS C DROP game;
 
 .. note::
 
-	If the domain of one *game* attribute in one super class is *event* and that of another super class is *team_event*, *team_event* is more specific than event because *team_event* is the descendant of event. Therefore, a super class that has the *team_event* attribute as a domain will be inherited; a user cannot forcefully inherit a super class that has the *event* attribute as a domain.
+    If the domain of one *game* attribute in one super class is *event* and that of another super class is *team_event*, *team_event* is more specific than event because *team_event* is the descendant of event. Therefore, a super class that has the *team_event* attribute as a domain will be inherited; a user cannot forcefully inherit a super class that has the *event* attribute as a domain.
 
 Schema Invariant
 ----------------

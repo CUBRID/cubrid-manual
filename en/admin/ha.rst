@@ -76,12 +76,12 @@ When the node status is changed, on cub_master process log and cub_server proces
 
 * The following log information of cub_master process is saved on $CUBRID/log/<hostname>_master.err file. ::
 
-	HA generic: Send changemode request to the server. (state:1[active], args:[cub_server demodb ], pid:25728).
-	HA generic: Receive changemode response from the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+    HA generic: Send changemode request to the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+    HA generic: Receive changemode response from the server. (state:1[active], args:[cub_server demodb ], pid:25728).
 
 * The following log information of cub_server is saved on $CUBRID/log/server/<db_name>_<date>_<time>.err file. ::
 
-	Server HA mode is changed from 'to-be-active' to 'active'.
+    Server HA mode is changed from 'to-be-active' to 'active'.
 
 
 heartbeat Message
@@ -276,7 +276,7 @@ Linux and CUBRID version 2008 R2.2 or later must be installed on the equipment t
 
 .. note:: 
 
-	This document describes the HA configuration in CUBRID 2008 R4.1 Patch 2 or later versions. Note that the previous versions have different settings. For example, **cubrid_ha.conf** is only available in CUBRID 2008 R4.0 or later. **ha_make_slavedb.sh** describes CUBRID 2008 R4.1 Patch 2 or later.
+    This document describes the HA configuration in CUBRID 2008 R4.1 Patch 2 or later versions. Note that the previous versions have different settings. For example, **cubrid_ha.conf** is only available in CUBRID 2008 R4.0 or later. **ha_make_slavedb.sh** describes CUBRID 2008 R4.1 Patch 2 or later.
 
 .. _quick-server-config:
 
@@ -287,63 +287,63 @@ Creating Databases and Configuring Servers
 
 Create databases to be included in CUBRID HA at each node of the CUBRID HA in the same manner. Modify the options for database creation as needed. ::
 
-	[nodeA]$ cd $CUBRID_DATABASES
-	[nodeA]$ mkdir testdb
-	[nodeA]$ cd testdb
-	[nodeA]$ mkdir log
-	[nodeA]$ cubrid createdb -L ./log testdb
-	Creating database with 512.0M size. The total amount of disk space needed is 1.5G.
-	 
-	CUBRID 9.0
-	 
-	[nodeA]$
+    [nodeA]$ cd $CUBRID_DATABASES
+    [nodeA]$ mkdir testdb
+    [nodeA]$ cd testdb
+    [nodeA]$ mkdir log
+    [nodeA]$ cubrid createdb -L ./log testdb
+    Creating database with 512.0M size. The total amount of disk space needed is 1.5G.
+     
+    CUBRID 9.0
+     
+    [nodeA]$
 
 **cubrid.conf**
 
 Ensure **ha_mode** of **$CUBRID/conf/cubrid.conf** in every CUBRID HA node has the same value. Especially, take caution when configuring the **log_max_archives** and **force_remove_log_archives** parameters (logging parameters) and the **ha_mode** parameter (HA parameter). ::
 
-	# Service parameters
-	[service]
-	service=server,broker,manager
+    # Service parameters
+    [service]
+    service=server,broker,manager
 
-	# Common section
-	[common]
-	service=server,broker,manager
+    # Common section
+    [common]
+    service=server,broker,manager
 
-	# Server parameters
-	server=testdb
-	data_buffer_size=512M
-	log_buffer_size=4M
-	sort_buffer_size=2M
-	max_clients=100
-	cubrid_port_id=1523
-	db_volume_size=512M
-	log_volume_size=512M
+    # Server parameters
+    server=testdb
+    data_buffer_size=512M
+    log_buffer_size=4M
+    sort_buffer_size=2M
+    max_clients=100
+    cubrid_port_id=1523
+    db_volume_size=512M
+    log_volume_size=512M
 
-	# Adds when configuring HA (Logging parameters)
-	log_max_archives=100
-	force_remove_log_archives=no
+    # Adds when configuring HA (Logging parameters)
+    log_max_archives=100
+    force_remove_log_archives=no
 
-	# Adds when configuring HA (HA mode)
-	ha_mode=on
+    # Adds when configuring HA (HA mode)
+    ha_mode=on
 
 **cubrid_ha.conf**
 
 Ensure **ha_port_id**, **ha_node_list**, **ha_db_list** of **$CUBRID/conf/cubrid_ha.conf** in every CUBRID HA node has the same value. In the example below, we assume that the host name of a master node is *nodeA* and that of a slave node is *nodeB*. ::
 
-	[common]
-	ha_port_id=59901
-	ha_node_list=cubrid@nodeA:nodeB
-	ha_db_list=testdb
-	ha_copy_sync_mode=sync:sync
-	ha_apply_max_mem_size=500
+    [common]
+    ha_port_id=59901
+    ha_node_list=cubrid@nodeA:nodeB
+    ha_db_list=testdb
+    ha_copy_sync_mode=sync:sync
+    ha_apply_max_mem_size=500
 
 **databases.txt**
 
 Ensure that you must configure the host names (*nodeA:nodeB*) of master and slave nodes in db-host of **$CUBRID_DATABASES/databases.txt**; if **$CUBRID_DATABASES** is not configured, do it in **$CUBRID/databases/databases.txt**). ::
 
-	#db-name vol-path db-host log-path lob-base-path
-	testdb /home/cubrid/DB/testdb nodeA:nodeB /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
+    #db-name vol-path db-host log-path lob-base-path
+    testdb /home/cubrid/DB/testdb nodeA:nodeB /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
 
 Starting and Verifying CUBRID HA
 --------------------------------
@@ -354,39 +354,39 @@ Execute the **cubrid heartbeat** **start** at each node in the CUBRID HA group. 
 
 *   Master node ::
 
-	[nodeA]$ cubrid heartbeat start
+    [nodeA]$ cubrid heartbeat start
 
 *   Slave node ::
 
-	[nodeB]$ cubrid heartbeat start
+    [nodeB]$ cubrid heartbeat start
 
 **Verifying CUBRID HA Status**
 
 Execute **cubrid heartbeat status** at each node in the CUBRID HA group to verify its configuration status. ::
 
-	[nodeA]$ cubrid heartbeat status
-	@ cubrid heartbeat list
-	 HA-Node Info (current nodeA-node-name, state master)
-	   Node nodeB-node-name (priority 2, state slave)
-	   Node nodeA-node-name (priority 1, state master)
-	 HA-Process Info (nodeA 9289, state nodeA)
-	   Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9423, state registered)
-	   Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9418, state registered)
-	   Server testdb (pid 9306, state registered_and_active)
-	 
-	[nodeA]$
+    [nodeA]$ cubrid heartbeat status
+    @ cubrid heartbeat list
+     HA-Node Info (current nodeA-node-name, state master)
+       Node nodeB-node-name (priority 2, state slave)
+       Node nodeA-node-name (priority 1, state master)
+     HA-Process Info (nodeA 9289, state nodeA)
+       Applylogdb testdb@localhost:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9423, state registered)
+       Copylogdb testdb@nodeB-node-name:/home1/cubrid1/DB/testdb_nodeB.cub (pid 9418, state registered)
+       Server testdb (pid 9306, state registered_and_active)
+     
+    [nodeA]$
 
 Use the **cubrid changemode** utility at each node in the CUBRID HA group to verify the status of the server.
 
 *   Master node ::
 
-	[nodeA]$ cubrid changemode testdb@localhost
-	The server 'testdb@localhost''s current HA running mode is active.
+    [nodeA]$ cubrid changemode testdb@localhost
+    The server 'testdb@localhost''s current HA running mode is active.
 
 *   Slave node ::
 
-	[nodeB]$ cubrid changemode testdb@localhost
-	The server 'testdb@localhost''s current HA running mode is standby.
+    [nodeB]$ cubrid changemode testdb@localhost
+    The server 'testdb@localhost''s current HA running mode is standby.
 
 **Verifying the CUBRID HA Operation**
 
@@ -396,19 +396,19 @@ Verify that action is properly applied to standby server of the slave node after
 
 *   Master node ::
 
-	[nodeA]$ csql -u dba testdb@localhost -c "create table abc(a int, b int, c int, primary key(a));"
-	[nodeA]$ csql -u dba testdb@localhost -c "insert into abc values (1,1,1);"
-	[nodeA]$
+    [nodeA]$ csql -u dba testdb@localhost -c "create table abc(a int, b int, c int, primary key(a));"
+    [nodeA]$ csql -u dba testdb@localhost -c "insert into abc values (1,1,1);"
+    [nodeA]$
 
 *   Slave node ::
 
-	[nodeB]$ csql -u dba testdb@localhost -l -c "select * from abc;"
-	=== <Result of SELECT Command in Line 1> ===
-	<00001> a: 1
-	        b: 1
-	        c: 1
-	
-	[nodeB]$
+    [nodeB]$ csql -u dba testdb@localhost -l -c "select * from abc;"
+    === <Result of SELECT Command in Line 1> ===
+    <00001> a: 1
+            b: 1
+            c: 1
+    
+    [nodeB]$
 
 .. _quick-broker-config:
 
@@ -421,27 +421,27 @@ To provide normal service during a database failover, it is necessary to configu
 
 *   databases.txt ::
 
-	#db-name        vol-path                db-host         log-path        lob-base-path
-	testdb          /home1/cubrid1/CUBRID/testdb  nodeA:nodeB        /home1/cubrid1/CUBRID/testdb/log file:/home1/cubrid1/CUBRID/testdb/lob
+    #db-name        vol-path                db-host         log-path        lob-base-path
+    testdb          /home1/cubrid1/CUBRID/testdb  nodeA:nodeB        /home1/cubrid1/CUBRID/testdb/log file:/home1/cubrid1/CUBRID/testdb/lob
 
 *   cubrid_broker.conf ::
 
-	[%testdb_RWbroker]
-	SERVICE                 =ON
-	BROKER_PORT             =33000
-	MIN_NUM_APPL_SERVER     =5
-	MAX_NUM_APPL_SERVER     =40
-	APPL_SERVER_SHM_ID      =33000
-	LOG_DIR                 =log/broker/sql_log
-	ERROR_LOG_DIR           =log/broker/error_log
-	SQL_LOG                 =ON
-	TIME_TO_KILL            =120
-	SESSION_TIMEOUT         =300
-	KEEP_CONNECTION         =AUTO
-	CCI_DEFAULT_AUTOCOMMIT  =ON
-	 
-	# broker mode parameter
-	ACCESS_MODE             =RW
+    [%testdb_RWbroker]
+    SERVICE                 =ON
+    BROKER_PORT             =33000
+    MIN_NUM_APPL_SERVER     =5
+    MAX_NUM_APPL_SERVER     =40
+    APPL_SERVER_SHM_ID      =33000
+    LOG_DIR                 =log/broker/sql_log
+    ERROR_LOG_DIR           =log/broker/error_log
+    SQL_LOG                 =ON
+    TIME_TO_KILL            =120
+    SESSION_TIMEOUT         =300
+    KEEP_CONNECTION         =AUTO
+    CCI_DEFAULT_AUTOCOMMIT  =ON
+     
+    # broker mode parameter
+    ACCESS_MODE             =RW
 
 **Starting Broker and Verifying its Status**
 
@@ -449,16 +449,16 @@ A broker is used to access applications such as JDBC, CCI or PHP. Therefore, to 
 
 The following example shows how to execute a broker from the master node. ::
 
-	[nodeA]$ cubrid broker start
-	@ cubrid broker start
-	++ cubrid broker start: success
-	[nodeA]$ cubrid broker status
-	@ cubrid broker status
-	% testdb_RWbroker
-	---------------------------------------------------------
-	ID   PID   QPS   LQS PSIZE STATUS
-	---------------------------------------------------------
-	 1  9532     0     0  48120  IDLE
+    [nodeA]$ cubrid broker start
+    @ cubrid broker start
+    ++ cubrid broker start: success
+    [nodeA]$ cubrid broker status
+    @ cubrid broker status
+    % testdb_RWbroker
+    ---------------------------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS
+    ---------------------------------------------------------
+     1  9532     0     0  48120  IDLE
 
 **Configuring Applications**
 
@@ -466,7 +466,7 @@ Specifies the host name (*nodeA_broker*, *nodeB_broker*) and port for an applica
 
 .. code-block:: java
 
-	Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA_broker:33000:testdb:::?charSet=utf-8&altHosts=nodeB_broker:33000", "dba", "");
+    Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA_broker:33000:testdb:::?charSet=utf-8&altHosts=nodeB_broker:33000", "dba", "");
 
 .. _ha-configuration:
 
@@ -506,7 +506,7 @@ If you configure the value for **force_remove_log_archives** to yes, the archive
 
 .. note::
 
-	From 2008 R4.3 in replica mode, it will be always deleted except for archive logs as many as specified in the **log_max_archives** parameter, regardless the **force_remove_log_archives** value specified.
+    From 2008 R4.3 in replica mode, it will be always deleted except for archive logs as many as specified in the **log_max_archives** parameter, regardless the **force_remove_log_archives** value specified.
 
 **max_clients**
 
@@ -532,27 +532,27 @@ Because the replication log copy and the replication log reflection processes st
 
 The following example shows how to configure **cubrid.conf**. Please take caution when configuring **log_max_archives** and **force_remove_log_archives** (logging-related parameters), and **ha_mode** (an HA-related parameter). ::
 
-	# Service Parameters
-	[service]
-	service=server,broker,manager
+    # Service Parameters
+    [service]
+    service=server,broker,manager
 
-	# Server Parameters
-	server=testdb
-	data_buffer_size=512M
-	log_buffer_size=4M
-	sort_buffer_size=2M
-	max_clients=200
-	cubrid_port_id=1523
-	db_volume_size=512M
-	log_volume_size=512M
+    # Server Parameters
+    server=testdb
+    data_buffer_size=512M
+    log_buffer_size=4M
+    sort_buffer_size=2M
+    max_clients=200
+    cubrid_port_id=1523
+    db_volume_size=512M
+    log_volume_size=512M
 
-	# Adds when configuring HA (Logging parameters)
-	log_max_archives=100
-	force_remove_log_archives=no
+    # Adds when configuring HA (Logging parameters)
+    log_max_archives=100
+    force_remove_log_archives=no
 
-	# Adds when configuring HA (HA mode)
-	ha_mode=on
-	log_max_archives=100
+    # Adds when configuring HA (HA mode)
+    ha_mode=on
+    log_max_archives=100
 
 .. _cubrid-ha-conf:
 
@@ -651,18 +651,18 @@ For details, see :ref:`log-multiplexing`.
 
 The following example shows how to configure **cubrid_ha.conf**. ::
 
-	[common]
-	ha_node_list=cubrid@nodeA:nodeB
-	ha_db_list=testdb
-	ha_copy_sync_mode=sync:sync
-	ha_apply_max_mem_size=500
+    [common]
+    ha_node_list=cubrid@nodeA:nodeB
+    ha_db_list=testdb
+    ha_copy_sync_mode=sync:sync
+    ha_apply_max_mem_size=500
 
 **Remark**
 
 The following example shows how to configure the value of /etc/hosts (a host name of a member node: nodeA, IP: 192.168.0.1). ::
 
-	127.0.0.1 localhost.localdomain localhost
-	192.168.0.1 nodeA
+    127.0.0.1 localhost.localdomain localhost
+    192.168.0.1 nodeA
 
 .. _ha-cubrid-broker-conf:
 
@@ -685,23 +685,23 @@ You can specify multiple nodes by using a colon (:). First, it tries to connect 
 
 The following example shows how to configure **cubrid_broker.conf**. ::
 
-	[%PHRO_broker]
-	SERVICE                 =ON
-	BROKER_PORT             =33000
-	MIN_NUM_APPL_SERVER     =5
-	MAX_NUM_APPL_SERVER     =40
-	APPL_SERVER_SHM_ID      =33000
-	LOG_DIR                 =log/broker/sql_log
-	ERROR_LOG_DIR           =log/broker/error_log
-	SQL_LOG                 =ON
-	TIME_TO_KILL            =120
-	SESSION_TIMEOUT         =300
-	KEEP_CONNECTION         =AUTO
-	CCI_DEFAULT_AUTOCOMMIT  =ON
-	 
-	# Broker mode setting parameter
-	ACCESS_MODE             =PHRO
-	PREFERRED_HOSTS         =nodeA:nodeB:nodeC
+    [%PHRO_broker]
+    SERVICE                 =ON
+    BROKER_PORT             =33000
+    MIN_NUM_APPL_SERVER     =5
+    MAX_NUM_APPL_SERVER     =40
+    APPL_SERVER_SHM_ID      =33000
+    LOG_DIR                 =log/broker/sql_log
+    ERROR_LOG_DIR           =log/broker/error_log
+    SQL_LOG                 =ON
+    TIME_TO_KILL            =120
+    SESSION_TIMEOUT         =300
+    KEEP_CONNECTION         =AUTO
+    CCI_DEFAULT_AUTOCOMMIT  =ON
+     
+    # Broker mode setting parameter
+    ACCESS_MODE             =PHRO
+    PREFERRED_HOSTS         =nodeA:nodeB:nodeC
 
 databases.txt
 -------------
@@ -710,8 +710,8 @@ The **databases.txt** file that has information on servers to be connected by a 
 
 The following example shows how to configure **databases.txt**. ::
 
-	#db-name    vol-path        db-host     log-path     lob-base-path
-	testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
+    #db-name    vol-path        db-host     log-path     lob-base-path
+    testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
 .. _ha-jdbc-conf:
 
@@ -724,7 +724,7 @@ The following example shows how to configure JDBC:
 
 .. code-block:: java
 
-	Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA_broker:33000:testdb:::?charSet=utf-8&altHosts=nodeB_broker:33000", "dba", "");
+    Connection connection = DriverManager.getConnection("jdbc:CUBRID:nodeA_broker:33000:testdb:::?charSet=utf-8&altHosts=nodeB_broker:33000", "dba", "");
 
 .. _ha-cci-conf:
 
@@ -737,12 +737,12 @@ The following example shows how to configure CCI.
 
 .. code-block:: c
 
-	con = cci_connect_with_url ("cci:CUBRID:nodeA_broker:33000:testdb:::?altHosts=nodeB_broker:33000", "dba", NULL);
-	if (con < 0)
-	{
-		  printf ("cannot connect to database\n");
-		  return 1;
-	}
+    con = cci_connect_with_url ("cci:CUBRID:nodeA_broker:33000:testdb:::?altHosts=nodeB_broker:33000", "dba", NULL);
+    if (con < 0)
+    {
+          printf ("cannot connect to database\n");
+          return 1;
+    }
 
 .. _ha-php-conf:
 
@@ -755,18 +755,18 @@ The following example shows how to configure PHP.
 
 .. code-block:: php
 
-	<?php
-	$con = cubrid_connect_with_url ("cci:CUBRID:nodeA_broker:33000:testdb:::?altHosts=nodeB_broker:33000", "dba", NULL);
-	if ($con < 0)
-	{
-		  printf ("cannot connect to database\n");
-		  return 1;
-	}
-	?>
+    <?php
+    $con = cubrid_connect_with_url ("cci:CUBRID:nodeA_broker:33000:testdb:::?altHosts=nodeB_broker:33000", "dba", NULL);
+    if ($con < 0)
+    {
+          printf ("cannot connect to database\n");
+          return 1;
+    }
+    ?>
 
 .. note:: If you want to run smoothly the broker's failover in the environment which the broker's failover is enabled by setting **altHosts**, you should set the value of *disconnectOnQueryTimeout** in URL as *true**.
-	
-	If this value is **true*, an application program releases the existing connection from a broker and reconnect to the other broker which is specified on **altHosts**.
+    
+    If this value is **true*, an application program releases the existing connection from a broker and reconnect to the other broker which is specified on **altHosts**.
 
 Running and Monitoring
 ======================
@@ -782,13 +782,13 @@ This utility is used to activate CUBRID HA feature and start all processes of CU
 
 How to execute the command is as shown below. ::
 
-	$ cubrid heartbeat start
+    $ cubrid heartbeat start
 
 The database server process configured in HA mode cannot be started with the **cubrid server start** command.
 
 Specify the database name at the end of the command to run only the HA configuration processes (database server process, replication log copy process, and replication log reflection process) of a specific database in the node. For example, use the following command to run the database *testdb* only: ::
 
-	$ cubrid heartbeat start testdb
+    $ cubrid heartbeat start testdb
 
 **stop**
 
@@ -796,13 +796,13 @@ This utility is used to disable and stop all components of CUBRID. The node that
 
 How to use this utility is as shown below. ::
 
-	$ cubrid heartbeat stop
+    $ cubrid heartbeat stop
 
 The database server process cannot be stopped with the **cubrid server stop** command.
 
 Specify the database name at the end of the command to stop only the HA configuration processes (database server process, replication log copy process, and replication log reflection process) of a specific database in the node. For example, use the following command to run the database *testdb* only: ::
 
-	$ cubrid heartbeat stop testdb
+    $ cubrid heartbeat stop testdb
 
 **copylogdb**
 
@@ -812,7 +812,7 @@ Even though only the **cubrid heartbeat copylogdb start** command has succeeded,
 
 How to use this utility is as shown below. ::
 
-	$ cubrid heartbeat copylogdb <start|stop> db_name peer_node
+    $ cubrid heartbeat copylogdb <start|stop> db_name peer_node
 
 When the **copylogdb** process is started/stopped, the configuration information of the **cubrid_ha.conf** is used. We recommend that you do not change the configuration as possible after you have set the configuration once. If you need to change it, it is recommended to restart the whole nodes.
 
@@ -824,7 +824,7 @@ Even though only the **cubrid heartbeat copylogdb start** command has succeeded,
 
 How to use this utility is as shown below. ::
 
-	$ cubrid heartbeat applylogdb <start|stop> db_name peer_node
+    $ cubrid heartbeat applylogdb <start|stop> db_name peer_node
 
 When the **applylogdb** process is started/stopped, the configuration information of the **cubrid_ha.conf** is used. We recommend that you do not change the configuration as possible after you have set the configuration once. If you need to change it, it is recommended to restart the whole nodes.
 
@@ -834,7 +834,7 @@ This utility is used to retrieve the CUBRID HA information again, and it starts 
 
 How to use this utility is as shown below. ::
 
-	$ cubrid heartbeat reload
+    $ cubrid heartbeat reload
 
 **status**
 
@@ -842,18 +842,18 @@ This utility is used to output the information of CUBRID HA group and CUBRID HA 
 
 How to use this utility is as shown below. ::
 
-	$ cubrid heartbeat status
-	@ cubrid heartbeat status
-	 
-	 HA-Node Info (current nodeB, state slave)
-	   Node nodeB (priority 2, state slave)
-	   Node nodeA (priority 1, state master)
-	 
-	 
-	 HA-Process Info (master 2143, state slave)
-	   Applylogdb testdb@localhost:/home/cubrid/DB/testdb_nodeB (pid 2510, state registered)
-	   Copylogdb testdb@nodeA:/home/cubrid/DB/testdb_nodeA (pid 2505, state registered)
-	   Server testdb (pid 2393, state registered_and_standby)
+    $ cubrid heartbeat status
+    @ cubrid heartbeat status
+     
+     HA-Node Info (current nodeB, state slave)
+       Node nodeB (priority 2, state slave)
+       Node nodeA (priority 1, state master)
+     
+     
+     HA-Process Info (master 2143, state slave)
+       Applylogdb testdb@localhost:/home/cubrid/DB/testdb_nodeB (pid 2510, state registered)
+       Copylogdb testdb@nodeA:/home/cubrid/DB/testdb_nodeA (pid 2505, state registered)
+       Server testdb (pid 2393, state registered_and_standby)
 
 .. note:: **act**, **deact**, and **deregister** commands which were used in versions lower than CUBRID 9.0 are no longer used.
 
@@ -866,23 +866,23 @@ If you register heartbeat to CUBRID service, you can use the utilities of **cubr
 
 How to configure **cubrid.conf** file is shown below. ::
 
-	# cubrid.conf
+    # cubrid.conf
 
-	...
+    ...
 
-	[service]
+    [service]
 
-	...
+    ...
 
-	service=broker,heartbeat
+    service=broker,heartbeat
 
-	...
+    ...
 
-	[common]
+    [common]
 
-	...
+    ...
 
-	ha_mode=on
+    ha_mode=on
 
 .. _cubrid-applyinfo:
 
@@ -891,7 +891,7 @@ cubrid applyinfo
 
 This utility is used to check the copied and applied status of replication logs by CUBRID HA. ::
 
-	cubrid applyinfo [option] <database-name>
+    cubrid applyinfo [option] <database-name>
 
 *   *database-name* : Specifies the name of a server to monitor. A node name is not included.
 
@@ -901,30 +901,30 @@ The following shows the [options] used on **cubrid applyinfo**.
 
 .. option:: -r, --remote-host-name=HOSTNAME
 
-	Configures the name of a target node in which transaction logs are copied. Using this option will output the information of active logs (Active Info.) of a target node.
-	
+    Configures the name of a target node in which transaction logs are copied. Using this option will output the information of active logs (Active Info.) of a target node.
+    
 .. option:: -a, --applied-info
 
-	Outputs the information of replication reflection of a node executing cubrid applyinfo. 
-	The **-L** option is required to use this option.
-	
+    Outputs the information of replication reflection of a node executing cubrid applyinfo. 
+    The **-L** option is required to use this option.
+    
 .. option:: -L, --copied-log-path=PATH
 
-	Configures the location of transaction logs copied from the other node. Using this option will output the information of transaction logs copied (Copied Active Info.) from the other node.
-	
+    Configures the location of transaction logs copied from the other node. Using this option will output the information of transaction logs copied (Copied Active Info.) from the other node.
+    
 .. option:: -p, --pageid=ID
 
-	Outputs the information of a specific page in the copied logs. 
-	This is available only when the  **-L** option is enabled.  The default is 0, it means the active page. 
-		
+    Outputs the information of a specific page in the copied logs. 
+    This is available only when the  **-L** option is enabled.  The default is 0, it means the active page. 
+        
 .. option:: -v
 
-	Outputs detailed information.                        
+    Outputs detailed information.                        
 
 .. option:: -i, --interval=SECOND
 
-	Outputs the copied status and applied status of transaction logs per specified seconds. To see the delayed status of the replicated log, this option is mandatory.
-	
+    Outputs the copied status and applied status of transaction logs per specified seconds. To see the delayed status of the replicated log, this option is mandatory.
+    
 **Example**
 
 The following example shows how to check log information (Active Info.) of the master node, the status information of log copy (Copied Active Info.) of the slave node, and the applylogdb info (Applied Info.) of the slave node by executing **applyinfo** in the slave node.
@@ -932,81 +932,81 @@ The following example shows how to check log information (Active Info.) of the m
 *   Applied Info.: Shows the status information after the slave node applies the replication log.
 *   Copied Active Info.: Shows the status information after the slave node copies the replication log.
 *   Active Info.: Shows the status information after the master node records the transaction log.
-*	Delay in Copying Active Log: Shows the status information which the transaction logs’ copy is delayed.
-*	Delay in Applying Copied Log: Shows the status information which the transaction logs’ application is delayed.
+*    Delay in Copying Active Log: Shows the status information which the transaction logs’ copy is delayed.
+*    Delay in Applying Copied Log: Shows the status information which the transaction logs’ application is delayed.
 
 ::
 
-	[nodeB] $ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a -i 3 testdb
-	 
-	 *** Applied Info. *** 
-	Insert count                   : 289492
-	Update count                   : 71192
-	Delete count                   : 280312
-	Schema count                   : 20
-	Commit count                   : 124917
-	Fail count                     : 0
+    [nodeB] $ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a -i 3 testdb
+     
+     *** Applied Info. *** 
+    Insert count                   : 289492
+    Update count                   : 71192
+    Delete count                   : 280312
+    Schema count                   : 20
+    Commit count                   : 124917
+    Fail count                     : 0
 
-	 *** Copied Active Info. *** 
-	DB name                        : testdb
-	DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
-	EOF LSA                        : 27722 | 10088
-	Append LSA                     : 27722 | 10088
-	HA server state                : active
+     *** Copied Active Info. *** 
+    DB name                        : testdb
+    DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+    EOF LSA                        : 27722 | 10088
+    Append LSA                     : 27722 | 10088
+    HA server state                : active
 
-	 ***  Active Info. *** 
-	DB name                        : testdb
-	DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
-	EOF LSA                        : 27726 | 2512
-	Append LSA                     : 27726 | 2512
-	HA server state                : active
+     ***  Active Info. *** 
+    DB name                        : testdb
+    DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
+    EOF LSA                        : 27726 | 2512
+    Append LSA                     : 27726 | 2512
+    HA server state                : active
 
-	 *** Delay in Copying Active Log *** 
-	Delayed log page count         : 4
-	Estimated Delay                : 0 second(s)
+     *** Delay in Copying Active Log *** 
+    Delayed log page count         : 4
+    Estimated Delay                : 0 second(s)
 
-	 *** Delay in Applying Copied Log *** 
-	Delayed log page count         : 1459
-	Estimated Delay                : 22 second(s)
+     *** Delay in Applying Copied Log *** 
+    Delayed log page count         : 1459
+    Estimated Delay                : 22 second(s)
 
 The items shown by each status are as follows:
 
-*	Applied Info.
-	
-	*	Committed page: The information of committed pageid and offset of a transaction reflected last through replication log reflection process. The difference between this value and the EOF LSA of "Copied Active Info. represents the amount of replication delay.
-	*	Insert Count: The number of Insert queries reflected through replication log reflection process.
-	*	Update Count: The number of Update queries reflected through replication log reflection process.
-	*	Delete Count: The number of Delete queries reflected through replication log reflection process.
-	*	Schema Count: The number of DDL statements reflected through replication log reflection process.
-	*	Commit Count: The number of transactions reflected through replication log reflection process.
-	*	Fail Count: The number of DML and DDL statements in which log reflection through replication log reflection process fails.
-	
-*	Copied Active Info.
-	
-	*	DB name: Name of a target database in which the replication log copy process copies logs
-	*	DB creation time: The creation time of a database copied through replication log copy process
-	*	EOF LSA: Information of pageid and offset copied at the last time on the target node by the replication log copy process. There will be a delay in copying logs as much as difference with the EOF LSA value of "Active Info." and with the Append LSA value of "Copied Active Info."
-	*	Append LSA: Information of pageid and offset written at the last time on the disk by the replication log copy process. This value can be less than or equal to EOF LSA. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
-	*	HA server state: Status of a database server process which replication log copy process receives logs from. For details on status, see :ref:`ha-server`.
-	
-*	Active Info.
-	
-	*	DB name: Name of a database of which node was configured in the **-r** option.
-	*	DB creation time: Database creation time of a node that is configured in the **-r** option.
-	*	EOF LSA: The last information of pageid and offset of a database transaction log of a node that is configured in the **-r** option. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
-	*	Append LSA: Information of pageid and offset written at the last time on the disk by the database of which node was configured in the **-r** option.
-	*	HA server state: The server status of a database server of which node was configured in the **-r** option.
-	
-*	Delay in Copying Active Log
-	
-	*	Delayed log page count: the count of transaction log pages which the copy is delayed.
-	*	Estimated Delay: the expected time which the logs copying is completed.
-	
-*	Delay in Applying Copied Log
+*    Applied Info.
+    
+    *    Committed page: The information of committed pageid and offset of a transaction reflected last through replication log reflection process. The difference between this value and the EOF LSA of "Copied Active Info. represents the amount of replication delay.
+    *    Insert Count: The number of Insert queries reflected through replication log reflection process.
+    *    Update Count: The number of Update queries reflected through replication log reflection process.
+    *    Delete Count: The number of Delete queries reflected through replication log reflection process.
+    *    Schema Count: The number of DDL statements reflected through replication log reflection process.
+    *    Commit Count: The number of transactions reflected through replication log reflection process.
+    *    Fail Count: The number of DML and DDL statements in which log reflection through replication log reflection process fails.
+    
+*    Copied Active Info.
+    
+    *    DB name: Name of a target database in which the replication log copy process copies logs
+    *    DB creation time: The creation time of a database copied through replication log copy process
+    *    EOF LSA: Information of pageid and offset copied at the last time on the target node by the replication log copy process. There will be a delay in copying logs as much as difference with the EOF LSA value of "Active Info." and with the Append LSA value of "Copied Active Info."
+    *    Append LSA: Information of pageid and offset written at the last time on the disk by the replication log copy process. This value can be less than or equal to EOF LSA. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
+    *    HA server state: Status of a database server process which replication log copy process receives logs from. For details on status, see :ref:`ha-server`.
+    
+*    Active Info.
+    
+    *    DB name: Name of a database of which node was configured in the **-r** option.
+    *    DB creation time: Database creation time of a node that is configured in the **-r** option.
+    *    EOF LSA: The last information of pageid and offset of a database transaction log of a node that is configured in the **-r** option. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
+    *    Append LSA: Information of pageid and offset written at the last time on the disk by the database of which node was configured in the **-r** option.
+    *    HA server state: The server status of a database server of which node was configured in the **-r** option.
+    
+*    Delay in Copying Active Log
+    
+    *    Delayed log page count: the count of transaction log pages which the copy is delayed.
+    *    Estimated Delay: the expected time which the logs copying is completed.
+    
+*    Delay in Applying Copied Log
 
-	*	Delayed log page count: the count of transaction log pages which the application is delayed.
-	*	Estimated Delay: the expected time which the logs applying is completed.
-	
+    *    Delayed log page count: the count of transaction log pages which the application is delayed.
+    *    Estimated Delay: the expected time which the logs applying is completed.
+    
 .. _cubrid-changemode:
 
 cubrid changemode
@@ -1014,7 +1014,7 @@ cubrid changemode
 
 This utility is used to check and change the server status of CUBRID HA. ::
 
-	cubrid changemode [option] <database-name@node-name>
+    cubrid changemode [option] <database-name@node-name>
 
 *   *database-name@node-name* : Specifies the name of a server to be checked or changed and separates each node name by using @.
 
@@ -1023,24 +1023,24 @@ This utility is used to check and change the server status of CUBRID HA. ::
 
 .. option:: -m, --mode=MODE
 
-	Changes the server status. You can enter one of the followings:                                                                                                       
-	
-	**standby**, **maintenance** or **active**.
-	
+    Changes the server status. You can enter one of the followings:                                                                                                       
+    
+    **standby**, **maintenance** or **active**.
+    
 .. option:: -f, --force
 
-	Configures whether or not to forcibly change the server status. This option must be configured if you want to change the server status from to-be-active to active.   |
-	
-	If it is not configured, the status will not be changed to active. 
-	Forcibly change may cause data inconsistency among replication nodes; so it is not recommended.                                                                       |
+    Configures whether or not to forcibly change the server status. This option must be configured if you want to change the server status from to-be-active to active.   |
+    
+    If it is not configured, the status will not be changed to active. 
+    Forcibly change may cause data inconsistency among replication nodes; so it is not recommended.                                                                       |
 
 .. option:: -t, --timeout=SECOND
-	
-	The default is 5(seconds). 
+    
+    The default is 5(seconds). 
 
-	Configures the waiting time for the normal completion of the transaction that is being processed when the node status switches from **standby** to **maintenance**. 
-	
-	If the transaction is still in progress beyond the configured time, it will be forced to terminate and switch to **maintenance** status; if all transactions have completed normally within the configured time, it will switch to **maintenance** status immediately. 
+    Configures the waiting time for the normal completion of the transaction that is being processed when the node status switches from **standby** to **maintenance**. 
+    
+    If the transaction is still in progress beyond the configured time, it will be forced to terminate and switch to **maintenance** status; if all transactions have completed normally within the configured time, it will switch to **maintenance** status immediately. 
 
 **Status Changeable**
 
@@ -1068,13 +1068,13 @@ This table shows changeable modes depending on current status.
 
 The following example shows how to switch the *testdb* server status in the localhost node to maintenance. The waiting time for all transactions in progress to complete normally is 5 seconds, which is the default value for the **-t** option. If all transactions are complete within this time limit, the status will be switched immediately. However, if there are transactions still being processed after this time limit, they will be rolled back before changing the status. ::
 
-	$ cubrid changemode -m maintenance testdb@localhost
-	The server 'testdb@localhost''s current HA running mode is maintenance.
+    $ cubrid changemode -m maintenance testdb@localhost
+    The server 'testdb@localhost''s current HA running mode is maintenance.
 
 The following example shows how to retrieve status of the *testdb* server in the localhost node. ::
 
-	$ cubrid changemode testdb@localhost
-	The server 'testdb@localhost''s current HA running mode is active.
+    $ cubrid changemode testdb@localhost
+    The server 'testdb@localhost''s current HA running mode is active.
 
 Monitoring CUBRID Manager HA
 ----------------------------
@@ -1117,30 +1117,30 @@ You can configure each node in the basic structure of HA as shown below:
 
     *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-		ha_mode=on
+        ha_mode=on
 
     *   The following example shows how to configure **cubrid_ha.conf**: ::
 
-		ha_port_id=59901
-		ha_node_list=cubrid@nodeA:nodeB
-		ha_db_list=testdb
+        ha_port_id=59901
+        ha_node_list=cubrid@nodeA:nodeB
+        ha_db_list=testdb
 
 *   **node B** (slave node): Configure this node in the same manner as *node A*.
 
 For the **databases.txt** file of a broker node, it is necessary to configure the list of hosts configured as HA in **db-host** according to their priority. The following example shows the **databases.txt** file. ::
 
-	#db-name    vol-path                  db-host       log-path       lob-base-path
-	testdb     /home/cubrid/DB/testdb1   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
+    #db-name    vol-path                  db-host       log-path       lob-base-path
+    testdb     /home/cubrid/DB/testdb1   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
 
 The **cubrid_broker.conf** file can be set in a variety of ways according to configuration of the broker. It can also be configured as separate equipment with the **databases.txt** file.
 
 The example below shows that the RW broker is set in each node, and *node A* and *node B* have the same value. ::
 
-	[%RW_broker]
-	...
-	 
-	# Broker mode setting parameter
-		ACCESS_MODE             =RW
+    [%RW_broker]
+    ...
+     
+    # Broker mode setting parameter
+        ACCESS_MODE             =RW
 
 **Connection Configuration of Applications**
 
@@ -1173,13 +1173,13 @@ You can configure each node in the basic structure of HA as shown below:
 
     *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-		ha_mode=on
+        ha_mode=on
 
     *   The following example shows how to configure **cubrid_ha.conf**: ::
 
-		ha_port_id=59901
-		ha_node_list=cubrid@nodeA:nodeB:nodeC
-		ha_db_list=testdb
+        ha_port_id=59901
+        ha_node_list=cubrid@nodeA:nodeB:nodeC
+        ha_db_list=testdb
 
 *   **node B** (slave node): Configure this node in the same manner as *node A*.
 
@@ -1187,8 +1187,8 @@ You can configure each node in the basic structure of HA as shown below:
 
 You must enter the list of hosts configured in HA in order of priority in the **databases.txt** file of a broker node. The following is an example of the **databases.txt** file. ::
 
-	#db-name    vol-path                  db-host             log-path       lob-base-path
-	testdb     /home/cubrid/DB/testdb1   nodeA:nodeB:nodeC   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
+    #db-name    vol-path                  db-host             log-path       lob-base-path
+    testdb     /home/cubrid/DB/testdb1   nodeA:nodeB:nodeC   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
 
 The **cubrid_broker.conf** file can be set in a variety of ways according to configuration of the broker. It can also be configured as separate equipment with the **databases.txt** file.
 
@@ -1196,11 +1196,11 @@ In this example, the RW broker is configured in *node A*, *node B*, and *node C*
 
 The following is an example of the **databases.txt** file in *node A*, *node B*, and *node C*. ::
 
-	[%RW_broker]
-	...
-	 
-	# Broker mode setting parameter
-	ACCESS_MODE             =RW
+    [%RW_broker]
+    ...
+     
+    # Broker mode setting parameter
+    ACCESS_MODE             =RW
 
 **Connection Configuration of Applications**
 
@@ -1208,8 +1208,8 @@ Connect the application to access to the broker of *node A*, *node B*, or *node 
 
 .. code-block:: java
 
-	Connection connection = DriverManager.getConnection(
-		"jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000,nodeC:33000", "dba", "");
+    Connection connection = DriverManager.getConnection(
+        "jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000,nodeC:33000", "dba", "");
 
 For details, see :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, and :ref:`ha-php-conf` in Environment Configuration.
 
@@ -1249,14 +1249,14 @@ You can configure each node in load balancing structure as shown below:
 
     *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-		ha_mode=on
+        ha_mode=on
 
     *   The following example shows how to configure **cubrid_ha.conf**: ::
 
-		ha_port_id=59901
-		ha_node_list=cubrid@nodeA:nodeB 
-		ha_replica_list=cubrid@nodeC:nodeD
-		ha_db_list=testdb
+        ha_port_id=59901
+        ha_node_list=cubrid@nodeA:nodeB 
+        ha_replica_list=cubrid@nodeC:nodeD
+        ha_db_list=testdb
 
 *   **node B** (slave node): Configure this node in the same manner as *node A*.
 
@@ -1264,7 +1264,7 @@ You can configure each node in load balancing structure as shown below:
 
     *   Configure the **ha_mode** of the **cubrid.conf** file to **replica**. ::
 
-		ha_mode=replica
+        ha_mode=replica
 
     *   You can configure the **cubrid_ha.conf** file in the same manner as *node A*.
 
@@ -1274,18 +1274,18 @@ You must enter the list of DB server hosts in the order so that each broker can 
 
 The following is an example of the **databases.txt** file in *node A* and *node B*. ::
 
-	#db-name    vol-path                  db-host       log-path             lob-base-path
-	testdb     /home/cubrid/DB/testdb1   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob
+    #db-name    vol-path                  db-host       log-path             lob-base-path
+    testdb     /home/cubrid/DB/testdb1   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob
 
 The following is an example of the **databases.txt** file in *node C*. ::
 
-	#db-name    vol-path                  db-host       log-path             lob-base-path
-	testdb     /home/cubrid/DB/testdb   nodeC   /home/cubrid/DB/testdb/log        file:/home/cubrid/CUBRID/testdb/lob
+    #db-name    vol-path                  db-host       log-path             lob-base-path
+    testdb     /home/cubrid/DB/testdb   nodeC   /home/cubrid/DB/testdb/log        file:/home/cubrid/CUBRID/testdb/lob
 
 The following is an example the **databases.txt** in *node D*. ::
 
-	#db-name    vol-path                  db-host       log-path             lob-base-path
-	testdb     /home/cubrid/DB/testdb   nodeD   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob
+    #db-name    vol-path                  db-host       log-path             lob-base-path
+    testdb     /home/cubrid/DB/testdb   nodeD   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob
 
 The **cubrid_broker.conf** can be set in a variety of ways according to configuration of the broker. It can also be configured as separate equipment with the **databases.txt** file.
 
@@ -1293,29 +1293,29 @@ In this example, the RW broker is configured in *node A* and *node B* and the PH
 
 The following is an example of **cubrid_broker.conf** in *node A* and *node B*. ::
 
-	[%RW_broker]
-	...
-	 
-	# Broker mode setting parameter
-	ACCESS_MODE             =RW
+    [%RW_broker]
+    ...
+     
+    # Broker mode setting parameter
+    ACCESS_MODE             =RW
 
 The following is an example **cubrid_broker.conf** in *node C*. ::
 
-	[%PHRO_broker]
-	...
-	 
-	# Broker mode setting parameter
-	ACCESS_MODE             =PHRO
-	PREFERRED_HOSTS         =nodeC:nodeD
+    [%PHRO_broker]
+    ...
+     
+    # Broker mode setting parameter
+    ACCESS_MODE             =PHRO
+    PREFERRED_HOSTS         =nodeC:nodeD
 
 The following is an example **cubrid_broker.conf** in *node D*. ::
 
-	[%PHRO_broker]
-	...
-	 
-	# Broker mode setting parameter
-	ACCESS_MODE             =PHRO
-	PREFERRED_HOSTS         =nodeD:nodeC
+    [%PHRO_broker]
+    ...
+     
+    # Broker mode setting parameter
+    ACCESS_MODE             =PHRO
+    PREFERRED_HOSTS         =nodeD:nodeC
 
 **Connection Configuration of Applications**
 
@@ -1323,15 +1323,15 @@ Connect the application to access in read/write mode to the broker of *node A* o
 
 .. code-block:: java
 
-	Connection connection = DriverManager.getConnection(
-		"jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000", "dba", "");
+    Connection connection = DriverManager.getConnection(
+        "jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000", "dba", "");
 
 Connect the application to access in read-only mode to the broker of *node C* or *node D*. The following is an example of a JDBC application.
 
 .. code-block:: java
 
-	Connection connection = DriverManager.getConnection(
-		"jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&altHosts=nodeD:33000", "dba", "");
+    Connection connection = DriverManager.getConnection(
+        "jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&altHosts=nodeD:33000", "dba", "");
 
 For details, see :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, and :ref:`ha-php-conf` in Environment Configuration.
 
@@ -1358,49 +1358,49 @@ You can configure each node in the basic structure of HA as shown below:
 
     *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-		ha_mode=on
+        ha_mode=on
 
     *   The following example shows how to configure **cubrid_ha.conf**. ::
 
-		ha_port_id=10000
-		ha_node_list=cubridA@Host1:Host5
-		ha_db_list=testdbA1,testdbA2
+        ha_port_id=10000
+        ha_node_list=cubridA@Host1:Host5
+        ha_db_list=testdbA1,testdbA2
 
 *   **node BM**, **node BS** : Configure them in the same manner.
 
     *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-		ha_mode=on
+        ha_mode=on
 
     *   The following example shows how to configure **cubrid_ha.conf**. ::
 
-		ha_port_id=10001
-		ha_node_list=cubridB@Host2:Host5
-		ha_db_list=testdbB1,testdbB2
+        ha_port_id=10001
+        ha_node_list=cubridB@Host2:Host5
+        ha_db_list=testdbB1,testdbB2
 
 *   **node CM**, **node CS** : Configure them in the same manner.
 
     *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-		ha_mode=on
+        ha_mode=on
 
     *   The following example shows how to configure **cubrid_ha.conf**. ::
 
-		ha_port_id=10002
-		ha_node_list=cubridC@Host3:Host5
-		ha_db_list=testdbC1,testdbC2
+        ha_port_id=10002
+        ha_node_list=cubridC@Host3:Host5
+        ha_db_list=testdbC1,testdbC2
 
 *   **node DM**, **node DS** : Configure them in the same manner.
 
     *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-		ha_mode=on
+        ha_mode=on
 
     *   The following is an example of the **cubrid_ha.conf** configuration. ::
 
-		ha_port_id=10003
-		ha_node_list=cubridD@Host4:Host5
-		ha_db_list=testdbD1,testdbD2
+        ha_port_id=10003
+        ha_node_list=cubridD@Host4:Host5
+        ha_db_list=testdbD1,testdbD2
 
 Constraints
 ===========
@@ -1465,102 +1465,102 @@ Using the above instructions, build a new slave node by following these steps, i
 
 #.  Stop the master node service. ::
 
-	[nodeA]$ cubrid service stop
+    [nodeA]$ cubrid service stop
 
 #.  Set the master node HA and the slave node HA.
 
     *   Set the **$CUBRID/conf/cubrid.conf** as identical for both the master node and the slave node. ::
 
-		...
+        ...
 
-		[common]
-		service=server,broker,manager
+        [common]
+        service=server,broker,manager
 
-		# Add the database name to run when starting the service
-		server=testdb
+        # Add the database name to run when starting the service
+        server=testdb
 
-		...
+        ...
 
-		# Add when configuring the HA (Logging parameters)
-		log_max_archives=100
-		force_remove_log_archives=no
+        # Add when configuring the HA (Logging parameters)
+        log_max_archives=100
+        force_remove_log_archives=no
 
-		# Add when configuring the HA (HA mode)
-		ha_mode=on
+        # Add when configuring the HA (HA mode)
+        ha_mode=on
 
     *   Set the **$CUBRID/conf/cubrid_ha.conf** as identical for both the master node and the slave node. ::
 
-		[common]
-		ha_port_id=59901
-		ha_node_list=cubrid@nodeA:nodeB
-		ha_db_list=testdb
-		ha_copy_sync_mode=sync:sync
-		ha_apply_max_mem_size=500
+        [common]
+        ha_port_id=59901
+        ha_node_list=cubrid@nodeA:nodeB
+        ha_db_list=testdb
+        ha_copy_sync_mode=sync:sync
+        ha_apply_max_mem_size=500
 
     *   Set the **$CUBRID_DATABASES/databases.txt** as identical for both the master node and the slave node. ::
 
-		#db-name    vol-path        db-host     log-path     lob-base-path
-		testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
+        #db-name    vol-path        db-host     log-path     lob-base-path
+        testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
-		
-	*   Create a database directory to the slave node. ::
-	
-		[nodeB]$ cd $CUBRID_DATABASES
-		[nodeB]$ mkdir testdb
+        
+    *   Create a database directory to the slave node. ::
+    
+        [nodeB]$ cd $CUBRID_DATABASES
+        [nodeB]$ mkdir testdb
 
     *   Create the log directory to the slave node(same location with the master node). ::
 
-		[nodeB]$ cd $CUBRID_DATABASES/testdb
-		[nodeB]$ mkdir log
+        [nodeB]$ cd $CUBRID_DATABASES/testdb
+        [nodeB]$ mkdir log
 
 #.  Back up the database of the master node and copy the backup file to the slave node. If the location where the backup file will be saved in the master node is not specified, the location is set as the log directory of *testdb* by default. Copy the backup file to the same location in the slave node. *testdb* _bk0v000 is the backup volume file and *testdb* _bkvinf is the backup volume information file. ::
 
-	[nodeA]$ cubrid backupdb -z -S testdb
-	Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 16:05:18 2012
-	[nodeA]$ cd $CUBRID_DATABASES/testdb/log
-	[nodeA]$ scp testdb_bk* cubrid_usr@nodeB:/home/cubrid_usr/CUBRID/databases/testdb/log
-	cubrid_usr@nodeB's password:
-	testdb_bk0v000                            100% 6157KB   6.0MB/s   00:00
-	testdb_bkvinf                             100%   66     0.1KB/s   00:00
+    [nodeA]$ cubrid backupdb -z -S testdb
+    Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 16:05:18 2012
+    [nodeA]$ cd $CUBRID_DATABASES/testdb/log
+    [nodeA]$ scp testdb_bk* cubrid_usr@nodeB:/home/cubrid_usr/CUBRID/databases/testdb/log
+    cubrid_usr@nodeB's password:
+    testdb_bk0v000                            100% 6157KB   6.0MB/s   00:00
+    testdb_bkvinf                             100%   66     0.1KB/s   00:00
 
 #.  Recover the database in the slave node. At this time, the volume path of the master node must be identical to that of the slave node. ::
 
-	[nodeB]$ cubrid restoredb -B $CUBRID_DATABASES/testdb/log demodb
-	
+    [nodeB]$ cubrid restoredb -B $CUBRID_DATABASES/testdb/log demodb
+    
 #.  Start the master node ::
 
-	[nodeA]$ cubrid heartbeat start
+    [nodeA]$ cubrid heartbeat start
 
 #.  After confirming that the master node has started, start the slave node. If *nodeA* is changed from to-be-master to master, it means that the master node has been successfully started. ::
 
-	[nodeA]$ cubrid heartbeat status
-	@ cubrid heartbeat status
-	 
-	 HA-Node Info (current nodeA, state master)
-	   Node nodeB (priority 2, state unknown)
-	   Node nodeA (priority 1, state master)
-	 
-	 HA-Process Info (master 123, state master)
-	 
-	   Applylogdb testdb@localhost:/home1/cubrid/DB/tdb01_nodeB (pid 234, state registered)
-	   Copylogdb testdb@nodeB:/home1/cubrid/DB/tdb01_nodeB (pid 345, state registered)
-	   Server tdb01 (pid 456, state registered_and_to_be_active)
-	 
-	[nodeB]$ cubrid heartbeat start
+    [nodeA]$ cubrid heartbeat status
+    @ cubrid heartbeat status
+     
+     HA-Node Info (current nodeA, state master)
+       Node nodeB (priority 2, state unknown)
+       Node nodeA (priority 1, state master)
+     
+     HA-Process Info (master 123, state master)
+     
+       Applylogdb testdb@localhost:/home1/cubrid/DB/tdb01_nodeB (pid 234, state registered)
+       Copylogdb testdb@nodeB:/home1/cubrid/DB/tdb01_nodeB (pid 345, state registered)
+       Server tdb01 (pid 456, state registered_and_to_be_active)
+     
+    [nodeB]$ cubrid heartbeat start
 
 #.  Confirm that the HA configurations of the master node and the slave node are successfully running ::
 
-	[nodeA]$ csql -u dba testdb@localhost -c"create table tbl(i int primary key);insert into tbl values (1),(2),(3)"
-	 
-	[nodeB]$ csql -u dba testdb@localhost -c"select * from tbl"
-	 
-	=== <Result of SELECT Command in Line 1> ===
-	 
-				i
-	=============
-				1
-				2
-				3
+    [nodeA]$ csql -u dba testdb@localhost -c"create table tbl(i int primary key);insert into tbl values (1),(2),(3)"
+     
+    [nodeB]$ csql -u dba testdb@localhost -c"select * from tbl"
+     
+    === <Result of SELECT Command in Line 1> ===
+     
+                i
+    =============
+                1
+                2
+                3
 
 Operation Scenario during Read/Write Service
 --------------------------------------------
@@ -1699,60 +1699,60 @@ Replication mismatch between replication nodes, indicating that data of the mast
 
 *   On the slave node, execute **cubrid applyinfo** to check the "Fail count" value. If the "Fail count" is 0, it can be determined that no transaction has failed in replication (see :ref:`cubrid-applyinfo`.) ::
 
-	[nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
-	 
-	 *** Applied Info. ***
-	Committed page                 : 1913 | 2904
-	Insert count                   : 645
-	Update count                   : 0
-	Delete count                   : 0
-	Schema count                   : 60
-	Commit count                   : 15
-	Fail count                     : 0
-	...
+    [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
+     
+     *** Applied Info. ***
+    Committed page                 : 1913 | 2904
+    Insert count                   : 645
+    Update count                   : 0
+    Delete count                   : 0
+    Schema count                   : 60
+    Commit count                   : 15
+    Fail count                     : 0
+    ...
 
 *   To check whether copying replication logs has been delayed or not on the slave node, execute **cubrid applyinfo** and compare the "Append LSA" value of "Copied Active Info." to the "Append LSA" value of "Active Info.". If there is a big difference between the two values, it means that delay has occurred while copying the replication logs to the slave node (see :ref:`cubrid-applyinfo`.) ::
 
-	[nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
+    [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
  
-	...
-	 
-	 *** Copied Active Info. ***
-	DB name                        : testdb
-	DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-	EOF LSA                        : 1913 | 2976
-	Append LSA                     : 1913 | 2976
-	HA server state                : active
-	 
-	 ***  Active Info. ***
-	DB name                        : testdb
-	DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-	EOF LSA                        : 1913 | 2976
-	Append LSA                     : 1913 | 2976
-	HA server state                : active
+    ...
+     
+     *** Copied Active Info. ***
+    DB name                        : testdb
+    DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
+    EOF LSA                        : 1913 | 2976
+    Append LSA                     : 1913 | 2976
+    HA server state                : active
+     
+     ***  Active Info. ***
+    DB name                        : testdb
+    DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
+    EOF LSA                        : 1913 | 2976
+    Append LSA                     : 1913 | 2976
+    HA server state                : active
 
 *   If a delay seems to occur when copying the replication logs, check whether the network line speed is slow, whether there is sufficient free disk space, disk I/O is normal, etc.
 
 *   To check the delay in applying the replication log in the slave node, execute **cubrid applyinfo** and compare the "Committed page" value of "Applied Info." to the "EOF LSA" value of "Copied Active Info.". If there is a big difference between the two values, it means that a delay has occurred while applying the replication logs to the slave database (see :ref:`cubrid-applyinfo`.) ::
 
-	[nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
+    [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
  
-	 *** Applied Info. ***
-	Committed page                 : 1913 | 2904
-	Insert count                   : 645
-	Update count                   : 0
-	Delete count                   : 0
-	Schema count                   : 60
-	Commit count                   : 15
-	Fail count                     : 0
-	 
-	 *** Copied Active Info. ***
-	DB name                        : testdb
-	DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-	EOF LSA                        : 1913 | 2976
-	Append LSA                     : 1913 | 2976
-	HA server state                : active
-	...
+     *** Applied Info. ***
+    Committed page                 : 1913 | 2904
+    Insert count                   : 645
+    Update count                   : 0
+    Delete count                   : 0
+    Schema count                   : 60
+    Commit count                   : 15
+    Fail count                     : 0
+     
+     *** Copied Active Info. ***
+    DB name                        : testdb
+    DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
+    EOF LSA                        : 1913 | 2976
+    Append LSA                     : 1913 | 2976
+    HA server state                : active
+    ...
 
 
 *   If the delay in applying the replication logs is too long, it may be due to a transaction with a long execution time. If the transaction is performed normally, a delay in applying the replication logs may normally occur. To determine whether it is normal or abnormal, continuously execute **cubrid applyinfo** and check whether applylogdb continuously applies replication logs to the slave node or not.
@@ -2039,102 +2039,102 @@ Rebuilding replications can be performed while the master node is running, howev
 
 Before starting to rebuild replications by executing the **ha_make_slavedb.sh** script, stop the HA service of the slave node and configure the **ha_make_slavedb.sh** script as shown below. Configure the host name of the master node to replicate (*nodeA*) to target_host and configure the nome directory of the replication log (default value: $CUBRID_DATABASES) to repl_log_home. ::
 
-	[nodeB]$ cubrid heartbeat stop
-	 
-	[nodeB]$ cd $CUBRID/share/scripts/ha
-	[nodeB]$ vi ha_make_slavedb.sh
-	target_host=nodeA
+    [nodeB]$ cubrid heartbeat stop
+     
+    [nodeB]$ cd $CUBRID/share/scripts/ha
+    [nodeB]$ vi ha_make_slavedb.sh
+    target_host=nodeA
 
 After configuration, execute the **ha_make_slavedb.sh** script on the slave node. ::
 
-	[nodeB]$ cd $CUBRID/share/scripts/ha
-	[nodeB]$ ./ha_make_slavedb.sh
+    [nodeB]$ cd $CUBRID/share/scripts/ha
+    [nodeB]$ ./ha_make_slavedb.sh
 
 When any error occurs while executing the script in step-by-step order, or if the script should be restarted before being stopped by entering n, you can enter s for the steps which have been succeeded and go to the next step.
 
 1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question. ::
 
-	##### step 1 ###################################################################
-	#
-	# get HA/replica user password and DBA password
-	#
-	#  * warning !!!
-	#   - Because ha_make_slavedb.sh use expect (ssh, scp) to control HA/replica node,
-	#     the script has to know these passwords.
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
+    ##### step 1 ###################################################################
+    #
+    # get HA/replica user password and DBA password
+    #
+    #  * warning !!!
+    #   - Because ha_make_slavedb.sh use expect (ssh, scp) to control HA/replica node,
+    #     the script has to know these passwords.
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
 
     Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. ::
 
-	HA/replica cubrid_usr's password :
-	HA/replica cubrid_usr's password :
+    HA/replica cubrid_usr's password :
+    HA/replica cubrid_usr's password :
 
-	testdb's DBA password :
-	Retype testdb's DBA password :
+    testdb's DBA password :
+    Retype testdb's DBA password :
 
 2.  At this step, check whether the environment variables of the slave node are correct. Enter y to the question. ::
 
-	##### step 2 ###################################################################
-	#
-	#  ha_make_slavedb.sh is the script for making slave database more easily
-	#
-	#  * environment
-	#   - db_name           : testdb
-	#
-	#   - master_host       : nodeA
-	#   - slave_host        : nodeB
-	#   - replica_hosts     :
-	#
-	#   - current_host      : nodeB
-	#   - current_state     : slave
-	#
-	#   - target_host       : nodeA
-	#   - target_state      : master
-	#
-	#   - repl_log_home     : /home/cubrid_usr/CUBRID/databases
-	#   - backup_dest_path  : /home/cubrid_usr/.ha/backup
-	#   - backup_option     :
-	#   - restore_option    :
-	#
-	#  * warning !!!
-	#   - environment on slave must be same as master
-	#   - database and replication log on slave will be deleted
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
+    ##### step 2 ###################################################################
+    #
+    #  ha_make_slavedb.sh is the script for making slave database more easily
+    #
+    #  * environment
+    #   - db_name           : testdb
+    #
+    #   - master_host       : nodeA
+    #   - slave_host        : nodeB
+    #   - replica_hosts     :
+    #
+    #   - current_host      : nodeB
+    #   - current_state     : slave
+    #
+    #   - target_host       : nodeA
+    #   - target_state      : master
+    #
+    #   - repl_log_home     : /home/cubrid_usr/CUBRID/databases
+    #   - backup_dest_path  : /home/cubrid_usr/.ha/backup
+    #   - backup_option     :
+    #   - restore_option    :
+    #
+    #  * warning !!!
+    #   - environment on slave must be same as master
+    #   - database and replication log on slave will be deleted
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
 
 3.  At this step, copy the HA-related scripts of the slave node to the master node. Enter y to the question. Then the password will be asked for when you access the master node in every step. In addition, the password will be asked for when you send a file by using the scp command. ::
 
-	##### step 3 ###################################################################
-	#
-	#  copy scripts to master node
-	#
-	#  * details
-	#   - scp scripts to '~/.ha' on nodeA(master).
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	[nodeB]$ tar -zcf ha.tgz ha
-	[nodeA]$ rm -rf /home/cubrid_usr/.ha
-	cubrid_usr@nodeA's password:
-	Connection to nodeA closed.
-	[nodeB]$ scp -l 131072 -r ./../ha.tgz cubrid_usr@nodeA:/home1/cubrid_usr
-	cubrid_usr@nodeA's password:
-	ha.tgz                    100%   10KB  10.4KB/s   00:00
-	[nodeA]$ tar -zxf ha.tgz
-	cubrid_usr@nodeA's password:
-	Connection to nodeA closed.
-	[nodeA]$ mv ha /home/cubrid_usr/.ha
-	cubrid_usr@nodeA's password:
-	Connection to nodeA closed.
-	[nodeA]$ mkdir /home/cubrid_usr/.ha/backup
-	cubrid_usr@nodeA's password:
-	Connection to nodeA closed.
+    ##### step 3 ###################################################################
+    #
+    #  copy scripts to master node
+    #
+    #  * details
+    #   - scp scripts to '~/.ha' on nodeA(master).
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+    [nodeB]$ tar -zcf ha.tgz ha
+    [nodeA]$ rm -rf /home/cubrid_usr/.ha
+    cubrid_usr@nodeA's password:
+    Connection to nodeA closed.
+    [nodeB]$ scp -l 131072 -r ./../ha.tgz cubrid_usr@nodeA:/home1/cubrid_usr
+    cubrid_usr@nodeA's password:
+    ha.tgz                    100%   10KB  10.4KB/s   00:00
+    [nodeA]$ tar -zxf ha.tgz
+    cubrid_usr@nodeA's password:
+    Connection to nodeA closed.
+    [nodeA]$ mv ha /home/cubrid_usr/.ha
+    cubrid_usr@nodeA's password:
+    Connection to nodeA closed.
+    [nodeA]$ mkdir /home/cubrid_usr/.ha/backup
+    cubrid_usr@nodeA's password:
+    Connection to nodeA closed.
 
     To skip the password entry while executing the scp command, configure the secret key of the scp to the slave node and the public key to the master node, as shown below. For more details, see How to Use ssh-keygen for Linux. 
 
@@ -2144,120 +2144,120 @@ When any error occurs while executing the script in step-by-step order, or if th
 
 4.  At this step, copy the HA-related scripts to the replica node. In this scenario, if there is no replica node, skip this step and go to the next step by entering. ::
 
-	##### step 4 #####################################
-	#
-	#  copy scripts to replication node
-	#
-	#  * details
-	#   - scp scripts to '~/.ha' on replication node.
-	#
-	##################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	There is no replication server to copy scripts.
+    ##### step 4 #####################################
+    #
+    #  copy scripts to replication node
+    #
+    #  * details
+    #   - scp scripts to '~/.ha' on replication node.
+    #
+    ##################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+    There is no replication server to copy scripts.
 
 5.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. ::
 
-	##### step 5 ###################################################################
-	#
-	#  check environment of all ha node
-	#
-	#  * details
-	#   - test $CUBRID == /home1/cubrid_usr/CUBRID
-	#   - test $CUBRID_DATABASES == /home1/cubrid_usr/CUBRID/database
-	#   - test -d /home1/cubrid_usr/CUBRID/database/testdb
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
+    ##### step 5 ###################################################################
+    #
+    #  check environment of all ha node
+    #
+    #  * details
+    #   - test $CUBRID == /home1/cubrid_usr/CUBRID
+    #   - test $CUBRID_DATABASES == /home1/cubrid_usr/CUBRID/database
+    #   - test -d /home1/cubrid_usr/CUBRID/database/testdb
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
 
 6.  At this step, stop replication of the master node. Enter y to the question. ::
 
-	##### step 6 ###################################################################
-	#
-	#  suspend copylogdb/applylogdb on master if running
-	#
-	#  * details
-	#   - deregister copylogdb/applylogdb on nodeA(master).
-	#
-	################################################################################
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	[nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_suspend.sh -l /home/cubrid_usr/CUBRID/databases -d testdb -h nodeB -o /home/cubrid_usr/.ha/repl_utils.output
-	cubrid_usr@nodeA's password:
-	[nodeA]$ cubrid heartbeat deregister 9408
-	suspend: (9408) cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
-	[nodeA]$ cubrid heartbeat deregister 9410
-	suspend: (9410) cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
-	 
-	 
-	3. heartbeat status on nodeA(master).
-	 
-	[nodeA]$ cubrid heartbeat list
-	@ cubrid heartbeat list
-	 
-	 HA-Node Info (current nodeA, state master)
-	   Node nodeB (priority 2, state unknown)
-	   Node nodeA (priority 1, state master)
-	 
-	 
-	 HA-Process Info (master 8362, state master)
-	   Copylogdb testdb@nodeB:/home/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 9408, state deregistered)
-	   Server testdb (pid 9196, state registered_and_active)
-	 
-	Connection to nodeA closed.
-	Wait for 60s to deregister coppylogdb/applylogdb.
-	............................................................
+    ##### step 6 ###################################################################
+    #
+    #  suspend copylogdb/applylogdb on master if running
+    #
+    #  * details
+    #   - deregister copylogdb/applylogdb on nodeA(master).
+    #
+    ################################################################################
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+    [nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_suspend.sh -l /home/cubrid_usr/CUBRID/databases -d testdb -h nodeB -o /home/cubrid_usr/.ha/repl_utils.output
+    cubrid_usr@nodeA's password:
+    [nodeA]$ cubrid heartbeat deregister 9408
+    suspend: (9408) cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
+    [nodeA]$ cubrid heartbeat deregister 9410
+    suspend: (9410) cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
+     
+     
+    3. heartbeat status on nodeA(master).
+     
+    [nodeA]$ cubrid heartbeat list
+    @ cubrid heartbeat list
+     
+     HA-Node Info (current nodeA, state master)
+       Node nodeB (priority 2, state unknown)
+       Node nodeA (priority 1, state master)
+     
+     
+     HA-Process Info (master 8362, state master)
+       Copylogdb testdb@nodeB:/home/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 9408, state deregistered)
+       Server testdb (pid 9196, state registered_and_active)
+     
+    Connection to nodeA closed.
+    Wait for 60s to deregister coppylogdb/applylogdb.
+    ............................................................
 
 7.  At this step, delete the old replication log from the slave node and initialize the HA meta information table of the master node. Enter y to the question. ::
 
-	##### step 7 ###################################################################
-	#
-	#  remove old copy log of slave and init db_ha_apply_info on master
-	#
-	#  * details
-	#   - remove old copy log of slave
-	#   - init db_ha_apply_info on master
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	- 1. remove old copy log.
-	 
-	[nodeA]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeB/*
-	cubrid_usr@nodeA's password:
-	Connection to nodeA closed.
-	 
-	 - 2. init db_ha_apply_info.
-	 
-	[nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "delete from db_ha_apply_info where db_name='testdb'"
-	cubrid_usr@nodeA's password:
-	Connection to nodeA closed.
-	[nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "select * from db_ha_apply_info where db_name='testdb'"
-	cubrid_usr@nodeA's password:
-	 
-	=== <Result of SELECT Command in Line 1> ===
-	 
-	There are no results.
-	Connection to nodeA closed.
+    ##### step 7 ###################################################################
+    #
+    #  remove old copy log of slave and init db_ha_apply_info on master
+    #
+    #  * details
+    #   - remove old copy log of slave
+    #   - init db_ha_apply_info on master
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+    - 1. remove old copy log.
+     
+    [nodeA]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeB/*
+    cubrid_usr@nodeA's password:
+    Connection to nodeA closed.
+     
+     - 2. init db_ha_apply_info.
+     
+    [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "delete from db_ha_apply_info where db_name='testdb'"
+    cubrid_usr@nodeA's password:
+    Connection to nodeA closed.
+    [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "select * from db_ha_apply_info where db_name='testdb'"
+    cubrid_usr@nodeA's password:
+     
+    === <Result of SELECT Command in Line 1> ===
+     
+    There are no results.
+    Connection to nodeA closed.
 
 8.  At this step, initialize the HA meta information table of replica node. In this scenario, if there is no replica node, skip this step and go to the next step by entering s. ::
 
-	##### step 8 ###################################################################
-	#
-	#  remove old copy log of slave and init db_ha_apply_info on replications
-	#
-	#  * details
-	#   - remove old copy log of replica
-	#   - init db_ha_apply_info on master
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	There is no replication server to init ha_info
+    ##### step 8 ###################################################################
+    #
+    #  remove old copy log of slave and init db_ha_apply_info on replications
+    #
+    #  * details
+    #   - remove old copy log of replica
+    #   - init db_ha_apply_info on master
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+    There is no replication server to init ha_info
 
 9.  At this step, create a backup volume from the master node (target_host) for HA replication rebuilding. You can skip this step and go to the next step by entering s if there is an existing backup volume. There are some constraints for rebuilding replication by using the existing backup volume, which are as follows:
 
@@ -2269,292 +2269,292 @@ When any error occurs while executing the script in step-by-step order, or if th
 
     ::
 
-	##### step 9 ###################################################################
-	#
-	#  online backup database  on master
-	#
-	#  * details
-	#   - run 'cubrid backupdb -C -D ... -o ... testdb@localhost' on master
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	[nodeA]$ cubrid backupdb  -C -D /home/cubrid_usr/.ha/backup -o /home/cubrid_usr/.ha/backup/testdb.bkup.output testdb@localhost
-	cubrid_usr@nodeA's password:
-	Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 18:52:03 2012
-	Connection to nodeA closed.
-	[nodeA]$ cat /home/cubrid_usr/.ha/backup/testdb.bkup.output
-	cubrid_usr@nodeA's password:
-	[ Database(testdb) Full Backup start ]
-	 
-	- num-threads: 2
-	 
-	- compression method: NONE
-	 
-	- backup start time: Thu Apr 19 18:52:03 2012
-	 
-	- number of permanent volumes: 1
-	 
-	- HA apply info: testdb 1334739766 715 8680
-	 
-	- backup progress status
-	 
-	-----------------------------------------------------------------------------
-	 volume name                  | # of pages | backup progress status    | done
-	-----------------------------------------------------------------------------
-	 testdb_vinf                  |          1 | ######################### | done
-	 testdb                       |       6400 | ######################### | done
-	 testdb_lgar000               |       6400 | ######################### | done
-	 testdb_lgar001               |       6400 | ######################### | done
-	 testdb_lginf                 |          1 | ######################### | done
-	 testdb_lgat                  |       6400 | ######################### | done
-	-----------------------------------------------------------------------------
-	 
-	# backup end time: Thu Apr 19 18:52:06 2012
-	 
-	[ Database(testdb) Full Backup end ]
-	Connection to nodeA closed.
+    ##### step 9 ###################################################################
+    #
+    #  online backup database  on master
+    #
+    #  * details
+    #   - run 'cubrid backupdb -C -D ... -o ... testdb@localhost' on master
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+    [nodeA]$ cubrid backupdb  -C -D /home/cubrid_usr/.ha/backup -o /home/cubrid_usr/.ha/backup/testdb.bkup.output testdb@localhost
+    cubrid_usr@nodeA's password:
+    Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 18:52:03 2012
+    Connection to nodeA closed.
+    [nodeA]$ cat /home/cubrid_usr/.ha/backup/testdb.bkup.output
+    cubrid_usr@nodeA's password:
+    [ Database(testdb) Full Backup start ]
+     
+    - num-threads: 2
+     
+    - compression method: NONE
+     
+    - backup start time: Thu Apr 19 18:52:03 2012
+     
+    - number of permanent volumes: 1
+     
+    - HA apply info: testdb 1334739766 715 8680
+     
+    - backup progress status
+     
+    -----------------------------------------------------------------------------
+     volume name                  | # of pages | backup progress status    | done
+    -----------------------------------------------------------------------------
+     testdb_vinf                  |          1 | ######################### | done
+     testdb                       |       6400 | ######################### | done
+     testdb_lgar000               |       6400 | ######################### | done
+     testdb_lgar001               |       6400 | ######################### | done
+     testdb_lginf                 |          1 | ######################### | done
+     testdb_lgat                  |       6400 | ######################### | done
+    -----------------------------------------------------------------------------
+     
+    # backup end time: Thu Apr 19 18:52:06 2012
+     
+    [ Database(testdb) Full Backup end ]
+    Connection to nodeA closed.
 
 10. At this step, copy the database backup of the master node to the slave node. Enter y to the question. ::
 
-	##### step 10 ###################################################################
-	#
-	#  copy testdb databases backup to current host
-	#
-	#  * details
-	#   - scp databases.txt from target host if there's no testdb info on current host
-	#   - remove old database and replication log if exist
-	#   - make new database volume and replication path
-	#   - scp  database backup to current host
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	 
-	 - 1. check if the databases information is already registered.
-	 
-	 
-	 - thres's already testdb information in /home/cubrid_usr/CUBRID/databases/databases.txt
-	[nodeB]$ grep testdb /home/cubrid_usr/CUBRID/databases/databases.txt
-	testdb          /home/cubrid_usr/CUBRID/databases/testdb        nodeA:nodeB /home/cubrid_usr/CUBRID/databases/testdb/log file:/home/cubrid_usr/CUBRID/databases/testdb/lob
-	 
-	 - 2. get db_vol_path and db_log_path from databases.txt.
-	 
-	 
-	 - 3. remove old database and replication log.
-	 
-	[nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb/log
-	[nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb
-	[nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_*
-	 
-	 - 4. make new database volume and replication log directory.
-	 
-	[nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb
-	[nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb/log
-	[nodeB]$ mkdir -p /home/cubrid_usr/.ha
-	[nodeB]$ rm -rf /home/cubrid_usr/.ha/backup
-	[nodeB]$ mkdir -p /home/cubrid_usr/.ha/backup
-	 
-	 - 5. copy backup volume and log from target host
-	 
-	cubrid_usr@nodeA's password:
-	testdb_bkvinf              100%   49     0.1KB/s   00:00
-	cubrid_usr@nodeA's password:
-	testdb_bk0v000             100% 1540MB   7.8MB/s   03:18
-	testdb.bkup.output         100% 1023     1.0KB/s   00:00
+    ##### step 10 ###################################################################
+    #
+    #  copy testdb databases backup to current host
+    #
+    #  * details
+    #   - scp databases.txt from target host if there's no testdb info on current host
+    #   - remove old database and replication log if exist
+    #   - make new database volume and replication path
+    #   - scp  database backup to current host
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+     
+     - 1. check if the databases information is already registered.
+     
+     
+     - thres's already testdb information in /home/cubrid_usr/CUBRID/databases/databases.txt
+    [nodeB]$ grep testdb /home/cubrid_usr/CUBRID/databases/databases.txt
+    testdb          /home/cubrid_usr/CUBRID/databases/testdb        nodeA:nodeB /home/cubrid_usr/CUBRID/databases/testdb/log file:/home/cubrid_usr/CUBRID/databases/testdb/lob
+     
+     - 2. get db_vol_path and db_log_path from databases.txt.
+     
+     
+     - 3. remove old database and replication log.
+     
+    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb/log
+    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb
+    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_*
+     
+     - 4. make new database volume and replication log directory.
+     
+    [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb
+    [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb/log
+    [nodeB]$ mkdir -p /home/cubrid_usr/.ha
+    [nodeB]$ rm -rf /home/cubrid_usr/.ha/backup
+    [nodeB]$ mkdir -p /home/cubrid_usr/.ha/backup
+     
+     - 5. copy backup volume and log from target host
+     
+    cubrid_usr@nodeA's password:
+    testdb_bkvinf              100%   49     0.1KB/s   00:00
+    cubrid_usr@nodeA's password:
+    testdb_bk0v000             100% 1540MB   7.8MB/s   03:18
+    testdb.bkup.output         100% 1023     1.0KB/s   00:00
 
 11. At this step, restore the copied database backup to the slave node. Enter y to the question. ::
 
-	##### step 11 ###################################################################
-	#
-	#  restore database testdb on current host
-	#
-	#  * details
-	#   - cubrid restoredb -B ... testdb current host
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	[nodeB]$ cubrid restoredb -B /home/cubrid_usr/.ha/backup  testdb
+    ##### step 11 ###################################################################
+    #
+    #  restore database testdb on current host
+    #
+    #  * details
+    #   - cubrid restoredb -B ... testdb current host
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+    [nodeB]$ cubrid restoredb -B /home/cubrid_usr/.ha/backup  testdb
 
 12. At this step, configure the HA meta information table value of the slave node. Enter y to the question. ::
 
-	##### step 12 ###################################################################
-	#
-	#  set db_ha_apply_info on slave
-	#
-	#  * details
-	#   - insert db_ha_apply_info on slave
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	 
-	 
-	1. get db_ha_apply_info from backup output(/home1/cubrid_usr/.ha/backup/testdb.bkup.output).
-	 
-	 - dn_name       : testdb
-	 - db_creation   : 1349426614
-	 - pageid        : 86
-	 - offset        : 8800
-	 - log_path      : /home1/cubrid_usr/CUBRID/databases/testdb_nodeA
-	 
-	 
-	 
-	2. select old db_ha_apply_info.
-	 
-	[nodeA]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
-	 
-	=== <Result of SELECT Command in Line 1> ===
-	 
-	There are no results.
-	 
-	 
-	 
-	3. insert new db_ha_apply_info on slave.
-	 
-	[nodeB]$ csql --sysadm -u dba -S testdb -c "DELETE FROM db_ha_apply_info WHERE db_name='testdb'"
-	[nodeB]$ csql --sysadm -u DBA -S testdb -c "INSERT INTO  db_ha_apply_info VALUES (       'testdb',       datetime '10/05/2012 17:43:34',         '/home1/cubrid_usr/DB/testdb_nodeA',         86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       NULL,   NULL,   NULL,   0,      0,      0,      0,      0,      0,      0,      NULL )"
-	[nodeB]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
-	 
-	=== <Result of SELECT Command in Line 1> ===
-	 
-	<00001> db_name             : 'testdb'
-			db_creation_time    : 05:43:34.000 PM 10/05/2012
-			copied_log_path     : '/home1/cubrid_usr/CUBRID/databases/testdb_nodeA'
-			committed_lsa_pageid: 86
-			committed_lsa_offset: 8800
-			committed_rep_pageid: 86
-			committed_rep_offset: 8800
-			required_lsa_pageid : 86
-			required_lsa_offset : 8800
+    ##### step 12 ###################################################################
+    #
+    #  set db_ha_apply_info on slave
+    #
+    #  * details
+    #   - insert db_ha_apply_info on slave
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+     
+     
+    1. get db_ha_apply_info from backup output(/home1/cubrid_usr/.ha/backup/testdb.bkup.output).
+     
+     - dn_name       : testdb
+     - db_creation   : 1349426614
+     - pageid        : 86
+     - offset        : 8800
+     - log_path      : /home1/cubrid_usr/CUBRID/databases/testdb_nodeA
+     
+     
+     
+    2. select old db_ha_apply_info.
+     
+    [nodeA]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
+     
+    === <Result of SELECT Command in Line 1> ===
+     
+    There are no results.
+     
+     
+     
+    3. insert new db_ha_apply_info on slave.
+     
+    [nodeB]$ csql --sysadm -u dba -S testdb -c "DELETE FROM db_ha_apply_info WHERE db_name='testdb'"
+    [nodeB]$ csql --sysadm -u DBA -S testdb -c "INSERT INTO  db_ha_apply_info VALUES (       'testdb',       datetime '10/05/2012 17:43:34',         '/home1/cubrid_usr/DB/testdb_nodeA',         86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       NULL,   NULL,   NULL,   0,      0,      0,      0,      0,      0,      0,      NULL )"
+    [nodeB]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
+     
+    === <Result of SELECT Command in Line 1> ===
+     
+    <00001> db_name             : 'testdb'
+            db_creation_time    : 05:43:34.000 PM 10/05/2012
+            copied_log_path     : '/home1/cubrid_usr/CUBRID/databases/testdb_nodeA'
+            committed_lsa_pageid: 86
+            committed_lsa_offset: 8800
+            committed_rep_pageid: 86
+            committed_rep_offset: 8800
+            required_lsa_pageid : 86
+            required_lsa_offset : 8800
 
 13. At this step, initial the replication log of the master node and then copy the storage log of the master node to the slave node. Enter y to othe question. ::
 
-	##### step 13 ###################################################################
-	#
-	#  make initial replication active log on master, and copy archive logs from
-	#  master
-	#
-	#  * details
-	#   - remove old replication log on master if exist
-	#   - start copylogdb to make replication active log
-	#   - copy archive logs from master
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	 
-	 - 1. remove old replicaton log.
-	 
-	[nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeA
-	[nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb_nodeA
-	 
-	 - 2. start copylogdb to initiate active log.
-	 
-	 
-	 - cubrid service stop
-	[nodeB]$ cubrid service stop >/dev/null 2>&1
-	 
-	 - start cub_master
-	[nodeB]$ cub_master >/dev/null 2>&1
-	 
-	 - start copylogdb and wait until replication active log header to be initialized
-	[nodeB]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA -m 3 testdb@nodeA >/dev/null 2>&1 &
-	 
-	...
-	 
-	 - cubrid service stop
-	[nodeB]$ cubrid service stop >/dev/null 2>&1
-	 
-	 - check copied active log header
-	[nodeB]$  cubrid applyinfo -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA testdb | grep -wqs "DB name"
-	 
-	 - 3. copy archive log from target.
-	 
-	cubrid_usr@nodeA's password:
-	testdb_lgar000             100%  512MB   3.9MB/s   02:11
+    ##### step 13 ###################################################################
+    #
+    #  make initial replication active log on master, and copy archive logs from
+    #  master
+    #
+    #  * details
+    #   - remove old replication log on master if exist
+    #   - start copylogdb to make replication active log
+    #   - copy archive logs from master
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+     
+     - 1. remove old replicaton log.
+     
+    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeA
+    [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb_nodeA
+     
+     - 2. start copylogdb to initiate active log.
+     
+     
+     - cubrid service stop
+    [nodeB]$ cubrid service stop >/dev/null 2>&1
+     
+     - start cub_master
+    [nodeB]$ cub_master >/dev/null 2>&1
+     
+     - start copylogdb and wait until replication active log header to be initialized
+    [nodeB]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA -m 3 testdb@nodeA >/dev/null 2>&1 &
+     
+    ...
+     
+     - cubrid service stop
+    [nodeB]$ cubrid service stop >/dev/null 2>&1
+     
+     - check copied active log header
+    [nodeB]$  cubrid applyinfo -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA testdb | grep -wqs "DB name"
+     
+     - 3. copy archive log from target.
+     
+    cubrid_usr@nodeA's password:
+    testdb_lgar000             100%  512MB   3.9MB/s   02:11
 
 14. At this step, restart the copylogdb process and the applylogdb process of the master node. Enter y to the question. ::
 
-	##### step 14 ###################################################################
-	#
-	#  restart copylogdb/applylogdb on master
-	#
-	#  * details
-	#   - restart copylogdb/applylogdb
-	#
-	################################################################################
-	 
-	   continue ? ([y]es / [n]o / [s]kip) : y
-	 
-	[nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_resume.sh -i /home/cubrid_usr/.ha/repl_utils.output
-	cubrid_usr@nodeA's password:
-	[nodeA]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB >/dev/null 2>&1 &
-	resume: cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
-	[nodeA]$ cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost >/dev/null 2>&1 &
-	resume: cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
-	 
-	 - check heartbeat list on (master).
-	 
-	[nodeA]$ cubrid heartbeat status
-	@ cubrid heartbeat status
-	 
-	 HA-Node Info (current nodeA, state master)
-	   Node nodeB (priority 2, state unknown)
-	   Node nodeA (priority 1, state master)
-	 
-	 HA-Process Info (master 11847, state master)
-	   Server testdb (pid 11853, state registered_and_active)
-	 
-	 
-	Connection to nodeA closed.
+    ##### step 14 ###################################################################
+    #
+    #  restart copylogdb/applylogdb on master
+    #
+    #  * details
+    #   - restart copylogdb/applylogdb
+    #
+    ################################################################################
+     
+       continue ? ([y]es / [n]o / [s]kip) : y
+     
+    [nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_resume.sh -i /home/cubrid_usr/.ha/repl_utils.output
+    cubrid_usr@nodeA's password:
+    [nodeA]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB >/dev/null 2>&1 &
+    resume: cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
+    [nodeA]$ cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost >/dev/null 2>&1 &
+    resume: cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
+     
+     - check heartbeat list on (master).
+     
+    [nodeA]$ cubrid heartbeat status
+    @ cubrid heartbeat status
+     
+     HA-Node Info (current nodeA, state master)
+       Node nodeB (priority 2, state unknown)
+       Node nodeA (priority 1, state master)
+     
+     HA-Process Info (master 11847, state master)
+       Server testdb (pid 11853, state registered_and_active)
+     
+     
+    Connection to nodeA closed.
 
 15. At this step, the result of building the slave node is printed to check whether it was successful or failed. ::
 
-	##### step 15 ##################################################################
-	#
-	#  completed
-	#
-	################################################################################
+    ##### step 15 ##################################################################
+    #
+    #  completed
+    #
+    ################################################################################
 
 After the **ha_make_slavedb.sh** script has been stopped, check the HA status from the slave node and then run the HA. ::
 
-	[NodeB]$ cubrid heartbeat status
-	@ cubrid heartbeat status
-	++ cubrid master is not running.
-	[NodeB]$ cubrid heartbeat start
-	@ cubrid heartbeat start
-	@ cubrid master start
-	++ cubrid master start: success
-	 
-	@ HA processes start
-	@ cubrid server start: testdb
-	 
-	This may take a long time depending on the amount of recovery works to do.
-	 
-	CUBRID 9.0
-	 
-	++ cubrid server start: success
-	@ copylogdb start
-	++ copylogdb start: success
-	@ applylogdb start
-	++ applylogdb start: success
-	++ HA processes start: success
-	++ cubrid heartbeat start: success
-	[nodeB ha]$ cubrid heartbeat status
-	@ cubrid heartbeat status
-	 
-	 HA-Node Info (current nodeB, state slave)
-	   Node nodeB (priority 2, state slave)
-	   Node nodeA (priority 1, state master)
-	 
-	 HA-Process Info (master 26611, state slave)
-	   Applylogdb testdb@localhost:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26831, state registered)
-	   Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
-	   Server testdb (pid 26617, state registered_and_standby)
+    [NodeB]$ cubrid heartbeat status
+    @ cubrid heartbeat status
+    ++ cubrid master is not running.
+    [NodeB]$ cubrid heartbeat start
+    @ cubrid heartbeat start
+    @ cubrid master start
+    ++ cubrid master start: success
+     
+    @ HA processes start
+    @ cubrid server start: testdb
+     
+    This may take a long time depending on the amount of recovery works to do.
+     
+    CUBRID 9.0
+     
+    ++ cubrid server start: success
+    @ copylogdb start
+    ++ copylogdb start: success
+    @ applylogdb start
+    ++ applylogdb start: success
+    ++ HA processes start: success
+    ++ cubrid heartbeat start: success
+    [nodeB ha]$ cubrid heartbeat status
+    @ cubrid heartbeat status
+     
+     HA-Node Info (current nodeB, state slave)
+       Node nodeB (priority 2, state slave)
+       Node nodeA (priority 1, state master)
+     
+     HA-Process Info (master 26611, state slave)
+       Applylogdb testdb@localhost:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26831, state registered)
+       Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
+       Server testdb (pid 26617, state registered_and_standby)

@@ -49,7 +49,7 @@ Before you start developing applications with CUBRID, you will need the Provider
 
 If you do not use the CUBRID OLED DB Provider installer, you should execute the command below to register the driver. The version of the driver should match the version of your operating system. For 32 bit, the **regsvr32** command should be executed in the **C:\Windows\system32** directory; for 64 bit, the **regsvr32** command should be executed in the **C:\Windows\SysWOW64** directory. ::
 
-	regsvr32 CUBRIDProvider.dll
+    regsvr32 CUBRIDProvider.dll
 
 OLE DB Programming
 ==================
@@ -107,14 +107,14 @@ When you do programming on the CUBRID OLE DB Provider using ActiveX Data Objects
 
 A connection string using the example above is as follows: ::
 
-	"Provider=CUBRIDProvider;Data Source=demodb;Location=127.0.0.1;User ID=PUBLIC;Password=xxx;Port= 33000;Fetch Size=100"
+    "Provider=CUBRIDProvider;Data Source=demodb;Location=127.0.0.1;User ID=PUBLIC;Password=xxx;Port= 33000;Fetch Size=100"
 
 .. note::
 
-	*   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection string.
-	*   If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
-	*   The database connection in thread-based programming must be used independently each other.
-	*   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
+    *   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection string.
+    *   If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
+    *   The database connection in thread-based programming must be used independently each other.
+    *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
 
 Multi-Threaded Programming in .NET Environment
 ----------------------------------------------
@@ -127,7 +127,7 @@ Without any changes of given values, the default value of the attribute in the T
 
 .. warning::
 
-	All OLE DB objects are the Component Object Model. Of COM threading model, the CUBRID OLE DB Provider currently supports the apartment threading model only, which is available in every multi-threaded environment as well as .NET environment.
+    All OLE DB objects are the Component Object Model. Of COM threading model, the CUBRID OLE DB Provider currently supports the apartment threading model only, which is available in every multi-threaded environment as well as .NET environment.
 
 OLE DB API
 ==========

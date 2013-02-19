@@ -97,11 +97,11 @@ After you filled out every field, click the [OK] button. You will notice that d
 
 It is also possible to connect to a CUBRID database directly in the application source code by using the connecting string. Below shows the example of connection string. ::
 
-	conn = "driver={CUBRID Driver};server=localhost;port=33000;uid=dba;pwd=;db_name=demodb;"
+    conn = "driver={CUBRID Driver};server=localhost;port=33000;uid=dba;pwd=;db_name=demodb;"
 
 .. note::
 
-	Make sure that your database is running before you try to connect to a CUBRID database. Otherwise, you will receive an error indicating that ODBC call has failed. To start the database called demodb, enter **cubrid server start demodb** in the command prompt.
+    Make sure that your database is running before you try to connect to a CUBRID database. Otherwise, you will receive an error indicating that ODBC call has failed. To start the database called demodb, enter **cubrid server start demodb** in the command prompt.
 
 ODBC Programming
 ================
@@ -135,13 +135,13 @@ When you are programming CUBRID ODBC, write the connection strings as follows:
 
 The following shows the result of using connection strings above. ::
 
-	"DRIVER=CUBRID Driver;UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8"
+    "DRIVER=CUBRID Driver;UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8"
 
 .. note::
 
-	*   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection strings.
-	*   The database connection in thread-based programming must be used independently each other.
-	*   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
+    *   Because a semi-colon (;) is used as a separator in URL string, it is not allowed to use a semi-colon as parts of a password (PWD) when specifying the password in connection strings.
+    *   The database connection in thread-based programming must be used independently each other.
+    *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
 
 Using Object Identifiers (OIDs) and Collections
 -----------------------------------------------
@@ -154,9 +154,9 @@ Because CUBRID ODBC driver regards an OID as a string (char(32)), you can use **
 
 .. code-block:: sql
 
-	insert into foo(member) values('@12|34|56')
-	delete from foo where member = '@12|34|56'
-	update foo set age = age + 1 where member = '@12|34|56'
+    insert into foo(member) values('@12|34|56')
+    delete from foo where member = '@12|34|56'
+    update foo set age = age + 1 where member = '@12|34|56'
 
 **Using Collections**
 
@@ -179,129 +179,129 @@ The following example shows that an IP address is configured as localhost.
 
 The following example shows how to create cubrid.asp and store it in a virtual directory. ::
 
-	<HTML>
-		<HEAD>
-		 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-		   <title>CUBRID Query Test Page</title>
-	  </HEAD>
+    <HTML>
+        <HEAD>
+         <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+           <title>CUBRID Query Test Page</title>
+      </HEAD>
 
-	 <BODY topmargin="0" leftmargin="0">
-	   
-	 <table border="0" width="748" cellspacing="0" cellpadding="0">
-	   <tr>
-		 <td width="200"></td>
-		 <td width="287">
-		   <p align="center"><font size="3" face="Times New Roman"><b><font color="#FF0000">CUBRID</font>Query Test</b></font></td>
-		 <td width="200"></td>
-	   </tr>
-	 </table>
+     <BODY topmargin="0" leftmargin="0">
+       
+     <table border="0" width="748" cellspacing="0" cellpadding="0">
+       <tr>
+         <td width="200"></td>
+         <td width="287">
+           <p align="center"><font size="3" face="Times New Roman"><b><font color="#FF0000">CUBRID</font>Query Test</b></font></td>
+         <td width="200"></td>
+       </tr>
+     </table>
 
-	 <form action="cubrid.asp" method="post" >
-	 <table border="1" width="700" cellspacing="0" cellpadding="0" height="45">
-	   <tr>
-		 <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">SERVER IP</font></td>
-		 <td width="78"  valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">Broker PORT</font></td>
-		 <td width="148" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB NAME</font></td>
-		 <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB USER</font></td>
-		 <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB PASS</font></td>
-		 <td width="80" height="37" rowspan="4" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED">　
-		   <p><input type="submit" value="Run" name="B1" tabindex="7"></p></td>
-	   </tr>
-	   <tr>
-		 <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="server_ip" size="20" tabindex="1" maxlength="15" value="<%=Request("server_ip")%>"></font></td>
-		 <td width="78"  height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="cas_port" size="15" tabindex="2" maxlength="6" value="<%=Request("cas_port")%>"></font></td>
-		 <td width="148" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="db_name" size="20" tabindex="3" maxlength="20" value="<%=Request("db_name")%>"></font></td>
-		 <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="db_user" size="15" tabindex="4" value="<%=Request("db_user")%>"></font></td>
-		 <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="password" name="db_pass" size="15" tabindex="5" value="<%=Request("db_pass")%>"></font></td>
-	   </tr>
-	   <tr>
-		 <td width="573" colspan="5" valign="bottom" height="18" bordercolorlight="#FFFFCC" bgcolor="#DBD7BD"><font size="2">QUERY</font></td>
-	   </tr>
-	   <tr>
-		 <td width="573" colspan="5" height="25" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><textarea rows="3" name="query" cols="92" tabindex="6"><%=Request("query")%></textarea></td>
-	   </tr>
-	 </table>
-	 </form>
-	 <hr>
+     <form action="cubrid.asp" method="post" >
+     <table border="1" width="700" cellspacing="0" cellpadding="0" height="45">
+       <tr>
+         <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">SERVER IP</font></td>
+         <td width="78"  valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">Broker PORT</font></td>
+         <td width="148" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB NAME</font></td>
+         <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB USER</font></td>
+         <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB PASS</font></td>
+         <td width="80" height="37" rowspan="4" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED">　
+           <p><input type="submit" value="Run" name="B1" tabindex="7"></p></td>
+       </tr>
+       <tr>
+         <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="server_ip" size="20" tabindex="1" maxlength="15" value="<%=Request("server_ip")%>"></font></td>
+         <td width="78"  height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="cas_port" size="15" tabindex="2" maxlength="6" value="<%=Request("cas_port")%>"></font></td>
+         <td width="148" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="db_name" size="20" tabindex="3" maxlength="20" value="<%=Request("db_name")%>"></font></td>
+         <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="db_user" size="15" tabindex="4" value="<%=Request("db_user")%>"></font></td>
+         <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="password" name="db_pass" size="15" tabindex="5" value="<%=Request("db_pass")%>"></font></td>
+       </tr>
+       <tr>
+         <td width="573" colspan="5" valign="bottom" height="18" bordercolorlight="#FFFFCC" bgcolor="#DBD7BD"><font size="2">QUERY</font></td>
+       </tr>
+       <tr>
+         <td width="573" colspan="5" height="25" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><textarea rows="3" name="query" cols="92" tabindex="6"><%=Request("query")%></textarea></td>
+       </tr>
+     </table>
+     </form>
+     <hr>
 
-	</BODY>
-	</HTML>
+    </BODY>
+    </HTML>
 
-	<%
-		' get DSN and SQL statement.
-		strIP = Request( "server_ip" )
-		strPort = Request( "cas_port" )
-		strUser = Request( "db_user" )
-		strPass = Request( "db_pass" )
-		strName = Request( "db_name" )
-		strQuery = Request( "query" )
-	   
-	if strIP = "" then
-	   Response.Write "Input SERVER_IP."
-			Response.End ' exit if no SERVER_IP's input.
-		end if
-		if strPort = "" then
-		   Response.Write "Input port number."
-			Response.End ' exit if no Port's input.
-		end if
-		if strUser = "" then
-		   Response.Write "Input DB_USER."
-			Response.End ' exit if no DB_User's input.
-		end if
-		if strName = "" then
-		   Response.Write "Input DB_NAME"
-			Response.End ' exit if no DB_NAME's input.
-		end if
-		if strQuery = "" then
-		   Response.Write "Input the query you want"
-			Response.End ' exit if no query's input.
-		end if
-	 ' create connection object.
-	  strDsn = "driver={CUBRID Driver};server=" & strIP & ";port=" & strPort & ";uid=" & strUser & ";pwd=" & strPass & ";db_name=" & strName & ";"
-	' DB connection.
-	Set DBConn = Server.CreateObject("ADODB.Connection")
-		   DBConn.Open strDsn
-		' run SQL.
-		Set rs = DBConn.Execute( strQuery )
-		' show the message by SQL.
-		if InStr(Ucase(strQuery),"INSERT")>0 then
-			Response.Write "A recored is added."
-			Response.End
-		end if
-		   
-		if InStr(Ucase(strQuery),"DELETE")>0  then
-			Response.Write "A recored is deleted."
-			Response.End
-		end if
-		   
-		if InStr(Ucase(strQuery),"UPDATE")>0  then
-			Response.Write "A recored is updated."
-			Response.End
-		end if   
-	%>
-	<table>
-	<%   
-		' show the field name.
-		Response.Write "<tr bgColor=#f3f3f3>"
-		For index =0 to ( rs.fields.count-1 )
-			Response.Write "<td><b>" & rs.fields(index).name & "</b></td>"
-		Next
-		Response.Write "</tr>"
-		' show the field value
-		Do While Not rs.EOF
-			Response.Write "<tr bgColor=#f3f3f3>"
-			For index =0 to ( rs.fields.count-1 )
-				Response.Write "<td>" & rs(index) & "</td>"
-			Next
-			Response.Write "</tr>"
-				  
-			rs.MoveNext
-		Loop
-	%>
-	<% 
-		set  rs = nothing
-	%>
-	</table>
+    <%
+        ' get DSN and SQL statement.
+        strIP = Request( "server_ip" )
+        strPort = Request( "cas_port" )
+        strUser = Request( "db_user" )
+        strPass = Request( "db_pass" )
+        strName = Request( "db_name" )
+        strQuery = Request( "query" )
+       
+    if strIP = "" then
+       Response.Write "Input SERVER_IP."
+            Response.End ' exit if no SERVER_IP's input.
+        end if
+        if strPort = "" then
+           Response.Write "Input port number."
+            Response.End ' exit if no Port's input.
+        end if
+        if strUser = "" then
+           Response.Write "Input DB_USER."
+            Response.End ' exit if no DB_User's input.
+        end if
+        if strName = "" then
+           Response.Write "Input DB_NAME"
+            Response.End ' exit if no DB_NAME's input.
+        end if
+        if strQuery = "" then
+           Response.Write "Input the query you want"
+            Response.End ' exit if no query's input.
+        end if
+     ' create connection object.
+      strDsn = "driver={CUBRID Driver};server=" & strIP & ";port=" & strPort & ";uid=" & strUser & ";pwd=" & strPass & ";db_name=" & strName & ";"
+    ' DB connection.
+    Set DBConn = Server.CreateObject("ADODB.Connection")
+           DBConn.Open strDsn
+        ' run SQL.
+        Set rs = DBConn.Execute( strQuery )
+        ' show the message by SQL.
+        if InStr(Ucase(strQuery),"INSERT")>0 then
+            Response.Write "A recored is added."
+            Response.End
+        end if
+           
+        if InStr(Ucase(strQuery),"DELETE")>0  then
+            Response.Write "A recored is deleted."
+            Response.End
+        end if
+           
+        if InStr(Ucase(strQuery),"UPDATE")>0  then
+            Response.Write "A recored is updated."
+            Response.End
+        end if   
+    %>
+    <table>
+    <%   
+        ' show the field name.
+        Response.Write "<tr bgColor=#f3f3f3>"
+        For index =0 to ( rs.fields.count-1 )
+            Response.Write "<td><b>" & rs.fields(index).name & "</b></td>"
+        Next
+        Response.Write "</tr>"
+        ' show the field value
+        Do While Not rs.EOF
+            Response.Write "<tr bgColor=#f3f3f3>"
+            For index =0 to ( rs.fields.count-1 )
+                Response.Write "<td>" & rs(index) & "</td>"
+            Next
+            Response.Write "</tr>"
+                  
+            rs.MoveNext
+        Loop
+    %>
+    <% 
+        set  rs = nothing
+    %>
+    </table>
 
 You can check the result of the sample program by connecting to http://localhost/cubrid.asp. When you execute the ASP sample code above, you will get the following output. Enter an appropriate value in each field, enter the query statement in the Query field, and click [Run]. The query result will be displayed at the lower part of the page.
 

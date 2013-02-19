@@ -12,61 +12,61 @@
 * 예약어는 허용되지 않는다.
 
 .. productionlist::
-	identifier : identifier_letter [ { other_identifier }; ]
-	identifier_letter : upper_case_letter | lower_case_letter
-	other_identifier : identifier_letter | digit | _ | #
-	digit : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-	upper_case_letter : A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P| Q | R | S | T | U | V | W | X | Y | Z
-	lower_case_letter : a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p| q | r | s | t | u | v | w | x | y | z
+    identifier : identifier_letter [ { other_identifier }; ]
+    identifier_letter : upper_case_letter | lower_case_letter
+    other_identifier : identifier_letter | digit | _ | #
+    digit : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+    upper_case_letter : A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P| Q | R | S | T | U | V | W | X | Y | Z
+    lower_case_letter : a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p| q | r | s | t | u | v | w | x | y | z
 
 허용되는 식별자
 ================
 
 **문자로 시작되는 식별자**
 
-	식별자의 첫 글자에는 반드시 문자를 사용해야 하며, 연산자로 사용되는 특수 문자를 제외한 나머지 특수 문자를 포함할 수 있다. 다음은 허용되는 식별자의 예제이다. ::
+    식별자의 첫 글자에는 반드시 문자를 사용해야 하며, 연산자로 사용되는 특수 문자를 제외한 나머지 특수 문자를 포함할 수 있다. 다음은 허용되는 식별자의 예제이다. ::
 
-		a
-		a_b
-		ssn#
-		this_is_an_example_#
+        a
+        a_b
+        ssn#
+        this_is_an_example_#
 
 **큰따옴표, 대괄호, 백틱 부호로 둘러싸인 식별자**
 
-	허용되지 않는 식별자 또는 예약어에 해당하더라도, 큰따옴표(" ")나 대괄호([ ]) 또는 백틱 부호(\` \`)로 식별자를 둘러싸면 예외적으로 허용된다. 큰따옴표는 질의 관련 파라미터인 **ansi_quotes** 가 yes일 때에만 식별자를 감싸는 부호로 사용할 수 있고, 이 값이 no이면 문자열을 감싸는 부호로 사용한다. **ansi_quotes** 의 기본값은 yes이다. 다음은 허용되는 식별자의 예제이다. ::
+    허용되지 않는 식별자 또는 예약어에 해당하더라도, 큰따옴표(" ")나 대괄호([ ]) 또는 백틱 부호(\` \`)로 식별자를 둘러싸면 예외적으로 허용된다. 큰따옴표는 질의 관련 파라미터인 **ansi_quotes** 가 yes일 때에만 식별자를 감싸는 부호로 사용할 수 있고, 이 값이 no이면 문자열을 감싸는 부호로 사용한다. **ansi_quotes** 의 기본값은 yes이다. 다음은 허용되는 식별자의 예제이다. ::
 
-		"select"
-		"@lowcost"
-		"low cost"
-		"abc""def"
-		[position]
+        "select"
+        "@lowcost"
+        "low cost"
+        "abc""def"
+        [position]
 
 허용되지 않는 식별자
 ====================
 
 **특수 문자나 숫자로 시작되는 식별자**
 
-	다음과 같이 언더바(_), #을 제외한 특수 문자, 숫자로 시작되는 식별자는 허용되지 않는다. ::
+    다음과 같이 언더바(_), #을 제외한 특수 문자, 숫자로 시작되는 식별자는 허용되지 않는다. ::
 
-		_a
-		#ack
-		%nums
-		2fer
-		88abs
+        _a
+        #ack
+        %nums
+        2fer
+        88abs
 
 **공백을 포함하는 식별자**
 
-	다음과 같이 중간에 공백을 포함하는 식별자는 허용되지 않는다. ::
+    다음과 같이 중간에 공백을 포함하는 식별자는 허용되지 않는다. ::
 
-		col1 t1
+        col1 t1
 
 **연산자로 사용하는 특수 문자를 포함하는 식별자**
 
-	다음과 같이 연산자로 사용되는 특수 문자(+, -, \*, /, %, ||, !, <, >, =, \|, ^, &, ~)를 포함하는 식별자는 허용되지 않는다. ::
+    다음과 같이 연산자로 사용되는 특수 문자(+, -, \*, /, %, ||, !, <, >, =, \|, ^, &, ~)를 포함하는 식별자는 허용되지 않는다. ::
 
-		col+
-		col~
-		col&&
+        col+
+        col~
+        col&&
 
 식별자 이름의 최대 길이
 =======================

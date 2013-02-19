@@ -12,17 +12,17 @@ REPLACE
 
 ::
 
-	<REPLACE … VALUES statement>
-	REPLACE [INTO] table_name [(column_name, ...)]
-		{VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
-	 
-	<REPLACE … SET statement>
-	REPLACE [INTO] table_name
-		SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
-	 
-	<REPLACE … SELECT statement>
-	REPLACE [INTO] table_name [(column_name, ...)]
-		SELECT...
+    <REPLACE … VALUES statement>
+    REPLACE [INTO] table_name [(column_name, ...)]
+        {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
+     
+    <REPLACE … SET statement>
+    REPLACE [INTO] table_name
+        SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
+     
+    <REPLACE … SELECT statement>
+    REPLACE [INTO] table_name [(column_name, ...)]
+        SELECT...
 
 *   *table_name* : 새로운 레코드를 삽입할 대상 테이블 이름을 지정한다.
 
@@ -32,25 +32,25 @@ REPLACE
 
 .. code-block:: sql
 
-	--creating a new table having the same schema as a_tbl1
-	CREATE TABLE a_tbl4 LIKE a_tbl1;
-	INSERT INTO a_tbl4 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
-	SELECT * FROM a_tbl4;
-			   id  name                  phone
-	=========================================================
-				1  'aaa'                 '000-0000'
-				2  'bbb'                 '000-0000'
-				3  'ccc'                 '333-3333'
-				6  'eee'                 '000-0000'
-	 
-	--insert duplicated value violating UNIQUE constraint
-	REPLACE INTO a_tbl4 VALUES(1, 'aaa', '111-1111'),(2, 'bbb', '222-2222');
-	REPLACE INTO a_tbl4 SET id=6, name='fff', phone=DEFAULT;
-	 
-	SELECT * FROM a_tbl4;
-			   id  name                  phone
-	=========================================================
-				3  'ccc'                 '333-3333'
-				1  'aaa'                 '111-1111'
-				2  'bbb'                 '222-2222'
-				6  'fff'                 '000-0000'
+    --creating a new table having the same schema as a_tbl1
+    CREATE TABLE a_tbl4 LIKE a_tbl1;
+    INSERT INTO a_tbl4 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
+    SELECT * FROM a_tbl4;
+               id  name                  phone
+    =========================================================
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                6  'eee'                 '000-0000'
+     
+    --insert duplicated value violating UNIQUE constraint
+    REPLACE INTO a_tbl4 VALUES(1, 'aaa', '111-1111'),(2, 'bbb', '222-2222');
+    REPLACE INTO a_tbl4 SET id=6, name='fff', phone=DEFAULT;
+     
+    SELECT * FROM a_tbl4;
+               id  name                  phone
+    =========================================================
+                3  'ccc'                 '333-3333'
+                1  'aaa'                 '111-1111'
+                2  'bbb'                 '222-2222'
+                6  'fff'                 '000-0000'

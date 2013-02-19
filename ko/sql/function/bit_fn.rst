@@ -53,72 +53,72 @@
 
 .. function:: BIT_AND (expr)
 
-	집계 함수로서, *expr* 의 모든 비트에 대해 비트 단위 **AND** 연산을 수행한다. 조건절을 만족하는 행이 없는 경우, NULL 을 반환한다.
+    집계 함수로서, *expr* 의 모든 비트에 대해 비트 단위 **AND** 연산을 수행한다. 조건절을 만족하는 행이 없는 경우, NULL 을 반환한다.
 
-	:param expr: 정수 타입의 임의의 연산식이다.
-	:rtype: BIGINT
+    :param expr: 정수 타입의 임의의 연산식이다.
+    :rtype: BIGINT
 
-	.. code-block:: sql
+    .. code-block:: sql
 
-		CREATE TABLE bit_tbl(id int);
-		INSERT INTO bit_tbl VALUES (1), (2), (3), (4), (5);
-		SELECT 1&3&5, BIT_AND(id) FROM bit_tbl WHERE id in(1,3,5);
+        CREATE TABLE bit_tbl(id int);
+        INSERT INTO bit_tbl VALUES (1), (2), (3), (4), (5);
+        SELECT 1&3&5, BIT_AND(id) FROM bit_tbl WHERE id in(1,3,5);
 
-	::
+    ::
 
-			 1&3&5           bit_and(id)
-		============================================
-				 1                     1	
+             1&3&5           bit_and(id)
+        ============================================
+                 1                     1    
 
 .. function:: BIT_OR (expr)
 
-	집계 함수로서, *expr* 의 모든 비트에 대해 비트 단위 **OR** 연산을 수행한다. 조건절을 만족하는 행이 없는 경우, **NULL** 을 반환한다.
+    집계 함수로서, *expr* 의 모든 비트에 대해 비트 단위 **OR** 연산을 수행한다. 조건절을 만족하는 행이 없는 경우, **NULL** 을 반환한다.
 
-	:param expr: 정수 타입의 임의의 연산식이다.
-	:rtype: BIGINT
+    :param expr: 정수 타입의 임의의 연산식이다.
+    :rtype: BIGINT
 
-	.. code-block:: sql
+    .. code-block:: sql
 
-		SELECT 1|3|5, BIT_OR(id) FROM bit_tbl WHERE id in(1,3,5);
+        SELECT 1|3|5, BIT_OR(id) FROM bit_tbl WHERE id in(1,3,5);
 
-	::
+    ::
 
-			 1|3|5            bit_or(id)
-		============================================
-			 	 7                     7
-					 
+             1|3|5            bit_or(id)
+        ============================================
+                  7                     7
+                     
 .. function:: BIT_XOR (expr)
 
-	집계 함수로서, *expr* 의 모든 비트에 대해 비트 단위 **XOR** 연산을 수행한다. 조건절을 만족하는 행이 없는 경우, **NULL** 을 반환한다.
+    집계 함수로서, *expr* 의 모든 비트에 대해 비트 단위 **XOR** 연산을 수행한다. 조건절을 만족하는 행이 없는 경우, **NULL** 을 반환한다.
 
-	:param expr: 정수 타입의 임의의 연산식이다.
-	:rtype: BIGINT
+    :param expr: 정수 타입의 임의의 연산식이다.
+    :rtype: BIGINT
 
-	.. code-block:: sql
+    .. code-block:: sql
 
-		SELECT 1^2^3, BIT_XOR(id) FROM bit_tbl WHERE id in(1,3,5);
+        SELECT 1^2^3, BIT_XOR(id) FROM bit_tbl WHERE id in(1,3,5);
 
-	::
-	
-			 1^3^5            bit_xor(id)
-		============================================
-			 	 7                     7
+    ::
+    
+             1^3^5            bit_xor(id)
+        ============================================
+                  7                     7
 
 .. function:: BIT_COUNT (expr)
  
-	*expr* 의 모든 비트 중 1로 설정된 비트의 개수를 반환하는 함수이며, 집계 함수는 아니다.
+    *expr* 의 모든 비트 중 1로 설정된 비트의 개수를 반환하는 함수이며, 집계 함수는 아니다.
 
-	:param expr: 정수 타입의 임의의 연산식이다.
-	:rtype: BIGINT
+    :param expr: 정수 타입의 임의의 연산식이다.
+    :rtype: BIGINT
 
-	.. code-block:: sql
+    .. code-block:: sql
 
-		SELECT BIT_COUNT(id) FROM bit_tbl WHERE id in(1,3,5);
+        SELECT BIT_COUNT(id) FROM bit_tbl WHERE id in(1,3,5);
 
-	::
-	
-		   bit_count(id)
-		================
-			   1
-			   2
-			   2
+    ::
+    
+           bit_count(id)
+        ================
+               1
+               2
+               2

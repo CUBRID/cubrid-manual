@@ -48,23 +48,23 @@ Let's take a look at a simple code which retrieves value from a CUBRID database 
 
 .. code-block:: c#
 
-	String sql = "select * from nation order by `code` asc";
-	 
-	using (CUBRIDCommand cmd = new CUBRIDCommand(sql, conn))
-	{
-		using (DbDataReader reader = cmd.ExecuteReader())
-		{
-			reader.Read();
-			//(read the values using: reader.Get...() methods)
-		}
-	}
+    String sql = "select * from nation order by `code` asc";
+     
+    using (CUBRIDCommand cmd = new CUBRIDCommand(sql, conn))
+    {
+        using (DbDataReader reader = cmd.ExecuteReader())
+        {
+            reader.Read();
+            //(read the values using: reader.Get...() methods)
+        }
+    }
 
 Once you have created the `DbDataReader <http://msdn.microsoft.com/en-us/library/system.data.common.dbdatareader.aspx>`_ object, all you have to do is to use the Get...() method to retrieve any column data. CUBRID ADO.NET driver implements all methods required to read any CUBRID data types.
 
 .. code-block:: c#
 
-	reader.GetString(3)
-	reader.GetDecimal(1)
+    reader.GetString(3)
+    reader.GetDecimal(1)
 
 The Get...() method will use as an input parameter the 0-based index position of the retrieved column.
 
@@ -72,19 +72,19 @@ To retrieve specific CUBRID data types, you need to use `CUBRIDDataReader <http:
 
 .. code-block:: c#
 
-	using (CUBRIDCommand cmd = new CUBRIDCommand("select * from t", conn))
-	{
-		CUBRIDDataReader reader = (CUBRIDDataReader)cmd.ExecuteReader();
-		 
-		reader.Read();
-		Debug.Assert(reader.GetDateTime(0) == newDateTime(2008, 10, 31, 10, 20, 30, 040));
-		Debug.Assert(reader.GetDate(0) == "2008-10-31");
-		Debug.Assert(reader.GetDate(0, "yy/MM/dd") == "08-10-31");
-		Debug.Assert(reader.GetTime(0) == "10:20:30");
-		Debug.Assert(reader.GetTime(0, "HH") == "10");
-		Debug.Assert(reader.GetTimestamp(0) == "2008-10-31 10:20:30.040");
-		Debug.Assert(reader.GetTimestamp(0, "yyyy HH") == "2008 10");
-	}
+    using (CUBRIDCommand cmd = new CUBRIDCommand("select * from t", conn))
+    {
+        CUBRIDDataReader reader = (CUBRIDDataReader)cmd.ExecuteReader();
+         
+        reader.Read();
+        Debug.Assert(reader.GetDateTime(0) == newDateTime(2008, 10, 31, 10, 20, 30, 040));
+        Debug.Assert(reader.GetDate(0) == "2008-10-31");
+        Debug.Assert(reader.GetDate(0, "yy/MM/dd") == "08-10-31");
+        Debug.Assert(reader.GetTime(0) == "10:20:30");
+        Debug.Assert(reader.GetTime(0, "HH") == "10");
+        Debug.Assert(reader.GetTimestamp(0) == "2008-10-31 10:20:30.040");
+        Debug.Assert(reader.GetTimestamp(0, "yyyy HH") == "2008 10");
+    }
 
 batch Commands
 --------------
@@ -96,29 +96,29 @@ For example, in CUBRID, you can write the code like:
 
 .. code-block:: c#
 
-	string[] sql_arr = newstring3;
-	sql_arr0 = "insert into t values(1)";
-	sql_arr1 = "insert into t values(2)";
-	sql_arr2 = "insert into t values(3)";
-	conn.BatchExecute(sql_arr);
+    string[] sql_arr = newstring3;
+    sql_arr0 = "insert into t values(1)";
+    sql_arr1 = "insert into t values(2)";
+    sql_arr2 = "insert into t values(3)";
+    conn.BatchExecute(sql_arr);
 
 or you can write as follows:
 
 .. code-block:: c#
 
-	string[] sqls = newstring3;
-	sqls0 = "create table t(id int)";
-	sqls1 = "insert into t values(1)";
-	sqls2 = "insert into t values(2)";
+    string[] sqls = newstring3;
+    sqls0 = "create table t(id int)";
+    sqls1 = "insert into t values(1)";
+    sqls2 = "insert into t values(2)";
 
-	conn.BatchExecuteNoQuery(sqls);
+    conn.BatchExecuteNoQuery(sqls);
 
 Connection String
 -----------------
 
 In order to establish a connection from .NET application to CUBRID, you must build the database connection string as the following format: ::
 
-	ConnectionString = "server=<server address>;database=<database name>;port=<port number to use for connection to broker>;user=<user name>;password=<user password>;"
+    ConnectionString = "server=<server address>;database=<database name>;port=<port number to use for connection to broker>;user=<user name>;password=<user password>;"
 
 All parameters are mandatory except for **port**. If you do not specify the broker port number, the default value is **30,000**.
 
@@ -126,39 +126,39 @@ The examples of connection string with different options are as follows:
 
 *   Connect to a local server, using the default *demodb* database. ::
 
-	ConnectionString = "server=127.0.0.1;database=demodb;port=30000;user=public;password="
+    ConnectionString = "server=127.0.0.1;database=demodb;port=30000;user=public;password="
 
 *   Connect to a remote server, using the default *demodb* database, as user **dba**. ::
 
-	ConnectionString = "server=10.50.88.1;database=demodb;user=dba;password="
+    ConnectionString = "server=10.50.88.1;database=demodb;user=dba;password="
 
 *   Connect to a remote server, using the default *demodb* database, as user **dba**, using password *secret*. ::
 
-	ConnectionString = "server=10.50.99.1;database=demodb;port=30000;user=dba;password=secret"
+    ConnectionString = "server=10.50.99.1;database=demodb;port=30000;user=dba;password=secret"
 
 As an alternative, you can use the `CUBRIDConnectionStringBuilder <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/a093b61e-d064-4f4e-b007-73bc601c564c.htm>`_ class to build easily a connection string in the correct format.
 
 .. code-block:: c#
 
-	CUBRIDConnectionStringBuilder sb = new CUBRIDConnectionStringBuilder(localhost,"33000","demodb","public","");
-	using (CUBRIDConnection conn = new CUBRIDConnection(sb.GetConnectionString()))
-	{
-		conn.Open();
-	}
+    CUBRIDConnectionStringBuilder sb = new CUBRIDConnectionStringBuilder(localhost,"33000","demodb","public","");
+    using (CUBRIDConnection conn = new CUBRIDConnection(sb.GetConnectionString()))
+    {
+        conn.Open();
+    }
 
 or you can write as follows:
 
 .. code-block:: c#
 
-	sb = new CUBRIDConnectionStringBuilder();
-	sb.User = "public" ;
-	sb.Database = "demodb";
-	sb.Port = "33000";
-	sb.Server = "localhost";
-	using (CUBRIDConnection conn = new CUBRIDConnection(sb.GetConnectionString()))
-	{
-		conn.Open();
-	}
+    sb = new CUBRIDConnectionStringBuilder();
+    sb.User = "public" ;
+    sb.Database = "demodb";
+    sb.Port = "33000";
+    sb.Server = "localhost";
+    using (CUBRIDConnection conn = new CUBRIDConnection(sb.GetConnectionString()))
+    {
+        conn.Open();
+    }
 
 .. note:: The database connection in thread-based programming must be used independently each other.
 
@@ -169,12 +169,12 @@ Collections are specific CUBRID data type. If you are not familiar with them, yo
 
 .. code-block:: c#
 
-	public void AddElementToSet(CUBRIDOid oid, String attributeName, Object value)
-	public void DropElementInSet(CUBRIDOid oid, String attributeName, Object value)
-	public void UpdateElementInSequence(CUBRIDOid oid, String attributeName, int index, Object value)
-	public void InsertElementInSequence(CUBRIDOid oid, String attributeName, int index, Object value)
-	public void DropElementInSequence(CUBRIDOid oid, String attributeName, int index)
-	public int GetCollectionSize(CUBRIDOid oid, String attributeName)
+    public void AddElementToSet(CUBRIDOid oid, String attributeName, Object value)
+    public void DropElementInSet(CUBRIDOid oid, String attributeName, Object value)
+    public void UpdateElementInSequence(CUBRIDOid oid, String attributeName, int index, Object value)
+    public void InsertElementInSequence(CUBRIDOid oid, String attributeName, int index, Object value)
+    public void DropElementInSequence(CUBRIDOid oid, String attributeName, int index)
+    public int GetCollectionSize(CUBRIDOid oid, String attributeName)
 
 Here below are two examples of using these CUBRID extensions.
 
@@ -182,40 +182,40 @@ Reading values from a Collection data type:
 
 .. code-block:: c#
 
-	using (CUBRIDCommand cmd = new CUBRIDCommand("SELECT * FROM t", conn))
-	{
-		using (DbDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				object[] o = (object[])reader0;
-				for (int i = 0; i <SeqSize; i++)
-				{
-					//...
-				}
-			}
-		}
-	}
+    using (CUBRIDCommand cmd = new CUBRIDCommand("SELECT * FROM t", conn))
+    {
+        using (DbDataReader reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                object[] o = (object[])reader0;
+                for (int i = 0; i <SeqSize; i++)
+                {
+                    //...
+                }
+            }
+        }
+    }
 
 Updating a Collection data type:
 
 .. code-block:: c#
 
-	conn.InsertElementInSequence(oid, attributeName, 5, value);
-	SeqSize = conn.GetCollectionSize(oid, attributeName);
-	using (CUBRIDCommandcmd = newCUBRIDCommand("SELECT * FROM t", conn))
-	{
-		using (DbDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				int[] expected = { 7, 1, 2, 3, 7, 4, 5, 6 };
-				object[] o = (object[])reader0;
-			}
-		}
-	}
-	conn.DropElementInSequence(oid, attributeName, 5);
-	SeqSize = conn.GetCollectionSize(oid, attributeName);
+    conn.InsertElementInSequence(oid, attributeName, 5, value);
+    SeqSize = conn.GetCollectionSize(oid, attributeName);
+    using (CUBRIDCommandcmd = newCUBRIDCommand("SELECT * FROM t", conn))
+    {
+        using (DbDataReader reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                int[] expected = { 7, 1, 2, 3, 7, 4, 5, 6 };
+                object[] o = (object[])reader0;
+            }
+        }
+    }
+    conn.DropElementInSequence(oid, attributeName, 5);
+    SeqSize = conn.GetCollectionSize(oid, attributeName);
 
 CUBRID BLOB/CLOB
 ----------------
@@ -228,38 +228,38 @@ Reading BLOB data:
 
 .. code-block:: c#
 
-	CUBRIDCommand cmd = new CUBRIDCommand(sql, conn);
-	DbDataReader reader = cmd.ExecuteReader();
-	
-	while (reader.Read())
-	{
-		CUBRIDBlobbImage = (CUBRIDBlob)reader0;
-		byte[] bytes = newbyte(int)bImage.BlobLength;
-		bytes = bImage.getBytes(1, (int)bImage.BlobLength);
-		//...
-	}
+    CUBRIDCommand cmd = new CUBRIDCommand(sql, conn);
+    DbDataReader reader = cmd.ExecuteReader();
+    
+    while (reader.Read())
+    {
+        CUBRIDBlobbImage = (CUBRIDBlob)reader0;
+        byte[] bytes = newbyte(int)bImage.BlobLength;
+        bytes = bImage.getBytes(1, (int)bImage.BlobLength);
+        //...
+    }
 
 
 Updating CLOB data:
 
 .. code-block:: c#
 
-	string sql = "UPDATE t SET c = ?";
-	CUBRIDCommandcmd = new CUBRIDCommand(sql, conn);
-	 
-	CUBRIDClobClob = new CUBRIDClob(conn);
-	str = conn.ConnectionString; //Use the ConnectionString for testing
-	 
-	Clob.setString(1, str);
-	
-	CUBRIDParameter param = new CUBRIDParameter();
-	
-	param.ParameterName = "?";
-	param.CUBRIDDataType = CUBRIDDataType.CCI_U_TYPE_CLOB;
-	param.Value = Clob;
-	
-	cmd.Parameters.Add(param);
-	cmd.ExecuteNonQuery();
+    string sql = "UPDATE t SET c = ?";
+    CUBRIDCommandcmd = new CUBRIDCommand(sql, conn);
+     
+    CUBRIDClobClob = new CUBRIDClob(conn);
+    str = conn.ConnectionString; //Use the ConnectionString for testing
+     
+    Clob.setString(1, str);
+    
+    CUBRIDParameter param = new CUBRIDParameter();
+    
+    param.ParameterName = "?";
+    param.CUBRIDDataType = CUBRIDDataType.CCI_U_TYPE_CLOB;
+    param.Value = Clob;
+    
+    cmd.Parameters.Add(param);
+    cmd.ExecuteNonQuery();
 
 CUBRID Metadata Support
 -----------------------
@@ -268,67 +268,67 @@ CUBRID ADO.NET Data Provider supports for database metadata. Most of these metho
 
 .. code-block:: c#
 
-	public DataTable GetDatabases(string[] filters)
-	public DataTable GetTables(string[] filters)
-	public DataTable GetViews(string[] filters)
-	public DataTable GetColumns(string[] filters)
-	public DataTable GetIndexes(string[] filters)
-	public DataTable GetIndexColumns(string[] filters)
-	public DataTable GetExportedKeys(string[] filters)
-	public DataTable GetCrossReferenceKeys(string[] filters)
-	public DataTable GetForeignKeys(string[] filters)
-	public DataTable GetUsers(string[] filters)
-	public DataTable GetProcedures(string[] filters)
-	public static DataTable GetDataTypes()
-	public static DataTable GetReservedWords()
-	public static String[] GetNumericFunctions()
-	public static String[] GetStringFunctions()
-	public DataTable GetSchema(string collection, string[] filters)
+    public DataTable GetDatabases(string[] filters)
+    public DataTable GetTables(string[] filters)
+    public DataTable GetViews(string[] filters)
+    public DataTable GetColumns(string[] filters)
+    public DataTable GetIndexes(string[] filters)
+    public DataTable GetIndexColumns(string[] filters)
+    public DataTable GetExportedKeys(string[] filters)
+    public DataTable GetCrossReferenceKeys(string[] filters)
+    public DataTable GetForeignKeys(string[] filters)
+    public DataTable GetUsers(string[] filters)
+    public DataTable GetProcedures(string[] filters)
+    public static DataTable GetDataTypes()
+    public static DataTable GetReservedWords()
+    public static String[] GetNumericFunctions()
+    public static String[] GetStringFunctions()
+    public DataTable GetSchema(string collection, string[] filters)
 
 The example below shows how to get the list of tables in the current CUBRID database.
 
 .. code-block:: c#
 
-	CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
-	DataTable dt = schema.GetTables(newstring[] { "%" });
-	 
-	Debug.Assert(dt.Columns.Count == 3);
-	Debug.Assert(dt.Rows.Count == 10);
-	 
-	Debug.Assert(dt.Rows00.ToString() == "demodb");
-	Debug.Assert(dt.Rows01.ToString() == "demodb");
-	Debug.Assert(dt.Rows02.ToString() == "stadium");
-	 
-	Get the list of Foreign Keys in a table:
-	 
-	CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
-	DataTable dt = schema.GetForeignKeys(newstring[] { "game" });
-	 
-	Debug.Assert(dt.Columns.Count == 9);
-	Debug.Assert(dt.Rows.Count == 2);
-	 
-	Debug.Assert(dt.Rows00.ToString() == "athlete");
-	Debug.Assert(dt.Rows01.ToString() == "code");
-	Debug.Assert(dt.Rows02.ToString() == "game");
-	Debug.Assert(dt.Rows03.ToString() == "athlete_code");
-	Debug.Assert(dt.Rows04.ToString() == "1");
-	Debug.Assert(dt.Rows05.ToString() == "1");
-	Debug.Assert(dt.Rows06.ToString() == "1");
-	Debug.Assert(dt.Rows07.ToString() == "fk_game_athlete_code");
-	Debug.Assert(dt.Rows08.ToString() == "pk_athlete_code");
+    CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
+    DataTable dt = schema.GetTables(newstring[] { "%" });
+     
+    Debug.Assert(dt.Columns.Count == 3);
+    Debug.Assert(dt.Rows.Count == 10);
+     
+    Debug.Assert(dt.Rows00.ToString() == "demodb");
+    Debug.Assert(dt.Rows01.ToString() == "demodb");
+    Debug.Assert(dt.Rows02.ToString() == "stadium");
+     
+    Get the list of Foreign Keys in a table:
+     
+    CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
+    DataTable dt = schema.GetForeignKeys(newstring[] { "game" });
+     
+    Debug.Assert(dt.Columns.Count == 9);
+    Debug.Assert(dt.Rows.Count == 2);
+     
+    Debug.Assert(dt.Rows00.ToString() == "athlete");
+    Debug.Assert(dt.Rows01.ToString() == "code");
+    Debug.Assert(dt.Rows02.ToString() == "game");
+    Debug.Assert(dt.Rows03.ToString() == "athlete_code");
+    Debug.Assert(dt.Rows04.ToString() == "1");
+    Debug.Assert(dt.Rows05.ToString() == "1");
+    Debug.Assert(dt.Rows06.ToString() == "1");
+    Debug.Assert(dt.Rows07.ToString() == "fk_game_athlete_code");
+    Debug.Assert(dt.Rows08.ToString() == "pk_athlete_code");
 
 The example below shows how to get the list of indexes in a table.
 
 .. code-block:: c#
 
-	CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
-	DataTable dt = schema.GetIndexes(newstring[] { "game" });
-	 
-	Debug.Assert(dt.Columns.Count == 9);
-	Debug.Assert(dt.Rows.Count == 5);
-	 
-	Debug.Assert(dt.Rows32.ToString() == "pk_game_host_year_event_code_athlete_code"); //Index name
-	Debug.Assert(dt.Rows34.ToString() == "True"); //Is it a PK?
+    CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
+    DataTable dt = schema.GetIndexes(newstring[] { "game" });
+     
+    Debug.Assert(dt.Columns.Count == 9);
+    Debug.Assert(dt.Rows.Count == 5);
+     
+    Debug.Assert(dt.Rows32.ToString() == "pk_game_host_year_event_code_athlete_code"); //Index name
+    Debug.Assert(dt.Rows34.ToString() == "True"); //Is it a PK?
 
 DataTable Support
 -----------------
@@ -344,46 +344,46 @@ The following example shows how to get columns attributes.
 
 .. code-block:: c#
 
-	String sql = "select * from nation";
-	CUBRIDDataAdapter da = new CUBRIDDataAdapter();
-	da.SelectCommand = new CUBRIDCommand(sql, conn);
-	DataTable dt = newDataTable("nation");
-	da.FillSchema(dt, SchemaType.Source);//To retrieve all the column properties you have to use the FillSchema() method
-	 
-	Debug.Assert(dt.Columns0.ColumnName == "code");
-	Debug.Assert(dt.Columns0.AllowDBNull == false);
-	Debug.Assert(dt.Columns0.DefaultValue.ToString() == "");
-	Debug.Assert(dt.Columns0.Unique == true);
-	Debug.Assert(dt.Columns0.DataType == typeof(System.String));
-	Debug.Assert(dt.Columns0.Ordinal == 0);
-	Debug.Assert(dt.Columns0.Table == dt);
+    String sql = "select * from nation";
+    CUBRIDDataAdapter da = new CUBRIDDataAdapter();
+    da.SelectCommand = new CUBRIDCommand(sql, conn);
+    DataTable dt = newDataTable("nation");
+    da.FillSchema(dt, SchemaType.Source);//To retrieve all the column properties you have to use the FillSchema() method
+     
+    Debug.Assert(dt.Columns0.ColumnName == "code");
+    Debug.Assert(dt.Columns0.AllowDBNull == false);
+    Debug.Assert(dt.Columns0.DefaultValue.ToString() == "");
+    Debug.Assert(dt.Columns0.Unique == true);
+    Debug.Assert(dt.Columns0.DataType == typeof(System.String));
+    Debug.Assert(dt.Columns0.Ordinal == 0);
+    Debug.Assert(dt.Columns0.Table == dt);
 
 The following example shows how to insert values into a table by using the **INSERT** statement.
 
 .. code-block:: c#
 
-	String sql = " select * from nation order by `code` asc";
-	using (CUBRIDDataAdapter da = new CUBRIDDataAdapter(sql, conn))
-	{
-		using (CUBRIDDataAdapter daCmd = new CUBRIDDataAdapter(sql, conn))
-		{
-			CUBRIDCommandBuildercmdBuilder = new CUBRIDCommandBuilder(daCmd);
-			da.InsertCommand = cmdBuilder.GetInsertCommand();
-		}
-		 
-		DataTable dt = newDataTable("nation");
-		da.Fill(dt);
-		 
-		DataRow newRow = dt.NewRow();
-		
-		newRow"code" = "ZZZ";
-		newRow"name" = "ABCDEF";
-		newRow"capital" = "MyXYZ";
-		newRow"continent" = "QWERTY";
-		
-		dt.Rows.Add(newRow);
-		da.Update(dt);
-	}
+    String sql = " select * from nation order by `code` asc";
+    using (CUBRIDDataAdapter da = new CUBRIDDataAdapter(sql, conn))
+    {
+        using (CUBRIDDataAdapter daCmd = new CUBRIDDataAdapter(sql, conn))
+        {
+            CUBRIDCommandBuildercmdBuilder = new CUBRIDCommandBuilder(daCmd);
+            da.InsertCommand = cmdBuilder.GetInsertCommand();
+        }
+         
+        DataTable dt = newDataTable("nation");
+        da.Fill(dt);
+         
+        DataRow newRow = dt.NewRow();
+        
+        newRow"code" = "ZZZ";
+        newRow"name" = "ABCDEF";
+        newRow"capital" = "MyXYZ";
+        newRow"continent" = "QWERTY";
+        
+        dt.Rows.Add(newRow);
+        da.Update(dt);
+    }
 
 Transactions
 ------------
@@ -392,25 +392,25 @@ CUBRID ADO.NET Data Provider implements support for transactions in a similar wa
 
 .. code-block:: c#
 
-	conn.BeginTransaction();
-	 
-	string sql = "create table t(idx integer)";
-	using (CUBRIDCommand command = new CUBRIDCommand(sql, conn))
-	{
-		command.ExecuteNonQuery();
-	}
-	 
-	conn.Rollback();
-	 
-	conn.BeginTransaction();
-	 
-	sql = "create table t(idx integer)";
-	using (CUBRIDCommand command = new CUBRIDCommand(sql, conn))
-	{
-		command.ExecuteNonQuery();
-	}
-	 
-	conn.Commit();
+    conn.BeginTransaction();
+     
+    string sql = "create table t(idx integer)";
+    using (CUBRIDCommand command = new CUBRIDCommand(sql, conn))
+    {
+        command.ExecuteNonQuery();
+    }
+     
+    conn.Rollback();
+     
+    conn.BeginTransaction();
+     
+    sql = "create table t(idx integer)";
+    using (CUBRIDCommand command = new CUBRIDCommand(sql, conn))
+    {
+        command.ExecuteNonQuery();
+    }
+     
+    conn.Commit();
 
 Working with Parameters
 -----------------------
@@ -421,18 +421,18 @@ The example below shows how to execute SQL statements by using the parameters. T
 
 .. code-block:: c#
 
-	using (CUBRIDCommand cmd = new CUBRIDCommand("insert into t values(?, ?)", conn))
-	{
-		CUBRIDParameter p1 = new CUBRIDParameter("?p1", CUBRIDDataType.CCI_U_TYPE_INT);
-		p1.Value = 1;
-		cmd.Parameters.Add(p1);
-		 
-		CUBRIDParameter p2 = new CUBRIDParameter("?p2", CUBRIDDataType.CCI_U_TYPE_STRING);
-		p2.Value = "abc";
-		cmd.Parameters.Add(p2);
-		 
-		cmd.ExecuteNonQuery();
-	}
+    using (CUBRIDCommand cmd = new CUBRIDCommand("insert into t values(?, ?)", conn))
+    {
+        CUBRIDParameter p1 = new CUBRIDParameter("?p1", CUBRIDDataType.CCI_U_TYPE_INT);
+        p1.Value = 1;
+        cmd.Parameters.Add(p1);
+         
+        CUBRIDParameter p2 = new CUBRIDParameter("?p2", CUBRIDDataType.CCI_U_TYPE_STRING);
+        p2.Value = "abc";
+        cmd.Parameters.Add(p2);
+         
+        cmd.ExecuteNonQuery();
+    }
 
 Error Codes and Messages
 ------------------------

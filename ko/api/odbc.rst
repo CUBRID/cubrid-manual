@@ -94,12 +94,12 @@ CUBRID ODBC Driver가 확인되었다면 응용 프로그램에서 접속하려�
 
 연결 문자열을 사용하여 CUBRID 데이터베이스에 직접 연결할 수도 있다. 연결 문자열의 예는 다음과 같다. ::
 
-	conn = "driver={CUBRID Driver};server=localhost;port=33000;uid=dba;pwd=;db_name=demodb;"
+    conn = "driver={CUBRID Driver};server=localhost;port=33000;uid=dba;pwd=;db_name=demodb;"
 
 .. note:: 
 
-	CUBRID 데이터베이스에 연결하기 전에 데이터베이스를 먼저 시작하지 않으면 ODBC 오류가 발생한다. 데이터베이스(demodb)를 시작하려면 터미널에 **cubrid server start demodb** 명령을 입력한다.
-	
+    CUBRID 데이터베이스에 연결하기 전에 데이터베이스를 먼저 시작하지 않으면 ODBC 오류가 발생한다. 데이터베이스(demodb)를 시작하려면 터미널에 **cubrid server start demodb** 명령을 입력한다.
+    
 ODBC 프로그래밍
 ===============
 
@@ -134,13 +134,13 @@ CUBRID ODBC 프로그래밍을 할 때 연결 문자열(connection string)은 �
 
 위의 예를 이용한 연결 문자열은 다음과 같다. ::
 
-	"DRIVER=CUBRID Driver;UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8"
+    "DRIVER=CUBRID Driver;UID=PUBLIC;PWD=xxx;FETCH_SIZE=100;PORT=33000;SERVER=127.0.0.1;DB_NAME=demodb;DESCRIPTION=cubrid_test;CHARSET=utf-8"
 
 .. note::
 
-	*   연결 문자열에서 세미콜론(;)은 구분자로 사용되므로, 연결 문자열에 암호(PWD)를 지정할 때 암호의 일부에 세미콜론을 사용할 수 없다.
-	*   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
-	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
+    *   연결 문자열에서 세미콜론(;)은 구분자로 사용되므로, 연결 문자열에 암호(PWD)를 지정할 때 암호의 일부에 세미콜론을 사용할 수 없다.
+    *   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+    *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
 
 OID와 컬렉션 사용
@@ -154,9 +154,9 @@ CUBRID ODBC 드라이버는 OID를 string (char(32))으로 간주하므로 OID�
 
 .. code-block:: sql
 
-	insert into foo(member) values('@12|34|56')
-	delete from foo where member = '@12|34|56'
-	update foo set age = age + 1 where member = '@12|34|56'
+    insert into foo(member) values('@12|34|56')
+    delete from foo where member = '@12|34|56'
+    update foo set age = age + 1 where member = '@12|34|56'
 
 **컬렉션 사용**
 
@@ -175,129 +175,129 @@ ASP 예제를 실행할 가상 디렉터리의 '기본 웹 사이트' 항목에�
 
 아래의 예제 코드를 cubrid.asp로 만들고 가상 디렉터리에 저장한다. ::
 
-	<HTML>
-		<HEAD>
-		 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-		   <title>CUBRID Query Test Page</title>
-	  </HEAD>
+    <HTML>
+        <HEAD>
+         <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+           <title>CUBRID Query Test Page</title>
+      </HEAD>
 
-	 <BODY topmargin="0" leftmargin="0">
-	   
-	 <table border="0" width="748" cellspacing="0" cellpadding="0">
-	   <tr>
-		 <td width="200"></td>
-		 <td width="287">
-		   <p align="center"><font size="3" face="Times New Roman"><b><font color="#FF0000">CUBRID</font>Query Test</b></font></td>
-		 <td width="200"></td>
-	   </tr>
-	 </table>
+     <BODY topmargin="0" leftmargin="0">
+       
+     <table border="0" width="748" cellspacing="0" cellpadding="0">
+       <tr>
+         <td width="200"></td>
+         <td width="287">
+           <p align="center"><font size="3" face="Times New Roman"><b><font color="#FF0000">CUBRID</font>Query Test</b></font></td>
+         <td width="200"></td>
+       </tr>
+     </table>
 
-	 <form action="cubrid.asp" method="post" >
-	 <table border="1" width="700" cellspacing="0" cellpadding="0" height="45">
-	   <tr>
-		 <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">SERVER IP</font></td>
-		 <td width="78"  valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">Broker PORT</font></td>
-		 <td width="148" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB NAME</font></td>
-		 <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB USER</font></td>
-		 <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB PASS</font></td>
-		 <td width="80" height="37" rowspan="4" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED">　
-		   <p><input type="submit" value="실행하기" name="B1" tabindex="7"></p></td>
-	   </tr>
-	   <tr>
-		 <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="server_ip" size="20" tabindex="1" maxlength="15" value="<%=Request("server_ip")%>"></font></td>
-		 <td width="78"  height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="cas_port" size="15" tabindex="2" maxlength="6" value="<%=Request("cas_port")%>"></font></td>
-		 <td width="148" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="db_name" size="20" tabindex="3" maxlength="20" value="<%=Request("db_name")%>"></font></td>
-		 <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="db_user" size="15" tabindex="4" value="<%=Request("db_user")%>"></font></td>
-		 <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="password" name="db_pass" size="15" tabindex="5" value="<%=Request("db_pass")%>"></font></td>
-	   </tr>
-	   <tr>
-		 <td width="573" colspan="5" valign="bottom" height="18" bordercolorlight="#FFFFCC" bgcolor="#DBD7BD"><font size="2">QUERY</font></td>
-	   </tr>
-	   <tr>
-		 <td width="573" colspan="5" height="25" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><textarea rows="3" name="query" cols="92" tabindex="6"><%=Request("query")%></textarea></td>
-	   </tr>
-	 </table>
-	 </form>
-	 <hr>
+     <form action="cubrid.asp" method="post" >
+     <table border="1" width="700" cellspacing="0" cellpadding="0" height="45">
+       <tr>
+         <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">SERVER IP</font></td>
+         <td width="78"  valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">Broker PORT</font></td>
+         <td width="148" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB NAME</font></td>
+         <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB USER</font></td>
+         <td width="113" valign="bottom" height="16" bgcolor="#DBD7BD" bordercolorlight="#FFFFCC"><font size="2">DB PASS</font></td>
+         <td width="80" height="37" rowspan="4" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED">　
+           <p><input type="submit" value="실행하기" name="B1" tabindex="7"></p></td>
+       </tr>
+       <tr>
+         <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="server_ip" size="20" tabindex="1" maxlength="15" value="<%=Request("server_ip")%>"></font></td>
+         <td width="78"  height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="cas_port" size="15" tabindex="2" maxlength="6" value="<%=Request("cas_port")%>"></font></td>
+         <td width="148" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="db_name" size="20" tabindex="3" maxlength="20" value="<%=Request("db_name")%>"></font></td>
+         <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="text" name="db_user" size="15" tabindex="4" value="<%=Request("db_user")%>"></font></td>
+         <td width="113" height="1" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><font size="2"><input type="password" name="db_pass" size="15" tabindex="5" value="<%=Request("db_pass")%>"></font></td>
+       </tr>
+       <tr>
+         <td width="573" colspan="5" valign="bottom" height="18" bordercolorlight="#FFFFCC" bgcolor="#DBD7BD"><font size="2">QUERY</font></td>
+       </tr>
+       <tr>
+         <td width="573" colspan="5" height="25" bordercolorlight="#FFFFCC" bgcolor="#F5F5ED"><textarea rows="3" name="query" cols="92" tabindex="6"><%=Request("query")%></textarea></td>
+       </tr>
+     </table>
+     </form>
+     <hr>
 
-	</BODY>
-	</HTML>
+    </BODY>
+    </HTML>
 
-	<%
-		' DSN과 SQL문을 가져온다.
-		strIP = Request( "server_ip" )
-		strPort = Request( "cas_port" )
-		strUser = Request( "db_user" )
-		strPass = Request( "db_pass" )
-		strName = Request( "db_name" )
-		strQuery = Request( "query" )
-	   
-	if strIP = "" then
-	   Response.Write "SERVER_IP를 입력하세요"
-			Response.End ' IP가 없으면 페이지 종료
-		end if
-		if strPort = "" then
-		   Response.Write "Port 번호를 입력하세요"
-			Response.End ' Port가 없으면 페이지 종료
-		end if
-		if strUser = "" then
-		   Response.Write "DB_USER를 입력하세요"
-			Response.End ' DB_User가 없으면 페이지 종료
-		end if
-		if strName = "" then
-		   Response.Write "DB_NAME을 입력하세요"
-			Response.End ' DB_NAME이 없으면 페이지 종료
-		end if
-		if strQuery = "" then
-		   Response.Write "확인하고자 하는 Query를 입력하세요"
-			Response.End ' Query가 없으면 페이지 종료
-		end if
-	 ' 연결 객체 생성
-	  strDsn = "driver={CUBRID Driver};server=" & strIP & ";port=" & strPort & ";uid=" & strUser & ";pwd=" & strPass & ";db_name=" & strName & ";"
-	' DB연결
-	Set DBConn = Server.CreateObject("ADODB.Connection")
-		   DBConn.Open strDsn
-		' SQL 실행
-		Set rs = DBConn.Execute( strQuery )
-		' SQL문에 따라 메시지 보이기
-		if InStr(Ucase(strQuery),"INSERT")>0 then
-			Response.Write "레코드가 추가되었습니다."
-			Response.End
-		end if
-		   
-		if InStr(Ucase(strQuery),"DELETE")>0  then
-			Response.Write "레코드가 삭제되었습니다."
-			Response.End
-		end if
-		   
-		if InStr(Ucase(strQuery),"UPDATE")>0  then
-			Response.Write "레코드가 수정되었습니다."
-			Response.End
-		end if   
-	%>
-	<table>
-	<%   
-		' 필드 이름 보여주기
-		Response.Write "<tr bgColor=#f3f3f3>"
-		For index =0 to ( rs.fields.count-1 )
-			Response.Write "<td><b>" & rs.fields(index).name & "</b></td>"
-		Next
-		Response.Write "</tr>"
-		' 필드 값 보여주기
-		Do While Not rs.EOF
-			Response.Write "<tr bgColor=#f3f3f3>"
-			For index =0 to ( rs.fields.count-1 )
-				Response.Write "<td>" & rs(index) & "</td>"
-			Next
-			Response.Write "</tr>"
-				  
-			rs.MoveNext
-		Loop
-	%>
-	<% 
-		set  rs = nothing
-	%>
-	</table>
+    <%
+        ' DSN과 SQL문을 가져온다.
+        strIP = Request( "server_ip" )
+        strPort = Request( "cas_port" )
+        strUser = Request( "db_user" )
+        strPass = Request( "db_pass" )
+        strName = Request( "db_name" )
+        strQuery = Request( "query" )
+       
+    if strIP = "" then
+       Response.Write "SERVER_IP를 입력하세요"
+            Response.End ' IP가 없으면 페이지 종료
+        end if
+        if strPort = "" then
+           Response.Write "Port 번호를 입력하세요"
+            Response.End ' Port가 없으면 페이지 종료
+        end if
+        if strUser = "" then
+           Response.Write "DB_USER를 입력하세요"
+            Response.End ' DB_User가 없으면 페이지 종료
+        end if
+        if strName = "" then
+           Response.Write "DB_NAME을 입력하세요"
+            Response.End ' DB_NAME이 없으면 페이지 종료
+        end if
+        if strQuery = "" then
+           Response.Write "확인하고자 하는 Query를 입력하세요"
+            Response.End ' Query가 없으면 페이지 종료
+        end if
+     ' 연결 객체 생성
+      strDsn = "driver={CUBRID Driver};server=" & strIP & ";port=" & strPort & ";uid=" & strUser & ";pwd=" & strPass & ";db_name=" & strName & ";"
+    ' DB연결
+    Set DBConn = Server.CreateObject("ADODB.Connection")
+           DBConn.Open strDsn
+        ' SQL 실행
+        Set rs = DBConn.Execute( strQuery )
+        ' SQL문에 따라 메시지 보이기
+        if InStr(Ucase(strQuery),"INSERT")>0 then
+            Response.Write "레코드가 추가되었습니다."
+            Response.End
+        end if
+           
+        if InStr(Ucase(strQuery),"DELETE")>0  then
+            Response.Write "레코드가 삭제되었습니다."
+            Response.End
+        end if
+           
+        if InStr(Ucase(strQuery),"UPDATE")>0  then
+            Response.Write "레코드가 수정되었습니다."
+            Response.End
+        end if   
+    %>
+    <table>
+    <%   
+        ' 필드 이름 보여주기
+        Response.Write "<tr bgColor=#f3f3f3>"
+        For index =0 to ( rs.fields.count-1 )
+            Response.Write "<td><b>" & rs.fields(index).name & "</b></td>"
+        Next
+        Response.Write "</tr>"
+        ' 필드 값 보여주기
+        Do While Not rs.EOF
+            Response.Write "<tr bgColor=#f3f3f3>"
+            For index =0 to ( rs.fields.count-1 )
+                Response.Write "<td>" & rs(index) & "</td>"
+            Next
+            Response.Write "</tr>"
+                  
+            rs.MoveNext
+        Loop
+    %>
+    <% 
+        set  rs = nothing
+    %>
+    </table>
 
 
 http://localhost/ASP수행폴더/cubrid.asp에 접속하면 수행 결과를 확인할 수 있다. 위의 ASP 예제 코드를 실행하면 다음과 같은 결과를 출력한다. 해당 항목에 알맞은 값을 넣고 Query 항목에 질의문을 입력하고 [실행하기]를 클릭하면 하단에 질의 문의 결과가 출력된다.

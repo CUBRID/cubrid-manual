@@ -6,14 +6,14 @@ You can delete records in the table by using the **DELETE** statement. You can s
 
 If you want to delete one table, the :ref:`limit-clause` can be specified. You can limit the number of records by specifying the :ref:`limit-clause`.  If the number of records satisfying the :ref:`where-clause` exceeds *row_count*, only the number of records specified in *row_count* will be deleted. ::
 
-	<DELETE single table>
-	DELETE [FROM] table_name [ WHERE <search_condition> ] [LIMIT row_count]
-	 
-	<DELETE multiple tables FROM ...>
-	DELETE table_name[, table_name] ... FROM <table_specifications> [ WHERE <search_condition> ]
-	 
-	<DELETE FROM multiple tables USING ...>
-	DELETE FROM table_name[, table_name] ... USING <table_specifications> [ WHERE <search_condition> ]
+    <DELETE single table>
+    DELETE [FROM] table_name [ WHERE <search_condition> ] [LIMIT row_count]
+     
+    <DELETE multiple tables FROM ...>
+    DELETE table_name[, table_name] ... FROM <table_specifications> [ WHERE <search_condition> ]
+     
+    <DELETE FROM multiple tables USING ...>
+    DELETE FROM table_name[, table_name] ... USING <table_specifications> [ WHERE <search_condition> ]
 
 *   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
 *   *table_name* : Specifies the name of a table where the data to be deleted is contained. If the number of table is one, the **FROM** keyword can be omitted.
@@ -30,60 +30,60 @@ If you want to delete one table, the :ref:`limit-clause` can be specified. You c
 
 .. code-block:: sql
 
-	CREATE TABLE a_tbl(
-	id INT NOT NULL,
-	phone VARCHAR(10));
-	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
-	 
-	DELETE FROM a_tbl WHERE phone IS NULL LIMIT 1;
-	 
-	--delete one record only from a_tbl
-	SELECT * FROM a_tbl;
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				5  NULL
-	 
-	--delete all records from a_tbl
-	DELETE FROM a_tbl;
+    CREATE TABLE a_tbl(
+    id INT NOT NULL,
+    phone VARCHAR(10));
+    INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
+     
+    DELETE FROM a_tbl WHERE phone IS NULL LIMIT 1;
+     
+    --delete one record only from a_tbl
+    SELECT * FROM a_tbl;
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                5  NULL
+     
+    --delete all records from a_tbl
+    DELETE FROM a_tbl;
 
 **Example 2**
 
 .. code-block:: sql
 
-	CREATE TABLE a_tbl(
-	id INT NOT NULL,
-	phone VARCHAR(10));
-	 
-	CREATE TABLE b_tbl(
-	id INT NOT NULL,
-	phone VARCHAR(10));
-	 
-	CREATE TABLE c_tbl(
-	id INT NOT NULL,
-	phone VARCHAR(10));
-	 
-	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
-	 
-	INSERT INTO b_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL);
-	 
-	INSERT INTO c_tbl VALUES(1,'111-1111'), (2,'222-2222'), (10, '333-3333'), (11, NULL), (12, NULL);
-	 
-	-- Below four queries show the same result.
-	--  <DELETE multiple tables FROM ...>
-	 
-	DELETE a, b FROM a_tbl a, b_tbl b
-	WHERE a.id=b.id;
-	 
-	DELETE a, b FROM a_tbl a INNER JOIN b_tbl b ON a.id=b.id
-	INNER JOIN c_tbl c ON b.id=c.id;
-	 
-	-- <DELETE FROM multiple tables USING ...>
-	 
-	DELETE FROM a, b USING a_tbl a, b_tbl b, c_tbl c
-	WHERE a.id=b.id AND b.id=c.id;
-	 
-	DELETE FROM a, b USING a_tbl a INNER JOIN b_tbl b ON a.id=b.id
-	INNER JOIN c_tbl c ON b.id=c.id;
+    CREATE TABLE a_tbl(
+    id INT NOT NULL,
+    phone VARCHAR(10));
+     
+    CREATE TABLE b_tbl(
+    id INT NOT NULL,
+    phone VARCHAR(10));
+     
+    CREATE TABLE c_tbl(
+    id INT NOT NULL,
+    phone VARCHAR(10));
+     
+    INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
+     
+    INSERT INTO b_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL);
+     
+    INSERT INTO c_tbl VALUES(1,'111-1111'), (2,'222-2222'), (10, '333-3333'), (11, NULL), (12, NULL);
+     
+    -- Below four queries show the same result.
+    --  <DELETE multiple tables FROM ...>
+     
+    DELETE a, b FROM a_tbl a, b_tbl b
+    WHERE a.id=b.id;
+     
+    DELETE a, b FROM a_tbl a INNER JOIN b_tbl b ON a.id=b.id
+    INNER JOIN c_tbl c ON b.id=c.id;
+     
+    -- <DELETE FROM multiple tables USING ...>
+     
+    DELETE FROM a, b USING a_tbl a, b_tbl b, c_tbl c
+    WHERE a.id=b.id AND b.id=c.id;
+     
+    DELETE FROM a, b USING a_tbl a INNER JOIN b_tbl b ON a.id=b.id
+    INNER JOIN c_tbl c ON b.id=c.id;

@@ -11,12 +11,12 @@ CREATE INDEX
 
 ::
 
-	CREATE [ UNIQUE ] INDEX index_name
-	ON table_name <index_col_desc>
-	 
-	<index_col_desc> ::=
-		( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
-		| (function_name (argument_list) )
+    CREATE [ UNIQUE ] INDEX index_name
+    ON table_name <index_col_desc>
+     
+    <index_col_desc> ::=
+        ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
+        | (function_name (argument_list) )
 
 *   **UNIQUE** : 유일한 값을 갖는 고유 인덱스를 생성한다.
 *   *index_name* : 생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
@@ -30,37 +30,37 @@ CREATE INDEX
 
 .. warning::
 
-	CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
+    CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
 
 다음은 내림차순으로 정렬된 인덱스를 생성하는 예제이다.
 
 .. code-block:: sql
 
-	CREATE INDEX gold_index ON participant(gold DESC);
+    CREATE INDEX gold_index ON participant(gold DESC);
 
 다음은 다중 칼럼 인덱스를 생성하는 예제이다.
 
 .. code-block:: sql
 
-	CREATE INDEX name_nation_idx ON athlete(name, nation_code);
+    CREATE INDEX name_nation_idx ON athlete(name, nation_code);
 
 다음은 단일 칼럼 인덱스를 생성하는 예제이다. 문자열 타입으로 정의한 *nation_code* 칼럼에 대해서 1바이트 길이만큼 prefix를 지정하여 인덱스를 생성한다.
 
 .. code-block:: sql
 
-	CREATE INDEX idx_game_nation_code ON game(nation_code(1));
+    CREATE INDEX idx_game_nation_code ON game(nation_code(1));
 
 ALTER INDEX
 ===========
 
 **ALTER INDEX** 문을 사용하여 인덱스를 재생성한다. 즉, 인덱스를 삭제하고 다시 생성한다. **ON** 절 뒤에 테이블 이름과 칼럼 이름이 추가되면 해당 테이블 이름과 칼럼 이름으로 인덱스를 재생성한다. ::
 
-	ALTER [ UNIQUE ] INDEX index_name
-	ON { ONLY } table_name <index_col_desc> REBUILD [ ; ]
-	 
-	<index_col_desc> ::=
-		( column_name[ {, column_name} ...] ) [ WHERE <filter_predicate> ]
-		| (function_name (argument_list) )
+    ALTER [ UNIQUE ] INDEX index_name
+    ON { ONLY } table_name <index_col_desc> REBUILD [ ; ]
+     
+    <index_col_desc> ::=
+        ( column_name[ {, column_name} ...] ) [ WHERE <filter_predicate> ]
+        | (function_name (argument_list) )
 
 *   **UNIQUE** : 유일한 값을 갖는 고유 인덱스를 생성한다.
 *   *index_name* : 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
@@ -71,23 +71,23 @@ ALTER INDEX
 
 .. warning::
 
-	CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
+    CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
 
 다음은 인덱스를 재생성하는 여러 가지 방법을 보여주는 예제이다.
 
 .. code-block:: sql
 
-	ALTER INDEX i_game_medal ON game(medal) REBUILD;
-	ALTER INDEX game_date_idx REBUILD;
-	ALTER INDEX char_idx ON athlete(gender, nation_code) WHERE gender='M' AND nation_code='USA' REBUILD;
+    ALTER INDEX i_game_medal ON game(medal) REBUILD;
+    ALTER INDEX game_date_idx REBUILD;
+    ALTER INDEX char_idx ON athlete(gender, nation_code) WHERE gender='M' AND nation_code='USA' REBUILD;
 
 DROP INDEX
 ==========
 
 **DROP INDEX** 문을 사용하여 인덱스를 삭제할 수 있다. ::
 
-	DROP [ UNIQUE ] INDEX index_name
-	[ON table_name] [ ; ]
+    DROP [ UNIQUE ] INDEX index_name
+    [ON table_name] [ ; ]
 
 *   **UNIQUE** : 삭제하려는 인덱스가 고유 인덱스임을 지정한다. 고유 인덱스는 **DROP CONSTRAINT** 절로도 삭제할 수 있다.
 *   *index_name* : 삭제할 인덱스의 이름을 지정한다.
@@ -97,4 +97,4 @@ DROP INDEX
 
 .. code-block:: sql
 
-	DROP INDEX game_date_idx ON game;
+    DROP INDEX game_date_idx ON game;

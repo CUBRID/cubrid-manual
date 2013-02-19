@@ -18,7 +18,7 @@ CUBRID provides various tools for you to use easily through GUI. You can downloa
 
 *   CUBRID Manager : `http://www.cubrid.org/wiki_tools/entry/cubrid-manager <http://www.cubrid.org/wiki_tools/entry/cubrid-manager>`_
 
-*	CUBRID Web Manager : `http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager>`_
+*    CUBRID Web Manager : `http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager>`_
 
 *   CUBRID Migration Toolkit : `http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit <http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit>`_
 
@@ -26,7 +26,7 @@ CUBRID also provides various drivers such as JDBC, CCI, PHP, PDO, ODBC, OLE DB, 
 
 .. toctree::
 
-	install.rst
-	env.rst
-	upgrade.rst
-	qrytool.rst
+    install.rst
+    env.rst
+    upgrade.rst
+    qrytool.rst

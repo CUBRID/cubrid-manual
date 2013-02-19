@@ -17,85 +17,85 @@ This section describes how to use the CSQL Interpreter on the Linux environment
 
 You can start the CSQL program in the shell as shown below. At the initial installation, **PUBLIC** and **DBA** users are provided and the passwords of the users not set. If no user is specified while the CSQL Interpreter is executed, **PUBLIC** is used for log-in. ::
 
-	% csql demodb
+    % csql demodb
 
-	CUBRID SQL Interpreter
-
-
-	Type `;help' for help messages.
-
-	csql> ;help
-
-	=== <Help: Session Command Summary> ===
+    CUBRID SQL Interpreter
 
 
-	   All session commands should be prefixed by `;' and only blanks/tabs
-	   can precede the prefix. Capitalized characters represent the minimum
-	   abbreviation that you need to enter to execute the specified command.
+    Type `;help' for help messages.
 
-	   ;REAd   [<file-name>]       - read a file into command buffer.
-	   ;Write  [<file-name>]       - (over)write command buffer into a file.
-	   ;APpend [<file-name>]       - append command buffer into a file.
-	   ;PRINT                      - print command buffer.
-	   ;SHELL                      - invoke shell.
-	   ;CD                         - change current working directory.
-	   ;EXit                       - exit program.
+    csql> ;help
 
-	   ;CLear                      - clear command buffer.
-	   ;EDIT                       - invoke system editor with command buffer.
-	   ;LISt                       - display the content of command buffer.
+    === <Help: Session Command Summary> ===
 
-	   ;RUn                        - execute sql in command buffer.
-	   ;Xrun                       - execute sql in command buffer,
-									 and clear the command buffer.
-	   ;COmmit                     - commit the current transaction.
-	   ;ROllback                   - roll back the current transaction.
-	   ;AUtocommit [ON|OFF]        - enable/disable auto commit mode.
-	   ;REStart                    - restart database.
 
-	   ;SHELL_Cmd  [shell-cmd]     - set default shell, editor, print and pager
-	   ;EDITOR_Cmd [editor-cmd]      command to new one, or display the current
-	   ;PRINT_Cmd  [print-cmd]       one, respectively.
-	   ;PAger_cmd  [pager-cmd]
+       All session commands should be prefixed by `;' and only blanks/tabs
+       can precede the prefix. Capitalized characters represent the minimum
+       abbreviation that you need to enter to execute the specified command.
 
-	   ;DATE                       - display the local time, date.
-	   ;DATAbase                   - display the name of database being accessed.
-	   ;SChema class-name          - display schema information of a class.
-	   ;SYntax [sql-cmd-name]      - display syntax of a command.
-	   ;TRigger [`*'|trigger-name] - display trigger definition.
-	   ;Get system_parameter       - get the value of a system parameter.
-	   ;SEt system_parameter=value - set the value of a system parameter.
-	   ;PLan [simple/detail/off]   - show query execution plan.
-	   ;Info <command>             - display internal information.
-	   ;TIme [ON/OFF]              - enable/disable to display the query
-									 execution time.
-	   ;LINe-output [ON/OFF]       - enable/disable to display each value in a line
-	   ;HISTORYList                - display list of the executed queries.
-	   ;HISTORYRead <history_num>  - read entry on the history number into command buffer.
-	   ;HElp                       - display this help message.
+       ;REAd   [<file-name>]       - read a file into command buffer.
+       ;Write  [<file-name>]       - (over)write command buffer into a file.
+       ;APpend [<file-name>]       - append command buffer into a file.
+       ;PRINT                      - print command buffer.
+       ;SHELL                      - invoke shell.
+       ;CD                         - change current working directory.
+       ;EXit                       - exit program.
+
+       ;CLear                      - clear command buffer.
+       ;EDIT                       - invoke system editor with command buffer.
+       ;LISt                       - display the content of command buffer.
+
+       ;RUn                        - execute sql in command buffer.
+       ;Xrun                       - execute sql in command buffer,
+                                     and clear the command buffer.
+       ;COmmit                     - commit the current transaction.
+       ;ROllback                   - roll back the current transaction.
+       ;AUtocommit [ON|OFF]        - enable/disable auto commit mode.
+       ;REStart                    - restart database.
+
+       ;SHELL_Cmd  [shell-cmd]     - set default shell, editor, print and pager
+       ;EDITOR_Cmd [editor-cmd]      command to new one, or display the current
+       ;PRINT_Cmd  [print-cmd]       one, respectively.
+       ;PAger_cmd  [pager-cmd]
+
+       ;DATE                       - display the local time, date.
+       ;DATAbase                   - display the name of database being accessed.
+       ;SChema class-name          - display schema information of a class.
+       ;SYntax [sql-cmd-name]      - display syntax of a command.
+       ;TRigger [`*'|trigger-name] - display trigger definition.
+       ;Get system_parameter       - get the value of a system parameter.
+       ;SEt system_parameter=value - set the value of a system parameter.
+       ;PLan [simple/detail/off]   - show query execution plan.
+       ;Info <command>             - display internal information.
+       ;TIme [ON/OFF]              - enable/disable to display the query
+                                     execution time.
+       ;LINe-output [ON/OFF]       - enable/disable to display each value in a line
+       ;HISTORYList                - display list of the executed queries.
+       ;HISTORYRead <history_num>  - read entry on the history number into command buffer.
+       ;HElp                       - display this help message.
 
 **Running SQL with CSQL**
 
 After the CSQL has been executed, you can enter the SQL into the CSQL prompt. Each SQL statement must end with a semicolon (;). Multiple SQL statements can be entered in a single line. You can find the simple usage of the session commands with the ;help command. For more information, see :ref:`csql-session-commands`. ::
 
-	csql> SELECT SUM(n) FROM (SELECT gold FROM participant WHERE nation_code='KOR'
-	csql> UNION ALL SELECT silver FROM participant WHERE nation_code='JPN') AS t(n);
+    csql> SELECT SUM(n) FROM (SELECT gold FROM participant WHERE nation_code='KOR'
+    csql> UNION ALL SELECT silver FROM participant WHERE nation_code='JPN') AS t(n);
 
-	=== <Result of SELECT Command in Line 2> ===
+    === <Result of SELECT Command in Line 2> ===
 
-		   sum(n)
-	=============
-			   82
+           sum(n)
+    =============
+               82
 
 
-	1 row selected.
-	SQL statement execution time:     0.106504 sec
-	
-	Current transaction has been committed.
+    1 row selected.
+    SQL statement execution time:     0.106504 sec
+    
+    Current transaction has been committed.
 
-	1 command(s) successfully processed.
+    1 command(s) successfully processed.
 
-	csql> ;exit
+    csql> ;exit
 
 .. _cm-cqb:
 
@@ -156,22 +156,22 @@ Because CUBRID 2008 R4.3 or higher version includes Web Manager on the installat
 
 #. Start CUBRID Service. Web Manager works normally only when CUBRID Manager server is started. For more information, see :ref:`cubrid-manager-server`. ::
 
-	C:\CUBRID>cubrid service start
-	++ cubrid service is running.
-		
+    C:\CUBRID>cubrid service start
+    ++ cubrid service is running.
+        
 #. Access to https://localhost:8282/ which is written on the address bar. The default TCP port is 8282 (HTTPS/SSL) and it is possible to change by editing the cm_httpd.conf file at $CUBRID/conf/. Note that the header of address is not http, but https.
 
 #. First, log-in to the host. To access to the host, you should perform the CUBRID Manager server user (=the host user)'s authentication primarily. The default user ID/password is admin/admin.
 
-	.. image:: /images/gs_manager_login.png
+    .. image:: /images/gs_manager_login.png
 
 #. Connect to the DB server. In the tree on the left, you can see the list of databases which have been generated within the corresponding host. Click the DB name that you want to access and perform the DB user authentication (default ID/password: dba/pressing enter key)
 
-	.. image:: /images/gs_manager_db.png
+    .. image:: /images/gs_manager_db.png
 
 #. Run the SQL on the access DB and confirm the result. On the left side, the list of connected databases are displayed. You can edit, run, and find the result on the SQL tab.
 
-	.. image:: /images/gs_manager_screen.png
+    .. image:: /images/gs_manager_screen.png
 
 For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual .
 
@@ -182,22 +182,22 @@ CUBRID Manager is the client tool that you should download and run. It is a Java
 
 #. Download and install the latest CUBRID Manager file. CUBRID Manager is compatible with CUBRID DB engine 2008 R2.2 or higher version. It is recommended to upgrade to the latest version periodically; it supports the auto-update feature.
 
-	(CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager )
+    (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager )
 
 #. Start CUBRID service on the server. CUBRID Manager server should be started for CUBRID Manager client to access to DB. For more information, see :ref:`cubrid-manager-server`.
 
 ::
 
-	C:\CUBRID>cubrid service start
-	++ cubrid service is running.
-	
+    C:\CUBRID>cubrid service start
+    ++ cubrid service is running.
+    
 #. After the installation of CUBRID Manager, register host information on the [File > Add Host] menu. To register the host, you should enter host address, connection port (default: 8001), and CUBRID Manager user name/password and install the JDBC driver of the same version with DB engine (supporting auto-driver-search/auto-update).
 
 #. Choose the host on the left tress and perform the CUBRID Manager user (=host user) authentication. The default ID/password is admin/admin.
 
 #. Run SQL on the access DB and confirm the result. The host, DB and table list are displayed on the left side, and the query editor and the result window is shown on the right side. You can reuse the SQLs which have been succeeded with [SQL History] tab and compare the multiple results of several DBs as adding the DBs for the comparison of the result with [Multiple Query] tab.
 
-	.. image:: /images/gs_manager_sql.png
+    .. image:: /images/gs_manager_sql.png
 
 For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr .
 
@@ -225,7 +225,7 @@ CQB client tool also needs to be downloaded and installed separately from the CU
 
 #. Run SQL on the access DB and confirm the result. The lists of Host, DB, and table are displayed on the left side, and the query editor/result window are shown on the right side. You can reuse the SQLs which have been succeeded with [SQL History] tab and compare the multiple results of several DBs as adding the DBs for the comparison of the result with [Multiple Query] tab.
 
-	.. image:: /images/gs_manager_qb.png
+    .. image:: /images/gs_manager_qb.png
 
 For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual_kr .
 

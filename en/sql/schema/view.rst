@@ -9,41 +9,41 @@ A view is a virtual table that does not exist physically. You can create a view 
 
 Use **CREATE VIEW** statement to create a view. For how to write view name, see :doc:`/sql/identifier`. ::
 
-	CREATE [OR REPLACE] {VIEW | VCLASS} <view_name>
-							   [ <subclass_definition> ]
-							   [ ( <view_column_def_comma_list> ) ]
-							   [ CLASS ATTRIBUTE
-								 ( <column_definition_comma_list> ) ]
-							   [ METHOD <method_definition_comma_list> ]
-							   [ FILE <method_file_comma_list> ]
-							   [ INHERIT <resolution_comma_list> ]
-							   [ AS <select_statement> ]
-							   [ WITH CHECK OPTION ]
-	 
-	<view_column_definition> ::= <column_definition> | <column_name>
-	 
-	<column_definition> :
-	column_name column_type [ <default_or_shared> ] [ <column_constraint_list>]
-	 
-	<default_or_shared> :
-	{SHARED [ <value_specification> ] | DEFAULT <value_specification> } |
-	AUTO_INCREMENT [ (seed, increment) ]
-	 
-	<column_constraint> :
-	NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY REFERENCES...
-	 
-	<subclass_definition> :
-	{ UNDER | AS SUBCLASS OF } table_name_comma_list
-	 
-	<method_definition> :
-	[ CLASS ] method_name
-	[ ( [ argument_type_comma_list ] ) ]
-	[ result_type ]
-	[ FUNCTION function_name ]
-	 
-	<resolution> :
-	[ CLASS ] { column_name | method_name } OF superclass_name
-	[ AS alias ]
+    CREATE [OR REPLACE] {VIEW | VCLASS} <view_name>
+                               [ <subclass_definition> ]
+                               [ ( <view_column_def_comma_list> ) ]
+                               [ CLASS ATTRIBUTE
+                                 ( <column_definition_comma_list> ) ]
+                               [ METHOD <method_definition_comma_list> ]
+                               [ FILE <method_file_comma_list> ]
+                               [ INHERIT <resolution_comma_list> ]
+                               [ AS <select_statement> ]
+                               [ WITH CHECK OPTION ]
+     
+    <view_column_definition> ::= <column_definition> | <column_name>
+     
+    <column_definition> :
+    column_name column_type [ <default_or_shared> ] [ <column_constraint_list>]
+     
+    <default_or_shared> :
+    {SHARED [ <value_specification> ] | DEFAULT <value_specification> } |
+    AUTO_INCREMENT [ (seed, increment) ]
+     
+    <column_constraint> :
+    NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY REFERENCES...
+     
+    <subclass_definition> :
+    { UNDER | AS SUBCLASS OF } table_name_comma_list
+     
+    <method_definition> :
+    [ CLASS ] method_name
+    [ ( [ argument_type_comma_list ] ) ]
+    [ result_type ]
+    [ FUNCTION function_name ]
+     
+    <resolution> :
+    [ CLASS ] { column_name | method_name } OF superclass_name
+    [ AS alias ]
 
 *   **OR REPLACE** : If the keyword **OR REPLACE** is specified after **CREATE**, the existing view is replaced by a new one without displaying any error message, even when the *view_name* overlaps with the existing view name.
 
@@ -61,43 +61,43 @@ Use **CREATE VIEW** statement to create a view. For how to write view name, see 
 
 .. code-block:: sql
 
-	CREATE TABLE a_tbl(
-	id INT NOT NULL,
-	phone VARCHAR(10));
-	INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
-	 
-	 
-	--creating a new view based on AS select_statement from a_tbl
-	CREATE VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL WITH CHECK OPTION;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-	 
-	--WITH CHECK OPTION doesn’t allow to update column value which violates WHERE clause
-	UPDATE b_view SET phone=NULL;
-	 
-	In line 1, column 72,
-	 
-	ERROR: Check option exception on view b_view.
-	 
-	 
-	--creating view which name is as same as existing view name
-	CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC;
-	 
-	--the existing view has been replaced as a new view by OR REPLACE keyword
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				5  NULL
-				4  NULL
-				3  '333-3333'
-				2  '222-2222'
-				1  '111-1111'
+    CREATE TABLE a_tbl(
+    id INT NOT NULL,
+    phone VARCHAR(10));
+    INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
+     
+     
+    --creating a new view based on AS select_statement from a_tbl
+    CREATE VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL WITH CHECK OPTION;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+     
+    --WITH CHECK OPTION doesn’t allow to update column value which violates WHERE clause
+    UPDATE b_view SET phone=NULL;
+     
+    In line 1, column 72,
+     
+    ERROR: Check option exception on view b_view.
+     
+     
+    --creating view which name is as same as existing view name
+    CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC;
+     
+    --the existing view has been replaced as a new view by OR REPLACE keyword
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                5  NULL
+                4  NULL
+                3  '333-3333'
+                2  '222-2222'
+                1  '111-1111'
 
 Condition for Creating Updatable VIEW
 -------------------------------------
@@ -130,12 +130,12 @@ ADD QUERY Clause
 
 You can add a new query to a query specification by using the **ADD QUERY** clause of the **ALTER VIEW** statement. 1 is assigned to the query defined when a virtual table was created, and 2 is assigned to the query added by the **ADD QUERY** clause. ::
 
-	ALTER [ VIEW | VCLASS ] view_name
-	ADD QUERY select_statement
-	[ INHERIT resolution [ {, resolution }_ ] ]
-	 
-	resolution :
-	{ column_name | method_name } OF superclass_name [ AS alias ]
+    ALTER [ VIEW | VCLASS ] view_name
+    ADD QUERY select_statement
+    [ INHERIT resolution [ {, resolution }_ ] ]
+     
+    resolution :
+    { column_name | method_name } OF superclass_name [ AS alias ]
 
 *   *view_name* : Specifies the name of a view where the query to be added.
 *   *select_statement* : Specifies the query to be added.
@@ -144,37 +144,37 @@ You can add a new query to a query specification by using the **ADD QUERY** clau
 
 .. code-block:: sql
 
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
-	 
-	 
-	ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
-				1  '111-1111'
-				2  '222-2222'
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
+     
+     
+    ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
+                1  '111-1111'
+                2  '222-2222'
 
 AS SELECT Clause
 ----------------
 
 You can change the **SELECT** query defined in the virtual table by using the **AS SELECT** clause in the **ALTER VIEW** statement. This function is working like the **CREATE OR REPLACE** statement. You can also change the query by specifying the query number 1 in the **CHANGE QUERY** clause of the **ALTER VIEW** statement. ::
 
-	ALTER [ VIEW | VCLASS ] view_name AS select_statement
-	
+    ALTER [ VIEW | VCLASS ] view_name AS select_statement
+    
 *   *view_name* : Specifies the name of a view to be modified.
 *   *select_statement* : Specifies the new query statement to replace the **SELECT** statement defined when a view is created.
 
@@ -182,22 +182,22 @@ You can change the **SELECT** query defined in the virtual table by using the **
 
 .. code-block:: sql
 
-	ALTER VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
+    ALTER VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
 
 CHANGE QUERY Clause
 -------------------
 
 You can change the query defined in the query specification by using the **CHANGE QUERY** clause reserved word of the **ALTER VIEW** statement. ::
 
-	ALTER [ VIEW | VCLASS ] view_name
-		CHANGE QUERY [ integer ] select_statement [ ; ]
+    ALTER [ VIEW | VCLASS ] view_name
+        CHANGE QUERY [ integer ] select_statement [ ; ]
 
 *   *view_name* : Specifies the name of a view to be modified.
 *   *integer* : Specifies the number value of the query to be modified. The default value is 1.
@@ -207,36 +207,36 @@ You can change the query defined in the query specification by using the **CHANG
 
 .. code-block:: sql
 
-	--adding select_statement which query number is 2 and 3 for each
-	ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
-	ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id = 3;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-	 
-	--altering view changing query number 2
-	ALTER VIEW b_view CHANGE QUERY 2 SELECT * FROM a_tbl WHERE phone IS NULL;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
-				4  NULL
-				5  NULL
-				3  '333-3333'
+    --adding select_statement which query number is 2 and 3 for each
+    ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
+    ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id = 3;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+     
+    --altering view changing query number 2
+    ALTER VIEW b_view CHANGE QUERY 2 SELECT * FROM a_tbl WHERE phone IS NULL;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
+                4  NULL
+                5  NULL
+                3  '333-3333'
 
 DROP QUERY Clause
 -----------------
@@ -247,38 +247,38 @@ You can drop a query defined in the query specification by using the **DROP QUER
 
 .. code-block:: sql
 
-	ALTER VIEW b_view DROP QUERY 2,3;
-	SELECT * FROM b_view;
-	 
-			   id  phone
-	===================================
-				1  '111-1111'
-				2  '222-2222'
-				3  '333-3333'
-				4  NULL
-				5  NULL
+    ALTER VIEW b_view DROP QUERY 2,3;
+    SELECT * FROM b_view;
+     
+               id  phone
+    ===================================
+                1  '111-1111'
+                2  '222-2222'
+                3  '333-3333'
+                4  NULL
+                5  NULL
 
 DROP VIEW
 =========
 
 You can drop a view by using the **DROP VIEW** clause. The way to drop a view is the same as to drop a regular table. ::
 
-	DROP [ VIEW | VCLASS ] view_name [ { ,view_name , ... } ]
-	
+    DROP [ VIEW | VCLASS ] view_name [ { ,view_name , ... } ]
+    
 *   *view_name* : Specifies the name of a view to be dropped.
 
 **Example**
 
 .. code-block:: sql
 
-	DROP VIEW b_view;
+    DROP VIEW b_view;
 
 RENAME VIEW
 ===========
 
 You can change the view name by using the **RENAME VIEW** statement. ::
 
-	RENAME [ TABLE |CLASS | VIEW | VCLASS ] old_view_name AS new_view_name [ ; ]
+    RENAME [ TABLE |CLASS | VIEW | VCLASS ] old_view_name AS new_view_name [ ; ]
 
 *   *old_view_name* : Specifies the name of a view to be modified.
 *   *new_view_name* : Specifies the new name of a view.
@@ -289,4 +289,4 @@ The following example shows how to rename a view name to *game_2004*.
 
 .. code-block:: sql
 
-	RENAME VIEW game_2004 AS info_2004;
+    RENAME VIEW game_2004 AS info_2004;

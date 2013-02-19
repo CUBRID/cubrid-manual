@@ -11,12 +11,12 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 
 ::
 
-	CREATE [ UNIQUE ] INDEX index_name
-	ON table_name <index_col_desc>
-	 
-	<index_col_desc> ::=
-		( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
-		| (function_name (argument_list) )
+    CREATE [ UNIQUE ] INDEX index_name
+    ON table_name <index_col_desc>
+     
+    <index_col_desc> ::=
+        ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
+        | (function_name (argument_list) )
 
 *   **UNIQUE** : Creates an index with unique values.
 *   *index_name* : Specifies the name of the index to be created. The index name must be unique in the table.
@@ -36,31 +36,31 @@ The following example shows how to create a descending index.
 
 .. code-block:: sql
 
-	CREATE INDEX gold_index ON participant(gold DESC);
+    CREATE INDEX gold_index ON participant(gold DESC);
 
 The following example shows how to create a multiple column index.
 
 .. code-block:: sql
 
-	CREATE INDEX name_nation_idx ON athlete(name, nation_code);
+    CREATE INDEX name_nation_idx ON athlete(name, nation_code);
 
 The following example shows how to create a single column index. In this example, 1-byte long prefix is specified for the *nation_code* column when creating an index.
 
 .. code-block:: sql
 
-	CREATE INDEX idx_game_nation_code ON game(nation_code(1));
+    CREATE INDEX idx_game_nation_code ON game(nation_code(1));
 
 ALTER INDEX
 ===========
 
 The **ALTER INDEX** statement rebuilds an index. In other words, it drops and rebuilds an index. If a table name and a column name are added at the end of the **ON** clause, a new index is re-created with the table and column names. ::
 
-	ALTER [ UNIQUE ] INDEX index_name
-	ON { ONLY } table_name <index_col_desc> REBUILD [ ; ]
-	 
-	<index_col_desc> ::=
-		( column_name[ {, column_name} ...] ) [ WHERE <filter_predicate> ]
-		| (function_name (argument_list) )
+    ALTER [ UNIQUE ] INDEX index_name
+    ON { ONLY } table_name <index_col_desc> REBUILD [ ; ]
+     
+    <index_col_desc> ::=
+        ( column_name[ {, column_name} ...] ) [ WHERE <filter_predicate> ]
+        | (function_name (argument_list) )
 
 *   **UNIQUE** : Creates an index with unique values.
 *   *index_name* : Specifies the name of the index to be recreated. The index name must be unique in the table.
@@ -77,17 +77,17 @@ The following is an example of re-creating indexes in various ways:
 
 .. code-block:: sql
 
-	ALTER INDEX i_game_medal ON game(medal) REBUILD;
-	ALTER INDEX game_date_idx REBUILD;
-	ALTER INDEX char_idx ON athlete(gender, nation_code) WHERE gender='M' AND nation_code='USA' REBUILD;
+    ALTER INDEX i_game_medal ON game(medal) REBUILD;
+    ALTER INDEX game_date_idx REBUILD;
+    ALTER INDEX char_idx ON athlete(gender, nation_code) WHERE gender='M' AND nation_code='USA' REBUILD;
 
 DROP INDEX
 ==========
 
 Use the **DROP INDEX** statement to drop an index. ::
 
-	DROP [ UNIQUE ] INDEX index_name
-	[ON table_name] [ ; ]
+    DROP [ UNIQUE ] INDEX index_name
+    [ON table_name] [ ; ]
 
 *   **UNIQUE** : Specifies that the index to be dropped is a unique index. This also can be dropped with **DROP CONSTRAINT** clause.
 *   *index_name* : Specifies the name of the index to be dropped. If omitted, a name is automatically assigned as *i_<table_name>_<column_names>*.
@@ -97,4 +97,4 @@ The following are examples of many ways of dropping indexes:
 
 .. code-block:: sql
 
-	DROP INDEX game_date_idx ON game;
+    DROP INDEX game_date_idx ON game;

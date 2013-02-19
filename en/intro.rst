@@ -25,7 +25,7 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 .. note:: 
 
-	CUBRID Query Browser is a light version of CUBRID Manager and provides only the features that application developers absolute need: the database management and query editor features. For more details on CUBRID Query Browse, see `http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_ .
+    CUBRID Query Browser is a light version of CUBRID Manager and provides only the features that application developers absolute need: the database management and query editor features. For more details on CUBRID Query Browse, see `http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_ .
 
 .. image:: /images/image1.png
 
@@ -57,10 +57,10 @@ Temp volume is a space where the intermediate and final results of query process
 The examples of queries that can use permanent temp volume or temporary temp volume are as follows:
 
 *   Queries creating the resultset like **SELECT**
-*	Queries including **GROUP BY** or **ORDER BY**
-*	Queries including a subquery
-*	Queries executing sort-merge join
-*	Queries including the **CREATE INDEX** statement
+*    Queries including **GROUP BY** or **ORDER BY**
+*    Queries including a subquery
+*    Queries executing sort-merge join
+*    Queries including the **CREATE INDEX** statement
 
 
 When executing the queries above, the temp volume is used after exhausting the memory space (the space size is determined by the system parameter **temp_file_memory_size_in_pages** specified in **cubrid.conf**) assigned to store **SELECT** results or sort the data. The order in which the storage space is used to store the results of query processing and sorting is as follows: When the current storage space is exhausted, the next storage space is used.

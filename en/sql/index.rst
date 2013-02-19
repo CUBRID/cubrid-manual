@@ -26,25 +26,25 @@ The main topics covered in this chapter are as follows:
 *   CUBRID system catalog: Describes the CUBRID system catalog, the internal information of the CUBRID database.
 
 .. toctree::
-	:maxdepth: 2
+    :maxdepth: 2
 
-	comment.rst
-	identifier.rst
-	keyword.rst
-	datatype.rst
-	schema/table.rst
-	schema/index.rst
-	schema/view.rst
-	schema/serial.rst
-	function/index.rst
-	query/index.rst
-	transaction.rst
-	authorization.rst
-	tuning.rst
-	trigger.rst
-	jsp.rst
-	method.rst
-	partition.rst
-	oodb.rst
-	catalog.rst
-	
+    comment.rst
+    identifier.rst
+    keyword.rst
+    datatype.rst
+    schema/table.rst
+    schema/index.rst
+    schema/view.rst
+    schema/serial.rst
+    function/index.rst
+    query/index.rst
+    transaction.rst
+    authorization.rst
+    tuning.rst
+    trigger.rst
+    jsp.rst
+    method.rst
+    partition.rst
+    oodb.rst
+    catalog.rst
+    

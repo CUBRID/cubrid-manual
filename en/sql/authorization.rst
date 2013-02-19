@@ -20,12 +20,12 @@ Managing User
 
 **DBA** and **DBA** members can create, drop and alter users by using SQL statements. At the initial installation, passwords for users are not configured. ::
 
-	CREATE USER user_name
-	[ PASSWORD password ]
-	[ GROUPS user_name [ {, user_name } ... ] ]
-	[ MEMBERS user_name [ {, user_name } ... ] ] ;
-	DROP USER user_name;
-	ALTER USER user_name PASSWORD password;
+    CREATE USER user_name
+    [ PASSWORD password ]
+    [ GROUPS user_name [ {, user_name } ... ] ]
+    [ MEMBERS user_name [ {, user_name } ... ] ] ;
+    DROP USER user_name;
+    ALTER USER user_name PASSWORD password;
 
 *   *user_name* : Specifies the user name to create, delete or change.
 *   *password* : Specifies the user password to create or change.
@@ -36,9 +36,9 @@ The following example shows how to create a user (*Fred*), change a password, an
 
 .. code-block:: sql
 
-	CREATE USER Fred;
-	ALTER USER Fred PASSWORD '1234';
-	DROP USER Fred;
+    CREATE USER Fred;
+    ALTER USER Fred PASSWORD '1234';
+    DROP USER Fred;
 
 **Example 2**
 
@@ -46,13 +46,13 @@ The following example shows how to create a user and add member to the user. By 
 
 .. code-block:: sql
 
-	CREATE USER company;
-	CREATE USER engineering GROUPS company;
-	CREATE USER marketing GROUPS company;
-	CREATE USER design GROUPS company;
-	CREATE USER smith GROUPS design, marketing;
-	CREATE USER jones GROUPS marketing;  
-	CREATE USER brown GROUPS engineering;
+    CREATE USER company;
+    CREATE USER engineering GROUPS company;
+    CREATE USER marketing GROUPS company;
+    CREATE USER design GROUPS company;
+    CREATE USER smith GROUPS design, marketing;
+    CREATE USER jones GROUPS marketing;  
+    CREATE USER brown GROUPS engineering;
 
 **Example 3**
 
@@ -60,13 +60,13 @@ The following example shows how to create the same groups as above but use the *
 
 .. code-block:: sql
 
-	CREATE USER smith;
-	CREATE USER brown;
-	CREATE USER jones;
-	CREATE USER engineering MEMBERS brown;
-	CREATE USER marketing MEMBERS smith, jones;
-	CREATE USER design MEMBERS smith;
-	CREATE USER company MEMBERS engineering, marketing, design;
+    CREATE USER smith;
+    CREATE USER brown;
+    CREATE USER jones;
+    CREATE USER engineering MEMBERS brown;
+    CREATE USER marketing MEMBERS smith, jones;
+    CREATE USER design MEMBERS smith;
+    CREATE USER company MEMBERS engineering, marketing, design;
 
 .. _granting-authorization:
 
@@ -77,8 +77,8 @@ In CUBRID, the smallest grant unit of authorization is a table. You must grant a
 
 You don't need to grant authorization individually because the members of the granted group have the same authorization. The access to the (virtual) table created by a **PUBLIC** user is allowed to all other users. You can grant access authorization to a user by using the **GRANT** statement. ::
 
-	GRANT operation [ { ,operation }_ ] ON table_name [ { ,table_name }_ ]
-	TO user [ { ,user }_ ] [ WITH GRANT OPTION ] [ ; ]
+    GRANT operation [ { ,operation }_ ] ON table_name [ { ,table_name }_ ]
+    TO user [ { ,user }_ ] [ WITH GRANT OPTION ] [ ; ]
 
 *   *operation* : Specifies an operation that can be used when granting authorization. The following table shows operations.
 
@@ -101,7 +101,7 @@ The following example shows how to grant the **SELECT** authorization for the *o
 
 .. code-block:: sql
 
-	GRANT SELECT ON olympic TO Fred;
+    GRANT SELECT ON olympic TO Fred;
 
 **Example 2**
 
@@ -109,7 +109,7 @@ The following example shows how to grant the **SELECT**, **INSERT**, **UPDATE** 
 
 .. code-block:: sql
 
-	GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jeniffer, Daniel;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jeniffer, Daniel;
 
 **Example 3**
 
@@ -117,7 +117,7 @@ The following example shows how to grant every authorization on the *game* and *
 
 .. code-block:: sql
 
-	GRANT ALL PRIVILEGES ON game, event TO public;
+    GRANT ALL PRIVILEGES ON game, event TO public;
 
 **Example 4**
 
@@ -125,7 +125,7 @@ The following example shows how to grant retrieving authorization on the *record
 
 .. code-block:: sql
 
-	GRANT SELECT ON record, history TO Ross WITH GRANT OPTION;
+    GRANT SELECT ON record, history TO Ross WITH GRANT OPTION;
 
 **Remark**
 
@@ -140,8 +140,8 @@ You can revoke authorization using the **REVOKE** statement. The authorization g
 
 If the authorization (**WITH GRANT OPTION**) is revoked from the grantor, the authorization granted to the grantee by that grantor is also revoked. ::
 
-	REVOKE operation [ { , operation }_ ] ON table_name [ { , class_name }_ ]
-	FROM user [ { , user }_ ] [ ; ]
+    REVOKE operation [ { , operation }_ ] ON table_name [ { , class_name }_ ]
+    FROM user [ { , user }_ ] [ ; ]
 
 *   *operation* : Indicates an operation that can be used when granting authorization (see **Syntax** in :ref:`granting-authorization` for details).
 *   *table_name* : Specifies the name of the table or virtual table to be granted.
@@ -153,7 +153,7 @@ The following example shows how to grant **SELECT**, **INSERT**, **UPDATE** and 
 
 .. code-block:: sql
 
-	GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO Fred, John;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO Fred, John;
 
 **Example 2**
 
@@ -161,7 +161,7 @@ The following example shows how to execute the **REVOKE** statement; this allows
 
 .. code-block:: sql
 
-	REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM John;
+    REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM John;
 
 **Example 3**
 
@@ -169,7 +169,7 @@ The following example shows how to execute the **REVOKE** statement revoking all
 
 .. code-block:: sql
 
-	REVOKE ALL PRIVILEGES ON nation, athlete FROM Fred;
+    REVOKE ALL PRIVILEGES ON nation, athlete FROM Fred;
 
 .. _change-owner:
 
@@ -178,18 +178,18 @@ Changing Owner
 
 Database Administrator (**DBA**) or a member of the **DBA** group can change the owner of table, view, trigger, and Java stored functions/procedures by using the following query. ::
 
-	ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] name OWNER TO user_id;
+    ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] name OWNER TO user_id;
 
 *   *name* : The name of schema object of which ower is to be changed
 *   *user_id* : User ID
 
 .. code-block:: sql
 
-	ALTER TABLE test_tbl OWNER TO public;
-	ALTER VIEW test_view OWNER TO public;
-	ALTER TRIGGER test_trigger OWNER TO public;
-	ALTER FUNCTION test_function OWNER TO public;
-	ALTER PROCEDURE test_procedure OWNER TO public;
+    ALTER TABLE test_tbl OWNER TO public;
+    ALTER VIEW test_view OWNER TO public;
+    ALTER TRIGGER test_trigger OWNER TO public;
+    ALTER FUNCTION test_function OWNER TO public;
+    ALTER PROCEDURE test_procedure OWNER TO public;
 
 .. _authorization-method:
 
@@ -202,8 +202,8 @@ The database administrator (**DBA**) can check and modify user authorization by 
 
 ::
 
-	CALL method_definition ON CLASS auth_class [ TO variable ] [ ; ]
-	CALL method_definition ON variable [ ; ]
+    CALL method_definition ON CLASS auth_class [ TO variable ] [ ; ]
+    CALL method_definition ON variable [ ; ]
 
 **login( ) method**
 
@@ -211,11 +211,11 @@ As a class method of **db_user** class, this method is used to change the users 
 
 .. code-block:: sql
 
-	-- Connect as DBA user who has no password
-	CALL login ('dba', '') ON CLASS db_user;
+    -- Connect as DBA user who has no password
+    CALL login ('dba', '') ON CLASS db_user;
 
-	-- Connect as a user_1 whose password is cubrid
-	CALL login ('user_1', 'cubrid') ON CLASS db_user;
+    -- Connect as a user_1 whose password is cubrid
+    CALL login ('user_1', 'cubrid') ON CLASS db_user;
 
 **add_user( ) method**
 
@@ -223,11 +223,11 @@ As a class method of **db_user** class, this method is used to add a new user. T
 
 .. code-block:: sql
 
-	-- Add user_2 who has no password
-	CALL add_user ('user_3', '') ON CLASS db_user;
+    -- Add user_2 who has no password
+    CALL add_user ('user_3', '') ON CLASS db_user;
 
-	-- Add user_3 who has no password, and store the return value of a method into an admin variable
-	CALL add_user ('user_2', '') ON CLASS db_user to admin;
+    -- Add user_3 who has no password, and store the return value of a method into an admin variable
+    CALL add_user ('user_2', '') ON CLASS db_user to admin;
 
 **drop_user( ) method**
 
@@ -235,8 +235,8 @@ As a class method of **db_user** class, this method is used to drop an existing 
 
 .. code-block:: sql
 
-	-- Delete user_2
-	CALL drop_user ('user_2') ON CLASS db_user;
+    -- Delete user_2
+    CALL drop_user ('user_2') ON CLASS db_user;
 
 **find_user( ) method**
 
@@ -244,8 +244,8 @@ As a class method of **db_user** class, this method is used to find a user who i
 
 .. code-block:: sql
 
-	-- Find user_2 and store it into a variable called 'admin'
-	CALL find_user ('user_2') ON CLASS db_user to admin;
+    -- Find user_2 and store it into a variable called 'admin'
+    CALL find_user ('user_2') ON CLASS db_user to admin;
 
 **set_password( ) method**
 
@@ -253,11 +253,11 @@ This method is an instance method that can call each user instance, and it is us
 
 .. code-block:: sql
 
-	-- Add user_4 and store it into a variable called user_common
-	CALL add_user ('user_4','') ON CLASS db_user to user_common;
+    -- Add user_4 and store it into a variable called user_common
+    CALL add_user ('user_4','') ON CLASS db_user to user_common;
 
-	-- Change the password of user_4 to 'abcdef'
-	CALL set_password('abcdef') on user_common;
+    -- Change the password of user_4 to 'abcdef'
+    CALL set_password('abcdef') on user_common;
 
 **change_owner() method**
 
@@ -265,8 +265,8 @@ As a class method of **db_authorizations** class, this method is used to change 
 
 .. code-block:: sql
 
-	-- Change the owner of table_1 to user_4
-	CALL change_owner ('table_1', 'user_4') ON CLASS db_authorizations;
+    -- Change the owner of table_1 to user_4
+    CALL change_owner ('table_1', 'user_4') ON CLASS db_authorizations;
 
 **Example**
 
@@ -276,14 +276,14 @@ The second statement outputs the value stored in the variable x. In this query s
 
 .. code-block:: sql
 
-	CALL find_user('dba') ON CLASS db_user to x;
-	Result
-	======================
-	db_user
-	 
-	SELECT x FROM db_root;
-	x
-	======================
-	db_user
+    CALL find_user('dba') ON CLASS db_user to x;
+    Result
+    ======================
+    db_user
+     
+    SELECT x FROM db_root;
+    x
+    ======================
+    db_user
 
 With **find_user**, you can determine if the user exists in the database depending on whether the return value is **NULL** or not.

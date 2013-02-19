@@ -48,11 +48,11 @@ CUBRID를 이용하는 응용 프로그램을 개발하려면 CUBRID OLE DB 공�
     `http://www.microsoft.com/express/Downloads/#2010-Visual-CPP <http://www.microsoft.com/express/Downloads/#2010-Visual-CPP>`_
     )을 사용한다. CUBRID 버전이 9.0.0이라면 *<CUBRID 버전>* 에는 9.0.0을 입력한다. ::
 
-	http://svn.cubrid.org/cubridapis/oledb/branches/RB-<CUBRID 버전>/Source/
+    http://svn.cubrid.org/cubridapis/oledb/branches/RB-<CUBRID 버전>/Source/
 
 CUBRID OLED DB Data Provider Installer를 이용하지 않는 경우에는 운영체제 버전에 따라 다음 명령어를 실행하여 드라이버를 등록해야 한다. 이때 32비트 Windows에서는 **C:\Windows\system32** 디렉터리의 regsvr32가 실행되어야 하고, 64비트 Windows에서는 **C:\Windows\SysWOW64** 디렉터리의 regsvr32가 실행되어야 한다. ::
 
-	regsvr32 CUBRIDProvider.dll
+    regsvr32 CUBRIDProvider.dll
 
 OLE DB 프로그래밍
 =================
@@ -110,14 +110,14 @@ ADO(ActiveX Data Object) 혹은 ADO.net을 이용하여 CUBRID OLE DB Provider �
 
 위의 예를 이용한 연결 문자열은 다음과 같다. ::
 
-	"Provider=CUBRIDProvider;Data Source=demodb;Location=127.0.0.1;User ID=PUBLIC;Password=xxx;Port= 33000;Fetch Size=100"
+    "Provider=CUBRIDProvider;Data Source=demodb;Location=127.0.0.1;User ID=PUBLIC;Password=xxx;Port= 33000;Fetch Size=100"
 
 .. note::
 
-	*   연결 문자열에서 세미콜론(;)은 구분자로 사용되므로, 연결 문자열에 암호(Password)를 지정할 때 암호의 일부에 세미콜론을 사용할 수 없다.
-	*   칼럼에서 정의한 크기보다 큰 문자열을 **INSERT** / **UPDATE** 하면 문자열이 잘려서 입력된다.
-	*   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
-	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
+    *   연결 문자열에서 세미콜론(;)은 구분자로 사용되므로, 연결 문자열에 암호(Password)를 지정할 때 암호의 일부에 세미콜론을 사용할 수 없다.
+    *   칼럼에서 정의한 크기보다 큰 문자열을 **INSERT** / **UPDATE** 하면 문자열이 잘려서 입력된다.
+    *   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+    *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
 
 .NET 환경에서의 멀티 스레드 프로그래밍
@@ -131,7 +131,7 @@ Microsoft의 .NET 환경에서 CUBRID OLE DB Provider를 이용하여 프로그�
 
 .. warning::
 
-	OLE DB의 모든 객체는 COM 객체이다. 현재 CUBRID OLE DB Provider는 COM threading model 중 apartment threading model만을 지원하고 free threading model은 지원하지 않는다. 이는 .NET 환경에만 해당하는 사항은 아니고 모든 multi-threaded 환경에 해당하는 내용이다.
+    OLE DB의 모든 객체는 COM 객체이다. 현재 CUBRID OLE DB Provider는 COM threading model 중 apartment threading model만을 지원하고 free threading model은 지원하지 않는다. 이는 .NET 환경에만 해당하는 사항은 아니고 모든 multi-threaded 환경에 해당하는 내용이다.
 
 OLE DB API
 ==========

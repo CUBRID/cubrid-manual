@@ -6,15 +6,15 @@ You can update the column value of a record stored in the target table to a new 
 
 In case of only one table is to be updated, you can specify :ref:`order-by-clause` or :ref:`limit-clause`. You can also limit the number of records to be updated in the :ref:`limit-clause`. You can use the update with the :ref:`order-by-clause` if you want to maintain the execution order or lock order of triggers. ::
 
-	<UPDATE single table>
-	UPDATE table_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT}...]
-		[WHERE search_condition]
-		[ORDER BY {col_name | expr}]
-		[LIMIT row_count]
-	 
-	<UPDATE multiple tables>
-	UPDATE <table_specifications> SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT}...]
-		[WHERE search_condition]
+    <UPDATE single table>
+    UPDATE table_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT}...]
+        [WHERE search_condition]
+        [ORDER BY {col_name | expr}]
+        [LIMIT row_count]
+     
+    <UPDATE multiple tables>
+    UPDATE <table_specifications> SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT}...]
+        [WHERE search_condition]
 
 *   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
 *   *column_name*: Specifies the column name to be updated. Columns for one or more tables can be specified.
@@ -29,73 +29,73 @@ The following example shows how to update one table.
 
 .. code-block:: sql
 
-	--creating a new table having all records copied from a_tbl1
-	CREATE TABLE a_tbl5 AS SELECT * FROM a_tbl1;
-	SELECT * FROM a_tbl5 WHERE name IS NULL;
-	 
-			   id  name                  phone
-	=========================================================
-			 NULL  NULL                  '000-0000'
-				4  NULL                  '000-0000'
-				5  NULL                  '000-0000'
-				7  NULL                  '777-7777'
-	 
-	UPDATE a_tbl5 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
-	SELECT * FROM a_tbl5;
-	 
-			   id  name                  phone
-	=========================================================
-			 NULL  'yyy'                 '999-9999'
-				1  'aaa'                 '000-0000'
-				2  'bbb'                 '000-0000'
-				3  'ccc'                 '333-3333'
-				4  'yyy'                 '999-9999'
-				5  'yyy'                 '999-9999'
-				6  'eee'                 '000-0000'
-				7  NULL                  '777-7777'
-	 
-	-- using triggers, that the order in which the rows are updated is modified by the ORDER BY clause.
-	 
-	CREATE TABLE t (i INT,d INT);
-	CREATE TRIGGER trigger1 BEFORE UPDATE ON t IF new.i < 10 EXECUTE PRINT 'trigger1 executed';
-	CREATE TRIGGER trigger2 BEFORE UPDATE ON t IF new.i > 10 EXECUTE PRINT 'trigger2 executed';
-	INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
-	UPDATE t  SET i = i + 1 WHERE 1 = 1;
-	 
-	trigger2 executed
-	trigger1 executed
-	trigger2 executed
-	trigger2 executed
-	trigger1 executed
-	trigger2 executed
-	trigger1 executed
-	 
-	TRUNCATE TABLE t;
-	INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
-	UPDATE t SET i = i + 1 WHERE 1 = 1  ORDER BY i;
-	 
-	trigger1 executed
-	trigger1 executed
-	trigger1 executed
-	trigger2 executed
-	trigger2 executed
-	trigger2 executed
-	trigger2 executed
+    --creating a new table having all records copied from a_tbl1
+    CREATE TABLE a_tbl5 AS SELECT * FROM a_tbl1;
+    SELECT * FROM a_tbl5 WHERE name IS NULL;
+     
+               id  name                  phone
+    =========================================================
+             NULL  NULL                  '000-0000'
+                4  NULL                  '000-0000'
+                5  NULL                  '000-0000'
+                7  NULL                  '777-7777'
+     
+    UPDATE a_tbl5 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
+    SELECT * FROM a_tbl5;
+     
+               id  name                  phone
+    =========================================================
+             NULL  'yyy'                 '999-9999'
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                4  'yyy'                 '999-9999'
+                5  'yyy'                 '999-9999'
+                6  'eee'                 '000-0000'
+                7  NULL                  '777-7777'
+     
+    -- using triggers, that the order in which the rows are updated is modified by the ORDER BY clause.
+     
+    CREATE TABLE t (i INT,d INT);
+    CREATE TRIGGER trigger1 BEFORE UPDATE ON t IF new.i < 10 EXECUTE PRINT 'trigger1 executed';
+    CREATE TRIGGER trigger2 BEFORE UPDATE ON t IF new.i > 10 EXECUTE PRINT 'trigger2 executed';
+    INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
+    UPDATE t  SET i = i + 1 WHERE 1 = 1;
+     
+    trigger2 executed
+    trigger1 executed
+    trigger2 executed
+    trigger2 executed
+    trigger1 executed
+    trigger2 executed
+    trigger1 executed
+     
+    TRUNCATE TABLE t;
+    INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
+    UPDATE t SET i = i + 1 WHERE 1 = 1  ORDER BY i;
+     
+    trigger1 executed
+    trigger1 executed
+    trigger1 executed
+    trigger2 executed
+    trigger2 executed
+    trigger2 executed
+    trigger2 executed
 
 The following example shows how to update multiple tables after joining them.
 
 .. code-block:: sql
 
-	CREATE TABLE a_tbl(id INT PRIMARY KEY, charge DOUBLE);
-	CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);
-	INSERT INTO a_tbl VALUES (1, 100.0), (2, 1000.0), (3, 10000.0);
-	INSERT INTO b_tbl VALUES (1, 0.1), (2, 0.0), (3, 0.2), (3, 0.5);
-	 
-	UPDATE
-	 a_tbl INNER JOIN b_tbl ON a_tbl.id=b_tbl.rate_id
-	SET
-	  a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
-	WHERE a_tbl.charge > 900.0;
+    CREATE TABLE a_tbl(id INT PRIMARY KEY, charge DOUBLE);
+    CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);
+    INSERT INTO a_tbl VALUES (1, 100.0), (2, 1000.0), (3, 10000.0);
+    INSERT INTO b_tbl VALUES (1, 0.1), (2, 0.0), (3, 0.2), (3, 0.5);
+     
+    UPDATE
+     a_tbl INNER JOIN b_tbl ON a_tbl.id=b_tbl.rate_id
+    SET
+      a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
+    WHERE a_tbl.charge > 900.0;
 
 For the *a_tbl* table and the *b_tbl* table, which join the **UPDATE** statement, when the number of rows of *a_tbl* which joins one row of *b_tbl* is two or more and the column to be updated is included in *a_tbl*, update is executed by using the value of the row detected first among the rows of *b_tbl*.
 

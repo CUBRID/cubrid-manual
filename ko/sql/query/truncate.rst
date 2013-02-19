@@ -10,29 +10,29 @@ TRUNCATE
 
 .. note:: 
 
-	**TRUNCATE** 문을 수행하려면 해당 테이블에 **ALTER**, **INDEX**, **DELETE** 권한이 필요하다. 권한을 부여하는 방법은 :ref:`granting-authorization` 를 참고한다.
+    **TRUNCATE** 문을 수행하려면 해당 테이블에 **ALTER**, **INDEX**, **DELETE** 권한이 필요하다. 권한을 부여하는 방법은 :ref:`granting-authorization` 를 참고한다.
 
 ::
 
-	TRUNCATE [ TABLE ] <table_name>
+    TRUNCATE [ TABLE ] <table_name>
 
 *   *table_name* : 삭제할 데이터가 포함되어 있는 테이블의 이름을 지정한다.
 
 .. code-block:: sql
 
-	CREATE TABLE a_tbl(A INT AUTO_INCREMENT(3,10) PRIMARY KEY);
-	INSERT INTO a_tbl VALUES (NULL),(NULL),(NULL);
-	SELECT * FROM a_tbl;
-				a
-	=============
-				3
-				13
-				23
-	 
-	--AUTO_INCREMENT column value increases from the initial value after truncating the table
-	TRUNCATE TABLE a_tbl;
-	INSERT INTO a_tbl VALUES (NULL);
-	SELECT * FROM a_tbl;
-				a
-	=============
-				3
+    CREATE TABLE a_tbl(A INT AUTO_INCREMENT(3,10) PRIMARY KEY);
+    INSERT INTO a_tbl VALUES (NULL),(NULL),(NULL);
+    SELECT * FROM a_tbl;
+                a
+    =============
+                3
+                13
+                23
+     
+    --AUTO_INCREMENT column value increases from the initial value after truncating the table
+    TRUNCATE TABLE a_tbl;
+    INSERT INTO a_tbl VALUES (NULL);
+    SELECT * FROM a_tbl;
+                a
+    =============
+                3

@@ -35,11 +35,11 @@ Linux
 
 #. 다음과 같은 명령어를 입력하여 CUBRID PDO 드라이버 최신 버전을 설치한다. ::
 
-	sudo pecl install pdo_cubrid
+    sudo pecl install pdo_cubrid
 
    하위 버전의 드라이버가 필요하면 다음과 같이 설치할 버전을 지정할 수 있다. ::
 
-	sudo pecl install pdo_cubrid-8.3.1.0003
+    sudo pecl install pdo_cubrid-8.3.1.0003
 
    설치가 진행되는 중에 **CUBRID base install dir autodetect :** 라는 프롬프트가 표시된다. 설치를 원활하게 진행하기 위해서 CUBRID를 설치한 디렉터리의 전체 경로를 입력한다. 예를 들어 CUBRID가 **/home/cubridtest/CUBRID** 디렉터리에 설치되었다면, **/home/cubridtest/CUBRID** 를 입력한다.
 
@@ -49,8 +49,8 @@ Linux
 
    * 다른 운영체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. ::
 
-	[CUBRID]
-	extension=pdo_cubrid.so
+    [CUBRID]
+    extension=pdo_cubrid.so
 
 #. 변경된 내용을 반영하려면 웹 서버를 재시작한다.
 
@@ -75,13 +75,13 @@ PDO 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있�
 
 #. **php.ini** ( **C:\\Program Files\\PHP\\php.ini** ) 파일을 열어 끝에 다음 두 줄을 추가한다. ::
 
-	[PHP_CUBRID]
-	extension=php_cubrid.dll
+    [PHP_CUBRID]
+    extension=php_cubrid.dll
 
    PDO 드라이버의 경우에는 다음 내용을 추가한다. ::
 
-	[PHP_PDO_CUBRID]
-	extension = php_pdo_cubrid.dll
+    [PHP_PDO_CUBRID]
+    extension = php_pdo_cubrid.dll
 
 #. 웹 서버를 재시작한다.
 
@@ -109,7 +109,7 @@ PDO_CUBRID 데이터 원본 이름(DSN)은 다음과 같은 요소로 구성된�
 
 **예제** ::
 
-	"cubrid:host=127.0.0.1;port=33000;dbname=demodb"
+    "cubrid:host=127.0.0.1;port=33000;dbname=demodb"
 
 미리 정의된 상수
 ----------------
@@ -171,30 +171,30 @@ CUBRID PDO 드라이버 확인
 
 .. code-block:: php
 
-	<?php
-	echo'PDO Drivers available:
-	';
-	foreach(PDO::getAvailableDrivers()as $driver)
-	{
-	if($driver =="cubrid"){
-	echo" - Driver: <b>".$driver.'</b>
-	';
-	}else{
-	echo" - Driver: ".$driver.'
-	';
-	}
-	}
-	?>
+    <?php
+    echo'PDO Drivers available:
+    ';
+    foreach(PDO::getAvailableDrivers()as $driver)
+    {
+    if($driver =="cubrid"){
+    echo" - Driver: <b>".$driver.'</b>
+    ';
+    }else{
+    echo" - Driver: ".$driver.'
+    ';
+    }
+    }
+    ?>
 
 
 위 스크립트는 다음과 같이 설치된 PDO 드라이버를 출력한다. ::
 
-	PDO Drivers available:
-	- Driver: mysql
-	- Driver: pgsql
-	- Driver: sqlite
-	- Driver: sqlite2
-	- Driver: cubrid
+    PDO Drivers available:
+    - Driver: mysql
+    - Driver: pgsql
+    - Driver: sqlite
+    - Driver: sqlite2
+    - Driver: cubrid
 
 CUBRID 연결
 -----------
@@ -205,33 +205,33 @@ CUBRID 연결
 
 .. code-block:: php
 
-	<?php
-	$database ="demodb";
-	$host ="localhost";
-	$port ="30000";//use default value
-	$username ="dba";
-	$password ="";
-	 
-	try{
-	//cubrid:host=localhost;port=33000;dbname=demodb
-	$conn_str ="cubrid:dbname=".$database.";host=".$host.";port=".$port;
-	echo"PDO connect string: ".$conn_str."
-	";
-	$db =new PDO($conn_str, $username, $password );
-	echo"PDO connection created ok!"."
-	";
-	$db = null;//disconnect
-	}catch(PDOException $e){
-	echo"Error: ".$e->getMessage()."
-	";
-	}
-	?>
+    <?php
+    $database ="demodb";
+    $host ="localhost";
+    $port ="30000";//use default value
+    $username ="dba";
+    $password ="";
+     
+    try{
+    //cubrid:host=localhost;port=33000;dbname=demodb
+    $conn_str ="cubrid:dbname=".$database.";host=".$host.";port=".$port;
+    echo"PDO connect string: ".$conn_str."
+    ";
+    $db =new PDO($conn_str, $username, $password );
+    echo"PDO connection created ok!"."
+    ";
+    $db = null;//disconnect
+    }catch(PDOException $e){
+    echo"Error: ".$e->getMessage()."
+    ";
+    }
+    ?>
 
 
 연결에 성공하면 다음과 같은 스크립트가 출력된다. ::
 
-	PDO connect string: cubrid:dbname=demodb;host=localhost;port=30000
-	PDO connection created ok!
+    PDO connect string: cubrid:dbname=demodb;host=localhost;port=30000
+    PDO connection created ok!
 
 SELECT 실행
 -----------
@@ -250,38 +250,38 @@ PDO에서 SQL 질의를 수행하려면 질의나 응용 프로그램의 성격�
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	 
-	$sql ="SELECT * FROM code";
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	echo'
-	';
-	 
-	try{
-	foreach($db->query($sql)as $row){
-	echo $row['s_name'].' - '. $row['f_name'].'
-	';
-	}
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+     
+    $sql ="SELECT * FROM code";
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+    echo'
+    ';
+     
+    try{
+    foreach($db->query($sql)as $row){
+    echo $row['s_name'].' - '. $row['f_name'].'
+    ';
+    }
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+     
+    $db = null;//disconnect
+    ?>
 
 위 스크립트의 결과는 다음과 같이 출력된다. ::
 
-	Executing SQL: SELECT * FROM code
-	 
-	X - Mixed
-	W - Woman
-	M - Man
-	B - Bronze
-	S - Silver
-	G - Goldie
+    Executing SQL: SELECT * FROM code
+     
+    X - Mixed
+    W - Woman
+    M - Man
+    B - Bronze
+    S - Silver
+    G - Goldie
 
 UPDATE 실행
 -----------
@@ -290,65 +290,65 @@ UPDATE 실행
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	 
-	$s_name ='X';
-	$f_name ='test';
-	$sql ="UPDATE code SET f_name=:f_name WHERE s_name=:s_name";
-	 
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	echo'
-	';
-	 
-	echo":f_name: <b>".$f_name.'</b>
-	';
-	echo'
-	';
-	echo":s_name: <b>".$s_name.'</b>
-	';
-	echo'
-	';
-	 
-	$qe = $db->prepare($sql);
-	$qe->execute(array(':s_name'=>$s_name,':f_name'=>$f_name));
-	 
-	$sql ="SELECT * FROM code";
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	echo'
-	';
-	 
-	try{
-	foreach($db->query($sql)as $row){
-	echo $row['s_name'].' - '. $row['f_name'].'
-	';
-	}
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+     
+    $s_name ='X';
+    $f_name ='test';
+    $sql ="UPDATE code SET f_name=:f_name WHERE s_name=:s_name";
+     
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+    echo'
+    ';
+     
+    echo":f_name: <b>".$f_name.'</b>
+    ';
+    echo'
+    ';
+    echo":s_name: <b>".$s_name.'</b>
+    ';
+    echo'
+    ';
+     
+    $qe = $db->prepare($sql);
+    $qe->execute(array(':s_name'=>$s_name,':f_name'=>$f_name));
+     
+    $sql ="SELECT * FROM code";
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+    echo'
+    ';
+     
+    try{
+    foreach($db->query($sql)as $row){
+    echo $row['s_name'].' - '. $row['f_name'].'
+    ';
+    }
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+     
+    $db = null;//disconnect
+    ?>
 
 위 스크립트의 실행 결과는 다음과 같이 출력된다. ::
 
-	Executing SQL: UPDATE code SET f_name=:f_name WHERE s_name=:s_name
-	 
-	:f_name: test
-	 
-	:s_name: X
-	 
-	Executing SQL: SELECT * FROM code
-	 
-	X - test
-	W - Woman
-	M - Man
-	B - Bronze
-	S - Silver
-	G – Goldie
+    Executing SQL: UPDATE code SET f_name=:f_name WHERE s_name=:s_name
+     
+    :f_name: test
+     
+    :s_name: X
+     
+    Executing SQL: SELECT * FROM code
+     
+    X - test
+    W - Woman
+    M - Man
+    B - Bronze
+    S - Silver
+    G – Goldie
 
 prepare와 bind
 --------------
@@ -363,92 +363,92 @@ prepared statement는 PDO가 제공하는 유용한 기능 중 하나로, 사용
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	 
-	$sql ="SELECT * FROM code WHERE s_name NOT LIKE :s_name";
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	 
-	$s_name ='xyz';
-	echo":s_name: <b>".$s_name.'</b>
-	';
-	 
-	echo'
-	';
-	 
-	try{
-	$stmt = $db->prepare($sql);
-	 
-	$stmt->bindParam(':s_name', $s_name, PDO::PARAM_STR);
-	$stmt->execute();
-	 
-	$result = $stmt->fetchAll();
-	foreach($result as $row)
-	{
-	echo $row['s_name'].' - '. $row['f_name'].'
-	';
-	}
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	echo'
-	';
-	 
-	$sql ="SELECT * FROM code WHERE s_name NOT LIKE :s_name";
-	echo"Executing SQL: <b>".$sql.'</b>
-	';
-	 
-	$s_name ='X';
-	echo":s_name: <b>".$s_name.'</b>
-	';
-	 
-	echo'
-	';
-	 
-	try{
-	$stmt = $db->prepare($sql);
-	 
-	$stmt->bindParam(':s_name', $s_name, PDO::PARAM_STR);
-	$stmt->execute();
-	 
-	$result = $stmt->fetchAll();
-	foreach($result as $row)
-	{
-	echo $row['s_name'].' - '. $row['f_name'].'
-	';
-	}
-	$stmt->closeCursor();
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	echo'
-	';
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+     
+    $sql ="SELECT * FROM code WHERE s_name NOT LIKE :s_name";
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+     
+    $s_name ='xyz';
+    echo":s_name: <b>".$s_name.'</b>
+    ';
+     
+    echo'
+    ';
+     
+    try{
+    $stmt = $db->prepare($sql);
+     
+    $stmt->bindParam(':s_name', $s_name, PDO::PARAM_STR);
+    $stmt->execute();
+     
+    $result = $stmt->fetchAll();
+    foreach($result as $row)
+    {
+    echo $row['s_name'].' - '. $row['f_name'].'
+    ';
+    }
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+    echo'
+    ';
+     
+    $sql ="SELECT * FROM code WHERE s_name NOT LIKE :s_name";
+    echo"Executing SQL: <b>".$sql.'</b>
+    ';
+     
+    $s_name ='X';
+    echo":s_name: <b>".$s_name.'</b>
+    ';
+     
+    echo'
+    ';
+     
+    try{
+    $stmt = $db->prepare($sql);
+     
+    $stmt->bindParam(':s_name', $s_name, PDO::PARAM_STR);
+    $stmt->execute();
+     
+    $result = $stmt->fetchAll();
+    foreach($result as $row)
+    {
+    echo $row['s_name'].' - '. $row['f_name'].'
+    ';
+    }
+    $stmt->closeCursor();
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+    echo'
+    ';
+     
+    $db = null;//disconnect
+    ?>
 
 위 스크립트의 결과는 다음과 같이 출력된다. ::
 
-	Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
-	:s_name: xyz
-	 
-	X - Mixed
-	W - Woman
-	M - Man
-	B - Bronze
-	S - Silver
-	G - Goldie
-	 
-	Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
-	:s_name: X
-	 
-	W - Woman
-	M - Man
-	B - Bronze
-	S - Silver
-	G - Goldie
+    Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
+    :s_name: xyz
+     
+    X - Mixed
+    W - Woman
+    M - Man
+    B - Bronze
+    S - Silver
+    G - Goldie
+     
+    Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
+    :s_name: X
+     
+    W - Woman
+    M - Man
+    B - Bronze
+    S - Silver
+    G - Goldie
 
 PDO::getAttribute() 사용
 ------------------------
@@ -466,28 +466,28 @@ PDO::getAttribute() 사용
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	 
-	echo"Driver name: <b>".$db->getAttribute(PDO::ATTR_DRIVER_NAME)."</b>";
-	echo"
-	";
-	echo"Client version: <b>".$db->getAttribute(PDO::ATTR_CLIENT_VERSION)."</b>";
-	echo"
-	";
-	echo"Server version: <b>".$db->getAttribute(PDO::ATTR_SERVER_VERSION)."</b>";
-	echo"
-	";
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+     
+    echo"Driver name: <b>".$db->getAttribute(PDO::ATTR_DRIVER_NAME)."</b>";
+    echo"
+    ";
+    echo"Client version: <b>".$db->getAttribute(PDO::ATTR_CLIENT_VERSION)."</b>";
+    echo"
+    ";
+    echo"Server version: <b>".$db->getAttribute(PDO::ATTR_SERVER_VERSION)."</b>";
+    echo"
+    ";
+     
+    $db = null;//disconnect
+    ?>
 
 위 스크립트의 결과는 다음과 같이 출력된다. ::
 
-	Driver name: cubrid
-	Client version: 8.3.0
-	Server version: 8.3.0.0337
+    Driver name: cubrid
+    Client version: 8.3.0
+    Server version: 8.3.0.0337
 
 CUBRID PDO 확장
 ---------------
@@ -496,26 +496,26 @@ CUBRID PDO 확장은 데이터베이스 스키마와 메타데이터 정보를 �
 
 .. code-block:: php
 
-	<?php
-	include("_db_config.php");
-	include("_db_connect.php");
-	try{
-	echo"Get PRIMARY KEY for table: <b>nation</b>:
-	 
-	";
-	$pk_list = $db->cubrid_schema(PDO::CUBRID_SCH_PRIMARY_KEY,"nation");
-	print_r($pk_list);
-	}catch(PDOException $e){
-	echo $e->getMessage();
-	}
-	 
-	$db = null;//disconnect
-	?>
+    <?php
+    include("_db_config.php");
+    include("_db_connect.php");
+    try{
+    echo"Get PRIMARY KEY for table: <b>nation</b>:
+     
+    ";
+    $pk_list = $db->cubrid_schema(PDO::CUBRID_SCH_PRIMARY_KEY,"nation");
+    print_r($pk_list);
+    }catch(PDOException $e){
+    echo $e->getMessage();
+    }
+     
+    $db = null;//disconnect
+    ?>
 
 위 스크립트의 결과는 다음과 같이 출력된다. ::
 
-	Get PRIMARY KEY for table: nation:
-	Array ( [0] => Array ( [CLASS_NAME] => nation [ATTR_NAME] => code [KEY_SEQ] => 1 [KEY_NAME] => pk_nation_code ) )
+    Get PRIMARY KEY for table: nation:
+    Array ( [0] => Array ( [CLASS_NAME] => nation [ATTR_NAME] => code [KEY_SEQ] => 1 [KEY_NAME] => pk_nation_code ) )
 
 PDO API
 =======

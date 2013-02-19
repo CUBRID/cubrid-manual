@@ -41,44 +41,44 @@
 
 ::
 
-	expression  comparison_operator  expression
-	 
-	expression :
-	• bit string
-	• character string
-	• numeric value
-	• date-time value
-	• collection value
-	• NULL
-	 
-	comparison_operator :
-	=
-	| <=>
-	| <>
-	| !=
-	| >
-	| <
-	| >=
-	| <=
+    expression  comparison_operator  expression
+     
+    expression :
+    • bit string
+    • character string
+    • numeric value
+    • date-time value
+    • collection value
+    • NULL
+     
+    comparison_operator :
+    =
+    | <=>
+    | <>
+    | !=
+    | >
+    | <
+    | >=
+    | <=
 
 **구문 2**
 
 ::
 
-	expression IS [NOT] boolean_value
-	 
-	expression :
-	• bit string
-	• character string
-	• numeric value
-	• date-time value
-	• collection value
-	• NULL
-	 
-	boolean_value :
-	< UNKNOWN | NULL>
-	| TRUE
-	| FALSE
+    expression IS [NOT] boolean_value
+     
+    expression :
+    • bit string
+    • character string
+    • numeric value
+    • date-time value
+    • collection value
+    • NULL
+     
+    boolean_value :
+    < UNKNOWN | NULL>
+    | TRUE
+    | FALSE
 
 *   *expression* : 비교할 수식을 선언한다.
 
@@ -98,15 +98,15 @@
 
 .. code-block:: sql
 
-	SELECT (1 <> 0); -- TRUE이므로 1을 출력한다.
-	SELECT (1 != 0); -- TRUE이므로 1을 출력한다.
-	SELECT (0.01 = '0.01'); -- 숫자 타입과 문자열 타입을 비교했으므로 에러가 발생한다.
-	SELECT (1 = NULL); -- NULL을 출력한다.
-	SELECT (1 <=> NULL); -- FALSE이므로 0을 출력한다.
-	SELECT (1.000 = 1); -- TRUE이므로 1을 출력한다.
-	SELECT ('cubrid' = 'CUBRID'); -- 대소문자를 구분하므로 0을 출력한다.
-	SELECT ('cubrid' = 'cubrid'); -- TRUE이므로 1을 출력한다.
-	SELECT (SYSTIMESTAMP = CAST(SYSDATETIME AS TIMESTAMP)); -- 명시적으로 타입을 변환하여 비교 연산을 수행한 결과, 1을 출력한다.
-	SELECT (SYSTIMESTAMP = SYSDATETIME); -- 묵시적으로 타입을 변환하여 비교 연산을 수행한 결과, 0을 출력한다.
-	SELECT (SYSTIMESTAMP <> NULL); -- NULL의 비교 연산을 수행하지 않고 NULL을 반환한다.
-	SELECT (SYSTIMESTAMP IS NOT NULL); -- NULL이 아니므로 1을 반환한다.
+    SELECT (1 <> 0); -- TRUE이므로 1을 출력한다.
+    SELECT (1 != 0); -- TRUE이므로 1을 출력한다.
+    SELECT (0.01 = '0.01'); -- 숫자 타입과 문자열 타입을 비교했으므로 에러가 발생한다.
+    SELECT (1 = NULL); -- NULL을 출력한다.
+    SELECT (1 <=> NULL); -- FALSE이므로 0을 출력한다.
+    SELECT (1.000 = 1); -- TRUE이므로 1을 출력한다.
+    SELECT ('cubrid' = 'CUBRID'); -- 대소문자를 구분하므로 0을 출력한다.
+    SELECT ('cubrid' = 'cubrid'); -- TRUE이므로 1을 출력한다.
+    SELECT (SYSTIMESTAMP = CAST(SYSDATETIME AS TIMESTAMP)); -- 명시적으로 타입을 변환하여 비교 연산을 수행한 결과, 1을 출력한다.
+    SELECT (SYSTIMESTAMP = SYSDATETIME); -- 묵시적으로 타입을 변환하여 비교 연산을 수행한 결과, 0을 출력한다.
+    SELECT (SYSTIMESTAMP <> NULL); -- NULL의 비교 연산을 수행하지 않고 NULL을 반환한다.
+    SELECT (SYSTIMESTAMP IS NOT NULL); -- NULL이 아니므로 1을 반환한다.

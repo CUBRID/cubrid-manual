@@ -9,15 +9,15 @@ START WITH ... CONNECT BY 절
 
 **CONNECT BY ... START WITH** 로 두 절의 순서를 바꿔서 사용할 수도 있다. ::
 
-	SELECT column_list
-		FROM table_joins | tables
-		[WHERE join_conditions and/or filtering_conditions]
-		[hierarchical_clause]
-	 
-	hierarchical_clause :
-		[START WITH condition] CONNECT BY [NOCYCLE] condition
-		| CONNECT BY [NOCYCLE] condition [START WITH condition]
-	
+    SELECT column_list
+        FROM table_joins | tables
+        [WHERE join_conditions and/or filtering_conditions]
+        [hierarchical_clause]
+     
+    hierarchical_clause :
+        [START WITH condition] CONNECT BY [NOCYCLE] condition
+        | CONNECT BY [NOCYCLE] condition [START WITH condition]
+    
 START WITH 절
 -------------
 
@@ -25,7 +25,7 @@ START WITH 절
 
 .. note::
 
-	**START WITH** 절이 생략되거나, **START WITH** 조건식을 만족하는 결과 행이 존재하지 않는 경우, 테이블 내의 모든 행을 루트 행으로 간주하여 각 루트 행에 속하는 하위 자식 행들 간 계층 관계를 검색하므로 결과 행들 중 일부는 중복되어 출력될 수 있다.
+    **START WITH** 절이 생략되거나, **START WITH** 조건식을 만족하는 결과 행이 존재하지 않는 경우, 테이블 내의 모든 행을 루트 행으로 간주하여 각 루트 행에 속하는 하위 자식 행들 간 계층 관계를 검색하므로 결과 행들 중 일부는 중복되어 출력될 수 있다.
 
 CONNECT BY [NOCYCLE] PRIOR 절
 -----------------------------
@@ -38,55 +38,55 @@ CONNECT BY [NOCYCLE] PRIOR 절
 
 .. code-block:: sql
 
-	-- tree 테이블을 만들고 데이터를 삽입하기
-	CREATE TABLE tree(ID INT, MgrID INT, Name VARCHAR(32), BirthYear INT);
-	 
-	INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
-	INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
-	INSERT INTO tree VALUES (3,1,'Jonas', 1976);
-	INSERT INTO tree VALUES (4,1,'Smith', 1974);
-	INSERT INTO tree VALUES (5,2,'Verma', 1973);
-	INSERT INTO tree VALUES (6,2,'Foster', 1972);
-	INSERT INTO tree VALUES (7,6,'Brown', 1981);
-	 
-	-- CONNECT BY 절을 이용하여 계층 질의문 수행하기
-	SELECT id, mgrid, name
-		FROM tree
-		CONNECT BY PRIOR id=mgrid
-		ORDER BY id;
-	 
-	id  mgrid       name
-	======================
-	1   null        Kim
-	2   null        Moy
-	3   1       Jonas
-	3   1       Jonas
-	4   1       Smith
-	4   1       Smith
-	5   2       Verma
-	5   2       Verma
-	6   2       Foster
-	6   2       Foster
-	7   6       Brown
-	7   6       Brown
-	7   6       Brown
-	 
-	-- START WITH 절을 이용하여 계층 질의문 수행하기
-	SELECT id, mgrid, name
-		FROM tree
-		START WITH mgrid IS NULL
-		CONNECT BY prior id=mgrid
-		ORDER BY id;
-	 
-	id  mgrid       name
-	=============================
-	1   null        Kim
-	2   null        Moy
-	3   1       Jonas
-	4   1       Smith
-	5   2       Verma
-	6   2       Foster
-	7   6       Brown
+    -- tree 테이블을 만들고 데이터를 삽입하기
+    CREATE TABLE tree(ID INT, MgrID INT, Name VARCHAR(32), BirthYear INT);
+     
+    INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
+    INSERT INTO tree VALUES (2,NULL,'Moy', 1958);
+    INSERT INTO tree VALUES (3,1,'Jonas', 1976);
+    INSERT INTO tree VALUES (4,1,'Smith', 1974);
+    INSERT INTO tree VALUES (5,2,'Verma', 1973);
+    INSERT INTO tree VALUES (6,2,'Foster', 1972);
+    INSERT INTO tree VALUES (7,6,'Brown', 1981);
+     
+    -- CONNECT BY 절을 이용하여 계층 질의문 수행하기
+    SELECT id, mgrid, name
+        FROM tree
+        CONNECT BY PRIOR id=mgrid
+        ORDER BY id;
+     
+    id  mgrid       name
+    ======================
+    1   null        Kim
+    2   null        Moy
+    3   1       Jonas
+    3   1       Jonas
+    4   1       Smith
+    4   1       Smith
+    5   2       Verma
+    5   2       Verma
+    6   2       Foster
+    6   2       Foster
+    7   6       Brown
+    7   6       Brown
+    7   6       Brown
+     
+    -- START WITH 절을 이용하여 계층 질의문 수행하기
+    SELECT id, mgrid, name
+        FROM tree
+        START WITH mgrid IS NULL
+        CONNECT BY prior id=mgrid
+        ORDER BY id;
+     
+    id  mgrid       name
+    =============================
+    1   null        Kim
+    2   null        Moy
+    3   1       Jonas
+    4   1       Smith
+    5   2       Verma
+    6   2       Foster
+    7   6       Brown
 
 조인 테이블에 대한 계층 질의
 ============================
@@ -109,35 +109,35 @@ CONNECT BY [NOCYCLE] PRIOR 절
 
 .. code-block:: sql
 
-	-- tree2 테이블을 생성하고 데이터를 삽입하기
-	CREATE TABLE tree2(id int, treeid int, job varchar(32));
-	 
-	INSERT INTO tree2 VALUES(1,1,'Partner');
-	INSERT INTO tree2 VALUES(2,2,'Partner');
-	INSERT INTO tree2 VALUES(3,3,'Developer');
-	INSERT INTO tree2 VALUES(4,4,'Developer');
-	INSERT INTO tree2 VALUES(5,5,'Sales Exec.');
-	INSERT INTO tree2 VALUES(6,6,'Sales Exec.');
-	INSERT INTO tree2 VALUES(7,7,'Assistant');
-	INSERT INTO tree2 VALUES(8,null,'Secretary');
-	 
-	-- 조인 테이블에 대해 계층 질의문을 수행하기
-	SELECT t.id,t.name,t2.job,level
-		FROM tree t
-			inner join tree2 t2 on t.id=t2.treeid
-		START WITH t.mgrid is null
-		CONNECT BY prior t.id=t.mgrid
-		ORDER BY t.id;
-	 
-	id  name        job     level
-	================================================
-	1   Kim         Partner     1
-	2   Moy         Partner     1
-	3   Jonas       Developer   2
-	4   Smith       Developer   2
-	5   Verma       Sales Exec. 2
-	6   Foster      Sales Exec. 2
-	7   Brown       Assistant   3
+    -- tree2 테이블을 생성하고 데이터를 삽입하기
+    CREATE TABLE tree2(id int, treeid int, job varchar(32));
+     
+    INSERT INTO tree2 VALUES(1,1,'Partner');
+    INSERT INTO tree2 VALUES(2,2,'Partner');
+    INSERT INTO tree2 VALUES(3,3,'Developer');
+    INSERT INTO tree2 VALUES(4,4,'Developer');
+    INSERT INTO tree2 VALUES(5,5,'Sales Exec.');
+    INSERT INTO tree2 VALUES(6,6,'Sales Exec.');
+    INSERT INTO tree2 VALUES(7,7,'Assistant');
+    INSERT INTO tree2 VALUES(8,null,'Secretary');
+     
+    -- 조인 테이블에 대해 계층 질의문을 수행하기
+    SELECT t.id,t.name,t2.job,level
+        FROM tree t
+            inner join tree2 t2 on t.id=t2.treeid
+        START WITH t.mgrid is null
+        CONNECT BY prior t.id=t.mgrid
+        ORDER BY t.id;
+     
+    id  name        job     level
+    ================================================
+    1   Kim         Partner     1
+    2   Moy         Partner     1
+    3   Jonas       Developer   2
+    4   Smith       Developer   2
+    5   Verma       Sales Exec. 2
+    6   Foster      Sales Exec. 2
+    7   Brown       Assistant   3
 
 계층 질의문에서 사용 가능한 의사 칼럼
 =====================================
@@ -153,39 +153,39 @@ LEVEL
 
 .. code-block:: sql
 
-	-- LEVEL의 값을 확인하기
-	SELECT id, mgrid, name, LEVEL
-		FROM tree
-		WHERE LEVEL=2
-		START WITH mgrid IS NULL
-		CONNECT BY PRIOR id=mgrid
-		ORDER BY id;
-	 
-	id  mgrid       name        level
-	=========================================
-	3   1       Jonas       2
-	4   1       Smith       2
-	5   2       Verma       2
-	6   2       Foster      2
+    -- LEVEL의 값을 확인하기
+    SELECT id, mgrid, name, LEVEL
+        FROM tree
+        WHERE LEVEL=2
+        START WITH mgrid IS NULL
+        CONNECT BY PRIOR id=mgrid
+        ORDER BY id;
+     
+    id  mgrid       name        level
+    =========================================
+    3   1       Jonas       2
+    4   1       Smith       2
+    5   2       Verma       2
+    6   2       Foster      2
 
 다음은 **CONNECT BY** 절 뒤에 **LEVEL** 조건을 추가한 예제이다.
 
 .. code-block:: sql
 
-	SELECT LEVEL FROM db_root CONNECT BY LEVEL <= 10;
-	 
-			level
-	=============
-				1
-				2
-				3
-				4
-				5
-				6
-				7
-				8
-				9
-			   10
+    SELECT LEVEL FROM db_root CONNECT BY LEVEL <= 10;
+     
+            level
+    =============
+                1
+                2
+                3
+                4
+                5
+                6
+                7
+                8
+                9
+               10
 
 단, "CONNECT BY expr(LEVEL) < expr"과 같은 형태, 예를 들어 "CONNECT BY LEVEL +1 < 5"와 같은 형태는 지원하지 않는다.
 
@@ -198,22 +198,22 @@ CONNECT_BY_ISLEAF
 
 .. code-block:: sql
 
-	-- CONNECT_BY_ISLEAF의 값을 확인하기
-	SELECT id, mgrid, name, CONNECT_BY_ISLEAF
-		FROM tree
-		START WITH mgrid IS NULL
-		CONNECT BY PRIOR id=mgrid
-		ORDER BY id;
-	 
-	id  mgrid       name        connect_by_isleaf
-	===========================================================
-	1   null        Kim     0
-	2   null        Moy     0
-	3   1       Jonas       1
-	4   1       Smith       1
-	5   2       Verma       1
-	6   2       Foster      0
-	7   6       Brown       1
+    -- CONNECT_BY_ISLEAF의 값을 확인하기
+    SELECT id, mgrid, name, CONNECT_BY_ISLEAF
+        FROM tree
+        START WITH mgrid IS NULL
+        CONNECT BY PRIOR id=mgrid
+        ORDER BY id;
+     
+    id  mgrid       name        connect_by_isleaf
+    ===========================================================
+    1   null        Kim     0
+    2   null        Moy     0
+    3   1       Jonas       1
+    4   1       Smith       1
+    5   2       Verma       1
+    6   2       Foster      0
+    7   6       Brown       1
 
 CONNECT_BY_ISCYCLE
 ------------------
@@ -228,41 +228,41 @@ CONNECT_BY_ISCYCLE
 
 .. code-block:: sql
 
-	-- tree_cycle 테이블을 만들고 데이터를 삽입하기
-	CREATE TABLE tree_cycle(ID INT, MgrID INT, Name VARCHAR(32));
-	 
-	INSERT INTO tree_cycle VALUES (1,NULL,'Kim');
-	INSERT INTO tree_cycle VALUES (2,11,'Moy');
-	INSERT INTO tree_cycle VALUES (3,1,'Jonas');
-	INSERT INTO tree_cycle VALUES (4,1,'Smith');
-	INSERT INTO tree_cycle VALUES (5,3,'Verma');
-	INSERT INTO tree_cycle VALUES (6,3,'Foster');
-	INSERT INTO tree_cycle VALUES (7,4,'Brown');
-	INSERT INTO tree_cycle VALUES (8,4,'Lin');
-	INSERT INTO tree_cycle VALUES (9,2,'Edwin');
-	INSERT INTO tree_cycle VALUES (10,9,'Audrey');
-	INSERT INTO tree_cycle VALUES (11,10,'Stone');
-	 
-	-- CONNECT_BY_ISCYCLE의 값을 확인하기
-	SELECT id, mgrid, name, CONNECT_BY_ISCYCLE
-		FROM tree_cycle
-		START WITH name in ('Kim', 'Moy')
-		CONNECT BY NOCYCLE PRIOR id=mgrid
-		ORDER BY id;
-	 
-	id  mgrid       name        connect_by_iscycle
-	==========================================================
-	1   null        Kim     0
-	2   11      Moy     0
-	3   1       Jonas       0
-	4   1       Smith       0
-	5   3       Verma       0
-	6   3       Foster      0
-	7   4       Brown       0
-	8   4       Lin     0
-	9   2       Edwin       0
-	10  9       Audrey      0
-	11  10      Stone       1
+    -- tree_cycle 테이블을 만들고 데이터를 삽입하기
+    CREATE TABLE tree_cycle(ID INT, MgrID INT, Name VARCHAR(32));
+     
+    INSERT INTO tree_cycle VALUES (1,NULL,'Kim');
+    INSERT INTO tree_cycle VALUES (2,11,'Moy');
+    INSERT INTO tree_cycle VALUES (3,1,'Jonas');
+    INSERT INTO tree_cycle VALUES (4,1,'Smith');
+    INSERT INTO tree_cycle VALUES (5,3,'Verma');
+    INSERT INTO tree_cycle VALUES (6,3,'Foster');
+    INSERT INTO tree_cycle VALUES (7,4,'Brown');
+    INSERT INTO tree_cycle VALUES (8,4,'Lin');
+    INSERT INTO tree_cycle VALUES (9,2,'Edwin');
+    INSERT INTO tree_cycle VALUES (10,9,'Audrey');
+    INSERT INTO tree_cycle VALUES (11,10,'Stone');
+     
+    -- CONNECT_BY_ISCYCLE의 값을 확인하기
+    SELECT id, mgrid, name, CONNECT_BY_ISCYCLE
+        FROM tree_cycle
+        START WITH name in ('Kim', 'Moy')
+        CONNECT BY NOCYCLE PRIOR id=mgrid
+        ORDER BY id;
+     
+    id  mgrid       name        connect_by_iscycle
+    ==========================================================
+    1   null        Kim     0
+    2   11      Moy     0
+    3   1       Jonas       0
+    4   1       Smith       0
+    5   3       Verma       0
+    6   3       Foster      0
+    7   4       Brown       0
+    8   4       Lin     0
+    9   2       Edwin       0
+    10  9       Audrey      0
+    11  10      Stone       1
 
 계층 질의문에서 사용 가능한 연산자
 ==================================
@@ -276,22 +276,22 @@ CONNECT_BY_ROOT 연산자
 
 .. code-block:: sql
 
-	-- 각 행마다 루트 행의 id 값을 확인하기
-	SELECT id, mgrid, name, CONNECT_BY_ROOT id
-		FROM tree
-		START WITH mgrid IS NULL
-		CONNECT BY PRIOR id=mgrid
-		ORDER BY id;
-	 
-	id  mgrid       name        connect_by_root id
-	==========================================================
-	1   null        Kim     1
-	2   null        Moy     2
-	3   1       Jonas       1
-	4   1       Smith       1
-	5   2       Verma       2
-	6   2       Foster      2
-	7   6       Brown       2
+    -- 각 행마다 루트 행의 id 값을 확인하기
+    SELECT id, mgrid, name, CONNECT_BY_ROOT id
+        FROM tree
+        START WITH mgrid IS NULL
+        CONNECT BY PRIOR id=mgrid
+        ORDER BY id;
+     
+    id  mgrid       name        connect_by_root id
+    ==========================================================
+    1   null        Kim     1
+    2   null        Moy     2
+    3   1       Jonas       1
+    4   1       Smith       1
+    5   2       Verma       2
+    6   2       Foster      2
+    7   6       Brown       2
 
 
 PRIOR 연산자
@@ -303,57 +303,57 @@ PRIOR 연산자
 
 .. code-block:: sql
 
-	-- 각 행마다 부모 행의 id 값을 확인하기
-	SELECT id, mgrid, name, PRIOR id as "prior_id"
-		FROM tree
-		START WITH mgrid IS NULL
-		CONNECT BY PRIOR id=mgrid
-		ORDER BY id;
-	 
-	id  mgrid       name        prior_id
-	========================================
-	1   null        Kim     null
-	2   null        Moy     null
-	3   1       Jonas       1
-	4   1       Smith       1
-	5   2       Verma       2
-	6   2       Foster  2
-	7   6       Brown       6
+    -- 각 행마다 부모 행의 id 값을 확인하기
+    SELECT id, mgrid, name, PRIOR id as "prior_id"
+        FROM tree
+        START WITH mgrid IS NULL
+        CONNECT BY PRIOR id=mgrid
+        ORDER BY id;
+     
+    id  mgrid       name        prior_id
+    ========================================
+    1   null        Kim     null
+    2   null        Moy     null
+    3   1       Jonas       1
+    4   1       Smith       1
+    5   2       Verma       2
+    6   2       Foster  2
+    7   6       Brown       6
 
 계층 질의문에서 사용 가능한 함수
 ================================
 
 **SYS_CONNECT_BY_PATH** 함수는 루트 행으로부터 해당 행까지의 상-하 관계의 path를 문자열로 반환하는 함수이다. 이때, 함수의 인자로 지정되는 칼럼과 구분자는 문자형 타입이어야 하며, 각 path는 지정된 구분자에 의해 구분되어 연쇄적으로 출력된다. 이 함수는 **SELECT** 문 내의 **WHERE** 절과 **ORDER BY** 절에서 사용할 수 있다. ::
 
-	SYS_CONNECT_BY_PATH (column_name, separator_char)
+    SYS_CONNECT_BY_PATH (column_name, separator_char)
 
 다음은 루트 행으로부터 해당 행의 path를 확인하는 예제이다.
 
 .. code-block:: sql
 
-	-- 구분자를 이용하여 루트 행으로부터 해당 행까지 path를 확인하기
-	SELECT id, mgrid, name, SYS_CONNECT_BY_PATH(name,'/') as [hierarchy]
-		FROM tree
-		START WITH mgrid IS NULL
-		CONNECT BY PRIOR id=mgrid
-		ORDER BY id;
-	 
-	id  mgrid       name        hierarchy
-	=================================================
-	1   null        Kim     /Kim
-	2   null        Moy     /Moy
-	3   1       Jonas       /Kim/Jonas
-	4   1       Smith       /Kim/Smith
-	5   2       Verma       /Moy/Verma
-	6   2       Foster      /Moy/Foster
-	7   6       Brown       /Moy/Foster/Brown
+    -- 구분자를 이용하여 루트 행으로부터 해당 행까지 path를 확인하기
+    SELECT id, mgrid, name, SYS_CONNECT_BY_PATH(name,'/') as [hierarchy]
+        FROM tree
+        START WITH mgrid IS NULL
+        CONNECT BY PRIOR id=mgrid
+        ORDER BY id;
+     
+    id  mgrid       name        hierarchy
+    =================================================
+    1   null        Kim     /Kim
+    2   null        Moy     /Moy
+    3   1       Jonas       /Kim/Jonas
+    4   1       Smith       /Kim/Smith
+    5   2       Verma       /Moy/Verma
+    6   2       Foster      /Moy/Foster
+    7   6       Brown       /Moy/Foster/Brown
 
 계층 질의문에서의 데이터 정렬
 =============================
 
 **ORDER SIBLINGS BY** 절은 계층 질의 결과 값들의 계층 정보를 유지하면서 특정 칼럼을 기준으로 오름차순 또는 내림차순으로 데이터를 정렬하며, 동일한 부모를 가진 자식 행들을 정렬할 수 있다. 계층적 질의문에서 데이터의 계층적 순서를 파악하기 위해 사용한다. ::
 
-	ORDER SIBLINGS BY col_1 [ASC|DESC] [, col_2 [ASC|DESC] […[, col_n [ASC|DESC]]…]]
+    ORDER SIBLINGS BY col_1 [ASC|DESC] [, col_2 [ASC|DESC] […[, col_n [ASC|DESC]]…]]
 
 다음은 상사와 그의 부하 직원을 출력하되, 출생 연도가 앞서는 사람부터 출력하는 예제이다.
 
@@ -361,43 +361,43 @@ PRIOR 연산자
 
 .. code-block:: sql
 
-	-- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 형제 노드 간에는 birthyear 순서로 정렬하기
-	SELECT id, mgrid, name, birthyear, level
-	FROM tree
-	START WITH mgrid IS NULL
-	CONNECT BY PRIOR id=mgrid
-	ORDER SIBLINGS BY birthyear;
-	 
-	id        mgrid  name                    birthyear        level
-	==========================================================================
-	2         NULL  'Moy'                        1958            1
-	6            2  'Foster'                     1972            2
-	7            6  'Brown'                      1981            3
-	5            2  'Verma'                      1973            2
-	1         NULL  'Kim'                        1963            1
-	4            1  'Smith'                      1974            2
-	3            1  'Jonas'                      1976            2
+    -- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 형제 노드 간에는 birthyear 순서로 정렬하기
+    SELECT id, mgrid, name, birthyear, level
+    FROM tree
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id=mgrid
+    ORDER SIBLINGS BY birthyear;
+     
+    id        mgrid  name                    birthyear        level
+    ==========================================================================
+    2         NULL  'Moy'                        1958            1
+    6            2  'Foster'                     1972            2
+    7            6  'Brown'                      1981            3
+    5            2  'Verma'                      1973            2
+    1         NULL  'Kim'                        1963            1
+    4            1  'Smith'                      1974            2
+    3            1  'Jonas'                      1976            2
 
 다음은 상사와 그의 부하 직원을 출력하되, 같은 레벨 간에는 우선 입사한 순서로 정렬시키는 예제이다. *id* 는 입사한 순서로 부여된다. *id* 는 직원의 입사번호이며, *mgrid* 는 상사의 입사번호이다.
 
 .. code-block:: sql
 
-	-- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 자식 노드 간에는 id 순서로 정렬하기
-	SELECT id, mgrid, name, LEVEL
-		FROM tree
-		START WITH mgrid IS NULL
-		CONNECT BY PRIOR id=mgrid
-		ORDER SIBLINGS BY id;
-	 
-	id  mgrid       name        level
-	===============================================
-	1   null        Kim     1
-	3   1       Jonas       2
-	4   1       Smith       2
-	2   null        Moy     1
-	5   2       Verma       2
-	6   2       Foster      2
-	7   6       Brown       3
+    -- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 자식 노드 간에는 id 순서로 정렬하기
+    SELECT id, mgrid, name, LEVEL
+        FROM tree
+        START WITH mgrid IS NULL
+        CONNECT BY PRIOR id=mgrid
+        ORDER SIBLINGS BY id;
+     
+    id  mgrid       name        level
+    ===============================================
+    1   null        Kim     1
+    3   1       Jonas       2
+    4   1       Smith       2
+    2   null        Moy     1
+    5   2       Verma       2
+    6   2       Foster      2
+    7   6       Brown       3
 
 
 계층 질의문 사용 예
@@ -411,39 +411,39 @@ PRIOR 연산자
 
 .. code-block:: sql
 
-	SELECT L1.ID, L1.ParentID, ..., 1 AS [Level]
-		FROM tree_table AS L1
-		WHERE L1.ParentID IS NULL
-	UNION ALL
-	SELECT L2.ID, L2.ParentID, ..., 2 AS [Level]
-		FROM tree_table AS L1
-			INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
-		WHERE L1.ParentID IS NULL
-	UNION ALL
-	SELECT L3.ID, L3.ParentID, ..., 3 AS [Level]
-		FROM tree_table AS L1
-			INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
-			INNER JOIN tree_table AS L3 ON L2.ID=L3.ParentID
-		WHERE L1.ParentID IS NULL
-	UNION ALL ...
+    SELECT L1.ID, L1.ParentID, ..., 1 AS [Level]
+        FROM tree_table AS L1
+        WHERE L1.ParentID IS NULL
+    UNION ALL
+    SELECT L2.ID, L2.ParentID, ..., 2 AS [Level]
+        FROM tree_table AS L1
+            INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
+        WHERE L1.ParentID IS NULL
+    UNION ALL
+    SELECT L3.ID, L3.ParentID, ..., 3 AS [Level]
+        FROM tree_table AS L1
+            INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
+            INNER JOIN tree_table AS L3 ON L2.ID=L3.ParentID
+        WHERE L1.ParentID IS NULL
+    UNION ALL ...
 
 계층 관계를 가지는 데이터의 레벨이 얼마나 될지 예측할 수 없으므로, 위 질의문은 새로운 행이 검색되지 않을 때까지 루프를 도는 저장 프로시저(stored procedure) 문으로 재작성할 수 있다. 그러나 루프를 도는 동안 각 단계마다 계층 트리를 확인해야 하므로, 아래와 같이 **SELECT** 문에 **CONNECT BY** 절을 명시하여 계층 질의문을 재작성할 수 있다. 다음의 질의문을 실행하면, 계층 관계를 가지는 데이터 전체와 각 행의 레벨이 출력된다.
 
 .. code-block:: sql
 
-	SELECT ID, ParentID, ..., Level
-		FROM tree_table
-		START WITH ParentID IS NULL
-		CONNECT BY ParentID=PRIOR ID
+    SELECT ID, ParentID, ..., Level
+        FROM tree_table
+        START WITH ParentID IS NULL
+        CONNECT BY ParentID=PRIOR ID
 
 루프로 인한 오류를 발생시키지 않으려면 다음과 같이 **NOCYCLE** 을 명시할 수 있다.
 
 .. code-block:: sql
 
-	SELECT ID, ParentID, ..., Level
-		FROM tree_table
-		START WITH ParentID IS NULL
-		CONNECT BY NOCYCLE ParentID=PRIOR ID
+    SELECT ID, ParentID, ..., Level
+        FROM tree_table
+        START WITH ParentID IS NULL
+        CONNECT BY NOCYCLE ParentID=PRIOR ID
 
 
 계층 질의문의 성능

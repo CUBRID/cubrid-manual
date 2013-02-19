@@ -35,11 +35,11 @@ If **PECL** package has been installed on your system, the installation of CUBRI
 
 #. Enter the following command to install the latest version of CUBRID PHP driver. ::
 
-	sudo pecl install cubrid
+    sudo pecl install cubrid
 
    If you need earlier versions of the driver, you can install exact versions as follows: ::
 
-	sudo pecl install cubrid-8.3.0.0005
+    sudo pecl install cubrid-8.3.0.0005
 
    During the installation, you will be prompted to enter **CUBRID base install dir autodetect :**. Just to make sure your installation goes smoothly, enter the full path to the directory where you have installed CUBRID. For example, if CUBRID has been installed at **/home/cubridtest/CUBRID**, then enter **/home/cubridtest/CUBRID**.
 
@@ -49,8 +49,8 @@ If **PECL** package has been installed on your system, the installation of CUBRI
 
    *   If you are using earlier versions of CentOS 6.0 or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2/** or **/etc/**) and add the following two command lines at the end of the file. ::
 
-	[CUBRID]
-	extension=cubrid.so
+    [CUBRID]
+    extension=cubrid.so
 
 #. Restart the web server to apply changes.
 
@@ -58,29 +58,29 @@ If **PECL** package has been installed on your system, the installation of CUBRI
 
 #. If you do not have PHP itself installed, install it using the following command; if you have PHP installed on your system, skip this step. ::
 
-	sudo apt-get install php5
+    sudo apt-get install php5
 
 #. To install CUBRID PHP driver using **apt-get**, we need to add CUBRID's repository so that Ubuntu knows where to download the packages from and tell the operating system to update its indexes. ::
 
-	sudo add-apt-repository ppa:cubrid/cubrid
-	sudo apt-get update
+    sudo add-apt-repository ppa:cubrid/cubrid
+    sudo apt-get update
 
 #. Now install the driver. ::
 
-	sudo apt-get install php5-cubrid
+    sudo apt-get install php5-cubrid
 
    To install earlier versions, indicate the version as: ::
 
-	sudo apt-get install php5-cubrid-8.3.1
+    sudo apt-get install php5-cubrid-8.3.1
 
    This will copy the **cubrid.so** driver to **/usr/lib/php5/2009*** and add the following configuration lines to **/etc/php5/apache2/php.ini**. ::
 
-	[PHP_CUBRID]
-	extension=cubrid.so
+    [PHP_CUBRID]
+    extension=cubrid.so
 
 #. Restart the web server so that PHP can read the module. ::
 
-	service apache2 restart
+    service apache2 restart
 
 **Installing using Yum on Fedora/CentOS**
 
@@ -91,21 +91,21 @@ If **PECL** package has been installed on your system, the installation of CUBRI
 
 #. Choose CUBRID version. You will be given a list of links for your particular version. For example, the following link is provided for Fedora 16 where fc16 means this operating system version. ::
 
-	rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
+    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
 
    For CentOS, el6.2 means CentOS version 6.2. ::
 
-	rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
+    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
 
    Executing this command will tell **Yum** where to look for CUBRID package.
 
 #. Execute the command below to install CUBRID PHP driver. ::
 
-	yum install php-cubrid
+    yum install php-cubrid
 
 #. Restart the web server. ::
 
-	service httpd restart
+    service httpd restart
 
 For Windows
 -----------
@@ -146,21 +146,21 @@ If you have received an error messages, follow the steps below; if you can see C
 
 #. Enter command below in the command prompt as follows. ::
 
-	php --version
+    php --version
 
    You can see the PHP version like below if it is properly configured. ::
 
-	C:\Users\Administrator>php --version
-	PHP 5.2.9 <cli> <built: Feb 25 2009 15:52:24>
+    C:\Users\Administrator>php --version
+    PHP 5.2.9 <cli> <built: Feb 25 2009 15:52:24>
 
 #. Enter command as follows. ::
 
-	php --version
+    php --version
 
    You can see the CUBIRD version like below if it is properly configured. ::
 
-	C:\Users\Administrator>cubrid --version
-	cubrid <cubrid utilities> R2.1
+    C:\Users\Administrator>cubrid --version
+    cubrid <cubrid utilities> R2.1
 
 If you can not get the result like above, it is highly likely that your PHP and CUBRID installations went wrong. Try to reinstall them and recheck again. If the path is not automatically specified even after you complete reinstallation, you can do it manually.
 
@@ -181,13 +181,13 @@ After you download the driver, you will see the **php_cubrid.dll** file for CUB
 #. Set your system environment. Check if the environment variable **PHPRC** is **C:\\Program Files\\PHP** and system variable path is added with **%PHPRC%** and **%PHPRC\\ext**.
 #. Edit **php.ini** (**C:\\Program Files\\PHP\\php.ini**) and add the following two command lines at the end of the **php.ini** file. ::
 
-	[PHP_CUBRID]
-	extension=php_cubrid.dll
+    [PHP_CUBRID]
+    extension=php_cubrid.dll
 
    For CUBRID PDO driver, add command lines below. ::
 
-	[PHP_PDO_CUBRID]
-	extension = php_pdo_cubrid.dll
+    [PHP_PDO_CUBRID]
+    extension = php_pdo_cubrid.dll
 
 #. Restart your web server to apply changes.
 
@@ -210,16 +210,16 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 
 #. Download the CUBRID PHP driver, extract it, and enter the directory. ::
 
-	$> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
-	$> cd php-<version>/ext 
+    $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
+    $> cd php-<version>/ext 
 
 #. Run **phpize**. For more information about getting **phpize**, see :ref:`Remark <phpize-remark>`. ::
 
-	cubrid-php> /usr/bin/phpize
+    cubrid-php> /usr/bin/phpize
 
 #. Configure the project. It is recommended to execute **./configure –h** so that you can check the configuration options (we assume that Apache 2 has been installed in **/usr/local**). ::
 
-	cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
+    cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
 
    *   --with-cubrid=shared: Includes CUBRID support.
    *   --with-php-config=PATH: Enters an absolute path of php-config including the file name.
@@ -228,13 +228,13 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 
 #. Copy the **cubrid.so** to the **/usr/local/php/lib/php/extensions** directory; the **/usr/local/php** is a PHP root directory. ::
 
-	cubrid-php> mkdir /usr/local/php/lib/php/extensions
-	cubrid-php> cp modules/cubrid.so /usr/local/php/lib/php/extensions
+    cubrid-php> mkdir /usr/local/php/lib/php/extensions
+    cubrid-php> cp modules/cubrid.so /usr/local/php/lib/php/extensions
 
 #. In the **php.ini** file, set the **extension_dir** variable and add the CUBRID PHP driver to the **extension** variable as shown below. ::
 
-	extension_dir = "/usr/local/php/lib/php/extension/no-debug-zts-xxx"
-	extension = cubrid.so
+    extension_dir = "/usr/local/php/lib/php/extension/no-debug-zts-xxx"
+    extension = cubrid.so
 
 **Testing CUBIRD PHP driver installation**
 
@@ -242,7 +242,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 
    .. code-block:: php
 
-	<?php phpinfo(); ?>
+    <?php phpinfo(); ?>
 
 #. Use web browser to visit http://localhost/test.php. If you can see the following result, it means that installation is successfully completed.
 
@@ -262,12 +262,12 @@ What is **phpize** ? Where can I get it?
 
 #. Download the PHP source code. Make sure that the PHP version works with the PHP extension that you want to use. Extract PHP source code and enter its root directory. ::
 
-	$> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
-	$> cd php-<version>
+    $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
+    $> cd php-<version>
 
 #. Configure the project, build, and install it. You can specify the directory you want install PHP by using the option, **--prefix**. ::
 
-	php-root> ./configure --prefix=prefix_dir; make; make install
+    php-root> ./configure --prefix=prefix_dir; make; make install
 
 #. You can find **phpize** in the **prefix_dir/bin** directory.
 
@@ -309,7 +309,7 @@ In the [Property Pages] dialog box, select [General] under the [C/C++] tree node
 
 .. note::
 
-	You do not need to build PHP 5.3 from source code but configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
+    You do not need to build PHP 5.3 from source code but configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
 
 **Building CUBRID PHP driver with VC9 for PHP 5.3**
 
@@ -351,7 +351,7 @@ You can configure the default settings without using this SDK; however, there is
 
 .. note::
 
-	If you build CUBRID PHP driver with PHP 5.3 source code, you need to make some configuration settings for PHP 5.3 on Windows. If you do not make these settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
+    If you build CUBRID PHP driver with PHP 5.3 source code, you need to make some configuration settings for PHP 5.3 on Windows. If you do not make these settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read https://wiki.php.net/internals/windows/stepbystepbuild to get more detailed information.
 
 **Building CUBRID PHP driver**
 
@@ -399,7 +399,7 @@ There is no official Apache for 64-bit Windows either. Instead, you can use IIS 
 
 .. note::
 
-	You do not need to build PHP 5.3 from source code; however, configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_ to get more detailed information.
+    You do not need to build PHP 5.3 from source code; however, configuring a project is required. If you do not make configuration settings, you will get the message that a header file (**config.w32.h**) cannot be found. Read `https://wiki.php.net/internals/windows/stepbystepbuild <https://wiki.php.net/internals/windows/stepbystepbuild>`_ to get more detailed information.
 
 **Configuring PHP 5.3**
 
@@ -467,8 +467,8 @@ The first step of database applications is to use `cubrid_connect <http://www.ph
 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
 
 .. note:: 
-	*   The database connection in thread-based programming must be used independently each other.
-	* In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
+    *   The database connection in thread-based programming must be used independently each other.
+    * In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
 
 Transactions and Auto-Commit
 ----------------------------
@@ -479,7 +479,7 @@ The default value of auto-commit mode upon application startup is configured by 
 
 .. code-block:: php
 
-	$con = cubrid_connect_with_url("cci:CUBRID:localhost:33000:demodb:dba::?autocommit=true");
+    $con = cubrid_connect_with_url("cci:CUBRID:localhost:33000:demodb:dba::?autocommit=true");
 
 If you set auto-commit mode to **OFF** in the `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function, you can handle transactions by specifying a proper function; to commit transactions, use the `cubrid_commit <http://www.php.net/manual/en/function.cubrid-commit.php>`_ () function and to roll back transactions, use the `cubrid_rollback <http://www.php.net/manual/en/function.cubrid-rollback.php>`_ () function. If you use the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function, transactions will be disconnected and jobs which have not been committed will be rolled back.
 
@@ -497,18 +497,18 @@ Followings are the basic steps to execute queries.
 
 .. code-block:: php
 
-	$con = cubrid_connect("192.168.0.10", 33000, "demodb");
-	if($con) {
-		$req = cubrid_execute($con, "select * from code");
-		if($req) {
-			while ($row = cubrid_fetch($req)) {
-				echo $row["s_name"];
-				echo $row["f_name"];
-			}
-			cubrid_close_request($req);
-		}
-		cubrid_disconnect($con);
-	}
+    $con = cubrid_connect("192.168.0.10", 33000, "demodb");
+    if($con) {
+        $req = cubrid_execute($con, "select * from code");
+        if($req) {
+            while ($row = cubrid_fetch($req)) {
+                echo $row["s_name"];
+                echo $row["f_name"];
+            }
+            cubrid_close_request($req);
+        }
+        cubrid_disconnect($con);
+    }
 
 **Column types and names of the query result**
 
@@ -516,19 +516,19 @@ The `cubrid_column_types <http://www.php.net/manual/en/function.cubrid-column-ty
 
 .. code-block:: php
 
-	$req = cubrid_execute($con, "select host_year, host_city from olympic");
-	if($req) {
-		$col_types = cubrid_column_types($req);
-		$col_names = cubrid_column_names($req);
-	 
-		while (list($key, $col_type) = each($col_types)) {
-			echo $col_type;
-		}
-		while (list($key, $col_name) = each($col_names))
-			echo $col_name;
-		}
-		cubrid_close_request($req);
-	}
+    $req = cubrid_execute($con, "select host_year, host_city from olympic");
+    if($req) {
+        $col_types = cubrid_column_types($req);
+        $col_names = cubrid_column_names($req);
+     
+        while (list($key, $col_type) = each($col_types)) {
+            echo $col_type;
+        }
+        while (list($key, $col_name) = each($col_names))
+            echo $col_name;
+        }
+        cubrid_close_request($req);
+    }
 
 **Controlling a cursor**
 
@@ -536,14 +536,14 @@ The `cubrid_move_cursor <http://www.php.net/manual/en/function.cubrid-move-curso
 
 .. code-block:: php
 
-	$req = cubrid_execute($con, "select host_year, host_city from olympic order by host_year");
-	if($req) {
-		cubrid_move_cursor($req, 20, CUBRID_CURSOR_CURRENT)
-		while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
-			echo $row["host_year"].” “;
-			echo $row["host_city"].”\n”;
-		}
-	}
+    $req = cubrid_execute($con, "select host_year, host_city from olympic order by host_year");
+    if($req) {
+        cubrid_move_cursor($req, 20, CUBRID_CURSOR_CURRENT)
+        while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
+            echo $row["host_year"].” “;
+            echo $row["host_city"].”\n”;
+        }
+    }
 
 **Result array types**
 
@@ -553,19 +553,19 @@ One of the following three types of arrays is used in the result of the `cubrid_
 
   .. code-block:: php
 
-	while (list($id, $name) = cubrid_fetch($req, CUBRID_NUM)) {
-		echo $id;
-		echo $name;
-	}
+    while (list($id, $name) = cubrid_fetch($req, CUBRID_NUM)) {
+        echo $id;
+        echo $name;
+    }
 
 *   Associative array
 
   .. code-block:: php
 
-	while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
-		echo $row["id"];
-		echo $row["name"];
-	}
+    while ($row = cubrid_fetch($req, CUBRID_ASSOC)) {
+        echo $row["id"];
+        echo $row["name"];
+    }
 
 **Catalog Operations**
 
@@ -573,15 +573,15 @@ The `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ (
 
 .. code-block:: php
 
-	$pk = cubrid_schema($con, CUBRID_SCH_PRIMARY_KEY, "game");
-	if ($pk) {
-		print_r($pk);
-	}
-	 
-	$fk = cubrid_schema($con, CUBRID_SCH_IMPORTED_KEYS, "game");
-	if ($fk) {
-		print_r($fk);
-	}
+    $pk = cubrid_schema($con, CUBRID_SCH_PRIMARY_KEY, "game");
+    if ($pk) {
+        print_r($pk);
+    }
+     
+    $fk = cubrid_schema($con, CUBRID_SCH_IMPORTED_KEYS, "game");
+    if ($fk) {
+        print_r($fk);
+    }
 
 **Error Handling**
 
@@ -596,30 +596,30 @@ The OID value in the currently updated f record by using the `cubrid_current_oid
 
 .. code-block:: php
 
-	$req = cubrid_execute($con, "select * from person where id = 1", CUBRID_INCLUDE_OID);
-	if ($req) {
-		while ($row = cubrid_fetch($req)) {
-			echo cubrid_current_oid($req);
-			echo $row["id"];
-			echo $row["name"];
-		}
-		cubrid_close_request($req);
-	}
+    $req = cubrid_execute($con, "select * from person where id = 1", CUBRID_INCLUDE_OID);
+    if ($req) {
+        while ($row = cubrid_fetch($req)) {
+            echo cubrid_current_oid($req);
+            echo $row["id"];
+            echo $row["name"];
+        }
+        cubrid_close_request($req);
+    }
 
 Values in every attribute, specified attributes, or a single attribute of an instance can be obtained by using OIDs. If any attributes are not specified in the `cubrid_get <http://www.php.net/manual/en/function.cubrid-get.php>`_ () function, values in every attribute are returned (a). If attributes is specified in the array data type, the array containing the specified attribute value is returned in the associative array (b). If a single attribute it is specified in the string type, a value of the attributed is returned (c).
 
 .. code-block:: php
 
-	$attrarray = cubrid_get ($con, $oid); // (a)
-	$attrarray = cubrid_get ($con, $oid, array("id", "name")); // (b)
-	$attrarray = cubrid_get ($con, $oid, "id"); // (c)
+    $attrarray = cubrid_get ($con, $oid); // (a)
+    $attrarray = cubrid_get ($con, $oid, array("id", "name")); // (b)
+    $attrarray = cubrid_get ($con, $oid, "id"); // (c)
 
 The attribute values of an instance can be updated by using OIDs. To update a single attribute value, specify attribute name and value in the string type (a). To update multiple attribute values, specify attribute names and values in the associative array (b).
 
 .. code-block:: php
 
-	$cubrid_put ($con, $oid, "id", 1); // (a)
-	$cubrid_put ($con, $oid, array("id"=>1, "name"=>"Tomas")); // (b)
+    $cubrid_put ($con, $oid, "id", 1); // (a)
+    $cubrid_put ($con, $oid, array("id"=>1, "name"=>"Tomas")); // (b)
 
 **Using Collections**
 
@@ -627,32 +627,32 @@ You can use the collection data types through PHP array data types or functions 
 
 .. code-block:: php
 
-	$row = cubrid_fetch ($req);
-	$col = $row["customer"];
-	while (list ($key, $cust) = each ($col)) {
-	   echo $cust;
-	}
+    $row = cubrid_fetch ($req);
+    $col = $row["customer"];
+    while (list ($key, $cust) = each ($col)) {
+       echo $cust;
+    }
 
 You can get values of collection attributes. The example shows how to get values of collection attributes by using the `cubrid_col_get <http://www.php.net/manual/en/function.cubrid-col-get.php>`_ () function.
 
 .. code-block:: php
 
-	$tels = cubrid_col_get ($con, $oid, "tels");
-	while (list ($key, $tel) = each ($tels)) {
-	   echo $tel."\n";
-	}
+    $tels = cubrid_col_get ($con, $oid, "tels");
+    while (list ($key, $tel) = each ($tels)) {
+       echo $tel."\n";
+    }
 
 
 You can directly update values of collection types by using cubrid_set_add() or cubrid_set_drop() function.
 
 .. code-block:: php
 
-	$tels = cubrid_col_get ($con, $oid, "tels");
-	while (list ($key, $tel) = each ($tels)) {
-	   $res = cubrid_set_drop ($con, $oid, "tel", $tel);
-	}
+    $tels = cubrid_col_get ($con, $oid, "tels");
+    while (list ($key, $tel) = each ($tels)) {
+       $res = cubrid_set_drop ($con, $oid, "tel", $tel);
+    }
 
-	cubrid_commit ($con);
+    cubrid_commit ($con);
 
 .. note:: If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
 

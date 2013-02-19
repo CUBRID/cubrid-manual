@@ -31,11 +31,11 @@ Node.js 설치
 
 CUBRID Node.js 드라이버는 먼저 http://nodejs.org/download/에서 node.js를 설치한 후, npm(Node Packaged Modules) install 명령을 사용하여 설치할 수 있다. ::
 
-	npm install node-cubrid
+    npm install node-cubrid
 
 언인스톨하려면 다음 명령을 수행한다. ::
 
-	npm uninstall node-cubrid
+    npm uninstall node-cubrid
 
 CUBRID Node.js 프로그래밍
 =========================

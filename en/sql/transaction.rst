@@ -26,43 +26,43 @@ Updates that occurred in the database are not permanently stored until the **COM
 
 All locks obtained by the transaction are released after the transaction is committed. ::
 
-	COMMIT [ WORK ]
+    COMMIT [ WORK ]
 
 The database transaction in the following example consists of three **UPDATE** statements and changes three column values of seats from the stadium. To compare the results, check the current values and names before the update is made. Since, by default, csql runs in an autocommit mode, the following example is executed after setting the autocommit mode to off.
 
 .. code-block:: sql
 
-	;autocommit off
-	AUTOCOMMIT IS OFF
-	
-	SELECT name, seats
-	FROM stadium WHERE code IN (30138, 30139, 30140);
-	   name                        seats
-	==================================
-		'Athens Olympic Tennis Centre'         3200
-		'Goudi Olympic Hall'         5000
-		'Vouliagmeni Olympic Centre'         3400
+    ;autocommit off
+    AUTOCOMMIT IS OFF
+    
+    SELECT name, seats
+    FROM stadium WHERE code IN (30138, 30139, 30140);
+       name                        seats
+    ==================================
+        'Athens Olympic Tennis Centre'         3200
+        'Goudi Olympic Hall'         5000
+        'Vouliagmeni Olympic Centre'         3400
 
 Let each **UPDATE** statement have the current seats of each stadium. To verify whether the command is correctly executed, you can retrieve the columns related to the seats table.
 
 .. code-block:: sql
 
-	UPDATE stadium
-	SET seats = seats + 1000
-	WHERE code IN (30138, 30139, 30140);
-	 
-	SELECT name, seats FROM stadium WHERE code in (30138, 30139, 30140);
-		name                        seats
-	===================================
-		'Athens Olympic Tennis Centre'         4200
-		'Goudi Olympic Hall'         6000
-		'Vouliagmeni Olympic Centre'         4400
+    UPDATE stadium
+    SET seats = seats + 1000
+    WHERE code IN (30138, 30139, 30140);
+     
+    SELECT name, seats FROM stadium WHERE code in (30138, 30139, 30140);
+        name                        seats
+    ===================================
+        'Athens Olympic Tennis Centre'         4200
+        'Goudi Olympic Hall'         6000
+        'Vouliagmeni Olympic Centre'         4400
 
 If the update is properly done, the changes can be semi-permentanetly fixed. In this time, use the **COMMIT WORK**  as below:
 
 .. code-block:: sql
 
-	COMMIT WORK;
+    COMMIT WORK;
 
 .. note:: In CUBRID, an auto-commit mode is set by default for transaction management.
 
@@ -77,31 +77,31 @@ Transaction Rollback
 
 The **ROLLBACK WORK** statement removes all updates to the database since the last transaction. The **WORK** keyword can be omitted. By using this statement, you can cancel incorrect or unnecessary updates before they are permanently applied to the database. All locks obtained during the transaction are released. ::
 
-	ROLLBACK [ WORK ]
+    ROLLBACK [ WORK ]
 
 The following example shows two commands that modify the definition and the row of the same table.
 
 .. code-block:: sql
 
-	ALTER TABLE code DROP s_name;
-	INSERT INTO code (s_name, f_name) VALUES ('D','Diamond');
-	 
-	ERROR: s_name is not defined.
+    ALTER TABLE code DROP s_name;
+    INSERT INTO code (s_name, f_name) VALUES ('D','Diamond');
+     
+    ERROR: s_name is not defined.
 
 The **INSERT** statement fails because the *s_name* column has been dropped in the definition of *code*. The data intended to be entered to the *code* table is correct, but the *s_name* column is wrongly removed. At this point, you can use the **ROLLBACK WORK** statement to restore the original definition of the *code* table.
 
 .. code-block:: sql
 
-	ROLLBACK WORK;
+    ROLLBACK WORK;
 
 Later, remove the *s_name* column by entering the **ALTER TABLE** again and modify the **INSERT** statement. The **INSERT** command must be entered again because the transaction has been aborted. If the database update has been done as intended, commit the transaction to make the changes permanent.
 
 .. code-block:: sql
 
-	ALTER TABLE code drop s_name;
-	INSERT INTO code (f_name) VALUES ('Diamond');
+    ALTER TABLE code drop s_name;
+    INSERT INTO code (f_name) VALUES ('Diamond');
 
-	COMMIT WORK;
+    COMMIT WORK;
 
 Savepoint and Partial Rollback
 ------------------------------
@@ -112,17 +112,17 @@ A savepoint can be created at a certain point of the transaction, and multiple s
 
 Savepoints are useful because intermediate steps can be created and named to control long and complicated utilities. For example, if you use a savepoint during the update operation, you don't need to perform all statements again when you made a mistake. ::
 
-	SAVEPOINT mark;
-	mark:
-	_ a SQL identifier
-	_ a host variable (starting with :)
+    SAVEPOINT mark;
+    mark:
+    _ a SQL identifier
+    _ a host variable (starting with :)
 
 If you make *mark* all the same value when you specify multiple savepoints in a single transaction, only the latest savepoint appears in the partial rollback. The previous savepoints remain hidden until the rollback to the latest savepoint is performed and then appears when the latest savepoint disappears after being used. ::
 
-	ROLLBACK [ WORK ] [ TO [ SAVEPOINT ] mark ] [ ; ]
-	mark:
-	_ a SQL identifier
-	_ a host variable (starting with :)
+    ROLLBACK [ WORK ] [ TO [ SAVEPOINT ] mark ] [ ; ]
+    mark:
+    _ a SQL identifier
+    _ a host variable (starting with :)
 
 Previously, the **ROLLBACK WORK** statement canceled all database changes added since the latest transaction. The **ROLLBACK WORK** statement is also used for the partial rollback that rolls back the transaction changes after the specified savepoint.
 
@@ -130,40 +130,40 @@ If *mark* value is not given, the transaction terminates canceling all changes i
 
 .. code-block:: sql
 
-	CREATE TABLE athlete2 (name VARCHAR(40), gender CHAR(1), nation_code CHAR(3), event VARCHAR(30));
-	INSERT INTO athlete2(name, gender, nation_code, event)
-	VALUES ('Lim Kye-Sook', 'W', 'KOR', 'Hockey');
-	SAVEPOINT SP1;
-	 
-	SELECT * from athlete2;
-	INSERT INTO athlete2(name, gender, nation_code, event)
-	VALUES ('Lim Jin-Suk', 'M', 'KOR', 'Handball');
-	 
-	SELECT * FROM athlete2;
-	SAVEPOINT SP2;
-	 
-	RENAME TABLE athlete2 AS sportsman;
-	SELECT * FROM sportsman;
-	ROLLBACK WORK TO SP2;
+    CREATE TABLE athlete2 (name VARCHAR(40), gender CHAR(1), nation_code CHAR(3), event VARCHAR(30));
+    INSERT INTO athlete2(name, gender, nation_code, event)
+    VALUES ('Lim Kye-Sook', 'W', 'KOR', 'Hockey');
+    SAVEPOINT SP1;
+     
+    SELECT * from athlete2;
+    INSERT INTO athlete2(name, gender, nation_code, event)
+    VALUES ('Lim Jin-Suk', 'M', 'KOR', 'Handball');
+     
+    SELECT * FROM athlete2;
+    SAVEPOINT SP2;
+     
+    RENAME TABLE athlete2 AS sportsman;
+    SELECT * FROM sportsman;
+    ROLLBACK WORK TO SP2;
 
 In the example above, the name change of the *athlete2* table is rolled back by the partial rollback. The following example shows how to execute the query with the original name and examining the result.
 
 .. code-block:: sql
 
-	SELECT * FROM athlete2;
-	DELETE FROM athlete2 WHERE name = 'Lim Jin-Suk';
-	SELECT * FROM athlete2;
-	ROLLBACK WORK TO SP2;
+    SELECT * FROM athlete2;
+    DELETE FROM athlete2 WHERE name = 'Lim Jin-Suk';
+    SELECT * FROM athlete2;
+    ROLLBACK WORK TO SP2;
 
 In the example above, deleting 'Lim Jin-Suk' is discarded by rollback work to SP2 command.
 The following example shows how to roll back to SP1.
 
 .. code-block:: sql
 
-	SELECT * FROM athlete2;
-	ROLLBACK WORK TO SP1;
-	SELECT * FROM athlete2;
-	COMMIT WORK;
+    SELECT * FROM athlete2;
+    ROLLBACK WORK TO SP1;
+    SELECT * FROM athlete2;
+    COMMIT WORK;
 
 .. _database-concurrency:
 
@@ -440,17 +440,17 @@ Note that if you configure the value of **error_log_level**, which indicates the
 
 In the following error log file, (1) indicates a table name which causes deadlock state and (2) indicates an index name. ::
 
-	demodb_20111102_1811.err
-		...
-		OID = -532| 520| 1
-	(1) Object type: Index key of class ( 0| 417| 7) = tbl.
-		BTID = 0| 123| 530
-	(2) Index Name : i_tbl_col1
-		Total mode of holders = NS_LOCK, Total mode of waiters = NULL_LOCK.
-		Num holders= 1, Num blocked-holders= 0, Num waiters= 0
-		LOCK HOLDERS:
-		Tran_index = 2, Granted_mode = NS_LOCK, Count = 1
-	...
+    demodb_20111102_1811.err
+        ...
+        OID = -532| 520| 1
+    (1) Object type: Index key of class ( 0| 417| 7) = tbl.
+        BTID = 0| 123| 530
+    (2) Index Name : i_tbl_col1
+        Total mode of holders = NS_LOCK, Total mode of waiters = NULL_LOCK.
+        Num holders= 1, Num blocked-holders= 0, Num waiters= 0
+        LOCK HOLDERS:
+        Tran_index = 2, Granted_mode = NS_LOCK, Count = 1
+    ...
 
 **Example**
 
@@ -554,12 +554,12 @@ If the lock is allowed within the lock timeout, CUBRID rolls back the transactio
 
 The system parameter **lock_timeout_in_secs** in the **$CUBRID/conf/cubrid.conf** file or the **SET TRANSACTION** statement sets the timeout (in seconds) during which the application will wait for the lock and rolls back the transaction and outputs an error message when the specified time has passed. The default value of the **lock_timeout_in_secs** parameter is **-1**, which means the application will wait indefinitely until the transaction lock is allowed. Therefore, the user can change this value depending on the transaction pattern of the application. If the lock timeout value has been set to 0, an error message will be displayed as soon as a lock occurs. ::
 
-	SET TRANSACTION LOCK TIMEOUT timeout_spec [ ; ]
-	timeout_spec:
-	- INFINITE
-	- OFF
-	- unsigned_integer
-	- variable
+    SET TRANSACTION LOCK TIMEOUT timeout_spec [ ; ]
+    timeout_spec:
+    - INFINITE
+    - OFF
+    - unsigned_integer
+    - variable
 
 *   **INFINITE** : Wait indefinitely until the transaction lock is allowed. Has the same effect as setting the system parameter **lock_timeout_in_secs** to -1.
 *   **OFF** : Do not wait for the lock, but roll back the transaction and display an error message. Has the same effect as setting the system parameter **lock_timeout_in_secs** to 0.
@@ -569,36 +569,36 @@ The system parameter **lock_timeout_in_secs** in the **$CUBRID/conf/cubrid.conf*
 **Example 1** ::
 
 
-	vi $CUBRID/conf/cubrid.conf
-	...
-	
-	lock_timeout_in_secs = 10
-	...
+    vi $CUBRID/conf/cubrid.conf
+    ...
+    
+    lock_timeout_in_secs = 10
+    ...
 
 **Example 2** ::
 
-	SET TRANSACTION LOCK TIMEOUT 10;
+    SET TRANSACTION LOCK TIMEOUT 10;
 
 **Checking the Lock Timeout**
 
 You can check the lock timeout set for the current application by using the **GET TRANSACTION** statement, or store this value in a variable. ::
 
-	GET TRANSACTION LOCK TIMEOUT [ { INTO | TO } variable ] [ ; ]
+    GET TRANSACTION LOCK TIMEOUT [ { INTO | TO } variable ] [ ; ]
 
 **Example** ::
 
-	GET TRANSACTION LOCK TIMEOUT;
-			 Result
-	===============
-	  1.000000e+001
+    GET TRANSACTION LOCK TIMEOUT;
+             Result
+    ===============
+      1.000000e+001
 
 **Checking and Handling Lock Timeout Error Message**
 
 The following message is displayed if lock timeout occurs in a transaction that has been waiting for another transaction's lock to be released. ::
 
-	Your transaction (index 2, user1@host1|9808) timed out waiting on IX_LOCK lock on class tbl. You are waiting for
-	user(s) user1@host1|csql(9807), user1@host1|csql(9805) to finish.
-	
+    Your transaction (index 2, user1@host1|9808) timed out waiting on IX_LOCK lock on class tbl. You are waiting for
+    user(s) user1@host1|csql(9807), user1@host1|csql(9805) to finish.
+    
 *   Your transaction(index 2 ...): This means that the index of the transaction that was rolled back due to timeout while waiting for the lock is 2. The transaction index is a number that is sequentially assigned when the client connects to the database server. You can also check this number by executing the **cubrid lockdb** utility.
 
 *   (... user1\@host1|9808): *cub_user* is the login ID of the client and the part after @ is the name of the host where the client was running. The part after| is the process ID (PID) of the client.
@@ -630,35 +630,35 @@ SET TRANSACTION ISOLATION LEVEL
 
 You can set the level of transaction isolation by using **isolation_level** and the **SET TRANSACTION** statement in the **$CUBRID/conf/cubrid.conf**. The level of **REPEATABLE READ CLASS** and **READ UNCOMMITTED INSTANCES** are set by default, which indicates the level 3 through level 1 to 6. For details, see :ref:`database-concurrency`. ::
 
-	SET TRANSACTION ISOLATION LEVEL isolation_level_spec [ ; ]
-	isolation_level_spec:
-	_ SERIALIZABLE
-	_ CURSOR STABILITY
-	_ isolation_level [ { CLASS | SCHEMA } [ , isolation_level INSTANCES ] ]
-	_ isolation_level [ INSTANCES [ , isolation_level { CLASS | SCHEMA } ] ]
-	_ variable
-	isolation_level:
-	_ REPEATABLE READ
-	_ READ COMMITTED
-	_ READ UNCOMMITTED
+    SET TRANSACTION ISOLATION LEVEL isolation_level_spec [ ; ]
+    isolation_level_spec:
+    _ SERIALIZABLE
+    _ CURSOR STABILITY
+    _ isolation_level [ { CLASS | SCHEMA } [ , isolation_level INSTANCES ] ]
+    _ isolation_level [ INSTANCES [ , isolation_level { CLASS | SCHEMA } ] ]
+    _ variable
+    isolation_level:
+    _ REPEATABLE READ
+    _ READ COMMITTED
+    _ READ UNCOMMITTED
 
 **Example 1** ::
 
-	vi $CUBRID/conf/cubrid.conf
-	...
+    vi $CUBRID/conf/cubrid.conf
+    ...
 
-	isolation_level = 1
-	...
-	 
-	또는
-	 
-	isolation_level = "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE"
+    isolation_level = 1
+    ...
+     
+    또는
+     
+    isolation_level = "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE"
 
 **Example 2** ::
 
-	SET TRANSACTION ISOLATION LEVEL 1;
-	-- or
-	SET TRANSACTION ISOLATION LEVEL READ COMMITTED CLASS,READ UNCOMMITTED INSTANCES;
+    SET TRANSACTION ISOLATION LEVEL 1;
+    -- or
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED CLASS,READ UNCOMMITTED INSTANCES;
 
 The following table shows the isolation levels from 1 to 6. It consists of table schema (row) and isolation level. For the unsupported isolation level, see :ref:`unsupported-isolation-level`.
 
@@ -693,14 +693,14 @@ GET TRANSACTION ISOLATION LEVEL
 
 You can assign the current isolation level to *variable* by using the **GET TRANSACTION** statement. The following is a statement that verifies the isolation level. ::
 
-	GET TRANSACTION ISOLATION LEVEL [ { INTO | TO } variable ] [ ; ]
+    GET TRANSACTION ISOLATION LEVEL [ { INTO | TO } variable ] [ ; ]
 
 .. code-block:: sql
 
-	GET TRANSACTION ISOLATION LEVEL;
-		   Result
-	=============
-	  READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES
+    GET TRANSACTION ISOLATION LEVEL;
+           Result
+    =============
+      READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES
 
 .. _isolation-level-6:
 
@@ -1224,7 +1224,7 @@ The following example shows that another transaction can read dirty data uncommi
 
 .. note::
 
-	CUBRID flushes dirty data (or dirty records) in the client buffers to the database (server) such as the following situations. For details, see :ref:`dirty-record-flush`.
+    CUBRID flushes dirty data (or dirty records) in the client buffers to the database (server) such as the following situations. For details, see :ref:`dirty-record-flush`.
 
 .. _isolation-level-2:
 
@@ -1532,7 +1532,7 @@ The user's intervention is somewhat needed to restart the database after media e
 
 .. note::
 
-	To minimize the possibility of losing database updates, it is recommended to create a snapshot and store it in the backup media before it is deleted from the disk. The DBA can backup and restore the database by using the **cubrid backupdb** and **cubrid restoredb** utilities. For details on these utilities, see :ref:`db-backup`.
+    To minimize the possibility of losing database updates, it is recommended to create a snapshot and store it in the backup media before it is deleted from the disk. The DBA can backup and restore the database by using the **cubrid backupdb** and **cubrid restoredb** utilities. For details on these utilities, see :ref:`db-backup`.
 
 .. _cursor-holding:
 
@@ -1545,14 +1545,14 @@ The following code shows how to set cursor holdability in JDBC:
 
 .. code-block:: java
 
-	// set cursor holdability at the connection level
-	conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
-	 
-	// set cursor holdability at the statement level which can override the connection’s
-	PreparedStatement pStmt = conn.prepareStatement(sql,
-										 ResultSet.TYPE_SCROLL_SENSITIVE,
-										 ResultSet.CONCUR_UPDATABLE,
-	 ResultSet.HOLD_CURSORS_OVER_COMMIT);
+    // set cursor holdability at the connection level
+    conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
+     
+    // set cursor holdability at the statement level which can override the connection’s
+    PreparedStatement pStmt = conn.prepareStatement(sql,
+                                         ResultSet.TYPE_SCROLL_SENSITIVE,
+                                         ResultSet.CONCUR_UPDATABLE,
+     ResultSet.HOLD_CURSORS_OVER_COMMIT);
 
 To set cursor holdability to close the cursor when a transaction is committed, set **ResultSet.CLOSE_CURSORS_AT_COMMIT**, instead of **ResultSet.HOLD_CURSORS_OVER_COMMIT**, in the above example.
 
@@ -1586,4 +1586,4 @@ When the connection between an application and the CAS is closed, all result set
 
 .. note::
 
-	Note that CUBRID versions lower than 9.0 do not support cursor holdability and the cursor is automatically closed when a transaction is committed. Therefore, the recordset of the **SELECT** query result is not kept. To keep the recordset of the **SELECT** query result in CUBRID versions lower than 9.0, set the auto commit mode to false and the record should be fetched before the transaction is committed.
+    Note that CUBRID versions lower than 9.0 do not support cursor holdability and the cursor is automatically closed when a transaction is committed. Therefore, the recordset of the **SELECT** query result is not kept. To keep the recordset of the **SELECT** query result in CUBRID versions lower than 9.0, set the auto commit mode to false and the record should be fetched before the transaction is committed.

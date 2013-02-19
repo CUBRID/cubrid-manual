@@ -28,7 +28,7 @@ CUBRID를 사용하는 .NET 응용 프로그램을 개발하려면 CUBRID ADO.NE
 
 * 소스코드에서 직접 빌드한다. 소스코드는 다음 SVN 저장소에서 체크아웃할 수 있다. CUBRID 버전이 9.0.0이라면 *<CUBRID 버전>* 에는 9.0.0을 입력한다. ::
 
-	http://svn.cubrid.org/cubridapis/adodotnet/branches/RB-<CUBRID 버전>/Data/Source
+    http://svn.cubrid.org/cubridapis/adodotnet/branches/RB-<CUBRID 버전>/Data/Source
 
 CUBRID .NET Data Provider는 full-managed .NET 코드로 작성되어 CUBRID 라이브러리 파일에 의존하지 않는다. 따라서 CUBRID를 설치하거나 CUBRID 파일을 다운로드하지 않아도 CUBRID .NET Data Provider를 사용할 수 있다.
 
@@ -48,23 +48,23 @@ CUBRID 데이터베이스의 테이블에서 값을 조회하는 간단한 코�
 
 .. code-block:: c#
 
-	String sql = "select * from nation order by `code` asc";
-	 
-	using (CUBRIDCommand cmd = new CUBRIDCommand(sql, conn))
-	{
-		using (DbDataReader reader = cmd.ExecuteReader())
-		{
-			reader.Read();
-			//(read the values using: reader.Get...() methods)
-		}
-	}
+    String sql = "select * from nation order by `code` asc";
+     
+    using (CUBRIDCommand cmd = new CUBRIDCommand(sql, conn))
+    {
+        using (DbDataReader reader = cmd.ExecuteReader())
+        {
+            reader.Read();
+            //(read the values using: reader.Get...() methods)
+        }
+    }
 
 위와 같이 `DbDataReader <http://msdn.microsoft.com/en-us/library/system.data.common.dbdatareader.aspx>`_ 객체를 생성한 후에는 Get...() 메서드를 사용하여 칼럼 데이터를 조회할 수 있다. CUBRID ADO.NET 드라이버는 다음과 같이 CUBRID의 모든 데이터 타입을 읽는 데 필요한 모든 메서드를 제공한다.
 
 .. code-block:: c#
 
-	reader.GetString(3)
-	reader.GetDecimal(1)
+    reader.GetString(3)
+    reader.GetDecimal(1)
 
 Get...() 메서드의 파라미터로 0부터 시작하는 숫자를 입력하여 칼럼에서 조회할 칼럼 데이터의 인덱스 위치를 지정한다.
 
@@ -73,19 +73,19 @@ Get...() 메서드의 파라미터로 0부터 시작하는 숫자를 입력하�
 
 .. code-block:: c#
 
-	using (CUBRIDCommand cmd = new CUBRIDCommand("select * from t", conn))
-	{
-		CUBRIDDataReader reader = (CUBRIDDataReader)cmd.ExecuteReader();
-		 
-		reader.Read();
-		Debug.Assert(reader.GetDateTime(0) == newDateTime(2008, 10, 31, 10, 20, 30, 040));
-		Debug.Assert(reader.GetDate(0) == "2008-10-31");
-		Debug.Assert(reader.GetDate(0, "yy/MM/dd") == "08-10-31");
-		Debug.Assert(reader.GetTime(0) == "10:20:30");
-		Debug.Assert(reader.GetTime(0, "HH") == "10");
-		Debug.Assert(reader.GetTimestamp(0) == "2008-10-31 10:20:30.040");
-		Debug.Assert(reader.GetTimestamp(0, "yyyy HH") == "2008 10");
-	}
+    using (CUBRIDCommand cmd = new CUBRIDCommand("select * from t", conn))
+    {
+        CUBRIDDataReader reader = (CUBRIDDataReader)cmd.ExecuteReader();
+         
+        reader.Read();
+        Debug.Assert(reader.GetDateTime(0) == newDateTime(2008, 10, 31, 10, 20, 30, 040));
+        Debug.Assert(reader.GetDate(0) == "2008-10-31");
+        Debug.Assert(reader.GetDate(0, "yy/MM/dd") == "08-10-31");
+        Debug.Assert(reader.GetTime(0) == "10:20:30");
+        Debug.Assert(reader.GetTime(0, "HH") == "10");
+        Debug.Assert(reader.GetTimestamp(0) == "2008-10-31 10:20:30.040");
+        Debug.Assert(reader.GetTimestamp(0, "yyyy HH") == "2008 10");
+    }
 
 batch 명령어
 ------------
@@ -98,29 +98,29 @@ CUBRID ADO.NET Data Provider를 사용하면 하나의 batch에서 데이터 서
 
 .. code-block:: c#
 
-	string[] sql_arr = newstring3;
-	sql_arr0 = "insert into t values(1)";
-	sql_arr1 = "insert into t values(2)";
-	sql_arr2 = "insert into t values(3)";
-	conn.BatchExecute(sql_arr);
+    string[] sql_arr = newstring3;
+    sql_arr0 = "insert into t values(1)";
+    sql_arr1 = "insert into t values(2)";
+    sql_arr2 = "insert into t values(3)";
+    conn.BatchExecute(sql_arr);
 
 위 코드는 다음과 같이 작성할 수도 있다.
 
 .. code-block:: c#
 
-	string[] sqls = newstring3;
-	sqls0 = "create table t(id int)";
-	sqls1 = "insert into t values(1)";
-	sqls2 = "insert into t values(2)";
+    string[] sqls = newstring3;
+    sqls0 = "create table t(id int)";
+    sqls1 = "insert into t values(1)";
+    sqls2 = "insert into t values(2)";
 
-	conn.BatchExecuteNoQuery(sqls);
+    conn.BatchExecuteNoQuery(sqls);
 
 연결 문자열
 -----------
 
 .NET 응용 프로그램에서 CUBRID 연결을 생성하려면 다음과 같은 형식의 연결 문자열을 생성해야 한다. ::
 
-	ConnectionString = "server=<server address>;database=<database name>;port=<port number to use for connection to broker>;user=<user name>;password=<user password>;"
+    ConnectionString = "server=<server address>;database=<database name>;port=<port number to use for connection to broker>;user=<user name>;password=<user password>;"
 
 **port** 를 제외한 모든 파라미터는 반드시 값을 입력해야 한다. **port** 값을 입력하지 않았을 때의 기본값은 **30000** 이다.
 
@@ -128,39 +128,39 @@ CUBRID ADO.NET Data Provider를 사용하면 하나의 batch에서 데이터 서
 
 *   로컬 서버의 *demodb* 데이터베이스에 연결하는 연결 문자열은 다음과 같다. ::
 
-	ConnectionString = "server=127.0.0.1;database=demodb;port=30000;user=public;password="
+    ConnectionString = "server=127.0.0.1;database=demodb;port=30000;user=public;password="
 
 *   원격 서버의 *demodb* 데이터베이스에 **dba** 사용자로 연결하는 문자열은 다음과 같다. ::
 
-	ConnectionString = "server=10.50.88.1;database=demodb;user=dba;password="
+    ConnectionString = "server=10.50.88.1;database=demodb;user=dba;password="
 
 *   원격 서버의 *demodb* 데이터베이스에 **dba** 사용자, 비밀번호는 *secret* 으로 연결하는 문자열은 다음과 같다. ::
 
-	ConnectionString = "server=10.50.99.1;database=demodb;port=30000;user=dba;password=secret"
+    ConnectionString = "server=10.50.99.1;database=demodb;port=30000;user=dba;password=secret"
 
 연결 문자열은 `CUBRIDConnectionStringBuilder <http://www.cubrid.org/manual/api/ado.net/8.4.1/html/a093b61e-d064-4f4e-b007-73bc601c564c.htm>`_ 클래스를 사용하여 다음과 같이 생성할 수도 있다.
 
 .. code-block:: c#
 
-	CUBRIDConnectionStringBuilder sb = new CUBRIDConnectionStringBuilder(localhost,"33000","demodb","public","");
-	using (CUBRIDConnection conn = new CUBRIDConnection(sb.GetConnectionString()))
-	{
-		conn.Open();
-	}
+    CUBRIDConnectionStringBuilder sb = new CUBRIDConnectionStringBuilder(localhost,"33000","demodb","public","");
+    using (CUBRIDConnection conn = new CUBRIDConnection(sb.GetConnectionString()))
+    {
+        conn.Open();
+    }
 
 위 코드와 같은 동작을 수행하는 코드를 다음과 같이 작성할 수도 있다.
 
 .. code-block:: c#
 
-	sb = new CUBRIDConnectionStringBuilder();
-	sb.User = "public" ;
-	sb.Database = "demodb";
-	sb.Port = "33000";
-	sb.Server = "localhost";
-	using (CUBRIDConnection conn = new CUBRIDConnection(sb.GetConnectionString()))
-	{
-		conn.Open();
-	}
+    sb = new CUBRIDConnectionStringBuilder();
+    sb.User = "public" ;
+    sb.Database = "demodb";
+    sb.Port = "33000";
+    sb.Server = "localhost";
+    using (CUBRIDConnection conn = new CUBRIDConnection(sb.GetConnectionString()))
+    {
+        conn.Open();
+    }
 
 .. note:: 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
 
@@ -171,51 +171,51 @@ CUBRID 컬렉션
 
 .. code-block:: c#
 
-	public void AddElementToSet(CUBRIDOid oid, String attributeName, Object value)
-	public void DropElementInSet(CUBRIDOid oid, String attributeName, Object value)
-	public void UpdateElementInSequence(CUBRIDOid oid, String attributeName, int index, Object value)
-	public void InsertElementInSequence(CUBRIDOid oid, String attributeName, int index, Object value)
-	public void DropElementInSequence(CUBRIDOid oid, String attributeName, int index)
-	public int GetCollectionSize(CUBRIDOid oid, String attributeName)
+    public void AddElementToSet(CUBRIDOid oid, String attributeName, Object value)
+    public void DropElementInSet(CUBRIDOid oid, String attributeName, Object value)
+    public void UpdateElementInSequence(CUBRIDOid oid, String attributeName, int index, Object value)
+    public void InsertElementInSequence(CUBRIDOid oid, String attributeName, int index, Object value)
+    public void DropElementInSequence(CUBRIDOid oid, String attributeName, int index)
+    public int GetCollectionSize(CUBRIDOid oid, String attributeName)
 
 다음은 컬렉션 타입에서 값을 읽는 코드의 예이다.
 
 .. code-block:: c#
 
-	using (CUBRIDCommand cmd = new CUBRIDCommand("SELECT * FROM t", conn))
-	{
-		using (DbDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				object[] o = (object[])reader0;
-				for (int i = 0; i <SeqSize; i++)
-				{
-					//...
-				}
-			}
-		}
-	}
+    using (CUBRIDCommand cmd = new CUBRIDCommand("SELECT * FROM t", conn))
+    {
+        using (DbDataReader reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                object[] o = (object[])reader0;
+                for (int i = 0; i <SeqSize; i++)
+                {
+                    //...
+                }
+            }
+        }
+    }
 
 다음은 컬렉션 타입을 갱신하는 코드의 예이다.
 
 .. code-block:: c#
 
-	conn.InsertElementInSequence(oid, attributeName, 5, value);
-	SeqSize = conn.GetCollectionSize(oid, attributeName);
-	using (CUBRIDCommandcmd = newCUBRIDCommand("SELECT * FROM t", conn))
-	{
-		using (DbDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				int[] expected = { 7, 1, 2, 3, 7, 4, 5, 6 };
-				object[] o = (object[])reader0;
-			}
-		}
-	}
-	conn.DropElementInSequence(oid, attributeName, 5);
-	SeqSize = conn.GetCollectionSize(oid, attributeName);
+    conn.InsertElementInSequence(oid, attributeName, 5, value);
+    SeqSize = conn.GetCollectionSize(oid, attributeName);
+    using (CUBRIDCommandcmd = newCUBRIDCommand("SELECT * FROM t", conn))
+    {
+        using (DbDataReader reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                int[] expected = { 7, 1, 2, 3, 7, 4, 5, 6 };
+                object[] o = (object[])reader0;
+            }
+        }
+    }
+    conn.DropElementInSequence(oid, attributeName, 5);
+    SeqSize = conn.GetCollectionSize(oid, attributeName);
 
 BLOB/CLOB 사용
 --------------
@@ -226,38 +226,38 @@ CUBRID 2008 R4.0(8.4.0) 이상 버전에서는 GLO 데이터 타입을 더 이�
 
 .. code-block:: c#
 
-	CUBRIDCommand cmd = new CUBRIDCommand(sql, conn);
-	DbDataReader reader = cmd.ExecuteReader();
-	
-	while (reader.Read())
-	{
-		CUBRIDBlobbImage = (CUBRIDBlob)reader0;
-		byte[] bytes = newbyte(int)bImage.BlobLength;
-		bytes = bImage.getBytes(1, (int)bImage.BlobLength);
-		//...
-	}
+    CUBRIDCommand cmd = new CUBRIDCommand(sql, conn);
+    DbDataReader reader = cmd.ExecuteReader();
+    
+    while (reader.Read())
+    {
+        CUBRIDBlobbImage = (CUBRIDBlob)reader0;
+        byte[] bytes = newbyte(int)bImage.BlobLength;
+        bytes = bImage.getBytes(1, (int)bImage.BlobLength);
+        //...
+    }
 
 
 다음은 CLOB 데이터를 갱신하는 코드의 예이다.
 
 .. code-block:: c#
 
-	string sql = "UPDATE t SET c = ?";
-	CUBRIDCommandcmd = new CUBRIDCommand(sql, conn);
-	 
-	CUBRIDClobClob = new CUBRIDClob(conn);
-	str = conn.ConnectionString; //Use the ConnectionString for testing
-	 
-	Clob.setString(1, str);
-	
-	CUBRIDParameter param = new CUBRIDParameter();
-	
-	param.ParameterName = "?";
-	param.CUBRIDDataType = CUBRIDDataType.CCI_U_TYPE_CLOB;
-	param.Value = Clob;
-	
-	cmd.Parameters.Add(param);
-	cmd.ExecuteNonQuery();
+    string sql = "UPDATE t SET c = ?";
+    CUBRIDCommandcmd = new CUBRIDCommand(sql, conn);
+     
+    CUBRIDClobClob = new CUBRIDClob(conn);
+    str = conn.ConnectionString; //Use the ConnectionString for testing
+     
+    Clob.setString(1, str);
+    
+    CUBRIDParameter param = new CUBRIDParameter();
+    
+    param.ParameterName = "?";
+    param.CUBRIDDataType = CUBRIDDataType.CCI_U_TYPE_CLOB;
+    param.Value = Clob;
+    
+    cmd.Parameters.Add(param);
+    cmd.ExecuteNonQuery();
 
 CUBRID 메타데이터 지원
 ----------------------
@@ -268,67 +268,67 @@ CUBRID ADO.NET Data Provider는 데이터베이스 메타데이터를 지원하�
 
 .. code-block:: c#
 
-	public DataTable GetDatabases(string[] filters)
-	public DataTable GetTables(string[] filters)
-	public DataTable GetViews(string[] filters)
-	public DataTable GetColumns(string[] filters)
-	public DataTable GetIndexes(string[] filters)
-	public DataTable GetIndexColumns(string[] filters)
-	public DataTable GetExportedKeys(string[] filters)
-	public DataTable GetCrossReferenceKeys(string[] filters)
-	public DataTable GetForeignKeys(string[] filters)
-	public DataTable GetUsers(string[] filters)
-	public DataTable GetProcedures(string[] filters)
-	public static DataTable GetDataTypes()
-	public static DataTable GetReservedWords()
-	public static String[] GetNumericFunctions()
-	public static String[] GetStringFunctions()
-	public DataTable GetSchema(string collection, string[] filters)
+    public DataTable GetDatabases(string[] filters)
+    public DataTable GetTables(string[] filters)
+    public DataTable GetViews(string[] filters)
+    public DataTable GetColumns(string[] filters)
+    public DataTable GetIndexes(string[] filters)
+    public DataTable GetIndexColumns(string[] filters)
+    public DataTable GetExportedKeys(string[] filters)
+    public DataTable GetCrossReferenceKeys(string[] filters)
+    public DataTable GetForeignKeys(string[] filters)
+    public DataTable GetUsers(string[] filters)
+    public DataTable GetProcedures(string[] filters)
+    public static DataTable GetDataTypes()
+    public static DataTable GetReservedWords()
+    public static String[] GetNumericFunctions()
+    public static String[] GetStringFunctions()
+    public DataTable GetSchema(string collection, string[] filters)
 
 다음은 데이터베이스에서 테이블의 목록을 얻는 코드의 예이다.
 
 .. code-block:: c#
 
-	CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
-	DataTable dt = schema.GetTables(newstring[] { "%" });
-	 
-	Debug.Assert(dt.Columns.Count == 3);
-	Debug.Assert(dt.Rows.Count == 10);
-	 
-	Debug.Assert(dt.Rows00.ToString() == "demodb");
-	Debug.Assert(dt.Rows01.ToString() == "demodb");
-	Debug.Assert(dt.Rows02.ToString() == "stadium");
-	 
-	Get the list of Foreign Keys in a table:
-	 
-	CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
-	DataTable dt = schema.GetForeignKeys(newstring[] { "game" });
-	 
-	Debug.Assert(dt.Columns.Count == 9);
-	Debug.Assert(dt.Rows.Count == 2);
-	 
-	Debug.Assert(dt.Rows00.ToString() == "athlete");
-	Debug.Assert(dt.Rows01.ToString() == "code");
-	Debug.Assert(dt.Rows02.ToString() == "game");
-	Debug.Assert(dt.Rows03.ToString() == "athlete_code");
-	Debug.Assert(dt.Rows04.ToString() == "1");
-	Debug.Assert(dt.Rows05.ToString() == "1");
-	Debug.Assert(dt.Rows06.ToString() == "1");
-	Debug.Assert(dt.Rows07.ToString() == "fk_game_athlete_code");
-	Debug.Assert(dt.Rows08.ToString() == "pk_athlete_code");
+    CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
+    DataTable dt = schema.GetTables(newstring[] { "%" });
+     
+    Debug.Assert(dt.Columns.Count == 3);
+    Debug.Assert(dt.Rows.Count == 10);
+     
+    Debug.Assert(dt.Rows00.ToString() == "demodb");
+    Debug.Assert(dt.Rows01.ToString() == "demodb");
+    Debug.Assert(dt.Rows02.ToString() == "stadium");
+     
+    Get the list of Foreign Keys in a table:
+     
+    CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
+    DataTable dt = schema.GetForeignKeys(newstring[] { "game" });
+     
+    Debug.Assert(dt.Columns.Count == 9);
+    Debug.Assert(dt.Rows.Count == 2);
+     
+    Debug.Assert(dt.Rows00.ToString() == "athlete");
+    Debug.Assert(dt.Rows01.ToString() == "code");
+    Debug.Assert(dt.Rows02.ToString() == "game");
+    Debug.Assert(dt.Rows03.ToString() == "athlete_code");
+    Debug.Assert(dt.Rows04.ToString() == "1");
+    Debug.Assert(dt.Rows05.ToString() == "1");
+    Debug.Assert(dt.Rows06.ToString() == "1");
+    Debug.Assert(dt.Rows07.ToString() == "fk_game_athlete_code");
+    Debug.Assert(dt.Rows08.ToString() == "pk_athlete_code");
 
 다음은 테이블의 인덱스 목록을 얻는 코드의 예이다.
 
 .. code-block:: c#
 
-	CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
-	DataTable dt = schema.GetIndexes(newstring[] { "game" });
-	 
-	Debug.Assert(dt.Columns.Count == 9);
-	Debug.Assert(dt.Rows.Count == 5);
-	 
-	Debug.Assert(dt.Rows32.ToString() == "pk_game_host_year_event_code_athlete_code"); //Index name
-	Debug.Assert(dt.Rows34.ToString() == "True"); //Is it a PK?
+    CUBRIDSchemaProvider schema = new CUBRIDSchemaProvider(conn);
+    DataTable dt = schema.GetIndexes(newstring[] { "game" });
+     
+    Debug.Assert(dt.Columns.Count == 9);
+    Debug.Assert(dt.Rows.Count == 5);
+     
+    Debug.Assert(dt.Rows32.ToString() == "pk_game_host_year_event_code_athlete_code"); //Index name
+    Debug.Assert(dt.Rows34.ToString() == "True"); //Is it a PK?
 
 DataTable 지원
 --------------
@@ -345,46 +345,46 @@ DataTable 지원
 
 .. code-block:: c#
 
-	String sql = "select * from nation";
-	CUBRIDDataAdapter da = new CUBRIDDataAdapter();
-	da.SelectCommand = new CUBRIDCommand(sql, conn);
-	DataTable dt = newDataTable("nation");
-	da.FillSchema(dt, SchemaType.Source);//To retrieve all the column properties you have to use the FillSchema() method
-	 
-	Debug.Assert(dt.Columns0.ColumnName == "code");
-	Debug.Assert(dt.Columns0.AllowDBNull == false);
-	Debug.Assert(dt.Columns0.DefaultValue.ToString() == "");
-	Debug.Assert(dt.Columns0.Unique == true);
-	Debug.Assert(dt.Columns0.DataType == typeof(System.String));
-	Debug.Assert(dt.Columns0.Ordinal == 0);
-	Debug.Assert(dt.Columns0.Table == dt);
+    String sql = "select * from nation";
+    CUBRIDDataAdapter da = new CUBRIDDataAdapter();
+    da.SelectCommand = new CUBRIDCommand(sql, conn);
+    DataTable dt = newDataTable("nation");
+    da.FillSchema(dt, SchemaType.Source);//To retrieve all the column properties you have to use the FillSchema() method
+     
+    Debug.Assert(dt.Columns0.ColumnName == "code");
+    Debug.Assert(dt.Columns0.AllowDBNull == false);
+    Debug.Assert(dt.Columns0.DefaultValue.ToString() == "");
+    Debug.Assert(dt.Columns0.Unique == true);
+    Debug.Assert(dt.Columns0.DataType == typeof(System.String));
+    Debug.Assert(dt.Columns0.Ordinal == 0);
+    Debug.Assert(dt.Columns0.Table == dt);
 
 **INSERT** 문 지원 기능을 이용하여 테이블에 값을 삽입하는 코드의 예는 다음과 같다.
 
 .. code-block:: c#
 
-	String sql = " select * from nation order by `code` asc";
-	using (CUBRIDDataAdapter da = new CUBRIDDataAdapter(sql, conn))
-	{
-		using (CUBRIDDataAdapter daCmd = new CUBRIDDataAdapter(sql, conn))
-		{
-			CUBRIDCommandBuildercmdBuilder = new CUBRIDCommandBuilder(daCmd);
-			da.InsertCommand = cmdBuilder.GetInsertCommand();
-		}
-		 
-		DataTable dt = newDataTable("nation");
-		da.Fill(dt);
-		 
-		DataRow newRow = dt.NewRow();
-		
-		newRow"code" = "ZZZ";
-		newRow"name" = "ABCDEF";
-		newRow"capital" = "MyXYZ";
-		newRow"continent" = "QWERTY";
-		
-		dt.Rows.Add(newRow);
-		da.Update(dt);
-	}
+    String sql = " select * from nation order by `code` asc";
+    using (CUBRIDDataAdapter da = new CUBRIDDataAdapter(sql, conn))
+    {
+        using (CUBRIDDataAdapter daCmd = new CUBRIDDataAdapter(sql, conn))
+        {
+            CUBRIDCommandBuildercmdBuilder = new CUBRIDCommandBuilder(daCmd);
+            da.InsertCommand = cmdBuilder.GetInsertCommand();
+        }
+         
+        DataTable dt = newDataTable("nation");
+        da.Fill(dt);
+         
+        DataRow newRow = dt.NewRow();
+        
+        newRow"code" = "ZZZ";
+        newRow"name" = "ABCDEF";
+        newRow"capital" = "MyXYZ";
+        newRow"continent" = "QWERTY";
+        
+        dt.Rows.Add(newRow);
+        da.Update(dt);
+    }
 
 트랜잭션
 --------
@@ -393,25 +393,25 @@ CUBRID ADO.NET Data Provider는 직접 SQL 트랜잭션(direct-SQL transaction)�
 
 .. code-block:: c#
 
-	conn.BeginTransaction();
-	 
-	string sql = "create table t(idx integer)";
-	using (CUBRIDCommand command = new CUBRIDCommand(sql, conn))
-	{
-		command.ExecuteNonQuery();
-	}
-	 
-	conn.Rollback();
-	 
-	conn.BeginTransaction();
-	 
-	sql = "create table t(idx integer)";
-	using (CUBRIDCommand command = new CUBRIDCommand(sql, conn))
-	{
-		command.ExecuteNonQuery();
-	}
-	 
-	conn.Commit();
+    conn.BeginTransaction();
+     
+    string sql = "create table t(idx integer)";
+    using (CUBRIDCommand command = new CUBRIDCommand(sql, conn))
+    {
+        command.ExecuteNonQuery();
+    }
+     
+    conn.Rollback();
+     
+    conn.BeginTransaction();
+     
+    sql = "create table t(idx integer)";
+    using (CUBRIDCommand command = new CUBRIDCommand(sql, conn))
+    {
+        command.ExecuteNonQuery();
+    }
+     
+    conn.Commit();
 
 파라미터 사용
 -------------
@@ -422,18 +422,18 @@ CUBRID에서는 위치 기반 파라미터만 지원하며 명명된 파라미�
 
 .. code-block:: c#
 
-	using (CUBRIDCommand cmd = new CUBRIDCommand("insert into t values(?, ?)", conn))
-	{
-		CUBRIDParameter p1 = new CUBRIDParameter("?p1", CUBRIDDataType.CCI_U_TYPE_INT);
-		p1.Value = 1;
-		cmd.Parameters.Add(p1);
-		 
-		CUBRIDParameter p2 = new CUBRIDParameter("?p2", CUBRIDDataType.CCI_U_TYPE_STRING);
-		p2.Value = "abc";
-		cmd.Parameters.Add(p2);
-		 
-		cmd.ExecuteNonQuery();
-	}
+    using (CUBRIDCommand cmd = new CUBRIDCommand("insert into t values(?, ?)", conn))
+    {
+        CUBRIDParameter p1 = new CUBRIDParameter("?p1", CUBRIDDataType.CCI_U_TYPE_INT);
+        p1.Value = 1;
+        cmd.Parameters.Add(p1);
+         
+        CUBRIDParameter p2 = new CUBRIDParameter("?p2", CUBRIDDataType.CCI_U_TYPE_STRING);
+        p2.Value = "abc";
+        cmd.Parameters.Add(p2);
+         
+        cmd.ExecuteNonQuery();
+    }
 
 오류 코드 및 메시지
 -------------------

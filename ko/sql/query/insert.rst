@@ -6,22 +6,22 @@ INSERT
 
 **INSERT ... VALUES** 문과 **INSERT ... SET** 문은 명시적으로 지정된 값을 기반으로 새로운 레코드를 삽입하며, **INSERT ... SELECT** 문은 다른 테이블에서 조회한 결과 레코드를 삽입할 수 있다. 단일 **INSERT** 문을 이용하여 여러 행을 삽입하기 위해서는 **INSERT ... VALUES** 문 또는 **INSERT ... SELECT** 문을 사용한다. ::
 
-	<INSERT … VALUES statement>
-	INSERT [INTO] table_name [(column_name, ...)]
-		{VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
-		[ON DUPLICATE KEY UPDATE column_name = expr, ... ]
-	INSERT [INTO] table_name DEFAULT [ VALUES ]
-	INSERT [INTO] table_name VALUES()
-	 
-	<INSERT … SET statement>
-	INSERT [INTO] table_name
-		SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
-		[ON DUPLICATE KEY UPDATE column_name = expr, ... ]
-	 
-	<INSERT … SELECT statement>
-	INSERT [INTO] table_name [(column_name, ...)]
-		SELECT...
-		[ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+    <INSERT … VALUES statement>
+    INSERT [INTO] table_name [(column_name, ...)]
+        {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
+        [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+    INSERT [INTO] table_name DEFAULT [ VALUES ]
+    INSERT [INTO] table_name VALUES()
+     
+    <INSERT … SET statement>
+    INSERT [INTO] table_name
+        SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
+        [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+     
+    <INSERT … SELECT statement>
+    INSERT [INTO] table_name [(column_name, ...)]
+        SELECT...
+        [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
 *   *table_name* : 새로운 레코드를 삽입할 대상 테이블 이름을 지정한다.
 
@@ -35,53 +35,53 @@ INSERT
 
 .. code-block:: sql
 
-	CREATE TABLE a_tbl1(
-	id INT UNIQUE,
-	name VARCHAR,
-	phone VARCHAR DEFAULT '000-0000');
-	 
-	--insert default values with DEFAULT keyword before VALUES
-	INSERT INTO a_tbl1 DEFAULT VALUES;
-	 
-	--insert multiple rows
-	INSERT INTO a_tbl1 VALUES (1,'aaa', DEFAULT),(2,'bbb', DEFAULT);
-	 
-	--insert a single row specifying column values for all
-	INSERT INTO a_tbl1 VALUES (3,'ccc', '333-3333');
-	 
-	--insert two rows specifying column values for only
-	INSERT INTO a_tbl1(id) VALUES (4), (5);
-	 
-	--insert a single row with SET clauses
-	INSERT INTO a_tbl1 SET id=6, name='eee';
-	INSERT INTO a_tbl1 SET id=7, phone='777-7777';
-	 
-	SELECT * FROM a_tbl1;
-			   id  name                  phone
-	=========================================================
-			 NULL  NULL                  '000-0000'
-				1  'aaa'                 '000-0000'
-				2  'bbb'                 '000-0000'
-				3  'ccc'                 '333-3333'
-				4  NULL                  '000-0000'
-				5  NULL                  '000-0000'
-				6  'eee'                 '000-0000'
-				7  NULL                  '777-7777' 
-	 
-	INSERT INTO a_tbl1 SET id=6, phone='000-0000'
-	ON DUPLICATE KEY UPDATE phone='666-6666';
-	 
-	SELECT * FROM a_tbl1 WHERE id=6;
-			   id  name                  phone
-	=========================================================
-				6  'eee'                 '666-6666'
-	 
-	INSERT INTO a_tbl1 SELECT * FROM a_tbl1 WHERE id=7 ON DUPLICATE KEY UPDATE name='ggg';
-	 
-	SELECT * FROM a_tbl1 WHERE id=7;
-			   id  name                  phone
-	=========================================================
-				7  'ggg'                 '777-7777'
+    CREATE TABLE a_tbl1(
+    id INT UNIQUE,
+    name VARCHAR,
+    phone VARCHAR DEFAULT '000-0000');
+     
+    --insert default values with DEFAULT keyword before VALUES
+    INSERT INTO a_tbl1 DEFAULT VALUES;
+     
+    --insert multiple rows
+    INSERT INTO a_tbl1 VALUES (1,'aaa', DEFAULT),(2,'bbb', DEFAULT);
+     
+    --insert a single row specifying column values for all
+    INSERT INTO a_tbl1 VALUES (3,'ccc', '333-3333');
+     
+    --insert two rows specifying column values for only
+    INSERT INTO a_tbl1(id) VALUES (4), (5);
+     
+    --insert a single row with SET clauses
+    INSERT INTO a_tbl1 SET id=6, name='eee';
+    INSERT INTO a_tbl1 SET id=7, phone='777-7777';
+     
+    SELECT * FROM a_tbl1;
+               id  name                  phone
+    =========================================================
+             NULL  NULL                  '000-0000'
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                4  NULL                  '000-0000'
+                5  NULL                  '000-0000'
+                6  'eee'                 '000-0000'
+                7  NULL                  '777-7777' 
+     
+    INSERT INTO a_tbl1 SET id=6, phone='000-0000'
+    ON DUPLICATE KEY UPDATE phone='666-6666';
+     
+    SELECT * FROM a_tbl1 WHERE id=6;
+               id  name                  phone
+    =========================================================
+                6  'eee'                 '666-6666'
+     
+    INSERT INTO a_tbl1 SELECT * FROM a_tbl1 WHERE id=7 ON DUPLICATE KEY UPDATE name='ggg';
+     
+    SELECT * FROM a_tbl1 WHERE id=7;
+               id  name                  phone
+    =========================================================
+                7  'ggg'                 '777-7777'
 
 INSERT ... SELECT 문
 ====================
@@ -90,71 +90,71 @@ INSERT ... SELECT 문
 
 **SELECT** 문은 **VALUES** 키워드 대신 사용하거나 **VALUES** 뒤의 칼럼 값 리스트 내에 부질의로서 포함될 수 있다. **VALUES** 키워드를 대신하여 **SELECT** 문을 명시하면, 질의 결과로 얻은 다수의 레코드를 한 번에 대상 테이블 칼럼에 삽입할 수 있다. **SELECT** 문을 칼럼 값 리스트 내에 부질의로 사용하려면 질의 결과 레코드가 하나여야 한다. ::
 
-	INSERT [INTO] table_name [(column_name, ...)]
-		SELECT...
-		[ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+    INSERT [INTO] table_name [(column_name, ...)]
+        SELECT...
+        [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
 .. code-block:: sql
 
-	--creating an empty table which schema replicated from a_tbl1
-	CREATE TABLE a_tbl2 LIKE a_tbl1;
-	 
-	--inserting multiple rows from SELECT query results
-	INSERT INTO a_tbl2 SELECT * FROM a_tbl1 WHERE id IS NOT NULL;
-	 
-	--inserting column value with SELECT subquery specified in the value list
-	INSERT INTO a_tbl2 VALUES(8, SELECT name FROM a_tbl1 WHERE name <'bbb', DEFAULT);
-	 
-	SELECT * FROM a_tbl2;
-			   id  name                  phone
-	=========================================================
-				1  'aaa'                 '000-0000'
-				2  'bbb'                 '000-0000'
-				3  'ccc'                 '333-3333'
-				4  NULL                  '000-0000'
-				5  NULL                  '000-0000'
-				6  'eee'                 '000-0000'
-				7  NULL                  '777-7777'
-				8  'aaa'                 '000-0000'
+    --creating an empty table which schema replicated from a_tbl1
+    CREATE TABLE a_tbl2 LIKE a_tbl1;
+     
+    --inserting multiple rows from SELECT query results
+    INSERT INTO a_tbl2 SELECT * FROM a_tbl1 WHERE id IS NOT NULL;
+     
+    --inserting column value with SELECT subquery specified in the value list
+    INSERT INTO a_tbl2 VALUES(8, SELECT name FROM a_tbl1 WHERE name <'bbb', DEFAULT);
+     
+    SELECT * FROM a_tbl2;
+               id  name                  phone
+    =========================================================
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                4  NULL                  '000-0000'
+                5  NULL                  '000-0000'
+                6  'eee'                 '000-0000'
+                7  NULL                  '777-7777'
+                8  'aaa'                 '000-0000'
 
 ON DUPLICATE KEY UPDATE 절
 ==========================
 
 **INSERT** 문에 **ON DUPLICATE KEY UPDATE** 절을 명시하여 **UNIQUE** 인덱스 또는 **PRIMARY KEY** 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 에러를 출력하지 않고 새로운 값으로 갱신할 수 있다. **ON DUPLICATE KEY UPDATE** 절은 **INSERT** 또는 **UPDATE** 에 대한 트리거가 활성화된 테이블에 대해서는 사용할 수 없으며, 중첩된 **INSERT** 문에서도 사용할 수 없다. ::
 
-	<INSERT … VALUES statement>
-	<INSERT … SET statement>
-	<INSERT … SELECT statement>
-		INSERT ...
-		[ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+    <INSERT … VALUES statement>
+    <INSERT … SET statement>
+    <INSERT … SELECT statement>
+        INSERT ...
+        [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
 
 *   *column_name* = *expr* : **ON DUPLICATE KEY UPDATE** 뒤에 칼럼 값을 변경하고자 하는 칼럼 이름을 명시하고, 등호 부호를 이용하여 새로운 칼럼 값을 명시한다.
 
 .. code-block:: sql
 
-	--creating a new table having the same schema as a_tbl1
-	CREATE TABLE a_tbl3 LIKE a_tbl1;
-	INSERT INTO a_tbl3 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
-	SELECT * FROM a_tbl3;
-			   id  name                  phone
-	=========================================================
-				1  'aaa'                 '000-0000'
-				2  'bbb'                 '000-0000'
-				3  'ccc'                 '333-3333'
-				6  'eee'                 '000-0000'
-	 
-	--insert duplicated value violating UNIQUE constraint
-	INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222');
-	 
-	ERROR: Operation would have caused one or more unique constraint violations.
-	 
-	--insert duplicated value with specifying ON DUPLICATED KEY UPDATE clause
-	INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222')
-	ON DUPLICATE KEY UPDATE phone = '222-2222';
-	 
-	SELECT * FROM a_tbl3 WHERE id=2;
-			   id  name                  phone
-	=========================================================
-				2  'bbb'                 '222-2222'
+    --creating a new table having the same schema as a_tbl1
+    CREATE TABLE a_tbl3 LIKE a_tbl1;
+    INSERT INTO a_tbl3 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
+    SELECT * FROM a_tbl3;
+               id  name                  phone
+    =========================================================
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                6  'eee'                 '000-0000'
+     
+    --insert duplicated value violating UNIQUE constraint
+    INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222');
+     
+    ERROR: Operation would have caused one or more unique constraint violations.
+     
+    --insert duplicated value with specifying ON DUPLICATED KEY UPDATE clause
+    INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222')
+    ON DUPLICATE KEY UPDATE phone = '222-2222';
+     
+    SELECT * FROM a_tbl3 WHERE id=2;
+               id  name                  phone
+    =========================================================
+                2  'bbb'                 '222-2222'
 

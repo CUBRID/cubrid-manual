@@ -12,17 +12,17 @@ The **REPLACE** statement determines whether a new record causes the duplication
 
 ::
 
-	<REPLACE … VALUES statement>
-	REPLACE [INTO] table_name [(column_name, ...)]
-		{VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
-	 
-	<REPLACE … SET statement>
-	REPLACE [INTO] table_name
-		SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
-	 
-	<REPLACE … SELECT statement>
-	REPLACE [INTO] table_name [(column_name, ...)]
-		SELECT...
+    <REPLACE … VALUES statement>
+    REPLACE [INTO] table_name [(column_name, ...)]
+        {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
+     
+    <REPLACE … SET statement>
+    REPLACE [INTO] table_name
+        SET column_name = {expr | DEFAULT}[, column_name = {expr | DEFAULT},...]
+     
+    <REPLACE … SELECT statement>
+    REPLACE [INTO] table_name [(column_name, ...)]
+        SELECT...
 
 *   *table_name* : Specifies the name of the target table into which you want to insert a new record.
 *   *column_name* : Specifies the name of the column into which you want to insert the value. If you omit to specify the column name, it is considered that all columns defined in the table have been specified. Therefore, you must specify the value for the column next to **VALUES**. If you do not specify all the columns defined in the table, a **DEFAULT** value is assigned to the non-specified columns; if the **DEFAULT** value is not defined, a NULL value is assigned.
@@ -31,25 +31,25 @@ The **REPLACE** statement determines whether a new record causes the duplication
 
 .. code-block:: sql
 
-	--creating a new table having the same schema as a_tbl1
-	CREATE TABLE a_tbl4 LIKE a_tbl1;
-	INSERT INTO a_tbl4 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
-	SELECT * FROM a_tbl4;
-			   id  name                  phone
-	=========================================================
-				1  'aaa'                 '000-0000'
-				2  'bbb'                 '000-0000'
-				3  'ccc'                 '333-3333'
-				6  'eee'                 '000-0000'
-	 
-	--insert duplicated value violating UNIQUE constraint
-	REPLACE INTO a_tbl4 VALUES(1, 'aaa', '111-1111'),(2, 'bbb', '222-2222');
-	REPLACE INTO a_tbl4 SET id=6, name='fff', phone=DEFAULT;
-	 
-	SELECT * FROM a_tbl4;
-			   id  name                  phone
-	=========================================================
-				3  'ccc'                 '333-3333'
-				1  'aaa'                 '111-1111'
-				2  'bbb'                 '222-2222'
-				6  'fff'                 '000-0000'
+    --creating a new table having the same schema as a_tbl1
+    CREATE TABLE a_tbl4 LIKE a_tbl1;
+    INSERT INTO a_tbl4 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
+    SELECT * FROM a_tbl4;
+               id  name                  phone
+    =========================================================
+                1  'aaa'                 '000-0000'
+                2  'bbb'                 '000-0000'
+                3  'ccc'                 '333-3333'
+                6  'eee'                 '000-0000'
+     
+    --insert duplicated value violating UNIQUE constraint
+    REPLACE INTO a_tbl4 VALUES(1, 'aaa', '111-1111'),(2, 'bbb', '222-2222');
+    REPLACE INTO a_tbl4 SET id=6, name='fff', phone=DEFAULT;
+     
+    SELECT * FROM a_tbl4;
+               id  name                  phone
+    =========================================================
+                3  'ccc'                 '333-3333'
+                1  'aaa'                 '111-1111'
+                2  'bbb'                 '222-2222'
+                6  'fff'                 '000-0000'

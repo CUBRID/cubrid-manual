@@ -66,10 +66,10 @@ You should put the logical expressions in brackets in the **SELECT** list.
 
 .. code-block:: sql
 
-	SELECT 1 = 1 FROM db_root;
-	ERROR: syntax error, unexpected '='
-	 
-	SELECT (1 = 1) FROM db_root;
-			(1=1)
-	=============
-				1
+    SELECT 1 = 1 FROM db_root;
+    ERROR: syntax error, unexpected '='
+     
+    SELECT (1 = 1) FROM db_root;
+            (1=1)
+    =============
+                1

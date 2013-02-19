@@ -28,7 +28,7 @@ CUBRID는 JDBC, CCI, PHP, PDO, ODBC, OLE DB, ADO.NET, Perl, Python, Ruby 등 다
 
 .. toctree::
 
-	install.rst
-	env.rst
-	upgrade.rst
-	qrytool.rst
+    install.rst
+    env.rst
+    upgrade.rst
+    qrytool.rst

@@ -3,10 +3,10 @@
 ***********
 
 .. toctree::
-	:maxdepth: 2
-	
-	r91.rst
-	r90.rst
+    :maxdepth: 2
+    
+    r91.rst
+    r90.rst
 
 공통 정보
 =========

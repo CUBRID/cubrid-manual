@@ -6,26 +6,26 @@ In general, the prepared statement is executed through the interface functions o
 
 *   Prepare the SQL statement to execute. ::
 
-	PREPARE stmt_name FROM preparable_stmt
+    PREPARE stmt_name FROM preparable_stmt
 
 *   Execute the prepared statement. ::
 
-	EXECUTE stmt_name [USING value [, value] ...]
+    EXECUTE stmt_name [USING value [, value] ...]
 
 *   Drop the prepared statement. ::
 
-	{DEALLOCATE | DROP} PREPARE stmt_name
+    {DEALLOCATE | DROP} PREPARE stmt_name
 
 .. note:: 
-	* In SQL level, the number of PREPARE statements is limited to 20 per DB connection. It is limited to protect abusing DB server memory, because PREPARE statement in SQL level uses the memory of DB server.
-	* In the interface function, the number of prepared statements is limited to :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` of broker parameter per DB connection.  If you use CUBRID SHARD, the number of prepared statements is limited to :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` of shard parameter per shard proxy.
+    * In SQL level, the number of PREPARE statements is limited to 20 per DB connection. It is limited to protect abusing DB server memory, because PREPARE statement in SQL level uses the memory of DB server.
+    * In the interface function, the number of prepared statements is limited to :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` of broker parameter per DB connection.  If you use CUBRID SHARD, the number of prepared statements is limited to :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` of shard parameter per shard proxy.
 
 PREPARE Statement
 =================
 
 The **PREPARE** statement prepares the query specified in *preparable_stmt* of the **FROM** clause and assigns the name to be used later when the SQL statement is referenced to *stmt_name*. See :ref:`execute-statement` for example. ::
 
-	PREPARE stmt_name FROM preparable_stmt
+    PREPARE stmt_name FROM preparable_stmt
 
 *   *stmt_name* : The prepared statement is specified. If an SQL statement with the same *stmt_name* exists in the given client session, clear the existing prepared statement and prepare a new SQL statement. If the **PREPARE** statement is not executed properly due to an error in the given SQL statement, it is processed as if the *stmt_name* assigned to the SQL statement does not exist.
 
@@ -44,7 +44,7 @@ EXECUTE Statement
 
 The **EXECUTE** statement executes the prepared statement. You can bind the data value after the **USING** clause if a bind parameter (?) is included in the prepared statement. You cannot specify user-defined variables like an attribute in the **USING** clause. An value such as literal and an input parameter only can be specified. ::
 
-	EXECUTE stmt_name [USING value [, value] ...]
+    EXECUTE stmt_name [USING value [, value] ...]
 
 *   *stmt_name* : The name given to the prepared statement to be executed is specified. An error message is displayed if the *stmt_name* is not valid, or if the prepared statement does not exist.
 
@@ -52,54 +52,54 @@ The **EXECUTE** statement executes the prepared statement. You can bind the data
 
 .. code-block:: sql
 
-	PREPARE st FROM 'SELECT 1 + ?';
-	EXECUTE st USING 4;
-	   1+ ?:0
-	==========================
-	   5
-	 
-	SET @a=3;
-	EXECUTE st USING @a;
-	   1+ ?:0
-	==========================
-	   4
-	 
-	PREPARE st FROM 'SELECT ? + ?';
-	EXECUTE st USING 1,3;
-	   ?:0 + ?:1
-	==========================
-	   4
-	 
-	PREPARE st FROM 'SELECT ? + ?';
-	EXECUTE st USING 'a','b';
-	   ?:0 + ?:1
-	==========================
-	   'ab'
-	 
-	PREPARE st FROM 'SELECT FLOOR(?)';
-	EXECUTE st USING '3.2';
-	   floor( ?:0 )
-	==========================
-	   3.000000000000000e+000
-	 
-	PREPARE st FROM 'SELECT FLOOR(?)';
-	EXECUTE st USING 3.2;
-	   floor( ?:0 )
-	==========================
-	   3.0
+    PREPARE st FROM 'SELECT 1 + ?';
+    EXECUTE st USING 4;
+       1+ ?:0
+    ==========================
+       5
+     
+    SET @a=3;
+    EXECUTE st USING @a;
+       1+ ?:0
+    ==========================
+       4
+     
+    PREPARE st FROM 'SELECT ? + ?';
+    EXECUTE st USING 1,3;
+       ?:0 + ?:1
+    ==========================
+       4
+     
+    PREPARE st FROM 'SELECT ? + ?';
+    EXECUTE st USING 'a','b';
+       ?:0 + ?:1
+    ==========================
+       'ab'
+     
+    PREPARE st FROM 'SELECT FLOOR(?)';
+    EXECUTE st USING '3.2';
+       floor( ?:0 )
+    ==========================
+       3.000000000000000e+000
+     
+    PREPARE st FROM 'SELECT FLOOR(?)';
+    EXECUTE st USING 3.2;
+       floor( ?:0 )
+    ==========================
+       3.0
 
 DEALLOCATE PREPARE/DROP PREPARE Statements
 ==========================================
 
 The statements **DEALLOCATE PREPARE** and **DROP PREPARE** are used interchangeably and they clear the prepared statement. All prepared statements are cleared automatically by the server when the client session is terminated even if the **DEALLOCATE PREPARE** or **DROP PREPARE** statement is not executed. ::
 
-	{DEALLOCATE | DROP} PREPARE stmt_name
+    {DEALLOCATE | DROP} PREPARE stmt_name
 
 *   *stmt_name* : The name given to the prepared statement to be cleared is specified. An error message is displayed if the *stmt_name* is not valid, or if the prepared statement does not exist.
 
 .. code-block:: sql
 
-	DEALLOCATE PREPARE stmt1;
+    DEALLOCATE PREPARE stmt1;
 
 ***
 SET
@@ -117,39 +117,39 @@ The user-defined variables are not case-sensitive. The user-defined variable typ
 
 .. code-block:: sql
 
-	SET @v1 = 1, @v2=CAST(1 AS BIGINT), @v3 = '123', @v4 = DATE'2010-01-01';
-	 
-	SELECT typeof(@v1), typeof(@v2), typeof(@v3), typeof(@v4);
-	 
-	   typeof(@v1)         typeof(@v2)         typeof(@v3)         typeof(@v4)
-	======================================================================================
-	  'integer'           'bigint'            'character var'     'character varying (10)'
+    SET @v1 = 1, @v2=CAST(1 AS BIGINT), @v3 = '123', @v4 = DATE'2010-01-01';
+     
+    SELECT typeof(@v1), typeof(@v2), typeof(@v3), typeof(@v4);
+     
+       typeof(@v1)         typeof(@v2)         typeof(@v3)         typeof(@v4)
+    ======================================================================================
+      'integer'           'bigint'            'character var'     'character varying (10)'
 
 The user-defined variables can be changed when you define values.
 
 .. code-block:: sql
 
-	SELECT @v := 1, typeof(@v1), @v1:='1', typeof(@v1);
-	 
-	  @v := 1                typeof(@v1)          @v1 := '1'             typeof(@v1)
-	======================================================================================
-	  1                     'integer'             '1'                   'character (1)'
+    SELECT @v := 1, typeof(@v1), @v1:='1', typeof(@v1);
+     
+      @v := 1                typeof(@v1)          @v1 := '1'             typeof(@v1)
+    ======================================================================================
+      1                     'integer'             '1'                   'character (1)'
 
 ::
 
-	<set_statement>
-			: <set_statement>, <udf_assignment>
-			| SET <udv_assignment>
-			;
-	 
-	<udv_assignment>
-			: @<name> = <expression>
-			| @<name> := <expression>
-			;
-	 
-	{DEALLOCATE|DROP} VARIABLE <variable_name_list>
-	<variable_name_list>
-		   : <variable_name_list> ',' @<name>
+    <set_statement>
+            : <set_statement>, <udf_assignment>
+            | SET <udv_assignment>
+            ;
+     
+    <udv_assignment>
+            : @<name> = <expression>
+            | @<name> := <expression>
+            ;
+     
+    {DEALLOCATE|DROP} VARIABLE <variable_name_list>
+    <variable_name_list>
+           : <variable_name_list> ',' @<name>
 
 *   You must define the variable names with alphanumeric characters and underscores (_).
 *   When you define the variables within SQL statements, you should use the ':=' operator.
@@ -158,59 +158,59 @@ The following example shows how to define the variable 'a' and assign a value 1 
 
 .. code-block:: sql
 
-	SET @a = 1;
-	 
-	SELECT @a;
-	 
-	  @a
-	======================
-	  1
+    SET @a = 1;
+     
+    SELECT @a;
+     
+      @a
+    ======================
+      1
 
 The following example shows how to count the number of rows in the **SELECT** statement by using the user-defined variable.
 
 .. code-block:: sql
 
-	CREATE TABLE t (i INTEGER);
-	INSERT INTO t(i) VALUES(2),(4),(6),(8);
-	 
-	SET @a = 0;
-	 
-	SELECT @a := @a+1 AS row_no, i FROM t;
-	 
-	  row_no                          i
-	 ===================================
-	  1                               2
-	  2                               4
-	  3                               6
-	  4                               8
-	4 ROWS selected.
+    CREATE TABLE t (i INTEGER);
+    INSERT INTO t(i) VALUES(2),(4),(6),(8);
+     
+    SET @a = 0;
+     
+    SELECT @a := @a+1 AS row_no, i FROM t;
+     
+      row_no                          i
+     ===================================
+      1                               2
+      2                               4
+      3                               6
+      4                               8
+    4 ROWS selected.
 
 The following example shows how to use the user-defined variable as the input of bind parameter specified in the prepared statement.
 
 .. code-block:: sql
 
-	SET @a:=3;
-	 
-	PREPARE stmt FROM 'SELECT i FROM t WHERE i < ?';
-	EXECUTE stmt USING @a;
-	 
-				i
-	=============
-				2
+    SET @a:=3;
+     
+    PREPARE stmt FROM 'SELECT i FROM t WHERE i < ?';
+    EXECUTE stmt USING @a;
+     
+                i
+    =============
+                2
 
 The following example shows how to declare the user-defined variable by using the ':=' operator.
 
 .. code-block:: sql
 
-	SELECT @a := 1, @user_defined_variable := 'user defined variable';
-	UPDATE t SET i = (@var := 1);
+    SELECT @a := 1, @user_defined_variable := 'user defined variable';
+    UPDATE t SET i = (@var := 1);
 
 The following example shows how to delete the user-defined variable *a* and *user_defined_variable*.
 
 .. code-block:: sql
 
-	DEALLOCATE VARIABLE @a, @user_defined_variable;
-	DROP VARIABLE @a, @user_defined_variable;
+    DEALLOCATE VARIABLE @a, @user_defined_variable;
+    DROP VARIABLE @a, @user_defined_variable;
 
 **Remark**
 
@@ -224,12 +224,12 @@ DO
 
 The **DO** statement executes the specified expression, but does not return the result. This can be used to determine whether or not the syntax of the expression is correct because an error is returned when a specified expression does not comply with the syntax.?In general, the execution speed of the **DO** statement is higher than that of the **SELECT** statement because the database server does not return the operation result or errors. ::
 
-	DO expression
+    DO expression
 
 *   *expression* : Specifies an expression.
 
 .. code-block:: sql
 
-	DO 1+1;
-	DO SYSDATE + 1;
-	DO (SELECT count(*) FROM athlete);
+    DO 1+1;
+    DO SYSDATE + 1;
+    DO (SELECT count(*) FROM athlete);

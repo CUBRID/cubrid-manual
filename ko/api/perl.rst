@@ -11,8 +11,8 @@ http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver
 에 접속한다.
 
 .. note:: 
-	* 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
-	*   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
+    * 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+    *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
 Perl 설치 및 설정
 =================
@@ -31,15 +31,15 @@ Perl 설치 및 설정
 
 다음과 같이 **CPAN** (Comprehensive Perl Archive Network)을 사용하면 자동으로 소스코드에서 드라이버를 설치할 수 있다. ::
 
-	cpan
-	install DBD::cubrid
+    cpan
+    install DBD::cubrid
 
 만약 **CPAN** 모듈을 처음으로 사용한다면 기본 설정에 따르는 것을 권장한다.
 
 최신 버전의 Perl을 사용하지 않는다면 위 명령어 대신 다음 명령어를 사용해야 할 수도 있다. ::
 
-	perl -MCPAN -e shell
-	install DBD::cubrid
+    perl -MCPAN -e shell
+    install DBD::cubrid
 
 **수동 설치**
 
@@ -49,13 +49,13 @@ http://www.cubrid.org/?mid=downloads&item=perl_driver
 
 파일 이름은 일반적으로 **DBD-cubrid-X.X.X.tar.gz** 와 같은 형식이다. 압축을 해제한 후 **DBD-cubrid-X.X.X** 디렉터리로 이동하여 다음 명령어를 실행한다. ::
 
-	Perl Makefile.PL
-	make
-	make test
+    Perl Makefile.PL
+    make
+    make test
 
 Windows에서는 **make** 대신 **nmake** 또는 **dmake** 를 사용해야 할 수도 있다. 테스트 결과가 성공적이면 다음 명령어를 실행하여 드라이버를 빌드한다. ::
 
-	make install
+    make install
 
 Perl API
 ========

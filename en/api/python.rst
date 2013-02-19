@@ -27,7 +27,7 @@ There are three ways to install CUBRID Python driver on Linux, UNIX, and UNIX-li
 
 **Installing CUBRID Python Driver using Yum (Fedora or CentOS)**
 
-*   To install CUBRID Python driver by using the **yum** command, you need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
+*  To install CUBRID Python driver by using the **yum** command, you need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
 
     *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
     *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
@@ -36,7 +36,7 @@ For the example to install CUBRID 9.0 on Fedora 17 is as folllows: (fc17 means t
 
     rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
 
-*   Enter the command below to install CUBRID Python driver. ::
+*  Enter the command below to install CUBRID Python driver. ::
 
     yum install python-cubrid
 
@@ -44,21 +44,21 @@ For the example to install CUBRID 9.0 on Fedora 17 is as folllows: (fc17 means t
 
 To install CUBRID Python driver by compiling source code, you should have Python Development Package installed on your system. If you do not have the package, follow the instructions stated at http://www.cubrid.org/wiki_apis/entry/install-python-development-package .
 
-*   Download the source code from http://www.cubrid.org/?mid=downloads&item=python_driver .
+*  Download the source code from http://www.cubrid.org/?mid=downloads&item=python_driver .
 
-*   Extract the archive to the desired location. ::
+*  Extract the archive to the desired location. ::
 
     tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
 
-*   Navigate to the directory where you have extracted the source code. ::
+*  Navigate to the directory where you have extracted the source code. ::
 
     cd cubrid-python-src
 
-*   Build the driver. At this and next step, make sure you are still under the root user. ::
+*  Build the driver. At this and next step, make sure you are still under the root user. ::
 
     python setup.py build
 
-*   Install the driver. Here you also need root privileges. ::
+*  Install the driver. Here you also need root privileges. ::
 
     python setup.py install
 

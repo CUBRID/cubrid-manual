@@ -124,15 +124,15 @@ All parameters are mandatory except for **port**. If you do not specify the brok
 
 The examples of connection string with different options are as follows:
 
-*   Connect to a local server, using the default *demodb* database. ::
+*  Connect to a local server, using the default *demodb* database. ::
 
     ConnectionString = "server=127.0.0.1;database=demodb;port=30000;user=public;password="
 
-*   Connect to a remote server, using the default *demodb* database, as user **dba**. ::
-
+*  Connect to a remote server, using the default *demodb* database, as user **dba**. ::
+ 
     ConnectionString = "server=10.50.88.1;database=demodb;user=dba;password="
 
-*   Connect to a remote server, using the default *demodb* database, as user **dba**, using password *secret*. ::
+*  Connect to a remote server, using the default *demodb* database, as user **dba**, using password *secret*. ::
 
     ConnectionString = "server=10.50.99.1;database=demodb;port=30000;user=dba;password=secret"
 

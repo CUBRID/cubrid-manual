@@ -4,19 +4,20 @@ PREPARED STATEMENT
 
 In general, the prepared statement is executed through the interface functions of JDBC, PHP, or ODBC; it can also be executed in the SQL level. The following SQL statements are provided for execution of prepared statement.
 
-*   Prepare the SQL statement to execute. ::
+* Prepare the SQL statement to execute. ::
 
     PREPARE stmt_name FROM preparable_stmt
 
-*   Execute the prepared statement. ::
+* Execute the prepared statement. ::
 
     EXECUTE stmt_name [USING value [, value] ...]
 
-*   Drop the prepared statement. ::
+* Drop the prepared statement. ::
 
     {DEALLOCATE | DROP} PREPARE stmt_name
 
-.. note:: 
+.. note::
+
     * In SQL level, the number of PREPARE statements is limited to 20 per DB connection. It is limited to protect abusing DB server memory, because PREPARE statement in SQL level uses the memory of DB server.
     * In the interface function, the number of prepared statements is limited to :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` of broker parameter per DB connection.  If you use CUBRID SHARD, the number of prepared statements is limited to :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` of shard parameter per shard proxy.
 

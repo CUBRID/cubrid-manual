@@ -49,12 +49,12 @@ If **PECL** package has bee installed on your system, the installation of CUBRID
 
 #. Edit the configuration file.
 
-   *   If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named **pdo_cubrid.ini**, enter a command line **extension=pdo_cubrid.so**, and store the file in the **/etc/php.d** directory.
+   * If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named **pdo_cubrid.ini**, enter a command line **extension=pdo_cubrid.so**, and store the file in the **/etc/php.d** directory.
 
-   *   If you are using earlier versions of Cent0S or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2** or **/etc/**) and add the following two command lines at the end of the file. ::
+   * If you are using earlier versions of Cent0S or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2** or **/etc/**) and add the following two command lines at the end of the file. ::
 
-    [CUBRID]
-    extension=pdo_cubrid.so
+      [CUBRID]
+      extension=pdo_cubrid.so
 
 #. Restart the web server to apply changes.
 

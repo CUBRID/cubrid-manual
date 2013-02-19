@@ -275,20 +275,20 @@ Step 2: Compiling Locale
         options ::= [-t 32|64 ] [-m debug|release]
         locale ::= [de_DE|es_ES|fr_FR|it_IT|ja_JP|km_KH|ko_KR|tr_TR|vi_VN|zh_CN]
         
-    *   *options*
+    *  *options*
 
         *   **-t** : Selects 32bit or 64bit (default value: **32**).
         *   **-m** : Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves. Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves.  
 
-    *   *locale* : The locale name of the library to build. If *locale* is not specified, the build includes data from all configured locales. In this case, library file is stored in **$CUBRID/lib** directory with the name of **libcubrid_all_locales.so** (**.dll** for Windows).
+    *  *locale* : The locale name of the library to build. If *locale* is not specified, the build includes data from all configured locales. In this case, library file is stored in **$CUBRID/lib** directory with the name of **libcubrid_all_locales.so** (**.dll** for Windows).
 
     To create user defined locale shared libraries, two choices are available:
 
-    *   Creating a single lib with all locales to be supported ::
+    *  Creating a single lib with all locales to be supported ::
 
         make_locale.sh                         # Build and pack all locales (32/release)
 
-    *   Creating one lib for each locale to be supported ::
+    *  Creating one lib for each locale to be supported ::
 
         make_locale.sh -t 64 -m release ko_KR
 
@@ -1468,7 +1468,9 @@ Remark
 *   **COLLATE** keyword modifier is not supported in **ORDER BY**, **GROUP BY**, operators using collation, etc. As an workaround, explicit **CAST** operator can be used to change the collation and charset in expressions.
 *   **COLLATE** is not supported on tables (setting collation at table level as default collation of all attributes of the table).
 *   **Collation** is supported only on string types, **ENUM** type does not support collation.
-*   **COLLATE** modifier can be specified on string types and **ENUM** type. **ENUM** type is recognized as number types; but if you specify the COLLATE modifier on **ENUM** type column, it is recognized as VARCHAR type. But, with "ALTER TABLE .. MODIFY" statement, you cannot change the character set of **ENUM** type column into the other character set.  :: 
+*   **COLLATE** modifier can be specified on string types and **ENUM** type. **ENUM** type is recognized as number types; but if you specify the COLLATE modifier on **ENUM** type column, it is recognized as VARCHAR type. But, with "ALTER TABLE .. MODIFY" statement, you cannot change the character set of **ENUM** type column into the other character set.  
+
+  :: 
     
     SET NAMES utf8 COLLATE utf8_en_ci; 
     CREATE TABLE tbl (a ENUM('A','B') COLLATE utf8_en_ci); 

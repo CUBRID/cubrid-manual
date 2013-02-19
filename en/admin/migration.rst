@@ -337,10 +337,10 @@ The following table shows options available with the **cubrid loaddb** utility (
 
     The following example shows a file that details errors.
 
-    *   The warning errors from 24 to 33 indicating DB volume space is insufficient are not ignored by configuring +DEFAULT.
-    *   The error code 2 is not ignored because +2 has been specified later, even when -2 has been specified first.
-    *   -670 has been specified to ignore the error code 670, which is a unique violation error.
-    *   #-115 has been processed as a comment since # is added. ::
+    *  The warning errors from 24 to 33 indicating DB volume space is insufficient are not ignored by configuring +DEFAULT.
+    *  The error code 2 is not ignored because +2 has been specified later, even when -2 has been specified first.
+    *  -670 has been specified to ignore the error code 670, which is a unique violation error.
+    *  #-115 has been processed as a comment since # is added. ::
 
         vi error_file
          

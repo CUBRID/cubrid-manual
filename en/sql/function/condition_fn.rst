@@ -645,10 +645,10 @@ The following list describes basic characteristics of regular expressions.
 
 The difference between **REGEXP** and **LIKE** are as follows:
 
-*   The **LIKE** operator succeeds only if the pattern matches the entire value.
-*   The **REGEXP** operator succeeds if the pattern matches anywhere in the value. To match the entire value, you should use "^" at the beginning and "$" at the end.
-*   The **LIKE** operator is case sensitive, but patterns of regular expressions in **REGEXP** is not case sensitive. To enable case sensitive, you should use **REGEXP BINARY** statement.
-*   **REGEXP**, **REGEXP BINARY** works as ASCII encoding without considering the collation of operands. ::
+*  The **LIKE** operator succeeds only if the pattern matches the entire value.
+*  The **REGEXP** operator succeeds if the pattern matches anywhere in the value. To match the entire value, you should use "^" at the beginning and "$" at the end.
+*  The **LIKE** operator is case sensitive, but patterns of regular expressions in **REGEXP** is not case sensitive. To enable case sensitive, you should use **REGEXP BINARY** statement.
+*  **REGEXP**, **REGEXP BINARY** works as ASCII encoding without considering the collation of operands. ::
     
     SELECT ('a' collate utf8_en_ci REGEXP BINARY 'A' collate utf8_en_ci); 
     0

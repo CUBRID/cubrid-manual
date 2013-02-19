@@ -493,7 +493,7 @@ Check that the CUBRID SHARD operates normally by using a simple Java program.
 
     Execute the query in each shard DB and check whether or not the partitioned information has been correctly entered.
 
-    *   shard #0 ::
+    * shard #0 ::
 
         sh> csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
          
@@ -506,7 +506,7 @@ Check that the CUBRID SHARD operates normally by using a simple Java program.
                     ...
 
 
-    *   shard #1 ::
+    * shard #1 ::
 
         sh> $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
          
@@ -518,7 +518,7 @@ Check that the CUBRID SHARD operates normally by using a simple Java program.
                    67  'name_67'                      13  
                    ...
 
-    *   shard #2 ::
+    * shard #2 ::
 
         sh> $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
          
@@ -532,7 +532,7 @@ Check that the CUBRID SHARD operates normally by using a simple Java program.
                    131  'name_131'                     13
                    ...
 
-    *   shard #3 ::
+    * shard #3 ::
 
         sh> $ csql -C -u shard -p 'shard123' shard1@localhost -c "select * from student order by s_no"
          
@@ -751,13 +751,13 @@ In addition to **shard.conf**, the CUBRID SHARD has a configuration file for sha
 
         .. note:: As shown in the general CUBRID settings, the content after # is converted to comment.
 
-.. warning::
+    .. warning::
 
-    *   min of the shard key should always start from 0.
-    *   max should be up to 255.
-    *   No empty value between min and max is allowed.
-    *   The default hash function should not exceed the value of the **SHARD_KEY_MODULAR** parameter.
-    *   The result of shard key hashing should be within a range from 0 to (**SHARD_KEY_MODULAR** -1).
+        *   min of the shard key should always start from 0.
+        *   max should be up to 255.
+        *   No empty value between min and max is allowed.
+        *   The default hash function should not exceed the value of the **SHARD_KEY_MODULAR** parameter.
+        *   The result of shard key hashing should be within a range from 0 to (**SHARD_KEY_MODULAR** -1).
 
 .. _setting-user-defined-hash-function:
 

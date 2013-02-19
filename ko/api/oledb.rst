@@ -44,9 +44,7 @@ CUBRID를 이용하는 응용 프로그램을 개발하려면 CUBRID OLE DB 공�
 
   `http://www.cubrid.org/?mid=downloads&item=oledb_driver <http://www.cubrid.org/?mid=downloads&item=oledb_driver>`_
 
-* 드라이버 소스코드를 컴파일한다. 소스코드는 다음 SVN 저장소에서 체크아웃한다. 소스코드를 컴파일하려면 Visual Studio Express edition(
-    `http://www.microsoft.com/express/Downloads/#2010-Visual-CPP <http://www.microsoft.com/express/Downloads/#2010-Visual-CPP>`_
-    )을 사용한다. CUBRID 버전이 9.0.0이라면 *<CUBRID 버전>* 에는 9.0.0을 입력한다. ::
+* 드라이버 소스코드를 컴파일한다. 소스코드는 다음 SVN 저장소에서 체크아웃한다. 소스코드를 컴파일하려면 Visual Studio Express edition(`http://www.microsoft.com/express/Downloads/#2010-Visual-CPP <http://www.microsoft.com/express/Downloads/#2010-Visual-CPP>`_)을 사용한다. CUBRID 버전이 9.0.0이라면 *<CUBRID 버전>* 에는 9.0.0을 입력한다. ::
 
     http://svn.cubrid.org/cubridapis/oledb/branches/RB-<CUBRID 버전>/Source/
 

@@ -126,15 +126,15 @@ CUBRID ADO.NET Data Provider를 사용하면 하나의 batch에서 데이터 서
 
 연결 옵션에 따른 연결 문자열의 예는 다음과 같다.
 
-*   로컬 서버의 *demodb* 데이터베이스에 연결하는 연결 문자열은 다음과 같다. ::
+* 로컬 서버의 *demodb* 데이터베이스에 연결하는 연결 문자열은 다음과 같다. ::
 
     ConnectionString = "server=127.0.0.1;database=demodb;port=30000;user=public;password="
 
-*   원격 서버의 *demodb* 데이터베이스에 **dba** 사용자로 연결하는 문자열은 다음과 같다. ::
+* 원격 서버의 *demodb* 데이터베이스에 **dba** 사용자로 연결하는 문자열은 다음과 같다. ::
 
     ConnectionString = "server=10.50.88.1;database=demodb;user=dba;password="
 
-*   원격 서버의 *demodb* 데이터베이스에 **dba** 사용자, 비밀번호는 *secret* 으로 연결하는 문자열은 다음과 같다. ::
+* 원격 서버의 *demodb* 데이터베이스에 **dba** 사용자, 비밀번호는 *secret* 으로 연결하는 문자열은 다음과 같다. ::
 
     ConnectionString = "server=10.50.99.1;database=demodb;port=30000;user=dba;password=secret"
 

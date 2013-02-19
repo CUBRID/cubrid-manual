@@ -351,24 +351,26 @@ DATETIME
 
     :func:`CAST` 함수를 사용하여 문자열을 날짜/시간 타입으로 변환할 때에는 문자열을 다음과 같은 형식으로 작성하는 것을 권장한다. 참고로, :func:`CAST` 함수에서 사용하는 날짜/시간 문자열 형식은 로캘(**CUBRID_CHARSET** 환경 변수의 값으로 지정)의 영향을 받지 않는다.
 
-    *   **DATE** 타입 ::
+    * **DATE** 타입 ::
 
         YYYY-MM-DD
         MM/DD/YYYY
 
-    *   **TIME** 타입 ::
+    * **TIME** 타입 ::
 
         HH:MM:SS ["AM"|"PM"]
 
-    *   **DATETIME** 타입 ::
+    * **DATETIME** 타입 ::
 
         YYYY-MM-DD HH:MM:SS[.msec] ["AM"|"PM"]
 
-    *   **TIMESTAMP** 타입 ::
+    * **TIMESTAMP** 타입 ::
 
         YYYY-MM-DD HH:MM:SS ["AM"|"PM"]
 
-**DATE 문자열 허용 형식** ::
+**DATE 문자열 허용 형식** 
+
+    ::
 
         [year sep] month sep day
 
@@ -394,7 +396,9 @@ DATETIME
     *   110420 : 2011년 4월 20일
     *   420 : 올해 4월 20일
 
-**TIME 문자열 허용 형식** ::
+**TIME 문자열 허용 형식** 
+
+    ::
 
         [hour]:min[:[sec]] [.[msec]] [am|pm]
 
@@ -435,7 +439,9 @@ DATETIME
 
         CUBRID 2008 R3.1 이하 버전에서는 [H]H 형식을 허용했다. 즉 R3.1 이하 버전에서 문자열 '10'은 **TIME**'10:00:00'으로 변환되었으나, R4.0부터는 **TIME**'00:00:10' 으로 변환된다.
 
-**DATETIME 문자열 허용 형식** ::
+**DATETIME 문자열 허용 형식** 
+
+    ::
 
         [year sep] month sep day [sep] [sep] hour [sep min[sep sec[.[msec]]]]
 
@@ -479,7 +485,9 @@ DATETIME
     *   201104200910.359 : 2020년 11월 4일 오후 8시 9분 10.359초
     *   20110420091000.359 : 2011년 4월 20일 오전 9시 10분 0.359초
 
-**시간-날짜 순서의 문자열 허용 형식** ::
+**시간-날짜 순서의 문자열 허용 형식** 
+
+    ::
 
         [hour]:min[:sec[.msec]] [am|pm] [year-]month-day
 

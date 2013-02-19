@@ -381,12 +381,12 @@ CUBRID HA 그룹 내의 각 노드에서 **cubrid heartbeat status** 를 수행�
 
 CUBRID HA 그룹 내의 각 노드에서 **cubrid changemode** 유틸리티를 이용하여 서버의 상태를 확인한다.
 
-*   마스터 노드 ::
+* 마스터 노드 ::
 
     [nodeA]$ cubrid changemode testdb@localhost
     The server 'testdb@localhost''s current HA running mode is active.
 
-*   슬레이브 노드 ::
+* 슬레이브 노드 ::
 
     [nodeB]$ cubrid changemode testdb@localhost
     The server 'testdb@localhost''s current HA running mode is standby.
@@ -397,13 +397,13 @@ CUBRID HA 그룹 내의 각 노드에서 **cubrid changemode** 유틸리티를 �
 
 .. warning:: 복제가 정상적으로 수행되기 위해서는 테이블을 생성할 때 기본키(primary key)가 반드시 존재해야 한다는 점을 주의한다
 
-*   마스터 노드 ::
+* 마스터 노드 ::
 
     [nodeA]$ csql -u dba testdb@localhost -c "create table abc(a int, b int, c int, primary key(a));"
     [nodeA]$ csql -u dba testdb@localhost -c "insert into abc values (1,1,1);"
     [nodeA]$
 
-*   슬레이브 노드 ::
+* 슬레이브 노드 ::
 
     [nodeB]$ csql -u dba testdb@localhost -l -c "select * from abc;"
     === <Result of SELECT Command in Line 1> ===
@@ -421,12 +421,12 @@ CUBRID HA 그룹 내의 각 노드에서 **cubrid changemode** 유틸리티를 �
 
 데이터베이스 failover 시 정상적인 서비스를 위해서 **databases.txt** 의 **db-host** 항목에 데이터베이스의 가용 노드를 설정해야 한다. 그리고 **cubrid_broker.conf** 의 **ACCESS_MODE** 를 설정하는데, 이를 생략하면 기본값인 Read Write 모드로 설정된다. 브로커를 별도의 장비로 분리하는 경우 브로커 장비에 **cubrid_broker.conf** 와 **databases.txt** 를 반드시 설정해야 한다.
 
-*   databases.txt ::
+* databases.txt ::
 
     #db-name        vol-path                db-host         log-path        lob-base-path
     testdb          /home1/cubrid1/CUBRID/testdb  nodeA:nodeB        /home1/cubrid1/CUBRID/testdb/log file:/home1/cubrid1/CUBRID/testdb/lob
 
-*   cubrid_broker.conf ::
+* cubrid_broker.conf ::
 
     [%testdb_RWbroker]
     SERVICE                 =ON
@@ -980,7 +980,7 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
 
 각 상태 정보가 나타내는 항목을 살펴보면 다음과 같다.
 
-*    Applied Info.
+* Applied Info.
 
     *   Committed page : 복제 로그 반영 프로세스에 의해 마지막으로 반영된 트랜잭션의 커밋된 pageid와 offset 정보. 이 값과 "Copied Active Info."의 EOF LSA 값의 차이만큼 복제 반영의 지연이 있다.
     *    Insert Count : 복제 로그 반영 프로세스가 반영한 Insert 쿼리의 개수
@@ -990,7 +990,7 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
     *    Commit Count : 복제 로그 반영 프로세스가 반영한 트랜잭션의 개수
     *    Fail Count : 복제 로그 반영 프로세스가 반영에 실패한 DML 및 DDL 문의 개수
 
-*    Copied Active Info.
+* Copied Active Info.
 
     *    DB name : 복제 로그 복사 프로세스가 로그를 복사하는 대상 데이터베이스의 이름
     *    DB creation time : 복제 로그 복사 프로세스가 복사하는 데이터베이스의 생성 시간
@@ -1001,7 +1001,7 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
     
     *    HA server state : 복제 로그 복사 프로세스가 로그를 받아오는 데이터베이스 서버 프로세스의 상태. 상태에 대한 자세한 설명은 :ref:`ha-server` 를 참고하도록 한다.
 
-*    Active Info.
+* Active Info.
 
     *    DB name : **-r** 옵션에 설정한 노드의 데이터베이스의 이름
     *    DB creation time : **-r** 옵션에 설정한 노드의 데이터베이스 생성 시간
@@ -1011,10 +1011,10 @@ CUBRID HA의 복제 로그 복사 및 반영 상태를 확인한다. ::
     
     *    HA server state : **-r** 옵션에 설정한 노드의 데이터베이스 서버 상태
     
-*    Delay in Copying Active Log
+* Delay in Copying Active Log
     *    Delayed log page count: 복사가 지연된 트랜잭션 로그 페이지 개수
     *    Estimated Delay: 트랜잭션 로그 복사 예상 완료 시간
-*    Delay in Applying Copied Log
+* Delay in Applying Copied Log
     *    Delayed log page count:  반영이 지연된 트랜잭션 로그 페이지 개수
     *    Estimated Delay: 트랜잭션 로그 반영 예상 완료 시간
 
@@ -1183,21 +1183,21 @@ HA로 구성된 노드 수가 많으므로 CUBRID HA 그룹 내의 여러 노드
 
 다중 슬레이브 구성의 각 노드는 다음과 같이 설정한다.
 
-*   **node A** (마스터 노드)
+* **node A** (마스터 노드)
 
-    *   **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
+    * **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
 
         ha_mode=on
 
-    *   다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
+    * 다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
 
         ha_port_id=59901
         ha_node_list=cubrid@nodeA:nodeB:nodeC
         ha_db_list=testdb
 
-*   **node B** (슬레이브 노드): *node A* 와 동일하게 설정한다.
+* **node B** (슬레이브 노드): *node A* 와 동일하게 설정한다.
 
-*   **node C** (슬레이브 노드): *node A* 와 동일하게 설정한다.
+* **node C** (슬레이브 노드): *node A* 와 동일하게 설정한다.
 
 브로커 노드의 **databases.txt** 파일에는 **db-host** 에 HA 구성된 호스트의 목록을 우선순위에 따라 순서대로 설정해야 한다. 다음은 **databases.txt** 파일의 예이다. ::
 
@@ -1257,28 +1257,28 @@ HA로 구성된 노드 수가 많으므로 CUBRID HA 그룹 내의 여러 노드
 
 부하 분산 구성의 각 노드는 다음과 같이 설정한다.
 
-*   **node A** (마스터 노드)
+* **node A** (마스터 노드)
 
-    *   **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
+    * **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
 
         ha_mode=on
 
-    *   다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
+    * 다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
 
         ha_port_id=12345
         ha_node_list=cubrid@nodeA:nodeB 
         ha_replica_list=cubrid@nodeC:nodeD
         ha_db_list=testdb
 
-*   **node B** (슬레이브 노드): *node A* 와 동일하게 설정한다.
+* **node B** (슬레이브 노드): *node A* 와 동일하게 설정한다.
 
-*   **node C** (레플리카 노드)
+* **node C** (레플리카 노드)
 
-    *   **cubrid.conf** 파일의 **ha_mode** 를 **replica** 로 설정한다. ::
+    * **cubrid.conf** 파일의 **ha_mode** 를 **replica** 로 설정한다. ::
 
         ha_mode=replica
 
-    *   **cubrid_ha.conf** 파일은 *node A* 와 동일하게 설정한다.
+    * **cubrid_ha.conf** 파일은 *node A* 와 동일하게 설정한다.
 
 *   **node D** (레플리카 노드): *node C* 와 동일하게 설정한다.
 
@@ -1368,49 +1368,49 @@ HA로 구성된 노드 수가 많으므로 CUBRID HA 그룹 내의 여러 노드
 
 HA 기본 구성의 각 노드는 다음과 같이 설정한다.
 
-*   **node AM**, **node AS** : 두 노드는 동일하게 설정한다.
+* **node AM**, **node AS** : 두 노드는 동일하게 설정한다.
 
-    *   **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
+    * **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
 
         ha_mode=on
 
-    *   다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
+    * 다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
 
         ha_port_id=10000
         ha_node_list=cubridA@Host1:Host5
         ha_db_list=testdbA1,testdbA2
 
-*   **node BM**, **node BS** : 두 노드는 동일하게 설정한다.
+* **node BM**, **node BS** : 두 노드는 동일하게 설정한다.
 
-    *   **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
+    * **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
 
         ha_mode=on
 
-    *   다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
+    * 다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
 
         ha_port_id=10001
         ha_node_list=cubridB@Host2:Host5
         ha_db_list=testdbB1,testdbB2
 
-*   **node CM**, **node CS** : 두 노드는 동일하게 설정한다.
+* **node CM**, **node CS** : 두 노드는 동일하게 설정한다.
 
-    *   **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
+    * **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다. ::
 
         ha_mode=on
 
-    *   다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
+    * 다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
 
         ha_port_id=10002
         ha_node_list=cubridC@Host3:Host5
         ha_db_list=testdbC1,testdbC2
 
-*   **node DM**, **node DS** : 두 노드는 동일하게 설정한다.
+* **node DM**, **node DS** : 두 노드는 동일하게 설정한다.
 
-    *   **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다.
+    * **cubrid.conf** 파일의 **ha_mode** 를 **on** 으로 설정한다.
 
         ha_mode=on
 
-    *   다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
+    * 다음은 **cubrid_ha.conf** 파일의 설정 예이다. ::
 
         ha_port_id=10003
         ha_node_list=cubridD@Host4:Host5
@@ -1479,13 +1479,13 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 
 위의 사항들을 염두에 두고 다음의 순서로 작업한다.
 
-#.   마스터 노드 서비스 중지 ::
+#. 마스터 노드 서비스 중지 ::
 
     [nodeA]$ cubrid service stop
 
-#.   마스터 노드 HA 설정, 슬레이브 노드 HA 설정
+#. 마스터 노드 HA 설정, 슬레이브 노드 HA 설정
 
-    *   마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID/conf/cubrid.conf** 설정 ::
+    * 마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID/conf/cubrid.conf** 설정 ::
 
         …
         [common]
@@ -1501,7 +1501,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
         ha_mode=on
 
 
-    *   마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID/conf/cubrid_ha.conf** 설정 ::
+    * 마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID/conf/cubrid_ha.conf** 설정 ::
 
         [common]
         ha_port_id=59901
@@ -1510,22 +1510,22 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
         ha_copy_sync_mode=sync:sync
         ha_apply_max_mem_size=500
 
-    *   마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID_DATABASES/databases.txt** 설정 ::
+    * 마스터 노드와 슬레이브 노드가 동일하게 **$CUBRID_DATABASES/databases.txt** 설정 ::
 
         #db-name    vol-path        db-host     log-path     lob-base-path
         testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
-    *    슬레이브 노드에 데이터베이스 디렉터리 생성 ::
+    * 슬레이브 노드에 데이터베이스 디렉터리 생성 ::
     
         [nodeB]$ cd $CUBRID_DATABASES
         [nodeB]$ mkdir testdb
     
-    *   슬레이브 노드에 로그 디렉터리 생성(마스터 노드와 같은 위치에 생성) ::
+    * 슬레이브 노드에 로그 디렉터리 생성(마스터 노드와 같은 위치에 생성) ::
 
         [nodeB]$ cd $CUBRID_DATABASES/testdb
         [nodeB]$ mkdir log
 
-#.   마스터 노드의 데이터베이스를 백업하고, 슬레이브 노드에 백업 파일을 복사. 마스터 노드에서 백업 파일의 저장 위치는 별도의 지정이 없으면 *testdb* 의 로그 디렉터리가 되며, 슬레이브 노드에도 마스터 노드와 같은 위치에 백업 파일을 복사한다. 아래에서 *testdb* _bk0v000은 백업 볼륨 파일, *testdb* _bkvinf는 백업 볼륨 정보 파일이다. ::
+#. 마스터 노드의 데이터베이스를 백업하고, 슬레이브 노드에 백업 파일을 복사. 마스터 노드에서 백업 파일의 저장 위치는 별도의 지정이 없으면 *testdb* 의 로그 디렉터리가 되며, 슬레이브 노드에도 마스터 노드와 같은 위치에 백업 파일을 복사한다. 아래에서 *testdb* _bk0v000은 백업 볼륨 파일, *testdb* _bkvinf는 백업 볼륨 정보 파일이다. ::
 
     [nodeA]$ cubrid backupdb -z -S testdb
     Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 16:05:18 2012
@@ -1535,15 +1535,15 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
     testdb_bk0v000                            100% 6157KB   6.0MB/s   00:00
     testdb_bkvinf                             100%   66     0.1KB/s   00:00
 
-#.   슬레이브 노드에서 데이터베이스 복구. 이때, 마스터 노드와 슬레이브 노드의 볼륨 경로가 반드시 같아야 한다. ::
+#. 슬레이브 노드에서 데이터베이스 복구. 이때, 마스터 노드와 슬레이브 노드의 볼륨 경로가 반드시 같아야 한다. ::
 
     [nodeB]$ cubrid restoredb -B $CUBRID_DATABASES/testdb/log demodb
 
-#.   마스터 노드 시작 ::
+#. 마스터 노드 시작 ::
 
     [nodeA]$ cubrid heartbeat start
 
-#.   마스터 노드가 시작 완료되었음을 확인한 후, 슬레이브 노드 시작. 아래에서 *nodeA* 가 to-be-master에서 master로 변경되면 마스터 노드가 정상 구동된 것이다. ::
+#. 마스터 노드가 시작 완료되었음을 확인한 후, 슬레이브 노드 시작. 아래에서 *nodeA* 가 to-be-master에서 master로 변경되면 마스터 노드가 정상 구동된 것이다. ::
 
     [nodeA]$ cubrid heartbeat status
     @ cubrid heartbeat status
@@ -1560,7 +1560,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
      
     [nodeB]$ cubrid heartbeat start
 
-#.   마스터 노드, 슬레이브 노드의 HA 구성이 정상 동작하는지 확인 ::
+#. 마스터 노드, 슬레이브 노드의 HA 구성이 정상 동작하는지 확인 ::
 
     [nodeA]$ csql -u dba testdb@localhost -c"create table tbl(i int primary key);insert into tbl values (1),(2),(3)"
      
@@ -1689,7 +1689,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 
 마스터 노드와 슬레이브 노드의 데이터가 일치하지 않는 복제 노드 간 데이터 불일치 현상은 다음과 같은 과정을 통해 어느 정도 감지할 수 있다. 그러나, 마스터 노드와 슬레이브 노드의 데이터를 서로 직접 비교해보는 방법보다 더 정확한 확인 방법은 없음에 주의해야 한다. 복제 불일치 상태라는 판단이 서면, 마스터 노드의 데이터베이스를 슬레이브 노드에 새로 구축해야 한다(:ref:`rebuilding-replication` 참고).
 
-*   슬레이브 노드에서 **cubrid applyinfo** 를 실행하여 "Fail count" 값을 확인한다. "Fail count"가 0이면, 복제에 실패한 트랜잭션이 없다고 볼 수 있다(:ref:`cubrid-applyinfo` 참고). ::
+* 슬레이브 노드에서 **cubrid applyinfo** 를 실행하여 "Fail count" 값을 확인한다. "Fail count"가 0이면, 복제에 실패한 트랜잭션이 없다고 볼 수 있다(:ref:`cubrid-applyinfo` 참고). ::
 
     [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
      
@@ -1703,7 +1703,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
     Fail count                     : 0
     ...
 
-*   슬레이브 노드에서 복제 로그의 복사 지연 여부를 확인하기 위해, **cubrid applyinfo** 를 실행하여 "Copied Active Info."의 "Append LSA" 값과 "Active Info."의 "Append LSA" 값을 비교한다. 이 값이 큰 차이를 보인다면, 복제 로그가 슬레이브 노드에 복사되는데 지연이 있다는 의미이다(:ref:`cubrid-applyinfo` 참고). ::
+* 슬레이브 노드에서 복제 로그의 복사 지연 여부를 확인하기 위해, **cubrid applyinfo** 를 실행하여 "Copied Active Info."의 "Append LSA" 값과 "Active Info."의 "Append LSA" 값을 비교한다. 이 값이 큰 차이를 보인다면, 복제 로그가 슬레이브 노드에 복사되는데 지연이 있다는 의미이다(:ref:`cubrid-applyinfo` 참고). ::
 
     [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
  
@@ -1723,9 +1723,9 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
     Append LSA                     : 1913 | 2976
     HA server state                : active
 
-*   복제 로그 복사 지연이 의심되는 경우 네트워크 회선 속도가 느려졌는지, 디스크 여유 공간이 충분한지, 디스크 I/O에는 이상이 없는지 등을 확인한다.
+* 복제 로그 복사 지연이 의심되는 경우 네트워크 회선 속도가 느려졌는지, 디스크 여유 공간이 충분한지, 디스크 I/O에는 이상이 없는지 등을 확인한다.
 
-*   슬레이브 노드에서 복제 로그의 반영 지연 여부를 확인하기 위해, **cubrid applyinfo** 를 실행하여 "Applied Info." 의 "Committed page" 값과 "Copied Active Info."의 "EOF LSA" 값을 비교한다. 이 값이 큰 차이를 보인다면, 복제 로그가 슬레이브 데이터베이스를 반영하는데 지연이 있다는 의미이다(:ref:`cubrid-applyinfo` 참고). ::
+* 슬레이브 노드에서 복제 로그의 반영 지연 여부를 확인하기 위해, **cubrid applyinfo** 를 실행하여 "Applied Info." 의 "Committed page" 값과 "Copied Active Info."의 "EOF LSA" 값을 비교한다. 이 값이 큰 차이를 보인다면, 복제 로그가 슬레이브 데이터베이스를 반영하는데 지연이 있다는 의미이다(:ref:`cubrid-applyinfo` 참고). ::
 
     [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
  
@@ -1746,11 +1746,11 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
     HA server state                : active
     ...
 
-*   복제 로그 반영 지연이 심한 경우 수행 시간이 긴 트랜잭션을 의심해 볼 수 있는데, 해당 트랜잭션의 수행이 정상이라면 복제 지연 역시 정상적으로 발생할 수 있다. 정상 여부를 판단하기 위해 **cubrid applyinfo** 를 지속적으로 수행하면서 applylogdb가 복제 로그를 슬레이브 노드에 계속 반영하고 있는지 확인해야 한다.
+* 복제 로그 반영 지연이 심한 경우 수행 시간이 긴 트랜잭션을 의심해 볼 수 있는데, 해당 트랜잭션의 수행이 정상이라면 복제 지연 역시 정상적으로 발생할 수 있다. 정상 여부를 판단하기 위해 **cubrid applyinfo** 를 지속적으로 수행하면서 applylogdb가 복제 로그를 슬레이브 노드에 계속 반영하고 있는지 확인해야 한다.
 
-*   copylogdb, applylogdb 프로세스가 생성한 오류 로그의 메시지를 확인한다(오류 메시지 참고).
+* copylogdb, applylogdb 프로세스가 생성한 오류 로그의 메시지를 확인한다(오류 메시지 참고).
 
-*   마스터 데이터베이스 테이블의 레코드 개수, 슬레이브 데이터베이스 테이블의 레코드 개수를 비교한다.
+* 마스터 데이터베이스 테이블의 레코드 개수, 슬레이브 데이터베이스 테이블의 레코드 개수를 비교한다.
 
 오류 메시지 확인
 ----------------
@@ -2036,7 +2036,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
 
 스크립트를 각 단계의 순서대로 실행하는 도중 오류가 발생하거나 n을 입력하여 실행을 중단한 이후에 재실행할 경우, 그 이전까지 실행에 성공한 단계에 대해서는 s를 입력하여 다음 단계로 넘어가도 된다.
 
-1.  HA 복제 재구축을 위한 Linux 계정의 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력하는 단계이다. 질문에 y를 입력한다. ::
+1. HA 복제 재구축을 위한 Linux 계정의 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력하는 단계이다. 질문에 y를 입력한다. ::
 
     ##### step 1 ###################################################################
     #
@@ -2058,7 +2058,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
     testdb's DBA password :
     Retype testdb's DBA password :
 
-2.  슬레이브 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. ::
+2. 레이브 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. ::
 
     ##### step 2 ###################################################################
     #
@@ -2090,7 +2090,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
      
        continue ? ([y]es / [n]o / [s]kip) : y
 
-3.  슬레이브 노드의 HA 관련 스크립트들을 마스터 노드에 복사하는 단계이다. 질문에 y를 입력한다. 이후 모든 단계에서도 마스터 노드에 접속 시 암호를 요구하게 되며, scp 명령을 이용하여 필요한 파일을 전송할 때에도 암호를 요구한다. ::
+3. 슬레이브 노드의 HA 관련 스크립트들을 마스터 노드에 복사하는 단계이다. 질문에 y를 입력한다. 이후 모든 단계에서도 마스터 노드에 접속 시 암호를 요구하게 되며, scp 명령을 이용하여 필요한 파일을 전송할 때에도 암호를 요구한다. ::
 
     ##### step 3 ###################################################################
     #
@@ -2126,7 +2126,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
   #.  마스터 노드 Linux 사용자 계정의 홈 디렉터리/.ssh 디렉터리 이하에 id_rsa.pub을 authorized_keys라는 파일명으로 복사한다.
   #.  테스트를 통해 암호 요청 없이 파일이 복사되는지 확인한다. (scp test.txt cubrid_usr@:/home/cubrid_usr/.)
 
-4.  HA 관련 스크립트들을 레플리카 노드에 복사하는 단계이다. 이 시나리오에서는 레플리카 노드가 없으므로 이 단계는 s를 입력하여 다음 단계로 넘어가도 된다. ::
+4. HA 관련 스크립트들을 레플리카 노드에 복사하는 단계이다. 이 시나리오에서는 레플리카 노드가 없으므로 이 단계는 s를 입력하여 다음 단계로 넘어가도 된다. ::
 
     ##### step 4 #####################################
     #
@@ -2141,7 +2141,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
      
     There is no replication server to copy scripts.
 
-5.  모든 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. ::
+5. 모든 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. ::
 
     ##### step 5 ###################################################################
     #
@@ -2156,7 +2156,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
      
        continue ? ([y]es / [n]o / [s]kip) : y
 
-6.  마스터 노드의 복제 진행을 멈추도록 하는 단계이다. 질문에 y를 입력한다. ::
+6. 마스터 노드의 복제 진행을 멈추도록 하는 단계이다. 질문에 y를 입력한다. ::
 
     ##### step 6 ###################################################################
     #
@@ -2195,7 +2195,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
     ............................................................
 
 
-7.  이전에 슬레이브 노드에 존재했던 오래된 복사 로그를 삭제하고 마스터 노드의 HA 메타 정보 테이블을 초기화하는 단계이다. 질문에 y를 입력한다. ::
+7. 이전에 슬레이브 노드에 존재했던 오래된 복사 로그를 삭제하고 마스터 노드의 HA 메타 정보 테이블을 초기화하는 단계이다. 질문에 y를 입력한다. ::
 
     ##### step 7 ###################################################################
     #
@@ -2228,7 +2228,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
     There are no results.
     Connection to nodeA closed.
 
-8.  레플리카 노드의 HA 메타 정보 테이블을 초기화하는 단계이다. 이 시나리오에서는 레플리카 노드가 없으므로 질문에 s를 입력하여 넘어가도 된다. ::
+8. 레플리카 노드의 HA 메타 정보 테이블을 초기화하는 단계이다. 이 시나리오에서는 레플리카 노드가 없으므로 질문에 s를 입력하여 넘어가도 된다. ::
 
     ##### step 8 ###################################################################
     #
@@ -2245,7 +2245,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
     There is no replication server to init ha_info
 
 
-9.  HA 복제 재구축을 위해 마스터 노드(target_host)로부터 백업 볼륨을 생성하는 단계로서, 기존에 이미 생성한 백업 볼륨이 있다면 s를 입력하여 다음 단계로 넘어갈 수 있다. 기존 백업 볼륨을 사용하여 복제 재구축을 수행하기 위해서는 다음과 같은 제약 조건이 있다.
+9. HA 복제 재구축을 위해 마스터 노드(target_host)로부터 백업 볼륨을 생성하는 단계로서, 기존에 이미 생성한 백업 볼륨이 있다면 s를 입력하여 다음 단계로 넘어갈 수 있다. 기존 백업 볼륨을 사용하여 복제 재구축을 수행하기 위해서는 다음과 같은 제약 조건이 있다.
    
   *   백업 시 실행 중인 트랜잭션을 포함하는 보관 로그(archive log)가 반드시 마스터 노드(target_host) 내에 존재해야 한다(즉, 오래 전에 생성한 백업 볼륨은 사용할 수 없음).
 
@@ -2302,216 +2302,215 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
     [ Database(testdb) Full Backup end ]
     Connection to nodeA closed.
 
-10.  마스터 노드의 데이터베이스 백업본을 슬레이브 노드에 복사하는 단계이다. 질문에 y를 입력한다. ::
+10. 마스터 노드의 데이터베이스 백업본을 슬레이브 노드에 복사하는 단계이다. 질문에 y를 입력한다. ::
 
-    ##### step 10 ###################################################################
-    #
-    #  copy testdb databases backup to current host
-    #
-    #  * details
-    #   - scp databases.txt from target host if there's no testdb info on current host
-    #   - remove old database and replication log if exist
-    #   - make new database volume and replication path
-    #   - scp  database backup to current host
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-     
-     - 1. check if the databases information is already registered.
-     
-     
-     - thres's already testdb information in /home/cubrid_usr/CUBRID/databases/databases.txt
-    [nodeB]$ grep testdb /home/cubrid_usr/CUBRID/databases/databases.txt
-    testdb          /home/cubrid_usr/CUBRID/databases/testdb        nodeA:nodeB /home/cubrid_usr/CUBRID/databases/testdb/log file:/home/cubrid_usr/CUBRID/databases/testdb/lob
-     
-     - 2. get db_vol_path and db_log_path from databases.txt.
-     
-     
-     - 3. remove old database and replication log.
-     
-    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb/log
-    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb
-    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_*
-     
-     - 4. make new database volume and replication log directory.
-     
-    [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb
-    [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb/log
-    [nodeB]$ mkdir -p /home/cubrid_usr/.ha
-    [nodeB]$ rm -rf /home/cubrid_usr/.ha/backup
-    [nodeB]$ mkdir -p /home/cubrid_usr/.ha/backup
-     
-     - 5. copy backup volume and log from target host
-     
-    cubrid_usr@nodeA's password:
-    testdb_bkvinf              100%   49     0.1KB/s   00:00
-    cubrid_usr@nodeA's password:
-    testdb_bk0v000             100% 1540MB   7.8MB/s   03:18
-    testdb.bkup.output         100% 1023     1.0KB/s   00:00
+     ##### step 10 ###################################################################
+     #
+     #  copy testdb databases backup to current host
+     #
+     #  * details
+     #   - scp databases.txt from target host if there's no testdb info on current host
+     #   - remove old database and replication log if exist
+     #   - make new database volume and replication path
+     #   - scp  database backup to current host
+     #
+     ################################################################################
+      
+        continue ? ([y]es / [n]o / [s]kip) : y
+      
+      
+      - 1. check if the databases information is already registered.
+      
+      
+      - thres's already testdb information in /home/cubrid_usr/CUBRID/databases/databases.txt
+     [nodeB]$ grep testdb /home/cubrid_usr/CUBRID/databases/databases.txt
+     testdb          /home/cubrid_usr/CUBRID/databases/testdb        nodeA:nodeB /home/cubrid_usr/CUBRID/databases/testdb/log file:/home/cubrid_usr/CUBRID/databases/testdb/lob
+      
+      - 2. get db_vol_path and db_log_path from databases.txt.
+      
+      
+      - 3. remove old database and replication log.
+      
+     [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb/log
+     [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb
+     [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_*
+      
+      - 4. make new database volume and replication log directory.
+      
+     [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb
+     [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb/log
+     [nodeB]$ mkdir -p /home/cubrid_usr/.ha
+     [nodeB]$ rm -rf /home/cubrid_usr/.ha/backup
+     [nodeB]$ mkdir -p /home/cubrid_usr/.ha/backup
+      
+      - 5. copy backup volume and log from target host
+      
+     cubrid_usr@nodeA's password:
+     testdb_bkvinf              100%   49     0.1KB/s   00:00
+     cubrid_usr@nodeA's password:
+     testdb_bk0v000             100% 1540MB   7.8MB/s   03:18
+     testdb.bkup.output         100% 1023     1.0KB/s   00:00
 
+11. 복사한 데이터베이스 백업본을 슬레이브 노드에 복구하는 단계이다. 질문에 y를 입력한다. ::
 
-11.  복사한 데이터베이스 백업본을 슬레이브 노드에 복구하는 단계이다. 질문에 y를 입력한다. ::
+     ##### step 11 ###################################################################
+     #
+     #  restore database testdb on current host
+     #
+     #  * details
+     #   - cubrid restoredb -B ... testdb current host
+     #
+     ################################################################################
+      
+        continue ? ([y]es / [n]o / [s]kip) : y
+      
+     [nodeB]$ cubrid restoredb -B /home/cubrid_usr/.ha/backup  testdb
 
-    ##### step 11 ###################################################################
-    #
-    #  restore database testdb on current host
-    #
-    #  * details
-    #   - cubrid restoredb -B ... testdb current host
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-    [nodeB]$ cubrid restoredb -B /home/cubrid_usr/.ha/backup  testdb
+12. 슬레이브 노드의 HA 메타 정보 테이블 값을 설정하는 단계이다. 질문에 y를 입력한다. ::
 
-12.  슬레이브 노드의 HA 메타 정보 테이블 값을 설정하는 단계이다. 질문에 y를 입력한다. ::
+     ##### step 12 ###################################################################
+     #
+     #  set db_ha_apply_info on slave
+     #
+     #  * details
+     #   - insert db_ha_apply_info on slave
+     #
+     ################################################################################
+      
+        continue ? ([y]es / [n]o / [s]kip) : y
+      
+      
+      
+     1. get db_ha_apply_info from backup output(/home1/cubrid_usr/.ha/backup/testdb.bkup.output).
+      
+      - dn_name       : testdb
+      - db_creation   : 1349426614
+      - pageid        : 86
+      - offset        : 8800
+      - log_path      : /home1/cubrid_usr/CUBRID/databases/testdb_nodeA
+      
+      
+      
+     2. select old db_ha_apply_info.
+      
+     [nodeA]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
+      
+     === <Result of SELECT Command in Line 1> ===
+      
+     There are no results.
+      
+      
+      
+     3. insert new db_ha_apply_info on slave.
+      
+     [nodeB]$ csql --sysadm -u dba -S testdb -c "DELETE FROM db_ha_apply_info WHERE db_name='testdb'"
+     [nodeB]$ csql --sysadm -u DBA -S testdb -c "INSERT INTO  db_ha_apply_info VALUES (       'testdb',       datetime '10/05/2012 17:43:34',         '/home1/cubrid_usr/DB/testdb_nodeA',         86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       NULL,   NULL,   NULL,   0,      0,      0,      0,      0,      0,      0,      NULL )"
+     [nodeB]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
+      
+     === <Result of SELECT Command in Line 1> ===
+      
+     <00001> db_name             : 'testdb'
+             db_creation_time    : 05:43:34.000 PM 10/05/2012
+             copied_log_path     : '/home1/cubrid_usr/CUBRID/databases/testdb_nodeA'
+             committed_lsa_pageid: 86
+             committed_lsa_offset: 8800
+             committed_rep_pageid: 86
+             committed_rep_offset: 8800
+             required_lsa_pageid : 86
+             required_lsa_offset : 8800
+ 
 
-    ##### step 12 ###################################################################
-    #
-    #  set db_ha_apply_info on slave
-    #
-    #  * details
-    #   - insert db_ha_apply_info on slave
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-     
-     
-    1. get db_ha_apply_info from backup output(/home1/cubrid_usr/.ha/backup/testdb.bkup.output).
-     
-     - dn_name       : testdb
-     - db_creation   : 1349426614
-     - pageid        : 86
-     - offset        : 8800
-     - log_path      : /home1/cubrid_usr/CUBRID/databases/testdb_nodeA
-     
-     
-     
-    2. select old db_ha_apply_info.
-     
-    [nodeA]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
-     
-    === <Result of SELECT Command in Line 1> ===
-     
-    There are no results.
-     
-     
-     
-    3. insert new db_ha_apply_info on slave.
-     
-    [nodeB]$ csql --sysadm -u dba -S testdb -c "DELETE FROM db_ha_apply_info WHERE db_name='testdb'"
-    [nodeB]$ csql --sysadm -u DBA -S testdb -c "INSERT INTO  db_ha_apply_info VALUES (       'testdb',       datetime '10/05/2012 17:43:34',         '/home1/cubrid_usr/DB/testdb_nodeA',         86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       NULL,   NULL,   NULL,   0,      0,      0,      0,      0,      0,      0,      NULL )"
-    [nodeB]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
-     
-    === <Result of SELECT Command in Line 1> ===
-     
-    <00001> db_name             : 'testdb'
-            db_creation_time    : 05:43:34.000 PM 10/05/2012
-            copied_log_path     : '/home1/cubrid_usr/CUBRID/databases/testdb_nodeA'
-            committed_lsa_pageid: 86
-            committed_lsa_offset: 8800
-            committed_rep_pageid: 86
-            committed_rep_offset: 8800
-            required_lsa_pageid : 86
-            required_lsa_offset : 8800
+13. 마스터에 있는 복제 로그를 초기화하고, 마스터 노드의 저장 로그를 슬레이브 노드에 복사하는 단계이다. 질문에 y를 입력한다. ::
 
-
-13.  마스터에 있는 복제 로그를 초기화하고, 마스터 노드의 저장 로그를 슬레이브 노드에 복사하는 단계이다. 질문에 y를 입력한다. ::
-
-    ##### step 13 ###################################################################
-    #
-    #  make initial replication active log on master, and copy archive logs from
-    #  master
-    #
-    #  * details
-    #   - remove old replication log on master if exist
-    #   - start copylogdb to make replication active log
-    #   - copy archive logs from master
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-     
-     - 1. remove old replicaton log.
-     
-    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeA
-    [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb_nodeA
-     
-     - 2. start copylogdb to initiate active log.
-     
-     
-     - cubrid service stop
-    [nodeB]$ cubrid service stop >/dev/null 2>&1
-     
-     - start cub_master
-    [nodeB]$ cub_master >/dev/null 2>&1
-     
-     - start copylogdb and wait until replication active log header to be initialized
-    [nodeB]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA -m 3 testdb@nodeA >/dev/null 2>&1 &
-     
-    ...
-     
-     - cubrid service stop
-    [nodeB]$ cubrid service stop >/dev/null 2>&1
-     
-     - check copied active log header
-    [nodeB]$  cubrid applyinfo -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA testdb | grep -wqs "DB name"
-     
-     - 3. copy archive log from target.
-     
-    cubrid_usr@nodeA's password:
-    testdb_lgar000             100%  512MB   3.9MB/s   02:11
-
-
-14.  마스터 노드의 copylogdb, applylogdb 프로세스를 재시작하는 단계이다. 질문에 y를 입력한다. ::
-
-    ##### step 14 ###################################################################
-    #
-    #  restart copylogdb/applylogdb on master
-    #
-    #  * details
-    #   - restart copylogdb/applylogdb
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-    [nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_resume.sh -i /home/cubrid_usr/.ha/repl_utils.output
-    cubrid_usr@nodeA's password:
-    [nodeA]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB >/dev/null 2>&1 &
-    resume: cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
-    [nodeA]$ cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost >/dev/null 2>&1 &
-    resume: cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
-     
-     - check heartbeat list on (master).
-     
-    [nodeA]$ cubrid heartbeat status
-    @ cubrid heartbeat status
-     
-     HA-Node Info (current nodeA, state master)
-       Node nodeB (priority 2, state unknown)
-       Node nodeA (priority 1, state master)
-     
-     HA-Process Info (master 11847, state master)
-       Server testdb (pid 11853, state registered_and_active)
-     
-     
-    Connection to nodeA closed.
+     ##### step 13 ###################################################################
+     #
+     #  make initial replication active log on master, and copy archive logs from
+     #  master
+     #
+     #  * details
+     #   - remove old replication log on master if exist
+     #   - start copylogdb to make replication active log
+     #   - copy archive logs from master
+     #
+     ################################################################################
+      
+        continue ? ([y]es / [n]o / [s]kip) : y
+      
+      
+      - 1. remove old replicaton log.
+      
+     [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeA
+     [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb_nodeA
+      
+      - 2. start copylogdb to initiate active log.
+      
+      
+      - cubrid service stop
+     [nodeB]$ cubrid service stop >/dev/null 2>&1
+      
+      - start cub_master
+     [nodeB]$ cub_master >/dev/null 2>&1
+      
+      - start copylogdb and wait until replication active log header to be initialized
+     [nodeB]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA -m 3 testdb@nodeA >/dev/null 2>&1 &
+      
+     ...
+      
+      - cubrid service stop
+     [nodeB]$ cubrid service stop >/dev/null 2>&1
+      
+      - check copied active log header
+     [nodeB]$  cubrid applyinfo -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA testdb | grep -wqs "DB name"
+      
+      - 3. copy archive log from target.
+      
+     cubrid_usr@nodeA's password:
+     testdb_lgar000             100%  512MB   3.9MB/s   02:11
 
 
-15.  슬레이브 노드 구축이 정상적으로 완료되었는지 여부를 출력하는 단계이다. ::
+14. 마스터 노드의 copylogdb, applylogdb 프로세스를 재시작하는 단계이다. 질문에 y를 입력한다. ::
 
-    ##### step 15 ##################################################################
-    #
-    #  completed
-    #
-    ################################################################################
+     ##### step 14 ###################################################################
+     #
+     #  restart copylogdb/applylogdb on master
+     #
+     #  * details
+     #   - restart copylogdb/applylogdb
+     #
+     ################################################################################
+      
+        continue ? ([y]es / [n]o / [s]kip) : y
+      
+     [nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_resume.sh -i /home/cubrid_usr/.ha/repl_utils.output
+     cubrid_usr@nodeA's password:
+     [nodeA]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB >/dev/null 2>&1 &
+     resume: cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
+     [nodeA]$ cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost >/dev/null 2>&1 &
+     resume: cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
+      
+      - check heartbeat list on (master).
+      
+     [nodeA]$ cubrid heartbeat status
+     @ cubrid heartbeat status
+      
+      HA-Node Info (current nodeA, state master)
+        Node nodeB (priority 2, state unknown)
+        Node nodeA (priority 1, state master)
+      
+      HA-Process Info (master 11847, state master)
+        Server testdb (pid 11853, state registered_and_active)
+      
+      
+     Connection to nodeA closed.
+
+
+15. 슬레이브 노드 구축이 정상적으로 완료되었는지 여부를 출력하는 단계이다. ::
+
+     ##### step 15 ##################################################################
+     #
+     #  completed
+     #
+     ################################################################################
 
 **ha_make_slavedb.sh** 스크립트가 종료된 후에는 슬레이브 노드에서 HA 상태를 확인하고, HA를 구동한다. ::
 

@@ -49,8 +49,8 @@ Linux
 
    * 다른 운영체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. ::
 
-    [CUBRID]
-    extension=pdo_cubrid.so
+      [CUBRID]
+      extension=pdo_cubrid.so
 
 #. 변경된 내용을 반영하려면 웹 서버를 재시작한다.
 

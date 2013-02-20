@@ -196,7 +196,7 @@ Files For Locale Setting
     *   **$CUBRID/locales/loclib** directory: contains a C header file, locale_lib_common.h and OS dependent makefile which are used in the process of creating / generating locales shared libraries.
     *   **$CUBRID/locales/data/ducet.txt** file: Text file containing default universal collation information (codepoints, contractions and expansions, to be more specific) and their weights, as standardized by The Unicode Consortium, which is the starting point for the creation of collations. For more information, see `http://unicode.org/reports/tr10/#Default_Unicode_Collation_Element_Table <http://unicode.org/reports/tr10/#Default_Unicode_Collation_Element_Table>`_.
     *   **$CUBRID/locales/data/unicodedata.txt** file: Text file containing information about each Unicode codepoint regarding casing, decomposition, normalization etc. CUBRID uses this to determine casing. For more information, see `http://www.ksu.ru/eng/departments/ktk/test/perl/lib/unicode/UCDFF301.html <http://www.ksu.ru/eng/departments/ktk/test/perl/lib/unicode/UCDFF301.html>`_.
-    *   **$CUBRID/locales/data/ldml** directory: XML files, name with the convention **cubrid**_*<locale_name>.* **xml**, containing locale information presented in human-readable XML format (LDML Locale Data Markup Language); a file for each of the supported language.
+    *   **$CUBRID/locales/data/ldml** directory: XML files, name with the convention *cubrid_<locale_name>.xml*, containing locale information presented in human-readable XML format (LDML Locale Data Markup Language); a file for each of the supported language.
     *   **$CUBRID/locales/data/codepages** directory: contains codepage console conversion for single byte codepages(8859-1.txt , 8859-15.txt , 8859-9.txt) and codepage console conversion for double byte codepages(CP1258.txt , CP923.txt, CP936.txt , CP949.txt).
     *   **$CUBRID/bin/make_locale.sh** file or **%CUBRID%\\bin\\make_locale.bat** file: A script file used to generate shared libraries for locale data
     *   **$CUBRID/lib** directory: Shared libraries for generated locales will be stored here.
@@ -245,7 +245,7 @@ Step 1: Selecting a Locale
     
         The list is written in **$CUBRID/conf/cubrid_locales.all.txt**. Specify the wanted locale in **$CUBRID/conf/cubrid_locales.txt**. You can select all or part of supported locales.
 
-        The LDML files for the supported locales are named **cubrid**_<*locale_name*>.**xml** and they can be found in the **$CUBRID/locales/data/ldml** directory. If only a subset of these locales are to be supported by CUBRID, one must make sure their corresponding LDML files are present in the **$CUBRID/locales/data/ldml** folder.
+        The LDML files for the supported locales are named **cubrid_<locale_name>.xml** and they can be found in the **$CUBRID/locales/data/ldml** directory. If only a subset of these locales are to be supported by CUBRID, one must make sure their corresponding LDML files are present in the **$CUBRID/locales/data/ldml** folder.
 
         A locale cannot be used by CUBRID, unless it has an entry in cubrid_locales.txt file and it has a corresponding cubrid_<*locale_name*>.xml in **$CUBRID/locales/data/ldml** directory.
 
@@ -254,9 +254,9 @@ Step 1: Selecting a Locale
             <lang_name> <LDML file>                    <lib file>
             ko_KR    /home/CUBRID/locales/data/ldml/cubrid_ko_KR.xml    /home/CUBRID/lib/libcubrid_ko_KR.so
 
-        By default, the LDML files are found in **$CUBRID/locales/data/ldml** and the locale libraries in **$CUBRID/lib**; the filenames for LDML are formatted like: **cubrid**_<*lang_name*>.**ldml**
+        By default, the LDML files are found in **$CUBRID/locales/data/ldml** and the locale libraries in **$CUBRID/lib**; the filenames for LDML are formatted like: **cubrid_<lang_name>.ldml**
 
-        The filenames for libraries: **libcubrid**_<*lang_name*>.**dll** (**.so** for Linux).
+        The filenames for libraries: **libcubrid_<lang_name>.dll** (**.so** for Linux).
 
 Step 2: Compiling Locale
 ------------------------
@@ -334,7 +334,7 @@ Step 2: Compiling Locale
             *   tr_TR.utf8
             *   tr_TR.iso88591: Will have Romanized Korean names for month, day names.
 
-            The order stated above is important; if no charset is defined while configuring **CUBRID_CHARSET**, the charset is the charset of the locale shown first. For example, if **CUBRID_CHARSET** = ko_KR, the charset is specified to ko_KR.**utf8**, the first locale among the ko_KR in the above list. Locales of the other languages except the built-in locales should end with **.utf8**. For example, specify as **CUBRID_CHARSET** = de_DE.utf8 for German.
+            The order stated above is important; if no charset is defined while configuring **CUBRID_CHARSET**, the charset is the charset of the locale shown first. For example, if **CUBRID_CHARSET** = ko_KR, the charset is specified to **ko_KR.utf8**, the first locale among the ko_KR in the above list. Locales of the other languages except the built-in locales should end with **.utf8**. For example, specify as **CUBRID_CHARSET** = de_DE.utf8 for German.
 
             The names of month and day for ko_KR.iso88591 and tr_TR.iso88591 should be Romanized. For example, "일요일" for Korean (Sunday in English) is Romanized to "Iryoil". Providing ISO-8859-1 characters only is required.
 
@@ -353,7 +353,7 @@ Step 3: Setting CUBRID to Use a Specific Locale
 Step 4: Creating a Database with the Selected Locale Setting
 ------------------------------------------------------------
 
-    Once the **CUBRID_CHARSET** and **intl_date_lang** environment variables have been set, one can create a new database (or delete and recreate an existing one). When issuing the command "**cubrid createdb** <*db*_*name*>", a database will be created using the settings in the variables described above.
+    Once the **CUBRID_CHARSET** and **intl_date_lang** environment variables have been set, one can create a new database (or delete and recreate an existing one). When issuing the command "**cubrid createdb** <*db_name*>", a database will be created using the settings in the variables described above.
 
     The charset and locale name are stored in "*db_root*" system table. Once a database is created with a language and charset, it cannot change these settings.
 
@@ -449,7 +449,7 @@ Step 6: Starting CUBRID-Related Processes
 
     The process of loading a locale library is as follows:
 
-    *   If no lib path is provided, CUBRID will try to load **$CUBRID/lib/libcubrid**_<*lang_name*>.**so** ; if this file is not found, then CUBRID assumes all locales are found in a single library: **$CUBRID/lib/libcubrid_all_locales.so**.
+    *   If no lib path is provided, CUBRID will try to load **$CUBRID/lib/libcubrid_<lang_name>.so** ; if this file is not found, then CUBRID assumes all locales are found in a single library: **$CUBRID/lib/libcubrid_all_locales.so**.
 
     *   If no suitable locale library cannot be found or any other error occurs during loading, the CUBRID process stops.
 

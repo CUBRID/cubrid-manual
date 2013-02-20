@@ -654,7 +654,7 @@ The index including all columns in the **ORDER BY** clause is referred to as the
 *   The index consisting of *tab* (*col1*, *col2*) is an ordered index.
 *   The index consisting of *tab* (*col1*, *col2*, *col3*) is also an ordered index. This is because the *col3*, which is not referred by the **ORDER BY** clause comes after *col1* and *col2* .
 *   The index consisting of *tab* (*col1*) is not an ordered index.
-*   You can use the index consisting of *tab* (*col3*, *col1*,*col2*) or *tab* (*col1*, *col3*, *col2*) for optimization. This is because *col3* is not located at the back of the columns in the **ORDER BY** clause.
+*   You can use the index consisting of *tab* (*col3*, *col1*, *col2*) or *tab* (*col1*, *col3*, *col2*) for optimization. This is because *col3* is not located at the back of the columns in the **ORDER BY** clause.
 
 Although the columns composing an index do not exist in the **ORDER BY** clause, you can use an ordered index if the column condition is a constant.
 

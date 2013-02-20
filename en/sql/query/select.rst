@@ -55,7 +55,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
 
 *   <*select_expressions*> :
 
-    *   *: By using **SELECT** * statement, you can retrieve all the columns from the table specified in the **FROM** clause.
+    *   \*: By using **SELECT** * statement, you can retrieve all the columns from the table specified in the **FROM** clause.
     *   *expression_comma_list* : *expression* can be a path expression (ex.: *tbl_name.col_name*), variable or table name. All general expressions including arithmetic operations can also be used. Use a comma (,) to separate each expression in the list. You can specify aliases by using the **AS** keyword for columns or expressions to be queried. Specified aliases are used as column names in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of a column is assigned based on the order in which the column was specified. The starting value is 1.
 
         As **AVG**, **COUNT**, **MAX**, **MIN**, or **SUM**, an aggregate function that manipulates the retrieved data can also be used in the *expression*. As the aggregate function returns only one result, you cannot specify a general column which has not been grouped by an aggregate function in the **SELECT** column list.

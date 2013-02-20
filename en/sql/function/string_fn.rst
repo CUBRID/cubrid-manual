@@ -1042,7 +1042,7 @@ String Functions
 
 .. function:: SUBSTRING_INDEX (string, delim, count)
 
-    The **SUBSTRING_INDEX** function counts the separators included in the partial character string and will return the partial character string before *count*th. The return value is a **VARCHAR** type.
+    The **SUBSTRING_INDEX** function counts the separators included in the partial character string and will return the partial character string before *count*\th. The return value is a **VARCHAR** type.
 
     :param string: Input character string. The maximum length is 33,554,432 and if this length is exceeded, **NULL** will be returned.
     :param delim: Delimiter. It is case-sensitive.

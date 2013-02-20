@@ -383,7 +383,8 @@ CASTing a String to Date/Time Type
 
         YYYY-MM-DD HH:MM:SS ["AM"|"PM"]
 
-**Available DATE String Format** ::
+**Available DATE String Format**
+    ::
 
         [year sep] month sep day
         
@@ -409,7 +410,8 @@ CASTing a String to Date/Time Type
     *   110420: April 20th, 2011
     *   420: April 20th of this year
 
-**Available TIME String Format** ::
+**Available TIME String Format**
+    ::
 
         [hour]:min[:[sec]] [.[msec]] [am|pm]
         
@@ -453,7 +455,8 @@ CASTing a String to Date/Time Type
 
         : The [H]H format was allowed in CUBRID 2008 R3.1 and the earlier versions. That is, the string '10' was converted to **TIME** '10:00:00' in the R3.1 and the earlier versions, and will be converted to **TIME** '00:00:10' in version R4.0 and later.
 
-**Available DATETIME String Format** ::
+**Available DATETIME String Format** 
+    ::
 
         [year sep] month sep day [sep] [sep] hour [sep min[sep sec[.[msec]]]]
         
@@ -497,7 +500,8 @@ CASTing a String to Date/Time Type
     *   201104200910.359: November 4th, 2020 8 hours 9 minutes 10.359 seconds PM
     *   20110420091000.359: April 20th, 2011, 9 hours 10 minutes 0.359 seconds AM
 
-**Available Time-Date String Format** ::
+**Available Time-Date String Format** 
+    ::
 
         [hour]:min[:sec[.msec]] [am|pm] [year-]month-day
         
@@ -566,7 +570,7 @@ CASTing a String to Date/Time Type
 
     *   If you convert the time-date sting to the **TIME** type, the date part of the string is ignored but the date part format must be valid.
 
-    *   All input strings including the time part allow [.*msec*] on conversion, but only the **DATETIME** type can be maintained. If you convert this to a type such as **DATE**, **TIMESTAMP** or **TIME**, the *msec* value is discarded.
+    *   All input strings including the time part allow *[.msec]* on conversion, but only the **DATETIME** type can be maintained. If you convert this to a type such as **DATE**, **TIMESTAMP** or **TIME**, the *msec* value is discarded.
 
     *   All conversions in the **DATETIME**, **TIME** string allow English locale following after time value or am/pm specifier written in the current locale of a server.
 
@@ -932,7 +936,7 @@ In the column of the **ENUM** type, each value is saved as 1 byte when the numbe
 
 **ENUM** type column is handled as a number and considered as an index number value, which corresponds to the **ENUM** type when the compared value is **CHAR** / **VARCHAR** in the query. 
 
-** ENUM** type cannot have duplicated values in the string elements.
+**ENUM** type cannot have duplicated values in the string elements.
 
 ::
 
@@ -1066,9 +1070,9 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
       2
 
       
-    *   If the entered 1 is not enclosed within single quotes, 0 (corresponds to the Index Number 1) is inserted instead of 1.
-    *   When '1' is entered, '1' value is inserted since the corresponding ENUM element value exists.
-    *   When '3' is entered, '2' (corresponds to the Index Number 3) is inserted because there is no corresponding ENUM element value and 3 is a valid index number.
+  *   If the entered 1 is not enclosed within single quotes, 0 (corresponds to the Index Number 1) is inserted instead of 1.
+  *   When '1' is entered, '1' value is inserted since the corresponding ENUM element value exists.
+  *   When '3' is entered, '2' (corresponds to the Index Number 3) is inserted because there is no corresponding ENUM element value and 3 is a valid index number.
 
 * The **ENUM** values are sorted by the index number, not by the string value of the element. **NULL** values are sorted on the front of all strings and blank strings are sorted on the front of any other strings. To sort elements in alphabetic order in the **ENUM** type column, use the **CAST** function as follows.
 

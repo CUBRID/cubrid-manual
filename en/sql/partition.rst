@@ -50,7 +50,7 @@ The following shows operators and functions that can be used in partitioning exp
 
     :func:`EXTRACT`, :func:`CAST`
 
-** Partitioning and Collation**
+**Partitioning and Collation**
 
 You can specify the collation on the partition table. The following example shows that *tbl* is defined as the case insensitive utf8_en_ci collation; therefore, it is considered that partitioning key 'test' and 'TEST' are the same, so table creation is failed.::
 

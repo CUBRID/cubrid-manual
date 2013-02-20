@@ -225,7 +225,7 @@ CCI API Reference
     
     The following shows how to calcel the query execution of a thread.
     
-    ::
+    .. code-block:: c
 
         /* gcc -o pthr pthr.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
         */
@@ -2192,7 +2192,7 @@ CCI API Reference
     
     Implement and compile the class to be used as Java Stored Procedure.
     
-    ::
+    .. code-block:: java
     
         public class SpCubrid{
             public static void outTest(String[] o) {
@@ -2210,7 +2210,7 @@ CCI API Reference
         
     Register the loaded Java class.
     
-    ::
+    .. code-block:: sql
         
         csql> CREATE PROCEDURE test_out(x OUT STRING)
         AS LANGUAGE JAVA
@@ -2218,7 +2218,7 @@ CCI API Reference
         
      On the CCI application program, specify **CCI_PREPARE_CALL** flag into the **cci_prepare** function, and bring the fetching result after setting the position of the outbind parameter by calling **cci_register_out_param**.
     
-    ::
+    .. code-block:: c
 
         // On Linux, compile with "gcc -g -o jsp jsp.c -I$CUBRID/include/ -L$CUBRID/lib/ -lcascci -lpthread"
         

@@ -23,7 +23,7 @@ For arithmetic operators, there are binary operators for addition, subtraction, 
 | **DIV**                 | Division. Returns quotient.                                                                        | 1 DIV 2      | 0                |
 +-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
 | **%**                   | Division. Returns quotient. An operator must be an integer type, and it always returns integer.    | 1 % 2        | 1                |
-| ,                       | If an operand is real number, the**MOD**                                                           | 1 MOD 2      |                  |
+| ,                       | If an operand is real number, the **MOD**                                                          | 1 MOD 2      |                  |
 | **MOD**                 | function can be used.                                                                              |              |                  |
 +-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
 

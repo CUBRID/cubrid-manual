@@ -248,7 +248,7 @@ When the Java stored function/procedure being executed should run only on JVM lo
 loadjava Utility
 ================
 
-To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadjava** utility. If you load a Java *.class or *.jar file using the **loadjava** utility, the file is moved to the specified database path. ::
+To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadjava** utility. If you load a Java \*.class or \*.jar file using the **loadjava** utility, the file is moved to the specified database path. ::
 
     loadjava <option> database-name java-class-file
 

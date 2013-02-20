@@ -163,7 +163,7 @@ Date/Time Functions and Operators
 .. function:: SYS_DATE
 .. function:: SYSDATE
 
-    **CURDATE**(), **CURRENT_DATE**, **CURRENT_DATE**(), **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
+    **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** (), **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
 
     If input every argument value of year, month, and day is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
@@ -191,7 +191,7 @@ Date/Time Functions and Operators
 .. function:: SYS_DATETIME
 .. function:: SYSDATETIME
 
-    **CURRENT_DATETIME**, **CURRENT_DATETIME**(), **NOW**(), **SYS_DATETIME** and **SYSDATETIME** are used interchangeably, and they return the current date and time in **DATETIME** type. The unit is millisecond.
+    **CURRENT_DATETIME**, **CURRENT_DATETIME** (), **NOW** (), **SYS_DATETIME** and **SYSDATETIME** are used interchangeably, and they return the current date and time in **DATETIME** type. The unit is millisecond.
 
     :rtype: DATETIME
     
@@ -216,7 +216,7 @@ Date/Time Functions and Operators
 .. function:: SYS_TIME
 .. function:: SYSTIME
 
-    **CURTIME**(), **CURRENT_TIME**, **CURRENT_TIME**(), **SYS_TIME** and **SYSTIME** are used interchangeably and they return the current time as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
+    **CURTIME** (), **CURRENT_TIME**, **CURRENT_TIME** (), **SYS_TIME** and **SYSTIME** are used interchangeably and they return the current time as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
 
     :rtype: TIME
     
@@ -243,7 +243,7 @@ Date/Time Functions and Operators
 .. function:: LOCALTIMESTAMP
 .. function:: LOCALTIMESTAMP ()
 
-    CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP**(), **SYS_TIMESTAMP**, **SYSTIMESTAMP**, **LOCALTIME**, **LOCALTIME**(), **LOCALTIMESTAMP** and **LOCALTIMESTAMP**() are used interchangeably and they return the current date and time as **TIMESTAMP** type. The unit is second.
+    **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **SYS_TIMESTAMP**, **SYSTIMESTAMP**, **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** and **LOCALTIMESTAMP** () are used interchangeably and they return the current date and time as **TIMESTAMP** type. The unit is second.
 
     :rtype: TIMESTAMP
     
@@ -636,7 +636,7 @@ Date/Time Functions and Operators
 
 .. function:: MINUTE (time)
 
-    The **MINUTE** function returns the minutes in the range of 0 to 59 from specified argument. You can specify the **TIME* , **TIMESTAMP** or **DATETIME** type; the value is returned in **INTEGER** type.
+    The **MINUTE** function returns the minutes in the range of 0 to 59 from specified argument. You can specify the **TIME** , **TIMESTAMP** or **DATETIME** type; the value is returned in **INTEGER** type.
 
     :param time: Time
     :rtype: INT
@@ -1144,7 +1144,7 @@ Date/Time Functions and Operators
         =================================
                                         3
 
-.. function:: YEAR (date)*
+.. function:: YEAR (date)
 
     The **YEAR** function returns the year in the range of 1 to 9,999 from the specified parameter. You can specify **DATE**, **TIMESTAMP** or **DATETIME** type; the value is returned in  **INTEGER** type.
 

@@ -68,7 +68,7 @@ If the update is properly done, the changes can be semi-permentanetly fixed. In 
 
 An auto-commit mode is a mode that commits or rolls back all SQL statements. The transaction is committed automatically if the SQL is executed successfully, or is rolled back automatically if an error occurs.Such auto commit modes are supported in any interfaces.
 
-In CCI, PHP, ODBC and OLE DB interfaces, you can configure auto-commit mode by using **CCI_DEFAULT_AUTOCOMMIT** upon startup of an application. If configuration on broker parameter is omitted, the default value is set to **ON**. To change auto-commit mode, use the following functions by interface: **cci_set_autocommit**() for CCI inferface and **cubrid_set_autocommit** () for PHP interface.
+In CCI, PHP, ODBC and OLE DB interfaces, you can configure auto-commit mode by using **CCI_DEFAULT_AUTOCOMMIT** upon startup of an application. If configuration on broker parameter is omitted, the default value is set to **ON**. To change auto-commit mode, use the following functions by interface: **cci_set_autocommit** () for CCI inferface and **cubrid_set_autocommit** () for PHP interface.
 
 For session command (**;AUtocommit**) which enables auto-commit configuration in CSQL Interpreter, see :ref:`csql-session-commands`.
 

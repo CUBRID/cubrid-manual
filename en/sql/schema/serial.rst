@@ -154,8 +154,8 @@ You can access and update a serial by serial name and a reserved word pair. ::
     serial_identifier.CURRENT_VALUE
     serial_identifier.NEXT_VALUE
 
-*   *serial_identifier*.**CURRENT_VALUE** : Returns the current serial value.
-*   *serial_identifier*.**NEXT_VALUE** : Increments the serial value and returns the result.
+*   *serial_identifier*. **CURRENT_VALUE** : Returns the current serial value.
+*   *serial_identifier*. **NEXT_VALUE** : Increments the serial value and returns the result.
 
 **Example**
 

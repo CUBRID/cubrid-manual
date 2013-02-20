@@ -60,10 +60,10 @@ SHOW COLUMNS Statement
 
 Displays the column information of a table. You can use the **LIKE** clause to search the column names matching it. If you use the **WHERE** clause, you can search column names with more general terms like, "General Considerations for All **SHOW** Statements."  :
 
-*   Field: Column name
-*   Type: Column data type
-*   Null: If you can store **NULL**, the value is YES and if not, it is NO
-*   Key: Whether a column has an index or not. If there is more than one key value in the given column of a table, this displays only the one that appears first in the order of PRI, UNI and MUL.
+* Field: Column name
+* Type: Column data type
+* Null: If you can store **NULL**, the value is YES and if not, it is NO
+* Key: Whether a column has an index or not. If there is more than one key value in the given column of a table, this displays only the one that appears first in the order of PRI, UNI and MUL.
     *   If the key is a space, the column doesn't have an index, it is not the first column in the multiple column index or the index is non-unique.
     *   If the value is PRI, it is a primary key or the primary key of multiple columns.
     *   If the value is UNI, it is a unique index. (The unique index allows multiple NULL values but you can also set a NOT NULL constraint.)
@@ -116,21 +116,21 @@ SHOW INDEX Statement
 
 The **SHOW INDEX** statement displays the index information. This query has the following columns:
 
-*   Table: Table Name
-*   Non_unique
+* Table: Table Name
+* Non_unique
     *   0: Duplicate data are not allowed
     *   1: Duplicate data are allowed
     
-*   Key_name: Index name
-*   Seq_in_index: Serial number of the column in the index. Starts from 1.
-*   Column_name: Column name
-*   Collation: Method of sorting columns in the index. 'A' means ascending and **NULL** means not sorted.
-*   Cardinality: The number of values measuring the unique values in the index. Higher cardinality increases the opportunity of using an index. This value is updated every time **SHOW INDEX** is executed.
+* Key_name: Index name
+* Seq_in_index: Serial number of the column in the index. Starts from 1.
+* Column_name: Column name
+* Collation: Method of sorting columns in the index. 'A' means ascending and **NULL** means not sorted.
+* Cardinality: The number of values measuring the unique values in the index. Higher cardinality increases the opportunity of using an index. This value is updated every time **SHOW INDEX** is executed.
 
-*   Sub_part: The number of bytes of the indexed characters if the columns are indexed partially. **NULL** if all columns are indexed.
-*   Packed: Shows how keys are packed. If they are not packed, it will be **NULL**.
-*   Null: YES if a column can include **NULL**, NO if not.
-*   Index_type: Index to be used (currently, only the BTREE is supported.)
+* Sub_part: The number of bytes of the indexed characters if the columns are indexed partially. **NULL** if all columns are indexed.
+* Packed: Shows how keys are packed. If they are not packed, it will be **NULL**.
+* Null: YES if a column can include **NULL**, NO if not.
+* Index_type: Index to be used (currently, only the BTREE is supported.)
 
 ::
 

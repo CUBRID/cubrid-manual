@@ -943,7 +943,7 @@ Data Type Casting Functions and Operators
 
     .. note::
 
-        * When only the language is set to "en_US" (the initial value of**CUBRID_CHARSET** at installation of CUBRID) in the locale of the **CUBRID_CHARSET** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
+        * When only the language is set to "en_US" (the initial value of **CUBRID_CHARSET** at installation of CUBRID) in the locale of the **CUBRID_CHARSET** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
         * When the charset is ISO-8859-1, the language that can be changed in **TO_DATETIME** function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`.
 
 .. function:: TO_NUMBER(string [, format ])

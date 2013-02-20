@@ -764,9 +764,11 @@ The following example shows how to configure PHP.
     }
     ?>
 
-.. note:: If you want to run smoothly the broker's failover in the environment which the broker's failover is enabled by setting **altHosts**, you should set the value of *disconnectOnQueryTimeout** in URL as *true**.
+.. note:: 
+
+    If you want to run smoothly the broker's failover in the environment which the broker's failover is enabled by setting **altHosts**, you should set the value of **disconnectOnQueryTimeout** in URL as **true**.
     
-    If this value is **true*, an application program releases the existing connection from a broker and reconnect to the other broker which is specified on **altHosts**.
+    If this value is **true**, an application program releases the existing connection from a broker and reconnect to the other broker which is specified on **altHosts**.
 
 Running and Monitoring
 ======================
@@ -1062,7 +1064,7 @@ This table shows changeable modes depending on current status.
 |                    | maintenance   | X              | O       | O           |
 +--------------------+---------------+----------------+---------+-------------+
 
-* When the server status is to-be-active, forcibly change may cause data inconsistency among replication nodes. It is not recommended if you are not skilled enough.
+\* When the server status is to-be-active, forcibly change may cause data inconsistency among replication nodes. It is not recommended if you are not skilled enough.
 
 **Example**
 
@@ -1765,7 +1767,7 @@ Error Messages
 
 **Replication Log Copy Process (copylogdb)**
 
-    The error messages from the replication log copy process are stored in **$CUBRID/log/***db-name***@***remote-node-name***_copylogdb.err**. The severity levels of error messages found in the replication log copy process are as follows: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see :ref:`error-parameters`.
+    The error messages from the replication log copy process are stored in **$CUBRID/log/db-name@remote-node-name_copylogdb.err**. The severity levels of error messages found in the replication log copy process are as follows: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see :ref:`error-parameters`.
 
 **Initialization Error Messages**
 

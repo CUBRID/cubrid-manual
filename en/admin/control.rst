@@ -26,7 +26,7 @@ The following **cubrid** utility syntax shows how to control database server pro
 Controlling Broker
 ------------------
 
-The following **cubrid** utility syntax shows how to control CUBRID broker process. One of the followings can be specified in *command*: **start**, **stop**, restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to checkstatus. In addition, **on** (to start a specific broker) and **off** (to stop a specific broker) are provided. ::
+The following **cubrid** utility syntax shows how to control CUBRID broker process. One of the followings can be specified in *command*: **start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to checkstatus. In addition, **on** (to start a specific broker) and **off** (to stop a specific broker) are provided. ::
 
     cubrid broker <command> 
     <command>: {start|stop|restart|status [broker_name] 

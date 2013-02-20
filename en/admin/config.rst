@@ -645,7 +645,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **error_log**
 
-    **error_log** is a server/client parameter used to configure the name of the error log file when an error occurs in the database server. The name of the error log file must be in the form of <*database_name*>_<*date*>_<*time*>.**err**. However, the naming rule of the error log file does not apply to errors for which the system cannot find the database server information. Therefore, error logs are recorded in the **cubrid.err** file. The error log file **cubrid.err** is stored in the **$CUBRID/log/server** directory.
+    **error_log** is a server/client parameter used to configure the name of the error log file when an error occurs in the database server. The name of the error log file must be in the form of *<database_name>_<date>_<time>.err*. However, the naming rule of the error log file does not apply to errors for which the system cannot find the database server information. Therefore, error logs are recorded in the **cubrid.err** file. The error log file **cubrid.err** is stored in the **$CUBRID/log/server** directory.
 
 **error_log_level**
 
@@ -657,7 +657,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **error_log_size**
 
-    **error_log_size** is a parameter used to configure the maximum number of lines per an error log file. The default value is **8,000,000**. If it reaches up the specified number, the <*database_name*>_<*date*>_<*time*>.**err**.**bak** file is created. 
+    **error_log_size** is a parameter used to configure the maximum number of lines per an error log file. The default value is **8,000,000**. If it reaches up the specified number, the *<database_name>_<date>_<time>.err.bak* file is created. 
 
 .. _lock-parameters:
 
@@ -1546,7 +1546,7 @@ The following are parameters commonly applied to entire brokers; it is written u
 Parameter by Broker
 -------------------
 
-The following describes parameters to configure the environment variables of brokers; each parameter is located under [%*broker_name*]. The maximum length of *broker_name* is 63 characters in English.
+The following describes parameters to configure the environment variables of brokers; each parameter is located under *[%broker_name]*. The maximum length of *broker_name* is 63 characters in English.
 
 **ACCESS_LIST**
 
@@ -1554,7 +1554,7 @@ The following describes parameters to configure the environment variables of bro
 
 **ACCESS_LOG**
 
-    **ACCESS_LOG** is a parameter used to configure whether to store the access log of the broker. The default value is **ON**. The name of the access log file for the broker is *broker_name_id*.**access** and the file is stored under **$CUBRID/log/broker** directory.
+    **ACCESS_LOG** is a parameter used to configure whether to store the access log of the broker. The default value is **ON**. The name of the access log file for the broker is *broker_name_id.access* and the file is stored under **$CUBRID/log/broker** directory.
 
 **ACCESS_MODE**
 
@@ -1627,7 +1627,7 @@ The following describes parameters to configure the environment variables of bro
 
 **ERROR_LOG_DIR**
 
-    **ERROR_LOG_DIR** is a parameter used to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log file name for the broker error is *broker_ name_id*.**err**.
+    **ERROR_LOG_DIR** is a parameter used to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log file name for the broker error is *broker_ name_id.err*.
 
 **ENABLE_MONITOR_HANG**
 
@@ -1642,11 +1642,11 @@ The following describes parameters to configure the environment variables of bro
 
 **LOG_BACKUP**
 
-    **LOG_BACKUP** is a parameter used to configure whether to back up access and error log files of the broker when CUBRID stops. The default value is set to **OFF**. An access log file (*broker_name*.**access**) in the **$CUBRID/log/broker** directory is deleted when CUBRID stops. If the value is set to **ON**, an access log file is stored (backed up) as *broker_name*.**access**.*yyyymmdd.hhmm* when CUBRID stops.
+    **LOG_BACKUP** is a parameter used to configure whether to back up access and error log files of the broker when CUBRID stops. The default value is set to **OFF**. An access log file (*broker_name.access*) in the **$CUBRID/log/broker** directory is deleted when CUBRID stops. If the value is set to **ON**, an access log file is stored (backed up) as *broker_name.access.yyyymmdd.hhmm* when CUBRID stops.
 
 **LOG_DIR**
 
-    **LOG_DIR** is a parameter used to configure the directory where SQL logs are stored. The default value is **log/broker/sql_log**. The file name of the SQL logs is *broker_name_id*.**sql.log**.
+    **LOG_DIR** is a parameter used to configure the directory where SQL logs are stored. The default value is **log/broker/sql_log**. The file name of the SQL logs is *broker_name_id.sql.log*.
 
 **LONG_QUERY_TIME**
 
@@ -1702,7 +1702,7 @@ The following describes parameters to configure the environment variables of bro
 
 **SLOW_LOG**
 
-    **SLOW_LOG** is a parameter used to configure whether to log. The default value is **ON**. If the value is **ON**, long transaction query which exceeds the time specified in **LONG_QUERY_TIME** or query where an error occurred is stored in the **SLOW SQL** log file. The name of file created is *broker_name_id*.**slow.log** and it is located under **SLOW_LOG_DIR**.
+    **SLOW_LOG** is a parameter used to configure whether to log. The default value is **ON**. If the value is **ON**, long transaction query which exceeds the time specified in **LONG_QUERY_TIME** or query where an error occurred is stored in the **SLOW SQL** log file. The name of file created is *broker_name_id.slow.log* and it is located under **SLOW_LOG_DIR**.
 
 **SLOW_LOG_DIR**
 
@@ -1716,7 +1716,7 @@ The following describes parameters to configure the environment variables of bro
 
 **SQL_LOG**
 
-    **SQL_LOG** is a parameter used to configure whether to leave logs for SQL statements processed by CAS when CAS handles requests from a client. The default value is **ON**. When this parameter is configured to **ON**, all logs are stored. The log file name becomes *broker_name_id.***sql**.**log**. The file is created in the **log/broker/sql_log** directory under the installation directory. The parameter values are as follows:
+    **SQL_LOG** is a parameter used to configure whether to leave logs for SQL statements processed by CAS when CAS handles requests from a client. The default value is **ON**. When this parameter is configured to **ON**, all logs are stored. The log file name becomes *broker_name_id.sql.log*. The file is created in the **log/broker/sql_log** directory under the installation directory. The parameter values are as follows:
 
     *   **OFF** : Does not leave any logs.
     *   **ERROR** : Stores logs for queries which occur an error. only queries where an error occurs.
@@ -1726,7 +1726,7 @@ The following describes parameters to configure the environment variables of bro
 
 **SQL_LOG_MAX_SIZE**
 
-    **SQL_LOG_MAX_SIZE** is a parameter used to configure the maximum size of the SQL log file. The default value is **100,000** (KB). If the size of the SQL log file, which is created when the **SQL_LOG** parameter is configured to **ON**, reaches the value configured by the parameter, *broker_name_id*.**sql.log.bak** is created.
+    **SQL_LOG_MAX_SIZE** is a parameter used to configure the maximum size of the SQL log file. The default value is **100,000** (KB). If the size of the SQL log file, which is created when the **SQL_LOG** parameter is configured to **ON**, reaches the value configured by the parameter, *broker_name_id.sql.log.bak* is created.
 
 **STATEMENT_POOLING**
 

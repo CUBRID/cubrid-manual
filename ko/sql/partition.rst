@@ -12,7 +12,7 @@
 
 CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), 리스트 분할(List Partitioning)의 세 가지 분할을 제공한다.
 
-한 테이블이 가질 수 있는 최대 분할 수는 1024이다. 테이블의 각 분할은 그 테이블의 서브 테이블로 생성된다. 분할 정의를 통해 생성된 서브 테이블은 사용자가 임의로 내용을 변경하거나 삭제할 수 없다. 서브 테이블의 이름은 '*class_name*__p__*partition_name*'의 형식으로 시스템 테이블에 등록된다. 데이터베이스 사용자는 db_class 뷰와 db_partition 뷰에서 분할의 정보를 확인할 수 있다. 또 다른 확인 방법은 CUBRID 매니저나 CSQL 인터프리터의 ;sc <테이블명> 명령을 사용하는 것이다.
+한 테이블이 가질 수 있는 최대 분할 수는 1024이다. 테이블의 각 분할은 그 테이블의 서브 테이블로 생성된다. 분할 정의를 통해 생성된 서브 테이블은 사용자가 임의로 내용을 변경하거나 삭제할 수 없다. 서브 테이블의 이름은 '*class_name__p__partition_name*'의 형식으로 시스템 테이블에 등록된다. 데이터베이스 사용자는 db_class 뷰와 db_partition 뷰에서 분할의 정보를 확인할 수 있다. 또 다른 확인 방법은 CUBRID 매니저나 CSQL 인터프리터의 ;sc <테이블명> 명령을 사용하는 것이다.
 
 .. _partition-data-type:
 
@@ -50,7 +50,7 @@ CUBRID는 영역 분할(Range Partitioning), 해시 분할(Hash Partitioning), �
 
   :func:`EXTRACT`, :func:`CAST`
 
-** 분할 테이블과 콜레이션**
+**분할 테이블과 콜레이션**
 
 분할 테이블에도 콜레이션을 지정할 수 있다. 다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다. ::
 

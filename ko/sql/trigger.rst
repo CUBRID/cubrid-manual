@@ -226,7 +226,7 @@ CREATE TRIGGER
 
 *   트리거의 조건 영역을 생략하면 조건 없는 트리거(unconditional trigger)가 되며 트리거가 호출될 때 항상 트리거의 실행 영역이 수행된다.
 
-다음은 조건 영역 내의 표현식에 상관명을 이용한 예제이다. 이벤트 타입이 **INSERT**, **UPDATE**, **DELETE** 인 경우에, 조건 영역 내의 표현식은 특정 칼럼 값에 접근하기 위하여 상관명 **obj**, **new**, **old**를 사용할 수 있다. 예제에서 *example* 트리거는 *record* 칼럼의 현재 값을 이용해서 조건 영역을 검사하기 위해 트리거 조건 영역에 **obj** 를 칼럼 이름 앞에 사용하였다.
+다음은 조건 영역 내의 표현식에 상관명을 이용한 예제이다. 이벤트 타입이 **INSERT**, **UPDATE**, **DELETE** 인 경우에, 조건 영역 내의 표현식은 특정 칼럼 값에 접근하기 위하여 상관명 **obj**, **new**, **old** 를 사용할 수 있다. 예제에서 *example* 트리거는 *record* 칼럼의 현재 값을 이용해서 조건 영역을 검사하기 위해 트리거 조건 영역에 **obj** 를 칼럼 이름 앞에 사용하였다.
 
 .. code-block:: sql
 
@@ -331,8 +331,8 @@ ALTER TRIGGER
     • PRIORITY key
 
 
-*   *trigger_name* : 변경할 트리거의 이름을 지정한다.
-*   *trigger_option* :
+* *trigger_name* : 변경할 트리거의 이름을 지정한다.
+* *trigger_option* :
     *   **STATUS** { **ACTIVE** | **INACTIVE** } : 트리거의 상태를 변경한다.
     *   **PRIORITY** *key* : 우선순위를 변경한다.
 
@@ -414,7 +414,7 @@ RENAME TRIGGER
     • ALL TRIGGERS
 
 
-*   *trigger_identifier* :
+* *trigger_identifier* :
     *   *trigger_name* : 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 실행된다.
     *   **ALL TRIGGERS** : 현재 모든 지연된 활동이 실행된다.
 
@@ -429,7 +429,7 @@ RENAME TRIGGER
     • trigger_name
     • ALL TRIGGERS
 
-*   *trigger_option* :
+* *trigger_option* :
     *   *trigger_name* : 트리거의 이름을 지정하면 지정된 트리거의 지연된 활동이 취소된다.
     *   **ALL TRIGGERS** : 현재 모든 지연된 활동이 취소된다.
 
@@ -524,7 +524,7 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
     • ON
     • OFF
 
-*   *switch* :
+* *switch* :
     *   **ON** : **TRACE** 가 작동되며 **OFF** 하거나 현재 데이터베이스 세션을 종료할 때까지 계속 유지된다.
     *   **OFF** : **TRACE** 의 작동을 멈춘다.
 

@@ -21,10 +21,10 @@ MERGE
     WHEN NOT MATCHED THEN INSERT [(<attributes_list>)]
         VALUES (<expr_list>) [WHERE <insert_condition>]
     
-*   <*target*> : 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있다.
-*   <*source*> : 데이터를 가져올 원본 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
-*   <*join_condition*> : 갱신할 조건을 명시한다.
-*   <*merge_update_clause*> : <*join_condition*> 조건이 TRUE이면 대상 테이블의 새로운 칼럼 값들을 지정한다.
+* <*target*> : 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있다.
+* <*source*> : 데이터를 가져올 원본 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
+* <*join_condition*> : 갱신할 조건을 명시한다.
+* <*merge_update_clause*> : <*join_condition*> 조건이 TRUE이면 대상 테이블의 새로운 칼럼 값들을 지정한다.
 
     *   **UPDATE** 절이 실행되면, <*target*>에 정의된 **UPDATE** 트리거가 활성화된다.
     *   <*col*> : 업데이트할 칼럼은 반드시 대상 테이블의 칼럼이어야 한다.
@@ -34,7 +34,7 @@ MERGE
     *   **ON** 조건 절에서 참조된 칼럼은 업데이트할 수 없다.
     *   뷰를 업데이트할 때에는 **DEFAULT** 를 명시할 수 없다.
 
-*   <*merge_insert_clause*> : <*join_condition*> 조건이 FALSE이면 대상 테이블의 칼럼으로 값을 삽입한다.
+* <*merge_insert_clause*> : <*join_condition*> 조건이 FALSE이면 대상 테이블의 칼럼으로 값을 삽입한다.
     *   **INSERT** 절이 실행되면, <*target*>에 정의된 **INSERT** 트리거들이 활성화된다.
     *   <*insert_condition*> : 지정한 조건이 TRUE일 때 삽입 연산을 실행한다. <*source*>의 칼럼만 조건에 포함할 수 있다.
     *   <*attribute_list*>: <*target*>에 삽입될 칼럼들이다.

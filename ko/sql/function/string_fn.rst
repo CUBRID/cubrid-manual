@@ -80,7 +80,7 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
 
     **BIT_LENGTH** 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, **BIT_LENGTH** 함수의 리턴 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
 
-    :param string: 비트 단위로 길이를 구할 문자열 또는 비트열을 지정한다.**NULL** 이 지정된 경우는 **NULL** 값이 반환된다. 
+    :param string: 비트 단위로 길이를 구할 문자열 또는 비트열을 지정한다. **NULL** 이 지정된 경우는 **NULL** 값이 반환된다. 
     :rtype: INT
 
     .. code-block:: sql

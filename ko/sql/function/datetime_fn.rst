@@ -25,7 +25,7 @@
     **unit에 대한 expr 형식**
 
     +--------------------+-------------------------------------------+--------------------------------------------------------------+
-    | unit 값            | expr 형식**                               | 예                                                           |
+    | unit 값            | expr 형식                                 | 예                                                           |
     |                    |                                           |                                                              |
     +====================+===========================================+==============================================================+
     | MILLISECOND        | MILLISECONDS                              | ADDDATE(SYSDATE, INTERVAL 123 MILLISECOND)                   |
@@ -166,7 +166,7 @@
 .. function:: SYS_DATE
 .. function:: SYSDATE
 
-    **CURDATE**(), **CURRENT_DATE**, **CURRENT_DATE**(), **SYS_DATE**, **SYSDATE** 는 모두 동일하며, 현재 날짜를 **DATE** 타입(*MM*/*DD*/*YYYY*)으로 반환한다. 산술 연산의 단위는 일(day)이다. 입력 인자의 연, 월, 일이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
+    **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** (), **SYS_DATE**, **SYSDATE** 는 모두 동일하며, 현재 날짜를 **DATE** 타입(*MM*/*DD*/*YYYY*)으로 반환한다. 산술 연산의 단위는 일(day)이다. 입력 인자의 연, 월, 일이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
 
     :rtype: DATE
     
@@ -192,7 +192,7 @@
 .. function:: SYS_DATETIME
 .. function:: SYSDATETIME
 
-    **CURRENT_DATETIME**, **CURRENT_DATETIME**(), **NOW**(), **SYS_DATETIME**, **SYSDATETIME** 는 동일하며, 현재 날짜를 **DATETIME** 타입으로 반환한다. 산술 연산의 단위는 밀리초(milli-sec)다.
+    **CURRENT_DATETIME**, **CURRENT_DATETIME** (), **NOW** (), **SYS_DATETIME**, **SYSDATETIME** 는 동일하며, 현재 날짜를 **DATETIME** 타입으로 반환한다. 산술 연산의 단위는 밀리초(milli-sec)다.
 
     :rtype: DATETIME
     
@@ -217,7 +217,7 @@
 .. function:: SYS_TIME
 .. function:: SYSTIME
 
-    **CURTIME**(), **CURRENT_TIME**, **CURRENT_TIME**(), **SYS_TIME**, **SYSTIME** 는 모두 동일하며, 현재 시간을 **TIME** 타입(*HH*:*MI*:*SS*)으로 반환한다. 산술 연산의 단위는 초(sec)다.
+    **CURTIME** (), **CURRENT_TIME**, **CURRENT_TIME** (), **SYS_TIME**, **SYSTIME** 는 모두 동일하며, 현재 시간을 **TIME** 타입(*HH*:*MI*:*SS*)으로 반환한다. 산술 연산의 단위는 초(sec)다.
 
     :rtype: TIME
     
@@ -244,7 +244,7 @@
 .. function:: LOCALTIMESTAMP
 .. function:: LOCALTIMESTAMP ()
 
-    CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP**(), **SYS_TIMESTAMP**, **SYSTIMESTAMP**, **LOCALTIME**, **LOCALTIME**(), **LOCALTIMESTAMP**, **LOCALTIMESTAMP**()는 동일하며, 현재 날짜와 시간을 **TIMESTAMP** 타입으로 반환한다. 산술 연산의 단위는 초(sec)다.
+    **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **SYS_TIMESTAMP**, **SYSTIMESTAMP**, **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP**, **LOCALTIMESTAMP** ()는 동일하며, 현재 날짜와 시간을 **TIMESTAMP** 타입으로 반환한다. 산술 연산의 단위는 초(sec)다.
 
     :rtype: TIMESTAMP
     
@@ -264,7 +264,7 @@
 
 .. function:: DATE (date)
 
-    **DATE** 함수는 지정된 인자로부터 날짜 부분을 추출하여 '*MM*/*DD*/*YYYY*' 형식 문자열로 반환한다. 지정 가능한 인자는 **DATE**, **TIMESTAMP**, **DATETIME**타입이며, 리턴 값은 **VARCHAR** 타입이다
+    **DATE** 함수는 지정된 인자로부터 날짜 부분을 추출하여 '*MM*/*DD*/*YYYY*' 형식 문자열로 반환한다. 지정 가능한 인자는 **DATE**, **TIMESTAMP**, **DATETIME** 타입이며, 리턴 값은 **VARCHAR** 타입이다
 
     인자의 연, 월, 일에는 0을 입력할 수 없으나, 예외적으로 날짜와 시간이 모두 0인 값을 입력한 경우에는 연, 월, 일 값이 모두 0인 문자열을 반환한다.
 
@@ -311,7 +311,7 @@
 .. function:: SUBDATE(date, INTERVAL expr unit)
 .. function:: SUBDATE(date, days)
 
-    **DATE_SUB**()와 **SUBDATE**()는 동일하며, 특정 **DATE** 값에 대해 뺄셈 또는 덧셈을 실행한다. 리턴 값은 **DATE** 타입 또는 **DATETIME** 타입이다. 연산 결과의 날짜가 해당 월의 마지막 날짜를 초과하면, 해당 월의 말일을 적용하여 유효한 **DATE** 값을 반환한다.
+    **DATE_SUB** ()와 **SUBDATE** ()는 동일하며, 특정 **DATE** 값에 대해 뺄셈 또는 덧셈을 실행한다. 리턴 값은 **DATE** 타입 또는 **DATETIME** 타입이다. 연산 결과의 날짜가 해당 월의 마지막 날짜를 초과하면, 해당 월의 말일을 적용하여 유효한 **DATE** 값을 반환한다.
     
     입력 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
 
@@ -922,7 +922,7 @@
 
 .. function:: TIMESTAMP (date [,time])
 
-    **TIMESTAMP** 함수는 인자로 날짜/시간 형식의 문자열이 지정되고, 이를 **DATETIME** 타입으로 반환한다. 단일 인자로 **DATE** 형식 문자열('*YYYY*-*MM*-*DD*' 또는 '*MM*/*DD*/*YYYY*') 또는 **TIMESTAMP** 형식 문자열('*YYYY*-*MM*-*DD**HH*:*MI*:*SS*' 또는 '*HH*:*MI*:*SS**MM*/*DD*/*YYYY*')이 지정되면 이를 **DATETIME** 타입으로 반환한다.
+    **TIMESTAMP** 함수는 인자로 날짜/시간 형식의 문자열이 지정되고, 이를 **DATETIME** 타입으로 반환한다. 단일 인자로 **DATE** 형식 문자열('*YYYY*-*MM*-*DD*' 또는 '*MM*/*DD*/*YYYY*') 또는 **TIMESTAMP** 형식 문자열('*YYYY*-*MM*-*DD* *HH*:*MI*:*SS*' 또는 '*HH*:*MI*:*SS* *MM*/*DD*/*YYYY*')이 지정되면 이를 **DATETIME** 타입으로 반환한다.
     
     두 번째 인자로 **TIME** 형식 문자열('*HH*:*MI*:*SS*')이 주어지면 이를 첫 번째 인자 값에 더한 결과를 **DATETIME** 타입으로 반환한다. 두 번째 인자가 명시되지 않으면, 기본값으로 **12:00:00.000 AM** 이 설정된다.
 

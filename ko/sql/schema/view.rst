@@ -47,13 +47,13 @@ CREATE VIEW
     [ CLASS ] { column_name | method_name } OF superclass_name
     [ AS alias ]
 
-*   **OR REPLACE** : **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name* 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
-*   *view_name* : 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
-*   *view_column_definition*
+* **OR REPLACE** : **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name* 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
+* *view_name* : 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
+* *view_column_definition*
     *   *column_name* : 뷰의 칼럼을 정의한다.
     *   *column_type* : 칼럼의 데이터 타입을 정의한다.
-*   **AS** *select_statement* : 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가생성된다.
-*   **WITH CHECK OPTION** : 이 옵션이 명시되면 *select_statement* 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
+* **AS** *select_statement* : 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가생성된다.
+* **WITH CHECK OPTION** : 이 옵션이 명시되면 *select_statement* 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
 
 **예제**
 

@@ -407,7 +407,7 @@ If the **CALL** statement is nested within another **CALL** statement calling a 
     call phone_info('Tom', call sp_int(999));
     call phone_info((select * from Phone where id='Tom'));
 
-If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the *dbname* **_java.log** file. To display the exception on the screen, change a handler value of the **$CUBRID/java/logging.properties** file to " java.lang.logging.ConsoleHandler." Then, the exception details are displayed on the screen.
+If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the *dbname*\ **_java.log** file. To display the exception on the screen, change a handler value of the **$CUBRID/java/logging.properties** file to " java.lang.logging.ConsoleHandler." Then, the exception details are displayed on the screen.
 
 Calling from SQL Statement
 --------------------------

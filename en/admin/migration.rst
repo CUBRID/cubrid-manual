@@ -182,7 +182,7 @@ The following is [options] used in **cubrid unloaddb**.
 
 .. option:: --datafile-per-class
 
-    This option specifies that the output file generated through unload operation creates a data file per each table. The file name is generated as *<Database Name>_<Table Name>*\_**objects** for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see :ref:`howtowrite-loadfile`). ::
+    This option specifies that the output file generated through unload operation creates a data file per each table. The file name is generated as *<Database Name>_<Table Name>*\_ **objects** for each table. However, all column values in object types are unloaded as NULL and %id class_name class_id part is not written in the unloaded file (see :ref:`howtowrite-loadfile`). ::
 
         cubrid unloaddb --datafile-per-class demodb
 
@@ -312,7 +312,7 @@ The following table shows options available with the **cubrid loaddb** utility (
 
     For the server error code name, see the **$CUBRID/include/dbi.h** file.
 
-    For error messages by error code (error number), see the number under $set 5 MSGCAT_SET_ERROR in th **$CUBRID/msg/** *<character set name>* **/cubrid.msg** file. ::
+    For error messages by error code (error number), see the number under $set 5 MSGCAT_SET_ERROR in th **$CUBRID/msg/**\ *<character set name>*\ **/cubrid.msg** file. ::
 
         vi $CUBRID/msg/en_US/cubrid.msg
          

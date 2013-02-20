@@ -1680,7 +1680,7 @@ CCI API 레퍼런스
 
     .. note::
 
-        Linux용 CUBRID에서는 **strings** 명령을 이용하여 CCI 라이브러리 파일의 버전을 확인할 수 있다. ::
+        Linux용 CUBRID에서는 **strings** 명령을 이용하여 CCI 라이브러리 파일의 버전을 확인할 수 있다 ::
         
             $ strings /home/usr1/CUBRID/lib/libcascci.so | grep VERSION
             VERSION=9.0.0.1

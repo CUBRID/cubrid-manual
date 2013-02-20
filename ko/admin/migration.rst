@@ -180,7 +180,7 @@
     
 .. option:: --datafile-per-class
 
-    언로드 작업으로 생성되는 데이터 파일을 각 테이블별로 생성되도록 지정하는 옵션이다. 파일 이름은 *<데이터베이스 이름>* **_** *<테이블 이름>*\ **_objects** 로 생성된다. 단, 객체 타입의 칼럼 값은 모두 **NULL** 로 언로드되며, 언로드된 파일에는 %id class_name class_id 부분이 작성되지 않는다. 자세한 내용은 :ref:`howtowrite-loadfile` 을 참고한다. ::
+    언로드 작업으로 생성되는 데이터 파일을 각 테이블별로 생성되도록 지정하는 옵션이다. 파일 이름은 *<데이터베이스 이름>_<테이블 이름>*\ **_objects** 로 생성된다. 단, 객체 타입의 칼럼 값은 모두 **NULL** 로 언로드되며, 언로드된 파일에는 %id class_name class_id 부분이 작성되지 않는다. 자세한 내용은 :ref:`howtowrite-loadfile` 을 참고한다. ::
 
         cubrid unloaddb --datafile-per-class demodb
     
@@ -313,7 +313,7 @@
 
     서버 에러 코드 이름은 **$CUBRID/include/dbi.h** 파일을 참고하도록 한다.
 
-    에러 코드(에러 번호) 별 에러 메시지는 **$CUBRID/msg/** *<문자셋 이름>* **/cubrid.msg** 파일의 $set 5 MSGCAT_SET_ERROR 이하에 있는 번호들을 참고하도록 한다. ::
+    에러 코드(에러 번호) 별 에러 메시지는 **$CUBRID/msg/**\ *<문자셋 이름>*\ **/cubrid.msg** 파일의 $set 5 MSGCAT_SET_ERROR 이하에 있는 번호들을 참고하도록 한다. ::
 
         vi $CUBRID/msg/en_US/cubrid.msg
          

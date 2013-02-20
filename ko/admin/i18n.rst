@@ -663,7 +663,7 @@ CUBRID의 문자 데이터
 
 표현식 결과가 문자열 데이터이면 표현식의 피연산자에 대한 콜레이션 추론 과정을 통하여 문자셋과 콜레이션을 결정한다.
 
-.. note::
+.. note:: \
 
     CUBRID는 유럽과 아시아 언어를 포함한 여러 가지 언어들의 콜레이션을 지원한다. 이러한 언어들은 다른 알파벳들을 사용할 뿐만 아니라, 특정 언어들은 일부 문자셋에 대해 확장(expansion) 또는 축약(contraction) 정의를 필요로 한다. 이러한 사항들의 대부분은 The Unicode Consortium에 의해 유니코드 표준(2012년 현재 버전 6.1.0)으로 제정되어 있으며, 대부분의 언어가 요구하는 모든 문자 정보는 DUCET 파일(`http://www.unicode.org/Public/UCA/latest/allkeys.txt <http://www.unicode.org/Public/UCA/latest/allkeys.txt>`_ )에 저장되어 있다.
 

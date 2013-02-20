@@ -408,7 +408,7 @@ CUBRID에서는 Java 저장 함수/프로시저를 같은 **CALL** 문을 이용
     call phone_info('Tom', call sp_int(999));
     call phone_info((select * from Phone where id='Tom'));
 
-Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname* **_java.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 " java.lang.logging.ConsoleHandler" 로 수정하면 화면으로 exception 내용을 출력한다.
+Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_java.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 " java.lang.logging.ConsoleHandler" 로 수정하면 화면으로 exception 내용을 출력한다.
 
 SQL 문에서 호출
 ---------------

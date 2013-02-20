@@ -466,6 +466,7 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
     Address(10.24.18.66) is not authorized.
 
 .. note::
+
     브로커에서의 접속 제한을 위해서는 :ref:`limiting-broker-access` 을 참고한다.
 
 .. _database-server-error:

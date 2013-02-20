@@ -827,7 +827,7 @@ By default, all string data types inherit the default database collation and cha
         SELECT s1, s2 FROM t WHERE s1 > s2;
 
     In the above example, column *s1* and column *s2* have different collations. Comparing *s1* with *s2* means comparing the strings to determine which column value is "larger" among the records on the table t. The collation *utf8_en_cs* and the collation *utf8_tr_cs* cannot be compared to each other, so an error will be output.
-
+    
     Collation coercibility is used to determine the result collation of comparison expression. It expresses how easily the collation can be converted to the collation of the opposite argument. High collation coercibility when comparing two operands of an expression means that the collation can be easily converted to the collation of the opposite argument. That is, an argument with high collation coercibility can be changed to the collation of an argument with lower collation coercibility.
 
     When an expression has various arguments with different collation, a common collation is computed based on each arguments collation and coercibility. The rules for collation inference are:

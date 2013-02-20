@@ -1850,7 +1850,7 @@ CUBRID HA에서 **LOB** 칼럼 메타 데이터(Locator)는 복제되고, **LOB*
 
 **복제 로그 반영 프로세스(applylogdb)**
 
-복제 로그 반영 프로세스의 오류 메시지는 **$CUBRID/log/** *db-name* **@** *local-node-name* **_applylogdb_** *db-name* **_** *remote-node-name* **.err** 에 남는다. 복제 로그 반영 프로세스에서 남을 수 있는 오류 메시지의 severity는 fatal, error, notification이며 기본 severity는 error이다. 따라서 notification 오류 메시지를 남기려면 **cubrid.conf** 의 **error_log_level** 값을 변경해야 한다. 이에 대한 자세한 설명은 :ref:`error-parameters` 를 참고한다.
+복제 로그 반영 프로세스의 오류 메시지는 **$CUBRID/log/**\ *db-name*\ **@**\ *local-node-name*\ **_applylogdb_**\ *db-name*\ **_**\ *remote-node-name*\ **.err** 에 남는다. 복제 로그 반영 프로세스에서 남을 수 있는 오류 메시지의 severity는 fatal, error, notification이며 기본 severity는 error이다. 따라서 notification 오류 메시지를 남기려면 **cubrid.conf** 의 **error_log_level** 값을 변경해야 한다. 이에 대한 자세한 설명은 :ref:`error-parameters` 를 참고한다.
 
 **초기화 오류 메시지**
 
@@ -2050,7 +2050,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
      
        continue ? ([y]es / [n]o / [s]kip) : y
    
-    HA 노드의 Linux 계정 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력한다. 처음 CUBRID 설치 후 **dba** 암호를 변경하지 않았을 경우, **dba** 암호의 입력 없이 <Enter> 키를 누르면 된다. ::
+   HA 노드의 Linux 계정 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력한다. 처음 CUBRID 설치 후 **dba** 암호를 변경하지 않았을 경우, **dba** 암호의 입력 없이 <Enter> 키를 누르면 된다. ::
     
     HA/replica cubrid_usr's password :
     HA/replica cubrid_usr's password :
@@ -2058,7 +2058,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
     testdb's DBA password :
     Retype testdb's DBA password :
 
-2. 레이브 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. ::
+2. 슬레이브 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. ::
 
     ##### step 2 ###################################################################
     #
@@ -2511,39 +2511,42 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
      #  completed
      #
      ################################################################################
+     .
 
-**ha_make_slavedb.sh** 스크립트가 종료된 후에는 슬레이브 노드에서 HA 상태를 확인하고, HA를 구동한다. ::
+**ha_make_slavedb.sh** 스크립트가 종료된 후에는 슬레이브 노드에서 HA 상태를 확인하고, HA를 구동한다. 
 
-    [NodeB]$ cubrid heartbeat status
-    @ cubrid heartbeat status
-    ++ cubrid master is not running.
-    [NodeB]$ cubrid heartbeat start
-    @ cubrid heartbeat start
-    @ cubrid master start
-    ++ cubrid master start: success
-     
-    @ HA processes start
-    @ cubrid server start: testdb
-     
-    This may take a long time depending on the amount of recovery works to do.
-     
-    CUBRID 9.0
-     
-    ++ cubrid server start: success
-    @ copylogdb start
-    ++ copylogdb start: success
-    @ applylogdb start
-    ++ applylogdb start: success
-    ++ HA processes start: success
-    ++ cubrid heartbeat start: success
-    [nodeB ha]$ cubrid heartbeat status
-    @ cubrid heartbeat status
-     
-     HA-Node Info (current nodeB, state slave)
-       Node nodeB (priority 2, state slave)
-       Node nodeA (priority 1, state master)
-     
-     HA-Process Info (master 26611, state slave)
-       Applylogdb testdb@localhost:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26831, state registered)
-       Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
-       Server testdb (pid 26617, state registered_and_standby)
+    ::
+
+     [NodeB]$ cubrid heartbeat status
+     @ cubrid heartbeat status
+     ++ cubrid master is not running.
+     [NodeB]$ cubrid heartbeat start
+     @ cubrid heartbeat start
+     @ cubrid master start
+     ++ cubrid master start: success
+      
+     @ HA processes start
+     @ cubrid server start: testdb
+      
+     This may take a long time depending on the amount of recovery works to do.
+      
+     CUBRID 9.0
+      
+     ++ cubrid server start: success
+     @ copylogdb start
+     ++ copylogdb start: success
+     @ applylogdb start
+     ++ applylogdb start: success
+     ++ HA processes start: success
+     ++ cubrid heartbeat start: success
+     [nodeB ha]$ cubrid heartbeat status
+     @ cubrid heartbeat status
+      
+      HA-Node Info (current nodeB, state slave)
+        Node nodeB (priority 2, state slave)
+        Node nodeA (priority 1, state master)
+      
+      HA-Process Info (master 26611, state slave)
+        Applylogdb testdb@localhost:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26831, state registered)
+        Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
+        Server testdb (pid 26617, state registered_and_standby)

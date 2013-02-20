@@ -25,7 +25,7 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 .. note:: 
 
-    CUBRID Query Browser is a light version of CUBRID Manager and provides only the features that application developers absolute need: the database management and query editor features. For more details on CUBRID Query Browse, see `http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_ .
+    CUBRID Query Browser is a light version of CUBRID Manager and provides only the features that application developers absolute need: the database management and query editor features. For more details on CUBRID Query Browse, see http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser .
 
 .. image:: /images/image1.png
 
@@ -109,7 +109,7 @@ Temporary temp volume is a temporary volume created temporarily by the system af
 
 **DBA** should consider space where temporary temp volume can be created when creating a database. Once temporary temp volume is created, it is maintained until a database restarts and its size cannot be reduced. It is recommended to make temporary temp volume automatically delete by restarting a database if its size is too big.
 
-*   **File name of the temporary temp volume** : The file name of the temporary temp volume of CUBRID has the format of *db_name* **_t** *num*, where *db_name* is the database name and *num* is the volume identifier. The volume identifier is decremented by 1 from 32766.
+*   **File name of the temporary temp volume** : The file name of the temporary temp volume of CUBRID has the format of *db_name*\ **_t**\ *num*, where *db_name* is the database name and *num* is the volume identifier. The volume identifier is decremented by 1 from 32766.
 
 *   **Configuring the temporary temp volume size** : The number of temporary temp volumes to be created is determined by the system depending on the space size needed for processing transactions. However, users can limit the temporary temp volume size by configuring the **temp_file_max_size_in_pages** parameter value in the system parameter configuration file (**cubrid.conf**). The default value is -1, which means it can be created as long as free space is available. If the **temp_file_max_size_in_pages** parameter value is configured to 0, the temporary temp volume will not be created even after exhausting the permanent temp volume.
 

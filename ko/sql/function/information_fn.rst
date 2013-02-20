@@ -127,6 +127,7 @@
         INSERT INTO info_tbl VALUES (DEFAULT,'d');
 
     .. note::
+    
         CUBRID 9.0 미만 버전에서는 테이블 생성 시 DATE, DATETIME, TIME, TIMESTAMP 칼럼의 DEFAULT 값을 SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP로 지정하면, CREATE TABLE 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 INSERT되는 시점의 값을 입력하려면 INSERT 구문의 VALUES 절에 해당 함수를 입력해야 했다.
         
 .. function:: INDEX_CARDINALITY(table, index, key_pos)

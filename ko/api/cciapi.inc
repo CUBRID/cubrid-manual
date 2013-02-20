@@ -246,7 +246,7 @@ CCI API 레퍼런스
     
     다음은 main 함수에서 스레드의 질의 실행을 취소하는 예이다.
     
-    ::
+    .. code-block:: c
 
         /* gcc -o pthr pthr.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
         */
@@ -740,7 +740,7 @@ CCI API 레퍼런스
 
     *   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : 질의 요청 타임아웃 시 즉시 소켓 연결 종료 여부. :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 **query_timeout** 으로 설정한 시간이 지나면 질의 취소 요청 후 즉시 소켓 연결을 종료할 것인지, 아니면 질의 취소 요청을 받아들인다는 서버의 응답을 기다릴 것인지를 설정한다. 기본값은 **false** 로, 서버의 응답을 기다린다. 이 값이 **true** 이면 :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수 호출 도중 질의 타임아웃이 발생할 때 서버에 질의 취소 메시지를 보낸 후, 소켓을 닫고 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. (브로커가 아닌 데이터베이스 서버 쪽에서 에러가 발생한 경우 -1을 반환한다. 상세 에러를 확인하고 싶으면 "데이터베이스 에러 버퍼"의 에러 코드를 확인한다. 데이터베이스 에러 버퍼에서 에러 코드를 확인하는 방법은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.) 이 경우 사용자는 명시적으로 :c:func:`cci_disconnect` 함수를 통해 데이터베이스 연결 핸들을 닫아야 한다. 응용 프로그램이 질의 취소 메시지를 보낸 후 에러를 반환했음에도 불구하고, 데이터베이스 서버는 그 메시지를 받지 못하고 해당 질의를 수행할 수 있음을 주의한다. **false** 이면 서버에 취소 메시지를 보낸 후, 서버의 질의 요청에 대한 응답이 올 때 까지 대기한다.
 
-    *   **logFile** : 디버깅용 로그 파일 이름(기본값: **cci_**<*handle_id*>**.log**).<*handle_id*>는 이 함수가 반환하는 연결 핸들 ID이다.
+    *   **logFile** : 디버깅용 로그 파일 이름(기본값: *cci_<handle_id>.log*). <*handle_id*>는 이 함수가 반환하는 연결 핸들 ID이다.
 
     *   **logBaseDir** : 디버깅용 로그 파일이 생성되는 디렉터리. 경로를 포함한 파일 이름의 형식은 logBaseDir/logFile이 되며, 상대 경로로 지정할 수 있다.
 
@@ -1950,7 +1950,7 @@ CCI API 레퍼런스
         *   **CCI_ER_QUERY_TIMEOUT**
         *   **CCI_ER_LOGIN_TIMEOUT**
     
-    *flag* 에 **CCI_PREPARE_UPDATABLE**, **CCI_PREPARE_INCLUDE_OID**, **CCI_PREPARE_HOLDABLE** 또는 **CCI_PREPARE_CALL**이 설정될 수 있다. *flag*\에 **CCI_PREPARE_UPDATABLE**\이 설정되면 갱신 가능한 결과 셋(updatable resultset)을 만들 수 있으며, 이 경우 **CCI_PREPARE_INCLUDE_OID**\는 자동 설정된다. *flag*\에 **CCI_PREPARE_UPDATABLE**\과 **CCI_PREPARE_HOLDABLE**\을 동시에 사용할 수 없다.
+    *flag* 에 **CCI_PREPARE_UPDATABLE**, **CCI_PREPARE_INCLUDE_OID**, **CCI_PREPARE_HOLDABLE** 또는 **CCI_PREPARE_CALL** 이 설정될 수 있다. *flag*\에 **CCI_PREPARE_UPDATABLE**\이 설정되면 갱신 가능한 결과 셋(updatable resultset)을 만들 수 있으며, 이 경우 **CCI_PREPARE_INCLUDE_OID**\는 자동 설정된다. *flag*\에 **CCI_PREPARE_UPDATABLE**\과 **CCI_PREPARE_HOLDABLE**\을 동시에 사용할 수 없다.
     자바 저장 함수를 호출하고 싶으면 **flag**\에 **CCI_PREPARE_CALL**\을 설정한다. 자바 저장 함수와 관련된 예는 :c:func:`cci_register_out_param` 함수를 참고한다.
 
     커밋 이후 결과 셋 유지 여부에 대한 설정의 기본값은 커서 유지이다. 따라서 :c:func:`cci_prepare`\의 *flag*\에 **CCI_PREPARE_UPDATABLE**\을 설정하고 싶으면 :c:func:`cci_prepare`\를 호출하기 전에 :c:func:`cci_set_holdable`\을 호출하여 커서를 유지하지 않도록 설정해야 한다.
@@ -2087,7 +2087,7 @@ CCI API 레퍼런스
     | READ UNCOMMITTED INSTANCES |                                       |
     +----------------------------+---------------------------------------+
 
-    DB 사용자 이름과 암호는 **user** 와 **password** 값을 직접 지정하거나 **url** 속성 내에서 **user**와 **password** 값을 지정한다. 두 가지 경우가 같이 사용되는 경우 우선 순위는 다음과 같다.
+    DB 사용자 이름과 암호는 **user** 와 **password** 값을 직접 지정하거나 **url** 속성 내에서 **user** 와 **password** 값을 지정한다. 두 가지 경우가 같이 사용되는 경우 우선 순위는 다음과 같다.
     
     * 둘다 입력되면 직접 지정하는 값이 우선한다. 
     * 둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다. 

@@ -836,7 +836,6 @@ CUBRID SHARD는 질의를 수행할 shard를 선택하기 위해 shard key를 �
         .. code-block:: c
             
             // <shard_key_udf.c>
-             
             1 #include <string.h>
             2 #include <stdio.h>
             3 #include <unistd.h>

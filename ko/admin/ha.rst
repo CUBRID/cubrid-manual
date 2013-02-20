@@ -1074,7 +1074,7 @@ CUBRID HA의 서버 상태를 확인하고 변경한다. ::
 |       | maintenance   | X      | O       | O           |
 +-------+---------------+--------+---------+-------------+
 
-* 서버가 to-be-active 상태일 때 active 상태로 강제 변경하면 복제 노드 간 불일치가 발생할 수 있으므로 관련 내용을 충분히 숙지한 사용자가 아니라면 사용하지 않는 것을 권장한다.
+\* 서버가 to-be-active 상태일 때 active 상태로 강제 변경하면 복제 노드 간 불일치가 발생할 수 있으므로 관련 내용을 충분히 숙지한 사용자가 아니라면 사용하지 않는 것을 권장한다.
 
 **예시**
 
@@ -1284,7 +1284,7 @@ HA로 구성된 노드 수가 많으므로 CUBRID HA 그룹 내의 여러 노드
 
 브로커 노드의 **databases.txt** 파일에는 브로커의 용도에 맞게 HA 또는 부하 분산 서버와 연결될 수 있도록 DB 서버 호스트의 목록을 순서대로 설정해야 한다.
 
-다음은*node A* 와 *node B* 의 **databases.txt** 파일의 예이다. ::
+다음은 *node A* 와 *node B* 의 **databases.txt** 파일의 예이다. ::
 
     #db-name    vol-path                  db-host       log-path             lob-base-path
     testdb     /home/cubrid/DB/testdb1   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob

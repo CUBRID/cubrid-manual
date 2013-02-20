@@ -1456,7 +1456,7 @@ CUBRID 매니저 사용자의 계정과 비밀번호는 CUBRID 매니저 클라�
         
     .. option:: -m, monitor AUTHORITY
 
-        생성할 CM 사용자의 모니터링 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor**이며, 기본값은 **none** 이다.
+        생성할 CM 사용자의 모니터링 권한을 지정한다. 사용할 수 있는 값은 **admin**, **none**, **monitor** 이며, 기본값은 **none** 이다.
 
     다음은 이름이 *testcm* 이고 비밀번호가 *testcmpwd* 인 CM 사용자를 생성하고 상태 모니터링 권한을 admin으로 설정하는 예이다.
 

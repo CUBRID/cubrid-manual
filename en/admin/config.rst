@@ -92,6 +92,7 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     * If "Dynamic Change" is "available" and "Applied" is "server parameter", that parameter's changed value is applied to DB server. Then applications use the changed value of the parameter until the DB server is restarted.
  
     * If "Dynamic Change" is "available" and "Applied" is "client parameter" or "client/server parameter", that parameter's changed value is applied only to that DB session. In other words, the changed value is only applied to the applications which requested to change that value. For example, if **block_ddl_statement** parameter's value is changed into **no**, then only the application who requested to change cannot use DDL statements.
+    
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     | Category                      | Parameter Name                      | Applied                 | Type     | Default Value                  | Dynamic Change  |
     +===============================+=====================================+=========================+==========+================================+=================+

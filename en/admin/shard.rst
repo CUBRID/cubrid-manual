@@ -211,9 +211,9 @@ Selecting a Shard DB through the Shard SQL Hint
         *   Receives the query execution result from the shard DB #1 and then returns it to the requested application.
         
         
-        .. note::
-        
-            On the driver functions which do a batch query processing with the array which binds several values(ex. executeBatch in JDBC, cci_execute_array and cci_execute_batch in CCI ), they fail to run if there is a value which accesses to a different shard.
+.. note::
+
+    On the driver functions which do a batch query processing with the array which binds several values(ex. executeBatch in JDBC, cci_execute_array and cci_execute_batch in CCI ), they fail to run if there is a value which accesses to a different shard.
 
 Various DBMSs Available
 -----------------------
@@ -1033,8 +1033,8 @@ The following shows how to print the detail information using the **-f** option.
                2           shard2                192.168.10.3
                3           shard3                192.168.10.4
 
-Checking CUBRID SHARD status Information
-----------------------------------------
+Checking CUBRID SHARD status
+----------------------------
 
 **cubrid shard status**
 

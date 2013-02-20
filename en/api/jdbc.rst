@@ -107,10 +107,6 @@ The CUBRID JDBC driver (**cubrid_jdbc.jar**) is located in the jdbc directory u
 
     If a general CUBRID JDBC driver has been installed in the same library directory (**$JAVA_HOME/jre/lib/ext**) where the JRE is installed, it may be loaded ahead of the server-side JDBC driver used by the Java stored procedure, which causing it to malfunction. In a Java stored procedure environment, make sure not to install a general CUBRID JDBC driver in the directory where the JRE is installed (**$JAVA_HOME/jre/lib/ext**).
 
-.. note::
-
-    To get the latest information about JDBC driver, click http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver .
-
 JDBC Programming
 ================
 

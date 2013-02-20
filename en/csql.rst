@@ -209,7 +209,7 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
     You can connect to the read-only database with the **-r** option. Retrieving data is only allowed in the read-only database; creating databases and entering data are not allowed. ::
 
-        $ csql -r demodb
+        csql -r demodb
 
 .. option:: --no-auto-commit
 

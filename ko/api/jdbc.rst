@@ -106,10 +106,6 @@ JDBC 설치 및 설정
 
     만약 JRE가 설치된 라이브러리 디렉터리(**$JAVA_HOME/jre/lib/ext**)에 일반 CUBRID JDBC 드라이버가 설치되어 있다면, Java 저장 프로시저에서 사용하는 서버 사이드 JDBC 드라이버보다 먼저 로드되어 Java 저장 프로시저가 비정상적으로 구동될 수 있다. Java 저장 프로시저를 사용하는 환경에서는 JRE가 설치된 라이브러리 디렉터리(    **$JAVA_HOME/jre/lib/ext**)에 일반 CUBRID JDBC 드라이버를 설치하지 않도록 주의한다.
 
-.. note::
-
-    JDBC 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver 에 접속한다.
-
 JDBC 프로그래밍
 ===============
 

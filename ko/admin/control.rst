@@ -78,7 +78,7 @@ CUBRID 서비스
 **cubrid service** 유틸리티를 사용해서 한 번에 관련된 프로세스들을 모두 구동, 정지하거나 상태를 알아볼 수 있어 편리하다. CUBRID HA를 설정하는 방법은 :ref:`cubrid-service-util` 를 참고한다.
 
 다음은 데이터베이스 환경 설정 파일에서 데이터베이스 서버와 브로커를 서비스로 등록하고, CUBRID 서비스 구동과 함께
-*demodb*와 *testdb* 라는 데이터베이스를 자동으로 시작하도록 설정한 예이다.
+*demodb* 와 *testdb* 라는 데이터베이스를 자동으로 시작하도록 설정한 예이다.
 
 ::
 
@@ -127,7 +127,7 @@ Windows 환경에서는 시스템 권한을 가진 사용자로 로그인한 경
     cub_master: '/tmp/CUBRID1523' file for UNIX domain socket exist.... Operation not permitted
     ++ cubrid master start: fail
 
-:ref:`control-cubrid-services` 에 설명된 대로 서비스를 등록한 후, 서비스를 구동하기 위해 다음과 같이 입력한다. 마스터 프로세스, 데이터베이스 서버 프로세스, 브로커 및 등록된 *demodb*,*testdb*가 한 번에 구동됨을 확인할 수 있다. 
+:ref:`control-cubrid-services` 에 설명된 대로 서비스를 등록한 후, 서비스를 구동하기 위해 다음과 같이 입력한다. 마스터 프로세스, 데이터베이스 서버 프로세스, 브로커 및 등록된 *demodb*, *testdb* 가 한 번에 구동됨을 확인할 수 있다. 
 
 ::
 
@@ -1240,7 +1240,7 @@ HA 환경에서 브로커의 **ACCESS_MODE** 를 Read Only로 변경하고 해�
 
         자동 커밋 모드 ON으로 수행
         
-    다음 예제는 query_convert.in 파일에 저장된 질의를 demodb에서 재실행하며, 브로커 IP가 192.168.1.10이고, 브로커 포트는 30000인 환경임을 가정한다.
+    다음 예제는 query_convert.in 파일에 저장된 질의를 *demodb* 에서 재실행하며, 브로커 IP가 192.168.1.10이고, 브로커 포트는 30000인 환경임을 가정한다.
         
     ::
 

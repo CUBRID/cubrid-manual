@@ -18,7 +18,7 @@ prepared statement 기능은 보통 JDBC, PHP, ODBC 등의 인터페이스 함�
 
 .. note::
  
-    * SQL 수준의 PREPARE 문은 DB 연결 당 개수가 최대 20개로 제한된다. SQL 수준의 PREPARE 문은 DB 서버의 메모리 자원을 사용하므로 DB 서버 메모리의 오용으로 인한 리소스 남용을 방지하기 위해 제한된다.
+    * SQL 수준의 PREPARE 문은 DB 연결 당 개수가 최대 20개로 제한된다. SQL 수준의 PREPARE 문은 DB 서버의 메모리 자원을 사용하므로 DB 서버 메모리의 남용을 방지하기 위해 제한된다.
     * 인터페이스 함수의 prepared statement는 브로커 파라미터인 :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` 를 통해 DB 연결 당 prepared statement 개수가 제한된다. CUBRID SHARD 를 사용하는 경우 shard proxy 파라미터인 :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` 를 통해 shard proxy 하나 당 prepared statement 개수가 제한된다.
 
 PREPARE 문
@@ -32,11 +32,11 @@ PREPARE 문
 
 *   *preparable_stmt* : 반드시 단일 SQL 문이어야 하며, 여러 개의 SQL 문을 지정할 수 없다. *preparable_stmt* 인자에 바인드 파라미터(?)를 사용할 수 있으며, 이를 따옴표로 감싸지 않아야 한다.
 
-**주의 사항**
+.. note:: \
 
-**PREPARE** 문은 응용 프로그램이 서버에 연결하면서 시작되며 응용 프로그램이 연결을 종료하거나 세션 기간이 만료되기 전까지 유지된다. 세션 기간은 시스템 파라미터의 **session_state_timeout** 파라미터로 설정할 수 있으며, 기본값은 **21600** 초(=6시간)이다. 
+    **PREPARE** 문은 응용 프로그램이 서버에 연결하면서 시작되며 응용 프로그램이 연결을 종료하거나 세션 기간이 만료되기 전까지 유지된다. 세션 기간은 시스템 파라미터의 **session_state_timeout** 파라미터로 설정할 수 있으며, 기본값은 **21600** 초(=6시간)이다. 
 
-세션에 의해 관리되는 데이터는 **PREPARE** 문 외에 사용자 정의 변수, 가장 마지막에 삽입한 ID(**LAST_INSERT_ID**), 가장 마지막에 실행한 문장에 의해 영향 받은 레코드의 개수(**ROW_COUNT**)를 포함한다.
+    세션에 의해 관리되는 데이터는 **PREPARE** 문 외에 사용자 정의 변수, 가장 마지막에 삽입한 ID(**LAST_INSERT_ID**), 가장 마지막에 실행한 문장에 의해 영향 받은 레코드의 개수(**ROW_COUNT**)를 포함한다.
 
 .. _execute-statement:
 
@@ -158,7 +158,7 @@ SET
 
 **예제**
 
-사용자 정의 변수 'a'를 선언하고, 값 1을 할당한다.
+사용자 정의 변수 a를 선언하고, 값 1을 할당한다.
 
 .. code-block:: sql
 
@@ -216,11 +216,11 @@ SQL 문 내에서 ':=' 연산자를 사용하여 사용자 정의 변수를 선�
     DEALLOCATE VARIABLE @a, @user_defined_variable;
     DROP VARIABLE @a, @user_defined_variable;
 
-**주의 사항**
+.. note:: \
 
-**SET** 문에 의해 정의되는 사용자 정의 변수는 응용 프로그램이 서버에 연결하면서 시작되어 응용 프로그램이 연결을 종료할 때까지 유지되며, 이 기간동안 유지되는 연결을 세션(session)이라고 한다. 사용자 정의 변수는 응용 프로그램이 연결을 종료하거나 일정 기간 동안 요청이 없어 세션 기간이 만료될(expired) 때 삭제된다. 세션 기간은 **cubrid.conf** 의 **session_state_timeout** 파라미터로 설정할 수 있으며, 기본값은 **21600** 초(=6시간)이다.
+    **SET** 문에 의해 정의되는 사용자 정의 변수는 응용 프로그램이 서버에 연결하면서 시작되어 응용 프로그램이 연결을 종료할 때까지 유지되며, 이 기간동안 유지되는 연결을 세션(session)이라고 한다. 사용자 정의 변수는 응용 프로그램이 연결을 종료하거나 일정 기간 동안 요청이 없어 세션 기간이 만료될(expired) 때 삭제된다. 세션 기간은 **cubrid.conf** 의 **session_state_timeout** 파라미터로 설정할 수 있으며, 기본값은 **21600** 초(=6시간)이다.
 
-세션에 의해 관리되는 데이터는 **PREPARE** 문 외에 사용자 정의 변수, 가장 마지막에 삽입한 ID(**LAST_INSERT_ID**), 가장 마지막에 실행한 문장에 의해 영향 받은 레코드의 개수(**ROW_COUNT**)를 포함한다.
+    세션에 의해 관리되는 데이터는 **PREPARE** 문 외에 사용자 정의 변수, 가장 마지막에 삽입한 ID(**LAST_INSERT_ID**), 가장 마지막에 실행한 문장에 의해 영향 받은 레코드의 개수(**ROW_COUNT**)를 포함한다.
 
 **
 DO

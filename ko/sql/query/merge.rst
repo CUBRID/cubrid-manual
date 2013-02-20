@@ -12,14 +12,13 @@ MERGE
     [ <merge_update_clause> ]
     [ <merge_insert_clause> ]
      
-    <merge_update_clause>::=
+    <merge_update_clause> ::=
     WHEN MATCHED THEN UPDATE
-    SET <col=expr> [,<col=expr>,…] [WHERE <update_condition>]
+    SET <col = expr> [,<col = expr>,…] [WHERE <update_condition>]
     [DELETE WHERE <delete_condition>]
      
-    <merge_insert_clause>::=
-    WHEN NOT MATCHED THEN INSERT [(<attributes_list>)]
-        VALUES (<expr_list>) [WHERE <insert_condition>]
+    <merge_insert_clause> ::=
+    WHEN NOT MATCHED THEN INSERT [(<attributes_list>)] VALUES (<expr_list>) [WHERE <insert_condition>]
     
 * <*target*> : 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있다.
 * <*source*> : 데이터를 가져올 원본 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
@@ -82,8 +81,8 @@ MERGE
 
 .. code-block:: sql
 
-    CREATE TABLE bonus (std_id int, addscore int);
-    CREATE INDEX i_scores_std_id on scores (std_id);
+    CREATE TABLE bonus (std_id INT, addscore INT);
+    CREATE INDEX i_scores_std_id ON scores (std_id);
      
     INSERT INTO bonus VALUES (1,10);
     INSERT INTO bonus VALUES (2,10);
@@ -118,46 +117,26 @@ MERGE
     MERGE INTO bonus t USING (SELECT * FROM std WHERE score < 40) s
     ON t.std_id = s.std_id
     WHEN MATCHED THEN
-    UPDATE SET t.addscore=t.addscore+s.score*0.1
+    UPDATE SET t.addscore = t.addscore + s.score * 0.1
     WHEN NOT MATCHED THEN
-    INSERT (t.std_id, t.addscore) VALUES (s.std_id, 10+s.score*0.1) WHERE s.score<=30;
+    INSERT (t.std_id, t.addscore) VALUES (s.std_id, 10 + s.score * 0.1) WHERE s.score <= 30;
      
     SELECT * FROM bonus ORDER BY 1;
+    
     std_id     addscore
     ==========================
-                1           10
-                2           10
-                3           10
-                4           14
-                5           10
-                6           13
-                7           10
-                8           10
-                9           10
-               10           12
-               12           12
-               14           13
+        1           10
+        2           10
+        3           10
+        4           14
+        5           10
+        6           13
+        7           10
+        8           10
+        9           10
+       10           12
+       12           12
+       14           13
 
 위의 예에서 원본 테이블은 score가 40 미만인 std 테이블의 레코드 집합이고, 대상 테이블은 bonus이다. **UPDATE** 절에서는 점수(std.score)가 40점 미만인 학생 번호(std_id)는 4, 6, 10, 12, 14이고 이들 중 보너스 테이블(bonus)에 있는 4, 6, 10번에게는 기존 보너스 점수(bonus.addscore)에 자신의 점수의 10%를 추가로 부여한다. INSERT 절에서는 보너스 테이블에 없는 12, 14번에게는 10점과 자신의 점수의 10%를 추가로 부여한다.
-
-.. note:: 뷰를 대상으로 **MERGE** 를 수행할 때 "WITH CHECK OPTION"을 정상 처리하지 못하면서 "Check option exception" 오류가 발생된다.
-
-.. code-block:: sql
-
-    CREATE TABLE t1(a int, b int);
-    INSERT INTO t1 values(1, 100);
-    INSERT INTO t1 values(2, 200);
-    CREATE TABLE t2(a int, b int);
-    INSERT INTO t2 values(1, 99);
-    INSERT INTO t2 values(2, 999);
-    CREATE VIEW v AS SELECT * FROM t1 WHERE b < 150 WITH CHECK OPTION;
-    --should succeed, but check option exception occurs
-    MERGE into v
-    USING t2
-    ON (t2.a=v.a)
-    WHEN MATCHED THEN
-    UPDATE
-    SET v.b=t2.b;
-     
-    ERROR: Check option exception on view v.
 

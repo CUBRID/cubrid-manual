@@ -14,7 +14,8 @@ SHOW TABLES 문
 .. code-block:: sql
 
     SHOW TABLES;
-    tables_in_demodb
+    
+    Tables_in_demodb
     ======================
       'athlete'
       'code'
@@ -28,6 +29,7 @@ SHOW TABLES 문
       'stadium'
      
     SHOW FULL TABLES;
+    
       Tables_in_demodb     Table_type
     ============================================
       'athlete'             'BASE TABLE'
@@ -42,6 +44,7 @@ SHOW TABLES 문
       'stadium'             'BASE TABLE'
      
     SHOW FULL TABLES LIKE '%c%';
+    
       Tables_in_demodb      Table_type
     ============================================
       'code'                'BASE TABLE'
@@ -49,7 +52,8 @@ SHOW TABLES 문
       'participant'         'BASE TABLE'
       'record'              'BASE TABLE'
      
-    SHOW FULL TABLES  WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';
+    SHOW FULL TABLES WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';
+    
       Tables_in_demodb      Table_type
     ============================================
       'code'                'BASE TABLE'
@@ -58,7 +62,7 @@ SHOW TABLES 문
 SHOW COLUMNS 문
 ===============
 
-테이블의 칼럼 정보를 출력한다. **LIKE** 절을 사용하면 이와 매칭되는 칼럼 이름을 검색할 수 있다. **WHERE** 절을 사용하면 "모든 **SHOW** 문에 대한 일반적인 고려 사항"과 같이 좀더 일반적인 조건으로 칼럼 이름을 검색할 수 있다. 
+테이블의 칼럼 정보를 출력한다. **LIKE** 절을 사용하면 이와 매칭되는 칼럼 이름을 검색할 수 있다. **WHERE** 절을 사용하면 "모든 **SHOW** 문에 대한 일반적인 고려 사항"과 같이 좀 더 일반적인 조건으로 칼럼 이름을 검색할 수 있다. 
 
 * Field : 칼럼 이름
 * Type : 칼럼의 데이터 타입.
@@ -87,6 +91,7 @@ SHOW COLUMNS 문
 .. code-block:: sql
 
     SHOW COLUMNS FROM athlete;
+    
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
@@ -96,17 +101,20 @@ SHOW COLUMNS 문
       'event'               'VARCHAR(30)'         'YES'      ''           NULL                  ''
      
     SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
+    
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
       'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
      
     SHOW COLUMNS FROM athlete  WHERE "type" = 'INTEGER' and "key"='PRI' AND extra='auto_increment';
+    
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
     
-    SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
+    SHOW FULL COLUMNS FROM athlete WHERE field LIKE '%c%';
+    
       Field                 Type                  Collation             Null      Key         Default               Extra
     ====================================================================================================================================
       'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
@@ -140,18 +148,20 @@ SHOW INDEX 문
 .. code-block:: sql
 
     SHOW INDEX IN athlete;
+    
        Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type
     ==========================================================================================================================================
      'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'
      
-    CREATE TABLE t1( i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
+    CREATE TABLE t1 (i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
      
-    CREATE INDEX i_t1_i1 ON t1(i1 desc);
-    CREATE INDEX i_t1_s1 ON t1(s1(7));
-    CREATE INDEX i_t1_i1_s1 ON t1(i1,s1);
-    CREATE UNIQUE INDEX i_t1_i2_s2 ON t1(i2,s2);
+    CREATE INDEX i_t1_i1 ON t1 (i1 DESC);
+    CREATE INDEX i_t1_s1 ON t1 (s1 (7));
+    CREATE INDEX i_t1_i1_s1 ON t1 (i1, s1);
+    CREATE UNIQUE INDEX i_t1_i2_s2 ON t1 (i2, s2);
      
     SHOW INDEXES FROM t1;
+    
       Table  Non_unique  Key_name          Seq_in_index  Column_name   Collation   Cardinality     Sub_part    Packed   Null    Index_type
     ==========================================================================================================================================
       't1'           0  'i_t1_i2_s2'              1      'i2'          'A'            0               NULL        NULL     'NO'    'BTREE'
@@ -175,12 +185,16 @@ SHOW COLLATION 문
 * Charset: 문자셋 이름
 * Id: 콜레이션 ID
 * Built_in: 내장 콜레이션 여부. 내장 콜레이션들은 하드-코딩되어 있어 추가 혹은 삭제가 불가능하다.
-* Expansions: 확장이 있는 콜레이션인지 여부. 확장이 있는 콜레이션에서 일부 결합 문자(코드포인트)들은 다른 문자들로 구성된 순서 있는 리스트(ordered list)로 해석된다. 예를 들어, 'æ'는 'ae'로 해석된다.
-* Strength: 문자 간 비교를 위한 기준인데, 이 기준에 따라 문자 순서가 달라질 수 있다. 이에 대한 설명은 :ref:`collation-cont-exp` 를 참고한다.
+* Expansions: 확장이 있는 콜레이션인지 여부. 자세한 내용은 :ref:`expansion` 참조하면 된다.
+* Strength: 문자 간 비교를 위한 기준인데, 이 기준에 따라 문자 순서가 달라질 수 있다. 이에 대한 설명은 :ref:`collation-properties` 를 참고한다.
 
-다음은 해당 질의를 실행한 결과이다. 
+**SHOW COLLATION** 문의 구문과 예는 다음과 같다.
 
 ::
+
+    SHOW COLLATION [ LIKE 'pattern' ]
+    
+.. code-block:: sql
 
     SHOW COLLATION;
 
@@ -230,6 +244,7 @@ SHOW GRANTS 문
     GRANT INSERT,SELECT ON testgrant TO user1;
      
     SHOW GRANTS FOR user1;
+    
       Grants for USER1
     ======================
       'GRANT INSERT, SELECT ON testgrant TO USER1'

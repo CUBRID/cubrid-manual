@@ -1,11 +1,8 @@
-***********
 Query Tools
-***********
+===========
 
 CSQL Interpreter
 ----------------
-
-**Starting the CSQL Interpreter**
 
 The CSQL Interpreter is a program used to execute the SQL statements and retrieve results in a way that CUBRID supports. The entered SQL statements and the results can be stored as a file. For more information, see :ref:`csql-intro` and :ref:`csql-exec-mode`.
 
@@ -102,62 +99,64 @@ After the CSQL has been executed, you can enter the SQL into the CSQL prompt. Ea
 CUBRID Management Tools
 -----------------------
 
-+--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
-|                          | Summary of features                                                         | Downloads of the recent files                               | Links to the latest documents                                   |
-+==========================+=============================================================================+=============================================================+=================================================================+
-| CUBRID Web Manager       | Web based tool for SQL execution and DB operation.                          | http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Web_Manager       | http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager       | 
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 1) Possible to access to DB with a web browser                              |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 2) Possible to use instantly after installing CUBRID                        |                                                             |                                                                 |
-|                          | (CUBRID 2008 R4.3 or higher)                                                |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 3) Useful to manage a single host                                           |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 4) DB access via CUBRID Manager server                                      |                                                             |                                                                 |
-+--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
-| CUBRID Manager           | Java client tool for SQL execution & DB operation.                          | http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager           | http://www.cubrid.org/wiki_tools/entry/cubrid-manager           |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 1) Java-based management tool (JRE 1.6 or higher required)                  |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 2) Auto upgrade after the initial download                                  |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 3) Useful to manage multiple hosts                                          |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 4) DB access via CUBRID Manager server                                      |                                                             |                                                                 |
-+--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
-| CUBRID Query Browser     | Java client tool for SQL execution only.                                    | http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Query_Browser     | http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser     |
-|                          |                                                                             |                                                             |                                                                 |  
-|                          | 1) Java-based management tool (JRE 1.6 or higher required)                  |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |  
-|                          | 2) Auto upgrade after the initial download                                  |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |  
-|                          | 3) Useful to manage multiple hosts                                          |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |  
-|                          | 4) Direct DB access via JDBC                                                |                                                             |                                                                 |
-+--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
-| CUBRID Migration Toolkit | Java-based client tool to migrate schema and data from source DB            | http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Migration_Toolkit | http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit |
-|                          | (MySQL, Oracle, CUBRID) to CUBRID.                                          |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 1) Java-based management tool (JRE 1.6 or higher required)                  |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 2) Auto upgrade after the initial download                                  |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 3) Available migration only for multiple queries results,                   |                                                             |                                                                 |
-|                          | the reuse of migration scenario; good to batch job                          |                                                             |                                                                 |
-|                          |                                                                             |                                                             |                                                                 |   
-|                          | 4) Direct DB access with JDBC                                               |                                                             |                                                                 |
-+--------------------------+-----------------------------------------------------------------------------+-------------------------------------------------------------+-----------------------------------------------------------------+
++--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------+
+|                          | Summary of features                                                         | Downloads of the recent files                                   | Links to the latest documents                                       |
++==========================+=============================================================================+=================================================================+=====================================================================+
+| CUBRID Web Manager       | Web based tool for SQL execution and DB operation.                          | `CUBRID Web Manager Download                                    | `CUBRID Web Manager Documents                                       | 
+|                          |                                                                             | <http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Web_Manager>`_       | <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager>`_       |   
+|                          | 1) Possible to access to DB with a web browser                              |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 2) Possible to use instantly after installing CUBRID                        |                                                                 |                                                                     |
+|                          |    (CUBRID 2008 R4.3 or higher)                                             |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 3) Useful to manage a single host                                           |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 4) DB access via CUBRID Manager server                                      |                                                                 |                                                                     |
++--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------+
+| CUBRID Manager           | Java client tool for SQL execution & DB operation.                          | `CUBRID Manager Download                                        | `CUBRID Manager Documents                                           |
+|                          |                                                                             | <http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager>`_           | <http://www.cubrid.org/wiki_tools/entry/cubrid-manager>`_           |   
+|                          | 1) Java-based management tool (JRE 1.6 or higher required)                  |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 2) Auto upgrade after the initial download                                  |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 3) Useful to manage multiple hosts                                          |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 4) DB access via CUBRID Manager server                                      |                                                                 |                                                                     |
++--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------+
+| CUBRID Query Browser     | Java client tool for SQL execution only.                                    | `CUBRID Query Browser Download                                  | `CUBRID Query Browser Documents                                     |
+|                          |                                                                             | <http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Query_Browser>`_     | <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_     |  
+|                          | 1) Java-based management tool (JRE 1.6 or higher required)                  |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |  
+|                          | 2) Auto upgrade after the initial download                                  |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |  
+|                          | 3) Useful to manage multiple hosts                                          |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |  
+|                          | 4) Direct DB access via JDBC                                                |                                                                 |                                                                     |
++--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------+
+| CUBRID Migration Toolkit | Java-based client tool to migrate schema and data from source DB            | `CUBRID Migration Toolkit Download                              | `CUBRID Migration Toolkit Documents                                 |
+|                          | (MySQL, Oracle, CUBRID) to CUBRID.                                          | <http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Migration_Toolkit>`_ | <http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit>`_ |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 1) Java-based management tool (JRE 1.6 or higher required)                  |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 2) Auto upgrade after the initial download                                  |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 3) Available migration only for multiple queries results,                   |                                                                 |                                                                     |
+|                          |    the reuse of migration scenario; good to batch job                       |                                                                 |                                                                     |
+|                          |                                                                             |                                                                 |                                                                     |   
+|                          | 4) Direct DB access with JDBC                                               |                                                                 |                                                                     |
++--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------+
 
 Running SQL with CUBRID Web Manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Because CUBRID 2008 R4.3 or higher version includes Web Manager on the installation package, you can use the Web Manager instantly after the installation of CUBRID DBMS.
 
-#. Start CUBRID Service. Web Manager works normally only when CUBRID Manager server is started. For more information, see :ref:`cubrid-manager-server`. ::
+#. Start CUBRID Service. Web Manager works normally only when CUBRID Manager server is started. For more information, see :ref:`cubrid-manager-server`. 
 
-    C:\CUBRID>cubrid service start
-    ++ cubrid service is running.
+    ::
+
+        C:\CUBRID>cubrid service start
+        ++ cubrid service is running.
         
 #. Access to https://localhost:8282/ which is written on the address bar. The default TCP port is 8282 (HTTPS/SSL) and it is possible to change by editing the cm_httpd.conf file at $CUBRID/conf/. Note that the header of address is not http, but https.
 
@@ -182,14 +181,14 @@ CUBRID Manager is the client tool that you should download and run. It is a Java
 
 #. Download and install the latest CUBRID Manager file. CUBRID Manager is compatible with CUBRID DB engine 2008 R2.2 or higher version. It is recommended to upgrade to the latest version periodically; it supports the auto-update feature.
 
-    (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager )
+   (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Manager )
 
 #. Start CUBRID service on the server. CUBRID Manager server should be started for CUBRID Manager client to access to DB. For more information, see :ref:`cubrid-manager-server`.
 
-::
+    ::
 
-    C:\CUBRID>cubrid service start
-    ++ cubrid service is running.
+        C:\CUBRID>cubrid service start
+        ++ cubrid service is running.
     
 #. After the installation of CUBRID Manager, register host information on the [File > Add Host] menu. To register the host, you should enter host address, connection port (default: 8001), and CUBRID Manager user name/password and install the JDBC driver of the same version with DB engine (supporting auto-driver-search/auto-update).
 
@@ -217,7 +216,7 @@ CUBRID Query Browser (hereafter CQB) is the development tool only for SQL execut
 CQB client tool also needs to be downloaded and installed separately from the CUBRID installation package. It is executed on a Java application which requires JRE or JDK 1.6 version or later.
 
 #. Install the latest CQB file after download. It is compatible with any versions of the engine if you just add the same version's JDBC driver with the DB server. It is recommended to upgrade to the latest version periodically because it supports the auto-update feature.
-(CUBRID ftp: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Query_Browser )
+   (CUBRID ftp: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Query_Browser )
 
 #. Register DB access information on the [File > New Connection] menu after installing CQB. In this case, broker address, broker access port (default: 33,000), DB user, and password should be entered and the JDBC driver which has the same version with DB server should be installed (supporting auto-driver-search/auto-update).
 

@@ -14,6 +14,7 @@ The following is the result of executing the query in the *demodb* database.
 .. code-block:: sql
 
     SHOW TABLES;
+    
       Tables_in_demodb
     ======================
       'athlete'
@@ -28,6 +29,7 @@ The following is the result of executing the query in the *demodb* database.
       'stadium'
      
     SHOW FULL TABLES;
+    
       Tables_in_demodb     Table_type
     ============================================
       'athlete'             'BASE TABLE'
@@ -42,6 +44,7 @@ The following is the result of executing the query in the *demodb* database.
       'stadium'             'BASE TABLE'
      
     SHOW FULL TABLES LIKE '%c%';
+    
       Tables_in_demodb      Table_type
     ============================================
       'code'                'BASE TABLE'
@@ -49,7 +52,8 @@ The following is the result of executing the query in the *demodb* database.
       'participant'         'BASE TABLE'
       'record'              'BASE TABLE'
      
-    SHOW FULL TABLES  WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';
+    SHOW FULL TABLES WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';
+    
       Tables_in_demodb      Table_type
     ============================================
       'code'                'BASE TABLE'
@@ -86,6 +90,7 @@ The following is the result of a query in the *demodb* database.
 .. code-block:: sql
 
     SHOW COLUMNS FROM athlete;
+    
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
@@ -95,17 +100,20 @@ The following is the result of a query in the *demodb* database.
       'event'               'VARCHAR(30)'         'YES'      ''           NULL                  ''
      
     SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
+    
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
       'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
      
     SHOW COLUMNS FROM athlete  WHERE "type" = 'INTEGER' and "key"='PRI' AND extra='auto_increment';
+    
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
     
     SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
+    
       Field                 Type                  Collation             Null      Key         Default               Extra
     ====================================================================================================================================
       'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
@@ -120,13 +128,11 @@ The **SHOW INDEX** statement displays the index information. This query has the 
 * Non_unique
     *   0: Duplicate data are not allowed
     *   1: Duplicate data are allowed
-    
 * Key_name: Index name
 * Seq_in_index: Serial number of the column in the index. Starts from 1.
 * Column_name: Column name
 * Collation: Method of sorting columns in the index. 'A' means ascending and **NULL** means not sorted.
 * Cardinality: The number of values measuring the unique values in the index. Higher cardinality increases the opportunity of using an index. This value is updated every time **SHOW INDEX** is executed.
-
 * Sub_part: The number of bytes of the indexed characters if the columns are indexed partially. **NULL** if all columns are indexed.
 * Packed: Shows how keys are packed. If they are not packed, it will be **NULL**.
 * Null: YES if a column can include **NULL**, NO if not.
@@ -141,6 +147,7 @@ The following is the result of a query in the *demodb* database.
 .. code-block:: sql
 
     SHOW INDEX IN athlete;
+    
        Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type
     ==========================================================================================================================================
      'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'
@@ -153,6 +160,7 @@ The following is the result of a query in the *demodb* database.
     CREATE UNIQUE INDEX i_t1_i2_s2 ON t1(i2,s2);
      
     SHOW INDEXES FROM t1;
+    
       Table  Non_unique  Key_name          Seq_in_index  Column_name   Collation   Cardinality     Sub_part    Packed   Null    Index_type
     ==========================================================================================================================================
       't1'           0  'i_t1_i2_s2'              1      'i2'          'A'            0               NULL        NULL     'NO'    'BTREE'
@@ -176,12 +184,16 @@ This query has the following columns:
 * Charset: Charset name
 * Id: Collation ID
 * Built_in: Built-in collation or not. Built-in collations are impossible to add or remove because they are hard-coded.
-* Expansions: Collation with expansion or not. In the collation with expansion, some composed characters(codepoints) are interpreted as oerdered list with other characters. For example, 'æ' is interpreted as 'ae'.
-* Strength: The number of levels that are to be considered in comparison, and the character order can be different by this number. For details, see :ref:`collation-cont-exp`.
+* Expansions: Collation with expansion or not. For details, see :ref:`expansion`.
+* Strength: The number of levels that are to be considered in comparison, and the character order can be different by this number. For details, see :ref:`collation-properties`.
 
-The following shows the result of executing the query.
+The following shows **SHOW COLLATION** syntax and examples.
 
 ::
+
+    SHOW COLLATION [ LIKE 'pattern' ]
+
+.. code-block:: sql
 
     SHOW COLLATION;
 
@@ -231,6 +243,7 @@ The **SHOW GRANT** statement displays the permissions associated with the databa
     GRANT INSERT,SELECT ON testgrant TO user1;
      
     SHOW GRANTS FOR user1;
+    
       Grants for USER1
     ======================
       'GRANT INSERT, SELECT ON testgrant TO USER1'

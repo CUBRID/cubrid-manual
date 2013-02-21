@@ -85,7 +85,6 @@ SHOW COLUMNS 문
 
     SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr]
 
-
 다음은 해당 질의들을 수행한 예이다.
 
 .. code-block:: sql
@@ -132,7 +131,7 @@ SHOW INDEX 문
 *   Key_name : 인덱스 이름
 *   Seq_in_index : 인덱스에 있는 칼럼의 일련번호. 1부터 시작한다.
 *   Column_name : 칼럼 이름
-*   Collation :칼럼이 인덱스에서 정렬되는 방법. 'A'는 오름차순(Ascending), **NULL** 은 비정렬을 의미한다.
+*   Collation : 칼럼이 인덱스에서 정렬되는 방법. 'A'는 오름차순(Ascending), **NULL** 은 비정렬을 의미한다.
 *   Cardinality : 인덱스에서 유일한 값의 개수를 측정하는 수치. 카디널리티가 높을수록 인덱스를 이용할 기회가 높아진다. 이 값은 **SHOW INDEX** 가 실행되면 매번 업데이트된다.
 *   Sub_part : 칼럼의 일부만 인덱스된 경우 인덱스된 문자의 바이트 수. 칼럼 전체가 인덱스되면 **NULL** 이다.
 *   Packed : 키가 어떻게 팩되었는지(packed)를 나타냄. 팩되지 않은 경우 **NULL** .
@@ -185,8 +184,8 @@ SHOW COLLATION 문
 * Charset: 문자셋 이름
 * Id: 콜레이션 ID
 * Built_in: 내장 콜레이션 여부. 내장 콜레이션들은 하드-코딩되어 있어 추가 혹은 삭제가 불가능하다.
-* Expansions: 확장이 있는 콜레이션인지 여부. 자세한 내용은 :ref:`expansion` 참조하면 된다.
-* Strength: 문자 간 비교를 위한 기준인데, 이 기준에 따라 문자 순서가 달라질 수 있다. 이에 대한 설명은 :ref:`collation-properties` 를 참고한다.
+* Expansions: 확장이 있는 콜레이션인지 여부. 자세한 내용은 :ref:`expansion`\ 을 참조한다.
+* Strength: 문자 간 비교를 위한 기준인데, 이 기준에 따라 문자 순서가 달라질 수 있다. 이에 대한 설명은 :ref:`collation-properties`\ 를 참고한다.
 
 **SHOW COLLATION** 문의 구문과 예는 다음과 같다.
 

@@ -44,7 +44,7 @@ The following example shows how to create a multiple column index.
 
     CREATE INDEX name_nation_idx ON athlete(name, nation_code);
 
-The following example shows how to create a single column index. In this example, 1-byte long prefix is specified for the *nation_code* column when creating an index.
+The following example shows how to create a prefix index. In this example, 1-byte long prefix is specified for the *nation_code* column when creating an index.
 
 .. code-block:: sql
 
@@ -93,7 +93,7 @@ Use the **DROP INDEX** statement to drop an index. ::
 *   *index_name* : Specifies the name of the index to be dropped. If omitted, a name is automatically assigned as *i_<table_name>_<column_names>*.
 *   *table_name* : Specifies the name of the table whose index is dropped.
 
-The following are examples of many ways of dropping indexes:
+The following is an example of dropping an indexe:
 
 .. code-block:: sql
 

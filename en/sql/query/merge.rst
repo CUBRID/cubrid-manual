@@ -12,14 +12,13 @@ To execute the **MERGE** statement, the **SELECT** authorization for the source 
     [ <merge_update_clause> ]
     [ <merge_insert_clause> ]
      
-    <merge_update_clause>::=
+    <merge_update_clause> ::=
     WHEN MATCHED THEN UPDATE
-    SET <col=expr> [,<col=expr>,…] [WHERE <update_condition>]
+    SET <col = expr> [,<col = expr>,…] [WHERE <update_condition>]
     [DELETE WHERE <delete_condition>]
      
-    <merge_insert_clause>::=
-    WHEN NOT MATCHED THEN INSERT [(<attributes_list>)]
-        VALUES (<expr_list>) [WHERE <insert_condition>]
+    <merge_insert_clause> ::=
+    WHEN NOT MATCHED THEN INSERT [(<attributes_list>)] VALUES (<expr_list>) [WHERE <insert_condition>]
 
 *   <*target*>: Target table to be updated or inserted. Several tables or views are available.
 *   <*source*>: Source table to get the data. Several tables or views are available and sub-query is available, too.
@@ -83,7 +82,7 @@ The following example shows how to use the **MERGE** statement to arrange the bo
 
 .. code-block:: sql
 
-    CREATE TABLE bonus (std_id int, addscore int);
+    CREATE TABLE bonus (std_id INT, addscore INT);
     CREATE INDEX i_scores_std_id on scores (std_id);
      
     INSERT INTO bonus VALUES (1,10);
@@ -119,9 +118,9 @@ The following example shows how to use the **MERGE** statement to arrange the bo
     MERGE INTO bonus t USING (SELECT * FROM std WHERE score < 40) s
     ON t.std_id = s.std_id
     WHEN MATCHED THEN
-    UPDATE SET t.addscore=t.addscore+s.score*0.1
+    UPDATE SET t.addscore = t.addscore + s.score * 0.1
     WHEN NOT MATCHED THEN
-    INSERT (t.std_id, t.addscore) VALUES (s.std_id, 10+s.score*0.1) WHERE s.score<=30;
+    INSERT (t.std_id, t.addscore) VALUES (s.std_id, 10 + s.score * 0.1) WHERE s.score <= 30;
      
     SELECT * FROM bonus ORDER BY 1;
     std_id     addscore
@@ -141,23 +140,3 @@ The following example shows how to use the **MERGE** statement to arrange the bo
 
 In the above example, the source table is a set of std table records where the score is less than 40 and the target table is bonus. The student numbers (std_id) where the score (std.score) is less than 40 are 4, 6, 10, 12, and 14. Among them, for 4, 6, and 10 on the bonus table, the **UPDATE** clause adds 10% of the corresponding student score to the existing bonus. For 12 and 14 which are not on the bonus table, the INSERT clause additionally gives 10 scores and 10% of the corresponding student score.
 
-.. note:: In CUBRID 9.0, "WITH CHECK OPTION" is not successfully processed and a "Check option exception" error occurs when **MERGE** is executed for the view.
-
-.. code-block:: sql
-
-    CREATE TABLE t1(a int, b int);
-    INSERT INTO t1 values(1, 100);
-    INSERT INTO t1 values(2, 200);
-    CREATE TABLE t2(a int, b int);
-    INSERT INTO t2 values(1, 99);
-    INSERT INTO t2 values(2, 999);
-    CREATE VIEW v AS SELECT * FROM t1 WHERE b < 150 WITH CHECK OPTION;
-    --should succeed, but check option exception occurs
-    MERGE into v
-    USING t2
-    ON (t2.a=v.a)
-    WHEN MATCHED THEN
-    UPDATE
-    SET v.b=t2.b;
-     
-    ERROR: Check option exception on view v.

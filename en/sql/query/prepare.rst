@@ -155,7 +155,7 @@ The user-defined variables can be changed when you define values.
 *   You must define the variable names with alphanumeric characters and underscores (_).
 *   When you define the variables within SQL statements, you should use the ':=' operator.
 
-The following example shows how to define the variable 'a' and assign a value 1 to it.
+The following example shows how to define the variable a and assign a value 1 to it.
 
 .. code-block:: sql
 
@@ -213,11 +213,11 @@ The following example shows how to delete the user-defined variable *a* and *use
     DEALLOCATE VARIABLE @a, @user_defined_variable;
     DROP VARIABLE @a, @user_defined_variable;
 
-**Remark**
+.. note:: \
 
-The user-defined variables that are defined by the **SET** statement start by connecting an application to a server and will be maintained until the application terminates the connection. The connection maintained during this period is called a session. When an application terminates the connection or when there are no requests for a certain period of time, the session will expire, and the user-defined variables will be deleted as a result. You can set the session time with the **session_state_timeout** parameter of **cubrid.conf**; the default value is **21600** seconds (=6 hours).
+    The user-defined variables that are defined by the **SET** statement start by connecting an application to a server and will be maintained until the application terminates the connection. The connection maintained during this period is called a session. When an application terminates the connection or when there are no requests for a certain period of time, the session will expire, and the user-defined variables will be deleted as a result. You can set the session time with the **session_state_timeout** parameter of **cubrid.conf**; the default value is **21600** seconds (=6 hours).
 
-The data managed by the session includes **PREPARE** statements, the user-defined variables, the last ID inserted (**LAST_INSERT_ID**) and the number of rows affected by the statement that you execute at the end (**ROW_COUNT**).
+    The data managed by the session includes **PREPARE** statements, the user-defined variables, the last ID inserted (**LAST_INSERT_ID**) and the number of rows affected by the statement that you execute at the end (**ROW_COUNT**).
 
 **
 DO

@@ -45,6 +45,7 @@ CREATE TABLE
     <referential_triggered_action> ::=
     { ON UPDATE <referential_action> } |
     { ON DELETE <referential_action> } 
+    
     <referential_action> ::=
     CASCADE | RESTRICT | NO ACTION | SET NULL
      

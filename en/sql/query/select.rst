@@ -22,7 +22,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
     <table specification> [ {, <table specification> | <join table specification> }... ]
      
     <table_specification> ::=
-     <single_table_spec> [ <correlation> ] [ WITH (lock_hint) ]|
+     <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
      <metaclass_specification> [ <correlation> ] |
      <subquery> <correlation> |
      TABLE ( <expression> ) <correlation>
@@ -37,11 +37,9 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
     <join_table_specification> ::=
     [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN <table specification> ON <search condition>
      
-    <join_table_specification2> ::=
-    CROSS JOIN <table_specification>
+    <join_table_specification2> ::= CROSS JOIN <table_specification>
      
-    lock_hint :
-    READ UNCOMMITTED
+    <lock_hint> ::= READ UNCOMMITTED
      
     <orderby_for_condition> ::=
     ORDERBY_NUM() { BETWEEN int AND int } |
@@ -55,14 +53,17 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
 
 *   <*select_expressions*> :
 
-    *   \*: By using **SELECT** * statement, you can retrieve all the columns from the table specified in the **FROM** clause.
+    *   \* : By using **SELECT** * statement, you can retrieve all the columns from the table specified in the **FROM** clause.
+    
     *   *expression_comma_list* : *expression* can be a path expression (ex.: *tbl_name.col_name*), variable or table name. All general expressions including arithmetic operations can also be used. Use a comma (,) to separate each expression in the list. You can specify aliases by using the **AS** keyword for columns or expressions to be queried. Specified aliases are used as column names in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of a column is assigned based on the order in which the column was specified. The starting value is 1.
 
-        As **AVG**, **COUNT**, **MAX**, **MIN**, or **SUM**, an aggregate function that manipulates the retrieved data can also be used in the *expression*. As the aggregate function returns only one result, you cannot specify a general column which has not been grouped by an aggregate function in the **SELECT** column list.
+        As **AVG**, **COUNT**, **MAX**, **MIN**, or **SUM**, an aggregate function that manipulates the retrieved data can also be used in the *expression*. 
 
 *   *table_name*. \*: Specifies the table name and using \* has the same effect as specifying all columns for the given table.
+
 *   *variable* : The data retrieved by the *select_expression* can be stored in more than one variable.
-*   [:] *identifier* : By using the *:identifier* after **TO** (or **INTO**), you can store the data to be retrieved in the ':identifier' variable.
+
+*   [:]\ *identifier* : By using the *:identifier* after **TO** (or **INTO**), you can store the data to be retrieved in the ':identifier' variable.
 
 *   <*single_table_spec*>
 
@@ -75,6 +76,7 @@ The following example shows how to retrieve host countries of the Olympic Games 
 .. code-block:: sql
 
     SELECT DISTINCT host_nation FROM olympic;
+    
       host_nation
     ======================
       'Australia'
@@ -89,6 +91,7 @@ The following example shows how to define an alias to a column to be queried and
 .. code-block:: sql
 
     SELECT host_year as col1, host_nation as col2 FROM olympic ORDER BY col2 LIMIT 5;
+    
              col1  col2
     ===================================
              2000  'Australia'
@@ -99,6 +102,7 @@ The following example shows how to define an alias to a column to be queried and
      
     SELECT CONCAT(host_nation, ', ', host_city) AS host_place FROM olympic
     ORDER BY host_place FOR ORDERBY_NUM() BETWEEN 1 AND 5;
+    
       host_place
     ======================
       'Australia,  Melbourne'
@@ -119,14 +123,14 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
 ::
 
     SELECT [ <qualifier> ] <select_expressions>
-                              [ FROM <table_specification> [ {, <table specification>
+    [ FROM <table_specification> [ {, <table specification>
     | <join table specification> }... ]]
      
      
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
     <table_specification> ::=
-     <single_table_spec> [ <correlation> ] [ WITH (lock_hint) ] |
+     <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ] |
      <metaclass_specification> [ <correlation> ] |
      <subquery> <correlation> |
      TABLE ( <expression> ) <correlation>
@@ -138,29 +142,25 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
      
     <metaclass_specification> ::= CLASS <class_name>
      
-    lock_hint ::= READ UNCOMMITTED
+    <lock_hint> ::= READ UNCOMMITTED
+    
+*   <*select_expressions*> : One or more columns or expressions to query is specified. Use * to query all columns in the table. You can also specify an alias for a column or an expression to be queried by using the AS keyword. This keyword can be used in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of the column is given according to the order in which the column was specified. The starting value is 1.
 
-*   *select_expressions* : One or more columns or expressions to query is specified. Use * to query all columns in the table. You can also specify an alias for a column or an expression to be queried by using the AS keyword. This keyword can be used in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of the column is given according to the order in which the column was specified. The starting value is 1.
+*   <*table_specification*> : At least one table name is specified after the **FROM** clause. Subqueries and derived tables can also be used in the **FROM** clause. For details on subquery derived tables, see :ref:`subquery-derived-table`.
 
-*   *table_specification* : At least one table name is specified after the **FROM** clause. Subqueries and derived tables can also be used in the **FROM** clause. For details on subquery derived tables, see :ref:`subquery-derived-table`.
-
-*   *lock_hint* : You can set **READ UNCOMMITTED** for the table isolation level. **READ UNCOMMITTED** is a level where dirty reads are allowed; see :ref:`transaction-isolation-level` For details on the CUBRID transaction isolation level.
+*   <*lock_hint*> : You can set **READ UNCOMMITTED** for the table isolation level. **READ UNCOMMITTED** is a level where dirty reads are allowed; see :ref:`transaction-isolation-level` For details on the CUBRID transaction isolation level.
 
 .. code-block:: sql
 
     --FROM clause can be omitted in the statement
     SELECT 1+1 AS sum_value;
-        sum_value
-    =============
-                2
-     
-    --db_root can be used as a dummy table
-    SELECT 1+1 AS sum_value FROM db_root;
+    
         sum_value
     =============
                 2
      
     SELECT CONCAT('CUBRID', '2008' , 'R3.0') AS db_version;
+    
       db_version
     ======================
       'CUBRID2008R3.0'
@@ -179,7 +179,7 @@ Subquery Derived Table
 
 Each instance in the derived table is created from the result of the subquery in the **FROM** clause. A derived table created form a subquery can have any number of columns and records. ::
 
-    FROM (subquery) [ AS ] derived_table_name [( column_name [ {, column_name }_ ] )]
+    FROM (subquery) [ AS ] derived_table_name [( column_name [ {, column_name } ... ] )]
 
 *   The number of *column_name* and the number of columns created by the *subquery* must be identical.
 
@@ -187,34 +187,33 @@ The following example shows how to retrieve the sum of the number of gold (*gold
 
 .. code-block:: sql
 
-    SELECT SUM(n) FROM (SELECT gold FROM participant WHERE nation_code='KOR'
-    UNION ALL SELECT silver FROM participant WHERE nation_code='JPN') AS t(n);
-      sum(n)
-    ========
-          82
+    SELECT SUM (n) 
+    FROM (SELECT gold FROM participant WHERE nation_code = 'KOR'
+          UNION ALL 
+          SELECT silver FROM participant WHERE nation_code = 'JPN') AS t(n);
 
 Subquery derived tables can be useful when combined with outer queries. For example, a derived table can be used in the **FROM** clause of the subquery used in the **WHERE** clause.
-
 The following example shows *nation_code*, *host_year* and *gold* records whose number of gold medals is greater than average sum of the number of silver and bronze medals when one or more sliver or bronze medals were won. In this example, the query (the outer **SELECT** clause) and the subquery (the inner **SELECT** clause) share the *nation_code* attribute.
 
 .. code-block:: sql
 
     SELECT nation_code, host_year, gold
     FROM participant p
-    WHERE gold > ( SELECT AVG(s)
-                FROM ( SELECT silver + bronze
-                FROM participant
-                WHERE nation_code = p.nation_code
-                AND silver > 0
-                AND bronze > 0
-              ) AS t(s));
-      nation_code          host_year          gold
+    WHERE gold > (SELECT AVG(s)
+                  FROM (SELECT silver + bronze
+                        FROM participant
+                        WHERE nation_code = p.nation_code
+                        AND silver > 0
+                        AND bronze > 0)
+                       AS t(s));
+              
+      nation_code      host_year      gold
     =========================================
-      'JPN'                       2004                16
-      'CHN'                       2004                32
-      'DEN'                       1996                 4
-      'ESP'                       1992                13
-
+      'JPN'                2004         16
+      'CHN'                2004         32
+      'DEN'                1996          4
+      'ESP'                1992         13
+    
 .. _where-clause:
 
 WHERE Clause
@@ -279,7 +278,7 @@ By SQL standard, you cannot specify a column (hidden column) not defined in the 
 
 *   [ **ASC** | **DESC** ] : Specifies the **ASC** or **DESC** sorting option after the columns specified in the **GROUP BY** clause. If the sorting option is not specified, the default value is **ASC**.
 
-*   *search_condition* : Specifies the search condition in the **HAVING** clause. In the **HAVING** clause you can refer to the hidden columns not specified in the **GROUP BY** clause as well as to columns and aliases specified in the **GROUP BY** clause and columns used in aggregate functions.
+*   <*search_condition*> : Specifies the search condition in the **HAVING** clause. In the **HAVING** clause you can refer to the hidden columns not specified in the **GROUP BY** clause as well as to columns and aliases specified in the **GROUP BY** clause and columns used in aggregate functions.
 
 *   **WITH ROLLUP** : If you specify the **WITH ROLLUP** modifier in the **GROUP BY** clause, the aggregate information of the result value of each GROUPed BY column is displayed for each group, and the total of all result rows is displayed at the last row. When a **WITH ROLLUP** modifier is defined in the **GROUP BY** clause, the result value for all rows of the group is additionally displayed. In other words, total aggregation is made for the value aggregated by group. When there are two columns for Group By, the former is considered as a large unit and the latter is considered as a small unit, so the total aggregation row for the small unit and the total aggregation row for the large unit are added. For example, you can check the aggregation of the sales result per department and salesperson through one query.
 
@@ -287,57 +286,67 @@ By SQL standard, you cannot specify a column (hidden column) not defined in the 
 
     --creating a new table
     CREATE TABLE sales_tbl
-    (dept_no int, name VARCHAR(20), sales_month int, sales_amount int DEFAULT 100, PRIMARY KEY (dept_no, name, sales_month));
+    (dept_no INT, name VARCHAR(20), sales_month INT, sales_amount INT DEFAULT 100, PRIMARY KEY (dept_no, name, sales_month));
+    
     INSERT INTO sales_tbl VALUES
-    (201, 'George' , 1, 450),
-    (201, 'George' , 2, 250),(201, 'Laura'  , 1, 100),
-    (201, 'Laura'  , 2, 500),
-    (301, 'Max'    , 1, 300),
-    (301, 'Max'    , 2, 300),
-    (501, 'Stephan', 1, 300),
-    (501, 'Stephan', 2, DEFAULT),
-    (501, 'Chang'  , 1, 150),
-    (501, 'Chang'  , 2, 150),
-    (501, 'Sue'    , 1, 150),
-    (501, 'Sue'    , 2, 200);
-     
-    --selecting rows grouped by dept_no
-    SELECT dept_no, avg(sales_amount) FROM sales_tbl
+    (201, 'George' , 1, 450), (201, 'George' , 2, 250), (201, 'Laura'  , 1, 100), (201, 'Laura'  , 2, 500),
+    (301, 'Max'    , 1, 300), (301, 'Max'    , 2, 300),
+    (501, 'Stephan', 1, 300), (501, 'Stephan', 2, DEFAULT), (501, 'Chang'  , 1, 150),(501, 'Chang'  , 2, 150),
+    (501, 'Sue'    , 1, 150), (501, 'Sue'    , 2, 200);
+    
+    -- selecting rows grouped by dept_no
+    SELECT dept_no, avg(sales_amount) 
+    FROM sales_tbl
     GROUP BY dept_no;
+    
           dept_no         avg(sales_amount)
     =======================================
               201     3.250000000000000e+02
               301     3.000000000000000e+02
               501     1.750000000000000e+02
-    --conditions in WHERE clause operate first before GROUP BY
-    SELECT dept_no, avg(sales_amount) FROM sales_tbl
-    WHERE sales_amount > 100 GROUP BY dept_no;
+    
+    -- conditions in WHERE clause operate first before GROUP BY
+    SELECT dept_no, avg(sales_amount) 
+    FROM sales_tbl
+    WHERE sales_amount > 100 
+    GROUP BY dept_no;
+    
           dept_no         avg(sales_amount)
     =======================================
               201     4.000000000000000e+02
               301     3.000000000000000e+02
               501     1.900000000000000e+02
      
-    --conditions in HAVING clause operate last after GROUP BY
-    SELECT dept_no, avg(sales_amount) FROM sales_tbl
-    WHERE sales_amount > 100 GROUP BY dept_no HAVING avg(sales_amount) > 200;
+    -- conditions in HAVING clause operate last after GROUP BY
+    SELECT dept_no, avg(sales_amount) 
+    FROM sales_tbl
+    WHERE sales_amount > 100 
+    GROUP BY dept_no HAVING avg(sales_amount) > 200;
+    
           dept_no         avg(sales_amount)
     =======================================
               201     4.000000000000000e+02
               301     3.000000000000000e+02
      
-    --selecting and sorting rows with using column alias
-    SELECT dept_no AS a1, avg(sales_amount) AS a2 FROM sales_tbl
-    WHERE sales_amount > 200 GROUP BY a1 HAVING a2 > 200 ORDER BY a2;
+    -- selecting and sorting rows with using column alias
+    SELECT dept_no AS a1, avg(sales_amount) AS a2 
+    FROM sales_tbl
+    WHERE sales_amount > 200 GROUP 
+    BY a1 HAVING a2 > 200 
+    ORDER BY a2;
+    
                a1                        a2
     =======================================
               301     3.000000000000000e+02
               501     3.000000000000000e+02
               201     4.000000000000000e+02
      
-    --selecting rows grouped by dept_no, name with WITH ROLLUP modifier
-    SELECT dept_no AS a1, name AS a2, avg(sales_amount) AS a3 FROM sales_tbl
-    WHERE sales_amount > 100 GROUP BY a1,a2 WITH ROLLUP;
+    -- selecting rows grouped by dept_no, name with WITH ROLLUP modifier
+    SELECT dept_no AS a1, name AS a2, avg(sales_amount) AS a3 
+    FROM sales_tbl
+    WHERE sales_amount > 100 
+    GROUP BY a1, a2 WITH ROLLUP;
+    
                a1  a2                                          a3
     =============================================================
               201  'George'                 3.500000000000000e+02
@@ -363,9 +372,9 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
         [ FOR <orderby_for_condition> ] ]
      
     <orderby_for_condition> ::=
-    ORDERBY_NUM() { BETWEEN int AND int } |
-        { { = | =< | < | > | >= } int } |
-        IN ( int, ...)
+    ORDERBY_NUM() { BETWEEN bigint AND bigint } |
+        { { = | =< | < | > | >= } bigint } |
+        IN (bigint, ...)
 
 *   *col_name* | *expr* | *position* : Specifies a column name, expression, alias, or column location. One or more column names, expressions or aliases can be specified. Items are separated by commas. A column that is not specified in the list of **SELECT** columns can be specified.
 
@@ -374,8 +383,10 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
 .. code-block:: sql
 
     --selecting rows sorted by ORDER BY clause
-    SELECT * FROM sales_tbl
+    SELECT * 
+    FROM sales_tbl
     ORDER BY dept_no DESC, name ASC;
+    
           dept_no  name                  sales_month  sales_amount
     ==============================================================
               501  'Chang'                         1           150
@@ -392,10 +403,12 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
               201  'Laura'                         2           500
      
     --sorting reversely and limiting result rows by LIMIT clause
-    SELECT dept_no AS a1, avg(sales_amount) AS a2 FROM sales_tbl
+    SELECT dept_no AS a1, avg(sales_amount) AS a2 
+    FROM sales_tbl
     GROUP BY a1
     ORDER BY a2 DESC
     LIMIT 0,3;
+    
                a1           a2
     =======================================
               201     3.250000000000000e+02
@@ -403,9 +416,11 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
               501     1.750000000000000e+02
      
     --sorting reversely and limiting result rows by FOR clause
-    SELECT dept_no AS a1, avg(sales_amount) AS a2 FROM sales_tbl
+    SELECT dept_no AS a1, avg(sales_amount) AS a2 
+    FROM sales_tbl
     GROUP BY a1
     ORDER BY a2 DESC FOR ORDERBY_NUM() BETWEEN 1 AND 3;
+    
                a1           a2
     =======================================
               201     3.250000000000000e+02
@@ -419,7 +434,9 @@ LIMIT Clause
 
 The **LIMIT** clause can be used to limit the number of records displayed. You can specify a very big integer for *row_count* to display to the last row, starting from a specific row. The **LIMIT** clause can be used as a prepared statement. In this case, the bind parameter (?) can be used instead of an argument.
 
-**INST_NUM** () and **ROWNUM** cannot be included in the **WHERE** clause in a query that contains the **LIMIT** clause. Also, **LIMIT** cannot be used together with FOR **ORDERBY_NUM** () or **HAVING GROUPBY_NUM** (). ::
+**INST_NUM** () and **ROWNUM** cannot be included in the **WHERE** clause in a query that contains the **LIMIT** clause. Also, **LIMIT** cannot be used together with FOR **ORDERBY_NUM** () or **HAVING GROUPBY_NUM** (). 
+
+::
 
     LIMIT { [offset,] row_count | row_count [ OFFSET offset ] }
 
@@ -433,9 +450,11 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
     EXECUTE STMT USING 0, 10;
      
     --selecting rows with LIMIT clause
-    SELECT * FROM sales_tbl
+    SELECT * 
+    FROM sales_tbl
     WHERE sales_amount > 100
     LIMIT 5;
+    
           dept_no  name                  sales_month  sales_amount
     ==============================================================
               201  'George'                        1           450
@@ -445,9 +464,10 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
               301  'Max'                           2           300
      
     --LIMIT clause can be used in subquery
-    SELECT t1.* FROM
-    (SELECT * FROM sales_tbl AS t2 WHERE sales_amount > 100 LIMIT 5) AS t1
+    SELECT t1.* 
+    FROM (SELECT * FROM sales_tbl AS t2 WHERE sales_amount > 100 LIMIT 5) AS t1
     LIMIT 1,3;
+    
           dept_no  name                  sales_month  sales_amount
     ==============================================================
               201  'George'                        2           250
@@ -480,7 +500,9 @@ A join that outputs only rows that satisfy the join condition from a joined tabl
 *   *join_table_specification*
 
     *   [ **INNER** ] **JOIN** : Used for inner join and requires join condifitions.
+
     *   { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** : **LEFT** is used for a left outer join query, and **RIGHT** is for a right outer join query.
+
     *   **CROSS JOIN** : Used for cross join and requires no join conditions.
 
 The inner join requires join conditions. The **INNER JOIN** keyword can be omitted. When it is omitted, the table is separated by a comma (,). The **ON** join condition an be replaced with the **WHERE** condition.
@@ -497,11 +519,12 @@ The following example shows how to retrieve the years and host countries of the 
 
 .. code-block:: sql
 
-    SELECT DISTINCT h.host_year, o.host_nation FROM history h INNER JOIN olympic o
-    ON h.host_year=o.host_year AND o.host_year>1950;
+    SELECT DISTINCT h.host_year, o.host_nation 
+    FROM history h INNER JOIN olympic o ON h.host_year = o.host_year AND o.host_year > 1950;
      
-    SELECT DISTINCT h.host_year, o.host_nation FROM history h, olympic o
-    WHERE h.host_year=o.host_year AND o.host_year>1950;
+    SELECT DISTINCT h.host_year, o.host_nation 
+    FROM history h, olympic o
+    WHERE h.host_year = o.host_year AND o.host_year > 1950;
      
         host_year  host_nation
     ===================================
@@ -519,7 +542,8 @@ The following example shows how to retrieve the years and host countries of the 
 .. code-block:: sql
 
     SELECT DISTINCT h.host_year, o.host_nation
-    FROM history h RIGHT OUTER JOIN olympic o ON h.host_year=o.host_year WHERE o.host_year>1950;
+    FROM history h RIGHT OUTER JOIN olympic o ON h.host_year=o.host_year 
+    WHERE o.host_year>1950;
      
         host_year  host_nation
     ===================================
@@ -543,7 +567,8 @@ A right outer join query can be converted to a left outer join query by switchin
 .. code-block:: sql
 
     SELECT DISTINCT h.host_year, o.host_nation
-    FROM olympic o LEFT OUTER JOIN history h ON h.host_year=o.host_year WHERE o.host_year>1950;
+    FROM olympic o LEFT OUTER JOIN history h ON h.host_year=o.host_year 
+    WHERE o.host_year>1950;
      
         host_year  host_nation
     ===================================
@@ -583,7 +608,8 @@ Outer joins can also be represented by using **(+)** in the **WHERE** clause. Th
 
 .. code-block:: sql
 
-    SELECT DISTINCT h.host_year, o.host_nation FROM history h, olympic o
+    SELECT DISTINCT h.host_year, o.host_nation 
+    FROM history h, olympic o
     WHERE o.host_year=h.host_year(+) AND o.host_year>1950;
      
         host_year  host_nation
@@ -607,9 +633,11 @@ The following example shows how to write cross join. The following two queries w
 
 .. code-block:: sql
 
-    SELECT DISTINCT h.host_year, o.host_nation FROM history h CROSS JOIN olympic o;
+    SELECT DISTINCT h.host_year, o.host_nation 
+    FROM history h CROSS JOIN olympic o;
      
-    SELECT DISTINCT h.host_year, o.host_nation FROM history h, olympic o;
+    SELECT DISTINCT h.host_year, o.host_nation 
+    FROM history h, olympic o;
      
     host_year  host_nation
     ===================================
@@ -641,9 +669,11 @@ The following example shows how to retrieve the *history* table as well as the h
 
 .. code-block:: sql
 
-    SELECT h.host_year, (SELECT host_nation FROM olympic o WHERE o.host_year=h.host_year),
-    h.event_code, h.score, h.unit from history h;    
-        host_year (SELECT host_nation FROM olympic o WHERE o.host_year=h.host_year)   event_code  score                 unit
+    SELECT h.host_year, (SELECT host_nation FROM olympic o WHERE o.host_year=h.host_year) AS host_nation,
+           h.event_code, h.score, h.unit 
+    FROM history h;
+    
+        host_year host_nation              event_code  score                 unit
     ============================================================================================
              2004  'Greece'                    20283  '07:53.0'             'time'
              2004  'Greece'                    20283  '07:53.0'             'time'
@@ -665,7 +695,9 @@ The following example shows how to retrieve nations, capitals and host cities fo
 
 .. code-block:: sql
 
-    SELECT name, capital, list(SELECT host_city FROM olympic WHERE host_nation = name) FROM nation;
+    SELECT name, capital, list(SELECT host_city FROM olympic WHERE host_nation = name) AS host_cities
+    FROM nation;
+    
       name                  capital               sequence((SELECT host_city FROM olympic WHERE host_nation=name))
     ==================================================================
       'Somalia'             'Mogadishu'           {}
@@ -695,7 +727,7 @@ The **VALUES** clause can be used to express the **UNION** query, which consists
 
 .. code-block:: sql
 
-    VALUES (1 AS col1, 'first' AS col2), (2, 'second'), (3, 'third'), (4, 'forth');
+    VALUES (1 AS col1, 'first' AS col2), (2, 'second'), (3, 'third'), (4, 'fourth');
 
 The above query prints out the following result.
 

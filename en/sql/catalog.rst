@@ -2196,7 +2196,7 @@ The information on collation.
 | coll_name          | VARCHAR(255)  | Collation name                                                                |
 |                    |               |                                                                               |
 +--------------------+---------------+-------------------------------------------------------------------------------+
-| charset_name       | VARCHAR(256)  | Charset name                                                                  |
+| charset_name       | VARCHAR(255)  | Charset name                                                                  |
 |                    |               |                                                                               |
 +--------------------+---------------+-------------------------------------------------------------------------------+
 | is_builtin         | VARCHAR(3)    | Built-in or not while installing the product(Yes, No)                         |

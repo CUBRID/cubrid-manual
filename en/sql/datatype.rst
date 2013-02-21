@@ -224,19 +224,17 @@ Date/time data types are used to represent the date or time (or both together). 
 
 **Explicit Coercions**
 
-    +----------+------------------------------------------------+
-    |          | TO                                             |
-    +==========+===========+======+======+==========+===========+
-    | FROM     |           | DATE | TIME | DATETIME | TIMESTAMP |
-    |          +-----------+------+------+----------+-----------+
-    |          | DATE      | -    | X    | O        | O         |
-    |          +-----------+------+------+----------+-----------+
-    |          | TIME      | X    | -    | X        | X         |
-    |          +-----------+------+------+----------+-----------+
-    |          | DATETIME  | O    | O    | -        | O         |
-    |          +-----------+------+------+----------+-----------+
-    |          | TIMESTAMP | O    | O    | O        | -         |
-    +----------+-----------+------+------+----------+-----------+
+    +------------+------+------+----------+-----------+
+    | FROM \\ TO | DATE | TIME | DATETIME | TIMESTAMP |
+    +============+======+======+==========+===========+
+    | DATE       | -    | X    | O        | O         |
+    +------------+------+------+----------+-----------+
+    | TIME       | X    | -    | X        | X         |
+    +------------+------+------+----------+-----------+
+    | DATETIME   | O    | O    | -        | O         |
+    +------------+------+------+----------+-----------+
+    | TIMESTAMP  | O    | O    | O        | -         |
+    +------------+------+------+----------+-----------+
 
     In general, zero is not allowed in **DATE**, **DATETIME**, and **TIMESTAMP** types. However, if both date and time values are 0, it is allowed as an exception. This is useful in terms that this value can be used if an index exists upon query execution of a column corresponding to the type.
 
@@ -261,12 +259,12 @@ The **DATE** data type is used to represent the year (yyyy), month (mm) and day 
 
 ::
 
-    DATE '2008-10-31' is displayed as '10/31/2008'.
-    DATE '10/31' is displayed as '10/31/2011'(if a value for year is omitted, the current year is automatically specified).
-    DATE '00-10-31' is displayed as '10/31/2000'.
-    DATE '0000-10-31' is displayed as an error (a year value should be at least 1).
-    DATE '70-10-31' is displayed as '10/31/1970'.
-    DATE '0070-10-31' displayed as '10/31/0070'.
+    DATE'2008-10-31' is displayed as '10/31/2008'.
+    DATE'10/31' is displayed as '10/31/2011'(if a value for year is omitted, the current year is automatically specified).
+    DATE'00-10-31' is displayed as '10/31/2000'.
+    DATE'0000-10-31' is displayed as an error (a year value should be at least 1).
+    DATE'70-10-31' is displayed as '10/31/1970'.
+    DATE'0070-10-31' displayed as '10/31/0070'.
 
 TIME
 ----
@@ -275,7 +273,7 @@ The **TIME** data type is used to represent the hour (hh), minute (mm) and secon
 
 The input format of **TIME** is as follows: ::
 
-    time'hh:mi [:ss] [am | pm]'
+    time'hh:mi[:ss] [am | pm]'
     
 *   All items must be entered as integer.
 *   AM/PM time notation is used to display time in the CSQL; while the 24-hour notation is used in the CUBRID Manager.
@@ -285,22 +283,22 @@ The input format of **TIME** is as follows: ::
 
 ::
 
-    TIME '00:00:00’ is outputted as '12:00:00 AM'.
-    TIME '1:15' is regarded as '01:15:00 AM'.
-    TIME '13:15:45' is regarded as '01:15:45 PM'.
-    TIME '13:15:45 pm' is stored normally.
-    TIME '13:15:45 am' is an error (an input value does not match the AM/PM format).
+    TIME'00:00:00’ is outputted as '12:00:00 AM'.
+    TIME'1:15' is regarded as '01:15:00 AM'.
+    TIME'13:15:45' is regarded as '01:15:45 PM'.
+    TIME'13:15:45 pm' is stored normally.
+    TIME'13:15:45 am' is an error (an input value does not match the AM/PM format).
 
 TIMESTAMP
 ---------
 
 The **TIMESTAMP** data type is used to represent a data value in which the date (year, month, date) and time (hour, minute, second) are combined. The range of representable value is between GMT '1970-01-01 00:00:01' and '2038-01-19 03:14:07'. The **DATETIME** type can be used if the value is out of range or data in milliseconds is stored. The input format of **TIMESTAMP** is as follows: ::
  
-    timestamp'hh:mi [:ss] [am|pm] mm/dd [/yyyy]'
-    timestamp'hh:mi [:ss] [am|pm] [yyyy-]mm-dd'
+    timestamp'hh:mi[:ss] [am|pm] mm/dd[/yyyy]'
+    timestamp'hh:mi[:ss] [am|pm] [yyyy-]mm-dd'
      
-    timestamp'mm/dd [/yyyy] hh:mi [:ss] [am|pm]'
-    timestamp'[yyyy-]mm-dd hh:mi [:ss] [am|pm]'
+    timestamp'mm/dd[/yyyy] hh:mi[:ss] [am|pm]'
+    timestamp'[yyyy-]mm-dd hh:mi[:ss] [am|pm]'
 
 *   All fields must be entered in integer format.
 *   If the year is omitted, the current year is specified by default. If the time value (hour/minute/second) is omitted, 12:00:00 AM is specified.
@@ -312,15 +310,15 @@ The **TIMESTAMP** data type is used to represent a data value in which the date 
 
 ::
 
-    TIMESTAMP '10/31' is outputted as '12:00:00 AM 10/31/2011' (if the value for year/time is omitted, a default value is outputted ).
-    TIMESTAMP '10/31/2008' is outputted as '12:00:00 AM 10/31/2008' (if the value for time is omitted, a default value is outputted ).
-    TIMESTAMP '13:15:45 10/31/2008' is outputted as '01:15:45 PM 10/31/2008'.
-    TIMESTAMP '01:15:45 PM 2008-10-31' is outputted as '01:15:45 PM 10/31/2008'.
-    TIMESTAMP '13:15:45 2008-10-31' is outputted as '01:15:45 PM 10/31/2008'.
-    TIMESTAMP '10/31/2008 01:15:45 PM' is outputted as '01:15:45 PM 10/31/2008'.
-    TIMESTAMP '10/31/2008 13:15:45' is outputted as '01:15:45 PM 10/31/2008'.
-    TIMESTAMP '2008-10-31 01:15:45 PM' is outputted as '01:15:45 PM 10/31/2008'.
-    TIMESTAMP '2008-10-31 13:15:45' is outputted as '01:15:45 PM 10/31/2008'.
+    TIMESTAMP'10/31' is outputted as '12:00:00 AM 10/31/2011' (if the value for year/time is omitted, a default value is outputted ).
+    TIMESTAMP'10/31/2008' is outputted as '12:00:00 AM 10/31/2008' (if the value for time is omitted, a default value is outputted ).
+    TIMESTAMP'13:15:45 10/31/2008' is outputted as '01:15:45 PM 10/31/2008'.
+    TIMESTAMP'01:15:45 PM 2008-10-31' is outputted as '01:15:45 PM 10/31/2008'.
+    TIMESTAMP'13:15:45 2008-10-31' is outputted as '01:15:45 PM 10/31/2008'.
+    TIMESTAMP'10/31/2008 01:15:45 PM' is outputted as '01:15:45 PM 10/31/2008'.
+    TIMESTAMP'10/31/2008 13:15:45' is outputted as '01:15:45 PM 10/31/2008'.
+    TIMESTAMP'2008-10-31 01:15:45 PM' is outputted as '01:15:45 PM 10/31/2008'.
+    TIMESTAMP'2008-10-31 13:15:45' is outputted as '01:15:45 PM 10/31/2008'.
 
 An error occurs on TIMESTAMP '2099-10-31 01:15:45 PM' (out of range to represent TIMESTAMP).
 
@@ -331,8 +329,8 @@ The **DATETIME** data type is used to represent a data value in which the data (
 
 The input format of **TIMESTAMP** is as follows: ::
 
-    datetime'hh:mi [:ss[.msec]] [am|pm] mm/dd [/yyyy]'
-    datetime'hh:mi [:ss[.msec]] [am|pm] [yyyy-]mm-dd'
+    datetime'hh:mi[:ss[.msec]] [am|pm] mm/dd[/yyyy]'
+    datetime'hh:mi[:ss[.msec]] [am|pm] [yyyy-]mm-dd'
     datetime'mm/dd[/yyyy] hh:mi[:ss[.ff]] [am|pm]'
     datetime'[yyyy-]mm-dd hh:mi[:ss[.ff]] [am|pm]'
 
@@ -346,16 +344,16 @@ The input format of **TIMESTAMP** is as follows: ::
 
 ::
 
-    DATETIME '10/31' is outputted as '12:00:00.000 AM 10/31/2011' (if the value for year/time is omitted, a default value is outputted).
-    DATETIME '10/31/2008' is outputted as '12:00:00.000 AM 10/31/2008'.
-    DATETIME '13:15:45 10/31/2008' is outputted as '01:15:45.000 PM 10/31/2008'.
-    DATETIME '01:15:45 PM 2008-10-31' is outputted as '01:15:45.000 PM 10/31/2008'.
-    DATETIME '13:15:45 2008-10-31' is outputted as '01:15:45.000 PM 10/31/2008'.
-    DATETIME '10/31/2008 01:15:45 PM' is outputted as '01:15:45.000 PM 10/31/2008'.
-    DATETIME '10/31/2008 13:15:45' is outputted as '01:15:45.000 PM 10/31/2008'.
-    DATETIME '2008-10-31 01:15:45 PM' is outputted as '01:15:45.000 PM 10/31/2008'.
-    DATETIME '2008-10-31 13:15:45' is outputted as '01:15:45.000 PM 10/31/2008'.
-    DATETIME '2099-10-31 01:15:45 PM' is outputted as '01:15:45.000 PM 10/31/2099'.
+    DATETIME'10/31' is outputted as '12:00:00.000 AM 10/31/2011' (if the value for year/time is omitted, a default value is outputted).
+    DATETIME'10/31/2008' is outputted as '12:00:00.000 AM 10/31/2008'.
+    DATETIME'13:15:45 10/31/2008' is outputted as '01:15:45.000 PM 10/31/2008'.
+    DATETIME'01:15:45 PM 2008-10-31' is outputted as '01:15:45.000 PM 10/31/2008'.
+    DATETIME'13:15:45 2008-10-31' is outputted as '01:15:45.000 PM 10/31/2008'.
+    DATETIME'10/31/2008 01:15:45 PM' is outputted as '01:15:45.000 PM 10/31/2008'.
+    DATETIME'10/31/2008 13:15:45' is outputted as '01:15:45.000 PM 10/31/2008'.
+    DATETIME'2008-10-31 01:15:45 PM' is outputted as '01:15:45.000 PM 10/31/2008'.
+    DATETIME'2008-10-31 13:15:45' is outputted as '01:15:45.000 PM 10/31/2008'.
+    DATETIME'2099-10-31 01:15:45 PM' is outputted as '01:15:45.000 PM 10/31/2099'.
 
 .. _cast-string-to-datetime:
 
@@ -413,7 +411,7 @@ CASTing a String to Date/Time Type
 **Available TIME String Format**
     ::
 
-        [hour]:min[:[sec]] [.[msec]] [am|pm]
+        [hour]:min[:[sec]][.[msec]] [am|pm]
         
     *   09:10:15.359 am: 9 hours 10 minutes 15 seconds AM (0.359 seconds will be truncated)
     *   09:10:15: 9 hours 10 minutes 15 seconds AM
@@ -951,7 +949,7 @@ The following example shows the definition of the **ENUM** column.
 .. code-block:: sql
 
     CREATE TABLE tbl (
-        color ENUM('red', 'yellow', 'blue')
+        color ENUM ('red', 'yellow', 'blue')
     );
 
 The *color* column can have one of following values:
@@ -972,7 +970,7 @@ The following example shows the insertion of a value into the **ENUM** column.
 
 .. code-block:: sql
 
-    INSERT into tbl values ('yellow'), ('red'), (2), ('blue');
+    INSERT INTO tbl VALUES ('yellow'), ('red'), (2), ('blue');
 
 The following example shows the **SELECT** statement that retrieves the **ENUM** column where the value has been inserted in the above. 
 
@@ -996,7 +994,7 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
       yellow
       blue
      
-    SELECT color FROM tbl ORDER BY cast(color as char) ASC;
+    SELECT color FROM tbl ORDER BY CAST (color AS CHAR) ASC;
      
       color
     ======================
@@ -1009,7 +1007,7 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
 
   .. code-block:: sql
 
-    SELECT CONCAT(enum_col, 'color') FROM tbl_name;
+    SELECT CONCAT (enum_col, 'color') FROM tbl_name;
  
       CONCAT(color, '_color')
     ======================
@@ -1059,8 +1057,8 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
 
   .. code-block:: sql
 
-    CREATE TABLE tb2 (nums enum('0', '1', '2'));
-    INSERT INTO tb2 (nums) VALUES(1),('1'),('3');
+    CREATE TABLE tb2 (nums ENUM ('0', '1', '2'));
+    INSERT INTO tb2 (nums) VALUES (1), ('1'), ('3');
     SELECT * FROM tb2;
      
       nums
@@ -1078,43 +1076,43 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
 
   .. code-block:: sql
 
-    SELECT color FROM tb ORDER BY cast(color as char) ASC;
+    SELECT color FROM tb ORDER BY CAST (color AS CHAR) ASC;
 
 * When converting the **ENUM** type to the other type, the index number or the string of the **ENUM** type is converted according to the target type. In the following table, the types with an asterisk (*) can be converted to the **ENUM** type.
 
-  +------------+---------------------------------+
-  | Type       | Value (Index Number/String)     |
-  +============+=================================+
-  | SHORT      | Index Number                    |
-  +------------+---------------------------------+
-  | INTEGER    | Index Number                    |
-  +------------+---------------------------------+
-  | BIGINT     | Index Number                    |
-  +------------+---------------------------------+
-  | FLOAT      | Index Number                    |
-  +------------+---------------------------------+
-  | DOUBLE     | Index Number                    |
-  +------------+---------------------------------+
-  | NUMERIC    | Index Number                    |
-  +------------+---------------------------------+
-  | MONETARY   | Index Number                    |
-  +------------+---------------------------------+
-  | TIME       | String                          |
-  +------------+---------------------------------+
-  | DATE       | String                          |
-  +------------+---------------------------------+
-  | DATETIME   | String                          |
-  +------------+---------------------------------+
-  | TIMESTAMP  | String                          |
-  +------------+---------------------------------+
-  | CHAR       | String                          |
-  +------------+---------------------------------+
-  | VARCHAR    | String                          |
-  +------------+---------------------------------+
-  | BIT        | String                          |
-  +------------+---------------------------------+
-  | VARBIT     | String                          |
-  +------------+---------------------------------+
+  +---------------+---------------------------------+
+  | Type          | Value (Index Number/String)     |
+  +===============+=================================+
+  | SHORT(*)      | Index Number                    |
+  +---------------+---------------------------------+
+  | INTEGER(*)    | Index Number                    |
+  +---------------+---------------------------------+
+  | BIGINT(*)     | Index Number                    |
+  +---------------+---------------------------------+
+  | FLOAT(*)      | Index Number                    |
+  +---------------+---------------------------------+
+  | DOUBLE(*)     | Index Number                    |
+  +---------------+---------------------------------+
+  | NUMERIC(*)    | Index Number                    |
+  +---------------+---------------------------------+
+  | MONETARY(*)   | Index Number                    |
+  +---------------+---------------------------------+
+  | TIME(*)       | String                          |
+  +---------------+---------------------------------+
+  | DATE(*)       | String                          |
+  +---------------+---------------------------------+
+  | DATETIME(*)   | String                          |
+  +---------------+---------------------------------+
+  | TIMESTAMP(*)  | String                          |
+  +---------------+---------------------------------+
+  | CHAR(*)       | String                          |
+  +---------------+---------------------------------+
+  | VARCHAR(*)    | String                          |
+  +---------------+---------------------------------+
+  | BIT           | String                          |
+  +---------------+---------------------------------+
+  | VARBIT        | String                          |
+  +---------------+---------------------------------+
 
 **Note**
 
@@ -1125,7 +1123,7 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
 
       .. code-block:: sql
 
-        SELECT * FROM tb WHERE color=0;
+        SELECT * FROM tb WHERE color = 0;
 
     *   In the **ENUM** column declared to allow **NULL**, the index number for **NULL** is **NULL**.
     *   The default value of the column, which allows **NULL** is **NULL**. For **NOT NULL**, the default value of the column is the first element of the **ENUM** list specified while defining the column.
@@ -1210,7 +1208,7 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
       .. code-block:: sql
 
         CREATE TABLE tb (
-            color ENUM('red', CONCAT('light ','gray'), 'blue')
+            color ENUM ('red', CONCAT ('light ','gray'), 'blue')
         );
 
 BLOB/CLOB Data Types
@@ -1245,24 +1243,23 @@ An External **LOB** type is data to process Large Object, such as text or images
 
     *   If the relevant path is deleted despite a **LOB** data file path being registered in the database location file (**databases.txt**), please note that the utility that operates in database server (**cub_server**) and standalone will not function normally.
 
-BLOB/CLOB
----------
+BLOB
+----
 
-**BLOB**
+*   A type that stores binary data outside the database.
+*   The maximum length of **BLOB** data is the maximum file size creatable in an external storage.
+*   In SQL statements, the **BLOB** type expresses the input and output value in a bit array. That is, it is compatible with the **BIT** (n) and **BIT VARYING** (n) types, and only an explicit type change is allowed. If data lengths differ from one another, the maximum length is truncated to fit the smaller one.
 
-    *   A type that stores binary data outside the database.
-    *   The maximum length of **BLOB** data is the maximum file size creatable in an external storage.
-    *   In SQL statements, the **BLOB** type expresses the input and output value in a bit array. That is, it is compatible with the **BIT** (n) and **BIT VARYING** (n) types, and only an explicit type change is allowed. If data lengths differ from one another, the maximum length is truncated to fit the smaller one.
+*   When converting the **BLOB** type value to a binary value, the length of the converted data cannot exceed 1GB. When converting binary data to the **BLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **BLOB** storage.
 
-    *   When converting the **BLOB** type value to a binary value, the length of the converted data cannot exceed 1GB. When converting binary data to the **BLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **BLOB** storage.
+CLOB
+----
 
-**CLOB**
+*   A type that stores character string data outside the database.
+*   The maximum length of **CLOB** data is the maximum file size creatable in an external storage.
+*   In SQL statements, the CLOB type expresses the input and output value in a character string. That is, it is compatible with the **CHAR** (n), **VARCHAR** (n) types. However, only an explicit type change is allowed, and if data lengths are different from one another, the maximum length is truncated to fit to the smaller one.
 
-    *   A type that stores character string data outside the database.
-    *   The maximum length of **CLOB** data is the maximum file size creatable in an external storage.
-    *   In SQL statements, the CLOB type expresses the input and output value in a character string. That is, it is compatible with the **CHAR** (n), **VARCHAR** (n) types. However, only an explicit type change is allowed, and if data lengths are different from one another, the maximum length is truncated to fit to the smaller one.
-
-    *   When converting the **CLOB** type value to a character string, the length of the converted data cannot exceed 1 GB. When converting a character string to the **CLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **CLOB** storage.
+*   When converting the **CLOB** type value to a character string, the length of the converted data cannot exceed 1 GB. When converting a character string to the **CLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **CLOB** storage.
 
 Creating and Altering Columns
 -----------------------------
@@ -1355,9 +1352,8 @@ When you get a **LOB** type column, the data stored in a file to which the colum
      
       doc_id                content               image
     ==================================================================
-      'doc-1'               file:/home1/data1/ces_658/doc_t.00001282208855807171_7329  file:/ home1/data1/ces_318/image_t.00001282208855809474_7474
-      'doc-2'               file:/home1/data1/ces_180/doc_t.00001282208854194135_5598  file:/
-    home1/data1/ces_519/image_t.00001282208854205773_1215
+      'doc-1'               file:/home1/data1/ces_658/doc_t.00001282208855807171_7329  file:/home1/data1/ces_318/image_t.00001282208855809474_7474
+      'doc-2'               file:/home1/data1/ces_180/doc_t.00001282208854194135_5598  file:/home1/data1/ces_519/image_t.00001282208854205773_1215
      
     2 rows selected.
      
@@ -1395,10 +1391,8 @@ Functions and Operators
 
     By using **CAST** operator, you can execute an explicit type change between **BLOB** / **CLOB** type and binary type/string type. For more details, see :func:`CAST`. ::
 
-        CAST (<bit_type_column_or_value> AS CLOB)
-        CAST (<bit_type_column_or_value> AS BLOB)
-        CAST (<char_type_column_or_value> AS BLOB)
-        CAST (<char_type_column_or_value> AS CLOB)
+        CAST (<bit_type_column_or_value> AS { BLOB | CLOB })
+        CAST (<char_type_column_or_value> AS { BLOB | CLOB })
 
 **LOB Data Process and Type Change Functions**
 
@@ -1484,6 +1478,7 @@ Commit/rollback for **LOB** data changes are supported. That is, it ensures the 
     UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 2') where doc_id = 'doc-10';
     ROLLBACK;
     SELECT doc_id, CLOB_TO_CHAR(content) FROM doc_t WHERE doc_id = 'doc-10';
+    
       doc_id   content                  
     =========================================================
       'doc-10'  'This is content '
@@ -1535,23 +1530,24 @@ As you see the table above, the value specified as a collection type can be inpu
     If the specified collection types are identical, the collection types can be cast explicitly by using the **CAST** operator. 
     The following table shows the collection types that allow explicit coercions.
 
-    +-----------+----------------------------------+
-    |           | **TO**                           |
-    +===========+==========+=====+==========+======+
-    | **FROM**  |          | SET | MULTISET | LIST |
-    |           +----------+-----+----------+------+
-    |           | SET      | -   | Yes      | Yes  |
-    |           +----------+-----+----------+------+
-    |           | MULTISET | Yes | -        | No   |
-    |           +----------+-----+----------+------+
-    |           | LIST     | Yes | Yes      | -    |
-    +-----------+----------+-----+----------+------+
+    +--------------+-----+----------+------+
+    | FROM \\ TO   | SET | MULTISET | LIST |
+    +==============+=====+==========+======+
+    | SET          | -   | Yes      | Yes  |
+    +--------------+-----+----------+------+
+    | MULTISET     | Yes | -        | No   |
+    +--------------+-----+----------+------+
+    | LIST         | Yes | Yes      | -    |
+    +--------------+-----+----------+------+
 
 **Collection Types and Collations**
 
-    Collection Types do not support collations. Therefore, Below query returns error. ::
+    Collection Types do not support collations. Therefore, Below query returns error.
 
-        CREATE TABLE tbl(str SET(string) COLLATE utf8_en_ci);
+    .. code-block:: sql
+
+        CREATE TABLE tbl (str SET (string) COLLATE utf8_en_ci);
+        
         Syntax error: unexpected 'COLLATE', expecting ',' or ')'
 
 SET
@@ -1561,18 +1557,20 @@ SET
 
 .. code-block:: sql
 
-    CREATE TABLE set_tbl ( col_1 set(CHAR(1)));
+    CREATE TABLE set_tbl (col_1 SET (CHAR(1)));
     INSERT INTO set_tbl VALUES ({'c','c','c','b','b','a'});
     INSERT INTO set_tbl VALUES ({NULL});
     INSERT INTO set_tbl VALUES ({''});
     SELECT * FROM set_tbl;
+    
       col_1
     ======================
     {'a', 'b', 'c'}
     {NULL}
     {' '}
      
-    SELECT CAST(col_1 AS MULTISET), CAST(col_1 AS LIST) FROM set_tbl;
+    SELECT CAST (col_1 AS MULTISET), CAST (col_1 AS LIST) FROM set_tbl;
+    
        cast(col_1 as multiset)   cast(col_1 as sequence)
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'c'}
@@ -1590,14 +1588,16 @@ MULTISET
 
 .. code-block:: sql
 
-    CREATE TABLE multiset_tbl ( col_1 multiset(CHAR(1)));
+    CREATE TABLE multiset_tbl (col_1 MULTISET (CHAR(1)));
     INSERT INTO multiset_tbl VALUES ({'c','c','c','b','b', 'a'});
     SELECT * FROM multiset_tbl;
+    
       col_1
     ======================
       {'a', 'b', 'b', 'c', 'c', 'c'}
      
     SELECT CAST(col_1 AS SET), CAST(col_1 AS LIST) FROM multiset_tbl;
+    
        cast(col_1 as set)   cast(col_1 as sequence)
     ============================================
       {'a', 'b', 'c'}  {'c', 'c', 'c', 'b', 'b', 'a'}
@@ -1610,14 +1610,16 @@ LIST/SEQUENCE
 
 .. code-block:: sql
 
-    CREATE TABLE list_tbl ( col_1 list(CHAR(1)));
+    CREATE TABLE list_tbl (col_1 LIST (CHAR(1)));
     INSERT INTO list_tbl VALUES ({'c','c','c','b','b', 'a'});
     SELECT * FROM list_tbl;
+    
       col_1
     ======================
       {'c', 'c', 'c', 'b', 'b', 'a'}
      
     SELECT CAST(col_1 AS SET), CAST(col_1 AS MULTISET) FROM list_tbl;
+    
        cast(col_1 as set)  cast(col_1 as multiset)
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
@@ -1712,340 +1714,345 @@ The implicit type conversion executed by CUBRID is as follows:
 Conversation Rules
 ------------------
 
-**INSERT and UPDATE**
+INSERT and UPDATE
+^^^^^^^^^^^^^^^^^
 
-    The type will be converted to the type of the column affected.
+The type will be converted to the type of the column affected.
+
+.. code-block:: sql
+
+    CREATE TABLE t(i INT);
+    INSERT INTO t VALUES('123');
+     
+    SELECT * FROM t;
+     
+                i
+    =============
+              123
+
+Function
+^^^^^^^^
+
+If the parameter value entered in the function can be converted to the specified type, the parameter type will be converted. The strings are converted to numbers because the input parameter expected in the following function is a number.
+
+.. code-block:: sql
+
+    SELECT MOD('123','2');
+     
+               mod('123', '2')
+    ==========================
+         1.000000000000000e+00
+
+You can enter multiple type values in the function. If the type value not specified in the function is delivered, the type will be converted depending on the following priority order.
+
+*   Date/Time Type ( **DATETIME** > **TIMESTAMP** > **DATE** > **TIME** )
+*   Approximate Numeric Type ( **MONETARY** > **DOUBLE** > **FLOAT** )
+*   Exact Numeric Type ( **NUMERIC** > **BIGINT** > **INT** > **SHORT** )
+*   String Type ( **CHAR** > **VARCHAR** )
+
+Comparison Operation
+^^^^^^^^^^^^^^^^^^^^
+
+The following are the conversion rules according to an operand type of the comparison operator.
+
++-------------------+-------------------+----------------------------------------------+----------------+
+| operand1 Type     | operand2 Type     | Conversion                                   | Comparison     |
++===================+===================+==============================================+================+
+| Numeric Type      | Numeric Type      | None                                         | NUMERIC        |
+|                   +-------------------+----------------------------------------------+----------------+
+|                   | String Type       | Converts operand2 to                         | NUMERIC        |
+|                   |                   | **DOUBLE**                                   |                |
+|                   +-------------------+----------------------------------------------+----------------+
+|                   | Date/Time Type    | None                                         | N/a            |
++-------------------+-------------------+----------------------------------------------+----------------+
+| String Type       | Numeric Type      | Converts operand1 to                         | NUMERIC        |
+|                   |                   | **DOUBLE**                                   |                |
+|                   +-------------------+----------------------------------------------+----------------+
+|                   | String Type       | None                                         | String         |
+|                   +-------------------+----------------------------------------------+----------------+
+|                   | Date/Time Type    | Converts operand1 to date/time type          | Date/Time      |
++-------------------+-------------------+----------------------------------------------+----------------+
+| Date/Time Type    | Numeric Type      | None                                         | N/A            |
+|                   +-------------------+----------------------------------------------+----------------+
+|                   | String Type       | Converts operand2 to date/time type          | Date/Time      |
+|                   +-------------------+----------------------------------------------+----------------+
+|                   | Date/Time Type    | Converts it to the type with higher priority | Date/Time      |
++-------------------+-------------------+----------------------------------------------+----------------+
+
+The following are the exceptions in the conversion rules for comparison operators:
+
+*   COLUMN <operator> value
+
++-------------------+-------------------+--------------------------------------+----------------+
+| operand1 Type     | operand2 Type     | Conversion                           | Comparison     |
++===================+===================+======================================+================+
+| String type       | Numeric type      | Converts operand2 to the string type | String         |
+|                   +-------------------+--------------------------------------+----------------+
+|                   | Date/Time type    | Converts operand2 to the string type | String         |
++-------------------+-------------------+--------------------------------------+----------------+
+
+If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, **< ALL**, **< ANY**, **<= ALL**, **<= ANY**, **>= ALL**, **>= ANY** ), the exception above is not applied.
+
+**Numeric Type & String Type Operands**
+
+    The string type operand will be converted to **DOUBLE**.
 
     .. code-block:: sql
 
-        CREATE TABLE t(i INT);
-        INSERT INTO t VALUES('123');
+        CREATE TABLE t(i INT, s STRING);
+        INSERT INTO t VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
          
-        SELECT * FROM t;
+        SELECT i FROM t WHERE i < '11.3';
          
                     i
         =============
-                  123
+                    1
+                    2
+                    3
+                    4
+         
+        SELECT ('2' <= 11);
+         
+             ('2'<11)
+        =============
+                    1
 
-**Function**
+**String Type & Date/Time Type Operands**
 
-    If the parameter value entered in the function can be converted to the specified type, the parameter type will be converted. The strings are converted to numbers because the input parameter expected in the following function is a number.
+    The string type operand will be converted to the date/time type.
 
     .. code-block:: sql
 
-        SELECT MOD('123','2');
+        SELECT ('2010-01-01' < date'2010-02-02');
          
-                   mod('123', '2')
-        ==========================
-             1.000000000000000e+00
+           ('2010-01-01'<date '2010-02-02')
+        ==================================
+                                        1
+         
+        SELECT (date'2010-02-02' >= '2010-01-01');
+         
+          (date '2010-02-02'>='2010-01-01')
+        ===================================
+                                        1
 
-    You can enter multiple type values in the function. If the type value not specified in the function is delivered, the type will be converted depending on the following priority order.
+**String Type & Numeric Type Host Variable Operands**
 
-    *   Date/Time Type ( **DATETIME** > **TIMESTAMP** > **DATE** > **TIME** )
-    *   Approximate Numeric Type ( **MONETARY** > **DOUBLE** > **FLOAT** )
-    *   Exact Numeric Type ( **NUMERIC** > **BIGINT** > **INT** > **SHORT** )
-    *   String Type ( **CHAR** > **VARCHAR** )
+    The numeric type host variable will be converted to the string type.
 
-**Comparison Operation**
+    .. code-block:: sql
 
-    The following are the conversion rules according to an operand type of the comparison operator.
+        PREPARE s FROM 'SELECT s FROM t WHERE s < ?';
+        EXECUTE s USING 11;
+               s
+        ===================
+             '1'
 
-    +-------------------+-------------------+----------------------------------------------+----------------+
-    | operand1 Type     | operand2 Type     | Conversion                                   | Comparison     |
-    +===================+===================+==============================================+================+
-    | Numeric Type      | Numeric Type      | None                                         | NUMERIC        |
-    |                   +-------------------+----------------------------------------------+----------------+
-    |                   | String Type       | Converts operand2 to                         | NUMERIC        |
-    |                   |                   | **DOUBLE**                                   |                |
-    |                   +-------------------+----------------------------------------------+----------------+
-    |                   | Date/Time Type    | None                                         | N/a            |
-    +-------------------+-------------------+----------------------------------------------+----------------+
-    | String Type       | Numeric Type      | Converts operand1 to                         | NUMERIC        |
-    |                   |                   | **DOUBLE**                                   |                |
-    |                   +-------------------+----------------------------------------------+----------------+
-    |                   | String Type       | None                                         | String         |
-    |                   +-------------------+----------------------------------------------+----------------+
-    |                   | Date/Time Type    | Converts operand1 to date/time type          | Date/Time      |
-    +-------------------+-------------------+----------------------------------------------+----------------+
-    | Date/Time Type    | Numeric Type      | None                                         | N/A            |
-    |                   +-------------------+----------------------------------------------+----------------+
-    |                   | String Type       | Converts operand2 to date/time type          | Date/Time      |
-    |                   +-------------------+----------------------------------------------+----------------+
-    |                   | Date/Time Type    | Converts it to the type with higher priority | Date/Time      |
-    +-------------------+-------------------+----------------------------------------------+----------------+
+**String Type & Numeric Type value Operands**
 
-    The following are the exceptions in the conversion rules for comparison operators:
+    The numeric type value will be converted to the string type.
 
-    *   COLUMN <operator> value
+    .. code-block:: sql
 
-    +-------------------+-------------------+--------------------------------------+----------------+
-    | operand1 Type     | operand2 Type     | Conversion                           | Comparison     |
-    +===================+===================+======================================+================+
-    | String type       | Numeric type      | Converts operand2 to the string type | String         |
-    |                   +-------------------+--------------------------------------+----------------+
-    |                   | Date/Time type    | Converts operand2 to the string type | String         |
-    +-------------------+-------------------+--------------------------------------+----------------+
+        SELECT s FROM t WHERE s > 11;
+               s
+        ==================
+             '2'
+             '3'
+             '4'
+             '12'
+         
+        SELECT s FROM t WHERE s BETWEEN 11 AND 33;
+                s
+        ======================
+              '2'
+              '3'
+              '12'
+          
+**String Type Column & Date/Time Type Value Operands**
 
-    If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, **< ALL**, **< ANY**, **<= ALL**, **<= ANY**, **>= ALL**, **>= ANY** ), the exception above is not applied.
+    The date/time type value will be converted to the string type.
 
-    **Numeric Type & String Type Operands**
+    .. code-block:: sql
 
-        The string type operand will be converted to **DOUBLE**.
-
-        .. code-block:: sql
-
-            CREATE TABLE t(i INT, s STRING);
-            INSERT INTO t VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
-             
-            SELECT i FROM t WHERE i < '11.3';
-             
-                        i
-            =============
-                        1
-                        2
-                        3
-                        4
-             
-            SELECT ('2' <= 11);
-             
-                 ('2'<11)
-            =============
-                        1
-
-    **String Type & Date/Time Type Operands**
-
-        The string type operand will be converted to the date/time type.
-
-        .. code-block:: sql
-
-            SELECT ('2010-01-01' < date'2010-02-02');
-             
-               ('2010-01-01'<date '2010-02-02')
-            ==================================
-                                            1
-             
-            SELECT (date'2010-02-02' >= '2010-01-01');
-             
-              (date '2010-02-02'>='2010-01-01')
-            ===================================
-                                            1
-
-    **String Type & Numeric Type Host Variable Operands**
-
-        The numeric type host variable will be converted to the string type.
-
-        .. code-block:: sql
-
-            PREPARE s FROM 'SELECT s FROM t WHERE s < ?';
-            EXECUTE s USING 11;
+        SELECT s FROM t;
+         
                    s
-            ===================
-                 '1'
-
-    **String Type & Numeric Type value Operands**
-
-        The numeric type value will be converted to the string type.
-
-        .. code-block:: sql
-
-            SELECT s FROM t WHERE s > 11;
-                   s
-            ==================
-                 '2'
-                 '3'
-                 '4'
-                 '12'
-             
-            SELECT s FROM t WHERE s BETWEEN 11 AND 33;
+        ======================
+            '01/01/1998'
+            '01/01/1999'
+            '01/01/2000'
+         
+        SELECT s FROM t WHERE s <= date'02/02/1998';
                     s
-            ======================
-                  '2'
-                  '3'
-                  '12'
-              
-    **String Type Column & Date/Time Type Value Operands**
+        ======================
+            '01/01/1998'
+            '01/01/1999'
+            '01/01/2000'
 
-        The date/time type value will be converted to the string type.
+Range Operation
+^^^^^^^^^^^^^^^
 
-        .. code-block:: sql
+**Numeric Type and String Type Operands**
 
-            SELECT s FROM t;
-             
-                       s
-            ======================
-                '01/01/1998'
-                '01/01/1999'
-                '01/01/2000'
-             
-            SELECT s FROM t WHERE s <= date'02/02/1998';
-                        s
-            ======================
-                '01/01/1998'
-                '01/01/1999'
-                '01/01/2000'
+    The string type operand will be converted to **DOUBLE**.
 
-**Range Operation**
+    .. code-block:: sql
 
-    **Numeric Type and String Type Operands**
+        SELECT i FROM t WHERE i <= all {'11','12'};
+         
+                    i
+        =============
+                    1
+                    2
+                    3
+                    4
 
-        The string type operand will be converted to **DOUBLE**.
+**String Type and Date/Time Type Operands**
 
-        .. code-block:: sql
+    The string type operand will be converted to the date/time type.
 
-            SELECT i FROM t WHERE i <= all {'11','12'};
-             
-                        i
-            =============
-                        1
-                        2
-                        3
-                        4
+    .. code-block:: sql
 
-    **String Type and Date/Time Type Operands**
+        SELECT s FROM t2;
+         
+                  s
+        ======================
+              '01/01/2000'
+              '01/01/1999'
+              '01/01/1998'
+         
+        SELECT s FROM t2 WHERE s <= ALL {date'02/02/1998',date'01/01/2000'};
+         
+                  s
+        ======================
+               '01/01/1998'
 
-        The string type operand will be converted to the date/time type.
+    An error will be returned if it cannot be converted to the corresponding type.
 
-        .. code-block:: sql
+Arithmetic Operation
+^^^^^^^^^^^^^^^^^^^^
 
-            SELECT s FROM t2;
-             
-                      s
-            ======================
-                  '01/01/2000'
-                  '01/01/1999'
-                  '01/01/1998'
-             
-            SELECT s FROM t2 WHERE s <= ALL {date'02/02/1998',date'01/01/2000'};
-             
-                      s
-            ======================
-                   '01/01/1998'
+**Date/Time Type Operand**
 
-        An error will be returned if it cannot be converted to the corresponding type.
+    If the date/time type operands are given to '-' operator and the types are different from each other, it will be converted to the type with a higher priority. The following example shows that the operand data type on the left is converted from **DATE** to **DATETIME** so that the result of '-' operation of **DATETIME** can be outputted in milliseconds.
 
-**Arithmetic Operation**
+    .. code-block:: sql
 
-    **Date/Time Type Operand**
+        SELECT date'2002-01-01' - datetime'2001-02-02 12:00:00 am';
 
-        If the date/time type operands are given to '-' operator and the types are different from each other, it will be converted to the type with a higher priority. The following example shows that the operand data type on the left is converted from **DATE** to **DATETIME** so that the result of '-' operation of **DATETIME** can be outputted in milliseconds.
+           date '2002-01-01'- datetime '2001-02-02 12:00:00 am'
+        =====================================================
+                                                  28771200000
 
-        .. code-block:: sql
+**Numeric Type Operand**
 
-            SELECT date'2002-01-01' - datetime'2001-02-02 12:00:00 am';
+    If the numeric type operands are given and the types are different from each other, it will be converted to the type with the higher priority.
 
-               date '2002-01-01'- datetime '2001-02-02 12:00:00 am'
-            =====================================================
-                                                      28771200000
+    **Date/Time Type & Numeric Type Operands**
 
-    **Numeric Type Operand**
+    If the date/time type and the numeric type operands are given to '+' or '-' operator, the numeric type operand is converted to either **BIGINT**, **INT** or **SHORT**.
 
-        If the numeric type operands are given and the types are different from each other, it will be converted to the type with the higher priority.
+    **Date/Time Type & String Type Operands**
 
-        **Date/Time Type & Numeric Type Operands**
+    If a date/time type and a string type are operands, only '+' and '-' operators are allowed. If the '+' operator is used, it will be applied according to the following rules.
 
-        If the date/time type and the numeric type operands are given to '+' or '-' operator, the numeric type operand is converted to either **BIGINT**, **INT** or **SHORT**.
+    *   The string type will be converted to **BIGINT** with an interval value. The interval is the smallest unit for operands in the Date/Time type, and the interval for each type is as follows:
 
-        **Date/Time Type & String Type Operands**
+        *   **DATE** : Days
+        *   **TIME**, **TIMESTAMP** : Seconds
+        *   **DATETIME** : Milliseconds
 
-        If a date/time type and a string type are operands, only '+' and '-' operators are allowed. If the '+' operator is used, it will be applied according to the following rules.
+    *   Floating-point numbers are rounded.
 
-        *   The string type will be converted to **BIGINT** with an interval value. The interval is the smallest unit for operands in the Date/Time type, and the interval for each type is as follows:
+    *   The result type is the type of an date/time operand.
 
-            *   **DATE** : Days
-            *   **TIME**, **TIMESTAMP** : Seconds
-            *   **DATETIME** : Milliseconds
+    .. code-block:: sql
 
-        *   Floating-point numbers are rounded.
+        SELECT date'2002-01-01' + '10';
+         
+          date '2002-01-01'+'10'
+        ======================
+          01/11/2002
 
-        *   The result type is the type of an date/time operand.
+    If the date/time type and a string type are operands and the '-' operator is used, they will be applied according to the following rules.
 
-        .. code-block:: sql
+    *   If the date/time type operands are **DATE**, **DATETIME** and **TIMESTAMP**, the string will be converted to **DATETIME**; if the date/time operand is **TIME**, the string is converted to **TIME**.
+    *   The result type is always **BIGINT**.
 
-            SELECT date'2002-01-01' + '10';
-             
-              date '2002-01-01'+'10'
-            ======================
-              01/11/2002
+    .. code-block:: sql
 
-        If the date/time type and a string type are operands and the '-' operator is used, they will be applied according to the following rules.
+        SELECT date'2002-01-01'-'2001-01-01';
+         
+          date '2002-01-01'-'2001-01-01'
+        ================================
+                            31536000000
+         
+        -- this causes an error
+         
+        SELECT date'2002-01-01'-'10';
+         
+         In line 1, column 13,
+         ERROR: Cannot coerce '10' to type datetime.    
+     
+**Numeric Type & String Type Operands**
 
-        *   If the date/time type operands are **DATE**, **DATETIME** and **TIMESTAMP**, the string will be converted to **DATETIME**; if the date/time operand is **TIME**, the string is converted to **TIME**.
-        *   The result type is always **BIGINT**.
+    If a numeric type and a string type are operands, they will be applied according to the following rules.
 
-        .. code-block:: sql
+    *   Strings will be converted to **DOUBLE** when possible.
+    *   The result type is **DOUBLE** or **MONETARY** and depends on the type of the numeric operand.
 
-            SELECT date'2002-01-01'-'2001-01-01';
-             
-              date '2002-01-01'-'2001-01-01'
-            ================================
-                                31536000000
-             
-            -- this causes an error
-             
-            SELECT date'2002-01-01'-'10';
-             
-             In line 1, column 13,
-             ERROR: Cannot coerce '10' to type datetime.    
-         
-    **Numeric Type & String Type Operands**
+    .. code-block:: sql
 
-        If a numeric type and a string type are operands, they will be applied according to the following rules.
+        SELECT 4 + '5.2';
+         
+                        4+'5.2'
+        ==========================
+          9.199999999999999e+00
 
-        *   Strings will be converted to **DOUBLE** when possible.
-        *   The result type is **DOUBLE** or **MONETARY** and depends on the type of the numeric operand.
+    Unlike CUBRID 2008 R3.1 and the earlier versions, the string in the date/time format, that is, the string such as '2010-09-15' is not converted to the date/time type. You can use a literal (DATE'2010-09-15') with the date/time type for addition and subtraction operations.
 
-        .. code-block:: sql
+    .. code-block:: sql
 
-            SELECT 4 + '5.2';
-             
-                            4+'5.2'
-            ==========================
-              9.199999999999999e+00
+        SELECT '2002-01-01'+1;
+           ERROR: Cannot coerce '2002-01-01' to type double.
+        
+        SELECT DATE'2002-01-01'+1;
+          date '2002-01-01'+1
+        =====================
+          01/02/2002
 
-        Unlike CUBRID 2008 R3.1 and the earlier versions, the string in the date/time format, that is, the string such as '2010-09-15' is not converted to the date/time type. You can use a literal (DATE'2010-09-15') with the date/time type for addition and subtraction operations.
+**String Type Operand**
 
-        .. code-block:: sql
+    If you multiply, divide or subtract both strings, the result returns a **DOUBLE** type value.
 
-            SELECT '2002-01-01'+1;
-               ERROR: Cannot coerce '2002-01-01' to type double.
-            
-            SELECT DATE'2002-01-01'+1;
-              date '2002-01-01'+1
-            =====================
-              01/02/2002
+    .. code-block:: sql
 
-    **String Type Operand**
+        SELECT '3'*'2';
+         
+                             '3'*'2'
+        ============================
+               6.000000000000000e+00
 
-        If you multiply, divide or subtract both strings, the result returns a **DOUBLE** type value.
+    The '+' operator action depends on how to set the system parameter **plus_as_concat** in the **cubrid.conf** file. For details, see :ref:`stmt-type-parameters`.
 
-        .. code-block:: sql
+    * If a value for **plus_as_concat** is yes (default value), the concatenation of two strings will be returned.
 
-            SELECT '3'*'2';
-             
-                                 '3'*'2'
-            ============================
-                   6.000000000000000e+00
+      .. code-block:: sql
 
-        The '+' operator action depends on how to set the system parameter **plus_as_concat** in the **cubrid.conf** file. For details, see :ref:`stmt-type-parameters`.
+        SELECT '1'+'1';
+         
+                       '1'+'1'
+        ======================
+                          '11'
 
-        * If a value for **plus_as_concat** is yes (default value), the concatenation of two strings will be returned.
+    * If a value for **plus_as_concat** is no and two strings can be converted to numbers, the **DOUBLE** type value will be returned by adding the two numbers.
 
-          .. code-block:: sql
+      .. code-block:: sql
 
-            SELECT '1'+'1';
-             
+        SELECT '1'+'1';
+         
                            '1'+'1'
-            ======================
-                              '11'
+        ==========================
+             2.000000000000000e+00
 
-        * If a value for **plus_as_concat** is no and two strings can be converted to numbers, the **DOUBLE** type value will be returned by adding the two numbers.
-
-          .. code-block:: sql
-
-            SELECT '1'+'1';
-             
-                               '1'+'1'
-            ==========================
-                 2.000000000000000e+00
-
-        An error will be returned if it cannot be converted to the corresponding type.
+    An error will be returned if it cannot be converted to the corresponding type.

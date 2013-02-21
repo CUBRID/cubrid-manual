@@ -643,7 +643,7 @@ If the indexes exist, firstly you should remove the indexes, and change the coll
 
     $ csql -S -u dba -i cubrid_synccolldb_xdb.sql xdb
 
-Removing the obsolete collations by executing cubrid_synccolldb_xdb.sql script file must be perfomed before forcing the synchronization of system collations into database.
+Removing the obsolete collations by executing the above cubrid_synccolldb_xdb.sql script file must be perfomed before forcing the synchronization of system collations into database.
 
 Run **cubrid synccolldb** command. If the option is omitted, the message is shown to ask to run this command or not; if the **-f** option is given, the synchronization is run without checking message. ::
 

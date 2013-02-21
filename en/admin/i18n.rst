@@ -74,7 +74,9 @@ Locale is defined by following attributes.
 .. note::
 
     Generally, locale supports a variety of character sets. However, CUBRID locale supports both ISO and UTF-8 character sets for English and Korean. The other operator-defined locales using the LDML file support the UTF-8 character set only.
-        
+
+.. _collation-properties:
+    
 Collation Properties
 ---------------------
 

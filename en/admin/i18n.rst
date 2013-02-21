@@ -32,8 +32,8 @@ Collation means more than comparing character casing. Collation decides the rela
 
 In CUBRID, a collation implies a charset. For instance, collations "utf8_en_ci" and "iso88591_en_ci" perform case insensitive compare, but operate on different charsets. Although for ASCII range, in these particular cases the results are similar, the collation with "utf8_en_ci" is slower, since it needs to work on variable number of bytes (UTF-8 encoding). 
 
-* "'a' COLLATE iso88591_en_ci" indicates "_utf8'a' COLLATE iso88591_en_ci".
-* "'a' COLLATE utf8_en_ci" indicates "_iso88591'a' COLLATE utf8_en_ci".
+* "'a' COLLATE iso88591_en_ci" indicates "_iso88591'a' COLLATE iso88591_en_ci".
+* "'a' COLLATE utf8_en_ci" indicates "_utf8'a' COLLATE utf8_en_ci".
 
 All string data types support precision. Special care is required with fixed characters(CHAR). The values of this types are padded to fill up the precision. For instance, inserting "abc" into a CHAR(5) column, will result in storing "abc " (2 padding spaces are added). Space (ASCII 32 decimal, Unicode 0020) is the padding character for most charsets. But, for EUC-KR charset, the padding consists of one character which is stored with two bytes (A1 A1).
     
@@ -309,7 +309,7 @@ The first choice is recommended. In this scenario, some data may be shared among
 
 .. warning:: **Limitations and Rules**
 
-    *   Do not change the contents of **$CUBRID/conf/cubrid_locales.txt** after locales generation; Once generated the locales libraries, the contents of **$CUBRID/conf/cubrid_locales.txt** should not change (order of languages within file must also be preserved). During locale generation, increasing numeric identifiers are assigned to each new encountered collation. These identifiers must be coherent at locale loading.
+    *   Do not change the contents of **$CUBRID/conf/cubrid_locales.txt** after locales generation; Once generated the locales libraries, the contents of **$CUBRID/conf/cubrid_locales.txt** should not change (order of languages within file must also be preserved). During locale compiling, the generic collation use as default locale the first one in which is referenced; changing the order may cause different results with casing for such collation (utf8_gen_*).
     *   Do not change the contents for **$CUBRID/locales/data/*.txt** files.
 
 .. note:: Procedure of Executing make_locale.sh(.bat) Script
@@ -346,7 +346,7 @@ Built-in Locale and Library Locale
 
 Regarding the embedded locales in CUBRID, they can be used without compiling user locale library, so they can be used by skipping the step 2. But there are two differences between the embedded locale and the library locale.
 
-*   Embedded(built-in) locale(and collation) are not aware of Unicode data For instance, casing (lower, upper) of (A, a) is not available in embedded locales. The LDML locales provide data for Unicode codepoints up to 65535.
+*   Embedded(built-in) locale(and collation) are not aware of Unicode data For instance, casing (lower, upper) of (Á, á) is not available in embedded locales. The LDML locales provide data for Unicode codepoints up to 65535.
 
 *   Also, the embedded collations deals only with ASCII range, or in case of 'utf8_tr_cs' - only ASCII and letters from Turkish alphabet. Embedded UTF-8 locales are not Unicode compatible, while compiled (LDML) locales are.
 
@@ -630,12 +630,6 @@ Check the difference between system and database by running **cubrid synccolldb 
     Synchronization of system collation into database is required.
     Run 'cubrid synccolldb -f xdb'
 
-Run **cubrid synccolldb** command. If the option is omitted, the message is shown to ask to run this command or not; if the **-f** option is given, the synchronization is run without checking message. ::
-
-    $ cubrid synccolldb xdb
-    Updating system collations may cause corruption of database. Continue (y/n) ?
-    Contents of '_db_collation' system table was updated with new system collations.
-
 If the indexes exist, firstly you should remove the indexes, and change the collation of each table, then recreate the indexes directly. The process to remove indexes and change the collation of tables can be executed by using cubrid_synccolldb_xdb.sql file which was created by **synccolldb** command. On the below example, a foreign key is the index which you should recreate. ::
     
     $ cat cubrid_synccolldb_xdb.sql
@@ -648,6 +642,14 @@ If the indexes exist, firstly you should remove the indexes, and change the coll
     ALTER TABLE [emp] MODIFY [depname] VARCHAR(1073741823) COLLATE utf8_bin;
 
     $ csql -S -u dba -i cubrid_synccolldb_xdb.sql xdb
+
+Removing the obsolete collations by executing cubrid_synccolldb_xdb.sql script file must be perfomed before forcing the synchronization of system collations into database.
+
+Run **cubrid synccolldb** command. If the option is omitted, the message is shown to ask to run this command or not; if the **-f** option is given, the synchronization is run without checking message. ::
+
+    $ cubrid synccolldb xdb
+    Updating system collations may cause corruption of database. Continue (y/n) ?
+    Contents of '_db_collation' system table was updated with new system collations.
     
 Recreate the dropped foreign key. ::
 
@@ -1117,7 +1119,7 @@ Using a LDML locale (built-in variants can also be overridden with a LDML varian
 
 As previously mentioned, a set of casing rules and supported characters (letters) forms an "alphabet" in CUBRID (this is actually a tag in LDML). Some locales, like tr_TR and de_DE have specific casing rules: - in Turkish: lower('I')='ı' (dot-less lower i); upper ('i') = 'İ' (capital I with dot). - in German: upper ('ß')='SS' (two capital S letters).
 
-Because of this, such locales have two sets of alphabets : one which applies to system data (identifiers) and one which applies to user data. The alphabet applying to user data include the special rules, while the system (identifiers) alphabet do not, thus making the system alphabets compatible between locales. This is required to avoid issues with identifiers (like in Turkish, where casing of the group name "public" results in errors -> "PUBLIC" != "PUBLIC"). 
+Because of this, such locales have two sets of alphabets : one which applies to system data (identifiers) and one which applies to user data. The alphabet applying to user data include the special rules, while the system (identifiers) alphabet do not, thus making the system alphabets compatible between locales. This is required to avoid issues with identifiers (like in Turkish, where casing of the group name "public" results in errors -> "PUBLİC" != "PUBLIC"). 
 
 It also provides a compatibility between databases with different locales (should be able to export - import schema and data).
 

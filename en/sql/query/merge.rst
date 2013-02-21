@@ -6,7 +6,7 @@ The **MERGE** statement is used to select rows from one or more sources and to u
 
 To execute the **MERGE** statement, the **SELECT** authorization for the source table should be granted. When the **UPDATE** clause is included in the target table, the **UPDATE** authorization should be granted. When the **DELETE** clause is included in the target table, the **DELETE** should be granted. When the **INSERT** clause is included in the target table, the **INSERT** should be granted. ::
 
-    MERGE INTO <target> [[AS] <alias>]
+    MERGE [<merge_hint>] INTO <target> [[AS] <alias>]
     USING <source> [[AS] <alias>], <source> [[AS] <alias>], ...
     ON <join_condition>
     [ <merge_update_clause> ]
@@ -19,6 +19,9 @@ To execute the **MERGE** statement, the **SELECT** authorization for the source 
      
     <merge_insert_clause> ::=
     WHEN NOT MATCHED THEN INSERT [(<attributes_list>)] VALUES (<expr_list>) [WHERE <insert_condition>]
+
+    <merge_hint> ::=
+    /*+ [ USE_UPDATE_IDX(<source_index_list>) ] [ USE_INSERT_IDX(<target_index_list>) ] */
 
 *   <*target*>: Target table to be updated or inserted. Several tables or views are available.
 *   <*source*>: Source table to get the data. Several tables or views are available and sub-query is available, too.
@@ -41,6 +44,12 @@ To execute the **MERGE** statement, the **SELECT** authorization for the source 
     *   <*expr_list*>: Integer filter condition can be used to insert all source rows to the target table. ON (0=1) is an example of integer filter condition.
     *   This clause can be specified as it is or as <*merge_update_clause*>. If both of two are defined, the order does not matter.
 
+* <*merge_hint*> : MERGE 문의 인덱스 힌트 
+    * USE_UPDATE_IDX(<source_index_list>) : MERGE 문의 UPDATE 절에서 사용되는 인덱스 힌트.    source_index_list에 UPDATE 절을 수행할 때 사용할 원본 테이블의 인덱스 이름을 나열한다.
+        <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
+    * USE_INSERT_IDX(<target_index_list>) : MERGE 문의 INSERT 절에서 사용되는 인덱스 힌트. target_index_list에 INSERT 절을 수행할 때 사용할 대상 테이블의 인덱스 이름을 나열한다
+        <*join_condition*>에 해당 힌트가 적용된다.
+        
 The following example shows how to merge the value of source_table to target_table.
 
 .. code-block:: sql
@@ -140,3 +149,25 @@ The following example shows how to use the **MERGE** statement to arrange the bo
 
 In the above example, the source table is a set of std table records where the score is less than 40 and the target table is bonus. The student numbers (std_id) where the score (std.score) is less than 40 are 4, 6, 10, 12, and 14. Among them, for 4, 6, and 10 on the bonus table, the **UPDATE** clause adds 10% of the corresponding student score to the existing bonus. For 12 and 14 which are not on the bonus table, the INSERT clause additionally gives 10 scores and 10% of the corresponding student score.
 
+[TODO] - translation required
+다음은 MERGE 문에 인덱스 힌트를 사용하는 예이다. **USE_UPDATE_IDX** 힌트는 UPDATE 절을 수행할 때 *source* 테이블을 인덱스 스캔하기 위해 사용되며, **USE_INSERT_IDX** 힌트는 INSERT 절을 수행할 때 *target** 테이블을 인덱스 스캔하기 위해 사용된다.
+
+.. code-block: sql
+
+    CREATE TABLE target (i int, j int);
+    CREATE TABLE source (i int, j int);
+
+    INSERT target VALUES (1,1),(2,2),(3,3);
+    INSERT source VALUES (1,11),(2,22),(4,44),(5,55),(7,77),(8,88);
+
+    CREATE INDEX i_t_i ON target(i);
+    CREATE INDEX i_t_ij ON target(i,j);
+    CREATE INDEX i_s_i ON source(i);
+    CREATE INDEX i_s_ij ON source(i,j);
+
+    MERGE /*+ recompile USE_UPDATE_IDX(i_s_ij) USE_INSERT_IDX(i_t_ij, i_t_i) */
+      INTO target t USING source s
+      ON t.i=s.i 
+      WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
+      WHEN NOT MATCHED THEN INSERT VALUES(i,j);
+      

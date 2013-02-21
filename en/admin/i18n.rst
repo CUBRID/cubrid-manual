@@ -1505,20 +1505,9 @@ Remark
 
 *   Charset is assumed to be the same per CUBRID instance. Providing direct UTF-8 input from a client through CCI-JDBC is possible to a CUBRID instance started with UTF-8 charset. This is due to charset conversions (when CUBRID is using ISO charset, all input is assumed ISO and is converted to UTF-8, even client native UTF-8 strings). ASCII compatible characters are fully compatible with both ISO and UTF-8, and will not suffer any transformation.
 
-*   :ref:`COLLATE  modifier <charset-collate-modifier>` is not supported in **ORDER BY**, **GROUP BY**, operators using collation, etc. As an workaround, explicit :func:`CAST` operator can be used to change the collation and charset in expressions.
-
-*   You should not start an instance (server, CAS, CSQL) with different collations than the ones used to create the databases.
-
 *   Query plans printing: collation is not displayed in plans for results with late binding.
 
 *   Only the Unicode code-points in range 0000-FFFF (Basic Multilingual Plan) are normalized.
-
-*   Several locales shared libraries cannot be used on one database instance at the same time.
-
-*   Optimization of string prefix key (index nodes) for collation with expansions is not supported yet; there is an overhead to use the whole string as a prefix.
-
-*   Case compare cannot cover the cases when lowercase and uppercase multipliers [#f2]_ are used(e.g.: de_DE).
-
 *   Some locales use space character as separator for digit grouping (thousands, millions, ..). Space is allowed but not working properly in some cases of localized conversion from string to number.
 
 *   User defined variable cannot be changed into the different collation from the system collation. For example, "set @v1='a' collate utf8_en_cs;" syntax cannot be executed when the system collation is iso88591.
@@ -1526,5 +1515,3 @@ Remark
 .. rubric:: Footnotes
 
 .. [#f1] glyph: an element for the shape of a character; a graphic symbol which indicates a shape or a form for a character. Because a glyph specifies the shape which is shown, several glyphs about one character can exist.
-
-.. [#f2] case multiplier:  the maximum number of codepoints used for representing a symbol in upper or lower casing. One can say that an alphabet where an uppercase (or lowercase) symbol contains N codepoints at the most, has an uppercase (or lowercase) multiplier of N. the Norwegian alphabet is a good example, having a lowercase multiplier of 2. The lowercase of Å (hex codepoint 0x00C5, capital letter A with ring above) is a symbol consisting of two codepoints: "aa". Also, 2 is the maximum number of codepoints needed by any lowercase symbol.

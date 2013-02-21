@@ -6,7 +6,7 @@ MERGE
 
 **MERGE** 문을 실행하기 위해서는 원본 테이블에 대해 **SELECT** 권한을 가져야 하며, 대상 테이블에 대해 **UPDATE** 절이 포함되어 있으면 **UPDATE** 권한, **DELETE** 절이 포함되어 있으면 **DELETE** 권한, **INSERT** 절이 포함되어 있으면 **INSERT** 권한을 가져야 한다. ::
 
-    MERGE [<merge_hint>]INTO <target> [[AS] <alias>]
+    MERGE [<merge_hint>] INTO <target> [[AS] <alias>]
     USING <source> [[AS] <alias>], <source> [[AS] <alias>], ...
     ON <join_condition>
     [ <merge_update_clause> ]

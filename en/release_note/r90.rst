@@ -22,66 +22,80 @@ CUBRID 9.0 has added features supporting a variety of character sets from differ
 
 CUBRID 9.0 Release includes all the fixes in CUBRID 2008 R4.1 and its previous versions. The key features of CUBRID 9.0 are shown below:
 
-**Globalization Support**
+Globalization Support
+---------------------
 
     Added character sets, collations, calendars and number notations of various languages, including Korean, English, Japanese, Chinese, Vietnamese, Cambodian, Turkish, German, Spanish, French, and Italian to provide a database environment suitable for localization.
 
-**Supports Middleware Functionality for Database Sharding**
+Supports Middleware Functionality for Database Sharding
+-------------------------------------------------------
 
     Provides the CUBRID SHARD middleware for facilitating access to horizontally partitioned databases across multiple machines. The CUBRID SHARD feature provides a single view that displays databases spread across multiple devices as a single database and transparency that allows users to recognize them without accessing individual databases.
 
-**Supports Analytic Functions Using the OVER Clause**
+Supports Analytic Functions Using the OVER Clause
+-------------------------------------------------
 
     Added analytic functions using a new analytic clause called OVER to get a variety of statistics for a specific row set.
 
-**Supports the MERGE Statement that is Used to Merge INSERT, UPDATE, and DELETE Queries**
+Supports the MERGE Statement that is Used to Merge INSERT, UPDATE, and DELETE Queries
+-------------------------------------------------------------------------------------
 
     Added the MERGE statement used to enter, update, or delete data from one or more source tables from a single target table.
 
-**Supports JOIN for the UPDATE and DELETE Statements**
+Supports JOIN for the UPDATE and DELETE Statements
+--------------------------------------------------
 
     This version supports JOIN in the UPDATE and DELETE statements.
 
-**Supports the ENUM Type**
+Supports the ENUM Type
+----------------------
 
     Added the ENUM type that is defined with enumeration type character string constants.
 
-**Supports a Variety of Index Functionalities, including Function-based and Filtered Indexes and the Index Skip Scan**
+Supports a Variety of Index Functionalities, including Function-based and Filtered Indexes and the Index Skip Scan
+------------------------------------------------------------------------------------------------------------------
 
     Provides a function-based index feature that includes function expressions in columns comprising an index. This version of CUBRID also adds a filtered index feature that includes search conditions in an index. The index skip scan optimization allows users to use a multi-column index from its second column even when the first column is not specified.
 
 
-**Improved the Stability and Performance of the Partitioned Table Feature and Supports the PROMOTE Statement**
+Improved the Stability and Performance of the Partitioned Table Feature and Supports the PROMOTE Statement
+----------------------------------------------------------------------------------------------------------
 
     Fundamentally enhanced the partitioning feature for better stability and performance. The performance of this version has been improved by allowing partitions to be pruned during the query execution process, not during the compiling process. It has also changed the primary key and the unique index to be maintained for each partition rather than for the entire partition. There has been many other stability and performance improvements as well.
 
     Also, the PROMOTE statement that is used to promote a specific partition from a partitioned table to a general table has been added.
 
-**Improved HA Stability and Operating Convenience**
+Improved HA Stability and Operating Convenience
+-----------------------------------------------
 
     Fixed many stability issues, such as the inconsistent HA replication of data and schema. This version provides a separate control for the HA management process and easier dynamic addition and deletion of nodes in the HA management process.
 
-**Supports Pseudo Column in Default**
+Supports Pseudo Column in Default
+---------------------------------
 
     If you specify system functions such as SYSDATE and USER, as default attributes, you can get the result value based on the time at which the query is executed.
 
 
-**Supports Cursor Holdability**
+Supports Cursor Holdability
+---------------------------
 
     The cursor holding has become the defaulting setting to maintain the cursor after a commit in order to allow a DML commit while maintaining the result set.
 
 
-**Added VALUES Clause**
+Added VALUES Clause
+-------------------
 
     Added VALUES clause used to output the row values specified in the expressions under VALUES clause so that a table mainly comprising constant values can be expressed.
 
 
-**Improved Error Messages**
+Improved Error Messages
+-----------------------
 
     Enhanced error messages to make it easier to find the location of an error. The cause of unspecific error messages are now easier to identify.
 
 
-**Fixed or Improved Over 1,800 Bugs and Functionalities**
+Fixed or Improved Over 1,800 Bugs and Functionalities
+-----------------------------------------------------
 
     Fixed or improved big and small bugs and functionalities found in SQL functions, SQL statements, query plans, indexes, triggers, drivers, and utilities. Fixed or improved the issues found in query plans, index scans, locks, repetitive executions of insertion and deletion, memory leaks, and disk usage. Also improved or fixed some issues related to the replication of HA schema and data.
 
@@ -93,13 +107,12 @@ New Functionalities
 SQL
 ---
 
-
 MERGE statement (CUBRIDSUS-7080)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Added the MERGE statement that is used to select rows from one or more sources and update or insert them to a single table or view. You can specify the condition to determine whether to update or insert rows to the target table or view.
 
-    ::
+    .. code-block:: sql
 
         MERGE INTO target_table tt USING source_table st
         ON (st.a=tt.a AND st.b=tt.b)
@@ -117,7 +130,7 @@ Analytic functions using OVER clause (CUBRIDSUS-6112)
 
     The following is an example of outputting the number of yearly acquired gold medals by countries whose nation_code in demodb starts with 'AU', and the average sum of accumulated gold medals up to a specific year.
 
-    ::
+    .. code-block:: sql
     
         SELECT host_year, nation_code, gold, AVG(gold) OVER (PARTITION BY nation_code ORDER BY host_year) avg_gold
         FROM participant WHERE nation_code LIKE 'AU%';
@@ -126,7 +139,7 @@ UPDATE JOIN and DELETE JOIN statements (CUBRIDSUS-5646)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     Added the UPDATE JOIN and DELETE JOIN statements that are used to update or delete one or more tables.
 
-    ::
+    .. code-block:: sql
 
         UPDATE a_tbl INNER JOIN b_tbl ON a_tbl.id=b_tbl.rate_id
         SET a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
@@ -140,7 +153,8 @@ ENUM type
 
     Added the ENUM type that is defined with enumeration type character string constants.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE tbl (
             color ENUM('red', 'yellow', 'blue')
@@ -161,7 +175,8 @@ Specified ORDER BY in the UPDATE statement (CUBRIDSUS-6605)
 
     Made it possible to update in order according to the ORDER BY clause in the UPDATE statement. If the UPDATE statement is executed in the query shown below, the value of 'b' will be updated in the descending order of the size of the value of the column 'a'.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t1 (a int, b int);
         INSERT INTO t1 VALUES (1,1), (2,2),(3,3),(4,4);
@@ -173,7 +188,8 @@ VALUES clause (CUBRIDSUS-7553)
 
     Added the VALUES clause used to create a constant table temporarily instead of an actual table. Although you can get the same result by connecting the UNION ALL statement but you can do it much more easily by using the VALUES clause. It is usually used in the form of joining with another table in the SELECT, UPDATE, and DELETE queries.
 
-    ::
+    .. code-block:: sql
+
 
         VALUES (1 AS col1, 'first' AS col2), (2, 'second'), (3, 'third'), (4, 'forth');
 
@@ -190,10 +206,12 @@ SHOW CREATE TABLE statement (CUBRIDSUS-6996)
 
     Added the SHOW CREATE TABLE statement used to output the SQL statement that creates a table.
 
-    ::
+    .. code-block:: sql
 
         SHOW CREATE TABLE tbl;
-
+        
+    ::
+    
         TABLE CREATE TABLE
         ============================================
         'tbl' 'CREATE TABLE [tbl] ([id] INTEGER DEFAULT 0 NOT NULL, [phone] CHARACTER VARYING(10), CONSTRAINT [pk_tbl_id] PRIMARY KEY ([id]))'
@@ -203,7 +221,8 @@ Partition PROMOTE statement (CUBRIDSUS-7629)
 
     Added the PROMOTE statement to promote some partitions specified by user from a partitioned table to a general table.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t(i int) PARTITION BY LIST(i) (
             partition p0 values in (1, 2, 3),
@@ -219,7 +238,8 @@ ALTER statement to change the owner of tables, views, triggers and stored proced
 
     Added the ALTER statement to specify the owner of tables, views, triggers, and stored procedures.
 
-    ::
+    .. code-block:: sql
+
 
         ALTER TABLE test_tbl OWNER TO PUBLIC;
         ALTER VIEW test_view OWNER TO PUBLIC;
@@ -232,7 +252,8 @@ Supports the LEVEL column for CONNECT BY clause (CUBRIDSUS-7526)
 
     Made it possible to use a LEVEL column in a CONNECT BY clause.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT LEVEL FROM db_root CONNECT BY LEVEL <= 10;
 
@@ -241,7 +262,8 @@ Supports OFFSET keyword for a LIMIT clause (CUBRIDSUS-7439)
 
     Made it possible to use the OFFSET keyword in a LIMIT clause. The following two queries execute the same result.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT * FROM tab LIMIT 2, 1;
         SELECT * FROM tab LIMIT 1 OFFSET 2;
@@ -251,22 +273,26 @@ INET_ATON and INET_NTOA functions (CUBRIDSUS-8230)
 
     Added the INET_ATON and INET_NTOA functions. The INET_ATON function returns numeric value when an IP address is entered, while the INET_NTOA function returns an IP address value when numbers are entered.
 
-    ::
+    .. code-block:: sql
 
         SELECT INET_ATON('192.168.0.10');
 
+    ::
+    
         inet_aton('192.168.0.10')
         ============================
         3232235530
 
-        SELECT INET_NTOA(3232235530);
+    .. code-block:: sql
 
+        SELECT INET_NTOA(3232235530);
+        
+    ::
+    
         inet_ntoa(3232235530)
         ======================
         '192.168.0.10'
 
-        
-        
 Globalization support
 ---------------------
 
@@ -326,7 +352,8 @@ Filtered index (CUBRIDSUS-6112)
 
     Supports the filtered index that includes a specific criterion. As only part of an index that meets some condition is used, it is also called partial index. As a filtered index is used to index only some rows that meet some condition, a burden of index update can be relieved and the search performance can be improved thanks to a smaller search range.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE UNIQUE INDEX bugs_per_dev ON bugs(Author) WHERE Closed = 0;
 
@@ -341,7 +368,8 @@ Function-based index (CUBRIDSUS-6112)
 
     Supports a function-based index that contains the result value of a specific function. It is used to sort or search data by using a specific function.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE INDEX idx_upper_post ON posts_table(UPPER(keyword));
 
@@ -350,7 +378,8 @@ Index skip scan (CUBRIDSUS-5646)
 
     Added the index skip scan (ISS) feature that allows the later part of an index to be used when the condition (usually =) is not met by the first column but by the following column of the index.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE INDEX idx_t_gen_name on t (gender, name);
         SELECT * from t WHERE name = 'SMITH';
@@ -377,7 +406,7 @@ Driver
 
     As previous connection functions returned a single error code when an error occurred, users were unable to check specific errors. After this modification, users can check specific error codes through error message buffer.
 
-    ::
+    .. code-block:: c
 
         T_CCI_ERROR error;
         connection = cci_connect_ex ("localhost", 33000, "demodb", "dba", "pwd", &error);
@@ -385,7 +414,6 @@ Driver
 
 System Catalog
 --------------
-
 
 Added and deleted columns in the HA catalog table (CUBRIDSUS-5456)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -616,19 +644,8 @@ Added multi-range optimization frequency to the execution statistics information
 
     Added the item of the number of multi-range optimizations to the execution statistics information checked through the cubrid statdump utility or the SHOW EXEC STATISTICS ALL.
 
-Added a connection URL attribute used to allow debugging logs to be written (CUBRIDSUS-6377)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    Added a feature that is used to configure debugging logs for CCI connection URLs. logSlowQueries and slowQueryThresholdMillis write slow query log information, logTraceApi writes the beginning and the end of the called CCI functions, and logTraceNetwork writes the network data transmission information of a CCI function to a file.
-
-    ::
-    
-        url = "cci:cubrid:localhost:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
-
-    The new version has also changed the operation behavior of logBaseDir which specifies the path of debugging log files to the CCI connection URL. In the previous version, the logBaseDir property was ignored when the logBaseDir value and logFile were together. The new version has been changed to specify the file name as "logBaseDir/logFile" to include the path.
-
-Changes of Behaviors
-====================
+Behavioral Changes
+==================
 
 SQL
 ---
@@ -644,7 +661,8 @@ Modified to get result values based on the time of query execution when function
     In the previous version, when the SYSTIMESTAMP, SYSDATE, SYSDATETIME, and USER functions were specified as a
     DEFAULT constraint value, the DEFAULT value was fixed to the result value of the function based on when the table was created. In the new version, the result value will be calculated whenever a query is executed.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t (ID int, col TIMESTAMP DEFAULT SYSTIMESTAMP);
         ALTER TABLE t add column (uid STRING DEFAULT USER);
@@ -655,7 +673,8 @@ Modified not to allow the cases in which the input argument of MINUTE, HOUR, SEC
 
     When the time type character string is an input argument as in the case of MINUTE, HOUR, SECOND, and TIME_TO_SEC functions, the date type character string, such as "YYYY-MM-DD" is not allowed any longer.
     
-    ::
+    .. code-block:: sql
+
     
         // The queries below are not allowed after modification.
         SELECT TIME_TO_SEC('2010-01-01');
@@ -671,7 +690,8 @@ Changed to return NEXTVAL from "set value" when the starting value of the serial
 
     If the starting value of the serial is changed, the NEXTVAL of the serial was returned from "set value + 1." The new version has been changed to return from the "set value."
 
-    ::
+    .. code-block:: sql
+
 
         ALTER SERIAL s1 START WITH 10;
         SELECT s1.NEXTVAL;
@@ -682,7 +702,8 @@ Modified when a column is altered to a character type column shorter than the le
 
     Previously, when ALTER TABLE ... CHANGE COLUMN... was executed to change a column into a character type column shorter than the length of the numeric value stored in the numeric type column, the value of the column was processed as an empty string when it exceeded the specified length of the character type column. Now the value will be stored up to the specified length.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1 (i1 INT);
         INSERT INTO t1 VALUES (1),(-2147483648),(2147483647),(-2147483648),(2147483647);
@@ -733,7 +754,7 @@ Driver
 
     In the previous version, the DatabaseMetaData.getColumns() method returned NUMERIC type names as DECIMAL. Now it returns them as NUMERIC.
 
-    ::
+    .. code-block:: java
 
         // An error such as "Caused by: org.hibernate.HibernateException: Wrong column type in mytbl_map for column col2. Found: decimal, expected: numeric(19,0)" occurred if a column with NUMERIC type is specified when configuring mapping between entities by using Hibernate in an earlier version which has not been fixed.
 
@@ -815,7 +836,8 @@ Improved the performance of the execution of the INSERT ON DUPLICATE KEY UPDATE 
 
     Improved the problem that would reduce the speed of the execution of the INSERT ON DUPLICATE KEY UPDATE statement when the statement contains two or more unique keys, including the primary key, in the target table.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE x (a INT PRIMARY KEY, b INT, c INT, d INT, UNIQUE(b), UNIQUE(c));
         CREATE SERIAL s;
@@ -840,7 +862,8 @@ Improved the performance of the execution of the UNION ALL query statement (CUBR
 
     Improved the performance by not copying the intermediate result row of the earlier query statement but reusing it when generating the result of the UNION ALL query statement.
 
-    ::
+    .. code-block:: sql
+
 
         // In the example below, the more number of tl tables will result in more improvement by modification.
         SELECT * FROM t1 UNION ALL SELECT * FROM t2;
@@ -853,7 +876,8 @@ Fixed a problem in which the time it takes to finish CREATE would increase when 
 
     Previously, the time it takes to finish CREATE would increase when DROP and CREATE tables were invoked repeatedly. This problem has been fixed. For reference, this problem could be avoided by configuring the REUSE_OID option, as in the example below, in the previous version.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE reuse_tbl (a INT PRIMARY KEY) REUSE_OID
 
@@ -885,7 +909,8 @@ Fixed a problem in which some spaces were unable to be reused after defining two
 
     Fixed a problem in which some spaces were unable to be reused after defining two or more foreign keys only with a different name in a single column and dropping the table.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE foo (a INT, PRIMARY KEY (a));
         CREATE TABLE bar (a INT,
@@ -907,7 +932,8 @@ Fixed an error that occurred when a CONCAT_WS function using a query or a functi
 
     Fixed the "ERROR: Cannot evaluate ' concat_ws('a', cast( SYS_DATE as varchar))'" error that occurred when a CONCAT_WS function using a query or a function as an argument was entered as the value of the INSERT statement.
 
-    ::
+    .. code-block:: sql
+
     
         INSERT INTO tbl VALUES (1,concat_ws('a',SYS_DATE()));
 
@@ -916,7 +942,8 @@ Fixed a problem in which it took long time to execute a query with a nested subq
 
     Fixed a problem in which it took a long time to execute a query with a subquery in the OR clause.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT col2 FROM tab0
         WHERE (A AND B) OR (col3 IN (SELECT i FROM t WHERE X AND Y OR Z AND W) AND D);
@@ -926,7 +953,8 @@ Fixed an error in which the DELETE FROM ALL statement was unable to delete the L
 
     Fixed an error in which, when deletion was executed with regard to the inheritance hierarchy through the DELETE FROM ALL statement, the LOB file of the relevant table and that of the tables that inherit it were not deleted.
 
-    ::
+    .. code-block:: sql
+
     
         DELETE FROM ALL parent_tbl;
 
@@ -965,15 +993,21 @@ Supports the YYYYMMDDH format as an input argument in the Date/Time function (CU
 
     Modified to support the YYYYMMDDH format as an input argument in the Date/Time functions, such as TIME and TO_DATETIME.
 
-    ::
-    
+    .. code-block:: sql
+
         SELECT TIME('1104209');
 
+    ::
+    
         time('1104209')
         ======================
         '09:00:00'
 
+    .. code-block:: sql
+    
         SELECT TO_DATETIME('1104209','YYMMDDH');
+
+    ::
 
         to_datetime('1104209', 'YYMMDDH', 'en_US')
         =============================================
@@ -984,7 +1018,7 @@ Fixed a problem in which the ADDTIME function returned incorrect results (CUBRID
 
     Fixed a problem in which the ADDTIME function returned incorrect results.
 
-    ::
+    .. code-block:: sql
 
         SELECT ADDTIME('2012-02-02','9:9:9');
 
@@ -993,7 +1027,7 @@ Fixed an overflow error that occurred when % operation, BIT_AND function or BIT_
 
     Fixed a problem in which the "ERROR: Overflow occurred in ..." error occurred when % operation, BIT_AND function or BIT_OR function was executed to a column storing -2147483648, the minimum value of the INT type.
 
-    ::
+    .. code-block:: sql
 
         INSERT INTO tbl VALUES (-2147483648);
         SELECT i%1009 FROM tbl;
@@ -1004,7 +1038,8 @@ Fixed an error in which TRIM function outputted incorrect results (CUBRIDSUS-659
 
     Fixed an error in which the TRIM function, which is an SQL function, deleted one more character than the character string specified to be deleted. As in the following example, when "foo" is TRIMMED from "foook", "ok" should be outputted.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT TRIM('foo' FROM 'foook');
 
@@ -1018,20 +1053,21 @@ Fixed an error that occurred when executing queries with only the CHAR type inpu
 
     Fixed a problem in which query execution failed with the message "ERROR: No error message available." when the input arguments of the CONCAT and CONCAT_WS functions consisted of only CHAR type arguments.
 
-::
+    ::
 
-    CREATE TABLE t1 (a int , b char (20) );
-    INSERT INTO t1 VALUES (-1, '');
-    --below statement will throw "ERROR: No error message available." message.
+        CREATE TABLE t1 (a int , b char (20) );
+        INSERT INTO t1 VALUES (-1, '');
+        --below statement will throw "ERROR: No error message available." message.
 
-    SELECT concat(b) FROM t1;
+        SELECT concat(b) FROM t1;
 
 Fixed an error that occurred when executing the CLOB_TO_CHAR function (CUBRIDSUS-6520)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Fixed a problem in which query execution failed with the message "ERROR: External file "xxxx" was not found." when CLOB_TO_CHAR() was executed after the execution and commit of the REPLACE statement to scan a unique index to a table with a CLOB column.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT id, CLOB_TO_CHAR(text) FROM tbl ORDER BY id;
 
@@ -1040,7 +1076,8 @@ Fixed an error that occurred when executing a query with the DATE type input arg
 
     Fixed a problem in which query execution failed with the message "ERROR: Conversion error in time format." when the input argument of the TIMEDIFF function was DATE type.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT TIMEDIFF(TO_DATE('2012-12-2'), TO_DATE('2012-11-2'));
 
@@ -1049,7 +1086,8 @@ Fixed a problem in which a smaller join result was outputted when the CONCAT_WS 
 
     In the previous version, when the CONCAT_WS function was a condition of the LEFT OUTER JOIN, a smaller join result was outputted because the result value of the function was always regarded as NULL when even a single input argument value of the CONCAT_WS function was NULL due to the error in the process of optimizing the LEFT OUTER JOIN query. This problem has been fixed.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT * FROM t1 LEFT JOIN t2 ON t1.id = t2.id WHERE CONCAT_WS(' ', t1_name, t2_name) LIKE '%In%';
 
@@ -1058,7 +1096,8 @@ Fixed a problem in which the server would be abnormally terminated when using th
 
     Fixed a problem in which the server was abnormally terminated during a query was executed if the INTERVAL value of theDATE_ADD, which is an SQL function, was used as a host variable when the query was prepared. In the previous version, only the INTERGER was available as the type of the input value according to the INTERVAL unit of the DATE_ADD function. Now you can also use VARCHAR.
 
-    ::
+    .. code-block:: sql
+
     
         PREPARE s FROM 'SELECT DATE_ADD(?, INTERVAL ? YEAR_MONTH)';
         EXECUTE s USING '2010-01-01', 1;
@@ -1074,7 +1113,7 @@ Fixed a problem in which query execution failed while binding value when all the
 
     Fixed a problem in which, when all the arguments were a host variable in some SQL functions, such as NULLIF, LEAST, and GREATEST, query execution failed because value was bound and attempted to be typecast to DOUBLE.
 
-    ::
+    .. code-block:: java
 
         preStmt = conn.prepareStatement("select nullif (?, ?)");
         preStmt.setString(1, "A");
@@ -1086,7 +1125,7 @@ Fixed an error that occurred when executing the DECODE function that omitted the
 
     Fixed a problem in which query execution failed with the message "ERROR: Attribute "val" cannot be made NULL." when the third input argument to specify the DEFAULT value was omitted in the execution of the DECODE function in the PREPARE statement.
 
-    ::
+    .. code-block:: sql
 
         PREPARE stmt1 FROM 'UPDATE foo SET del_ts = 100, val=DECODE(name,?,val + ?) WHERE name IN (?)';
         EXECUTE stmt1 USING 'seo', 1, 'seo';
@@ -1096,7 +1135,8 @@ Fixed an error that occurred when executing a query in which the SELECT list con
 
     Fixed a problem in which query execution failed with the message "ERROR: System error (query result) in ../../src/parser/query_result.c" when the SELECT list contained an INSERT or ELT function and the value came after it.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT INSERT('test',2,1,'hi'), 5;
         SELECT ELT(2, 1), 5;
@@ -1114,14 +1154,16 @@ Supports SELECT ALL/DISTINCT constant or DISTINCT (Column) (CUBRIDSUS-6080)
 
     Modified to support SELECT ALL or SELECT DISTINCT constants.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT ALL 1;
         SELECT DISTINCT 1;
 
     You can also execute aggregate functions by enclosing a column with parentheses or executing DISTINCT of constants.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT SUM(DISTINCT(i)) FROM t;
         SELECT SUM(DISTINCT 4) FROM t;
@@ -1131,10 +1173,12 @@ Made it possible to delete derived table names in the FROM clause (CUBRIDSUS-654
  
     Improved to delete the name of a derived table in the FROM clause, which had to be necessarily specified.
 
-    ::
-    
+    .. code-block:: sql
+
         SELECT * FROM (SELECT sysdate FROM db_root);
 
+    ::
+    
         // Message before fixed
         FROM (subquery) [ AS ] derived_table_name [( column_name [ {, column_name } ... ] )]
 
@@ -1165,7 +1209,8 @@ Made it possible to enter SELECT queries to the DO statement (CUBRIDSUS-6528)
 
     Modified to make it possible to enter SELECT queries to the DO statement.
 
-    ::
+    .. code-block:: sql
+
 
         DO (SELECT count(*) FROM athlete);
 
@@ -1180,7 +1225,8 @@ Made it possible to use TO as well as AS between the existing and new names of a
 
     Previously, you could use only AS when changing the name of a column. Now you can also use TO instead of AS.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t ( a int);
         ALTER TABLE t RENAME COLUMN a TO b;
@@ -1190,7 +1236,7 @@ Fixed a problem in which an incorrect query result would be displayed when an OR
 
     Fixed a problem in which an incorrect query result would be displayed when an ORDER BY clause was used in the scalar subquery of an IN or NOT IN condition, or several columns existed in the SELECT list.
 
-    ::
+    .. code-block:: sql
 
         // The case number was always 0 when an ORDER BY clause was used in the scalar subquery.
         SELECT * FROM tbl WHERE col IN (SELECT col FROM tbl2 ORDER BY b);
@@ -1206,7 +1252,8 @@ Fixed a problem in which normal execution failed when the host variable type in 
 
     In the previous version, when the type of the value to be bound was date/time, Q1 worked normally as the data was deleted, but Q2 worked abnormally because the data was not deleted.
 
-    ::
+    .. code-block:: sql
+
     
         DELETE FROM TBL WHERE D = ?;        -- Q1
         DELETE FROM TBL WHERE D IN (?);        -- Q2
@@ -1216,7 +1263,8 @@ Fixed a problem in which incorrect results would be outputted when an ORDER BY c
 
     Fixed a problem in which incorrect results would be outputted when there were a GROUP BY and a correlated subquery and when a column not found in the SELECT list was specified in the ORDER BY clause.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT (SELECT f1.a FROM foo f1 WHERE f1.b=f2.b) as t
         FROM foo f2
@@ -1229,7 +1277,8 @@ Fixed a problem in which incorrect results would be produced when WITH ROLLUP co
 
     Fixed a problem in which incorrect results would be produced when the WITH ROLLUP corrector of the GROUP BY clause was specified.
 
-    ::
+    .. code-block:: sql
+
     
         // The results was not outputted with ROLLUP.
         SELECT a FROM t1 GROUP BY A WITH ROLLUP;
@@ -1242,7 +1291,8 @@ Fixed a problem in which, when the select list format of a subquery was "\*, col
 
     Fixed a problem in which, when the SELECT list format of a subquery was "\*, Column", the following columns were not outputted.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT b FROM (SELECT *, 'hello' AS b FROM t1) t;
 
@@ -1251,10 +1301,12 @@ Fixed an error that occurred when the escape character specified in the ESCAPE c
 
     Fixed a problem in which query execution failed with the message "System error" when the escape character specified in the ESCAPE clause was the last character of the LIKE pattern.
 
-    ::
+    .. code-block:: sql
     
         CREATE TABLE foo(a char(10));
         SELECT * FROM foo WHERE a LIKE 'ab' ESCAPE 'b';
+        
+    ::
 
         ERROR: System error (db_compress_like_pattern) in ../../src/optimizer/query_rewrite.c (line: 3291)
 
@@ -1263,7 +1315,8 @@ Fixed an error that occurred when a query with wildcard (\*) and a query with co
 
     Fixed a problem in which query execution failed with the message "ERROR: The number of columns, 0, in the left query do not match the number of columns, N, in the right query." when a query with * and a query with column name, both specified in the SELECT list, were united through a statement set operator, such as UNION, despite the same number of columns.
 
-    ::
+    .. code-block:: sql
+
     
         (SELECT * FROM t1) UNION (SELECT a, b FROM t2 );
 
@@ -1271,11 +1324,14 @@ Fixed a problem in which incorrect results would be outputted when a comparison 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     Fixed a problem in which an unexpected result was outputted from a query when the comparison condition clause of the query contained a host variable and the type of the values entered to the host variable was converted.
 
-    ::
+    .. code-block:: sql
+
     
         // The result value was correctly outputted if constant was used, not host variable.
         SELECT * FROM foo WHERE a > 2.5;
 
+    ::
+    
         a
         =============
         3
@@ -1288,6 +1344,8 @@ Fixed a problem in which incorrect results would be outputted when a comparison 
         PREPARE stmt FROM 'SELECT * FROM foo WHERE a > ?';
         EXECUTE stmt USING 2.5;
 
+    ::
+    
         a
         =============
         4
@@ -1298,7 +1356,8 @@ Fixed a problem in which incorrect results were outputted when a query with a su
 
     Fixed a problem in which incorrect results were outputted when a query with a subquery that contained UNION and LIMIT clauses was executed.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t1 (a INT);
         INSERT INTO t1 VALUES (1);
@@ -1311,7 +1370,8 @@ Fixed an error that occurred when a query with its subquery containing a UNION c
 
     Fixed a problem in which query execution failed with the message "ERROR: '(select t1.i from t1 t1)<>0' is not union compatible with '(select t2.i from t2 t2)'." when a subquery containing a UNION clause is in the condition of a WHERE clause.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT * FROM t1 WHERE EXISTS ((SELECT i FROM t1) UNION ALL (SELECT i FROM t2));
 
@@ -1320,7 +1380,8 @@ Fixed an error in which incorrect query results were outputted when the OUTER JO
 
         Fixed an error in which incorrect query results were outputted when an OUTER JOIN query was executed in the merge join method.
 
-        ::
+        .. code-block:: sql
+
         
             SELECT /*+ USE_MERGE */ * FROM tab t
             LEFT OUTER JOIN idx i on t.t = i.t
@@ -1331,7 +1392,8 @@ Fixed a problem in which, if the number of the rows of ORDERBY_NUM() was bigger 
 
     In the condition in which the limited number of rows is outputted through ORDERBY_NUM() from the sorted result after limiting the number of rows through ROWNUM, if the number of rows of ROWNUM was bigger than that of ORDERBY_NUM(), the incorrect number was outputted as the result. This problem has been fixed.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT * FROM foo f, bar b WHERE f.a > 0 AND f.a = b.a AND ROWNUM <=4 ORDER BY f.a FOR ORDERYBY_NUM()<=10;
 
@@ -1340,7 +1402,8 @@ Fixed a problem in which an overflow error was not processed in the TIMEST AMP t
 
     Fixed a problem in which an overflow error was not processed in the query below with regard to the TIMESTAMP type. The new version returns an overflow error when the below query is executed.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT timestamp'01/19/2038 12:14:07 pm' - CAST(-32768 as smallint);
 
@@ -1349,7 +1412,8 @@ Fixed an error that occurred when a subquery with an ORDER BY clause as the argu
 
     Fixed a problem in which the "ERROR: Aggregate function must have 1 argument: min(t2.id, t2.a)." error occurred when an subquery with an ORDER BY clause as the argument of ANY, SOME determiners was executed.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT * FROM t1 WHERE id > ANY(SELECT id FROM t2 ORDER BY a);
 
@@ -1358,7 +1422,7 @@ Fixed a problem in which, when executing multiple queries after preparing them c
 
     Fixed a problem in which, when executing multiple queries repeatedly after preparing them concurrently, only the first execution was made normally and an error occurred from the second execution.
 
-    ::
+    .. code-block:: java
 
         String MULTI_SELECT = "SELECT A FROM T1 WHERE A = ?
         ; UPDATE T1 SET A = 2 WHERE A = 2; SELECT A, B FROM T1 WHERE A = ?; SELECT A, B, A AS C FROM T1 WHERE A = ?;";
@@ -1378,7 +1442,7 @@ Fixed a problem in which key limit optimization was applied incorrectly in a que
 
     Fixed a problem in which inappropriate key limit optimization was applied in a query with the EXISTS and FOR ORDERBY_NUM() BETWEEN conditions and incorrect results were outputted.
 
-    ::
+    .. code-block:: sql
 
         SELECT cd, tcd, nm
         FROM a
@@ -1393,7 +1457,8 @@ Fixed an error that occurred when the earlier VARCHAR type column was smaller th
 
     Fixed a problem in which query execution failed with the message "ERROR: Execute: Query execution failure #1336." when the front VARCHAR type column was smaller than the later column in a UNION query.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE u1 (a varchar(1));
         CREATE TABLE u2 (a varchar(2));
@@ -1406,7 +1471,8 @@ Fixed an error that occurred when executing CASE or DECODE statements with a PRE
 
     Fixed a problem in which query execution failed with the message "ERROR: Semantic: System error (generate var) in ../../src/parser/xasl_generation.c" when a type was not able to be determined, for example, because all the arguments were given as a host variable, in the execution of the CASE or DECODE statements with a PREPARE statement.
 
-    ::
+    .. code-block:: sql
+
 
         PREPARE ST FROM 'SELECT CASE WHEN col=? THEN ? ELSE ? END FROM tbl;'
 
@@ -1415,7 +1481,8 @@ Fixed an malfunction that occurred when '%' was used as an escape character of t
 
     Fixed an error in which a malfunction occurred when '%' was used as an escape character of the LIKE statement.
 
-    ::
+    .. code-block:: sql
+
 
         // When the following query was executed, '%' character at first, random character at second, and 'cab' string after third were retrieved.
         SELECT * FROM foo WHERE a LIKE '%%_cab' escape '%';
@@ -1425,9 +1492,9 @@ Fixed an overflow error that occurred even when division operations were execute
 
     Fixed a problem in which query execution failed with the message "ERROR: Data overflow on data type numeric" when division operations were executed with NUMERIC type operands although an input argument value was a number within the scope of the NUMVER type.
 
-    ::
-    
-        // An error occurred in the following case.
+    .. code-block:: sql
+
+        -- An error occurred in the following case.
         SELECT 9/1.2345678901211111111;
         SELECT -9/1.2345678901211111111;
 
@@ -1446,20 +1513,23 @@ Fixed an error that occurred when a condition query using NOT and unary operator
 
     Fixed a problem in which query execution failed with the message "ERROR: 'unknown opcode' operator is not defined on types integer and integer." when the following condition query using NOT and unary operator (-) was executed.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT * FROM tab WHERE NOT - col0 = - col0;
 
     An error that occurred when unary operators + and - were used together in a query statement has also been fixed.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT * FROM tab0 WHERE col0 IN (+ - col0);
 
 Fixed a problem in which the server process would be abnormally terminated when a SELECT query to retrieve a specific column was executed for a view containing an ORDER BY clause (CUBRIDSUS-7140)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    ::
+    .. code-block:: sql
+
 
         CREATE VIEW va AS SELECT code, name, gender, nation_code FROM athlete ORDER BY nation_code;
         SELECT code, name FROM va;
@@ -1469,7 +1539,8 @@ Fixed an error that occurred when an INSERT INTO ... SELECT ? ... query was exec
 
     Fixed a problem in which query execution failed with the message "ERROR: A domain conflict exists on attribute noname" when binding INT type in a CHAR type column when the INSERT INTO ... SELECT ? FROM db_root query was executed.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t ( a CHAR(1));
         PREPARE s FROM 'INSERT INTO t SELECT ? FROM db_root';
@@ -1480,7 +1551,8 @@ Fixed a problem in which the server process was abnormally terminated when one c
 
     Fixed a problem in which the server process was abnormally terminated when the condition of the IN or EXISTS expression was a SELECT list comprising conditional expressions, such as simple comparison, ALL, BETWEEN, LIKE, and ISNULL.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT * FROM t1 WHERE v IN (SELECT (1 = 1));
         SELECT * FROM t1 WHERE v IN (SELECT (aaa' LIKE 'bbb'));
@@ -1491,7 +1563,8 @@ Fixed an error that occurred when a query containing a USING INDEX clause was ex
 
     Fixed a problem in which query execution failed with the message "ERROR: Execute: Query execution failure #10842." when a query containing a USING INDEX  clause was executed after the execution of partial rollback to before the schema was changed.
 
-    ::
+    .. code-block:: sql
+
 
         ;autocommit off
         CREATE TABLE t (id INTEGER, textlabel VARCHAR(255), description VARCHAR(4096));
@@ -1508,7 +1581,8 @@ Fixed a problem in which CSQL and CAS was abnormally terminated when a column no
 
     Fixed a problem in which CSQL and CAS were abnormally terminated when the CASE expression contained a column not defined.
 
-    ::
+    .. code-block:: sql
+
 
         //IN the statement below, a was not be defined.
 
@@ -1523,7 +1597,8 @@ Fixed a problem in which applications were abnormally terminated when a subquery
 
     Fixed a problem in which applications were abnormally terminated when a subquery of over 128 in depth was executed.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT * FROM (SELECT * FROM (... (SELECT 1)...)...);
 
@@ -1534,9 +1609,12 @@ Fixed an error in which the length of a string type was incorrectly outputted wh
 
     For reference, STRING(n) means the VARCHAR(n) type.
 
-    ::
+    .. code-block:: sql
 
-        csql> DESCRIBE test_tbl;
+
+        DESCRIBE test_tbl;
+        
+    ::
 
         Field Type Null Key Default Extra
         ====================================================================================================================================
@@ -1549,7 +1627,7 @@ Fixed a problem in which the precision (p) and the scale (s) exceeding the allow
 
     Fixed an error in which the values exceeding the precision (p) and scale (s) of the DECIMAL(p, s) type were allowed to be entered.
 
-    ::
+    .. code-block:: sql
 
         CREATE TABLE t1 (col1 decimal (5, 2));
 
@@ -1561,18 +1639,21 @@ Fixed a problem in which syntax checking for a DEFAULT expression was not execut
 
     Modified to execute syntax checking for a DEFAULT expression when creating a table. Previously, in the example below, a table was created while ignoring the input of -9999 after SYSTIMESTAMP. Now in this case, an error will be outputted as it is not correct in terms of syntax.
 
+    .. code-block:: sql
+
+        CREATE TABLE foo(a TIMESTAMP DEFAULT SYSTIMESTAMP - 9999);
+        
     ::
     
-        CREATE TABLE foo(a TIMESTAMP DEFAULT SYSTIMESTAMP - 9999);
         Error: Invalid DEFAULT clause. 'sys_timestamp ' cannot be used in a nested expression.
-
 
 Fixed an error in which a character string being bound was not automatically converted to a numeric type when multiplication/division operations between host variables were executed (CUBRIDSUS-5506)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Fixed an error in which a character string being bound was not automatically converted to a numeric type when multiplication/division operations between host variables were executed.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1 (i1 integer);
         PREPARE st FROM 'INSERT INTO t1(i1) VALUES (? * ?)'
@@ -1583,7 +1664,8 @@ Fixed a problem in which incorrect results of the LAST_IONSERT_ID function would
 
     Fixed a problem in which incorrect results of the LAST_INSERT_ID function would be outputted after failing in the execution of the INSERT statement due to the violation of the UNIQUE key.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1 ( k int(11) PRIMARY KEY AUTO_INCREMENT, a INT(11) DEFAULT NULL UNIQUE);
         INSERT INTO t1 ( a ) VALUES ( 1 );
@@ -1600,7 +1682,8 @@ Fixed a problem in which an error was out outputted when an invalid ALTER COLUMN
 
     Fixed a problem in which an error was not outputted when an invalid ALTER COLUMN ... SET DEFAULT statement was executed. In the following example, as the column "a" is TIMESTAMP, you cannot use a character string such as "aaa" as a DEFAULT value.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE foo(a TIMESTAMP);
         ALTER TABLE foo ALTER COLUMN a SET DEFAULT 'aaa';
@@ -1615,7 +1698,8 @@ Fixed a problem in which NULL would be entered into the primary key when the INS
 
     Fixed a problem in which NULL was entered into the primary key when the INSERT ... ON DUPLICATE KEY UPDATE statement was executed, as in the following example.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t1( id int AUTO_INCREMENT NOT NULL, c CHAR(1) NOT NULL , counter int NOT NULL DEFAULT 1, PRIMARY KEY(id), UNIQUE KEY(c) ) ;
         INSERT INTO t1 (id, c) VALUES (NULL, 'a'), (NULL, 'a') ON DUPLICATE KEY UPDATE id = null, counter = counter + 1;
@@ -1625,7 +1709,8 @@ INSERT ... Fixed a problem in which an incorrect result of a COUNT(*) query was 
 
     Fixed a problem in which an incorrect result of a COUNT(*) query was outputted when the value of a UNIQUE column was entered as NULL in the execution of the INSERT ... SELECT statement. In the previous version, a COUNT query is executed normally when the name of a column is specified, as in COUNT(column name).
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t1(id INT AUTO_INCREMENT, mgrid INT UNIQUE, dummy INT);
         INSERT INTO t1(dummy) VALUES (1);
@@ -1639,7 +1724,8 @@ Fixed an error that occurred when performing INSERT into a list partitioned tabl
 
     Fixed a problem in which query execution failed with the message "ERROR: Appropriate partition does not exist." when performing INSERT into a list partitioned table with an AUTO_INCREMENT column.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t1 (a int AUTO_INCREMENT PRIMARY KEY)
         PARTITION BY LIST (a) (PARTITION p0 VALUES IN (1, 2));
@@ -1656,7 +1742,8 @@ Fixed an error that occurred when inserting a character string to the BLOB and C
 
     Fixed a problem in which query execution failed with the message "ERROR: Cannot coerce '123' to type clob." when inserting a character string to the BLOB and CLOB types on a Windows 64 bit environment.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE table alltypes(blob_col blob,clob_col clob);
         INSERT into alltypes values('123', '123')
@@ -1666,7 +1753,8 @@ Fixed a problem in which deadlock would occur when the REPLACE statement and the
 
     Fixed a problem in which deadlock would occur when the REPLACE statement and the DELETE statement were executed as separate transactions.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t1(a int);
         CREATE UNIQUE INDEX ON t1 (a);
@@ -1683,7 +1771,8 @@ Fixed a problem in which a unique key violation error would occur when using the
 
     Fixed a problem in which a unique key violation error would occur when using the REPLACE statement.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t1(id1 VARCHAR(10) UNIQUE);
         INSERT INTO t1 VALUES ('a'),('b'),('f'),('k');
@@ -1701,7 +1790,8 @@ Made it possible to omit the FROM keyword in the DELETE statement (CUBRIDSUS-654
 
     Modified to be able to omit the keyword in the DELETE statement when there is only a single table under the FROM clause.
 
-    ::
+    .. code-block:: sql
+
 
         DELETE tbl;
 
@@ -1742,7 +1832,8 @@ Fixed an error in which REUSE_OID attribute was not copied when copying and crea
 
     Fixed an error in which the REUSE_OID attribute was omitted in a newly created table when copying and creating a REUSE_OID table by using the CREATE TABLE ... LIKE statement.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE src_tbl (i INT) REUSE_OID;
         CREATE TABLE dest_tbl LIKE src_tbl;
@@ -1752,11 +1843,14 @@ Fixed a problem in which DEFAULT attributes were added through the ALTER stateme
 
     Fixed a problem in which the DEFAULT attribute was added by using the ALTER statement although it is impossible to set the AUTO_INCREMENT and DEFAULT attributes together in the same column.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE tbl (x INT SHARED 3);
         ALTER TABLE tbl ALTER COLUMN x SET DEFAULT 100;
 
+    ::
+    
         -- The following error was outputted.
         SHARED, DEFAULT and AUTO_INCREMENT cannot be defined with each other.
 
@@ -1765,7 +1859,8 @@ Fixed a problem in which the cache option configuration of serial was not altere
 
     Fixed a problem in which the cache option was not activated or deactivated by the ALTER SERIAL statement.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE SERIAL s2 STARt WITH 5 INCREMENT BY 6 CACHE 5;
         ALTER SERIAL s2 NOCACHE;
@@ -1775,7 +1870,8 @@ Fixed a problem in which the DEFAULT NULL constraint was set to a primary key co
 
     Made it impossible to set the DEFAULT NULL constraint to a primary key column.
 
-    ::
+    .. code-block:: sql
+
     
         // An problem existed where the query below was executed.
         CREATE TABLE t(a INT PRIMARY KEY DEFAULT NULL);
@@ -1785,7 +1881,8 @@ Fixed a problem in which the primary key was able to be declared to both the upp
 
     When a primary key was in the upper class, the key should not be declared in its subclasses because the subclasses would inherit it from the upper class. The new version has fixed a problem in which primary key was declared in subclasses.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE student (std_id INT PRIMARY KEY);
         CREATE TABLE time_table as subclass of student (std_id INT PRIMARY KEY);
@@ -1806,7 +1903,8 @@ Fixed a problem in which the server process would be abnormally terminated when 
 
     Fixed a problem in which the server process would be abnormally terminated when executing a query for a view containing a host variable. DDL containing a host variable is not allowed.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE tree(node INT,parentnode INT,name VARCHAR(30));
         INSERT INTO TREE VALUES (1, NULL,'1'),(2, 1,'2'),(3, 1,'3'),(4,2,'4');
@@ -1819,7 +1917,8 @@ Fixed an error in which DEFAULT value was not copied when creating a view (CUBRI
 
     Fixed a problem in which the DEFAULT values of the source table were not copied when the CREATE VIEW AS SELECT ... statement was executed.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE foo(a INT DEFAULT 222);
         CREATE VIEW voo AS SELECT * FROM foo;
@@ -1830,7 +1929,8 @@ Fixed an error that occurred when executing a SELECT query without a FROM clause
 
     Fixed a problem in which query execution failed with the message "ERROR: There are more attributes in class v1 than columns in the query specification." when executing a SELECT query without a FROM clause in queries of a view.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE VIEW v1 AS (SELECT 1 a) UNION (SELECT 1 a);
         SELECT * FROM v1;
@@ -1840,7 +1940,8 @@ Fixed a problem in which query execution would fail when complex expressions app
 
     Fixed a problem in which query execution would fail when complex expressions appeared in the SELECT list when creating or changing a view. As in the example below, unless a column alias is not specified for a complex expression in the SELECT list, "SQRT(CAST(100 as double))" will become the column alias. As such expressions are not allowed as an identifier, it is necessary to use signs to enclose the identifier (double quotes, brackets or backticks). The new version has eliminated the problem by internally adding a sign to enclose an identifier when executing a query.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE VIEW vw AS SELECT SQRT(CAST(100 as double));
         // If query above is executed, it will be internally performed as follows:
@@ -1848,7 +1949,8 @@ Fixed a problem in which query execution would fail when complex expressions app
 
     Previously, in the HA environment, this problem would occur even when a query was written to prevent it in the master node because a query was re-written to CAST argument values in a function in the slave node.
 
-    ::
+    .. code-block:: sql
+
     
         // If query below is executed, the query will be rewritten in the form of first query in slave node.
         CREATE VIEW vw AS SELECT SQRT(100);
@@ -1873,9 +1975,13 @@ Fixed a problem in which login failed with a username longer than 32 bytes (CUBR
 
     There is a problem in which login fails when a username is longer than 32 bytes. In the new version, you can specify a username up to 32 bytes when creating a DB user account.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE USER a12345678901234567890123456789012345678901234567890;
+        
+    ::
+
         $ csql -u a1234567890123456789012345678901234567890123456
         ERROR: User "a12345678901234567890123456789012345" is invalid.
 
@@ -1885,7 +1991,8 @@ Allowed a CONNECT BY clause to be placed after a START WITH clause (CUBRIDSUS-65
 
     Modified to enable a CONNECT BY clause to be placed after a START WITH clause in a hierarchy query.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT * FROM a CONNECT BY PRIOR id = pid START WITH id = 1;
 
@@ -1894,7 +2001,8 @@ Fixed a problem in which incorrect query results were outputted when a hierarchy
 
     Fixed a problem in which incorrect query results were outputted when a hierarchy query containing a ORDER SIBLINGS BY clause was used as a subquery because the query was re-written incorrectly in the query optimizer.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT *
         FROM tbl
@@ -1909,7 +2017,8 @@ Fixed a problem of the incorrect number of query results in a hierarchy query wi
 
     Fixed a problem in which the number of query results was not limited by the ROWNUM condition when a hierarchy query with the ROWNUM condition was processed through the index scan.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT oid
         FROM foo
@@ -1934,7 +2043,8 @@ Fixed a problem in which trigger execution failed (CUBRIDSUS-7187)
 
     Case 1) In the previous version, an error occurred when the following query was executed.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1(a INT);
         INSERT INTO t1 VALUES(1), (2), (3), (4);
@@ -1944,7 +2054,8 @@ Fixed a problem in which trigger execution failed (CUBRIDSUS-7187)
 
     Case 2) In the previous version, the application was abnormally terminated when the following query was executed.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1(a INT, b INT);
         INSERT INTO t1 VALUES (2,2), (3,3);
@@ -1965,7 +2076,8 @@ Fixed a problem in which the triggered query would not roll back even when a tri
 
     Previously, the triggered query would not roll back even when a triggered UPDATE/INSERT query failed while auto-commit mode was off. This problem has been fixed. In the following example, executing the Q6 will start the trig1 trigger in the t2 table. At this point, an error would occur because a value in int cannot be entered in the t1 table, and the Q6 should have rolled back. This means that the number of records for the t1 table should be 1, and the number of records for the t2 table should be 0 after executing Q7. In the previous version, the Q6 query that started the trig1 trigger would not roll back when an error occurred.
 
-    ::
+    .. code-block:: sql
+
     
         ;autocommit off 
 
@@ -1999,7 +2111,8 @@ Fixed a problem in which query result was 0 if the query contained ORDERBY_NUM()
 
     Fixed an error in which the result was outputted as 0 because orderby_num() was not removed when the query optimization process removed the unnecessary ORDER BY clause.
 
-    ::
+    .. code-block:: sql
+
 
         SELECT orderby_num(), history.*
         FROM history
@@ -2011,7 +2124,8 @@ Fixed a problem in which the application was abnormally terminated when executin
 
     Fixed a problem in which the application was abnormally terminated when executing the PREPARE statement with the query plan cache disabled by configuring the max_plan_cache_entries system parameter as -1.
     
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t(a INT);
         INSERT INTO t VALUES (1), (2), (3);
@@ -2024,7 +2138,8 @@ Fixed a problem in which incorrect results would be outputted when executing a q
     Fixed a problem in which incorrect results would be outputted when outputting a query plan by executing the ;plan simple command because the input value was converted to the type of the column corresponding to the value.
     As shown in the following example, in the previous versions, the input value 23 was converted to 2 and passed to the server when the query plan was outputted and as a result 2 was not included in the result.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE foo(col INT);
         INSERT INTO foo VALUES (1),(2);
@@ -2036,7 +2151,8 @@ Fixed a problem in which, when executing a query after changing the table name i
 
     Fixed a problem in which, when executing a query after changing the table name, the query was executed not for a new table with the name but for the previous table before the change of the name. In the previous version, this problem always occurred because the INSERT statement did not use query plan cache. This problem also occurred in the other queries when the query plan cache feature was disabled by configuring the value of the max_plan_cache_entries system parameter as -1.
 
-    ::
+    .. code-block:: sql
+
     
         // Example of insert
         INSERT INTO tbl VALUES (...);
@@ -2051,7 +2167,8 @@ Fixed an error that would occur when executing the covering index scan query for
 
     Fixed a problem in which the "Query execution failure #10946." would occur in the execution when the covering index scan query plan was incorrect for a specific query with the OUTER JOIN condition.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT foo.obj_id, foo.h_id
         FROM foo
@@ -2066,7 +2183,8 @@ Fixed an error in which the query plan was not outputted when an IN clause had a
 
     Fixed an error in which the query plan would not be outputted when an IN clause contains a host variable in the form of (?, ?, ...).
 
-    ::
+    .. code-block:: sql
+
     
         csql> ;plan detail
         csql> SELECT * FROM tbl WHERE id IN (?, ?, ?);
@@ -2076,39 +2194,40 @@ Fixed a problem in which results omitting some conditions would be outputted whe
 
     Fixed a problem in which results omitting some conditions would be outputted due to a query plan bug when executing a query with multiple AND and OR conditions.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT *
         FROM it, p
         WHERE
         (
-        p_pkey = l_pkey
-        and p_br = 'Br12'
-        and p_ct in ('CS', 'BX', 'PK', 'PG')
-        and l_qty >= 1 and l_qty <= 1 + 10
-        and p_sz between 1 and 5
-        and l_sm in ('A', 'RG')
-        and l_st = 'DIP'
+          p_pkey = l_pkey
+          and p_br = 'Br12'
+          and p_ct in ('CS', 'BX', 'PK', 'PG')
+          and l_qty >= 1 and l_qty <= 1 + 10
+          and p_sz between 1 and 5
+          and l_sm in ('A', 'RG')
+          and l_st = 'DIP'
         )
         OR
         (
-        p_pkey = l_pkey
-        and p_br = 'Br12'
-        and p_ct in ('MG', 'MB', 'MPK', 'MPC')
-        and l_qty >= 10 and l_qty <= 10 + 10
-        and p_sz between 1 and 10
-        and l_sm in ('A', 'RG')
-        and l_st = 'DIP'
+          p_pkey = l_pkey
+          and p_br = 'Br12'
+          and p_ct in ('MG', 'MB', 'MPK', 'MPC')
+          and l_qty >= 10 and l_qty <= 10 + 10
+          and p_sz between 1 and 10
+          and l_sm in ('A', 'RG')
+          and l_st = 'DIP'
         )
         OR
         (
-        p_pkey = l_pkey
-        and p_br = 'Br12'
-        and p_ct in ('LG', 'LB', 'LPK', 'LPC')
-        and l_qty >= 20 and l_qty <= 20 + 10
-        and p_sz between 1 and 15
-        and l_sm in ('A', 'RG')
-        and l_st = 'DIP'
+          p_pkey = l_pkey
+          and p_br = 'Br12'
+          and p_ct in ('LG', 'LB', 'LPK', 'LPC')
+          and l_qty >= 20 and l_qty <= 20 + 10
+          and p_sz between 1 and 15
+          and l_sm in ('A', 'RG')
+          and l_st = 'DIP'
         );
 
 Fixed a problem in which a query would not be deleted in the query plan cache when deleting a column or table including AUTO_INCREMENT (CUBRIDSUS-7872)
@@ -2116,7 +2235,8 @@ Fixed a problem in which a query would not be deleted in the query plan cache wh
 
     When a column or table containing AUTO_INCREMENT was deleted, the related query was not deleted in the query plan cache and consequently the serial was generated with the same name as AUTO_INCREMENT. As a result, a problem occurred with the message "ERROR: Cannot fetch serial object." when a query was executed with the serial. The new version has fixed this problem.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE tbl ( a INT AUTO_INCREMENT);
         SELECT tbl_ai_a.NEXT_VALUE;
@@ -2129,7 +2249,8 @@ Fixed a problem in which the application would be abnormally terminated when exe
 
     Fixed a problem in which the application would be abnormally terminated when executing a REPLACE statement after configuring the OPTIMIZATION LEVEL as either 2,258 or 514 so that only a plan can be generated without executing a query.
 
-    ::
+    .. code-block:: sql
+
     
         SET OPTIMIZATION LEVEL 2;
         DROP TABLE t;
@@ -2142,7 +2263,8 @@ Fixed a problem in which UPDATE of the view failed after re-creating the view (C
 
     Fixed a problem in which UPDATE failed when, after re-creating the view, executing the UPDATE statement in the execution of UPDATE, because the view dropped by using the previous query plan was referenced.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE foo(a int);
         INSERT INTO foo VALUES (3);
@@ -2164,7 +2286,8 @@ Modified to return results immediately when LIMIT 0 (CUBRIDSUS-7420)
 
     Modified to return results immediately without executing a query when LIMIT 0. In the previous version, it took long to process a query in some cases because a LIMIT clause was evaluated after executing the query.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT CAST(dt_col AS DATE)
         FROM article
@@ -2196,7 +2319,8 @@ Fixed an error in which the incorrect SELECT result of a range-partitioned table
 
     Fixed a problem in which, if executing SELECT while performing INSERT to a range-partitioned table with the auto commit mode OFF, and additionally executing INSERT and SELECT, the additionally inserted record would not be outputted.
 
-    ::
+    .. code-block:: sql
+
     
         csql>; autocommit off
         CREATE TABLE foo (id1 BIGINT) PARTITION BY RANGE(id1) (
@@ -2218,7 +2342,8 @@ Fixed a problem in which incorrect results were outputted when there was the IS 
 
     Fixed a problem in which incorrect results were outputted when there was the IS NULL OR IS NOT NULL condition when executing SELECT in a range-partitioned table.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT * FROM tbl
         WHERE a IS NULL OR a IS NOT NULL;
@@ -2228,7 +2353,8 @@ Fixed a problem in which incorrect query results were outputted when executing O
 
     The new version has fixed a problem in which incorrect query results were outputted when executing OUTER JOIN in a partitioned table.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE pt1(i int,j int) PARTITION BY HASH(i) PARTITIONS 4;
         CREATE TABLE pt2(i int,j int) PARTITION BY HASH(i) PARTITIONS 4;
@@ -2240,6 +2366,7 @@ Fixed a problem in which incorrect query results were outputted when executing O
         // When the query below was executed, first record was incorrectly outputted like "1, 1, NULL, NULL".
         SELECT * FROM pt1 LEFT JOIN pt2 ON pt1.i=pt2.i USING INDEX idx(+);
 
+    ::
 
         i j i    j
         ==============
@@ -2252,7 +2379,8 @@ Fixed a problem in which constraint conditions were not checked when creating a 
 
     The new version has fixed a problem in which constraint conditions were not checked when creating a foreign key in a partitioned table.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1(i INT PRIMARY KEY);
         INSERT INTO t1 VALUES(1);
@@ -2265,7 +2393,8 @@ Fixed a problem in which data was inputted into only one partitioned table when 
 
     Fixed a problem in which data would be inputted into only one partitioned table when entering data to a hash partitioned table by using the AUTO_INCREMENT column as a partition key.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t(i INT AUTO_INCREMENT) PARTITION BY HASH(i) PARTITIONS 3;
         INSERT INTO t(i) VALUES (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL);
@@ -2285,7 +2414,8 @@ Fixed a problem in which records would not be deleted with the view created with
 
     Fixed a problem in which an error would occur when deleting records with the view created with regard to a partitioned table with a CLOB column.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t(i INT,c CLOB) PARTITION BY HASH(i) PARTITIONS 4;
         INSERT INTO t SELECT ROWNUM,'1' FROM db_class LIMIT 40;
@@ -2301,7 +2431,8 @@ Fixed a problem in which creating a partitioned table would not be reflected to 
 
     Fixed a problem in which the partitioned table creation statement would not be reflected to the slave node when creating a partitioned table in the HA environment.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1 (a int PRIMARY KEY)
         PARTITION BY HASH (a) PARTITIONS 2;
@@ -2314,12 +2445,13 @@ Fixed an error that occurred when the inserted records in a partitioned table ha
 
     Fixed a problem in which the "ERROR: Error evaluating action for "tr2", Not allowed access to partition." occurred when the record inserted in a partitioned table would not move to a partition other than the one where INSERT was executed due to the UPDATE statement of the trigger.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE emp (store_id INT NOT NULL)
         PARTITION BY RANGE (store_id) (
-        PARTITION P1 VALUES LESS THAN (10 ),
-        PARTITION P2 VALUES LESS THAN (20 )
+          PARTITION P1 VALUES LESS THAN (10 ),
+          PARTITION P2 VALUES LESS THAN (20 )
         );
 
         CREATE TRIGGER tr2 AFTER INSERT ON emp EXECUTE UPDATE emp SET store_id = store_id + 10 WHERE store_id = obj.store_id;
@@ -2330,11 +2462,12 @@ Fixed a problem in which table recreation failed after the creation and rollback
 
     Fixed a problem in which table recreation failed with the message "ERROR: Partition failed." when recreating the same partitioned table after the creation and rollback of a partitioned table with an index.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE tbl(col1 varchar(10), index (col1))
         PARTYTION BY LIST(col1) (
-        PARTITION p1 values in ('cubrid', 'mysql', 'abc')
+          PARTITION p1 values in ('cubrid', 'mysql', 'abc')
         );
 
 Fixed an error that occurred when executing loaddb with data files of a partitioned table (CUBRIDSUS-5815)
@@ -2342,17 +2475,20 @@ Fixed an error that occurred when executing loaddb with data files of a partitio
 
     Fixed a problem in which loaddb execution failed with the message "Partitioned failed" if data exists in the partitioned table location when executing loaddb with data files containing a partitioned table.
 
-    ::
-    
+    .. code-block:: sql
+
         // Partitioned table
-        CREATE TABLE record
-        (host_year INTEGER NOT NULL,
-         event_code INTEGER NOT NULL,
-         score VARCHAR(20)
+        CREATE TABLE record (
+          host_year INTEGER NOT NULL,
+          event_code INTEGER NOT NULL,
+          score VARCHAR(20)
         )
-        PARTITION BY RANGE (host_year)
-        ( PARTITION before_1996 VALUES LESS THAN (1996),
-          PARTITION after_1996 VALUES LESS THAN MAXVALUE);
+        PARTITION BY RANGE (host_year) ( 
+          PARTITION before_1996 VALUES LESS THAN (1996),
+          PARTITION after_1996 VALUES LESS THAN MAXVALUE
+        );
+
+    ::
 
         // Data file for loaddb. It was changed so that data after class [record] can exist.
         %class [record] ([host_year] [event_code] [score])
@@ -2365,12 +2501,15 @@ Fixed an error in which redefining range partitions would fail when the existing
 
     The new version has fixed an error in which redefining range partitions would fail when the existing partition had the LESS THAN MAXVALUE condition.
 
-    ::
+    .. code-block:: sql
 
-        CREATE TABLE t1(id int) PARTITION BY RANGE (id)
-        (PARTITION l10 VALUES LESS THAN (10),
-         PARTITION l100 VALUES LESS THAN (100),
-         PARTITION lar VALUES LESS THAN MAXVALUE);
+
+        CREATE TABLE t1(id int) 
+        PARTITION BY RANGE (id) (
+          PARTITION l10 VALUES LESS THAN (10),
+          PARTITION l100 VALUES LESS THAN (100),
+          PARTITION lar VALUES LESS THAN MAXVALUE
+        );
 
         ALTER TABLE t1 REORGANIZE PARTITION l100,lar
         INTO (PARTITION lar VALUES LESS THAN MAXVALUE);
@@ -2385,14 +2524,19 @@ Fixed a problem in which DELETE CASCADE would not operate in a partitioned table
 
     Fixed a problem in which, when there was a partitioned table with a foreign key specifying the action of DELETE CASCADE, the "ERROR: The instance having the foreign key 'f' cannot be dropped." would occur in the partitioned table with a foreign key when deleting the record of the table.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE dp(i INT PRIMARY KEY);
         INSERT INTO dp SELECT ROWNUM FROM db_class LIMIT 40;
 
-        CREATE TABLE f(i INTEGER , orderdatekey INTEGER NOT NULL) PARTITION BY range(i) (
-        PARTITION p0 VALUES LESS THAN (200), PARTITION p1 VALUES LESS THAN (400),
-        PARTITION p2 VALUES LESS THAN (600), PARTITION p3 VALUES LESS THAN maxvalue);
+        CREATE TABLE f(i INTEGER , orderdatekey INTEGER NOT NULL) 
+        PARTITION BY range(i) (
+          PARTITION p0 VALUES LESS THAN (200), 
+          PARTITION p1 VALUES LESS THAN (400),
+          PARTITION p2 VALUES LESS THAN (600), 
+          PARTITION p3 VALUES LESS THAN maxvalue
+        );
 
         ALTER TABLE f ADD CONSTRAINT FOREIGN KEY f(i) REFERENCES dp(i) ON DELETE CASCADE;
         INSERT INTO f SELECT ROWNUM , ROWNUM FROM db_class LIMIT 40;
@@ -2405,17 +2549,20 @@ Fixed a problem in which the server process would be abnormally terminated when 
 
     Fixed a problem in which the server process would be abnormally terminated when executing SELECT after the backup of a database with a range-partitioned table with AUTO_INCREMENT columns.
 
-    ::
+    .. code-block:: sql
     
         CREATE TABLE u1(id INT AUTO_INCREMENT,v VARCHAR(5))
-        PARTITION BY RANGE(id)
-        (PARTITION l5 VALUES LESS THAN (5),
-         PARTITION l10 VALUES LESS THAN (10),
-         PARTITION l20 VALUES LESS THAN (20),
-         PARTITION l100 VALUES LESS THAN (100));
+        PARTITION BY RANGE(id) (
+          PARTITION l5 VALUES LESS THAN (5),
+          PARTITION l10 VALUES LESS THAN (10),
+          PARTITION l20 VALUES LESS THAN (20),
+          PARTITION l100 VALUES LESS THAN (100)
+        );
 
         INSERT INTO u1 VALUES (NULL,''),(6,''),(NULL,'');
-
+        
+    ::
+    
         $ cubrid backupdb testdb
 
 Fixed a problem in which the server process would be abnormally terminated when executing a query to a range partitioned table with AUTO_INCREMENT columns (CUBRIDSUS_6373)
@@ -2423,14 +2570,16 @@ Fixed a problem in which the server process would be abnormally terminated when 
 
     Fixed a problem in which the server process would be abnormally terminated when executing a query to a range-partitioned table with AUTO_INCREMENT columns.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE u(id int AUTO_INCREMENT,v varchar(5))
-        PARTITION BY RANGE (id)
-        (PARTITION l5 VALUES LESS THAN (5),
-         PARTITION l10 VALUES LESS than (10),
-         PARTITION l20 VALUES LESS than (20),
-         PARTITION l100 VALUES LESS than (100));
+        PARTITION BY RANGE (id) (
+          PARTITION l5 VALUES LESS THAN (5),
+          PARTITION l10 VALUES LESS than (10),
+          PARTITION l20 VALUES LESS than (20),
+          PARTITION l100 VALUES LESS than (100)
+        );
 
         INSERT INTO u VALUES(0,';jf;dfj iouer'),(5,' fdfd'),(10,'dfd '),(15,'fdf'),(20,'a');
 
@@ -2444,14 +2593,15 @@ Fixed a problem in which, after deleting the value in a partitioned table when t
 
     The new version has fixed a problem in which, after deleting the value in a partitioned table when the auto commit mode was OFF, the value was outputted when searching the record with OID.
 
-    ::
+    .. code-block:: sql
     
-        csql> ;autocommit off
+        ;autocommit off
 
         CREATE TABLE tbl (id INT)
-        PARTITION BY RANGE (id + 1)
-        (PARTITION p0 VALUES LESS THAN (2),
-         PARTITION p1 VALUES LESS THAN MAXVALUE);
+        PARTITION BY RANGE (id + 1) (
+          PARTITION p0 VALUES LESS THAN (2),
+          PARTITION p1 VALUES LESS THAN MAXVALUE
+        );
 
         INSERT INTO tbl VALUES (-1);
         INSERT INTO tbl values (3);
@@ -2474,16 +2624,18 @@ Fixed a problem in which re-partitioning a table by ALTER TABLE ... PARTITION wo
 
     Fixed a problem in which, when repartitioning a table by ALTER TABLE ... PARTITION, the existing partition information would not be deleted.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE participant2 ( host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
-        PARTITION BY RANGE (host_year)
-        (PARTITION before_2000 VALUES LESS THAN (2000),
-         PARTITION before_2008 VALUES LESS THAN (2008));
+        PARTITION BY RANGE (host_year) (
+          PARTITION before_2000 VALUES LESS THAN (2000),
+          PARTITION before_2008 VALUES LESS THAN (2008)
+        );
 
         ALTER TABLE participant2 REORGANIZE PARTITION before_2000 INTO (
-        PARTITION before_1996 VALUES LESS THAN (1996),
-        PARTITION before_2000 VALUES LESS THAN (2000)
+          PARTITION before_1996 VALUES LESS THAN (1996),
+          PARTITION before_2000 VALUES LESS THAN (2000)
         );
 
 
@@ -2494,19 +2646,20 @@ Fixed a problem in which partitioning would not be executed when creating a tabl
 
     Fixed a problem in which partitions would not be created normally when creating a table with many partitions through the loaddb utility.
 
-    ::
+    .. code-block:: sql
+
     
         ALTER CLASS [col_day]
-        PARTITION BY LIST ( [yyyymmdd] )
-        ( PARTITION [p_20110701] VALUES IN ('20110701'),
-        PARTITION [p_20110702] VALUES IN ('20110702'),
-        PARTITION [p_20110703] VALUES IN ('20110703'),
-        PARTITION [p_20110704] VALUES IN ('20110704'),
-        PARTITION [p_20110705] VALUES IN ('20110705'),
-        PARTITION [p_20110706] VALUES IN ('20110706'),
-        PARTITION [p_20110707] VALUES IN ('20110707'),
-        ....
-        PARTITION [p_20111231] VALUES IN ('20111231') ) ;
+        PARTITION BY LIST ( [yyyymmdd] ) (
+          PARTITION [p_20110701] VALUES IN ('20110701'),
+          PARTITION [p_20110702] VALUES IN ('20110702'),
+          PARTITION [p_20110703] VALUES IN ('20110703'),
+          PARTITION [p_20110704] VALUES IN ('20110704'),
+          PARTITION [p_20110705] VALUES IN ('20110705'),
+          PARTITION [p_20110706] VALUES IN ('20110706'),
+          PARTITION [p_20110707] VALUES IN ('20110707'),
+          ....
+          PARTITION [p_20111231] VALUES IN ('20111231') 
         );
 
 Index
@@ -2518,7 +2671,8 @@ Fixed an error that occurred when executing a query using a MAX function or ORDE
 
     Fixed a problem in which, after an index was created while data being in the table and the entire data were deleted, the "ERROR: An I/O error occurred while reading page 65536 of volume (null).... Bad file descriptor" would occur when executing a query to find the last leaf page, such as using a MAX function or ORDER BY DESC in the table.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE tb2 ( col1 INT PRIMARY KEY, col2 VARCHAR(16));
         INSERT INTO tb2 VALUES (1, '1');
@@ -2531,7 +2685,8 @@ Fixed a malfunction that occurred when executing an aggregate function in a colu
 
     Fixed a problem in which the "ERROR: No error message available." would occur if the type of the aggregate target column was CHAR and incorrect results would be outputted when the type was VARCHAR, when executing aggregate function in a column with a PREFIX index.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1 (id int PRIMARY KEY, b char(16), INDEX(b(4)));
         INSERT INTO t1 VALUES (1, 'xxxxbbbb'), (2, 'xxxxaaaa');
@@ -2550,12 +2705,13 @@ Modified to share B-Tree if there is already a created index with the same key w
 
     In the previous version, an error (cannot create an index) occurred when an index with the same key already existed when creating an index. The new version has been modified to share the existing index in this case rather than creating another index physically. As in the following example, it is not necessary to create B-Tree for the foreign key separately because the index has already been defined in the b column which creates a foreign key.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1 (
-        a INT PRIMARY KEY,
-        b INT, KEY(b),
-        CONSTRAINT fk FOREIGN KEY (b) REFERENCES t1 (a)
+          a INT PRIMARY KEY,
+          b INT, KEY(b),
+          CONSTRAINT fk FOREIGN KEY (b) REFERENCES t1 (a)
         );
 
 Fixed a problem in which the server would be abnormally terminated when there was a class OID search condition and all other conditions satisfied covering index conditions (CUBRIDSUS-7585)
@@ -2563,7 +2719,8 @@ Fixed a problem in which the server would be abnormally terminated when there wa
 
     Previously, the server would be abnormally terminated when there was a class OID search condition and all other conditions satisfied covering index conditions, including the SELECT list column of an index and the column in a WHERE statement. This problem has been fixed.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE a (class_of object, class_name varchar(200));
         CREATE TABLE c (class_name varchar(200), i int);
@@ -2578,7 +2735,8 @@ Fixed a problem in which the application would be abnormally terminated when a U
 
     As shown in the following example, there was a problem in which the application would be abnormally terminated when a USING INDEX clause was invalid. This problem has been fixed.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t1 (a INT, b CHAR(3), c INT);
         CREATE TABLE t2 (a INT, b CHAR(3), c INT);
@@ -2592,7 +2750,8 @@ Made it possible to use the CONSTRAINT ... REFERENCES ...statement when creating
 
     In the previous version, users were able to use only a FOREIGN KEY REFERENCES ... statement when creating a foreign key. Now you can use a CONSTRAINT constraint_name REFERENCES ... statement as well.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE tbl (id INT CONSTRAINT pk_id PRIMARY KEY);
         CREATE TABLE tbl2 (id INT FOREIGN KEY REFERENCES tbl(id))
@@ -2603,7 +2762,8 @@ Fixed a problem in which the NOT NULL constraint condition of the primary key co
 
     Fixed a problem in which the NOT NULL constraint condition of the primary key column was removed when executing an ALTER ... CHANGE COLUMN statement.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1_add_default (a INT PRIMARY KEY, b INT);
         ALTER TABLE t1_add_default CHANGE COLUMN a a INT DEFAULT 2;
@@ -2686,7 +2846,8 @@ Fixed a problem in which the condition would be changed to positive numbers when
 
     Fixed a problem in which the condition would be changed to positive numbers if the partition condition of a table included negative numbers in the HA environment. In the previous version, when executing the following example, the partition condition was created incorrectly as (2, 1) instead of (-2, 1).
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1 (a INT AUTO_INCREMENT(-2,3) PRIMARY KEY) PARTITION BY LIST(a) (PARTITION p0 VALUES IN (-2, 1));
 
@@ -2741,7 +2902,8 @@ Fixed a problem in which a WITH CHECK OPTION clause would not be reflected to a 
     
     Fixed a problem in which the WITH CHECK OPTION clause of the view would not be reflected to a slave node in the HA environment.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE vc_tb(a INT PRIMARY KEY);
         CREATE VIEW fbo_view AS SELECT * FROM vc_tb WHERE a >5 WITH CHECK OPTION;
@@ -2751,7 +2913,8 @@ Fixed a problem in which the IF EXISTS clause in the DROP TABLE statement would 
 
     Fixed a problem in which the IF EXISTS clause of a DROP TABLE statement would not be reflected to a slave node in the HA environment.
 
-    ::
+    .. code-block:: sql
+
     
         DROP TABLE IF EXISTS tbl1;
 
@@ -2760,7 +2923,8 @@ Fixed a problem in which the logical expression included in a column of the view
 
     Fixed a problem in which the logical expression included in the SELECT list would not be reflected to a slave node in the HA environment.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE VIEW v(a,b,c) AS SELECT a,b, (b='aaa') c FROM t;
 
@@ -2769,7 +2933,8 @@ Fixed a problem in which the view would look different in master and slave nodes
 
     Fixed a problem in which, when the view created in the master node was outputted to the system catalog table db_vclass in the slave node, parentheses were added to some of the WHERE condition.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE vc_tb1(a INT PRIMARY KEY);
         // The WHERE condition was enclosed with braces, if the view above was outputted in the db_vclass of slave node.
@@ -2780,7 +2945,8 @@ Fixed a problem in which replication would be made in the incorrect order of col
 
     The new version has fixed a problem in which replication would be made in the incorrect order of columns in the slave node when creating a table through the CREATE .... AS SELECT.
 
-    ::
+    .. code-block:: sql
+
     
         // Executing following in master node
         CREATE TABLE t2 (a INT PRIMARY KEY, b INT, c INT)
@@ -2800,7 +2966,8 @@ Fixed a problem in which a DDL statement accompanied by a SELECT statement would
 
     Fixed a problem in which a DDL statement accompanied by a SELECT statement, such as CREATE TABLE ... SELECT, CREATE VIEW ... SELECT would not be reflected in the HA environment.
 
-    ::
+    .. code-block:: sql
+
 
         CREATE TABLE t1 (a int primary key, b int)
         AS SELECT * FROM (SELECT 1 as a, (SELECT 1) b from db_root ) tt; 
@@ -2810,7 +2977,8 @@ Fixed a problem in which creating an index would not be reflected to the slave n
 
     The new version has fixed a problem in which the index creation statement would not be reflected to the slave node when creating an index in the HA environment.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE tab(a INT AUTO_INCREMENT(1,1) PRIMARY KEY, c VARCHAR(32));
         CREATE INDEX i_tab_c ON tab(c);
@@ -2820,7 +2988,8 @@ Fixed a problem in which creating an index whose name is a reserved word would n
 
     Fixed a problem in which creating an index whose name is a reserved word would not be reflected to a slave node with the message "Internal system failure: [t2,'create class [t2] ( [a] integer, [b] integer, index none ([a]) ) '] In line 1, column 44 before ' ([a]) ) '" in the HA environment.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t2(a INT, b INT, INDEX "none" (a));
 
@@ -2834,7 +3003,8 @@ Fixed a problem in which the serial derived from AUTO_INCREMENT would be left in
 
     Fixed a problem in which a table would not be created in the slave node when attempting to re-create AUTO_INCREMENT in the master node with the same name of a table and a column, due to an error in which the serial derived from AUTO_INCREMENT was left in the slave node after dropping a table with the AUTO_INCREMENT column in the master node in the HA environment.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1( id INT PRIMARY KEY AUTO_INCREMENT a INT);
         DROP TABLE t1;
@@ -2845,7 +3015,8 @@ Fixed a problem in which changing the attributes or name of the AUTO_INCREMENT c
 
     Fixed a problem in which changing the attributes of an AUTO_INCREMENT column or adding the attributes of the AUTO_INCREMENT column and renaming it would not be reflected to the slave node in the HA environment.
 
-    ::
+    .. code-block:: sql
+
     
         // Changing property
         CREATE TABLE foo ( a INTEGER PRIMARY KEY AUTO_INCREMENT , b CHAR(10), c DATETIME );
@@ -2862,7 +3033,8 @@ Fixed a problem in which the ALTER SERIAL statement would not be reflected to a 
 
     The new version has fixed a problem in which the ALTER SERIAL statement would not be reflected to a slave node in the HA environment.
 
-    ::
+    .. code-block:: sql
+
 
         ALTER SERIAL s1 START WITH 2;
 
@@ -2881,7 +3053,8 @@ Fixed a problem in which the ALTER INDEX ... REBUILD statement would not be refl
 
     Fixed a problem in which executing the ALTER INDEX ... REBUILD statement would not be reflected to a slave node in the HA environment with the message "log applier: failed to apply schema replication log. class: "-", schema: 'alter index i_t_b on () rebuild', internal error: -492."
 
-    ::
+    .. code-block:: sql
+
 
         ALTER INDEX i_t_b REBUILD;
 
@@ -2890,13 +3063,21 @@ Fixed a problem in which the ALTER... CHANGE COLUMN statement would not be refle
 
     The new version has fixed a problem in which the ALTER... CHANGE COLUMN statement would not be reflected to a slave node in the HA environment.
 
-    ::
+    .. code-block:: sql
     
         ALTER TABLE coo CHANGE col1 col1 INT AFTER col3;
+        
+    ::
+    
         // When the query above was executed, the following error occurred in slave node.
         log applier: failed to apply schema replication log. class: "coo", schema: "'alter class [coo] change attribute [col1] [col1] integerafter [col3] '", internal error: -492.
 
+    .. code-block:: sql
+        
         ALTER TABLE t1 ALTER COLUMN a set DEFAULT 1;
+        
+    ::
+    
         // When the query above was executed, the following error occurred in slave node.
         "alter class [t1] alter column [b] set default default 1", this SQL statement is illegal. So there is something wrong with the "parser_print_xxx" function.
 
@@ -2905,7 +3086,8 @@ Fixed a problem in which changing DEFAULT value of a column through the ALTER ..
 
     Fixed a problem in which changing DEFAULT values through the ALTER .. CHANGE statement would not be reflected to a slave node with the message "log applier: failed to apply schema replication log. class: "t1", schema: "'alter class [t1] alter column [a] set default default 1'", internal error: -492."
 
-    ::
+    .. code-block:: sql
+
     
         ALTER TABLE t1 ALTER COLUMN a SET DEFAULT 1;
 
@@ -2914,7 +3096,8 @@ Fixed a problem in which the ALTER .... AUTO_INCREMENT statement would not be re
 
     Fixed a problem in which the ALTER .... AUTO_INCREMENT statement would not be reflected to a slave node in the HA environment with the message "log applier: failed to apply schema replication log. class: "t", schema: "'alter class [t] auto_increment = 5'", internal error: -1056."
     
-    ::
+    .. code-block:: sql
+
 
         ALTER TABLE t AUTO_INCREMENT = 5;
 
@@ -2923,7 +3106,8 @@ Fixed a problem in which partitioning a table through an ALTER statement would n
 
     Fixed a problem in which partitioning a table through an ALTER statement would not be reflected to a slave node in the HA environment.
 
-    ::
+    .. code-block:: sql
+
     
         ALTER TABLE range_tbl
         REORGANIZE PARTITION p2 INTO
@@ -2934,7 +3118,8 @@ Fixed a problem in which creating a DESC INDEX to a PREFIX column would not be r
 
     Fixed a problem in which creating DESC INDEX to a PREFIX column would not be reflected to a slave node in the HA environment.
 
-    ::
+    .. code-block:: sql
+
 
         ALTER TABLE c2 ADD INDEX i_c (c(5) DESC);
 
@@ -2948,7 +3133,8 @@ Fixed a problem in which executing the DROP TABLE IF EXISTS statement when the a
 
     Fixed a problem in which executing a DROP TABLE IF EXISTS statement when the auto commit mode is OFF would not be reflected to a slave node with the message "SYNTAX ERROR ... ERROR CODE = -493."
 
-    ::
+    .. code-block:: sql
+
         
         DROP TABLE IF EXISTS m1;
         CREATE TABLE m1(i INT,j INT PRIMARY KEY);
@@ -2959,11 +3145,13 @@ Fixed a problem in which a partitioned table would not be reflected to a slave n
 
     Fixed a problem in which data of partitions of a partitioned table would not be replicated to a slave node when their type was converted internally in the HA environment.
 
-    ::
+    .. code-block:: sql
 
-        CREATE TABLE t1(i int PRIMARY KEY ) PARTITION BY RANGE (i) ( 
-        PARTITION p1 VALUES LESS THAN (-2147483648), 
-        PARTITION p2 VALUES LESS THAN maxvalue 
+
+        CREATE TABLE t1(i int PRIMARY KEY ) 
+        PARTITION BY RANGE (i) ( 
+          PARTITION p1 VALUES LESS THAN (-2147483648), 
+          PARTITION p2 VALUES LESS THAN maxvalue 
         );
 
 Driver
@@ -3006,7 +3194,7 @@ Driver
 
     Fixed a problem in which the millisecond part of the java.sql.Date or java.sql.Time object value would be returned without being reset to 0.
 
-    ::
+    .. code-block:: java
     
         ResultSet rs = connection.createStatement().executeQuery("select time '12:15:00'");
         rs.next();
@@ -3027,7 +3215,7 @@ Driver
 
     Fixed a problem in which the error code -26 would occur repeatedly because the server handle would not be terminated when exceptions occurred while executing multiple queries by using the same statement objects repeatedly in JDBC applications.
 
-    ::
+    .. code-block:: java
 
         public void run(ArrayList<String> sqlList, int max) throws SQLException {
             this.sqlList = sqlList;
@@ -3067,7 +3255,7 @@ Driver
 
     Fixed a problem of failing to bind the value expressed as a scientific notation, such as 2.4E+2, to BigDecimal in JDBC applications.
 
-    ::
+    .. code-block:: java
     
         BigDecimal x = new BigDecimal("240.0");
         x = x.stripTrailingZeros(); // Specifying value in the form of science
@@ -3095,7 +3283,8 @@ Driver
 
     Fixed a problem in which the "unterminated string" occurred when getting the column information of a table through the JDBC getColumns() method if backslash was set to be used as an escape character by configuring the value of the no_backslash_escape system parameter as NO.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t2 (col1 INT, col2 VARCHAR(20));
 
@@ -3116,12 +3305,23 @@ Driver
 
     For your information, the driver version can also be checked by using the cci_get_version function (major, minor, patch).
 
+Added a connection URL attribute used to allow debugging logs to be written (CUBRIDSUS-6377)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Added a feature that is used to configure debugging logs for CCI connection URLs. logSlowQueries and slowQueryThresholdMillis write slow query log information, logTraceApi writes the beginning and the end of the called CCI functions, and logTraceNetwork writes the network data transmission information of a CCI function to a file.
+
+    ::
+    
+        url = "cci:cubrid:localhost:33000:demodb:::?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"
+
+    The new version has also changed the operation behavior of logBaseDir which specifies the path of debugging log files to the CCI connection URL. In the previous version, the logBaseDir property was ignored when the logBaseDir value and logFile were together. The new version has been changed to specify the file name as "logBaseDir/logFile" to include the path.
+    
 [CCI] Fixed an error in which the trigger information of the entire database was outputted even when the table name was specified, when getting trigger information from cci_schema_info() (CUBRIDSUS-7675)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     The new version has fixed an error in which the trigger information of the entire database was outputted even when the table name was specified, when getting trigger information from cci_schema_info(). Also, it ha also added a feature to search the table name or column name to enter when getting trigger information through the pattern matching of a LIKE clause.
 
-    ::
+    .. code-block:: c
     
         req = cci_schema_info(conn, CCI_SCH_TRIGGER, "tbl%", NULL, CCI_CLASS_NAME_PATTERN_MATCH, &error);
 
@@ -3208,7 +3408,8 @@ Fixed a problem in which query execution failed when there is any comment after 
 
     Fixed a problem in which query execution failed when a comment existed after a query and a semicolon (;) in the CSQL Interpreter unless a semicolon was not added to the end of the comment.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT 1; --
 
@@ -3250,7 +3451,8 @@ Fixed a problem in which the CSQL Interpreter was abnormally terminated when exe
 
     Fixed a problem in which the CSQL Interpreter was abnormally terminated when executing a query that includes a special character, such as '%', in the name of a table or column in the CSQL Interpreter for Windows.
 
-    ::
+    .. code-block:: sql
+
     
         SELECT * FROM [as%];
 
@@ -3259,7 +3461,8 @@ Added query execution time to an output file after executing broker_log_runner (
 
     Modified to include query execution time in the output file specified by -o option after the execution of broker_log_runner.
 
-    ::
+    .. code-block:: sql
+
     
         //When it was executed by using broker_log_runner after fixed, prepare/execute/end tran time was additionally outputted.
         -------------- query -----------------
@@ -3414,24 +3617,30 @@ Improved to output table, index name and key values when outputting a unique key
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     The new version has been modified to output table, index name and key values when outputting an error message about the violation of unique key in the error log.
-    Improved error messages so that users can find the location of errors when syntax errors or semantic errors occurred
 
+Improved error messages so that users can find the location of errors when syntax errors or semantic errors occurred
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    
 Improved an error message that is outputted when serial is created with incorrect statements (CUBRIDSUS-7119)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     The error message that is outputted when serial is created with incorrect statements, such as using a reserved word as a serial name or using values out of the permitted range, has been improved to locate any incorrect part in the message.
 
-    ::
-    
+    .. code-block:: sql
+
         CREATE SERIAL s START WITH 5 INCREMENT BY 3 cache -10;
 
+    ::
+    
         -- An error message before fixed
         In line 1, column 52,
         ERROR: invalid create serial
 
         CREATE SERIAL identifier {START WITH integer} {INCREMENT BY integer}
         serial_min_max {CYCLE|NOCYCLE} {CACHE unsigned_integer|NOCACHE}
-
+        
+    ::
+    
         -- An error message after fixed
         ERROR: In line 1, column 52 before '10; '
         Syntax error: unexpected '-', expecting UNSIGNED_INTEGER
@@ -3441,10 +3650,14 @@ Improved the error message that is outputted when the index name is incorrect (C
 
     The new version has been modified to output the index name that resulted in the error message which is outputted when an index name that is outputted when an index is created is incorrect.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t(i int);
         CREATE INDEX INDEX ON t(i);
+        
+    ::
+    
         ERROR: In line 1, column 14 before ' on t(i); '
         Syntax error: unexpected 'index'
 
@@ -3458,22 +3671,30 @@ Improved the error message that is outputted when the DDL statement block parame
 
     Previously, when the DDL statement block parameter block_ddl_statement or the query with WHERE clause block parameter block_where_statement was set to YES, the message "Authorization failure." was outputted. In the new version, this message has been improved to display situations in more details.
 
-    DDL statement is not allowed by configuration (block_ddl_statement=yes).
-
-    Statement without WHERE clause is not allowed by configuration (block_nowhere_statement=yes).
+    ::
+    
+        DDL statement is not allowed by configuration (block_ddl_statement=yes).
+        Statement without WHERE clause is not allowed by configuration (block_nowhere_statement=yes).
 
 Fixed an incorrect error message that occurred when renaming a partitioned table name with the name of other existing partitioned tables (CUBRIDSUS-7176)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Fixed a problem in which the name of a partitioned table in an error message was outputted incorrectly when the partitioned table was renamed with the name of other existing partitioned tables.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE pt1(i int) PARTITION BY hash(i) PARTITION 5;
         CREATE TABLE pt2(i int) PARTITION BY hash(i) PARTITION 5;
         RENAME pt1 AS pt2;
+        
+    ::
+    
         -- When the query above was executed, partitioned table was outputted.
         ERROR: Class "pt2__p__p0" already exists
+        
+    ::
+    
         -- The name is normally outputted after fixed.
         ERROR: Class "pt2" already exists
 
@@ -3494,14 +3715,22 @@ Fixed a problem of incorrect error messages that occurred when inserting inappro
 
     The new version has fixed a problem in which error messages not suitable to a situation would be outputted when inappropriate arguments were inserted into the ADDDATE and SUBDATE functions.
 
+    .. code-block:: sql
+
+        SELECT ADDDATE('1991-01-01 00:00:00', -10000000);
+        
     ::
     
-        SELECT ADDDATE('1991-01-01 00:00:00', -10000000);
         // An abnormal error message below was outputted.
         ERROR: before ' , -10000000); '
         No error message available.
+        
+    .. code-block:: sql
 
         SELECT SUBDATE(SYSDATE, 9999999);
+        
+    ::
+    
         // An abnormal error message below was outputted.
         ERROR: Execute: Query execution failure #931.
 
@@ -3510,14 +3739,19 @@ Fixed a problem of incorrect error messages that occurred when creating an index
 
     The new version has fixed a problem in which error messages not suitable to a situation would be outputted when an index was created to a SHARED attribute column.
 
-    ::
+    .. code-block:: sql
+
     
         CREATE TABLE t1(i INT SAHRED 10);
         CREATE INDEX ON t1(i);
 
+    ::
+    
         // Error message before fixed
         ERROR: before ' ); ' i is not defined.
 
+    ::
+    
         // Error message after fixed
         ERROR: Cannot create index on attribute "i", defined with a shared value.
 
@@ -3526,7 +3760,8 @@ Fixed incorrect error messages that occurred when creating serial with invalid m
 
     Fixed a problem in which incorrect error messages were outputted when creating serial with invalid maximum or minimum values.
     
-    ::
+    .. code-block:: sql
+
     
         // If the value was invalid, an error, "Minimum value is invalid" was outputted.
         CREATE SERIAL s START WITH 3 INCREMENT BY 1 MAXVALUE 1;
@@ -3676,18 +3911,19 @@ Fixed a problem in which the number of rows affected during query execution woul
 
     Previously, sometimes the number of rows affected by query execution was outputted incorrectly but this problem has been fixed.
 
-    ::
+    .. code-block:: sql
     
         INSERT INTO t1 SELECT ROWNUM FROM db_class;
+        
+    ::
+    
         // 1 was outputted before fixed
         1 row affected.
+        
+    ::
+    
         // The normal value is outputted after fixed
         52 rows affected.
-
-Modified a problem of sending a wrong error instead of the error which has occurred in the db server when an INTERRUPT has occurred in the broker application server (CUBRIDSUS-9450)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    When an INTERRUPT occurred in the broker application server (CAS), the error which has occurred in the DB server was sent as another error. This problem has been fixed.
 
 Caution
 =======

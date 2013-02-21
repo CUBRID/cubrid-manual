@@ -405,6 +405,42 @@ The following example shows how to create the *athlete2* table partitioned by th
     
     ALTER TABLE athlete2 DROP PARTITION event3;
 
+Partitioning key and Charset, Collation
+=======================================
+
+Partitioning keys of partition table should have the same character set with the column. Therefore, the following case is not allowed.
+
+.. code-block:: sql
+
+    CREATE TABLE t (c CHAR(50) COLLATE utf8_bin) 
+    PARTITION BY LIST (c) (
+        PARTITION p0 VALUES IN (_utf8'x'),
+        PARTITION p1 VALUES IN (_iso88591'y')
+    );
+    
+You can specify the collation on the partition table. The following example shows that *tbl* is defined as the case insensitive utf8_en_ci collation; Since it is considered that partitioning key 'test' and 'TEST' are the same, the table creation fails.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (str STRING) COLLATE utf8_en_ci 
+    PARTITION BY LIST (str) (
+        PARTITION p0 VALUES IN ('test'), 
+        PARTITION p1 VALUES IN ('TEST')
+    );
+    
+    ERROR: Partition definition is duplicated. 'p1'
+ 
+A hash partition whose partition key has a non-binary collation is not allowed. 
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (code VARCHAR (10)) COLLATE utf8_de_exp_ai_ci 
+    PARTITION BY HASH (code) PARTITIONS 4;
+
+    ERROR: before ' ; '
+    Unsupported partition column type.
+
+
 Retrieval and Manipulation data from Partition
 ==============================================
 
@@ -600,6 +636,39 @@ The following example shows how to move the instance to another partition by cha
 .. note::
 
     Be aware that when moving data between partitions by changing a partition key value, it can cause performance degradation due to internal deletions and insertions.
+
+Creating VIEW with Partitioning Table
+-------------------------------------
+
+You can define a VIEW by using each partition of a partitioned table.
+
+The following example shows how to create the *participant2* table partitioned based on the participating year, and create and retrieve a virtual table with the *before_2000* partition of the *participant2* table.
+
+.. code-block:: sql
+
+    CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
+    PARTITION BY RANGE (host_year) (
+        PARTITION before_2000 VALUES LESS THAN (2000),
+        PARTITION before_2008 VALUES LESS THAN (2008)
+    );
+
+    INSERT INTO participant2 VALUES (1988, 'NZL', 3, 2, 8);
+    INSERT INTO participant2 VALUES (1988, 'CAN', 3, 2, 5);
+    INSERT INTO participant2 VALUES (1996, 'KOR', 7, 15, 5);
+    INSERT INTO participant2 VALUES (2000, 'RUS', 32, 28, 28);
+    INSERT INTO participant2 VALUES (2004, 'JPN', 16, 9, 12);
+
+    CREATE VIEW v_2000 AS
+    SELECT * FROM participant2 PARTITION (before_2000)
+    WHERE host_year = 1988;
+
+    SELECT * FROM v_2000;
+    
+        host_year  nation                       gold       silver       bronze
+    ==========================================================================
+             1988  'NZL'                           3            2            8
+             1988  'CAN'                           3            2            5
+
     
 Partitioning Management
 =======================
@@ -610,15 +679,19 @@ Altering Regular Table into Partitioning Table
 To alter a regular table into a partitioned one, use the **ALTER TABLE** statement. Three partitioning methods can be used with the **ALTER TABLE** statement. The data in the existing table are moved to and stored in each partition according to the partition definition. ::
 
     ALTER {TABLE | CLASS} table_name
-    PARTITION BY {RANGE | HASH | LIST } ( <partition_expression> )
-    ( PARTITION partition_name VALUES LESS THAN { MAXVALUE | ( <partition_value_option> ) }
-    | PARTITION partition_name VALUES IN ( <partition_value_option list) > ]
-    | PARTITION <UNSINGED_INTEGER> )
+    PARTITION BY RANGE ( <partition_expression> )
+    ( PARTITION partition_name VALUES LESS THAN { MAXVALUE | ( <partition_value_option> ) }, ... )
 
-    <partition_expression>
-    expression_
-    <partition_value_option>
-    literal_
+    ALTER {TABLE | CLASS} table_name
+    PARTITION BY LIST ( <partition_expression> )
+    ( PARTITION partition_name VALUES IN ( <partition_value_option_list> ), ... )
+    
+    ALTER {TABLE | CLASS} table_name
+    PARTITION BY HASH ( <partition_expression> )
+    PARTITIONS number_of_hash_partition
+
+    <partition_expression> ::= expression
+    <partition_value_option> ::= literal
 
 *   *table_name* : Specifies the name of the table to be altered.
 *   *partition_expression* : Specifies a partition expression. The expression can be specified by the name of the column to be partitioned or by a function. For details on the data types and functions available, see :ref:`Data Types Available for Partition Expressions <partition-data-type>`.
@@ -629,18 +702,20 @@ The following are examples of altering the record table into a range, list and h
 
 .. code-block:: sql
 
-    ALTER TABLE record PARTITION BY RANGE (host_year)
-    ( PARTITION before_1996 VALUES LESS THAN (1996),
-      PARTITION after_1996 VALUES LESS THAN MAXVALUE);
+    ALTER TABLE record PARTITION BY RANGE (host_year) (
+        PARTITION before_1996 VALUES LESS THAN (1996),
+        PARTITION after_1996 VALUES LESS THAN MAXVALUE
+    );
 
-    ALTER TABLE record PARTITION BY list (unit)
-    ( PARTITION time_record VALUES IN ('Time'),
-      PARTITION kg_record VALUES IN ('kg'),
-      PARTITION meter_record VALUES IN ('Meter'),
-      PARTITION score_record VALUES IN ('Score') );
+    ALTER TABLE record PARTITION BY LIST (unit) (
+        PARTITION time_record VALUES IN ('Time'),
+        PARTITION kg_record VALUES IN ('kg'),
+        PARTITION meter_record VALUES IN ('Meter'),
+        PARTITION score_record VALUES IN ('Score')
+    );
 
-    ALTER TABLE record
-    PARTITION BY HASH (score) PARTITIONS 4;
+    ALTER TABLE record PARTITION BY HASH (score) PARTITIONS 4;
+
 
 .. note::
 
@@ -651,8 +726,7 @@ Altering Partitioning Table into Regular Table
 
 To alter an existing partitioned table into a regular one, use the **ALTER TABLE** statement. Removing partition does not mean that the data of a table will be deleted. ::
 
-    ALTER {TABLE | CLASS} <table_name>
-    REMOVE PARTITIONING
+    ALTER {TABLE | CLASS} table_name REMOVE PARTITIONING
 
 *   *table_name* : Specifies the name of the table to be altered.
 
@@ -692,19 +766,19 @@ The following attributes are used as they are on the promoted table:
 
 ::
 
-    ALTER TABLE identifier PROMOTE PARTITION <identifier_list>
+    ALTER TABLE table_name PROMOTE PARTITION <partition_name_list>
 
-*   <*identifier_list*>: The name of a partition to promote
+*   <*partition_name_list*>: The name of a partition to promote
 
 The following example shows promotion of list partition:
 
 .. code-block:: sql
 
-    CREATE TABLE t(i int) PARTITION BY LIST(i) (
-        partition p0 values in (1, 2, 3),
-        partition p1 values in (4, 5, 6),
-        partition p2 values in (7, 8, 9),
-        partition p3 values in (10, 11, 12)
+    CREATE TABLE t (i INT) PARTITION BY LIST (i) (
+        PARTITION p0 VALUES IN (1, 2, 3),
+        PARTITION p1 VALUES IN (4, 5, 6),
+        PARTITION p2 VALUES IN (7, 8, 9),
+        PARTITION p3 VALUES IN (10, 11, 12)
     );
      
     ALTER TABLE t PROMOTE PARTITION p1, p2;
@@ -712,101 +786,91 @@ The following example shows promotion of list partition:
 After promotion, the partition of the *t* table has *p0* and *p3* only and *p1* and *p2* can be accessed through the *t__p__p1* table and the *t__p__p2* table, respectively. ::
 
     csql> ;schema t
+    
     === <Help: Schema of a Class> ===
+    
      <Class Name>
          t
+         
      <Sub Classes>
          t__p__p0
          t__p__p3
+         
      <Attributes>
          i                    INTEGER
+         
      <Partitions>
          PARTITION BY LIST ([i])
          PARTITION p0 VALUES IN (1, 2, 3)
          PARTITION p3 VALUES IN (10, 11, 12)
      
     csql> ;schema t__p__p1
+    
     === <Help: Schema of a Class> ===
+    
      <Class Name>
          t__p__p1
+         
      <Attributes>
          i                    INTEGER
-
+         
+         
 The following example shows promotion of range partition.
 
 .. code-block:: sql
 
-    CREATE TABLE t(i int, j int) PARTITION BY RANGE(i) (
-            PARTITION p0 VALUES LESS THAN (1),
-            PARTITION p1 VALUES LESS THAN (10),
-            PARTITION p2 VALUES LESS THAN (100),
-            PARTITION p3 VALUES LESS THAN MAXVALUE
-          );
+    CREATE TABLE t (i INT, j INT) PARTITION BY RANGE (i) (
+        PARTITION p0 VALUES LESS THAN (1),
+        PARTITION p1 VALUES LESS THAN (10),
+        PARTITION p2 VALUES LESS THAN (100),
+        PARTITION p3 VALUES LESS THAN MAXVALUE
+    );
      
-    CREATE UNIQUE INDEX u_t_i ON t(i);
-    CREATE INDEX i_t_j ON t(j);
+    CREATE UNIQUE INDEX u_t_i ON t (i);
+    CREATE INDEX i_t_j ON t (j);
      
     ALTER TABLE t PROMOTE PARTITION p1, p2;
 
 After promotion, the partition of the *t* table has *p0* and *p3* only and *p1* and *p2* can be accessed through the *t__p__p1* table and the *t__p__p2* table, respectively. Note that some attributes or indexes such as the primary keys, foreign keys, and unique keys have been removed from *t__p__p1* and *t__p__p2*, the promoted tables. ::
 
     csql> ;schema t
+    
     === <Help: Schema of a Class> ===
+    
      <Class Name>
          t
+         
      <Sub Classes>
          t__p__p0
          t__p__p3
+         
      <Attributes>
          i                    INTEGER
          j                    INTEGER
+         
      <Constraints>
         UNIQUE u_t_i ON t (i)
         INDEX i_t_j ON t (j)
+        
      <Partitions>
          PARTITION BY RANGE ([i])
          PARTITION p0 VALUES LESS THAN (1)
          PARTITION p3 VALUES LESS THAN MAXVALUE
      
     csql> ;schema t__p__p1
+    
     === <Help: Schema of a Class> ===
+    
      <Class Name>
          t__p__p1
+         
      <Attributes>
          i                    INTEGER
          j                    INTEGER
+         
      <Constraints>
         INDEX idx_t_j ON t (j)
 
-Creating VIEW with Partitioning Table
--------------------------------------
-
-You can define a VIEW by using each partition of a partitioned table.
-
-The following example shows how to create the *participant2* table partitioned based on the participating year, and create and retrieve a virtual table with the *before_2000* partition of the *participant2* table.
-
-.. code-block:: sql
-
-    CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
-    PARTITION BY RANGE (host_year)
-    ( PARTITION before_2000 VALUES LESS THAN (2000),
-     PARTITION before_2008 VALUES LESS THAN (2008) );
-
-    INSERT INTO participant2 VALUES (1988, 'NZL', 3, 2, 8);
-    INSERT INTO participant2 VALUES (1988, 'CAN', 3, 2, 5);
-    INSERT INTO participant2 VALUES (1996, 'KOR', 7, 15, 5);
-    INSERT INTO participant2 VALUES (2000, 'RUS', 32, 28, 28);
-    INSERT INTO participant2 VALUES (2004, 'JPN', 16, 9, 12);
-
-    CREATE VIEW v_2000 AS
-    SELECT * FROM participant2 PARTITION(before_2000)
-    WHERE host_year = 1988;
-
-    SELECT * FROM v_2000;
-        host_year  nation                       gold       silver       bronze
-    ==========================================================================
-             1988  'NZL'                           3            2            8
-             1988  'CAN'                           3            2            5
 
 Updating Statistics on Partitioning Tables
 ------------------------------------------
@@ -820,45 +884,6 @@ As the search range is limited by partitioning pruning when a query is executed,
 Partitions and Inheritance
 --------------------------
 
-Partitions cannot be a part of the hierarchy chain and CUBRID has a different inheritance relationship for a partitioned table and a subclass. In fact, a partitioned table has superclasses and subclasses. However, in CUBRID, one partition has just one superclass (in other words, a partitioned table) only and does not have several subclasses.
-
-Partitioning key and Charset
-----------------------------
-
-Partitioning keys of partition table should have the same character set with the column. Therefore, the following case is not allowed.
-
-.. code-block:: sql
-
-    CREATE TABLE t(c CHAR(50) COLLATE utf8_bin) PARTITION BY LIST(c)
-    (
-        PARTITION p0 VALUES IN(_utf8'xxx'),
-        PARTITION p1 VALUES IN(_iso88591'yyy')
-    );
-    
-Partitioning key and Collation
-------------------------------
-
-You can specify the collation on the partition table. The following example shows that *tbl* is defined as the case insensitive utf8_en_ci collation; Since it is considered that partitioning key 'test' and 'TEST' are the same, the table creation fails.
-
-.. code-block:: sql
-
-    CREATE TABLE tbl (str STRING) COLLATE utf8_en_ci 
-    PARTITION BY LIST (str) 
-    (
-        PARTITION p0 VALUES IN ('test'), 
-        PARTITION p1 VALUES IN ('TEST')
-    );
-    
-    ERROR: Partition definition is duplicated. 'p1'
- 
-A hash partition whose partition key has a non-binary collation is not allowed. 
-
-.. code-block:: sql
-
-    CREATE TABLE tbl (code VARCHAR(10)) COLLATE utf8_de_exp_ai_ci 
-    PARTITION BY HASH (code) PARTITIONS 4;
-
-    ERROR: before ' ; '
-    Unsupported partition column type.
+Partitions cannot be a part of the inheritance hierarchy chain and CUBRID has a different inheritance relationship for a partitioned table and a subclass. In fact, a partitioned table has superclasses and subclasses. However, in CUBRID, one partition has just one superclass (in other words, a partitioned table) only and does not have several subclasses.
 
 

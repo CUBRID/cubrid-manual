@@ -51,7 +51,7 @@ CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스�
 
   :func:`EXTRACT`, :func:`CAST`
 
- 
+
 영역 분할
 =========
 
@@ -406,6 +406,43 @@ CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스�
     
     ALTER TABLE athlete2 DROP PARTITION event3;
 
+분할 키와 문자셋, 콜레이션
+==========================
+
+분할 테이블의 분할 키 값들은 칼럼과 같은 문자셋을 가져야 한다. 따라서 아래와 같은 경우는 허용되지 않는다. 
+
+.. code-block:: sql
+
+    CREATE TABLE t (c CHAR(50) COLLATE utf8_bin) 
+    PARTITION BY LIST (c) (
+        PARTITION p0 VALUES IN (_utf8'x'),
+        PARTITION p1 VALUES IN (_iso88591'y')
+    );
+
+분할 테이블에도 콜레이션을 지정할 수 있다. 
+
+다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다. 
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (str STRING) COLLATE utf8_en_ci 
+    PARTITION BY LIST (str) (
+        PARTITION p0 VALUES IN ('test'), 
+        PARTITION p1 VALUES IN ('TEST')
+    );
+    
+    ERROR: Partition definition is duplicated. 'p1'
+ 
+비 바이너리(non-binary) 콜레이션을 가지는 컬럼에 대한 해시 분할은 허용되지 않는다.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (code VARCHAR (10)) COLLATE utf8_de_exp_ai_ci 
+    PARTITION BY HASH (code) PARTITIONS 4;
+
+    ERROR: before ' ; '
+    Unsupported partition column type.
+
 분할에서 데이터 조회와 조작
 ===========================
 
@@ -599,6 +636,39 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
 
     분할 키 값의 변경에 의한 분할 간 데이터 이동은 내부적으로 삭제와 삽입을 수반하여 성능 저하의 원인이 될 수 있으므로 사용에 주의한다.
 
+분할 테이블을 이용하여 VIEW 생성
+--------------------------------
+
+분할 테이블의 각 분할을 이용하여 뷰를 정의할 수 있다.
+
+다음은 참가연도에 따라 영역 분할된 *participant2* 테이블을 생성하고 *participant2* 테이블의 *before_2000* 분할을 이용하여 뷰를 생성, 조회하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
+    PARTITION BY RANGE (host_year) (
+        PARTITION before_2000 VALUES LESS THAN (2000),
+        PARTITION before_2008 VALUES LESS THAN (2008)
+    );
+
+    INSERT INTO participant2 VALUES (1988, 'NZL', 3, 2, 8);
+    INSERT INTO participant2 VALUES (1988, 'CAN', 3, 2, 5);
+    INSERT INTO participant2 VALUES (1996, 'KOR', 7, 15, 5);
+    INSERT INTO participant2 VALUES (2000, 'RUS', 32, 28, 28);
+    INSERT INTO participant2 VALUES (2004, 'JPN', 16, 9, 12);
+
+    CREATE VIEW v_2000 AS
+    SELECT * FROM participant2 PARTITION (before_2000)
+    WHERE host_year = 1988;
+
+    SELECT * FROM v_2000;
+    
+        host_year  nation                       gold       silver       bronze
+    ==========================================================================
+             1988  'NZL'                           3            2            8
+             1988  'CAN'                           3            2            5
+
+
 분할 관리
 =========
 
@@ -608,15 +678,19 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
 일반 테이블을 분할 테이블로 변경하려면 **ALTER TABLE** 문을 이용한다. **ALTER TABLE** 문을 이용하여 세 종류의 분할 모드로 변경 가능하다. 분할 테이블로 변경하면 기존 테이블에 있던 데이터는 분할 정의에 따라 각 분할로 이동 저장된다. 일반 테이블의 데이터를 분할 테이블로 이동하는 것이므로 데이터 양에 따라 긴 작업 시간이 필요할 수 있다. ::
 
     ALTER {TABLE | CLASS} table_name
-    PARTITION BY {RANGE | HASH | LIST } ( <partition_expression> )
-    ( PARTITION partition_name VALUES LESS THAN { MAXVALUE | ( <partition_value_option> ) }
-    | PARTITION partition_name VALUES IN ( <partition_value_option list) > ]
-    | PARTITION <UNSINGED_INTEGER> )
+    PARTITION BY RANGE ( <partition_expression> )
+    ( PARTITION partition_name VALUES LESS THAN { MAXVALUE | ( <partition_value_option> ) }, ... )
 
-    <partition_expression>
-    expression_
-    <partition_value_option>
-    literal_
+    ALTER {TABLE | CLASS} table_name
+    PARTITION BY LIST ( <partition_expression> )
+    ( PARTITION partition_name VALUES IN ( <partition_value_option_list> ), ... )
+    
+    ALTER {TABLE | CLASS} table_name
+    PARTITION BY HASH ( <partition_expression> )
+    PARTITIONS number_of_hash_partition
+    
+    <partition_expression> ::= expression
+    <partition_value_option> ::= literal
 
 *   *table_name* : 변경하려는 테이블의 이름을 지정한다.
 *   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 명을 지정하거나 함수를 사용하여 지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 내용은 :ref:`분할 표현식에 사용할 수 있는 데이터 타입 <partition-data-type>` 을 참조한다.
@@ -627,18 +701,19 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
 
 .. code-block:: sql
 
-    ALTER TABLE record PARTITION BY RANGE (host_year)
-    ( PARTITION before_1996 VALUES LESS THAN (1996),
-      PARTITION after_1996 VALUES LESS THAN MAXVALUE);
+    ALTER TABLE record PARTITION BY RANGE (host_year) (
+        PARTITION before_1996 VALUES LESS THAN (1996),
+        PARTITION after_1996 VALUES LESS THAN MAXVALUE
+    );
 
-    ALTER TABLE record PARTITION BY list (unit)
-    ( PARTITION time_record VALUES IN ('Time'),
-      PARTITION kg_record VALUES IN ('kg'),
-      PARTITION meter_record VALUES IN ('Meter'),
-      PARTITION score_record VALUES IN ('Score') );
+    ALTER TABLE record PARTITION BY LIST (unit) (
+        PARTITION time_record VALUES IN ('Time'),
+        PARTITION kg_record VALUES IN ('kg'),
+        PARTITION meter_record VALUES IN ('Meter'),
+        PARTITION score_record VALUES IN ('Score')
+    );
 
-    ALTER TABLE record
-    PARTITION BY HASH (score) PARTITIONS 4;
+    ALTER TABLE record PARTITION BY HASH (score) PARTITIONS 4;
 
 .. note::
 
@@ -649,8 +724,7 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
 
 기존에 정의된 분할 테이블을 일반 테이블로 변경하려면 **ALTER TABLE** 문을 이용한다. 분할을 제거한다고 해서 테이블의 데이터가 삭제되는 것은 아니다. ::
 
-    ALTER {TABLE | CLASS} <table_name>
-    REMOVE PARTITIONING
+    ALTER {TABLE | CLASS} table_name REMOVE PARTITIONING
 
 *   *table_name* : 변경하고자 하는 테이블의 이름을 지정한다.
 
@@ -663,7 +737,7 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
 분할 PROMOTE 문
 ---------------
 
-분할(partition) **PROMOTE** 문은 분할 테이블에서 사용자가 지정한 분할을 독립적인 일반 테이블로 승격(promote)한다. 이것은 거의 접근하지 않는 매우 오래된 데이터를 쌓아놓을(archiving) 목적으로만 유지하려 할 때 유용하다. 해당 분할을 일반 테이블로 승격함으로써 유용한 데이터는 더 적은 수의 분할을 갖게 되므로 접근 부하는 줄이고 오래된 데이터는 편리하게 보존할 수 있다.
+분할(partition) **PROMOTE** 문은 분할 테이블에서 사용자가 지정한 분할을 독립적인 일반 테이블로 승격(promote)한다. 이것은 거의 접근하지 않는 매우 오래된 데이터를 보관할(archiving) 목적으로만 유지하려 할 때 유용하다. 해당 분할을 일반 테이블로 승격함으로써 유용한 데이터는 더 적은 수의 분할을 갖게 되므로 접근 부하는 줄이고 오래된 데이터는 편리하게 보존할 수 있다.
 
 분할 **PROMOTE** 문은 영역 분할(range partition) 테이블과 리스트 분할(list partition) 테이블에만 허용된다. 해시 분할 테이블은 사용자가 제어할 수 있는 방법이 없으므로 승격을 허용하지 않는다.
 
@@ -690,19 +764,19 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
 
 ::
 
-    ALTER TABLE identifier PROMOTE PARTITION <identifier_list>
+    ALTER TABLE table_name PROMOTE PARTITION <partition_name_list>
 
-*   <*identifier_list*> : 승격할 분할 이름
+*   <*partition_name_list*> : 승격할 분할 이름
 
 다음은 리스트 분할을 승격한 예이다.
 
 .. code-block:: sql
 
-    CREATE TABLE t(i int) PARTITION BY LIST(i) (
-        partition p0 values in (1, 2, 3),
-        partition p1 values in (4, 5, 6),
-        partition p2 values in (7, 8, 9),
-        partition p3 values in (10, 11, 12)
+    CREATE TABLE t (i INT) PARTITION BY LIST (i) (
+        PARTITION p0 VALUES IN (1, 2, 3),
+        PARTITION p1 VALUES IN (4, 5, 6),
+        PARTITION p2 VALUES IN (7, 8, 9),
+        PARTITION p3 VALUES IN (10, 11, 12)
     );
      
     ALTER TABLE t PROMOTE PARTITION p1, p2;
@@ -710,23 +784,31 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
 승격 이후 테이블 *t* 의 파티션은 *p0*, *p3* 만 가지게 되며, *p1*, *p2* 는 각각 *t__p__p1*, *t__p__p2* 인 테이블로 접근할 수 있다. ::
 
     csql> ;schema t
+    
     === <Help: Schema of a Class> ===
+    
      <Class Name>
          t
+         
      <Sub Classes>
          t__p__p0
          t__p__p3
+         
      <Attributes>
          i                    INTEGER
+         
      <Partitions>
          PARTITION BY LIST ([i])
          PARTITION p0 VALUES IN (1, 2, 3)
          PARTITION p3 VALUES IN (10, 11, 12)
      
     csql> ;schema t__p__p1
+    
     === <Help: Schema of a Class> ===
+    
      <Class Name>
          t__p__p1
+         
      <Attributes>
          i                    INTEGER
      
@@ -734,78 +816,58 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
 
 .. code-block:: sql
 
-    CREATE TABLE t(i int, j int) PARTITION BY RANGE(i) (
-            PARTITION p0 VALUES LESS THAN (1),
-            PARTITION p1 VALUES LESS THAN (10),
-            PARTITION p2 VALUES LESS THAN (100),
-            PARTITION p3 VALUES LESS THAN MAXVALUE
-          );
+    CREATE TABLE t (i INT, j INT) PARTITION BY RANGE (i) (
+        PARTITION p0 VALUES LESS THAN (1),
+        PARTITION p1 VALUES LESS THAN (10),
+        PARTITION p2 VALUES LESS THAN (100),
+        PARTITION p3 VALUES LESS THAN MAXVALUE
+    );
      
-    CREATE UNIQUE INDEX u_t_i ON t(i);
-    CREATE INDEX i_t_j ON t(j);
+    CREATE UNIQUE INDEX u_t_i ON t (i);
+    CREATE INDEX i_t_j ON t (j);
      
     ALTER TABLE t PROMOTE PARTITION p1, p2;
 
 승격 이후 테이블 *t* 의 파티션은 *p0*, *p3* 만 가지게 되며, *p1*, *p2* 는 각각 *t__p__p1*, *t__p__p2* 인 테이블로 접근할 수 있다. 승격된 테이블 *t__p__p1*, *t__p__p2* 에는 기본 키, 외래 키, 고유 키 등 테이블의 일부 속성이나 인덱스가 제거된 상태라는 점에 주의한다. ::
 
     csql> ;schema t
+    
     === <Help: Schema of a Class> ===
+    
      <Class Name>
          t
+         
      <Sub Classes>
          t__p__p0
          t__p__p3
+         
      <Attributes>
          i                    INTEGER
          j                    INTEGER
+         
      <Constraints>
         UNIQUE u_t_i ON t (i)
         INDEX i_t_j ON t (j)
+        
      <Partitions>
          PARTITION BY RANGE ([i])
          PARTITION p0 VALUES LESS THAN (1)
          PARTITION p3 VALUES LESS THAN MAXVALUE
      
     csql> ;schema t__p__p1
+    
     === <Help: Schema of a Class> ===
+    
      <Class Name>
          t__p__p1
+         
      <Attributes>
          i                    INTEGER
          j                    INTEGER
+         
      <Constraints>
         INDEX idx_t_j ON t (j)
     
-분할 테이블을 이용하여 VIEW 생성
---------------------------------
-
-분할 테이블의 각 분할을 이용하여 뷰를 정의할 수 있다.
-
-다음은 참가연도에 따라 영역 분할된 *participant2* 테이블을 생성하고 *participant2* 테이블의 *before_2000* 분할을 이용하여 뷰를 생성, 조회하는 예제이다.
-
-.. code-block:: sql
-
-    CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
-    PARTITION BY RANGE (host_year)
-    ( PARTITION before_2000 VALUES LESS THAN (2000),
-     PARTITION before_2008 VALUES LESS THAN (2008) );
-
-    INSERT INTO participant2 VALUES (1988, 'NZL', 3, 2, 8);
-    INSERT INTO participant2 VALUES (1988, 'CAN', 3, 2, 5);
-    INSERT INTO participant2 VALUES (1996, 'KOR', 7, 15, 5);
-    INSERT INTO participant2 VALUES (2000, 'RUS', 32, 28, 28);
-    INSERT INTO participant2 VALUES (2004, 'JPN', 16, 9, 12);
-
-    CREATE VIEW v_2000 AS
-    SELECT * FROM participant2 PARTITION(before_2000)
-    WHERE host_year = 1988;
-
-    SELECT * FROM v_2000;
-        host_year  nation                       gold       silver       bronze
-    ==========================================================================
-             1988  'NZL'                           3            2            8
-             1988  'CAN'                           3            2            5
-
 
 분할 테이블의 통계 정보 갱신
 ----------------------------
@@ -814,53 +876,11 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
 
 .. note::
 
-    CUBRID 9.0 미만 버전에서는 **ANALYZE PARTITION** 구문을 통해 분할 테이블의 통계 정보를 갱신했는데, CUBRID 9.0 버전부터는 이 구문 수행 시 실제로 아무런 동작도 하지 않지만 이전 버전과의 호환을 위해 오류로 처리하지는 않는다.
+    CUBRID 9.0 미만 버전에서는 **ANALYZE PARTITION** 구문을 통해 분할 테이블의 통계 정보를 갱신했는데, CUBRID 9.0 버전부터는 이 구문 수행 시 실제로 아무런 동작도 하지 않지만 이전 버전과의 호환을 위해 **ANALYZE PARTITION** 구문을 오류로 처리하지는 않는다.
 
 분할과 상속 관계
 ----------------
 
-분할들(partitions)은 계층 구조 체인의 일부가 될 수 없으며, 분할 테이블(partitioned table)과 하위 클래스(subclass) 관계를 가지는 것과 다르다. 실제로 분할 테이블은 상위 클래스(superclass)와 하위 클래스(subclass)를 갖게 되지만, CUBRID는 하나의 분할이 오직 하나의 상위 클래스(superclass), 즉 하나의 분할 테이블만 가지며 여러 개의 하위 클래스(subclasses)를 가지지 않도록 보장한다.
+분할들(partitions)은 상속 구조의 일부가 될 수 없으며, 분할 테이블(partitioned table)과 하위 클래스(subclass) 관계를 가지는 것과 다르다. 실제로 분할 테이블은 상위 클래스(superclass)와 하위 클래스(subclass)를 갖게 되지만, CUBRID는 하나의 분할이 오직 하나의 상위 클래스(superclass), 즉 하나의 분할 테이블만 가지며 여러 개의 하위 클래스(subclasses)를 가지지 않도록 보장한다.
 
-분할 키와 문자셋
-----------------
-
-분할 테이블의 분할 키들은 칼럼과 같은 문자셋을 가져야 한다. 
-따라서 아래와 같은 경우는 허용하지 않는다. 
-
-.. code-block:: sql
-
-    CREATE TABLE t (c CHAR(50) COLLATE utf8_bin) 
-    PARTITION BY LIST (c)
-    (
-        PARTITION p0 VALUES IN(_utf8'xxx'),
-        PARTITION p1 VALUES IN(_iso88591'yyy')
-    );
-
-분할 키와 콜레이션
-----------------------
-
-분할 테이블에도 콜레이션을 지정할 수 있다. 
-
-다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다. 
-
-.. code-block:: sql
-
-    CREATE TABLE tbl (str STRING) COLLATE utf8_en_ci 
-    PARTITION BY LIST (str) 
-    (
-        PARTITION p0 VALUES IN ('test'), 
-        PARTITION p1 VALUES IN ('TEST')
-    );
-    
-    ERROR: Partition definition is duplicated. 'p1'
- 
-비 바이너리(non-binary) 콜레이션을 가지는 컬럼에 대한 해시 분할은 허용되지 않는다.
-
-.. code-block:: sql
-
-    CREATE TABLE tbl (code VARCHAR (10)) COLLATE utf8_de_exp_ai_ci 
-    PARTITION BY HASH (code) PARTITIONS 4;
-
-    ERROR: before ' ; '
-    Unsupported partition column type.
 

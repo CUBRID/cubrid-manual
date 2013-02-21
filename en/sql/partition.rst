@@ -10,13 +10,14 @@ Partitioning is a method by which a table is divided into multiple independent l
 *   Decreased possibility of data corruption and improved availability by partitioning a table into multiple chunks
 *   Optimized storage cost
 
-Three types of partitioning methods are supported by CUBRID: range partitioning, hash partitioning, and list partitioning.
+Three types of partitioning methods are supported by CUBRID: range partition, hash partition, and list partition.
 
-The maximum number of partitions cannot exceed 1,024. Each partition of a table is created as its subtable. The subtables created by the partitioning process cannot be altered or deleted by users. The name of the subtable is stored in the system table in a '*class_name__p__partition_name*' format. Database users can check the partitioning information in the db_class and db_partition virtual tables. They can also check the information by using the ;sc <table name> command in the CUBRID Manager or the CSQL Interpreter.
+The maximum number of partitions cannot exceed 1,024. Each partition of a table is created as its subtable. The subtables created by the partitioning process cannot be altered or deleted by users. The name of the subtable is stored in the system table in a '*class_name__p__partition_name*' format. Database users can check the partitioning information in the **db_class** and **db_partition** views. They can also check the information by using the ;sc <table name> command in the CUBRID Manager or the CSQL Interpreter.
 
 .. _partition-data-type:
 
-**Data Types Allowed in Partitioning Expressions**
+Partitioning key
+================
 
 The data types of columns allowed as partitioning expressions are as follows:
 
@@ -50,26 +51,6 @@ The following shows operators and functions that can be used in partitioning exp
 
     :func:`EXTRACT`, :func:`CAST`
 
-**Partitioning and Collation**
-
-You can specify the collation on the partition table. The following example shows that *tbl* is defined as the case insensitive utf8_en_ci collation; therefore, it is considered that partitioning key 'test' and 'TEST' are the same, so table creation is failed.::
-
-    CREATE TABLE tbl(str STRING) COLLATE utf8_en_ci PARTITION BY LIST(str) 
-    (
-        PARTITION p0 VALUES IN ('test'), 
-        PARTITION p1 VALUES IN ('TEST')
-    );
-    
-    ERROR: Partition definition is duplicated. 'p1'
- 
-But, you cannot apply the hash partition key on the table specified by the non-binary collation. ::
-
-    CREATE TABLE tbl ( code VARCHAR(10)) COLLATE utf8_de_exp_ai_ci PARTITION BY HASH (code) PARTITIONS 4;
-
-    ERROR: before ' ; '
-    Unsupported partition column type.
-
-
 
 Range Partitioning
 ==================
@@ -81,13 +62,13 @@ Range Partitioning Definition
 
 You can define a range partition by using the **PARTITION BY RANGE** clause. ::
 
-    CREATE TABLE(
-    ...
+    CREATE TABLE table_name (
+       ...
     )
     PARTITION BY RANGE ( <partition_expression> ) (
-    PARTITION <partition_name> VALUES LESS THAN ( <range_value> ),
-    PARTITION <partition_name> VALUES LESS THAN ( <range_value> ) ),
-    ... )
+       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+       ... 
     )
 
 *   *partition_expression* : Specifies the partition expression. The expression can be specified by the name of the column to be partitioned or by a function. For details of the data types and functions available, see Data Types Available for Partition Expression.
@@ -99,9 +80,10 @@ The following example shows how to create the *participant2* table with the part
 .. code-block:: sql
 
     CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
-    PARTITION BY RANGE (host_year)
-    (PARTITION before_2000 VALUES LESS THAN (2000),
-    PARTITION before_2008 VALUES LESS THAN (2008) );
+    PARTITION BY RANGE (host_year) (
+      PARTITION before_2000 VALUES LESS THAN (2000),
+      PARTITION before_2008 VALUES LESS THAN (2008)
+    );
      
     INSERT INTO participant2 VALUES (1988, 'NZL', 3, 2, 8);
     INSERT INTO participant2 VALUES (1988, 'CAN', 3, 2, 5);
@@ -113,7 +95,7 @@ As shown below, the partition key value in a range partition is **NULL**, the da
 
 .. code-block:: sql
 
-    INSERT INTO participant2 VALUES(NULL, 'AAA', 0, 0, 0);
+    INSERT INTO participant2 VALUES (NULL, 'AAA', 0, 0, 0);
     
 .. note::
 
@@ -128,38 +110,41 @@ Range Partitioning Redefinition
 
 You can redefine a partition by using the **REORGANIZE PARTITION** clause of the **ALTER** statement. By redefining partitions, you can combine multiple partitions into one or divide one into multiple. ::
 
-    ALTER {TABLE | CLASS} <table_name>
-    REORGANIZE PARTITION
-    <alter partition name comma list>
-    INTO ( <partition definition comma list> )
+    ALTER {TABLE | CLASS} table_name
+    REORGANIZE PARTITION <alter_partition_name_comma_list>
+    INTO ( <partition_definition_comma_list> )
      
-    partitiondefinition comma list:
-    PARTITION <partition_name> VALUES LESS THAN ( <range_value> ),.... 
+    partition_definition_comma_list ::=
+    PARTITION partition_name VALUES LESS THAN ( <range_value> ), ... 
 
 *   *table_name* : Specifies the name of the table to be redefined.
-*   *alter partition name comma list* : Specifies the partition to be redefined. Multiple partitions are separated by commas (,).
-*   *partition definition comma list* : Specifies the redefined partitions. Multiple partitions are separated by commas (,).
+*   *alter_partition_name_comma_list* : Specifies the partition to be redefined. Multiple partitions are separated by commas (,).
+*   *partition_definition_comma_list* : Specifies the redefined partitions. Multiple partitions are separated by commas (,).
 
 The following example shows how to perform repartitioning the *before_2000* partition into the *before_1996* and *before_2000* partitions.
 
 .. code-block:: sql
 
-    CREATE TABLE participant2 ( host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
-    PARTITION BY RANGE (host_year)
-    ( PARTITION before_2000 VALUES LESS THAN (2000),
-     PARTITION before_2008 VALUES LESS THAN (2008) );
+    CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
+    PARTITION BY RANGE (host_year) (
+      PARTITION before_2000 VALUES LESS THAN (2000),
+      PARTITION before_2008 VALUES LESS THAN (2008)
+    );
      
-    ALTER TABLE participant2 REORGANIZE PARTITION before_2000 INTO (
-    PARTITION before_1996 VALUES LESS THAN (1996),
-    PARTITION before_2000 VALUES LESS THAN (2000)
+    ALTER TABLE participant2 
+    REORGANIZE PARTITION before_2000 INTO (
+      PARTITION before_1996 VALUES LESS THAN (1996),
+      PARTITION before_2000 VALUES LESS THAN (2000)
     );
 
-The following example shows how to combine two partitions redefined in Example 1 back into a single *before_2000* partition.
+The following example shows how to combine two partitions redefined in the above example back into a single *before_2000* partition.
 
 .. code-block:: sql
 
-    ALTER TABLE participant2 REORGANIZE PARTITION before_1996, before_2000 INTO
-    (PARTITION before_2000 VALUES LESS THAN (2000) );
+    ALTER TABLE participant2 
+    REORGANIZE PARTITION before_1996, before_2000 INTO (
+      PARTITION before_2000 VALUES LESS THAN (2000)
+    );
 
 .. note::
 
@@ -174,21 +159,23 @@ Adding Range Partitioning
 
 You can add range partitions by using the **ADD PARTITION** clause of the **ALTER** statement. ::
 
-    ALTER {TABLE | CLASS} <table_name>
-    ADD PARTITION <partition definitions comma list>
-    partition definition comma list:
-    PARTITION <partition_name> VALUES LESS THAN ( <range_value> ),...
+    ALTER {TABLE | CLASS} table_name
+    ADD PARTITION <partition_definitions_comma_list>
+    
+    partition definition_comma_list ::=
+    PARTITION partition_name VALUES LESS THAN ( <range_value> ), ...
 
 *   *table_name* : Specifies the name of the table to which partitions are added.
-*   *partition definition comma list* : Specifies the partitions to be added. Multiple partitions are separated by commas (,).
+*   *partition_definition_comma_list* : Specifies the partitions to be added. Multiple partitions are separated by commas (,).
 
-Currently, the partition before the 2008 Olympic Games is defined in the *participant2* table. The following example shows how to add the *before_2012* and *before_2016* partitions; the former will store the information about the 2012 Olympic Games and the latter will store the information about the 2016 Olympic Games.
+Currently, the partition before the 2008 Olympic Games is defined in the *participant2* table. The following example shows how to add the *before_2012* and *last_one* partitions; the former will contain the information about the 2012 Olympic Games and the latter will have the information about the later ones.
 
 .. code-block:: sql
 
     ALTER TABLE participant2 ADD PARTITION (
-    PARTITION before_2012 VALUES LESS THAN (2012),
-    PARTITION before_2016 VALUES LESS THAN MAXVALUE );
+      PARTITION before_2012 VALUES LESS THAN (2012),
+      PARTITION last_one VALUES LESS THAN MAXVALUE
+    );
 
 .. note::
 
@@ -201,8 +188,8 @@ Dropping Range Partitioning
 
 You can drop a partition by using the **DROP PARTITION** clause of the **ALTER** statement. ::
 
-    ALTER {TABLE | CLASS} <table_name>
-    DROP PARTITION <partition_name>
+    ALTER {TABLE | CLASS} table_name
+    DROP PARTITION partition_name
     
 *   *table_name* : Specifies the name of the partitioned table.
 *   *partition_name* : Specifies the name of the partition to be dropped.
@@ -229,12 +216,11 @@ Hash Partitioning Definition
 
 You can define a hash partition by using the **PARTITION BY HASH** clause. ::
 
-    CREATE TABLE (
-    ...
+    CREATE TABLE table_name (
+       ...
     )
-    ( PARTITION BY HASH ( <partition_expression> )
-     PARTITIONS ( <number_of_partitions> )
-    )
+    PARTITION BY HASH ( <partition_expression> )
+    PARTITIONS ( number_of_partitions )
 
 *   *partition_expression* : Specifies a partition expression. The expression can be specified by the name of the column to be partitioned or by a function.
 *   *number_of_partitions* : Specifies the number of partitions.
@@ -243,21 +229,24 @@ The following example shows how to create the *nation2* table with country *code
 
 .. code-block:: sql
 
-    CREATE TABLE nation2
-    ( code CHAR(3),
-      name VARCHAR(50) )
-    PARTITION BY HASH ( code) PARTITIONS 4;
+    CREATE TABLE nation2 (
+      code CHAR (3),
+      name VARCHAR (50)
+    )
+    PARTITION BY HASH (code) 
+    PARTITIONS 4;
 
-The following example shows how to insert data to the hash partition created in the example 1. When a value is inserted into a hash partition, the partition to store the data is determined by the hash value of the partition key. If the partition key value is **NULL**, the data is stored in the first partition.
+The following example shows how to insert data to the hash partition created in the above example. When a value is inserted into a hash partition, the partition to store the data is determined by the hash value of the partition key. If the partition key value is **NULL**, the data is stored in the first partition.
 
 .. code-block:: sql
 
-    INSERT INTO nation2 VALUES ('KOR','Korea');
-    INSERT INTO nation2 VALUES ('USA','USA United States of America');
-    INSERT INTO nation2 VALUES ('FRA','France');
-    INSERT INTO nation2 VALUES ('DEN','Denmark');
-    INSERT INTO nation2 VALUES ('CHN','China');
-    INSERT INTO nation2 VALUES (NULL,'AAA');
+    INSERT INTO nation2 VALUES ('KOR', 'Korea');
+    INSERT INTO nation2 VALUES ('USA', 'USA United States of America');
+    INSERT INTO nation2 VALUES ('FRA', 'France');
+    INSERT INTO nation2 VALUES ('DEN', 'Denmark');
+    INSERT INTO nation2 VALUES ('CHN', 'China');
+    INSERT INTO nation2 VALUES (NULL, 'AAA');
+
 
 .. note::
 
@@ -268,11 +257,11 @@ Hash Partitioning Redefinition
 
 You can redefine a partition by using the **COALESCE PARTITION** clause of the **ALTER** statement. Instances are preserved if the hash partition is redefined. ::
 
-    ALTER {TABLE | CLASS} <table_name>
-    COALESCE PARTITION <unsigned integer>
+    ALTER {TABLE | CLASS} table_name
+    COALESCE PARTITION number_of_shrinking_partitions
 
 *   *table_name* : Specifies the name of the table to be redefined.
-*   *unsigned integer* : Specifies the number of partitions to be deleted.
+*   *number_of_shrinking_partitions* : Specifies the number of partitions to be deleted.
 
 The following example shows how to decrease the number of partitions in the *nation2* table from 4 to 3.
 
@@ -296,13 +285,14 @@ List Partitioning Definition
 
 You can define a list partition by using the **PARTITION BY LIST** statement. ::
 
-    CREATE TABLE(
-    ...
+    CREATE TABLE table_name (
+      ...
     )
     PARTITION BY LIST ( <partition_expression> ) (
-    PARTITION <partition_name> VALUES IN ( <partition_value_list> ),
-    PARTITION <partition_name> VALUES IN ( <partition_value_ list>, ...
-    );
+      PARTITION partition_name VALUES IN ( <partition_value_list> ),
+      PARTITION partition_name VALUES IN ( <partition_value_list> ),
+      ... 
+    )
     
 *   *partition_expression* : Specifies a partition expression. The expression can be specified by the name of the column to be partitioned or by a function. For details on the data types and functions available, see :ref:`Data Types Available for Partition Expressions <partition-data-type>`.
 *   *partition_name* : Specifies the partition name.
@@ -312,33 +302,38 @@ The following example shows how to create the *athlete2* table with athlete name
 
 .. code-block:: sql
 
-    CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
+    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
     PARTITION BY LIST (event) (
-    PARTITION event1 VALUES IN ('Swimming', 'Athletics ' ),
-    PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
-    PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball'));
+        PARTITION event1 VALUES IN ('Swimming', 'Athletics'),
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
+        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
+    );
 
-The following example shows how to insert data to the list partition created in the example 1. In the last query of the example 2, if you insert an argument that has not been specified in the partition expression of the example 1, data inserting fails.
+The following example shows how to insert data to the list partition created in the above example. In the last query of the following example, if you insert an argument that has not been specified in the partition expression of the above example, data inserting fails.
 
 .. code-block:: sql
 
     INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
     INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
-    INSERT INTO athlete2 VALUES ('Moon Dae-Sung','Taekwondo');
     INSERT INTO athlete2 VALUES ('Cho In-Chul', 'Judo');
     INSERT INTO athlete2 VALUES ('Hong Kil-Dong', 'Volleyball');
 
-The following example shows in which an error occurs with no data inserted when the partition key value is **NULL**. To define a partition where a **NULL** value can be inserted, define one that has a list including a **NULL** value as in the event3 partition as below.
+The following example shows in which an error occurs with no data inserted when the partition key value is **NULL**. 
 
 .. code-block:: sql
 
-    INSERT INTO athlete2 VALUES ('Hong Kil-Dong','NULL');
+    INSERT INTO athlete2 VALUES ('Hong Kil-Dong', NULL);
      
-    CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
+To define a partition where a **NULL** value can be inserted, define one that has a list including a **NULL** value as in the event3 partition as below.
+
+.. code-block:: sql
+
+    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
     PARTITION BY LIST (event) (
-    PARTITION event1 VALUES IN ('Swimming', 'Athletics ' ),
-    PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
-    PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball', NULL));
+        PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
+        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball', NULL)
+    );
 
 .. note::
 
@@ -349,46 +344,50 @@ List Partitioning Redefinition
 
 You can redefine a partition by using the **REORGANIZE PARTITION** clause of the **ALTER** statement. By redefining partitions, you can combine multiple partitions into one or divide one into multiple. ::
 
-    ALTER {TABLE | CLASS} <table_name>
-    REORGANIZEPARTITION
-    <alter partition name comma list>
-    INTO ( <partition definition comma list> )
-    partition definition comma list:
-    PARTITION <partition_name> VALUES IN ( <partition_value_list>),... 
-
+    ALTER {TABLE | CLASS} table_name
+    REORGANIZE PARTITION alter_partition_name_comma_list
+    INTO ( <partition_definition_comma_list> )
+    
+    partition_definition_comma_list ::=
+    PARTITION <partition_name> VALUES IN ( <partition_value_list> ), ... 
+    
 *   *table_name* : Specifies the name of the table to be redefined.
-*   *alter partition name comma list* : Specifies the partition to be redefined. Multiple partitions are separated by commas (,).
-*   *partition definition comma list* : Specifies the redefined partitions. Multiple partitions are separated by commas (,).
+*   *alter_partition_name_comma_list* : Specifies the partition to be redefined. Multiple partitions are separated by commas (,).
+*   *partition_definition_comma_list* : Specifies the redefined partitions. Multiple partitions are separated by commas (,).
 
 The following example shows how to create the *athlete2* table partitioned by the list of sport events, and redefine the *event2* partition to be divided into *event2_1* (Judo) and *event2_2* (Taekwondo, Boxing).
 
 .. code-block:: sql
 
-    CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
+    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR(30))
     PARTITION BY LIST (event) (
-        PARTITION event1 VALUES IN ('Swimming', 'Athletics ' ),
-        PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
+        PARTITION event1 VALUES IN ('Swimming', 'Athletics'),
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
         PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
     );
 
-    ALTER TABLE athlete2 REORGANIZE PARTITION event2 INTO
-    (PARTITION event2_1 VALUES IN ('Judo'),
-    PARTITION event2_2 VALUES IN ( 'Taekwondo','Boxing'));
+    ALTER TABLE athlete2 
+    REORGANIZE PARTITION event2 INTO (
+        PARTITION event2_1 VALUES IN ('Judo'),
+        PARTITION event2_2 VALUES IN ('Taekwondo', 'Boxing')
+    );
 
 The following example shows how to combine the *event2_1* and *event2_2* partitions divided in Example 1 back into a single *event2* partition.
 
 .. code-block:: sql
 
-    ALTER TABLE athlete2 REORGANIZE PARTITION event2_1, event2_2 INTO
-    (PARTITION event2 VALUES IN('Judo','Taekwondo','Boxing'));
+    ALTER TABLE athlete2 
+    REORGANIZE PARTITION event2_1, event2_2 INTO (
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing')
+    );
 
 Dropping List Partitioning
 --------------------------
 
 You can drop a partition by using the **DROP PARTITION** clause of the **ALTER** statement. ::
 
-    ALTER {TABLE | CLASS} <table_name>
-    DROP PARTITION <partition_name>
+    ALTER {TABLE | CLASS} table_name
+    DROP PARTITION partition_name
 
 *   *table_name* : Specifies the name of the partitioned table.
 *   *partition_name* : Specifies the name of the partition to be dropped.
@@ -397,21 +396,111 @@ The following example shows how to create the *athlete2* table partitioned by th
 
 .. code-block:: sql
 
-    CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
+    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
     PARTITION BY LIST (event) (
-    PARTITION event1 VALUES IN ('Swimming', 'Athletics ' ),
-    PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
-    PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball'));
+        PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
+        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
+    );
     
     ALTER TABLE athlete2 DROP PARTITION event3;
 
-Retrieving and Manipulating Data in Partitioning
-================================================
+Retrieval and Manipulation data from Partition
+==============================================
 
-SELECT/UPDATE/DELETE Data in Partitioning
------------------------------------------
+Local Index and Global Index for Partitioning
+---------------------------------------------
 
-When SELECT/UPDATE/DELETE data, it is possible to access for each partition with "**PARTITION** (partition_name)" syntax.
+Indexes created on a partitioning table are classified into Local Index or Global Index. Global Index defines one index structure that maintains data from all partitions. However, Local Index defines one index for one partition. The operators cannot control the index to be Local Index or Global Index. The index type is automatically determined by the system.
+
+*   All primary keys are Global Index.
+*   All foreign keys are Local Index.
+*   All non-unique indexes are Local Index.
+*   A unique index is Local Index or Global Index. If the partition key is a unique index, the index is Local Index; otherwise, it is Global Index.
+
+Partition Pruning
+-----------------
+
+Partition pruning is an optimization, limiting the scope of your query according to the criteria you have specified. It is the skipping of unnecessary data partitions in a query. By doing this, you can greatly reduce the amount of data output from the disk and time spent on processing data as well as improve query performance and resource availability.
+
+.. note::
+
+    In versions lower than CUBRID 9.0, partition pruning has been executed at the query compiling stage. However, in version of CUBRID 9.0 or higher, it is executed at the server side at the query execution stage. Therefore, in version of CUBRID 9.0 or higher, partition pruning can be executed for more complex and various queries than existing versions. However, it is not available to print out the query information for a partitioning pruning query and optimization of **ORDER BY SKIP**, and **GROUP BY SKIP** is not supported.
+
+The following example shows how to create the *olympic2* table to be partitioned based on the year the Olympic Games were held, and retrieve the countries that participated in the Olympic Games since the 2000 Sydney Olympic Games. In the **WHERE** clause, partition pruning takes place when equality or range comparison is performed between a partition key and a constant value.
+
+In this example, the *before_1996* partition that has smaller year values than 2000 is not scanned.
+
+.. code-block:: sql
+
+    CREATE TABLE olympic2 (opening_date DATE, host_nation VARCHAR (40))
+    PARTITION BY RANGE (EXTRACT (YEAR FROM opening_date)) (
+        PARTITION before_1996 VALUES LESS THAN (1996),
+        PARTITION before_MAX VALUES LESS THAN MAXVALUE
+    );
+     
+    SELECT opening_date, host_nation 
+    FROM olympic2 
+    WHERE EXTRACT (YEAR FROM (opening_date)) >= 2000;
+
+
+The following example shows how to retrieve the method of getting the effects of partition pruning by retrieving data with a specific partition when partition pruning does not occur. In the first query, partition pruning does not occur because the value compared is not in the same format as that of the partition expression. Therefore, you can use the same effect of partition pruning by specifying the appropriate partition as shown in the second query.
+
+.. code-block:: sql
+
+    -- pruning cannot be applied
+    SELECT host_nation 
+    FROM olympic2 
+    WHERE opening_date >= '2000-01-01';
+
+    -- to access a specific partition
+    SELECT host_nation 
+    FROM olympic2 PARTITION (before_max) 
+    WHERE opening_date >= '2000-01-01';
+
+The following example shows how to specify the search condition to make a partition pruning in the hash partitioned table, called the *manager* table. For hash partitioning, partition pruning occurs only when equality comparison is performed between a partition key and a constant value in the **WHERE** clause.
+
+.. code-block:: sql
+
+    CREATE TABLE manager (
+        code INT,
+        name VARCHAR (50)
+    )
+    PARTITION BY HASH (code) PARTITIONS 4;
+     
+    SELECT * FROM manager WHERE code = 10053;
+
+.. note::
+
+    *   The partition expression and the value compared must be in the same format.
+    
+    *   To enable pruning for hash partitioning and list partitioning, use the following partitioning key expression in the **WHERE** clause. The following constant expression does not include any table columns and any other conditions are not allowed.
+
+        *   <*partitioning key*> = <*constant expression*>
+        *   <*partitioning key*> { IN | = SOME | = ANY } ( <*constant expression list*> )
+
+    *   To enable pruning for range partitioning, use the following partitioning key expression in the **WHERE** clause.
+
+        *   <*partitioning key*> { < | > | = | <= | >= } <*constant expression*>
+        *   <*partitioning key*> BETWEEN <*constant expression*> AND <*constant expression*>
+
+To access a specific partition
+------------------------------
+
+.. (TODO - translation)
+
+.. 데이터를 SELECT/INSERT/UPDATE할 때 특정 분할을 명시적으로 지정하여 접근할 수 있다. 특정 분할을 지정할 때 분할 테이블 이름을 명시하지 않고 분할 이름만 명시하여 지정할 수 있도록 PARTITION 절을 지원한다. PARTITION 절은 분할 테이블 이름 뒤에 명시할 수 있으며, SELECT 문 뿐만 아니라 분할을 사용할 수 있는 모든 SQL에 사용할 수 있다. 
+
+.. When SELECT/UPDATE/DELETE data, it is possible to access for each partition with "**PARTITION** (partition_name)" syntax.
+
+.. code-block:: sql
+
+    -- to specify a partition with its table name
+    SELECT * FROM athlete2__p__event2;
+    
+    -- to specify a partition with PARTITION clause
+    SELECT * FROM athlete2 PARTITION (event2);
+    
 
 The following example shows how to create the *athlete2* table to be partitioned by the list of sport events, insert data, and retrieve the *event1* and *event2* partitions.
 
@@ -452,6 +541,27 @@ The following shows to UPDATE one row on the *event2* partition of the *athlete2
 
     UPDATE athlete2 PARTITION(event2) SET name='Cho In-Chul' WHERE name='Kim In-Chul';
 
+.. (TODO - translation)
+
+.. INSERT 문 등에 PARTITION 절을 명시했을 때 지정된 분할이 정의와 다를 경우에는 오류가 반환된다.
+
+.. code-block:: sql
+
+    CREATE TABLE t (i INTEGER) 
+    PARTITION BY RANGE (i) (
+      PARTITION p0 VALUES LESS THAN (10), 
+      PARTITION p1 VALUES LESS THAN (100)
+    );
+    
+    -- success
+    INSERT INTO t PARTITION (p0) VALUES (2);
+    
+    -- error -1108
+    INSERT INTO t PARTITION (p0) VALUES (20);
+
+.. WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분할 프루닝 과정을 수행하지 않게 되는 성능상의 (작은) 이점이 있으며, 또한 일반적으로 분할 테이블에는 적용되지 못하는 INDEX JOIN, ORDER BY 및 GROUP BY 생략 최적화, 다중 키 범위 최적화, INDEX SKIP SCAN 등의 질의 처리 기법이 사용될 수 있다.
+
+
 Moving Data by Changing Partitioning Key Value
 ----------------------------------------------
 
@@ -461,100 +571,36 @@ The following example shows how to move the instance to another partition by cha
 
 .. code-block:: sql
 
-    CREATE TABLE athlete2( name VARCHAR(40), event VARCHAR(30) )
+    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
     PARTITION BY LIST (event) (
-    PARTITION event1 VALUES IN ('Swimming', 'Athletics ' ),
-    PARTITION event2 VALUES IN ('Judo', 'Taekwondo','Boxing'),
-    PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball'));
+        PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
+        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
+    );
     
     INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
     INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
 
-    SELECT * FROM athlete2__p__event1;
+    SELECT * FROM athlete2 PARTITION (event1);
+    
       name                  event
     ============================================
       'Hwang Young-Cho'     'Athletics'
 
     UPDATE athlete2 SET event = 'Football' WHERE name = 'Hwang Young-Cho';
 
-    SELECT * FROM athlete2__p__event3;
+    SELECT * FROM athlete2 PARTITION (event3);
+    
       name                  event
     ============================================
       'Lee Seung-Yuop'      'Baseball'
       'Hwang Young-Cho'     'Football'
 
+
 .. note::
 
     Be aware that when moving data between partitions by changing a partition key value, it can cause performance degradation due to internal deletions and insertions.
-
-Local Index and Global Index for Partitioning
----------------------------------------------
-
-Indexes created on a partitioning table are classified into Local Index or Global Index. Global Index defines one index structure that maintains data from all partitions. However, Local Index defines one index for one partition. The operators cannot control the index to be Local Index or Global Index. The index type is automatically determined by the system.
-
-*   All primary keys are Global Index.
-*   All foreign keys are Local Index.
-*   All non-unique indexes are Local Index.
-*   A unique index is Local Index or Global Index. If the partition key is a unique index, the index is Local Index; otherwise, it is Global Index.
-
-Partition Pruning
------------------
-
-Partition pruning is an optimization, limiting the scope of your query according to the criteria you have specified. It is the skipping of unnecessary data partitions in a query. By doing this, you can greatly reduce the amount of data output from the disk and time spent on processing data as well as improve query performance and resource availability.
-
-.. note::
-
-    In versions lower than CUBRID 9.0, partition pruning has been executed at the query compiling stage. However, in version of CUBRID 9.0 or higher, it is executed at the server side at the query execution stage. Therefore, in version of CUBRID 9.0 or higher, partition pruning can be executed for more complex and various queries than existing versions. However, it is not available to print out the query information for a partitioning pruning query and optimization of **ORDER BY SKIP**, and **GROUP BY SKIP** is not supported.
-
-The following example shows how to create the *olympic2* table to be partitioned based on the year the Olympic Games were held, and retrieve the countries that participated in the Olympic Games since the 2000 Sydney Olympic Games. In the **WHERE** clause, partition pruning takes place when equality or range comparison is performed between a partition key and a constant value.
-
-In this example, the *before_1996* partition that has a smaller year value than 2000 is not scanned.
-
-.. code-block:: sql
-
-    CREATE TABLE olympic2
-    ( opening_date DATE, host_nation VARCHAR(40))
-    PARTITION BY RANGE ( EXTRACT (YEAR FROM opening_date) )
-    ( PARTITION before_1996 VALUES LESS THAN (1996),
-      PARTITION before_MAX VALUES LESS THAN MAXVALUE );
-     
-    SELECT opening_date, host_nation FROM olympic2 WHERE EXTRACT ( YEAR FROM (opening_date)) >= 2000;
-
-The following example shows how to retrieve the method of getting the effects of partition pruning by retrieving data with a specific partition when partition pruning does not occur. In the first query, partition pruning does not occur because the value compared is not in the same format as that of the partition expression.
-
-Therefore, you can use the same effect of partition pruning by specifying the appropriate partition as shown in the second query.
-
-.. code-block:: sql
-
-    SELECT host_nation FROM olympic2 WHERE opening_date >= '2000 - 01 - 01';
-
-    SELECT host_nation FROM olympic2__p__before_max WHERE opening_date >= '2000 - 01 - 01';
-
-The following example shows how to specify the search condition to make a partition pruning in the hash partitioned table, called the *manager* table. For hash partitioning, partition pruning occurs only when equality comparison is performed between a partition key and a constant value in the **WHERE** clause.
-
-.. code-block:: sql
-
-    CREATE TABLE manager (
-    code INT,
-    name VARCHAR(50))
-    PARTITION BY HASH (code) PARTITIONS 4;
-     
-    SELECT * FROM manager WHERE code = 10053;
-
-.. note::
-
-    *   The partition expression and the value compared must be in the same format.
     
-    *   To enable pruning for hash partitioning and list partitioning, use the following partitioning key expression in the **WHERE** clause. The following constant expression does not include any table columns and any other conditions are not allowed.
-
-        *   <*partitioning key*> = <*constant expression*>
-        *   <*partitioning key*> { IN | = SOME | = ANY } ( <*constant expression list*> )
-
-    *   To enable pruning for range partitioning, use the following partitioning key expression in the **WHERE** clause.
-
-        *   <*partitioning key*> { < | > | = | <= | >= | } <*constant expression*>
-        *   <*partitioning key*> BETWEEN <*constant expression*> AND <*constant expression*>
-
 Partitioning Management
 =======================
 
@@ -788,3 +834,31 @@ Partitioning keys of partition table should have the same character set with the
         PARTITION p0 VALUES IN(_utf8'xxx'),
         PARTITION p1 VALUES IN(_iso88591'yyy')
     );
+    
+Partitioning key and Collation
+------------------------------
+
+You can specify the collation on the partition table. The following example shows that *tbl* is defined as the case insensitive utf8_en_ci collation; Since it is considered that partitioning key 'test' and 'TEST' are the same, the table creation fails.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (str STRING) COLLATE utf8_en_ci 
+    PARTITION BY LIST (str) 
+    (
+        PARTITION p0 VALUES IN ('test'), 
+        PARTITION p1 VALUES IN ('TEST')
+    );
+    
+    ERROR: Partition definition is duplicated. 'p1'
+ 
+A hash partition whose partition key has a non-binary collation is not allowed. 
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (code VARCHAR(10)) COLLATE utf8_de_exp_ai_ci 
+    PARTITION BY HASH (code) PARTITIONS 4;
+
+    ERROR: before ' ; '
+    Unsupported partition column type.
+
+

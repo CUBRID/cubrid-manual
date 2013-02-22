@@ -520,14 +520,12 @@ The following example shows how to specify the search condition to make a partit
         *   <*partitioning key*> { < | > | = | <= | >= } <*constant expression*>
         *   <*partitioning key*> BETWEEN <*constant expression*> AND <*constant expression*>
 
-To access a specific partition
-------------------------------
+Accessing Partitions Directly
+-----------------------------
 
-.. (TODO - translation)
+When you SELECT/UPDATE/DELETE the data, you can access a specific partition directly with "PARTITION (partition_name)" syntax. If you want to access a specific partition, you can access it without a table name, but with a partition name by using "PARTITION (partition_name)" syntax.
+PARTITION clause follows after the name of a partitioned table, and it can be used to not only SELECT statement, but also all SQL syntax.
 
-.. 데이터를 SELECT/INSERT/UPDATE할 때 특정 분할을 명시적으로 지정하여 접근할 수 있다. 특정 분할을 지정할 때 분할 테이블 이름을 명시하지 않고 분할 이름만 명시하여 지정할 수 있도록 PARTITION 절을 지원한다. PARTITION 절은 분할 테이블 이름 뒤에 명시할 수 있으며, SELECT 문 뿐만 아니라 분할을 사용할 수 있는 모든 SQL에 사용할 수 있다. 
-
-.. When SELECT/UPDATE/DELETE data, it is possible to access for each partition with "**PARTITION** (partition_name)" syntax.
 
 .. code-block:: sql
 
@@ -536,7 +534,6 @@ To access a specific partition
     
     -- to specify a partition with PARTITION clause
     SELECT * FROM athlete2 PARTITION (event2);
-    
 
 The following example shows how to create the *athlete2* table to be partitioned by the list of sport events, insert data, and retrieve the *event1* and *event2* partitions.
 
@@ -555,11 +552,13 @@ The following example shows how to create the *athlete2* table to be partitioned
     INSERT INTO athlete2 VALUES ('Kim In-Chul', 'Judo');
 
     SELECT * FROM athlete2 PARTITION (event1);
+    
       name                  event
     ============================================
       'Hwang Young-Cho'     'Athletics'
 
     SELECT * FROM athlete2 PARTITION (event2);
+    
       name                  event
     ============================================
       'Lee Sun-Hee'         'Taekwondo'
@@ -577,9 +576,7 @@ The following shows to UPDATE one row on the *event2* partition of the *athlete2
 
     UPDATE athlete2 PARTITION(event2) SET name='Cho In-Chul' WHERE name='Kim In-Chul';
 
-.. (TODO - translation)
-
-.. INSERT 문 등에 PARTITION 절을 명시했을 때 지정된 분할이 정의와 다를 경우에는 오류가 반환된다.
+If the specified partition is different with the definition of the partition when you specify the PARTITION clause in INSERT statement, etc., an error occurs.
 
 .. code-block:: sql
 
@@ -595,8 +592,7 @@ The following shows to UPDATE one row on the *event2* partition of the *athlete2
     -- error -1108
     INSERT INTO t PARTITION (p0) VALUES (20);
 
-.. WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분할 프루닝 과정을 수행하지 않게 되는 성능상의 (작은) 이점이 있으며, 또한 일반적으로 분할 테이블에는 적용되지 못하는 INDEX JOIN, ORDER BY 및 GROUP BY 생략 최적화, 다중 키 범위 최적화, INDEX SKIP SCAN 등의 질의 처리 기법이 사용될 수 있다.
-
+If you directly access the specific partition in the query with WHERE clause, there is a (small) strength in the performance and you can use the query processing methods, which cannot be used generally on the partitioned table, like INDEX JOIN, ORDER BY-skip & GROUP BY-skip optimization, multiple key range optimization, INDEX SKIP SCAN, etc.
 
 Moving Data by Changing Partitioning Key Value
 ----------------------------------------------
@@ -879,7 +875,7 @@ As the search range is limited by partitioning pruning when a query is executed,
 
 .. note::
 
-    In versions lower than CUBRID 9.0, statistics information of the partitioning table has been updated by using the **ANALYZE PARTITION** syntax. From the CUBRID 9.0 version, no action is actually made even when this syntax is executed, however, it is not processed as an error for compatibility with the previous versions.
+    In versions lower than CUBRID 9.0, statistics information of the partitioning table has been updated by using the **ANALYZE PARTITION** syntax. From the CUBRID 9.0 version, no action is actually made even when this syntax is executed. However, it is not processed as an error for compatibility with the previous versions.
 
 Partitions and Inheritance
 --------------------------

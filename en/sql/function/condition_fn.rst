@@ -97,251 +97,266 @@ The data type for a value returned by the **CASE** expression is determined base
     FROM case_tbl;
     ERROR: Cannot coerce 'one' to type double.
 
-Conditional Functions
-=====================
+COALESCE
+========
 
 .. function:: COALESCE (expression [, ...])
 
-    The **COALESCE** function has more than one expression as an argument. If a first argument is non-**NULL**, the corresponding value is returned if it is **NULL**, a second argument is returned. If all expressions which have an argument are **NULL**, **NULL** is returned. Therefore, this function is generally used to replace **NULL** with other default value.
+The **COALESCE** function has more than one expression as an argument. If a first argument is non-**NULL**, the corresponding value is returned if it is **NULL**, a second argument is returned. If all expressions which have an argument are **NULL**, **NULL** is returned. Therefore, this function is generally used to replace **NULL** with other default value.
 
-    Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
+Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
 
-    *   **CHAR** < **VARCHAR**
-    *   **BIT** < **VARBIT**
-    *   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
-    *   **DATE** < **TIMESTAMP** < **DATETIME**
+*   **CHAR** < **VARCHAR**
+*   **BIT** < **VARBIT**
+*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
+*   **DATE** < **TIMESTAMP** < **DATETIME**
 
-    For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FLOAT**, then **COALESCE** (a, b, c, d) returns a **FLOAT** type. If a type of a is **INTEGER**, b, **DOULBE** , c, **FLOAT**, and d, **TIMESTAMP**, then **COALESCE** (a, b, c, d) returns a **VARCHAR** type.
+For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FLOAT**, then **COALESCE** (a, b, c, d) returns a **FLOAT** type. If a type of a is **INTEGER**, b, **DOULBE** , c, **FLOAT**, and d, **TIMESTAMP**, then **COALESCE** (a, b, c, d) returns a **VARCHAR** type.
 
-    **COALESCE** (*a, b*) works the same as the **CASE** statement as follows: ::
+**COALESCE** (*a, b*) works the same as the **CASE** statement as follows: ::
 
-        CASE WHEN a IS NOT NULL
-        THEN a
-        ELSE b
-        END
+    CASE WHEN a IS NOT NULL
+    THEN a
+    ELSE b
+    END
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT * FROM case_tbl;
-                    a
-        =============
-                    1
-                    2
-                    3
-                 NULL
-         
-        --substituting a default value 10.0000 for NULL valuse
-        SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
-                    a  coalesce(a, 10.0000)
-        ===================================
-                    1  1.0000
-                    2  2.0000
-                    3  3.0000
-                 NULL  10.0000
+    SELECT * FROM case_tbl;
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --substituting a default value 10.0000 for NULL valuse
+    SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
+                a  coalesce(a, 10.0000)
+    ===================================
+                1  1.0000
+                2  2.0000
+                3  3.0000
+             NULL  10.0000
+
+DECODE
+======
 
 .. function:: DECODE( expression, search, result [, search, result]* [, default] )
 
-    As well as a **CASE** expression, the **DECODE** function performs the same functionality as the **IF** ... **THEN** ... **ELSE** statement. It compares the *expression* argument with *search* argument, and returns the *result* corresponding to *search* that has the same value. It returns *default* if there is no *search* with the same value, and returns **NULL** if *default* is omitted. An expression argument and a search argument to be comparable should be same or convertible each other. The number of digits after the decimal point is determined to display all significant figures including valid number of all *result*.
+As well as a **CASE** expression, the **DECODE** function performs the same functionality as the **IF** ... **THEN** ... **ELSE** statement. It compares the *expression* argument with *search* argument, and returns the *result* corresponding to *search* that has the same value. It returns *default* if there is no *search* with the same value, and returns **NULL** if *default* is omitted. An expression argument and a search argument to be comparable should be same or convertible each other. The number of digits after the decimal point is determined to display all significant figures including valid number of all *result*.
 
-    **DECODE** (*a*, *b*, *c*, *d*, *e, f*) has the same meaning as the **CASE** statement below. ::
+**DECODE** (*a*, *b*, *c*, *d*, *e, f*) has the same meaning as the **CASE** statement below. ::
 
-        CASE WHEN a = b THEN c
-        WHEN a = d THEN e
-        ELSE f
-        END
+    CASE WHEN a = b THEN c
+    WHEN a = d THEN e
+    ELSE f
+    END
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT * FROM case_tbl;
-                    a
-        =============
-                    1
-                    2
-                    3
-                 NULL
-         
-        --Using DECODE function to compare expression and search values one by one
-        SELECT a, DECODE(a, 1, 'one', 2, 'two', 'other') FROM case_tbl;
-                    a  decode(a, 1, 'one', 2, 'two', 'other')
-        ===================================
-                    1  'one'
-                    2  'two'
-                    3  'other'
-                 NULL  'other'
-         
-         
-        --result types are converted to a single type containing all of significant figures
-        SELECT a, DECODE(a, 1, 1, 2, 1.2345, 1.234567890) FROM case_tbl;
-                    a  decode(a, 1, 1, 2, 1.2345, 1.234567890)
-        ===================================
-                    1  1.000000000
-                    2  1.234500000
-                    3  1.234567890
-                 NULL  1.234567890
-         
-        --an error occurs when result types are not convertible
-        SELECT a, DECODE(a, 1, 'one', 2, 'two', 1.2345) FROM case_tbl;
-         
-        ERROR: Cannot coerce 'one' to type double.
+    SELECT * FROM case_tbl;
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --Using DECODE function to compare expression and search values one by one
+    SELECT a, DECODE(a, 1, 'one', 2, 'two', 'other') FROM case_tbl;
+                a  decode(a, 1, 'one', 2, 'two', 'other')
+    ===================================
+                1  'one'
+                2  'two'
+                3  'other'
+             NULL  'other'
+     
+     
+    --result types are converted to a single type containing all of significant figures
+    SELECT a, DECODE(a, 1, 1, 2, 1.2345, 1.234567890) FROM case_tbl;
+                a  decode(a, 1, 1, 2, 1.2345, 1.234567890)
+    ===================================
+                1  1.000000000
+                2  1.234500000
+                3  1.234567890
+             NULL  1.234567890
+     
+    --an error occurs when result types are not convertible
+    SELECT a, DECODE(a, 1, 'one', 2, 'two', 1.2345) FROM case_tbl;
+     
+    ERROR: Cannot coerce 'one' to type double.
+
+IF
+==
 
 .. function:: IF ( expression1, expression2, expression3 )
 
-    The **IF** function returns *expression2* if the value of the arithmetic expression specified as the first parameter is **TRUE**, or *expression3* if the value is **FALSE** or **NULL**. *expression2* and *expression3* which are returned as a result must be the same or of a convertible common type. If one is explicitly **NULL**, the result of the function follows the type of the non-**NULL** parameter.
+The **IF** function returns *expression2* if the value of the arithmetic expression specified as the first parameter is **TRUE**, or *expression3* if the value is **FALSE** or **NULL**. *expression2* and *expression3* which are returned as a result must be the same or of a convertible common type. If one is explicitly **NULL**, the result of the function follows the type of the non-**NULL** parameter.
 
-    **IF** (*a*, *b*, *c*) has the same meaning as the **CASE** statement in the following example: ::
+**IF** (*a*, *b*, *c*) has the same meaning as the **CASE** statement in the following example: ::
 
-        CASE WHEN a IS TRUE THEN b
-        ELSE c
-        END
+    CASE WHEN a IS TRUE THEN b
+    ELSE c
+    END
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT * FROM case_tbl;
-                    a
-        =============
-                    1
-                    2
-                    3
-                 NULL
-         
-        --IF function returns the second expression when the fist is TRUE
-        SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
-                    a   if(a=1, 'one', 'other')
-        ===================================
-                    1  'one'
-                    2  'other'
-                    3  'other'
-                 NULL  'other'
-         
-        --If function in WHERE clause
-        SELECT * FROM case_tbl WHERE IF(a=1, 1, 2) = 1;
-                    a
-        =============
-                    1
+    SELECT * FROM case_tbl;
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --IF function returns the second expression when the fist is TRUE
+    SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
+                a   if(a=1, 'one', 'other')
+    ===================================
+                1  'one'
+                2  'other'
+                3  'other'
+             NULL  'other'
+     
+    --If function in WHERE clause
+    SELECT * FROM case_tbl WHERE IF(a=1, 1, 2) = 1;
+                a
+    =============
+                1
+
+IFNULL, NVL
+===========
 
 .. function:: IFNULL ( expr1, expr2 )
 .. function:: NVL ( expr1, expr2 )
 
-    The **IFNULL** function is working like the **NVL** function; however, only the **NVL** function supports collection type as well. The **IFNULL** function (which has two arguments) returns *expr1* if the value of the first expression is not **NULL** or returns *expr2*, otherwise.
-    
-    Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
+The **IFNULL** function is working like the **NVL** function; however, only the **NVL** function supports collection type as well. The **IFNULL** function (which has two arguments) returns *expr1* if the value of the first expression is not **NULL** or returns *expr2*, otherwise.
 
-    *   **CHAR** < **VARCHAR**
-    *   **BIT** < **VARBIT**
-    *   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
-    *   **DATE** < **TIMESTAMP** < **DATETIME**
+Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
 
-    For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a, b) returns a **BIGINT** type. If a type of a is **INTEGER** and b is **TIMESTAMP**, then **IFNULL** (a, b) returns a **VARCHAR** type.
+*   **CHAR** < **VARCHAR**
+*   **BIT** < **VARBIT**
+*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
+*   **DATE** < **TIMESTAMP** < **DATETIME**
 
-    **IFNULL** (*a*, *b*) or **NVL** (*a*, *b*) has the same meaning as the **CASE** statement below. ::
+For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a, b) returns a **BIGINT** type. If a type of a is **INTEGER** and b is **TIMESTAMP**, then **IFNULL** (a, b) returns a **VARCHAR** type.
 
-        CASE WHEN a IS NULL THEN b
-        ELSE a
-        END
+**IFNULL** (*a*, *b*) or **NVL** (*a*, *b*) has the same meaning as the **CASE** statement below. ::
 
-    .. code-block:: sql
+    CASE WHEN a IS NULL THEN b
+    ELSE a
+    END
 
-        SELECT * FROM case_tbl;
-                    a
-        =============
-                    1
-                    2
-                    3
-                 NULL
-         
-        --returning a specific value when a is NULL
-        SELECT a, NVL(a, 10.0000) FROM case_tbl;
-                    a  nvl(a, 10.0000)
-        ===================================
-                    1  1.0000
-                    2  2.0000
-                    3  3.0000
-                 NULL  10.0000
-         
-        --IFNULL can be used instead of NVL and return values are converted to the string type
-        SELECT a, IFNULL(a, 'UNKNOWN') FROM case_tbl;
-                    a   ifnull(a, 'UNKNOWN')
-        ===================================
-                    1  '1'
-                    2  '2'
-                    3  '3'
-                 NULL  'UNKNOWN'
+.. code-block:: sql
+
+    SELECT * FROM case_tbl;
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --returning a specific value when a is NULL
+    SELECT a, NVL(a, 10.0000) FROM case_tbl;
+                a  nvl(a, 10.0000)
+    ===================================
+                1  1.0000
+                2  2.0000
+                3  3.0000
+             NULL  10.0000
+     
+    --IFNULL can be used instead of NVL and return values are converted to the string type
+    SELECT a, IFNULL(a, 'UNKNOWN') FROM case_tbl;
+                a   ifnull(a, 'UNKNOWN')
+    ===================================
+                1  '1'
+                2  '2'
+                3  '3'
+             NULL  'UNKNOWN'
+
+NULLIF
+======
 
 .. function:: NULLIF (expr1, expr2)
 
-    The **NULLIF** function returns **NULL** if the two expressions specified as the parameters are identical, and returns the first parameter value otherwise.
+The **NULLIF** function returns **NULL** if the two expressions specified as the parameters are identical, and returns the first parameter value otherwise.
 
-    **NULLIF** (*a*, *b*) is the same of the **CASE** statement. ::
+**NULLIF** (*a*, *b*) is the same of the **CASE** statement. ::
 
-        CASE
-        WHEN a = b THEN NULL
-        ELSE a
-        END
+    CASE
+    WHEN a = b THEN NULL
+    ELSE a
+    END
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT * FROM case_tbl;
+    SELECT * FROM case_tbl;
 
-        SELECT * FROM case_tbl;
-                    a
-        =============
-                    1
-                    2
-                    3
-                 NULL
-         
-        --returning NULL value when a is 1
-        SELECT a, NULLIF(a, 1) FROM case_tbl;
-                    a  nullif(a, 1)
-        ===========================
-                    1          NULL
-                    2             2
-                    3             3
-                 NULL          NULL
-         
-        --returning NULL value when arguments are same
-        SELECT NULLIF (1, 1.000)  FROM db_root;
-          nullif(1, 1.000)
-        ======================
-          NULL
-         
-        --returning the first value when arguments are not same
-        SELECT NULLIF ('A', 'a')  FROM db_root;
-          nullif('A', 'a')
-        ======================
-          'A'
+    SELECT * FROM case_tbl;
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --returning NULL value when a is 1
+    SELECT a, NULLIF(a, 1) FROM case_tbl;
+                a  nullif(a, 1)
+    ===========================
+                1          NULL
+                2             2
+                3             3
+             NULL          NULL
+     
+    --returning NULL value when arguments are same
+    SELECT NULLIF (1, 1.000)  FROM db_root;
+      nullif(1, 1.000)
+    ======================
+      NULL
+     
+    --returning the first value when arguments are not same
+    SELECT NULLIF ('A', 'a')  FROM db_root;
+      nullif('A', 'a')
+    ======================
+      'A'
+
+NVL2
+====
 
 .. function:: NVL2 ( expr1, expr2, expr3 )
 
-    Three parameters are specified for the **NVL2** function. The second expression (*expr2*) is returned if the first expression (*expr1*) is not **NULL**; the third expression (*expr3*) is returned if it is **NULL**.
+Three parameters are specified for the **NVL2** function. The second expression (*expr2*) is returned if the first expression (*expr1*) is not **NULL**; the third expression (*expr3*) is returned if it is **NULL**.
 
-    Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
+Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
 
-    *   **CHAR** < **VARCHAR**
-    *   **BIT** < **VARBIT**
-    *   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
-    *   **DATE** < **TIMESTAMP** < **DATETIME**
+*   **CHAR** < **VARCHAR**
+*   **BIT** < **VARBIT**
+*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
+*   **DATE** < **TIMESTAMP** < **DATETIME**
 
-    For example, if a type of a is **INT**, b, **BIGINT**, and c, **SHORT**, then **NVL2** (a, b, c) returns a **BIGINT** type. If a type of a is **INTEGER**, b, **DOUBLE**, and c, **TIMESTAMP**, then **NVL2** (a, b, c) returns a **VARCHAR** type.
+For example, if a type of a is **INT**, b, **BIGINT**, and c, **SHORT**, then **NVL2** (a, b, c) returns a **BIGINT** type. If a type of a is **INTEGER**, b, **DOUBLE**, and c, **TIMESTAMP**, then **NVL2** (a, b, c) returns a **VARCHAR** type.
 
-    .. code-block:: sql
-    
-        SELECT * FROM case_tbl;
-                    a
-        =============
-                    1
-                    2
-                    3
-                 NULL
-         
-        --returning a specific value of INT type
-        SELECT a, NVL2(a, a+1, 10.5678) FROM case_tbl;
-                    a  nvl2(a, a+1, 10.5678)
-        ====================================
-                    1                      2
-                    2                      3
-                    3                      4
-                 NULL                     11
+.. code-block:: sql
+
+    SELECT * FROM case_tbl;
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --returning a specific value of INT type
+    SELECT a, NVL2(a, a+1, 10.5678) FROM case_tbl;
+                a  nvl2(a, a+1, 10.5678)
+    ====================================
+                1                      2
+                2                      3
+                3                      4
+             NULL                     11
 
 .. _basic-cond-expr:
 

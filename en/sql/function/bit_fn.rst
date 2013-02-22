@@ -27,8 +27,8 @@ The following table shows the bitwise operators supported by CUBRID.
 | >>                   | Performs the operation of moving bits of the left operand as far to the right as the value of the right operand, and returns a BIGINT integer. | 17 >> 3        | 2                |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+
 
-Bit Functions
-=============
+BIT_AND
+=======
 
 .. function:: BIT_AND (expr)
 
@@ -37,17 +37,20 @@ Bit Functions
     :param expr: An expression of integer type
     :rtype: BIGINT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        CREATE TABLE bit_tbl(id int);
-        INSERT INTO bit_tbl VALUES (1), (2), (3), (4), (5);
-        SELECT 1&3&5, BIT_AND(id) FROM bit_tbl WHERE id in(1,3,5);
+    CREATE TABLE bit_tbl(id int);
+    INSERT INTO bit_tbl VALUES (1), (2), (3), (4), (5);
+    SELECT 1&3&5, BIT_AND(id) FROM bit_tbl WHERE id in(1,3,5);
 
-    ::
+::
 
-             1&3&5           bit_and(id)
-        ============================================
-                 1                     1    
+         1&3&5           bit_and(id)
+    ============================================
+             1                     1    
+
+BIT_OR
+======
 
 .. function:: BIT_OR (expr)
 
@@ -56,15 +59,18 @@ Bit Functions
     :param expr: An expression of integer type
     :rtype: BIGINT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT 1|3|5, BIT_OR(id) FROM bit_tbl WHERE id in(1,3,5);
+    SELECT 1|3|5, BIT_OR(id) FROM bit_tbl WHERE id in(1,3,5);
 
-    ::
+::
 
-             1|3|5            bit_or(id)
-        ============================================
-                  7                     7
+         1|3|5            bit_or(id)
+    ============================================
+              7                     7
+
+BIT_XOR
+=======
 
 .. function:: BIT_XOR (expr)
 
@@ -73,15 +79,18 @@ Bit Functions
     :param expr: An expression of integer type
     :rtype: BIGINT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT 1^2^3, BIT_XOR(id) FROM bit_tbl WHERE id in(1,3,5);
+    SELECT 1^2^3, BIT_XOR(id) FROM bit_tbl WHERE id in(1,3,5);
 
-    ::
-    
-             1^3^5            bit_xor(id)
-        ============================================
-                  7                     7
+::
+
+         1^3^5            bit_xor(id)
+    ============================================
+              7                     7
+
+BIT_COUNT
+=========
 
 .. function:: BIT_COUNT (expr)
 
@@ -90,14 +99,14 @@ Bit Functions
     :param expr: An expression of integer type
     :rtype: BIGINT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT BIT_COUNT(id) FROM bit_tbl WHERE id in(1,3,5);
+    SELECT BIT_COUNT(id) FROM bit_tbl WHERE id in(1,3,5);
 
-    ::
-    
-           bit_count(id)
-        ================
-               1
-               2
-               2
+::
+
+       bit_count(id)
+    ================
+           1
+           2
+           2

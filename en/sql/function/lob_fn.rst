@@ -2,6 +2,9 @@
 LOB Functions
 *************
 
+CLOB_TO_CHAR
+============
+
 .. function:: CLOB_TO_CHAR ( clob_type_column [USING charset] )
 
     This function converts **CLOB** type into **VARCHAR** type.
@@ -10,6 +13,9 @@ LOB Functions
     :param charset: The character set of string to convert. It can be utf8, euckr or iso88591.
     :rtype: VARCHAR
     
+BLOB_TO_BIT
+===========
+
 .. function:: BLOB_TO_BIT ( blob_type_column )
 
     This function converts **BLOB** type to **VARYING BIT** type.           
@@ -17,12 +23,18 @@ LOB Functions
     :param blob_type_column: Target column to convert
     :rtype: VARYING BIT
     
+CHAR_TO_CLOB
+============
+
 .. function:: CHAR_TO_CLOB ( char_type_column_or_value )
 
     This function converts **CHAR** or **VARCHAR** type into **CLOB** type.
 
     :param char_type_column_or_value: Target column or value to convert
     :rtype: CLOB
+
+BIT_TO_BLOB
+===========
 
 .. function:: BIT_TO_BLOB ( blob_type_column_or_value )
 
@@ -31,12 +43,18 @@ LOB Functions
     :param blob_type_column_or_value: Target column or value to convert
     :rtype: BLOB
 
+CHAR_TO_BLOB
+============
+
 .. function:: CHAR_TO_BLOB ( char_type_column_or_value )
 
     This function converts **CHAR** or **VARCHAR** type into **BLOB**  type.           
 
     :param char_type_column_or_value: Target column or value to convert
     :rtype: BLOB
+
+CLOB_FROM_FILE
+==============
 
 .. function:: CLOB_FROM_FILE ( file_pathname )
 
@@ -45,15 +63,18 @@ LOB Functions
     :param file_pathname: the path on the server which DB clients like CAS or CSQL are started
     :rtype: CLOB
 
-    If you specify the *file_pathname* as the relative path, the parent path will be the current working directory. For the statement including this function, the query plan is not cached.
+If you specify the *file_pathname* as the relative path, the parent path will be the current working directory. For the statement including this function, the query plan is not cached.
+
+.. code-block:: sql
+
+    SELECT CAST(CLOB_FROM_FILE('local:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
+       AS VARCHAR) result; 
     
-    .. code-block:: sql
-    
-        SELECT CAST(CLOB_FROM_FILE('local:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
-           AS VARCHAR) result; 
-        
-        SELECT CAST(CLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
-           AS VARCHAR) result; 
+    SELECT CAST(CLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
+       AS VARCHAR) result; 
+
+BLOB_FROM_FILE
+==============
 
 .. function:: BLOB_FROM_FILE ( file_pathname )
 
@@ -62,13 +83,16 @@ LOB Functions
     :param file_pathname: the path on the server which DB clients like CAS or CSQL are started
     :rtype: BLOB
 
-    .. code-block:: sql
-    
-        SELECT CAST(BLOB_FROM_FILE('local:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
-           AS BIT VARYING) result; 
+.. code-block:: sql
 
-        SELECT CAST(BLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
-           AS BIT VARYING) result; 
+    SELECT CAST(BLOB_FROM_FILE('local:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
+       AS BIT VARYING) result; 
+
+    SELECT CAST(BLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
+       AS BIT VARYING) result; 
+
+CLOB_LENGTH
+===========
 
 .. function:: CLOB_LENGTH ( clob_column )
  
@@ -77,6 +101,9 @@ LOB Functions
     :param clob_column: The column to get the length of **CLOB**
     :rtype: INT
  
+BLOB_LENGTH
+===========
+
 .. function:: BLOB_LENGTH ( blob_column )                                            
  
         The length of **LOB** data stored in **BLOB** file is returned.

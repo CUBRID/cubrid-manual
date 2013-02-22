@@ -187,8 +187,15 @@ DROP SERIAL
 시리얼 함수
 ===========
 
-시리얼 함수에는 **SERIAL_CURRENT_VALUE** 함수와 **SERIAL_NEXT_VALUE** 함수가 있다.
+.. function:: SERIAL_CURRENT_VALUE (serial_name)
+.. function:: SERIAL_NEXT_VALUE (serial_name, number)
 
+    시리얼 함수에는 **SERIAL_CURRENT_VALUE** 함수와 **SERIAL_NEXT_VALUE** 함수가 있다.
+    
+    :param serial_name: 시리얼 이름
+    :param number: 얻고자 하는 시리얼 개수
+    :rtype:  NUMERIC(38,0)
+    
 **SERIAL_CURRENT_VALUE** 함수는 현재의 시리얼 값을 반환하며, *serial_name*.\ **current_value** 와 동일한 값을 반환한다.
 
 **SERIAL_NEXT_VALUE** 함수는 현재의 시리얼 값에서 지정한 개수의 시리얼 간격만큼 증가시킨 값을 반환한다. 시리얼 간격은 **CREATE SERIAL ... INCREMENT BY** 절로 지정한 값을 따른다. **SERIAL_NEXT_VALUE** (*serial_name*, 1)은 *serial_name*.\ **next_value** 와 동일한 값을 반환한다.
@@ -198,14 +205,6 @@ DROP SERIAL
 즉, 어떤 응용 프로세스가 한꺼번에 *N* 개의 시리얼을 얻고자 한다면 N번 *serial_name*.\ **next_value** 를 호출하여 값들을 구하는 것보다는, 한 번 **SERIAL_NEXT_VALUE** (*serial_name*, *N*)을 호출하여 반환하는 값을 가지고 (함수를 호출한 시점의 시리얼 시작값)과 (반환 값) 사이의 시리얼 값들을 계산하는 것이 낫다. (함수를 호출한 시점의 시리얼 시작값)은 (반환 값) - (얻고자 하는 시리얼 개수-1) * (시리얼 간격)이다.
 
 예를 들어, 101로 시작하며 1씩 증가하는 시리얼을 처음에 생성하였을 경우, 처음 **SERIAL_NEXT_VALUE** (*serial_name*, 10)을 호출하면 110이 반환된다. 이 시점의 시작값을 구하면 110-(10-1)*1 = 101이므로 101, 102, 103, ... 110까지 10개의 시리얼 값을 해당 응용 프로세스에서 사용할 수 있다. 한 번 더 **SERIAL_NEXT_VALUE** (*serial_name*, 10)을 호출하면 120이 반환되며, 이 시점의 시작값은 120-(10-1)*1 = 111이다.
-
-::
-
-    SERIAL_CURRENT_VALUE (serial_name)
-    SERIAL_NEXT_VALUE (serial_name, number)
-
-*   *serial_name*\ : 시리얼 이름
-*   *number*\ : 얻고자 하는 시리얼 개수
 
 .. code-block:: sql
 

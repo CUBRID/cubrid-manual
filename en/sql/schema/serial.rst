@@ -187,7 +187,14 @@ The following example shows how to create a table *athlete_idx* where athlete nu
 Serial Function
 ===============
 
-The **Serial** function consists of the **SERIAL_CURRENT_VALUE** and **SERIAL_NEXT_VALUE** functions.
+.. function:: SERIAL_CURRENT_VALUE (serial_name)
+.. function:: SERIAL_NEXT_VALUE (serial_name, number)
+
+    The **Serial** function consists of the **SERIAL_CURRENT_VALUE** and **SERIAL_NEXT_VALUE** functions.
+    
+    :param serial_name: Serial name
+    :param number: The number of serials to be obtained
+    :rtype:  NUMERIC(38,0)
 
 The **SERIAL_CURRENT_VALUE** function returns the current serial value, which is the same value as *serial_name* **.current_value**.
 
@@ -198,14 +205,6 @@ To get a large amount of serials at once, specify the desired number as an argum
 Assume that an application process is trying to get the number of n serials at once. To perform it, call **SERIAL_NEXT_VALUE** (*serial_name*, N) one time to store a return value and calculate a serial value between (a serial start value) and (the return value). (Serial value at the point of function call) is equal to the value of (return value) - (desired number of serials) * (serial interval).
 
 For example, if you create a serial starting 101 and increasing by 1 and call **SERIAL_NEXT_VALUE** (*serial_name*, 10), it returns 110. The start value at the point is 110-(10-1)*1 = 101. Therefore, 10 serial values such as 101, 102, 103, ... 110 can be used by an application process. If **SERIAL_NEXT_VALUE** (*serial_name*, 10) is called in succession, 120 is returned; the start value at this point is 120-(10-1)*1 = 111.
-
-::
-
-    SERIAL_CURRENT_VALUE(serial_name)
-    SERIAL_NEXT_VALUE(serial_name, number)
-
-*   *serial_name*\ : Serial name
-*   *number*\ : The number of serials to be obtained
 
 .. code-block:: sql
 

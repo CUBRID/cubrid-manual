@@ -30,6 +30,7 @@ SQL 함수 추가 및 인덱스 힌트 확장
     * TRUNC, ROUND 함수에 날짜 타입을 인자를 사용할 수 있도록 확장했다.
     * 새로운 인덱스 힌트 지정 구문을 지원한다.
     * Multi UPDATE, DELETE 문에 SQL 힌트를 사용할 수 있도록 확장했다.
+    * MERGE 문에 인덱스 힌트를 명시할 수 있도록 확장했다.
     
 성능 및 최적화 개선
 -------------------
@@ -245,17 +246,14 @@ UPDATE JOIN, DELETE JOIN 문에 SQL 힌트 지정할 수 있도록 확장(CUBRID
 MERGE 문에 인덱스 힌트 지원(CUBRIDSUS-10134)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    MERGE문에 USE_UPDATE_IDX, USE_INSERT_IDX 인덱스 힌트를 지원한다.
+    MERGE 문에 USE_UPDATE_IDX, USE_INSERT_IDX 인덱스 힌트를 지원한다. USE_UPDATE_IDX 힌트는 UPDATE 절을 수행할 때 ON 절과 UPDATE 문의 WHERE 절에 적용되며, USE_INSERT_IDX 힌트는 INSERT 절을 수행할 때 ON 절에 적용된다.
     
-    USE_UPDATE_IDX 힌트는 UPDATE 절을 수행할 때 원본 테이블을 인덱스 스캔하기 위해 사용되며, USE_INSERT_IDX 힌트는 INSERT 절을 수행할 때 대상 테이블을 인덱스 스캔하기 위해 사용된다.
-    
-    .. code-block: sql
+    .. code-block:: sql
     
         MERGE /*+ USE_UPDATE_IDX(i_s_ij) USE_INSERT_IDX(i_t_ij, i_t_i) */
-          INTO target t USING source s
-          ON t.i=s.i 
-          WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
-          WHEN NOT MATCHED THEN INSERT VALUES(i,j);
+        INTO target t USING source s ON t.i=s.i 
+        WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
+        WHEN NOT MATCHED THEN INSERT VALUES(i,j);
     
 다국어
 ------

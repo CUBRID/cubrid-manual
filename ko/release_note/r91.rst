@@ -390,11 +390,11 @@ Windows 버전에서 SHARD 기능 지원(CUBRISUS-9549)
         % cubrid tranlist -s testdb
         
         Tran index         User name      Host name      Process id          Program name
-        -------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------
            1(ACTIVE)         PUBLIC        myhost            1822           broker1_cub_cas_1
            2(ACTIVE)            dba        myhost            1823           broker1_cub_cas_2
            3(COMMITTED)         dba        myhost            1824           broker1_cub_cas_3
-        -------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------
 
 killtran 유틸리티에 질의 수행 상태를 출력하는 기능 추가(CUBRIDSUS-9588)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -405,10 +405,10 @@ killtran 유틸리티에 질의 수행 상태를 출력하는 기능 추가(CUBR
     
         % cubrid killtran -q testdb
 
-        Tran index  Process id  Program name  Query time   Tran time  Wait for lock holder         SQL ID  SQL Text
+        Tran index  Process id  Program name   Query time   Tran time  Wait for lock holder        SQL ID  SQL Text
         --------------------------------------------------------------------------------------------------------------------------------
-          1(ACTIVE)      22982   b1_cub_cas_1        0.00       0.00                      -1                 *** empty ***
-          2(ACTIVE)      22983   b1_cub_cas_2        1.80       1.80                       1  5377225ebc75a  update [ta] [ta] set [a]=5 wh
+          1(ACTIVE)      22982   b1_cub_cas_1        0.00       0.00                    -1                 *** empty ***
+          2(ACTIVE)      22983   b1_cub_cas_2        1.80       1.80                     1  5377225ebc75a  update [ta] [ta] set [a]=5 wh
         --------------------------------------------------------------------------------------------------------------------------------
 
     질의 수행 상태에는 다음 정보를 포함한다.
@@ -431,13 +431,13 @@ killtran 유틸리티에 특정 SQL을 수행 중인 트랜잭션을 제거하�
     
         % cubrid killtran --query-exec-info testdb
     
-            Tran index     Process id    Program name              Query time    Tran time              Wait for lock holder      SQL_ID       SQL Text
-        --------------------------------------------------------------------------------------------------------------------------------------------------
-              1(+)          26650    query_editor_cub_cas_1          0.00         0.00                              -1     *** empty ***
-              2(+)          26652    query_editor_cub_cas_3          0.00         0.00                              -1     *** empty ***
-              3(+)          26651    query_editor_cub_cas_2          0.00         0.00                              -1     *** empty ***
-              4(+)          26653    query_editor_cub_cas_4          1.80         1.80                         2, 1, 3     cdcb58552e320   update [ta] [ta] set [ta].[a]=
-        --------------------------------------------------------------------------------------------------------------------------------------------------
+        Tran index  Process id  Program name             Query time   Tran time  Wait for lock holder     SQL ID      SQL Text
+        --------------------------------------------------------------------------------------------------------------------------------------------
+          1(ACTIVE)    26650    query_editor_cub_cas_1        0.00         0.00                    -1  *** empty ***
+          2(ACTIVE)    26652    query_editor_cub_cas_3        0.00         0.00                    -1  *** empty ***
+          3(ACTIVE)    26651    query_editor_cub_cas_2        0.00         0.00                    -1  *** empty ***
+          4(ACTIVE)    26653    query_editor_cub_cas_4        1.80         1.80               2, 1, 3  cdcb58552e320  update [ta] [ta] set [ta].[a]=
+        --------------------------------------------------------------------------------------------------------------------------------------------
 
         SQL_ID: cdcb58552e320
         Tran index : 4

@@ -7,47 +7,48 @@ Numeric Types
 
 CUBRID supports the following numeric data types to store integers or real numbers.
 
-**Numeric Types Supported by CUBRID**
+Numeric Types Supported by CUBRID
+---------------------------------
 
-    +------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-    | Type             | Bytes     | Mix                                                     | Max                                                     | Exact/approx.       |
-    +==================+===========+=========================================================+=========================================================+=====================+
-    | SHORT            | 2         | -32,768                                                 | 32,767                                                  | exact numeric       |
-    | SMALLINT         |           |                                                         |                                                         |                     |
-    +------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-    | INTEGER          | 4         | -2,147,483,648                                          | +2,147,483,647                                          | exact numeric       |
-    | INT              |           |                                                         |                                                         |                     |
-    +------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-    | BIGINT           | 8         | -9,223,372,036,854,775,808                              | +9,223,372,036,854,775,807                              | exact numeric       |
-    +------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-    | NUMERIC          | 16        | precision                                               | precision                                               | exact numeric       |
-    | DECIMAL          |           | *p*                                                     | *p*                                                     |                     |
-    |                  |           | : 1                                                     | : 38                                                    |                     |
-    |                  |           | scale                                                   | scale                                                   |                     |
-    |                  |           | *s*                                                     | *s*                                                     |                     |
-    |                  |           | : 0                                                     | : 38                                                    |                     |
-    +------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-    | FLOAT            | 4         | -3.402823466E+38 (ANSI/IEEE 754-1985 standard)          | +3.402823466E+38                                        | approximate numeric |
-    | REAL             |           |                                                         | (ANSI/IEEE 754-1985 standard)                           | floating point : 7  |
-    +------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-    | DOUBLE           | 8         | -1.7976931348623157E+308 ANSI/IEEE 754-1985 standard)   | +1.7976931348623157E+308(ANSI/IEEE 754-1985 standard)   | approximate numeric |
-    | DOUBLE PRECISION |           |                                                         |                                                         | floating point : 15 |
-    +------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-    | MONETARY         | 12        | -3.402823466E+38                                        | +3.402823466E+38                                        | approximate numeric |
-    +------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
++------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| Type             | Bytes     | Mix                                                     | Max                                                     | Exact/approx.       |
++==================+===========+=========================================================+=========================================================+=====================+
+| SHORT            | 2         | -32,768                                                 | 32,767                                                  | exact numeric       |
+| SMALLINT         |           |                                                         |                                                         |                     |
++------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| INTEGER          | 4         | -2,147,483,648                                          | +2,147,483,647                                          | exact numeric       |
+| INT              |           |                                                         |                                                         |                     |
++------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| BIGINT           | 8         | -9,223,372,036,854,775,808                              | +9,223,372,036,854,775,807                              | exact numeric       |
++------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| NUMERIC          | 16        | precision                                               | precision                                               | exact numeric       |
+| DECIMAL          |           | *p*                                                     | *p*                                                     |                     |
+|                  |           | : 1                                                     | : 38                                                    |                     |
+|                  |           | scale                                                   | scale                                                   |                     |
+|                  |           | *s*                                                     | *s*                                                     |                     |
+|                  |           | : 0                                                     | : 38                                                    |                     |
++------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| FLOAT            | 4         | -3.402823466E+38 (ANSI/IEEE 754-1985 standard)          | +3.402823466E+38                                        | approximate numeric |
+| REAL             |           |                                                         | (ANSI/IEEE 754-1985 standard)                           | floating point : 7  |
++------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| DOUBLE           | 8         | -1.7976931348623157E+308 ANSI/IEEE 754-1985 standard)   | +1.7976931348623157E+308(ANSI/IEEE 754-1985 standard)   | approximate numeric |
+| DOUBLE PRECISION |           |                                                         |                                                         | floating point : 15 |
++------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| MONETARY         | 12        | -3.402823466E+38                                        | +3.402823466E+38                                        | approximate numeric |
++------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
 
-    Numeric data types are divided into exact and approximate types. Exact numeric data types (**SMALLINT**, **INT**, **BIGINT**, **NUMERIC**) are used for numbers whose values must be precise and consistent, such as the numbers used in financial accounting. Note that even when the literal values are equal, approximate numeric data types (**FLOAT**, **DOUBLE**, **MONETARY**) can be interpreted differently depending on the system.
+Numeric data types are divided into exact and approximate types. Exact numeric data types (**SMALLINT**, **INT**, **BIGINT**, **NUMERIC**) are used for numbers whose values must be precise and consistent, such as the numbers used in financial accounting. Note that even when the literal values are equal, approximate numeric data types (**FLOAT**, **DOUBLE**, **MONETARY**) can be interpreted differently depending on the system.
 
-    CUBRID does not support the UNSIGNED type for numeric data types.
+CUBRID does not support the UNSIGNED type for numeric data types.
 
-    On the above table, two types on the same cell are identical types but it always prints the above type name when you execute **SHOW COLUMNS** statement. For example, you can use both **SHORT** and **SMALLINT** when you create a table, but it prints "SHORT" when you execute **SHOW COLUMNS** statement.
+On the above table, two types on the same cell are identical types but it always prints the above type name when you execute **SHOW COLUMNS** statement. For example, you can use both **SHORT** and **SMALLINT** when you create a table, but it prints "SHORT" when you execute **SHOW COLUMNS** statement.
 
 **Precision and Scale**
 
     The precision of numeric data types is defined as the number of significant figures. This applies to both exact and approximate numeric data types.
 
-    The scale represents the number of digits following the decimal point. It is significant only in exact numeric data types. Attributes declared as exact numeric data types always have fixed precision and scale. **NUMERIC** (or **DECIMAL**) data type always has at least one-digit precision, and the scale should be between 0 and the precision declared. Scale
-    cannot be greater than precision. For **INTEGER**, **SMALLINT**, or **BIGINT** data types, the scale is 0 (i.e. no digits following the decimal point), and the precision is fixed by the system.
+    The scale represents the number of digits following the decimal point. It is significant only in exact numeric data types. Attributes declared as exact numeric data types always have fixed precision and scale. **NUMERIC** (or **DECIMAL**) data type always has at least one-digit precision, and the scale should be between 0 and the precision declared. 
+    Scale cannot be greater than precision. For **INTEGER**, **SMALLINT**, or **BIGINT** data types, the scale is 0 (i.e. no digits following the decimal point), and the precision is fixed by the system.
 
 **Numeric Literals**
 
@@ -189,40 +190,41 @@ You can use a dollar sign or a decimal point, but a comma is not allowed.
 Date/Time Types
 ===============
 
+Date-Time Types Supported by CUBRID
+-----------------------------------
+
 Date/time data types are used to represent the date or time (or both together). CUBRID supports the following data types:
 
-**Date-Time Types Supported by CUBRID**
-
-    +---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
-    | Type          | bytes     | Min.                      | Max.                      | Note                                                                |
-    +===============+===========+===========================+===========================+=====================================================================+
-    | **DATE**      | 4         | 0001-01-01                | 9999-12-31                | As an exception, DATE '0000-00-00' format is allowed.               |
-    +---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
-    | **TIME**      | 4         | 00:00:00                  | 23:59:59                  |                                                                     |
-    +---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
-    | **TIMESTAMP** | 4         | 1970-01-01 00:00:01 (GMT) | 2038-01-19 03:14:07 (GMT) | As an exception, TIMESTAMP '0000-00-00 00:00:00' format is allowed. |
-    |               |           | 1970-01-01 09:00:01 (KST) | 2038-01-19 12:14:07 (KST) |                                                                     |
-    +---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
-    | **DATETIME**  | 8         | 0001-01-01 00:00:0.000    | 9999-12-31 23:59:59.999   | As an exception, DATETIME '0000-00-00 00:00:00' format is allowed.  |
-    +---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
++---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
+| Type          | bytes     | Min.                      | Max.                      | Note                                                                |
++===============+===========+===========================+===========================+=====================================================================+
+| **DATE**      | 4         | 0001-01-01                | 9999-12-31                | As an exception, DATE '0000-00-00' format is allowed.               |
++---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
+| **TIME**      | 4         | 00:00:00                  | 23:59:59                  |                                                                     |
++---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
+| **TIMESTAMP** | 4         | 1970-01-01 00:00:01 (GMT) | 2038-01-19 03:14:07 (GMT) | As an exception, TIMESTAMP '0000-00-00 00:00:00' format is allowed. |
+|               |           | 1970-01-01 09:00:01 (KST) | 2038-01-19 12:14:07 (KST) |                                                                     |
++---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
+| **DATETIME**  | 8         | 0001-01-01 00:00:0.000    | 9999-12-31 23:59:59.999   | As an exception, DATETIME '0000-00-00 00:00:00' format is allowed.  |
++---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
 
 **Range and Resolution**
 
-    *   By default, the range of a time value is represented by the 24-hour system. Dates follow the Gregorian calendar. An error occurs if a value that does not meet these two constraints is entered as a date or time.
+*   By default, the range of a time value is represented by the 24-hour system. Dates follow the Gregorian calendar. An error occurs if a value that does not meet these two constraints is entered as a date or time.
 
-    *   The range of year in  **DATE** is 0001 - 9999 AD.
+*   The range of year in  **DATE** is 0001 - 9999 AD.
 
-    *   From the CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 00 to 69 is converted into a number from 2000 to 2069; a number from 70 to 99 is converted into a number from 1970 to 1999. In earlier than CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 01 to 99 is converted into a number from 0001 to 0099.
+*   From the CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 00 to 69 is converted into a number from 2000 to 2069; a number from 70 to 99 is converted into a number from 1970 to 1999. In earlier than CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 01 to 99 is converted into a number from 0001 to 0099.
 
-    *   The range of **TIMESTAMP** is between 1970-01-01 00:00:01 - 2038-01-19 03 03:14:07 (GMT). For KST (GMT+9), values from 1970-01-01 00:00:01 to 2038-01-19 12:14:07 can be stored. timestamp'1970-01-01 00:00:00' (GMT) is the same as timestamp'0000-00-00 00:00:00'.
+*   The range of **TIMESTAMP** is between 1970-01-01 00:00:01 - 2038-01-19 03 03:14:07 (GMT). For KST (GMT+9), values from 1970-01-01 00:00:01 to 2038-01-19 12:14:07 can be stored. timestamp'1970-01-01 00:00:00' (GMT) is the same as timestamp'0000-00-00 00:00:00'.
 
-    *   The results of date, time and timestamp operations may depend on the rounding mode. In these cases, for Time and Timestamp, the most approximate second is used as the minimum resolution; for Date, the most approximate date is used as the minimum resolution.
+*   The results of date, time and timestamp operations may depend on the rounding mode. In these cases, for Time and Timestamp, the most approximate second is used as the minimum resolution; for Date, the most approximate date is used as the minimum resolution.
 
 **Coercions**
 
-    The **Date** / **Time** types can be cast explicitly using the **CAST** operator only when they have the same field. For implicit coercion, see :ref:`implicit-type-conversion`. The following table shows types that allows explicit coercions. For implicit coercion, see :ref:`arithmetic-op-type-casting`.
+The **Date** / **Time** types can be cast explicitly using the **CAST** operator only when they have the same field. For implicit coercion, see :ref:`implicit-type-conversion`. The following table shows types that allows explicit coercions. For implicit coercion, see :ref:`arithmetic-op-type-casting`.
 
-**Explicit Coercions**
+    **Explicit Coercions**
 
     +------------+------+------+----------+-----------+
     | FROM \\ TO | DATE | TIME | DATETIME | TIMESTAMP |
@@ -236,13 +238,13 @@ Date/time data types are used to represent the date or time (or both together). 
     | TIMESTAMP  | O    | O    | O        | -         |
     +------------+------+------+----------+-----------+
 
-    In general, zero is not allowed in **DATE**, **DATETIME**, and **TIMESTAMP** types. However, if both date and time values are 0, it is allowed as an exception. This is useful in terms that this value can be used if an index exists upon query execution of a column corresponding to the type.
+In general, zero is not allowed in **DATE**, **DATETIME**, and **TIMESTAMP** types. However, if both date and time values are 0, it is allowed as an exception. This is useful in terms that this value can be used if an index exists upon query execution of a column corresponding to the type.
 
-    *   Some functions in which the **DATE**, **DATETIME**, and **TIMESTAMP** types are specified as an argument return different value based on the **return_null_on_function_errors** system parameter if every input argument value for date and time is 0. If **return_null_on_function_errors** is yes, **NULL** is returned; if no, an error is returned. The default value is **no**.
-    *   The functions that return **DATE**, **DATETIME**, and **TIMESTAMP** types can return a value of 0 for date and time. However, these values cannot be stored in Date objects in Java applications. Therefore, it will be processed with one of the followings based on the configuration of zeroDateTimeBehavior, the connection URL property: being handled as an exception, returning **NULL**, or returning a minimum value (see "API Reference > JDBC API > JDBC Programming > Connection Configuration").
-    *   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_DATETIME`, and :func:`TO_TIMESTAMP` functions follows the corresponding locale date format. For details, see :ref:`stmt-type-parameters`.
+*   Some functions in which the **DATE**, **DATETIME**, and **TIMESTAMP** types are specified as an argument return different value based on the **return_null_on_function_errors** system parameter if every input argument value for date and time is 0. If **return_null_on_function_errors** is yes, **NULL** is returned; if no, an error is returned. The default value is **no**.
+*   The functions that return **DATE**, **DATETIME**, and **TIMESTAMP** types can return a value of 0 for date and time. However, these values cannot be stored in Date objects in Java applications. Therefore, it will be processed with one of the followings based on the configuration of zeroDateTimeBehavior, the connection URL property: being handled as an exception, returning **NULL**, or returning a minimum value (see "API Reference > JDBC API > JDBC Programming > Connection Configuration").
+*   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_DATETIME`, and :func:`TO_TIMESTAMP` functions follows the corresponding locale date format. For details, see :ref:`stmt-type-parameters`.
 
-    For details, see the description of each function.
+For details, see the description of each function.
 
 DATE
 ----
@@ -360,28 +362,33 @@ The input format of **TIMESTAMP** is as follows: ::
 CASTing a String to Date/Time Type
 ----------------------------------
 
-**Recommended Format for Strings in Date/Time Type**
+Recommended Format for Strings in Date/Time Type
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    When you casting a string to Date/Time type by using the :func:`CAST` function, it is recommended to write the string in the following format: Note that date/time string formats used in the :func:`CAST` function are not affected by locale (which is specified as the **CUBRID_CHARSET** environment variable).
+When you casting a string to Date/Time type by using the :func:`CAST` function, it is recommended to write the string in the following format: Note that date/time string formats used in the :func:`CAST` function are not affected by locale (which is specified as the **CUBRID_CHARSET** environment variable).
 
-    * **DATE** Type ::
+* **DATE** Type ::
 
-        YYYY-MM-DD
-        MM/DD/YYYY
+    YYYY-MM-DD
+    MM/DD/YYYY
 
-    * **TIME** Type ::
+* **TIME** Type ::
 
-        HH:MM:SS ["AM"|"PM"]
+    HH:MM:SS ["AM"|"PM"]
 
-    * **DATETIME** Type ::
+* **DATETIME** Type ::
 
-        YYYY-MM-DD HH:MM:SS[.msec] ["AM"|"PM"]
+    YYYY-MM-DD HH:MM:SS[.msec] ["AM"|"PM"]
 
-    * **TIMESTAMP** Type ::
+* **TIMESTAMP** Type ::
 
-        YYYY-MM-DD HH:MM:SS ["AM"|"PM"]
+    YYYY-MM-DD HH:MM:SS ["AM"|"PM"]
+
+Available Format for Strings in Date/Time Type
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Available DATE String Format**
+
     ::
 
         [year sep] month sep day
@@ -409,6 +416,7 @@ CASTing a String to Date/Time Type
     *   420: April 20th of this year
 
 **Available TIME String Format**
+
     ::
 
         [hour]:min[:[sec]][.[msec]] [am|pm]
@@ -453,7 +461,8 @@ CASTing a String to Date/Time Type
 
         : The [H]H format was allowed in CUBRID 2008 R3.1 and the earlier versions. That is, the string '10' was converted to **TIME** '10:00:00' in the R3.1 and the earlier versions, and will be converted to **TIME** '00:00:10' in version R4.0 and later.
 
-**Available DATETIME String Format** 
+**Available DATETIME String Format**
+
     ::
 
         [year sep] month sep day [sep] [sep] hour [sep min[sep sec[.[msec]]]]
@@ -498,7 +507,8 @@ CASTing a String to Date/Time Type
     *   201104200910.359: November 4th, 2020 8 hours 9 minutes 10.359 seconds PM
     *   20110420091000.359: April 20th, 2011, 9 hours 10 minutes 0.359 seconds AM
 
-**Available Time-Date String Format** 
+**Available Time-Date String Format**
+ 
     ::
 
         [hour]:min[:sec[.msec]] [am|pm] [year-]month-day
@@ -1003,7 +1013,7 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
       yellow
       yellow
 
-* When the string context is used as the **ENUM** value, the string is returned. The following example shows a case of using the string context.
+*   When the string context is used as the **ENUM** value, the string is returned. The following example shows a case of using the string context.
 
   .. code-block:: sql
 
@@ -1016,151 +1026,152 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
       yellow_color
       blue_color
 
-* When the numeric context is used as the **ENUM** value, the index number is returned. The numeric value can be searched on the **ENUM** column as follows.
+*   When the numeric context is used as the **ENUM** value, the index number is returned. The numeric value can be searched on the **ENUM** column as follows.
 
-  .. code-block:: sql
+    .. code-block:: sql
 
-    SELECT color + 0 FROM tb;
-     
-      color + 0
-    ======================
-      2
-      1
-      2
-      3
+        SELECT color + 0 FROM tb;
+         
+          color + 0
+        ======================
+          2
+          1
+          2
+          3
 
-* The result of using the string is different from the result of using the index number. See the following example.
+*   The result of using the string is different from the result of using the index number. See the following example.
 
-  .. code-block:: sql
+    .. code-block:: sql
 
-    -- will use the ENUM index value because it is compared with a number
-    SELECT color FROM tbl WHERE color <= 1;
-     
-      color
-    ======================
-    red
-     
-     
-    -- will use the ENUM char literal value because it is compared with a CHAR type
-    SELECT color FROM tbl WHERE color <= 'red';
-     
-      color
-    ======================
-    red
-    blue
+        -- will use the ENUM index value because it is compared with a number
+        SELECT color FROM tbl WHERE color <= 1;
+         
+          color
+        ======================
+        red
+         
+         
+        -- will use the ENUM char literal value because it is compared with a CHAR type
+        SELECT color FROM tbl WHERE color <= 'red';
+         
+          color
+        ======================
+        red
+        blue
 
-* Index scan of the **ENUM** type column is allowed for **=** and **IN** operators. Index scan cannot process any other comparison operators.
+*   Index scan of the **ENUM** type column is allowed for **=** and **IN** operators. Index scan cannot process any other comparison operators.
 
-* The value which exceeds the range that the **ENUM** type can express is not converted to the **ENUM** type and an error occurs. For the error data, automatic mapping to the default index value (0) and the default string value (NULL) is not supported.
+*   The value which exceeds the range that the **ENUM** type can express is not converted to the **ENUM** type and an error occurs. For the error data, automatic mapping to the default index value (0) and the default string value (NULL) is not supported.
 
-* When a number inserted in the **ENUM** type column is enclosed within single quotes (' '), if the value is included in the list of the ENUM elements, the value is interpreted as a string value; otherwise, it is interpreted as an index number. Therefore, to avoid confusion, we recommend that you do not use the value similar to the number as the ENUM element value. The following example shows typing an ENUM element value similar to a number in the **ENUM** type column.
+*   When a number inserted in the **ENUM** type column is enclosed within single quotes (' '), if the value is included in the list of the ENUM elements, the value is interpreted as a string value; otherwise, it is interpreted as an index number. Therefore, to avoid confusion, we recommend that you do not use the value similar to the number as the ENUM element value. The following example shows typing an ENUM element value similar to a number in the **ENUM** type column.
 
-  .. code-block:: sql
+    .. code-block:: sql
 
-    CREATE TABLE tb2 (nums ENUM ('0', '1', '2'));
-    INSERT INTO tb2 (nums) VALUES (1), ('1'), ('3');
-    SELECT * FROM tb2;
-     
-      nums
-    ======================
-      0
-      1
-      2
+        CREATE TABLE tb2 (nums ENUM ('0', '1', '2'));
+        INSERT INTO tb2 (nums) VALUES (1), ('1'), ('3');
+        SELECT * FROM tb2;
+         
+          nums
+        ======================
+          0
+          1
+          2
 
       
-  *   If the entered 1 is not enclosed within single quotes, 0 (corresponds to the Index Number 1) is inserted instead of 1.
-  *   When '1' is entered, '1' value is inserted since the corresponding ENUM element value exists.
-  *   When '3' is entered, '2' (corresponds to the Index Number 3) is inserted because there is no corresponding ENUM element value and 3 is a valid index number.
+    *   If the entered 1 is not enclosed within single quotes, 0 (corresponds to the Index Number 1) is inserted instead of 1.
+    *   When '1' is entered, '1' value is inserted since the corresponding ENUM element value exists.
+    *   When '3' is entered, '2' (corresponds to the Index Number 3) is inserted because there is no corresponding ENUM element value and 3 is a valid index number.
 
-* The **ENUM** values are sorted by the index number, not by the string value of the element. **NULL** values are sorted on the front of all strings and blank strings are sorted on the front of any other strings. To sort elements in alphabetic order in the **ENUM** type column, use the **CAST** function as follows.
+*   The **ENUM** values are sorted by the index number, not by the string value of the element. **NULL** values are sorted on the front of all strings and blank strings are sorted on the front of any other strings. To sort elements in alphabetic order in the **ENUM** type column, use the **CAST** function as follows.
 
-  .. code-block:: sql
+    .. code-block:: sql
 
-    SELECT color FROM tb ORDER BY CAST (color AS CHAR) ASC;
+        SELECT color FROM tb ORDER BY CAST (color AS CHAR) ASC;
 
-* When converting the **ENUM** type to the other type, the index number or the string of the **ENUM** type is converted according to the target type. In the following table, the types with an asterisk (*) can be converted to the **ENUM** type.
+*   When converting the **ENUM** type to the other type, the index number or the string of the **ENUM** type is converted according to the target type. In the following table, the types with an asterisk (*) can be converted to the **ENUM** type.
 
-  +---------------+---------------------------------+
-  | Type          | Value (Index Number/String)     |
-  +===============+=================================+
-  | SHORT(*)      | Index Number                    |
-  +---------------+---------------------------------+
-  | INTEGER(*)    | Index Number                    |
-  +---------------+---------------------------------+
-  | BIGINT(*)     | Index Number                    |
-  +---------------+---------------------------------+
-  | FLOAT(*)      | Index Number                    |
-  +---------------+---------------------------------+
-  | DOUBLE(*)     | Index Number                    |
-  +---------------+---------------------------------+
-  | NUMERIC(*)    | Index Number                    |
-  +---------------+---------------------------------+
-  | MONETARY(*)   | Index Number                    |
-  +---------------+---------------------------------+
-  | TIME(*)       | String                          |
-  +---------------+---------------------------------+
-  | DATE(*)       | String                          |
-  +---------------+---------------------------------+
-  | DATETIME(*)   | String                          |
-  +---------------+---------------------------------+
-  | TIMESTAMP(*)  | String                          |
-  +---------------+---------------------------------+
-  | CHAR(*)       | String                          |
-  +---------------+---------------------------------+
-  | VARCHAR(*)    | String                          |
-  +---------------+---------------------------------+
-  | BIT           | String                          |
-  +---------------+---------------------------------+
-  | VARBIT        | String                          |
-  +---------------+---------------------------------+
+    +---------------+---------------------------------+
+    | Type          | Value (Index Number/String)     |
+    +===============+=================================+
+    | SHORT(*)      | Index Number                    |
+    +---------------+---------------------------------+
+    | INTEGER(*)    | Index Number                    |
+    +---------------+---------------------------------+
+    | BIGINT(*)     | Index Number                    |
+    +---------------+---------------------------------+
+    | FLOAT(*)      | Index Number                    |
+    +---------------+---------------------------------+
+    | DOUBLE(*)     | Index Number                    |
+    +---------------+---------------------------------+
+    | NUMERIC(*)    | Index Number                    |
+    +---------------+---------------------------------+
+    | MONETARY(*)   | Index Number                    |
+    +---------------+---------------------------------+
+    | TIME(*)       | String                          |
+    +---------------+---------------------------------+
+    | DATE(*)       | String                          |
+    +---------------+---------------------------------+
+    | DATETIME(*)   | String                          |
+    +---------------+---------------------------------+
+    | TIMESTAMP(*)  | String                          |
+    +---------------+---------------------------------+
+    | CHAR(*)       | String                          |
+    +---------------+---------------------------------+
+    | VARCHAR(*)    | String                          |
+    +---------------+---------------------------------+
+    | BIT           | String                          |
+    +---------------+---------------------------------+
+    | VARBIT        | String                          |
+    +---------------+---------------------------------+
 
-**Note**
+Note
+----
 
-    *   To view all values allowed for the **ENUM** column, use **SHOW COLUMNS**.
-    *   Each **ENUM** value has its index number based on the order of the sorting elements. The element index number starts at 1.
-    *   Blank strings can be used as an ENUM element value when operators have explicitly specified a general index number to the blank strings.
-    * If operators have not specified a general index number to the blank strings, the index number of blank strings is 0. To search the rows with the blank strings, use the following sentence.
+*   To view all values allowed for the **ENUM** column, use **SHOW COLUMNS**.
+*   Each **ENUM** value has its index number based on the order of the sorting elements. The element index number starts at 1.
+*   Blank strings can be used as an ENUM element value when operators have explicitly specified a general index number to the blank strings.
+*   If operators have not specified a general index number to the blank strings, the index number of blank strings is 0. To search the rows with the blank strings, use the following sentence.
 
-      .. code-block:: sql
+    .. code-block:: sql
 
         SELECT * FROM tb WHERE color = 0;
 
-    *   In the **ENUM** column declared to allow **NULL**, the index number for **NULL** is **NULL**.
-    *   The default value of the column, which allows **NULL** is **NULL**. For **NOT NULL**, the default value of the column is the first element of the **ENUM** list specified while defining the column.
+*   In the **ENUM** column declared to allow **NULL**, the index number for **NULL** is **NULL**.
+*   The default value of the column, which allows **NULL** is **NULL**. For **NOT NULL**, the default value of the column is the first element of the **ENUM** list specified while defining the column.
 
-    *   When a table is created, all trailing blanks of all elements in the **ENUM** column are automatically removed.
-    *   The cases of the **ENUM** element are not changed but the cases defined while defining the column are maintained as they are.
-    * For the operation where operands are Type 1 and Type 2, the result type is as follows. The exception of the following rule is the case of comparing the **ENUM** column to the constant value. In this case, the constant value is changed to the **ENUM** value of the same type.
+*   When a table is created, all trailing blanks of all elements in the **ENUM** column are automatically removed.
+*   The cases of the **ENUM** element are not changed but the cases defined while defining the column are maintained as they are.
+*   For the operation where operands are Type 1 and Type 2, the result type is as follows. The exception of the following rule is the case of comparing the **ENUM** column to the constant value. In this case, the constant value is changed to the **ENUM** value of the same type.
 
-      +------------+------------+-----------------+
-      | Type 1     | Type 2     | Result Type     |
-      +============+============+=================+
-      | SHORT      | ENUM       | SHORT           |
-      +------------+------------+-----------------+
-      | INTEGER    | ENUM       | INTEGER         |
-      +------------+------------+-----------------+
-      | BIGINT     | ENUM       | BIGINT          |
-      +------------+------------+-----------------+
-      | FLOAT      | ENUM       | FLOAT           |
-      +------------+------------+-----------------+
-      | DOUBLE     | ENUM       | DOUBLE          |
-      +------------+------------+-----------------+
-      | NUMERIC    | ENUM       | NUMERIC         |
-      +------------+------------+-----------------+
-      | MONETARY   | ENUM       | MONETARY        |
-      +------------+------------+-----------------+
-      | TIME       | ENUM       | TIME            |
-      +------------+------------+-----------------+
-      | DATE       | ENUM       | DATE            |
-      +------------+------------+-----------------+
-      | DATETIME   | ENUM       | DATETIME        |
-      +------------+------------+-----------------+
-      | TIMESTAMP  | ENUM       | TIMESTAMP       |
-      +------------+------------+-----------------+
-      | CHAR       | ENUM       | CHAR            |
-      +------------+------------+-----------------+
-      | VARCHAR    | ENUM       | VARCHAR         |
-      +------------+------------+-----------------+
+    +------------+------------+-----------------+
+    | Type 1     | Type 2     | Result Type     |
+    +============+============+=================+
+    | SHORT      | ENUM       | SHORT           |
+    +------------+------------+-----------------+
+    | INTEGER    | ENUM       | INTEGER         |
+    +------------+------------+-----------------+
+    | BIGINT     | ENUM       | BIGINT          |
+    +------------+------------+-----------------+
+    | FLOAT      | ENUM       | FLOAT           |
+    +------------+------------+-----------------+
+    | DOUBLE     | ENUM       | DOUBLE          |
+    +------------+------------+-----------------+
+    | NUMERIC    | ENUM       | NUMERIC         |
+    +------------+------------+-----------------+
+    | MONETARY   | ENUM       | MONETARY        |
+    +------------+------------+-----------------+
+    | TIME       | ENUM       | TIME            |
+    +------------+------------+-----------------+
+    | DATE       | ENUM       | DATE            |
+    +------------+------------+-----------------+
+    | DATETIME   | ENUM       | DATETIME        |
+    +------------+------------+-----------------+
+    | TIMESTAMP  | ENUM       | TIMESTAMP       |
+    +------------+------------+-----------------+
+    | CHAR       | ENUM       | CHAR            |
+    +------------+------------+-----------------+
+    | VARCHAR    | ENUM       | VARCHAR         |
+    +------------+------------+-----------------+
 
 **Using ENUM Type at the Driver Level**
 
@@ -1239,7 +1250,7 @@ An External **LOB** type is data to process Large Object, such as text or images
 
 **Default Storage**
 
-    *   **LOB** data is stored in the local file system of the DB server. LOB data is stored in the path specified in the **-lob-base-path option** value of **cubrid createdb**; if this value is omitted, the data will be stored in the [db-vol path]/lob path where the database volume will be created. For more details, see :ref:`creating-database` and :ref:`lob_storage`.
+    *   **LOB** data is stored in the local file system of the DB server. LOB data is stored in the path specified in the **-lob-base-path option** value of **cubrid createdb**; if this value is omitted, the data will be stored in the [db-vol path]/lob path where the database volume will be created. For more details, see :ref:`creating-database` and :ref:`lob-storage`.
 
     *   If the relevant path is deleted despite a **LOB** data file path being registered in the database location file (**databases.txt**), please note that the utility that operates in database server (**cub_server**) and standalone will not function normally.
 
@@ -1411,7 +1422,7 @@ Functions and Operators
 
     .. note:: " <*blob_or_clob_column* **IS NULL** ": using **IS NULL** condition, it compares the value of **LOB** column(Locator) if it's **NULL** or not. If it's **NULL**, this condition returns **TRUE**.
     
-.. _lob_storage:
+.. _lob-storage:
 
 Creating and Managing Storage
 -----------------------------

@@ -10,16 +10,17 @@ CUBRID 9.0 Beta 버전 사용자는 CUBRID 9.1 버전을 별도의 디렉터리�
 
 **cubrid.conf**
 
-    * sort_buffer_size의 최대 크기를 2G로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
+* sort_buffer_size의 최대 크기를 2G로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
     
 **cubrid_broker.conf**
 
-    * KEEP_CONNECTION에서 OFF 설정이 제거되었으므로 이전 버전에서 OFF로 설정한 경우 ON 또는 AUTO로 변경해야 한다.
-    * SELECT_AUTO_COMMIT이 제거되었으므로 이전 버전에서 이 파라미터의 설정을 제거해야 한다. 
-    * APPL_SERVER_MAX_SIZE_HARD_LIMIT의 최대값을 2,097,151으로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
+* KEEP_CONNECTION에서 OFF 설정이 제거되었으므로 이전 버전에서 OFF로 설정한 경우 ON 또는 AUTO로 변경해야 한다.
+* SELECT_AUTO_COMMIT이 제거되었으므로 이전 버전에서 이 파라미터의 설정을 제거해야 한다. 
+* APPL_SERVER_MAX_SIZE_HARD_LIMIT의 최대값을 2,097,151으로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
 
 **환경 변수**
-    * CUBRID_LANG이 제거되고, CUBRID_CHARSET으로 데이터베이스의 문자셋을, CUBRID_MSG_LANG으로 유틸리티 메시지 및 오류 메시지의 문자셋을 설정하게 되었다.
+
+* CUBRID_LANG이 제거되고, CUBRID_CHARSET으로 데이터베이스의 문자셋을, CUBRID_MSG_LANG으로 유틸리티 메시지 및 오류 메시지의 문자셋을 설정하게 되었다.
 
 보다 자세한 설명은 :ref:`changed-config91` 을 참고한다.
 
@@ -34,23 +35,24 @@ CUBRID 2008 R4.1, R4.3 버전 사용자는 CUBRID 9.1 버전을 별도의 디렉
 
 **cubrid.conf**
 
-    * sort_buffer_size의 최대 크기를 2G로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
-    * single_byte_compare 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
-    * intl_mbs_support 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
-    * lock_timeout_message_type 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
+* sort_buffer_size의 최대 크기를 2G로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
+* single_byte_compare 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
+* intl_mbs_support 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
+* lock_timeout_message_type 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
 
 **cubrid_broker.conf**
 
-    * KEEP_CONNECTION에서 OFF 설정이 제거되었으므로 이전 버전에서 OFF로 설정한 경우 ON 또는 AUTO로 변경해야 한다.
-    * SELECT_AUTO_COMMIT이 제거되었으므로 이전 버전에서 이 파라미터의 설정을 제거해야 한다. 
-    * APPL_SERVER_MAX_SIZE_HARD_LIMIT의 최대값을 2,097,151으로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
+* KEEP_CONNECTION에서 OFF 설정이 제거되었으므로 이전 버전에서 OFF로 설정한 경우 ON 또는 AUTO로 변경해야 한다.
+* SELECT_AUTO_COMMIT이 제거되었으므로 이전 버전에서 이 파라미터의 설정을 제거해야 한다. 
+* APPL_SERVER_MAX_SIZE_HARD_LIMIT의 최대값을 2,097,151으로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
 
 **cubrid_ha.conf**
 
-    * ha_apply_max_mem_size 파라미터의 값을 500보다 크게 설정한 사용자는 이 값을 500 이하로 설정해야 한다.
+* ha_apply_max_mem_size 파라미터의 값을 500보다 크게 설정한 사용자는 이 값을 500 이하로 설정해야 한다.
 
 **환경 변수**
-    * CUBRID_LANG이 제거되고, CUBRID_CHARSET으로 데이터베이스의 문자셋을, CUBRID_MSG_LANG으로 유틸리티 메시지 및 오류 메시지의 문자셋을 설정하게 되었다.
+
+* CUBRID_LANG이 제거되고, CUBRID_CHARSET으로 데이터베이스의 문자셋을, CUBRID_MSG_LANG으로 유틸리티 메시지 및 오류 메시지의 문자셋을 설정하게 되었다.
 
 보다 자세한 설명은 :ref:`changed-config91` 을 참고한다.
 
@@ -63,28 +65,29 @@ CUBRID 2008 R4.0 이하 버전 사용자는 CUBRID 9.1 버전을 별도의 디�
 
 **cubrid.conf**
 
-    * sort_buffer_size의 최대 크기를 2G로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
-    * single_byte_compare 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
-    * intl_mbs_support 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
-    * lock_timeout_message_type 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
-    * thread_stacksize의 기본값이 100K에서 1M으로 변경되었으므로, 이 값을 설정하지 않은 사용자는 CUBRID 관련 프로세스들의 메모리 사용량을 살펴볼 것을 권장한다.
-    * data_buffer_size의 최소값이 64K에서 16M으로 변경되었으므로, 이 값을 16M 미만으로 설정한 사용자는 16M 이상으로 설정해야 한다.
-    * data_buffer_size의 최소값이 64K에서 16M으로 변경되었으므로, 이 값을 16M 미만으로 설정한 사용자는 16M 이상으로 설정해야 한다.
+* sort_buffer_size의 최대 크기를 2G로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
+* single_byte_compare 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
+* intl_mbs_support 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
+* lock_timeout_message_type 파라미터는 더 이상 사용하지 않으므로 삭제해야 한다.
+* thread_stacksize의 기본값이 100K에서 1M으로 변경되었으므로, 이 값을 설정하지 않은 사용자는 CUBRID 관련 프로세스들의 메모리 사용량을 살펴볼 것을 권장한다.
+* data_buffer_size의 최소값이 64K에서 16M으로 변경되었으므로, 이 값을 16M 미만으로 설정한 사용자는 16M 이상으로 설정해야 한다.
+* data_buffer_size의 최소값이 64K에서 16M으로 변경되었으므로, 이 값을 16M 미만으로 설정한 사용자는 16M 이상으로 설정해야 한다.
 
 **cubrid_broker.conf**
 
-    * KEEP_CONNECTION에서 OFF 설정값이 제거되었으므로 이전 버전에서 OFF로 설정한 경우 ON 또는 AUTO로 변경해야 한다.
-    * SELECT_AUTO_COMMIT이 제거되었으므로 이전 버전에서 이 파라미터의 설정을 제거해야 한다. 
-    * APPL_SERVER_MAX_SIZE_HARD_LIMIT의 최대값을 2,097,151으로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
-    * APPL_SERVER_MAX_SIZE_HARD_LIMIT의 최소값이 1024M이다. APPL_SERVER_MAX_SIZE의 값을 설정하는 사용자는 APPL_SERVER_MAX_SIZE_HARD_LIMIT의 값보다 작게 설정할 것을 권장한다.
-    * CCI_DEFAULT_AUTOCOMMIT의 기본값이 ON으로 변경되었으므로, 이를 설정하지 않은 응용 프로그램 사용자가 기존과 같은 자동 커밋 모드를 유지하고 싶다면 OFF로 설정해야 한다.
+* KEEP_CONNECTION에서 OFF 설정값이 제거되었으므로 이전 버전에서 OFF로 설정한 경우 ON 또는 AUTO로 변경해야 한다.
+* SELECT_AUTO_COMMIT이 제거되었으므로 이전 버전에서 이 파라미터의 설정을 제거해야 한다. 
+* APPL_SERVER_MAX_SIZE_HARD_LIMIT의 최대값을 2,097,151으로 제한했으므로 이 값보다 크게 설정하지 않아야 한다.
+* APPL_SERVER_MAX_SIZE_HARD_LIMIT의 최소값이 1024M이다. APPL_SERVER_MAX_SIZE의 값을 설정하는 사용자는 APPL_SERVER_MAX_SIZE_HARD_LIMIT의 값보다 작게 설정할 것을 권장한다.
+* CCI_DEFAULT_AUTOCOMMIT의 기본값이 ON으로 변경되었으므로, 이를 설정하지 않은 응용 프로그램 사용자가 기존과 같은 자동 커밋 모드를 유지하고 싶다면 OFF로 설정해야 한다.
     
 **cubrid_ha.conf**
 
-    * ha_apply_max_mem_size 파라미터의 값을 500 이상으로 설정한 사용자는 이 값을 500 이하로 설정해야 한다.
+* ha_apply_max_mem_size 파라미터의 값을 500 이상으로 설정한 사용자는 이 값을 500 이하로 설정해야 한다.
 
 **환경 변수**
-    * CUBRID_LANG이 제거되고, CUBRID_CHARSET으로 데이터베이스의 문자셋을, CUBRID_MSG_LANG으로 유틸리티 메시지 및 오류 메시지의 문자셋을 설정하게 되었다.
+
+* CUBRID_LANG이 제거되고, CUBRID_CHARSET으로 데이터베이스의 문자셋을, CUBRID_MSG_LANG으로 유틸리티 메시지 및 오류 메시지의 문자셋을 설정하게 되었다.
 
 보다 자세한 설명은 :ref:`changed-config91` 을 참고한다.
 
@@ -95,23 +98,23 @@ CUBRID 2008 R4.0 이하 버전 사용자는 CUBRID 9.1 버전을 별도의 디�
 
 **기존 환경 설정 파일 보관**
 
-    * 이전 버전의 $CUBRID/conf 디렉터리의 환경 설정 파일(cubrid.conf, cubrid_broker.conf, cm.conf)과 $CUBRID_DATABASES 디렉터리의 DB 위치 정보 파일(databases.txt)을 보관한다.
+* 이전 버전의 $CUBRID/conf 디렉터리의 환경 설정 파일(cubrid.conf, cubrid_broker.conf, cm.conf)과 $CUBRID_DATABASES 디렉터리의 DB 위치 정보 파일(databases.txt)을 보관한다.
 
 **새로 추가된 예약어 검사**
 
-    * CUBRID 설치 패키지에 포함 또는 http://ftp.cubrid.org 에서 배포되는 CUBRID 9.1 버전용 예약어 검출 스크립트인 check_reserved.sql을 이용하여 예약어 사용 여부를 검사할 수 있으며, 예약어로 지정된 식별자를 사용하고 있을 경우 식별자를 수정해야 한다. :doc:`sql/identifier` 를 참고한다.
+* CUBRID 설치 패키지에 포함 또는 http://ftp.cubrid.org 에서 배포되는 CUBRID 9.1 버전용 예약어 검출 스크립트인 check_reserved.sql을 이용하여 예약어 사용 여부를 검사할 수 있으며, 예약어로 지정된 식별자를 사용하고 있을 경우 식별자를 수정해야 한다. :doc:`sql/identifier` 를 참고한다.
 
 **환경 변수 CUBRID_CHARSET, CUBRID_MSG_LANG 설정**
 
-    * CUBRID_LANG 환경 변수는 더 이상 사용되지 않으며, 데이터베이스를 생성하거나 구동할 때 CUBRID_CHARSET 환경 변수를 통해 어떤 문자셋을 사용할지 결정하므로 CUBRID_CHARSET 환경 변수를 반드시 설정해야 한다. 유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용하며 설정하지 않으면 CUBRID_CHARSET을 따른다.
+* CUBRID_LANG 환경 변수는 더 이상 사용되지 않으며, 데이터베이스를 생성하거나 구동할 때 CUBRID_CHARSET 환경 변수를 통해 어떤 문자셋을 사용할지 결정하므로 CUBRID_CHARSET 환경 변수를 반드시 설정해야 한다. 유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용하며 설정하지 않으면 CUBRID_CHARSET을 따른다.
 
 **스키마 변환**
 
-    * 9.0 Beta 이전 버전에서 ISO-8859-1이 아닌 EUC-KR, UTF-8 문자셋을 사용하던 사용자는 스키마를 반드시 변경해야 한다. 9.0 Beta 이전 버전에서는 CHAR, VARCHAR의 자릿수(precision)를 바이트 크기로 지정했으나 9.0 Beta 버전부터는 글자의 개수로 지정한다.
+* 9.0 Beta 이전 버전에서 ISO-8859-1이 아닌 EUC-KR, UTF-8 문자셋을 사용하던 사용자는 스키마를 반드시 변경해야 한다. 9.0 Beta 이전 버전에서는 CHAR, VARCHAR의 자릿수(precision)를 바이트 크기로 지정했으나 9.0 Beta 버전부터는 글자의 개수로 지정한다.
 
 **시스템 로캘 추가**
 
-    * 추가하고 싶은 시스템 로캘이 있는 경우 $CUBRID/conf/cubrid_locales.txt 파일에 해당 로캘을 추가한 후 make_locale 스크립트를 실행한다. :ref:`locale-setting` 을 참고한다.
+* 추가하고 싶은 시스템 로캘이 있는 경우 $CUBRID/conf/cubrid_locales.txt 파일에 해당 로캘을 추가한 후 make_locale 스크립트를 실행한다. :ref:`locale-setting` 을 참고한다.
 
 DB 마이그레이션
 ---------------
@@ -134,7 +137,7 @@ DB 마이그레이션 절차
 CUBRID 9.1로 마이그레이션
 -------------------------
 
-* CUBRID 9.0 Beta에서 DB를 마이그레이션하는 경우는 "migrate_90beta_to_91 <db_name>" 명령을 사용하여 다음의 절차대로 수행한다.
+*   CUBRID 9.0 Beta에서 DB를 마이그레이션하는 경우는 "migrate_90beta_to_91 <db_name>" 명령을 사용하여 다음의 절차대로 수행한다.
 
     +------------------------------------+---------------------------------------------+---------------------------------------------+
     | 단계                               | Linux 환경                                  | Windows 환경                                |
@@ -176,9 +179,9 @@ CUBRID 9.1로 마이그레이션
     |                                    |   % cubrid server start testdb              |                                             |
     +------------------------------------+---------------------------------------------+---------------------------------------------+
 
-* CUBRID 9.0 Beta 이전 버전에서 DB를 마이그레이션하는 경우는 다음의 절차대로 수행한다.
-* CUBRID 2008 R3.0 Beta 이하 사용자의 경우, 기존의 GLO 클래스를 사용하고 있는 경우에는 추가 작업이 필요하다(:ref:`glo-users-migration` 참고).
-* 아래는 cubrid unloaddb/loaddb 유틸리티와 http://ftp.cubrid.org 에서 별도 배포되는 check_reserved.sql 예약어 검출 스크립트를 이용하여 마이그레이션을 수행하는 방법이다. (cubrid unloaddb/loaddb는 매뉴얼의 :doc:`/admin/migration` 참고)
+*   CUBRID 9.0 Beta 이전 버전에서 DB를 마이그레이션하는 경우는 다음의 절차대로 수행한다.
+*   CUBRID 2008 R3.0 Beta 이하 사용자의 경우, 기존의 GLO 클래스를 사용하고 있는 경우에는 추가 작업이 필요하다(:ref:`glo-users-migration` 참고).
+*   아래는 cubrid unloaddb/loaddb 유틸리티와 http://ftp.cubrid.org 에서 별도 배포되는 check_reserved.sql 예약어 검출 스크립트를 이용하여 마이그레이션을 수행하는 방법이다. (cubrid unloaddb/loaddb는 매뉴얼의 :doc:`/admin/migration` 참고)
 
     +------------------------------------+---------------------------------------------+---------------------------------------------+
     | 단계                               | Linux 환경                                  | Windows 환경                                |
@@ -233,7 +236,7 @@ CUBRID 9.1로 마이그레이션
 GLO 클래스 사용자의 마이그레이션
 --------------------------------
 
-* GLO 클래스를 사용하는 경우, CUBRID 2008 R3.1부터는 GLO 클래스를 지원하지 않으므로 BLOB 또는 CLOB 타입을 사용하도록 응용과 스키마를 변경해야 한다. 변경 작업이 용이하지 않다면 마이그레이션을 보류할 것을 권장한다.
+*   GLO 클래스를 사용하는 경우, CUBRID 2008 R3.1부터는 GLO 클래스를 지원하지 않으므로 BLOB 또는 CLOB 타입을 사용하도록 응용과 스키마를 변경해야 한다. 변경 작업이 용이하지 않다면 마이그레이션을 보류할 것을 권장한다.
 
 .. _ha-db-migration:
 
@@ -243,7 +246,7 @@ HA 환경에서 DB 마이그레이션 절차
 CUBRID 2008 R2.2 이상 버전에서 CUBRID 9.1로 HA 마이그레이션
 ----------------------------------------------------------------
 
-* 아래는 브로커, 마스터 DB, 슬레이브 DB를 각각 별도 서버에 구축한 환경에서 현재 서비스를 중지하고 업그레이드를 수행하기 위한 가이드이다. 
+*   아래는 브로커, 마스터 DB, 슬레이브 DB를 각각 별도 서버에 구축한 환경에서 현재 서비스를 중지하고 업그레이드를 수행하기 위한 가이드이다. 
 
 
     +------------------------------------------------------+--------------------------------------------------------------------------------------------------+
@@ -257,13 +260,13 @@ CUBRID 2008 R2.2 이상 버전에서 CUBRID 9.1로 HA 마이그레이션
     +------------------------------------------------------+--------------------------------------------------------------------------------------------------+
     | H8 단계: 마스터 노드 백업본을 슬레이브 서버에서 복구 | H6 단계에서 생성된 마스터 노드의 새 버전 DB 백업본(예: testdb_bk*)을 슬레이브 서버에서 복구한다. |
     |                                                      |                                                                                                  |
-    |                                                      |   % scp user1@master:$CUBRID/databases/databases.txt $CUBRID/databases/.                         |
+    |                                                      |   % scp user1\ @master:$CUBRID/databases/databases.txt $CUBRID/databases/.                       |
     |                                                      |                                                                                                  |
     |                                                      |   % cd ~/DB/testdb                                                                               |
     |                                                      |                                                                                                  |
-    |                                                      |   % scp user1@master:~/DB/testdb/testdb_bk0v000 .                                                |
+    |                                                      |   % scp user1\ @master:~/DB/testdb/testdb_bk0v000 .                                              |
     |                                                      |                                                                                                  |
-    |                                                      |   % scp user1@master:~/DB/testdb/testdb_bkvinf .                                                 |
+    |                                                      |   % scp user1\ @master:~/DB/testdb/testdb_bkvinf .                                               |
     |                                                      |                                                                                                  |
     |                                                      |   % cubrid restoredb testdb                                                                      |
     +------------------------------------------------------+--------------------------------------------------------------------------------------------------+
@@ -281,16 +284,16 @@ CUBRID 2008 R2.2 이상 버전에서 CUBRID 9.1로 HA 마이그레이션
 CUBRID 2008 R2.0 또는 R2.1에서 CUBRID 9.1로 HA 마이그레이션
 ----------------------------------------------------------------
 
-* CUBRID 2008 R2.0 또는 R2.1의 HA 기능을 사용하는 경우, 서버 버전 업그레이드, DB 마이그레이션을 수행하고 HA 환경을 새롭게 구축한 후 해당 버전에서 사용되었던 Linux Heartbeat 자동 시작 설정을 변경해야 한다. (Linux Heartbeat 패키지가 불필요한 경우 삭제한다.)
+*   CUBRID 2008 R2.0 또는 R2.1의 HA 기능을 사용하는 경우, 서버 버전 업그레이드, DB 마이그레이션을 수행하고 HA 환경을 새롭게 구축한 후 해당 버전에서 사용되었던 Linux Heartbeat 자동 시작 설정을 변경해야 한다. (Linux Heartbeat 패키지가 불필요한 경우 삭제한다.)
 
-* 위의 H1~H10 단계를 수행한 후, 아래의 H11 단계를 수행한다.
+*   위의 H1~H10 단계를 수행한 후, 아래의 H11 단계를 수행한다.
 
     +-----------------------------------------------------+-------------------------------------------------------------------+
     | 단계                                                | 설명                                                              |
     +=====================================================+===================================================================+
     | H11 단계: 기존 Linux heartbeat 자동 시작 설정 변경  | 이하의 작업은 마스터 및 슬레이브 서버에서 root 계정으로 수행한다. |
     |                                                     |                                                                   |
-    |                                                     |   [root@master ~]# chkconfig --del heartbeat                      |
+    |                                                     |   [root\ @master ~]# chkconfig --del heartbeat                    |
     |                                                     |   // 슬레이브 서버에서 동일 작업 수행                             |
     +-----------------------------------------------------+-------------------------------------------------------------------+
 

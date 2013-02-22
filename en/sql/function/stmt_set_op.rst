@@ -40,7 +40,7 @@ The following table shows statement set operators supported by CUBRID and their 
     • subquery
      
     qualifier :
-    • DISTINCT, DISTINCTROW 또는 UNIQUE(A returned instance is a distinct value.)
+    • DISTINCT, DISTINCTROW or UNIQUE(A returned instance is a distinct value.)
     • ALL (All instances are returned. Duplicates are allowed.)
      
     statement_set_operator :

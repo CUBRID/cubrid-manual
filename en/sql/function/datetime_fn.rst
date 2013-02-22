@@ -18,7 +18,7 @@ ADDDATE, DATE_ADD
 
     If every input argument value of date and time is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
-    If the calculated value is between '0000-00-00 00:00:00' and '0001-01-01 00:00:00', a value having 0 for all arguments is returned in **DATE** or **DATETIME** type. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property (see "API Reference > JDBC API > JDBC Programming > Connection Configuration").
+    If the calculated value is between '0000-00-00 00:00:00' and '0001-01-01 00:00:00', a value having 0 for all arguments is returned in **DATE** or **DATETIME** type. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property. For more information about JDBC connection URL, please refer :ref:`jdbc-connection-conf`\ .
 
     :param date: It is a **DATE**, **TIMETIME**, or **TIMESTAMP** expression that represents the start date. If an invalid **DATE** value such as '2006-07-00' is specified, an error is returned.
     :param expr: It represents the interval value to be added to the start date. If a negative number is specified next to the **INTERVAL** keyword, the interval value is subtracted from the start date.
@@ -176,9 +176,9 @@ CURDATE, CURRENT_DATE, SYS_DATE, SYSDATE
 
 .. function:: CURDATE ()
 .. function:: CURRENT_DATE ()
-.. function:: CURRENT_DATE
-.. function:: SYS_DATE
-.. function:: SYSDATE
+.. c:macro:: CURRENT_DATE
+.. c:macro:: SYS_DATE
+.. c:macro:: SYSDATE
 
     **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** (), **SYS_DATE** and **SYSDATE** are used interchangeably and they return the current date as the **DATE** type (*MM*/*DD*/*YYYY* or *YYYY*-*MM*-*DD*). The unit is day.
 
@@ -206,10 +206,10 @@ CURRENT_DATETIME, NOW, SYS_DATETIME, SYSDATETIME
 ================================================
 
 .. function:: CURRENT_DATETIME ()
-.. function:: CURRENT_DATETIME
+.. c:macro:: CURRENT_DATETIME
 .. function:: NOW ()
-.. function:: SYS_DATETIME
-.. function:: SYSDATETIME
+.. c:macro:: SYS_DATETIME
+.. c:macro:: SYSDATETIME
 
     **CURRENT_DATETIME**, **CURRENT_DATETIME** (), **NOW** (), **SYS_DATETIME** and **SYSDATETIME** are used interchangeably, and they return the current date and time in **DATETIME** type. The unit is millisecond.
 
@@ -235,10 +235,10 @@ CURTIME, CURRENT_TIME, SYS_TIME, SYSTIME
 ========================================
 
 .. function:: CURTIME ()
-.. function:: CURRENT_TIME
+.. c:macro:: CURRENT_TIME
 .. function:: CURRENT_TIME ()
-.. function:: SYS_TIME
-.. function:: SYSTIME
+.. c:macro:: SYS_TIME
+.. c:macro:: SYSTIME
 
     **CURTIME** (), **CURRENT_TIME**, **CURRENT_TIME** (), **SYS_TIME** and **SYSTIME** are used interchangeably and they return the current time as **TIME** type (*HH*:*MI*:*SS*). The unit is second.
 
@@ -263,13 +263,13 @@ CURTIME, CURRENT_TIME, SYS_TIME, SYSTIME
 CURRENT_TIMESTAMP, SYS_TIMESTAMP, SYSTIMESTAMP, LOCALTIME, LOCALTIMESTAMP
 =========================================================================
 
-.. function:: CURRENT_TIMESTAMP
+.. c:macro:: CURRENT_TIMESTAMP
 .. function:: CURRENT_TIMESTAMP ()
-.. function:: SYS_TIMESTAMP
-.. function:: SYSTIMESTAMP
-.. function:: LOCALTIME
+.. c:macro:: SYS_TIMESTAMP
+.. c:macro:: SYSTIMESTAMP
+.. c:macro:: LOCALTIME
 .. function:: LOCALTIME ()
-.. function:: LOCALTIMESTAMP
+.. c:macro:: LOCALTIMESTAMP
 .. function:: LOCALTIMESTAMP ()
 
     **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **SYS_TIMESTAMP**, **SYSTIMESTAMP**, **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP** and **LOCALTIMESTAMP** () are used interchangeably and they return the current date and time as **TIMESTAMP** type. The unit is second.
@@ -910,7 +910,6 @@ ROUND
     SELECT ROUND(datetime'2012-12-26 12:10:10', 'dd');
     12/27/2012
     
-    // 
     SELECT ROUND(datetime'2012-12-26 12:10:10', 'day');
     12/30/2012
 
@@ -932,7 +931,7 @@ ROUND
     SELECT ROUND(datetime'2012-02-28 23:59:59.500', 'ss');
     02/29/2012
     
-:ref:`TRUNC(date, fmt) <trunc-date>` 를 참고한다.
+In order to truncate date instead of rounding, please see :ref:`TRUNC(date, fmt) <trunc-date>`.
 
 SEC_TO_TIME
 ===========
@@ -1196,7 +1195,7 @@ TRUNC
     SELECT TRUNC(datetime'2012-12-26 12:10:10', 'day');
     12/23/2012
             
-Refer :ref:`ROUND(date, fmt) <round-date>`.
+In order to round date instead of truncation, please see :ref:`ROUND(date, fmt) <round-date>`.
 
 UNIX_TIMESTAMP
 ==============

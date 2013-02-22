@@ -1,6 +1,6 @@
-******************************
-Numeric and Operator Functions
-******************************
+****************
+Number Functions
+****************
 
 ABS
 ===
@@ -765,32 +765,34 @@ WIDTH_BUCKET
 
 .. function:: WIDTH_BUCKET(expression, from, to, num_buckets)
 
-    **WIDTH_BUCKET** 함수는 순차적인 데이터 집합을 균등한 범위로 부여된 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다. 반환되는 값은 정수이다.
+    **WIDTH_BUCKET** 함수는 순차적인 데이터 집합을 균등한 범위로 부여된 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다. 즉, WIDTH_BUCKET 함수는 equi-width histogram을 생성한다. 반환되는 값은 정수이다.
     
     이 함수는 주어진 버킷 개수로 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
-    ( :func:`NTILE` 함수는 이에 비해 주어진 버킷 개수로 전체 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 행의 개수는 균등하다.)
+    
+    참고로 :func:`NTILE` 분석 함수는 이에 비해 주어진 버킷 개수로 전체 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 행의 개수는 균등하다.
 
-    expression은 버킷 번호를 부여받기 위한 입력 데이터이다. *from* 과 *to* 값으로 숫자형 타입과 날짜/시간 타입의 값 또는 날짜/시간 타입으로 변환 가능한 문자열이 입력될 수 있다.
-    
-    전체 범위에서 *from* 은 범위에 포함되지만 *to* 는 범위 밖에 존재한다. 예를 들어 WIDTH_BUCKET(score, 80, 50, 3)이 반환하는 값은 score가 
-    
-        * 80보다 크면 0, 
-        * [80,70)이면  1, 
-        * [70, 60)이면  2, 
-        * [60, 50)이면 3, 
-        * 50 또는 50보다 작으면 4가 된다.
-    
     :param expression: 버킷 번호를 부여받기 위한 입력 값. 수치 값을 반환하는 임의의 연산식을 지정한다.
     :param from: expression이 취할 수 있는 범위의 시작값으로, 이 값은 전체 범위 안에 포함된다. 
     :param to: expression이 취할 수 있는 범위의 마지막 값으로, 이 값은 전체 범위 안에 포함되지 않는다.
     :param num_buckets: 버킷의 개수. 추가로 범위 밖의 내용을 담기 위한 0번 버킷과 (num_buckets + 1)번 버킷이 생성된다.
     :rtype: INT
 
+    *expression*\ 은 버킷 번호를 부여받기 위한 입력 데이터이다. *from*\ 과 *to* 값으로 숫자형 타입과 날짜/시간 타입의 값 또는 날짜/시간 타입으로 변환 가능한 문자열이 입력될 수 있다. 전체 범위에서 *from*\ 은 범위에 포함되지만 *to*\ 는 범위 밖에 존재한다. 
+
+    예를 들어 WIDTH_BUCKET (score, 80, 50, 3)이 반환하는 값은 score가 
+    
+        * 80보다 크면 0, 
+        * [80, 70)이면 1, 
+        * [70, 60)이면 2, 
+        * [60, 50)이면 3, 
+        * 50보다 작거나 같으면 4가 된다.
+    
+
 다음 예제는 80점보다 작거나 같고 50점보다 큰 범위를 1부터 3까지 균등한 점수 범위로 나누어 등급을 부여한다. 해당 범위를 벗어나는 경우 80점보다 크면 0, 50점이거나 50점보다 작으면 4등급을 부여한다.
 
 .. code-block:: sql
 
-    CREATE TABLE t_score(name VARCHAR(10), score INT);
+    CREATE TABLE t_score (name VARCHAR(10), score INT);
     INSERT INTO t_score VALUES
         ('Amie', 60),
         ('Jane', 80),
@@ -801,7 +803,9 @@ WIDTH_BUCKET
         ('Ralph', 99),
         ('David', 55);
 
-    SELECT name, score, WIDTH_BUCKET(score, 80, 50, 3) grade FROM t_score ORDER BY grade ASC, score DESC;
+    SELECT name, score, WIDTH_BUCKET (score, 80, 50, 3) grade 
+    FROM t_score 
+    ORDER BY grade ASC, score DESC;
     
       name                        score        grade
     ================================================
@@ -814,4 +818,33 @@ WIDTH_BUCKET
       'David'                        55            3
       'Tom'                          50            4
 
-NTILE 함수와 비교한 예제는 :func:`NTILE` 함수를 참고한다.
+
+다음의 예에서 **WIDTH_BUCKET** 함수는 birthdate의 지정 범위를 균등하게 나누고 이를 기준으로 버킷 번호를 부여한다. 8 명의 고객을 생년월일을 기준으로 '1950-01-01'부터 '1999-12-31'까지의 범위를 5개로 균등 분할하며, birthdate 값이 범위를 벗어나면 0 또는 버킷 개수 + 1인 6을 반환한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t_customer (name VARCHAR(10), birthdate DATE);
+    INSERT INTO t_customer VALUES
+        ('Amie', date'1978-03-18'),
+        ('Jane', date'1983-05-12'),
+        ('Lora', date'1987-03-26'),
+        ('James', date'1948-12-28'),
+        ('Peter', date'1988-10-25'),
+        ('Tom', date'1980-07-28'),
+        ('Ralph', date'1995-03-17'),
+        ('David', date'1986-07-28');
+        
+    SELECT name, birthdate, WIDTH_BUCKET (birthdate, date'1950-01-01', date'2000-1-1', 5) age_group 
+    FROM t_customer 
+    ORDER BY birthdate;
+
+      name                  birthdate     age_group
+    ===============================================
+      'James'               12/28/1948            0
+      'Amie'                03/18/1978            4
+      'Tom'                 07/28/1980            4
+      'Jane'                05/12/1983            5
+      'David'               07/28/1986            5
+      'Lora'                03/26/1987            5
+      'Peter'               10/25/1988            5
+      'Ralph'               03/17/1995            6

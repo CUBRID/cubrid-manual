@@ -22,9 +22,9 @@ The following table shows the bitwise operators supported by CUBRID.
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+
 | ~                    | A unary operator. It performs complementary operation that reverses (INVERT) the bit order of the operand and returns a BIGINT integer.        | ~17            | -18              |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| <<                   | Performs the operation of moving bits of the left operand as far to the left as the value of the right operand, and returns a BIGINT integer.  | 17 << 3        | 136              |
+| <<                   | Performs the operation to shift bits of the left operand as far to the left as the value of the right operand, and returns a BIGINT integer.   | 17 << 3        | 136              |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+
-| >>                   | Performs the operation of moving bits of the left operand as far to the right as the value of the right operand, and returns a BIGINT integer. | 17 >> 3        | 2                |
+| >>                   | Performs the operation to shift bits of the left operand as far to the right as the value of the right operand, and returns a BIGINT integer.  | 17 >> 3        | 2                |
 +----------------------+------------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+
 
 BIT_AND

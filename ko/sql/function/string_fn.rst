@@ -211,7 +211,7 @@ CHR
       'DB'
             
     SELECT CHR(14909886 USING utf8); 
-    // Below query's result is the same as above.
+    -- Below query's result is the same as above.
     SET NAMES utf8; 
     SELECT CHR(14909886); 
     

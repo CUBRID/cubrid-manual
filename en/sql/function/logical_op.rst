@@ -4,9 +4,9 @@ Logical Operators
 
 For logical operators, boolean expressions or expressions that evaluates to an **INTEGER** value are specified as operands; **TRUE**, **FALSE** or **NULL** is returned as a result. If the **INTEGER** value is used, 0 is evaluated to **FALSE** and the other values are evaluated to **TRUE**. If a boolean value is used, 1 is evaluated to **TRUE** and 0 is evaluated to **FALSE**.
 
-The following table shows the logic operators supported by CUBRID.
+The following table shows the logical operators.
 
-**Logical Operators Supported by CUBRID**
+**Logical Operators**
 
 +----------------------+------------------------------------------------------------------------------------------+---------------+
 | Logical Operator     | Description                                                                              | Condition     |
@@ -46,7 +46,7 @@ The following table shows the logic operators supported by CUBRID.
 |                      | .                                                                                        |               |
 +----------------------+------------------------------------------------------------------------------------------+---------------+
 
-**True Table of Logical Operators**
+**Truth Table of Logical Operators**
 
 +-----------+-----------+-------------+------------+-----------+-------------+
 | a         | b         | a AND b     | a OR b     | NOT a     | a XOR b     |
@@ -57,19 +57,9 @@ The following table shows the logic operators supported by CUBRID.
 +-----------+-----------+-------------+------------+-----------+-------------+
 | **TRUE**  | **NULL**  | NULL        | TRUE       | FALSE     | NULL        |
 +-----------+-----------+-------------+------------+-----------+-------------+
+| **FALSE** | **TRUE**  | FALSE       | TRUE       | TRUE      | TRUE        |
++-----------+-----------+-------------+------------+-----------+-------------+
 | **FALSE** | **FALSE** | FALSE       | FALSE      | TRUE      | FALSE       |
 +-----------+-----------+-------------+------------+-----------+-------------+
 | **FALSE** | **NULL**  | FALSE       | NULL       | TRUE      | NULL        |
 +-----------+-----------+-------------+------------+-----------+-------------+
-
-You should put the logical expressions in brackets in the **SELECT** list.
-
-.. code-block:: sql
-
-    SELECT 1 = 1 FROM db_root;
-    ERROR: syntax error, unexpected '='
-     
-    SELECT (1 = 1) FROM db_root;
-            (1=1)
-    =============
-                1

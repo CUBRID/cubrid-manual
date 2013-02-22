@@ -40,26 +40,21 @@ The following table shows than possibility of operation by operand and type conv
 
 **Possibility of Operation by Operand**
 
-+---------------------+--------------------+--------------------+-----------------------------------------+
-|                     | SET                | MULTISET           | LIST(=SEQUENCE)                         |
-+=====================+====================+====================+=========================================+
-| **SET**             | Operation possible | Operation possible | Operation possible                      |
-+---------------------+--------------------+--------------------+-----------------------------------------+
-| **MULTISET**        | Operation possible | Operation possible | Operation possible                      |
-|                     |                    |                    | (                                       |
-|                     |                    |                    | **LIST**                                |
-|                     |                    |                    | is converted into                       |
-|                     |                    |                    | **MULTISET**                            |
-|                     |                    |                    | )                                       |
-+---------------------+--------------------+--------------------+-----------------------------------------+
-| **LIST(=SEQUENCE)** | Operation possible | Operation possible | Some operation possible                 |
-|                     |                    | (                  | (                                       |
-|                     |                    | **LIST**           | **SETEQ**                               |
-|                     |                    | is converted into  | ,                                       |
-|                     |                    | **MULTISET**       | **SETNEQ**                              |
-|                     |                    | )                  | )                                       |
-|                     |                    |                    | Error occurs for the rest of operators. |
-+---------------------+--------------------+--------------------+-----------------------------------------+
++---------------------+--------------------+--------------------+------------------------------+
+|                     | SET                | MULTISET           | LIST(=SEQUENCE)              |
++=====================+====================+====================+==============================+
+| **SET**             | Operation possible | Operation possible | Operation possible           |
++---------------------+--------------------+--------------------+------------------------------+
+| **MULTISET**        | Operation possible | Operation possible | Operation possible           |
+|                     |                    |                    | (**LIST**                    |
+|                     |                    |                    | is converted into            |
+|                     |                    |                    | **MULTISET**)                |
++---------------------+--------------------+--------------------+------------------------------+
+| **LIST(=SEQUENCE)** | Operation possible | Operation possible | Some operation possible      |
+|                     |                    | (**LIST**          | (**SETEQ**, **SETNEQ**)      |
+|                     |                    | is converted into  | Error occurs for the rest of |
+|                     |                    | **MULTISET**)      | operators.                   |
++---------------------+--------------------+--------------------+------------------------------+
 
 ::
 
@@ -68,7 +63,7 @@ The following table shows than possibility of operation by operand and type conv
     collection_operand:
     • set
     • multiset
-    • sequence(또는 list)
+    • sequence(or list)
     • subquery
     • NULL
      
@@ -166,8 +161,8 @@ The following table shows than possibility of operation by operand and type conv
      
     ERROR: ' subseteq ' operator is not defined on types sequence and sequence.
 
-SETEQ Operator
-==============
+SETEQ
+=====
 
 The **SETEQ** operator returns **TRUE** if the first operand is the same as the second one. It can perform comparison operator for all collection data type. ::
 
@@ -206,8 +201,8 @@ The **SETEQ** operator returns **TRUE** if the first operand is the same as the 
      
     1 rows selected.
 
-SETNEQ Operator
-===============
+SETNEQ
+======
 
 The **SETNEQ** operator returns **TRUE** (1) if a first operand is different from a second operand. A comparable operation can be performed for all collection data types. ::
 
@@ -243,8 +238,8 @@ The **SETNEQ** operator returns **TRUE** (1) if a first operand is different fro
                 6  'Smith     '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 5}
                 7  'Brown     '          {'city', 'country', 'state', 'street'}  {}
 
-SUPERSET Operator
-=================
+SUPERSET
+========
 
 The **SUPERSET** operator returns **TRUE** (1) when a second operand is a proper subset of a first operand; that is, the first one is larger than the second one. If two operands are identical, **FALSE(0)** is returned. Note that **SUPERSET** is not supported if all operands are **LIST** type. ::
 
@@ -279,8 +274,8 @@ The **SUPERSET** operator returns **TRUE** (1) when a second operand is a proper
                 5  'Kim       '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 4}
                 6  'Smith     '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 5}
 
-SUPERSETEQ Operator
-===================
+SUPERSETEQ
+==========
 
 The **SUPERSETEQ** operator returns **TRUE** (1) when a second operand is a subset of a first operand; that is, the first one is identical to or larger than the second one. Note that **SUPERSETEQ** is not supported if an operand is **LIST** type. ::
 
@@ -317,8 +312,8 @@ The **SUPERSETEQ** operator returns **TRUE** (1) when a second operand is a subs
                 5  'Kim       '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 4}
                 6  'Smith     '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 5}
 
-SUBSET Operator
-===============
+SUBSET
+======
 
 The **SUBSET** operator returns **TRUE** (1) if the second operand contains all elements of the first operand. If the first and the second collection have the same elements, **FALSE** (0) is returned. Note that both operands are the **LIST** type, the **SUBSET** operation is not supported. ::
 
@@ -347,8 +342,8 @@ The **SUBSET** operator returns **TRUE** (1) if the second operand contains all 
     ===============================================================================
                 7  'Brown     '          {'city', 'country', 'state', 'street'}  {}
 
-SUBSETEQ Operator
-=================
+SUBSETEQ
+========
 
 The **SUBSETEQ** operator returns **TRUE** (1) when a first operand is a subset of a second operand; that is, the second one is identical to or larger than the first one. Note that **SUBSETEQ** is not supported if an operand is **LIST** type. ::
 

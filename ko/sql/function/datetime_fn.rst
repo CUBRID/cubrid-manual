@@ -18,7 +18,7 @@ ADDDATE, DATE_ADD
 
     입력 인자의 날짜와 시간 값이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
 
-    계산 결과가 '0000-00-00 00:00:00'과 '0001-01-01 00:00:00' 사이이면, 날짜와 시간 값이 모두 0인 **DATE** 또는 **DATETIME** 타입의 값을 반환한다. 그러나 JDBC 프로그램에서는 연결 URL 속성인 zeroDateTimeBehavior의 설정에 따라 동작이 달라진다("API 레퍼런스 > JDBC API > JDBC 프로그래밍 > 연결 설정" 참고).
+    계산 결과가 '0000-00-00 00:00:00'과 '0001-01-01 00:00:00' 사이이면, 날짜와 시간 값이 모두 0인 **DATE** 또는 **DATETIME** 타입의 값을 반환한다. 그러나 JDBC 프로그램에서는 연결 URL 속성인 zeroDateTimeBehavior의 설정에 따라 동작이 달라진다. JDBC의 연결 URL 속성은 :ref:`jdbc-connection-conf` \을 참고하면 된다.
 
     :param date: **DATE**, **DATETIME** 또는 **TIMESTAMP** 타입의 연산식이며, 시작 날짜를 의미한다. 만약, '2006-07-00'와 같이 유효하지 않은 **DATE** 값이 지정되면, 에러를 반환한다.
     :param expr: 시작 날짜로부터 더할 시간 간격 값(interval value)을 의미하며, **INTERVAL** 키워드 뒤에 음수가 명시되면 시작 날짜로부터 시간 간격 값을 뺀다.
@@ -146,7 +146,7 @@ ADD_MONTHS
 
 .. function:: ADD_MONTHS ( date_argument , month )
 
-    **ADD_MONTHS** 함수는 **DATE** 타입의 연산식 *date_argument* 에 *month* 를 더한 후, **DATE** 타입의 값을 반환한다. 인자로 지정된 값의 일(*dd*)이 연산 결과값의 월에 존재하면 해당 일(*dd*)을 반환하고, 존재하지 않으면 해당 월의 마지막 날(<*dd*)을 반환한다. 또한, 연산 결과값이 **DATE** 타입의 표현 범위를 초과하는 경우, 에러를 반환한다.
+    **ADD_MONTHS** 함수는 **DATE** 타입의 연산식 *date_argument* 에 *month* 를 더한 후, **DATE** 타입의 값을 반환한다. 인자로 지정된 값의 일(*dd*)이 연산 결과값의 월에 존재하면 해당 일(*dd*)을 반환하고, 존재하지 않으면 해당 월의 마지막 날(*dd*)을 반환한다. 또한, 연산 결과값이 **DATE** 타입의 표현 범위를 초과하는 경우, 에러를 반환한다.
 
     :param date_argument: **DATE** 타입의 연산식을 지정한다. **TIMESTAMP** 나 **DATETIME** 값을 지정하려면 **DATE** 타입으로 명시적 변환을 해야 한다. 값이 **NULL** 이면 **NULL** 을 반환한다.
     :param month: *date_argument* 에 더할 개월 수를 지정하며, 양수와 음수 모두 지정될 수 있다. 만약, 정수가 아닌 타입의 값이 주어지면 묵시적으로 변환(소수점 아래 첫째자리를 반올림 처리)하여 정수형 타입으로 변환한다. 값이 **NULL** 이면 **NULL** 을 반환한다.
@@ -173,16 +173,16 @@ ADD_MONTHS
     ================================================================================
       07/03/2010                                     07/03/2010
 
-CURDATE, CURRENT_DATE, SYS_DATE, SYS_DATE
+CURDATE, CURRENT_DATE, SYS_DATE, SYSDATE
 =========================================
 
 .. function:: CURDATE ()
 .. function:: CURRENT_DATE ()
-.. function:: CURRENT_DATE
-.. function:: SYS_DATE
-.. function:: SYS_DATE
+.. c:macro:: CURRENT_DATE
+.. c:macro:: SYS_DATE
+.. c:macro:: SYSDATE
 
-    **CURDATE** (), **CURRENT_DATE**, **CURRENT_DATE** (), **SYS_DATE**, **SYSDATE** 는 모두 동일하며, 현재 날짜를 **DATE** 타입(*MM*/*DD*/*YYYY*)으로 반환한다. 산술 연산의 단위는 일(day)이다. 입력 인자의 연, 월, 일이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
+    **CURDATE** (), **CURRENT_DATE** (), **CURRENT_DATE**, **SYS_DATE**, **SYSDATE** 는 모두 동일하며, 현재 날짜를 **DATE** 타입(*MM*/*DD*/*YYYY*)으로 반환한다. 산술 연산의 단위는 일(day)이다. 입력 인자의 연, 월, 일이 모두 0이면 시스템 파라미터 **return_null_on_function_errors** 의 값에 따라 다른 값을 반환한다. **return_null_on_function_errors** 가 yes이면 **NULL** 을 반환하고 no이면 에러를 반환하며, 기본값은 **no** 이다.
 
     :rtype: DATE
     
@@ -206,10 +206,10 @@ CURRENT_DATETIME, NOW, SYS_DATETIME, SYSDATETIME
 ================================================
 
 .. function:: CURRENT_DATETIME ()
-.. function:: CURRENT_DATETIME
+.. c:macro:: CURRENT_DATETIME
 .. function:: NOW ()
-.. function:: SYS_DATETIME
-.. function:: SYSDATETIME
+.. c:macro:: SYS_DATETIME
+.. c:macro:: SYSDATETIME
 
     **CURRENT_DATETIME**, **CURRENT_DATETIME** (), **NOW** (), **SYS_DATETIME**, **SYSDATETIME** 는 동일하며, 현재 날짜를 **DATETIME** 타입으로 반환한다. 산술 연산의 단위는 밀리초(milli-sec)다.
 
@@ -234,10 +234,10 @@ CURTIME, CURRENT_TIME, SYS_TIME, SYSTIME
 ========================================
 
 .. function:: CURTIME ()
-.. function:: CURRENT_TIME
+.. c:macro:: CURRENT_TIME
 .. function:: CURRENT_TIME ()
-.. function:: SYS_TIME
-.. function:: SYSTIME
+.. c:macro:: SYS_TIME
+.. c:macro:: SYSTIME
 
     **CURTIME** (), **CURRENT_TIME**, **CURRENT_TIME** (), **SYS_TIME**, **SYSTIME** 는 모두 동일하며, 현재 시간을 **TIME** 타입(*HH*:*MI*:*SS*)으로 반환한다. 산술 연산의 단위는 초(sec)다.
 
@@ -262,13 +262,13 @@ CURTIME, CURRENT_TIME, SYS_TIME, SYSTIME
 CURRENT_TIMESTAMP, SYS_TIMESTAMP, SYSTIMESTAMP, LOCALTIME, LOCALTIMESTAMP
 =========================================================================
 
-.. function:: CURRENT_TIMESTAMP
+.. c:macro:: CURRENT_TIMESTAMP
 .. function:: CURRENT_TIMESTAMP ()
-.. function:: SYS_TIMESTAMP
-.. function:: SYSTIMESTAMP
-.. function:: LOCALTIME
+.. c:macro:: SYS_TIMESTAMP
+.. c:macro:: SYSTIMESTAMP
+.. c:macro:: LOCALTIME
 .. function:: LOCALTIME ()
-.. function:: LOCALTIMESTAMP
+.. c:macro:: LOCALTIMESTAMP
 .. function:: LOCALTIMESTAMP ()
 
     **CURRENT_TIMESTAMP**, **CURRENT_TIMESTAMP** (), **SYS_TIMESTAMP**, **SYSTIMESTAMP**, **LOCALTIME**, **LOCALTIME** (), **LOCALTIMESTAMP**, **LOCALTIMESTAMP** ()는 동일하며, 현재 날짜와 시간을 **TIMESTAMP** 타입으로 반환한다. 산술 연산의 단위는 초(sec)다.
@@ -916,7 +916,6 @@ ROUND
     SELECT ROUND(datetime'2012-12-26 12:10:10', 'dd');
     12/27/2012
     
-    // 
     SELECT ROUND(datetime'2012-12-26 12:10:10', 'day');
     12/30/2012
 
@@ -938,7 +937,7 @@ ROUND
     SELECT ROUND(datetime'2012-02-28 23:59:59.500', 'ss');
     02/29/2012
     
-:ref:`TRUNC(date, fmt) <trunc-date>` 를 참고한다.
+반올림이 아니라 절삭하기 위해서는 :ref:`TRUNC(date, fmt) <trunc-date>` 함수를 사용하면 된다.
 
 SEC_TO_TIME
 ===========
@@ -1199,7 +1198,7 @@ TRUNC
     SELECT TRUNC(datetime'2012-12-26 12:10:10', 'day');
     12/23/2012
             
-:ref:`ROUND(date, fmt) <round-date>` 를 참고한다.
+절삭이 아니라 반올림하기 위해서는 :ref:`ROUND(date, fmt) <round-date>` 함수를 사용하면 된다.
 
 UNIX_TIMESTAMP
 ==============

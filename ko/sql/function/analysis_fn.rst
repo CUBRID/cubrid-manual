@@ -37,7 +37,7 @@ AVG
 
 .. function:: AVG ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **AVG** 함수는 모든 행에 대한 연산식 값의 산술 평균을 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 평균을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해서 평균을 구한다.
+    **AVG** 함수는 집계 함수 또는 분석 함수로 사용되며, 모든 행에 대한 연산식 값의 산술 평균을 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 평균을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해서 평균을 구한다.
 
     :param expression: 수치 값을 반환하는 임의의 연산식을 지정한다. 컬렉션 타입의 데이터를 반환하는 연산식은 지정될 수 없다.
     :param ALL: 모든 값에 대해 평균을 구하기 위해 사용되며, 기본값이다.
@@ -102,7 +102,7 @@ COUNT
 
 .. function:: COUNT ( * | [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **COUNT** 함수는 질의문이 반환하는 결과 행들의 개수를 반환한다. 별표(*)를 지정하면 조건을 만족하는 모든 행(**NULL** 값을 가지는 행 포함)의 개수를 반환하며, **DISTINCT** 또는 **UNIQUE** 키워드를 연산식 앞에 지정하면 중복을 제거한 후 유일한 값을 가지는 행(**NULL** 값을 가지는 행은 포함하지 않음)의 개수만 반환한다. 따라서, 반환되는 값은 항상 정수이며, **NULL** 은 반환되지 않는다.
+    **COUNT** 함수는 집계 함수 또는 분석 함수로 사용되며,  질의문이 반환하는 결과 행들의 개수를 반환한다. 별표(*)를 지정하면 조건을 만족하는 모든 행(**NULL** 값을 가지는 행 포함)의 개수를 반환하며, **DISTINCT** 또는 **UNIQUE** 키워드를 연산식 앞에 지정하면 중복을 제거한 후 유일한 값을 가지는 행(**NULL** 값을 가지는 행은 포함하지 않음)의 개수만 반환한다. 따라서, 반환되는 값은 항상 정수이며, **NULL** 은 반환되지 않는다.
 
     :param expression: 임의의 연산식이다.
     :param ALL: 주어진 expression의 모든 행의 개수를 구하기 위해 사용되며, 기본값이다.
@@ -224,7 +224,7 @@ GROUP_CONCAT
 
 .. function:: GROUP_CONCAT( [DISTINCT] expression [ORDER BY {col | unsigned_int} [ASC | DESC]] [SEPARATOR str_val] )
 
-    **GROUP_CONCAT** 함수는 그룹에서 **NULL** 이 아닌 값들을 연결하여 결과 문자열을 **VARCHAR** 타입으로 반환한다. 질의 결과 행이 없거나 **NULL** 값만 있으면 **NULL** 을 반환한다. 
+    **GROUP_CONCAT** 함수는 집계 함수로만 사용되며,  그룹에서 **NULL** 이 아닌 값들을 연결하여 결과 문자열을 **VARCHAR** 타입으로 반환한다. 질의 결과 행이 없거나 **NULL** 값만 있으면 **NULL** 을 반환한다. 
     
     :param expression: 수치 또는 문자열을 반환하는 칼럼 또는 연산식
     :param str_val: 구분자로 쓰일 문자열
@@ -392,7 +392,7 @@ MAX
 
 .. function:: MAX ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **MAX** 함수는 모든 행에 대하여 연산식 값 중 최대 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 뒤에 나오는 문자열이 최대 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 큰 값이 최대 값이다.
+    **MAX** 함수는 함수는 집계 함수 또는 분석 함수로 사용되며,  모든 행에 대하여 연산식 값 중 최대 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 뒤에 나오는 문자열이 최대 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 큰 값이 최대 값이다.
 
     :param expression: 수치 또는 문자열을 반환하는 하나의 연산식을 지정한다. 컬렉션 타입의 데이터를 반환하는 연산식은 지정할 수 없다.
     :param ALL: 모든 값에 대해 최대 값을 구하기 위해 사용되며, 기본값이다.
@@ -437,7 +437,7 @@ MIN
 
 .. function:: MIN ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **MIN** 함수는 모든 행에 대하여 연산식 값 중 최소 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 앞에 나오는 문자열이 최소 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 작은 값이 최소 값이다.
+    **MIN** 함수는 집계 함수 또는 분석 함수로 사용되며,  모든 행에 대하여 연산식 값 중 최소 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 앞에 나오는 문자열이 최소 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 작은 값이 최소 값이다.
 
     :param expression: 수치 또는 문자열을 반환하는 하나의 연산식을 지정한다. 컬렉션 타입의 데이터를 반환하는 연산식은 지정할 수 없다.
     :param ALL: 모든 값에 대해 최소 값을 구하기 위해 사용되며, 기본값이다.
@@ -480,7 +480,7 @@ RANK
 
 .. function:: RANK() OVER ( [partition_by_clause] [order_by_clause] )
 
-    **PARTITION BY** 절에 의한 칼럼 값의 그룹에서 값의 순위를 계산하여 **INTEGER** 로 출력하며, 분석 함수로만 사용된다. 공동 순위가 존재하면 그 다음 순위는 공동 순위의 개수를 더한 숫자이다. 예를 들어, 13위에 해당하는 행이 3개이면 그 다음 행의 순위는 14위가 아니라 16위가 된다. 반면, :func:`DENSE_RANK` 함수는 이와 달리 순위에 1을 더해 다음 순위의 값을 계산한다.
+    RANK 함수는 분석 함수로만 사용되며, **PARTITION BY** 절에 의한 칼럼 값의 그룹에서 값의 순위를 계산하여 **INTEGER** 로 출력한다. 공동 순위가 존재하면 그 다음 순위는 공동 순위의 개수를 더한 숫자이다. 예를 들어, 13위에 해당하는 행이 3개이면 그 다음 행의 순위는 14위가 아니라 16위가 된다. 반면, :func:`DENSE_RANK` 함수는 이와 달리 순위에 1을 더해 다음 순위의 값을 계산한다.
 
     :rtype: INT
     
@@ -548,7 +548,7 @@ ROW_NUMBER
 
 .. function:: ROW_NUMBER() OVER ( [partition_by_clause] [order_by_clause] )
 
-    **PARTITION BY** 절에 의한 칼럼 값의 그룹에서 각 행에 고유한 일련번호를 1부터 순서대로 부여하여 **INTEGER** 로 출력하며, 분석 함수로만 사용된다.
+    **ROW_NUMBER** 함수는 분석 함수로만 사용되며, **PARTITION BY** 절에 의한 칼럼 값의 그룹에서 각 행에 고유한 일련번호를 1부터 순서대로 부여하여 **INTEGER** 로 출력한다.
 
     :rtype: INT
 
@@ -614,7 +614,7 @@ STDDEV, STDDEV_POP
 .. function:: STDDEV( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 .. function:: STDDEV_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **STDDEV** 함수와 **STDDEV_POP** 함수는 동일하며, 모든 행에 대한 연산식 값들에 대한 표준편차, 즉 모표준 편차를 반환한다. **STDDEV_POP** 함수가 SQL:1999 표준이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모표준 편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모표준 편차를 구한다.
+    **STDDEV** 함수와 **STDDEV_POP** 함수는 동일하며, 이 함수는 집계 함수 또는 분석 함수로 사용된다. 이 함수는 모든 행에 대한 연산식 값들에 대한 표준편차, 즉 모표준 편차를 반환한다. **STDDEV_POP** 함수가 SQL:1999 표준이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모표준 편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모표준 편차를 구한다.
 
     :param expression: 수치를 반환하는 하나의 연산식을 지정한다.
     :param ALL: 모든 값에 대해 표준 편차를 구하기 위해 사용되며, 기본값이다.
@@ -681,7 +681,7 @@ STDDEV_SAMP
 
 .. function:: STDDEV_SAMP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **STDDEV_SAMP** 함수는 표본 표준편차를 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 표준편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 표준편차를 구한다.
+    **STDDEV_SAMP** 함수는 집계 함수 또는 분석 함수로 사용되며, 표본 표준편차를 구한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 표준편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 표준편차를 구한다.
 
     :param expression: 수치를 반환하는 하나의 연산식을 지정한다.
     :param ALL: 모든 값에 대해 표준 편차를 구하기 위해 사용되며, 기본값이다.
@@ -691,6 +691,8 @@ STDDEV_SAMP
 리턴 값은 :func:`VAR_SAMP` 리턴 값의 제곱근과 같으며 **DOUBLE** 타입이다. 결과 계산에 사용할 행이 없으면 **NULL** 을 반환한다.
 
 다음은 함수에 적용된 공식이다.
+
+.. (TODO - equation)
 
 .. math:: STDDEV_SAMP = [ { 1 / (N-1) } * SUM( { xI - mean(x) }^2) ]^1/2
 
@@ -744,7 +746,7 @@ SUM
 
 .. function:: SUM ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **SUM** 함수는 모든 행에 대한 연산식 값들의 합계를 반환한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 합계를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 합계를 구한다. 단일 값 수식을 **SUM** 함수의 입력으로 사용할 수 있다.
+    **SUM** 함수는 집계 함수 또는 분석 함수로 사용되며, 모든 행에 대한 연산식 값들의 합계를 반환한다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후 합계를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 합계를 구한다. 단일 값 수식을 **SUM** 함수의 입력으로 사용할 수 있다.
 
     :param expression: 수치를 반환하는 하나의 연산식을 지정한다.
     :param ALL: 모든 값에 대해 합계를 구하기 위해 사용되며, 기본으로 지정된다.
@@ -824,7 +826,7 @@ NTILE
 
 .. function:: NTILE(expression) OVER ([partition_by_clause] [order_by_clause])
 
-    **NTILE** 함수는 분석 함수이다. 순차적인 데이터 집합을 입력 인자 값에 의해 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다.
+    **NTILE** 함수는 분석 함수로만 사용되며, 순차적인 데이터 집합을 입력 인자 값에 의해 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다.
     반환되는 값은 정수이다. 
     
     :param expression: 버킷의 개수. 숫자 값을 반환하는 임의의 연산식을 지정한다. 
@@ -903,7 +905,7 @@ VARIANCE, VAR_POP
 .. function:: VARIANCE( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 .. function:: VAR_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **VARIANCE** 함수와 **VAR_POP** 함수는 동일하며, 모든 행에 대한 연산식 값들에 대한 분산, 즉 모분산을 반환한다. 분모는 모든 행의 개수이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모분산을 구한다.
+    **VARIANCE** 함수와 **VAR_POP** 함수는 동일하며, 집계 함수 또는 분석 함수로 사용된다. 이 함수는 모든 행에 대한 연산식 값들에 대한 분산, 즉 모분산을 반환한다. 분모는 모든 행의 개수이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모분산을 구한다.
 
     :param expression: 수치를 반환하는 하나의 연산식을 지정한다.
     :param ALL: 모든 값에 대해 모분산을 구하기 위해 사용되며, 기본값이다.
@@ -967,7 +969,7 @@ VAR_SAMP
 
 .. function:: VAR_SAMP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **VAR_SAMP** 함수는 표본 분산을 반환한다. 분모는 모든 행의 개수 - 1이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 분산을 구한다.
+    **VAR_SAMP** 함수는 집계 함수 또는 분석 함수로 사용되며, 표본 분산을 반환한다. 분모는 모든 행의 개수 - 1이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 분산을 구한다.
 
     :param expression: 수치를 반환하는 하나의 연산식을 지정한다.
     :param ALL: 모든 값에 대해 표본 분산을 구하기 위해 사용되며, 기본값이다.

@@ -2,6 +2,9 @@
 정보 함수
 *********
 
+CHARSET
+=======
+
 .. function:: CHARSET(expr)
 
     *expr* 의 문자셋을 반환한다.
@@ -10,19 +13,21 @@
     
     :rtype: STRING
 
-    .. code-block:: sql
+.. code-block:: sql
+ 
+    SELECT CHARSET('abc');
+    'iso88591'
+    
+    SELECT CHARSET(_utf8'abc');
+    'utf8'
+    
+    SET NAMES utf8;
+    SELECT CHARSET('abc');
+    'utf8'
+    
+COERCIBILITY
+============
 
-        SELECT CHARSET('abc');
-        'iso88591'
-        
-        SELECT CHARSET(_utf8'abc');
-        'utf8'
-        
-        SET NAMES utf8;
-        SELECT CHARSET('abc');
-        'utf8'
-        
-        
 .. function:: COERCIBILITY(expr)
     
     *expr* 의 콜레이션 변환도(coercibility)를 반환한다. 콜레이션 변환도는 칼럼(표현식)들이 서로 다른 콜레이션과 문자셋을 가지고 있을 때 어떤 콜레이션과 문자셋으로 변환할 것인지를 결정한다. 어떤 연산을 수행하는 두 개의 칼럼(표현식)이 있을 때, 높은 변환도를 가진 인자는 더 낮은 변환도를 가진 인자의 콜레이션으로 변환된다. 이와 관련하여 :ref:`콜레이션 변환도 <collation-coercibility>` 를 참고한다.
@@ -31,13 +36,16 @@
 
     :rtype: INT
     
-    .. code-block:: sql
+.. code-block:: sql
+
+    SELECT COERCIBILITY(USER());
+    7
     
-        SELECT COERCIBILITY(USER());
-        7
-        
-        SELECT COERCIBILITY(_utf8'abc');
-        10
+    SELECT COERCIBILITY(_utf8'abc');
+    10
+
+COLLATION
+=========
 
 .. function:: COLLATION(expr)
 
@@ -47,13 +55,16 @@
 
     :rtype: STRING
     
-    .. code-block:: sql
+.. code-block:: sql
+
+    SELECT COLLATION('abc');
+    'iso88591_bin'
     
-        SELECT COLLATION('abc');
-        'iso88591_bin'
-        
-        SELECT COLLATION(_utf8'abc');
-        'utf8_bin'
+    SELECT COLLATION(_utf8'abc');
+    'utf8_bin'
+
+CURRENT_USER, USER
+==================
 
 .. function:: CURRENT_USER
 .. function:: USER
@@ -64,28 +75,31 @@
 
     :rtype: STRING
     
-    .. code-block:: sql
+.. code-block:: sql
 
-        --selecting the current user on the session
-        SELECT USER;
-           CURRENT_USER
-        ======================
-          'PUBLIC'
-         
-        SELECT USER(), CURRENT_USER;
-           user()                CURRENT_USER
-        ============================================
-          'PUBLIC@cdbs006.cub'  'PUBLIC'
-         
-        --selecting all users of the current database from the system table
-        SELECT name, id, password FROM db_user;
-          name                           id  password
-        =========================================================
-          'DBA'                        NULL  NULL
-          'PUBLIC'                     NULL  NULL
-          'SELECT_ONLY_USER'           NULL  db_password
-          'ALMOST_DBA_USER'            NULL  db_password
-          'SELECT_ONLY_USER2'          NULL  NULL
+    --selecting the current user on the session
+    SELECT USER;
+       CURRENT_USER
+    ======================
+      'PUBLIC'
+     
+    SELECT USER(), CURRENT_USER;
+       user()                CURRENT_USER
+    ============================================
+      'PUBLIC@cdbs006.cub'  'PUBLIC'
+     
+    --selecting all users of the current database from the system table
+    SELECT name, id, password FROM db_user;
+      name                           id  password
+    =========================================================
+      'DBA'                        NULL  NULL
+      'PUBLIC'                     NULL  NULL
+      'SELECT_ONLY_USER'           NULL  db_password
+      'ALMOST_DBA_USER'            NULL  db_password
+      'SELECT_ONLY_USER2'          NULL  NULL
+
+DATABASE, SCHEMA
+================
 
 .. function:: DATABASE()
 .. function:: SCHEMA()
@@ -94,12 +108,15 @@
 
     :rtype: STRING
     
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT DATABASE(), SCHEMA();
-           database()            schema()
-        ============================================
-          'demodb'              'demodb'
+    SELECT DATABASE(), SCHEMA();
+       database()            schema()
+    ============================================
+      'demodb'              'demodb'
+
+DEFAULT
+=======
 
 .. function:: DEFAULT(column_name)
 .. function:: DEFAULT
@@ -108,28 +125,31 @@
 
     기본값이 정의되지 않은 칼럼에 어떠한 제약 조건이 정의되어 있지 않거나 **UNIQUE** 제약 조건이 정의된 경우에는 **NULL** 을 반환하고, 해당 칼럼에 **NOT NULL** 또는 **PRIMARY KEY** 제약 조건이 정의된 경우에는 에러를 반환한다.
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        CREATE TABLE info_tbl(id INT DEFAULT 0, name VARCHAR)
-        INSERT INTO info_tbl VALUES (1,'a'),(2,'b'),(NULL,'c');
-         
-        3 rows affected.
-         
-        SELECT id, DEFAULT(id) FROM info_tbl;
-                   id   default(id)  
-        =============================
-                    1             0
-                    2             0  
-                 NULL             0   
-         
-        UPDATE info_tbl SET id = DEFAULT WHERE id IS NULL;
-        DELETE FROM info_tbl WHERE id = DEFAULT(id);
-        INSERT INTO info_tbl VALUES (DEFAULT,'d');
+    CREATE TABLE info_tbl(id INT DEFAULT 0, name VARCHAR)
+    INSERT INTO info_tbl VALUES (1,'a'),(2,'b'),(NULL,'c');
+     
+    3 rows affected.
+     
+    SELECT id, DEFAULT(id) FROM info_tbl;
+               id   default(id)  
+    =============================
+                1             0
+                2             0  
+             NULL             0   
+     
+    UPDATE info_tbl SET id = DEFAULT WHERE id IS NULL;
+    DELETE FROM info_tbl WHERE id = DEFAULT(id);
+    INSERT INTO info_tbl VALUES (DEFAULT,'d');
 
-    .. note::
+.. note::
+
+    CUBRID 9.0 미만 버전에서는 테이블 생성 시 DATE, DATETIME, TIME, TIMESTAMP 칼럼의 DEFAULT 값을 SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP로 지정하면, CREATE TABLE 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 INSERT되는 시점의 값을 입력하려면 INSERT 구문의 VALUES 절에 해당 함수를 입력해야 했다.
     
-        CUBRID 9.0 미만 버전에서는 테이블 생성 시 DATE, DATETIME, TIME, TIMESTAMP 칼럼의 DEFAULT 값을 SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP로 지정하면, CREATE TABLE 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 INSERT되는 시점의 값을 입력하려면 INSERT 구문의 VALUES 절에 해당 함수를 입력해야 했다.
-        
+INDEX_CARDINALITY
+=================
+
 .. function:: INDEX_CARDINALITY(table, index, key_pos)
 
     **INDEX_CARDINALITY** 함수는 테이블에서 인덱스 카디널리티(cardinality)를 반환한다. 인덱스 카디널리티는 인덱스를 정의하는 고유한 값의 개수이다. 인덱스 카디널리티는 다중 칼럼 인덱스의 부분 키에 대해서도 적용할 수 있는데, 이때 세 번째 인자로 칼럼의 위치를 지정하여 부분 키에 대한 고유 값의 개수를 나타낸다.
@@ -143,45 +163,48 @@
 
     :rtype: INT
     
-    리턴 값은 0 또는 양의 정수이며, 입력 인자 중 하나라도 **NULL** 이면 **NULL** 을 반환한다. 입력 인자인 테이블이나 인덱스가 발견되지 않거나 *key_pos* 가 지정된 범위를 벗어나면 **NULL** 을 리턴한다.
+리턴 값은 0 또는 양의 정수이며, 입력 인자 중 하나라도 **NULL** 이면 **NULL** 을 반환한다. 입력 인자인 테이블이나 인덱스가 발견되지 않거나 *key_pos* 가 지정된 범위를 벗어나면 **NULL** 을 리턴한다.
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        CREATE TABLE t1( i1 INTEGER ,
-        i2 INTEGER not null,
-        i3 INTEGER unique,
-        s1 VARCHAR(10),
-        s2 VARCHAR(10),
-        s3 VARCHAR(10) UNIQUE);
-          
-        CREATE INDEX i_t1_i1 ON t1(i1 DESC);
-        CREATE INDEX i_t1_s1 ON t1(s1(7));
-        CREATE INDEX i_t1_i1_s1 on t1(i1,s1);
-        CREATE UNIQUE INDEX i_t1_i2_s2 ON t1(i2,s2);
-         
-        INSERT INTO t1 VALUES (1,1,1,'abc','abc','abc');
-        INSERT INTO t1 VALUES (2,2,2,'zabc','zabc','zabc');
-        INSERT INTO t1 VALUES (2,3,3,'+abc','+abc','+abc');
-         
-        SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',0);
-           index_cardinality('t1', 'i_t1_i1_s1', 0)
-        ===========================================
-                                                  2
-         
-        SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',1);
-           index_cardinality('t1', 'i_t1_i1_s1', 1)
-        ===========================================
-                                                  3
-         
-        SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',2);
-           index_cardinality('t1', 'i_t1_i1_s1', 2)
-        ===========================================
-                                               NULL
-         
-        SELECT INDEX_CARDINALITY('t123','i_t1_i1_s1',1);
-          index_cardinality('t123', 'i_t1_i1_s1', 1)
-        ============================================
-                                               NULL
+    CREATE TABLE t1( i1 INTEGER ,
+    i2 INTEGER not null,
+    i3 INTEGER unique,
+    s1 VARCHAR(10),
+    s2 VARCHAR(10),
+    s3 VARCHAR(10) UNIQUE);
+      
+    CREATE INDEX i_t1_i1 ON t1(i1 DESC);
+    CREATE INDEX i_t1_s1 ON t1(s1(7));
+    CREATE INDEX i_t1_i1_s1 on t1(i1,s1);
+    CREATE UNIQUE INDEX i_t1_i2_s2 ON t1(i2,s2);
+     
+    INSERT INTO t1 VALUES (1,1,1,'abc','abc','abc');
+    INSERT INTO t1 VALUES (2,2,2,'zabc','zabc','zabc');
+    INSERT INTO t1 VALUES (2,3,3,'+abc','+abc','+abc');
+     
+    SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',0);
+       index_cardinality('t1', 'i_t1_i1_s1', 0)
+    ===========================================
+                                              2
+     
+    SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',1);
+       index_cardinality('t1', 'i_t1_i1_s1', 1)
+    ===========================================
+                                              3
+     
+    SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',2);
+       index_cardinality('t1', 'i_t1_i1_s1', 2)
+    ===========================================
+                                           NULL
+     
+    SELECT INDEX_CARDINALITY('t123','i_t1_i1_s1',1);
+      index_cardinality('t123', 'i_t1_i1_s1', 1)
+    ============================================
+                                           NULL
+
+INET_ATON
+=========
 
 .. function:: INET_ATON( ip_string )
 
@@ -190,15 +213,18 @@
     :param ip_string: IPv4 주소 문자열
     :rtype: BIGINT
 
-    다음 예제에서 192.168.0.10은 "192 * 256 ^ 3 + 168 * 256 ^ 2 + 0 * 256 + 10"으로 계산된다.
+다음 예제에서 192.168.0.10은 "192 * 256 ^ 3 + 168 * 256 ^ 2 + 0 * 256 + 10"으로 계산된다.
 
-    .. code-block:: sql
-    
-        SELECT INET_ATON('192.168.0.10');
-         
-           inet_aton('192.168.0.10')
-        ============================
-                          3232235530
+.. code-block:: sql
+
+    SELECT INET_ATON('192.168.0.10');
+     
+       inet_aton('192.168.0.10')
+    ============================
+                      3232235530
+
+INET_NTOA
+=========
 
 .. function:: INET_NTOA( expr )
 
@@ -207,13 +233,16 @@
     :param expr: 숫자 표현식
     :rtype: STRING
 
-    .. code-block:: sql
-    
-        SELECT INET_NTOA(3232235530);
-         
-           inet_ntoa(3232235530)
-        ======================
-          '192.168.0.10'
+.. code-block:: sql
+
+    SELECT INET_NTOA(3232235530);
+     
+       inet_ntoa(3232235530)
+    ======================
+      '192.168.0.10'
+
+LAST_INSERT_ID
+==============
 
 .. function:: LAST_INSERT_ID()
 
@@ -221,59 +250,62 @@
     
     :rtype: BIGINT
     
-    **LAST_INSERT_ID** 함수가 반환하는 값은 다음의 특징을 가진다. 
-    
-    *   성공적으로 **INSERT** 된 값이 없을 때에는 가장 최근에 성공한 값이 유지된다.
-    *   수행 중인 SQL 문은 **LAST_INSERT_ID** () 값에 영향을 주지 않는다.
-    *   다중 행 **INSERT** 문(예: INSERT INTO tbl VALUES (), (), ..., ())에서 **LAST_INSERT_ID** ()는 첫 번째로 입력된 **AUTO_INCREMENT** () 값을 반환한다.
-    *   롤백해도 **LAST_INSERT_ID** () 값은 트랜잭션 이전의 **LAST_INSERT_ID** () 값으로 복구되지 않는다.
-    *   트리거 내에서 사용한 **LAST_INSERT_ID** () 값은 트리거 밖에서 확인할 수 없다.
-    *   **LAST_INSERT_ID** 는 각 응용 클라이언트의 연결마다 독립적으로 유지된다.
+**LAST_INSERT_ID** 함수가 반환하는 값은 다음의 특징을 가진다. 
 
-    .. code-block:: sql
-    
-        CREATE TABLE ss (id INT AUTO_INCREMENT NOT NULL PRIMARY KEY, text VARCHAR(32));
-        INSERT into ss VALUES(NULL,’cubrid’);
-        SELECT LAST_INSERT_ID();
-         
-             last_insert_id()
-        =======================
-                             1
-         
-        INSERT INTO ss VALUES(NULL,’database’),(NULL,’manager’);
-        SELECT LAST_INSERT_ID();
-         
-             last_insert_id()
-        =======================
-                             3
+*   성공적으로 **INSERT** 된 값이 없을 때에는 가장 최근에 성공한 값이 유지된다.
+*   수행 중인 SQL 문은 **LAST_INSERT_ID** () 값에 영향을 주지 않는다.
+*   다중 행 **INSERT** 문(예: INSERT INTO tbl VALUES (), (), ..., ())에서 **LAST_INSERT_ID** ()는 첫 번째로 입력된 **AUTO_INCREMENT** () 값을 반환한다.
+*   롤백해도 **LAST_INSERT_ID** () 값은 트랜잭션 이전의 **LAST_INSERT_ID** () 값으로 복구되지 않는다.
+*   트리거 내에서 사용한 **LAST_INSERT_ID** () 값은 트리거 밖에서 확인할 수 없다.
+*   **LAST_INSERT_ID** 는 각 응용 클라이언트의 연결마다 독립적으로 유지된다.
 
-    .. code-block:: sql
-    
-        CREATE TABLE tbl (id INT AUTO_INCREMENT);
-        INSERT INTO tbl values (500), (NULL), (NULL);
-        SELECT LAST_INSERT_ID();
-         
-             last_insert_id()
-        =======================
-                             1
-         
-        INSERT INTO tbl values (500), (NULL), (NULL);
-        SELECT LAST_INSERT_ID();
-         
-             last_insert_id()
-        =======================
-                             3
-         
-        SELECT * FROM tbl;
-         
-                            id
-        =======================
-                           500
-                             1
-                             2
-                           500
-                             3
-                             4
+.. code-block:: sql
+
+    CREATE TABLE ss (id INT AUTO_INCREMENT NOT NULL PRIMARY KEY, text VARCHAR(32));
+    INSERT into ss VALUES(NULL,’cubrid’);
+    SELECT LAST_INSERT_ID();
+     
+         last_insert_id()
+    =======================
+                         1
+     
+    INSERT INTO ss VALUES(NULL,’database’),(NULL,’manager’);
+    SELECT LAST_INSERT_ID();
+     
+         last_insert_id()
+    =======================
+                         3
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (id INT AUTO_INCREMENT);
+    INSERT INTO tbl values (500), (NULL), (NULL);
+    SELECT LAST_INSERT_ID();
+     
+         last_insert_id()
+    =======================
+                         1
+     
+    INSERT INTO tbl values (500), (NULL), (NULL);
+    SELECT LAST_INSERT_ID();
+     
+         last_insert_id()
+    =======================
+                         3
+     
+    SELECT * FROM tbl;
+     
+                        id
+    =======================
+                       500
+                         1
+                         2
+                       500
+                         3
+                         4
+
+LIST_DBS
+========
 
 .. function:: LIST_DBS()
 
@@ -281,12 +313,15 @@
 
     :rtype: STRING
         
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT LIST_DBS();
-          dbs
-        ======================
-          'testdb demodb'
+    SELECT LIST_DBS();
+      dbs
+    ======================
+      'testdb demodb'
+
+ROW_COUNT
+=========
 
 .. function:: ROW_COUNT()
 
@@ -294,26 +329,29 @@
 
     :rtype: INT
     
-    .. code-block:: sql
+.. code-block:: sql
+
+    CREATE TABLE rc (i int);
+    INSERT INTO rc VALUES (1),(2),(3),(4),(5),(6),(7);
+    SELECT ROW_COUNT();
+       row_count()
+    ===============
+                  7
     
-        CREATE TABLE rc (i int);
-        INSERT INTO rc VALUES (1),(2),(3),(4),(5),(6),(7);
-        SELECT ROW_COUNT();
-           row_count()
-        ===============
-                      7
-        
-        UPDATE rc SET i = 0 WHERE i >  3;
-        SELECT ROW_COUNT();
-           row_count()
-        ===============
-                      4
-         
-        DELETE FROM rc WHERE i = 0;
-        SELECT ROW_COUNT();
-           row_count()
-        ===============
-                      4
+    UPDATE rc SET i = 0 WHERE i >  3;
+    SELECT ROW_COUNT();
+       row_count()
+    ===============
+                  4
+     
+    DELETE FROM rc WHERE i = 0;
+    SELECT ROW_COUNT();
+       row_count()
+    ===============
+                  4
+
+USER, SYSTEM_USER
+=================
 
 .. function:: USER()
 .. function:: SYSTEM_USER()
@@ -324,28 +362,31 @@
 
     :rtype: STRING
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        --selecting the current user on the session
-        SELECT USER;
-           CURRENT_USER
-        ======================
-          'PUBLIC'
-         
-        SELECT USER(), CURRENT_USER;
-           user()                CURRENT_USER
-        ============================================
-          'PUBLIC@cdbs006.cub'  'PUBLIC'
-         
-        --selecting all users of the current database from the system table
-        SELECT name, id, password FROM db_user;
-          name                           id  password
-        =========================================================
-          'DBA'                        NULL  NULL
-          'PUBLIC'                     NULL  NULL
-          'SELECT_ONLY_USER'           NULL  db_password
-          'ALMOST_DBA_USER'            NULL  db_password
-          'SELECT_ONLY_USER2'          NULL  NULL
+    --selecting the current user on the session
+    SELECT USER;
+       CURRENT_USER
+    ======================
+      'PUBLIC'
+     
+    SELECT USER(), CURRENT_USER;
+       user()                CURRENT_USER
+    ============================================
+      'PUBLIC@cdbs006.cub'  'PUBLIC'
+     
+    --selecting all users of the current database from the system table
+    SELECT name, id, password FROM db_user;
+      name                           id  password
+    =========================================================
+      'DBA'                        NULL  NULL
+      'PUBLIC'                     NULL  NULL
+      'SELECT_ONLY_USER'           NULL  db_password
+      'ALMOST_DBA_USER'            NULL  db_password
+      'SELECT_ONLY_USER2'          NULL  NULL
+
+VERSION
+=======
 
 .. function:: VERSION()
 
@@ -353,9 +394,9 @@
 
     :rtype: STRING
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT VERSION();
-           version()
-        =====================
-          '8.3.1.2015'
+    SELECT VERSION();
+       version()
+    =====================
+      '8.3.1.2015'

@@ -2,6 +2,9 @@
 수치 연산 함수
 **************
 
+ABS
+===
+
 .. function:: ABS (number_expr)
 
     함수는 지정된 인자 값의 절대값을 반환하며, 리턴 값의 타입은 주어진 인자의 타입과 같다.
@@ -9,14 +12,17 @@
     :param number_expr: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: number_expr의 타입
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        --it returns the absolute value of the argument
-        SELECT ABS(12.3), ABS(-12.3), ABS(-12.3000), ABS(0.0);
-        
-          abs(12.3)             abs(-12.3)            abs(-12.3000)         abs(0.0)
-        ================================================================================
-          12.3                  12.3                  12.3000               .0
+    --it returns the absolute value of the argument
+    SELECT ABS(12.3), ABS(-12.3), ABS(-12.3000), ABS(0.0);
+    
+      abs(12.3)             abs(-12.3)            abs(-12.3000)         abs(0.0)
+    ================================================================================
+      12.3                  12.3                  12.3000               .0
+
+ACOS
+====
 
 .. function:: ACOS ( x )
 
@@ -25,12 +31,15 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT ACOS(1), ACOS(0), ACOS(-1);
-          acos(1)                   acos(0)                  acos(-1)
-        ==================================================================================
-          0.000000000000000e+00     1.570796326794897e+00     3.141592653589793e+00
+    SELECT ACOS(1), ACOS(0), ACOS(-1);
+      acos(1)                   acos(0)                  acos(-1)
+    ==================================================================================
+      0.000000000000000e+00     1.570796326794897e+00     3.141592653589793e+00
+
+ASIN
+====
 
 .. function:: ASIN ( x )
 
@@ -39,12 +48,15 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT ASIN(1), ASIN(0), ASIN(-1);
-          asin(1)                   asin(0)                  asin(-1)
-        ==============================================================================
-          1.570796326794897e+00     0.000000000000000e+00    -1.570796326794897e+00
+    SELECT ASIN(1), ASIN(0), ASIN(-1);
+      asin(1)                   asin(0)                  asin(-1)
+    ==============================================================================
+      1.570796326794897e+00     0.000000000000000e+00    -1.570796326794897e+00
+
+ATAN
+====
 
 .. function:: ATAN ( [y,] x )
 
@@ -53,13 +65,16 @@
     :param x,y: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT ATAN(1), ATAN(-1), ATAN(1,-1);
-         
-                           atan(1)                  atan(-1)              atan2(1, -1)
-        ==============================================================================
-             7.853981633974483e-01    -7.853981633974483e-01     2.356194490192345e+000
+    SELECT ATAN(1), ATAN(-1), ATAN(1,-1);
+     
+                       atan(1)                  atan(-1)              atan2(1, -1)
+    ==============================================================================
+         7.853981633974483e-01    -7.853981633974483e-01     2.356194490192345e+000
+
+ATAN2
+=====
 
 .. function:: ATAN2 ( y, x )
 
@@ -68,13 +83,16 @@
     :param x,y: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT ATAN2(1,1), ATAN2(-1,-1), ATAN2(Pi(),0);
-         
-        atan2(1, 1)             atan2(-1, -1)           atan2( pi(), 0)
-        ==============================================================================
-         7.853981633974483e-01    -2.356194490192345e+00     1.570796326794897e+00
+    SELECT ATAN2(1,1), ATAN2(-1,-1), ATAN2(Pi(),0);
+     
+    atan2(1, 1)             atan2(-1, -1)           atan2( pi(), 0)
+    ==============================================================================
+     7.853981633974483e-01    -2.356194490192345e+00     1.570796326794897e+00
+
+CEIL
+====
 
 .. function:: CEIL( number_operand )
 
@@ -83,17 +101,20 @@
     :param number_operand: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: INT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT CEIL(34567.34567), CEIL(-34567.34567);
-          ceil(34567.34567)     ceil(-34567.34567)
-        ============================================
-          34568.00000           -34567.00000
-         
-        SELECT CEIL(34567.1), CEIL(-34567.1);
-          ceil(34567.1)         ceil(-34567.1)
-        =============================
-          34568.0         -34567.0
+    SELECT CEIL(34567.34567), CEIL(-34567.34567);
+      ceil(34567.34567)     ceil(-34567.34567)
+    ============================================
+      34568.00000           -34567.00000
+     
+    SELECT CEIL(34567.1), CEIL(-34567.1);
+      ceil(34567.1)         ceil(-34567.1)
+    =============================
+      34568.0         -34567.0
+
+CONV
+====
 
 .. function:: CONV (number,from_base,to_base)
 
@@ -104,16 +125,19 @@
     :param to_base: 반환할 숫자의 진수
     :rtype: STRING
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT CONV('f',16,2);
-        '1111'
+    SELECT CONV('f',16,2);
+    '1111'
 
-        SELECT CONV('6H',20,8);
-        '211'
+    SELECT CONV('6H',20,8);
+    '211'
 
-        SELECT CONV(-30,10,-20);
-        '-1A'
+    SELECT CONV(-30,10,-20);
+    '-1A'
+
+COS
+===
 
 .. function:: COS ( x )
 
@@ -122,13 +146,16 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT COS(pi()/6), COS(pi()/3), COS(pi());
-          cos( pi()/6)              cos( pi()/3)                cos( pi())
-        ==============================================================================
-          8.660254037844387e-01     5.000000000000001e-01    -1.000000000000000e+00
-  
+    SELECT COS(pi()/6), COS(pi()/3), COS(pi());
+      cos( pi()/6)              cos( pi()/3)                cos( pi())
+    ==============================================================================
+      8.660254037844387e-01     5.000000000000001e-01    -1.000000000000000e+00
+
+COT
+===
+
 .. function:: COT ( x )
 
     **COT** 함수는 인자 *x* 의 코탄젠트(cotangent) 값을 반환한다. 즉, 탄젠트가 *x* 인 값을 라디안 단위로 반환하며, 리턴 값은 **DOUBLE** 타입이다.
@@ -136,12 +163,15 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT COT(1), COT(-1), COT(0);
-          cot(1)                   cot(-1)   cot(0)
-        ==========================================================================
-          6.420926159343306e-01    -6.420926159343306e-01  NULL
+    SELECT COT(1), COT(-1), COT(0);
+      cot(1)                   cot(-1)   cot(0)
+    ==========================================================================
+      6.420926159343306e-01    -6.420926159343306e-01  NULL
+
+DEGREES
+=======
 
 .. function:: DEGREES ( x )
 
@@ -150,13 +180,16 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT DEGREES(pi()/6), DEGREES(pi()/3), DEGREES (pi());
-          degrees( pi()/6)          degrees( pi()/3)            degrees( pi())
-        ==============================================================================
-          3.000000000000000e+01     5.999999999999999e+01     1.800000000000000e+02
-  
+    SELECT DEGREES(pi()/6), DEGREES(pi()/3), DEGREES (pi());
+      degrees( pi()/6)          degrees( pi()/3)            degrees( pi())
+    ==============================================================================
+      3.000000000000000e+01     5.999999999999999e+01     1.800000000000000e+02
+
+DRANDOM, DRAND
+==============
+
 .. function:: DRANDOM ( [seed] )
 .. function:: DRAND ( [seed] )
 
@@ -167,56 +200,59 @@
     :param seed: 
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT DRAND(), DRAND(1), DRAND(1.4);
-                           drand()                  drand(1)                drand(1.4)
-        ==============================================================================
-            2.849646518006921e-001    4.163034446537495e-002    4.163034446537495e-002
-         
-        SELECT * FROM rand_tbl;
-                   id  name
-        ===================================
-                    1  'a'
-                    2  'b'
-                    3  'c'
-                    4  'd'
-                    5  'e'
-                    6  'f'
-                    7  'g'
-                    8  'h'
-                    9  'i'
-                   10  'j'
-         
-        --drandom() returns random values on every row
-        SELECT DRAND(), DRANDOM() FROM rand_tbl;
-           drand()                 drandom()
-        ==============================================================================
-           7.638782921842098e-001    1.018707846308786e-001
-           7.638782921842098e-001    3.191320535905026e-001
-           7.638782921842098e-001    3.461714529862361e-001
-           7.638782921842098e-001    6.791894283883175e-001
-           7.638782921842098e-001    4.533829767754143e-001
-           7.638782921842098e-001    1.714224677266762e-001
-           7.638782921842098e-001    1.698049867244484e-001
-           7.638782921842098e-001    4.507583849604786e-002
-           7.638782921842098e-001    5.279091769157994e-001
-           7.638782921842098e-001    7.021088290047914e-001
-         
-        --selecting rows in random order
-        SELECT * FROM rand_tbl ORDER BY DRANDOM();
-                   id  name
-        ===================================
-                    6  'f'
-                    2  'b'
-                    7  'g'
-                    8  'h'
-                    1  'a'
-                    4  'd'
-                   10  'j'
-                    9  'i'
-                    5  'e'
-                    3  'c'
+    SELECT DRAND(), DRAND(1), DRAND(1.4);
+                       drand()                  drand(1)                drand(1.4)
+    ==============================================================================
+        2.849646518006921e-001    4.163034446537495e-002    4.163034446537495e-002
+     
+    SELECT * FROM rand_tbl;
+               id  name
+    ===================================
+                1  'a'
+                2  'b'
+                3  'c'
+                4  'd'
+                5  'e'
+                6  'f'
+                7  'g'
+                8  'h'
+                9  'i'
+               10  'j'
+     
+    --drandom() returns random values on every row
+    SELECT DRAND(), DRANDOM() FROM rand_tbl;
+       drand()                 drandom()
+    ==============================================================================
+       7.638782921842098e-001    1.018707846308786e-001
+       7.638782921842098e-001    3.191320535905026e-001
+       7.638782921842098e-001    3.461714529862361e-001
+       7.638782921842098e-001    6.791894283883175e-001
+       7.638782921842098e-001    4.533829767754143e-001
+       7.638782921842098e-001    1.714224677266762e-001
+       7.638782921842098e-001    1.698049867244484e-001
+       7.638782921842098e-001    4.507583849604786e-002
+       7.638782921842098e-001    5.279091769157994e-001
+       7.638782921842098e-001    7.021088290047914e-001
+     
+    --selecting rows in random order
+    SELECT * FROM rand_tbl ORDER BY DRANDOM();
+               id  name
+    ===================================
+                6  'f'
+                2  'b'
+                7  'g'
+                8  'h'
+                1  'a'
+                4  'd'
+               10  'j'
+                9  'i'
+                5  'e'
+                3  'c'
+
+EXP
+===
 
 .. function:: EXP( x )
 
@@ -225,17 +261,20 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT EXP(1), EXP(0);
-          exp(1)                    exp(0)
-        ====================================================
-          2.718281828459045e+000 1.000000000000000e+000
-         
-        SELECT EXP(-1), EXP(2.00);
-          exp(-1)                 exp(2.00)
-        ====================================================
-          3.678794411714423e-001 7.389056098930650e+000
+    SELECT EXP(1), EXP(0);
+      exp(1)                    exp(0)
+    ====================================================
+      2.718281828459045e+000 1.000000000000000e+000
+     
+    SELECT EXP(-1), EXP(2.00);
+      exp(-1)                 exp(2.00)
+    ====================================================
+      3.678794411714423e-001 7.389056098930650e+000
+
+FLOOR
+=====
 
 .. function:: FLOOR( number_operand )
 
@@ -244,18 +283,21 @@
     :param number_operand: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: number_operand의 타입
 
-    .. code-block:: sql
-    
-        --it returns the largest integer less than or equal to the arguments
-        SELECT FLOOR(34567.34567), FLOOR(-34567.34567);
-          floor(34567.34567)    floor(-34567.34567)
-        ============================================
-          34567.00000           -34568.00000
-         
-        SELECT FLOOR(34567), FLOOR(-34567);
-          floor(34567)   floor(-34567)
-        =============================
-                 34567         -34567
+.. code-block:: sql
+
+    --it returns the largest integer less than or equal to the arguments
+    SELECT FLOOR(34567.34567), FLOOR(-34567.34567);
+      floor(34567.34567)    floor(-34567.34567)
+    ============================================
+      34567.00000           -34568.00000
+     
+    SELECT FLOOR(34567), FLOOR(-34567);
+      floor(34567)   floor(-34567)
+    =============================
+             34567         -34567
+
+GREATEST
+========
 
 .. function:: GREATEST( expression [, expression]* )
 
@@ -264,19 +306,22 @@
     :param expression: 하나 이상의 연산식을 지정하며, 서로 비교 가능한 타입이어야 한다. 인자 중 어느 하나가 **NULL** 값이면 **NULL** 을 반환한다.
     :rtype: expression의 타입
 
-    다음은 *demodb* 에서 한국이 획득한 각 메달의 수와 최대 메달의 수를 반환하는 예제이다.
+다음은 *demodb* 에서 한국이 획득한 각 메달의 수와 최대 메달의 수를 반환하는 예제이다.
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT gold, silver , bronze, GREATEST (gold, silver, bronze) FROM participant
-        WHERE nation_code = 'KOR';
-                 gold       silver       bronze  greatest(gold, silver, bronze)
-        =======================================================================
-                    9           12            9                              12
-                    8           10           10                              10
-                    7           15            5                              15
-                   12            5           12                              12
-                   12           10           11                              12
+    SELECT gold, silver , bronze, GREATEST (gold, silver, bronze) FROM participant
+    WHERE nation_code = 'KOR';
+             gold       silver       bronze  greatest(gold, silver, bronze)
+    =======================================================================
+                9           12            9                              12
+                8           10           10                              10
+                7           15            5                              15
+               12            5           12                              12
+               12           10           11                              12
+
+HEX
+===
 
 .. function:: HEX(n)
 
@@ -285,12 +330,15 @@
     :param n: 16진수 문자열 or 10진수 숫자
     :rtype: STRING
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT HEX('ab'), HEX(128), CONV(HEX(128), 16, 10);
-        hex('ab')             hex(128)              conv(hex(128), 16, 10)
-        ==================================================================
-          '6162'                '80'                  '128'
+    SELECT HEX('ab'), HEX(128), CONV(HEX(128), 16, 10);
+    hex('ab')             hex(128)              conv(hex(128), 16, 10)
+    ==================================================================
+      '6162'                '80'                  '128'
+
+LEAST
+=====
 
 .. function:: LEAST( expression [, expression]* )
 
@@ -299,19 +347,22 @@
     :param expression: 하나 이상의 연산식을 지정하며, 서로 비교 가능한 타입이어야 한다. 인자 중 어느 하나가 **NULL** 값이면 **NULL** 을 반환한다.
     :rtype: expression의 타입
 
-    다음은 *demodb* 에서 한국이 획득한 각 메달의 수와 최소 메달의 수를 반환하는 예제이다.
+다음은 *demodb* 에서 한국이 획득한 각 메달의 수와 최소 메달의 수를 반환하는 예제이다.
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT gold, silver , bronze, LEAST(gold, silver, bronze) FROM participant
-        WHERE nation_code = 'KOR';
-                 gold       silver       bronze  least(gold, silver, bronze)
-        ====================================================================
-                    9           12            9                            9
-                    8           10           10                            8
-                    7           15            5                            5
-                   12            5           12                            5
-                   12           10           11                           10
+    SELECT gold, silver , bronze, LEAST(gold, silver, bronze) FROM participant
+    WHERE nation_code = 'KOR';
+             gold       silver       bronze  least(gold, silver, bronze)
+    ====================================================================
+                9           12            9                            9
+                8           10           10                            8
+                7           15            5                            5
+               12            5           12                            5
+               12           10           11                           10
+
+LN
+==
 
 .. function:: LN ( x )
 
@@ -320,12 +371,15 @@
     :param x: 양수 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT ln(1), ln(2.72);
-             ln(1)                     ln(2.72)
-        =====================================================
-             0.000000000000000e+00     1.000631880307906e+00
+    SELECT ln(1), ln(2.72);
+         ln(1)                     ln(2.72)
+    =====================================================
+         0.000000000000000e+00     1.000631880307906e+00
+
+LOG2
+====
 
 .. function:: LOG2 ( x )
 
@@ -334,12 +388,15 @@
     :param x: 양수 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT log2(1), log2(8);
-             log2(1)                   log2(8)
-        ======================================================
-             0.000000000000000e+00     3.000000000000000e+00  
+    SELECT log2(1), log2(8);
+         log2(1)                   log2(8)
+    ======================================================
+         0.000000000000000e+00     3.000000000000000e+00  
+
+LOG10
+=====
 
 .. function:: LOG10 ( x )
 
@@ -348,12 +405,15 @@
     :param x: 양수 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT log10(1), log10(1000);
-             log10(1)                  log10(1000)
-        ====================================================
-             0.000000000000000e+00     3.000000000000000e+00
+    SELECT log10(1), log10(1000);
+         log10(1)                  log10(1000)
+    ====================================================
+         0.000000000000000e+00     3.000000000000000e+00
+
+MOD
+===
 
 .. function:: MOD (m, n)
 
@@ -380,18 +440,21 @@
     :param n: 제수를 나타내며, 수치 값을 반환하는 연산식이다.
     :rtype: INT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        --it returns the reminder of m divided by n
-        SELECT MOD(11, 4), MOD(11, -4), MOD(-11, 4), MOD(-11, -4), MOD(11,0);
-            mod(11, 4)   mod(11, -4)   mod(-11, 4)   mod(-11, -4)   mod(11, 0)
-        =====================================================================
-                    3             3            -3             -3           11
-         
-        SELECT MOD(11.0, 4), MOD(11.000, 4), MOD(11, 4.0), MOD(11, 4.000);
-          mod(11.0, 4)          mod(11.000, 4)        mod(11, 4.0)          mod(11, 4.000)
-        =========================================================================
-          3.0                   3.000                 3.0                   3.000
+    --it returns the reminder of m divided by n
+    SELECT MOD(11, 4), MOD(11, -4), MOD(-11, 4), MOD(-11, -4), MOD(11,0);
+        mod(11, 4)   mod(11, -4)   mod(-11, 4)   mod(-11, -4)   mod(11, 0)
+    =====================================================================
+                3             3            -3             -3           11
+     
+    SELECT MOD(11.0, 4), MOD(11.000, 4), MOD(11, 4.0), MOD(11, 4.000);
+      mod(11.0, 4)          mod(11.000, 4)        mod(11, 4.0)          mod(11, 4.000)
+    =========================================================================
+      3.0                   3.000                 3.0                   3.000
+
+PI
+==
 
 .. function:: PI ()
 
@@ -399,12 +462,15 @@
 
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT PI(), PI()/2;
-             pi()                      pi()/2
-        ====================================================
-             3.141592653589793e+00     1.570796326794897e+00
+    SELECT PI(), PI()/2;
+         pi()                      pi()/2
+    ====================================================
+         3.141592653589793e+00     1.570796326794897e+00
+
+POW, POWER
+==========
 
 .. function:: POW( x, y )
 .. function:: POWER( x, y )
@@ -415,17 +481,20 @@
     :param y: 지수를 나타내며, 수치 값을 반환하는 연산식이다. 밑수가 음수인 경우, 지수는 반드시 정수가 지정되어야 한다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT POWER(2, 5), POWER(-2, 5), POWER(0, 0), POWER(1,0);
-         power(2, 5)            power(-2, 5)           power(0, 0)           power(1, 0)
-        ======================================================================================
-         3.200000000000000e+01    -3.200000000000000e+01     1.000000000000000e+00     1.000000000000000e+00
-         
-        --it returns an error when the negative base is powered by a non-int exponent
-        SELECT POWER(-2, -5.1), POWER(-2, -5.1);
-         
-        ERROR
+    SELECT POWER(2, 5), POWER(-2, 5), POWER(0, 0), POWER(1,0);
+     power(2, 5)            power(-2, 5)           power(0, 0)           power(1, 0)
+    ======================================================================================
+     3.200000000000000e+01    -3.200000000000000e+01     1.000000000000000e+00     1.000000000000000e+00
+     
+    --it returns an error when the negative base is powered by a non-int exponent
+    SELECT POWER(-2, -5.1), POWER(-2, -5.1);
+     
+    ERROR
+
+RADIANS
+=======
 
 .. function:: RADIANS ( x )
 
@@ -434,12 +503,15 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT RADIANS(90), RADIANS(180), RADIANS(360);
-             radians(90)               radians(180)              radians(360)
-        ==============================================================================
-             1.570796326794897e+00     3.141592653589793e+00     6.283185307179586e+00
+    SELECT RADIANS(90), RADIANS(180), RADIANS(360);
+         radians(90)               radians(180)              radians(360)
+    ==============================================================================
+         1.570796326794897e+00     3.141592653589793e+00     6.283185307179586e+00
+
+RANDOM, RAND
+============
 
 .. function:: RANDOM ( [seed] )
 .. function:: RAND ( [seed] )
@@ -453,58 +525,61 @@
     :param seed: 
     :rtype: INT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT RAND(), RAND(1), RAND(1.4);
-               rand()      rand(1)    rand(1.4)
-        =======================================
-           1526981144     89400484     89400484
-         
-        --creating a new table
-        SELECT * FROM rand_tbl;
-                   id  name
-        ===================================
-                    1  'a'
-                    2  'b'
-                    3  'c'
-                    4  'd'
-                    5  'e'
-                    6  'f'
-                    7  'g'
-                    8  'h'
-                    9  'i'
-                   10  'j'
-         
-        --random() returns random values on every row
-        SELECT RAND(),RANDOM() FROM rand_tbl;
-               rand()       random()
-        ============================
-           2078876566     1753698891
-           2078876566     1508854032
-           2078876566      625052132
-           2078876566      279624236
-           2078876566     1449981446
-           2078876566     1360529082
-           2078876566     1563510619
-           2078876566     1598680194
-           2078876566     1160177096
-           2078876566     2075234419
-         
-         
-        --selecting rows in random order
-        SELECT * FROM rand_tbl ORDER BY RANDOM();
-                   id  name
-        ===================================
-                    6  'f'
-                    1  'a'
-                    5  'e'
-                    4  'd'
-                    2  'b'
-                    7  'g'
-                   10  'j'
-                    9  'i'
-                    3  'c'
-                    8  'h'
+    SELECT RAND(), RAND(1), RAND(1.4);
+           rand()      rand(1)    rand(1.4)
+    =======================================
+       1526981144     89400484     89400484
+     
+    --creating a new table
+    SELECT * FROM rand_tbl;
+               id  name
+    ===================================
+                1  'a'
+                2  'b'
+                3  'c'
+                4  'd'
+                5  'e'
+                6  'f'
+                7  'g'
+                8  'h'
+                9  'i'
+               10  'j'
+     
+    --random() returns random values on every row
+    SELECT RAND(),RANDOM() FROM rand_tbl;
+           rand()       random()
+    ============================
+       2078876566     1753698891
+       2078876566     1508854032
+       2078876566      625052132
+       2078876566      279624236
+       2078876566     1449981446
+       2078876566     1360529082
+       2078876566     1563510619
+       2078876566     1598680194
+       2078876566     1160177096
+       2078876566     2075234419
+     
+     
+    --selecting rows in random order
+    SELECT * FROM rand_tbl ORDER BY RANDOM();
+               id  name
+    ===================================
+                6  'f'
+                1  'a'
+                5  'e'
+                4  'd'
+                2  'b'
+                7  'g'
+               10  'j'
+                9  'i'
+                3  'c'
+                8  'h'
+
+ROUND
+=====
 
 .. function:: ROUND( number_operand, integer )
 
@@ -514,26 +589,29 @@
     :param integer: 반올림 처리할 위치를 지정한다. 양의 정수 *n* 이 지정되면 소수점 아래 *n* 자리까지 표현되고, 음의 정수 *n* 이 지정되면 소수점 위 *n* 자리에서 반올림한다.
     :rtype: number_operand의 타입
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        --it rounds a number to one decimal point when the second argument is omitted
-        SELECT ROUND(34567.34567), ROUND(-34567.34567);
-          round(34567.34567, 0)   round(-34567.34567, 0)
-        ============================================
-          34567.00000           -34567.00000
-         
-         
-        --it rounds a number to three decimal point
-        SELECT ROUND(34567.34567, 3), ROUND(-34567.34567, 3)  FROM db_root;
-         round(34567.34567, 3)   round(-34567.34567, 3)
-        ============================================
-          34567.34600           -34567.34600
-         
-        --it rounds a number three digit to the left of the decimal point
-        SELECT ROUND(34567.34567, -3), ROUND(-34567.34567, -3);
-         round(34567.34567, -3)   round(-34567.34567, -3)
-        ============================================
-          35000.00000           -35000.00000
+    --it rounds a number to one decimal point when the second argument is omitted
+    SELECT ROUND(34567.34567), ROUND(-34567.34567);
+      round(34567.34567, 0)   round(-34567.34567, 0)
+    ============================================
+      34567.00000           -34567.00000
+     
+     
+    --it rounds a number to three decimal point
+    SELECT ROUND(34567.34567, 3), ROUND(-34567.34567, 3)  FROM db_root;
+     round(34567.34567, 3)   round(-34567.34567, 3)
+    ============================================
+      34567.34600           -34567.34600
+     
+    --it rounds a number three digit to the left of the decimal point
+    SELECT ROUND(34567.34567, -3), ROUND(-34567.34567, -3);
+     round(34567.34567, -3)   round(-34567.34567, -3)
+    ============================================
+      35000.00000           -35000.00000
+
+SIGN
+====
 
 .. function:: SIGN (number_operand)
 
@@ -542,14 +620,17 @@
     :param number_operand: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: INT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        --it returns the sign of the argument
-         
-        SELECT SIGN(12.3), SIGN(-12.3), SIGN(0);
-            sign(12.3)   sign(-12.3)      sign(0)
-        ========================================
-                    1            -1            0
+    --it returns the sign of the argument
+     
+    SELECT SIGN(12.3), SIGN(-12.3), SIGN(0);
+        sign(12.3)   sign(-12.3)      sign(0)
+    ========================================
+                1            -1            0
+
+SIN
+===
 
 .. function:: SIN ( x )
 
@@ -558,12 +639,15 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT SIN(pi()/6), SIN(pi()/3), SIN(pi());
-             sin( pi()/6)              sin( pi()/3)              sin( pi())
-        ==============================================================================
-             4.999999999999999e-01     8.660254037844386e-01     1.224646799147353e-16
+    SELECT SIN(pi()/6), SIN(pi()/3), SIN(pi());
+         sin( pi()/6)              sin( pi()/3)              sin( pi())
+    ==============================================================================
+         4.999999999999999e-01     8.660254037844386e-01     1.224646799147353e-16
+
+SQRT
+====
 
 .. function:: SQRT ( x )
 
@@ -572,12 +656,15 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다. 만약, 음수이면 에러를 반환한다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT SQRT(4), SQRT(16.0);
-             sqrt(4)                   sqrt(16.0)
-        ====================================================
-             2.000000000000000e+00     4.000000000000000e+00
+    SELECT SQRT(4), SQRT(16.0);
+         sqrt(4)                   sqrt(16.0)
+    ====================================================
+         2.000000000000000e+00     4.000000000000000e+00
+
+TAN
+===
 
 .. function:: TAN ( x )
 
@@ -586,12 +673,15 @@
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT TAN(pi()/6), TAN(pi()/3), TAN(pi()/4);
-             tan( pi()/6)              tan( pi()/3)              tan( pi()/4)
-        ==============================================================================
-             5.773502691896257e-01     1.732050807568877e+00     9.999999999999999e-01
+    SELECT TAN(pi()/6), TAN(pi()/3), TAN(pi()/4);
+         tan( pi()/6)              tan( pi()/3)              tan( pi()/4)
+    ==============================================================================
+         5.773502691896257e-01     1.732050807568877e+00     9.999999999999999e-01
+
+TRUNC, TRUNCATE
+===============
 
 .. function:: TRUNC ( x[, dec] )
 .. function:: TRUNCATE ( x, dec )
@@ -602,25 +692,28 @@
     :param dec: 버림할 위치를 지정한다. 양의 정수 *n* 이 지정되면 소수점 아래 *n* 자리까지 표현되고, 음의 정수 *n* 이 지정되면 소수점 위 *n* 자리까지 0으로 표시한다. *dec* 인자가 0이거나 생략되면 소수부를 버림한다. 단, **TRUNCATE** 함수에서는 *dec* 인자를 생략할 수 없다.
     :rtype: x의 타입
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        --it returns a number truncated to 0 places
-        SELECT TRUNC(34567.34567), TRUNCATE(34567.34567, 0);
-          trunc(34567.34567, 0)   trunc(34567.34567, 0)
-        ============================================
-          34567.00000            34567.00000
-         
-        --it returns a number truncated to three decimal places
-        SELECT TRUNC(34567.34567, 3), TRUNC(-34567.34567, 3);
-          trunc(34567.34567, 3)   trunc(-34567.34567, 3)
-        ============================================
-          34567.34500           -34567.34500
-         
-        --it returns a number truncated to three digits left of the decimal point
-        SELECT TRUNC(34567.34567, -3), TRUNC(-34567.34567, -3);
-          trunc(34567.34567, -3)   trunc(-34567.34567, -3)
-        ============================================
-          34000.00000           -34000.00000
+    --it returns a number truncated to 0 places
+    SELECT TRUNC(34567.34567), TRUNCATE(34567.34567, 0);
+      trunc(34567.34567, 0)   trunc(34567.34567, 0)
+    ============================================
+      34567.00000            34567.00000
+     
+    --it returns a number truncated to three decimal places
+    SELECT TRUNC(34567.34567, 3), TRUNC(-34567.34567, 3);
+      trunc(34567.34567, 3)   trunc(-34567.34567, 3)
+    ============================================
+      34567.34500           -34567.34500
+     
+    --it returns a number truncated to three digits left of the decimal point
+    SELECT TRUNC(34567.34567, -3), TRUNC(-34567.34567, -3);
+      trunc(34567.34567, -3)   trunc(-34567.34567, -3)
+    ============================================
+      34000.00000           -34000.00000
+
+WIDTH_BUCKET
+============
 
 .. function:: WIDTH_BUCKET(expression, from, to, num_buckets)
 
@@ -645,35 +738,33 @@
     :param num_buckets: 버킷의 개수. 추가로 범위 밖의 내용을 담기 위한 0번 버킷과 (num_buckets + 1)번 버킷이 생성된다.
     :rtype: INT
 
-    다음 예제는 80점보다 작거나 같고 50점보다 큰 범위를 1부터 3까지 균등한 점수 범위로 나누어 등급을 부여한다. 해당 범위를 벗어나는 경우 80점보다 크면 0, 50점이거나 50점보다 작으면 4등급을 부여한다.
+다음 예제는 80점보다 작거나 같고 50점보다 큰 범위를 1부터 3까지 균등한 점수 범위로 나누어 등급을 부여한다. 해당 범위를 벗어나는 경우 80점보다 크면 0, 50점이거나 50점보다 작으면 4등급을 부여한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t_score(name VARCHAR(10), score INT);
+    INSERT INTO t_score VALUES
+        ('Amie', 60),
+        ('Jane', 80),
+        ('Lora', 60),
+        ('James', 75),
+        ('Peter', 70),
+        ('Tom', 50),
+        ('Ralph', 99),
+        ('David', 55);
+
+    SELECT name, score, WIDTH_BUCKET(score, 80, 50, 3) grade FROM t_score ORDER BY grade ASC, score DESC;
     
-    .. code-block:: sql
-    
-        CREATE TABLE t_score(name VARCHAR(10), score INT);
-        INSERT INTO t_score VALUES
-            ('Amie', 60),
-            ('Jane', 80),
-            ('Lora', 60),
-            ('James', 75),
-            ('Peter', 70),
-            ('Tom', 50),
-            ('Ralph', 99),
-            ('David', 55);
+      name                        score        grade
+    ================================================
+      'Ralph'                        99            0
+      'Jane'                         80            1
+      'James'                        75            1
+      'Peter'                        70            2
+      'Amie'                         60            3
+      'Lora'                         60            3
+      'David'                        55            3
+      'Tom'                          50            4
 
-        SELECT name, score, WIDTH_BUCKET(score, 80, 50, 3) grade FROM t_score ORDER BY grade ASC, score DESC;
-        
-          name                        score        grade
-        ================================================
-          'Ralph'                        99            0
-          'Jane'                         80            1
-          'James'                        75            1
-          'Peter'                        70            2
-          'Amie'                         60            3
-          'Lora'                         60            3
-          'David'                        55            3
-          'Tom'                          50            4
-
-    .. code-block:: sql
-
-    NTILE 함수와 비교한 예제는 :func:`NTILE` 함수를 참고한다.
+NTILE 함수와 비교한 예제는 :func:`NTILE` 함수를 참고한다.
     

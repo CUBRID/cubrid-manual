@@ -241,7 +241,22 @@ UPDATE JOIN, DELETE JOIN 문에 SQL 힌트 지정할 수 있도록 확장(CUBRID
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     UPDATE JOIN, DELETE JOIN 문에 대해 ORDERED, USE_DESC_IDX, NO_COVERING_INDEX, NO_DESC_IDX, USE_NL, USE_IDX, USE_MERGE, NO_MULTI_RANGE_OPT, RECOMPILE과 같은 SQL 힌트를 사용할 수 있도록 개선했다.
-        
+
+MERGE 문에 인덱스 힌트 지원(CUBRIDSUS-10134)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    MERGE문에 USE_UPDATE_IDX, USE_INSERT_IDX 인덱스 힌트를 지원한다.
+    
+    USE_UPDATE_IDX 힌트는 UPDATE 절을 수행할 때 원본 테이블을 인덱스 스캔하기 위해 사용되며, USE_INSERT_IDX 힌트는 INSERT 절을 수행할 때 대상 테이블을 인덱스 스캔하기 위해 사용된다.
+    
+    .. code-block: sql
+    
+        MERGE /*+ recompile USE_UPDATE_IDX(i_s_ij) USE_INSERT_IDX(i_t_ij, i_t_i) */
+          INTO target t USING source s
+          ON t.i=s.i 
+          WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
+          WHEN NOT MATCHED THEN INSERT VALUES(i,j);
+    
 다국어
 ------
 

@@ -9,6 +9,7 @@
     comparison_op.rst
     arithmetic_op.rst
     set_op.rst
+    stmt_set_op.rst
     containment_op.rst
     bit_fn.rst
     string_fn.rst

@@ -47,11 +47,8 @@ SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: ye
     ======================
       NULL
 
-문자열 함수
-===========  
-
 ASCII
------
+=====
 
 .. function:: ASCII (str)
 
@@ -68,7 +65,7 @@ ASCII
     97
 
 BIN
----
+===
 
 .. function:: BIN (n)
 
@@ -83,7 +80,7 @@ BIN
     '1100'
 
 BIT_LENGTH
-----------
+==========
 
 .. function:: BIT_LENGTH (string)
 
@@ -131,7 +128,7 @@ BIT_LENGTH
     8                   40                      32                       9
 
 CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
-----------------------------------------------
+==============================================
 
 .. function:: CHAR_LENGTH (string)
 .. function:: CHARACTER_LENGTH (string)
@@ -185,7 +182,7 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
     1                     5                        2             2
 
 CHR
----
+===
 
 .. function:: CHR (number_operand [USING charset_name])
 
@@ -211,7 +208,7 @@ CHR
       'ま' 
 
 CONCAT
-------
+======
 
 .. function:: CONCAT (string1, string2 [,string3 [, ... [, stringN]...]])
 
@@ -243,7 +240,7 @@ CONCAT
       '20083.0'
       
 CONCAT_WS
----------
+=========
 
 .. function:: CONCAT_WS (string1, string2 [,string3 [, ... [, stringN]...]])
 
@@ -272,7 +269,7 @@ CONCAT_WS
       '2008 3.0'
 
 ELT
----
+===
 
 .. function:: ELT (N, string1, string2, ... )
 
@@ -318,7 +315,7 @@ ELT
     ERROR: Cannot coerce value of domain "character" to domain "bigint".
 
 FIELD
------
+=====
 
 .. function:: FIELD ( search_string, string1 [,string2 [, ... [, stringN]...]])
 
@@ -359,7 +356,7 @@ FIELD
                                                  3
 
 FIND_IN_SET
------------
+===========
 
 .. function:: FIND_IN_SET (str, strlist)
 
@@ -375,7 +372,7 @@ FIND_IN_SET
     2
 
 INSERT
-------
+======
 
 .. function:: INSERT ( str, pos, len, string )
 
@@ -420,7 +417,7 @@ INSERT
       'cudb'
 
 INSTR
------
+=====
 
 .. function:: INSTR ( string , substring [, position] )
 
@@ -475,7 +472,7 @@ INSTR
                                        7
 
 LCASE, LOWER
-------------
+============
 
 .. function:: LCASE (string)
 .. function:: LOWER (string)
@@ -503,7 +500,7 @@ LCASE, LOWER
       'cubrid'
 
 LEFT
-----
+====
 
 .. function:: LEFT ( string , length )
 
@@ -526,7 +523,7 @@ LEFT
       'CUBRID'
 
 LOCATE
-------
+======
 
 .. function:: LOCATE ( substring, string [, position] )
 
@@ -564,7 +561,7 @@ LOCATE
                                     0
 
 LPAD
-----
+====
 
 .. function:: LPAD ( char1, n, [, char2 ] )
 
@@ -619,7 +616,7 @@ LPAD
       '????큐브리드'
 
 LTRIM
------
+=====
 
 .. function:: LTRIM ( string [, trim_string])
 
@@ -650,7 +647,7 @@ LTRIM
       'Olympiciiiii'
 
 MID
----
+===
 
 .. function:: MID ( string, position, substring_length )
 
@@ -693,7 +690,7 @@ MID
       'eabc'                'eabc'                '1234'
 
 OCTET_LENGTH
-------------
+============
 
 .. function:: OCTET_LENGTH ( string )
 
@@ -741,7 +738,7 @@ OCTET_LENGTH
     1                      7                         4                       2
 
 POSITION
---------
+========
 
 .. function:: POSITION ( substring IN string )
 
@@ -792,7 +789,7 @@ POSITION
                                     5
 
 REPEAT
-------
+======
 
 .. function:: REPEAT( string, count )
 
@@ -823,7 +820,7 @@ REPEAT
     ERROR: Cannot coerce value of domain "character" to domain "integer".
 
 REPLACE
--------
+=======
 
 .. function:: REPLACE ( string, search_string [, replacement_string ] )
 
@@ -855,7 +852,7 @@ REPLACE
       '12345'
 
 REVERSE
--------
+=======
 
 .. function:: REVERSE( string )
 
@@ -872,7 +869,7 @@ REVERSE
       'DIRBUC'
 
 RIGHT
------
+=====
 
 .. function:: RIGHT ( string , length )
 
@@ -895,7 +892,7 @@ RIGHT
       'CUBRID'
 
 RPAD
-----
+====
 
 .. function:: RPAD( char1, n, [, char2 ] ) 
 
@@ -951,7 +948,7 @@ RPAD
       '큐브리드????'
 
 RTRIM
------
+=====
 
 .. function:: RTRIM ( string [, trim_string])
 
@@ -981,7 +978,7 @@ RTRIM
       'iiiiiOlympic'
 
 SPACE
------
+=====
 
 .. function:: SPACE (N)
 
@@ -1018,7 +1015,7 @@ SPACE
     ERROR: Cannot coerce value of domain "character" to domain "bigint".
 
 STRCMP
-------
+======
 
 .. function:: STRCMP( string1 , string2 )
 
@@ -1046,7 +1043,7 @@ STRCMP
                           0
 
 SUBSTR
-------
+======
 
 .. function:: SUBSTR ( string, position [, substring_length])
 
@@ -1090,7 +1087,7 @@ SUBSTR
       '가나다라'
 
 SUBSTRING
----------
+=========
 
 .. function:: SUBSTRING ( string, position [, substring_length]), 
 .. function:: SUBSTRING ( string FROM position [FOR substring_length] )
@@ -1118,7 +1115,7 @@ SUBSTRING
       'abcdeabcde'          NULL
 
 SUBSTRING_INDEX
----------------
+===============
 
 .. function:: SUBSTRING_INDEX (string, delim, count)
 
@@ -1157,7 +1154,7 @@ SUBSTRING_INDEX
       'www.cubrid.org'
 
 TRANSLATE
----------
+=========
 
 .. function:: TRANSLATE ( string, from_substring, to_substring )
 
@@ -1201,7 +1198,7 @@ TRANSLATE
       '12345345de345de'
 
 TRIM
-----
+====
 
 .. function:: TRIM ( [ [ LEADING | TRAILING | BOTH ] [ trim_string ] FROM ] string )
 
@@ -1247,7 +1244,7 @@ TRIM
       'iiiiiOlympic'
 
 UCASE, UPPER
-------------
+============
 
 .. function:: UCASE ( string )
 .. function:: UPPER ( string )

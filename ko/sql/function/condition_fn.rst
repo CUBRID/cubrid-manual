@@ -97,8 +97,8 @@ CASE
     FROM case_tbl;
     ERROR: Cannot coerce 'one' to type double.
 
-COALESCE 함수
-=============
+COALESCE
+========
 
 .. function:: COALESCE (expression [, ...])
 
@@ -139,8 +139,8 @@ COALESCE 함수
                 3  3.0000
              NULL  10.0000
 
-DECODE 함수
-===========
+DECODE
+======
 
 .. function:: DECODE( expression, search, result [, search, result]* [, default] )
 
@@ -187,8 +187,8 @@ DECODE 함수
      
     ERROR: Cannot coerce 'one' to type double.
 
-IF 함수
-=======
+IF
+==
 
 .. function:: IF ( expression1, expression2, expression3 )
 
@@ -225,8 +225,8 @@ IF 함수
     =============
                 1
 
-IFNULL, NVL 함수
-================
+IFNULL, NVL
+===========
 
 .. function:: IFNULL ( expr1, expr2 )
 .. function:: NVL ( expr1, expr2 )
@@ -276,8 +276,8 @@ IFNULL, NVL 함수
                 3  '3'
              NULL  'UNKNOWN'
 
-NULLIF 함수
-===========
+NULLIF
+======
 
 .. function:: NULLIF (expr1, expr2)
 
@@ -323,8 +323,8 @@ NULLIF 함수
     ======================
       'A'
 
-NVL2 함수
-=========
+NVL2
+====
 
 .. function:: NVL2 ( expr1, expr2, expr3 )
 

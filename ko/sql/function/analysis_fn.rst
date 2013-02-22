@@ -475,6 +475,84 @@ MIN
              2000  'AUT'                           2            0
              2004  'AUT'                           2            0
 
+NTILE
+=====
+
+.. function:: NTILE(expression) OVER ([partition_by_clause] [order_by_clause])
+
+    **NTILE** 함수는 분석 함수로만 사용되며, 순차적인 데이터 집합을 입력 인자 값에 의해 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다.
+    반환되는 값은 정수이다. 
+    
+    :param expression: 버킷의 개수. 숫자 값을 반환하는 임의의 연산식을 지정한다. 
+    :rtype: INT
+    
+    
+**NTILE** 함수는 주어진 버킷 개수로 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, NTILE 함수는 equi-height histogram을 생성해준다. 각 버킷에 있는 행의 개수는 최대 1개까지 차이가 생길 수 있다. 나머지 값(행의 개수를 버킷 개수로 나눈 나머지)이 각 버킷에 대해 1번 버킷부터 하나씩 배포된다.
+
+반면에 :func:`WIDTH_BUCKET` 함수는 주어진 버킷 개수로 주어진 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
+
+    
+다음은 8명의 고객을 생년월일을 기준으로 5개의 버킷으로 나누되, 각 버킷의 수가 균등하도록 나누는  예이다. 1, 2, 3번 버킷에는 2개의 행이, 4, 5번 버킷에는 2개의 행이 존재한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t_customer(name VARCHAR(10), birthdate DATE);
+    INSERT INTO t_customer VALUES
+        ('Amie', date'1978-03-18'),
+        ('Jane', date'1983-05-12'),
+        ('Lora', date'1987-03-26'),
+        ('James', date'1948-12-28'),
+        ('Peter', date'1988-10-25'),
+        ('Tom', date'1980-07-28'),
+        ('Ralph', date'1995-03-17'),
+        ('David', date'1986-07-28');
+    
+    SELECT name, birthdate, NTILE(5) OVER (ORDER BY birthdate) age_group 
+    FROM t_customer;
+    
+      name                  birthdate     age_group
+    ===============================================
+      'James'               12/28/1948            1
+      'Amie'                03/18/1978            1
+      'Tom'                 07/28/1980            2
+      'Jane'                05/12/1983            2
+      'David'               07/28/1986            3
+      'Lora'                03/26/1987            3
+      'Peter'               10/25/1988            4
+      'Ralph'               03/17/1995            5
+
+
+다음은 8명의 학생을 점수가 높은 순으로 5개의 버킷으로 나눈 후, 이름 순으로 출력하되, 각 버킷의 행의 개수는 균등하게 나누는 예이다. t_score 테이블의 score 칼럼에는 8개의 행이 존재하므로, 8을 5로 나눈 나머지 3개 행이 1번 버킷부터 각각 할당되어 1,2,3번 버킷은 4,5번 버킷에 비해 1개의 행이 더 존재한다.
+NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으로 균등하게 grade를 나눈다.
+
+.. code-block:: sql
+
+    CREATE TABLE t_score(name VARCHAR(10), score INT);
+    INSERT INTO t_score VALUES
+        ('Amie', 60),
+        ('Jane', 80),
+        ('Lora', 60),
+        ('James', 75),
+        ('Peter', 70),
+        ('Tom', 30),
+        ('Ralph', 99),
+        ('David', 55);
+
+    SELECT name, score, NTILE(5) OVER (ORDER BY score DESC) grade 
+    FROM t_score 
+    ORDER BY name;
+
+      name                        score        grade
+    ================================================
+      'Ralph'                        99            1
+      'Jane'                         80            1
+      'James'                        75            2
+      'Peter'                        70            2
+      'Amie'                         60            3
+      'Lora'                         60            3
+      'David'                        55            4
+      'Tom'                          30            5
+
 RANK
 ====
 
@@ -821,84 +899,6 @@ SUM
              1992  'AUT'                           0            5
              1988  'AUT'                           1            5
              
-NTILE
-=====
-
-.. function:: NTILE(expression) OVER ([partition_by_clause] [order_by_clause])
-
-    **NTILE** 함수는 분석 함수로만 사용되며, 순차적인 데이터 집합을 입력 인자 값에 의해 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다.
-    반환되는 값은 정수이다. 
-    
-    :param expression: 버킷의 개수. 숫자 값을 반환하는 임의의 연산식을 지정한다. 
-    :rtype: INT
-    
-    
-**NTILE** 함수는 주어진 버킷 개수로 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, NTILE 함수는 equi-height histogram을 생성해준다. 각 버킷에 있는 행의 개수는 최대 1개까지 차이가 생길 수 있다. 나머지 값(행의 개수를 버킷 개수로 나눈 나머지)이 각 버킷에 대해 1번 버킷부터 하나씩 배포된다.
-
-반면에 :func:`WIDTH_BUCKET` 함수는 주어진 버킷 개수로 주어진 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
-
-    
-다음은 8명의 고객을 생년월일을 기준으로 5개의 버킷으로 나누되, 각 버킷의 수가 균등하도록 나누는  예이다. 1, 2, 3번 버킷에는 2개의 행이, 4, 5번 버킷에는 2개의 행이 존재한다.
-
-.. code-block:: sql
-
-    CREATE TABLE t_customer(name VARCHAR(10), birthdate DATE);
-    INSERT INTO t_customer VALUES
-        ('Amie', date'1978-03-18'),
-        ('Jane', date'1983-05-12'),
-        ('Lora', date'1987-03-26'),
-        ('James', date'1948-12-28'),
-        ('Peter', date'1988-10-25'),
-        ('Tom', date'1980-07-28'),
-        ('Ralph', date'1995-03-17'),
-        ('David', date'1986-07-28');
-    
-    SELECT name, birthdate, NTILE(5) OVER (ORDER BY birthdate) age_group 
-    FROM t_customer;
-    
-      name                  birthdate     age_group
-    ===============================================
-      'James'               12/28/1948            1
-      'Amie'                03/18/1978            1
-      'Tom'                 07/28/1980            2
-      'Jane'                05/12/1983            2
-      'David'               07/28/1986            3
-      'Lora'                03/26/1987            3
-      'Peter'               10/25/1988            4
-      'Ralph'               03/17/1995            5
-
-
-다음은 8명의 학생을 점수가 높은 순으로 5개의 버킷으로 나눈 후, 이름 순으로 출력하되, 각 버킷의 행의 개수는 균등하게 나누는 예이다. t_score 테이블의 score 칼럼에는 8개의 행이 존재하므로, 8을 5로 나눈 나머지 3개 행이 1번 버킷부터 각각 할당되어 1,2,3번 버킷은 4,5번 버킷에 비해 1개의 행이 더 존재한다.
-NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으로 균등하게 grade를 나눈다.
-
-.. code-block:: sql
-
-    CREATE TABLE t_score(name VARCHAR(10), score INT);
-    INSERT INTO t_score VALUES
-        ('Amie', 60),
-        ('Jane', 80),
-        ('Lora', 60),
-        ('James', 75),
-        ('Peter', 70),
-        ('Tom', 30),
-        ('Ralph', 99),
-        ('David', 55);
-
-    SELECT name, score, NTILE(5) OVER (ORDER BY score DESC) grade 
-    FROM t_score 
-    ORDER BY name;
-
-      name                        score        grade
-    ================================================
-      'Ralph'                        99            1
-      'Jane'                         80            1
-      'James'                        75            2
-      'Peter'                        70            2
-      'Amie'                         60            3
-      'Lora'                         60            3
-      'David'                        55            4
-      'Tom'                          30            5
-
 VARIANCE, VAR_POP
 =================
       

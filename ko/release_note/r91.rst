@@ -251,7 +251,7 @@ MERGE 문에 인덱스 힌트 지원(CUBRIDSUS-10134)
     
     .. code-block: sql
     
-        MERGE /*+ recompile USE_UPDATE_IDX(i_s_ij) USE_INSERT_IDX(i_t_ij, i_t_i) */
+        MERGE /*+ USE_UPDATE_IDX(i_s_ij) USE_INSERT_IDX(i_t_ij, i_t_i) */
           INTO target t USING source s
           ON t.i=s.i 
           WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1

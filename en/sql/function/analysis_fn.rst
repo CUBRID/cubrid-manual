@@ -628,7 +628,7 @@ The following is a formula that is applied to the function.
 
 .. (TODO - equation)
 
-.. math:: STDDEV_POP = [ (1/N) * SUM( { xI - AVG(x) }^2) ]^1/2
+.. image:: /images/stddev_pop.jpg
 
 .. note:: In CUBRID 2008 R3.1 or earlier, the **STDDEV** function worked the same as the :func:`STDDEV_SAMP`.
 
@@ -695,7 +695,7 @@ The following are the formulas applied to the function.
 
 .. (TODO - equation)
 
-.. math:: STDDEV_SAMP = [ { 1 / (N-1) } * SUM( { xI - mean(x) }^2) ]^1/2
+.. image:: /images/stddev_samp.jpg
 
 The following example shows how to output the sample standard variance of all students for all subjects.
 
@@ -916,7 +916,7 @@ The return value is a **DOUBLE** type. If there are no rows that can be used for
 
 The following is a formula that is applied to the function.
 
-.. math:: VAR_POP = (1/N) * SUM( { xI - AVG(x) }^2 )
+.. image:: /images/var_pop.jpg
 
 .. note:: In CUBRID 2008 R3.1 or earlier, the **VARIANCE** function worked the same as the :func:`VAR_SAMP`.
 
@@ -980,7 +980,7 @@ The return value is a **DOUBLE** type. If there are no rows that can be used for
 
 The following are the formulas applied to the function.
 
-.. math:: VAR_SAMP = { 1 / (N-1) } * SUM( { xI - mean(x) }^2 )
+.. image:: /images/var_samp.jpg
 
 The following example shows how to output the sample variance of all students for all subjects.
 

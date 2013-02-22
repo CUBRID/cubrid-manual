@@ -627,7 +627,7 @@ STDDEV, STDDEV_POP
 
 .. (TODO - equation)
 
-.. math:: STDDEV_POP = [ (1/N) * SUM( { xI - AVG(x) }^2) ]^1/2
+.. image:: /images/stddev_pop.jpg
 
 .. warning:: CUBRID 2008 R3.1 이하 버전에서 **STDDEV** 함수는 :func:`STDDEV_SAMP` 와 같은 기능을 수행했다.
 
@@ -694,7 +694,7 @@ STDDEV_SAMP
 
 .. (TODO - equation)
 
-.. math:: STDDEV_SAMP = [ { 1 / (N-1) } * SUM( { xI - mean(x) }^2) ]^1/2
+.. image:: /images/stddev_samp.jpg
 
 다음은 전체 과목에 대해 전체 학생의 표본 표준 편차를 출력하는 예제이다.
 
@@ -916,7 +916,7 @@ VARIANCE, VAR_POP
 
 다음은 함수에 적용된 공식이다.
 
-.. math:: VAR_POP = (1/N) * SUM( { xI - AVG(x) }^2 )
+.. image:: /images/var_pop.jpg
 
 .. warning:: CUBRID 2008 R3.1 이하 버전에서 **VARIANCE** 함수는 :func:`VAR_SAMP` 와 같은 기능을 수행했다.
 
@@ -980,7 +980,7 @@ VAR_SAMP
 
 다음은 함수에 적용된 공식이다.
 
-.. math:: VAR_SAMP = { 1 / (N-1) } * SUM( { xI - mean(x) }^2 )
+.. image:: /images/var_samp.jpg
 
 다음은 전체 과목에 대해 전체 학생의 표본 분산을 출력하는 예제이다.
 

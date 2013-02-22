@@ -63,7 +63,11 @@ INCR, DECR
 .. code-block:: sql
 
     CREATE TABLE board (
-    id  INT, title  VARCHAR(100), content  VARCHAR(4000), read_count  INT );
+      id  INT, 
+      title  VARCHAR(100), 
+      content  VARCHAR(4000), 
+      read_count  INT 
+    );
     INSERT INTO board VALUES (1, 'aaa', 'text...', 0);
     INSERT INTO board VALUES (2, 'bbb', 'text...', 0);
     INSERT INTO board VALUES (3, 'ccc', 'text...', 0);
@@ -73,6 +77,7 @@ INCR, DECR
 .. code-block:: sql
 
     SELECT content, INCR(read_count) FROM board WHERE id = 1;
+    
       content                read_count
     ===================================
       'text...'                       0
@@ -82,6 +87,7 @@ INCR, DECR
 .. code-block:: sql
 
     SELECT content, read_count FROM board WHERE id = 1;
+    
       content                read_count
     ===================================
       'text...'                       1

@@ -28,21 +28,25 @@ If **pipes_as_concat** that is a parameter related to SQL statement is set to **
 .. code-block:: sql
 
     SELECT 'CUBRID' || ',' + '2008';
+    
      'CUBRID'||','+'2008'
     ======================
       'CUBRID,2008'
      
     SELECT 'cubrid' || ',' || B'0010' ||B'0000' ||B'0000' ||B'1000';;
+    
      'cubrid'||','||B'0010'||B'0000'||B'0000'||B'1000'
     ======================
       'cubrid,2008'
      
     SELECT ((EXTRACT(YEAR FROM SYS_TIMESTAMP))||(EXTRACT(MONTH FROM SYS_TIMESTAMP)));
+    
      (( extract(year  from  SYS_TIMESTAMP ))||( extract(month  from  SYS_TIMESTAMP )))
     ======================
       '200812'
      
     SELECT 'CUBRID' || ',' + NULL;
+    
      'CUBRID'||','+null
     ======================
       NULL
@@ -61,6 +65,7 @@ ASCII
 
     SELECT ASCII('5');
     53
+    
     SELECT ASCII('ab');
     97
 
@@ -92,22 +97,26 @@ BIT_LENGTH
 .. code-block:: sql
 
     SELECT BIT_LENGTH('');
+    
        bit_length('')
     =================
                     0
      
     SELECT BIT_LENGTH('CUBRID');
+    
        bit_length('CUBRID')
     =======================
                          48
      
     -- UTF-8 Korean character
     SELECT BIT_LENGTH('큐브리드');
+    
          bit_length('큐브리드')
     =========================
                            96
      
     SELECT BIT_LENGTH(B'010101010');
+    
        bit_length(B'010101010')
     ===========================
                               9
@@ -151,16 +160,19 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
 
     --character set is UTF-8 for Korean characters
     SELECT LENGTH('');
+    
     char length('')
     ==================
                      0
      
     SELECT LENGTH('CUBRID');
+    
     char length('CUBRID')
     ==================
                      6
      
     SELECT LENGTH('큐브리드');
+    
     char length('큐브리드')
     ==================
                      4
@@ -175,7 +187,6 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
      
     char_length(char_1) char_length(char_2) char_length(varchar_1) char_length(varchar_2)
     ================================================================================
-     
     1                     5                        0             0
     1                     5                        1             1
     NULL                  5                        1             1
@@ -195,6 +206,7 @@ CHR
 .. code-block:: sql
 
     SELECT CHR(68) || CHR(68-2);
+    
        chr(68)|| chr(68-2)
     ======================
       'DB'
@@ -203,6 +215,7 @@ CHR
     // Below query's result is the same as above.
     SET NAMES utf8; 
     SELECT CHR(14909886); 
+    
        chr(14909886 using utf8) 
     ====================== 
       'ま' 
@@ -222,12 +235,14 @@ CONCAT
 .. code-block:: sql
 
     SELECT CONCAT('CUBRID', '2008' , 'R3.0');
+    
        concat('CUBRID', '2008', 'R3.0')
     ======================
     'CUBRID2008R3.0'
      
     --it returns null when null is specified for one of parameters
     SELECT CONCAT('CUBRID', '2008' , 'R3.0', NULL);
+    
        concat('CUBRID', '2008', 'R3.0', null)
     ======================
       NULL
@@ -235,6 +250,7 @@ CONCAT
      
     --it converts number types and then returns concatenated strings
     SELECT CONCAT(2008, 3.0);
+    
        concat(2008, 3.0)
     ======================
       '20083.0'
@@ -252,18 +268,21 @@ CONCAT_WS
 .. code-block:: sql
 
     SELECT CONCAT_WS(' ', 'CUBRID', '2008' , 'R3.0');
+    
     concat_ws(' ', 'CUBRID', '2008', 'R3.0')
     ======================
       'CUBRID 2008 R3.0'
      
     --it returns strings even if null is specified for one of parameters
     SELECT CONCAT_WS(' ', 'CUBRID', '2008', NULL, 'R3.0');
+    
     concat_ws(' ', 'CUBRID', '2008', null, 'R3.0')
     ======================
       'CUBRID 2008 R3.0'
      
     --it converts number types and then returns concatenated strings with separator
     SELECT CONCAT_WS(' ',2008, 3.0);
+    
     concat_ws(' ', 2008, 3.0)
     ======================
       '2008 3.0'
@@ -279,33 +298,38 @@ ELT
 
     If *N* is 0 or a negative number, an empty string will be returned. If *N* is greater than the number of this input character string, **NULL** will be returned as it is out of range. If *N* is a type that cannot be converted to an integer, an error will be returned.
 
-    :param N: 
-    :param strings: 
+    :param N: A position of a string to return among the list of strings 
+    :param strings: The list of strings
     :rtype: STRING
 
 .. code-block:: sql
 
     SELECT ELT(3,'string1','string2','string3');
+    
       elt(3, 'string1', 'string2', 'string3')
     ======================
       'string3'
      
     SELECT ELT('3','1/1/1','23:00:00','2001-03-04');
+    
       elt('3', '1/1/1', '23:00:00', '2001-03-04')
     ======================
       '2001-03-04'
      
     SELECT ELT(-1, 'string1','string2','string3');
+    
       elt(-1, 'string1','string2','string3')
     ======================
       NULL
      
     SELECT ELT(4,'string1','string2','string3');
+    
       elt(4, 'string1', 'string2', 'string3')
     ======================
       NULL
      
     SELECT ELT(3.2,'string1','string2','string3');
+    
       elt(3.2, 'string1', 'string2', 'string3')
     ======================
       'string3'
@@ -323,34 +347,40 @@ FIELD
 
     If all arguments specified for **FIELD** function are of string type, string comparison operation is performed: if all of them are of number type, numeric comparison operation is performed. If the type of one argument is different from that of another, a comparison operation is performed by casting each argument to the type of the first argument. If type casting fails during the comparison operation with each argument, the function considers the result of the comparison operation as **FALSE** and resumes the other operations.
 
-    :param strings: 
+    :param search_string: A string pattern to search
+    :param strings: The list of strings to be searched
     :rtype: INT
 
 .. code-block:: sql
 
     SELECT FIELD('abc', 'a', 'ab', 'abc', 'abcd', 'abcde');
+    
        field('abc', 'a', 'ab', 'abc', 'abcd', 'abcde')
     ==================================================
                                                      3
      
     --it returns 0 when no same string is found in the list
     SELECT FIELD('abc', 'a', 'ab', NULL);
+    
        field('abc', 'a', 'ab', null)
     ================================
                                    0
      
     --it returns 0 when null is specified in the first parameter
     SELECT FIELD(NULL, 'a', 'ab', NULL);
+    
        field(null, 'a', 'ab', null)
     ===============================
                                   0
      
     SELECT FIELD('123', 1, 12, 123.0, 1234, 12345);
+    
        field('123', 1, 12, 123.0, 1234, 12345)
     ==========================================
                                              0
      
     SELECT FIELD(123, 1, 12, '123.0', 1234, 12345);
+    
        field(123, 1, 12, '123.0', 1234, 12345)
     ==============================================
                                                  3
@@ -391,31 +421,37 @@ INSERT
 .. code-block:: sql
 
     SELECT INSERT('cubrid',2,2,'dbsql');
+    
       insert('cubrid', 2, 2, 'dbsql')
     ======================
       'cdbsqlrid'
      
     SELECT INSERT('cubrid',0,3,'db');
+    
       insert('cubrid', 0, 3, 'db')
     ======================
       'cubrid'
      
     SELECT INSERT('cubrid',-3,3,'db');
+    
       insert('cubrid', -3, 3, 'db')
     ======================
       'cubrid'
      
     SELECT INSERT('cubrid',3,100,'db');
+    
       insert('cubrid', 3, 100, 'db')
     ======================
       'cudb'
      
     SELECT INSERT('cubrid',7,100,'db');
+    
       insert('cubrid', 7, 100, 'db')
     ======================
       'cubriddb'
      
     SELECT INSERT('cubrid',3,-1,'db');
+    
       insert('cubrid', 3, -1, 'db')
     ======================
       'cudb'
@@ -441,36 +477,42 @@ INSTR
     --character set is UTF-8 for Korean characters
     --it returns position of the first 'b'
     SELECT INSTR ('12345abcdeabcde','b');
+    
        instr('12345abcdeabcde', 'b', 1)
     ===================================
                                       7
      
     -- it returns position of the first '나' on UTF-8 Korean charset
     SELECT INSTR ('12345가나다라마가나다라마', '나' );
+    
        instr('12345가나다라마가나다라마', '나', 1)
     =================================
                                     7
      
     -- it returns position of the second '나' on UTF-8 Korean charset
     SELECT INSTR ('12345가나다라마가나다라마', '나', 11 );
+    
        instr('12345가나다라마가나다라마', '나', 11)
     =================================
                                    12
      
     --it returns position of the 'b' searching from the 8th position
     SELECT INSTR ('12345abcdeabcde','b', 8);
+    
        instr('12345abcdeabcde', 'b', 8)
     ===================================
                                      12
      
     --it returns position of the 'b' searching backwardly from the end
     SELECT INSTR ('12345abcdeabcde','b', -1);
+    
        instr('12345abcdeabcde', 'b', -1)
     ====================================
                                       12
      
     --it returns position of the 'b' searching backwardly from a specified position
     SELECT INSTR ('12345abcdeabcde','b', -8);
+    
        instr('12345abcdeabcde', 'b', -8)
     ====================================
                                        7
@@ -489,16 +531,19 @@ LCASE, LOWER
 .. code-block:: sql
 
     SELECT LOWER('');
+    
       lower('')
     ======================
       ''
      
     SELECT LOWER(NULL);
+    
       lower(null)
     ======================
       NULL
      
     SELECT LOWER('Cubrid');
+    
       lower('Cubrid')
     ======================
       'cubrid'
@@ -512,18 +557,20 @@ LEFT
 
     To extract a length number of characters from the rightmost of the string, use the :func:`RIGHT`.
 
-    :param string: 
-    :param length: 
+    :param string: Input string
+    :param length: The length of a string to be returned
     :rtype: STRING
 
 .. code-block:: sql
 
     SELECT LEFT('CUBRID', 3);
+    
      left('CUBRID', 3)
     ======================
       'CUB'
      
     SELECT LEFT('CUBRID', 10);
+    
       left('CUBRID', 10)
     ======================
       'CUBRID'
@@ -537,33 +584,37 @@ LOCATE
 
     The **LOCATE** function is working like the :func:`POSITION`, but you cannot use **LOCATE** for bit strings.
 
-    :param substring: 
-    :param string: 
-    :param position: 
+    :param substring: A string pattern to search
+    :param string: A whole string to be searched
+    :param position: Starting position of a whole string to be searched
     :rtype: INT
     
 .. code-block:: sql
 
     --it returns 1 when substring is empty space
     SELECT LOCATE ('', '12345abcdeabcde');
+    
      locate('', '12345abcdeabcde')
     ===============================
-                                  1
+                                 1
      
     --it returns position of the first 'abc'
     SELECT LOCATE ('abc', '12345abcdeabcde');
+    
      locate('abc', '12345abcdeabcde')
     ================================
                                    6
      
     --it returns position of the second 'abc'
     SELECT LOCATE ('abc', '12345abcdeabcde', 8);
+    
      locate('abc', '12345abcdeabcde', 8)
     ======================================
-                                        11
+                                      11
      
     --it returns 0 when no substring found in the string
     SELECT LOCATE ('ABC', '12345abcdeabcde');
+    
      locate('ABC', '12345abcdeabcde')
     =================================
                                     0
@@ -592,35 +643,41 @@ LPAD
      
     --it returns only 3 characters if not enough length is specified
     SELECT LPAD ('CUBRID', 3, '?');
+    
       lpad('CUBRID', 3, '?')
     ======================
       'CUB'
      
     SELECT LPAD ('큐브리드', 3, '?');
+    
      lpad('큐브리드', 3, '?')
     ======================
       '큐브리'
      
     --padding spaces on the left till char_length is 10
     SELECT LPAD ('CUBRID', 10);
+    
      lpad('CUBRID', 10)
     ======================
       '    CUBRID'
      
     --padding specific characters on the left till char_length is 10
     SELECT LPAD ('CUBRID', 10, '?');
+    
      lpad('CUBRID', 10, '?')
     ======================
       '????CUBRID'
      
     --padding specific characters on the left till char_length is 10
     SELECT LPAD ('큐브리드', 10, '?');
+    
      lpad('큐브리드', 10, '?')
     ======================
       '??????큐브리드'
      
     --padding 4 characters on the left
     SELECT LPAD ('큐브리드', LENGTH('큐브리드')+4, '?');
+    
      lpad('큐브리드',  char_length('큐브리드')+4, '?')
     ======================
       '????큐브리드'
@@ -640,18 +697,21 @@ LTRIM
 
     --trimming spaces on the left
     SELECT LTRIM ('     Olympic     ');
+    
       ltrim('     Olympic     ')
     ======================
       'Olympic     '
      
     --If NULL is specified, it returns NULL
     SELECT LTRIM ('iiiiiOlympiciiiii', NULL);
+    
       ltrim('iiiiiOlympiciiiii', null)
     ======================
       NULL
      
     -- trimming specific strings on the left
     SELECT LTRIM ('iiiiiOlympiciiiii', 'i');
+    
       ltrim('iiiiiOlympiciiiii', 'i')
     ======================
       'Olympiciiiii'
@@ -677,24 +737,28 @@ MID
      
     --it returns empty string when substring_length is 0
     SELECT MID(a, 6, 0), SUBSTR(a, 6, 0), SUBSTRING(a, 6, 0) FROM mid_tbl;
+    
       mid(a, 6, 0)          substr(a, 6, 0)       substring(a from 6 for 0)
     ==================================================================
       ''                    ''                    ''
      
     --it returns 4-length substrings counting from the 6th position
     SELECT MID(a, 6, 4), SUBSTR(a, 6, 4), SUBSTRING(a, 6, 4) FROM mid_tbl;
+    
       mid(a, 6, 4)          substr(a, 6, 4)       substring(a from 6 for 4)
     ==================================================================
       'abcd'                'abcd'                'abcd'
      
     --it returns a empty string when substring_length < 0
     SELECT MID(a, 6, -4), SUBSTR(a, 6, -4), SUBSTRING(a, 6, -4) FROM mid_tbl;
+    
       mid(a, 6, -4)         substr(a, 6, -4)      substring(a from 6 for -4)
     ==================================================================
       ''                    NULL                  'abcdeabcde'
      
     --it returns 4-length substrings at 6th position counting backward from the end
     SELECT MID(a, -6, 4), SUBSTR(a, -6, 4), SUBSTRING(a, -6, 4) FROM mid_tbl;
+    
       mid(a, -6, 4)         substr(a, -6, 4)      substring(a from -6 for 4)
     ==================================================================
       'eabc'                'eabc'                '1234'
@@ -714,21 +778,25 @@ OCTET_LENGTH
     --character set is UTF-8 for Korean characters
      
     SELECT OCTET_LENGTH('');
+    
      octet_length('')
     ==================
                      0
      
     SELECT OCTET_LENGTH('CUBRID');
+    
      octet_length('CUBRID')
     ==================
                      6
      
     SELECT OCTET_LENGTH('큐브리드');
+    
      octet_length('큐브리드')
     ==================
                      12
      
     SELECT OCTET_LENGTH(B'010101010');
+    
      octet_length(B'010101010')
     ==================
                      2
@@ -740,6 +808,7 @@ OCTET_LENGTH
     INSERT INTO octet_length_tbl VALUES(' ', ' 큐', ' 큐', B'010101010'); --Korean character and space
      
     SELECT OCTET_LENGTH(char_1), OCTET_LENGTH(char_2), OCTET_LENGTH(varchar_1), OCTET_LENGTH(bit_var_1) FROM octet_length_tbl;
+    
     octet_length(char_1) octet_length(char_2) octet_length(varchar_1) octet_length(bit_var_1)
     ================================================================================
     1                      5                         0                       0
@@ -771,24 +840,28 @@ POSITION
      
     --it returns 1 when substring is empty space
     SELECT POSITION ('' IN '12345abcdeabcde');
+    
       position('' in '12345abcdeabcde')
     ===============================
                                   1
      
     --it returns position of the first 'b'
     SELECT POSITION ('b' IN '12345abcdeabcde');
+    
       position('b' in '12345abcdeabcde')
     ================================
                                    7
      
     -- it returns position of the first '나'
     SELECT POSITION ('나' IN '12345가나다라마가나다라마');
+    
       position('나' in '12345가나다라마가나다라마')
     =================================
                                     7
      
     --it returns 0 when no substring found in the string
     SELECT POSITION ('f' IN '12345abcdeabcde');
+    
       position('f' in '12345abcdeabcde')
     =================================
                                     0
@@ -812,21 +885,25 @@ REPEAT
 .. code-block:: sql
 
     SELECT REPEAT('cubrid',3);
+    
        repeat('cubrid', 3)
     ======================
       'cubridcubridcubrid'
      
     SELECT REPEAT('cubrid',32000000);
+    
        repeat('cubrid', 32000000)
     ======================
       NULL
      
     SELECT REPEAT('cubrid',-1);
+    
        repeat('cubrid', -1)
     ======================
       ''
      
     SELECT REPEAT('cubrid','a');
+    
     ERROR: Cannot coerce value of domain "character" to domain "integer".
 
 REPLACE
@@ -845,18 +922,21 @@ REPLACE
 
     --it returns NULL when an argument is specified with NULL value
     SELECT REPLACE('12345abcdeabcde','abcde',NULL);
+    
     replace('12345abcdeabcde', 'abcde', null)
     ======================
       NULL
      
     --not only the first substring but all substrings into 'ABCDE' are replaced
     SELECT REPLACE('12345abcdeabcde','abcde','ABCDE');
+    
     replace('12345abcdeabcde', 'abcde', 'ABCDE')
     ======================
       '12345ABCDEABCDE'
      
     --it removes all of substrings when replace_string is omitted
     SELECT REPLACE('12345abcdeabcde','abcde');
+    
     replace('12345abcdeabcde', 'abcde')
     ======================
       '12345'
@@ -874,6 +954,7 @@ REVERSE
 .. code-block:: sql
 
     SELECT REVERSE('CUBRID');
+    
      reverse('CUBRID')
     ======================
       'DIRBUC'
@@ -885,18 +966,20 @@ RIGHT
 
     The **RIGHT** function returns a *length* number of characters from the rightmost of a *string*. If any of the arguments is **NULL**, **NULL** is returned. If a value greater than the length of the *string* or a negative number is specified for a *length*, the entire string is returned. To extract a length number of characters from the leftmost of the string, use the :func:`LEFT`.
 
-    :param string: 
-    :param length: 
+    :param string: Input string
+    :param length: The length of a string to be returned
     :rtype: STRING
 
 .. code-block:: sql
 
     SELECT RIGHT('CUBRID', 3);
+    
      right('CUBRID', 3)
     ======================
       'RID'
      
     SELECT RIGHT ('CUBRID', 10);
+    
      right('CUBRID', 10)
     ======================
       'CUBRID'
@@ -923,36 +1006,42 @@ RPAD
      
     --it returns only 3 characters if not enough length is specified
     SELECT RPAD ('CUBRID', 3, '?');
+    
      rpad('CUBRID', 3, '?')
     ======================
       'CUB'
      
     --on multi-byte charset, it returns the first character only with a right-padded space
     SELECT RPAD ('큐브리드', 3, '?');
+    
      rpad('큐브리드', 3, '?')
     ======================
       '큐브리'
      
     --padding spaces on the right till char_length is 10
     SELECT RPAD ('CUBRID', 10);
+    
      rpad('CUBRID', 10)
     ======================
       'CUBRID    '
      
     --padding specific characters on the right till char_length is 10
     SELECT RPAD ('CUBRID', 10, '?');
+    
      rpad('CUBRID', 10, '?')
     ======================
       'CUBRID????'
      
     --padding specific characters on the right till char_length is 10
     SELECT RPAD ('큐브리드', 10, '?');
+    
      rpad('큐브리드', 10, '?')
     ======================
       '큐브리드??????'
      
     --padding 4 characters on the right
     SELECT RPAD ('큐브리드', LENGTH('큐브리드')+4, '?');
+    
      rpad('',  char_length('')+4, '?')
     ======================
       '큐브리드????'
@@ -971,18 +1060,21 @@ RTRIM
 .. code-block:: sql
 
     SELECT RTRIM ('     Olympic     ');
+    
      rtrim('     Olympic     ')
     ======================
       '     Olympic'
      
     --If NULL is specified, it returns NULL
     SELECT RTRIM ('iiiiiOlympiciiiii', NULL);
+    
      rtrim('iiiiiOlympiciiiii', null)
     ======================
       NULL
      
     -- trimming specific strings on the right
     SELECT RTRIM ('iiiiiOlympiciiiii', 'i');
+    
      rtrim('iiiiiOlympiciiiii', 'i')
     ======================
       'iiiiiOlympic'
@@ -1000,22 +1092,26 @@ SPACE
 .. code-block:: sql
 
     SELECT SPACE(8);
+    
        space(8)
     ======================
       '        '
      
     SELECT LENGTH(space(1048576));
+    
        char_length( space(1048576))
     ===============================
                             1048576
      
     SELECT LENGTH(space(1048577));
+    
        char_length( space(1048577))
     ===============================
                                NULL
      
     -- string_max_size_bytes=33554432
     SELECT LENGTH(space('33554432'));
+    
        char_length( space('33554432'))
     ==================================
                               33554432
@@ -1031,26 +1127,21 @@ STRCMP
 
     The **STRCMP** function compares two strings, *string1* and *string2*, and returns 0 if they are identical, 1 if *string1* is greater, or -1 if *string1* is smaller. If any of the parameters is **NULL**, **NULL** is returned.
 
-    :param string1: 
-    :param string2: 
+    :param string1: A string to be compared
+    :param string2: A string to be compared
     :rtype: INT
 
 .. code-block:: sql
 
     SELECT STRCMP('abc', 'abc');
-     
-    =======================
-                          0
+    0
+    
     SELECT STRCMP ('acc', 'abc');
-     
-    =======================
-                          1
+    1
      
     --STRCMP works case-insensitively
     SELECT STRCMP ('ABC','abc');
-     
-    =======================
-                          0
+    0
 
 SUBSTR
 ======
@@ -1074,24 +1165,28 @@ SUBSTR
      
     --it returns empty string when substring_length is 0
     SELECT SUBSTR('12345abcdeabcde',6, 0);
+    
      substr('12345abcdeabcde', 6, 0)
     ======================
       ''
      
     --it returns 4-length substrings counting from the position
     SELECT SUBSTR('12345abcdeabcde', 6, 4), SUBSTR('12345abcdeabcde', -6, 4);
+    
      substr('12345abcdeabcde', 6, 4)   substr('12345abcdeabcde', -6, 4)
     ============================================
       'abcd'                'eabc'
      
     --it returns substrings counting from the position to the end
     SELECT SUBSTR('12345abcdeabcde', 6), SUBSTR('12345abcdeabcde', -6);
+    
      substr('12345abcdeabcde', 6)   substr('12345abcdeabcde', -6)
     ============================================
       'abcdeabcde'          'eabcde'
      
     -- it returns 4-length substrings counting from 11th position
     SELECT SUBSTR ('12345가나다라마가나다라마', 11 , 4);
+    
      substr('12345가나다라마가나다라마', 11 , 4)
     ======================
       '가나다라'
@@ -1114,15 +1209,20 @@ SUBSTRING
 .. code-block:: sql
 
     SELECT SUBSTRING('12345abcdeabcde', -6 ,4), SUBSTR('12345abcdeabcde', -6 ,4);
+    
+      substring('12345abcdeabcde' from -6 for 4)   substr('12345abcdeabcde', -6, 4)
     ============================================
       '1234'                'eabc'
      
-     
     SELECT SUBSTRING('12345abcdeabcde', 16), SUBSTR('12345abcdeabcde', 16);
+    
+      substring('12345abcdeabcde' from 16)   substr('12345abcdeabcde', 16)
     ============================================
       ''                    NULL
      
     SELECT SUBSTRING('12345abcdeabcde', 6, -4), SUBSTR('12345abcdeabcde', 6, -4);
+    
+      substring('12345abcdeabcde' from 6 for -4)   substr('12345abcdeabcde', 6, -4)
     ============================================
       'abcdeabcde'          NULL
 
@@ -1141,26 +1241,31 @@ SUBSTRING_INDEX
 .. code-block:: sql
 
     SELECT SUBSTRING_INDEX('www.cubrid.org','.','2');
+    
       substring_index('www.cubrid.org', '.', '2')
     ======================
       'www.cubrid'
      
     SELECT SUBSTRING_INDEX('www.cubrid.org','.','2.3');
+    
       substring_index('www.cubrid.org', '.', '2.3')
     ======================
       'www.cubrid'
      
     SELECT SUBSTRING_INDEX('www.cubrid.org',':','2.3');
+    
       substring_index('www.cubrid.org', ':', '2.3')
     ======================
       'www.cubrid.org'
      
     SELECT SUBSTRING_INDEX('www.cubrid.org','cubrid',1);
+    
       substring_index('www.cubrid.org', 'cubrid', 1)
     ======================
       'www.'
      
     SELECT SUBSTRING_INDEX('www.cubrid.org','.',100);
+    
       substring_index('www.cubrid.org', '.', 100)
     ======================
       'www.cubrid.org'
@@ -1181,30 +1286,35 @@ TRANSLATE
 
     --it returns NULL when an argument is specified with NULL value
     SELECT TRANSLATE('12345abcdeabcde','abcde', NULL);
+    
       translate('12345abcdeabcde', 'abcde', null)
     ======================
       NULL
      
     --it translates 'a','b','c','d','e' into '1', '2', '3', '4', '5' respectively
     SELECT TRANSLATE('12345abcdeabcde', 'abcde', '12345');
+    
       translate('12345abcdeabcde', 'abcde', '12345')
     ======================
       '123451234512345'
      
     --it translates 'a','b','c' into '1', '2', '3' respectively and removes 'd's and 'e's
     SELECT TRANSLATE('12345abcdeabcde','abcde', '123');
+    
       translate('12345abcdeabcde', 'abcde', '123')
     ======================
       '12345123123'
      
     --it removes 'a's,'b's,'c's,'d's, and 'e's in the string
     SELECT TRANSLATE('12345abcdeabcde','abcde', '');
+    
       translate('12345abcdeabcde', 'abcde', '')
     ======================
       '12345'
      
     --it only translates 'a','b','c' into '3', '4', '5' respectively
     SELECT TRANSLATE('12345abcdeabcde','ABabc', '12345');
+    
       translate('12345abcdeabcde', 'ABabc', '12345')
     ======================
       '12345345de345de'
@@ -1228,30 +1338,35 @@ TRIM
 
     --trimming NULL returns NULL
     SELECT TRIM (NULL);
+    
      trim(both  from null)
     ======================
       NULL
      
     --trimming spaces on both leading and trailing parts
     SELECT TRIM ('     Olympic     ');
+    
      trim(both  from '     Olympic     ')
     ======================
       'Olympic'
      
     --trimming specific strings on both leading and trailing parts
     SELECT TRIM ('i' FROM 'iiiiiOlympiciiiii');
+    
      trim(both 'i' from 'iiiiiOlympiciiiii')
     ======================
       'Olympic'
      
     --trimming specific strings on the leading part
     SELECT TRIM (LEADING 'i' FROM 'iiiiiOlympiciiiii');
+    
      trim(leading 'i' from 'iiiiiOlympiciiiii')
     ======================
       'Olympiciiiii'
      
     --trimming specific strings on the trailing part
     SELECT TRIM (TRAILING 'i' FROM 'iiiiiOlympiciiiii');
+    
      trim(trailing 'i' from 'iiiiiOlympiciiiii')
     ======================
       'iiiiiOlympic'
@@ -1270,16 +1385,19 @@ UCASE, UPPER
 .. code-block:: sql
 
     SELECT UPPER('');
+    
      upper('')
     ======================
       ''
      
     SELECT UPPER(NULL);
+    
      upper(null)
     ======================
       NULL
      
     SELECT UPPER('Cubrid');
+    
      upper('Cubrid')
     ======================
       'CUBRID'

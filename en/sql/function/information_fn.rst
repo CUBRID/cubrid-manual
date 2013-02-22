@@ -81,17 +81,20 @@ CURRENT_USER, USER
 
     --selecting the current user on the session
     SELECT USER;
+    
        CURRENT_USER
     ======================
       'PUBLIC'
      
     SELECT USER(), CURRENT_USER;
+    
        user()                CURRENT_USER
     ============================================
       'PUBLIC@cdbs006.cub'  'PUBLIC'
      
     --selecting all users of the current database from the system table
     SELECT name, id, password FROM db_user;
+    
       name                           id  password
     =========================================================
       'DBA'                        NULL  NULL
@@ -113,6 +116,7 @@ DATABASE, SCHEMA
 .. code-block:: sql
 
     SELECT DATABASE(), SCHEMA();
+    
        database()            schema()
     ============================================
       'demodb'              'demodb'
@@ -135,6 +139,7 @@ If any of constraints is not defined or the **UNIQUE** constraint is defined for
     3 rows affected.
      
     SELECT id, DEFAULT(id) FROM info_tbl;
+    
                id   default(id)  
     =============================
                 1             0
@@ -187,21 +192,25 @@ For the table and the index names which are the first and the second input param
     INSERT INTO t1 VALUES (2,3,3,'+abc','+abc','+abc');
      
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',0);
+    
        index_cardinality('t1', 'i_t1_i1_s1', 0)
     ===========================================
                                               2
      
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',1);
+    
        index_cardinality('t1', 'i_t1_i1_s1', 1)
     ===========================================
                                               3
      
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',2);
+    
        index_cardinality('t1', 'i_t1_i1_s1', 2)
     ===========================================
                                            NULL
      
     SELECT INDEX_CARDINALITY('t123','i_t1_i1_s1',1);
+    
       index_cardinality('t123', 'i_t1_i1_s1', 1)
     ============================================
                                            NULL
@@ -319,7 +328,8 @@ LIST_DBS
 .. code-block:: sql
 
     SELECT LIST_DBS();
-                      dbs
+    
+      list_dbs()
     ======================
       'testdb demodb'
 
@@ -337,18 +347,21 @@ ROW_COUNT
     CREATE TABLE rc (i int);
     INSERT INTO rc VALUES (1),(2),(3),(4),(5),(6),(7);
     SELECT ROW_COUNT();
+    
        row_count()
     ===============
                   7
      
     UPDATE rc SET i = 0 WHERE i >  3;
     SELECT ROW_COUNT();
+    
        row_count()
     ===============
                   4
      
     DELETE FROM rc WHERE i = 0;
     SELECT ROW_COUNT();
+    
        row_count()
     ===============
                   4
@@ -367,17 +380,20 @@ USER, SYSTEM_USER
 
     --selecting the current user on the session
     SELECT USER;
+    
        CURRENT_USER
     ======================
       'PUBLIC'
      
     SELECT USER(), CURRENT_USER;
+    
        user()                CURRENT_USER
     ============================================
-      'PUBLIC@cdbs006.cub'  'PUBLIC'
+      'PUBLIC@cubrid_host'  'PUBLIC'
      
     --selecting all users of the current database from the system table
     SELECT name, id, password FROM db_user;
+    
       name                           id  password
     =========================================================
       'DBA'                        NULL  NULL
@@ -398,6 +414,7 @@ VERSION
 .. code-block:: sql
 
     SELECT VERSION();
+    
        version()
     =====================
       '8.3.1.2015'

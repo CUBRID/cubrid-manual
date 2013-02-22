@@ -130,11 +130,13 @@ ADDTIME
 .. code-block:: sql
 
     SELECT ADDTIME(datetime'2007-12-31 23:59:59', time'1:1:2');
+    
      addtime(datetime '2007-12-31 23:59:59', time '1:1:2')
     ========================================================
     01:01:01.000 AM 01/01/2008
      
     SELECT ADDTIME(time'01:00:00', time'02:00:01');
+    
      addtime(time '01:00:00', time '02:00:01')
     ============================================
     03:00:01 AM
@@ -154,12 +156,14 @@ ADD_MONTHS
     --it returns DATE type value by adding month to the first argument
      
     SELECT ADD_MONTHS(DATE '2008-12-25', 5), ADD_MONTHS(DATE '2008-12-25', -5);
+    
       add_months(date '2008-12-25', 5)   add_months(date '2008-12-25', -5)
     =======================================================================
       05/25/2009                         07/25/2008
      
      
     SELECT ADD_MONTHS(DATE '2008-12-31', 5.5), ADD_MONTHS(DATE '2008-12-31', -5.5);
+    
       add_months(date '2008-12-31', 5.5)   add_months(date '2008-12-31', -5.5)
     ===========================================================================
       06/30/2009                           06/30/2008
@@ -243,12 +247,14 @@ CURTIME, CURRENT_TIME, SYS_TIME, SYSTIME
 
     --it returns the current time in TIME type
     SELECT CURTIME(), CURRENT_TIME(), CURRENT_TIME, SYS_TIME, SYSTIME;
+    
        SYS_TIME     SYS_TIME     SYS_TIME     SYS_TIME     SYS_TIME
     =================================================================
       04:37:34 PM  04:37:34 PM  04:37:34 PM  04:37:34 PM  04:37:34 PM
      
     --it returns the time value 1 hour added to the current sys_time
     SELECT CURTIME()+3600;
+    
        SYS_TIME +3600
     =================
        05:37:34 PM
@@ -273,6 +279,7 @@ CURRENT_TIMESTAMP, SYS_TIMESTAMP, SYSTIMESTAMP, LOCALTIME, LOCALTIMESTAMP
 
     --it returns the current date and time in TIMESTAMP type
     SELECT LOCALTIME, SYS_TIMESTAMP;
+    
      SYS_TIMESTAMP              SYS_TIMESTAMP
     ==============================================================================
       07:00:48 PM 04/01/2010     07:00:48 PM 04/01/2010
@@ -298,16 +305,19 @@ DATE
 .. code-block:: sql
 
     SELECT DATE('2010-02-27 15:10:23');
+    
      date('2010-02-27 15:10:23')
     ==============================
       '02/27/2010'
      
     SELECT DATE(NOW());
+    
      date( SYS_DATETIME )
     ======================
       '04/01/2010'
      
     SELECT DATE('0000-00-00 00:00:00');
+    
      date('0000-00-00 00:00:00')
     ===============================
      '00/00/0000'
@@ -327,11 +337,13 @@ DATEDIFF
 .. code-block:: sql
 
     SELECT DATEDIFF('2010-2-28 23:59:59','2010-03-02');
+    
      datediff('2010-2-28 23:59:59', '2010-03-02')
     ===============================================
                                                  -2
      
     SELECT DATEDIFF('0000-00-00 00:00:00', '2010-2-28 23:59:59');
+    
     ERROR: Conversion error in date format.
 
 DATE_SUB, SUBDATE
@@ -355,20 +367,24 @@ DATE_SUB, SUBDATE
 .. code-block:: sql
 
     SELECT SYSDATE, SUBDATE(SYSDATE,INTERVAL 24 HOUR), SUBDATE(SYSDATE, 1);
+    
        SYS_DATE    date_sub( SYS_DATE , INTERVAL 24 HOUR)   subdate( SYS_DATE , 1)
     ==============================================================================
       03/30/2010  12:00:00.000 AM 03/29/2010               03/29/2010
      
     --it adds days when argument < 0
     SELECT SYSDATE, SUBDATE(SYSDATE,INTERVAL -24 HOUR), SUBDATE(SYSDATE, -1);
+    
        SYS_DATE    date_sub( SYS_DATE , INTERVAL -24 HOUR)   subdate( SYS_DATE , -1)
     ==============================================================================
       03/30/2010  12:00:00.000 AM 03/31/2010               03/31/2010
      
     SELECT SUBDATE('0000-00-00 00:00:00', -50);
+    
     ERROR: Conversion error in date format.
      
     SELECT SUBDATE('0001-01-01 00:00:00', 10);
+    
      subdate('0001-01-01 00:00:00', 10)
     ==============================
      '12:00:00.000 AM 00/00/0000'
@@ -389,16 +405,19 @@ DAY,DAYOFMONTH
 .. code-block:: sql
 
     SELECT DAYOFMONTH('2010-09-09');
+    
        dayofmonth('2010-09-09')
     ===========================
                               9
      
     SELECT DAY('2010-09-09 19:49:29');
+    
        day('2010-09-09 19:49:29')
     =============================
                                 9
      
     SELECT DAYOFMONTH('0000-00-00 00:00:00');
+    
        dayofmonth('0000-00-00 00:00:00')
     ====================================
                                        0
@@ -418,16 +437,19 @@ DAYOFWEEK
 .. code-block:: sql
 
     SELECT DAYOFWEEK('2010-09-09');
+    
        dayofweek('2010-09-09')
     ==========================
                              5
      
     SELECT DAYOFWEEK('2010-09-09 19:49:29');
+    
      dayofweek('2010-09-09 19:49:29')
     =================================
                                     5
      
     SELECT DAYOFWEEK('0000-00-00');
+    
     ERROR: Conversion error in date format.
 
 DAYOFYEAR
@@ -445,16 +467,19 @@ DAYOFYEAR
 .. code-block:: sql
 
     SELECT DAYOFYEAR('2010-09-09');
+    
        dayofyear('2010-09-09')
     ==========================
                            252
      
     SELECT DAYOFYEAR('2010-09-09 19:49:29');
+    
     dayofyear('2010-09-09 19:49:29')
     =================================
                                 252
      
     SELECT DAYOFYEAR('0000-00-00');
+    
     ERROR: Conversion error in date format.
 
 EXTRACT
@@ -473,21 +498,25 @@ EXTRACT
 .. code-block:: sql
 
     SELECT EXTRACT(MONTH FROM DATETIME '2008-12-25 10:30:20.123' );
+    
       extract(month  from datetime '2008-12-25 10:30:20.123')
     =========================================================
                                                            12
      
     SELECT EXTRACT(HOUR FROM DATETIME '2008-12-25 10:30:20.123' );
+    
      extract(hour  from datetime '2008-12-25 10:30:20.123')
     =========================================================
                                                            10
      
     SELECT EXTRACT(MILLISECOND FROM DATETIME '2008-12-25 10:30:20.123' );
+    
      extract(millisecond  from datetime '2008-12-25 10:30:20.123')
     =========================================================
                                                           123
      
     SELECT EXTRACT(MONTH FROM '0000-00-00 00:00:00');
+    
      extract(month from '0000-00-00 00:00:00')
     ==========================================
                                              0
@@ -509,21 +538,25 @@ FROM_DAYS
 .. code-block:: sql
 
     SELECT FROM_DAYS(719528);
+    
        from_days(719528)
     ====================
       01/01/1970
      
     SELECT FROM_DAYS('366');
+    
       from_days('366')
     =================
       01/03/0001
      
     SELECT FROM_DAYS(3652424);
+    
        from_days(3652424)
     =====================
       12/31/9999
      
     SELECT FROM_DAYS(0);
+    
        from_days(0)
     ===============
         00/00/0000
@@ -548,26 +581,31 @@ FROM_UNIXTIME
 .. code-block:: sql
 
     SELECT FROM_UNIXTIME(1234567890);
+    
        from_unixtime(1234567890)
     ============================
       01:31:30 AM 02/14/2009
      
     SELECT FROM_UNIXTIME('1000000000');
+    
        from_unixtime('1000000000')
     ==============================
       04:46:40 AM 09/09/2001
      
     SELECT FROM_UNIXTIME(1234567890,'%M %Y %W');
+    
        from_unixtime(1234567890, '%M %Y %W')
     ======================
       'February 2009 Saturday'
      
     SELECT FROM_UNIXTIME('1234567890','%M %Y %W');
+    
        from_unixtime('1234567890', '%M %Y %W')
     ======================
       'February 2009 Saturday'
      
     SELECT FROM_UNIXTIME(0);
+    
        from_unixtime(0)
     ===========================
        12:00:00 AM 00/00/0000
@@ -585,16 +623,19 @@ HOUR
 .. code-block:: sql
 
     SELECT HOUR('12:34:56');
+    
        hour('12:34:56')
     ======================
                      12
      
     SELECT HOUR('2010-01-01 12:34:56');
+    
        hour('2010-01-01 12:34:56')
     ======================
                      12
      
     SELECT HOUR(datetime'2010-01-01 12:34:56');
+    
        time(datetime '2010-01-01 12:34:56')
     ======================
                      12
@@ -615,12 +656,14 @@ LAST_DAY
 
     --it returns last day of the momth in DATE type
     SELECT LAST_DAY(DATE '1980-02-01'), LAST_DAY(DATE '2010-02-01');
+    
       last_day(date '1980-02-01')   last_day(date '2010-02-01')
     ============================================================
       02/28/1980                    02/28/2010
      
     --it returns last day of the momth when explicitly casted to DATE type
     SELECT LAST_DAY(CAST (SYS_TIMESTAMP AS DATE)), LAST_DAY(CAST (SYS_DATETIME AS DATE));
+    
       last_day( cast( SYS_TIMESTAMP  as date))   last_day( cast( SYS_DATETIME  as date))
     ================================================================================
       02/28/2010                                 02/28/2010
@@ -644,31 +687,37 @@ MAKEDATE
 .. code-block:: sql
 
     SELECT MAKEDATE(2010,277);
+    
        makedate(2010, 277)
     ======================
       10/04/2010
      
     SELECT MAKEDATE(10,277);
+    
        makedate(10, 277)
     ====================
       10/04/2010
      
     SELECT MAKEDATE(70,277);
+    
        makedate(70, 277)
     ====================
       10/04/1970
      
     SELECT MAKEDATE(100,3615902);
+    
        makedate(100, 3615902)
     =========================
       12/31/9999
      
     SELECT MAKEDATE(9999,365);
+    
        makedate(9999, 365)
     ======================
       12/31/9999
      
     SELECT MAKEDATE(0,0);
+    
     ERROR: Conversion error in date format.
 
 MAKETIME
@@ -686,11 +735,13 @@ MAKETIME
 .. code-block:: sql
 
     SELECT MAKETIME(13,34,4);
+    
        maketime(13, 34, 4)
     ======================
       01:34:04 PM
      
     SELECT MAKETIME('1','34','4');
+    
        maketime('1', '34', '4')
     ===========================
       01:34:04 AM
@@ -712,16 +763,19 @@ MINUTE
 .. code-block:: sql
 
     SELECT MINUTE('12:34:56');
+    
        minute('12:34:56')
     =====================
                        34
      
     SELECT MINUTE('2010-01-01 12:34:56');
+    
        minute('2010-01-01 12:34:56')
     ================================
                                   34
      
     SELECT MINUTE('2010-01-01 12:34:56.7890');
+    
        minute('2010-01-01 12:34:56.7890')
     =====================================
                                        34
@@ -741,21 +795,25 @@ MONTH
 .. code-block:: sql
 
     SELECT MONTH('2010-01-02');
+    
        month('2010-01-02')
     ======================
                          1
      
     SELECT MONTH('2010-01-02 12:34:56');
+    
        month('2010-01-02 12:34:56')
     ===============================
                                   1
      
     SELECT MONTH('2010-01-02 12:34:56.7890');
+    
        month('2010-01-02 12:34:56.7890')
     ====================================
                                        1
      
     SELECT MONTH('0000-00-00');
+    
        month('0000-00-00')
     ======================
                          0
@@ -774,24 +832,28 @@ MONTHS_BETWEEN
 
     --it returns the negative months when the first argument is the previous date
     SELECT MONTHS_BETWEEN(DATE '2008-12-31', DATE '2010-6-30');
+    
      months_between(date '2008-12-31', date '2010-6-30')
     ======================================================
                                    -1.800000000000000e+001
      
     --it returns integer values when each date is the last dat of the month
     SELECT MONTHS_BETWEEN(DATE '2010-6-30', DATE '2008-12-31');
+    
      months_between(date '2010-6-30', date '2008-12-31')
     ======================================================
                                     1.800000000000000e+001
      
     --it returns months between two arguments when explicitly casted to DATE type
     SELECT MONTHS_BETWEEN(CAST (SYS_TIMESTAMP AS DATE), DATE '2008-12-25');
+    
      months_between( cast( SYS_TIMESTAMP  as date), date '2008-12-25')
     ====================================================================
                                                   1.332258064516129e+001
      
     --it returns months between two arguments when explicitly casted to DATE type
     SELECT MONTHS_BETWEEN(CAST (SYS_DATETIME AS DATE), DATE '2008-12-25');
+    
      months_between( cast( SYS_DATETIME  as date), date '2008-12-25')
     ===================================================================
                                                  1.332258064516129e+001
@@ -809,16 +871,19 @@ QUARTER
 .. code-block:: sql
 
     SELECT QUARTER('2010-05-05');
+    
        quarter('2010-05-05')
     ========================
                            2
      
     SELECT QUARTER('2010-05-05 12:34:56');
+    
       quarter('2010-05-05 12:34:56')
     ===============================
                                   2
      
     SELECT QUARTER('2010-05-05 12:34:56.7890');
+    
       quarter('2010-05-05 12:34:56.7890')
     ==================================
                                   2
@@ -888,16 +953,19 @@ SEC_TO_TIME
 .. code-block:: sql
 
     SELECT SEC_TO_TIME(82800);
+    
        sec_to_time(82800)
     =====================
       11:00:00 PM
      
     SELECT SEC_TO_TIME('82800.3');
+    
        sec_to_time('82800.3')
     =========================
       11:00:00 PM
      
-    SELECT SEC_TO_TIME(86399)
+    SELECT SEC_TO_TIME(86399);
+    
        sec_to_time(86399)
     =====================
       11:59:59 PM
@@ -915,16 +983,19 @@ SECOND
 .. code-block:: sql
 
     SELECT SECOND('12:34:56');
+    
        second('12:34:56')
     =====================
                        56
      
     SELECT SECOND('2010-01-01 12:34:56');
+    
        second('2010-01-01 12:34:56')
     ================================
                                   56
      
     SELECT SECOND('2010-01-01 12:34:56.7890');
+    
        second('2010-01-01 12:34:56.7890')
     =====================================
                                        56
@@ -942,16 +1013,19 @@ TIME
 .. code-block:: sql
 
     SELECT TIME('12:34:56');
+    
        time('12:34:56')
     ======================
       '12:34:56'
      
     SELECT TIME('2010-01-01 12:34:56');
+    
        time('2010-01-01 12:34:56')
     ======================
       '12:34:56'
      
     SELECT TIME(datetime'2010-01-01 12:34:56');
+    
        time(datetime '2010-01-01 12:34:56')
     ======================
       '12:34:56'
@@ -969,16 +1043,19 @@ TIME_TO_SEC
 .. code-block:: sql
 
     SELECT TIME_TO_SEC('23:00:00');
+    
        time_to_sec('23:00:00')
     ==========================
                          82800
      
     SELECT TIME_TO_SEC('2010-10-04 23:00:00');
+    
        time_to_sec('2010-10-04 23:00:00')
     =====================================
                                     82800
      
      SELECT TIME_TO_SEC('2010-10-04 23:00:00.1234');
+     
        time_to_sec('2010-10-04 23:00:00.1234')
     ==========================================
                                          82800
@@ -996,16 +1073,19 @@ TIMEDIFF
 .. code-block:: sql
 
     SELECT TIMEDIFF(time '17:18:19', time '12:05:52');
+    
        timediff(time '17:18:19', time '12:05:52')
     =============================================
       05:12:27 AM
      
     SELECT TIMEDIFF('17:18:19','12:05:52');
+    
        timediff('17:18:19', '12:05:52')
     ===================================
       05:12:27 AM
      
     SELECT TIMEDIFF('2010-01-01 06:53:45', '2010-01-01 03:04:05');
+    
        timediff('2010-01-01 06:53:45', '2010-01-01 03:04:05')
     =========================================================
       03:49:40 AM              
@@ -1026,16 +1106,19 @@ TIMESTAMP
 .. code-block:: sql
 
     SELECT TIMESTAMP('2009-12-31'), TIMESTAMP('2009-12-31','12:00:00');
+    
      timestamp('2009-12-31')        timestamp('2009-12-31', '12:00:00')
     =====================================================================
       12:00:00.000 AM 12/31/2009     12:00:00.000 PM 12/31/2009
      
     SELECT TIMESTAMP('2010-12-31 12:00:00','12:00:00');
+    
      timestamp('2010-12-31 12:00:00', '12:00:00')
     ===============================================
       12:00:00.000 AM 01/01/2011
      
     SELECT TIMESTAMP('13:10:30 12/25/2008');
+    
      timestamp('13:10:30 12/25/2008')
     ===================================
       01:10:30.000 PM 12/25/2008
@@ -1054,26 +1137,31 @@ TO_DAYS
 .. code-block:: sql
 
     SELECT TO_DAYS('2010-10-04');
+    
        to_days('2010-10-04')
     ========================
                       734414
      
     SELECT TO_DAYS('2010-10-04 12:34:56');
+    
        to_days('2010-10-04 12:34:56')
     ================================
                               734414
      
     SELECT TO_DAYS('2010-10-04 12:34:56.7890');
+    
        to_days('2010-10-04 12:34:56.7890')
     ======================================
                                     734414
      
     SELECT TO_DAYS('1-1-1');
+    
        to_days('1-1-1')
     ===================
                     366
      
     SELECT TO_DAYS('9999-12-31');
+    
        to_days('9999-12-31')
     ========================
                      3652424
@@ -1128,11 +1216,13 @@ UNIX_TIMESTAMP
 .. code-block:: sql
 
     SELECT UNIX_TIMESTAMP('1970-01-02'), UNIX_TIMESTAMP();
+    
        unix_timestamp('1970-01-02')   unix_timestamp()
     ==================================================
                               54000         1270196737
      
     SELECT UNIX_TIMESTAMP ('0000-00-00 00:00:00');
+    
        unix_timestamp('0000-00-00 00:00:00')
     ========================================
                                            0
@@ -1149,6 +1239,7 @@ UTC_DATE
 .. code-block:: sql
 
     SELECT UTC_DATE();
+    
       utc_date()
     ==============
       01/12/2011
@@ -1165,6 +1256,7 @@ UTC_TIME
 .. code-block:: sql
 
     SELECT UTC_TIME();
+    
       utc_time()
     ==============
       10:35:52 AM
@@ -1207,6 +1299,7 @@ WEEK
 .. code-block:: sql
     
     SELECT YEAR('2000-01-01'), WEEK('2000-01-01',0);
+    
        year('2000-01-01')   week('2000-01-01', 0)
     =============================================
                     2000                       0
@@ -1216,6 +1309,7 @@ WEEK
 .. code-block:: sql
 
     SELECT WEEK('2000-01-01',2);
+    
         week('2000-01-01', 2)
     ========================
                           52
@@ -1223,16 +1317,19 @@ WEEK
 .. code-block:: sql
 
     SELECT WEEK('2010-04-05');
+    
        week('2010-04-05', 0)
     ========================
                           14
      
     SELECT WEEK('2010-04-05 12:34:56',2);
+    
        week('2010-04-05 12:34:56',2)
     ===============================
                                   14
      
     SELECT WEEK('2010-04-05 12:34:56.7890',4);
+    
        week('2010-04-05 12:34:56.7890',4)
     ====================================
                                       14
@@ -1250,11 +1347,13 @@ WEEKDAY
 .. code-block:: sql
 
     SELECT WEEKDAY('2010-09-09');
+    
        weekday('2010-09-09')
     ========================
                            3
      
     SELECT WEEKDAY('2010-09-09 13:16:00');
+    
        weekday('2010-09-09 13:16:00')
     =================================
                                     3
@@ -1272,16 +1371,19 @@ YEAR
 .. code-block:: sql
 
     SELECT YEAR('2010-10-04');
+    
        year('2010-10-04')
     =====================
                      2010
      
     SELECT YEAR('2010-10-04 12:34:56');
+    
        year('2010-10-04 12:34:56')
     ==============================
                               2010
      
     SELECT YEAR('2010-10-04 12:34:56.7890');
+    
        year('2010-10-04 12:34:56.7890')
     ===================================
                                    2010

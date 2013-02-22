@@ -96,66 +96,76 @@
 
     --empty set is a subset of any set
     SELECT ({} SUBSETEQ (CAST ({3,1,2} AS SET)));
+    
            Result
     =============
                 1
      
     --operation between set type and null returns null
     SELECT ((CAST ({3,1,2} AS SET)) SUBSETEQ NULL);
+    
            Result
     =============
             NULL
      
     --{1,2,3} seteq {1,2,3} returns true
     SELECT ((CAST ({3,1,2} AS SET)) SETEQ (CAST ({1,2,3,3} AS SET)));
+    
            Result
     =============
                 1
      
     --{1,2,3} seteq {1,2,3,3} returns false
     SELECT ((CAST ({3,1,2} AS SET)) SETEQ (CAST ({1,2,3,3} AS MULTISET)));
+    
            Result
     =============
                 0
      
     --{1,2,3} setneq {1,2,3,3} returns true
     SELECT ((CAST ({3,1,2} AS SET)) SETNEQ (CAST ({1,2,3,3} AS MULTISET)));
+    
            Result
     =============
                 1
      
     --{1,2,3} subseteq {1,2,3,4} returns true
     SELECT ((CAST ({3,1,2} AS SET)) SUBSETEQ (CAST ({1,2,4,4,3} AS SET)));
+    
            Result
     =============
                 1
      
     --{1,2,3} subseteq {1,2,3,4,4} returns true
     SELECT ((CAST ({3,1,2} AS SET)) SUBSETEQ (CAST ({1,2,4,4,3} AS MULTISET)));
+    
            Result
     =============
                 1
      
     --{1,2,3} subseteq {1,2,4,4,3} returns true
     SELECT ((CAST ({3,1,2} AS SET)) SUBSETEQ (CAST ({1,2,4,4,3} AS LIST)));
+    
            Result
     =============
                 0
      
     --{1,2,3} subseteq {1,2,3,4,4} returns true
     SELECT ((CAST ({3,1,2} AS SET)) SUBSETEQ (CAST ({1,2,3,4,4} AS LIST)));
+    
            Result
     =============
                 1
      
     --{3,1,2} seteq {3,1,2} returns true
     SELECT ((CAST ({3,1,2} AS LIST)) SETEQ (CAST ({3,1,2} AS LIST)));
+    
            Result
     =============
                 1
     --error occurs because LIST subseteq LIST is not supported
     SELECT ((CAST ({3,1,2} AS LIST)) SUBSETEQ (CAST ({3,1,2} AS LIST)));
-     
+         
     ERROR: ' subseteq ' operator is not defined on types sequence and sequence.
 
 SETEQ 연산자
@@ -182,6 +192,7 @@ SETEQ 연산자
      
     --selecting rows when two collection_operands are same in the WEHRE clause
     SELECT id, name, address, zip_code FROM contain_tbl WHERE address SETEQ {'country','state', 'city'};
+    
                id  name                  address               zip_code
     ===============================================================================
                 3  'Jones     '          {'city', 'country', 'state'}  {1, 2, 3, 4}
@@ -190,6 +201,7 @@ SETEQ 연산자
      
     --selecting rows when two collection_operands are same in the WEHRE clause
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SETEQ {1,2,3};
+    
      
                id  name                  address               zip_code
     ===============================================================================
@@ -210,6 +222,7 @@ SETNEQ 연산자
 
     --selecting rows when two collection_operands are not same in the WEHRE clause
     SELECT id, name, address, zip_code FROM contain_tbl WHERE address SETNEQ {'country','state', 'city'};
+    
                id  name                  address               zip_code
     ===============================================================================
                 1  'Kim       '          {'country', 'state'}  {1, 2, 3}
@@ -223,6 +236,7 @@ SETNEQ 연산자
      
     --selecting rows when two collection_operands are not same in the WEHRE clause
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SETNEQ {1,2,3};
+    
                id  name                  address               zip_code
     ===============================================================================
                 2  'Moy       '          {'country', 'state'}  {3, 2, 1}
@@ -245,6 +259,7 @@ SUPERSET 연산자
 
     --selecting rows when the first operand is a superset of the second operand and they are not same
     SELECT id, name, address, zip_code FROM contain_tbl WHERE address SUPERSET {'country','state','city'};
+    
                id  name                  address               zip_code
     ===============================================================================
                 4  'Smith     '          {'city', 'country', 'state', 'street'}  {1, 2, 3, 4}
@@ -259,6 +274,7 @@ SUPERSET 연산자
      
     --Comparing operands with a SUPERSET operator after casting LIST type as SET type
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SUPERSET (CAST ({1,2,3} AS SET));
+    
                id  name                  address               zip_code
     ===============================================================================
                 3  'Jones     '          {'city', 'country', 'state'}  {1, 2, 3, 4} 
@@ -295,6 +311,7 @@ SUPERSETEQ 연산자
      
     --Comparing operands with a SUPERSETEQ operator after casting LIST type as SET type
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SUPERSETEQ (CAST ({1,2,3} AS SET));
+    
                id  name                  address               zip_code
     ===============================================================================
                 1  'Kim       '          {'country', 'state'}  {1, 2, 3}
@@ -316,6 +333,7 @@ SUBSET 연산자
 
     --selecting rows when the first operand is a subset of the second operand and they are not same
     SELECT id, name, address, zip_code FROM contain_tbl WHERE address SUBSET {'country','state','city'};
+    
                id  name                  address               zip_code
     ===============================================================================
                 1  'Kim       '          {'country', 'state'}  {1, 2, 3}
@@ -328,6 +346,7 @@ SUBSET 연산자
      
     --Comparing operands with a SUBSET operator after casting LIST type as SET type
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SUBSET (CAST ({1,2,3} AS SET));
+    
                id  name                  address               zip_code
     ===============================================================================
                 7  'Brown     '          {'city', 'country', 'state', 'street'}  {}
@@ -345,6 +364,7 @@ SUBSETEQ 연산자
 
     --selecting rows when the first operand is a subset of the second operand
     SELECT id, name, address, zip_code FROM contain_tbl WHERE address SUBSETEQ {'country','state','city'};
+    
                id  name                  address               zip_code
     ===============================================================================
                 1  'Kim       '          {'country', 'state'}  {1, 2, 3}
@@ -358,6 +378,7 @@ SUBSETEQ 연산자
      
     --Comparing operands with a SUBSETEQ operator after casting LIST type as SET type
     SELECT id, name, address, zip_code FROM contain_tbl WHERE zip_code SUBSETEQ (CAST ({1,2,3} AS SET));
+    
                id  name                  address               zip_code
     ===============================================================================
                 1  'Kim       '          {'country', 'state'}  {1, 2, 3}

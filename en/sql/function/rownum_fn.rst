@@ -35,6 +35,7 @@ The following example shows how to retrieve country names ranked first to fourth
     (SELECT nation_code FROM participant WHERE host_year = 1988
          ORDER BY gold DESC) AS T
     WHERE ROWNUM <5;
+    
       nation_code
     ======================
       'URS'
@@ -46,6 +47,7 @@ The following example shows how to retrieve country names ranked first to fourth
     SELECT ROWNUM, nation_code FROM participant WHERE host_year = 1988
     ORDER BY gold DESC
     FOR ORDERBY_NUM() < 5;
+    
            rownum  nation_code
     ===================================
               156  'URS'
@@ -57,6 +59,7 @@ The following example shows how to retrieve country names ranked first to fourth
     SELECT ROWNUM, nation_code FROM participant
     WHERE host_year = 1988 AND ROWNUM < 5
     ORDER BY gold DESC;
+    
            rownum  nation_code
     ===================================
                 1  'ZIM'
@@ -82,6 +85,7 @@ The following example shows how to retrieve the fastest record in the previous f
     --Group-ordering first and then limiting rows using GROUPBY_NUM()
     SELECT host_year, MIN(score) FROM history  
     GROUP BY host_year HAVING GROUPBY_NUM() BETWEEN 1 AND 5;
+    
         host_year  min(score)
     ===================================
              1968  '8.9'
@@ -93,6 +97,7 @@ The following example shows how to retrieve the fastest record in the previous f
     --Limiting rows first and then Group-ordering using ROWNUM
     SELECT host_year, MIN(score) FROM history
     WHERE ROWNUM BETWEEN 1 AND 5 GROUP BY host_year;
+    
         host_year  min(score)
     ===================================
              2000  '03:41.0'
@@ -114,6 +119,7 @@ The following example shows how to retrieve athlete names ranked 3rd to 5th and 
     --Ordering first and then limiting rows using FOR ORDERBY_NUM()
     SELECT athlete, score FROM history
     ORDER BY score FOR ORDERBY_NUM() BETWEEN 3 AND 5;
+    
       athlete               score
     ============================================
       'Luo Xuejuan'         '01:07.0'
@@ -123,6 +129,7 @@ The following example shows how to retrieve athlete names ranked 3rd to 5th and 
     --Limiting rows first and then Ordering using ROWNUM
     SELECT athlete, score FROM history
     WHERE ROWNUM BETWEEN 3 AND 5 ORDER BY score;
+    
       athlete               score
     ============================================
       'Thorpe Ian'          '01:45.0'

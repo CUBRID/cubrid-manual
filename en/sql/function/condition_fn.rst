@@ -52,6 +52,7 @@ The data type for a value returned by the **CASE** expression is determined base
                 ELSE 'other'
            END
     FROM case_tbl;
+    
                 a  case when a=1 then 'one' when a=2 then 'two' else 'other' end
     ===================================
                 1  'one'
@@ -66,6 +67,7 @@ The data type for a value returned by the **CASE** expression is determined base
                   ELSE 'other'
            END
     FROM case_tbl;
+    
                 a  case a when 1 then 'one' when 2 then 'two' else 'other' end
     ===================================
                 1  'one'
@@ -81,6 +83,7 @@ The data type for a value returned by the **CASE** expression is determined base
                 ELSE 1.234567890
            END
     FROM case_tbl;
+    
                 a  case when a=1 then 1 when a=2 then 1.2345 else 1.234567890 end
     ===================================
                 1  1.000000000
@@ -95,6 +98,7 @@ The data type for a value returned by the **CASE** expression is determined base
                 ELSE 1.2345
            END
     FROM case_tbl;
+    
     ERROR: Cannot coerce 'one' to type double.
 
 COALESCE
@@ -123,6 +127,7 @@ For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FL
 .. code-block:: sql
 
     SELECT * FROM case_tbl;
+    
                 a
     =============
                 1
@@ -132,6 +137,7 @@ For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FL
      
     --substituting a default value 10.0000 for NULL valuse
     SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
+    
                 a  coalesce(a, 10.0000)
     ===================================
                 1  1.0000
@@ -156,6 +162,7 @@ As well as a **CASE** expression, the **DECODE** function performs the same func
 .. code-block:: sql
 
     SELECT * FROM case_tbl;
+    
                 a
     =============
                 1
@@ -165,6 +172,7 @@ As well as a **CASE** expression, the **DECODE** function performs the same func
      
     --Using DECODE function to compare expression and search values one by one
     SELECT a, DECODE(a, 1, 'one', 2, 'two', 'other') FROM case_tbl;
+    
                 a  decode(a, 1, 'one', 2, 'two', 'other')
     ===================================
                 1  'one'
@@ -175,6 +183,7 @@ As well as a **CASE** expression, the **DECODE** function performs the same func
      
     --result types are converted to a single type containing all of significant figures
     SELECT a, DECODE(a, 1, 1, 2, 1.2345, 1.234567890) FROM case_tbl;
+    
                 a  decode(a, 1, 1, 2, 1.2345, 1.234567890)
     ===================================
                 1  1.000000000
@@ -203,6 +212,7 @@ The **IF** function returns *expression2* if the value of the arithmetic express
 .. code-block:: sql
 
     SELECT * FROM case_tbl;
+    
                 a
     =============
                 1
@@ -212,6 +222,7 @@ The **IF** function returns *expression2* if the value of the arithmetic express
      
     --IF function returns the second expression when the fist is TRUE
     SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
+    
                 a   if(a=1, 'one', 'other')
     ===================================
                 1  'one'
@@ -221,6 +232,7 @@ The **IF** function returns *expression2* if the value of the arithmetic express
      
     --If function in WHERE clause
     SELECT * FROM case_tbl WHERE IF(a=1, 1, 2) = 1;
+    
                 a
     =============
                 1
@@ -251,6 +263,7 @@ For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a,
 .. code-block:: sql
 
     SELECT * FROM case_tbl;
+    
                 a
     =============
                 1
@@ -260,6 +273,7 @@ For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a,
      
     --returning a specific value when a is NULL
     SELECT a, NVL(a, 10.0000) FROM case_tbl;
+    
                 a  nvl(a, 10.0000)
     ===================================
                 1  1.0000
@@ -269,6 +283,7 @@ For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a,
      
     --IFNULL can be used instead of NVL and return values are converted to the string type
     SELECT a, IFNULL(a, 'UNKNOWN') FROM case_tbl;
+    
                 a   ifnull(a, 'UNKNOWN')
     ===================================
                 1  '1'
@@ -293,8 +308,7 @@ The **NULLIF** function returns **NULL** if the two expressions specified as the
 .. code-block:: sql
 
     SELECT * FROM case_tbl;
-
-    SELECT * FROM case_tbl;
+    
                 a
     =============
                 1
@@ -304,6 +318,7 @@ The **NULLIF** function returns **NULL** if the two expressions specified as the
      
     --returning NULL value when a is 1
     SELECT a, NULLIF(a, 1) FROM case_tbl;
+    
                 a  nullif(a, 1)
     ===========================
                 1          NULL
@@ -313,12 +328,14 @@ The **NULLIF** function returns **NULL** if the two expressions specified as the
      
     --returning NULL value when arguments are same
     SELECT NULLIF (1, 1.000)  FROM db_root;
+    
       nullif(1, 1.000)
     ======================
       NULL
      
     --returning the first value when arguments are not same
     SELECT NULLIF ('A', 'a')  FROM db_root;
+    
       nullif('A', 'a')
     ======================
       'A'
@@ -342,6 +359,7 @@ For example, if a type of a is **INT**, b, **BIGINT**, and c, **SHORT**, then **
 .. code-block:: sql
 
     SELECT * FROM case_tbl;
+    
                 a
     =============
                 1
@@ -351,6 +369,7 @@ For example, if a type of a is **INT**, b, **BIGINT**, and c, **SHORT**, then **
      
     --returning a specific value of INT type
     SELECT a, NVL2(a, a+1, 10.5678) FROM case_tbl;
+    
                 a  nvl2(a, a+1, 10.5678)
     ====================================
                 1                      2
@@ -420,6 +439,7 @@ When a comparison operation is performed on **NULL** in a conditional expression
      
     --selecting rows where department is sales or devel
     SELECT * FROM condition_tbl WHERE dept_name = ANY{'devel','sales'};
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -430,10 +450,12 @@ When a comparison operation is performed on **NULL** in a conditional expression
      
     --selecting rows comparing NULL value in the ALL group conditions
     SELECT * FROM condition_tbl WHERE salary > ALL{3000000, 4000000, NULL};
+    
     There are no results.
      
     --selecting rows comparing NULL value in the ANY group conditions
     SELECT * FROM condition_tbl WHERE salary > ANY{3000000, 4000000, NULL};
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -443,8 +465,8 @@ When a comparison operation is performed on **NULL** in a conditional expression
      
     --selecting rows where salary*0.9 is less than those salary in devel department
     SELECT * FROM condition_tbl WHERE (
-    (0.9 * salary) < ALL (SELECT salary FROM condition_tbl
-    WHERE dept_name = 'devel')
+      (0.9 * salary) < ALL (SELECT salary FROM condition_tbl
+      WHERE dept_name = 'devel')
     );
                id  name                  dept_name                  salary
     ======================================================================
@@ -468,6 +490,7 @@ The **BETWEEN** conditional expression makes a comparison to determine whether t
     --selecting rows where 3000000 <= salary <= 4000000
     SELECT * FROM condition_tbl WHERE salary BETWEEN 3000000 AND 4000000;
     SELECT * FROM condition_tbl WHERE (salary >= 3000000) AND (salary <= 4000000);
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -476,6 +499,7 @@ The **BETWEEN** conditional expression makes a comparison to determine whether t
      
     --selecting rows where salary < 3000000 or salary > 4000000
     SELECT * FROM condition_tbl WHERE salary NOT BETWEEN 3000000 AND 4000000;
+    
                id  name                  dept_name                  salary
     ======================================================================
                 3  'Jones     '          'sales'                   5400000
@@ -484,6 +508,7 @@ The **BETWEEN** conditional expression makes a comparison to determine whether t
      
     --selecting rows where name starts from A to E
     SELECT * FROM condition_tbl WHERE name BETWEEN 'A' AND 'E';
+    
                id  name                  dept_name                  salary
     ======================================================================
                 7  'Brown     '          'account'                    NULL
@@ -504,6 +529,7 @@ The **EXISTS** conditional expression returns **TRUE** if one or more results of
     --selecting rows using EXISTS and subquery
     SELECT 'raise' FROM db_root WHERE EXISTS(
     SELECT * FROM condition_tbl WHERE salary < 2500000);
+    
       'raise'
     ======================
       'raise'
@@ -511,6 +537,7 @@ The **EXISTS** conditional expression returns **TRUE** if one or more results of
     --selecting rows using NOT EXISTS and subquery
     SELECT 'raise' FROM db_root WHERE NOT EXISTS(
     SELECT * FROM condition_tbl WHERE salary < 2500000);
+    
     There are no results.
 
 .. _in-expr:
@@ -530,6 +557,7 @@ The **IN** conditional expression compares to determine whether the single data 
     --selecting rows where department is sales or devel
     SELECT * FROM condition_tbl WHERE dept_name IN {'devel','sales'};
     SELECT * FROM condition_tbl WHERE dept_name = ANY{'devel','sales'};
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -540,6 +568,7 @@ The **IN** conditional expression compares to determine whether the single data 
      
     --selecting rows where department is neither sales nor devel
     SELECT * FROM condition_tbl WHERE dept_name NOT IN {'devel','sales'};
+    
                id  name                  dept_name                  salary
     ======================================================================
                 5  'Kim       '          'account'                 3800000
@@ -560,12 +589,14 @@ The **IS NULL** conditional expression compares to determine whether the express
 
     --selecting rows where salary is NULL
     SELECT * FROM condition_tbl WHERE salary IS NULL;
+    
                id  name                  dept_name                  salary
     ======================================================================
                 7  'Brown     '          'account'                    NULL
      
     --selecting rows where salary is NOT NULL
     SELECT * FROM condition_tbl WHERE salary IS NOT NULL;
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -590,6 +621,7 @@ The **IS NULL** conditional expression compares to determine whether the express
 
         --Using ISNULL function to select rows with NULL value
         SELECT * FROM condition_tbl WHERE ISNULL(salary);
+        
                    id  name                  dept_name                  salary
         ======================================================================
                     7  'Brown     '          'account'                    NULL
@@ -625,12 +657,14 @@ Whether to detect the escape characters of the LIKE conditional expression is de
 
     --selection rows where name contains lower case 's', not upper case
     SELECT * FROM condition_tbl WHERE name LIKE '%s%';
+    
                id  name                  dept_name                  salary
     ======================================================================
                 3  'Jones     '          'sales'                   5400000
      
     --selection rows where second letter is 'O' or 'o'
     SELECT * FROM condition_tbl WHERE UPPER(name) LIKE '_O%';
+    
                id  name                  dept_name                  salary
     ======================================================================
                 2  'Moy       '          'sales'                   3000000
@@ -638,6 +672,7 @@ Whether to detect the escape characters of the LIKE conditional expression is de
      
     --selection rows where name is 3 characters
     SELECT * FROM condition_tbl WHERE name LIKE '___';
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -695,6 +730,7 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
     -- When REGEXP is used in SELECT list, enclosing this with parentheses is required. But used in WHERE clause, no need parentheses.
     -- case insensitive, except when used with BINARY.
     SELECT name FROM athlete where name REGEXP '^[a-d]';
+    
     name
     ======================
     'Dziouba Irina'
@@ -709,6 +745,7 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
     -- \n : match a special character, when no_backslash_escapes=no
     SELECT ('new\nline' REGEXP 'new
     line');
+    
     ('new
     line' regexp 'new
     line')
@@ -717,58 +754,69 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
      
     -- ^ : match the beginning of a string
     SELECT ('cubrid dbms' REGEXP '^cub');
+    
     ('cubrid dbms' regexp '^cub')
     ===============================
     1
      
     -- $ : match the end of a string
     SELECT ('this is cubrid dbms' REGEXP 'dbms$');
+    
     ('this is cubrid dbms' regexp 'dbms$')
     ========================================
     1
      
     --.: match any character
     SELECT ('cubrid dbms' REGEXP '^c.*$');
+    
     ('cubrid dbms' regexp '^c.*$')
     ================================
     1
      
     -- a+ : match any sequence of one or more a characters. case insensitive.
     SELECT ('Aaaapricot' REGEXP '^A+pricot');
+    
     ('Aaaapricot' regexp '^A+pricot')
     ================================
     1
      
     -- a? : match either zero or one a character.
     SELECT ('Apricot' REGEXP '^Aa?pricot');
+    
     ('Apricot' regexp '^Aa?pricot')
     ==========================
     1
     SELECT ('Aapricot' REGEXP '^Aa?pricot');
+    
     ('Aapricot' regexp '^Aa?pricot')
     ===========================
     1
      
     SELECT ('Aaapricot' REGEXP '^Aa?pricot');
+    
     ('Aaapricot' regexp '^Aa?pricot')
     ============================
     0
      
     -- (cub)* : match zero or more instances of the sequence abc.
     SELECT ('cubcub' REGEXP '^(cub)*$');
+    
     ('cubcub' regexp '^(cub)*$')
     ==========================
     1
      
     -- [a-dX], [^a-dX] : matches any character that is (or is not, if ^ is used) either a, b, c, d or X.
     SELECT ('aXbc' REGEXP '^[a-dXYZ]+');
+    
     ('aXbc' regexp '^[a-dXYZ]+')
     ==============================
     1
      
     SELECT ('strike' REGEXP '^[^a-dXYZ]+$');
+    
     ('strike' regexp '^[^a-dXYZ]+$')
     ================================
+    1
 
 .. note::
 

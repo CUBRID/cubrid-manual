@@ -614,7 +614,7 @@ STDDEV, STDDEV_POP
 .. function:: STDDEV( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 .. function:: STDDEV_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **STDDEV** 함수와 **STDDEV_POP** 함수는 동일하며, 모든 행에 대한 연산식 값들에 대한 표준편차, 즉 모표준편차를 반환한다. **STDDEV_POP** 함수가 SQL:1999 표준이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 표본 표준편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 표본 표준편차를 구한다.
+    **STDDEV** 함수와 **STDDEV_POP** 함수는 동일하며, 모든 행에 대한 연산식 값들에 대한 표준편차, 즉 모표준 편차를 반환한다. **STDDEV_POP** 함수가 SQL:1999 표준이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모표준 편차를 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모표준 편차를 구한다.
 
     :param expression: 수치를 반환하는 하나의 연산식을 지정한다.
     :param ALL: 모든 값에 대해 표준 편차를 구하기 위해 사용되며, 기본값이다.
@@ -631,7 +631,7 @@ STDDEV, STDDEV_POP
 
 .. warning:: CUBRID 2008 R3.1 이하 버전에서 **STDDEV** 함수는 :func:`STDDEV_SAMP` 와 같은 기능을 수행했다.
 
-다음은 전체 과목에 대해 전체 학생의 모 표준 편차를 출력하는 예제이다.
+다음은 전체 과목에 대해 전체 학생의 모표준 편차를 출력하는 예제이다.
 
 .. code-block:: sql
     
@@ -649,7 +649,7 @@ STDDEV, STDDEV_POP
     ==========================
          2.329711474744362e+01
 
-다음은 각 과목(subjects_id)별로 전체 학생의 점수와 모 표준편차를 함께 출력하는 예제이다.
+다음은 각 과목(subjects_id)별로 전체 학생의 점수와 모표준 편차를 함께 출력하는 예제이다.
 
 .. code-block:: sql    
 
@@ -897,13 +897,13 @@ NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으�
       'David'                        55            4
       'Tom'                          30            5
 
-VAR_POP, VARIANCE
+VARIANCE, VAR_POP
 =================
       
-.. function:: VAR_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 .. function:: VARIANCE( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
+.. function:: VAR_POP( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **VAR_POP** 함수와 **VARIANCE** 함수는 동일하며, 모든 행에 대한 연산식 값들에 대한 분산, 즉 모분산을 반환한다. 분모는 모든 행의 개수이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모분산을 구한다.
+    **VARIANCE** 함수와 **VAR_POP** 함수는 동일하며, 모든 행에 대한 연산식 값들에 대한 분산, 즉 모분산을 반환한다. 분모는 모든 행의 개수이다. 하나의 연산식 *expression* 만 인자로 지정되며, 연산식 앞에 **DISTINCT** 또는 **UNIQUE** 키워드를 포함시키면 연산식 값 중 중복을 제거한 후, 모분산을 구하고, 키워드가 생략되거나 **ALL** 인 경우에는 모든 값에 대해 모분산을 구한다.
 
     :param expression: 수치를 반환하는 하나의 연산식을 지정한다.
     :param ALL: 모든 값에 대해 모분산을 구하기 위해 사용되며, 기본값이다.
@@ -918,7 +918,7 @@ VAR_POP, VARIANCE
 
 .. warning:: CUBRID 2008 R3.1 이하 버전에서 **VARIANCE** 함수는 :func:`VAR_SAMP` 와 같은 기능을 수행했다.
 
-다음은 전체 과목에 대해 전체 학생의 모 분산을 출력하는 예제이다.
+다음은 전체 과목에 대해 전체 학생의 모분산을 출력하는 예제이다.
 
 .. code-block:: sql
 
@@ -936,7 +936,7 @@ VAR_POP, VARIANCE
     ==========================
          5.427555555555550e+02
 
-다음은 각 과목(subjects_id)별로 전체 학생의 점수와 모 분산을 함께 출력하는 예제이다.
+다음은 각 과목(subjects_id)별로 전체 학생의 점수와 모분산을 함께 출력하는 예제이다.
 
 .. code-block:: sql
 

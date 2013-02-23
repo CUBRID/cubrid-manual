@@ -5,7 +5,7 @@ ROWNUM 함수
 ROWNUM, INST_NUM
 ================
 
-.. function:: ROWNUM
+.. c:macro:: ROWNUM
 .. function:: INST_NUM ()
 
     **ROWNUM** 함수는 질의 결과로 생성될 각 레코드에 대한 순서를 나타내는 번호를 반환한다. 첫 번째 결과 레코드는 1, 두 번째 결과 레코드는 2를 가진다.

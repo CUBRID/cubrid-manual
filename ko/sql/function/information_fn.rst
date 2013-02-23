@@ -30,7 +30,7 @@ COERCIBILITY
 
 .. function:: COERCIBILITY(expr)
     
-    *expr* 의 콜레이션 변환도(coercibility)를 반환한다. 콜레이션 변환도는 칼럼(표현식)들이 서로 다른 콜레이션과 문자셋을 가지고 있을 때 어떤 콜레이션과 문자셋으로 변환할 것인지를 결정한다. 어떤 연산을 수행하는 두 개의 칼럼(표현식)이 있을 때, 높은 변환도를 가진 인자는 더 낮은 변환도를 가진 인자의 콜레이션으로 변환된다. 이와 관련하여 :ref:`콜레이션 변환도 <collation-coercibility>` 를 참고한다.
+    *expr*\ 의 콜레이션 변환도(coercibility)를 반환한다. 콜레이션 변환도는 칼럼(표현식)들이 서로 다른 콜레이션과 문자셋을 가지고 있을 때 어떤 콜레이션과 문자셋으로 변환할 것인지를 결정한다. 어떤 연산을 수행하는 두 개의 칼럼(표현식)이 있을 때, 높은 변환도를 가진 인자는 더 낮은 변환도를 가진 인자의 콜레이션으로 변환된다. 이와 관련하여 :ref:`콜레이션 변환도 <collation-coercibility>`\ 를 참고한다.
 
     :param expr: 콜레이션 변환도를 구할 대상 표현식
 
@@ -49,7 +49,7 @@ COLLATION
 
 .. function:: COLLATION(expr)
 
-    *expr* 의 콜레이션을 반환한다.
+    *expr*\ 의 콜레이션을 반환한다.
     
     :param expr: 콜레이션을 구할 대상 표현식
 
@@ -66,12 +66,13 @@ COLLATION
 CURRENT_USER, USER
 ==================
 
-.. function:: CURRENT_USER
-.. function:: USER
+.. c:macro:: CURRENT_USER
 
-    **CURRENT_USER** 와 **USER** 는 동일하며, 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
+.. c:macro:: USER
 
-    기능이 비슷한 :func:`SYSTEM_USER` 는 사용자 이름을 호스트 이름과 함께 반환한다.
+    **CURRENT_USER**\ 와 **USER** 의사 컬럼(pseudo column)은 동일하며, 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
+
+    기능이 비슷한 :func:`USER` 함수와 :func:`SYSTEM_USER` 함수는 사용자 이름을 호스트 이름과 함께 반환한다.
 
     :rtype: STRING
     
@@ -123,11 +124,11 @@ DEFAULT
 =======
 
 .. function:: DEFAULT(column_name)
-.. function:: DEFAULT
+.. c:macro:: DEFAULT
 
-    **DEFAULT** 와 **DEFAULT** 함수는 칼럼에 정의된 기본값을 반환한다. 해당 칼럼에 기본값이 지정되지 않으면 **NULL** 또는 에러를 출력한다. **DEFAULT** 는 인자가 없는 반면, **DEFAULT** 함수는 칼럼 이름을 입력 인자로 하는 차이가 있다. **DEFAULT** 는 **INSERT** 문의 입력 데이터, **UPDATE** 문의 **SET** 절에서 사용될 수 있고, **DEFAULT** 함수는 모든 곳에서 사용될 수 있다.
+    **DEFAULT**\ 와 **DEFAULT** 함수는 칼럼에 정의된 기본값을 반환한다. 해당 칼럼에 기본값이 지정되지 않으면 **NULL** 또는 에러를 출력한다. **DEFAULT**\ 는 인자가 없는 반면, **DEFAULT** 함수는 칼럼 이름을 입력 인자로 하는 차이가 있다. **DEFAULT**\ 는 **INSERT** 문의 입력 데이터, **UPDATE** 문의 **SET** 절에서 사용될 수 있고, **DEFAULT** 함수는 모든 곳에서 사용될 수 있다.
 
-    기본값이 정의되지 않은 칼럼에 어떠한 제약 조건이 정의되어 있지 않거나 **UNIQUE** 제약 조건이 정의된 경우에는 **NULL** 을 반환하고, 해당 칼럼에 **NOT NULL** 또는 **PRIMARY KEY** 제약 조건이 정의된 경우에는 에러를 반환한다.
+    기본값이 정의되지 않은 칼럼에 어떠한 제약 조건이 정의되어 있지 않거나 **UNIQUE** 제약 조건이 정의된 경우에는 **NULL**\ 을 반환하고, 해당 칼럼에 **NOT NULL** 또는 **PRIMARY KEY** 제약 조건이 정의된 경우에는 에러를 반환한다.
 
 .. code-block:: sql
 
@@ -270,19 +271,19 @@ LAST_INSERT_ID
 .. code-block:: sql
 
     CREATE TABLE ss (id INT AUTO_INCREMENT NOT NULL PRIMARY KEY, text VARCHAR(32));
-    INSERT into ss VALUES(NULL,’cubrid’);
-    SELECT LAST_INSERT_ID();
+    INSERT INTO ss VALUES (NULL, 'cubrid');
+    SELECT LAST_INSERT_ID ();
      
          last_insert_id()
     =======================
                          1
      
-    INSERT INTO ss VALUES(NULL,’database’),(NULL,’manager’);
-    SELECT LAST_INSERT_ID();
+    INSERT INTO ss VALUES (NULL, 'database'), (NULL, 'manager');
+    SELECT LAST_INSERT_ID ();
      
          last_insert_id()
     =======================
-                         3
+                         2
 
 .. code-block:: sql
 
@@ -294,7 +295,7 @@ LAST_INSERT_ID
     =======================
                          1
      
-    INSERT INTO tbl values (500), (NULL), (NULL);
+    INSERT INTO tbl VALUES (500), (NULL), (NULL);
     SELECT LAST_INSERT_ID();
      
          last_insert_id()
@@ -317,7 +318,7 @@ LIST_DBS
 
 .. function:: LIST_DBS()
 
-    **LIST_DBS** 함수는 CUBRID 데이터베이스 서버에 존재하는 모든 데이터베이스 리스트를 공백 문자로 구분하여 출력한다.
+    **LIST_DBS** 함수는 디렉터리 파일(**$CUBRID_DATABASES/databases.txt**)에 존재하는 모든 데이터베이스 리스트를 공백 문자로 구분하여 출력한다.
 
     :rtype: STRING
         
@@ -334,7 +335,7 @@ ROW_COUNT
 
 .. function:: ROW_COUNT()
 
-    **ROW_COUNT** 함수는 가장 마지막에 수행된 **UPDATE** / **INSERT** / **DELETE** / **REPLACE** 문에 영향을 받는 행의 개수를 정수로 반환한다. **INSERT ... ON DUPLICATE KEY UPDATE** 문에 의해 INSERT가 수행되면 1, UPDATE가 수행되면 2를 반환한다. REPLACE INTO 문을 수행하면 DELETE와 INSERT를 합한 개수를 반환한다. **UPDATE** / **INSERT** / **DELETE** 문에 의해 호출되는 트리거에는 영향을 받지 않으며, 트리거 내에 **UPDATE** / **INSERT** / **DELETE** 문이 포함되어 있어도 영향을 받지 않는다.
+    **ROW_COUNT** 함수는 가장 마지막에 수행된 **UPDATE**, **INSERT**, **DELETE**, **REPLACE** 문에 영향을 받는 행의 개수를 정수로 반환한다. **INSERT ... ON DUPLICATE KEY UPDATE** 문에 의해 INSERT가 수행되면 1, UPDATE가 수행되면 2를 반환한다. **REPLACE** 문을 수행하면 DELETE와 INSERT를 합한 개수를 반환한다. **UPDATE**, **INSERT**, **DELETE** 문에 의해 호출되는 트리거에는 영향을 받지 않으며, 트리거 내에 **UPDATE**, **INSERT**, **DELETE** 문이 포함되어 있어도 영향을 받지 않는다.
 
     :rtype: INT
     
@@ -366,22 +367,23 @@ USER, SYSTEM_USER
 =================
 
 .. function:: USER()
+
 .. function:: SYSTEM_USER()
 
     **USER** 함수와 **SYSTEM_USER** 함수는 동일하며, 사용자 이름을 호스트 이름과 함께 반환한다.
 
-    기능이 비슷한 :func:`CURRENT_USER` 는 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
+    기능이 비슷한 :c:macro:`USER`\ 와 :c:macro:`CURRENT_USER` 의사컬럼은 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
 
     :rtype: STRING
 
 .. code-block:: sql
 
     --selecting the current user on the session
-    SELECT USER;
+    SELECT SYSTEM_USER ();
     
-       CURRENT_USER
+       user()
     ======================
-      'PUBLIC'
+      'PUBLIC@cubrid_host'
      
     SELECT USER(), CURRENT_USER;
     
@@ -415,4 +417,4 @@ VERSION
     
        version()
     =====================
-      '8.3.1.2015'
+      '9.1.0.0203'

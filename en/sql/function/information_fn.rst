@@ -30,9 +30,7 @@ COERCIBILITY
         
 .. function:: COERCIBILITY(expr)
     
-    This function returns the collation coercibility level of *expr*. the collation coercibility level determins what collation or charset should be used when each column(expression) has different collation or charset.
-    
-    If there are two columns(expressions) to do an operation, lower coercibility levels take precedence over higher ones when the server is determining what collation to use. For more details, see :ref:`Collation Coercibility <collation-coercibility>`.
+    This function returns the collation coercibility level of *expr*. The collation coercibility level determines which collation or charset should be used when each column(expression) has different collation or charset. For more details, please refer :ref:`Collation Coercibility <collation-coercibility>`.
 
     :param expr: Target expression to get the collation coercibility level.
 
@@ -68,12 +66,13 @@ COLLATION
 CURRENT_USER, USER
 ==================
 
-.. function:: CURRENT_USER
-.. function:: USER
+.. c:macro:: CURRENT_USER
 
-    **CURRENT_USER** and **USER** are used interchangeably. They return the user name that is currently logged in to the database as a string.
+.. c:macro:: USER
 
-    **USER()** and **SYSTEM_USER()** are used interchangeably. They return the user name with a host name.
+    **CURRENT_USER** and **USER** are pseudo-columns and can be used interchangeably. They return the user name that is currently logged in to the database as a string.
+
+    Please note that :func:`USER` and :func:`SYSTEM_USER` functions return the user name with a host name.
 
     :rtype: STRING
     
@@ -125,7 +124,7 @@ DEFAULT
 =======
 
 .. function:: DEFAULT (column_name)
-.. function:: DEFAULT
+.. c:macro:: DEFAULT
 
 The **DEFAULT** and the **DEFAULT** function returns a default value defined for a column. If a default value is not specified for the column, **NULL** or an error is output. **DEFAULT** has no parameter, however, the **DEFAULT** function uses the column name as the input parameter. **DEFAULT** can be used for the input data of the **INSERT** statement and the **SET** clause of the **UPDATE** statement and the **DEFAULT** function can be used anywhere.
 
@@ -274,19 +273,19 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
 .. code-block:: sql
 
     CREATE TABLE ss (id INT AUTO_INCREMENT NOT NULL PRIMARY KEY, text VARCHAR(32));
-    INSERT into ss VALUES(NULL,’cubrid’);
-    SELECT LAST_INSERT_ID();
+    INSERT INTO ss VALUES (NULL, 'cubrid');
+    SELECT LAST_INSERT_ID ();
      
          last_insert_id()
     =======================
                          1
      
-    INSERT INTO ss VALUES(NULL,’database’),(NULL,’manager’);
-    SELECT LAST_INSERT_ID();
+    INSERT INTO ss VALUES (NULL, 'database'), (NULL, 'manager');
+    SELECT LAST_INSERT_ID ();
      
          last_insert_id()
     =======================
-                         3
+                         2
 
 .. code-block:: sql
 
@@ -298,7 +297,7 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
     =======================
                          1
      
-    INSERT INTO tbl values (500), (NULL), (NULL);
+    INSERT INTO tbl VALUES (500), (NULL), (NULL);
     SELECT LAST_INSERT_ID();
      
          last_insert_id()
@@ -321,7 +320,7 @@ LIST_DBS
 
 .. function:: LIST_DBS()
 
-    The **LIST_DBS** function outputs the list of all databases in the CUBRID database server, separated by blanks. 
+    The **LIST_DBS** function outputs the list of all databases in the directory file(**$CUBRID_DATABASES/databases.txt**), separated by blanks. 
 
     :rtype: STRING
         
@@ -338,8 +337,11 @@ ROW_COUNT
 
 .. function:: ROW_COUNT()
 
-    The **ROW_COUNT** function returns the number of rows updated (**UPDATE**, **INSERT**, **DELETE)** by the previous statement. Note that the **ROW_COUNT** function execution area at the SQL level is limited to the client session in which the SQL was created. If this function is called after executing SQL with the **;run** or **;xrun** command, it returns -1.
+    The **ROW_COUNT** function returns the number of rows updated (**UPDATE**, **INSERT**, **DELETE**, **REPLACE**) by the previous statement. 
 
+.. (TODO - Translation)
+.. **INSERT ... ON DUPLICATE KEY UPDATE** 문에 의해 INSERT가 수행되면 1, UPDATE가 수행되면 2를 반환한다. **REPLACE** 문을 수행하면 DELETE와 INSERT를 합한 개수를 반환한다. **UPDATE**, **INSERT**, **DELETE** 문에 의해 호출되는 트리거에는 영향을 받지 않으며, 트리거 내에 **UPDATE**, **INSERT**, **DELETE** 문이 포함되어 있어도 영향을 받지 않는다.
+    
     :rtype: INT
     
 .. code-block:: sql
@@ -370,21 +372,22 @@ USER, SYSTEM_USER
 =================
 
 .. function:: USER()
+
 .. function:: SYSTEM_USER()
 
-    The functions **USER** and **SYSTEM_USER** are identical and they return the user name together with the host name. The :func:`CURRENT_USER` with a similar feature returns the user names who has logged on to the current database as character strings.
+    The functions **USER** and **SYSTEM_USER** are identical and they return the user name together with the host name. The :c:macro:`USER` and :c:macro:`CURRENT_USER` pseudo-columns return the user names who has logged on to the current database as character strings.
 
     :rtype: STRING
 
 .. code-block:: sql
 
     --selecting the current user on the session
-    SELECT USER;
+    SELECT SYSTEM_USER ();
     
-       CURRENT_USER
+       user()
     ======================
-      'PUBLIC'
-     
+      'PUBLIC@cubrid_host'
+      
     SELECT USER(), CURRENT_USER;
     
        user()                CURRENT_USER
@@ -417,5 +420,5 @@ VERSION
     
        version()
     =====================
-      '8.3.1.2015'
+      '9.1.0.0203'
 

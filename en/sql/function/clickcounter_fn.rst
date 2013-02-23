@@ -19,7 +19,9 @@ The **INCR** function increments the column value specified as an argument. Only
 
 If an **INCR** function is specified in the **SELECT** statement, the **COUNTER** value is incremented by 1 and the query result is displayed with the values before the increment. Furthermore, the **INCR** function does not increment the value of the row(tuple) affected by the query process but rather the one affected by the final result.
 
-If you want to increase or decrease the click counter without specifying **INCR** or **DECR** on the **SELECT** list, specify **WITH INCREMENT FOR** *column* or **WITH INCREMENT FOR** *column* after the WHERE clause. ::
+If you want to increase or decrease the click counter without specifying **INCR** or **DECR** on the **SELECT** list, specify **WITH INCREMENT FOR** *column* or **WITH INCREMENT FOR** *column* after the WHERE clause. 
+
+.. code-block:: sql
 
     SELECT content FROM board WHERE id=1 WITH INCREMENT FOR cnt;
 
@@ -37,7 +39,7 @@ If you want to increase or decrease the click counter without specifying **INCR*
 
     *   If the **SELECT** statement with **INCR/DECR** functions returns more than one row as a result, it is treated as an error. The final result where only one row exists is valid.
 
-    *   The **INCR/DECR** function can be used only in numerical type. Applicable domains are limited to integer data types such as **SMALLINT** and **INTEGER**. They cannot be used in other types.
+    *   The **INCR/DECR** function can be used only in numerical type. Applicable domains are limited to integer data types such as **SMALLINT**, **INTEGER** and **BIGINT**. They cannot be used in other types.
 
     *   When the **INCR** function is called, the value to be returned will be the current value, while the value to be stored will be the current value + 1. Execute the following statement to select the value to be stored as a result :
 

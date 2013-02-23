@@ -19,7 +19,9 @@ INCR, DECR
 
 **SELECT** 절에 **INCR** 함수를 명시한 경우, 카운터 값은 1이 증가하고 질의 결과는 증가하기 전의 값으로 출력한다. 그리고, **INCR** 함수는 질의 처리 과정에서 참여한 행(tuple)이 아니라 최종 결과에 참여한 행에 대해서만 값을 증가시킨다.
 
-**SELECT** 리스트에 **INCR** 또는 **DECR** 함수를 명시하지 않고 클릭 카운터를 증가 또는 감소시키고자 하는 경우, WHERE 절 뒤에 **WITH INCREMENT FOR** *column* 또는 **WITH INCREMENT FOR** *column* 을 명시하면 된다. ::
+**SELECT** 리스트에 **INCR** 또는 **DECR** 함수를 명시하지 않고 클릭 카운터를 증가 또는 감소시키고자 하는 경우, WHERE 절 뒤에 **WITH INCREMENT FOR** *column* 또는 **WITH INCREMENT FOR** *column* 을 명시하면 된다. 
+
+.. code-block:: sql
 
     SELECT content FROM board WHERE id=1 WITH INCREMENT FOR cnt;
 
@@ -35,9 +37,9 @@ INCR, DECR
     
         SELECT b.content, INCR(b.read_count) FROM (SELECT * FROM board WHERE id = 1) AS b
 
-    * **INCR/DECR** 함수가 포함된 **SELECT** 문의 경우, 결과 행 의 개수가 둘 이상이면 오류로 처리한다. 최종 결과가 하나인 경우에만 유효하다.
+    * **INCR/DECR** 함수가 포함된 **SELECT** 문의 경우, 결과 행의 개수가 둘 이상이면 오류로 처리한다. 최종 결과가 하나인 경우에만 유효하다.
 
-    * **INCR/DECR** 함수는 숫자 타입에 대해서만 사용할 수 있다. 적용 가능한 타입은 **SMALLINT**, **INTEGER** 와 같은 정수형 데이터 타입으로 제한된다. 기타 타입에는 사용할 수 없다.
+    * **INCR/DECR** 함수는 숫자 타입에 대해서만 사용할 수 있다. 적용 가능한 타입은 **SMALLINT**, **INTEGER**, **BIGINT**\ 와 같은 정수형 데이터 타입으로 제한된다. 기타 타입에는 사용할 수 없다.
 
     * **INCR** 함수 호출 시 결과 값은 현재 값이며, 저장 값은 현재 값 +1인 값이 저장된다. 결과를 저장값과 같은 값을 조회하고자 할 경우는 다음과 같이 수행한다.
 

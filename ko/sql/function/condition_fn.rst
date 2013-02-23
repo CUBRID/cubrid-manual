@@ -2,379 +2,8 @@
 조건 연산식과 함수
 ******************
 
-CASE
-====
-
-**CASE** 연산식은 **IF** ... **THEN** ... **ELSE** 로직을 SQL 문장으로 표현하며, **WHEN** 에 지정된 비교 연산 결과가 참이면 **THEN** 절의 값을 반환하고 거짓이면 **ELSE** 절에 명시된 값을 반환한다. 만약, **ELSE** 절이 없다면 **NULL** 값을 반환한다. ::
-
-    CASE control_expression simple_when_list
-    [ else_clause ]
-    END
-     
-    CASE searched_when_list
-    [ else_clause ]
-    END
-     
-    simple_when :
-    WHEN expression THEN result
-     
-    searched_when :
-    WHEN search_condition THEN result
-     
-    else_clause :
-    ELSE result
-     
-    result :
-    expression | NULL
-
-**CASE** 문은 반드시 키워드 **END** 로 끝나야 하며, *control_expression* 과 데이터 타입과 *simple_when* 절 내의 *expression* 은 비교 가능한 데이터 타입이어야 한다. 또한, **THEN** 과 **ELSE** 절에 지정된 모든 *result* 의 데이터 타입은 서로 같거나, 어느 하나의 공통 데이터 타입으로 변환 가능(convertible)해야 한다.
-
-**CASE** 수식이 반환하는 값의 데이터 타입은 다음과 같은 규칙에 따라 결정된다.
-
-*   **THEN** 절에 명시된 모든 *result* 의 데이터 타입이 같으면, 해당 타입이 리턴 값의 데이터 타입이 된다.
-*   모든 *result* 의 데이터 타입이 같지 않더라도 어느 하나의 공통 데이터 타입으로 변환 가능하면, 해당 타입이 리턴 값의 데이터 타입이 된다.
-*   *result* 중 어느 하나가 가변 길이 문자열인 경우, 리턴 값의 데이터 타입은 가변 길이 문자열이 된다. 또한, *result* 가 모두 고정 길이 문자열인 경우에는 가장 긴 길이를 가지는 문자열 또는 비트열이 결과로 반환된다.
-*   *result* 중 어느 하나가 근사치로 표현되는 수치형이면, 근사치로 표현되고 이때 소수점 이하 자릿수는 모든 *result* 의 유효 숫자를 표현할 수 있도록 결정된다.
-
-.. code-block:: sql
-
-    --creating a table
-    CREATE TABLE case_tbl( a INT);
-    INSERT INTO case_tbl VALUES (1);
-    INSERT INTO case_tbl VALUES (2);
-    INSERT INTO case_tbl VALUES (3);
-    INSERT INTO case_tbl VALUES (NULL);
-     
-    --case operation with a search when clause
-    SELECT a,
-           CASE WHEN a=1 THEN 'one'
-                WHEN a=2 THEN 'two'
-                ELSE 'other'
-           END
-    FROM case_tbl;
-    
-                a  case when a=1 then 'one' when a=2 then 'two' else 'other' end
-    ===================================
-                1  'one'
-                2  'two'
-                3  'other'
-             NULL  'other'
-     
-    --case operation with a simple when clause
-    SELECT a,
-           CASE a WHEN 1 THEN 'one'
-                  WHEN 2 THEN 'two'
-                  ELSE 'other'
-           END
-    FROM case_tbl;
-    
-                a  case a when 1 then 'one' when 2 then 'two' else 'other' end
-    ===================================
-                1  'one'
-                2  'two'
-                3  'other'
-             NULL  'other'
-     
-     
-    --result types are converted to a single type containing all of significant figures
-    SELECT a,
-           CASE WHEN a=1 THEN 1
-                WHEN a=2 THEN 1.2345
-                ELSE 1.234567890
-           END
-    FROM case_tbl;
-    
-                a  case when a=1 then 1 when a=2 then 1.2345 else 1.234567890 end
-    ===================================
-                1  1.000000000
-                2  1.234500000
-                3  1.234567890
-             NULL  1.234567890
-     
-    --an error occurs when result types are not convertible
-    SELECT a,
-           CASE WHEN a=1 THEN 'one'
-                WHEN a=2 THEN 'two'
-                ELSE 1.2345
-           END
-    FROM case_tbl;
-    
-    ERROR: Cannot coerce 'one' to type double.
-
-COALESCE
-========
-
-.. function:: COALESCE (expression [, ...])
-
-**COALESCE** 함수는 하나 이상의 연산식 리스트가 인자로 지정되며, 첫 번째 인자가 **NULL** 이 아닌 값이면 해당 값을 결과로 반환하고, **NULL** 이면 두 번째 인자를 반환한다. 만약 인자로 지정된 모든 연산식이 **NULL** 이면 **NULL** 을 결과로 반환한다. 이러한 **COALESCE** 함수는 주로 **NULL** 값을 다른 기본값으로 대체할 때 사용한다.
-
-**COALESCE** 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 **VARCHAR** 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.
-
-*   **CHAR** < **VARCHAR**
-*   **BIT** < **VARBIT**
-*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
-*   **DATE** < **TIMESTAMP** < **DATETIME**
-
-예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT**, c의 타입이 **SHORT**, d의 타입이 **FLOAT** 이면 **COALESCE** (a, b, c, d)는 **FLOAT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **DOUBLE**, c의 타입이 **FLOAT**, d의 타입이 **TIMESTAMP** 이면 **COALESCE** (a, b, c, d)는 **VARCHAR** 타입을 반환한다.
-
-**COALESCE** (*a, b*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
-
-    CASE WHEN a IS NOT NULL
-    THEN a
-    ELSE b
-    END
-
-.. code-block:: sql
-
-    SELECT * FROM case_tbl;
-    
-                a
-    =============
-                1
-                2
-                3
-             NULL
-     
-    --substituting a default value 10.0000 for NULL valuse
-    SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
-    
-                a  coalesce(a, 10.0000)
-    ===================================
-                1  1.0000
-                2  2.0000
-                3  3.0000
-             NULL  10.0000
-
-DECODE
-======
-
-.. function:: DECODE( expression, search, result [, search, result]* [, default] )
-
-**DECODE** 함수는 **CASE** 문과 마찬가지로 **IF** ... **THEN** ... **ELSE** 문과 동일한 기능을 수행한다. 인자로 지정된 *expression* 과 *search* 를 비교하여, 같은 값을 가지는 *search* 에 대응하는 *result* 를 결과로 반환한다. 만약, 같은 값을 가지는 *search* 가 없다면 *default* 값을 반환하고, *default* 값이 생략된 경우에는 **NULL** 을 반환한다. 비교 연산의 대상이 되는 *expression* 과 *search* 는 데이터 타입이 동일하거나 서로 변환 가능해야 하고, 지정된 모든 *result* 값의 유효 숫자를 포함하여 표현할 수 있도록 결과 값의 소수점 아래 자릿수가 결정된다.
-
-**DECODE** (*a*, *b*, *c*, *d*, *e*, *f*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
-
-    CASE WHEN a = b THEN c
-    WHEN a = d THEN e
-    ELSE f
-    END
-
-.. code-block:: sql
-
-    SELECT * FROM case_tbl;
-    
-                a
-    =============
-                1
-                2
-                3
-             NULL
-     
-    --Using DECODE function to compare expression and search values one by one
-    SELECT a, DECODE(a, 1, 'one', 2, 'two', 'other') FROM case_tbl;
-    
-                a  decode(a, 1, 'one', 2, 'two', 'other')
-    ===================================
-                1  'one'
-                2  'two'
-                3  'other'
-             NULL  'other'
-     
-     
-    --result types are converted to a single type containing all of significant figures
-    SELECT a, DECODE(a, 1, 1, 2, 1.2345, 1.234567890) FROM case_tbl;
-    
-                a  decode(a, 1, 1, 2, 1.2345, 1.234567890)
-    ===================================
-                1  1.000000000
-                2  1.234500000
-                3  1.234567890
-             NULL  1.234567890
-     
-    --an error occurs when result types are not convertible
-    SELECT a, DECODE(a, 1, 'one', 2, 'two', 1.2345) FROM case_tbl;
-     
-    ERROR: Cannot coerce 'one' to type double.
-
-IF
-==
-
-.. function:: IF ( expression1, expression2, expression3 )
-
-**IF** 함수는 첫 번째 인자로 지정된 연산식의 값이 **TRUE** 이면 *expression2* 를 반환하고, **FALSE** 이거나 **NULL** 이면 *expression3* 를 반환한다. 결과로 반환되는 *expression2* 와 *expression3* 은 데이터 타입이 동일하거나 공통의 타입으로 변환 가능해야 한다. 둘 중 하나가 명확하게 **NULL** 이면, 함수의 결과 타입은 **NULL** 이 아닌 인자의 타입을 따른다.
-
-**IF** (*a*, *b*, *c*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
-
-    CASE WHEN a IS TRUE THEN b
-    ELSE c
-    END
-
-.. code-block:: sql
-
-    SELECT * FROM case_tbl;
-    
-                a
-    =============
-                1
-                2
-                3
-             NULL
-     
-    --IF function returns the second expression when the fist is TRUE
-    SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
-    
-                a   if(a=1, 'one', 'other')
-    ===================================
-                1  'one'
-                2  'other'
-                3  'other'
-             NULL  'other'
-     
-    --If function in WHERE clause
-    SELECT * FROM case_tbl WHERE IF(a=1, 1, 2) = 1;
-    
-                a
-    =============
-                1
-
-IFNULL, NVL
-===========
-
-.. function:: IFNULL ( expr1, expr2 )
-.. function:: NVL ( expr1, expr2 )
-
-**IFNULL** 함수와 **NVL** 함수는 유사하게 동작하며, **NVL** 함수는 컬렉션 타입을 추가로 지원한다. 두 개의 인자가 지정되며, 첫 번째 인자 *expr1* 이 **NULL** 이 아니면 *expr1* 을 반환하고, **NULL** 이면 두 번째 인자인 *expr2* 를 반환한다.
-
-**IFNULL** 함수와 **NVL** 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 **VARCHAR** 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.
-
-*   **CHAR** < **VARCHAR**
-*   **BIT** < **VARBIT**
-*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
-*   **DATE** < **TIMESTAMP** < **DATETIME**
-
-예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT** 이면 **IFNULL** (a, b)은 **BIGINT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **TIMESTAMP** 이면 **IFNULL** (a, b)은 **VARCHAR** 타입을 반환한다.
-
-**IFNULL** (*a*, *b*) 또는 **NVL** (*a*, *b*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
-
-    CASE WHEN a IS NULL THEN b
-    ELSE a
-    END
-
-.. code-block:: sql
-
-    SELECT * FROM case_tbl;
-    
-                a
-    =============
-                1
-                2
-                3
-             NULL
-     
-    --returning a specific value when a is NULL
-    SELECT a, NVL(a, 10.0000) FROM case_tbl;
-    
-                a  nvl(a, 10.0000)
-    ===================================
-                1  1.0000
-                2  2.0000
-                3  3.0000
-             NULL  10.0000
-     
-    --IFNULL can be used instead of NVL and return values are converted to the string type
-    SELECT a, IFNULL(a, 'UNKNOWN') FROM case_tbl;
-    
-                a   ifnull(a, 'UNKNOWN')
-    ===================================
-                1  '1'
-                2  '2'
-                3  '3'
-             NULL  'UNKNOWN'
-
-NULLIF
-======
-
-.. function:: NULLIF (expr1, expr2)
-
-**NULLIF** 함수는 인자로 지정된 두 개의 연산식이 동일하면 **NULL** 을 반환하고, 다르면 첫 번째 인자 값을 반환한다.
-
-**NULLIF** (*a, b*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
-
-    CASE
-    WHEN a = b THEN NULL
-    ELSE a
-    END
-
-.. code-block:: sql
-
-    SELECT * FROM case_tbl;
-                a
-    =============
-                1
-                2
-                3
-             NULL
-     
-    --returning NULL value when a is 1
-    SELECT a, NULLIF(a, 1) FROM case_tbl;
-    
-                a  nullif(a, 1)
-    ===========================
-                1          NULL
-                2             2
-                3             3
-             NULL          NULL
-     
-    --returning NULL value when arguments are same
-    SELECT NULLIF (1, 1.000)  FROM db_root;
-    
-      nullif(1, 1.000)
-    ======================
-      NULL
-     
-    --returning the first value when arguments are not same
-    SELECT NULLIF ('A', 'a')  FROM db_root;
-    
-      nullif('A', 'a')
-    ======================
-      'A'
-
-NVL2
-====
-
-.. function:: NVL2 ( expr1, expr2, expr3 )
-
-**NVL2** 함수는 세 개의 인자가 지정되며, 첫 번째 연산식(*expr1*)이 **NULL** 이 아니면 두 번째 연산식(*expr2*)을 반환하고, **NULL** 이면 세 번째 연산식(*expr3*)을 반환한다.
-
-**NVL2** 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 **VARCHAR** 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.
-
-*   **CHAR** < **VARCHAR**
-*   **BIT** < **VARBIT**
-*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
-*   **DATE** < **TIMESTAMP** < **DATETIME**
-
-예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT**, c의 타입이 **SHORT** 이면 **NVL2** (a, b, c)는 **BIGINT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **DOUBLE**, c의 타입이 **TIMESTAMP** 이면 **NVL2** (a, b, c)는 **VARCHAR** 타입을 반환한다.
-
-.. code-block:: sql
-
-    SELECT * FROM case_tbl;
-    
-                a
-    =============
-                1
-                2
-                3
-             NULL
-     
-    --returning a specific value of INT type
-    SELECT a, NVL2(a, a+1, 10.5678) FROM case_tbl;
-    
-                a  nvl2(a, a+1, 10.5678)
-    ====================================
-                1                      2
-                2                      3
-                3                      4
-             NULL                     11
+조건 연산식
+***********
 
 .. _basic-cond-expr:
 
@@ -611,24 +240,6 @@ IS NULL 조건식
     SELECT * FROM condition_tbl WHERE salary = NULL;
     There are no results.
 
-ISNULL 함수
-===========
-
-.. function:: ISNULL (expression)
-
-    **ISNULL** 함수는 조건절 내에서 사용할 수 있으며, 인자로 지정된 표현식의 결과가 **NULL** 인지 비교하여 **NULL** 이면 1을 반환하고, 아니면 0을 반환한다. 이 함수를 이용하여 어떤 값이 **NULL** 인지 아닌지를 테스트할 수 있으며, **IS NULL** 조건식과 유사하게 동작한다.
-
-    :param expression: 단일 값을 가지는 칼럼, 경로 표현식(예: *tbl_name.col_name*), 상수 값 또는 단일 값을 생성하는 산술 함수를 입력한다.
-    :rtype: INT
-
-    .. code-block:: sql
-
-        --Using ISNULL function to select rows with NULL value
-        SELECT * FROM condition_tbl WHERE ISNULL(salary);
-                   id  name                  dept_name                  salary
-        ======================================================================
-                    7  'Brown     '          'account'                    NULL
-
 .. _like-expr:
 
 LIKE 조건식
@@ -638,15 +249,11 @@ LIKE 조건식
 
 **LIKE** 연산자 오른쪽에 오는 검색어에는 임의의 문자 또는 문자열에 대응되는 와일드 카드(wild card) 문자열을 포함할 수 있으며, **%** (percent)와 **_** (underscore)를 사용할 수 있다. **%** 는 길이가 0 이상인 임의의 문자열에 대응되며, **_** 는 1개의 문자에 대응된다. 또한, 이스케이프 문자(escape character)는 와일드 카드 문자 자체에 대한 검색을 수행할 때 사용되는 문자로서, 사용자에 의해 길이가 1인 다른 문자(**NULL**, 알파벳 또는 숫자)로 지정될 수 있다. 와일드 카드 문자 또는 이스케이프 문자를 포함하는 문자열을 검색어로 사용하는 예제는 아래를 참고한다. ::
 
-    expression [ NOT ] LIKE expression [ ESCAPE char]
+    expression [ NOT ] LIKE expression [ ESCAPE char ]
 
 *   *expression* (left) : 문자열 데이터 타입 칼럼이 지정된다. 패턴 비교는 칼럼 값의 첫 번째 문자부터 시작되며, 대소문자를 구분한다.
 *   *expression* (right) : 검색어를 입력하며, 길이가 0 이상인 문자열이 된다. 이때, 검색어 패턴에는 와일드 카드 문자(**%** 또는 **_**)가 포함될 수 있다. 문자열의 길이는 0 이상이다.
 *   **ESCAPE** *char* : *char* 에 올 수 있는 문자는 **NULL**, 알파벳, 숫자이다. 만약 검색어의 문자열 패턴이 "_" 또는 "%" 자체를 포함하는 경우 이스케이프 문자가 반드시 지정되어야 한다. 예를 들어, 이스케이프 문자를 백슬래시(\\)로 지정한 후 '10%'인 문자열을 검색하고자 한다면, *expression* (right)에 '10\%'을 지정해야 한다. 또한, 'C:\\'인 문자열을 검색하고자 한다면, *expression* (right)에 'C:\\ '을 지정하면 된다.
-
-**참고 사항**
-
-**LIKE** 조건식은 대소문자를 구분한다. 대소문자를 구분하지 않게 하려면 :ref:`regexp-rlike` 을 이용한다.
 
 CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
 
@@ -848,3 +455,399 @@ REGEXP 조건식, RLIKE 조건식
         ever read sources, credits must appear in the documentation.
          
         4. This notice may not be removed or altered.
+
+CASE
+====
+
+**CASE** 연산식은 **IF** ... **THEN** ... **ELSE** 로직을 SQL 문장으로 표현하며, **WHEN** 에 지정된 비교 연산 결과가 참이면 **THEN** 절의 값을 반환하고 거짓이면 **ELSE** 절에 명시된 값을 반환한다. 만약, **ELSE** 절이 없다면 **NULL** 값을 반환한다. ::
+
+    CASE control_expression simple_when_list
+    [ else_clause ]
+    END
+     
+    CASE searched_when_list
+    [ else_clause ]
+    END
+     
+    simple_when :
+    WHEN expression THEN result
+     
+    searched_when :
+    WHEN search_condition THEN result
+     
+    else_clause :
+    ELSE result
+     
+    result :
+    expression | NULL
+
+**CASE** 문은 반드시 키워드 **END** 로 끝나야 하며, *control_expression* 과 데이터 타입과 *simple_when* 절 내의 *expression* 은 비교 가능한 데이터 타입이어야 한다. 또한, **THEN** 과 **ELSE** 절에 지정된 모든 *result* 의 데이터 타입은 서로 같거나, 어느 하나의 공통 데이터 타입으로 변환 가능(convertible)해야 한다.
+
+**CASE** 수식이 반환하는 값의 데이터 타입은 다음과 같은 규칙에 따라 결정된다.
+
+*   **THEN** 절에 명시된 모든 *result* 의 데이터 타입이 같으면, 해당 타입이 리턴 값의 데이터 타입이 된다.
+*   모든 *result* 의 데이터 타입이 같지 않더라도 어느 하나의 공통 데이터 타입으로 변환 가능하면, 해당 타입이 리턴 값의 데이터 타입이 된다.
+*   *result* 중 어느 하나가 가변 길이 문자열인 경우, 리턴 값의 데이터 타입은 가변 길이 문자열이 된다. 또한, *result* 가 모두 고정 길이 문자열인 경우에는 가장 긴 길이를 가지는 문자열 또는 비트열이 결과로 반환된다.
+*   *result* 중 어느 하나가 근사치로 표현되는 수치형이면, 근사치로 표현되고 이때 소수점 이하 자릿수는 모든 *result* 의 유효 숫자를 표현할 수 있도록 결정된다.
+
+.. code-block:: sql
+
+    --creating a table
+    CREATE TABLE case_tbl( a INT);
+    INSERT INTO case_tbl VALUES (1);
+    INSERT INTO case_tbl VALUES (2);
+    INSERT INTO case_tbl VALUES (3);
+    INSERT INTO case_tbl VALUES (NULL);
+     
+    --case operation with a search when clause
+    SELECT a,
+           CASE WHEN a=1 THEN 'one'
+                WHEN a=2 THEN 'two'
+                ELSE 'other'
+           END
+    FROM case_tbl;
+    
+                a  case when a=1 then 'one' when a=2 then 'two' else 'other' end
+    ===================================
+                1  'one'
+                2  'two'
+                3  'other'
+             NULL  'other'
+     
+    --case operation with a simple when clause
+    SELECT a,
+           CASE a WHEN 1 THEN 'one'
+                  WHEN 2 THEN 'two'
+                  ELSE 'other'
+           END
+    FROM case_tbl;
+    
+                a  case a when 1 then 'one' when 2 then 'two' else 'other' end
+    ===================================
+                1  'one'
+                2  'two'
+                3  'other'
+             NULL  'other'
+     
+     
+    --result types are converted to a single type containing all of significant figures
+    SELECT a,
+           CASE WHEN a=1 THEN 1
+                WHEN a=2 THEN 1.2345
+                ELSE 1.234567890
+           END
+    FROM case_tbl;
+    
+                a  case when a=1 then 1 when a=2 then 1.2345 else 1.234567890 end
+    ===================================
+                1  1.000000000
+                2  1.234500000
+                3  1.234567890
+             NULL  1.234567890
+     
+    --an error occurs when result types are not convertible
+    SELECT a,
+           CASE WHEN a=1 THEN 'one'
+                WHEN a=2 THEN 'two'
+                ELSE 1.2345
+           END
+    FROM case_tbl;
+    
+    ERROR: Cannot coerce 'one' to type double.
+
+조건 연산 함수
+**************
+
+COALESCE
+========
+
+.. function:: COALESCE (expression [, ...])
+
+**COALESCE** 함수는 하나 이상의 연산식 리스트가 인자로 지정되며, 첫 번째 인자가 **NULL** 이 아닌 값이면 해당 값을 결과로 반환하고, **NULL** 이면 두 번째 인자를 반환한다. 만약 인자로 지정된 모든 연산식이 **NULL** 이면 **NULL** 을 결과로 반환한다. 이러한 **COALESCE** 함수는 주로 **NULL** 값을 다른 기본값으로 대체할 때 사용한다.
+
+**COALESCE** 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 **VARCHAR** 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.
+
+*   **CHAR** < **VARCHAR**
+*   **BIT** < **VARBIT**
+*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
+*   **DATE** < **TIMESTAMP** < **DATETIME**
+
+예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT**, c의 타입이 **SHORT**, d의 타입이 **FLOAT** 이면 **COALESCE** (a, b, c, d)는 **FLOAT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **DOUBLE**, c의 타입이 **FLOAT**, d의 타입이 **TIMESTAMP** 이면 **COALESCE** (a, b, c, d)는 **VARCHAR** 타입을 반환한다.
+
+**COALESCE** (*a, b*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
+
+    CASE WHEN a IS NOT NULL
+    THEN a
+    ELSE b
+    END
+
+.. code-block:: sql
+
+    SELECT * FROM case_tbl;
+    
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --substituting a default value 10.0000 for NULL valuse
+    SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
+    
+                a  coalesce(a, 10.0000)
+    ===================================
+                1  1.0000
+                2  2.0000
+                3  3.0000
+             NULL  10.0000
+
+DECODE
+======
+
+.. function:: DECODE( expression, search, result [, search, result]* [, default] )
+
+**DECODE** 함수는 **CASE** 문과 마찬가지로 **IF** ... **THEN** ... **ELSE** 문과 동일한 기능을 수행한다. 인자로 지정된 *expression* 과 *search* 를 비교하여, 같은 값을 가지는 *search* 에 대응하는 *result* 를 결과로 반환한다. 만약, 같은 값을 가지는 *search* 가 없다면 *default* 값을 반환하고, *default* 값이 생략된 경우에는 **NULL** 을 반환한다. 비교 연산의 대상이 되는 *expression* 과 *search* 는 데이터 타입이 동일하거나 서로 변환 가능해야 하고, 지정된 모든 *result* 값의 유효 숫자를 포함하여 표현할 수 있도록 결과 값의 소수점 아래 자릿수가 결정된다.
+
+**DECODE** (*a*, *b*, *c*, *d*, *e*, *f*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
+
+    CASE WHEN a = b THEN c
+    WHEN a = d THEN e
+    ELSE f
+    END
+
+.. code-block:: sql
+
+    SELECT * FROM case_tbl;
+    
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --Using DECODE function to compare expression and search values one by one
+    SELECT a, DECODE(a, 1, 'one', 2, 'two', 'other') FROM case_tbl;
+    
+                a  decode(a, 1, 'one', 2, 'two', 'other')
+    ===================================
+                1  'one'
+                2  'two'
+                3  'other'
+             NULL  'other'
+     
+     
+    --result types are converted to a single type containing all of significant figures
+    SELECT a, DECODE(a, 1, 1, 2, 1.2345, 1.234567890) FROM case_tbl;
+    
+                a  decode(a, 1, 1, 2, 1.2345, 1.234567890)
+    ===================================
+                1  1.000000000
+                2  1.234500000
+                3  1.234567890
+             NULL  1.234567890
+     
+    --an error occurs when result types are not convertible
+    SELECT a, DECODE(a, 1, 'one', 2, 'two', 1.2345) FROM case_tbl;
+     
+    ERROR: Cannot coerce 'one' to type double.
+
+IF
+==
+
+.. function:: IF ( expression1, expression2, expression3 )
+
+**IF** 함수는 첫 번째 인자로 지정된 연산식의 값이 **TRUE** 이면 *expression2* 를 반환하고, **FALSE** 이거나 **NULL** 이면 *expression3* 를 반환한다. 결과로 반환되는 *expression2* 와 *expression3* 은 데이터 타입이 동일하거나 공통의 타입으로 변환 가능해야 한다. 둘 중 하나가 명확하게 **NULL** 이면, 함수의 결과 타입은 **NULL** 이 아닌 인자의 타입을 따른다.
+
+**IF** (*a*, *b*, *c*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
+
+    CASE WHEN a IS TRUE THEN b
+    ELSE c
+    END
+
+.. code-block:: sql
+
+    SELECT * FROM case_tbl;
+    
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --IF function returns the second expression when the fist is TRUE
+    SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
+    
+                a   if(a=1, 'one', 'other')
+    ===================================
+                1  'one'
+                2  'other'
+                3  'other'
+             NULL  'other'
+     
+    --If function in WHERE clause
+    SELECT * FROM case_tbl WHERE IF(a=1, 1, 2) = 1;
+    
+                a
+    =============
+                1
+
+IFNULL, NVL
+===========
+
+.. function:: IFNULL ( expr1, expr2 )
+.. function:: NVL ( expr1, expr2 )
+
+**IFNULL** 함수와 **NVL** 함수는 유사하게 동작하며, **NVL** 함수는 컬렉션 타입을 추가로 지원한다. 두 개의 인자가 지정되며, 첫 번째 인자 *expr1* 이 **NULL** 이 아니면 *expr1* 을 반환하고, **NULL** 이면 두 번째 인자인 *expr2* 를 반환한다.
+
+**IFNULL** 함수와 **NVL** 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 **VARCHAR** 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.
+
+*   **CHAR** < **VARCHAR**
+*   **BIT** < **VARBIT**
+*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
+*   **DATE** < **TIMESTAMP** < **DATETIME**
+
+예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT** 이면 **IFNULL** (a, b)은 **BIGINT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **TIMESTAMP** 이면 **IFNULL** (a, b)은 **VARCHAR** 타입을 반환한다.
+
+**IFNULL** (*a*, *b*) 또는 **NVL** (*a*, *b*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
+
+    CASE WHEN a IS NULL THEN b
+    ELSE a
+    END
+
+.. code-block:: sql
+
+    SELECT * FROM case_tbl;
+    
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --returning a specific value when a is NULL
+    SELECT a, NVL(a, 10.0000) FROM case_tbl;
+    
+                a  nvl(a, 10.0000)
+    ===================================
+                1  1.0000
+                2  2.0000
+                3  3.0000
+             NULL  10.0000
+     
+    --IFNULL can be used instead of NVL and return values are converted to the string type
+    SELECT a, IFNULL(a, 'UNKNOWN') FROM case_tbl;
+    
+                a   ifnull(a, 'UNKNOWN')
+    ===================================
+                1  '1'
+                2  '2'
+                3  '3'
+             NULL  'UNKNOWN'
+
+ISNULL
+======
+
+.. function:: ISNULL (expression)
+
+    **ISNULL** 함수는 조건절 내에서 사용할 수 있으며, 인자로 지정된 표현식의 결과가 **NULL** 인지 비교하여 **NULL** 이면 1을 반환하고, 아니면 0을 반환한다. 이 함수를 이용하여 어떤 값이 **NULL** 인지 아닌지를 테스트할 수 있으며, **IS NULL** 조건식과 유사하게 동작한다.
+
+    :param expression: 단일 값을 가지는 칼럼, 경로 표현식(예: *tbl_name.col_name*), 상수 값 또는 단일 값을 생성하는 산술 함수를 입력한다.
+    :rtype: INT
+
+    .. code-block:: sql
+
+        --Using ISNULL function to select rows with NULL value
+        SELECT * FROM condition_tbl WHERE ISNULL(salary);
+                   id  name                  dept_name                  salary
+        ======================================================================
+                    7  'Brown     '          'account'                    NULL
+
+NULLIF
+======
+
+.. function:: NULLIF (expr1, expr2)
+
+**NULLIF** 함수는 인자로 지정된 두 개의 연산식이 동일하면 **NULL** 을 반환하고, 다르면 첫 번째 인자 값을 반환한다.
+
+**NULLIF** (*a, b*)는 다음의 **CASE** 문장과 같은 의미를 가진다. ::
+
+    CASE
+    WHEN a = b THEN NULL
+    ELSE a
+    END
+
+.. code-block:: sql
+
+    SELECT * FROM case_tbl;
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --returning NULL value when a is 1
+    SELECT a, NULLIF(a, 1) FROM case_tbl;
+    
+                a  nullif(a, 1)
+    ===========================
+                1          NULL
+                2             2
+                3             3
+             NULL          NULL
+     
+    --returning NULL value when arguments are same
+    SELECT NULLIF (1, 1.000)  FROM db_root;
+    
+      nullif(1, 1.000)
+    ======================
+      NULL
+     
+    --returning the first value when arguments are not same
+    SELECT NULLIF ('A', 'a')  FROM db_root;
+    
+      nullif('A', 'a')
+    ======================
+      'A'
+
+NVL2
+====
+
+.. function:: NVL2 ( expr1, expr2, expr3 )
+
+**NVL2** 함수는 세 개의 인자가 지정되며, 첫 번째 연산식(*expr1*)이 **NULL** 이 아니면 두 번째 연산식(*expr2*)을 반환하고, **NULL** 이면 세 번째 연산식(*expr3*)을 반환한다.
+
+**NVL2** 함수는 인자의 타입 중 우선순위가 가장 높은 타입으로 모든 인자를 변환하여 연산을 수행한다. 인자 중에 같은 타입으로 변환할 수 없는 타입의 인자가 있으면 모든 인자를 **VARCHAR** 타입으로 변환한다. 아래는 입력 인자의 타입에 따른 변환 우선순위를 나타낸 것이다.
+
+*   **CHAR** < **VARCHAR**
+*   **BIT** < **VARBIT**
+*   **SHORT** < **INT** < **BIGINT** < **NUMERIC** < **FLOAT** < **DOUBLE**
+*   **DATE** < **TIMESTAMP** < **DATETIME**
+
+예를 들어 a의 타입이 **INT**, b의 타입이 **BIGINT**, c의 타입이 **SHORT** 이면 **NVL2** (a, b, c)는 **BIGINT** 타입을 반환한다. 만약 a의 타입이 **INTEGER**, b의 타입이 **DOUBLE**, c의 타입이 **TIMESTAMP** 이면 **NVL2** (a, b, c)는 **VARCHAR** 타입을 반환한다.
+
+.. code-block:: sql
+
+    SELECT * FROM case_tbl;
+    
+                a
+    =============
+                1
+                2
+                3
+             NULL
+     
+    --returning a specific value of INT type
+    SELECT a, NVL2(a, a+1, 10.5678) FROM case_tbl;
+    
+                a  nvl2(a, a+1, 10.5678)
+    ====================================
+                1                      2
+                2                      3
+                3                      4
+             NULL                     11
+

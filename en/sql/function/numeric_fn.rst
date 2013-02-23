@@ -311,36 +311,6 @@ FLOOR
     =============================
              34567         -34567
 
-GREATEST
-========
-
-.. function:: GREATEST( expression [, expression]* )
-
-    The **GREATEST** function compares more than one expression specified as parameters and returns the greatest value. If only one expression has been specified, the expression is returned because there is no expression to be compared with.
-
-    Therefore, more than one expression that is specified as parameters must be of the type that can be compared with each other. If the types of the specified parameters are identical, so are the types of the return values; if they are different, the type of the return value becomes a convertible common data type.
-
-    That is, the **GREATEST** function compares the values of column 1, column 2 and column 3 in the same row and returns the greatest value while the **MAX** function compares the values of column in all result rows and returns the greatest value.
-
-    :param expression: Specifies more than one expression. Their types must be comparable each other. One of the arguments is **NULL**, **NULL** is returned.
-    :rtype: same as that of the argument
-    
-The following example shows how to retrieve the number of every medals and the highest number that Korea won in the *demodb* database.
-
-.. code-block:: sql
-
-    SELECT gold, silver , bronze, GREATEST (gold, silver, bronze) 
-    FROM participant
-    WHERE nation_code = 'KOR';
-    
-             gold       silver       bronze  greatest(gold, silver, bronze)
-    =======================================================================
-                9           12            9                              12
-                8           10           10                              10
-                7           15            5                              15
-               12            5           12                              12
-               12           10           11                              12
-
 HEX
 ===
 
@@ -358,35 +328,6 @@ HEX
     hex('ab')             hex(128)              conv(hex(128), 16, 10)
     ==================================================================
       '6162'                '80'                  '128'
-
-LEAST
-=====
-
-.. function:: LEAST( expression [, expression]* )
-
-    The **LEAST** function compares more than one expression specified as parameters and returns the smallest value. If only one expression has been specified, the expression is returned because there is no expression to be compared with.
-
-    Therefore, more than one expression that is specified as parameters must be of the type that can be compared with each other. If the types of the specified parameters are identical, so are the types of the return values; if they are different, the type of the return value becomes a convertible common data type.
-
-    That is, the **LEAST** function compares the values of column 1, column 2 and column 3 in the same row and returns the smallest value while the :func:`MIN` compares the values of column in all result rows and returns the smallest value. 
-
-    :param expression: Specifies more than one expression. Their types must be comparable each other. One of the arguments is **NULL**, **NULL** is returned.
-    :rtype: same as that of the argument
-
-The following example shows how to retrieve the number of every medals and the lowest number that Korea won in the *demodb* database.
-
-.. code-block:: sql
-
-    SELECT gold, silver , bronze, LEAST(gold, silver, bronze) FROM participant
-    WHERE nation_code = 'KOR';
-    
-             gold       silver       bronze  least(gold, silver, bronze)
-    ====================================================================
-                9           12            9                            9
-                8           10           10                            8
-                7           15            5                            5
-               12            5           12                            5
-               12           10           11                           10
 
 LN
 ==

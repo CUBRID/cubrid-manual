@@ -1,24 +1,21 @@
-*************************************
-Comparison Expressions and Functions
-*************************************
-
-Comparison Expressions
-***********************
+*********************
+Comparison Expression
+*********************
 
 .. _basic-cond-expr:
 
-Simple Comparison Expressions
-=============================
+Simple Comparison Expression
+============================
 
-A comparison expression is an expression that is included in the **WHERE** clause of the **SELECT**, **UPDATE** and **DELETE** statements, and in the **HAVING** clause of the **SELECT** statement. There are simple comparison, **ANY** / **SOME** / **ALL**, **BETWEEN**, **EXISTS**, **IN** / **NOT IN**, **LIKE** and **IS NULL** conditional expressions, depending on the kinds of the operators combined.
+A comparison expression is an expression that is included in the **WHERE** clause of the **SELECT**, **UPDATE** and **DELETE** statements, and in the **HAVING** clause of the **SELECT** statement. There are simple comparison, **ANY** / **SOME** / **ALL**, **BETWEEN**, **EXISTS**, **IN** / **NOT IN**, **LIKE** and **IS NULL** comparison expressions, depending on the kinds of the operators combined.
 
-A simple comparison conditional expression compares two comparable data values. Expressions or subqueries are specified as operands, and the conditional expression always returns
-**NULL** if one of the operands is **NULL**. The following table shows operators that can be used in the simple comparison conditional expressions. For details, see :doc:`/sql/function/comparison_op`.
+A simple comparison expression compares two comparable data values. Expressions or subqueries are specified as operands, and the comparison expression always returns
+**NULL** if one of the operands is **NULL**. The following table shows operators that can be used in the simple comparison comparison expressions. For details, see :doc:`/sql/function/comparison_op`.
 
-**Operators for Conditional Expressions**
+**Comparison Operators**
 
 +-------------------------+----------------------------------------------------------------------------+----------------------------+------------------+
-| Comparison Operator     | Description                                                                | Conditional Expression     | Return Value     |
+| Comparison Operator     | Description                                                                | Comparison Expression      | Return Value     |
 +=========================+============================================================================+============================+==================+
 | **=**                   | A value of left operand is the same as that of right operand.              | 1=2                        | 0                |
 +-------------------------+----------------------------------------------------------------------------+----------------------------+------------------+
@@ -40,9 +37,9 @@ A simple comparison conditional expression compares two comparable data values. 
 ANY/SOME/ALL quantifiers
 ========================
 
-A comparison expression that includes quantifiers such as **ANY/SOME/ALL** performs comparison operation on one data value and on some or all values included in the list. A conditional expression that includes **ANY** or **SOME** returns **TRUE** if the value of the data on the left satisfies simple comparison with at least one of the values in the list specified as an operand on the right. A conditional expression that includes **ALL** returns **TRUE** if the value of the data on the left satisfies simple comparison with all values in the list on the right.
+A comparison expression that includes quantifiers such as **ANY/SOME/ALL** performs comparison operation on one data value and on some or all values included in the list. A comparison expression that includes **ANY** or **SOME** returns **TRUE** if the value of the data on the left satisfies simple comparison with at least one of the values in the list specified as an operand on the right. A comparison expression that includes **ALL** returns **TRUE** if the value of the data on the left satisfies simple comparison with all values in the list on the right.
 
-When a comparison operation is performed on **NULL** in a conditional expression that includes **ANY** or **SOME**, **UNKNOWN** or **TRUE** is returned as a result; when a comparison operation is performed on **NULL** in a conditional expression that includes **ALL**, **UNKNOWN** or **FALSE** is returned. ::
+When a comparison operation is performed on **NULL** in a comparison expression that includes **ANY** or **SOME**, **UNKNOWN** or **TRUE** is returned as a result; when a comparison operation is performed on **NULL** in a comparison expression that includes **ALL**, **UNKNOWN** or **FALSE** is returned. ::
 
     expression comp_op SOME expression
     expression comp_op ANY expression
@@ -102,10 +99,10 @@ When a comparison operation is performed on **NULL** in a conditional expression
 
 .. _between-expr:
 
-BETWEEN Conditional Expression
-==============================
+BETWEEN
+=======
 
-The **BETWEEN** conditional expression makes a comparison to determine whether the data value on the left exists between two data values specified on the right. It returns **TRUE** even when the data value on the left is the same as a boundary value of the comparison target range. If **NOT** comes before the **BETWEEN** keyword, the result of a **NOT** operation on the result of the **BETWEEN** operation is returned.
+The **BETWEEN** makes a comparison to determine whether the data value on the left exists between two data values specified on the right. It returns **TRUE** even when the data value on the left is the same as a boundary value of the comparison target range. If **NOT** comes before the **BETWEEN** keyword, the result of a **NOT** operation on the result of the **BETWEEN** operation is returned.
 
 *i* **BETWEEN** *g* **AND** *m* and the compound condition *i* **>= g AND** *i* <= *m* have the same effect. ::
 
@@ -143,10 +140,10 @@ The **BETWEEN** conditional expression makes a comparison to determine whether t
 
 .. _exists-expr:
 
-EXISTS Conditional Expression
-=============================
+EXISTS
+======
 
-The **EXISTS** conditional expression returns **TRUE** if one or more results of the execution of the subquery specified on the right exist, and returns **FALSE** if the result of the operation is an empty set. ::
+The **EXISTS** returns **TRUE** if one or more results of the execution of the subquery specified on the right exist, and returns **FALSE** if the result of the operation is an empty set. ::
 
     EXISTS expression
 
@@ -170,10 +167,10 @@ The **EXISTS** conditional expression returns **TRUE** if one or more results of
 
 .. _in-expr:
 
-IN Conditional Expression
-=========================
+IN
+==
 
-The **IN** conditional expression compares to determine whether the single data value on the left is included in the list specified on the right. That is, the predicate returns **TRUE** if the single data value on the left is an element of the expression specified on the right. If **NOT** comes before the **IN** keyword, the result of a **NOT** operation on the result of the **IN** operation is returned. ::
+The **IN** compares to determine whether the single data value on the left is included in the list specified on the right. That is, the predicate returns **TRUE** if the single data value on the left is an element of the expression specified on the right. If **NOT** comes before the **IN** keyword, the result of a **NOT** operation on the result of the **IN** operation is returned. ::
 
     expression [ NOT ] IN expression
 
@@ -204,10 +201,10 @@ The **IN** conditional expression compares to determine whether the single data 
 
 .. _is-null-expr:
 
-IS NULL Conditional Expression
-==============================
+IS NULL
+=======
 
-The **IS NULL** conditional expression compares to determine whether the expression specified on the left is **NULL**, and if it is **NULL**, returns **TRUE** and it can be used in the conditional expression. If **NOT** comes before the **NULL** keyword, the result of a **NOT** operation on the result of the **IS NULL** operation is returned.
+The **IS NULL** compares to determine whether the expression specified on the left is **NULL**, and if it is **NULL**, returns **TRUE** and it can be used in the conditional expression. If **NOT** comes before the **NULL** keyword, the result of a **NOT** operation on the result of the **IS NULL** operation is returned.
 
     expression IS [ NOT ] NULL
 
@@ -240,18 +237,18 @@ The **IS NULL** conditional expression compares to determine whether the express
 
 .. _like-expr:
 
-LIKE Conditional Expression
-===========================
+LIKE
+====
 
-The **LIKE** conditional expression compares patterns between character string data, and returns **TRUE** if a character string whose pattern matches the search word is found. Pattern comparison target types are **CHAR**, **VARCHAR** and **STRING**. The **LIKE** search cannot be performed on an **BIT** type. If **NOT** comes before the **LIKE** keyword, the result of a **NOT** operation on the result of the **LIKE** operation is returned.
+The **LIKE** compares patterns between character string data, and returns **TRUE** if a character string whose pattern matches the search word is found. Pattern comparison target types are **CHAR**, **VARCHAR** and **STRING**. The **LIKE** search cannot be performed on an **BIT** type. If **NOT** comes before the **LIKE** keyword, the result of a **NOT** operation on the result of the **LIKE** operation is returned.
 
 A wild card string corresponding to any character or character string can be included in the search word on the right of the **LIKE** operator. % (percent) and _ (underscore) can be used. .% corresponds to any character string whose length is 0 or greater, and _ corresponds to one character. An escape character is a character that is used to search for a wild card character itself, and can be specified by the user as another character (**NULL**, alphabet, or number whose length is 1. See below for an example of using a character string that includes wild card or escape characters. ::
 
-    expression [ NOT ] LIKE expression [ ESCAPE char ]
+    expression [ NOT ] LIKE pattern [ ESCAPE char ]
 
-*   *expression* (left): Specifies the data type column of the character string. Pattern comparison, which is case-sensitive, starts from the first character of the column.
-*   *expression* (right): Enters the search word. A character string with a length of 0 or greater is required. Wild card characters (% or _) can be included as the pattern of the search word. The length of the character string is 0 or greater.
-*   **ESCAPE** *char* : **NULL**, alphabet, or number is allowed for *char*. If the string pattern of the search word includes "_" or "%" itself, an ESCAPE character must be specified. For example, if you want to search for the character string "10%" after specifying backslash (\\) as the ESCAPE character, you must specify "10\%" for the expression (right). If you want to search for the character string "C:\\", you can specify "C:\\" for the expression (right).
+*   *expression*\ : Specifies the data type column of the character string. Pattern comparison, which is case-sensitive, starts from the first character of the column.
+*   *pattern*\ : Enters the search word. A character string with a length of 0 or greater is required. Wild card characters (% or _) can be included as the pattern of the search word. The length of the character string is 0 or greater.
+*   **ESCAPE** *char* : **NULL**, alphabet, or number is allowed for *char*. If the string pattern of the search word includes "_" or "%" itself, an ESCAPE character must be specified. For example, if you want to search for the character string "10%" after specifying backslash (\\) as the ESCAPE character, you must specify "10\%" for *pattern*. If you want to search for the character string "C:\\", you can specify "C:\\" for *pattern*.
 
 For details about character sets supported in CUBRID, see :ref:`char-data-type`.
 
@@ -289,10 +286,10 @@ Whether to detect the escape characters of the LIKE conditional expression is de
 
 .. _regexp-rlike:
 
-REGEXP/RLIKE Conditional Expressions
-====================================
+REGEXP, RLIKE
+=============
 
-The conditional expressions **REGEXP** and **RLIKE** are used interchangeably; a regular expressions is a powerful way to specify a pattern for a complex search. CUBRID uses Henry Spencer's implementation of regular expressions, which conforms the POSIX 1003.2 standards. The details on regular expressions are not described in this page. For more information on regular expressions, see Henry Spencer's regex(7).
+The **REGEXP** and **RLIKE** are used interchangeably; a regular expressions is a powerful way to specify a pattern for a complex search. CUBRID uses Henry Spencer's implementation of regular expressions, which conforms the POSIX 1003.2 standards. The details on regular expressions are not described in this page. For more information on regular expressions, see Henry Spencer's regex(7).
 
 The following list describes basic characteristics of regular expressions.
 
@@ -320,22 +317,23 @@ The difference between **REGEXP** and **LIKE** are as follows:
     SELECT ('a' COLLATE iso88591_bin REGEXP BINARY 'A' COLLATE iso88591_bin);
     0
 
-In the syntax below, if *expr* matches *pat*, 1 is returned; otherwise, 0 is returned. If either *expr* or *pat* is **NULL**, **NULL** is returned.
+In the syntax below, if *expression* matches *pattern*, 1 is returned; otherwise, 0 is returned. If either *expression* or *pattern* is **NULL**, **NULL** is returned.
 
 The second syntax has the same meaning as the third syntax, which both syntaxes are using **NOT**.
 
 ::
 
-    expr REGEXP|RLIKE [BINARY] pat
-    expr NOT REGEXP|RLIKE pat
-    NOT (expr REGEXP|RLIKE pat)
+    expression REGEXP | RLIKE [BINARY] pattern
+    expression NOT REGEXP | RLIKE pattern
+    NOT (expression REGEXP | RLIKE pattern)
 
-*   *expr* : Column or input expression
-*   *pat* : Pattern used in regular expressions; not case sensitive
+*   *expression* : Column or input expression
+*   *pattern* : Pattern used in regular expressions; not case sensitive
 
 .. code-block:: sql
 
-    -- When REGEXP is used in SELECT list, enclosing this with parentheses is required. But used in WHERE clause, no need parentheses.
+    -- When REGEXP is used in SELECT list, enclosing this with parentheses is required. 
+    -- But used in WHERE clause, no need parentheses.
     -- case insensitive, except when used with BINARY.
     SELECT name FROM athlete where name REGEXP '^[a-d]';
     
@@ -550,15 +548,19 @@ The data type for a value returned by the **CASE** expression is determined base
     
     ERROR: Cannot coerce 'one' to type double.
 
-Conditional Functions
-*********************
+********************
+Comparison Functions
+********************
 
 COALESCE
 ========
 
-.. function:: COALESCE (expression [, ...])
+.. function:: COALESCE ( expression [, expression ] ... )
 
-The **COALESCE** function has more than one expression as an argument. If a first argument is non-**NULL**, the corresponding value is returned if it is **NULL**, a second argument is returned. If all expressions which have an argument are **NULL**, **NULL** is returned. Therefore, this function is generally used to replace **NULL** with other default value.
+    The **COALESCE** function has more than one expression as an argument. If the first argument is non-**NULL**, the corresponding value is returned if it is **NULL**, the second argument is returned. If all expressions which have an argument are **NULL**, **NULL** is returned. Therefore, this function is generally used to replace **NULL** with other default value.
+
+    :param expression: Specifies more than one expression. Their types must be comparable each other.
+    :rtype: determined with the type of the arguments
 
 Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
 
@@ -569,7 +571,7 @@ Operation is performed by converting the type of every argument into that with t
 
 For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FLOAT**, then **COALESCE** (a, b, c, d) returns a **FLOAT** type. If a type of a is **INTEGER**, b, **DOULBE** , c, **FLOAT**, and d, **TIMESTAMP**, then **COALESCE** (a, b, c, d) returns a **VARCHAR** type.
 
-**COALESCE** (*a, b*) works the same as the **CASE** statement as follows: ::
+**COALESCE** (*a, b*) works the same as the **CASE** expression as follows: ::
 
     CASE WHEN a IS NOT NULL
     THEN a
@@ -602,9 +604,14 @@ DECODE
 
 .. function:: DECODE( expression, search, result [, search, result]* [, default] )
 
-As well as a **CASE** expression, the **DECODE** function performs the same functionality as the **IF** ... **THEN** ... **ELSE** statement. It compares the *expression* argument with *search* argument, and returns the *result* corresponding to *search* that has the same value. It returns *default* if there is no *search* with the same value, and returns **NULL** if *default* is omitted. An expression argument and a search argument to be comparable should be same or convertible each other. The number of digits after the decimal point is determined to display all significant figures including valid number of all *result*.
+    As well as a **CASE** expression, the **DECODE** function performs the same functionality as the **IF** ... **THEN** ... **ELSE** statement. It compares the *expression* argument with *search* argument, and returns the *result* corresponding to *search* that has the same value. It returns *default* if there is no *search* with the same value, and returns **NULL** if *default* is omitted. An expression argument and a search argument to be comparable should be same or convertible each other. The number of digits after the decimal point is determined to display all significant figures including valid number of all *result*.
 
-**DECODE** (*a*, *b*, *c*, *d*, *e, f*) has the same meaning as the **CASE** statement below. ::
+    :param expression,search: expressions that are comparable with each other
+    :param result: the value to be returned when matched
+    :param default: the value to be retuned when no match is found 
+    :rtype: determined with the type of *result* and *default*
+
+**DECODE** (*a*, *b*, *c*, *d*, *e, f*) has the same meaning as the **CASE** expression below. ::
 
     CASE WHEN a = b THEN c
     WHEN a = d THEN e
@@ -648,14 +655,50 @@ As well as a **CASE** expression, the **DECODE** function performs the same func
      
     ERROR: Cannot coerce 'one' to type double.
 
+GREATEST
+========
+
+.. function:: GREATEST( expression [, expression]* )
+
+    The **GREATEST** function compares more than one expression specified as parameters and returns the greatest value. If only one expression has been specified, the expression is returned because there is no expression to be compared with.
+
+    Therefore, more than one expression that is specified as parameters must be of the type that can be compared with each other. If the types of the specified parameters are identical, so are the types of the return values; if they are different, the type of the return value becomes a convertible common data type.
+
+    That is, the **GREATEST** function compares the values of column 1, column 2 and column 3 in the same row and returns the greatest value while the **MAX** function compares the values of column in all result rows and returns the greatest value.
+
+    :param expression: Specifies more than one expression. Their types must be comparable each other. One of the arguments is **NULL**, **NULL** is returned.
+    :rtype: same as that of the argument
+    
+The following example shows how to retrieve the number of every medals and the highest number that Korea won in the *demodb* database.
+
+.. code-block:: sql
+
+    SELECT gold, silver , bronze, GREATEST (gold, silver, bronze) 
+    FROM participant
+    WHERE nation_code = 'KOR';
+    
+             gold       silver       bronze  greatest(gold, silver, bronze)
+    =======================================================================
+                9           12            9                              12
+                8           10           10                              10
+                7           15            5                              15
+               12            5           12                              12
+               12           10           11                              12
+
 IF
 ==
 
 .. function:: IF ( expression1, expression2, expression3 )
 
-The **IF** function returns *expression2* if the value of the arithmetic expression specified as the first parameter is **TRUE**, or *expression3* if the value is **FALSE** or **NULL**. *expression2* and *expression3* which are returned as a result must be the same or of a convertible common type. If one is explicitly **NULL**, the result of the function follows the type of the non-**NULL** parameter.
+    The **IF** function returns *expression2* if the value of the arithmetic expression specified as the first parameter is **TRUE**, or *expression3* if the value is **FALSE** or **NULL**. *expression2* and *expression3* which are returned as a result must be the same or of a convertible common type. If one is explicitly **NULL**, the result of the function follows the type of the non-**NULL** parameter.
 
-**IF** (*a*, *b*, *c*) has the same meaning as the **CASE** statement in the following example: ::
+    :param expression1: comparison expression
+    :param expression2: the value to be returned when *expression1* is true
+    :param expression3: the value to be returned when *expression1* is not true
+    :rtype: type of *expression2* or *expression3*
+
+
+**IF** (*a*, *b*, *c*) has the same meaning as the **CASE** expression in the following example: ::
 
     CASE WHEN a IS TRUE THEN b
     ELSE c
@@ -695,7 +738,11 @@ IFNULL, NVL
 .. function:: IFNULL ( expr1, expr2 )
 .. function:: NVL ( expr1, expr2 )
 
-The **IFNULL** function is working like the **NVL** function; however, only the **NVL** function supports collection type as well. The **IFNULL** function (which has two arguments) returns *expr1* if the value of the first expression is not **NULL** or returns *expr2*, otherwise.
+    The **IFNULL** function is working like the **NVL** function; however, only the **NVL** function supports collection type as well. The **IFNULL** function (which has two arguments) returns *expr1* if the value of the first expression is not **NULL** or returns *expr2*, otherwise.
+
+    :param expr1: expression
+    :param expr2: the value to be returned when *expr1* is **NULL**
+    :rtype: determined with the type of *expr1* and *expr2*
 
 Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
 
@@ -706,7 +753,7 @@ Operation is performed by converting the type of every argument into that with t
 
 For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a, b) returns a **BIGINT** type. If a type of a is **INTEGER** and b is **TIMESTAMP**, then **IFNULL** (a, b) returns a **VARCHAR** type.
 
-**IFNULL** (*a*, *b*) or **NVL** (*a*, *b*) has the same meaning as the **CASE** statement below. ::
+**IFNULL** (*a*, *b*) or **NVL** (*a*, *b*) has the same meaning as the **CASE** expression below. ::
 
     CASE WHEN a IS NULL THEN b
     ELSE a
@@ -762,15 +809,47 @@ ISNULL
         ======================================================================
                     7  'Brown     '          'account'                    NULL
 
+LEAST
+=====
+
+.. function:: LEAST( expression [, expression]* )
+
+    The **LEAST** function compares more than one expression specified as parameters and returns the smallest value. If only one expression has been specified, the expression is returned because there is no expression to be compared with.
+
+    Therefore, more than one expression that is specified as parameters must be of the type that can be compared with each other. If the types of the specified parameters are identical, so are the types of the return values; if they are different, the type of the return value becomes a convertible common data type.
+
+    That is, the **LEAST** function compares the values of column 1, column 2 and column 3 in the same row and returns the smallest value while the :func:`MIN` compares the values of column in all result rows and returns the smallest value. 
+
+    :param expression: Specifies more than one expression. Their types must be comparable each other. One of the arguments is **NULL**, **NULL** is returned.
+    :rtype: same as that of the argument
+
+The following example shows how to retrieve the number of every medals and the lowest number that Korea won in the *demodb* database.
+
+.. code-block:: sql
+
+    SELECT gold, silver , bronze, LEAST(gold, silver, bronze) FROM participant
+    WHERE nation_code = 'KOR';
+    
+             gold       silver       bronze  least(gold, silver, bronze)
+    ====================================================================
+                9           12            9                            9
+                8           10           10                            8
+                7           15            5                            5
+               12            5           12                            5
+               12           10           11                           10
 
 NULLIF
 ======
 
 .. function:: NULLIF (expr1, expr2)
 
-The **NULLIF** function returns **NULL** if the two expressions specified as the parameters are identical, and returns the first parameter value otherwise.
+    The **NULLIF** function returns **NULL** if the two expressions specified as the parameters are identical, and returns the first parameter value otherwise.
 
-**NULLIF** (*a*, *b*) is the same of the **CASE** statement. ::
+    :param expr1: expression to be compared with *expr2*
+    :param expr2: expression to be compared with *expr1*
+    :rtype: type of *expr1*
+
+**NULLIF** (*a*, *b*) is the same of the **CASE** expression. ::
 
     CASE
     WHEN a = b THEN NULL
@@ -817,7 +896,12 @@ NVL2
 
 .. function:: NVL2 ( expr1, expr2, expr3 )
 
-Three parameters are specified for the **NVL2** function. The second expression (*expr2*) is returned if the first expression (*expr1*) is not **NULL**; the third expression (*expr3*) is returned if it is **NULL**.
+    Three parameters are specified for the **NVL2** function. The second expression (*expr2*) is returned if the first expression (*expr1*) is not **NULL**; the third expression (*expr3*) is returned if it is **NULL**.
+
+    :param expr1: expression
+    :param expr2: the value to be returned when *expr1* is not **NULL**
+    :param expr3: the value to be returned when *expr1* is **NULL**
+    :rtype: determined with the type of *expr1*, *expr2* and *expr3*
 
 Operation is performed by converting the type of every argument into that with the highest priority. If there is an argument whose type cannot be converted, the type of every argument is converted into a **VARCHAR** type. The following list shows priority of conversion based on input argument type.
 

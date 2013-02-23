@@ -310,32 +310,6 @@ FLOOR
     =============================
              34567         -34567
 
-GREATEST
-========
-
-.. function:: GREATEST( expression [, expression]* )
-
-    **GREATEST** 함수는 인자로 지정된 하나 이상의 연산식을 서로 비교하여 가장 큰 값을 반환한다. 만약, 하나의 연산식만 지정되면 서로 비교할 대상이 없으므로 해당 연산식의 값을 그대로 반환한다. 따라서, 인자로 지정되는 하나 이상의 연산식은 서로 비교 가능한 타입이어야 한다. 지정된 인자의 타입이 동일하면 리턴 값의 타입도 동일하고, 인자의 타입이 다르면 리턴 값의 타입은 변환 가능(convertible)한 공통의 데이터 타입이 된다. 즉, **GREATEST** 함수는 같은 행(row) 내에서 칼럼 1, 칼럼 2, 칼럼 3의 값을 서로 비교하여 최대 값을 반환하며, :func:`MAX` 함수는 모든 결과 행들의 칼럼 1 값을 서로 비교하여 최대 값을 반환한다.
-
-    :param expression: 하나 이상의 연산식을 지정하며, 서로 비교 가능한 타입이어야 한다. 인자 중 어느 하나가 **NULL** 값이면 **NULL** 을 반환한다.
-    :rtype: expression의 타입
-
-다음은 *demodb* 에서 한국이 획득한 각 메달의 수와 최대 메달의 수를 반환하는 예제이다.
-
-.. code-block:: sql
-
-    SELECT gold, silver , bronze, GREATEST (gold, silver, bronze) 
-    FROM participant
-    WHERE nation_code = 'KOR';
-    
-             gold       silver       bronze  greatest(gold, silver, bronze)
-    =======================================================================
-                9           12            9                              12
-                8           10           10                              10
-                7           15            5                              15
-               12            5           12                              12
-               12           10           11                              12
-
 HEX
 ===
 
@@ -353,31 +327,6 @@ HEX
     hex('ab')             hex(128)              conv(hex(128), 16, 10)
     ==================================================================
       '6162'                '80'                  '128'
-
-LEAST
-=====
-
-.. function:: LEAST( expression [, expression]* )
-
-    **LEAST** 함수는 인자로 지정된 하나 이상의 연산식을 비교하여 가장 작은 값을 반환한다. 만약, 하나의 연산식만 지정되면 서로 비교할 대상이 없으므로 해당 연산식의 값을 그대로 반환한다. 따라서, 인자로 지정되는 하나 이상의 연산식은 서로 비교 가능한 타입이어야 한다. 만약, 지정된 인자의 타입이 동일하면 리턴 값의 타입도 동일하고, 인자의 타입이 다르면 리턴 값의 타입은 변환 가능(convertible)한 공통의 데이터 타입이 된다. 즉, **LEAST** 함수는 같은 행(row) 내에서 칼럼 1, 칼럼 2, 칼럼 3의 값을 서로 비교하여 최소 값을 반환하며, :func:`MIN` 함수는 모든 결과 행들의 칼럼 1 값을 서로 비교하여 최소 값을 반환한다.
-
-    :param expression: 하나 이상의 연산식을 지정하며, 서로 비교 가능한 타입이어야 한다. 인자 중 어느 하나가 **NULL** 값이면 **NULL** 을 반환한다.
-    :rtype: expression의 타입
-
-다음은 *demodb* 에서 한국이 획득한 각 메달의 수와 최소 메달의 수를 반환하는 예제이다.
-
-.. code-block:: sql
-
-    SELECT gold, silver , bronze, LEAST(gold, silver, bronze) FROM participant
-    WHERE nation_code = 'KOR';
-    
-             gold       silver       bronze  least(gold, silver, bronze)
-    ====================================================================
-                9           12            9                            9
-                8           10           10                            8
-                7           15            5                            5
-               12            5           12                            5
-               12           10           11                           10
 
 LN
 ==

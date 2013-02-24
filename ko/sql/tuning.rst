@@ -181,6 +181,7 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
     =========================================================
       'Sim Kwon Ho'                2000  'G'
       'Sim Kwon Ho'                1996  'G'
+      
     2 rows selected.
 
 
@@ -209,9 +210,9 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
 USING INDEX
 -----------
 
-**USING INDEX** 절은 **SELECT**, **DELETE**, **UPDATE** 문의 **WHERE** 절 다음에 지정되어야 한다. **USING INDEX** 절은 강제로 순차 스캔 또는 인덱스 스캔이 사용되게 하거나, 성능에 유리한 인덱스가 포함되도록 한다.
+**USING INDEX** 절은 **SELECT**, **DELETE**, **UPDATE** 문의 **WHERE** 절 다음에 지정되어야 한다. **USING INDEX** 절에 강제로 순차 스캔 또는 인덱스 스캔이 사용되게 하거나, 성능에 유리한 인덱스가 포함되도록 한다.
 
-**USING INDEX** 절에 인덱스 이름의 리스트가 지정된다면 질의 최적화기는 지정된 인덱스만을 대상으로 질의 실행 비용을 계산하고, 지정된 인덱스의 인덱스 스캔 비용과 순차 스캔 비용을 비교하여 최적의 실행 계획을 만든다(CUBRID는 실행 계획을 선택할 때 비용 기반의 질의 최적화를 수행한다).
+**USING INDEX** 절에 인덱스 이름의 리스트가 지정되면 질의 최적화기는 지정된 인덱스만을 대상으로 질의 실행 비용을 계산하고, 지정된 인덱스의 인덱스 스캔 비용과 순차 스캔 비용을 비교하여 최적의 실행 계획을 만든다(CUBRID는 실행 계획을 선택할 때 비용 기반의 질의 최적화를 수행한다).
 
 **USING INDEX** 절은 **ORDER BY** 없이 원하는 순서로 결과를 얻고자 할 때 유용하게 사용될 수 있다. CUBRID는 인덱스 스캔을 하면 인덱스에 저장된 순서로 결과가 생성되는데, 한 테이블에 여러 인덱스가 있을 경우 특정 인덱스의 순서로 질의 결과를 얻고자 할 때 **USING INDEX** 를 사용할 수 있다. 
 
@@ -240,7 +241,7 @@ USING INDEX
 USE,FORCE,IGNORE INDEX
 ----------------------
 
-FROM 절의 테이블 명세 뒤에 USE, FORCE, IGNORE INDEX 구문을 통해서 인덱스 힌트를 지정할 수 있다. 
+FROM 절의 테이블 명세 뒤에 **USE**, **FORCE**, **IGNORE INDEX** 구문을 통해서 인덱스 힌트를 지정할 수 있다. 
 
 ::
 
@@ -515,19 +516,19 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
      
     CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
 
-* 필터링된 인덱스에 대한 인덱스 스킵 스캔(ISS)은 지원되지 않는다.
-* 필터링된 인덱스에서 사용되는 조건 문자열의 길이는 128자로 제한한다.
+*   필터링된 인덱스에 대한 인덱스 스킵 스캔(ISS)은 지원되지 않는다.
+*   필터링된 인덱스에서 사용되는 조건 문자열의 길이는 128자로 제한한다.
 
-  .. code-block:: sql
+    .. code-block:: sql
 
-    CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
+        CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
+            
+        CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) 
+        WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND 
+        sqrt(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
         
-    CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) 
-    WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND 
-    sqrt(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
-    
-    ERROR: before ' ; '
-    The maximum length of filter predicate string must be 128.
+        ERROR: before ' ; '
+        The maximum length of filter predicate string must be 128.
 
 .. _function-index:
 
@@ -930,7 +931,7 @@ ORDER BY 절 최적화
     CREATE INDEX i_di_i on di (i);
     INSERT INTO di VALUES (5),(3),(1),(4),(3),(5),(2),(5);
 
-다음 예는 위와 질의가 같더라도 **USE_DESC_IDX** 힌트가 없어 내림차순 스캔이 되지 않으므로 출력 결과가 다를 수 있다.
+다음 예는 **USE_DESC_IDX** 힌트 없이 오름차순 스캔을 통해 질의를 수행한다.
 
 .. code-block:: sql
 
@@ -1041,7 +1042,7 @@ GROUP BY 절 최적화
 .. code-block:: sql
 
     CREATE TABLE tab (i INT, j INT, k INT);
-    CREATE INDEX i_tab_j_k on tab (j, k);
+    CREATE INDEX i_tab_j_k ON tab (j, k);
     INSERT INTO tab VALUES (1,2,3), (6,4,2), (3,4,1), (5,2,1), (1,5,5), (2,6,6), (3,5,4);
 
 다음의 예는 *j*, *k* 칼럼으로 **GROUP BY** 를 수행하므로 *tab* (*j*, *k*)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다.
@@ -1216,7 +1217,7 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
     SELECT ... WHERE C2 < x AND C3 >= y AND ... AND Cp BETWEEN (z AND w); -- other conditions than equal
 
 
-질의 최적화기는 궁극적으로 비용에 따라 ISS가 최적의 접근 방식인지 비용을 감안하여 결정한다. ISS는 인덱스의 첫 번째 칼럼이 레코드 개수에 비해 구분되는(**DISTINCT**) 값의 개수가 적은 경우와 같이 특정한 상황에서 적용되며, 인덱스 전체 검색(index full scan)보다 더 우수한 성능을 발휘한다. 예를 들어, 인덱스 칼럼 중에 첫 번째 칼럼이 남성/여성의 값 또는 수백만 건의 레코드가 1~100 사이의 값을 가지는 것처럼 매우 낮은 카디널리티(cardinality)를 가지고 있고(값의 중복도가 높고), 이 칼럼 조건이 질의 조건에 명시되지 않은 경우에 질의 최적화기는 ISS 적용을 검토하게 된다.
+질의 최적화기는 궁극적으로 비용에 따라 ISS가 최적의 접근 방식인지 비용을 감안하여 결정한다. ISS는 인덱스의 첫 번째 칼럼이 레코드 개수에 비해 구분되는(**DISTINCT**) 값의 개수가 적은 경우와 같이 특정한 상황에서 적용되며, 이 경우 인덱스 전체 검색(index full scan)보다 더 우수한 성능을 발휘한다. 예를 들어, 인덱스 칼럼 중에 첫 번째 칼럼이 남성/여성의 값 또는 수백만 건의 레코드가 1~100 사이의 값을 가지는 것처럼 매우 낮은 카디널리티(cardinality)를 가지고 있고(값의 중복도가 높고), 이 칼럼 조건이 질의 조건에 명시되지 않은 경우에 질의 최적화기는 ISS 적용을 검토하게 된다.
 
 인덱스 전체 검색은 인덱스 리프 전체를 모두 다 읽어야 하지만, ISS는 동적으로 재조정되는 범위 검색(range search)을 사용하여 대부분의 인덱스 페이지 읽기를 생략하면서 질의를 처리한다. 값의 중복도가 높을수록 읽기를 생략할 수 있는 인덱스 페이지가 많아질 수 있기 때문에 ISS의 효율이 높아질 수 있다. 하지만 ISS가 많이 적용된다는 것은 인덱스 생성이 적절하지 않다는 것을 의미하기 때문에, DBA들은 인덱스 재조정이 필요하지 않은지 검토해볼 필요가 있다.
 

@@ -8,10 +8,12 @@ Updating Statistics
 With the **UPDATE STATISTICS ON** statement, you can generate internal statistics used by the query processor. Such statistics allow the database system to perform query optimization more efficiently. ::
 
     UPDATE STATISTICS ON { table_spec [ {, table_spec } ] | ALL CLASSES | CATALOG CLASSES } [ ; ]
-    table_spec :
+    
+    table_spec ::=
     single_table_spec
-    ( single_table_spec [ {, single_table_spec } ] )
-    single_table_spec :
+    | ( single_table_spec [ {, single_table_spec } ] )
+    
+    single_table_spec ::=
     [ ONLY ] table_name
     | ALL table_name [ ( EXCEPT table_name ) ]
 
@@ -22,7 +24,7 @@ Checking Statistics Information
 
 You can check the statistics Information with the session command of the CSQL Interpreter. ::
 
-    csql> ;info stats <table_name>
+    csql> ;info stats table_name
     
 *   *table_name* : Table name to check the statistics Information
 
@@ -51,86 +53,12 @@ You can check the statistics Information with the session command of the CSQL In
             BTID: { 0 , 1049 }
             Cardinality: 5 (5) , Total pages: 2 , Leaf pages: 1 , Height: 2
 
-Using SQL Hint
-==============
-
-Using hints can affect the performance of query execution. you can allow the query optimizer to create more efficient execution plan by referring the SQL HINT. The SQL HINTs related tale join, index, and statistics information are provided by CUBRID. ::
-
-    CREATE /*+ NO_STATS */ [TABLE | CLASS] ...;
-    ALTER /*+ NO_STATS */ [TABLE | CLASS] ...;
-     
-    CREATE /*+ NO_STATS */ INDEX ...;
-    ALTER /*+ NO_STATS */ INDEX ...;
-    DROP /*+ NO_STATS */ INDEX ...;
-     
-    SELECT /*+ hint [ { hint } ... ] */
-    SELECT --+ hint [ { hint } ... ]
-    SELECT //+ hint [ { hint } ... ]
-     
-    hint :
-    USE_NL[(spec-name[{, spec-name}...])]
-    USE_IDX[(spec-name[{, spec-name}...])]
-    USE_MERGE[(spec-name[{, spec-name}...])]
-    ORDERED
-    USE_DESC_IDX
-    NO_DESC_IDX
-    NO_COVERING_IDX
-    NO_MULTI_RANGE_OPT
-    RECOMPILE
-
-SQL hints are specified by using plus signs and comments. CUBRID interprets this comment as a list of hints separated by blanks. The hint comment must appear after the **SELECT**, **CREATE**, or **ALTER** keyword, and the comment must begin with a plus sign (+), following the comment delimiter.
-
-The following hints can be specified on CREATE statement.
-    *   **NO_STATS** : Related to a statistical information hint. If it is specified, query optimizaer does not update the statistical information. Therefore, the query performance is improved, but note that the query plan is not optimized.
-
-The following hints can be specified on UPDATE, DELETE and SELECT statements.
-    *   **USE_NL** : Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
-    *   **USE_MERGE** : Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
-    *   **ORDERED** : Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
-    *   **USE_IDX** : Related to a index, the query optimizer creates a index join execution plan corresponding to a specified table with this hint.
-    *   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
-    *   **NO_DESC_IDX** : This is a hint not to use the descending index.
-    *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
-    *   **NO_STATS** : Related to statistics information, the query optimizer does not update statistics information. Query performance for the corresponding queries can be improved; however, query plan is not optimized because the information is not updated.
-    *   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
-
-*   *spec_name* : If the *spec_name* is specified together with **USE_NL**, **USE_IDX** or **USE_MERGE**, the specified join method applies only to the *spec_name*. If **USE_NL** and **USE_MERGE** are specified together, the given hint is ignored. In some cases, the query optimizer cannot create a query execution plan based on the given hint. For example, if **USE_NL** is specified for a right outer join, the query is converted to a left outer join internally, and the join order may not be guaranteed.
-
-The following example shows how to retrieve the years when Sim Kwon Ho won medals and the types of medals. Here, a nested loop join execution plan needs to be created which has the *athlete* table as an outer table and the *game* table as an inner table. It can be expressed by the following query. The query optimizer creates a nested loop join execution plan that has the *game* table as an outer table and the *athlete* table as an inner table.
-
-.. code-block:: sql
-
-    SELECT /*+ USE_NL ORDERED  */ a.name, b.host_year, b.medal
-    FROM athlete a, game b WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
-      name                    host_year  medal
-    =========================================================
-      'Sim Kwon Ho'                2000  'G'
-      'Sim Kwon Ho'                1996  'G'
-    2 rows selected.
-
-.. note::
-    For how to specify the index to use in the query, see :ref:`index-hint-syntax`.
-
-The following example shows how to retrieve query execution time with **NO_STAT** hint to improve the functionality of drop partitioned table (*before_2008*); any data is not stored in the table. Assuming that there are more than 1 million data in the *participant2* table. The execution time in the example depends on system performance and database configuration.
-
-.. code-block:: sql
-
-    -- Not using NO_STATS hint
-    ALTER TABLE participant2 DROP partition before_2008;
-
-    SQL statement execution time: 31.684550 sec
-
-    -- Using NO_STATS hint
-    ALTER /*+ NO_STATS */ TABLE participant2 DROP partition before_2008;
-
-    SQL statement execution time: 0.025773 sec
-
 Viewing Query Plan
 ==================
 
 To view a query plan for a CUBRID SQL query, change the value of the optimization level by using the **SET OPTIMIZATION** statement. You can get the current optimization level value by using the **GET OPTIMIZATION** statement. 
 
-The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referencing the optimization level value set by the user. The query plan is displayed as standard output; the following explanations are based on the assumption that the plan is used in a terminal-based program such as the CSQL Interpreter. In the CSQL query editor, you can view execution plan by executing the **;plan** command. See :ref:`csql-session-commands`. For information on how to view a query plan, see the CUBRID Manager. ::
+The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referencing the optimization level value set by the user. The query plan is displayed as standard output; the following explanations are based on the assumption that the plan is used in a terminal-based program such as the CSQL Interpreter. In the CSQL query editor, you can view execution plan by executing the **;plan** command. For details, see :ref:`csql-session-commands`. For the method how to view a query plan, see `CUBRID Manager manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_. ::
 
     SET OPTIMIZATION LEVEL opt-level [;]
     GET OPTIMIZATION LEVEL [ { TO | INTO } variable ] [;]
@@ -138,8 +66,10 @@ The CUBRID query optimizer determines whether to perform query optimization and 
 *   *opt-level* : A value that specifies the optimization level. It has the following meanings.
 
     *   0: Does not perform query optimization. The query is executed using the simplest query plan. This value is used only for debugging.
+    
     *   1: Create a query plan by performing query optimization and executes the query. This is a default value used in CUBRID, and does not have to be changed in most cases.
-    *   2: Creates a query plan by performing query optimization. However, the query itself is not executed. In generall, this value is not used; it is used together with the following values to be set for viewing query plans.
+    
+    *   2: Creates a query plan by performing query optimization. However, the query itself is not executed. In general, this value is not used; it is used together with the following values to be set for viewing query plans.
     
     *   257: Performs query optimization and outputs the created query plan. This value works for displaying the query plan by internally interpreting the value as 256+1 related with the value 1.
     
@@ -149,10 +79,8 @@ The CUBRID query optimizer determines whether to perform query optimization and 
     
     *   514: Performs query optimization and outputs the detailed query plan. However, the query is not executed. This value works for displaying more detailed query plan than the value 258 by internally interpreting the value as 512+2.
 
-    If you config the optimization level as not executing the query like 2, 258, or 514, all queries are not executed not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.
-    
+    .. note:: If you config the optimization level as not executing the query like 2, 258, or 514, all queries(not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.) are not executed.   
 
-    
 The following example shows how to view query plan by using the example retrieving year when Sim Kwon Ho won medal and metal type.
 
 .. code-block:: sql
@@ -173,163 +101,303 @@ The following example shows how to view query plan by using the example retrievi
     There are no results.
     0 rows selected.
 
-.. _tuning-index:
+.. _sql-hint:
+
+Using SQL Hint
+==============
+
+Using hints can affect the performance of query execution. you can allow the query optimizer to create more efficient execution plan by referring the SQL HINT. The SQL HINTs related tale join, index, and statistics information are provided by CUBRID. ::
+
+    { CREATE | ALTER } /*+ NO_STATS */ { TABLE | CLASS } ...;
+        
+    { CREATE | ALTER | DROP } /*+ NO_STATS */ INDEX ...;
+     
+    { SELECT | UPDATE | DELETE } /*+ <hint> [ { <hint> } ... ] */ ...;
+
+    MERGE /*+ <merge_statement_hint> [ { <merge_statement_hint> } ... ] */ INTO ...;
     
-Using Indexes
-=============
+    <hint> ::=
+    USE_NL [ (spec_name_comma_list) ] |
+    USE_IDX [ (spec_name_comma_list) ] |
+    USE_MERGE [ (spec_name_comma_list) ] |
+    ORDERED |
+    USE_DESC_IDX |
+    NO_DESC_IDX |
+    NO_COVERING_IDX |
+    NO_MULTI_RANGE_OPT |
+    RECOMPILE
+    
+    <merge_statement_hint> ::=
+    USE_UPDATE_INDEX (<update_index_list>) |
+    USE_DELETE_INDEX (<insert_index_list>) |
+    RECOMPILE
+
+SQL hints are specified by using plus signs to comments.
+
+* /\*+ hint \*/
+* --+ hint
+* //+ hint
+
+The hint comment must appear after the **SELECT**, **CREATE**, **ALTER**, etc. keyword, and the comment must begin with a plus sign (+), following the comment delimiter.  When you specify several hints, they are  separated by blanks.
+
+The following hints can be specified in CREATE/ALTER TABLE statements and CREATE/ALTER/DROP INDEX statements.
+
+    *   **NO_STATS** : Related to a statistical information hint. If it is specified, query optimizaer does not update the statistical information after running the DDL statement. Therefore, the DDL performance  is improved, but note that the query plan is not optimized.
+
+The following hints can be specified in UPDATE, DELETE and SELECT statements.
+
+    *   **USE_NL** : Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
+    *   **USE_MERGE** : Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
+    *   **ORDERED** : Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
+    *   **USE_IDX** : Related to a index, the query optimizer creates a index join execution plan corresponding to a specified table with this hint.
+    *   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
+    *   **NO_DESC_IDX** : This is a hint not to use the descending index.
+    *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
+    *   **NO_STATS** : Related to statistics information, the query optimizer does not update statistics information. Query performance for the corresponding queries can be improved; however, query plan is not optimized because the information is not updated.
+    *   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
+
+    .. note:: If the *spec_name* is specified together with **USE_NL**, **USE_IDX** or **USE_MERGE**, the specified join method applies only to the *spec_name*. If **USE_NL** and **USE_MERGE** are specified together, the given hint is ignored. In some cases, the query optimizer cannot create a query execution plan based on the given hint. For example, if **USE_NL** is specified for a right outer join, the query is converted to a left outer join internally, and the join order may not be guaranteed.
+
+MERGE statement can have below hints.
+
+*   **USE_INSERT_INDEX** (<*insert_index_list*>) : An index hint which is used in INSERT clause of MERGE statement. Lists index names to *insert_index_list* to use when executing INSERT cluase. This hint is applied to  <*join_condition*> of MERGE statement.
+*   **USE_UPDATE_INDEX** (<*update_index_list*>) : An index hint which is used in UPDATE clause of MERGE statement. Lists index names to *update_index_list* to use when executing UPDATE cluase. This hint is applied to <*join_condition*> and <*update_condition*> of MERGE statement.
+*   **RECOMPILE** : Recompile the query execution plan. Use this hint to remove the old query plan and set the new one to the query plan cache.
+
+The following example shows how to retrieve the years when Sim Kwon Ho won medals and the types of medals. Here, a nested loop join execution plan needs to be created which has the *athlete* table as an outer table and the *game* table as an inner table. It can be expressed by the following query. The query optimizer creates a nested loop join execution plan that has the *game* table as an outer table and the *athlete* table as an inner table.
+
+.. code-block:: sql
+
+    SELECT /*+ USE_NL ORDERED  */ a.name, b.host_year, b.medal
+    FROM athlete a, game b 
+    WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
+    
+      name                    host_year  medal
+    =========================================================
+      'Sim Kwon Ho'                2000  'G'
+      'Sim Kwon Ho'                1996  'G'
+      
+    2 rows selected.
+
+The following example shows how to retrieve query execution time with **NO_STAT** hint to improve the functionality of drop partitioned table (*before_2008*); any data is not stored in the table. Assuming that there are more than 1 million data in the *participant2* table. The execution time in the example depends on system performance and database configuration.
+
+.. code-block:: sql
+
+    -- Not using NO_STATS hint
+    ALTER TABLE participant2 DROP partition before_2008;
+
+    SQL statement execution time: 31.684550 sec
+
+    -- Using NO_STATS hint
+    ALTER /*+ NO_STATS */ TABLE participant2 DROP partition before_2008;
+
+    SQL statement execution time: 0.025773 sec
 
 .. _index-hint-syntax:
 
 Index Hint Syntax
 -----------------
 
-The index hint syntax allows the query processor to select a proper index by specifying the index in the query.
+The index hint syntax allows the query processor to select a proper index by specifying the index in the query. You can specify the index hint by USING INDEX clause or by {USE|FORCE|IGNORE} INDEX syntax after "FROM table" clause.
 
-{USE|FORCE|IGNORE} INDEX syntax is specified after "FROM table" clause.
+USING INDEX
+-----------
+
+**USING INDEX** clause should be specified after **WHERE** clause of **SELECT**, **DELETE** or **UPDATE** statement. **USING INDEX** clause forces a sequential/index scan to be used or an index that can improve the performance to be included.
+
+If **USING INDEX** clause is specified with the list of index names, query optimizer creates optimized execution plan by calculating the query execution cost based on the specified indexes only and comparing the index scan cost and the sequential scan cost of the specified indexes(CUBRID performs cost-based query optimization to select an execution plan).
+
+The **USING INDEX**  clause is useful to get the results in the desired order without **ORDER BY**. When index scan is performed by CUBRID, the results are created in the order they were saved in the index. When there are more than one indexes in one table, you can use **USING INDEX** to get the query results in a given order of indexes.
 
 ::
 
-    SELECT ... FROM ...
-      USE INDEX  (index_spec [, index_spec  ...] ) 
-    | FORCE INDEX ( index_spec [, index_spec ...] ) 
-    | IGNORE INDEX ( index_spec [, index_spec ...] )
-    WHERE ...
+    SELECT ... WHERE ...
+    [USING INDEX { NONE | [ ALL EXCEPT ] <index_spec> [ {, <index_spec> } ...] } ] [ ; ]
     
-    index_spec :
-     [table_name.]index_name
+    DELETE ... WHERE ...
+    [USING INDEX { NONE | [ ALL EXCEPT ] <index_spec> [ {, <index_spec> } ...] } ] [ ; ]
+    
+    UPDATE ... WHERE ...
+    [USING INDEX { NONE | [ ALL EXCEPT ] <index_spec> [ {, <index_spec> } ...] } ] [ ; ] 
+    
+    <index_spec> ::=
+      [table_spec.]index_name [(+) | (-)] |
+      table_spec.NONE
+ 
 
-*    **USE INDEX** ( *index_spec*, *index_spec*, ... ): forces to use only one index among specified indexes.
-*    **FORCE INDEX** ( *index_spec*, *index_spec*, ... ): works like **USING INDEX** clause, but it assumes that a cost of sequential scanning cost is very expensive. In other words, sequential scanning is executed only if there is no method to use the specified indexes to find the rows on the table.
-*    **IGNORE INDEX** ( *index_spec*, *index_spec*, ... ): forces not to use the specified indexes when scanning.
+*   **NONE** : If **NONE** is specified,  a sequential scan is used on all tables.
+*   **ALL EXCEPT** : All indexes except the specified indexes can be used when the query is executed.
+*   *index_name*\ (+) : If (+) is specified after the index_name, it is the first priority in index selection. IF this index is not proper to run the query, it is not selected.
+*   *index_name*\ (-) : If (-) is specified after the index_name, it is execluded from index selection. 
+*   *table_spec*.\ **NONE** : All indexes are execluded from the selection, so sequential scan is used.
 
-The **USING INDEX** *index_name* clause should be specified after the **WHERE** clause of the **SELECT** statement; it works like **USE INDEX** (*index_name*). If (+) is specified after the index name, it works like **FORCE INDEX**;if (-) is specified after the index name, it works like **IGNORE INDEX**.
+USE,FORCE,IGNORE INDEX
+----------------------
 
-**USING INDEX NONE** syntax forces not to use the all indexes.
-
-**USING ALL EXCEPT** syntax forces not to use only the specified indexes.
+Index hints can be specified through **USE**, **FORCE**, **IGNORE INDEX** syntax after table specification of **FROM** clause.
 
 ::
 
-    SELECT ... FROM . . . WHERE . . .
-      USING INDEX { [table_name.]NONE | [ ALL EXCEPT ] index_spec [ {, index_spec } ...] }  
+    FROM table_spec [ <index_hint_clause> ] ...
+    
+    <index_hint_clause> ::=
+      { USE | FORCE | IGNORE } INDEX  ( <index_spec> [, <index_spec>  ...] )
+    
+    <index_spec> ::=
+      [table_spec.]index_name
 
-    index_spec :
-     [table_name.]index_name [{(+)|(-)}]
+*    **USE INDEX** ( <*index_spec*> ): Only specified indexes are considered when choose them.
+*    **FORCE INDEX** ( <*index_spec*> ): Specified indexes are choosed as the first priority.
+*    **IGNORE INDEX** ( <*index_spec*> ): Specified indexes are excluded from the choice.
 
-*   **NONE** : All indexes are not used and sequential scanning is executed.
-*   **ALL EXCEPT** : All indexes except the specified index can be used on query execution.
-*   (+) : When (+) is specified after the index name, the possibility to use that index is increased.
-*   (-) : When (-) is specified after the index name, that index is not used on the query execution.
+USE, FORCE, IGNORE INDEX syntax is automatically rewritten as the proper USING INDEX syntax by the system.
 
-The following example is creating an index based on the table creation statement of the *athlete* table.
+Examples of index hint
+----------------------
 
 .. code-block:: sql
 
     CREATE TABLE athlete (
-       code             SMALLINT    NOT NULL PRIMARY KEY,
+       code             SMALLINT PRIMARY KEY,
        name             VARCHAR(40) NOT NULL,
-       gender           CHAR(1)     ,
-       nation_code      CHAR(3)     ,
+       gender           CHAR(1),
+       nation_code      CHAR(3),
        event            VARCHAR(30)
-       );
-       
-    CREATE UNIQUE INDEX athlete_idx ON athlete(code, nation_code);
-    CREATE INDEX char_idx ON athlete(gender, nation_code);
+    );
+    CREATE UNIQUE INDEX athlete_idx1 ON athlete (code, nation_code);
+    CREATE INDEX athlete_idx2 ON athlete (gender, nation_code);
 
-For the following query, the query optimizer can select the index scan that uses the *athlete_idx* index.
-
-.. code-block:: sql
-
-    SELECT * FROM athlete WHERE gender='M' AND nation_code='USA';
-
-    
-If the index scanning cost is lower than the sequantial scanning cost, the index scanning is executed.
-Below two queries do the same behavior and they use always char_idx index to execute.
+Below two queries do the same behavior and they select index scan if the specified index, *athlete_idx2*\'s scan cost is lower than sequential scan cost.
 
 .. code-block:: sql
 
-    SELECT /*+ RECOMPILE */ * FROM athlete USE INDEX (char_idx) WHERE gender='M' AND nation_code='USA';
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete USE INDEX (athlete_idx2) 
+    WHERE gender='M' AND nation_code='USA';
 
-    SELECT /*+ RECOMPILE */ * FROM athlete WHERE gender='M' AND nation_code='USA'
-    USING INDEX char_idx;
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete 
+    WHERE gender='M' AND nation_code='USA'
+    USING INDEX athlete_idx2;
 
-Below two queries do the same behavior and they don't use char_idx index to execute.
+Below two queries do the same behavior and they always use *athlete_idx2*
 
 .. code-block:: sql
     
-    SELECT /*+ RECOMPILE */ * FROM athlete IGNORE INDEX (char_idx) WHERE gender='M' AND nation_code='USA';
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete FORCE INDEX (athlete_idx2) 
+    WHERE gender='M' AND nation_code='USA';
 
-    SELECT /*+ RECOMPILE */ * FROM athlete WHERE gender='M' AND nation_code='USA'
-    USING INDEX char_idx(-);
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete 
+    WHERE gender='M' AND nation_code='USA'
+    USING INDEX athlete_idx2(+);
 
-Below query always forces to do the sequential scanning.
+Below two queries do the same behavior and they always don't use *athlete_idx2*
+
+.. code-block:: sql
+    
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete IGNORE INDEX (athlete_idx2) 
+    WHERE gender='M' AND nation_code='USA';
+
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete 
+    WHERE gender='M' AND nation_code='USA'
+    USING INDEX athlete_idx2(-);
+    
+Below query always do the sequential scan.
 
 .. code-block:: sql
 
-    SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
+    SELECT * 
+    FROM athlete 
+    WHERE gender='M' AND nation_code='USA'
     USING INDEX NONE;
 
-Below query forces to be possible to use all indexes execept char_idex index.
+    SELECT * 
+    FROM athlete 
+    WHERE gender='M' AND nation_code='USA'
+    USING INDEX athlete.NONE;
+
+Below query forces to be possible to use all indexes execept *athlete_idx2* index.
 
 .. code-block:: sql
 
-    SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
-    USING INDEX ALL EXCEPT char_idx;
-
+    SELECT * 
+    FROM athlete 
+    WHERE gender='M' AND nation_code='USA'
+    USING INDEX ALL EXCEPT athlete_idx2;
     
     
 When two or more indexes have been specified in the **USING INDEX** clause, the query optimizer selects the proper one of the specified indexes.
 
 .. code-block:: sql
 
-    SELECT * FROM athlete USE INDEX (char_idx, athlete_idx) WHERE gender='M' AND nation_code='USA';
+    SELECT * 
+    FROM athlete USE INDEX (char_idx, athlete_idx) 
+    WHERE gender='M' AND nation_code='USA';
 
-    SELECT * FROM athlete WHERE gender='M' AND nation_code='USA'
+    SELECT * 
+    FROM athlete 
+    WHERE gender='M' AND nation_code='USA'
     USING INDEX char_idx, athlete_idx;
 
-When a query is made for several tables, you can specify a table to perform index scan by using a specific index and another table to perform sequential scan. The query has the following format.
+When a query is run for several tables, you can specify a table to perform index scan by using a specific index and another table to perform sequential scan. The query has the following format.
 
 .. code-block:: sql
 
-    SELECT ... FROM tab1, tab2 WHERE ... USING INDEX tab1.idx1, tab2.NONE;
+    SELECT * 
+    FROM tab1, tab2 
+    WHERE ... 
+    USING INDEX tab1.idx1, tab2.NONE;
 
 When executing a query with the index hint syntax, the query optimizer considers all available indexes on the table for which no index has been specified. For example, when the *tab1* table includes *idx1* and *idx2* and the *tab2* table includes *idx3*, *idx4*, and *idx5*, if indexes for only *tab1* are specified but no indexes are specified for *tab2*, the query optimizer considers the indexes of *tab2*.
 
 .. code-block:: sql
 
-    SELECT ... FROM tab1, tab2 USE INDEX(tab1.idx1) WHERE ... ;
-    SELECT ... FROM tab1, tab2 WHERE ... USING INDEX tab1.idx1;
+    SELECT ... 
+    FROM tab1, tab2 USE INDEX(tab1.idx1) 
+    WHERE ... ;
+    
+    SELECT ... 
+    FROM tab1, tab2 
+    WHERE ... USING INDEX tab1.idx1;
 
-*   The sequential scan of table *tab1* and *idx1* index scan are compared, and the optimal query plan is selected.
-*   The sequential scan of table *tab2* and *idx3*, *idx4*, and *idx5* index scan are compared, and the optimal query plan is selected.
+The above query select the scan method of table *tab1* after comparing the cost between the sequential scan of the table *tab1* and the index scan of the index *idx1*, and select the scan method of table *tab2* after comparing the cost between the sequential scan of the table *tab2* and the index scan of the indexes *idx3*, *idx4*, *idx5*.
+    
+Specitial Indexes
+=================
 
-To perform index scan for only the *tab2* table and sequential scan for the *tab1* table, specify *tab1*.NONE not to perform index scan for the *tab1* table.
-
-.. code-block:: sql
-
-    SELECT * from tab1,tab2 WHERE tab1.id > 2 and tab2.id < 3 USING index i_tab2_id, tab1.NONE;
+.. _filtered-index:
 
 Filtered Index
 --------------
 
-The filtered index is used to sort, search, or operate a well-defined partials set for one table. It is called the partial index since only some of indexes that satisfy the condition are used. To guarantee using the filtered indexes, the **USING INDEX** syntax must be added as follows:
+The filtered index is used to sort, search, or operate a well-defined partials set for one table. It is called the partial index since only some data that satisfy the condition are kept in that index. ::
+
+
+    CREATE /*+ hints */ INDEX index_name
+    ON table_name (col1, col2, ...) 
+    WHERE <filter_predicate>;
+     
+    ALTER  /*+ hints */ INDEX index_name
+    [ ON table_name (col1, col2, ...) 
+    [ WHERE <filter_predicate> ] ]
+    REBUILD;
+     
+    <filter_predicate> ::= <filter_predicate> AND <expression> | <expression>
+    
+*   <*filter_predicate*>: Condition to compare the column and the constant. When there are several conditions, filtering is available only when they are connected by using **AND**. The filter conditions can include most of the operators and functions supported by CUBRID. However, the date/time function that shows the current date/time (ex: :func:`SYS_DATETIME`) or random functions (ex: :func:`RAND`), which outputs different results for one input are not allowed.
+
+If you apply the filtered index, that filtered index must be specified by **USING INDEX** clause or **USE INDEX** syntax.
 
 .. code-block:: sql
 
-    SELECT * FROM blogtopic WHERE postDate>'2010-01-01' USING INDEX my_filter_index;
-
-::
-
-    CREATE /* hints */ INDEX index_name
-            ON table_name (col1, col2, ...) WHERE <filter_predicate>;
-     
-    ALTER  /* hints */ INDEX index_name
-            [ ON table_name (col1, col2, ...) [ WHERE <filter_predicate> ] ]
-            REBUILD;
-     
-    <filter_predicate> ::= <filter_predicate> AND <expression> | <expression>
-
-*   <*filter_predicate*>: Condition to compare the column and the constant. When there are several conditions, filtering is available only when they are connected by using **AND**. The filter conditions can include most of the operators and functions supported by CUBRID. However, the date/time function that shows the current date/time (ex: :func:`SYS_DATETIME`) or random functions (ex: :func:`RAND`), which outputs different results for one input are not allowed.
+    SELECT * 
+    FROM blogtopic 
+    WHERE postDate>'2010-01-01' 
+    USING INDEX my_filter_index;
 
 The following example shows a bug tracking system that maintains bugs/issues. After a specified period of development, the bugs table records bugs. Most of the bugs have already been closed. The bug tracking system makes queries on the table to find new open bugs. In this case, the indexes on the bug table do not need to know the records on closed bugs. Then the filtered indexes allow indexing of open bugs only.
 
@@ -337,13 +405,13 @@ The following example shows a bug tracking system that maintains bugs/issues. Af
 
     CREATE TABLE bugs
     (
-            bugID BIGINT NOT NULL,
-            CreationDate TIMESTAMP,
-            Author VARCHAR(255),
-            Subject VARCHAR(255),
-            Description VARCHAR(255),
-            CurrentStatus INTEGER,
-            Closed SMALLINT
+        bugID BIGINT NOT NULL,
+        CreationDate TIMESTAMP,
+        Author VARCHAR(255),
+        Subject VARCHAR(255),
+        Description VARCHAR(255),
+        CurrentStatus INTEGER,
+        Closed SMALLINT
     );
 
 Indexes for open bugs can be created by using the following sentence:
@@ -352,17 +420,18 @@ Indexes for open bugs can be created by using the following sentence:
 
     CREATE INDEX idx_open_bugs ON bugs(bugID) WHERE Closed = 0;
 
-To process queries that are interested in open bugs, specify the index in the USING INDEX statement. It will allow to create query results by accessing less index pages through filtered indexes.
+To process queries that are interested in open bugs, specify the index as a index hint. It will allow to create query results by accessing less index pages through filtered indexes.
 
 .. code-block:: sql
 
-    SELECT * FROM bugs
+    SELECT * 
+    FROM bugs
     WHERE Author = 'madden' AND Subject LIKE '%fopen%' AND Closed = 0;
     USING INDEX idx_open_bugs;
      
-    SELECT * FROM bugs
+    SELECT * 
+    FROM bugs  USE INDEX (idx_open_bugs)
     WHERE CreationDate > CURRENT_DATE - 10 AND Closed = 0;
-    USING INDEX idx_open_bugs;
 
 .. warning::
 
@@ -370,98 +439,109 @@ To process queries that are interested in open bugs, specify the index in the US
 
 **Constraints**
 
-Only generic indexes are allowed as filtered indexes. For example, the filtered unique index is not allowed. The following cases are not allowed as filtering conditions.
+Only generic indexes are allowed as filtered indexes. For example, the filtered unique index is not allowed. 
 
-* Functions, which output different results with the same input, such as date/time function or random function
+The following cases are not allowed as filtering conditions.
 
-  .. code-block:: sql
-  
-    CREATE INDEX idx ON bugs(creationdate) WHERE creationdate > SYS_DATETIME;
-     
-    ERROR: before ' ; '
-    'sys_datetime ' is not allowed in a filter expression for index.
-     
-    CREATE INDEX idx ON bugs(bugID) WHERE bugID > RAND();
-     
-    ERROR: before ' ; '
-    'rand ' is not allowed in a filter expression for index.
+*   Functions, which output different results with the same input, such as date/time function or random function
+
+    .. code-block:: sql
+      
+        CREATE INDEX idx ON bugs(creationdate) WHERE creationdate > SYS_DATETIME;
+         
+        ERROR: before ' ; '
+        'sys_datetime ' is not allowed in a filter expression for index.
+         
+        CREATE INDEX idx ON bugs(bugID) WHERE bugID > RAND();
+         
+        ERROR: before ' ; '
+        'rand ' is not allowed in a filter expression for index.
     
-* When the **OR** operator is used
+*   In case of using the **OR** operator
 
-  .. code-block:: sql
+    .. code-block:: sql
 
-    CREATE INDEX IDX ON bugs(bugID) WHERE bugID > 10 OR bugID = 3;
-     
-    In line 1, column 62,
-     
-    ERROR: before ' ; '
-    ' or ' is not allowed in a filter expression for index.
+        CREATE INDEX IDX ON bugs(bugID) WHERE bugID > 10 OR bugID = 3;
+         
+        In line 1, column 62,
+         
+        ERROR: before ' ; '
+        ' or ' is not allowed in a filter expression for index.
 
-* **INCR** () function and **DECR** () function
-* Serial-related functions
-* Aggregate functions such as **MIN** (), **MAX** (), and **STDDEV** ()
-* Conditions for types where indexes cannot be created
+*   In case of including functions like :func:`INCR`, :func:`DECR` functions, which modify the data of a table.
+    
+*   In case of Serial-related functions and including pseudo columns.
+    
+*   In case of including aggregate functions such as :func:`MIN`, :func:`MAX`, :func:`STDDEV`
+    
+*   In case of using the types where indexes cannot be created
 
-  * The operators and functions where parameter is the **SET** type
-  * **IS NULL** operator can be used only when at least one column among the columns of the index is not **NULL**.
+    -   The operators and functions where an argument is the **SET** type
+    -   The functions to use LOB file(:func:`CHAR_TO_BLOB`, :func:`CHAR_TO_CLOB`, :func:`BIT_TO_BLOB`, :func:`BLOB_FROM_FILE`, :func:`CLOB_FROM_FILE`)
 
-* The **IS NULL** operator can be used only when at least one column of an index is not NULL.
+*   The **IS NULL** operator can be used only when at least one column of an index is not NULL.
 
   .. code-block:: sql
   
     CREATE TABLE t (a INT, b INT);
-    Current transaction has been committed.
      
     -- IS NULL cannot be used with expressions
     CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
+    
     ERROR: before ' ; '
     Invalid filter expression (( not t.a<>0) is null ) for index.
      
     CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
+    
     ERROR: before ' ; '
     Invalid filter expression ((t.a+1) is null ) for index.
      
     -- At least one attribute must not be used with IS NULL
     CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
+    
     ERROR: before '  ; '
     Invalid filter expression (t.a is null ) for index.
      
     CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
+    
     ERROR: before ' ; '
     Invalid filter expression (t.a is null  and t.b is null ) for index.
      
     CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
-    Current transaction has been committed.
 
-* Index Skip Scan (ISS) is not allowed for the filtered indexes.
-* The length of condition string used for the filtered index is limited to 128 characters.
+*   Index Skip Scan (ISS) is not allowed for the filtered indexes.
+*   The length of condition string used for the filtered index is limited to 128 characters.
 
-  .. code-block:: sql
+    .. code-block:: sql
 
-    CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
-    1 command(s) successfully processed.
-     
-    CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND sqrt(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
-    ERROR: before ' ; '
-    The maximum length of filter predicate string must be 128.
+        CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
+        1 command(s) successfully processed.
+         
+        CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND sqrt(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
+        ERROR: before ' ; '
+        The maximum length of filter predicate string must be 128.
 
 Function-based Index
 --------------------
 
 Function-based index is used to sort or find the data based on the combination of values of table rows by using a specific function. For example, to find the space-ignored string, it can be used to optimize the query by using the function that provides the feature. In addition, it is useful to search the non-case-sensitive names. ::
 
-    CREATE /* hints */ [UNIQUE] INDEX index_name
-            ON table_name (function_name (argument_list));
-    ALTER /* hints */ [UNIQUE] INDEX index_name
-            [ ON table_name (function_name (argument_list)) ]
-            REBUILD;
-
+    CREATE /*+ hints */ INDEX index_name
+    ON table_name (function_name (argument_list));
+    
+    ALTER /*+ hints */ INDEX index_name
+    [ ON table_name (function_name (argument_list)) ]
+    REBUILD;
+    
 After the following indexes have been created, the **SELECT** query automatically uses the function-based index.
 
 .. code-block:: sql
 
     CREATE INDEX idx_trim_post ON posts_table(TRIM(keyword));
-    SELECT * FROM posts_table WHERE TRIM(keyword) = 'SQL';
+    
+    SELECT * 
+    FROM posts_table 
+    WHERE TRIM(keyword) = 'SQL';
 
 If a function-based index is created by using the **LOWER** function, it can be used to search the non-case-sensitive names.
 
@@ -474,7 +554,8 @@ To make an index selected while creating a query plan, the function used for the
 
 .. code-block:: sql
 
-    SELECT * FROM clients_table
+    SELECT * 
+    FROM clients_table
     WHERE LOWER(CONCAT('Mr. ', LastName)) = LOWER('Mr. Timothy');
 
 In addition, to make the function-based index used by force, use the **USING INDEX** syntax.
@@ -482,40 +563,14 @@ In addition, to make the function-based index used by force, use the **USING IND
 .. code-block:: sql
 
     CREATE INDEX i_tbl_first_four ON tbl(LEFT(col, 4));
-    SELECT * FROM clients_table WHERE LEFT(col, 4) = 'CAT5' USING INDEX i_tbl_first_four;
-
-**Constraints**
-
-Arguments of functions which can be used in the function-based indexes, only column names and constants are allowed; nested expressions are not allowed. For example, a statement below will cause an error.
-
-.. code-block:: sql
-
-    CREATE INDEX my_idx ON tbl (TRIM(LEFT(col, 3)));
-    CREATE INDEX my_idx ON tbl (LEFT(col1, col2 + 3));
-
-However, implicit cast is allowed. In the example below, the first argument type of the **LEFT** () function should be **VARCHAR** and the second argument type should be **INTEGER**; it works normally.
-
-.. code-block:: sql
-
-    CREATE INDEX my_idx ON tbl (LEFT(int_col, str_col));
-
-Function-based indexes cannot be used with filtered indexes. The example will cause an error.
-
-.. code-block:: sql
-
-    CREATE INDEX my_idx ON tbl ( TRIM(col) ) WHERE col > 'SQL';
-
-Function-based indexes cannot become multiple-columns indexes. The example will cause an error.
-.. code-block:: sql
-
-    CREATE INDEX my_idx ON tbl ( TRIM(col1), col2, LEFT(col3, 5) );
+    SELECT *
+    FROM clients_table 
+    WHERE LEFT(col, 4) = 'CAT5' 
+    USING INDEX i_tbl_first_four;
 
 .. _allowed-function-in-function-index:
 
-Functions which can be used on the function-based indexes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    Functions with the function-based indexes are as follows:
+Functions with the function-based indexes are as follows:
 
     +-------------------+-------------------+-------------------+-------------------+-------------------+
     | ABS               | ACOS              | ADD_MONTHS        | ADDDATE           | ASIN              |
@@ -558,6 +613,36 @@ Functions which can be used on the function-based indexes
     +-------------------+-------------------+-------------------+-------------------+-------------------+
     | UNIX_TIMESTAMP    | UPPER             | WEEK              | WEEKDAY           | YEAR              |
     +-------------------+-------------------+-------------------+-------------------+-------------------+
+
+Arguments of functions which can be used in the function-based indexes, only column names and constants are allowed; nested expressions are not allowed. For example, a statement below will cause an error.
+
+.. code-block:: sql
+
+    CREATE INDEX my_idx ON tbl (TRIM(LEFT(col, 3)));
+    CREATE INDEX my_idx ON tbl (LEFT(col1, col2 + 3));
+
+However, implicit cast is allowed. In the example below, the first argument type of the **LEFT** () function should be **VARCHAR** and the second argument type should be **INTEGER**; it works normally.
+
+.. code-block:: sql
+
+    CREATE INDEX my_idx ON tbl (LEFT(int_col, str_col));
+
+Function-based indexes cannot be used with filtered indexes. The example will cause an error.
+
+.. code-block:: sql
+
+    CREATE INDEX my_idx ON tbl ( TRIM(col) ) WHERE col > 'SQL';
+
+Function-based indexes cannot become multiple-columns indexes. The example will cause an error.
+.. code-block:: sql
+
+    CREATE INDEX my_idx ON tbl ( TRIM(col1), col2, LEFT(col3, 5) );
+
+
+.. _tuning-index:
+
+Optimization using indexes
+========================== 
 
 .. _covering-index:
 
@@ -640,16 +725,21 @@ The following example shows that the index is used as a covering index because c
         'abcd '
 
     As you can see in the above comparison result, the value in the **VARCHAR** type retrieved from the index will appear with the following empty string truncated when the covering index has been applied.
+    
+.. note:: If covering index optimization is available to be applied, the I/O performance can be improved because the disk I/O is decreased. Buf if you don't want covering index optimization in a special condition, specify a **NO_COVERING_IDX** hint to the query. For how to add a query, refer :ref:`sql-hint`.
 
 Optimizing ORDER BY Clause
 --------------------------
 
 The index including all columns in the **ORDER BY** clause is referred to as the ordered index.
- Optimizing the query with ORDER BY clause is no need for the additional sorting process(skip order by), because the query results are searched by the ordered index. In general, for an ordered index, the columns in the **ORDER BY** clause should be located at the front of the index.
+ Optimizing the query with **ORDER BY** clause is no need for the additional sorting process(skip order by), because the query results are searched by the ordered index. In general, for an ordered index, the columns in the **ORDER BY** clause should be located at the front of the index.
 
 .. code-block:: sql
 
-    SELECT * FROM tab WHERE col1 > 0 ORDER BY col1, col2
+    SELECT * 
+    FROM tab 
+    WHERE col1 > 0 
+    ORDER BY col1, col2
 
 *   The index consisting of *tab* (*col1*, *col2*) is an ordered index.
 *   The index consisting of *tab* (*col1*, *col2*, *col3*) is also an ordered index. This is because the *col3*, which is not referred by the **ORDER BY** clause comes after *col1* and *col2* .
@@ -660,7 +750,10 @@ Although the columns composing an index do not exist in the **ORDER BY** clause,
 
 .. code-block:: sql
 
-    SELECT * FROM tab WHERE col2=val ORDER BY col1,col3;
+    SELECT * 
+    FROM tab 
+    WHERE col2=val 
+    ORDER BY col1,col3;
 
 If the index consisting of *tab* (*col1*, *col2*, *col3*) exists and the index consisting of *tab* (*col1*, *col2*) do not exist when executing the above query, the query optimizer uses the index consisting of *tab* (*col1*, *col2*, *col3*) as an ordered index. You can get the result in the requested order when you execute an index scan, so you don't need to sort records.
 
@@ -678,7 +771,10 @@ The following example shows that indexes consisting of *tab* (*j*, *k*) become s
 
 .. code-block:: sql
 
-    SELECT i,j,k FROM tab WHERE j > 0 ORDER BY j,k;
+    SELECT i,j,k 
+    FROM tab 
+    WHERE j > 0 
+    ORDER BY j,k;
      
     --  the  selection from the query plan dump shows that the ordering index i_tab_j_k was used and sorting was not necessary
     --  (/* --> skip ORDER BY */)
@@ -706,7 +802,10 @@ The following example shows that *j* and *k* columns execute **ORDER BY** and th
 
 .. code-block:: sql
 
-    SELECT /*+ RECOMPILE */ j,k FROM tab WHERE j > 0 ORDER BY j,k;
+    SELECT /*+ RECOMPILE */ j,k 
+    FROM tab 
+    WHERE j > 0 
+    ORDER BY j,k;
      
     --  in this case the index i_tab_j_k is a covering index and also respects the orderind index property.
     --  Therefore, it is used as a covering index and sorting is not performed.
@@ -736,7 +835,9 @@ The following example shows that *i* column exists, **ORDER BY** is executed by 
 .. code-block:: sql
 
     CREATE INDEX i_tab_j_k ON tab (i,j,k);
-    SELECT /*+ RECOMPILE */ i,j,k FROM tab WHERE i > 0 ORDER BY j,k;
+    SELECT /*+ RECOMPILE */ i,j,k 
+    FROM tab WHERE i > 0 
+    ORDER BY j,k;
      
     -- since an index on (i,j,k) is now available, it will be used as covering index. However, sorting the results according to
     -- the ORDER BY  clause is needed.
@@ -763,25 +864,25 @@ The following example shows that *i* column exists, **ORDER BY** is executed by 
                 2            6            6
 
 .. note::
-    Even if the type of a column in the ORDER BY clause is converted, ORDER BY optimization is executed when the sorting order is the same as before.
+    Even if the type of a column in the ORDER BY clause is converted by using :func:`CAST`, ORDER BY optimization is executed when the sorting order is the same as before.
     
-    +---------------------------------+
-    | Before         | After          |
-    +================+================+
-    | numeric type   | numeric type   |
-    +----------------+----------------+
-    | string type    | string type    |
-    +----------------+----------------+
-    | DATETIME       | TIMESTAMP      |
-    +----------------+----------------+
-    | TIMESTAMP      | DATETIME       |
-    +----------------+----------------+
-    | DATETIME       | DATE           |
-    +----------------+----------------+
-    | TIMESTAMP      | DATE           |
-    +----------------+----------------+
-    | DATE           | DATETIME       |
-    +----------------+----------------+
+        +---------------------------------+
+        | Before         | After          |
+        +================+================+
+        | numeric type   | numeric type   |
+        +----------------+----------------+
+        | string type    | string type    |
+        +----------------+----------------+
+        | DATETIME       | TIMESTAMP      |
+        +----------------+----------------+
+        | TIMESTAMP      | DATETIME       |
+        +----------------+----------------+
+        | DATETIME       | DATE           |
+        +----------------+----------------+
+        | TIMESTAMP      | DATE           |
+        +----------------+----------------+
+        | DATE           | DATETIME       |
+        +----------------+----------------+
 
 .. _index-descending-scan:
 
@@ -792,7 +893,10 @@ When a query is executed by sorting in descending order as follows, it usually c
 
 .. code-block:: sql
 
-    SELECT * FROM tab [WHERE ...] ORDER BY a DESC
+    SELECT * 
+    FROM tab 
+    [WHERE ...] 
+    ORDER BY a DESC
 
 However, if you create an ascending index and an descending index in the same column, the possibility of deadlock increases. In order to decrease the possibility of such case, CUBRID supports the descending scan only with ascending index. Users can use the **USE_DESC_IDX** hint to specify the use of the descending scan. If the hint is not specified, the following three query executions should be considered, provided that the columns listed in the **ORDER BY** clause can use the index.
 
@@ -810,24 +914,7 @@ Although the **USE_DESC_IDX** hint is omitted for the scan in descending order, 
     CREATE INDEX i_di_i on di (i);
     INSERT INTO di VALUES (5),(3),(1),(4),(3),(5),(2),(5);
 
-The following example shows how to execute queries by using the **USE_DESC_IDX** hint.
-
-.. code-block:: sql
-
-    -- We now run the following query, using the ''use_desc_idx'' SQL hint:
-     
-    SELECT /*+ USE_DESC_IDX */ * FROM di WHERE i > 0 LIMIT 3;
-     
-    Query plan:
-     Index scan(di di, i_di_i, (di.i range (0 gt_inf max) and inst_num() range (min inf_le 3)) (covers) (desc_index))
-     
-                i
-    =============
-                5
-                5
-                5
-
-Even though the example below is the same as that above, the output result may be different because it cannot be scanned in descending order; which is caused by not using the **USE_DESC_IDX** hint.
+The query will be executed as an ascending scan without **USE_DESC_IDX** hint.
 
 .. code-block:: sql
 
@@ -844,15 +931,38 @@ Even though the example below is the same as that above, the output result may b
                 1
                 2
                 3
+    
 
-The following example shows how to sort in descending order by using **ORDER BY DESC**; the example below is the same as that above. There is no **USE_DESC_IDX** hint in the following example; however it is scanned in descending order and the result is the same as the example 1.
+If you add **USE_DESC_IDX** hint to the above query, a different result will be shown by descending scan.
 
 .. code-block:: sql
 
-    -- We also run the same query , this time asking that the results are displayed in descending order. However, no hint will be given. Since the
-    -- ORDER BY...DESC clause is present, CUBRID will use descending scan, even if the hint is  was not given, thus avoiding to sort the records.
+    -- We now run the following query, using the ''use_desc_idx'' SQL hint:
      
-    SELECT * FROM di WHERE i > 0 ORDER BY i DESC LIMIT 3;
+    SELECT /*+ USE_DESC_IDX */ * FROM di WHERE i > 0 LIMIT 3;
+     
+    Query plan:
+     Index scan(di di, i_di_i, (di.i range (0 gt_inf max) and inst_num() range (min inf_le 3)) (covers) (desc_index))
+     
+                i
+    =============
+                5
+                5
+                5
+
+The following example requires descending order by **ORDER BY** clause. In this case, there is no **USE_DESC_IDX** but do the descending scan.
+
+.. code-block:: sql
+
+    -- We also run the same query, this time asking that the results are displayed in descending order. 
+    -- However, no hint is given. 
+    -- Since ORDER BY...DESC clause exists, CUBRID will use descending scan, even though the hint is not given, 
+    -- thus avoiding to sort the records.
+     
+    SELECT * 
+    FROM di 
+    WHERE i > 0 
+    ORDER BY i DESC LIMIT 3;
      
     Query plan:
      Index scan(di di, i_di_i, (di.i range (0 gt_inf max)) (covers) (desc_index))
@@ -870,7 +980,10 @@ Optimizing GROUP BY Clause
 
 .. code-block:: sql
 
-    SELECT * FROM tab WHERE col1 > 0 GROUP BY col1,col2
+    SELECT * 
+    FROM tab 
+    WHERE col1 > 0 
+    GROUP BY col1,col2
 
 *   You can use the index consisting of tab(col1, col2) for optimization.
 *   The index consisting of tab(col1, col2, col3) can be used because col3 no referred by **GROUP BY** comes after col1 and col2.
@@ -881,7 +994,10 @@ You can use the index if the column condition is a constant although the column 
 
 .. code-block:: sql
 
-    SELECT * FROM tab WHERE col2=val GROUP BY col1,col3
+    SELECT * 
+    FROM tab 
+    WHERE col2=val 
+    GROUP BY col1,col3
 
 If there is any index that consists of tab(col1, col2, col3) in the above example, use the index for optimizing **GROUP BY**.
 
@@ -901,14 +1017,17 @@ If the index consisting of the **GROUP BY** column and the first column of the i
 .. code-block:: sql
 
     CREATE TABLE tab (i INT, j INT, k INT);
-    CREATE INDEX i_tab_j_k ON tab (j,k);
+    CREATE INDEX i_tab_j_k ON tab (j, k);
     INSERT INTO tab VALUES (1,2,3),(6,4,2),(3,4,1),(5,2,1),(1,5,5),(2,6,6),(3,5,4);
 
 The following example shows that indexes consisting of tab(j,k) are used and no separate sorting process is required because **GROUP BY** is executed by j and k columns.
 
 .. code-block:: sql
 
-    SELECT i,j,k FROM tab WHERE j > 0 GROUP BY j,k;
+    SELECT i,j,k 
+    FROM tab 
+    WHERE j > 0 
+    GROUP BY j,k;
      
     --  the  selection from the query plan dump shows that the index i_tab_j_k was used and sorting was not necessary
     --  (/* ---> skip GROUP BY */)
@@ -937,7 +1056,9 @@ The following example shows that an index consisting of tab(j,k) is used and no 
 .. code-block:: sql
 
     ALTER TABLE tab CHANGE COLUMN j j INT NOT NULL;
-    SELECT * FROM tab GROUP BY j,k;
+    SELECT * 
+    FROM tab 
+    GROUP BY j,k;
      
     --  the  selection from the query plan dump shows that the index i_tab_j_k was used (since j has the NOT NULL constraint )
     --  and sorting was not necessary (/* ---> skip GROUP BY */)
@@ -961,11 +1082,107 @@ The following example shows that an index consisting of tab(j,k) is used and no 
                 1            5            5
                 2            6            6
 
+
+.. _multi-key-range-opt:
+
+[번역]
+
+다중 키 범위 최적화
+-------------------
+
+대부분의 질의가 **LIMIT** 절을 포함하고 있기 때문에 **LIMIT** 절을 최적화하는 것이 질의 성능에 매우 중요한데, 이에 해당하는 대표적인 최적화가 다중 키 범위 최적화(multiple key range optimization)이다. 다중 키 범위 최적화는 결과 생성에 필요한 인덱스 범위 전체를 스캔하지 않고, 인덱스 내의 일부 키 범위만 스캔하면서 Top N 정렬 방식을 통해 질의 결과를 생성한다. Top N 정렬은 전체 결과를 생성한 후에 이를 정렬하여 결과를 얻는 것이 아니라, 항상 최적의 N 개의 결과를 유지하는 방식으로 질의를 처리하기 때문에 매우 뛰어난 성능을 보인다.
+
+예를 들어 내 친구들이 쓴 글 중에서 가장 최근 글을 10 개만 검색하는 경우, 내 전체 친구가 쓴 글을 모두 찾아서 정렬한 후에 결과를 찾는 방법 보다는 각 친구가 쓴 최근 글 10 개씩만을 찾아서 정렬을 유지하는 방식으로 인덱스를 스캔하는 CUBRID만의 최적화 기법이다.
+
+
+다중 키 범위 최적화를 사용할 수 있는 예는 다음과 같다. 
+
+.. code-block:: sql
+
+    CREATE TABLE t (a int, b int); 
+    CREATE INDEX i_t_a_b ON t (a,b);
+    
+    -- Multiple key range optimization
+    SELECT * 
+    FROM t 
+    WHERE a IN (1,2,3) 
+    ORDER BY b 
+    LIMIT 2; 
+
+    Query plan: 
+    iscan 
+    class: t node[0] 
+    index: i_t_a_b term[0] (covers) (multi_range_opt) 
+    sort: 1 asc, 2 asc 
+    cost: 1 card 0 
+
+단일 테이블에서는 다음과 같은 조건들이 만족되었을 경우에 다중 키 범위 최적화가 수행된다. 
+
+::
+
+    SELECT /*+ hints */ … 
+    FROM table
+    WHERE col_1 = ? AND col_2 = ? AND … AND col(j-1) = ?
+    AND col_(j) IN (?, ?, … )
+    AND col_(j+1) = ? AND … AND col_(p-1) = ?
+    AND key_filter_terms
+    ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC],… col_(p+k-1) [ASC|DESC]
+    FOR orderbynum_pred | LIMIT n;
+
+먼저 *orderbynum_pred* 조건이 명시되었다면 이 조건은 유효해야 하고, **ORDERBY_NUM** 또는 **LIMIT**\ 를 통해서 지정된 최종 결과의 상한 크기(*n*)이 multi_range_optimization_limit 시스템 파라미터 값보다 크지 않아야 한다.
+
+또한 다중 키 범위 최적화에 적합한 인덱스가 필요한데, **ORDER BY** 절에 명시된 모든 *k* 개의 컬럼을 커버해야 한다. 즉, 인덱스 상에서 **ORDER BY** 절에 명시된 컬럼들을 모두 포함해야 하고, 컬럼들의 순서와 정렬 방향이 일치해야 한다. 또한 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
+
+인덱스를 구성하는 칼럼들 중 
+
+* 범위 조건(예를 들어, IN 조건) 앞의 칼럼들은 동일(=) 조건으로 표현된다.
+* 범위 조건을 가진 칼럼이 하나만 존재한다. 
+* 범위 조건 이후의 칼럼들은 키 필터로 존재한다. 
+* 데이터 필터 조건이 없어야 한다. 다시 말해, 인덱스는 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
+* 키 필터 이후의 칼럼들은 **ORDER BY** 절에 존재한다. 
+* 키 필터 조건의 칼럼들은 반드시 **ORDER BY** 절의 칼럼이 아니어야 한다.
+* 상관 부질의(correlated subquery)를 포함한 키 필터 조건이 포함되어 있다면, 이에 연관된 컬럼은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
+
+다음과 같은 예에 다중 키 범위 최적화가 수행된다. 
+
+.. code-block:: sql
+
+    CREATE TABLE t (a INT, b INT, c INT, d INT, e INT); 
+    CREATE INDEX i_t_a_b ON t (a,b,c,d,e); 
+    
+    SELECT * 
+    FROM t 
+    WHERE a = 1 AND b = 3 AND c IN (1,2,3) AND d = 3 
+    ORDER BY e 
+    LIMIT 2; 
+
+다중 테이블을 포함하는 JOIN 질의에서는 다음의 경우 최적화가 수행된다. 
+
+::
+
+    SELECT /*+ hints */ ...
+    FROM table_1, table_2, ... table_(sort), ...
+    WHERE col_1 = ? AND col_2 = ? AND ...
+    AND col_(j) IN (?, ?, ... )
+    AND col_(j+1) = ? AND ... AND col_(p-1) = ?
+    AND key_filter_terms
+    AND join_terms
+    ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC], ... col_(p+k-1) [ASC|DESC]
+    FOR ordbynum_pred | LIMIT n;
+
+JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서는 다음과 같은 조건을 만족해야 한다.
+
+* ORDER BY 절에 존재하는 칼럼들은 하나의 테이블에만 존재하는 칼럼들이며, 이 테이블은 단일 테이블 질의에서 다중 키 범위 최적화에 의해 요구되는 조건을 모두 만족해야 한다. 이 테이블을 정렬 테이블(sort table)이라고 하자. 
+*  정렬 테이블과 외부 테이블들(outer tables) 간의 JOIN 조건에 명시된 정렬 테이블의 칼럼들은 모두 인덱스에 포함되어야 한다. 즉, 데이터 필터링 조건이 없어야 한다. 
+*  정렬 테이블과 내부 테이블들(inner tables) 간의 JOIN 조건에 명시된 정렬 테이블의 칼럼들은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
+
+
+.. note:: 다중 키 범위 최적화가 적용될 수 있는 대부분의 경우에 다중 키 범위 최적화가 가장 좋은 성능을 보장하지만, 특정한 상황에서 최적화를 원하지 않는다면 질의에 **NO_MULTI_RANGE_OPT** 힌트를 명시하면 된다. 힌트를 지정하는 방법은 :ref:`sql-hint`\ 를 참고하면 된다.
+
 Index Skip Scan
 ---------------
 
 Index Skip Scan (also known as ISS) is an optimization method that allows ignoring the first column of an index when the first column of the index is not included in the condition but the following column is included in the condition (in most cases, =).
-
 Generally, ISS should consider several columns (C1, C2, ..., Cn). Here, a query has the conditions for the consecutive columns and the conditions are started from the second column (C2) of the index.
 
 .. code-block:: sql
@@ -974,10 +1191,10 @@ Generally, ISS should consider several columns (C1, C2, ..., Cn). Here, a query 
      
     SELECT ... WHERE C2 = x and C3 = y and ... and Cp = z; -- p <= n
     SELECT ... WHERE C2 < x and C3 >= y and ... and Cp BETWEEN (z and w); -- other conditions than equal
+    
+The query optimizer eventually determines whether ISS is the most optimum access method based on the cost. ISS is applied under very specific situations, such as when the first column of an index has a very small number of **DISTINCT** values compared to the number of records. In this case, ISS provides higher performance compared to Index Full Scan. For example, when the first column of index columns has very low cardinality, such as the value of men/women or millions of records with the value of 1~100, it may be inefficient to perform index scan by using the first column value. So ISS is useful in this case.
 
-The query optimizer eventually determines whether ISS is the most optimum access method based on the cost. ISS is applied under very specific situations, such as when the first column of an index has a very small number of **DISTINCT** values compared to the number of records. In addition, ISS should provide higher performance compared to Index Full Scan. For example, when the first column of index columns has very low cardinality, such as the value of men/women or hundreds of thousands of records with the value of 1~100, it may be inefficient to perform index scan by using the first column value. So ISS is useful in this case.
-
-ISS skips reading most of the index pages in the disk and uses range search which is dynamically readjusted. Generally, ISS can be applied to a specific scenario when the number of **DISTINCT** values in the first column is very small. If ISS is applied to this case, ISS provides significantly higher performance than the index full scan.
+ISS skips reading most of the index pages in the disk and uses range search which is dynamically readjusted. Generally, ISS can be applied to a specific scenario when the number of **DISTINCT** values in the first column is very small. If ISS is applied to this case, ISS provides significantly higher performance than the index full scan. However, it means improper index creation that ISS is applied to a lot queries. So DBA should consider whether readjusting the indexes or not.
 
 .. code-block:: sql
 
@@ -987,7 +1204,9 @@ ISS skips reading most of the index pages in the disk and uses range search whic
     -- Note that gender can only have 2 values, 'M' and 'F' (low cardinality)
      
     -- this would qualify to use Index Skip Scanning:
-    SELECT * FROM t WHERE name = 'SMITH';
+    SELECT * 
+    FROM t 
+    WHERE name = 'SMITH';
 
 ISS is not applied in the following cases:
 
@@ -996,63 +1215,3 @@ ISS is not applied in the following cases:
 *   Hierarchical query
 *   Aggregate function included
 
-[번역]
-
-.. _multi-key-range-opt:
-
-다중 키 범위 최적화
--------------------
-
-LIMIT 필터(ROWNUM, ORDERBY_NUM, GROUPBY_NUM)가 있는 질의는 질의 결과의 일부만 취하기 때문에 질의 전체를 최적화하는 것은 대부분 성능에 부담이 된다. 
-다중 키 범위 최적화(multiple key range optimization)는 전체 인덱스 스캔(full index scan)을 수행하기 보다는 인덱스 내 일부 키 범위만 스캔하는 Top N 정렬(Top N sort) 방식이 사용된다. Top N 정렬은 항상 모든 레코드를 선택하기 보다는 최적의 N개의 레코드를 선택하여 정렬한다. 
-
-다중 키 범위 최적화를 사용할 수 있는 예는 다음과 같다. 
-
-.. code-block:: sql
-
-    CREATE TABLE table(a int, b int); 
-    CREATE INDEX i_t_a_b ON table(a,b); 
-    SELECT * FROM table WHERE a IN (1,2,3) ORDER BY b LIMIT 2; 
-
-    Query plan: 
-    iscan 
-    class: t node[0] 
-    index: i_t_a_b term[0] (covers) (multi_range_opt) 
-    sort: 1 asc, 2 asc 
-    cost: 1 card 0 
-
-다중 키 범위 최적화는 단일 테이블 질의 뿐만 아니라 여러 테이블을 JOIN하는 질의에서도 사용될 수 있다. 
-단일 테이블에서는 다음의 경우 최적화가 수행된다. 
-
-인덱스를 구성하는 칼럼들 중 
-
-* 앞의 칼럼들이 동일 조건으로 표현된다. 
-
-* 범위 조건을 가진 칼럼이 중간에 존재한다. 
-* 이후 칼럼들은 키 필터로 존재한다. 
-* 인덱스는 WHERE 절에서 사용되는 모든 칼럼을 포함해야 한다. 즉, 데이터 필터링 조건이 없어야 한다. 
-* 키 필터 이후의 칼럼들은 ORDER BY 절에 존재한다. 
-* 키 필터 조건의 칼럼들은 반드시 ORDER BY 절의 칼럼이 아니어야 한다. 
-
-예를 들면 다음의 질의에서 최적화가 수행된다. 
-
-.. code-block:: sql
-
-    CREATE TABLE table(a int, b int, c int, d int, e int); 
-    CREATE INDEX i_t_a_b ON table(a,b,c,d,e); 
-    SELECT * FROM table WHERE 
-    a=1 AND b=3 
-    AND c IN (1,2,3) 
-    AND d=3 
-    ORDER BY e LIMIT 2; 
-
-
-다중 테이블을 포함하는 JOIN 질의에서는 다음의 경우 최적화가 수행된다. 
-
-인덱스를 구성하는 칼럼들 중 
-
-* ORDER BY 절에 존재하는 칼럼들은 하나의 테이블에만 존재하는 칼럼들이며, 이 테이블은 단일 테이블 질의에서 다중 키 범위 최적화에 의해 요구되는 조건을 모두 만족해야 한다. 이 테이블을 정렬 테이블(sort table)이라고 하자. 
-*  JOIN 조건에서 정렬 테이블과 외부 테이블들(outer tables)에 대해, 정렬 테이블의 칼럼들은 모두 인덱스에 포함되어야 한다. 즉, 데이터 필터링 조건이 없어야 한다. 
-*  JOIN 조건에서 정렬 테이블과 내부 테이블들(inner tables)에 대해, 정렬 테이블의 칼럼들은 WHERE 조건에 포함되어서는 안 된다. 
-
-어떤 질의에서는 다중 키 범위 최적화가 최상의 선택이 아닐 수 있으므로, 최적화를 원하지 않는다면 질의에 **NO_MULTI_RANGE_OPT** 힌트를 추가한다.

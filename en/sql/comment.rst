@@ -2,9 +2,10 @@
 Comment
 *******
 
-The CSQL Interpreter is a SQL-style method; the SQL-style comment starts with the double dashes (--) and the comment line after the double dashes are regarded as comment. Additionally, it supports C++ style, which starts with double slashes (//), and C-style, which starts and ends with '/*' and '*/' respectively.
 
-The following are examples of comments supported in the CSQL Interpreter.
+Th comments can be 3 types written as SQL-style which starts with '--', C++ style starts with '//' and C style starts with '/\*' and ends with '\*/'
+
+The following are examples of comments.
 
 **Example**
 

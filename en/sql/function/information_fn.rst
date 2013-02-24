@@ -338,9 +338,15 @@ ROW_COUNT
 .. function:: ROW_COUNT()
 
     The **ROW_COUNT** function returns the number of rows updated (**UPDATE**, **INSERT**, **DELETE**, **REPLACE**) by the previous statement. 
-
-.. (TODO - Translation)
-.. **INSERT ... ON DUPLICATE KEY UPDATE** 문에 의해 INSERT가 수행되면 1, UPDATE가 수행되면 2를 반환한다. **REPLACE** 문을 수행하면 DELETE와 INSERT를 합한 개수를 반환한다. **UPDATE**, **INSERT**, **DELETE** 문에 의해 호출되는 트리거에는 영향을 받지 않으며, 트리거 내에 **UPDATE**, **INSERT**, **DELETE** 문이 포함되어 있어도 영향을 받지 않는다.
+    
+    With **INSERT ... ON DUPLICATE KEY UPDATE** statement: 
+    
+    *   if INSERT is operated, ROW_COUNT returns 1
+    *   if UPDATE is operated, ROW_COUNT returns 2
+    
+    With **REPLACE** statement, it returns the sum of DELETEed rows and INSERTed rows.
+    
+    There is no influence by the trigger called with **UPDATE**, **INSERT** or **DELETE** statement, or by the trigger which includes **UPDATE**, **INSERT** or **DELETE** statement.
     
     :rtype: INT
     

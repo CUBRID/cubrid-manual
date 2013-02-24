@@ -335,7 +335,13 @@ ROW_COUNT
 
 .. function:: ROW_COUNT()
 
-    **ROW_COUNT** 함수는 가장 마지막에 수행된 **UPDATE**, **INSERT**, **DELETE**, **REPLACE** 문에 영향을 받는 행의 개수를 정수로 반환한다. **INSERT ... ON DUPLICATE KEY UPDATE** 문에 의해 INSERT가 수행되면 1, UPDATE가 수행되면 2를 반환한다. **REPLACE** 문을 수행하면 DELETE와 INSERT를 합한 개수를 반환한다. **UPDATE**, **INSERT**, **DELETE** 문에 의해 호출되는 트리거에는 영향을 받지 않으며, 트리거 내에 **UPDATE**, **INSERT**, **DELETE** 문이 포함되어 있어도 영향을 받지 않는다.
+    **ROW_COUNT** 함수는 가장 마지막에 수행된 **UPDATE**, **INSERT**, **DELETE**, **REPLACE** 문에 영향을 받는 행의 개수를 정수로 반환한다. 
+    
+    **INSERT ... ON DUPLICATE KEY UPDATE** 문에 의해 INSERT가 수행되면 1, UPDATE가 수행되면 2를 반환한다.
+    
+    **REPLACE** 문을 수행하면 DELETE와 INSERT를 합한 개수를 반환한다. 
+    
+    **UPDATE**, **INSERT**, **DELETE** 문에 의해 호출되는 트리거에는 영향을 받지 않으며, 트리거 내에 **UPDATE**, **INSERT**, **DELETE** 문이 포함되어 있어도 영향을 받지 않는다.
 
     :rtype: INT
     

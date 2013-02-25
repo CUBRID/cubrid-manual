@@ -339,15 +339,10 @@ ROW_COUNT
 
     The **ROW_COUNT** function returns the number of rows updated (**UPDATE**, **INSERT**, **DELETE**, **REPLACE**) by the previous statement. 
     
-    With **INSERT ... ON DUPLICATE KEY UPDATE** statement: 
+    ROW_COUNT returns 1 for each inserted row and 2 for each updatead row for **INSERT ON DUPLICATE KEY UPDATE** statement. It returns the sum of number of deleted and inserted rows for **REPLACE** statement.
     
-    *   if INSERT is operated, ROW_COUNT returns 1
-    *   if UPDATE is operated, ROW_COUNT returns 2
-    
-    With **REPLACE** statement, it returns the sum of DELETEed rows and INSERTed rows.
-    
-    There is no influence by the trigger called with **UPDATE**, **INSERT** or **DELETE** statement, or by the trigger which includes **UPDATE**, **INSERT** or **DELETE** statement.
-    
+    Statements triggered by trigger will not affect the ROW_COUNT for the statement.
+        
     :rtype: INT
     
 .. code-block:: sql

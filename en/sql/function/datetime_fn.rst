@@ -891,15 +891,14 @@ ROUND
 .. function:: ROUND(date, fmt)
 
     This function rounds date to the unit specified by the format string, *fmt*.
-
-    Format, unit, return value of this function are as follows.
+    The format and its unit and the return value are as follows::
     
     +-------------------+----------+-----------------------------------------------------------------------+
     | Format            | Unit     | Return value                                                          |
     +===================+==========+=======================================================================+
     | 'yyyy' or 'yy'    | year     | a value rounded to year                                               |
     +-------------------+----------+-----------------------------------------------------------------------+
-    | 'mm' or   'month' | month    | a value rounded to month                                              |
+    | 'mm' or 'month'   | month    | a value rounded to month                                              |
     +-------------------+----------+-----------------------------------------------------------------------+
     | 'q'               | quarter  | a value rounded to quarter, one of 1/1, 4/1, 7/1, 10/1                |
     +-------------------+----------+-----------------------------------------------------------------------+
@@ -1191,21 +1190,20 @@ TRUNC
 
 
     This function truncates date to the unit specified by the format string, *fmt*.
-    
-    Format, unit, return value of this function are as follows.
+    The format and its unit and the return value are as follows::
     
     +-------------------+----------+-----------------------------------------------------------------------+
     | Format            | Unit     | Return value                                                          |
     +===================+==========+=======================================================================+
-    | 'yyyy' or 'yy'    | year     | same year with Jan. 1st                                               |
+    | 'yyyy' or 'yy'    | year     | the same year with Jan. 1st                                           |
     +-------------------+----------+-----------------------------------------------------------------------+
-    | 'mm' or   'month' | month    | same month with 1st                                                   |
+    | 'mm' or 'month'   | month    | the same month with 1st                                               |
     +-------------------+----------+-----------------------------------------------------------------------+
-    | 'q'               | quarter  | same quarter with one of Jan. 1st, Apr. 1st, Jul. 1st, Oct. 1st       |
+    | 'q'               | quarter  | the same quarter with one of Jan. 1st, Apr. 1st, Jul. 1st, Oct. 1st   |
     +-------------------+----------+-----------------------------------------------------------------------+
     | 'day'             | week     | Sunday of the same week(starting date of the week including *date*)   |
     +-------------------+----------+-----------------------------------------------------------------------+
-    | 'dd'              | day      | same date with *date*                                                 |
+    | 'dd'              | day      | the same date with *date*                                             |
     +-------------------+----------+-----------------------------------------------------------------------+
 
     :param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**

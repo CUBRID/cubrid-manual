@@ -2,8 +2,10 @@
 SHOW
 ****
 
-SHOW TABLES 문
-==============
+.. _show-tables-statement:
+
+SHOW TABLES
+===========
 
 데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *table_type* 이라는 이름의 두 번째 칼럼을 함께 출력하며, 테이블은 **BASE TABLE**, 뷰는 **VIEW** 라는 값을 가진다. ::
 
@@ -59,8 +61,10 @@ SHOW TABLES 문
       'code'                'BASE TABLE'
       'record'              'BASE TABLE'
 
-SHOW COLUMNS 문
-===============
+.. _show-columns-statement:
+
+SHOW COLUMNS
+============
 
 테이블의 칼럼 정보를 출력한다. **LIKE** 절을 사용하면 이와 매칭되는 칼럼 이름을 검색할 수 있다. **WHERE** 절을 사용하면 "모든 **SHOW** 문에 대한 일반적인 고려 사항"과 같이 좀 더 일반적인 조건으로 칼럼 이름을 검색할 수 있다. 
 
@@ -119,8 +123,10 @@ SHOW COLUMNS 문
       'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
       'nation_code'         'CHAR(3)'             'iso88591_bin'        'YES'     ''          NULL                  ''
 
-SHOW INDEX 문
-=============
+.. _show-index-statement:
+
+SHOW INDEX
+==========
 
 **SHOW INDEX** 문은 인덱스 정보를 출력한다. 해당 질의는 다음과 같은 칼럼을 가진다.
 
@@ -172,10 +178,10 @@ SHOW INDEX 문
       't1'           1  'i_t1_i1_s1'              2      's1'          'A'            0               NULL        NULL     'YES'   'BTREE'
       't1'           1  'i_t1_s1'                 1      's1'          'A'            0                  7        NULL     'YES'   'BTREE'
 
-.. _show-collation:
+.. _show-collation-statement:
  
-SHOW COLLATION 문
-=================
+SHOW COLLATION
+==============
 
 **SHOW COLLATION** 문은 데이터베이스에서 지원하는 콜레이션 리스트를 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
 해당 질의는 다음과 같은 칼럼을 가진다.
@@ -229,8 +235,10 @@ SHOW COLLATION 문
       'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
       'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
 
-SHOW GRANTS 문
-==============
+.. _show-grants-statement:
+
+SHOW GRANTS
+===========
 
 **SHOW GRANT** 문은 데이터베이스의 사용자 계정에 부여된 권한을 출력한다. ::
 
@@ -248,8 +256,10 @@ SHOW GRANTS 문
     ======================
       'GRANT INSERT, SELECT ON testgrant TO USER1'
 
-SHOW CREATE TABLE 문
-====================
+.. _show-create-table-statement:
+
+SHOW CREATE TABLE
+=================
 
 **SHOW CREATE TABLE** 문은 테이블 이름을 지정하면 해당 테이블의 **CREATE TABLE** 문을 출력한다. ::
 
@@ -265,8 +275,10 @@ SHOW CREATE TABLE 문
     T NULL, [continent] CHARACTER VARYING(10), [capital] CHARACTER VARYING(30),  CONSTRAINT [pk_nation_code] PRIM
     ARY KEY  ([code]))'
 
-SHOW CREATE VIEW 문
-===================
+.. _show-create-view-statement:
+
+SHOW CREATE VIEW
+================
 
 **SHOW CREATE VIEW** 문은 뷰 이름을 지정하면 해당 **CREATE VIEW** 문을 출력한다. ::
 
@@ -289,8 +301,10 @@ SHOW CREATE VIEW 문
                        (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name =
                        CURRENT_USER) AND  au.auth_type = 'SELECT')'
 
-SHOW EXEC STATISTICS 문
-=======================
+.. _show-exec-statistics-statement:
+
+SHOW EXEC STATISTICS
+====================
 
 **SHOW EXEC STATISTICS** 문은 실행한 질의들의 실행 통계 정보를 출력한다.
 

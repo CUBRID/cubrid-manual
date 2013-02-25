@@ -5,11 +5,11 @@ Identifier
 Guidelines for Creating Identifiers
 ===================================
 
-Table name, index name, view name, column name name, user name etc. are included in identifier. The guidelines for creating identifiers in the CSQL Interpreter are as follows:
+Table name, index name, view name, column name name, user name etc. are included in identifier. The guidelines for creating identifiers are as follows:
 
 *   An identifier must begin with a letter; it must not begin with a number or a symbol.
 *   It is not case-sensitive.
-*   CUBRID keywords are not allowed.
+*   :doc:`keyword` are not allowed.
 
 .. productionlist::
     identifier : identifier_letter [ { other_identifier }; ]

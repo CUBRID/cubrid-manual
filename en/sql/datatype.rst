@@ -7,9 +7,6 @@ Numeric Types
 
 CUBRID supports the following numeric data types to store integers or real numbers.
 
-Numeric Types Supported by CUBRID
----------------------------------
-
 +------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
 | Type             | Bytes     | Mix                                                     | Max                                                     | Exact/approx.       |
 +==================+===========+=========================================================+=========================================================+=====================+
@@ -41,7 +38,7 @@ Numeric data types are divided into exact and approximate types. Exact numeric d
 
 CUBRID does not support the UNSIGNED type for numeric data types.
 
-On the above table, two types on the same cell are identical types but it always prints the above type name when you execute **SHOW COLUMNS** statement. For example, you can use both **SHORT** and **SMALLINT** when you create a table, but it prints "SHORT" when you execute **SHOW COLUMNS** statement.
+On the above table, two types on the same cell are identical types but it always prints the above type name when you execute :ref:`show-columns-statement` statement. For example, you can use both **SHORT** and **SMALLINT** when you create a table, but it prints "SHORT" when you execute :ref:`show-columns-statement` statement.
 
 **Precision and Scale**
 
@@ -190,9 +187,6 @@ You can use a dollar sign or a decimal point, but a comma is not allowed.
 Date/Time Types
 ===============
 
-Date-Time Types Supported by CUBRID
------------------------------------
-
 Date/time data types are used to represent the date or time (or both together). CUBRID supports the following data types:
 
 +---------------+-----------+---------------------------+---------------------------+---------------------------------------------------------------------+
@@ -229,22 +223,20 @@ The **Date** / **Time** types can be cast explicitly using the **CAST** operator
     +------------+------+------+----------+-----------+
     | FROM \\ TO | DATE | TIME | DATETIME | TIMESTAMP |
     +============+======+======+==========+===========+
-    | DATE       | -    | X    | O        | O         |
+    | DATE       | \-   | X    | O        | O         |
     +------------+------+------+----------+-----------+
-    | TIME       | X    | -    | X        | X         |
+    | TIME       | X    | \-   | X        | X         |
     +------------+------+------+----------+-----------+
-    | DATETIME   | O    | O    | -        | O         |
+    | DATETIME   | O    | O    | \-       | O         |
     +------------+------+------+----------+-----------+
-    | TIMESTAMP  | O    | O    | O        | -         |
+    | TIMESTAMP  | O    | O    | O        | \-        |
     +------------+------+------+----------+-----------+
 
 In general, zero is not allowed in **DATE**, **DATETIME**, and **TIMESTAMP** types. However, if both date and time values are 0, it is allowed as an exception. This is useful in terms that this value can be used if an index exists upon query execution of a column corresponding to the type.
 
 *   Some functions in which the **DATE**, **DATETIME**, and **TIMESTAMP** types are specified as an argument return different value based on the **return_null_on_function_errors** system parameter if every input argument value for date and time is 0. If **return_null_on_function_errors** is yes, **NULL** is returned; if no, an error is returned. The default value is **no**.
-*   The functions that return **DATE**, **DATETIME**, and **TIMESTAMP** types can return a value of 0 for date and time. However, these values cannot be stored in Date objects in Java applications. Therefore, it will be processed with one of the followings based on the configuration of zeroDateTimeBehavior, the connection URL property: being handled as an exception, returning **NULL**, or returning a minimum value (see "API Reference > JDBC API > JDBC Programming > Connection Configuration").
-*   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_DATETIME`, and :func:`TO_TIMESTAMP` functions follows the corresponding locale date format. For details, see :ref:`stmt-type-parameters`.
-
-For details, see the description of each function.
+*   The functions that return **DATE**, **DATETIME**, and **TIMESTAMP** types can return a value of 0 for date and time. However, these values cannot be stored in Date objects in Java applications. Therefore, it will be processed with one of the followings based on the configuration of zeroDateTimeBehavior, the connection URL property: being handled as an exception, returning **NULL**, or returning a minimum value (see :ref:`jdbc-connection-conf`).
+*   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_DATETIME`, and :func:`TO_TIMESTAMP` functions follows the corresponding locale date format. For details, see :ref:`stmt-type-parameters` and the description of each function.
 
 DATE
 ----
@@ -280,7 +272,7 @@ The input format of **TIME** is as follows: ::
 *   All items must be entered as integer.
 *   AM/PM time notation is used to display time in the CSQL; while the 24-hour notation is used in the CUBRID Manager.
 *   AM/PM can be specified in the 24-hour notation. An error occurs if the time specified does not follow the AM/PM format.
-*   Every time value is stored in the 24-hour notation. **db_time_decode**, one of C API functions, is used to return a value in the 24-hour notation.
+*   Every time value is stored in the 24-hour notation. 
 *   The :func:`TO_TIME` function is used to return a character string type into a TIME type.
 
 ::
@@ -305,7 +297,7 @@ The **TIMESTAMP** data type is used to represent a data value in which the date 
 *   All fields must be entered in integer format.
 *   If the year is omitted, the current year is specified by default. If the time value (hour/minute/second) is omitted, 12:00:00 AM is specified.
 
-*   You can store the timestamp value of the system in the **TIMESTAMP** type by using the :func:`SYS_TIMESTAMP` (or :func:`SYSTIMESTAMP`, :func:`CURRENT_TIMESTAMP`) function. Note that the timestamp value is specified as a default value at the time of creating the table, not at the time of **INSERT** the data, if :func:`SYS_TIMESTAMP` is specified as a **DEFAULT** value for a **TIMESTAMP** column when creating a table.
+*   You can store the timestamp value of the system in the **TIMESTAMP** type by using the :func:`SYS_TIMESTAMP` (or :func:`SYSTIMESTAMP`, :func:`CURRENT_TIMESTAMP`) function. 
 
 *   The :func:`TIMESTAMP` or :func:`TO_TIMESTAMP` function is used to cast a character string type into a **TIMESTAMP** type.
 *   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception. GMT timestamp'1970-01-01 12:00:00 AM' or KST timestamp'1970-01-01 09:00:00 AM' is translated into timestamp'0000-00-00 00:00:00'.
@@ -321,8 +313,7 @@ The **TIMESTAMP** data type is used to represent a data value in which the date 
     TIMESTAMP'10/31/2008 13:15:45' is outputted as '01:15:45 PM 10/31/2008'.
     TIMESTAMP'2008-10-31 01:15:45 PM' is outputted as '01:15:45 PM 10/31/2008'.
     TIMESTAMP'2008-10-31 13:15:45' is outputted as '01:15:45 PM 10/31/2008'.
-
-An error occurs on TIMESTAMP '2099-10-31 01:15:45 PM' (out of range to represent TIMESTAMP).
+    An error occurs on TIMESTAMP '2099-10-31 01:15:45 PM' (out of range to represent TIMESTAMP).
 
 DATETIME
 --------
@@ -339,9 +330,9 @@ The input format of **TIMESTAMP** is as follows: ::
 *   All fields must be entered as integer.
 *   If you year is omitted, the current year is specified by default. If the value (hour, minute/second) is omitted, 12:00:00.000 AM is specified.
 
-*   You can store the timestamp value of the system in the **DATETIME** type by using the :func:`SYS_DATETIME` (or :func:`SYSDATETIME`, :func:`CURRENT_DATETIME`, :func:`CURRENT_DATETIME`, :func:`NOW`) function. Note that the timestamp value is specified as a default value at the time of creating the table, not at the time of **INSERT** the data, if :func:`SYS_DATETIME` is specified as a **DEFAULT** value for a **DATETIME** column when creating a table.
+*   You can store the timestamp value of the system in the **DATETIME** type by using the :c:macro:`SYS_DATETIME` (or :c:macro:`SYSDATETIME`, :c:macro:`CURRENT_DATETIME`, :func:`CURRENT_DATETIME`, :func:`NOW`) function.
 
-*   The :func:`TO_DATETIME:func:` function is used to convert a string type into a **DATETIME** type.
+*   The :func:`TO_DATETIME` function is used to convert a string type into a **DATETIME** type.
 *   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception.
 
 ::
@@ -846,16 +837,16 @@ Escape Special Characters
 
 CUBRID supports two kinds of methods to escape special characters. One is using quotes and the other is using backslash (\\).
 
-**Escape with Quotes**
+* Escape with Quotes
 
-    If you set **no** for the system parameter **ansi_quotes** in the **cubrid.conf** file, you can use both double quotes (") and singe quotes (') to wrap strings. The default value for the **ansi_quotes** parameter is **yes**, and you can use only single quotes to wrap the string. The numbers 2 and 3 below are applied only if you set for the **ansi_quotes** parameter to **no**.
+    If you set **no** for the system parameter **ansi_quotes** in the **cubrid.conf** file, you can use both double quotes (") and singe quotes (') to wrap strings. The default value for the **ansi_quotes** parameter is **yes**, and you can use only single quotes to wrap the string. 
 
     *   You should use two single quotes ('') for the single quotes included in the strings wrapped in single quotes.
-    *   You should use two double quotes ("") for the double quotes included in the strings wrapped in double quotes.
-    *   You don't need to escape the single quotes included in the string wrapped in double quotes.
+    *   You should use two double quotes ("") for the double quotes included in the strings wrapped in double quotes. (when **ansi_quotes** = **no**)
+    *   You don't need to escape the single quotes included in the string wrapped in double quotes. (when **ansi_quotes** = **no**)
     *   You don't need to escape the double quotes included in the string wrapped in single quotes.
 
-**Escape with Backslash**
+* Escape with Backslash
 
     You can use escape using backslash (\\) only if you set no for the system parameter **no_backslash_escapes** in the **cubrid.conf** file. The default value for the **no_backslash_escapes** parameter is **yes**. If the value of **no_backslash_escapes** is **no**, the following are the special characters.
 
@@ -938,7 +929,7 @@ The following is the result of executing Escape if a value for the system parame
 ENUM Data Type
 ==============
 
-The **ENUM** type is defined as the enumerated string constants. Only the specified string elements are allowed as the value of the column defined as **ENUM** and the maximum number of the ENUM elements is 65535. 
+The **ENUM** type is defined as the enumerated string constants. Only the specified string elements are allowed as the value of the column defined as **ENUM** and the maximum number of the ENUM elements is 65535. Each **ENUM** value has its index number based on the order of the sorting elements. The element index number starts at 1.
 
 In the column of the **ENUM** type, each value is saved as 1 byte when the number of the **ENUM** elements is less than 256, and 2 bytes when the number is 256 or more. **ENUM** value allows numeric data type or string type.
 
@@ -1013,9 +1004,9 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
       yellow
       yellow
 
-*   When the string context is used as the **ENUM** value, the string is returned. The following example shows a case of using the string context.
+When the string context is used as the **ENUM** value, the string is returned. The following example shows a case of using the string context.
 
-  .. code-block:: sql
+.. code-block:: sql
 
     SELECT CONCAT (enum_col, 'color') FROM tbl_name;
  
@@ -1026,9 +1017,9 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
       yellow_color
       blue_color
 
-*   When the numeric context is used as the **ENUM** value, the index number is returned. The numeric value can be searched on the **ENUM** column as follows.
+When the numeric context is used as the **ENUM** value, the index number is returned. The numeric value can be searched on the **ENUM** column as follows.
 
-    .. code-block:: sql
+.. code-block:: sql
 
         SELECT color + 0 FROM tb;
          
@@ -1039,9 +1030,9 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
           2
           3
 
-*   The result of using the string is different from the result of using the index number. See the following example.
+The result of using the string is different from the result of using the index number. See the following example.
 
-    .. code-block:: sql
+.. code-block:: sql
 
         -- will use the ENUM index value because it is compared with a number
         SELECT color FROM tbl WHERE color <= 1;
@@ -1059,13 +1050,13 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
         red
         blue
 
-*   Index scan of the **ENUM** type column is allowed for **=** and **IN** operators. Index scan cannot process any other comparison operators.
+Index scan of **ENUM** type column is allowed for **=** and **IN** operators. Index scan cannot be done with any other comparison operators.
 
-*   The value which exceeds the range that the **ENUM** type can express is not converted to the **ENUM** type and an error occurs. For the error data, automatic mapping to the default index value (0) and the default string value (NULL) is not supported.
+The value which exceeds the range that the **ENUM** type can express is not converted to the **ENUM** type and an error occurs. For the error data, automatic mapping to the default index value (0) and the default string value (NULL) is not supported.
 
-*   When a number inserted in the **ENUM** type column is enclosed within single quotes (' '), if the value is included in the list of the ENUM elements, the value is interpreted as a string value; otherwise, it is interpreted as an index number. Therefore, to avoid confusion, we recommend that you do not use the value similar to the number as the ENUM element value. The following example shows typing an ENUM element value similar to a number in the **ENUM** type column.
+When a number inserted in the **ENUM** type column is enclosed within single quotes (' '), if the value is included in the list of the ENUM elements, the value is interpreted as a string value; otherwise, it is interpreted as an index number. Therefore, to avoid confusion, we recommend that you do not use the value similar to the number as the ENUM element value. The following example shows typing an ENUM element value similar to a number in the **ENUM** type column.
 
-    .. code-block:: sql
+.. code-block:: sql
 
         CREATE TABLE tb2 (nums ENUM ('0', '1', '2'));
         INSERT INTO tb2 (nums) VALUES (1), ('1'), ('3');
@@ -1078,17 +1069,17 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
           2
 
       
-    *   If the entered 1 is not enclosed within single quotes, 0 (corresponds to the Index Number 1) is inserted instead of 1.
-    *   When '1' is entered, '1' value is inserted since the corresponding ENUM element value exists.
-    *   When '3' is entered, '2' (corresponds to the Index Number 3) is inserted because there is no corresponding ENUM element value and 3 is a valid index number.
+*   If the entered 1 is not enclosed within single quotes, 0 (corresponds to the Index Number 1) is inserted instead of 1.
+*   When '1' is entered, '1' value is inserted since the corresponding ENUM element value exists.
+*   When '3' is entered, '2' (corresponds to the Index Number 3) is inserted because there is no corresponding ENUM element value and 3 is a valid index number.
 
-*   The **ENUM** values are sorted by the index number, not by the string value of the element. **NULL** values are sorted on the front of all strings and blank strings are sorted on the front of any other strings. To sort elements in alphabetic order in the **ENUM** type column, use the **CAST** function as follows.
+The **ENUM** values are sorted by the index number, not by the string value of the element. **NULL** values are sorted on the front of all strings and blank strings are sorted on the front of any other strings. To sort elements in alphabetic order in the **ENUM** type column, use the **CAST** function as follows.
 
-    .. code-block:: sql
+.. code-block:: sql
 
         SELECT color FROM tb ORDER BY CAST (color AS CHAR) ASC;
 
-*   When converting the **ENUM** type to the other type, the index number or the string of the **ENUM** type is converted according to the target type. In the following table, the types with an asterisk (*) can be converted to the **ENUM** type.
+When converting the **ENUM** type to the other type, the index number or the string of the **ENUM** type is converted according to the target type. In the following table, the types with an asterisk (*) can be converted to the **ENUM** type.
 
     +---------------+---------------------------------+
     | Type          | Value (Index Number/String)     |
@@ -1124,24 +1115,19 @@ The following example shows the **SELECT** statement that retrieves the **ENUM**
     | VARBIT        | String                          |
     +---------------+---------------------------------+
 
-Note
-----
+You can browse the entire values of the **ENUM** column with :ref:`show-columns-statement` statement.
+   
+Blank strings can be used as an ENUM element value when operators have explicitly specified a general index number to the blank strings. If operators have not specified a general index number to the blank strings, the index number of blank strings is 0. You can find the rows with the blank strings as follows:
 
-*   To view all values allowed for the **ENUM** column, use **SHOW COLUMNS**.
-*   Each **ENUM** value has its index number based on the order of the sorting elements. The element index number starts at 1.
-*   Blank strings can be used as an ENUM element value when operators have explicitly specified a general index number to the blank strings.
-*   If operators have not specified a general index number to the blank strings, the index number of blank strings is 0. To search the rows with the blank strings, use the following sentence.
+.. code-block:: sql
 
-    .. code-block:: sql
+    SELECT * FROM tb WHERE color = 0;
 
-        SELECT * FROM tb WHERE color = 0;
+In the **ENUM** column declared to allow **NULL**, the index number for **NULL** is **NULL**. The default value of the column, which allows **NULL** is **NULL**. For **NOT NULL**, the default value of the column is the first element of the **ENUM** list specified while defining the column.
 
-*   In the **ENUM** column declared to allow **NULL**, the index number for **NULL** is **NULL**.
-*   The default value of the column, which allows **NULL** is **NULL**. For **NOT NULL**, the default value of the column is the first element of the **ENUM** list specified while defining the column.
+When a table is created, all trailing blanks of all elements in the **ENUM** column are automatically removed. The cases of the **ENUM** element are not changed but the cases defined while defining the column are maintained as they are.
 
-*   When a table is created, all trailing blanks of all elements in the **ENUM** column are automatically removed.
-*   The cases of the **ENUM** element are not changed but the cases defined while defining the column are maintained as they are.
-*   For the operation where operands are Type 1 and Type 2, the result type is as follows. The exception of the following rule is the case of comparing the **ENUM** column to the constant value. In this case, the constant value is changed to the **ENUM** value of the same type.
+For the operation where operands are Type 1 and Type 2, the result type is as follows. The exception of the following rule is the case of comparing the **ENUM** column to the constant value. In this case, the constant value is changed to the **ENUM** value of the same type.
 
     +------------+------------+-----------------+
     | Type 1     | Type 2     | Result Type     |
@@ -1173,11 +1159,21 @@ Note
     | VARCHAR    | ENUM       | VARCHAR         |
     +------------+------------+-----------------+
 
-**Using ENUM Type at the Driver Level**
+The **ENUM** type column does not allow the **DEFALUT** value.
+No expressions can be used for the **ENUM** value. For example, the following **CREATE TABLE** statement returns an error.
 
-    The **ENUM** type is not specially mapped to various drivers such as JDBC and CCI. Therefore, application developers can use the **STRING** type as they have used. The following example shows the JDBC application.
+.. code-block:: sql
 
-    .. code-block:: java
+        CREATE TABLE tb (
+            color ENUM ('red', CONCAT ('light ','gray'), 'blue')
+        );
+
+Using ENUM Type at the Driver Level
+-----------------------------------
+
+The **ENUM** type is not specially mapped to various drivers such as JDBC and CCI. Therefore, application developers can use the **STRING** type as they have used. The following example shows the JDBC application.
+
+.. code-block:: java
 
         Statement stmt = connection.createStatement("SELECT color FROM tbl");
         ResultSet rs = stmt.executeQuery();
@@ -1186,9 +1182,9 @@ Note
            System.out.println(rs.getString());
         }
 
-    The following example shows the CCI application.
+The following example shows the CCI application.
 
-    .. code-block:: c
+.. code-block:: c
 
         req_id = cci_prepare (conn, "SELECT color FROM tbl", 0, &err);
         error = cci_execute (req_id, 0, 0, &err);
@@ -1211,17 +1207,6 @@ Note
         
         cci_get_data (req, idx, CCI_A_TYPE_STR, &data, 1);
 
-**Constraints**
-
-    *   The **ENUM** type column does not allow the **DEFALUT** value.
-    *   No expressions can be used for the **ENUM** value. For example, the following **CREATE TABLE** statement returns an error.
-
-      .. code-block:: sql
-
-        CREATE TABLE tb (
-            color ENUM ('red', CONCAT ('light ','gray'), 'blue')
-        );
-
 BLOB/CLOB Data Types
 ====================
 
@@ -1230,50 +1215,44 @@ An External **LOB** type is data to process Large Object, such as text or images
 *   Binary Large Object (**BLOB**)
 *   Character Large Object (**CLOB**)
 
-**Related Terms**
+.. note:: **Terminologies**
 
-    *   **LOB** (Large Object) : Large-sized objects such as binaries or text.
-    *   **FBO** (File Based Object) : An object that stores data of the database in an external file.
-    *   **External LOB** : An object better known as FBO, which stores **LOB** data in a file into an external DB. It is supported by CUBRID. Internal **LOB** is an object that stores **LOB** data inside the DB.
-    *   **External Storage** : An external storage to store LOB (example : POSIX file system).
-    *   **LOB Locator** : The path name of a file stored in external storage.
-    *   **LOB Data** : Details of a file in a specific location of LOB Locator.
+    *   **LOB** (Large Object): Large-sized objects such as binaries or text.
+    *   **FBO** (File Based Object): An object that stores data of the database in an external file.
+    *   **External LOB**\ : An object better known as FBO, which stores **LOB** data in a file into an external DB. It is supported by CUBRID. Internal **LOB** is an object that stores **LOB** data inside the DB.
+    *   **External Storage**\ : An external storage to store LOB (example : POSIX file system).
+    *   **LOB Locator**\ : The path name of a file stored in external storage.
+    *   **LOB Data**\ : Details of a file in a specific location of LOB Locator.
 
-**File Names**
+When storing LOB data in external storage, the following naming convention will be applied: ::
 
-    When storing LOB data in external storage, the following naming convention will be applied: ::
+    {table_name}_{unique_name}
+   
+*   *table_name* : It is inserted as a prefix and able to store the **LOB** data of many tables in one external storage.
+*   *unique_name* : The random name created by the DB server.
 
-        {table_name}_{unique_name}
-        
-    *   *table_name* : It is inserted as a prefix and able to store the **LOB** data of many tables in one external storage.
-    *   *unique_name* : The random name created by the DB server.
+**LOB** data is stored in the local file system of the DB server. LOB data is stored in the path specified in the **-lob-base-path option** value of **cubrid createdb**; if this value is omitted, the data will be stored in the [db-vol path]/lob path where the database volume will be created. For more details, see :ref:`creating-database` and :ref:`lob-storage`.
 
-**Default Storage**
-
-    *   **LOB** data is stored in the local file system of the DB server. LOB data is stored in the path specified in the **-lob-base-path option** value of **cubrid createdb**; if this value is omitted, the data will be stored in the [db-vol path]/lob path where the database volume will be created. For more details, see :ref:`creating-database` and :ref:`lob-storage`.
-
-    *   If the relevant path is deleted despite a **LOB** data file path being registered in the database location file (**databases.txt**), please note that the utility that operates in database server (**cub_server**) and standalone will not function normally.
+If a **LOB** data file path that was registered to the database directory file(**databases.txt**) is deleted, please note that database server (**cub_server**) and standalone utilities will not correctly work.
 
 BLOB
 ----
 
-*   A type that stores binary data outside the database.
-*   The maximum length of **BLOB** data is the maximum file size creatable in an external storage.
-*   In SQL statements, the **BLOB** type expresses the input and output value in a bit array. That is, it is compatible with the **BIT** (n) and **BIT VARYING** (n) types, and only an explicit type change is allowed. If data lengths differ from one another, the maximum length is truncated to fit the smaller one.
-
-*   When converting the **BLOB** type value to a binary value, the length of the converted data cannot exceed 1GB. When converting binary data to the **BLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **BLOB** storage.
+A type that stores binary data outside the database.
+The maximum length of **BLOB** data is the maximum file size creatable in an external storage.
+In SQL statements, the **BLOB** type expresses the input and output value in a bit array. That is, it is compatible with the **BIT** (n) and **BIT VARYING** (n) types, and only an explicit type change is allowed. If data lengths differ from one another, the maximum length is truncated to fit the smaller one.
+When converting the **BLOB** type value to a binary value, the length of the converted data cannot exceed 1GB. When converting binary data to the **BLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **BLOB** storage.
 
 CLOB
 ----
 
-*   A type that stores character string data outside the database.
-*   The maximum length of **CLOB** data is the maximum file size creatable in an external storage.
-*   In SQL statements, the CLOB type expresses the input and output value in a character string. That is, it is compatible with the **CHAR** (n), **VARCHAR** (n) types. However, only an explicit type change is allowed, and if data lengths are different from one another, the maximum length is truncated to fit to the smaller one.
+A type that stores character string data outside the database.
+The maximum length of **CLOB** data is the maximum file size creatable in an external storage.
+In SQL statements, the CLOB type expresses the input and output value in a character string. That is, it is compatible with the **CHAR** (n), **VARCHAR** (n) types. However, only an explicit type change is allowed, and if data lengths are different from one another, the maximum length is truncated to fit to the smaller one.
+When converting the **CLOB** type value to a character string, the length of the converted data cannot exceed 1 GB. When converting a character string to the **CLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **CLOB** storage.
 
-*   When converting the **CLOB** type value to a character string, the length of the converted data cannot exceed 1 GB. When converting a character string to the **CLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **CLOB** storage.
-
-Creating and Altering Columns
------------------------------
+To Create and alter LOB
+-----------------------
 
 **BLOB** / **CLOB** type columns can be created/added/deleted by using a **CREATE TABLE** statement or an **ALTER TABLE** statement.
 
@@ -1303,10 +1282,10 @@ Creating and Altering Columns
     -- an error occurs when adding a BLOB column with DEFAULT attribute
     ALTER TABLE image_t ADD COLUMN thumbnail2 BLOB DEFAULT BIT_TO_BLOB(X'010101');    
 
-Storing and Updating Columns
-----------------------------
+To store and update LOB
+-----------------------
 
-In a **BLOB** / **CLOB** type column, each **BLOB** / **CLOB** type value is stored, and if binary or character string data is input, you must explicitly change the types by using each **BIT_TO_BLOB** / **CHAR_TO_CLOB** function.
+In a **BLOB** / **CLOB** type column, each **BLOB** / **CLOB** type value is stored, and if binary or character string data is input, you must explicitly change the types by using each :func:`BIT_TO_BLOB` and :func:`CHAR_TO_CLOB` function.
 
 If a value is input in a **LOB** column by using an **INSERT** statement, a file is created in an external storage internally and the relevant data is stored; the relevant file path (Locator) is stored in an actual column value.
 
@@ -1342,18 +1321,18 @@ If a record containing a **LOB** column uses a **DELETE** statement, a file to w
     -- deleting BLOB column value and its referencing files
     DELETE FROM image_t WHERE image_id = 'image-1010';
 
-Getting Column Values
----------------------
+To access LOB
+-------------
 
-When you get a **LOB** type column, the data stored in a file to which the column refers will be displayed. You can execute an explicit type change by using **CAST** operator, **CLOB_TO_CHAR** function, and **BLOB_TO_BIT** function.
+When you get a **LOB** type column, the data stored in a file to which the column refers will be displayed. You can execute an explicit type change by using :func:`CAST` operator, :func:`CLOB_TO_CHAR` and :func:`BLOB_TO_BIT` function.
 
-*   If the query is executed in CSQL, a column value (Locator) will be displayed, instead of the data stored in a file. To display the data to which a **BLOB** / **CLOB** column refers, it must be changed to strings by using **CLOB_TO_CHAR** function.
+*   If the query is executed in CSQL, a column value (Locator) will be displayed, instead of the data stored in a file. To display the data to which a **BLOB** / **CLOB** column refers, it must be changed to strings by :func:`CLOB_TO_CHAR` function.
 
-*   To use the string process function, the strings need to be converted by using the **CLOB_TO_CHAR** function.
+*   To use the string process function, the strings need to be converted by :func:`CLOB_TO_CHAR` function.
 *   You cannot specify a **LOB** column in ** GROUP BY** clause and **ORDER BY** clause.
 *   Comparison operators, relational operators, **IN**, **NOT IN** operators cannot be used to compare **LOB** columns. However, **IS NULL** expression can be used to compare whether it is a **LOB** column value (Locator) or **NULL**. This means that **TRUE** will be returned when a column value is **NULL**, and if a column value is **NULL**, there is no file to store **LOB** data.
 
-*   When a **LOB** column is created, and the file is deleted after data input, a **LOB** column value (Locator) will become a state that is referring to an invalid file. As such, using **CLOB_TO_CHAR**, **BLOB_TO_BIT**, **CLOB_LENGTH**, and **BLOB_LENGTH** functions on the columns that have mismatching **LOB** Locator and a **LOB** data file enables them to display **NULL**.
+*   When a **LOB** column is created, and the file is deleted after data input, a **LOB** column value (Locator) will become a state that is referring to an invalid file. As such, using :func:`CLOB_TO_CHAR`, :func:`BLOB_TO_BIT`, :func:`CLOB_LENGTH` and :func:`BLOB_LENGTH` functions on the columns that have mismatching **LOB** Locator and a **LOB** data file enables them to display **NULL**.
 
 
 .. code-block:: sql
@@ -1395,89 +1374,75 @@ When you get a **LOB** type column, the data stored in a file to which the colum
     SELECT * FROM doc_t WHERE content LIKE 'This%';
     SELECT * FROM doc_t ORDER BY content;
 
-Functions and Operators
------------------------
+Functions and Operators for LOB
+-------------------------------
 
-**CAST Operator**
+You can explicitly cast bit/string type to **BLOB**/**CLOB** type and **BLOB**/**CLOB** type to bit/string type with :func:`CAST` operator. For more details, see :func:`CAST` operator. ::
 
-    By using **CAST** operator, you can execute an explicit type change between **BLOB** / **CLOB** type and binary type/string type. For more details, see :func:`CAST`. ::
+    CAST (<bit_type_column_or_value> AS { BLOB | CLOB })
+    CAST (<char_type_column_or_value> AS { BLOB | CLOB })
 
-        CAST (<bit_type_column_or_value> AS { BLOB | CLOB })
-        CAST (<char_type_column_or_value> AS { BLOB | CLOB })
+These are the functions for BLOB/CLOB types. For more details, refer :doc:`/sql/function/lob_fn`.
 
-**LOB Data Process and Type Change Functions**
+* :func:`CLOB_TO_CHAR` 
+* :func:`BLOB_TO_BIT` 
+* :func:`CHAR_TO_CLOB` 
+* :func:`BIT_TO_BLOB` 
+* :func:`CHAR_TO_BLOB` 
+* :func:`CLOB_FROM_FILE` 
+* :func:`BLOB_FROM_FILE` 
+* :func:`CLOB_LENGTH` 
+* :func:`BLOB_LENGTH`                        
 
-    The following shows the functions provided to process and change BLOB/CLOB types.
-    For more details, refer :doc:`/sql/function/lob_fn`.
-
-    * **CLOB_TO_CHAR** ( *clob_type_column* )
-    * **BLOB_TO_BIT** ( *blob_type_column* )
-    * **CHAR_TO_CLOB** ( *char_type_column_or_value* )
-    * **BIT_TO_BLOB** ( *blob_type_column_or_value* )
-    * **CHAR_TO_BLOB** ( *char_type_column_or_value* )
-    * **CLOB_FROM_FILE** ( *file_pathname* )
-    * **BLOB_FROM_FILE** ( *file_pathname* )
-    * **CLOB_LENGTH** ( *clob_column* )
-    * **BLOB_LENGTH** ( *blob_column* )                          
-
-    .. note:: " <*blob_or_clob_column* **IS NULL** ": using **IS NULL** condition, it compares the value of **LOB** column(Locator) if it's **NULL** or not. If it's **NULL**, this condition returns **TRUE**.
+.. note:: " <*blob_or_clob_column* **IS NULL** ": using **IS NULL** condition, it compares the value of **LOB** column(Locator) if it's **NULL** or not. If it's **NULL**, this condition returns **TRUE**.
     
 .. _lob-storage:
 
-Creating and Managing Storage
------------------------------
+To create and manage LOB storage
+--------------------------------
 
-**LOB File Path Specification**
+By default, the **LOB** data file is stored in the <db-volumn-path>/lob directory where database volume is created. However, if the lob base path is specified with :option:`createdb -B` option when creating the database, **LOB** data files will be stored in the directory designated. However, if the specified directory does not exists, CUBRID tries to create the directory and display an error message when it fails to create it. For more details, see :option:`createdb -B` option. ::
 
-    By default, the **LOB** data file is stored in the <db-volumn-path>/lob directory where database volume is created. However, if the **--lob-base-path** option of **cubrid createdb** utility is used when creating the database, a **LOB** data file can be stored in the directory specified by option value. However, if there is no directory specified by option value, attempt to create a directory, and display an error message if it fails to create the directory. For more details, see the **--lob-base-path** option in :option:`createdb -B`. ::
+    # image_db volume is created in the current work directory, and a LOB data file will be stored.
+    % cubrid createdb image_db
 
-        #image_db volume is created in the current work directory, and a LOB data file will be stored.
-        cubrid createdb image_db
+    # LOB data file is stored in the "/home1/data1" path within a local file system.
+    % cubrid createdb --lob-base-path="file:/home1/data1" image_db
 
-        #LOB data file is stored in the "/home1/data1" path within a local file system.
-        cubrid createdb --lob-base-path="file:/home1/data1" image_db
+You can identify a directory where a LOB file will be stored by executing the cubrid spacedb utility.
+::
 
-**Checking LOB File Store Directory** 
+    % cubrid spacedb image_db
+         
+    Space description for database 'image_db' with pagesize 16.0K. (log pagesize: 16.0K)
+         
+    Volid  Purpose  total_size  free_size  Vol Name
+         
+        0  GENERIC      512.0M     510.1M  /home1/data1/image_db
 
-    ::
+    Space description for temporary volumes for database 'image_db' with pagesize 16.0K.
+        
+    Volid  Purpose  total_size  free_size  Vol Name
+    
+    LOB space description file:/home1/data1
 
-        #You can check a directory where a LOB file will be stored by executing the cubrid spacedb utility.
-        cubrid spacedb image_db
 
-        Space description for database 'image_db' with pagesize 16.0K. (log pagesize: 16.0K)
+To expand or change the **lob-base-path** of the database, change its **lob-base-path** of **databases.txt** file. Restart the database server to apply the changes made to **databases.txt**. However, even if you change the **lob-base-path** of **databases.txt**, access to the **LOB** data stored in a previous storage is possible. ::
 
-        Volid  Purpose  total_size  free_size  Vol Name
+    # You can change to a new directory from the lob-base-path of databases.txt file.
+    % cat $CUBRID_DATABASES/databases.txt
 
-            0  GENERIC      512.0M     510.1M  /home1/data1/image_db
+    #db-name         vol-path             db-host         log-path         lob-base-path    
+    image_db         /home1/data1         localhost       /home1/data1     file:/home1/data2
 
-        Space description for temporary volumes for database 'image_db' with pagesize 16.0K.
+Backup/recovery for data files of **LOB** type columns are not supported, while those for meta data(Locator) are supported.
 
-        Volid  Purpose  total_size  free_size  Vol Name
+If you are copying a database by using :program:`copydb` utility, you must configure the **databases.txt** additionally, as the **LOB** file directory path will not be copied if the related option is not specified. For more details, see the :option:`copydb -B` and :option:`copydb --copy-lob-path` options.
 
-        LOB space description file:/home1/data1
+Transaction and Recovery
+------------------------
 
-**Changing or Expanding LOB File Store Directory**
-
-    Secure disk space to create additional file storage, expand the **lob-base-path** of **databases.txt**, and change to the disk location. Restart the database server to apply the changes made to **databases.txt**. However, even if you change the **lob-base-path** of **databases.txt**, access to the **LOB** data stored in a previous storage is possible. ::
-
-        # You can change to a new directory from the lob-base-path of databases.txt file.
-        sh> cat $CUBRID_DATABASES/databases.txt
-
-        #db-name         vol-path             db-host         log-path         lob-base-path    
-        image_db         /home1/data1         localhost       /home1/data1     file:/home1/data2
-
-**Backing up and Recovering of LOB Files**
-
-    While backup/recovery is not supported for **LOB** type columns, meta data (Locator) of the **LOB** type columns is supported with such service.
-
-**Copying Database with LOB Files**
-
-    If you are copying a database by using the **cubrid copydb** utility, you must configure the **databases.txt** additionally, as the **LOB** file directory path will not be copied if the related option is not specified. For more details, see the :option:`copydb -B` and :option:`copydb --copy-lob-path` options.
-
-Supporting and Recovering Transactions
---------------------------------------
-
-Commit/rollback for **LOB** data changes are supported. That is, it ensures the validation of mapping between **LOB** Locator and actual **LOB** data within transactions, and it supports recovery during DB errors. This means that an error will be displayed in case of mapping errors between **LOB** Locator and **LOB** data due to the rollback of the relevant transactions, as the database is terminated during transactions. See the example below.
+Commit/Rollback for **LOB** data changes are supported. That is, it ensures the validation of mapping between **LOB** Locator and actual **LOB** data within transactions, and it supports recovery during DB errors. This means that an error will be displayed in case of mapping errors between **LOB** Locator and **LOB** data due to the rollback of the relevant transactions, as the database is terminated during transactions. See the example below.
 
 .. code-block:: sql
 
@@ -1536,26 +1501,22 @@ Allowing multiple data values to be stored in a single attribute is an extended 
 
 As you see the table above, the value specified as a collection type can be inputted with curly braces ('{', '}') each value is separated with a comma (,).
 
-**Coercions**
-
-    If the specified collection types are identical, the collection types can be cast explicitly by using the **CAST** operator. 
-    The following table shows the collection types that allow explicit coercions.
+If the specified collection types are identical, the collection types can be cast explicitly by using the **CAST** operator. 
+The following table shows the collection types that allow explicit coercions.
 
     +--------------+-----+----------+------+
     | FROM \\ TO   | SET | MULTISET | LIST |
     +==============+=====+==========+======+
-    | SET          | -   | Yes      | Yes  |
+    | SET          | \-  | Yes      | Yes  |
     +--------------+-----+----------+------+
-    | MULTISET     | Yes | -        | No   |
+    | MULTISET     | Yes | \-       | No   |
     +--------------+-----+----------+------+
-    | LIST         | Yes | Yes      | -    |
+    | LIST         | Yes | Yes      | \-   |
     +--------------+-----+----------+------+
 
-**Collection Types and Collations**
+Collection Types do not support collations. Therefore, Below query returns error.
 
-    Collection Types do not support collations. Therefore, Below query returns error.
-
-    .. code-block:: sql
+.. code-block:: sql
 
         CREATE TABLE tbl (str SET (string) COLLATE utf8_en_ci);
         
@@ -1652,78 +1613,79 @@ The implicit type conversion executed by CUBRID is as follows:
 
 **Implicit Type Conversion Table 1**
 
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| From \ To     | DATETIME     | DATE     | TIME     | TIMESTAMP     | DOUBLE     | FLOAT     | NUMERIC     | BIGINT     |
-+===============+==============+==========+==========+===============+============+===========+=============+============+
-| **DATETIME**  | -            | O        | O        | O             |            |           |             |            |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **DATE**      | O            | -        |          | O             |            |           |             |            |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **TIME**      |              |          | -        |               |            |           |             |            |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **TIMESTAMP** | O            | O        | O        | -             |            |           |             |            |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **DOUBLE**    |              |          |          |               | -          | O         | O           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **FLOAT**     |              |          |          |               | O          | -         | O           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **NUMERIC**   |              |          |          |               | O          | O         | -           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **BIGINT**    |              |          |          |               | O          | O         | O           | -          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **INT**       |              |          |          | O             | O          | O         | O           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **SHORT**     |              |          |          |               | O          | O         | O           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **MONETARY**  |              |          |          |               | O          | O         | O           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **BIT**       |              |          |          |               |            |           |             |            |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **VARBIT**    |              |          |          |               |            |           |             |            |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **CHAR**      | O            | O        | O        | O             | O          | O         | O           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-| **VARCHAR**   | O            | O        | O        | O             | O          | O         | O           | O          |
-+---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | From \\ To    | DATETIME     | DATE     | TIME     | TIMESTAMP     | DOUBLE     | FLOAT     | NUMERIC     | BIGINT     |
+    +===============+==============+==========+==========+===============+============+===========+=============+============+
+    | **DATETIME**  | \-           | O        | O        | O             |            |           |             |            |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **DATE**      | O            | \-       |          | O             |            |           |             |            |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **TIME**      |              |          | \-       |               |            |           |             |            |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **TIMESTAMP** | O            | O        | O        | \-            |            |           |             |            |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **DOUBLE**    |              |          |          |               | \-         | O         | O           | O          |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **FLOAT**     |              |          |          |               | O          | \-        | O           | O          |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **NUMERIC**   |              |          |          |               | O          | O         | \-          | O          |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **BIGINT**    |              |          |          |               | O          | O         | O           | \-         |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **INT**       |              |          |          | O             | O          | O         | O           | O          |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **SHORT**     |              |          |          |               | O          | O         | O           | O          |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **MONETARY**  |              |          |          |               | O          | O         | O           | O          |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **BIT**       |              |          |          |               |            |           |             |            |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **VARBIT**    |              |          |          |               |            |           |             |            |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **CHAR**      | O            | O        | O        | O             | O          | O         | O           | O          |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+    | **VARCHAR**   | O            | O        | O        | O             | O          | O         | O           | O          |
+    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
+
 
 **Implicit Type Conversion Table 2**
 
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| From \ To     | INT     | SHORT     | MONETARY     | BIT     | VARBIT     | CHAR     | VARCHAR     | NCHAR     | VARNCHAR     |
-+===============+=========+===========+==============+=========+============+==========+=============+===========+==============+
-| **DATETIME**  |         |           |              |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **DATE**      |         |           |              |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **TIME**      |         |           |              |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **TIMESTAMP** |         |           |              |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **DOUBLE**    | O       | O         | O            |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **FLOAT**     | O       | O         | O            |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **NUMERIC**   | O       | O         | O            |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **BIGINT**    | O       | O         | O            |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **INT**       | -       | O         | O            |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **SHORT**     | O       | -         | O            |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **MONETARY**  | O       | O         | -            |         |            | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **BIT**       |         |           |              | -       | O          | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **VARBIT**    |         |           |              | O       | -          | O        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **CHAR**      | O       | O         | O            | O       | O          | -        | O           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
-| **VARCHAR**   | O       | O         | O            | O       | O          | O        | -           | O         | O            |
-+---------------+---------+-----------+--------------+---------+------------+----------+-------------+-----------+--------------+
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | From \\ To    | INT     | SHORT     | MONETARY     | BIT     | VARBIT     | CHAR     | VARCHAR     |
+    +===============+=========+===========+==============+=========+============+==========+=============+
+    | **DATETIME**  |         |           |              |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **DATE**      |         |           |              |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **TIME**      |         |           |              |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **TIMESTAMP** |         |           |              |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **DOUBLE**    | O       | O         | O            |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **FLOAT**     | O       | O         | O            |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **NUMERIC**   | O       | O         | O            |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **BIGINT**    | O       | O         | O            |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **INT**       | \-      | O         | O            |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **SHORT**     | O       | \-        | O            |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **MONETARY**  | O       | O         | \-           |         |            | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **BIT**       |         |           |              | \-      | O          | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **VARBIT**    |         |           |              | O       | \-         | O        | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **CHAR**      | O       | O         | O            | O       | O          | \-       | O           |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    | **VARCHAR**   | O       | O         | O            | O       | O          | O        | \-          |
+    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
 
-Conversation Rules
-------------------
+Conversion Rules
+----------------
 
 INSERT and UPDATE
 ^^^^^^^^^^^^^^^^^

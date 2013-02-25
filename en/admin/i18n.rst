@@ -1432,7 +1432,7 @@ Viewing Collation Information
 
 To view the collation information, use :func:`CHARSET`, :func:`COLLATION` and :func:`COERCIBILITY` functions.
 
-The information of the database collation can be shown on db_collation system view or :ref:`show-collation`.
+The information of the database collation can be shown on db_collation system view or :ref:`show-collation-statement`.
 
 .. _char-data-conf-guide:
 

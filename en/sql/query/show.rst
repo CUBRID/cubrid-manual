@@ -2,8 +2,10 @@
 SHOW
 ****
 
-SHOW TABLES Statement
-=====================
+.. _show-tables-statement:
+
+SHOW TABLES
+===========
 
 Displays the list of all table names within a database. The name of the result column will be *tables_in_<database name>* and it will have one column. If you use the **LIKE** clause, you can search the table names matching this and if you use the **WHERE** clause, you can search table names with more general terms. **SHOW FULL TABLES** displays the second column, *table_type* together. The table must have the value, **BASE TABLE** and the view has the value, **VIEW**. ::
 
@@ -59,8 +61,11 @@ The following is the result of executing the query in the *demodb* database.
       'code'                'BASE TABLE'
       'record'              'BASE TABLE'
 
-SHOW COLUMNS Statement
-======================
+
+.. _show-columns-statement:
+
+SHOW COLUMNS
+============
 
 Displays the column information of a table. You can use the **LIKE** clause to search the column names matching it. If you use the **WHERE** clause, you can search column names with more general terms like, "General Considerations for All **SHOW** Statements."  :
 
@@ -119,8 +124,10 @@ The following is the result of a query in the *demodb* database.
       'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
       'nation_code'         'CHAR(3)'             'iso88591_bin'        'YES'     ''          NULL                  ''
 
-SHOW INDEX Statement
-====================
+.. _show-index-statement:
+
+SHOW INDEX
+==========
 
 The **SHOW INDEX** statement displays the index information. This query has the following columns:
 
@@ -172,10 +179,10 @@ The following is the result of a query in the *demodb* database.
       't1'           1  'i_t1_i1_s1'              2      's1'          'A'            0               NULL        NULL     'YES'   'BTREE'
       't1'           1  'i_t1_s1'                 1      's1'          'A'            0                  7        NULL     'YES'   'BTREE'
 
-.. _show-collation:
+.. _show-collation-statement:
  
-SHOW COLLATION Statement
-========================
+SHOW COLLATION
+==============
 
 **SHOW COLLATION** statement lists collations supported by the database. If LIKE clause is present, it indicates which collation names to match. 
 This query has the following columns:
@@ -229,8 +236,10 @@ The following shows **SHOW COLLATION** syntax and examples.
       'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
       'utf8_ko_cs_uca'      'utf8'                        133  'No'                  'No'                  'Quaternary'
 
-SHOW GRANTS Statement
-=====================
+.. _show-grants-statement:
+
+SHOW GRANTS
+===========
 
 The **SHOW GRANT** statement displays the permissions associated with the database user accounts. ::
 
@@ -248,8 +257,10 @@ The **SHOW GRANT** statement displays the permissions associated with the databa
     ======================
       'GRANT INSERT, SELECT ON testgrant TO USER1'
 
-SHOW CREATE TABLE Statement
-===========================
+.. _show-create-table-statement:
+
+SHOW CREATE TABLE
+=================
 
 When a table name is specified, the **SHOW CREATE TABLE** statement outputs the **CREATE TABLE** statement of the table. ::
 
@@ -265,8 +276,10 @@ When a table name is specified, the **SHOW CREATE TABLE** statement outputs the 
     T NULL, [continent] CHARACTER VARYING(10), [capital] CHARACTER VARYING(30),  CONSTRAINT [pk_nation_code] PRIM
     ARY KEY  ([code]))'
 
-SHOW CREATE VIEW Statement
-==========================
+.. _show-create-view-statement:
+
+SHOW CREATE VIEW
+================
 
 The **SHOW CREATE VIEW** statement outputs the corresponding **CREATE VIEW** statement if view name is specified. ::
 
@@ -289,8 +302,10 @@ The following example shows the result of executing query in the *demodb* databa
                        (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name =
                        CURRENT_USER) AND  au.auth_type = 'SELECT')'
 
-SHOW EXEC STATISTICS Statement
-==============================
+.. _show-exec-statistics-statement:
+
+SHOW EXEC STATISTICS
+====================
 
 The **SHOW EXEC STATISTICS** statement outputs statistics information of executing query.
 

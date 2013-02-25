@@ -293,6 +293,8 @@ The following example shows how to retrieve the root row's *id* value.
     6   2       Foster      2
     7   6       Brown       2
 
+.. _prior-operator:
+
 PRIOR Operator
 --------------
 

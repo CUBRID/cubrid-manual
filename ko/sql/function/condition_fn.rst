@@ -454,6 +454,8 @@ REGEXP, RLIKE
          
         4. This notice may not be removed or altered.
 
+.. _case-expr:
+
 CASE
 ====
 

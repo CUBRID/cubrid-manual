@@ -293,6 +293,7 @@ CONNECT_BY_ROOT 연산자
     6   2       Foster      2
     7   6       Brown       2
 
+.. _prior-operator:
 
 PRIOR 연산자
 ------------

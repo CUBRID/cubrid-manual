@@ -366,8 +366,8 @@ When executing a query with the index hint syntax, the query optimizer considers
 
 The above query select the scan method of table *tab1* after comparing the cost between the sequential scan of the table *tab1* and the index scan of the index *idx1*, and select the scan method of table *tab2* after comparing the cost between the sequential scan of the table *tab2* and the index scan of the indexes *idx3*, *idx4*, *idx5*.
     
-Specitial Indexes
-=================
+Special Indexes
+===============
 
 .. _filtered-index:
 
@@ -520,6 +520,8 @@ The following cases are not allowed as filtering conditions.
         CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND sqrt(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
         ERROR: before ' ; '
         The maximum length of filter predicate string must be 128.
+
+.. _function-index:
 
 Function-based Index
 --------------------
@@ -727,6 +729,8 @@ The following example shows that the index is used as a covering index because c
     As you can see in the above comparison result, the value in the **VARCHAR** type retrieved from the index will appear with the following empty string truncated when the covering index has been applied.
     
 .. note:: If covering index optimization is available to be applied, the I/O performance can be improved because the disk I/O is decreased. Buf if you don't want covering index optimization in a special condition, specify a **NO_COVERING_IDX** hint to the query. For how to add a query, refer :ref:`sql-hint`.
+
+.. _order-by-skip-optimization:
 
 Optimizing ORDER BY Clause
 --------------------------
@@ -973,6 +977,8 @@ The following example requires descending order by **ORDER BY** clause. In this 
                 5
                 5
 
+.. _group-by-skip-optimization:
+
 Optimizing GROUP BY Clause
 --------------------------
 
@@ -1081,8 +1087,7 @@ The following example shows that an index consisting of tab(j,k) is used and no 
                 3            5            4
                 1            5            5
                 2            6            6
-
-
+                
 .. _multi-key-range-opt:
 
 [번역]
@@ -1178,6 +1183,8 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
 
 .. note:: 다중 키 범위 최적화가 적용될 수 있는 대부분의 경우에 다중 키 범위 최적화가 가장 좋은 성능을 보장하지만, 특정한 상황에서 최적화를 원하지 않는다면 질의에 **NO_MULTI_RANGE_OPT** 힌트를 명시하면 된다. 힌트를 지정하는 방법은 :ref:`sql-hint`\ 를 참고하면 된다.
+
+.. _index-skip-scan:
 
 Index Skip Scan
 ---------------

@@ -891,7 +891,7 @@ ROUND
 .. function:: ROUND(date, fmt)
 
     This function rounds date to the unit specified by the format string, *fmt*.
-    The format and its unit and the return value are as follows::
+    The format and its unit and the return value are as follows:
     
     +-------------------+----------+-----------------------------------------------------------------------+
     | Format            | Unit     | Return value                                                          |
@@ -1190,7 +1190,7 @@ TRUNC
 
 
     This function truncates date to the unit specified by the format string, *fmt*.
-    The format and its unit and the return value are as follows::
+    The format and its unit and the return value are as follows:
     
     +-------------------+----------+-----------------------------------------------------------------------+
     | Format            | Unit     | Return value                                                          |

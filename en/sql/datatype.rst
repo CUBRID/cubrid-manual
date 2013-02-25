@@ -297,7 +297,7 @@ The **TIMESTAMP** data type is used to represent a data value in which the date 
 *   All fields must be entered in integer format.
 *   If the year is omitted, the current year is specified by default. If the time value (hour/minute/second) is omitted, 12:00:00 AM is specified.
 
-*   You can store the timestamp value of the system in the **TIMESTAMP** type by using the :func:`SYS_TIMESTAMP` (or :func:`SYSTIMESTAMP`, :func:`CURRENT_TIMESTAMP`) function. 
+*   You can store the timestamp value of the system in the **TIMESTAMP** type by using the :c:macro:`SYS_TIMESTAMP`\ (or :c:macro:`SYSTIMESTAMP`, :c:macro:`CURRENT_TIMESTAMP`). 
 
 *   The :func:`TIMESTAMP` or :func:`TO_TIMESTAMP` function is used to cast a character string type into a **TIMESTAMP** type.
 *   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception. GMT timestamp'1970-01-01 12:00:00 AM' or KST timestamp'1970-01-01 09:00:00 AM' is translated into timestamp'0000-00-00 00:00:00'.
@@ -365,15 +365,15 @@ When you casting a string to Date/Time type by using the :func:`CAST` function, 
 
 * **TIME** Type ::
 
-    HH:MM:SS ["AM"|"PM"]
+    HH:MM:SS [AM|PM]
 
 * **DATETIME** Type ::
 
-    YYYY-MM-DD HH:MM:SS[.msec] ["AM"|"PM"]
+    YYYY-MM-DD HH:MM:SS[.msec] [AM|PM]
 
 * **TIMESTAMP** Type ::
 
-    YYYY-MM-DD HH:MM:SS ["AM"|"PM"]
+    YYYY-MM-DD HH:MM:SS [AM|PM]
 
 Available Format for Strings in Date/Time Type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -440,9 +440,7 @@ Available Format for Strings in Date/Time Type
 
     ::
 
-        [S]S[.[
-        *msec*
-        ]] [am|pm]
+        [S]S[.[msec]] [am|pm]
 
     *   15.359 am: 12 hours 15 seconds AM
     *   15: 12 hours 15 seconds AM
@@ -800,13 +798,6 @@ When the length of a character string exceeds *n*, they are truncated. When char
     If you specify 'pacesetter ' as VARCHAR(12), 'pacesetter ' is stored (a 10-character string plus two whitespace characters).
     If you specify 'pacesetter ' as VARCHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters are truncated).
     If you specify 'p ' as VARCHAR, 'p' is stored (if n is not specified, the default value 1,073,741,823 is used, and the trailing space is not filled with whitespace characters).
-
-::
-
-    If you specify '큐브리드' as VARCHAR(10) in the EUC-KR encoding, it is processed normally.
-    If you specify '큐브리드' as CHAR(10) and then use CHAR_LENGTH() function in the EUC-KR encoding, 8 is stored.
-    If you specify '큐브리드, as CHAR(10) in the utf-8 encoding, the last character is broken (one Korean character takes up three bytes in the UTF-8 encoding so it requires two more bytes).
-    If you specify '큐브리드' as VARCHAR(12) in the UTF-8 encoding, it is processed normally.
 
 STRING
 ------

@@ -2,16 +2,42 @@
 LOB 함수
 ********
 
-CLOB_TO_CHAR
-============
+BIT_TO_BLOB
+===========
 
-.. function:: CLOB_TO_CHAR ( clob_type_column [USING charset] )
+.. function:: BIT_TO_BLOB ( blob_type_column_or_value )
 
-    **CLOB** 타입을 **VARCHAR** 타입으로 변환한다.           
+    **BIT**, **VARYING BIT** 타입을 **BLOB** 타입으로 변환한다.           
 
-    :param clob_type_column: 변환 대상 칼럼
-    :param charset: 변환할 문자열의 문자셋. utf8, euckr, iso88591이 올 수 있다.
-    :rtype: VARCHAR
+    :param blob_type_column_or_value: 변환 대상 칼럼 또는 값
+    :rtype: BLOB
+
+BLOB_FROM_FILE
+==============
+
+.. function:: BLOB_FROM_FILE ( file_pathname )
+
+    **VARCHAR** 타입의 파일 경로에서 파일 내용을 읽어 **BLOB** 타입 데이터로 반환한다. 
+
+    :param file_pathname: CAS나 CSQL과 같은 DB 클라이언트가 구동하는 서버 상의 경로
+    :rtype: BLOB
+
+.. code-block:: sql
+
+    SELECT CAST(BLOB_FROM_FILE('local:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
+       AS BIT VARYING) result; 
+
+    SELECT CAST(BLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
+       AS BIT VARYING) result; 
+
+BLOB_LENGTH
+===========
+.. function:: BLOB_LENGTH ( blob_column )                                            
+ 
+    **BLOB** 파일에 저장된 **LOB** 데이터의 길이를 바이트 단위로 반환한다. 
+    
+    :param clob_column: 길이를 구하고자 하는 BLOB 타입의 칼럼
+    :rtype: INT
     
 BLOB_TO_BIT
 ===========
@@ -23,26 +49,6 @@ BLOB_TO_BIT
     :param blob_type_column: 변환 대상 칼럼
     :rtype: VARYING BIT
     
-CHAR_TO_CLOB
-============
-
-.. function:: CHAR_TO_CLOB ( char_type_column_or_value )
-
-    **CHAR**, **VARCHAR** 타입을 **CLOB** 타입으로 변환한다.           
-
-    :param char_type_column_or_value: 변환 대상 칼럼 또는 값
-    :rtype: CLOB
-
-BIT_TO_BLOB
-===========
-
-.. function:: BIT_TO_BLOB ( blob_type_column_or_value )
-
-    **BIT**, **VARYING BIT** 타입을 **BLOB** 타입으로 변환한다.           
-
-    :param blob_type_column_or_value: 변환 대상 칼럼 또는 값
-    :rtype: BLOB
-
 CHAR_TO_BLOB
 ============
 
@@ -52,6 +58,16 @@ CHAR_TO_BLOB
 
     :param char_type_column_or_value: 변환 대상 칼럼 또는 값
     :rtype: BLOB
+ 
+CHAR_TO_CLOB
+============
+
+.. function:: CHAR_TO_CLOB ( char_type_column_or_value )
+
+    **CHAR**, **VARCHAR** 타입을 **CLOB** 타입으로 변환한다.           
+
+    :param char_type_column_or_value: 변환 대상 칼럼 또는 값
+    :rtype: CLOB
 
 CLOB_FROM_FILE
 ==============
@@ -74,24 +90,6 @@ file_pathname을 상대 경로로 명시한 경우, 상위 경로는 프로세�
     SELECT CAST(CLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
        AS VARCHAR) result; 
 
-BLOB_FROM_FILE
-==============
-
-.. function:: BLOB_FROM_FILE ( file_pathname )
-
-    **VARCHAR** 타입의 파일 경로에서 파일 내용을 읽어 **BLOB** 타입 데이터로 반환한다. 
-
-    :param file_pathname: CAS나 CSQL과 같은 DB 클라이언트가 구동하는 서버 상의 경로
-    :rtype: BLOB
-
-.. code-block:: sql
-
-    SELECT CAST(BLOB_FROM_FILE('local:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
-       AS BIT VARYING) result; 
-
-    SELECT CAST(BLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
-       AS BIT VARYING) result; 
-
 CLOB_LENGTH
 ===========
 
@@ -101,13 +99,14 @@ CLOB_LENGTH
     
     :param clob_column: 길이를 구하고자 하는 **CLOB** 타입의 칼럼
     :rtype: INT
+ 
+CLOB_TO_CHAR
+============
 
-BLOB_LENGTH
-===========
-.. function:: BLOB_LENGTH ( blob_column )                                            
- 
-    **BLOB** 파일에 저장된 **LOB** 데이터의 길이를 바이트 단위로 반환한다. 
-    
-    :param clob_column: 길이를 구하고자 하는 BLOB 타입의 칼럼
-    :rtype: INT
- 
+.. function:: CLOB_TO_CHAR ( clob_type_column [USING charset] )
+
+    **CLOB** 타입을 **VARCHAR** 타입으로 변환한다.           
+
+    :param clob_type_column: 변환 대상 칼럼
+    :param charset: 변환할 문자열의 문자셋. utf8, euckr, iso88591이 올 수 있다.
+    :rtype: VARCHAR

@@ -891,9 +891,29 @@ ROUND
 .. function:: ROUND(date, fmt)
 
     This function rounds date to the unit specified by the format string, *fmt*.
-    In *fmt*, 'yyyy' or 'yy' indicates year, and it rounds the year. 'mm' or 'month' indicates month, and it rounds the month. 'q' indicats the quarter, and it rounds the quarter. 'dd' indicates the day, and it rounds the day. 'day' rounds the *date* on that week, by returning the Sunday of that week including that *date* or the Sunday of the next week.
+
+    Format, unit, return value of this function are as follows.
     
-    'hh' rounds the hour. 'mi' rounds the minute. 'ss' rounds the second.
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | Format            | Unit     | Return value                                                          |
+    +===================+==========+=======================================================================+
+    | 'yyyy' or 'yy'    | year     | a value rounded to year                                               |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'mm' or   'month' | month    | a value rounded to month                                              |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'q'               | quarter  | a value rounded to quarter, one of 1/1, 4/1, 7/1, 10/1                |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'day'             | week     | a value rounded to week, this Sunday of *date* week                   | 
+    |                   |          | or the next Sunday of *date* week                                     |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'dd'              | day      | a value rounded to day                                                |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'hh'              | hour     | a value rounded to hour                                               |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'mi'              | minute   | a value rounded to minute                                             |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'ss'              | second   | a value rounded to second                                             |
+    +-------------------+----------+-----------------------------------------------------------------------+
 
     :param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
     :param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
@@ -1169,8 +1189,24 @@ TRUNC
 
 .. function:: TRUNC( date[, fmt] )
 
+
     This function truncates date to the unit specified by the format string, *fmt*.
-    In *fmt*, 'yyyy' or 'yy' indicates the year, and it truncates the month by returning the date with the same year and January 1st. 'mm' or 'month' indicates the month, and it truncates the day by returning the same year and the same month with 1st. 'q' indicats the quarter, and it truncates the below of quarter by returning the 1st day of that quarter. 'dd' truncates the hour. 'day' truncates the week, by returning the Sunday of the week including that *date*.
+    
+    Format, unit, return value of this function are as follows.
+    
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | Format            | Unit     | Return value                                                          |
+    +===================+==========+=======================================================================+
+    | 'yyyy' or 'yy'    | year     | same year with Jan. 1st                                               |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'mm' or   'month' | month    | same month with 1st                                                   |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'q'               | quarter  | same quarter with one of Jan. 1st, Apr. 1st, Jul. 1st, Oct. 1st       |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'day'             | week     | Sunday of the same week(starting date of the week including *date*)   |
+    +-------------------+----------+-----------------------------------------------------------------------+
+    | 'dd'              | day      | same date with *date*                                                 |
+    +-------------------+----------+-----------------------------------------------------------------------+
 
     :param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
     :param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.

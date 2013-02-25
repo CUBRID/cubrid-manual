@@ -2,37 +2,6 @@
 LOB Functions
 *************
 
-CLOB_TO_CHAR
-============
-
-.. function:: CLOB_TO_CHAR ( clob_type_column [USING charset] )
-
-    This function converts **CLOB** type into **VARCHAR** type.
-
-    :param clob_type_column: Target column to convert
-    :param charset: The character set of string to convert. It can be utf8, euckr or iso88591.
-    :rtype: VARCHAR
-    
-BLOB_TO_BIT
-===========
-
-.. function:: BLOB_TO_BIT ( blob_type_column )
-
-    This function converts **BLOB** type to **VARYING BIT** type.           
-
-    :param blob_type_column: Target column to convert
-    :rtype: VARYING BIT
-    
-CHAR_TO_CLOB
-============
-
-.. function:: CHAR_TO_CLOB ( char_type_column_or_value )
-
-    This function converts **CHAR** or **VARCHAR** type into **CLOB** type.
-
-    :param char_type_column_or_value: Target column or value to convert
-    :rtype: CLOB
-
 BIT_TO_BLOB
 ===========
 
@@ -43,6 +12,44 @@ BIT_TO_BLOB
     :param blob_type_column_or_value: Target column or value to convert
     :rtype: BLOB
 
+BLOB_FROM_FILE
+==============
+
+.. function:: BLOB_FROM_FILE ( file_pathname )
+
+    This function read the contents from the file with **VARCHAR** type data and returns **BLOB** type data.
+
+    :param file_pathname: the path on the server which DB clients like CAS or CSQL are started
+    :rtype: BLOB
+
+.. code-block:: sql
+
+    SELECT CAST(BLOB_FROM_FILE('local:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
+       AS BIT VARYING) result; 
+
+    SELECT CAST(BLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
+       AS BIT VARYING) result; 
+
+BLOB_LENGTH
+===========
+
+.. function:: BLOB_LENGTH ( blob_column )                                            
+ 
+        The length of **LOB** data stored in **BLOB** file is returned.
+    
+    :param clob_column: The column to get the length of **BLOB**
+    :rtype: INT
+
+BLOB_TO_BIT
+===========
+
+.. function:: BLOB_TO_BIT ( blob_type_column )
+
+    This function converts **BLOB** type to **VARYING BIT** type.           
+
+    :param blob_type_column: Target column to convert
+    :rtype: VARYING BIT
+    
 CHAR_TO_BLOB
 ============
 
@@ -52,6 +59,16 @@ CHAR_TO_BLOB
 
     :param char_type_column_or_value: Target column or value to convert
     :rtype: BLOB
+
+CHAR_TO_CLOB
+============
+
+.. function:: CHAR_TO_CLOB ( char_type_column_or_value )
+
+    This function converts **CHAR** or **VARCHAR** type into **CLOB** type.
+
+    :param char_type_column_or_value: Target column or value to convert
+    :rtype: CLOB
 
 CLOB_FROM_FILE
 ==============
@@ -73,24 +90,6 @@ If you specify the *file_pathname* as the relative path, the parent path will be
     SELECT CAST(CLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
        AS VARCHAR) result; 
 
-BLOB_FROM_FILE
-==============
-
-.. function:: BLOB_FROM_FILE ( file_pathname )
-
-    This function read the contents from the file with **VARCHAR** type data and returns **BLOB** type data.
-
-    :param file_pathname: the path on the server which DB clients like CAS or CSQL are started
-    :rtype: BLOB
-
-.. code-block:: sql
-
-    SELECT CAST(BLOB_FROM_FILE('local:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
-       AS BIT VARYING) result; 
-
-    SELECT CAST(BLOB_FROM_FILE('file:/home/cubrid/demo/lob/ces_622/image_t.00001352246696287352_4131') 
-       AS BIT VARYING) result; 
-
 CLOB_LENGTH
 ===========
 
@@ -100,14 +99,16 @@ CLOB_LENGTH
     
     :param clob_column: The column to get the length of **CLOB**
     :rtype: INT
- 
-BLOB_LENGTH
-===========
-
-.. function:: BLOB_LENGTH ( blob_column )                                            
- 
-        The length of **LOB** data stored in **BLOB** file is returned.
     
-    :param clob_column: The column to get the length of **BLOB**
-    :rtype: INT
- 
+CLOB_TO_CHAR
+============
+
+.. function:: CLOB_TO_CHAR ( clob_type_column [USING charset] )
+
+    This function converts **CLOB** type into **VARCHAR** type.
+
+    :param clob_type_column: Target column to convert
+    :param charset: The character set of string to convert. It can be utf8, euckr or iso88591.
+    :rtype: VARCHAR
+
+

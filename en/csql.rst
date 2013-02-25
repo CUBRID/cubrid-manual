@@ -3,7 +3,7 @@ CSQL Interpreter
 ****************
 
 
-To execute SQL statements in CUBRID, you need to use either a Graphical User Interface (GUI)-based CUBRID Manager or a console-based CSQL Interpreter.
+To execute SQL statements in CUBRID, you need to use either a Graphical User Interface(GUI)-based `CUBRID Query Browser <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser>`_ or a console-based CSQL Interpreter.
 CSQL is an application that allows users to use SQL statements through a command-driven interface. This section briefly explains how to use the CSQL Interpreter and associated commands.
 
 .. _csql-intro:
@@ -29,7 +29,7 @@ The CSQL Interpreter directly connects to a CUBRID database and executes various
 
 **A Tool for DBA**
 
-A database administrator (**DBA**) performs administrative tasks by using various administrative utilities provided by CUBRID; a terminal-based interface of CSQL Interpreter is an environment where **DBA** executes administrative tasks.
+A database administrator(**DBA**) performs administrative tasks by using various administrative utilities provided by CUBRID; a terminal-based interface of CSQL Interpreter is an environment where **DBA** executes administrative tasks.
 
 It is also possible to run the CSQL Interpreter in standalone mode. In this mode, the CSQL Interpreter directly accesses database files and executes commands including server process properties. That is, SQL statements can be executed to a database without running a separate database server process. The CSQL Interpreter is a powerful tool that allows you to use the database only with a **csql** utility, without any other applications such as the database server or the brokers.
 
@@ -57,7 +57,7 @@ In the standalone mode, CSQL Interpreter directly accesses database files and ex
 
 CSQL Interpreter usually operates as a client process and accesses the server process.
 
-**System Administration Mode(--sysadm)**
+**System Administration Mode**
 
 You can use this mode when you  run checkpoint through CSQL interpreter or exit the transaction monitoring. Also, it allows one connection on CSQL interpreter even if the server  access count exceeds the value of max_client system parameter. In this mode, allowed connection count by CSQL interpreter is only one.
 
@@ -99,7 +99,7 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
     $ csql
     A database-name is missing.
-    interactive SQL utility, version 9.0
+    interactive SQL utility, version 9.1
     usage: csql [OPTION] database-name[@host]
 
     valid options:
@@ -114,6 +114,7 @@ To display the option list in the prompt, execute the **csql** utilities withou
       -c, --command=ARG            CSQL-commands
       -l, --line-output            display each value in a line
       -r, --read-only              read-only mode
+          --string-width           display each column which is a string type in this width
           --no-auto-commit         disable auto commit mode execution
           --no-pager               do not use pager
           --no-single-line         turn off single line oriented execution
@@ -244,7 +245,7 @@ Enter the **;help** command to display a list of the session commands available 
 
 The **;REAd** command reads the contents of a file into the buffer. This command is used to execute SQL commands stored in the specified file. To view the contents of the file loaded into the buffer, use the **;List** command. ::
 
-    csql> ;rea nation.sql
+    csql> ;read nation.sql
     The file has been read into the command buffer.
     csql> ;list
     insert into "sport_event" ("event_code", "event_name", "gender_type", "num_player") values
@@ -257,14 +258,14 @@ The **;REAd** command reads the contents of a file into the buffer. This command
 
 The **;Write** command stores the contents of the query buffer into a file. This command is used to store queries that you entered or modified in the CSQL Interpreter. ::
 
-    csql> ;w outfile
+    csql> ;write outfile
     Command buffer has been saved.
 
 **Appending to a file (;APpend)**
 
 This command appends the contents of the current query buffer to an **outfile** file. ::
 
-    csql> ;ap outfile
+    csql> ;append outfile
     Command buffer has been saved.
 
 **Executing a shell command (;SHELL)**
@@ -304,19 +305,19 @@ The ;PAger_cmd command registers a pager command to display the query result. Th
 
 When you register pager command as more, the query result shows by page and wait until you press the space key. ::
 
-    csql>;pa more
+    csql>;pager more
     
 When you register pager command as cat, the query result shows all in one display without paging. ::
      
-    csql>;pa cat
+    csql>;pager cat
 
 When you redirect the output with a file, the total query result will be written on the file. ::
 
-    csql>;pa cat > output.txt
+    csql>;pager cat > output.txt
 
 If you register pager command as less, you can forward, backward the query result. Also pattern matching on the query result is possible. ::
 
-    csql>;pa less
+    csql>;pager less
     
 The keyboard commands used on the **less** are as follows.
 
@@ -350,46 +351,46 @@ This command exits the CSQL Interpreter. ::
 
 The **;CLear** session command clears the contents of the query buffer. ::
 
-    csql> ;cl
+    csql> ;clear
     csql> ;list
 
 **Displaying the contents of the query buffer (;List)**
 
 The **;List** session command lists the contents of the query buffer that have been entered or modified. The query buffer can be modified by **;READ** or **;Edit** command. ::
 
-    csql> ;l
+    csql> ;list
 
 **Executing SQL statements (;RUn)**
 
 This command executes SQL statements in the query buffer. Unlike the **;Xrun** session command described below, the buffer will not be cleared even after the query execution. ::
 
-    csql> ;ru
+    csql> ;run
 
 **Clearing the query buffer after executing the SQL statement (;Xrun)**
 
 This command executes SQL statements in the query buffer. The buffer will be cleared after the query execution. ::
 
-    csql> ;x
+    csql> ;xrun
 
 **Committing transaction (;COmmit)**
 
 This command commits the current transaction. You must enter a commit command explicitly if it is not in auto-commit mode. In auto-commit mode, transactions are automatically committed whenever SQL is executed. ::
 
-    csql> ;co
+    csql> ;commit
     Current transaction has been committed.
 
 **Rolling back transaction (;ROllback)**
 
 This command rolls back the current transaction. Like a commit command (**;COmmit**), it must enter a rollback command explicitly if it is not in auto-commit mode (**OFF**). ::
 
-    csql> ;ro
+    csql> ;rollback
     Current transaction has been rolled back.
 
 **Setting the auto-commit mode (;AUtocommit)**
 
 This command sets auto-commit mode to **ON** or **OFF**. If any value is not specified, current configured value is applied by default. The default value is **ON**. ::
 
-    csql> ;au off
+    csql> ;autocommit off
     AUTOCOMMIT IS OFF
 
 **CHeckpoint Execution (;CHeckpoint)**
@@ -400,14 +401,14 @@ This command executes the checkpoint within the CSQL session. This command can o
 
 is an operation of flushing all dirty pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval_in_mins** and **checkpoint_every_npages**). For more information, see :ref:`logging-parameters`. ::
 
-    csql> ;ch
+    csql> ;checkpoint
     Checkpoint has been issued.
 
 **Transaction Monitoring Or Termination (;Killtran)**
 
 This command checks the transaction status information or terminates a specific transaction in the CSQL session. This command prints out the status information of all transactions on the screen if a parameter is omitted it terminates the transaction if a specific transaction ID is specified for the parameter. It can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**--sysadm**). ::
 
-    csql> ;k
+    csql> ;killtran
     Tran index      User name      Host name      Process id      Program name
     -------------------------------------------------------------------------------
           1(+)            dba      myhost             664           cub_cas
@@ -416,14 +417,14 @@ This command checks the transaction status information or terminates a specific 
           4(+)            dba      myhost             696              csql
           5(+)         public      myhost            6944              csql
      
-    csql> ;k 3
+    csql> ;killtran 3
     The specified transaction has been killed.
 
 **Restarting database (;REStart)**
 
 A command that tries to reconnect to the target database in a CSQL session. Note that when you execute the CSQL Interpreter in CS (client/server) mode, it will be disconnected from the server. When the connection to the server is lost due to a HA failure and failover to another server occurs, this command is particularly useful in connecting to the switched server while maintaining the current session. ::
 
-    csql> ;res
+    csql> ;restart
     The database has been restarted.
 
 **Displaying the current date (;DATE)**
@@ -437,14 +438,14 @@ The **;DATE** command displays the current date and time in the CSQL Interpreter
 
 This command displays the database name and host name where the CSQL Interpreter is working. If the database is running, the HA mode (one of those followings: active, standby, or maintenance) will be displayed as well.  ::
 
-    csql> ;data
+    csql> ;database
          demodb@cubridhost (active)
 
 **Displaying schema information of a class (;SChema)**
 
 The **;SChema** session command displays schema information of the specified table. The information includes the table name, its column name and constraints. ::
 
-    csql> ;sc event
+    csql> ;schema event
     === <Help: Schema of a Class> ===
      <Class Name>
          event
@@ -461,7 +462,7 @@ The **;SChema** session command displays schema information of the specified tab
 
 This command searches and displays the trigger specified. If there is no trigger name specified, all the triggers defined will be displayed. ::
 
-    csql> ;tr
+    csql> ;trigger
     === <Help: All Triggers> ===
         trig_delete_contents
 
@@ -469,7 +470,7 @@ This command searches and displays the trigger specified. If there is no trigger
 
 You can check the parameter value currently set in the CSQL Interpreter using the **;Get** session command. An error occurs if the parameter name specified is incorrect. ::
 
-    csql> ;g isolation_level
+    csql> ;get isolation_level
     === Get Param Input ===
     isolation_level=4
 
@@ -477,18 +478,18 @@ You can check the parameter value currently set in the CSQL Interpreter using th
 
 You can use the **;Set** session command to set a specific parameter value. Note that changeable parameter values are only can be changed. To change the server parameter values, you must have DBA authorization. For information on list of changeable parameters, see :ref:`broker-configuration`. ::
 
-    csql> ;se block_ddl_statement=1
+    csql> ;set block_ddl_statement=1
     === Set Param Input ===
     block_ddl_statement=1
 
     -- Dynamically change the log_max_archives value in the csql accessed by dba account
-    csql> ;se log_max_archives=5
+    csql> ;set log_max_archives=5
 
 **Setting the displaying width of string (;STring-width)** 
 
 You can use the **;STring-width** command to set the displaying width of character string or BIT string.
 
-If you don't give a value after the **;ST** command, it shows the current setting length. If it is 0, all values of the columns are displayed. If it's bigger than 0, the specified length is displayed. ::
+**;string-width** session command without a length shows the current setting length. When it is set to 0, the columns will be displayed as it is. If it sets greater than 0, the string typed columns will be displayed with the specified length. ::
 
     csql> SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
       'Arab Republic of Egypt'
@@ -496,28 +497,28 @@ If you don't give a value after the **;ST** command, it shows the current settin
       'Armenia'
       'Argentina'
 
-    csql> ;ST 5
+    csql> ;string-width 5
     csql>  SELECT name FROM NATION WHERE NAME LIKE 'Ar%';
       'Arab '
       'Aruba'
       'Armen'
       'Argen'
 
-    csql> ;ST
+    csql> ;string-width
     STRING-WIDTH : 5
 
 **Setting the displaying width of the column (;COLumn-width)**
 
-You can use the **;COLumn-width** command to set the displaying width without caring the type.
+You can use the **;COLumn-width** command to set the displaying width regardless of its data types.
 
-If you don't give a value after **;COL** command, it shows the current setting length. If it is 0, all values of of the columns are displayed. If it's bigger than 0, the specified length is displayed. ::
+If you don't give a value after **;COL** command, it shows the current setting length. When it sets to 0, the columns will be displayed as it is. If it sets to greater than 0, the columns will be displayed with the specified length. ::
 
     csql> CREATE TABLE tbl(a BIGINT, b BIGINT);
     csql> INSERT INTO tbl VALUES(12345678890, 1234567890)
-    csql> ;COL a=5
+    csql> ;column-width a=5
     csql> SELECT * FROM tbl;
           12345            1234567890
-    csql> ;COL
+    csql> ;column-width
     COLUMN-WIDTH a : 5
 
 **Setting the view level of executing query plan (;PLan)**
@@ -532,7 +533,7 @@ You can use the **;PLan** session command to set the view level of executing que
 
 The **;Info** session command allows you to check information such as schema, triggers, the working environment, locks and statistics. ::
 
-    csql> ;i lock
+    csql> ;info lock
     *** Lock Table Dump ***
      Lock Escalation at = 100000, Run Deadlock interval = 1
     Transaction (index  0, unknown, unknown@unknown|-1)
@@ -620,7 +621,7 @@ This example shows the server statistics information for current connection. For
      
      *** OTHER STATISTICS ***
     Data_page_buffer_hit_ratio    =     100.00
-    csql> ;.h off
+    csql> ;.hist off
 
 **Displaying query execution time (;TIme)**
 
@@ -629,15 +630,15 @@ The **;TIme** session command can be set to display the elapsed time to execute 
 The **SELECT** query includes the time of outputting the fetched records. Therefore, to check the execution time of complete output of all records in the **SELECT** query, use the **--no-pager** option while executing the CSQC interpreter. ::
 
     $ csql -u dba --no-pager demodb
-    csql> ;ti ON
-    csql> ;ti
+    csql> ;time ON
+    csql> ;time
     TIME IS ON
 
 **Displaying a column of result record in one line(;LINe-output)**
 
 If this value is set to ON, it would make the record display in several lines by column. The default value is OFF, which makes one record display in one line. ::
 
-    csql> ;LIN OFF
+    csql> ;line-output OFF
     csql> select * from athlete;
      
     === <Result of SELECT Command in Line 1> ===
@@ -658,7 +659,7 @@ If this value is set to ON, it would make the record display in several lines by
 
 This command displays the list that contains previously executed commands (input) and their history numbers. ::
 
-    csql> ;historyl
+    csql> ;historylist
     ----< 1 >----
     select * from nation;
     ----< 2 >----
@@ -666,9 +667,9 @@ This command displays the list that contains previously executed commands (input
 
 **Reading input with the specified history number into the buffer (;HISTORYRead)**
 
-You can use **;HISTORYRead** session command to read input with history number in the **;HISTORYList** list into the command buffer. You can enter **;ru** or **;x** directly because it has the same effect as when you enter SQL statements directly. ::
+You can use **;HISTORYRead** session command to read input with history number in the **;HISTORYList** list into the command buffer. You can enter **;run** or **;xrun** directly because it has the same effect as when you enter SQL statements directly. ::
 
-    csql> ;historyr 1
+    csql> ;historyread 1
 
 **Calling the default editor (;EDIT)**
 
@@ -680,5 +681,5 @@ This command calls the specified editor. The default editor is **vi** on Linux *
 
 This command specifies the editor to be used with **;EDIT** session command. As shown in the example below, you can specify other editor (ex: emacs) which is installed in the system. ::
 
-    csql> ;editor_c emacs
+    csql> ;editor_cmd emacs
     csql> ;edit

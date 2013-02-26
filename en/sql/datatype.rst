@@ -920,283 +920,276 @@ The following is the result of executing Escape if a value for the system parame
 ENUM Data Type
 ==============
 
-The **ENUM** type is defined as the enumerated string constants. Only the specified string elements are allowed as the value of the column defined as **ENUM** and the maximum number of the ENUM elements is 65535. Each **ENUM** value has its index number based on the order of the sorting elements. The element index number starts at 1.
-
-In the column of the **ENUM** type, each value is saved as 1 byte when the number of the **ENUM** elements is less than 256, and 2 bytes when the number is 256 or more. **ENUM** value allows numeric data type or string type.
-
-**ENUM** type column is handled as a number and considered as an index number value, which corresponds to the **ENUM** type when the compared value is **CHAR** / **VARCHAR** in the query. 
-
-**ENUM** type cannot have duplicated values in the string elements.
-
-::
+The **ENUM** type is  a data type consisting of an ordered set of distinct constant char literals called enum values. The syntax for creating an enum column is::
 
     <enum_type>
         : ENUM '(' <char_string_literal_list> ')'
+    
     <char_string_literal_list>
         : <char_string_literal_list> ',' CHAR_STRING
         | CHAR_STRING
 
-The following example shows the definition of the **ENUM** column.
+The following example shows the definition of an **ENUM** column.
 
 .. code-block:: sql
 
     CREATE TABLE tbl (
-        color ENUM ('red', 'yellow', 'blue')
+        color ENUM ('red', 'yellow', 'blue', 'green')
     );
 
-The *color* column can have one of following values:
 
-+-----------+------------------+
-| Value     | Index Number     |
-+===========+==================+
-| NULL      | NULL             |
-+-----------+------------------+
-| 'red'     | 1                |
-+-----------+------------------+
-| 'yellow'  | 2                |
-+-----------+------------------+
-| 'blue'    | 3                |
-+-----------+------------------+
+An index is associated to each element of the enum set, according to the order in which elements are defined in the enum type. For example, the *color* column can have one of the following values (assuming that the column allows NULL values):
 
-The following example shows the insertion of a value into the **ENUM** column.
+    =========       ============
+    Value           Index Number
+    =========       ============
+    NULL            NULL
+    'red'           1
+    'yellow'        2
+    'blue'          3
+    'green'         4
+    =========       ============
 
-.. code-block:: sql
+The set of values of an **ENUM** type must not exceed 512 elements and each element of the set must be unique. CUBRID allocates two bytes of storage for each **ENUM** type value because it only stores the index of each value. This reduces the storage space needed which may improve performance.
 
-    INSERT INTO tbl VALUES ('yellow'), ('red'), (2), ('blue');
-
-The following example shows the **SELECT** statement that retrieves the **ENUM** column where the value has been inserted in the above. 
+Both the enum value or the value index can be used when working with **ENUM** types. For example, to insert values into an **ENUM** type column, users can use either the value or the index of the **ENUM** type:
 
 .. code-block:: sql
 
-    SELECT color FROM tbl;
+    -- insert enum element 'yellow' with index 2
+    INSERT INTO tbl (color) VALUES ('yellow');
+    -- insert enum element 'red' with index 1
+    INSERT INTO tbl (color) VALUES (1);
+
+When used in expressions, the **ENUM** type behaves either as a CHAR type or as a number, depending on the context in which it is used:
+
+.. code-block:: sql
+
+    -- the first result column has ENUM type, the second has INTEGER type and the third has VARCHAR type
+    SELECT color, color + 0, CONCAT(color, '') FROM tbl;
      
+      color                     color+0   concat(color, '')
+    =========================================================
+      'red'                           1  'red'
+      'yellow'                        2  'yellow'
+      'blue'                          3  'blue'
+      'green'                         4  'green'    
+
+When used in type contexts other than CHAR or numbers, the enum is coerced to that type using either the index or the enum value. The table below shows which part of an **ENUM** type is used in the coercion:
+
+    +---------------+-------------------------+
+    | Type          | Enum type (Index/Value) |
+    +===============+=========================+
+    | SHORT         | Index                   |
+    +---------------+-------------------------+
+    | INTEGER       | Index                   |
+    +---------------+-------------------------+
+    | BIGINT        | Index                   |
+    +---------------+-------------------------+
+    | FLOAT         | Index                   |
+    +---------------+-------------------------+
+    | DOUBLE        | Index                   |
+    +---------------+-------------------------+
+    | NUMERIC       | Index                   |
+    +---------------+-------------------------+
+    | MONETARY      | Index                   |
+    +---------------+-------------------------+
+    | TIME          | Value                   |
+    +---------------+-------------------------+
+    | DATE          | Value                   |
+    +---------------+-------------------------+
+    | DATETIME      | Value                   |
+    +---------------+-------------------------+
+    | TIMESTAMP     | Value                   |
+    +---------------+-------------------------+
+    | CHAR          | Value                   |
+    +---------------+-------------------------+
+    | VARCHAR       | Value                   |
+    +---------------+-------------------------+
+    | BIT           | Value                   |
+    +---------------+-------------------------+
+    | VARBIT        | Value                   |
+    +---------------+-------------------------+
+
+Enum Type Comparisons
+-----------------------
+
+When used in **=** or **IN** predicates of the form (enum_column op constant), CUBRID tries to convert the constant to the ENUM type. If the coercion fails, CUBRID does not return an error but considers the comparison to be false. This is implemented like this in order to allow index scan plans to be generated on these two operators.
+
+For all other :doc:`comparison operators<function/comparison_op>`, the **ENUM** type is converted to the type of the other operand. If a comparison is performed on two **ENUM** types, both arguments are converted to CHAR type and the comparison follows CHAR type rules. Except for **=** and **IN**, predicates on **ENUM** columns cannot be used in index scan plans.
+
+To understand these rules, consider the following table:
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (
+        color ENUM ('red', 'yellow', 'blue', 'green')
+    );
+    
+    INSERT INTO tbl (color) VALUES(1), (2), (3), (4);
+
+The following query will convert the constant 'red' to the enum value 'red' with index 1
+
+.. code-block:: sql
+
+    SELECT color FROM tbl WHERE color = 'red';
+    
       color
     ======================
-      yellow
-      red
-      yellow
-      blue
-     
+      'red'
+    
+    SELECT color FROM tbl WHERE color = 1;
+    
+      color
+    ======================
+      'red'
+
+
+The following queries will not return a conversion error but will not return any results:
+
+.. code-block:: sql
+    
+    SELECT color FROM tbl WHERE color = date'2010-01-01';
+
+    SELECT color FROM tbl WHERE color = 15;
+
+    SELECT color FROM tbl WHERE color = 'asdf';
+    
+In the following queries the **ENUM** type will be converted to the type of the other operand:
+
+.. code-block:: sql
+
+    -- CHAR comparison using the enum value
+    SELECT color FROM tbl WHERE color < 'pink';
+    
+      color
+    ======================
+      'blue'
+      'green'
+
+    -- INTEGER comparison using the enum index
+    SELECT color FROM tbl WHERE color > 3;
+
+      color
+    ======================
+      'green'
+
+    -- Conversion error
+    SELECT color FROM tbl WHERE color > date'2012-01-01';
+
+    ERROR: Cannot coerce value of domain "enum" to domain "date".
+    
+Enum Type Ordering
+--------------------
+
+Values of the **ENUM** type are ordered by value index, not by enum value. When defining a column with **ENUM** type, users also define the ordering of the enum values.
+
+.. code-block:: sql
+
     SELECT color FROM tbl ORDER BY color ASC;
-     
+
       color
     ======================
-      red
-      yellow
-      yellow
-      blue
-     
-    SELECT color FROM tbl ORDER BY CAST (color AS CHAR) ASC;
-     
+      'red'
+      'yellow'
+      'blue'
+      'green'
+
+To order the values stored in an **ENUM** type column as CHAR values, users can cast the enum value to the CHAR type:
+
+.. code-block:: sql
+
+    SELECT color FROM tbl ORDER BY CAST (color AS VARCHAR) ASC;
+
       color
     ======================
-      blue
-      red
-      yellow
-      yellow
+      'blue'
+      'green'
+      'red'
+      'yellow'
 
-When the string context is used as the **ENUM** value, the string is returned. The following example shows a case of using the string context.
+
+Notes
+-------
+
+The **ENUM** type is not a reusable type. If several columns require the same set of values, an **ENUM** type must be defined for each one. When comparing two columns of **ENUM** type, the comparison is performed as if the columns were coerced to CHAR type even if the two **ENUM** types define the same set of values.
+
+Using the *ALTER .. CHANGE* statement to modify the set of values of an **ENUM** type is only allowed if the value of the system parameter **alter_table_change_type_strict** is set to yes. In this case, CUBRID uses enum value (the char-literal) to convert values to the new domain. If a value is outside of the new **ENUM** type values set, it is automatically mapped to the first value of the **ENUM** type.
+
+.. code-block:: sql
+    
+    CREATE TABLE tbl(color enum ('red', 'green', 'blue'));
+
+    INSERT INTO tbl VALUES('red'), ('green'), ('blue');
+
+The following statement will extend the **ENUM** type with the value 'yellow':
 
 .. code-block:: sql
 
-    SELECT CONCAT (enum_col, 'color') FROM tbl_name;
- 
-      CONCAT(color, '_color')
+    ALTER TABLE tbl CHANGE color color enum ('red', 'green', 'blue', 'yellow');
+    
+    INSERT into tbl VALUES(4);
+    
+    SELECT color FROM tbl;
+
+      color
     ======================
-      yellow_color
-      red_color
-      yellow_color
-      blue_color
+      'blue'
+      'green'
+      'red'    
+      'yellow'
 
-When the numeric context is used as the **ENUM** value, the index number is returned. The numeric value can be searched on the **ENUM** column as follows.
-
-.. code-block:: sql
-
-        SELECT color + 0 FROM tb;
-         
-          color + 0
-        ======================
-          2
-          1
-          2
-          3
-
-The result of using the string is different from the result of using the index number. See the following example.
+The following statement will change all tuples with value 'green' to value 'red' because the value 'green' cannot be converted the the new **ENUM** type:
 
 .. code-block:: sql
 
-        -- will use the ENUM index value because it is compared with a number
-        SELECT color FROM tbl WHERE color <= 1;
-         
-          color
-        ======================
-        red
-         
-         
-        -- will use the ENUM char literal value because it is compared with a CHAR type
-        SELECT color FROM tbl WHERE color <= 'red';
-         
-          color
-        ======================
-        red
-        blue
+    ALTER TABLE tbl CHANGE color color enum ('red', 'yellow', 'blue');
+    
+    SELECT color FROM tbl;
+    
+      color
+    ======================
+      'blue'
+      'red'
+      'red'
+      'yellow'    
 
-Index scan of **ENUM** type column is allowed for **=** and **IN** operators. Index scan cannot be done with any other comparison operators.
-
-The value which exceeds the range that the **ENUM** type can express is not converted to the **ENUM** type and an error occurs. For the error data, automatic mapping to the default index value (0) and the default string value (NULL) is not supported.
-
-When a number inserted in the **ENUM** type column is enclosed within single quotes (' '), if the value is included in the list of the ENUM elements, the value is interpreted as a string value; otherwise, it is interpreted as an index number. Therefore, to avoid confusion, we recommend that you do not use the value similar to the number as the ENUM element value. The following example shows typing an ENUM element value similar to a number in the **ENUM** type column.
-
-.. code-block:: sql
-
-        CREATE TABLE tb2 (nums ENUM ('0', '1', '2'));
-        INSERT INTO tb2 (nums) VALUES (1), ('1'), ('3');
-        SELECT * FROM tb2;
-         
-          nums
-        ======================
-          0
-          1
-          2
-
-      
-*   If the entered 1 is not enclosed within single quotes, 0 (corresponds to the Index Number 1) is inserted instead of 1.
-*   When '1' is entered, '1' value is inserted since the corresponding ENUM element value exists.
-*   When '3' is entered, '2' (corresponds to the Index Number 3) is inserted because there is no corresponding ENUM element value and 3 is a valid index number.
-
-The **ENUM** values are sorted by the index number, not by the string value of the element. **NULL** values are sorted on the front of all strings and blank strings are sorted on the front of any other strings. To sort elements in alphabetic order in the **ENUM** type column, use the **CAST** function as follows.
-
-.. code-block:: sql
-
-        SELECT color FROM tb ORDER BY CAST (color AS CHAR) ASC;
-
-When converting the **ENUM** type to the other type, the index number or the string of the **ENUM** type is converted according to the target type. In the following table, the types with an asterisk (*) can be converted to the **ENUM** type.
-
-    +---------------+---------------------------------+
-    | Type          | Value (Index Number/String)     |
-    +===============+=================================+
-    | SHORT(*)      | Index Number                    |
-    +---------------+---------------------------------+
-    | INTEGER(*)    | Index Number                    |
-    +---------------+---------------------------------+
-    | BIGINT(*)     | Index Number                    |
-    +---------------+---------------------------------+
-    | FLOAT(*)      | Index Number                    |
-    +---------------+---------------------------------+
-    | DOUBLE(*)     | Index Number                    |
-    +---------------+---------------------------------+
-    | NUMERIC(*)    | Index Number                    |
-    +---------------+---------------------------------+
-    | MONETARY(*)   | Index Number                    |
-    +---------------+---------------------------------+
-    | TIME(*)       | String                          |
-    +---------------+---------------------------------+
-    | DATE(*)       | String                          |
-    +---------------+---------------------------------+
-    | DATETIME(*)   | String                          |
-    +---------------+---------------------------------+
-    | TIMESTAMP(*)  | String                          |
-    +---------------+---------------------------------+
-    | CHAR(*)       | String                          |
-    +---------------+---------------------------------+
-    | VARCHAR(*)    | String                          |
-    +---------------+---------------------------------+
-    | BIT           | String                          |
-    +---------------+---------------------------------+
-    | VARBIT        | String                          |
-    +---------------+---------------------------------+
-
-You can browse the entire values of the **ENUM** column with :ref:`show-columns-statement` statement.
-   
-Blank strings can be used as an ENUM element value when operators have explicitly specified a general index number to the blank strings. If operators have not specified a general index number to the blank strings, the index number of blank strings is 0. You can find the rows with the blank strings as follows:
-
-.. code-block:: sql
-
-    SELECT * FROM tb WHERE color = 0;
-
-In the **ENUM** column declared to allow **NULL**, the index number for **NULL** is **NULL**. The default value of the column, which allows **NULL** is **NULL**. For **NOT NULL**, the default value of the column is the first element of the **ENUM** list specified while defining the column.
-
-When a table is created, all trailing blanks of all elements in the **ENUM** column are automatically removed. The cases of the **ENUM** element are not changed but the cases defined while defining the column are maintained as they are.
-
-For the operation where operands are Type 1 and Type 2, the result type is as follows. The exception of the following rule is the case of comparing the **ENUM** column to the constant value. In this case, the constant value is changed to the **ENUM** value of the same type.
-
-    +------------+------------+-----------------+
-    | Type 1     | Type 2     | Result Type     |
-    +============+============+=================+
-    | SHORT      | ENUM       | SHORT           |
-    +------------+------------+-----------------+
-    | INTEGER    | ENUM       | INTEGER         |
-    +------------+------------+-----------------+
-    | BIGINT     | ENUM       | BIGINT          |
-    +------------+------------+-----------------+
-    | FLOAT      | ENUM       | FLOAT           |
-    +------------+------------+-----------------+
-    | DOUBLE     | ENUM       | DOUBLE          |
-    +------------+------------+-----------------+
-    | NUMERIC    | ENUM       | NUMERIC         |
-    +------------+------------+-----------------+
-    | MONETARY   | ENUM       | MONETARY        |
-    +------------+------------+-----------------+
-    | TIME       | ENUM       | TIME            |
-    +------------+------------+-----------------+
-    | DATE       | ENUM       | DATE            |
-    +------------+------------+-----------------+
-    | DATETIME   | ENUM       | DATETIME        |
-    +------------+------------+-----------------+
-    | TIMESTAMP  | ENUM       | TIMESTAMP       |
-    +------------+------------+-----------------+
-    | CHAR       | ENUM       | CHAR            |
-    +------------+------------+-----------------+
-    | VARCHAR    | ENUM       | VARCHAR         |
-    +------------+------------+-----------------+
-
-The **ENUM** type column does not allow the **DEFALUT** value.
-No expressions can be used for the **ENUM** value. For example, the following **CREATE TABLE** statement returns an error.
-
-.. code-block:: sql
-
-        CREATE TABLE tb (
-            color ENUM ('red', CONCAT ('light ','gray'), 'blue')
-        );
-
-Using ENUM Type at the Driver Level
------------------------------------
-
-The **ENUM** type is not specially mapped to various drivers such as JDBC and CCI. Therefore, application developers can use the **STRING** type as they have used. The following example shows the JDBC application.
+The **ENUM** type is mapped to char-string types in CUBRID drivers. The following example shows how to use the **ENUM** type in a JDBC application:
 
 .. code-block:: java
 
-        Statement stmt = connection.createStatement("SELECT color FROM tbl");
-        ResultSet rs = stmt.executeQuery();
-        
-        while(rs.next()) {
-           System.out.println(rs.getString());
-        }
+    Statement stmt = connection.createStatement("SELECT color FROM tbl");
+    ResultSet rs = stmt.executeQuery();
+    
+    while(rs.next()) {
+       System.out.println(rs.getString());
+    }
 
-The following example shows the CCI application.
+The following example shows how to use the **ENUM** type in a CCI application.
 
 .. code-block:: c
 
-        req_id = cci_prepare (conn, "SELECT color FROM tbl", 0, &err);
-        error = cci_execute (req_id, 0, 0, &err);
-        if (error < CCI_ER_NO_ERROR)
-        {
-            /* handle error */
-        }
-        
-        error = cci_cursor (req_id, 1, CCI_CURSOR_CURRENT, &err);
-        if (error < CCI_ER_NO_ERROR)
-        {
-            /* handle error */
-        }
-        
-        error = cci_fetch (req_id, &err);
-        if (error < CCI_ER_NO_ERROR)
-        {
-            /* handle error */
-        }
-        
-        cci_get_data (req, idx, CCI_A_TYPE_STR, &data, 1);
+    req_id = cci_prepare (conn, "SELECT color FROM tbl", 0, &err);
+    error = cci_execute (req_id, 0, 0, &err);
+    if (error < CCI_ER_NO_ERROR)
+    {
+        /* handle error */
+    }
+    
+    error = cci_cursor (req_id, 1, CCI_CURSOR_CURRENT, &err);
+    if (error < CCI_ER_NO_ERROR)
+    {
+        /* handle error */
+    }
+    
+    error = cci_fetch (req_id, &err);
+    if (error < CCI_ER_NO_ERROR)
+    {
+        /* handle error */
+    }
+    
+    cci_get_data (req, idx, CCI_A_TYPE_STR, &data, 1);
+
 
 BLOB/CLOB Data Types
 ====================

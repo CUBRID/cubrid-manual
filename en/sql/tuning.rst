@@ -1087,10 +1087,10 @@ The following example shows that an index consisting of tab(j,k) is used and no 
                 3            5            4
                 1            5            5
                 2            6            6
-                
-.. _multi-key-range-opt:
 
 [번역]
+                
+.. _multi-key-range-opt:
 
 다중 키 범위 최적화
 -------------------

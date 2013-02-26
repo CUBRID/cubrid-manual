@@ -2,7 +2,9 @@
 분할
 ****
 
-분할 기법(partitioning)은 하나의 테이블을 여러 독립적인 논리적 단위로 분할하는 기법이다. 분할 기법에서 사용하는 분할된 단위를 분할(partition)이라 한다. 분할은 주로 관리의 편의, 성능, 가용성의 목적으로 사용한다. 분할을 적용함으로써 얻을 수 있는 효과는 다음과 같다.
+분할 기법(partitioning)은 하나의 테이블을 여러 독립적인 논리적 단위로 분할하는 기법이다. CUBRID에서 각 분할(partition)은 분할 테이블(partitioned table)의 서브클래스로 구현된 테이블이다. 각 분할은 :ref:`partitioning-key`\ 의 부분 집합과 분할 메서드를 유지한다. 사용자는 분할 테이블에 질의문을 수행하여 분할되어 저장된 데이터에 접근할 수 있다. 이것은 사용자가 해당 테이블에 접근하는데 사용되는 질의문이나 코드를 변경하지 않고 테이블을 분할할 수 있다는 것을 뜻하며, 응용 프로그램을 거의 변경하지 않고 분할할 수 있는 이점을 제공한다.
+
+분할 기법은 관리, 성능 및 가용성을 향상시킬 수 있다. 테이블을 분할하면 다음과 같은 이점이 있다.
 
 *   대용량 테이블의 관리 향상
 *   데이터 조회 시 접근 범위를 줄임으로써 성능 향상
@@ -10,72 +12,88 @@
 *   여러 분할로 나눔으로써 전체 데이터의 훼손 가능성 감소 및 가용성 향상
 *   스토리지 비용의 최적화
 
-CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스트 분할(List Partition)의 세 가지 분할을 제공한다.
+분할된 데이터는 시스템에 의해 자동으로 관리된다. 분할 테이블에서 실행되는 :doc:`INSERT<query/insert>` 문과 :doc:`UPDATE<query/update>` 문은 실행하는 동안 튜플이 어느 분할에 위치해야 하는지 확인하기 위해 추가적인 절차를 수행한다. 시스템은 UPDATE 문이 수행되는 동안 수정된 튜플이 어떤 분할로 이동해야 할지를 확인하고 분할 정의를 일관되게 유지한다. 존재하지 않는 분할에 튜플을 삽입하면 오류를 반환한다.
 
-한 테이블이 가질 수 있는 최대 분할 수는 1024이다. 테이블의 각 분할은 그 테이블의 서브 테이블로 생성된다. 분할 정의를 통해 생성된 서브 테이블은 사용자가 임의로 내용을 변경하거나 삭제할 수 없다. 서브 테이블의 이름은 '*class_name__p__partition_name*'의 형식으로 시스템 테이블에 등록된다. 데이터베이스 사용자는 **db_class** 뷰와 **db_partition** 뷰에서 분할의 정보를 확인할 수 있다. 또 다른 확인 방법은 CUBRID 매니저나 CSQL 인터프리터의 ;sc <테이블명> 명령을 사용하는 것이다.
+:doc:`SELECT<query/select>` 문을 수행할 때 시스템은 검색 조건에 해당하는 결과를 나타낼 분할만 대상으로 하여 검색 공간을 좁히기 위해 :ref:`partition-pruning` 작업을 적용한다. SELECT 문 수행 중에 대부분의 분할을 프루닝(제거)하는 작업은 성능을 크게 향상시킨다.
 
-.. _partition-data-type:
+테이블 분할 기법은 매우 큰 테이블에 적용할 때 가장 효과적이다. "매우 큰" 테이블은 응용 프로그램에, 그리고 테이블이 질의문에서 사용되는 방법에 의존적이다. 테이블에 대해 :ref:`영역 <range-partitioning>`, :ref:`리스트 <list-partitioning>` 또는 :ref:`해시 <hash-partitioning>` 중 어느 것이 최적의 분할 방법인지는 테이블이 질의문에서 어떻게 사용되며 데이터가 분할 사이에서 어떻게 분배될 것인가에 달려있다. 분할 테이블이 일반 테이블로만 사용된다 하더라도, :ref:`partitioning-notes`\ 만 고려하면 된다.
+
+.. _partitioning-key:
 
 분할 키
 =======
-
-분할 키로 사용할 수 있는 칼럼의 데이터 타입은 다음과 같다.
+분할 키는 정의된 분할에 따라 데이터를 분배하기 위해 분할하는 방법에서 사용되는 표현식이다. 분할 키로 사용할 수 있는 칼럼의 데이터 타입은 다음과 같다.
 
 *   **CHAR**
 *   **VARCHAR**
-*   **NCHAR**
-*   **VARNCHAR**
 *   **SMALLINT**
 *   **INT**
 *   **BIGINT**
 *   **DATE**
 *   **TIME**
 *   **TIMESTAMP**
-*   **ENUM**
+*   **DATETIME**
 
-다음과 같은 연산자 함수를 분할 키에 적용하는 분할 표현식에 사용할 수 있다.
+분할 키에는 다음과 같은 제약 사항이 적용된다.
 
-* 숫자 관련 연산자 함수
+* 분할 키는 분할 테이블에서 하나의 칼럼만을 사용해야 한다.
+* :doc:`집계 함수 및 분석함수<function/analysis_fn>`, :doc:`논리 연산자<function/logical_op>` 그리고 :doc:`비교 연산자 <function/comparison_op>`\는 분할 키 표현식에 사용할 수 없다.
+* 다음 함수 및 표현식은 분할 키 표현식에서 허용되지 않는다.
+    *   :ref:`CASE <case-expr>` 
+    *   :func:`CHARSET` 
+    *   :func:`CHR` 
+    *   :func:`COALESCE` 
+    *   :func:`SERIAL_CURRENT_VALUE` 
+    *   :func:`SERIAL_NEXT_VALUE` 
+    *   :func:`DECODE`
+    *   :func:`DECR` 
+    *   :func:`INCR`
+    *   :func:`DRAND` 
+    *   :func:`DRANDOM` 
+    *   :func:`GREATEST` 
+    *   :func:`LEAST` 
+    *   :func:`IF` 
+    *   :func:`IFNULL` 
+    *   :func:`INSTR` 
+    *   :func:`NVL` 
+    *   :func:`NVL2` 
+    *   :c:macro:`ROWNUM` 
+    *   :func:`INST_NUM` 
+    *   :c:macro:`USER` 
+    *   :ref:`PRIOR <prior-operator>` 
+    *   :func:`WIDTH_BUCKET`
 
-  +, -, \*, /, :func:`MOD`, :func:`FLOOR`, :func:`CEIL`, :func:`POWER`, :func:`ROUND`, :func:`ABS`, :func:`TRUNC`
-
-* 문자열 관련 연산자 함수
-
-  :func:`POSITION`, :func:`SUBSTRING`, :func:`OCTET_LENGTH`, :func:`BIT_LENGTH`, :func:`CHAR_LENGTH`, :func:`LOWER`, :func:`UPPER`, :func:`TRIM`, :func:`LTRIM`, :func:`RTRIM`, :func:`LPAD`, :func:`RPAD`, :func:`REPLACE`, :func:`TRANSLATE`
-
-* 날짜 관련 연산자 함수
-
-  :func:`ADD_MONTHS`, :func:`LAST_DAY`, :func:`MONTHS_BETWEEN`, :func:`SYS_DATE`, :func:`SYS_TIME`, :func:`SYS_TIMESTAMP`, :func:`TO_DATE`, :func:`TO_NUMBER`, :func:`TO_TIME`, :func:`TO_TIMESTAMP`, :func:`TO_CHAR`
-
-* 기타 관련 연산자 함수
-
-  :func:`EXTRACT`, :func:`CAST`
-
+.. _range-partitioning:
 
 영역 분할
 =========
 
-.. _defining-range-partitions:
+영역 분할(range partitioning)은 각 분할에 대해 특정 영역 값을 정의하여 테이블을 분할하는 방법이다. 범위는 겹치지 않는 연속된 간격으로 정의된다. 이 분할 방법은 테이블의 데이터가 영역 간격으로 나누어질 수 있을 때(예: 순서 테이블에서 날짜 별 순서 게시 또는 사용자 테이블에서 나이 간격) 가장 유용한 방법이다. 영역 분할은 :ref:`partition-pruning`\의 관점에서 가장 다목적으로 사용되는 분할 기법인데, 거의 모든 검색 조건이 영역 매칭을 식별하는데 사용되기 때문이다.
 
-영역 분할 정의
---------------
-
-영역 분할은 **PARTITION BY RANGE** 문을 이용하여 정의한다. ::
+테이블은 **CREATE** 또는 **ALTER** 문에서 **PARTITION BY RANGE** 절을 사용하여 분할될 수 있다. ::
 
     CREATE TABLE table_name (
-      ...
+       ...
     )
-    PARTITION BY RANGE ( <partition_expression> ) (
-      PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-      PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-      ... 
+    PARTITION BY RANGE ( <partitioning_key> ) (
+       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+       ... 
+    )
+    
+    ALTER TABLE table_name PARTITION BY RANGE ( <partitioning_key> ) (
+       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+       ... 
     )
 
-*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 명을 지정하거나 함수를 사용하여 지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 설명은 :ref:`분할 표현식에 사용할 수 있는 데이터 타입 <partition-data-type>` 을 참조한다.
+*   *partitioning_key* : :ref:`partitioning-key`\를 지정한다.
 *   *partition_name* : 분할 명을 지정한다.
-*   *range_value* : 분할의 기준이 되는 값을 지정한다.
+*   *range_value* : 분할 키의 최대 값을 지정한다. 분할 키가 *range_value*\보다 작은 것으로 평가되는 모든 튜플은 해당 분할에 저장될 것이다.
 
 다음은 올림픽 참가국 정보를 담은 *participant2* 테이블을 생성하고 참가한 올림픽의 개최연도를 2000년도 전/후로 영역 분할하는 데이터를 삽입하는 예제이다. 데이터 삽입 시 1988년, 1996년 올림픽에 참가한 국가는 *before_2000* 에, 나머지 국가는 *before_2008* 에 저장된다.
+
+.. _range-participant2-table:
 
 .. code-block:: sql
 
@@ -85,51 +103,219 @@ CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스�
       PARTITION before_2008 VALUES LESS THAN (2008)
     );
      
-    INSERT INTO participant2 VALUES (1988, 'NZL', 3, 2, 8);
-    INSERT INTO participant2 VALUES (1988, 'CAN', 3, 2, 5);
-    INSERT INTO participant2 VALUES (1996, 'KOR', 7, 15, 5);
-    INSERT INTO participant2 VALUES (2000, 'RUS', 32, 28, 28);
-    INSERT INTO participant2 VALUES (2004, 'JPN', 16, 9, 12);
+분할을 생성할 때, 시스템은 사용자가 제공한 영역을 가장 작은 값부터 가장 큰 값까지 정렬하고 정렬된 리스트에서 겹치지 않는 간격을 생성한다. 분할에 대한 무제한의 최대값을 지정하고 싶으면 **MAXVALUE** 식별자를 사용한다. 이 예에서 생성된 영역의 간격은 [-∞, 2000)와 [2000, 2008)이다.
 
-다음과 같이 영역 분할에서 분할 키 값이 **NULL** 이면 첫 번째 분할에 저장된다.
+튜플을 영역 분할 테이블에 삽입할 때, 시스템은 분할 키를 평가하여 튜플이 어느 분할 영역에 속해있는지를 식별한다. 분할 키 값이 **NULL**\이면 데이터가 가장 작은 영역에 속한 분할로 저장된다. 분할 키 값을 받아들일 범위가 없으면 오류를 반환한다. 또한  튜플을 업데이트할 때 분할 키의 새 값이 정의된 영역에 속하지 않으면 오류를 반환한다. 
+
+.. _hash-partitioning:
+
+해시 분할
+=========
+
+해시 분할은 특정 개수의 분할로 데이터를 분배하기 위해 사용되는 분할 기법이다. 이 분할 기법은 테이블 데이터가 영역이나 리스트가 의미 없는 값(예: 키워드 테이블이나 user_id가 가장 관심 있는 값인 사용자 테이블)을 포함할 때 유용하다. 분할 키 값이 테이블 데이터를 고르게 분배한다면, 해시 분할 기법은 정의된 분할들에 테이블 데이터를 고르게 배분한다. 해시 분할에서 ref:`partition-pruning`\은 동등 조건(예: **=**\과 :func:`IN` 절을 사용하는 조건)에만 적용될 수 있는데, 대부분의 질의에 분할 키에 대한 조건이 지정될 때만 해시 분할이 유용하다.
+
+**CREATE** 또는 **ALTER** 문에서 **PARTITION BY HASH** 절을 사용하여 해시 분할을 할 수 있다. ::
+
+    CREATE TABLE table_name (
+       ...
+    )
+    PARTITION BY HASH ( <partitioning_key> )
+    PARTITIONS ( number_of_partitions )
+
+    ALTER TABLE table_name 
+    PARTITION BY HASH (<partitioning_key>)
+    PARTITIONS (number_of_partitions)
+
+*   *partitioning_key* : :ref:`partitioning-key`\를 지정한다.
+*   *number_of_partitions* : 원하는 분할의 수를 지정한다.
+
+다음은 국가 코드와 국가 이름의 정보를 담은 *nation2* 테이블을 생성하고 *code* 값을 기준으로 4개의 해시 분할을 정의하는 예제이다. 해시 분할은 분할의 수만 지정하고 이름은 지정하지 않는다.
+
+.. _hash-nation2-table:
 
 .. code-block:: sql
 
-    INSERT INTO participant2 VALUES (NULL, 'AAA', 0, 0, 0);
+    CREATE TABLE nation2 (
+      code CHAR (3),
+      name VARCHAR (50)
+    )
+    PARTITION BY HASH (code) PARTITIONS 4;
 
-.. note::
+하나의 값이 해시 분할 테이블에 삽입될 때 데이터를 저장하는 분할은 분할 키의 해시 값에 의해 결정된다. 분할 키 값이 **NULL**\이면 데이터는 첫번째 분할에 저장된다.
 
-    *   한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
+.. _list-partitioning:
+
+리스트 분할
+===========
+
+리스트 분할은 사용자가 분할 키로 지정한 리스트에 따라 테이블을 분할하는 기법이다. 분할을 위한 값의 리스트는 겹치는 값이 없어야 한다. 이 분할 기법은 테이블 데이터가 의미 있는 값(예: 사원 테이블의 부서 ID 또는 사용자 테이블의 국가 코드)의 목록으로 나누어질 때 유용하다. 해시 분할과 마찬가지로, 리스트 분할에서 ref:`partition-pruning`\은 동등 조건(예: **=**\과 :func:`IN` 절을 사용하는 조건)에만 적용될 수 있다.
+
+**CREATE** 또는 **ALTER** 문에서 **PARTITION BY LIST** 절을 사용하여 리스트 분할을 할 수 있다. ::
+
+    CREATE TABLE table_name (
+      ...
+    )
+    PARTITION BY LIST ( <partitioning_key> ) (
+      PARTITION partition_name VALUES IN ( <values_list> ),
+      PARTITION partition_name VALUES IN ( <values_list> ),
+      ... 
+    )
     
-    *   분할 키 값이 **NULL** 이면, 첫 번째 분할에 저장된다
+    ALTER TABLE table_name
+    PARTITION BY LIST ( <partitioning_key> ) (
+      PARTITION partition_name VALUES IN ( <values_list> ),
+      PARTITION partition_name VALUES IN ( <values_list> ),
+      ... 
+    )
 
-.. _range-partitioning-redefinition:
+*   *partitioning_key* : :ref:`partitioning-key`\를 지정한다.
+*   *partition_name* : 분할 명을 지정한다.
+*   *partition_value_list* : 분할의 기준이 되는 값의 목록을 지정한다.
 
-영역 분할 재정의
-----------------
+다음은 선수의 이름과 종목 정보를 담고있는 *athlete2* 테이블을 생성하고 종목에 따른 리스트 분할을 정의하는 예제이다.
 
-**ALTER** 문의 **REORGANIZE PARTITION** 절을 이용하여 분할을 재정의한다. 재정의를 통해 여러 개의 분할을 한 개에 결합할 수 있으며, 한 개의 분할을 여러 개로 분리할 수 있다. ::
+.. _list-athlete2-table:
+
+.. code-block:: sql
+
+    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
+    PARTITION BY LIST (event) (
+        PARTITION event1 VALUES IN ('Swimming', 'Athletics'),
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
+        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
+    );
+
+리스트 분할 테이블에 튜플을 삽입할 때 분할 키 값은 분할에 정의된 리스트 값 중 하나에 속해야 한다. 이 분할 기법에서 분할 키 값이 **NULL**\이면 오류가 발생한다. 리스트 분할에서 **NULL** 값을 저장하려면 **NULL**\을 포함하는 분할이 생성되어야 한다.
+
+.. code-block:: sql
+
+    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
+    PARTITION BY LIST (event) (
+        PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
+        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball', NULL)
+    );
+
+.. _partition-pruning:
+
+분할 프루닝
+===========
+
+분할 프루닝(partition pruning)은 검색 조건을 통해 데이터 검색 범위를 한정시키는 최적화 기법이다. 분할 프루닝을 수행하는 동안, 질의문의 **WHERE** 절이 항상 FALSE 인지를 (분할이 정의된 방법을 고려하여) 확인한다. 다음 예에서 **SELECT** 문은 *before_2008*\과  *before_2012* 분할에만 적용되는데, 나머지 분할의 데이터는 *YEAR (opening_date)*\가 2004보다 작다는 것을 시스템이 알기 때문이다.
+
+.. code-block:: sql
+
+    CREATE TABLE olympic2 (opening_date DATE, host_nation VARCHAR (40))
+    PARTITION BY RANGE (YEAR(opening_date)) (
+        PARTITION before_1996 VALUES LESS THAN (1996),
+        PARTITION before_2000 VALUES LESS THAN (2000),
+        PARTITION before_2004 VALUES LESS THAN (2004),
+        PARTITION before_2008 VALUES LESS THAN (2008),
+        PARTITION before_2012 VALUES LESS THAN (2012)
+    );
+     
+    SELECT opening_date, host_nation 
+    FROM olympic2 
+    WHERE YEAR(opening_date) > 2004;
+
+분할 프루닝은 디스크 I/O와 질의 수행 중 처리해야 할 데이터 양을 크게 줄인다. 프루닝의 이점을 얻기 위해 언제 프루닝이 수행되어야 하는 가를 이해하는 것이 중요하다. 성공적으로 분할을 프루닝하려면 다음 조건을 만족해야 한다.
+
+*   분할 키는 *WHERE* 절에서 (다른 표현식을 적용하지 않고) 직접 사용되어야 한다.
+*   영역 분할에서 분할 키는 범위 조건(**<**, **>**, **BETWEEN** 등)이나 동등 조건(**=**, **IN** 등)으로 사용되어야 한다.
+*   리스트 분할과 해시 분할에서 분할 키는 동등 조건(**=**, **IN** 등)으로 사용되어야 한다.
+
+다음 예는 위의 *olympic2* 테이블을 가지고 프루닝이 어떻게 수행되는가를 설명한다.  
+
+.. code-block:: sql
+
+    -- prune all partitions except before_2012
+    SELECT host_nation 
+    FROM olympic2 
+    WHERE YEAR (opening_date) >= 2008;
+
+    -- prune all partitions except before_2008
+    SELECT host_nation 
+    FROM olympic2 PARTITION (before_max) 
+    WHERE YEAR(opening_date) BETWEEN 2005 and 2007;
+
+    -- no partition is pruned because partitioning key is not used
+    SELECT host_nation 
+    FROM olympic2 PARTITION (before_max) 
+    WHERE opening_date = '2008-01-02';
+
+    -- no partition is pruned because partitioning key is not used directly
+    SELECT host_nation 
+    FROM olympic2 PARTITION (before_max) 
+    WHERE YEAR(opening_date) + 1 = 2008;
+
+    -- no partition is pruned because there is no useful predicate in the WHERE clause
+    SELECT host_nation 
+    FROM olympic2 PARTITION (before_max) 
+    WHERE YEAR(opening_date) != 2008;
+
+CUBRID 9.0 이전 버전에서 분할 프루닝은 질의 컴파일 단계에서 수행되었다. CUBRID 9.0부터 분할 프루닝은 질의 실행 단계에서 수행된다. 질의를 실행하는 동안 분할 프루닝을 실행하면 훨씬 복잡한 질의에 대해서도 이 최적화를 적용할 수 있게 된다. 그러나, 질의 계획은 질의 실행 전에 발생하고 프루닝 정보는 질의 실행 전에는 알 수 없으므로 프루닝 정보는 더 이상 질의 실행 단계에서 출력되지 않는다.
+
+사용자는 또한 시스템에 의해 정의된 분할 이름을 사용하거나 *table PARTITION (name)* 절을 사용하여 각 분할에 접근할 수 있다.
+
+.. code-block:: sql
+
+    -- to specify a partition with its table name
+    SELECT * FROM olympic2__p__before2008;
+    
+    -- to specify a partition with PARTITION clause
+    SELECT * FROM olympic2 PARTITION (before2008);
+
+위의 *before2008* 분할에 접근하는 두 개의 질의는 분할(partition)이 아닌 일반 테이블인 것처럼 보인다. 이 기능은 매우 유용한데, 분할 테이블(partitioned table)에서는 사용할 수 없는 최적화 기법을 사용할 수 있기 때문이다(자세한 내용은 :ref:`partitioning-notes` 참고). 분할에 직접 접근할 때 질의의 범위는 해당 분할에 제한된다는 것을 유의해야 한다. 이것은 다른 분할들의 튜플은 고려되지 않음을 의미하며(**WHERE** 절이 해당 범위를 포함하더라도), **INSERT**\와 **UPDATE** 문에 의해 삽입/수정되는 튜필이 지정된 분할에 속하지 않는 경우 오류가 발생한다.
+
+분할 테이블(partitioned table)이 아닌 분할(partition)에 대해 질의를 수행하면, 분할 기법의 몇 가지 이점을 잃게 된다. 예를 들어, 사용자가 단지 분할 테이블에만 수행하면 사용자의 응용 프로그램을 수정할 필요 없이 이 테이블이 재분할되거나 분할이 제외될 수 있다. 사용자가 분할에 직접 접근하면 이러한 이점을 잃게 된다. 또한, **INSERT** 문에서 분할을 사용하는 것이 허용되더라도, 이로 인한 성능 향상이 없으므로 이는 권장되지 않는다.
+
+분할 관리
+=========
+
+분할 테이블은 **ALTER** 문의 분할 지정 절을 사용하여 관리될 수 있다. 분할에서 허용되는 여러 가지 동작은 다음과 같다.
+
+1. :ref:`분할 테이블을 일반 테이블로 변경<remove-partitioning>`
+#. :ref:`분할 재구성<reorganize-partitions>`
+#. :ref:`이미 존재하는 분할 테이블에 분할 추가<add-partitions>`
+#. :ref:`분할 제거하기<drop-partitions>`
+#. :ref:`분할을 일반테이블로 승격<promote-partitions>`
+
+.. _remove-partitioning:
+
+분할 테이블을 일반 테이블로 변경
+--------------------------------
+
+분할 테이블을 일반 테이블로 변경하려면 **ALTER TABLE** 문을 이용한다. ::
+
+    ALTER {TABLE | CLASS} table_name REMOVE PARTITIONING
+
+*   *table_name* : 변경하고자 하는 테이블의 이름을 지정한다.
+
+분할 지정을 제거하면 각 분할에 있던 모든 데이터가 분할 테이블로 이동하게 된다. 이는 비용이 많이 드는 작업이며 주의해서 계획되어야 한다.
+
+.. _reorganize-partitions:
+
+분할 재구성
+-----------
+
+분할 재구성은 하나의 분할이 더 작은 분할 또는 한 그룹의 분할들이 하나의 분할로 병합될 수 있도록 하는 작업이다. 이를 수행하려면 **ALTER** 문의 **REORGANIZE PARTITIONS** 절을 사용한다. ::
 
     ALTER {TABLE | CLASS} table_name
     REORGANIZE PARTITION <alter_partition_name_comma_list>
     INTO ( <partition_definition_comma_list> )
      
     partition_definition_comma_list ::=
-    PARTITION <partition_name> VALUES LESS THAN ( <range_value> ), ... 
+    PARTITION partition_name VALUES LESS THAN ( <range_value> ), ... 
 
-*   *table_name* : 재정의할 테이블의 이름을 지정한다.
-*   *alter_partition_name_comma_list* : 재정의할 분할을 지정한다. 여러 개인 경우 쉼표(,) 구분한다.
-*   *partition_definition_comma_list* : 재정의 내용을 정의한다. 여러 개인 경우 쉼표(,)로 구분한다.
+*   *table_name* : 재정의될 테이블의 이름을 지정한다.
+*   *alter_partition_name_comma_list* : 재정의될 분할을 지정한다(현재의 분할). 여러 개의 분할은 쉼표(,)로 구분된다.
+*   *partition_definition_comma_list* : 재정의된 분할들을 지정한다(새 분할). 여러 개의 분할은 쉼표(,)로 구분된다.
 
-다음은 *participant2* 테이블의 *before_2000* 분할을 *before_1996* 과 *before_2000* 으로 재분할하는 예제이다.
+이 절은 영역 분할 및 리스트 분할에만 적용된다. 해시 분할 기법에서 데이터 분배는 구문 상 다르므로, 해시 분할 테이블은 분할 추가 및 삭제만 허용한다. 자세한 사항은 :ref:`hash-reorganization`\을 참고한다.
+
+다음 예는 :ref:`participant2<range-participant2-table>` 테이블의 *before_2000* 분할을 *before_1996* 분할과 *before_2000* 분할로 재구성하는 방법이다.
 
 .. code-block:: sql
-
-    CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
-    PARTITION BY RANGE (host_year) (
-      PARTITION before_2000 VALUES LESS THAN (2000),
-      PARTITION before_2008 VALUES LESS THAN (2008)
-    );
      
     ALTER TABLE participant2 
     REORGANIZE PARTITION before_2000 INTO (
@@ -137,7 +323,7 @@ CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스�
       PARTITION before_2000 VALUES LESS THAN (2000)
     );
 
-다음은 위의 예제에서 재정의했던 분할을 다시 *before_2000* 하나로 결합하는 예제이다.
+다음 예는 위의 예에서 정의된 두 개의 분할을 다시 하나의 *before_2000*\로 병합하는 방법이다.
 
 .. code-block:: sql
 
@@ -146,31 +332,46 @@ CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스�
       PARTITION before_2000 VALUES LESS THAN (2000)
     );
 
+다음 예는 :ref:`athlete2<list-athlete2-table>` 테이블에서 정의된  *event2* 분할을 *event2_1* (Judo)와 *event2_2* (Taekwondo, Boxing)으로 재구성하는 방법이다.
+
+.. code-block:: sql
+
+    ALTER TABLE athlete2 
+    REORGANIZE PARTITION event2 INTO (
+        PARTITION event2_1 VALUES IN ('Judo'),
+        PARTITION event2_2 VALUES IN ('Taekwondo', 'Boxing')
+    );
+
+다음 예는 *event2_1*\과 *event2_2* 분할을 다시 *event2* 분할로 합치는 방법이
+
+.. code-block:: sql
+
+    ALTER TABLE athlete2 
+    REORGANIZE PARTITION event2_1, event2_2 INTO (
+        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing')
+    );
+
 .. note::
 
-    *   영역 및 리스트 분할 테이블을 재정의할 때, 새로운 분할 테이블에는 중복된 영역이나 값은 허용되지 않는다.
+    *   영역 분할 테이블에서, 인접한 분할끼리만 재구성될 수 있다.
+    *   분할 재구성을 수행하는 동안, 새로 분할된 스키마를 반영하기 위해 분할끼리 데이터를 이동한다. 재구성되는 분할의 크기에 따라 시간이 많이 소요될 수 있으므로 해당 작업을 계획할 때 주의를 요한다.
+    *   *REORGANIZE PARTITION* 절은 분할 방법을 바꾸기 위해 사용할 수 없다. 예를 들어, 영역 분할 테이블이 해시 분할 테이블로 바뀔 수 없다.
+    *   분할을 제거한 후에 최소한 하나의 분할이 존재해야 한다.
     
-    *   **REORGANIZE PARTITION** 절을 사용해 테이블의 분할 종류를 변경할 수 없다. 예를 들어, 영역 분할을 해시 분할로 변경할 수 없으며, 그 반대도 마찬가지이다.
-    
-    *   분할 추가 후 최대 분할의 개수는 1,024개를 넘지 못하며, 분할 삭제 후 최소 1개 이상의 분할이 남아 있어야 한다. 영역 분할 테이블은 인접한 분할만 재정의할 수 있다.
+.. _add-partitions:
 
-.. _range-partitioning-append:
+분할 추가
+---------
 
-영역 분할 추가
---------------
-
-**ALTER** 구문의 **ADD PARTITION** 절을 이용하여 분할된 테이블에 분할을 추가한다. ::
+*ALTER* 문의 *ADD PARTITION* 절을 사용하여 분할 테이블에 분할을 추가할 수 있다. ::
 
     ALTER {TABLE | CLASS} table_name
-    ADD PARTITION <partition_definitions_comma_list>
-    
-    partition definition_comma_list ::=
-    PARTITION partition_name VALUES LESS THAN ( <range_value> ), ...
+    ADD PARTITION (<partition_definitions_comma_list>)
 
-*   *table_name* : 분할을 추가할 테이블의 이름을 지정한다.
-*   *partition_definition_comma_list* : 추가할 분할을 정의한다. 여러 개인 경우 쉼표(,)로 구분한다.
+*   *table_name* : 분할이 추가될 테이블 이름을 지정한다. 
+*   *partition_definition_comma_list* : 추가될 분할 이름을 지정한다. 여러 개인 경우 쉼표(,)로 구분한다.
 
-현재 *participant2* 테이블에는 2008년 이전 올림픽 정보에 관한 분할만 정의되어 있다. 다음은 2012년 올림픽 정보가 저장될 *before_2012* 분할과 그 이후 올림픽 정보가 저장될 *last_one* 분할을 추가하는 예제이다.
+다음 예는 :ref:`participant2<range-participant2-table>` 테이블에 *before_2012* 분할과 *last_one* 분할을 추가하는 방법이다.
 
 .. code-block:: sql
 
@@ -180,23 +381,25 @@ CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스�
     );
 
 .. note::
+    *   영역 분할 테이블에서 추가될 분할에 대한 영역 값은 기존 분할의 최대 영역 값보다 커야 한다.
+    *   영역 분할 테이블에서 **MAXVALUE** 로 최대값이 설정되어 있으면 **ADD PARTITION** 절은 항상 오류를 반환한다(ref:`REORGANIZE PARTITION<reorganize-partitions>` 절이 대신 사용되어야 함).
+    *   *ADD PARTITION* 절은 분할 테이블에서만 사용될 수 있다.
+    *   *ADD PARTITION* 절이 해시 분할 테이블에서 실행될 때는 다른 구문을 사용한다. 자세한 사항은 :ref:`hash-reorganization`\을 참고한다.
 
-    *   영역 분할을 추가할 때는 분할 기준 값이 기존의 분할보다 큰 값만 추가할 수 있다. 따라서, 위의 예제처럼 **MAXVALUE** 로 최대값을 설정하면 더 이상 분할을 추가할 수 없다(분할 재정의를 통해서 **MAXVALUE** 를 다른 값으로 변경하면 분할 추가 가능).
+.. _drop-partitions:
 
-    *   기존의 분할보다 작은 분할 기준 값을 추가하려면 분할 재정의를 이용한다(:ref:`range-partitioning-redefinition` 참조).
+분할 제거
+---------
 
-영역 분할 삭제
---------------
-
-**ALTER** 구문의 **DROP PARTITION** 절을 이용하여 분할을 삭제한다. ::
+**ALTER** 문의 **DROP PARTITION** 절을 이용하여 분할 테이블에서 분할을 제거(drop)한다. ::
 
     ALTER {TABLE | CLASS} table_name
     DROP PARTITION partition_name
 
 *   *table_name* : 분할된 테이블의 이름을 지정한다.
-*   *partition_name* : 삭제할 분할의 이름을 지정한다.
+*   *partition_name_list* : 제거될 분할 이름을 지정한다. 여러 개인 경우 쉼표(,)로 구분한다.
 
-다음은 *participant2* 테이블의 *before_2000* 분할을 삭제한다. 
+다음은 :ref:`participant2<range-participant2-table>` 테이블에서 *before_2000* 분할을 제거하는 방법이다.
 
 .. code-block:: sql
 
@@ -204,212 +407,194 @@ CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스�
 
 .. note::
 
-    *   분할된 테이블을 삭제하면 해당 분할 내에 저장된 데이터도 모두 삭제된다.
-    
-    *   데이터는 유지한 채 테이블의 분할을 변경하는 경우 **ALTER TABLE** ... **REORGANIZE PARTITION** 문을 사용한다(:ref:`range-partitioning-redefinition` 참조).
-    
-    *   분할을 삭제할 경우 삭제된 행의 수를 반환하지 않는다. 테이블과 분할을 유지한 채로 데이터만 삭제하고 싶은 경우 **DELETE** 문을 수행한다.
+    *   분할된 테이블을 제거하면 해당 분할 내에 저장된 데이터도 모두 삭제된다.  데이터는 유지한 채 테이블의 분할을 변경하고 싶다면 **ALTER TABLE** ... **REORGANIZE PARTITION** 문을 사용한다.
+   
+    *   분할을 제거할 경우 삭제된 행의 개수를 반환하지 않는다. 테이블과 분할을 유지한 채로 데이터만 삭제하고 싶은 경우 **DELETE** 문을 수행한다.
 
-해시 분할
-=========
+이 구문은 해시 분할 테이블에서는 사용할 수 없다. 해시 분할 테이블의 분할을 제거하려면 해시 분할에서만 사용하는 :ref:`ALTER 절<hash-reorganization>`\을 참고한다.
+   
+.. _hash-reorganization:
 
-해시 분할 정의
---------------
-
-해시 분할은 **PARTITION BY HASH** 문을 이용하여 정의한다. ::
-
-    CREATE TABLE table_name (
-       ...
-    )
-    PARTITION BY HASH ( <partition_expression> )
-    PARTITIONS ( number_of_partitions )
-    
-*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 이름이나 함수를 사용하여 지정할 수 있다.
-*   *number_of_partitions* : 원하는 분할의 수를 지정한다.
-
-다음은 국가 코드와 국가 이름의 정보를 담은 *nation2* 테이블을 생성하고 *code* 값을 기준으로 4개의 해시 분할을 정의하는 예제이다. 해시 분할은 분할의 수만 지정하고 이름은 지정하지 않으므로 p0, p1과 같이 자동으로 이름이 부여된다.
-
-.. code-block:: sql
-
-    CREATE TABLE nation2 (
-      code CHAR (3),
-      name VARCHAR (50)
-    )
-    PARTITION BY HASH (code) 
-    PARTITIONS 4;
-
-다음은 위의 예제에서 생성한 해시 분할에 데이터를 삽입하는 예제이다. 해시 분할에 값을 입력하면 분할 키의 해시 값에 따라 저장될 분할이 결정된다. 해시 분할에서 분할 키 값이 **NULL** 이면 첫 번째 분할에 저장된다.
-
-.. code-block:: sql
-
-    INSERT INTO nation2 VALUES ('KOR', 'Korea');
-    INSERT INTO nation2 VALUES ('USA', 'USA United States of America');
-    INSERT INTO nation2 VALUES ('FRA', 'France');
-    INSERT INTO nation2 VALUES ('DEN', 'Denmark');
-    INSERT INTO nation2 VALUES ('CHN', 'China');
-    INSERT INTO nation2 VALUES (NULL, 'AAA');
-
-.. note::
-
-    한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
-
-해시 분할 재정의
+해시 분할 재구성
 ----------------
 
-**ALTER** 문의 **COALESCE PARTITION** 절을 이용하여 재정의할 수 있다. 해시 분할이 재정의되는 경우 인스턴스는 그대로 보존된다. ::
+해시 분할 테이블에서 분할 사이에 데이터 분배는 CUBRID에 의해 내부적으로 관리되므로, 해시 분할 재구성은 리스트 분할이나 영역 분할에서의 재구성과 다르게 동작한다. CUBRID는 해시 분할 테이블에 정의된 분할 개수가 증가 또는 감소되는 것을 허용한다. 해시 분할 테이블의 분할 개수를 수정할 때, 데이터 손실은 없다. 그러나, 해시 함수의 영역이 수정되기 때문에, 해시 분할의 일관성을 유지하기 위해 새로운 분할들 사이에 데이터가 재분배되어야 한다.
+
+해시 분할 테이블에 정의된 분할 개수는 **ALTER** 문의 **COALESCE PARTITION** 절을 이용하여 줄일 수 있다. ::
 
     ALTER {TABLE | CLASS} table_name
     COALESCE PARTITION number_of_shrinking_partitions
 
 *   *table_name* : 재정의할 테이블의 이름을 지정한다.
-*   *number_of_shrinking_partitions* : 삭제하려는 분할의 개수를 지정한다.
+*   *number_of_shrinking_partitions* : 삭제하려는 분할 개수를 지정한다.
 
-다음은 *nation2* 테이블의 분할의 개수를 4 개에서 3 개로 줄이는 예제이다.
+다음은 :ref:`nation2<hash-nation2-table>` 테이블의 분할 개수를 4개에서 3개로 줄이는 예제이다.
 
 .. code-block:: sql
 
     ALTER TABLE nation2 COALESCE PARTITION 1;
-    
-.. note::
 
-    *   분할의 개수를 감소시키는 재편성 결합만 가능하다.
-    
-    *   분할의 수를 늘리고자 하는 경우에는 영역 분할에서와 같은 **ALTER TABLE** ... **ADD PARTITION** 구문을 이용한다(자세한 내용은 :ref:`range-partitioning-append` 참조).
-    
-    *   분할 재정의 후에 최소 1개 이상의 분할이 남아 있어야 한다.
-
-리스트 분할
-===========
-
-리스트 분할 정의
-----------------
-
-리스트 분할은 **PARTITIION BY LIST** 문을 이용하여 정의한다. ::
-
-    CREATE TABLE table_name (
-      ...
-    )
-    PARTITION BY LIST ( <partition_expression> ) (
-      PARTITION partition_name VALUES IN ( <partition_value_list> ),
-      PARTITION partition_name VALUES IN ( <partition_value_list> ),
-      ... 
-    )
-
-*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 명을 지정하거나 함수를 사용하여 지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 내용은 :ref:`분할 표현식에 사용할 수 있는 데이터 타입 <partition-data-type>` 을 참조한다.
-*   *partition_name* : 분할 명을 지정한다.
-*   *partition_value_list* : 분할의 기준이 되는 값의 목록을 지정한다.
-
-다음은 선수의 이름과 종목 정보를 담고있는 *athlete2* 테이블을 생성하고 종목에 따른 리스트 분할을 정의하는 예제이다.
-
-.. code-block:: sql
-
-    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
-    PARTITION BY LIST (event) (
-        PARTITION event1 VALUES IN ('Swimming', 'Athletics'),
-        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
-        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
-    );
-
-다음은 위의 예제에서 생성한 리스트 분할에 데이터를 삽입하는 예제이다. 마지막 질의와 같이 데이터 삽입 시 분할 표현식에서 기술하였던 리스트에 없는 값으로 삽입하는 경우에는 삽입이 이루어지지 않는다.
-
-.. code-block:: sql
-
-    INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
-    INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
-    INSERT INTO athlete2 VALUES ('Cho In-Chul', 'Judo');
-    INSERT INTO athlete2 VALUES ('Hong Kil-Dong', 'Volleyball');
-
-다음은 분할키 값이 **NULL** 인 경우에 삽입이 이루어지지 않고 에러가 발생함을 보여주는 예제이다. 
-
-.. code-block:: sql
-
-    INSERT INTO athlete2 VALUES ('Hong Kil-Dong', NULL);
-
-**NULL** 값을 삽입 가능하도록 분할을 정의하려면 아래의 CREATE TABLE 문처럼 **NULL** 값을 리스트로 갖는 분할을 정의하면 된다.
-
-.. code-block:: sql
-    
-    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
-    PARTITION BY LIST (event) (
-        PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
-        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
-        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball', NULL)
-    );
-
-.. note::
-
-    한 테이블이 가질 수 있는 최대 분할 개수는 1024이다.
-
-리스트 분할 재정의
-------------------
-
-**ALTER** 문의 **REORGANIZE PARTITION** 절을 이용하여 재정의할 수 있다. 재정의를 통해 여러 개의 분할을 한 개로 결합할 수 있으며, 한 개의 분할을 여러 개로 분리할 수 있다. ::
+ **ALTER** 문의 **ADD PARTITION** 절을 사용하여 **ALTER** 해시 분할 테이블에 정의된 분할 개수를 늘릴 수 있다. ::
 
     ALTER {TABLE | CLASS} table_name
-    REORGANIZE PARTITION alter_partition_name_comma_list
-    INTO ( <partition_definition_comma_list> )
+    ADD PARTITION PARTITIONS number
+
+*   *table_name* : 분할 개수가 재정의될 테이블의 이름을 지정한다.
+*   *number* : 추가될 분할 개수를 지정한다.
+
+다음은 :ref:`nation2 <hash-nation2-table>` 테이블에 3개의 분할을 추가하는 예이다.
+
+.. code-block:: sql
+
+    ALTER TABLE nation2 ADD PARTITION PARTITIONS 3;
+
+.. _promote-partitions:
+
+분할 PROMOTE 문
+---------------
+
+분할(partition) **PROMOTE** 문은 분할 테이블에서 사용자가 지정한 분할을 독립적인 일반 테이블로 승격(promote)한다. 이것은 거의 접근하지 않는 매우 오래된 데이터를 보관할(archiving) 목적으로만 유지하려 할 때 유용하다. 해당 분할을 일반 테이블로 승격함으로써 접근 부하는 줄이고 분할 테이블에서 제거된 데이터는 승격된 테이블에 유지되므로 여전히 해당 데이터에 접근이 가능하다. 분할을 승격(promote)하는 것은 철회할 수 없는 작업이며, 승격된 분할은 분할 테이블로 되돌릴 수 없다.
+
+분할 **PROMOTE** 문은 영역 분할(range partition) 테이블과 리스트 분할(list partition) 테이블에만 허용된다. 해시 분할 테이블은 사용자가 제어할 수 있는 방법이 없으므로 승격을 허용하지 않는다.
+
+분할이 일반 테이블로 승격될 때 그 테이블은 오직 데이터와 비고유 로컬 인덱스만 상속받는다. 다음의 테이블 속성들은 승격된 테이블에 저장되지 않는다.
+
+*   기본 키
+*   외래 키
+*   고유 인덱스
+*   **AUTO_INCREMENT** 속성 및 시리얼
+*   트리거
+*   메서드
+*   상속 관계(수퍼클래스와 서브클래스)
+
+분할을 승격하는 구문은 다음과 같다. ::
+
+    ALTER TABLE table_name PROMOTE PARTITION <partition_name_list>
+
+*   <*partition_name_list*> :  승격할 분할 이름으로, 여러 개를 쉼표(,)로 구분한다.
+
+다음은 분할 테이블을 생성하고, 일부 튜플을 삽입한 후 이들 중 2개의 분할을 승격하는 예이다.  
+
+.. code-block:: sql
     
-    partition_definition_comma_list ::=
-    PARTITION <partition_name> VALUES IN ( <partition_value_list> ), ... 
-
-*   *table_name* : 재정의할 테이블의 이름을 지정한다.
-*   *alter_partition_name_comma_list* : 재정의할 분할을 지정한다. 여러 개인 경우 쉼표(,)로 구분한다.
-*   *partition_definition_comma_list* : 재정의 내용을 정의한다. 여러 개인 경우 쉼표(,)로 구분한다.
-
-다음은 종목에 따라 리스트 분할한 *athlete2* 테이블을 생성하고 분할 *event2* 를 *event2_1* (유도), *event2_2* (태권도, 복싱)로 재정의하는 예제이다.
-
-.. code-block:: sql
-
-    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR(30))
-    PARTITION BY LIST (event) (
-        PARTITION event1 VALUES IN ('Swimming', 'Athletics'),
-        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
-        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
-    );
-
-    ALTER TABLE athlete2 
-    REORGANIZE PARTITION event2 INTO (
-        PARTITION event2_1 VALUES IN ('Judo'),
-        PARTITION event2_2 VALUES IN ('Taekwondo', 'Boxing')
-    );
-
-다음은 예제 1에서 분할한 *event2_1* 과 *event2_2* 를 다시 *event2* 하나로 결합하는 예제이다.
-
-.. code-block:: sql
-
-    ALTER TABLE athlete2 
-    REORGANIZE PARTITION event2_1, event2_2 INTO (
-        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing')
-    );
-
-리스트 분할 삭제
-----------------
-
-**ALTER** 구문의 **DROP PARTITION** 절을 이용하여 분할을 삭제할 수 있다. ::
-
-    ALTER {TABLE | CLASS} table_name
-    DROP PARTITION partition_name
-
-*   *table_name* : 분할된 테이블의 이름을 지정한다.
-*   *partition_name* : 삭제할 분할의 이름을 지정한다.
-
-다음은 종목에 따라 리스트 분할한 *athlete2* 테이블을 생성하고 *event3* 분할을 삭제하는 예제이다.
-
-.. code-block:: sql
-
-    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
-    PARTITION BY LIST (event) (
-        PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
-        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
-        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
+    CREATE TABLE t (i INT) PARTITION BY LIST (i) (
+        PARTITION p0 VALUES IN (1, 2),
+        PARTITION p1 VALUES IN (3, 4),
+        PARTITION p2 VALUES IN (5, 6)
     );
     
-    ALTER TABLE athlete2 DROP PARTITION event3;
+    INSERT INTO t VALUES(1), (2), (3), (4), (5), (6);
+    
+테이블 *t*\의 스키마와 데이터는 다음과 같다. ::
+
+    csql> ;schema t
+    === <Help: Schema of a Class> ===
+    ...
+     <Partitions>
+         PARTITION BY LIST ([i])
+         PARTITION p0 VALUES IN (1, 2)
+         PARTITION p1 VALUES IN (3, 4)
+         PARTITION p2 VALUES IN (5, 6)
+
+    csql> SELECT * FROM t;
+
+    === <Result of SELECT Command in Line 1> ===
+                i
+    =============
+                1
+                2
+                3
+                4
+                5
+                6
+
+다음 구문은 *p0* 분할과 *p2* 분할을 승격한다.
+
+.. code-block:: sql
+
+    ALTER TABLE t PROMOTE PARTITION p0, p2;
+
+승격(promotion) 이후, 테이블 *t*\는 *p1*\이라는 하나의 분할만 포함하며 다음 데이터를 유지한다. ::
+
+    csql> ;schema t
+    === <Help: Schema of a Class> ===
+     <Class Name>
+         t
+     ...
+     <Partitions>
+         PARTITION BY LIST ([i])
+         PARTITION p1 VALUES IN (3, 4)
+
+    csql> SELECT * FROM t;
+
+    === <Result of SELECT Command in Line 1> ===
+                i
+    =============
+                3
+                4         
+
+분할 테이블에 대한 인덱스
+-------------------------
+
+분할 테이블에서 생성되는 인덱스는 로컬 인덱스 또는 글로벌 인덱스로 구분된다. 글로벌 인덱스는 모든 분할들로부터 데이터를 유지하는 하나의 인덱스 구조를 정의하지만, 로컬 인덱스는 각 분할마다 하나의 인덱스를 정의한다. 분할 테이블에 인덱스를 생성할 때, 로컬 인덱스가 될 것인지 혹은 글로벌 인덱스가 될 것인지는 다음 규칙에 따라 시스템이 결정한다.
+
+*   모든 기본 키는 글로벌 인덱스이다.
+*   모든 외래 키는 로컬 인덱스이다.
+*   모든 비고유 인덱스는 로컬 인덱스이다.
+*   고유 인덱스는 로컬 또는 글로벌 인덱스이다. 분할 키가 고유 인덱스에 속하면 로컬 인덱스이고, 그렇지 않으면 글로벌 인덱스이다.
+
+다음 예는 시스템이 로컬 인덱스와 글로벌 인덱스를 결정하는 방법이다.
+
+.. code-block:: sql
+    
+	CREATE TABLE t(i INTEGER, j INTEGER k INTEGER)
+	PARTITION BY HASH(i) PARTITIONS 5;
+	
+	--pk_t_i is global because it is a primary key
+	ALTER TABLE t ADD CONSTRAINT pk_t_i PRIMARY KEY(i);
+	
+	--i_t_j and i_t_j_k are local indexes
+	CREATE INDEX i_t_j ON t(j);
+	CREATE INDEX i_t_j_k ON t(j, k);
+	
+	--u_t_i_j is a local index because the partitioning key (i) is part of the index definition
+	CREATE UNIQUE INDEX u_t_i_j ON t(i, j);
+	
+	--u_t_j_k is a global index because the partitioning key (i) is not part of the index definition
+	CREATE UNIQUE INDEX u_t_j_k ON t(j, k);
+
+로컬 인덱스를 정의하는 것이 언제든지 가능하다는 점은 중요하다. 시스템은 글로벌 인덱스를 사용하여 여러 개의 분할을 함께 스캔할 수 있도록 인덱스 스캔을 최적화하지는 않는다. 대신, 글로벌 인덱스 스켄에서, 프루닝되지 않은 각 분할에 대해 별개의 인덱스 스캔이 수행된다. 이것은 로컬 인덱스 스캔보다 더 낮은 성능을 보이는데, 다른 분할에서 가져온 데이터가 디스크에서 페치(fetch)되고 버려지기 때문이다(해당 데이터는 스캔되는 순간의 분할이 아닌 다른 분할에 속한다). **INSERT** 문도 로컬 인덱스에서 더 나은 성능을 보여주는데, 로컬 인덱스가 더 작기 때문이다.
+
+.. _partitioning-notes:
+
+분할 시 참고 사항
+=================
+
+분할 테이블은 일반적으로 일반 테이블처럼 동작한다. 그러나 테이블을 분할하여 얻는 이점을 완전히 활용하기 위해 몇 가지 고려해야 할 유의 사항이 있다. 
+
+분할 테이블의 통계 정보 갱신
+----------------------------
+
+CUBRID 9.0 버전부터는 **ALTER** 문의 **ANALYZE PARTITION** 절을 더 이상 사용하지 않는다(deprecated). 분할 프루닝이 질의 실행 중에 발생하므로, 이 구문을 수행해도 아무런 동작을 수행하지 않는다. 9.0부터 각 분할에는 별개의 통계가 유지된다. 분할 테이블에서 통계는 분할들의 통계 평균 값으로 계산된다. 이 작업은 하나를 제외한 나머지 분할이 모두 프루닝되는 질의에서 최적화되기 위해 수행된다.
+
+분할 테이블 제약 사항
+---------------------
+
+분할 테이블에 다음 제약 사항이 적용된다.
+
+* 한 테이블에 정의될 수 있는 최대 분할 개수는 1,024이다.
+* 분할들(partitions)은 상속 체인의 일부가 될 수 없다. 클래스는 분할을 상속할 수 없으며 분할은 분할된 클래스(기본적으로 상속하는 클래스)가 아닌 다른 클래스를 상속할 수 없다. 
+* 다음 질의 최적화는 분할 테이블에서 수행되지 않는다.
+    * ORDER BY 절 최적화(:ref:`order-by-skip-optimization` 참고)
+    * GROUP BY 절 최적화(:ref:`group-by-skip-optimization` 참고)
+    * 인덱스 스킵 스캔 (:ref:`index-skip-scan` 참고)
+    * 다중 키 범위 최적화(:ref:`multi-key-range-opt` 참고)
+    * INDEX JOIN
 
 분할 키와 문자셋, 콜레이션
-==========================
+--------------------------
 
-분할 테이블의 분할 키 값들은 칼럼과 같은 문자셋을 가져야 한다. 따라서 아래와 같은 경우는 허용되지 않는다. 
+분할 키 값과 분할 정의는 같은 문자셋을 가져야 한다. 따라서 아래와 같은 경우는 오류를 반환한다.
 
 .. code-block:: sql
 
@@ -419,9 +604,7 @@ CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스�
         PARTITION p1 VALUES IN (_iso88591'y')
     );
 
-분할 테이블에도 콜레이션을 지정할 수 있다. 
-
-다음 예제에서 tbl은 대소문자 구분이 없는 utf8_en_ci 콜레이션으로 정의하므로 분할 키 'test'와 'TEST'는 같은 것으로 간주되어, 테이블 생성에 실패한다. 
+분할 키에서 비교 작업을 수행할 때 분할 테이블에 정의된 콜레이션을 사용한다. 다음 예제에서  utf8_en_ci 콜레이션의 'test'는 'TEST'와 같으므로 오류를 반환한다.
 
 .. code-block:: sql
 
@@ -433,454 +616,6 @@ CUBRID는 영역 분할(Range Partition), 해시 분할(Hash Partition), 리스�
     
     ERROR: Partition definition is duplicated. 'p1'
  
-비 바이너리(non-binary) 콜레이션을 가지는 컬럼에 대한 해시 분할은 허용되지 않는다.
-
-.. code-block:: sql
-
-    CREATE TABLE tbl (code VARCHAR (10)) COLLATE utf8_de_exp_ai_ci 
-    PARTITION BY HASH (code) PARTITIONS 4;
-
-    ERROR: before ' ; '
-    Unsupported partition column type.
-
-분할에서 데이터 조회와 조작
-===========================
-
-.. (TODO) 일반적인 조회/조작에 대한 설명이 필요
-
-분할에 대한 로컬 인덱스와 글로벌 인덱스
----------------------------------------
-
-분할 테이블에서 생성되는 인덱스는 로컬 인덱스 또는 글로벌 인덱스로 구분된다. 글로벌 인덱스는 모든 분할들로부터 데이터를 유지하는 하나의 인덱스 구조를 정의하지만, 로컬 인덱스는 각 분할마다 하나의 인덱스를 정의한다. 로컬 인덱스가 될 것인지 혹은 글로벌 인덱스가 될 것인지의 선택을 사용자가 제어할 수는 없으며, 다음 규칙에 따라 시스템이 자동으로 결정한다.
-
-*   모든 기본 키는 글로벌 인덱스이다.
-*   모든 외래 키는 로컬 인덱스이다.
-*   모든 비고유 인덱스는 로컬 인덱스이다.
-*   고유 인덱스는 로컬 또는 글로벌 인덱스이다. 분할 키가 고유 인덱스에 속하면 로컬 인덱스이고, 그렇지 않으면 글로벌 인덱스이다.
-
-분할 프루닝
------------
-
-분할 프루닝(partition pruning)은 검색 조건을 통해 데이터 검색 범위를 한정시키는 최적화 기법이다. 질의에서 필요한 데이터를 포함하고 있지 않은 분할은 검색 과정에서 제외시킨다. 이를 통해 디스크로부터 인출되는 데이터의 양과 처리 시간을 크게 줄이고 질의 성능 및 자원 사용률을 개선할 수 있다.
-
-.. note::
-
-    CUBRID 9.0 미만 버전에서 분할 프루닝은 질의 컴파일 단계에서 수행되었으나, CUBRID 9.0 이상 버전에서는 질의 실행 단계에 서버 단에서 수행된다. 따라서 기존보다 더 복잡하고 다양한 질의들에 대해서 분할 프루닝을 수행할 수 있지만, 분할 프루닝 질의에 대해 질의 계획 정보를 출력할 수 없으며 **ORDER BY SKIP** 최적화, **GROUP BY SKIP** 최적화를 지원하지 않는다.
-
-다음은 참가한 올림픽의 개최연도에 따라 영역 분할하는 *olympic2* 테이블을 생성하고 2000년도 시드니 올림픽 이후의 올림픽에 참가한 국가를 조회하는 질의이다. **WHERE** 절에서 분할 키에 대하여 상수 값과 동등 비교하거나 범위 비교하는 경우 분할 프루닝이 발생한다.
-
-예제의 SELECT 문 실행 시에 2000보다 작은 연도 값을 가진 *before_1996* 분할은 접근하지 않는다.
-
-.. code-block:: sql
-
-    CREATE TABLE olympic2 (opening_date DATE, host_nation VARCHAR (40))
-    PARTITION BY RANGE (EXTRACT (YEAR FROM opening_date)) (
-        PARTITION before_1996 VALUES LESS THAN (1996),
-        PARTITION before_MAX VALUES LESS THAN MAXVALUE
-    );
-     
-    SELECT opening_date, host_nation 
-    FROM olympic2 
-    WHERE EXTRACT (YEAR FROM (opening_date)) >= 2000;
-
-다음은 분할 프루닝이 되지 않는 경우에 사용자가 특정 분할을 지정하여 데이터를 조회함으로써 분할 프루닝의 효과를 얻는 방법을 보여주는 예제이다. 예제에서 첫 번째 질의는 비교 값이 분할 표현식과 같은 형식이 아니므로 분할 프루닝이 일어나지 않는다. 따라서 두 번째 질의와 같이 알맞은 분할을 지정하여 분할 프루닝이 발생하는 것과 같은 효과를 얻을 수 있다.
-
-.. code-block:: sql
-
-    -- pruning cannot be applied
-    SELECT host_nation 
-    FROM olympic2 
-    WHERE opening_date >= '2000-01-01';
-
-    -- to access a specific partition
-    SELECT host_nation 
-    FROM olympic2 PARTITION (before_max) 
-    WHERE opening_date >= '2000-01-01';
-
-다음은 해시 분할 테이블인 *manager* 테이블에서 분할 프루닝이 발생하도록 검색 조건을 지정한 예제이다. 해시 분할의 경우 **WHERE** 절에서 분할 키에 대하여 상수 값과 동등 비교를 하는 경우에만 분할 프루닝이 발생한다.
-
-.. code-block:: sql
-
-    CREATE TABLE manager (
-        code INT,
-        name VARCHAR (50)
-    )
-    PARTITION BY HASH (code) PARTITIONS 4;
-     
-    SELECT * FROM manager WHERE code = 10053;
-
-.. note::
-
-    * 분할 표현식과 비교되는 값은 서로 같은 형식이어야 한다.
-    
-    * 해시 분할과 리스트 분할에서 프루닝이 가능하려면 **WHERE** 절에 다음의 분할 키 표현식을 사용해야 한다. 아래의 상수 표현식은 테이블 칼럼을 포함하지 않는 표현식이며, 다른 조건은 사용할 수 없다.
-    
-        * <*분할 키*> = <*상수 표현식*>
-        * <*분할 키*> { IN | = SOME | = ANY } ( <*상수 표현식 리스트*> )
-        
-    * 영역 분할에서 프루닝이 가능하려면 **WHERE** 절에 다음의 분할 키 표현식을 사용해야 한다.
-    
-        * <*분할 키*> { < | > | = | <= | >= } <*상수 표현식*>
-        * <*분할 키*> BETWEEN <*상수 표현식*> AND <*상수 표현식*>
-
-특정 분할에서 데이터 조회와 조작
---------------------------------
-
-데이터를 SELECT/INSERT/UPDATE할 때 특정 분할을 명시적으로 지정하여 접근할 수 있다. 특정 분할을 지정할 때 분할 테이블 이름을 명시하지 않고 분할 이름만 명시하여 지정할 수 있도록 PARTITION 절을 지원한다. PARTITION 절은 분할 테이블 이름 뒤에 명시할 수 있으며, SELECT 문 뿐만 아니라 분할을 사용할 수 있는 모든 SQL에 사용할 수 있다. 
-
-.. code-block:: sql
-
-    -- 특정 분할 테이블 이름을 직접 명시
-    SELECT * FROM athlete2__p__event2;
-    
-    -- PARTITION 절을 이용한 특정 분할 명시
-    SELECT * FROM athlete2 PARTITION (event2);
-    
-
-다음은 종목에 따라 리스트 분할한 *athlete2* 테이블을 생성하고 데이터를 삽입한 뒤 *event1* 분할과 *event2* 분할을 조회하는 예제이다.
-
-.. code-block:: sql
-
-    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
-    PARTITION BY LIST (event) (
-        PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
-        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
-        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
-    );
-
-    INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
-    INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
-    INSERT INTO athlete2 VALUES ('Lee Sun-Hee', 'Taekwondo');
-    INSERT INTO athlete2 VALUES ('Kim In-Chul', 'Judo');
-
-    SELECT * FROM athlete2 PARTITION (event1);
-    
-      name                  event
-    ============================================
-      'Hwang Young-Cho'     'Athletics'
-
-    SELECT * FROM athlete2 PARTITION (event2);
-    
-      name                  event
-    ============================================
-      'Lee Sun-Hee'         'Taekwondo'
-      'Kim In-Chul'         'Judo'
-
-다음은 *athlete2* 테이블의 *event1* 분할에 한 행을 INSERT하는 예제이다. 
-
-.. code-block:: sql
-
-    INSERT INTO athlete2 PARTITION (event1) VALUES ('Lee Bong-Ju', 'Athletics');
-
-다음은 *athlete2* 테이블의 *event2* 분할에 한 행을 UPDATE하는 예제이다. 
-
-.. code-block:: sql
-
-    UPDATE athlete2 PARTITION (event2) SET name='Cho In-Chul' WHERE name='Kim In-Chul';
-
-
-INSERT 문 등에 PARTITION 절을 명시했을 때 지정된 분할이 정의와 다를 경우에는 오류가 반환된다.
-
-.. code-block:: sql
-
-    CREATE TABLE t (i INTEGER) 
-    PARTITION BY RANGE (i) (
-      PARTITION p0 VALUES LESS THAN (10), 
-      PARTITION p1 VALUES LESS THAN (100)
-    );
-    
-    -- success
-    INSERT INTO t PARTITION (p0) VALUES (2);
-    
-    -- error -1108
-    INSERT INTO t PARTITION (p0) VALUES (20);
-
-WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분할 프루닝 과정을 수행하지 않게 되는 성능상의 (작은) 이점이 있으며, 또한 일반적으로 분할 테이블에는 적용되지 못하는 INDEX JOIN, ORDER BY 및 GROUP BY 생략 최적화, 다중 키 범위 최적화, INDEX SKIP SCAN 등의 질의 처리 기법이 사용될 수 있다.
-
-
-분할 키 값의 변경에 의한 데이터 이동
-------------------------------------
-
-분할의 분할 키 값이 변경되면 변경된 인스턴스는 분할 표현식에 의해서 다른 분할로 이동할 수 있다.
-
-다음은 분할 키 값이 변경되어 인스턴스가 다른 분할로 이동하는 것을 보여주는 예제이다. *event1* 분할에 저장되어 있는 황영조 선수의 종목 정보를 'Athletics'에서 'Football'로 바꾸면 인스턴스가 *event3* 분할로 이동된다.
-
-.. code-block:: sql
-
-    CREATE TABLE athlete2 (name VARCHAR (40), event VARCHAR (30))
-    PARTITION BY LIST (event) (
-        PARTITION event1 VALUES IN ('Swimming', 'Athletics' ),
-        PARTITION event2 VALUES IN ('Judo', 'Taekwondo', 'Boxing'),
-        PARTITION event3 VALUES IN ('Football', 'Basketball', 'Baseball')
-    );
-    
-    INSERT INTO athlete2 VALUES ('Hwang Young-Cho', 'Athletics');
-    INSERT INTO athlete2 VALUES ('Lee Seung-Yuop', 'Baseball');
-
-    SELECT * FROM athlete2 PARTITION (event1);
-    
-      name                  event
-    ============================================
-      'Hwang Young-Cho'     'Athletics'
-
-    UPDATE athlete2 SET event = 'Football' WHERE name = 'Hwang Young-Cho';
-
-    SELECT * FROM athlete2 PARTITION (event3);
-    
-      name                  event
-    ============================================
-      'Lee Seung-Yuop'      'Baseball'
-      'Hwang Young-Cho'     'Football'
-  
-.. note::
-
-    분할 키 값의 변경에 의한 분할 간 데이터 이동은 내부적으로 삭제와 삽입을 수반하여 성능 저하의 원인이 될 수 있으므로 사용에 주의한다.
-
-분할 테이블을 이용하여 VIEW 생성
---------------------------------
-
-분할 테이블의 각 분할을 이용하여 뷰를 정의할 수 있다.
-
-다음은 참가연도에 따라 영역 분할된 *participant2* 테이블을 생성하고 *participant2* 테이블의 *before_2000* 분할을 이용하여 뷰를 생성, 조회하는 예제이다.
-
-.. code-block:: sql
-
-    CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
-    PARTITION BY RANGE (host_year) (
-        PARTITION before_2000 VALUES LESS THAN (2000),
-        PARTITION before_2008 VALUES LESS THAN (2008)
-    );
-
-    INSERT INTO participant2 VALUES (1988, 'NZL', 3, 2, 8);
-    INSERT INTO participant2 VALUES (1988, 'CAN', 3, 2, 5);
-    INSERT INTO participant2 VALUES (1996, 'KOR', 7, 15, 5);
-    INSERT INTO participant2 VALUES (2000, 'RUS', 32, 28, 28);
-    INSERT INTO participant2 VALUES (2004, 'JPN', 16, 9, 12);
-
-    CREATE VIEW v_2000 AS
-    SELECT * FROM participant2 PARTITION (before_2000)
-    WHERE host_year = 1988;
-
-    SELECT * FROM v_2000;
-    
-        host_year  nation                       gold       silver       bronze
-    ==========================================================================
-             1988  'NZL'                           3            2            8
-             1988  'CAN'                           3            2            5
-
-
-분할 관리
-=========
-
-일반 테이블을 분할 테이블로 변경
---------------------------------
-
-일반 테이블을 분할 테이블로 변경하려면 **ALTER TABLE** 문을 이용한다. **ALTER TABLE** 문을 이용하여 세 종류의 분할 모드로 변경 가능하다. 분할 테이블로 변경하면 기존 테이블에 있던 데이터는 분할 정의에 따라 각 분할로 이동 저장된다. 일반 테이블의 데이터를 분할 테이블로 이동하는 것이므로 데이터 양에 따라 긴 작업 시간이 필요할 수 있다. ::
-
-    ALTER {TABLE | CLASS} table_name
-    PARTITION BY RANGE ( <partition_expression> )
-    ( PARTITION partition_name VALUES LESS THAN { MAXVALUE | ( <partition_value_option> ) }, ... )
-
-    ALTER {TABLE | CLASS} table_name
-    PARTITION BY LIST ( <partition_expression> )
-    ( PARTITION partition_name VALUES IN ( <partition_value_option_list> ), ... )
-    
-    ALTER {TABLE | CLASS} table_name
-    PARTITION BY HASH ( <partition_expression> )
-    PARTITIONS number_of_hash_partition
-    
-    <partition_expression> ::= expression
-    <partition_value_option> ::= literal
-
-*   *table_name* : 변경하려는 테이블의 이름을 지정한다.
-*   *partition_expression* : 분할 표현식을 지정한다. 표현식은 분할 대상이 되는 칼럼 명을 지정하거나 함수를 사용하여 지정할 수 있다. 사용 가능한 데이터 타입과 함수에 대한 자세한 내용은 :ref:`분할 표현식에 사용할 수 있는 데이터 타입 <partition-data-type>` 을 참조한다.
-*   *partition_name* : 분할명을 지정한다.
-*   *partition_value_option* : 분할의 기준이 되는 값 또는 값의 목록을 지정한다.
-
-다음은 record 테이블을 영역, 리스트, 해시 분할로 각각 변경하는 예제이다.
-
-.. code-block:: sql
-
-    ALTER TABLE record PARTITION BY RANGE (host_year) (
-        PARTITION before_1996 VALUES LESS THAN (1996),
-        PARTITION after_1996 VALUES LESS THAN MAXVALUE
-    );
-
-    ALTER TABLE record PARTITION BY LIST (unit) (
-        PARTITION time_record VALUES IN ('Time'),
-        PARTITION kg_record VALUES IN ('kg'),
-        PARTITION meter_record VALUES IN ('Meter'),
-        PARTITION score_record VALUES IN ('Score')
-    );
-
-    ALTER TABLE record PARTITION BY HASH (score) PARTITIONS 4;
-
-.. note::
-
-    분할 조건을 충족하지 않는 데이터가 존재하는 경우에는 분할이 정의되지 않는다.
-
-분할 테이블을 일반 테이블로 변경
---------------------------------
-
-기존에 정의된 분할 테이블을 일반 테이블로 변경하려면 **ALTER TABLE** 문을 이용한다. 분할을 제거한다고 해서 테이블의 데이터가 삭제되는 것은 아니다. ::
-
-    ALTER {TABLE | CLASS} table_name REMOVE PARTITIONING
-
-*   *table_name* : 변경하고자 하는 테이블의 이름을 지정한다.
-
-다음은 분할 테이블인 *nation2* 를 일반 테이블로 변경하는 예제이다.
-
-.. code-block:: sql
-
-    ALTER TABLE nation2 REMOVE PARTITIONING;
-
-분할 PROMOTE 문
----------------
-
-분할(partition) **PROMOTE** 문은 분할 테이블에서 사용자가 지정한 분할을 독립적인 일반 테이블로 승격(promote)한다. 이것은 거의 접근하지 않는 매우 오래된 데이터를 보관할(archiving) 목적으로만 유지하려 할 때 유용하다. 해당 분할을 일반 테이블로 승격함으로써 유용한 데이터는 더 적은 수의 분할을 갖게 되므로 접근 부하는 줄이고 오래된 데이터는 편리하게 보존할 수 있다.
-
-분할 **PROMOTE** 문은 영역 분할(range partition) 테이블과 리스트 분할(list partition) 테이블에만 허용된다. 해시 분할 테이블은 사용자가 제어할 수 있는 방법이 없으므로 승격을 허용하지 않는다.
-
-분할이 일반 테이블로 승격될 때 그 테이블은 오직 데이터와 비고유 로컬 인덱스만 상속받는다. 이것은 다음의 테이블 속성들이 승격된 테이블에 저장되지 않는다는 것을 의미한다.
-
-*   기본 키
-*   외래 키
-*   고유 인덱스
-*   **AUTO_INCREMENT** 속성 및 시리얼
-*   트리거
-*   메서드
-*   상속 관계(수퍼클래스와 서브클래스)
-
-다음 속성들은 승격된 테이블에서도 그대로 사용된다.
-
-*   레코드 속성(칼럼 타입들)
-*   테이블 속성
-*   로컬 인덱스(고유 인덱스, 기본 키, 외래 키가 아닌 일반 인덱스)
-
-**제약 사항**
-
-*   외래 키가 존재하는 분할 테이블의 분할은 승격할 수 없다.
-*   해시 분할 테이블을 승격하는 것은 허용되지 않는다.
-
-::
-
-    ALTER TABLE table_name PROMOTE PARTITION <partition_name_list>
-
-*   <*partition_name_list*> : 승격할 분할 이름
-
-다음은 리스트 분할을 승격한 예이다.
-
-.. code-block:: sql
-
-    CREATE TABLE t (i INT) PARTITION BY LIST (i) (
-        PARTITION p0 VALUES IN (1, 2, 3),
-        PARTITION p1 VALUES IN (4, 5, 6),
-        PARTITION p2 VALUES IN (7, 8, 9),
-        PARTITION p3 VALUES IN (10, 11, 12)
-    );
-     
-    ALTER TABLE t PROMOTE PARTITION p1, p2;
-
-승격 이후 테이블 *t* 의 파티션은 *p0*, *p3* 만 가지게 되며, *p1*, *p2* 는 각각 *t__p__p1*, *t__p__p2* 인 테이블로 접근할 수 있다. ::
-
-    csql> ;schema t
-    
-    === <Help: Schema of a Class> ===
-    
-     <Class Name>
-         t
-         
-     <Sub Classes>
-         t__p__p0
-         t__p__p3
-         
-     <Attributes>
-         i                    INTEGER
-         
-     <Partitions>
-         PARTITION BY LIST ([i])
-         PARTITION p0 VALUES IN (1, 2, 3)
-         PARTITION p3 VALUES IN (10, 11, 12)
-     
-    csql> ;schema t__p__p1
-    
-    === <Help: Schema of a Class> ===
-    
-     <Class Name>
-         t__p__p1
-         
-     <Attributes>
-         i                    INTEGER
-     
-다음은 범위 분할을 승격한 예이다.
-
-.. code-block:: sql
-
-    CREATE TABLE t (i INT, j INT) PARTITION BY RANGE (i) (
-        PARTITION p0 VALUES LESS THAN (1),
-        PARTITION p1 VALUES LESS THAN (10),
-        PARTITION p2 VALUES LESS THAN (100),
-        PARTITION p3 VALUES LESS THAN MAXVALUE
-    );
-     
-    CREATE UNIQUE INDEX u_t_i ON t (i);
-    CREATE INDEX i_t_j ON t (j);
-     
-    ALTER TABLE t PROMOTE PARTITION p1, p2;
-
-승격 이후 테이블 *t* 의 파티션은 *p0*, *p3* 만 가지게 되며, *p1*, *p2* 는 각각 *t__p__p1*, *t__p__p2* 인 테이블로 접근할 수 있다. 승격된 테이블 *t__p__p1*, *t__p__p2* 에는 기본 키, 외래 키, 고유 키 등 테이블의 일부 속성이나 인덱스가 제거된 상태라는 점에 주의한다. ::
-
-    csql> ;schema t
-    
-    === <Help: Schema of a Class> ===
-    
-     <Class Name>
-         t
-         
-     <Sub Classes>
-         t__p__p0
-         t__p__p3
-         
-     <Attributes>
-         i                    INTEGER
-         j                    INTEGER
-         
-     <Constraints>
-        UNIQUE u_t_i ON t (i)
-        INDEX i_t_j ON t (j)
-        
-     <Partitions>
-         PARTITION BY RANGE ([i])
-         PARTITION p0 VALUES LESS THAN (1)
-         PARTITION p3 VALUES LESS THAN MAXVALUE
-     
-    csql> ;schema t__p__p1
-    
-    === <Help: Schema of a Class> ===
-    
-     <Class Name>
-         t__p__p1
-         
-     <Attributes>
-         i                    INTEGER
-         j                    INTEGER
-         
-     <Constraints>
-        INDEX idx_t_j ON t (j)
-    
-
-분할 테이블의 통계 정보 갱신
-----------------------------
-
-질의 수행 시 분할 프루닝을 통해 검색할 범위를 한정하므로 질의 계획에는 분할 정보를 포함하지 않게 되어, 분할 테이블에서 통계 정보 갱신은 더 이상 불필요하다.
-
-.. note::
-
-    CUBRID 9.0 미만 버전에서는 **ANALYZE PARTITION** 구문을 통해 분할 테이블의 통계 정보를 갱신했는데, CUBRID 9.0 버전부터는 이 구문 수행 시 실제로 아무런 동작도 하지 않지만 이전 버전과의 호환을 위해 **ANALYZE PARTITION** 구문을 오류로 처리하지는 않는다.
-
-분할과 상속 관계
-----------------
-
-분할들(partitions)은 상속 구조의 일부가 될 수 없으며, 분할 테이블(partitioned table)과 하위 클래스(subclass) 관계를 가지는 것과 다르다. 실제로 분할 테이블은 상위 클래스(superclass)와 하위 클래스(subclass)를 갖게 되지만, CUBRID는 하나의 분할이 오직 하나의 상위 클래스(superclass), 즉 하나의 분할 테이블만 가지며 여러 개의 하위 클래스(subclasses)를 가지지 않도록 보장한다.
-
-
+해시 분할 테이블에서 분할 키의 콜레이션은 바이너리여야 한다.
+    *   바이너리 콜레이션의 예: utf8_bin, iso88591_bin, euckr_bin
+    *   바이너리가 아닌 콜레이션의 예: utf8_de_exp_ai_ci, utf8_es_cs

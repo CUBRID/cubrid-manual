@@ -112,7 +112,7 @@ When inserting a tuple into a range-partitioned table, CUBRID identifies the ran
 Hash Partitioning
 =================
 
-Hash partitioning is a partitioning method which is used to distribute data across a specified number of partition. This partitioning method is useful when table data contains values for which ranges or lists would be meaningless (for example, a keywords table or an users table for which user_id is the most interesting value). If the values for the partitioning key are evenly distributed across the table data, hash-partitioning technique divides table data evenly between the defined partitions. For hash partitioning, :ref:`partition-pruning` can only be applied on equality predicates (e.g. predicates using **=** and :func:`IN` expressions), making hash partitioning useful only if most of the queries specify such a predicate for the partitioning key. 
+Hash partitioning is a partitioning method which is used to distribute data across a specified number of partition. This partitioning method is useful when table data contains values for which ranges or lists would be meaningless (for example, a keywords table or an users table for which user_id is the most interesting value). If the values for the partitioning key are evenly distributed across the table data, hash-partitioning technique divides table data evenly between the defined partitions. For hash partitioning, :ref:`partition-pruning` can only be applied on equality predicates (e.g. predicates using **=** and :ref:`IN <in-expr>` expressions), making hash partitioning useful only if most of the queries specify such a predicate for the partitioning key. 
 
 Tables can be partitioned by hash by using the **PARTITION BY HASH** clause in **CREATE** or **ALTER** statements::
 
@@ -148,7 +148,7 @@ When a value is inserted into a hash-partitioned table, the partition to store t
 List Partitioning
 =================
 
-List partitioning is a partitioning method in which a table is divided into partitions according to user specified list of values for the partitioning key. The lists of values for partitions must be disjoint sets. This partitioning method is useful when table data can be divided into lists of possible values which have a certain meaning (e.g. department id for an employees table or country code for an users table). As for hash partitioning, :ref:`partition-pruning` for list partitioned tables can only be applied on equality predicates (e.g. predicates using **=** and :func:`IN` expressions). 
+List partitioning is a partitioning method in which a table is divided into partitions according to user specified list of values for the partitioning key. The lists of values for partitions must be disjoint sets. This partitioning method is useful when table data can be divided into lists of possible values which have a certain meaning (e.g. department id for an employees table or country code for an users table). As for hash partitioning, :ref:`partition-pruning` for list partitioned tables can only be applied on equality predicates (e.g. predicates using **=** and :ref:`IN <in-expr>` expressions). 
 
 Tables can be partitioned by list by using the **PARTITION BY LIST** clause in **CREATE** or **ALTER** statements::
 
@@ -235,25 +235,25 @@ The following queries explain how pruning is performed on the *olympic2* table f
 
     -- prune all partitions except before_2008
     SELECT host_nation 
-    FROM olympic2 PARTITION (before_max) 
+    FROM olympic2 
     WHERE YEAR(opening_date) BETWEEN 2005 and 2007;
 
     -- no partition is pruned because partitioning key is not used
     SELECT host_nation 
-    FROM olympic2 PARTITION (before_max) 
+    FROM olympic2 
     WHERE opening_date = '2008-01-02';
 
     -- no partition is pruned because partitioning key is not used directly
     SELECT host_nation 
-    FROM olympic2 PARTITION (before_max) 
+    FROM olympic2 
     WHERE YEAR(opening_date) + 1 = 2008;
 
     -- no partition is pruned because there is no useful predicate in the WHERE clause
     SELECT host_nation 
-    FROM olympic2 PARTITION (before_max) 
+    FROM olympic2 
     WHERE YEAR(opening_date) != 2008;
 
-In versions older than CUBRID 9.0, partition pruning was performed during query compilation stage. Starting with CUBRID 9.0, partition pruning is performed during the query execution stage. Executing partition pruning during query execution allows CUBRID to apply this optimization on much more complex queries. However, pruning information is not displayed in query plans anymore (since query planing happens before query execution and this information is not available at that time).
+In versions older than CUBRID 9.0, partition pruning was performed during query compilation stage. Starting with CUBRID 9.0, partition pruning is performed during the query execution stage. Executing partition pruning during query execution allows CUBRID to apply this optimization on much more complex queries. However, pruning information is not displayed in query plans anymore (since query planning happens before query execution and this information is not available at that time).
 
 Users can also access partitions directly (independent of the partitioned table) either by using the table name assigned by CUBRID to a partition or by using the *table PARTITION (name)* clause:
 
@@ -282,8 +282,8 @@ Partitioned tables can be managed using partition specific clauses of the **ALTE
 
 .. _remove-partitioning:
 
-Modifying a Partitioned Table into a Regular Table.
----------------------------------------------------
+Modifying a Partitioned Table into a Regular Table
+--------------------------------------------------
 
 Changing a partitioned table into a regular table can be done using the **REMOVE PARTITIONING** clause of the **ALTER** statement::
 
@@ -355,7 +355,7 @@ The following example shows how to combine the *event2_1* and *event2_2* partiti
 
     *   In a range-partitioned table, only adjacent partitions can be reorganized.
     *   During partition reorganization, CUBRID moves data between partitions in order to reflect the new partitioning schema. Depending on the size of the reorganized partitions, this might be a time consuming operations and should be carefully planed.
-    *   The *REORGANIZE PARTITION* clause cannot be used to change the partitioning method. For example, a range-partitioned table cannot be changed into a hash-partitioned one.
+    *   The **REORGANIZE PARTITION** clause cannot be used to change the partitioning method. For example, a range-partitioned table cannot be changed into a hash-partitioned one.
     *   There must be at least one partition remaining after deleting partitions.
 
 .. _add-partitions:
@@ -369,7 +369,7 @@ Partitions can be added to a partitioned table by using the *ADD PARTITION* clau
     ADD PARTITION (<partition_definitions_comma_list>)
 
 *   *table_name* : Specifies the name of the table to which partitions are added.
-*   *partition_definition_comma_list* : Specifies the partitions to be added. Multiple partitions are separated by commas (,).
+*   *partition_definitions_comma_list* : Specifies the partitions to be added. Multiple partitions are separated by commas (,).
 
 The following example shows how to add the *before_2012* and *last_one* partitions to the :ref:`participant2<range-participant2-table>` table.
 
@@ -418,15 +418,15 @@ This statement is not allowed on hash-partitioned tables. To drop partitions of 
 Hash Partitioning Reorganization
 --------------------------------
 
-Because data distribution among partitions in a hash-partitioned table is controlled internally by CUBRID, hash-partitioning reorganization behaves differently for hash-partitioned tables than for list or range partitioned tables. CUBRID allows the number of partitions defined on a hash-partitioned table to be increased of reduced. When modifying the number of partitions of a hash-partitioned table, no data is lost. However, because the domain of the hashing function is modified, table data has to be redistributed between the new partitions in order to maintain hash-partitioning consistency.
+Because data distribution among partitions in a hash-partitioned table is controlled internally by CUBRID, hash-partitioning reorganization behaves differently for hash-partitioned tables than for list or range partitioned tables. CUBRID allows the number of partitions defined on a hash-partitioned table to be increased or reduced. When modifying the number of partitions of a hash-partitioned table, no data is lost. However, because the domain of the hashing function is modified, table data has to be redistributed between the new partitions in order to maintain hash-partitioning consistency.
 
 The number of partitions defined on a hash-partitioned table can be reduced using the  **COALESCE PARTITION** clause of the **ALTER** statement. ::
 
     ALTER {TABLE | CLASS} table_name
-    COALESCE PARTITION number
+    COALESCE PARTITION number_of_shrinking_partitions
 
 *   *table_name* : Specifies the name of the table to be redefined.
-*   *number* : Specifies the number of partitions to be deleted.
+*   *number_of_shrinking_partitions* : Specifies the number of partitions to be deleted.
 
 The following example shows how to decrease the number of partitions in the :ref:`nation2<hash-nation2-table>` table from 4 to 3.
 
@@ -455,7 +455,7 @@ Partition Promotion
 
 The **PROMOTE** clause of the **ALTER** statement promotes a partition of a partitioned table to a regular table. This feature is useful when a certain partition contains historic data which is almost never used. By promoting the partition to a regular table, performance on the partitioned table is increased and the data removed from this table (contained in the promoted partition) can still be accessed. Promoting a partition is an ireversible process, promoted partitions cannot be added back to the partitioned table.
 
-The partition **PROMOTE** statement is allowed only on range and list-partitioned tables. Since users do control how data is distributed among hash partitions, promoting such a partition does not make sense.
+The partition **PROMOTE** statement is allowed only on range and list-partitioned tables. Since users do not control how data is distributed among hash partitions, promoting such a partition does not make sense.
 
 When the partition is promoted to a standalone table, this table inherits the data and local indexes only. The following constraints are not available on the promoted partition:
 
@@ -508,7 +508,7 @@ Schema and data of table *t* are shown below::
                 5
                 6
 
-The follwing statement promotes partitions *p0* and *p2*:
+The following statement promotes partitions *p0* and *p2*:
 
 .. code-block:: sql
 
@@ -550,17 +550,17 @@ The following examples show how CUBRID decides between local and global indexes:
 	CREATE TABLE t(i INTEGER, j INTEGER k INTEGER)
 	PARTITION BY HASH(i) PARTITIONS 5;
 	
-	--pk_t_i is global because it is a primary key
+	-- pk_t_i is global because it is a primary key
 	ALTER TABLE t ADD CONSTRAINT pk_t_i PRIMARY KEY(i);
 	
-	--i_t_j and i_t_j_k are local indexes
+	-- i_t_j and i_t_j_k are local indexes
 	CREATE INDEX i_t_j ON t(j);
 	CREATE INDEX i_t_j_k ON t(j, k);
 	
-	--u_t_i_j is a local index because the partitioning key (i) is part of the index definition
+	-- u_t_i_j is a local index because the partitioning key (i) is part of the index definition
 	CREATE UNIQUE INDEX u_t_i_j ON t(i, j);
 	
-	--u_t_j_k is a global index because the partitioning key (i) is not part of the index definition
+	-- u_t_j_k is a global index because the partitioning key (i) is not part of the index definition
 	CREATE UNIQUE INDEX u_t_j_k ON t(j, k);
 
 It is important to define local indexes wherever possible. CUBRID does not optimize index scans to be able to scan several partitions together using a global index. Instead, in a global index scan, for each partition that was not pruned a separate index scan is performed. This leads to poorer performance than scanning local indexes because data from other partitions is fetched from disk and then discarded (it belongs to another partition than the one being scanned at the moment). **INSERT** statements also show better performance on local indexes since these indexes are smaller.

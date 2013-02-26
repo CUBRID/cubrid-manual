@@ -7,32 +7,32 @@ Numeric Types
 
 CUBRID supports the following numeric data types to store integers or real numbers.
 
-+------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| Type             | Bytes     | Mix                                                     | Max                                                     | Exact/approx.       |
-+==================+===========+=========================================================+=========================================================+=====================+
-| SHORT            | 2         | -32,768                                                 | 32,767                                                  | exact numeric       |
-| SMALLINT         |           |                                                         |                                                         |                     |
-+------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| INTEGER          | 4         | -2,147,483,648                                          | +2,147,483,647                                          | exact numeric       |
-| INT              |           |                                                         |                                                         |                     |
-+------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| BIGINT           | 8         | -9,223,372,036,854,775,808                              | +9,223,372,036,854,775,807                              | exact numeric       |
-+------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| NUMERIC          | 16        | precision                                               | precision                                               | exact numeric       |
-| DECIMAL          |           | *p*                                                     | *p*                                                     |                     |
-|                  |           | : 1                                                     | : 38                                                    |                     |
-|                  |           | scale                                                   | scale                                                   |                     |
-|                  |           | *s*                                                     | *s*                                                     |                     |
-|                  |           | : 0                                                     | : 38                                                    |                     |
-+------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| FLOAT            | 4         | -3.402823466E+38 (ANSI/IEEE 754-1985 standard)          | +3.402823466E+38                                        | approximate numeric |
-| REAL             |           |                                                         | (ANSI/IEEE 754-1985 standard)                           | floating point : 7  |
-+------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| DOUBLE           | 8         | -1.7976931348623157E+308 ANSI/IEEE 754-1985 standard)   | +1.7976931348623157E+308(ANSI/IEEE 754-1985 standard)   | approximate numeric |
-| DOUBLE PRECISION |           |                                                         |                                                         | floating point : 15 |
-+------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| MONETARY         | 12        | -3.402823466E+38                                        | +3.402823466E+38                                        | approximate numeric |
-+------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
++----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| Type                 | Bytes     | Mix                                                     | Max                                                     | Exact/approx.       |
++======================+===========+=========================================================+=========================================================+=====================+
+| **SHORT**,           | 2         | -32,768                                                 | 32,767                                                  | exact numeric       |
+| **SMALLINT**         |           |                                                         |                                                         |                     |
++----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| **INTEGER**,         | 4         | -2,147,483,648                                          | +2,147,483,647                                          | exact numeric       |
+| **INT**              |           |                                                         |                                                         |                     |
++----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| **BIGINT**           | 8         | -9,223,372,036,854,775,808                              | +9,223,372,036,854,775,807                              | exact numeric       |
++----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| **NUMERIC**,         | 16        | precision                                               | precision                                               | exact numeric       |
+| **DECIMAL**          |           | *p*                                                     | *p*                                                     |                     |
+|                      |           | : 1                                                     | : 38                                                    |                     |
+|                      |           | scale                                                   | scale                                                   |                     |
+|                      |           | *s*                                                     | *s*                                                     |                     |
+|                      |           | : 0                                                     | : 38                                                    |                     |
++----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| **FLOAT**,           | 4         | -3.402823466E+38 (ANSI/IEEE 754-1985 standard)          | +3.402823466E+38                                        | approximate numeric |
+| **REAL**             |           |                                                         | (ANSI/IEEE 754-1985 standard)                           | floating point : 7  |
++----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| **DOUBLE**,          | 8         | -1.7976931348623157E+308 ANSI/IEEE 754-1985 standard)   | +1.7976931348623157E+308(ANSI/IEEE 754-1985 standard)   | approximate numeric |
+| **DOUBLE PRECISION** |           |                                                         |                                                         | floating point : 15 |
++----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
+| **MONETARY**         | 12        | -3.402823466E+38                                        | +3.402823466E+38                                        | approximate numeric |
++----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
 
 Numeric data types are divided into exact and approximate types. Exact numeric data types (**SMALLINT**, **INT**, **BIGINT**, **NUMERIC**) are used for numbers whose values must be precise and consistent, such as the numbers used in financial accounting. Note that even when the literal values are equal, approximate numeric data types (**FLOAT**, **DOUBLE**, **MONETARY**) can be interpreted differently depending on the system.
 
@@ -220,17 +220,17 @@ The **Date** / **Time** types can be cast explicitly using the **CAST** operator
 
     **Explicit Coercions**
 
-    +------------+------+------+----------+-----------+
-    | FROM \\ TO | DATE | TIME | DATETIME | TIMESTAMP |
-    +============+======+======+==========+===========+
-    | DATE       | \-   | X    | O        | O         |
-    +------------+------+------+----------+-----------+
-    | TIME       | X    | \-   | X        | X         |
-    +------------+------+------+----------+-----------+
-    | DATETIME   | O    | O    | \-       | O         |
-    +------------+------+------+----------+-----------+
-    | TIMESTAMP  | O    | O    | O        | \-        |
-    +------------+------+------+----------+-----------+
+    +----------------+------+------+----------+-----------+
+    | FROM \\ TO     | DATE | TIME | DATETIME | TIMESTAMP |
+    +================+======+======+==========+===========+
+    | **DATE**       | \-   | X    | O        | O         |
+    +----------------+------+------+----------+-----------+
+    | **TIME**       | X    | \-   | X        | X         |
+    +----------------+------+------+----------+-----------+
+    | **DATETIME**   | O    | O    | \-       | O         |
+    +----------------+------+------+----------+-----------+
+    | **TIMESTAMP**  | O    | O    | O        | \-        |
+    +----------------+------+------+----------+-----------+
 
 In general, zero is not allowed in **DATE**, **DATETIME**, and **TIMESTAMP** types. However, if both date and time values are 0, it is allowed as an exception. This is useful in terms that this value can be used if an index exists upon query execution of a column corresponding to the type.
 
@@ -258,14 +258,12 @@ The **DATE** data type is used to represent the year (yyyy), month (mm) and day 
     DATE'00-10-31' is displayed as '10/31/2000'.
     DATE'0000-10-31' is displayed as an error (a year value should be at least 1).
     DATE'70-10-31' is displayed as '10/31/1970'.
-    DATE'0070-10-31' displayed as '10/31/0070'.
+    DATE'0070-10-31' is displayed as '10/31/0070'.
 
 TIME
 ----
 
-The **TIME** data type is used to represent the hour (hh), minute (mm) and second (ss). Supported range is "00:00:00" to "23:59:59." Second can be omitted; if it is, 0 seconds is specified. Both 12-hour and 24-hour notations are allowed as an input format.
-
-The input format of **TIME** is as follows: ::
+The **TIME** data type is used to represent the hour (hh), minute (mm) and second (ss). Supported range is "00:00:00" to "23:59:59." Second can be omitted; if it is, 0 seconds is specified. Both 12-hour and 24-hour notations are allowed as an input format. The input format of **TIME** is as follows: ::
 
     time'hh:mi[:ss] [am | pm]'
     
@@ -319,7 +317,6 @@ DATETIME
 --------
 
 The **DATETIME** data type is used to represent a data value in which the data (year, month, date) and time (hour, minute, second) are combined. The range of representable value is between 0001-01-01 00:00:00.000 and 9999-12-31 23:59:59.999 (GMT).
-
 The input format of **TIMESTAMP** is as follows: ::
 
     datetime'hh:mi[:ss[.msec]] [am|pm] mm/dd[/yyyy]'
@@ -445,7 +442,6 @@ Available Format for Strings in Date/Time Type
     *   15.359 am: 12 hours 15 seconds AM
     *   15: 12 hours 15 seconds AM
 
-
     .. note::
 
         : The [H]H format was allowed in CUBRID 2008 R3.1 and the earlier versions. That is, the string '10' was converted to **TIME** '10:00:00' in the R3.1 and the earlier versions, and will be converted to **TIME** '00:00:10' in version R4.0 and later.
@@ -563,7 +559,7 @@ Available Format for Strings in Date/Time Type
 
         *   The year in the date part must be over 4 digits (available to start with 0) or the time part must include hours and minutes ([H]H:[M]M) at least. Otherwise the date pate are recognized as the TIME type of the [MM]SS format, and the following string will be ignored.
 
-    *   If the one of the units (year, month, date, hour, minute and second) of the **DATETIME** string is greater than 999999, it is not recognized as a number, so the string including the corresponding unit will be ignored. For example, in '2009-10-21 20:9943:10', an error occurs because the value in minutes is out of the range. However, if '2009-10-21 20:1000123:10' is entered,'2009' is recognized as the the **TIME** type of the MMSS format, so that **TIME** '00:20:09' will be returned.
+    *   If the one of the units (year, month, date, hour, minute and second) of the **DATETIME** string is greater than 999999, it is not recognized as a number, so the string including the corresponding unit will be ignored. For example, in '2009-10-21 20:9943:10', an error occurs because the value in minutes is out of the range. However, if '2009-10-21 20:1000123:10' is entered,'2009' is recognized as the **TIME** type of the MMSS format, so that **TIME** '00:20:09' will be returned.
 
     *   If you convert the time-date sting to the **TIME** type, the date part of the string is ignored but the date part format must be valid.
 
@@ -635,8 +631,6 @@ Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*),
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
 *   If a bit string smaller than *n* is stored, the remainder of the string is filled with 0s.
 
-
-
 .. code-block:: sql
 
     CREATE TABLE bit_tbl(a1 BIT, a2 BIT(1), a3 BIT(8), a4 BIT VARYING);
@@ -703,7 +697,7 @@ The followings are the rules that are applied when using the character string ty
 
 *   In general, single quotations are used to enclose character string. Double quotations may be used as well depending on the value of **ansi_quotes**, which is a parameter related to SQL statement. If the **ansi_quotes** value is set to **no**, character string enclosed by double quotations is handled as character string, not as an identifier. The default value is **yes**. For details, :ref:`stmt-type-parameters`.
 
-*   If there are characters that can be considered to be blank (e.g. spaces, tabs, or line breaks) between two character strings, these two character strings are treated as one according to ANSI standard. For example, the following example shows that a line break exists between two character string. ::
+*   If there are characters that can be considered to be blank (e.g. spaces, tabs, or line breaks) between two character strings, these two character strings are treated as one according to ANSI standard. For example, the following example shows that a line break exists between two character strings. ::
 
     'abc'
     'def'
@@ -735,7 +729,7 @@ To enter the language of a specific country, we recommend that you to change the
 
     A character set (charset) is a set in which rules are defined that relate to what kind of codes can be used for encoding when specified characters (symbols) are stored in the computer.
 
-    The characted used by CUBRID can be configued as the **CUBRID_CHARSET** environment variable. For details, see :doc:`/admin/i18n`.
+    The character used by CUBRID can be configured as the **CUBRID_CHARSET** environment variable. For details, see :doc:`/admin/i18n`.
 
 **Collating Character Sets**
 
@@ -759,8 +753,6 @@ When the length of a character string exceeds *n*, they are truncated. When char
 **CHAR** (*n*) and **CHARACTER** (*n*) are used interchangeably.
 
 .. note:: In the earlier versions of CUBRID 9.0, *n* represents bite length, not the number of characters.
-
-*   The **CHAR** data type is always based on the ISO 8859-1 Latin character set.
 
 *   *n* is an integer between 1 and 1,073,741,823 (1G).
 
@@ -789,7 +781,6 @@ When the length of a character string exceeds *n*, they are truncated. When char
 *   **STRING** is the same as the **VARCHAR** (maximum length).
 *   *n* is an integer between 1 and 1,073,741,823 (1G).
 *   Empty quotes (' ') are used to represent a blank string. In this case, the return value of the **LENGTH** function is not 0.
-
 
 ::
 
@@ -871,6 +862,7 @@ The following is the result of executing Escape if a value for the system parame
     s       uvwxyz')
     =====================================================================
                                                                         0 
+
     SELECT LENGTH('\\');
      
        char_length('\')
@@ -908,7 +900,7 @@ The following is the result of executing Escape if a value for the system parame
 
 .. code-block:: sql
 
-    CREATE TABLE t1 (a varchar(200));
+    CREATE TABLE t1 (a VARCHAR(200));
     INSERT INTO t1 VALUES ('aaabbb'), ('aaa%');
      
     SELECT a FROM t1 WHERE a LIKE 'aaa\%' escape '\\';
@@ -937,8 +929,7 @@ The following example shows the definition of an **ENUM** column.
         color ENUM ('red', 'yellow', 'blue', 'green')
     );
 
-
-An index is associated to each element of the enum set, according to the order in which elements are defined in the enum type. For example, the *color* column can have one of the following values (assuming that the column allows NULL values):
+An index is associated to each element of the enum set, according to the order in which elements are defined in the enum type. For example, the *color* column can have one of the following values (assuming that the column allows NULL values) :
 
     =========       ============
     Value           Index Number
@@ -952,7 +943,7 @@ An index is associated to each element of the enum set, according to the order i
 
 The set of values of an **ENUM** type must not exceed 512 elements and each element of the set must be unique. CUBRID allocates two bytes of storage for each **ENUM** type value because it only stores the index of each value. This reduces the storage space needed which may improve performance.
 
-Both the enum value or the value index can be used when working with **ENUM** types. For example, to insert values into an **ENUM** type column, users can use either the value or the index of the **ENUM** type:
+Either the enum value or the value index can be used when working with **ENUM** types. For example, to insert values into an **ENUM** type column, users can use either the value or the index of the **ENUM** type:
 
 .. code-block:: sql
 
@@ -1011,10 +1002,10 @@ When used in type contexts other than CHAR or numbers, the enum is coerced to th
     | VARBIT        | Value                   |
     +---------------+-------------------------+
 
-Enum Type Comparisons
+ENUM Type Comparisons
 -----------------------
 
-When used in **=** or **IN** predicates of the form (enum_column op constant), CUBRID tries to convert the constant to the ENUM type. If the coercion fails, CUBRID does not return an error but considers the comparison to be false. This is implemented like this in order to allow index scan plans to be generated on these two operators.
+When used in **=** or **IN** predicates of the form (<enum_column> <operator> <constant>), CUBRID tries to convert the constant to the ENUM type. If the coercion fails, CUBRID does not return an error but considers the comparison to be false. This is implemented like this in order to allow index scan plans to be generated on these two operators.
 
 For all other :doc:`comparison operators<function/comparison_op>`, the **ENUM** type is converted to the type of the other operand. If a comparison is performed on two **ENUM** types, both arguments are converted to CHAR type and the comparison follows CHAR type rules. Except for **=** and **IN**, predicates on **ENUM** columns cannot be used in index scan plans.
 
@@ -1043,7 +1034,6 @@ The following query will convert the constant 'red' to the enum value 'red' with
       color
     ======================
       'red'
-
 
 The following queries will not return a conversion error but will not return any results:
 
@@ -1079,7 +1069,7 @@ In the following queries the **ENUM** type will be converted to the type of the 
 
     ERROR: Cannot coerce value of domain "enum" to domain "date".
     
-Enum Type Ordering
+ENUM Type Ordering
 --------------------
 
 Values of the **ENUM** type are ordered by value index, not by enum value. When defining a column with **ENUM** type, users also define the ordering of the enum values.
@@ -1114,7 +1104,7 @@ Notes
 
 The **ENUM** type is not a reusable type. If several columns require the same set of values, an **ENUM** type must be defined for each one. When comparing two columns of **ENUM** type, the comparison is performed as if the columns were coerced to CHAR type even if the two **ENUM** types define the same set of values.
 
-Using the *ALTER .. CHANGE* statement to modify the set of values of an **ENUM** type is only allowed if the value of the system parameter **alter_table_change_type_strict** is set to yes. In this case, CUBRID uses enum value (the char-literal) to convert values to the new domain. If a value is outside of the new **ENUM** type values set, it is automatically mapped to the first value of the **ENUM** type.
+Using the *ALTER ... CHANGE* statement to modify the set of values of an **ENUM** type is only allowed if the value of the system parameter **alter_table_change_type_strict** is set to yes. In this case, CUBRID uses enum value (the char-literal) to convert values to the new domain. If a value is outside of the new **ENUM** type values set, it is automatically mapped to the first value of the **ENUM** type.
 
 .. code-block:: sql
     
@@ -1139,7 +1129,7 @@ The following statement will extend the **ENUM** type with the value 'yellow':
       'red'    
       'yellow'
 
-The following statement will change all tuples with value 'green' to value 'red' because the value 'green' cannot be converted the the new **ENUM** type:
+The following statement will change all tuples with value 'green' to value 'red' because the value 'green' cannot be converted the new **ENUM** type:
 
 .. code-block:: sql
 
@@ -1190,7 +1180,6 @@ The following example shows how to use the **ENUM** type in a CCI application.
     
     cci_get_data (req, idx, CCI_A_TYPE_STR, &data, 1);
 
-
 BLOB/CLOB Data Types
 ====================
 
@@ -1217,6 +1206,8 @@ When storing LOB data in external storage, the following naming convention will 
 
 **LOB** data is stored in the local file system of the DB server. LOB data is stored in the path specified in the **-lob-base-path option** value of **cubrid createdb**; if this value is omitted, the data will be stored in the [db-vol path]/lob path where the database volume will be created. For more details, see :ref:`creating-database` and :ref:`lob-storage`.
 
+If a user change any **LOB** file without using CUBRID API or CUBRID tools, data consistency is not guaranteed.
+
 If a **LOB** data file path that was registered to the database directory file(**databases.txt**) is deleted, please note that database server (**cub_server**) and standalone utilities will not correctly work.
 
 BLOB
@@ -1224,13 +1215,13 @@ BLOB
 
 A type that stores binary data outside the database.
 The maximum length of **BLOB** data is the maximum file size creatable in an external storage.
-In SQL statements, the **BLOB** type expresses the input and output value in a bit array. That is, it is compatible with the **BIT** (n) and **BIT VARYING** (n) types, and only an explicit type change is allowed. If data lengths differ from one another, the maximum length is truncated to fit the smaller one.
+In SQL statements, the **BLOB** type expresses the input and output value in a bit string. That is, it is compatible with the **BIT** (n) and **BIT VARYING** (n) types, and only an explicit type change is allowed. If data lengths differ from one another, the maximum length is truncated to fit the smaller one.
 When converting the **BLOB** type value to a binary value, the length of the converted data cannot exceed 1GB. When converting binary data to the **BLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **BLOB** storage.
 
 CLOB
 ----
 
-A type that stores character string data outside the database.
+A type that stores character string data outside the database. 
 The maximum length of **CLOB** data is the maximum file size creatable in an external storage.
 In SQL statements, the CLOB type expresses the input and output value in a character string. That is, it is compatible with the **CHAR** (n), **VARCHAR** (n) types. However, only an explicit type change is allowed, and if data lengths are different from one another, the maximum length is truncated to fit to the smaller one.
 When converting the **CLOB** type value to a character string, the length of the converted data cannot exceed 1 GB. When converting a character string to the **CLOB** type, the size of the converted data cannot exceed the maximum file size provided by the **CLOB** storage.
@@ -1273,7 +1264,9 @@ In a **BLOB** / **CLOB** type column, each **BLOB** / **CLOB** type value is sto
 
 If a value is input in a **LOB** column by using an **INSERT** statement, a file is created in an external storage internally and the relevant data is stored; the relevant file path (Locator) is stored in an actual column value.
 
-If a record containing a **LOB** column uses a **DELETE** statement, a file to which the relevant **LOB** column refers will be deleted simultaneously. If a **LOB** column value is changed using an **UPDATE** statement, the column value will be changed following the operation below, according to whether a new value is **NULL** or not.
+If a record containing a **LOB** column uses a **DELETE** statement, a file to which the relevant **LOB** column refers will be deleted simultaneously. 
+
+If a **LOB** column value is changed using an **UPDATE** statement, the column value will be changed following the operation below, according to whether a new value is **NULL** or not.
 
 *   If a **LOB** type column value is changed to a value that is not **NULL** : If a Locator that refers to an external file is already available in a **LOB** column, the relevant file will be deleted. A new file is created afterwards. After storing a value that is not **NULL**, a Locator for a new file will be stored in a **LOB** column value.
 
@@ -1313,11 +1306,12 @@ When you get a **LOB** type column, the data stored in a file to which the colum
 *   If the query is executed in CSQL, a column value (Locator) will be displayed, instead of the data stored in a file. To display the data to which a **BLOB** / **CLOB** column refers, it must be changed to strings by :func:`CLOB_TO_CHAR` function.
 
 *   To use the string process function, the strings need to be converted by :func:`CLOB_TO_CHAR` function.
+
 *   You cannot specify a **LOB** column in ** GROUP BY** clause and **ORDER BY** clause.
+
 *   Comparison operators, relational operators, **IN**, **NOT IN** operators cannot be used to compare **LOB** columns. However, **IS NULL** expression can be used to compare whether it is a **LOB** column value (Locator) or **NULL**. This means that **TRUE** will be returned when a column value is **NULL**, and if a column value is **NULL**, there is no file to store **LOB** data.
 
 *   When a **LOB** column is created, and the file is deleted after data input, a **LOB** column value (Locator) will become a state that is referring to an invalid file. As such, using :func:`CLOB_TO_CHAR`, :func:`BLOB_TO_BIT`, :func:`CLOB_LENGTH` and :func:`BLOB_LENGTH` functions on the columns that have mismatching **LOB** Locator and a **LOB** data file enables them to display **NULL**.
-
 
 .. code-block:: sql
 
@@ -1385,7 +1379,7 @@ These are the functions for BLOB/CLOB types. For more details, refer :doc:`/sql/
 To create and manage LOB storage
 --------------------------------
 
-By default, the **LOB** data file is stored in the <db-volumn-path>/lob directory where database volume is created. However, if the lob base path is specified with :option:`createdb -B` option when creating the database, **LOB** data files will be stored in the directory designated. However, if the specified directory does not exists, CUBRID tries to create the directory and display an error message when it fails to create it. For more details, see :option:`createdb -B` option. ::
+By default, the **LOB** data file is stored in the <db-volumn-path>/lob directory where database volume is created. However, if the lob base path is specified with :option:`createdb -B` option when creating the database, **LOB** data files will be stored in the directory designated. However, if the specified directory does not exist, CUBRID tries to create the directory and display an error message when it fails to create it. For more details, see :option:`createdb -B` option. ::
 
     # image_db volume is created in the current work directory, and a LOB data file will be stored.
     % cubrid createdb image_db
@@ -1394,6 +1388,7 @@ By default, the **LOB** data file is stored in the <db-volumn-path>/lob director
     % cubrid createdb --lob-base-path="file:/home1/data1" image_db
 
 You can identify a directory where a LOB file will be stored by executing the cubrid spacedb utility.
+
 ::
 
     % cubrid spacedb image_db
@@ -1409,7 +1404,6 @@ You can identify a directory where a LOB file will be stored by executing the cu
     Volid  Purpose  total_size  free_size  Vol Name
     
     LOB space description file:/home1/data1
-
 
 To expand or change the **lob-base-path** of the database, change its **lob-base-path** of **databases.txt** file. Restart the database server to apply the changes made to **databases.txt**. However, even if you change the **lob-base-path** of **databases.txt**, access to the **LOB** data stored in a previous storage is possible. ::
 
@@ -1491,11 +1485,11 @@ The following table shows the collection types that allow explicit coercions.
     +--------------+-----+----------+------+
     | FROM \\ TO   | SET | MULTISET | LIST |
     +==============+=====+==========+======+
-    | SET          | \-  | Yes      | Yes  |
+    | **SET**      | \-  | Yes      | Yes  |
     +--------------+-----+----------+------+
-    | MULTISET     | Yes | \-       | No   |
+    | **MULTISET** | Yes | \-       | No   |
     +--------------+-----+----------+------+
-    | LIST         | Yes | Yes      | \-   |
+    | **LIST**     | Yes | Yes      | \-   |
     +--------------+-----+----------+------+
 
 Collection Types do not support collations. Therefore, Below query returns error.
@@ -1563,7 +1557,6 @@ LIST/SEQUENCE
 
 **LIST** (= **SEQUENCE**) is a collection type in which the input order of elements is preserved, and duplications are allowed. Elements of a **LIST** are allowed to have only one data type. It can have records of other tables.
 
-
 .. code-block:: sql
 
     CREATE TABLE list_tbl (col_1 LIST (CHAR(1)));
@@ -1630,7 +1623,6 @@ The implicit type conversion executed by CUBRID is as follows:
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
     | **VARCHAR**   | O            | O        | O        | O             | O          | O         | O           | O          |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-
 
 **Implicit Type Conversion Table 2**
 
@@ -1717,13 +1709,11 @@ The following are the conversion rules according to an operand type of the compa
 +===================+===================+==============================================+================+
 | Numeric Type      | Numeric Type      | None                                         | NUMERIC        |
 |                   +-------------------+----------------------------------------------+----------------+
-|                   | String Type       | Converts operand2 to                         | NUMERIC        |
-|                   |                   | **DOUBLE**                                   |                |
+|                   | String Type       | Converts operand2 to **DOUBLE**              | NUMERIC        |
 |                   +-------------------+----------------------------------------------+----------------+
-|                   | Date/Time Type    | None                                         | N/a            |
+|                   | Date/Time Type    | None                                         | N/A            |
 +-------------------+-------------------+----------------------------------------------+----------------+
-| String Type       | Numeric Type      | Converts operand1 to                         | NUMERIC        |
-|                   |                   | **DOUBLE**                                   |                |
+| String Type       | Numeric Type      | Converts operand1 to **DOUBLE**              | NUMERIC        |
 |                   +-------------------+----------------------------------------------+----------------+
 |                   | String Type       | None                                         | String         |
 |                   +-------------------+----------------------------------------------+----------------+
@@ -1750,7 +1740,7 @@ The following are the exceptions in the conversion rules for comparison operator
 
 If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, **< ALL**, **< ANY**, **<= ALL**, **<= ANY**, **>= ALL**, **>= ANY** ), the exception above is not applied.
 
-**Numeric Type & String Type Operands**
+*   **Numeric Type & String Type Operands**
 
     The string type operand will be converted to **DOUBLE**.
 
@@ -1774,7 +1764,7 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
         =============
                     1
 
-**String Type & Date/Time Type Operands**
+*   **String Type & Date/Time Type Operands**
 
     The string type operand will be converted to the date/time type.
 
@@ -1792,7 +1782,7 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
         ===================================
                                         1
 
-**String Type & Numeric Type Host Variable Operands**
+*   **String Type & Numeric Type Host Variable Operands**
 
     The numeric type host variable will be converted to the string type.
 
@@ -1804,7 +1794,7 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
         ===================
              '1'
 
-**String Type & Numeric Type value Operands**
+*   **String Type & Numeric Type value Operands**
 
     The numeric type value will be converted to the string type.
 
@@ -1825,7 +1815,7 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
               '3'
               '12'
           
-**String Type Column & Date/Time Type Value Operands**
+*   **String Type Column & Date/Time Type Value Operands**
 
     The date/time type value will be converted to the string type.
 
@@ -1849,7 +1839,7 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
 Range Operation
 ^^^^^^^^^^^^^^^
 
-**Numeric Type and String Type Operands**
+*   **Numeric Type and String Type Operands**
 
     The string type operand will be converted to **DOUBLE**.
 
@@ -1864,7 +1854,7 @@ Range Operation
                     3
                     4
 
-**String Type and Date/Time Type Operands**
+*   **String Type and Date/Time Type Operands**
 
     The string type operand will be converted to the date/time type.
 
@@ -1889,7 +1879,7 @@ Range Operation
 Arithmetic Operation
 ^^^^^^^^^^^^^^^^^^^^
 
-**Date/Time Type Operand**
+*   **Date/Time Type Operand**
 
     If the date/time type operands are given to '-' operator and the types are different from each other, it will be converted to the type with a higher priority. The following example shows that the operand data type on the left is converted from **DATE** to **DATETIME** so that the result of '-' operation of **DATETIME** can be outputted in milliseconds.
 
@@ -1901,15 +1891,15 @@ Arithmetic Operation
         =====================================================
                                                   28771200000
 
-**Numeric Type Operand**
+*   **Numeric Type Operand**
 
     If the numeric type operands are given and the types are different from each other, it will be converted to the type with the higher priority.
 
-    **Date/Time Type & Numeric Type Operands**
+*   **Date/Time Type & Numeric Type Operands**
 
     If the date/time type and the numeric type operands are given to '+' or '-' operator, the numeric type operand is converted to either **BIGINT**, **INT** or **SHORT**.
 
-    **Date/Time Type & String Type Operands**
+*   **Date/Time Type & String Type Operands**
 
     If a date/time type and a string type are operands, only '+' and '-' operators are allowed. If the '+' operator is used, it will be applied according to the following rules.
 
@@ -1951,7 +1941,7 @@ Arithmetic Operation
          In line 1, column 13,
          ERROR: Cannot coerce '10' to type datetime.    
      
-**Numeric Type & String Type Operands**
+*   **Numeric Type & String Type Operands**
 
     If a numeric type and a string type are operands, they will be applied according to the following rules.
 
@@ -1978,7 +1968,7 @@ Arithmetic Operation
         =====================
           01/02/2002
 
-**String Type Operand**
+*   **String Type Operand**
 
     If you multiply, divide or subtract both strings, the result returns a **DOUBLE** type value.
 

@@ -10,18 +10,22 @@ CREATE TABLE
 
 **CREATE TABLE** 문을 사용하여 새로운 테이블을 생성한다. ::
 
-    CREATE {TABLE | CLASS} <table_name>
-                       [ <subclass_definition> ]
-                       [ ( <column_definition> [,<table_constraint>]... ) ]
-                       [ AUTO_INCREMENT = initial_value ] ]
-                       [ CLASS ATTRIBUTE ( <column_definition_comma_list> ) ]
-                       [ METHOD <method_definition_comma_list> ]
-                       [ FILE <method_file_comma_list> ]
-                       [ INHERIT <resolution_comma_list> ]
-                       [ REUSE_OID ]
+    CREATE {TABLE | CLASS} table_name
+    [ <subclass_definition> ]
+    [ ( <column_definition> [,<table_constraint>]... ) ]
+    [ AUTO_INCREMENT = initial_value ] ]
+    [ CLASS ATTRIBUTE ( <column_definition_comma_list> ) ]
+    [ METHOD <method_definition_comma_list> ]
+    [ FILE <method_file_comma_list> ]
+    [ INHERIT <resolution_comma_list> ]
+    [ REUSE_OID ]
+    [ CHARSET charset_name ] [ COLLATE collation_name ]
+                       
     <column_definition> ::=
-    column_name column_type [[ <default_or_shared> ] | [ <column_constraint> ]]...
-     
+    column_name <data_type> [[ <default_or_shared> ] | [ <column_constraint> ]]...
+    
+    <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+
     <default_or_shared> ::=
     {SHARED <value_specification> | DEFAULT <value_specification> } |
     AUTO_INCREMENT [(seed, increment)]
@@ -29,6 +33,10 @@ CREATE TABLE
     <column_constraint> ::=
     NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
      
+    <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
+
+    <collation_modifier_clause> ::= COLLATE { <char_string_literal> | <identifier> }
+
     <table_constraint> ::=
     [ CONSTRAINT [ <constraint_name> ] ] UNIQUE [ KEY | INDEX ]( column_name_comma_list ) |
     [ { KEY | INDEX } [ <constraint_name> ]( column_name_comma_list ) |
@@ -76,8 +84,8 @@ CREATE TABLE
        host_city        VARCHAR(20) NOT NULL,
        opening_date     DATE        NOT NULL,
        closing_date     DATE        NOT NULL,
-       mascot           VARCHAR(20) ,
-       slogan           VARCHAR(40) ,
+       mascot           VARCHAR(20),
+       slogan           VARCHAR(40),
        introduction     VARCHAR(1500)
     );
 
@@ -89,19 +97,25 @@ CREATE TABLE
     ::
 
         <column_definition> ::=
-        column_name column_type [ [ <default_or_shared> ] | [ <column_constraint> ] ]...
-         
+        column_name <data_type> [[ <default_or_shared> ] | [ <column_constraint> ]]...
+    
+        <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+
         <default_or_shared> ::=
-        { SHARED <value_specification> | DEFAULT <value_specification> } |
-        AUTO_INCREMENT [ (seed, increment) ]
+        {SHARED <value_specification> | DEFAULT <value_specification> } |
+        AUTO_INCREMENT [(seed, increment)]
          
         <column_constraint> ::=
         NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+         
+        <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
+
+        <collation_modifier_clause> ::= COLLATE { <char_string_literal> | <identifier> }
 
 칼럼 이름
 ^^^^^^^^^
 
-칼럼 이름 작성 원칙은 :doc:`/sql/identifier` 를 참고한다. 생성한 칼럼의 이름은 **ALTER TABLE** 문의 **RENAME COLUMN** 절을 사용하여 변경할 수 있다. 자세한 내용은 :ref:`rename-column` 을 참고한다.
+칼럼 이름 작성 원칙은 :doc:`/sql/identifier` 절을 참고한다. 생성한 칼럼의 이름은 **ALTER TABLE** 문의 :ref:`rename-column`\ 을 사용하여 변경할 수 있다. 
 
 다음은 *full_name* 과 *age*, 2개의 칼럼을 가지는 *manager2* 테이블을 생성하는 예제이다.
 
@@ -109,7 +123,7 @@ CREATE TABLE
 
     CREATE TABLE manager2 (full_name VARCHAR(40), age INT );
 
-.. warning::
+.. note::
 
     *   칼럼 이름의 첫 글자는 반드시 알파벳이어야 한다.
     *   칼럼 이름은 테이블 내에서 고유해야 한다.
@@ -117,13 +131,13 @@ CREATE TABLE
 칼럼의 초기 값 설정(SHARED, DEFAULT)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**SHARED**, **DEFAULT** 는 칼럼 초기 값과 관련된 속성이다. **SHARED**, **DEFAULT** 값은 **ALTER TABLE** 문에서 변경할 수 있다.
+테이블의 칼럼의 초기값을 **SHARED** 또는 **DEFAULT** 값을 통해 정의할 수 있다. **SHARED**, **DEFAULT** 값은 **ALTER TABLE** 문에서 변경할 수 있다.
 
-*   **SHARED** : 칼럼 값은 모든 행에서 동일하다. 따라서 **SHARED** 속성은 **UNIQUE** 제약 조건과 동시에 정의할 수 없다. 초기에 설정한 값과 다른 새로운 값을 **INSERT** 하면, 해당 칼럼 값은 모든 행에서 새로운 값으로 갱신된다.
+*   **SHARED** : 칼럼 값은 모든 행에서 동일하다. 따라서 **SHARED** 속성은 **UNIQUE** 제약 조건과 동시에 정의할 수 없다. 초기에 설정한 값과 다른 새로운 값을 **INSERT**\ 하면, 해당 칼럼 값은 모든 행에서 새로운 값으로 갱신된다.
 
 *   **DEFAULT** : 새로운 행을 삽입할 때 칼럼 값을 지정하지 않으면 **DEFAULT** 속성으로 설정한 값이 저장된다.
 
-**DEFAULT** 의 값으로 허용되는 의사 칼럼(pseudo column, 인자가 없는 특수 함수)은 다음과 같다.
+**DEFAULT**\ 의 값으로 허용되는 의사 칼럼(pseudo-column)과 함수는 다음과 같다.
 
 +---------------+---------------+
 | DEFAULT 값    | 데이터 타입   |
@@ -141,7 +155,7 @@ CREATE TABLE
 
 .. note::
 
-    CUBRID 9.0 미만 버전에서는 테이블 생성 시 **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** 칼럼의 **DEFAULT** 값을 **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** 로 지정하면, **CREATE TABLE** 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 **INSERT** 되는 시점의 값을 입력하려면 **INSERT** 구문의 **VALUES** 절에 해당 함수를 입력해야 했다.
+    CUBRID 9.0 미만 버전에서는 테이블 생성 시 **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** 칼럼의 **DEFAULT** 값을 **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** 로 지정하면, **CREATE TABLE** 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 **INSERT** 되는 시점의 값을 입력하려면 **INSERT** 구문의 **VALUES** 절에 해당 함수를 입력해야 한다.
 
 .. code-block:: sql
 
@@ -194,7 +208,7 @@ CREATE TABLE
 자동 증가 특성(AUTO INCREMENT)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-칼럼 값에 자동으로 일련 번호를 부여하기 위해 칼럼에 **AUTO_INCREMENT** 속성을 정의할 수 있다. **SMALLINT**, **INTEGER**, **BIGINT**, **NUMERIC** (*p*, 0) 타입에 한정하여 정의할 수 있다.
+칼럼 값에 자동으로 일련 번호를 부여하기 위해 칼럼에 **AUTO_INCREMENT** 속성을 정의할 수 있다. **SMALLINT**, **INTEGER**, **BIGINT**, **NUMERIC**\ (*p*, 0) 타입에 한정하여 정의할 수 있다.
 
 동일한 칼럼에 **AUTO_INCREMENT** 속성과 **SHARED** 또는 **DEFAULT** 속성을 동시에 정의할 수 없으며, 사용자가 직접 입력한 값과 자동 증가 특성에 의해 입력된 값이 서로 충돌되지 않도록 주의해야 한다.
 
@@ -202,7 +216,7 @@ CREATE TABLE
 
 .. code-block:: sql
 
-    CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]);
+    CREATE TABLE table_name (id int AUTO_INCREMENT [(seed, increment)] );
     
     CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
 
@@ -300,11 +314,9 @@ NOT NULL 제약
     CREATE TABLE const_tbl1 (id INT NOT NULL, INDEX i_index (id ASC), phone VARCHAR);
      
     CREATE TABLE const_tbl2 (id INT NOT NULL PRIMARY KEY, phone VARCHAR);
-    INSERT INTO const_tbl2 (NULL, '000-0000');
+    INSERT INTO const_tbl2 VALUES (NULL, '000-0000');
      
-    In line 2, column 25,
-     
-    ERROR: syntax error, unexpected Null
+    Putting value 'null' into attribute 'id' returned: Attribute "id" cannot be made NULL.
 
 UNIQUE 제약
 ^^^^^^^^^^^
@@ -448,7 +460,7 @@ FOREIGN KEY 제약
     -- when deleting primay key value, it cascades foreign key value  
     DELETE FROM a_tbl WHERE id=3;
      
-    1 rows affected.
+    1 row affected.
      
     SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id = b.id;
      
@@ -478,13 +490,13 @@ KEY 또는 INDEX
 
 **KEY** 와 **INDEX** 는 동일하며, 해당 칼럼을 키로 하는 인덱스를 생성한다.
 
-.. note::
-
-    CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
-
 .. code-block:: sql
 
     CREATE TABLE const_tbl4  (id INT, phone VARCHAR, KEY i_key (id DESC, phone ASC));
+
+.. note::
+
+    CUBRID 9.0 미만 버전에서는 인덱스 이름을 생략할 수 있었으나, CUBRID 9.0 버전부터는 인덱스 이름을 생략할 수 없다.
 
 칼럼 옵션
 ---------
@@ -516,8 +528,11 @@ KEY 또는 INDEX
       1000     jone
 
 
-테이블 옵션(REUSE_OID)
-----------------------
+테이블 옵션
+-----------
+
+REUSE_OID
+^^^^^^^^^
 
 테이블 생성 시 **REUSE_OID** 옵션을 명시하면, 레코드 삭제(**DELETE**)로 인해 삭제된 OID를 새로운 레코드 삽입(**INSERT**) 시 재사용할 수 있다. **REUSE_OID** 옵션을 명시하여 생성된 테이블을 OID 재사용 테이블 또는 참조 불가능(non-referable)한 테이블이라고 한다.
 
@@ -555,17 +570,23 @@ OID(Object Identifier)는 볼륨 번호, 페이지 번호, 슬롯 번호와 같�
     *   OID 재사용 테이블은 CUBRID 2008 R2.2 버전 이상에서만 지원되며, 하위 호환성을 보장하지 않는다. 즉, 더 낮은 버전의 데이터베이스 서버에서 OID 재사용 테이블이 존재하는 데이터베이스에 접근할 수 없다.
     *   OID 재사용 테이블은 분할 테이블로 관리될 수 있으며, 복제될 수 있다.
 
+문자셋과 콜레이션
+^^^^^^^^^^^^^^^^^
+
+해당 테이블에 적용할 문자셋과 콜레이션을 **CREATE TABLE** 문에 명시할 수 있다. 이에 관한 자세한 내용은 :ref:`collation-charset-string` 절을 참조하면 된다.
+
 CREATE TABLE LIKE
 -----------------
 
 **CREATE TABLE … LIKE** 문을 사용하면, 이미 존재하는 테이블의 스키마와 동일한 스키마를 갖는 테이블을 생성할 수 있다. 기존 테이블에서 정의된 칼럼 속성, 테이블 제약 조건, 인덱스도 그대로 복제된다. 원본 테이블에서 자동 생성된 인덱스의 이름은 새로 생성된 테이블의 이름에 맞게 새로 생성되지만, 사용자에 의해 지어진 인덱스 이름은 그대로 복제된다. 그러므로 인덱스 힌트 구문(:ref:`index-hint-syntax` 참고)으로 특정 인덱스를 사용하도록 작성된 질의문이 있다면 주의해야 한다.
 
-**CREATE TABLE … LIKE** 문은 스키마만 복제하므로 칼럼 정의문을 작성할 수 없다. ::
+**CREATE TABLE … LIKE** 문은 스키마만 복제하므로 칼럼 정의문을 작성할 수 없다. 
+::
 
     CREATE {TABLE | CLASS} <new_table_name> LIKE <source_table_name>;
     
-*   *new_table_name* : 새로 생성할 테이블 이름이다.
-*   *source_table_name* : 데이터베이스에 이미 존재하는 원본 테이블 이름이다. **CREATE TABLE ... LIKE**   문에서 아래의 테이블은 원본 테이블로 지정될 수 없다.
+*   *new_table_name*: 새로 생성할 테이블 이름이다.
+*   *source_table_name*: 데이터베이스에 이미 존재하는 원본 테이블 이름이다. **CREATE TABLE ... LIKE** 문에서 아래의 테이블은 원본 테이블로 지정될 수 없다.
         *   분할 테이블
         *   **AUTO_INCREMENT** 칼럼이 포함된 테이블
         *   상속 또는 메서드를 사용하는 테이블
@@ -630,25 +651,25 @@ CREATE TABLE AS SELECT
 
 **CREATE TABLE ... AS SELECT** 문을 사용하여 **SELECT** 문의 결과 레코드를 포함하는 새로운 테이블을 생성할 수 있다. 새로운 테이블에 대해 칼럼 및 테이블 제약 조건을 정의할 수 있으며, 다음의 규칙을 적용하여 **SELECT** 결과 레코드를 반영한다.
 
-*   새로운 테이블에 칼럼 *col_1* 이 정의되고, *select_statement* 에 동일한 칼럼 *col_1* 이 명시된 경우, **SELECT** 결과 레코드가 새로운 테이블 *col_1* 값으로 저장된다. 칼럼 이름은 같고 칼럼 타입이 다르면 타입 변환을 시도한다.
+*   새로운 테이블에 칼럼 *col_1*\ 이 정의되고, *select_statement*\ 에 동일한 칼럼 *col_1*\ 이 명시된 경우, **SELECT** 결과 레코드가 새로운 테이블 *col_1* 값으로 저장된다. 칼럼 이름은 같고 칼럼 타입이 다르면 타입 변환을 시도한다.
 
-*   새로운 테이블에 칼럼 *col_1*, *col_2* 가 정의되고, *select_statement* 의 칼럼 리스트에 *col_1*, *col_2*, *col_3* 이 명시되어 모두 포함 관계가 성립하는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3* 이 생성되고, **SELECT** 결과 데이터가 모든 칼럼 값으로 저장된다. 칼럼 이름은 같고 칼럼 타입이 다르면 타입 변환을 시도한다.
+*   새로운 테이블에 칼럼 *col_1*, *col_2*\ 가 정의되고, *select_statement*\ 의 칼럼 리스트에 *col_1*, *col_2*, *col_3*\ 이 명시되어 모두 포함 관계가 성립하는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3*\ 이 생성되고, **SELECT** 결과 데이터가 모든 칼럼 값으로 저장된다. 칼럼 이름은 같고 칼럼 타입이 다르면 타입 변환을 시도한다.
 
-*   새로운 테이블에 칼럼 *col_1*, *col_2* 가 정의되고, *select_statement* 의 칼럼 리스트에 *col_1*, *col_3* 이 명시되어 포함 관계가 성립하지 않는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3* 이 생성되고, *select_statement* 에 명시된 칼럼 *col_1*, *col_3* 에 대해서만 **SELECT** 결과 데이터가 저장되고, *col_2* 에는 NULL이 저장된다.
+*   새로운 테이블에 칼럼 *col_1*, *col_2*\ 가 정의되고, *select_statement*\ 의 칼럼 리스트에 *col_1*, *col_3*\ 이 명시되어 포함 관계가 성립하지 않는 경우, 새로 생성되는 테이블에는 *col_1*, *col_2*, *col_3*\ 이 생성되고, *select_statement*\ 에 명시된 칼럼 *col_1*, *col_3*\ 에 대해서만 **SELECT** 결과 데이터가 저장되고, *col_2*\ 에는 NULL이 저장된다.
 
-*   *select_statement* 의 칼럼 리스트에는 칼럼 별칭(alias)이 포함될 수 있으며, 이 경우 칼럼 별칭이 새로운 테이블 칼럼 이름으로 사용된다. 함수 호출이나 표현식이 사용된 경우 별칭이 없으면 유효하지 않은 칼럼 이름이 생성되므로, 이 경우에는 별칭을 사용하는 것이 좋다.
+*   *select_statement*\ 의 칼럼 리스트에는 칼럼 별칭(alias)이 포함될 수 있으며, 이 경우 칼럼 별칭이 새로운 테이블 칼럼 이름으로 사용된다. 함수 호출이나 표현식이 사용된 경우 별칭이 없으면 유효하지 않은 칼럼 이름이 생성되므로, 이 경우에는 별칭을 사용하는 것이 좋다.
 
-*   **REPLACE** 옵션은 새로운 테이블의 칼럼(*col_1*)에 **UNIQUE** 제약 조건이 정의된 경우에만 유효하다. *select_statement* 의 결과 레코드에 중복된 값이 존재하는 경우, **REPLACE** 옵션이 명시되면 칼럼 *col_1* 에는 고유한 값이 저장되고, **REPLACE** 옵션이 생략되면 **UNIQUE** 제약 조건에 위배되므로 에러 메시지가 출력된다.
+*   **REPLACE** 옵션은 새로운 테이블의 칼럼(*col_1*)에 **UNIQUE** 제약 조건이 정의된 경우에만 유효하다. *select_statement*\ 의 결과 레코드에 중복된 값이 존재하는 경우, **REPLACE** 옵션이 명시되면 칼럼 *col_1*\ 에는 고유한 값이 저장되고, **REPLACE** 옵션이 생략되면 **UNIQUE** 제약 조건에 위배되므로 에러 메시지가 출력된다.
 
 ::
 
     CREATE {TABLE | CLASS} <table_name> [( <column_definition> [,<table_constraint>]... )]
     [REPLACE] AS <select_statement>;
 
-*   *table_name* : 새로 생성할 테이블 이름이다.
-*   *column_definition*, *table_constraint* : 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성은 복제되지 않는다.
-*   *table_constraint* : 테이블 제약 조건을 정의한다.
-*   *select_statement* : 데이터베이스에 이미 존재하는 원본 테이블을 대상으로 하는 **SELECT** 문이다.
+*   *table_name*: 새로 생성할 테이블 이름이다.
+*   *column_definition*, *table_constraint*: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성은 복제되지 않는다.
+*   *table_constraint*: 테이블 제약 조건을 정의한다.
+*   *select_statement*: 데이터베이스에 이미 존재하는 원본 테이블을 대상으로 하는 **SELECT** 문이다.
 
 .. code-block:: sql
 
@@ -739,7 +760,7 @@ ALTER TABLE
      
     <alter_clause> ::= ADD <alter_add> [ INHERIT <resolution_comma_list> ] | 
                        ADD { KEY | INDEX } <index_name> (<index_col_name>) |
-                       ALTER [ COLUMN ] column_name SET DEFAULT <value_specifiation> |
+                       ALTER [ COLUMN ] column_name SET DEFAULT <value_specification> |
                        DROP <alter_drop> [ INHERIT <resolution_comma_list> ] |
                        DROP { KEY | INDEX } index_name |
                        DROP FOREIGN KEY constraint_name |
@@ -760,7 +781,7 @@ ALTER TABLE
     <alter_change> ::= FILE <file_path_name> AS <file_path_name> |
                        METHOD <method_definition_comma_list> |
                        QUERY [ <unsigned_integer_literal> ] <select_statement> |
-                       <column_name> DEFAULT <value_specifiation>
+                       <column_name> DEFAULT <value_specification>
      
     <alter_drop> ::= [ ATTRIBUTE | COLUMN | METHOD ]
                      <column_name_comma_list> |
@@ -781,8 +802,7 @@ ALTER TABLE
      
     <column_constraint> ::= UNIQUE [ KEY ] | PRIMARY KEY | FOREIGN KEY
      
-    <index_col_name> ::=
-    column_name [(length)] [ ASC | DESC ]
+    <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
 .. warning::
 
@@ -801,7 +821,7 @@ ADD COLUMN 절
     ADD [ COLUMN | ATTRIBUTE ] [(]<column_definition>[)] [ FIRST | AFTER old_column_name ]
      
     column_definition ::=
-    column_name column_type
+    column_name <data_type>
         { [ NOT NULL | NULL ] |
           [ { SHARED <value_specification> | DEFAULT <value_specification> }
               | AUTO_INCREMENT [(seed, increment)] ] |
@@ -811,12 +831,16 @@ ADD COLUMN 절
                   [ <referential_triggered_action> ... ]
               ]
           ] } ...
+    
+    <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
+
+    <charset_modifier_clause> ::= {CHARACTER_SET | CHARSET} {<char_string_literal> | <identifier> }
+
+    <collation_modifier_clause> ::= COLLATE {<char_string_literal> | <identifier> } 
+    
+    <referential_triggered_action> ::= { ON UPDATE <referential_action> } | { ON DELETE <referential_action> }
      
-    <referential_triggered_action> ::=
-    { ON UPDATE <referential_action> } |
-    { ON DELETE <referential_action> }  
-    <referential_action> ::=
-    CASCADE | RESTRICT | NO ACTION | SET NULL
+    <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : 칼럼을 추가할 테이블의 이름을 지정한다.
 *   *column_definition* : 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
@@ -1376,7 +1400,7 @@ DROP TABLE
 ==========
 
 **DROP** 구문을 이용하여 기존의 테이블을 삭제할 수 있다. 하나의 **DROP** 구문으로 여러 개의 테이블을 삭제할 수 있으며 테이블이 삭제되면 포함된 행도 모두 삭제된다.
-**IF EXISTS** 문을 함께 사용하면 해당 테이블이 존재하지 않을 때 에러가 발생하지 않도록 할 수 있으며, 한 구문에 여러 개의 테이블을 지정할 수 있다. ::
+**IF EXISTS** 절을 함께 사용하면 해당 테이블이 존재하지 않더라도 에러가 발생하지 않는다. ::
 
     DROP [ TABLE | CLASS ] [ IF EXISTS ] <table_specification_comma_list>
      

@@ -1,24 +1,28 @@
-****************
-Table Definition
-****************
+*****
+Table
+*****
 
 CREATE TABLE
 ============
 
 To create a table, use the **CREATE TABLE** statement. ::
 
-    CREATE {TABLE | CLASS} <table_name>
-                       [ <subclass_definition> ]
-                       [ ( <column_definition> [,<table_constraint>]... ) ]
-                       [ AUTO_INCREMENT = initial_value ] ]
-                       [ CLASS ATTRIBUTE ( <column_definition_comma_list> ) ]
-                       [ METHOD <method_definition_comma_list> ]
-                       [ FILE <method_file_comma_list> ]
-                       [ INHERIT <resolution_comma_list> ]
-                       [ REUSE_OID ]
+    CREATE {TABLE | CLASS} table_name
+    [ <subclass_definition> ]
+    [ ( <column_definition> [,<table_constraint>]... ) ]
+    [ AUTO_INCREMENT = initial_value ] ]
+    [ CLASS ATTRIBUTE ( <column_definition_comma_list> ) ]
+    [ METHOD <method_definition_comma_list> ]
+    [ FILE <method_file_comma_list> ]
+    [ INHERIT <resolution_comma_list> ]
+    [ REUSE_OID ]
+    [ CHARSET charset_name ] [ COLLATE collation_name ]
+                       
     <column_definition> ::=
-    column_name column_type [[ <default_or_shared> ] | [ <column_constraint> ]]...
-     
+    column_name <data_type> [[ <default_or_shared> ] | [ <column_constraint> ]]...
+    
+    <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+
     <default_or_shared> ::=
     {SHARED <value_specification> | DEFAULT <value_specification> } |
     AUTO_INCREMENT [(seed, increment)]
@@ -26,6 +30,10 @@ To create a table, use the **CREATE TABLE** statement. ::
     <column_constraint> ::=
     NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
      
+    <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
+
+    <collation_modifier_clause> ::= COLLATE { <char_string_literal> | <identifier> }
+
     <table_constraint> ::=
     [ CONSTRAINT [ <constraint_name> ] ] UNIQUE [ KEY | INDEX ]( column_name_comma_list ) |
     [ { KEY | INDEX } [ <constraint_name> ]( column_name_comma_list ) |
@@ -41,8 +49,8 @@ To create a table, use the **CREATE TABLE** statement. ::
      
     <referential_triggered_action> ::=
     { ON UPDATE <referential_action> } |
-    { ON DELETE <referential_action> }
-     
+    { ON DELETE <referential_action> } 
+    
     <referential_action> ::=
     CASCADE | RESTRICT | NO ACTION | SET NULL
      
@@ -73,30 +81,38 @@ To create a table, use the **CREATE TABLE** statement. ::
        host_city        VARCHAR(20) NOT NULL,
        opening_date     DATE        NOT NULL,
        closing_date     DATE        NOT NULL,
-       mascot           VARCHAR(20) ,
-       slogan           VARCHAR(40) ,
+       mascot           VARCHAR(20),
+       slogan           VARCHAR(40),
        introduction     VARCHAR(1500)
     );
 
 Column Definition
 -----------------
 
-A column is a set of data values of a particular simple type, one for each row of the table. ::
+A column is a set of data values of a particular simple type, one for each row of the table.
 
-    <column_definition> ::=
-    column_name column_type [ [ <default_or_shared> ] | [ <column_constraint> ] ]...
-     
-    <default_or_shared> ::=
-    { SHARED <value_specification> | DEFAULT <value_specification> } |
-    AUTO_INCREMENT [ (seed, increment) ]
-     
-    <column_constraint> ::=
-    NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+    ::
+
+        <column_definition> ::=
+        column_name <data_type> [[ <default_or_shared> ] | [ <column_constraint> ]]...
+    
+        <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+
+        <default_or_shared> ::=
+        {SHARED <value_specification> | DEFAULT <value_specification> } |
+        AUTO_INCREMENT [(seed, increment)]
+         
+        <column_constraint> ::=
+        NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+         
+        <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
+
+        <collation_modifier_clause> ::= COLLATE { <char_string_literal> | <identifier> }
 
 Column Name
 ^^^^^^^^^^^
 
-How to create a column name, see :doc:`/sql/identifier`. You can alter created column name by using the **RENAME COLUMN** clause of the **ALTER TABLE** statement (see :ref:`rename-column`).
+How to create a column name, see :doc:`/sql/identifier`. You can alter created column name by using the :ref:`rename-column` of the **ALTER TABLE** statement.
 
 The following example shows how to create the *manager2* table that has the following two columns: *full_name* and *age*.
 
@@ -104,7 +120,7 @@ The following example shows how to create the *manager2* table that has the foll
 
     CREATE TABLE manager2 (full_name VARCHAR(40), age INT );
 
-.. warning::
+.. note::
 
     *   The first character of a column name must be an alphabet.
     *   The column name must be unique in the table.
@@ -112,12 +128,12 @@ The following example shows how to create the *manager2* table that has the foll
 Setting the Column Initial Value (SHARED, DEFAULT)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**SHARED** and **DEFAULT** are attributes related to the initial value of the column. You can change the value of **SHARED** and **DEFAULT** in the **ALTER TABLE** statement.
+An attribute in a table can be created with an initial **SHARED** or **DEFAULT** value. You can change the value of **SHARED** and **DEFAULT** in the **ALTER TABLE** statement.
 
 *   **SHARED** : Column values are identical in all rows. If a value different from the initial value is **INSERT** ed, the column value is updated to a new one in every row.
 *   **DEFAULT** : The initial value set when the **DEFAULT** attribute was defined is stored even if the column value is not specified when a new row is inserted.
 
-The pseudocolumn (a special function which has no element) allows for the **DEFAULT** value as follows.
+The pseudocolumn allows for the **DEFAULT** value as follows.
 
 +-------------------+---------------+
 | DEFAULT Value     | Data Type     |
@@ -187,9 +203,9 @@ The **DEFAULT** value of the pseudocolumn can be specified to one or more column
 AUTO INCREMENT
 ^^^^^^^^^^^^^^
 
-You can define the **AUTO_INCREMENT** attribute for the column to automatically give serial numbers to column values. This can be defined only for **SMALLINT**, **INTEGER**, **BIGINT**, and **NUMERIC** (*p*, 0) types.
+You can define the **AUTO_INCREMENT** attribute for the column to automatically give serial numbers to column values. This can be defined only for **SMALLINT**, **INTEGER**, **BIGINT** and **NUMERIC**\ (*p*, 0) types.
 
-**DEFAULT**, **SHARED**, and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
+**DEFAULT**, **SHARED** and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
 
 You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see :ref:`alter-auto-increment` of **ALTER TABLE**. 
 
@@ -296,11 +312,9 @@ In the following example, if you input NULL value on the *id* column, it occurs 
     CREATE TABLE const_tbl1(id INT NOT NULL, INDEX i_index(id ASC), phone VARCHAR);
      
     CREATE TABLE const_tbl2(id INT NOT NULL PRIMARY KEY, phone VARCHAR);
-    INSERT INTO const_tbl2 (NULL,'000-0000');
+    INSERT INTO const_tbl2 VALUES (NULL,'000-0000');
      
-    In line 2, column 25,
-     
-    ERROR: syntax error, unexpected Null
+    Putting value 'null' into attribute 'id' returned: Attribute "id" cannot be made NULL.
 
 UNIQUE Constraint
 ^^^^^^^^^^^^^^^^^
@@ -444,7 +458,7 @@ A foreign key is a column or a set of columns that references the primary key in
     --when deleting primay key value, it cascades foreign key value  
     DELETE FROM a_tbl WHERE id=3;
      
-    1 rows affected.
+    1 row affected.
      
     SELECT a.id, b.id, a.phone, b.name FROM a_tbl a, b_tbl b WHERE a.id=b.id;
      
@@ -474,11 +488,11 @@ KEY or INDEX
 
 **KEY** and **INDEX** are used interchangeably. They create an index that uses the corresponding column as a key.
 
-.. note:: In versions lower than CUBRID 9.0, index name can be omitted; however, in version of CUBRID 9.0 or higher, it is no longer supported.
-
 .. code-block:: sql
 
     CREATE TABLE const_tbl4(id INT, phone VARCHAR, KEY i_key(id DESC, phone ASC));
+
+.. note:: In versions lower than CUBRID 9.0, index name can be omitted; however, in version of CUBRID 9.0 or higher, it is no longer allowed.
 
 Column Option
 -------------
@@ -509,8 +523,11 @@ You can specify options such as **ASC** or **DESC** after the column name when d
       1000     johnny     
       1000     jone
 
-Table Option (REUSE_OID)
-------------------------
+Table Option
+------------
+
+REUSE_OID
+^^^^^^^^^
 
 You can specify the **REUSE_OID** option when creating a table, so that OIDs that have been deleted due to the deletion of records (**DELETE**) can be reused when a new record is inserted (**INSERT**). Such a table is called an OID reusable or a non-referable table.
 
@@ -550,17 +567,22 @@ If you specify REUSE_OID together with the collation of table, it can be placed 
     *   OID reusable tables are supported only by CUBRID 2008 R2.2 or above, and backward compatibility is not ensured. That is, the database in which the OID reusable table is located cannot be accessed from a lower version database.
     *   OID reusable tables can be managed as partitioned tables and can be replicated.
 
+Charset and Collation
+^^^^^^^^^^^^^^^^^^^^^
+
+The charset and collation of the table can be designated in **CREATE TABLE** statement. Please refer :ref:`collation-charset-string` for details.
+
 CREATE TABLE LIKE
 -----------------
 
-You can create a table that has the same schema as an existing table by using the **CREATE TABLE...LIKE** statement. Column attribute, table constraint, and index are replicated from the existing table. An index name created from the existing table changes according to a new table name, but an index name defined by a user is replicated as it is. Therefore, you should be careful at a query statement that is supposed to use a specific index created by using the index hint syntax(see ref:`index-hint-syntax`).
+You can create a table that has the same schema as an existing table by using the **CREATE TABLE ... LIKE** statement. Column attribute, table constraint, and index are replicated from the existing table. An index name created from the existing table changes according to a new table name, but an index name defined by a user is replicated as it is. Therefore, you should be careful at a query statement that is supposed to use a specific index created by using the index hint syntax(see :ref:`index-hint-syntax`).
 
 You cannot create the column definition because the **CREATE TABLE ... LIKE** statement replicates the schema only. ::
 
     CREATE {TABLE | CLASS} <new_table_name> LIKE <source_table_name>;
 
-* *new_table_name* : A table name to be created
-* *source_table_name* : The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE … LIKE** statement.
+* *new_table_name*: A table name to be created
+* *source_table_name*: The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE … LIKE** statement.
     * Partition table
     * Table that contains an **AUTO_INCREMENT** column
     * Table that uses inheritance or methods
@@ -640,10 +662,10 @@ You can create a new table that contains the result records of the **SELECT** st
     CREATE {TABLE | CLASS} <table_name> [( <column_definition> [,<table_constraint>]... )]
     [REPLACE] AS <select_statement>
 
-*   *table_name* : A name of the table to be created.
-*   *column_definition* : Defines a column. If it is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
-*   *table_constraint* : Defines table constraint.
-*   *select_statement* : A **SELECT** statement targeting a source table that already exists in the database.
+*   *table_name*: A name of the table to be created.
+*   *column_definition*: Defines a column. If it is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
+*   *table_constraint*: Defines table constraint.
+*   *select_statement*: A **SELECT** statement targeting a source table that already exists in the database.
 
 .. code-block:: sql
 
@@ -736,7 +758,7 @@ You can also change the initial value of **AUTO_INCREMENT**. ::
      
     <alter_clause> ::= ADD <alter_add> [ INHERIT <resolution_comma_list> ] | 
                        ADD { KEY | INDEX } <index_name> (<index_col_name>) |
-                       ALTER [ COLUMN ] column_name SET DEFAULT <value_specifiation> |
+                       ALTER [ COLUMN ] column_name SET DEFAULT <value_specification> |
                        DROP <alter_drop> [ INHERIT <resolution_comma_list> ] |
                        DROP { KEY | INDEX } index_name |
                        DROP FOREIGN KEY constraint_name |
@@ -757,7 +779,7 @@ You can also change the initial value of **AUTO_INCREMENT**. ::
     <alter_change> ::= FILE <file_path_name> AS <file_path_name> |
                        METHOD <method_definition_comma_list> |
                        QUERY [ <unsigned_integer_literal> ] <select_statement> |
-                       <column_name> DEFAULT <value_specifiation>
+                       <column_name> DEFAULT <value_specification>
      
     <alter_drop> ::= [ ATTRIBUTE | COLUMN | METHOD ]
                      <column_name_comma_list> |
@@ -778,8 +800,7 @@ You can also change the initial value of **AUTO_INCREMENT**. ::
      
     <column_constraint> ::= UNIQUE [ KEY ] | PRIMARY KEY | FOREIGN KEY
      
-    <index_col_name> ::=
-    column_name [(length)] [ ASC | DESC ]
+    <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
 .. warning::
 
@@ -800,7 +821,7 @@ For **add_column_update_hard_default** and the hard default, see :ref:`change-co
     ADD [ COLUMN | ATTRIBUTE ] [(]<column_definition>[)] [ FIRST | AFTER old_column_name ]
      
     column_definition ::=
-    column_name column_type
+    column_name <data_type>
         { [ NOT NULL | NULL ] |
           [ { SHARED <value_specification> | DEFAULT <value_specification> }
               | AUTO_INCREMENT [(seed, increment)] ] |
@@ -810,13 +831,16 @@ For **add_column_update_hard_default** and the hard default, see :ref:`change-co
                   [ <referential_triggered_action> ... ]
               ]
           ] } ...
+    
+    <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
+
+    <charset_modifier_clause> ::= {CHARACTER_SET | CHARSET} {<char_string_literal> | <identifier> }
+
+    <collation_modifier_clause> ::= COLLATE {<char_string_literal> | <identifier> } 
+    
+    <referential_triggered_action> ::= { ON UPDATE <referential_action> } | { ON DELETE <referential_action> }
      
-    <referential_triggered_action> ::=
-    { ON UPDATE <referential_action> } |
-    { ON DELETE <referential_action> }
-     
-    <referential_action> ::=
-    CASCADE | RESTRICT | NO ACTION | SET NULL
+    <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : Specifies the name of a table that has a column to be added.
 *   *column_definition* : Specifies the name, data type, and constraints of a column to be added.
@@ -1263,7 +1287,7 @@ The hard default value is a value that will be used when you add columns with th
 +-----------+-------------------------------------+-----------------------------------------+
 | BIGINT    | Yes                                 | 0                                       |
 +-----------+-------------------------------------+-----------------------------------------+
-| BIT       | Yes                                 |                                         |
+| BIT       | NO                                  |                                         |
 +-----------+-------------------------------------+-----------------------------------------+
 | VARBIT    | No                                  |                                         |
 +-----------+-------------------------------------+-----------------------------------------+
@@ -1371,7 +1395,7 @@ You can drop a foreign key constraint defined for a table using the **DROP FOREI
 DROP TABLE
 ==========
 
-You can drop an existing table by the **DROP** statement. Multiple tables can be dropped by a single **DROP** statement. All rows of table are also dropped. If you use it together with the **IF EXISTS** statement, you can prevent errors from occurring and specify multiple tables in one statement. ::
+You can drop an existing table by the **DROP** statement. Multiple tables can be dropped by a single **DROP** statement. All rows of table are also dropped. If you also specify **IF EXISTS** clause, no error will be happened even if a target table does not exist. ::
 
     DROP [ TABLE | CLASS ] [ IF EXISTS ] <table_specification_comma_list>
      
@@ -1419,4 +1443,4 @@ You can change the name of a table by using the **RENAME TABLE** statement and s
 
 .. note::
 
-    The table name can be changed only by the table owner, **DBA** and **DBA** members. The other users must be granted to change the name by the owner or **DBA** (see :ref:`granting-authorization` For details on authorization).
+    The table name can be changed only by the table owner, **DBA** and **DBA** members. The other users must be granted to change the name by the owner or **DBA** (see :ref:`granting-authorization` for details about authorization).

@@ -47,7 +47,7 @@ Version Compatibility and Operability
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the http://www.cubrid.org Website.
 
-.. note:: 9.0 Beta version user should upgrade all of driver, broker, DB server; Data migration should be done because it's DB volume is not compatible with 9.1 version.
+.. note:: 9.0 Beta version user should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 9.1 version.
     For upgrade and data migration, see :doc:`/upgrade`.
 
 Interoperability
@@ -88,7 +88,7 @@ Installing and Running on Linux
   
 **Installing CUBRID**
 
-    The installation program consists shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-9.1.0.0201-linux.x86_64.sh" file on the Linux. ::
+    The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-9.1.0.0201-linux.x86_64.sh" file on the Linux. ::
 
         $ sh CUBRID-9.1.0.0201-linux.x86_64.sh
         Do you agree to the above license terms? (yes or no) : yes
@@ -140,7 +140,7 @@ Installing and Running on Linux
 
         $ rpm -Uvh cubrid-9.1.0.0201-el5.x86_64.rpm
 
-    When rmp is executed, CUBRID is installed in the "cubrid" home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with "cubrid" Linux ID. When installation is complete, enter the code below to start CUBRID with "cubrid" Linux ID. ::
+    When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with "cubrid" Linux ID. When installation is complete, enter the code below to start CUBRID with "cubrid" Linux ID. ::
 
         $ cubrid service start
 
@@ -233,7 +233,7 @@ Installing and Running on Windows
 
 **Details to Check when Install**
 
-    You should check belows before installing CUBRID for Windows.
+    You should check the belows before installing CUBRID for Windows.
     
     * 64-bit
 
@@ -255,7 +255,7 @@ Installing and Running on Windows
 
     **Step 3: Creating a sample database**
         
-        To craete a sample database, it requires 300MB disk space. 
+        To create a sample database, it requires 300MB disk space. 
     
     **Step 4: Completing the installation**
     
@@ -263,7 +263,7 @@ Installing and Running on Windows
 
     .. note:: 
     
-        CUBRID Service is automatically started when the system is rebooted. If you want to stop the  when the system is rebooted, change the "Start parameters" of "CUBRIDService" as "Stop"; "Control Panel > Adminstrative Tools > Services" and double-clicking "CUBRIDService", then pop-up window will be shown.
+        CUBRID Service is automatically started when the system is rebooted. If you want to stop the  when the system is rebooted, change the "Start parameters" of "CUBRIDService" as "Stop"; "Control Panel > Administrative Tools > Services" and double-clicking "CUBRIDService", then pop-up window will be shown.
 
 **Upgrading CUBRID**
 
@@ -283,7 +283,7 @@ Installing and Running on Windows
 
     * **cm_httpd.conf**
      
-      A configuration file for CUBRID Web Manager. **listen** is the port to be used in the web manager server process, and it's default value is **8282**. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ .
+      A configuration file for CUBRID Web Manager. **listen** is the port to be used in the web manager server process, and its default value is **8282**. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ .
 
     * **cubrid.conf**
 
@@ -599,7 +599,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
                     -> shard proxy <- shard CAS - cub_master
                                                 -> cub_server
     
-        * shard broker: CUBRID SHARD 브로커 프로세스. apllication과 shard proxy를 중계
+        * shard broker: CUBRID SHARD 브로커 프로세스. application과 shard proxy를 중계
         * shard proxy: CUBRID SHARD 프록시 프로세스. 어떤 shard DB를 선택할 지 결정하는 역할을 수행
         * shard CAS: CUBRID SHARD CAS 프로세스. shard proxy와 cub_server를 중계
     

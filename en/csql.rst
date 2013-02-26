@@ -434,7 +434,7 @@ The **;DATE** command displays the current date and time in the CSQL Interpreter
     csql> ;date
          Tue July 29 18:58:12 KST 2008
 
-**Displaying the database informatio (;DATAbase)**
+**Displaying the database information (;DATAbase)**
 
 This command displays the database name and host name where the CSQL Interpreter is working. If the database is running, the HA mode (one of those followings: active, standby, or maintenance) will be displayed as well.  ::
 
@@ -485,9 +485,9 @@ You can use the **;Set** session command to set a specific parameter value. Note
     -- Dynamically change the log_max_archives value in the csql accessed by dba account
     csql> ;set log_max_archives=5
 
-**Setting the displaying width of string (;STring-width)** 
+**Setting the output width of string (;STring-width)** 
 
-You can use the **;STring-width** command to set the displaying width of character string or BIT string.
+You can use the **;STring-width** command to set the output width of character string or BIT string.
 
 **;string-width** session command without a length shows the current setting length. When it is set to 0, the columns will be displayed as it is. If it sets greater than 0, the string typed columns will be displayed with the specified length. ::
 
@@ -507,9 +507,9 @@ You can use the **;STring-width** command to set the displaying width of charact
     csql> ;string-width
     STRING-WIDTH : 5
 
-**Setting the displaying width of the column (;COLumn-width)**
+**Setting the output width of the column (;COLumn-width)**
 
-You can use the **;COLumn-width** command to set the displaying width regardless of its data types.
+You can use the **;COLumn-width** command to set the output width regardless of its data types.
 
 If you don't give a value after **;COL** command, it shows the current setting length. When it sets to 0, the columns will be displayed as it is. If it sets to greater than 0, the columns will be displayed with the specified length. ::
 

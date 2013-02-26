@@ -25,7 +25,7 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 .. note:: 
 
-    CUBRID Query Browser is a light version of CUBRID Manager and provides only the features that application developers absolute need: the database management and query editor features. For more details on CUBRID Query Browse, see http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser .
+    CUBRID Query Browser is a light version of CUBRID Manager and provides only the features which application developers require: the database management and query editor features. For more details on CUBRID Query Browser, see http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser .
 
 .. image:: /images/image1.png
 
@@ -91,7 +91,7 @@ Active log is a log that contains recent changes to the database. If a problem o
 
 **Archive Log**
 
-Archive log is a volume to store logs continuously created after exhausting available active log space that contains recent changes. If the value of system parameter **log_max_archives** is larger than 0, the archive log volume will be generated only after exhausting available active log volume space. The initial value is set to 0 when installing CUBRID. the The number of archive log files are kept on the storage by setting the value of **log_max_archives**. The unnecessary archive log files should be deleted for getting the free space by the configuration of log_max_archives, but this value should be set properly to use for restoring the database.
+Archive log is a volume to store logs continuously created after exhausting available active log space that contains recent changes. If the value of system parameter **log_max_archives** is larger than 0, the archive log volume will be generated only after exhausting available active log volume space. The initial value is set to 0 when installing CUBRID. The number of archive log files are kept on the storage by setting the value of **log_max_archives**. The unnecessary archive log files should be deleted for getting the free space by the configuration of log_max_archives, but this value should be set properly to use for restoring the database.
 
 To get more information on the above, see :ref:`Managing_Archive_Logs`.
 

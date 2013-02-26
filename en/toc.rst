@@ -86,7 +86,7 @@ The following table provides conventions on definitions used in the CUBRID Datab
 |                                      |                                                                                                                                                         | *class_name*         |
 |                                      |                                                                                                                                                         | }...                 |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
-| Angle brackets(< >)                  | Angle brackets represents a single key or a series of key strokes.                                                                                      | <Ctrl+n>             |
+| Angle brackets(< >)                  | Angle brackets represent a single key or a series of key strokes.                                                                                       | <Ctrl+n>             |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 
 Version Name and Version String Conventions

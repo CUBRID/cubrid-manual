@@ -120,7 +120,7 @@ The language that will be used in the CUBRID DBMS can be designated with the **C
 *   **ja_JP.utf8** : Japanese UTF-8 encoding
 *   **km_KH.utf8** : Cambodian UTF-8 encoding
 *   **tr_TR.utf8** : Turkish UTF-8 encoding
-*   **vi_VN.utf8** : Vietnames UTF-8 encoding
+*   **vi_VN.utf8** : Vietnamese UTF-8 encoding
 *   **zh_CN.utf8** : Chinese UTF-8 encoding
 
 Language and charset setting of CUBRID affects read and write data. The language is used for messages displayed by the program. The default value of **CUBRID_CHARSET** is **en_US** while installing the product.
@@ -191,7 +191,7 @@ You can create databases by using the **cubrid createdb** utility and execute it
     -rw------- 1 cubrid dbms       176 Jan 11 15:04 testdb_lginf
     -rw------- 1 cubrid dbms       183 Jan 11 15:04 testdb_vinf
 
-In the above, *testdb* represents a generic volume file, testdb_lgar_t represents a background archive log file, testdb_lgat represents an active log file, testdb_lginf reoresents a log information file, and testdb_vinf represents a volume information file.
+In the above, *testdb* represents a generic volume file, testdb_lgar_t represents a background archive log file, testdb_lgat represents an active log file, testdb_lginf represents a log information file, and testdb_vinf represents a volume information file.
 
 For details on volumes, see :ref:`database-volume-structure` . For details on creating volumes, see :ref:`creating-database`. It is recommended to classify and add volumes based on its purpose by using the **cubrid addvoldb** utility. For details, see :ref:`adding-database-volume`.
 

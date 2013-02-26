@@ -120,7 +120,7 @@ DB Migration
 ------------
 
 * Since the DB volume of CUBRID 9.0 Beta is not compatible with the DB volume of CUBRID 9.1, it should be migrated with migrate_90beta_to_91 utility.
-* Since the DB volume of CUBRID 2008 R4.x or earlier version is not compatible with the DB voluem of CUBRID 9.1, it should be migrated with cubrid unloaddb/loaddb utility.
+* Since the DB volume of CUBRID 2008 R4.x or earlier version is not compatible with the DB volume of CUBRID 9.1, it should be migrated with cubrid unloaddb/loaddb utility.
 * CUBRID 2008 R3.1 and later don't support GLO and the LOB type replaces the GLO feature. For this reason, applications or schemas that use GLO must be modified to be compatible with LOB(see :ref:`glo-users-migration`).
 
 Reconfiguring Environments for Replication or HA
@@ -173,10 +173,10 @@ Migration to CUBRID 9.1
     +------------------------------------+-----------------------------------------------+---------------------------------------------+
     | Step 6: Configure the CUBRID       | Modify the configuration file. At this point, | Start the service by selecting              |
     |      environment                   | partially modify the configuration files      | CUBRID Service Tray > [Service Start].      |
-    |      and start the CUBRID Servic   | from the earlier version stored in step (3a)  |                                             |
+    |      and start the CUBRID Service  | from the earlier version stored in step (3a)  |                                             |
     |                                    | to fit the new version.                       | Start the database server from              |
     |                                    |                                               | the command prompt.                         |
-    |                                    | (For configuring system paramater,            |                                             |
+    |                                    | (For configuring system parameter,            |                                             |
     |                                    |                                               |   % cubrid server start testdb              |
     |                                    | see :ref:`upgrade` and :doc:`admin/config`)   |                                             |
     |                                    |                                               |                                             |
@@ -304,7 +304,7 @@ HA Migration from 2008 R2.0 or 2008 R2.1 to CUBRID 9.1
 *   Perform steps H1–H10 above, then perform step H11 below:
 
     +-----------------------------------------------------+-------------------------------------------------------------------------------+
-    | Step                                                | Descripton                                                                    |
+    | Step                                                | Description                                                                   |
     +=====================================================+===============================================================================+
     | Step H11: Change the previous Linux heartbeat       | Perform the following task in the master and slave nodes from a root account. |
     |           auto start settings                       |                                                                               |

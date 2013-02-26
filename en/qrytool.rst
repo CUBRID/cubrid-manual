@@ -235,7 +235,7 @@ CUBRID Migration Toolkit is a tool to migrate the data and the schema from the s
 
 (CUBRID FTP: http://ftp.cubrid.org/CUBRID_Tools/CUBRID_Migration_Toolkit )
 
-It is useful in cases of swiching a DB to CUBRID to migrating to other hardware, migrating some schema and data from the operating DB, upgrading CUBRID version, and running the batch jobs. The main features are as follows:
+It is useful in case of switching from other DB into CUBRID, in case of migrating into other hardware, in case of migrating some schema and data from the operating DB, in case of upgrading CUBRID version, and in case of running the batch jobs. The main features are as follows:
 
 * Supports the tools/some schema and data migration
 

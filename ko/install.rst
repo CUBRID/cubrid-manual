@@ -604,7 +604,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
                     -> shard proxy <- shard CAS - cub_master
                                                 -> cub_server
     
-        * shard broker: CUBRID SHARD 브로커 프로세스. apllication과 shard proxy를 중계
+        * shard broker: CUBRID SHARD 브로커 프로세스. application과 shard proxy를 중계
         * shard proxy: CUBRID SHARD 프록시 프로세스. 어떤 shard DB를 선택할 지 결정하는 역할을 수행
         * shard CAS: CUBRID SHARD CAS 프로세스. shard proxy와 cub_server를 중계
     

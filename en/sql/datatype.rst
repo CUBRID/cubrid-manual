@@ -741,7 +741,7 @@ To enter the language of a specific country, we recommend that you to change the
 
     Automatic coercion takes place between a fixed-length and a variable-length character string for the comparison of two characters, applicable only to characters that belong to the same character set.
 
-    For example, when you extract a column value from a CHAR(5) data type and insert it into a column with a CHAR(10) data type, the data type is automatically coerced to CHAR(10). If you want to coerce a character string explicitly, use the **CAST** operator (See :func:`CAST`).
+    For example, when you extract a column value from a **CHAR** (5) data type and insert it into a column with a **CHAR** (10) data type, the data type is automatically coerced to **CHAR** (10). If you want to coerce a character string explicitly, use the **CAST** operator (See :func:`CAST`).
 
 CHAR(n)
 -------
@@ -952,7 +952,7 @@ Either the enum value or the value index can be used when working with **ENUM** 
     -- insert enum element 'red' with index 1
     INSERT INTO tbl (color) VALUES (1);
 
-When used in expressions, the **ENUM** type behaves either as a CHAR type or as a number, depending on the context in which it is used:
+When used in expressions, the **ENUM** type behaves either as a **CHAR** type or as a number, depending on the context in which it is used:
 
 .. code-block:: sql
 
@@ -966,7 +966,7 @@ When used in expressions, the **ENUM** type behaves either as a CHAR type or as 
       'blue'                          3  'blue'
       'green'                         4  'green'    
 
-When used in type contexts other than CHAR or numbers, the enum is coerced to that type using either the index or the enum value. The table below shows which part of an **ENUM** type is used in the coercion:
+When used in type contexts other than **CHAR** or numbers, the enum is coerced to that type using either the index or the enum value. The table below shows which part of an **ENUM** type is used in the coercion:
 
     +---------------+-------------------------+
     | Type          | Enum type (Index/Value) |
@@ -1005,9 +1005,9 @@ When used in type contexts other than CHAR or numbers, the enum is coerced to th
 ENUM Type Comparisons
 -----------------------
 
-When used in **=** or **IN** predicates of the form (<enum_column> <operator> <constant>), CUBRID tries to convert the constant to the ENUM type. If the coercion fails, CUBRID does not return an error but considers the comparison to be false. This is implemented like this in order to allow index scan plans to be generated on these two operators.
+When used in **=** or **IN** predicates of the form (<enum_column> <operator> <constant>), CUBRID tries to convert the constant to the **ENUM** type. If the coercion fails, CUBRID does not return an error but considers the comparison to be false. This is implemented like this in order to allow index scan plans to be generated on these two operators.
 
-For all other :doc:`comparison operators<function/comparison_op>`, the **ENUM** type is converted to the type of the other operand. If a comparison is performed on two **ENUM** types, both arguments are converted to CHAR type and the comparison follows CHAR type rules. Except for **=** and **IN**, predicates on **ENUM** columns cannot be used in index scan plans.
+For all other :doc:`comparison operators<function/comparison_op>`, the **ENUM** type is converted to the type of the other operand. If a comparison is performed on two **ENUM** types, both arguments are converted to **CHAR** type and the comparison follows **CHAR** type rules. Except for **=** and **IN**, predicates on **ENUM** columns cannot be used in index scan plans.
 
 To understand these rules, consider the following table:
 
@@ -1085,7 +1085,7 @@ Values of the **ENUM** type are ordered by value index, not by enum value. When 
       'blue'
       'green'
 
-To order the values stored in an **ENUM** type column as CHAR values, users can cast the enum value to the CHAR type:
+To order the values stored in an **ENUM** type column as **CHAR** values, users can cast the enum value to the **CHAR** type:
 
 .. code-block:: sql
 
@@ -1102,9 +1102,9 @@ To order the values stored in an **ENUM** type column as CHAR values, users can 
 Notes
 -------
 
-The **ENUM** type is not a reusable type. If several columns require the same set of values, an **ENUM** type must be defined for each one. When comparing two columns of **ENUM** type, the comparison is performed as if the columns were coerced to CHAR type even if the two **ENUM** types define the same set of values.
+The **ENUM** type is not a reusable type. If several columns require the same set of values, an **ENUM** type must be defined for each one. When comparing two columns of **ENUM** type, the comparison is performed as if the columns were coerced to **CHAR** type even if the two **ENUM** types define the same set of values.
 
-Using the *ALTER ... CHANGE* statement to modify the set of values of an **ENUM** type is only allowed if the value of the system parameter **alter_table_change_type_strict** is set to yes. In this case, CUBRID uses enum value (the char-literal) to convert values to the new domain. If a value is outside of the new **ENUM** type values set, it is automatically mapped to the first value of the **ENUM** type.
+Using the **ALTER ... CHANGE** statement to modify the set of values of an **ENUM** type is only allowed if the value of the system parameter **alter_table_change_type_strict** is set to yes. In this case, CUBRID uses enum value (the char-literal) to convert values to the new domain. If a value is outside of the new **ENUM** type values set, it is automatically mapped to the first value of the **ENUM** type.
 
 .. code-block:: sql
     
@@ -1464,18 +1464,18 @@ Collection Types
 
 Allowing multiple data values to be stored in a single attribute is an extended feature of relational database. Each element of a collection is possible to have different data type each other except View. Rest types except BLOB and CLOB can be an element of collection types.
 
-+--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
-| Type         | Description                                                           | Definition                      | Input Data                 | Stored Data                |
-+==============+=======================================================================+=================================+============================+============================+
-| **SET**      | A union which does not allow duplicates                               | col_name SET VARCHAR(20)        | {'c','c','c','b','b','a'}  | {'a','b','c'}              |
-|              |                                                                       | col_name SET (VARCHAR(20))      | {'c','c','c','b','b', 'a'} | {'a','b','c'}              |
-+--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
-| **MULTISET** | A union which allows duplicates                                       | col_name MULTISET VARCHAR(20)   | {'c','c','c','b','b','a'}  | {'a','b','b','c','c','c'}  |
-|              |                                                                       | col_name MULTISET (VARCHAR(20)) | {'c','c','c','b','b','a'}  | {'a','b','b', 'c','c','c'} |
-+--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
-| **LIST** or  | A union which allows duplicates and stores data in the order of input | col_name LIST VARCHAR(20)       | {'c','c','c','b','b','a'}  | {'c','c','c','b','b','a'}  |
-| **SEQUENCE** |                                                                       | col_name LIST (VARCHAR(20))     | {'c','c','c','b','b', 'a'} | {'c','c','c','b','b','a'}  |
-+--------------+-----------------------------------------------------------------------+---------------------------------+----------------------------+----------------------------+
++--------------+---------------------------------------+------------------------------------+----------------------------+----------------------------+
+| Type         | Description                           | Definition                         | Input Data                 | Stored Data                |
++==============+=======================================+====================================+============================+============================+
+| **SET**      | A union which does not allow          | col_name SET VARCHAR(20) or        | {'c','c','c','b','b','a'}  | {'a','b','c'}              |
+|              | duplicates                            | col_name SET (VARCHAR(20))         |                            |                            |
++--------------+---------------------------------------+------------------------------------+----------------------------+----------------------------+
+| **MULTISET** | A union which allows                  | col_name MULTISET VARCHAR(20) or   | {'c','c','c','b','b','a'}  | {'a','b','b','c','c','c'}  |
+|              | duplicates                            | col_name MULTISET (VARCHAR(20))    |                            |                            |
++--------------+---------------------------------------+------------------------------------+----------------------------+----------------------------+
+| **LIST** or  | A union which allows duplicatess      | col_name LIST VARCHAR(20) or       | {'c','c','c','b','b','a'}  | {'c','c','c','b','b','a'}  |
+| **SEQUENCE** | and stores data in the order of input | col_name LIST (VARCHAR(20))        |                            |                            |
++--------------+---------------------------------------+------------------------------------+----------------------------+----------------------------+
 
 As you see the table above, the value specified as a collection type can be inputted with curly braces ('{', '}') each value is separated with a comma (,).
 

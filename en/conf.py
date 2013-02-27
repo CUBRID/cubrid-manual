@@ -105,8 +105,17 @@ html_theme = 'default' # 3
 html_theme_options = {
 	"rightsidebar": "true",
 	"stickysidebar": "true",
-	"codebgcolor": "#E8E8E8"
+	"codebgcolor": "#E8E8E8",
+    "sidebarbgcolor": "#F4F7FA",
+    "relbarbgcolor": "#424242",
+    "relbartextcolor": "#F2F2F2",
+    "relbarlinkcolor": "#E6E6E6",
+    "sidebartextcolor": "#3C2323",
+    "sidebarlinkcolor": "#3B5999", 
+    "footerbgcolor":  "#424242",
+    "footertextcolor": "#F2F2F2"
 }
+
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []

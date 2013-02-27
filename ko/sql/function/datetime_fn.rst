@@ -654,14 +654,14 @@ LAST_DAY
 
 .. code-block:: sql
 
-    --it returns last day of the momth in DATE type
+    --it returns last day of the month in DATE type
     SELECT LAST_DAY(DATE '1980-02-01'), LAST_DAY(DATE '2010-02-01');
     
       last_day(date '1980-02-01')   last_day(date '2010-02-01')
     ============================================================
       02/28/1980                    02/28/2010
      
-    --it returns last day of the momth when explicitly casted to DATE type
+    --it returns last day of the month when explicitly casted to DATE type
     SELECT LAST_DAY(CAST (SYS_TIMESTAMP AS DATE)), LAST_DAY(CAST (SYS_DATETIME AS DATE));
     
       last_day( cast( SYS_TIMESTAMP  as date))   last_day( cast( SYS_DATETIME  as date))
@@ -837,7 +837,7 @@ MONTHS_BETWEEN
     ======================================================
                                    -1.800000000000000e+001
      
-    --it returns integer values when each date is the last dat of the month
+    --it returns integer values when each date is the last date of the month
     SELECT MONTHS_BETWEEN(DATE '2010-6-30', DATE '2008-12-31');
     
      months_between(date '2010-6-30', date '2008-12-31')

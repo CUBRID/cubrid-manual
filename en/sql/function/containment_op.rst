@@ -11,27 +11,27 @@ The description and return values about the containment operators supported by C
 +--------------------------+----------------------------------------------+--------------------------+------------------+
 | Containment Operator     | Description                                  | Predicates               | Return Value     |
 +==========================+==============================================+==========================+==================+
-| A                        | A = B                                        | {1,2} SETEQ {1,2,2}      | 0                |
+| A                        | A = B:                                       | {1,2} SETEQ {1,2,2}      | 0                |
 | **SETEQ**                | Elements in A and B are same each other.     |                          |                  |
 | B                        |                                              |                          |                  |
 +--------------------------+----------------------------------------------+--------------------------+------------------+
-| A                        | A <> B                                       | {1,2} SETNEQ {1,2,3}     | 1                |
+| A                        | A <> B:                                      | {1,2} SETNEQ {1,2,3}     | 1                |
 | **SETNEQ**               | Elements in A and B are not same each other. |                          |                  |
 | B                        |                                              |                          |                  |
 +--------------------------+----------------------------------------------+--------------------------+------------------+
-| A                        | A > B                                        | {1,2} SUPERSET {1,2,3}   | 0                |
+| A                        | A > B:                                       | {1,2} SUPERSET {1,2,3}   | 0                |
 | **SUPERSET**             | B is a proper subset of A.                   |                          |                  |
 | B                        |                                              |                          |                  |
 +--------------------------+----------------------------------------------+--------------------------+------------------+
-| A                        | A < B                                        | {1,2} SUBSET {1,2,3}     | 1                |
+| A                        | A < B:                                       | {1,2} SUBSET {1,2,3}     | 1                |
 | **SUBSET**               | A is a proper subset of B.                   |                          |                  |
 | B                        |                                              |                          |                  |
 +--------------------------+----------------------------------------------+--------------------------+------------------+
-| A                        | A >= B                                       | {1,2} SUPERSETEQ {1,2,3} | 0                |
+| A                        | A >= B:                                      | {1,2} SUPERSETEQ {1,2,3} | 0                |
 | **SUPERSETEQ**           | B is a subset of A.                          |                          |                  |
 | B                        |                                              |                          |                  |
 +--------------------------+----------------------------------------------+--------------------------+------------------+
-| A                        | A <= B                                       | {1,2} SUBSETEQ {1,2,3}   | 1                |
+| A                        | A <= B:                                      | {1,2} SUBSETEQ {1,2,3}   | 1                |
 | **SUBSETEQ**             | A is a subset of B.                          |                          |                  |
 | B                        |                                              |                          |                  |
 +--------------------------+----------------------------------------------+--------------------------+------------------+
@@ -174,7 +174,7 @@ The **SETEQ** operator returns **TRUE** if the first operand is the same as the 
 
     --creating a table with SET type address column and LIST type zip_code column
      
-    CREATE TABLE contain_tbl (id int primary key, name char(10), address SET varchar(20), zip_code LIST int);
+    CREATE TABLE contain_tbl (id INT PRIMARY KEY, name CHAR(10), address SET VARCHAR(20), zip_code LIST INT);
     INSERT INTO contain_tbl VALUES(1, 'Kim', {'country', 'state'},{1, 2, 3});
     INSERT INTO contain_tbl VALUES(2, 'Moy', {'country', 'state'},{3, 2, 1});
     INSERT INTO contain_tbl VALUES(3, 'Jones', {'country', 'state', 'city'},{1,2,3,4});
@@ -241,7 +241,7 @@ The **SETNEQ** operator returns **TRUE** (1) if a first operand is different fro
 SUPERSET
 ========
 
-The **SUPERSET** operator returns **TRUE** (1) when a second operand is a proper subset of a first operand; that is, the first one is larger than the second one. If two operands are identical, **FALSE(0)** is returned. Note that **SUPERSET** is not supported if all operands are **LIST** type. ::
+The **SUPERSET** operator returns **TRUE** (1) when a second operand is a proper subset of a first operand; that is, the first one is larger than the second one. If two operands are identical, **FALSE** (0) is returned. Note that **SUPERSET** is not supported if all operands are **LIST** type. ::
 
     collection_operand SUPERSET collection_operand
 

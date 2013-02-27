@@ -71,10 +71,10 @@ The following table shows statement set operators supported by CUBRID and their 
     INSERT INTO nojoin_tbl_2 VALUES (9,'Edwin');
     INSERT INTO nojoin_tbl_2 VALUES (10,'Edwin');
      
-    --Using UNION to get only distict rows
+    --Using UNION to get only distinct rows
     SELECT id, name FROM nojoin_tbl_1
     UNION
-    SELECT id,name FROM nojoin_tbl_2;
+    SELECT id, name FROM nojoin_tbl_2;
      
                id  name
     ===================================
@@ -92,7 +92,7 @@ The following table shows statement set operators supported by CUBRID and their 
     --Using UNION ALL not eliminating duplicate selected rows
     SELECT id, name FROM nojoin_tbl_1
     UNION ALL
-    SELECT id,name FROM nojoin_tbl_2;
+    SELECT id, name FROM nojoin_tbl_2;
      
                id  name
     ===================================
@@ -113,7 +113,7 @@ The following table shows statement set operators supported by CUBRID and their 
     --Using DEFFERENCE to get only rows returned by the first query but not by the second
     SELECT id, name FROM nojoin_tbl_1
     DIFFERENCE
-    SELECT id,name FROM nojoin_tbl_2;
+    SELECT id, name FROM nojoin_tbl_2;
      
                id  name
     ===================================
@@ -125,7 +125,7 @@ The following table shows statement set operators supported by CUBRID and their 
     --Using INTERSECTION to get only those rows returned by both queries
     SELECT id, name FROM nojoin_tbl_1
     INTERSECT
-    SELECT id,name FROM nojoin_tbl_2;
+    SELECT id, name FROM nojoin_tbl_2;
      
                id  name
     ===================================

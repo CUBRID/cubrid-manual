@@ -102,7 +102,7 @@ COUNT
 
 .. function:: COUNT ( * | [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    The **COUNT** function is used as an aggregate function or an analytic function. It returns the number of of rows returned by a query. If an asterisk (*) is specified, the number of all rows satisfying the condition (including the rows with the **NULL** value) is returned. If the **DISTINCT** or **UNIQUE** keyword is specified in front of the expression, only the number of rows that have a unique value (excluding the rows with the **NULL** value) is returned after duplicates have been removed. Therefore, the value returned is always an integer and **NULL** is never returned.
+    The **COUNT** function is used as an aggregate function or an analytic function. It returns the number of rows returned by a query. If an asterisk (*) is specified, the number of all rows satisfying the condition (including the rows with the **NULL** value) is returned. If the **DISTINCT** or **UNIQUE** keyword is specified in front of the expression, only the number of rows that have a unique value (excluding the rows with the **NULL** value) is returned after duplicates have been removed. Therefore, the value returned is always an integer and **NULL** is never returned.
 
     :param expression: Specifies an expression.
     :param ALL: Gets the number of rows given in the *expression* (default).
@@ -127,7 +127,7 @@ The following example shows how to output the number of players whose nation_cod
 
 .. code-block:: sql
 
-    SELECT nation_code, event,name, COUNT(*) OVER (ORDER BY event) co
+    SELECT nation_code, event, name, COUNT(*) OVER (ORDER BY event) co
     FROM athlete WHERE nation_code='AUT';
     
        nation_code           event                 name                           co
@@ -242,7 +242,7 @@ If the non-character string type is passed to the result character string, an er
 To use the **GROUP_CONCAT** function, you must meet the following conditions.
 
 *   Only one expression (or a column) is allowed for an input parameter.
-*   Sorting with **ORDER BY** is available only in the the expression used as a parameter.
+*   Sorting with **ORDER BY** is available only in the expression used as a parameter.
 *   The character string used as a separator allows not only character string type but also allows other types.
 
 .. code-block:: sql
@@ -445,7 +445,7 @@ MIN
     :param DISTINCT,DISTINCTROW,UNIQUE: Gets the maximum value without duplicates.
     :rtype: same type as that the expression
 
-The following example shows how to retrive the minimum number of gold (*gold*) medals that Korea won in the Olympics in the *demodb* database.
+The following example shows how to retrieve the minimum number of gold (*gold*) medals that Korea won in the Olympics in the *demodb* database.
 
 .. code-block:: sql
 
@@ -701,7 +701,7 @@ STDDEV, STDDEV_POP
     :param DISTINCT,DISTINCTROW,UNIQUE: Calculates the standard variance without duplicates.
     :rtype: DOUBLE
 
-The return value is the same with the square root of it's variance (the return value of :func:`VAR_POP` and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
+The return value is the same with the square root of its variance (the return value of :func:`VAR_POP` and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
 
 The following is a formula that is applied to the function.
 
@@ -765,10 +765,10 @@ STDDEV_SAMP
 
     :param expression: An expression that returns a numeric value
     :param ALL: Used to calculate the standard variance for all values. It is the default value.
-    :param DISTINCT,DISTINCTROW,UNIQUE: Used used to calculate the standard variance for the unique values without duplicates.
+    :param DISTINCT,DISTINCTROW,UNIQUE: Used to calculate the standard variance for the unique values without duplicates.
     :rtype: DOUBLE
 
-The return value is the same as the square root of it's sample variance (:func:`VAR_SAMP`) and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
+The return value is the same as the square root of its sample variance (:func:`VAR_SAMP`) and it is a **DOUBLE** type. If there are no rows that can be used for calculating a result, **NULL** is returned.
 
 The following are the formulas applied to the function.
 

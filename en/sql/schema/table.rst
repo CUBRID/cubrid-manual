@@ -130,7 +130,7 @@ Setting the Column Initial Value (SHARED, DEFAULT)
 
 An attribute in a table can be created with an initial **SHARED** or **DEFAULT** value. You can change the value of **SHARED** and **DEFAULT** in the **ALTER TABLE** statement.
 
-*   **SHARED** : Column values are identical in all rows. If a value different from the initial value is **INSERT** ed, the column value is updated to a new one in every row.
+*   **SHARED** : Column values are identical in all rows. If a value different from the initial value is **INSERT**\ ed, the column value is updated to a new one in every row.
 *   **DEFAULT** : The initial value set when the **DEFAULT** attribute was defined is stored even if the column value is not specified when a new row is inserted.
 
 The pseudocolumn allows for the **DEFAULT** value as follows.
@@ -323,7 +323,7 @@ The **UNIQUE** constraint enforces a column to have a unique value. An error occ
 
 You can place a **UNIQUE** constraint on either a column or a set of columns. If the **UNIQUE** constraint is defined for multiple columns, the uniqueness is ensured not for each column, but the combination of multiple columns.
 
-In the following example, the second INSERT statement fails because the value of *id* column is the same as 1 with the value of *id* column in the fist INSERT statement.
+In the following example, the second INSERT statement fails because the value of *id* column is the same as 1 with the value of *id* column in the first INSERT statement.
 
 .. code-block:: sql
 
@@ -347,7 +347,8 @@ In the following example, if a **UNIQUE** constraint is defined on several colum
 
 .. code-block:: sql
 
-    CREATE TABLE const_tbl6(id INT, phone VARCHAR, CONSTRAINT UNIQUE(id,phone));
+    -- UNIQUE constraint is defined on several columns
+    CREATE TABLE const_tbl6(id INT, phone VARCHAR, CONSTRAINT UNIQUE(id, phone));
     INSERT INTO const_tbl6 VALUES (1,NULL), (2,NULL), (1,'000-0000'), (1,'111-1111');
     SELECT * FROM const_tbl6;
      
@@ -431,7 +432,7 @@ A foreign key is a column or a set of columns that references the primary key in
 
 .. code-block:: sql
 
-    --creaing two tables where one is referencing the other
+    --creating two tables where one is referencing the other
     CREATE TABLE a_tbl(
       id INT NOT NULL DEFAULT 0 PRIMARY KEY,
       phone VARCHAR(10)
@@ -455,7 +456,7 @@ A foreign key is a column or a set of columns that references the primary key in
         2            2                   '222-2222'            'Laura'
         3            3                   '333-3333'            'Max'
      
-    --when deleting primay key value, it cascades foreign key value  
+    --when deleting primary key value, it cascades foreign key value  
     DELETE FROM a_tbl WHERE id=3;
      
     1 row affected.
@@ -467,7 +468,7 @@ A foreign key is a column or a set of columns that references the primary key in
         1            1                   '111-1111'            'George'
         2            2                   '222-2222'            'Laura'
      
-    --when attempting to update primay key value, it restricts the operation
+    --when attempting to update primary key value, it restricts the operation
     UPDATE  a_tbl SET id = 10 WHERE phone = '111-1111';
      
     In the command from line 1,
@@ -533,7 +534,7 @@ You can specify the **REUSE_OID** option when creating a table, so that OIDs tha
 
 OID (Object Identifier) is an object identifier represented by physical location information such as the volume number, page number and slot number. By using such OIDs, CUBRID manages the reference relationships of objects and searches, stores or deletes them. When an OID is used, accessibility is improved because the object in the heap file can be directly accessed without referring to the table. However, the problem of decreased reusability of the storage occurs when there are many **DELETE/ INSERT** operations because the object's OID is kept to maintain the reference relationship with the object even if it is deleted.
 
-If you specify the **REUSE_OID** option when creating a table, the OID is also deleted when data in the table is deleted, so that another **INSERT** ed data can use it. OID reusable tables cannot be referred to by other tables, and OID values of the objects in the OID reusable tables cannot be viewed.
+If you specify the **REUSE_OID** option when creating a table, the OID is also deleted when data in the table is deleted, so that another **INSERT**\ ed data can use it. OID reusable tables cannot be referred to by other tables, and OID values of the objects in the OID reusable tables cannot be viewed.
 
 .. code-block:: sql
 
@@ -1043,7 +1044,7 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 
     * **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.
     * When converting a number type to character type, if the length of the string is shorter than that of the number, the string is truncated and saved according to the length of the converted character type.
-    * If the column attributs like a type, a collation, etc. are changed, the changed attributes are not applied into the view created with the table before the change. Therefore, if you change the attributes of a table, it is recommended to recreate the related views.
+    * If the column attributes like a type, a collation, etc. are changed, the changed attributes are not applied into the view created with the table before the change. Therefore, if you change the attributes of a table, it is recommended to recreate the related views.
 
 ::
 

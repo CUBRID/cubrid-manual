@@ -329,7 +329,7 @@ DATEDIFF
 
 .. function:: DATEDIFF (date1, date2)
 
-    The **DATEDIFF** function returns the difference between two arguments as an integer representing the number of days. Arguments that can be specified are **DATE**, **TIMESTAMP** and **DATETIME** types and it's return value is only **INTEGER** type.
+    The **DATEDIFF** function returns the difference between two arguments as an integer representing the number of days. Arguments that can be specified are **DATE**, **TIMESTAMP** and **DATETIME** types and its return value is only **INTEGER** type.
 
     If every input argument value of date and time is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
@@ -652,14 +652,14 @@ LAST_DAY
 
 .. code-block:: sql
 
-    --it returns last day of the momth in DATE type
+    --it returns last day of the month in DATE type
     SELECT LAST_DAY(DATE '1980-02-01'), LAST_DAY(DATE '2010-02-01');
     
       last_day(date '1980-02-01')   last_day(date '2010-02-01')
     ============================================================
       02/28/1980                    02/28/2010
      
-    --it returns last day of the momth when explicitly casted to DATE type
+    --it returns last day of the month when explicitly casted to DATE type
     SELECT LAST_DAY(CAST (SYS_TIMESTAMP AS DATE)), LAST_DAY(CAST (SYS_DATETIME AS DATE));
     
       last_day( cast( SYS_TIMESTAMP  as date))   last_day( cast( SYS_DATETIME  as date))
@@ -832,7 +832,7 @@ MONTHS_BETWEEN
     ======================================================
                                    -1.800000000000000e+001
      
-    --it returns integer values when each date is the last dat of the month
+    --it returns integer values when each date is the last date of the month
     SELECT MONTHS_BETWEEN(DATE '2010-6-30', DATE '2008-12-31');
     
      months_between(date '2010-6-30', date '2008-12-31')

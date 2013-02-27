@@ -7,7 +7,7 @@ MD5
 
 .. function:: MD5(string)
 
-    The **MD5** function function returns the MD5 128-bit checksum for the input character string. The result value is displayed as a character string that is expressed in 32 hexadecimals, which you can use to create hash keys, for example.
+    The **MD5** function returns the MD5 128-bit checksum for the input character string. The result value is displayed as a character string that is expressed in 32 hexadecimals, which you can use to create hash keys, for example.
 
     :param string: Input string. If a value that is not a **VARCHAR** type is entered, it will be converted to **VARCHAR**.
     :rtype: STRING

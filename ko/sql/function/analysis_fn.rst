@@ -127,7 +127,7 @@ COUNT
 
 .. code-block:: sql
 
-    SELECT nation_code, event,name, COUNT(*) OVER (ORDER BY event) co
+    SELECT nation_code, event, name, COUNT(*) OVER (ORDER BY event) co
     FROM athlete WHERE nation_code='AUT';
     
        nation_code           event                 name                           co

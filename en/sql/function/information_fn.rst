@@ -263,7 +263,7 @@ LAST_INSERT_ID
     
 The value returned by the **LAST_INSERT_ID** function has the following characteristics.
 
-*   If no values are **INSERT** ed successfully, the latest successful value will be maintained.
+*   If no values are **INSERT**\ ed successfully, the latest successful value will be maintained.
 *   SQL statement on execution does not affect the **LAST_INSERT_ID** () value.
 *   The **LAST_INSERT_ID** () will return the first entered **AUTO_INCREMENT** () value in the **INSERT** statement with multiple rows (ex. INSERT INTO tbl VALUES (), (), …, ()).
 *   The **LAST_INSERT_ID** () value will not be back to the state in the transaction began even though rollback is performed.
@@ -339,7 +339,7 @@ ROW_COUNT
 
     The **ROW_COUNT** function returns the number of rows updated (**UPDATE**, **INSERT**, **DELETE**, **REPLACE**) by the previous statement. 
     
-    ROW_COUNT returns 1 for each inserted row and 2 for each updatead row for **INSERT ON DUPLICATE KEY UPDATE** statement. It returns the sum of number of deleted and inserted rows for **REPLACE** statement.
+    ROW_COUNT returns 1 for each inserted row and 2 for each updated row for **INSERT ON DUPLICATE KEY UPDATE** statement. It returns the sum of number of deleted and inserted rows for **REPLACE** statement.
     
     Statements triggered by trigger will not affect the ROW_COUNT for the statement.
         

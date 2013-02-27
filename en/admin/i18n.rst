@@ -659,7 +659,7 @@ Recreate the dropped foreign key. ::
 
 .. note::
 
-    In CUBRID, collations are identified by the ID number on the CUBRID server, and it's range is from 0 to 255. LDML file is compiled with shared library, which offers the mapping information between the ID and the collation(name, attribute). 
+    In CUBRID, collations are identified by the ID number on the CUBRID server, and its range is from 0 to 255. LDML file is compiled with shared library, which offers the mapping information between the ID and the collation(name, attribute). 
     
     * The system collation is the collation which is loaded from the locale library, by the CUBRID server and the CAS module.
     

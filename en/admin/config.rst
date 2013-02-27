@@ -82,7 +82,7 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
 **Database Server System Parameters**
 
     The following are database server system parameters that can be used in the **cubrid.conf** configuration file.
-    On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. It's "server parameter" means that they are applied to the DB server process.
+    On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server process.
     For the scope of **client** and **server parameters**, see :ref:`scope-server-conf`.
 
     You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change client parameters.

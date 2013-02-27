@@ -1473,7 +1473,7 @@ Allowing multiple data values to be stored in a single attribute is an extended 
 | **MULTISET** | A union which allows                  | col_name MULTISET VARCHAR(20) or   | {'c','c','c','b','b','a'}  | {'a','b','b','c','c','c'}  |
 |              | duplicates                            | col_name MULTISET (VARCHAR(20))    |                            |                            |
 +--------------+---------------------------------------+------------------------------------+----------------------------+----------------------------+
-| **LIST** or  | A union which allows duplicatess      | col_name LIST VARCHAR(20) or       | {'c','c','c','b','b','a'}  | {'c','c','c','b','b','a'}  |
+| **LIST** or  | A union which allows duplicates       | col_name LIST VARCHAR(20) or       | {'c','c','c','b','b','a'}  | {'c','c','c','b','b','a'}  |
 | **SEQUENCE** | and stores data in the order of input | col_name LIST (VARCHAR(20))        |                            |                            |
 +--------------+---------------------------------------+------------------------------------+----------------------------+----------------------------+
 

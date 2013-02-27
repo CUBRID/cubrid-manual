@@ -93,7 +93,7 @@ Use the **DROP INDEX** statement to drop an index. ::
 *   *index_name* : Specifies the name of the index to be dropped. If omitted, a name is automatically assigned as *i_<table_name>_<column_names>*.
 *   *table_name* : Specifies the name of the table whose index is dropped.
 
-The following is an example of dropping an indexe:
+The following is an example of dropping an index:
 
 .. code-block:: sql
 

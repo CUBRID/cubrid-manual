@@ -10,7 +10,7 @@ Simple Comparison Expression
 A comparison expression is an expression that is included in the **WHERE** clause of the **SELECT**, **UPDATE** and **DELETE** statements, and in the **HAVING** clause of the **SELECT** statement. There are simple comparison, **ANY** / **SOME** / **ALL**, **BETWEEN**, **EXISTS**, **IN** / **NOT IN**, **LIKE** and **IS NULL** comparison expressions, depending on the kinds of the operators combined.
 
 A simple comparison expression compares two comparable data values. Expressions or subqueries are specified as operands, and the comparison expression always returns
-**NULL** if one of the operands is **NULL**. The following table shows operators that can be used in the simple comparison comparison expressions. For details, see :doc:`/sql/function/comparison_op`.
+**NULL** if one of the operands is **NULL**. The following table shows operators that can be used in the simple comparison expressions. For details, see :doc:`/sql/function/comparison_op`.
 
 **Comparison Operators**
 
@@ -231,7 +231,7 @@ The **IS NULL** compares to determine whether the expression specified on the le
                 5  'Kim       '          'account'                 3800000
                 6  'Smith     '          'devel'                   2400000
      
-    --simple conparison operation returns NULL when operand is NULL
+    --simple comparison operation returns NULL when operand is NULL
     SELECT * FROM condition_tbl WHERE salary = NULL;
     There are no results.
 
@@ -454,7 +454,7 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
 CASE
 ====
 
-The **CASE** expression uses the SQL statement to perform an **IF** ... **THEN** statement. When a result of comparison expression specified in a **WHEN** clause is true, a value specified in **THEN** value is returned. A value specified in an **ELSE** clause is returned otherwise. If no **ELSE** clause exists, **NULL** is returned. ::
+The **CASE** expression uses the SQL statement to perform an **IF** ... **THEN** statement. When a result of comparison expression specified in a **WHEN** clause is true, a value specified in **THEN** clause is returned. A value specified in an **ELSE** clause is returned otherwise. If no **ELSE** clause exists, **NULL** is returned. ::
 
     CASE control_expression simple_when_list
     [ else_clause ]
@@ -591,7 +591,7 @@ For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FL
                 3
              NULL
      
-    --substituting a default value 10.0000 for NULL valuse
+    --substituting a default value 10.0000 for NULL value
     SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
     
                 a  coalesce(a, 10.0000)
@@ -717,7 +717,7 @@ IF
                 3
              NULL
      
-    --IF function returns the second expression when the fist is TRUE
+    --IF function returns the second expression when the first is TRUE
     SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
     
                 a   if(a=1, 'one', 'other')

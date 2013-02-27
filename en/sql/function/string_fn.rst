@@ -152,7 +152,7 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
     
 .. note:: 
 
-    * In versions lower than than CUBRID 9.0, the multibyte string returns the number of bytes in the string. Therefore, the length of one character is calculated as 2- or 3-bytes according to the charset.
+    * In versions lower than CUBRID 9.0, the multibyte string returns the number of bytes in the string. Therefore, the length of one character is calculated as 2- or 3-bytes according to the charset.
     * The length of each space character that is included in a character string is one byte.
     * The length of empty quotes (") to represent a space character is 0. Note that in a  **CHAR** (*n*) type, the length of a space character is *n*, and it is specified as 1 if n is omitted.
 
@@ -553,9 +553,9 @@ LEFT
 
 .. function:: LEFT ( string , length )
 
-    The **LEFT** function returns a length number of characters from the leftmost of *string*. If any of the arguments is **NULL**, **NULL** is returned. If a value greater than the *length* of the *string* or a negative number is specified for a length, the entire string is returned.
+    The **LEFT** function returns a length number of characters from the leftmost *string*. If any of the arguments is **NULL**, **NULL** is returned. If a value greater than the *length* of the *string* or a negative number is specified for a length, the entire string is returned.
 
-    To extract a length number of characters from the rightmost of the string, use the :func:`RIGHT`.
+    To extract a length number of characters from the rightmost string, use the :func:`RIGHT`.
 
     :param string: Input string
     :param length: The length of a string to be returned
@@ -749,7 +749,7 @@ MID
     ==================================================================
       'abcd'                'abcd'                'abcd'
      
-    --it returns a empty string when substring_length < 0
+    --it returns an empty string when substring_length < 0
     SELECT MID(a, 6, -4), SUBSTR(a, 6, -4), SUBSTRING(a, 6, -4) FROM mid_tbl;
     
       mid(a, 6, -4)         substr(a, 6, -4)      substring(a from 6 for -4)
@@ -876,7 +876,7 @@ REPEAT
 
 .. function:: REPEAT( string, count )
 
-    The **REPEAT** function returns the character string with a length equal to the number of repeated input character strings. The return value is a **VARCHAR** type. The maximum length of the characcter string is 33,554,432 and if it this length is exceeded, **NULL** will be returned. If one of the parameters is **NULL**, **NULL** will be returned.
+    The **REPEAT** function returns the character string with a length equal to the number of repeated input character strings. The return value is a **VARCHAR** type. The maximum length of the character string is 33,554,432 and if it this length is exceeded, **NULL** will be returned. If one of the parameters is **NULL**, **NULL** will be returned.
 
     :param substring: Character string
     :param count: Repeat count. If you enter 0 or a negative number, an empty string will be returned and if you enter a non-numeric data type, an error will be returned.
@@ -913,7 +913,7 @@ REPLACE
 
     The **REPLACE** function searches for a character string, *search_string*, within a given character string, *string*, and replaces it with a character string, *replacement_string*. If the string to be replaced, *replacement_string* is omitted, all *search_strings* retrieved from *string* are removed. If **NULL** is specified as an argument, **NULL** is returned.
 
-    :param string: pecifies the original string. If the value is **NULL**, **NULL** is returned.
+    :param string: Specifies the original string. If the value is **NULL**, **NULL** is returned.
     :param search_string: Specifies the string to be searched. If the value is **NULL**, **NULL** is returned
     :param search_string: Specifies the string to replace the *search_string*. If this value is omitted, *string* is returned with the *search_string* removed. If the value is **NULL**, **NULL** is returned.
     :rtype: STRING
@@ -964,7 +964,7 @@ RIGHT
 
 .. function:: RIGHT ( string , length )
 
-    The **RIGHT** function returns a *length* number of characters from the rightmost of a *string*. If any of the arguments is **NULL**, **NULL** is returned. If a value greater than the length of the *string* or a negative number is specified for a *length*, the entire string is returned. To extract a length number of characters from the leftmost of the string, use the :func:`LEFT`.
+    The **RIGHT** function returns a *length* number of characters from the rightmost *string*. If any of the arguments is **NULL**, **NULL** is returned. If a value greater than the length of the *string* or a negative number is specified for a *length*, the entire string is returned. To extract a length number of characters from the leftmost string, use the :func:`LEFT`.
 
     :param string: Input string
     :param length: The length of a string to be returned
@@ -1084,7 +1084,7 @@ SPACE
 
 .. function:: SPACE (N)
 
-    The **SPACE** function returns as many empy strings as the number specified. The return value is a **VARCHAR** type.
+    The **SPACE** function returns as many empty strings as the number specified. The return value is a **VARCHAR** type.
 
     :param N: Space count. It cannot be greater than the value specified in the system parameter, **string_max_size_bytes** (default 1048576). If it exceeds the specified value, **NULL** will be returned. The maximum value is 33,554,432; if this length is exceeded, **NULL** will be returned. If you enter 0 or a negative number, an empty string will be returned; if you enter a type that can't be converted to a numeric value, an error will be returned.
     :rtype: STRING
@@ -1231,11 +1231,11 @@ SUBSTRING_INDEX
 
 .. function:: SUBSTRING_INDEX (string, delim, count)
 
-    The **SUBSTRING_INDEX** function counts the separators included in the partial character string and will return the partial character string before *count*\th. The return value is a **VARCHAR** type.
+    The **SUBSTRING_INDEX** function counts the separators included in the partial character string and will return the partial character string before the *count*\ -th separator. The return value is a **VARCHAR** type.
 
     :param string: Input character string. The maximum length is 33,554,432 and if this length is exceeded, **NULL** will be returned.
     :param delim: Delimiter. It is case-sensitive.
-    :param count: Delimiter occurrence count. If you enter a positive number, it counts the character string from the left and if you enter a negative number, it counts it from the right. If it is 0, an empty string will be returned. If the type cannot be converted, an error wll be returned.
+    :param count: Delimiter occurrence count. If you enter a positive number, it counts the character string from the left and if you enter a negative number, it counts it from the right. If it is 0, an empty string will be returned. If the type cannot be converted, an error will be returned.
     :rtype: STRING
 
 .. code-block:: sql

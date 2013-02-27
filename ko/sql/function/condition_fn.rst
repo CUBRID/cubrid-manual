@@ -233,7 +233,7 @@ IS NULL
                 5  'Kim       '          'account'                 3800000
                 6  'Smith     '          'devel'                   2400000
      
-    --simple conparison operation returns NULL when operand is NULL
+    --simple comparison operation returns NULL when operand is NULL
     SELECT * FROM condition_tbl WHERE salary = NULL;
     There are no results.
 

@@ -738,7 +738,7 @@ MID
     ==================================================================
       'abcd'                'abcd'                'abcd'
      
-    --it returns a empty string when substring_length < 0
+    --it returns an empty string when substring_length < 0
     SELECT MID(a, 6, -4), SUBSTR(a, 6, -4), SUBSTRING(a, 6, -4) FROM mid_tbl;
     
       mid(a, 6, -4)         substr(a, 6, -4)      substring(a from 6 for -4)

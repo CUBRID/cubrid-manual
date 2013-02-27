@@ -137,7 +137,7 @@ CREATE TABLE
 
 *   **DEFAULT** : 새로운 행을 삽입할 때 칼럼 값을 지정하지 않으면 **DEFAULT** 속성으로 설정한 값이 저장된다.
 
-**DEFAULT**\ 의 값으로 허용되는 의사 칼럼(pseudo-column)과 함수는 다음과 같다.
+**DEFAULT**\ 의 값으로 허용되는 의사 칼럼(pseudocolumn)과 함수는 다음과 같다.
 
 +---------------+---------------+
 | DEFAULT 값    | 데이터 타입   |
@@ -433,7 +433,7 @@ FOREIGN KEY 제약
 
 .. code-block:: sql
 
-    -- creaing two tables where one is referencing the other
+    -- creating two tables where one is referencing the other
     CREATE TABLE a_tbl (
       id INT NOT NULL DEFAULT 0 PRIMARY KEY,
       phone VARCHAR(10)
@@ -457,7 +457,7 @@ FOREIGN KEY 제약
         2            2                   '222-2222'            'Laura'
         3            3                   '333-3333'            'Max'
      
-    -- when deleting primay key value, it cascades foreign key value  
+    -- when deleting primary key value, it cascades foreign key value  
     DELETE FROM a_tbl WHERE id=3;
      
     1 row affected.
@@ -469,7 +469,7 @@ FOREIGN KEY 제약
         1            1                   '111-1111'            'George'
         2            2                   '222-2222'            'Laura'
 
-    -- when attempting to update primay key value, it restricts the operation
+    -- when attempting to update primary key value, it restricts the operation
     UPDATE  a_tbl SET id = 10 WHERE phone = '111-1111';
      
     In the command from line 1,

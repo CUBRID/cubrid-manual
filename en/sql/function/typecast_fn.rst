@@ -7,7 +7,8 @@ CAST
 
 .. function:: CAST (cast_operand AS cast_target)
 
-    The **CAST** operator can be used to explicitly cast one data type to another in the **SELECT** statement. A query list or a value expression in the **WHERE** clause can be cast to another data type. 
+    The **CAST** operator can be used to explicitly cast one data type to another in the **SELECT** statement. A query list or a value expression in the **WHERE** clause can be cast to another data type.
+    
     :param cast_operand: Declares the value to cast to a different data type.
     :param cast_target: Specifies the type to cast to.
     :rtype: cast_target
@@ -178,7 +179,7 @@ The following table shows a summary of explicit type conversions (casts) using t
 
     *   **CAST** is allowed only between data types having the same character set.
     *   If you cast an approximate data type(FLOAT, DOUBLE, MONETARY) to integer type, the number is rounded to zero decimal places.
-    *   If you cast an exact numeric data type(NUMERIC) to integer type, the number is rounded to zero dicimal places.
+    *   If you cast an exact numeric data type(NUMERIC) to integer type, the number is rounded to zero decimal places.
     *   If you cast a numeric data type to string character type, it should be longer than the length of significant figures + decimal point. An error occurs otherwise.
     *   If you cast a character string type *A* to a character string type *B*, B should be longer than the *A*. The end of character string is truncated otherwise.
     *   If you cast a character string type *A*    to a date-time date type *B*, it is converted only when literal of *A* and *B* type match one another. An error occurs otherwise.
@@ -445,7 +446,7 @@ TIME_FORMAT
 
     The **TIME_FORMAT** function converts the value of strings with **TIME** format ('*HH*-*MI*-*SS)* or that of date/time data type (**DATE**, **TIMESTAMP**, **DATETIME**) to specified date/time format and then return the value with the **VARCHAR** data type.
 
-    :param time: A value of string with **TIME** (*HH*:*MI*:*SS*) or that of date/time data type (**TIME**, **TIMESTAMP**, **DATETIME**) an be specified.
+    :param time: A value of string with **TIME** (*HH*:*MI*:*SS*) or that of date/time data type (**TIME**, **TIMESTAMP**, **DATETIME**) can be specified.
     :param format: Specifies the output format. Use a string that contains ‘%’ as a specifier. See the table :ref:`Date/Time Format 2 <datetime-format2>` of :func:`DATE_FORMAT` function.
 
     :rtype: STRING
@@ -488,21 +489,21 @@ The following example shows the case when the system parameter **intl_date_lang*
 .. note::
 
     * When only the language is set to "en_US" (the initial value of **CUBRID_CHARSET** at installation of CUBRID) in the locale of the **CUBRID_CHARSET** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
-    * When the charset is ISO-8859-1, the language that can be changed in :func:`TO_DATE` function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language suppored by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`.
+    * When the charset is ISO-8859-1, the language that can be changed in :func:`TO_DATE` function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`.
 
 TO_CHAR(date_time)
 ==================
 
 .. function:: TO_CHAR ( date_time [, format[, date_lang_string_literal ]] )
 
-    The **TO_CHAR** (date_time) function converts the value of date/time types (**TIME**, **DATE**, **TIMESTAMP**, **DATETIME**) to based on the table :ref:`Date/Time Format 1 <datetime-format1>` and then returns the value. The type of the return value is **VARCHAR**.
+    The **TO_CHAR** (date_time) function converts the value of date/time types (**TIME**, **DATE**, **TIMESTAMP**, **DATETIME**) to a string depending on the table :ref:`Date/Time Format 1 <datetime-format1>` and then returns the value. The type of the return value is **VARCHAR**.
 
     :param date_time: Specifies an expression that returns date-time type string. If the value is **NULL**, **NULL** is returned.
     :param format: Specifies a format of return value. If the value is **NULL**, **NULL** is returned.
     :param date_lang_string_literal: Specifies a language applied to a return value.
     :rtype: STRING
     
-When the *format* argument is assigned, the *date_time* is output according to the specified language (see the :ref:`Date/Time Format 1 <datetime-format1>` table). At this time, the language specified to the *intl_date_lang* argument is applied. For example, when the language is set to "de_DE" and the format is "HH:MI:SS:AM", "08:46:53 PM" is output as "08:46:53 Nachm.". When **intl_date_lang** system paramter is not set, the language of **CUBRID_CHARSET** environment variable is applied. When the *format* argument specified does not correspond to the given *string*, an error is returned.
+When the *format* argument is assigned, the *date_time* is output according to the specified language (see the :ref:`Date/Time Format 1 <datetime-format1>` table). At this time, the language specified to the *intl_date_lang* argument is applied. For example, when the language is set to "de_DE" and the format is "HH:MI:SS:AM", "08:46:53 PM" is output as "08:46:53 Nachm.". When **intl_date_lang** system parameter is not set, the language of **CUBRID_CHARSET** environment variable is applied. When the *format* argument specified does not correspond to the given *string*, an error is returned.
 
 When the *format* argument is omitted, the *date_time* is output as a string according to the default output format of the language set by **intl_date_lang** or **CUBRID_CHARSET** (see the following table :ref:`Default Date/Time Output Format for Each Language <tochar-default-datetime-format>`).
 
@@ -589,7 +590,7 @@ When the *format* argument is omitted, the *date_time* is output as a string acc
 +--------------------+---------------------------------------------------------------------------+
 | **SS**             | Second (0 - 59)                                                           |
 +--------------------+---------------------------------------------------------------------------+
-| **FF**             | Millsecond (0-999)                                                        |
+| **FF**             | Millisecond (0-999)                                                       |
 +--------------------+---------------------------------------------------------------------------+
 | \- / , . ; : "text"| Punctuation and quotation marks are represented as they are in the result |
 +--------------------+---------------------------------------------------------------------------+
@@ -803,7 +804,7 @@ If the number format has not been specified as an argument, all significant figu
 +--------------+------------+-------------------+-----------------+--------------------------+
 | Language     | Locale     | Number of Digits  | Decimal Symbol  | Example of Number Usage  |
 +==============+============+===================+=================+==========================+
-| Englisth     | en_US      | ,(comma)          | .(period)       | 123,456,789.012          |
+| English      | en_US      | ,(comma)          | .(period)       | 123,456,789.012          |
 +--------------+------------+-------------------+-----------------+--------------------------+
 | German       | de_DE      | .(period)         | ,(comma)        | 123.456.789.012          |
 +--------------+------------+-------------------+-----------------+--------------------------+

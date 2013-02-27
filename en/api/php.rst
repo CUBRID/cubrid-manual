@@ -131,7 +131,7 @@ Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are
 
 #. To install the PHP extension, run the installer. Once the installer starts, click the [Next] button.
 #. Agree with the BSD license terms and click the [Next] button.
-#. Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like like **C:\\Program Files\\CUBRID PHP API**.
+#. Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like **C:\\Program Files\\CUBRID PHP API**.
 
 #. Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see "Configuring the environment" below.
 
@@ -162,7 +162,7 @@ If you have received an error messages, follow the steps below; if you can see C
     C:\Users\Administrator>cubrid --version
     cubrid <cubrid utilities> R2.1
 
-If you can not get the result like above, it is highly likely that your PHP and CUBRID installations went wrong. Try to reinstall them and recheck again. If the path is not automatically specified even after you complete reinstallation, you can do it manually.
+If you cannot get the result like above, it is highly likely that your PHP and CUBRID installations went wrong. Try to reinstall them and recheck again. If the path is not automatically specified even after you complete reinstallation, you can do it manually.
 
 #. Right-click [My Computer] and select [Properties]. The [System Properties] dialog box will appear.
 #. Go to [Advanced] tab and click on [Environment Variables].
@@ -463,7 +463,7 @@ PHP Programming
 Connecting to a Database
 ------------------------
 
-The first step of database applications is to use `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function which provides database connection. Once `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function is executed successfully, you can use any functions available in the database. It is very important to call the`cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function before applications are  terminated. The `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function terminates the current transaction as well as the connection handle and all request handles created by the
+The first step of database applications is to use `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function which provides database connection. Once `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () or `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function is executed successfully, you can use any functions available in the database. It is very important to call the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function before applications are terminated. The `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function terminates the current transaction as well as the connection handle and all request handles created by the
 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
 
 .. note:: 
@@ -473,7 +473,7 @@ The first step of database applications is to use `cubrid_connect <http://www.ph
 Transactions and Auto-Commit
 ----------------------------
 
-CUBRID PHP suppors transaction and auto-commit mode. Auto-commit mode means that every query that you run has its own implicit transaction. You can use the `cubrid_get_autocommit <http://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () function to get the status of current connection auto-commit mode and use the `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function to enable/disable auto-commit mode of current connection. In auto-commit mode, any transactions being executed are committed regardless of whether it is set to **ON** or **OFF**.
+CUBRID PHP supports transaction and auto-commit mode. Auto-commit mode means that every query that you run has its own implicit transaction. You can use the `cubrid_get_autocommit <http://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () function to get the status of current connection auto-commit mode and use the `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function to enable/disable auto-commit mode of current connection. In auto-commit mode, any transactions being executed are committed regardless of whether it is set to **ON** or **OFF**.
 
 The default value of auto-commit mode upon application startup is configured by the **CCI_DEFAULT_AUTOCOMMIT** (broker parameter). If the broker parameter value is not configured, the default value is set to **ON**. You can also use the `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function to set auto-commit mode as example shown below.
 

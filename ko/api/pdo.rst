@@ -281,7 +281,7 @@ PDO에서 SQL 질의를 수행하려면 질의나 응용 프로그램의 성격�
     M - Man
     B - Bronze
     S - Silver
-    G - Goldie
+    G - Gold
 
 UPDATE 실행
 -----------
@@ -348,7 +348,7 @@ UPDATE 실행
     M - Man
     B - Bronze
     S - Silver
-    G – Goldie
+    G – Gold
 
 prepare와 bind
 --------------
@@ -439,7 +439,7 @@ prepared statement는 PDO가 제공하는 유용한 기능 중 하나로, 사용
     M - Man
     B - Bronze
     S - Silver
-    G - Goldie
+    G - Gold
      
     Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
     :s_name: X
@@ -448,7 +448,7 @@ prepared statement는 PDO가 제공하는 유용한 기능 중 하나로, 사용
     M - Man
     B - Bronze
     S - Silver
-    G - Goldie
+    G - Gold
 
 PDO::getAttribute() 사용
 ------------------------

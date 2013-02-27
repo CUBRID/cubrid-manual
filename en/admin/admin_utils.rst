@@ -1451,7 +1451,7 @@ The **cubrid plandump** utility is used to display information on the query plan
 
 * **plandump**: A utility that displays the query plans stored in the current cache of a specific database.
 
-* *database_name*: The name of the database where the query plans are to be checked or dropped from its sever cache.
+* *database_name*: The name of the database where the query plans are to be checked or dropped from its server cache.
 
 If no option is used, it checks the query plans stored in the cache. ::
 

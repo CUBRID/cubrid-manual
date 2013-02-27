@@ -322,7 +322,7 @@ For details, see :ref:`statdump`.
 
     SHOW EXEC STATISTICS [ALL]
 
-The following example shows the result of exeucting query in the *demodb* database.
+The following example shows the result of executing query in the *demodb* database.
 
 .. code-block:: sql
 

@@ -371,7 +371,7 @@ The following are parameters related to the database server. The type and value 
 
     The values and the working methods are as follows.
 
-    *    **both**: As the server process access to the client process by ECHO(7) port, it checks if the client process works well. The client process also do the same thing to the sever process(The default value).
+    *    **both**: As the server process access to the client process by ECHO(7) port, it checks if the client process works well. The client process also do the same thing to the server process(The default value).
     *    **server_only**: Only the server process checks whether the client process works well.
     *    **client_only**: Only the client process checks whether the server process works well.
     *    **none**: Both of the server and client processes do not check whether the other process works well.
@@ -1581,7 +1581,7 @@ The following describes parameters to configure the environment variables of bro
 
     .. note::
 
-        Be careful not to make the value too small because application severs may restart frequently and unexpectedly. In general, the value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is greater than that of **APPL_SERVER_MAX_SIZE**. For details, see description of **APPL_SERVER_MAX_SIZE_HARD_LIMIT**.
+        Be careful not to make the value too small because application servers may restart frequently and unexpectedly. In general, the value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is greater than that of **APPL_SERVER_MAX_SIZE**. For details, see description of **APPL_SERVER_MAX_SIZE_HARD_LIMIT**.
 
 **APPL_SERVER_MAX_SIZE_HARD_LIMIT**
 
@@ -1591,7 +1591,7 @@ The following describes parameters to configure the environment variables of bro
 
     .. note::
 
-        Be careful not to make the value too small because application severs may restart frequently and unexpectedly. When restarting CAS, **APPL_SERVER_MAX_SIZE** is specified to wait for normal termination of transactions although memory usage increases; **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is specified to forcibly terminate transactions if memory usage exceeds the maximum value allowed. Therefore, in general, the value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is greater than that of **APPL_SERVER_MAX_SIZE**.
+        Be careful not to make the value too small because application servers may restart frequently and unexpectedly. When restarting CAS, **APPL_SERVER_MAX_SIZE** is specified to wait for normal termination of transactions although memory usage increases; **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is specified to forcibly terminate transactions if memory usage exceeds the maximum value allowed. Therefore, in general, the value of **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is greater than that of **APPL_SERVER_MAX_SIZE**.
 
 **APPL_SERVER_PORT**
 

@@ -34,7 +34,7 @@ CUBRID .NET Data Provider는 full-managed .NET 코드로 작성되어 CUBRID 라
 
 CUBRID ADO.NET Data Provider를 가장 간단하게 설치하는 방법은 CUBRID ADO.NET Data Provider Installer를 실행하는 것이다. 기본 설정(x86)으로 설치하면 **Program Files\\CUBRID\\CUBRID ADO.NET Data Provider 8.4.1** 디렉터리에 설치된다.
 
-드라이버를 GAC(`http://en.wikipedia.org/wiki/Global_Assembly_Cache <http://en.wikipedia.org/wiki/global_assembly_cache>`_ 에 설치할 수도 있다. 드라이버를 GAC에 설치하는 가장 좋은 방법은 tblimp(`http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx <http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx>`_)를 사용하는 것이다. 필요한 네임스페이스는 다음과 같이 import한다.
+드라이버를 GAC(`http://en.wikipedia.org/wiki/Global_Assembly_Cache <http://en.wikipedia.org/wiki/global_assembly_cache>`_ 에 설치할 수도 있다. 드라이버를 GAC에 설치하는 가장 좋은 방법은 tlbimp(`http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx <http://msdn.microsoft.com/en-us/library/tt0cf3sx%28v=vs.80%29.aspx>`_)를 사용하는 것이다. 필요한 네임스페이스는 다음과 같이 import한다.
 
 .. image:: /images/image88.png
 

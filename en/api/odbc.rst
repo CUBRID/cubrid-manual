@@ -18,41 +18,41 @@ The following table shows the data type mapping relationship between CUBRID and 
 +-------------------------+--------------------------------+
 | CUBRID Data Type        | ODBC Data Type                 |
 +=========================+================================+
-| Char                    | SQL_CHAR                       |
+| CHAR                    | SQL_CHAR                       |
 +-------------------------+--------------------------------+
-| Varchar                 | SQL_VARCHAR                    |
+| VARCHAR                 | SQL_VARCHAR                    |
 +-------------------------+--------------------------------+
-| String                  | SQL_LONGVARCHAR                |
+| STRING                  | SQL_LONGVARCHAR                |
 +-------------------------+--------------------------------+
-| Bit                     | SQL_BINARY                     |
+| BIT                     | SQL_BINARY                     |
 +-------------------------+--------------------------------+
-| varying bit             | SQL_VARBINARY                  |
+| VARYING BIT             | SQL_VARBINARY                  |
 +-------------------------+--------------------------------+
-| Numeric                 | SQL_NUMERIC                    |
+| NUMERIC                 | SQL_NUMERIC                    |
 +-------------------------+--------------------------------+
-| Int                     | SQL_INTEGER                    |
+| INT                     | SQL_INTEGER                    |
 +-------------------------+--------------------------------+
-| Short                   | SQL_SMALLINT                   |
+| SHORT                   | SQL_SMALLINT                   |
 +-------------------------+--------------------------------+
-| Float                   | SQL_FLOAT                      |
+| FLOAT                   | SQL_FLOAT                      |
 +-------------------------+--------------------------------+
-| Double                  | SQL_DOUBLE                     |
+| DOUBLE                  | SQL_DOUBLE                     |
 +-------------------------+--------------------------------+
-| Bigint                  | SQL_BIGINT                     |
+| BIGINT                  | SQL_BIGINT                     |
 +-------------------------+--------------------------------+
-| Date                    | SQL_TYPE_DATE                  |
+| DATE                    | SQL_TYPE_DATE                  |
 +-------------------------+--------------------------------+
-| Time                    | SQL_TYPE_TIME                  |
+| TIME                    | SQL_TYPE_TIME                  |
 +-------------------------+--------------------------------+
-| Timestamp               | SQL_TYPE_TIMESTAMP             |
+| TIMESTAMP               | SQL_TYPE_TIMESTAMP             |
 +-------------------------+--------------------------------+
-| Datetime                | SQL_TYPE_TIMESTAMP             |
+| DATETIME                | SQL_TYPE_TIMESTAMP             |
 +-------------------------+--------------------------------+
-| Monetary                | SQL_DOUBLE                     |
+| MONETARY                | SQL_DOUBLE                     |
 +-------------------------+--------------------------------+
-| Oid                     | SQL_CHAR(32)                   |
+| OID                     | SQL_CHAR(32)                   |
 +-------------------------+--------------------------------+
-| set, multiset, sequence | SQL_VARCHAR(MAX_STRING_LENGTH) |
+| SET, MULTISET, SEQUENCE | SQL_VARCHAR(MAX_STRING_LENGTH) |
 +-------------------------+--------------------------------+
 
 Configuring and Environment ODBC and ASP

@@ -35,7 +35,7 @@ Linux
 
 **Installing CUBRID PHP Driver using PECL**
 
-If **PECL** package has bee installed on your system, the installation of CUBRID PDO driver is straightforward. **PECL** will download and compile the driver for you.?If you do not have **PECL** installed, follow the instructions at http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl to get it installed.
+If **PECL** package has been installed on your system, the installation of CUBRID PDO driver is straightforward. **PECL** will download and compile the driver for you. If you do not have **PECL** installed, follow the instructions at http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl to get it installed.
 
 #. Enter the following command to install the latest version of CUBRID PDO driver. ::
 
@@ -45,7 +45,7 @@ If **PECL** package has bee installed on your system, the installation of CUBRID
 
     sudo pecl install pdo_cubrid-8.3.1.0003
 
-   During the installation, you will be prompted to enter **CUBRID base install dir autodetect :**. Just to make sure your installation goes smootyly, enter the full path to the directory where you have CUBRID installed. For example, if CUBRID has been installed at **/home/cubridtest/CUBRID**, then enter **/home/cubridtest/CUBRID**.
+   During the installation, you will be prompted to enter **CUBRID base install dir autodetect :**. Just to make sure your installation goes smoothly, enter the full path to the directory where you have CUBRID installed. For example, if CUBRID has been installed at **/home/cubridtest/CUBRID**, then enter **/home/cubridtest/CUBRID**.
 
 #. Edit the configuration file.
 
@@ -120,7 +120,7 @@ The PDO_CUBRID data source name (DSN) consists of the following elements:
 Predefined Constants
 --------------------
 
-The constants defined by CUBRID PDO driver are available only when the extension has been either compiled into PHP or dynamically loaded at runtime. In addition, these driver-specific constants should only be used if you are using PDO driver. Using driver-specific attributes with another driver may result in unexpected behaviour.
+The constants defined by CUBRID PDO driver are available only when the extension has been either compiled into PHP or dynamically loaded at runtime. In addition, these driver-specific constants should only be used if you are using PDO driver. Using driver-specific attributes with another driver may result in unexpected behavior.
 
 The `PDO::getAttribute() <http://docs.php.net/manual/en/pdo.getattribute.php>`_ function may be used to obtain the **PDO_ATTR_DRIVER_NAME** attribute value to check the driver if your code can run.
 
@@ -248,7 +248,7 @@ In PDO, there is more than one way to execute SQL queries.
 
 The example script below shows the simplest one - using the `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () function. You can retrieve the return values from the resultset (a PDOStatement object) by using the column names, like $rs["*column_name*"].
 
-Note that when you use the `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () function, you must ensure that the query code is properly escaped. For information about escaping, see the?`PDO::quote <http://www.php.net/manual/en/pdo.quote.php>`_ () function.
+Note that when you use the `query <http://docs.php.net/manual/en/pdo.exec.php>`_ () function, you must ensure that the query code is properly escaped. For information about escaping, see `PDO::quote <http://www.php.net/manual/en/pdo.quote.php>`_ () function.
 
 .. code-block:: php
 
@@ -283,12 +283,12 @@ The output of the script is as follows: ::
     M - Man
     B - Bronze
     S - Silver
-    G - Goldie
+    G - Gold
 
 Executing an UPDATE Statement
 -----------------------------
 
-The following example shows how to execute an?UPDATE statement by using a prepared statement and parameters. You can use the `exec <http://docs.php.net/manual/en/pdo.exec.php>`_ () function as an alternative.
+The following example shows how to execute an UPDATE statement by using a prepared statement and parameters. You can use the `exec <http://docs.php.net/manual/en/pdo.exec.php>`_ () function as an alternative.
 
 .. code-block:: php
 
@@ -350,7 +350,7 @@ The output of the script is as follows: ::
     M - Man
     B - Bronze
     S - Silver
-    G ? Goldie
+    G - Gold
 
 Using prepare and bind
 ----------------------
@@ -440,7 +440,7 @@ The output of the script is as follows: ::
     M - Man
     B - Bronze
     S - Silver
-    G - Goldie
+    G - Gold
      
     Executing SQL: SELECT * FROM code WHERE s_name NOT LIKE :s_name
     :s_name: X
@@ -449,7 +449,7 @@ The output of the script is as follows: ::
     M - Man
     B - Bronze
     S - Silver
-    G - Goldie
+    G - Gold
 
 Using the PDO::getAttribute() Function
 --------------------------------------

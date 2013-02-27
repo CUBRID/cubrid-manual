@@ -598,7 +598,7 @@ In the calling block, you must set the OUT argument with **Types.JAVA_OBJECT**, 
 
     public class TestResultSet{
         public static void main(String[] args) {
-            Connnection conn = null;
+            Connection conn = null;
             Statement stmt= null;
             int result;
             int i;

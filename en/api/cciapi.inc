@@ -223,7 +223,7 @@ CCI API Reference
 
     Cancel the running query on the other thread. This function executes the same behavior as Statement.cancel() method in JAVA.
     
-    The following shows how to calcel the query execution of a thread.
+    The following shows how to cancel the query execution of a thread.
     
     .. code-block:: c
 
@@ -237,8 +237,6 @@ CCI API Reference
         #include <pthread.h>
         #include <string.h>
         #include <time.h>
-        #include <sys/time.h>
-        #include <sys/timeb.h>
 
         #define QUERY "select * from db_class A, db_class B, db_class C, db_class D, db_class E"
 
@@ -395,9 +393,9 @@ CCI API Reference
             return error_msg;
         }
 
-    :param conn_handle: (IN) 연결 핸들
+    :param conn_handle: (IN) Connection handle
     
-    :return: 에러 코드
+    :return: Error code
         
         *    **CCI_ER_CON_HANDLE**
 
@@ -833,7 +831,7 @@ CCI API Reference
     | **CCI_A_TYPE_CLOB**         | **T_CCI_CLOB**              |
     +-----------------------------+-----------------------------+
 
-.. c:function:: T_CCI_CONN cci_datasource_borrow (T_CCI_DATASOURCE * datesource, T_CCI_ERROR * err_buf)
+.. c:function:: T_CCI_CONN cci_datasource_borrow (T_CCI_DATASOURCE * datasource, T_CCI_ERROR * err_buf)
 
     The **cci_datasource_borrow** function obtains CCI connection to be used in **T_CCI_DATASOURCE** struct.
 
@@ -886,9 +884,9 @@ CCI API Reference
         :c:func:`cci_datasource_destroy`,
         :c:func:`cci_datasource_release`
 
-.. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * date_source, T_CCI_CONN conn)
+.. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * datasource, T_CCI_CONN conn)
 
-    The **cci_datasource_release** function returns CCI connection released in **T_CCI_DATASOURCE** struct. If you want to reuse the coonection after calling this function, recall c:func:`cci_datasource_borrow`.
+    The **cci_datasource_release** function returns CCI connection released in **T_CCI_DATASOURCE** struct. If you want to reuse the connection after calling this function, recall c:func:`cci_datasource_borrow`.
 
     :param datasource: (IN) **T_CCI_DATASOURCE** struct pointer which returns CCI connection
     :param conn: (IN) CCI connection handler identifier released
@@ -954,7 +952,7 @@ CCI API Reference
     When the system parameter **no_backslash_escapes** is no or when the **CCI_NO_BACKSLASH_ESCAPES_FALSE** value is sent to the connection handle location, the string is converted to the following characters:
 
     *   \\n (new line character, ASCII 10) => \\ + n (backslash + Alphabet n)
-    *   \\r (carrage return, ASCII 13) => \\ + r (backslash + Alphabet r)
+    *   \\r (carriage return, ASCII 13) => \\ + r (backslash + Alphabet r)
     *   \\0 (ASCII 0) => \\ + 0 (backslash + 0(ASCII 48)
     *   \\  (backslash) => \\ + \\
 
@@ -969,7 +967,7 @@ CCI API Reference
     :param max_col_size: (IN) The maximum length of a column to be fetched when it is a string data type in bytes. If this value is 0, full length is fetched.
     :param err_buf: (OUT) Database error buffer
     :return: 
-      * **SELECT** : Returns the number of results in sync mode returns 0 in async mode.
+      * **SELECT** : Returns the number of results in sync mode. Returns 0 in async mode.
       * **INSERT**, **UPDATE** : Returns the number of rows reflected.
       * Others queries : 0
       * Failure : Error code
@@ -1016,7 +1014,7 @@ CCI API Reference
 
     To bind the data, call the :c:func:`cci_bind_param_array_size` function to specify the size of the array, bind each value to the variable by using the :c:func:`cci_bind_param_array` function, and execute the query by calling the :c:func:`cci_execute_array` function. The query result will be stored on the array of **T_CCI_QUERY_RESULT** structure.
 
-    You can get three execution results by calling the :c:func:`cci_execute` function. However, the :c:func:`cci_execute_array` function returns the number of queries executed by the query_result variable. You can use :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG` and :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` macros to get the esult of each query. 
+    You can get three execution results by calling the :c:func:`cci_execute` function. However, the :c:func:`cci_execute_array` function returns the number of queries executed by the query_result variable. You can use :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG` and :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` macros to get the result of each query. 
     
     Note that the validity check is not performed for each parameter entered in the macro. 
     
@@ -1040,7 +1038,7 @@ CCI API Reference
     
     .. note:: 
     
-        * In the previous version of 2008 R4.3, if the autocommit mode is on, all queries in the array were committed after all of them are executed.  From 2008 R4.3 version, the trasaction is committed everytime when a query is executed.
+        * In the previous version of 2008 R4.3, if the autocommit mode is on, all queries in the array were committed after all of them are executed.  From 2008 R4.3 version, the transaction is committed every time when a query is executed.
         * In autocommit mode off, if the general error occurs during executing one of the queries in the array on the cci_execute_array function which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 
     
     .. code-block:: c
@@ -1202,7 +1200,7 @@ CCI API Reference
     :param req_handle: (IN) Request handle of the prepared statement
     :param query_result: (OUT) Query results
     :param err_buf: (OUT) Database error buffer
-    :return: Suceess: The number of queries, Failure: Negative number
+    :return: Success: The number of queries, Failure: Negative number
 
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_COMMUNICATION**
@@ -1368,16 +1366,16 @@ CCI API Reference
     +---------------------+------------------------------+-------------------------------------------+
     | CCI_A_TYPE_BIT      | **T_CCI_BIT** \*             | value copy (pointer copy for each member) |
     +---------------------+------------------------------+-------------------------------------------+
-    | CCI_A_TYPE_SET      | **T_CCI_SET** \*             | memory alloc and value copy               |
+    | CCI_A_TYPE_SET      | **T_CCI_SET** \*             | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
     | CCI_A_TYPE_DATE     | **T_CCI_DATE** \*            | value copy                                |
     +---------------------+------------------------------+-------------------------------------------+
     | CCI_A_TYPE_BIGINT   | int64_t \*                   | value copy                                |
     |                     | (For Windows: __int64 \*)    |                                           |
     +---------------------+------------------------------+-------------------------------------------+
-    | **CCI_A_TYPE_BLOB** | **T_CCI_BLOB**               | memory alloc and value copy               |
+    | CCI_A_TYPE_BLOB     | **T_CCI_BLOB**               | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
-    | **CCI_A_TYPE_CLOB** | **T_CCI_CLOB**               | memory alloc and value copy               |
+    | CCI_A_TYPE_CLOB     | **T_CCI_CLOB**               | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
 
     **Remark**
@@ -1424,7 +1422,7 @@ CCI API Reference
 
     :param conn_handle: (IN) Connection handle
     :param out_buf: (OUT) Result buffer
-    :param out_buf_size: (IN) *oub_buf* size
+    :param out_buf_size: (IN) *out_buf* size
     :return: Error code (0: success)
 
         *   **CCI_ER_CON_HANDLE**
@@ -1700,7 +1698,7 @@ CCI API Reference
         
 .. c:function:: int cci_is_updatable(int req_handle)
 
-    The **cci_is_updatable** function checks the SQL statement executing :c:func:`cci_prepare` can make updatable result set (which means CCI_PREPARE_UPDATABLE is configued in *flag* when executing :c:func:`cci_prepare`).
+    The **cci_is_updatable** function checks the SQL statement executing :c:func:`cci_prepare` can make updatable result set (which means CCI_PREPARE_UPDATABLE is configured in *flag* when executing :c:func:`cci_prepare`).
 
     :param req_handle: (IN) Request handle for the prepared statement
     :return: 1 : updatable, 0 : not updatable
@@ -1946,7 +1944,7 @@ CCI API Reference
         *   **CCI_ER_QUERY_TIMEOUT**
         *   **CCI_ER_LOGIN_TIMEOUT**
 
-    **CCI_PREPARE_UPDATABLE**, **CCI_PREPARE_INCLUDE_OID**, or **CCI_PREPARE_HOLDABLE** can be configured in *flag*. If **CCI_PREPARE_UPDATABLE** is configured, updatable resultset is created and **CCI_PREPARE_INCLUDE_OID** is automatically configured. **CCI_PREPARE_UPDATABLE** and **CCI_PREPARE_HOLDABLE** can not be used simultaneously in *flag*.
+    **CCI_PREPARE_UPDATABLE**, **CCI_PREPARE_INCLUDE_OID**, or **CCI_PREPARE_HOLDABLE** can be configured in *flag*. If **CCI_PREPARE_UPDATABLE** is configured, updatable resultset is created and **CCI_PREPARE_INCLUDE_OID** is automatically configured. **CCI_PREPARE_UPDATABLE** and **CCI_PREPARE_HOLDABLE** cannot be used simultaneously in *flag*.
     If you want to call the Java Stored Procedure, specify **CCI_PREPARE_CALL** flag into the **cci_prepare** function. You can see an related example on c:func:`cci_register_out_param`.
     
     The default value of whether to keep result set after commit is cursor holdability. Thus, if you want to configure **CCI_PREPARE_UPDATABLE** in *flag* of :c:func:`cci_prepare`, you should call :c:func:`cci_set_holdable` first before calling :c:func:`cci_prepare` so that cursor cannot be maintained.
@@ -2043,7 +2041,7 @@ CCI API Reference
     
     *   **user**: DB user name
     *   **password**: DB user password
-    *   **url**: connection URL. For specifying connnection URL string, refer :c:func:`cci_connect_with_url`.
+    *   **url**: connection URL. For specifying connection URL string, refer :c:func:`cci_connect_with_url`.
     *   **pool_size** : Maximum number of connection (default value: 10)
     *   **max_wait** : Maximum waiting time to get connection (default value: 1000 msec.)
     *   **pool_prepared_statement** : Whether to enable statement pooling (default value: false)
@@ -2055,7 +2053,7 @@ CCI API Reference
     *   **default_isolation** : Transaction isolation level refreshed whenever **cci_datasource_borrow** is called
     *   **default_lock_timeout** : lock_timeout refreshed whenever **cci_datasource_borrow** is called
 
-    If the number of prepared statemets exceeds **max_open_prepared_statement** value, the oldest prepared statement is released from the statement pool. If you reuse it later, it is added to the statement pool again.
+    If the number of prepared statements exceeds **max_open_prepared_statement** value, the oldest prepared statement is released from the statement pool. If you reuse it later, it is added to the statement pool again.
     
     If you configure **default_autocommit**, **default_isolation**, or **default_lock_timeout** value, connection for autocommit, isolation, or lock_timeout based on current configured value is returned when **cci_datasource_borrow** is called. If you do not configure it, connection for autocommit, isolation, or lock_timeout is returned with keeping the value that a user changed before.
 
@@ -2136,7 +2134,7 @@ CCI API Reference
 
 .. c:macro:: #define CCI_QUERY_RESULT_ERR_NO(T_CCI_QUERY_RESULT* query_result, int index)
 
-    Since query results performed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array`, or :c:func:`cci_execute_result` fuctions are stored as an array of **T_CCI_QUERY_RESULT** structure, you need to check the query result for each item of the array.
+    Since query results performed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array`, or :c:func:`cci_execute_result` function are stored as an array of **T_CCI_QUERY_RESULT** structure, you need to check the query result for each item of the array.
     
     **CCI_QUERY_RESULT_ERR_NO** fetches the error number for the array item specified as *index*, if it is not an error, it returns 0. 
 
@@ -2147,7 +2145,7 @@ CCI API Reference
         
 .. c:macro:: #define CCI_QUERY_RESULT_ERR_MSG(T_CCI_QUERY_RESULT* query_result, int index)
 
-    The **CCI_QUERY_RESULT_ERR_MSG** macro gets error messages about query results executed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function. If there is non error message, this macro returns ""(empty string). It does not check whether the specified argument, *query_result*, is **NULL**, and whether *index* is valid.
+    The **CCI_QUERY_RESULT_ERR_MSG** macro gets error messages about query results executed by :c:func:`cci_execute_batch`, :c:func:`cci_execute_array` or :c:func:`cci_execute_result` function. If there is no error message, this macro returns ""(empty string). It does not check whether the specified argument, *query_result*, is **NULL**, and whether *index* is valid.
 
     :param query_result: (IN) Query results of to be executed
     :param index: (IN) Column index (base: 1)
@@ -2202,7 +2200,7 @@ CCI API Reference
         
         %javac SpCubrid.java
     
-    Load the compliled Java class into CUBRID.
+    Load the compiled Java class into CUBRID.
     
     ::
         
@@ -2316,7 +2314,7 @@ CCI API Reference
 
         :c:func:`cci_prepare`
         
-    :param req_handle: (IN) Reqeust handle
+    :param req_handle: (IN) Request handle
      int cci_register_out_param(int req_handle, int index)
     
     :return: Error code

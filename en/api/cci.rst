@@ -14,7 +14,7 @@ It is automatically installed upon CUBRID installation and can be found in the *
 +-----------------+-------------------+-------------------+
 |                 | Windows           | UNIX/Linux        |
 +=================+===================+===================+
-| C hearder file  | include/cas_cci.h | include/cas_cci.h |
+| C header file   | include/cas_cci.h | include/cas_cci.h |
 +-----------------+-------------------+-------------------+
 | Static library  | lib/cascci.lib    | lib/libcascci.a   |
 +-----------------+-------------------+-------------------+
@@ -43,7 +43,7 @@ General process for writing applications is as follows. For using the prepared s
 *   Getting the request handle for the prepared statement (related function: :c:func:`cci_prepare`)
 *   Binding data to the prepared statement (related function: :c:func:`cci_bind_param`)
 *   Executing the prepared statement (related function: :c:func:`cci_execute`)
-*   Processing the exeuction result (related functions: :c:func:`cci_cursor`, :c:func:`cci_fetch`, :c:func:`cci_get_data`, :c:func:`cci_get_result_info`)
+*   Processing the execution result (related functions: :c:func:`cci_cursor`, :c:func:`cci_fetch`, :c:func:`cci_get_data`, :c:func:`cci_get_result_info`)
 *   Closing the request handle (related function: :c:func:`cci_close_req_handle`)
 *   Closing the database connection handle (related function: :c:func:`cci_disconnect`)
 *   Using database connection pool (related functions: :c:func:`cci_property_create`), :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`)
@@ -379,7 +379,7 @@ You can create **LOB** data file and bind the data by using the functions below 
 
 *   Creating **LOB** data files (related functions: :c:func:`cci_blob_new`, :c:func:`cci_blob_write`)
 *   Binding **LOB** data (related function: :c:func:`cci_bind_param`)
-*   Freeing memory for **LOB** struct (related function::c:func:`cci_blob_free`)
+*   Freeing memory for **LOB** struct (related function: :c:func:`cci_blob_free`)
 
 **Example**
 
@@ -448,7 +448,7 @@ You can create **LOB** data file and bind the data by using the functions below 
 
 You can retrieve **LOB** data by using the following functions in CCI applications. Note that if you enter data in the **LOB** type column, the actual **LOB** data is stored in the file located in external storage and Locator value is stored in the **LOB** type column. Thus, to retrieve the **LOB** data stored in the file, you should call the :c:func:`cci_blob_read` function but the :c:func:`cci_get_data` function.
 
-*   Retrieving meata data (Locator) in the the **LOB** type column (related function: :c:func:`cci_get_data`)
+*   Retrieving meta data (Locator) in the the **LOB** type column (related function: :c:func:`cci_get_data`)
 *   Retrieving the **LOB** data (related function: :c:func:`cci_blob_read`)
 *   Freeing memory for the **LOB** struct: (related function: :c:func:`cci_blob_free`)
 
@@ -531,7 +531,7 @@ CCI API functions return a negative number as CCI or CAS (broker application ser
 
 .. note::
 
-    In the earlier version of CUBRID 9.0, the CCI and CAS error codes had values which w different in the version of CUBRID 9.0 or later. Therfore, the users who developed the applications by using the error code names must recomplie them and the users who developed them by directly assigning error code numbers must recomplie them after changing the number values.
+    In the earlier version of CUBRID 9.0, the CCI and CAS error codes had values which w different in the version of CUBRID 9.0 or later. Therefore, the users who developed the applications by using the error code names must recompile them and the users who developed them by directly assigning error code numbers must recompile them after changing the number values.
 
 For database server errors, see :ref:`database-server-error`.
 

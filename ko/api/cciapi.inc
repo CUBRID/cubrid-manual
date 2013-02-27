@@ -258,8 +258,6 @@ CCI API 레퍼런스
         #include <pthread.h>
         #include <string.h>
         #include <time.h>
-        #include <sys/time.h>
-        #include <sys/timeb.h>
 
         #define QUERY "select * from db_class A, db_class B, db_class C, db_class D, db_class E"
 
@@ -855,7 +853,7 @@ CCI API 레퍼런스
     | **CCI_A_TYPE_CLOB**         | **T_CCI_CLOB**              |
     +-----------------------------+-----------------------------+
 
-.. c:function:: T_CCI_CONN cci_datasource_borrow (T_CCI_DATASOURCE * datesource, T_CCI_ERROR * err_buf)
+.. c:function:: T_CCI_CONN cci_datasource_borrow (T_CCI_DATASOURCE * datasource, T_CCI_ERROR * err_buf)
 
     **T_CCI_DATASOURCE** 구조체에서 사용할 CCI 연결을 획득한다.
 
@@ -908,7 +906,7 @@ CCI API 레퍼런스
         :c:func:`cci_datasource_destroy`,
         :c:func:`cci_datasource_release`
 
-.. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * date_source, T_CCI_CONN conn)
+.. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * datasource, T_CCI_CONN conn)
 
     **T_CCI_DATASOURCE** 구조체에 사용을 끝낸 CCI 연결을 반환한다. 연결이 연결 풀에 반환된 이후 재사용하려면 반드시 c:func:`cci_datasource_borrow` 함수를 재호출해야 한다.
 
@@ -975,7 +973,7 @@ CCI API 레퍼런스
     시스템 파라미터 **no_backslash_escapes의** 값이 no이거나 연결 핸들 위치에 **CCI_NO_BACKSLASH_ESCAPES_FALSE** 값을 전달하는 경우, 변환되는 문자는 다음과 같다.
     
     *   \\n (new line character, ASCII 10) => \\ + n (백슬래시 + 알파벳 n)
-    *   \\r (carrage return, ASCII 13) => \\ + r (백슬래시 + 알파벳 r)
+    *   \\r (carriage return, ASCII 13) => \\ + r (백슬래시 + 알파벳 r)
     *   \\0 (ASCII 0) => \\ + 0 (백슬래시 + 0(ASCII 48)
     *   \\ (백슬래시) => \\ + \\
 
@@ -1386,16 +1384,16 @@ CCI API 레퍼런스
     +---------------------+------------------------------+-------------------------------------------+
     | CCI_A_TYPE_BIT      | **T_CCI_BIT** \*             | value copy (pointer copy for each member) |
     +---------------------+------------------------------+-------------------------------------------+
-    | CCI_A_TYPE_SET      | **T_CCI_SET** \*             | memory alloc and value copy               |
+    | CCI_A_TYPE_SET      | **T_CCI_SET** \*             | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
     | CCI_A_TYPE_DATE     | **T_CCI_DATE** \*            | value copy                                |
     +---------------------+------------------------------+-------------------------------------------+
     | CCI_A_TYPE_BIGINT   | int64_t \*                   | value copy                                |
     |                     | (For Windows: __int64 \*)    |                                           |
     +---------------------+------------------------------+-------------------------------------------+
-    | **CCI_A_TYPE_BLOB** | **T_CCI_BLOB**               | memory alloc and value copy               |
+    | CCI_A_TYPE_BLOB     | **T_CCI_BLOB**               | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
-    | **CCI_A_TYPE_CLOB** | **T_CCI_CLOB**               | memory alloc and value copy               |
+    | CCI_A_TYPE_CLOB     | **T_CCI_CLOB**               | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
 
     **참고 사항**
@@ -1442,7 +1440,7 @@ CCI API 레퍼런스
 
     :param conn_handle: (IN) 연결 핸들
     :param out_buf: (OUT) 결과 버퍼
-    :param out_buf_size: (IN) *oub_buf* 크기
+    :param out_buf_size: (IN) *out_buf* 크기
     :return: 에러 코드(0: 성공)
 
         *   **CCI_ER_CON_HANDLE**

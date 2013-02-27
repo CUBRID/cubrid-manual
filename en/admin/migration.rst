@@ -312,7 +312,7 @@ The following table shows options available with the **cubrid loaddb** utility (
 
     For the server error code name, see the **$CUBRID/include/dbi.h** file.
 
-    For error messages by error code (error number), see the number under $set 5 MSGCAT_SET_ERROR in th **$CUBRID/msg/**\ *<character set name>*\ **/cubrid.msg** file. ::
+    For error messages by error code (error number), see the number under $set 5 MSGCAT_SET_ERROR in the **$CUBRID/msg/**\ *<character set name>*\ **/cubrid.msg** file. ::
 
         vi $CUBRID/msg/en_US/cubrid.msg
          
@@ -404,7 +404,7 @@ The *class_name* specified by the **%id** command is the class name defined in t
 Specifying the Class and Attribute
 ----------------------------------
 
-You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loadd** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class. ::
+You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loaddb** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class. ::
 
     %class class_name ( attr_name [attr_name... ] )
 

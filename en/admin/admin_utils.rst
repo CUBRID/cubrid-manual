@@ -34,7 +34,7 @@ The following shows how to use the CUBRID management utilities. ::
         unloaddb [option] <database-name>  --- Unloading data and schema 
         paramdump [option] <database-name>  --- Checking out the parameter values configured in a database 
         changemode [option] <database-name>  --- Displaying or changing the server HA mode 
-        copylogdb [option] <database-name>  --- Multiplating transaction logs to configure HA 
+        copylogdb [option] <database-name>  --- Multiplicating transaction logs to configure HA 
         applylogdb [option] <database-name>  --- Reading and applying replication logs from transaction logs to configure HA 
         applyinfo [option] <database-name>   --- Displaying the status of being applied transaction log to the other node in HA replication environment
         synccolldb [option] <database-name>  --- Synchronizing the DB collation with the system collation
@@ -44,7 +44,7 @@ The following shows how to use the CUBRID management utilities. ::
 Database Users
 ==============
 
-A CUBRID database user can have members with the same authorization. If authorization **A** is granted to a user, the same authorization is also granted to all members belonging to the user. A database user and its members are called a "group."; a use who has no members is called a "user."
+A CUBRID database user can have members with the same authorization. If authorization **A** is granted to a user, the same authorization is also granted to all members belonging to the user. A database user and its members are called a "group."; a user who has no members is called a "user."
 
 CUBRID provides **DBA** and **PUBLIC** users by default.
 
@@ -101,7 +101,7 @@ The **cubrid createdb** utility creates databases and initializes them with the 
 
 * *database_name*: Specifies a unique name for the database to be created, without including the path name to the directory where the database will be created. If the specified database name is the same as that of an existing database name, CUBRID halts creation of the database to protect existing files.
 
-The maximun length of database name is 17 in English.
+The maximum length of database name is 17 in English.
 
 The following shows [options] available with the **cubrid** **createdb** utility.
 
@@ -170,7 +170,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
 .. option:: -B, --lob-base-path=PATH
 
-    This option specifies a directory where LOB data files are stored when BLOB/CLOB data is used. If the **--lob-base-path** option is not specified, LOB data files are store in < *location of database volumns created* >/ **lob** directory. The following example shows how to create a database named *testdb* in the working directory and specify /home/data1 of local file system as a location of LOB data files. ::
+    This option specifies a directory where LOB data files are stored when BLOB/CLOB data is used. If the **--lob-base-path** option is not specified, LOB data files are store in < *location of database volumes created* >/ **lob** directory. The following example shows how to create a database named *testdb* in the working directory and specify /home/data1 of local file system as a location of LOB data files. ::
 
         cubrid createdb --lob-base-path "file:/home1/data1" testdb
         
@@ -255,7 +255,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
         USER sedan
         USER suv
         USER hatchback
-        USER granduer GROUPS sedan
+        USER grandeur GROUPS sedan
         USER sonata GROUPS sedan
         USER tuscan GROUPS suv
         USER i30 GROUPS hatchback
@@ -265,11 +265,11 @@ The following shows [options] available with the **cubrid** **createdb** utility
         --
         -- Example 2 of a user information file
         --
-        USER granduer
+        USER grandeur
         USER sonata
         USER tuscan
         USER i30
-        USER sedan MEMBERS sonata granduer
+        USER sedan MEMBERS sonata grandeur
         USER suv MEMBERS tuscan
         USER hatchback MEMBERS i30
     
@@ -389,7 +389,7 @@ The following shows [options] available with the **cubrid addvoldb** utility.
         cubrid addvoldb -C --db-volume-size=256M testdb
 
 .. option:: --max_writesize-in-sec=SIZE
-    The --max_writesize-in-sec is used to limit the impact of  system operating when you add a volumn to the database. This can limit the maximum writing size per second. The unit of this option is K(kilobytes) and M(megabytes). The minimum value is 160K. If you set this value as less than 160K, it is changed as 160K. It can be used only in client/server mode.
+    The --max_writesize-in-sec is used to limit the impact of  system operating when you add a volume to the database. This can limit the maximum writing size per second. The unit of this option is K(kilobytes) and M(megabytes). The minimum value is 160K. If you set this value as less than 160K, it is changed as 160K. It can be used only in client/server mode.
     
     The below is an example to limit the writing size of the 2GB volume as 1MB. Consuming time will be about 35 minutes(= (2048MB/1MB) /60 sec.). ::
     
@@ -426,7 +426,7 @@ The following shows options available with the **cubrid deleteldb** utility.
 
 .. option:: -d, --delete-backup
 
-    This option deletes database volumns, backup volumes and backup information files simultaneously. If the -**d** option is not specified, backup volume and backup information files are not deleted. ::
+    This option deletes database volumes, backup volumes and backup information files simultaneously. If the -**d** option is not specified, backup volume and backup information files are not deleted. ::
     
         cubrid deletedb -d testdb
 
@@ -557,7 +557,7 @@ The following shows [options] available with the **cubrid copydb** utility.
 
         cubrid copydb -i copy_path demodb new_demodb
 
-    The following is an exmaple of input file that contains each volume name, current directory path, and new directory and volume names. ::
+    The following is an example of input file that contains each volume name, current directory path, and new directory and volume names. ::
 
         # volid   source_fullvolname   dest_fullvolname
         0 /usr/databases/demodb        /drive1/usr/databases/new_demodb
@@ -569,11 +569,11 @@ The following shows [options] available with the **cubrid copydb** utility.
 
     * *source_fullvolname*: The current directory path to each source database volume.
 
-    * *dest_fullvolname*: The target directory path where new volumes will be stored. You should specify a vaild path.  
+    * *dest_fullvolname*: The target directory path where new volumes will be stored. You should specify a valid path.  
 
 .. option:: -r, --replace
 
-    If the **-r** option is specified, a new database name overwrites the existing database name if it is identical, insteading outputting an error. ::
+    If the **-r** option is specified, a new database name overwrites the existing database name if it is identical, instead of outputting an error. ::
 
         cubrid copydb -r -F /home/usr/CUBRID/databases demodb new_demodb
 
@@ -720,7 +720,7 @@ The following shows [options] available with the **cubrid spacedb** utility.
 
 .. option:: -S, --SA-mode
 
-    This option specifies to compact used space in standalone mode while database server is not running; no arugment is specified.  If the **-S** option is not specified, system recognizes that the job is executed in client/server mode. ::
+    This option specifies to compact used space in standalone mode while database server is not running; no argument is specified.  If the **-S** option is not specified, system recognizes that the job is executed in client/server mode. ::
 
         cubrid compactdb --SA-mode testdb
 
@@ -730,11 +730,11 @@ The following shows [options] available with the **cubrid spacedb** utility.
 
 .. option:: - i, --input-class-file=FILE
 
-    You can specify an input file name that contains the table table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option.
+    You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option.
 
 .. option:: -p, --pages-commited-once=NUMBER
 
-    You can specify the number of maximum pages that can be commited once with this option. The default value is 10, the minimum value is 1, and the maximum value is 10. The less option value is specified, the more concurrency is enhanced because the value for class/instance lock is small; however, it causes slowdown on operation, and vice versa. ::
+    You can specify the number of maximum pages that can be committed once with this option. The default value is 10, the minimum value is 1, and the maximum value is 10. The less option value is specified, the more concurrency is enhanced because the value for class/instance lock is small; however, it causes slowdown on operation, and vice versa. ::
 
         cubrid compactdb --CS-mode -p 10 testdb tbl1, tbl2, tbl5
 
@@ -808,11 +808,11 @@ The following shows [options] available with the **cubrid statdump** utility.
     
         cubrid statdump -i 1 -c demodb
         
-    The following outputs the accumulated values during 1 second, as starting with 0 value per every 1 second. 다음은 1초 마다 0으로 리셋하고 1초 동안 누적된 값을 출력한다. ::
+    The following outputs the accumulated values during 1 second, as starting with 0 value per every 1 second. ::
     
         cubrid statdump -i 1 demodb
         
-    The following outputs the last values which were executed with -i option. ::
+    The following outputs the last values which were executed with **-i** option. ::
     
         cubrid statdump demodb
         

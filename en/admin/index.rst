@@ -47,7 +47,7 @@ See `Registering Services <#admin_admin_service_conf_registe_6298>`_ for details
 
 The database management utilities are as follows:
 
-*   Creating database, adding volume, and deleting datbase
+*   Creating database, adding volume, and deleting database
 
     *   cubrid createdb
     *   cubrid addvoldb
@@ -160,7 +160,7 @@ The following result is displayed if **cubrid** is entered in a prompt.
 
     If you want to control the service by using **cubrid** utility on Windows Vista or later, it is recommended that you run the command prompt with an administrator account. If you use **cubrid** utility without an administrator account, the result message is not displayed even though you can run it through the User Account Control (UAC) dialog.
 
-    To run the command prompt on Windows Vista or later with an administrator account, right-click [Start] > [All Programs] > [Accessories] > [Command Prompt] and select [Run as Administrator]. In the dialog verifying authorization, click [Yes]; then the command prompt runs with an administrator account.
+    To run the command prompt on Windows Vista or later with an administrator account, right-click [Start] > [All Programs] > [Accessories] > [Command Prompt] and select [Run as Administrator]. In the dialog verifying authorization, click [Yes], and then the command prompt is run as an administrator account.
 
 .. toctree::
     :maxdepth: 2

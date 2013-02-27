@@ -1379,7 +1379,7 @@ These are the functions for BLOB/CLOB types. For more details, refer :doc:`/sql/
 To create and manage LOB storage
 --------------------------------
 
-By default, the **LOB** data file is stored in the <db-volumn-path>/lob directory where database volume is created. However, if the lob base path is specified with :option:`createdb -B` option when creating the database, **LOB** data files will be stored in the directory designated. However, if the specified directory does not exist, CUBRID tries to create the directory and display an error message when it fails to create it. For more details, see :option:`createdb -B` option. ::
+By default, the **LOB** data file is stored in the <db-volume-path>/lob directory where database volume is created. However, if the lob base path is specified with :option:`createdb -B` option when creating the database, **LOB** data files will be stored in the directory designated. However, if the specified directory does not exist, CUBRID tries to create the directory and display an error message when it fails to create it. For more details, see :option:`createdb -B` option. ::
 
     # image_db volume is created in the current work directory, and a LOB data file will be stored.
     % cubrid createdb image_db

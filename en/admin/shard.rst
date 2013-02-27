@@ -35,7 +35,7 @@ More details on each characteristic will be described in the next chapter.
 CUBRID SHARD Terminologies
 ==========================
 
-The teminologies used to describe CUBRID SHARD are as follows:
+The terminologies used to describe CUBRID SHARD are as follows:
 
 *   **shard DB** : A database that includes a split table and data and processes user requests
 

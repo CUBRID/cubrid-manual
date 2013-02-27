@@ -371,12 +371,12 @@ The following are parameters related to the database server. The type and value 
 
     The values and the working methods are as follows.
 
-    *    **both**: As the server process access to the client process by ECHO(7) port, it checks if the client process works well..The client process also do the same thing to the sever process(The default value).
-    *    **server_only**: Only the server process checks if the client process works well.
-    *    **client_only**: Only the client rocess checks if the server process works well.
-    *    **none**: Both of the server and client processes do not check if the other process works well.
+    *    **both**: As the server process access to the client process by ECHO(7) port, it checks if the client process works well. The client process also do the same thing to the sever process(The default value).
+    *    **server_only**: Only the server process checks whether the client process works well.
+    *    **client_only**: Only the client process checks whether the server process works well.
+    *    **none**: Both of the server and client processes do not check whether the other process works well.
 
-    Specially, if ECHO(7) port is blocked by the firewall configuration, each process can mistake that the other process  was exit.Therefore, you should avoid this problem by setting this parameter’s value as none.
+    Specially, if ECHO(7) port is blocked by the firewall configuration, each process can mistake that the other process  was exited. Therefore, you should avoid this problem by setting this parameter’s value as none.
 
 **db_hosts**
 
@@ -950,7 +950,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **intl_check_input_string**
 
-    **intl_check_input_string** is a parameter used to whether to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is no and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be termminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
+    **intl_check_input_string** is a parameter used to whether to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is no and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be terminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
 
     UTF-8 and EUC-KR can be checked; ISO-8859-1 is one-byte encoding so it does not have to be checked because every byte is valid.
 
@@ -960,7 +960,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **intl_check_input_string**
 
-    **intl_check_input_string** is a parameter used to whether to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is no and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be termminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
+    **intl_check_input_string** is a parameter used to whether to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is no and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be terminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
 
     UTF-8 and EUC-KR can be checked; ISO-8859-1 is one-byte encoding so it does not have to be checked because every byte is valid.
 
@@ -1012,7 +1012,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **intl_number_lang**
 
-    **intl_number_lane**  is a parameter used to specify locale applied when numeric format is assiged to input/output string in the function where a string is converted to number or number is converted to string. A delimiter and decimal symbol are used for numeric localization. In general, a comma and period are used; however, it can be changeable based on locale. For example, while number 1000.12 is used as 1,000.12 in most locale, it used as 1.000,12 in , tr_TR locale.
+    **intl_number_lane**  is a parameter used to specify locale applied when numeric format is assigned to input/output string in the function where a string is converted to number or number is converted to string. A delimiter and decimal symbol are used for numeric localization. In general, a comma and period are used; however, it can be changeable based on locale. For example, while number 1000.12 is used as 1,000.12 in most locale, it used as 1.000,12 in , tr_TR locale.
 
     The function recognizing input string based on calendar format of specified language is as follows:
 
@@ -1025,7 +1025,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **no_backslash_escapes**
 
-    **no_backslash_escapes** is a parameter used to configure whether or not to use backslash (\\) as an escape character, and the default value is **yes**. If a value for this parameter is set to no, backslash (\\) will be used as an escape character; if it is set to yes, backslash (\\) will be used as a normal character. For example, if ths value is set to no, "\\n" means a newline character. For details, see :ref:`escape-characters`.
+    **no_backslash_escapes** is a parameter used to configure whether or not to use backslash (\\) as an escape character, and the default value is **yes**. If a value for this parameter is set to no, backslash (\\) will be used as an escape character; if it is set to yes, backslash (\\) will be used as a normal character. For example, if this value is set to no, "\\n" means a newline character. For details, see :ref:`escape-characters`.
 
 **only_full_group_by**
 
@@ -1142,13 +1142,13 @@ The following are parameters related to SQL statements and data types supported 
 
     **unicode_input_normalization** is a parameter used to whether to input unicode stored in system level. The default value is **no**.
 
-    In gernal, unicode text can be stored in "fully composed" or "fully decomposed". When character 'Ä' has 00C4 (if it is encoded in UTF-8, it becomes 2 bytes of C3 84) which is only one code point. In "fully decomposed" mode, it has tow code points/characters. It is 0041 (character "A") and 0308(COMBINING DIAERESIS). In case of UTF-8 encoding, it becomes 3 bytes of 41 CC 88.
+    In general, unicode text can be stored in "fully composed" or "fully decomposed". When character 'Ä' has 00C4 (if it is encoded in UTF-8, it becomes 2 bytes of C3 84) which is only one code point. In "fully decomposed" mode, it has two code points/characters. It is 0041 (character "A") and 0308(COMBINING DIAERESIS). In case of UTF-8 encoding, it becomes 3 bytes of 41 CC 88.
 
     CUBRID can work with fully composed unicode. For clients which have fully decomposed texts, configure the value of **unicode_input_normalization** to yes so that it can be converted to fully composed mode; and then it can be reverted to fully decomposed mode. For normalization of unicode encapsulation of CUBRID, compatibility equivalence is not applied. In general, normalization of unicode is not possible to revert after composition, CUBRID supports revert for characters an many as possible, it applies normalization of unicode encapsulation. The characteristics of CUBRID normalization are as follows:
 
     *   In case of language specific, normalization does not depend on locale. 
     
-        If one or more locale cana be used, this means every CAS/CSQL process, not CUBRID server. The **unicode_input_normalization** system parameter determines whether composition of input codes by normalization in system level. The **unicode_output_normalization** system parameter determines whether composition of output codes by normalization in system level.
+        If one or more locale can be used, this means every CAS/CSQL process, not CUBRID server. The **unicode_input_normalization** system parameter determines whether composition of input codes by normalization in system level. The **unicode_output_normalization** system parameter determines whether composition of output codes by normalization in system level.
 
     *   Collation and normalization does not have direct relationship. 
     
@@ -1195,7 +1195,7 @@ The following are parameters related to the query plan cache functionality. The 
 
 **max_filter_pred_cache_entries**
 
-    **max_filter_pred_cache_entries** is a parameter used to specify the maximum number of of filtered index expressions. The filtered index expressions are stored with them complied and can be immediately used in server. If it is not stored in cache, the process is required which filtered index expressions are fetched from database schema and interpreted.
+    **max_filter_pred_cache_entries** is a parameter used to specify the maximum number of filtered index expressions. The filtered index expressions are stored with them complied and can be immediately used in server. If it is not stored in cache, the process is required which filtered index expressions are fetched from database schema and interpreted.
 
 .. _utility-parameters:
 
@@ -1686,7 +1686,7 @@ The following describes parameters to configure the environment variables of bro
 
 **MAX_STRING_LENGTH**
 
-    **MAX_STRING_LENGTH** is a parameter used to configure the maximum string length for BIT, VARBIT, CHAR and VARCHAR data types. If the value is **-1**, which is the default value, the length defined in the database is used. If the value is **100**, the value acts like 100 being applied even when a certain attribute is defined as varchar(1000).
+    **MAX_STRING_LENGTH** is a parameter used to configure the maximum string length for BIT, VARBIT, CHAR and VARCHAR data types. If the value is **-1**, which is the default value, the length defined in the database is used. If the value is **100**, the value acts like 100 being applied even when a certain attribute is defined as VARCHAR(1000).
 
 **PREFERRED_HOSTS**
 

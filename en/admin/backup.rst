@@ -220,7 +220,7 @@ Managing Archive Logs
 
 You must not delete archive logs by using the file deletion command such as rm or del by yourself; the archive logs should be deleted by system configuration or the **cubrid backupdb** utility. In the following three cases, archive logs can be deleted.
 
-*   In an HA environment, configure the **force_remove_log_archives** values to no and delete it by specifying the number of  the **log_max_archives** values (it will be deleted after eplication is applied).
+*   In an HA environment, configure the **force_remove_log_archives** values to no and delete it by specifying the number of  the **log_max_archives** values (it will be deleted after replication is applied).
 
 *   In non-HA environment, configure the **force_remove_log_archives** value to yes and delete it by specifying the number of **log_max_archives** values (In initial installation, the **log_max_archives** value is set to 0).
 
@@ -308,7 +308,7 @@ The following table shows options available with the **cubrid restoredb** utilit
 
 .. option:: -p, --partial-recovery
 
-    Yo can perform partial restoration without requesting for the user's response by using the **-p** option. If active or archive logs written after the backup point are not complete, by default the system displays a request message informing that log files are needed and prompting the user to enter an execution option. The partial restoration can be performed directly without such a request message by using the **-p** option. Therefore, if the **-p** option is used when performing restoration, data is always restored to the point of the last backup. ::
+    You can perform partial restoration without requesting for the user's response by using the **-p** option. If active or archive logs written after the backup point are not complete, by default the system displays a request message informing that log files are needed and prompting the user to enter an execution option. The partial restoration can be performed directly without such a request message by using the **-p** option. Therefore, if the **-p** option is used when performing restoration, data is always restored to the point of the last backup. ::
 
         cubrid restoredb -p demodb
 

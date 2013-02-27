@@ -68,7 +68,7 @@ The server status changes based on the status of the node. You can use the :ref:
 
 *   **active** : The status of servers that run on a master node is usually active. In this status, all services including read, write, etc. are provided.
 *   **standby** : The status of servers that run on a slave node or a replica node is standby. In this status, only the read service is provided.
-*   **maintenanc** : The status of servers can be manually changed for operational convenience is maintenance. In this status, only a csql can access and no service is provided to the user.
+*   **maintenance** : The status of servers can be manually changed for operational convenience is maintenance. In this status, only a csql can access and no service is provided to the user.
 *   **to-be-active** : The status in which a standby server will become active for reasons such as failover, etc. is to-be-active. In this status, servers prepare to become active by reflecting transaction logs from the existing master node to its own server. The node in this status can accept only SELECT query.
 *   Other : This status is internally used.
 
@@ -123,7 +123,7 @@ When the broker temporarily establishes a connection to a standby server, it wil
 
 The order of server connection is described below:
 
-*   The broker tries to establish a connection to an existing server connected (if exsits). The active status of the server means the connection is complete.
+*   The broker tries to establish a connection to an existing server connected (if exists). The active status of the server means the connection is complete.
 *   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence. The active status of the server means the connection is complete.
 *   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence and connects to the first available host.
 
@@ -139,7 +139,7 @@ command. An error will occur when the Read Only broker receives write requests; 
 
 The order of server connection is described below:
 
-*   The broker tries to establish a connection to an existing server connected (if exsits). The standby status of the server means the connection is complete.
+*   The broker tries to establish a connection to an existing server connected (if exists). The standby status of the server means the connection is complete.
 *   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence. The standby status of the server means the connection is complete.
 *   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence and connects to the first available host.
 
@@ -219,7 +219,7 @@ The broker failover is not automatically failed over by the settings of system p
 
 **Broker failback**
 
-If the failed broker is recovered after a failover, the connection to the existing broker is terminated and a new connection is established with the recovered broker which has the highest priority. This requires no processing in the application side as it is processed within the JDBC, CCI, and PHP drivers. Exeuction time of failback depends on the value configured in JDBC connection URL. For details, see :ref:`ha-jdbc-conf`.
+If the failed broker is recovered after a failover, the connection to the existing broker is terminated and a new connection is established with the recovered broker which has the highest priority. This requires no processing in the application side as it is processed within the JDBC, CCI, and PHP drivers. Execution time of failback depends on the value configured in JDBC connection URL. For details, see :ref:`ha-jdbc-conf`.
 
 .. _log-multiplexing:
 
@@ -611,7 +611,7 @@ For details, see :ref:`log-multiplexing`.
 
 **ha_apply_max_mem_size**
 
-**ha_apply_max_mem_size** is a parameter used to configure the value of maximum memory that the replication log reflection process of CUBRID HA can use. The default and maximun values are **500** (unit: MB). When the value is larger than the size allowed by the system, memory allocation fails and the HA replication reflection process may malfunction. For this reason, you must check whether or not the memory resource can handle the specified value before setting it.
+**ha_apply_max_mem_size** is a parameter used to configure the value of maximum memory that the replication log reflection process of CUBRID HA can use. The default and maximum values are **500** (unit: MB). When the value is larger than the size allowed by the system, memory allocation fails and the HA replication reflection process may malfunction. For this reason, you must check whether or not the memory resource can handle the specified value before setting it.
 
 **ha_applylogdb_ignore_error_list**
 
@@ -1235,7 +1235,7 @@ The path of a transaction log in these configurations is as follows:
 Load Balancing Structure
 ------------------------
 
-The load balancing structure increases the availability of the CUBRID servie by placing several nodes in the HA configuration (one master node and one slave node) and distributes read-load.
+The load balancing structure increases the availability of the CUBRID service by placing several nodes in the HA configuration (one master node and one slave node) and distributes read-load.
 
 Because the replica nodes receive replication logs from the nodes in the HA configuration and maintain the same data, and because the nodes in the HA configuration do not receive replication logs from the replica nodes, its network and disk usage rate is lower than that of the multiple-slave structure.
 
@@ -2008,7 +2008,7 @@ The following are optional items:
 *   **backup_dest_path** : Specifies the path in which the backup volume is created when executing **backupdb** in source node for rebuilding replication.
 *   **backup_option** : Specifies necessary options when executing **backupdb** in source node in which replication will be rebuilt.
 *   **restore_option** : Specifies necessary options when executing **restoredb** in slave node in which replication will be rebuilt.
-*   **scp_option** : Specifies the **scp** option which enables backup of source node in which replication is rebuilt to copy into the slave node. The default option is **-l 131072**, which does not impose a overload on network (limits the transfer rate to 16 MB).
+*   **scp_option** : Specifies the **scp** option which enables backup of source node in which replication is rebuilt to copy into the slave node. The default option is **-l 131072**, which does not impose an overload on network (limits the transfer rate to 16 MB).
 
 Once the script has been configured, execute the **ha_make_slavedb.sh** script in slave node in which replication will be rebuilt. When the script is executed, rebuilding replication happens in a number of phases. To move to the next stage, the user must enter an appropriate value. The following are the descriptions of available values.
 
@@ -2039,7 +2039,7 @@ The following example shows how to configure an original node for rebuilding rep
 
 Rebuilding replications can be performed while the master node is running, however, it is recommended to execute this when there are just a few transactions per hour in order to minimize replication delay.
 
-Before starting to rebuild replications by executing the **ha_make_slavedb.sh** script, stop the HA service of the slave node and configure the **ha_make_slavedb.sh** script as shown below. Configure the host name of the master node to replicate (*nodeA*) to target_host and configure the nome directory of the replication log (default value: $CUBRID_DATABASES) to repl_log_home. ::
+Before starting to rebuild replications by executing the **ha_make_slavedb.sh** script, stop the HA service of the slave node and configure the **ha_make_slavedb.sh** script as shown below. Configure the host name of the master node to replicate (*nodeA*) to target_host and configure the home directory of the replication log (default value: $CUBRID_DATABASES) to repl_log_home. ::
 
     [nodeB]$ cubrid heartbeat stop
      
@@ -2284,7 +2284,7 @@ When any error occurs while executing the script in step-by-step order, or if th
 
 9. At this step, create a backup volume from the master node (target_host) for HA replication rebuilding. You can skip this step and go to the next step by entering s if there is an existing backup volume. There are some constraints for rebuilding replication by using the existing backup volume, which are as follows:
 
-    *   The archive log, including the transaction being executed during backup, must be in the master node (target_host); this means that a backup volumen created long ago cannot be used.
+    *   The archive log, including the transaction being executed during backup, must be in the master node (target_host); this means that a backup volume created long ago cannot be used.
     *   The backup status information file must be created by using the **-o** option during backup. 
         At this time, the path must be identical to the path of the backup volume file. 
         The file name must be the db_name.bkup.output format. If the file name is not identical with the format, change the file name according to the format before executing the script.
@@ -2362,7 +2362,7 @@ When any error occurs while executing the script in step-by-step order, or if th
      - 1. check if the databases information is already registered.
      
      
-     - thres's already testdb information in /home/cubrid_usr/CUBRID/databases/databases.txt
+     - there is already testdb information in /home/cubrid_usr/CUBRID/databases/databases.txt
     [nodeB]$ grep testdb /home/cubrid_usr/CUBRID/databases/databases.txt
     testdb          /home/cubrid_usr/CUBRID/databases/testdb        nodeA:nodeB /home/cubrid_usr/CUBRID/databases/testdb/log file:/home/cubrid_usr/CUBRID/databases/testdb/lob
      
@@ -2427,7 +2427,7 @@ When any error occurs while executing the script in step-by-step order, or if th
      
     1. get db_ha_apply_info from backup output(/home1/cubrid_usr/.ha/backup/testdb.bkup.output).
      
-     - dn_name       : testdb
+     - db_name       : testdb
      - db_creation   : 1349426614
      - pageid        : 86
      - offset        : 8800
@@ -2463,7 +2463,7 @@ When any error occurs while executing the script in step-by-step order, or if th
             required_lsa_pageid : 86
             required_lsa_offset : 8800
 
-13. At this step, initial the replication log of the master node and then copy the storage log of the master node to the slave node. Enter y to othe question. 
+13. At this step, initial the replication log of the master node and then copy the storage log of the master node to the slave node. Enter y to the question. 
 
   ::
 
@@ -2482,7 +2482,7 @@ When any error occurs while executing the script in step-by-step order, or if th
        continue ? ([y]es / [n]o / [s]kip) : y
      
      
-     - 1. remove old replicaton log.
+     - 1. remove old replication log.
      
     [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeA
     [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb_nodeA

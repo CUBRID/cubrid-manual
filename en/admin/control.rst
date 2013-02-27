@@ -104,7 +104,7 @@ The following message is returned if master process is already running.
     @ cubrid master start
     ++ cubrid master is running.
 
-The following message is returned if master process fails to run. The example shows that service fails to start due to conflicts of the **cubrid_port_id** parameter value specified in the cubrid.conf file. In a such case, you can resolve the problem by changing the port. If it fails to start even though no port is occupied by process, delete /tmp/CUBRID1523 file and then restart the process. ::
+The following message is returned if master process fails to run. The example shows that service fails to start due to conflicts of the **cubrid_port_id** parameter value specified in the cubrid.conf file. In such a case, you can resolve the problem by changing the port. If it fails to start even though no port is occupied by process, delete /tmp/CUBRID1523 file and then restart the process. ::
 
     % cubrid service start
     
@@ -405,7 +405,7 @@ To change the contents of **access_ip_control_file** and apply it to server, use
 
     cubrid server acl reload <database_name>
 
-To display the IP configuration of a sever which is currently running, use the following command. 
+To display the IP configuration of a server which is currently running, use the following command. 
 
 ::
 
@@ -602,7 +602,7 @@ If you do not specify an option or argument to check the status of all brokers, 
 *   LQS: The number of long-duration queries processed per second
 *   PSIZE: Size of CAS
 *   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
-*   % broker1 OFF: broker1's SERVICE parmeter is set to OFF. So, broker1 is not started.
+*   % broker1 OFF: broker1's SERVICE parameter is set to OFF. So, broker1 is not started.
 
 To check the detail status of broker for 5 seconds, enter the command as below. The display will reset per 5 seconds as the new status information. To escape the display of the status, press <Q>.
 
@@ -630,8 +630,8 @@ To check the detail status of broker for 5 seconds, enter the command as below. 
 *   OTHERS: The number of queries like CREATE and DROP except for SELECT, INSERT, UPDATE, DELETE. When there is an option of "-b -s <sec>", it is updated every time with the number of queries which have been executed during the seconds specified by this option.
 *   LONG-T: The number of transactions which exceed LONG_TRANSACTION_TIME. / the value of the LONG_TRANSACTION_TIME parameter. When there is an option of "-b -s <sec>", it is updated every time with the number of transactions which have been executed during the seconds specified by this option.
 *   LONG-Q: The number of queries which exceed LONG_QUERY_TIME. / the value of the LONG_QUERY_TIME parameter. When there is an option of "-b -s <sec>", it is updated every time with the number of queries which have been executed during the seconds specified by this option.
-*   ERR-Q: The number of queries with errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of erros which have occurred during the seconds specified by this option.
-*   UNIQUE-ERR-Q: The number of queries with unique key errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of unique key erros which have occurred during the seconds specified by this option.
+*   ERR-Q: The number of queries with errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of errors which have occurred during the seconds specified by this option.
+*   UNIQUE-ERR-Q: The number of queries with unique key errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of unique key errors which have occurred during the seconds specified by this option.
 *   #CONNECT: The number of connections that an application client accesses to CAS after starting the broker. 
 
 Enter code below to check the status of broker whose name includes broker1 with the **-q** option and job status of a specific broker in the job queue. If you do not specify broker1 as an argument, list of jobs in the job queue for all brokers is displayed. 
@@ -731,7 +731,7 @@ Meaning of every column in code above is as follows:
 Limiting Broker Server Access
 -----------------------------
 
-To limit the client applications accessing the broker, set to **ON** for the **ACCESS_ CONTROL** parameter in the **cubrid_broker.conf** file, and enter a name of the file in which the users and the list of databases and IP addresses allowed to access the **ACCESS_CONTROL_FILE** parameter value are written. The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] in which common parameters are specified.
+To limit the client applications accessing the broker, set to **ON** for the **ACCESS_ CONTROL** parameter in the **cubrid_broker.conf** file, and enter a name of the file in which the users and the list of databases and IP addresses allowed to access the **ACCESS_CONTROL_FILE** parameter value are written. The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified.
 
 The format of **ACCESS_CONTROL_FILE** is as follows: ::
 
@@ -986,10 +986,10 @@ There are three types of logs that relate to starting the broker: access, error 
 
     *   auto_commit/auto_rollback: Automatically committed or rolled back. The second auto_commit/auto_rollback is an error code. 0 indicates that the transaction has been completed without an error.
 
-    The **broker_log_top** utility analyses the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in
+    The **broker_log_top** utility analyzes the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in
     **log.top.res**, respectively.
 
-    The **broker_log_top** utility is useful to analyse a long running query. The syntax is as follows: ::
+    The **broker_log_top** utility is useful to analyze a long running query. The syntax is as follows: ::
 
         broker_log_top [options] <sql_log_file_list>
 
@@ -1010,7 +1010,7 @@ There are three types of logs that relate to starting the broker: access, error 
 
     :: option:: -T DATE
 
-        This option specifies the exectuon end date of the SQL statements to be analyzed.
+        This option specifies the execution end date of the SQL statements to be analyzed.
         The input format is the same with the *DATE* in the **-F** options.
 
     All logs are displayed by SQL statement if any option is not specified.
@@ -1023,7 +1023,7 @@ There are three types of logs that relate to starting the broker: access, error 
 
         broker_log_top -F "01/19" -T "01/20" log1.log
 
-    The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should separated by a white space on Windows. ::
+    The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a white space on Windows. ::
 
         --Execution broker_log_top on Linux
         % broker_log_top -F "11/11" -T "11/12" -t *.sql.log
@@ -1453,7 +1453,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **adddbinfo**: A command to add database information to a CM user
     *   *cmuser-name*: CM user name
-    *   *databse-name*: The name of a database to be added
+    *   *database-name*: The name of a database to be added
 
     The following example shows how to add a database without specifying any user-defined values to a CM user named *testcm* . ::
 
@@ -1500,7 +1500,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **deldbinfo**: A command to delete database information of a CM user
     *   *cmuser-name*: CM user name
-    *   *databse-name*: The name of a database to be deleted
+    *   *database-name*: The name of a database to be deleted
 
     The following example shows how to delete database information of which name is *testdb* from a CM user named *testcm* . ::
 
@@ -1515,7 +1515,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
     *   **changedbinfo**: A command to change database information of a CM user
     *   *cmuser-name*: CM user name
-    *   *databse-name*: The name of a database to be changed
+    *   *database-name*: The name of a database to be changed
 
     The following is [options] of **cm_admin changedbinfo**.
 

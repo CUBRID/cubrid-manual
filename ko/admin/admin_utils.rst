@@ -246,7 +246,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     사용자 정보 파일에서는 주석을 사용할 수 있으며, 주석 라인은 연속된 하이픈(--)으로 시작된다. 공백 라인은 무시된다.
 
-    다음 예제는 그룹 *sedan* 에 *granduer* 와 *sonata* 가, 그룹 *suv* 에 *tuscan* 이, 그룹 *hatchback* 에 *i30* 가 포함되는 것을 정의하는 사용자 정보 파일이다. 사용자 정보 파일명은 user_info.txt로 예시한다. ::
+    다음 예제는 그룹 *sedan* 에 *grandeur* 와 *sonata* 가, 그룹 *suv* 에 *tuscan* 이, 그룹 *hatchback* 에 *i30* 가 포함되는 것을 정의하는 사용자 정보 파일이다. 사용자 정보 파일명은 user_info.txt로 예시한다. ::
 
         --
         --    사용자 정보 파일의 예1
@@ -254,7 +254,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
         USER sedan
         USER suv
         USER hatchback
-        USER granduer GROUPS sedan
+        USER grandeur GROUPS sedan
         USER sonata GROUPS sedan
         USER tuscan GROUPS suv
         USER i30 GROUPS hatchback
@@ -264,11 +264,11 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
         --
         -- 사용자 정보 파일의 예2
         --
-        USER granduer
+        USER grandeur
         USER sonata
         USER tuscan
         USER i30
-        USER sedan MEMBERS sonata granduer
+        USER sedan MEMBERS sonata grandeur
         USER suv MEMBERS tuscan
         USER hatchback MEMBERS i30
         

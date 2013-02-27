@@ -2383,7 +2383,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
       
      1. get db_ha_apply_info from backup output(/home1/cubrid_usr/.ha/backup/testdb.bkup.output).
       
-      - dn_name       : testdb
+      - db_name       : testdb
       - db_creation   : 1349426614
       - pageid        : 86
       - offset        : 8800
@@ -2437,7 +2437,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
         continue ? ([y]es / [n]o / [s]kip) : y
       
       
-      - 1. remove old replicaton log.
+      - 1. remove old replication log.
       
      [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeA
      [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb_nodeA

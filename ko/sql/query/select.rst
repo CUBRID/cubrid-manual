@@ -15,9 +15,11 @@ SELECT
         [ USING INDEX { index name [,index_name,...] | NONE }]
      
     <qualifier> ::= ALL | DISTINCT | DISTINCTROW | UNIQUE
-     
+    
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
+    <variable_comma_list> ::= [:] identifier, [:] identifier, ...
+    
     <extended_table_specification_comma_list> ::=
     <table specification> [ {, <table specification> | <join table specification> }... ]
      
@@ -51,7 +53,7 @@ SELECT
     *   **ALL** : 테이블의 모든 레코드를 조회한다.
     *   **DISTINCT** : 중복을 허용하지 않고 유일한 값을 갖는 레코드에 대해서만 조회한다. **DISTINCTROW**, **UNIQUE** 와 동일하다.
 
-*   <*select_expression*> :
+*   <*select_expressions*> :
 
     *   \* : **SELECT** * 구문을 사용하면 **FROM** 절에서 명시한 테이블에 대한 모든 칼럼을 조회할 수 있다.
 
@@ -61,9 +63,9 @@ SELECT
 
 *   *table_name*.\* : 테이블 이름을 지정한다. \*을 사용하면 명시한 테이블의 모든 칼럼을 지정하는 것과 같다.
 
-*   *variable* : *select_expression* 이 조회하는 데이터는 하나 이상의 변수에 저장될 수 있다.
+*   *variable_comma_list* : *select_expressions* 이 조회하는 데이터는 하나 이상의 변수에 저장될 수 있다.
 
-*   [:]\ *identifier* : **TO** (또는 **INTO**) 다음에 :식별자를 쓰면 조회하는 데이터를 ':identifier'의 변수에 저장할 수 있다.
+*   [:]\ *identifier* : **TO** (또는 **INTO**) 다음에 *:identifier*\를  조회하는 데이터를 ':identifier'의 변수에 저장할 수 있다.
 
 *   <*single_table_spec*>
 

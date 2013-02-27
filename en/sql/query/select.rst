@@ -17,7 +17,9 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
     <qualifier> ::= ALL | DISTINCT | DISTINCTROW | UNIQUE
      
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
-     
+    
+    <variable_comma_list> ::= [:] identifier, [:] identifier, ...
+    
     <extended_table_specification_comma_list> ::=
     <table specification> [ {, <table specification> | <join table specification> }... ]
      
@@ -61,7 +63,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
 
 *   *table_name*. \*: Specifies the table name and using \* has the same effect as specifying all columns for the given table.
 
-*   *variable* : The data retrieved by the *select_expression* can be stored in more than one variable.
+*   *variable_comma_list* : The data retrieved by the *select_expressions* can be stored in more than one variable.
 
 *   [:]\ *identifier* : By using the *:identifier* after **TO** (or **INTO**), you can store the data to be retrieved in the ':identifier' variable.
 
@@ -193,7 +195,7 @@ The following example shows how to retrieve the sum of the number of gold (*gold
           SELECT silver FROM participant WHERE nation_code = 'JPN') AS t(n);
 
 Subquery derived tables can be useful when combined with outer queries. For example, a derived table can be used in the **FROM** clause of the subquery used in the **WHERE** clause.
-The following example shows *nation_code*, *host_year* and *gold* records whose number of gold medals is greater than average sum of the number of silver and bronze medals when one or more sliver or bronze medals were won. In this example, the query (the outer **SELECT** clause) and the subquery (the inner **SELECT** clause) share the *nation_code* attribute.
+The following example shows *nation_code*, *host_year* and *gold* records whose number of gold medals is greater than average sum of the number of silver and bronze medals when one or more silver or bronze medals were won. In this example, the query (the outer **SELECT** clause) and the subquery (the inner **SELECT** clause) share the *nation_code* attribute.
 
 .. code-block:: sql
 
@@ -271,7 +273,7 @@ You can also set a condition for group selection by including the **HAVING** cla
 By SQL standard, you cannot specify a column (hidden column) not defined in the **GROUP BY** clause to the SELECT column list. However, by using extended CUBRID grammars, you can specify the hidden column to the SELECT column list. If you do not use the extended CUBRID grammars, the **only_full_group_by** parameter should be set to **yes**. For details, see :ref:`stmt-type-parameters`. ::
 
     SELECT ...
-    GROUP BY { col_name | expr | positoin } [ ASC | DESC ],...
+    GROUP BY { col_name | expr | position } [ ASC | DESC ],...
               [ WITH ROLLUP ][ HAVING <search_condition> ]
 
 *   *col_name* | *expr* | *position* : Specifies one or more column names, expressions, aliases or column location. Items are separated by commas. Columns are sorted on this basis.
@@ -481,7 +483,7 @@ A join is a query that combines the rows of two or more tables or virtual tables
 
 A join query using an equality operator (=) is called an equi-join, and one without any join condition is called a cartesian product. Meanwhile, joining a single table is called a self join. In a self join, table **ALIAS** is used to distinguish columns, because the same table is used twice in the **FROM** clause.
 
-A join that outputs only rows that satisfy the join condition from a joined table is called an inner or a simple join, whereas a join that outputs both rows that satisfy and do not satisfy the join condition from a joined table is called an outer join. An outer join is divided into a left outer join which outputs all rowss of the left table as a result, a right outer join which outputs all rowss of the right table as a result and a full outer join which outputs all rows of both tables. If there is no column value that corresponds to a table on one side in the result of an outer join query, all rowss are returned as **NULL**. ::
+A join that outputs only rows that satisfy the join condition from a joined table is called an inner or a simple join, whereas a join that outputs both rows that satisfy and do not satisfy the join condition from a joined table is called an outer join. An outer join is divided into a left outer join which outputs all rows of the left table as a result, a right outer join which outputs all rows of the right table as a result and a full outer join which outputs all rows of both tables. If there is no column value that corresponds to a table on one side in the result of an outer join query, all rows are returned as **NULL**. ::
 
     FROM table_specification [{, table_specification | { join_table_specification | join_table_specification2 }...]
      
@@ -499,13 +501,13 @@ A join that outputs only rows that satisfy the join condition from a joined tabl
 
 *   *join_table_specification*
 
-    *   [ **INNER** ] **JOIN** : Used for inner join and requires join condifitions.
+    *   [ **INNER** ] **JOIN** : Used for inner join and requires join conditions.
 
     *   { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** : **LEFT** is used for a left outer join query, and **RIGHT** is for a right outer join query.
 
     *   **CROSS JOIN** : Used for cross join and requires no join conditions.
 
-The inner join requires join conditions. The **INNER JOIN** keyword can be omitted. When it is omitted, the table is separated by a comma (,). The **ON** join condition an be replaced with the **WHERE** condition.
+The inner join requires join conditions. The **INNER JOIN** keyword can be omitted. When it is omitted, the table is separated by a comma (,). The **ON** join condition can be replaced with the **WHERE** condition.
 
 CUBRID does not support full outer joins; it supports only left and right joins. Path expressions that include subqueries and sub-columns cannot be used in the join conditions of an outer join.
 
@@ -604,7 +606,7 @@ In this example, *h.host_year=o.host_year* is an outer join condition, and *o.ho
              2000  'Australia'
              2004  'Greece'
 
-Outer joins can also be represented by using **(+)** in the **WHERE** clause. The above example is a query that has the same meaning as the example using the **LEFT** **OUTER** **JOIN**. The **(+)** syntax is not ISO/aNSI standard, so it can lead to ambiguous situations. It is recommended to use the standard syntax **LEFT** **OUTER** **JOIN** (or **RIGHT** **OUTER** **JOIN**) if possible.
+Outer joins can also be represented by using **(+)** in the **WHERE** clause. The above example is a query that has the same meaning as the example using the **LEFT** **OUTER** **JOIN**. The **(+)** syntax is not ISO/ANSI standard, so it can lead to ambiguous situations. It is recommended to use the standard syntax **LEFT** **OUTER** **JOIN** (or **RIGHT** **OUTER** **JOIN**) if possible.
 
 .. code-block:: sql
 
@@ -689,7 +691,7 @@ The following example shows how to retrieve the *history* table as well as the h
 Multiple-Row Subquery
 ---------------------
 
-The multiple-row subquery returns one or more rows that contain the specified column. The result of the mutiple-row subquery can create **SET**, **MULTISET** and **LIST**) by using an appropriate keyword.
+The multiple-row subquery returns one or more rows that contain the specified column. The result of the multiple-row subquery can create **SET**, **MULTISET** and **LIST**) by using an appropriate keyword.
 
 The following example shows how to retrieve nations, capitals and host cities for Olympic Game all together in the *nation* table. In this example, the subquery result is used to create a **List** from the values of the *host_city* column in the *olympic* table. This query returns *name* and *capital* value for *nation* table, as well as a set that contains *host_city* values of the *olympic* table with *host_nation* value. If the *name* value is an empty set in the query result, it is excluded. If there is no *olympic* table that has the same value as the *name*, an empty set is returned.
 

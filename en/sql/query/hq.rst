@@ -220,7 +220,7 @@ CONNECT_BY_ISCYCLE
 
 **CONNECT_BY_ISCYCLE** is a pseudocolumn representing that a cycle was detected while processing the node, meaning that a child was also found to be an ancestor. A value of 1 for a row means a cycle was detected; the pseudo-column's value is 0, otherwise.
 
-The **CONNECT_BY_ISCYCLE** pseudo-column can be used in the **WHERE**, **ORDER BY** and **GROUP BY** ... **HAVING** clauses of the **SELECT** statement. It can also used in aggregate functions.
+The **CONNECT_BY_ISCYCLE** pseudo-column can be used in the **WHERE**, **ORDER BY** and **GROUP BY** ... **HAVING** clauses of the **SELECT** statement. It can also be used in aggregate functions.
 
 .. note:: This pseudocolumn is available only when the **NOCYCLE** keyword is used in the statement.
 

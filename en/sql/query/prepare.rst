@@ -43,7 +43,7 @@ The data managed by the session includes the **PREPARE** statement, user-defined
 EXECUTE Statement
 =================
 
-The **EXECUTE** statement executes the prepared statement. You can bind the data value after the **USING** clause if a bind parameter (?) is included in the prepared statement. You cannot specify user-defined variables like an attribute in the **USING** clause. An value such as literal and an input parameter only can be specified. ::
+The **EXECUTE** statement executes the prepared statement. You can bind the data value after the **USING** clause if a bind parameter (?) is included in the prepared statement. You cannot specify user-defined variables like an attribute in the **USING** clause. A value such as literal and an input parameter only can be specified. ::
 
     EXECUTE stmt_name [USING value [, value] ...]
 
@@ -114,7 +114,7 @@ The user-defined variables are also called session variables as they are used fo
 
 You can use user-defined variables in most SQL statements. If you define user-defined variables and refer to them in one statement, the sequence is not guaranteed. That is, if you refer to the variables specified in the **SELECT** list of the **HAVING**, **GROUP BY** or **ORDER BY** clause, you may not get the values in the sequence you expect. You cannot also use user-defined variables as identifiers, such as column names or table names within SQL statements
 
-The user-defined variables are not case-sensitive. The user-defined variable type can be one of the **SHORT**, **INTEGER**, **BIGINT**, **FLOAT**, **DOUBLE**, **NUMERIC**, **CHAR**, **VARCHAR**, **NCHAR**, **VARNCHAR**, **BIT** and **BIT VARYING**. Other types will be converted to the **VARCHAR** type.
+The user-defined variables are not case-sensitive. The user-defined variable type can be one of the **SHORT**, **INTEGER**, **BIGINT**, **FLOAT**, **DOUBLE**, **NUMERIC**, **CHAR**, **VARCHAR**, **BIT** and **BIT VARYING**. Other types will be converted to the **VARCHAR** type.
 
 .. code-block:: sql
 

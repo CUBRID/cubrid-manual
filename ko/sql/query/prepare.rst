@@ -114,7 +114,7 @@ SET
 
 대부분의 SQL 구문에서는 사용자 정의 변수를 사용할 수 있다. 한 구문에서 사용자 정의 변수를 지정하고 참조할 때에는 그 순서가 보장되지 않는다. 즉, **HAVING**, **GROUP BY** 또는 **ORDER BY** 절의 **SELECT** 리스트에 지정된 사용자 정의 변수를 참조하면 기대한 순서대로 값을 가져오지 않을 수도 있다. 또한, 사용자 정의 변수는 SQL 문 내에서 칼럼 이름이나 테이블 이름 같은 식별자로 사용할 수 없다.
 
-사용자 정의 변수는 대소문자를 구분하지 않는다. 사용자 정의 변수의 타입은 **SHORT**, **INTEGER**, **BIGINT**, **FLOAT**, **DOUBLE**, **NUMERIC**, **CHAR**, **VARCHAR**, **NCHAR**, **VARNCHAR**, **BIT**, **BIT VARYING** 중 하나가 될 수 있으며, 그 밖의 타입은 **VARCHAR** 타입으로 변환된다.
+사용자 정의 변수는 대소문자를 구분하지 않는다. 사용자 정의 변수의 타입은 **SHORT**, **INTEGER**, **BIGINT**, **FLOAT**, **DOUBLE**, **NUMERIC**, **CHAR**, **VARCHAR**, **BIT**, **BIT VARYING** 중 하나가 될 수 있으며, 그 밖의 타입은 **VARCHAR** 타입으로 변환된다.
 
 .. code-block:: sql
 

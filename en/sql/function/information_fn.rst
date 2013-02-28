@@ -170,8 +170,6 @@ INDEX_CARDINALITY
 
 The return value is 0 or a positive integer and if any of the input parameters is **NULL**, **NULL** is returned. If tables or indexes that are input parameters are not found, or *key_pos* is out of range, **NULL** is returned.
 
-For the table and the index names which are the first and the second input parameters, they cannot be passed as **NCHAR** or **VARNCHAR** types.
-
 .. code-block:: sql
 
     CREATE TABLE t1( i1 INTEGER ,

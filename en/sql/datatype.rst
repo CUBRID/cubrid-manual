@@ -721,7 +721,9 @@ To enter the language of a specific country, we recommend that you to change the
 
     For a fixed-length character string type such as **CHAR**, the length is fixed at the declared length. Therefore, the right part (trailing space) of the character string is filled with space characters when the string is stored. For a variable-length character string type such as **VARCHAR**, only the entered character string is stored, and the space is not filled with space characters.
 
-    The maximum length of a **CHAR** or **VARCHAR** type to be specified is 1,073,741,823 the maximum length of a **NCHAR** or **NCHAR VARYING** type to be specified is 536,870,911. The maximum length that can be input or output in a CSQL statement is 8,192 KB.
+    The maximum length of a **CHAR** or **VARCHAR** type to be specified is 1,073,741,823.
+    
+    Also, the maximum length that can be input or output in a CSQL statement is 8,192 KB.
 
     .. note:: In the CUBRID version less than 9.0, the length of **CHAR** or **VARCHAR** was not the number of characters, but the byte size.
 

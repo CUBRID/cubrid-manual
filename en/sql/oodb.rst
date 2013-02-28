@@ -61,7 +61,7 @@ When a class is created as a sub class, the class inherits all attributes and me
     resolution:
     { column_name | method_name } OF superclass_name [ AS alias ]
 
-For the *attr_mthd_name* in the **INHERIT** clause, specify the name of the attribute or method of the super class to inherit. With the **ALIAS** clause, you can resolve a name conflict that occurs in multiple inheritance statements by inheriting a new name.
+In the **INHERIT** clause, specify the name of the attribute or method of the super class to inherit. With the **ALIAS** clause, you can resolve a name conflict that occurs in multiple inheritance statements by inheriting a new name.
 
 .. _add-superclass:
 
@@ -158,7 +158,7 @@ Superclass Conflict
 
 The **INHERIT** clause of the **ALTER CLASS** statement is optional, but must be used when a conflict occurs due to class changes. You can specify more than one resolution after the **INHERIT** clause.
 
-*superclass_name* specifies the name of the super class that has the new attribute or method to inherit when a conflict occurs. *attr_mthd_name* specifies the name of the attribute or method to inherit. You can use the **AS** clause when you need to change the name of the attribute or method to inherit.
+*superclass_name* specifies the name of the super class that has the new attribute(column) or method to inherit when a conflict occurs. *column_name* or *method_name* specifies the name of the attribute or method to inherit. You can use the **AS** clause when you need to change the name of the attribute or method to inherit.
 
 The following example shows how to create the *soccer_stadium* class by inheriting the *event* and *stadium* classes in the *olympic* database of *demodb*. Because both *event* and *stadium* classes have the name and code attributes, you must specify the attributes to inherit using the **INHERIT** clause.
 
@@ -224,7 +224,7 @@ If the *event* class is dropped from the *soccer_stadium* super class, the *cost
 
 When an attribute is dropped from a class, any resolution specifiers which refer to the attribute by using the **INHERIT** clause are also removed. If a conflict occurs due to the deletion of an attribute, the system will determine a new inheritance hierarchy. If you don't like the inheritance hierarchy determined by the system, you can determine it by using the **INHERIT** clause of the **ALTER** statement. The following example shows such conflict.
 
-Suppose there is a sub class that inherits attributes from three different super classes. If a name conflict occurrs in all super classes and the explicitly inherited attribute is dropped, one of the remaining two attributes will be inherited automatically to resolve the problem.
+Suppose there is a sub class that inherits attributes from three different super classes. If a name conflict occurs in all super classes and the explicitly inherited attribute is dropped, one of the remaining two attributes will be inherited automatically to resolve the problem.
 
 The following example shows sub class conflict. Classes *B*, *C* and *D* are super classes of class *E*, and have an attribute whose name is *team* and the domain is *team_event*. Class *E* was created with the *place* attribute inherited from class *C* as follows:
 

@@ -855,7 +855,7 @@ db_trigger
 db_ha_apply_info
 ----------------
 
-A table that stores the progress status every time the **applylogdb** utility applies replication logs. This table is updated at every point the **applylogdb** utility commits, and the acculmative count of operations are stored in the \*_counter column. The meaning of each column is as follows:
+A table that stores the progress status every time the **applylogdb** utility applies replication logs. This table is updated at every point the **applylogdb** utility commits, and the accumulative count of operations are stored in the \*_counter column. The meaning of each column is as follows:
 
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 |   Column Name        |   Column Type   |   Description                                                                                                                                      |
@@ -891,17 +891,17 @@ A table that stores the progress status every time the **applylogdb** utility ap
 |                      |                 | Checks whether the reflection of replication has been delayed or not at the time of reflecting the replication log.                                |
 |                      |                 |                                                                                                                                                    |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| append_lsa_offset    | INTEGER         | The offset of the last replication log lsa at the last refelction.                                                                                 |
+| append_lsa_offset    | INTEGER         | The offset of the last replication log lsa at the last reflection.                                                                                 |
 |                      |                 | Saves append_lsa of the replication log header that is being processed by applylogdb at the time of reflecting the replication.                    |
 |                      |                 | Checks whether the reflection of replication has been delayed or not at the time of reflecting the replication log.                                |
 |                      |                 |                                                                                                                                                    |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| eof_lsa_page_id      | BIGINT          | The page id of the replication log eof lsa at the last reflection.                                                                                 |
+| eof_lsa_page_id      | BIGINT          | The page id of the replication log EOF lsa at the last reflection.                                                                                 |
 |                      |                 | Saves eof_lsa of the replication log header that is being processed by applylogdb at the time of reflecting the replication.                       |
 |                      |                 | Checks whether the reflection of replication has been delayed or not at the time of reflecting the replication log.                                |
 |                      |                 |                                                                                                                                                    |
 +----------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| eof_lsa_offset       | INTEGER         | The offset of the replication log eof lsa at the last reflection.                                                                                  |
+| eof_lsa_offset       | INTEGER         | The offset of the replication log EOF lsa at the last reflection.                                                                                  |
 |                      |                 | Saves eof_lsa of the replication log header that is being processed by applylogdb at the time of reflecting the replication.                       |
 |                      |                 | Checks whether the reflection of replication has been delayed or not at the time of reflecting the replication log.                                |
 |                      |                 |                                                                                                                                                    |
@@ -1336,7 +1336,7 @@ The following example shows how to retrieve classes whose attribute names are si
 DB_ATTR_SETDOMAIN_ELM
 ---------------------
 
-Among attributes of the class to which the current user has access authorization in the database, if an attribute's data type is a collection (set, multiset, sequence), this macro represents the data type of the element of the collection.
+Among attributes of the class to which the current user has access authorization in the database, if an attribute's data type is a collection (SET, MULTISET, SEQUENCE), this macro represents the data type of the element of the collection.
 
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------+
 |   Attribute Name   |   Data Type   |   Description                                                                                             |

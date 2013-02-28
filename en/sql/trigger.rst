@@ -60,19 +60,19 @@ A trigger is created by defining a trigger target, condition and action to be pe
        • COMMIT
      
     event_target: 
-       • ONtable_name
-       • ONtable_name [ (column_name) ]
+       • ON table_name
+       • ON table_name [ (column_name) ]
      
     condition: 
        • expression
      
     action: 
-     • REJECT    
-     • INVALIDATE TRANSACTION 
-      •  PRINT message_string
-      •  INSERT statement
-      •  UPDATE statement
-      •  DELETE statement 
+       • REJECT    
+       • INVALIDATE TRANSACTION 
+         •  PRINT message_string
+         •  INSERT statement
+         •  UPDATE statement
+         •  DELETE statement 
 
 *   *trigger_name * : Specifies the name of the trigger to be defined.
 *   [ **STATUS** { **ACTIVE** | **INACTIVE** } ]: Defines the state of the trigger (if not defined, the default value is **ACTIVE**).
@@ -152,7 +152,7 @@ TRIGGER Event Type
     *   **COMMIT**
     *   **ROLLBACK**
 
-The following example shows how to use an instance event. The *example* trigger is called by each instance affected by the database update. For example, if the *score* values of five instances in the *history* table are modified, the trigger is called five times. If you want the trigger to be called only once, before the first instance of the *score* column is updated, use the **STATEMENT** **UPDATE** type as in example 2.
+The following example shows how to use an instance event. The *example* trigger is called by each instance affected by the database update. For example, if the *score* values of five instances in the *history* table are modified, the trigger is called five times. 
 
 .. code-block:: sql
 
@@ -160,6 +160,8 @@ The following example shows how to use an instance event. The *example* trigger 
     ...
     BEFORE UPDATE ON history(score)
     ...
+
+If you want the trigger to be called only once, before the first instance of the *score* column is updated, use the **STATEMENT** **UPDATE** type as the following example.
 
 The following example shows how to use a statement event. If you define a statement event, the trigger is called only once before the first instance gets updated even when there are multiple instances affected by the update.
 
@@ -170,10 +172,10 @@ The following example shows how to use a statement event. If you define a statem
     BEFORE STATEMENT UPDATE ON history(score)
     ...
 
-**Remark**
+.. note:
 
-*   You must specify the event target when you define an instance or statement event as the event type.
-*   **COMMIT** and **ROLLBACK** cannot have an event target.
+    *   You must specify the event target when you define an instance or statement event as the event type.
+    *   **COMMIT** and **ROLLBACK** cannot have an event target.
 
 .. _trigger-event-target:
 
@@ -239,9 +241,9 @@ The following example shows how to use the **SELECT** statement in an expression
     IF 1000 >  (SELECT COUNT(*) FROM participant)
     ......
 
-**Remark**
+.. note:
 
-The expression given in the trigger condition may cause side effects on the database if a method is called while the condition is performed. A trigger condition must be constructed to avoid unexpected side effects in the database.
+    The expression given in the trigger condition may cause side effects on the database if a method is called while the condition is performed. A trigger condition must be constructed to avoid unexpected side effects in the database.
 
 Correlation Name
 ----------------
@@ -303,10 +305,10 @@ The following example shows how to define an action when a trigger is created. T
     IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
     EXECUTE REJECT;
 
-**Remark**
+.. note:
 
-*   Trigger may fall into an infinite loop when you use **INSERT** in an action of a trigger where an **INSERT** event is defined.
-*   If a trigger where an **UPDATE** event is defined runs on a partitioned table, you must be careful because the defined partition can be broken or unintended malfunction may occur. To prevent such situation, CUBRID outputs an error so that the **UPDATE** causing changes to the running partition is not executed. Trigger may fall into an infinite loop when you use **UPDATE** in an action of a trigger where an **UPDATE** event is defined.
+    *   Trigger may fall into an infinite loop when you use **INSERT** in an action of a trigger where an **INSERT** event is defined.
+    *   If a trigger where an **UPDATE** event is defined runs on a partitioned table, you must be careful because the defined partition can be broken or unintended malfunction may occur. To prevent such situation, CUBRID outputs an error so that the **UPDATE** causing changes to the running partition is not executed. Trigger may fall into an infinite loop when you use **UPDATE** in an action of a trigger where an **UPDATE** event is defined.
 
 .. _alter-trigger:
 
@@ -340,11 +342,11 @@ The following example shows how to create the medal_trig trigger and then change
     ALTER TRIGGER medal_trig STATUS INACTIVE;
     ALTER TRIGGER medal_trig PRIORITY 0.7;
 
-**Remark**
+.. note:
 
-*   Only one *trigger_option* can be specified in a single **ALTER TRIGGER** statement.
-*   To change a table trigger, you must be the trigger owner or granted the **ALTER** authorization on the table where the trigger belongs.
-*   A user trigger can only be changed by its owner. For details on *trigger_option*, see the :ref:`create-trigger` section. The key specified together with the **PRIORITY** option must be a non-negative floating point value.
+    *   Only one *trigger_option* can be specified in a single **ALTER TRIGGER** statement.
+    *   To change a table trigger, you must be the trigger owner or granted the **ALTER** authorization on the table where the trigger belongs.
+    *   A user trigger can only be changed by its owner. For details on *trigger_option*, see the :ref:`create-trigger` section. The key specified together with the **PRIORITY** option must be a non-negative floating point value.
 
 DROP TRIGGER
 ============
@@ -361,10 +363,10 @@ The following example shows how to drop the medal_trig trigger.
 
     DROP TRIGGER medal_trig;
 
-**Remark**
+.. note:
 
-*   A user trigger (i.e. the trigger event is **COMMIT** or **ROLLBACK**) can be seen and dropped only by the owner.
-*   Only one trigger can be dropped by a single **DROP TRIGGER** statement. A table trigger can be dropped by a user who has an **ALTER** authorization on the table.
+    *   A user trigger (i.e. the trigger event is **COMMIT** or **ROLLBACK**) can be seen and dropped only by the owner.
+    *   Only one trigger can be dropped by a single **DROP TRIGGER** statement. A table trigger can be dropped by a user who has an **ALTER** authorization on the table.
 
 RENAME TRIGGER
 ==============
@@ -380,10 +382,10 @@ You can change a trigger name by using the **TRIGGER** reserved word in the **RE
 
     RENAME TRIGGER medal_trigger AS medal_trig;
 
-**Remark**
+.. note:
 
-*   A trigger name must be unique among all trigger names. The name of a trigger can be the same as the table name in the database.
-*   To rename a table trigger, you must be the trigger owner or granted the **ALTER** authorization on the table where the trigger belongs. A user trigger can only be renamed by its user.
+    *   A trigger name must be unique among all trigger names. The name of a trigger can be the same as the table name in the database.
+    *   To rename a table trigger, you must be the trigger owner or granted the **ALTER** authorization on the table where the trigger belongs. A user trigger can only be renamed by its user.
 
 Deferred Condition and Action
 =============================
@@ -425,14 +427,12 @@ Drops the deferred condition and action of a trigger. ::
 Granting TRIGGER Authorization
 ------------------------------
 
-**Description**
-
 Trigger authorization is not granted explicitly. Authorization on the table trigger is automatically granted to the user if the authorization is granted on the event target table described in the trigger definition. In other words, triggers that have table targets (**INSERT**, **UPDATE**, etc.) are seen by all users. User triggers (**COMMIT** and **ROLLBACK**) are seen only by the user who defined the triggers. All authorizations are automatically granted to the trigger owner.
 
-**Remark**
+.. note:
 
-*   To define a table trigger, you must have an **ALTER** authorization on the table.
-*   To define a user trigger, the database must be accessed by a valid user.
+    *   To define a table trigger, you must have an **ALTER** authorization on the table.
+    *   To define a user trigger, the database must be accessed by a valid user.
 
 Trigger on REPLACE and INSERT ... ON DUPLICATE KEY UPDATE
 =========================================================
@@ -557,8 +557,6 @@ This section covers trigger definitions in the demo database. The triggers creat
 
 Triggers created by the user in the own database can be as powerful as applications created by the user.
 
-**Example 1**
-
 The following trigger created in the *participant* table rejects an update to the medal column (*gold*, *silver*, *bronze*) if a given value is smaller than 0. The evaluation time must be **BEFORE** because a correlation name new is used in the trigger condition. Although not described, the action time of this trigger is also **BEFORE**.
 
 .. code-block:: sql
@@ -576,8 +574,6 @@ The trigger *medal_trigger* starts when the number of gold (*gold*) medals of th
     SET gold = -10
     WHERE nation_code = 'BLA';
 
-**Example 2**
-
 The following trigger has the same condition as the one above except that **STATUS ACTIVE** is added. If the **STATUS** statement is omitted, the default value is **ACTIVE**. You can change **STATUS** to **INACTIVE** by using the **ALTER TRIGGER** statement.
 
 You can specify whether or not to execute the trigger depending on the **STATUS** value.
@@ -593,8 +589,6 @@ You can specify whether or not to execute the trigger depending on the **STATUS*
     ALTER TRIGGER medal_trig
     STATUS INACTIVE;
 
-**Example 3**
-
 The following trigger shows how integrity constraint is enforced when a transaction is committed. This example is different from the previous ones, in that one trigger can have specific conditions for multiple tables.
 
 .. code-block:: sql
@@ -604,8 +598,6 @@ The following trigger shows how integrity constraint is enforced when a transact
     IF 0 < (SELECT count(*) FROM athlete WHERE gender IS NULL)
     OR 0 < (SELECT count(*) FROM game WHERE nation_code IS NULL)
     EXECUTE REJECT;
-
-**Example 4**
 
 The following trigger delays the update integrity constraint check for the *record* table until the transaction is committed. Since the **DEFERRED** keyword is given as the event time, the trigger is not executed at the time.
 

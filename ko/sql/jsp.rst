@@ -440,8 +440,8 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 .. code-block:: sql
 
     CREATE TABLE phone(
-         name varchar(20),
-         phoneno varchar(20)
+         name VARCHAR(20),
+         phoneno VARCHAR(20)
     )
 
 다음의 PhoneNumber.java Java 파일을 컴파일하여 Java 클래스 파일을 CUBRID로 로드하고 등록한다.
@@ -527,9 +527,9 @@ Java 저장 함수/프로시저의 리턴 값 및 IN/OUT에 대한 타입 자릿
 
 Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 자릿수를 한정하는 경우, CUBRID에서는 다음과 같이 처리한다.
 
-Java 저장 함수/프로시저의 sql_type을 기준으로 확인한다.
+*   Java 저장 함수/프로시저의 sql_type을 기준으로 확인한다.
 
-Java 저장 함수/프로시저 생성 시 정의한 자릿수는 무시하고 타입만 맞추어 Java에서 반환하는 값을 그대로 데이터베이스에 전달한다. 전달한 데이터에 대한 조작은 사용자가 데이터베이스에서 직접 처리하는 것을 원칙으로 한다.
+*   Java 저장 함수/프로시저 생성 시 정의한 자릿수는 무시하고 타입만 맞추어 Java에서 반환하는 값을 그대로 데이터베이스에 전달한다. 전달한 데이터에 대한 조작은 사용자가 데이터베이스에서 직접 처리하는 것을 원칙으로 한다.
 
 다음과 같은 **typestring** () Java 저장 함수를 살펴보자.
 

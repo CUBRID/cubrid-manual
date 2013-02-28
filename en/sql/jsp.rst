@@ -439,8 +439,8 @@ Create a phone class in the CUBRID database.
 .. code-block:: sql
 
     CREATE TABLE phone(
-         name varchar(20),
-         phoneno varchar(20)
+         name VARCHAR(20),
+         phoneno VARCHAR(20)
     )
 
 Compile the following **PhoneNumber.java** file, load the Java class file into CUBRID, and publish it.
@@ -526,9 +526,9 @@ Returning Value of Java Stored Function/Procedure and Precision Type on IN/OUT
 
 To limit the return value of Java stored function/procedure and precision type on IN/OUT, CUBRID processes as follows:
 
-Checks the sql_type of the Java stored function/procedure.
+*   Checks the sql_type of the Java stored function/procedure.
 
-Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user manipulates the passed data directly in the database.
+*   Passes the value returned by Java to the database with only the type converted if necessary, ignoring the number of digits defined during creating the Java stored function/procedure. In principle, the user manipulates directly the data which is passed to the database.
 
 Take a look at the following **typestring** () Java stored function.
 

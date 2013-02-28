@@ -2,9 +2,11 @@
 INSERT
 ******
 
-You can insert a new record into a table in a database by using the **INSERT** statement. CUBRID supports **INSERT...VALUES**, **INSERT...SET** and **INSERT...SELECT** statements.
+You can insert a new record into a table in a database by using the **INSERT** statement. CUBRID supports **INSERT ... VALUES**, **INSERT ... SET** and **INSERT ... SELECT** statements.
 
-**INSERT ... VALUES** and **INSERT...SET** statements are used to insert a new record based on the value that is explicitly specified while the **INSERT ... SELECT** statement is used to insert query result records obtained from different tables. Use the **INSERT VALUES** or **INSERT ... SELECT** statement to insert multiple rows by using the single **INSERT** statement. ::
+**INSERT ... VALUES** and **INSERT ... SET** statements are used to insert a new record based on the value that is explicitly specified while the **INSERT ... SELECT** statement is used to insert query result records obtained from different tables. Use the **INSERT VALUES** or **INSERT ... SELECT** statement to insert multiple rows by using the single **INSERT** statement.
+
+::
 
     <INSERT … VALUES statement>
     INSERT [INTO] table_name [(column_name, ...)]
@@ -23,15 +25,15 @@ You can insert a new record into a table in a database by using the **INSERT** s
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
-*   *table_name* : Specifies the name of the target table into which you want to insert a new record.
+*   *table_name*: Specifies the name of the target table into which you want to insert a new record.
 
-*   *column_name* : Specifies the name of the column into which you want to insert the value. If you omit to specify the column name, it is considered that all columns defined in the table have been specified. Therefore, you must specify the values for all columns next to the **VALUES** keyword. If you do not specify all the columns defined in the table, a **DEFAULT** value is assigned to the non-specified columns; if the **DEFAULT** value is not defined, a **NULL** value is assigned.
+*   *column_name*: Specifies the name of the column into which you want to insert the value. If you omit to specify the column name, it is considered that all columns defined in the table have been specified. Therefore, you must specify the values for all columns next to the **VALUES** keyword. If you do not specify all the columns defined in the table, a **DEFAULT** value is assigned to the non-specified columns; if the **DEFAULT** value is not defined, a **NULL** value is assigned.
 
-*   *expr* | **DEFAULT** : Specifies values that correspond to the columns next to the **VALUES** keyword. Expressions or the **DEFAULT** keyword can be specified as a value. At this time, the order and number of the specified column list must correspond to the column value list. The column value list for a single record is described in parentheses.
+*   *expr* | **DEFAULT**: Specifies values that correspond to the columns next to the **VALUES** keyword. Expressions or the **DEFAULT** keyword can be specified as a value. At this time, the order and number of the specified column list must correspond to the column value list. The column value list for a single record is described in parentheses.
 
-*   **DEFAULT** : You can use the **DEFAULT** keyword to specify a default value as the column value. If you specify **DEFAULT** in the column value list next to the **VALUES** keyword, a default value column is stored for the given column: if you specify **DEFAULT** before the **VALUES** keyword, default values are stored for all columns in the table. **NULL** is stored for the column whose default value has not been defined.
+*   **DEFAULT**: You can use the **DEFAULT** keyword to specify a default value as the column value. If you specify **DEFAULT** in the column value list next to the **VALUES** keyword, a default value column is stored for the given column: if you specify **DEFAULT** before the **VALUES** keyword, default values are stored for all columns in the table. **NULL** is stored for the column whose default value has not been defined.
 
-*   **ON DUPLICATE KEY UPDATE** : In case constraints are violated because a duplicated value for a column where **PRIMARY KEY** or **UNIQUE** attribute is defined is inserted, the value that makes constraints violated is changed into a specific value by performing the action specified in the **ON DUPLICATE KEY UPDATE** statement.
+*   **ON DUPLICATE KEY UPDATE**: In case constraints are violated because a duplicated value for a column where **PRIMARY KEY** or **UNIQUE** attribute is defined is inserted, the value that makes constraints violated is changed into a specific value by performing the action specified in the **ON DUPLICATE KEY UPDATE** statement.
 
 .. code-block:: sql
 
@@ -117,12 +119,12 @@ In this way, you can extract data from another table that satisfies a certain re
                 7  NULL                  '777-7777'
                 8  'aaa'                 '000-0000'
 
-ON DUPLICATE KEY UPDATE Statement
-=================================
+ON DUPLICATE KEY UPDATE Clause
+==============================
 
-In a situation in which a duplicate value is inserted into a column for which the **UNIQUE** index or the **PRIMARY KEY** constraint has been set, you can update to a new value without outputting the error by specifying the **ON DUPLICATE KEY UPDATE** clause in the **INSERT** statement.
+In a situation in which a duplicate value is inserted into a column for which the **UNIQUE** index or the **PRIMARY KEY** constraint has been set, you can update to a new value by specifying the **ON DUPLICATE KEY UPDATE** clause in the **INSERT** statement. The **ON DUPLICATE KEY UPDATE** clause cannot be used in a nested **INSERT** statement. 
 
-However, the **ON DUPLICATE KEY UPDATE** clause cannot be used in a table in which a trigger for **INSERT** or **UPDATE** has been activated, or in a nested **INSERT** statement. ::
+::
 
     <INSERT … VALUES statement>
     <INSERT … SET statement>
@@ -130,7 +132,7 @@ However, the **ON DUPLICATE KEY UPDATE** clause cannot be used in a table in whi
         INSERT ...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
-*   *column_name* = *expr* : Specifies the name of the column whose value you want to change next to **ON DUPLICATE KEY UPDATE** and a new column value by using the equal sign.
+*   *column_name* = *expr*: Specifies the name of the column whose value you want to change next to **ON DUPLICATE KEY UPDATE** and a new column value by using the equal sign.
 
 .. code-block:: sql
 

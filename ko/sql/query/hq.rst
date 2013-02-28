@@ -2,24 +2,21 @@
 계층적 질의
 ***********
 
-START WITH ... CONNECT BY 절
-============================
-
 계층적 질의란 테이블에 포함된 행(row)간에 수직적 계층 관계가 성립되는 데이터에 대하여 계층 관계에 따라 각 행을 출력하는 질의이다. **START WITH ... CONNECT BY** 절은 **SELECT** 구문과 결합하여 사용된다.
 
 **CONNECT BY ... START WITH** 로 두 절의 순서를 바꿔서 사용할 수도 있다. ::
 
     SELECT column_list
-        FROM table_joins | tables
-        [WHERE join_conditions and/or filtering_conditions]
-        [hierarchical_clause]
+    FROM table_joins | tables
+    [WHERE join_conditions and/or filtering_conditions]
+    [hierarchical_clause]
      
     hierarchical_clause :
         [START WITH condition] CONNECT BY [NOCYCLE] condition
         | CONNECT BY [NOCYCLE] condition [START WITH condition]
     
 START WITH 절
--------------
+=============
 
 **START WITH** 절은 계층 관계가 시작되는 루트 행(root row)을 지정하기 위한 것으로, **START WITH** 절 다음에 계층 관계를 검색하기 위한 조건식을 포함한다. 만약, **START WITH** 절에 다음에 위치하는 조건식이 생략되면 대상 테이블 내에 존재하는 모든 행을 루트 행으로 간주하여 계층 관계를 검색할 것이다.
 
@@ -27,8 +24,8 @@ START WITH 절
 
     **START WITH** 절이 생략되거나, **START WITH** 조건식을 만족하는 결과 행이 존재하지 않는 경우, 테이블 내의 모든 행을 루트 행으로 간주하여 각 루트 행에 속하는 하위 자식 행들 간 계층 관계를 검색하므로 결과 행들 중 일부는 중복되어 출력될 수 있다.
 
-CONNECT BY [NOCYCLE] PRIOR 절
------------------------------
+CONNECT BY 절
+=============
 
 *   **PRIOR** : **CONNECT BY** 조건식은 한 쌍의 행에 대한 상-하 계층 관계(부모-자식 관계)를 정의하기 위한 것으로, 조건식 내에서 하나는 부모(parent)로 지정되고, 다른 하나는 자식(child)으로 지정된다. 이처럼 행 간의 부모-자식 간 계층 관계를 정의하기 위하여 **CONNECT BY** 조건식 내에 **PRIOR** 연산자를 이용하여 부모 행의 칼럼 값을 지정한다. 즉, 부모 행의 칼럼 값과 같은 칼럼 값을 가지는 모든 행은 자식 행이 된다.
 
@@ -51,9 +48,9 @@ CONNECT BY [NOCYCLE] PRIOR 절
      
     -- CONNECT BY 절을 이용하여 계층 질의문 수행하기
     SELECT id, mgrid, name
-        FROM tree
-        CONNECT BY PRIOR id=mgrid
-        ORDER BY id;
+    FROM tree
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
      
     id  mgrid       name
     ======================
@@ -73,10 +70,10 @@ CONNECT BY [NOCYCLE] PRIOR 절
      
     -- START WITH 절을 이용하여 계층 질의문 수행하기
     SELECT id, mgrid, name
-        FROM tree
-        START WITH mgrid IS NULL
-        CONNECT BY prior id=mgrid
-        ORDER BY id;
+    FROM tree
+    START WITH mgrid IS NULL
+    CONNECT BY prior id=mgrid
+    ORDER BY id;
      
     id  mgrid       name
     =============================
@@ -88,11 +85,11 @@ CONNECT BY [NOCYCLE] PRIOR 절
     6   2       Foster
     7   6       Brown
 
-조인 테이블에 대한 계층 질의
-============================
+계층 질의 실행
+==============
 
-테이블 조인 조건식
-------------------
+조인 테이블에 대한 계층 질의
+----------------------------
 
 **SELECT** 문에서 대상 테이블이 조인된 경우, **WHERE** 절에는 검색 조건식 외에 테이블 조인 조건을 포함할 수 있다. 이때, CUBRID는 제일 먼저 **WHERE** 절의 조인 조건을 적용하여 테이블 조인 연산을 수행한 후, **CONNECT BY** 절의 조건식을 적용하고, 마지막으로 **WHERE** 절 내의 나머지 검색 조건식을 적용하여 연산을 처리한다.
 
@@ -123,11 +120,10 @@ CONNECT BY [NOCYCLE] PRIOR 절
      
     -- 조인 테이블에 대해 계층 질의문을 수행하기
     SELECT t.id,t.name,t2.job,level
-        FROM tree t
-            inner join tree2 t2 on t.id=t2.treeid
-        START WITH t.mgrid is null
-        CONNECT BY prior t.id=t.mgrid
-        ORDER BY t.id;
+    FROM tree t INNER JOIN tree2 t2 ON t.id=t2.treeid
+    START WITH t.mgrid is null
+    CONNECT BY prior t.id=t.mgrid
+    ORDER BY t.id;
      
     id  name        job     level
     ================================================
@@ -138,9 +134,61 @@ CONNECT BY [NOCYCLE] PRIOR 절
     5   Verma       Sales Exec. 2
     6   Foster      Sales Exec. 2
     7   Brown       Assistant   3
+    
+계층 질의문에서의 데이터 정렬
+-----------------------------
 
-계층 질의문에서 사용 가능한 의사 칼럼
-=====================================
+**ORDER SIBLINGS BY** 절은 계층 질의 결과 값들의 계층 정보를 유지하면서 특정 칼럼을 기준으로 오름차순 또는 내림차순으로 데이터를 정렬하며, 동일한 부모를 가진 자식 행들을 정렬할 수 있다. 계층적 질의문에서 데이터의 계층적 순서를 파악하기 위해 사용한다. ::
+
+    ORDER SIBLINGS BY col_1 [ASC|DESC] [, col_2 [ASC|DESC] […[, col_n [ASC|DESC]]…]]
+
+다음은 상사와 그의 부하 직원을 출력하되, 출생 연도가 앞서는 사람부터 출력하는 예제이다.
+
+계층 질의 결과는 기본적으로 **ORDER SIBLINGS BY** 절에 명시된 칼럼 리스트에 따라 정렬된 부모와 그 부모의 자식 노드들이 연속으로 출력된다. 부모가 같은 형제 노드는 명시된 정렬 순서에 따라 정렬되어 출력된다.
+
+.. code-block:: sql
+
+    -- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 형제 노드 간에는 birthyear 순서로 정렬하기
+    SELECT id, mgrid, name, birthyear, level
+    FROM tree
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id=mgrid
+    ORDER SIBLINGS BY birthyear;
+     
+    id        mgrid  name                    birthyear        level
+    ==========================================================================
+    2         NULL  'Moy'                        1958            1
+    6            2  'Foster'                     1972            2
+    7            6  'Brown'                      1981            3
+    5            2  'Verma'                      1973            2
+    1         NULL  'Kim'                        1963            1
+    4            1  'Smith'                      1974            2
+    3            1  'Jonas'                      1976            2
+
+다음은 상사와 그의 부하 직원을 출력하되, 같은 레벨 간에는 우선 입사한 순서로 정렬시키는 예제이다. *id* 는 입사한 순서로 부여된다. *id* 는 직원의 입사번호이며, *mgrid* 는 상사의 입사번호이다.
+
+.. code-block:: sql
+
+    -- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 자식 노드 간에는 id 순서로 정렬하기
+    SELECT id, mgrid, name, LEVEL
+    FROM tree
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id=mgrid
+    ORDER SIBLINGS BY id;
+     
+    id  mgrid       name        level
+    ===============================================
+    1   null        Kim     1
+    3   1       Jonas       2
+    4   1       Smith       2
+    2   null        Moy     1
+    5   2       Verma       2
+    6   2       Foster      2
+    7   6       Brown       3
+
+
+계층 질의 의사 칼럼
+===================
 
 LEVEL
 -----
@@ -155,11 +203,11 @@ LEVEL
 
     -- LEVEL의 값을 확인하기
     SELECT id, mgrid, name, LEVEL
-        FROM tree
-        WHERE LEVEL=2
-        START WITH mgrid IS NULL
-        CONNECT BY PRIOR id=mgrid
-        ORDER BY id;
+    FROM tree
+    WHERE LEVEL=2
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
      
     id  mgrid       name        level
     =========================================
@@ -200,10 +248,10 @@ CONNECT_BY_ISLEAF
 
     -- CONNECT_BY_ISLEAF의 값을 확인하기
     SELECT id, mgrid, name, CONNECT_BY_ISLEAF
-        FROM tree
-        START WITH mgrid IS NULL
-        CONNECT BY PRIOR id=mgrid
-        ORDER BY id;
+    FROM tree
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
      
     id  mgrid       name        connect_by_isleaf
     ===========================================================
@@ -245,10 +293,10 @@ CONNECT_BY_ISCYCLE
      
     -- CONNECT_BY_ISCYCLE의 값을 확인하기
     SELECT id, mgrid, name, CONNECT_BY_ISCYCLE
-        FROM tree_cycle
-        START WITH name in ('Kim', 'Moy')
-        CONNECT BY NOCYCLE PRIOR id=mgrid
-        ORDER BY id;
+    FROM tree_cycle
+    START WITH name in ('Kim', 'Moy')
+    CONNECT BY NOCYCLE PRIOR id=mgrid
+    ORDER BY id;
      
     id  mgrid       name        connect_by_iscycle
     ==========================================================
@@ -264,11 +312,11 @@ CONNECT_BY_ISCYCLE
     10  9       Audrey      0
     11  10      Stone       1
 
-계층 질의문에서 사용 가능한 연산자
-==================================
+계층 질의 연산자
+================
 
-CONNECT_BY_ROOT 연산자
-----------------------
+CONNECT_BY_ROOT
+---------------
 
 **CONNECT_BY_ROOT** 은 칼럼 값으로 루트 행의 값을 반환한다. 이 연산자는 **SELECT** 문 내의 **WHERE** 절 및 **ORDER BY** 절에서 사용할 수 있다.
 
@@ -278,10 +326,10 @@ CONNECT_BY_ROOT 연산자
 
     -- 각 행마다 루트 행의 id 값을 확인하기
     SELECT id, mgrid, name, CONNECT_BY_ROOT id
-        FROM tree
-        START WITH mgrid IS NULL
-        CONNECT BY PRIOR id=mgrid
-        ORDER BY id;
+    FROM tree
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
      
     id  mgrid       name        connect_by_root id
     ==========================================================
@@ -295,8 +343,8 @@ CONNECT_BY_ROOT 연산자
 
 .. _prior-operator:
 
-PRIOR 연산자
-------------
+PRIOR
+-----
 
 **PRIOR** 연산자는 칼럼 값으로 부모 행의 값을 반환하고, 루트 행에 대해서는 **NULL** 을 반환한다. 이 연산자는 **SELECT** 문 내의 **WHERE** 절, **ORDER BY** 절 및 **CONNECT BY** 절에서 사용할 수 있다.
 
@@ -306,10 +354,10 @@ PRIOR 연산자
 
     -- 각 행마다 부모 행의 id 값을 확인하기
     SELECT id, mgrid, name, PRIOR id as "prior_id"
-        FROM tree
-        START WITH mgrid IS NULL
-        CONNECT BY PRIOR id=mgrid
-        ORDER BY id;
+    FROM tree
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
      
     id  mgrid       name        prior_id
     ========================================
@@ -321,8 +369,11 @@ PRIOR 연산자
     6   2       Foster  2
     7   6       Brown       6
 
-계층 질의문에서 사용 가능한 함수
-================================
+계층 질의 함수
+==============
+
+SYS_CONNECT_BY_PATH
+-------------------
 
 **SYS_CONNECT_BY_PATH** 함수는 루트 행으로부터 해당 행까지의 상-하 관계의 path를 문자열로 반환하는 함수이다. 이때, 함수의 인자로 지정되는 칼럼과 구분자는 문자형 타입이어야 하며, 각 path는 지정된 구분자에 의해 구분되어 연쇄적으로 출력된다. 이 함수는 **SELECT** 문 내의 **WHERE** 절과 **ORDER BY** 절에서 사용할 수 있다. ::
 
@@ -334,10 +385,10 @@ PRIOR 연산자
 
     -- 구분자를 이용하여 루트 행으로부터 해당 행까지 path를 확인하기
     SELECT id, mgrid, name, SYS_CONNECT_BY_PATH(name,'/') as [hierarchy]
-        FROM tree
-        START WITH mgrid IS NULL
-        CONNECT BY PRIOR id=mgrid
-        ORDER BY id;
+    FROM tree
+    START WITH mgrid IS NULL
+    CONNECT BY PRIOR id=mgrid
+    ORDER BY id;
      
     id  mgrid       name        hierarchy
     =================================================
@@ -349,60 +400,9 @@ PRIOR 연산자
     6   2       Foster      /Moy/Foster
     7   6       Brown       /Moy/Foster/Brown
 
-계층 질의문에서의 데이터 정렬
-=============================
 
-**ORDER SIBLINGS BY** 절은 계층 질의 결과 값들의 계층 정보를 유지하면서 특정 칼럼을 기준으로 오름차순 또는 내림차순으로 데이터를 정렬하며, 동일한 부모를 가진 자식 행들을 정렬할 수 있다. 계층적 질의문에서 데이터의 계층적 순서를 파악하기 위해 사용한다. ::
-
-    ORDER SIBLINGS BY col_1 [ASC|DESC] [, col_2 [ASC|DESC] […[, col_n [ASC|DESC]]…]]
-
-다음은 상사와 그의 부하 직원을 출력하되, 출생 연도가 앞서는 사람부터 출력하는 예제이다.
-
-계층 질의 결과는 기본적으로 **ORDER SIBLINGS BY** 절에 명시된 칼럼 리스트에 따라 정렬된 부모와 그 부모의 자식 노드들이 연속으로 출력된다. 부모가 같은 형제 노드는 명시된 정렬 순서에 따라 정렬되어 출력된다.
-
-.. code-block:: sql
-
-    -- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 형제 노드 간에는 birthyear 순서로 정렬하기
-    SELECT id, mgrid, name, birthyear, level
-    FROM tree
-    START WITH mgrid IS NULL
-    CONNECT BY PRIOR id=mgrid
-    ORDER SIBLINGS BY birthyear;
-     
-    id        mgrid  name                    birthyear        level
-    ==========================================================================
-    2         NULL  'Moy'                        1958            1
-    6            2  'Foster'                     1972            2
-    7            6  'Brown'                      1981            3
-    5            2  'Verma'                      1973            2
-    1         NULL  'Kim'                        1963            1
-    4            1  'Smith'                      1974            2
-    3            1  'Jonas'                      1976            2
-
-다음은 상사와 그의 부하 직원을 출력하되, 같은 레벨 간에는 우선 입사한 순서로 정렬시키는 예제이다. *id* 는 입사한 순서로 부여된다. *id* 는 직원의 입사번호이며, *mgrid* 는 상사의 입사번호이다.
-
-.. code-block:: sql
-
-    -- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 자식 노드 간에는 id 순서로 정렬하기
-    SELECT id, mgrid, name, LEVEL
-        FROM tree
-        START WITH mgrid IS NULL
-        CONNECT BY PRIOR id=mgrid
-        ORDER SIBLINGS BY id;
-     
-    id  mgrid       name        level
-    ===============================================
-    1   null        Kim     1
-    3   1       Jonas       2
-    4   1       Smith       2
-    2   null        Moy     1
-    5   2       Verma       2
-    6   2       Foster      2
-    7   6       Brown       3
-
-
-계층 질의문 사용 예
-===================
+계층 질의문 예
+==============
 
 **SELECT** 문에 **CONNECT BY** 절을 명시하여 계층 질의문을 작성하는 예이다.
 
@@ -433,18 +433,18 @@ PRIOR 연산자
 .. code-block:: sql
 
     SELECT ID, ParentID, ..., Level
-        FROM tree_table
-        START WITH ParentID IS NULL
-        CONNECT BY ParentID=PRIOR ID
+    FROM tree_table
+    START WITH ParentID IS NULL
+    CONNECT BY ParentID=PRIOR ID
 
 루프로 인한 오류를 발생시키지 않으려면 다음과 같이 **NOCYCLE** 을 명시할 수 있다.
 
 .. code-block:: sql
 
     SELECT ID, ParentID, ..., Level
-        FROM tree_table
-        START WITH ParentID IS NULL
-        CONNECT BY NOCYCLE ParentID=PRIOR ID
+    FROM tree_table
+    START WITH ParentID IS NULL
+    CONNECT BY NOCYCLE ParentID=PRIOR ID
 
 
 계층 질의문의 성능

@@ -76,19 +76,19 @@ You don't need to grant authorization individually because the members of the gr
     GRANT operation [ { ,operation }_ ] ON table_name [ { ,table_name }_ ]
     TO user [ { ,user }_ ] [ WITH GRANT OPTION ] [ ; ]
 
-*   *operation*: Specifies an operation that can be used when granting authorization. The following table shows operations.
-    *   **SELECT**: Allows to read the table definitions and retrieve records. The most general type of permissions.
-    *   **INSERT**: Allows to create records in the table.
-    *   **UPDATE**: Allows to modify the records already existing in the table.
-    *   **DELETE**: Allows to delete records in the table.
-    *   **ALTER**: Allows to modify the table definition, rename or delete the table.
-    *   **INDEX**: Allows to call table methods or instance methods.
-    *   **EXECUTE**: Allows to call table methods or instance methods.
-    *   **ALL PRIVILEGES**: Includes all permissions described above.
+* *operation*: Specifies an operation that can be used when granting authorization. The following table shows operations.
+    * **SELECT**: Allows to read the table definitions and retrieve records. The most general type of permissions.
+    * **INSERT**: Allows to create records in the table.
+    * **UPDATE**: Allows to modify the records already existing in the table.
+    * **DELETE**: Allows to delete records in the table.
+    * **ALTER**: Allows to modify the table definition, rename or delete the table.
+    * **INDEX**: Allows to call table methods or instance methods.
+    * **EXECUTE**: Allows to call table methods or instance methods.
+    * **ALL PRIVILEGES**: Includes all permissions described above.
 
-*   *table_name* : Specifies the name of a table or virtual table to be granted.
-*   *user* : Specifies the name of a user (group) to be granted. Enter the login name of the database user or **PUBLIC**, a system-defined user. If **PUBLIC** is specified, all database users are granted with the permission.
-*   **WITH GRANT OPTION** : **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
+* *table_name*: Specifies the name of a table or virtual table to be granted.
+* *user*: Specifies the name of a user (group) to be granted. Enter the login name of the database user or **PUBLIC**, a system-defined user. If **PUBLIC** is specified, all database users are granted with the permission.
+* **WITH GRANT OPTION**: **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
 
 The following example shows how to grant the **SELECT** authorization for the *olympic* table to *Fred* (including his members).
 

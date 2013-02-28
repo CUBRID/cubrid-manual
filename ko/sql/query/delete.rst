@@ -2,7 +2,7 @@
 DELETE
 ******
 
-**DELETE** 문을 사용하여 테이블 내에 레코드를 삭제할 수 있으며, :ref:`where-clause` 과 결합하여 삭제 조건을 명시할 수 있다. 하나의 **DELETE** 문으로 하나 이상의 테이블을 삭제할 수 있다. 삭제할 테이블이 한 개인 경우에 한하여, :ref:`limit-clause` 을 지정할 수 있다. :ref:`limit-clause` 을 명시하면 삭제할 레코드 수를 한정할 수 있다. :ref:`where-clause` 을 만족하는 레코드 개수가 *row_count* 를 초과하면 *row_count* 개의 레코드만 삭제된다. ::
+**DELETE** 문을 사용하여 테이블 내에 레코드를 삭제할 수 있으며, :ref:`where-clause`\ 과 결합하여 삭제 조건을 명시할 수 있다. 하나의 **DELETE** 문으로 하나 이상의 테이블을 삭제할 수 있다. 삭제할 테이블이 한 개인 경우에 한하여, :ref:`limit-clause`\ 을 지정할 수 있다. :ref:`limit-clause`\ 을 명시하면 삭제할 레코드 수를 한정할 수 있다. :ref:`where-clause`\ 을 만족하는 레코드 개수가 *row_count*\ 를 초과하면 *row_count* 개의 레코드만 삭제된다. ::
 
     <DELETE single table>
     DELETE [FROM] table_name [ WHERE <search_condition> ] [LIMIT row_count]
@@ -13,21 +13,19 @@ DELETE
     <DELETE FROM multiple tables USING ...>
     DELETE FROM table_name[, table_name] ... USING <table_specifications> [ WHERE <search_condition> ]
 
-*   <*table_specifications*> : **SELECT** 문의 **FROM** 절과 같은 형태의 구문을 지정할 수 있으며, 하나 이상의 테이블을 지정할 수 있다.
+*   <*table_specifications*>: **SELECT** 문의 **FROM** 절과 같은 형태의 구문을 지정할 수 있으며, 하나 이상의 테이블을 지정할 수 있다.
 
-*   *table_name* : 삭제할 데이터가 포함되어 있는 테이블의 이름을 지정한다. 테이블의 개수가 한 개일 경우 앞의 **FROM** 키워드를 생략할 수 있다.
+*   *table_name*: 삭제할 데이터가 포함되어 있는 테이블의 이름을 지정한다. 테이블의 개수가 한 개일 경우 앞의 **FROM** 키워드를 생략할 수 있다.
 
-*   *search_condition* : :ref:`where-clause` 을 이용하여 *search_condition* 을 만족하는 데이터만 삭제한다. 생략할 경우 지정된 테이블의 모든 데이터를 삭제한다.
+*   *search_condition*: :ref:`where-clause`\ 을 이용하여 *search_condition*\ 을 만족하는 데이터만 삭제한다. 생략할 경우 지정된 테이블의 모든 데이터를 삭제한다.
 
-*   *row_count* : :ref:`limit-clause` 에 삭제할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
+*   *row_count*: :ref:`limit-clause`\ 에 삭제할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
 
-**참고 사항**
+.. note:: \
 
-*   여러 개의 테이블이 있는(multiple table) **DELETE** 문에서는 <*table_specifications*> 내에서만 테이블 별칭(alias)을 정의할 수 있고, <*table_specifications*> 밖에서는 < *table_specifications*> 내에서 정의한 테이블 별칭만 사용할 수 있다(예제 2 참고).
+    *   여러 개의 테이블이 있는(multiple table) **DELETE** 문에서는 <*table_specifications*> 내에서만 테이블 별칭(alias)을 정의할 수 있고, <*table_specifications*> 밖에서는 <*table_specifications*> 내에서 정의한 테이블 별칭만 사용할 수 있다.
 
-*   CUBRID 9.0 미만 버전에서는 <*table_specifications*>에 한 개의 테이블만 입력할 수 있다.
-
-**예제 1**
+    *   CUBRID 9.0 미만 버전에서는 <*table_specifications*>에 한 개의 테이블만 입력할 수 있다.
 
 .. code-block:: sql
 
@@ -50,8 +48,6 @@ DELETE
     --delete all records from a_tbl
     DELETE FROM a_tbl;
 
-
-**예제 2**
 
 .. code-block:: sql
 

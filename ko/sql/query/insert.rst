@@ -4,7 +4,9 @@ INSERT
 
 **INSERT** 문을 사용하여 데이터베이스에 존재하는 테이블에 새로운 레코드를 삽입할 수 있다. CUBRID는 **INSERT ... VALUES** 문, **INSERT ... SET** 문, **INSERT ... SELECT** 문을 지원한다.
 
-**INSERT ... VALUES** 문과 **INSERT ... SET** 문은 명시적으로 지정된 값을 기반으로 새로운 레코드를 삽입하며, **INSERT ... SELECT** 문은 다른 테이블에서 조회한 결과 레코드를 삽입할 수 있다. 단일 **INSERT** 문을 이용하여 여러 행을 삽입하기 위해서는 **INSERT ... VALUES** 문 또는 **INSERT ... SELECT** 문을 사용한다. ::
+**INSERT ... VALUES** 문과 **INSERT ... SET** 문은 명시적으로 지정된 값을 기반으로 새로운 레코드를 삽입하며, **INSERT ... SELECT** 문은 다른 테이블에서 조회한 결과 레코드를 삽입할 수 있다. 단일 **INSERT** 문을 이용하여 여러 행을 삽입하기 위해서는 **INSERT ... VALUES** 문 또는 **INSERT ... SELECT** 문을 사용한다.
+
+::
 
     <INSERT … VALUES statement>
     INSERT [INTO] table_name [(column_name, ...)]
@@ -23,15 +25,15 @@ INSERT
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
-*   *table_name* : 새로운 레코드를 삽입할 대상 테이블 이름을 지정한다.
+*   *table_name*: 새로운 레코드를 삽입할 대상 테이블 이름을 지정한다.
 
-*   *column_name* : 값을 삽입할?칼럼 이름을 지정한다. 이 값을 생략하면, 테이블에 정의된 모든 칼럼이 명시된 것으로 간주되므로 모든 칼럼에 대한 값을 **VALUES** 뒤에 명시해야 한다. 테이블에 정의된 칼럼 중 일부 칼럼만 명시하면 나머지 칼럼에는 **DEFAULT** 로 정의된 값이 할당되며, 정의된 기본값이 없는 경우 **NULL** 값이 할당된다.
+*   *column_name*: 값을 삽입할 칼럼 이름을 지정한다. 이 값을 생략하면, 테이블에 정의된 모든 칼럼이 명시된 것으로 간주되므로 모든 칼럼에 대한 값을 **VALUES** 뒤에 명시해야 한다. 테이블에 정의된 칼럼 중 일부 칼럼만 명시하면 나머지 칼럼에는 **DEFAULT** 로 정의된 값이 할당되며, 정의된 기본값이 없는 경우 **NULL** 값이 할당된다.
 
-*   *expr* | **DEFAULT** : **VALUES** 뒤에는 칼럼에 대응하는 칼럼 값을 명시하며, 표현식 또는 **DEFAULT** 키워드를 값으로 지정할 수 있다. 명시된 칼럼 리스트의 순서와 개수는 칼럼 값 리스트와 대응되어야 하며, 하나의 레코드에 대해 칼럼 값 리스트는 괄호로 처리된다.
+*   *expr* | **DEFAULT**: **VALUES** 뒤에는 칼럼에 대응하는 칼럼 값을 명시하며, 표현식 또는 **DEFAULT** 키워드를 값으로 지정할 수 있다. 명시된 칼럼 리스트의 순서와 개수는 칼럼 값 리스트와 대응되어야 하며, 하나의 레코드에 대해 칼럼 값 리스트는 괄호로 처리된다.
 
-*   **DEFAULT** : 기본값을 칼럼 값으로 명시하기 위하여 **DEFAULT** 키워드를 사용할 수 있다. **VALUES** 키워드 뒤의 칼럼 값 리스트 내에 **DEFAULT** 를 명시하면 해당 칼럼에 기본값을 저장하고, **VALUES** 키워드 앞에 **DEFAULT** 를 명시하면 테이블 내 모든 칼럼에 대해 기본값을 저장한다. 기본값이 정의되지 않은 칼럼에 대해서는 **NULL** 을 저장한다.
+*   **DEFAULT**: 기본값을 칼럼 값으로 명시하기 위하여 **DEFAULT** 키워드를 사용할 수 있다. **VALUES** 키워드 뒤의 칼럼 값 리스트 내에 **DEFAULT** 를 명시하면 해당 칼럼에 기본값을 저장하고, **VALUES** 키워드 앞에 **DEFAULT** 를 명시하면 테이블 내 모든 칼럼에 대해 기본값을 저장한다. 기본값이 정의되지 않은 칼럼에 대해서는 **NULL** 을 저장한다.
 
-*   **ON DUPLICATE KEY UPDATE** : **PRIMARY KEY** 또는 **UNIQUE** 속성이 정의된 칼럼에 중복 값이 삽입되어 제약 조건 위반이 발생하면, **ON DUPLICATE KEY UPDATE** 절에 명시된 액션을 수행하면서 제약 조건 위반을 발생시킨 값을 특정 값으로 변경한다.
+*   **ON DUPLICATE KEY UPDATE**: **PRIMARY KEY** 또는 **UNIQUE** 속성이 정의된 칼럼에 중복 값이 삽입되어 제약 조건 위반이 발생하면, **ON DUPLICATE KEY UPDATE** 절에 명시된 액션을 수행하면서 제약 조건 위반을 발생시킨 값을 특정 값으로 변경한다.
 
 .. code-block:: sql
 
@@ -120,7 +122,7 @@ INSERT ... SELECT 문
 ON DUPLICATE KEY UPDATE 절
 ==========================
 
-**INSERT** 문에 **ON DUPLICATE KEY UPDATE** 절을 명시하여 **UNIQUE** 인덱스 또는 **PRIMARY KEY** 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 에러를 출력하지 않고 새로운 값으로 갱신할 수 있다. **ON DUPLICATE KEY UPDATE** 절은 **INSERT** 또는 **UPDATE** 에 대한 트리거가 활성화된 테이블에 대해서는 사용할 수 없으며, 중첩된 **INSERT** 문에서도 사용할 수 없다. ::
+**INSERT** 문에 **ON DUPLICATE KEY UPDATE** 절을 명시하여 **UNIQUE** 인덱스 또는 **PRIMARY KEY** 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 에러를 출력하지 않고 새로운 값으로 갱신할 수 있다. **ON DUPLICATE KEY UPDATE** 절은 중첩된 **INSERT** 문에 사용할 수 없다. ::
 
     <INSERT … VALUES statement>
     <INSERT … SET statement>
@@ -129,7 +131,7 @@ ON DUPLICATE KEY UPDATE 절
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
 
 
-*   *column_name* = *expr* : **ON DUPLICATE KEY UPDATE** 뒤에 칼럼 값을 변경하고자 하는 칼럼 이름을 명시하고, 등호 부호를 이용하여 새로운 칼럼 값을 명시한다.
+*   *column_name* = *expr*: **ON DUPLICATE KEY UPDATE** 뒤에 칼럼 값을 변경하고자 하는 칼럼 이름을 명시하고, 등호 부호를 이용하여 새로운 칼럼 값을 명시한다.
 
 .. code-block:: sql
 

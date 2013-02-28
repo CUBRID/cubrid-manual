@@ -75,10 +75,8 @@ CREATE VIEW
                 2  '222-2222'
                 3  '333-3333'
      
-    --WITH CHECK OPTION doesn’t allow to update column value which violates WHERE clause
+    --WITH CHECK OPTION doesn’t allow updating column value which violates WHERE clause
     UPDATE b_view SET phone=NULL;
-     
-    In line 1, column 72,
      
     ERROR: Check option exception on view b_view.
      

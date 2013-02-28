@@ -10,7 +10,7 @@ If the **PRIMARY KEY** constraint is defined in the table and this is referred b
 
 .. note:: 
 
-    To execute the **TRUNCATE** statement, the authorization of **ALTER**, **INDEX**, and **DELETE** is required on the table. Fro granting authorization, see :ref:`granting-authorization`.
+    To execute the **TRUNCATE** statement, the authorization of **ALTER**, **INDEX**, and **DELETE** is required on the table. For granting authorization, see :ref:`granting-authorization`.
 
 ::
 

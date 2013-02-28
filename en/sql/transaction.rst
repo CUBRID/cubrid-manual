@@ -58,7 +58,7 @@ Let each **UPDATE** statement have the current seats of each stadium. To verify 
         'Goudi Olympic Hall'         6000
         'Vouliagmeni Olympic Centre'         4400
 
-If the update is properly done, the changes can be semi-permentanetly fixed. In this time, use the **COMMIT WORK**  as below:
+If the update is properly done, the changes can be semi-permanently fixed. In this time, use the **COMMIT WORK**  as below:
 
 .. code-block:: sql
 
@@ -68,7 +68,7 @@ If the update is properly done, the changes can be semi-permentanetly fixed. In 
 
 An auto-commit mode is a mode that commits or rolls back all SQL statements. The transaction is committed automatically if the SQL is executed successfully, or is rolled back automatically if an error occurs.Such auto commit modes are supported in any interfaces.
 
-In CCI, PHP, ODBC and OLE DB interfaces, you can configure auto-commit mode by using **CCI_DEFAULT_AUTOCOMMIT** upon startup of an application. If configuration on broker parameter is omitted, the default value is set to **ON**. To change auto-commit mode, use the following functions by interface: **cci_set_autocommit** () for CCI inferface and **cubrid_set_autocommit** () for PHP interface.
+In CCI, PHP, ODBC and OLE DB interfaces, you can configure auto-commit mode by using **CCI_DEFAULT_AUTOCOMMIT** upon startup of an application. If configuration on broker parameter is omitted, the default value is set to **ON**. To change auto-commit mode, use the following functions by interface: **cci_set_autocommit** () for CCI interface and **cubrid_set_autocommit** () for PHP interface.
 
 For session command (**;AUtocommit**) which enables auto-commit configuration in CSQL Interpreter, see :ref:`csql-session-commands`.
 
@@ -650,7 +650,7 @@ You can set the level of transaction isolation by using **isolation_level** and 
     isolation_level = 1
     ...
      
-    또는
+    or
      
     isolation_level = "TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE"
 
@@ -669,20 +669,20 @@ The following table shows the isolation levels from 1 to 6. It consists of table
 +===========================================================+=====================================================================================================================================================================================+
 | SERIALIZABLE (6)                                          | In this isolation level, problems concerning concurrency (e.g. dirty read, non-repeatable read, phantom read, etc.) do not occur.                                                   |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| REPEATABLE READ CLASS withREPEATABLE READ INSTANCES (5)   | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
+| REPEATABLE READ CLASS with REPEATABLE READ INSTANCES (5)  | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
 |                                                           | Transaction T1 may experience phantom read for the record R that was inserted by another transaction T2 when it is repeatedly retrieving a specific record.                         |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| REPEATABLE READ CLASS withREAD COMMITTED INSTANCES (4)    | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
+| REPEATABLE READ CLASS with READ COMMITTED INSTANCES (4)   | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
 | (or CURSOR STABILITY)                                     | Transaction T1 may experience R read (non-repeatable read) that was updated and committed by another transaction T2 when it is repeatedly retrieving the record R.                  |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| REPEATABLE READ CLASS withREAD UNCOMMITTED INSTANCES (3)  | Default isolation level.                                                                                                                                                            |
+| REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES (3) | Default isolation level.                                                                                                                                                            |
 |                                                           | Another transaction T2 cannot update the schema of table A  while transaction T1 is viewing table A.                                                                                |
 |                                                           | Transaction T1 may experience R' read (dirty read) for the record that was updated but not committed by another transaction T2.                                                     |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| READ COMMITTED CLASS withREAD COMMITTED INSTANCES (2)     | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction  T2 while it is viewing table A repeatedly.         |
+| READ COMMITTED CLASS with READ COMMITTED INSTANCES (2)    | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction  T2 while it is viewing table A repeatedly.         |
 |                                                           | Transaction T1 may experience R' read (non-repeatable read) for the record that was updated and committed by another transaction T2 while it is retrieving the record R repeatedly. |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| READ COMMITTED CLASS withREAD UNCOMMITTED INSTANCES (1)   | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction T2 while it is repeatedly viewing table A.          |
+| READ COMMITTED CLASS with READ UNCOMMITTED INSTANCES (1)  | Transaction T1 may experience A' read (non-repeatable read) for the table that was updated and committed by another transaction T2 while it is repeatedly viewing table A.          |
 |                                                           | Transaction T1 may experience R' read (dirty read) for the record that was updated but not committed by another transaction T2.                                                     |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
@@ -1446,7 +1446,7 @@ This isolation level uses a two-phase locking protocol for an exclusive and upda
 +---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
 | ::                                                                              |                                                                                     |
 |                                                                                 |                                                                                     |
-|   csql> sALTER TABLE isol1_tbl ADD COLUMN gold INT;                             |                                                                                     |
+|   csql> ALTER TABLE isol1_tbl ADD COLUMN gold INT;                              |                                                                                     |
 |                                                                                 |                                                                                     |
 |   /* able to alter the table schema even if tran 2 is uncommitted yet*/         |                                                                                     |
 +---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
@@ -1582,7 +1582,7 @@ When the connection between an application and the CAS is closed, all result set
 *   KEEP_CONNECTION = ON: Cursor holdability is not affected.
 *   KEEP_CONNECTION = AUTO: The CAS cannot be restarted while the result set with cursor holdability is open.
 
-.. warning:: Usage of memory will increase in the status of result set opened. Thus, you should closed the result set after completion.
+.. warning:: Usage of memory will increase in the status of result set opened. Thus, you should close the result set after completion.
 
 .. note::
 

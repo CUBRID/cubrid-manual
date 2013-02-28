@@ -24,13 +24,13 @@ Managing User
     [ PASSWORD password ]
     [ GROUPS user_name [ {, user_name } ... ] ]
     [ MEMBERS user_name [ {, user_name } ... ] ] ;
+    
     DROP USER user_name;
+    
     ALTER USER user_name PASSWORD password;
 
 *   *user_name* : Specifies the user name to create, delete or change.
 *   *password* : Specifies the user password to create or change.
-
-**Example 1**
 
 The following example shows how to create a user (*Fred*), change a password, and delete the user.
 
@@ -39,8 +39,6 @@ The following example shows how to create a user (*Fred*), change a password, an
     CREATE USER Fred;
     ALTER USER Fred PASSWORD '1234';
     DROP USER Fred;
-
-**Example 2**
 
 The following example shows how to create a user and add member to the user. By the following statement, *company* becomes a group that has *engineering*, *marketing* and *design* as its members. *marketing* becomes a group with members *smith* and *jones*, *design* becomes a group with a member *smith*, and *engineering* becomes a group with a member *brown*.
 
@@ -53,8 +51,6 @@ The following example shows how to create a user and add member to the user. By 
     CREATE USER smith GROUPS design, marketing;
     CREATE USER jones GROUPS marketing;  
     CREATE USER brown GROUPS engineering;
-
-**Example 3**
 
 The following example shows how to create the same groups as above but use the **MEMBERS** keyword instead of **GROUPS**.
 
@@ -80,22 +76,19 @@ You don't need to grant authorization individually because the members of the gr
     GRANT operation [ { ,operation }_ ] ON table_name [ { ,table_name }_ ]
     TO user [ { ,user }_ ] [ WITH GRANT OPTION ] [ ; ]
 
-*   *operation* : Specifies an operation that can be used when granting authorization. The following table shows operations.
-
-    *   **SELECT** : Allows to read the table definitions and retrieve records. The most general type of permissions.
-    *   **INSERT** : Allows to create records in the table.
-    *   **UPDATE** : Allows to modify the records already existing in the table.
-    *   **DELETE** : Allows to delete records in the table.
-    *   **ALTER** : Allows to modify the table definition, rename or delete the table.
-    *   **INDEX** : Allows to call table methods or instance methods.
-    *   **EXECUTE** : Allows to call table methods or instance methods.
-    *   **ALL PRIVILEGES** : Includes all permissions described above.
+*   *operation*: Specifies an operation that can be used when granting authorization. The following table shows operations.
+    *   **SELECT**: Allows to read the table definitions and retrieve records. The most general type of permissions.
+    *   **INSERT**: Allows to create records in the table.
+    *   **UPDATE**: Allows to modify the records already existing in the table.
+    *   **DELETE**: Allows to delete records in the table.
+    *   **ALTER**: Allows to modify the table definition, rename or delete the table.
+    *   **INDEX**: Allows to call table methods or instance methods.
+    *   **EXECUTE**: Allows to call table methods or instance methods.
+    *   **ALL PRIVILEGES**: Includes all permissions described above.
 
 *   *table_name* : Specifies the name of a table or virtual table to be granted.
 *   *user* : Specifies the name of a user (group) to be granted. Enter the login name of the database user or **PUBLIC**, a system-defined user. If **PUBLIC** is specified, all database users are granted with the permission.
 *   **WITH GRANT OPTION** : **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
-
-**Example 1**
 
 The following example shows how to grant the **SELECT** authorization for the *olympic* table to *Fred* (including his members).
 
@@ -103,15 +96,11 @@ The following example shows how to grant the **SELECT** authorization for the *o
 
     GRANT SELECT ON olympic TO Fred;
 
-**Example 2**
-
-The following example shows how to grant the **SELECT**, **INSERT**, **UPDATE** and **DELETE** authorization on the *nation* and *athlete* tables to *Jeniffer* and *Daniel* (including their members).
+The following example shows how to grant the **SELECT**, **INSERT**, **UPDATE** and **DELETE** authorization on the *nation* and *athlete* tables to *Jenifer* and *Daniel* (including their members).
 
 .. code-block:: sql
 
-    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jeniffer, Daniel;
-
-**Example 3**
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jenifer, Daniel;
 
 The following example shows how to grant every authorization on the *game* and *event* tables to all users.
 
@@ -119,15 +108,13 @@ The following example shows how to grant every authorization on the *game* and *
 
     GRANT ALL PRIVILEGES ON game, event TO public;
 
-**Example 4**
-
 The following example shows how to grant retrieving authorization on the *record* and *history* tables to *ROSS*. Using **WITH GRANT OPTION** allows *ROSS* to grant retrieving to another users. Ross can grant authorization to others within her authorization.
 
 .. code-block:: sql
 
     GRANT SELECT ON record, history TO Ross WITH GRANT OPTION;
 
-**Remark**
+.. note: \
 
 *   The grantor of authorization must be the owner of all tables listed before the grant operation or have **WITH GRANT OPTION** specified.
 *   Before granting **SELECT**, **UPDATE**, **DELETE** and **INSERT** authorization for a virtual table, the owner of the virtual table must have **SELECT** and **GRANT** authorization for all the tables included in the query specification. The **DBA** user and the members of the **DBA** group are automatically granted all authorization for all tables.
@@ -147,23 +134,17 @@ If the authorization (**WITH GRANT OPTION**) is revoked from the grantor, the au
 *   *table_name* : Specifies the name of the table or virtual table to be granted.
 *   *user* : Specifies the name of the user (group) to be granted.
 
-**Example 1**
-
 The following example shows how to grant **SELECT**, **INSERT**, **UPDATE** and **DELETE** authorization to *Fred* and *John* so that they can perform on the *nation* and *athlete* tables.
 
 .. code-block:: sql
 
     GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO Fred, John;
 
-**Example 2**
-
 The following example shows how to execute the **REVOKE** statement; this allows *John* to have only **SELECT** authorization. If *John* has granted authorization to another user, the user is also allowed to execute **SELECT** only.
 
 .. code-block:: sql
 
     REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM John;
-
-**Example 3**
 
 The following example shows how to execute the **REVOKE** statement revoking all authorization that has granted to *Fred*. *Fred* is not allowed to execute any operations on the *nation* and *athlete* tables once this statement is executed.
 
@@ -180,7 +161,7 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
 
     ALTER [TABLE | CLASS | VIEW | VCLASS | TRIGGER | PROCEDURE | FUNCTION] name OWNER TO user_id;
 
-*   *name* : The name of schema object of which ower is to be changed
+*   *name* : The name of schema object of which owner is to be changed
 *   *user_id* : User ID
 
 .. code-block:: sql
@@ -196,7 +177,7 @@ Database Administrator (**DBA**) or a member of the **DBA** group can change the
 User Authorization Management METHOD
 ====================================
 
-The database administrator (**DBA**) can check and modify user authorization by calling authorization-related methods defined in **db_user** where information about database user is stored, and **db_authorization** (the system authorization class). The administrator can specify **db_user** or **db_authorization** depending on the method to be called, and store the return value of a method to a variable. In addition, some methods can be called only by **DBA** or members of **DBA** group.
+The database administrator (**DBA**) can check and modify user authorization by calling authorization-related methods defined in **db_user** where information about database user is stored, or **db_authorizations** (the system authorization class). The administrator can specify **db_user** or **db_authorizations** depending on the method to be called, and store the return value of a method to a variable. In addition, some methods can be called only by **DBA** or members of **DBA** group.
 
 .. note:: Note that method call made by the master node is not applied to the slave node in the HA environment.
 
@@ -267,8 +248,6 @@ As a class method of **db_authorizations** class, this method is used to change 
 
     -- Change the owner of table_1 to user_4
     CALL change_owner ('table_1', 'user_4') ON CLASS db_authorizations;
-
-**Example**
 
 The following example shows a **CALL** statement that calls the find_user method defined in the system table **db_user**. It is called to determine whether the database user entered as the **find_user** exists. The first statement calls the table method defined in the **db_user** class. The name (**db_user** in this case) is stored in x if the user is registered in the database. Otherwise, **NULL** is stored.
 

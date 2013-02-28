@@ -77,7 +77,7 @@ SHOW COLUMNS
    * UNI 값이면 고유(unique) 인덱스이다. (고유 인덱스는 여러 개의 NULL값을 허용하지만, NOT NULL 제약 조건을 설정할 수도 있다.)
    * MUL 값이면 주어진 값이 칼럼 내에서 여러 번 나타나는 것을 허용하는 비고유 인덱스의 첫번째 칼럼이다. 복합 고유 인덱스를 구성하는 칼럼이면 MUL 값이 된다. 칼럼 값들의 결합은 고유일 수 있으나 각 칼럼의 값은 여러 번 나타날 수 있기 때문이다.
 * Default : 칼럼에 정의된 기본값
-* Extra : 주어진 칼럼에 대해 가능한 추가 정보. **AUTO_INCREMENT** 속성인 칼럼은 auto_increment라는 값을 갖는다.
+* Extra : 주어진 칼럼에 대해 가능한 추가 정보. **AUTO_INCREMENT** 속성인 칼럼은 'auto_increment'라는 값을 갖는다.
 
 **FULL** 키워드가 사용되면 Collation 정보를 추가로 출력한다.
 
@@ -246,7 +246,7 @@ SHOW GRANTS
 
 .. code-block:: sql
 
-    CREATE TABLE testgrant (id int);
+    CREATE TABLE testgrant (id INT);
     CREATE USER user1;
     GRANT INSERT,SELECT ON testgrant TO user1;
      

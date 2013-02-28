@@ -47,8 +47,8 @@ You can check the statistics Information with the session command of the CSQL In
      Atrribute: code
         id: 0
         Type: DB_TYPE_INTEGER
-        Mininum value: 1
-        Maxinum value: 5
+        Minimum value: 1
+        Maximum value: 5
         B+tree statistics:
             BTID: { 0 , 1049 }
             Cardinality: 5 (5) , Total pages: 2 , Leaf pages: 1 , Height: 2
@@ -79,7 +79,7 @@ The CUBRID query optimizer determines whether to perform query optimization and 
     
     *   514: Performs query optimization and outputs the detailed query plan. However, the query is not executed. This value works for displaying more detailed query plan than the value 258 by internally interpreting the value as 512+2.
 
-    .. note:: If you config the optimization level as not executing the query like 2, 258, or 514, all queries(not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.) are not executed.   
+    .. note:: If you configure the optimization level as not executing the query like 2, 258, or 514, all queries(not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.) are not executed.   
 
 The following example shows how to view query plan by using the example retrieving year when Sim Kwon Ho won medal and metal type.
 
@@ -142,14 +142,14 @@ The hint comment must appear after the **SELECT**, **CREATE**, **ALTER**, etc. k
 
 The following hints can be specified in CREATE/ALTER TABLE statements and CREATE/ALTER/DROP INDEX statements.
 
-    *   **NO_STATS** : Related to a statistical information hint. If it is specified, query optimizaer does not update the statistical information after running the DDL statement. Therefore, the DDL performance  is improved, but note that the query plan is not optimized.
+    *   **NO_STATS** : Related to a statistical information hint. If it is specified, query optimizer does not update the statistical information after running the DDL statement. Therefore, the DDL performance  is improved, but note that the query plan is not optimized.
 
 The following hints can be specified in UPDATE, DELETE and SELECT statements.
 
     *   **USE_NL** : Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
     *   **USE_MERGE** : Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
     *   **ORDERED** : Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
-    *   **USE_IDX** : Related to a index, the query optimizer creates a index join execution plan corresponding to a specified table with this hint.
+    *   **USE_IDX** : Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
     *   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
     *   **NO_DESC_IDX** : This is a hint not to use the descending index.
     *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
@@ -160,8 +160,8 @@ The following hints can be specified in UPDATE, DELETE and SELECT statements.
 
 MERGE statement can have below hints.
 
-*   **USE_INSERT_INDEX** (<*insert_index_list*>) : An index hint which is used in INSERT clause of MERGE statement. Lists index names to *insert_index_list* to use when executing INSERT cluase. This hint is applied to  <*join_condition*> of MERGE statement.
-*   **USE_UPDATE_INDEX** (<*update_index_list*>) : An index hint which is used in UPDATE clause of MERGE statement. Lists index names to *update_index_list* to use when executing UPDATE cluase. This hint is applied to <*join_condition*> and <*update_condition*> of MERGE statement.
+*   **USE_INSERT_INDEX** (<*insert_index_list*>) : An index hint which is used in INSERT clause of MERGE statement. Lists index names to *insert_index_list* to use when executing INSERT clause. This hint is applied to  <*join_condition*> of MERGE statement.
+*   **USE_UPDATE_INDEX** (<*update_index_list*>) : An index hint which is used in UPDATE clause of MERGE statement. Lists index names to *update_index_list* to use when executing UPDATE clause. This hint is applied to <*join_condition*> and <*update_condition*> of MERGE statement.
 *   **RECOMPILE** : Recompile the query execution plan. Use this hint to remove the old query plan and set the new one to the query plan cache.
 
 The following example shows how to retrieve the years when Sim Kwon Ho won medals and the types of medals. Here, a nested loop join execution plan needs to be created which has the *athlete* table as an outer table and the *game* table as an inner table. It can be expressed by the following query. The query optimizer creates a nested loop join execution plan that has the *game* table as an outer table and the *athlete* table as an inner table.
@@ -228,8 +228,8 @@ The **USING INDEX**  clause is useful to get the results in the desired order wi
 *   **NONE** : If **NONE** is specified,  a sequential scan is used on all tables.
 *   **ALL EXCEPT** : All indexes except the specified indexes can be used when the query is executed.
 *   *index_name*\ (+) : If (+) is specified after the index_name, it is the first priority in index selection. IF this index is not proper to run the query, it is not selected.
-*   *index_name*\ (-) : If (-) is specified after the index_name, it is execluded from index selection. 
-*   *table_spec*.\ **NONE** : All indexes are execluded from the selection, so sequential scan is used.
+*   *index_name*\ (-) : If (-) is specified after the index_name, it is excluded from index selection. 
+*   *table_spec*.\ **NONE** : All indexes are excluded from the selection, so sequential scan is used.
 
 USE,FORCE,IGNORE INDEX
 ----------------------
@@ -247,7 +247,7 @@ Index hints can be specified through **USE**, **FORCE**, **IGNORE INDEX** syntax
       [table_spec.]index_name
 
 *    **USE INDEX** ( <*index_spec*> ): Only specified indexes are considered when choose them.
-*    **FORCE INDEX** ( <*index_spec*> ): Specified indexes are choosed as the first priority.
+*    **FORCE INDEX** ( <*index_spec*> ): Specified indexes are chosen as the first priority.
 *    **IGNORE INDEX** ( <*index_spec*> ): Specified indexes are excluded from the choice.
 
 USE, FORCE, IGNORE INDEX syntax is automatically rewritten as the proper USING INDEX syntax by the system.
@@ -320,7 +320,7 @@ Below query always do the sequential scan.
     WHERE gender='M' AND nation_code='USA'
     USING INDEX athlete.NONE;
 
-Below query forces to be possible to use all indexes execept *athlete_idx2* index.
+Below query forces to be possible to use all indexes except *athlete_idx2* index.
 
 .. code-block:: sql
 
@@ -420,7 +420,7 @@ Indexes for open bugs can be created by using the following sentence:
 
     CREATE INDEX idx_open_bugs ON bugs(bugID) WHERE Closed = 0;
 
-To process queries that are interested in open bugs, specify the index as a index hint. It will allow to create query results by accessing less index pages through filtered indexes.
+To process queries that are interested in open bugs, specify the index as an index hint. It will allow  creating query results by accessing less index pages through filtered indexes.
 
 .. code-block:: sql
 
@@ -811,7 +811,7 @@ The following example shows that *j* and *k* columns execute **ORDER BY** and th
     WHERE j > 0 
     ORDER BY j,k;
      
-    --  in this case the index i_tab_j_k is a covering index and also respects the orderind index property.
+    --  in this case the index i_tab_j_k is a covering index and also respects the ordering index property.
     --  Therefore, it is used as a covering index and sorting is not performed.
      
     Query plan:
@@ -982,7 +982,7 @@ The following example requires descending order by **ORDER BY** clause. In this 
 Optimizing GROUP BY Clause
 --------------------------
 
-**GROUP BY** caluse optimization works on the premise that if all columns in the **GROUP BY** clause are included in an index, you can use the index upon executing a query, so you don't execute a separate sorting job. The columns in the **GROUP BY** clause must exist in front side of the column forming the index.
+**GROUP BY** clause optimization works on the premise that if all columns in the **GROUP BY** clause are included in an index, you can use the index upon executing a query, so you don't execute a separate sorting job. The columns in the **GROUP BY** clause must exist in front side of the column forming the index.
 
 .. code-block:: sql
 
@@ -996,7 +996,7 @@ Optimizing GROUP BY Clause
 *   You cannot use the index consisting of tab(col1) for optimization.
 *   You also cannot use the index consisting of tab(col3, col1, col2) or tab(col1, col3, col2), because col3 is not located at the back of the column in the **GROUP BY** clause.
 
-You can use the index if the column condition is a constant although the column consisting of the idex doesn't exist in the **GROUP BY** clause.
+You can use the index if the column condition is a constant although the column consisting of the index doesn't exist in the **GROUP BY** clause.
 
 .. code-block:: sql
 
@@ -1136,7 +1136,7 @@ The following example shows that an index consisting of tab(j,k) is used and no 
 
 먼저 *orderbynum_pred* 조건이 명시되었다면 이 조건은 유효해야 하고, **ORDERBY_NUM** 또는 **LIMIT**\ 를 통해서 지정된 최종 결과의 상한 크기(*n*)이 multi_range_optimization_limit 시스템 파라미터 값보다 크지 않아야 한다.
 
-또한 다중 키 범위 최적화에 적합한 인덱스가 필요한데, **ORDER BY** 절에 명시된 모든 *k* 개의 컬럼을 커버해야 한다. 즉, 인덱스 상에서 **ORDER BY** 절에 명시된 컬럼들을 모두 포함해야 하고, 컬럼들의 순서와 정렬 방향이 일치해야 한다. 또한 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
+또한 다중 키 범위 최적화에 적합한 인덱스가 필요한데, **ORDER BY** 절에 명시된 모든 *k* 개의 칼럼을 커버해야 한다. 즉, 인덱스 상에서 **ORDER BY** 절에 명시된 칼럼들을 모두 포함해야 하고, 칼럼들의 순서와 정렬 방향이 일치해야 한다. 또한 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
 
 인덱스를 구성하는 칼럼들 중 
 
@@ -1146,7 +1146,7 @@ The following example shows that an index consisting of tab(j,k) is used and no 
 * 데이터 필터 조건이 없어야 한다. 다시 말해, 인덱스는 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
 * 키 필터 이후의 칼럼들은 **ORDER BY** 절에 존재한다. 
 * 키 필터 조건의 칼럼들은 반드시 **ORDER BY** 절의 칼럼이 아니어야 한다.
-* 상관 부질의(correlated subquery)를 포함한 키 필터 조건이 포함되어 있다면, 이에 연관된 컬럼은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
+* 상관 부질의(correlated subquery)를 포함한 키 필터 조건이 포함되어 있다면, 이에 연관된 칼럼은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
 
 다음과 같은 예에 다중 키 범위 최적화가 수행된다. 
 

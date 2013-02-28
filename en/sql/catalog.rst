@@ -2053,7 +2053,7 @@ Represents information of partitioned classes for which the current user has acc
              )
           )
 
-The following example shows how to retrieve the partition information currently configured for the participant2 class (see examples in :ref:`defining-range-partitions`).
+The following example shows how to retrieve the partition information currently configured for the :ref:`participant2 <range-participant2-table>` class.
 
 .. code-block:: sql
 

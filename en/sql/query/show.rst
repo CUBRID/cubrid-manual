@@ -78,7 +78,7 @@ Displays the column information of a table. You can use the **LIKE** clause to s
     *   If the value is UNI, it is a unique index. (The unique index allows multiple NULL values but you can also set a NOT NULL constraint.)
     *   If the value is MUL, it is the first column of the non-unique index that allows the given value to be displayed in the column several times. If the column composes a composite unique index, the value will be MUL. The combination of column values can be unique but the value of each column can appear several times.
 *   Default : Default value defined in the column
-*   Extra : Additional information available about the given column. **AUTO_INCREMENT** The column attribute must have the auto_increment value.
+*   Extra : Additional information available on the given column. For the column with **AUTO_INCREMENT** constraint, it shows the 'auto_increment'.
 
 If a **FULL** keyword is used, it displays the additional information, collation.
 
@@ -161,7 +161,7 @@ The following is the result of a query in the *demodb* database.
      
     CREATE TABLE t1( i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
      
-    CREATE INDEX i_t1_i1 ON t1(i1 desc);
+    CREATE INDEX i_t1_i1 ON t1(i1 DESC);
     CREATE INDEX i_t1_s1 ON t1(s1(7));
     CREATE INDEX i_t1_i1_s1 ON t1(i1,s1);
     CREATE UNIQUE INDEX i_t1_i2_s2 ON t1(i2,s2);
@@ -247,7 +247,7 @@ The **SHOW GRANT** statement displays the permissions associated with the databa
 
 .. code-block:: sql
 
-    CREATE TABLE testgrant (id int);
+    CREATE TABLE testgrant (id INT);
     CREATE USER user1;
     GRANT INSERT,SELECT ON testgrant TO user1;
      

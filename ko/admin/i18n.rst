@@ -313,12 +313,8 @@ CUBRID에 내장된 로캘을 사용한다면 사용자 로캘 라이브러리�
 이와 같은 두 가지 방법 중에서 첫 번째 방법을 사용하는 것을 권장한다. 공유 라이브러리를 생성하면 로캘들 간에 공유될 수 있는 데이터들이 중복되지 않기 때문에 메모리 사용량을 줄일 수 있다. 첫 번째 방식으로 지원하는 모든 로캘을 포함하도록 생성하면 약 15MB 정도 크기의 라이브러리가 생성되며, 두 번째 방식으로 생성할 경우에는 언어에 따라서 1MB에서 5MB 이상의 크기의 라이브러리가 생성된다. 또한 첫 번째 방식에서는 두 번째 방식을 사용했을 때에 서버 재시작 시점 등에 발생되는 런타임 오버헤드가 없기 때문에 런타임에도 유리하다.
 
 .. warning:: **제약 사항 및 규칙**
-    *   Do not change the contents of **$CUBRID/conf/cubrid_locales.txt** after locales generation; 
-    Once generated the locales libraries, the contents of **$CUBRID/conf/cubrid_locales.txt** should not change (order of languages within file must also be preserved). 
-    During locale compiling, the generic collation use as default locale the first one in which is referenced; changing the order may cause different results with casing for such collation (utf8_gen_*).
     
-    *   일단 로캘 라이브러리가 생성된 후에는 **$CUBRID/conf/cubrid_locales.txt** 파일을 변경하면 안 된다. 이 파일에서 명시된 언어들의 순서를 포함하여 어떤 내용도 변경해서는 안 된다. 
-    로캘이 컴파일되고 나면, 일반 콜레이션(generic collation)은 기본 로캘로 **cubrid_locales.txt**\에 존재하는 첫번째 로캘을 사용한다. 따라서 순서를 바꾸면 해당 콜레이션(utf8_gen_*)에 대한 대소문자 변환 결과가 달라질 수 있다.
+    *   일단 로캘 라이브러리가 생성된 후에는 **$CUBRID/conf/cubrid_locales.txt** 파일을 변경하면 안 된다. 다시 말해서, 이 파일에서 명시된 언어들의 순서를 포함하여 어떤 내용도 변경해서는 안 된다. 로캘이 컴파일되고 나면, 일반 콜레이션(generic collation)은 기본 로캘로 **cubrid_locales.txt**\에 존재하는 첫번째 로캘을 사용한다. 따라서 순서를 바꾸면 해당 콜레이션(utf8_gen_*)에 대한 대소문자 변환 결과가 달라질 수 있다.
     *   **$CUBRID/locales/data/*.txt** 파일들은 변경되어서는 안 된다.
     
 .. note:: make_locale.sh(.bat) 스크립트 수행 절차

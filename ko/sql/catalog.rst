@@ -1802,7 +1802,7 @@ DB_PARTITION
              )
           )
 
-다음 예제에서는 participant2 클래스의 현재 구성된 분할 정보를 조회한다. (:ref:`defining-range-partitions` 의 예제 참조)
+다음 예제에서는 :ref:`participant2 <range-participant2-table>` 클래스의 현재 구성된 분할 정보를 조회한다.
 
 .. code-block:: sql
 

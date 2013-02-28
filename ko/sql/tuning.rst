@@ -49,8 +49,8 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
      Atrribute: code
         id: 0
         Type: DB_TYPE_INTEGER
-        Mininum value: 1
-        Maxinum value: 5
+        Minimum value: 1
+        Maximum value: 5
         B+tree statistics:
             BTID: { 0 , 1049 }
             Cardinality: 5 (5) , Total pages: 2 , Leaf pages: 1 , Height: 2
@@ -477,7 +477,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 *   :func:`INCR`, :func:`DECR` 함수와 같이 테이블의 데이터를 수정하는 함수를 포함한 경우
 
-*   시리얼 관련 함수와 의사 컬럼을 포함한 경우
+*   시리얼 관련 함수와 의사 칼럼을 포함한 경우
 
 *   :func:`MIN`, :func:`MAX`, :func:`STDDEV` 등 집계 함수를 포함한 경우
 
@@ -825,7 +825,7 @@ ORDER BY 절 최적화
     WHERE j > 0 
     ORDER BY j,k;
      
-    --  in this case the index i_tab_j_k is a covering index and also respects the orderind index property.
+    --  in this case the index i_tab_j_k is a covering index and also respects the ordering index property.
     --  Therefore, it is used as a covering index and sorting is not performed.
      
     Query plan:
@@ -1159,7 +1159,7 @@ GROUP BY 절 최적화
 
 먼저 *orderbynum_pred* 조건이 명시되었다면 이 조건은 유효해야 하고, **ORDERBY_NUM** 또는 **LIMIT**\ 를 통해서 지정된 최종 결과의 상한 크기(*n*)이 multi_range_optimization_limit 시스템 파라미터 값보다 크지 않아야 한다.
 
-또한 다중 키 범위 최적화에 적합한 인덱스가 필요한데, **ORDER BY** 절에 명시된 모든 *k* 개의 컬럼을 커버해야 한다. 즉, 인덱스 상에서 **ORDER BY** 절에 명시된 컬럼들을 모두 포함해야 하고, 컬럼들의 순서와 정렬 방향이 일치해야 한다. 또한 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
+또한 다중 키 범위 최적화에 적합한 인덱스가 필요한데, **ORDER BY** 절에 명시된 모든 *k* 개의 칼럼을 커버해야 한다. 즉, 인덱스 상에서 **ORDER BY** 절에 명시된 칼럼들을 모두 포함해야 하고, 칼럼들의 순서와 정렬 방향이 일치해야 한다. 또한 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
 
 인덱스를 구성하는 칼럼들 중 
 
@@ -1169,7 +1169,7 @@ GROUP BY 절 최적화
 * 데이터 필터 조건이 없어야 한다. 다시 말해, 인덱스는 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
 * 키 필터 이후의 칼럼들은 **ORDER BY** 절에 존재한다. 
 * 키 필터 조건의 칼럼들은 반드시 **ORDER BY** 절의 칼럼이 아니어야 한다.
-* 상관 부질의(correlated subquery)를 포함한 키 필터 조건이 포함되어 있다면, 이에 연관된 컬럼은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
+* 상관 부질의(correlated subquery)를 포함한 키 필터 조건이 포함되어 있다면, 이에 연관된 칼럼은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
 
 다음과 같은 예에 다중 키 범위 최적화가 수행된다. 
 

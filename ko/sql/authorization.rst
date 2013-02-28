@@ -96,11 +96,11 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
     GRANT SELECT ON olympic TO Fred;
 
-다음은 *Jeniffer*\ 와 *Daniel* (두 사용자에 속한 모든 멤버)에게 *nation*\ 과 *athlete* 테이블에 대해 **SELECT**, **INSERT**, **UPDATE**, **DELETE** 권한을 부여한 예제이다.
+다음은 *Jenifer* 와 *Daniel* (두 사용자에 속한 모든 멤버)에게 *nation*\ 과 *athlete* 테이블에 대해 **SELECT**, **INSERT**, **UPDATE**, **DELETE** 권한을 부여한 예제이다.
 
 .. code-block:: sql
 
-    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jeniffer, Daniel;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jenifer, Daniel;
 
 다음은 모든 사용자에게 *game*, *event* 테이블에 대해 모든 권한을 부여한 예제이다.
 
@@ -114,7 +114,7 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
     GRANT SELECT ON record, history TO Ross WITH GRANT OPTION;
 
-**주의 사항**
+.. note: \
 
 *   권한을 부여하는 사용자는 권한 부여 전에 나열된 모든 테이블의 소유자이거나, **WITH GRANT OPTION** 을 가지고 있어야 한다.
 *   뷰에 대한 **SELECT**, **UPDATE**, **DELETE**, **INSERT** 권한을 부여하기 전에 뷰의 소유자는 뷰의 질의 명세부에 포함되어 있는 모든 테이블에 대해서 **SELECT** 권한과 **GRANT** 권한을 가져야 한다. **DBA** 사용자와 **DBA** 그룹에 속한 멤버는 자동적으로 모든 테이블에 대한 모든 권한을 가진다.
@@ -194,6 +194,7 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
     -- 비밀번호가 없는 DBA 사용자로 접속하기
     CALL login ('dba', '') ON CLASS db_user;
+    
     -- 비밀번호가 cubrid인 user_1 사용자로 접속하기
     CALL login ('user_1', 'cubrid') ON CLASS db_user;
 
@@ -205,6 +206,7 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
     -- 비밀번호가 없는 user_2 추가하기
     CALL add_user ('user_2', '') ON CLASS db_user;
+    
     -- 비밀번호가 없는 user_3 추가하고, 메서드 리턴 값을 admin 변수에 저장하기
     CALL add_user ('user_3', '') ON CLASS db_user to admin;
 
@@ -234,6 +236,7 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 
     -- user_4 를 추가하고 user_common 변수에 저장하기
     CALL add_user ('user_4', '') ON CLASS db_user to user_common;
+    
     -- user_4의 비밀번호를 'abcdef'로 변경하기
     CALL set_password('abcdef') on user_common;
 
@@ -261,6 +264,5 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
     x
     ======================
     db_user
-
 
 **find_user** 메서드를 이용하면 결과값이 **NULL** 인지 아닌지에 따라 해당 사용자가 데이터베이스에 존재하는지 여부를 판단할 수 있다.

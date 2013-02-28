@@ -963,7 +963,7 @@ CCI API Reference
     The **cci_execute** function executes the SQL statement (prepared statement) that has executed :c:func:`cci_prepare`. A request handle, *flag*, the maximum length of a column to be fetched, and the address of a **T_CCI_ERROR** construct variable in which error information being stored are specified as arguments.
 
     :param req_handle: (IN) Request handle of the prepared statement
-    :param flag: (IN) exec flag ( **CCI_EXEC_ASYNC** 또는 **CCI_EXEC_QUERY_ALL** )
+    :param flag: (IN) exec flag ( **CCI_EXEC_ASYNC** or **CCI_EXEC_QUERY_ALL** )
     :param max_col_size: (IN) The maximum length of a column to be fetched when it is a string data type in bytes. If this value is 0, full length is fetched.
     :param err_buf: (OUT) Database error buffer
     :return: 
@@ -1931,7 +1931,7 @@ CCI API Reference
 
     :param conn_handle: (IN) Connection handle
     :param sql_stmt: (IN) SQL statement
-    :param flag: (IN) prepare flag (CCI_PREPARE_UPDATABLE, CCI_PREPARE_INCLUDE_OID 또는 CCI_PREPARE_HOLDABLE)
+    :param flag: (IN) prepare flag (CCI_PREPARE_UPDATABLE, CCI_PREPARE_INCLUDE_OID or CCI_PREPARE_HOLDABLE)
     :param err_buf: (OUT) Database error buffer        
     :return: Success: Request handle ID (int), Failure: Error code
     

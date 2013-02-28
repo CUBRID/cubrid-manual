@@ -1180,6 +1180,8 @@ ENUM 타입 정렬
         
         cci_get_data (req, idx, CCI_A_TYPE_STR, &data, 1);
         
+.. _blob-clob:
+
 BLOB/CLOB 데이터 타입
 =====================
 

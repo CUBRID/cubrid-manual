@@ -1498,7 +1498,7 @@ Normalization
 CAST vs COLLATE
 ---------------
 
-* when building statements, the :func:`CAST` operator is more costly than ref:`COLLATE modifier <charset-collate-modifier>` (even more when charset conversion from ISO-88591-1 to UTF-8 is implied)
+* when building statements, the :func:`CAST` operator is more costly than :ref:`COLLATE modifier <charset-collate-modifier>` (even more when charset conversion from ISO-88591-1 to UTF-8 is implied)
 
 * :ref:`COLLATE modifier <charset-collate-modifier>` does not add an additional execution operator; using :ref:`COLLATE modifier <charset-collate-modifier>` should enhance execution speed over using :func:`CAST` operator.
 

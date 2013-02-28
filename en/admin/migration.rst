@@ -40,7 +40,7 @@ The following steps describes migration scenario that can be applied while the e
     Configure the new version of CUBRID by referring to configuration files of the existing database stored in the step 3, " **Store the existing CUBRID configuration files** ." For details on configuring new environment, see :doc:`/install` in "Getting Started."
 
 #. Load the new database
-    Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. For details on creating a database, see :ref:`creating-database` in "Administrator's Guide." For details on loading a database, see :ref:`load-db` .
+    Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. Please refer :ref:`creating-database` for creating a database and :ref:`load-db` for loading a database.
     
 #. Back up the new database
 

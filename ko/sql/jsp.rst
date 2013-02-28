@@ -343,7 +343,7 @@ Call Specifications에는 SQL의 데이터 타입과 Java의 매개변수와 리
      
     'athlete_add'         'PROCEDURE'           'void'                          4  'JAVA''Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)'  'DBA'
 
-    .. code-block:: sql
+.. code-block:: sql
     
     SELECT * from db_stored_procedure_args;
     sp_name   index_of  arg_name  data_type      mode

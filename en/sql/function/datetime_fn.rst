@@ -359,7 +359,7 @@ DATE_SUB, SUBDATE
 
     If every input argument value of date and time is 0, the return value is determined by the **return_null_on_function_errors** system parameter; if it is set to yes, then **NULL** is returned; if it is set to no, an error is returned. The default value is **no**.
 
-    If the calculated value is between '0000-00-00 00:00:00' and '0001-01-01 00:00:00', a value having 0 for all arguments is returned in **DATE** or **DATETIME** type. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property (see "API Reference > JDBC API > JDBC Programming > Connection Configuration").
+    If the calculated value is between '0000-00-00 00:00:00' and '0001-01-01 00:00:00', a value having 0 for all arguments is returned in **DATE** or **DATETIME** type. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property (see :ref:`jdbc-connection-conf` for details).
 
     :param date: It is a **DATE** or **TIMESTAMP** expression that represents the start date. If an invalid **DATE** value such as '2006-07-00' is specified, **NULL** is returned.
     :param expr: It represents the interval value to be subtracted from the start date. If a negative number is specified next to the **INTERVAL** keyword, the interval value is added to the start date.
@@ -570,10 +570,10 @@ FROM_UNIXTIME
 
     The relationship is not one of one-to-one correspondence between **TIMESTAMP** and UNIX timestamp so if you use :func:`UNIX_TIMESTAMP` or **FROM_UNIXTIME** function, partial value could be lost. For details, see :func:`UNIX_TIMESTAMP`.
 
-    0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, string where 0 is specified for every date and time value is returned. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property (see "API Reference > JDBC API > JDBC Programming > Connection Configuration").
+    0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, string where 0 is specified for every date and time value is returned. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property (see :ref:`jdbc-connection-conf` for details).
 
     :param unix_timestamp: Positive integer
-    :param format: 시간 형식. : Time format. Follows the date/time format of the func:`DATE_FORMAT`.
+    :param format: 시간 형식. : Time format. Follows the date/time format of the :func:`DATE_FORMAT`.
     :rtype: STRING
 
 .. code-block:: sql

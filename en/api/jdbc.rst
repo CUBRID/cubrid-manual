@@ -10,7 +10,7 @@ JDBC Overview
 CUBRID JDBC driver (**cubrid_jdbc.jar**) implements an interface to enable access from applications in Java to CUBRID database server. CUBRID JDBC driver is installed in the <
 *directory where CUBRID is installed*>/**jdbc** directory. The driver has been developed based on the JDBC 2.0 specification and the default driver provided is complied with JDK 1.6.
 
-To download JDBC driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver .
+To download JDBC driver or get the latest information, please visit http://www.cubrid.org/wiki_apis/entry/cubrid-jdbc-driver\ .
 
 **Verifying CUBRID JDBC Driver Version**
 
@@ -58,7 +58,7 @@ Installing and Configuring JDBC
 
 **Installing Java and Configuring Environment**
 
-You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( http://java.sun.com ). For more information, see Environment Settings for Java Stored Functions/Procedures.
+You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( http://java.sun.com ). For more information, please refer :ref:`jsp_environment-configuration`.
 
 **Configuring the environment variables for Windows**
 
@@ -68,7 +68,7 @@ In the [System Variables], click [New]. Enter **JAVA_HOME** and Java installatio
 
 .. image:: /images/image51.png
 
-Of system variables, select Path and then click [Edit]. Add **%JAVA_HOME%\bin** in the [Variable value] and then click [OK].
+Of system variables, select Path and then click [Edit]. Add **%JAVA_HOME%\\bin** in the [Variable value] and then click [OK].
 
 .. image:: /images/image52.png
 
@@ -81,11 +81,11 @@ You can also configure **JAVA_HOME** and **PATH** values in the shell instead of
 
 Specify the directory path where Java is installed (example: /usr/java/jdk1.6.0_13) as a **JAVA_HOME** environment variable and add **$JAVA_HOME/bin** to the **PATH** environment variable. ::
 
-    export JAVA_HOME=/usr/java/jdk1.6.0_16     //bash
-    export PATH=$JAVA_HOME/bin:$PATH           //bash
+    export JAVA_HOME=/usr/java/jdk1.6.0_16     #bash
+    export PATH=$JAVA_HOME/bin:$PATH           #bash
      
-    setenv JAVA_HOME /usr/java/jdk1.6.0_16     //csh
-    set path = ($JAVA_HOME/bin $path)          //csh
+    setenv JAVA_HOME /usr/java/jdk1.6.0_16     #csh
+    set path = ($JAVA_HOME/bin $path)          #csh
 
 **Configuring JDBC Driver**
 
@@ -564,7 +564,7 @@ The line "a" in the example 1 is where data of collection types (**SET**, **MULT
 Getting Auto Increment Column Value
 -----------------------------------
 
-Auto increment (**AUTO_INCREMENT**) is a column-related feature that increments the numeric value of each row. For more information, see "CUBRID SQL Guide > Table Definition > CREATE TABLE > Column Definition." It can be defined only for numeric domains (**SMALLINT**, **INTEGER**, **DECIMAL** (*p*, 0), and **NUMERIC** (*p*, 0)).
+Auto increment (**AUTO_INCREMENT**) is a column-related feature that increments the numeric value of each row. For more information, see :ref:`column-definition`. It can be defined only for numeric domains (**SMALLINT**, **INTEGER**, **DECIMAL** (*p*, 0), and **NUMERIC** (*p*, 0)).
 
 Auto increment is recognized as automatically created keys in the JDBC programs. To retrieve the key, you need to specify the time to insert a row from which the automatically created key value is to be retrieved. To perform it, you must set the flag by calling **Connection.prepareStatement** and **Statement.execute** methods. In this case, the command executed should be the **INSERT** statement or **INSERT** within **SELECT** statement. For other commands, the JDBC driver ignores the flag-setting parameter. 
 
@@ -643,7 +643,7 @@ The interface that handles **LOB** data in JDBC is implemented based on JDBC 4.0
 
     .. code-block:: java
 
-        //JDK 1.6 이상
+        //JDK 1.6 or higher
 
         import java.sql.*;
 
@@ -651,7 +651,7 @@ The interface that handles **LOB** data in JDBC is implemented based on JDBC 4.0
         Blob blob = conn.createBlob();
 
         
-        //JDK 1.6 미만
+        //JDK 1.5 or lower
 
         import java.sql.*;
         import cubrid.jdbc.driver.*;
@@ -801,8 +801,6 @@ To send a query statement to the connected database and execute it, create **Sta
 
 You can disconnect from a database by executing the **close** () method for each object.
 
-**Example 1**
-
 The following example shows how to connect to the *demodb* database, create a table, execute a query statement with the prepared statement, and roll back the query statement. You can also practice it yourself by appropriately modifying argument values of the **getConnection** () method.
 
 .. code-block:: java
@@ -873,8 +871,6 @@ The following example shows how to connect to the *demodb* database, create a ta
        }
     }
 
-**Example 2**
-
 The following example shows how to execute the **SELECT** statement by connecting to *demodb* which is automatically created when installing CUBRID.
 
 .. code-block:: java
@@ -917,8 +913,6 @@ The following example shows how to execute the **SELECT** statement by connectin
         }
     }
 
-**Example 3**
-
 The following example shows how to execute the **INSERT** statement by connecting to *demodb* which is automatically created when installing CUBRID. You can delete or update data the same way as you insert data so you can reuse the code below by simply modifying the query statement in the code.
 
 .. code-block:: java
@@ -954,7 +948,7 @@ JDBC API
 
 For details about JDBC API, see Java API Specification (http://docs.oracle.com/javase/7/docs/api) and for details about Java, see Java SE Documentation (http://www.oracle.com/technetwork/java/javase/documentation/index.htm).
 
-If cursor holdability is not configured, a cursor is maintained by default. For more information about cursor holdability, see CUBRID SQL Guide > Locking Transaction > Cursor Holdability.
+If :ref:`cursor holdability <cursor-holding>` is not configured, a cursor is maintained by default.
 
 The following table shows the JDBC standard and extended interface supported by CUBRID. Note that some methods are not supported even though they are included in the JDBC 2.0 specification.
 

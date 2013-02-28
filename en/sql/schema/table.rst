@@ -86,6 +86,8 @@ To create a table, use the **CREATE TABLE** statement. ::
        introduction     VARCHAR(1500)
     );
 
+.. _column-definition:
+
 Column Definition
 -----------------
 

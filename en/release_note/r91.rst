@@ -1104,7 +1104,7 @@ SQL
 데이터베이스 이름을 변경한 후 LOB 타입의 연산 수행에 실패하는 문제 수정(CUBRIDSUS-8905)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-데이터베이스 이름 변경 과정에서 BLOC/CLOB 타입에 대한 디렉터리 정보가 설정되지 않아, CHAR_TO_BLOB 함수와 같은 LOB 타입 연산 수행에 실패하는 문제를 수정했다. ::
+데이터베이스 이름 변경 과정에서 BLOB/CLOB 타입에 대한 디렉터리 정보가 설정되지 않아, CHAR_TO_BLOB 함수와 같은 LOB 타입 연산 수행에 실패하는 문제를 수정했다. ::
 
     % cubrid createdb --db-volume-size=20m testdb
     % cubrid renamedb testdb testdb2
@@ -3087,7 +3087,7 @@ A Manager Server process-related error occurs in the execution of the CUBRID sou
 GLO Class which is used in 2008 R3.0 or before is not supported any longer(CUBRIDSUS-3826)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. (See CUBRID SQL Guide > Data Types > BLOC/CLOB Data Type in the manual).
+    CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. (See :ref:`blob-clob` for more information about LOB data types).
 
     glo class users are recommended to carry out tasks as follows:
     

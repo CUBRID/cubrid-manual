@@ -342,7 +342,7 @@ You can check the information on the published Java stored function/procedure Th
      
     'athlete_add'         'PROCEDURE'           'void'                          4  'JAVA''Athlete.Athlete(java.lang.String, java.lang.String, java.lang.String, java.lang.String)'  'DBA'
 
-    .. code-block:: sql
+.. code-block:: sql
     
     SELECT * from db_stored_procedure_args;
     sp_name   index_of  arg_name  data_type      mode

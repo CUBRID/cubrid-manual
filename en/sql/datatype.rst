@@ -1182,6 +1182,8 @@ The following example shows how to use the **ENUM** type in a CCI application.
     
     cci_get_data (req, idx, CCI_A_TYPE_STR, &data, 1);
 
+.. _blob-clob:
+
 BLOB/CLOB Data Types
 ====================
 

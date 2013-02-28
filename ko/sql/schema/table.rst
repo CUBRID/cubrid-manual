@@ -89,6 +89,8 @@ CREATE TABLE
        introduction     VARCHAR(1500)
     );
 
+.. _column-definition:
+
 칼럼 정의
 ---------
 

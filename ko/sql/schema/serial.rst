@@ -154,7 +154,10 @@ DROP SERIAL
 시리얼 사용
 ===========
 
-시리얼은 시리얼 이름과 예약어를 질의 안에 삽입하여 읽고 갱신할 수 있다. ::
+의사컬럼
+--------
+
+시리얼 이름과 의사컬럼을 통해서 해당 시리얼을 읽고 갱신할 수 있다. ::
 
     serial_identifier.CURRENT_VALUE
     serial_identifier.NEXT_VALUE
@@ -184,8 +187,8 @@ DROP SERIAL
 
     시리얼을 생성하고 처음 사용할 때 **NEXT_VALUE** 를 이용하면 초기 값을 반환한다. 그 이후에는 현재 값에 증가 값이 추가되어 반환된다.
 
-시리얼 함수
-===========
+함수
+----
 
 .. function:: SERIAL_CURRENT_VALUE (serial_name)
 .. function:: SERIAL_NEXT_VALUE (serial_name, number)

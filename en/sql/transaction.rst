@@ -2,7 +2,7 @@
 Transaction and Lock
 ********************
 
-This chapter covers issues relating to concurrency and restore, as well as how to commit or roll back transactions.
+This chapter covers issues relating to concurrency and restore, as well as how to commit or rollback transactions.
 
 In multi-user environment, controlling access and update is essential to protect database integrity and ensure that a user’s transaction will have accurate and consistent data. Without appropriate control, data could be updated incorrectly in the wrong order.
 
@@ -164,6 +164,63 @@ The following example shows how to roll back to SP1.
     ROLLBACK WORK TO SP1;
     SELECT * FROM athlete2;
     COMMIT WORK;
+
+.. _cursor-holding:
+
+Cursor Holdability
+==================
+
+Cursor holdability is when an application holds the record set of the **SELECT** query result to fetch the next record even after performing an explicit commit or an automatic commit. In each application, cursor holdability can be specified to Connection level or Statement level. If it is not specified, the cursor is held by default. Therefore, **HOLD_CURSORS_OVER_COMMIT** is the default setting.
+
+The following code shows how to set cursor holdability in JDBC:
+
+.. code-block:: java
+
+    // set cursor holdability at the connection level
+    conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
+     
+    // set cursor holdability at the statement level which can override the connection’s
+    PreparedStatement pStmt = conn.prepareStatement(sql,
+                                         ResultSet.TYPE_SCROLL_SENSITIVE,
+                                         ResultSet.CONCUR_UPDATABLE,
+     ResultSet.HOLD_CURSORS_OVER_COMMIT);
+
+To set cursor holdability to close the cursor when a transaction is committed, set **ResultSet.CLOSE_CURSORS_AT_COMMIT**, instead of **ResultSet.HOLD_CURSORS_OVER_COMMIT**, in the above example.
+
+The default setting for applications that were developed based on CCI is to hold the cursor. If the cursor is set to 'not to hold a cursor' at connection level and you want to hold the cursor, define the **CCI_PREPARE_HOLDABLE** flag while preparing a query. The default setting for CCI drivers (PHP, PDO, ODBC, OLE DB, ADO.NET, Perl, Python, Ruby) is to hold the cursor. To check whether a driver supports the cursor holdability setting, refer to the **PREPARE** function of the driver.
+
+.. note:: \
+
+    * Note that versions lower than CUBRID 9.0 do not support cursor holdability. The default setting of those versions is to close all cursors at commit.
+    * CUBRID currently does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in XAConnection interface. It will be supported later.
+    
+**Cursor-related Operation at Transaction Commit**
+
+When a transaction is committed, all statements and result sets that are closed are released even if you have set cursor holdability. After that, when the result sets are used for another transaction, some or all of the result sets should be closed as required.
+
+When a transaction is rolled back, all result sets are closed. This means that all result sets held in the previous transaction are closed because you have set cursor holdability.
+
+**When the Result Sets are Closed**
+
+The result sets that hold the cursor are closed in the following cases:
+
+*   The result set is closed by driver (ex. rs.close(), etc)
+*   The statement is closed by driver (ex. stmt.close(), etc)
+*   Driver is disconnected
+
+**Relationship with CAS**
+
+When the connection between an application and the CAS is closed, all result sets are automatically closed even if you have set cursor holdability in the application. The setting value of
+**KEEP_CONNECTION**, the broker parameter, affects cursor holdability of the result set.
+
+*   KEEP_CONNECTION = ON: Cursor holdability is not affected.
+*   KEEP_CONNECTION = AUTO: The CAS cannot be restarted while the result set with cursor holdability is open.
+
+.. warning:: Usage of memory will increase in the status of result set opened. Thus, you should close the result set after completion.
+
+.. note::
+
+    Note that CUBRID versions lower than 9.0 do not support cursor holdability and the cursor is automatically closed when a transaction is committed. Therefore, the recordset of the **SELECT** query result is not kept. To keep the recordset of the **SELECT** query result in CUBRID versions lower than 9.0, set the auto commit mode to false and the record should be fetched before the transaction is committed.
 
 .. _database-concurrency:
 
@@ -1534,59 +1591,3 @@ The user's intervention is somewhat needed to restart the database after media e
 
     To minimize the possibility of losing database updates, it is recommended to create a snapshot and store it in the backup media before it is deleted from the disk. The DBA can backup and restore the database by using the **cubrid backupdb** and **cubrid restoredb** utilities. For details on these utilities, see :ref:`db-backup`.
 
-.. _cursor-holding:
-
-Cursor Holdability
-==================
-
-Cursor holdability is when an application holds the record set of the **SELECT** query result to fetch the next record even after performing an explicit commit or an automatic commit. In each application, cursor holdability can be specified to Connection level or Statement level. If it is not specified, the cursor is held by default. Therefore, **HOLD_CURSORS_OVER_COMMIT** is the default setting.
-
-The following code shows how to set cursor holdability in JDBC:
-
-.. code-block:: java
-
-    // set cursor holdability at the connection level
-    conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
-     
-    // set cursor holdability at the statement level which can override the connection’s
-    PreparedStatement pStmt = conn.prepareStatement(sql,
-                                         ResultSet.TYPE_SCROLL_SENSITIVE,
-                                         ResultSet.CONCUR_UPDATABLE,
-     ResultSet.HOLD_CURSORS_OVER_COMMIT);
-
-To set cursor holdability to close the cursor when a transaction is committed, set **ResultSet.CLOSE_CURSORS_AT_COMMIT**, instead of **ResultSet.HOLD_CURSORS_OVER_COMMIT**, in the above example.
-
-The default setting for applications that were developed based on CCI is to hold the cursor. If the cursor is set to 'not to hold a cursor' at connection level and you want to hold the cursor, define the **CCI_PREPARE_HOLDABLE** flag while preparing a query. The default setting for CCI drivers (PHP, PDO, ODBC, OLE DB, ADO.NET, Perl, Python, Ruby) is to hold the cursor. To check whether a driver supports the cursor holdability setting, refer to the **PREPARE** function of the driver.
-
-.. note:: \
-
-    * Note that versions lower than CUBRID 9.0 do not support cursor holdability. The default setting of those versions is to close all cursors at commit.
-    * CUBRID currently does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in XAConnection interface. It will be supported later.
-    
-**Cursor-related Operation at Transaction Commit**
-
-When a transaction is committed, all statements and result sets that are closed are released even if you have set cursor holdability. After that, when the result sets are used for another transaction, some or all of the result sets should be closed as required.
-
-When a transaction is rolled back, all result sets are closed. This means that all result sets held in the previous transaction are closed because you have set cursor holdability.
-
-**When the Result Sets are Closed**
-
-The result sets that hold the cursor are closed in the following cases:
-
-*   The result set is closed by driver (ex. rs.close(), etc)
-*   The statement is closed by driver (ex. stmt.close(), etc)
-*   Driver is disconnected
-
-**Relationship with CAS**
-
-When the connection between an application and the CAS is closed, all result sets are automatically closed even if you have set cursor holdability in the application. The setting value of
-**KEEP_CONNECTION**, the broker parameter, affects cursor holdability of the result set.
-
-*   KEEP_CONNECTION = ON: Cursor holdability is not affected.
-*   KEEP_CONNECTION = AUTO: The CAS cannot be restarted while the result set with cursor holdability is open.
-
-.. warning:: Usage of memory will increase in the status of result set opened. Thus, you should close the result set after completion.
-
-.. note::
-
-    Note that CUBRID versions lower than 9.0 do not support cursor holdability and the cursor is automatically closed when a transaction is committed. Therefore, the recordset of the **SELECT** query result is not kept. To keep the recordset of the **SELECT** query result in CUBRID versions lower than 9.0, set the auto commit mode to false and the record should be fetched before the transaction is committed.

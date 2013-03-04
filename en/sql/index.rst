@@ -17,10 +17,10 @@ The main topics covered in this chapter are as follows:
 *   Operators and functions: Describes the operators and functions used for query statements.
 *   Data retrieval and manipulation: Describes the SELECT, INSERT, UPDATE, and DELETE statements.
 *   Query optimization: Describes the query optimization by using the index, hint, and the index hint syntax.
+*   Partitioning: Describes how to partition one table into several independent logical units.
 *   Trigger: Describes how to create, alter, drop, and rename a trigger that is automatically executed in response to certain events.
 *   Java stored functions/procedures: Describes how to create a Java method and call it in the query statement.
 *   Method: Describes the method, a built-in function of the CUBRID database system.
-*   Partitioning: Describes how to partition one table into several independent logical units.
 *   Class inheritance: Describes how to inherit the attribute from the parent to the child table (class).
 *   Class conflict resolution: Describes how to resolve table (class) conflicts between attributes or methods related through inheritance.
 *   CUBRID system catalog: Describes the CUBRID system catalog, the internal information of the CUBRID database.
@@ -36,15 +36,15 @@ The main topics covered in this chapter are as follows:
     schema/index.rst
     schema/view.rst
     schema/serial.rst
+    authorization.rst
     function/index.rst
     query/index.rst
-    transaction.rst
-    authorization.rst
     tuning.rst
+    partition.rst
+    transaction.rst
     trigger.rst
     jsp.rst
     method.rst
-    partition.rst
     oodb.rst
     catalog.rst
     

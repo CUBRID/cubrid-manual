@@ -1,5 +1,5 @@
 ******
-SERIAL
+Serial
 ******
 
 CREATE SERIAL
@@ -151,10 +151,13 @@ The following example shows how to drop the *order_no* serial.
 
     DROP SERIAL order_no;
 
-Use SERIAL
-==========
+Accessing Serial
+================
 
-You can access and update a serial by serial name and a reserved word pair. ::
+Pseudocolumns
+-------------
+
+You can access and update a serial by serial name and a pseudocolumn pair. ::
 
     serial_identifier.CURRENT_VALUE
     serial_identifier.NEXT_VALUE
@@ -184,8 +187,8 @@ The following example shows how to create a table *athlete_idx* where athlete nu
 
     When you use a serial for the first time after creating it, **NEXT_VALUE** returns the initial value. Subsequently, the sum of the current value and the increment are returned.
 
-Serial Function
-===============
+Functions
+---------
 
 .. function:: SERIAL_CURRENT_VALUE (serial_name)
 .. function:: SERIAL_NEXT_VALUE (serial_name, number)

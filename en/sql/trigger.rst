@@ -1,5 +1,5 @@
 *******
-TRIGGER
+Trigger
 *******
 
 .. _create-trigger:
@@ -7,8 +7,8 @@ TRIGGER
 CREATE TRIGGER
 ==============
 
-Guideline for TRIGGER Definition
---------------------------------
+Guidelines for Trigger Definition
+-----------------=---------------
 
 Trigger definition provides various and powerful functionalities. Before creating a trigger, you must consider the following:
 
@@ -32,7 +32,7 @@ Trigger definition provides various and powerful functionalities. Before creatin
 
     A trigger defined in the same table or the one started in the same action becomes the cause of an unrecoverable error. A trigger in the same table must have a different trigger event. In addition, trigger priority must be explicitly and unambiguously defined.
 
-TRIGGER Definition
+Trigger Definition
 ------------------
 
 A trigger is created by defining a trigger target, condition and action to be performed in the **CREATE TRIGGER** statement. A trigger is a database object that performs a defined action when a specific event occurs in the target table. ::
@@ -132,7 +132,7 @@ Trigger Type
 
 .. _trigger-event-type:
 
-TRIGGER Event Type
+Trigger Event Type
 ------------------
 
 *   Instance events: An event type whose unit of operation is an instance. The types of instance (record) events are as follows:
@@ -179,7 +179,7 @@ The following example shows how to use a statement event. If you define a statem
 
 .. _trigger-event-target:
 
-TRIGGER Event Target
+Trigger Event Target
 --------------------
 
 An event target specifies the target for the trigger to be called. The target of a trigger event can be specified as a table or column name. If a column name is specified, the trigger is called only when the specified column is affected by the event. If a column is not specified, the trigger is called when any column of the table is affected. Only **UPDATE** and **STATEMENT UPDATE** events can specify a column as the event target.
@@ -214,7 +214,7 @@ A database event calling triggers is identified by the trigger event type and ev
 
 .. _trigger-condition:
 
-TRIGGER Condition
+Trigger Condition
 -----------------
 
 You can specify whether a trigger action is to be performed by defining a condition when defining the trigger.
@@ -280,7 +280,7 @@ As shown in the table below, the use of correlation names is further restricted 
 
 .. _trigger-action:
 
-TRIGGER Action
+Trigger Action
 --------------
 
 A trigger action describes what to be performed if the trigger condition is true or omitted. If a specific point of time (**AFTER** or **DEFERRED**) is not given in the action clause, the action is executed at once as the trigger event.
@@ -424,7 +424,7 @@ Drops the deferred condition and action of a trigger. ::
     *   *trigger_name* : Cancels the deferred action of the trigger when a trigger name is specified.
     *   **ALL TRIGGERS** : Cancels currently deferred actions.
 
-Granting TRIGGER Authorization
+Granting Trigger Authorization
 ------------------------------
 
 Trigger authorization is not granted explicitly. Authorization on the table trigger is automatically granted to the user if the authorization is granted on the event target table described in the trigger definition. In other words, triggers that have table targets (**INSERT**, **UPDATE**, etc.) are seen by all users. User triggers (**COMMIT** and **ROLLBACK**) are seen only by the user who defined the triggers. All authorizations are automatically granted to the trigger owner.
@@ -485,7 +485,7 @@ The following example shows that **INSERT ... ON DUPLICATE KEY UPDATE** and **RE
                 3
                 1
 
-TRIGGER Debugging
+Trigger Debugging
 =================
 
 Once a trigger is defined, it is recommended to check whether it is running as intended. Sometimes the trigger takes more time than expected in processing. This means that it is adding too much overhead to the system or has fallen into a recursive loop. This section explains several ways to debug the trigger.
@@ -501,7 +501,7 @@ The following example shows a trigger that was defined to fall into a recursive 
             SET gold = new.gold - 1
             WHERE nation_code = obj.nation_code AND host_year = obj.host_year;
 
-Viewing TRIGGER Execution Log
+Viewing Trigger Execution Log
 -----------------------------
 
 You can view the execution log of the trigger from a terminal by using the **SET TRIGGER TRACE** statement. ::
@@ -529,7 +529,7 @@ The following example shows how to execute the **TRACE** and the *loop_tgr* trig
     TRACE: Evaluating condition for trigger "loop".
     TRACE: Executing action for trigger "loop".
 
-Limiting Nested TRIGGER
+Limiting Nested Trigger
 -----------------------
 
 With the **MAXIMUM DEPTH** keyword of the **SET TRIGGER** statement, you can limit the number of triggers to be initiated at each step. By doing so, you can prevent a recursively called trigger from falling into an infinite loop. ::
@@ -550,7 +550,7 @@ The following example shows how to configure the maximum number of times of recu
      
     ERROR: Maximum trigger depth 10 exceeded at trigger "loop_tgr".
 
-TRIGGER Example
+Trigger Example
 ===============
 
 This section covers trigger definitions in the demo database. The triggers created in the *demodb* database are not complex, but use most of the features available in CUBRID. If you want to maintain the original state of the *demodb* database when testing such triggers, you must perform a rollback after changes are made to the data.

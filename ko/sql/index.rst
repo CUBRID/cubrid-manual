@@ -17,10 +17,10 @@ CUBRID SQL 설명서
 * 연산자와 함수: 질의문에서 사용되는 연산자와 함수에 대해 설명한다.
 * 데이터 조회 및 조작: SELECT, INSERT, UPDATE, DELETE 구문에 대해 설명한다.
 * 질의 최적화: 인덱스와 힌트, 인덱스 힌트 구문을 이용한 질의 최적화에 대해 설명한다.
+* 분할: 하나의 테이블을 여러 독립적인 논리적 단위로 분할하는 방법을 설명한다.
 * 트리거(trigger): 특정 질의 수행 시 특정 기능이 같이 수행되도록 하는 트리거의 생성, 변경, 삭제 방법을 설명한다.
 * Java 저장 함수/프로시저: Java 메서드를 별도로 생성하여 질의문 내에서 호출할 수 있는 방법을 설명한다.
 * 메서드(method): CUBRID 데이터베이스 시스템의 내장 함수인 메서드에 대해 설명한다.
-* 분할: 하나의 테이블을 여러 독립적인 논리적 단위로 분할하는 방법을 설명한다.
 * 클래스 상속: 부모와 자식 테이블(클래스) 사이에 속성을 상속하는 방법을 설명한다.
 * 클래스 충돌 해결: 상속 관련 테이블(클래스) 사이에 속성이나 메소드에서 충돌을 해결하는 방법을 설명한다.
 * CUBRID 시스템 카탈로그: CUBRID 데이터베이스의 내부 정보인 시스템 카탈로그에 대해 설명한다.
@@ -36,15 +36,15 @@ CUBRID SQL 설명서
     schema/index.rst
     schema/view.rst
     schema/serial.rst
+    authorization.rst
     function/index.rst
     query/index.rst
-    transaction.rst
-    authorization.rst
     tuning.rst
+    partition.rst
+    transaction.rst
     trigger.rst
     jsp.rst
     method.rst
-    partition.rst
     oodb.rst
     catalog.rst
     

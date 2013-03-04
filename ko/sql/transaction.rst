@@ -167,6 +167,61 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
     SELECT * FROM athlete2;
     COMMIT WORK;
 
+.. _cursor-holding:
+    
+커서 유지
+=========
+
+응용 프로그램이 명시적인 커밋 혹은 자동 커밋 이후에도 **SELECT** 질의 결과의 레코드셋을 유지하여 다음 레코드를 읽을(fetch) 수 있도록 하는 것을 커서 유지(cursor holdability)라고 한다. 각 응용 프로그램에서 연결 수준(connection level) 또는 문장 수준(statement level)으로 커서 유지 기능을 설정할 수 있으며, 설정을 명시하지 않으면 기본으로 커서가 유지된다.
+
+다음 코드는 JDBC에서 커서 유지를 설정하는 예이다.
+
+.. code-block:: java
+
+    // set cursor holdability at the connection level
+    conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
+     
+    // set cursor holdability at the statement level which can override the connection’s
+    PreparedStatement pStmt = conn.prepareStatement(sql,
+                                         ResultSet.TYPE_SCROLL_SENSITIVE,
+                                         ResultSet.CONCUR_UPDATABLE,
+     ResultSet.HOLD_CURSORS_OVER_COMMIT);
+ 
+커밋 시점에 커서를 유지하지 않고 커서를 닫도록 설정하고 싶으면, 위의 예제에서 **ResultSet.HOLD_CURSORS_OVER_COMMIT** 대신 **ResultSet.CLOSE_CURSORS_AT_COMMIT** 를 설정한다.
+
+CCI 로 개발된 응용 프로그램 역시 커서 유지가 기본 동작이며, 연결 수준에서 커서를 유지하지 않도록 설정한 경우 질의를 prepare할 때 **CCI_PREPARE_HOLDABLE** 플래그를 명시하면 해당 질의 수준에서 커서를 유지한다. CCI로 개발된 드라이버(PHP, PDO, ODBC, OLE DB, ADO.NET, Perl, Python, Ruby) 역시 커서 유지가 기본 동작이며, 커서 유지 여부의 설정을 지원하는지에 대해서는 해당 드라이버의 **PREPARE** 함수를 참고한다.
+
+.. note:: \
+
+    * CUBRID 9.0 미만 버전까지는 커서 유지를 지원하지 않으며, 커밋이 발생하면 커서가 자동으로 닫히는 것이 기본 동작이다.
+    * CUBRID는 현재 XAConnection 인터페이스에서 ResultSet.HOLD_CURSORS_OVER_COMMIT을 지원하지 않으며, 추후 지원할 예정이다.
+
+**트랜잭션 종료 시의 커서 관련 동작**
+
+트랜잭션이 커밋되면 커서 유지로 설정되어 있더라도 모든 잠금은 해제된다.
+
+트랜잭션이 롤백되면 결과 셋이 닫힌다. 이것은 커서 유지가 설정되어 현재 트랜잭션에서 유지되던 결과 셋이 닫힌다는 것을 의미한다.
+
+**결과 셋이 종료되는 경우**
+
+커서가 유지되는 결과 셋은 다음의 경우에 닫힌다.
+
+*   드라이버에서 결과 셋을 닫는 경우(예: rs.close() 등)
+*   드라이버에서 statement를 닫는 경우(예: stmt.close() 등)
+*   드라이버 연결 종료
+
+**CAS와의 관계**
+
+응용 프로그램에서 커서 유지로 설정되어 있다고 해도 응용 프로그램과 CAS와의 연결이 끊기면 결과 셋은 자동으로 닫힌다. 브로커 파라미터인 **KEEP_CONNECTION** 의 설정 값은 결과 셋의 커서 유지에 영향을 미친다.
+
+*   KEEP_CONNECTION = ON : 커서 유지에 영향을 주지 않음.
+*   KEEP_CONNECTION = AUTO : 커서 유지되는 결과 셋이 열려 있는 동안 CAS가 재시작될 수 없음.
+
+.. warning:: 결과 셋을 닫지 않은 상태로 유지하는 만큼 메모리 사용량이 늘어날 수 있으므로 사용을 마친 결과 셋은 반드시 닫아야 한다.
+
+.. note:: CUBRID 9.0 미만 버전까지는 커서 유지를 지원하지 않으며, 커밋이 발생하면 커서가 자동으로 닫힌다. 즉, **SELECT** 질의 결과의 레코드셋을 유지하지 않는다.
+
+
 .. _database-concurrency:
 
 데이터베이스 동시성
@@ -1530,56 +1585,3 @@ CUBRID는 활성 로그가 꽉 차면 보관 로그로 복사하여 디스크에
 
     데이터베이스의 정보를 잃어버릴 가능성을 줄이기 위해서 보관 로그가 디스크에서 삭제되기 전에 보관 로그의 스냅샷을 만들고 이를 백업 장치에 보관할 것을 권장한다. DBA는 **cubrid backupdb**, **cubrid restoredb** 유틸리티를 사용하여 데이터베이스를 백업하고 복원할 수 있다. 이 유틸리티에 대한 상세한 내용을 보려면 :ref:`db-backup` 를 참조한다.
 
-.. _cursor-holding:
-    
-커서 유지
-=========
-
-응용 프로그램이 명시적인 커밋 혹은 자동 커밋 이후에도 **SELECT** 질의 결과의 레코드셋을 유지하여 다음 레코드를 읽을(fetch) 수 있도록 하는 것을 커서 유지(cursor holdability)라고 한다. 각 응용 프로그램에서 연결 수준(connection level) 또는 문장 수준(statement level)으로 커서 유지 기능을 설정할 수 있으며, 설정을 명시하지 않으면 기본으로 커서가 유지된다.
-
-다음 코드는 JDBC에서 커서 유지를 설정하는 예이다.
-
-.. code-block:: java
-
-    // set cursor holdability at the connection level
-    conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
-     
-    // set cursor holdability at the statement level which can override the connection’s
-    PreparedStatement pStmt = conn.prepareStatement(sql,
-                                         ResultSet.TYPE_SCROLL_SENSITIVE,
-                                         ResultSet.CONCUR_UPDATABLE,
-     ResultSet.HOLD_CURSORS_OVER_COMMIT);
- 
-커밋 시점에 커서를 유지하지 않고 커서를 닫도록 설정하고 싶으면, 위의 예제에서 **ResultSet.HOLD_CURSORS_OVER_COMMIT** 대신 **ResultSet.CLOSE_CURSORS_AT_COMMIT** 를 설정한다.
-
-CCI 로 개발된 응용 프로그램 역시 커서 유지가 기본 동작이며, 연결 수준에서 커서를 유지하지 않도록 설정한 경우 질의를 prepare할 때 **CCI_PREPARE_HOLDABLE** 플래그를 명시하면 해당 질의 수준에서 커서를 유지한다. CCI로 개발된 드라이버(PHP, PDO, ODBC, OLE DB, ADO.NET, Perl, Python, Ruby) 역시 커서 유지가 기본 동작이며, 커서 유지 여부의 설정을 지원하는지에 대해서는 해당 드라이버의 **PREPARE** 함수를 참고한다.
-
-.. note:: \
-
-    * CUBRID 9.0 미만 버전까지는 커서 유지를 지원하지 않으며, 커밋이 발생하면 커서가 자동으로 닫히는 것이 기본 동작이다.
-    * CUBRID는 현재 XAConnection 인터페이스에서 ResultSet.HOLD_CURSORS_OVER_COMMIT을 지원하지 않으며, 추후 지원할 예정이다.
-
-**트랜잭션 종료 시의 커서 관련 동작**
-
-트랜잭션이 커밋되면 커서 유지로 설정되어 있더라도 모든 잠금은 해제된다.
-
-트랜잭션이 롤백되면 결과 셋이 닫힌다. 이것은 커서 유지가 설정되어 현재 트랜잭션에서 유지되던 결과 셋이 닫힌다는 것을 의미한다.
-
-**결과 셋이 종료되는 경우**
-
-커서가 유지되는 결과 셋은 다음의 경우에 닫힌다.
-
-*   드라이버에서 결과 셋을 닫는 경우(예: rs.close() 등)
-*   드라이버에서 statement를 닫는 경우(예: stmt.close() 등)
-*   드라이버 연결 종료
-
-**CAS와의 관계**
-
-응용 프로그램에서 커서 유지로 설정되어 있다고 해도 응용 프로그램과 CAS와의 연결이 끊기면 결과 셋은 자동으로 닫힌다. 브로커 파라미터인 **KEEP_CONNECTION** 의 설정 값은 결과 셋의 커서 유지에 영향을 미친다.
-
-*   KEEP_CONNECTION = ON : 커서 유지에 영향을 주지 않음.
-*   KEEP_CONNECTION = AUTO : 커서 유지되는 결과 셋이 열려 있는 동안 CAS가 재시작될 수 없음.
-
-.. warning:: 결과 셋을 닫지 않은 상태로 유지하는 만큼 메모리 사용량이 늘어날 수 있으므로 사용을 마친 결과 셋은 반드시 닫아야 한다.
-
-.. note:: CUBRID 9.0 미만 버전까지는 커서 유지를 지원하지 않으며, 커밋이 발생하면 커서가 자동으로 닫힌다. 즉, **SELECT** 질의 결과의 레코드셋을 유지하지 않는다.

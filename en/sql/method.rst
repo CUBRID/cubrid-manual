@@ -1,12 +1,12 @@
 ******
-METHOD
+Method
 ******
 
 This chapter describes methods which are built-in functions of the CUBRID database system.
 
 The methods are written in C and called by the **CALL** statement. A method program is loaded and linked with the application currently running by the dynamic loader when the method is called. The return value created as a result of the method execution is passed to the caller.
 
-METHOD Type
+Method Type
 ===========
 
 The CSQL language supports the following two types of methods: class and instance methods.

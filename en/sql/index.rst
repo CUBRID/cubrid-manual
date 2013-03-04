@@ -41,6 +41,7 @@ The main topics covered in this chapter are as follows:
     query/index.rst
     tuning.rst
     partition.rst
+    i18n.rst
     transaction.rst
     trigger.rst
     jsp.rst

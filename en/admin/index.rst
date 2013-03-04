@@ -8,13 +8,11 @@ It also includes instructions on how to use the **cubrid** utility, which starts
 
 This chapter contains the following:
 
-*   How to use CUBRID utilities
+*   cubrid utility
 *   How to control the CUBRID (service, database server, broker, manager server)
 *   How to use the database administrative utilities
 *   Database migration
 *   Database backup and restore
-*   CUBRID HA
-*   CUBRID SHARD
 *   System configuration
 
 **CUBRID Utilities**
@@ -169,7 +167,4 @@ The following result is displayed if **cubrid** is entered in a prompt.
     admin_utils.rst
     migration.rst
     backup.rst
-    i18n.rst
-    ha.rst
-    shard.rst
     config.rst

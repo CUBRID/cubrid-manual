@@ -8,13 +8,11 @@
 
 이 장에서 설명하는 주요 내용은 다음과 같다.
 
-*   CUBRID 유틸리티
+*   cubrid 유틸리티
 *   CUBRID 제어
 *   데이터베이스 관리
 *   데이터베이스 마이그레이션
 *   데이터베이스 백업 및 복구
-*   CUBRID HA
-*   CUBRID SHARD
 *   시스템 설정
 
 **cubrid 유틸리티**
@@ -186,7 +184,4 @@
     admin_utils.rst
     migration.rst
     backup.rst
-    i18n.rst
-    ha.rst
-    shard.rst
     config.rst

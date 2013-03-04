@@ -14,5 +14,7 @@ CUBRID 9.1 사용자 매뉴얼
     csql.rst
     sql/index.rst
     admin/index.rst
+    ha.rst
+    shard.rst
     api/index.rst
     release_note/index.rst

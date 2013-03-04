@@ -41,6 +41,7 @@ CUBRID SQL 설명서
     query/index.rst
     tuning.rst
     partition.rst
+    i18n.rst
     transaction.rst
     trigger.rst
     jsp.rst

@@ -171,8 +171,8 @@ heartbeat 메시지가 정상적으로 전달되지 않으면 failover가 일어
 
 .. image:: /images/image23.png
 
-CUBRID HA기능
-=============
+CUBRID HA 기능
+==============
 
 서버 이중화
 -----------

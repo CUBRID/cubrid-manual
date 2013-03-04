@@ -1,11 +1,6 @@
-***************
-CUBRID Controls
-***************
 
-How to Use CUBRID Utilities (Syntax)
-====================================
-
-How to use CUBRID utilities (syntax) is as follows:
+cubrid utility
+==============
 
 Controlling CUBRID Service
 --------------------------

@@ -3,11 +3,8 @@
 설치와 실행
 ===========
 
-개요
-----
-
 지원 플랫폼 및 설치 권장 사양
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------
 
 CUBRID가 지원하는 플랫폼과 설치를 위한 하드웨어/소프트웨어 요구 사항은 아래 표와 같다.
 
@@ -28,8 +25,8 @@ CUBRID 매니저 및 CUBRID 쿼리 브라우저 설치 패키지와 JDBC, PHP, O
 CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http://www.cubrid.org 를 참고한다.
 
 
-버전 호환성과 운용성
-^^^^^^^^^^^^^^^^^^^^
+버전 호환성
+-----------
 
 **응용 프로그램의 호환성**
 
@@ -51,7 +48,7 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
     업그레이드 및 데이터 마이그레이션은 :doc:`/upgrade` 를 참고한다.
 
 상호 운용성
-^^^^^^^^^^^
+-----------
 
 *   CUBRID DB 서버와 브로커 서버(또는 CUBRID SHARD 서버)를 분리하여 운영하는 경우, 서버 장비의 운영 체제가 다르더라도 상호 운용성을 보장한다. 단, DB 서버의 Bit 버전과 브로커 서버의 Bit 버전은 서로 동일해야 한다. 예를 들어, Linux용 64Bit 버전 DB 서버는 Windows용 64Bit 버전 브로커 서버와 상호 운용이 가능하지만, 32Bit 버전 브로커 서버와는 상호 운용이 불가능하다.
 
@@ -414,252 +411,264 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
     
 각 구분 별 상세 설명은 아래와 같다.
 
-**1. CUBRID 기본 사용 포트**
+.. _cubrid-basic-ports:
 
-    접속 요청을 기다리는(listening) 프로세스 들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
-    
-    +------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | listener   | requester     | Linux port     | Windows port                                        | 방화벽 포트 설정         | 설명         |
-    +============+===============+================+=====================================================+==========================+==============+
-    | cub_broker | application   | BROKER_PORT    | BROKER_PORT                                         | 개방(open)               | 일회성 연결  |
-    +------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | CAS        | application   | BROKER_PORT    | APPL_SERVER_PORT ~ (APP_SERVER_PORT + CAS 개수 - 1) | 개방                     | 연결 유지    |
-    +------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | cub_master | CAS           | cubrid_port_id | cubrid_port_id                                      | 개방                     | 일회성 연결  |
-    +------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | cub_server | CAS           | cubrid_port_id | 임의의 가용 포트                                    | Linux: 개방              | 연결 유지    |
-    |            |               |                |                                                     |                          |              |
-    |            |               |                |                                                     | Windows: 프로그램        |              |
-    +------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | 클라이언트 | cub_server    | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-    | 장비(*)    |               |                |                                                     |                          |              |
-    +------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | 서버       | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-    | 장비(**)   |               |                |                                                     |                          |              |
-    +------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-        
-    (*): CAS 또는 CSQL 프로세스가 존재하는 장비
-    
-    (**): cub_server가 존재하는 장비
-        
-    .. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다. 따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\\bin\\cub_server.exe"을 추가해야 한다.
-        
-    서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
+CUBRID 기본 사용 포트
+---------------------
 
-    다음은 각 프로세스 간 연결 관계를 나타낸 것이다.
-    
-    ::
-    
-         application - cub_broker
-                     -> CAS  -  cub_master
-                             -> cub_server
+접속 요청을 기다리는(listening) 프로세스들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
 
-    * application: 응용 프로세스
-    * cub_broker: 브로커 서버 프로세스. application이 연결할 CAS를 선택하는 역할을 수행.
-    * CAS: 브로커 응용 서버 프로세스. application과 cub_server를 중계.
-    * cub_master: 마스터 프로세스. CAS가 연결할 cub_server를 선택하는 역할을 수행.
-    * cub_server: DB 서버 프로세스
-        
-    프로세스 간 관계 기호 및 의미는 다음과 같다.
++------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| listener   | requester     | Linux port     | Windows port                                        | 방화벽 포트 설정         | 설명         |
++============+===============+================+=====================================================+==========================+==============+
+| cub_broker | application   | BROKER_PORT    | BROKER_PORT                                         | 개방(open)               | 일회성 연결  |
++------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| CAS        | application   | BROKER_PORT    | APPL_SERVER_PORT ~ (APP_SERVER_PORT + CAS 개수 - 1) | 개방                     | 연결 유지    |
++------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| cub_master | CAS           | cubrid_port_id | cubrid_port_id                                      | 개방                     | 일회성 연결  |
++------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| cub_server | CAS           | cubrid_port_id | 임의의 가용 포트                                    | Linux: 개방              | 연결 유지    |
+|            |               |                |                                                     |                          |              |
+|            |               |                |                                                     | Windows: 프로그램        |              |
++------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| 클라이언트 | cub_server    | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
+| 장비(*)    |               |                |                                                     |                          |              |
++------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| 서버       | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
+| 장비(**)   |               |                |                                                     |                          |              |
++------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
     
-    * \- 기호: 최초 한 번만 연결됨을 나타낸다.
-    * ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.
-    * (master): HA 구성에서 master 노드를 나타낸다.
-    * (slave): HA 구성에서 slave 노드를 나타낸다.
+(*): CAS 또는 CSQL 프로세스가 존재하는 장비
 
-    다음은 응용 프로그램과 DB 사이의 연결 과정을 순서대로 나열한 것이다.
+(**): cub_server가 존재하는 장비
     
-    #. application이 cubrid_broker.conf에 설정된 브로커 포트(BROKER_PORT)를 통해 cub_broker와 연결을 시도한다.
-    #. cub_broker는 연결 가능한 CAS를 선택한다.
-    #. application과 CAS가 연결된다. 
+.. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다. 따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\\bin\\cub_server.exe"을 추가해야 한다.
     
-       Linux에서는 application이 유닉스 도메인 소켓을 통해 CAS와 연결되므로 BROKER_PORT를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 CAS마다 cubrid_broker.conf에 설정된 APPL_SERVER_PORT 값을 기준으로 CAS ID를 더한 포트를 통해 연결된다. APPL_SERVER_PORT의 값이 설정되지 않으면 첫번째 CAS와 연결하는 포트 값은 BROKER_PORT + 1이 된다.
-    
-       예를 들어 Windows에서 BROKER_PORT가 33000이고 APPL_SERVER_PORT 가 설정되지 않았으면 application과 CAS 사이에 사용하는 포트는 다음과 같다.
-        
-       * application이 CAS(1)과 접속하는 포트 : 33001
-       * application이 CAS(2)와 접속하는 포트 : 33002
-       * application이 CAS(3)와 접속하는 포트 : 33003
-                    
-    #. CAS는 cubrid.conf에 설정된 cubrid_port_id 포트를 통해 cub_master에게 cub_server로의 연결을 요청한다.
-    #. CAS와 cub_server가 연결된다. 
-    
-       Linux에서는 CAS가 유닉스 도메인 소켓을 통해 cub_server와 연결되므로 cubrid_port_id 포트를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 임의의 가용 포트를 통해 cub_server와 연결된다. Windows에서 DB server를 운용한다면 브로커 장비와 DB 서버 장비 사이에서는 임의의 가용 포트를 사용하므로, 두 장비 사이에서 방화벽이 해당 프로세스에 대한 포트를 막게 되면 정상 동작을 보장할 수 없게 된다는 점에 주의한다.
-      
-    #. 이후 CAS는 application이 종료되어도 CAS가 재시작되지 않는 한 cub_server와 연결을 유지한다.
-    
-    
-**2. CUBRID HA 사용 포트**
+서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
 
-    CUBRID HA는 Linux 환경에서만 지원한다.
+다음은 각 프로세스 간 연결 관계를 나타낸 것이다.
 
-    접속 요청을 기다리는(listening) 프로세스 들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
+::
 
-    +------------+---------------+----------------+--------------------------+--------------+
-    | listener   | requester     | Linux port     | 방화벽 포트 설정         | 설명         |
-    +============+===============+================+==========================+==============+
-    | cub_broker | application   | BROKER_PORT    | 개방(open)               | 일회성 연결  |
-    +------------+---------------+----------------+--------------------------+--------------+
-    | CAS        | application   | BROKER_PORT    | 개방                     | 연결 유지    |
-    +------------+---------------+----------------+--------------------------+--------------+
-    | cub_master | CAS           | cubrid_port_id | 개방                     | 일회성 연결  |
-    +------------+---------------+----------------+--------------------------+--------------+
-    | cub_master | cub_master    | ha_port_id     | 개방                     | 주기적 연결, |
-    |            |               |                |                          | heartbeat    |
-    | (slave)    | (master)      |                |                          | 확인         |
-    +------------+---------------+----------------+--------------------------+--------------+
-    | cub_master | cub_master    | ha_port_id     | 개방                     | 주기적 연결, |
-    |            |               |                |                          | heartbeat    |
-    | (master)   | (slave)       |                |                          | 확인         |
-    +------------+---------------+----------------+--------------------------+--------------+
-    | cub_server | CAS           | cubrid_port_id | 개방                     | 연결 유지    |
-    +------------+---------------+----------------+--------------------------+--------------+
-    | 클라이언트 | cub_server    | ECHO(7)        | 개방                     | 주기적 연결  |
-    | 장비(*)    |               |                |                          |              |
-    +------------+---------------+----------------+--------------------------+--------------+
-    | 서버       | CAS, CSQL,    | ECHO(7)        | 개방                     | 주기적 연결  |
-    | 장비(**)   | copylogdb,    |                |                          |              |
-    |            | applylogdb    |                |                          |              |
-    +------------+---------------+----------------+--------------------------+--------------+
-        
-    (*): CAS, CSQL, copylogdb, 또는 applylogdb 프로세스가 존재하는 장비
-    
-    (**): cub_server가 존재하는 장비
-    
-    서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL, copylogdb, applylogdb 등) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
-    
-    이외에도 ECHO(7) 포트의 개방이 필요하다. ECHO 포트 개방과 관련된 설명은 "1. CUBRID 기본 사용 포트"를 참고한다.
+     application - cub_broker
+                 -> CAS  -  cub_master
+                         -> cub_server
 
-    다음은 각 프로세스 간 연결 관계를 나타낸 것이다.
+* application: 응용 프로세스
+* cub_broker: 브로커 서버 프로세스. application이 연결할 CAS를 선택하는 역할을 수행.
+* CAS: 브로커 응용 서버 프로세스. application과 cub_server를 중계.
+* cub_master: 마스터 프로세스. CAS가 연결할 cub_server를 선택하는 역할을 수행.
+* cub_server: DB 서버 프로세스
     
-    ::
-    
-        application - cub_broker
-                    -> CAS  -  cub_master(master) <-> cub_master(slave)
-                            -> cub_server(master)     cub_server(slave) <- applylogdb(slave)
-                                                  <----------------------- copylogdb(slave)
-                                                  
-    * cub_master(master): CUBRID HA 구성에서 master 노드에 있는 마스터 프로세스. 상대 노드가 살아있는지 확인하는 역할을 수행.
-    * cub_master(slave): CUBRID HA 구성에서 slave 노드에 있는 마스터 프로세스. 상대 노드가 살아있는지 확인하는 역할을 수행.
-    * copylogdb(slave): CUBRID HA 구성에서 slave 노드에 있는 복제 로그 복사 프로세스
-    * applylogdb(slave): CUBRID HA 구성에서 slave 노드에 있는 복제 로그 반영 프로세스
-    
-    master 노드에서 slave 노드로의 복제 과정 파악이 용이하게 하기 위해 위에서 master 노드의 applylogdb, copylogdb와 slave 노드의 CAS는 생략했다.
-    
-    프로세스 간 관계 기호 및 의미는 다음과 같다.
-    
-    * \- 기호: 최초 한 번만 연결됨을 나타낸다.
-    * ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.
-    * (master): HA 구성에서 master 노드를 나타낸다.
-    * (slave): HA 구성에서 slave 노드를 나타낸다.
-        
-    응용 프로그램과 DB 사이의 연결 과정은 1. CUBRID 기본 사용 포트와 동일하다. 여기에서는 CUBRID HA에 의해 1:1로 master DB와 slave DB를 구성할 때 master 노드와 slave 노드 사이의 연결 과정에 대해서만 설명한다.
-    
-    #. cub_master(master)와 cub_master(slave) 사이에는 cubrid_ha.conf에 설정된 ha_port_id를 사용한다.
-    #. copylogdb(slave)는 slave 노드에 있는 cubrid.conf의 cubrid_port_id에 설정된 포트를 통해 cub_master(master)에게 master DB로의 연결을 요청하여, 최종적으로 cub_server(master)와 연결하게 된다.
-    #. applylogdb(slave)는 slave 노드에 있는 cubrid.conf의 cubrid_port_id에 설정된 포트를 통해 cub_master(slave)에게 slave DB로의 연결을 요청하여, 최종적으로 cub_server(slave)와 연결하게 된다.
+프로세스 간 관계 기호 및 의미는 다음과 같다.
 
-    master 노드에서도 applylogdb와 copylogdb가 동작하는데, master 노드가 절체로 인해 slave 노드로 변경될 때를 대비하기 위함이다.
-    
-**3. CUBRID SHARD 사용 포트**
+* \- 기호: 최초 한 번만 연결됨을 나타낸다.
+* ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.
+* (master): HA 구성에서 master 노드를 나타낸다.
+* (slave): HA 구성에서 slave 노드를 나타낸다.
 
-    접속 요청을 기다리는(listening) 프로세스 들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
+다음은 응용 프로그램과 DB 사이의 연결 과정을 순서대로 나열한 것이다.
 
-    +---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | listener      | requester    | Linux port     | Windows port                                        | 방화벽 포트 설정         | 설명         |
-    +===============+==============+================+=====================================================+==========================+==============+
-    | shard_broker  | application  | BROKER_PORT    | BROKER_PORT                                         | 개방(open)               | 일회성 연결  |
-    +---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | shard_proxy   | application  | BROKER_PORT    | BROKER_PORT + 1 ~ (BROKER_PORT + MAX_NUM_PROXY)     | 개방                     | 연결 유지    |
-    +---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | shard_proxy   | shard CAS    | 없음           | (BROKER_PORT + MAX_NUM_PROXY + 1) ~                 | 불필요(*)                | 연결 유지    |
-    |               |              |                | (BROKER_PORT + MAX_NUM_PROXY * 2)                   |                          |              |
-    +---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | cub_master    | shard CAS    | cubrid_port_id | cubrid_port_id                                      | 개방                     | 일회성 연결  |
-    +---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | cub_server    | shard CAS    | cubrid_port_id | 임의의 가용 포트                                    | Linux: 개방              | 연결 유지    |
-    |               |              |                |                                                     |                          |              |
-    |               |              |                |                                                     | Windows: 프로그램        |              |
-    +---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | 클라이언트    | cub_server   | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-    | 장비(**)      |              |                |                                                     |                          |              |
-    +---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | 서버          | CAS, CSQL    | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-    | 장비(\*\*\*)  |              |                |                                                     |                          |              |
-    +---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    
-    (*): shard CAS와 shard_proxy는 물리적으로 서로 분리되지 않으므로 방화벽에서 포트 개방을 설정하지 않아도 된다. Linux에서 두 프로세스 간 접속은 유닉스 도메인 소켓을 사용한다.
-    
-    (**): CAS 또는 CSQL 프로세스가 존재하는 장비
-    
-    (\*\*\*): cub_server가 존재하는 장비
-        
-    .. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다.  따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\\bin\\cub_server.exe"을 추가해야 한다.
-        
-    서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
+#. application이 cubrid_broker.conf에 설정된 브로커 포트(BROKER_PORT)를 통해 cub_broker와 연결을 시도한다.
+#. cub_broker는 연결 가능한 CAS를 선택한다.
+#. application과 CAS가 연결된다. 
 
-    ::
-    
-        application - shard broker
-                    -> shard proxy <- shard CAS - cub_master
-                                                -> cub_server
-    
-        * shard broker: CUBRID SHARD 브로커 프로세스. application과 shard proxy를 중계
-        * shard proxy: CUBRID SHARD 프록시 프로세스. 어떤 shard DB를 선택할 지 결정하는 역할을 수행
-        * shard CAS: CUBRID SHARD CAS 프로세스. shard proxy와 cub_server를 중계
-    
-    프로세스 간 관계 기호 및 의미는 다음과 같다.
-    
-    * \- 기호: 최초 한 번만 연결됨을 나타낸다.
-    * ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.
+   Linux에서는 application이 유닉스 도메인 소켓을 통해 CAS와 연결되므로 BROKER_PORT를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 CAS마다 cubrid_broker.conf에 설정된 APPL_SERVER_PORT 값을 기준으로 CAS ID를 더한 포트를 통해 연결된다. APPL_SERVER_PORT의 값이 설정되지 않으면 첫번째 CAS와 연결하는 포트 값은 BROKER_PORT + 1이 된다.
 
-    다음은 CUBRID SHARD 구성에서 application과 DB server 사이의 연결 과정에 대해 나열한 것이다. shard CAS와 shard proxy는 CUBRID SHARD를 구동(cubrid shard start)하는 시점에 이미 연결된 상태이다.
+   예를 들어 Windows에서 BROKER_PORT가 33000이고 APPL_SERVER_PORT 가 설정되지 않았으면 application과 CAS 사이에 사용하는 포트는 다음과 같다.
+    
+   * application이 CAS(1)과 접속하는 포트 : 33001
+   * application이 CAS(2)와 접속하는 포트 : 33002
+   * application이 CAS(3)와 접속하는 포트 : 33003
+                
+#. CAS는 cubrid.conf에 설정된 cubrid_port_id 포트를 통해 cub_master에게 cub_server로의 연결을 요청한다.
+#. CAS와 cub_server가 연결된다. 
 
-    #. application이 shard.conf에 설정된 BROKER_PORT를 통해 shard broker에 연결을 시도한다.
-    
-    #. shard broker는 연결 가능한 shard proxy를 선택한다. 
-    
-    #. application과 shard proxy가 연결된다. shard proxy의 최소, 최대 개수는 shard.conf의 MIN_NUM_PROXY와 MAX_NUM_PROXY에 의해 설정된다.
-    
-       Linux에서는 application이 유닉스 도메인 소켓을 통해 shard proxy와 연결된다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 shard proxy마다 shard.conf에 설정된 BROKER_PORT와 MAX_NUM_PROXY를 가지고 계산된 포트를 통해 연결된다.
-    
-       예를 들어 Linux에서 BROKER_PORT가 45000이고 MAX_NUM_PROXY가 3일 때 사용하는 포트는 45000 하나면 된다.
-       
-       * application이 shard proxy(1)과 접속하는 포트: 45000, shard CAS가 shard proxy(1)과 접속하는 포트 : 없음
-       * application이 shard proxy(2)와 접속하는 포트: 45000, shard CAS가 shard proxy(2)와 접속하는 포트 : 없음
-       * application이 shard proxy(3)과 접속하는 포트: 45000, shard CAS가 shard proxy(3)와 접속하는 포트 : 없음
-       
-       반면, Windows에서 BROKER_PORT가 45000이고 MAX_NUM_PROXY가 3이면 사용하는 포트는 다음과 같다.
-       
-       * application이 shard proxy(1)과 접속하는 포트: 45001, shard CAS가 shard proxy(1)과 접속하는 포트 : 45004
-       * application이 shard proxy(2)와 접속하는 포트: 45002, shard CAS가 shard proxy(2)와 접속하는 포트 : 45005
-       * application이 shard proxy(3)과 접속하는 포트: 45003, shard CAS가 shard proxy(3)와 접속하는 포트 : 45006
-       
-       .. note:: 현재 버전에서 MIN_NUM_PROXY는 사용되지 않고 MAX_NUM_PROXY만 사용된다.
-     
-    #. shard CAS와 shard proxy는 CUBRID SHARD를 구동(cubrid shard start)하는 시점에 이미 연결된 상태이다. 또한, 각 프로세스는 항상 한 장비 내에 존재하므로 원격 접속이 불필요하다.
-    
-       shard CAS가 shard proxy로 연결할 때 Linux에서는 유닉스 도메인 소켓을 사용하지만 Windows에서는 유닉스 도메인 소켓이 없어 포트를 사용한다(위의 예 참고). shard proxy 하나 당 여러 개의 shard CAS가 연결될 수 있다. shard CAS의 최소, 최대 개수는 shard.conf의 MIN_NUM_APPL_SERVER, MAX_NUM_APPL_SERVER에 의해 설정된다. shard proxy 하나가 동시에 연결 가능한 shard CAS의 최대 개수는 shard.conf의 MAX_CLIENT에 의해 설정된다.
-      
-    #. shard CAS는 cubrid.conf에 설정된 cubrid_port_id 포트를 통해 cub_master에게 DB 서버로의 연결을 요청한다.
-    
-    #. shard CAS와 DB 서버가 연결된다. Linux에서는 CAS가 유닉스 도메인 소켓을 통해 cub_server와 연결되므로 cubrid_port_id 포트를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 임의의 가용 포트를 통해 cub_server와 연결된다. Windows에서 DB server를 운용한다면 브로커 장비와 DB 서버 장비 사이에서는 임의의 가용 포트를 사용하므로, 두 장비 사이에서 방화벽이 해당 프로세스에 대한 포트를 막게 되면 정상 동작을 보장할 수 없게 된다는 점에 주의한다.
-    
-    #. 이후 shard CAS는 application이 종료되어도 shard CAS가 재시작되지 않는 한 cub_server와 연결을 유지한다.
+   Linux에서는 CAS가 유닉스 도메인 소켓을 통해 cub_server와 연결되므로 cubrid_port_id 포트를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 임의의 가용 포트를 통해 cub_server와 연결된다. Windows에서 DB server를 운용한다면 브로커 장비와 DB 서버 장비 사이에서는 임의의 가용 포트를 사용하므로, 두 장비 사이에서 방화벽이 해당 프로세스에 대한 포트를 막게 되면 정상 동작을 보장할 수 없게 된다는 점에 주의한다.
+  
+#. 이후 CAS는 application이 종료되어도 CAS가 재시작되지 않는 한 cub_server와 연결을 유지한다.
 
-**4. CUBRID Web Manager, CUBRID Manager 서버 사용 포트**
+.. _cubrid-ha-ports: 
+
+CUBRID HA 사용 포트
+-------------------
+
+CUBRID HA는 Linux 환경에서만 지원한다.
+
+접속 요청을 기다리는(listening) 프로세스들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
+
++------------+---------------+----------------+--------------------------+--------------+
+| listener   | requester     | Linux port     | 방화벽 포트 설정         | 설명         |
++============+===============+================+==========================+==============+
+| cub_broker | application   | BROKER_PORT    | 개방(open)               | 일회성 연결  |
++------------+---------------+----------------+--------------------------+--------------+
+| CAS        | application   | BROKER_PORT    | 개방                     | 연결 유지    |
++------------+---------------+----------------+--------------------------+--------------+
+| cub_master | CAS           | cubrid_port_id | 개방                     | 일회성 연결  |
++------------+---------------+----------------+--------------------------+--------------+
+| cub_master | cub_master    | ha_port_id     | 개방                     | 주기적 연결, |
+|            |               |                |                          | heartbeat    |
+| (slave)    | (master)      |                |                          | 확인         |
++------------+---------------+----------------+--------------------------+--------------+
+| cub_master | cub_master    | ha_port_id     | 개방                     | 주기적 연결, |
+|            |               |                |                          | heartbeat    |
+| (master)   | (slave)       |                |                          | 확인         |
++------------+---------------+----------------+--------------------------+--------------+
+| cub_server | CAS           | cubrid_port_id | 개방                     | 연결 유지    |
++------------+---------------+----------------+--------------------------+--------------+
+| 클라이언트 | cub_server    | ECHO(7)        | 개방                     | 주기적 연결  |
+| 장비(*)    |               |                |                          |              |
++------------+---------------+----------------+--------------------------+--------------+
+| 서버       | CAS, CSQL,    | ECHO(7)        | 개방                     | 주기적 연결  |
+| 장비(**)   | copylogdb,    |                |                          |              |
+|            | applylogdb    |                |                          |              |
++------------+---------------+----------------+--------------------------+--------------+
     
-    접속 요청을 기다리는(listening) 프로세스 들을 기준으로 CUBRID Web Manager, CUBRID Manager 서버가 사용하는 포트는 다음과 같으며, 이들은 OS의 종류와 관계없이 동일하다.
+(*): CAS, CSQL, copylogdb, 또는 applylogdb 프로세스가 존재하는 장비
+
+(**): cub_server가 존재하는 장비
+
+서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL, copylogdb, applylogdb 등) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
+
+이외에도 ECHO(7) 포트의 개방이 필요하다. ECHO 포트 개방과 관련된 설명은 :ref:`cubrid-basic-ports` 절을 참고한다.
+
+다음은 각 프로세스 간 연결 관계를 나타낸 것이다.
+
+::
+
+    application - cub_broker
+                -> CAS  -  cub_master(master) <-> cub_master(slave)
+                        -> cub_server(master)     cub_server(slave) <- applylogdb(slave)
+                                              <----------------------- copylogdb(slave)
+                                              
+* cub_master(master): CUBRID HA 구성에서 master 노드에 있는 마스터 프로세스. 상대 노드가 살아있는지 확인하는 역할을 수행.
+* cub_master(slave): CUBRID HA 구성에서 slave 노드에 있는 마스터 프로세스. 상대 노드가 살아있는지 확인하는 역할을 수행.
+* copylogdb(slave): CUBRID HA 구성에서 slave 노드에 있는 복제 로그 복사 프로세스
+* applylogdb(slave): CUBRID HA 구성에서 slave 노드에 있는 복제 로그 반영 프로세스
+
+master 노드에서 slave 노드로의 복제 과정 파악이 용이하게 하기 위해 위에서 master 노드의 applylogdb, copylogdb와 slave 노드의 CAS는 생략했다.
+
+프로세스 간 관계 기호 및 의미는 다음과 같다.
+
+* \- 기호: 최초 한 번만 연결됨을 나타낸다.
+* ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.
+* (master): HA 구성에서 master 노드를 나타낸다.
+* (slave): HA 구성에서 slave 노드를 나타낸다.
     
-    +--------------------------+--------------+----------------+--------------------------+
-    | listener                 | requester    | port           | 방화벽 존재 시 포트 설정 |
-    +==========================+==============+================+==========================+
-    | Manager server           | application  | 8001, 8002     | 개방(open)               |
-    +--------------------------+--------------+----------------+--------------------------+
-    | Web Manager server       | application  | 8282           | 개방                     |
-    +--------------------------+--------------+----------------+--------------------------+
+응용 프로그램과 DB 사이의 연결 과정은 1. CUBRID 기본 사용 포트와 동일하다. 여기에서는 CUBRID HA에 의해 1:1로 master DB와 slave DB를 구성할 때 master 노드와 slave 노드 사이의 연결 과정에 대해서만 설명한다.
+
+#. cub_master(master)와 cub_master(slave) 사이에는 cubrid_ha.conf에 설정된 ha_port_id를 사용한다.
+#. copylogdb(slave)는 slave 노드에 있는 cubrid.conf의 cubrid_port_id에 설정된 포트를 통해 cub_master(master)에게 master DB로의 연결을 요청하여, 최종적으로 cub_server(master)와 연결하게 된다.
+#. applylogdb(slave)는 slave 노드에 있는 cubrid.conf의 cubrid_port_id에 설정된 포트를 통해 cub_master(slave)에게 slave DB로의 연결을 요청하여, 최종적으로 cub_server(slave)와 연결하게 된다.
+
+master 노드에서도 applylogdb와 copylogdb가 동작하는데, master 노드가 절체로 인해 slave 노드로 변경될 때를 대비하기 위함이다.
+
+.. _cubrid-shard-ports:
+
+CUBRID SHARD 사용 포트
+----------------------
+
+접속 요청을 기다리는(listening) 프로세스들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
+
++---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| listener      | requester    | Linux port     | Windows port                                        | 방화벽 포트 설정         | 설명         |
++===============+==============+================+=====================================================+==========================+==============+
+| shard_broker  | application  | BROKER_PORT    | BROKER_PORT                                         | 개방(open)               | 일회성 연결  |
++---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| shard_proxy   | application  | BROKER_PORT    | BROKER_PORT + 1 ~ (BROKER_PORT + MAX_NUM_PROXY)     | 개방                     | 연결 유지    |
++---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| shard_proxy   | shard CAS    | 없음           | (BROKER_PORT + MAX_NUM_PROXY + 1) ~                 | 불필요(*)                | 연결 유지    |
+|               |              |                | (BROKER_PORT + MAX_NUM_PROXY * 2)                   |                          |              |
++---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| cub_master    | shard CAS    | cubrid_port_id | cubrid_port_id                                      | 개방                     | 일회성 연결  |
++---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| cub_server    | shard CAS    | cubrid_port_id | 임의의 가용 포트                                    | Linux: 개방              | 연결 유지    |
+|               |              |                |                                                     |                          |              |
+|               |              |                |                                                     | Windows: 프로그램        |              |
++---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| 클라이언트    | cub_server   | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
+| 장비(**)      |              |                |                                                     |                          |              |
++---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+| 서버          | CAS, CSQL    | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
+| 장비(\*\*\*)  |              |                |                                                     |                          |              |
++---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+
+(*): shard CAS와 shard_proxy는 물리적으로 서로 분리되지 않으므로 방화벽에서 포트 개방을 설정하지 않아도 된다. Linux에서 두 프로세스 간 접속은 유닉스 도메인 소켓을 사용한다.
+
+(**): CAS 또는 CSQL 프로세스가 존재하는 장비
+
+(\*\*\*): cub_server가 존재하는 장비
     
-    * CUBRID Manager 클라이언트가 CUBRID Manager 서버 프로세스에 접속할 때 사용하는 포트는 cm.conf의 **cm_port**\와 **cm_port** + 1이며 **cm_port**\의 기본값은 8001이다.
-    * CUBRID Web Manager 클라이언트가 CUBRID Web Manager 서버 프로세스에 접속할 때 사용하는 포트는 cm_httpd.conf의 **listen**\이며 기본값은 8282이다.
+.. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다.  따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\\bin\\cub_server.exe"을 추가해야 한다.
+    
+서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
+
+::
+
+    application - shard broker
+                -> shard proxy <- shard CAS - cub_master
+                                            -> cub_server
+
+    * shard broker: CUBRID SHARD 브로커 프로세스. application과 shard proxy를 중계
+    * shard proxy: CUBRID SHARD 프록시 프로세스. 어떤 shard DB를 선택할 지 결정하는 역할을 수행
+    * shard CAS: CUBRID SHARD CAS 프로세스. shard proxy와 cub_server를 중계
+
+프로세스 간 관계 기호 및 의미는 다음과 같다.
+
+* \- 기호: 최초 한 번만 연결됨을 나타낸다.
+* ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.
+
+다음은 CUBRID SHARD 구성에서 application과 DB server 사이의 연결 과정에 대해 나열한 것이다. shard CAS와 shard proxy는 CUBRID SHARD를 구동(cubrid shard start)하는 시점에 이미 연결된 상태이다.
+
+#. application이 shard.conf에 설정된 BROKER_PORT를 통해 shard broker에 연결을 시도한다.
+
+#. shard broker는 연결 가능한 shard proxy를 선택한다. 
+
+#. application과 shard proxy가 연결된다. shard proxy의 최소, 최대 개수는 shard.conf의 MIN_NUM_PROXY와 MAX_NUM_PROXY에 의해 설정된다.
+
+   Linux에서는 application이 유닉스 도메인 소켓을 통해 shard proxy와 연결된다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 shard proxy마다 shard.conf에 설정된 BROKER_PORT와 MAX_NUM_PROXY를 가지고 계산된 포트를 통해 연결된다.
+
+   예를 들어 Linux에서 BROKER_PORT가 45000이고 MAX_NUM_PROXY가 3일 때 사용하는 포트는 45000 하나면 된다.
+   
+   * application이 shard proxy(1)과 접속하는 포트: 45000, shard CAS가 shard proxy(1)과 접속하는 포트 : 없음
+   * application이 shard proxy(2)와 접속하는 포트: 45000, shard CAS가 shard proxy(2)와 접속하는 포트 : 없음
+   * application이 shard proxy(3)과 접속하는 포트: 45000, shard CAS가 shard proxy(3)와 접속하는 포트 : 없음
+   
+   반면, Windows에서 BROKER_PORT가 45000이고 MAX_NUM_PROXY가 3이면 사용하는 포트는 다음과 같다.
+   
+   * application이 shard proxy(1)과 접속하는 포트: 45001, shard CAS가 shard proxy(1)과 접속하는 포트 : 45004
+   * application이 shard proxy(2)와 접속하는 포트: 45002, shard CAS가 shard proxy(2)와 접속하는 포트 : 45005
+   * application이 shard proxy(3)과 접속하는 포트: 45003, shard CAS가 shard proxy(3)와 접속하는 포트 : 45006
+   
+   .. note:: 현재 버전에서 MIN_NUM_PROXY는 사용되지 않고 MAX_NUM_PROXY만 사용된다.
+ 
+#. shard CAS와 shard proxy는 CUBRID SHARD를 구동(cubrid shard start)하는 시점에 이미 연결된 상태이다. 또한, 각 프로세스는 항상 한 장비 내에 존재하므로 원격 접속이 불필요하다.
+
+   shard CAS가 shard proxy로 연결할 때 Linux에서는 유닉스 도메인 소켓을 사용하지만 Windows에서는 유닉스 도메인 소켓이 없어 포트를 사용한다(위의 예 참고). shard proxy 하나 당 여러 개의 shard CAS가 연결될 수 있다. shard CAS의 최소, 최대 개수는 shard.conf의 MIN_NUM_APPL_SERVER, MAX_NUM_APPL_SERVER에 의해 설정된다. shard proxy 하나가 동시에 연결 가능한 shard CAS의 최대 개수는 shard.conf의 MAX_CLIENT에 의해 설정된다.
+  
+#. shard CAS는 cubrid.conf에 설정된 cubrid_port_id 포트를 통해 cub_master에게 DB 서버로의 연결을 요청한다.
+
+#. shard CAS와 DB 서버가 연결된다. Linux에서는 CAS가 유닉스 도메인 소켓을 통해 cub_server와 연결되므로 cubrid_port_id 포트를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 임의의 가용 포트를 통해 cub_server와 연결된다. Windows에서 DB server를 운용한다면 브로커 장비와 DB 서버 장비 사이에서는 임의의 가용 포트를 사용하므로, 두 장비 사이에서 방화벽이 해당 프로세스에 대한 포트를 막게 되면 정상 동작을 보장할 수 없게 된다는 점에 주의한다.
+
+#. 이후 shard CAS는 application이 종료되어도 shard CAS가 재시작되지 않는 한 cub_server와 연결을 유지한다.
+
+
+.. _cwm-cm-ports:
+
+CUBRID Web Manager, CUBRID Manager 서버 사용 포트
+-------------------------------------------------
+
+접속 요청을 기다리는(listening) 프로세스들을 기준으로 CUBRID Web Manager, CUBRID Manager 서버가 사용하는 포트는 다음과 같으며, 이들은 OS의 종류와 관계없이 동일하다.
+
++--------------------------+--------------+----------------+--------------------------+
+| listener                 | requester    | port           | 방화벽 존재 시 포트 설정 |
++==========================+==============+================+==========================+
+| Manager server           | application  | 8001, 8002     | 개방(open)               |
++--------------------------+--------------+----------------+--------------------------+
+| Web Manager server       | application  | 8282           | 개방                     |
++--------------------------+--------------+----------------+--------------------------+
+
+* CUBRID Manager 클라이언트가 CUBRID Manager 서버 프로세스에 접속할 때 사용하는 포트는 cm.conf의 **cm_port**\와 **cm_port** + 1이며 **cm_port**\의 기본값은 8001이다.
+* CUBRID Web Manager 클라이언트가 CUBRID Web Manager 서버 프로세스에 접속할 때 사용하는 포트는 cm_httpd.conf의 **listen**\이며 기본값은 8282이다.
 
             

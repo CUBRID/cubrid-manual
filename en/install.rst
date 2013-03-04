@@ -1,13 +1,10 @@
 .. _install-execute:
 
-Installing and Running on Linux
+Installation and Running CUBRID
 ===============================
 
-Overview
---------
-
 Supported Platforms and System Requirements
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------------------
 
 The platforms supported by CUBRID and hardware/software requirements for the installation are as follows:
 
@@ -16,7 +13,7 @@ The platforms supported by CUBRID and hardware/software requirements for the ins
 +=====================================================================+==================+=====================+======================================+
 | * Windows 32/64 Bit XP, 2003, Vista, Windows 7                      | 1GB or more      | 2GB or more(\*)     | JRE/JDK 1.6 or higher                |
 |                                                                     |                  |                     | (Required when Java Stored Procedure |
-| * Linux family 32/64 Bit(Linux kernel 2.4 및 glibc 2.3.4 or higher) |                  |                     | is required)                         |
+| * Linux family 32/64 Bit(Linux kernel 2.4, glibc 2.3.4 or higher)   |                  |                     | is required)                         |
 +---------------------------------------------------------------------+------------------+---------------------+--------------------------------------+
 
 (\*): Requires a 500 MB of free disk space on the initial installation; requires approximately 1.5 GB of free disk space with a database creating with default options.
@@ -28,8 +25,8 @@ Including CUBRID Query Browser, a variety of drivers such as PHP, ODBC, OLE, and
 For more information on the CUBRID engine, tools, and drivers, see http://www.cubrid.org.
 
 
-Version Compatibility and Operability
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Compatibility
+-------------
 
 **Application Compatibility**
 
@@ -51,7 +48,7 @@ Version Compatibility and Operability
     For upgrade and data migration, see :doc:`/upgrade`.
 
 Interoperability
-^^^^^^^^^^^^^^^^
+----------------
 
 *   If the CUBRID DB server and its broker server are operated separately, their interoperability is guaranteed, even when the operating systems are different. However, the bit version of a DB server must be identical to the bit version of a broker server. For example, the 64-bit DB server for Linux is interoperable with the 64-bit broker server for Windows, but it is not interoperable with a 32-bit broker server.
 
@@ -59,8 +56,8 @@ Interoperability
 
 *   If the CUBRID DB server and its broker server are operated separately, their system locales should be the same. For example, if CUBRID_CHARSET of DB server is en_US.utf8, CUBRID_CHARSET of broker server should be en_US.utf8, too.
 
-Installing and Running on Linux
--------------------------------
+Installation and Running CUBRID on Linux
+----------------------------------------
 
 **Details to Check when Installing**
 
@@ -228,8 +225,8 @@ Installing and Running on Linux
 
 .. _Installin-and-Running-on-Windows:
 
-Installing and Running on Windows
----------------------------------
+Installation and Running CUBRID on Windows
+------------------------------------------
 
 **Details to Check when Install**
 

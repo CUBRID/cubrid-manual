@@ -1,24 +1,21 @@
-****************************************************
-Configuring Environment Variable and Starting CUBRID
-****************************************************
-
-Configuring the Environment Variable
-====================================
+*********************************
+Configuring Environment Variables
+*********************************
 
 The following environment variables need to be set in order to use the CUBRID. The necessary environment variables are automatically set when the CUBRID system is installed or can be changed, as needed, by the user.
 
 CUBRID Environment Variables
-----------------------------
+============================
 
-*   **CUBRID** : The default environment variable that designates the location where the CUBRID is installed. This variable must be set accurately since all programs included in the CUBRID system uses this environment variable as reference.
+*   **CUBRID**: The default environment variable that designates the location where the CUBRID is installed. This variable must be set accurately since all programs included in the CUBRID system uses this environment variable as reference.
 
-*   **CUBRID_DATABASES** : The environment variable that designates the location of the **databases.txt** file. The CUBRID system stores the absolute path of database volumes in the **$CUBRID_DATABASES/databases.txt** file. See :ref:`databases-txt-file`.
+*   **CUBRID_DATABASES**: The environment variable that designates the location of the **databases.txt** file. The CUBRID system stores the absolute path of database volumes in the **$CUBRID_DATABASES/databases.txt** file. See :ref:`databases-txt-file`.
 
-*   **CUBRID_CHARSET** : The environment variable that specifies database locale (language+character set) in CUBRID. The initial value upon CUBRID installation is **en_US**. If character set is omitted after language name, ISO-8859-1(.iso88591) will be specified by default. For more information, see :ref:`Language Setting <language-setting>`.
+*   **CUBRID_CHARSET**: The environment variable that specifies database locale (language+character set) in CUBRID. The initial value upon CUBRID installation is **en_US**. If character set is omitted after language name, ISO-8859-1(.iso88591) will be specified by default. For more information, see :ref:`Language Setting <language-setting>`.
 
-*   **CUBRID_MSG_LANG** : The environment variable that specifies usage messages and error messages in CUBRID. The initial value upon start is not defined. If it's not defined, it follows the value of **CUBRID_CHARESET**. If character set is omitted after **en_US**, ISO-8859-1(.iso88591) will be specified by default. For more information, see :ref:`Language Setting <language-setting>`.
+*   **CUBRID_MSG_LANG**: The environment variable that specifies usage messages and error messages in CUBRID. The initial value upon start is not defined. If it's not defined, it follows the value of **CUBRID_CHARESET**. If character set is omitted after **en_US**, ISO-8859-1(.iso88591) will be specified by default. For more information, see :ref:`Language Setting <language-setting>`.
 
-*   **CUBRID_TMP** : The environment variable that specifies the location where the cub_master process and the cub_broker process store the UNIX domain socket file in CUBRID for Linux. If it is not specified, the cub_master process stores the UNIX domain socket file under the **/tmp** directory and the cub_broker process stores the UNIX domain socket file under the **$CUBRID/var/CUBRID_SOCK** directory (not used in CUBRID for Windows).
+*   **CUBRID_TMP**: The environment variable that specifies the location where the cub_master process and the cub_broker process store the UNIX domain socket file in CUBRID for Linux. If it is not specified, the cub_master process stores the UNIX domain socket file under the **/tmp** directory and the cub_broker process stores the UNIX domain socket file under the **$CUBRID/var/CUBRID_SOCK** directory (not used in CUBRID for Windows).
 
 **CUBRID_TMP** value has some constraints, which are as follows:
 
@@ -55,7 +52,7 @@ In Windows : ::
     C:\> set CUBRID
 
 OS Environment and Java Environment Variables
----------------------------------------------
+=============================================
 
 *   PATH: In the Linux environment, the directory **$CUBRID/bin**, which includes a CUBRID system executable file, must be included in the PATH environment variable.
 
@@ -106,29 +103,30 @@ shell log-in script. The following is the contents of . **cubrid.sh** environmen
 .. _language-setting:
 
 Language Setting
-----------------
+================
 
 The language that will be used in the CUBRID DBMS can be designated with the **CUBRID_CHARSET** environment variable. The following are examples of values that can currently be set in the **CUBRID_CHARSET** environment variable.
 
-*   **en_US** : English (Default value)
-*   **ko_KR.euckr** : Korean EUC-KR encoding
-*   **ko_KR.utf8** : Korean UTF-8 encoding
-*   **de_DE.utf8** : German UTF-8 encoding
-*   **es_ES.utf8** : Spanish UTF-8 encoding
-*   **fr_FR.utf8** : French UTF-8 encoding
-*   **it_IT.utf8** : Italian UTF-8 encoding
-*   **ja_JP.utf8** : Japanese UTF-8 encoding
-*   **km_KH.utf8** : Cambodian UTF-8 encoding
-*   **tr_TR.utf8** : Turkish UTF-8 encoding
-*   **vi_VN.utf8** : Vietnamese UTF-8 encoding
-*   **zh_CN.utf8** : Chinese UTF-8 encoding
+*   **en_US**: English (Default)
+*   **ko_KR.euckr**: Korean EUC-KR encoding
+*   **ko_KR.utf8**: Korean UTF-8 encoding
+*   **de_DE.utf8**: German UTF-8 encoding
+*   **es_ES.utf8**: Spanish UTF-8 encoding
+*   **fr_FR.utf8**: French UTF-8 encoding
+*   **it_IT.utf8**: Italian UTF-8 encoding
+*   **ja_JP.utf8**: Japanese UTF-8 encoding
+*   **km_KH.utf8**: Cambodian UTF-8 encoding
+*   **tr_TR.utf8**: Turkish UTF-8 encoding
+*   **vi_VN.utf8**: Vietnamese UTF-8 encoding
+*   **zh_CN.utf8**: Chinese UTF-8 encoding
 
 Language and charset setting of CUBRID affects read and write data. The language is used for messages displayed by the program. The default value of **CUBRID_CHARSET** is **en_US** while installing the product.
 
 For more details related to charset, locale and collation settings, see :doc:`admin/i18n`.
 
+***************************
 Starting the CUBRID Service
-===========================
+***************************
 
 Configure environment variables and language, and then start the CUBRID service. For more information on configuring environment variables and language, see :ref:`control-cubrid-services`.
 

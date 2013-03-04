@@ -97,7 +97,7 @@ After the CSQL has been executed, you can enter the SQL into the CSQL prompt. Ea
 .. _cm-cqb:
 
 CUBRID Management Tools
------------------------
+=======================
 
 +--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------+
 |                          | Summary of features                                                         | Downloads of the recent files                                   | Links to the latest documents                                       |
@@ -147,7 +147,7 @@ CUBRID Management Tools
 +--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------+
 
 Running SQL with CUBRID Web Manager
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------------
 
 Because CUBRID 2008 R4.3 or higher version includes Web Manager on the installation package, you can use the Web Manager instantly after the installation of CUBRID DBMS.
 
@@ -172,10 +172,10 @@ Because CUBRID 2008 R4.3 or higher version includes Web Manager on the installat
 
     .. image:: /images/gs_manager_screen.png
 
-For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual .
+For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual\ .
 
 Running SQL with CUBRID Manager Client
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------
 
 CUBRID Manager is the client tool that you should download and run. It is a Java application which requires JRE or JDK 1.6 or higher.
 
@@ -198,10 +198,10 @@ CUBRID Manager is the client tool that you should download and run. It is a Java
 
     .. image:: /images/gs_manager_sql.png
 
-For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr .
+For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr\ .
 
 Running SQL with CUBRID Query Browser
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------------
 
 CUBRID Query Browser (hereafter CQB) is the development tool only for SQL execution, light-weight version of CUBRID Manager (hereafter CM). The differences with CM are as follows:
 
@@ -226,10 +226,10 @@ CQB client tool also needs to be downloaded and installed separately from the CU
 
     .. image:: /images/gs_manager_qb.png
 
-For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual_kr .
+For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual_kr\ .
 
 Migrating schema/data with CUBRID Migration Toolkit
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------------------------
 
 CUBRID Migration Toolkit is a tool to migrate the data and the schema from the source DB (MySQL, Oracle, and CUBRID) to the target DB (CUBRID). It is also Java applications which require JRE or JDK 1.6 or later. You should download separately.
 
@@ -251,10 +251,10 @@ It is useful in case of switching from other DB into CUBRID, in case of migratin
 
 .. image:: /images/gs_manager_migration.png
 
-For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit-manual .
+For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit-manual\ .
 
 CUBRID Drivers
---------------
+==============
 
 The drivers supported by CUBRID are as follows:
 

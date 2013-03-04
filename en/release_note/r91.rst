@@ -2279,34 +2279,34 @@ Sharding
 질의문에 두 개 이상의 shard 힌트가 서로 다른 shard를 가리키는 경우 오류 처리하도록 수정(CUBRIDSUS-9395)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    질의문에 두 개 이상의 shard 힌트가 서로 다른 shard를 가리키는 경우 기존에는 첫번째 힌트의 shard를 사용했으나,
-    모두 같은 shard가 아니면 오류 처리하도록 수정했다.
+질의문에 두 개 이상의 shard 힌트가 서로 다른 shard를 가리키는 경우 기존에는 첫번째 힌트의 shard를 사용했으나,
+모두 같은 shard가 아니면 오류 처리하도록 수정했다.
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        SELECT * 
-        FROM student 
-        WHERE (id = /*+ shard_key */ 250) OR (id = /*+ shard_key */ 22);
+    SELECT * 
+    FROM student 
+    WHERE (id = /*+ shard_key */ 250) OR (id = /*+ shard_key */ 22);
 
 독립된 트랜잭션으로 다수의 SHARD에 대한 SELECT가 실패하는 문제(CUBRIDSUS-9529)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    SHARD 환경에서 각각 독립된 트랜잭션으로 처음에 한 SHARD에 SELECT를 수행하고 난 후, 다른 SHARD에 SELECT를 시도하면 실패하는 문제를 수정했다.
+SHARD 환경에서 각각 독립된 트랜잭션으로 처음에 한 SHARD에 SELECT를 수행하고 난 후, 다른 SHARD에 SELECT를 시도하면 실패하는 문제를 수정했다.
 
 SHARD의 메타 정보를 출력하는 명령 수행 시 해당 명령이 비정상 종료되는 문제(CUBRIDSUS-10375)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    shard.conf의 MAX_NUM_PROXY 파라미터 값을 2 이상으로 설정하여 다수의 shard proxy를 실행한 상태에서 "cubrid shard status -m"으로 CUBRID SHARD의 메타 정보를 출력하는 명령을 실행하면 해당 명령이 비정상 종료되는 문제를 수정했다.
+shard.conf의 MAX_NUM_PROXY 파라미터 값을 2 이상으로 설정하여 다수의 shard proxy를 실행한 상태에서 "cubrid shard status -m"으로 CUBRID SHARD의 메타 정보를 출력하는 명령을 실행하면 해당 명령이 비정상 종료되는 문제를 수정했다.
  
 shard.conf의 기본 설정에 포함된 PROXY_LOG_FILE을 PROXY_LOG_DIR로 바로 잡음(CUBRIDSUS-10381)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    기본으로 설치되는 shard.conf 파일에 포함되어 있던 잘못된 PROXY_LOG_FILE 파라미터 설정을 PROXY_LOG_DIR로 바로 잡았다. 
+기본으로 설치되는 shard.conf 파일에 포함되어 있던 잘못된 PROXY_LOG_FILE 파라미터 설정을 PROXY_LOG_DIR로 바로 잡았다. 
     
 바인딩 배열의 shard 키 값이 서로 다른 shard에 존재하면 오류 처리하도록 수정(CUBRIDSUS-9826)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Shard 환경에서 JDBC의 PreparedStatement.executeBatch(), CCI의 cci_execute_array()와 같이 여러 개의 값을 바인딩하여 질의를 일괄 처리하는 함수에서 바인딩하는 배열의 shard 키 값이 서로 다른 shard에 존재하면 해당 함수의 실행을 오류 처리하도록 수정했다.
+Shard 환경에서 JDBC의 PreparedStatement.executeBatch(), CCI의 cci_execute_array()와 같이 여러 개의 값을 바인딩하여 질의를 일괄 처리하는 함수에서 바인딩하는 배열의 shard 키 값이 서로 다른 shard에 존재하면 해당 함수의 실행을 오류 처리하도록 수정했다.
 
 shard.conf의 PROXY_LOG 파라미터 값을 ALL로 설정하는 경우 해당 로그 파일의 크기가 2KB 이상이면 shard proxy 프로세스가 비정상 종료하는 현상(CUBRIDSUS-10443)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2314,7 +2314,7 @@ shard.conf의 PROXY_LOG 파라미터 값을 ALL로 설정하는 경우 해당 �
 prepare 요청이 많아지면서 응답이 오지 않는 현상(CUBRIDSUS-10041) 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Shard 환경에서 동시에 동일한 질의에 대한 prepare 요청이 많아지면서 그 중 하나가 질의 타임아웃 또는 PROXY_TIMEOUT 시간 내에 처리하지 못하게 되는 경우, 처리 대기중이던 나머지 prepare 요청들도 함께 응답을 받지 못하는 문제를 수정했다. 
+Shard 환경에서 동시에 동일한 질의에 대한 prepare 요청이 많아지면서 그 중 하나가 질의 타임아웃 또는 PROXY_TIMEOUT 시간 내에 처리하지 못하게 되는 경우, 처리 대기중이던 나머지 prepare 요청들도 함께 응답을 받지 못하는 문제를 수정했다. 
 
 shard proxy의 부하가 많은데 비해 CAS 개수가 적은 경우 응용 프로그램의 요청이 계속 실패하는 현상(CUBRIDSUS-10012)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2322,10 +2322,10 @@ shard proxy의 부하가 많은데 비해 CAS 개수가 적은 경우 응용 프
 CUBRID SHARD proxy에서 인증 실패 시 적절한 에러 메시지를 출력하도록 수정(CUBRIDSUS-8839)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    CUBRID SHARD proxy에서 인증 실패 시에도 에러 메시지를 출력하지 않았으나, 다음의 예와 같이 적절한 에러 메시지를 출력하도록 수정했다.
-    ::
-    
-        Authorization error.(Address is rejected)
+CUBRID SHARD proxy에서 인증 실패 시에도 에러 메시지를 출력하지 않았으나, 다음의 예와 같이 적절한 에러 메시지를 출력하도록 수정했다.
+::
+
+    Authorization error.(Address is rejected)
 
 드라이버
 --------
@@ -2333,146 +2333,148 @@ CUBRID SHARD proxy에서 인증 실패 시 적절한 에러 메시지를 출력�
 [JDBC][CCI] 질의 타임아웃 시간 계산 방식 개선(CUBRIDSUS-9585)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    응용 프로그램 단에서 사용한 시간을 제외한 나머지 시간을 서버에 전달하여 응용 프로그램이 요구하는 질의 타임아웃 기간이 만료되면 질의 수행이 중단되도록 수정했다.
+응용 프로그램 단에서 사용한 시간을 제외한 나머지 시간을 서버에 전달하여 응용 프로그램이 요구하는 질의 타임아웃 기간이 만료되면 질의 수행이 중단되도록 수정했다.
     
 [JDBC][CCI] 질의 타임아웃을 설정하면 fetch 도중에 질의 타임아웃이 발생하면서 실패하는 현상(CUBRIDSUS-9043)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    브로커 파라미터 MAX_QUERY_TIMEOUT, JDBC의 setQueryTimeout 메서드, 연결 URL의 queryTimeout 속성으로 질의 타임아웃을 설정하면 fetch 도중에 질의 타임아웃이 발생하면서 실패하는 현상이 있었으나, 질의 execute 시간에만 타임아웃 발생이 가능하게 하고 fetch 도중에는 타임아웃이 발생하지 않도록 수정했다.
+브로커 파라미터 MAX_QUERY_TIMEOUT, JDBC의 setQueryTimeout 메서드, 연결 URL의 queryTimeout 속성으로 질의 타임아웃을 설정하면 fetch 도중에 질의 타임아웃이 발생하면서 실패하는 현상이 있었으나, 질의 execute 시간에만 타임아웃 발생이 가능하게 하고 fetch 도중에는 타임아웃이 발생하지 않도록 수정했다.
 
-    또한, cci_execute_batch 함수와 cci_execute_array 함수에서는 질의 타임 아웃이 동작하지 않도록 수정했다. 
+또한, cci_execute_batch 함수와 cci_execute_array 함수에서는 질의 타임 아웃이 동작하지 않도록 수정했다. 
 
 [JDBC][CCI] 다중 질의 실행 함수에서 질의를 실행하는 도중 교착 상태가 발생하면 나머지 질의를 수행하지 않도록 수정(CUBRIDSUS-9692)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    JDBC의 PreparedStatement.executeBatch 메서드 또는 CCI의 cci_execute_array, cci_execute_batch와 같은 다중 질의 실행 함수에서 각각의 질의문을 실행하는 도중 교착 상태(deadlock)가 발생했음에도 불구하고 나머지 질의를 계속 수행했었지만, 교착 상태가 발생하면 나머지 질의 수행을 중단하도록 수정했다. 그 외에 일반적인 오류가 발생하는 경우에는 나머지 질의를 계속 수행한다.
+JDBC의 PreparedStatement.executeBatch 메서드 또는 CCI의 cci_execute_array, cci_execute_batch와 같은 다중 질의 실행 함수에서 각각의 질의문을 실행하는 도중 교착 상태(deadlock)가 발생했음에도 불구하고 나머지 질의를 계속 수행했었지만, 교착 상태가 발생하면 나머지 질의 수행을 중단하도록 수정했다. 그 외에 일반적인 오류가 발생하는 경우에는 나머지 질의를 계속 수행한다.
 
 [JDBC][CCI] SHOW EXEC STATISTICS ALL 문장 끝에 세미콜론(;)이 없으면 오류 발생되는 문제(CUBRIDSUS-7430)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    응용 프로그램에서 SHOW EXEC STATISTICS ALL 구문을 수행할 때 문장 끝에 세미콜론(;)이 포함되어 있지 않으면 실패하는 현상을 수정했다.
-    수정 이전 버전에서도 CUBRID 매니저, 쿼리 브라우저 및 CSQL 등은 이와 같은 문제가 발생하지 않았고, JDBC 및 CCI 응용 프로그램만 이와 같은 문제가 존재했다.
+응용 프로그램에서 SHOW EXEC STATISTICS ALL 구문을 수행할 때 문장 끝에 세미콜론(;)이 포함되어 있지 않으면 실패하는 현상을 수정했다.
+수정 이전 버전에서도 CUBRID 매니저, 쿼리 브라우저 및 CSQL 등은 이와 같은 문제가 발생하지 않았고, JDBC 및 CCI 응용 프로그램만 이와 같은 문제가 존재했다.
 
 [CCI] CCI_U_TYPE_ENUM 타입 추가(CUBRIDSUS-10236)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    ENUM 타입 컬럼에 대한 CCI의 데이터베이스 타입(u_type)인 CCI_U_TYPE_ENUM을 추가했다.
- 
-    CCI_U_TYPE_ENUM은 CCI_A_TYPE_STR을 통해 값을 조회하거나 전달할 수 있다.
-    
-    .. code-block:: c
+ENUM 타입 컬럼에 대한 CCI의 데이터베이스 타입(u_type)인 CCI_U_TYPE_ENUM을 추가했다.
 
-    
-        cci_bind_param (req, 1, CCI_A_TYPE_STR, (char *) buffer, CCI_U_TYPE_ENUM, CCI_BIND_PTR);
-        cci_get_data (req, 1, CCI_A_TYPE_STR, &buffer, &ind);
+CCI_U_TYPE_ENUM은 CCI_A_TYPE_STR을 통해 값을 조회하거나 전달할 수 있다.
+
+.. code-block:: c
+
+
+    cci_bind_param (req, 1, CCI_A_TYPE_STR, (char *) buffer, CCI_U_TYPE_ENUM, CCI_BIND_PTR);
+    cci_get_data (req, 1, CCI_A_TYPE_STR, &buffer, &ind);
      
 [JDBC][CCI] ENUM 칼럼의 타입으로 "VARCHAR" 대신 "ENUM"을 반환하도록 수정(CUBRIDSUS-10236)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    ENUM 칼럼의 타입으로 "VARCHAR" 대신 "ENUM"이 반환되도록 수정했다.
-    
-    - JDBC DatabaseMetaData를 통한 타입 이름 조회 
+ENUM 칼럼의 타입으로 "VARCHAR" 대신 "ENUM"이 반환되도록 수정했다.
 
-        .. code-block:: java
-        
-            DatabaseMetaData dbmd = conn.getMetaData();
-            rs = dbmd.getColumns(null, null, "tbl", null);
-            while (rs.next()) {
-             String type = rs.getString("type_name");
-             System.out.println("Column type is:" + type);
-            }
-         
-    - CCI의 cci_schema_info와 cci_get_result_info 함수를 통한 타입 형식 조회
+- JDBC DatabaseMetaData를 통한 타입 이름 조회 
+
+    .. code-block:: java
     
-        .. code-block:: c
-        
-            res_col_info = cci_get_result_info (req, &stmt_type, &col_count);
-             
-            for (i = 1; i <= col_count; i++)
-              {
-                printf ("resultset metadata - column type: %d\n",
-                         CCI_GET_RESULT_INFO_TYPE (res_col_info, i));
-              }
+        DatabaseMetaData dbmd = conn.getMetaData();
+        rs = dbmd.getColumns(null, null, "tbl", null);
+        while (rs.next()) {
+         String type = rs.getString("type_name");
+         System.out.println("Column type is:" + type);
+        }
+     
+- CCI의 cci_schema_info와 cci_get_result_info 함수를 통한 타입 형식 조회
+
+    .. code-block:: c
+    
+        res_col_info = cci_get_result_info (req, &stmt_type, &col_count);
+         
+        for (i = 1; i <= col_count; i++)
+          {
+            printf ("resultset metadata - column type: %d\n",
+                     CCI_GET_RESULT_INFO_TYPE (res_col_info, i));
+          }
 
 [JDBC] 예외 발생 시 메시지에 다양한 정보를 출력하도록 수정(CUBRIDSUS-9611)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    JDBC에서 예외 발생 시 메시지에 브로커 응용 서버(CAS) ID, CAS PID, SESSION ID, 연결 URL을 출력하도록 수정했다.
+JDBC에서 예외 발생 시 메시지에 브로커 응용 서버(CAS) ID, CAS PID, SESSION ID, 연결 URL을 출력하도록 수정했다.
 
 [JDBC] Fixed a phenomenon in which the executeBatch method has failed to be executed(CUBRIDSUS-9496)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Fixed a phenomenon in which the executeBatch method of JDBC has failed to be executed and the "Cannot communicate with the broker or received invalid packet" error message was returned.
+Fixed a phenomenon in which the executeBatch method of JDBC has failed to be executed and the "Cannot communicate with the broker or received invalid packet" error message was returned.
 
 [JDBC] 하나의 실행 함수로 다수의 질의 수행 도중 질의 계획 실패 등으로 인해 질의가 재시도되는 경우 일부 DML이 반복 수행되는 현상(CUBRIDSUS-8472)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    하나의 실행 함수로 여러 개의 질의 수행 도중 질의 계획 실패 등으로 질의가 첫번째 질의부터 재시도되는 경우, 앞서 수행되었던 일부 DML이 롤백되지 않아 반복 수행되는 문제를 수정했다.
+하나의 실행 함수로 여러 개의 질의 수행 도중 질의 계획 실패 등으로 질의가 첫번째 질의부터 재시도되는 경우, 앞서 수행되었던 일부 DML이 롤백되지 않아 반복 수행되는 문제를 수정했다.
 
-    .. code-block:: sql
-    
-        -- 아래의 MULTI_STMT는 하나의 작업으로 간주한다.
-        String MULTI_STMT = "INSERT INTO T1 VALUES (1, 1); INSERT INTO T1 VALUES (2, 2); UPDATE T2 SET A = 0";
-        PreparedStatement p = c.prepareStatement(MULTI_STMT);
-        boolean retval = p.execute();
+.. code-block:: sql
+
+    -- 아래의 MULTI_STMT는 하나의 작업으로 간주한다.
+    String MULTI_STMT = "INSERT INTO T1 VALUES (1, 1); INSERT INTO T1 VALUES (2, 2); UPDATE T2 SET A = 0";
+    PreparedStatement p = c.prepareStatement(MULTI_STMT);
+    boolean retval = p.execute();
 
 [JDBC] 자동 커밋 모드에서 커서 타입이 TYPE_FORWARD_ONLY인 업데이트 가능한 결과 셋에 대해 updateRow()를 수행하면 예외 처리되는 문제(CUBRIDSUS-9313)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    자동 커밋 모드에서 커서 타입이 TYPE_FORWARD_ONLY인 업데이트 가능한 결과 셋(resultSet)에 대해 updateRow()를 수행하면 "Internal server error"로 예외 처리되는 문제를 수정했다. 수정 이전 버전에서는 커서 타입이 TYPE_SCROLL_SENSITIVE인 경우에만 결과 셋의 업데이트가 가능했으나, 수정 이후 모든 커서 타입(TYPE_FORWARD_ONLY, TYPE_SCROLL_INSENSITIVE, TYPE_SCROLL_SENSITIVE)에 대해 결과 셋의 업데이트가 가능하게 되었다.
+자동 커밋 모드에서 커서 타입이 TYPE_FORWARD_ONLY인 업데이트 가능한 결과 셋(resultSet)에 대해 updateRow()를 수행하면 "Internal server error"로 예외 처리되는 문제를 수정했다. 수정 이전 버전에서는 커서 타입이 TYPE_SCROLL_SENSITIVE인 경우에만 결과 셋의 업데이트가 가능했으나, 수정 이후 모든 커서 타입(TYPE_FORWARD_ONLY, TYPE_SCROLL_INSENSITIVE, TYPE_SCROLL_SENSITIVE)에 대해 결과 셋의 업데이트가 가능하게 되었다.
 
-    .. code-block:: java
-    
-        conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-        ...
-        rs.updateNull("col2");
-        rs.updateRow();
+.. code-block:: java
+
+    conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+    ...
+    rs.updateNull("col2");
+    rs.updateRow();
 
 [JDBC] 연결 URL에서 connectTimeout을 설정해도 altHost로 재연결을 시도하지 않는 문제(CUBRIDSUS-10240)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    JDBC에서 연결 URL에 connectTimeout을 설정해도 connectTimeout이 발생되었을 때 altHost로의 재연결을 시도하지 않고 오류가 발생하는 문제를 수정했다.
+JDBC에서 연결 URL에 connectTimeout을 설정해도 connectTimeout이 발생되었을 때 altHost로의 재연결을 시도하지 않고 오류가 발생하는 문제를 수정했다.
 
 [JDBC] 응용 프로그램에서 Statement를 닫지 않았음에도 불구하고  PreparedStatement.clearParameter() 메서드 호출 시 예외 발생(CUBRIDSUS-10274)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    JDBC 응용 프로그램에서 사용자가 DB 연결을 종료하지 않았고 Statement를 닫지 않았음에도 불구하고 PreparedStatement.clearParameter() 메서드를 호출하면 'Connection or Statement might be closed' 예외가 발생하는 문제를 수정했다.
+JDBC 응용 프로그램에서 사용자가 DB 연결을 종료하지 않았고 Statement를 닫지 않았음에도 불구하고 PreparedStatement.clearParameter() 메서드를 호출하면 'Connection or Statement might be closed' 예외가 발생하는 문제를 수정했다.
 
 [CCI] Modified a phenomenon in which the statement has not been removed from the statement pool when an SQL was prepared twice(CUBRIDSUS-9397)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    When a SQL statement has been prepared twice on one DB connection, the second statement was not closed on the statement pool being used even if the statement was closed. This problem has been fixed.
+
+When a SQL statement has been prepared twice on one DB connection, the second statement was not closed on the statement pool being used even if the statement was closed. This problem has been fixed.
 
 [CCI] Fixed a phenomenon in which the CCI application has been abnormally terminated when NULL has been entered as the pointer value in the function which used the T_CCI_ERROR structure pointer in the CCI application(CUBRIDSUS-9435)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    Fixed a phenomenon in which the CCI application has been abnormally terminated when NULL has been entered as the pointer value in the function which used the T_CCI_ERROR structure pointer in the CCI application such as cci_datasource_release..
+
+Fixed a phenomenon in which the CCI application has been abnormally terminated when NULL has been entered as the pointer value in the function which used the T_CCI_ERROR structure pointer in the CCI application such as cci_datasource_release..
 
 [CCI] 비동기 모드로 SELECT 질의 수행 이후 fetch가 완료되면 CAS_NO_MORE_DATA 오류가 발생하는 문제(CUBRIDSUS-7170)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    비동기 모드로 SELECT 질의 수행 이후 fetch가 완료되면 CCI_NO_MORE_DATA 오류 대신 CAS_NO_MORE_DATA 오류가 발생하는 문제를 수정했다.
+비동기 모드로 SELECT 질의 수행 이후 fetch가 완료되면 CCI_NO_MORE_DATA 오류 대신 CAS_NO_MORE_DATA 오류가 발생하는 문제를 수정했다.
 
-    .. code-block:: c
-    
-        res = cci_execute (req, CCI_EXEC_ASYNC, 0, &error);
+.. code-block:: c
+
+    res = cci_execute (req, CCI_EXEC_ASYNC, 0, &error);
 
 [CCI] Fixed a phenomenon in which the CCI application for windows infinitely waited when there was no DB server to connect(CUBRIDSUS-9361)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Fixed a phenomenon in which the CCI application for windows infinitely waited when it could not acces the database like the case when there was no DB server to connect.
+Fixed a phenomenon in which the CCI application for windows infinitely waited when it could not acces the database like the case when there was no DB server to connect.
 
 [CCI] 질의를 다중 처리하는 함수들에서 질의 결과를 전달받을 인자에 NULL이 입력되면 응용 프로그램이 비정상 종료되는 문제(CUBRIDSUS-9600)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    cci_execute_batch, cci_execute_array, cci_execute_result 함수들의 질의 결과를 전달받을 인자에 NULL이 입력되면 "invalid argument"라는 오류 메시지를 출력하도록 수정했다.
+cci_execute_batch, cci_execute_array, cci_execute_result 함수들의 질의 결과를 전달받을 인자에 NULL이 입력되면 "invalid argument"라는 오류 메시지를 출력하도록 수정했다.
 
 [CCI] cci_is_holable 함수 추가(CUBRIDSUS-8803)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    해당 request handle의 holdable cursor 여부를 반환하는 cci_is_holdable 함수를 추가했다.
+해당 request handle의 holdable cursor 여부를 반환하는 cci_is_holdable 함수를 추가했다.
 
-    .. code-block:: c
-    
-        holdable = cci_is_holdable (req_handle);
+.. code-block:: c
+
+    holdable = cci_is_holdable (req_handle);
 
 [CCI] 128 자리 이상의 double 값을 cci_get_data(CCI_A_TYPE_STR)으로 읽는 경우 응용 프로그램의 비정상 종료(CUBRIDSUS-9756)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2480,15 +2482,15 @@ CUBRID SHARD proxy에서 인증 실패 시 적절한 에러 메시지를 출력�
 [CCI] datasource에서 사용한 연결을 닫은 후 연결 핸들을 그대로 다시 사용하는 경우 응용 프로그램이 비정상적으로 동작하는 문제(CUBRIDSUS-9586)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    datasource를 사용하는 CCI 응용 프로그램에서 사용한 연결을 닫은 후 연결 핸들을 그대로 다시 사용하면 응용 프로그램이 비정상적으로 동작했으나 오류를 출력하도록 수정했다.
-    
-    .. code-block:: c
+datasource를 사용하는 CCI 응용 프로그램에서 사용한 연결을 닫은 후 연결 핸들을 그대로 다시 사용하면 응용 프로그램이 비정상적으로 동작했으나 오류를 출력하도록 수정했다.
 
-        con_1 = cci_datasource_borrow (ds, &error);
-        cci_prepare_and_execute (con_1, query, 1, &exec_retval, &error);
-        ret = cci_datasource_release (ds, con_1, &error);
-        
-        ret = cci_prepare_and_execute (con_1, query, 1, &exec_retval, &error); /* invalid access */
+.. code-block:: c
+
+    con_1 = cci_datasource_borrow (ds, &error);
+    cci_prepare_and_execute (con_1, query, 1, &exec_retval, &error);
+    ret = cci_datasource_release (ds, con_1, &error);
+    
+    ret = cci_prepare_and_execute (con_1, query, 1, &exec_retval, &error); /* invalid access */
         
 [CCI] cci_prepare 함수 수행 도중 내부적으로 PREPARE를 재시도하는 경우에 발생하는 메모리 누수 현상 수정(CUBRIDSUS-10053)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2496,22 +2498,22 @@ CUBRID SHARD proxy에서 인증 실패 시 적절한 에러 메시지를 출력�
 [CCI] 모든 테이블에 대한 트리거 정보를 얻기 위해 cci_schema_info 함수 실행 시 가장 마지막 값을 fetch한 이후에 CCI_ER_NO_MORE_DATA 오류를 반환하지 않는 문제 수정(CUBRIDSUS-9438)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
-    .. code-block:: c
-    
-        req = cci_schema_info (conn, CCI_SCH_TRIGGER, NULL, NULL, CCI_CLASS_NAME_PATTERN_MATCH, &error); 
+.. code-block:: c
+
+    req = cci_schema_info (conn, CCI_SCH_TRIGGER, NULL, NULL, CCI_CLASS_NAME_PATTERN_MATCH, &error); 
 
 [CCI] cci_execute 함수를 통해 다중 질의문 수행 시 두번째로 해당 함수를 호출하면 오류가 발생하는 문제(CUBRIDSUS-10424)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    cci_execute 함수를 통해 다중 질의문 수행 시 다중 질의문 중 첫번째와 마지막의 질의 유형이 다른 경우, 예를 들어 첫번째가 UPDATE 문이고 마지막이 SELECT 문인 경우에 두번째로 해당 함수를 호출하면 "Invalid cursor position" 오류가 발생하는 문제를 수정했다.
+cci_execute 함수를 통해 다중 질의문 수행 시 다중 질의문 중 첫번째와 마지막의 질의 유형이 다른 경우, 예를 들어 첫번째가 UPDATE 문이고 마지막이 SELECT 문인 경우에 두번째로 해당 함수를 호출하면 "Invalid cursor position" 오류가 발생하는 문제를 수정했다.
 
-    .. code-block:: c
+.. code-block:: c
 
-        static char *MULTI_STMT = "UPDATE T1 SET B = A; SELECT A FROM T1 WHERE A = ?;";
-        
-        result = cci_execute (request, CCI_EXEC_QUERY_ALL, 0, error); /* 1st */
-        
-        result = cci_execute (request, CCI_EXEC_QUERY_ALL, 0, error); /* 2nd */
+    static char *MULTI_STMT = "UPDATE T1 SET B = A; SELECT A FROM T1 WHERE A = ?;";
+    
+    result = cci_execute (request, CCI_EXEC_QUERY_ALL, 0, error); /* 1st */
+    
+    result = cci_execute (request, CCI_EXEC_QUERY_ALL, 0, error); /* 2nd */
 
 [CCI] cci_connect_ex 함수 수행 중 DB 연결 실패 시 오류 메시지 버퍼에 오류가 잘못 저장되는 문제(CUBRIDSUS-10316)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2519,236 +2521,236 @@ CUBRID SHARD proxy에서 인증 실패 시 적절한 에러 메시지를 출력�
 [CCI] Windows에서 cci_set_allocator 함수가 동작하지 않도록 수정(CUBRIDSUS-10669)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows에서는 cci_set_allocator 함수를 사용해도 메모리 할당 및 해제 함수가 변경되지 않도록 수정했다.
+Windows에서는 cci_set_allocator 함수를 사용해도 메모리 할당 및 해제 함수가 변경되지 않도록 수정했다.
 
 [PHP] 웹 페이지 로딩을 중단했음에도 불구하고 서버 단에서는 수행 중이던 질의가 중단되지 않는 문제(CUBRIDSUS-5855)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    PHP 응용 웹사이트에서 페이지 로딩을 중단했음에도 서버 단에서는 수행 중이던 질의가 중단되지 않는 문제를 수정했다. 수정 이전 버전에서 사용자가 장시간의 질의 수행을 요구하는 웹 페이지에 대해 로딩 중단을 반복하면 웹 서버 단에서 해제해도 되는 연결 리소스가 늘어나는 현상이 발생한다.
+PHP 응용 웹사이트에서 페이지 로딩을 중단했음에도 서버 단에서는 수행 중이던 질의가 중단되지 않는 문제를 수정했다. 수정 이전 버전에서 사용자가 장시간의 질의 수행을 요구하는 웹 페이지에 대해 로딩 중단을 반복하면 웹 서버 단에서 해제해도 되는 연결 리소스가 늘어나는 현상이 발생한다.
 
 유틸리티
 --------
 
 CSQL에서 결과 출력 시 칼럼의 길이를 제한하는 기능 추가(CUBRIDSUS-9643)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    CSQL에서 결과 출력 시 칼럼의 길이를 제한하는 기능을 추가했다.
-    
-    * ;STring-width는 문자열과 비트 타입의 칼럼에 대해 출력 길이를 제한하는 CSQL 세션 명령어이다. 명령행 옵션(--string-width)도 제공한다.
-    * ;COLumn-width는 타입의 구분 없이 모든 칼럼의 출력 길이를 제한하는 CSQL 세션 명령어이다.
+CSQL에서 결과 출력 시 칼럼의 길이를 제한하는 기능을 추가했다.
+
+* ;STring-width는 문자열과 비트 타입의 칼럼에 대해 출력 길이를 제한하는 CSQL 세션 명령어이다. 명령행 옵션(--string-width)도 제공한다.
+* ;COLumn-width는 타입의 구분 없이 모든 칼럼의 출력 길이를 제한하는 CSQL 세션 명령어이다.
 
 Added ";line-output", the CSQL session command(CUBRIDSUS-9537)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Added CSQL session command, ";line-output" which works like --line-output option of CSQL Interpreter.
-    
-    ::
-    
-        csql> ;line-output on
-        csql> ;line-output off 
+Added CSQL session command, ";line-output" which works like --line-output option of CSQL Interpreter.
+
+::
+
+    csql> ;line-output on
+    csql> ;line-output off 
         
 CSQL에서 SQL 실행 시간을 기본으로 출력하도록 변경(CUBRIDSUS-9537)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    CSQL에서 SQL 수행 시 수행 시간을 기본으로 출력하도록 변경했다. 수행 시간 출력 여부는 ;time CSQL 세션 명령을 통해 변경할 수 있다.
+CSQL에서 SQL 수행 시 수행 시간을 기본으로 출력하도록 변경했다. 수행 시간 출력 여부는 ;time CSQL 세션 명령을 통해 변경할 수 있다.
 
 Fixed to allow additional connection by using --sysadm in the CSQL even when the maximum number of connection to server has been exceeded (CUBRIDSUS-9478)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Fixed to allow only one connection with the system administrator mode (--sysadm) in the CSQL even when the maximum number of connection to server, which has been set by the value of the system parameter max_clients has been exceeded.
+Fixed to allow only one connection with the system administrator mode (--sysadm) in the CSQL even when the maximum number of connection to server, which has been set by the value of the system parameter max_clients has been exceeded.
 
-    ::
-    
-        % csql -u dba --sysadm testdb
+::
+
+    % csql -u dba --sysadm testdb
 
 Windows에서 CSQL의 ;historylist와 ;historyread 명령 수행 시 지원하지 않는다는 오류를 출력하도록 수정(CUBRIDSUS-10190)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows 버전은 ;historylist와 ;historyread 세션 명령어를 지원하지 않기 때문에, 해당 세션 명령이 입력되면 오류 메시지를 출력한다.
+Windows 버전은 ;historylist와 ;historyread 세션 명령어를 지원하지 않기 때문에, 해당 세션 명령이 입력되면 오류 메시지를 출력한다.
 
 로컬 호스트 DB에 접속한 CSQL에서 ;database 실행 시 호스트 이름을 출력하도록 변경(CUBRIDSUS-5243)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    로컬 호스트 DB에 접속한 CSQL에서 ;database 실행 시 "localhost"가 아닌 호스트 이름을 출력하도록 변경했다. ::
-    
-        csql> ;database
-        testdb@cubridhost
+로컬 호스트 DB에 접속한 CSQL에서 ;database 실행 시 "localhost"가 아닌 호스트 이름을 출력하도록 변경했다. ::
+
+    csql> ;database
+    testdb@cubridhost
 
 CSQL에서 주석 내에 작은 따옴표가 포함되어 있을 때 주석 처리가 제대로 되지 못하는 문제(CUBRIDSUS-8999)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    다음과 같은 경우에 주석 처리가 정확히 되지 않아 세션 명령어가 수행되지 않는 문제를 수정했다.
-    ::
-    
-        csql> -- it's a line comment.
-        csql> ;exit
+다음과 같은 경우에 주석 처리가 정확히 되지 않아 세션 명령어가 수행되지 않는 문제를 수정했다.
+::
+
+    csql> -- it's a line comment.
+    csql> ;exit
 
 유니코드 분해된 문자를 식별자로 가지는 스키마 객체를 CSQL에서 조회할 수 없는 문제(CUBRIDSUS-9923)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    테이블 이름이나 트리거 이름 등에 유니코드 분해(decomposition)된 문자가 포함되어 있을 때, CSQL의 ;SCHEMA, ;TRIGGER 세션 명령어로 해당 스키마 객체를 조회할 수 없는 문제를 수정했다. 
+테이블 이름이나 트리거 이름 등에 유니코드 분해(decomposition)된 문자가 포함되어 있을 때, CSQL의 ;SCHEMA, ;TRIGGER 세션 명령어로 해당 스키마 객체를 조회할 수 없는 문제를 수정했다. 
     
 CSQL 세션 명령어인 ";read" 수행 시 파일 이름 뒤에 공백 문자가 오면 수행에 실패하는 문제(CUBRIDSUS-10357)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    아래 명령 수행 시 test.txt 뒤에 공백 문자가 오면 발생되는 오류를 수정했다. ::
-    
-        csql> ;read test.txt 
-        ERROR: Too many file names have been entered.
+아래 명령 수행 시 test.txt 뒤에 공백 문자가 오면 발생되는 오류를 수정했다. ::
+
+    csql> ;read test.txt 
+    ERROR: Too many file names have been entered.
 
 Windows 버전의 CSQL로 긴 질의문 수행 시 비정상 종료되는 문제(CUBRIDSUS-9315)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    스택(stack) 오버플로우를 회피하기 위해, Windows 버전의 CSQL의 스택 메모리 크기를 1M에서 8M로 변경하였다.
+스택(stack) 오버플로우를 회피하기 위해, Windows 버전의 CSQL의 스택 메모리 크기를 1M에서 8M로 변경하였다.
 
 자바 저장 프로시저를 포함하는 뷰를 언로드한 스키마 파일로 로드할 수 없는 문제(CUBRIDSUS-1520)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    자바 저장 프로시저를 포함하는 뷰를 unloaddb 유틸리티로 언로드한 스키마 파일로 loaddb 유틸리티로 로드할 수 없는 문제를 수정했다.
+자바 저장 프로시저를 포함하는 뷰를 unloaddb 유틸리티로 언로드한 스키마 파일로 loaddb 유틸리티로 로드할 수 없는 문제를 수정했다.
 
 loaddb에 특정 에러를 무시하도록 설정한 경우 제약 조건을 위배하는 데이터가 입력되는 현상(CUBRIDSUS-7650)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    loaddb 유틸리티에 --error-control-file=FILE 옵션을 지정하여 특정 에러를 무시하도록 설정한 경우에 제약 조건을 위배하는 데이터가 입력되는 문제를 수정했다. 예를 들어 NULL 에러를 무시하도록 -205를 설정했는데, 기본 키 칼럼에 NULL 데이터가 입력되는 현상이 존재했다. 에러가 발생하면 해당 데이터는 입력하지 않도록 수정했다.
+loaddb 유틸리티에 --error-control-file=FILE 옵션을 지정하여 특정 에러를 무시하도록 설정한 경우에 제약 조건을 위배하는 데이터가 입력되는 문제를 수정했다. 예를 들어 NULL 에러를 무시하도록 -205를 설정했는데, 기본 키 칼럼에 NULL 데이터가 입력되는 현상이 존재했다. 에러가 발생하면 해당 데이터는 입력하지 않도록 수정했다.
 
 loaddb 수행 시 오류 발생된 행 번호를 잘못 출력하는 문제(CUBRIDSUS-7894)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    loaddb 유틸리티가 데이터 로딩 중에 오류가 발생된 행 번호를 잘못 출력할 수 있는 문제를 수정했다.
+loaddb 유틸리티가 데이터 로딩 중에 오류가 발생된 행 번호를 잘못 출력할 수 있는 문제를 수정했다.
 
 스키마 파일에 백슬래시('\\')로 끝나는 문자열이 포함되어 있으면 loaddb가 실패하거나 잘못된 값으로 로딩되는 현상(CUBRIDSUS-9109)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    loaddb 유틸리티가 스키마 파일에 백슬래시('\\')로 끝나는 문자열이 포함되어 있으면 정상적으로 로딩되지 못하는 문제를 수정했다.
+loaddb 유틸리티가 스키마 파일에 백슬래시('\\')로 끝나는 문자열이 포함되어 있으면 정상적으로 로딩되지 못하는 문제를 수정했다.
 
-    .. code-block:: sql
-    
-        ALTER TABLE [t] ADD ATTRIBUTE
-        [dir] character varying(200) DEFAULT 'C:\Databases\',
-        ...;
+.. code-block:: sql
+
+    ALTER TABLE [t] ADD ATTRIBUTE
+    [dir] character varying(200) DEFAULT 'C:\Databases\',
+    ...;
 
 역순의 PREFIX 인덱스를 잘못 언로드하는 문제(CUBRIDSUS-9966)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    역순 prefix 인덱스를 아래 예와 같이 잘못 언로드하여 해당 인덱스를 로딩할 때 오류가 발생되는 문제를 수정했다. 
+역순 prefix 인덱스를 아래 예와 같이 잘못 언로드하여 해당 인덱스를 로딩할 때 오류가 발생되는 문제를 수정했다. 
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        CREATE TABLE t (a VARCHAR (200));
-        CREATE INDEX i ON t (a (2) DESC);
-        
-    ::
+    CREATE TABLE t (a VARCHAR (200));
+    CREATE INDEX i ON t (a (2) DESC);
     
-        % cubrid unloaddb -S testdb
-        % cat testdb_indexes
-        
-    .. code-block:: sql
+::
 
-        CREATE INDEX [i] ON [t1] ([a] DESC (2));
+    % cubrid unloaddb -S testdb
+    % cat testdb_indexes
+    
+.. code-block:: sql
+
+    CREATE INDEX [i] ON [t1] ([a] DESC (2));
 
 db_collation 시스템 카탈로그 뷰의 데이터가 언로드되는 문제(CUBRIDSUS-10350)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    9.0 베타 버전의 데이터베이스를 언로드할 때 db_collation 시스템 카탈로그 뷰에 대해 데이터를 언로드하는 문제를 수정했다.
-    
-    9.0 Beta 버전에서 9.1 버전으로 데이터를 마이그레이션할 때 unloaddb/loaddb 유틸리티를 사용하면 시스템 카탈로그 뷰에 대한 데이터 로딩을 시도하면서 오류가 발생할 수 있으므로, 언로드된 파일에서 db_collation 부분을 제거하거나 unloaddb/loaddb 유틸리티 대신 migrate_90beta_to_91 유틸리티를 사용할 것을 권장한다.
+9.0 베타 버전의 데이터베이스를 언로드할 때 db_collation 시스템 카탈로그 뷰에 대해 데이터를 언로드하는 문제를 수정했다.
+
+9.0 Beta 버전에서 9.1 버전으로 데이터를 마이그레이션할 때 unloaddb/loaddb 유틸리티를 사용하면 시스템 카탈로그 뷰에 대한 데이터 로딩을 시도하면서 오류가 발생할 수 있으므로, 언로드된 파일에서 db_collation 부분을 제거하거나 unloaddb/loaddb 유틸리티 대신 migrate_90beta_to_91 유틸리티를 사용할 것을 권장한다.
 
 Windows 버전의 backupdb 유틸리티가 잘못된 입력에 대해 내부 에러를 출력하는 문제(CUBRIDSUS-10634)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows 버전의 cubrid backupdb 유틸리티의 -D 옵션에 존재하지 않는 디렉터리를 입력하면 "pthread_cond_destroy" 오류가 발생하는 현상을 수정했다.
+Windows 버전의 cubrid backupdb 유틸리티의 -D 옵션에 존재하지 않는 디렉터리를 입력하면 "pthread_cond_destroy" 오류가 발생하는 현상을 수정했다.
 
 checkdb 유틸리티 수행을 인터럽트하지 못하는 문제(CUBRIDSUS-7452)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    cubrid checkdb 유틸리티의 인덱스 검사 작업을 인터럽트하여 중단시키지 못하는 문제를 수정했다.
+cubrid checkdb 유틸리티의 인덱스 검사 작업을 인터럽트하여 중단시키지 못하는 문제를 수정했다.
 
 killtran 유틸리티를 통해 종료된 트랜잭션의 질의문이 오류를 반환하지 않는 문제(CUBRIDSUS-10133)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    질의를 수행중인 트랜잭션을 killtran으로 종료하면 해당 트랜잭션에서 수행중인 질의문의 결과로 아무런 오류가 반환되지 않았으나, "Has been interrupted" 오류를 반환하도록 수정했다.
+질의를 수행중인 트랜잭션을 killtran으로 종료하면 해당 트랜잭션에서 수행중인 질의문의 결과로 아무런 오류가 반환되지 않았으나, "Has been interrupted" 오류를 반환하도록 수정했다.
     
 plandump 유틸리티 또는 슬로우 쿼리 로그 출력 시 질의 원문이 포함되도록 수정(CUBRIDSUS-9593)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    cubrid plandump 유틸리티를 통해 질의 계획 대상이 되는 질의를 출력하거나 서버 에러 로그 혹은 브로커 로그에 슬로우 쿼리(slow query)를 출력할 때 기존에는 재작성된(rewritten) 질의문을 출력했으나, 사용자가 입력한 질의 원문도 포함하도록 수정했다.
+cubrid plandump 유틸리티를 통해 질의 계획 대상이 되는 질의를 출력하거나 서버 에러 로그 혹은 브로커 로그에 슬로우 쿼리(slow query)를 출력할 때 기존에는 재작성된(rewritten) 질의문을 출력했으나, 사용자가 입력한 질의 원문도 포함하도록 수정했다.
 
 dumplocale 유틸리티가 로캘 설정이 잘못되어 있을 때 오류를 출력하도록 수정(CUBRIDSUS-10306)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    cubrid dumplocale 유틸리티 수행 시 로캘 라이브러리에 존재하지 않는 로캘이 cubrid_locales.txt에 지정되어 있으면 오류를 출력하도록 수정했다. 
+cubrid dumplocale 유틸리티 수행 시 로캘 라이브러리에 존재하지 않는 로캘이 cubrid_locales.txt에 지정되어 있으면 오류를 출력하도록 수정했다. 
 
 Fixed a problem in which the broker is abnormally terminated as executing broker_log_top when ')' came in front of the string binding value as the first character(CUBRIDSUS-9245)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Fixed a problem in which the broker is abnormally terminated as executing broker_log_top when ')' came in front of the string binding value as the first character
+Fixed a problem in which the broker is abnormally terminated as executing broker_log_top when ')' came in front of the string binding value as the first character
     
 SQL 로그 파일 형식이 잘못된 경우 broker_log_top 유틸리티가 비정상 종료하는 문제(CUBRIDSUS-10072)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    SQL 로그 파일 형식이 잘못되어 있는 경우에 broker_log_top, shard_broker_log_top 유틸리티가 비정상 종료되는 문제를 수정했다.
+SQL 로그 파일 형식이 잘못되어 있는 경우에 broker_log_top, shard_broker_log_top 유틸리티가 비정상 종료되는 문제를 수정했다.
     
 Windows 버전의 broker_log_top 유틸리티가 UNIX 파일 형식의 SQL 로그 파일을 분석하지 못하는 문제(CUBRIDSUS-10139)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows 버전의 broker_log_top 유틸리티가 UNIX 파일 형식의 SQL 로그 파일을 입력으로 받아 정상적으로 분석하지 못하는 문제를 수정했다.
+Windows 버전의 broker_log_top 유틸리티가 UNIX 파일 형식의 SQL 로그 파일을 입력으로 받아 정상적으로 분석하지 못하는 문제를 수정했다.
 
 Fixed a problem in which backup could not be stopped when the checkpoint operation was being executed(CUBRIDSUS-9337)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    Fixed a problem in which backup could not be stopped by using INTERRUPT (Ctrl+C) when the checkpoint operation was being executed while executing the backup.
+Fixed a problem in which backup could not be stopped by using INTERRUPT (Ctrl+C) when the checkpoint operation was being executed while executing the backup.
 
 Modified to cancel the checkpoint when it took 1 minute or more to execute termination of the database because of the checkpoint(CUBRIDSUS-6867)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    The database was set to be terminated by force when it took 1 minute or more to execute termination of the database by using the cubrid server stop command. When it took a long time to operate the checkpoint during shutdown, the database server was terminated by force, causing a long time to recover the database when restarting the database. This was fixed to cancel the checkpoint process and terminate the database when a timeout occurred during shutdown.
+The database was set to be terminated by force when it took 1 minute or more to execute termination of the database by using the cubrid server stop command. When it took a long time to operate the checkpoint during shutdown, the database server was terminated by force, causing a long time to recover the database when restarting the database. This was fixed to cancel the checkpoint process and terminate the database when a timeout occurred during shutdown.
 
 브로커 상태 정보 출력 시 client wait CAS 개수가 전체 CAS 개수보다 크게 출력되는 현상(CUBRIDSUS-10235)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    cubrid broker status -f 명령으로 브로커 상태 정보를 출력할 때, CAS 개수가 최소 개수보다 늘었다가 줄어들었으면 CLIENT WAIT 상태의 CAS 개수가 전체 CAS 개수보다 더 크게 출력되는 현상을 수정했다.
+cubrid broker status -f 명령으로 브로커 상태 정보를 출력할 때, CAS 개수가 최소 개수보다 늘었다가 줄어들었으면 CLIENT WAIT 상태의 CAS 개수가 전체 CAS 개수보다 더 크게 출력되는 현상을 수정했다.
 
 Windows 버전의 createdb 유틸리티 수행을 중단시키는 경우 비정상 종료되는 문제(CUBRIDSUS-9332)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows 버전의 cubrid createdb 유틸리티 수행을 인터럽트로 중단시키면 비정상 종료되는 문제를 수정했다.
+Windows 버전의 cubrid createdb 유틸리티 수행을 인터럽트로 중단시키면 비정상 종료되는 문제를 수정했다.
 
 shard_broker_changer 유틸리티를 통해 파라미터 값을 변경할 때 잘못된 값으로 설정되는 문제(CUBRIDSUS-9956)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    SQL_LOG, SLOW_LOG, PROXY_LOG 등의 파라미터 값을 shard_broker_changer 유틸리티를 통해 변경할 때 잘못된 값으로 설정되는 문제를 수정했다.
+SQL_LOG, SLOW_LOG, PROXY_LOG 등의 파라미터 값을 shard_broker_changer 유틸리티를 통해 변경할 때 잘못된 값으로 설정되는 문제를 수정했다.
 
 cubrid broker status 명령의 -s 옵션이 주어진 경우 ERR-Q 항목 값을 잘못 출력하는 문제(CUBRIDSUS-10391)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    cubrid broker status 명령의 -s 옵션이 주어진 경우 ERR-Q 항목에 초당 오류 질의 개수를 출력했으나, 옵션으로 주어진 N 초 동안의 오류 질의 개수를 출력하도록 수정했다. 
+cubrid broker status 명령의 -s 옵션이 주어진 경우 ERR-Q 항목에 초당 오류 질의 개수를 출력했으나, 옵션으로 주어진 N 초 동안의 오류 질의 개수를 출력하도록 수정했다. 
 
 Windows 버전 CSQL이 ;append 세션 명령에 파일 인자가 누락되었을 때 잘못된 오류 메시지를 출력하는 문제(CUBRIDSUS-10191)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows 버전 CSQL이 ;append 세션 명령에 파일 이름 인자가 누락되었을 때 오류 메시지로 "ERROR: A file name is required."를 출력하도록 수정했다.
+Windows 버전 CSQL이 ;append 세션 명령에 파일 이름 인자가 누락되었을 때 오류 메시지로 "ERROR: A file name is required."를 출력하도록 수정했다.
     수정 이전 버전에서는 "ERROR: Permission denied" 또는 "ERROR: Too many file names have been entered."를 출력했다.
 
 
 createdb 유틸리티가 데이터베이스 생성 시 요구되는 디스크 공간 크기를 출력하도록 수정(CUBRIDSUS-6623)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    createdb 유틸리티가 데이터베이스 생성 시 요구되는 디스크 공간 크기를 출력하도록 했다. ::
-    
-        Creating database with 512.0M size. The total amount of disk space needed is 1.5G.
+createdb 유틸리티가 데이터베이스 생성 시 요구되는 디스크 공간 크기를 출력하도록 했다. ::
 
-    디스크 공간이 부족한 경우에는 추가로 다음과 같은 오류 메시지가 출력된다. ::
-    
-        Couldn't create database.
-        Unable to create volumes for database "testdb". Please refer "/home/CUBRID/log/testdb_createdb.err" for additional information.
+    Creating database with 512.0M size. The total amount of disk space needed is 1.5G.
+
+디스크 공간이 부족한 경우에는 추가로 다음과 같은 오류 메시지가 출력된다. ::
+
+    Couldn't create database.
+    Unable to create volumes for database "testdb". Please refer "/home/CUBRID/log/testdb_createdb.err" for additional information.
         
 DB 생성 시 범위를 벗어난 볼륨 크기를 입력하면 출력하는 오류 메시지 개선(CUBRIDSUS-9761)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    DB 생성 시 허용 범위를 벗어난 볼륨 크기를 입력 단위 없이 입력하면 Byte(B) 단위로 입력되었다는 것을 오류 메시지에 포함하여 출력하도록 수정했다.
-    ::
-    
-        % cubrid createdb testdb --db-volume-size=1121
-        Couldn't create database.
-        The given 'db_volume_size', 1121B is out of range. Choose a size between 20.0M and 20.0G.
+DB 생성 시 허용 범위를 벗어난 볼륨 크기를 입력 단위 없이 입력하면 Byte(B) 단위로 입력되었다는 것을 오류 메시지에 포함하여 출력하도록 수정했다.
+::
+
+    % cubrid createdb testdb --db-volume-size=1121
+    Couldn't create database.
+    The given 'db_volume_size', 1121B is out of range. Choose a size between 20.0M and 20.0G.
 
 -t 옵션을 사용하는 loaddb 명령에서 테이블 접근 권한이 없거나 해당 테이블이 존재하지 않음에도 불구하고 오류를 출력하지 않는 문제 수정(CUBRIDSUS-10326)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2759,41 +2761,41 @@ DB 생성 시 범위를 벗어난 볼륨 크기를 입력하면 출력하는 오
 정의되지 않은 시스템 파라미터를 cubrid.conf에 명시하면 클라이언트 및 서버 구동 시 비정상 종료하는 문제(CUBRIDSUS-9765)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    9.0 베타 버전에서 cubrid.conf에 존재하지 않는 시스템 파라미터를 설정하면, 클라이언트와 서버 구동시에 비정상 종료되는 문제를 수정했다.
+9.0 베타 버전에서 cubrid.conf에 존재하지 않는 시스템 파라미터를 설정하면, 클라이언트와 서버 구동시에 비정상 종료되는 문제를 수정했다.
     
 일부 시스템 파라미터를 시스템 운영 중에 변경할 수 있도록 수정(CUBRIDSUS-7625)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    다음의 시스템 파라미터들은 시스템 운영 도중 변경할 수 있도록 수정했다.
+다음의 시스템 파라미터들은 시스템 운영 도중 변경할 수 있도록 수정했다.
 
-    * index_scan_oid_buffer_size
-    * sort_buffer_size
-    * temp_file_memory_size_in_pages
-    * unfill_factor
-    * volume_extension_path
-    * lock_escalation
-    * checkpoint_every_npages
-    * async_commit
-    * access_ip_control
-    * access_ip_control_file
-    * index_unfill_factor
+* index_scan_oid_buffer_size
+* sort_buffer_size
+* temp_file_memory_size_in_pages
+* unfill_factor
+* volume_extension_path
+* lock_escalation
+* checkpoint_every_npages
+* async_commit
+* access_ip_control
+* access_ip_control_file
+* index_unfill_factor
 
-    또한, CSQL에서 ;get 세션 명령으로 시스템 파라미터 값을 구할 때 발생하는 다음 현상들을 수정했다.
-    
-    * ;get access_ip_control_file을 수행하면 CSQL이 비정상 종료
-    * ;get unfill_factor을 수행하면 잘못된 결과를 출력
-    * 정의되지 않은 시스템 파라미터에 대해 ;get 명령을 수행하여 실패한 후에는 정상적인 시스템 파라미터도 ;get 세션 명령으로 조회할 수 없는 문제
+또한, CSQL에서 ;get 세션 명령으로 시스템 파라미터 값을 구할 때 발생하는 다음 현상들을 수정했다.
+
+* ;get access_ip_control_file을 수행하면 CSQL이 비정상 종료
+* ;get unfill_factor을 수행하면 잘못된 결과를 출력
+* 정의되지 않은 시스템 파라미터에 대해 ;get 명령을 수행하여 실패한 후에는 정상적인 시스템 파라미터도 ;get 세션 명령으로 조회할 수 없는 문제
 
 CUBRID 소스 파일에서 CCI 드라이버만 빌드하는 옵션 추가 및 CCI 소스 패키지 배포(CUBRIDSUS-8247)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    CUBRID 소스 파일에서 CCI 드라이버만 빌드할 수 있도록 configure 스크립트에 --with-cci-only 옵션을 추가했다.
-    또한, CCI 드라이버만 빌드할 수 있는 소스 패키지를 별도로 배포한다.
+CUBRID 소스 파일에서 CCI 드라이버만 빌드할 수 있도록 configure 스크립트에 --with-cci-only 옵션을 추가했다.
+또한, CCI 드라이버만 빌드할 수 있는 소스 패키지를 별도로 배포한다.
 
 브로커 파라미터 SQL_LOG의 값이 NOTICE로 설정되어 있어도 SQL 로그에 정상 수행된 질의가 가끔 출력되는 현상(CUBRIDSUS-10286)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    cubrid_broker.conf의 SQL_LOG 값이 NOTICE로 설정되어 있어도 정상 수행된 질의가 가끔 출력되는 현상이 발생할 수 있는데, 이러한 가능성을 줄이도록 수정했다. 
+cubrid_broker.conf의 SQL_LOG 값이 NOTICE로 설정되어 있어도 정상 수행된 질의가 가끔 출력되는 현상이 발생할 수 있는데, 이러한 가능성을 줄이도록 수정했다. 
 
 JDK 7으로 JDBC 드라이버를 빌드할 수 있도록 수정(CUBRIDSUS-10660)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2801,19 +2803,19 @@ JDK 7으로 JDBC 드라이버를 빌드할 수 있도록 수정(CUBRIDSUS-10660)
 Windows에서 브로커 파라미터의 경로 구분자로 '/'도 쓸 수 있도록 수정(CUBRIDSUS-9318)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows에서 브로커 파라미터의 경로 구분자로 '/'를 쓸 수 있게 수정했다. ::
-    
-        D:/dir/dir/file
+Windows에서 브로커 파라미터의 경로 구분자로 '/'를 쓸 수 있게 수정했다. ::
+
+    D:/dir/dir/file
 
 Windows에서 ACCESS_CONTROL_FILE 파일 내용 중 "드라이브명:"이 잘못 인식되는 문제(CUBRIDSUS-9318)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    ACCESS_CONTROL_FILE 파일 내용을 "db_name:db_user_id:IP_file" 포맷으로 기록할 때 IP_file 경로가 "드라이브명:\경로\파일명"과 같이 기록될 경우, 드라이브명 뒤의 ":"을 값의 구분자로 오인하여 파일을 제대로 인식하지 못하는 문제를 수정했다.
+ACCESS_CONTROL_FILE 파일 내용을 "db_name:db_user_id:IP_file" 포맷으로 기록할 때 IP_file 경로가 "드라이브명:\경로\파일명"과 같이 기록될 경우, 드라이브명 뒤의 ":"을 값의 구분자로 오인하여 파일을 제대로 인식하지 못하는 문제를 수정했다.
     
 Windows에서 브로커 파라미터 값이 잘못되었음에도 불구하고 브로커 구동 시 정상 구동되었다는 메시지가 출력되는 문제(CUBRIDSUS-9992)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows에서 브로커 파라미터 값이 잘못되었으면 브로커를 구동할 수 없다는 오류 메시지가 정상 출력되도록 수정했다.
+Windows에서 브로커 파라미터 값이 잘못되었으면 브로커를 구동할 수 없다는 오류 메시지가 정상 출력되도록 수정했다.
 
 Windows에서 DB 서버 구동 시 데이터베이스 섹션에 설정된 파라미터가 정상인지 여부를 확인하지 않는 문제(CUBRIDSUS-10110)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2824,7 +2826,7 @@ Windows 버전 설치 시 "인터페이스 드라이버 설치" 항목을 선택
 Windows에서 CUBRID 엔진 설치 중 Java 설치 여부에 따른 알림 메시지 수정(CUBRIDSUS-9917)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows에서 CUBRID 엔진 설치 중 Java 1.6 이상 버전이 설치되지 않았으면 CUBRID Manager를 사용할 수 없다는 메시지를 출력했으나, 이 메시지는 CUBRID 엔진과는 무관한 메시지이므로 이 메시지 대신 자바 저장 프로시저를 사용할 수 없다는 메시지를 출력하도록 수정했다.
+Windows에서 CUBRID 엔진 설치 중 Java 1.6 이상 버전이 설치되지 않았으면 CUBRID Manager를 사용할 수 없다는 메시지를 출력했으나, 이 메시지는 CUBRID 엔진과는 무관한 메시지이므로 이 메시지 대신 자바 저장 프로시저를 사용할 수 없다는 메시지를 출력하도록 수정했다.
 
 
 기타
@@ -2833,80 +2835,79 @@ Windows에서 CUBRID 엔진 설치 중 Java 설치 여부에 따른 알림 메�
 Modified a phenomenon of outputting a warning message When DML is executed in the environment configured to output a warning(CUBRIDSUS-9458)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Modified a phenomenon of outputting a warning message when normal INSERT/UPDATE/DELETE was executed in the environment configured to output a warning.
+Modified a phenomenon of outputting a warning message when normal INSERT/UPDATE/DELETE was executed in the environment configured to output a warning.
     
 일부 에러 메시지에서 32비트 int 범위를 넘는 64비트 int 값을 잘못 출력하는 문제(CUBRIDSUS-8379)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    일부 에러 메시지에서 32비트 int 범위를 넘는 64비트 int 값을 잘못 출력하는 문제를 수정했다.
+일부 에러 메시지에서 32비트 int 범위를 넘는 64비트 int 값을 잘못 출력하는 문제를 수정했다.
 
 데이터베이스 접속 요청에 대한 notification 메시지를 한번만 기록하도록 수정(CUBRIDSUS-9885)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    데이터베이스 서버에 대한 접속 요청 시에 접속 요청에 대한 처리 시작과 끝을 나타내는 각각의 notification 메시지를 출력하던 것을 하나의 notification 메시지만 출력하도록 수정했다.
+데이터베이스 서버에 대한 접속 요청 시에 접속 요청에 대한 처리 시작과 끝을 나타내는 각각의 notification 메시지를 출력하던 것을 하나의 notification 메시지만 출력하도록 수정했다.
 
 응용 클라이언트의 접속 정보는 에러 로그에서 제거하고 접속 로그에 기록하도록 수정(CUBRIDSUS-5962)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    응용 클라이언트의 접속 정보가 에러 로그에 너무 많이 기록되어 실제 에러를 파악하기 어려운 문제를 해결하기 위해, 응용 클라이언트의 접속 정보를 에러 로그 대신 접속 로그에 기록하도록 수정했다.
+응용 클라이언트의 접속 정보가 에러 로그에 너무 많이 기록되어 실제 에러를 파악하기 어려운 문제를 해결하기 위해, 응용 클라이언트의 접속 정보를 에러 로그 대신 접속 로그에 기록하도록 수정했다.
 
 인터럽트 발생 시 인터럽트 에러 외에 다른 에러가 반환되는 문제(CUBRIDSUS-9450)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    인터럽트가 발생했을 때 인터럽트 에러 외에 다른 에러가 반환될 수 있는 문제를 수정했다.
-
+인터럽트가 발생했을 때 인터럽트 에러 외에 다른 에러가 반환될 수 있는 문제를 수정했다.
     
 Modified a problem of sending a wrong error instead of the error which has occurred in the DB server when an INTERRUPT has occurred(CUBRIDSUS-9450)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    When an INTERRUPT occurred, the error which has occurred in the DB server was sent as another error. This problem has been fixed.
+When an INTERRUPT occurred, the error which has occurred in the DB server was sent as another error. This problem has been fixed.
 
     
 여러 클라이언트가 동일한 테이블에 대한 UPDATE 수행 시 -495번 오류가 발생할 수 있는 문제(CUBRIDSUS-10651)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    여러 클라이언트가 동시에 같은 테이블에 대해 UPDATE를 수행하고 질의 타임아웃이 자주 발생하는 상황에서, 몇 가지 원인으로 인해 -495번 오류("Execute: Query execution failure #8560")가 발생하는 문제를 수정했다. 
-    
-    하지만 부하가 집중되어 특정 서버 스레드가 UPDATE를 위한 페이지 접근에 여러 번 실패하게 되면 수정 이전 버전에서는 -495번 오류가 발생했는데, 수정 이후 -2번 오류("Internal system failure: no more specific information is available.")가 발생한다. 이런 상황은 동일한 페이지에 대한 UPDATE 요청이 집중되는 상황에서 발생할 수 있는 문제로 사용자는 실패한 질의를 다시 시도해야 한다.  
-    
+여러 클라이언트가 동시에 같은 테이블에 대해 UPDATE를 수행하고 질의 타임아웃이 자주 발생하는 상황에서, 몇 가지 원인으로 인해 -495번 오류("Execute: Query execution failure #8560")가 발생하는 문제를 수정했다. 
+
+하지만 부하가 집중되어 특정 서버 스레드가 UPDATE를 위한 페이지 접근에 여러 번 실패하게 되면 수정 이전 버전에서는 -495번 오류가 발생했는데, 수정 이후 -2번 오류("Internal system failure: no more specific information is available.")가 발생한다. 이런 상황은 동일한 페이지에 대한 UPDATE 요청이 집중되는 상황에서 발생할 수 있는 문제로 사용자는 실패한 질의를 다시 시도해야 한다.  
+
 메모리 사용량 초과로 브로커 응용 서버(CAS)가 재시작될 때 메모리 사용량을 CAS 로그에 출력하도록 수정(CUBRIDSUS-10181)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    브로커 응용 서버(CAS)가 메모리 사용량 최대값인 cubrid_broker.conf의 APPL_SERVER_MAX_SIZE 초과로 인해 재시작할 때 해당 프로세스의 메모리 사용량을 CAS 로그에 출력하도록 수정했다. ::
- 
-        01/10 18:43:42.217 (0) CAS MEMORY USAGE (101M) HAS EXCEEDED MAX SIZE (101M)
+브로커 응용 서버(CAS)가 메모리 사용량 최대값인 cubrid_broker.conf의 APPL_SERVER_MAX_SIZE 초과로 인해 재시작할 때 해당 프로세스의 메모리 사용량을 CAS 로그에 출력하도록 수정했다. ::
+
+    01/10 18:43:42.217 (0) CAS MEMORY USAGE (101M) HAS EXCEEDED MAX SIZE (101M)
 
 A problem in which an error log of the broker and the database server was not recreated when it was randomly deleted(CUBRIDSUS-8351)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    There was a problem in which an error log of the broker and the database server was not recreated when it was randomly deleted. It has been fixed and the deleted error log is recreated.
+There was a problem in which an error log of the broker and the database server was not recreated when it was randomly deleted. It has been fixed and the deleted error log is recreated.
 
 Fixed a problem in which a broker was abnormally terminated when an application connected to the broker with a long broker name(CUBRIDSUS-9392)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    A broker was abnormally terminated when an application connected to the broker with a long broker name (32 characters or longer). The problem was fixed by allowing the length of a broker name to 63 characters and making the broker not to be started when the broker name was longer than 63 characters. 
+A broker was abnormally terminated when an application connected to the broker with a long broker name (32 characters or longer). The problem was fixed by allowing the length of a broker name to 63 characters and making the broker not to be started when the broker name was longer than 63 characters. 
 
 Windows에서 서비스가 정상 종료되지 않는 경우에도 정상 종료된 것으로 메시지를 잘못 출력하는 문제(CUBRIDSUS-10143)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows에서 "cubrid service stop" 명령을 수행하면 cubrid.conf의 services에 등록된 프로세스들이 모두 정상 종료되지 않았음에도 "++ cubrid service stop: success" 라는 메시지를 출력하는 문제를 수정했다.
+Windows에서 "cubrid service stop" 명령을 수행하면 cubrid.conf의 services에 등록된 프로세스들이 모두 정상 종료되지 않았음에도 "++ cubrid service stop: success" 라는 메시지를 출력하는 문제를 수정했다.
 
 Windows에서 서버가 구동된 상태에서 서버 시작을 실행하면 잘못된 메시지가 출력되는 현상(CUBRIDSUS-10216)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Windows에서 서버가 구동된 상태에서 또 다시 서버를 구동하려고 하면 "cubrid server start: success" 메시지가 출력되었으나, "cubrid server is already running" 메시지가 출력되도록 수정했다.
+Windows에서 서버가 구동된 상태에서 또 다시 서버를 구동하려고 하면 "cubrid server start: success" 메시지가 출력되었으나, "cubrid server is already running" 메시지가 출력되도록 수정했다.
 
 Windows 서비스 프로세스인 CUBRIDService에 설명 추가(CUBRIDSUS-8917)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    CUBRID의 Windows 서비스 프로세스인 CUBRIDService에 다음 설명(description)을 추가했다.
-    이 설명은 Windows의 "제어판 > 시스템 및 보안 > 관리 도구 > 서비스 > CUBRIDService"에서 확인할 수 있다. ::
+CUBRID의 Windows 서비스 프로세스인 CUBRIDService에 다음 설명(description)을 추가했다.
+이 설명은 Windows의 "제어판 > 시스템 및 보안 > 관리 도구 > 서비스 > CUBRIDService"에서 확인할 수 있다. ::
 
-        Service to execute master,broker,database server and manager server processes for CUBRID.
-        Service start/stop menu is equal to the command of "cubrid service start/stop".
-        If you setup "startup type" of this service to "Disabled", you can't use "cubrid service" command.
+    Service to execute master,broker,database server and manager server processes for CUBRID.
+    Service start/stop menu is equal to the command of "cubrid service start/stop".
+    If you setup "startup type" of this service to "Disabled", you can't use "cubrid service" command.
 
 CUBRID Manager를 통해 DB 사용자를 편집하지 못하는 현상(CUBRIDSUS-9971)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    9.0 Beta 버전에서 CUBRID Manager를 통해 DB 사용자의 비밀번호 또는 그룹 변경과 같은 편집 기능을 수행하지 못하는 문제를 수정했다. 
+9.0 Beta 버전에서 CUBRID Manager를 통해 DB 사용자의 비밀번호 또는 그룹 변경과 같은 편집 기능을 수행하지 못하는 문제를 수정했다. 
 
 주의 사항
 =========
@@ -2919,89 +2920,89 @@ CUBRID Manager를 통해 DB 사용자를 편집하지 못하는 현상(CUBRIDSUS
 9.1 버전과 9.0 베타 버전 사이에 DB 볼륨 호환 안 됨(CUBRIDSUS-10147)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    9.1 버전과 9.0 베타 버전 사이에 DB 볼륨이 호환되지 않게 됨에 따라 CUBRID 9.0 Beta를 9.1로 업그레이드하는 사용자는 CUBRID 9.1 설치 이후 기존의 DB 볼륨을 9.1용으로 반드시 변환해야 한다. 볼륨 마이그레이션을 위해서 9.1 버전에 제공되는 migrate_90beta_to_91 유틸리티를 제공한다. ::
+9.1 버전과 9.0 베타 버전 사이에 DB 볼륨이 호환되지 않게 됨에 따라 CUBRID 9.0 Beta를 9.1로 업그레이드하는 사용자는 CUBRID 9.1 설치 이후 기존의 DB 볼륨을 9.1용으로 반드시 변환해야 한다. 볼륨 마이그레이션을 위해서 9.1 버전에 제공되는 migrate_90beta_to_91 유틸리티를 제공한다. ::
 
-        % migrate_90beta_to_91 <db_name>
+    % migrate_90beta_to_91 <db_name>
 
-    보다 자세한 사항은  :doc:`/upgrade`\ 를 참고한다.
-    
+보다 자세한 사항은  :doc:`/upgrade`\ 를 참고한다.
+
 9.1 버전과 9.0 Beta 이전 버전 간에 DB 볼륨이 호환되지 않음(CUBRIDSUS-5238)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    9.0 Beta 이전 버전과 DB 볼륨이 호환되지 않으므로 cubrid unloaddb/loaddb를 이용하여 데이터를 마이그레이션해야 한다. 보다 자세한 사항은  :doc:`/upgrade`\ 를 참고한다.
+9.0 Beta 이전 버전과 DB 볼륨이 호환되지 않으므로 cubrid unloaddb/loaddb를 이용하여 데이터를 마이그레이션해야 한다. 보다 자세한 사항은  :doc:`/upgrade`\ 를 참고한다.
 
-    .. note:: 9.0 Beta 버전 및 그 이전 버전 사용자는 데이터를 마이그레이션 하는 것과 함께 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 한다.
+.. note:: 9.0 Beta 버전 및 그 이전 버전 사용자는 데이터를 마이그레이션 하는 것과 함께 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 한다.
     
 CUBRID_LANG 환경 변수 대신에 CUBRID_CHARSET 및 CUBRID_MSG_LANG 환경 변수로 변경
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    9.1 버전부터 CUBRID_LANG 환경 변수는 더 이상 사용되지 않으며, 
-    데이터베이스를 생성하거나 구동할 때 CUBRID_CHARSET 환경 변수를 통해 어떤 문자셋을 사용할 지 결정하므로 CUBRID_CHARSET 환경 변수를 반드시 설정해야 한다. 
-    유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용하며 생략되면 CUBRID_CHARSET 환경 변수 설정을 따른다.
+9.1 버전부터 CUBRID_LANG 환경 변수는 더 이상 사용되지 않으며, 
+데이터베이스를 생성하거나 구동할 때 CUBRID_CHARSET 환경 변수를 통해 어떤 문자셋을 사용할 지 결정하므로 CUBRID_CHARSET 환경 변수를 반드시 설정해야 한다. 
+유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용하며 생략되면 CUBRID_CHARSET 환경 변수 설정을 따른다.
 
 CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결과의 배열에 대한 에러 처리 방식 수정(CUBRIDSUS-9364)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    CCI 응용에서 여러 개의 질의를 한 번에 수행할 때 2008 R3.0부터 2008 R4.1 버전까지는 cci_execute_array 함수, cci_execute_batch 함수 또는 cci_execute_result 함수에 의한 질의 수행 결과들 중 하나만 에러가 발생해도 해당 질의의 에러 코드를 반환했으나, 2008 R4.3 버전 및 2008 R9.1 버전부터는 전체 질의 개수를 반환하고 CCI_QUERY_RESULT_* 매크로들을 통해 개별 질의에 대한 에러를 확인할 수 있도록 수정했다.
+CCI 응용에서 여러 개의 질의를 한 번에 수행할 때 2008 R3.0부터 2008 R4.1 버전까지는 cci_execute_array 함수, cci_execute_batch 함수 또는 cci_execute_result 함수에 의한 질의 수행 결과들 중 하나만 에러가 발생해도 해당 질의의 에러 코드를 반환했으나, 2008 R4.3 버전 및 2008 R9.1 버전부터는 전체 질의 개수를 반환하고 CCI_QUERY_RESULT_* 매크로들을 통해 개별 질의에 대한 에러를 확인할 수 있도록 수정했다.
 
-    수정 이전 버전에서는 에러가 발생한 경우에도 배열 내 각각의 질의들의 성공 실패 여부를 알 수 없으므로, 이를 판단해야 한다.
+수정 이전 버전에서는 에러가 발생한 경우에도 배열 내 각각의 질의들의 성공 실패 여부를 알 수 없으므로, 이를 판단해야 한다.
 
-    .. code-block:: c
+.. code-block:: c
+
+    ...
+    char *query = "INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)";
+    ...
+    req = cci_prepare (con, query, 0, &cci_error);
+    ...
+    error = cci_bind_param_array_size (req, 3);
+    ...
+    error = cci_bind_param_array (req, 1, CCI_A_TYPE_INT, co_ex, null_ind, CCI_U_TYPE_INT);
+    ...
+    n_executed = cci_execute_array (req, &result, &cci_error);
+
+    if (n_executed < 0)
+      {
+        printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+
+        for (i = 1; i <= 3; i++)
+          {
+            printf ("query %d\n", i);
+            printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
+            printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
+            printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
+          }
+      }
+    ...
     
-        ...
-        char *query = "INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)";
-        ...
-        req = cci_prepare (con, query, 0, &cci_error);
-        ...
-        error = cci_bind_param_array_size (req, 3);
-        ...
-        error = cci_bind_param_array (req, 1, CCI_A_TYPE_INT, co_ex, null_ind, CCI_U_TYPE_INT);
-        ...
-        n_executed = cci_execute_array (req, &result, &cci_error);
+수정 이후 버전에서는 에러가 발생하면 전체 질의가 실패한 것이며, 에러가 발생하지 않은 경우에 대해 배열 내 각 질의들의 성공 실패 여부를 판단한다.
 
-        if (n_executed < 0)
-          {
-            printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+.. code-block:: c
 
-            for (i = 1; i <= 3; i++)
-              {
-                printf ("query %d\n", i);
-                printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-                printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-                printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
-              }
-          }
-        ...
-        
-    수정 이후 버전에서는 에러가 발생하면 전체 질의가 실패한 것이며, 에러가 발생하지 않은 경우에 대해 배열 내 각 질의들의 성공 실패 여부를 판단한다.
-
-    .. code-block:: c
-    
-        ...
-        char *query = "INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)";
-        ...
-        req = cci_prepare (con, query, 0, &cci_error);
-        ...
-        error = cci_bind_param_array_size (req, 3);
-        ...
-        error = cci_bind_param_array (req, 1, CCI_A_TYPE_INT, co_ex, null_ind, CCI_U_TYPE_INT);
-        ...
-        n_executed = cci_execute_array (req, &result, &cci_error);
-        if (n_executed < 0)
+    ...
+    char *query = "INSERT INTO test_data (id, ndata, cdata, sdata, ldata) VALUES (?, ?, 'A', 'ABCD', 1234)";
+    ...
+    req = cci_prepare (con, query, 0, &cci_error);
+    ...
+    error = cci_bind_param_array_size (req, 3);
+    ...
+    error = cci_bind_param_array (req, 1, CCI_A_TYPE_INT, co_ex, null_ind, CCI_U_TYPE_INT);
+    ...
+    n_executed = cci_execute_array (req, &result, &cci_error);
+    if (n_executed < 0)
+      {
+        printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+      }
+    else
+      {
+        for (i = 1; i <= 3; i++)
           {
-            printf ("execute error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+            printf ("query %d\n", i);
+            printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
+            printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
+            printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
           }
-        else
-          {
-            for (i = 1; i <= 3; i++)
-              {
-                printf ("query %d\n", i);
-                printf ("result count = %d\n", CCI_QUERY_RESULT_RESULT (result, i));
-                printf ("error message = %s\n", CCI_QUERY_RESULT_ERR_MSG (result, i));
-                printf ("statement type = %d\n", CCI_QUERY_RESULT_STMT_TYPE (result, i));
-              }
-          }
-        ...
+      }
+    ...
 
 기존 주의 사항
 --------------
@@ -3009,158 +3010,158 @@ CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결�
 Since the 2008 R4.1 version, the default value of CCI_DEFAULT_AUTOCOMMIT has been ON(CUBRIDSUS-5879)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the auto commit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application's auto commit mode is suitable for this.
+The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the auto commit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application's auto commit mode is suitable for this.
 
 From the 2008 R4.0 version, the options and parameters that use the unit of pages were changed to use the unit of volume size(CUBRIDSUS-5136)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (--db-volume-size, --log-volume-size, --db-page-size, --log-page-size), are used.
+The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (--db-volume-size, --log-volume-size, --db-page-size, --log-page-size), are used.
 
-    To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (--db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
-    It is recommended to use the new system parameters in bytes because the page-unit system parameters will be removed. For details on the related system parameters, see the below.
+To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (--db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
+It is recommended to use the new system parameters in bytes because the page-unit system parameters will be removed. For details on the related system parameters, see the below.
 
 Be cautious when setting DB volume size if you are a user of a version before 2008 R4.0 Beta(CUBRIDSUS-4222)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    From the 2008 R4.0 Beta version, the default value of data page size and log page size in creating the database was changed from 4 KB to 16 KB. If you specify the database volume to the page count, the byte size of the volume may differ from your expectations. If you did not set any options, 100MB-database volume with 4KB-page size was created in the previous version. However, starting from the 2008 R4.0, 512MB-database volume with 16KB-page size is created.
+From the 2008 R4.0 Beta version, the default value of data page size and log page size in creating the database was changed from 4 KB to 16 KB. If you specify the database volume to the page count, the byte size of the volume may differ from your expectations. If you did not set any options, 100MB-database volume with 4KB-page size was created in the previous version. However, starting from the 2008 R4.0, 512MB-database volume with 16KB-page size is created.
 
-    In addition, the minimum size of the available database volume is limited to 20 MB. Therefore, a database volume less than this size cannot be created.
+In addition, the minimum size of the available database volume is limited to 20 MB. Therefore, a database volume less than this size cannot be created.
 
 The change of the default value of some system parameters of the versions before 2008 R4.0(CUBRIDSUS-4095)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Starting from 2008 R4.0, the default values of some system parameters have been changed.
+Starting from 2008 R4.0, the default values of some system parameters have been changed.
 
-    Now, the default value of max_clients, which specifies the number of concurrent connections allowed by a DB server, and the default value of index_unfill_factor that specifies the ratio of reserved space for future updates while creating an index page, have been changed. Furthermore, the default values of the system parameters in bytes now use more memory when they exceed the default values of the previous system parameters per page.
+Now, the default value of max_clients, which specifies the number of concurrent connections allowed by a DB server, and the default value of index_unfill_factor that specifies the ratio of reserved space for future updates while creating an index page, have been changed. Furthermore, the default values of the system parameters in bytes now use more memory when they exceed the default values of the previous system parameters per page.
 
-    +-----------------------------+----------------------------+----------------------+--------------------+ 
-    | Previous System             | Added System               | Previous Default     | Changed Default    | 
-    | Parameter                   | Parameter                  | Value                | Value (unit: byte) |
-    |                             |                            |                      |                    | 
-    +=============================+============================+======================+====================+ 
-    | max_clients                 |  -                         | 50                   | 100                | 
-    +-----------------------------+----------------------------+----------------------+--------------------+ 
-    | index_unfill_factor         |  -                         | 0.2                  | 0.05               | 
-    +-----------------------------+----------------------------+----------------------+--------------------+
-    | data_buffer_pages           | data_buffer_size           | 100M(page size=4K)   | 512M               | 
-    +-----------------------------+----------------------------+----------------------+--------------------+
-    | log_buffer_pages            | log_buffer_size            | 200K(page size=4K)   | 4M                 | 
-    |                             |                            |                      |                    |
-    +-----------------------------+----------------------------+----------------------+--------------------+
-    | sort_buffer_pages           | sort_buffer_size           | 64K(page size=4K)    | 2M                 | 
-    |                             |                            |                      |                    | 
-    +-----------------------------+----------------------------+----------------------+--------------------+
-    | index_scan_oid_buffer_pages | index_scan_oid_buffer_size | 16K(page size=4K)    | 64K                | 
-    |                             |                            |                      |                    | 
-    +-----------------------------+----------------------------+----------------------+--------------------+
- 
-    In addition, when a database is created using cubrid createdb, the minimum value of the data page size and the log page size has been changed from 1K to 4K.
++-----------------------------+----------------------------+----------------------+--------------------+ 
+| Previous System             | Added System               | Previous Default     | Changed Default    | 
+| Parameter                   | Parameter                  | Value                | Value (unit: byte) |
+|                             |                            |                      |                    | 
++=============================+============================+======================+====================+ 
+| max_clients                 |  -                         | 50                   | 100                | 
++-----------------------------+----------------------------+----------------------+--------------------+ 
+| index_unfill_factor         |  -                         | 0.2                  | 0.05               | 
++-----------------------------+----------------------------+----------------------+--------------------+
+| data_buffer_pages           | data_buffer_size           | 100M(page size=4K)   | 512M               | 
++-----------------------------+----------------------------+----------------------+--------------------+
+| log_buffer_pages            | log_buffer_size            | 200K(page size=4K)   | 4M                 | 
+|                             |                            |                      |                    |
++-----------------------------+----------------------------+----------------------+--------------------+
+| sort_buffer_pages           | sort_buffer_size           | 64K(page size=4K)    | 2M                 | 
+|                             |                            |                      |                    | 
++-----------------------------+----------------------------+----------------------+--------------------+
+| index_scan_oid_buffer_pages | index_scan_oid_buffer_size | 16K(page size=4K)    | 64K                | 
+|                             |                            |                      |                    | 
++-----------------------------+----------------------------+----------------------+--------------------+
+
+In addition, when a database is created using cubrid createdb, the minimum value of the data page size and the log page size has been changed from 1K to 4K.
  
 Changed so that database services, utilities, and applications cannot be executed when the system parameter is incorrectly configured(CUBRIDSUS-5375)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    It has been changed so that now the related database services, utilities, and applications are not executed when configuring system parameters that are not defined in cubrid.conf or cubrid_ha.conf, when the value of system parameters exceed the threshold, or when the system parameters per page and the system parameters in bytes are used simultaneously.
+It has been changed so that now the related database services, utilities, and applications are not executed when configuring system parameters that are not defined in cubrid.conf or cubrid_ha.conf, when the value of system parameters exceed the threshold, or when the system parameters per page and the system parameters in bytes are used simultaneously.
 
 Database fails to start if the data_buffer_size is configured with a value that exceeds 2G in CUBRID 32-bit version(CUBRIDSUS-5349)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    In the CUBRID 32-bit version, if the value of data_buffer_size exceeds 2G, the running database fails. Note that the configuration value cannot exceed 2G in the 32-bit version because of the OS limit.
+In the CUBRID 32-bit version, if the value of data_buffer_size exceeds 2G, the running database fails. Note that the configuration value cannot exceed 2G in the 32-bit version because of the OS limit.
 
 Recommendations for controlling services with the CUBRID utility in Windows Vista and higher(CUBRIDSUS-4186)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    To control services using cubrid utility from Windows Vista and higher, it is recommended to start the command prompt window with administrative privileges.
+To control services using cubrid utility from Windows Vista and higher, it is recommended to start the command prompt window with administrative privileges.
 
-    If you don't start the command prompt window with administrative privileges and use the cubrid utility, you can still execute it with administrative privileges through the User Account Control (UAC) dialog box, but you will not be able to verify the resulting messages.
+If you don't start the command prompt window with administrative privileges and use the cubrid utility, you can still execute it with administrative privileges through the User Account Control (UAC) dialog box, but you will not be able to verify the resulting messages.
 
-    The procedures for starting the command prompt window as an administrator in Windows Vista and higher are as follows:
+The procedures for starting the command prompt window as an administrator in Windows Vista and higher are as follows:
 
-    * Right-click [Start > All Programs > Accessories > Command Prompt].
-    * When [Execute as an administrator (A)] is selected, a dialog box to verify the privilege escalation is activated. Click “YES” to start with administrative privileges.
+* Right-click [Start > All Programs > Accessories > Command Prompt].
+* When [Execute as an administrator (A)] is selected, a dialog box to verify the privilege escalation is activated. Click “YES” to start with administrative privileges.
     
 A Manager Server process-related error occurs in the execution of the CUBRID source after its build(CUBRIDSUS-3553)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
-    If users want to build the CUBRID source and install it themselves, they must build and install CUBRID and the CUBRID Manager respectively. If you check out only CUBRID source and run cubrid service start or cubrid manager start after build, the error "cubrid manager server is not installed" will occur.
+If users want to build the CUBRID source and install it themselves, they must build and install CUBRID and the CUBRID Manager respectively. If you check out only CUBRID source and run cubrid service start or cubrid manager start after build, the error "cubrid manager server is not installed" will occur.
 
 
 GLO Class which is used in 2008 R3.0 or before is not supported any longer(CUBRIDSUS-3826)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. (See :ref:`blob-clob` for more information about LOB data types).
+CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. (See :ref:`blob-clob` for more information about LOB data types).
 
-    glo class users are recommended to carry out tasks as follows:
-    
-    * After saving GLO data as a file, modify to not use GLO in any application and DB schema.
-    * Implement DB migration by using the unloaddb and loaddb utilities.
-    * Perform tasks to load files into LOB data according to the modified application.
-    * Verify the application that you modified operates normally.
-    
-    For reference, if the cubrid loaddb utility loads a table that inherits the GLO class or has the GLO class type, it stops the data from loading by displaying an error message, "Error occurred during schema loading."
+glo class users are recommended to carry out tasks as follows:
 
-    With the discontinued support of GLO class, the deleted functions for each interface are as follows:
-    
-    +------------+----------------------------+
-    | Interface  | Deleted Functions          |
-    +============+============================+
-    | CCI        | cci_glo_append_data        |
-    |            |                            |
-    |            | cci_glo_compress_data      |
-    |            |                            |
-    |            | cci_glo_data_size          |
-    |            |                            |
-    |            | cci_glo_delete_data        |
-    |            |                            |
-    |            | cci_glo_destroy_data       |
-    |            |                            |
-    |            | cci_glo_insert_data        |
-    |            |                            |
-    |            | cci_glo_load               |
-    |            |                            |
-    |            | cci_glo_new                |
-    |            |                            |
-    |            | cci_glo_read_data          |
-    |            |                            |
-    |            | cci_glo_save               |
-    |            |                            |
-    |            | cci_glo_truncate_data      |
-    |            |                            |
-    |            | cci_glo_write_data         |
-    |            |                            |
-    +------------+----------------------------+
-    | JDBC       | CUBRIDConnection.getNewGLO |
-    |            |                            |
-    |            | CUBRIDOID.loadGLO          |
-    |            |                            |
-    |            | CUBRIDOID.saveGLO          |
-    |            |                            |
-    +------------+----------------------------+
-    | PHP        | cubrid_new_glo             |
-    |            |                            |
-    |            | cubrid_save_to_glo         |
-    |            |                            |
-    |            | cubrid_load_from_glo       |
-    |            |                            |
-    |            | cubrid_send_glo            |
-    |            |                            |
-    +------------+----------------------------+
+* After saving GLO data as a file, modify to not use GLO in any application and DB schema.
+* Implement DB migration by using the unloaddb and loaddb utilities.
+* Perform tasks to load files into LOB data according to the modified application.
+* Verify the application that you modified operates normally.
+
+For reference, if the cubrid loaddb utility loads a table that inherits the GLO class or has the GLO class type, it stops the data from loading by displaying an error message, "Error occurred during schema loading."
+
+With the discontinued support of GLO class, the deleted functions for each interface are as follows:
+
++------------+----------------------------+
+| Interface  | Deleted Functions          |
++============+============================+
+| CCI        | cci_glo_append_data        |
+|            |                            |
+|            | cci_glo_compress_data      |
+|            |                            |
+|            | cci_glo_data_size          |
+|            |                            |
+|            | cci_glo_delete_data        |
+|            |                            |
+|            | cci_glo_destroy_data       |
+|            |                            |
+|            | cci_glo_insert_data        |
+|            |                            |
+|            | cci_glo_load               |
+|            |                            |
+|            | cci_glo_new                |
+|            |                            |
+|            | cci_glo_read_data          |
+|            |                            |
+|            | cci_glo_save               |
+|            |                            |
+|            | cci_glo_truncate_data      |
+|            |                            |
+|            | cci_glo_write_data         |
+|            |                            |
++------------+----------------------------+
+| JDBC       | CUBRIDConnection.getNewGLO |
+|            |                            |
+|            | CUBRIDOID.loadGLO          |
+|            |                            |
+|            | CUBRIDOID.saveGLO          |
+|            |                            |
++------------+----------------------------+
+| PHP        | cubrid_new_glo             |
+|            |                            |
+|            | cubrid_save_to_glo         |
+|            |                            |
+|            | cubrid_load_from_glo       |
+|            |                            |
+|            | cubrid_send_glo            |
+|            |                            |
++------------+----------------------------+
 
 Port configuration is required if the protocol between the master and server processes is changed, or if two versions are running at the same time(CUBRIDSUS-3564)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Because the communication protocol between a master process (cub_master) and a server process (cub_server) has been changed, the master process of CUBRID 2008 R3.0 or later cannot communicate with the server process of a lower version, and the master process of a lower version cannot communicate with a server process of 2008 R3.0 version or later. Therefore, if you run two versions of CUBRID at the same time by adding a new version in an environment where a lower version has already been installed, you should modify the cubrid_port_id system parameter of cubrid.conf so that different ports are used by the different versions.
+Because the communication protocol between a master process (cub_master) and a server process (cub_server) has been changed, the master process of CUBRID 2008 R3.0 or later cannot communicate with the server process of a lower version, and the master process of a lower version cannot communicate with a server process of 2008 R3.0 version or later. Therefore, if you run two versions of CUBRID at the same time by adding a new version in an environment where a lower version has already been installed, you should modify the cubrid_port_id system parameter of cubrid.conf so that different ports are used by the different versions.
 
 Specifying a question mark when entering connection information as a URL string in JDBC(CUBRIDSUS-3217)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    When entering connection information as a URL string in JDBC, property information was applied even if you did not enter a question mark (?) in the earlier version. However, you must specify a question mark depending on syntax in this CUBRID 2008 R3.0 version. If not, an error is displayed. In addition, you must specify colon (:) even if there is no username or password in the connection information. ::
+When entering connection information as a URL string in JDBC, property information was applied even if you did not enter a question mark (?) in the earlier version. However, you must specify a question mark depending on syntax in this CUBRID 2008 R3.0 version. If not, an error is displayed. In addition, you must specify colon (:) even if there is no username or password in the connection information. ::
 
-        URL=jdbc:CUBRID:127.0.0.1:31000:db1:::althosts=127.0.0.2:31000,127.0.0.3:31000 – Error
-        URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?althosts=127.0.0.2:31000,127.0.0.3:31000 – Normal
+    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::althosts=127.0.0.2:31000,127.0.0.3:31000 – Error
+    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?althosts=127.0.0.2:31000,127.0.0.3:31000 – Normal
 
 Not allowed to include @ in a database name(CUBRIDSUS-2828)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    If @ is included in a database name, it can be interpreted that a host name has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.
+If @ is included in a database name, it can be interpreted that a host name has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.
 
 

@@ -96,8 +96,8 @@ After the CSQL has been executed, you can enter the SQL into the CSQL prompt. Ea
 
 .. _cm-cqb:
 
-CUBRID Management Tools
-=======================
+Management Tools
+================
 
 +--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------+
 |                          | Summary of features                                                         | Downloads of the recent files                                   | Links to the latest documents                                       |
@@ -253,8 +253,8 @@ It is useful in case of switching from other DB into CUBRID, in case of migratin
 
 For more information, see http://www.cubrid.org/wiki_tools/entry/cubrid-migration-toolkit-manual\ .
 
-CUBRID Drivers
-==============
+Drivers
+=======
 
 The drivers supported by CUBRID are as follows:
 

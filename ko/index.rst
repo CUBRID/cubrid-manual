@@ -9,6 +9,7 @@ CUBRID 9.1 사용자 매뉴얼
 
     toc.rst
     intro.rst
+    install_upgrade.rst
     start.rst
     csql.rst
     sql/index.rst

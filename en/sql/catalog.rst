@@ -1,6 +1,6 @@
-*********************
-CUBRID System Catalog
-*********************
+**************
+System Catalog
+**************
 
 You can easily get various schema information from the SQL statement by using the system catalog virtual class. For example, you can get the following schema information by using the catalog virtual class.
 

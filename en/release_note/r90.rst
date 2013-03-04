@@ -9,9 +9,9 @@
 Release Note Information
 =========================
 
-This document contains information about CUBRID 9.0 Beta(Build Number 9.0.0.0478). For the previous versions of the release note, go to the CUBRID Release Note Website: `<http://release.cubrid/org/en>`_.
+This document contains information about CUBRID 9.0 Beta(Build Number 9.0.0.0478). For the previous versions of the release note, go to the CUBRID Release Note Website: `<http://release.cubrid.org/en>`_.
 
-For a more detailed description about the previous version of CUBRID 9.0 Beta, see the release notes of the **CUBRID 2008 R4.1 Patch 7**.
+For a more detailed description about the previous version of CUBRID 9.0 Beta, see the release notes of the **CUBRID 2008 R4.1**.
 
 If you are using 9.0 Beta, we strongly recommend that you should upgrade to 9.1. Please migrate the DB volume using "migrate_90beta_to_91 <db_name>" tool after upgrade,  because 9.0 Beta and 9.1 are not compatible. For 9.1 release note, See :doc:`r91`.
 

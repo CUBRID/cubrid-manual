@@ -2215,7 +2215,7 @@ CUBRID HA 환경에서의 복제 재구축은 다중 슬레이브 노드의 다�
     cubrid_usr@nodeA's password:
     Connection to nodeA closed.
      
-     - 2. init db_ha_apply_info.
+    - 2. init db_ha_apply_info.
      
     [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "delete from db_ha_apply_info where db_name='testdb'"
     cubrid_usr@nodeA's password:

@@ -3,9 +3,7 @@
 Upgrade
 =======
 
-.. _up-from-90to91:
-
-Upgrading From 9.0 Beta To 9.1
+Upgrading from 9.0 Beta to 9.1
 ------------------------------
 
 Users who are using versions CUBRID 2008 R9.0 Beta should install 9.1 in the different directory and modify parameter values in the existing environment configuration file.
@@ -30,7 +28,7 @@ For more details, see :ref:`changed-config91`.
 
 For DB migration, see :ref:`db-migration`.
 
-Upgrading From 2008 R4.1, Or R4.3 To 9.1
+Upgrading from 2008 R4.1, or R4.3 to 9.1
 ----------------------------------------
 
 Users who are using versions CUBRID 2008 R4.1, or R4.3 should install 9.1 in the different directory and modify parameter values in the existing environment configuration file.
@@ -60,7 +58,7 @@ For more details, see :ref:`changed-config91`.
 
 For DB migration after environmental configuration, see :ref:`db-migration`.
 
-Upgrading From 2008 R4.0 Or Earlier Versions To 9.1
+Upgrading from 2008 R4.0 or Earlier Versions to 9.1
 ---------------------------------------------------
 Users who are using versions CUBRID 2008 R4.0 or less should install 9.1 in the different directory and modify parameter values in the existing environment configuration file.
 
@@ -142,13 +140,15 @@ Migration to CUBRID 9.1
     +------------------------------------+-----------------------------------------------+---------------------------------------------+
     | Step                               | Linux Environment                             | Windows Environment                         |
     +====================================+===============================================+=============================================+
-    | Step 1: Stop CUBRID Service        | % cubrid service stop                         | Stop CUBRID Service Tray.                   |
+    | Step 1: Stop CUBRID Service        | ::                                            | Stop CUBRID Service Tray.                   |
+    |                                    |                                               |                                             |
+    |                                    |   % cubrid service stop                       |                                             |
     +------------------------------------+-----------------------------------------------+---------------------------------------------+
     | Step 2: Execute the reserved words | Execute the following command in the directory where the reserved word detection script     |
     |          detection script.         | is located.                                                                                 |
     |                                    |                                                                                             |
     |                                    | Execute migration or identifier modification by checking the detection result               |
-    |                                    | (For the allowable identifier).                                                             |
+    |                                    | (For the allowable identifier).  ::                                                         |
     |                                    |                                                                                             |
     |                                    |   % csql -S -u dba -i check_reserved.sql testdb                                             |
     +------------------------------------+---------------------------------------------------------------------------------------------+
@@ -156,7 +156,7 @@ Migration to CUBRID 9.1
     |         the earlier version DB     | the earlier version in a separate directory.  (3a)                                          |
     |                                    |                                                                                             |
     |                                    | Execute the cubrid backupdb utility and store the file generated                            |
-    |                                    | at this point in a separate directory (3b)                                                  |
+    |                                    | at this point in a separate directory (3b) ::                                               |
     |                                    |                                                                                             |
     |                                    |   % cubrid backupdb -S testdb                                                               |
     |                                    +-----------------------------------------------+---------------------------------------------+
@@ -167,7 +167,7 @@ Migration to CUBRID 9.1
     | Step 4: Install new version        | Install new version on the same directory of earlier installation.                          |
     |                                    | See :ref:`install-execute`.                                                                 |
     +------------------------------------+---------------------------------------------------------------------------------------------+
-    | Step 5: Database migration         | Run below utility with previous database volume.                                            |
+    | Step 5: Database migration         | Run below utility with previous database volume.  ::                                        |
     |                                    |                                                                                             |
     |                                    |   % migrate_90beta_to_91 testdb                                                             |
     +------------------------------------+-----------------------------------------------+---------------------------------------------+
@@ -175,13 +175,14 @@ Migration to CUBRID 9.1
     |      environment                   | partially modify the configuration files      | CUBRID Service Tray > [Service Start].      |
     |      and start the CUBRID Service  | from the earlier version stored in step (3a)  |                                             |
     |                                    | to fit the new version.                       | Start the database server from              |
-    |                                    |                                               | the command prompt.                         |
+    |                                    |                                               | the command prompt. ::                      |
     |                                    | (For configuring system parameter,            |                                             |
     |                                    |                                               |   % cubrid server start testdb              |
     |                                    | see :ref:`upgrade` and :doc:`admin/config`)   |                                             |
     |                                    |                                               |                                             |
-    |                                    |   % cubrid service start                      |                                             |
+    |                                    | ::                                            |                                             |
     |                                    |                                               |                                             |
+    |                                    |   % cubrid service start                      |                                             |
     |                                    |   % cubrid server start testdb                |                                             |
     +------------------------------------+-----------------------------------------------+---------------------------------------------+
 
@@ -192,13 +193,15 @@ Migration to CUBRID 9.1
     +------------------------------------+---------------------------------------------+---------------------------------------------+
     | Step                               | Linux Environment                           | Windows Environment                         |
     +====================================+=============================================+=============================================+
-    | Step C1: Stop CUBRID Service       | % cubrid service stop                       | Stop CUBRID Service Tray.                   |
+    | Step C1: Stop CUBRID Service       | ::                                          | Stop CUBRID Service Tray.                   |
+    |                                    |                                             |                                             |
+    |                                    |   % cubrid service stop                     |                                             |
     +------------------------------------+---------------------------------------------+---------------------------------------------+
     | Step C2: Execute the reserved      | Execute the following command in the directory where the reserved word detection          |
     |         words detection script     | script is located.                                                                        |
     |                                    |                                                                                           |
     |                                    | Execute migration or identifier modification by checking the detection result             |
-    |                                    | (For the allowable identifier).                                                           |
+    |                                    | (For the allowable identifier). ::                                                        |
     |                                    |                                                                                           |
     |                                    |   % csql -S -u dba -i check_reserved.sql testdb                                           |
     +------------------------------------+-------------------------------------------------------------------------------------------+
@@ -206,11 +209,11 @@ Migration to CUBRID 9.1
     |          version of the DB         | of the earlier version in a separate directory (C3a).                                     |
     |                                    |                                                                                           |
     |                                    | Execute the cubrid unloaddb utility and store the file generated at this point in a       |
-    |                                    | separate directory(C3b).                                                                  |
+    |                                    | separate directory(C3b). ::                                                               |
     |                                    |                                                                                           |
     |                                    |   % cubrid unloaddb -S testdb                                                             |
     |                                    |                                                                                           |
-    |                                    | Delete the existing database (C3c).                                                       |
+    |                                    | Delete the existing database (C3c). ::                                                    |
     |                                    |                                                                                           |
     |                                    |   % cubrid deletedb testdb                                                                |
     |                                    +---------------------------------------------+---------------------------------------------+
@@ -218,18 +221,18 @@ Migration to CUBRID 9.1
     +------------------------------------+---------------------------------------------+---------------------------------------------+
     | Step C4: Install new version       | See :ref:`install-execute`                                                                |
     +------------------------------------+-------------------------------------------------------------------------------------------+
-    | Step C5: Database creation and     | Go to the directory where you want to create a database, and create one. (C5a)            |
+    | Step C5: Database creation and     | Go to the directory where you want to create a database, and create one. (C5a) ::         |
     |          data loading              |                                                                                           |
     |                                    |   % cd $CUBRID/databases/testdb                                                           |
-    |                                    |                                                                                           |
     |                                    |   % cubrid createdb testdb                                                                |
     |                                    |                                                                                           |
-    |                                    | Execute the cubrid loaddb utility with the stored files in (C3b). (C5b)                   |
+    |                                    | Execute the cubrid loaddb utility with the stored files in (C3b). (C5b)  ::               |
     |                                    |                                                                                           |
     |                                    |   % cubrid loaddb -s testdb_schema –d testdb_objects –i testdb_indexes testdb             |
     +------------------------------------+-------------------------------------------------------------------------------------------+
-    | Step C6: Back up the new version   |   % cubrid backupdb -S testdb                                                             |
+    | Step C6: Back up the new version   | ::                                                                                        |
     |          of the DB                 |                                                                                           |
+    |                                    |     % cubrid backupdb -S testdb                                                           |
     +------------------------------------+---------------------------------------------+---------------------------------------------+
     | Step C7: Configure the CUBRID      | Modify the configuration file.              | Start the service by selecting              |
     |          environment and start     | At this point, partially modify             | CUBRID Service Tray > [Service Start].      |
@@ -239,11 +242,12 @@ Migration to CUBRID 9.1
     |                                    | see the cautions).                          | Start the database server from the          |
     |                                    |                                             | command prompt.                             |
     |                                    | (For configuring system paramater,          |                                             |
-    |                                    |                                             |                                             |
-    |                                    | see :ref:`upgrade` and :doc:`admin/config`) |   % cubrid server start testdb              |
+    |                                    |                                             | ::                                          |
+    |                                    | see :ref:`upgrade` and :doc:`admin/config`) |                                             |
+    |                                    |                                             |   % cubrid server start testdb              |
+    |                                    | ::                                          |                                             |
     |                                    |                                             |                                             |
     |                                    |   % cubrid service start                    |                                             |
-    |                                    |                                             |                                             |
     |                                    |   % cubrid server start testdb              |                                             |
     +------------------------------------+---------------------------------------------+---------------------------------------------+
 
@@ -274,16 +278,12 @@ HA migration from 2008 R2.2 or higher to CUBRID 9.1
     |                                                      | For more information, see :ref:`install-execute`.                                                         |
     +------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
     | Step H8: Restore the backup copy of the master node  | Restore the new database backup copy (testdb_bk*) of the master node, which is created in step H6         |
-    |          in the slave node                           | , to the slave node.                                                                                      |
+    |          in the slave node                           | , to the slave node. ::                                                                                   |
     |                                                      |                                                                                                           |
     |                                                      |   % scp user1\ @master:$CUBRID/databases/databases.txt $CUBRID/databases/.                                |
-    |                                                      |                                                                                                           |
     |                                                      |   % cd ~/DB/testdb                                                                                        |
-    |                                                      |                                                                                                           |
     |                                                      |   % scp user1\ @master:~/DB/testdb/testdb_bk0v000 .                                                       |
-    |                                                      |                                                                                                           |
     |                                                      |   % scp user1\ @master:~/DB/testdb/testdb_bkvinf .                                                        |
-    |                                                      |                                                                                                           |
     |                                                      |   % cubrid restoredb testdb                                                                               |
     +------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
     | Step H9: Reconfigure HA environment and start        | In the master node and the slave node, set the CUBRID environment configuration file (cubrid.conf)        |
@@ -292,7 +292,7 @@ HA migration from 2008 R2.2 or higher to CUBRID 9.1
     +------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
     | Step H10: Install new version in the broker server,  | For more information about installation, see :ref:`install-execute`.                                      |
     |           and start the broker                       |                                                                                                           |
-    |                                                      | Start the broker in the Broker server. See :ref:`quick-broker-config`.                                    |
+    |                                                      | Start the broker in the Broker server. See :ref:`quick-broker-config`. ::                                 |
     |                                                      |                                                                                                           |
     |                                                      |   % cubrid broker start                                                                                   |
     +------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
@@ -308,6 +308,8 @@ HA Migration from 2008 R2.0 or 2008 R2.1 to CUBRID 9.1
     +=====================================================+===============================================================================+
     | Step H11: Change the previous Linux heartbeat       | Perform the following task in the master and slave nodes from a root account. |
     |           auto start settings                       |                                                                               |
+    |                                                     | ::                                                                            |
+    |                                                     |                                                                               |
     |                                                     |   [root\ @master ~]# chkconfig --del heartbeat                                |
     |                                                     |   // Performing the same job in the slave node                                |
     +-----------------------------------------------------+-------------------------------------------------------------------------------+

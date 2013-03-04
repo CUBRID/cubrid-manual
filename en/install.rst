@@ -468,7 +468,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
     #. cub_broker는 연결 가능한 CAS를 선택한다.
     #. application과 CAS가 연결된다. 
     
-       Linux에서는 application이 유닉스 도메인 소켓을 통해 CAS와 연결되므로 BROKER_PORT를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 CAS마다 cubrid_broker.conf에 설정된 APPL_SERVER_PORT 값을 기준으로 CAS ID를 더한 포트를 통해 연결된다. APPL_SERVER_PORT의 값이 설정되지 않으면 첫번째 CAS와 연결하는 포트 값은 BROKER_PORT + 1이 된다.
+       Linux에서는 application이 유닉스 도메인 소켓을 통해 CAS와 연결되므로 BROKER_PORT를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 CAS마다 cubrid_broker.conf에 설정된 APPL_SERVER_PORT 값을 기준으로 CAS ID를 더한 포트를 통해 연결된다. APPL_SERVER_PORT의 값이 설정되지 않으면 첫 번째 CAS와 연결하는 포트 값은 BROKER_PORT + 1이 된다.
     
        예를 들어 Windows에서 BROKER_PORT가 33000이고 APPL_SERVER_PORT 가 설정되지 않았으면 application과 CAS 사이에 사용하는 포트는 다음과 같다.
         
@@ -517,7 +517,7 @@ Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법
     |            | applylogdb    |                |                          |              |
     +------------+---------------+----------------+--------------------------+--------------+
         
-    (*): CAS, CSQL, copplogdb, 또는 applylogdb 프로세스가 존재하는 장비
+    (*): CAS, CSQL, copylogdb, 또는 applylogdb 프로세스가 존재하는 장비
     
     (**): cub_server가 존재하는 장비
     

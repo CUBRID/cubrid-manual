@@ -185,7 +185,7 @@ Windows 환경에서는 다음과 같은 방법으로 CUBRID 서비스를 시작
 **데이터베이스 생성**
 
 데이터베이스 볼륨 및 로그 볼륨이 위치할 디렉터리에서 **cubrid createdb** 유틸리티를 실행하여 데이터베이스를 생성할 수 있다.
-**--db-volume-size**, **--log-volume-size** 와 같은 별도의 옵션을 지정하지 않으면 기본적으로 범용 볼륨(generic volume) 512MB, 활성 로그(active log) 512MB, 백그라운드 보관 로그(backgroud archive log) 512MB, 총 1.5GB의 볼륨 파일이 생성된다. ::
+**--db-volume-size**, **--log-volume-size** 와 같은 별도의 옵션을 지정하지 않으면 기본적으로 범용 볼륨(generic volume) 512MB, 활성 로그(active log) 512MB, 백그라운드 보관 로그(background archive log) 512MB, 총 1.5GB의 볼륨 파일이 생성된다. ::
 
     % cd testdb
     % cubrid createdb testdb

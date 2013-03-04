@@ -2251,7 +2251,7 @@ When any error occurs while executing the script in step-by-step order, or if th
     cubrid_usr@nodeA's password:
     Connection to nodeA closed.
      
-     - 2. init db_ha_apply_info.
+    - 2. init db_ha_apply_info.
      
     [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "delete from db_ha_apply_info where db_name='testdb'"
     cubrid_usr@nodeA's password:

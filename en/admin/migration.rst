@@ -40,6 +40,7 @@ The following steps describes migration scenario that can be applied while the e
     Configure the new version of CUBRID by referring to configuration files of the existing database stored in the step 3, " **Store the existing CUBRID configuration files** ." For details on configuring new environment, see :doc:`/install` in "Getting Started."
 
 #. Load the new database
+
     Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. Please refer :ref:`creating-database` for creating a database and :ref:`load-db` for loading a database.
     
 #. Back up the new database
@@ -394,7 +395,7 @@ You can assign an identifier to class reference relations by using the **%id** c
 
 The *class_name* specified by the **%id** command is the class name defined in the database, and *class_id* is the numeric identifier which is assigned for object reference.
 
-**Example 1** ::
+::
 
     %id employee 2
     %id office 22
@@ -412,8 +413,6 @@ The schema must be pre-defined in the database to be loaded.
 
 The *class_name* specified by the **%class** command is the class name defined in the database and the *attr_name* is the name of the attribute defined.
 
-**Example 2**
-
 The following example shows how to specify a class and three attributes by using the **%class** command to enter data into a class named *employee*. Three pieces of data should be entered on the data lines after the **%class** command. For this, see :ref:`conf-reference-relation` . ::
 
     %class employee (name age department)
@@ -430,7 +429,7 @@ Loading an Instance
 
 As shown below, you can load an instance that has the same type as the specified class attribute. Each piece of data is separated by at least one space.
 
-**Example 1** ::
+::
 
     %class employee (name)
     'jordan' 
@@ -443,7 +442,7 @@ Assigning an Instance Number
 
 You can assign a number to a given instance at the beginning of the data line. An instance number is a unique positive number in the specified class. Spaces are not allowed between the number and the colon (:). Assigning an instance number is used to configure the reference relation for later.
 
-**Example 2** ::
+::
 
     %class employee (name)
     1: 'jordan' 
@@ -465,8 +464,6 @@ You can configure the object reference relation by specifying the reference clas
 
 Specify a class name or a class id after the **@** sign, and an instance number after a vertical line (|). Spaces are not allowed before and after a vertical line (|).
 
-**Example 3**
-
 The following example shows how to load class instances into the *paycheck* class. The *name* attribute references an instance of the *employee* class. As in the last line, data is loaded as **NULL** if you configure the reference relation by using an instance number not specified earlier. ::
 
     %class paycheck(name department salary)
@@ -476,9 +473,7 @@ The following example shows how to load class instances into the *paycheck* clas
     @employee|4   'development'   4000000
     @employee|5   'development'   5000000
 
-**Example 4**
-
-Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`assign-id-to-class` section, Example 3 can be written as follows: ::
+Since the id 21 was assigned to the *employee* class by using the **%id** command in the :ref:`assign-id-to-class` section, the above example can be written as follows: ::
 
     %class paycheck(name department salary)
     @21|1   'planning'   8000000   

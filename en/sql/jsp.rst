@@ -297,7 +297,8 @@ If the parameter of a Java stored function/procedure is set to **OUT**, it will 
 
 When a Java stored function/procedure is published, it is not checked whether the return definition of the Java stored function/procedure coincides with the one in the declaration of the Java file. Therefore, the Java stored function/procedure follows the *sql_type* return definition provided at the time of registration. The return definition in the declaration is significant only as user-defined information.
 
-**Data Type Mapping**
+Data Type Mapping
+-----------------
 
 In call specifications, the data types SQL must correspond to the data types of Java parameter and return value. The following table shows SQL/Java data types allowed in CUBRID.
 

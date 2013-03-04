@@ -2523,6 +2523,18 @@ cci_execute 함수를 통해 다중 질의문 수행 시 다중 질의문 중 �
 
 Windows에서는 cci_set_allocator 함수를 사용해도 메모리 할당 및 해제 함수가 변경되지 않도록 수정했다.
 
+[CCI] 정적 라이브러리를 사용하면 링크 오류가 발생하는 문제 (CUBRIDSUS-10743)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CCI 정적 라이브러리를 사용하여 C 코드를 컴파일하면 링크 오류가 발생하는 문제를 수정했다.  ::
+    
+    $ gcc -o test_cci test_cci.c -m64 -I/home1/brightest/CUBRID/include -lnsl /home1/brightest/CUBRID/lib/libcascci.a -lpthread -lstdc++ 2>&1 |more
+
+    /home/CUBRID/lib/libcascci.a(cci_util.o): In function `cci_url_match':
+    /home1/build/workspace/CUBRID_9.0.0/RB-9.0.0/build_x86_64_release/cci/../../src/cci/cci_util.c:653: undefined reference to `cub_regset_malloc'
+    /home1/build/workspace/CUBRID_9.0.0/RB-9.0.0/build_x86_64_release/cci/../../src/cci/cci_util.c:654: undefined reference to `cub_regset_realloc'
+    ...
+
 [PHP] 웹 페이지 로딩을 중단했음에도 불구하고 서버 단에서는 수행 중이던 질의가 중단되지 않는 문제(CUBRIDSUS-5855)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2894,6 +2906,18 @@ Windows에서 서버가 구동된 상태에서 서버 시작을 실행하면 잘
 
 Windows에서 서버가 구동된 상태에서 또 다시 서버를 구동하려고 하면 "cubrid server start: success" 메시지가 출력되었으나, "cubrid server is already running" 메시지가 출력되도록 수정했다.
 
+Windows 용 브로커를 통해 서버에 접속할때 cub_master가 구동되어 있지 않으면 잘못된 에러가 발생하는 문제(CUBRIDSUS-10739)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+응용프로그램이 Windows 용 브로커를 통해 서버에 접속하는 경우 cub_master 프로세스가 구동되어 있지 않으면 잘못된 에러가 발생하고 CAS가 무한 루프를 반복하는 문제를 수정했다.
+
+수정 이전 버전에서 Windows의 경우 아래의 오류 번호를 반환한다. 
+    *   첫번째 접속 시도 시 -21112 (An IOException was caught during reading the inputstream) 반환
+    *   두번째 접속 시도 시 -21013 (Cannot connect to a broker)
+    
+수정 전후의 Linux와 수정 이후의 Windows의 경우 아래의 오류 번호를 반환한다.
+    *  첫번째, 두번째 접속 시도 시 모두 -353 (Failed to connect to database server, 'basic', on the following host(s): localhost) 반환
+
 Windows 서비스 프로세스인 CUBRIDService에 설명 추가(CUBRIDSUS-8917)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -3003,6 +3027,11 @@ CCI 응용에서 여러 개의 질의를 한 번에 수행할 때 2008 R3.0부�
           }
       }
     ...
+
+XAConnection 인터페이스에서 HOLD_CURSORS_OVER_COMMIT 미지원(CUBRIDSUS-10800)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CUBRID는 현재 XAConnection 인터페이스에서 ResultSet.HOLD_CURSORS_OVER_COMMIT을 지원하지 않으며, 추후 지원할 예정이다. 
 
 기존 주의 사항
 --------------

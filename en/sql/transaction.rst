@@ -1558,8 +1558,11 @@ To set cursor holdability to close the cursor when a transaction is committed, s
 
 The default setting for applications that were developed based on CCI is to hold the cursor. If the cursor is set to 'not to hold a cursor' at connection level and you want to hold the cursor, define the **CCI_PREPARE_HOLDABLE** flag while preparing a query. The default setting for CCI drivers (PHP, PDO, ODBC, OLE DB, ADO.NET, Perl, Python, Ruby) is to hold the cursor. To check whether a driver supports the cursor holdability setting, refer to the **PREPARE** function of the driver.
 
-.. note:: Note that versions lower than CUBRID 9.0 do not support cursor holdability. The default setting of those versions is to close all cursors at commit.
+.. note:: \
 
+    * Note that versions lower than CUBRID 9.0 do not support cursor holdability. The default setting of those versions is to close all cursors at commit.
+    * CUBRID currently does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in XAConnection interface. It will be supported later.
+    
 **Cursor-related Operation at Transaction Commit**
 
 When a transaction is committed, all statements and result sets that are closed are released even if you have set cursor holdability. After that, when the result sets are used for another transaction, some or all of the result sets should be closed as required.

@@ -485,7 +485,8 @@ Starting the CUBRID Service
 
 Configure environment variables and language, and then start the CUBRID service. For more information on configuring environment variables and language, see :ref:`control-cubrid-services`.
 
-**Shell Command**
+Shell Command
+-------------
 
 The following shell command can be used to start the CUBRID service and the *demodb* included in the installation package. ::
 

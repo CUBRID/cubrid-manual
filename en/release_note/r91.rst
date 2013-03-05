@@ -256,6 +256,20 @@ MERGE 문에 USE_UPDATE_IDX, USE_INSERT_IDX 인덱스 힌트를 지원한다. US
     INTO target t USING source s ON t.i=s.i 
     WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
     WHEN NOT MATCHED THEN INSERT VALUES(i,j);
+
+Available to refer the previously specified column in the VALUES and SET clauses of INSERT statement(CUBRIDSUS-3112)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fixed it available that refering the previously specified column in the VALUES and SET clauses of INSERT statement.  For example, when the expression like "b = a + 1" is evaluated, a column's value which was previously specified can be referred.
+
+::
+ 
+    CREATE TABLE tbl (a INT, b INT);
+    INSERT INTO tbl SET a=0, b=a+1
+ 
+In the above example, the previous version cannot evaluate b's value, but the fixed version can evaluate b's value as 1 by referring a's value.
+ 
+The evaluation of an assignment expression is performed from left to right. The default value is assigned if the column's value is not specified, and the **NULL** is assigned if the default value is not defined.
     
 다국어
 ------
@@ -1525,20 +1539,6 @@ ORDERY BY 절이 질의문의 가장 뒤에 위치하는 것으로 다루어져 
 .. code-block:: sql
 
     (SELECT * FROM tbl1 ORDER BY a) UNION (SELECT * FROM tbl2 ORDER BY b);
-    
-The evaluation of an assignment expression became available when there is other column inside that expression(CUBRIDSUS-3112)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Now the evaluation of an assignment expression in the SET clause of INSERT statement became available when there is other column inside that expression(e.g. b=a+1).
-
-::
- 
-    CREATE TABLE tbl (a INT, b INT);
-    INSERT INTO tbl SET a=0, b=a+1
- 
-In the above example, the previous version cannot evaluate b's value, but the fixed version can evaluate b's value as 1 since a's value is specified as 0.
- 
-The evaluation of an assignment expression is performed from left to right. The default value is assigned if the column's value is not specified, and the **NULL** is assigned if the default value is not defined.
 
 click counter 질의로 인한 교착 상태 발생 후에 질의 결과 잘못되는 문제(CUBRIDSUS-5009)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

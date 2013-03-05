@@ -1156,7 +1156,7 @@ HA 환경에서 브로커의 **ACCESS_MODE** 를 Read Only로 변경하고 해�
 
     **broker_log_converter** 에서 사용하는 [option]은 다음과 같다.
 
-    .. program:: broker_log_top
+    .. program:: broker_log_converter
 
     .. option:: -i
         

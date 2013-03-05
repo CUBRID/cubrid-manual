@@ -1066,7 +1066,7 @@ There are three types of logs that relate to starting the broker: access, error 
     The **broker_log_top** utility analyzes the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in **log.top.res**, respectively.
 
     The **broker_log_top** utility is useful to analyze a long running query. The syntax is as follows: 
-    
+        
     ::
 
         broker_log_top [options] sql_log_file_list
@@ -1156,7 +1156,7 @@ There are three types of logs that relate to starting the broker: access, error 
 
     The following is the [option] used in **broker_log_converter**.
 
-    .. program:: broker_log_top
+    .. program:: broker_log_converter
 
     .. option:: -i
         

@@ -182,6 +182,4 @@
 
     control.rst
     admin_utils.rst
-    migration.rst
-    backup.rst
     config.rst

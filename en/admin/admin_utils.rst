@@ -20,7 +20,7 @@ The following shows how to use the cubrid management utilities. ::
         tranlist [option] <database-name>  --- Checking transactions
         killtran [option] <database-name>  --- Removing transactions 
         optimizedb [option] <database-name>  --- Updating database statistics 
-        statdump [option] <database-name>  --- Outputting statistic information of database server execution 
+        statdump [option] <database-name>  --- Dumping statistic information of database server execution 
         compactdb [option] <database-name>  --- Optimizing space by freeing unused space 
         diagdb [option] <database-name>  --- Displaying internal information 
         checkdb [option] <database-name>  --- Checking database consistency 
@@ -849,7 +849,7 @@ The following shows [options] available with the **cubrid plandump** utility.
 
 .. _statdump:
 
-Outputting Statistics Information of Server
+Dumping Statistics Information of Server
 -------------------------------------------
 
 The cubrid statdump utility checks statistics information processed by the CUBRID database server. The statistics information mainly consists of the followings: File I/O, Page buffer, Logs, Transactions, Concurrency/Lock, Index, and Network request.
@@ -870,7 +870,7 @@ The following shows [options] available with the **cubrid statdump** utility.
 
 .. option:: -i, --interval=SECOND
 
-    This option specifies the periodic number of outputting statistics as seconds.
+    This option specifies the periodic number of Dumping statistics as seconds.
 
     The following outputs the accumulated values per second. ::
     
@@ -1319,7 +1319,7 @@ The **cubrid killtran** is used to check transactions or abort specific transact
 
 * *database_name*: The name of database whose transactions are to be killed
 
-Some options refer to killing specified transactions; others refer to outputting active transactions. If no option is specified, **-d** is specified by default so all transactions are displayed on the screen.
+Some options refer to killing specified transactions; others refer to print active transactions. If no option is specified, **-d** is specified by default so all transactions are displayed on the screen.
  
 ::
 
@@ -1510,8 +1510,8 @@ The following shows [options] available with the **cubrid checkdb** utility.
          
              t10
 
-Outputting Internal Database Information
-----------------------------------------
+Dumping Internal Database Information
+-------------------------------------
 
 You can check various pieces of internal information on the database with the **cubrid diagdb** utility. Information provided by **cubrid diagdb** is helpful in diagnosing the current status of the database or figuring out a problem. ::
 
@@ -1519,7 +1519,7 @@ You can check various pieces of internal information on the database with the **
 
 * **cubrid**: An integrated utility for the CUBRID service and database management.
 
-* **diagdb**: A command that is used to check the current storage state of the database by outputting the information contained in the binary file managed by CUBRID in text format. It normally executes only when the database is in a stopped state. You can check the whole database or the file table, file size, heap size, class name or disk bitmap selectively by using the provided option.
+* **diagdb**: A command that is used to check the current storage state of the database by Dumping the information contained in the binary file managed by CUBRID in text format. It normally executes only when the database is in a stopped state. You can check the whole database or the file table, file size, heap size, class name or disk bitmap selectively by using the provided option.
 
 * *database_name*: The name of the database of which internal information is to be diagnosed.
 
@@ -1556,7 +1556,7 @@ The following shows [options] available with the **cubrid diagdb** utility.
     +------+--------------------------------------+
     | 8    | Displays log information.            |
     +------+--------------------------------------+
-    | 9    | Displays hip information.            |
+    | 9    | Displays heap information.           |
     +------+--------------------------------------+
 
 Dumping Parameters Used in Server/Client
@@ -1600,8 +1600,8 @@ The following shows [options] available with the **cubrid paramdump** utility.
 
         cubrid paramdump -C testdb
 
-Changing HA Mode, Replicating/Applying Logs
-===========================================
+Changing HA Mode, Copying/Applying Logs
+=======================================
 
 **cubrid changemode** utility prints or changes the HA mode.
 
@@ -1613,12 +1613,12 @@ Changing HA Mode, Replicating/Applying Logs
 
 For more details, see :ref:`cubrid-service-util`.
 
-Compiling/Outputting Locale
-===========================
+Compiling/Dumping Locale
+========================
 
 **cubrid genlocale** utility compiles the locale information to use. This utility is executed in the **make_locale.sh** script ( **.bat** for Windows).
 
-**cubrid dumplocale** utility outputs the compiled binary locale file as a human-readable format on the console. The output value may be very large, so we recommend that you save the value as a file by redirecting.
+**cubrid dumplocale** utility dumps the compiled binary locale file as a human-readable format on the console. It is better to save the output as a file by output redirection.
 
 **cubrid synccolldb** utility checks if the collations between database and locale library are consistent or not, and synchronize them.
 

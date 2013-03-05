@@ -6,9 +6,9 @@ This chapter describes SQL syntax such as data types, functions and operators, d
 
 The main topics covered in this chapter are as follows:
 
-*   Comment
 *   Identifier: Describes how to write, the identifier, string allowed to be used as a name of a table, index, and column.
 *   Reserved words: Lists reserved words in CUBRID. To use a reserved word as an identifier, enclose the identifier by using double quotes, backticks (`), or brackets ([]).
+*   Comment
 *   Data types: Describes the data types, the format to store data.
 *   Tables: Describes how to create, alter, drop, and rename a table.
 *   Index: Describes how to create, alter, and drop an index.
@@ -28,9 +28,9 @@ The main topics covered in this chapter are as follows:
 .. toctree::
     :maxdepth: 2
 
-    comment.rst
     identifier.rst
     keyword.rst
+    comment.rst
     datatype.rst
     schema/table.rst
     schema/index.rst

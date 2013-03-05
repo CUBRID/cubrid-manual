@@ -28,6 +28,8 @@ You can check the statistics Information with the session command of the CSQL In
     
 *   *table_name* : Table name to check the statistics Information
 
+The following shows the statictical information of *t1* table in CSQL interpreter.
+
 .. code-block:: sql
 
     CREATE TABLE t1 (code INT);
@@ -85,7 +87,8 @@ The following example shows how to view query plan by using the example retrievi
 
 .. code-block:: sql
 
-    GET OPTIMIZATION LEVEL
+    GET OPTIMIZATION LEVEL;
+    
           Result
     =============
                 1
@@ -93,7 +96,9 @@ The following example shows how to view query plan by using the example retrievi
     SET OPTIMIZATION LEVEL 258;
 
     SELECT a.name, b.host_year, b.medal
-    FROM athlete a, game b WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code
+    FROM athlete a, game b 
+    WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code
+    
     Query plan:
       Nested loops
             Sequential scan(game b)
@@ -132,7 +137,7 @@ Using hints can affect the performance of query execution. you can allow the que
     USE_DELETE_INDEX (<insert_index_list>) |
     RECOMPILE
 
-SQL hints are specified by using plus signs to comments.
+SQL hints are specified by using a plus sign(+) to comments. To use a hint, there are three styles as being introduced on :doc:`comment`. Therefore, also SQL hint can be used as three styles.
 
 * /\*+ hint \*/
 * --+ hint
@@ -142,19 +147,19 @@ The hint comment must appear after the **SELECT**, **CREATE**, **ALTER**, etc. k
 
 The following hints can be specified in CREATE/ALTER TABLE statements and CREATE/ALTER/DROP INDEX statements.
 
-    *   **NO_STATS** : Related to a statistical information hint. If it is specified, query optimizer does not update the statistical information after running the DDL statement. Therefore, the DDL performance  is improved, but note that the query plan is not optimized.
+*   **NO_STATS** : Related to a statistical information hint. If it is specified, query optimizer does not update the statistical information after running the DDL statement. Therefore, the DDL performance  is improved, but note that the query plan is not optimized.
 
 The following hints can be specified in UPDATE, DELETE and SELECT statements.
 
-    *   **USE_NL** : Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
-    *   **USE_MERGE** : Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
-    *   **ORDERED** : Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
-    *   **USE_IDX** : Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
-    *   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
-    *   **NO_DESC_IDX** : This is a hint not to use the descending index.
-    *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
-    *   **NO_STATS** : Related to statistics information, the query optimizer does not update statistics information. Query performance for the corresponding queries can be improved; however, query plan is not optimized because the information is not updated.
-    *   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
+*   **USE_NL** : Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
+*   **USE_MERGE** : Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
+*   **ORDERED** : Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
+*   **USE_IDX** : Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
+*   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
+*   **NO_DESC_IDX** : This is a hint not to use the descending index.
+*   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
+*   **NO_STATS** : Related to statistics information, the query optimizer does not update statistics information. Query performance for the corresponding queries can be improved; however, query plan is not optimized because the information is not updated.
+*   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
 
     .. note:: If the *spec_name* is specified together with **USE_NL**, **USE_IDX** or **USE_MERGE**, the specified join method applies only to the *spec_name*. If **USE_NL** and **USE_MERGE** are specified together, the given hint is ignored. In some cases, the query optimizer cannot create a query execution plan based on the given hint. For example, if **USE_NL** is specified for a right outer join, the query is converted to a left outer join internally, and the join order may not be guaranteed.
 
@@ -195,8 +200,8 @@ The following example shows how to retrieve query execution time with **NO_STAT*
 
 .. _index-hint-syntax:
 
-Index Hint Syntax
------------------
+Index Hint
+==========
 
 The index hint syntax allows the query processor to select a proper index by specifying the index in the query. You can specify the index hint by USING INDEX clause or by {USE|FORCE|IGNORE} INDEX syntax after "FROM table" clause.
 
@@ -231,8 +236,8 @@ The **USING INDEX**  clause is useful to get the results in the desired order wi
 *   *index_name*\ (-) : If (-) is specified after the index_name, it is excluded from index selection. 
 *   *table_spec*.\ **NONE** : All indexes are excluded from the selection, so sequential scan is used.
 
-USE,FORCE,IGNORE INDEX
-----------------------
+USE, FORCE, IGNORE INDEX
+------------------------
 
 Index hints can be specified through **USE**, **FORCE**, **IGNORE INDEX** syntax after table specification of **FROM** clause.
 
@@ -329,7 +334,6 @@ Below query forces to be possible to use all indexes except *athlete_idx2* index
     WHERE gender='M' AND nation_code='USA'
     USING INDEX ALL EXCEPT athlete_idx2;
     
-    
 When two or more indexes have been specified in the **USING INDEX** clause, the query optimizer selects the proper one of the specified indexes.
 
 .. code-block:: sql
@@ -362,7 +366,8 @@ When executing a query with the index hint syntax, the query optimizer considers
     
     SELECT ... 
     FROM tab1, tab2 
-    WHERE ... USING INDEX tab1.idx1;
+    WHERE ... 
+    USING INDEX tab1.idx1;
 
 The above query select the scan method of table *tab1* after comparing the cost between the sequential scan of the table *tab1* and the index scan of the index *idx1*, and select the scan method of table *tab2* after comparing the cost between the sequential scan of the table *tab2* and the index scan of the indexes *idx3*, *idx4*, *idx5*.
     
@@ -375,7 +380,6 @@ Filtered Index
 --------------
 
 The filtered index is used to sort, search, or operate a well-defined partials set for one table. It is called the partial index since only some data that satisfy the condition are kept in that index. ::
-
 
     CREATE /*+ hints */ INDEX index_name
     ON table_name (col1, col2, ...) 
@@ -515,9 +519,11 @@ The following cases are not allowed as filtering conditions.
     .. code-block:: sql
 
         CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
-        1 command(s) successfully processed.
          
-        CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND sqrt(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
+        CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) 
+        WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND
+        sqrt(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
+        
         ERROR: before ' ; '
         The maximum length of filter predicate string must be 128.
 
@@ -550,7 +556,10 @@ If a function-based index is created by using the **LOWER** function, it can be 
 .. code-block:: sql
 
     CREATE INDEX idx_last_name_lower ON clients_table(LOWER(LastName));
-    SELECT * FROM clients_table WHERE LOWER(LastName) = LOWER('Timothy');
+    
+    SELECT * 
+    FROM clients_table 
+    WHERE LOWER(LastName) = LOWER('Timothy');
 
 To make an index selected while creating a query plan, the function used for the index should be used for the query condition in the same way. The **SELECT** query above uses the last_name_lower index created above. However, this index is not used for the following condition:
 
@@ -636,6 +645,7 @@ Function-based indexes cannot be used with filtered indexes. The example will ca
     CREATE INDEX my_idx ON tbl ( TRIM(col) ) WHERE col > 'SQL';
 
 Function-based indexes cannot become multiple-columns indexes. The example will cause an error.
+
 .. code-block:: sql
 
     CREATE INDEX my_idx ON tbl ( TRIM(col1), col2, LEFT(col3, 5) );
@@ -676,6 +686,7 @@ The following example shows that the index is used as a covering index because c
      
     Query plan:
      Index scan(t t, i_t_col1_col2_col3, [(t.col1 range (min inf_lt t.col3))] (covers))
+     
              col1         col2         col3
     =======================================
                 1            2            3
@@ -735,8 +746,7 @@ The following example shows that the index is used as a covering index because c
 Optimizing ORDER BY Clause
 --------------------------
 
-The index including all columns in the **ORDER BY** clause is referred to as the ordered index.
- Optimizing the query with **ORDER BY** clause is no need for the additional sorting process(skip order by), because the query results are searched by the ordered index. In general, for an ordered index, the columns in the **ORDER BY** clause should be located at the front of the index.
+The index including all columns in the **ORDER BY** clause is referred to as the ordered index. Optimizing the query with **ORDER BY** clause is no need for the additional sorting process(skip order by), because the query results are searched by the ordered index. In general, for an ordered index, the columns in the **ORDER BY** clause should be located at the front of the index.
 
 .. code-block:: sql
 
@@ -840,7 +850,8 @@ The following example shows that *i* column exists, **ORDER BY** is executed by 
 
     CREATE INDEX i_tab_j_k ON tab (i,j,k);
     SELECT /*+ RECOMPILE */ i,j,k 
-    FROM tab WHERE i > 0 
+    FROM tab 
+    WHERE i > 0 
     ORDER BY j,k;
      
     -- since an index on (i,j,k) is now available, it will be used as covering index. However, sorting the results according to
@@ -924,7 +935,10 @@ The query will be executed as an ascending scan without **USE_DESC_IDX** hint.
 
     -- The same query, without the hint, will have a different output, since descending scan is not used.
      
-    SELECT  * FROM di WHERE i > 0 LIMIT 3;
+    SELECT  * 
+    FROM di 
+    WHERE i > 0 
+    LIMIT 3;
      
     Query plan:
      
@@ -943,7 +957,10 @@ If you add **USE_DESC_IDX** hint to the above query, a different result will be 
 
     -- We now run the following query, using the ''use_desc_idx'' SQL hint:
      
-    SELECT /*+ USE_DESC_IDX */ * FROM di WHERE i > 0 LIMIT 3;
+    SELECT /*+ USE_DESC_IDX */ * 
+    FROM di 
+    WHERE i > 0 
+    LIMIT 3;
      
     Query plan:
      Index scan(di di, i_di_i, (di.i range (0 gt_inf max) and inst_num() range (min inf_le 3)) (covers) (desc_index))
@@ -982,7 +999,8 @@ The following example requires descending order by **ORDER BY** clause. In this 
 Optimizing GROUP BY Clause
 --------------------------
 
-**GROUP BY** clause optimization works on the premise that if all columns in the **GROUP BY** clause are included in an index, you can use the index upon executing a query, so you don't execute a separate sorting job. The columns in the **GROUP BY** clause must exist in front side of the column forming the index.
+**GROUP BY** clause optimization works on the premise that if all columns in the **GROUP BY** clause are included in an index, you can use the index upon executing a query, so you don't execute a separate sorting job. 
+The columns in the **GROUP BY** clause must exist in front side of the column forming the index.
 
 .. code-block:: sql
 
@@ -1062,6 +1080,7 @@ The following example shows that an index consisting of tab(j,k) is used and no 
 .. code-block:: sql
 
     ALTER TABLE tab CHANGE COLUMN j j INT NOT NULL;
+    
     SELECT * 
     FROM tab 
     GROUP BY j,k;
@@ -1088,19 +1107,18 @@ The following example shows that an index consisting of tab(j,k) is used and no 
                 1            5            5
                 2            6            6
 
-[번역]
-                
 .. _multi-key-range-opt:
 
-다중 키 범위 최적화
--------------------
+Multiple Key Ranges Optimization
+--------------------------------
 
-대부분의 질의가 **LIMIT** 절을 포함하고 있기 때문에 **LIMIT** 절을 최적화하는 것이 질의 성능에 매우 중요한데, 이에 해당하는 대표적인 최적화가 다중 키 범위 최적화(multiple key range optimization)이다. 다중 키 범위 최적화는 결과 생성에 필요한 인덱스 범위 전체를 스캔하지 않고, 인덱스 내의 일부 키 범위만 스캔하면서 Top N 정렬 방식을 통해 질의 결과를 생성한다. Top N 정렬은 전체 결과를 생성한 후에 이를 정렬하여 결과를 얻는 것이 아니라, 항상 최적의 N 개의 결과를 유지하는 방식으로 질의를 처리하기 때문에 매우 뛰어난 성능을 보인다.
+Optimizing the LIMIT clause is crucial for performance because the most queries have limit filter. A representative optimization of this case is Multiple Key Ranges Optimization.
 
-예를 들어 내 친구들이 쓴 글 중에서 가장 최근 글을 10 개만 검색하는 경우, 내 전체 친구가 쓴 글을 모두 찾아서 정렬한 후에 결과를 찾는 방법 보다는 각 친구가 쓴 최근 글 10 개씩만을 찾아서 정렬을 유지하는 방식으로 인덱스를 스캔하는 CUBRID만의 최적화 기법이다.
+Multiple Key Ranges Optimization generate the query result with Top N Sorting to scan only some key ranges in an index rather than doing a full index scan. Top N Sorting always keeps the best N tuples sorted rather than selecting all tuples and then sorting. Therefore, it shows the outstanding performance. 
 
+For example, when you search only the recent 10 posts which your friends wrote, CUBRID which applied Multiple KEY Ranges Optimization finds the result not by sorting after finding all your friends' posts, but by scanning the index which keeps the recent 10 sorted posts of each friends.
 
-다중 키 범위 최적화를 사용할 수 있는 예는 다음과 같다. 
+An example of Multiple Key Ranges Optimization is as follows.
 
 .. code-block:: sql
 
@@ -1121,7 +1139,7 @@ The following example shows that an index consisting of tab(j,k) is used and no 
     sort: 1 asc, 2 asc 
     cost: 1 card 0 
 
-단일 테이블에서는 다음과 같은 조건들이 만족되었을 경우에 다중 키 범위 최적화가 수행된다. 
+On a single table, multiple key range optimization can be applied if below conditions are satisfied.
 
 ::
 
@@ -1134,21 +1152,22 @@ The following example shows that an index consisting of tab(j,k) is used and no 
     ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC],… col_(p+k-1) [ASC|DESC]
     FOR orderbynum_pred | LIMIT n;
 
-먼저 *orderbynum_pred* 조건이 명시되었다면 이 조건은 유효해야 하고, **ORDERBY_NUM** 또는 **LIMIT**\ 를 통해서 지정된 최종 결과의 상한 크기(*n*)이 multi_range_optimization_limit 시스템 파라미터 값보다 크지 않아야 한다.
+Firstly, if *orderbynum_pred* condition is specified, it should be valid. And upper limit(*n*) for **ORDERBY_NUM** or **LIMIT** should be less than or equal to the value of **multi_range_optimization_limit** system parameter.
 
-또한 다중 키 범위 최적화에 적합한 인덱스가 필요한데, **ORDER BY** 절에 명시된 모든 *k* 개의 칼럼을 커버해야 한다. 즉, 인덱스 상에서 **ORDER BY** 절에 명시된 칼럼들을 모두 포함해야 하고, 칼럼들의 순서와 정렬 방향이 일치해야 한다. 또한 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
+And you need the proper index to the multiple key range optimization, this index should cover all *k* columns specified in the **ORDER BY** clause. In other words, this index should include all *k* columns specified in the **ORDER BY** clause and the sorting order should be the same as the columns' order. Also this index should include all columns used in **WHERE** clause.
 
-인덱스를 구성하는 칼럼들 중 
+Among columns that comprise the index,
 
-* 범위 조건(예를 들어, IN 조건) 앞의 칼럼들은 동일(=) 조건으로 표현된다.
-* 범위 조건을 가진 칼럼이 하나만 존재한다. 
-* 범위 조건 이후의 칼럼들은 키 필터로 존재한다. 
-* 데이터 필터 조건이 없어야 한다. 다시 말해, 인덱스는 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
-* 키 필터 이후의 칼럼들은 **ORDER BY** 절에 존재한다. 
-* 키 필터 조건의 칼럼들은 반드시 **ORDER BY** 절의 칼럼이 아니어야 한다.
-* 상관 부질의(correlated subquery)를 포함한 키 필터 조건이 포함되어 있다면, 이에 연관된 칼럼은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
+*   Columns in front of range condition(e.g. IN condition) are represented as equivalent condition(=).
+*   Only one column with range condition exists.
+*   Columns after range condition exist as key filters.
+*   There should be no data filtering condition. In other words, the index should include all columns used in **WHERE** clause.
+*   There should be no data filtering condition. In other words, the index should include all columns used in **WHERE** clause.
+*   Columns after the key filter exist in **ORDER BY** clause.
+*   Columns of key filter condition always should not the column of **ORDER BY** clause.
+*   If key filter condition with correlated subquery exists, related columns to this should be included into **WHERE** clause with no range condition. 
 
-다음과 같은 예에 다중 키 범위 최적화가 수행된다. 
+On the below example, Multiple Key Ranges Optimization can be applied.
 
 .. code-block:: sql
 
@@ -1161,7 +1180,7 @@ The following example shows that an index consisting of tab(j,k) is used and no 
     ORDER BY e 
     LIMIT 2; 
 
-다중 테이블을 포함하는 JOIN 질의에서는 다음의 경우 최적화가 수행된다. 
+Queries with multiple joined tables can also support Multiple Key Ranges Optimization:
 
 ::
 
@@ -1175,14 +1194,13 @@ The following example shows that an index consisting of tab(j,k) is used and no 
     ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC], ... col_(p+k-1) [ASC|DESC]
     FOR ordbynum_pred | LIMIT n;
 
-JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서는 다음과 같은 조건을 만족해야 한다.
+If queries with multiple joined tables can support Multiple Key Ranges Optimization, below conditions should be satisfied:
 
-* ORDER BY 절에 존재하는 칼럼들은 하나의 테이블에만 존재하는 칼럼들이며, 이 테이블은 단일 테이블 질의에서 다중 키 범위 최적화에 의해 요구되는 조건을 모두 만족해야 한다. 이 테이블을 정렬 테이블(sort table)이라고 하자. 
-*  정렬 테이블과 외부 테이블들(outer tables) 간의 JOIN 조건에 명시된 정렬 테이블의 칼럼들은 모두 인덱스에 포함되어야 한다. 즉, 데이터 필터링 조건이 없어야 한다. 
-*  정렬 테이블과 내부 테이블들(inner tables) 간의 JOIN 조건에 명시된 정렬 테이블의 칼럼들은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
+*   Columns in **ORDER BY** clause only exist on one table, and this table should satisfy all required conditions by Multiple Key Ranges Optimization on a single table query. Let the "sort table" be the table that contains all sorting columns.
+*   All columns of "sort table" specified in a JOIN condition between "sort table" and "outer tables" should be included on an index. In other words, there should be no data filtering condition.
+*   All columns of "sort table" specified in a JOIN condition between "sort table" and "outer tables" should be included on the **WHERE** clause with no range condition.
 
-
-.. note:: 다중 키 범위 최적화가 적용될 수 있는 대부분의 경우에 다중 키 범위 최적화가 가장 좋은 성능을 보장하지만, 특정한 상황에서 최적화를 원하지 않는다면 질의에 **NO_MULTI_RANGE_OPT** 힌트를 명시하면 된다. 힌트를 지정하는 방법은 :ref:`sql-hint`\ 를 참고하면 된다.
+.. note:: In most cases available to apply Multiple Key Ranges Optimization, this optimization shows the best performance. However, if you do not want this optimization on the special case, specify **NO_MULTI_RANGE_OPT** hint to the query. For details, see :ref:`sql-hint`.
 
 .. _index-skip-scan:
 

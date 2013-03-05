@@ -192,7 +192,7 @@ The default setting for applications that were developed based on CCI is to hold
 .. note:: \
 
     * Note that versions lower than CUBRID 9.0 do not support cursor holdability. The default setting of those versions is to close all cursors at commit.
-    * CUBRID currently does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in XAConnection interface. It will be supported later.
+    * CUBRID currently does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in java.sql.XAConnection interface.
     
 **Cursor-related Operation at Transaction Commit**
 

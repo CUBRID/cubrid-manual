@@ -664,6 +664,8 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. include:: backup.inc
 
+.. _unload-load:
+
 내보내기와 가져오기
 ===================
 

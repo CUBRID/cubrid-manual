@@ -52,7 +52,7 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
 *   CUBRID DB 서버와 브로커 서버(또는 CUBRID SHARD 서버)를 분리하여 운영하는 경우, 서버 장비의 운영 체제가 다르더라도 상호 운용성을 보장한다. 단, DB 서버의 Bit 버전과 브로커 서버의 Bit 버전은 서로 동일해야 한다. 예를 들어, Linux용 64Bit 버전 DB 서버는 Windows용 64Bit 버전 브로커 서버와 상호 운용이 가능하지만, 32Bit 버전 브로커 서버와는 상호 운용이 불가능하다.
 
-    DB 서버와 브로커 서버 사이의 관계에 대한 설명은 :doc:`intro`\ 를 참고한다. CUBRID SHARD에 대한 설명은 :doc:`admin/shard` 를 참고한다.
+    DB 서버와 브로커 서버 사이의 관계에 대한 설명은 :doc:`intro`\ 를 참고한다. CUBRID SHARD에 대한 설명은 :doc:`shard` 를 참고한다.
 
 *   CUBRID DB 서버와 브로커 서버(또는 CUBRID SHARD 서버)를 분리하여 운영하는 경우, DB 서버와 브로커 서버의 시스템 로캘은 동일해야 한다. 예를 들어 DB 서버의 CUBRID_CHARSET이 en_US.utf8이면 브로커 서버의 CUBRID_CHARSET도 en_US.utf8이어야 한다.
 

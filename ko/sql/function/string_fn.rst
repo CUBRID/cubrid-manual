@@ -143,7 +143,7 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
 .. function:: LENGTHB (string)
 .. function:: LENGTH (string)
 
-    문자의 개수를 정수 값으로 반환한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :doc:`/admin/i18n` 을 참고한다.
+    문자의 개수를 정수 값으로 반환한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :doc:`/sql/i18n` 을 참고한다.
     **CHAR_LENGTH**, **CHARACTER_LENGTH**, **LENGTHB**, **LENGTH** 함수는 동일하다.
     
     :param string: 문자 개수 단위로 길이를 구할 문자열을 지정한다. **NULL** 이 지정된 경우는 **NULL** 값이 반환된다.
@@ -1363,7 +1363,7 @@ UCASE, UPPER
 .. function:: UCASE ( string )
 .. function:: UPPER ( string )
 
-    **UCASE** 함수와 **UPPER** 함수는 동일하며, 문자열에 포함된 소문자를 대문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는 문자셋에 관한 자세한 내용은 :doc:`/admin/i18n` 을 참고한다.
+    **UCASE** 함수와 **UPPER** 함수는 동일하며, 문자열에 포함된 소문자를 대문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는 문자셋에 관한 자세한 내용은 :doc:`/sql/i18n` 을 참고한다.
 
     :param string: 대문자로 변환할 문자열을 지정한다. 값이 **NULL** 이면 결과는 **NULL** 이 반환된다.
     :rtype: STRING

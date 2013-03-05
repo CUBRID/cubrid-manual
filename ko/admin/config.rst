@@ -1170,7 +1170,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
     
     클라이언트 응용 프로그램이 입력과 출력의 형태에 대해 모두 알고 있다면, **unicode_input_normalization** 과 **unicode_output_normalization** 을 **no** 인 상태로 둔다(기본 설정). 
 
-    로캘과 콜레이션에 대한 자세한 설명은 :doc:`/admin/i18n` 을 참고한다.
+    로캘과 콜레이션에 대한 자세한 설명은 :doc:`/sql/i18n` 을 참고한다.
 
 **unicode_output_normalization**
 
@@ -1263,7 +1263,7 @@ HA 관련 파라미터
     *   on : 설정한 노드는 failover의 대상이 되는 노드로, CUBRID HA 기능을 사용한다.
     *   replica : 설정한 노드는 failover의 대상이 되지 않는 노드로, CUBRID HA 기능을 사용한다.
 
-    CUBRID HA 기능을 사용하려면 **ha_mode** 파라미터를 설정하는 것 외에 **cubrid_ha.conf** 파일에서 HA 관련 파라미터를 설정해야 한다. 자세한 내용은 :doc:`/admin/ha` 를 참고한다.
+    CUBRID HA 기능을 사용하려면 **ha_mode** 파라미터를 설정하는 것 외에 **cubrid_ha.conf** 파일에서 HA 관련 파라미터를 설정해야 한다. 자세한 내용은 :doc:`/ha` 를 참고한다.
 
 .. _other-parameters:
 

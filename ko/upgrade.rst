@@ -126,7 +126,7 @@ DB 마이그레이션
 ------------------------
 
 * CUBRID 2008 R4.0부터는 복제 기능을 더 이상 지원하지 않으므로, 이전의 복제 기능을 사용하는 시스템에서는 DB 마이그레이션 이후 HA 환경으로 재구성할 것을 권장한다. 또한, CUBRID 2008 R2.0 및 R2.1에서 제공된 Linux Heartbeat 기반의 HA 기능을 사용하는 시스템도 보다 안정적인 운영을 위해 DB 마이그레이션 이후 CUBRID Heartbeat 기반의 HA 환경으로 재구성해야 한다. (아래의 :ref:`ha-db-migration` 참고)
-* HA 환경 구성은 매뉴얼의 :doc:`/admin/ha` 를 참고하여 재설정해야 한다.
+* HA 환경 구성은 매뉴얼의 :doc:`ha` 를 참고하여 재설정해야 한다.
 
 .. _db-migration:
 
@@ -187,7 +187,7 @@ CUBRID 9.0 Beta 이전 버전에서 CUBRID 9.1로 마이그레이션
 
 CUBRID 2008 R3.0 Beta 이하 사용자의 경우, 기존의 GLO 클래스를 사용하고 있는 경우에는 추가 작업이 필요하다(:ref:`glo-users-migration` 참고).
 
-아래는 cubrid unloaddb/loaddb 유틸리티와 http://ftp.cubrid.org 에서 별도 배포되는 check_reserved.sql 예약어 검출 스크립트를 이용하여 마이그레이션을 수행하는 방법이다. (cubrid unloaddb/loaddb는 매뉴얼의 :doc:`/admin/migration` 참고)
+아래는 cubrid unloaddb/loaddb 유틸리티와 http://ftp.cubrid.org 에서 별도 배포되는 check_reserved.sql 예약어 검출 스크립트를 이용하여 마이그레이션을 수행하는 방법이다. (cubrid unloaddb/loaddb는 매뉴얼의 :ref:`unload-load` 참고)
 
 +------------------------------------+---------------------------------------------+---------------------------------------------+
 | 단계                               | Linux 환경                                  | Windows 환경                                |

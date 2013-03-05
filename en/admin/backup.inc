@@ -1,7 +1,3 @@
-***************************
-Database Backup and Restore
-***************************
-
 .. _db-backup:
 
 Database Backup
@@ -109,7 +105,7 @@ The following table shows options available with the **cubrid backupdb** utility
         cubrid backupdb --sleep-msecs=5 demodb
 
 Backup Strategy and Method
-==========================
+--------------------------
 
 The following must be considered before performing a backup:
 
@@ -185,7 +181,7 @@ A parallel or multi-thread backup is a method of performing as many backups as t
 To perform a parallel backup, use the **cubrid backupdb -t** | **--thread-count** command.
 
 Managing Backup Files
-=====================
+---------------------
 
 One or more backup files can be created in sequence based on the size of the database to be backed up. A unit number is given sequentially (000, 001-0xx) to the extension of each backup file based in the order of creation.
 
@@ -212,11 +208,10 @@ During the backup process, if there is not enough space on the disk to store the
        -  2 to continue after changing the volume's directory or device.
     ******************************************************************
 
-
-.. _Managing_Archive_Logs:
+.. _managing-archive-logs:
 
 Managing Archive Logs
-=====================
+---------------------
 
 You must not delete archive logs by using the file deletion command such as rm or del by yourself; the archive logs should be deleted by system configuration or the **cubrid backupdb** utility. In the following three cases, archive logs can be deleted.
 
@@ -342,7 +337,7 @@ The following table shows options available with the **cubrid restoredb** utilit
         cubrid restoredb -u demodb
 
 Restoring Strategy and Procedure
-================================
+--------------------------------
 
 You must consider the followings before restoring databases.
 
@@ -372,23 +367,20 @@ The following procedure shows how to perform backup and restoration described in
 #.  Performs the first incremental backup of *demodb* running at 2008/8/14 10:00.
 #.  Performs the first incremental backup of *demodb* running at 2008/8/14 15:00. Overwrites the first incremental backup file in step 2.
 #.  A system failure occurs at 2008/8/14 15:30, and the system administrator prepares the restore of *demodb*. Sets the restore time as 15:25, which is the time when the last commit was made before database failure
-
 #.  The system administrator prepares the full backup file created in Step 1 and the first incremental backup file created in Step 3, restores the *demodb* database up to the point of 15:00, and then prepares the active and archive logs to restore the database up to the point of 15:25.
 
 +-----------------+----------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | Time            | Command                                      | Description                                                                                                                   |
 +=================+==============================================+===============================================================================================================================+
 | 2008/8/14 04:25 | cubrid server stop demodb                    | Shuts down                                                                                                                    |
-|                 |                                              | *demodb*                                                                                                                      |
-|                 |                                              | .                                                                                                                             |
+|                 |                                              | *demodb*.                                                                                                                     |
 +-----------------+----------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | 2008/8/14 04:30 | cubrid backupdb -S -D /home/backup -l 0      | Performs a full backup of                                                                                                     |
 |                 | demodb                                       | *demodb*                                                                                                                      |
 |                 |                                              | in offline mode and creates backup files in the specified directory.                                                          |
 +-----------------+----------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | 2008/8/14 05:00 | cubrid server start demodb                   | Starts                                                                                                                        |
-|                 |                                              | *demodb*                                                                                                                      |
-|                 |                                              | .                                                                                                                             |
+|                 |                                              | *demodb*.                                                                                                                     |
 +-----------------+----------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | 2008/8/14 10:00 | cubrid backupdb -C -D /home/backup -l 1      | Performs the first incremental backup of                                                                                      |
 |                 | demodb                                       | *demodb*                                                                                                                      |
@@ -407,7 +399,7 @@ The following procedure shows how to perform backup and restoration described in
 +-----------------+----------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 
 Restoring Database to Different Server
-======================================
+--------------------------------------
 
 The following shows how to back up *demodb* on server *A* and restore it on server *B* with the backed up files.
 

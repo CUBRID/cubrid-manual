@@ -15,9 +15,9 @@ This chapter contains the following:
 *   Database backup and restore
 *   System configuration
 
-**CUBRID Utilities**
+**cubrid Utilities**
 
-The CUBRID utilities provide features that can be used to comprehensively manage the CUBRID service. The CUBRID utilities are divided into the service management utility, which is used to manage the CUBRID service process, and the database management utility, which is used to manage the database.
+The **cubrid** utilities provide features that can be used to comprehensively manage the CUBRID service. The CUBRID utilities are divided into the service management utility, which is used to manage the CUBRID service process, and the database management utility, which is used to manage the database.
 
 The service management utilities are as follows:
 
@@ -41,7 +41,7 @@ The service management utilities are as follows:
 
     *   cubrid heartbeat
 
-See `Registering Services <#admin_admin_service_conf_registe_6298>`_ for details.
+See :ref:`control-cubrid-processes` for details.
 
 The database management utilities are as follows:
 
@@ -51,54 +51,58 @@ The database management utilities are as follows:
     *   cubrid addvoldb
     *   cubrid deletedb
 
-*   Renaming database, altering host, copying database, and installing database
+*   Renaming database, altering host, copying/moving database, and registering database
 
     *   cubrid renamedb
     *   cubrid alterdbhost
     *   cubrid copydb
     *   cubrid installdb
 
+*   Backing up database
+
+    *   cubrid backupdb
+
+*   Restoring database
+
+    *   cubrid restoredb
+
+*   Unloading and Loading database
+
+    *   cubrid loaddb
+    *   cubrid unloaddb
+    
 *   Checking and compacting database space
 
     *   cubrid spacedb
     *   cubrid compactdb
 
-*   Checking query plan and optimizing database
+*   Updating statistics and checking query plan
 
     *   cubrid plandump
     *   cubrid optimizedb
     *   cubrid statdump
 
-*   Checking database lock, checking transaction, killing transaction, and checking consistency
+*   Checking database lock, checking transaction and killing transaction
 
     *   cubrid lockdb
     *   cubrid tranlist
     *   cubrid killtran
-    *   cubrid checkdb
 
 *   Diagnosing database and dumping parameter
 
+    *   cubrid checkdb
     *   cubrid diagdb
     *   cubrid paramdump
 
-*   Loading and unloading database
-
-    *   cubrid loaddb
-    *   cubrid unloaddb
-
-*   Backing up and restoring database
-
-    *   cubrid backupdb
-    *   cubrid restoredb
-
-*   HA utilities
+*   Changing HA mode, replicating/applying logs 
 
     *   cubrid changemode
     *   cubrid copylogdb
     *   cubrid applylogdb
     *   cubrid applyinfo
 
-*   Locale utilities
+*   Compiling/Outputting locale
+ 
 
     *   cubrid genlocale
     *   cubrid dumplocale
@@ -111,7 +115,7 @@ The following result is displayed if **cubrid** is entered in a prompt.
 
     % cubrid
      
-    cubrid utility, version 9.0
+    cubrid utility, version 9.1
     usage: cubrid <utility-name> [args]
     Type 'cubrid <utility-name>' for help on a specific utility.
      
@@ -149,6 +153,9 @@ The following result is displayed if **cubrid** is entered in a prompt.
         copylogdb
         applylogdb
         applyinfo
+        genlocale
+        dumplocale
+        synccolldb
      
     cubrid is a tool for DBMS.
 
@@ -165,6 +172,4 @@ The following result is displayed if **cubrid** is entered in a prompt.
 
     control.rst
     admin_utils.rst
-    migration.rst
-    backup.rst
     config.rst

@@ -1,11 +1,17 @@
+.. _control-cubrid-processes:
 
 Controlling CUBRID Processes
 ============================
 
+CUBRID processes can be controlled by **cubrid** utility.
+
 Controlling CUBRID Service
 --------------------------
 
-The following **cubrid** utility syntax shows how to control services registered in the configuration file. One of the followings can be specified in *command*: **start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to check status. No additional options or arguments are required. ::
+The following **cubrid** utility syntax shows how to control services registered in the configuration file. One of the followings can be specified in *command*: 
+**start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to check status. No additional options or arguments are required. 
+
+::
 
     cubrid service <command>
     <command>: {start|stop|restart|status}
@@ -13,7 +19,10 @@ The following **cubrid** utility syntax shows how to control services registered
 Controlling Database Server
 ---------------------------
 
-The following **cubrid** utility syntax shows how to control database server process. One of the followings can be specified in *command*: **start**, **stop**, **restart**, or **status**. **start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to check status. Every command except **status** must have a database name as an argument. ::
+The following **cubrid** utility syntax shows how to control database server process. 
+One of the followings can be specified in *command*: **start**, **stop**, **restart**, or **status**. **start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to check status. Every command except **status** must have a database name as an argument. 
+
+::
 
     cubrid server <command> [database_name]
     <command>: {start|stop|restart|status}
@@ -21,7 +30,10 @@ The following **cubrid** utility syntax shows how to control database server pro
 Controlling Broker
 ------------------
 
-The following **cubrid** utility syntax shows how to control CUBRID broker process. One of the followings can be specified in *command*: **start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to checkstatus. In addition, **on** (to start a specific broker) and **off** (to stop a specific broker) are provided. ::
+The following **cubrid** utility syntax shows how to control CUBRID broker process. 
+One of the followings can be specified in *command*: **start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to checkstatus. In addition, **on** (to start a specific broker) and **off** (to stop a specific broker) are provided. 
+
+::
 
     cubrid broker <command> 
     <command>: {start|stop|restart|status [broker_name] 
@@ -29,11 +41,12 @@ The following **cubrid** utility syntax shows how to control CUBRID broker proce
                |on broker_name |off broker_name 
                |reset broker_name |acl {status|reload} broker_name }
 
-
 Controlling CUBRID Manager Server
 ---------------------------------
 
-To use the CUBRID Manager, the Manager server must be running where database server is running. The following **cubrid** utility syntax shows how to control the CUBRID Manager processes. One of the followings can be specified in *command*: **start**, **stop**, or **status**; **start** is used to run services; **stop** is used to stop services; **status** is used to check status. ::
+To use the CUBRID Manager, the Manager server must be running where database server is running. The following **cubrid** utility syntax shows how to control the CUBRID Manager processes. One of the followings can be specified in *command*: **start**, **stop**, or **status**; **start** is used to run services; **stop** is used to stop services; **status** is used to check status. 
+
+::
 
     cubrid manager <command>
     <command>: {start|stop|status}
@@ -42,7 +55,10 @@ To use the CUBRID Manager, the Manager server must be running where database ser
 Controlling CUBRID HA
 ---------------------
 
-The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. One of the followings can be specified in *command*: **start**, **stop**, **reload**, **deact**, or **act**; **start** is used to run HA-related processes; **stop** is used to stop them; **reload** is used to reload information on HA configuration; **deact** is used to exclude nodes from the CUBRID HA groups; **act** is used to include nodes which have been excluded from the CUBRID HA groups. For details, see :ref:`cubrid-heartbeat`. ::
+The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. One of the followings can be specified in *command*: 
+**start**, **stop**, **reload**, **deact**, or **act**; **start** is used to run HA-related processes; **stop** is used to stop them; **reload** is used to reload information on HA configuration; **deact** is used to exclude nodes from the CUBRID HA groups; **act** is used to include nodes which have been excluded from the CUBRID HA groups. For details, see :ref:`cubrid-heartbeat`. 
+
+::
 
     cubrid heartbeat <command>
     <command>: {start|stop|reload|deact|act}
@@ -55,10 +71,10 @@ CUBRID Services
 Registering Services
 --------------------
 
-You can register one or more database servers, CUBRID brokers, CUBRID Manager(s) or CUBRID HAs as CUBRID service in the configuration file ( **cubrid.conf** ). If you do not register any service, only master process is registered by default. It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
+You can register one or more database servers, CUBRID brokers, CUBRID Manager(s) or CUBRID HAs as CUBRID service in the configuration file ( **cubrid.conf** ). If you do not register any service, only master process is registered by default. 
+It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
 
 The following example shows how to register database server and broker as service in the **cubrid.conf** file and enable databases ( *demodb* and *testdb* ) to start automatically at once when CUBRID server starts running.
-
 
 ::
 
@@ -74,7 +90,6 @@ The following example shows how to register database server and broker as servic
     # The list of database servers in all by 'cubrid service start' command.
     # This property is effective only when the above 'service' property contains 'server' keyword.
     server=demodb,testdb
-
 
 Starting Services
 -----------------
@@ -133,13 +148,17 @@ After registering service as explained in :ref:`control-cubrid-services`, enter 
 Stopping Services
 -----------------
 
-Enter code below to stop CUBRID service. If no services are registered by a user, only master process stops and then restarts. ::
+Enter code below to stop CUBRID service. If no services are registered by a user, only master process stops and then restarts. 
+
+::
 
     % cubrid service stop
     @ cubrid master stop
     ++ cubrid master stop: success
 
-Enter code below to stop registered CUBRID service. You can verify that server process, broker process, and master process as well as *demodb* and *testdb* stop at once. ::
+Enter code below to stop registered CUBRID service. You can verify that server process, broker process, and master process as well as *demodb* and *testdb* stop at once. 
+
+::
 
     % cubrid service stop
     @ cubrid server stop: demodb
@@ -159,7 +178,9 @@ Enter code below to stop registered CUBRID service. You can verify that server p
 Restarting Services
 -------------------
 
-Enter code below to restart CUBRID service. If no services are registered by a user, only master process stops and then restarts. ::
+Enter code below to restart CUBRID service. If no services are registered by a user, only master process stops and then restarts. 
+
+::
 
     % cubrid service restart
     
@@ -169,7 +190,9 @@ Enter code below to restart CUBRID service. If no services are registered by a u
     ++ cubrid master start: success
 
 
-Enter code below to restart registered CUBRID service. You can verify that server process, broker process, and master process as well as *demodb* and *testdb* stop and then restart at once. ::
+Enter code below to restart registered CUBRID service. You can verify that server process, broker process, and master process as well as *demodb* and *testdb* stop and then restart at once. 
+
+::
 
     % cubrid service restart
     
@@ -207,7 +230,9 @@ Enter code below to restart registered CUBRID service. You can verify that serve
 Managing Service Status
 -----------------------
 
-The following example shows how to check the status of master process and database server registered. ::
+The following example shows how to check the status of master process and database server registered. 
+
+::
 
     % cubrid service status
     
@@ -233,15 +258,12 @@ The following example shows how to check the status of master process and databa
 
     @ cubrid manager server status
     ++ cubrid manager server is not running.
-
-
     
 The following message is returned if master process has stopped.
 
 ::
 
     % cubrid service status
-
     @ cubrid master status    
     ++ cubrid master is not running.
     
@@ -250,6 +272,7 @@ Database Server
 
 Starting Database Server
 ------------------------
+
 The following example shows how to run *demodb* server.
 
 ::
@@ -289,13 +312,14 @@ The following message is returned while *demodb* server is running.
     @ cubrid server start: demodb
     ++ cubrid server 'demodb' is running.
 
-**cubrid server start** runs cub_server process of a specific database regardless of HA mode configuration. To run database in HA environment, you should use
-**cubrid heartbeat start**.
+**cubrid server start** runs cub_server process of a specific database regardless of HA mode configuration. To run database in HA environment, you should use **cubrid heartbeat start**.
 
 Stopping Database Server
 ------------------------
 
-The following example shows how to stop *demodb* server. ::
+The following example shows how to stop *demodb* server. 
+
+::
 
     % cubrid server stop demodb
     
@@ -304,7 +328,9 @@ The following example shows how to stop *demodb* server. ::
     This may take several minutes. Please wait.
     ++ cubrid server stop: success
 
-The following message is returned while *demodb* server has stopped. ::
+The following message is returned while *demodb* server has stopped. 
+
+::
 
     % cubrid server stop demodb
     
@@ -316,7 +342,9 @@ The following message is returned while *demodb* server has stopped. ::
 Restarting Database Server
 --------------------------
 
-The following example shows how to restart *demodb* server. *demodb* server that has already run stops and the server restarts. ::
+The following example shows how to restart *demodb* server. *demodb* server that has already run stops and the server restarts. 
+
+::
 
     % cubrid server restart demodb
     
@@ -335,7 +363,9 @@ The following example shows how to restart *demodb* server. *demodb* server that
 Checking Database Server Status
 -------------------------------
 
-The following example shows how to check the status of a database server. Names of currently running database servers are displayed. ::
+The following example shows how to check the status of a database server. Names of currently running database servers are displayed. 
+
+::
 
     % cubrid server status
     
@@ -343,8 +373,9 @@ The following example shows how to check the status of a database server. Names 
     Server testdb (rel 9.0, pid 24465)
     Server demodb (rel 9.0, pid 24342)
 
+The following example shows the message when master process has stopped. 
 
-The following example shows the message when master process has stopped. ::
+::
 
     % cubrid server status
     
@@ -358,27 +389,32 @@ Limiting Database Server Access
 
 To limit brokers and the CSQL Interpreter connecting to the database server, configure the parameter value of **access_ip_control** in the **cubrid.conf** file to yes and enter the path of a file in which the list of IP addresses allowed to access the **access_ip_control_file** parameter value is written. You should enter the absolute file path. If you enter the relative path, the system will search the file under the **$CUBRID/conf** directory on Linux and under the **%CUBRID%\\conf** directory on Windows.
 
-The following example shows how to configure the **cubrid.conf** file. ::
+The following example shows how to configure the **cubrid.conf** file. 
+
+::
 
     # cubrid.conf
     access_ip_control=yes
     access_ip_control_file="/home1/cubrid1/CUBRID/db.access"
 
-The following example shows the format of the **access_ip_control_file** file. ::
+The following example shows the format of the **access_ip_control_file** file. 
+
+::
 
     [@<db_name>]
     <ip_addr>
     ...
 
 *   <db_name> : The name of a database in which access is allowed
-
 *   <ip_addr> : The IP address allowed to access a database. Using an asterisk (*) at the last digit means that all IP addresses are allowed. Several lines of <ip_addr> can be added in the next line of the name of a database.
 
 To configure several databases, it is possible to specify additional [@<db_name>] and <ip_addr>.
 
 Accessing any IP address except localhost is blocked by server if **access_ip_control** is set to yes but **ip_control_file** is not configured. A server will not run if analyzing **access_ip_control_file** fails caused by incorrect format. 
 
-The following example shows **access_ip_control_file**. ::
+The following example shows **access_ip_control_file**. 
+
+::
 
     [@dbname1]
     10.10.10.10
@@ -390,7 +426,9 @@ The following example shows **access_ip_control_file**. ::
     [@dbname3]
     192.168.1.15
     
-The example above shows that *dbname1* database allows the access of IP addresses starting with 10.156; *dbname2* database allows the access of every IP address; *dbname3* database allows the access of an IP address, 192.168.1.15, only.
+The example above shows that *dbname1* database allows the access of IP addresses starting with 10.156;
+*dbname2* database allows the access of every IP address;
+*dbname3* database allows the access of an IP address, 192.168.1.15, only.
 
 For the database which has already been running, you can modify a configuration file or you can check the currently applied status by using the following commands.
 
@@ -408,6 +446,7 @@ To display the IP configuration of a server which is currently running, use the 
 
 Database Server Log
 -------------------
+
 The following log is created in the file of a server error log if an IP address that is not allowed to access is used. 
 
 ::
@@ -415,7 +454,9 @@ The following log is created in the file of a server error log if an IP address 
     Time: 10/29/10 17:32:42.360 - ERROR *** ERROR CODE = -1022, Tran = 0, CLIENT = (unknown):(unknown)(-1), EID = 2
     Address(10.24.18.66) is not authorized.
 
-.. note:: For details on how to limit an access to the broker server, see :ref:`limiting-broker-access`.
+.. note:: 
+
+    For details on how to limit an access to the broker server, see :ref:`limiting-broker-access`.
 
 .. _database-server-error:
 
@@ -499,14 +540,17 @@ Broker
 Starting Broker
 ---------------
 
-Enter the command below to start the broker. ::
+Enter the command below to start the broker. 
+
+::
 
     $ cubrid broker start
     @ cubrid broker start
     ++ cubrid broker start: success
 
+The following message is returned if the broker is already running. 
 
-The following message is returned if the broker is already running. ::
+::
 
     $ cubrid broker start
     @ cubrid broker start
@@ -515,13 +559,17 @@ The following message is returned if the broker is already running. ::
 Stopping Broker
 ---------------
 
-Enter the command below to stop the broker. ::
+Enter the command below to stop the broker. 
+
+::
 
     $ cubrid broker stop
     @ cubrid broker stop
     ++ cubrid broker stop: success
 
-The following message is returned if the broker has stopped. ::
+The following message is returned if the broker has stopped. 
+
+::
 
     $ cubrid broker stop
     @ cubrid broker stop
@@ -531,6 +579,8 @@ Restarting Broker
 -----------------
 
 Enter the command below to restart the whole brokers.
+
+::
 
     $ cubrid broker restart
 
@@ -552,6 +602,7 @@ The following [options] are available with the **cubrid broker status** utility.
 .. option:: -b
 
     Displays the status information of a broker but does not display information on broker application server. the name of a broker is displayed until 20 characters; if the length is over 20, by adding "..." after the name.
+    
 .. option:: -f
 
     Displays information of DB and host accessed by broker.
@@ -574,7 +625,9 @@ The following [options] are available with the **cubrid broker status** utility.
 
     Regularly displays the status of broker based on specified period. It returns to a command prompt if q is entered.
 
-If you do not specify an option or argument to check the status of all brokers, the following result is displayed. ::
+If you do not specify an option or argument to check the status of all brokers, the following result is displayed. 
+
+::
 
     $ cubrid broker status
     @ cubrid broker status
@@ -645,7 +698,9 @@ Enter code below to check the status of broker whose name includes broker1 with 
      4 28447     0     0 50144 IDLE
      5 28448     0     0 50144 IDLE
 
-Enter code below to input the monitoring interval of broker whose name includes broker1 with the **-s** option and monitor broker status regularly. If you do not specify broker1 as an argument, monitoring status for all brokers is performed regularly. It returns to a command prompt if q is not entered. ::
+Enter code below to input the monitoring interval of broker whose name includes broker1 with the **-s** option and monitor broker status regularly. If you do not specify broker1 as an argument, monitoring status for all brokers is performed regularly. It returns to a command prompt if q is not entered. 
+
+::
 
     % cubrid broker status -s 5 broker1
     % broker1
@@ -702,7 +757,9 @@ Meaning of every column in code above is as follows:
 *   # CONNECT: The number of connections that an application client accesses to CAS after starting the broker
 *   # RESTART: The number of connection that CAS is re-running after starting the broker
 
-Enter code below to display information on AS (T W B Ns-W Ns-B) and CANCELED with the **-b** and **-f** options. ::
+Enter code below to display information on AS (T W B Ns-W Ns-B) and CANCELED with the **-b** and **-f** options. 
+
+::
 
     // The -f option is added upon execution of broker status information. Configuring Ns-W and Ns-B are displayed as long as N seconds by using the -l.
     % cubrid broker status -b -f -l 2
@@ -726,9 +783,12 @@ Meaning of every column in code above is as follows:
 Limiting Broker Server Access
 -----------------------------
 
-To limit the client applications accessing the broker, set to **ON** for the **ACCESS_ CONTROL** parameter in the **cubrid_broker.conf** file, and enter a name of the file in which the users and the list of databases and IP addresses allowed to access the **ACCESS_CONTROL_FILE** parameter value are written. The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified.
+To limit the client applications accessing the broker, set to **ON** for the **ACCESS_ CONTROL** parameter in the **cubrid_broker.conf** file, and enter a name of the file in which the users and the list of databases and IP addresses allowed to access the **ACCESS_CONTROL_FILE** parameter value are written. 
+The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified.
 
-The format of **ACCESS_CONTROL_FILE** is as follows: ::
+The format of **ACCESS_CONTROL_FILE** is as follows: 
+
+::
 
     [%<broker_name>]
     <db_name>:<db_user>:<ip_list_file>
@@ -741,7 +801,9 @@ The format of **ACCESS_CONTROL_FILE** is as follows: ::
 
 [%<broker_name>] and <db_name>:<db_user>:<ip_list_file> can be specified separately for each broker.
 
-The format of the ip_list_file is as follows:  ::
+The format of the ip_list_file is as follows:  
+
+::
 
     <ip_addr>
     ... 
@@ -750,7 +812,9 @@ The format of the ip_list_file is as follows:  ::
 
 If a value for **ACCESS_CONTROL** is set to ON and a value for **ACCESS_CONTROL_FILE** is not specified, the broker will only allow the access requests from the localhost. If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will only allow the access requests from the localhost.
 
-If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will not run.  ::
+If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker is running, the broker will not run.  
+
+::
 
     # cubrid_broker.conf
     [broker]
@@ -763,7 +827,9 @@ If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails while a broker
     BROKER_PORT             =30000
     ......
 
-The following example shows the content of **ACCESS_CONTROL_FILE**. The * symbol represents everything, and you can use it when you want to specify database names, database user IDs and IPs in the IP list file which are allowed to access the broker server.  ::
+The following example shows the content of **ACCESS_CONTROL_FILE**. The * symbol represents everything, and you can use it when you want to specify database names, database user IDs and IPs in the IP list file which are allowed to access the broker server.  
+
+::
 
     [%QUERY_EDITOR]
     dbname1:dbuser1:READIP.txt
@@ -789,7 +855,9 @@ The QUERY_EDITOR broker only allows the following application access requests.
 *   When a user logging into *dbname1* with a *dbuser2* account connects from IPs registered in WRITEIP1.txt and WRITEIP2.txt
 *   When a user logging into every database with a **DBA** account connects from IPs registered in READIP.txt, WRITEIP1.txt, and WRITEIP2.txt
 
-The following example shows how to specify the IPs allowed in ip_list_file.  ::
+The following example shows how to specify the IPs allowed in ip_list_file.  
+
+::
 
     192.168.1.25
     192.168.*
@@ -840,7 +908,9 @@ To display the databases, database user IDs and IPs that are allowed to access t
 Managing a Specific Broker
 --------------------------
 
-Enter the code below to run *broker1* only. Note that *broker1* should have already been configured in the shared memory. ::
+Enter the code below to run *broker1* only. Note that *broker1* should have already been configured in the shared memory. 
+
+::
 
     % cubrid broker on broker1
 
@@ -870,18 +940,23 @@ Dynamically Changing Broker Parameters
 
 You can configure the parameters related to running the broker in the configuration file ( **cubrid_broker.conf** ). You can also modify some broker parameters temporarily while the broker is running by using the **broker_changer** utility. For details, see :ref:`broker-configuration`.
 
-The syntax for the **broker_changer** utility, which is used to change broker parameters while the broker is running, is as follows. Enter the name of the currently running broker for the *broker_name* . The *parameters* can be used only for dynamically modifiable parameters. The *value* must be specified based on the parameter to be modified. You can specify the broker CAS identifier ( *cas_id* ) to apply the changes to the specific broker CAS. *cas_id* is an ID to be output by **cubrid broker status** command.
+The syntax for the **broker_changer** utility, which is used to change broker parameters while the broker is running, is as follows. Enter the name of the currently running broker for the *broker_name* . The *parameters* can be used only for dynamically modifiable parameters. The *value* must be specified based on the parameter to be modified. You can specify the broker CAS identifier ( *cas_id* ) to apply the changes to the specific broker CAS. 
+*cas_id* is an ID to be output by **cubrid broker status** command.
 
 ::
 
     broker_changer broker_name [cas_id] parameters value
 
-Enter the following to configure the **SQL_LOG** parameter to **ON** so that SQL logs can be written to the currently running broker. Such dynamic parameter change is effective only while the broker is running. ::
+Enter the following to configure the **SQL_LOG** parameter to **ON** so that SQL logs can be written to the currently running broker. Such dynamic parameter change is effective only while the broker is running. 
+
+::
 
     % broker_changer query_editor sql_log on
     OK
 
-Enter the following to change the **ACCESS_MODE** to **Read Only** and automatically reset the broker in HA environment. ::
+Enter the following to change the **ACCESS_MODE** to **Read Only** and automatically reset the broker in HA environment. 
+
+::
 
     % broker_changer broker_m access_mode ro
     OK
@@ -890,28 +965,31 @@ Enter the following to change the **ACCESS_MODE** to **Read Only** and automatic
 
     If you want to control the service using cubrid utilities on Windows Vista or the later versions of Window, you are recommended to open the command prompt window as an administrator. For details, see the notes of :ref:`CUBRID Utilities <utility-on-windows>`.
 
-.. _broker-logs:
-
 Broker configuration information
 --------------------------------
 
-**cubrid broker info** dumps the currently "working" broker parameters' configuration information(cubrid_broker.conf). broker parameters' information can be dynamically changed by **broker_changer** command; with **cubrid broker info** command, you can see the configuration information of the working broker. ::
+**cubrid broker info** dumps the currently "working" broker parameters' configuration information(cubrid_broker.conf). broker parameters' information can be dynamically changed by **broker_changer** command; with **cubrid broker info** command, you can see the configuration information of the working broker. 
+
+::
 
     % cubrid broker info
 
 As a reference, to see the configuration information of the currently "working" system(cubrid.conf), use **cubrid paramdump** *database_name* command. By **SET SYSTEM PARAMETERS** syntax, the configuration information of the system parameters can be changed dynamically; with **cubrid broker info** command, you can see the configuration information of the system parameters.
 
+.. _broker-logs:
+
 Broker Logs
 -----------
 
-There are three types of logs that relate to starting the broker: access, error and SQL logs. Each log can be found in the log directory under the installation directory. You can change the directory where these logs are to be stored through LOG_DIR and ERROR_LOG_DIR parameters of the broker configuration file (cubrid_broker.conf).
+There are three types of logs that relate to starting the broker: access, error and SQL logs. Each log can be found in the log directory under the installation directory. You can change the directory where these logs are to be stored through **LOG_DIR** and **ERROR_LOG_DIR** parameters of the broker configuration file (**cubrid_broker.conf**).
 
 **Checking the Access Log**
 
-    The access log file records information on the application client and is stored with the name of *broker_name.access* . If the **LOG_BACKUP** parameter is configured to **ON** in the broker configuration file, when the broker stops properly, the access log file is stored with the date and time that the broker has stopped. For example, if broker1 stopped at 12:27 P.M. on June 17, 2008, an access file named broker1.access.20080617.1227 is generated in the **log/broker**
-    directory. The following example shows an access log.
+    The access log file records information on the application client and is stored with the name of *broker_name.access* . If the **LOG_BACKUP** parameter is configured to **ON** in the broker configuration file, when the broker stops properly, the access log file is stored with the date and time that the broker has stopped. For example, if broker1 stopped at 12:27 P.M. on June 17, 2008, an access file named broker1.access.20080617.1227 is generated in the **log/broker** directory. The following example shows an access log.
 
-    The following example and description show an access log file created in the log directory: ::
+    The following example and description show an access log file created in the log directory: 
+    
+    ::
 
         1 192.168.1.203 - - 972523031.298 972523032.058 2008/06/17 12:27:46~2008/06/17 12:27:47 7118 - -1
         2 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:47~2008/06/17 12:27:47 7119 ERR 1025
@@ -931,7 +1009,9 @@ There are three types of logs that relate to starting the broker: access, error 
 
     The error log file records information on errors that occurred during the client's request processing and is stored with the name of *<broker_name>_<app_server_num>*.err.
 
-    The following example and description show an error log: ::
+    The following example and description show an error log: 
+    
+    ::
 
         Time: 02/04/09 13:45:17.687 - SYNTAX ERROR *** ERROR CODE = -493, Tran = 1, EID = 38
         Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
@@ -947,7 +1027,9 @@ There are three types of logs that relate to starting the broker: access, error 
 
     The SQL log file records SQL statements requested by the application client and is stored with the name of *<broker_name>_<app_server_num>*. sql.log. The SQL log is generated in the log/broker/sql_log directory when the SQL_LOG parameter is set to ON. Note that the size of the SQL log file to be generated cannot exceed the value set for the SQL_LOG_MAX_SIZE parameter. CUBRID offers the **broker_log_top**, **broker_log_converter**, and **broker_log_runner** utilities to manage SQL logs. Each utility should be executed in a directory where the corresponding SQL log exists.
 
-    The following examples and descriptions show SQL log files: ::
+    The following examples and descriptions show SQL log files: 
+    
+    ::
 
         02/04 13:45:17.687 (38) prepare 0 insert into unique_tbl values (1)
         02/04 13:45:17.687 (38) prepare srv_h_id 1
@@ -981,14 +1063,15 @@ There are three types of logs that relate to starting the broker: access, error 
 
     *   auto_commit/auto_rollback: Automatically committed or rolled back. The second auto_commit/auto_rollback is an error code. 0 indicates that the transaction has been completed without an error.
 
-    The **broker_log_top** utility analyzes the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in
-    **log.top.res**, respectively.
+    The **broker_log_top** utility analyzes the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in **log.top.res**, respectively.
 
-    The **broker_log_top** utility is useful to analyze a long running query. The syntax is as follows: ::
+    The **broker_log_top** utility is useful to analyze a long running query. The syntax is as follows: 
+    
+    ::
 
-        broker_log_top [options] <sql_log_file_list>
+        broker_log_top [options] sql_log_file_list
 
-    <sql_log_file_list> lists the log file names to analyze.
+    * *sql_log_file_list*: names of log files to analyze.
 
     The following is [options] used on **broker_log_top**.
 
@@ -1000,25 +1083,29 @@ There are three types of logs that relate to starting the broker: access, error 
 
     .. option:: -F DATE
 
-        This option specifies the execution start date of the SQL statements to be analyzed.
-        The input format is MM[/DD[ hh[:mm[:ss[.msec]]]]], and the part enclosed by [] can be omitted. If you omit the value, it is regarded as that 01 is input for DD, and 0 is input for hh, mm, ss and msec.
+        This option specifies the execution start date of the SQL statements to be analyzed. The input format is MM[/DD[ hh[:mm[:ss[.msec]]]]], and the part enclosed by [] can be omitted. If you omit the value, it is regarded as that 01 is input for DD, and 0 is input for hh, mm, ss and msec.
 
     :: option:: -T DATE
 
-        This option specifies the execution end date of the SQL statements to be analyzed.
-        The input format is the same with the *DATE* in the **-F** options.
+        This option specifies the execution end date of the SQL statements to be analyzed. The input format is the same with the *DATE* in the **-F** options.
 
     All logs are displayed by SQL statement if any option is not specified.
         
-    The following sets the search range to milliseconds ::
+    The following sets the search range to milliseconds 
+    
+    ::
 
         broker_log_top -F "01/19 15:00:25.000" -T "01/19 15:15:25.180" log1.log
         
-    The part where the time format is omitted is set to 0 by default. This means that -F "01/19 00:00:00.000" -T "01/20 00:00:00.000" is input. ::
+    The part where the time format is omitted is set to 0 by default. This means that -F "01/19 00:00:00.000" -T "01/20 00:00:00.000" is input. 
+    
+    ::
 
         broker_log_top -F "01/19" -T "01/20" log1.log
 
-    The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a white space on Windows. ::
+    The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a white space on Windows. 
+    
+    ::
 
         --Execution broker_log_top on Linux
         % broker_log_top -F "11/11" -T "11/12" -t *.sql.log
@@ -1032,7 +1119,10 @@ There are three types of logs that relate to starting the broker: access, error 
         --Executing broker_log_top on Windows
         % broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
 
-    The log.top.q and log.top.res files are generated in the same directory where the analyzed logs are stored when executing the example above; In the log.top.q file, you can view each SQL statement, and its line number. In the log.top.res, you can the minimum, maximum and avg. time, and the number of execution queries for each SQL statement. ::
+    The **log.top.q** and **log.top.res** files are generated in the same directory where the analyzed logs are stored when executing the example above; 
+    In the **log.top.q** file, you can see each SQL statement, and its line number. In the **log.top.res** file, you can see the minimum execution time, the maximum execution time, the average execution time, and the number of execution queries for each SQL statement. 
+    
+    ::
 
         --log.top.q file
         [Q1]-------------------------------------------
@@ -1046,7 +1136,7 @@ There are three types of logs that relate to starting the broker: access, error 
         11/11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
         11/11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
 
-        --log.top.res
+        --log.top.res file
 
                       max       min        avg   cnt(err)
         -----------------------------------------------------
@@ -1055,24 +1145,46 @@ There are three types of logs that relate to starting the broker: access, error 
         [Q3]        35.548    25.650    30.599    2 (0)
         [Q4]        30.469     0.001     0.103 1050 (0)
 
-    To store SQL logs created in log/broker/sql_log under the installation directory to a separate file, the **broker_log_converter** utility is executed. The syntax of the **broker_log_converter** utility is as follows. The example shows how to store queries in the query_editor_1.sql.log file to the query_convert.in file. ::
+    To store SQL logs created in log/broker/sql_log under the installation directory to a separate file, the **broker_log_converter** utility is executed. The syntax of the **broker_log_converter** utility is as follows. The example shows how to store queries in the query_editor_1.sql.log file to the query_convert.in file. 
+    
+    ::
 
-        broker_log_converter <SQL_log_file> <output_file>
+        broker_log_converter [option] SQL_log_file output_file
+        
+    * *SQL_log_file*: SQL log file located in $CUBRID/log/broker/sql_log directory. It only saves SQL log when the application sends a query through only a driver, and does not save SQL log when the query is executed through CSQL interpreter.
+    * *output_file*: an output file which the input format is followed by **broker_log_runner**
 
-    The following example shows how to convert the query in the query_editor_1.sql.log file into the query_convert.in file. ::
+    The following is the [option] used in **broker_log_converter**.
 
+    .. program:: broker_log_top
+
+    .. option:: -i
+        
+        It prints QUERY_ID comment in front of the query.
+    
+    If QUERY_ID comment exists on the query, tracing a query is easier since QUERY_ID information is printed to the SQL log(located in $CUBRID/log/broker/sql_log) of the broker when replaying the queries of **output_file**.
+    
+    The following example shows how to convert the query in the query_editor_1.sql.log file into the query_convert.in file. 
+    
+    ::
+
+        % cd CUBRID/log/broker/sql_log
         % broker_log_converter query_editor_1.sql.log query_convert.in
 
-    To re-execute queries stored in the query file which has been created by the **broker_log_converter** utility, the **broker_log_runner** utility is executed. The syntax of the **broker_log_runner** utility is as follows: The example shows how to re-executes queries store in the query_convert.in of demodb. It is assumed that the IP address of the broker is 192.168.1.10 and its port number is 30,000. ::
+    To re-execute queries stored in the query file which has been created by the **broker_log_converter** utility, execute the **broker_log_runner** utility.
+    
+    The syntax of the **broker_log_runner** utility is as follows: 
+    
+    ::
 
         broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
         
-    * *broker_host*: IP address or host name of the CUBRID broker
-    * *broker_port*: Port number of the CUBRID broker
-    * *dbname*: Name of the database against which queries are to be executed  
-    * *exec_script_file*: Name of the file where execution results are to be stored.
+    *   *broker_host*: IP address or host name of the CUBRID broker
+    *   *broker_port*: Port number of the CUBRID broker
+    *   *dbname*: Name of the database against which queries are to be executed  
+    *   *exec_script_file*: Name of the file where execution results are to be stored.
 
-    The following is [options] used on **broker_log_runner** .
+    The following is [options] used in **broker_log_runner**.
 
     .. program::broker_log_runner
 
@@ -1083,6 +1195,10 @@ There are three types of logs that relate to starting the broker: access, error 
     .. option:: -p PASSWORD
 
         Database password
+        
+    .. option:: -t NUMBER    
+
+        스레드의 개수 지정(기본값: 1)
         
     .. option:: -r COUNT
 
@@ -1096,7 +1212,17 @@ There are three types of logs that relate to starting the broker: access, error 
         
         Stores the query plan in the FILE specified in the **-o** option.
 
-    The following example re-executes the queries saved on *query_convert.in* on *demodb*, and it assumes that the broker IP is specified in 192.168.1.10, and broker port is specified in 30000. ::
+    .. option:: -s
+        
+        Prints the information by the "cubrid statdump" command per each query. See :ref:`statdump`.
+        
+    .. option:: -a
+
+        Sets autocommit mode as ON.
+        
+    The following example re-executes the queries saved on *query_convert.in* on *demodb*, and it assumes that the broker IP is specified in 192.168.1.10, and broker port is specified in 30000. 
+    
+    ::
 
         % broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
         broker_ip = 192.168.1.10
@@ -1110,7 +1236,9 @@ There are three types of logs that relate to starting the broker: access, error 
         exec_time : 0.000
         0.000500 0.000500
 
-    The following example saves the query plan only without running the query. ::
+    The following example saves the query plan only without running the query. 
+    
+    ::
         
         % broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
         ... 
@@ -1158,11 +1286,15 @@ CUBRID Manager Server
 Starting the CUBRID Manager Server
 ----------------------------------
 
-The following example shows how to start the CUBRID Manager server. ::
+The following example shows how to start the CUBRID Manager server. 
+
+::
 
     % cubrid manager start
 
-The following message is returned if the CUBRID Manager server is already running. ::
+The following message is returned if the CUBRID Manager server is already running. 
+
+::
 
     % cubrid manager start
     @ cubrid manager server start
@@ -1171,7 +1303,9 @@ The following message is returned if the CUBRID Manager server is already runni
 Stopping the CUBRID Manager Server
 ----------------------------------
 
-The following example shows how to stop the CUBRID Manager server. ::
+The following example shows how to stop the CUBRID Manager server. 
+
+::
 
     % cubrid manager stop
     @ cubrid manager server stop
@@ -1187,10 +1321,13 @@ The logs of CUBRID Manager server are stored in the log/manager directory under 
 *   cub_js.access.log: Job log processed by the CUBRID Manager server
 *   cub_js.error.log: Error log that occurred while the CUBRID Manager server has been processing jobs
 
-**Configuring CUBRID Manager Server**
+Configuring CUBRID Manager Server
+---------------------------------
 
-    The configuration file name for the CUBRID Manager server is **cm.conf** and located in the **$CUBRID/conf** directory.
-    In the CUBRID Manager server configuration file, where parameter names and values are stored, comments are prefaced by "#." Parameter names and values are separated by spaces or an equal sign (=). This page describes parameters that are specified in the **cm.conf** file.
+The configuration file name for the CUBRID Manager server is **cm.conf** and located in the **$CUBRID/conf** directory.
+In the CUBRID Manager server configuration file, where parameter names and values are stored, comments are prefaced by "#." Parameter names and values are separated by spaces or an equal sign (=). 
+    
+This page describes parameters that are specified in the **cm.conf** file.
 
 **cm_port**
 
@@ -1208,8 +1345,7 @@ The logs of CUBRID Manager server are stored in the log/manager directory under 
 
 **server_long_query_time**
 
-    **server_long_query_time** is a parameter used to configure delay reference time in seconds when configuring **slow_query** which is one of server diagnostics items. The default value is **10** . If the execution time of the query performed on the server exceeds this parameter value, the number of the **slow_query**
-    parameters will increase.
+    **server_long_query_time** is a parameter used to configure delay reference time in seconds when configuring **slow_query** which is one of server diagnostics items. The default value is **10** . If the execution time of the query performed on the server exceeds this parameter value, the number of the **slow_query** parameters will increase.
 
 **cm_target**
 
@@ -1228,10 +1364,11 @@ The logs of CUBRID Manager server are stored in the log/manager directory under 
 CUBRID Manager User Management Console
 --------------------------------------
 
-The account and password of CUBRID Manager user are used to access the CUBRID Manager server when starting the CUBRID Manager client, distinguishing this user from the database user. CUBRID Manager Administrator (cm_admin) is a CLI tool that manages user information and it executes commands in the console window to manage users.
-This utility only supports Linux OS.
+The account and password of CUBRID Manager user are used to access the CUBRID Manager server when starting the CUBRID Manager client, distinguishing this user from the database user. CUBRID Manager Administrator (cm_admin) is a CLI tool that manages user information and it executes commands in the console window to manage users. This utility only supports Linux OS.
 
-The following shows how to use the CUBRID Manager (hereafter, CM) Administrator utilities. The utilities can be used through GUI on the CUBRID Manager client. ::
+The following shows how to use the CUBRID Manager (hereafter, CM) Administrator utilities. The utilities can be used through GUI on the CUBRID Manager client. 
+
+::
 
     cm_admin <utility_name>
     <utility_name>:
@@ -1261,16 +1398,15 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
 **Adding CM Users**
 
-    The **cm_admin adduser** utility creates a CM user who has been granted a specific authority and has database information. The permissions to configure broker, create a database, and monitor status can be granted to the CM user. ::
+    The **cm_admin adduser** utility creates a CM user who has been granted a specific authority and has database information. The permissions to configure broker, create a database, and monitor status can be granted to the CM user. 
+    
+    ::
 
         cm_admin adduser [options] cmuser-name cmuser-password
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
-
     *   **adduser**: A command to create a new CM user
-
     *   *cmuser-name*: Specifies a unique name to a CM user. The name must have at least 4 characters in length. If the specified name in *cmuser-name* is identical to the existing one, **cm_admin** will stop creating a new CM user.
-
     *   *cmuser-password*: A password of a CM user. The password must have at least 4 characters in length.
 
     The following is [options] of **cm_admin adduser**.
@@ -1286,7 +1422,6 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure broker authority to monitor. ::
         
             cm_admin adduser -b monitor testcm testcmpwd
-
         
     .. option:: -c, --dbcreate AUTHORITY
 
@@ -1300,21 +1435,21 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
     .. option:: -m, monitor AUTHORITY
 
-        Specifies the authority to monitor status which will be granted to a new CM user. 
+        Specifies the authority to monitor status which will be granted to a new CM user. You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
 
-        You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
-
-        The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure monitoring authority to admin. ::
+        The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure monitoring authority to admin. 
+        
+        ::
 
             cm_admin adduser -m admin testcm testcmpwd
 
     .. option:: -d, --dbinfo INFO_STRING
 
-        Specifies database information of a new CM user. 
-        
-        The format of *INFO_STRING* must be "<dbname>;<uid>;<broker_ip>,<broker_port>".
+        Specifies database information of a new CM user. The format of *INFO_STRING* must be "<dbname>;<uid>;<broker_ip>,<broker_port>".
 
-        The following example shows how to add database information "testdb;dba;localhost,30000" to a CM user named *testcm* . ::
+        The following example shows how to add database information "testdb;dba;localhost,30000" to a CM user named *testcm* . 
+        
+        ::
         
             cm_admin adduser -d "testdb;dba;localhost,30000" testcm testcmpwd
 
@@ -1325,9 +1460,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         cm_admin deluser cmuser-name
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
-
     *   **deluser**: A command to delete an existing CM user
-
     *   *cmuser-name*: The name of a CM user to be deleted
 
     The following example shows how to delete a CM user named *testcm*. ::
@@ -1336,21 +1469,25 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
 **Displaying CM User information**
 
-    The **cm_admin viewuser** utility displays information of a CM user. ::
+    The **cm_admin viewuser** utility displays information of a CM user. 
+    
+    ::
 
         cm_admin viewuser cmuser-name
 
     *   **cm_admin**: An integrated utility to manage CUBRID Manager
-
     *   **viewuser**: A command to display the CM user information
-
     *   *cmuser-name*: A CM user name. If this value is entered, information only for the specified user is displayed; if it is omitted, information for all CM users is displayed.
 
-    The following example shows how to display information of a CM user named *testcm* . ::
+    The following example shows how to display information of a CM user named *testcm* . 
+    
+    ::
 
         cm_admin viewuser testcm
 
-    The information will be displayed as follows: ::
+    The information will be displayed as follows: 
+    
+    ::
 
         CM USER: testcm
           Auth info:
@@ -1382,7 +1519,9 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         Specifies the broker authority that will be granted to a CM user. 
         You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
 
-        The following example shows how to change the broker authority of a CM user named *testcm* to monitor. ::
+        The following example shows how to change the broker authority of a CM user named *testcm* to monitor. 
+        
+        ::
         
             cm_admin changeuserauth -b monitor testcm    
         
@@ -1391,24 +1530,28 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
         Specifies the authority to create a database which will be granted to a CM user.
         You can use **admin** and **none** as *AUTHORITY* .
 
-        The following example shows how to change the database creation authority of a CM user named *testcm* to admin. ::
+        The following example shows how to change the database creation authority of a CM user named *testcm* to admin. 
+        
+        ::
 
             cm_admin changeuserauth -c admin testcm
-
 
     .. option:: -m, --monitor 
 
         Specifies the authority to monitor status which will be granted to a CM user.
         You can use **admin**, **none**, and **monitor** as *AUTHORITY* .
 
-        The following example shows how to change the monitoring authority of a CM user named *testcm* to admin. ::
+        The following example shows how to change the monitoring authority of a CM user named *testcm* to admin. 
+        
+        ::
 
             cm_admin changeuserauth -m admin testcm
 
-
 **Changing the CM User Password**
 
-    The **cm_admin changeuserpwd** utility changes the password of a CM user. ::
+    The **cm_admin changeuserpwd** utility changes the password of a CM user. 
+    
+    ::
 
         cm_admin changeuserpwd [options] cmuser-name  
 
@@ -1422,7 +1565,9 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         Specifies the existing password of a CM user.
 
-        The following example shows how to change a password of a CM user named *testcm* . ::
+        The following example shows how to change a password of a CM user named *testcm* . 
+        
+        ::
 
             cm_admin changeuserpwd -o old_password -n new_password testcm
         
@@ -1430,14 +1575,15 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         The password of an admin user can be specified instead of old CM user's password that you don't know. 
 
-        The following example shows how to change a password of a CM user named *testcm* by using an admin password. ::
+        The following example shows how to change a password of a CM user named *testcm* by using an admin password. 
+        
+        ::
 
             cm_admin changeuserauth --adminpass admin_password -n new_password testcm
         
     .. option:: -n, --newpass PASSWORD
 
         Specifies a new password of a CM user.
-    
 
 **Adding Database Information to CM Users**
 
@@ -1450,10 +1596,11 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     *   *cmuser-name*: CM user name
     *   *database-name*: The name of a database to be added
 
-    The following example shows how to add a database without specifying any user-defined values to a CM user named *testcm* . ::
+    The following example shows how to add a database without specifying any user-defined values to a CM user named *testcm* . 
+    
+    ::
 
         cm_admin adddbinfo testcm testdb
-
 
     The following is [options] of **cm_admin adddbinfo**.
 
@@ -1463,7 +1610,9 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         Specifies the ID of a database user to be added. The default value is **dba**.
 
-        The following example shows how to add a database of which name is *testdb* and user ID is *uid* to a CM user named *testcm*. ::
+        The following example shows how to add a database of which name is *testdb* and user ID is *uid* to a CM user named *testcm*. 
+        
+        ::
 
             cm_admin adddbinfo -u uid testcm testdb
         
@@ -1478,13 +1627,6 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     .. option:: -p, --port
 
         Specifies the port number of a broker used when clients access a database. The default value: **30000** .
-
-
-**Adding a broker port (-p)**
-
-    The following example shows how to add a database of which name is *testdb* and the broker port *33000* to a CM user named *testcm*. ::
-
-        cm_admin adddbinfo -p 33000 testcm testdb
 
 **Deleting database information from CM Users**
 
@@ -1503,7 +1645,9 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
 **Changing Database Information of a CM user**
 
-    The **cm_admin changedbinfo** utility changes database information of a specified CM user. ::
+    The **cm_admin changedbinfo** utility changes database information of a specified CM user. 
+    
+    ::
 
         cm_admin changedbinfo [options] cmuser-name database-name
 

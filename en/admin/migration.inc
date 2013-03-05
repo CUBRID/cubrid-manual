@@ -1,60 +1,7 @@
-******************
-Database Migration
-******************
-
-Migrating Database
-==================
-
-To use a new version of CUBRID database, you may need to migrate an existing data to a new one. For this purpose, you can use the "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. 
-
-The following section explains migration steps using the **cubrid unloaddb** and **cubrid loaddb** utilities.
-
-**Recommended Scenario and Procedures**
-
-The following steps describes migration scenario that can be applied while the existing version of CUBRID is running. For database migration, you should use the **cubrid unloaddb** and **cubrid loaddb** utilities. For details, see :ref:`unload-db` and :ref:`load-db`.
-
-#. Stop the existing CUBRID service
-
-    Execute **cubrid service stop** to stop all service processes running on the existing CUBRID and then check whether all CUBRID-related processes have been successfully stopped. 
-
-    To verify whether all CUBRID-related processes have been successfully stopped, execute **ps -ef | grep cub\_** in Linux. If there is no process starting with cub\_, all CUBRID-related processes have been successfully stopped. In Windows, press the <Ctrl+Alt+Delete> key and select [Start Task Manager]. If there is no process starting with cub\_ in the [Processes] tab, all CUBRID-related processes have been successfully stopped. In Linux, when the related processes remain even after the CUBRID service has been terminated, use **kill** command to forcibly terminate them, and use **ipcs -m** command to check and release the memory shard by CUBRID broker. To forcibly terminate related processes in Windows, go to the [Processes] tab of Task Manager, right-click the image name, and then select [End Process].
-
-#. Back up the existing database
-
-    Perform backup of the existing version of the database by using the **cubrid backupdb** utility. The purpose of this step is to safeguard against failures that might occur during the database unload/load operations. For details on the database backup, see :ref:`db-backup`.
-
-#. Unload the existing database
-
-    Unload the database created for the existing version of CUBRID by using the **cubrid unloaddb** utility. For details on unloading a database, see :ref:`unload-db` .
-
-#. Store the existing CUBRID configuration files
-
-    Store the configurations files such as **cubrid.conf**, **cubrid_broker.conf** and **cm.conf ** in the **CUBRID/conf** directory. The purpose of this step is to conveniently apply parameter values for the existing CUBRID database environment to the new one.
-
-#. Install a new version of CUBRID
-
-    Once backing up and unloading of the data created by the existing version of CUBRID have been completed, delete the existing version of CUBRID and its databases and then install the new version of CUBRID. For details on installing CUBRID, see :doc:`/start`.
-
-#. Configure the new CUBRID environment
-
-    Configure the new version of CUBRID by referring to configuration files of the existing database stored in the step 3, " **Store the existing CUBRID configuration files** ." For details on configuring new environment, see :doc:`/install` in "Getting Started."
-
-#. Load the new database
-
-    Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. Please refer :ref:`creating-database` for creating a database and :ref:`load-db` for loading a database.
-    
-#. Back up the new database
-
-    Once the data has been successfully loaded into the new database, back up the database created for the new version of CUBRID by using the **cubrid backupdb** utility. The reason for this step is because you cannot restore the data backed up in the existing version of CUBRID when using the new version. For details on backing up the database, see :ref:`db-backup` .
-
-.. warning:: 
-
-    Even if the version is identical, the 32-bit database volume and the 64-bit database volume are not compatible for backup and recovery. Therefore, it is not recommended to recover a 32-bit database backup on the 64-bit CUBRID or vice versa.
-
 .. _unload-db:
     
 Unloading Database
-==================
+------------------
 
 The purposes of loading/unloading databases are as follows:
 
@@ -72,9 +19,6 @@ The purposes of loading/unloading databases are as follows:
 *   Object file(*database-name*\ **_objects**): A file that contains information on the records in the database.
 *   Index file(*database-name*\ **_indexes**): A file that contains information on the indexes defined in the database.
 *   Trigger file(*database-name*\ **_trigger**): A file that contains information on the triggers defined in the database. If you don't want triggers to be running while loading the data, load the trigger definitions after the data loading has completed.
-
-*   User-defined object file (*user_defined_object_file*): A file in table format written by the user to enter mass data. (For details, see How to Write Files to Load Database.)
-
 
 The schema, object, index, and trigger files are created in the same directory.
 
@@ -190,7 +134,7 @@ The following is [options] used in **cubrid unloaddb**.
 .. _load-db:
         
 Loading Database
-================
+----------------
 
 You can load a database by using the **cubrid loaddb** utility in the following situations:
 
@@ -210,7 +154,7 @@ In general, the **cubrid loaddb** utility uses files (schema definition, object 
 *   Trigger file(*database-name*\ **_trigger**): A file created by an unload operation. It contains information on the triggers defined in the database.
 *   User-defined object file(*user_defined_object_file*): A file in table format written by the user to enter mass data. (For details, see :ref:`howtowrite-loadfile` .)
 
-The following table shows options available with the **cubrid loaddb** utility (options are case sensitive).
+The following table shows [options] available with the **cubrid loaddb** utility.
 
 .. program:: loaddb
 
@@ -226,7 +170,6 @@ The following table shows options available with the **cubrid loaddb** utility (
 
         cubrid loaddb -p admin -d demodb_objects newdb
 
-        
 .. option:: --data-file-check-only
 
     This option checks only the syntax of the data contained in demodb_objects, and does not load the data to the database. ::
@@ -305,7 +248,7 @@ The following table shows options available with the **cubrid loaddb** utility (
 
         cubrid loaded -u dba -d demodb_objects -t tbl_name newdb
 
-.. option:: --error-control-file
+.. option:: --error-control-file=FILE
 
     This option specifies the file that describes how to handle specific errors occurring during database loading. ::
 
@@ -339,8 +282,11 @@ The following table shows options available with the **cubrid loaddb** utility (
     The following example shows a file that details errors.
 
     *  The warning errors from 24 to 33 indicating DB volume space is insufficient are not ignored by configuring +DEFAULT.
+    
     *  The error code 2 is not ignored because +2 has been specified later, even when -2 has been specified first.
+    
     *  -670 has been specified to ignore the error code 670, which is a unique violation error.
+    
     *  #-115 has been processed as a comment since # is added. ::
 
         vi error_file
@@ -351,7 +297,7 @@ The following table shows options available with the **cubrid loaddb** utility (
         #-115 --> comment
         +2
 
-.. option:: --ignore-class-file
+.. option:: --ignore-class-file=FILE
 
     You can specify a file that lists classes to be ignored during loading records. All records of classes except ones specified in the file will be loaded. ::
 
@@ -364,26 +310,26 @@ The following table shows options available with the **cubrid loaddb** utility (
 .. _howtowrite-loadfile:
 
 How to Write Files to Load Database
-===================================
+-----------------------------------
 
 You can add mass data to the database more rapidly by writing the object input file used in the **cubrid loaddb** utility. An object input file is a text file in simple table form that consists of comments and command/data lines.
 
 Comment
--------
+^^^^^^^
 
 In CUBRID, a comment is represented by two hyphens (--). ::
 
     -- This is a comment!
 
 Command Line
-------------
+^^^^^^^^^^^^
 
 A command line begins with a percent character (%) and consists of **%class** and **%id** commands; the former defines classes, and the latter defines aliases and identifiers used for class identification.
 
 .. _assign-id-to-class:
 
 Assigning an Identifier to a Class
-----------------------------------
+++++++++++++++++++++++++++++++++++
 
 You can assign an identifier to class reference relations by using the **%id** command. ::
 
@@ -403,7 +349,7 @@ The *class_name* specified by the **%id** command is the class name defined in t
     %id phone 24
 
 Specifying the Class and Attribute
-----------------------------------
+++++++++++++++++++++++++++++++++++
 
 You can specify the classes (tables) and attributes (columns) upon loading data by using the **%class** command. The data line should be written based on the order of attributes specified. When a class name is provided by using the **-t** option while executing the **cubrid loaddb** utility, you don't have to specify the class and attribute in the data file. However, the order of writing data must comply with the order of the attribute defined when creating a class. ::
 
@@ -418,14 +364,14 @@ The following example shows how to specify a class and three attributes by using
     %class employee (name age department)
 
 Data Line
----------
+^^^^^^^^^
 
 A data line comes after the **%class** command line. Data loaded must have the same type as the class attributes specified by the **%class** command. The data loading operation stops if these two types are different.
 
 Data for each attribute must be separated by at least one space and be basically written as a single line. However, if the data to be loaded takes more than one line, you should specify the plus sign (+) at the end of the first data line to enter data continuously on the following line. Note that no space is allowed between the last character of the data and the plus sign.
 
 Loading an Instance
--------------------
++++++++++++++++++++
 
 As shown below, you can load an instance that has the same type as the specified class attribute. Each piece of data is separated by at least one space.
 
@@ -438,7 +384,7 @@ As shown below, you can load an instance that has the same type as the specified
     'malone'
 
 Assigning an Instance Number
-----------------------------
+++++++++++++++++++++++++++++
 
 You can assign a number to a given instance at the beginning of the data line. An instance number is a unique positive number in the specified class. Spaces are not allowed between the number and the colon (:). Assigning an instance number is used to configure the reference relation for later.
 
@@ -453,7 +399,7 @@ You can assign a number to a given instance at the beginning of the data line. A
 .. _conf-reference-relation:
     
 Configuring Reference Relation
-------------------------------
+++++++++++++++++++++++++++++++
 
 You can configure the object reference relation by specifying the reference class after an "at sign (**@**)" and the instance number after the "vertical line (|)." ::
 
@@ -481,3 +427,52 @@ Since the id 21 was assigned to the *employee* class by using the **%id** comman
     @21|3   'sales'   5000000  
     @21|4   'development'   4000000
     @21|5   'development'   5000000
+
+Migrating Database
+------------------
+
+To use a new version of CUBRID database, you may need to migrate an existing data to a new one. For this purpose, you can use the "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. 
+
+The following section explains migration steps using the **cubrid unloaddb** and **cubrid loaddb** utilities.
+
+**Recommended Scenario and Procedures**
+
+The following steps describes migration scenario that can be applied while the existing version of CUBRID is running. For database migration, you should use the **cubrid unloaddb** and **cubrid loaddb** utilities. For details, see :ref:`unload-db` and :ref:`load-db`.
+
+#. Stop the existing CUBRID service
+
+    Execute **cubrid service stop** to stop all service processes running on the existing CUBRID and then check whether all CUBRID-related processes have been successfully stopped. 
+
+    To verify whether all CUBRID-related processes have been successfully stopped, execute **ps -ef | grep cub\_** in Linux. If there is no process starting with cub\_, all CUBRID-related processes have been successfully stopped. In Windows, press the <Ctrl+Alt+Delete> key and select [Start Task Manager]. If there is no process starting with cub\_ in the [Processes] tab, all CUBRID-related processes have been successfully stopped. In Linux, when the related processes remain even after the CUBRID service has been terminated, use **kill** command to forcibly terminate them, and use **ipcs -m** command to check and release the memory shard by CUBRID broker. To forcibly terminate related processes in Windows, go to the [Processes] tab of Task Manager, right-click the image name, and then select [End Process].
+
+#. Back up the existing database
+
+    Perform backup of the existing version of the database by using the **cubrid backupdb** utility. The purpose of this step is to safeguard against failures that might occur during the database unload/load operations. For details on the database backup, see :ref:`db-backup`.
+
+#. Unload the existing database
+
+    Unload the database created for the existing version of CUBRID by using the **cubrid unloaddb** utility. For details on unloading a database, see :ref:`unload-db` .
+
+#. Store the existing CUBRID configuration files
+
+    Store the configurations files such as **cubrid.conf**, **cubrid_broker.conf** and **cm.conf ** in the **CUBRID/conf** directory. The purpose of this step is to conveniently apply parameter values for the existing CUBRID database environment to the new one.
+
+#. Install a new version of CUBRID
+
+    Once backing up and unloading of the data created by the existing version of CUBRID have been completed, delete the existing version of CUBRID and its databases and then install the new version of CUBRID. For details on installing CUBRID, see :doc:`/start`.
+
+#. Configure the new CUBRID environment
+
+    Configure the new version of CUBRID by referring to configuration files of the existing database stored in the step 3, " **Store the existing CUBRID configuration files** ." For details on configuring new environment, see :doc:`/install` in "Getting Started."
+
+#. Load the new database
+
+    Create a database by using the **cubrid createdb** utility and then load the data which had previously been unloaded into the new database by using the **cubrid loaddb** utility. Please refer :ref:`creating-database` for creating a database and :ref:`load-db` for loading a database.
+    
+#. Back up the new database
+
+    Once the data has been successfully loaded into the new database, back up the database created for the new version of CUBRID by using the **cubrid backupdb** utility. The reason for this step is because you cannot restore the data backed up in the existing version of CUBRID when using the new version. For details on backing up the database, see :ref:`db-backup` .
+
+.. warning:: 
+
+    Even if the version is identical, the 32-bit database volume and the 64-bit database volume are not compatible for backup and recovery. Therefore, it is not recommended to recover a 32-bit database backup on the 64-bit CUBRID or vice versa.

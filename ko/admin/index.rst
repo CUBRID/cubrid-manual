@@ -9,7 +9,7 @@
 이 장에서 설명하는 주요 내용은 다음과 같다.
 
 *   cubrid 유틸리티
-*   CUBRID 제어
+*   CUBRID 제어 (서비스, DB 서버, 브로커, 매니저 서버)
 *   데이터베이스 관리
 *   데이터베이스 마이그레이션
 *   데이터베이스 백업 및 복구
@@ -32,6 +32,7 @@
 *   브로커 유틸리티: 브로커 프로세스 및 응용서버(CAS) 프로세스를 구동 및 관리한다.
 
     *   cubrid broker
+    
 *   매니저 유틸리티: 매니저 서버 프로세스를 구동 및 관리한다.
 
     *   cubrid manager
@@ -44,80 +45,67 @@
 
 데이터베이스 관리 유틸리티는 다음과 같다.
 
-*   데이터베이스 생성/볼륨 추가/삭제 유틸리티
+*   데이터베이스 생성, 볼륨 추가, 삭제 
 
     *   cubrid createdb
-    
     *   cubrid addvoldb
-    
     *   cubrid deletedb
     
-*   데이터베이스 이름 변경/호스트 변경/복사/설치 유틸리티
+*   데이터베이스 이름 변경, 호스트 변경, 복사/이동, 등록 
 
     *   cubrid renamedb
-    
     *   cubrid alterdbhost
-    
     *   cubrid copydb
-    
     *   cubrid installdb
-    
-*   데이터베이스 공간 확인/공간 정리 유틸리티
 
-    *   cubrid spacedb
-    
-    *   cubrid compactdb
-    
-*   데이터베이스 질의 계획 확인/최적화 유틸리티
-
-    *   cubrid plandump
-    
-    *   cubrid optimizedb
-    
-    *   cubrid statdump
-    
-*   데이터베이스 잠금 확인/트랜잭션 확인/트랜잭션 제거/일관성 확인 유틸리티
-
-    *   cubrid lockdb
-    
-    *   cubrid tranlist
-    
-    *   cubrid killtran
-    
-    *   cubrid checkdb
-    
-*   데이터베이스 진단/파라미터 출력 유틸리티
-
-    *   cubrid diagdb
-    
-    *   cubrid paramdump
-    
-*   데이터베이스 적재 유틸리티
-
-    *   cubrid loaddb
-    
-    *   cubrid unloaddb
-    
-*   데이터베이스 백업/복구 유틸리티
+*   데이터베이스 백업
 
     *   cubrid backupdb
 
+*   데이터베이스 복구
+
     *   cubrid restoredb
 
-*   HA 유틸리티
+*   내보내기와 가져오기
+
+    *   cubrid unloaddb
+    *   cubrid loaddb
+    
+*   데이터베이스 공간 확인, 공간 정리 
+
+    *   cubrid spacedb
+    *   cubrid compactdb
+    
+*   통계 정보 갱신, 질의 계획 확인 
+
+    *   cubrid plandump
+    *   cubrid optimizedb
+    *   cubrid statdump
+    
+*   잠금 확인, 트랜잭션 확인, 트랜잭션 제거 
+
+    *   cubrid lockdb
+    *   cubrid tranlist
+    *   cubrid killtran
+    
+*   데이터베이스 진단/파라미터 출력 
+
+    *   cubrid checkdb
+    *   cubrid diagdb
+    *   cubrid paramdump
+
+
+*   HA 모드 변경,로그 복제/반영
+ 
 
     *   cubrid changemode
-    
     *   cubrid copylogdb
-    
     *   cubrid applylogdb
-    
     *   cubrid applyinfo
 
-*   로캘 유틸리티
+*   로캘 컴파일/출력
 
     *   cubrid genlocale
-    
     *   cubrid dumplocale
 
 자세한 설명은 :ref:`cubrid-utilities` 를 참조한다.

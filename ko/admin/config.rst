@@ -432,7 +432,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **index_scan_oid_buffer_size**
 
-    **index_scan_oid_buffer_size** 는 인덱스 스캔을 수행할 때 OID 리스트의 임시 저장을 위한 버퍼의 크기를 설정하기 위한 파라미터이다. K, M, G, T로 단위를 설정할 수 있으며, 각각 KB(kilobytes), MB(megabytes), GB(gigabytes), TB(terabytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **64K** 이고, 최소값은 1K, 최대값은 256K이다.
+    **index_scan_oid_buffer_size** 는 인덱스 스캔을 수행할 때 OID 리스트의 임시 저장을 위한 버퍼의 크기를 설정하기 위한 파라미터이다. K 단위를 설정할 수 있으며, KB(kilobytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 **64K** 이고, 최소값은 1K, 최대값은 256K이다.
 
     **index_scan_oid_buffer_size** 파라미터 값과 데이터베이스 생성 시 설정한 단위 페이지의 크기에 비례하여 OID 버퍼의 크기가 결정되고, 이러한 OID버퍼의 크기가 클수록 인덱스 스캔 비용이 증가하는 경향을 보인다. 이를 고려하여 **index_scan_oid_buffer_size** 파라미터 값을 조정할 수 있다.
 

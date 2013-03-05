@@ -433,7 +433,7 @@ The following are parameters related to the memory used by the database server o
 
 **index_scan_oid_buffer_size**
 
-    **index_scan_oid_buffer_size** is a parameter used to configure the size of buffer where the OID list is to be temporarily stored during the index scan.  You can set units as K, M, G and T, which stand for KB (kilobytes), MB (megabytes), GB (gigabytes) and TB (terabytes), respectively. If you omit the unit, bytes will be applied. The default value is 64K, the minimum value is 1K, and the maximum value is 256K.
+    **index_scan_oid_buffer_size** is a parameter used to configure the size of buffer where the OID list is to be temporarily stored during the index scan. You can set unit K, which stands for KB (kilobytes). If you omit the unit, bytes will be applied. The default value is 64K, the minimum value is 1K, and the maximum value is 256K.
 
     The size of the OID buffer tends to vary in proportion to the value of the **index_scan_oid_buffer_size** parameter and the page size set when the database was created. In addition, the bigger the size of such OID buffer, the more the index scan cost. You can set the value of the **index_scan_oid_buffer_size** by considering these factors.
 

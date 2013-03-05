@@ -121,7 +121,7 @@ The language that will be used in the CUBRID DBMS can be designated with the **C
 
 Language and charset setting of CUBRID affects read and write data. The language is used for messages displayed by the program. The default value of **CUBRID_CHARSET** is **en_US** while installing the product.
 
-For more details related to charset, locale and collation settings, see :doc:`admin/i18n`.
+For more details related to charset, locale and collation settings, see :doc:`/sql/i18n`.
 
 [번역]
 

@@ -52,7 +52,7 @@ Interoperability
 
 *   If the CUBRID DB server and its broker server are operated separately, their interoperability is guaranteed, even when the operating systems are different. However, the bit version of a DB server must be identical to the bit version of a broker server. For example, the 64-bit DB server for Linux is interoperable with the 64-bit broker server for Windows, but it is not interoperable with a 32-bit broker server.
 
-    For the relation between DB server and broker, see :doc:`intro`.For CUBRID SHARD, see :doc:`admin/shard`.
+    For the relation between DB server and broker, see :doc:`intro`.For CUBRID SHARD, see :doc:`shard`.
 
 *   If the CUBRID DB server and its broker server are operated separately, their system locales should be the same. For example, if CUBRID_CHARSET of DB server is en_US.utf8, CUBRID_CHARSET of broker server should be en_US.utf8, too.
 

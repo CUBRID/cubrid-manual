@@ -1164,7 +1164,7 @@ The following are parameters related to SQL statements and data types supported 
 
     If the application client knows both of input and output, leave the setting **unicode_input_normalization** and **unicode_output_normalization** as **no**.
 
-    For more details, see :doc:`/admin/i18n`.
+    For more details, see :doc:`/sql/i18n`.
 
 **unicode_output_normalization**
 
@@ -1257,7 +1257,7 @@ The following are HA-related parameters. The type and value range for each param
     *   on : CUBRID HA is used using the configured node as a node for failover.
     *   replica : CUBRID HA is used without using the configured node as a node for failover.
 
-    To use the CUBRID HA feature, you should set HA-related parameters in the **cubrid_ha.conf** file in addition to the **ha_mode** parameter. For details, see :doc:`/admin/ha`.
+    To use the CUBRID HA feature, you should set HA-related parameters in the **cubrid_ha.conf** file in addition to the **ha_mode** parameter. For details, see :doc:`/ha`.
 
 .. _other-parameters:
 

@@ -128,7 +128,7 @@ Reconfiguring Environments for Replication or HA
 ------------------------------------------------
 
 * From 2008 R4.0, the replication feature is no longer supported; for this reason, it is recommended to reconfigure the DB migration and HA environment for systems in which previous replication versions are used. In addition, for systems that use Linux Heartbeat-based HA feature, which is provided in CUBRID 2008 R2.0 and 2008 R2.1, you must reconfigure to DB migration and the CUBRID Heartbeat-based HA environment for better operational stability(see :ref:`ha-db-migration`).
-* To reconfigure the HA environment configuration, see :doc:`/admin/ha` in the manual.
+* To reconfigure the HA environment configuration, see :doc:`/ha` in the manual.
 
 .. _db-migration:
 
@@ -195,7 +195,7 @@ Migration from CUBRID 9.0 Beta or earlier to CUBRID 9.1
 
 If you are using CUBRID 2008 R3.0 Beta or less and GLO classes, you have to do the additional works(see :ref:`glo-users-migration`).
 
-The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org and the cubrid unloaddb/loaddb utilities. See :doc:`/admin/migration`)
+The following table shows how to perform the migration using the reserved word detection script, check_reserved.sql, which is separately distributed from http://ftp.cubrid.org and the cubrid unloaddb/loaddb utilities. See :ref:`unload-load`)
 
 +------------------------------------+---------------------------------------------+---------------------------------------------+
 | Step                               | Linux Environment                           | Windows Environment                         |

@@ -484,7 +484,7 @@ A foreign key is a column or a set of columns that references the primary key in
     *   In a referential constraint, the name of the primary key table to be referenced and the corresponding column names are defined. If the list of column names are is not specified, the primary key of the primary key table is specified in the defined order.
     *   The number of primary keys in a referential constraint must be identical to that of foreign keys. The same column name cannot be used multiple times for the primary key in the referential constraint.
     *   The actions cascaded by reference constraints do not activate the trigger action.
-    *   It is not recommended to use *referential_triggered_action* in the CUBRID HA environment. In the CUBRID HA environment, the trigger action is not supported. Therefore, if you use *referential_triggered_action*, the data between the master database and the slave database can be inconsistent. For details, see :doc:`/admin/ha`.
+    *   It is not recommended to use *referential_triggered_action* in the CUBRID HA environment. In the CUBRID HA environment, the trigger action is not supported. Therefore, if you use *referential_triggered_action*, the data between the master database and the slave database can be inconsistent. For details, see :doc:`/ha`.
 
 KEY or INDEX
 ^^^^^^^^^^^^

@@ -145,7 +145,7 @@ CHAR_LENGTH, CHARACTER_LENGTH, LENGTHB, LENGTH
 .. function:: LENGTH (string)
 
     **CHAR_LENGTH**, **CHARACTER_LENGTH**, **LENGTHB**, and **LENGTH** are used interchangeably.
-    The number of characters is returned as an integer. For details on character set supported by CUBRID, see :doc:`/admin/i18n`.
+    The number of characters is returned as an integer. For details on character set supported by CUBRID, see :doc:`/sql/i18n`.
 
     :param string: Specifies the string whose length will be calculated according to the number of characters. If the character string is **NULL**, **NULL** is returned.
     :rtype: INT
@@ -1377,7 +1377,7 @@ UCASE, UPPER
 .. function:: UCASE ( string )
 .. function:: UPPER ( string )
 
-    The function **UCASE** or **UPPER** converts lowercase characters that are included in a character string to uppercase characters. Note that the **UPPER** function may not work properly in character sets that are not supported by CUBRID. For details about the character sets supported by CUBRID, see :doc:`/admin/i18n`.
+    The function **UCASE** or **UPPER** converts lowercase characters that are included in a character string to uppercase characters. Note that the **UPPER** function may not work properly in character sets that are not supported by CUBRID. For details about the character sets supported by CUBRID, see :doc:`/sql/i18n`.
 
     :param string: Specifies the string in which lowercase characters are to be converted to uppercase. If the value is **NULL**, **NULL** is returned.
     :rtype: STRING

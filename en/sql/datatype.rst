@@ -712,7 +712,7 @@ The followings are the rules that are applied when using the character string ty
 
 *   The maximum size of the token for all the character strings is 16 KB.
 
-To enter the language of a specific country, we recommend that you to change the locale by using the **CUBRID_CHARSET** environment variable or introducer **CHARSET** (or **COLLATE** modifier). For a more information, see :doc:`/admin/i18n`.
+To enter the language of a specific country, we recommend that you to change the locale by using the **CUBRID_CHARSET** environment variable or introducer **CHARSET** (or **COLLATE** modifier). For a more information, see :doc:`/sql/i18n`.
 
 **Length**
  
@@ -731,11 +731,11 @@ To enter the language of a specific country, we recommend that you to change the
 
     A character set (charset) is a set in which rules are defined that relate to what kind of codes can be used for encoding when specified characters (symbols) are stored in the computer.
 
-    The character used by CUBRID can be configured as the **CUBRID_CHARSET** environment variable. For details, see :doc:`/admin/i18n`.
+    The character used by CUBRID can be configured as the **CUBRID_CHARSET** environment variable. For details, see :doc:`/sql/i18n`.
 
 **Collating Character Sets**
 
-    A collation is a set of rules used for comparing characters to search or sort values stored in the database when a certain character set is specified. For details, see :doc:`/admin/i18n`.
+    A collation is a set of rules used for comparing characters to search or sort values stored in the database when a certain character set is specified. For details, see :doc:`/sql/i18n`.
 
     Therefore, such rules are applied only to character string data types such as **CHAR** or **VARCHAR**. For a national character string type such as **NCAHR()** or **NCHAR VARYING()** , the sorting rules are determined according to the encoding algorithm of the specified character set.
 

@@ -1,6 +1,6 @@
 
-cubrid utility
-==============
+Controlling CUBRID Processes
+============================
 
 Controlling CUBRID Service
 --------------------------

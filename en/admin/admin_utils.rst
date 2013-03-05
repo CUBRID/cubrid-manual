@@ -1527,10 +1527,12 @@ Backing up and Restoring
 
 **DBA** must perform regular backups of the database so that it can be restored successfully to a state at a certain point in time in case of system failure. For details, see :ref:`db-backup`.
 
+.. _unload-load:
+
 Exporting and Importing
 =======================
 
-To use a newer version of CUBRID database, the existing version must be migrated to a new one. For this purpose, you can use "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID. For details on export and import, see :doc:`/admin/migration`.
+To use a newer version of CUBRID database, the existing version must be migrated to a new one. For this purpose, you can use "Export to an ASCII text file" and "Import from an ASCII text file" features provided by CUBRID.
 
 Dumping Parameters Used in Server/Client
 =========================================

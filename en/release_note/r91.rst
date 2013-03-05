@@ -1526,19 +1526,19 @@ ORDERY BY 절이 질의문의 가장 뒤에 위치하는 것으로 다루어져 
 
     (SELECT * FROM tbl1 ORDER BY a) UNION (SELECT * FROM tbl2 ORDER BY b);
     
-INSERT 문의 SET 절에서 할당 표현식 안에 다른 칼럼이 있는 경우에도 평가가 가능하도록 수정(CUBRIDSUS-3112)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-INSERT 문의  SET 절에서 할당 표현식 안에 다른 칼럼이 있는 경우, 예를 들어 b=a+1인 경우 해당 표현식에 대한 평가가 가능하도록 수정했다.
- 
+The evaluation of an assignment expression became available when there is other column inside that expression(CUBRIDSUS-3112)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now the evaluation of an assignment expression in the SET clause of INSERT statement became available when there is other column inside that expression(e.g. b=a+1).
+
 ::
  
     CREATE TABLE tbl (a INT, b INT);
     INSERT INTO tbl SET a=0, b=a+1
  
-위의 예에서 수정 이전 버전은 b의 값을 평가할 수 없으나, 수정 이후에는 먼저 a의 값을 0으로 할당하므로 b의 값을 1로 평가한다. 
+In the above example, the previous version cannot evaluate b's value, but the fixed version can evaluate b's value as 1 since a's value is specified as 0.
  
-할당 표현식에 대한 평가는 왼쪽에서 오른쪽으로 수행된다. 칼럼 값이 정해지지 않았으면 기본값을 할당하고, 기본값이 없으면 NULL을 할당한다. 
+The evaluation of an assignment expression is performed from left to right. The default value is assigned if the column's value is not specified, and the **NULL** is assigned if the default value is not defined.
 
 click counter 질의로 인한 교착 상태 발생 후에 질의 결과 잘못되는 문제(CUBRIDSUS-5009)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2537,17 +2537,8 @@ cci_execute 함수를 통해 다중 질의문 수행 시 다중 질의문 중 �
 
 Windows에서는 cci_set_allocator 함수를 사용해도 메모리 할당 및 해제 함수가 변경되지 않도록 수정했다.
 
-[CCI] 정적 라이브러리를 사용하면 링크 오류가 발생하는 문제 (CUBRIDSUS-10743)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-CCI 정적 라이브러리를 사용하여 C 코드를 컴파일하면 링크 오류가 발생하는 문제를 수정했다.  ::
-    
-    $ gcc -o test_cci test_cci.c -m64 -I/home1/brightest/CUBRID/include -lnsl /home1/brightest/CUBRID/lib/libcascci.a -lpthread -lstdc++ 2>&1 |more
-
-    /home/CUBRID/lib/libcascci.a(cci_util.o): In function `cci_url_match':
-    /home1/build/workspace/CUBRID_9.0.0/RB-9.0.0/build_x86_64_release/cci/../../src/cci/cci_util.c:653: undefined reference to `cub_regset_malloc'
-    /home1/build/workspace/CUBRID_9.0.0/RB-9.0.0/build_x86_64_release/cci/../../src/cci/cci_util.c:654: undefined reference to `cub_regset_realloc'
-    ...
+[CCI] Fixed a problem of linking when using the static library(CUBRIDSUS-10743)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [PHP] 웹 페이지 로딩을 중단했음에도 불구하고 서버 단에서는 수행 중이던 질의가 중단되지 않는 문제(CUBRIDSUS-5855)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2920,17 +2911,17 @@ Windows에서 서버가 구동된 상태에서 서버 시작을 실행하면 잘
 
 Windows에서 서버가 구동된 상태에서 또 다시 서버를 구동하려고 하면 "cubrid server start: success" 메시지가 출력되었으나, "cubrid server is already running" 메시지가 출력되도록 수정했다.
 
-Windows 용 브로커를 통해 서버에 접속할때 cub_master가 구동되어 있지 않으면 잘못된 에러가 발생하는 문제(CUBRIDSUS-10739)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fixed a problem of occuring wrong error if cub_master is not started when accessing the server through the broker of Windows version(CUBRIDSUS-10739)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-응용프로그램이 Windows 용 브로커를 통해 서버에 접속하는 경우 cub_master 프로세스가 구동되어 있지 않으면 잘못된 에러가 발생하고 CAS가 무한 루프를 반복하는 문제를 수정했다.
+In case that the application accesses the server through the broker of Windows version, the wrong error occurs and CAS runs infinite loop when cub_master process is not started.
 
-수정 이전 버전에서 Windows의 경우 아래의 오류 번호를 반환한다. 
-    *   첫번째 접속 시도 시 -21112 (An IOException was caught during reading the inputstream) 반환
-    *   두번째 접속 시도 시 -21013 (Cannot connect to a broker)
+In previous version of Windows, below error number will be returned.
+    *   On the first trial of access, -21112 (An IOException was caught during reading the inputstream) is returned.
+    *   On the second trial of access, -21013 (Cannot connect to a broker) is returned.
     
-수정 전후의 Linux와 수정 이후의 Windows의 경우 아래의 오류 번호를 반환한다.
-    *  첫번째, 두번째 접속 시도 시 모두 -353 (Failed to connect to database server, 'basic', on the following host(s): localhost) 반환
+In previous and fixed versions of Linux and fixed version of Windows, below error number will be returned.
+    *  On the first and second trial of access, -353 (Failed to connect to database server, 'basic', on the following host(s): localhost) will be returned.
 
 Windows 서비스 프로세스인 CUBRIDService에 설명 추가(CUBRIDSUS-8917)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3042,10 +3033,10 @@ CCI 응용에서 여러 개의 질의를 한 번에 수행할 때 2008 R3.0부�
       }
     ...
 
-XAConnection 인터페이스에서 HOLD_CURSORS_OVER_COMMIT 미지원(CUBRIDSUS-10800)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+In java.sql.XAConnection interface, HOLD_CURSORS_OVER_COMMIT is not supported(CUBRIDSUS-10800)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CUBRID는 현재 XAConnection 인터페이스에서 ResultSet.HOLD_CURSORS_OVER_COMMIT을 지원하지 않으며, 추후 지원할 예정이다. 
+Current CUBRID does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in java.sql.XAConnection interface.
 
 기존 주의 사항
 --------------

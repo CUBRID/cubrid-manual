@@ -1,7 +1,3 @@
-.. *****************
-.. 데이터베이스 관리
-.. *****************
-
 .. _cubrid-utilities:
 
 cubrid 관리 유틸리티
@@ -665,6 +661,15 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
     
         cubrid installdb -L /home/cubrid/CUBRID/databases/logs/testdb testdb
 
+
+.. include:: backup.inc
+
+내보내기와 가져오기
+===================
+
+신규 버전의 CUBRID 데이터베이스를 사용하기 위해서는 기존 버전의 CUBRID 데이터베이스를 신규 버전의 CUBRID 데이터베이스로 이전하는 작업을 진행해야 할 경우가 있다. 이때 CUBRID에서 제공하는 텍스트 파일로 내보내기와 텍스트 파일에서 가져오기 기능을 활용할 수 있다. 
+
+.. include:: migration.inc
 
 데이터베이스 공간 확인,공간 정리
 ================================
@@ -1674,15 +1679,6 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
         cubrid paramdump -C testdb
 
-
-.. include:: backup.inc
-
-내보내기와 가져오기
-===================
-
-신규 버전의 CUBRID 데이터베이스를 사용하기 위해서는 기존 버전의 CUBRID 데이터베이스를 신규 버전의 CUBRID 데이터베이스로 이전하는 작업을 진행해야 할 경우가 있다. 이때 CUBRID에서 제공하는 텍스트 파일로 내보내기와 텍스트 파일에서 가져오기 기능을 활용할 수 있다. 
-
-.. include:: migration.inc
 
 HA 모드 변경,로그 복제,반영
 ===========================

@@ -1,3 +1,5 @@
+.. _control-cubrid-processes:
+
 CUBRID 프로세스 제어
 ====================
 

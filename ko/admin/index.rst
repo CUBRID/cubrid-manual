@@ -17,7 +17,7 @@
 
 **cubrid 유틸리티**
 
-**cubrid** 유틸리티는 CUBRID 서비스를 통합 관리할 수 있는 기능을 제공하며, CUBRID 서비스 프로세스를 관리하는 서비스 관리 유틸리티와, 데이터베이스를 관리하는 데이터베이스 관리 유틸리티로 구분된다.
+**cubrid** 유틸리티는 CUBRID 서비스를 통합 관리할 수 있는 기능을 제공하며, CUBRID 서비스 프로세스를 관리하는 서비스 관리 유틸리티와 데이터베이스를 관리하는 데이터베이스 관리 유틸리티로 구분된다.
 
 서비스 관리 유틸리티는 다음과 같다.
 
@@ -40,7 +40,7 @@
 
     *   cubrid heartbeat
 
-자세한 설명은 CUBRID 서비스를 참조한다.
+자세한 설명은 :ref:`control-cubrid-processes` 절을 참조한다.
 
 데이터베이스 관리 유틸리티는 다음과 같다.
 
@@ -128,7 +128,7 @@
 
     % cubrid
      
-    cubrid utility, version 9.0
+    cubrid utility, version 9.1
     usage: cubrid <utility-name> [args]
     Type 'cubrid <utility-name>' for help on a specific utility.
      
@@ -166,6 +166,9 @@
         copylogdb
         applylogdb
         applyinfo
+        genlocale
+        dumplocale
+        synccolldb
      
     cubrid is a tool for DBMS.
 

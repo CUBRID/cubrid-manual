@@ -85,6 +85,52 @@ INSERT
     =========================================================
                 7  'ggg'                 '777-7777'
 
+**INSERT ... SET** 문에서 할당 표현식에 대한 평가는 왼쪽에서 오른쪽으로 수행된다. 칼럼 값이 정해지지 않았으면 기본값을 할당하고, 기본값이 없으면 **NULL**\을 할당한다.
+ 
+::
+         
+    CREATE TABLE tbl (a INT, b INT, c INT);
+    INSERT INTO tbl SET a=1, b=a+1, c=b+2;
+    SELECT * FROM tbl;
+    
+            a            b            c
+    ===================================
+            1            2            4
+    
+위의 예에서 칼럼 b의 값을 할당할 때, a의 값이 1이므로 b는 2, c는 4가 된다.
+ 
+::
+ 
+    CREATE TABLE tbl2 (a INT, b INT, c INT);
+    INSERT INTO tbl2 SET a=b+1, b=1, c=b+2;
+ 
+위의 예에서 칼럼 a의 값을 할당할 때, b의 값이 아직 정해지지 않았으며 b의 기본값이 없으므로 a의 값은 **NULL**\이 된다.
+ 
+::
+    
+    SELECT * FROM tbl2;
+    
+            a            b            c
+    ===================================
+         NULL            1            3
+  
+ 
+::
+         
+    CREATE TABLE tbl3 (a INT, b INT default 10, c INT);
+    INSERT INTO tbl3 SET a=b+1, b=1, c=b+2;
+ 
+위의 예에서 칼럼 a의 값을 할당할 때, b의 값이 아직 정해지지 않았으며 b의 기본값이 10이므로 a의 값은 11이 된다.
+   
+::
+    
+    SELECT * FROM tbl3;
+    
+            a            b            c
+    ===================================
+           11            1            3
+                
+                
 INSERT ... SELECT 문
 ====================
 

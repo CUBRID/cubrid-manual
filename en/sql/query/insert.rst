@@ -85,6 +85,51 @@ You can insert a new record into a table in a database by using the **INSERT** s
     =========================================================
                 7  'ggg'                 '777-7777'
 
+In **INSERT ... SET** syntax, the evaluation of an assignment expression is performed from left to right. If the column value is not specified, then the default value is assigned. If there is no default value, **NULL** is assigned.
+ 
+::
+         
+    CREATE TABLE tbl (a INT, b INT, c INT);
+    INSERT INTO tbl SET a=1, b=a+1, c=b+2;
+    SELECT * FROM tbl;
+    
+            a            b            c
+    ===================================
+            1            2            4
+    
+In the above example, b's value will be 2 and c's value will be 4 since a's value is 1.
+ 
+::
+ 
+    CREATE TABLE tbl2 (a INT, b INT, c INT);
+    INSERT INTO tbl2 SET a=b+1, b=1, c=b+2;
+ 
+In the above example, a's value will be **NULL** since b's value is not specified yet when assigning a's value.
+ 
+::
+    
+    SELECT * FROM tbl2;
+    
+            a            b            c
+    ===================================
+         NULL            1            3
+  
+ 
+::
+         
+    CREATE TABLE tbl3 (a INT, b INT default 10, c INT);
+    INSERT INTO tbl3 SET a=b+1, b=1, c=b+2;
+ 
+In the above example, a's value will be 11 since b's value is not specified yet and b's default is 10.
+   
+::
+    
+    SELECT * FROM tbl3;
+    
+            a            b            c
+    ===================================
+           11            1            3
+           
 INSERT ... SELECT Statement
 ===========================
 

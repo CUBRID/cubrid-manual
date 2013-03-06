@@ -25,7 +25,7 @@ As the database volume of CUBRID 9.1 is not compatible with the database of CUBR
 
 Added SQL Functions and Expanded Index Hint
 -------------------------------------------
-*   Added functions: NTILIE, WIDTH_BUCKET, LEAD, and LAG.
+*   Added functions: NTILE, WIDTH_BUCKET, LEAD, and LAG.
 *   Expanded TRUNC function and ROUND function to use the parameters for the date type.
 *   Supports new index hint specification syntax.
 *   Expanded Multi UPDATE statement and DELETE statement to use the SQL hints.

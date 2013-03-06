@@ -705,6 +705,7 @@ cubrid broker status 명령을 통해 브로커의 상태를 출력할 때 아�
         % cubrid broker status SERVICE=ON
         
 *   -b 옵션으로 브로커 상태 출력 시
+
     *   브로커 이름은 최대 20자까지만 출력하고, 이를 초과하는 경우 이름 뒤에 ...을 출력한다.
     *   REQ 항목은 더 이상 출력하지 않는다.
     *   QPS, TPS 항목 출력 시 UINT64 최대 값까지 출력한다. 수정 이전에는 해당 항목이 음수로 출력되는 경우가 존재했다.
@@ -713,6 +714,7 @@ cubrid broker status 명령을 통해 브로커의 상태를 출력할 때 아�
     *   고유 키 위반 오류 회수를 출력하는 UNIQUE-ERR-Q 항목이 추가되었다.
         
 *   -b 옵션 없이 브로커 상태 출력 시
+
     *   STATUS 항목 출력 시 "CLIENT WAIT", "CLOSE WAIT"가 각각 "CLIENT_WAIT", "CLOSE_WAIT"로 출력되도록 변경되었다.
     *   브로커 설정 정보가 출력에서 제외되었다.
         

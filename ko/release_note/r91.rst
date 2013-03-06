@@ -10,10 +10,10 @@
 릴리스 노트 정보
 ================
 
-본 문서는 CUBRID 9.1(빌드번호 9.1.0.0201)에 관한 정보를 포함한다.
+본 문서는 CUBRID 9.1(빌드번호 9.1.0.0209)에 관한 정보를 포함한다.
 CUBRID 9.1은 CUBRID 9.0 Beta에서 발견된 오류 수정 및 기능 개선과 이전 버전들에 반영된 모든 오류 수정 및 기능 개선을 포함한다.
 
-CUBRID 9.0 Beta에 대한 정보는 :doc:`r90` 에서, CUBRID 2008 R4.3에 대한 정보는 `<http://release.cubrid.org/ko>`_ 에서 확인할 수 있다.
+CUBRID 9.0 Beta에 대한 정보는 :doc:`r90` 에서, CUBRID 2008 R4.3에 대한 정보는 http://release.cubrid.org/ko\ 에서 확인할 수 있다.
 
 
 릴리스 특징
@@ -22,65 +22,65 @@ CUBRID 9.0 Beta에 대한 정보는 :doc:`r90` 에서, CUBRID 2008 R4.3에 대�
 CUBRID 9.1은 CUBRID 9.0 Beta의 안정화 버전 및 업그레이드 버전이다.
 9.0 Beta 버전에서 발견된 이슈들을 수정하여 안정화 시켰을 뿐만 아니라 CUBRID 9.1은 질의 수행에 관련된 다양한 기능들을 추가하였으며, 질의 처리 성능이 향상되었고 질의 최적화가 개선되었다. 다국어 관련 기능들을 강화하였으며, 운영 도구를 개선했다.
 
-CUBRID 9.1은 CUBRID 9.0 Beta와 데이터베이스 볼륨이 호환되지 않으므로, CUBRID 9.0 Beta 및 이전 버전 사용자는 반드시 **데이터베이스를  마이그레이션** 해야 한다. 이와 관련하여 :doc:`/upgrade` 절을 참고한다.
+CUBRID 9.1은 CUBRID 9.0 Beta와 데이터베이스 볼륨이 호환되지 않으므로, CUBRID 9.0 Beta 및 이전 버전 사용자는 반드시 **데이터베이스를  마이그레이션**\ 해야 한다. 이와 관련하여 :doc:`/upgrade` 절을 참고한다.
 
 SQL 함수 추가 및 인덱스 힌트 확장
 ---------------------------------
-* NTILIE, WIDTH_BUCKET, LEAD, LAG 함수를 추가했다.
-* TRUNC, ROUND 함수에 날짜 타입을 인자를 사용할 수 있도록 확장했다.
-* 새로운 인덱스 힌트 지정 구문을 지원한다.
-* Multi UPDATE, DELETE 문에 SQL 힌트를 사용할 수 있도록 확장했다.
-* MERGE 문에 인덱스 힌트를 명시할 수 있도록 확장했다.
+*   NTILIE, WIDTH_BUCKET, LEAD, LAG 함수를 추가했다.
+*   TRUNC, ROUND 함수에 날짜 타입을 인자를 사용할 수 있도록 확장했다.
+*   새로운 인덱스 힌트 지정 구문을 지원한다.
+*   Multi UPDATE, DELETE 문에 SQL 힌트를 사용할 수 있도록 확장했다.
+*   MERGE 문에 인덱스 힌트를 명시할 수 있도록 확장했다.
     
 성능 및 최적화 개선
 -------------------
-* HA 복제 반영 성능을 크게 개선하였다.
-* 다중 키 범위 최적화를 대폭 개선하였다.
-* ORDER BY 절 최적화 및 GROUP BY 절 최적화를 더욱 개선하였다.
-* 분석 함수 성능을 향상시켰다.
-* INSERT ON DUPLICATE KEY UPDATE 문과 REPLACE 문의 성능을 개선하였다.
-* 중복 키가 많은 인덱스에 대한 탐색 및 삭제 성능을 개선했다.
-* 입력 삭제가 반복될 때 삭제 성능을 개선했다.
+*   HA 복제 반영 성능을 크게 개선하였다.
+*   다중 키 범위 최적화를 대폭 개선하였다.
+*   ORDER BY 절 최적화 및 GROUP BY 절 최적화를 더욱 개선하였다.
+*   분석 함수 성능을 향상시켰다.
+*   INSERT ON DUPLICATE KEY UPDATE 문과 REPLACE 문의 성능을 개선하였다.
+*   중복 키가 많은 인덱스에 대한 탐색 및 삭제 성능을 개선했다.
+*   입력 삭제가 반복될 때 삭제 성능을 개선했다.
     
 다국어 관련 기능 추가 및 안정화
 -------------------------------
-* 테이블에 대한 콜레이션을 지원한다.
-* SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수를 추가했다.
-* 확장이 있는 콜레이션에서 액센트에 따라 역순으로 프랑스어를 정렬하는 콜레이션을 지원한다.
-* 9.0 베타 버전의 다국어 관련 제약 사항과 이슈들을 수정, 개선하였다.
+*   테이블에 대한 콜레이션을 지원한다.
+*   SHOW COLLATION 문 및 CHARSET, COLLATION, COERCIBILITY 함수를 추가했다.
+*   확장이 있는 콜레이션에서 액센트에 따라 역순으로 프랑스어를 정렬하는 콜레이션을 지원한다.
+*   9.0 베타 버전의 다국어 관련 제약 사항과 이슈들을 수정, 개선하였다.
     
 Sharding 기능 개선 
 ------------------
-* Shard key에 해당하는 shard ID를 확인할 수 있도록 하는 명령을 추가했다.
-* Windows에서 Sharding 기능을 사용할 수 있게 되었다.
+*   Shard key에 해당하는 shard ID를 확인할 수 있도록 하는 명령을 추가했다.
+*   Windows에서 Sharding 기능을 사용할 수 있게 되었다.
     
 운영 도구 개선
 --------------
-* applyinfo 유틸리티로 복제 로그 반영 상태를 출력할 때 복제 지연 상태를 출력하도록 개선했다.
-* killtran 유틸리티에 각 트랜잭션마다 질의의 수행 상태를 출력하는 기능을 추가했다.
-* killtran 유틸리티에 특정 SQL을 수행하는 트랜잭션을 지정하여 트랜잭션을 제거하는 기능을 추가했다.
-* 질의 수행이 지정한 시간을 초과하면 서버 에러 로그 및 CAS 로그 파일에 질의 실행 정보를 기록하게 하는 기능을 추가했다.
+*   applyinfo 유틸리티로 복제 로그 반영 상태를 출력할 때 복제 지연 상태를 출력하도록 개선했다.
+*   killtran 유틸리티에 각 트랜잭션마다 질의의 수행 상태를 출력하는 기능을 추가했다.
+*   killtran 유틸리티에 특정 SQL을 수행하는 트랜잭션을 지정하여 트랜잭션을 제거하는 기능을 추가했다.
+*   질의 수행이 지정한 시간을 초과하면 서버 에러 로그 및 CAS 로그 파일에 질의 실행 정보를 기록하게 하는 기능을 추가했다.
 
 동작 변경
 ---------
-* CUBRID_LANG 환경 변수가 제거되었고, 데이터베이스 문자셋을 설정하는 CUBRID_CHARSET 환경 변수 및 유틸리티 메시지 및 오류 메시지에 대한 문자셋을 설정하는 CUBRID_MSG_LANG 환경 변수가 추가되었다.
-* cci_execute_array 함수, cci_execute_batch 함수, JDBC의 Statement.executeBatch 메서드, PreparedStatement.executeBatch 메서드 등 배열 내 여러 개의 질의문을 일괄적으로 처리할 때 모든 질의문을 수행한 이후에 커밋했으나 각 질의문을 수행할 때마다 커밋하도록 변경되었다.
-* cci_execute_array 함수, cci_execute_batch 함수 또는 cci_execute_result 함수에서 여러 개의 질의 수행 도중 에러 발생 시 동작 방식이 바뀌었다. 수정 이전에는 중간에 에러가 발생하면 해당 함수가 에러를 반환하고 종료했으나, 수정 이후에는 질의를 끝까지 수행하고 CCI_QUERY_RESULT_* 매크로들을 통해 개별 질의에 대한 에러를 확인할 수 있게 변경되었다.
-* 브로커 파라미터 KEEP_CONNECTION에서 OFF 값 설정이 제거되었다.
-* 브로커 파라미터 SELECT_AUTO_COMMIT 파라미터가 제거되었다.
-* 브로커 파라미터 APPL_SERVER_MAX_SIZE_HARD_LIMIT의 값의 범위가 1과 2,097,151 사이의 값으로 제한되었다.
-* SQL 로그 파일 크기를 지정하는 브로커 파라미터의 기본 설정값이 100MB에서 10MB로 변경되었다.
-* call_stack_dump_activation_list 파라미터의 동작 방식이 변경되었다.
+*   CUBRID_LANG 환경 변수가 제거되었고, 데이터베이스 문자셋을 설정하는 CUBRID_CHARSET 환경 변수 및 유틸리티 메시지 및 오류 메시지에 대한 문자셋을 설정하는 CUBRID_MSG_LANG 환경 변수가 추가되었다.
+*   cci_execute_array 함수, cci_execute_batch 함수, JDBC의 Statement.executeBatch 메서드, PreparedStatement.executeBatch 메서드 등 배열 내 여러 개의 질의문을 일괄적으로 처리할 때 모든 질의문을 수행한 이후에 커밋했으나 각 질의문을 수행할 때마다 커밋하도록 변경되었다.
+*   cci_execute_array 함수, cci_execute_batch 함수 또는 cci_execute_result 함수에서 여러 개의 질의 수행 도중 에러 발생 시 동작 방식이 바뀌었다. 수정 이전에는 중간에 에러가 발생하면 해당 함수가 에러를 반환하고 종료했으나, 수정 이후에는 질의를 끝까지 수행하고 CCI_QUERY_RESULT_* 매크로들을 통해 개별 질의에 대한 에러를 확인할 수 있게 변경되었다.
+*   브로커 파라미터 KEEP_CONNECTION에서 OFF 값 설정이 제거되었다.
+*   브로커 파라미터 SELECT_AUTO_COMMIT 파라미터가 제거되었다.
+*   브로커 파라미터 APPL_SERVER_MAX_SIZE_HARD_LIMIT의 값의 범위가 1과 2,097,151 사이의 값으로 제한되었다.
+*   SQL 로그 파일 크기를 지정하는 브로커 파라미터의 기본 설정값이 100MB에서 10MB로 변경되었다.
+*   call_stack_dump_activation_list 파라미터의 동작 방식이 변경되었다.
     
 
 드라이버 호환성
 ---------------
-* 9.1 버전의 JDBC와 CCI 드라이버는 CUBRID 9.0 Beta와 CUBRID 2008 R4.x 버전과 연동된다.
+*   9.1 버전의 JDBC와 CCI 드라이버는 CUBRID 9.0 Beta와 CUBRID 2008 R4.x 버전과 연동된다.
     
 수많은 개선 및 수정
 -------------------
-* 기존 버전에 존재했던 중대한 안정성 이슈들을 다수 수정하였다.
-* 그 외에 안정성, SQL, 분할, HA, Sharding, 유틸리티, 드라이버 등 여러 부분에서 수많은 이슈들을 개선, 수정했다.
+*   기존 버전에 존재했던 중대한 안정성 이슈들을 다수 수정하였다.
+*   그 외에 안정성, SQL, 분할, HA, Sharding, 유틸리티, 드라이버 등 여러 부분에서 수많은 이슈들을 개선, 수정했다.
     
 보다 자세한 변경 사항은 아래의 내용을 참고하며, 이전 버전 사용자는 :ref:`changed-behaviors91` 절과 :ref:`new-cautions91` 절을 반드시 확인하도록 한다.
 
@@ -248,7 +248,7 @@ UPDATE JOIN, DELETE JOIN 문에 대해 ORDERED, USE_DESC_IDX, NO_COVERING_INDEX,
 MERGE 문에 인덱스 힌트 지원(CUBRIDSUS-10134)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-MERGE 문에 USE_UPDATE_IDX, USE_INSERT_IDX 인덱스 힌트를 지원한다. USE_UPDATE_IDX 힌트는 UPDATE 절을 수행할 때 ON 절과 UPDATE 문의 WHERE 절에 적용되며, USE_INSERT_IDX 힌트는 INSERT 절을 수행할 때 ON 절에 적용된다.
+MERGE 문에 USE_UPDATE_IDX, USE_INSERT_IDX 인덱스 힌트를 지원한다. USE_UPDATE_IDX 힌트는 UPDATE 절을 수행할 때 ON 절과 UPDATE 절의 WHERE 절에 적용되며, USE_INSERT_IDX 힌트는 INSERT 절을 수행할 때 ON 절에 적용된다.
 
 .. code-block:: sql
 
@@ -430,14 +430,14 @@ cubrid killtran 유틸리티에 트랜잭션의 질의 수행 상태를 출력�
 
 질의 수행 상태에는 다음 정보를 포함한다.
 
-* Tran index: 트랜잭션 인덱스
-* Process id: 클라이언트 프로세스 ID
-* Program name: 클라이언트 프로그램 이름
-* Query time: 수행중인 질의의 총 수행 시간(단위: 초)
-* Tran time: 현재 트랜잭션의 총 수행 시간(단위: 초)
-* Wait for lock holder: 현재 트랜잭션이 잠금(lock) 대기중이면 해당 잠금을 소유하고 있는 트랜잭션의 리스트
-* SQL ID: SQL Text에 대한 ID
-* SQL Text: 수행중인 질의문(최대 30자)        
+*   Tran index: 트랜잭션 인덱스
+*   Process id: 클라이언트 프로세스 ID
+*   Program name: 클라이언트 프로그램 이름
+*   Query time: 수행중인 질의의 총 수행 시간(단위: 초)
+*   Tran time: 현재 트랜잭션의 총 수행 시간(단위: 초)
+*   Wait for lock holder: 현재 트랜잭션이 잠금(lock) 대기중이면 해당 잠금을 소유하고 있는 트랜잭션의 리스트
+*   SQL ID: SQL Text에 대한 ID
+*   SQL Text: 수행중인 질의문(최대 30자)        
 
 killtran 유틸리티에 특정 SQL을 수행 중인 트랜잭션을 제거하는 기능 추가(CUBRIDSUS-9653)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -516,7 +516,7 @@ cubrid killtran 유틸리티의 -i 옵션에 강제 종료하고자 하는 트�
     EXECUTE st USING '_B_';
 
 +------------------------+-----------------------------------------------------------------------------------------------------+
-| **콜레이션 변환도**    |  **표현식의 인자(피연산자)**                                                                        |
+| 콜레이션 변환도        |  표현식의 인자(피연산자)                                                                            |
 +========================+=====================================================================================================+
 | 0                      | COLLATE 수정자를 지닌 피연산자                                                                      |
 +------------------------+-----------------------------------------------------------------------------------------------------+
@@ -615,22 +615,22 @@ JDBC에서 PreparedStatement 객체에 대해 setBoolean() 메서드로 값을 �
 
 관련된 CCI_QUERY_RESULT_* 매크로들은 다음과 같다. 
 
-* CCI_QUERY_RESULT_RESULT
-* CCI_QUERY_RESULT_ERR_NO
-* CCI_QUERY_RESULT_ERR_MSG
-* CCI_QUERY_RESULT_STMT_TYPE
-* CCI_QUERY_RESULT_OID
+*   CCI_QUERY_RESULT_RESULT
+*   CCI_QUERY_RESULT_ERR_NO
+*   CCI_QUERY_RESULT_ERR_MSG
+*   CCI_QUERY_RESULT_STMT_TYPE
+*   CCI_QUERY_RESULT_OID
     
 [CCI] cci_property_set 함수와 cci_connect_with_url 함수의 DB 사용자와 암호 설정에 대한 동작 방식 변경(CUBRIDSUS-9393)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 cci_property_set 함수와 cci_connect_with_url 함수의 DB 사용자와 암호 설정 시 동작 방식을 통일했다. 수정 이후 다음과 같이 동작한다.
 
-* 인자와 URL에 둘 다 값이 지정되면 인자의 값이 우선한다.
-* 둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다.
-* 둘 다 NULL이면 NULL 값으로 사용된다.
-* DB 사용자 인자 값이 NULL이면 "public", 암호 인자 값이 NULL이면 NULL로 설정된다.
-* 암호 인자 값이 NULL이면 URL의 설정을 따른다.
+*   인자와 URL에 둘 다 값이 지정되면 인자의 값이 우선한다.
+*   둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다.
+*   둘 다 NULL이면 NULL 값으로 사용된다.
+*   DB 사용자 인자 값이 NULL이면 "public", 암호 인자 값이 NULL이면 NULL로 설정된다.
+*   암호 인자 값이 NULL이면 URL의 설정을 따른다.
 
 수정 이전 버전에서 cci_property_set 함수로 DATASOURCE에 대한 DB 사용자와 암호 설정 시 DB 사용자 인자는 반드시 설정해야 되며, 암호 인자를 설정하지 않으면 NULL로 인식했다. 또한, 암호 인자가 NULL이면 URL의 암호를 사용했다.
 
@@ -656,8 +656,8 @@ call_stack_dump_activation_list 파라미터 지정에 따른 동작 방식 변�
 
 cubrid.conf의 call_stack_dump_activation_list 파라미터 지정에 따른 동작 방식이 변경되었다.
 
-* call_stack_dump_activation_list의 값을 지정하면 기본적으로 설정되던 오류 번호들이 있었으나 지정한 값에 대해서만 오류 번호가 설정되도록 수정했다.
-* call_stack_dump_activation_list의 값으로 DEFAULT 키워드를 지정할 수 있게 수정했다. DEFAULT 키워드는  "-2, -7, -13, -14, -17, -19 , -21, -22, -45, -46, -48, -50, -51, -52, -76, -78, -79, -81, -90, -96, -97, -313, -314, -407, -414, -415, -416, -417, -583, -603, -836, -859, -890, -891, -976, -1040, -1075"으로 대체된다.
+*   call_stack_dump_activation_list의 값을 지정하면 기본적으로 설정되던 오류 번호들이 있었으나 지정한 값에 대해서만 오류 번호가 설정되도록 수정했다.
+*   call_stack_dump_activation_list의 값으로 DEFAULT 키워드를 지정할 수 있게 수정했다. DEFAULT 키워드는  "-2, -7, -13, -14, -17, -19 , -21, -22, -45, -46, -48, -50, -51, -52, -76, -78, -79, -81, -90, -96, -97, -313, -314, -407, -414, -415, -416, -417, -583, -603, -836, -859, -890, -891, -976, -1040, -1075"으로 대체된다.
 
 call_stack_dump_activation_list의 값을 지정하지 않으면 기존처럼 "-2, -7, -13, -14, -17, -19 , -21, -22, -45, -46, -48, -50, -51, -52, -76, -78, -79, -81, -90, -96, -97, -313, -314, -407, -414, -415, -416, -417, -583, -603, -836, -859, -890, -891, -976, -1040, -1075"이 기본으로 설정된다.
 
@@ -698,23 +698,25 @@ HA 환경에서 노드가 to-be-active 상태에서도 SELECT 문을 처리할 �
     
 cubrid broker status 명령을 통해 브로커의 상태를 출력할 때 아래와 같이 몇 가지 사항이 추가 또는 변경되었다.
 
-* 브로커의 SERVICE 파라미터 값을 ON으로 설정하면 구동 중인 브로커의 상태만 출력하게 되었다. ::
+*   브로커의 SERVICE 파라미터 값을 ON으로 설정하면 구동 중인 브로커의 상태만 출력하게 되었다.
 
-    % cubrid broker status SERVICE=ON
+    ::
     
-* -b 옵션으로 브로커 상태 출력 시
-    * 브로커 이름은 최대 20자까지만 출력하고, 이를 초과하는 경우 이름 뒤에 ...을 출력한다.
-    * REQ 항목은 더 이상 출력하지 않는다.
-    * QPS, TPS 항목 출력 시 UINT64 최대 값까지 출력한다. 수정 이전에는 해당 항목이 음수로 출력되는 경우가 존재했다.
-    * 브로커 응용 서버(CAS) 별 응용 프로그램 연결 개수의 합을 출력하는 #CONNECT가 추가되었다.
-    * 질의 종류 별 수행 회수를 출력하는 SELECT, INSERT, UPDATE, DELETE, OTHERS 항목을 추가하게 되었다. 단, -f 옵션이 있는 경우는 해당 항목들이 출력되지 않는다.
-    * 고유 키 위반 오류 회수를 출력하는 UNIQUE-ERR-Q 항목이 추가되었다.
-    
-* -b 옵션 없이 브로커 상태 출력 시
-    * STATUS 항목 출력 시 "CLIENT WAIT", "CLOSE WAIT"가 각각 "CLIENT_WAIT", "CLOSE_WAIT"로 출력되도록 변경되었다.
-    * 브로커 설정 정보가 출력에서 제외되었다.
-    
-* -l 옵션 사용 시 상태가 "CLOSE_WAIT"인 CAS의 정보는 출력에서 제외되었다.
+        % cubrid broker status SERVICE=ON
+        
+*   -b 옵션으로 브로커 상태 출력 시
+    *   브로커 이름은 최대 20자까지만 출력하고, 이를 초과하는 경우 이름 뒤에 ...을 출력한다.
+    *   REQ 항목은 더 이상 출력하지 않는다.
+    *   QPS, TPS 항목 출력 시 UINT64 최대 값까지 출력한다. 수정 이전에는 해당 항목이 음수로 출력되는 경우가 존재했다.
+    *   브로커 응용 서버(CAS) 별 응용 프로그램 연결 개수의 합을 출력하는 #CONNECT가 추가되었다.
+    *   질의 종류 별 수행 회수를 출력하는 SELECT, INSERT, UPDATE, DELETE, OTHERS 항목을 추가하게 되었다. 단, -f 옵션이 있는 경우는 해당 항목들이 출력되지 않는다.
+    *   고유 키 위반 오류 회수를 출력하는 UNIQUE-ERR-Q 항목이 추가되었다.
+        
+*   -b 옵션 없이 브로커 상태 출력 시
+    *   STATUS 항목 출력 시 "CLIENT WAIT", "CLOSE WAIT"가 각각 "CLIENT_WAIT", "CLOSE_WAIT"로 출력되도록 변경되었다.
+    *   브로커 설정 정보가 출력에서 제외되었다.
+        
+*   -l 옵션 사용 시 상태가 "CLOSE_WAIT"인 CAS의 정보는 출력에서 제외되었다.
          
             
 개선 및 오류 수정 
@@ -760,9 +762,9 @@ INSERT ON DUPLICATE KEY UPDATE, REPLACE 문의 성능 개선(CUBRIDSUS-8337)
 
 분석 함수의 성능을 개선하였다.
 
-* 질의에 명시된 분석 함수들이 같은 윈도우를 공유하는 경우에 대한 성능 향상
-* 많은 그룹으로 구성되는 데이터에 대한 분석 함수 처리 성능 향상
-* 일부분이 정렬된 데이터에 대한 분석 함수 처리 성능 향상
+*   질의에 명시된 분석 함수들이 같은 윈도우를 공유하는 경우에 대한 성능 향상
+*   많은 그룹으로 구성되는 데이터에 대한 분석 함수 처리 성능 향상
+*   일부분이 정렬된 데이터에 대한 분석 함수 처리 성능 향상
 
 .. code-block:: sql
     
@@ -810,8 +812,8 @@ INSERT ON DUPLICATE KEY UPDATE, REPLACE 문의 성능 개선(CUBRIDSUS-8337)
 
 다중 키 범위 최적화(multi-key range optimization)가 대폭 개선되었다.
 
-* ORDER BY 칼럼이 2개 이상이라도, orderby_num()에 의해 범위가 주어져도 중간 값의 정렬을 진행하면서 결과를 수집하는 다중 키 범위 최적화가 가능하도록 개선했다. 
-
+*   ORDER BY 칼럼이 2개 이상이라도, orderby_num()에 의해 범위가 주어져도 중간 값의 정렬을 진행하면서 결과를 수집하는 다중 키 범위 최적화가 가능하도록 개선했다. 
+    
     .. code-block:: sql
 
         SELECT * 
@@ -829,7 +831,7 @@ INSERT ON DUPLICATE KEY UPDATE, REPLACE 문의 성능 개선(CUBRIDSUS-8337)
         ORDER BY b, c DESC 
         FOR orderby_num() BETWEEN 5 AND 10;
 
-* 일부 JOIN 질의에서도 다중 키 범위 최적화가 가능해졌다. 
+*   일부 JOIN 질의에서도 다중 키 범위 최적화가 가능해졌다. 
 
     .. code-block:: sql
 
@@ -840,7 +842,7 @@ INSERT ON DUPLICATE KEY UPDATE, REPLACE 문의 성능 개선(CUBRIDSUS-8337)
         ORDER BY t.c DESC, d 
         LIMIT 10;
 
-* 다중 키 범위 최적화를 질의 실행 계획 생성 단계에서 수행하도록 변경하여 질의 플랜을 통해서 볼 수 있다. 다중 키 범위 최적화 적용 여부는 LIMIT 절 또는 orderby_num()을 통해서 정의되는 최종 결과 크기에 따라서 결정된다. 예를 들어, 파라미터를 통해서 설정된 크기보다 큰 최종 결과를 얻고자 하는 경우에는 다중 키 범위 최적화 실행 계획은 적용되지 않는다.
+*   다중 키 범위 최적화를 질의 실행 계획 생성 단계에서 수행하도록 변경하여 질의 플랜을 통해서 볼 수 있다. 다중 키 범위 최적화 적용 여부는 LIMIT 절 또는 orderby_num()을 통해서 정의되는 최종 결과 크기에 따라서 결정된다. 예를 들어, 파라미터를 통해서 설정된 크기보다 큰 최종 결과를 얻고자 하는 경우에는 다중 키 범위 최적화 실행 계획은 적용되지 않는다.
 
 ORDER BY 절의 칼럼을 타입 변환해도 결과 순서에 영향이 없으면 ORDER BY 절 최적화를 적용하도록 개선(CUBRIDSUS-7418)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -980,9 +982,9 @@ SQL 함수와 연산자
 
 분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY 절 및 PARTITION BY 절에 명시되는 표현식에 따른 동작 방식은 다음과 같다.
     
-* ORDER BY 상수 (예: 1): 상수는 SELECT 리스트의 칼럼 위치를 지정한다.
-* ORDER BY 상수 표현식 (예: 1+0): 상수 표현식은 무시되어 정렬/분할(ordering/partitioning)에 사용되지 않는다.
-* ORDER BY 상수가 아닌 표현식(예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용된다.
+*   ORDER BY 상수 (예: 1): 상수는 SELECT 리스트의 칼럼 위치를 지정한다.
+*   ORDER BY 상수 표현식 (예: 1+0): 상수 표현식은 무시되어 정렬/분할(ordering/partitioning)에 사용되지 않는다.
+*   ORDER BY 상수가 아닌 표현식(예: i, sin(i+1)): 표현식은 정렬/분할(ordering/partitioning)에 사용된다.
 
 STR_TO_DATE 함수가 밀리초를 항상 0으로 리턴하는 문제 수정(CUBRIDSUS-9553)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1460,8 +1462,8 @@ NUMERIC 타입 컬럼에 대해 호스트변수를 이용하여 INSERT를 수행
 
     ERROR: A domain conflict exists on attribute "a".
     
-계층 질의문에서 CONNECT BY 절에 LEVEL 의사 칼럼의 최대값 조건과 NOCYCLE이 지정된 경우에 잘못된 질의 결과를 출력하는 문제 수정(CUBRIDSUS-9581)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+계층 질의문에서 CONNECT BY 절에 LEVEL 의사 칼럼의 최대값 조건과 NOCYCLE이 지정된 경우에 잘못된 질의 결과를 출력하는 문제(CUBRIDSUS-9581)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 계층 질의문에서 CONNECT BY 절에 LEVEL 의사 칼럼의 최대값 조건과 NOCYCLE이 지정된 경우에 잘못된 질의 결과를 출력하는 문제를 수정했다.
 
@@ -1680,7 +1682,7 @@ Windows에서 "0x"로 시작하는 16진수 숫자를 나타내는 문자열을 
 
 ::
 
-    --수정 이전 버전에서 위의 질의들을 수행하면 아래의 오류 메시지를 출력했다.
+    -- 수정 이전 버전에서 위의 질의들을 수행하면 아래의 오류 메시지를 출력했다.
     ERROR: Cannot coerce value of domain "character" to domain "float".
 
 32비트 버전에서 LOB 타입의 데이터를 읽어들일 때 오류 발생하는 문제(CUBRIDSUS-10437)
@@ -1804,8 +1806,8 @@ FIND_IN_SET, POSITION, REPLACE, INSTR, LOCATE, SUBSTRING_INDEX 함수가 콜레�
 
 9.0 베타 버전에서 사용했던 LDML 파일의 정규화 관련 태그는 더 이상 사용되지 않으며, 다음과 같은 두 개의 시스템 파라미터가 사용된다.
 
-* unicode_input_normalization: 데이터를 저장할 때에 유니코드 결합(composition) 수행 여부를 지정한다.
-* unicode_output_normalization: 데이터를 읽을 때에 유니코드 분해(decomposition) 수행 여부를 지정한다.
+*   unicode_input_normalization: 데이터를 저장할 때에 유니코드 결합(composition) 수행 여부를 지정한다.
+*   unicode_output_normalization: 데이터를 읽을 때에 유니코드 분해(decomposition) 수행 여부를 지정한다.
 
 서로 호환되지 않는 콜레이션을 가지는 칼럼 조합 간에 외래 키 제약조건을 설정할 수 없도록 수정(CUBRIDSUS-8742)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1891,8 +1893,8 @@ CLOB_TO_CHAR 함수를 통해서 변환될 문자열의 문자셋을 지정할 �
 make_locale 도구(Linux 확장자는 .sh, Windows 확장자는 .bat)를 사용하여 로캘 라이브러리 생성 시 입력으로 주어진 LDML(Locale Data Markup Language) 파일의 속성 값 설정 오류를 검증하여 오류 발견 시 적절한 메시지를 출력하도록 수정했다.
 속성 값을 잘못 설정하는 예는 다음과 같다.
 
-* 같은 콜레이션 타입을 중복해서 설정하는 경우
-* 콜레이션 ID로 설정할 수 있는 범위(0~255)를 벗어나는 경우
+*   같은 콜레이션 타입을 중복해서 설정하는 경우
+*   콜레이션 ID로 설정할 수 있는 범위(0~255)를 벗어나는 경우
 
 또한, 속성 값에 대해 대소문자를 구분하지 않도록 수정했다.
 
@@ -2017,9 +2019,9 @@ ISO-8859-1 문자셋에서 확장 ASCII 코드에 대한 대소문자 변환이 
 ISO-8859-1 문자셋에서 확장 ASCII 코드(C0 - FE 영역)에 대해 대소문자 변환이 정상적으로 처리되지 못하는 문제를 수정했다. 
 이로 인해서 확장 ASCII 영역에 속하는 문자를 포함하는 사용자 식별자를 사용하는데 아래와 같은 문제점이 존재했다.
 
-* 사용자 이름, 그룹 이름이 대문자로 변환되지 못하는 문제
-* CREATE, ALTER와 같은 일반적인 스키마 작업을 할 수 없는 문제
-* 문자열 변환과 같은 문자열 처리가 정상적으로 이뤄지지 못하는 문제
+*   사용자 이름, 그룹 이름이 대문자로 변환되지 못하는 문제
+*   CREATE, ALTER와 같은 일반적인 스키마 작업을 할 수 없는 문제
+*   문자열 변환과 같은 문자열 처리가 정상적으로 이뤄지지 못하는 문제
 
 두 개의 인자를 가지는 표현식에 대한 콜레이션 결정 방식 오류(CUBRIDSUS-10560)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2162,7 +2164,7 @@ WHERE 절을 가지는 질의에 대해 특정 분할을 직접 참조하면 분
     % cubrid checkdb testdb
 
     Some inconsistencies were detected in your database.
-     Please consult error_log_file /home/CUBRID/log/testdb_checkdb.err for additional information.
+    Please consult error_log_file /home/CUBRID/log/testdb_checkdb.err for additional information.
 
 특정 분할을 대상으로 하는 뷰가 updatable하지 못한 문제(CUBRIDSUS-10264)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2223,14 +2225,18 @@ HA 환경에서 노드 상태가 변경되는 경우에 대한 로그 정보 추
 
 HA 환경에서 노드 상태가 변경되는 경우 다음 로그 정보를 추가하도록 수정했다. 이 정보는 error_log_level 시스템 파라미터의 값이 error 이하인 경우에 에러 로그 파일에 기록된다.
 
-* cub_master 프로세스의 로그 정보는 $CUBRID/log/<hostname>_master.err 파일에 저장되며 다음의 내용이 기록된다. ::
+*   cub_master 프로세스의 로그 정보는 $CUBRID/log/<hostname>_master.err 파일에 저장되며 다음의 내용이 기록된다. 
 
-    HA generic: Send changemode request to the server. (state:1[active], args:[cub_server demodb ], pid:25728).
-    HA generic: Receive changemode response from the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+    ::
 
-* cub_server 프로세스의 로그 정보는 $CUBRID/log/server/<db_name>_<date>_<time>.err 파일에 저장되며 다음의 내용이 기록된다. ::
+        HA generic: Send changemode request to the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+        HA generic: Receive changemode response from the server. (state:1[active], args:[cub_server demodb ], pid:25728).
 
-    Server HA mode is changed from 'to-be-active' to 'active'.
+*   cub_server 프로세스의 로그 정보는 $CUBRID/log/server/<db_name>_<date>_<time>.err 파일에 저장되며 다음의 내용이 기록된다. 
+
+    ::
+
+        Server HA mode is changed from 'to-be-active' to 'active'.
 
 슬레이브 노드를 maintenance 모드로 변경하면 마스터 노드의 복제 로그 반영 프로세스가 재시작을 반복하는 문제(CUBRIDSUS-9380)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2382,7 +2388,7 @@ CCI_U_TYPE_ENUM은 CCI_A_TYPE_STR을 통해 값을 조회하거나 전달할 수
 
 ENUM 칼럼의 타입으로 "VARCHAR" 대신 "ENUM"이 반환되도록 수정했다.
 
-- JDBC DatabaseMetaData를 통한 타입 이름 조회 
+-   JDBC DatabaseMetaData를 통한 타입 이름 조회 
 
     .. code-block:: java
     
@@ -2393,7 +2399,7 @@ ENUM 칼럼의 타입으로 "VARCHAR" 대신 "ENUM"이 반환되도록 수정했
          System.out.println("Column type is:" + type);
         }
      
-- CCI의 cci_schema_info와 cci_get_result_info 함수를 통한 타입 형식 조회
+-   CCI의 cci_schema_info와 cci_get_result_info 함수를 통한 타입 형식 조회
 
     .. code-block:: c
     
@@ -2551,8 +2557,8 @@ CSQL에서 결과 출력 시 칼럼의 길이를 제한하는 기능 추가(CUBR
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 CSQL에서 결과 출력 시 칼럼의 길이를 제한하는 기능을 추가했다.
 
-* ;STring-width는 문자열과 비트 타입의 칼럼에 대해 출력 길이를 제한하는 CSQL 세션 명령어이다. 명령행 옵션(--string-width)도 제공한다.
-* ;COLumn-width는 타입의 구분 없이 모든 칼럼의 출력 길이를 제한하는 CSQL 세션 명령어이다.
+*   ;STring-width는 문자열과 비트 타입의 칼럼에 대해 출력 길이를 제한하는 CSQL 세션 명령어이다. 명령행 옵션(--string-width)도 제공한다.
+*   ;COLumn-width는 타입의 구분 없이 모든 칼럼의 출력 길이를 제한하는 CSQL 세션 명령어이다.
 
 CSQL에 ;line-output 세션 명령 추가(CUBRIDSUS-9537)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2785,23 +2791,23 @@ DB 생성 시 허용 범위를 벗어난 볼륨 크기를 입력 단위 없이 �
 
 다음의 시스템 파라미터들은 시스템 운영 도중 변경할 수 있도록 수정했다.
 
-* index_scan_oid_buffer_size
-* sort_buffer_size
-* temp_file_memory_size_in_pages
-* unfill_factor
-* volume_extension_path
-* lock_escalation
-* checkpoint_every_npages
-* async_commit
-* access_ip_control
-* access_ip_control_file
-* index_unfill_factor
+*   index_scan_oid_buffer_size
+*   sort_buffer_size
+*   temp_file_memory_size_in_pages
+*   unfill_factor
+*   volume_extension_path
+*   lock_escalation
+*   checkpoint_every_npages
+*   async_commit
+*   access_ip_control
+*   access_ip_control_file
+*   index_unfill_factor
 
 또한, CSQL에서 ;get 세션 명령으로 시스템 파라미터 값을 구할 때 발생하는 다음 현상들을 수정했다.
 
-* ;get access_ip_control_file을 수행하면 CSQL이 비정상 종료
-* ;get unfill_factor을 수행하면 잘못된 결과를 출력
-* 정의되지 않은 시스템 파라미터에 대해 ;get 명령을 수행하여 실패한 후에는 정상적인 시스템 파라미터도 ;get 세션 명령으로 조회할 수 없는 문제
+*   ;get access_ip_control_file을 수행하면 CSQL이 비정상 종료
+*   ;get unfill_factor을 수행하면 잘못된 결과를 출력
+*   정의되지 않은 시스템 파라미터에 대해 ;get 명령을 수행하여 실패한 후에는 정상적인 시스템 파라미터도 ;get 세션 명령으로 조회할 수 없는 문제
 
 CUBRID 소스 파일에서 CCI 드라이버만 빌드하는 옵션 추가 및 CCI 소스 패키지 배포(CUBRIDSUS-8247)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2914,11 +2920,11 @@ Windows 버전 브로커를 통해 서버에 접속할때 cub_master가 구동�
 응용프로그램이 Windows 버전 브로커를 통해 서버에 접속하는 경우 cub_master 프로세스가 구동되어 있지 않으면 잘못된 에러가 발생하고 CAS가 무한 루프를 반복하는 문제를 수정했다.
 
 수정 이전 버전에서 Windows의 경우 아래의 오류 번호를 반환한다. 
-    *   첫번째 접속 시도 시 -21112 (An IOException was caught during reading the inputstream) 반환
-    *   두번째 접속 시도 시 -21013 (Cannot connect to a broker)
+*   첫번째 접속 시도 시 -21112 (An IOException was caught during reading the inputstream) 반환
+*   두번째 접속 시도 시 -21013 (Cannot connect to a broker)
     
 수정 전후의 Linux와 수정 이후의 Windows의 경우 아래의 오류 번호를 반환한다.
-    *  첫번째, 두번째 접속 시도 시 모두 -353 (Failed to connect to database server, 'basic', on the following host(s): localhost) 반환
+*   첫번째, 두번째 접속 시도 시 모두 -353 (Failed to connect to database server, 'basic', on the following host(s): localhost) 반환
 
 Windows 서비스 프로세스인 CUBRIDService에 설명 추가(CUBRIDSUS-8917)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2950,14 +2956,14 @@ CUBRID Manager를 통해 DB 사용자를 편집하지 못하는 현상(CUBRIDSUS
 
     % migrate_90beta_to_91 <db_name>
 
-    보다 자세한 사항은  :doc:`/upgrade`\ 를 참고한다.
+보다 자세한 사항은  :doc:`/upgrade`\ 를 참고한다.
 
 9.1 버전과 9.0 Beta 이전 버전 간에 DB 볼륨이 호환되지 않음(CUBRIDSUS-5238)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 9.0 Beta 이전 버전과 DB 볼륨이 호환되지 않으므로 cubrid unloaddb/loaddb를 이용하여 데이터를 마이그레이션해야 한다. 보다 자세한 사항은  :doc:`/upgrade`\ 를 참고한다.
 
-    .. note:: 9.0 Beta 버전 및 그 이전 버전 사용자는 데이터를 마이그레이션하는 것과 함께 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 한다.
+.. note:: 9.0 Beta 버전 및 그 이전 버전 사용자는 데이터를 마이그레이션하는 것과 함께 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 한다.
 
 CUBRID_LANG 환경 변수 대신에 CUBRID_CHARSET 및 CUBRID_MSG_LANG 환경 변수로 변경
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2969,7 +2975,7 @@ CUBRID_LANG 환경 변수 대신에 CUBRID_CHARSET 및 CUBRID_MSG_LANG 환경 �
 CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결과의 배열에 대한 에러 처리 방식 수정(CUBRIDSUS-9364)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CCI 응용에서 여러 개의 질의를 한 번에 수행할 때 2008 R3.0부터 2008 R4.1 버전까지는 cci_execute_array 함수, cci_execute_batch 함수 또는 cci_execute_result 함수에 의한 질의 수행 결과들 중 하나만 에러가 발생해도 해당 질의의 에러 코드를 반환했으나, 2008 R4.3 버전 및 2008 R9.1 버전부터는 전체 질의 개수를 반환하고 CCI_QUERY_RESULT_* 매크로들을 통해 개별 질의에 대한 에러를 확인할 수 있도록 수정했다.
+CCI 응용에서 여러 개의 질의를 한 번에 수행할 때 2008 R3.0부터 2008 R4.1 버전까지는 cci_execute_array 함수, cci_execute_batch 함수 또는 cci_execute_result 함수에 의한 질의 수행 결과들 중 하나만 에러가 발생해도 해당 질의의 에러 코드를 반환했으나, 2008 R4.3 버전 및 9.1 버전부터는 전체 질의 개수를 반환하고 CCI_QUERY_RESULT_* 매크로들을 통해 개별 질의에 대한 에러를 확인할 수 있도록 수정했다.
 
 수정 이전 버전에서는 에러가 발생한 경우에도 배열 내 각각의 질의들의 성공 실패 여부를 알 수 없으므로, 이를 판단해야 한다.
 
@@ -3108,9 +3114,9 @@ Windows Vista 이상 버전에서 cubrid 유틸리티를 사용하여 서비스�
 
 Windows Vista 이상 버전에서 명령 프롬프트 창을 관리자 권한으로 구동하는 방법은 다음과 같다.
 
-* [시작> 모든 프로그램> 보조 프로그램> 명령 프롬프트]에서 마우스 오른쪽 버튼을 클릭한다.
-
-* [관리자 권한으로 실행(A)]을 선택하면 권한 상승을 확인하는 대화 상자가 활성화되고, "예"를 클릭하여 관리자 권한으로 구동한다.
+*   [시작> 모든 프로그램> 보조 프로그램> 명령 프롬프트]에서 마우스 오른쪽 버튼을 클릭한다.
+    
+*   [관리자 권한으로 실행(A)]을 선택하면 권한 상승을 확인하는 대화 상자가 활성화되고, "예"를 클릭하여 관리자 권한으로 구동한다.
 
 CUBRID 소스 빌드 후 실행 시, 매니저 서버 프로세스 관련 오류 발생(CUBRIDSUS-3553)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3124,13 +3130,13 @@ CUBRID 2008 R3.0 이하 버전은 glo (Generalized Large Object) 클래스를 �
 
 기존의 glo 클래스 사용자는 다음과 같이 작업할 것을 권장한다.
 
-* GLO 데이터를 파일로 저장한 후 어플리케이션 및 DB 스키마에서 GLO를 사용하지 않도록 수정한다.
-
-* unloaddb, loaddb 유틸리티를 이용하여 DB 마이그레이션을 한다.
-
-* 변경한 어플리케이션에 맞게 파일을 LOB 데이터로 로딩하는 작업을 수행하도록 한다.
-
-* 수정한 어플리케이션이 정상 동작하는지 확인한다.
+*   GLO 데이터를 파일로 저장한 후 어플리케이션 및 DB 스키마에서 GLO를 사용하지 않도록 수정한다.
+    
+*   unloaddb, loaddb 유틸리티를 이용하여 DB 마이그레이션을 한다.
+    
+*   변경한 어플리케이션에 맞게 파일을 LOB 데이터로 로딩하는 작업을 수행하도록 한다.
+    
+*   수정한 어플리케이션이 정상 동작하는지 확인한다.
 
 
 참고로, cubrid loaddb 유틸리티는 GLO 클래스를 상속받거나 GLO 클래스 타입을 가진 테이블을 로딩하려는 경우 " Error occurred during schema loading " 오류 메시지와 함께 데이터 로딩을 중지한다.

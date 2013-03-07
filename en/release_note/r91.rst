@@ -2324,6 +2324,11 @@ When there are many prepare requests for a query in the Shard environment, if on
 Continuous Failure of Requests from the Application when the Number of CASs was Smaller than the Load on the shard proxy(CUBRIDSUS-10012)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+In shard proxy, even if rcTime of connection URL is specified, the behavior to return to the original connection did not occur(CUBRIDSUS-10823)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+Fixed a problem that the connection didn't return to the original one after the rcTime(rcTime is specified in ocnnection URL) when shard proxy is failed over.
+
 Fixed to Output an Appropriate Error Message when the CUBRID SHARD proxy failed to Authorize(CUBRIDSUS-8839)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

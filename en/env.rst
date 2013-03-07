@@ -123,139 +123,137 @@ Language and charset setting of CUBRID affects read and write data. The language
 
 For more details related to charset, locale and collation settings, see :doc:`/sql/i18n`.
 
-[번역]
-
 .. _connect-to-cubrid-server:
 
-포트 설정
-=========
+Port Setting
+============
 
-포트가 개방되어 있지 않은 환경에서 사용하는 경우, CUBRID가 사용하는 포트들을 개방해야 한다.
+If ports are closed, the ports used by CUBRID should be opened.
 
-다음은 CUBRID가 사용하는 포트에 대해 하나의 표로 정리한 것이다. 각 포트는 상대방의 접속을 대기하는 listener 쪽에서 개방되어야 한다.
+The following table summarizes the ports used by CUBRID. Each port on the listener that waits for connection from the opposite side should be opened.
 
-Linux 방화벽에서 특정 프로세스에 대한 포트를 개방하려면 해당 방화벽 프로그램의 설명을 따른다.
+To open the ports for a specific process on the Linux firewall, follow the guide described for the corresponding firewall program.
 
-Windows에서 임의의 가용 포트를 사용하는 경우는 어떤 포트를 개방할 지 알 수 없으므로  Windows 메뉴의 "제어판" 검색창에서  "방화벽"을 입력한 후, "Windows 방화벽 > Windows 방화벽을 통해 프로그램 또는 기능 허용"에서 포트 개방을 원하는 프로그램을 추가한다. 
+If available ports for Windows are used, you cannot know which port will be opened. In this case, enter "firewall" in the "Control Panel" of the Windows menu and then choose "Windows Firewall> Allow a program or functionality through Windows Firewall" and then add the program for which port should be opened.
 
-Windows에서 특정 포트를 지정하기 번거로운 경우에도 이 방법을 사용할 수 있다. 일반적으로 Windows 방화벽에서 특정 프로그램을 지정하지 않고 포트를 여는 것보다 허용되는 프로그램 목록에 프로그램을 추가하는 것이 보다 안전하므로 이 방식을 권장한다.
+This method can be used for the case that it is difficult to specify a specific port in Windows. This method is recommended since it is safer to add a program to the Allowed programs list than to open a port without specifying a program on the Windows firewall.
 
-* cub_broker에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_broker.exe"를 추가한다.
-* CAS에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cas.exe"를 추가한다.
-* cub_master에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_master.exe"를 추가한다.
-* cub_server에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_server.exe"를 추가한다.
-* CUBRID Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cmserver.exe"를 추가한다.
-* CUBRID Web Manager에 대한 모든 포트를 개방하려면 "%CUBRID%\\bin\\cub_cmhttpd.exe"를 추가한다.
+*   Add "%CUBRID%\\bin\\cub_broker.exe" to open all ports for cub_broker.
+*   Add "%CUBRID%\\bin\\cub_cas.exe" to open all ports for CAS.
+*   Add "%CUBRID%\\bin\\cub_master.exe" to open all ports for cub_master.
+*   Add "%CUBRID%\\bin\\cub_server.exe" to open all ports for cub_server.
+*   Add "%CUBRID%\\bin\\cub_cmserver.exe" to open all ports for the CUBRID Manager.
+*   Add "%CUBRID%\\bin\\cub_cmhttpd.exe" to open all ports for the CUBRID Web Manager.
     
-브로커 장비 또는 DB 서버 장비에서 Linux용 CUBRID를 사용한다면 Linux 포트가 모두 개방되어 있어야 한다.
-브로커 장비 또는 DB 서버 장비에서 Windows용 CUBRID를 사용한다면 Windows 포트가 모두 개방되어 있거나, 관련 프로세스들이 모두 Windows 방화벽에서 허용되는 목록에 추가되어 있어야 한다.
+If you use CUBRID for Linux at the broker equipment or the DB server equipment, all of Linux ports should be opened. 
+If you use CUBRID for Windows at the broker equipment or the DB server equipment, all of Linux ports should be opened or the related processes should be added to the program list allowed for the Windows firewall.
      
-    +---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | 구분          | listener     | requester     | Linux 포트     | Windows 포트                                        | 방화벽 포트 설정         | 설명         |
-    +===============+==============+===============+================+=====================================================+==========================+==============+
-    | 기본 사용     | cub_broker   | application   | BROKER_PORT    | BROKER_PORT                                         | 개방(open)               | 일회성 연결  |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | CAS          | application   | BROKER_PORT    | APPL_SERVER_PORT ~ (APP_SERVER_PORT + CAS 개수 - 1) | 개방                     | 연결 유지    |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | cub_master   | CAS           | cubrid_port_id | cubrid_port_id                                      | 개방                     | 일회성 연결  |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | cub_server   | CAS           | cubrid_port_id | 임의의 가용 포트                                    | Linux: 개방              | 연결 유지    |
-    |               |              |               |                |                                                     |                          |              |
-    |               |              |               |                |                                                     | Windows: 프로그램        |              |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | 클라이언트   | cub_server    | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-    |               | 장비(*)      |               |                |                                                     |                          |              |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | 서버         | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-    |               | 장비(**)     |               |                |                                                     |                          |              |
-    +---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | HA 사용       | cub_broker   | application   | BROKER_PORT    | 미지원                                              | 개방                     | 일회성 연결  |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | CAS          | application   | BROKER_PORT    | 미지원                                              | 개방                     | 연결 유지    |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | cub_master   | CAS           | cubrid_port_id | 미지원                                              | 개방                     | 일회성 연결  |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | cub_master   | cub_master    | ha_port_id     | 미지원                                              | 개방                     | 주기적 연결, |
-    |               |              |               |                |                                                     |                          | heartbeat    |
-    |               | (slave)      | (master)      |                |                                                     |                          | 확인         |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | cub_master   | cub_master    | ha_port_id     | 미지원                                              | 개방                     | 주기적 연결, |
-    |               |              |               |                |                                                     |                          | heartbeat    |
-    |               | (master)     | (slave)       |                |                                                     |                          | 확인         |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | cub_server   | CAS           | cubrid_port_id | 미지원                                              | 개방                     | 연결 유지    |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | 클라이언트   | cub_server    | ECHO(7)        | 미지원                                              | 개방                     | 주기적 연결  |
-    |               | 장비(*)      |               |                |                                                     |                          |              |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | 서버         | CAS, CSQL,    | ECHO(7)        | 미지원                                              | 개방                     | 주기적 연결  |
-    |               | 장비(**)     | copylogdb,    |                |                                                     |                          |              |
-    |               |              | applylogdb    |                |                                                     |                          |              |
-    +---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | SHARD 사용    | shard_broker | application   | BROKER_PORT    | BROKER_PORT                                         | 개방                     | 일회성 연결  |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | shard_proxy  | application   | BROKER_PORT    | BROKER_PORT + 1 ~ (BROKER_PORT + MAX_NUM_PROXY)     | 개방                     | 연결 유지    |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | shard_proxy  | shard CAS     | 없음           | (BROKER_PORT + MAX_NUM_PROXY + 1) ~                 | 불필요                   | 연결 유지    |
-    |               |              |               |                | (BROKER_PORT + MAX_NUM_PROXY * 2)                   |                          |              |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | cub_master   | shard CAS     | cubrid_port_id | cubrid_port_id                                      | 개방                     | 일회성 연결  |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | cub_server   | shard CAS     | cubrid_port_id | 임의의 가용 포트                                    | Linux: 개방              | 연결 유지    |
-    |               |              |               |                |                                                     |                          |              |
-    |               |              |               |                |                                                     | Windows: 프로그램        |              |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | 클라이언트   | cub_server    | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-    |               | 장비(**)     |               |                |                                                     |                          |              |
-    |               +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    |               | 서버         | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-    |               | 장비(\*\*\*) |               |                |                                                     |                          |              |
-    +---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | Manager,      | Manager      | application   | 8001, 8002     | 8001, 8002                                          | 개방                     |              |
-    |               | 서버         |               |                |                                                     |                          |              |
-    | Web Manager   +--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-    | 사용          | Web Manager  | application   | 8282           | 8282                                                | 개방                     |              |
-    |               | 서버         |               |                |                                                     |                          |              |
-    +---------------+--------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
+    +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    | Label         | Listener      | Requester     | Linux Port     | Windows Port                                        | Firewall Port Setting    | Description            |
+    +===============+===============+===============+================+=====================================================+==========================+========================+
+    | Default use   | cub_broker    | application   | BROKER_PORT    | BROKER_PORT                                         | Open                     | One-time connection    |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | CAS           | application   | BROKER_PORT    | APPL_SERVER_PORT ~ (APP_SERVER_PORT + # of CAS - 1) | Open                     | Keep connected         |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | cub_master    | CAS           | cubrid_port_id | cubrid_port_id                                      | Open                     | One-time connection    |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | cub_server    | CAS           | cubrid_port_id | A random available port                             | Linux: Open              | Keep connected         |
+    |               |               |               |                |                                                     |                          |                        |
+    |               |               |               |                |                                                     | Windows: Program         |                        |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | Client        | cub_server    | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
+    |               | equipment     |               |                |                                                     |                          |                        |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | Server        | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
+    |               | equipment     |               |                |                                                     |                          |                        |
+    +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    | HA used       | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | CAS           | application   | BROKER_PORT    | Not supported                                       | Open                     | Keep connected         |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | cub_master    | CAS           | cubrid_port_id | Not supported                                       | Open                     | One-time connection    |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | cub_master    | cub_master    | ha_port_id     | Not supported                                       | Open                     | Periodical connection, |
+    |               |               |               |                |                                                     |                          | check the heartbeat    |
+    |               | (slave)       | (master)      |                |                                                     |                          |                        |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | cub_master    | cub_master    | ha_port_id     | Not supported                                       | Open                     | Periodical connection, |
+    |               |               |               |                |                                                     |                          | check the heartbeat    |
+    |               | (master)      | (slave)       |                |                                                     |                          |                        |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | cub_server    | CAS           | cubrid_port_id | Not supported                                       | Open                     | Keep connected         |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | Client        | cub_server    | ECHO(7)        | Not supported                                       | Open                     | Periodical connection  |
+    |               | equipment     |               |                |                                                     |                          |                        |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | Server        | CAS, CSQL,    | ECHO(7)        | Not supported                                       | Open                     | Periodical connection  |
+    |               | equipment     | copylogdb,    |                |                                                     |                          |                        |
+    |               |               | applylogdb    |                |                                                     |                          |                        |
+    +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    | SHARD used    | shard_broker  | application   | BROKER_PORT    | BROKER_PORT                                         | Open                     | One-time connection    |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | shard_proxy   | application   | BROKER_PORT    | BROKER_PORT + 1 ~ (BROKER_PORT + MAX_NUM_PROXY)     | Open                     | Keep connected         |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | shard_proxy   | shard CAS     | None           | (BROKER_PORT + MAX_NUM_PROXY + 1) ~                 | Not required             | Keep connected         |
+    |               |               |               |                | (BROKER_PORT + MAX_NUM_PROXY * 2)                   |                          |                        |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | cub_master    | shard CAS     | cubrid_port_id | cubrid_port_id                                      | Open                     | One-time connection    |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | cub_server    | shard CAS     | cubrid_port_id | A random available port                             | Linux: Open              | Keep connected         |
+    |               |               |               |                |                                                     |                          |                        |
+    |               |               |               |                |                                                     | Windows: Program         |                        |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | Client        | cub_server    | ECHO(7)        | ECHO(7)                                             | Open                     | Keep connected         |
+    |               | equipment     |               |                |                                                     |                          |                        |
+    |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    |               | Server        | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | Open                     | Keep connected         |
+    |               | equipment     |               |                |                                                     |                          |                        |
+    +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    | Manager,      | Manager       | application   | 8001, 8002     | 8001, 8002                                          | Open                     |                        |
+    |               | server        |               |                |                                                     |                          |                        |
+    | Web Manager   +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+    | used          | Web Manager   | application   | 8282           | 8282                                                | Open                     |                        |
+    |               | server        |               |                |                                                     |                          |                        |
+    +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
     
-각 구분 별 상세 설명은 아래와 같다.
+The detailed description on each classification is given as follows.
 
 .. _cubrid-basic-ports:
 
-CUBRID 기본 사용 포트
----------------------
+Default Ports for CUBRID
+------------------------
 
-접속 요청을 기다리는(listening) 프로세스들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
+The following table summarizes the ports required for each OS, based on the listening processes. Each port on the listener should be opened.
 
-+------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| listener   | requester     | Linux port     | Windows port                                        | 방화벽 포트 설정         | 설명         |
-+============+===============+================+=====================================================+==========================+==============+
-| cub_broker | application   | BROKER_PORT    | BROKER_PORT                                         | 개방(open)               | 일회성 연결  |
-+------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| CAS        | application   | BROKER_PORT    | APPL_SERVER_PORT ~ (APP_SERVER_PORT + CAS 개수 - 1) | 개방                     | 연결 유지    |
-+------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| cub_master | CAS           | cubrid_port_id | cubrid_port_id                                      | 개방                     | 일회성 연결  |
-+------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| cub_server | CAS           | cubrid_port_id | 임의의 가용 포트                                    | Linux: 개방              | 연결 유지    |
-|            |               |                |                                                     |                          |              |
-|            |               |                |                                                     | Windows: 프로그램        |              |
-+------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| 클라이언트 | cub_server    | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-| 장비(*)    |               |                |                                                     |                          |              |
-+------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| 서버       | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-| 장비(**)   |               |                |                                                     |                          |              |
-+------------+---------------+----------------+-----------------------------------------------------+--------------------------+--------------+
++---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| Listener      | Requester     | Linux port     | Windows port                                        | Firewall Port Setting    | Description            |
++===============+===============+================+=====================================================+==========================+========================+
+| cub_broker    | application   | BROKER_PORT    | BROKER_PORT                                         | Open                     | One-time connection    |
++---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| CAS           | application   | BROKER_PORT    | APPL_SERVER_PORT ~ (APP_SERVER_PORT + # of CAS - 1) | Open                     | Keep connected         |
++---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| cub_master    | CAS           | cubrid_port_id | cubrid_port_id                                      | Open                     | One-time connection    |
++---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| cub_server    | CAS           | cubrid_port_id | A random available port                             | Linux: Open              | Keep connected         |
+|               |               |                |                                                     |                          |                        |
+|               |               |                |                                                     | Windows: Program         |                        |
++---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| Client        | cub_server    | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
+| equipment(*)  |               |                |                                                     |                          |                        |
++---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| Server        | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
+| equipment(**) |               |                |                                                     |                          |                        |
++---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
     
-(*): CAS 또는 CSQL 프로세스가 존재하는 장비
+(*): The equipment which has the CAS or CSQL process
 
-(**): cub_server가 존재하는 장비
+(**): The equipment which has the cub_server
     
-.. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다. 따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\\bin\\cub_server.exe"을 추가해야 한다.
-    
-서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
+.. note:: In Windows, you cannot specify the ports to open because CAS randomly specifies the ports as accessing the cub_server. In this case, add "%CUBRID%\\bin\\cub_server.exe" to "Windows Firewall > Allowed programs".
 
-다음은 각 프로세스 간 연결 관계를 나타낸 것이다.
+As the server process (cub_server) and the client processes (CAS, CSQL) cross-check if the opposite node is normally running or not by using the ECHO(7) port, you should open the ECHO(7) port if there is a firewall. If the ECHO port cannot be opened for both the server and the client, set the **check_peer_alive**  parameter value of the cubrid.conf to none.
+
+The relation of connection between processes is as follows:
 
 ::
 
@@ -263,85 +261,83 @@ CUBRID 기본 사용 포트
                  -> CAS  -  cub_master
                          -> cub_server
 
-* application: 응용 프로세스
-* cub_broker: 브로커 서버 프로세스. application이 연결할 CAS를 선택하는 역할을 수행.
-* CAS: 브로커 응용 서버 프로세스. application과 cub_server를 중계.
-* cub_master: 마스터 프로세스. CAS가 연결할 cub_server를 선택하는 역할을 수행.
-* cub_server: DB 서버 프로세스
+* application: The application process
+* cub_broker: The broker server process. It selects CAS to connect with the application.
+* CAS: The broker application server process. It relays the application and the cub_server.
+* cub_master: The master process. It selects the cub_server to connect with the CAS.
+* cub_server: The database server process
     
-프로세스 간 관계 기호 및 의미는 다음과 같다.
+The symbols of relation between processes and the meaning are as follows:
 
-* \- 기호: 최초 한 번만 연결됨을 나타낸다.
-* ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.
-* (master): HA 구성에서 master 노드를 나타낸다.
-* (slave): HA 구성에서 slave 노드를 나타낸다.
+* \- : Indicates that the connection is made only once for the initial.
+* ->, <- : Indicates that the connection is maintained. The right side of -> or the left side of <- is the party that the arrow symbol indicates. The party that the arrow symbol indicates is the listener which listens to the opposite process.
+* (master): Indicates the master node in the HA configuration.
+* (slave): Indicates the slave node in the HA configuration.
 
-다음은 응용 프로그램과 DB 사이의 연결 과정을 순서대로 나열한 것이다.
+The connection process between the application and the DB is as follows: 
 
-#. application이 cubrid_broker.conf에 설정된 브로커 포트(BROKER_PORT)를 통해 cub_broker와 연결을 시도한다.
-#. cub_broker는 연결 가능한 CAS를 선택한다.
-#. application과 CAS가 연결된다. 
-
-   Linux에서는 application이 유닉스 도메인 소켓을 통해 CAS와 연결되므로 BROKER_PORT를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 CAS마다 cubrid_broker.conf에 설정된 APPL_SERVER_PORT 값을 기준으로 CAS ID를 더한 포트를 통해 연결된다. APPL_SERVER_PORT의 값이 설정되지 않으면 첫번째 CAS와 연결하는 포트 값은 BROKER_PORT + 1이 된다.
-
-   예를 들어 Windows에서 BROKER_PORT가 33000이고 APPL_SERVER_PORT 가 설정되지 않았으면 application과 CAS 사이에 사용하는 포트는 다음과 같다.
+#.  The application tries to connect to the cub_broker through the broker port (BROKER_PORT) set in the cubrid_broker.conf.
+#.  The cub_broker selects a connectable CAS.
+#.  The application and CAS are connected.
     
-   * application이 CAS(1)과 접속하는 포트 : 33001
-   * application이 CAS(2)와 접속하는 포트 : 33002
-   * application이 CAS(3)와 접속하는 포트 : 33003
-                
-#. CAS는 cubrid.conf에 설정된 cubrid_port_id 포트를 통해 cub_master에게 cub_server로의 연결을 요청한다.
-#. CAS와 cub_server가 연결된다. 
-
-   Linux에서는 CAS가 유닉스 도메인 소켓을 통해 cub_server와 연결되므로 cubrid_port_id 포트를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 임의의 가용 포트를 통해 cub_server와 연결된다. Windows에서 DB server를 운용한다면 브로커 장비와 DB 서버 장비 사이에서는 임의의 가용 포트를 사용하므로, 두 장비 사이에서 방화벽이 해당 프로세스에 대한 포트를 막게 되면 정상 동작을 보장할 수 없게 된다는 점에 주의한다.
-  
-#. 이후 CAS는 application이 종료되어도 CAS가 재시작되지 않는 한 cub_server와 연결을 유지한다.
+    In Linux, BROKER_PORT, which is used as an application, is connected to CAS through the Unix domain socket. In Windows, since the Unix domain socket cannot be used, an application and CAS are connected through a port of which number is the sum of the corresponding CAS ID and the APPL_SERVER_PORT value set in the cubrid_broker.conf. If the APPL_SERVER_PORT value has not been set, the port value connected to the first CAS is BROKER_PORT + 1.
+    
+    For example, if the BROKER_PORT is 33000 and the APPL_SERVER_PORT value has not been set in Windows, the ports used between the application and CAS are as follows:
+        
+    *   The port used to connect the application to the CAS(1): 33001
+    *   The port used to connect the application to the CAS(2): 33002
+    *   The port used to connect the application to the CAS(3): 33003
+                    
+#.  CAS sends a request of connecting with the cub_server to the cub_master through the cubrid_port_id port set in the cubrid.conf.
+#.  CAS and the cub_server are connected.
+    
+    In Linux, you should use the cubrid_port_id port as CAS is connected to the cub_server through the Unix domain socket. In Windows, CAS is connected to the cub_server through a random available port as the Unix domain socket cannot be used. If the DB server is running in Windows, a random available port is used between the broker equipment and the DB server equipment. In this case, note that the operation may not be successful if a firewall blocks the port for the process between the two equipment.
+    
+#.  After that, CAS keeps connection with the cub_server even if the application is terminated until the CAS restarts.
 
 .. _cubrid-ha-ports: 
 
-CUBRID HA 사용 포트
+Ports for CUBRID HA
 -------------------
 
-CUBRID HA는 Linux 환경에서만 지원한다.
+The CUBRID HA is supported in Linux only.
 
-접속 요청을 기다리는(listening) 프로세스들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
+The following table summarizes the ports required for each OS, based on the listening processes. Each port on the listener should be opened.
 
-+------------+---------------+----------------+--------------------------+--------------+
-| listener   | requester     | Linux port     | 방화벽 포트 설정         | 설명         |
-+============+===============+================+==========================+==============+
-| cub_broker | application   | BROKER_PORT    | 개방(open)               | 일회성 연결  |
-+------------+---------------+----------------+--------------------------+--------------+
-| CAS        | application   | BROKER_PORT    | 개방                     | 연결 유지    |
-+------------+---------------+----------------+--------------------------+--------------+
-| cub_master | CAS           | cubrid_port_id | 개방                     | 일회성 연결  |
-+------------+---------------+----------------+--------------------------+--------------+
-| cub_master | cub_master    | ha_port_id     | 개방                     | 주기적 연결, |
-|            |               |                |                          | heartbeat    |
-| (slave)    | (master)      |                |                          | 확인         |
-+------------+---------------+----------------+--------------------------+--------------+
-| cub_master | cub_master    | ha_port_id     | 개방                     | 주기적 연결, |
-|            |               |                |                          | heartbeat    |
-| (master)   | (slave)       |                |                          | 확인         |
-+------------+---------------+----------------+--------------------------+--------------+
-| cub_server | CAS           | cubrid_port_id | 개방                     | 연결 유지    |
-+------------+---------------+----------------+--------------------------+--------------+
-| 클라이언트 | cub_server    | ECHO(7)        | 개방                     | 주기적 연결  |
-| 장비(*)    |               |                |                          |              |
-+------------+---------------+----------------+--------------------------+--------------+
-| 서버       | CAS, CSQL,    | ECHO(7)        | 개방                     | 주기적 연결  |
-| 장비(**)   | copylogdb,    |                |                          |              |
-|            | applylogdb    |                |                          |              |
-+------------+---------------+----------------+--------------------------+--------------+
++---------------+---------------+----------------+--------------------------+------------------------+
+| Listener      | Requester     | Linux port     | Firewall Port Setting    | Description            |
++===============+===============+================+==========================+========================+
+| cub_broker    | application   | BROKER_PORT    | Open                     | One-time connection    |
++---------------+---------------+----------------+--------------------------+------------------------+
+| CAS           | application   | BROKER_PORT    | Open                     | Keep connected         |
++---------------+---------------+----------------+--------------------------+------------------------+
+| cub_master    | CAS           | cubrid_port_id | Open                     | One-time connection    |
++---------------+---------------+----------------+--------------------------+------------------------+
+| cub_master    | cub_master    | ha_port_id     | Open                     | Periodical connection, |
+|               |               |                |                          | check the heartbeat    |
+| (slave)       | (master)      |                |                          |                        |
++---------------+---------------+----------------+--------------------------+------------------------+
+| cub_master    | cub_master    | ha_port_id     | Open                     | Periodical connection, |
+|               |               |                |                          | check the heartbeat    |
+| (master)      | (slave)       |                |                          |                        |
++---------------+---------------+----------------+--------------------------+------------------------+
+| cub_server    | CAS           | cubrid_port_id | Open                     | Keep connected         |
++---------------+---------------+----------------+--------------------------+------------------------+
+| Client        | cub_server    | ECHO(7)        | Open                     | Periodical connection  |
+| equipment(*)  |               |                |                          |                        |
++---------------+---------------+----------------+--------------------------+------------------------+
+| Server        | CAS, CSQL,    | ECHO(7)        | Open                     | Periodical connection  |
+| equipment(**) | copylogdb,    |                |                          |                        |
+|               | applylogdb    |                |                          |                        |
++---------------+---------------+----------------+--------------------------+------------------------+
     
-(*): CAS, CSQL, copylogdb, 또는 applylogdb 프로세스가 존재하는 장비
+(*): The equipment which has the CAS, CSQL, copylogdb, or applylogdb process
 
-(**): cub_server가 존재하는 장비
+(**): The equipment which has the cub_server
 
-서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL, copylogdb, applylogdb 등) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
+As the server process (cub_server) and the client processes (CAS, CSQL, copylogdb, applylogdb, etc.) cross-check if the opposite node is normally running or not by using the ECHO(7) port, you should open the ECHO(7) port if there is a firewall. If the ECHO port cannot be opened for both the server and the client, set the **check_peer_alive** parameter value of the cubrid.conf to none.
 
-이외에도 ECHO(7) 포트의 개방이 필요하다. ECHO 포트 개방과 관련된 설명은 :ref:`cubrid-basic-ports` 절을 참고한다.
-
-다음은 각 프로세스 간 연결 관계를 나타낸 것이다.
+The relation of connection between processes is as follows:
 
 ::
 
@@ -350,67 +346,67 @@ CUBRID HA는 Linux 환경에서만 지원한다.
                         -> cub_server(master)     cub_server(slave) <- applylogdb(slave)
                                               <----------------------- copylogdb(slave)
                                               
-* cub_master(master): CUBRID HA 구성에서 master 노드에 있는 마스터 프로세스. 상대 노드가 살아있는지 확인하는 역할을 수행.
-* cub_master(slave): CUBRID HA 구성에서 slave 노드에 있는 마스터 프로세스. 상대 노드가 살아있는지 확인하는 역할을 수행.
-* copylogdb(slave): CUBRID HA 구성에서 slave 노드에 있는 복제 로그 복사 프로세스
-* applylogdb(slave): CUBRID HA 구성에서 slave 노드에 있는 복제 로그 반영 프로세스
+*   cub_master(master): the master process on the master node in the CUBRID HA configuration. It checks if the peer node is alive.
+*   cub_master(slave): the master process on the slave node in the CUBRID HA configuration. It checks if the peer node is alive.
+*   copylogdb(slave): the process which copies the replication log on the slave node in the CUBRID HA configuration
+*   applylogdb(slave): the process which applies the replication log on the slave node in the CUBRID HA configuration
 
-master 노드에서 slave 노드로의 복제 과정 파악이 용이하게 하기 위해 위에서 master 노드의 applylogdb, copylogdb와 slave 노드의 CAS는 생략했다.
+For easy understanding for the replication process from the master node to the slave node, the applylogdb and copylogdb on the master node and CAS on the slave node have been omitted.
 
-프로세스 간 관계 기호 및 의미는 다음과 같다.
+The symbols of relation between processes and the meaning are as follows:
 
-* \- 기호: 최초 한 번만 연결됨을 나타낸다.
-* ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.
-* (master): HA 구성에서 master 노드를 나타낸다.
-* (slave): HA 구성에서 slave 노드를 나타낸다.
+*   \- : Indicates that the connection is made only once for the initial.
+*   ->, <- : Indicates that the connection is maintained. The right side of -> or the left side of <- is the party that the arrow symbol indicates. The party that the arrow symbol indicates is the listener which listens to the opposite process.
+*   (master): Indicates the master node in the HA configuration.
+*   (slave): Indicates the slave node in the HA configuration.
     
-응용 프로그램과 DB 사이의 연결 과정은 1. CUBRID 기본 사용 포트와 동일하다. 여기에서는 CUBRID HA에 의해 1:1로 master DB와 slave DB를 구성할 때 master 노드와 slave 노드 사이의 연결 과정에 대해서만 설명한다.
+The connection process between the application and the DB is identical with :ref:`cubrid-basic-ports`\. This section describes the connection process between the master node and the slave node when the master DB and the slave DB are configured 1:1 by the CUBRID HA.
 
-#. cub_master(master)와 cub_master(slave) 사이에는 cubrid_ha.conf에 설정된 ha_port_id를 사용한다.
-#. copylogdb(slave)는 slave 노드에 있는 cubrid.conf의 cubrid_port_id에 설정된 포트를 통해 cub_master(master)에게 master DB로의 연결을 요청하여, 최종적으로 cub_server(master)와 연결하게 된다.
-#. applylogdb(slave)는 slave 노드에 있는 cubrid.conf의 cubrid_port_id에 설정된 포트를 통해 cub_master(slave)에게 slave DB로의 연결을 요청하여, 최종적으로 cub_server(slave)와 연결하게 된다.
+#.  The ha_port_id set in the cubrid_ha.conf is used between the cub_master(master) and the cub_master(slave).
+#.  The copylogdb(slave) sends a request for connecting with the master DB to the cub_master(master) through the port set in the cubrid_port_id of the cubrid.conf on the slave node. Finally, the copylogdb(slave) is connected with the cub_server(master).
+#.  The applylogdb(slave) sends a request for connecting with the slave DB to the cub_master(slave) through the port set in the cubrid_port_id of the cubrid.conf on the slave node. Finally, the applylogdb(slave) is connected with the cub_server(slave).
 
-master 노드에서도 applylogdb와 copylogdb가 동작하는데, master 노드가 절체로 인해 slave 노드로 변경될 때를 대비하기 위함이다.
+On the master node, the applylogdb and the copylogdb run for the case that the master node is switched to the slave node.
 
 .. _cubrid-shard-ports:
 
-CUBRID SHARD 사용 포트
+Ports for CUBRID SHARD
 ----------------------
 
-접속 요청을 기다리는(listening) 프로세스들을 기준으로 각 OS 별로 필요한 포트를 정리하면 다음과 같으며, 각 포트는 listener 쪽에서 개방되어야 한다.
+The following table summarizes the ports required for each OS, based on the listening processes. Each port on the listener should be opened.
 
-+---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| listener      | requester    | Linux port     | Windows port                                        | 방화벽 포트 설정         | 설명         |
-+===============+==============+================+=====================================================+==========================+==============+
-| shard_broker  | application  | BROKER_PORT    | BROKER_PORT                                         | 개방(open)               | 일회성 연결  |
-+---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| shard_proxy   | application  | BROKER_PORT    | BROKER_PORT + 1 ~ (BROKER_PORT + MAX_NUM_PROXY)     | 개방                     | 연결 유지    |
-+---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| shard_proxy   | shard CAS    | 없음           | (BROKER_PORT + MAX_NUM_PROXY + 1) ~                 | 불필요(*)                | 연결 유지    |
-|               |              |                | (BROKER_PORT + MAX_NUM_PROXY * 2)                   |                          |              |
-+---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| cub_master    | shard CAS    | cubrid_port_id | cubrid_port_id                                      | 개방                     | 일회성 연결  |
-+---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| cub_server    | shard CAS    | cubrid_port_id | 임의의 가용 포트                                    | Linux: 개방              | 연결 유지    |
-|               |              |                |                                                     |                          |              |
-|               |              |                |                                                     | Windows: 프로그램        |              |
-+---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| 클라이언트    | cub_server   | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-| 장비(**)      |              |                |                                                     |                          |              |
-+---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
-| 서버          | CAS, CSQL    | ECHO(7)        | ECHO(7)                                             | 개방                     | 주기적 연결  |
-| 장비(\*\*\*)  |              |                |                                                     |                          |              |
-+---------------+--------------+----------------+-----------------------------------------------------+--------------------------+--------------+
++-------------------+--------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| Listener          | requester    | Linux port     | Windows port                                        | Firewall Port Setting    | Description            |
++===================+==============+================+=====================================================+==========================+========================+
+| shard_broker      | application  | BROKER_PORT    | BROKER_PORT                                         | Open                     | One-time connection    |
++-------------------+--------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| shard_proxy       | application  | BROKER_PORT    | BROKER_PORT + 1 ~ (BROKER_PORT + MAX_NUM_PROXY)     | Open                     | Keep connected         |
++-------------------+--------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| shard_proxy       | shard CAS    | None           | (BROKER_PORT + MAX_NUM_PROXY + 1) ~                 | Not required(*)          | Keep connected         |
+|                   |              |                | (BROKER_PORT + MAX_NUM_PROXY * 2)                   |                          |                        |
++-------------------+--------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| cub_master        | shard CAS    | cubrid_port_id | cubrid_port_id                                      | Open                     | One-time connection    |
++-------------------+--------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| cub_server        | shard CAS    | cubrid_port_id | A random available port                             | Linux: Open              | Keep connected         |
+|                   |              |                |                                                     |                          |                        |
+|                   |              |                |                                                     | Windows: Program         |                        |
++-------------------+--------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| Client            | cub_server   | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
+| equipment(**)     |              |                |                                                     |                          |                        |
++-------------------+--------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
+| Server            | CAS, CSQL    | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
+| equipment(\*\*\*) |              |                |                                                     |                          |                        |
++-------------------+--------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 
-(*): shard CAS와 shard_proxy는 물리적으로 서로 분리되지 않으므로 방화벽에서 포트 개방을 설정하지 않아도 된다. Linux에서 두 프로세스 간 접속은 유닉스 도메인 소켓을 사용한다.
+(*): It is not necessary to set port open on the firewall as the shard CAS and the shard_proxy are not physically separated. In Linux, the Unix domain socket is used for connection between two processes.
 
-(**): CAS 또는 CSQL 프로세스가 존재하는 장비
+(**): The equipment which has the CAS or CSQL process
 
-(\*\*\*): cub_server가 존재하는 장비
+(\*\*\*): The equipment which has the cub_server
     
-.. note:: Windows에서는 CAS가 cub_server에 접근할 때 사용할 포트를 임의로 정하므로 개방할 포트를 정할 수 없다.  따라서 "Windows 방화벽 >  허용되는 프로그램"에 "%CUBRID%\\bin\\cub_server.exe"을 추가해야 한다.
-    
-서버 프로세스(cub_server)와 이에 접속하는 클라이언트 프로세스들(CAS, CSQL) 사이에서 상대 노드가 정상 동작하는지 ECHO(7) 포트를 통해 서로 확인하므로, 방화벽 존재 시 ECHO(7) 포트를 개방해야 한다. ECHO 포트를 서버와 클라이언트 양쪽 다 개방할 수 없는 상황이라면 cubrid.conf의 **check_peer_alive** 파라미터 값을 none으로 설정한다.
+.. note:: In Windows, you cannot specify the ports to open because CAS randomly specifies the ports as accessing the cub_server. In this case, add "%CUBRID%\\bin\\cub_server.exe" to "Windows Firewall > Allowed programs".
+
+As the server process (cub_server) and the client processes (CAS, CSQL) cross-check if the opposite node is normally running or not by using the ECHO(7) port, you should open the ECHO(7) port if there is a firewall. If the ECHO port cannot be opened for both the server and the client, set the **check_peer_alive** parameter value of the cubrid.conf to none.
 
 ::
 
@@ -418,64 +414,65 @@ CUBRID SHARD 사용 포트
                 -> shard proxy <- shard CAS - cub_master
                                             -> cub_server
 
-    * shard broker: CUBRID SHARD 브로커 프로세스. application과 shard proxy를 중계
-    * shard proxy: CUBRID SHARD 프록시 프로세스. 어떤 shard DB를 선택할 지 결정하는 역할을 수행
-    * shard CAS: CUBRID SHARD CAS 프로세스. shard proxy와 cub_server를 중계
+    * shard broker: The CUBRID SHARD broker process. It relates the application and the shard proxy.
+    * shard proxy: The CUBRID SHARD proxy process. It determines which shard DB will be selected.
+    * shard CAS: The CUBRID SHARD CAS process. It relays the shard proxy and the cub_server
 
-프로세스 간 관계 기호 및 의미는 다음과 같다.
+The symbols of relation between processes and the meaning are as follows:
 
-* \- 기호: 최초 한 번만 연결됨을 나타낸다.
-* ->, <- 기호: 연결이 유지됨을 나타내며, -> 의 오른쪽 또는 <-의 왼쪽이 화살을 받는 쪽이다. 화살을 받는 쪽이 처음에 상대 프로세스의 접속을 기다리는(listening) 쪽을 나타낸다.
+* \- : Indicates that the connection is made only once for the initial.
+* ->, <- : Indicates that the connection is maintained. The right side of -> or the left side of <- is the party that the arrow symbol indicates. The party that the arrow symbol indicates is the listener which listens to the opposite process.
 
-다음은 CUBRID SHARD 구성에서 application과 DB server 사이의 연결 과정에 대해 나열한 것이다. shard CAS와 shard proxy는 CUBRID SHARD를 구동(cubrid shard start)하는 시점에 이미 연결된 상태이다.
+The connection process between the application and the server for the CUBRID SHARD configuration is as follows. The shard CAS and the shard proxy have already been connected when starting the CUBRID SHARD (cubrid shard start).
 
-#. application이 shard.conf에 설정된 BROKER_PORT를 통해 shard broker에 연결을 시도한다.
+#.  The application tries to connect with the shard broker through the BROKER_PORT set in the shard.conf.
+    
+#.  The shard broker selects the connectable shard proxy. 
+    
+#.  The application and the shard proxy are connected. The minimum number and the maximum number of the shard proxy are determined by MIN_NUM_PROXY and MAX_NUM_PROXY of the shard.conf.
+    
+    In Linux, the application is connected to the shard proxy through the Unix domain socket. In Windows, the application is connected to the shard proxy through the port calculated based on BROKER_PORT and MAX_NUM_PROXY set in the shard.conf of each shard proxy as the Unix domain socket cannot be used.
+    
+    For example, in Linux, if BROKER_PORT is 45000 and MAX_NUM_PROXY is 3, only one port is used: 45000.
+    
+    *   The port used to connect the application to the shard proxy(1): 45000, the port used to connect the shard CAS to the shard proxy(1): None
+    *   The port used to connect the application to the shard proxy(2): 45000, the port used to connect the shard CAS to the shard proxy(2): None
+    *   The port used to connect the application to the shard proxy(3): 45000, the port used to connect the shard CAS to the shard proxy(3): None
+    
+    On the contrary, the following ports are used in Windows if BROKER_PORT is 45000 and MAX_NUM_PROXY is 3:
+    
+    *   The port used to connect the application to the shard proxy(1): 45001, the port used to connect the shard CAS to the shard proxy(1): 45004
+    *   The port used to connect the application to the shard proxy(2): 45002, the port used to connect the shard CAS to the shard proxy(2): 45005
+    *   The port used to connect the application to the shard proxy(3): 45003, the port used to connect the shard CAS to the shard proxy(3): 45006
 
-#. shard broker는 연결 가능한 shard proxy를 선택한다. 
-
-#. application과 shard proxy가 연결된다. shard proxy의 최소, 최대 개수는 shard.conf의 MIN_NUM_PROXY와 MAX_NUM_PROXY에 의해 설정된다.
-
-   Linux에서는 application이 유닉스 도메인 소켓을 통해 shard proxy와 연결된다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 각 shard proxy마다 shard.conf에 설정된 BROKER_PORT와 MAX_NUM_PROXY를 가지고 계산된 포트를 통해 연결된다.
-
-   예를 들어 Linux에서 BROKER_PORT가 45000이고 MAX_NUM_PROXY가 3일 때 사용하는 포트는 45000 하나면 된다.
-   
-   * application이 shard proxy(1)과 접속하는 포트: 45000, shard CAS가 shard proxy(1)과 접속하는 포트 : 없음
-   * application이 shard proxy(2)와 접속하는 포트: 45000, shard CAS가 shard proxy(2)와 접속하는 포트 : 없음
-   * application이 shard proxy(3)과 접속하는 포트: 45000, shard CAS가 shard proxy(3)와 접속하는 포트 : 없음
-   
-   반면, Windows에서 BROKER_PORT가 45000이고 MAX_NUM_PROXY가 3이면 사용하는 포트는 다음과 같다.
-   
-   * application이 shard proxy(1)과 접속하는 포트: 45001, shard CAS가 shard proxy(1)과 접속하는 포트 : 45004
-   * application이 shard proxy(2)와 접속하는 포트: 45002, shard CAS가 shard proxy(2)와 접속하는 포트 : 45005
-   * application이 shard proxy(3)과 접속하는 포트: 45003, shard CAS가 shard proxy(3)와 접속하는 포트 : 45006
-   
-   .. note:: 현재 버전에서 MIN_NUM_PROXY는 사용되지 않고 MAX_NUM_PROXY만 사용된다.
- 
-#. shard CAS와 shard proxy는 CUBRID SHARD를 구동(cubrid shard start)하는 시점에 이미 연결된 상태이다. 또한, 각 프로세스는 항상 한 장비 내에 존재하므로 원격 접속이 불필요하다.
-
-   shard CAS가 shard proxy로 연결할 때 Linux에서는 유닉스 도메인 소켓을 사용하지만 Windows에서는 유닉스 도메인 소켓이 없어 포트를 사용한다(위의 예 참고). shard proxy 하나 당 여러 개의 shard CAS가 연결될 수 있다. shard CAS의 최소, 최대 개수는 shard.conf의 MIN_NUM_APPL_SERVER, MAX_NUM_APPL_SERVER에 의해 설정된다. shard proxy 하나가 동시에 연결 가능한 shard CAS의 최대 개수는 shard.conf의 MAX_CLIENT에 의해 설정된다.
-  
-#. shard CAS는 cubrid.conf에 설정된 cubrid_port_id 포트를 통해 cub_master에게 DB 서버로의 연결을 요청한다.
-
-#. shard CAS와 DB 서버가 연결된다. Linux에서는 CAS가 유닉스 도메인 소켓을 통해 cub_server와 연결되므로 cubrid_port_id 포트를 사용한다. Windows에서는 유닉스 도메인 소켓을 사용할 수 없으므로 임의의 가용 포트를 통해 cub_server와 연결된다. Windows에서 DB server를 운용한다면 브로커 장비와 DB 서버 장비 사이에서는 임의의 가용 포트를 사용하므로, 두 장비 사이에서 방화벽이 해당 프로세스에 대한 포트를 막게 되면 정상 동작을 보장할 수 없게 된다는 점에 주의한다.
-
-#. 이후 shard CAS는 application이 종료되어도 shard CAS가 재시작되지 않는 한 cub_server와 연결을 유지한다.
+    
+    .. note:: In the current version, MIN_NUM_PROXY is not used but only MAX_NUM_PROXY.
+    
+#.  The shard CAS and the shard proxy have already been connected when starting the CUBRID SHARD (cubrid shard start). In addition, the processes are always in one equipment, requiring no remote access.
+    
+    When the shard CAS is connected to the shard proxy, the Unix domain socket is used in Linux. However, a port is used in Windows as there is no Unix domain socket (see the example above). Multiple shard CASs can be connected to one shard proxy. The minimum number and the maximum number of the shard CAS are determined by MIN_NUM_APPL_SERVER and MAX_NUM_APPL_SERVER of the shard.conf. The maximum number of shard CASs which can be connected to one shard proxy simultaneously is determined based on MAX_CLIENT of the shard.conf.
+    
+#.  The shard CAS sends a request of connecting with the DB server to the cub_master through the cubrid_port_id port set in the cubrid.conf.
+    
+#.  The shard CAS and the DB server are connected. In Linux, you should use the cubrid_port_id port as the CAS is connected to the cub_server through the Unix domain socket. In Windows, CAS is connected to the cub_server through a random available port as the Unix domain socket cannot be used. If the DB server is running in Windows, a random available port is used between the broker equipment and the DB server equipment. In this case, note that the operation may not be successful if a firewall blocks the port for the process between the two equipment.
+    
+#.  After that, the shard CAS keeps connection with the cub_server even of the application is terminated until the shard CAS restarts.
 
 
 .. _cwm-cm-ports:
 
-CUBRID Web Manager, CUBRID Manager 서버 사용 포트
--------------------------------------------------
+Ports for CUBRID Web Manager and CUBRID Manager Server
+------------------------------------------------------
 
-접속 요청을 기다리는(listening) 프로세스들을 기준으로 CUBRID Web Manager, CUBRID Manager 서버가 사용하는 포트는 다음과 같으며, 이들은 OS의 종류와 관계없이 동일하다.
+The following table summarizes the ports, based on the listening processes, used for the CUBRID Web Manager and the CUBRID Manager server. The ports are identical regardless of the OS type.
 
 +--------------------------+--------------+----------------+--------------------------+
-| listener                 | requester    | port           | 방화벽 존재 시 포트 설정 |
+| Listener                 | Requester    | Port           | Firewall Port Setting    |
 +==========================+==============+================+==========================+
-| Manager server           | application  | 8001, 8002     | 개방(open)               |
+| Manager server           | application  | 8001, 8002     | Open                     |
 +--------------------------+--------------+----------------+--------------------------+
-| Web Manager server       | application  | 8282           | 개방                     |
+| Web Manager server       | application  | 8282           | Open                     |
 +--------------------------+--------------+----------------+--------------------------+
 
-* CUBRID Manager 클라이언트가 CUBRID Manager 서버 프로세스에 접속할 때 사용하는 포트는 cm.conf의 **cm_port**\와 **cm_port** + 1이며 **cm_port**\의 기본값은 8001이다.
-* CUBRID Web Manager 클라이언트가 CUBRID Web Manager 서버 프로세스에 접속할 때 사용하는 포트는 cm_httpd.conf의 **listen**\이며 기본값은 8282이다.
+*   The port used when the CUBRID Manager client accesses the CUBRID Manager server process is **cm_port** and **cm_port** + 1 of the cm.conf. The default value of the **cm_port** is 8001.
+*   The port used when the CUBRID Web Manager client accesses the CUBRID Web Manager server process is **listen** of the cm_httpd.conf. The default value of the port is 8282.

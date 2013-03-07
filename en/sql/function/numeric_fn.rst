@@ -702,34 +702,33 @@ TRUNC, TRUNCATE
 
 WIDTH_BUCKET
 ============
-[번역]
 
 .. function:: WIDTH_BUCKET(expression, from, to, num_buckets)
 
-    **WIDTH_BUCKET** 함수는 순차적인 데이터 집합을 균등한 범위로 부여된 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다. 즉, WIDTH_BUCKET 함수는 equi-width histogram을 생성한다. 반환되는 값은 정수이다.
+    **WIDTH_BUCKET** distributes the rows in an ordered partition into a specified number of buckets. The buckets are numbered, starting from one. That is, **WIDTH_BUCKET** function creates an equi-width histogram. The return value is an integer.
     
-    이 함수는 주어진 버킷 개수로 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
-    
-    참고로 :func:`NTILE` 분석 함수는 이에 비해 주어진 버킷 개수로 전체 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 행의 개수는 균등하다.
+    This function equally divides the range by the given number of buckets and assigns the bucket number to each bucket. That is, every interval (bucket) has the identical size.
 
-    :param expression: 버킷 번호를 부여받기 위한 입력 값. 수치 값을 반환하는 임의의 연산식을 지정한다.
-    :param from: expression이 취할 수 있는 범위의 시작값으로, 이 값은 전체 범위 안에 포함된다. 
-    :param to: expression이 취할 수 있는 범위의 마지막 값으로, 이 값은 전체 범위 안에 포함되지 않는다.
-    :param num_buckets: 버킷의 개수. 추가로 범위 밖의 내용을 담기 위한 0번 버킷과 (num_buckets + 1)번 버킷이 생성된다.
+    Note that :func:`NTILE` function equally divides the number of rows by the given number of buckets and assigns the bucket number to each bucket. That is, every bucket has the same number of rows.
+
+    
+    :param expression: an input value to assign the bucket number. It specifies a certain expression which returns the number.
+    :param from: a start value of the range, which is given to *expression*. It is included in the entire range. 
+    :param to: an end value of the range, which is given to *expression*. It is not included in the entire range.
+    :param num_buckets: the number of buckets. The #0 bucket and the #(*num_buckets* + 1) bucket are created to include the contents beyond the range.
     :rtype: INT
 
-    *expression*\ 은 버킷 번호를 부여받기 위한 입력 데이터이다. *from*\ 과 *to* 값으로 숫자형 타입과 날짜/시간 타입의 값 또는 날짜/시간 타입으로 변환 가능한 문자열이 입력될 수 있다. 전체 범위에서 *from*\ 은 범위에 포함되지만 *to*\ 는 범위 밖에 존재한다. 
-
-    예를 들어 WIDTH_BUCKET (score, 80, 50, 3)이 반환하는 값은 score가 
+    *expression* is an input value to assign the bucket number. *from* and *to* should be numeric values, date/time values, or the string which can be converted to date/time value. *from* is included in the acceptable range, but *to* is beyond the range.
     
-        * 80보다 크면 0, 
-        * [80, 70)이면 1, 
-        * [70, 60)이면 2, 
-        * [60, 50)이면 3, 
-        * 50보다 작거나 같으면 4가 된다.
+    For example, WIDTH_BUCKET (score, 80, 50, 3) returns
     
+        *   0 when the score is larger than 80,
+        *   1 for [80, 70),
+        *   2 for [70, 60), 
+        *   3 for [60, 50), 
+        *   and 4 when the score is 50 or smaller.
 
-다음 예제는 80점보다 작거나 같고 50점보다 큰 범위를 1부터 3까지 균등한 점수 범위로 나누어 등급을 부여한다. 해당 범위를 벗어나는 경우 80점보다 크면 0, 50점이거나 50점보다 작으면 4등급을 부여한다.
+The following example divides the range equal to 80 or smaller and larger than 50 into the score range that has the identical score range from 1 to 3. If any score is beyond the range, 0 is given for the score larger than 80 and 4 is given for the score of 50 or smaller than 50.
 
 .. code-block:: sql
 
@@ -759,8 +758,7 @@ WIDTH_BUCKET
       'David'                        55            3
       'Tom'                          50            4
 
-
-다음의 예에서 **WIDTH_BUCKET** 함수는 birthdate의 지정 범위를 균등하게 나누고 이를 기준으로 버킷 번호를 부여한다. 8 명의 고객을 생년월일을 기준으로 '1950-01-01'부터 '1999-12-31'까지의 범위를 5개로 균등 분할하며, birthdate 값이 범위를 벗어나면 0 또는 버킷 개수 + 1인 6을 반환한다.
+In the following example, **WIDTH_BUCKET** function evenly divides the birthdate range into buckets and assigns the bucket number based on the range. It divides the range of eight customers from '1950-01-01' to '1999-12-31' into five buckets based on their dates of birth. If the birthdate value is beyond the range, 0 or 6 (*num_buckets* + 1) is returned.
 
 .. code-block:: sql
 

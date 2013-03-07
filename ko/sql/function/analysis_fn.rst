@@ -272,11 +272,11 @@ LAG
 
 .. function:: LAG (expression[, offset[, default]]) OVER ( [partition_by_clause] [order_by_clause] )
     
-    **LAG** 함수는 분석 함수로만 사용되며 현재 행을 기준으로 *offset* 이전 행의 expression 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
+    **LAG** 함수는 분석 함수로만 사용되며 현재 행을 기준으로 *offset* 이전 행의 *expression* 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
     
     :param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
     :param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
-    :param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+    :param default: 현재 위치에서 *offset* 이전에 위치한 *expression* 값이 NULL인 경우 출력하는 값. 기본값 NULL 
     :rtype: NUMBER or STRING
     
 다음은 사번 순으로 정렬하여 같은 행에 이전 사번을 같이 출력하는 예이다.
@@ -315,11 +315,11 @@ LEAD
     
 .. function:: LEAD (expression, offset, default) OVER ( [partition_by_clause] [order_by_clause] )
 
-    LEAD 함수는 분석 함수로만 사용되며, 현재 행을 기준으로 *offset* 이후 행의 expression 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
+    **LEAD** 함수는 분석 함수로만 사용되며, 현재 행을 기준으로 *offset* 이후 행의 *expression* 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
 
     :param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
     :param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
-    :param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+    :param default: 현재 위치에서 *offset* 이전에 위치한 *expression* 값이 NULL인 경우 출력하는 값. 기본값 NULL 
     :rtype: NUMBER or STRING
 
 다음은 사번 순으로 정렬하여 같은 행에 다음 사번을 같이 출력하는 예이다.

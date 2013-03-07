@@ -267,22 +267,20 @@ To use the **GROUP_CONCAT** function, you must meet the following conditions.
       group_concat(i*2+1 order by 1 separator '')
     ======================
       '35791113'
-          
-[번역]
 
 LAG
 ===
 
 .. function:: LAG (expression[, offset[, default]]) OVER ( [partition_by_clause] [order_by_clause] )
     
-    **LAG** 함수는 분석 함수로만 사용되며 현재 행을 기준으로 *offset* 이전 행의 expression 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
+    **LAG** is an analytic function that returns the *expression* value from a previous row, before *offset* that comes before the current row. It can be used to access several rows simultaneously without making any self join.
     
-    :param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
-    :param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
-    :param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+    :param expression: a column or an expression that returns a number or a string
+    :param offset: an integer which indicates the offset position. If not specified, the default is 1
+    :param default: a value to return when an *expression* value before *offset* is NULL. If a default value is not specified, NULL is returned 
     :rtype: NUMBER or STRING
     
-다음은 사번 순으로 정렬하여 같은 행에 이전 사번을 같이 출력하는 예이다.
+The following example shows how to sort employee numbers and output the previous employee number on the same row:
 
 ..  code-block:: sql
 
@@ -311,21 +309,21 @@ LAG
       'Peter'                     14006        13077
       'Ralph'                     23518        14006
 
-이와는 반대로, 현재 행을 기준으로 *offset* 이후 행의 expression 값을 반환하는 :func:`LEAD` 함수를 참고한다.
+On the contrary, :func:`LEAD` function returns the expression value from a subsequent row, after *offset* that follows the current row.
 
 LEAD
 ====
     
 .. function:: LEAD (expression, offset, default) OVER ( [partition_by_clause] [order_by_clause] )
 
-    LEAD 함수는 분석 함수로만 사용되며, 현재 행을 기준으로 *offset* 이후 행의 expression 값을 반환한다. 한 행에 자체 조인(self join) 없이 동시에 여러 개의 행에 접근하고 싶을 때 사용할 수 있다.
+    **LEAD** is an analytic function that returns the *expression* value from a subsequent row, after *offset* that follows the current row. It can be used to access several rows simultaneously without making any self join.
 
     :param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
     :param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
-    :param default: 현재 위치에서 offset 이전에 위치한 expression 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+    :param default: 현재 위치에서 *offset* 이전에 위치한 *expression* 값이 NULL인 경우 출력하는 값. 기본값 NULL 
     :rtype: NUMBER or STRING
 
-다음은 사번 순으로 정렬하여 같은 행에 다음 사번을 같이 출력하는 예이다.
+The following example shows how to sort employee numbers and output the next employee number on the same row:
 
     ..  code-block:: sql
     
@@ -348,7 +346,7 @@ LEAD
           'Peter'                     14006        23518
           'Ralph'                     23518         NULL
 
-다음은 tbl_board 테이블에서 현재 행을 기준으로 이전 행과 이후 행의 title을 같이 출력하는 예이다. 
+The following example shows how to output the title of the previous row and the title of the next row along with the title of the current row on the tbl_board table:
 
 ..  code-block:: sql
 
@@ -371,8 +369,8 @@ LEAD
         6  'title 6'             'title 7'             'title 5'
         7  'title 7'             NULL                  'title 6'
 
-다음은 tbl_board 테이블에서 특정 행을 기준으로 이전 행과 이후 행의 타이틀을 같이 출력하는 예이다.
-WHERE 조건이 괄호 안에 있으면 하나의 행만 선택되고, 이전 행과 이후 행이 존재하지 않게 되어 next_title과 prev_title의 값이 NULL이 됨에 유의한다.
+The following example shows how to output the title of the previous row and the title of the next row along with the title of a specified row on the tbl_board table. 
+If a WHERE condition is enclosed in parentheses, the values of next_title and prev_title are NULL as only one row is selected but the previous row and the subsequent row.
     
 ..  code-block:: sql
 
@@ -483,18 +481,16 @@ NTILE
 
 .. function:: NTILE(expression) OVER ([partition_by_clause] [order_by_clause])
 
-    **NTILE** 함수는 분석 함수이다. 순차적인 데이터 집합을 입력 인자 값에 의해 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다.
-    즉, NTILE 함수는 equi-height histogram을 생성해준다. 반환되는 값은 정수이다. 이 함수는 주어진 버킷 개수로 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 행의 개수는 균등하다.
+     **NTILE** is an analytic function. It divides an ordered data set into a number of buckets indicated by the input parameter value and assigns the appropriate bucket number to each row. The buckets are numbered 1. In other words, the NTILE function creates an equi-height histogram. The return value is an integer. This function equally divides the number of rows by the given number of buckets and assigns the bucket number to each bucket. That is, every bucket has the same number of rows.
     
-    :param expression: 버킷의 개수. 숫자 값을 반환하는 임의의 연산식을 지정한다. 
+    :param expression: the number of buckets. It specifies a certain expression which returns a number value. 
     :rtype: INT
     
-**NTILE** 함수는 주어진 버킷 개수로 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, NTILE 함수는 equi-height histogram을 생성해준다. 각 버킷에 있는 행의 개수는 최대 1개까지 차이가 생길 수 있다. 나머지 값(행의 개수를 버킷 개수로 나눈 나머지)이 각 버킷에 대해 1번 버킷부터 하나씩 배포된다.
+**NTILE** function equally divides the number of rows by the given number of buckets and assigns the bucket number to each bucket. That is, **NTILE** function creates an equi-height histogram. The number of rows in the buckets can differ by at most 1. The remainder values (the remainder number of rows divided by buckets number) are distributed one for each bucket, starting with #1 Bucket.
 
-반면에 :func:`WIDTH_BUCKET` 함수는 주어진 버킷 개수로 주어진 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
-
+On the contrary, :func:`WIDTH_BUCKET` function equally divides the range by the given number of buckets and assigns the bucket number to each bucket. That is, every interval (bucket) has the identical size.
     
-다음은 8명의 고객을 생년월일을 기준으로 5개의 버킷으로 나누되, 각 버킷의 수가 균등하도록 나누는  예이다. 1, 2, 3번 버킷에는 2개의 행이, 4, 5번 버킷에는 2개의 행이 존재한다.
+The following example divides rows into five buckets of eight customers based on their dates of birth. Because the total number of rows is not divisible by the number of buckets, the first three buckets have two rows and the remaining groups have one row each.
 
 .. code-block:: sql
 
@@ -523,9 +519,7 @@ NTILE
       'Peter'               10/25/1988            4
       'Ralph'               03/17/1995            5
 
-
-다음은 8명의 학생을 점수가 높은 순으로 5개의 버킷으로 나눈 후, 이름 순으로 출력하되, 각 버킷의 행의 개수는 균등하게 나누는 예이다. t_score 테이블의 score 칼럼에는 8개의 행이 존재하므로, 8을 5로 나눈 나머지 3개 행이 1번 버킷부터 각각 할당되어 1,2,3번 버킷은 4,5번 버킷에 비해 1개의 행이 더 존재한다.
-NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으로 균등하게 grade를 나눈다.
+The following example divides eight students into five buckets that have the identical number of rows in the order of score and outputs in the order of the name. As the score column of the t_score table has eight rows, the remaining three rows are assigned to buckets from #1 Bucket. The first three buckets have one more row than the remaining groups. The NTILE function equally divides the grade based on the number of rows, regardless the range of the score.
 
 .. code-block:: sql
 

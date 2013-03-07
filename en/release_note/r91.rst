@@ -2,9 +2,9 @@
 
 .. contents::
 
-*****************
-9.1 Release Notes
-*****************
+************************
+CUBRID 9.1 Release Notes
+************************
 
 
 Release Note Information
@@ -13,87 +13,96 @@ Release Note Information
 This document includes information on CUBRID 9.1 (Build No. 9.1.0.0209). 
 CUBRID 9.1 includes all of the fixed errors and improved functionalities that were detected in the CUBRID 9.0 Beta version and applied to the previous versions.
 
-For details on the CUBRID 9.0 Beta, see  :doc:`r90`. For details on the CUBRID 2008 R4.3, see http://release.cubrid.org/en.
+For details on the CUBRID 9.0 Beta, see :doc:`r90`. For details on the CUBRID 2008 R4.3, see http://release.cubrid.org/en.
 
 
-Release Features
-================
+Overview
+========
 
-CUBRID 9.1 is an upgraded and stabilized version of CUBRID 9.0 Beta. Issues detected in the 9.0 Beta version have been fixed and stabilized. With a variety of query-related functionalities, CUBRID 9.1 offers improved query processing performance and improved query optimization. In addition, its globalization-related functionalities have been developed, and the operating tools are improved.
+CUBRID 9.1 is an upgraded and stabilized version of CUBRID 9.0 Beta. Issues found in the 9.0 Beta version have been fixed and stabilized. With a variety of query-related functionalities, CUBRID 9.1 offers improved query processing performance and improved query optimization. In addition, its globalization-related functionalities have been developed, and the operating tools are improved.
 
 As the database volume of CUBRID 9.1 is not compatible with the database of CUBRID 9.0 Beta version, users of CUBRID 9.0 Beta version or previous versions should **migrate the database**. For more information on migration, see section  :doc:`/upgrade`.
 
-Added SQL Functions and Expanded Index Hint
--------------------------------------------
-*   Added functions: NTILE, WIDTH_BUCKET, LEAD, and LAG.
-*   Expanded TRUNC function and ROUND function to use the parameters for the date type.
-*   Supports new index hint specification syntax.
-*   Expanded Multi UPDATE statement and DELETE statement to use the SQL hints.
-*   Expanded MERGE statement to use the SQL hints.
+Major enhacements include:
+
+New SQL Functions and Index Hints 
+---------------------------------
+
+*   New functions: NTILE, WIDTH_BUCKET, LEAD and LAG.
+*   TRUNC and ROUND functions accept the date types.
+*   Support a new index hint clause.
+*   SQL hints for Multi UPDATE and DELETE statement.
+*   SQL hints for MERGE statement.
     
 Performance Improvements and Optimizations
 ------------------------------------------
-*   Improved HA replication application performance.
-*   Significantly improved multi-key scope optimization.
-*   Improved optimization of the ORDER BY clause and the GROUP BY clause.
-*   Improved analytic function performance.
-*   Improved performance of INSERT ON DUPLICATE KEY UPDATE statement and REPLACE statement.
-*   Improved search and delete performance for indexes with many duplicate keys.
-*   Improved delete performance when input and delete are repeated.
+
+*   Improve HA replication performance.
+*   Improve multi-key range optimization.
+*   Enhance optimization of ORDER BY and GROUP BY clause.
+*   Improve analytic function performance.
+*   Improve performance of INSERT ON DUPLICATE KEY UPDATE and REPLACE statement.
+*   Improve search and delete performance for non-unique indexes with many duplicate keys.
+*   Improve delete performance when insert and delete operations are repeated.
     
-Addition and Stabilization of Globalization-related Functionalities
--------------------------------------------------------------------
-*   Supports collation for tables.
-*   Added the SHOW COLLATION statement and functions (CHARSET, COLLATION, and COERCIBILITY).
-*   Supports collation with expansion which sorts French words by backward accents.
-*   Fixed and improved globalization-related restrictions and issues of the 9.0 Beta version.
+Globalization 
+-------------
+
+*   Support collation for tables.
+*   SHOW COLLATION statement and new functions (CHARSET, COLLATION, and COERCIBILITY).
+*   Support collation with expansion which sorts French with backward accent order.
+*   Improve and fix restrictions and issues of 9.0 Beta version.
     
-Improvement of Sharding Functionality
--------------------------------------
-*   Added a command to verify the Shard ID of the Shard key.
-*   Allowed the use of the Sharding functionality in Windows.
+CUBRID SHARD
+------------
+
+*   Support "cubrid shard getid" command to verify its shard ID of the shard key.
+*   CUBRID SHARD is now available from Windows.
     
-Improvement of Operating Tools
-------------------------------
-*   Improved the applyinfo utility to output the replication delay state when outputting the replication log application state.
-*   Added a functionality to output the query execution state for each transaction to the killtran utility.
-*   Added a functionality to specify and remove a transaction which executes a specific SQL to the killtran utility.
-*   Added a functionality to record the query execution information in the server error log and the CAS log file when the query execution time exceeds the specified time.
+Administration Tools
+--------------------
+
+*   "cubrid applyinfo" utility now also shows information about the replication delay.
+*   killtran utility has ability to show the query execution information of each transaction.
+*   killtran utility has ability to remove transactions which executess a designated SQL.
+*   to log the query execution information in the server error log and the CAS log file when the query timeout occurs.
 
 Behavioral Changes
 ------------------
-*	Removed the CUBRID_LANG environment variable and added the CUBRID_CHARSET environment variable which sets the database charset and the CUBRID_MSG_LANG environment variable which sets the charset for utility messages and error messages.
-*	In the previous versions, when executing several query statements in an array, such as the cci_execute_array function, the cci_execute_batch function, the JDBC Statement.executeBatch method, and the PreparedStatement.executeBatch method, commit was only executed after executing all of the query statements. This was modified to commit each query statement the query statement was completed.
 
-*	Modified the behavior for errors which occurred while executing several queries in the cci_execute_array function, the cci_execute_batch function, or the cci_execute_result function. In the previous versions, when an error occurred while executing several queries, the function returned the error and was terminated. In this version, the query is completed and the error for each query is returned through the CCI_QUERY_RESULT_* macros.
-*	Removed the option of the OFF value for the broker parameter, KEEP_CONNECTION.
-*	Removed the broker parameter, SELECT_AUTO_COMMIT.
-*	Limited the range of the broker parameter APPL_SERVER_MAX_SIZE_HARD_LIMIT value to 1 - 2,097,151.
-*	Changed the default setting value of the broker parameter which specifies the SQL log file size from 100 MB to 10 MB.
-*	Changed the behavior of the call_stack_dump_activation_list parameter.
-
+*	CUBRID_LANG environment variable is no longer used.
+*   CUBRID_CHARSET environment variable which sets the database charset instead of CUBRID_LANG and the CUBRID_MSG_LANG environment variable which sets the charset for utility and error messages.
+*   Change array execution functions such as cci_execute_array, cci_execute_batch function and Statement.executeBatch and PreparedStatement.executeBatch method of JDBC to commit whenever it executes an individual query under auto commit mode, while the previous versions commit once for entire execution.
+*   Change the behavior of cci_execute_array, cci_execute_batch and cci_execute_result function when an error occurs while they are executing multiple statements. These functions now continue to execute the entire given queries while the previous versions stop execution and return an error. Users can access the results and identify the errors with CCI_QUERY_RESULT_* macros.
+*	OFF is no longer supported for KEEP_CONNECTION broker parameter.
+*	SELECT_AUTO_COMMIT broker parameter is no longer supported.
+*	Change the allowed value range of a broker parameter APPL_SERVER_MAX_SIZE_HARD_LIMIT to 1 - 2,097,151.
+*	Change the default value of a broker parameter SQL_LOG_MAX_SIZE from 100 MB to 10 MB.
+*	Change the behavior of the call_stack_dump_activation_list parameter.
 
 Driver Compatibility
 --------------------
-*   The JDBC and CCI driver for version 9.1 are compatible with the CUBRID 9.0 Beta and CUBRID 2008 R4.x version.
+
+*   The JDBC and CCI driver of CUBRID 9.1 are compatible with CUBRID 9.0 Beta and CUBRID 2008 R4.x version. Some features that are fixed and improved for 9.1 are not supported when 9.1 drivers connect to the previous versions.
     
-Numerous Improvements and Fixes
--------------------------------
-*   Many critical stability issues of the previous version have been fixed.
-*   In addition, many issues related to stability, SQL, partitioning, HA, Sharding, utilities, and drivers have been improved or fixed.
+Numerous Improvements and Bug Fixes
+-----------------------------------
+
+*   Fix many critical issues of the previous versions.
+*   Improve of fix many issues of stability, SQL, partitioning, HA, Sharding, utilities, and drivers.
     
 For more details on changes, see the following. Users of previous versions should check the :ref:`changed-behaviors91` and :ref:`new-cautions91` sections.
 
-Added Functionalities
-=====================
+New Features
+============
 
 SQL
 ---
 
-Added the WIDTH_BUCKET Function(CUBRIDSUS-4209)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+WIDTH_BUCKET Function(CUBRIDSUS-4209)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The WIDTH_BUCKET function evenly splits the range among the buckets and assigns sequential numbers to the buckets. That is, the WIDTH_BUCKET function creates an equiwidth histogram. The range is specified by specifying the minimum value and the maximum value. The range is evenly divided and bucket numbers are assigned sequentially given from 1.
+WIDTH_BUCKET function evenly splits the range among the buckets and assigns sequential numbers to the buckets. That is, the WIDTH_BUCKET function creates an equiwidth histogram. The range is specified by specifying the minimum value and the maximum value. The range is evenly divided and bucket numbers are assigned sequentially given from 1.
 
 The following example shows how to split the range of eight customers from '1950-01-01' to '1999-12-31' into five buckets based on their dates of birth. When the data is out of the range, 0 or the largest bucket number + 1 is returned.
 
@@ -117,10 +126,10 @@ The following example shows how to split the range of eight customers from '1950
       'Peter'               10/25/1988            5
       'Ralph'               03/17/1995            6
 
-Added the NTILE Analytic Function(CUBRIDSUS-9688)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NTILE Analytic Function(CUBRIDSUS-9688)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The NTILE analytic function evenly splits the range value among the buckets and assigns sequential numbers to the buckets. That is, the NTILE function creates an equiheight histogram.
+NTILE analytic function evenly splits the range value among the buckets and assigns sequential numbers to the buckets. That is, the NTILE function creates an equiheight histogram.
 
 The following example shows how to split the row numbers of eight customers into five buckets based on their dates of birth. Buckets #1, #2, and #3 have two rows, and Buckets #4 and #5 have one row.
 
@@ -142,10 +151,10 @@ The following example shows how to split the row numbers of eight customers into
       'Peter'               10/25/1988            4
       'Ralph'               03/17/1995            5
 
-Added the LEAD Function and the LAG Analytic Function(CUBRIDSUS-9414)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LEAD and LAG Analytic Function(CUBRIDSUS-9414)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Added the LEAD analytic function and the LAG analytic function to get the column information of the next row and the previous row based on one row.
+LEAD and LAG analytic function returns the column information of the next row and the previous one based on the current for each.
 
 The following example shows how to sort employee numbers and output the next employee number on the same row:
 
@@ -194,10 +203,10 @@ The following example shows how to sort employee numbers and output the previous
       'Peter'                     14006        13077
       'Ralph'                     23518        14006
         
-Expanded the TRUNC Function to Use DATE, DATETIME, and TIMESTAMP Types as Parameters(CUBRIDSUS-9413)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TRUNC Function accepts DATE, DATETIME and TIMESTAMP Types(CUBRIDSUS-9413)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Expanded the TRUNC function to truncate the DATE, DATETIME, and TIMESTAMP type values under the specified unit and return the values.
+TRUNC function truncates the DATE, DATETIME and TIMESTAMP type values with the specified format.
 
 .. code-block:: sql
 
@@ -209,10 +218,10 @@ Expanded the TRUNC function to truncate the DATE, DATETIME, and TIMESTAMP type v
     ============
      01/01/2012
 
-Expanded the ROUND Function to Use the DATE, DATETIME, and TIMESTAMP Types as Parameters(CUBRIDSUS-9488)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ROUND Function accepts DATE, DATETIME and TIMESTAMP Types(CUBRIDSUS-9488)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Expanded the TRUNC function to round off the DATE, DATETIME, and TIMESTAMP type values and return the values.
+ROUND function rounds off the DATE, DATETIME and TIMESTAMP type values with the specified format.
 
 .. code-block:: sql
 
@@ -224,30 +233,30 @@ Expanded the TRUNC function to round off the DATE, DATETIME, and TIMESTAMP type 
     ============
      01/01/2013
 
-Support for New Index Hint Specification Syntax(CUBRIDSUS-6675)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support New Index Hint Clause(CUBRIDSUS-6675)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Supports new index hint specification syntaxes, such as USE INDEX, FORCE INDEX, and IGNORE INDEX clauses, as well as the general USING INDEX clause.
+Supports new index hint specification syntaxes, such as USE INDEX, FORCE INDEX and IGNORE INDEX clauses, as well as the general USING INDEX clause.
 
 .. code-block:: sql
 
     SELECT * FROM tbl USE INDEX (idx1), IGNORE INDEX (idx2) WHERE col1 < 4;
 
-In addition, supports the "USING INDEX index_name(-)" syntax which has the same role, using the IGNORE INDEX hint.
+In addition, supports the "USING INDEX index_name(-)" syntax that let optimizer ignore the designated indexes. It provides the same sematics with IGNORE INDEX clause.
 
 .. code-block:: sql
 
      SELECT * FROM tbl  WHERE col1 < 4 USING INDEX idx1(-);
      
-Expanded to Specify the SQL Hint to the UPDATE JOIN Statement and the DELETE JOIN Statement(CUBRIDSUS-9491)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SQL Hints for UPDATE JOIN and DELETE JOIN Statement(CUBRIDSUS-9491)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improved to use SQL hints such as ORDERED, USE_DESC_IDX, NO_COVERING_INDEX, NO_DESC_IDX, USE_NL, USE_IDX, USE_MERGE, NO_MULTI_RANGE_OPT, and RECOMPILE for the UPDATE JOIN and DELETE JOIN statements.
+SQL hints such as ORDERED, USE_DESC_IDX, NO_COVERING_INDEX, NO_DESC_IDX, USE_NL, USE_IDX, USE_MERGE, NO_MULTI_RANGE_OPT, and RECOMPILE are allowed for the UPDATE JOIN and DELETE JOIN statements.
 
-Support for Index Hints on MERGE statement(CUBRIDSUS-10134)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Index Hints for MERGE statement(CUBRIDSUS-10134)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Supports Index Hints like USE_UPDATE_IDX, USE_INSERT_IDX on MERGE statement. 
+Supports Index Hints, for instance, USE_UPDATE_IDX, USE_INSERT_IDX for MERGE statement. 
 USE_UPDATE_IDX hint is applied to ON clause and WHERE clause of UPDATE clause when performing UPDATE clause, and USE_INSERT_IDX hint is applied to ON clause when performing INSERT clause.
 
 .. code-block:: sql
@@ -257,10 +266,10 @@ USE_UPDATE_IDX hint is applied to ON clause and WHERE clause of UPDATE clause wh
     WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
     WHEN NOT MATCHED THEN INSERT VALUES(i,j);
 
-Available to refer the previously specified column in the VALUES and SET clauses of INSERT statement(CUBRIDSUS-3112)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+refer the previously specified columns in the VALUES and SET clauses of INSERT statement(CUBRIDSUS-3112)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fixed it available that refering the previously specified column in the VALUES and SET clauses of INSERT statement.  For example, when the expression like "b = a + 1" is evaluated, a column's value which was previously specified can be referred.
+It is allowed to refer the previously specified columns in the VALUES and SET clauses of INSERT statement. For example, when the expression like "b = a + 1" is evaluated, a column's value which was previously specified can be referred.
 
 ::
  

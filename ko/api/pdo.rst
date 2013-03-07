@@ -13,9 +13,9 @@ PDO는 어떤 데이터베이스를 사용하든 같은 함수를 사용할 수 
 
 따라서 CUBRID PDO 드라이버를 사용하면, 데이터베이스 인터페이스 레이어로 PDO를 사용하는 모든 응용 프로그램은 CUBRID와 함께 사용할 수 있다.
 
-CUBRID PDO 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
+CUBRID PDO 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT**\ 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 PDO 드라이버를 다운로드하거나 PDO 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver 에 접속한다.
+별도로 PDO 드라이버를 다운로드하거나 PDO 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-pdo-driver\ 에 접속한다.
 
 PDO 설치 및 설정
 ================
@@ -31,28 +31,28 @@ Linux
 
 **PECL을 이용한 설치**
 
-**PECL** 이 설치되어 있다면, **PECL** 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PDO 드라이버를 설치할 수 있다. **PECL** 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl 을 참고하여 PECL을 설치한다.
+**PECL**\ 이 설치되어 있다면, **PECL**\ 이 소스코드 다운로드 및 컴파일을 수행하므로 다음과 같이 간단하게 CUBRID PDO 드라이버를 설치할 수 있다. **PECL**\ 이 설치되어있지 않다면 http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl\ 을 참고하여 PECL을 설치한다.
 
-#. 다음과 같은 명령어를 입력하여 CUBRID PDO 드라이버 최신 버전을 설치한다. ::
-
-    sudo pecl install pdo_cubrid
-
-   하위 버전의 드라이버가 필요하면 다음과 같이 설치할 버전을 지정할 수 있다. ::
-
-    sudo pecl install pdo_cubrid-8.3.1.0003
-
-   설치가 진행되는 중에 **CUBRID base install dir autodetect :** 라는 프롬프트가 표시된다. 설치를 원활하게 진행하기 위해서 CUBRID를 설치한 디렉터리의 전체 경로를 입력한다. 예를 들어 CUBRID가 **/home/cubridtest/CUBRID** 디렉터리에 설치되었다면, **/home/cubridtest/CUBRID** 를 입력한다.
-
-#. 설정 파일을 수정한다.
-
-   * CentOS 6.0 이상 버전이나 Fedora 15 이상 버전을 사용한다면 **pdo_cubrid.ini** 파일을 생성하고 내용에 **extension=pdo_cubrid.so** 를 입력하여 **/etc/php.d** 디렉터리에 저장한다.
-
-   * 다른 운영체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. ::
-
-      [CUBRID]
-      extension=pdo_cubrid.so
-
-#. 변경된 내용을 반영하려면 웹 서버를 재시작한다.
+#.  다음과 같은 명령어를 입력하여 CUBRID PDO 드라이버 최신 버전을 설치한다. ::
+    
+        sudo pecl install pdo_cubrid
+    
+    하위 버전의 드라이버가 필요하면 다음과 같이 설치할 버전을 지정할 수 있다. ::
+    
+        sudo pecl install pdo_cubrid-8.3.1.0003
+    
+    설치가 진행되는 중에 **CUBRID base install dir autodetect :**\ 라는 프롬프트가 표시된다. 설치를 원활하게 진행하기 위해서 CUBRID를 설치한 디렉터리의 전체 경로를 입력한다. 예를 들어 CUBRID가 **/home/cubridtest/CUBRID** 디렉터리에 설치되었다면, **/home/cubridtest/CUBRID**\ 를 입력한다.
+    
+#.  설정 파일을 수정한다.
+    
+    * CentOS 6.0 이상 버전이나 Fedora 15 이상 버전을 사용한다면 **pdo_cubrid.ini** 파일을 생성하고 내용에 **extension=pdo_cubrid.so** 를 입력하여 **/etc/php.d** 디렉터리에 저장한다.
+    
+    * 다른 운영체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. ::
+    
+        [CUBRID]
+        extension=pdo_cubrid.so
+    
+#.  변경된 내용을 반영하려면 웹 서버를 재시작한다.
 
 Windows
 -------
@@ -65,25 +65,29 @@ Windows
 
 **빌드된 드라이버 다운로드 및 설치**
 
-운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo 에서 다운로드한다.
+운영체제와 PHP 버전에 맞는 Windows용 CUBRID PHP/PDO 드라이버를 http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows&ostype=any&php=any&driver_type=pdo\ 에서 다운로드한다.
 
 PDO 드라이버를 다운로드하면 **php_cubrid.dll** 파일을 볼 수 있으며, PDO 드라이버를 다운로드하면 **php_pdo_cubrid.dll** 파일을 볼 수 있다. 드라이버를 설치하는 방법은 다음과 같다.
 
-#. 드라이버 파일을 기본 PHP 확장 디렉터리( **C:\\Program Files\\PHP\\ext** )에 복사한다.
+#.  드라이버 파일을 기본 PHP 확장 디렉터리( **C:\\Program Files\\PHP\\ext** )에 복사한다.
 
-#. 시스템 환경 변수를 설정한다. 시스템 환경 변수 **PHPRC** 의 값으로 **C:\\Program Files\\PHP** 가 설정되고, **Path** 에 **%PHPRC%** 와 **%PHPRC\\ext** 가 추가되었는지 확인한다.
+#.  시스템 환경 변수를 설정한다. 시스템 환경 변수 **PHPRC**\ 의 값으로 **C:\\Program Files\\PHP**\ 가 설정되고, **Path**\ 에 **%PHPRC%**\ 와 **%PHPRC%\\ext**\ 가 추가되었는지 확인한다.
 
-#. **php.ini** ( **C:\\Program Files\\PHP\\php.ini** ) 파일을 열어 끝에 다음 두 줄을 추가한다. ::
+#.  **php.ini** ( **C:\\Program Files\\PHP\\php.ini** ) 파일을 열어 끝에 다음 두 줄을 추가한다. 
 
-    [PHP_CUBRID]
-    extension=php_cubrid.dll
-
-   PDO 드라이버의 경우에는 다음 내용을 추가한다. ::
-
-    [PHP_PDO_CUBRID]
-    extension = php_pdo_cubrid.dll
-
-#. 웹 서버를 재시작한다.
+    ::
+    
+        [PHP_CUBRID]
+        extension=php_cubrid.dll
+    
+    PDO 드라이버의 경우에는 다음 내용을 추가한다. 
+        
+    ::
+    
+        [PHP_PDO_CUBRID]
+        extension = php_pdo_cubrid.dll
+    
+#.  웹 서버를 재시작한다.
 
 PDO 프로그래밍
 ==============
@@ -201,7 +205,7 @@ CUBRID 연결
 
 데이터 원본 이름(DSN)을 사용하여 데이터베이스에 연결한다. 데이터 원본 이름에 대한 자세한 설명은 :ref:`pdo-dsn` 을 참고한다.
 
-다음은 *demodb* 라는 CUBRID 데이터베이스에 PDO 연결을 수행하는 간단한 PHP 스크립트이다. PDO에서는 try-catch로 오류를 처리하며, 연결을 해제할 때에는 연결 객체에 **NULL** 을 할당한다는 것을 알 수 있다.
+다음은 *demodb*\ 라는 CUBRID 데이터베이스에 PDO 연결을 수행하는 간단한 PHP 스크립트이다. PDO에서는 try-catch로 오류를 처리하며, 연결을 해제할 때에는 연결 객체에 **NULL**\ 을 할당한다는 것을 알 수 있다.
 
 .. code-block:: php
 
@@ -520,7 +524,7 @@ CUBRID PDO 확장은 데이터베이스 스키마와 메타데이터 정보를 �
 PDO API
 =======
 
-PDO API에 대한 자세한 내용은 `http://docs.php.net/manual/en/book.pdo.php <http://docs.php.net/manual/en/book.pdo.php>`_ 를 참고한다. CUBRID PDO 드라이버가 제공하는 API는 다음과 같다.
+PDO API에 대한 자세한 내용은 http://docs.php.net/manual/en/book.pdo.php\ 를 참고한다. CUBRID PDO 드라이버가 제공하는 API는 다음과 같다.
 
 *   `PDO_CUBRID DSN <http://www.php.net/manual/en/ref.pdo-cubrid.connection.php>`_
 *   `PDO::cubrid_schema <http://www.php.net/manual/en/pdo.cubrid-schema.php>`_

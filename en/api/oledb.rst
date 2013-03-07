@@ -2,9 +2,6 @@
 OLE DB Driver
 *************
 
-OLE DB Overview
-===============
-
 OLE DB (Object Linking and Embedding, Database) is an API designed by Microsoft for accessing data from a variety of sources in a uniform manner so it can be used by all Microsoft platforms. It is a set of interfaces implemented using the Component Object Model (COM).
 
 .NET Framework is a software framework for Microsoft Windows operating systems. It includes a large library and it supports several programming languages which allows language interoperability (each language can utilize code written in other languages). The .NET library is available to all programming languages that .NET supports. A data provider in the .NET Framework serves as a bridge between an application and a data source; a data provider is used to retrieve data from a data source and to reconcile changes to that data back to the data source.
@@ -18,10 +15,10 @@ Installing and Configuring OLE DB
 
 **Requirements**
 
-*   Microsoft Windows Vista or Windows 7 (32-bit version)
+*   Windows Vista or Windows 7 (32-bit version)
 *   CUBRID 2008 R4.1 (8.4.1.) or later (32-bit version)
-*   Microsoft Visual Studio 2010 Express Edition (http://www.microsoft.com/visualstudio/en-us/products/2010-editions/express)
-*   Microsoft .NET Framework 3.5 or later (http://www.microsoft.com/download/en/details.aspx?id=21)
+*   Visual Studio 2010 Express Edition ( http://www.microsoft.com/visualstudio/en-us/products/2010-editions/express )
+*   .NET Framework 3.5 or later ( http://www.microsoft.com/download/en/details.aspx?id=21 )
 
 **CUBRID OLE DB Provider**
 
@@ -43,9 +40,11 @@ Before you start developing applications with CUBRID, you will need the Provider
 
     http://www.cubrid.org/?mid=downloads&item=oledb_driver
 
-*   **Building from source code** : Compile the driver source code. You can check out the source code at the SVN storage below. To compile the source code, the Visual Studio Express Edition ( http://www.microsoft.com/express/Downloads/#2010-Visual-CPP ) is required. If you are using CUBRID 9.0.0 version, enter 9.0.0 in <*CUBRID version*>.
+*   **Building from source code** : Compile the driver source code. You can check out the source code at the SVN storage below. To compile the source code, the Visual Studio Express Edition ( http://www.microsoft.com/express/Downloads/#2010-Visual-CPP ) is required. If you are using CUBRID 9.1.0 version, enter 9.1.0 in <*CUBRID version*>.
 
-    http://svn.cubrid.org/cubridapis/oledb/branches/RB-*<CUBRID version>*/Source/
+    ::
+
+        http://svn.cubrid.org/cubridapis/oledb/branches/RB-*<CUBRID version>*/Source/
 
 If you do not use the CUBRID OLED DB Provider installer, you should execute the command below to register the driver. The version of the driver should match the version of your operating system. For 32 bit, the **regsvr32** command should be executed in the **C:\Windows\system32** directory; for 64 bit, the **regsvr32** command should be executed in the **C:\Windows\SysWOW64** directory. ::
 
@@ -67,10 +66,10 @@ If you click the [Next] button after selecting "CUBRID OLE DB Provider," the [Co
 
 .. image:: /images/image85.png
 
-*   **Data Source** : Enter the name of the CUBRID database.
-*   **Location** : Enter the IP address or host name of the server where the CUBRID broker is running.
-*   **User name** : Enter the user name to be used for logon to the database server.
-*   **Password** : Enter the password to be used for logon to the database server.
+*   **Data Source**: Enter the name of the CUBRID database.
+*   **Location**: Enter the IP address or host name of the server where the CUBRID broker is running.
+*   **User name**: Enter the user name to be used for logon to the database server.
+*   **Password**: Enter the password to be used for logon to the database server.
 
 Set all values of connection properties and then click the [All] tab.
 

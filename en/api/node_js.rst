@@ -12,7 +12,7 @@ Node.js has the following specifics.
 * Good at handling lots of different kinds of I/O at the same time.
 * Non-blocking I/O model that makes it lightweight and efficient.
 
-For more details, see http://nodejs.org/ .
+For more details, see http://nodejs.org/.
 
 If you want to download CUBRRID Node.js driver or find the recent information, see the following sites:
 
@@ -30,7 +30,7 @@ Installing Node.js
 
 **Installation**
 
-You can install CUBRID Node.js driver with "npm(Node Packaged Modules) install" command, but firstly you need to install node.js on http://nodejs.org/download/ . ::
+You can install CUBRID Node.js driver with "npm(Node Packaged Modules) install" command, but firstly you need to install node.js on http://nodejs.org/download/. ::
 
     npm install node-cubrid
 

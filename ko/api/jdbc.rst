@@ -13,86 +13,86 @@ CUBRID JDBC 드라이버(cubrid_jdbc.jar)를 사용하면 Java로 작성된 응�
 
 **CUBRID JDBC 드라이버 버전 확인**
 
-    JDBC 드라이버 버전은 다음과 같은 방법으로 확인할 수 있다. ::
+JDBC 드라이버 버전은 다음과 같은 방법으로 확인할 수 있다. ::
 
-        % jar -tf cubrid_jdbc.jar
-        META-INF/
-        META-INF/MANIFEST.MF
-        cubrid/
-        cubrid/jdbc/
-        cubrid/jdbc/driver/
-        cubrid/jdbc/jci/
-        cubrid/sql/
-        cubrid/jdbc/driver/CUBRIDBlob.class
-        ...
-        CUBRID-JDBC-8.3.1.1032
+    % jar -tf cubrid_jdbc.jar
+    META-INF/
+    META-INF/MANIFEST.MF
+    cubrid/
+    cubrid/jdbc/
+    cubrid/jdbc/driver/
+    cubrid/jdbc/jci/
+    cubrid/sql/
+    cubrid/jdbc/driver/CUBRIDBlob.class
+    ...
+    CUBRID-JDBC-8.3.1.1032
 
 **CUBRID JDBC 드라이버 등록**
 
-    JDBC 드라이버 등록은 **Class.forName** (*driver-class-name*) 명령을 사용하며, 아래는 CUBRID JDBC 드라이버를 등록하기 위해 cubrid.jdbc.driver.CUBRIDDriver 클래스를 로드하는 예제이다.
+JDBC 드라이버 등록은 **Class.forName** (*driver-class-name*) 명령을 사용하며, 아래는 CUBRID JDBC 드라이버를 등록하기 위해 cubrid.jdbc.driver.CUBRIDDriver 클래스를 로드하는 예제이다.
 
-    .. code-block:: java
+.. code-block:: java
 
-        import java.sql.*;
-        import cubrid.jdbc.driver.*;
-         
-        public class LoadDriver {
-           public static void main(String[] Args) {
-               try {
-                   Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-               } catch (Exception e) {
-                   System.err.println("Unable to load driver.");
-                   e.printStackTrace();
-               }
-               ...
+    import java.sql.*;
+    import cubrid.jdbc.driver.*;
+     
+    public class LoadDriver {
+       public static void main(String[] Args) {
+           try {
+               Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
+           } catch (Exception e) {
+               System.err.println("Unable to load driver.");
+               e.printStackTrace();
+           }
+           ...
            
 JDBC 설치 및 설정
 =================
 
 **기본 환경**
 
-    *   JDK 1.6 이상
-    *   CUBRID 2008 R2.0(8.2.0) 이상
-    *   CUBRID JDBC 드라이버 2008 R1.0 이상
+*   JDK 1.6 이상
+*   CUBRID 2008 R2.0(8.2.0) 이상
+*   CUBRID JDBC 드라이버 2008 R1.0 이상
 
 **Java 설치 및 환경 변수 설정**
 
-    시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( http://java.sun.com )에서 다운로드할 수 있다. 이에 대한 자세한 설명은 :ref:`jsp_environment-configuration` 절을 참고한다.
+시스템에 Java가 설치되어 있고 **JAVA_HOME** 환경 변수가 등록되어 있어야 한다. Java는 Developer Resources for Java Technology 사이트( http://java.sun.com )에서 다운로드할 수 있다. 이에 대한 자세한 설명은 :ref:`jsp_environment-configuration` 절을 참고한다.
 
 **Windows 환경에서 환경 변수 설정**
 
-    Java 설치 후 [내 컴퓨터]를 마우스 오른쪽 버튼 클릭하여 [속성]을 선택하면 [시스템 등록 정보] 대화 상자가 나타난다. [고급] 탭의 [환경 변수]를 클릭하면 나타나는 [환경 변수] 대화 상자가 나타난다.
+Java 설치 후 [내 컴퓨터]를 마우스 오른쪽 버튼 클릭하여 [속성]을 선택하면 [시스템 등록 정보] 대화 상자가 나타난다. [고급] 탭의 [환경 변수]를 클릭하면 나타나는 [환경 변수] 대화 상자가 나타난다.
 
-    [시스템 변수]에서 [새로 만들기]를 선택한다. [변수 이름]에 **JAVA_HOME** 을 입력하고, 변수 값으로 Java 설치 경로(예: C:\Program Files\Java\jdk1.6.0_16)를 입력한 후 [확인]을 클릭한다.
+[시스템 변수]에서 [새로 만들기]를 선택한다. [변수 이름]에 **JAVA_HOME** 을 입력하고, 변수 값으로 Java 설치 경로(예: C:\Program Files\Java\jdk1.6.0_16)를 입력한 후 [확인]을 클릭한다.
 
-    .. image:: /images/image51.png
+.. image:: /images/image51.png
 
-    [시스템 변수] 중 Path를 선택하고 [편집]을 클릭한다. [변수 값]에 **%JAVA_HOME%\\bin** 를 추가하고 [확인]을 클릭한다.
+[시스템 변수] 중 Path를 선택하고 [편집]을 클릭한다. [변수 값]에 **%JAVA_HOME%\\bin** 를 추가하고 [확인]을 클릭한다.
 
-    .. image:: /images/image52.png
+.. image:: /images/image52.png
 
-    위의 방법을 사용하지 않고 다음과 같이 셸에서 **JAVA_HOME** 과 **PATH** 환경 변수를 설정할 수도 있다. ::
+위의 방법을 사용하지 않고 다음과 같이 셸에서 **JAVA_HOME** 과 **PATH** 환경 변수를 설정할 수도 있다. ::
 
-        set JAVA_HOME= C:\Program Files\Java\jdk1.6.0_16
-        set PATH=%PATH%;%JAVA_HOME%\bin
+    set JAVA_HOME= C:\Program Files\Java\jdk1.6.0_16
+    set PATH=%PATH%;%JAVA_HOME%\bin
 
 **Linux 환경에서 환경 변수 설정**
 
-    다음과 같이 Java가 설치된 **JAVA_HOME** 환경 변수로 디렉터리 경로(예: /usr/java/jdk1.6.0_16)를 설정하고, **PATH** 환경 변수에 **$JAVA_HOME/bin** 을 추가한다. ::
+다음과 같이 Java가 설치된 **JAVA_HOME** 환경 변수로 디렉터리 경로(예: /usr/java/jdk1.6.0_16)를 설정하고, **PATH** 환경 변수에 **$JAVA_HOME/bin** 을 추가한다. ::
 
-        export JAVA_HOME=/usr/java/jdk1.6.0_16     #bash
-        export PATH=$JAVA_HOME/bin:$PATH           #bash
-         
-        setenv JAVA_HOME /usr/java/jdk1.6.0_16     #csh
-        set path = ($JAVA_HOME/bin $path)          #csh
+    export JAVA_HOME=/usr/java/jdk1.6.0_16     #bash
+    export PATH=$JAVA_HOME/bin:$PATH           #bash
+     
+    setenv JAVA_HOME /usr/java/jdk1.6.0_16     #csh
+    set path = ($JAVA_HOME/bin $path)          #csh
 
 **JDBC 드라이버 설정**
 
-    JDBC를 사용하려면 CUBRID JDBC 드라이버가 존재하는 경로를 환경 변수 **CLASSPATH** 에 추가해야 한다.
+JDBC를 사용하려면 CUBRID JDBC 드라이버가 존재하는 경로를 환경 변수 **CLASSPATH** 에 추가해야 한다.
 
-    CUBRID JDBC 드라이버(**cubrid_jdbc.jar**)는 CUBRID 설치 디렉터리 아래의 jdbc 디렉터리에 위치한다.
+CUBRID JDBC 드라이버(**cubrid_jdbc.jar**)는 CUBRID 설치 디렉터리 아래의 jdbc 디렉터리에 위치한다.
 
-    .. image:: /images/image53.gif
+.. image:: /images/image53.gif
 
 **Windows 환경에서 CLASSPATH 환경 변수 설정** ::
 
@@ -124,7 +124,7 @@ JDBC 프로그래밍
      
     <property> ::= altHosts=<alternative_hosts>
                  | rcTime=<second>
-                  | loadBalance=<bool_type>
+                 | loadBalance=<bool_type>
                  | connectTimeout=<second>
                  | queryTimeout=<second>
                  | charSet=<character_set>
@@ -132,6 +132,7 @@ JDBC 프로그래밍
                  | logFile=<file_name>
                  | logOnException=<bool_type>
                  | logSlowQueries=<bool_type>&slowQueryThresholdMillis=<millisecond>
+                 
     <alternative_hosts> ::=
     <standby_broker1_host>:<port> [,<standby_broker2_host>:<port>]
     <behavior_type> ::= exception | round | convertToNull

@@ -2,9 +2,6 @@
 Python Driver
 *************
 
-Python Overview
-===============
-
 **CUBRIDdb** is a Python extension package that implements Python Database API 2.0 compliant support for CUBRID. In additional to the minimal feature set of the standard Python DB API, CUBRID Python API also exposes nearly the entire native client API of the database engine in **_cubrid**.
 
 CUBRID Python driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
@@ -14,57 +11,58 @@ If you want to download Python driver or get the latest information, click http:
 Installing and Configuring Python
 =================================
 
-For Linux/UNIX
---------------
+Linux/UNIX
+----------
 
 There are three ways to install CUBRID Python driver on Linux, UNIX, and UNIX-like operating systems. You can find instructions for each of them below.
 
 **Requirements**
 
-*   CUBRID: 2008 R4.0 (8.4.0) or later
 *   Operating system: 32-bit or 64-bit Linux, UNIX, or UNIX-like operating systems
 *   Python: 2.4 or later (http://www.python.org/download/)
 
 **Installing CUBRID Python Driver using Yum (Fedora or CentOS)**
 
-*  To install CUBRID Python driver by using the **yum** command, you need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
+#.  To install CUBRID Python driver by using the **yum** command, you need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
 
     *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
     *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
 
-For the example to install CUBRID 9.0 on Fedora 17 is as folllows: (fc17 means this operating system version). ::
+    For the example to install CUBRID 9.0 on Fedora 17 is as folllows: (fc17 means this operating system version). ::
 
-    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
+        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
 
-*  Enter the command below to install CUBRID Python driver. ::
+#.  Enter the command below to install CUBRID Python driver. 
 
-    yum install python-cubrid
+    ::
+
+        yum install python-cubrid
 
 **Building CUBRID Python Driver from Source Code (Linux)**
 
 To install CUBRID Python driver by compiling source code, you should have Python Development Package installed on your system. If you do not have the package, follow the instructions stated at http://www.cubrid.org/wiki_apis/entry/install-python-development-package .
 
-*  Download the source code from http://www.cubrid.org/?mid=downloads&item=python_driver .
+#.  Download the source code from http://www.cubrid.org/?mid=downloads&item=python_driver.
 
-*  Extract the archive to the desired location. ::
+#.  Extract the archive to the desired location. ::
 
-    tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
+        tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
 
-*  Navigate to the directory where you have extracted the source code. ::
+#.  Navigate to the directory where you have extracted the source code. ::
 
-    cd cubrid-python-src
+        cd cubrid-python-src
 
-*  Build the driver. At this and next step, make sure you are still under the root user. ::
+#.  Build the driver. At this and next step, make sure you are still under the root user. ::
 
-    python setup.py build
+        python setup.py build
 
-*  Install the driver. Here you also need root privileges. ::
+#.  Install the driver. Here you also need root privileges. ::
 
-    python setup.py install
+        python setup.py install
 
 **Using a Package Manager (EasyInstall) of CUBRID Python Driver (Linux)**
 
-EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see http://packages.python.org/distribute/easy_install.html .
+EasyInstall is a Python module (**easy_install**) bundled with **setuptools** that lets you automatically download, build, install, and manage Python packages. It gives you a quick way to install packages remotely by connecting to other websites via HTTP as well as connecting to the Package Index. It is somewhat analogous to the CPAN and PEAR tools for Perl and PHP, respectively. For more information about EasyInstall, see http://packages.python.org/distribute/easy_install.html.
 
 Enter the command below to install CUBRID Python driver by using EasyInstall. ::
 
@@ -105,18 +103,18 @@ This sample program will show steps that you need to perform in order to connect
 
 **Connecting to demodb from Python**
 
-#. Open a new Python console and enter the command line below to import CUBRID Python driver. 
-
-   .. code-block:: python
-   
+#.  Open a new Python console and enter the command line below to import CUBRID Python driver. 
+    
+    .. code-block:: python
+    
         import CUBRIDdb
-
-#. Establish a connection to the *demodb* database located on localhost.
-
-   .. code-block:: python
-   
-        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
-
+    
+#.  Establish a connection to the *demodb* database located on localhost.
+    
+    .. code-block:: python
+    
+            conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
+    
 For the *demodb* database, it is not required to enter any password. In a real-world scenario, you will have to provide the password to successfully connect. The syntax to use the `connect <http://packages.python.org/CUBRID-Python/_cubrid-module.html#connect>`_ () function is as follows: ::
 
     connect (url[,user[password]])
@@ -178,8 +176,6 @@ The entire script up to now looks like this:
     cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
      
     conn.commit()
-
-**Fetching Data from Database**
 
 **Fetching all records at a time**
 
@@ -254,6 +250,6 @@ After you have done using any cursor or connection to the database, you must rel
 Python API
 ==========
 
-Python Database API is composed of connect() module class, Connection object, Cursor object, and many other auxiliary functions. For more information, see Python DB API 2.0 Official Documentation at  http://www.python.org/dev/peps/pep-0249/ .
+Python Database API is composed of connect() module class, Connection object, Cursor object, and many other auxiliary functions. For more information, see Python DB API 2.0 Official Documentation at  http://www.python.org/dev/peps/pep-0249/.
 
-You can find the information about CUBRID Python API at http://packages.python.org/CUBRID-Python/ .
+You can find the information about CUBRID Python API at http://packages.python.org/CUBRID-Python/.

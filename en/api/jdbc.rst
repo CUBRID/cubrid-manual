@@ -641,23 +641,23 @@ The interface that handles **LOB** data in JDBC is implemented based on JDBC 4.0
 
 *   To use **BLOB** / **CLOB** type in the environment where JDBC 4.0 is not supported such as JDK versions 1.5 or earlier, you must do explicit type conversion for the conn object to **CUBRIDConnection**. See example below.
 
-    .. code-block:: java
+.. code-block:: java
 
-        //JDK 1.6 or higher
+    //JDK 1.6 or higher
 
-        import java.sql.*;
+    import java.sql.*;
 
-        Connection conn = DriverManager.getConnection(url, id, passwd);
-        Blob blob = conn.createBlob();
+    Connection conn = DriverManager.getConnection(url, id, passwd);
+    Blob blob = conn.createBlob();
 
-        
-        //JDK 1.5 or lower
+    
+    //JDK 1.5 or lower
 
-        import java.sql.*;
-        import cubrid.jdbc.driver.*;
+    import java.sql.*;
+    import cubrid.jdbc.driver.*;
 
-        Connection conn = DriverManager.getConnection(url, id, passwd);
-        Blob blob = ((CUBRIDConnection)conn).createBlob();
+    Connection conn = DriverManager.getConnection(url, id, passwd);
+    Blob blob = ((CUBRIDConnection)conn).createBlob();
 
 **Storing LOB Data**
 

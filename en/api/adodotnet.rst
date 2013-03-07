@@ -494,12 +494,12 @@ The following list displays the error code and messages shown up when using CUBR
 NHibernate
 ----------
 
-CUBRID will be accessed from NHibernate using CUBRID ADO.NET Data Provider. For more information, see http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial .
+CUBRID will be accessed from NHibernate using CUBRID ADO.NET Data Provider. For more information, see http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial.
 
 Java Stored Prcedure
 --------------------
 
-For how to call Java stored procedure in .NET, see http://www.cubrid.org/?mid=forum&category=195532&document_srl=358924 .
+For how to call Java stored procedure in .NET, see http://www.cubrid.org/wiki_apis/entry/how-to-calling-java-stored-functionprocedurec.
 
 ADO.NET API
 ===========

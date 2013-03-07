@@ -2,14 +2,11 @@
 Ruby Driver
 ***********
 
-Ruby Overview
-=============
-
 CUBRID Ruby driver implements the interface to enable access from applications in Ruby to CUBRID database server and official one is available as a RubyGem package.
 
 CUBRID Ruby driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
 
-To download Ruby driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver .
+To download Ruby driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver.
 
 Installing and Configuring Ruby
 ===============================

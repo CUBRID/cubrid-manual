@@ -496,19 +496,15 @@ NHibernate
 ----------
 
 CUBRID ADO.NET Data Provider를 사용하면 NHibernate에서 CUBRID 데이터베이스를 사용할 수 있다. 이에 대한 자세한 내용은
-`http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial <http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial>`_
-를 참고한다.
+http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial\ 을 참고한다.
 
 Java 저장 프로시저
 ------------------
 
 .NET에서 Java 저장 프로시저를 사용하는 방법은
-`http://www.cubrid.org/?mid=forum&category=195532&document_srl=358924 <http://www.cubrid.org/?mid=forum&category=195532&document_srl=358924>`_
-를 참고한다.
+http://www.cubrid.org/wiki_apis/entry/how-to-calling-java-stored-functionprocedurec\ 를 참고한다.
 
 ADO.NET API
 ===========
 
-ADO.NET API에 대한 자세한 내용은 CUBRID ADO.NET Driver 문서(
-`http://www.cubrid.org/manual/api/ado.net/8.4.1/Index.html <http://www.cubrid.org/manual/api/ado.net/8.4.1/Index.html>`_
-)를 참고한다.
+ADO.NET API에 대한 자세한 내용은 CUBRID ADO.NET Driver 문서( http://www.cubrid.org/manual/api/ado.net/8.4.1/Index.html )를 참고한다.

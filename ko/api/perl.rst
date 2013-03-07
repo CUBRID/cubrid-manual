@@ -11,6 +11,7 @@ http://www.cubrid.org/wiki_apis/entry/cubrid-perl-driver
 에 접속한다.
 
 .. note:: 
+
     * 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
     *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
@@ -19,9 +20,9 @@ Perl 설치 및 설정
 
 **기본 환경**
 
-*   Perl: 시스템에 적합한 버전의 Perl을 사용하는 것을 권장한다. 모든 Linux와 FreeBSD에는 Perl이 포함되어 있으며, Windows에서는 ActivePerl을 권장한다. Active Perl에 대한 자세한 내용은 http://www.activestate.com/activeperl 을 참고한다.
+*   Perl: 시스템에 적합한 버전의 Perl을 사용하는 것을 권장한다. 모든 Linux와 FreeBSD에는 Perl이 포함되어 있으며, Windows에서는 ActivePerl을 권장한다. Active Perl에 대한 자세한 내용은 http://www.activestate.com/activeperl\ 을 참고한다.
 
-*   CUBRID: Perl 드라이버를 빌드하기 위해 CCI 드라이버가 필요하며, 이를 위해 CUBRID를 설치해야 한다. CUBRID는 http://www.cubrid.org/downloads 에서 다운로드한다.
+*   CUBRID: Perl 드라이버를 빌드하기 위해 CCI 드라이버가 필요하며, 이를 위해 CUBRID를 설치해야 한다. CUBRID는 http://www.cubrid.org/downloads\ 에서 다운로드한다.
 
 *   DBI: http://code.activestate.com/ppm/DBI/
 

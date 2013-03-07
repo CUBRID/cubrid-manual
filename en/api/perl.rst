@@ -2,9 +2,6 @@
 Perl Driver
 ***********
 
-Perl Overview
-=============
-
 **DBD::cubrid** is a CUBRID Perl driver that implements Perl5 Database Interface (DBI) to enable access to CUBRID database server. It provides full API support.
 
 CUBRID Perl driver is written based on CCI API so affected by CCI configurations such as **CCI_DEFAULT_AUTOCOMMIT**.
@@ -64,4 +61,4 @@ Perl API
 
 Currently, CUBRID Perl driver provides only basic features and does not support LOB type and column information verification.
 
-If you want to get details about CUBRID Perl driver API, see http://search.cpan.org/~cubrid/ .
+If you want to get details about CUBRID Perl driver API, see http://search.cpan.org/~cubrid/.

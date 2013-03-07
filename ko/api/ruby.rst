@@ -6,7 +6,7 @@ CUBRID Ruby 드라이버는 Ruby로 작성한 응용 프로그램에서 CUBRID �
 
 CUBRID Ruby 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
-별도로 Ruby 드라이버를 다운로드하거나 Ruby 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver 에 접속한다.
+별도로 Ruby 드라이버를 다운로드하거나 Ruby 드라이버에 대한 최신 정보를 확인하려면 http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-driver\ 에 접속한다.
 
 Ruby 설치 및 설정
 =================

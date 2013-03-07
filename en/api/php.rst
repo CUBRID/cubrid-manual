@@ -2,9 +2,6 @@
 PHP Driver
 **********
 
-PHP Overview
-============
-
 CUBRID PHP driver implements an interface to enable access from application in PHP to CUBRID database. Every function offered by CUBRID PHP driver has a prefix **cubrid_** such as cubrid_connect() and cubrid_connect_with_url().
 
 The official one is available as a PECL package. PECL is a repository for PHP extensions, providing a directory of all known extensions and holding facilities for downloading and development of PHP extensions. For more information about PECL, visit http://pecl.php.net/ .
@@ -24,7 +21,6 @@ For Linux
 
 **Configuring the Environment**
 
-*   CUBRID: 2008 R3.0 (8.3.0) or later
 *   Operating system: 32-bit or 64-bit Linux
 *   Web server: Apache
 *   PHP: 5.2 or 5.3 (http://php.net/downloads.php)
@@ -33,79 +29,81 @@ For Linux
 
 If **PECL** package has been installed on your system, the installation of CUBRID PHP driver is straightforward. **PECL** will download and compile the driver for you. If you do not have **PECL** installed, follow the instructions at http://www.cubrid.org/wiki_apis/entry/installing-cubrid-php-driver-using-pecl to get it installed.
 
-#. Enter the following command to install the latest version of CUBRID PHP driver. ::
-
-    sudo pecl install cubrid
-
-   If you need earlier versions of the driver, you can install exact versions as follows: ::
-
-    sudo pecl install cubrid-8.3.0.0005
-
-   During the installation, you will be prompted to enter **CUBRID base install dir autodetect :**. Just to make sure your installation goes smoothly, enter the full path to the directory where you have installed CUBRID. For example, if CUBRID has been installed at **/home/cubridtest/CUBRID**, then enter **/home/cubridtest/CUBRID**.
-
-#. Edit the configuration file.
-
-   *  If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named **pdo_cubrid.ini**, enter a command line **extension=pdo_cubrid.so**, and store the fine in the **/etc/php.d** directory.
-
-   *  If you are using earlier versions of CentOS 6.0 or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2/** or **/etc/**) and add the following two command lines at the end of the file. ::
-
-       [CUBRID]
-       extension=cubrid.so
-
-#. Restart the web server to apply changes.
+#.  Enter the following command to install the latest version of CUBRID PHP driver. ::
+    
+        sudo pecl install cubrid
+    
+    If you need earlier versions of the driver, you can install exact versions as follows: ::
+    
+        sudo pecl install cubrid-8.3.0.0005
+    
+    During the installation, you will be prompted to enter **CUBRID base install dir autodetect :**. Just to make sure your installation goes smoothly, enter the full path to the directory where you have installed CUBRID. For example, if CUBRID has been installed at **/home/cubridtest/CUBRID**, then enter **/home/cubridtest/CUBRID**.
+    
+#.  Edit the configuration file.
+    
+    If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named **pdo_cubrid.ini**, enter a command line **extension=pdo_cubrid.so**, and store the fine in the **/etc/php.d** directory.
+    
+    If you are using earlier versions of CentOS 6.0 or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2/** or **/etc/**) and add the following two command lines at the end of the file. 
+    
+    ::
+    
+        [CUBRID]
+        extension=cubrid.so
+    
+#.  Restart the web server to apply changes.
 
 **Installing using apt-get on Ubuntu**
 
-#. If you do not have PHP itself installed, install it using the following command; if you have PHP installed on your system, skip this step. ::
-
-    sudo apt-get install php5
-
-#. To install CUBRID PHP driver using **apt-get**, we need to add CUBRID's repository so that Ubuntu knows where to download the packages from and tell the operating system to update its indexes. ::
-
-    sudo add-apt-repository ppa:cubrid/cubrid
-    sudo apt-get update
-
-#. Now install the driver. ::
-
-    sudo apt-get install php5-cubrid
-
-   To install earlier versions, indicate the version as: ::
-
-    sudo apt-get install php5-cubrid-8.3.1
-
-   This will copy the **cubrid.so** driver to **/usr/lib/php5/2009*** and add the following configuration lines to **/etc/php5/apache2/php.ini**. ::
-
-    [PHP_CUBRID]
-    extension=cubrid.so
-
-#. Restart the web server so that PHP can read the module. ::
-
-    service apache2 restart
+#.  If you do not have PHP itself installed, install it using the following command; if you have PHP installed on your system, skip this step. ::
+    
+        sudo apt-get install php5
+    
+#.  To install CUBRID PHP driver using **apt-get**, we need to add CUBRID's repository so that Ubuntu knows where to download the packages from and tell the operating system to update its indexes. ::
+    
+        sudo add-apt-repository ppa:cubrid/cubrid
+        sudo apt-get update
+    
+#.  Now install the driver. ::
+    
+        sudo apt-get install php5-cubrid
+    
+    To install earlier versions, indicate the version as: ::
+    
+        sudo apt-get install php5-cubrid-8.3.1
+    
+    This will copy the **cubrid.so** driver to **/usr/lib/php5/2009*** and add the following configuration lines to **/etc/php5/apache2/php.ini**. ::
+    
+        [PHP_CUBRID]
+        extension=cubrid.so
+    
+#.  Restart the web server so that PHP can read the module. ::
+    
+        service apache2 restart
 
 **Installing using Yum on Fedora/CentOS**
 
-#. To install CUBRID PHP driver using **yum** command, we need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
-
-   *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
-   *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
-
-#. Choose CUBRID version. You will be given a list of links for your particular version. For example, the following link is provided for Fedora 16 where fc16 means this operating system version. ::
-
-    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
-
-   For CentOS, el6.2 means CentOS version 6.2. ::
-
-    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
-
-   Executing this command will tell **Yum** where to look for CUBRID package.
-
-#. Execute the command below to install CUBRID PHP driver. ::
-
-    yum install php-cubrid
-
-#. Restart the web server. ::
-
-    service httpd restart
+#.  To install CUBRID PHP driver using **yum** command, we need to tell **Yum** where to look for CUBRID package. First, visit one of the following links depending on your operating system.
+    
+    *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
+    *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
+    
+#.  Choose CUBRID version. You will be given a list of links for your particular version. For example, the following link is provided for Fedora 16 where fc16 means this operating system version. ::
+    
+        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
+    
+    For CentOS, el6.2 means CentOS version 6.2. ::
+    
+        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
+    
+    Executing this command will tell **Yum** where to look for CUBRID package.
+    
+#.  Execute the command below to install CUBRID PHP driver. ::
+    
+        yum install php-cubrid
+    
+#.  Restart the web server. ::
+    
+        service httpd restart
 
 For Windows
 -----------
@@ -125,42 +123,42 @@ In case you want to remove the CUBRID PHP driver, you just have to run the CUBRI
 
 Before you install CUBRID PHP driver, make sure that paths of PHP and CUBRID are added in the system variable, **Path**.
 
-#. Download the CUBRID PHP API installer for Windows from the link below. The current installer includes the drivers for all CUBRID versions.
+#.  Download the CUBRID PHP API installer for Windows from the link below. The current installer includes the drivers for all CUBRID versions.
+    
+    http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows
+    
+#.  To install the PHP extension, run the installer. Once the installer starts, click the [Next] button.
+#.  Agree with the BSD license terms and click the [Next] button.
+#.  Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like **C:\\Program Files\\CUBRID PHP API**.
+    
+#.  Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see "Configuring the environment" below.
+    
+#.  If no error message is displayed, this should install the CUBRID PHP extension and update your **php.ini** file. Click [Finish] to close the installer.
+#.  For changes to take place, restart your web server and execute the phpinfo() to confirm CUBRID has successfully been installed.
 
-   http://www.cubrid.org/?mid=downloads&item=php_driver&os=windows
-
-#. To install the PHP extension, run the installer. Once the installer starts, click the [Next] button.
-#. Agree with the BSD license terms and click the [Next] button.
-#. Choose where you would like to install this CUBRID PHP API Installer and click the [Next] button. You should choose a new folder for this installer like **C:\\Program Files\\CUBRID PHP API**.
-
-#. Give a folder name and click the [Install] button. If you fail installation, you should probably receive an error message. In this case, see "Configuring the environment" below.
-
-#. If no error message is displayed, this should install the CUBRID PHP extension and update your **php.ini** file. Click [Finish] to close the installer.
-#. For changes to take place, restart your web server and execute the phpinfo() to confirm CUBRID has successfully been installed.
-
-   .. image:: /images/image56.png
+    .. image:: /images/image56.png
 
 **Configuring the environment**
 
 If you have received an error messages, follow the steps below; if you can see CUBRID in phpinfo(), you do not need to look further. By default, when you install CUBRID, it automatically adds its installation directory to the **Path** system environment variable. To verify the variable have been correctly configured, launch the command prompt ([Start] > [Programs] > [Accessories] > [Command Prompt]) and enter the following commands one by one.
 
-#. Enter command below in the command prompt as follows. ::
-
-    php --version
-
-   You can see the PHP version like below if it is properly configured. ::
-
-    C:\Users\Administrator>php --version
-    PHP 5.2.9 <cli> <built: Feb 25 2009 15:52:24>
-
-#. Enter command as follows. ::
-
-    php --version
-
-   You can see the CUBIRD version like below if it is properly configured. ::
-
-    C:\Users\Administrator>cubrid --version
-    cubrid <cubrid utilities> R2.1
+#.  Enter command below in the command prompt as follows. ::
+    
+        php --version
+    
+    You can see the PHP version like below if it is properly configured. ::
+    
+        C:\Users\Administrator>php --version
+        PHP 5.2.9 <cli> <built: Feb 25 2009 15:52:24>
+    
+#.  Enter command as follows. ::
+    
+        php --version
+    
+    You can see the CUBIRD version like below if it is properly configured. ::
+    
+        C:\Users\Administrator>cubrid --version
+        cubrid <cubrid utilities> R2.1
 
 If you cannot get the result like above, it is highly likely that your PHP and CUBRID installations went wrong. Try to reinstall them and recheck again. If the path is not automatically specified even after you complete reinstallation, you can do it manually.
 
@@ -177,19 +175,19 @@ First, download CUBRID PHP/PDO driver of which versions match the versions of yo
 
 After you download the driver, you will see the **php_cubrid.dll** file for CUBRID PHP driver or the **php_pdo_cubrid.dll** file for CUBRID PDO driver. Follow the steps below to install it.
 
-#. Copy this driver to the default PHP extensions directory (usually located at **C:\\Program Files\\PHP\\ext**).
-#. Set your system environment. Check if the environment variable **PHPRC** is **C:\\Program Files\\PHP** and system variable path is added with **%PHPRC%** and **%PHPRC\\ext**.
-#. Edit **php.ini** (**C:\\Program Files\\PHP\\php.ini**) and add the following two command lines at the end of the **php.ini** file. ::
-
-    [PHP_CUBRID]
-    extension=php_cubrid.dll
-
-   For CUBRID PDO driver, add command lines below. ::
-
-    [PHP_PDO_CUBRID]
-    extension = php_pdo_cubrid.dll
-
-#. Restart your web server to apply changes.
+#.  Copy this driver to the default PHP extensions directory (usually located at **C:\\Program Files\\PHP\\ext**).
+#.  Set your system environment. Check if the environment variable **PHPRC** is **C:\\Program Files\\PHP** and system variable path is added with **%PHPRC%** and **%PHPRC\\ext**.
+#.  Edit **php.ini** (**C:\\Program Files\\PHP\\php.ini**) and add the following two command lines at the end of the **php.ini** file. ::
+    
+        [PHP_CUBRID]
+        extension=php_cubrid.dll
+    
+    For CUBRID PDO driver, add command lines below. ::
+    
+        [PHP_PDO_CUBRID]
+        extension = php_pdo_cubrid.dll
+    
+#.  Restart your web server to apply changes.
 
 Building CUBRID PHP Driver from Source Code
 ===========================================
@@ -208,50 +206,50 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
 
 **Compiling CUBRID PHP driver**
 
-#. Download the CUBRID PHP driver, extract it, and enter the directory. ::
-
-    $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
-    $> cd php-<version>/ext 
-
-#. Run **phpize**. For more information about getting **phpize**, see :ref:`Remark <phpize-remark>`. ::
-
-    cubrid-php> /usr/bin/phpize
-
-#. Configure the project. It is recommended to execute **./configure –h** so that you can check the configuration options (we assume that Apache 2 has been installed in **/usr/local**). ::
-
-    cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
-
-   *   --with-cubrid=shared: Includes CUBRID support.
-   *   --with-php-config=PATH: Enters an absolute path of php-config including the file name.
-
-#. Build the project. If it is successfully compiled, the **cubrid.so** file will be created in the **/modules** directory.
-
-#. Copy the **cubrid.so** to the **/usr/local/php/lib/php/extensions** directory; the **/usr/local/php** is a PHP root directory. ::
-
-    cubrid-php> mkdir /usr/local/php/lib/php/extensions
-    cubrid-php> cp modules/cubrid.so /usr/local/php/lib/php/extensions
-
-#. In the **php.ini** file, set the **extension_dir** variable and add the CUBRID PHP driver to the **extension** variable as shown below. ::
-
-    extension_dir = "/usr/local/php/lib/php/extension/no-debug-zts-xxx"
-    extension = cubrid.so
-
+#.  Download the CUBRID PHP driver, extract it, and enter the directory. ::
+    
+        $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
+        $> cd php-<version>/ext 
+    
+#.  Run **phpize**. For more information about getting **phpize**, see :ref:`Remark <phpize-remark>`. ::
+    
+        cubrid-php> /usr/bin/phpize
+    
+#.  Configure the project. It is recommended to execute **./configure –h** so that you can check the configuration options (we assume that Apache 2 has been installed in **/usr/local**). ::
+    
+        cubrid-php>./configure --with-cubrid --with-php-config=/usr/local/bin/php-config
+    
+    *   --with-cubrid=shared: Includes CUBRID support.
+    *   --with-php-config=PATH: Enters an absolute path of php-config including the file name.
+    
+#.  Build the project. If it is successfully compiled, the **cubrid.so** file will be created in the **/modules** directory.
+    
+#.  Copy the **cubrid.so** to the **/usr/local/php/lib/php/extensions** directory; the **/usr/local/php** is a PHP root directory. ::
+    
+        cubrid-php> mkdir /usr/local/php/lib/php/extensions
+        cubrid-php> cp modules/cubrid.so /usr/local/php/lib/php/extensions
+    
+#.  In the **php.ini** file, set the **extension_dir** variable and add the CUBRID PHP driver to the **extension** variable as shown below. ::
+    
+        extension_dir = "/usr/local/php/lib/php/extension/no-debug-zts-xxx"
+        extension = cubrid.so
+    
 **Testing CUBIRD PHP driver installation**
-
-#. Create a **test.php** file as follows:
-
-   .. code-block:: php
-
-    <?php phpinfo(); ?>
-
-#. Use web browser to visit http://localhost/test.php. If you can see the following result, it means that installation is successfully completed.
-
-   +------------+------------+
-   | **CUBRID** | **Value**  |
-   +------------+------------+
-   | Version    | 9.0.0.XXXX |
-   +------------+------------+
-
+    
+#.  Create a **test.php** file as follows:
+    
+    .. code-block:: php
+    
+        <?php phpinfo(); ?>
+    
+#.  Use web browser to visit http://localhost/test.php. If you can see the following result, it means that installation is successfully completed.
+    
+    +------------+------------+
+    | CUBRID     |   Value    |
+    +============+============+
+    | Version    | 9.0.0.XXXX |
+    +------------+------------+
+    
 .. _phpize-remark:
 
 **Remark**
@@ -260,16 +258,16 @@ What is **phpize** ? Where can I get it?
 
 **phpize** is a shell script to prepare the PHP extension for compiling. You can get it when you install PHP because it is automatically installed with PHP installation, in general. If it you do not have **phpize** installed on your system, you can get it by following the steps below.
 
-#. Download the PHP source code. Make sure that the PHP version works with the PHP extension that you want to use. Extract PHP source code and enter its root directory. ::
-
-    $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
-    $> cd php-<version>
-
-#. Configure the project, build, and install it. You can specify the directory you want install PHP by using the option, **--prefix**. ::
-
-    php-root> ./configure --prefix=prefix_dir; make; make install
-
-#. You can find **phpize** in the **prefix_dir/bin** directory.
+#.  Download the PHP source code. Make sure that the PHP version works with the PHP extension that you want to use. Extract PHP source code and enter its root directory. ::
+    
+        $> tar zxvf php-<version>.tar.gz (or tar jxvf php-<version>.tar.bz2)
+        $> cd php-<version>
+    
+#.  Configure the project, build, and install it. You can specify the directory you want install PHP by using the option, **--prefix**. ::
+    
+        php-root> ./configure --prefix=prefix_dir; make; make install
+    
+#.  You can find **phpize** in the **prefix_dir/bin** directory.
 
 For Windows
 -----------
@@ -313,21 +311,21 @@ In the [Property Pages] dialog box, select [General] under the [C/C++] tree node
 
 **Building CUBRID PHP driver with VC9 for PHP 5.3**
 
-#. Open the **php_cubrid.vcproj** file under the **\\win** directory. In the [Solution Explorer] pane, right-click on the **php_cubrid** (project name) and select [Properties].
-
-   .. image:: /images/image59.jpg
-
-#. In the [Property Page] dialog box, click the [Configuration Manager] button. Select one of four values among Release_TS, Release_NTS, Debug_TS, and Debug_NTS in [Configuration] of [Project contexts] and click the [Close] button.
-
-   .. image:: /images/image60.jpg
-
-#. After you complete the properties modification, click the [OK] button and press the <F7> key to compile the driver. Then, we have the **php_cubrid.dll** file built.
-
-#. You need to make PHP recognize the **php_cubrid.dll** file as an extension. To do this:
-
-   *   Create a new folder named **cubrid** where PHP has been installed and copy the  **php_cubrid.dll** file to the **cubrid** folder. You can also put the **php_cubrid.dll** file in **%PHPRC%\\ext** if this directory exists.
-
-   *   In the php.ini file, enter the path of the **php_cubrid.dll** file as an extension_dir variable value and enter **php_cubrid.dll** as an extension value.
+#.  Open the **php_cubrid.vcproj** file under the **\\win** directory. In the [Solution Explorer] pane, right-click on the **php_cubrid** (project name) and select [Properties].
+    
+    .. image:: /images/image59.jpg
+    
+#.  In the [Property Page] dialog box, click the [Configuration Manager] button. Select one of four values among Release_TS, Release_NTS, Debug_TS, and Debug_NTS in [Configuration] of [Project contexts] and click the [Close] button.
+    
+    .. image:: /images/image60.jpg
+    
+#.  After you complete the properties modification, click the [OK] button and press the <F7> key to compile the driver. Then, we have the **php_cubrid.dll** file built.
+    
+#.  You need to make PHP recognize the **php_cubrid.dll** file as an extension. To do this:
+    
+    *   Create a new folder named **cubrid** where PHP has been installed and copy the  **php_cubrid.dll** file to the **cubrid** folder. You can also put the **php_cubrid.dll** file in **%PHPRC%\\ext** if this directory exists.
+    
+    *   In the php.ini file, enter the path of the **php_cubrid.dll** file as an extension_dir variable value and enter **php_cubrid.dll** as an extension value.
 
 **Building CUBRID PHP Driver with VC6 for PHP 5.2/5.3**
 
@@ -355,21 +353,21 @@ You can configure the default settings without using this SDK; however, there is
 
 **Building CUBRID PHP driver**
 
-#. Open the project in the [Build] menu and then select [Set Active Configuration].
-
-   .. image:: /images/image63.jpg
-
-#. There are four types of configuration settings (Win32 Release_TS, Win32 Release, Win32 Debug_TS, and Win32 Debug). Select one of them depending on your system and then click the [OK] button.
-
-   .. image:: /images/image64.jpg
-
-#. After you complete the properties modification, click the [OK] button and press the <F7> key to compile the driver. Then you have the **php_cubrid.dll** file built.
-
-#. You need to make PHP recognize the **php_cubrid.dll** file as an extension. To do this:
-
-   * Create a new folder named  **cubrid** where PHP is installed and copy **php_cubrid.dll** to the **cubrid** folder. You can also put **php_cubrid.dll** in **%PHPRC%\\ext** if this directory exists.
-
-   * Set the **extension_dir** variable and add CUBRID PHP driver to **extension** variable in the **php.ini** file.
+#.  Open the project in the [Build] menu and then select [Set Active Configuration].
+    
+    .. image:: /images/image63.jpg
+    
+#.  There are four types of configuration settings (Win32 Release_TS, Win32 Release, Win32 Debug_TS, and Win32 Debug). Select one of them depending on your system and then click the [OK] button.
+    
+    .. image:: /images/image64.jpg
+    
+#.  After you complete the properties modification, click the [OK] button and press the <F7> key to compile the driver. Then you have the **php_cubrid.dll** file built.
+    
+#.  You need to make PHP recognize the **php_cubrid.dll** file as an extension. To do this:
+    
+    *   Create a new folder named  **cubrid** where PHP is installed and copy **php_cubrid.dll** to the **cubrid** folder. You can also put **php_cubrid.dll** in **%PHPRC%\\ext** if this directory exists.
+        
+    *   Set the **extension_dir** variable and add CUBRID PHP driver to **extension** variable in the **php.ini** file.
 
 **Building CUBRID PHP Driver for 64-bit Windows**
 
@@ -403,59 +401,59 @@ There is no official Apache for 64-bit Windows either. Instead, you can use IIS 
 
 **Configuring PHP 5.3**
 
-#. After you have installed SDK 6.1, click the [CMD Shell] shortcut under the [Microsoft Windows SDK v6.1] folder (Windows Start menu).
-
-   .. image:: /images/image65.png
-
-#. Run **setenv /x64 /release**.
-
-   .. image:: /images/image66.png
-
-#. Enter PHP 5.3 source code directory in the command prompt and run **buildconf** to generate the **configure.js** file.
-
-   .. image:: /images/image67.png
-
-   Or you can also double-click the **buildconf.bat** file.
-
-   .. image:: /images/image68.png
-
-#. Run the **configure** command to configure the PHP project.
-
-   .. image:: /images/image69.png
-
-   .. image:: /images/image70.png
+#.  After you have installed SDK 6.1, click the [CMD Shell] shortcut under the [Microsoft Windows SDK v6.1] folder (Windows Start menu).
+    
+    .. image:: /images/image65.png
+    
+#.  Run **setenv /x64 /release**.
+    
+    .. image:: /images/image66.png
+    
+#.  Enter PHP 5.3 source code directory in the command prompt and run **buildconf** to generate the **configure.js** file.
+    
+    .. image:: /images/image67.png
+    
+    Or you can also double-click the **buildconf.bat** file.
+    
+    .. image:: /images/image68.png
+    
+#.  Run the **configure** command to configure the PHP project.
+    
+    .. image:: /images/image69.png
+    
+    .. image:: /images/image70.png
 
 **Building CUBRID PHP dirver**
 
-#. Open the **php_cubrid.vcproj** file under the **\\win** directory. In the [Solution Explorer] on the left, right-click on the **php_cubrid** project name and select [Properties].
-
-#. On the top right corner of the [Property Pages] dialog box, click [Configuration Manager].
-
-   .. image:: /images/image71.png
-
-#. In the [Configuration Manager] dialog box, you can see four types of configurations (Release_TS, Release_NTS, Debug_TS, and Debug_NTS) in the [Active solution configuration] dropdown list. Select **New** in the dropdown list so that you can create a new one for your x64 build.
-
-   .. image:: /images/image72.png
-
-#. In the [New Solution Configuration] dialog box, enter a value in the **Name** box (e.g., **Release_TS_x64**). In the [Copy settings from] dropdown list, select the corresponding x86 configuration and click [OK].
-
-   .. image:: /images/image73.png
-
-#. In the [Configuration Manager] dialog box, select the value **x64** in the [Platform] dropdown list. If it does not exist, select **New**.
-
-   .. image:: /images/image74.png
-
-   *   In the [New Project Platform] dialog box, select **x64** option in the [New platform] dropdown list.
-
-   .. image:: /images/image75.png
-
-   *   Click [OK] and close the [Configuration Manager].
-
-#. In the [Property Pages] dialog box, select [Preprocessor] under the [C/C++] tree node. In [Preprocessor Definitions], delete **_USE_32BIT_TIME_T** and click [OK] to close the dialog box.
-
-   .. image:: /images/image76.png
-
-#. Press the <F7> key to compile. Now you will get the CUBRID PHP driver for 64-bit Windows.
+#.  Open the **php_cubrid.vcproj** file under the **\\win** directory. In the [Solution Explorer] on the left, right-click on the **php_cubrid** project name and select [Properties].
+    
+#.  On the top right corner of the [Property Pages] dialog box, click [Configuration Manager].
+    
+    .. image:: /images/image71.png
+    
+#.  In the [Configuration Manager] dialog box, you can see four types of configurations (Release_TS, Release_NTS, Debug_TS, and Debug_NTS) in the [Active solution configuration] dropdown list. Select **New** in the dropdown list so that you can create a new one for your x64 build.
+    
+    .. image:: /images/image72.png
+    
+#.  In the [New Solution Configuration] dialog box, enter a value in the **Name** box (e.g., **Release_TS_x64**). In the [Copy settings from] dropdown list, select the corresponding x86 configuration and click [OK].
+    
+    .. image:: /images/image73.png
+    
+#.  In the [Configuration Manager] dialog box, select the value **x64** in the [Platform] dropdown list. If it does not exist, select **New**.
+    
+    .. image:: /images/image74.png
+    
+    *   In the [New Project Platform] dialog box, select **x64** option in the [New platform] dropdown list.
+    
+    .. image:: /images/image75.png
+    
+    *   Click [OK] and close the [Configuration Manager].
+    
+#.  In the [Property Pages] dialog box, select [Preprocessor] under the [C/C++] tree node. In [Preprocessor Definitions], delete **_USE_32BIT_TIME_T** and click [OK] to close the dialog box.
+    
+    .. image:: /images/image76.png
+    
+#.  Press the <F7> key to compile. Now you will get the CUBRID PHP driver for 64-bit Windows.
 
 PHP Programming
 ===============
@@ -467,8 +465,9 @@ The first step of database applications is to use `cubrid_connect <http://www.ph
 `cubrid_connect <http://www.php.net/manual/en/function.cubrid-connect.php>`_ () function.
 
 .. note:: 
+
     *   The database connection in thread-based programming must be used independently each other.
-    * In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
+    *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
 
 Transactions and Auto-Commit
 ----------------------------

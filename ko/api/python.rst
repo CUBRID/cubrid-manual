@@ -20,54 +20,53 @@ Linux, Unix 및 유사 운영체제에서는 다음과 같은 세 가지 방법�
 
 **기본 환경**
 
-*   CUBRID: 2008 R4.0(8.4.0) 이상
 *   운영체제: Linux: 32 비트/64비트 또는 유사 Unix 운영체제
-*   Python: 2.4 이상(`http://www.python.org/download/ <http://www.python.org/download/>`_)
+*   Python: 2.4 이상(http://www.python.org/download/)
 
 **Yum을 이용한 설치(Fedora, CentOS)**
 
-#. Yum을 이용하여 CUBRID Python 드라이버를 설치하려면, CUBRID 패키지의 위치를 Yum에 알려야 한다. 운영체제에 따라 다음 주소에 접속하여 사용하는 운영체제와 CUBRID 버전에 해당하는 명령어를 찾아 사용한다.
+#.  Yum을 이용하여 CUBRID Python 드라이버를 설치하려면, CUBRID 패키지의 위치를 Yum에 알려야 한다. 운영체제에 따라 다음 주소에 접속하여 사용하는 운영체제와 CUBRID 버전에 해당하는 명령어를 찾아 사용한다.
+    
+    *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
+    *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
+    
+    예를 들어 Fedora 17에 CUBRID 9.0을 설치한 경우에 해당하는 명령어는 다음과 같다. ::
+    
+        rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
+    
+#.  다음 명령어를 실행하여 CUBRID Python 드라이버를 설치한다.
 
-   *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
-   *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
+    ::
 
-   예를 들어 Fedora 17에 CUBRID 9.0을 설치한 경우에 해당하는 명령어는 다음과 같다. ::
-
-    rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
-
-#. 다음 명령어를 실행하여 CUBRID Python 드라이버를 설치한다. ::
-
-    yum install python-cubrid
+        yum install python-cubrid
 
 **소스코드로 설치(Linux)**
 
-소스코드를 컴파일하여 CUBRID Python 드라이버를 설치하려면 Python Development Package가 필요하다. Python Development Package가 설치되어 있지 않다면
-http://www.cubrid.org/wiki_apis/entry/install-python-development-package
-를 참고하여 설치한다.
+소스코드를 컴파일하여 CUBRID Python 드라이버를 설치하려면 Python Development Package가 필요하다. Python Development Package가 설치되어 있지 않다면 http://www.cubrid.org/wiki_apis/entry/install-python-development-package\ 를 참고하여 설치한다.
 
-#. 소스코드를 다음 주소에서 다운로드한다.
+#.  소스 코드를 다음 주소에서 다운로드한다.
 
-   http://www.cubrid.org/?mid=downloads&item=python_driver
-
-#. 다음 명령어를 실행하여 원하는 위치에 다운로드한 파일의 압축을 해제한다. ::
-
-    tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
-
-#. 압축을 해제한 디렉터리로 이동한다. ::
-
-    cd cubrid-python-src
-
-#. 드라이버를 빌드한다. 이 단계와 다음 단계는 루트 사용자 계정으로 실행해야 한다. ::
-
-    python setup.py build
-
-#. 빌드한 드라이버를 설치한다. ::
-
-    python setup.py install
+    http://www.cubrid.org/?mid=downloads&item=python_driver
+    
+#.  다음 명령어를 실행하여 원하는 위치에 다운로드한 파일의 압축을 해제한다. ::
+    
+        tar xvfz cubrid-python-src-8.4.0.0001.tar.gz
+    
+#.  압축을 해제한 디렉터리로 이동한다. ::
+    
+        cd cubrid-python-src
+    
+#.  드라이버를 빌드한다. 이 단계와 다음 단계는 루트 사용자 계정으로 실행해야 한다. ::
+    
+        python setup.py build
+    
+#.  빌드한 드라이버를 설치한다. ::
+    
+        python setup.py install
 
 **Easy Install을 이용한 설치(Linux)**
 
-Easy Install은 자동으로 Python 패키지를 다운로드/빌드/설치/관리할 수 있는 Python 모듈로, setuptools에 포함되어 있다. Easy Install을 사용하면 패키지 인덱스뿐만 아니라 다른 웹 사이트에도 HTTP로 연결하여 패키지를 설치할 수 있다. Perl의 CPAN이나 PHP의 PEAR와 유사하다. Easy Install에 대한 더 자세한 설명은 `http://packages.python.org/distribute/easy_install.html <http://packages.python.org/distribute/easy_install.html>`_ 을 침고한다.
+Easy Install은 자동으로 Python 패키지를 다운로드/빌드/설치/관리할 수 있는 Python 모듈로, setuptools에 포함되어 있다. Easy Install을 사용하면 패키지 인덱스뿐만 아니라 다른 웹 사이트에도 HTTP로 연결하여 패키지를 설치할 수 있다. Perl의 CPAN이나 PHP의 PEAR와 유사하다. Easy Install에 대한 더 자세한 설명은 http://packages.python.org/distribute/easy_install.html\ 을 참고한다.
 
 Easy Install을 이용하여 CUBRID Python 드라이버를 설치하려면 다음 명령어를 입력한다. ::
 
@@ -78,11 +77,11 @@ Windows
 
 Windows에 CUBRID Python 드라이버를 설치하려면 다음과 같이 CUBRID Python 드라이버를 다운로드하여 설치한다.
 
-* 다음 주소에서 운영체제와 Python의 버전에 맞는 드라이버를 다운로드한다.
-
-  http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect
-
-* 다운로드한 파일의 압축을 해제하여 Python이 설치된 경로의 **Lib** 폴더( **C:\\Program Files\\Python\\Lib** ) 안에 복사한다.
+*   다음 주소에서 운영체제와 Python의 버전에 맞는 드라이버를 다운로드한다.
+    
+    http://www.cubrid.org/?mid=downloads&item=python_driver&os=windows&python=detect
+    
+*   다운로드한 파일의 압축을 해제하여 Python이 설치된 경로의 **Lib** 폴더( **C:\\Program Files\\Python\\Lib** ) 안에 복사한다.
 
 Python 프로그래밍
 =================
@@ -108,15 +107,17 @@ Python 예제 프로그램
 
 **Python에서 demodb에 연결**
 
-#. 새 Python 콘솔을 열어 다음과 같이 Python에 CUBRID Python 드라이버를 import한다. ::
+#.  새 Python 콘솔을 열어 다음과 같이 Python에 CUBRID Python 드라이버를 import한다. 
 
-    import CUBRIDdb
-
-#. localhost에 위치한 *demodb* 데이터베이스에 연결을 생성한다.
-
-   .. code-block:: python
-   
-    conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
+    .. code-block:: python
+    
+        import CUBRIDdb
+    
+#.  localhost에 위치한 *demodb* 데이터베이스에 연결을 생성한다.
+    
+    .. code-block:: python
+    
+        conn = CUBRIDdb.connect('CUBRID:localhost:30000:demodb', 'public')
 
 *demodb* 데이터베이스는 비밀번호가 필요하지 않으므로 비밀번호를 입력하지 않았다. 그러나 실제 데이터베이스에 연결할 때에는 비밀번호가 필요하다면 비밀번호를 입력해야 한다.
 `connect <http://packages.python.org/CUBRID-Python/_cubrid-module.html#connect>`_ () 함수의 구문은 다음과 같다. ::
@@ -181,8 +182,6 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
      
     conn.commit()
 
-
-**데이터베이스에서 데이터 조회**
 
 **전체 레코드를 한 번에 조회**
 

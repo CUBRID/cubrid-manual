@@ -59,8 +59,8 @@ CUBRID SHARD
 *   Support "cubrid shard getid" command to verify its shard ID of the shard key.
 *   CUBRID SHARD is now available from Windows.
     
-Administration Tools
---------------------
+Administration Utility
+----------------------
 
 *   "cubrid applyinfo" utility now also shows information about the replication delay.
 *   killtran utility has ability to show the query execution information of each transaction.
@@ -274,7 +274,7 @@ It is allowed to refer the previously specified columns in the VALUES and SET cl
 ::
  
     CREATE TABLE tbl (a INT, b INT);
-    INSERT INTO tbl SET a=0, b=a+1
+    INSERT INTO tbl SET a = 0, b = a + 1;
  
 In the above example, the previous version cannot evaluate b's value, but the fixed version can evaluate b's value as 1 by referring a's value.
  
@@ -283,38 +283,38 @@ The evaluation of an assignment expression is performed from left to right. The 
 Globalization
 -------------
 
-Support for SHOW COLLATION Statement and CHARSET Function, COLLATION Function, and COERCIBILITY Function(CUBRIDSUS-9404)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SHOW COLLATION Statement and CHARSET, COLLATION and COERCIBILITY Function(CUBRIDSUS-9404)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add the SHOW COLLATION statement which outputs the collation information. Also add CHARSET function, COLLATION function, and COERCIBILITY function, which return the charset, collation, and coercibility of the specified string.
+SHOW COLLATION statement which shows the collation information. CHARSET, COLLATION and COERCIBILITY function return the charset, collation and coercibility of its argument.
 
-Support for Collation for Table(CUBRIDSUS-9403)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support Collation for Table(CUBRIDSUS-9403)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-9.0 Beta version allowed collation to be specified for columns only. Version 9.1 allows collation to be specified for tables.
+9.1 allows collation for tables while 9.0 Beta only allowed collation for columns. 
 
 .. code-block:: sql
 
     CREATE TABLE address_book (id INTEGER, name STRING, address1 STRING, address2 STRING) COLLATE utf8_en_cs;
     
-Provide an Utility to Change the Database Collation According to the System Collation(CUBRIDSUS-9495)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+synccolldb Utility to Set the Database Collation According to the System Collation(CUBRIDSUS-9495)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A utility is provided to change the database collation (collation defined in the system catalog table) according to the system collation (collation defined in $CUBRID/conf/cubrid_locales.txt). ::
+"cubrid synccolldb" utility changes the database collation that is managed in the system catalog table according to the system collation that is kept in $CUBRID/conf/cubrid_locales.txt). ::
  
     % cubrid synccolldb testdb
 
-In addition, it has been fixed to output a message which required execution of the cubrid synccolldb utility to synchronize the existing database collation created with the locale library collation by executing the script that created the locale library (make_locale.sh for Linux, make_locale.bat for Windows).   ::
+In addition, it shows a message which required execution of the cubrid synccolldb utility to synchronize the existing database collation created with the locale library collation by executing the script that created the locale library (make_locale.sh for Linux, make_locale.bat for Windows).   ::
 
     To check compatibility and synchronize your existing databases, run:
         cubrid synccolldb <database-name>
 
-The cubrid synccolldb utility changes the collation defined in the system catalog table, not the collation of general tables and data charset.
+The cubrid synccolldb utility changes the collation defined in the system catalog table, not the collation of general tables and the charset of data.
 
-Support for Collation Sorting Based on Backward Accents(CUBRIDSUS-9407)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support Collation with expansion Sort By Backward Accents(CUBRIDSUS-9407)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Support expanded collation (utf8_fr_exp_ab) which sorts Canadian French based on backward accents. Canadian French sorting by backward accents means sorting based on the order of accents given to the end of the string. The weight is checked from the end of the string.
+Support collation with expansion(utf8_fr_exp_ab) which sorts Canadian French based on backward accents. Canadian French sorting by backward accents means sorting based on the order of accents located from the end of the string. The weight is checked from the end of the string.
 
 ::
 
@@ -325,69 +325,69 @@ Support expanded collation (utf8_fr_exp_ab) which sorts Canadian French based on
 Sharding
 --------
 
-Add a Command to Get the Shard ID with the Shard key(CUBRIDSUS-9547)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"cubrid shard getid" command to verify its shard ID of the shard key(CUBRIDSUS-9547)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add a command to get the Shard ID with the Shard key.
+"cubrid shard getid" command to show its shard ID of the given shard key.
 
-The following command outputs the shard ID for shard key 1 on shard1, the shard proxy: ::
+The following example prints the shard ID for shard key 1 on shard1, the shard proxy: ::
 
     % cubrid shard getid -b shard1 1
     
-The -f option allows you to output all information of the shard ID. ::
+The -f option dumps all information of the shard ID. ::
 
     % cubrid shard getid -b shard1 -f 1
     
-Support for SHARD Functionalities for Windows Version(CUBRISUS-9549)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support Windows(CUBRISUS-9549)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Support the SHARD functionality in the Windows version. To use the SHARD functionalities, you need to use the 9.1 version driver.
+CUBRID SHARD is now available from Windows.
 
 Driver
 ------
 
-[JDBC][CCI] Add the Load Balancing Functionality(CUBRIDSUS-8675)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[JDBC][CCI] Support Load Balancing(CUBRIDSUS-8675)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add a functionality to connect an application to the main host and the hosts specified in althosts in a random order when altHosts was added to the connection URL of CCI and JDBC. In the following example of a connection URL, this functionality is activated when the value of loadBalance is set to true.
+Provide a load balancing feature which let applications connect to the primary host and the hosts specified in althosts in a random order when altHosts was added to the connection URL of CCI and JDBC. In the following example of a connection URL, this functionality is activated when the value of loadBalance is set to true.
 
 ::
 
     jdbc:cubrid:host1:port1:demodb:::?althosts=host2:port2,host3:port3&loadBalance=true
     
-[CCI] Add a Function to Close Resultset(CUBRIDSUS-9269)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] cci_close_query_result Function(CUBRIDSUS-9269)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Different from the JDBC driver which provided two methods to close resultset and statement respectively, the CCI driver had one function, cci_close_req_handle, to close both. The cci_close_query_result function has been added to close resultset. When a new function is not called, the memory for resultset is occupied until the statement is closed. So, the memory usage may be increased.
+Different from the JDBC driver which provided two methods to close resultset and statement respectively, the CCI driver had one function, cci_close_req_handle, to close both. The cci_close_query_result function closes the given resultset. When a new function is not called, the memory for resultset is occupied until the statement is closed. So, the memory usage may be increased.
 
 In the revised version, when the cci_close_req_handle function is called without calling the cci_close_query_result function, both resultset and the statement are closed like the previous version.
 
 Configuration
 -------------
 
-Set Whether to Execute the Procedure to Check If the Database Server Process and the Client Process that Connected to the Database Server Process, such as the Broker Application Server, Have Run Normally or Not(CUBRIDSUS-9308)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check_peer_alive system parameter(CUBRIDSUS-9308)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add the check_peer_alive system parameter to set whether to execute the procedure to check if the database server process (cub_server) and the client process that connected to the database server process have run normally or not. The types of client processes are including the broker application server (cub_cas) process, the replication log reflection server (copylogdb), the replication log copy process (applylogdb), and the CSQL interpreter (csql).
+Introduce check_peer_alive system parameter to set whether to execute the procedure to check if the database server process (cub_server) and the client process that connected to the database server process have run normally or not. The types of client processes are including the broker application server (cub_cas) process, the replication log reflection server (copylogdb), the replication log copy process (applylogdb), and the CSQL interpreter (csql).
 
 When a server process and a client process do not receive any response for a long time (e.g., 5 seconds or longer) while waiting for data via the network after they have been connected, they check if the opponent normally operates or not based on the configuration. If they decide that the opponent does not normally operate, they disconnect the connection by force.
 
 When the ECHO(7) port is blocked by the firewall configuration, the server process or the client process may mistake the opponent process as terminated. Set the parameter to none to avoid this problem.
 
-Determine Whether the Broker Common Application Server (CAS) is Hung or Not(CUBRIDSUS-7558)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ENABLE_MONITOR_HANG broker parameter(CUBRIDSUS-7558)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Add a functionality to block access to the corresponding broker when it is determined that a certain rate of CASs is hung. This functionality is enabled when the ENABLE_MONITOR_HANG parameter is set to ON.
 
 When a CAS hang continues for more than one minute, the broker process determines that the CAS is hung. If the broker process is determined as abnormal based on the number of CASs, applications attempting to access the broker are blocked and led to the alternative hosts (altHosts) specified in the access URL.
 
-Operating Tools
----------------
+Administration Utility
+----------------------
 
-Improve to Output the Replication Delay Information(CUBRIDSUS-9525)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Provide Replication Delay Information(CUBRIDSUS-9525)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improve to output the replication delay information when copying the transaction logs and outputting the transaction log reflection information by using the applylogdb command in the HA environment. The following example shows how to output the replication delay information:
+"cubrid applyinfo" utility now also shows information about the replication delay. It provides delay to copy transaction logs and apply ones. The following example shows how to output the replication delay information:
 
 ::
 
@@ -403,10 +403,10 @@ Improve to output the replication delay information when copying the transaction
     Delayed log page count         : 1459
     Estimated Delay                : 22 second(s)
 
-Add Tranlist Utility to Output Transaction Information(CUBRIDSUS-9601)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"cubrid tranlist" Utility(CUBRIDSUS-9601)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add cubrid tranlist utility which outputs the transaction information of the database. The utility can only be used by the users who belong to DBA or DBA groups.
+"cubrid tranlist" utility which shows the transaction information of the database. DBA and DBA groups are only allowed to use it.
 
 ::
 
@@ -419,10 +419,10 @@ Add cubrid tranlist utility which outputs the transaction information of the dat
        3(COMMITTED)         dba        myhost            1824           broker1_cub_cas_3
     -------------------------------------------------------------------------------------
 
-Add a Functionality to Output the Query Execution Status of Transactions(CUBRIDSUS-9588)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+killtran utility shows the query execution information(CUBRIDSUS-9588)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add a functionality to output the query execution status of transactions to cubrid killtran with –q(--query-exec-info) option.
+cubrid killtran with -q(--query-exec-info) option shows the query execution information of each transaction.
 
 ::
 
@@ -444,10 +444,10 @@ The status of a query execution includes the following information:
 * Wait for lock holder: The list of transactions which hold the lock when the current transaction is in lock waiting
 * SQL Text: The query statement being executed (up to 30 characters)
 
-Add a Functionality to killtran Utility to Remove the Transaction Which is Executing a Specific SQL(CUBRIDSUS-9653)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+killtran utility can remove transactions with SQL ID(CUBRIDSUS-9653)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add a functionality to the cubrid killtran utility to remove a specific transaction based on the SQL ID.
+killtran utility has ability to remove transactions which executes a designated SQL.
 
 ::
 
@@ -467,31 +467,31 @@ Add a functionality to the cubrid killtran utility to remove a specific transact
 
     % cubrid killtran --kill-sql-id=cdcb58552e320 -f testdb    
     
-Add a Functionality to the Killtran Utility to Abort Several Transactions at Once(CUBRIDSUS-9601)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-i option of killtran utility accepts multiple transactions(CUBRIDSUS-9601)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Expanded the -i option of the cubrid killtran utility to enter the transaction IDs to be aborted by separating them with commas (,).
+You can specify several transactions with -i option of the killtran utility to remove them at once.
 
 ::
 
     % cubrid killtran -i 1,3,8 testdb
 
-Add a Function to Log the Query Statements which Exceeded the Specified Time and the Query Execution Plan Information(CUBRIDSUS-6987)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+to Log the Query which Exceeded the Specified Time and the Query Execution Plan Information(CUBRIDSUS-6987)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 With the system parameter sql_trace_slow_msecs, add a function to log the query statements which exceeded the specified time and the query execution plan information to a log. When the value of the system parameter sql_trace_execution_plan is yes, the SQL statement, query execution plan, and the cubrid statdump information are recorded in the server error log file and the broker application server (CAS) log file. When the cubrid plandump is executed, the corresponding SQL statement and the query execution plan are output.
 
 However, the corresponding information is recorded in the server error log file only when the value of the error_log_level parameter is NOTIFICATION.
 
-Add a Command to Check the Parameters of Broker and Shard Being Executed(CUBRIDSUS-7771)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Show Parameters of Broker and Shard(CUBRIDSUS-7771)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add "cubrid broker info" command and "cubrid shard info" command to verify the parameter information of the broker being executed.
+"cubrid broker info" and "cubrid shard info" command shows the parameter information of the broker.
 
-Expanded Utilities of Converting and Executing Broker Logs(CUBRIDSUS-8804)
+New options for broker_log_converter and broker_log_runner(CUBRIDSUS-8804)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add the -i option which outputs the query ID comment before the query statement to cubrid broker_log_converter, the broker log conversion utility. In addition, add two options to the cubrid broker_log_runner utility which re-executes a query with the output file converted by the cubrid broker_log_converter utility: the -s option, which outputs the statdump information for each query, and the -a option, which executes a query with auto commit mode.
+cubrid broker_log_converter, the broker log conversion utility prints the query ID comment before the query statement with -i option. cubrid broker_log_runner utility which re-executes a query with the output file converted by the cubrid broker_log_converter utility has two new options: -s option which prints the statdump information for each query and -a option which executes a query with auto commit mode.
 
 .. _changed-behaviors91:
 
@@ -501,8 +501,8 @@ Behavioral Changes
 Globalization
 -------------
 
-Changes of Collation Coercibility Level(CUBRIDSUS-10057)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Change Collation Coercibility Level(CUBRIDSUS-10057)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Change the coercibility level which indicates the level of converting the collation with high coercibility to the collation with low coercibility, as shown in the following table. Notably, binary collation lowers the coercibility to eliminate inconsistency of LIKE query result between the host variable and the string constant.
 

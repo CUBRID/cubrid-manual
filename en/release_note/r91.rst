@@ -7,8 +7,8 @@ CUBRID 9.1 Release Notes
 ************************
 
 
-Release Note Information
-========================
+Release Notes Information
+=========================
 
 This document includes information on CUBRID 9.1 (Build No. 9.1.0.0209). 
 CUBRID 9.1 includes all of the fixed errors and improved functionalities that were detected in the CUBRID 9.0 Beta version and applied to the previous versions.

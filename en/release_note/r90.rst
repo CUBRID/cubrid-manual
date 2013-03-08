@@ -3391,7 +3391,7 @@ Add a connection URL attribute used to allow debugging logs to be written (CUBRI
 
     ::
 
-        URL=jdbc:CUBRID:192.168.0.1:33000:demodb:::?althosts=192.168.0.2:33000,192.168.0.3:33000
+        URL=jdbc:CUBRID:192.168.0.1:33000:demodb:::?altHosts=192.168.0.2:33000,192.168.0.3:33000
 
     You can also include "?" in a database name of URL in the Linux version.
 
@@ -4077,8 +4077,8 @@ Specifying a question mark when entering connection information as a URL string 
 
     ::
     
-        URL=jdbc:CUBRID:127.0.0.1:31000:db1:::althosts=127.0.0.2:31000,127.0.0.3:31000 – Error
-        URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?althosts=127.0.0.2:31000,127.0.0.3:31000 – Normal
+        URL=jdbc:CUBRID:127.0.0.1:31000:db1:::altHosts=127.0.0.2:31000,127.0.0.3:31000 – Error
+        URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?altHosts=127.0.0.2:31000,127.0.0.3:31000 – Normal
 
 Port configuration is required if the protocol between the master and server processes is changed, or if two versions are running at the same time (CUBRIDSUS-3564)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

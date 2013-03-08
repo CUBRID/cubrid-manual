@@ -99,7 +99,7 @@ New Features
 SQL
 ---
 
-WIDTH_BUCKET Function(CUBRIDSUS-4209)
+WIDTH_BUCKET function(CUBRIDSUS-4209)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 WIDTH_BUCKET function evenly splits the range among the buckets and assigns sequential numbers to the buckets. That is, the WIDTH_BUCKET function creates an equi-width histogram. The range is specified by specifying the minimum value and the maximum value. The range is evenly divided and bucket numbers are assigned sequentially given from 1.
@@ -126,7 +126,7 @@ The following example shows how to split the range of eight customers from '1950
       'Peter'               10/25/1988            5
       'Ralph'               03/17/1995            6
 
-NTILE Analytic Function(CUBRIDSUS-9688)
+NTILE Analytic function(CUBRIDSUS-9688)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 NTILE analytic function evenly splits the range value among the buckets and assigns sequential numbers to the buckets. That is, the NTILE function creates an equi-height histogram.
@@ -151,7 +151,7 @@ The following example shows how to split the row numbers of eight customers into
       'Peter'               10/25/1988            4
       'Ralph'               03/17/1995            5
 
-LEAD and LAG Analytic Function(CUBRIDSUS-9414)
+LEAD and LAG analytic function(CUBRIDSUS-9414)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 LEAD and LAG analytic function returns the column information of the next row and the previous one based on the current for each.
@@ -203,7 +203,7 @@ The following example shows how to sort employee numbers and output the previous
       'Peter'                     14006        13077
       'Ralph'                     23518        14006
         
-TRUNC Function accepts DATE, DATETIME and TIMESTAMP Types(CUBRIDSUS-9413)
+TRUNC function accepts DATE, DATETIME and TIMESTAMP types(CUBRIDSUS-9413)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 TRUNC function truncates the DATE, DATETIME and TIMESTAMP type values with the specified format.
@@ -218,7 +218,7 @@ TRUNC function truncates the DATE, DATETIME and TIMESTAMP type values with the s
     ============
      01/01/2012
 
-ROUND Function accepts DATE, DATETIME and TIMESTAMP Types(CUBRIDSUS-9488)
+ROUND function accepts DATE, DATETIME and TIMESTAMP types(CUBRIDSUS-9488)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ROUND function rounds off the DATE, DATETIME and TIMESTAMP type values with the specified format.
@@ -233,7 +233,7 @@ ROUND function rounds off the DATE, DATETIME and TIMESTAMP type values with the 
     ============
      01/01/2013
 
-Support New Index Hint Clause(CUBRIDSUS-6675)
+Support new index hint clause(CUBRIDSUS-6675)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Support new index hint specification syntaxes, such as USE INDEX, FORCE INDEX and IGNORE INDEX clauses, as well as the general USING INDEX clause.
@@ -248,12 +248,12 @@ In addition, supports the "USING INDEX index_name(-)" syntax that let optimizer 
 
      SELECT * FROM tbl  WHERE col1 < 4 USING INDEX idx1(-);
      
-SQL Hints for UPDATE JOIN and DELETE JOIN Statement(CUBRIDSUS-9491)
+SQL hints for UPDATE JOIN and DELETE JOIN statement(CUBRIDSUS-9491)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 SQL hints such as ORDERED, USE_DESC_IDX, NO_COVERING_INDEX, NO_DESC_IDX, USE_NL, USE_IDX, USE_MERGE, NO_MULTI_RANGE_OPT, and RECOMPILE are allowed for the UPDATE JOIN and DELETE JOIN statements.
 
-Index Hints for MERGE statement(CUBRIDSUS-10134)
+Index hints for MERGE statement(CUBRIDSUS-10134)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Support Index Hints, for instance, USE_UPDATE_IDX, USE_INSERT_IDX for MERGE statement. 
@@ -266,7 +266,7 @@ USE_UPDATE_IDX hint is applied to ON clause and WHERE clause of UPDATE clause wh
     WHEN MATCHED THEN UPDATE SET t.j=s.j WHERE s.i <> 1
     WHEN NOT MATCHED THEN INSERT VALUES(i,j);
 
-Refer Previously Specified Columns in the VALUES and SET clauses of INSERT statement(CUBRIDSUS-3112)
+Refer previously specified columns in the VALUES and SET clauses of INSERT statement(CUBRIDSUS-3112)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is allowed to refer the previously specified columns in the VALUES and SET clauses of INSERT statement. For example, when the expression like "b = a + 1" is evaluated, a column's value which was previously specified can be referred.
@@ -283,7 +283,7 @@ The evaluation of an assignment expression is performed from left to right. The 
 Globalization
 -------------
 
-SHOW COLLATION Statement and CHARSET, COLLATION and COERCIBILITY Function(CUBRIDSUS-9404)
+SHOW COLLATION statement and CHARSET, COLLATION and COERCIBILITY Function(CUBRIDSUS-9404)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 SHOW COLLATION statement which shows the collation information. CHARSET, COLLATION and COERCIBILITY function return the charset, collation and coercibility of its argument.
@@ -297,7 +297,7 @@ Support Collation for Table(CUBRIDSUS-9403)
 
     CREATE TABLE address_book (id INTEGER, name STRING, address1 STRING, address2 STRING) COLLATE utf8_en_cs;
     
-synccolldb Utility to Set the Database Collation According to the System Collation(CUBRIDSUS-9495)
+synccolldb utility to set the Database collation according to the system collation(CUBRIDSUS-9495)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "cubrid synccolldb" utility changes the database collation that is managed in the system catalog table according to the system collation that is kept in $CUBRID/conf/cubrid_locales.txt). ::
@@ -311,7 +311,7 @@ In addition, it shows a message which required execution of the cubrid synccolld
 
 The cubrid synccolldb utility changes the collation defined in the system catalog table, not the collation of general tables and the charset of data.
 
-Support Collation with expansion Sort By Backward Accents(CUBRIDSUS-9407)
+Support collation with expansion sort by backward accents(CUBRIDSUS-9407)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Support collation with expansion(utf8_fr_exp_ab) which sorts Canadian French based on backward accents. Canadian French sorting by backward accents means sorting based on the order of accents located from the end of the string. The weight is checked from the end of the string.
@@ -349,11 +349,11 @@ Driver
 [JDBC][CCI] Support Load Balancing(CUBRIDSUS-8675)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Provide a load balancing feature which let applications connect to the primary host and the hosts specified in althosts in a random order when altHosts was added to the connection URL of CCI and JDBC. In the following example of a connection URL, this functionality is activated when the value of loadBalance is set to true.
+Provide a load balancing feature which let applications connect to the primary host and the hosts specified in altHosts in a random order when altHosts was added to the connection URL of CCI and JDBC. In the following example of a connection URL, this functionality is activated when the value of loadBalance is set to true.
 
 ::
 
-    jdbc:cubrid:host1:port1:demodb:::?althosts=host2:port2,host3:port3&loadBalance=true
+    jdbc:cubrid:host1:port1:demodb:::?altHosts=host2:port2,host3:port3&loadBalance=true
     
 [CCI] cci_close_query_result Function(CUBRIDSUS-9269)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -384,7 +384,7 @@ When a CAS hang continues for more than one minute, the broker process determine
 Administration Utility
 ----------------------
 
-Provide Replication Delay Information(CUBRIDSUS-9525)
+Provide replication delay information(CUBRIDSUS-9525)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "cubrid applyinfo" utility now also shows information about the replication delay. It provides delay to copy transaction logs and apply ones. The following example shows how to output the replication delay information:
@@ -403,7 +403,7 @@ Provide Replication Delay Information(CUBRIDSUS-9525)
     Delayed log page count         : 1459
     Estimated Delay                : 22 second(s)
 
-"cubrid tranlist" Utility(CUBRIDSUS-9601)
+"cubrid tranlist" utility(CUBRIDSUS-9601)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "cubrid tranlist" utility which shows the transaction information of the database. DBA and DBA groups are only allowed to use it.
@@ -476,14 +476,14 @@ You can specify several transactions with -i option of the killtran utility to r
 
     % cubrid killtran -i 1,3,8 testdb
 
-to Log the Query which Exceeded the Specified Time and the Query Execution Plan Information(CUBRIDSUS-6987)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Log the query which exceeded the specified time and the query execution plan information(CUBRIDSUS-6987)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 With the system parameter sql_trace_slow_msecs, add a function to log the query statements which exceeded the specified time and the query execution plan information to a log. When the value of the system parameter sql_trace_execution_plan is yes, the SQL statement, query execution plan, and the cubrid statdump information are recorded in the server error log file and the broker application server (CAS) log file. When the cubrid plandump is executed, the corresponding SQL statement and the query execution plan are output.
 
 However, the corresponding information is recorded in the server error log file only when the value of the error_log_level parameter is NOTIFICATION.
 
-Show Parameters of Broker and Shard(CUBRIDSUS-7771)
+Show parameters of broker and shard(CUBRIDSUS-7771)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "cubrid broker info" and "cubrid shard info" command shows the parameter information of the broker.
@@ -501,7 +501,7 @@ Behavioral Changes
 Globalization
 -------------
 
-Change Collation Coercibility Level(CUBRIDSUS-10057)
+Change collation coercibility level(CUBRIDSUS-10057)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Change the coercibility level which indicates the level of converting the collation with high coercibility to the collation with low coercibility, as shown in the following table. Notably, binary collation lowers the coercibility to eliminate inconsistency of LIKE query result between the host variable and the string constant.
@@ -547,7 +547,7 @@ Change the coercibility level which indicates the level of converting the collat
 | 11                     | Host variables**, user-defined variables                                                                          |
 +------------------------+-------------------------------------------------------------------------------------------------------------------+
 
-Modify SQL Function That Required Two or More String Arguments to Execute the SQL Function Only when the Input Argument is a Collation which can be Converted to Either of the Two(CUBRIDSUS-9920)
+Modify SQL function that required two or more string arguments to execute the SQL function only when the input argument is a collation which can be converted to either of the two(CUBRIDSUS-9920)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When two or more arguments have been given to the IF, CASE, DECODE, or FIELD function, the function can be executed only when the collation can be converted to either of the two.
@@ -577,7 +577,7 @@ If the collation of the input argument is non-binary, it cannot convert either o
     'if ' requires arguments with compatible collations.
 
 
-Modify Not to Allow Hash Partitioning of the Table by Using the Non-binary Collation String(CUBRIDSUS-10156)
+Modify not to allow hash partitioning of the table by using the non-binary collation string(CUBRIDSUS-10156)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The table is not hash-partitioned by using the non-binary collation string.
@@ -600,12 +600,12 @@ The table is not hash-partitioned by using the non-binary collation string.
 Driver
 ------
 
-[JDBC][CCI] Modify to Commit Whenever a Function Which Executed Several Query Statements in the Array at once Executes Each Query Statement in the Auto Commit Mode(CUBRIDSUS-6148)
+[JDBC][CCI] Modify to commit whenever a function which executed several query statements in the array at once executes each query statement in the auto commit mode(CUBRIDSUS-6148)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the auto commit mode, when the cci_execute_array function and the cci_execute_batch function, and the Statement.executeBatch method and the PreparedStatement.executeBatch method of JDBC have processed several query statements in the array at once, commit has been executed after executing all query statements. It has been fixed to commit whenever each query statement was executed.
 
-[JDBC] Only the BIT Type Values were Allowed as Binding the Values for the PreparedStatement object by Using the setBoolean Method(CUBRIDSUS-9205)
+[JDBC] Only the BIT type values were allowed as binding the values for the PreparedStatement object by using the setBoolean method(CUBRIDSUS-9205)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There was a problem in which only the BIT type values were allowed as binding the values for the PreparedStatement object by using the setBoolean method in JDBC. Now, the BIT type values are excluded but all numeric types such as SMALLINT, INTEGER, BIGINT, DECIMAL, REAL, DOUBLE, and MONETARY or all character types such as CHAR and VARCHAR can be bound.
@@ -625,7 +625,7 @@ The related CCI_QUERY_RESULT_* macros are like below.
 *   CCI_QUERY_RESULT_STMT_TYPE
 *   CCI_QUERY_RESULT_OID
 
-[CCI] Change the Operation Method for Setting DB User and Password by Using cci_property_set Function and cci_connect_with_url Function(CUBRIDSUS-9393)
+[CCI] Change the operation method for setting DB user and password by using cci_property_set function and cci_connect_with_url function(CUBRIDSUS-9393)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The operation method of setting the DB user and password of the cci_property_set function and the cci_connect_with_url function was unified. After the modification, the two functions operate as follows:
@@ -645,18 +645,18 @@ In the previous versions, when setting the DB user and password of the cci_conne
 Default Setting Changes
 -----------------------
 
-Remove the CUBRID_LANG Environment Variable and Add an Alternative Environment Variable(CUBRIDSUS-9719)(CUBRIDSUS-9468)
+Remove the CUBRID_LANG environment variable and add an alternative environment variable(CUBRIDSUS-9719)(CUBRIDSUS-9468)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Remove the CUBRID_LANG environment variable and add the CUBRID_CHARSET environment variable that sets the database charset and the CUBRID_MSG_LANG environment variable that sets the charset of each message. The CUBRID_CHARSET environment variable should be set. If the CUBRID_MSG_LANG environment variable is omitted, it follows the setting of the CUBRID_CHARSET environment variable.
 
 
-Limit the Maximum Size of the sort_buffer_size System Parameter to 2G(CUBRIDSUS-9582)
+Limit the maximum size of the sort_buffer_size system parameter to 2G(CUBRIDSUS-9582)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Limit the maximum size of the sort_buffer_size system parameter to 2G. In previous versions, the task was abnormally terminated when sort_buffer_size was set to a value larger than 2G and the sort_buffer with a size larger than 2 G was used for tasks requiring sorting, such as creating indexes.
 
-Change the Operation Method According to the Specification of the call_stack_dump_activation_list Parameter (CUBRIDSUS-9836)
+Change the operation method according to the specification of the call_stack_dump_activation_list parameter (CUBRIDSUS-9836)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The operation method of cubrid.conf according to the specification of the call_stack_dump_activation_list parameter has been changed.
@@ -667,23 +667,23 @@ The operation method of cubrid.conf according to the specification of the call_s
 If the value of call_stack_dump_activation_list is not specified, it is set to "-2, -7, -13, -14, -17, -19 , -21, -22, -45, -46, -48, -50, -51, -52, -76, -78, -79, -81, -90, -96, -97, -313, -314, -407, -414, -415, -416, -417, -583, -603, -836, -859, -890, -891, -976, -1040, -1075" by default, as it was.
 
 
-Remove the OFF Value Setting from the KEEP_CONNECTION Broker Parameter(CUBRIDSUS-5316)
+Remove the OFF value setting from the KEEP_CONNECTION broker parameter(CUBRIDSUS-5316)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Remove the option of OFF value setting for the broker parameter, KEEP_CONNECTION. In 2008 R4.x and earlier versions, when the parameter value is set to OFF, the user-defined variable and the LAST_INSERT_ID, ROW_COUNT, PREPARE statement are not executed normally.
 
-Remove the SELECT_AUTO_COMMIT Broker Parameter(CUBRIDSUS-9326)
+Remove the SELECT_AUTO_COMMIT broker parameter(CUBRIDSUS-9326)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The SELECT_AUTO_COMMIT broker parameter was removed, as it allowed auto commit for the SELECT statement even when auto commit mode was OFF.
 
-Modify the Operation Method According to the Values of Parameters which Defined the Maximum Memory Usage of MaCAS Process(CUBRIDSUS-10260)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modify the operation of CAS process by the values of parameters which defining the maximum memory usage of CAS Process(CUBRIDSUS-10260)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Limited the range of the value of APPL_SERVER_MAX_SIZE_HARD_LIMIT, the broker parameter, to a value within the range of 1 to 2,097,151. If the value is outside of the range the broker cannot run. 
 In addition, when the value of APPL_SERVER_MAX_SIZE_HARD_LIMIT is changed to a value smaller than APPL_SERVER_MAX_SIZE by using broker_changer, a warning message is displayed.
 
-Reduce the Default Setting Value of the Broker Parameter Which Specified the Size of SQL Log File from 100 MB to 10 MB(CUBRIDSUS-9944)
+Reduce the default setting value of the broker parameter which specified the size of SQL log file from 100 MB to 10 MB(CUBRIDSUS-9944)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Reduce the default setting value of SQL_LOG_MAX_SIZE of cubrid_broker.conf from 100 MB to 10 MB. If a user of a previous version wants to leave SQL logs equivalent to the existing volume of the SQL logs after upgrading to the new version, set the value of SQL_LOG_MAX_SIZE to 100,000 (unit: KB).
@@ -691,7 +691,7 @@ Reduce the default setting value of SQL_LOG_MAX_SIZE of cubrid_broker.conf from 
 HA
 --
 
-Modify to Process the SELECT Statement in the HA Environment when the Node is in to-be-active State(CUBRIDSUS-8896)
+Modify to process the SELECT statement in the HA environment when the node is in to-be-active state(CUBRIDSUS-8896)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The SELECT statement can be processed in the HA environment when the node is in to-be-active state.
@@ -699,7 +699,7 @@ The SELECT statement can be processed in the HA environment when the node is in 
 Other
 -----
 
-Improve and Change the Broker Status Output(CUBRIDSUS-9602)
+Improve and change the broker status output(CUBRIDSUS-9602)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Some issues related to outputting the broker status using the cubrid broker status command have been added or modified as follows:
@@ -732,7 +732,7 @@ Improvements and Fixes
 Performance and Optimization
 ----------------------------
 
-Improve HA Replication Performance(CUBRIDSUS-8114)
+Improve HA replication performance(CUBRIDSUS-8114)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Significantly improve the replication application performance in the HA environment. 
@@ -746,25 +746,25 @@ When the master server is loaded with a large YCSB benchmark workload, the repli
     | CUBRID 9.1        |             1.18  |
     +-------------------+-------------------+
 
-Improve the DELETE Performance when INSERT/DELETE are Repeatedly Executed(CUBRIDSUS-5222)
+Improve the DELETE performance when INSERT/DELETE are repeatedly executed(CUBRIDSUS-5222)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The time taken to execute DELETE became longer when INSERT/DELETE was executed repeatedly. This has been fixed, and now the time taken to execute DELETE is similar to the initial execution time, even when INSERT/DELETE is repeatedly executed.
 
-Improve the DELETE Performance of Databases with an Overflow Page(CUBRIDSUS-5878)
+Improve the DELETE performance of databases with an overflow page(CUBRIDSUS-5878)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improve the Performance of Accessing INSERT after Recreating TRUNCATE Table or Index Repeatedly(CUBRIDSUS-6501)
+Improve the performance of accessing INSERT after recreating TRUNCATE table or index repeatedly(CUBRIDSUS-6501)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Previously, the performance of accessing INSERT was degraded after recreating TRUNCATE table or index repeatedly. This degradation has been reduced.
 
-Improve Performance of INSERT ON DUPLICATE KEY UPDATE and REPLACE Statement(CUBRIDSUS-8337)
+Improve performance of INSERT ON DUPLICATE KEY UPDATE and REPLACE statement(CUBRIDSUS-8337)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Improve the performance by searching the index directly, rather than executing the SELECT statement internally to search the records which violated the uniqueness. In addition, the performance has been improved by directly modifying the method of executing the UPDATE statement when the INSERT ON DUPLICATE KEY UPDATE statement was executed on the server.
 
-Improve Analytic Function Performance(CUBRIDSUS-8487)
+Improve analytic function performance(CUBRIDSUS-8487)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The analytic function performance has been improved.
@@ -814,7 +814,7 @@ The analytic function performance has been improved.
           FROM t) x 
     WHERE x.rn > 999999;
 
-Improve Multi-key Range Optimization(CUBRIDSUS-10278)(CUBRIDSUS-6091)
+Improve multi-key range optimization(CUBRIDSUS-10278)(CUBRIDSUS-6091)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The multi-key range optimization has been significantly improved.
@@ -851,7 +851,7 @@ The multi-key range optimization has been significantly improved.
 
 *   Fixed to execute the multi-key range optimization at the stage of creating the query action plan in order to view the multi-key range optimization through the query plan. Multi-key range optimization is applied based on the final result size defined by the LIMIT clause or orderby_num(). For example, to get the final result larger than the value set by parameter, the multi-key range optimization execution plan is not applied.
 
-Improve to Apply Optimization of the ORDER BY Clause if there was No Affect on the Result Order When the Column Type of the ORDER BY Clause was Converted(CUBRIDSUS-7418)
+Improve to apply optimization of the ORDER BY clause if there was no affect on the result order when the column type of the ORDER BY clause was converted(CUBRIDSUS-7418)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Improve to apply 'skip order by' (optimization of the ORDER BY clause that retrieved the value in the order sorted by index, not by executing sorting) if the result order before converting the column type of the ORDER BY clause was same with the result order after the conversion. 
@@ -865,7 +865,7 @@ Improve to apply 'skip order by' (optimization of the ORDER BY clause that retri
     WHERE a > '0000-00-00 00:00:00'
     ORDER BY cast (a AS DATE);
 
-Improve the GROUP BY Query Including the LIMIT Clause(CUBRIDSUS-6400)
+Improve the GROUP BY query including the LIMIT clause(CUBRIDSUS-6400)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Scan is immediately terminated when the GROUP BY query that includes the LIMIT clause reaches the result count of the LIMIT clause if GROUP BY omit optimization is applied.
@@ -890,7 +890,7 @@ Improve the inefficiency of terminating a query after navigating the N+1st recor
 
     SELECT * FROM t1 WHERE a > 0 AND b = 1 LIMIT 3;    
     
-Reduce the Time Taken to Run the Broker Common Application Server (CAS) until the Maximum Connection Count (CUBRIDSUS-9067)
+Reduce the time taken to run the broker common application server (CAS) until the maximum connection count (CUBRIDSUS-9067)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the broker starts, as many CASs are running as the value of MIN_NUM_APPL_SERVER, the broker parameter. As the number of applications connected to the CAS gets larger, the CASs run up to the MAX_NUM_APPL_SERVER value. In 9.1 version, the time taken to run CASs to the MAX_NUM_APPL_SERVER has been reduced.
@@ -908,25 +908,25 @@ Add a function to limit the disk output volume to reduce the effect caused by ad
     % cubrid addvoldb -C --db-volume-size=2G --max-writesize-in-sec=1M testdb
     
 
-Improve Efficiency of Temporary Volume Usage in Overflow Record Sorting Process(CUBRIDSUS-9772)
+Improve efficiency of temporary volume usage in overflow record sorting process(CUBRIDSUS-9772)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Improve in order to enhance the efficiency of temporary volume usage when the overflow record is included as sorting is required while creating indexes or processing queries. The temporary volume is expanded only when required and the reusable space is utilized.
 
-Temp Volume Not Removed when Restarting the Server after Abnormal Termination(CUBRIDSUS-10195)
+Temp volume not removed when restarting the server after abnormal termination(CUBRIDSUS-10195)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Memory Leak that Occurred in the Command which Periodically Outputs the Shard Status Information(CUBRIDSUS-10393)
+Memory leak that occurred in the command which periodically outputs the shard status information(CUBRIDSUS-10393)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix memory leak in the "cubrid shard status -c -s 1" command which periodically outputs the Shard status information.
 
-More Precise Forecasting of Memory Usage Space Required to Sort Query Result(CUBRIDSUS-1339)
+More precise forecasting of memory usage space required to sort query result(CUBRIDSUS-1339)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The possibility of external sorting which requires disk usage has been reduced through more precise forecasting of the memory usage space required to sort the query results.
 
-Several Volumes Created at Once when Volume was Automatically Increased(CUBRIDSUS-10295)
+Several volumes created at once when volume was automatically increased(CUBRIDSUS-10295)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Several volumes would be created at once when several clients simultaneously required automatic volume expansion. This problem has been fixed.
@@ -934,34 +934,34 @@ Several volumes would be created at once when several clients simultaneously req
 Stability
 ---------
 
-DB Server Process Hang Due to Internal Problem of the Lock Manager(CUBRIDSUS-10329)(CUBRIDSUS-10009)
+DB server process hang due to internal problem of the lock manager(CUBRIDSUS-10329)(CUBRIDSUS-10009)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Server process hang would occur due to problems in the lock manager while getting lock and due to internal errors caused by an incorrect lock timeout. These errors have been fixed.
 
-Memory Leak and Abnormal Server Termination that Might Occur When Deadlock was Detected(CUBRIDSUS-10378)
+Memory leak and abnormal server termination that might occur when deadlock was detected(CUBRIDSUS-10378)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the problems of memory leak and abnormal server termination that might occur when deadlock was detected.
 
-Archive Log not Cleaned after Checkpoint(CUBRIDSUS-9848)
+Archive log not cleaned after checkpoint(CUBRIDSUS-9848)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the phenomenon that would result in the archive log not being cleaned up after executing checkpoint to flush the data to the DB volume in order to cut the recovery time. 
 This phenomenon can frequently occur when checkpoint is executed when there is frequent data flushing.
 In previous versions, the archive log had to be maintained since the checkpoint execution time was not updated. After the update, the archive log before the checkpoint execution time is organized.
 
-Error that Might Occur when Checkpoint Occurs while Allocating a New Page in Standalone Mode(CUBRIDSUS-10444)
+Error that might occur when checkpoint occurs while allocating a new page in standalone mode(CUBRIDSUS-10444)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The error "Skip invalid page in checkpoint" might occur when checkpoint occurred while allocating a new page in the standalone mode. This error has been fixed.
 
-Unlimited Wait of CAS While CLIENT WAIT(CUBRIDSUS-10238)
+Unlimited wait of CAS while CLIENT WAIT(CUBRIDSUS-10238)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the CAS was terminated by a signal or abnormally terminated at a specific time, the CAS process or broker process after would wait indefinitely. This problem has been fixed.
 
-Abnormal CAS Termination when Network Socket Error Occurred in CAS while Receiving DB Server Error(CUBRIDSUS-10401) 
+Abnormal CAS termination when network socket error occurred in CAS while receiving DB server error(CUBRIDSUS-10401) 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The CAS was abnormally terminated when a network socket error was occurred in the CAS while receiving a DB server error. 
@@ -970,8 +970,8 @@ This problem has been fixed. In previous versions, SHARD CAS was abnormally term
 SQL Function and Operator
 -------------------------
 
-Error that would Occur when an Expression was Specified to the PARTITION BY Clause of Analytic Function(CUBRIDSUS-9579)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error when an expression was specified to the PARTITION BY clause of analytic function(CUBRIDSUS-9579)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix an error that would occur when an expression has been specified to the PARTITION BY clause of the analytic function.
 
@@ -992,7 +992,7 @@ The following shows the operation method based on the expression defined in the 
 *   ORDER BY constant expression (ex: 1+0): The constant expression is ignored and not used for ordering/partitioning.
 *   Expression which is not configured with the ORDER BY constant (ex: i, sin(i+1)): The expression is used for ordering/partitioning.
 
-str_to_date Function always Returned the Millisecond as 0(CUBRIDSUS-9553)
+str_to_date function always returned the millisecond as 0(CUBRIDSUS-9553)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Modified a problem in which the STR_TO_DATE function always returned the millisecond as 0.
@@ -1001,13 +1001,13 @@ Modified a problem in which the STR_TO_DATE function always returned the millise
 
     SELECT STR_TO_DATE ('2012-10-31 23:49:29.123', '%Y-%m-%d %H:%i:%s.%f');
     
-Error that would Occur while Executing BLOB_FROM_FILE and CLOB_FROM_FILE Function(CUBRIDSUS-7596)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error while executing BLOB_FROM_FILE and CLOB_FROM_FILE function(CUBRIDSUS-7596)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 An error "Semantic: Cannot coerce blob to type unknown data type." would occur when executing the BLOB_FROM_FILE function and the CLOB_FROM_FILE function.
 
-Fix to Return an Error when Overflow Occurs as Adding the TIME Type Value to the BIGINT Type(CUBRIDSUS-3735)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error when overflow occurs as adding the TIME type value to the BIGINT type(CUBRIDSUS-3735)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 An incorrect result was output when overflow occurred as adding the TIME type value to the BIGINT type. Instead of the incorrect result, an error is now output.
 
@@ -1015,8 +1015,8 @@ An incorrect result was output when overflow occurred as adding the TIME type va
 
     SELECT CAST (9223372036854775807 as bigint) + TIME'11:59:59 pm';
 
-Error when String Convertible to Double Type was Entered to the Host Variable Argument to the SUM Function and the AVG Function(CUBRIDSUS-8789)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error when string convertible to double type was entered to the host variable argument to SUM function and AVG function(CUBRIDSUS-8789)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 An "ERROR: Invalid data type referenced" error would occur when a string convertible to the double type was entered as the host variable argument of the SUM function and the AVG function. This error has been fixed.
 
@@ -1028,7 +1028,7 @@ An "ERROR: Invalid data type referenced" error would occur when a string convert
     PREPARE STMT FROM 'SELECT AVG (?) FROM tbl';
     EXECUTE STMT USING '1.1';
 
-Error when Using the Analytic Function for a Query Statement Including the GROUP BY Clause(CUBRIDSUS-7270)
+Error when using the analytic function for a query statement including the GROUP BY clause(CUBRIDSUS-7270)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to use the analytic function for the query statement that includes the GROUP BY clause.
@@ -1043,7 +1043,7 @@ Fix to use the analytic function for the query statement that includes the GROUP
     ERROR:  before '  from tbl group by a; '
     Nested or invalid use of aggregate function.
 
-Error when a Subquery Has Been Specified as an Input Argument of the SQL Function in the Query Statement without the FROM Clause(CUBRIDSUS-9949)
+Error when a subquery has been specified as an input argument of the SQL function in the query statement without the FROM clause(CUBRIDSUS-9949)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When a subquery was specified as the input argument of the SQL function for the query statement without the FROM clause, the error "ERROR: syntax is ambiguous" would occur. This error has been fixed.
@@ -1052,7 +1052,7 @@ When a subquery was specified as the input argument of the SQL function for the 
 
     SELECT INET_NTOA ((SELECT 3232235530));
 
-Fix to Return NULL when NULL Has Been Given to the SQL Function or the Operator(CUBRIDSUS-10324)
+Fix to return NULL when NULL has been given to the SQL function or the operator(CUBRIDSUS-10324)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to return NULL when NULL is given as an operand or argument, except for special operators (e.g., IS NULL) and SQL functions (e.g., NVL).
@@ -1068,8 +1068,8 @@ Fix to return NULL when NULL is given as an operand or argument, except for spec
     ERROR: before ' , null); '
     Cannot coerce 'a' to type double.
     
-Fix so as not to Create a Function Index for the SPACE Function(CUBRIDSUS-10419)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fix not to create a function index for the SPACE function(CUBRIDSUS-10419)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The SPACE function would return a series of spaces, which are meaningless for index scan. This has been fixed, and now no function index is created for the SPACE function now.
 
@@ -1082,12 +1082,12 @@ The SPACE function would return a series of spaces, which are meaningless for in
     -- After the fix, the following message is output when the above query is executed:
     'space ' function cannot be used for function based index.
 
-Fix so as not to Allow Function-based Index when the Argument of the TO_CHAR Function is String Type(CUBRIDSUS-8977)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fix not to allow function-based index when the argument of the TO_CHAR function is string type(CUBRIDSUS-8977)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the first argument of the TO_CHAR function is string type, the given argument is returned as the function result. In this case, no function-based index is created.
 
-Abnormal Server Process Termination when ENUM Type Column and String were Given to the IN Operator as Operands(CUBRIDSUS-10586)
+Abnormal server process termination when ENUM type column and string were given to the IN operator as operands(CUBRIDSUS-10586)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the ENUM type column and a string (not a set) were given as the operand of the IN operator, the server process would be abnormally terminated without returning an error. The RHS operand of the IN operator requires a set or a subquery. In this case, the string should be enclosed in parentheses to specify the set type.
@@ -1106,7 +1106,7 @@ When the ENUM type column and a string (not a set) were given as the operand of 
 SQL
 ---
 
-Incorrect Query Result when the Left Outer Join Query Included the WHERE Clause Condition(CUBRIDSUS-8867)
+Incorrect query result when the left outer join query included the WHERE clause condition(CUBRIDSUS-8867)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the problem that would cause an incorrect query result to be output when the WHERE clause was included in the query in which the left outer join was nested three times or more, as shown in the following example:
@@ -1119,7 +1119,7 @@ Fix the problem that would cause an incorrect query result to be output when the
               LEFT OUTER JOIN tblD ON tblC.p3key = tblD.p3key 
     WHERE tblD.p3key = 1;
     
-Failure to Execute the LOB Type Operation after Changing the Database Name(CUBRIDSUS-8905)
+Failure to execute the LOB type operation after changing the database name(CUBRIDSUS-8905)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the problem that would cause the LOB type operation, such as the CHAR_TO_BLOB function, to fail to execute, since the directory information was not set for the BLOC/CLOB type as changing the database name. ::
@@ -1136,12 +1136,12 @@ Fix the problem that would cause the LOB type operation, such as the CHAR_TO_BLO
     ERROR: before ' )); '
     External storage is not initialized because the path is not specified in "databases.txt".
 
-Session Operations, such as LAST_INSERT_ID function, Could continuously Fail under Network Failure or HA Failover(CUBRIDSUS-7549)(CUBRIDSUS-7669)
+Session operations, such as LAST_INSERT_ID function, could continuously fail under network failure or HA failover(CUBRIDSUS-7549)(CUBRIDSUS-7669)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem in which, although CASs were not supposed to share session ID for normal actions, when one of the CASs sharing the session ID due to a network failure or HA failover was terminated earlier than the others, session operation execution continuously failed in the applications connected to the remaining CASs. Session operations include: LAST_INSERT_ID functions, PREPARE statements, user session variables defined through SET, and ROW_COUNT() functions.
 
-Query Result would be Wrong when there is a DESC Column in the Multi-Column Index with OR conditions(CUBRIDSUS-9314)
+Query result would be wrong when there is a DESC column in the multi-column index with OR conditions(CUBRIDSUS-9314)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Previously, a query result would be wrong when there was a DESC column in the multi-column index, and the OR condition was given for the part of keys. This problem has been fixed.
@@ -1155,13 +1155,13 @@ Previously, a query result would be wrong when there was a DESC column in the mu
     PREPARE s FROM 'SELECT col1,col2 FROM foo WHERE col1=? AND ((col2=? AND col3<?) OR col2>?);';
     EXECUTE s USING 1, 10, 100, 10;
 
-Auto Commit Was Not Executed When Multiple Queries Have Been Executed at Once in the Auto Commit Mode(CUBRIDSUS-7606)
+Auto commit was not executed when multiple queries have been executed at once in the auto commit mode(CUBRIDSUS-7606)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem in which auto commit was not executed when multiple queries have been executed at once in the auto commit mode, for example, when executing multiple queries as "CREATE TABLE a(col int);INSERT INTO a VALUES (1);".
 
-a Server was Abnormally Terminated when Executing SELECT for the View that Included the ORDER BY clause(CUBRIDSUS-9331)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Server was abnormally terminated when executing SELECT for the view that included the ORDER BY clause(CUBRIDSUS-9331)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a phenomenon in which a server was abnormally terminated when executing SELECT for the VIEW that included the ORDER BY clause, except the case that an asterisk (\*) has been used for the SELECT list.
 
@@ -1179,7 +1179,7 @@ Fix a phenomenon in which a server was abnormally terminated when executing SELE
 
     SELECT u_name FROM au;
 
-Error that Created a View with the Same Name as the Table(CUBRIDSUS-3091)
+Error that created a view with the same name as the table(CUBRIDSUS-3091)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix an error that allowed the creation of a view with the same name as the table.
@@ -1193,7 +1193,7 @@ Fix an error that allowed the creation of a view with the same name as the table
 
     ERROR: Class t1 already exists.
     
-View not to be Created when the ORDER BY Clause Referred to Column that was Hidden in the SELECT List(CUBRIDSUS-9345)
+View not to be created when the ORDER BY clause referred to column that was hidden in the SELECT List(CUBRIDSUS-9345)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause a view to not be created when the ORDER BY clause referred to a column hidden in the SELECT list.
@@ -1203,7 +1203,7 @@ Fix a problem that would cause a view to not be created when the ORDER BY clause
     CREATE TABLE foo (i INTEGER, j INTEGER);
     CREATE VIEW v AS SELECT i FROM foo ORDER BY j;
     
-Incorrect Result or an Abnormal Server Termination when Executing the DISTINCT Query for a View Including the ORDER BY Clause(CUBRIDSUS-9880)
+Incorrect result or an abnormal server termination when executing the DISTINCT query for a view including the ORDER BY clause(CUBRIDSUS-9880)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause the output of an incorrect result or an abnormal server termination when executing the DISTINCT query for a view including the ORDER BY clause.
@@ -1218,7 +1218,7 @@ Fix a problem that would cause the output of an incorrect result or an abnormal 
 
     SELECT DISTINCT t1.i_v FROM v t1, v t2;
 
-Problem Using the Unchanged Table to Execute a Query for a View after Changing the Name of the Table Used for Creating the View(CUBRIDSUS-8536)
+Problem using the unchanged table to execute a query for a view after changing the name of the table used for creating the view(CUBRIDSUS-8536)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The unchanged table was used to execute a query for the view after changing the name of the table used for creating the view. This problem has been fixed.
@@ -1240,7 +1240,7 @@ The unchanged table was used to execute a query for the view after changing the 
     SELECT b FROM foo; -- Q1
     SELECT b FROM v1;  -- Q2
         
-a View which Referred to the View Itself(CUBRIDSUS-3090)
+View which referred to the view itself(CUBRIDSUS-3090)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to prevent the creation of a view referring to the view itself. In previous versions, a view that referred to the view itself could be created, and an error would be returned when a query for the view was executed.
@@ -1251,7 +1251,7 @@ Fix to prevent the creation of a view referring to the view itself. In previous 
     -- In the current version, execution of the following query is not allowed:
     CREATE OR REPLACE VIEW v2 AS SELECT * FROM v2;
     
-Abnormal Application Termination when Executing INSERT for a View that Included the LIMIT Clause(CUBRIDSUS-9940)
+Abnormal application termination when executing INSERT for a view that included the LIMIT clause(CUBRIDSUS-9940)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: sql
@@ -1261,7 +1261,7 @@ Abnormal Application Termination when Executing INSERT for a View that Included 
     
     INSERT INTO tv VALUES ('a');
 
-a Violation of Conditions not to be Detected when Executing the MERGE Statement for a View Including the WITH CHECK OPTION Clause(CUBRIDSUS-10219)
+A violation of conditions not to be detected when executing the MERGE statement for a view including the WITH CHECK OPTION clause(CUBRIDSUS-10219)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In 9.0 Beta version, a query could be executed without detecting violation of the WITH CHECK OPTION condition while executing the MERGE statement as shown below:
@@ -1280,7 +1280,7 @@ In 9.0 Beta version, a query could be executed without detecting violation of th
     MERGE INTO v USING t2 ON (t2.a = v.a)
     WHEN NOT MATCHED THEN INSERT VALUES (t2.a, t2.b);
     
-SELECT Query for the View Created Using the VALUES Clause to Cause an Error(CUBRIDSUS-9982)
+SELECT query for the view created using the VALUES clause to cause an error(CUBRIDSUS-9982)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: sql
@@ -1293,7 +1293,7 @@ SELECT Query for the View Created Using the VALUES Clause to Cause an Error(CUBR
     -- In 9.0 Beta version, the following error would occur:
     ERROR: There are more attributes in class vw than columns in the query specification.
 
-Failure to Execute the MERGE Statement for a View Including the WITH CHECK OPTION Clause(CUBRIDSUS-9174)
+Failure to execute the MERGE statement for a view including the WITH CHECK OPTION clause(CUBRIDSUS-9174)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix an error that would occur when executing the MERGE statement for the view that included the WITH CHECK OPTION clause.
@@ -1318,7 +1318,7 @@ Fix an error that would occur when executing the MERGE statement for the view th
     -- The above query should be executed successfully, but the following error message was output in the previous versions:
     ERROR: Check option exception on view v.
 
-Incorrect MERGE Statement that Might Cause Frequent Modifications of Record in the Target Table of the MERGE Statement(CUBRIDSUS-7489)
+Incorrect MERGE statement that might cause frequent modifications of record in the target table of the MERGE statement(CUBRIDSUS-7489)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When an incorrect record was specified as a target of UPDATE in the target table of the MERGE statement, the record would be updated several times without returning an error. This problem has been fixed. A query should be given to update each record just once while executing the whole of the MERGE statement.
@@ -1336,7 +1336,7 @@ When an incorrect record was specified as a target of UPDATE in the target table
     MERGE INTO t1 USING t2 ON (t1.a = t2.a)
     WHEN MATCHED THEN UPDATE SET t1.b = t2.b;
 
-Malfunction of the MERGE Statement(CUBRIDSUS-9158)
+Malfunction of the MERGE statement(CUBRIDSUS-9158)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the malfunction when the subquery which refers the source table on MERGE statement is used as target table.
@@ -1354,7 +1354,7 @@ In addition, fixed the phenomenon in which the data included in the partitioned 
     WHEN MATCHED THEN UPDATE SET t2.col1 = 'updated', t2.col2 = t1.col1
     DELETE WHERE t2.col1 = 'updated';
     
-MERGE Statement not to be Allowed when the Original Table was the Same as the Target Table(CUBRIDSUS-10207)
+MERGE statement not to be allowed when the original table was the same as the target table(CUBRIDSUS-10207)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In 9.0 beta version, the "Cannot affect the source table in a MERGE statement." error would be returned when the original table was same as the target table, as shown below: 
@@ -1364,7 +1364,7 @@ In 9.0 beta version, the "Cannot affect the source table in a MERGE statement." 
     MERGE INTO tbl t USING tbl s ON (t.a = s.a)
     WHEN MATCHED THEN UPDATE SET t.b = 'updated';
 
-Number of Rows Affected by UPDATE JOIN would be Incorrectly Reported(CUBRIDSUS-7185)
+Number of rows affected by UPDATE JOIN would be incorrectly reported(CUBRIDSUS-7185)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the phenomenon that would result in one row being updated by the UPDATE JOIN query several times and would output an incorrect number of affected rows.
@@ -1384,18 +1384,18 @@ Fix the phenomenon that would result in one row being updated by the UPDATE JOIN
     -- After the modification, 8 rows are normally output. In 9.0 Beta version, 32 rows were output.
     8 rows affected.
 
-Improve Performance of the DELETE Query when Executing the Query for Multiple Tables not Related to Each Other(CUBRIDSUS-8144)
+Improve performance of DELETE Query when executing the query for multiple tables not related to each other(CUBRIDSUS-8144)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improve performance of the DELETE query for multiple tables not related to each other by removing unnecessary JOIN operation.
+Improve performance of DELETE query for multiple tables not related to each other by removing unnecessary JOIN operation.
 
 .. code-block:: sql
 
     DELETE m1, m2, m3, m4, m5, m6, m7, m8, m9, m10 
     FROM m1, m2, m3, m4, m5, m6, m7, m8, m9, m10;
     
-Fix so as not to Define the ROWNUM Condition and the INST_NUM Condition in the ON Clause of the OUTER Join and the explicit INNER Join(CUBRIDSUS-10366) 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fix not to define the ROWNUM condition and the INST_NUM condition in the on clause of the OUTER join and the explicit INNER join(CUBRIDSUS-10366) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix so as not to define the ROWNUM condition and the INST_NUM condition in the ON clause of the OUTER join and the explicit INNER join. However, it is allowed to define the ROWNUM, INST_NUM condition in the WHERE clause of the query.
 
@@ -1412,7 +1412,7 @@ Fix so as not to define the ROWNUM condition and the INST_NUM condition in the O
     ERROR: before ' ; '
     INST_NUM()/ROWNUM expression not allowed in join condition.
 
-"ON DELETE CASCADE" in the Foreign Key which Referred to the Default Key of the Child Table, did Not Work(CUBRIDSUS-3493)
+"ON DELETE CASCADE" in the foreign key which referred to the default key of the child table, did not work(CUBRIDSUS-3493)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The foreign key that referred to the default key of the child table inherited from a specific table had the "ON DELETE CASCADE" attribute. However, the record of the table that referred to the attribute was not deleted, even when DELETE has been executed for the child table. This error has been fixed.
@@ -1430,7 +1430,7 @@ The foreign key that referred to the default key of the child table inherited fr
     DELETE FROM pk20 WHERE a = 1;
     SELECT COUNT(*) FROM fk20;  -- In previous versions, 3 was returned because DELETE CASCADE did not work. In the fixed version, DELETE CASCADE works successfully and 1 is returned.
 
-Incorrect Result when Column of ORDER BY Clause did not Exist in the SELECT List of Subquery(CUBRIDSUS-8931)
+Incorrect result when column of ORDER BY clause did not exist in the SELECT list of subquery(CUBRIDSUS-8931)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause an incorrect result or an error (for 9.0 Beta version only) when the column of ORDER BY clause did not exist in the SELECT list of subquery.
@@ -1439,7 +1439,7 @@ Fix a problem that would cause an incorrect result or an error (for 9.0 Beta ver
 
     SELECT a FROM foo WHERE a IN (SELECT a FROM foo WHERE b = 'AAA' ORDER BY b, c);
 
-Failure to Execute INSERT by Using the Host Variable for the NUMERIC Type Column(CUBRIDSUS-9500)
+Failure to execute INSERT by using the Host variable for the NUMERIC type column(CUBRIDSUS-9500)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When executing INSERT by using the host variable for the NUMERIC type column, the type of input value was changed into the default precision(15), scale(0) of the NUMERIC. This problem has been fixed.
@@ -1467,7 +1467,7 @@ When executing INSERT by using the host variable for the NUMERIC type column, th
 
     ERROR: A domain conflict exists on attribute "a".
     
-Incorrect Query Result when the Maximum Value Condition and NOCYCLE of the LEVEL Pseudo Column were Specified to the CONNECT BY Clause of the Hierarchy Query Statement(CUBRIDSUS-9581)
+Incorrect query result when the maximum value condition and NOCYCLE of the LEVEL Pseudo column were specified to the CONNECT BY clause of the hierarchy query statement(CUBRIDSUS-9581)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause the output of an incorrect query result when the maximum value condition and NOCYCLE of the LEVEL pseudo column were specified to the CONNECT BY clause of the hierarchy query statement.
@@ -1486,7 +1486,7 @@ Fix a problem that would cause the output of an incorrect query result when the 
         4
         5
             
-Problem of Entering 0 when the Current Date/Time was Entered in the Trigger Action Syntax(CUBRIDSUS-9596)
+Problem of entering 0 when the current Date/Time was entered in the trigger action syntax(CUBRIDSUS-9596)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem of entering 0 (zero datetime) when Date/Time was entered by using SYSDATE, SYSTIME, SYSTIMESTAMP, and SYSDATETIME in the trigger action syntax.
@@ -1509,13 +1509,13 @@ Fix a problem of entering 0 (zero datetime) when Date/Time was entered by using 
     ===============================
       12:00:00 AM 00/00/0000
       
-Failure to RENAME the Table that Included the AUTO_INCREMENT Column(CUBRIDSUS-9691)
+Failure to RENAME the table that included the AUTO_INCREMENT column(CUBRIDSUS-9691)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix an error that occurred when changing the name of a table that included the AUTO_INCREMENT attribute.
 
-Error which Occurred when the INSERT ON DUPLICATE KEY UPDATE Statement Referred to the Column of SELECT Statement(CUBRIDSUS-8337)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error when the INSERT ON DUPLICATE KEY UPDATE statement referred to the column of SELECT statement(CUBRIDSUS-8337)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As shown in the following example, an error that occurred when the INSERT ON DUPLICATE KEY UPDATE statement referred to the column of SELECT statement was fixed:
 
@@ -1528,8 +1528,8 @@ As shown in the following example, an error that occurred when the INSERT ON DUP
 
     ERROR: t2.field_c is not defined.
     
-Syntax Error that would Occur when a Query Statement followed the ORDERY BY Clause(CUBRIDSUS-6920)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Syntax Error when a Query Statement followed the ORDERY BY Clause(CUBRIDSUS-6920)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause a syntax error to occur when the ORDER BY clause was followed by a sentence, i.e., "SELECT ~ ORDER BY ~ UNION SELECT ~ ", since the ORDER BY clause was recognized as if it was at the end of the query statement.
 
@@ -1581,7 +1581,7 @@ When two or more applications simultaneously executed INCR/DECR functions, a dea
     | -- the same as above                  |                                       |
     +---------------------------------------+---------------------------------------+
 
--96 Error when an INSERT Statement was Re-executed after a Table was Created under Auto Commit OFF and then a Unique Key Violation Occurs(CUBRIDSUS-10239)
+-96 Error when an INSERT statement was re-executed after a table was created under Auto Commit OFF and then a unique key violation occurs(CUBRIDSUS-10239)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The -96 error would occur when the INSERT statement was re-executed after a table had been created under Auto Commit OFF, and then a unique key violation would occur while executing the INSERT statement. This error has been fixed. ::
@@ -1606,17 +1606,17 @@ The -96 error would occur when the INSERT statement was re-executed after a tabl
     
     ERROR: Media recovery may be needed on volume "/home1/cubrid1/CUBRID/databases/testdb/testdb".
 
-Error of Unique Key Violation Caused by a Key Lock Error while Executing the Range Query of DELETE and UPDATE(CUBRIDSUS-9382)
+Error of unique key violation caused by a key lock error while executing the range query of DELETE and UPDATE(CUBRIDSUS-9382)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When several applications were executing the range query of DELETE and UPDATE, a unique key violation error would occur due to a key lock error. This error has been fixed.
 
-Failure to Execute the INSERT Statement due to the Error of Splitting the Index Node, as a result of Many Duplicate Keys(CUBRIDSUS-9829)
+Failure to execute the INSERT statement due to the error of splitting the index node, as a result of many duplicate keys(CUBRIDSUS-9829)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As the list of duplicate record addresses was large due to many duplicate keys, the INSERT statement failed to execute by selecting an incorrect node to split the index leaf node. This problem has been fixed.
 
-Failure to Create an Index when the Key Size of the Single Column Index was Larger than 1/4 of the Database Page Size(CUBRIDSUS-10570)
+Failure to create an index when the key size of the single column index was larger than 1/4 of the database page size(CUBRIDSUS-10570)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause a failure to create an index when the key size of the single column index was larger than 1/4 of the database page size.
@@ -1634,7 +1634,7 @@ Fix a problem that would cause a failure to create an index when the key size of
 
     ERROR: Schema manager internal corruption detected.
 
-Expand to Use Logical Expressions without Parentheses(CUBRIDSUS-7392)
+Expand to use logical expressions without parentheses(CUBRIDSUS-7392)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Modify logical expressions to be used without parentheses.
@@ -1646,7 +1646,7 @@ Modify logical expressions to be used without parentheses.
     SELECT SUM((code>10)) FROM t1;
 
     
-Problem that Would Cause an Incorrect Query Result to be Returned when False Conditions Have Been Given as an Operand of the OR Operator(CUBRIDSUS-10475)
+Problem that would cause an incorrect query result to be returned when false conditions have been given as an operand of the OR operator(CUBRIDSUS-10475)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: sql
@@ -1658,7 +1658,7 @@ Problem that Would Cause an Incorrect Query Result to be Returned when False Con
     -- The following query should output 0 case; however, two cases have been output in the previous versions:
     SELECT * FROM tab0 WHERE (col1 BETWEEN 9 AND 2) OR (col1 BETWEEN 5 AND 4);
     
-Problem Causing NULL to be Returned when Retrieving the Table Created Using a CREATE Statement that Included the Sentence Set Operator(CUBRIDSUS-10105)
+Problem causing NULL to be returned when retrieving the table created Using a CREATE Statement that included the sentence set operator(CUBRIDSUS-10105)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause NULL to be returned when retrieving the table created using the CREATE statement that included the sentence set operator (UNION, DIFFERENCE, INTERSECT).
@@ -1677,7 +1677,7 @@ Fix a problem that would cause NULL to be returned when retrieving the table cre
       NULL                
       NULL                
 
-Failure to Convert the String which Indicated the Hexadecimal Number Starting with "0x" to a Floating Point Value in Windows(CUBRIDSUS-10384)
+Failure to convert the string which indicated the hexadecimal number starting with "0x" to a floating point value in Windows(CUBRIDSUS-10384)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: sql
@@ -1690,14 +1690,14 @@ Failure to Convert the String which Indicated the Hexadecimal Number Starting wi
     -- In the previous versions, the following error message would be output when the above queries were executed:
     ERROR: Cannot coerce value of domain "character" to domain "float".
 
-Error Occurring when LOB Type Data was Read in the 32-bit Version(CUBRIDSUS-10437)
+Error occurring when lob type data was read in the 32-bit version(CUBRIDSUS-10437)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: sql
 
     UPDATE tbl SET b = CHAR_TO_CLOB ('2test') WHERE a = 1;
 
-Problem Executing Query Statements other than the SELECT Statement Even when Only the Query Plan Would be Read(CUBRIDSUS-9771)(CUBRIDSUS-10352)
+Problem executing query statements other than the SELECT statement even when only the query plan would be read(CUBRIDSUS-9771)(CUBRIDSUS-10352)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In 9.0 Beta version, statements other than the SELECT statement, such as INSERT, UPDATE, DELETE, REPLACE, TRIGGER, and SERIAL, were executed even when the query plan could be read for the query optimization level. This problem has been fixed. In previous versions, some SQLs were abnormally terminated. The query plan for query statements other than the SELECT statement is not output.
@@ -1707,13 +1707,13 @@ In 9.0 Beta version, statements other than the SELECT statement, such as INSERT,
     SET OPTIMIZATION LEVEL 514;
     REPLACE INTO tbl (col1, col2, col3) VALUES (1, 2, 3);
     
-Accumulated Query Plan as Executing Java Save Procedure in Windows Version(CUBRIDSUS-10489)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Accumulated query plan as executing Java Stored Procedure in Windows version(CUBRIDSUS-10489)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Globalization
 -------------
 
-Fix to Apply the COLLATE Modifier to the Expression(CUBRIDSUS-9401)
+Fix to apply the COLLATE modifier to the expression(CUBRIDSUS-9401)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The COLLATE modifier can be applied to the expression. The following two queries returns the same result.
@@ -1763,7 +1763,7 @@ Fix the FIND_IN_SET, POSITION, REPLACE, INSTR, LOCATE, and SUBSTRING_INDEX funct
     ==========================
         0            1
 
-LIKE Search not to be Case-sensitive for Non-case-sensitive Collation(CUBRIDSUS-8391)
+LIKE Search not to be Case-sensitive for non-case-sensitive Collation(CUBRIDSUS-8391)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the problem that caused the LIKE search to be case-sensitive for non-case-sensitive collation.
@@ -1776,7 +1776,7 @@ Fix the problem that caused the LIKE search to be case-sensitive for non-case-se
     -- In the previous versions, 'I' was excluded from the query result, but both of 'I' and 'i' are output in version 9.1.
     SELECT * FROM t WHERE v LIKE '%i%';
 
-Change Index Creation for the Column with Collation(CUBRIDSUS-7737)
+Change index creation for the column with collation(CUBRIDSUS-7737)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to consider the collation to create the index for columns that had collation.
@@ -1800,7 +1800,7 @@ For your information, the prefix index cannot be created for a column with expan
     ERROR: before ' ; ' 
     Prefix index is not allowed on attribute 's1' (has collation with expansions). 
 
-Problem that caused Unicode Normalization not to be Executed(CUBRDISUS-8685)
+Problem that caused unicode normalization not to be executed(CUBRDISUS-8685)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the problem that would cause unicode normalization to not be executed, even when normalization was set.
@@ -1810,7 +1810,7 @@ The normalization-related tag of the LDML file, used in 9.0 beta version, is not
 *   unicode_output_normalization: Specifies whether to execute unicode decomposition to read data.
 
 
-Fix not to Set the Foreign Key Constraints between the Combinations of Columns with Non-compatible Collation(CUBRIDSUS-8742)
+Fix not to set the foreign key constraints between the combinations of columns with non-compatible collation(CUBRIDSUS-8742)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to not set foreign key constraints between combinations of columns with non-compatible collation.
@@ -1823,7 +1823,7 @@ Fix to not set foreign key constraints between combinations of columns with non-
     -- After the update, an error is output when the following query is executed::
     ALTER TABLE fact ADD CONSTRAINT FOREIGN KEY(s) REFERENCES dim(s);
     
-Abnormal Termination when the String is Converted to a Collation of a Charset that did not Exist(CUBRIDSUS-10158)
+Abnormal termination when the string is converted to a collation of a charset that did not exist(CUBRIDSUS-10158)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When an attempt was made to convert a string to the collation of an unusable charset, the csql process or the cub_cas process would be abnormally terminated. This problem has been fixed. In the following example, the test database allows the French charset only: ::
@@ -1844,7 +1844,7 @@ However, it was attempted to convert the string to German collation, which was n
     
     SELECT * FROM t ORDER BY CAST (s AS STRING COLLATE utf8_de_exp);
     
-Problem of CHR Function to Use the Default System Charset Only(CUBRIDSUS-8934)
+Problem of CHR function to use the default system charset only(CUBRIDSUS-8934)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Expand the CHR function to use the charset of the client specified as well as the default system charset.
@@ -1870,7 +1870,7 @@ Expand the CHR function to use the charset of the client specified as well as th
     ======================
       '八'               
     
-Expand the CHR Function to Use the COLLATE Modifier(CUBRIDSUS-9939)
+Expand the CHR function to use the COLLATE modifier(CUBRIDSUS-9939)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Expand the CHR function to use the COLLATE modifier.
@@ -1879,7 +1879,7 @@ Expand the CHR function to use the COLLATE modifier.
 
     SELECT * FROM tbl WHERE CHR (65) COLLATE utf8_bin > 'a';
 
-Expand the Argument of CLOB_TO_CHAR Function to Specify the Charset of the String to be Converted(CUBRIDSUS-9467)
+Expand the argument of CLOB_TO_CHAR function to specify the charset of the string to be converted(CUBRIDSUS-9467)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Expand the CLOB_TO_CHAR function to specify the string charset to be converted.
@@ -1888,7 +1888,7 @@ Expand the CLOB_TO_CHAR function to specify the string charset to be converted.
 
     SELECT CLOB_TO_CHAR (contents USING utf8) FROM documents;
 
-Modify to Verify the Error of Setting the Attribute Value of LDML File when Creating the Locale Library(CUBRIDSUS-10000)
+Modify to verify the error of setting the attribute value of LDML file when creating the locale library(CUBRIDSUS-10000)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Modify to output an appropriate message for a detected error by verifying the error of setting the attribute value of the LDML (Locale Data Markup Language) file given as an input for creating the locale library by using the make_locale tool (.sh for Linux extension, .bat for Windows extension). An example of an incorrect attribute value setting is given as follows:
@@ -1898,7 +1898,7 @@ Modify to output an appropriate message for a detected error by verifying the er
 
 In addition, it is modified to not be case-sensitive regarding the attribute value.
 
-COLLATE Modifier not being Applied to the SQL Function Result Normally(CUBRIDSUS-10043)
+COLLATE modifier not being applied to the SQL function result normally(CUBRIDSUS-10043)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause an incorrect result of the SQL function to be output because the COLLATE modifier was not applied normally.
@@ -1913,7 +1913,7 @@ Fix a problem that would cause an incorrect result of the SQL function to be out
     FROM tbl 
     WHERE TRIM (REPLACE (col1,'b','B')) COLLATE utf8_gen LIKE TRIM (col2) COLLATE utf8_gen;
 
-Incorrect LIKE Query Result for the Fixed-length String in the EUC-KR Charset DB(CUBRIDSUS-9199)
+Incorrect LIKE query result for the fixed-length string in the EUC-KR charset DB(CUBRIDSUS-9199)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the EUC-KR charset DB, when the LIKE query is processed for the fixed-length string, all the space characters (A1 A1) of the EUC-KR charset and the ASCII space are regarded.
@@ -1927,17 +1927,17 @@ In the EUC-KR charset DB, when the LIKE query is processed for the fixed-length 
     SELECT * FROM t WHERE col LIKE '_b';
 
 
-Incorrect Sorting of Some Characters in the euckr_bin Collation(CUBRIDSUS-10493)
+Incorrect sorting of some characters in the euckr_bin collation(CUBRIDSUS-10493)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a phenomenon that would cause the incorrect sorting of some characters of the euckr_bin collation. The space characters (A1 A1) of EUC-KR charset are considered as the smallest value, like the ASCII spaces.
 
-No Type Conversion because of the Space Characters in the CHAR Type of EUC Charset(CUBRIDSUS-10555)
+No type conversion because of the space characters in the CHAR type of EUC charset(CUBRIDSUS-10555)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Modify to process the EUC space characters (A1 A1) included in the fixed-length string in the CAST, TO_DATE, TO_TIME, TO_TIMESTAMP, TO_DATETIME, STR_TO_DATE, and TO_NUMBER functions.
 
-Error when Executing Queries for View, Function Index, Filtered Index, and Trigger if the Charset of Client was Different from the System Charset(CUBRIDSUS-10561)
+Error when executing queries for view, function index, filtered index, and trigger if the charset of client was different from the System Charset(CUBRIDSUS-10561)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause an error to occur when executing queries for View, Function Index, Filtered Index, and Trigger if the charset of client was different from the system charset. Fixed a problem that would cause an error to occur when executing queries for View, Function Index, Filtered Index, and Trigger when the charset of client was different from the system charset.
@@ -1964,7 +1964,7 @@ The SHOW TABLES sentence caused a syntax analysis error, as shown in the above. 
     -- In 9.0 Beta version, an error would occur when executing the following query:
     SHOW TABLES;
     
-Support for REVERSE Function, BETWEEN Condition, Collation of Hierarchy Operator(CUBRIDSUS-10423)
+Support for REVERSE Function, BETWEEN Condition, Collation of hierarchy operator(CUBRIDSUS-10423)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Modify the REVERSE function and the BETWEEN condition to consider the collation.
@@ -2007,12 +2007,12 @@ Expand to apply the COLLATE modifier to the PRIOR, CONNECT_BY_ROOT hierarchy ope
     ORDER BY id;
 
 
-make_locale.sh Script not to be Executed in Ubuntu Linux(CUBRIDSUS-10647)
+make_locale.sh script not to be executed in Ubuntu Linux(CUBRIDSUS-10647)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause make_locale.sh not to be executed in the dash shell.
 
-Character Case of the ISO-8859-1 Charset not to be Converted for the Expanded ASCII Code(CUBRIDSUS-10624)
+Character case of the ISO-8859-1 Charset not to be converted for the expanded ASCII code(CUBRIDSUS-10624)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause the character case of the ISO-8859-1 charset to not be successfully converted for the expanded ASCII code (C0 - FE region). The following problem would occur when using a user identifier which included characters of the expanded ASCII region:
@@ -2022,7 +2022,7 @@ Fix a problem that would cause the character case of the ISO-8859-1 charset to n
 *   String processing, such as string conversion, was not processed normally
 
 
-Error in Collation Determination Method for Expressions with Two Arguments(CUBRIDSUS-10560)
+Error in collation determination method for expressions with two arguments(CUBRIDSUS-10560)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix an error in the collation determination method for expressions with two arguments.
@@ -2037,15 +2037,15 @@ Fix an error in the collation determination method for expressions with two argu
     -- In 9.0 Beta version, an error would occur when executing the following query:
     SELECT s1 || s2 FROM t;
 
-Incorrect Error Message when Executing a PREPARE Statement Exceeding the Allowable Limit(CUBRIDSUS-8998)
+Incorrect error message when executing a PREPARE statement exceeding the allowable limit(CUBRIDSUS-8998)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When a PREPARE statement was executed that exceeded the maximum number (20) allowed for one application, "ERROR: Too many prepared statements." should be output. But "ERROR: No error message available." was output instead. This problem has been fixed.
 
-Incorrect Error Message when a File with the Wrong Path was Given to the CLOB_FROM_FILE Function and the BLOB_FROM_FILE Function(CUBRIDSUS-10320)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Incorrect error message when a file with the wrong path was given to CLOB_FROM_FILE function and BLOB_FROM_FILE function(CUBRIDSUS-10320)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix to output the error message "Invalid Path" when a file with an invalid path was entered to the CLOB_FROM_FILE function and the BLOB_FROM_FILE function.
+Fix to output the error message "Invalid Path" when a file with an invalid path was entered to CLOB_FROM_FILE function and BLOB_FROM_FILE function.
 
 .. code-block:: sql
 
@@ -2059,7 +2059,7 @@ Fix to output the error message "Invalid Path" when a file with an invalid path 
     -- In 9.0 Beta version, the following error was output:
     Attempted to create string with illegal length - 1545942208
 
-Phenomenon Causing an Incorrect Error to be Output when the Argument of the FORMAT Function was not Numeric(CUBRIDSUS-10426)
+Phenomenon causing an incorrect error to be output when the argument of the FORMAT function was not numeric(CUBRIDSUS-10426)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a phenomenon that would cause an incorrect error to be output when the argument of the FORMAT function was not numeric.
@@ -2082,7 +2082,7 @@ Fix a phenomenon that would cause an incorrect error to be output when the argum
 Partitioning
 ------------
 
-Support for PARTITION Clause to Define a Specific Partition(CUBRIDSUS-9492)(CUBRIDSUS-9935)
+Support for PARTITION clause to define a specific partition(CUBRIDSUS-9492)(CUBRIDSUS-9935)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Support PARTITION clause to specify the partition name without defining the partitioned table. The PARTITION clause can be defined after the partitioned table. It can be used for all AQLs which allow partition, as well as the SELECT statement.
@@ -2113,17 +2113,17 @@ When the PARTITION clause is defined in the INSERT statement and the partition s
 
 If a specific partition is directly referred for a query which has the WHERE clause, partition pruning is not executed and the performance may be improved (slightly). In addition, query processing methods not allowed for the partitioned table, such as INDEX JOIN, ORDER BY/GROUP BY Omit Optimization, Multiple Key Range Optimization, and INDEX SKIP SCAN can be used.
 
-Support the click counter (INCR Function and DECR Function) for Partitioned Table(CUBRIDSUS-9157)
+Support the click counter (INCR function and DECR function) for partitioned table(CUBRIDSUS-9157)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to use the click counter (INCR function and DECR function) for the partitioned table. In the previous versions, as the INCR function and the DECR function did not work normally, the value did not increase or decrease.
 
-Support the INSERT ON DUPLICATE KEY UPDATE Statement and the REPLACE Statement for Partitioned Table(CUBRIDSUS-8337)
+Support the INSERT ON DUPLICATE KEY UPDATE statement and the REPLACE statement for partitioned table(CUBRIDSUS-8337)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to use the INSERT ON DUPLICATE KEY UPDATE statement and the REPLACE statement for a partitioned table.
 
-Partition Pruning being Unavailable when the Query Condition of the Range Partitioned Table was "Column > Maximum Value"(CUBRIDSUS-7792)
+Partition pruning being unavailable when the query condition of the range partitioned table was "Column > Maximum Value"(CUBRIDSUS-7792)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Partition pruning was not available but the entire partition table was searched when the query condition of the range partitioned table was "Column > Maximum Value". This problem has been fixed and No Result is immediately returned.
@@ -2137,7 +2137,7 @@ Partition pruning was not available but the entire partition table was searched 
     -- After the update, the following condition is considered as the conditions above for partition pruning:
     SELECT * FROM t WHERE i > 20;
 
-Output 0 as the COUNT(*) Value Even if there were Data when Partition was Removed from the Partition Table(CUBRIDSUS-9338)
+Output 0 as the COUNT(*) value even if there were data when partition was removed from the partition table(CUBRIDSUS-9338)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When partition was removed after executing several INSERT, UPDATE, or DELETE for the partition table, 0 was output as the COUNT(*) value even if there were data. This problem has been fixed.
@@ -2165,7 +2165,7 @@ In the previous versions, the database with the corresponding partitioned table 
     Some inconsistencies were detected in your database.
     Please consult error_log_file /home/CUBRID/log/testdb_checkdb.err for additional information.
 
-View for a Specific Partition not to be Updatable(CUBRIDSUS-10264)
+View for a specific partition not to be updatable(CUBRIDSUS-10264)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that caused the view for a specific partition to not be updatable.
@@ -2185,7 +2185,7 @@ Fix a problem that caused the view for a specific partition to not be updatable.
 
     ERROR: Not allowed access to partition: 's1__p__p0'
 
-Not to be Normally Partitioned when the Partition Key Value in the Partitioned Table Had a Different Charset from the Column(CUBRIDSUS-9904)
+Not to be normally partitioned when the partition key value in the partitioned table had a different charset from the column(CUBRIDSUS-9904)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As shown in the following example, data was not normally partitioned when the partition key value in the partitioned table had a different charset from the column. This has been fixed in order to not allow the partition key of which charset is different from the column.
@@ -2198,7 +2198,7 @@ As shown in the following example, data was not normally partitioned when the pa
       PARTITION p1 VALUES IN (_iso88591'y')
     );
 
-Incorrect Number of Affected Rows to be Output when an Error Occurred while Updating the Partitioned Table through the View(CUBRIDSUS-9011)
+Incorrect number of affected rows to be output when an error occurred while updating the partitioned table through the view(CUBRIDSUS-9011)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause an incorrect number of affected rows to be output when an error occurred while updating the partitioned table through the view.
@@ -2219,7 +2219,7 @@ Fix a problem that would cause an incorrect number of affected rows to be output
 HA
 --
 
-Add Log Information For Changing the Node Status in HA Environment(CUBRIDSUS-9748)
+Add log information for changing the node status in HA environment(CUBRIDSUS-9748)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Add the following log information for changing the node status in HA environment. This information is written in an error log file when the error_log_level system parameter value is the error value or a lower value.
@@ -2237,12 +2237,12 @@ Add the following log information for changing the node status in HA environment
 
         Server HA mode is changed from 'to-be-active' to 'active'.
 
-Repeating Restart of the Replication Log Reflection Process of a Master node when a Slave node was Changed to the maintenance Mode(CUBRIDSUS-9380)
+Repeating restart of the replication log reflection process of a master node when a slave node was changed to the maintenance mode(CUBRIDSUS-9380)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem of repeating restart of the replication log reflection process of a master node when a slave node was changed to the maintenance mode in the HA environment.
 
-Not to be Replicated when the Default Key Configured with Multiple Columns Included the DESC Direction(CUBRIDSUS-9774)
+Not to be replicated when the default key configured with multiple columns included the DESC direction(CUBRIDSUS-9774)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: sql
@@ -2250,17 +2250,17 @@ Not to be Replicated when the Default Key Configured with Multiple Columns Inclu
     CREATE TABLE t (a INTEGER, b INTEGER, c INTEGER, PRIMARY KEY (a, b DESC, c));
     INSERT INTO t VALUES (1, 1, 1);
 
-Improve Replication Rebuilding Script(CUBRIDSUS-10327)
+Improve replication rebuilding script(CUBRIDSUS-10327)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to create the $repl_log_home directory set when it was not in the ha_make_slavedb.sh script. Also fixed the problem that caused a replication log of the master node, previously copied from the slave node, to not be deleted while the script was being executed if $CUBRID_DATABASES was different from $repl_log_home.
 
-Not Recognizing the Last Host Name when there were Several Host Names Set in databases.txt(CUBRIDSUS-10344)
+Not recognizing the last host name when there were several host names set in databases.txt(CUBRIDSUS-10344)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the HA environment, if there were several host names set in the databases.txt file and the last host name was a string that included the first host name, the last host name would not be recognized correctly. This problem has been fixed. For example, in the previous versions, if the host name list was set to "node:node1", node1 was not recognized correctly. So, when "node" is the slave node and the "node1" is the master node, the RW Broker Common Application Server (CAS) cannot recognize and connect to "node1".
 
-New Replica Node Not to be Built from the Replica Node by Using the ha_make_slavedb.sh Script(CUBRIDSUS-10501)
+New replica node not to be built from the replica node by using the ha_make_slavedb.sh script(CUBRIDSUS-10501)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ALTER ... CHANGE COLUMN statement has not been reflected to the slave node(CUBRIDSUS-9649)
@@ -2272,17 +2272,17 @@ Fix a phenomenon in which the ALTER ... CHANGE COLUMN statement has not been ref
 
     ALTER TABLE t1 CHANGE i2 i0 INTEGER FIRST;
 
-Phenomenon causing Schema to be Replicated to the Slave Node with the User who Connected to the DB First from the Application(CUBRIDSUS-6511)
+Phenomenon causing schema to be replicated to the slave node with the user who connected to the DB first from the application(CUBRIDSUS-6511)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Schema was replicated to the slave node with the user who had connected to the DB first from the application. For example, when user1 account had connected to and disconnected from the DB and then user2 account connected to create a table, the table owned by user1 was created in the slave node. This problem would persist until the Broker Common Application Server (CAS) was restarted. This problem has been fixed.
 
-Fix to not Replicate the TRUNCATE Statement for the Table without the Default Key to the Slave Node(CUBRIDSUS-6502)
+Fix to not replicate the TRUNCATE statement for the table without the default key to the slave node(CUBRIDSUS-6502)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Since the table without the default key should not be replicated to the slave node, the delay that resulted from applying the TRUNCATE statement to the slave node was fixed by preventing replication of the TRUNCATE statement for the table.
 
-Replication Mismatch to the Serial when INSERT was Executed for the Table with the AUTO_INCREMENT Column if Automatic Commit Mode was set to OFF(CUBRIDSUS-9045)
+Replication mismatch to the serial when INSERT was executed for the table with the AUTO_INCREMENT column if automatic commit mode was set to OFF(CUBRIDSUS-9045)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix replication mismatch to the serial that managed the AUTO_INCREMENT when INSERT was executed for the table with the AUTO_INCREMENT column if automatic commit mode was OFF. AUTO_INCREMENT is managed as a serial value on the db_serial system catalog table.
@@ -2291,7 +2291,7 @@ Fix replication mismatch to the serial that managed the AUTO_INCREMENT when INSE
 Sharding
 --------
 
-Fix to Handle as an Error when Two or More Shard Hints Indicated Different Shard(CUBRIDSUS-9395)
+Fix to handle as an error when two or more shard hints indicated different shard(CUBRIDSUS-9395)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When two or more shard hints in a query statement indicated different shards, in the previous versions the shard of the first hint would be used. This has been fixed to be handled as an error if the shard is not identical for all hints.
@@ -2302,43 +2302,43 @@ When two or more shard hints in a query statement indicated different shards, in
     FROM student 
     WHERE (id = /*+ shard_key */ 250) OR (id = /*+ shard_key */ 22);
 
-Failure to SELECT for Multiple SHARDs with an Independent Transaction(CUBRIDSUS-9529)
+Failure to SELECT for multiple SHARDs with an independent transaction(CUBRIDSUS-9529)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the SHARD environment, when SELECT was executed for one SHARD with an independent transaction and then SELECT was executed for the other SHARD, it would fail. This problem has been fixed.
 
-Abnormal Termination of the Command which Output the Metadata of SHARD when Executing the Command(CUBRIDSUS-10375)
+Abnormal termination of the command which output the metadata of SHARD when executing the command(CUBRIDSUS-10375)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 While executing multiple shard proxies by setting the MAX_NUM_PROXY parameter of shard.conf to 2 or the larger value, when the command which output the metadata of CUBRID SHARD was executed using "cubrid shard status -m", the command would be abnormally terminated. This problem has been fixed.
  
-Correct the PROXY_LOG_FILE Included in the Default Setting of shard.conf to PROXY_LOG_DIR(CUBRIDSUS-10381)
+Correct the PROXY_LOG_FILE included in the default setting of shard.conf to PROXY_LOG_DIR(CUBRIDSUS-10381)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Correct the incorrect PROXY_LOG_FILE parameter setting which has been included in the default shard.conf file to PROXY_LOG_DIR.
     
-Fix to Handle as an Error when the Binding Array shard Key Value was in Different shards(CUBRIDSUS-9826)
+Fix to handle as an error when the binding array shard key value was in different shards(CUBRIDSUS-9826)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the Shard environment, if the shard key value of the array to be bound by the functions, such as JDBC PreparedStatement.executeBatch() and CCI cci_execute_array(), which bind several values to process queries at once, is in different shards, the function is handled as an error.
 
-Abnormal Termination of shard proxy Process when the PROXY_LOG parameter of shard.conf has been set to ALL and the log file size is 2 KB or larger(CUBRIDSUS-10443)
+Abnormal termination of shard proxy process when the PROXY_LOG parameter of shard.conf has been set to ALL and the log file size is 2 KB or larger(CUBRIDSUS-10443)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-No Response when Receiving Many Prepare Requests (CUBRIDSUS-10041)
+No Response when receiving many prepare requests (CUBRIDSUS-10041)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When there are many prepare requests for a query in the Shard environment, if one of the request has not been processed within the query timeout or PROXY_TIMEOUT, the remaining prepare requests were not responded to. This problem has been fixed.
 
-Continuous Failure of Requests from the Application when the Number of CASs was Smaller than the Load on the shard proxy(CUBRIDSUS-10012)
+Continuous failure of requests from the application when the number of CASs was smaller than the load on the shard proxy(CUBRIDSUS-10012)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In shard proxy, even if rcTime of connection URL is Specified, the Behavior to Return to the Original Connection did not Occur(CUBRIDSUS-10823)
+In shard proxy, even if rcTime of connection URL is specified, the behavior to return to the original connection did not occur(CUBRIDSUS-10823)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  
 Fix a problem that the connection didn't return to the original one after the rcTime(rcTime is specified in ocnnection URL) when shard proxy is failed over.
 
-Now Output an Appropriate Error Message when the CUBRID SHARD proxy failed to Authorize(CUBRIDSUS-8839)
+Now output an appropriate error message when the CUBRID SHARD proxy failed to authorize(CUBRIDSUS-8839)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 No error message has been output when the CUBRID SHARD proxy failed to authorize. This has been fixed to output an appropriate error message as shown in the following example:
@@ -2350,29 +2350,29 @@ No error message has been output when the CUBRID SHARD proxy failed to authorize
 Driver
 ------
 
-[JDBC][CCI] Improved Query Timeout Calculation (CUBRIDSUS-9585)
+[JDBC][CCI] Improved query timeout calculation (CUBRIDSUS-9585)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The query timeout period has been modified to stop query execution when the query timeout period requested by the application has expired, by sending the time remaining to the server.
     
-[JDBC][CCI] Phenomenon that would Cause Query Timeout and Failure to Occur in the Middle of fetch When Query Timeout Has Been Set(CUBRIDSUS-9043)
+[JDBC][CCI] Phenomenon that would cause query timeout and failure to occur in the middle of fetch when query timeout has been set(CUBRIDSUS-9043)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When query timeout was set using the broker parameter MAX_QUERY_TIMEOUT, JDBC's setQueryTimeout method, and the queryTimeout attribute of the connecting URL, query timeout would occur in the middle of fetch, and a failure would also occur. This has been fixed, and now no query timeout occurs in the middle of fetch. The timeout occurs only when the query is being executed.
 
 In addition, query timeout does not occur for the cci_execute_batch function and the cci_execute_array function.
 
-[JDBC][CCI] Now the Remaining Queries are Not Executed when Deadlock Occurs while the Multiple Query Execution Function Executes Queries(CUBRIDSUS-9692)
+[JDBC][CCI] Now the remaining queries are not executed when deadlock occurs while the multiple query execution function executes queries(CUBRIDSUS-9692)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the previous versions, when a deadlock occurred while multiple query execution functions, such as JDBC's PreparedStatement.executeBatch method or CCI's cci_execute_array and cci_execute_batch, were executing each query statement, the remaining queries would be continuously executed. This has been fixed, and now the remaining queries are no longer executed when deadlock occurs. For other general errors, the remaining queries are continuously executed.
 
-[JDBC][CCI] Error Occuring when there was no Semicolon (;) at the End of the SHOW EXEC STATISTICS ALL Sentence(CUBRIDSUS-7430)
+[JDBC][CCI] Error occuring when there was no semicolon (;) at the end of the SHOW EXEC STATISTICS ALL sentence(CUBRIDSUS-7430)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 An error would occur when there was no semicolon (;) at the end of the sentence while the application was executing the SHOW EXEC STATISTICS ALL statement. This problem has been fixed. In previous versions, this error did not occur in the CUBRID Manager, Query Browser, and CSQL, but did occur in the JDBC or CCI applications.
 
-[CCI] Add CCI_U_TYPE_ENUM Type(CUBRIDSUS-10236)
+[CCI] Add CCI_U_TYPE_ENUM type(CUBRIDSUS-10236)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Add CCI_U_TYPE_ENUM, the CCI database type (u_type) for the ENUM type column.
@@ -2385,7 +2385,7 @@ CCI_U_TYPE_ENUM can be retrieved or sent through CCI_A_TYPE_STR.
     cci_bind_param (req, 1, CCI_A_TYPE_STR, (char *) buffer, CCI_U_TYPE_ENUM, CCI_BIND_PTR);
     cci_get_data (req, 1, CCI_A_TYPE_STR, &buffer, &ind);
      
-[JDBC][CCI] Fix to Return "ENUM", instead of "VARCHAR", as the ENUM Column Type(CUBRIDSUS-10236)
+[JDBC][CCI] Fix to return "ENUM", instead of "VARCHAR", as the ENUM column type(CUBRIDSUS-10236)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to return "ENUM", instead of "VARCHAR", as the ENUM column type.
@@ -2413,7 +2413,7 @@ Fix to return "ENUM", instead of "VARCHAR", as the ENUM column type.
                      CCI_GET_RESULT_INFO_TYPE (res_col_info, i));
           }
 
-[JDBC] Fix to Output a variety of Information in the Message when an Exception Occurs(CUBRIDSUS-9611)
+[JDBC] Fix to output a variety of information in the message when an exception occurs(CUBRIDSUS-9611)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to output the Broker Common Application Server (CAS) ID, CAS PID, SESSION ID, and connection URL in the message when an exception occurs in JDBC.
@@ -2423,7 +2423,7 @@ Fix to output the Broker Common Application Server (CAS) ID, CAS PID, SESSION ID
 
 Fix a phenomenon in which the executeBatch method of JDBC has failed to be executed and the "Cannot communicate with the broker or received invalid packet" error message was returned.
 
-[JDBC] Repeated DML Execution when a Query was Retried Because of Query Plan Fail while Executing Multiple Queries with One Execution Function(CUBRIDSUS-8472)
+[JDBC] Repeated DML Execution when a query was retried because of query plan fail while executing multiple queries with one execution function(CUBRIDSUS-8472)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When queries were retried from the first query when the query plan has failed while executing several queries with one execution function, some of the DML executed was not rolled back and repeated execution was made. This problem has been fixed.
@@ -2435,8 +2435,8 @@ When queries were retried from the first query when the query plan has failed wh
     PreparedStatement p = c.prepareStatement(MULTI_STMT);
     boolean retval = p.execute();
 
-[JDBC] Updatable Result Set with a Cursor Type of TYPE_FORWARD_ONLY in Automatic Commit Mode was Processed as an Exception when updateRow() was Executed for the Set(CUBRIDSUS-9313)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[JDBC] Updatable resultSet with a cursor type of TYPE_FORWARD_ONLY in automatic commit mode was processed as an exception when updateRow() was executed for the set(CUBRIDSUS-9313)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When updateRow() was executed for the updatable resultSet with a cursor type of TYPE_FORWARD_ONLY in automatic commit mode, it was processed as an exception, "Internal server error". This problem has been fixed. In previous versions, the resultSet could be updated only when the cursor type was TYPE_SCROLL_SENSITIVE. After the update, the resultSet can be updated for all cursor types (TYPE_FORWARD_ONLY, TYPE_SCROLL_INSENSITIVE, TYPE_SCROLL_SENSITIVE).
 
@@ -2447,12 +2447,12 @@ When updateRow() was executed for the updatable resultSet with a cursor type of 
     rs.updateNull("col2");
     rs.updateRow();
 
-[JDBC] Problem Causing Reconnection to altHost to not be Tried Even when connectTimeout Has Been Set in the Connection URL(CUBRIDSUS-10240)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[JDBC] Problem causing reconnection to altHosts to not be tried even when connecttimeout has been set in the connection URL(CUBRIDSUS-10240)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix a problem that caused reconnection to altHost to not be tried but an error would occur even when connectTimeout has been set in the connection URL and occurred in JDBC. This problem has been fixed.
+Fix a problem that caused reconnection to altHosts to not be tried but an error would occur even when connectTimeout has been set in the connection URL and occurred in JDBC. This problem has been fixed.
 
-[JDBC] Exception When Calling PreparedStatement.clearParameter() Method Even When the Application Has not Closed the Statement(CUBRIDSUS-10274)
+[JDBC] Exception when calling PreparedStatement.clearParameter() method even when the application has not closed the statement(CUBRIDSUS-10274)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 An exception 'Connection or Statement might be closed' would occur when the PreparedStatement.clearParameter() method was called while the user did not disconnect the DB connection and closed the statement in the JDBC application. This problem has been fixed.
@@ -2467,7 +2467,7 @@ When a SQL statement has been prepared twice on one DB connection, the second st
 
 Fix a phenomenon in which the CCI application has been abnormally terminated when NULL has been entered as the pointer value in the function which used the T_CCI_ERROR structure pointer in the CCI application such as cci_datasource_release..
 
-[CCI] CAS_NO_MORE_DATA Error when Completing fetch After Executing the SELECT Query in Asynchronous Mode(CUBRIDSUS-7170)
+[CCI] CAS_NO_MORE_DATA Error when completing fetch after executing the SELECT query in asynchronous mode(CUBRIDSUS-7170)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The CAS_NO_MORE_DATA error would occur when completing fetch after executing the SELECT query in asynchronous mode, instead of the CCI_NO_MORE_DATA error. This problem has been fixed.
@@ -2476,17 +2476,17 @@ The CAS_NO_MORE_DATA error would occur when completing fetch after executing the
 
     res = cci_execute (req, CCI_EXEC_ASYNC, 0, &error);
 
-[CCI] CCI Application for Windows Infinitely Waited When No DB Server to Connect(CUBRIDSUS-9361)
+[CCI] CCI application for windows infinitely waited when no db server to connect(CUBRIDSUS-9361)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a phenomenon in which the CCI application for windows infinitely waited when it could not acces the database like the case when there was no DB server to connect.
 
-[CCI] Abnormal Termination of Application when NULL was Entered to the Argument of the Multiple Query Processing Functions which Would Receive the Query Result(CUBRIDSUS-9600)
+[CCI] Abnormal termination of application when null was entered to the argument of the multiple query processing functions which would receive the query result(CUBRIDSUS-9600)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When NULL is entered in the argument of cci_execute_batch, cci_execute_array, and cci_execute_result which will receive the query result, the "invalid argument" error occurs.
 
-[CCI] Add cci_is_holable Function (CUBRIDSUS-8803)
+[CCI] Add cci_is_holable function (CUBRIDSUS-8803)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Add cci_is_holable function which returns whether the request handle has a holdable cursor or not.
@@ -2495,10 +2495,10 @@ Add cci_is_holable function which returns whether the request handle has a holda
 
     holdable = cci_is_holdable (req_handle);
 
-[CCI] Abnormal Termination of Application when the 128-digit or More Double Value is Read by cci_get_data(CCI_A_TYPE_STR)(CUBRIDSUS-9756)
+[CCI] Abnormal termination of application when the 128-digit or more double value is read by cci_get_data(CCI_A_TYPE_STR)(CUBRIDSUS-9756)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[CCI] Abnormal Operation of Application when the Connection Used by datasource Has Been Closed and then the Connection Handle is Used as It was(CUBRIDSUS-9586)
+[CCI] Abnormal operation of application when the connection used by datasource has been closed and then the connection handle is used as it was(CUBRIDSUS-9586)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the CCI application which used the datasource closes the connection and uses the connection handle as it was, the application operated abnormally. This has been fixed to output an error.
@@ -2511,18 +2511,18 @@ When the CCI application which used the datasource closes the connection and use
     
     ret = cci_prepare_and_execute (con_1, query, 1, &exec_retval, &error); /* invalid access */
         
-[CCI] Memory Leak that Occurred when Retrying PREPARE Internally while Executing the cci_prepare Function(CUBRIDSUS-10053)
+[CCI] Memory leak that occurred when retrying PREPARE internally while executing the cci_prepare function(CUBRIDSUS-10053)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[CCI] CCI_ER_NO_MORE_DATA Error not to be Returned after Fetching the Last Value as Executing the cci_schema_info Function to Get the Trigger Information for All Tables(CUBRIDSUS-9438)
+[CCI] CCI_ER_NO_MORE_DATA Error not to be returned after fetching the last value as executing the cci_schema_info function to get the trigger information for all tables(CUBRIDSUS-9438)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
 .. code-block:: c
 
     req = cci_schema_info (conn, CCI_SCH_TRIGGER, NULL, NULL, CCI_CLASS_NAME_PATTERN_MATCH, &error); 
 
-[CCI] Error that Occurred when Calling the cci_execute Function Twice as Executing Multiple Query Statements by Using the Function(CUBRIDSUS-10424)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] Error when calling the cci_execute function twice as executing multiple query statements by using the function(CUBRIDSUS-10424)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If the first query type was different from the last query type when executing multiple query statements using the cci_execute function, e.g., the first one is the UPDATE statement and the last one is the SELECT statement, the "Invalid cursor position" error would occur when the function was called twice. This problem has been fixed.
 
@@ -2534,18 +2534,18 @@ If the first query type was different from the last query type when executing mu
     
     result = cci_execute (request, CCI_EXEC_QUERY_ALL, 0, error); /* 2nd */
 
-[CCI] Save an Incorrect Error in the Error Message Buffer When DB Connection Failed While Executing the cci_connect_ex Function(CUBRIDSUS-10316)
+[CCI] Save an incorrect error in the error message buffer when db connection failed while executing the cci_connect_ex function(CUBRIDSUS-10316)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[CCI] Fix so as not to operate the cci_set_allocator Function in Windows(CUBRIDSUS-10669)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] Fix not to operate the cci_set_allocator function in Windows(CUBRIDSUS-10669)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In Windows, the function to allocate or deallocate memory was changed when the cci_set_allocator function was used. This has been fixed so as not to allow the cci_set_allocator function to change the function.
 
-[CCI] Not Linked when Using the Static Library(CUBRIDSUS-10743)
+[CCI] Not linked when using the static library(CUBRIDSUS-10743)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[PHP] Query not being Stopped at the Server when Webpage Loading was Stopped(CUBRIDSUS-5855)
+[PHP] Query not being stopped at the server when webpage loading was stopped(CUBRIDSUS-5855)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Even when webpage loading has been stopped on the PHP application website, the query being executed at the server was not stopped. This problem has been fixed. In previous versions, if a user repeatedly stops loading a webpage requiring a long query execution time, the unnecessary connection resource in the web server gets larger.
@@ -2575,7 +2575,7 @@ Change to print the SQL running time as default in CSQL interpreter(CUBRIDSUS-95
 
 Now CSQL interpreter prints the SQL running time as default when SQL is run. You can change whether printing the running time or not by using ";time" CSQL session command.
 
-Fix to Allow Additional Connection by using --sysadm in the CSQL even when the Maximum Number of Connection to Server has been Exceeded(CUBRIDSUS-9478)
+Fix to allow additional connection by using --sysadm in the CSQL even when the maximum number of connection to server has been exceeded(CUBRIDSUS-9478)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to allow only one connection with the system administrator mode (--sysadm) in the CSQL even when the maximum number of connection to server, which has been set by the value of the system parameter max_clients has been exceeded.
@@ -2584,12 +2584,12 @@ Fix to allow only one connection with the system administrator mode (--sysadm) i
 
     % csql -u dba --sysadm testdb
 
-Fix to Output an Error Saying that Windows did not Support ;historylist and ;historyread Commands of CSQL When the Commands are Attempted to be Executed(CUBRIDSUS-10190)
+Fix to output an error saying that windows did not support ;historylist and ;historyread commands of CSQL when the commands are attempted to be executed(CUBRIDSUS-10190)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Windows version does not support the ;historylist and ;historyread session commands. If the session command is entered, an error message is output.
 
-Change to Output the Host Name when ;database is Executed in the CSQL Connected to the Local Host DB(CUBRIDSUS-5243)
+Change to output the host name when ;database is executed in the CSQL connected to the local host DB(CUBRIDSUS-5243)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Change to output the host name, not the "localhost", when executing ;database in the CSQL connected to the local host DB. ::
@@ -2597,7 +2597,7 @@ Change to output the host name, not the "localhost", when executing ;database in
     csql> ;database
     testdb@cubridhost
 
-Annotation not to Be Processed Normally when the Annotation Included a Single Quote in CSQL(CUBRIDSUS-8999)
+Annotation not to be processed normally when the annotation included a single quote in CSQL(CUBRIDSUS-8999)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the problem that caused the session command not to be executed because the annotation was not correctly processed in the following case:
@@ -2607,12 +2607,12 @@ Fix the problem that caused the session command not to be executed because the a
     csql> -- it's a line comment.
     csql> ;exit
 
-Schema Object with Unicode Decomposed Characters as Its Identifier Could not be Retrieved in CSQL(CUBRIDSUS-9923)
+Schema object with unicode decomposed characters as its identifier could not be retrieved in CSQL(CUBRIDSUS-9923)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When unicode decomposed characters were included in the table name or the trigger name, the schema object could not be retrieved using the ;SCHEMA session command and the ;TRIGGER session command of CSQL. This problem has been fixed.
     
-Failure of Executing ";read", the CSQL Session Command, when the File Name was Followed by a Space(CUBRIDSUS-10357)
+Failure of executing ";read", the CSQL session command, when the file name was followed by a space(CUBRIDSUS-10357)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix an error that would occur when executing the following command when the name of test.txt was followed by a space. ::
@@ -2620,27 +2620,27 @@ Fix an error that would occur when executing the following command when the name
     csql> ;read test.txt 
     ERROR: Too many file names have been entered.
 
-Abnormal Termination Occurring when a Long Query Statement Has Been Executed with the Windows-version CSQL(CUBRIDSUS-9315)
+Abnormal termination occurring when a long query statement has been executed with the Windows-version CSQL(CUBRIDSUS-9315)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To avoid stack overflow, the stack memory size for Windows was changed from 1 M to 8 M.
 
-View to Include the Java Stored Procedure was not Loaded with a Unloaded Schema File(CUBRIDSUS-1520)
+View to include the Java Stored Procedure was not loaded with a unloaded schema file(CUBRIDSUS-1520)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The view to include the Java stored procedure could not be loaded with a schema file which has been unloaded by unloaddb utility. This problem has been fixed.
 
-Data violating the Constraints was Input when loaddb was Set to Ignore a Specific Error(CUBRIDSUS-7650)
+Data violating the constraints was input when loaddb was set to ignore a specific error(CUBRIDSUS-7650)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If the loaddb utility was set to ignore a specific error by setting the --error-control-file=FILE option, data violating the constraints was entered. This problem has been fixed. For example, when -205 was set to ignore the NULL error, NULL data was entered in the default key column. This has been fixed so that data is not entered when an error occurs.
 
-Incorrect Row Number where an Error Has Occurred as Executing loaddb(CUBRIDSUS-7894)
+Incorrect row number where an error has occurred as executing loaddb(CUBRIDSUS-7894)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would lead to the output of an incorrect row number when an error occurred as the loaddb utility was loading data.
 
-loaddb to Fail or Load an Incorrect Value when the Schema File Included a String Ending with a Backslash ('\\')(CUBRIDSUS-9109)
+loaddb to fail or load an incorrect value when the schema file included a string ending with a backslash ('\\')(CUBRIDSUS-9109)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause the loaddb utility to fail or load an incorrect value when the schema file included a string ending with a backslash ('\\').
@@ -2651,7 +2651,7 @@ Fix a problem that would cause the loaddb utility to fail or load an incorrect v
     [dir] character varying(200) DEFAULT 'C:\Databases\',
     ...;
 
-Unloading a Wrong Reverse Order PREFIX Index(CUBRIDSUS-9966)
+Unloading a wrong reverse order prefix index(CUBRIDSUS-9966)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 An error would occur when loading the wrong reverse order prefix index, as shown in the following example. This error has been fixed.
@@ -2670,89 +2670,89 @@ An error would occur when loading the wrong reverse order prefix index, as shown
 
     CREATE INDEX [i] ON [t1] ([a] DESC (2));
 
-Unloading Data of the db_collation System Catalog View(CUBRIDSUS-10350)
+Unloading data of the db_collation system catalog view(CUBRIDSUS-10350)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause data for the db_collation system catalog view to be unloaded while unloading the database of 9.0 Beta version.
 While migrating the data from 9.0 Beta version to 9.1 version, using the unloaddb/loaddb utility may cause an error while trying to load data for system catalog view. It is recommended to remove db_collation from the unloaded file or use the migrate_90beta_to_91 utility instead of the unloaddb/loaddb utility.
 
 
-backupdb Utility of the Windows Version to Output an Internal Error for an Incorrect Input(CUBRIDSUS-10634)
+backupdb utility of the Windows version to output an internal error for an incorrect input(CUBRIDSUS-10634)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When a directory that did not exist was entered in the -D option of the cubrid backupdb utility for the Windows version, the "pthread_cond_destroy" error would occur. This problem has been fixed.
 
-Problem Preventing the checkdb Utility Execution from being Interrupted(CUBRIDSUS-7452)
+Problem preventing the checkdb utility execution from being interrupted(CUBRIDSUS-7452)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the problem that prevented the index check task carried out by the cubrid checkdb utility from being interrupted and stopped.
 
-Query Statement Terminated by the killtran Utility to not Return an Error(CUBRIDSUS-10133)
+Query statement terminated by the killtran utility to not return an error(CUBRIDSUS-10133)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When a transaction executing a query was terminated by the killtran utility, no error was returned. This has been fixed to return the "Has been interrupted" error.
     
-Fix to Include the Original Statement of the Query when Outputting the plandump Utility or the Slow Query Log(CUBRIDSUS-9593)
+Fix to include the original statement of the query when outputting the plandump utility or the slow query log(CUBRIDSUS-9593)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the query that was a query plan target was output, or a slow query was output in the server error log or the broker log by using the cubrid plandump utility, the rewritten query statement was output in the previous versions. This has been fixed to also output the original query statement entered by the user.
 
-Fix to Occur an Error when the Locale Setting of the dumplocale Utility was Wrong(CUBRIDSUS-10306)
+Fix to occur an error when the locale setting of the dumplocale utility was wrong(CUBRIDSUS-10306)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When a locale that does not exist in the locale library is specified in the cubrid_locales.txt file while executing the cubrid dumplocale utility, an error results.
 
-Broker is Abnormally Terminated as Executing broker_log_top when ')' Came in front of the String Binding Value as the First Character(CUBRIDSUS-9245)
+Broker is abnormally terminated as executing broker_log_top when ')' came in front of the string binding value as the first character(CUBRIDSUS-9245)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem in which the broker is abnormally terminated as executing broker_log_top when ')' came in front of the string binding value as the first character
     
-Abnormal Termination of the broker_log_top Utility when the SQL Log File Type was Wrong(CUBRIDSUS-10072)
+Abnormal termination of the broker_log_top utility when the SQL log file type was wrong(CUBRIDSUS-10072)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the problem that would cause the broker_log_top utility and the shard_broker_log_top utility to be abnormally terminated when the SQL log file type was incorrect.
     
-Problem Preventing the broker_log_top Utility for Windows from Analyzing the UNIX File Type SQL Log File(CUBRIDSUS-10139)
+Problem preventing the broker_log_top utility for windows from analyzing the UNIX File type SQL log file(CUBRIDSUS-10139)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem preventing the broker_log_top utility for Windows from analyzing the UNIX file type SQL log file.
 
-backup could Not be Stopped when the Checkpoint Operation was being Executed(CUBRIDSUS-9337)
+backup could not be stopped when the checkpoint operation was being executed(CUBRIDSUS-9337)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Fix a problem in which backup could not be stopped by using INTERRUPT (Ctrl+C) when the checkpoint operation was being executed while executing the backup.
 
-Modify to Cancel the Checkpoint when it Took 1 Minute or More to Execute Termination of the Database because of the Checkpoint(CUBRIDSUS-6867)
+Modify to cancel the checkpoint when it took 1 minute or more to execute termination of the database because of the checkpoint(CUBRIDSUS-6867)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The database was set to be terminated by force when it took 1 minute or more to execute termination of the database by using the cubrid server stop command. When it took a long time to operate the checkpoint during shutdown, the database server was terminated by force, causing a long time to recover the database when restarting the database. This was fixed to cancel the checkpoint process and terminate the database when a timeout occurred during shutdown.
 
-the Number of client wait CASs is Larger than the Total of CASs when Outputting the Broker Status Information(CUBRIDSUS-10235)
+The number of client wait CASs is larger than the total of CASs when outputting the broker status information(CUBRIDSUS-10235)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When outputting the broker status information using the cubrid broker status -f command, if the number of CASs increased to be higher than the minimum number and then decreased, the number of CLIENT WAIT CASs was larger than the total number of CASs. This problem has been fixed.
 
-Abnormal Termination when Interrupting the Execution of createdb Utility for Windows(CUBRIDSUS-9332)
+Abnormal termination when interrupting the execution of createdb utility for Windows(CUBRIDSUS-9332)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem that would cause abnormal termination when the cubrid createdb utility for Windows was interrupted.
 
-Parameter Value is Set Incorrectly when Changing the Parameter Value Using the shard_broker_changer Utility(CUBRIDSUS-9956)
+Parameter value is set incorrectly when changing the parameter value using the shard_broker_changer utility(CUBRIDSUS-9956)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a problem causing parameter values such as SQL_LOG, SLOW_LOG, and PROXY_LOG to be changed to the wrong values using the shard_broker_changer utility.
 
-Output an Incorrect ERR-Q Value when the -s Option of cubrid broker status Command Has Been Set(CUBRIDSUS-10391)
+Output an incorrect ERR-Q value when the -s option of cubrid broker status command has been set(CUBRIDSUS-10391)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the -s option of cubrid broker status command was set, the number of error queries per second was output in the ERR-Q item. This has been fixed to output the number of error queries for N seconds as an option.
 
-Output an Incorrect Error Message when the File Argument has been Omitted from the ;append Session Command of CSQL for Windows(CUBRIDSUS-10191)
+Output an incorrect error message when the file argument has been omitted from the ;append session command of CSQL for Windows(CUBRIDSUS-10191)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In CSQL for Windows, the file name argument has been omitted from the ;append session command, and the error message "ERROR: A file name is required." is output. 
 In the previous versions, "ERROR: Permission denied" or "ERROR: Too many file names have been entered." was output.
 
-Fix to Output the Disk Space Size Required to Create the Database Using createdb Utility(CUBRIDSUS-6623)
+Fix to output the disk space size required to create the database using createdb utility(CUBRIDSUS-6623)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to output the disk space size required to create the database by using the createdb utility. ::
@@ -2764,7 +2764,7 @@ If the disk space is not sufficient, the following error message is also output:
     Couldn't create database.
     Unable to create volumes for database "testdb". Please refer "/home/CUBRID/log/testdb_createdb.err" for additional information.
         
-Improve the Error Message Output when Entering the Volume Size out of the Range as Creating the DB(CUBRIDSUS-9761)
+Improve the error message output when entering the volume size out of the range as creating the DB(CUBRIDSUS-9761)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to output the error message that says that the volume size has been entered in Bytes(B) when the volume size out of the allowable DB size has been entered while creating the DB. ::
@@ -2773,18 +2773,18 @@ Fix to output the error message that says that the volume size has been entered 
     Couldn't create database.
     The given 'db_volume_size', 1121B is out of range. Choose a size between 20.0M and 20.0G.
 
-No Error for the loaddb Command with the -t Option, even when there was no Right to Access the Table or the Table did not Exist(CUBRIDSUS-10326)
+No error for the loaddb command with the -t option, even when there was no right to access the table or the table did not exist(CUBRIDSUS-10326)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Configuration, Build, and Installation
 --------------------------------------
 
-Abnormal Termination of Client and Server when Defining the Undefined System Parameter to cubrid.conf(CUBRIDSUS-9765)
+Abnormal termination of client and server when defining the undefined system parameter to cubrid.conf(CUBRIDSUS-9765)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In 9.0 Beta version, when a system parameter that did not exist in cubrid.conf was set, the client and server would be abnormally terminated. This problem has been fixed.
     
-Fix to Change Some System Parameters while the System is Operating(CUBRIDSUS-7625)
+Fix to change some system parameters while the system is operating(CUBRIDSUS-7625)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following system parameters can be changed while the system is operating:
@@ -2808,44 +2808,44 @@ In addition, the following phenomena that occurred when calculating the system p
 *   Normal system parameters could not be retrieved by using the ;get session command after failing to executing the ;get command for the undefined system parameter
 
 
-Add an Option to Build the CCI Driver Only in the CUBRID Source File and Distributed the CCI Source Package(CUBRIDSUS-8247)
+Add an option to build the CCI driver only in the CUBRID Source file and distributed the CCI source package(CUBRIDSUS-8247)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Add the --with-cci-only option to the configure script of the CUBRID source file to build the CCI driver only. 
 In addition, distributed the source package that can build the CCI driver only.
 
-a Query that Has Been Normally Executed to be Included in the SQL Log, even when the Broker Parameter SQL_LOG Value Has Been Set to NOTICE(CUBRIDSUS-10286)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Normally executed query had been included in the SQL log, even when the broker parameter SQL_LOG has been set to NOTICE(CUBRIDSUS-10286)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Even when the SQL_LOG value of cubrid_broker.conf was set to NOTICE, the query that has been normally executed was often output. The possibility of this occurring has been reduced.
 
-Fix to Build the JDBC Driver with JDK 7(CUBRIDSUS-10660)
+Fix to build the JDBC driver with JDK 7(CUBRIDSUS-10660)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix to Allow '/' as the Path Separator of the Broker Parameter in Windows(CUBRIDSUS-9318)
+Fix to allow '/' as the path separator of the broker parameter in Windows(CUBRIDSUS-9318)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to allow '/' as the path separator of the broker parameter in Windows. ::
 
     D:/dir/dir/file
 
-"Drive Name:" to be Incorrectly Recognized in the ACCESS_CONTROL_FILE File in Windows(CUBRIDSUS-9318)
+"Drive name:" to be incorrectly recognized in the ACCESS_CONTROL_FILE file in Windows(CUBRIDSUS-9318)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the ACCESS_CONTROL_FILE file was written in "db_name:db_user_id:IP_file" format and the IP_file path was written as "Drive Name:Path File Name", the ":" after the drive name was mistaken as the value separator, causing misrecognition of the file.
     
-a Message Saying Wrongly that the Broker Has Been Normally Operated Even when the Broker Parameter Value was Incorrect in Windows(CUBRIDSUS-9992)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Wrong Message that the Broker Has Been Normally Operated Even when the Broker Parameter Value was Incorrect in Windows(CUBRIDSUS-9992)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to output an error message saying that the broker cannot be operated when the broker parameter value is incorrect in Windows.
 
-Parameter Setting Values in the Database Section Were Not Checked as Running the DB Server in Windows(CUBRIDSUS-10110)
+Parameter setting values in the database section were not checked as running the DB server in Windows(CUBRIDSUS-10110)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-"Server and Driver Installation" is Selected even if Select "Install the Interface Driver Only" when Installing CUBRID in Windows(CUBRIDSUS-9746)
+"Server and Driver Installation" is selected even if select "Install the Interface Driver Only" when installing CUBRID in Windows(CUBRIDSUS-9746)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Alarm Message Based on Java Installation while Installing the CUBRID Engine in Windows(CUBRIDSUS-9917)
+Alarm message based on Java installation while installing the CUBRID engine in Windows(CUBRIDSUS-9917)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If Java 1.6 or higher has not been installed in Windows while installing the CUBRID engine, the message saying that CUBRID Manager could not be used would be output. But this message is not related with the CUBRID engine. Therefore, this has been fixed to output a message saying that the Java stored procedure cannot be used.
@@ -2853,59 +2853,59 @@ If Java 1.6 or higher has not been installed in Windows while installing the CUB
 Other
 -----
 
-Wrong Warning Message When DML is Executed in the Environment Configured to Output a Warning(CUBRIDSUS-9458)
+Wrong warning message when DML is executed in the environment configured to output a warning(CUBRIDSUS-9458)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix a phenomenon of outputting a wrong warning message when normal INSERT/UPDATE/DELETE was executed in the environment configured to output a warning.
     
-Output an Incorrect 64-bit int Value Exceeding the 32-bit int Range in Some Error Messages(CUBRIDSUS-8379)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Incorrect 64-bit int value exceeding the 32-bit int range in some error messages(CUBRIDSUS-8379)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix the problem causing the output of an incorrect 64-bit int value exceeding the 32-bit int range in some error messages.
 
-Fix to Write the Notification Message for the Request for Database Access Only Once(CUBRIDSUS-9885)
+Fix to write the notification message for the request for database access only once(CUBRIDSUS-9885)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to output only one notification message for the access request to the database server. In the previous versions, two notification messages were output to indicate the start and end of the processing of the request.
 
-Fix to Remove the Application Client Access Information from the Error Log and Write in the Access Log(CUBRIDSUS-5962)
+Fix to remove the application client access information from the error log and write in the access log(CUBRIDSUS-5962)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When too much application client access information was written in the error log, it became difficult for the user to view the details of specific errors. To solve this problem, a fix was applied to remove the application client access information from the error log and write in the access log.
 
-Send a Wrong Error instead of the Error which has Occurred in the DB Server when an INTERRUPT Has Occurred(CUBRIDSUS-9450)
+Send a wrong error instead of the error which has occurred in the db server when an INTERRUPT has occurred(CUBRIDSUS-9450)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 When an INTERRUPT occurred, the error which has occurred in the DB server was sent as another error. This problem has been fixed.
 
-Possible -495 Error when Many Clients Executed UPDATE for the Same Table(CUBRIDSUS-10651)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-495 error when many clients executed UPDATE for the Same table(CUBRIDSUS-10651)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When many clients simultaneously executed UPDATE for the same table and a query timeout frequently occurred, the -495 error ("Execute: Query execution failure #8560") would occur. This problem has been fixed.
 
 However, when a specific server thread has failed to access a page for update several times due to load being concentrated, a -495 error would occur in the previous version. After the update, the -2 error ("Internal system failure: no more specific information is available.") occurs. This situation may occur when there is a large number of UPDATE requests for the same page within a short period. In this case, the user should retry the failed query.
 
-Output the Memory Usage in the CAS Log when the Broker Common Application Server (CAS) is Restarted due to the Exceeded Memory Usage(CUBRIDSUS-10181)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Wrong memory usage in the CAS Log when the broker common application server (CAS) is restarted due to the exceeded memory usage(CUBRIDSUS-10181)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Fix to output the memory usage of the corresponding process in the CAS log when the Broker Common Application Server (CAS) is restarted due to excessive APPL_SERVER_MAX_SIZE of cubrid_broker.conf, which is the maximum value of the memory usage. ::
 
     01/10 18:43:42.217 (0) CAS MEMORY USAGE (101M) HAS EXCEEDED MAX SIZE (101M)
 
-Error Log of the Broker and the Database Server was Not Recreated when it was Randomly Deleted(CUBRIDSUS-8351)
+Error log of the broker and the database server was not recreated when it was randomly deleted(CUBRIDSUS-8351)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 There was a problem in which an error log of the broker and the database server was not recreated when it was randomly deleted. It has been fixed and the deleted error log is recreated.
 
-Broker was Abnormally Terminated when an Application Connected to the Broker with a Long Broker Name(CUBRIDSUS-9392)
+Broker was abnormally terminated when an application connected to the broker with a long broker name(CUBRIDSUS-9392)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 A broker was abnormally terminated when an application connected to the broker with a long broker name (32 characters or longer). The problem was fixed by allowing the length of a broker name to 63 characters and making the broker not to be started when the broker name was longer than 63 characters. 
 
-Output a Message of Normal Service Termination Even when the Service Has not Been Normally Terminated in Windows(CUBRIDSUS-10143)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A message of normal service termination even when the service has not been normally terminated in Windows(CUBRIDSUS-10143)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the "cubrid service stop" command was executed in Windows, the "++ cubrid service stop: success" message was output even when not all of the processes registered in services of cubrid.conf were not normally terminated. This problem has been fixed.
 
-Output an Incorrect Message when the Server was Started while the Server Has Been Running in Windows(CUBRIDSUS-10216)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Incorrect message when the server was started while the server has been running in Windows(CUBRIDSUS-10216)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When it was attempted to start the server while the server was running in Windows, the "cubrid server start: success" message was output. This has been fixed and the "cubrid server is already running" message is output.
 
@@ -2921,7 +2921,7 @@ In previous version of Windows, below error number will be returned.
 In previous and fixed versions of Linux and fixed version of Windows, below error number will be returned.
 *   On the first and second trial of access, -353 (Failed to connect to database server, 'basic', on the following host(s): localhost) will be returned.
 
-Description to CUBRIDService, the Windows Service Process(CUBRIDSUS-8917)
+Description to CUBRIDService, the Windows Service process(CUBRIDSUS-8917)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Add the following description to CUBRIDService, the Windows service process of CUBRID. This description can be checked in "Control Panel > System and Security > Management Tools > Services > CUBRIDService" of Windows. ::
@@ -2930,7 +2930,7 @@ Add the following description to CUBRIDService, the Windows service process of C
     Service start/stop menu is equal to the command of "cubrid service start/stop".
     If you setup "startup type" of this service to "Disabled", you can't use "cubrid service" command.
 
-Phenomenon preventing DB Users from being Edited in CUBRID Manager(CUBRIDSUS-9971)
+Phenomenon preventing DB users from being edited in CUBRID Manager(CUBRIDSUS-9971)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In 9.0 Beta version, it was impossible to edit the password of the DB users or change the group on the CUBRID Manager. This has been fixed.
@@ -2943,7 +2943,7 @@ Cautions
 New Cautions
 --------------
 
-DB Volume of 9.1 Version and 9.0 Beta Version were not Compatible(CUBRIDSUS-10147)
+DB volume of 9.1 version and 9.0 Beta version were not compatible(CUBRIDSUS-10147)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As the DB volume of 9.1 version and 9.0 Beta version are not compatible, a user upgrading CUBRID 9.0 Beta to version 9.1 should convert the existing DB volume to the DB volume of version 9.1 after installing CUBRID 9.1. For volume migration, the migrate_90beta_to_91 utility for version 9.1 is provided. ::
@@ -2952,19 +2952,19 @@ As the DB volume of 9.1 version and 9.0 Beta version are not compatible, a user 
 
 For details, see :doc:`/upgrade`.
 
-DB Volume was not Compatible Between 9.1 Version and the Versions Lower than 9.0 Beta Version(CUBRIDSUS-5238)
+DB volume was not compatible between 9.1 version and the versions lower than 9.0 Beta version(CUBRIDSUS-5238)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As the DB volume of version 9.1 and versions lower than 9.0 Beta are not compatible, the user should migrate the data using cubrid unloaddb/loaddb. For more details, see :doc:`/upgrade`\.
 
 .. note:: 9.0 Beta version users should upgrade all drivers, broker, and DB server together as migrating DB volume.
     
-Changed to CUBRID_CHARSET Environment Variable and CUBRID_MSG_LANG Environment Variable instead of CUBRID_LANG
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Change to CUBRID_CHARSET and CUBRID_MSG_LANG environment variables instead of CUBRID_LANG
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Since version 9.1, CUBRID_LANG environment variable is no longer used. To create or run the database, the CUBRID_CHARSET environment variable should be set because it determines the charset type. To output the utility message and the error message, the CUBRID_MSG_LANG environment variable is used. If the setting is omitted, the setting of CUBRID_CHARSET environment variable is used. 
 
-Modified How to Process an Error for the Array of the Result of Executing Several Queries at Once in the CCI Application(CUBRIDSUS-9364)
+Modify how to process an error for the array of the result of executing several queries at once in the CCI application(CUBRIDSUS-9364)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When executing several queries at once in the CCI application, if an error has occurs from at least one query among the results of executing queries by using the cci_execute_array function, the cci_execute_batch function, the error code of the corresponding query was returned from 2008 R3.0 to 2008 R4.1. This problem has been fixed to return the number of the entire queries and check the error of each query by using the CCI_QUERY_RESULT_* macros from 2008 R4.3 and 9.1 version.
@@ -3041,7 +3041,7 @@ Since the 2008 R4.1 version, the Default value of CCI_DEFAULT_AUTOCOMMIT has bee
 
 The default value for the CCI_DEFAULT_AUTOCOMMIT broker parameter, which affects the auto commit mode for applications developed with CCI interface, has been changed to ON since CUBRID 2008 R4.1. As a result of this change, CCI and CCI-based interface (PHP, ODBC, OLE DB etc.) users should check whether or not the application's auto commit mode is suitable for this.
 
-From the 2008 R4.0 version, the Options and Parameters that use the unit of Pages were changed to use the unit of Volume Size(CUBRIDSUS-5136)
+From the 2008 R4.0 version, the options and parameters that use the unit of pages were changed to use the unit of volume size(CUBRIDSUS-5136)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The options (-p, -l, -s), which use page units to specify the database volume size and log volume size of the cubrid createdb utility, will be removed. Instead, the new options, added after 2008 R4.0 Beta (--db-volume-size, --log-volume-size, --db-page-size, --log-page-size), are used.
@@ -3049,14 +3049,14 @@ The options (-p, -l, -s), which use page units to specify the database volume si
 To specify the database volume size of the cubrid addvoldb utility, use the newly-added option (--db-volume-size) after 2008 R4.0 Beta instead of using the page unit.
 It is recommended to use the new system parameters in bytes because the page-unit system parameters will be removed. For details on the related system parameters, see the below.
 
-Be Cautious when setting DB Volume Size if you are a user of a version before 2008 R4.0 Beta(CUBRIDSUS-4222)
+Be cautious when setting db volume size if you are a user of a version before 2008 R4.0 Beta(CUBRIDSUS-4222)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 From the 2008 R4.0 Beta version, the default value of data page size and log page size in creating the database was changed from 4 KB to 16 KB. If you specify the database volume to the page count, the byte size of the volume may differ from your expectations. If you did not set any options, 100MB-database volume with 4KB-page size was created in the previous version. However, starting from the 2008 R4.0, 512MB-database volume with 16KB-page size is created.
 
 In addition, the minimum size of the available database volume is limited to 20 MB. Therefore, a database volume less than this size cannot be created.
 
-The Change of the Default value of some System Parameters of the versions before 2008 R4.0(CUBRIDSUS-4095)
+The change of the default value of some system parameters of the versions before 2008 R4.0(CUBRIDSUS-4095)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Starting from 2008 R4.0, the default values of some system parameters have been changed.
@@ -3086,17 +3086,17 @@ Now, the default value of max_clients, which specifies the number of concurrent 
 
 In addition, when a database is created using cubrid createdb, the minimum value of the data page size and the log page size has been changed from 1K to 4K.
  
-Changed so that Database Services, Utilities, and Applications Cannot be Executed when the System Parameter is Incorrectly Configured(CUBRIDSUS-5375)
+Changed so that database services, utilities, and applications cannot be executed when the system parameter is incorrectly configured(CUBRIDSUS-5375)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It has been changed so that now the related database services, utilities, and applications are not executed when configuring system parameters that are not defined in cubrid.conf or cubrid_ha.conf, when the value of system parameters exceed the threshold, or when the system parameters per page and the system parameters in bytes are used simultaneously.
 
-Database Fails to Start if the data_buffer_size is Configured with a value that Exceeds 2G in CUBRID 32-bit version(CUBRIDSUS-5349)
+Database fails to start if the data_buffer_size is configured with a value that exceeds 2G in CUBRID 32-bit version(CUBRIDSUS-5349)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the CUBRID 32-bit version, if the value of data_buffer_size exceeds 2G, the running database fails. Note that the configuration value cannot exceed 2G in the 32-bit version because of the OS limit.
 
-Recommendations for Controlling Services with the CUBRID Utility in Windows Vista and higher(CUBRIDSUS-4186)
+Recommendations for controlling services with the CUBRID Utility in Windows Vista and higher(CUBRIDSUS-4186)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To control services using cubrid utility from Windows Vista and higher, it is recommended to start the command prompt window with administrative privileges.
@@ -3108,13 +3108,13 @@ The procedures for starting the command prompt window as an administrator in Win
 * Right-click [Start > All Programs > Accessories > Command Prompt].
 * When [Execute as an administrator (A)] is selected, a dialog box to verify the privilege escalation is activated. Click “YES” to start with administrative privileges.
     
-A Manager Server process-related Error Occurs in the Execution of the CUBRID source after its build(CUBRIDSUS-3553)
+A manager server process-related error occurs in the execution of the CUBRID source after its build(CUBRIDSUS-3553)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
 If users want to build the CUBRID source and install it themselves, they must build and install CUBRID and the CUBRID Manager respectively. If you check out only CUBRID source and run cubrid service start or cubrid manager start after build, the error "cubrid manager server is not installed" will occur.
 
 
-GLO Class which is Used in 2008 R3.0 or before is Not Supported any longer(CUBRIDSUS-3826)
+GLO class which is used in 2008 r3.0 or before is not supported any longer(CUBRIDSUS-3826)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. (See :ref:`blob-clob` for more information about LOB data types).
@@ -3175,20 +3175,20 @@ With the discontinued support of GLO class, the deleted functions for each inter
 |            |                            |
 +------------+----------------------------+
 
-Port Configuration is Required if the Protocol between the master and server Processes is changed, or if two versions are Running at the same time(CUBRIDSUS-3564)
+Port configuration is required if the protocol between the master and server processes is changed, or if two versions are running at the same time(CUBRIDSUS-3564)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Because the communication protocol between a master process (cub_master) and a server process (cub_server) has been changed, the master process of CUBRID 2008 R3.0 or later cannot communicate with the server process of a lower version, and the master process of a lower version cannot communicate with a server process of 2008 R3.0 version or later. Therefore, if you run two versions of CUBRID at the same time by adding a new version in an environment where a lower version has already been installed, you should modify the cubrid_port_id system parameter of cubrid.conf so that different ports are used by the different versions.
 
-Specifying a Question Mark when Entering Connection Information as a URL string in JDBC(CUBRIDSUS-3217)
+Specifying a question mark when entering connection information as a URL string in JDBC(CUBRIDSUS-3217)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When entering connection information as a URL string in JDBC, property information was applied even if you did not enter a question mark (?) in the earlier version. However, you must specify a question mark depending on syntax in this CUBRID 2008 R3.0 version. If not, an error is displayed. In addition, you must specify colon (:) even if there is no username or password in the connection information. ::
 
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::althosts=127.0.0.2:31000,127.0.0.3:31000 – Error
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?althosts=127.0.0.2:31000,127.0.0.3:31000 – Normal
+    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::altHosts=127.0.0.2:31000,127.0.0.3:31000 – Error
+    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?altHosts=127.0.0.2:31000,127.0.0.3:31000 – Normal
 
-Not Allowed to Include @ In a database Name(CUBRIDSUS-2828)
+Not allowed to include @ in a database name(CUBRIDSUS-2828)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If @ is included in a database name, it can be interpreted that a host name has been specified. To prevent this, a revision has been made so that @ cannot be included in a database name when running cubrid createdb, cubrid renamedb and cubrid copydb utilities.

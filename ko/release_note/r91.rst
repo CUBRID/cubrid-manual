@@ -343,11 +343,11 @@ Windows 버전에서 SHARD 기능을 지원한다. SHARD 기능을 이용하기 
 [JDBC][CCI] 로드 밸런싱 기능 추가(CUBRIDSUS-8675)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CCI, JDBC의 연결 URL에 althosts를 포함하는 경우 응용 프로그램이 메인 호스트와 althosts에 지정한 호스트들에 임의의 순서로 연결되게 하는 기능을 추가했다. 아래의 예와 같이 연결 URL의 loadBalance의 값을 true로 설정하는 경우 해당 기능이 동작된다.
+CCI, JDBC의 연결 URL에 altHosts를 포함하는 경우 응용 프로그램이 메인 호스트와 altHosts에 지정한 호스트들에 임의의 순서로 연결되게 하는 기능을 추가했다. 아래의 예와 같이 연결 URL의 loadBalance의 값을 true로 설정하는 경우 해당 기능이 동작된다.
 
 ::
 
-    jdbc:cubrid:host1:port1:demodb:::?althosts=host2:port2,host3:port3&loadBalance=true
+    jdbc:cubrid:host1:port1:demodb:::?altHosts=host2:port2,host3:port3&loadBalance=true
         
 [CCI] resultset을 종료하는 함수 추가(CUBRIDSUS-9269)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -671,8 +671,8 @@ call_stack_dump_activation_list의 값을 지정하지 않으면 기존처럼 "-
 
 자동 커밋 모드가 OFF인 상황에서도 SELECT 문에 대해서만 자동 커밋이 가능하게 설정하는 브로커 파라미터 SELECT_AUTO_COMMIT를 제거했다. 
 
-CAS 프로세스의 최대 메모리 사용량을 정의하는 파라미터들의 값에 따른 동작 방식 수정(CUBRIDSUS-10260)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CAS 프로세스의 최대 메모리 사용량을 정의하는 파라미터에 의한 동작 방식 수정(CUBRIDSUS-10260)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 브로커 파라미터 APPL_SERVER_MAX_SIZE_HARD_LIMIT의 값의 범위를 1과 2,097,151 사이의 값으로 제한하고 이를 벗어나는 경우 브로커 구동을 하지 못하도록 수정했다.
 이와 함께 broker_changer를 이용해서 APPL_SERVER_MAX_SIZE_HARD_LIMIT의 값을 APPL_SERVER_MAX_SIZE보다 작게 변경하면 경고 메시지를 출력하도록 수정했다. 
@@ -2452,10 +2452,10 @@ JDBC의 executeBatch 메서드 실행 시 "Cannot communicate with the broker or
     rs.updateNull("col2");
     rs.updateRow();
 
-[JDBC] 연결 URL에서 connectTimeout을 설정해도 altHost로 재연결을 시도하지 않는 문제(CUBRIDSUS-10240)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[JDBC] 연결 URL에서 connectTimeout을 설정해도 altHosts로 재연결을 시도하지 않는 문제(CUBRIDSUS-10240)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-JDBC에서 연결 URL에 connectTimeout을 설정해도 connectTimeout이 발생되었을 때 altHost로의 재연결을 시도하지 않고 오류가 발생하는 문제를 수정했다.
+JDBC에서 연결 URL에 connectTimeout을 설정해도 connectTimeout이 발생되었을 때 altHosts로의 재연결을 시도하지 않고 오류가 발생하는 문제를 수정했다.
 
 [JDBC] 응용 프로그램에서 Statement를 닫지 않았음에도 불구하고  PreparedStatement.clearParameter() 메서드 호출 시 예외 발생(CUBRIDSUS-10274)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3209,8 +3209,8 @@ JDBC에서 URL 스트링으로 연결 정보를 입력하는 경우 이전 버�
 
 ::
 
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::althosts=127.0.0.2:31000,127.0.0.3:31000 –에러 처리
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?althosts=127.0.0.2:31000,127.0.0.3:31000 –정상 처리
+    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::altHosts=127.0.0.2:31000,127.0.0.3:31000 –에러 처리
+    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?altHosts=127.0.0.2:31000,127.0.0.3:31000 –정상 처리
 
 DB 이름에 @를 포함할 수 없음(CUBRIDSUS-2828)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

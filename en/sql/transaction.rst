@@ -200,6 +200,13 @@ When a transaction is committed, all statements and result sets that are closed 
 
 When a transaction is rolled back, all result sets are closed. This means that all result sets held in the previous transaction are closed because you have set cursor holdability.
 
+.. code-block:: java
+
+    rs1 = stmt.executeQuery(sql1);
+    conn.commit();
+    rs2 = stmt.executeQuery(sql2);
+    conn.rollback();  // result sets rs1 and rs2 are closed and it will not be available to use them.
+
 **When the Result Sets are Closed**
 
 The result sets that hold the cursor are closed in the following cases:
@@ -207,6 +214,7 @@ The result sets that hold the cursor are closed in the following cases:
 *   The result set is closed by driver (ex. rs.close(), etc)
 *   The statement is closed by driver (ex. stmt.close(), etc)
 *   Driver is disconnected
+*   Transaction is rolled back because of query execution failure in auto-commit ON mode or user's explicit call of rollback() in auto-commit OFF mode.
 
 **Relationship with CAS**
 

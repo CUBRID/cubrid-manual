@@ -1543,6 +1543,17 @@ For your information, in the previous versions, each SELECT statement had to be 
 
     (SELECT * FROM tbl1 ORDER BY a) UNION (SELECT * FROM tbl2 ORDER BY b);
 
+Wrong sorting order when ORDER BY sorting is performed in case that DEFAULT and NOT NULL constraints and an index exist in ENUM type column(CUBRIDSUS-10841)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql
+
+    CREATE TABLE t1(e ENUM('a', 'b', 'c', 'd', 'e') DEFAULT 'a' NOT NULL);
+    CREATE INDEX idx_t1 ON t1(e);
+    INSERT INTO t1 VALUES (3), (1), (2), (5), (4);
+
+    SELECT * FROM t1 ORDER BY 1;
+    
 Incorrect Query Result after Deadlock State Caused by the click counter Query(CUBRIDSUS-5009)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2510,9 +2521,19 @@ When the CCI application which used the datasource closes the connection and use
     ret = cci_datasource_release (ds, con_1, &error);
     
     ret = cci_prepare_and_execute (con_1, query, 1, &exec_retval, &error); /* invalid access */
-        
+
+[CCI] Abnormal termination of application when calling cci_execute() after calling cci_datasource_release() with setting pool_prepared_statement property to OFF(CUBRIDSUS-10847)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+An application was abnormally terminated when calling cci_execute() after calling cci_datasource_release() with setting pool_prepared_statement property to OFF. This has been fixed as occuring an error.
+    
 [CCI] Memory leak that occurred when retrying PREPARE internally while executing the cci_prepare function(CUBRIDSUS-10053)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+[CCI] COMMUNICATION Error when prepared statement is performed(CUBRIDSUS-10840)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When auto-commit mode is ON, if a CAS_ER_STMT_POOLING error occurred in the inner routine of cci_execute(), a driver retried "prepare" operation and CAS was restarted simultaneously then communication error(-20004, CCI_ER_COMMUNICATION) occurred. This phenomenon has been fixed.
 
 [CCI] CCI_ER_NO_MORE_DATA Error not to be returned after fetching the last value as executing the cci_schema_info function to get the trigger information for all tables(CUBRIDSUS-9438)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

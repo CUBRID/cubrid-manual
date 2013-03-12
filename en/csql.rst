@@ -397,9 +397,7 @@ This command sets auto-commit mode to **ON** or **OFF**. If any value is not spe
 
 This command executes the checkpoint within the CSQL session. This command can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**--sysadm**).
 
-**Checkpoint**
-
-is an operation of flushing all dirty pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval_in_mins** and **checkpoint_every_npages**). For more information, see :ref:`logging-parameters`. ::
+**Checkpoint** is an operation of flushing all dirty pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval_in_mins** and **checkpoint_every_npages**). For more information, see :ref:`logging-parameters`. ::
 
     csql> ;checkpoint
     Checkpoint has been issued.
@@ -542,16 +540,18 @@ The **;Info** session command allows you to check information such as schema, tr
     Timeout_period -1
     ......
 
-**Outputting statistics information of server processing (;.Hist)**
+**Dumping statistics information of server processing (;.Hist)**
 
-This command shows the statistics information of server processing. The information is collected after this command is entered. Therefore, the execution commands such as **;.dump_hist** or **;.x** must be entered to output the statistics information.
-
-This command is executable while the **communication_histogram** parameter in the **cubrid.conf** file is set to **yes**. You can also view this information by using the **cubrid statdump** utility. Following options are provided for this session command.
+This command is a CSQL session command for starting to collect the statistics information of server processing. The information is collected only for the current connection of CSQL after ";.Hist on" command is entered. Following options are provided for this session command.
 
 *   **on** : Starts collecting statistics information for the current connection.
 *   **off** : Stops collecting statistics information of server.
 
-This example shows the server statistics information for current connection. For information on specific items, see :ref:`statdump`. ::
+After running ";.Hist on", the execution commands such as **;.dump_hist** or **;.x** must be entered to output the statistics information.
+
+This command is executable while the **communication_histogram** parameter in the **cubrid.conf** file is set to **yes**. You can also view this information by using the **cubrid statdump** utility. 
+
+This example shows the server statistics information for current connection. For information on specific items or the command for the all statistics information about the server, see :ref:`statdump`. ::
 
     csql> ;.hist on
     csql> ;.x

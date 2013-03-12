@@ -283,12 +283,12 @@ The evaluation of an assignment expression is performed from left to right. The 
 Globalization
 -------------
 
-SHOW COLLATION statement and CHARSET, COLLATION and COERCIBILITY Function(CUBRIDSUS-9404)
+SHOW COLLATION statement and CHARSET, COLLATION and COERCIBILITY function(CUBRIDSUS-9404)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 SHOW COLLATION statement which shows the collation information. CHARSET, COLLATION and COERCIBILITY function return the charset, collation and coercibility of its argument.
 
-Support Collation for Table(CUBRIDSUS-9403)
+Support collation for table(CUBRIDSUS-9403)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 9.1 allows collation for tables while 9.0 Beta only allowed collation for columns. 
@@ -346,7 +346,7 @@ CUBRID SHARD is now available from Windows.
 Driver
 ------
 
-[JDBC][CCI] Support Load Balancing(CUBRIDSUS-8675)
+[JDBC][CCI] Support load balancing(CUBRIDSUS-8675)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Provide a load balancing feature which let applications connect to the primary host and the hosts specified in altHosts in a random order when altHosts was added to the connection URL of CCI and JDBC. In the following example of a connection URL, this functionality is activated when the value of loadBalance is set to true.
@@ -355,7 +355,7 @@ Provide a load balancing feature which let applications connect to the primary h
 
     jdbc:cubrid:host1:port1:demodb:::?altHosts=host2:port2,host3:port3&loadBalance=true
     
-[CCI] cci_close_query_result Function(CUBRIDSUS-9269)
+[CCI] cci_close_query_result function(CUBRIDSUS-9269)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Different from the JDBC driver which provided two methods to close resultset and statement respectively, the CCI driver had one function, cci_close_req_handle, to close both. The cci_close_query_result function closes the given resultset. When a new function is not called, the memory for resultset is occupied until the statement is closed. So, the memory usage may be increased.
@@ -403,8 +403,8 @@ Provide replication delay information(CUBRIDSUS-9525)
     Delayed log page count         : 1459
     Estimated Delay                : 22 second(s)
 
-"cubrid tranlist" utility(CUBRIDSUS-9601)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tranlist utility(CUBRIDSUS-9601)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "cubrid tranlist" utility which shows the transaction information of the database. DBA and DBA groups are only allowed to use it.
 
@@ -504,7 +504,7 @@ Globalization
 Change collation coercibility level(CUBRIDSUS-10057)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Change the coercibility level which indicates the level of converting the collation with high coercibility to the collation with low coercibility, as shown in the following table. Notably, binary collation lowers the coercibility to eliminate inconsistency of LIKE query result between the host variable and the string constant.
+Change the coercibility level which indicates the level of converting the collation with high coercibility to the collation with low coercibility, as shown in the following table. The coercibility of binary collations is changed to eliminate inconsistency of LIKE query result between the host variable and the string constant.
 
 .. code-block:: sql
 
@@ -544,11 +544,11 @@ Change the coercibility level which indicates the level of converting the collat
 +------------------------+-------------------------------------------------------------------------------------------------------------------+
 | 10                     | When the **constant string** has a binary collation and ISO-8859-1 charset (iso88591_bin)                         |
 +------------------------+-------------------------------------------------------------------------------------------------------------------+
-| 11                     | Host variables**, user-defined variables                                                                          |
+| 11                     | Host variables, user-defined variables                                                                            |
 +------------------------+-------------------------------------------------------------------------------------------------------------------+
 
-Modify SQL function that required two or more string arguments to execute the SQL function only when the input argument is a collation which can be converted to either of the two(CUBRIDSUS-9920)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Prevent SQL functions whose argument is not coercible to the other's collation from execution(CUBRIDSUS-9920)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When two or more arguments have been given to the IF, CASE, DECODE, or FIELD function, the function can be executed only when the collation can be converted to either of the two.
 
@@ -577,8 +577,8 @@ If the collation of the input argument is non-binary, it cannot convert either o
     'if ' requires arguments with compatible collations.
 
 
-Modify not to allow hash partitioning of the table by using the non-binary collation string(CUBRIDSUS-10156)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Hash partitioning with a non-binary collation column is not allowed(CUBRIDSUS-10156)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The table is not hash-partitioned by using the non-binary collation string.
 
@@ -600,22 +600,22 @@ The table is not hash-partitioned by using the non-binary collation string.
 Driver
 ------
 
-[JDBC][CCI] Modify to commit whenever a function which executed several query statements in the array at once executes each query statement in the auto commit mode(CUBRIDSUS-6148)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[JDBC][CCI] Change array execution functions to commit whenever it executes a query under auto commit mode(CUBRIDSUS-6148)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the auto commit mode, when the cci_execute_array function and the cci_execute_batch function, and the Statement.executeBatch method and the PreparedStatement.executeBatch method of JDBC have processed several query statements in the array at once, commit has been executed after executing all query statements. It has been fixed to commit whenever each query statement was executed.
+cci_execute_array, cci_execute_batch function of CCI and Statement.executeBatch PreparedStatement.executeBatch method of JDBC commits, whenever it executes an individual query under auto commit mode, while the previous versions commit once for entire execution.
 
-[JDBC] Only the BIT type values were allowed as binding the values for the PreparedStatement object by using the setBoolean method(CUBRIDSUS-9205)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[JDBC] PreparedStatement.setBoolean method(CUBRIDSUS-9205)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There was a problem in which only the BIT type values were allowed as binding the values for the PreparedStatement object by using the setBoolean method in JDBC. Now, the BIT type values are excluded but all numeric types such as SMALLINT, INTEGER, BIGINT, DECIMAL, REAL, DOUBLE, and MONETARY or all character types such as CHAR and VARCHAR can be bound.
+There was a problem in which only the BIT type values were allowed as binding the values for PreparedStatement.setBoolean method. Now, the BIT type values are excluded but all numeric types such as SMALLINT, INTEGER, BIGINT, DECIMAL, REAL, DOUBLE, and MONETARY or all character types such as CHAR and VARCHAR can be bound.
 
-[CCI] Modify the way to process an error for the array of the result of executing several queries at once in the CCI application(CUBRIDSUS-9364)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] Change error handling of array/batch execution functions of CCI(CUBRIDSUS-9364)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When executing several queries at once in the CCI application, if an error has occurs from at least one query among the results of executing queries by using the cci_execute_array function, the cci_execute_batch function, an error code of the corresponding query was returned from 2008 R3.0 to 2008 R4.1. This problem has been fixed to return the number of the entire queries and check the error of each query by using the CCI_QUERY_RESULT_* macros from 2008 R4.3 version.
 
-In regard to this, the CCI_QUERY_RESULT_ERR_NO macro to check the error number of a specific query failed among the entire query results has been added, and the error identifiers (CAS error -1 and DBMS error -2) have been added to the return value of the CCI_QUERY_RESULT_RESULT macro.
+The CCI_QUERY_RESULT_ERR_NO macro checks the error number of a specific query failed among the entire query results. The error indicator is also provided to identify wheterh an error is from CAS(-1) or DBMS(-2) from the return values of CCI_QUERY_RESULT_RESULT macro.
 
 The related CCI_QUERY_RESULT_* macros are like below.
 
@@ -625,10 +625,10 @@ The related CCI_QUERY_RESULT_* macros are like below.
 *   CCI_QUERY_RESULT_STMT_TYPE
 *   CCI_QUERY_RESULT_OID
 
-[CCI] Change the operation method for setting DB user and password by using cci_property_set function and cci_connect_with_url function(CUBRIDSUS-9393)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] Change usage of user and password from cci_property_set and cci_connect_with_url function(CUBRIDSUS-9393)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The operation method of setting the DB user and password of the cci_property_set function and the cci_connect_with_url function was unified. After the modification, the two functions operate as follows:
+The usages of DB user and password of the cci_property_set and cci_connect_with_url function are unified. The two functions now operate as follows:
 
 *   When the argument and the URL are specified, the argument value has a higher priority than the URL value.
 *   When either of the two is NULL, the one that is not NULL is used.
@@ -636,8 +636,7 @@ The operation method of setting the DB user and password of the cci_property_set
 *   If the DB user argument is NULL, "public" is set. If the password argument is NULL, NULL is set.
 *   If the password argument is NULL, URL setting is used.
 
-In the previous versions, if the DB user and password of DATASOURCE were set in the cci_property_set function, the DB user argument had to be set. If the password argument was not set, it was set to NULL. In addition, if the password argument was NULL, the password of the URL argument was used.
-In the previous versions, when setting the DB user and password of the cci_connect_with_url function, if the DB user argument was NULL, the value was set to "public". If the password argument was NULL, the password of the URL argument was used.
+In the previous versions, when the DB user and password of DATASOURCE were set in the cci_property_set function, the DB user argument had to be set. If the password argument was not set, it was set to NULL. In addition, when the password argument was NULL, the password of the URL argument was used. When an application sets the DB user and password of the cci_connect_with_url function, NULL argument for a DB user was interpreted as "public" user. If NULL was given as the password argument, the password of the URL was used.
 
 
 .. _changed-config91:
@@ -645,87 +644,87 @@ In the previous versions, when setting the DB user and password of the cci_conne
 Default Setting Changes
 -----------------------
 
-Remove the CUBRID_LANG environment variable and add an alternative environment variable(CUBRIDSUS-9719)(CUBRIDSUS-9468)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Remove CUBRID_LANG and add CUBRID_CHARSET and CUBRID_MSG_LANG environment variable(CUBRIDSUS-9719)(CUBRIDSUS-9468)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Remove the CUBRID_LANG environment variable and add the CUBRID_CHARSET environment variable that sets the database charset and the CUBRID_MSG_LANG environment variable that sets the charset of each message. The CUBRID_CHARSET environment variable should be set. If the CUBRID_MSG_LANG environment variable is omitted, it follows the setting of the CUBRID_CHARSET environment variable.
+Remove CUBRID_LANG and add CUBRID_CHARSET that sets the database charset and CUBRID_MSG_LANG that designates the charset of each message. The CUBRID_CHARSET environment variable is mandatory. When the CUBRID_MSG_LANG environment variable is omitted, it inherits the CUBRID_CHARSET environment variable.
 
 
-Limit the maximum size of the sort_buffer_size system parameter to 2G(CUBRIDSUS-9582)
+Change the upper limit of the sort_buffer_size system parameter to 2G(CUBRIDSUS-9582)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Limit the maximum size of the sort_buffer_size system parameter to 2G. In previous versions, the task was abnormally terminated when sort_buffer_size was set to a value larger than 2G and the sort_buffer with a size larger than 2 G was used for tasks requiring sorting, such as creating indexes.
+Change the upper limit of the sort_buffer_size system parameter to 2G. In previous versions, the server was abnormally terminated when sort_buffer_size was set to a value larger than 2G and more thant 2G of sort_buffer was actually used, such as loading a huge index.
 
-Change the operation method according to the specification of the call_stack_dump_activation_list parameter (CUBRIDSUS-9836)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Change the usage of call_stack_dump_activation_list system parameter(CUBRIDSUS-9836)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The operation method of cubrid.conf according to the specification of the call_stack_dump_activation_list parameter has been changed.
 
-*   When the value of call_stack_dump_activation_list was specified, some error numbers were set by default. This has been fixed and the error number is set for the specified value only.
-*   It is fixed to specify the DEFAULT keyword as the value of call_stack_dump_activation_list. The DEFAULT keyword is replaced with "-2, -7, -13, -14, -17, -19 , -21, -22, -45, -46, -48, -50, -51, -52, -76, -78, -79, -81, -90, -96, -97, -313, -314, -407, -414, -415, -416, -417, -583, -603, -836, -859, -890, -891, -976, -1040, -1075".
+*   When the value of call_stack_dump_activation_list was specified, some error numbers were set by default. 9.1 sets only the specified error codes.
+*   Add DEFAULT keyword for call_stack_dump_activation_list. The DEFAULT keyword is replaced with "-2, -7, -13, -14, -17, -19 , -21, -22, -45, -46, -48, -50, -51, -52, -76, -78, -79, -81, -90, -96, -97, -313, -314, -407, -414, -415, -416, -417, -583, -603, -836, -859, -890, -891, -976, -1040, -1075".
 
 If the value of call_stack_dump_activation_list is not specified, it is set to "-2, -7, -13, -14, -17, -19 , -21, -22, -45, -46, -48, -50, -51, -52, -76, -78, -79, -81, -90, -96, -97, -313, -314, -407, -414, -415, -416, -417, -583, -603, -836, -859, -890, -891, -976, -1040, -1075" by default, as it was.
 
 
-Remove the OFF value setting from the KEEP_CONNECTION broker parameter(CUBRIDSUS-5316)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Remove OFF option from KEEP_CONNECTION broker parameter(CUBRIDSUS-5316)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Remove the option of OFF value setting for the broker parameter, KEEP_CONNECTION. In 2008 R4.x and earlier versions, when the parameter value is set to OFF, the user-defined variable and the LAST_INSERT_ID, ROW_COUNT, PREPARE statement are not executed normally.
+Remove OFF option from the broker parameter, KEEP_CONNECTION. In 2008 R4.x and earlier versions, when it is set to OFF, the user-defined variable and the LAST_INSERT_ID, ROW_COUNT, PREPARE statement are not executed normally.
 
-Remove the SELECT_AUTO_COMMIT broker parameter(CUBRIDSUS-9326)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Remove SELECT_AUTO_COMMIT broker parameter(CUBRIDSUS-9326)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The SELECT_AUTO_COMMIT broker parameter was removed, as it allowed auto commit for the SELECT statement even when auto commit mode was OFF.
+The SELECT_AUTO_COMMIT broker parameter was removed, as it is no longer needed.
 
-Modify the operation of CAS process by the values of parameters which defining the maximum memory usage of CAS Process(CUBRIDSUS-10260)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Change APPL_SERVER_MAX_SIZE_HARD_LIMIT broker parameter(CUBRIDSUS-10260)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Limited the range of the value of APPL_SERVER_MAX_SIZE_HARD_LIMIT, the broker parameter, to a value within the range of 1 to 2,097,151. If the value is outside of the range the broker cannot run. 
+Change the permitted range of the value of APPL_SERVER_MAX_SIZE_HARD_LIMIT broker parameter as 1 to 2,097,151. If the value is out of the range, it is not allowed for the broker to be executed. 
 In addition, when the value of APPL_SERVER_MAX_SIZE_HARD_LIMIT is changed to a value smaller than APPL_SERVER_MAX_SIZE by using broker_changer, a warning message is displayed.
 
-Reduce the default setting value of the broker parameter which specified the size of SQL log file from 100 MB to 10 MB(CUBRIDSUS-9944)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Change the default value of SQL_LOG_MAX_SIZE broker parameter(CUBRIDSUS-9944)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Reduce the default setting value of SQL_LOG_MAX_SIZE of cubrid_broker.conf from 100 MB to 10 MB. If a user of a previous version wants to leave SQL logs equivalent to the existing volume of the SQL logs after upgrading to the new version, set the value of SQL_LOG_MAX_SIZE to 100,000 (unit: KB).
+Change the default value of SQL_LOG_MAX_SIZE of cubrid_broker.conf from 100MB to 10MB. If a user of a previous version wants to leave SQL logs equivalent to the existing volume of the SQL logs after upgrade, please set the value of SQL_LOG_MAX_SIZE to 100,000 (unit: KB).
 
 HA
 --
 
-Modify to process the SELECT statement in the HA environment when the node is in to-be-active state(CUBRIDSUS-8896)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Allow SELECT statements when the node is in to-be-active state(CUBRIDSUS-8896)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The SELECT statement can be processed in the HA environment when the node is in to-be-active state.
+The SELECT statements can be executed when the node is in to-be-active state.
 
 Other
 -----
 
-Improve and change the broker status output(CUBRIDSUS-9602)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changes on "cubrid broker status" command(CUBRIDSUS-9602)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Some issues related to outputting the broker status using the cubrid broker status command have been added or modified as follows:
+Changes on "cubrid broker status" command are as follows:
 
-*	Only the status of the brokers running is output when the SERVICE parameter of the broker is set to ON.
+*	Only the status of the executing brokers are shown when the SERVICE parameter is ON.
 
     ::
 
         % cubrid broker status SERVICE=ON
     
-* 	When outputting the broker status using the -b option
+* 	with -b option,
 
-    *	The first 20 characters of the broker name are output. When the broker name exceeds 20 characters, '...' is output after the first 20 characters of the broker name.
-    *	The REQ item is not output any longer.
-    *	The maximum value of UINT64 is output when the QPS item and the TPS item are output. In previous versions, the items were often output as a negative number.
-    *	#CONNECT has been added to output the sum of the connections to the application by Broker Common Application Server (CAS).
-    *	The SELECT, INSERT, UPDATE, DELETE, and OTHERS items have been added to output the count of executions by query type. However, if the -f option is selected, the items are not output.
-    *	The UNIQUE-ERR-Q item has been added to output the count of unique key violation errors.
+    *	The first 20 characters of the broker name are shown. When the broker name exceeds 20 characters, '...' is printed right after the first 20 characters of the broker name.
+    *	The REQ item is no longer provided.
+    *	To show QPS and TPS as unsigned 64-bits integer. In previous versions, negative numbers was shown when an overflow happened.
+    *	Add #CONNECT to provide the sum of the number of connections to the CAS processes belongs to the broker.
+    *	The SELECT, INSERT, UPDATE, DELETE and OTHERS items show the number of query executions for each. However -f option is given, these items are not printed.
+    *	UNIQUE-ERR-Q shows the number of unique key violation errors.
     
-*	When outputting the broker status without the -b option
+*	without -b option,
 
-    *	When outputting the STATUS item, "CLIENT_WAIT" and "CLOSE_WAIT" are output instead of "CLIENT WAIT" and "CLOSE WAIT".
-    *	The broker setting information is not output.
+    *	"CLIENT_WAIT" and "CLOSE_WAIT" are shown instead of "CLIENT WAIT" and "CLOSE WAIT".
+    *	The broker configuration is no longer provided.
     
-*	When the -l option is selected, the information of CAS for which the status is "CLOSE_WAIT" is not output.         
-        
+*	When -l option is given, the information of CAS whose status is "CLOSE_WAIT" is excluded.
+ 
 Improvements and Fixes
 ======================
 
@@ -735,8 +734,8 @@ Performance and Optimization
 Improve HA replication performance(CUBRIDSUS-8114)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Significantly improve the replication application performance in the HA environment. 
-When the master server is loaded with a large YCSB benchmark workload, the replication delay time taken until the load is applied to the slave server is measured as follows:
+The HA replication performance is significantly improved.
+Changes on the master node is reflected on the slave nodes in real time. The following table shows the delay time with a heavy workload of YCSB benchmark:
 
     +-------------------+-------------------+
     | Version           | Delay Time (sec)  |
@@ -746,36 +745,36 @@ When the master server is loaded with a large YCSB benchmark workload, the repli
     | CUBRID 9.1        |             1.18  |
     +-------------------+-------------------+
 
-Improve the DELETE performance when INSERT/DELETE are repeatedly executed(CUBRIDSUS-5222)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Improve DELETE performance when INSERT and DELETE are repeated(CUBRIDSUS-5222)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The time taken to execute DELETE became longer when INSERT/DELETE was executed repeatedly. This has been fixed, and now the time taken to execute DELETE is similar to the initial execution time, even when INSERT/DELETE is repeatedly executed.
+DELETE operation took longer as INSERT and DELETE were repeated. Improve to maintain the initial DELETE performance, even though there have been many INSERT and DELETE operations.
 
-Improve the DELETE performance of databases with an overflow page(CUBRIDSUS-5878)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Improve search and delete performance for non-unique indexes with many duplicate keys(CUBRIDSUS-5878)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improve the performance of accessing INSERT after recreating TRUNCATE table or index repeatedly(CUBRIDSUS-6501)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Improve the performance of accessing table after recreating TRUNCATE table or rebuilding an index(CUBRIDSUS-6501)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Previously, the performance of accessing INSERT was degraded after recreating TRUNCATE table or index repeatedly. This degradation has been reduced.
+Heavy execution of TRUNCATE a table or index rebuids brought performance degradation of accessing the table.
 
 Improve performance of INSERT ON DUPLICATE KEY UPDATE and REPLACE statement(CUBRIDSUS-8337)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improve the performance by searching the index directly, rather than executing the SELECT statement internally to search the records which violated the uniqueness. In addition, the performance has been improved by directly modifying the method of executing the UPDATE statement when the INSERT ON DUPLICATE KEY UPDATE statement was executed on the server.
+Improve the performance by searching the index directly, rather than executing an internal SELECT statement to find the records which violate the unique constraints. The performance of server side execution of INSERT ON DUPLICATE KEY UPDATE statement is also enhanced. It does not require an internal UPDATE statement any more.
 
 Improve analytic function performance(CUBRIDSUS-8487)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The analytic function performance has been improved.
 
-*   Improved the performance to process the analytic function for the data which is partly sorted
-*   Improved the performance when the analytic functions defined in a query share the same window
-*   Improved the performance to process the analytic function for the data configured with many groups
+*   Improve the performance to process the analytic function for the data which is partly sorted.
+*   Improve the performance when the analytic functions defined in a query share the same window.
+*   Improve the performance to process the analytic function for the data configured with many groups.
 
 .. code-block:: sql
     
-    -- Q1: Improved two times
+    -- Q1: Improved 2 times
     SELECT * 
     FROM (SELECT ROWNUM AS rn, 
                  AVG (c1) OVER (PARTITION BY p1) a1, 

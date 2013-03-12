@@ -756,7 +756,7 @@ Improve search and delete performance for non-unique indexes with many duplicate
 Improve the performance of accessing table after recreating TRUNCATE table or rebuilding an index(CUBRIDSUS-6501)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Heavy execution of TRUNCATE a table or index rebuids brought performance degradation of accessing the table.
+Heavy execution of TRUNCATE a table or index rebuilds brought performance degradation of accessing the table.
 
 Improve performance of INSERT ON DUPLICATE KEY UPDATE and REPLACE statement(CUBRIDSUS-8337)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

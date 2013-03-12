@@ -768,9 +768,9 @@ Improve analytic function performance(CUBRIDSUS-8487)
 
 The analytic function performance has been improved.
 
-*   Improve the performance to process the analytic function for the data which is partly sorted.
-*   Improve the performance when the analytic functions defined in a query share the same window.
-*   Improve the performance to process the analytic function for the data configured with many groups.
+*   Improve the performance when the analytic functions in a query share the same window.
+*   Improve the performance of analytic functions for many groups.
+*   Improve the performance of analytic functions for partly sorted data.
 
 .. code-block:: sql
     
@@ -816,9 +816,9 @@ The analytic function performance has been improved.
 Improve multi-key range optimization(CUBRIDSUS-10278)(CUBRIDSUS-6091)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The multi-key range optimization has been significantly improved.
+The multi-key range optimization is significantly improved.
 
-*   When there are two or more ORDER BY columns, or when the range is given by orderby_num(), multi-key range optimization to sort the median values and collect the result is available.
+*   Multi-key range optimization can be appied for the cases two or more ORDER BY columns or a range with orderby_num().
 
     .. code-block:: sql
 
@@ -837,7 +837,7 @@ The multi-key range optimization has been significantly improved.
         ORDER BY b, c DESC 
         FOR orderby_num() BETWEEN 5 AND 10;
 
-*   For some JOIN queries, multi-key range optimization is available.
+*   Support Multi-key range optimization on some JOIN queries.
 
     .. code-block:: sql
 
@@ -848,26 +848,26 @@ The multi-key range optimization has been significantly improved.
         ORDER BY t.c DESC, d 
         LIMIT 10;
 
-*   Fixed to execute the multi-key range optimization at the stage of creating the query action plan in order to view the multi-key range optimization through the query plan. Multi-key range optimization is applied based on the final result size defined by the LIMIT clause or orderby_num(). For example, to get the final result larger than the value set by parameter, the multi-key range optimization execution plan is not applied.
+*   Fix to show query execution plans for multi-key range optimization. It is now done during query compilation stage. However, multi-key range optimization is applied based on the final result size defined by the LIMIT clause or orderby_num() predicate. For example, when the final result size is larger than the limit, the multi-key range optimization execution plan is not applied.
 
-Improve to apply optimization of the ORDER BY clause if there was no affect on the result order when the column type of the ORDER BY clause was converted(CUBRIDSUS-7418)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Improve 'skip order by' optimization(CUBRIDSUS-7418)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improve to apply 'skip order by' (optimization of the ORDER BY clause that retrieved the value in the order sorted by index, not by executing sorting) if the result order before converting the column type of the ORDER BY clause was same with the result order after the conversion. 
+'skip order by' optimization can be applied even though a sorting column is coerced but the order of the result is same.
 
 .. code-block:: sql
 
-    CREATE TABLE t (a datetime);
+    CREATE TABLE t (a DATETIME);
     CREATE INDEX i ON t (a);
     
     SELECT * FROM t 
     WHERE a > '0000-00-00 00:00:00'
-    ORDER BY cast (a AS DATE);
+    ORDER BY CAST (a AS DATE);
 
-Improve the GROUP BY query including the LIMIT clause(CUBRIDSUS-6400)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Improve LIMIT clause optimization for GROUP BY query(CUBRIDSUS-6400)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Scan is immediately terminated when the GROUP BY query that includes the LIMIT clause reaches the result count of the LIMIT clause if GROUP BY omit optimization is applied.
+Scan is immediately stopped on reaching the result count of LIMIT clause of GROUP BY query when 'GROUP BY skip' optimization is applied.
 
 .. code-block:: sql
 
@@ -881,90 +881,85 @@ Scan is immediately terminated when the GROUP BY query that includes the LIMIT c
     LIMIT 5;
 
 Improve query optimization of the LIMIT clause (CUBRIDSUS-7661)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improve the inefficiency of terminating a query after navigating the N+1st record when a query was executed by using LIMIT N.
+The query is immediately stopped when it just reaches the result count of LIMIT clause. It does not go further to find the N+1 record any more.
 
 .. code-block:: sql
 
     SELECT * FROM t1 WHERE a > 0 AND b = 1 LIMIT 3;    
     
-Reduce the time taken to run the broker common application server (CAS) until the maximum connection count (CUBRIDSUS-9067)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Reduce time to fork new CAS processes(CUBRIDSUS-9067)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When the broker starts, as many CASs are running as the value of MIN_NUM_APPL_SERVER, the broker parameter. As the number of applications connected to the CAS gets larger, the CASs run up to the MAX_NUM_APPL_SERVER value. In 9.1 version, the time taken to run CASs to the MAX_NUM_APPL_SERVER has been reduced.
-
-For example, if MIN_NUM_APPL_SERVER was 100 and MAX_NUM_APPL_SERVER was 400, it took 30 seconds to increase one CAS connection from the 101st connection to the 400th connection. After the update, the time has been reduced to 3 seconds.
+As the number of application connections grows, it is required to fork new CAS processes upto MAX_NUM_APPL_SERVER broker parameter. 9.1 reduces time to fork new CAS processes.
+For example, when MIN_NUM_APPL_SERVER is 100 and MAX_NUM_APPL_SERVER is 400, it took over 30 seconds to fork 300 new CAS processes. 9.1 takes 3 seconds.
 
 Resource
 --------
 
-Add a function to limit the disk output volume to reduce the affect caused by adding the database volume on system operation(CUBRIDSUS-9521)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--max-writesize-in-sec option of addvoldb utility(CUBRIDSUS-9521)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add a function to limit the disk output volume to reduce the effect caused by adding the database volume on system operation. This function uses the --max_writesize-in-sec option to the addvoldb command and specifies the volume size used per second. ::
+Add an option, --max_writesize-in-sec for 'cubrid addvoldb' utility to limit the disk usage to add a new volume. ::
 
     % cubrid addvoldb -C --db-volume-size=2G --max-writesize-in-sec=1M testdb
     
 
-Improve efficiency of temporary volume usage in overflow record sorting process(CUBRIDSUS-9772)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Improve utilization of temporary volume to sort overflow records(CUBRIDSUS-9772)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Improve in order to enhance the efficiency of temporary volume usage when the overflow record is included as sorting is required while creating indexes or processing queries. The temporary volume is expanded only when required and the reusable space is utilized.
+A temporary volume is expanded/added only if the existing volumes are fully used while sorting overflow records.
 
-Temp volume not removed when restarting the server after abnormal termination(CUBRIDSUS-10195)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fix to clearly remove temporary volumes while recovering from abnormal termination(CUBRIDSUS-10195)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Memory leak that occurred in the command which periodically outputs the shard status information(CUBRIDSUS-10393)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fix memory leak of 'cubrid shard status' command(CUBRIDSUS-10393)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix memory leak in the "cubrid shard status -c -s 1" command which periodically outputs the Shard status information.
+Fix memory leak of "cubrid shard status -c -s 1" command which periodically prints the shard status information.
 
-More precise forecasting of memory usage space required to sort query result(CUBRIDSUS-1339)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Reduce the possibility of external sorting(CUBRIDSUS-1339)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The possibility of external sorting which requires disk usage has been reduced through more precise forecasting of the memory usage space required to sort the query results.
+Fix to reduce the possibility of external sorting through more precise forecasting of the memory space required to sort the query results.
 
 Several volumes created at once when volume was automatically increased(CUBRIDSUS-10295)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Several volumes would be created at once when several clients simultaneously required automatic volume expansion. This problem has been fixed.
+Fix not to automatically add several volumes at once even multiple clients simultaneously suffer lack of usable space. A volume extension is now done only when there's no usable one.
 
 Stability
 ---------
 
-DB server process hang due to internal problem of the lock manager(CUBRIDSUS-10329)(CUBRIDSUS-10009)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+DB server process hang due to internal issues of lock manager(CUBRIDSUS-10329)(CUBRIDSUS-10009)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Server process hang would occur due to problems in the lock manager while getting lock and due to internal errors caused by an incorrect lock timeout. These errors have been fixed.
+Fix an issue that lock manager might cause server process hang while acquiring a lock. Fix another internal issue due to an incorrect lock timeout. 
 
-Memory leak and abnormal server termination that might occur when deadlock was detected(CUBRIDSUS-10378)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Memory leak and abnormal termination of server that might occur while examining a deadlock(CUBRIDSUS-10378)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix the problems of memory leak and abnormal server termination that might occur when deadlock was detected.
+Purge unneeded archive logs(CUBRIDSUS-9848)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Archive log not cleaned after checkpoint(CUBRIDSUS-9848)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fix to clearly purge the unneeded archive logs. This issue can happen when a checkpoint operation is executed when there are many data flush operations.
 
-Fix the phenomenon that would result in the archive log not being cleaned up after executing checkpoint to flush the data to the DB volume in order to cut the recovery time. 
-This phenomenon can frequently occur when checkpoint is executed when there is frequent data flushing.
-In previous versions, the archive log had to be maintained since the checkpoint execution time was not updated. After the update, the archive log before the checkpoint execution time is organized.
+Error that might occur when a checkpoint occurs while allocating a new page in standalone mode(CUBRIDSUS-10444)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Error that might occur when checkpoint occurs while allocating a new page in standalone mode(CUBRIDSUS-10444)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fix the error "Skip invalid page in checkpoint" might occur when a checkpoint operation occurred while allocating a new page in the standalone mode.
 
-The error "Skip invalid page in checkpoint" might occur when checkpoint occurred while allocating a new page in the standalone mode. This error has been fixed.
+CAS hang in CLIENT WAIT state(CUBRIDSUS-10238)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Unlimited wait of CAS while CLIENT WAIT(CUBRIDSUS-10238)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-When the CAS was terminated by a signal or abnormally terminated at a specific time, the CAS process or broker process after would wait indefinitely. This problem has been fixed.
+Fix an issue can be happened when a CAS was terminated by a signal or abnormally terminated at a particular timepoint, the CAS or broker process would wait indefinitely.
 
 Abnormal CAS termination when network socket error occurred in CAS while receiving DB server error(CUBRIDSUS-10401) 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The CAS was abnormally terminated when a network socket error was occurred in the CAS while receiving a DB server error. 
-This problem has been fixed. In previous versions, SHARD CAS was abnormally terminated when "cubrid shard start" was executed while the MAX_NUM_APPL_SERVER value of cubrid_shard.conf (which set the number of shard CAS processes) was larger than the max_clients value of cubrid.conf (which set the maximum number of connections for the server) in the SHARD environment.
+Fix abnormal termination of CAS process when a network socket error happens while it is receiving a DB server error.
+In previous versions, SHARD CAS was abnormally terminated when "cubrid shard start" was executed while the MAX_NUM_APPL_SERVER value of cubrid_shard.conf (which set the number of shard CAS processes) was larger than the max_clients value of cubrid.conf (which set the maximum number of connections for the server) in the SHARD environment.
 
 SQL Function and Operator
 -------------------------

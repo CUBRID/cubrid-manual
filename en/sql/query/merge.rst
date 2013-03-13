@@ -45,6 +45,7 @@ To execute the **MERGE** statement, the **SELECT** authorization for the source 
     *   This clause can be specified as it is or as <*merge_update_clause*>. If both of two are defined, the order does not matter.
 
 * <*merge_hint*>: Index hint of MERGE statement
+
     *   USE_UPDATE_IDX (<*update_index_list*>): Index hint used in UPDATE clause of MERGE statement. Index names are listed on the *update_index_list* when UPDATE clause of MERGE statement is used. This hint is applied to <*join_condition*> and <*update_condition*>.
     *   USE_INSERT_IDX (<*insert_index_list*>): Index hint used in INSERT clause of MERGE statement. Index names are listed on the *insert_index_list* when INSERT clause of MERGE statement is used. This hint is applied to <*join_condition*>.
     
@@ -130,20 +131,21 @@ The following example shows how to use the **MERGE** statement to arrange the bo
     INSERT (t.std_id, t.addscore) VALUES (s.std_id, 10 + s.score * 0.1) WHERE s.score <= 30;
      
     SELECT * FROM bonus ORDER BY 1;
+    
     std_id     addscore
     ==========================
-                1           10
-                2           10
-                3           10
-                4           14
-                5           10
-                6           13
-                7           10
-                8           10
-                9           10
-               10           12
-               12           12
-               14           13
+        1           10
+        2           10
+        3           10
+        4           14
+        5           10
+        6           13
+        7           10
+        8           10
+        9           10
+       10           12
+       12           12
+       14           13
 
 In the above example, the source table is a set of std table records where the score is less than 40 and the target table is bonus. The student numbers (std_id) where the score (std.score) is less than 40 are 4, 6, 10, 12, and 14. Among them, for 4, 6, and 10 on the bonus table, the **UPDATE** clause adds 10% of the corresponding student score to the existing bonus. For 12 and 14 which are not on the bonus table, the INSERT clause additionally gives 10 scores and 10% of the corresponding student score.
 

@@ -1228,7 +1228,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **communication_histogram**
 
-    **communication_histogram** 은 데이터베이스 서버의 통계 정보를 확인하는 유틸리티인 **cubrid statdump** (자세한 내용은 :ref:`statdump` 참조)와 csql 인터프리터의 :ref:`csql-session-commands` " **;.h** "와  관련된 파라미터이며, 기본값은 **no** 이다.
+    **communication_histogram** 은 csql 인터프리터의 :ref:`csql-session-commands` " **;.h** "와  관련된 파라미터이며, 기본값은 **no** 이다. :ref:`CSQL 실행 통계 정보 출력 <csql-execution-statistics>`\ 를 참고한다.
 
 **compactdb_page_reclaim_only**
 

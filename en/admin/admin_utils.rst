@@ -850,15 +850,12 @@ The following shows [options] available with the **cubrid plandump** utility.
 .. _statdump:
 
 Dumping Statistics Information of Server
--------------------------------------------
+----------------------------------------
 
 **cubrid statdump** utility checks statistics information processed by the CUBRID database server. The statistics information mainly consists of the followings: File I/O, Page buffer, Logs, Transactions, Concurrency/Lock, Index, and Network request.
 
-Note that you must specify the parameter **communication_histogram** to **yes** in the **cubrid.conf** before executing the utility, or run ";se communication_histogram=yes" in csql.
-
-You can also check statistics information about the connection of csql, not the all statistics information of the server; start to collecting statistics information
- with "**;.h on**", then print the information with "**;.dump_hist**" or "**;.x**" in csql.
-
+You can also use CSQL's session commands to check the statistics information only about the CSQL's connection. For details, see :ref:`Dumping CSQL execution statistics information <csql-execution-statistics>`.
+ 
 ::
 
     cubrid statdump [options] database_name

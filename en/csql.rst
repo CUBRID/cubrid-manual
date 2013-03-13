@@ -508,7 +508,6 @@ You can use the **;STring-width** command to set the output width of character s
 **Setting the output width of the column (;COLumn-width)**
 
 You can use the **;COLumn-width** command to set the output width regardless of its data types.
-
 If you don't give a value after **;COL** command, it shows the current setting length. When it sets to 0, the columns will be displayed as it is. If it sets to greater than 0, the columns will be displayed with the specified length. ::
 
     csql> CREATE TABLE tbl(a BIGINT, b BIGINT);
@@ -540,18 +539,24 @@ The **;Info** session command allows you to check information such as schema, tr
     Timeout_period -1
     ......
 
-**Dumping statistics information of server processing (;.Hist)**
+.. _csql-execution-statistics:
 
-This command is a CSQL session command for starting to collect the statistics information of server processing. The information is collected only for the current connection of CSQL after ";.Hist on" command is entered. Following options are provided for this session command.
+**Dumping CSQL execution statistics information(;.Hist)**
+
+This command is a CSQL session command for starting to collect the statistics information in CSQL. The information is collected only for the currently connected CSQL after "**;.Hist on**" command is entered. Following options are provided for this session command.
 
 *   **on** : Starts collecting statistics information for the current connection.
 *   **off** : Stops collecting statistics information of server.
 
-After running ";.Hist on", the execution commands such as **;.dump_hist** or **;.x** must be entered to output the statistics information.
-
 This command is executable while the **communication_histogram** parameter in the **cubrid.conf** file is set to **yes**. You can also view this information by using the **cubrid statdump** utility. 
 
-This example shows the server statistics information for current connection. For information on specific items or the command for the all statistics information about the server, see :ref:`statdump`. ::
+After running "**;.Hist on**", the execution commands such as **;.dump_hist** or **;.x** must be entered to output the statistics information. After **;.dump_hist** or **;.x**, all accumulated informations are dumped and initiated.
+
+As a reference, you should use **cubrid statdump** utility to check all queries' statistics information of a database server.
+
+This example shows the server statistics information for current connection. For information on dumped specific items or **cubrid statdump** command, see :ref:`statdump`. 
+
+::
 
     csql> ;.hist on
     csql> ;.x

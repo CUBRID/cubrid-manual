@@ -1222,7 +1222,7 @@ The following are parameters related to utilities used in CUBRID. The type and v
 
 **communication_histogram**
 
-    **communication_histogram** is a parameter used to configure the **cubrid statdump** utility. It is related to :ref:`csql-session-commands` "**;.h**" of the CSQL Interpreter and the default value is **no**. For details, see :ref:`statdump`.
+    **communication_histogram** is a parameter associated with :ref:`csql-session-commands` "**;.h**" of the CSQL Interpreter and the default value is **no**. For details, see :ref:`Dumping CSQL execution statistics information <csql-execution-statistics>`.
 
 **compactdb_page_reclaim_only**
 

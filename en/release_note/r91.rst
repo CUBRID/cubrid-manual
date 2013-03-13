@@ -2367,10 +2367,10 @@ When query timeout was set using the broker parameter MAX_QUERY_TIMEOUT, JDBC's 
 
 In addition, query timeout does not occur for the cci_execute_batch function and the cci_execute_array function.
 
-[JDBC][CCI] Now the remaining queries are not executed when deadlock occurs while the multiple query execution function executes queries(CUBRIDSUS-9692)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[JDBC][CCI] Now the remaining queries are not executed when deadlock occurs while an array/batch execution function executes queries(CUBRIDSUS-9692)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the previous versions, when a deadlock occurred while multiple query execution functions, such as JDBC's PreparedStatement.executeBatch method or CCI's cci_execute_array and cci_execute_batch, were executing each query statement, the remaining queries would be continuously executed. This has been fixed, and now the remaining queries are no longer executed when deadlock occurs. For other general errors, the remaining queries are continuously executed.
+In the previous versions, when a deadlock occurred while an array/batch execution functions, such as JDBC's PreparedStatement.executeBatch method or CCI's cci_execute_array and cci_execute_batch, were executing each query statement, the remaining queries would be continuously executed. This has been fixed, and now the remaining queries are no longer executed when deadlock occurs. For other general errors, the remaining queries are continuously executed.
 
 [JDBC][CCI] Error occuring when there was no semicolon (;) at the end of the SHOW EXEC STATISTICS ALL sentence(CUBRIDSUS-7430)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

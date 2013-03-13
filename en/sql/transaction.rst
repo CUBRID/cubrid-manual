@@ -211,10 +211,10 @@ When a transaction is rolled back, all result sets are closed. This means that a
 
 The result sets that hold the cursor are closed in the following cases:
 
-*   The result set is closed by driver (ex. rs.close(), etc)
-*   The statement is closed by driver (ex. stmt.close(), etc)
-*   Driver is disconnected
-*   Transaction is rolled back because of query execution failure in auto-commit ON mode or user's explicit call of rollback() in auto-commit OFF mode.
+*   Driver closes the result set, i.e. rs.close()
+*   Driver closes the statement, i.e. stmt.close()
+*   Driver disconnects the connection.
+*   Transaction aborts, for instance, application explicitly calls rollback(), auto rollback due to a query failure under auto-commit mode.
 
 **Relationship with CAS**
 

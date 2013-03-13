@@ -325,10 +325,10 @@ Support collation with expansion(utf8_fr_exp_ab) which sorts Canadian French bas
 Sharding
 --------
 
-"cubrid shard getid" command to verify its shard ID of the shard key(CUBRIDSUS-9547)
+"cubrid shard getid" command to print the shard ID for the shard key(CUBRIDSUS-9547)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-"cubrid shard getid" command to show its shard ID of the given shard key.
+"cubrid shard getid" command prints the shard ID for the shard key.
 
 The following example prints the shard ID for shard key 1 on shard1, the shard proxy: ::
 
@@ -419,8 +419,8 @@ tranlist utility(CUBRIDSUS-9601)
        3(COMMITTED)         dba        myhost            1824           broker1_cub_cas_3
     -------------------------------------------------------------------------------------
 
-killtran utility shows the query execution information(CUBRIDSUS-9588)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+killtran utility with -q option shows the query execution information(CUBRIDSUS-9588)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 cubrid killtran with -q(--query-exec-info) option shows the query execution information of each transaction.
 
@@ -1537,13 +1537,15 @@ For your information, in the previous versions, each SELECT statement had to be 
 
     (SELECT * FROM tbl1 ORDER BY a) UNION (SELECT * FROM tbl2 ORDER BY b);
 
-Wrong sorting order when ORDER BY sorting is performed in case that DEFAULT and NOT NULL constraints and an index exist in ENUM type column(CUBRIDSUS-10841)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sorting does not work when index full scan for ENUM type column with NOT NULL constraint is performed(CUBRIDSUS-10841)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix a problem that sorting does not work when index full scan for ENUM type column with NOT NULL constraint is performed.
 
 .. code-block:: sql
 
-    CREATE TABLE t1(e ENUM('a', 'b', 'c', 'd', 'e') DEFAULT 'a' NOT NULL);
-    CREATE INDEX idx_t1 ON t1(e);
+    CREATE TABLE t1 (e ENUM('a', 'b', 'c', 'd', 'e') NOT NULL);
+    CREATE INDEX idx_t1 ON t1 (e);
     INSERT INTO t1 VALUES (3), (1), (2), (5), (4);
 
     SELECT * FROM t1 ORDER BY 1;
@@ -2503,10 +2505,10 @@ Add cci_is_holable function which returns whether the request handle has a holda
 [CCI] Abnormal termination of application when the 128-digit or more double value is read by cci_get_data(CCI_A_TYPE_STR)(CUBRIDSUS-9756)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[CCI] Abnormal operation of application when the connection used by datasource has been closed and then the connection handle is used as it was(CUBRIDSUS-9586)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] Abnormal operation of application when the closed connection was reused in DATASOURCE(CUBRIDSUS-9586)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When the CCI application which used the datasource closes the connection and uses the connection handle as it was, the application operated abnormally. This has been fixed to output an error.
+The application operated abnormally when the CCI application reused the closed DATASOURCE connection. This has been fixed to output an error.
 
 .. code-block:: c
 
@@ -2516,21 +2518,21 @@ When the CCI application which used the datasource closes the connection and use
     
     ret = cci_prepare_and_execute (con_1, query, 1, &exec_retval, &error); /* invalid access */
 
-[CCI] Abnormal termination of application when calling cci_execute() after calling cci_datasource_release() with setting pool_prepared_statement property to OFF(CUBRIDSUS-10847)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] Abnormal termination of application when calling cci_execute() after calling cci_datasource_release() with setting pool_prepared_statement property=OFF(CUBRIDSUS-10847)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-An application was abnormally terminated when calling cci_execute() after calling cci_datasource_release() with setting pool_prepared_statement property to OFF. This has been fixed as occuring an error.
+Fix a problem that an application was abnormally terminated when calling cci_execute() after calling cci_datasource_release() with setting pool_prepared_statement property=OFF.
     
 [CCI] Memory leak that occurred when retrying PREPARE internally while executing the cci_prepare function(CUBRIDSUS-10053)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[CCI] COMMUNICATION Error when prepared statement is performed(CUBRIDSUS-10840)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] -20004 error when prepared statement is performed(CUBRIDSUS-10840)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When auto-commit mode is ON, if a CAS_ER_STMT_POOLING error occurred in the inner routine of cci_execute(), a driver retried "prepare" operation and CAS was restarted simultaneously then communication error(-20004, CCI_ER_COMMUNICATION) occurred. This phenomenon has been fixed.
+Fixed a problem that -20004 error(CCI_ER_COMMUNICATION) occurred when a driver retried "prepare" operation and CAS was restarted simultaneously; "prepare" retrial is performed if CAS_ER_STMT_POOLING error occurred during running cci_execute() with autocommit mode ON.
 
-[CCI] CCI_ER_NO_MORE_DATA Error not to be returned after fetching the last value as executing the cci_schema_info function to get the trigger information for all tables(CUBRIDSUS-9438)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] CCI_ER_NO_MORE_DATA Error not to be returned after fetching the last value when executing the cci_schema_info function to get the all triggers information(CUBRIDSUS-9438)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
 .. code-block:: c
 
@@ -2898,6 +2900,11 @@ When an INTERRUPT occurred, the error which has occurred in the DB server was se
 When many clients simultaneously executed UPDATE for the same table and a query timeout frequently occurred, the -495 error ("Execute: Query execution failure #8560") would occur. This problem has been fixed.
 
 However, when a specific server thread has failed to access a page for update several times due to load being concentrated, a -495 error would occur in the previous version. After the update, the -2 error ("Internal system failure: no more specific information is available.") occurs. This situation may occur when there is a large number of UPDATE requests for the same page within a short period. In this case, the user should retry the failed query.
+
+All cursors are closed when there is an internal error in autocommit mode(CUBRIDSUS-10840)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix a problem that all holding cursors were closed by auto-rollback when an internal -20004 error(CAS_ER_STMT_POOLING) in autocommit mode occurred.
 
 Wrong memory usage in the CAS Log when the broker common application server (CAS) is restarted due to the exceeded memory usage(CUBRIDSUS-10181)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

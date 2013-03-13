@@ -3800,10 +3800,10 @@ Modify to be possible to change the location of the unix domain socket file of t
 
     2. The /tmp is used to store temporary files for Linux. Some administrators periodically clean up this directory.
 
-Limited the maximum value of the system parameter data_buffer_pages to 2G in the 32-bit version (CUBRIDSUS-6257)
+Limited the maximum value of the system parameter data_buffer_size to 2G in the 32-bit version (CUBRIDSUS-6257)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    In the 32-bit version, the maximum value of the system parameter data_buffer_pages is limited to 2G.
+    In the 32-bit version, the maximum value of the system parameter data_buffer_size is limited to 2G.
 
 Database would not be started when the set value of the index scan-related OID buffer parameter was 1K (CUBRIDSUS-8958)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3815,10 +3815,10 @@ Database would not be created when the set buffer size value of the database ser
 
     In this version, you can create a database even when the value of the system parameter data_buffer_size, which is used to configure the size of the data buffer cached into the memory by the database server process, is bigger than the physical memory capacity.
 
-Server process would be abnormally terminated when the size of the system parameter data_buffer_pages was configured to a value bigger than the available size of the system (CUBRIDSUS-6350)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Server process would be abnormally terminated when the size of the system parameter data_buffer_size was configured to a value bigger than the available size of the system (CUBRIDSUS-6350)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    This new version has fixed a problem in which the server process was abnormally terminated when the size of the system parameter data_buffer_pages was set to a value bigger than the available size of the system.
+    This new version has fixed a problem in which the server process was abnormally terminated when the size of the system parameter data_buffer_size was set to a value bigger than the available size of the system.
 
 Server process would be abnormally terminated when starting the HA if the system parameter ha_node_list does not have the separator @ (CUBRIDSUS-6474)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

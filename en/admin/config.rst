@@ -2,7 +2,7 @@
 System Parameters
 *****************
 
-This chapter provides information about configuring system parameters that can affect the system performance. System parameters determine overall performance and operation of the system. This chapter explains how to use configuration files for database server and broker as well as a description of each parameter. For CUBRID Manager server configuration, see CUBRID Manager Manual.
+This chapter provides information about configuring system parameters that can affect the system performance. System parameters determine overall performance and operation of the system. This chapter explains how to use configuration files for database server and broker as well as a description of each parameter. For CUBRID Manager server configuration, see `CUBRID Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual>`_.
 
 This chapter covers the following topics:
 
@@ -112,7 +112,7 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | temp_file_memory_size_in_pages      | server parameter        | int      | 4                              | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | thread_stack_size                   | server parameter        | int      | 1048576                        |                 |
+    |                               | thread_stacksize                    | server parameter        | int      | 1048576                        |                 |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     | :ref:`disk-parameters`        | db_volume_size                      | server parameter        | int      | 512M                           |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+

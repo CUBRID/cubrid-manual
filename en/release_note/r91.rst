@@ -964,10 +964,10 @@ In previous versions, SHARD CAS was abnormally terminated when "cubrid shard sta
 SQL Function and Operator
 -------------------------
 
-Error when an expression was specified to the PARTITION BY clause of analytic function(CUBRIDSUS-9579)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error when an expression is given for the PARTITION BY clause of analytic function(CUBRIDSUS-9579)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix an error that would occur when an expression has been specified to the PARTITION BY clause of the analytic function.
+Fix an error that would occur when an expression is given for the PARTITION BY clause of analytic function.
 
 .. code-block:: sql
 
@@ -980,7 +980,7 @@ In 9.0 beta version, the following error would occur:
     Semantic: System error (generate order_by) in ..\..\src\parser\xasl_generation.c (line: 5466) 
     select [v].[a], row_number() over (partition by 1+0) from (values (1),(2),(3)) [v] ([a]);
 
-The following shows the operation method based on the expression defined in the ORDER BY clause and the PARTITION BY clause after the OVER clause of the analytic function:
+The following rules show how CUBRID handles the expressions in ORDER BY and PARTITION BY clause of the OVER clause:
     
 *   ORDER BY constant (ex: 1): The constant specifies the column location of the SELECT list.
 *   ORDER BY constant expression (ex: 1+0): The constant expression is ignored and not used for ordering/partitioning.
@@ -998,12 +998,12 @@ Modified a problem in which the STR_TO_DATE function always returned the millise
 Error while executing BLOB_FROM_FILE and CLOB_FROM_FILE function(CUBRIDSUS-7596)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-An error "Semantic: Cannot coerce blob to type unknown data type." would occur when executing the BLOB_FROM_FILE function and the CLOB_FROM_FILE function.
+An error "Semantic: Cannot coerce blob to type unknown data type." would occur when executing BLOB_FROM_FILE and CLOB_FROM_FILE function.
 
 Error when overflow occurs as adding the TIME type value to the BIGINT type(CUBRIDSUS-3735)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-An incorrect result was output when overflow occurred as adding the TIME type value to the BIGINT type. Instead of the incorrect result, an error is now output.
+An incorrect result was returned when overflow occurred as adding the TIME type value to the BIGINT type. Instead of the incorrect result, an error is now output.
 
 .. code-block:: sql
 
@@ -2502,8 +2502,8 @@ Add cci_is_holable function which returns whether the request handle has a holda
 
     holdable = cci_is_holdable (req_handle);
 
-[CCI] Abnormal termination of application when the 128-digit or more double value is read by cci_get_data(CCI_A_TYPE_STR)(CUBRIDSUS-9756)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[CCI] Abnormal termination of application when the 128-digit or more double, monetary value is read by cci_get_data(CCI_A_TYPE_STR)(CUBRIDSUS-9756)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [CCI] Abnormal operation of application when the closed connection was reused in DATASOURCE(CUBRIDSUS-9586)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

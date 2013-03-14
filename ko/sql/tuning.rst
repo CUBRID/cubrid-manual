@@ -451,26 +451,26 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     
     .. code-block:: sql
     
-    CREATE INDEX idx ON bugs (creationdate) WHERE creationdate > SYS_DATETIME;
-        
-    ERROR: before ' ; '
-    'sys_datetime ' is not allowed in a filter expression for index.
-        
-    CREATE INDEX idx ON bugs (bugID) WHERE bugID > RAND();
-        
-    ERROR: before ' ; '
-    'rand ' is not allowed in a filter expression for index.
+        CREATE INDEX idx ON bugs (creationdate) WHERE creationdate > SYS_DATETIME;
+            
+        ERROR: before ' ; '
+        'sys_datetime ' is not allowed in a filter expression for index.
+            
+        CREATE INDEX idx ON bugs (bugID) WHERE bugID > RAND();
+            
+        ERROR: before ' ; '
+        'rand ' is not allowed in a filter expression for index.
     
 *   **OR** 연산자를 사용하는 경우
 
-  .. code-block:: sql
+    .. code-block:: sql
 
-    CREATE INDEX IDX ON bugs (bugID) WHERE bugID > 10 OR bugID = 3;
-     
-    In line 1, column 62,
-     
-    ERROR: before ' ; '
-    ' or ' is not allowed in a filter expression for index.
+        CREATE INDEX IDX ON bugs (bugID) WHERE bugID > 10 OR bugID = 3;
+         
+        In line 1, column 62,
+         
+        ERROR: before ' ; '
+        ' or ' is not allowed in a filter expression for index.
 
 *   :func:`INCR`, :func:`DECR` 함수와 같이 테이블의 데이터를 수정하는 함수를 포함한 경우
 
@@ -485,33 +485,33 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 *   **IS NULL** 연산자는 인덱스를 구성하는 칼럼들 중 적어도 하나가 **NULL** 이 아닐 경우에만 사용 가능
 
-  .. code-block:: sql
+    .. code-block:: sql
     
-    CREATE TABLE t (a INT, b INT);
-    
-    -- IS NULL cannot be used with expressions
-    CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
-    
-    ERROR: before ' ; '
-    Invalid filter expression (( not t.a<>0) is null ) for index.
-     
-    CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
-    
-    ERROR: before ' ; '
-    Invalid filter expression ((t.a+1) is null ) for index.
-     
-    -- At least one attribute must not be used with IS NULL
-    CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
-    
-    ERROR: before '  ; '
-    Invalid filter expression (t.a is null ) for index.
-     
-    CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
-    
-    ERROR: before ' ; '
-    Invalid filter expression (t.a is null  and t.b is null ) for index.
-     
-    CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
+        CREATE TABLE t (a INT, b INT);
+        
+        -- IS NULL cannot be used with expressions
+        CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
+        
+        ERROR: before ' ; '
+        Invalid filter expression (( not t.a<>0) is null ) for index.
+         
+        CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
+        
+        ERROR: before ' ; '
+        Invalid filter expression ((t.a+1) is null ) for index.
+         
+        -- At least one attribute must not be used with IS NULL
+        CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
+        
+        ERROR: before '  ; '
+        Invalid filter expression (t.a is null ) for index.
+         
+        CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
+        
+        ERROR: before ' ; '
+        Invalid filter expression (t.a is null  and t.b is null ) for index.
+         
+        CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
 
 *   필터링된 인덱스에 대한 인덱스 스킵 스캔(ISS)은 지원되지 않는다.
 *   필터링된 인덱스에서 사용되는 조건 문자열의 길이는 128자로 제한한다.

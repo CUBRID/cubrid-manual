@@ -66,6 +66,7 @@ The **INTEGER** data type is used to represent integers. The value range is avai
 
 *   If a real number is entered for an **INT** type, the number is rounded to zero decimal place and the integer value is stored.
 *   **INTEGER** and **INT** are used interchangeably.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -81,6 +82,7 @@ The **SMALLINT** data type is used to represent a small integer type. The value 
 
 *   If a real number is entered for an **SMALLINT** type, the number is rounded to zero decimal place and the integer value is stored.
 *   **SMALLINT** and **SHORT** are used interchangeably.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -94,10 +96,12 @@ BIGINT
 
 The **BIGINT** data type is used to represent big integers. The value range is available from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807.
 
-* If a real number is entered for a **BIG** type, the number is rounded to zero decimal place and the integer value is stored.
-* Based on the precision and the range of representation, the following order applies.
+*   If a real number is entered for a **BIG** type, the number is rounded to zero decimal place and the integer value is stored.
+*   Based on the precision and the range of representation, the following order is applied.
 
-  **SMALLINT** ⊂ **INTEGER** ⊂ **BIGINT** ⊂ **NUMERIC** 
+    **SMALLINT** ⊂ **INTEGER** ⊂ **BIGINT** ⊂ **NUMERIC** 
+    
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -117,6 +121,7 @@ NUMERIC/DECIMAL
 *   Precision must be equal to or greater than the number of integer digits + scale.
 *   **NUMERIC**, **DECIMAL**, and **DEC** are used interchangeably.
 *   To check how the precision and the scale became changed when you operate with **NUMERIC** typed values, see :ref:`numeric-data-type-op-and-conversion`.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -142,6 +147,7 @@ The minimum value for the precision *p* is 1 and the maximum value is 38. When t
 *   **FLOAT** is in 7 significant figures.
 *   Extra cautions are required when comparing data because the **FLOAT** type stores approximate numeric.
 *   **FLOAT** and **REAL** are used interchangeably.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -164,6 +170,7 @@ The precision *p* is not specified. The data specified as this data type is repr
 *   **DOUBLE** is in 15 significant figures.
 *   Extra caution is required when comparing data because the **DOUBLE** type stores approximate numeric.
 *   **DOUBLE** and **DOUBLE PRECISION** are used interchangeably.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -175,7 +182,8 @@ MONETARY
 
 The **MONETARY** data type is an approximate numeric data type. The range of valid value is the same as **DOUBLE**, which is represented to two decimal places; the value range can be different based on system. A comma is appended to every 1000th place.
 
-You can use a dollar sign or a decimal point, but a comma is not allowed.
+*   You can use a dollar sign or a decimal point, but a comma is not allowed.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -250,6 +258,7 @@ The **DATE** data type is used to represent the year (yyyy), month (mm) and day 
 *   The date value is displayed in the type of 'MM/DD/YYYY' in CSQL, and it is displayed in the type of 'YYYY-MM-DD' in JDBC application programs and the CUBRID Manager.
 *   The :func:`TO_DATE` function is used to convert a character string type into a **DATE** type. 
 *   0 is not allowed to input in year, month, and day; however, '0000-00-00', which every digit consisting of year, month, and day is 0, is allowed as an exception.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -272,6 +281,7 @@ The **TIME** data type is used to represent the hour (hh), minute (mm) and secon
 *   AM/PM can be specified in the 24-hour notation. An error occurs if the time specified does not follow the AM/PM format.
 *   Every time value is stored in the 24-hour notation. 
 *   The :func:`TO_TIME` function is used to return a character string type into a TIME type.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -294,11 +304,10 @@ The **TIMESTAMP** data type is used to represent a data value in which the date 
 
 *   All fields must be entered in integer format.
 *   If the year is omitted, the current year is specified by default. If the time value (hour/minute/second) is omitted, 12:00:00 AM is specified.
-
 *   You can store the timestamp value of the system in the **TIMESTAMP** type by using the :c:macro:`SYS_TIMESTAMP`\ (or :c:macro:`SYSTIMESTAMP`, :c:macro:`CURRENT_TIMESTAMP`). 
-
 *   The :func:`TIMESTAMP` or :func:`TO_TIMESTAMP` function is used to cast a character string type into a **TIMESTAMP** type.
 *   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception. GMT timestamp'1970-01-01 12:00:00 AM' or KST timestamp'1970-01-01 09:00:00 AM' is translated into timestamp'0000-00-00 00:00:00'.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -326,11 +335,10 @@ The input format of **TIMESTAMP** is as follows: ::
 
 *   All fields must be entered as integer.
 *   If you year is omitted, the current year is specified by default. If the value (hour, minute/second) is omitted, 12:00:00.000 AM is specified.
-
 *   You can store the timestamp value of the system in the **DATETIME** type by using the :c:macro:`SYS_DATETIME` (or :c:macro:`SYSDATETIME`, :c:macro:`CURRENT_DATETIME`, :func:`CURRENT_DATETIME`, :func:`NOW`) function.
-
 *   The :func:`TO_DATETIME` function is used to convert a string type into a **DATETIME** type.
 *   0 is not allowed to input in year, month, and day; however, '0000-00-00 00:00:00', which every digit consisting of year, month, day, hour, minute, and second is 0, is allowed as an exception.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 ::
 
@@ -630,6 +638,7 @@ Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*),
 *   *n* must be a number greater than 0.
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
 *   If a bit string smaller than *n* is stored, the remainder of the string is filled with 0s.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 .. code-block:: sql
 
@@ -658,6 +667,7 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
 *   The remainder of the string is not filled with 0s even if a bit string smaller than *n* is stored.
 *   *n* must be a number greater than 0.
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 .. code-block:: sql
 
@@ -769,6 +779,8 @@ When the length of a character string exceeds *n*, they are truncated. When char
     If you specify 'pacesetter' as CHAR(4), 'pace' is stored (truncated as the length of the character string is greater than 4).
     If you specify 'p ' as CHAR, 'p' is stored (if n is not specified, the length is set to the default value 1).
 
+*   **DEFAULT** constraint can be specified in a column of this type.
+
 VARCHAR(n)/CHAR VARYING(n)
 --------------------------
 
@@ -791,6 +803,8 @@ When the length of a character string exceeds *n*, they are truncated. When char
     If you specify 'pacesetter ' as VARCHAR(12), 'pacesetter ' is stored (a 10-character string plus two whitespace characters).
     If you specify 'pacesetter ' as VARCHAR(10), 'pacesetter' is stored (a 10-character string; two whitespace characters are truncated).
     If you specify 'p ' as VARCHAR, 'p' is stored (if n is not specified, the default value 1,073,741,823 is used, and the trailing space is not filled with whitespace characters).
+
+*   **DEFAULT** constraint can be specified in a column of this type.
 
 STRING
 ------
@@ -930,7 +944,9 @@ The following example shows the definition of an **ENUM** column.
     CREATE TABLE tbl (
         color ENUM ('red', 'yellow', 'blue', 'green')
     );
-
+    
+*   **DEFAULT** constraint can be specified in a column of this type.
+    
 An index is associated to each element of the enum set, according to the order in which elements are defined in the enum type. For example, the *color* column can have one of the following values (assuming that the column allows NULL values) :
 
     =========       ============

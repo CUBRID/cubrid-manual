@@ -931,6 +931,24 @@ REPLACE
     ======================
       '12345'
 
+다음은 개행 문자(newline)를 "\\n"으로 출력하도록 하는 예이다.
+    
+.. code-block:: sql
+
+    -- no_backslash_escapes=yes (default)
+
+    CREATE TABLE tbl (cmt_no INT PRIMARY KEY, cmt VARCHAR(1024));
+    INSERT INTO tbl VALUES (1234,
+    'This is a test for
+
+     new line.');
+
+    SELECT REPLACE(cmt, CHR(10), '\n')
+    FROM tbl
+    WHERE cmt_no=1234;
+
+    This is a test for\n\n new line.
+    
 REVERSE
 =======
 

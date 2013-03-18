@@ -941,6 +941,24 @@ REPLACE
     ======================
       '12345'
 
+The following shows how to print out the newline as "\\n".
+    
+.. code-block:: sql
+
+    -- no_backslash_escapes=yes (default)
+
+    CREATE TABLE tbl (cmt_no INT PRIMARY KEY, cmt VARCHAR(1024));
+    INSERT INTO tbl VALUES (1234,
+    'This is a test for
+
+     new line.');
+
+    SELECT REPLACE(cmt, CHR(10), '\n')
+    FROM tbl
+    WHERE cmt_no=1234;
+
+    This is a test for\n\n new line.
+
 REVERSE
 =======
 

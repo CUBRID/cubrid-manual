@@ -559,7 +559,7 @@ Add columns to the index catalog tables and views
 Add collation tables and views
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    The following tables and views have been added for the collation function for multilingual support.
+    The following tables and views have been added for the collation function for globalization.
 
     The _db_collation table has been added.
 
@@ -1217,7 +1217,7 @@ Possible to enter SELECT queries to the DO statement (CUBRIDSUS-6528)
 Possible to use UTF-8 character set as the identifier, such as the name of a table or column (CUBRIDSUS-7227)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Make it possible to use a UTF-8 character set as an identifier, such as the name of a table or column. For more information, see Multilingual Support in the Manual.
+    Make it possible to use a UTF-8 character set as an identifier, such as the name of a table or column. For more information, see :ref:`casing-and-identifiers`.
 
 
 Possible to use TO as well as AS between the existing and new names of a column when changing the name of the column (CUBRIDSUS-7477)
@@ -3932,7 +3932,7 @@ Cautions for CUBRID 9.0 Beta
 The DB volume is not compatible with the previous versions (CUBRIDSUS-5238)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    As the DB volume is not compatible with the versions before 9.0 Beta, it is necessary to migrate data by using cubrid unloaddb/loaddb. For more information, see the Manual and the "How to upgrade to CUBRID 9.0 Beta."
+    As the DB volume is not compatible with the versions before 9.0 Beta, it is necessary to migrate data by using cubrid unloaddb/loaddb. For more information, see :doc:`/upgrade`.
 
 Cautions for 9.0 Beta and Previous Versions
 -------------------------------------------
@@ -3996,7 +3996,7 @@ Database fails to start if the data_buffer_size is configured with a value that 
 GLO Class which is used in 2008 R3.0 or before is not supported any longer (CUBRIDSUS-3826)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. (See CUBRID SQL Guide > Data Types > BLOC/CLOB Data Type in the manual).
+    CUBRID 2008 R3.0 and earlier versions processed Large Objects with the Generalized Large Object glo class, but the glo class has been removed from CUBRID 2008 R3.1 and later versions. Instead, they support BLOB and CLOB (LOB from this point forward) data types. For more information, see :ref:`blob-clob`.
 
     glo class users are recommended to carry out tasks as follows:
 

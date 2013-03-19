@@ -2,7 +2,7 @@
 Globalization
 *************
 
-Multilingual support includes internationalization and localization. Internationalization can be applied to various languages and regions. Localization fits the language and culture in a specific area as appending the language-specific components. CUBRID supports multilingual collations including Europe and Asia to facilitate the localization.
+Globalization includes internationalization and localization. Internationalization can be applied to various languages and regions. Localization fits the language and culture in a specific area as appending the language-specific components. CUBRID supports multilingual collations including Europe and Asia to facilitate the localization.
 
 If you want to know overall information about character data setting, see :ref:`char-data-conf-guide`.
 
@@ -1097,6 +1097,8 @@ The locale part of CUBRID_CHARSET controls:
 * default locale for date - string conversion functions
 * default locale for number - string conversion functions
 * console conversion in CSQL
+
+.. _casing-and-identifiers:
 
 Casing and identifiers
 ^^^^^^^^^^^^^^^^^^^^^^

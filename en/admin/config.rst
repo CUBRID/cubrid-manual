@@ -166,8 +166,6 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | max_flush_pages_per_second          | server parameter        | int      | 10000                          | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | page_flush_interval_in_msecs        | server parameter        | int      | 0                              | available       |
-    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | sync_on_nflush                      | server parameter        | int      | 200                            | available       |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     | :ref:`transaction-parameters` | async_commit                        | server parameter        | bool     | no                             | available       |
@@ -748,8 +746,6 @@ Logging-Related Parameters
     +------------------------------+----------+-------------------+----------+----------+
     | max_flush_pages_per_second   | int      | 10000             | 1        | INT_MAX  |
     +------------------------------+----------+-------------------+----------+----------+
-    | page_flush_interval_in_msecs | int      | 0                 | -1       |          |
-    +------------------------------+----------+-------------------+----------+----------+
     | sync_on_nflush               | int      | 200               | 1        | INT_MAX  |
     +------------------------------+----------+-------------------+----------+----------+
 
@@ -805,10 +801,6 @@ Logging-Related Parameters
     **max_flush_pages_per_second** is a parameter used to configure the maximum flush capacity when the flushing operation is performed from a buffer to a disk. Its default value is **10,000**. That is, you can prevent concentration of I/O load at a certain point of time by configuring this parameter to control the maximum flush capacity per second.
 
     If a large number of **INSERT** or **UPDATE** operations are concentrated at a certain point of time, and the flush capacity reaches the maximum capacity set by this parameter, only log pages are flushed to the disk, and data pages are no longer flushed. Therefore, you must set an appropriate value for this parameter considering the workload of the service environment.
-
-**page_flush_interval_in_msecs**
-
-    **page_flush_interval_in_msecs** is a parameter used to configure the interval in milliseconds (msec.) at which dirty pages in a data buffer are flushed to a disk. Its default value is **0**. When the minimum value is set to -1, it work as that is set to 0. This is a parameter that is related to I/O load and buffer concurrency. For this reason, you must set its value in consideration of the workload of the service environment.
 
 **sync_on_nflush**
 

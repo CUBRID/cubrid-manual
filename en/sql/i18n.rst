@@ -1465,7 +1465,7 @@ CHAR and VARCHAR
 
 * generally, use VARCHAR if there are large variations in actual number of characters in user data.
 
-* CHAR requires 4x more storage when using UTF-8 compared to ISO-8859-1 and 3x when using EUC-KR.
+* CHAR type is fixed length type. Therefore, Even if you store only English character in CHAR type, it requires 4 bytes storage in UTF-8 and 3 bytes in EUC-KR.
 
 * the precision of columns refers to the number of characters (glyphs).
 

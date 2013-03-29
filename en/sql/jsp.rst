@@ -13,7 +13,7 @@ The advantages of using Java stored functions/procedures are as follows:
 *   **Productivity and usability** : Java stored functions/procedures, once created, can be reused anytime. They can be called from SQL statements or from Java applications using JDBC.
 *   **Excellent interoperability and portability** : Java stored functions/procedures use the Java Virtual Machine. Therefore, they can be used on any system where the Java Virtual Machine is available.
 
-.. _jsp_environment-configuration:
+.. _jsp-environment-configuration:
 
 Environment Configuration for Java Stored Function/Procedure
 ============================================================

@@ -4,7 +4,7 @@ MERGE
 
 **MERGE** 문은 하나 또는 그 이상의 원본으로부터 행들을 선택하여 하나의 테이블 또는 뷰로 갱신이나 삽입을 수행하기 위해 사용되며, 대상 테이블 또는 뷰에 갱신할지 또는 삽입할지 결정하는 조건을 지정할 수 있다. **MERGE** 문은 결정적 문장(deterministic statement)으로, 하나의 문장 내에서 대상 테이블의 같은 행을 여러 번 갱신할 수 없다.
 
-**MERGE** 문을 실행하기 위해서는 원본 테이블에 대해 **SELECT** 권한을 가져야 하며, 대상 테이블에 대해 **UPDATE** 절이 포함되어 있으면 **UPDATE** 권한, **DELETE** 절이 포함되어 있으면 **DELETE** 권한, **INSERT** 절이 포함되어 있으면 **INSERT** 권한을 가져야 한다. ::
+::
 
     MERGE [<merge_hint>] INTO <target> [[AS] <alias>]
     USING <source> [[AS] <alias>], <source> [[AS] <alias>], ...
@@ -44,12 +44,14 @@ MERGE
     *   <*expr_list*>: 상수 필터 조건은 모든 원본 테이블의 행들을 대상 테이블에 삽입하는 데 사용될 수 있다. 상수 필터 조건의 예로 ON (1=1)과 같은 것이 있다.
     *   <*merge_update_clause*>만 지정하거나 <*merge_update_clause*>와 함께 지정할 수 있다. 둘 다 명시한다면 순서는 바뀌어도 된다.
 
-* <*merge_hint*>: MERGE 문의 인덱스 힌트
+* <*merge_hint*>: **MERGE** 문의 인덱스 힌트
  
-    * USE_UPDATE_IDX (<*update_index_list*>): MERGE 문의 UPDATE 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 UPDATE 절을 수행할 때 사용할 인덱스 이름을 나열한다. <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
-    * USE_INSERT_IDX (<*insert_index_list*>): MERGE 문의 INSERT 절에서 사용되는 인덱스 힌트. *insert_index_list*\ 에 INSERT 절을 수행할 때 사용할 인덱스 이름을 나열한다. <*join_condition*>에 해당 힌트가 적용된다.
+    *   **USE_UPDATE_IDX** (<*update_index_list*>): **MERGE** 문의 **UPDATE** 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 **UPDATE** 절을 수행할 때 사용할 인덱스 이름을 나열한다. <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
+    *   **USE_INSERT_IDX** (<*insert_index_list*>): **MERGE** 문의 **INSERT** 절에서 사용되는 인덱스 힌트. *insert_index_list*\ 에 **INSERT** 절을 수행할 때 사용할 인덱스 이름을 나열한다. <*join_condition*>에 해당 힌트가 적용된다.
+    
+**MERGE** 문을 실행하기 위해서는 원본 테이블에 대해 **SELECT** 권한을 가져야 하며, 대상 테이블에 대해 **UPDATE** 절이 포함되어 있으면 **UPDATE** 권한, **DELETE** 절이 포함되어 있으면 **DELETE** 권한, **INSERT** 절이 포함되어 있으면 **INSERT** 권한을 가져야 한다. 
 
-다음은 source_table의 값을 target_table에 합치는 예이다.
+다음은 *source_table*\ 의 값을 *target_table*\ 에 합치는 예이다.
 
 .. code-block:: sql
 
@@ -84,14 +86,14 @@ MERGE
                 5            5            2
                 2            4            5
 
-위의 예에서 source_table의 칼럼 a, b와 target_table의 칼럼 a, b의 값이 같은 경우 target_table의 칼럼 c를 source_table의 칼럼 c값으로 갱신하고, 그렇지 않은 경우 source_table의 레코드 값을 target_table에 삽입하는 예이다. 단, 갱신된 레코드에서 target_table의 칼럼 c의 값이 1이면 해당 레코드는 삭제한다.
+위의 예에서 *source_table*\ 의 칼럼 a, b와 *target_table*\ 의 칼럼 a, b의 값이 같은 경우 *target_table*\ 의 칼럼 c를 source_table의 칼럼 c값으로 갱신하고, 그렇지 않은 경우 *source_table*\ 의 레코드 값을 *target_table*\ 에 삽입하는 예이다. 단, 갱신된 레코드에서 *target_table*\ 의 칼럼 c의 값이 1이면 해당 레코드는 삭제된다.
 
-다음은 학생들에게 줄 보너스 점수 테이블(bonus)의 레코드를 정리할 때 **MERGE** 문을 이용하는 예제이다.
+다음은 학생들에게 줄 보너스 점수 테이블(*bonus*)의 레코드를 정리할 때 **MERGE** 문을 이용하는 예제이다.
 
 .. code-block:: sql
 
     CREATE TABLE bonus (std_id INT, addscore INT);
-    CREATE INDEX i_scores_std_id ON scores (std_id);
+    CREATE INDEX i_bonus_std_id ON bonus (std_id);
      
     INSERT INTO bonus VALUES (1,10);
     INSERT INTO bonus VALUES (2,10);
@@ -147,9 +149,9 @@ MERGE
        12           12
        14           13
 
-위의 예에서 원본 테이블은 score가 40 미만인 std 테이블의 레코드 집합이고, 대상 테이블은 bonus이다. **UPDATE** 절에서 점수(std.score)가 40점 미만인 학생 번호(std_id)는 4, 6, 10, 12, 14이고 이들 중 보너스 테이블(bonus)에 있는 4, 6, 10번에게는 기존 보너스 점수(bonus.addscore)에 자신의 점수의 10%를 추가로 부여한다. INSERT 절에서 보너스 테이블에 없는 12, 14번에게는 10점과 자신의 점수의 10%를 추가로 부여한다.
+위의 예에서 원본 테이블은 *score*\ 가 40 미만인 *std* 테이블의 레코드 집합이고, 대상 테이블은 *bonus*\ 이다. **UPDATE** 절에서 점수(*std.score*)가 40점 미만인 학생 번호(*std_id*)는 4, 6, 10, 12, 14이고 이들 중 보너스 테이블(*bonus*)에 있는 4, 6, 10번에게는 기존 보너스 점수(*bonus.addscore*)에 자신의 점수의 10%를 추가로 부여한다. **INSERT** 절에서는 보너스 테이블에 없는 12, 14번에게 10점과 자신의 점수의 10%를 추가로 부여한다.
 
-다음은 MERGE 문에 인덱스 힌트를 사용하는 예이다. 
+다음은 **MERGE** 문에 인덱스 힌트를 사용하는 예이다. 
 
 .. code-block:: sql
 

@@ -261,12 +261,62 @@ LAST_INSERT_ID
     
 The value returned by the **LAST_INSERT_ID** function has the following characteristics.
 
-*   If no values are **INSERT**\ ed successfully, the latest successful value will be maintained.
-*   SQL statement on execution does not affect the **LAST_INSERT_ID** () value.
-*   The **LAST_INSERT_ID** () will return the first entered **AUTO_INCREMENT** () value in the **INSERT** statement with multiple rows (ex. INSERT INTO tbl VALUES (), (), …, ()).
-*   The **LAST_INSERT_ID** () value will not be back to the state in the transaction began even though rollback is performed.
-*   The **LAST_INSERT_ID** () value used within the trigger cannot be verified outside trigger.
-*   Each **LAST_INSERT_ID** is working independently for applications.
+*   The latest **LAST_INSERT_ID** value which was INSERTed successfully will be maintained. If it fails to INSERT, there is no change for **LAST_INSERT_ID**\() value, but **AUTO_INCREMENT** value will be internally increased. Therefore, **LAST_INSERT_ID**\() value after the next **INSERT** statement's success reflects the internally increased **AUTO_INCREMENT** value.
+
+    .. code-block:: sql
+
+        CREATE TABLE tbl(a INT PRIMARY KEY AUTO_INCREMENT, b INT UNIQUE);
+        INSERT INTO tbl VALUES (null, 1);
+        INSERT INTO tbl VALUES (null, 1);
+        
+        ERROR: Operation would have caused one or more unique constraint violations.
+
+        INSERT INTO tbl VALUES (null, 1);
+        
+        ERROR: Operation would have caused one or more unique constraint violations.
+
+        SELECT LAST_INSERT_ID();
+        1
+
+        INSERT INTO tbl VALUES (null, 2);
+        SELECT LAST_INSERT_ID();
+        4
+        
+*   In the Multiple-rows **INSERT** statement(INSERT INTO tbl VALUES (), (), ..., ()), **LAST_INSERT_ID**\ () returns the firstly inserted **AUTO_INCREMENT** value. In other words, from the second row, there is no change on **LAST_INSERT_ID**\ () value even if the next rows are inserted.
+
+    .. code-block:: sql
+    
+        INSERT INTO tbl VALUES (null, 11), (null, 12), (null, 13);    
+        SELECT LAST_INSERT_ID();
+        5
+    
+        INSERT INTO tbl VALUES (null, 21);
+        SELECT LAST_INSERT_ID();
+        8
+        
+*   If **INSERT** statement succeeds to execute, **LAST_INSERT_ID** () value is not recovered to its previous value even if the transaction is rolled back.
+
+    .. code-block:: sql
+
+        csql> ;autocommit off
+        CREATE TABLE tbl2(a INT PRIMARY KEY AUTO_INCREMENT, b INT UNIQUE);
+        INSERT INTO tbl2 VALUES (null, 1);
+        COMMIT;
+        
+        SELECT LAST_INSERT_ID();
+        1
+        
+        INSERT INTO tbl2 VALUES (null, 2);
+        INSERT INTO tbl2 VALUES (null, 3);
+        ROLLBACK;
+        
+        SELECT LAST_INSERT_ID();
+        3
+        
+        
+*   **LAST_INSERT_ID**\ () value used from the inside of a trigger cannot be identified from the outside of the trigger.
+
+*   **LAST_INSERT_ID**\ is independently kept by a session of each application.
 
 .. code-block:: sql
 

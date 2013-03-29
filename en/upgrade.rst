@@ -5,10 +5,10 @@ Upgrade
 
 .. _up-from-90to91:
 
-Upgrading From CUBRID 9.0 Beta To CUBRID 9.1
+Upgrading From CUBRID 9.0 Beta To CUBRID 9.2
 --------------------------------------------
 
-Users who are using versions CUBRID 2008 R9.0 Beta should install 9.1 in the different directory and modify parameter values in the existing environment configuration file.
+Users who are using versions CUBRID 2008 R9.0 Beta should install 9.2 in the different directory and modify parameter values in the existing environment configuration file.
 
 **cubrid.conf**
 
@@ -26,14 +26,14 @@ Users who are using versions CUBRID 2008 R9.0 Beta should install 9.1 in the dif
 
 For more details, see :ref:`changed-config91`.
 
-* Since the DB volume of CUBRID 9.0 Beta is not compatible with the DB volume of CUBRID 9.1, it should be migrated after the installation of CUBRID 9.1.
+* Since the DB volume of CUBRID 9.0 Beta is not compatible with the DB volume of CUBRID 9.2, it should be migrated after the installation of CUBRID 9.2.
 
 For DB migration, see :ref:`db-migration`.
 
-Upgrading From CUBRID 2008 R4.1/R4.3 To CUBRID 9.1
+Upgrading From CUBRID 2008 R4.1/R4.3 To CUBRID 9.2
 --------------------------------------------------
 
-Users who are using versions CUBRID 2008 R4.1 or R4.3 should install 9.1 in the different directory and modify parameter values in the existing environment configuration file.
+Users who are using versions CUBRID 2008 R4.1 or R4.3 should install 9.2 in the different directory and modify parameter values in the existing environment configuration file.
 
 **cubrid.conf**
 
@@ -60,10 +60,10 @@ For more details, see :ref:`changed-config91`.
 
 For DB migration after environmental configuration, see :ref:`db-migration`.
 
-Upgrading From CUBRID 2008 R4.0 or Earlier Versions To CUBRID 9.1
+Upgrading From CUBRID 2008 R4.0 or Earlier Versions To CUBRID 9.2
 -----------------------------------------------------------------
 
-Users who are using versions CUBRID 2008 R4.0 or earlier should install 9.1 in the different directory and modify parameter values in the existing environment configuration file.
+Users who are using versions CUBRID 2008 R4.0 or earlier should install 9.2 in the different directory and modify parameter values in the existing environment configuration file.
 
 **cubrid.conf**
 
@@ -103,7 +103,7 @@ Cautions During Upgrade
 
 **Checking New Reserved Words**
 
-* You can check whether reserved words are being used or not by applying the CUBRID 9.1 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org\ . If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
+* You can check whether reserved words are being used or not by applying the CUBRID 9.2 reserved word detection script, check_reserved.sql, which is distributed through the CUBRID installation package or http://ftp.cubrid.org\ . If the reserved words are being used as identifiers, the identifiers must be modified. See :doc:`sql/identifier`.
 
 **Configuring environment variables of CUBRID_CHARSET, CUBRID_MSG_LANG**
 
@@ -120,8 +120,8 @@ Cautions During Upgrade
 DB Migration
 ------------
 
-* Since the DB volume of CUBRID 9.0 Beta is not compatible with the DB volume of CUBRID 9.1, it should be migrated with migrate_90beta_to_91 utility.
-* Since the DB volume of CUBRID 2008 R4.x or earlier version is not compatible with the DB volume of CUBRID 9.1, it should be migrated with cubrid unloaddb/loaddb utility.
+* Since the DB volume of CUBRID 9.0 Beta is not compatible with the DB volume of CUBRID 9.2, it should be migrated with migrate_90beta_to_91 utility.
+* Since the DB volume of CUBRID 2008 R4.x or earlier version is not compatible with the DB volume of CUBRID 9.2, it should be migrated with cubrid unloaddb/loaddb utility.
 * CUBRID 2008 R3.1 and later don't support GLO and the LOB type replaces the GLO feature. For this reason, applications or schemas that use GLO must be modified to be compatible with LOB(see :ref:`glo-users-migration`).
 
 Reconfiguring Environments for Replication or HA
@@ -137,7 +137,7 @@ Database Migration Procedures
 
 .. _migration-from-90beta:
 
-Migration from CUBRID 9.0 Beta to CUBRID 9.1
+Migration from CUBRID 9.0 Beta to CUBRID 9.2
 --------------------------------------------
 
 To migrate DB from CUBRID 9.0 Beta, do the following procedures with "migrate_90beta_to_91 <db_name>" command.
@@ -190,7 +190,7 @@ To migrate DB from CUBRID 9.0 Beta, do the following procedures with "migrate_90
 
 .. _migration-from-4x-or-earlier:
 
-Migration from CUBRID 9.0 Beta or earlier to CUBRID 9.1
+Migration from CUBRID 9.0 Beta or earlier to CUBRID 9.2
 -------------------------------------------------------
 
 If you are using CUBRID 2008 R3.0 Beta or less and GLO classes, you have to do the additional works(see :ref:`glo-users-migration`).
@@ -267,7 +267,7 @@ If you use GLO classes, you must modify applications and schema in order to use 
 Database Migration Procedures under HA Environment
 ==================================================
 
-HA migration from CUBRID 2008 R2.2 or higher to CUBRID 9.1
+HA migration from CUBRID 2008 R2.2 or higher to CUBRID 9.2
 ----------------------------------------------------------
 
 In the scenario described below, the current service is stopped to perform an upgrade in an environment in which a broker, a master DB and a slave DB are operating on different servers.
@@ -305,7 +305,7 @@ In the scenario described below, the current service is stopped to perform an up
 |                                                      |   % cubrid broker start                                                                                   |
 +------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
 
-HA Migration from CUBRID 2008 R2.0/R2.1 to CUBRID 9.1
+HA Migration from CUBRID 2008 R2.0/R2.1 to CUBRID 9.2
 -----------------------------------------------------
 
 If you are using the HA feature of CUBRID 2008 R2.0 or 2008 R2.1, you must upgrade the server version, migrate the database, set up a new HA environment, and then change the Linux Heartbeat auto start setting used in 2008 R2.0 or 2008 R2.1. If the Linux Heartbeat package is not needed, delete it.

@@ -25,7 +25,7 @@ The CUBRID SHARD is middleware for database sharding and its characteristics are
 
 *   Middleware that is used to minimize changes in existing applications, allowing access to transparently sharded data by using Java Database Connectivity (JDBC), a popular choice, or CUBRID C Interface (CCI), which is CUBRID C API.
 *   In this function, a hint may be added to an existing query to indicate a shard in which the query would be executed.
-*   It can be configured on various backend shard DBs such as MySQL and Oracle, as well as CUBRID.
+*   MySQL, as well as CUBRID can be configured on backend shard DBs.
 *   It guarantees the unique characteristics of certain transactions.
 
 More details on each characteristic will be described in the next chapter.
@@ -1477,24 +1477,27 @@ SHARD CAS Log
 Constraints
 ===========
 
-**Changing or retrieving data in several shard DBs within one transaction**
+**One transaction can be run on only one shard DB**
 
     One transaction should be performed within only one shard DB, so the following constraints exist.
 
     *   It is unavailable to change data in several shard DBs through changing the shard key (**UPDATE**). If necessary, use **DELETE** / **INSERT**.
 
-    *   When a query, such as join, sub-query, or, union, group by, between, like, in, exist, or any/some/all, for several shard DB data, a result different from the intended one may be returned.
+    *   A query about more than one shard DB, such as join, sub-query, or, union, group by, between, like, in, exist, or any/some/all, is not supported.
 
-**Session**
+**Session information is valid only in each shard DB**
 
-    Session information is valid within each shard DB only. Therefore, the results from session-related functions such as **last_insert_id** () may be different from the intended result.
+    Session information is valid within each shard DB only. Therefore, the results from session-related functions such as :func:`LAST_INSERT_ID` may be different from the intended result.
 
-**auto increment**
+**auto increment is valid only in each shard DB**
 
     The auto increment attribute or SERIAL is valid within each shard DB only. So a result different from the intended result may be returned.
 
-**The access between SHARD DB for Windows and application drivers**
+**In SHARD environment for Windows, driver and DB's versions should be the same**
     
-    SHARD DB server for Windows can be accessed to the application with the drivers which use the same version with the DB server's version. 
-    SHARD DB server for Linux can be accessed to the application with the drivers which use the different version with the DB server's version. 
-    
+    In SHARD environment for Windows, DB server and driver should be the same version.
+    However, in SHARD environment for Linux, the application with the different version's driver can access to the DB server. 
+
+**Configuring SHARD is impossible between heterogenious databases**
+
+    Configuring SHARD is impossible between heterogenious databases. For example, CUBRID and MySQL cannot be configured as one SHARD system.

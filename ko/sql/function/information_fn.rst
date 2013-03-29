@@ -255,18 +255,68 @@ LAST_INSERT_ID
 
 .. function:: LAST_INSERT_ID()
 
-    **LAST_INSERT_ID** 함수는 하나의 **INSERT** 문에 의해 **AUTO_INCREMENT** 칼럼에 가장 최근에 삽입된 값을 반환한다.
+    **LAST_INSERT_ID** 함수는 **AUTO_INCREMENT** 칼럼의 값이 자동 증가할 때 가장 최근에 **INSERT**\ 된 값을 반환한다.
     
     :rtype: BIGINT
     
 **LAST_INSERT_ID** 함수가 반환하는 값은 다음의 특징을 가진다. 
 
-*   성공적으로 **INSERT** 된 값이 없을 때에는 가장 최근에 성공한 값이 유지된다.
-*   수행 중인 SQL 문은 **LAST_INSERT_ID** () 값에 영향을 주지 않는다.
-*   다중 행 **INSERT** 문(예: INSERT INTO tbl VALUES (), (), ..., ())에서 **LAST_INSERT_ID** ()는 첫 번째로 입력된 **AUTO_INCREMENT** () 값을 반환한다.
-*   롤백해도 **LAST_INSERT_ID** () 값은 트랜잭션 이전의 **LAST_INSERT_ID** () 값으로 복구되지 않는다.
-*   트리거 내에서 사용한 **LAST_INSERT_ID** () 값은 트리거 밖에서 확인할 수 없다.
-*   **LAST_INSERT_ID** 는 각 응용 클라이언트의 연결마다 독립적으로 유지된다.
+*   **INSERT** 문 수행에 성공했던 가장 최근의 **LAST_INSERT_ID** 값이 유지된다. **INSERT** 문 수행에 실패하는 경우 **LAST_INSERT_ID**\() 값은 변동이 없으나 **AUTO_INCREMENT** 값은 내부적으로 증가한다. 따라서, 다음 **INSERT** 문 수행이 성공한 이후 **LAST_INSERT_ID**\() 값은 내부적으로 증가된 **AUTO_INCREMENT** 값을 반영한다.
+
+    .. code-block:: sql
+
+        CREATE TABLE tbl(a INT PRIMARY KEY AUTO_INCREMENT, b INT UNIQUE);
+        INSERT INTO tbl VALUES (null, 1);
+        INSERT INTO tbl VALUES (null, 1);
+        
+        ERROR: Operation would have caused one or more unique constraint violations.
+
+        INSERT INTO tbl VALUES (null, 1);
+        
+        ERROR: Operation would have caused one or more unique constraint violations.
+
+        SELECT LAST_INSERT_ID();
+        1
+
+        INSERT INTO tbl VALUES (null, 2);
+        SELECT LAST_INSERT_ID();
+        4
+        
+*   다중 행 **INSERT** 문(INSERT INTO tbl VALUES (), (), ..., ())에서 **LAST_INSERT_ID**\ ()는 첫 번째로 입력된 **AUTO_INCREMENT** 값을 반환한다. 즉, 두 번째 행부터는 입력이 되어도 **LAST_INSERT_ID**\ () 값이 변하지 않는다. 
+
+    .. code-block:: sql
+    
+        INSERT INTO tbl VALUES (null, 11), (null, 12), (null, 13);    
+        SELECT LAST_INSERT_ID();
+        5
+    
+        INSERT INTO tbl VALUES (null, 21);
+        SELECT LAST_INSERT_ID();
+        8
+        
+*   **INSERT** 문이 실행에 성공한 경우, **LAST_INSERT_ID** () 값은 트랜잭션이 롤백되어도 이전의 **LAST_INSERT_ID** () 값으로 복구되지 않는다.
+
+    .. code-block:: sql
+
+        csql> ;autocommit off
+        CREATE TABLE tbl2(a INT PRIMARY KEY AUTO_INCREMENT, b INT UNIQUE);
+        INSERT INTO tbl2 VALUES (null, 1);
+        COMMIT;
+        
+        SELECT LAST_INSERT_ID();
+        1
+        
+        INSERT INTO tbl2 VALUES (null, 2);
+        INSERT INTO tbl2 VALUES (null, 3);
+        ROLLBACK;
+        
+        SELECT LAST_INSERT_ID();
+        3
+        
+        
+*   트리거 내에서 사용한 **LAST_INSERT_ID**\ () 값은 트리거 밖에서 확인할 수 없다.
+
+*   **LAST_INSERT_ID**\ 는 각 응용 클라이언트의 세션마다 독립적으로 유지된다.
 
 .. code-block:: sql
 

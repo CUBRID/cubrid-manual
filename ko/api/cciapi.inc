@@ -19,11 +19,25 @@ CCI API 레퍼런스
         *   **CCI_ER_ATYPE**
         *   **CCI_ER_NO_MORE_MEMORY**
         
-    데이터베이스에 **NULL** 을 바인딩할 경우 다음의 두 가지 형태를 가질 수 있다.
+    데이터베이스에 **NULL** 을 바인딩하려면 다음의 두 가지 중 하나를 설정한다.
         
-    *   *value* 값이 **NULL** 포인터인 경우
-    *   *u_type* 이 :c:macro:`CCI_U_TYPE_NULL` 인 경우
+    *   *value* 값을 **NULL** 포인터로 설정
+    *   *u_type* 을 :c:macro:`CCI_U_TYPE_NULL`\로 설정
 
+    다음은 NULL을 바인딩하는 코드의 일부이다.
+    
+    .. code-block:
+    
+        res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_STR, NULL, CCI_U_TYPE_STRING, CCI_BIND_PTR);
+        
+    또는 
+    
+    .. code-block:
+    
+        res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_STR, data, CCI_U_TYPE_NULL, CCI_BIND_PTR);
+
+    가 사용될 수 있다.
+    
     *flag* 에 :c:type:`CCI_BIND_PTR` 이 설정되어 있을 경우 *value* 변수의 포인터만 복사하고(shallow copy) 값은 복사하지 않는다.
     *flag* 가 설정되지 않는 경우 메모리를 할당하여 *value* 변수의 값을 복사(deep copy)한다. 만약 같은 메모리 버퍼를 이용하여 여러 개의 칼럼을 바인딩할 경우라면, :c:type:`CCI_BIND_PTR` *flag* 를 설정하지 않아야 한다.
 
@@ -57,7 +71,7 @@ CCI API 레퍼런스
     :c:type:`T_CCI_U_TYPE` 은 데이터베이스의 칼럼 타입으로, value 인자를 통해 바인딩된 데이터를 이 타입으로 변환한다.
     :c:func:`cci_bind_param` 함수는 C 언어가 이해하는 A 타입의 데이터를 데이터베이스가 이해할 수 있는 U 타입의 데이터로 변환하기 위한 정보를 전달하기 위해서 두 가지 타입을 사용한다.
 
-    U 타입이 허용하는 A 타입은 여러 가지이다. 예를 들어 **CCI_U_TYPE_INT** 는 **CCI_A_TYPE_INT** 외에 **CCI_A_TYPE_STR** 도 A 타입으로 받을 수 있다. 타입 변환은 "CUBRID SQL 설명서 > 데이터 타입 > 묵시적 타입 변환 > 규칙"을 따른다.
+    U 타입이 허용하는 A 타입은 여러 가지이다. 예를 들어 **CCI_U_TYPE_INT** 는 **CCI_A_TYPE_INT** 외에 **CCI_A_TYPE_STR** 도 A 타입으로 받을 수 있다. 타입 변환은 :ref:`implicit-type-conversion`\ 을 따른다.
 
     :c:type:`T_CCI_A_TYPE` 및 :c:type:`T_CCI_U_TYPE` enum은 모두 **cas_cci.h** 파일에 정의되어 있다. 각 타입에 대한 식별자 정의는 아래 표를 참고한다.
 
@@ -396,6 +410,7 @@ CCI API 레퍼런스
                             snprintf (error_msg, 128, "cci_get_data ERROR\n");
                             return error_msg;
                         }
+                        
                     }
                 }
             }
@@ -1020,7 +1035,7 @@ CCI API 레퍼런스
     prepared statement에 하나 이상의 값이 바인딩되는 경우, 바인딩되는 변수의 값을 배열(array)로 전달받아 각각의 값을 변수에 바인딩하여 질의를 실행한다.
 
     :param req_handle: (IN) prepared statement의 요청 핸들
-    :param query_result: (OUT) 질의 결과(수행된 질의 개수)
+    :param query_result: (OUT) 질의 결과
     :param err_buf: (OUT) 데이터베이스 에러 버퍼
     :return: 수행된 질의의 개수(성공), 에러 코드(실패)
     
@@ -1033,14 +1048,14 @@ CCI API 레퍼런스
     
     데이터를 바인딩하기 위해서는 :c:func:`cci_bind_param_array_size` 함수를 호출하여 배열의 크기를 지정한 후, :c:func:`cci_bind_param_array` 함수를 이용하여 각각의 값을 변수에 바인딩하고, :c:func:`cci_execute_array` 함수를 호출하여 질의를 실행한다. 질의 결과는 T_CCI_QUERY_RESULT 구조체의 배열에 저장된다.
 
-    :c:func:`cci_execute` 함수를 호출하면 질의 수행 결과 셋을 가져올 수 있으나, :c:func:`cci_execute_array` 함수는 *query_result* 변수로 수행된 질의 개수를 반환한다. 실행 결과에 대한 정보를 얻기 위해서는 아래와 같은 매크로를 이용할 수 있다. 매크로에서는 입력받는 각 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. 
+    :c:func:`cci_execute_array` 함수는 *query_result* 변수에 질의 결과를 반환한다. 실행 결과에 대한 정보를 얻기 위해서는 아래와 같은 매크로를 이용할 수 있다. 매크로에서는 입력받는 각 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. 
     
     *query_result* 변수의 사용이 끝나면 :c:func:`cci_query_result_free` 함수를 이용하여 질의 결과를 삭제해야 한다.
 
     +---------------------------------------+---------------------------------+-------------------------------+
     | 매크로                                | 리턴 타입                       |  의미                         |
     +=======================================+=================================+===============================+
-    | :c:macro:`CCI_QUERY_RESULT_RESULT`    | int                             | 결과 개수                     |
+    | :c:macro:`CCI_QUERY_RESULT_RESULT`    | int                             | 영향을 끼친 행의 개수         |
     |                                       |                                 | 또는 에러 식별자              |
     |                                       |                                 | (-1: CAS 에러, -2: DBMS 에러) |    
     +---------------------------------------+---------------------------------+-------------------------------+
@@ -1398,8 +1413,24 @@ CCI API 레퍼런스
 
     **참고 사항**
 
-    *   **LOB** 타입에 대해 :c:func:`cci_get_data` 를 호출하면 **LOB** 타입 칼럼의 메타 데이터(Locator)를 출력하며, **LOB** 타입 칼럼의 데이터를 인출하려면 :c:func:`cci_blob_read` 를 호출해야 한다.
+    *   **LOB** 타입에 대해 :c:func:`cci_get_data`\ 를 호출하면 **LOB** 타입 칼럼의 메타 데이터(Locator)를 출력하며, **LOB** 타입 칼럼의 데이터를 인출하려면 :c:func:`cci_blob_read`\ 를 호출해야 한다.
 
+    다음 예제는 페치한 결과 값을 :c:func:`cci_get_data`\ 를 이용하여 출력하는 코드의 일부이다.
+        
+    .. code-block:: c
+    
+        ...
+        
+        if ((res=cci_get_data(req, i, CCI_A_TYPE_INT, &buffer, &ind))<0) {
+            printf( "%s(%d): cci_get_data fail\n", __FILE__, __LINE__);
+            goto handle_error;
+        }
+        if (ind != -1)
+                printf("%d \t|", buffer);
+        else
+                printf("NULL \t|");
+        ...
+        
 .. c:function:: int cci_get_db_parameter(int conn_handle, T_CCI_DB_PARAM param_name, void *value, T_CCI_ERROR *err_buf)
 
     데이터베이스에 설정된 파라미터 값을 가져온다. 
@@ -2279,7 +2310,10 @@ CCI API 레퍼런스
                 goto handle_error;
             }
             // ind: string length, buffer: a string which came from the out binding parameter of test_out(?) Java SP.
-            printf ("%d, (%s)\n", ind, buffer);
+            if (ind != -1) 
+                printf ("%d, (%s)\n", ind, buffer);
+            else // if ind== -1, then data is NULL
+                printf ("NULL\n");
 
             if ((res = cci_close_query_result (req)) < 0)
             {
@@ -2703,8 +2737,15 @@ CCI API 레퍼런스
                     {
                         goto _END_WHILE;
                     }
-                    strcat(query_result_buffer, buffer);
-                    strcat(query_result_buffer, "|");
+                    if ( ind != -1)
+                    {
+                        strcat(query_result_buffer, buffer);
+                        strcat(query_result_buffer, "|");
+                    } 
+                    else
+                    {
+                        strcat(query_result_buffer, "NULL|");
+                    }
                 }
                 strcat(query_result_buffer, "\n");
          
@@ -2996,7 +3037,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_set_holdability(int conn_handle,int holdable)
 
-    연결 수준에서 결과 셋의 커서 유지(cursor holdability) 여부를 설정한다. 값이 1이면 커밋 여부에 관계 없이 연결이 종료되거나 결과 셋을 의도적으로 닫기 전까지 커서를 유지(holdable)하고, 0이면 커밋될 때 결과 셋이 닫히면서 커서를 유지하지 않는다(not holdable). 커서 유지에 대한 자세한 설명은 CUBRID SQL 설명서 > 트랜잭션과 잠금 > 커서 유지를 참고한다.
+    연결 수준에서 결과 셋의 커서 유지(cursor holdability) 여부를 설정한다. 값이 1이면 커밋 여부에 관계 없이 연결이 종료되거나 결과 셋을 의도적으로 닫기 전까지 커서를 유지(holdable)하고, 0이면 커밋될 때 결과 셋이 닫히면서 커서를 유지하지 않는다(not holdable). 커서 유지에 대한 자세한 설명은 :ref:`cursor-holding`\ 를 참고한다.
 
     :param conn_handle: (IN) 연결 핸들
     :param holdable: (IN) 커서 유지 여부 설정 값(0: not holdable, 1: holdable)

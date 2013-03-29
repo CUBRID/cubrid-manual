@@ -1419,11 +1419,9 @@ If data of the specific table within CUBRID HA groups is not synchronized, you s
 
 On the partitioned table, the table which has promoted some partitions by the **PROMOTE** statement replicates all data to the slave. However, since the table does not have the primary key, the data changes on the table made by the master are not applied to the slave.
 
-**Table Trigger and Java Stored Procedure**
+**Java Stored Procedure**
 
-Using triggers and java stored procedures in CUBRID HA can cause duplicate executions because triggers and java stored procedures executed in a master node will be executed in a slave node again. This may cause data inconsistency among nodes within CUBRID HA groups.
-
-It is not recommended to use triggers and java stored procedures in CUBRID HA.
+Because using java stored procedures in CUBRID HA cannot be replicated, java stored procedures should be configured to all nodes. For more details, see :ref:`jsp-environment-configuration`.
 
 **Method and CUBRID Manager**
 
@@ -1452,6 +1450,10 @@ If you use **INCR** / **DECR** (click counter functions) in a slave node of HA c
 **LOB (BLOB/CLOB) Type**
 
 In a CUBRID HA environment, the meta data (Locator) of a **LOB** column is replicated and **LOB** data is not replicated. Therefore, if storage of a **LOB** type is located on the local machine, no tasks corresponding to columns are allowed in slave nodes or master nodes after failover.
+
+.. note::
+
+    On previous version of CUBRID 9.1, using triggers in CUBRID HA can cause duplicate executions. This may cause data inconsistency among nodes within CUBRID HA groups. Therefore, you should not use triggers on the previous version of 9.1.
 
 Operational Scenarios
 =====================

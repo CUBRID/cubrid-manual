@@ -1492,23 +1492,26 @@ SHARD CAS 로그
 제약 사항
 =========
 
-**한 트랜잭션 내에서 다수의 shard DB의 데이터 변경 또는 조회**
+**하나의 트랜잭션은 하나의 shard DB에서만 수행 가능**
 
     하나의 트랜잭션은 오직 하나의 shard DB에서만 수행되어야 하며, 따라서 아래와 같은 제약사항이 존재한다.
 
     *   shard key 변경(**UPDATE**)으로 인해 여러 shard DB의 데이터를 변경하는 것은 불가능하며, 필요하다면 **DELETE** / **INSERT** 를 이용한다.
 
-    *   여러 shard DB 데이터에 대한 join, sub-query, or, union, group by, between, like, in, exist, any/some/all 등 질의를 수행하면, 의도한 것과 다른 결과가 반환될 수 있다.
+    *   2개 이상의 샤드에 대한 질의(join, sub-query, or, union, group by, between, like, in, exist, any/some/all 등)를 지원하지 않는다.
 
-**세션**
+**세션 정보는 각 shard DB 내에서만 유효**
 
-    세션 정보가 각 shard DB 내에서만 유효하므로, :func:`LAST_INSERT_ID` 와 같은 세션 관련 함수의 결과가 의도한 바와 다를 수 있다.
+    세션 정보가 각 shard DB 내에서만 유효하므로, :func:`LAST_INSERT_ID`\ 와 같은 세션 관련 함수의 결과가 의도한 바와 다를 수 있다.
 
-**auto increment**
+**auto increment는 각 shard DB 내에서만 유효**
 
     auto increment 속성 또는 SERIAL 등의 값이 각 shard DB 내에서만 유효하므로, 의도한 것과 다른 값을 반환할 수 있다.
 
-**Windows용 SHARD DB와 응용 드라이버 사이의 접속**
+**Windows용 SHARD 환경에서 드라이버와 DB의 버전이 같아야 함**
     
-    Windows용 SHARD DB 서버는 같은 버전의 드라이버를 사용하는 응용 프로그램만 접속이 가능하다. Linux용 SHARD DB 서버는 다른 버전의 드라이버를 사용하는 응용 프로그램과도 접속이 가능하다.
+    Windows용 SHARD 환경에서 DB 서버와 드라이버는 같은 버전을 사용해야 한다. 그러나, Linux용 SHARD 환경에서는 다른 버전의 드라이버를 사용하는 응용 프로그램도 DB 서버에 접속이 가능하다.
     
+**서로 다른 제품의 DB끼리 SHARD 구성 불가**
+
+    서로 다른 제품의 DB끼리는 SHARD 구성이 불가하다. 예를 들어 CUBRID와 MySQL을 하나의 SHARD 시스템으로 구성할 수 없다.

@@ -4,7 +4,7 @@ MERGE
 
 The **MERGE** statement is used to select rows from one or more sources and to update or to insert the rows onto one table or view. You can specify the condition whether to update or to insert the rows onto the target table or view. The **MERGE** statement is a deterministic statement, so you cannot update the same rows on the target table several times within one sentence.
 
-To execute the **MERGE** statement, the **SELECT** authorization for the source table should be granted. When the **UPDATE** clause is included in the target table, the **UPDATE** authorization should be granted. When the **DELETE** clause is included in the target table, the **DELETE** should be granted. When the **INSERT** clause is included in the target table, the **INSERT** should be granted. ::
+::
 
     MERGE [<merge_hint>] INTO <target> [[AS] <alias>]
     USING <source> [[AS] <alias>], <source> [[AS] <alias>], ...
@@ -44,12 +44,14 @@ To execute the **MERGE** statement, the **SELECT** authorization for the source 
     *   <*expr_list*>: Integer filter condition can be used to insert all source rows to the target table. ON (0=1) is an example of integer filter condition.
     *   This clause can be specified as it is or as <*merge_update_clause*>. If both of two are defined, the order does not matter.
 
-* <*merge_hint*>: Index hint of MERGE statement
+* <*merge_hint*>: Index hint of **MERGE** statement
 
-    *   USE_UPDATE_IDX (<*update_index_list*>): Index hint used in UPDATE clause of MERGE statement. Index names are listed on the *update_index_list* when UPDATE clause of MERGE statement is used. This hint is applied to <*join_condition*> and <*update_condition*>.
-    *   USE_INSERT_IDX (<*insert_index_list*>): Index hint used in INSERT clause of MERGE statement. Index names are listed on the *insert_index_list* when INSERT clause of MERGE statement is used. This hint is applied to <*join_condition*>.
+    *   **USE_UPDATE_IDX** (<*update_index_list*>): Index hint used in **UPDATE** clause of **MERGE** statement. Index names are listed on the *update_index_list* when **UPDATE** clause is run. This hint is applied to <*join_condition*> and <*update_condition*>.
+    *   **USE_INSERT_IDX** (<*insert_index_list*>): Index hint used in **INSERT** clause of **MERGE** statement. Index names are listed on the *insert_index_list* when **INSERT** clause is run. This hint is applied to <*join_condition*>.
+
+To execute the **MERGE** statement, the **SELECT** authorization for the source table should be granted. When the **UPDATE** clause is included in the target table, the **UPDATE** authorization should be granted. When the **DELETE** clause is included in the target table, the **DELETE** should be granted. When the **INSERT** clause is included in the target table, the **INSERT** should be granted. 
     
-The following example shows how to merge the value of source_table to target_table.
+The following example shows how to merge the value of *source_table* to *target_table*.
 
 .. code-block:: sql
 
@@ -84,14 +86,14 @@ The following example shows how to merge the value of source_table to target_tab
                 5            5            2
                 2            4            5
 
-In the above example, when column A and B of source_table are identical with the values of column A and B in target_table, column C of target_table is updated with the column C of source_table. Otherwise, the record value in source_table is inserted to target_table. However, if the value of column C in target_table is 1 in the updated record, delete the record.
+In the above example, when column A and B of source_table are identical with the values of column A and B in *target_table*, column C of *target_table* is updated with the column C of *source_table*. Otherwise, the records in *source_table* are inserted to *target_table*. However, if the value of column C in *target_table* is 1 in the updated record, the record is deleted.
 
-The following example shows how to use the **MERGE** statement to arrange the bonus score records given to students.
+The following example shows how to use the **MERGE** statement to arrange the records of *bonus* score table to give to students.
 
 .. code-block:: sql
 
     CREATE TABLE bonus (std_id INT, addscore INT);
-    CREATE INDEX i_scores_std_id on scores (std_id);
+    CREATE INDEX i_bonus_std_id on bonus (std_id);
      
     INSERT INTO bonus VALUES (1,10);
     INSERT INTO bonus VALUES (2,10);
@@ -147,9 +149,9 @@ The following example shows how to use the **MERGE** statement to arrange the bo
        12           12
        14           13
 
-In the above example, the source table is a set of std table records where the score is less than 40 and the target table is bonus. The student numbers (std_id) where the score (std.score) is less than 40 are 4, 6, 10, 12, and 14. Among them, for 4, 6, and 10 on the bonus table, the **UPDATE** clause adds 10% of the corresponding student score to the existing bonus. For 12 and 14 which are not on the bonus table, the INSERT clause additionally gives 10 scores and 10% of the corresponding student score.
+In the above example, the source table is a set of *std* table records, where the score is less than 40 and the target table is *bonus*. The student numbers (*std_id*) where the score (*std.score*) is less than 40 are 4, 6, 10, 12, and 14. Among them, for 4, 6, and 10 on the *bonus* table, the **UPDATE** clause adds 10% of the score of their own to the existing bonus. For 12 and 14 which are not on the *bonus* table, the **INSERT** clause adds 10 scores and 10% of the score of their own.
 
-The following shows how to use index hints in MERGE statement.
+The following shows how to use index hints in **MERGE** statement.
 
 .. code-block:: sql
 

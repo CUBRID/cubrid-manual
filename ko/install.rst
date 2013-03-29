@@ -30,7 +30,7 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
 **응용 프로그램의 호환성**
 
-*   2008 R2.0 또는 그 이상 버전에서 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 9.1 DB에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 9.1 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다.
+*   2008 R2.0 또는 그 이상 버전에서 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 9.2 DB에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 9.2 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다.
 
 *   새로운 예약어 추가 및 일부 질의에 대한 스펙 변경으로 인해 질의 결과가 이전 버전과 다를 수 있으므로 주의한다.
 
@@ -44,7 +44,7 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
 *   CUBRID 2008 R2.2 이상 버전의 드라이버는 CUBRID 매니저에 기본으로 내장되어 있으며, cubrid.org에서 별도로 받을 수도 있다.
 
-.. note:: 9.0 Beta 버전 사용자는 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 하며, DB 볼륨이 9.1과 호환되지 않으므로 반드시 데이터 마이그레이션을 해야 한다.
+.. note:: 9.0 Beta 버전 사용자는 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 하며, DB 볼륨이 9.2와 호환되지 않으므로 반드시 데이터 마이그레이션을 해야 한다.
     업그레이드 및 데이터 마이그레이션은 :doc:`/upgrade`\ 를 참고한다.
 
 상호 운용성
@@ -87,14 +87,14 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
 
 **CUBRID 설치**
 
-    설치 프로그램은 바이너리를 포함한 셸 스크립트로 되어 있어 자동으로 설치할 수 있다. 다음은 리눅스에서 "CUBRID-9.1.0.0201-linux.x86_64.sh" 파일을 이용하여 CUBRID를 설치하는 예제이다. ::
+    설치 프로그램은 바이너리를 포함한 셸 스크립트로 되어 있어 자동으로 설치할 수 있다. 다음은 리눅스에서 "CUBRID-9.2.0.0201-linux.x86_64.sh" 파일을 이용하여 CUBRID를 설치하는 예제이다. ::
 
-        $ sh CUBRID-9.1.0.0201-linux.x86_64.sh
+        $ sh CUBRID-9.2.0.0201-linux.x86_64.sh
         Do you agree to the above license terms? (yes or no) : yes
         Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
         Install CUBRID to '/home1/cub_user/CUBRID' ...
         In case a different version of the CUBRID product is being used in other machines, 
-        please note that the CUBRID 9.1 servers are only compatible with the CUBRID 9.1 clients and vice versa.
+        please note that the CUBRID 9.2 servers are only compatible with the CUBRID 9.2 clients and vice versa.
         Do you want to continue? (yes or no) [Default: yes] : yes
         Copying old .cubrid.sh to .cubrid.sh.bak ...
 
@@ -106,7 +106,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
         $ . /home1/cub_user/.cubrid.sh
         $ cubrid service start
 
-    위의 예제와 같이 다운로드한 파일(CUBRID-9.1.0.0201-linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 CUBRID 관련 환경 정보를 설정해야 한다. 이 설정은 해당 터미널에 로그인할 때 자동 설정되도록 지정되어 있으므로 설치 후 최초 한 번만 수행하면 된다. ::
+    위의 예제와 같이 다운로드한 파일(CUBRID-9.2.0.0201-linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 CUBRID 관련 환경 정보를 설정해야 한다. 이 설정은 해당 터미널에 로그인할 때 자동 설정되도록 지정되어 있으므로 설치 후 최초 한 번만 수행하면 된다. ::
 
         $ . /home1/cub_user/.cubrid.sh
 
@@ -137,7 +137,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
 
     CentOS5 환경에서 생성한 RPM 파일을 사용하여 CUBRID를 설치할 수 있으며, 일반적인 RPM 유틸리티와 동일한 방법으로 설치하고 삭제할 수 있다. 설치하면 새로운 시스템 그룹(cubrid) 및 사용자 계정(cubrid)이 생성되며, 설치 후에는 cubrid 사용자 계정으로 로그인하여 CUBRID 서비스를 시작해야 한다. ::
 
-        $ rpm -Uvh cubrid-9.1.0.0201-el5.x86_64.rpm
+        $ rpm -Uvh cubrid-9.2.0.0201-el5.x86_64.rpm
 
     RPM을 실행하면 CUBRID는 "cubrid" 홈 디렉터리(/opt/cubrid)에 설치되고, CUBRID 관련 환경 설정 파일(cubrid.[c]sh)이 /etc/profile.d 디렉터리에 설치된다. 단, demodb는 자동으로 설치되지 않으므로 "cubrid" Linux 계정으로 로그인하여 /opt/cubrid/demo/make_cubrid_demo.sh를 실행하여야 한다. CUBRID가 설치 완료되면 "cubrid" Linux 계정으로 로그인하여 CUBRID 서비스를 다음과 같이 시작한다. ::
 
@@ -145,15 +145,18 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
 
     .. note:: \
 
-        **RPM과 의존성**
+        *   **RPM과 의존성**
         
             RPM으로 설치할 때에는 의존성을 꼭 확인해야 한다. 의존성을 무시(--nodeps)하고 설치하면 실행되지 않을 수 있다.
             RPM을 삭제하더라도 cubrid 사용자 계정 및 설치 후 생성한 데이터베이스는 보관되므로, 더 이상 필요하지 않은 경우 수동으로 삭제해야 한다.
 
-
-        **Linux에서 시스템 구동 시 CUBRID 자동 구동하기**
+        *   **Linux에서 시스템 구동 시 CUBRID 자동 구동하기**
         
             SH 패키지나 RPM 패키지로 CUBRID를 설치했다면 $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **CUBRID_USER** 라는 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용하여 Linux 시스템 구동 시 CUBRID를 자동으로 구동할 수 있다.
+            
+        *   **/etc/hosts 파일에 호스트 이름과 IP 주소 매핑이 정상인지 확인하기**
+
+            호스트 이름과 이에 맞는 IP 주소가 비정상적으로 매핑되어 있으면 DB 서버를 구동할 수 없으므로, 정상적으로 매핑되어 있는지 확인한다.
 
 **Fedora/CentOS에서 CUBRID 설치**
 

@@ -2,9 +2,7 @@
 REPLACE
 *******
 
-The **REPLACE** statement is working like **INSERT**, but the difference is that it inserts a new record after deleting the existing record without displaying the error when a duplicate value is to be inserted into a column for which **PRIMARY KEY** or **UNIQUE** constraints have defined. You must have both **INSERT** and **DELETE** authorization to use the **REPLACE** statement, because it performs insertion or insertion after deletion operations. Please refer :ref:`granting-authorization` for more information about authorization.
-
-The **REPLACE** statement determines whether a new record causes the duplication of **PRIMARY KEY** or **UNIQUE** index column values. Therefore, for performance reasons, it is recommended to use the **INSERT** statement for a table for which a **PRIMARY KEY** or **UNIQUE** index has not been defined. 
+The **REPLACE** statement is working like :doc:`insert`, but the difference is that it inserts a new record after deleting the existing record without displaying the error when a duplicate value is to be inserted into a column for which **PRIMARY KEY** or **UNIQUE** constraints have defined. You must have both **INSERT** and **DELETE** authorization to use the **REPLACE** statement, because it performs insertion or insertion after deletion operations. Please refer :ref:`granting-authorization` for more information about authorization.
 
 ::
 
@@ -21,9 +19,12 @@ The **REPLACE** statement determines whether a new record causes the duplication
         SELECT...
 
 *   *table_name*: Specifies the name of the target table into which you want to insert a new record.
+
 *   *column_name*: Specifies the name of the column into which you want to insert the value. If you omit to specify the column name, it is considered that all columns defined in the table have been specified. Therefore, you must specify the value for the column next to **VALUES**. If you do not specify all the columns defined in the table, a **DEFAULT** value is assigned to the non-specified columns; if the **DEFAULT** value is not defined, a **NULL** value is assigned.
 
 *   *expr* | **DEFAULT**: Specifies values that correspond to the columns after **VALUES**. Expressions or the **DEFAULT** keyword can be specified as a value. At this time, the order and number of the specified column list must correspond to the column value list. The column value list for a single record is described in parentheses.
+
+The **REPLACE** statement determines whether a new record causes the duplication of **PRIMARY KEY** or **UNIQUE** index column values. Therefore, for performance reasons, it is recommended to use the **INSERT** statement for a table for which a **PRIMARY KEY** or **UNIQUE** index has not been defined. 
 
 .. code-block:: sql
 

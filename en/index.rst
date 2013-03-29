@@ -1,7 +1,7 @@
 .. _reference-index:
 
 ######################
-CUBRID 9.1 User Manual
+CUBRID 9.2 User Manual
 ######################
 
 .. toctree::

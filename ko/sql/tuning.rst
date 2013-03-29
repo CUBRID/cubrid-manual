@@ -443,7 +443,22 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 **제약 사항**
 
-필터링된 인덱스는 일반 인덱스만 허용된다. 예를 들어, 필터링된 유일한(unique) 인덱스는 허용되지 않는다. 
+필터링된 인덱스는 일반 인덱스만 허용한다. 예를 들어, 필터링된 유일한(unique) 인덱스는 허용하지 않는다. 또한, 필터링된 인덱스를 구성하는 칼럼 값이 모두 NULL이 가능한 경우는 허용하지 않는다. 
+예를 들어, 아래의 경우는 Author 값이 NULL일 수 있으므로 허용하지 않는다.
+
+.. code-block:: sql
+
+    CREATE INDEX idx_open_bugs ON bugs (Author) WHERE Closed = 0;
+    
+    ERROR: before ' ; '
+    Invalid filter expression (bugs.Closed=0) for index.
+
+    
+하지만 아래의 경우는 Author 값이 NULL이더라도 CreationDate 값이 NULL일 수 없으므로 허용한다.
+
+.. code-block:: sql
+    
+    CREATE INDEX idx_open_bugs ON bugs (Author, CreationDate) WHERE Closed = 0;
 
 다음은 인덱스 필터 조건으로 허용하지 않는 경우이다.
 

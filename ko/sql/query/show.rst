@@ -2,6 +2,25 @@
 SHOW
 ****
 
+DESC, DESCRIBE
+==============
+
+**DESC** 또는 **DESCRIBE** 문은 테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
+
+::
+
+    DESC tbl_name
+    DESCRIBE tbl_name
+    
+EXPLAIN
+=======
+
+**EXPLAIN** 문은 테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
+
+::
+
+    EXPLAIN tbl_name
+
 .. _show-tables-statement:
 
 SHOW TABLES
@@ -83,7 +102,7 @@ SHOW COLUMNS
 
 **SHOW FIELDS** 는 **SHOW COLUMNS** 와 같은 구문이다.
 
-**DESCRIBE** (또는 줄여서 **DESC**) 문과 **EXPLAIN** 문은 **SHOW COLUMNS** 와 비슷한 정보를 제공한다.
+**DESCRIBE** (또는 줄여서 **DESC**) 문과 **EXPLAIN** 문은 **SHOW COLUMNS**\ 와 같은 정보를 제공하지만, LIKE 절 또는 WHERE 절은 지원하지 않는다.
 
 ::
 
@@ -271,10 +290,13 @@ SHOW CREATE TABLE
      
       TABLE                 CREATE TABLE
     ============================================
-      'nation'              'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, [name] CHARACTER VARYING(40) NO
-    T NULL, [continent] CHARACTER VARYING(10), [capital] CHARACTER VARYING(30),  CONSTRAINT [pk_nation_code] PRIM
-    ARY KEY  ([code]))'
+      'nation'               'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, 
+    [name] CHARACTER VARYING(40) NOT NULL, [continent] CHARACTER VARYING(10), 
+    [capital] CHARACTER VARYING(30),  CONSTRAINT [pk_nation_code] PRIMARY KEY  ([code])) 
+    COLLATE iso88591_bin'
 
+**SHOW CREATE TABLE** 문은 사용자가 입력한 구문을 그대로 출력하지는 않는다. 예를 들어, 사용자가 입력한 커멘트를 출력하지 않으며, 테이블 명이나 칼럼 명은 항상 소문자로 출력한다.
+    
 .. _show-create-view-statement:
 
 SHOW CREATE VIEW

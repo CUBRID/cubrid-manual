@@ -13,7 +13,6 @@ You can insert a new record into a table in a database by using the **INSERT** s
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
     INSERT [INTO] table_name DEFAULT [ VALUES ]
-    INSERT [INTO] table_name VALUES()
      
     <INSERT … SET statement>
     INSERT [INTO] table_name
@@ -129,17 +128,19 @@ In the above example, a's value will be 11 since b's value is not specified yet 
             a            b            c
     ===================================
            11            1            3
-           
+
 INSERT ... SELECT Statement
 ===========================
 
-If you use the **SELECT** query in the **INSERT** statement, you can insert query results obtained from at least one table. The **SELECT** statement can be used in place of the **VALUES** keyword, or be included as a subquery in the column value list next to **VALUES**. If you specify the **SELECT** statement in place of the **VALUES** keyword, you can insert multiple query result records into the column of the table at once. However, there should be only one query result record if the **SELECT** statement is specified in the column value list.
+If you use the **SELECT** query in the **INSERT** statement, you can insert query results which satisfy the specified retrieval condition from one or many tables to the target table. 
 
-In this way, you can extract data from another table that satisfies a certain retrieval condition, and insert it into the target table by combining the **SELECT** statement with the **INSERT** statement. ::
+::
 
     INSERT [INTO] table_name [(column_name, ...)]
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+
+The **SELECT** statement can be used in place of the **VALUES** keyword, or be included as a subquery in the column value list next to **VALUES**. If you specify the **SELECT** statement in place of the **VALUES** keyword, you can insert multiple query result records into the column of the table at once. However, there should be only one query result record if the **SELECT** statement is specified in the column value list.
 
 .. code-block:: sql
 
@@ -153,6 +154,7 @@ In this way, you can extract data from another table that satisfies a certain re
     INSERT INTO a_tbl2 VALUES(8, SELECT name FROM a_tbl1 WHERE name <'bbb', DEFAULT);
      
     SELECT * FROM a_tbl2;
+    
                id  name                  phone
     =========================================================
                 1  'aaa'                 '000-0000'
@@ -167,7 +169,7 @@ In this way, you can extract data from another table that satisfies a certain re
 ON DUPLICATE KEY UPDATE Clause
 ==============================
 
-In a situation in which a duplicate value is inserted into a column for which the **UNIQUE** index or the **PRIMARY KEY** constraint has been set, you can update to a new value by specifying the **ON DUPLICATE KEY UPDATE** clause in the **INSERT** statement. The **ON DUPLICATE KEY UPDATE** clause cannot be used in a nested **INSERT** statement. 
+In a situation in which a duplicate value is inserted into a column for which the **UNIQUE** index or the **PRIMARY KEY** constraint has been set, you can update to a new value by specifying the **ON DUPLICATE KEY UPDATE** clause in the **INSERT** statement.
 
 ::
 
@@ -185,6 +187,7 @@ In a situation in which a duplicate value is inserted into a column for which th
     CREATE TABLE a_tbl3 LIKE a_tbl1;
     INSERT INTO a_tbl3 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
     SELECT * FROM a_tbl3;
+    
                id  name                  phone
     =========================================================
                 1  'aaa'                 '000-0000'
@@ -196,12 +199,19 @@ In a situation in which a duplicate value is inserted into a column for which th
     INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222');
      
     ERROR: Operation would have caused one or more unique constraint violations.
-     
+
+With ON DUPLICATE KEY UPDATE, "affected rows" value per row will be 1 if a new row is inserted, and 2 if an existing row is updated.
+
+.. code-block:: sql
+    
     --insert duplicated value with specifying ON DUPLICATED KEY UPDATE clause
     INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222')
     ON DUPLICATE KEY UPDATE phone = '222-2222';
      
     SELECT * FROM a_tbl3 WHERE id=2;
+    
                id  name                  phone
     =========================================================
-                2  'bbb'                 '222-2222'
+                2  'ggg'                 '222-2222'
+
+    2 rows affected.

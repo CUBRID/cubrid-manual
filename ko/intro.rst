@@ -196,7 +196,6 @@ CUBRID의 특징
 *   복제 간 트랜잭션 일관성 보장
 *   데이터베이스, 테이블, 레코드 등 다중 단위 잠금(multiple granularity locking) 지원
 *   교착 상태(deadlock) 자동 해결
-*   분산 트랜잭션(two phase commit) 지원
 
 **데이터베이스 백업 및 복구**
 

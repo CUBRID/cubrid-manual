@@ -14,7 +14,7 @@ Java 저장 함수/프로시저를 사용할 때 얻을 수 있는 이점은 다
 
 *   **뛰어난 상호 운용성, 이식성** : Java 저장 함수/프로시저는 Java 가상 머신을 사용하므로, 시스템에 Java 가상 머신을 사용할 수만 있다면 언제 어디서나 사용할 수 있다.
 
-.. _jsp_environment-configuration:
+.. _jsp-environment-configuration:
 
 Java 저장 함수/프로시저 환경 설정
 =================================

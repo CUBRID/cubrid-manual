@@ -4,7 +4,7 @@ UPDATE
 
 You can update the column value of a record stored in the target table to a new one by using the **UPDATE** statement. Specify the name of the column to update and a new value in the **SET** clause, and specify the condition to be used to extract the record to be updated in the :ref:`where-clause`. You can one or more tables only with one **UPDATE** statement.
 
-In case of only one table is to be updated, you can specify :ref:`order-by-clause` or :ref:`limit-clause`. You can also limit the number of records to be updated in the :ref:`limit-clause`. You can use the update with the :ref:`order-by-clause` if you want to maintain the execution order or lock order of triggers. ::
+::
 
     <UPDATE single table>
     UPDATE table_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT} ...]
@@ -17,13 +17,20 @@ In case of only one table is to be updated, you can specify :ref:`order-by-claus
         [WHERE search_condition]
 
 *   <*table_specifications*>: You can specify the statement such as **FROM** clause of the **SELECT** statement and one or more tables can be specified.
+
 *   *column_name*: Specifies the column name to be updated. Columns for one or more tables can be specified.
+
 *   *expr* | **DEFAULT**: Specifies a new value for the column and expression or **DEFAULT** keyword can be specified as a value. The **SELECT** statement returning result record also can be specified.
+
 *   *search_condition*: Update only data that meets the *search_condition* if conditions are specified in the :ref:`where-clause`.
+
 *   *col_name* | *expr*: Specifies base column to be updated.
+
 *   *row_count*: Specifies the number of records to be updated after the :ref:`limit-clause`. An integer greater than 0 can be specified.
 
-.. note:: 9.0 or higher versions allow multiple tables for <*table_specifications*>.
+In case of only one table is to be updated, you can specify :ref:`order-by-clause` or :ref:`limit-clause`. You can also limit the number of records to be updated in the :ref:`limit-clause`. You can use the update with the :ref:`order-by-clause` if you want to maintain the execution order or lock order of triggers. 
+
+.. note:: Previous versions of CUBRID 9.0 allow only one table for <*table_specifications*>.
 
 The following example shows how to update one table.
 
@@ -100,3 +107,5 @@ The following example shows how to update multiple tables after joining them.
 For *a_tbl* table and *b_tbl* table, which join the **UPDATE** statement, when the number of rows of *a_tbl* which joins one row of *b_tbl* is two or more and the column to be updated is included in *a_tbl*, update is executed by using the value of the row detected first among the rows of *b_tbl*.
 
 In the above example, when the number of rows with *id* = 5, the **JOIN** condition column, is one in *a_tbl* and two in *b_tbl*, *a_tbl.charge*, the update target column in the row with *a_tbl.id* = 5, uses the value of *rate* of the first row in *b_tbl* only.
+
+For more details on join syntax, see :ref:`join-query`.

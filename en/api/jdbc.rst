@@ -58,7 +58,7 @@ Installing and Configuring JDBC
 
 **Installing Java and Configuring Environment**
 
-You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( http://java.sun.com ). For more information, please refer :ref:`jsp_environment-configuration`.
+You must already have Java installed and the **JAVA_HOME** environment variable configured in your system. You can download Java from the Developer Resources for Java Technology website ( http://java.sun.com ). For more information, please refer :ref:`jsp-environment-configuration`.
 
 **Configuring the environment variables for Windows**
 
@@ -764,6 +764,151 @@ You can get the **LOB** type data in the following ways.
 
 .. note:: If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
 
+JDBC Error Codes and Error Messages
+-----------------------------------
+
+JDBC error codes which occur in SQLException are as follows.
+
+*   All error codes are negative.
+*   After SQLException, error number can be shown by SQLException.getErrorCode() and error message can be shown by SQLException.getMessage().
+*   If the value of error code is between -21001 and -21999, it is caused by CUBRID JDBC methods.
+*   If the value of error code is between -10000 and -10999, it is caused by CAS and transferred by JDBC methods. For CAS errors, see :ref:`broker-error`. 
+*   If the value of error code is between 0 and -9999, it is caused by database server. For database server errors, see :ref:`database-server-error`.
+
++---------------+--------------------------------------------------------------------------------------+
+| Error Number  | Error Message                                                                        |
++===============+======================================================================================+
+| -21001        | Index's Column is Not Object                                                         |
++---------------+--------------------------------------------------------------------------------------+
+| -21002        | Server error                                                                         |
++---------------+--------------------------------------------------------------------------------------+
+| -21003        | Cannot communicate with the broker                                                   |
++---------------+--------------------------------------------------------------------------------------+
+| -21004        | Invalid cursor position                                                              |
++---------------+--------------------------------------------------------------------------------------+
+| -21005        | Type conversion error                                                                |
++---------------+--------------------------------------------------------------------------------------+
+| -21006        | Missing or invalid position of the bind variable provided                            |
++---------------+--------------------------------------------------------------------------------------+
+| -21007        | Attempt to execute the query when not all the parameters are binded                  |
++---------------+--------------------------------------------------------------------------------------+
+| -21008        | Internal Error: NULL value                                                           |
++---------------+--------------------------------------------------------------------------------------+
+| -21009        | Column index is out of range                                                         |
++---------------+--------------------------------------------------------------------------------------+
+| -21010        | Data is truncated because receive buffer is too small                                |
++---------------+--------------------------------------------------------------------------------------+
+| -21011        | Internal error: Illegal schema type                                                  |
++---------------+--------------------------------------------------------------------------------------+
+| -21012        | File access failed                                                                   |
++---------------+--------------------------------------------------------------------------------------+
+| -21013        | Cannot connect to a broker                                                           |
++---------------+--------------------------------------------------------------------------------------+
+| -21014        | Unknown transaction isolation level                                                  |
++---------------+--------------------------------------------------------------------------------------+
+| -21015        | Internal error: The requested information is not available                           |
++---------------+--------------------------------------------------------------------------------------+
+| -21016        | The argument is invalid                                                              |
++---------------+--------------------------------------------------------------------------------------+
+| -21017        | Connection or Statement might be closed                                              |
++---------------+--------------------------------------------------------------------------------------+
+| -21018        | Internal error: Invalid argument                                                     |
++---------------+--------------------------------------------------------------------------------------+
+| -21019        | Cannot communicate with the broker or received invalid packet                        |
++---------------+--------------------------------------------------------------------------------------+
+| -21020        | No More Result                                                                       |
++---------------+--------------------------------------------------------------------------------------+
+| -21021        | This ResultSet do not include the OID                                                |
++---------------+--------------------------------------------------------------------------------------+
+| -21022        | Command is not insert                                                                |
++---------------+--------------------------------------------------------------------------------------+
+| -21023        | Error                                                                                |
++---------------+--------------------------------------------------------------------------------------+
+| -21024        | Request timed out                                                                    |
++---------------+--------------------------------------------------------------------------------------+
+| -21101        | Attempt to operate on a closed Connection.                                           |
++---------------+--------------------------------------------------------------------------------------+
+| -21102        | Attempt to access a closed Statement.                                                |
++---------------+--------------------------------------------------------------------------------------+
+| -21103        | Attempt to access a closed PreparedStatement.                                        |
++---------------+--------------------------------------------------------------------------------------+
+| -21104        | Attempt to access a closed ResultSet.                                                |
++---------------+--------------------------------------------------------------------------------------+
+| -21105        | Not supported method                                                                 |
++---------------+--------------------------------------------------------------------------------------+
+| -21106        | Unknown transaction isolation level.                                                 |
++---------------+--------------------------------------------------------------------------------------+
+| -21107        | invalid URL -                                                                        |
++---------------+--------------------------------------------------------------------------------------+
+| -21108        | The database name should be given.                                                   |
++---------------+--------------------------------------------------------------------------------------+
+| -21109        | The query is not applicable to the executeQuery(). Use the executeUpdate() instead.  |
++---------------+--------------------------------------------------------------------------------------+
+| -21110        | The query is not applicable to the executeUpdate(). Use the executeQuery() instead.  |
++---------------+--------------------------------------------------------------------------------------+
+| -21111        | The length of the stream cannot be negative.                                         |
++---------------+--------------------------------------------------------------------------------------+
+| -21112        | An IOException was caught during reading the inputstream.                            |
++---------------+--------------------------------------------------------------------------------------+
+| -21113        | Not supported method, because it is deprecated.                                      |
++---------------+--------------------------------------------------------------------------------------+
+| -21114        | The object does not seem to be a number.                                             |
++---------------+--------------------------------------------------------------------------------------+
+| -21115        | Missing or invalid position of the bind variable provided.                           |
++---------------+--------------------------------------------------------------------------------------+
+| -21116        | The column name is invalid.                                                          |
++---------------+--------------------------------------------------------------------------------------+
+| -21117        | Invalid cursor position.                                                             |
++---------------+--------------------------------------------------------------------------------------+
+| -21118        | Type conversion error.                                                               |
++---------------+--------------------------------------------------------------------------------------+
+| -21119        | Internal error: The number of attributes is different from the expected.             |
++---------------+--------------------------------------------------------------------------------------+
+| -21120        | The argument is invalid.                                                             |
++---------------+--------------------------------------------------------------------------------------+
+| -21121        | The type of the column should be a collection type.                                  |
++---------------+--------------------------------------------------------------------------------------+
+| -21122        | Attempt to operate on a closed DatabaseMetaData.                                     |
++---------------+--------------------------------------------------------------------------------------+
+| -21123        | Attempt to call a method related to scrollability of non-scrollable ResultSet.       |
++---------------+--------------------------------------------------------------------------------------+
+| -21124        | Attempt to call a method related to sensitivity of non-sensitive ResultSet.          |
++---------------+--------------------------------------------------------------------------------------+
+| -21125        | Attempt to call a method related to updatability of non-updatable ResultSet.         |
++---------------+--------------------------------------------------------------------------------------+
+| -21126        | Attempt to update a column which cannot be updated.                                  |
++---------------+--------------------------------------------------------------------------------------+
+| -21127        | The query is not applicable to the executeInsert().                                  |
++---------------+--------------------------------------------------------------------------------------+
+| -21128        | The argument row can not be zero.                                                    |
++---------------+--------------------------------------------------------------------------------------+
+| -21129        | Given InputStream object has no data.                                                |
++---------------+--------------------------------------------------------------------------------------+
+| -21130        | Given Reader object has no data.                                                     |
++---------------+--------------------------------------------------------------------------------------+
+| -21131        | Insertion query failed.                                                              |
++---------------+--------------------------------------------------------------------------------------+
+| -21132        | Attempt to call a method related to scrollability of TYPE_FORWARD_ONLY Statement.    |
++---------------+--------------------------------------------------------------------------------------+
+| -21133        | Authentication failure                                                               |
++---------------+--------------------------------------------------------------------------------------+
+| -21134        | Attempt to operate on a closed PooledConnection.                                     |
++---------------+--------------------------------------------------------------------------------------+
+| -21135        | Attempt to operate on a closed XAConnection.                                         |
++---------------+--------------------------------------------------------------------------------------+
+| -21136        | Illegal operation in a distributed transaction                                       |
++---------------+--------------------------------------------------------------------------------------+
+| -21137        | Attempt to access a CUBRIDOID associated with a Connection which has been closed.    |
++---------------+--------------------------------------------------------------------------------------+
+| -21138        | The table name is invalid.                                                           |
++---------------+--------------------------------------------------------------------------------------+
+| -21139        | Lob position to write is invalid.                                                    |
++---------------+--------------------------------------------------------------------------------------+
+| -21140        | Lob is not writable.                                                                 |
++---------------+--------------------------------------------------------------------------------------+
+| -21141        | Request timed out.                                                                   |
++---------------+--------------------------------------------------------------------------------------+
+
 JDBC Sample Program
 ===================
 
@@ -813,7 +958,7 @@ The following example shows how to connect to the *demodb* database, create a ta
           Connection conn = null;
           try {
                Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-               conn = DriverManager.getConnection("jdbc:cubrid:localhost:33000:demodb::","dba","");
+               conn = DriverManager.getConnection("jdbc:cubrid:localhost:33000:demodb:::","dba","");
                conn.setAutoCommit (false) ;
           } catch ( Exception e ) {
                System.err.println("SQLException : " + e.getMessage());

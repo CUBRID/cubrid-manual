@@ -443,7 +443,21 @@ To process queries that are interested in open bugs, specify the index as an ind
 
 **Constraints**
 
-Only generic indexes are allowed as filtered indexes. For example, the filtered unique index is not allowed. 
+Only generic indexes are allowed as filtered indexes. For example, the filtered unique index is not allowed. Also, it is not allowed that columns which compose an index are all NULLable.
+For example, below is not allowed because Author is NULLable.
+
+.. code-block:: sql
+
+    CREATE INDEX idx_open_bugs ON bugs (Author) WHERE Closed = 0;
+    
+    ERROR: before ' ; '
+    Invalid filter expression (bugs.Closed=0) for index.
+    
+However, below is allowed because Author is NULLable, but CreationDate is not NULLable.
+
+.. code-block:: sql
+    
+    CREATE INDEX idx_open_bugs ON bugs (Author, CreationDate) WHERE Closed = 0;
 
 The following cases are not allowed as filtering conditions.
 

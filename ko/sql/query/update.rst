@@ -4,7 +4,7 @@ UPDATE
 
 **UPDATE** 문을 사용하면 대상 테이블에 저장된 레코드의 칼럼 값을 새로운 값으로 업데이트할 수 있다. **SET** 절에는 업데이트할 칼럼 이름과 새로운 값을 명시하며, :ref:`where-clause`\ 에는 업데이트할 레코드를 추출하기 위한 조건을 명시한다. 하나의 **UPDATE** 문으로 하나 이상의 테이블을 업데이트할 수 있다.
 
-업데이트할 테이블이 한 개인 경우에 한하여, :ref:`order-by-clause`\ 이나 :ref:`limit-clause`\ 을 지정할 수 있다. :ref:`limit-clause`\ 을 명시하면 업데이트할 레코드 수를 한정할 수 있다. :ref:`order-by-clause`\ 을 명시하면 해당 칼럼의 순서로 레코드를 업데이트한다. :ref:`order-by-clause`\ 에 의한 업데이트는 트리거의 실행 순서나 잠금 순서를 유지하고자 할 때 유용하게 이용할 수 있다. ::
+::
 
     <UPDATE single table>
     UPDATE table_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT} ...]
@@ -27,6 +27,8 @@ UPDATE
 *   *col_name* | *expr*: 업데이트할 순서의 기준이 되는 칼럼을 지정한다.
 
 *   *row_count*: :ref:`limit-clause`\ 에 업데이트할 레코드 수를 명시하며, 0보다 큰 정수를 지정할 수 있다.
+
+업데이트할 테이블이 한 개인 경우에 한하여, :ref:`order-by-clause`\ 이나 :ref:`limit-clause`\ 을 지정할 수 있다. :ref:`limit-clause`\ 을 명시하면 업데이트할 레코드 수를 한정할 수 있다. :ref:`order-by-clause`\ 을 명시하면 해당 칼럼의 순서로 레코드를 업데이트한다. :ref:`order-by-clause`\ 에 의한 업데이트는 트리거의 실행 순서나 잠금 순서를 유지하고자 할 때 유용하게 이용할 수 있다. 
 
 .. note:: CUBRID 9.0 미만 버전에서는 <*table_specifications*>에 한 개의 테이블만 입력할 수 있다.
 
@@ -102,6 +104,8 @@ UPDATE
       a_tbl.charge = a_tbl.charge * (1 + b_tbl.rate)
     WHERE a_tbl.charge > 900.0;
 
-**UPDATE** 문에서 조인하는 테이블 *a_tbl*, *b_tbl* 에 대해 *a_tbl* 의 행 하나당 조인하는 *b_tbl* 의 행의 개수가 두 개 이상이고 갱신 대상 칼럼이 *a_tbl* 에 있으면, *b_tbl* 의 행들 중 첫 번째로 발견되는 행의 값을 사용하여 갱신을 수행한다.
+**UPDATE** 문에서 조인하는 테이블 *a_tbl*, *b_tbl*\ 에 대해 *a_tbl*\ 의 행 하나당 조인하는 *b_tbl*\ 의 행의 개수가 두 개 이상이고 갱신 대상 칼럼이 *a_tbl*\ 에 있으면, *b_tbl*\ 의 행들 중 첫 번째로 발견되는 행의 값을 사용하여 갱신을 수행한다.
 
-위의 예에서 **JOIN** 조건 칼럼인 *id* = 5 인 행의 개수가 *a_tbl* 에는 한 개 있고 *b_tbl* 에는 두 개 있다면, *a_tbl.id* = 5 인 행의 업데이트 대상 칼럼인 a_tbl.charge는 *b_tbl* 의 첫 번째 행의 *rate* 칼럼 값만 사용한다.
+위의 예에서 **JOIN** 조건 칼럼인 *id* = 5 인 행의 개수가 *a_tbl* 에는 한 개 있고 *b_tbl* 에는 두 개 있다면, *a_tbl.id* = 5 인 행의 업데이트 대상 칼럼인 *a_tbl.charge*\ 는 *b_tbl*\ 의 첫 번째 행의 *rate* 칼럼 값만 사용한다.
+
+조인 구문에 대한 자세한 설명은 :ref:`join-query`\ 를 참고한다.

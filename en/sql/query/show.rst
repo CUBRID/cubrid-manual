@@ -2,6 +2,25 @@
 SHOW
 ****
 
+DESC, DESCRIBE
+==============
+
+**DESC** or **DESCRIBE** statement displays the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
+
+::
+
+    DESC tbl_name
+    DESCRIBE tbl_name
+    
+EXPLAIN
+=======
+
+**EXPLAIN** statement displays the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
+
+::
+
+    EXPLAIN tbl_name
+
 .. _show-tables-statement:
 
 SHOW TABLES
@@ -84,7 +103,7 @@ If a **FULL** keyword is used, it displays the additional information, collation
 
 **SHOW FIELDS** is the same statement as **SHOW COLUMNS**.
 
-The **DESCRIBE** (abbreviated **DESC**) statement and the **EXPLAIN** statement provide similar information to **SHOW COLUMNS**.
+The **DESCRIBE** (abbreviated **DESC**) statement and the **EXPLAIN** statement provide the same information with **SHOW COLUMNS**, but they don't support LIKE clause or WHERE clause.
 
 ::
 
@@ -272,9 +291,12 @@ When a table name is specified, the **SHOW CREATE TABLE** statement outputs the 
      
       TABLE                 CREATE TABLE
     ============================================
-      'nation'              'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, [name] CHARACTER VARYING(40) NO
-    T NULL, [continent] CHARACTER VARYING(10), [capital] CHARACTER VARYING(30),  CONSTRAINT [pk_nation_code] PRIM
-    ARY KEY  ([code]))'
+      'nation'               'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, 
+    [name] CHARACTER VARYING(40) NOT NULL, [continent] CHARACTER VARYING(10), 
+    [capital] CHARACTER VARYING(30),  CONSTRAINT [pk_nation_code] PRIMARY KEY  ([code])) 
+    COLLATE iso88591_bin'
+
+**SHOW CREATE TABLE** statement does not display as the user's written syntax. For example, the comment that user wrote is not displayed, and table names and column names are always displayed as lower case letters.
 
 .. _show-create-view-statement:
 

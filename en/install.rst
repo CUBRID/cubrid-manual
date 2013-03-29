@@ -30,7 +30,7 @@ Compatibility
 
 **Application Compatibility**
 
-*   Applications that use JDBC, PHP or CCI APIs from 2008 R2.0 or higher version of CUBRID can access the CUBRID 2008 R4.1 database. However, you must link the CUBRID 2008 R4.1 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces.
+*   Applications that use JDBC, PHP or CCI APIs from 2008 R2.0 or higher version of CUBRID can access the CUBRID 9.2 database. However, you must link the CUBRID 9.2 library or use the driver to use the added/improved features of JDBC, PHP or CCI interfaces.
 
 *   Note that query results may differ from those given in the earlier version because new reserved words have been added, and the specifications for some queries have been changed.
 
@@ -44,7 +44,7 @@ Compatibility
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the http://www.cubrid.org Website.
 
-.. note:: 9.0 Beta version user should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 9.1 version.
+.. note:: 9.0 Beta version user should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 9.2 version.
     For upgrade and data migration, see :doc:`/upgrade`.
 
 Interoperability
@@ -85,14 +85,14 @@ Installation and Running CUBRID on Linux
   
 **Installing CUBRID**
 
-    The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-9.1.0.0201-linux.x86_64.sh" file on the Linux. ::
+    The installation program consists of shell scripts that contain binary; thus it can be installed automatically. The following example shows how to install CUBRID with the "CUBRID-9.2.0.0201-linux.x86_64.sh" file on the Linux. ::
 
-        $ sh CUBRID-9.1.0.0201-linux.x86_64.sh
+        $ sh CUBRID-9.2.0.0201-linux.x86_64.sh
         Do you agree to the above license terms? (yes or no) : yes
         Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
         Install CUBRID to '/home1/cub_user/CUBRID' ...
         In case a different version of the CUBRID product is being used in other machines, 
-        please note that the CUBRID 9.1 servers are only compatible with the CUBRID 9.1 clients and vice versa.
+        please note that the CUBRID 9.2 servers are only compatible with the CUBRID 9.2 clients and vice versa.
         Do you want to continue? (yes or no) [Default: yes] : yes
         Copying old .cubrid.sh to .cubrid.sh.bak ...
 
@@ -104,7 +104,7 @@ Installation and Running CUBRID on Linux
         $ . /home1/cub_user/.cubrid.sh
         $ cubrid service start
 
-    As shown in the example above, after installing the downloaded file (CUBRID-9.1.0.0201-linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
+    As shown in the example above, after installing the downloaded file (CUBRID-9.2.0.0201-linux.x86_64.sh), the CUBRID related environment variables must be set in order to use the CUBRID database. Such setting has been made automatically when logging in the concerned terminal. Therefore there is no need to re-set after the first installation. ::
 
         $ . /home1/cub_user/.cubrid.sh
 
@@ -135,7 +135,7 @@ Installation and Running CUBRID on Linux
 
     You can install CUBRID by using rpm file that is created on CentOS5. The way of installing and uninstalling CUBRID is the same as that of using general rpm utility. While CUBRID is being installed, a new system group (cubrid) and a user account (cubrid) are created. After installation is complete, you should log in with a cubrid user account to start a CUBRID service.::
 
-        $ rpm -Uvh cubrid-9.1.0.0201-el5.x86_64.rpm
+        $ rpm -Uvh cubrid-9.2.0.0201-el5.x86_64.rpm
 
     When rpm is executed, CUBRID is installed in the "cubrid" home directory (/opt/cubrid) and related configuration file (cubrid.[c]sh) is installed in the /etc/profile.d directory. Note that *demodb* is not automatically installed. Therefore, you must executed /opt/cubrid/demo/make_cubrid_demo.sh with "cubrid" Linux ID. When installation is complete, enter the code below to start CUBRID with "cubrid" Linux ID. ::
 
@@ -143,14 +143,18 @@ Installation and Running CUBRID on Linux
 
     .. note:: \
 
-        **RPM and dependency**
+        *   **RPM and dependency**
         
-        You must check RPM dependency when installing with RPM. If you ignore (--nodeps) dependency, it may not be executed. Even if you remove RPM, user accounts and databases that are created after installing, you must remove it manually, if needed.
+            You must check RPM dependency when installing with RPM. If you ignore (--nodeps) dependency, it may not be executed. Even if you remove RPM, user accounts and databases that are created after installing, you must remove it manually, if needed.
         
-        **Running CUBRID automatically in Linux when the system is started**
+        *   **Running CUBRID automatically in Linux when the system is started**
         
-        How to use service or chkconfig command If you use SH or RPM package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, **CUBRID_USER**. If you change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command to run CUBRID automatically when the Linux system is started.
+            How to use service or chkconfig command If you use SH or RPM package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, **CUBRID_USER**. If you change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command to run CUBRID automatically when the Linux system is started.
     
+        *   **In /etc/hosts file, check if a host name and an IP address mapping is normal**
+
+            If a host name and an IP address is abnormally mapped, you cannot start DB server. Therefore, you should check if they are normally mapped.
+            
 **Installing CUBRID on Fedora/CentOS**
 
     To install CUBRID using the yum command, you should know where the CUBRID package is located. Choose appropriate location based on your operating system.

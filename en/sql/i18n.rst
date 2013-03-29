@@ -1330,9 +1330,7 @@ Operations Requiring Collation and Charset
     * euckr to/from utf8 not allowed
     * iso88591 to utf8 - byte conversion - it is the only transition where all characters in the source can be encoded in the destination.
     * iso88591 to euckr - not allowed (some characters cannot be encoded in EUC-KR)
-    * utf8 and euckr to iso88591 - byte reinterpret; When value (to be converted) has domain with infinite precision, the size of storage remains the same, but precision increases. 
-    
-        .. note:: In 9.0 version, when value has domain with finite precision, the precision is kept resulting in data truncation. In 9.1 version, CUBRID no longer truncates the data to keep precision; in cases where precision is not enforced, CUBRID will extend the precision in order to keep data integrity.
+    * utf8 and euckr to iso88591 - the precision is kept and data can be truncated.
 
 .. _collation-setting-impacted-features:
 

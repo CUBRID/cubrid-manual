@@ -197,7 +197,6 @@ CUBRID supports the following features to completely ensure the atomicity, consi
 *   Ensuring transaction consistency between replications
 *   Supporting multiple granularity locking of databases, tables and records
 *   Resolving deadlocks automatically
-*   Supporting distributed transactions (two phase commit)
 
 **Database Backup and Restore**
 

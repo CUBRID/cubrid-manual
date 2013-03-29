@@ -13,7 +13,6 @@ INSERT
         {VALUES | VALUE}({expr | DEFAULT}, ...)[,({expr | DEFAULT}, ...),...]
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
     INSERT [INTO] table_name DEFAULT [ VALUES ]
-    INSERT [INTO] table_name VALUES()
      
     <INSERT … SET statement>
     INSERT [INTO] table_name
@@ -129,18 +128,19 @@ INSERT
             a            b            c
     ===================================
            11            1            3
-                
-                
+
 INSERT ... SELECT 문
 ====================
 
-**INSERT** 문에 **SELECT** 질의를 사용하면 하나 이상의 다른 테이블로부터 특정 검색 조건을 만족하는 데이터를 추출하여 대상 테이블에 삽입할 수 있다.
+**INSERT** 문에 **SELECT** 질의를 사용하면 하나 이상의 테이블로부터 특정 검색 조건을 만족하는 질의 결과를  대상 테이블에 삽입할 수 있다.
 
-**SELECT** 문은 **VALUES** 키워드 대신 사용하거나 **VALUES** 뒤의 칼럼 값 리스트 내에 부질의로서 포함될 수 있다. **VALUES** 키워드를 대신하여 **SELECT** 문을 명시하면, 질의 결과로 얻은 다수의 레코드를 한 번에 대상 테이블 칼럼에 삽입할 수 있다. **SELECT** 문을 칼럼 값 리스트 내에 부질의로 사용하려면 질의 결과 레코드가 하나여야 한다. ::
+::
 
     INSERT [INTO] table_name [(column_name, ...)]
         SELECT...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
+
+**SELECT** 문은 **VALUES** 키워드 대신 사용하거나 **VALUES** 뒤의 칼럼 값 리스트 내에 부질의로서 포함될 수 있다. **VALUES** 키워드를 대신하여 **SELECT** 문을 명시하면, 질의 결과로 얻은 다수의 레코드를 한 번에 대상 테이블 칼럼에 삽입할 수 있다. 그러나, **SELECT** 문을 칼럼 값 리스트 내에 부질의로 사용하려면 질의 결과 레코드가 하나여야 한다. 
 
 .. code-block:: sql
 
@@ -154,6 +154,7 @@ INSERT ... SELECT 문
     INSERT INTO a_tbl2 VALUES(8, SELECT name FROM a_tbl1 WHERE name <'bbb', DEFAULT);
      
     SELECT * FROM a_tbl2;
+    
                id  name                  phone
     =========================================================
                 1  'aaa'                 '000-0000'
@@ -168,14 +169,15 @@ INSERT ... SELECT 문
 ON DUPLICATE KEY UPDATE 절
 ==========================
 
-**INSERT** 문에 **ON DUPLICATE KEY UPDATE** 절을 명시하여 **UNIQUE** 인덱스 또는 **PRIMARY KEY** 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 에러를 출력하지 않고 새로운 값으로 갱신할 수 있다. **ON DUPLICATE KEY UPDATE** 절은 중첩된 **INSERT** 문에 사용할 수 없다. ::
+**INSERT** 문에 **ON DUPLICATE KEY UPDATE** 절을 명시하여 **UNIQUE** 인덱스 또는 **PRIMARY KEY** 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 에러를 출력하지 않고 새로운 값으로 갱신할 수 있다. 
+
+::
 
     <INSERT … VALUES statement>
     <INSERT … SET statement>
     <INSERT … SELECT statement>
         INSERT ...
         [ON DUPLICATE KEY UPDATE column_name = expr, ... ]
-
 
 *   *column_name* = *expr*: **ON DUPLICATE KEY UPDATE** 뒤에 칼럼 값을 변경하고자 하는 칼럼 이름을 명시하고, 등호 부호를 이용하여 새로운 칼럼 값을 명시한다.
 
@@ -185,6 +187,7 @@ ON DUPLICATE KEY UPDATE 절
     CREATE TABLE a_tbl3 LIKE a_tbl1;
     INSERT INTO a_tbl3 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
     SELECT * FROM a_tbl3;
+    
                id  name                  phone
     =========================================================
                 1  'aaa'                 '000-0000'
@@ -196,13 +199,19 @@ ON DUPLICATE KEY UPDATE 절
     INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222');
      
     ERROR: Operation would have caused one or more unique constraint violations.
-     
+
+ON DUPLICATE KEY UPDATE에서 "affected rows" 값은 새로운 행이 삽입되었을 경우에는 1이고, 존재하는 행이 업데이트되었을 경우에는 2이다.
+
+.. code-block:: sql
+    
     --insert duplicated value with specifying ON DUPLICATED KEY UPDATE clause
-    INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222')
-    ON DUPLICATE KEY UPDATE phone = '222-2222';
+    INSERT INTO a_tbl3 VALUES(2, 'ggg', '222-2222')
+    ON DUPLICATE KEY UPDATE name='ggg', phone = '222-2222';
      
     SELECT * FROM a_tbl3 WHERE id=2;
+    
                id  name                  phone
     =========================================================
-                2  'bbb'                 '222-2222'
+                2  'ggg'                 '222-2222'
 
+    2 rows affected.

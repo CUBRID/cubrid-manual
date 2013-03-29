@@ -19,11 +19,25 @@ CCI API Reference
         *   **CCI_ER_ATYPE**
         *   **CCI_ER_NO_MORE_MEMORY**
 
-    If **NULL** is bound to the database, there can be two scenarios.
+    To bind **NULL** to the database, choose one of below settings.
 
-    *   When the value of *value* is a **NULL** pointer
-    *   When the value of *u_type* is **CCI_U_TYPE_NULL**
+    *   Set the value of *value* to a **NULL** pointer
+    *   Set the value of *u_type* to **CCI_U_TYPE_NULL**
 
+    The following shows a part of code to bind NULL.
+    
+    .. code-block:
+    
+        res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_STR, NULL, CCI_U_TYPE_STRING, CCI_BIND_PTR);
+        
+    or
+    
+    .. code-block:
+    
+        res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_STR, data, CCI_U_TYPE_NULL, CCI_BIND_PTR);
+
+    can be used.
+    
     If **CCI_BIND_PTR** is configured for *flag*, the pointer of *value* variable is copied (shallow copy), but no value is copied. If it is not configured for *flag*, the value of *value* variable is copied (deep copy) by allocating memory. If multiple columns are bound by using the same memory buffer, **CCI_BIND_PTR** must not be configured for the *flag*.
 
     **T_CCI_A_TYPE** is a C language type that is used in CCI applications for data binding, and consists of primitive types such as int and float, and user-defined types defined by CCI such as **T_CCI_BIT** and **T_CCI_DATE**. The identifier for each type is defined as shown in the table below.
@@ -55,8 +69,8 @@ CCI API Reference
 
     **T_CCI_U_TYPE** is a column type of database and data bound though the *value* argument is converted into this type. The **cci_bind_param** () function uses two kinds of types to send information which is used to convert U-type data from A-type data; the U-type data can be interpreted by database language and the A-type data can be interpreted by C language.
 
-    There are various A-type data that are allowed by U-type data. For example, **CCI_U_TYPE_INT** can receive **CCI_A_TYPE_STR** as A-type data including **CCI_A_TYPE_INT**. For information on type conversion, see "CUBRID SQL Guide > Data Types > Implicit Type Conversion > Rules."
-
+    There are various A-type data that are allowed by U-type data. For example, **CCI_U_TYPE_INT** can receive **CCI_A_TYPE_STR** as A-type data including **CCI_A_TYPE_INT**. For information on type conversion, see :ref:`implicit-type-conversion`.
+    
     Both **T_CCI_A_TYPE** and **T_CCI_U_TYPE** enum(s) are defined in the **cas_cci.h** file. The definition of each identifier is described in the table below.
 
     +--------------------------+------------------------------------+
@@ -1001,7 +1015,7 @@ CCI API Reference
     If more than one value is bound to the prepared statement, this gets the values of the variables to be bound and executes the query by binding each value to the variable.
 
     :param req_handle: (IN) Request handle of the prepared statement
-    :param query_result: (OUT) Query results (the number of executed queries)
+    :param query_result: (OUT) Query results
     :param err_buf: (OUT) Database error buffer
     :return: Success: The number of executed queries, Failure: Negative number
     
@@ -1011,27 +1025,25 @@ CCI API Reference
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_QUERY_TIMEOUT**
         *   **CCI_ER_LOGIN_TIMEOUT**
-
+       
     To bind the data, call the :c:func:`cci_bind_param_array_size` function to specify the size of the array, bind each value to the variable by using the :c:func:`cci_bind_param_array` function, and execute the query by calling the :c:func:`cci_execute_array` function. The query result will be stored on the array of **T_CCI_QUERY_RESULT** structure.
 
-    You can get three execution results by calling the :c:func:`cci_execute` function. However, the :c:func:`cci_execute_array` function returns the number of queries executed by the query_result variable. You can use :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG` and :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` macros to get the result of each query. 
-    
-    Note that the validity check is not performed for each parameter entered in the macro. 
+    :c:func:`cci_execute_array` function returns the results of queries to the *query_result* variable. You can use below macros to get the result of each query. In the macro, note that the validation check for each parameter entered is not performed. 
     
     After using the query_result variable, you must delete the query_result by using the :c:func:`cci_query_result_free` function.
 
     +---------------------------------------+---------------------------------+---------------------------------+
     | Macro                                 | Return Type                     | Meaning                         |
     +=======================================+=================================+=================================+
-    | :c:macro:`CCI_QUERY_RESULT_RESULT`    | int                             | the number of results           |
+    | :c:macro:`CCI_QUERY_RESULT_RESULT`    | int                             | the number of affected rows     |
     |                                       |                                 | or error identifier             |
     |                                       |                                 | (-1: CAS error, -2: DBMS error) |    
     +---------------------------------------+---------------------------------+---------------------------------+
-    | :c:macro:`CCI_QUERY_RESULT_ERR_NO`    | int                             | error number about query        |
+    | :c:macro:`CCI_QUERY_RESULT_ERR_NO`    | int                             | error number about a query      |
     +---------------------------------------+---------------------------------+---------------------------------+
-    | :c:macro:`CCI_QUERY_RESULT_ERR_MSG`   | char \*                         | error message about query       |
+    | :c:macro:`CCI_QUERY_RESULT_ERR_MSG`   | char \*                         | error message about a query     |
     +---------------------------------------+---------------------------------+---------------------------------+
-    | :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` | int(**T_CCI_CUBRID_STMT** enum) | type of query statement         |
+    | :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` | int(**T_CCI_CUBRID_STMT** enum) | type of a query statement       |
     +---------------------------------------+---------------------------------+---------------------------------+
     
     If autocommit mode is on, each query in the array is committed after executing.
@@ -1382,6 +1394,22 @@ CCI API Reference
 
     *   For **LOB** type, if the :c:func:`cci_get_data` function is called, meta data with the **LOB** type column (Locator) is displayed. To call data of the **LOB** type column, the :c:func:`cci_blob_read` function should be called.
 
+    The below example shows a part of a code to print out the fetched result with :c:func:`cci_get_data`.
+        
+    .. code-block:: c
+    
+        ...
+        
+        if ((res=cci_get_data(req, i, CCI_A_TYPE_INT, &buffer, &ind))<0) {
+            printf( "%s(%d): cci_get_data fail\n", __FILE__, __LINE__);
+            goto handle_error;
+        }
+        if (ind != -1)
+                printf("%d \t|", buffer);
+        else
+                printf("NULL \t|");
+        ...
+    
 .. c:function:: int cci_get_db_parameter(int conn_handle, T_CCI_DB_PARAM param_name, void *value, T_CCI_ERROR *err_buf)
 
     The **cci_get_db_parameter** function gets a parameter value specified in the database.
@@ -2711,8 +2739,16 @@ CCI API Reference
                     {
                         goto _END_WHILE;
                     }
-                    strcat(query_result_buffer, buffer);
-                    strcat(query_result_buffer, "|");
+                    if ( ind != -1)
+                    {
+                        strcat(query_result_buffer, buffer);
+                        strcat(query_result_buffer, "|");
+                    } 
+                    else 
+                    {
+                        strcat(query_result_buffer, "NULL|");
+                    }
+
                 }
                 strcat(query_result_buffer, "\n");
          
@@ -3004,7 +3040,7 @@ CCI API Reference
 
 .. c:function:: int cci_set_holdability(int conn_handle,int holdable)
 
-    Sets whether to enable or disable cursor holdability of the result set from the connection level. When it is 1, the connection is disconnected or the cursor is holdable until the result set is intentionally closed regardless of commit. When it is 0, the result set is closed when committed and the cursor is not holdable. For more details on cursor holdability, see Cursor Holdability.
+    Sets whether to enable or disable cursor holdability of the result set from the connection level. When it is 1, the connection is disconnected or the cursor is holdable until the result set is intentionally closed regardless of commit. When it is 0, the result set is closed when committed and the cursor is not holdable. For more details on cursor holdability, see :ref:`cursor-holding`.
 
     :param conn_handle: (IN) Connection handle
     :param holdable: (IN) Cursor holdability setting value (0: not holdable, 1: holdable)

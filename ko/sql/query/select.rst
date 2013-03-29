@@ -21,7 +21,7 @@ SELECT
     <variable_comma_list> ::= [:] identifier, [:] identifier, ...
     
     <extended_table_specification_comma_list> ::=
-    <table specification> [ {, <table specification> | <join table specification> }... ]
+    <table specification> [ {, <table specification> | <join_table_specification> }... ]
      
     <table_specification> ::=
      <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
@@ -57,7 +57,7 @@ SELECT
 
     *   \* : **SELECT** * 구문을 사용하면 **FROM** 절에서 명시한 테이블에 대한 모든 칼럼을 조회할 수 있다.
 
-    * *expression_comma_list* : *expression* 은 칼럼 이름이나 경로 표현식(예: *tbl_name.col_name*), 변수, 테이블 이름이 될 수 있으며 산술 연산을 포함하는 일반적인 표현식도 모두 사용될 수 있다. 쉼표(,)는 리스트에서 개별 표현식을 구분하는데 사용된다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY**, **FOR** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
+    *   *expression_comma_list* : *expression* 은 칼럼 이름이나 경로 표현식(예: *tbl_name.col_name*), 변수, 테이블 이름이 될 수 있으며 산술 연산을 포함하는 일반적인 표현식도 모두 사용될 수 있다. 쉼표(,)는 리스트에서 개별 표현식을 구분하는데 사용된다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY**, **FOR** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
 
       *expression* 에는 **AVG**, **COUNT**, **MAX**, **MIN**, **SUM** 과 같이 조회된 데이터를 조작하는 집계 함수가 사용될 수 있다. 
 
@@ -126,7 +126,7 @@ FROM 절
 
     SELECT [ <qualifier> ] <select_expressions>
     [ FROM <table_specification> [ {, <table specification>
-    | <join table specification> }... ]]
+    | <join_table_specification> }... ]]
      
      
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
@@ -476,6 +476,8 @@ LIMIT 절
               201  'Laura'                         2           500
               301  'Max'                           1           300
 
+.. _join-query:
+              
 조인 질의
 =========
 
@@ -515,7 +517,7 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
 
 **FROM** 절에 명시된 순서대로 테이블 실행 순서가 고정되므로, 외부 조인을 사용하는 경우 테이블 순서에 주의하여 질의문을 작성한다. 외부 조인 연산자 '**(+)**' 를 **WHERE** 절에 명시하여 Oracle 스타일의 조인 질의문도 작성 가능하나, 실행 결과나 실행 계획이 원하지 않는 방향으로 유도될 수 있으므로 { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** 을 이용한 표준 구문을 사용할 것을 권장한다.
 
-교차 조인은 아무런 조건 없이 두 개의 테이블을 결합한 것, 즉 카티션 곱(cartesian product)이다. 교차 조인에서 **CROSS JOIN** 키워드는 생략할 수 있으며, 생략하면 테이블 사이를 쉼표(,)로 구분한다.
+교차 조인은 아무런 조건 없이 두 개의 테이블을 결합한 것, 즉 카티션 곱(cartesian product)이다. 교차 조인에서 **CROSS JOIN** 키워드는 생략할 수 있으며, 생략하려면 테이블 사이를 쉼표(,)로 구분한다.
 
 다음은 내부 조인을 이용하여 1950년 이후에 열린 올림픽 중에서 신기록이 세워진 올림픽의 개최연도와 개최국가를 조회하는 예제이다. 다음 질의는 *history* 테이블의 *host_year* 가 1950보다 큰 범위에서 값이 존재하는 레코드를 가져온다. 다음 두 개의 질의는 같은 결과를 출력한다.
 

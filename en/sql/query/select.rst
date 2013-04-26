@@ -79,6 +79,8 @@ The following example shows how to retrieve host countries of the Olympic Games 
 
     SELECT DISTINCT host_nation FROM olympic;
     
+::
+
       host_nation
     ======================
       'Australia'
@@ -94,6 +96,8 @@ The following example shows how to define an alias to a column to be queried and
 
     SELECT host_year as col1, host_nation as col2 FROM olympic ORDER BY col2 LIMIT 5;
     
+::
+    
              col1  col2
     ===================================
              2000  'Australia'
@@ -102,8 +106,12 @@ The following example shows how to define an alias to a column to be queried and
              1976  'Canada'
              1948  'England'
      
+.. code-block:: sql
+
     SELECT CONCAT(host_nation, ', ', host_city) AS host_place FROM olympic
     ORDER BY host_place FOR ORDERBY_NUM() BETWEEN 1 AND 5;
+    
+::
     
       host_place
     ======================
@@ -157,12 +165,18 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
     --FROM clause can be omitted in the statement
     SELECT 1+1 AS sum_value;
     
+::
+
         sum_value
     =============
                 2
      
+.. code-block:: sql
+
     SELECT CONCAT('CUBRID', '2008' , 'R3.0') AS db_version;
     
+::
+
       db_version
     ======================
       'CUBRID2008R3.0'
@@ -209,6 +223,8 @@ The following example shows *nation_code*, *host_year* and *gold* records whose 
                         AND bronze > 0)
                        AS t(s));
               
+::
+
       nation_code      host_year      gold
     =========================================
       'JPN'                2004         16
@@ -286,7 +302,7 @@ By SQL standard, you cannot specify a column (hidden column) not defined in the 
 
 .. code-block:: sql
 
-    --creating a new table
+    -- creating a new table
     CREATE TABLE sales_tbl
     (dept_no INT, name VARCHAR(20), sales_month INT, sales_amount INT DEFAULT 100, PRIMARY KEY (dept_no, name, sales_month));
     
@@ -295,41 +311,53 @@ By SQL standard, you cannot specify a column (hidden column) not defined in the 
     (301, 'Max'    , 1, 300), (301, 'Max'    , 2, 300),
     (501, 'Stephan', 1, 300), (501, 'Stephan', 2, DEFAULT), (501, 'Chang'  , 1, 150),(501, 'Chang'  , 2, 150),
     (501, 'Sue'    , 1, 150), (501, 'Sue'    , 2, 200);
-    
+     
     -- selecting rows grouped by dept_no
     SELECT dept_no, avg(sales_amount) 
     FROM sales_tbl
     GROUP BY dept_no;
     
+::
+
           dept_no         avg(sales_amount)
     =======================================
               201     3.250000000000000e+02
               301     3.000000000000000e+02
               501     1.750000000000000e+02
     
+.. code-block:: sql
+
     -- conditions in WHERE clause operate first before GROUP BY
     SELECT dept_no, avg(sales_amount) 
     FROM sales_tbl
     WHERE sales_amount > 100 
     GROUP BY dept_no;
     
+::
+
           dept_no         avg(sales_amount)
     =======================================
               201     4.000000000000000e+02
               301     3.000000000000000e+02
               501     1.900000000000000e+02
      
+.. code-block:: sql
+
     -- conditions in HAVING clause operate last after GROUP BY
     SELECT dept_no, avg(sales_amount) 
     FROM sales_tbl
     WHERE sales_amount > 100 
     GROUP BY dept_no HAVING avg(sales_amount) > 200;
     
+::
+
           dept_no         avg(sales_amount)
     =======================================
               201     4.000000000000000e+02
               301     3.000000000000000e+02
      
+.. code-block:: sql
+
     -- selecting and sorting rows with using column alias
     SELECT dept_no AS a1, avg(sales_amount) AS a2 
     FROM sales_tbl
@@ -337,18 +365,24 @@ By SQL standard, you cannot specify a column (hidden column) not defined in the 
     BY a1 HAVING a2 > 200 
     ORDER BY a2;
     
+::
+
                a1                        a2
     =======================================
               301     3.000000000000000e+02
               501     3.000000000000000e+02
               201     4.000000000000000e+02
      
+.. code-block:: sql
+
     -- selecting rows grouped by dept_no, name with WITH ROLLUP modifier
     SELECT dept_no AS a1, name AS a2, avg(sales_amount) AS a3 
     FROM sales_tbl
     WHERE sales_amount > 100 
     GROUP BY a1, a2 WITH ROLLUP;
     
+::
+
                a1  a2                                          a3
     =============================================================
               201  'George'                 3.500000000000000e+02
@@ -384,11 +418,13 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
 
 .. code-block:: sql
 
-    --selecting rows sorted by ORDER BY clause
+    -- selecting rows sorted by ORDER BY clause
     SELECT * 
     FROM sales_tbl
     ORDER BY dept_no DESC, name ASC;
     
+::
+
           dept_no  name                  sales_month  sales_amount
     ==============================================================
               501  'Chang'                         1           150
@@ -404,25 +440,33 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
               201  'Laura'                         1           100
               201  'Laura'                         2           500
      
-    --sorting reversely and limiting result rows by LIMIT clause
+.. code-block:: sql
+
+    -- sorting reversely and limiting result rows by LIMIT clause
     SELECT dept_no AS a1, avg(sales_amount) AS a2 
     FROM sales_tbl
     GROUP BY a1
     ORDER BY a2 DESC
-    LIMIT 0,3;
+    LIMIT 0, 3;
     
+::
+
                a1           a2
     =======================================
               201     3.250000000000000e+02
               301     3.000000000000000e+02
               501     1.750000000000000e+02
      
-    --sorting reversely and limiting result rows by FOR clause
+.. code-block:: sql
+
+    -- sorting reversely and limiting result rows by FOR clause
     SELECT dept_no AS a1, avg(sales_amount) AS a2 
     FROM sales_tbl
     GROUP BY a1
     ORDER BY a2 DESC FOR ORDERBY_NUM() BETWEEN 1 AND 3;
     
+::
+
                a1           a2
     =======================================
               201     3.250000000000000e+02
@@ -445,18 +489,20 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
 *   *offset* : Specifies the offset value of the starting row to be displayed. The offset value of the starting row of the result set is 0; it can be omitted and the default value is **0**.
 *   *row_count* : Specifies the number of records to be displayed. You can specify an integer greater than 0.
 
-.. code-block:: sql
+... code-block:: sql
 
-    --LIMIT clause can be used in prepared statement
-    PREPARE STMT FROM 'SELECT * FROM sales_tbl LIMIT ?, ?';
-    EXECUTE STMT USING 0, 10;
+    -- LIMIT clause can be used in prepared statement
+    PREPARE stmt FROM 'SELECT * FROM sales_tbl LIMIT ?, ?';
+    EXECUTE stmt USING 0, 10;
      
-    --selecting rows with LIMIT clause
+    -- selecting rows with LIMIT clause
     SELECT * 
     FROM sales_tbl
     WHERE sales_amount > 100
     LIMIT 5;
     
+::
+
           dept_no  name                  sales_month  sales_amount
     ==============================================================
               201  'George'                        1           450
@@ -465,11 +511,15 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
               301  'Max'                           1           300
               301  'Max'                           2           300
      
-    --LIMIT clause can be used in subquery
-    SELECT t1.* 
+.. code-block:: sql
+
+    -- LIMIT clause can be used in subquery
+    SELECT t1.*
     FROM (SELECT * FROM sales_tbl AS t2 WHERE sales_amount > 100 LIMIT 5) AS t1
     LIMIT 1,3;
     
+::
+
           dept_no  name                  sales_month  sales_amount
     ==============================================================
               201  'George'                        2           250
@@ -530,6 +580,8 @@ The following example shows how to retrieve the years and host countries of the 
     FROM history h, olympic o
     WHERE h.host_year = o.host_year AND o.host_year > 1950;
      
+::
+
         host_year  host_nation
     ===================================
              1968  'Mexico'
@@ -549,6 +601,8 @@ The following example shows how to retrieve the years and host countries of the 
     FROM history h RIGHT OUTER JOIN olympic o ON h.host_year=o.host_year 
     WHERE o.host_year>1950;
      
+::
+
         host_year  host_nation
     ===================================
              NULL  'Australia'
@@ -574,6 +628,8 @@ A right outer join query can be converted to a left outer join query by switchin
     FROM olympic o LEFT OUTER JOIN history h ON h.host_year=o.host_year 
     WHERE o.host_year>1950;
      
+::
+
         host_year  host_nation
     ===================================
              NULL  'Australia'
@@ -598,6 +654,8 @@ In this example, *h.host_year=o.host_year* is an outer join condition, and *o.ho
     SELECT DISTINCT h.host_year, o.host_nation
     FROM olympic o LEFT OUTER JOIN history h ON h.host_year=o.host_year AND o.host_year>1950;
      
+::
+
         host_year  host_nation
     ===================================
              NULL  'Australia'
@@ -616,6 +674,8 @@ Outer joins can also be represented by using **(+)** in the **WHERE** clause. Th
     FROM history h, olympic o
     WHERE o.host_year=h.host_year(+) AND o.host_year>1950;
      
+::
+
         host_year  host_nation
     ===================================
              NULL  'Australia'
@@ -643,6 +703,8 @@ The following example shows how to write cross join. The following two queries w
     SELECT DISTINCT h.host_year, o.host_nation 
     FROM history h, olympic o;
      
+::
+
     host_year  host_nation
     ===================================
              1968  'Australia'
@@ -677,17 +739,19 @@ The following example shows how to retrieve the *history* table as well as the h
            h.event_code, h.score, h.unit 
     FROM history h;
     
-        host_year host_nation              event_code  score                 unit
+::
+
+        host_year  host_nation            event_code  score                 unit
     ============================================================================================
-             2004  'Greece'                    20283  '07:53.0'             'time'
-             2004  'Greece'                    20283  '07:53.0'             'time'
-             2004  'Greece'                    20281  '03:57.0'             'time'
-             2004  'Greece'                    20281  '03:57.0'             'time'
-             2004  'Greece'                    20281  '03:57.0'             'time'
-             2004  'Greece'                    20281  '03:57.0'             'time'
-             2004  'Greece'                    20326  '210'                 'kg'
-             2000  'Australia'                 20328  '225'                 'kg'
-             2004  'Greece'                    20331  '237.5'               'kg'
+        2004       'Greece'               20283       '07:53.0'             'time'
+        2004       'Greece'               20283       '07:53.0'             'time'
+        2004       'Greece'               20281       '03:57.0'             'time'
+        2004       'Greece'               20281       '03:57.0'             'time'
+        2004       'Greece'               20281       '03:57.0'             'time'
+        2004       'Greece'               20281       '03:57.0'             'time'
+        2004       'Greece'               20326       '210'                 'kg'
+        2000       'Australia'            20328       '225'                 'kg'
+        2004       'Greece'               20331       '237.5'               'kg'
     ...
 
 Multiple-Row Subquery
@@ -702,17 +766,19 @@ The following example shows how to retrieve nations, capitals and host cities fo
     SELECT name, capital, list(SELECT host_city FROM olympic WHERE host_nation = name) AS host_cities
     FROM nation;
     
-      name                  capital               sequence((SELECT host_city FROM olympic WHERE host_nation=name))
+::
+
+      name                      capital                 host_cities
     ==================================================================
-      'Somalia'             'Mogadishu'           {}
-      'Sri Lanka'           'Sri Jayewardenepura Kotte'  {}
-      'Sao Tome & Principe'  'Sao Tome'            {}
-    ...
-      'U.S.S.R.'            'Moscow'              {'Moscow'}
-      'Uruguay'             'Montevideo'          {}
+      'Somalia'                   'Mogadishu'           {}
+      'Sri Lanka'                 'Sri Jayewardenepura Kotte' {}
+      'Sao Tome & Principe'       'Sao Tome'            {}
+      ...
+      'U.S.S.R.'                  'Moscow'              {'Moscow'}
+      'Uruguay'                   'Montevideo'          {}
       'United States of America'  'Washington.D.C'      {'Atlanta ', 'St. Louis', 'Los Angeles', 'Los Angeles'}
-      'Uzbekistan'          'Tashkent'            {}
-      'Vanuatu'             'Port Vila'           {}
+      'Uzbekistan'                'Tashkent'            {}
+      'Vanuatu'                   'Port Vila'           {}
 
 Such multiple-row subquery expressions can be used anywhere a collection-type value expression is allowed. However, they cannot be used where a collection-type constant value is required as in the **DEFAULT** specification in the class attribute definition.
 
@@ -750,8 +816,8 @@ The following example shows use of the **VALUES** clause with multiple rows in t
 .. code-block:: sql
 
     INSERT INTO athlete (code, name, gender, nation_code, event)
-        VALUES ('21111', 'Miran Jang', 'F', 'KOR', 'Weight-lifting'),
-               ('21112', 'Yeonjae Son', 'F', 'KOR', 'Rhythmic gymnastics');
+    VALUES ('21111', 'Jang Mi-Ran ', 'F', 'KOR', 'Weight-lifting'),
+           ('21112', 'Son Yeon-Jae ', 'F', 'KOR', 'Rhythmic gymnastics');
 
 The following example shows how to use subquery in the **FROM** statement.
 
@@ -761,7 +827,9 @@ The following example shows how to use subquery in the **FROM** statement.
     FROM athlete a, (VALUES ('Miran Jang', 'F'), ('Yeonjae Son', 'F')) AS t(name, gender)
     WHERE a.name=t.name AND a.gender=t.gender;
      
+::
+
              code  name                gender   nation_code        event
     =====================================================================================================
-            21111  'Miran Jang'        'F'      'KOR'              'Weight-lifting'
-            21112  'Yeonjae Son'       'F'      'KOR'              'Rhythmic gymnastics'
+            21111  'Jang Mi-ran'       'F'      'KOR'              'Weight-lifting'
+            21112  'Son Yeon-Jae'      'F'      'KOR'              'Rhythmic gymnastics'

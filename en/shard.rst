@@ -127,13 +127,13 @@ Selecting a Shard DB through the Shard SQL Hint
 
     .. code-block:: sql
 
-        SELECT name FROM student WHERE student_no = /*+ shard_key */ ?
+        SELECT name FROM student WHERE student_no = /*+ shard_key */ ?;
 
     Ex) Specifies the position of a literal value. Executes the query in the shard DB corresponding to the student_no value (the literal value) that is 123 when executed.
 
     .. code-block:: sql
 
-        SELECT name FROM student WHERE student_no = /*+ shard_key */ 123
+        SELECT name FROM student WHERE student_no = /*+ shard_key */ 123;
 
 **shard_val Hint**
 
@@ -143,7 +143,7 @@ Selecting a Shard DB through the Shard SQL Hint
 
     .. code-block:: sql
 
-        SELECT age FROM student WHERE name =? /*+ shard_val(123) */
+        SELECT age FROM student WHERE name =? /*+ shard_val(123) */;
 
 **shard_id Hint**
 
@@ -153,7 +153,7 @@ Selecting a Shard DB through the Shard SQL Hint
 
     .. code-block:: sql
 
-        SELECT * FROM student WHERE age > 17 /*+ shard_id(3) */
+        SELECT * FROM student WHERE age > 17 /*+ shard_id(3) */;
 
 .. _using-shard-hint:
 
@@ -639,13 +639,47 @@ Default Configuration File, shard.conf
 
 *   **SHARD_KEY_FILE** : The path of the shard key configuration file. The shard key configuration file should be located in **$CUBRID/conf**. For more information, see the :ref:`shard key configuration file <shard-key-configuration-file>`.
 
-*   **SHARD_KEY_MODULAR** : The parameter to specify the range of results of the default shard key hash function. The result of the function is shard_key(integer) % SHARD_KEY_MODULAR. For related issues, see :ref:`shard key configuration file <shard-key-configuration-file>` and :ref:`setting-user-defined-hash-function`.
+*   **SHARD_KEY_MODULAR** : The parameter to specify the range of results of the default shard key hash function. The result of the function is shard_key(integer) % SHARD_KEY_MODULAR.  The minimum value is 1, and the maximum value is 256. For related issues, see :ref:`shard key configuration file <shard-key-configuration-file>` and :ref:`setting-user-defined-hash-function`.
 
 *   **SHARD_KEY_LIBRARY_NAME** : Specify the library path loadable at runtime to specify the user hash function for the shard key. If the **SHARD_KEY_LIBRARY_NAME** parameter is set, the **SHARD_KEY_FUNCTION_NAME** parameter should also be set. For more information, see :ref:`setting-user-defined-hash-function`.
 
 *   **SHARD_KEY_FUNCTION_NAME** : The parameter to specify the name of the user hash function for shard key. For more information, see :ref:`setting-user-defined-hash-function`.
 
 *   **IGNORE_SHARD_HINT** : When this value is **ON**, the hint provided to connect to a specific shard is ignored and the database to connect is selected based on the defined rule. The default value is **OFF**. It can be used to balance the read load while all databases are copied with the same data. For example, to give the load of an application to only one node among several replication nodes, the shard proxy automatically determines the node (database) with one connection to a specific shard.
+
+To configure SHARD proxy, you should specify MAX_CLIENT, MAX_NUM_APPL_SERVER and MAX_NUM_PROXY.
+ 
+*   In Linux, file descriptors(fd) per SHARD proxy process is limited as follows.
+    *   "((MAX_CLIENT + MAX_NUM_APPL_SERVER) / MAX_NUM_PROXY) + 256" <= 10000
+    
+*   In Windows, sockets per SHARD proxy process is limited as follows.
+    *   "((MAX_CLIENT + MAX_NUM_APPL_SERVER) / MAX_NUM_PROXY) + 128" <= 1024
+ 
+Belows are detail descriptions on above fomulas.
+ 
+*   MAX_CLIENT is the maximum number of applications which access the SHARD system.
+*   MAX_NUM_APPL_SERVER is the maximum number of all SHARD CASs which can access SHARD proxy system.
+*   MAX_NUM_PROXY is the maximum number of SHARD proxy processes which can use on the SHARD system.
+*   "MAX_CLIENT / MAX_NUM_PROXY" is the maximum number of applications which can access per SHARD proxy process.
+*   "MAX_NUM_APPL_SERVER / MAX_NUM_PROXY" is the maximum number of CASs which can access per SHARD proxy process.
+*   256 is the number of file descriptors which are used internally per process on Linux, and 128 is the number of sockets which are used internally per process on Windows.
+
+As an example of configuring SHARD parameters in Linux system, if you specify the maximum concurrent access number of applications (MAX_CLIENT) as 5000, the maximum number of CASs(MAX_NUM_APPL_SERVER) as 200 and the maximum number of SHARD proxy process(MAX_NUM_PROXY) as 1, then file descriptors per SHARD proxy process becomes (5000 + 200)/1 + 256 = 5456, and it is less than 10000; it is possible configuration.
+ 
+If you configure as above in Windows system, then sockets per SHARD proxy process becomes (5000 + 200)/1 + 128 = 5328, and it is larger than 1024; it is impossible configuration. To make it possible, you should specify the value of MAX_NUM_PROXY larger.
+If you specify the value of MAX_NUM_PROXY as 6, then sockets per SHARD proxy process becomes (5000 + 200)/6 + 128 = 995, and it is smaller than 1024; it is possible configuration.
+ 
+Regarding above, the following is the connection-relationship between each process. "SHARD proxy" intermediates a connection between "app. client" and "SHARD CAS".
+
+In the below, [] indicates a process, and -> indicates the requesting direction.
+
+::
+ 
+    [app. client]   --(initial access request)-----------------> [SHARD broker] (select SHARD proxy)
+                    <--(announce SHARD proxy to access)---------
+                    -------------------------------------------> [SHARD proxy] --(select SHARD CAS)--> [SHARD CAS] ---> [DB server]
+                    <-------------------------------------------               <----------------------             <--- 
+                    <--(now keep using the same SHARD proxy)--->               <--------------------->             <-->
 
 Setting Shard Metadata
 ----------------------
@@ -739,11 +773,6 @@ In addition to **shard.conf**, the CUBRID SHARD has a configuration file for sha
             192     223     2
             224     255     3
              
-            #[%another_key_column]
-            #min    max     shard_id
-            #0      127     0   
-            #128    255     1
-
         *   [%shard_key_name]: Specifies the name of the shard key.
         *   min: The minimum value range of the shard key hash results.
         *   max: The maximum range of the shard key hash results.
@@ -756,7 +785,7 @@ In addition to **shard.conf**, the CUBRID SHARD has a configuration file for sha
         *   min of the shard key should always start from 0.
         *   max should be up to 255.
         *   No empty value between min and max is allowed.
-        *   The default hash function should not exceed the value of the **SHARD_KEY_MODULAR** parameter.
+        *   The default hash function should not exceed the value of the **SHARD_KEY_MODULAR** parameter(min. 1, max 256).
         *   The result of shard key hashing should be within a range from 0 to (**SHARD_KEY_MODULAR** -1).
 
 .. _setting-user-defined-hash-function:
@@ -1033,6 +1062,8 @@ The following shows how to print the detail information using the **-f** option.
                2           shard2                192.168.10.3
                3           shard3                192.168.10.4
 
+.. _shard-status:
+
 Checking CUBRID SHARD status
 ----------------------------
 
@@ -1041,40 +1072,41 @@ Checking CUBRID SHARD status
     provides a variety of options to check the status information of each shard broker, shard proxy, and shard cas. In addition, it is possible to check the metadata information and the information on the client who has accessed the shard proxy. ::
 
         cubrid shard status [options] [<expr>]
-        options : -b | -f [-l sec] | -t | -c | -m | -s <sec>
 
     When <*expr*> is given, the status monitoring is performed for the corresponding CUBRID SHARD. When it is omitted, status monitoring is performed for all CUBRID SHARDs registered to the CUBRID SHARD configuration file (**shard.conf**).
 
-**Options**
+The following shows [options] used in **cubrid shard status**\ .
 
-    The following table shows options that can be used together with cubrid broker status.
+.. program:: shard-status
 
-    +------------+-------------------------------------------------------------------------------------------------------------------------+
-    | Option     | Description                                                                                                             |
-    +============+=========================================================================================================================+
-    | <          | Displays the status information for the CUBRID SHARD whose name includes <                                              |
-    | *expr*     | *expr*                                                                                                                  |
-    | >          | >. If the name is not specified, displays the status information for all CUBRID SHARDs.                                 |
-    +------------+-------------------------------------------------------------------------------------------------------------------------+
-    | **-b**     | Displays the status information for the CUBRID broker excluding the information on the CUBRID proxy or the CUBRID CAS.  |
-    +------------+-------------------------------------------------------------------------------------------------------------------------+
-    | **-c**     | Displays the information on the client which has accessed the CUBRID proxy.                                             |
-    +------------+-------------------------------------------------------------------------------------------------------------------------+
-    | **-m**     | Displays the metadata information.                                                                                      |
-    +------------+-------------------------------------------------------------------------------------------------------------------------+
-    | **-t**     | Displays in tty mode. The output content can be redirected to a file.                                                   |
-    +------------+-------------------------------------------------------------------------------------------------------------------------+
-    | **-f**     | Displays more detailed information on the CUBRID SHARD.                                                                 |
-    | [          |                                                                                                                         |
-    | **-l**     |                                                                                                                         |
-    | *secs*     |                                                                                                                         |
-    | ]          |                                                                                                                         |
-    +------------+-------------------------------------------------------------------------------------------------------------------------+
-    | **-s**     | Periodically displays the status information for the CUBRID SHARD at a specified time. Returns to the command prompt if |
-    | *secs*     | **q**                                                                                                                   |
-    |            | is entered.                                                                                                             |
-    +------------+-------------------------------------------------------------------------------------------------------------------------+
+.. option:: -b
 
+    Displays the status information for the CUBRID broker excluding the information on the CUBRID proxy or the CUBRID CAS.
+
+.. option:: -c
+   
+    Displays the information on the client which has accessed the CUBRID proxy. 
+    
+.. option:: -m
+
+    Displays the metadata information.
+    
+.. option:: -t
+
+    Displays in tty mode. The output content can be redirected to a file. 
+    
+.. option:: -f
+
+    Displays more detailed information on the CUBRID SHARD.
+    
+.. option:: -l SECOND
+    
+    **-l** option is used together only with **-f** option. It is used to specify the output period(Unit: second) about the accumulated number of shard CASs which are in a client Wating/Busy state. If **-l** *SECOND* option is omitted, the default is one second.
+    
+.. option:: -s SECOND
+
+    Periodically displays the status information for the CUBRID SHARD at a specified time. Returns to the command prompt if **q** is entered.
+   
 **Example**
 
     If no options or parameters are given to check the status of all CUBRID SHARDs, the following will be displayed as a result: ::
@@ -1092,7 +1124,7 @@ Checking CUBRID SHARD status
                1        2        1  2581     200     4 55968 IDLE
 
     *   % test_shard: The proxy name
-    *   shard_cas: The application server format [shard_cas | shard_cas_myqsl]
+    *   shard_cas: The application server format [shard_cas | shard_cas_mysql]
     *   [2576, 45000]: The proxy process ID and the proxy access port number
     *   /home/CUBRID/log/broker/test_shard.err: The error log file of test_shard
     *   JOB QUEUE: The number of standing by jobs in the job queue
@@ -1142,9 +1174,9 @@ Checking CUBRID SHARD status
 
         $ cubrid shard status -b -f
         @ cubrid shard status
-        NAME           PID  PSIZE  PORT  Active-P  Active-C      REQ  TPS  QPS  K-QPS (H-KEY   H-ID H-ALL) NK-QPS    LONG-T    LONG-Q  ERR-Q  CANCELED  ACCESS_MODE  SQL_LOG
-        ======================================================================================================================================================================
-        * test_shard 3548 100644 45000         1         2        0    0    0      0      0      0      0      0    0/60.0    0/60.0      0         0           RW      ALL
+          NAME          PID   PSIZE  PORT   Active-P   Active-C  STMT-Q SHARD-Q    TPS    QPS   K-QPS  (H-KEY    H_ID  H-ALL)  NK-QPS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q   CANCELED   ACCESS_MODE   SQL_LOG  #CONNECT
+        =============================================================================================================================================================================================================================
+        * test_shard  17826  112676 25511          1         32       0       0   1549   1552    1552    1552       0       0       0     0/60.0     0/60.0             4             0          0            RW       ALL         0
 
     *   NAME: The proxy name
     *   PID: The process ID of the proxy
@@ -1153,6 +1185,8 @@ Checking CUBRID SHARD status
     *   Active-P: The number of proxies
     *   Active-C: The number of application servers (CASs)
     *   REQ: The number of client requests processed by the proxy
+    *   STMT-Q: The number of client requests; the client is waiting to run prepare at the time to run **shard status**
+    *   SHARD-Q: The number of client requests; the client is waiting the enable CAS at the time to run **shard status**
     *   TPS: The number of transactions processed per second (calculated only when the option is **-b -s** <*sec*>)
     *   QPS: The number of queries processed per second (calculated only when the option is **-b -s** <*sec*>)
     *   K-QPS: QPS for the queries which include a shard key
@@ -1162,18 +1196,25 @@ Checking CUBRID SHARD status
     *   NK-QPS: QPS for the queries which do not include a shard key
     *   LONG-T: The number of transactions that exceeds the **LONG_TRANSACTION_TIME** time / **LONG_TRANSACTION_TIME** parameter value
     *   LONG-Q: The number of queries that exceeds the **LONG_QUERY_TIME** time / **LONG_QUERY_TIME** parameter value
-    *   ERR-Q: The number of queries where errors have occurred
+    *   ERR-Q: The number of queries where an error has occurred
+    *   UNIQUE-ERR-Q: The number of queries where an unique violation error has occurred
     *   CANCELED: The number of queries which have been canceled due to user interruption after the shard broker had been started (the number accumulations for *N* seconds in case of using with the **-l** *N* option)
-    *   ACCESS_MODE: The shard broker operation mode. The RW mode allows modification of the database as well as retrieval.
-    *   SQL_LOG: The **SQL_LOG** parameter value of the **shard.conf** file is ALL in order to leave the SQL log.
+    *   ACCESS_MODE: The shard broker operation mode. The RW mode allows modification of the database as well as retrieval
+    *   SQL_LOG: The **SQL_LOG** parameter value of the **shard.conf** file is ALL in order to leave the SQL log
+    *   #CONNECT: The count that the application client have accessed shard CAS after starting **shard broker**
 
+    STMT-Q is an abbreviation of "Statement Waiting Queue". If you try to run "prepare" about the same query at the same time, "prepare" execution requests of the other clients except the firstly executed client are waiting for a while on STMT-Q to run because let the other clients use the meta information of the query which the firstly executed client had run. If the value of STMT-Q is larger, it means that "prepare" is rerun frequently; statement pooling is used inefficiently. Therefore, you can consider to enlarge the value of PROXY_MAX_PREPARED_STMT_COUNT.
+    
+    SHARD-Q is an abbreviation of "Shard Waiting Queue". If SHARD proxy process requested to run the query but there was no SHARD CAS process to run this, then this request is waiting on SHARD-Q for a while. If the value of SHARD-Q is larger, it means that waiting cases are more. Therefore, you can consider to enlarge the value of MAX_NUM_APPL_SERVER.
+    
     By using the **-s** option, enter the monitoring interval of the shard broker which includes test_shard, and then enter the following to monitor the shard broker status periodically. If test_shard is not entered as a parameter,the status monitoring is periodically made for all shard brokers. If **q** is entered, the monitoring screen returns to the command prompt. ::
 
         $ cubrid shard status -b test_shard -s 1 -t
         @ cubrid shard status
-          NAME           PID  PORT  Active-P  Active-C      REQ  TPS  QPS  K-QPS NK-QPS    LONG-T    LONG-Q  ERR-Q
-        ==========================================================================================================
-        * test_shard    3548 45000         1         2        0    0    0      0      0    0/60.0    0/60.0      0
+
+                  NAME          PID  PORT   Active-P   Active-C  STMT-Q SHARD-Q   TPS  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS   K-QPS  NK-QPS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT
+        =====================================================================================================================================================================================================
+        * test_shard  17826 25511          1         32       0       0    42   43        0       43        0        0        0      43       0     0/60.0     0/60.0             1             0         0
 
     Output TPS and QPS information to a file by using the **-t** option. To stop the output as a file, press <Ctrl+C> to stop the program. ::
 
@@ -1186,12 +1227,12 @@ Checking CUBRID SHARD status
         % test_shard [299009]
         MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
         SHARD STATISTICS
-                   ID  NUM-KEY-Q  NUM-ID-Q   NUM-NO-HINT-Q       SUM
-                -----------------------------------------------------
-                    0          0         0               0         0
-                    1          0         0               0         0
-                    2          0         0               0         0
-                    3          0         0               0         0
+           ID  NUM-KEY-Q   NUM-ID-Q   NUM-NO-HINT-Q             SUM
+        ------------------------------------------------------------
+            0       1281          0               0            1281
+            1       1281          0               0            1281
+            2       1281          0               0            1281
+            3       1281          0               0            1281
 
     *   test_shard: The proxy name
     *   [299009]: The decimal value of the **METADATA_SHM_ID** parameter of **shard.conf**
@@ -1214,24 +1255,25 @@ Checking CUBRID SHARD status
         MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
         SHARD : 0 [HostA] [shard1], 1 [HostB] [shard1], 2 [HostC] [shard1], 3 [HostD] [shard1]
         SHARD STATISTICS
-                   ID  NUM-KEY-Q  NUM-ID-Q   NUM-NO-HINT-Q       SUM
-                -----------------------------------------------------
-                    0          0         0               0         0
-                    1          0         0               0         0
-                    2          0         0               0         0
-                    3          0         0               0         0
+                   ID  NUM-KEY-Q   NUM-ID-Q   NUM-NO-HINT-Q             SUM
+                ------------------------------------------------------------
+                    0       2309          0               0            2309
+                    1       2309          0               0            2309
+                    2       2309          0               0            2309
+                    3       2309          0               0            2309
          
         RANGE STATISTICS : user_no
                   MIN ~   MAX :      SHARD     NUM-Q
                 ------------------------------------
-                    0 ~    31 :          0         0
-                   32 ~    63 :          1         0
-                   64 ~    95 :          2         0
-                   96 ~   127 :          3         0
-                  128 ~   159 :          0         0
-                  160 ~   191 :          1         0
-                  192 ~   223 :          2         0
-                  224 ~   255 :          3         0
+                    0 ~    31 :          0      1157
+                   32 ~    63 :          1      1157
+                   64 ~    95 :          2      1157
+                   96 ~   127 :          3      1157
+                  128 ~   159 :          0      1152
+                  160 ~   191 :          1      1152
+                  192 ~   223 :          2      1152
+                  224 ~   255 :          3      1152
+
         DB Alias : shard1 [USER : shard, PASSWD : shard123]
 
     *   test_shard: The proxy name
@@ -1302,9 +1344,11 @@ The format of writing ip_list_file is as follows: ::
 
 *   <*ip_addr*>: The name of IP of which access is permitted. If * is enterd in back part, it means every IP is permitted.
 
-While the value of **ACCESS_CONTROL** is ON and **ACCESS_CONTROL_FILE** is not specified, shard proxy allows access request from localhost. When running shard proxy and if it analysis of **ACCESS_CONTROL_FILE** and ip_list_file is faled, shard proxy allows access request only from localhost.
+While the value of **ACCESS_CONTROL** is ON and **ACCESS_CONTROL_FILE** is not specified, shard proxy allows access request from localhost. 
 
-When running shard proxy and if it analysis of **ACCESS_CONTROL_FILE** and ip_list_file is faled, shard proxy does not run. ::
+If the analysis of **ACCESS_CONTROL_FILE** and ip_list_file fails when starting a shard proxy, shard proxy will not be run.  
+
+::
 
     # cubrid_broker.conf
     [broker]
@@ -1396,6 +1440,8 @@ To restart shard1, enter the following. ::
 The shard proxy reset feature disconnects exiting connection and makes new connection when shard proxy is connected unwanted database server due to failover in HA. If **SHARD_DB_NAME**, **SHARD_DB_USER**, **SHARD_DB_PASSWORD** is changed dynamically, it will try to connect with the changed value. ::
 
     % cubrid shard reset shard1
+
+.. _shard-logs:
 
 CUBRID SHARD Log
 ================

@@ -584,7 +584,7 @@ and the error message, 'Syntax: Unknown class "notable". select * from notable'Â
         // ...
     }
 
-The following list shows CCI and CAS error codes.
+The following list shows CCI error codes. For CAS errors, see :ref:`broker-error`.
 
 +------------------------------------------+------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | Error Code                               | Error Message                                                    | Note                                                                                                                 |

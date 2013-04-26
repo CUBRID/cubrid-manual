@@ -22,6 +22,7 @@ Table partitioning is most effective when applied to large tables. Exactly what 
 
 Partitioning key
 ================
+
 The partitioning key is an expression which is used by the partitioning method to distribute data across defined partitions. The following data types are supported for the partitioning key:
 
 *   **CHAR**
@@ -76,15 +77,16 @@ Tables can be partitioned by range by using the **PARTITION BY RANGE** clause in
        ...
     )
     PARTITION BY RANGE ( <partitioning_key> ) (
-       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-       ... 
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        ... 
     )
     
-    ALTER TABLE table_name PARTITION BY RANGE ( <partitioning_key> ) (
-       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-       ... 
+    ALTER TABLE table_name 
+    PARTITION BY RANGE ( <partitioning_key> ) (
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        ... 
     )
 
 *   *partitioning_key* : Specifies the :ref:`partitioning-key`.
@@ -97,10 +99,16 @@ The following example shows how to create the *participant2* table which holds c
 
 .. code-block:: sql
 
-    CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
+    CREATE TABLE participant2 (
+        host_year INT, 
+        nation CHAR(3), 
+        gold INT, 
+        silver INT, 
+        bronze INT
+    )
     PARTITION BY RANGE (host_year) (
-      PARTITION before_2000 VALUES LESS THAN (2000),
-      PARTITION before_2008 VALUES LESS THAN (2008)
+        PARTITION before_2000 VALUES LESS THAN (2000),
+        PARTITION before_2008 VALUES LESS THAN (2008)
     );
      
 When creating partitions, CUBRID sorts the user supplied range values from smallest to largest and creates the non-overlapping intervals from the sorted list. The identifier **MAXVALUE** can be used to specify an infinite upper limit for a partition. In the example above, the created range intervals are [-∞, 2000) and [2000, 2008).
@@ -604,6 +612,10 @@ Partitioning keys and partition definition must have the same character set. The
         PARTITION p1 VALUES IN (_iso88591'y')
     );
     
+::
+
+    ERROR: Invalid codeset '_iso88591' for partition value. Expecting '_utf8' codeset.
+        
 CUBRID uses the collation defined on the table when performing comparisons on the partitioning key. The following example will return an error because, for utf8_en_ci collation 'test' equals 'TEST'.
 
 .. code-block:: sql
@@ -616,6 +628,8 @@ CUBRID uses the collation defined on the table when performing comparisons on th
     
     ERROR: Partition definition is duplicated. 'p1'
  
-For hash-partitioned tables, the collation of the partitioning key must be binary. 
-    *   e.g. of binary collation: utf8_bin, iso88591_bin, euckr_bin
-    *   e.g. of non-binary collation: utf8_de_exp_ai_ci
+.. CUBRIDSUS-10161 : below constraints of 9.1 was removed from 9.2. (below will be commented)
+
+    For hash-partitioned tables, the collation of the partitioning key must be binary. 
+        *   e.g. of binary collation: utf8_bin, iso88591_bin, euckr_bin
+        *   e.g. of non-binary collation: utf8_de_exp_ai_ci

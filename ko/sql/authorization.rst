@@ -71,7 +71,7 @@ CUBRID는 기본적으로 **DBA**\ 와 **PUBLIC** 두 종류의 사용자를 제
 
 CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든 테이블에 다른 사용자(그룹)의 접근을 허용하려면 해당 사용자(그룹)에게 적절한 권한을 부여해야 한다.
 
-권한이 부여된 그룹에 속한 모든 멤버는 같은 권한을 소유하므로 모든 멤버에게 개별적으로 권한을 부여할 필요는 없다. **PUBLIC** 사용자가 생성한 (가상) 테이블은 다른 모든 사용자에게 접근이 허용된다. **GRANT** 문을 사용하여 사용자에게 접근 권한을 부여할 수 있다. ::
+권한이 부여된 그룹에 속한 모든 멤버는 같은 권한을 소유하므로 모든 멤버에게 개별적으로 권한을 부여할 필요는 없다. **PUBLIC** 사용자가 생성한 (가상) 테이블은 모든 사용자에게 접근이 허용된다. **GRANT** 문을 사용하여 사용자에게 접근 권한을 부여할 수 있다. ::
 
     GRANT operation [ { ,operation } ... ] ON table_name [ { ,table_name } ... ]
     TO user [ { ,user } ... ] [ WITH GRANT OPTION ] [ ; ]
@@ -90,29 +90,31 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 * *user*: 권한을 부여할 사용자나 그룹의 이름을 지정한다. 데이터베이스 사용자의 로그인 이름을 입력하거나 시스템 정의 사용자인 **PUBLIC**\ 을 입력할 수 있다. **PUBLIC**\ 이 명시되면 데이터베이스의 모든 사용자는 부여한 권한을 가진다.
 * **WITH GRANT OPTION**: **WITH GRANT OPTION**\ 을 이용하면 권한을 부여받은 사용자가 부여받은 권한을 다른 사용자에게 부여할 수 있다.
 
-다음은 *Fred*\ (*Fred*\ 의 모든 멤버)에게 *olympic* 테이블의 검색 권한을 부여한 예제이다.
+다음은 *smith*\ (*smith*\ 의 모든 멤버 포함)에게 *olympic* 테이블의 검색 권한을 부여한 예제이다.
 
 .. code-block:: sql
 
-    GRANT SELECT ON olympic TO Fred;
+    GRANT SELECT ON olympic TO smith;
 
-다음은 *Jenifer* 와 *Daniel* (두 사용자에 속한 모든 멤버)에게 *nation*\ 과 *athlete* 테이블에 대해 **SELECT**, **INSERT**, **UPDATE**, **DELETE** 권한을 부여한 예제이다.
-
-.. code-block:: sql
-
-    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jenifer, Daniel;
-
-다음은 모든 사용자에게 *game*, *event* 테이블에 대해 모든 권한을 부여한 예제이다.
+다음은 *brown* 와 *jones* (두 사용자에 속한 모든 멤버)에게 *nation*\ 과 *athlete* 테이블에 대해 **SELECT**, **INSERT**, **UPDATE**, **DELETE** 권한을 부여한 예제이다.
 
 .. code-block:: sql
 
-    GRANT ALL PRIVILEGES ON game, event TO public;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO brown, jones;
 
-다음 **GRANT** 문은 *Ross*\ 에게 *record*, *history* 테이블에 대한 검색 권한을 부여하고 *Ross*\ 가 다른 사용자에게 검색 권한을 부여하는 것을 허용하도록 **WITH GRANT OPTION** 절을 사용한 예제이다. 이후 *Ross*\ 는 다른 사용자에게 자신이 받은 권한 내에서 권한을 부여할 수 있다.
+다음은 모든 사용자(public)에게 *tbl1*, *tbl2* 테이블에 대해 모든 권한을 부여하는 예제이다.
 
 .. code-block:: sql
 
-    GRANT SELECT ON record, history TO Ross WITH GRANT OPTION;
+    CREATE TABLE tbl1 (a INT);
+    CREATE TABLE tbl2 (a INT);
+    GRANT ALL PRIVILEGES ON tbl1, tbl2 TO public;
+
+다음 **GRANT** 문은 *brown*\ 에게 *record*, *history* 테이블에 대한 검색 권한을 부여하고 *brown*\ 이 다른 사용자에게 검색 권한을 부여하는 것을 허용하도록 **WITH GRANT OPTION** 절을 사용한 예제이다. 이후 *brown*\ 은 다른 사용자에게 자신이 받은 권한 내에서 권한을 부여할 수 있다.
+
+.. code-block:: sql
+
+    GRANT SELECT ON record, history TO brown WITH GRANT OPTION;
 
 .. note: \
 
@@ -134,23 +136,23 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 *   *table_name*: 권한을 부여할 테이블 혹은 뷰의 이름을 지정한다.
 *   *user*: 권한을 부여할 사용자나 그룹의 이름을 지정한다.
 
-다음은 *Fred*, *John* 사용자에게 *nation*, *athlete* 두 테이블에 대해 **SELECT**, **INSERT**, **UPDATE**, **DELETE** 권한을 부여하는 예제이다.
+다음은 *smith*, *jones* 사용자에게 *nation*, *athlete* 두 테이블에 대해 **SELECT**, **INSERT**, **UPDATE**, **DELETE** 권한을 부여하는 예제이다.
 
 .. code-block:: sql
 
-    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO Fred, John;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO smith, jones;
 
-다음은 *Fred*\ 에게 부여된 모든 권한은 남겨두고, *John*\ 에게는 조회 권한만을 부여하기 위해 **REVOKE** 문장을 수행하는 예제이다. 만약 *John*\ 이 다른 사용자에게 권한을 부여했다면 권한받은 사용자 또한 조회만 가능하다.
-
-.. code-block:: sql
-
-    REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM John;
-
-다음은 *Fred*\ 에게 부여한 모든 권한을 해지하기 위해 **REVOKE** 문을 수행하는 예제이다. 이 문장이 수행되면 *Fred*\ 는 *nation*, *athlete* 테이블에 대한 어떠한 연산도 허용되지 않는다.
+다음은 *jones*\ 에게 조회 권한만을 부여하기 위해 **REVOKE** 문장을 수행하는 예제이다. 만약 *jones*\ 가 다른 사용자에게 권한을 부여했다면 권한받은 사용자 또한 조회만 가능하다.
 
 .. code-block:: sql
 
-    REVOKE ALL PRIVILEGES ON nation, athlete FROM Fred;
+    REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM jones;
+
+다음은 *smith*\ 에게 부여한 모든 권한을 해지하기 위해 **REVOKE** 문을 수행하는 예제이다. 이 문장이 수행되면 *smith*\ 는 *nation*, *athlete* 테이블에 대한 어떠한 연산도 허용되지 않는다.
+
+.. code-block:: sql
+
+    REVOKE ALL PRIVILEGES ON nation, athlete FROM smith;
 
 .. _change-owner:
 
@@ -256,11 +258,19 @@ CUBRID에서 권한 부여의 최소 단위는 테이블이다. 자신이 만든
 .. code-block:: sql
 
     CALL find_user('dba') ON CLASS db_user to x;
+    
+::
+
     Result
     ======================
     db_user
      
+.. code-block:: sql
+
     SELECT x FROM db_root;
+    
+::
+
     x
     ======================
     db_user

@@ -37,6 +37,9 @@ The database transaction in the following example consists of three **UPDATE** s
     
     SELECT name, seats
     FROM stadium WHERE code IN (30138, 30139, 30140);
+    
+::
+    
        name                        seats
     ==================================
         'Athens Olympic Tennis Centre'         3200
@@ -52,11 +55,14 @@ Let each **UPDATE** statement have the current seats of each stadium. To verify 
     WHERE code IN (30138, 30139, 30140);
      
     SELECT name, seats FROM stadium WHERE code in (30138, 30139, 30140);
-        name                        seats
-    ===================================
-        'Athens Olympic Tennis Centre'         4200
-        'Goudi Olympic Hall'         6000
-        'Vouliagmeni Olympic Centre'         4400
+    
+::
+
+        name                                seats
+    ============================================
+        'Athens Olympic Tennis Centre'      4200
+        'Goudi Olympic Hall'                6000
+        'Vouliagmeni Olympic Centre'        4400
 
 If the update is properly done, the changes can be semi-permanently fixed. In this time, use the **COMMIT WORK**  as below:
 
@@ -83,9 +89,18 @@ The following example shows two commands that modify the definition and the row 
 
 .. code-block:: sql
 
-    ALTER TABLE code DROP s_name;
-    INSERT INTO code (s_name, f_name) VALUES ('D','Diamond');
-     
+    -- csql> ;autocommit off
+    CREATE TABLE code2 (
+        s_name  CHAR(1),
+        f_name  VARCHAR(10)
+    );
+    COMMIT;
+    
+    ALTER TABLE code2 DROP s_name;
+    INSERT INTO code2 (s_name, f_name) VALUES ('D','Diamond');
+ 
+::
+
     ERROR: s_name is not defined.
 
 The **INSERT** statement fails because the *s_name* column has been dropped in the definition of *code*. The data intended to be entered to the *code* table is correct, but the *s_name* column is wrongly removed. At this point, you can use the **ROLLBACK WORK** statement to restore the original definition of the *code* table.
@@ -128,8 +143,13 @@ Previously, the **ROLLBACK WORK** statement canceled all database changes added 
 
 If *mark* value is not given, the transaction terminates canceling all changes including all savepoints created in the transaction. If *mark* value is given, changes after the specified savepoint are canceled and the ones before it are remained.
 
+The below example shows how to rollback a part of a transaction.
+Firstly, specify savepoints SP1, SP2.
+
 .. code-block:: sql
 
+    -- csql> ;autocommit off
+    
     CREATE TABLE athlete2 (name VARCHAR(40), gender CHAR(1), nation_code CHAR(3), event VARCHAR(30));
     INSERT INTO athlete2(name, gender, nation_code, event)
     VALUES ('Lim Kye-Sook', 'W', 'KOR', 'Hockey');
@@ -181,9 +201,9 @@ The following code shows how to set cursor holdability in JDBC:
      
     // set cursor holdability at the statement level which can override the connection’s
     PreparedStatement pStmt = conn.prepareStatement(sql,
-                                         ResultSet.TYPE_SCROLL_SENSITIVE,
-                                         ResultSet.CONCUR_UPDATABLE,
-     ResultSet.HOLD_CURSORS_OVER_COMMIT);
+                                        ResultSet.TYPE_SCROLL_SENSITIVE,
+                                        ResultSet.CONCUR_UPDATABLE,
+                                        ResultSet.HOLD_CURSORS_OVER_COMMIT);
 
 To set cursor holdability to close the cursor when a transaction is committed, set **ResultSet.CLOSE_CURSORS_AT_COMMIT**, instead of **ResultSet.HOLD_CURSORS_OVER_COMMIT**, in the above example.
 
@@ -226,10 +246,8 @@ When the connection between an application and the CAS is closed, all result set
 
 .. warning:: Usage of memory will increase in the status of result set opened. Thus, you should close the result set after completion.
 
-.. note::
-
-    Note that CUBRID versions lower than 9.0 do not support cursor holdability and the cursor is automatically closed when a transaction is committed. Therefore, the recordset of the **SELECT** query result is not kept. To keep the recordset of the **SELECT** query result in CUBRID versions lower than 9.0, set the auto commit mode to false and the record should be fetched before the transaction is committed.
-
+.. note:: Note that CUBRID versions lower than 9.0 do not support cursor holdability and the cursor is automatically closed when a transaction is committed. Therefore, the recordset of the **SELECT** query result is not kept.
+    
 .. _database-concurrency:
 
 Database Concurrency
@@ -273,16 +291,12 @@ The default value of CUBRID isolation level is :ref:`isolation-level-3`.
 Lock Protocol
 =============
 
-In the two-phase locking protocol used by CUBRID, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously.
-
-If transaction T1 requires a lock, CUBRID checks if the requested lock conflicts with the existing one. If it does, transaction T1 enters a standby state and delays the lock. If another transaction T2 releases the lock, transaction T1 resumes and obtains it. Once the lock is released, the transaction do not require any more new locks.
+In the two-phase locking protocol used by CUBRID, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously. If transaction T1 requires a lock, CUBRID checks if the requested lock conflicts with the existing one. If it does, transaction T1 enters a standby state and delays the lock. If another transaction T2 releases the lock, transaction T1 resumes and obtains it. Once the lock is released, the transaction do not require any more new locks.
 
 Granularity Locking
 -------------------
 
-CUBRID uses a granularity locking protocol to decrease the number of locks. In the granularity locking protocol, a database can be modeled as a hierarchy of lockable units: bigger locks have more granular locks.
-
-For example, suppose that a database consists of multiple tables and each table consists of multiple instances. If the database is locked, all tables and instances are implicitly considered to be locked. A lock on a big unit results in less overhead, because only one lock needs to be managed. However, it leads to decreased concurrency because almost all concurrent transactions conflict with each other. The finer the granularity, the better the concurrency; it causes more overhead because more locks need to be managed. CUBRID selects a locking granularity level based on the operation being executed. For example, if a transaction retrieves all instances of a table, the entire tables will be locked, rather than each instance. If the transaction accesses a few instances of the table, the instances are locked individually.
+CUBRID uses a granularity locking protocol to decrease the number of locks. In the granularity locking protocol, a database can be modeled as a hierarchy of lockable units: row lock, table lock and database lock. Bigger locks have more granular locks.
 
 If the locking granularities overlap, effects of a finer granularity are propagated in order to prevent conflicts. That is, if a shared lock is required on an instance of a table, an intention shared lock will be set on the table. If an exclusive lock is required on an instance of a table, an intention exclusive lock will be set on the table. An intention shared lock on a table means that a shared lock can be set on an instance of the table. An intention exclusive lock on a table means that a shared/exclusive lock can be set on an instance of the table. That is, if an intention shared lock on a table is allowed in one transaction, another transaction cannot obtain an exclusive lock on the table (for example, to add a new column). However, the second transaction may obtain a shared lock on the table. If an intention exclusive lock on the table is allowed in one transaction, another transaction cannot obtain a shared lock on the table (for example, a query on an instance of the tables cannot be executed because it is being changed).
 
@@ -296,30 +310,42 @@ Lock Mode Types And Compatibility
 CUBRID determines the lock mode depending on the type of operation to be performed by the transaction, and determines whether or not to share the lock depending on the mode of the lock preoccupied by another transaction. Such decisions concerning the lock are made by the system automatically. Manual assignment by the user is not allowed. To check the lock information of CUBRID, use the **cubrid lockdb** *db_name* command. For details, see :ref:`lockdb`.
 
 *   **Shared lock (shared lock, S_LOCK)**
-    : This lock is obtained before the read operation is executed on the object. It can be obtained by multiple transactions for the same object.
-    Transaction T1 obtains the shared lock first before it performs the read operation on a certain object X, and releases it immediately after it completes the operation even before transaction T1 is committed. Here, transaction T2 and T3 can perform the read operation on  X concurrently, but not the update operation.
+
+    This lock is obtained before the read operation is executed on the object. 
+    
+    It can be obtained by multiple transactions for the same object. Transaction T1 obtains the shared lock first before it performs the read operation on a certain object X, and releases it immediately after it completes the operation even before transaction T1 is committed. Here, transaction T2 and T3 can perform the read operation on  X concurrently, but not the update operation.
 
 *   **Exclusive lock (exclusive lock, X_LOCK)**
-    : This lock is obtained before the update operation is executed on the object. It can only be obtained by one transaction.
-    Transaction T1 obtains the exclusive lock first before it performs the update operation on a certain object X, and does not release it until transaction T1 is committed even after the update operation is completed. Therefore, transaction T2 and T3 cannot perform the read operation as well on X before transaction T1 releases the exclusive lock.
+
+    This lock is obtained before the update operation is executed on the object. 
+    
+    It can only be obtained by one transaction. Transaction T1 obtains the exclusive lock first before it performs the update operation on a certain object X, and does not release it until transaction T1 is committed even after the update operation is completed. Therefore, transaction T2 and T3 cannot perform the read operation as well on X before transaction T1 releases the exclusive lock.
 
 *   **Update lock (update lock, U_LOCK)**
-    : This lock is obtained when the read operation is executed in the expression before the update operation is performed.
+    
+    This lock is obtained when the read operation is executed in the expression before the update operation is performed.
+    
     For example, when an UPDATE statement combined with a **WHERE** clause is executed, execute the operation by obtaining the update lock for each row and the exclusive lock only for the result rows that satisfy the condition when performing index search or full scan search in the **WHERE** clause. The update lock is converted to an exclusive lock when the actual update operation is performed. It can be called a quasi-exclusive lock because it does not allow read lock on the same object for another transaction.
 
 *   **Intention lock (intention lock)**
-    : A lock that is set inherently in a higher-level object than X to protect the lock on the object X of a certain level.
+    
+    A lock that is set inherently in a higher-level object than X to protect the lock on the object X of a certain level.
+    
     For example, when a shared lock is requested for a certain row, prevent a situation from occurring in which the table is locked by another transaction by setting the intention shared lock as well on the table at the higher level in hierarchy. Therefore, the intention lock is not set on rows at the lowest level, but is set on higher-level objects. The types of intention locks are as follows:
 
-*   **Intention shared lock (intention shared lock, IS_LOCK)**
-    : If the intention shared lock is set on the table, which is the higher-level object, as a result of the shared lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table (e.g. adding a column or changing the table name) or updating all rows. However updating some rows or viewing all rows is allowed.
+    *   **Intention shared lock (intention shared lock, IS_LOCK)**
+    
+        If the intention shared lock is set on the table, which is the higher-level object, as a result of the shared lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table (e.g. adding a column or changing the table name) or updating all rows. However updating some rows or viewing all rows is allowed.
 
-*   **Intention exclusive lock (intention exclusive lock, IX_LOCK)**
-    : If the intention exclusive lock is set on the table, which is the higher-level object, as a result of the exclusive lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table, updating or viewing all rows. However updating some rows is allowed.
+    *   **Intention exclusive lock (intention exclusive lock, IX_LOCK)**
+    
+        If the intention exclusive lock is set on the table, which is the higher-level object, as a result of the exclusive lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table, updating or viewing all rows. However updating some rows is allowed.
 
-*   **Shared with intent exclusive (shared with intent exclusive, SIX_LOCK)**
-    : This lock is set on the higher-level object inherently to protect the shared lock set on all objects at the lower hierarchical level and the intention exclusive lock on some object at the lower hierarchical level.
-    Once the shared intention exclusive lock is set on a table, another transaction cannot change the schema of the table, update all/some rows or view all rows. However, viewing some rows is allowed.
+    *   **Shared with intent exclusive (shared with intent exclusive, SIX_LOCK)**
+
+        This lock is set on the higher-level object inherently to protect the shared lock set on all objects at the lower hierarchical level and the intention exclusive lock on some object at the lower hierarchical level.
+    
+        Once the shared intention exclusive lock is set on a table, another transaction cannot change the schema of the table, update all/some rows or view all rows. However, viewing some rows is allowed.
 
 The following table briefly shows the lock compatibility between the locks described below. Compatibility means that the lock requester can obtain a lock while the lock holder is keeping the lock obtained for the object X. N/a means 'not applicable'.
 
@@ -347,7 +373,6 @@ The following table briefly shows the lock compatibility between the locks descr
 +----------------------+---------------+-----------------+-------------+------------+-------------+--------------+------------+------------+
 
 *   **NULL_LOCK** : No lock
-
 
 **Example**
 
@@ -633,10 +658,8 @@ The system parameter **lock_timeout_in_secs** in the **$CUBRID/conf/cubrid.conf*
 
 **Example 1** ::
 
-
     vi $CUBRID/conf/cubrid.conf
-    ...
-    
+    ...    
     lock_timeout_in_secs = 10
     ...
 
@@ -653,6 +676,7 @@ You can check the lock timeout set for the current application by using the **G
 **Example** ::
 
     GET TRANSACTION LOCK TIMEOUT;
+    
              Result
     ===============
       1.000000e+001
@@ -669,11 +693,10 @@ The following message is displayed if lock timeout occurs in a transaction that 
 *   (... user1\@host1|9808): *cub_user* is the login ID of the client and the part after @ is the name of the host where the client was running. The part after| is the process ID (PID) of the client.
 
 *   IX_LOCK: This means the exclusive lock set on the object to perform data update. For details, see :ref:`lock-mode`.
+
 *   user1@host1|csql(9807), user1@host1|csql(9805): Another transactions waiting for termination to lock **IX_LOCK**
 
-That is, the above lock error message can be interpreted as meaning that "Because another client is holding **X_LOCK** on a specific row in the *participant* table, transaction 3 which running on the host *cdbs006.cub* waited for the lock and was rolled back as the timeout has passed." 
-
-If you want to check the lock information of the transaction specified in the error message, you can do so by using the **cubrid lockdb** utility to search for the OID value (ex: 0|636|34) of a specific row where the **X_LOCK** is set currently to find the transaction ID currently holding the lock, the client program name and the process ID (PID). For details, see :ref:`lockdb`. You can also check the transaction lock information in the CUBRID Manager.
+That is, the above lock error message can be interpreted as meaning that "Because another client is holding **X_LOCK** on a specific row in the *participant* table, transaction 3 which running on the host *cdbs006.cub* waited for the lock and was rolled back as the timeout has passed". If you want to check the lock information of the transaction specified in the error message, you can do so by using the **cubrid lockdb** utility to search for the OID value (ex: 0|636|34) of a specific row where the **X_LOCK** is set currently to find the transaction ID currently holding the lock, the client program name and the process ID (PID). For details, see :ref:`lockdb`. You can also check the transaction lock information in the CUBRID Manager.
 
 You can organize the transactions by checking uncommitted queries through the SQL log after checking the transaction lock information in the manner described above. For information on checking the SQL log, see :ref:`broker-logs`.
 
@@ -737,8 +760,8 @@ The following table shows the isolation levels from 1 to 6. It consists of table
 | REPEATABLE READ CLASS with REPEATABLE READ INSTANCES (5)  | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
 |                                                           | Transaction T1 may experience phantom read for the record R that was inserted by another transaction T2 when it is repeatedly retrieving a specific record.                         |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| REPEATABLE READ CLASS with READ COMMITTED INSTANCES (4)   | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
-| (or CURSOR STABILITY)                                     | Transaction T1 may experience R read (non-repeatable read) that was updated and committed by another transaction T2 when it is repeatedly retrieving the record R.                  |
+| REPEATABLE READ CLASS with READ COMMITTED INSTANCES       | Another transaction T2 cannot update the schema of table A while transaction T1 is viewing table A.                                                                                 |
+| (or CURSOR STABILITY) (4)                                 | Transaction T1 may experience R read (non-repeatable read) that was updated and committed by another transaction T2 when it is repeatedly retrieving the record R.                  |
 +-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | REPEATABLE READ CLASS with READ UNCOMMITTED INSTANCES (3) | Default isolation level.                                                                                                                                                            |
 |                                                           | Another transaction T2 cannot update the schema of table A  while transaction T1 is viewing table A.                                                                                |
@@ -763,6 +786,9 @@ You can assign the current isolation level to *variable* by using the **GET TRAN
 .. code-block:: sql
 
     GET TRANSACTION ISOLATION LEVEL;
+    
+::
+
            Result
     =============
       READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES

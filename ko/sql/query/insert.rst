@@ -56,8 +56,11 @@ INSERT
     --insert a single row with SET clauses
     INSERT INTO a_tbl1 SET id=6, name='eee';
     INSERT INTO a_tbl1 SET id=7, phone='777-7777';
-     
+    
     SELECT * FROM a_tbl1;
+    
+::
+    
                id  name                  phone
     =========================================================
              NULL  NULL                  '000-0000'
@@ -69,62 +72,77 @@ INSERT
                 6  'eee'                 '000-0000'
                 7  NULL                  '777-7777' 
      
+.. code-block:: sql
+
     INSERT INTO a_tbl1 SET id=6, phone='000-0000'
     ON DUPLICATE KEY UPDATE phone='666-6666';
-     
     SELECT * FROM a_tbl1 WHERE id=6;
+    
+::
+
                id  name                  phone
     =========================================================
                 6  'eee'                 '666-6666'
      
+.. code-block:: sql
+
     INSERT INTO a_tbl1 SELECT * FROM a_tbl1 WHERE id=7 ON DUPLICATE KEY UPDATE name='ggg';
-     
     SELECT * FROM a_tbl1 WHERE id=7;
+    
+::
+
+    
                id  name                  phone
     =========================================================
                 7  'ggg'                 '777-7777'
 
 **INSERT ... SET** 문에서 할당 표현식에 대한 평가는 왼쪽에서 오른쪽으로 수행된다. 칼럼 값이 정해지지 않았으면 기본값을 할당하고, 기본값이 없으면 **NULL**\을 할당한다.
  
-::
-         
+.. code-block:: sql
+
     CREATE TABLE tbl (a INT, b INT, c INT);
     INSERT INTO tbl SET a=1, b=a+1, c=b+2;
     SELECT * FROM tbl;
     
+::
+
             a            b            c
     ===================================
             1            2            4
     
 위의 예에서 칼럼 b의 값을 할당할 때, a의 값이 1이므로 b는 2, c는 4가 된다.
  
-::
+.. code-block:: sql
  
     CREATE TABLE tbl2 (a INT, b INT, c INT);
     INSERT INTO tbl2 SET a=b+1, b=1, c=b+2;
  
-위의 예에서 칼럼 a의 값을 할당할 때, b의 값이 아직 정해지지 않았으며 b의 기본값이 없으므로 a의 값은 **NULL**\이 된다.
+위의 예에서 칼럼 a의 값을 할당할 때, b의 값이 아직 정해지지 않았으며 b의 기본값이 없으므로 a의 값은 **NULL**\ 이 된다.
  
-::
+.. code-block:: sql
     
     SELECT * FROM tbl2;
+
+::
     
             a            b            c
     ===================================
          NULL            1            3
   
  
-::
+.. code-block:: sql
          
     CREATE TABLE tbl3 (a INT, b INT default 10, c INT);
     INSERT INTO tbl3 SET a=b+1, b=1, c=b+2;
  
 위의 예에서 칼럼 a의 값을 할당할 때, b의 값이 아직 정해지지 않았으며 b의 기본값이 10이므로 a의 값은 11이 된다.
    
-::
+.. code-block:: sql
     
     SELECT * FROM tbl3;
     
+::
+
             a            b            c
     ===================================
            11            1            3
@@ -155,6 +173,8 @@ INSERT ... SELECT 문
      
     SELECT * FROM a_tbl2;
     
+::
+
                id  name                  phone
     =========================================================
                 1  'aaa'                 '000-0000'
@@ -188,6 +208,8 @@ ON DUPLICATE KEY UPDATE 절
     INSERT INTO a_tbl3 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
     SELECT * FROM a_tbl3;
     
+::
+
                id  name                  phone
     =========================================================
                 1  'aaa'                 '000-0000'
@@ -195,9 +217,13 @@ ON DUPLICATE KEY UPDATE 절
                 3  'ccc'                 '333-3333'
                 6  'eee'                 '000-0000'
      
+.. code-block:: sql
+
     --insert duplicated value violating UNIQUE constraint
     INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222');
      
+::
+
     ERROR: Operation would have caused one or more unique constraint violations.
 
 ON DUPLICATE KEY UPDATE에서 "affected rows" 값은 새로운 행이 삽입되었을 경우에는 1이고, 존재하는 행이 업데이트되었을 경우에는 2이다.
@@ -210,6 +236,8 @@ ON DUPLICATE KEY UPDATE에서 "affected rows" 값은 새로운 행이 삽입되�
      
     SELECT * FROM a_tbl3 WHERE id=2;
     
+::
+
                id  name                  phone
     =========================================================
                 2  'ggg'                 '222-2222'

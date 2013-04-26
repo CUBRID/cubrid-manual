@@ -23,6 +23,9 @@ TRUNCATE
     CREATE TABLE a_tbl(A INT AUTO_INCREMENT(3,10) PRIMARY KEY);
     INSERT INTO a_tbl VALUES (NULL),(NULL),(NULL);
     SELECT * FROM a_tbl;
+    
+::
+
                 a
     =============
                 3
@@ -33,6 +36,9 @@ TRUNCATE
     TRUNCATE TABLE a_tbl;
     INSERT INTO a_tbl VALUES (NULL);
     SELECT * FROM a_tbl;
+    
+::
+
                 a
     =============
                 3

@@ -71,7 +71,7 @@ Granting Authorization
 
 In CUBRID, the smallest grant unit of authorization is a table. You must grant appropriate authorization to other users (groups) before allowing them to access the table you created.
 
-You don't need to grant authorization individually because the members of the granted group have the same authorization. The access to the (virtual) table created by a **PUBLIC** user is allowed to all other users. You can grant access authorization to a user by using the **GRANT** statement. ::
+You don't need to grant authorization individually because the members of the granted group have the same authorization. The access to the (virtual) table created by a **PUBLIC** user is allowed to all users. You can grant access authorization to a user by using the **GRANT** statement. ::
 
     GRANT operation [ { ,operation }_ ] ON table_name [ { ,table_name }_ ]
     TO user [ { ,user }_ ] [ WITH GRANT OPTION ] [ ; ]
@@ -90,29 +90,31 @@ You don't need to grant authorization individually because the members of the gr
 * *user*: Specifies the name of a user (group) to be granted. Enter the login name of the database user or **PUBLIC**, a system-defined user. If **PUBLIC** is specified, all database users are granted with the permission.
 * **WITH GRANT OPTION**: **WITH GRANT OPTION** allows the grantee of authorization to grant that same authorization to another user.
 
-The following example shows how to grant the **SELECT** authorization for the *olympic* table to *Fred* (including his members).
+The following example shows how to grant the **SELECT** authorization for the *olympic* table to *smith* (including his members).
 
 .. code-block:: sql
 
-    GRANT SELECT ON olympic TO Fred;
+    GRANT SELECT ON olympic TO smith;
 
-The following example shows how to grant the **SELECT**, **INSERT**, **UPDATE** and **DELETE** authorization on the *nation* and *athlete* tables to *Jenifer* and *Daniel* (including their members).
-
-.. code-block:: sql
-
-    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  Jenifer, Daniel;
-
-The following example shows how to grant every authorization on the *game* and *event* tables to all users.
+The following example shows how to grant the **SELECT**, **INSERT**, **UPDATE** and **DELETE** authorization on the *nation* and *athlete* tables to *brown* and *jones* (including their members).
 
 .. code-block:: sql
 
-    GRANT ALL PRIVILEGES ON game, event TO public;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO  brown, jones;
 
-The following example shows how to grant retrieving authorization on the *record* and *history* tables to *ROSS*. Using **WITH GRANT OPTION** allows *ROSS* to grant retrieving to another users. Ross can grant authorization to others within her authorization.
+The following example shows how to grant every authorization on the *tbl1* and *tbl2* tables to all users(public).
 
 .. code-block:: sql
 
-    GRANT SELECT ON record, history TO Ross WITH GRANT OPTION;
+    CREATE TABLE tbl1 (a INT);
+    CREATE TABLE tbl2 (a INT);
+    GRANT ALL PRIVILEGES ON tbl1, tbl2 TO public;
+
+The following example shows how to grant retrieving authorization on the *record* and *history* tables to *brown*. Using **WITH GRANT OPTION** allows *brown* to grant retrieving to another users. *brown* can grant authorization to others within his authorization.
+
+.. code-block:: sql
+
+    GRANT SELECT ON record, history TO brown WITH GRANT OPTION;
 
 .. note: \
 
@@ -134,23 +136,23 @@ If the authorization (**WITH GRANT OPTION**) is revoked from the grantor, the au
 *   *table_name* : Specifies the name of the table or virtual table to be granted.
 *   *user* : Specifies the name of the user (group) to be granted.
 
-The following example shows how to grant **SELECT**, **INSERT**, **UPDATE** and **DELETE** authorization to *Fred* and *John* so that they can perform on the *nation* and *athlete* tables.
+The following example shows how to grant **SELECT**, **INSERT**, **UPDATE** and **DELETE** authorization to *smith* and *jones* so that they can perform on the *nation* and *athlete* tables.
 
 .. code-block:: sql
 
-    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO Fred, John;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON nation, athlete TO smith, jones;
 
-The following example shows how to execute the **REVOKE** statement; this allows *John* to have only **SELECT** authorization. If *John* has granted authorization to another user, the user is also allowed to execute **SELECT** only.
-
-.. code-block:: sql
-
-    REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM John;
-
-The following example shows how to execute the **REVOKE** statement revoking all authorization that has granted to *Fred*. *Fred* is not allowed to execute any operations on the *nation* and *athlete* tables once this statement is executed.
+The following example shows how to execute the **REVOKE** statement; this allows *jones* to have only **SELECT** authorization. If *jones* has granted authorization to another user, the user is also allowed to execute **SELECT** only.
 
 .. code-block:: sql
 
-    REVOKE ALL PRIVILEGES ON nation, athlete FROM Fred;
+    REVOKE INSERT, UPDATE, DELETE ON nation, athlete FROM jones;
+
+The following example shows how to execute the **REVOKE** statement revoking all authorization that has granted to *smith*. *smith* is not allowed to execute any operations on the *nation* and *athlete* tables once this statement is executed.
+
+.. code-block:: sql
+
+    REVOKE ALL PRIVILEGES ON nation, athlete FROM smith;
 
 .. _change-owner:
 
@@ -256,11 +258,19 @@ The second statement outputs the value stored in the variable x. In this query s
 .. code-block:: sql
 
     CALL find_user('dba') ON CLASS db_user to x;
+    
+::
+    
     Result
     ======================
     db_user
      
+.. code-block:: sql
+
     SELECT x FROM db_root;
+    
+::
+
     x
     ======================
     db_user

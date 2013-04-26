@@ -25,17 +25,17 @@ CREATE SERIAL
 
 *   *serial_identifier*\ : 생성할 시리얼의 이름을 지정한다(최대 254 바이트).
 
-*   **START WITH** *initial*\ : 처음 생성되는 시리얼 숫자를 지정한다. 이 값은 38자리 이하의 숫자이다. 오름차순 시리얼의 경우 기본값은 1이며 내림차순 시리얼의 경우 기본값은 -1이다.
+*   **START WITH** *initial*\ : 처음 생성되는 시리얼 숫자를 지정한다. 이 값의 범위는 -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36)와   9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) 사이이다. 오름차순 시리얼의 경우 기본값은 1이며 내림차순 시리얼의 경우 기본값은 -1이다.
 
-*   **INCREMENT BY** *interval*\ : 시리얼 숫자 간의 간격을 지정한다. *interval* 값으로 0을 제외한 38자리 이하의 어떤 정수도 지정할 수 있다. *interval* 의 절대값은 **MAXVALUE** 와 **MINVALUE** 의 차이보다 작아야 한다. 음수가 설정되면 시리얼은 내림차순이 되고 양수가 설정되면 오름차순이 된다. 기본값은 **1** 이다.
+*   **INCREMENT BY** *interval*\ : 시리얼 숫자 간의 간격을 지정한다. *interval* 값으로 0을 제외하고 -9,999,999,999,999,999,999,999,999,999,999,999,999(-10^37+1)와 9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) 사이의 어느 정수라도 올 수 있다.  *interval* 의 절대값은 **MAXVALUE** 와 **MINVALUE** 의 차이와 같거나 작아야 한다. 음수가 설정되면 시리얼은 내림차순이 되고 양수가 설정되면 오름차순이 된다. 기본값은 **1** 이다.
 
-*   **MINVALUE**\ : 시리얼의 최소값을 지정한다. 이 값은 38자리 이하의 숫자이다. **MINVALUE** 는 초기값보다 작거나 같아야 하고 최대값보다 작아야 한다.
+*   **MINVALUE**\ : 시리얼의 최소값을 지정한다. 이 값의 범위는 -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36)와 9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) 사이이다. **MINVALUE**\ 는 초기값보다 작거나 같아야 하고 최대값보다 작아야 한다.
 
-*   **NOMINVALUE**\ : 오름차순 시리얼에 대해서는 1, 내림차순 시리얼에 대해서는 -10^38 이 최소값으로 자동 지정된다.
+*   **NOMINVALUE**\ : 오름차순 시리얼에 대해서는 1, 내림차순 시리얼에 대해서는 -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) 이 최소값으로 자동 지정된다.
 
-*   **MAXVALUE**\ : 시리얼의 최대값을 지정한다. 이 값은 38자리 이하의 숫자이다. **MAXVALUE** 는 초기값보다 크거나 같아야 하고 최소값보다 커야 한다.
+*   **MAXVALUE**\ : 시리얼의 최대값을 지정한다. 이 값의 범위는 -999,999,999,999,999,999,999,999,999,999,999,999(-10^36+1)와 10,000,000,000,000,000,000,000,000,000,000,000,000(10^37) 사이이다. **MAXVALUE**\ 는 초기값보다 크거나 같아야 하고 최소값보다 커야 한다.
 
-*   **NOMAXVALUE**\ : 오름차순 시리얼에 대해서는 10^37, 내림차순 시리얼에 대해서는 -1이 최대값으로 자동 지정된다.
+*   **NOMAXVALUE**\ : 오름차순 시리얼에 대해서는 10,000,000,000,000,000,000,000,000,000,000,000,000(10^37), 내림차순 시리얼에 대해서는 -1이 최대값으로 자동 지정된다.
 
 *   **CYCLE**\ : 시리얼 값이 최대 또는 최소값에 도달한 후에 연속적으로 값을 생성하도록 지정한다. 오름차순 시리얼은 최대값에 도달한 후에 다음 값으로 최소값이 생성된다. 내림차순 시리얼은 최소값에 도달한 후에 다음 값으로 최대값이 생성된다.
 
@@ -58,7 +58,9 @@ CREATE SERIAL
      
     --selecting serial information from the db_serial class
     SELECT * FROM db_serial;
-     
+
+::
+    
       name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
     ====================================================================================================================================================
     'order_no'      10006            2                     20000           10000                0            1                3            NULL
@@ -75,7 +77,9 @@ CREATE SERIAL
     INSERT INTO athlete_idx VALUES (order_no.CURRENT_VALUE, 'Lee');
     
     SELECT * FROM athlete_idx;
-     
+
+::
+    
              code  name
     ===================================
             10000  'Park'
@@ -128,7 +132,7 @@ ALTER SERIAL
 .. code-block:: sql
 
     --altering serial by changing start and incremental values
-    ALTER SERIAL order_no START WITH 100 INCREMENT BY 2;
+    ALTER SERIAL order_no START WITH 100 MINVALUE 100 INCREMENT BY 2;
      
     --altering serial to operate in cache mode
     ALTER SERIAL order_no CACHE 5;
@@ -170,11 +174,14 @@ DROP SERIAL
 .. code-block:: sql
 
     CREATE TABLE athlete_idx (code INT, name VARCHAR (40));
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');
     SELECT * FROM athlete_idx;
+    
+::
      
              code  name
     ===================================
@@ -183,7 +190,7 @@ DROP SERIAL
             10004  'Choo'
             10006  'Lee'
 
-.. note:: \
+.. note:: 
 
     시리얼을 생성하고 처음 사용할 때 **NEXT_VALUE** 를 이용하면 초기 값을 반환한다. 그 이후에는 현재 값에 증가 값이 추가되어 반환된다.
 
@@ -211,16 +218,29 @@ DROP SERIAL
 
 .. code-block:: sql
 
-    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+    CREATE SERIAL order_no START WITH 101 INCREMENT BY 1 MAXVALUE 20000;
     SELECT SERIAL_CURRENT_VALUE(order_no);
-    10000
+    
+::
+
+    101
      
+.. code-block:: sql
+
     -- At first, the first serial value starts with the initial serial value, 10000. So the l0'th serial value will be 10009.
     SELECT SERIAL_NEXT_VALUE(order_no, 10);
-    10009
+    
+::
+
+    110
      
+.. code-block:: sql
+
     SELECT SERIAL_NEXT_VALUE(order_no, 10);
-    10019
+    
+::
+
+    120
 
 .. note:: \
 

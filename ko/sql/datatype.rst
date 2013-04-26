@@ -18,12 +18,9 @@
 +----------------------+-----------+----------------------------+----------------------------+--------------------+
 | **BIGINT**           | 8         | -9,223,372,036,854,775,808 | +9,223,372,036,854,775,807 | 정확한 수치        |
 +----------------------+-----------+----------------------------+----------------------------+--------------------+
-| **NUMERIC**,         | 16        | 정밀도                     | 정밀도                     | 정확한 수치        |
-| **DECIMAL**          |           | *p*                        | *p*                        |                    |
-|                      |           | : 1                        | : 38                       |                    |
-|                      |           | 스케일                     | 스케일                     |                    |
-|                      |           | *s*                        | *s*                        |                    |
-|                      |           | : 0                        | : 38                       |                    |
+| **NUMERIC**,         | 16        | 정밀도 *p*: 1              | 정밀도 *p*: 38             | 정확한 수치        |
+| **DECIMAL**          |           |                            |                            |                    |
+|                      |           | 스케일 *s*: 0              | 스케일 *s*: 38             |                    |
 +----------------------+-----------+----------------------------+----------------------------+--------------------+
 | **FLOAT**,           | 4         | -3.402823466E+38           | +3.402823466E+38           | 근사치             |
 | **REAL**             |           | (ANSI/IEEE 754-1985 표준)  | (ANSI/IEEE 754-1985 표준)  | 부동소수점: 7자리  |
@@ -578,25 +575,38 @@ DATETIME
     .. code-block:: sql
 
         SELECT CAST('420' AS DATE);
+        
+    ::
          
            cast('420' as date)
         ======================
           04/20/2012
          
+    .. code-block:: sql
+
         SELECT CAST('91015' AS TIME);
+        
+    ::
          
            cast('91015' as time)
         ========================
           09:10:15 AM
          
-         
+    .. code-block:: sql
+
         SELECT CAST('110420091035.359' AS DATETIME);
+        
+    ::
          
            cast('110420091035.359' as datetime)
         =======================================
           09:10:35.359 AM 04/20/2011
          
+    .. code-block:: sql
+
         SELECT CAST('110420091035.359' AS TIMESTAMP);
+        
+    ::
          
            cast('110420091035.359' as timestamp)
         ========================================
@@ -686,9 +696,13 @@ BIT VARYING(n)
       X'a'                  X'a'
       X'aa'                 X'aa'
       X'aaa'                NULL
-     
+
+.. code-block:: sql
+
     INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
-     
+
+::
+    
     ERROR: Data overflow coercing X'aaa' to type bit varying.
 
 .. _char-data-type:
@@ -712,7 +726,7 @@ CUBRID는 두 종류의 문자열(character string) 타입을 지원한다.
     'abc'
     'def'
 
- 위 문자열은 아래에 있는 하나의 문자열과 동일하다. ::
+    위 문자열은 아래에 있는 하나의 문자열과 동일하다. ::
 
     'abcdef'
 
@@ -738,7 +752,6 @@ CUBRID는 두 종류의 문자열(character string) 타입을 지원한다.
     
     .. note:: 9.0 미만 버전에서 **CHAR** 나 **VARCHAR** 타입의 길이는 문자의 개수가 아닌 문자의 바이트 크기를 나타내었다.
 
-    
 **문자셋(Character Set, charset)**
 
     문자셋(문자 집합)은 특정 문자(symbol)를 컴퓨터에 저장할 때, 어떠한 코드로 인코딩할 것인지에 대한 규칙이 정의된 집합을 의미한다. CUBRID가 사용할 문자셋은 **CUBRID_CHARSET** 환경 변수, **CHARSET** 소개자 또는 **COLLATE** 수정자를 사용할 수 있다. 문자셋에 대한 자세한 설명은 :doc:`i18n` 을 참고한다.
@@ -815,6 +828,7 @@ NCHAR(n)
 **NCHAR** (*n*)는 **CHAR** (*n*)과 같다.
 
 .. note::
+
     CUBRID 9.0 미만 버전에서 영어 외 국가 언어의 데이터를 입력하기 위한 용도로 사용되었으나 로캘 설정에 따른 문자셋과 콜레이션을 지원하면서 이 타입은 syntax 호환을 위해서만 남게 되었다. 따라서 새로 스키마를 작성하는 경우에는 이 타입 대신 **CHAR** 타입을 사용할 것을 권장한다.
 
 NCHAR VARYING(n)
@@ -823,6 +837,7 @@ NCHAR VARYING(n)
 **NCHAR VARYING** (*n*)은 **VARCHAR** (*n*)과 같다.
 
 .. note::
+
     CUBRID 9.0 미만 버전에서 영어 외 국가 언어의 데이터를 입력하기 위한 용도로 사용되었으나 로캘 설정에 따른 문자셋과 콜레이션을 지원하면서 이 타입은 syntax 호환을 위해서만 남게 되었다. 따라서 새로 스키마를 작성하는 경우에는 이 타입 대신 **VARCHAR** 타입을 사용할 것을 권장한다.
 
 .. _escape-characters:
@@ -832,7 +847,7 @@ NCHAR VARYING(n)
 
 CUBRID는 특수 문자를 이스케이프(escape)하는 방법을 두 가지 지원한다. 하나는 따옴표를 이용한 방법이고, 다른 하나는 백슬래시(\\)를 이용한 방법이다.
 
-* 따옴표를 이용한 이스케이프
+* 따옴표 이스케이프
 
     **cubrid.conf** 의 시스템 파라미터 **ansi_quotes**\ 가 no로 설정되어 있으면 문자열을 감쌀 때 큰따옴표(")와 작은따옴표(') 둘 다 사용할 수 있다.
     **ansi_quotes** 파라미터의 기본값은 **yes** 로, 문자열을 감쌀 때 작은따옴표만 사용할 수 있다.
@@ -842,7 +857,7 @@ CUBRID는 특수 문자를 이스케이프(escape)하는 방법을 두 가지 �
     *   큰따옴표로 감싼 문자열에 포함된 작은따옴표는 이스케이프하지 않아도 된다. (**ansi_quotes** 값이 no인 경우)
     *   작은따옴표로 감싼 문자열에 포함된 큰따옴표는 이스케이프하지 않아도 된다.
 
-* 백슬래시를 이용한 이스케이프
+* 백슬래시 이스케이프
 
     백슬래시(\\)를 이용한 이스케이프는 **cubrid.conf**\ 의 시스템 파라미터 **no_backslash_escapes**\ 를 no로 설정했을 때에만 사용할 수 있다. **no_backslash_escapes** 파라미터의 기본값은 **yes** 이다. **no_backslash_escapes**\ 의 값이 no인 경우, 다음과 같은 특수 문자를 의미한다.
 
@@ -859,70 +874,114 @@ CUBRID는 특수 문자를 이스케이프(escape)하는 방법을 두 가지 �
 
     **\\%** 와 **\\_** 는 **LIKE** 와 같은 패턴 매칭 구문에서 퍼센트 기호와 언더바를 찾을 때 쓰이며, 백슬래시가 없으면 와일드카드 문자(wildcard character)로 쓰인다. 패턴 매칭 구문 밖에서는 와일드카드 문자가 아닌 일반 문자열 "\\%"와 "\\_"로 그대로 쓰인다. 자세한 내용은 :ref:`like-expr` 을 참고한다.
 
-다음은 **cubrid.conf**\ 의 시스템 파라미터 **ansi_quotes**\ 가 no이고 **no_backslash_escapes**\ 가 no일 때 이스케이프를 수행한 결과이다.
+다음은 **cubrid.conf**\ 의 시스템 파라미터 **ansi_quotes**\ 가 yes(기본값)이고 **no_backslash_escapes**\ 가 no일 때 백슬래시에 대해 이스케이프를 수행한 결과이다.
 
 .. code-block:: sql
 
+    -- ansi_quotes=yes, no_backslash_escapes=no
     SELECT STRCMP('single quotes test('')', 'single quotes test(\')');
-     
+
+위의 구문을 실행하면, 백슬래시가 이스케이프 문자로 인식되므로 두 문자열은 같은 것으로 인식된다.
+    
+::
+
        strcmp('single quotes test('')', 'single quotes test('')')
     =============================================================
                                                                 0
-     
-    SELECT STRCMP("\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z", "a\bcdefghijklm\nopq\rs\tuvwxyz");
-     
+
+.. code-block:: sql
+
+    SELECT STRCMP('\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z', 'a\bcdefghijklm\nopq\rs\tuvwxyz');
+
+위의 구문을 실행하면, 백슬래시가 이스케이프 문자로 인식되므로 두 문자열은 같은 것으로 인식된다.
+
+::
+
        strcmp('abcdefghijklm
     s       uvwxyz', 'abcdefghijklm
     s       uvwxyz')
     =====================================================================
-                                                                        0 
-     
+                                                                        0
+
+.. code-block:: sql
+
     SELECT LENGTH('\\');
-     
+
+위의 구문을 실행하면, 백슬래시가 이스케이프 문자로 인식되므로 문자열의 길이는 1이 된다.
+    
+::
+
        char_length('\')
     ===================
                       1
 
-다음은 **cubrid.conf**\ 의 시스템 파라미터 **ansi_quotes**\ 가 yes이고 **no_backslash_escapes**\ 가 yes일 때 이스케이프를 수행한 결과이다.
+다음은 **cubrid.conf**\ 의 시스템 파라미터 **ansi_quotes**\ 가 yes(기본값)이고 **no_backslash_escapes**\ 가 yes(기본값)일 때 수행한 결과이다. 백슬래시는 일반 문자로 인식된다.
 
 .. code-block:: sql
 
+    -- ansi_quotes=yes, no_backslash_escapes=yes
+
     SELECT STRCMP('single quotes test('')', 'single quotes test(\')');
-     
-    In the command from line 2,
-    ERROR: unterminated string
-     
-    In the command from line 2,
-    ERROR: syntax error, unexpected UNTERMINATED_STRING
-     
-     
-    SELECT STRCMP("\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z", "a\bcdefghijklm\nopq\rs\tuvwxyz");
-     
-    In line 1, column 18,
-    ERROR: [\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z] is not defined.
-     
-    In line 1, column 18,
-    ERROR: [a\bcdefghijklm\nopq\rs\tuvwxyz] is not defined.
-     
+
+위의 구문을 실행하면, 아직 따옴표가 열린 것으로 간주하여 아래와 같은 에러가 발생한다.
+CSQL 인터프리터의 SQL 입력 화면에서 위의 구문을 입력하면 다음 따옴표가 입력되기를 대기한다.
+
+::
+
+    ERROR: syntax error, unexpected UNTERMINATED_STRING, expecting SELECT or VALUE or VALUES or '('
+
+.. code-block:: sql
+
+    SELECT STRCMP('\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z', 'a\bcdefghijklm\nopq\rs\tuvwxyz');
+
+위의 구문을 실행하면, 백슬래시가 일반 문자로 인식되므로 두 문자열의 비교 결과는 서로 다른 것으로 인식된다.
+    
+::
+
+       strcmp('\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z', 'a\bcdefghijklm\nopq\rs\tuvwxyz')
+    ===================================================================================================
+                                                                                                     -1
+
+.. code-block:: sql
+
     SELECT LENGTH('\\');
-     
+
+위의 구문을 실행하면, 백슬래시가 일반 문자로 인식되므로 문자열의 길이는 2가 된다.
+
+::
+
        char_length('\\')
     ====================
                        2
 
-다음은 **cubrid.conf**\ 의 시스템 파라미터 **ansi_quotes**\ 가 yes이고 **no_backslash_escapes**\ 가 no일 때 이스케이프를 수행한 결과이다.
+다음은 **cubrid.conf**\ 의 시스템 파라미터 **ansi_quotes**\ 가 yes이고 **no_backslash_escapes**\ 가 no일 때 LIKE 절에 대해 이스케이프를 수행한 결과이다.
 
 .. code-block:: sql
+
+    -- ansi_quotes=yes, no_backslash_escapes=no
 
     CREATE TABLE t1 (a VARCHAR(200));
     INSERT INTO t1 VALUES ('aaabbb'), ('aaa%');
      
-    SELECT a FROM t1 WHERE a LIKE 'aaa\%' escape '\\';
-     
+    SELECT a FROM t1 WHERE a LIKE 'aaa\%' ESCAPE '\\';
+
+::
+
       a
     ======================
       'aaa%'
 
+'%'가 패턴 매칭 문자가 아닌 일반 문자로 인식되기 때문에, 질의를 수행하면 1개의 행만 리턴한다.
+      
+LIKE 절의 문자열에서는 백슬래시가 항상 일반 문자로 간주되기 때문에, '%'를 패턴 매칭 문자가 아닌 일반 문자로 인식시키려면 ESCAPE 절을 지정하여 백슬래시가 이스케이프 문자임을 명시해야 한다.
+ESCAPE 절에서는 백슬래시가 이스케이프 문자로 간주되기 때문에, 두 개의 백슬래시 문자를 사용했다.
+
+위의 SELECT 질의에서 이스케이프 문자를 백슬래시가 아닌 다른 문자로 쓰려면 아래와 같이 사용할 수 있다.
+
+.. code-block:: sql
+
+    SELECT a FROM t1 WHERE a LIKE 'aaa#%' ESCAPE '#';
+      
 ENUM 데이터 타입
 ================
 
@@ -975,12 +1034,12 @@ ENUM 데이터 타입
     -- the first result column has ENUM type, the second has INTEGER type and the third has VARCHAR type
     SELECT color, color + 0, CONCAT(color, '') FROM tbl;
      
+::
+
       color                     color+0   concat(color, '')
     =========================================================
-      'red'                           1  'red'
       'yellow'                        2  'yellow'
-      'blue'                          3  'blue'
-      'green'                         4  'green'    
+      'red'                           1  'red'
 
 문맥 상 CHAR나 숫자 타입이 아닌 다른 타입으로 사용될 때, 열거형은 색인 또는 열거형 값을 사용하는 해당 타입으로 변환된다. 아래 표는 타입 변환 시 **ENUM** 타입의 어떤 부분이 사용되는지를 보여준다.
 
@@ -1033,7 +1092,7 @@ ENUM 타입 비교
         color ENUM ('red', 'yellow', 'blue', 'green')
     );
     
-    INSERT INTO tbl (color) VALUES(1), (2), (3), (4);
+    INSERT INTO tbl (color) VALUES (1), (2), (3), (4);
 
 다음 질의는 상수 'red'를 색인 번호 1을 가진 열거형 값 'red'로 변환한다.
 
@@ -1041,12 +1100,18 @@ ENUM 타입 비교
 
     SELECT color FROM tbl WHERE color = 'red';
     
+::
+
       color
     ======================
       'red'
     
+.. code-block:: sql
+
     SELECT color FROM tbl WHERE color = 1;
     
+::
+
       color
     ======================
       'red'    
@@ -1056,9 +1121,7 @@ ENUM 타입 비교
 .. code-block:: sql
     
     SELECT color FROM tbl WHERE color = date'2010-01-01';
-
     SELECT color FROM tbl WHERE color = 15;
-
     SELECT color FROM tbl WHERE color = 'asdf';
     
 다음 질의에서 **ENUM** 타입은 다른 피연산자의 타입으로 변환된다.
@@ -1068,20 +1131,30 @@ ENUM 타입 비교
     -- CHAR comparison using the enum value
     SELECT color FROM tbl WHERE color < 'pink';
     
+::
+
       color
     ======================
       'blue'
       'green'
 
+.. code-block:: sql
+
     -- INTEGER comparison using the enum index
     SELECT color FROM tbl WHERE color > 3;
+
+::
 
       color
     ======================
       'green'
 
+.. code-block:: sql
+
     -- Conversion error
     SELECT color FROM tbl WHERE color > date'2012-01-01';
+
+::
 
     ERROR: Cannot coerce value of domain "enum" to domain "date".
       
@@ -1093,6 +1166,8 @@ ENUM 타입 정렬
 .. code-block:: sql
 
     SELECT color FROM tbl ORDER BY color ASC;
+
+::
 
       color
     ======================
@@ -1107,14 +1182,15 @@ ENUM 타입 정렬
 
     SELECT color FROM tbl ORDER BY CAST (color AS VARCHAR) ASC;
 
+::
+
       color
     ======================
       'blue'
       'green'
       'red'
       'yellow'
-      
-      
+
 참고 사항
 ---------
 
@@ -1125,7 +1201,6 @@ ENUM 타입 정렬
 .. code-block:: sql
     
     CREATE TABLE tbl(color enum ('red', 'green', 'blue'));
-
     INSERT INTO tbl VALUES('red'), ('green'), ('blue');
 
 다음 문장은 **ENUM** 타입이 'yellow' 값을 가지도록 변경한다.
@@ -1133,16 +1208,16 @@ ENUM 타입 정렬
 .. code-block:: sql
 
     ALTER TABLE tbl CHANGE color color ENUM ('red', 'green', 'blue', 'yellow');
-    
     INSERT into tbl VALUES(4);
-    
     SELECT color FROM tbl;
+
+::
 
       color
     ======================
-      'blue'
+      'red'
       'green'
-      'red'    
+      'blue'
       'yellow'
 
 다음의 예에서 'green' 값이 새로운 **ENUM** 타입 정의에 매핑되지 않기 때문에, 모든 튜플의 'green'이 'red'로 변경된다.
@@ -1150,51 +1225,52 @@ ENUM 타입 정렬
 .. code-block:: sql
 
     ALTER TABLE tbl CHANGE color color ENUM ('red', 'yellow', 'blue');
-    
     SELECT color FROM tbl;
     
+::
+
       color
     ======================
+      'red'
+      'red'
       'blue'
-      'red'
-      'red'
-      'yellow' 
+      'yellow'
 
 **ENUM** 타입은 CUBRID 드라이버에서 문자열로 매핑된다. 다음은 JDBC 응용에서 **ENUM** 타입을 사용하는 예이다.
 
 .. code-block:: java
 
-        Statement stmt = connection.createStatement("SELECT color FROM tbl");
-        ResultSet rs = stmt.executeQuery();
-        
-        while(rs.next()){
-           System.out.println(rs.getString());
-        }
+    Statement stmt = connection.createStatement("SELECT color FROM tbl");
+    ResultSet rs = stmt.executeQuery();
+    
+    while(rs.next()){
+       System.out.println(rs.getString());
+    }
 
 다음은 CCI 응용에서 **ENUM** 타입을 사용하는 예이다.
 
 .. code-block:: c
 
-        req_id = cci_prepare (conn, "SELECT color FROM tbl", 0, &err);
-        error = cci_execute (req_id, 0, 0, &err);
-        if (error < CCI_ER_NO_ERROR)
-        {
-            /* handle error */
-        }
-        
-        error = cci_cursor (req_id, 1, CCI_CURSOR_CURRENT, &err);
-        if (error < CCI_ER_NO_ERROR)
-        {
-            /* handle error */
-        }
-        
-        error = cci_fetch (req_id, &err);
-        if (error < CCI_ER_NO_ERROR)
-        {
-            /* handle error */
-        }
-        
-        cci_get_data (req, idx, CCI_A_TYPE_STR, &data, 1);
+    req_id = cci_prepare (conn, "SELECT color FROM tbl", 0, &err);
+    error = cci_execute (req_id, 0, 0, &err);
+    if (error < CCI_ER_NO_ERROR)
+    {
+        /* handle error */
+    }
+    
+    error = cci_cursor (req_id, 1, CCI_CURSOR_CURRENT, &err);
+    if (error < CCI_ER_NO_ERROR)
+    {
+        /* handle error */
+    }
+    
+    error = cci_fetch (req_id, &err);
+    if (error < CCI_ER_NO_ERROR)
+    {
+        /* handle error */
+    }
+    
+    cci_get_data (req, idx, CCI_A_TYPE_STR, &data, 1);
         
 .. _blob-clob:
 
@@ -1264,7 +1340,7 @@ CLOB
     ALTER TABLE doc_t ADD CONSTRAINT content_unique UNIQUE(content);
      
     -- an error occurs when creating an index on CLOB column
-    CREATE INDEX ON doc_t (content);
+    CREATE INDEX i_doc_t_content ON doc_t (content);
      
     -- creating a table and BLOB column
     CREATE TABLE image_t (image_id VARCHAR(36) PRIMARY KEY, doc_id VARCHAR(64) NOT NULL, image BLOB);
@@ -1336,6 +1412,8 @@ CLOB
     -- displaying locator value when selecting CLOB and BLOB column in CSQL interpreter
     SELECT doc_t.doc_id, content, image FROM doc_t, image_t WHERE doc_t.doc_id = image_t.doc_id;
      
+::
+
       doc_id                content               image
     ==================================================================
       'doc-1'               file:/home1/data1/ces_658/doc_t.00001282208855807171_7329  file:/home1/data1/ces_318/image_t.00001282208855809474_7474
@@ -1343,9 +1421,13 @@ CLOB
      
     2 rows selected.
      
+.. code-block:: sql
+
     -- using string functions after coercing its type by CLOB_TO_CHAR( )
     SELECT CLOB_TO_CHAR(content), SUBSTRING(CLOB_TO_CHAR(content), 10) FROM doc_t;
      
+::
+
        clob_to_char(content)  substring( clob_to_char(content) from 10)
     ============================================
       'This is a Dog'       ' Dog'
@@ -1353,22 +1435,46 @@ CLOB
      
     2 rows selected.
      
+.. code-block:: sql
+
     SELECT CLOB_TO_CHAR(content) FROM doc_t WHERE CLOB_TO_CHAR(content) LIKE '%Dog%';
      
+::
+
        clob_to_char(content)
     ======================
       'This is a Dog'
      
-    SELECT CLOB_TO_CHAR(content) FROM doc_t ORDER BY CLOB_TO_CHAR(content)
+.. code-block:: sql
+
+    SELECT CLOB_TO_CHAR(content) FROM doc_t ORDER BY CLOB_TO_CHAR(content);
      
+::
+
        clob_to_char(content)
     ======================
       'This is a Cat'
       'This is a Dog'
      
-    -- an error occurs when LOB column specified in WHERE/ORDER BY/GROUP BY clauses
+.. code-block:: sql
+
     SELECT * FROM doc_t WHERE content LIKE 'This%';
+    
+::
+
+      doc_id                content
+    ============================================
+      'doc-1'               file:/home1/data1/ces_004/doc_t.00001366272829040346_0773
+      'doc-2'               file:/home1/data1/ces_256/doc_t.00001366272815153996_1229
+    
+.. code-block:: sql
+
+    -- an error occurs when LOB column specified in ORDER BY/GROUP BY clauses
     SELECT * FROM doc_t ORDER BY content;
+
+::
+
+    ERROR: doc_t.content can not be an ORDER BY column
 
 연산자와 함수
 -------------
@@ -1442,19 +1548,25 @@ CLOB
 
 .. code-block:: sql
 
-    ;AUTOCOMMIT OFF
+    -- csql> ;AUTOCOMMIT OFF
      
     CREATE TABLE doc_t (doc_id VARCHAR(64) PRIMARY KEY, content CLOB);
     INSERT INTO doc_t VALUES ('doc-10', CHAR_TO_CLOB('This is content'));
     COMMIT;
-    UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 2') where doc_id = 'doc-10';
+    UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 2') WHERE doc_id = 'doc-10';
     ROLLBACK;
     SELECT doc_id, CLOB_TO_CHAR(content) FROM doc_t WHERE doc_id = 'doc-10';
     
+::
+
       doc_id   content                  
     =========================================================
-      'doc-10'  'This is content '
+      'doc-10'  'This is content'
      
+.. code-block:: sql
+
+    -- csql> ;AUTOCOMMIT OFF
+
     INSERT INTO doc_t VALUES ('doc-11', CHAR_TO_CLOB ('This is content'));
     COMMIT;
     UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 3') WHERE doc_id = 'doc-11';
@@ -1462,6 +1574,8 @@ CLOB
     -- system crash occurred and then restart server
     SELECT doc_id, CLOB_TO_CHAR(content) FROM doc_t WHERE doc_id = 'doc-11';
      
+::
+
     -- Error : LOB Locator references to the previous LOB data because only LOB Locator is rollbacked.
 
 .. note:: 
@@ -1515,6 +1629,8 @@ CLOB
 
         CREATE TABLE tbl (str SET (string) COLLATE utf8_en_ci);
         
+::
+
         Syntax error: unexpected 'COLLATE', expecting ',' or ')'
 
 SET
@@ -1529,6 +1645,8 @@ SET
     INSERT INTO set_tbl VALUES ({NULL});
     INSERT INTO set_tbl VALUES ({''});
     SELECT * FROM set_tbl;
+
+::
     
       col_1
     ======================
@@ -1536,17 +1654,25 @@ SET
     {NULL}
     {' '}
      
+.. code-block:: sql
+
     SELECT CAST (col_1 AS MULTISET), CAST (col_1 AS LIST) FROM set_tbl;
     
+::
+
        cast(col_1 as multiset)   cast(col_1 as sequence)
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'c'}
       {NULL}  {NULL}
       {' '}  {' '}
      
+.. code-block:: sql
+
     INSERT INTO set_tbl VALUES ('');
      
-    ERROR: Cannot coerce '' to type set.
+::
+
+    ERROR: Casting '' to type set is not supported.
 
 MULTISET
 --------
@@ -1559,12 +1685,18 @@ MULTISET
     INSERT INTO multiset_tbl VALUES ({'c','c','c','b','b', 'a'});
     SELECT * FROM multiset_tbl;
     
+::
+
       col_1
     ======================
       {'a', 'b', 'b', 'c', 'c', 'c'}
      
+.. code-block:: sql
+
     SELECT CAST(col_1 AS SET), CAST(col_1 AS LIST) FROM multiset_tbl;
     
+::
+
        cast(col_1 as set)   cast(col_1 as sequence)
     ============================================
       {'a', 'b', 'c'}  {'c', 'c', 'c', 'b', 'b', 'a'}
@@ -1580,12 +1712,18 @@ LIST 또는 SEQUENCE
     INSERT INTO list_tbl VALUES ({'c','c','c','b','b', 'a'});
     SELECT * FROM list_tbl;
     
+::
+
       col_1
     ======================
       {'c', 'c', 'c', 'b', 'b', 'a'}
      
+.. code-block:: sql
+
     SELECT CAST(col_1 AS SET), CAST(col_1 AS MULTISET) FROM list_tbl;
     
+::
+
        cast(col_1 as set)  cast(col_1 as multiset)
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
@@ -1692,6 +1830,8 @@ INSERT와 UPDATE
      
     SELECT * FROM t;
      
+::
+
                 i
     =============
               123
@@ -1705,6 +1845,8 @@ INSERT와 UPDATE
 
     SELECT MOD('123','2');
      
+::
+
                mod('123', '2')
     ==========================
          1.000000000000000e+00
@@ -1763,11 +1905,13 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
 
     .. code-block:: sql
 
-        CREATE TABLE t(i INT, s STRING);
-        INSERT INTO t VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
+        CREATE TABLE t1(i INT, s STRING);
+        INSERT INTO t1 VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
          
-        SELECT i FROM t WHERE i < '11.3';
+        SELECT i FROM t1 WHERE i < '11.3';
          
+    ::
+
                     i
         =============
                     1
@@ -1775,9 +1919,13 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
                     3
                     4
          
+    .. code-block:: sql
+
         SELECT ('2' <= 11);
          
-             ('2'<11)
+    ::
+
+          ('2'<=11)
         =============
                     1
 
@@ -1788,13 +1936,19 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     .. code-block:: sql
 
         SELECT ('2010-01-01' < date'2010-02-02');
-         
+    
+    ::
+    
            ('2010-01-01'<date '2010-02-02')
         ==================================
                                         1
          
+    .. code-block:: sql
+
         SELECT (date'2010-02-02' >= '2010-01-01');
-         
+
+    ::
+        
           (date '2010-02-02'>='2010-01-01')
         ===================================
                                         1
@@ -1805,8 +1959,11 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
 
     .. code-block:: sql
 
-        PREPARE s FROM 'SELECT s FROM t WHERE s < ?';
+        PREPARE s FROM 'SELECT s FROM t1 WHERE s < ?';
         EXECUTE s USING 11;
+
+    ::
+
                s
         ===================
              '1'
@@ -1817,7 +1974,10 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
 
     .. code-block:: sql
 
-        SELECT s FROM t WHERE s > 11;
+        SELECT s FROM t1 WHERE s > 11;
+
+    ::
+    
                s
         ==================
              '2'
@@ -1825,7 +1985,12 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
              '4'
              '12'
          
-        SELECT s FROM t WHERE s BETWEEN 11 AND 33;
+    .. code-block:: sql
+
+        SELECT s FROM t1 WHERE s BETWEEN 11 AND 33;
+
+    ::
+    
                 s
         ======================
               '2'
@@ -1838,15 +2003,26 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
 
     .. code-block:: sql
 
-        SELECT s FROM t;
+        CREATE TABLE t2 (s STRING);
+        INSERT INTO t2 VALUES ('01/01/1998'), ('01/01/1999'), ('01/01/2000');
+        SELECT s FROM t2;
          
+    ::
+
                    s
         ======================
             '01/01/1998'
             '01/01/1999'
             '01/01/2000'
          
-        SELECT s FROM t WHERE s <= date'02/02/1998';
+    .. code-block:: sql
+
+        SELECT s FROM t2 WHERE s <= date'02/02/1998';
+
+    위의 질의에서 date'02/02/1998'이 문자열 '02/02/1998'으로 변환되어 문자열 간의 비교 연산이 수행된다.
+        
+    ::
+    
                     s
         ======================
             '01/01/1998'
@@ -1861,9 +2037,13 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     문자열 타입 피연산자가 **DOUBLE** 로 변환된다.
 
     .. code-block:: sql
-
-        SELECT i FROM t WHERE i <= all {'11','12'};
-         
+    
+        CREATE TABLE t3 (i INT);
+        INSERT INTO t3 VALUES (1), (2), (3), (4);
+        SELECT i FROM t3 WHERE i <= ALL {'11','12'};
+    
+    ::
+    
                     i
         =============
                     1
@@ -1878,18 +2058,24 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     .. code-block:: sql
 
         SELECT s FROM t2;
-         
-                  s
-        ======================
-              '01/01/2000'
-              '01/01/1999'
-              '01/01/1998'
-         
+    
+    ::
+    
+          s
+        =================
+          '01/01/1998'
+          '01/01/1999'
+          '01/01/2000'
+
+    .. code-block:: sql
+
         SELECT s FROM t2 WHERE s <= ALL {date'02/02/1998',date'01/01/2000'};
          
-                  s
-        ======================
-               '01/01/1998'
+    ::
+
+          s
+        ================
+         '01/01/1998'
            
     해당 타입으로 변환할 수 없으면 오류를 반환한다.
 
@@ -1903,6 +2089,8 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     .. code-block:: sql
 
         SELECT date'2002-01-01' - datetime'2001-02-02 12:00:00 am';
+
+    ::
 
            date '2002-01-01'- datetime '2001-02-02 12:00:00 am'
         =====================================================
@@ -1933,6 +2121,8 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
 
         SELECT date'2002-01-01' + '10';
          
+    ::
+
           date '2002-01-01'+'10'
         ======================
           01/11/2002
@@ -1947,15 +2137,20 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
 
         SELECT date'2002-01-01'-'2001-01-01';
          
+    ::
+
           date '2002-01-01'-'2001-01-01'
         ================================
                             31536000000
          
         -- this causes an error
          
+    .. code-block:: sql
+
         SELECT date'2002-01-01'-'10';
          
-         In line 1, column 13,
+    ::
+
          ERROR: Cannot coerce '10' to type datetime.    
      
 *   **수치형 타입과 문자열 타입 피연산자**
@@ -1969,18 +2164,28 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
 
         SELECT 4 + '5.2';
          
+    ::
+
                         4+'5.2'
         ==========================
           9.199999999999999e+00
       
-    CUBRID 2008 R3.1 이하 버전과 달리, 날짜/시간 형태의 문자열, 즉 '2010-09-15'와 같은 문자열은 날짜/시간 타입으로 변환되지 않는다. 날짜/시간 타입을 갖는 리터럴 (DATE'2010-09-15')은 덧셈, 뺄셈 연산에 사용할 수 있다.
+    CUBRID 2008 R3.1 이하 버전과 달리, 날짜/시간 형태의 문자열, 즉 '2010-09-15'와 같은 문자열은 날짜/시간 타입으로 변환되지 않는다. 날짜/시간 타입을 갖는 리터럴 (date'2010-09-15')은 덧셈, 뺄셈 연산에 사용할 수 있다.
 
     .. code-block:: sql
 
         SELECT '2002-01-01'+1;
-           ERROR: Cannot coerce '2002-01-01' to type double.
         
-        SELECT DATE'2002-01-01'+1;
+    ::
+    
+           ERROR: Cannot coerce '2002-01-01' to type double.
+    
+    .. code-block:: sql
+
+        SELECT date'2002-01-01'+1;
+        
+    ::
+    
           date '2002-01-01'+1
         =====================
           01/02/2002
@@ -1992,31 +2197,37 @@ operand2가 집합인 연산자( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**,
     .. code-block:: sql
 
         SELECT '3'*'2';
+        
+    ::
          
                              '3'*'2'
         ============================
                6.000000000000000e+00
            
-    '+' 연산자의 동작은 **cubrid.conf** 의 시스템 파라미터인 **plus_as_concat** 을 어떻게 설정하느냐에 따라 결정된다. 자세한 내용은 :ref:`stmt-type-parameters` 를 참고한다.
+    '+' 연산자의 동작은 **cubrid.conf** 의 시스템 파라미터인 **plus_as_concat**\ 을 어떻게 설정하느냐에 따라 결정된다. 자세한 내용은 :ref:`stmt-type-parameters`\ 를 참고한다.
 
     *   **plus_as_concat** 값이 yes(기본값)이면 두 개의 문자열을 연결한 값을 반환한다.
 
-      .. code-block:: sql
+        .. code-block:: sql
 
-        SELECT '1'+'1';
-         
-                       '1'+'1'
-        ======================
-                          '11'
-                      
-    *   **plus_as_concat** 값이 no 이고 두 개의 문자열이 숫자로 변환 가능하면, 두 숫자를 더하여 **DOUBLE** 타입의 값을 반환한다.
-
-      .. code-block:: sql
-
-        SELECT '1'+'1';
-         
+            SELECT '1'+'1';
+            
+        ::
+             
                            '1'+'1'
-        ==========================
-             2.000000000000000e+00
+            ======================
+                              '11'
+                      
+    *   **plus_as_concat** 값이 no이고 두 개의 문자열이 숫자로 변환 가능하면, 두 숫자를 더하여 **DOUBLE** 타입의 값을 반환한다.
+
+        .. code-block:: sql
+
+            SELECT '1'+'1';
+            
+        ::
+             
+                               '1'+'1'
+            ==========================
+                 2.000000000000000e+00
          
     해당 타입으로 변환할 수 없으면 오류를 반환한다.

@@ -5,7 +5,9 @@
 UNION, DIFFERENCE, INTERSECTION
 ===============================
 
-피연산자로 지정된 하나 이상의 질의문의 결과에 대해 합집합(**UNION**), 차집합(**DIFFERENCE**), 교집합(**INTERSECTION**)을 구하기 위하여 문장 집합 연산자(Statement Set Operator)를 이용한다. 단, 두 질의문의 대상 테이블에서 조회하고자 하는 데이터 타입이 동일하거나, 묵시적으로 변환 가능해야 한다. 다음은 CUBRID가 지원하는 문장 집합 연산자와 예제를 나타낸 표이다.
+피연산자로 지정된 하나 이상의 질의문의 결과에 대해 합집합(**UNION**), 차집합(**DIFFERENCE**), 교집합(**INTERSECTION**)을 구하기 위하여 문장 집합 연산자(Statement Set Operator)를 이용한다. 단, 두 질의문의 대상 테이블에서 조회하고자 하는 데이터 타입이 동일하거나, 묵시적으로 변환 가능해야 한다. 
+
+다음은 CUBRID가 지원하는 문장 집합 연산자와 예제를 나타낸 표이다.
 
 **CUBRID가 지원하는 문장 집합 연산자**
 
@@ -16,12 +18,12 @@ UNION, DIFFERENCE, INTERSECTION
 |                  | 중복을 허용하지 않음 | 이면 중복된 값을 포함한 모든 결과 인스턴스 출력 |
 +------------------+----------------------+-------------------------------------------------+
 | **DIFFERENCE**   | 차집합               | **EXCEPT**                                      |
-|                  | 중복을 허용하지 않음 | 연산자와 동일                                   |
+|                  | 중복을 허용하지 않음 | 연산자와 동일.                                  |
 |                  |                      | **DIFFERENCE ALL**                              |
 |                  |                      | 이면 중복된 값을 포함한 모든 결과 인스턴스 출력 |
 +------------------+----------------------+-------------------------------------------------+
 | **INTERSECTION** | 교집합               | **INTERSECT**                                   |
-|                  | 중복을 허용하지 않음 | 연산자와 동일                                   |
+|                  | 중복을 허용하지 않음 | 연산자와 동일.                                  |
 |                  |                      | **INTERSECTION ALL**                            |
 |                  |                      | 이면 중복된 값을 포함한 모든 결과 인스턴스 출력 |
 +------------------+----------------------+-------------------------------------------------+
@@ -73,7 +75,9 @@ UNION, DIFFERENCE, INTERSECTION
     SELECT id, name FROM nojoin_tbl_1
     UNION
     SELECT id, name FROM nojoin_tbl_2;
-     
+
+::
+    
                id  name
     ===================================
                 1  'Kim'
@@ -87,11 +91,15 @@ UNION, DIFFERENCE, INTERSECTION
                 9  'Edwin'
                10  'Edwin'
      
+.. code-block:: sql
+
     --Using UNION ALL not eliminating duplicate selected rows
     SELECT id, name FROM nojoin_tbl_1
     UNION ALL
     SELECT id, name FROM nojoin_tbl_2;
      
+::
+    
                id  name
     ===================================
                 1  'Kim'
@@ -108,11 +116,15 @@ UNION, DIFFERENCE, INTERSECTION
                 9  'Edwin'
                10  'Edwin'
      
+.. code-block:: sql
+
     --Using DEFFERENCE to get only rows returned by the first query but not by the second
     SELECT id, name FROM nojoin_tbl_1
     DIFFERENCE
     SELECT id, name FROM nojoin_tbl_2;
      
+::
+    
                id  name
     ===================================
                 1  'Kim'
@@ -120,11 +132,15 @@ UNION, DIFFERENCE, INTERSECTION
                 3  'Jonas'
                 4  'Smith'
      
+.. code-block:: sql
+
     --Using INTERSECTION to get only those rows returned by both queries
     SELECT id, name FROM nojoin_tbl_1
     INTERSECT
     SELECT id, name FROM nojoin_tbl_2;
      
+::
+    
                id  name
     ===================================
                 5  'Kim'

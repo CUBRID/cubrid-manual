@@ -35,8 +35,10 @@ The following is the result of executing the query in the *demodb* database.
 .. code-block:: sql
 
     SHOW TABLES;
+
+::
     
-      Tables_in_demodb
+    Tables_in_demodb
     ======================
       'athlete'
       'code'
@@ -49,8 +51,12 @@ The following is the result of executing the query in the *demodb* database.
       'record'
       'stadium'
      
+.. code-block:: sql
+
     SHOW FULL TABLES;
     
+::
+
       Tables_in_demodb     Table_type
     ============================================
       'athlete'             'BASE TABLE'
@@ -64,8 +70,12 @@ The following is the result of executing the query in the *demodb* database.
       'record'              'BASE TABLE'
       'stadium'             'BASE TABLE'
      
+.. code-block:: sql
+
     SHOW FULL TABLES LIKE '%c%';
     
+::
+
       Tables_in_demodb      Table_type
     ============================================
       'code'                'BASE TABLE'
@@ -73,13 +83,16 @@ The following is the result of executing the query in the *demodb* database.
       'participant'         'BASE TABLE'
       'record'              'BASE TABLE'
      
+.. code-block:: sql
+
     SHOW FULL TABLES WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';
     
+::
+
       Tables_in_demodb      Table_type
     ============================================
       'code'                'BASE TABLE'
       'record'              'BASE TABLE'
-
 
 .. _show-columns-statement:
 
@@ -115,6 +128,8 @@ The following is the result of a query in the *demodb* database.
 
     SHOW COLUMNS FROM athlete;
     
+::
+
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
@@ -123,21 +138,33 @@ The following is the result of a query in the *demodb* database.
       'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
       'event'               'VARCHAR(30)'         'YES'      ''           NULL                  ''
      
+.. code-block:: sql
+
     SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
     
+::
+
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
       'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
      
+.. code-block:: sql
+
     SHOW COLUMNS FROM athlete  WHERE "type" = 'INTEGER' and "key"='PRI' AND extra='auto_increment';
     
+::
+
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
     
+.. code-block:: sql
+
     SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
     
+::
+
       Field                 Type                  Collation             Null      Key         Default               Extra
     ====================================================================================================================================
       'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
@@ -174,19 +201,25 @@ The following is the result of a query in the *demodb* database.
 
     SHOW INDEX IN athlete;
     
+::
+
        Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type
     ==========================================================================================================================================
      'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'
      
-    CREATE TABLE t1( i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
+.. code-block:: sql
+
+    CREATE TABLE t1 (i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
      
-    CREATE INDEX i_t1_i1 ON t1(i1 DESC);
-    CREATE INDEX i_t1_s1 ON t1(s1(7));
-    CREATE INDEX i_t1_i1_s1 ON t1(i1,s1);
-    CREATE UNIQUE INDEX i_t1_i2_s2 ON t1(i2,s2);
+    CREATE INDEX i_t1_i1 ON t1 (i1 DESC);
+    CREATE INDEX i_t1_s1 ON t1 (s1 (7));
+    CREATE INDEX i_t1_i1_s1 ON t1 (i1, s1);
+    CREATE UNIQUE INDEX i_t1_i2_s2 ON t1 (i2, s2);
      
     SHOW INDEXES FROM t1;
     
+::
+
       Table  Non_unique  Key_name          Seq_in_index  Column_name   Collation   Cardinality     Sub_part    Packed   Null    Index_type
     ==========================================================================================================================================
       't1'           0  'i_t1_i2_s2'              1      'i2'          'A'            0               NULL        NULL     'NO'    'BTREE'
@@ -196,7 +229,7 @@ The following is the result of a query in the *demodb* database.
       't1'           1  'i_t1_i1'                 1      'i1'          NULL           0               NULL        NULL     'YES'   'BTREE'
       't1'           1  'i_t1_i1_s1'              1      'i1'          'A'            0               NULL        NULL     'YES'   'BTREE'
       't1'           1  'i_t1_i1_s1'              2      's1'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           1  'i_t1_s1'                 1      's1'          'A'            0                  7        NULL     'YES'   'BTREE'
+      't1'           1  'i_t1_s1'                 1      's1'          'A'            0      
 
 .. _show-collation-statement:
  
@@ -223,6 +256,8 @@ The following shows **SHOW COLLATION** syntax and examples.
 
     SHOW COLLATION;
 
+::
+
       Collation             Charset                        Id  Built_in              Expansions            Strength
     ===========================================================================================================================
       'euckr_bin'           'euckr'                         8  'Yes'                 'No'                  'Not applicable'
@@ -248,8 +283,12 @@ The following shows **SHOW COLLATION** syntax and examples.
       'utf8_tr_cs_uca'      'utf8'                        205  'No'                  'No'                  'Quaternary'
       'utf8_vi_cs'          'utf8'                        221  'No'                  'No'                  'Quaternary'
 
+.. code-block:: sql
+
     SHOW COLLATION LIKE '%_ko_%';
     
+::
+
       Collation             Charset                        Id  Built_in              Expansions            Strength
     ===========================================================================================================================
       'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
@@ -272,6 +311,8 @@ The **SHOW GRANT** statement displays the permissions associated with the databa
      
     SHOW GRANTS FOR user1;
     
+::
+
       Grants for USER1
     ======================
       'GRANT INSERT, SELECT ON testgrant TO USER1'
@@ -289,6 +330,8 @@ When a table name is specified, the **SHOW CREATE TABLE** statement outputs the 
 
     SHOW CREATE TABLE nation;
      
+::
+
       TABLE                 CREATE TABLE
     ============================================
       'nation'               'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, 
@@ -313,6 +356,8 @@ The following example shows the result of executing query in the *demodb* databa
 
     SHOW CREATE VIEW db_class;
      
+::
+
       View              Create View
     ========================================
       'db_class'       'SELECT c.class_name, CAST(c.owner.name AS VARCHAR(255)), CASE c.class_type WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE
@@ -332,11 +377,12 @@ SHOW EXEC STATISTICS
 The **SHOW EXEC STATISTICS** statement outputs statistics information of executing query.
 
 *   To start collecting **@collect_exec_stats** statistics information, configure the value of session variable **@collect_exec_stats** to 1; to stop, configure it to 0.
+
 *   It outputs the result of collecting statistics information.
 
-*   The **SHOW EXEC STATISTICS** statement outputs four part of data page statistics information; data_page_fetches, data_page_dirties, data_page_ioreads, and data_page_iowrites. The result columns consist of variable column (name of statistics name) and value column (value of statistics value). Once the **SHOW EXEC STATISTICS** statement is executed, the statistics information which has been accumulated is initialized.
+    *   The **SHOW EXEC STATISTICS** statement outputs four part of data page statistics information; data_page_fetches, data_page_dirties, data_page_ioreads, and data_page_iowrites. The result columns consist of variable column (name of statistics name) and value column (value of statistics value). Once the **SHOW EXEC STATISTICS** statement is executed, the statistics information which has been accumulated is initialized.
 
-*   The **SHOW EXEC STATISTICS ALL** statement outputs all items of statistics information.
+    *   The **SHOW EXEC STATISTICS ALL** statement outputs all items of statistics information.
 
 For details, see :ref:`statdump`.
 
@@ -351,10 +397,12 @@ The following example shows the result of executing query in the *demodb* databa
     -- set session variable @collect_exec_stats as 1 to start collecting the statistical information.
     SET @collect_exec_stats = 1;
     SELECT * FROM db_class;
-    ...
      
     -- print the statistical information of the data pages.
     SHOW EXEC STATISTICS;
+    
+::
+
     variable value
     ============================================
     'data_page_fetches' 332
@@ -362,12 +410,15 @@ The following example shows the result of executing query in the *demodb* databa
     'data_page_ioreads' 18
     'data_page_iowrites' 28
      
+.. code-block:: sql
+
     SELECT * FROM db_index;
-    ...
-     
+    
     -- print all of the statistical information.
     SHOW EXEC STATISTICS ALL;
-     
+
+::
+    
     variable value
     ============================================
     'file_creates' 0

@@ -7,7 +7,9 @@ CREATE VIEW
 
 A view is a virtual table that does not exist physically. You can create a view by using an existing table or a query. **VIEW** and **VCLASS** are used interchangeably.
 
-Use **CREATE VIEW** statement to create a view. For how to write view name, see :doc:`/sql/identifier`. ::
+Use **CREATE VIEW** statement to create a view. For how to write view name, see :doc:`/sql/identifier`. 
+
+::
 
     CREATE [OR REPLACE] {VIEW | VCLASS} <view_name>
                                [ <subclass_definition> ]
@@ -71,24 +73,34 @@ Use **CREATE VIEW** statement to create a view. For how to write view name, see 
     CREATE VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL WITH CHECK OPTION;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
                 2  '222-2222'
                 3  '333-3333'
      
+.. code-block:: sql
+
     --WITH CHECK OPTION doesn’t allow updating column value which violates WHERE clause
     UPDATE b_view SET phone=NULL;
      
+::
+
     ERROR: Check option exception on view b_view.
      
      
+.. code-block:: sql
+
     --creating view which name is as same as existing view name
     CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC;
      
     --the existing view has been replaced as a new view by OR REPLACE keyword
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 5  NULL
@@ -109,7 +121,6 @@ A virtual table is updatable if it satisfies the following conditions:
 *   The **DISTINCT** or **UNIQUE** statement should not be included.
 *   The **GROUP BY... HAVING** statement should not be included.
 *   Aggregate functions such as **SUM** or **AVG** should not be included.
-
 *   The entire query must consist of queries that can be updated by **UNION ALL**, not by **UNION**. However, the table should exist only in one of the queries that constitute **UNION ALL**.
 *   If a record is inserted into a view created by using the **UNION ALL** statement, the system determines into which table the record will be inserted. This cannot be done by the user. To control this, the user must manually insert the row or create a separate view for insertion.
 
@@ -144,6 +155,8 @@ You can add a new query to a query specification by using the **ADD QUERY** clau
 
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -152,10 +165,13 @@ You can add a new query to a query specification by using the **ADD QUERY** clau
                 4  NULL
                 5  NULL
      
+.. code-block:: sql
      
     ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -183,6 +199,8 @@ You can change the **SELECT** query defined in the virtual table by using the **
     ALTER VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -210,6 +228,8 @@ You can change the query defined in the query specification by using the **CHANG
     ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id = 3;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -221,10 +241,14 @@ You can change the query defined in the query specification by using the **CHANG
                 2  '222-2222'
                 3  '333-3333'
      
+.. code-block:: sql
+
     --altering view changing query number 2
     ALTER VIEW b_view CHANGE QUERY 2 SELECT * FROM a_tbl WHERE phone IS NULL;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -248,6 +272,8 @@ You can drop a query defined in the query specification by using the **DROP QUER
     ALTER VIEW b_view DROP QUERY 2,3;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'

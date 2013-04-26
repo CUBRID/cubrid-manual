@@ -9,8 +9,7 @@ Simple Comparison Expression
 
 A comparison expression is an expression that is included in the **WHERE** clause of the **SELECT**, **UPDATE** and **DELETE** statements, and in the **HAVING** clause of the **SELECT** statement. There are simple comparison, **ANY** / **SOME** / **ALL**, **BETWEEN**, **EXISTS**, **IN** / **NOT IN**, **LIKE** and **IS NULL** comparison expressions, depending on the kinds of the operators combined.
 
-A simple comparison expression compares two comparable data values. Expressions or subqueries are specified as operands, and the comparison expression always returns
-**NULL** if one of the operands is **NULL**. The following table shows operators that can be used in the simple comparison expressions. For details, see :doc:`/sql/function/comparison_op`.
+A simple comparison expression compares two comparable data values. Expressions or subqueries are specified as operands, and the comparison expression always returns **NULL** if one of the operands is **NULL**. The following table shows operators that can be used in the simple comparison expressions. For details, see :doc:`/sql/function/comparison_op`.
 
 **Comparison Operators**
 
@@ -65,6 +64,8 @@ When a comparison operation is performed on **NULL** in a comparison expression 
     --selecting rows where department is sales or devel
     SELECT * FROM condition_tbl WHERE dept_name = ANY{'devel','sales'};
     
+::    
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -73,13 +74,21 @@ When a comparison operation is performed on **NULL** in a comparison expression 
                 4  'Smith     '          'devel'                   5500000
                 6  'Smith     '          'devel'                   2400000
      
+.. code-block:: sql
+
     --selecting rows comparing NULL value in the ALL group conditions
     SELECT * FROM condition_tbl WHERE salary > ALL{3000000, 4000000, NULL};
+
+::
     
     There are no results.
      
+.. code-block:: sql
+
     --selecting rows comparing NULL value in the ANY group conditions
     SELECT * FROM condition_tbl WHERE salary > ANY{3000000, 4000000, NULL};
+
+::
     
                id  name                  dept_name                  salary
     ======================================================================
@@ -88,11 +97,16 @@ When a comparison operation is performed on **NULL** in a comparison expression 
                 4  'Smith     '          'devel'                   5500000
                 5  'Kim       '          'account'                 3800000
      
+.. code-block:: sql
+
     --selecting rows where salary*0.9 is less than those salary in devel department
     SELECT * FROM condition_tbl WHERE (
       (0.9 * salary) < ALL (SELECT salary FROM condition_tbl
       WHERE dept_name = 'devel')
     );
+
+::
+    
                id  name                  dept_name                  salary
     ======================================================================
                 6  'Smith     '          'devel'                   2400000
@@ -104,7 +118,9 @@ BETWEEN
 
 The **BETWEEN** makes a comparison to determine whether the data value on the left exists between two data values specified on the right. It returns **TRUE** even when the data value on the left is the same as a boundary value of the comparison target range. If **NOT** comes before the **BETWEEN** keyword, the result of a **NOT** operation on the result of the **BETWEEN** operation is returned.
 
-*i* **BETWEEN** *g* **AND** *m* and the compound condition *i* **>= g AND** *i* <= *m* have the same effect. ::
+*i* **BETWEEN** *g* **AND** *m* and the compound condition *i* **>= g AND** *i* <= *m* have the same effect. 
+
+::
 
     expression [ NOT ] BETWEEN expression AND expression
 
@@ -116,24 +132,34 @@ The **BETWEEN** makes a comparison to determine whether the data value on the le
     SELECT * FROM condition_tbl WHERE salary BETWEEN 3000000 AND 4000000;
     SELECT * FROM condition_tbl WHERE (salary >= 3000000) AND (salary <= 4000000);
     
+::
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
                 2  'Moy       '          'sales'                   3000000
                 5  'Kim       '          'account'                 3800000
      
+.. code-block:: sql
+
     --selecting rows where salary < 3000000 or salary > 4000000
     SELECT * FROM condition_tbl WHERE salary NOT BETWEEN 3000000 AND 4000000;
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 3  'Jones     '          'sales'                   5400000
                 4  'Smith     '          'devel'                   5500000
                 6  'Smith     '          'devel'                   2400000
      
+.. code-block:: sql
+
     --selecting rows where name starts from A to E
     SELECT * FROM condition_tbl WHERE name BETWEEN 'A' AND 'E';
-    
+
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 7  'Brown     '          'account'                    NULL
@@ -155,14 +181,20 @@ The **EXISTS** returns **TRUE** if one or more results of the execution of the s
     SELECT 'raise' FROM db_root WHERE EXISTS(
     SELECT * FROM condition_tbl WHERE salary < 2500000);
     
+::
+    
       'raise'
     ======================
       'raise'
      
+.. code-block:: sql
+
     --selecting rows using NOT EXISTS and subquery
     SELECT 'raise' FROM db_root WHERE NOT EXISTS(
     SELECT * FROM condition_tbl WHERE salary < 2500000);
-    
+
+::
+
     There are no results.
 
 .. _in-expr:
@@ -183,6 +215,8 @@ The **IN** compares to determine whether the single data value on the left is in
     SELECT * FROM condition_tbl WHERE dept_name IN {'devel','sales'};
     SELECT * FROM condition_tbl WHERE dept_name = ANY{'devel','sales'};
     
+::
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -191,9 +225,13 @@ The **IN** compares to determine whether the single data value on the left is in
                 4  'Smith     '          'devel'                   5500000
                 6  'Smith     '          'devel'                   2400000
      
+.. code-block:: sql
+
     --selecting rows where department is neither sales nor devel
     SELECT * FROM condition_tbl WHERE dept_name NOT IN {'devel','sales'};
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 5  'Kim       '          'account'                 3800000
@@ -215,13 +253,19 @@ The **IS NULL** compares to determine whether the expression specified on the le
     --selecting rows where salary is NULL
     SELECT * FROM condition_tbl WHERE salary IS NULL;
     
+::
+    
                id  name                  dept_name                  salary
     ======================================================================
                 7  'Brown     '          'account'                    NULL
      
+.. code-block:: sql
+
     --selecting rows where salary is NOT NULL
     SELECT * FROM condition_tbl WHERE salary IS NOT NULL;
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -231,8 +275,13 @@ The **IS NULL** compares to determine whether the expression specified on the le
                 5  'Kim       '          'account'                 3800000
                 6  'Smith     '          'devel'                   2400000
      
+.. code-block:: sql
+
     --simple comparison operation returns NULL when operand is NULL
     SELECT * FROM condition_tbl WHERE salary = NULL;
+    
+::
+
     There are no results.
 
 .. _like-expr:
@@ -263,21 +312,31 @@ Whether to detect the escape characters of the LIKE conditional expression is de
     --selection rows where name contains lower case 's', not upper case
     SELECT * FROM condition_tbl WHERE name LIKE '%s%';
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 3  'Jones     '          'sales'                   5400000
      
+.. code-block:: sql
+
     --selection rows where second letter is 'O' or 'o'
     SELECT * FROM condition_tbl WHERE UPPER(name) LIKE '_O%';
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 2  'Moy       '          'sales'                   3000000
                 3  'Jones     '          'sales'                   5400000
      
+.. code-block:: sql
+
     --selection rows where name is 3 characters
     SELECT * FROM condition_tbl WHERE name LIKE '___';
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -294,8 +353,11 @@ The **REGEXP** and **RLIKE** are used interchangeably; a regular expressions is 
 The following list describes basic characteristics of regular expressions.
 
 *   "." matches any single character(including new-line and carriage-return).
+
 *   "[...]" matches one of characters within square brackets. For example, "[abc]" matches "a", "b", or "c". To represent a range of characters, use a dash (-). "[a-z]" matches any alphabet letter whereas "[0-9]" matches any single number.
+
 *   "*" matches 0 or more instances of the thing proceeding it. For example, "xabc*" matches "xab", "xabc", "xabcc", and "xabcxabc" etc. "[0-9][0-9]*" matches any numbers, and ".*" matches every string.
+
 *   To match special characters such as "\\n", "\\t", "\\r", and "\\", some must be escaped with the backslash (\\) by specifying the value of **no_backslash_escapes** (default: yes) to **no**. For details on **no_backslash_escapes**, see :ref:`escape-characters`.
 
 The difference between **REGEXP** and **LIKE** are as follows:
@@ -303,18 +365,38 @@ The difference between **REGEXP** and **LIKE** are as follows:
 *  The **LIKE** operator succeeds only if the pattern matches the entire value.
 *  The **REGEXP** operator succeeds if the pattern matches anywhere in the value. To match the entire value, you should use "^" at the beginning and "$" at the end.
 *  The **LIKE** operator is case sensitive, but patterns of regular expressions in **REGEXP** is not case sensitive. To enable case sensitive, you should use **REGEXP BINARY** statement.
-*  **REGEXP**, **REGEXP BINARY** works as ASCII encoding without considering the collation of operands. ::
+*  **REGEXP**, **REGEXP BINARY** works as ASCII encoding without considering the collation of operands.
+    
+.. code-block:: sql
     
     SELECT ('a' collate utf8_en_ci REGEXP BINARY 'A' collate utf8_en_ci); 
+
+::
+
     0
+
+.. code-block:: sql
     
     SELECT ('a' collate utf8_en_cs REGEXP BINARY 'A' collate utf8_en_cs); 
+
+::
+
     0
     
+.. code-block:: sql
+
     SELECT ('a' COLLATE iso88591_bin REGEXP 'A' COLLATE iso88591_bin);
+
+::
+
     1
     
+.. code-block:: sql
+
     SELECT ('a' COLLATE iso88591_bin REGEXP BINARY 'A' COLLATE iso88591_bin);
+
+::
+
     0
 
 In the syntax below, if *expression* matches *pattern*, 1 is returned; otherwise, 0 is returned. If either *expression* or *pattern* is **NULL**, **NULL** is returned.
@@ -336,6 +418,8 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
     -- But used in WHERE clause, no need parentheses.
     -- case insensitive, except when used with BINARY.
     SELECT name FROM athlete where name REGEXP '^[a-d]';
+
+::
     
     name
     ======================
@@ -348,9 +432,14 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
     'Bukic Perica'
     'Abdullayev Namik'
      
+.. code-block:: sql
+
     -- \n : match a special character, when no_backslash_escapes=no
     SELECT ('new\nline' REGEXP 'new
     line');
+
+
+::
     
     ('new
     line' regexp 'new
@@ -358,68 +447,109 @@ The second syntax has the same meaning as the third syntax, which both syntaxes 
     =====================================
     1
      
+.. code-block:: sql
+
     -- ^ : match the beginning of a string
     SELECT ('cubrid dbms' REGEXP '^cub');
     
+::
+
     ('cubrid dbms' regexp '^cub')
     ===============================
     1
      
+.. code-block:: sql
+
     -- $ : match the end of a string
     SELECT ('this is cubrid dbms' REGEXP 'dbms$');
     
+::
+
     ('this is cubrid dbms' regexp 'dbms$')
     ========================================
     1
      
+.. code-block:: sql
+
     --.: match any character
     SELECT ('cubrid dbms' REGEXP '^c.*$');
     
+::
+
     ('cubrid dbms' regexp '^c.*$')
     ================================
     1
      
+.. code-block:: sql
+
     -- a+ : match any sequence of one or more a characters. case insensitive.
     SELECT ('Aaaapricot' REGEXP '^A+pricot');
     
+::
+
     ('Aaaapricot' regexp '^A+pricot')
     ================================
     1
      
+.. code-block:: sql
+
     -- a? : match either zero or one a character.
     SELECT ('Apricot' REGEXP '^Aa?pricot');
     
+::
+
     ('Apricot' regexp '^Aa?pricot')
     ==========================
     1
+    
+.. code-block:: sql
+
     SELECT ('Aapricot' REGEXP '^Aa?pricot');
     
+::
+
     ('Aapricot' regexp '^Aa?pricot')
     ===========================
     1
      
+.. code-block:: sql
+
     SELECT ('Aaapricot' REGEXP '^Aa?pricot');
     
+::
+
     ('Aaapricot' regexp '^Aa?pricot')
     ============================
     0
      
+.. code-block:: sql
+
     -- (cub)* : match zero or more instances of the sequence abc.
     SELECT ('cubcub' REGEXP '^(cub)*$');
     
+::
+
     ('cubcub' regexp '^(cub)*$')
     ==========================
     1
      
+.. code-block:: sql
+
     -- [a-dX], [^a-dX] : matches any character that is (or is not, if ^ is used) either a, b, c, d or X.
     SELECT ('aXbc' REGEXP '^[a-dXYZ]+');
     
+::
+
     ('aXbc' regexp '^[a-dXYZ]+')
     ==============================
     1
      
+.. code-block:: sql
+
     SELECT ('strike' REGEXP '^[^a-dXYZ]+$');
     
+::
+
     ('strike' regexp '^[^a-dXYZ]+$')
     ================================
     1
@@ -502,6 +632,8 @@ The data type for a value returned by the **CASE** expression is determined base
            END
     FROM case_tbl;
     
+::
+
                 a  case when a=1 then 'one' when a=2 then 'two' else 'other' end
     ===================================
                 1  'one'
@@ -509,6 +641,8 @@ The data type for a value returned by the **CASE** expression is determined base
                 3  'other'
              NULL  'other'
      
+.. code-block:: sql
+
     --case operation with a simple when clause
     SELECT a,
            CASE a WHEN 1 THEN 'one'
@@ -517,6 +651,8 @@ The data type for a value returned by the **CASE** expression is determined base
            END
     FROM case_tbl;
     
+::
+
                 a  case a when 1 then 'one' when 2 then 'two' else 'other' end
     ===================================
                 1  'one'
@@ -524,7 +660,8 @@ The data type for a value returned by the **CASE** expression is determined base
                 3  'other'
              NULL  'other'
      
-     
+.. code-block:: sql
+
     --result types are converted to a single type containing all of significant figures
     SELECT a,
            CASE WHEN a=1 THEN 1
@@ -533,6 +670,8 @@ The data type for a value returned by the **CASE** expression is determined base
            END
     FROM case_tbl;
     
+::
+
                 a  case when a=1 then 1 when a=2 then 1.2345 else 1.234567890 end
     ===================================
                 1  1.000000000
@@ -540,6 +679,8 @@ The data type for a value returned by the **CASE** expression is determined base
                 3  1.234567890
              NULL  1.234567890
      
+.. code-block:: sql
+
     --an error occurs when result types are not convertible
     SELECT a,
            CASE WHEN a=1 THEN 'one'
@@ -548,6 +689,8 @@ The data type for a value returned by the **CASE** expression is determined base
            END
     FROM case_tbl;
     
+::
+
     ERROR: Cannot coerce 'one' to type double.
 
 ********************
@@ -584,6 +727,8 @@ For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FL
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -591,9 +736,13 @@ For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FL
                 3
              NULL
      
-    --substituting a default value 10.0000 for NULL value
+.. code-block:: sql
+
+    --substituting a default value 10.0000 for NULL valuse
     SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
     
+::
+
                 a  coalesce(a, 10.0000)
     ===================================
                 1  1.0000
@@ -624,6 +773,8 @@ DECODE
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -631,9 +782,13 @@ DECODE
                 3
              NULL
      
+.. code-block:: sql
+
     --Using DECODE function to compare expression and search values one by one
     SELECT a, DECODE(a, 1, 'one', 2, 'two', 'other') FROM case_tbl;
     
+::
+
                 a  decode(a, 1, 'one', 2, 'two', 'other')
     ===================================
                 1  'one'
@@ -642,9 +797,13 @@ DECODE
              NULL  'other'
      
      
+.. code-block:: sql
+
     --result types are converted to a single type containing all of significant figures
     SELECT a, DECODE(a, 1, 1, 2, 1.2345, 1.234567890) FROM case_tbl;
     
+::
+
                 a  decode(a, 1, 1, 2, 1.2345, 1.234567890)
     ===================================
                 1  1.000000000
@@ -652,9 +811,13 @@ DECODE
                 3  1.234567890
              NULL  1.234567890
      
+.. code-block:: sql
+
     --an error occurs when result types are not convertible
     SELECT a, DECODE(a, 1, 'one', 2, 'two', 1.2345) FROM case_tbl;
      
+::
+
     ERROR: Cannot coerce 'one' to type double.
 
 GREATEST
@@ -679,6 +842,8 @@ The following example shows how to retrieve the number of every medals and the h
     FROM participant
     WHERE nation_code = 'KOR';
     
+::
+
              gold       silver       bronze  greatest(gold, silver, bronze)
     =======================================================================
                 9           12            9                              12
@@ -699,7 +864,6 @@ IF
     :param expression3: the value to be returned when *expression1* is not true
     :rtype: type of *expression2* or *expression3*
 
-
 **IF** (*a*, *b*, *c*) has the same meaning as the **CASE** expression in the following example: ::
 
     CASE WHEN a IS TRUE THEN b
@@ -710,6 +874,8 @@ IF
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -717,9 +883,13 @@ IF
                 3
              NULL
      
-    --IF function returns the second expression when the first is TRUE
+.. code-block:: sql
+
+    --IF function returns the second expression when the fist is TRUE
     SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
     
+::
+
                 a   if(a=1, 'one', 'other')
     ===================================
                 1  'one'
@@ -727,9 +897,13 @@ IF
                 3  'other'
              NULL  'other'
      
+.. code-block:: sql
+
     --If function in WHERE clause
     SELECT * FROM case_tbl WHERE IF(a=1, 1, 2) = 1;
     
+::
+
                 a
     =============
                 1
@@ -765,6 +939,8 @@ For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a,
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -772,9 +948,13 @@ For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a,
                 3
              NULL
      
+.. code-block:: sql
+
     --returning a specific value when a is NULL
     SELECT a, NVL(a, 10.0000) FROM case_tbl;
     
+::
+
                 a  nvl(a, 10.0000)
     ===================================
                 1  1.0000
@@ -782,9 +962,13 @@ For example, if a type of a is **INT** and b is **BIGINT**, then **IFNULL** (a,
                 3  3.0000
              NULL  10.0000
      
+.. code-block:: sql
+
     --IFNULL can be used instead of NVL and return values are converted to the string type
     SELECT a, IFNULL(a, 'UNKNOWN') FROM case_tbl;
     
+::
+
                 a   ifnull(a, 'UNKNOWN')
     ===================================
                 1  '1'
@@ -802,14 +986,16 @@ ISNULL
     :param expression: An arithmetic function that has a single-value column, path expression (ex.: *tbl_name.col_name*), constant value is specified.
     :rtype: INT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        --Using ISNULL function to select rows with NULL value
-        SELECT * FROM condition_tbl WHERE ISNULL(salary);
+    --Using ISNULL function to select rows with NULL value
+    SELECT * FROM condition_tbl WHERE ISNULL(salary);
         
-                   id  name                  dept_name                  salary
-        ======================================================================
-                    7  'Brown     '          'account'                    NULL
+::
+
+               id  name                  dept_name                  salary
+    ======================================================================
+                7  'Brown     '          'account'                    NULL
 
 LEAST
 =====
@@ -832,6 +1018,8 @@ The following example shows how to retrieve the number of every medals and the l
     SELECT gold, silver , bronze, LEAST(gold, silver, bronze) FROM participant
     WHERE nation_code = 'KOR';
     
+::
+
              gold       silver       bronze  least(gold, silver, bronze)
     ====================================================================
                 9           12            9                            9
@@ -862,6 +1050,8 @@ NULLIF
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -869,9 +1059,13 @@ NULLIF
                 3
              NULL
      
+.. code-block:: sql
+
     --returning NULL value when a is 1
     SELECT a, NULLIF(a, 1) FROM case_tbl;
     
+::
+
                 a  nullif(a, 1)
     ===========================
                 1          NULL
@@ -879,16 +1073,24 @@ NULLIF
                 3             3
              NULL          NULL
      
+.. code-block:: sql
+
     --returning NULL value when arguments are same
     SELECT NULLIF (1, 1.000)  FROM db_root;
     
+::
+
       nullif(1, 1.000)
     ======================
       NULL
      
+.. code-block:: sql
+
     --returning the first value when arguments are not same
     SELECT NULLIF ('A', 'a')  FROM db_root;
     
+::
+
       nullif('A', 'a')
     ======================
       'A'
@@ -918,6 +1120,8 @@ For example, if a type of a is **INT**, b, **BIGINT**, and c, **SHORT**, then **
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -925,13 +1129,16 @@ For example, if a type of a is **INT**, b, **BIGINT**, and c, **SHORT**, then **
                 3
              NULL
      
+.. code-block:: sql
+
     --returning a specific value of INT type
     SELECT a, NVL2(a, a+1, 10.5678) FROM case_tbl;
     
+::
+
                 a  nvl2(a, a+1, 10.5678)
     ====================================
                 1                      2
                 2                      3
                 3                      4
              NULL                     11
-

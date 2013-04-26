@@ -140,27 +140,6 @@ The following shows the result of using connection strings above. ::
     *   The database connection in thread-based programming must be used independently each other.
     *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
 
-Using Object Identifiers (OIDs) and Collections
------------------------------------------------
-
-CUBRID ODBC driver is designed for relational DBMS so it does not support all characteristics of object-oriented DBMS. It is because CUBRID is an object-relational DBMS integrating relational and object-oriented data models.
-
-**Using OIDs**
-
-Because CUBRID ODBC driver regards an OID as a string (char(32)), you can use **INSERT**, **UPDATE**, and **DELETE** statements containing OIDs as follows. The OID string should be used with single quotes (''). In the example below, the domain of the member attribute is treated as an object (OID).
-
-.. code-block:: sql
-
-    insert into foo(member) values('@12|34|56')
-    delete from foo where member = '@12|34|56'
-    update foo set age = age + 1 where member = '@12|34|56'
-
-**Using Collections**
-
-There are three types of collections which are **SET**, **MULTISET**, and **SEQUENCE**. Because CUBRID ODBC driver regards a collection as a string (longvarchar), you can obtain collections with commas separated within braces such as "{value_1, value_2, ... value_n}" in the **SELECT** statement.
-
-.. note:: If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
-
 ASP Sample Program
 ==================
 

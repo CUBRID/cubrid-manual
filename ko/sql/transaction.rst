@@ -32,15 +32,19 @@ CUBRID는 많은 사용자가 동시에 데이터베이스에 접근하도록 �
 
 .. code-block:: sql
 
-    ;autocommit off
-    AUTOCOMMIT IS OFF
+    -- ;autocommit off
+    -- AUTOCOMMIT IS OFF
+    
     SELECT name, seats
     FROM stadium WHERE code IN (30138, 30139, 30140);
-       name                        seats
-    ==================================
-        'Athens Olympic Tennis Centre'         3200
-        'Goudi Olympic Hall'         5000
-        'Vouliagmeni Olympic Centre'         3400
+    
+::
+
+        name                                seats
+    ============================================
+        'Athens Olympic Tennis Centre'      3200
+        'Goudi Olympic Hall'                5000
+        'Vouliagmeni Olympic Centre'        3400
 
 3개의 **UPDATE** 문은 각각의 stadium의 현재 seats을 가지고 있도록 한다. 명령이 수행되면 정확하게 입력이 되었는지 확인하기 위해 seats 테이블의 관련된 칼럼을 검색할 수 있다.
 
@@ -51,11 +55,14 @@ CUBRID는 많은 사용자가 동시에 데이터베이스에 접근하도록 �
     WHERE code IN (30138, 30139, 30140);
      
     SELECT name, seats FROM stadium WHERE code in (30138, 30139, 30140);
-        name                        seats
-    ===================================
-        'Athens Olympic Tennis Centre'         4200
-        'Goudi Olympic Hall'         6000
-        'Vouliagmeni Olympic Centre'         4400
+    
+::
+
+        name                                seats
+    ============================================
+        'Athens Olympic Tennis Centre'      4200
+        'Goudi Olympic Hall'                6000
+        'Vouliagmeni Olympic Centre'        4400
 
 만약 갱신이 제대로 이루어 졌다면 변경을 영구적으로 만들 수 있다. 이때 아래처럼 **COMMIT WORK** 문을 사용한다.
 
@@ -82,8 +89,17 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
 
 .. code-block:: sql
 
-    ALTER TABLE code DROP s_name;
-    INSERT INTO code (s_name, f_name) VALUES ('D','Diamond');
+    -- csql> ;autocommit off
+    CREATE TABLE code2 (
+        s_name  CHAR(1),
+        f_name  VARCHAR(10)
+    );
+    COMMIT;
+    
+    ALTER TABLE code2 DROP s_name;
+    INSERT INTO code2 (s_name, f_name) VALUES ('D','Diamond');
+    
+::
      
     ERROR: s_name is not defined.
 
@@ -97,7 +113,7 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
 
 .. code-block:: sql
 
-    ALTER TABLE code drop s_name;
+    ALTER TABLE code DROP s_name;
     INSERT INTO code (f_name) VALUES ('Diamond');
 
     COMMIT WORK;
@@ -132,6 +148,8 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
 
 .. code-block:: sql
 
+    -- csql> ;autocommit off
+    
     CREATE TABLE athlete2 (name VARCHAR(40), gender CHAR(1), nation_code CHAR(3), event VARCHAR(30));
     INSERT INTO athlete2(name, gender, nation_code, event)
     VALUES ('Lim Kye-Sook', 'W', 'KOR', 'Hockey');
@@ -183,9 +201,9 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
      
     // set cursor holdability at the statement level which can override the connection’s
     PreparedStatement pStmt = conn.prepareStatement(sql,
-                                         ResultSet.TYPE_SCROLL_SENSITIVE,
-                                         ResultSet.CONCUR_UPDATABLE,
-     ResultSet.HOLD_CURSORS_OVER_COMMIT);
+                                        ResultSet.TYPE_SCROLL_SENSITIVE,
+                                        ResultSet.CONCUR_UPDATABLE,
+                                        ResultSet.HOLD_CURSORS_OVER_COMMIT);
  
 커밋 시점에 커서를 유지하지 않고 커서를 닫도록 설정하고 싶으면, 위의 예제에서 **ResultSet.HOLD_CURSORS_OVER_COMMIT** 대신 **ResultSet.CLOSE_CURSORS_AT_COMMIT** 를 설정한다.
 
@@ -291,29 +309,43 @@ CUBRID는 잠금의 개수를 줄이기 위해서 단위 잠금(granularity lock
 
 CUBRID는 트랜잭션이 수행하고자 하는 연산의 종류에 따라 획득하고자 하는 잠금 모드를 결정하며, 다른 트랜잭션에 의해 이미 선점된 잠금 모드의 종류에 따라 잠금 공유 여부를 결정한다. 이와 같은 잠금에 대한 결정은 시스템이 자동으로 수행하며, 사용자에 의한 수동 지정은 허용되지 않는다. CUBRID의 잠금 정보를 확인하기 위해서는 **cubrid lockdb** *db_name* 명령어를 사용하며, 자세한 내용은 :ref:`lockdb` 을 참고한다.
 
-* **공유 잠금(shared lock, S_LOCK)** : 객체에 대해 읽기 연산을 수행하기 전에 획득하며, 여러 트랜잭션이 동일 객체에 대해 획득할 수 있는 잠금이다.
+*   **공유 잠금(shared lock, S_LOCK)**
 
-  트랜잭션 T1이 특정 객체 X에 대해 읽기 연산을 수행하기 전에 공유 잠금을 먼저 획득하고, 트랜잭션 T1이 커밋되기 전이라도 읽기 연산을 완료하면 즉시 획득한 공유 잠금을 해제한다. 이때, 트랜잭션 T2, T3은 동시에 X에 대해 읽기 연산은 수행할 수 있으나 갱신 연산은 수행할 수 없다.
+    객체에 대해 읽기 연산을 수행하기 전에 획득하며, 여러 트랜잭션이 동일 객체에 대해 획득할 수 있는 잠금이다.
 
-* **배타 잠금(exclusive lock, X_LOCK)** : 객체에 대해 갱신 연산을 수행하기 전에 획득하며, 하나의 트랜잭션만 획득할 수 있는 잠금이다.
+    트랜잭션 T1이 특정 객체 X에 대해 읽기 연산을 수행하기 전에 공유 잠금을 먼저 획득하고, 트랜잭션 T1이 커밋되기 전이라도 읽기 연산을 완료하면 즉시 획득한 공유 잠금을 해제한다. 이때, 트랜잭션 T2, T3은 동시에 X에 대해 읽기 연산은 수행할 수 있으나 갱신 연산은 수행할 수 없다.
 
-  트랜잭션 T1이 특정 객체 X에 대해 갱신 연산을 수행하기 전에 배타 잠금을 먼저 획득하고, 갱신 연산을 완료하더라도 트랜잭션 T1이 커밋될 때까지 배타 잠금을 해제하지 않는다. 따라서, 트랜잭션 T2, T3은 트랜잭션 T1이 배타 잠금을 해제하기 전까지는 X에 대한 읽기 연산도 수행할 수 없다.
+*   **배타 잠금(exclusive lock, X_LOCK)**
 
-* **갱신 잠금(update lock, U_LOCK)** : 갱신 연산을 수행하기 전, 조건절에서 읽기 연산을 수행할 때 획득하는 잠금이다.
+    객체에 대해 갱신 연산을 수행하기 전에 획득하며, 하나의 트랜잭션만 획득할 수 있는 잠금이다.
 
-  예를 들어 **WHERE** 절과 결합된 **UPDATE** 문을 수행하는 경우, **WHERE** 절에서 인덱스 검색을 하거나 풀 스캔 검색을 수행할 때 행 단위로 갱신 잠금을 획득하고, 조건을 만족하는 결과 행들에 대해서만 배타 잠금을 획득하여 갱신 연산을 수행한다. 이처럼 갱신 잠금은 실제 갱신 연산을 수행할 때 배타 잠금으로 변환되며, 이는 다른 트랜잭션이 동일한 객체에 대해 읽기 연산을 수행하지 못하도록 하므로 준 배타 잠금이라고 할 수 있다.
+    트랜잭션 T1이 특정 객체 X에 대해 갱신 연산을 수행하기 전에 배타 잠금을 먼저 획득하고, 갱신 연산을 완료하더라도 트랜잭션 T1이 커밋될 때까지 배타 잠금을 해제하지 않는다. 따라서, 트랜잭션 T2, T3은 트랜잭션 T1이 배타 잠금을 해제하기 전까지는 X에 대한 읽기 연산도 수행할 수 없다.
 
-* **의도 잠금(내재된 잠금, intention lock)**: 특정 단위의 객체 X에 걸리는 잠금을 보호하기 위하여 X보다 상위 단위의 객체에 내재적으로 설정하는 잠금을 의미한다.
+*   **갱신 잠금(update lock, U_LOCK)** 
 
-  예를 들어, 특정 행에 공유 잠금이 요청되면 이보다 계층적으로 상위에 있는 테이블에도 의도 공유 잠금을 함께 설정하여 다른 트랜잭션에 의해 테이블이 잠금되는 것을 예방한다. 따라서, 의도 잠금은 계층적으로 가장 낮은 단위인 행에 대해서는 설정되지 않으며, 이보다 높은 단위의 객체에 대해서만 설정된다. 의도 잠금의 종류는 다음과 같다.
+    갱신 연산을 수행하기 전, 조건절에서 읽기 연산을 수행할 때 획득하는 잠금이다.
 
-  * **의도 공유 잠금(intention shared lock, IS_LOCK)** : 특정 행에 공유 잠금이 설정됨에 따라 상위 객체인 테이블에 의도 공유 잠금이 설정되면, 다른 트랜잭션은 칼럼을 추가하거나 테이블 이름을 변경하는 등의 테이블 스키마를 변경할 수 없고, 모든 행을 갱신하는 작업을 수행할 수 없다. 그러나 일부 행을 갱신하는 작업이나, 모든 행을 조회하는 작업은 허용된다.
+    예를 들어 **WHERE** 절과 결합된 **UPDATE** 문을 수행하는 경우, **WHERE** 절에서 인덱스 검색을 하거나 풀 스캔 검색을 수행할 때 행 단위로 갱신 잠금을 획득하고, 조건을 만족하는 결과 행들에 대해서만 배타 잠금을 획득하여 갱신 연산을 수행한다. 이처럼 갱신 잠금은 실제 갱신 연산을 수행할 때 배타 잠금으로 변환되며, 이는 다른 트랜잭션이 동일한 객체에 대해 읽기 연산을 수행하지 못하도록 하므로 준 배타 잠금이라고 할 수 있다.
 
-  * **의도 배타 잠금(intention exclusive lock, IX_LOCK)** : 특정 행에 배타 잠금이 설정됨에 따라 상위 객체인 테이블에 의도 배타 잠금이 설정되면, 다른 트랜잭션은 테이블 스키마를 변경할 수 없고, 모든 행을 갱신하는 작업은 물론, 모든 행을 조회하는 작업은 수행할 수 없다. 그러나, 일부 행을 갱신하는 작업은 허용된다.
+*   **의도 잠금(내재된 잠금, intention lock)**
 
-  * **공유 의도 배타 잠금(shared with intent exclusive, SIX_LOCK)** : 계층적으로 더 낮은 모든 객체에 설정된 공유 잠금을 보호하고, 계층적으로 더 낮은 일부 객체에 대한 의도 배타 잠금을 보호하기 위하여 상위 객체에 내재적으로 설정되는 잠금이다.
+    특정 단위의 객체 X에 걸리는 잠금을 보호하기 위하여 X보다 상위 단위의 객체에 내재적으로 설정하는 잠금을 의미한다.
 
-    테이블에 공유 의도 배타 잠금이 설정되면, 다른 트랜잭션은 테이블 스키마를 변경할 수 없고, 모든 행/일부 행을 갱신할 수 없으며, 모든 행을 조회할 수 없다. 그러나, 일부 행을 조회하는 작업은 허용된다.
+    예를 들어, 특정 행에 공유 잠금이 요청되면 이보다 계층적으로 상위에 있는 테이블에도 의도 공유 잠금을 함께 설정하여 다른 트랜잭션에 의해 테이블이 잠금되는 것을 예방한다. 따라서, 의도 잠금은 계층적으로 가장 낮은 단위인 행에 대해서는 설정되지 않으며, 이보다 높은 단위의 객체에 대해서만 설정된다. 의도 잠금의 종류는 다음과 같다.
+
+    *   **의도 공유 잠금(intention shared lock, IS_LOCK)**
+  
+        특정 행에 공유 잠금이 설정됨에 따라 상위 객체인 테이블에 의도 공유 잠금이 설정되면, 다른 트랜잭션은 칼럼을 추가하거나 테이블 이름을 변경하는 등의 테이블 스키마를 변경할 수 없고, 모든 행을 갱신하는 작업을 수행할 수 없다. 그러나 일부 행을 갱신하는 작업이나, 모든 행을 조회하는 작업은 허용된다.
+
+    *   **의도 배타 잠금(intention exclusive lock, IX_LOCK)** 
+    
+        특정 행에 배타 잠금이 설정됨에 따라 상위 객체인 테이블에 의도 배타 잠금이 설정되면, 다른 트랜잭션은 테이블 스키마를 변경할 수 없고, 모든 행을 갱신하는 작업은 물론, 모든 행을 조회하는 작업은 수행할 수 없다. 그러나, 일부 행을 갱신하는 작업은 허용된다.
+
+    *   **공유 의도 배타 잠금(shared with intent exclusive, SIX_LOCK)** 
+    
+        계층적으로 더 낮은 모든 객체에 설정된 공유 잠금을 보호하고, 계층적으로 더 낮은 일부 객체에 대한 의도 배타 잠금을 보호하기 위하여 상위 객체에 내재적으로 설정되는 잠금이다.
+
+        테이블에 공유 의도 배타 잠금이 설정되면, 다른 트랜잭션은 테이블 스키마를 변경할 수 없고, 모든 행/일부 행을 갱신할 수 없으며, 모든 행을 조회할 수 없다. 그러나, 일부 행을 조회하는 작업은 허용된다.
 
 위에서 설명한 잠금들의 호환 관계(lock compatibility)를 정리하면 아래의 표와 같다. 호환된다는 것은 잠금 보유자(lock holder)가 객체 X에 대해 획득한 잠금과 중복하여 잠금 요청자(lock requester)가 잠금을 획득할 수 있다는 의미다. 한편, N/A는 해당 사항이 없음을 의미한다.
 
@@ -487,7 +519,6 @@ CUBRID는 트랜잭션이 수행하고자 하는 연산의 종류에 따라 획�
 |           Maximum number of objects which can be locked = 10000               |                                                                            |
 +-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
-
 트랜잭션 교착 상태(deadlock)
 ----------------------------
 
@@ -620,7 +651,6 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
     - unsigned_integer
     - variable
 
-
 *   **INFINITE** : 트랜잭션 잠금이 허용될 때까지 무한정 대기한다. 시스템 파라미터 **lock_timeout_in_secs** 를 -1로 설정한 것과 같다.
 *   **OFF** : 잠금을 대기하지 않고, 해당 트랜잭션을 롤백시킨 후 에러 메시지를 출력한다. 시스템 파라미터 **lock_timeout_in_secs** 를 0으로 설정한 것과 같다.
 *   *unsigned_integer* : 초 단위로 설정되며, 설정된 시간만큼 트랜잭션 잠금을 대기한다.
@@ -646,6 +676,7 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
 **예제** ::
 
     GET TRANSACTION LOCK TIMEOUT;
+    
              Result
     ===============
       1.000000e+001
@@ -667,7 +698,7 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
 
 즉, 위의 잠금 에러 메시지는 "다른 트랜잭션들이 *tbl* 테이블의 특정 행에 잠금을 점유하고 있으므로, *host1* 호스트에서 수행된 트랜잭션은 다른 트랜잭션들이 종료되기를 기다리다가 타임아웃 시간이 경과되어 롤백되었다."로 해석할 수 있다. 만약, 에러 메시지에 명시된 트랜잭션의 잠금 정보를 확인하고자 한다면, **cubrid lockdb** 유틸리티를 통해 현재 잠금을 점유 중인 클라이언트의 트랜잭션 ID 값, 클라이언트 프로그램 이름, 프로세스 ID(PID)를 확인할 수 있다. 이에 관한 상세한 설명은 :ref:`lockdb` 을 참고한다.
 
-이처럼 트랜잭션의 잠금 정보를 확인한 후에는 SQL 로그를 통해 커밋되지 않은 질의문을 확인하여 트랜잭션을 정리할 수 있다. SQL 로그를 확인하는 방법은 :ref:`broker-logs` 를 참고한다.
+이처럼 트랜잭션의 잠금 정보를 확인한 후에는 SQL 로그를 통해 커밋되지 않은 질의문을 확인하여 트랜잭션을 정리할 수 있다. SQL 로그를 확인하는 방법은 :ref:`broker-logs`\ 를 참고한다.
 
 또한, **cubrid killtran** 유틸리티를 통해 문제가 되는 트랜잭션을 강제 종료할 수 있으며, 이에 관한 상세한 설명은 :ref:`killtran` 를 참고한다.
 
@@ -755,6 +786,9 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
 .. code-block:: sql
 
     GET TRANSACTION ISOLATION LEVEL;
+    
+::
+
            Result
     =============
       READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES
@@ -1026,9 +1060,7 @@ REPEATABLE READ CLASS with READ COMMITTED INSTANCES
 *   트랜잭션 T1은 다른 트랜잭션 T2에서 조회 중인 테이블에 대해 레코드를 갱신/삽입할 수 있다.
 *   트랜잭션 T1은 다른 트랜잭션 T2에서 조회 중인 테이블의 스키마를 변경할 수 없다.
 
-이 격리 수준은 배타 잠금에 대해서는 2단계 잠금을 따른다. 하지만 행에 대한 공유 잠금은 행이 조회된 직후 바로 해제되지만, 테이블에 대한 의도 잠금은 스키마에 대한 반복 가능한 읽기를 보장하기 위하여 트랜잭션이 종료될 때 해제된다.
-
-**SET TRANSACTION** 문을 수행할 때 격리 수준의 다른 명칭으로 **CURSOR STABILITY** 키워드가 사용될 수 있다.
+이 격리 수준은 배타 잠금에 대해서는 2단계 잠금을 따른다. 하지만 행에 대한 공유 잠금은 행이 조회된 직후 바로 해제되지만, 테이블에 대한 의도 잠금은 스키마에 대한 반복 가능한 읽기를 보장하기 위하여 트랜잭션이 종료될 때 해제된다. 
 
 **예제**
 

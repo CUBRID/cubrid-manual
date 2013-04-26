@@ -55,39 +55,57 @@ The **EXECUTE** statement executes the prepared statement. You can bind the data
 
     PREPARE st FROM 'SELECT 1 + ?';
     EXECUTE st USING 4;
+    
+::
+
        1+ ?:0
     ==========================
        5
      
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT 1 + ?';
     SET @a=3;
     EXECUTE st USING @a;
+    
+::
+
        1+ ?:0
     ==========================
        4
      
+.. code-block:: sql
+
     PREPARE st FROM 'SELECT ? + ?';
     EXECUTE st USING 1,3;
+    
+::
+
        ?:0 + ?:1
     ==========================
        4
      
+.. code-block:: sql
+
     PREPARE st FROM 'SELECT ? + ?';
     EXECUTE st USING 'a','b';
+    
+::
+
        ?:0 + ?:1
     ==========================
        'ab'
      
+.. code-block:: sql
+
     PREPARE st FROM 'SELECT FLOOR(?)';
     EXECUTE st USING '3.2';
+    
+::
+
        floor( ?:0 )
     ==========================
        3.000000000000000e+000
-     
-    PREPARE st FROM 'SELECT FLOOR(?)';
-    EXECUTE st USING 3.2;
-       floor( ?:0 )
-    ==========================
-       3.0
 
 DEALLOCATE PREPARE/DROP PREPARE Statements
 ==========================================
@@ -122,19 +140,26 @@ The user-defined variables are not case-sensitive. The user-defined variable typ
      
     SELECT typeof(@v1), typeof(@v2), typeof(@v3), typeof(@v4);
      
+::
+
        typeof(@v1)         typeof(@v2)         typeof(@v3)         typeof(@v4)
     ======================================================================================
-      'integer'           'bigint'            'character var'     'character varying (10)'
+      'integer'           'bigint'            'character (-1)'     'character varying (10)'
 
 The user-defined variables can be changed when you define values.
 
 .. code-block:: sql
 
+    SET @v = 'a'; 
+    SET @v1 = 10;
+
     SELECT @v := 1, typeof(@v1), @v1:='1', typeof(@v1);
      
+::
+
       @v := 1                typeof(@v1)          @v1 := '1'             typeof(@v1)
     ======================================================================================
-      1                     'integer'             '1'                   'character (1)'
+      1                     'integer'             '1'                   'character (-1)'
 
 ::
 
@@ -160,9 +185,10 @@ The following example shows how to define the variable a and assign a value 1 to
 .. code-block:: sql
 
     SET @a = 1;
-     
     SELECT @a;
-     
+
+::     
+
       @a
     ======================
       1
@@ -177,14 +203,17 @@ The following example shows how to count the number of rows in the **SELECT** st
     SET @a = 0;
      
     SELECT @a := @a+1 AS row_no, i FROM t;
-     
+
+::
+    
       row_no                          i
      ===================================
       1                               2
       2                               4
       3                               6
       4                               8
-    4 ROWS selected.
+      
+    4 rows selected.
 
 The following example shows how to use the user-defined variable as the input of bind parameter specified in the prepared statement.
 
@@ -194,7 +223,9 @@ The following example shows how to use the user-defined variable as the input of
      
     PREPARE stmt FROM 'SELECT i FROM t WHERE i < ?';
     EXECUTE stmt USING @a;
-     
+ 
+::
+ 
                 i
     =============
                 2

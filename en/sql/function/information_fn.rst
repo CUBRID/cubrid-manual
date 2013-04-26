@@ -14,15 +14,28 @@ CHARSET
     :rtype: STRING
 
 .. code-block:: sql
-
+ 
     SELECT CHARSET('abc');
+    
+::
+    
     'iso88591'
     
+.. code-block:: sql
+ 
     SELECT CHARSET(_utf8'abc');
+    
+::
+    
     'utf8'
     
+.. code-block:: sql
+ 
     SET NAMES utf8;
     SELECT CHARSET('abc');
+    
+::
+    
     'utf8'
     
 COERCIBILITY
@@ -39,9 +52,17 @@ COERCIBILITY
 .. code-block:: sql
 
     SELECT COERCIBILITY(USER());
+    
+::
+
     7
     
+.. code-block:: sql
+
     SELECT COERCIBILITY(_utf8'abc');
+    
+::
+    
     10
 
 COLLATION
@@ -58,9 +79,17 @@ COLLATION
 .. code-block:: sql
 
     SELECT COLLATION('abc');
+    
+::
+
     'iso88591_bin'
     
+.. code-block:: sql
+
     SELECT COLLATION(_utf8'abc');
+    
+::
+
     'utf8_bin'
 
 CURRENT_USER, USER
@@ -81,19 +110,29 @@ CURRENT_USER, USER
     --selecting the current user on the session
     SELECT USER;
     
+::
+
        CURRENT_USER
     ======================
       'PUBLIC'
      
+.. code-block:: sql
+
     SELECT USER(), CURRENT_USER;
     
+::
+
        user()                CURRENT_USER
     ============================================
       'PUBLIC@cdbs006.cub'  'PUBLIC'
      
+.. code-block:: sql
+
     --selecting all users of the current database from the system table
     SELECT name, id, password FROM db_user;
     
+::
+
       name                           id  password
     =========================================================
       'DBA'                        NULL  NULL
@@ -116,6 +155,8 @@ DATABASE, SCHEMA
 
     SELECT DATABASE(), SCHEMA();
     
+::
+
        database()            schema()
     ============================================
       'demodb'              'demodb'
@@ -132,24 +173,27 @@ If any of constraints is not defined or the **UNIQUE** constraint is defined for
 
 .. code-block:: sql
 
-    CREATE TABLE info_tbl(id INT DEFAULT 0, name VARCHAR)
+    CREATE TABLE info_tbl(id INT DEFAULT 0, name VARCHAR);
     INSERT INTO info_tbl VALUES (1,'a'),(2,'b'),(NULL,'c');
-     
-    3 rows affected.
      
     SELECT id, DEFAULT(id) FROM info_tbl;
     
+::
+
                id   default(id)  
     =============================
                 1             0
                 2             0  
              NULL             0   
      
+.. code-block:: sql
+
     UPDATE info_tbl SET id = DEFAULT WHERE id IS NULL;
     DELETE FROM info_tbl WHERE id = DEFAULT(id);
     INSERT INTO info_tbl VALUES (DEFAULT,'d');
 
 .. note::
+
     In version lower than CUBRID 9.0, the value at the time of CREATE TABLE has been saved when the DATE value of the DATE, DATETIME, TIME, TIMESTAMP column has been specified to SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP while creating a table. Therefore, to enter the value at the time of data INSERT in version lower than CUBRID 9.0, the function should be entered to the VALUES clause of the INSERT syntax.
     
 INDEX_CARDINALITY
@@ -163,8 +207,8 @@ INDEX_CARDINALITY
     :param index: Index name that exists in the *table*
     :param key_pos: Partial key location. It *key_pos* starts from 0 and has a range that is smaller than the number of columns consisting of keys; that is, the *key_pos* of the first column is 0. For the single column index, it is 0. It can be one of the following types.
     
-        * Character string that can be converted to a numeric type.
-        * Numeric type that can be converted to an integer type. The **FLOAT** or the **DOUBLE** types will be the value converted by the **ROUND** function.
+        *   Character string that can be converted to a numeric type.
+        *   Numeric type that can be converted to an integer type. The **FLOAT** or the **DOUBLE** types will be the value converted by the **ROUND** function.
 
     :rtype: INT
 
@@ -190,24 +234,38 @@ The return value is 0 or a positive integer and if any of the input parameters i
      
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',0);
     
+::
+
        index_cardinality('t1', 'i_t1_i1_s1', 0)
     ===========================================
                                               2
      
+.. code-block:: sql
+
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',1);
     
+::
+
        index_cardinality('t1', 'i_t1_i1_s1', 1)
     ===========================================
                                               3
      
+.. code-block:: sql
+
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',2);
     
+::
+
        index_cardinality('t1', 'i_t1_i1_s1', 2)
     ===========================================
                                            NULL
      
+.. code-block:: sql
+
     SELECT INDEX_CARDINALITY('t123','i_t1_i1_s1',1);
     
+::
+
       index_cardinality('t123', 'i_t1_i1_s1', 1)
     ============================================
                                            NULL
@@ -228,6 +286,8 @@ In the following example, 192.168.0.10 is calculated as "192 * 256 ^ 3 + 168 * 2
 
     SELECT INET_ATON('192.168.0.10');
      
+::
+
        inet_aton('192.168.0.10')
     ============================
                       3232235530
@@ -246,6 +306,8 @@ INET_NTOA
 
     SELECT INET_NTOA(3232235530);
      
+::
+
        inet_ntoa(3232235530)
     ======================
       '192.168.0.10'
@@ -269,17 +331,33 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
         INSERT INTO tbl VALUES (null, 1);
         INSERT INTO tbl VALUES (null, 1);
         
+    ::
+
         ERROR: Operation would have caused one or more unique constraint violations.
+
+    .. code-block:: sql
 
         INSERT INTO tbl VALUES (null, 1);
         
+    ::
+    
         ERROR: Operation would have caused one or more unique constraint violations.
 
+    .. code-block:: sql
+
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         1
+
+    .. code-block:: sql
 
         INSERT INTO tbl VALUES (null, 2);
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         4
         
 *   In the Multiple-rows **INSERT** statement(INSERT INTO tbl VALUES (), (), ..., ()), **LAST_INSERT_ID**\ () returns the firstly inserted **AUTO_INCREMENT** value. In other words, from the second row, there is no change on **LAST_INSERT_ID**\ () value even if the next rows are inserted.
@@ -288,31 +366,47 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
     
         INSERT INTO tbl VALUES (null, 11), (null, 12), (null, 13);    
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         5
     
+    .. code-block:: sql
+
         INSERT INTO tbl VALUES (null, 21);
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         8
         
 *   If **INSERT** statement succeeds to execute, **LAST_INSERT_ID** () value is not recovered to its previous value even if the transaction is rolled back.
 
     .. code-block:: sql
 
-        csql> ;autocommit off
+        -- csql> ;autocommit off
         CREATE TABLE tbl2(a INT PRIMARY KEY AUTO_INCREMENT, b INT UNIQUE);
         INSERT INTO tbl2 VALUES (null, 1);
         COMMIT;
         
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         1
         
+    .. code-block:: sql
+    
         INSERT INTO tbl2 VALUES (null, 2);
         INSERT INTO tbl2 VALUES (null, 3);
+        
         ROLLBACK;
         
         SELECT LAST_INSERT_ID();
-        3
         
+    ::
+    
+        3
         
 *   **LAST_INSERT_ID**\ () value used from the inside of a trigger cannot be identified from the outside of the trigger.
 
@@ -324,13 +418,19 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
     INSERT INTO ss VALUES (NULL, 'cubrid');
     SELECT LAST_INSERT_ID ();
      
+::
+
          last_insert_id()
     =======================
                          1
      
+.. code-block:: sql
+
     INSERT INTO ss VALUES (NULL, 'database'), (NULL, 'manager');
     SELECT LAST_INSERT_ID ();
      
+::
+
          last_insert_id()
     =======================
                          2
@@ -341,19 +441,29 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
     INSERT INTO tbl values (500), (NULL), (NULL);
     SELECT LAST_INSERT_ID();
      
+::
+
          last_insert_id()
     =======================
                          1
      
+.. code-block:: sql
+
     INSERT INTO tbl VALUES (500), (NULL), (NULL);
     SELECT LAST_INSERT_ID();
      
+::
+
          last_insert_id()
     =======================
                          3
      
+.. code-block:: sql
+
     SELECT * FROM tbl;
      
+::
+
                         id
     =======================
                        500
@@ -376,6 +486,8 @@ LIST_DBS
 
     SELECT LIST_DBS();
     
+::
+
       list_dbs()
     ======================
       'testdb demodb'
@@ -399,24 +511,34 @@ ROW_COUNT
     INSERT INTO rc VALUES (1),(2),(3),(4),(5),(6),(7);
     SELECT ROW_COUNT();
     
+::
+
        row_count()
     ===============
                   7
-     
+    
+.. code-block:: sql
+
     UPDATE rc SET i = 0 WHERE i >  3;
     SELECT ROW_COUNT();
     
+::
+
        row_count()
     ===============
                   4
      
+.. code-block:: sql
+
     DELETE FROM rc WHERE i = 0;
     SELECT ROW_COUNT();
     
+::
+
        row_count()
     ===============
                   4
-
+                  
 USER, SYSTEM_USER
 =================
 
@@ -424,7 +546,9 @@ USER, SYSTEM_USER
 
 .. function:: SYSTEM_USER()
 
-    The functions **USER** and **SYSTEM_USER** are identical and they return the user name together with the host name. The :c:macro:`USER` and :c:macro:`CURRENT_USER` pseudo-columns return the user names who has logged on to the current database as character strings.
+    The functions **USER** and **SYSTEM_USER** are identical and they return the user name together with the host name. 
+    
+    The :c:macro:`USER` and :c:macro:`CURRENT_USER` pseudo-columns return the user names who has logged on to the current database as character strings.
 
     :rtype: STRING
 
@@ -433,19 +557,29 @@ USER, SYSTEM_USER
     --selecting the current user on the session
     SELECT SYSTEM_USER ();
     
+::
+
        user()
     ======================
       'PUBLIC@cubrid_host'
-      
+     
+.. code-block:: sql
+
     SELECT USER(), CURRENT_USER;
     
+::
+
        user()                CURRENT_USER
     ============================================
       'PUBLIC@cubrid_host'  'PUBLIC'
      
+.. code-block:: sql
+
     --selecting all users of the current database from the system table
     SELECT name, id, password FROM db_user;
     
+::
+
       name                           id  password
     =========================================================
       'DBA'                        NULL  NULL
@@ -467,6 +601,8 @@ VERSION
 
     SELECT VERSION();
     
+::
+
        version()
     =====================
       '9.1.0.0203'

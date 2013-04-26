@@ -11,7 +11,6 @@ Java 저장 함수/프로시저는 SQL에서도 호출할 수 있으며, JDBC를
 Java 저장 함수/프로시저를 사용할 때 얻을 수 있는 이점은 다음과 같다.
 
 *   **생산성과 사용성** : Java 저장 함수/프로시저는 한번 만들어 놓으면 계속해서 사용할 수 있다. 사용자가 저장 함수와 저장 프로시저를 SQL에서도 호출하여 사용할 수 있고, JDBC를 사용하여 쉽게 Java 응용 프로그램에서 호출할 수 있다.
-
 *   **뛰어난 상호 운용성, 이식성** : Java 저장 함수/프로시저는 Java 가상 머신을 사용하므로, 시스템에 Java 가상 머신을 사용할 수만 있다면 언제 어디서나 사용할 수 있다.
 
 .. _jsp-environment-configuration:
@@ -135,7 +134,9 @@ Java 소스 작성 및 컴파일
 
 .. code-block:: sql
 
-    create function hello() return string as language java name 'SpCubrid.HelloCubrid() return java.lang.String';
+    CREATE FUNCTION hello() RETURN STRING 
+    AS LANGUAGE JAVA 
+    NAME 'SpCubrid.HelloCubrid() return java.lang.String';
 
 Java 저장 함수/프로시저 호출
 ----------------------------
@@ -144,8 +145,10 @@ Java 저장 함수/프로시저 호출
 
 .. code-block:: sql
 
-    call hello() into :Hello;
+    CALL hello() INTO :Hello;
     
+::
+
       Result
     ======================
     'Hello, Cubrid !!'
@@ -255,7 +258,7 @@ loadjava 유틸리티
 
 *   *database-name* : Java 파일을 로드하려고 하는 데이터베이스 이름
 *   *java-class-file* : 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
-*   < *option* > :
+*   < *option* >
     *   **-y** : 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
 
 로딩한 Java 클래스 등록
@@ -277,7 +280,7 @@ CUBRID에서는 Java 저장 함수/프로시저를 사용하기 위해서는 Cal
    
 Java 저장 함수/프로시저의 인자를 **OUT** 으로 설정한 경우 길이가 1인 1차원 배열로 전달된다. 그러므로 Java 메서드는 배열의 첫번째 공간에 전달할 값을 저장해야 한다.
 
-.. code-block:: java
+.. code-block:: sql
 
     CREATE FUNCTION Hello() RETURN VARCHAR
     AS LANGUAGE JAVA
@@ -333,7 +336,10 @@ Call Specifications에는 SQL의 데이터 타입과 Java의 매개변수와 리
 
 .. code-block:: sql
 
-    SELECT * from db_stored_procedure;
+    SELECT * FROM db_stored_procedure;
+    
+::
+    
     sp_name     sp_type   return_type    arg_count
     sp_name               sp_type               return_type             arg_count  lang target                owner
     ================================================================================
@@ -345,7 +351,10 @@ Call Specifications에는 SQL의 데이터 타입과 Java의 매개변수와 리
 
 .. code-block:: sql
     
-    SELECT * from db_stored_procedure_args;
+    SELECT * FROM db_stored_procedure_args;
+    
+::
+    
     sp_name   index_of  arg_name  data_type      mode
     =================================================
      'sp_int'                        0  'i'                   'INTEGER'             'IN'
@@ -363,8 +372,8 @@ Java 저장 함수/프로시저의 삭제는 Java 저장 함수/프로시저를 
 
 .. code-block:: sql
 
-    drop function hello[, sp_int]
-    drop procedure Athlete_Add
+    DROP FUNCTION hello, sp_int;
+    DROP PROCEDURE Athlete_Add;
 
 Java 저장 함수/프로시저 호출
 ============================
@@ -379,9 +388,9 @@ CALL 문
 
 .. code-block:: sql
 
-    call Hello() into :HELLO;
-    call Sp_int(3) into :i;
-    call phone_info('Tom','016-111-1111');
+    CALL Hello() INTO :HELLO;
+    CALL Sp_int(3) INTO :i;
+    CALL phone_info('Tom','016-111-1111');
 
 CUBRID에서는 Java 저장 함수/프로시저를 같은 **CALL** 문을 이용해 호출한다. 따라서 다음과 같이 **CALL** 문을 처리하게 된다.
 
@@ -393,10 +402,18 @@ CUBRID에서는 Java 저장 함수/프로시저를 같은 **CALL** 문을 이용
 
 .. code-block:: sql
 
-    CALL deposit()
+    CALL deposit();
+    
+::
+    
     ERROR: Stored procedure/function 'deposit' does not exist.
 
-    CALL deposit('Tom', 3000000)
+.. code-block:: sql
+
+    CALL deposit('Tom', 3000000);
+    
+::
+
     ERROR: Methods require an object as their target.
 
 **CALL** 문에 인자가 없는 경우는 메서드와 구분되므로 "ERROR: Stored procedure/function 'deposit' does not exist."라는 오류 메시지가 나타난다. 하지만, **CALL** 문에 인자가 있는 경우에는 메서드와 구분할 수 없기 때문에 "ERROR: Methods require an object as their target."이라는 메시지가 나타난다.
@@ -405,8 +422,8 @@ CUBRID에서는 Java 저장 함수/프로시저를 같은 **CALL** 문을 이용
 
 .. code-block:: sql
 
-    call phone_info('Tom', call sp_int(999));
-    call phone_info((select * from Phone where id='Tom'));
+    CALL phone_info('Tom', CALL sp_int(999));
+    CALL phone_info((SELECT * FROM Phone WHERE id='Tom'));
 
 Java 저장 함수/프로시저를 호출하여 수행 중 exception이 발생하면 *dbname*\ **_java.log** 파일에 exception 내용이 기록되어 저장된다. 만약 화면으로 exception 내용을 확인하고자 할 경우는 **$CUBRID/java/logging.properties** 파일의 handlers 값을 " java.lang.logging.ConsoleHandler" 로 수정하면 화면으로 exception 내용을 출력한다.
 
@@ -417,8 +434,8 @@ SQL 문에서 호출
 
 .. code-block:: sql
 
-    select Hello() from db_root;
-    select sp_int(99) from db_root;
+    SELECT Hello() FROM db_root;
+    SELECT sp_int(99) FROM db_root;
 
 Java 저장 함수/프로시저를 호출할 때 IN/OUT의 데이터 타입에 호스트 변수를 사용할 수 있으며, 사용 예는 다음과 같다.
 
@@ -442,7 +459,7 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
     CREATE TABLE phone(
          name VARCHAR(20),
          phoneno VARCHAR(20)
-    )
+    );
 
 다음의 PhoneNumber.java Java 파일을 컴파일하여 Java 클래스 파일을 CUBRID로 로드하고 등록한다.
 
@@ -495,7 +512,7 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
                 CallableStatement cs;
-                cs = conn.prepareCall("call PHONE_INFO(?, ?)");
+                cs = conn.prepareCall("CALL PHONE_INFO(?, ?)");
 
                 cs.setString(1, "Jane");
                 cs.setString(2, "010-1111-1111");
@@ -514,7 +531,10 @@ CUBRID 데이터베이스에 Phone 클래스를 생성한다.
 
 .. code-block:: sql
 
-    SELECT * from phone;
+    SELECT * FROM phone;
+    
+::
+
     name                  phoneno
     ============================================
         'Jane'                '010-111-1111'
@@ -546,12 +566,13 @@ Java 저장 함수/프로시저의 리턴 값과 IN/OUT의 데이터 타입에 �
 
 .. code-block:: sql
 
-    CREATE FUNCTION typestring() return char(5)    as language java
-    name 'JavaSP1.typestring() return java.lang.String';
-
-.. code-block:: sql
-    
+    CREATE FUNCTION typestring() RETURN CHAR(5) AS LANGUAGE JAVA
+    NAME 'JavaSP1.typestring() return java.lang.String';
+   
     CALL typestring();
+    
+::
+
       Result
     ======================
       ' 1234567890'
@@ -563,8 +584,8 @@ CUBRID에서는 **java.sql.ResultSet** 을 반환하는 Java 저장 함수/프�
 
 .. code-block:: sql
 
-    CREATE FUNCTION rset() return cursor as language java
-    name 'JavaSP2.TResultSet() return java.sql.ResultSet'
+    CREATE FUNCTION rset() RETURN CURSOR AS LANGUAGE JAVA
+    NAME 'JavaSP2.TResultSet() return java.sql.ResultSet'
 
 Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResultSet** 클래스로 캐스팅 후 **setReturnable** () 메서드를 호출해야 한다.
 
@@ -633,8 +654,8 @@ CUBRID의 Java 저장 함수/프로시저에서 Set 타입이 IN OUT인 경우 J
 
 .. code-block:: sql
 
-    Create procedure setoid(x in out set, z object)    as language java name
-    'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID';
+    CREATE PROCEDURE setoid(x in out set, z object) AS LANGUAGE JAVA 
+    NAME 'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID';
 
 .. code-block:: java
 
@@ -671,8 +692,8 @@ CUBRID 저장 프로시저에서 OID 타입의 값을 IN/OUT으로 사용할 경
 
 .. code-block:: sql
 
-    create procedure tOID(i inout object, q string) as language java
-    name 'OIDtest.tOID(cubrid.sql.CUBRIDOID[], java.lang.String)';
+    CREATE PROCEDURE tOID(i inout object, q string) AS LANGUAGE JAVA
+    NAME 'OIDtest.tOID(cubrid.sql.CUBRIDOID[], java.lang.String)';
 
 .. code-block:: java
 

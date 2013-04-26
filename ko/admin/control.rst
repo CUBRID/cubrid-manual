@@ -810,7 +810,7 @@ ip_list_file의 작성 형식은 다음과 같다.
 
 *   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 \*로 입력하면 뒷자리의 모든 IP를 허용한다.
 
-**ACCESS_CONTROL** 값이 ON인 상태에서 **ACCESS_CONTROL_FILE** 이 지정되지 않으면 브로커는 localhost에서의 접속 요청만을 허용한다. 브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하면 브로커는 localhost에서의 접속 요청만을 허용한다.
+**ACCESS_CONTROL** 값이 ON인 상태에서 **ACCESS_CONTROL_FILE** 이 지정되지 않으면 브로커는 localhost에서의 접속 요청만을 허용한다.
 
 브로커 구동 시 **ACCESS_CONTROL_FILE** 및 ip_list_file 분석에 실패하는 경우 브로커는 구동되지 않는다. 
 

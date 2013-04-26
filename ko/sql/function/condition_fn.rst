@@ -36,8 +36,7 @@
 ANY/SOME/ALL 수량어와 그룹 조건식
 =================================
 
-**ANY** / **SOME** / **ALL** 과 같은 수량어를 포함하는 그룹 조건식은 하나의 데이터 값과 리스트에 포함된 값들의 일부 또는 모든 값에 대해서 비교 연산을 수행한다. 즉, **ANY**
-또는 **SOME** 이 포함된 그룹 조건식은, 왼쪽의 데이터 값이 오른쪽 피연산자로 지정된 리스트 내의 값 중 최소한 하나에 대해 단순 비교 연산자를 만족할 때 **TRUE** 를 반환한다. 한편, **ALL** 이 포함된 그룹 조건식의 경우, 왼쪽 데이터 값이 오른쪽 리스트 내의 모든 값들에 대해 단순 비교 연산자를 만족할 때 **TRUE** 를 반환한다.
+**ANY** / **SOME** / **ALL** 과 같은 수량어를 포함하는 그룹 조건식은 하나의 데이터 값과 리스트에 포함된 값들의 일부 또는 모든 값에 대해서 비교 연산을 수행한다. 즉, **ANY** 또는 **SOME** 이 포함된 그룹 조건식은, 왼쪽의 데이터 값이 오른쪽 피연산자로 지정된 리스트 내의 값 중 최소한 하나에 대해 단순 비교 연산자를 만족할 때 **TRUE** 를 반환한다. 한편, **ALL** 이 포함된 그룹 조건식의 경우, 왼쪽 데이터 값이 오른쪽 리스트 내의 모든 값들에 대해 단순 비교 연산자를 만족할 때 **TRUE** 를 반환한다.
 
 만약, **ANY** 또는 **SOME** 을 포함하는 그룹 조건식에서 **NULL** 을 대상으로 비교 연산을 수행하면 그룹 조건식의 결과로 **UNKNOWN** 또는 **TRUE** 를 반환하고, **ALL** 을 포함하는 그룹 조건식에서 **NULL** 을 대상으로 비교 연산을 수행하면 **UNKNOWN** 또는 **FALSE** 를 반환한다. ::
 
@@ -65,6 +64,8 @@ ANY/SOME/ALL 수량어와 그룹 조건식
     --selecting rows where department is sales or devel
     SELECT * FROM condition_tbl WHERE dept_name = ANY{'devel','sales'};
     
+::    
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -73,13 +74,21 @@ ANY/SOME/ALL 수량어와 그룹 조건식
                 4  'Smith     '          'devel'                   5500000
                 6  'Smith     '          'devel'                   2400000
      
+.. code-block:: sql
+
     --selecting rows comparing NULL value in the ALL group conditions
     SELECT * FROM condition_tbl WHERE salary > ALL{3000000, 4000000, NULL};
+
+::
     
     There are no results.
      
+.. code-block:: sql
+
     --selecting rows comparing NULL value in the ANY group conditions
     SELECT * FROM condition_tbl WHERE salary > ANY{3000000, 4000000, NULL};
+
+::
     
                id  name                  dept_name                  salary
     ======================================================================
@@ -88,11 +97,15 @@ ANY/SOME/ALL 수량어와 그룹 조건식
                 4  'Smith     '          'devel'                   5500000
                 5  'Kim       '          'account'                 3800000
      
+.. code-block:: sql
+
     --selecting rows where salary*0.9 is less than those salary in devel department
     SELECT * FROM condition_tbl WHERE (
       (0.9 * salary) < ALL (SELECT salary FROM condition_tbl
       WHERE dept_name = 'devel')
     );
+
+::
     
                id  name                  dept_name                  salary
     ======================================================================
@@ -119,24 +132,34 @@ BETWEEN
     SELECT * FROM condition_tbl WHERE salary BETWEEN 3000000 AND 4000000;
     SELECT * FROM condition_tbl WHERE (salary >= 3000000) AND (salary <= 4000000);
     
+::
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
                 2  'Moy       '          'sales'                   3000000
                 5  'Kim       '          'account'                 3800000
      
+.. code-block:: sql
+
     --selecting rows where salary < 3000000 or salary > 4000000
     SELECT * FROM condition_tbl WHERE salary NOT BETWEEN 3000000 AND 4000000;
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 3  'Jones     '          'sales'                   5400000
                 4  'Smith     '          'devel'                   5500000
                 6  'Smith     '          'devel'                   2400000
      
+.. code-block:: sql
+
     --selecting rows where name starts from A to E
     SELECT * FROM condition_tbl WHERE name BETWEEN 'A' AND 'E';
-    
+
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 7  'Brown     '          'account'                    NULL
@@ -158,14 +181,20 @@ EXISTS
     SELECT 'raise' FROM db_root WHERE EXISTS(
     SELECT * FROM condition_tbl WHERE salary < 2500000);
     
+::
+    
       'raise'
     ======================
       'raise'
      
+.. code-block:: sql
+
     --selecting rows using NOT EXISTS and subquery
     SELECT 'raise' FROM db_root WHERE NOT EXISTS(
     SELECT * FROM condition_tbl WHERE salary < 2500000);
-    
+
+::
+
     There are no results.
 
 .. _in-expr:
@@ -186,6 +215,8 @@ IN
     SELECT * FROM condition_tbl WHERE dept_name IN {'devel','sales'};
     SELECT * FROM condition_tbl WHERE dept_name = ANY{'devel','sales'};
     
+::
+    
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -194,8 +225,13 @@ IN
                 4  'Smith     '          'devel'                   5500000
                 6  'Smith     '          'devel'                   2400000
      
+.. code-block:: sql
+
     --selecting rows where department is neither sales nor devel
     SELECT * FROM condition_tbl WHERE dept_name NOT IN {'devel','sales'};
+    
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 5  'Kim       '          'account'                 3800000
@@ -217,13 +253,19 @@ IS NULL
     --selecting rows where salary is NULL
     SELECT * FROM condition_tbl WHERE salary IS NULL;
     
+::
+    
                id  name                  dept_name                  salary
     ======================================================================
                 7  'Brown     '          'account'                    NULL
      
+.. code-block:: sql
+
     --selecting rows where salary is NOT NULL
     SELECT * FROM condition_tbl WHERE salary IS NOT NULL;
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -233,8 +275,13 @@ IS NULL
                 5  'Kim       '          'account'                 3800000
                 6  'Smith     '          'devel'                   2400000
      
+.. code-block:: sql
+
     --simple comparison operation returns NULL when operand is NULL
     SELECT * FROM condition_tbl WHERE salary = NULL;
+    
+::
+
     There are no results.
 
 .. _like-expr:
@@ -265,21 +312,31 @@ LIKE 조건식의 이스케이프 문자 인식은 **cubrid.conf** 파일의 **n
     --selection rows where name contains lower case 's', not upper case
     SELECT * FROM condition_tbl WHERE name LIKE '%s%';
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 3  'Jones     '          'sales'                   5400000
      
+.. code-block:: sql
+
     --selection rows where second letter is 'O' or 'o'
     SELECT * FROM condition_tbl WHERE UPPER(name) LIKE '_O%';
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 2  'Moy       '          'sales'                   3000000
                 3  'Jones     '          'sales'                   5400000
      
+.. code-block:: sql
+
     --selection rows where name is 3 characters
     SELECT * FROM condition_tbl WHERE name LIKE '___';
     
+::
+
                id  name                  dept_name                  salary
     ======================================================================
                 1  'Kim       '          'devel'                   4000000
@@ -303,23 +360,43 @@ REGEXP, RLIKE
 
 *   "\\n", "\\t", "\\r", "\\"의 특수 문자를 매칭하기 위해서는 시스템 파라미터 **no_backslash_escapes** (기본값: yes)를 no로 설정하여 백슬래시(\\)를 이스케이프 문자로 허용해야 한다. **no_backslash_escapes**\ 에 대한 자세한 설명은 :ref:`escape-characters`\ 를 참고한다.
 
-**REGEXP** 와 **LIKE** 의 차이는 다음과 같다.
+**REGEXP**\ 와 **LIKE**\ 의 차이는 다음과 같다.
 
 * **LIKE** 절은 입력값 전체가 패턴과 매칭되어야 성공한다.
 * **REGEXP**\ 는 입력값의 일부가 패턴과 매칭되면 성공한다. **REGEXP**\ 에서 전체 값에 대한 패턴 매칭을 하려면, 패턴의 시작에는 "^"을, 끝에는 "$"을 사용해야 한다.
 * **LIKE** 절의 패턴은 대소문자를 구분하지만 **REGEXP**\ 에서 정규 표현식의 패턴은 대소문자를 구분하지 않는다. 대소문자를 구분하려면 **REGEXP BINARY** 구문을 사용해야 한다.
-* **REGEXP**, **REGEXP BINARY**\ 는 피연산자의 콜레이션을 고려하지 않고 ASCII 인코딩으로 동작한다. ::
+* **REGEXP**, **REGEXP BINARY**\ 는 피연산자의 콜레이션을 고려하지 않고 ASCII 인코딩으로 동작한다. 
+
+.. code-block:: sql
     
     SELECT ('a' collate utf8_en_ci REGEXP BINARY 'A' collate utf8_en_ci); 
+
+::
+
     0
+
+.. code-block:: sql
     
     SELECT ('a' collate utf8_en_cs REGEXP BINARY 'A' collate utf8_en_cs); 
+
+::
+
     0
     
+.. code-block:: sql
+
     SELECT ('a' COLLATE iso88591_bin REGEXP 'A' COLLATE iso88591_bin);
+
+::
+
     1
     
+.. code-block:: sql
+
     SELECT ('a' COLLATE iso88591_bin REGEXP BINARY 'A' COLLATE iso88591_bin);
+
+::
+
     0
     
 아래 구문에서 *expression*\ 에 매칭되는 패턴 *pattern*\ 이 존재하면 1을 반환하며, 그렇지 않은 경우 0을 반환한다. *expression*\ 과 *pattern* 중 하나가 **NULL**\ 이면 **NULL**\ 을 반환한다.
@@ -341,6 +418,8 @@ REGEXP, RLIKE
     -- But used in WHERE clause, no need parentheses.
     -- case insensitive, except when used with BINARY.
     SELECT name FROM athlete where name REGEXP '^[a-d]';
+
+::
     
     name
     ======================
@@ -353,9 +432,14 @@ REGEXP, RLIKE
     'Bukic Perica'
     'Abdullayev Namik'
      
+.. code-block:: sql
+
     -- \n : match a special character, when no_backslash_escapes=no
     SELECT ('new\nline' REGEXP 'new
     line');
+
+
+::
     
     ('new
     line' regexp 'new
@@ -363,68 +447,109 @@ REGEXP, RLIKE
     =====================================
     1
      
+.. code-block:: sql
+
     -- ^ : match the beginning of a string
     SELECT ('cubrid dbms' REGEXP '^cub');
     
+::
+
     ('cubrid dbms' regexp '^cub')
     ===============================
     1
      
+.. code-block:: sql
+
     -- $ : match the end of a string
     SELECT ('this is cubrid dbms' REGEXP 'dbms$');
     
+::
+
     ('this is cubrid dbms' regexp 'dbms$')
     ========================================
     1
      
+.. code-block:: sql
+
     --.: match any character
     SELECT ('cubrid dbms' REGEXP '^c.*$');
     
+::
+
     ('cubrid dbms' regexp '^c.*$')
     ================================
     1
      
+.. code-block:: sql
+
     -- a+ : match any sequence of one or more a characters. case insensitive.
     SELECT ('Aaaapricot' REGEXP '^A+pricot');
     
+::
+
     ('Aaaapricot' regexp '^A+pricot')
     ================================
     1
      
+.. code-block:: sql
+
     -- a? : match either zero or one a character.
     SELECT ('Apricot' REGEXP '^Aa?pricot');
     
+::
+
     ('Apricot' regexp '^Aa?pricot')
     ==========================
     1
+    
+.. code-block:: sql
+
     SELECT ('Aapricot' REGEXP '^Aa?pricot');
     
+::
+
     ('Aapricot' regexp '^Aa?pricot')
     ===========================
     1
      
+.. code-block:: sql
+
     SELECT ('Aaapricot' REGEXP '^Aa?pricot');
     
+::
+
     ('Aaapricot' regexp '^Aa?pricot')
     ============================
     0
      
+.. code-block:: sql
+
     -- (cub)* : match zero or more instances of the sequence abc.
     SELECT ('cubcub' REGEXP '^(cub)*$');
     
+::
+
     ('cubcub' regexp '^(cub)*$')
     ==========================
     1
      
+.. code-block:: sql
+
     -- [a-dX], [^a-dX] : matches any character that is (or is not, if ^ is used) either a, b, c, d or X.
     SELECT ('aXbc' REGEXP '^[a-dXYZ]+');
     
+::
+
     ('aXbc' regexp '^[a-dXYZ]+')
     ==============================
     1
      
+.. code-block:: sql
+
     SELECT ('strike' REGEXP '^[^a-dXYZ]+$');
     
+::
+
     ('strike' regexp '^[^a-dXYZ]+$')
     ================================
     1
@@ -507,6 +632,8 @@ CASE
            END
     FROM case_tbl;
     
+::
+
                 a  case when a=1 then 'one' when a=2 then 'two' else 'other' end
     ===================================
                 1  'one'
@@ -514,6 +641,8 @@ CASE
                 3  'other'
              NULL  'other'
      
+.. code-block:: sql
+
     --case operation with a simple when clause
     SELECT a,
            CASE a WHEN 1 THEN 'one'
@@ -522,6 +651,8 @@ CASE
            END
     FROM case_tbl;
     
+::
+
                 a  case a when 1 then 'one' when 2 then 'two' else 'other' end
     ===================================
                 1  'one'
@@ -529,7 +660,8 @@ CASE
                 3  'other'
              NULL  'other'
      
-     
+.. code-block:: sql
+
     --result types are converted to a single type containing all of significant figures
     SELECT a,
            CASE WHEN a=1 THEN 1
@@ -538,6 +670,8 @@ CASE
            END
     FROM case_tbl;
     
+::
+
                 a  case when a=1 then 1 when a=2 then 1.2345 else 1.234567890 end
     ===================================
                 1  1.000000000
@@ -545,6 +679,8 @@ CASE
                 3  1.234567890
              NULL  1.234567890
      
+.. code-block:: sql
+
     --an error occurs when result types are not convertible
     SELECT a,
            CASE WHEN a=1 THEN 'one'
@@ -553,6 +689,8 @@ CASE
            END
     FROM case_tbl;
     
+::
+
     ERROR: Cannot coerce 'one' to type double.
 
 *********
@@ -589,6 +727,8 @@ COALESCE
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -596,9 +736,13 @@ COALESCE
                 3
              NULL
      
+.. code-block:: sql
+
     --substituting a default value 10.0000 for NULL valuse
     SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
     
+::
+
                 a  coalesce(a, 10.0000)
     ===================================
                 1  1.0000
@@ -629,6 +773,8 @@ DECODE
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -636,9 +782,13 @@ DECODE
                 3
              NULL
      
+.. code-block:: sql
+
     --Using DECODE function to compare expression and search values one by one
     SELECT a, DECODE(a, 1, 'one', 2, 'two', 'other') FROM case_tbl;
     
+::
+
                 a  decode(a, 1, 'one', 2, 'two', 'other')
     ===================================
                 1  'one'
@@ -647,9 +797,13 @@ DECODE
              NULL  'other'
      
      
+.. code-block:: sql
+
     --result types are converted to a single type containing all of significant figures
     SELECT a, DECODE(a, 1, 1, 2, 1.2345, 1.234567890) FROM case_tbl;
     
+::
+
                 a  decode(a, 1, 1, 2, 1.2345, 1.234567890)
     ===================================
                 1  1.000000000
@@ -657,9 +811,13 @@ DECODE
                 3  1.234567890
              NULL  1.234567890
      
+.. code-block:: sql
+
     --an error occurs when result types are not convertible
     SELECT a, DECODE(a, 1, 'one', 2, 'two', 1.2345) FROM case_tbl;
      
+::
+
     ERROR: Cannot coerce 'one' to type double.
 
 GREATEST
@@ -667,7 +825,11 @@ GREATEST
 
 .. function:: GREATEST( expression [, expression]* )
 
-    **GREATEST** 함수는 인자로 지정된 하나 이상의 연산식을 서로 비교하여 가장 큰 값을 반환한다. 만약, 하나의 연산식만 지정되면 서로 비교할 대상이 없으므로 해당 연산식의 값을 그대로 반환한다. 따라서, 인자로 지정되는 하나 이상의 연산식은 서로 비교 가능한 타입이어야 한다. 지정된 인자의 타입이 동일하면 리턴 값의 타입도 동일하고, 인자의 타입이 다르면 리턴 값의 타입은 변환 가능(convertible)한 공통의 데이터 타입이 된다. 즉, **GREATEST** 함수는 같은 행(row) 내에서 칼럼 1, 칼럼 2, 칼럼 3의 값을 서로 비교하여 최대 값을 반환하며, :func:`MAX` 함수는 모든 결과 행들의 칼럼 1 값을 서로 비교하여 최대 값을 반환한다.
+    **GREATEST** 함수는 인자로 지정된 하나 이상의 연산식을 서로 비교하여 가장 큰 값을 반환한다. 만약, 하나의 연산식만 지정되면 서로 비교할 대상이 없으므로 해당 연산식의 값을 그대로 반환한다. 
+    
+    따라서, 인자로 지정되는 하나 이상의 연산식은 서로 비교 가능한 타입이어야 한다. 지정된 인자의 타입이 동일하면 리턴 값의 타입도 동일하고, 인자의 타입이 다르면 리턴 값의 타입은 변환 가능(convertible)한 공통의 데이터 타입이 된다. 
+    
+    즉, **GREATEST** 함수는 같은 행(row) 내에서 칼럼 1, 칼럼 2, 칼럼 3의 값을 서로 비교하여 최대 값을 반환하며, :func:`MAX` 함수는 모든 결과 행들의 칼럼 1 값을 서로 비교하여 최대 값을 반환한다.
 
     :param expression: 하나 이상의 연산식을 지정하며, 서로 비교 가능한 타입이어야 한다. 인자 중 어느 하나가 **NULL** 값이면 **NULL** 을 반환한다.
     :rtype: *expression*\ 의 타입
@@ -680,6 +842,8 @@ GREATEST
     FROM participant
     WHERE nation_code = 'KOR';
     
+::
+
              gold       silver       bronze  greatest(gold, silver, bronze)
     =======================================================================
                 9           12            9                              12
@@ -710,6 +874,8 @@ IF
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -717,9 +883,13 @@ IF
                 3
              NULL
      
+.. code-block:: sql
+
     --IF function returns the second expression when the fist is TRUE
     SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
     
+::
+
                 a   if(a=1, 'one', 'other')
     ===================================
                 1  'one'
@@ -727,9 +897,13 @@ IF
                 3  'other'
              NULL  'other'
      
+.. code-block:: sql
+
     --If function in WHERE clause
     SELECT * FROM case_tbl WHERE IF(a=1, 1, 2) = 1;
     
+::
+
                 a
     =============
                 1
@@ -765,6 +939,8 @@ IFNULL, NVL
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -772,9 +948,13 @@ IFNULL, NVL
                 3
              NULL
      
+.. code-block:: sql
+
     --returning a specific value when a is NULL
     SELECT a, NVL(a, 10.0000) FROM case_tbl;
     
+::
+
                 a  nvl(a, 10.0000)
     ===================================
                 1  1.0000
@@ -782,9 +962,13 @@ IFNULL, NVL
                 3  3.0000
              NULL  10.0000
      
+.. code-block:: sql
+
     --IFNULL can be used instead of NVL and return values are converted to the string type
     SELECT a, IFNULL(a, 'UNKNOWN') FROM case_tbl;
     
+::
+
                 a   ifnull(a, 'UNKNOWN')
     ===================================
                 1  '1'
@@ -802,20 +986,27 @@ ISNULL
     :param expression: 단일 값을 가지는 칼럼, 경로 표현식(예: *tbl_name.col_name*), 상수 값 또는 단일 값을 생성하는 산술 함수를 입력한다.
     :rtype: INT
 
-    .. code-block:: sql
+.. code-block:: sql
 
-        --Using ISNULL function to select rows with NULL value
-        SELECT * FROM condition_tbl WHERE ISNULL(salary);
-                   id  name                  dept_name                  salary
-        ======================================================================
-                    7  'Brown     '          'account'                    NULL
+    --Using ISNULL function to select rows with NULL value
+    SELECT * FROM condition_tbl WHERE ISNULL(salary);
+        
+::
+
+               id  name                  dept_name                  salary
+    ======================================================================
+                7  'Brown     '          'account'                    NULL
 
 LEAST
 =====
 
 .. function:: LEAST( expression [, expression]* )
 
-    **LEAST** 함수는 인자로 지정된 하나 이상의 연산식을 비교하여 가장 작은 값을 반환한다. 만약, 하나의 연산식만 지정되면 서로 비교할 대상이 없으므로 해당 연산식의 값을 그대로 반환한다. 따라서, 인자로 지정되는 하나 이상의 연산식은 서로 비교 가능한 타입이어야 한다. 만약, 지정된 인자의 타입이 동일하면 리턴 값의 타입도 동일하고, 인자의 타입이 다르면 리턴 값의 타입은 변환 가능(convertible)한 공통의 데이터 타입이 된다. 즉, **LEAST** 함수는 같은 행(row) 내에서 칼럼 1, 칼럼 2, 칼럼 3의 값을 서로 비교하여 최소 값을 반환하며, :func:`MIN` 함수는 모든 결과 행들의 칼럼 1 값을 서로 비교하여 최소 값을 반환한다.
+    **LEAST** 함수는 인자로 지정된 하나 이상의 연산식을 비교하여 가장 작은 값을 반환한다. 만약, 하나의 연산식만 지정되면 서로 비교할 대상이 없으므로 해당 연산식의 값을 그대로 반환한다. 
+    
+    따라서, 인자로 지정되는 하나 이상의 연산식은 서로 비교 가능한 타입이어야 한다. 만약, 지정된 인자의 타입이 동일하면 리턴 값의 타입도 동일하고, 인자의 타입이 다르면 리턴 값의 타입은 변환 가능(convertible)한 공통의 데이터 타입이 된다. 
+    
+    즉, **LEAST** 함수는 같은 행(row) 내에서 칼럼 1, 칼럼 2, 칼럼 3의 값을 서로 비교하여 최소 값을 반환하며, :func:`MIN` 함수는 모든 결과 행들의 칼럼 1 값을 서로 비교하여 최소 값을 반환한다.
 
     :param expression: 하나 이상의 연산식을 지정하며, 서로 비교 가능한 타입이어야 한다. 인자 중 어느 하나가 **NULL** 값이면 **NULL** 을 반환한다.
     :rtype: *expression*\ 의 타입
@@ -827,6 +1018,8 @@ LEAST
     SELECT gold, silver , bronze, LEAST(gold, silver, bronze) FROM participant
     WHERE nation_code = 'KOR';
     
+::
+
              gold       silver       bronze  least(gold, silver, bronze)
     ====================================================================
                 9           12            9                            9
@@ -856,6 +1049,9 @@ NULLIF
 .. code-block:: sql
 
     SELECT * FROM case_tbl;
+    
+::
+
                 a
     =============
                 1
@@ -863,9 +1059,13 @@ NULLIF
                 3
              NULL
      
+.. code-block:: sql
+
     --returning NULL value when a is 1
     SELECT a, NULLIF(a, 1) FROM case_tbl;
     
+::
+
                 a  nullif(a, 1)
     ===========================
                 1          NULL
@@ -873,16 +1073,24 @@ NULLIF
                 3             3
              NULL          NULL
      
+.. code-block:: sql
+
     --returning NULL value when arguments are same
     SELECT NULLIF (1, 1.000)  FROM db_root;
     
+::
+
       nullif(1, 1.000)
     ======================
       NULL
      
+.. code-block:: sql
+
     --returning the first value when arguments are not same
     SELECT NULLIF ('A', 'a')  FROM db_root;
     
+::
+
       nullif('A', 'a')
     ======================
       'A'
@@ -912,6 +1120,8 @@ NVL2
 
     SELECT * FROM case_tbl;
     
+::
+
                 a
     =============
                 1
@@ -919,13 +1129,16 @@ NVL2
                 3
              NULL
      
+.. code-block:: sql
+
     --returning a specific value of INT type
     SELECT a, NVL2(a, a+1, 10.5678) FROM case_tbl;
     
+::
+
                 a  nvl2(a, a+1, 10.5678)
     ====================================
                 1                      2
                 2                      3
                 3                      4
              NULL                     11
-

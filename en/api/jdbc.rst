@@ -172,33 +172,33 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 
     --connection URL string when user name and password omitted
      
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::
      
     --connection URL string when zeroDateTimeBehavior property specified
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?zeroDateTimeBehavior=convertToNull
+    URL=jdbc:CUBRID:127.0.0.1:33000:demodb:public::?zeroDateTimeBehavior=convertToNull
      
     --connection URL string when charSet property specified
      
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?charSet=utf-8
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?charSet=utf-8
      
     --connection URL string when queryTimeout and charSet property specified
      
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?queryTimeout=1&charSet=utf-8
+    URL=jdbc:CUBRID:127.0.0.1:33000:demodb:public::?queryTimeout=1&charSet=utf-8
      
     --connection URL string when a property(altHosts) specified for HA
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?altHosts=192.168.0.2:33000,192.168.0.3:33000
      
     --connection URL string when properties(altHosts,rcTime, connectTimeout) specified for HA
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&connectTimeout=5
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&connectTimeout=5
      
     --connection URL string when properties(altHosts,rcTime, charSet) specified for HA
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&charSet=utf-8
-
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&charSet=utf-8
+    
 **Example 2**
 
 .. code-block:: java
 
-    String url = "jdbc:cubrid:192.168.0.1:33000:demodb:::";
+    String url = "jdbc:cubrid:192.168.0.1:33000:demodb:public::";
     String userid = "";
     String password = "";
      
@@ -360,7 +360,7 @@ You must follow the rules below when using OIDs.
        public static void main (String args [])
        {
           // Making a connection
-          String url= "jdbc:cubrid:localhost:33000:demodb:::";
+          String url= "jdbc:cubrid:localhost:33000:demodb:public::";
           String user = "dba";
           String passwd = "";
 
@@ -468,7 +468,7 @@ The line "a" in the example 1 is where data of collection types (**SET**, **MULT
     {
        public static void main (String args [])
        {
-           String url= "jdbc:cubrid:127.0.0.1:33000:demodb:::";
+           String url= "jdbc:cubrid:127.0.0.1:33000:demodb:public::";
            String user = "";
            String passwd = "";
            String sql = "select settest,multisettest,listtest from collection_test";
@@ -525,7 +525,7 @@ The line "a" in the example 1 is where data of collection types (**SET**, **MULT
     {
        public static void main (String args [])
        {
-           String url = "jdbc:cubrid:127.0.0.1:33000:demodb:::";
+           String url = "jdbc:cubrid:127.0.0.1:33000:demodb:public::";
            String user = "";
            String passwd = "";
            String sql = "select collection_test from collection_test";
@@ -671,7 +671,7 @@ You can bind the **LOB** type data in the following ways.
 .. code-block:: java
 
     Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:::", "", "");
+    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:user1:password1:", "", "");
     
     PreparedStatement pstmt1 = conn.prepareStatement("INSERT INTO doc(image_id, doc_id, image) VALUES (?,?,?)");
     pstmt1.setString(1, "image-21");
@@ -697,7 +697,7 @@ You can bind the **LOB** type data in the following ways.
 .. code-block:: java
 
     Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:::", "", "");
+    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:user1:password1:", "", "");
     conn.setAutoCommit(false);
     
     PreparedStatement pstmt1 = conn.prepareStatement("SELECT image FROM doc WHERE image_id = ? ");
@@ -732,7 +732,7 @@ You can get the **LOB** type data in the following ways.
 
 .. code-block:: java
 
-    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:::", "", "");
+    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:user1:password1:", "", "");
      
     // Getting data directly from ResetSet
     PrepareStatement pstmt1 = conn.prepareStatement("SELECT content FROM doc_t WHERE doc_id = ? ");
@@ -749,7 +749,7 @@ You can get the **LOB** type data in the following ways.
 
 .. code-block:: java
 
-    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:::", "", "");
+    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:user1:password1:", "", "");
      
     // Getting BLOB data from ResultSet and getting data from the BLOB object
     PrepareStatement pstmt2 = conn.prepareStatement("SELECT image FROM image_t WHERE image_id = ?");
@@ -763,6 +763,8 @@ You can get the **LOB** type data in the following ways.
     }
 
 .. note:: If a string longer than defined max length is inserted (**INSERT**) or updated (**UPDATE**), the string will be truncated.
+
+.. _jdbc-error-codes:
 
 JDBC Error Codes and Error Messages
 -----------------------------------
@@ -993,9 +995,9 @@ The following example shows how to connect to the *demodb* database, create a ta
                conn = connect();
      
                stmt = conn.createStatement();
-               stmt.executeUpdate("create class xoo ( a int, b int, c char(10))");
+               stmt.executeUpdate("CREATE TABLE xoo ( a INT, b INT, c CHAR(10))");
      
-               preStmt = conn.prepareStatement("insert into xoo values(?,?,''''100'''')");
+               preStmt = conn.prepareStatement("INSERT INTO xoo VALUES(?,?,''''100'''')");
                preStmt.setInt (1, 1) ;
                preStmt.setInt (2, 1*10) ;
                int rst = preStmt.executeUpdate () ;
@@ -1033,7 +1035,7 @@ The following example shows how to execute the **SELECT** statement by connectin
                 Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:cubrid:localhost:33000:demodb:::","dba","");
                
-                String sql = "select name, players from event";
+                String sql = "SELECT name, players FROM event";
                 stmt = conn.createStatement();
                 rs = stmt.executeQuery(sql);
                

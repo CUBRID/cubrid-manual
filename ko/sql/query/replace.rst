@@ -31,7 +31,11 @@ REPLACE
     --creating a new table having the same schema as a_tbl1
     CREATE TABLE a_tbl4 LIKE a_tbl1;
     INSERT INTO a_tbl4 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
+    
     SELECT * FROM a_tbl4;
+    
+::
+
                id  name                  phone
     =========================================================
                 1  'aaa'                 '000-0000'
@@ -44,6 +48,9 @@ REPLACE
     REPLACE INTO a_tbl4 SET id=6, name='fff', phone=DEFAULT;
      
     SELECT * FROM a_tbl4;
+    
+::
+
                id  name                  phone
     =========================================================
                 3  'ccc'                 '333-3333'

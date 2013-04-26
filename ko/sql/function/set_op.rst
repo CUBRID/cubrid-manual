@@ -57,54 +57,88 @@ SET, MULTISET, LIST
 .. code-block:: sql
 
     SELECT ((CAST ({3,3,3,2,2,1} AS SET))+(CAST ({4,3,3,2} AS MULTISET)));
+
+::
     
      (( cast({3, 3, 3, 2, 2, 1} as set))+( cast({4, 3, 3, 2} as multiset)))
     ======================
       {1, 2, 2, 3, 3, 3, 4}
      
+.. code-block:: sql
+
     SELECT ((CAST ({3,3,3,2,2,1} AS MULTISET))+(CAST ({4,3,3,2} AS MULTISET)));
+    
+::
     
      (( cast({3, 3, 3, 2, 2, 1} as multiset))+( cast({4, 3, 3, 2} as multiset)))
     ======================
       {1, 2, 2, 2, 3, 3, 3, 3, 3, 4}
      
+.. code-block:: sql
+
     SELECT ((CAST ({3,3,3,2,2,1} AS LIST))+(CAST ({4,3,3,2} AS MULTISET)));
+    
+::
     
      (( cast({3, 3, 3, 2, 2, 1} as sequence))+( cast({4, 3, 3, 2} as multiset)))
     ======================
       {1, 2, 2, 2, 3, 3, 3, 3, 3, 4}
      
+.. code-block:: sql
+
     SELECT ((CAST ({3,3,3,2,2,1} AS SET))-(CAST ({4,3,3,2} AS MULTISET)));
+    
+::
     
      (( cast({3, 3, 3, 2, 2, 1} as set))-( cast({4, 3, 3, 2} as multiset)))
     ======================
       {1}
      
+.. code-block:: sql
+
     SELECT ((CAST ({3,3,3,2,2,1} AS MULTISET))-(CAST ({4,3,3,2} AS MULTISET)));
+    
+::
     
      (( cast({3, 3, 3, 2, 2, 1} as multiset))-( cast({4, 3, 3, 2} as multiset)))
     ======================
       {1, 2, 3}
      
+.. code-block:: sql
+
     SELECT ((CAST ({3,3,3,2,2,1} AS LIST))-(CAST ({4,3,3,2} AS MULTISET)));
+    
+::
     
      (( cast({3, 3, 3, 2, 2, 1} as sequence))-( cast({4, 3, 3, 2} as multiset)))
     ======================
       {1, 2, 3}
      
+.. code-block:: sql
+
     SELECT ((CAST ({3,3,3,2,2,1} AS SET))*(CAST ({4,3,3,2} AS MULTISET)));
+    
+::
     
      (( cast({3, 3, 3, 2, 2, 1} as set))*( cast({4, 3, 3, 2} as multiset)))
     ======================
       {2, 3}
      
+.. code-block:: sql
+
     SELECT ((CAST ({3,3,3,2,2,1} AS MULTISET))*(CAST ({4,3,3,2} AS MULTISET)));
+    
+::
     
      (( cast({3, 3, 3, 2, 2, 1} as multiset))*( cast({4, 3, 3, 2} as multiset)))
     ======================
       {2, 3, 3}
      
+.. code-block:: sql
+
     SELECT ((CAST ({3,3,3,2,2,1} AS LIST))*(CAST ({4,3,3,2} AS MULTISET)));
+    
+::
     
      (( cast({3, 3, 3, 2, 2, 1} as sequence))*( cast({4, 3, 3, 2} as multiset)))
     ======================
@@ -119,8 +153,15 @@ SET, MULTISET, LIST
 
 .. code-block:: sql
 
+    CREATE TABLE people (
+        ssn VARCHAR(10),
+        name VARCHAR(255)
+    );
+    
+    INSERT INTO people 
+    VALUES ('1234', 'Ken'), ('5678', 'Dan'), ('9123', 'Jones');
+    
     SELECT SET(SELECT name
     FROM people
     WHERE ssn in {'1234', '5678'})
-    TO :"names"
-    FROM TABLE people;
+    TO :name_group;

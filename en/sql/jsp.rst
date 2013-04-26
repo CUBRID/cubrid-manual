@@ -134,7 +134,9 @@ Create a CUBRID stored function and publish the Java class as shown below.
 
 .. code-block:: sql
 
-    create function hello() return string as language java name 'SpCubrid.HelloCubrid() return java.lang.String';
+    CREATE FUNCTION hello() RETURN STRING 
+    AS LANGUAGE JAVA 
+    NAME 'SpCubrid.HelloCubrid() return java.lang.String';
 
 Call the Java stored function/procedure
 ---------------------------------------
@@ -143,8 +145,10 @@ Call the published Java stored function as follows:
 
 .. code-block:: sql
 
-    call hello() into :Hello;
-    
+    CALL hello() INTO :Hello;
+
+::
+
       Result
     ======================
     'Hello, Cubrid !!'
@@ -254,8 +258,7 @@ To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadja
 
 *   *database-name* : The name of the database where the Java file is to be loaded.
 *   *java-class-file* : The name of the Java class or jar file to be loaded.
-*   <*option*> :
-
+*   <*option*>
     *   **-y** : Automatically overwrites a class file with the same name, if any. The default value is **no**. If you load the file without specifying the **-y** option, you will be prompted to ask if you want to overwrite the class file with the same name (if any).
 
 Loaded Java Class Publish
@@ -277,7 +280,7 @@ To use a Java stored function/procedure in CUBRID, you must write call specifica
 
 If the parameter of a Java stored function/procedure is set to **OUT**, it will be passed as a one-dimensional array whose length is 1. Therefore, a Java method must store its value to pass in the first space of the array.
 
-.. code-block:: java
+.. code-block:: sql
 
     CREATE FUNCTION Hello() RETURN VARCHAR
     AS LANGUAGE JAVA
@@ -333,7 +336,10 @@ You can check the information on the published Java stored function/procedure Th
 
 .. code-block:: sql
 
-    SELECT * from db_stored_procedure;
+    SELECT * FROM db_stored_procedure;
+    
+::
+    
     sp_name     sp_type   return_type    arg_count
     sp_name               sp_type               return_type             arg_count  lang target                owner
     ================================================================================
@@ -345,7 +351,10 @@ You can check the information on the published Java stored function/procedure Th
 
 .. code-block:: sql
     
-    SELECT * from db_stored_procedure_args;
+    SELECT * FROM db_stored_procedure_args;
+    
+::
+    
     sp_name   index_of  arg_name  data_type      mode
     =================================================
      'sp_int'                        0  'i'                   'INTEGER'             'IN'
@@ -363,8 +372,8 @@ A Java stored function/procedure can be deleted only by the user who published i
 
 .. code-block:: sql
 
-    drop function hello[, sp_int]
-    drop procedure Athlete_Add
+    DROP FUNCTION hello[, sp_int]
+    DROP PROCEDURE Athlete_Add
     
 Java Stored Function/Procedure Call
 ===================================
@@ -379,9 +388,9 @@ You can call the Java stored functions/procedures by using a **CALL** statement,
 
 .. code-block:: sql
 
-    call Hello() into :HELLO;
-    call Sp_int(3) into :i;
-    call phone_info('Tom','016-111-1111');
+    CALL Hello() INTO :HELLO;
+    CALL Sp_int(3) INTO :i;
+    CALL phone_info('Tom','016-111-1111');
 
 In CUBRID, the Java functions/procedures are called by using the same **CALL** statement. Therefore, the **CALL** statement is processed as follows:
 
@@ -393,10 +402,18 @@ The following error occurs if you call a Java stored function/procedure that doe
 
 .. code-block:: sql
 
-    CALL deposit()
+    CALL deposit();
+    
+::
+
     ERROR: Stored procedure/function 'deposit' does not exist.
 
-    CALL deposit('Tom', 3000000)
+.. code-block:: sql
+
+    CALL deposit('Tom', 3000000);
+    
+::
+
     ERROR: Methods require an object as their target.
 
 If there is no argument in the **CALL** statement, a message "ERROR: Stored procedure/function 'deposit' does not exist." appears because it can be distinguished from a method. However, if there is an argument in the **CALL** statement, a message "ERROR: Methods require an object as their target." appears because it cannot be distinguished from a method.
@@ -405,8 +422,8 @@ If the **CALL** statement is nested within another **CALL** statement calling a 
 
 .. code-block:: sql
 
-    call phone_info('Tom', call sp_int(999));
-    call phone_info((select * from Phone where id='Tom'));
+    CALL phone_info('Tom', CALL sp_int(999));
+    CALL phone_info((SELECT * FROM Phone WHERE id='Tom'));
 
 If an exception occurs during the execution of a Java stored function/procedure, the exception is logged and stored in the *dbname*\ **_java.log** file. To display the exception on the screen, change a handler value of the **$CUBRID/java/logging.properties** file to " java.lang.logging.ConsoleHandler." Then, the exception details are displayed on the screen.
 
@@ -417,8 +434,8 @@ You can call a Java stored function from a SQL statement as shown below.
 
 .. code-block:: sql
 
-    select Hello() from db_root;
-    select sp_int(99) from db_root;
+    SELECT Hello() FROM db_root;
+    SELECT sp_int(99) FROM db_root;
 
 You can use a host variable for the IN/OUT data type when you call a Java stored function/procedure as follows:
 
@@ -495,7 +512,7 @@ Create and run the following Java application.
                 conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
 
                 CallableStatement cs;
-                cs = conn.prepareCall("call PHONE_INFO(?, ?)");
+                cs = conn.prepareCall("CALL PHONE_INFO(?, ?)");
 
                 cs.setString(1, "Jane");
                 cs.setString(2, "010-1111-1111");
@@ -515,6 +532,9 @@ Retrieve the phone class after executing the program above; the following result
 .. code-block:: sql
 
     SELECT * from phone;
+    
+::
+
     name                  phoneno
     ============================================
         'Jane'                '010-111-1111'
@@ -546,12 +566,13 @@ Take a look at the following **typestring** () Java stored function.
 
 .. code-block:: sql
 
-    CREATE FUNCTION typestring() return char(5)    as language java
-    name 'JavaSP1.typestring() return java.lang.String';
+    CREATE FUNCTION typestring() RETURN CHAR(5) AS LANGUAGE JAVA
+    NAME 'JavaSP1.typestring() return java.lang.String';
 
-.. code-block:: sql
-    
     CALL typestring();
+    
+::
+
       Result
     ======================
       ' 1234567890'
@@ -563,8 +584,8 @@ In CUBRID, you must use **CURSOR** as the data type when you declare a Java stor
 
 .. code-block:: sql
 
-    CREATE FUNCTION rset() return cursor as language java
-    name 'JavaSP2.TResultSet() return java.sql.ResultSet'
+    CREATE FUNCTION rset() RETURN CURSOR AS LANGUAGE java
+    NAME 'JavaSP2.TResultSet() return java.sql.ResultSet'
 
 Before the Java file returns **java.sql.ResultSet**, it is required to cast to the **CUBRIDResultSet** class and then to call the **setReturnable** () method.
 
@@ -633,8 +654,8 @@ If the set type of the Java stored function/procedure in CUBRID is IN OUT, the v
 
 .. code-block:: sql
 
-    Create procedure setoid(x in out set, z object)    as language java name
-    'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID';
+    CREATE PROCEDURE setoid(x in out set, z object) AS LANGUAGE JAVA 
+    NAME 'SetOIDTest.SetOID(cubrid.sql.CUBRIDOID[][], cubrid.sql.CUBRIDOID';
 
 .. code-block:: java
 
@@ -671,8 +692,8 @@ In case of using the OID type value for IN/OUT in CUBRID, use the value passed f
 
 .. code-block:: sql
 
-    create procedure tOID(i inout object, q string) as language java
-    name 'OIDtest.tOID(cubrid.sql.CUBRIDOID[], java.lang.String)';
+    CREATE PROCEDURE tOID(i inout object, q string) AS LANGUAGE JAVA
+    NAME 'OIDtest.tOID(cubrid.sql.CUBRIDOID[], java.lang.String)';
 
 .. code-block:: java
 

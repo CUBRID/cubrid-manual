@@ -35,7 +35,7 @@ CONNECT BY 절
 
 .. code-block:: sql
 
-    -- tree 테이블을 만들고 데이터를 삽입하기
+    -- Creating tree table and then inserting data
     CREATE TABLE tree(ID INT, MgrID INT, Name VARCHAR(32), BirthYear INT);
      
     INSERT INTO tree VALUES (1,NULL,'Kim', 1963);
@@ -46,12 +46,14 @@ CONNECT BY 절
     INSERT INTO tree VALUES (6,2,'Foster', 1972);
     INSERT INTO tree VALUES (7,6,'Brown', 1981);
      
-    -- CONNECT BY 절을 이용하여 계층 질의문 수행하기
+    -- Executing a hierarchical query with CONNECT BY clause
     SELECT id, mgrid, name
     FROM tree
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
-     
+
+::
+    
     id  mgrid       name
     ======================
     1   null        Kim
@@ -68,13 +70,17 @@ CONNECT BY 절
     7   6       Brown
     7   6       Brown
      
-    -- START WITH 절을 이용하여 계층 질의문 수행하기
+.. code-block:: sql
+
+    -- Executing a hierarchical query with START WITH clause
     SELECT id, mgrid, name
     FROM tree
     START WITH mgrid IS NULL
     CONNECT BY prior id=mgrid
     ORDER BY id;
-     
+
+::
+    
     id  mgrid       name
     =============================
     1   null        Kim
@@ -106,7 +112,7 @@ CONNECT BY 절
 
 .. code-block:: sql
 
-    -- tree2 테이블을 생성하고 데이터를 삽입하기
+    -- Creating tree2 table and then inserting data
     CREATE TABLE tree2(id int, treeid int, job varchar(32));
      
     INSERT INTO tree2 VALUES(1,1,'Partner');
@@ -118,13 +124,15 @@ CONNECT BY 절
     INSERT INTO tree2 VALUES(7,7,'Assistant');
     INSERT INTO tree2 VALUES(8,null,'Secretary');
      
-    -- 조인 테이블에 대해 계층 질의문을 수행하기
+    -- Executing a hierarchical query onto table joins
     SELECT t.id,t.name,t2.job,level
     FROM tree t INNER JOIN tree2 t2 ON t.id=t2.treeid
     START WITH t.mgrid is null
     CONNECT BY prior t.id=t.mgrid
     ORDER BY t.id;
-     
+
+::
+    
     id  name        job     level
     ================================================
     1   Kim         Partner     1
@@ -148,13 +156,15 @@ CONNECT BY 절
 
 .. code-block:: sql
 
-    -- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 형제 노드 간에는 birthyear 순서로 정렬하기
+    -- Outputting a parent node and its child nodes, which sibling nodes that share the same parent are sorted in the order of birthyear.
     SELECT id, mgrid, name, birthyear, level
     FROM tree
     START WITH mgrid IS NULL
     CONNECT BY PRIOR id=mgrid
     ORDER SIBLINGS BY birthyear;
-     
+
+::
+    
     id        mgrid  name                    birthyear        level
     ==========================================================================
     2         NULL  'Moy'                        1958            1
@@ -169,23 +179,24 @@ CONNECT BY 절
 
 .. code-block:: sql
 
-    -- 부모 노드와 그에 따르는 자식 노드를 출력하되, 같은 레벨의 자식 노드 간에는 id 순서로 정렬하기
+    -- Outputting a parent node and its child nodes, which sibling nodes that share the same parent are sorted in the order of id.
     SELECT id, mgrid, name, LEVEL
     FROM tree
     START WITH mgrid IS NULL
     CONNECT BY PRIOR id=mgrid
     ORDER SIBLINGS BY id;
-     
-    id  mgrid       name        level
-    ===============================================
-    1   null        Kim     1
-    3   1       Jonas       2
-    4   1       Smith       2
-    2   null        Moy     1
-    5   2       Verma       2
-    6   2       Foster      2
-    7   6       Brown       3
 
+::
+    
+    id  mgrid       name        level
+    ==================================
+    1   null        Kim         1
+    3   1           Jonas       2
+    4   1           Smith       2
+    2   null        Moy         1
+    5   2           Verma       2
+    6   2           Foster      2
+    7   6           Brown       3
 
 계층 질의 의사 칼럼
 ===================
@@ -201,27 +212,31 @@ LEVEL
 
 .. code-block:: sql
 
-    -- LEVEL의 값을 확인하기
+    -- Checking the LEVEL value
     SELECT id, mgrid, name, LEVEL
     FROM tree
     WHERE LEVEL=2
     START WITH mgrid IS NULL
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
-     
+
+::
+    
     id  mgrid       name        level
     =========================================
-    3   1       Jonas       2
-    4   1       Smith       2
-    5   2       Verma       2
-    6   2       Foster      2
+    3   1           Jonas       2
+    4   1           Smith       2
+    5   2           Verma       2
+    6   2           Foster      2
 
 다음은 **CONNECT BY** 절 뒤에 **LEVEL** 조건을 추가한 예제이다.
 
 .. code-block:: sql
 
     SELECT LEVEL FROM db_root CONNECT BY LEVEL <= 10;
-     
+
+::
+    
             level
     =============
                 1
@@ -253,6 +268,8 @@ CONNECT_BY_ISLEAF
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        connect_by_isleaf
     ===========================================================
     1   null        Kim     0
@@ -298,6 +315,8 @@ CONNECT_BY_ISCYCLE
     CONNECT BY NOCYCLE PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        connect_by_iscycle
     ==========================================================
     1   null        Kim     0
@@ -331,6 +350,8 @@ CONNECT_BY_ROOT
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        connect_by_root id
     ==========================================================
     1   null        Kim     1
@@ -359,15 +380,17 @@ PRIOR
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        prior_id
     ========================================
-    1   null        Kim     null
-    2   null        Moy     null
-    3   1       Jonas       1
-    4   1       Smith       1
-    5   2       Verma       2
-    6   2       Foster  2
-    7   6       Brown       6
+    1   null        Kim         null
+    2   null        Moy         null
+    3   1           Jonas       1
+    4   1           Smith       1
+    5   2           Verma       2
+    6   2           Foster      2
+    7   6           Brown       6
 
 계층 질의 함수
 ==============
@@ -390,16 +413,17 @@ SYS_CONNECT_BY_PATH
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        hierarchy
     =================================================
-    1   null        Kim     /Kim
-    2   null        Moy     /Moy
-    3   1       Jonas       /Kim/Jonas
-    4   1       Smith       /Kim/Smith
-    5   2       Verma       /Moy/Verma
-    6   2       Foster      /Moy/Foster
-    7   6       Brown       /Moy/Foster/Brown
-
+    1   null        Kim         /Kim
+    2   null        Moy         /Moy
+    3   1           Jonas       /Kim/Jonas
+    4   1           Smith       /Kim/Smith
+    5   2           Verma       /Moy/Verma
+    6   2           Foster      /Moy/Foster
+    7   6           Brown       /Moy/Foster/Brown
 
 계층 질의문 예
 ==============
@@ -411,40 +435,94 @@ SYS_CONNECT_BY_PATH
 테이블이 생성되었다면, 아래와 같이 **UNION ALL** 을 이용하여 계층 구조를 가지는 전체 데이터와 **LEVEL** 값을 조회할 수 있다.
 
 .. code-block:: sql
-
-    SELECT L1.ID, L1.ParentID, ..., 1 AS [Level]
+    
+    CREATE TABLE tree_table (ID int PRIMARY KEY, ParentID int, name VARCHAR(128));
+    
+    INSERT INTO tree_table VALUES (1,NULL,'Kim');
+    INSERT INTO tree_table VALUES (2,1,'Moy');
+    INSERT INTO tree_table VALUES (3,1,'Jonas');
+    INSERT INTO tree_table VALUES (4,1,'Smith');
+    INSERT INTO tree_table VALUES (5,3,'Verma');
+    INSERT INTO tree_table VALUES (6,3,'Foster');
+    INSERT INTO tree_table VALUES (7,4,'Brown');
+    INSERT INTO tree_table VALUES (8,4,'Lin');
+    INSERT INTO tree_table VALUES (9,2,'Edwin');
+    INSERT INTO tree_table VALUES (10,9,'Audrey');
+    INSERT INTO tree_table VALUES (11,10,'Stone');
+    
+    SELECT L1.ID, L1.ParentID, L1.name, 1 AS [Level]
         FROM tree_table AS L1
         WHERE L1.ParentID IS NULL
     UNION ALL
-    SELECT L2.ID, L2.ParentID, ..., 2 AS [Level]
+    SELECT L2.ID, L2.ParentID, L2.name, 2 AS [Level]
         FROM tree_table AS L1
             INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
         WHERE L1.ParentID IS NULL
     UNION ALL
-    SELECT L3.ID, L3.ParentID, ..., 3 AS [Level]
+    SELECT L3.ID, L3.ParentID, L3.name, 3 AS [Level]
         FROM tree_table AS L1
             INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
             INNER JOIN tree_table AS L3 ON L2.ID=L3.ParentID
         WHERE L1.ParentID IS NULL
-    UNION ALL ...
+    UNION ALL
+    SELECT L4.ID, L4.ParentID, L4.name, 4 AS [Level]
+        FROM tree_table AS L1
+            INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
+            INNER JOIN tree_table AS L3 ON L2.ID=L3.ParentID
+            INNER JOIN tree_table AS L4 ON L3.ID=L4.ParentID
+        WHERE L1.ParentID IS NULL;
 
-계층 관계를 가지는 데이터의 레벨이 얼마나 될지 예측할 수 없으므로, 위 질의문은 새로운 행이 검색되지 않을 때까지 루프를 도는 저장 프로시저(stored procedure) 문으로 재작성할 수 있다. 그러나 루프를 도는 동안 각 단계마다 계층 트리를 확인해야 하므로, 아래와 같이 **SELECT** 문에 **CONNECT BY** 절을 명시하여 계층 질의문을 재작성할 수 있다. 다음의 질의문을 실행하면, 계층 관계를 가지는 데이터 전체와 각 행의 레벨이 출력된다.
+::
+
+               ID     ParentID  name                        Level
+    =============================================================
+                1         NULL  'Kim'                           1
+                2            1  'Moy'                           2
+                3            1  'Jonas'                         2
+                4            1  'Smith'                         2
+                9            2  'Edwin'                         3
+                5            3  'Verma'                         3
+                6            3  'Foster'                        3
+                7            4  'Brown'                         3
+                8            4  'Lin'                           3
+               10            9  'Audrey'                        4
+
+계층 관계를 가지는 데이터의 레벨이 얼마나 될지 예측할 수 없으므로, 위 질의문은 새로운 행이 검색되지 않을 때까지 루프를 도는 저장 프로시저(stored procedure) 문으로 재작성할 수 있다. 
+
+그러나 루프를 도는 동안 각 단계마다 계층 트리를 확인해야 하므로, 아래와 같이 **SELECT** 문에 **CONNECT BY** 절을 명시하여 계층 질의문을 재작성할 수 있다. 다음의 질의문을 실행하면, 계층 관계를 가지는 데이터 전체와 각 행의 레벨이 출력된다.
 
 .. code-block:: sql
 
-    SELECT ID, ParentID, ..., Level
+    SELECT ID, ParentID, name, Level
     FROM tree_table
     START WITH ParentID IS NULL
-    CONNECT BY ParentID=PRIOR ID
+    CONNECT BY ParentID=PRIOR ID;
+    
+::
+
+               ID     ParentID  name                        level
+    =============================================================
+                1         NULL  'Kim'                           1
+                2            1  'Moy'                           2
+                9            2  'Edwin'                         3
+               10            9  'Audrey'                        4
+               11           10  'Stone'                         5
+                3            1  'Jonas'                         2
+                5            3  'Verma'                         3
+                6            3  'Foster'                        3
+                4            1  'Smith'                         2
+                7            4  'Brown'                         3
+                8            4  'Lin'                           3
+
 
 루프로 인한 오류를 발생시키지 않으려면 다음과 같이 **NOCYCLE** 을 명시할 수 있다.
 
 .. code-block:: sql
 
-    SELECT ID, ParentID, ..., Level
+    SELECT ID, ParentID, name, Level
     FROM tree_table
     START WITH ParentID IS NULL
-    CONNECT BY NOCYCLE ParentID=PRIOR ID
+    CONNECT BY NOCYCLE ParentID=PRIOR ID;
 
 
 계층 질의문의 성능

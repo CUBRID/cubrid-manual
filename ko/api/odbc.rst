@@ -142,28 +142,6 @@ CUBRID ODBC 프로그래밍을 할 때 연결 문자열(connection string)은 �
     *   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
     *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
-
-OID와 컬렉션 사용
------------------
-
-ODBC는 관계형 DBMS에 맞게 설계되었다. 그러므로 CUBRID ODBC 드라이버는 CUBRID의 OID와 컬렉션과 같은 일부 객체지향 특징을 지원하지 않는다. CUBRID는 관계형 데이터 모델과 객체지향 데이터 모델을 통합한 객체관계형 DBMS이기 때문이다.
-
-**OID 사용**
-
-CUBRID ODBC 드라이버는 OID를 string (char(32))으로 간주하므로 OID를 포함하는 **INSERT**, **UPDATE**, **DELETE** 를 아래와 같이 사용할 수 있다. OID string을 사용할 때는 반드시 작은 따옴표 ('')처리가 필요하다. 다음 예제의 member 속성의 도메인은 객체(OID)와 같다.
-
-.. code-block:: sql
-
-    insert into foo(member) values('@12|34|56')
-    delete from foo where member = '@12|34|56'
-    update foo set age = age + 1 where member = '@12|34|56'
-
-**컬렉션 사용**
-
-컬렉션 타입 : **SET**, **MULTISET**, **SEQUENCE** 세가지가 있다. CUBRID ODBC 드라이버는 컬렉션을 string(longvarchar)으로 간주한다. 컬렉션은 **SELECT** 질의에서 "{value_1, value_2, ... value_n}"와 같이 중괄호 안의 쉼표를 이용해 각 요소를 구분하여 획득한다.
-
-.. note:: 칼럼에서 정의한 크기보다 큰 문자열을 **INSERT** / **UPDATE** 하면 문자열이 잘려서 입력된다.
-
 ASP 예제 프로그램
 =================
 

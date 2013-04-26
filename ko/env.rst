@@ -62,7 +62,7 @@ OS 환경 변수 및 Java 환경 변수
 
 * **Path** : Windows 환경에서 Path 환경 변수에는 CUBRID 시스템의 실행 파일이 있는 디렉터리인 %CUBRID%\\bin이 포함되어 있어야 한다.
 
-* **JAVA_HOME**: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 하고 JAVA_HOME 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`jsp_environment-configuration` 을 참고한다.
+* **JAVA_HOME**: CUBRID 시스템에서 자바 저장 프로시저 기능을 사용하기 위해서는 Java Runtime Environment (JRE) 1.6 이상 버전이 설치되어야 하고 JAVA_HOME 환경 변수에 해당 디렉터리가 지정되어야 한다. :ref:`jsp-environment-configuration` 을 참고한다.
 
 환경 변수 설정
 --------------

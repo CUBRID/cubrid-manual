@@ -47,13 +47,17 @@ CREATE VIEW
     [ CLASS ] { column_name | method_name } OF superclass_name
     [ AS alias ]
 
-* **OR REPLACE** : **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name* 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
-* *view_name* : 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
-* *view_column_definition*
+*   **OR REPLACE** : **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name* 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
+
+*   *view_name* : 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
+*   *view_column_definition*
+
     *   *column_name* : 뷰의 칼럼을 정의한다.
     *   *column_type* : 칼럼의 데이터 타입을 정의한다.
-* **AS** *select_statement* : 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가생성된다.
-* **WITH CHECK OPTION** : 이 옵션이 명시되면 *select_statement* 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
+    
+*   **AS** *select_statement* : 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가생성된다.
+
+*   **WITH CHECK OPTION** : 이 옵션이 명시되면 *select_statement* 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
 
 **예제**
 
@@ -69,24 +73,34 @@ CREATE VIEW
     CREATE VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL WITH CHECK OPTION;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
                 2  '222-2222'
                 3  '333-3333'
      
+.. code-block:: sql
+
     --WITH CHECK OPTION doesn’t allow updating column value which violates WHERE clause
     UPDATE b_view SET phone=NULL;
      
+::
+
     ERROR: Check option exception on view b_view.
      
      
+.. code-block:: sql
+
     --creating view which name is as same as existing view name
     CREATE OR REPLACE VIEW b_view AS SELECT * FROM a_tbl ORDER BY id DESC;
      
     --the existing view has been replaced as a new view by OR REPLACE keyword
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 5  NULL
@@ -101,6 +115,7 @@ CREATE VIEW
 다음의 조건을 만족한다면 해당 뷰를 업데이트할 수 있다.
 
 *   **FROM** 절은 반드시 업데이트 가능한 테이블이나 뷰만 포함해야 한다.
+
     CUBRID 9.0 미만 버전에서는 **FROM** 절에 업데이트 가능한 테이블을 포함할 경우 반드시 하나의 테이블만 포함해야 했다. 단, FROM (class_x, class_y)와 같이 괄호에 포함된 두 테이블은 하나의 테이블로 표현되므로 업데이트할 수 있었다. CUBRID 9.0 이상 버전에서는 업데이트 가능한 두 개 이상의 테이블을 허용한다.
 
 *   **DISTINCT**, **UNIQUE** 구문을 포함하지 않는다.
@@ -140,6 +155,8 @@ ADD QUERY 절
 
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -148,10 +165,13 @@ ADD QUERY 절
                 4  NULL
                 5  NULL
      
+.. code-block:: sql
      
     ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id IN (1,2);
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -161,7 +181,6 @@ ADD QUERY 절
                 5  NULL
                 1  '111-1111'
                 2  '222-2222'
-
 
 AS SELECT 절
 ------------
@@ -180,6 +199,8 @@ AS SELECT 절
     ALTER VIEW b_view AS SELECT * FROM a_tbl WHERE phone IS NOT NULL;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -207,6 +228,8 @@ CHANGE QUERY 절
     ALTER VIEW b_view ADD QUERY SELECT * FROM a_tbl WHERE id = 3;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -218,10 +241,14 @@ CHANGE QUERY 절
                 2  '222-2222'
                 3  '333-3333'
      
+.. code-block:: sql
+
     --altering view changing query number 2
     ALTER VIEW b_view CHANGE QUERY 2 SELECT * FROM a_tbl WHERE phone IS NULL;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'
@@ -245,6 +272,8 @@ DROP QUERY 절
     ALTER VIEW b_view DROP QUERY 2,3;
     SELECT * FROM b_view;
      
+::
+
                id  phone
     ===================================
                 1  '111-1111'

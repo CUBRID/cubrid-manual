@@ -2,6 +2,161 @@
 Aggregate/Analytic Functions
 ****************************
 
+Overview
+========
+
+Aggregate/Analytic function is used when you want to analyze data and extract some results.
+
+*   Aggregate function returns the grouped results and it returns only the columns which are grouped.
+
+*   Analytic function returns the grouped results, but it includes the ungrouped columns, so it can return multiple rows for one group.
+
+For examples, aggregate/analytic function can be used to get the answers as follows.
+
+1.  What is the total sales amount per year?
+
+2.  How can you display the sales amount from the highest one's month by grouping each year?
+    
+3.  How can you display the accumulated sales amount as annual and monthly order by grouping each year?
+
+You can answer for No. 1 with aggregate function. for No. 2 and No. 3, you can answer with analytic function. Above questions can be written as following SQL statements.
+
+Below is the table which stores the sales amounts per month of each year.
+
+.. code-block:: sql
+
+    CREATE TABLE sales_mon_tbl (
+        yyyy INT,
+        mm INT,
+        sales_sum INT
+    );
+    
+    INSERT INTO sales_mon_tbl VALUES
+        (2000, 1, 1000), (2000, 2, 770), (2000, 3, 630), (2000, 4, 890),
+        (2000, 5, 500), (2000, 6, 900), (2000, 7, 1300), (2000, 8, 1800), 
+        (2000, 9, 2100), (2000, 10, 1300), (2000, 11, 1500), (2000, 12, 1610), 
+        (2001, 1, 1010), (2001, 2, 700), (2001, 3, 600), (2001, 4, 900),
+        (2001, 5, 1200), (2001, 6, 1400), (2001, 7, 1700), (2001, 8, 1110), 
+        (2001, 9, 970), (2001, 10, 690), (2001, 11, 710), (2001, 12, 880), 
+        (2002, 1, 980), (2002, 2, 750), (2002, 3, 730), (2002, 4, 980),
+        (2002, 5, 1110), (2002, 6, 570), (2002, 7, 1630), (2002, 8, 1890), 
+        (2002, 9, 2120), (2002, 10, 970), (2002, 11, 420), (2002, 12, 1300);
+
+1.  What is the total sales amount per year?
+
+.. code-block:: sql
+
+    SELECT yyyy, sum(sales_sum) 
+    FROM sales_mon_tbl
+    GROUP BY yyyy;
+
+::
+
+             yyyy  sum(sales_sum)
+    =============================
+             2000           14300
+             2001           11870
+             2002           13450
+ 
+2.  How can you display the sales amount from the highest one's month by grouping each year?
+
+.. code-block:: sql
+
+    SELECT yyyy, mm, sales_sum, RANK() OVER (PARTITION BY yyyy ORDER BY sales_sum DESC) AS rnk
+    FROM sales_mon_tbl;
+
+::
+
+             yyyy           mm    sales_sum          rnk
+    ====================================================
+             2000            9         2100            1
+             2000            8         1800            2
+             2000           12         1610            3
+             2000           11         1500            4
+             2000            7         1300            5
+             2000           10         1300            5
+             2000            1         1000            7
+             2000            6          900            8
+             2000            4          890            9
+             2000            2          770           10
+             2000            3          630           11
+             2000            5          500           12
+             2001            7         1700            1
+             2001            6         1400            2
+             2001            5         1200            3
+             2001            8         1110            4
+             2001            1         1010            5
+             2001            9          970            6
+             2001            4          900            7
+             2001           12          880            8
+             2001           11          710            9
+             2001            2          700           10
+             2001           10          690           11
+             2001            3          600           12
+             2002            9         2120            1
+             2002            8         1890            2
+             2002            7         1630            3
+             2002           12         1300            4
+             2002            5         1110            5
+             2002            1          980            6
+             2002            4          980            6
+             2002           10          970            8
+             2002            2          750            9
+             2002            3          730           10
+             2002            6          570           11
+             2002           11          420           12
+
+3.  How can you display the accumulated sales amount as annual and monthly order by grouping each year?
+
+.. code-block:: sql
+
+    SELECT yyyy, mm, sales_sum, SUM(sales_sum) OVER (PARTITION BY yyyy ORDER BY yyyy, mm) AS a_sum
+    FROM sales_mon_tbl;
+
+::
+
+             yyyy           mm    sales_sum        a_sum
+    ====================================================
+             2000            1         1000         1000
+             2000            2          770         1770
+             2000            3          630         2400
+             2000            4          890         3290
+             2000            5          500         3790
+             2000            6          900         4690
+             2000            7         1300         5990
+             2000            8         1800         7790
+             2000            9         2100         9890
+             2000           10         1300        11190
+             2000           11         1500        12690
+             2000           12         1610        14300
+             2001            1         1010         1010
+             2001            2          700         1710
+             2001            3          600         2310
+             2001            4          900         3210
+             2001            5         1200         4410
+             2001            6         1400         5810
+             2001            7         1700         7510
+             2001            8         1110         8620
+             2001            9          970         9590
+             2001           10          690        10280
+             2001           11          710        10990
+             2001           12          880        11870
+             2002            1          980          980
+             2002            2          750         1730
+             2002            3          730         2460
+             2002            4          980         3440
+             2002            5         1110         4550
+             2002            6          570         5120
+             2002            7         1630         6750
+             2002            8         1890         8640
+             2002            9         2120        10760
+             2002           10          970        11730
+             2002           11          420        12150
+             2002           12         1300        13450
+ 
+집계 함수와 분석 함수 비교
+==========================
+
 **Aggregate function** returns one result based on the group of rows. When the **GROUP BY** clause is included, a one-row aggregate result per group is returned. When the **GROUP BY** clause is omitted, a one-row aggregate result for all rows is returned. The **HAVING** clause is used to add a condition to the query which contains the **GROUP BY** clause.
 
 Most aggregate functions can use **DISTINCT**, **UNIQUE** constraints. For the **GROUP BY ... HAVING** clause, see :ref:`group-by-clause`.
@@ -52,6 +207,8 @@ The following example shows how to retrieve the average number of gold medals th
     FROM participant
     WHERE nation_code = 'KOR'; 
     
+::
+
                      avg(gold)
     ==========================
          9.600000000000000e+00
@@ -64,6 +221,8 @@ The following example shows how to output the number of gold medals by year and 
     AVG(gold) OVER (PARTITION BY nation_code ORDER BY host_year) avg_gold
     FROM participant WHERE nation_code like 'AU%';
      
+::
+
         host_year  nation_code                  gold               avg_gold
     =======================================================================
              1988  'AUS'                           3  3.000000000000000e+00
@@ -84,6 +243,8 @@ The following example is removing the "ORDER BY host_year" clause under the **OV
     SELECT host_year, nation_code, gold, AVG(gold) OVER (PARTITION BY nation_code) avg_gold
     FROM participant WHERE nation_code LIKE 'AU%';
      
+::
+
         host_year  nation_code                  gold                  avg_gold
     ==========================================================================
              2004  'AUS'                          17     1.040000000000000e+01
@@ -119,6 +280,8 @@ The following example shows how to retrieve the number of Olympic Games that hav
     FROM olympic
     WHERE mascot IS NOT NULL; 
     
+::
+
          count(*)
     =============
                 9
@@ -130,6 +293,8 @@ The following example shows how to output the number of players whose nation_cod
     SELECT nation_code, event, name, COUNT(*) OVER (ORDER BY event) co
     FROM athlete WHERE nation_code='AUT';
     
+::
+
        nation_code           event                 name                           co
     ===============================================================================
       'AUT'                 'Athletics'           'Kiesl Theresia'                2
@@ -168,6 +333,8 @@ The following example shows output of the number of Olympic gold medals of each 
     DENSE_RANK() OVER (PARTITION BY host_year ORDER BY gold DESC) AS d_rank
     FROM participant;
      
+::
+
     host_year  nation_code                  gold       d_rank
     =============================================================
          1988  'URS'                          55            1
@@ -249,12 +416,16 @@ To use the **GROUP_CONCAT** function, you must meet the following conditions.
 
     SELECT GROUP_CONCAT(s_name) FROM code;
     
+::
+
       group_concat(s_name)
     ======================
       'X,W,M,B,S,G'
      
     SELECT GROUP_CONCAT(s_name ORDER BY s_name SEPARATOR ':') FROM code;
     
+::
+
       group_concat(s_name order by s_name separator ':')
     ======================
       'B:G:M:S:W:X'
@@ -264,6 +435,8 @@ To use the **GROUP_CONCAT** function, you must meet the following conditions.
      
     SELECT GROUP_CONCAT(i*2+1 ORDER BY 1 SEPARATOR '') FROM t;
     
+::
+
       group_concat(i*2+1 order by 1 separator '')
     ======================
       '35791113'
@@ -298,6 +471,8 @@ The following example shows how to sort employee numbers and output the previous
     SELECT name, empno, LAG (empno, 1) OVER (ORDER BY empno) prev_empno
     FROM t_emp;
 
+::
+
       name                        empno   prev_empno
     ================================================
       'David'                        55         NULL
@@ -325,26 +500,28 @@ LEAD
 
 The following example shows how to sort employee numbers and output the next employee number on the same row:
 
-    ..  code-block:: sql
-    
-        CREATE TABLE t_emp (name VARCHAR(10), empno INT);
-        INSERT INTO t_emp VALUES
-        ('Amie', 11011), ('Jane', 13077), ('Lora', 12045), ('James', 12006),
-        ('Peter', 14006), ('Tom', 12786), ('Ralph', 23518), ('David', 55);
-        
-        SELECT name, empno, LEAD (empno,1) OVER (ORDER BY empno) next_empno
-        FROM t_emp;
+..  code-block:: sql
 
-          name                        empno   next_empno
-        ================================================
-          'David'                        55        11011
-          'Amie'                      11011        12006
-          'James'                     12006        12045
-          'Lora'                      12045        12786
-          'Tom'                       12786        13077
-          'Jane'                      13077        14006
-          'Peter'                     14006        23518
-          'Ralph'                     23518         NULL
+    CREATE TABLE t_emp (name VARCHAR(10), empno INT);
+    INSERT INTO t_emp VALUES
+    ('Amie', 11011), ('Jane', 13077), ('Lora', 12045), ('James', 12006),
+    ('Peter', 14006), ('Tom', 12786), ('Ralph', 23518), ('David', 55);
+    
+    SELECT name, empno, LEAD (empno, 1) OVER (ORDER BY empno) next_empno
+    FROM t_emp;
+
+::
+
+      name                        empno   next_empno
+    ================================================
+      'David'                        55        11011
+      'Amie'                      11011        12006
+      'James'                     12006        12045
+      'Lora'                      12045        12786
+      'Tom'                       12786        13077
+      'Jane'                      13077        14006
+      'Peter'                     14006        23518
+      'Ralph'                     23518         NULL
 
 The following example shows how to output the title of the previous row and the title of the next row along with the title of the current row on the tbl_board table:
 
@@ -359,6 +536,8 @@ The following example shows how to output the title of the previous row and the 
         LAG (title,1,'no previous page') OVER (ORDER BY num) prev_title
     FROM tbl_board;
     
+::
+
       num  title                 next_title            prev_title
     ===============================================================================
         1  'title 1'             'title 2'             NULL
@@ -377,33 +556,35 @@ If a WHERE condition is enclosed in parentheses, the values of next_title and pr
     SELECT * FROM 
     (
         SELECT num, title,
-                LEAD (title,1,'no next page') OVER (ORDER BY num) next_title,
-                LAG (title,1,'no previous page') OVER (ORDER BY num) prev_title
+            LEAD(title,1,'no next page') OVER (ORDER BY num) next_title,
+            LAG(title,1,'no previous page') OVER (ORDER BY num) prev_title
         FROM tbl_board
     ) 
     WHERE num=5;
     
+::
+
       num  title                 next_title            prev_title
     ===============================================================================
         5  'title 5'             'title 6'             'title 4'
-
+        
 MAX
 ===
 
 .. function:: MAX ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    The **MAX** function is used as an aggregate function or an analytic function. It gets the greatest value of expressions of all rows. Only one *expression* is specified.
+    The **MAX** function is used as an aggregate function or an analytic function. It gets the greatest value of expressions of all rows. Only one *expression* is specified. For expressions that return character strings, the string that appears later in alphabetical order becomes the maximum value; for those that return numbers, the greatest value becomes the maximum value.
 
     :param expression: Specifies an expression that returns a numeric or string value. An expression that returns a collection-type data is not allowed.
     :param ALL: Gets the maximum value for all data (default).
     :param DISTINCT,DISTINCTROW,UNIQUE: Gets the maximum value without duplicates.
     :rtype: same type as that the expression
 
-For expressions that return character strings, the string that appears later in alphabetical order becomes the maximum value; for those that return numbers, the greatest value becomes the maximum value.
-
 The following example shows how to retrieve the maximum number of gold (*gold*) medals that Korea won in the Olympics in the *demodb* database.
 
 .. code-block:: sql
+
+::
 
     SELECT MAX(gold) FROM participant WHERE nation_code = 'KOR';
     
@@ -417,8 +598,12 @@ The following example shows how to output the number of gold medals by year and 
 
     SELECT host_year, nation_code, gold,
     MAX(gold) OVER (PARTITION BY nation_code) mx_gold
-    FROM participant WHERE nation_code like 'AU%' ORDER BY nation_code, host_year;
+    FROM participant 
+    WHERE nation_code LIKE 'AU%' 
+    ORDER BY nation_code, host_year;
      
+::
+
         host_year  nation_code                  gold      mx_gold
     =============================================================
              1988  'AUS'                           3           17
@@ -434,6 +619,7 @@ The following example shows how to output the number of gold medals by year and 
 
 MIN
 ===
+
 .. function:: MIN ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
     The **MIN** function is used as an aggregate function or an analytic function. It gets the smallest value of expressions of all rows. Only one *expression* is specified. For expressions that return character strings, the string that appears earlier in alphabetical order becomes the minimum value; for those that return numbers, the smallest value becomes the minimum value.
@@ -449,6 +635,8 @@ The following example shows how to retrieve the minimum number of gold (*gold*) 
 
     SELECT MIN(gold) FROM participant WHERE nation_code = 'KOR';
     
+::
+
         min(gold)
     =============
                 7
@@ -461,6 +649,8 @@ The following example shows how to output the number of gold medals by year and 
     MIN(gold) OVER (PARTITION BY nation_code) mn_gold
     FROM participant WHERE nation_code like 'AU%' ORDER BY nation_code, host_year;
      
+::
+
         host_year  nation_code                  gold      mn_gold
     =============================================================
              1988  'AUS'                           3            3
@@ -473,8 +663,6 @@ The following example shows how to output the number of gold medals by year and 
              1996  'AUT'                           0            0
              2000  'AUT'                           2            0
              2004  'AUT'                           2            0
-
-[번역]
 
 NTILE
 =====
@@ -508,6 +696,8 @@ The following example divides rows into five buckets of eight customers based on
     SELECT name, birthdate, NTILE(5) OVER (ORDER BY birthdate) age_group 
     FROM t_customer;
     
+::
+
       name                  birthdate     age_group
     ===============================================
       'James'               12/28/1948            1
@@ -519,7 +709,8 @@ The following example divides rows into five buckets of eight customers based on
       'Peter'               10/25/1988            4
       'Ralph'               03/17/1995            5
 
-The following example divides eight students into five buckets that have the identical number of rows in the order of score and outputs in the order of the name. As the score column of the t_score table has eight rows, the remaining three rows are assigned to buckets from #1 Bucket. The first three buckets have one more row than the remaining groups. The NTILE function equally divides the grade based on the number of rows, regardless the range of the score.
+The following example divides eight students into five buckets that have the identical number of rows in the order of score and outputs in the order of the name. As the score column of the t_score table has eight rows, the remaining three rows are assigned to buckets from #1 Bucket. The first three buckets have one more row than the remaining groups. 
+The NTILE function equally divides the grade based on the number of rows, regardless the range of the score.
 
 .. code-block:: sql
 
@@ -537,6 +728,8 @@ The following example divides eight students into five buckets that have the ide
     SELECT name, score, NTILE(5) OVER (ORDER BY score DESC) grade 
     FROM t_score 
     ORDER BY name;
+
+::
 
       name                        score        grade
     ================================================
@@ -566,6 +759,8 @@ The following example shows output of the number of Olympic gold medals of each 
     RANK() OVER (PARTITION BY host_year ORDER BY gold DESC) AS g_rank
     FROM participant;
      
+::
+
         host_year  nation_code                  gold       g_rank
     =============================================================
              1988  'URS'                          55            1
@@ -634,6 +829,8 @@ The following example shows output of the serial number according to the number 
     ROW_NUMBER() OVER (PARTITION BY host_year ORDER BY gold DESC) AS r_num
     FROM participant;
      
+::
+
         host_year  nation_code                  gold       r_num
     =============================================================
              1988  'URS'                          55            1
@@ -720,6 +917,8 @@ The following example shows how to output the population standard variance of al
          
     SELECT STDDEV_POP(score) FROM student;
      
+::
+
              stddev_pop(score)
     ==========================
          2.329711474744362e+01
@@ -732,6 +931,8 @@ The following example shows how to output the score and population standard vari
     FROM student 
     ORDER BY subjects_id, name;
      
+::
+
       subjects_id  name                                     score                   std_pop
     =======================================================================================
                 1  'Bruce'                  6.300000000000000e+01     2.632869157402243e+01
@@ -784,6 +985,8 @@ The following example shows how to output the sample standard variance of all s
      
     SELECT STDDEV_SAMP(score) FROM student;
      
+::
+
             stddev_samp(score)
     ==========================
          2.411480477888654e+01
@@ -792,10 +995,13 @@ The following example shows how to output the sample standard variance of all st
 
 .. code-block:: sql
 
-    SELECT subjects_id, name, score, STDDEV_SAMP(score) OVER(PARTITION BY subjects_id) std_samp 
+    SELECT subjects_id, name, score, 
+        STDDEV_SAMP(score) OVER(PARTITION BY subjects_id) std_samp 
     FROM student 
     ORDER BY subjects_id, name;
      
+::
+
       subjects_id  name                                     score                  std_samp
     =======================================================================================
                 1  'Bruce'                  6.300000000000000e+01     2.943637205907005e+01
@@ -816,6 +1022,7 @@ The following example shows how to output the sample standard variance of all st
 
 SUM
 ===
+
 .. function:: SUM ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
     The **SUM** function is used as an aggregate function or an analytic function. It returns the sum of expressions of all rows. Only one *expression* is specified as a parameter. You can get the sum without duplicates by inserting the **DISTINCT** or **UNIQUE** keyword in front of the expression, or get the sum of all values by omitting the keyword or by using **ALL**.
@@ -835,7 +1042,7 @@ The following is an example that outputs the top 10 countries and the total numb
     ORDER BY SUM(gold) DESC
     LIMIT 10;
      
-    === <Result of SELECT Command in Line 1> ===
+::
      
       nation_code             sum(gold)
     ===================================
@@ -859,6 +1066,8 @@ The following example shows how to output the number of gold medals by year and 
     FROM participant 
     WHERE nation_code LIKE 'AU%';
      
+::
+
         host_year  nation_code                  gold     sum_gold
     =============================================================
              1988  'AUS'                           3            3
@@ -880,6 +1089,8 @@ The following example is removing the "ORDER BY host_year" clause under the **OV
     FROM participant 
     WHERE nation_code LIKE 'AU%';
     
+::
+
         host_year  nation_code                  gold     sum_gold
     =============================================================
              2004  'AUS'                          17           52
@@ -928,6 +1139,8 @@ The following example shows how to output the population variance of all student
      
     SELECT VAR_POP(score) FROM student;
      
+::
+
                 var_pop(score)
     ==========================
          5.427555555555550e+02
@@ -940,6 +1153,8 @@ The following example shows how to output the score and population variance of a
     FROM student 
     ORDER BY subjects_id, name;
      
+::
+
       subjects_id  name                                     score                     v_pop
     =======================================================================================
                 1  'Bruce'                  6.300000000000000e+01     6.931999999999998e+02
@@ -982,23 +1197,16 @@ The following example shows how to output the sample variance of all students f
 
     CREATE TABLE student (name VARCHAR(32), subjects_id INT, score DOUBLE);
     INSERT INTO student VALUES
-    ('Jane',1, 78),
-    ('Jane',2, 50),
-    ('Jane',3, 60),
-    ('Bruce', 1, 63),
-    ('Bruce', 2, 50),
-    ('Bruce', 3, 80),
-    ('Lee', 1, 85),
-    ('Lee', 2, 88),
-    ('Lee', 3, 93),
-    ('Wane', 1, 32),
-    ('Wane', 2, 42),
-    ('Wane', 3, 99),
-    ('Sara', 1, 17),
-    ('Sara', 2, 55),
-    ('Sara', 3, 43);
-     
+    ('Jane',1, 78), ('Jane',2, 50), ('Jane',3, 60),
+    ('Bruce', 1, 63), ('Bruce', 2, 50), ('Bruce', 3, 80),
+    ('Lee', 1, 85), ('Lee', 2, 88), ('Lee', 3, 93),
+    ('Wane', 1, 32), ('Wane', 2, 42), ('Wane', 3, 99),
+    ('Sara', 1, 17), ('Sara', 2, 55), ('Sara', 3, 43);     
+    
     SELECT VAR_SAMP(score) FROM student;
+    
+::
+
                var_samp(score)
     ==========================
          5.815238095238092e+02
@@ -1011,6 +1219,8 @@ The following example shows how to output the score and sample variance of all s
     FROM student 
     ORDER BY subjects_id, name;
      
+::
+
       subjects_id  name                                     score                    v_samp
     =======================================================================================
                 1  'Bruce'                  6.300000000000000e+01     8.665000000000000e+02

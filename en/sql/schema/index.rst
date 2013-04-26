@@ -62,7 +62,7 @@ The **ALTER INDEX** statement rebuilds an index. In other words, it drops and re
         ( column_name[ {, column_name} ...] ) [ WHERE <filter_predicate> ]
         | (function_name (argument_list) )
 
-*   **UNIQUE** : Creates an index with unique values.
+*   **UNIQUE** : Specifies that an index to be recreated is an unique index.
 *   *index_name* : Specifies the name of the index to be recreated. The index name must be unique in the table.
 *   *table_name* : Specifies the name of the table where the index is recreated.
 *   *column_name* : Specifies the name of the column where the index is applied. To create a multiple column index, specify two or more column names.

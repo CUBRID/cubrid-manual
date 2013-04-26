@@ -23,10 +23,10 @@ MERGE
     <merge_hint> ::=
     /*+ [ USE_UPDATE_IDX (<update_index_list>) ] [ USE_INSERT_IDX (<insert_index_list>) ] */
     
-* <*target*>: 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있다.
-* <*source*>: 데이터를 가져올 원본 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
-* <*join_condition*>: 갱신할 조건을 명시한다.
-* <*merge_update_clause*>: <*join_condition*> 조건이 TRUE이면 대상 테이블의 새로운 칼럼 값들을 지정한다.
+*   <*target*>: 갱신하거나 삽입할 대상 테이블. 여러 개의 테이블 또는 뷰가 될 수 있다.
+*   <*source*>: 데이터를 가져올 원본 테이블. 여러 개의 테이블 또는 뷰가 될 수 있으며, 부질의(subquery)도 가능하다.
+*   <*join_condition*>: 갱신할 조건을 명시한다.
+*   <*merge_update_clause*>: <*join_condition*> 조건이 TRUE이면 대상 테이블의 새로운 칼럼 값들을 지정한다.
 
     *   **UPDATE** 절이 실행되면, <*target*>에 정의된 **UPDATE** 트리거가 활성화된다.
     *   <*col*>: 업데이트할 칼럼은 반드시 대상 테이블의 칼럼이어야 한다.
@@ -36,7 +36,7 @@ MERGE
     *   **ON** 조건 절에서 참조된 칼럼은 업데이트할 수 없다.
     *   뷰를 업데이트할 때에는 **DEFAULT** 를 명시할 수 없다.
 
-* <*merge_insert_clause*>: <*join_condition*> 조건이 FALSE이면 대상 테이블의 칼럼으로 값을 삽입한다.
+*   <*merge_insert_clause*>: <*join_condition*> 조건이 FALSE이면 대상 테이블의 칼럼으로 값을 삽입한다.
 
     *   **INSERT** 절이 실행되면, <*target*>에 정의된 **INSERT** 트리거들이 활성화된다.
     *   <*insert_condition*>: 지정한 조건이 TRUE일 때 삽입 연산을 실행한다. <*source*>의 칼럼만 조건에 포함할 수 있다.
@@ -44,7 +44,7 @@ MERGE
     *   <*expr_list*>: 상수 필터 조건은 모든 원본 테이블의 행들을 대상 테이블에 삽입하는 데 사용될 수 있다. 상수 필터 조건의 예로 ON (1=1)과 같은 것이 있다.
     *   <*merge_update_clause*>만 지정하거나 <*merge_update_clause*>와 함께 지정할 수 있다. 둘 다 명시한다면 순서는 바뀌어도 된다.
 
-* <*merge_hint*>: **MERGE** 문의 인덱스 힌트
+*   <*merge_hint*>: **MERGE** 문의 인덱스 힌트
  
     *   **USE_UPDATE_IDX** (<*update_index_list*>): **MERGE** 문의 **UPDATE** 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 **UPDATE** 절을 수행할 때 사용할 인덱스 이름을 나열한다. <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
     *   **USE_INSERT_IDX** (<*insert_index_list*>): **MERGE** 문의 **INSERT** 절에서 사용되는 인덱스 힌트. *insert_index_list*\ 에 **INSERT** 절을 수행할 때 사용할 인덱스 이름을 나열한다. <*join_condition*>에 해당 힌트가 적용된다.
@@ -78,6 +78,9 @@ MERGE
      
     -- the result of above query
     SELECT * FROM target_table;
+    
+::
+
                 a            b            c
     =======================================
                 1            2            5
@@ -133,6 +136,8 @@ MERGE
     INSERT (t.std_id, t.addscore) VALUES (s.std_id, 10 + s.score * 0.1) WHERE s.score <= 30;
      
     SELECT * FROM bonus ORDER BY 1;
+
+::
     
     std_id     addscore
     ==========================

@@ -51,7 +51,9 @@ The following example shows how to execute hierarchical query.
     FROM tree
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
-     
+
+::
+    
     id  mgrid       name
     ======================
     1   null        Kim
@@ -68,13 +70,17 @@ The following example shows how to execute hierarchical query.
     7   6       Brown
     7   6       Brown
      
-    -- Executing a hierarchical query with CONNECT BY clause
+.. code-block:: sql
+
+    -- Executing a hierarchical query with START WITH clause
     SELECT id, mgrid, name
     FROM tree
     START WITH mgrid IS NULL
     CONNECT BY prior id=mgrid
     ORDER BY id;
-     
+
+::
+    
     id  mgrid       name
     =============================
     1   null        Kim
@@ -124,7 +130,9 @@ The example illustrates how joins can be used in **CONNECT BY** queries. The joi
     START WITH t.mgrid is null
     CONNECT BY prior t.id=t.mgrid
     ORDER BY t.id;
-     
+
+::
+    
     id  name        job     level
     ================================================
     1   Kim         Partner     1
@@ -134,7 +142,7 @@ The example illustrates how joins can be used in **CONNECT BY** queries. The joi
     5   Verma       Sales Exec. 2
     6   Foster      Sales Exec. 2
     7   Brown       Assistant   3
-
+    
 Ordering Data with the Hierarchical Query
 =========================================
 
@@ -148,13 +156,15 @@ The result with hierarchical query shows parent and child nodes in a row accordi
 
 .. code-block:: sql
 
-    -- Outputting a parent node and its child nodes, which sibling nodes that share the same parent are sorted in the order of birth year.
+    -- Outputting a parent node and its child nodes, which sibling nodes that share the same parent are sorted in the order of birthyear.
     SELECT id, mgrid, name, birthyear, level
     FROM tree
     START WITH mgrid IS NULL
     CONNECT BY PRIOR id=mgrid
     ORDER SIBLINGS BY birthyear;
-     
+
+::
+    
     id        mgrid  name                    birthyear        level
     ==========================================================================
     2         NULL  'Moy'                        1958            1
@@ -169,22 +179,24 @@ The following example shows how to display information about seniors and subordi
 
 .. code-block:: sql
 
-    -- Outputting siblings in a row
+    -- Outputting a parent node and its child nodes, which sibling nodes that share the same parent are sorted in the order of id.
     SELECT id, mgrid, name, LEVEL
     FROM tree
     START WITH mgrid IS NULL
     CONNECT BY PRIOR id=mgrid
     ORDER SIBLINGS BY id;
-     
+
+::
+    
     id  mgrid       name        level
-    ===============================================
-    1   null        Kim     1
-    3   1       Jonas       2
-    4   1       Smith       2
-    2   null        Moy     1
-    5   2       Verma       2
-    6   2       Foster      2
-    7   6       Brown       3
+    ==================================
+    1   null        Kim         1
+    3   1           Jonas       2
+    4   1           Smith       2
+    2   null        Moy         1
+    5   2           Verma       2
+    6   2           Foster      2
+    7   6           Brown       3
     
 Pseudo Columns for Hierarchical Query
 =====================================
@@ -208,12 +220,14 @@ The following example shows how to retrieve the **LEVEL** value to check level o
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        level
     =========================================
-    3   1       Jonas       2
-    4   1       Smith       2
-    5   2       Verma       2
-    6   2       Foster      2
+    3   1           Jonas       2
+    4   1           Smith       2
+    5   2           Verma       2
+    6   2           Foster      2
 
 The following example shows how to add **LEVEL** conditions after the **CONNECT BY** statement.
 
@@ -221,6 +235,8 @@ The following example shows how to add **LEVEL** conditions after the **CONNECT 
 
     SELECT LEVEL FROM db_root CONNECT BY LEVEL <= 10;
      
+::
+
             level
     =============
                 1
@@ -252,6 +268,8 @@ The following example shows how to retrieve the **CONNECT_BY_ISLEAF** value to c
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        connect_by_isleaf
     ===========================================================
     1   null        Kim     0
@@ -297,6 +315,8 @@ The following example shows how to retrieve the **CONNECT_BY_ISCYCE** value to c
     CONNECT BY NOCYCLE PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        connect_by_iscycle
     ==========================================================
     1   null        Kim     0
@@ -330,6 +350,8 @@ The following example shows how to retrieve the root row's *id* value.
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        connect_by_root id
     ==========================================================
     1   null        Kim     1
@@ -358,15 +380,17 @@ The following example shows how to retrieve the parent row's *id* value.
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        prior_id
     ========================================
-    1   null        Kim     null
-    2   null        Moy     null
-    3   1       Jonas       1
-    4   1       Smith       1
-    5   2       Verma       2
-    6   2       Foster  2
-    7   6       Brown       6
+    1   null        Kim         null
+    2   null        Moy         null
+    3   1           Jonas       1
+    4   1           Smith       1
+    5   2           Verma       2
+    6   2           Foster      2
+    7   6           Brown       6
 
 Functions for Hierarchical Query
 ================================
@@ -389,15 +413,17 @@ The following example shows how to retrieve path from a root to the specified ro
     CONNECT BY PRIOR id=mgrid
     ORDER BY id;
      
+::
+
     id  mgrid       name        hierarchy
     =================================================
-    1   null        Kim     /Kim
-    2   null        Moy     /Moy
-    3   1       Jonas       /Kim/Jonas
-    4   1       Smith       /Kim/Smith
-    5   2       Verma       /Moy/Verma
-    6   2       Foster      /Moy/Foster
-    7   6       Brown       /Moy/Foster/Brown
+    1   null        Kim         /Kim
+    2   null        Moy         /Moy
+    3   1           Jonas       /Kim/Jonas
+    4   1           Smith       /Kim/Smith
+    5   2           Verma       /Moy/Verma
+    6   2           Foster      /Moy/Foster
+    7   6           Brown       /Moy/Foster/Brown
 
 Examples of Hierarchical Query
 ==============================
@@ -410,21 +436,56 @@ Once a table is create, you can get the entire data with hierarchical structure 
 
 .. code-block:: sql
 
-    SELECT L1.ID, L1.ParentID, ..., 1 AS [Level]
+    CREATE TABLE tree_table (ID int PRIMARY KEY, ParentID int, name VARCHAR(128));
+    
+    INSERT INTO tree_table VALUES (1,NULL,'Kim');
+    INSERT INTO tree_table VALUES (2,1,'Moy');
+    INSERT INTO tree_table VALUES (3,1,'Jonas');
+    INSERT INTO tree_table VALUES (4,1,'Smith');
+    INSERT INTO tree_table VALUES (5,3,'Verma');
+    INSERT INTO tree_table VALUES (6,3,'Foster');
+    INSERT INTO tree_table VALUES (7,4,'Brown');
+    INSERT INTO tree_table VALUES (8,4,'Lin');
+    INSERT INTO tree_table VALUES (9,2,'Edwin');
+    INSERT INTO tree_table VALUES (10,9,'Audrey');
+    INSERT INTO tree_table VALUES (11,10,'Stone');
+    
+    SELECT L1.ID, L1.ParentID, L1.name, 1 AS [Level]
         FROM tree_table AS L1
         WHERE L1.ParentID IS NULL
     UNION ALL
-    SELECT L2.ID, L2.ParentID, ..., 2 AS [Level]
+    SELECT L2.ID, L2.ParentID, L2.name, 2 AS [Level]
         FROM tree_table AS L1
             INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
         WHERE L1.ParentID IS NULL
     UNION ALL
-    SELECT L3.ID, L3.ParentID, ..., 3 AS [Level]
+    SELECT L3.ID, L3.ParentID, L3.name, 3 AS [Level]
         FROM tree_table AS L1
             INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
             INNER JOIN tree_table AS L3 ON L2.ID=L3.ParentID
         WHERE L1.ParentID IS NULL
-    UNION ALL ...
+    UNION ALL
+    SELECT L4.ID, L4.ParentID, L4.name, 4 AS [Level]
+        FROM tree_table AS L1
+            INNER JOIN tree_table AS L2 ON L1.ID=L2.ParentID
+            INNER JOIN tree_table AS L3 ON L2.ID=L3.ParentID
+            INNER JOIN tree_table AS L4 ON L3.ID=L4.ParentID
+        WHERE L1.ParentID IS NULL;
+
+::
+
+               ID     ParentID  name                        Level
+    =============================================================
+                1         NULL  'Kim'                           1
+                2            1  'Moy'                           2
+                3            1  'Jonas'                         2
+                4            1  'Smith'                         2
+                9            2  'Edwin'                         3
+                5            3  'Verma'                         3
+                6            3  'Foster'                        3
+                7            4  'Brown'                         3
+                8            4  'Lin'                           3
+               10            9  'Audrey'                        4
 
 Because you do not know how many levels exist in the data, you can rewrite the query above as a stored procedure that loops until no new row is retrieved.
 
@@ -432,19 +493,35 @@ However, the hierarchical structure should be checked every step while looping, 
 
 .. code-block:: sql
 
-    SELECT ID, ParentID, ..., Level
+    SELECT ID, ParentID, name, Level
     FROM tree_table
     START WITH ParentID IS NULL
-    CONNECT BY ParentID=PRIOR ID
+    CONNECT BY ParentID=PRIOR ID;
+
+::
+
+               ID     ParentID  name                        level
+    =============================================================
+                1         NULL  'Kim'                           1
+                2            1  'Moy'                           2
+                9            2  'Edwin'                         3
+               10            9  'Audrey'                        4
+               11           10  'Stone'                         5
+                3            1  'Jonas'                         2
+                5            3  'Verma'                         3
+                6            3  'Foster'                        3
+                4            1  'Smith'                         2
+                7            4  'Brown'                         3
+                8            4  'Lin'                           3
 
 You can specify **NOCYCLE** to prevent an error from occurring as follows:
 
 .. code-block:: sql
 
-    SELECT ID, ParentID, ..., Level
+    SELECT ID, ParentID, name, Level
     FROM tree_table
     START WITH ParentID IS NULL
-    CONNECT BY NOCYCLE ParentID=PRIOR ID
+    CONNECT BY NOCYCLE ParentID=PRIOR ID;
 
 Performance of Hierarchical Query
 =================================

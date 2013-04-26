@@ -3055,6 +3055,30 @@ In java.sql.XAConnection interface, HOLD_CURSORS_OVER_COMMIT is not supported(CU
 
 Current CUBRID does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in java.sql.XAConnection interface.
 
+From 9.0, STRCMP behaves case-sensitively
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Until the previous version of 9.0, STRCMP did not distinguish an upppercase and a lowercase. From 9.0, it compares the strings case-sensitively.
+To make STRCMP case-insensitive, you should use case-insensitive collation(e.g.: utf8_en_ci).
+
+.. code-block:: sql
+
+    -- In previous version of 9.0 STRCMP works case-insensitively
+    SELECT STRCMP ('ABC','abc');
+    0
+    
+    -- From 9.0 version, STRCMP distinguish the uppercase and the lowercase when the collation is case-sensitive.
+    export CUBRID_CHARSET=en_US.iso88591
+    
+    SELECT STRCMP ('ABC','abc');
+    -1
+    
+    -- If the collation is case-insensitive, it distinguish the uppercase and the lowercase.
+    export CUBRID_CHARSET=en_US.iso88591
+
+    SELECT STRCMP ('ABC' COLLATE utf8_en_ci ,'abc' COLLATE utf8_en_ci);
+    0
+
 Existing Cautions
 -----------------
 

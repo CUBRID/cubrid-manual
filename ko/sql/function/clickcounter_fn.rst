@@ -23,6 +23,7 @@ INCR, DECR
 
 .. code-block:: sql
 
+    CREATE TABLE board (id INT, cnt INT, content VARCHAR(8096));
     SELECT content FROM board WHERE id=1 WITH INCREMENT FOR cnt;
 
 .. note::
@@ -79,6 +80,8 @@ INCR, DECR
 .. code-block:: sql
 
     SELECT content, INCR(read_count) FROM board WHERE id = 1;
+
+::
     
       content                read_count
     ===================================
@@ -89,6 +92,8 @@ INCR, DECR
 .. code-block:: sql
 
     SELECT content, read_count FROM board WHERE id = 1;
+    
+::
     
       content                read_count
     ===================================

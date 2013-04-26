@@ -23,6 +23,7 @@ If you want to increase or decrease the click counter without specifying **INCR*
 
 .. code-block:: sql
 
+    CREATE TABLE board (id INT, cnt INT, content VARCHAR(8096));
     SELECT content FROM board WHERE id=1 WITH INCREMENT FOR cnt;
 
 .. note::
@@ -80,6 +81,8 @@ The following example shows how to increment the value of the 'read_count' colum
 
     SELECT content, INCR(read_count) FROM board WHERE id = 1;
     
+::
+
       content                read_count
     ===================================
       'text...'                       0
@@ -90,7 +93,8 @@ In the example, the column value becomes read_count + 1 as a result of the **INC
 
     SELECT content, read_count FROM board WHERE id = 1;
     
+::
+
       content                read_count
     ===================================
       'text...'                       1
-

@@ -7,32 +7,29 @@ Numeric Types
 
 CUBRID supports the following numeric data types to store integers or real numbers.
 
-+----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| Type                 | Bytes     | Mix                                                     | Max                                                     | Exact/approx.       |
-+======================+===========+=========================================================+=========================================================+=====================+
-| **SHORT**,           | 2         | -32,768                                                 | 32,767                                                  | exact numeric       |
-| **SMALLINT**         |           |                                                         |                                                         |                     |
-+----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| **INTEGER**,         | 4         | -2,147,483,648                                          | +2,147,483,647                                          | exact numeric       |
-| **INT**              |           |                                                         |                                                         |                     |
-+----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| **BIGINT**           | 8         | -9,223,372,036,854,775,808                              | +9,223,372,036,854,775,807                              | exact numeric       |
-+----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| **NUMERIC**,         | 16        | precision                                               | precision                                               | exact numeric       |
-| **DECIMAL**          |           | *p*                                                     | *p*                                                     |                     |
-|                      |           | : 1                                                     | : 38                                                    |                     |
-|                      |           | scale                                                   | scale                                                   |                     |
-|                      |           | *s*                                                     | *s*                                                     |                     |
-|                      |           | : 0                                                     | : 38                                                    |                     |
-+----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| **FLOAT**,           | 4         | -3.402823466E+38 (ANSI/IEEE 754-1985 standard)          | +3.402823466E+38                                        | approximate numeric |
-| **REAL**             |           |                                                         | (ANSI/IEEE 754-1985 standard)                           | floating point : 7  |
-+----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| **DOUBLE**,          | 8         | -1.7976931348623157E+308 ANSI/IEEE 754-1985 standard)   | +1.7976931348623157E+308(ANSI/IEEE 754-1985 standard)   | approximate numeric |
-| **DOUBLE PRECISION** |           |                                                         |                                                         | floating point : 15 |
-+----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
-| **MONETARY**         | 12        | -3.402823466E+38                                        | +3.402823466E+38                                        | approximate numeric |
-+----------------------+-----------+---------------------------------------------------------+---------------------------------------------------------+---------------------+
++----------------------+-----------+---------------------------------+--------------------------------+---------------------+
+| Type                 | Bytes     | Mix                             | Max                            | Exact/approx.       |
++======================+===========+=================================+================================+=====================+
+| **SHORT**,           | 2         | -32,768                         | 32,767                         | exact numeric       |
+| **SMALLINT**         |           |                                 |                                |                     |
++----------------------+-----------+---------------------------------+--------------------------------+---------------------+
+| **INTEGER**,         | 4         | -2,147,483,648                  | +2,147,483,647                 | exact numeric       |
+| **INT**              |           |                                 |                                |                     |
++----------------------+-----------+---------------------------------+--------------------------------+---------------------+
+| **BIGINT**           | 8         | -9,223,372,036,854,775,808      | +9,223,372,036,854,775,807     | exact numeric       |
++----------------------+-----------+---------------------------------+--------------------------------+---------------------+
+| **NUMERIC**,         | 16        | precision *p*: 1                | precision *p*: 38              | exact numeric       |
+| **DECIMAL**          |           |                                 |                                |                     |
+|                      |           | scale *s*: 0                    | scale *s*: 38                  |                     |
++----------------------+-----------+---------------------------------+--------------------------------+---------------------+
+| **FLOAT**,           | 4         | -3.402823466E+38                | +3.402823466E+38               | approximate numeric |
+| **REAL**             |           | (ANSI/IEEE 754-1985 standard)   | (ANSI/IEEE 754-1985 standard)  | floating point : 7  |
++----------------------+-----------+---------------------------------+--------------------------------+---------------------+
+| **DOUBLE**,          | 8         | -1.7976931348623157E+308        | +1.7976931348623157E+308       | approximate numeric |
+| **DOUBLE PRECISION** |           | (ANSI/IEEE 754-1985 standard)   | (ANSI/IEEE 754-1985 standard)  | floating point : 15 |
++----------------------+-----------+---------------------------------+--------------------------------+---------------------+
+| **MONETARY**         | 12        | -3.402823466E+38                | +3.402823466E+38               | approximate numeric |
++----------------------+-----------+---------------------------------+--------------------------------+---------------------+
 
 Numeric data types are divided into exact and approximate types. Exact numeric data types (**SMALLINT**, **INT**, **BIGINT**, **NUMERIC**) are used for numbers whose values must be precise and consistent, such as the numbers used in financial accounting. Note that even when the literal values are equal, approximate numeric data types (**FLOAT**, **DOUBLE**, **MONETARY**) can be interpreted differently depending on the system.
 
@@ -579,25 +576,38 @@ Available Format for Strings in Date/Time Type
 
         SELECT CAST('420' AS DATE);
          
+    ::
+
            cast('420' as date)
         ======================
           04/20/2012
          
+    .. code-block:: sql
+
         SELECT CAST('91015' AS TIME);
          
+    ::
+
            cast('91015' as time)
         ========================
           09:10:15 AM
          
-         
+    .. code-block:: sql
+
         SELECT CAST('110420091035.359' AS DATETIME);
          
+    ::
+
            cast('110420091035.359' as datetime)
         =======================================
           09:10:35.359 AM 04/20/2011
          
+    .. code-block:: sql
+
         SELECT CAST('110420091035.359' AS TIMESTAMP);
          
+    ::
+
            cast('110420091035.359' as timestamp)
         ========================================
           09:10:35 AM 04/20/2011
@@ -687,8 +697,12 @@ A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* 
       X'aa'                 X'aa'
       X'aaa'                NULL
      
+.. code-block:: sql
+
     INSERT INTO bitvar_tbl(a2) VALUES (0xaaa);
      
+::
+
     ERROR: Data overflow coercing X'aaa' to type bit varying.
 
 .. _char-data-type:
@@ -712,7 +726,7 @@ The followings are the rules that are applied when using the character string ty
     'abc'
     'def'
 
-*   The two strings above are considered identical to one string below. ::
+    The two strings above are considered identical to one string below. ::
 
     'abcdef'
 
@@ -727,6 +741,7 @@ To enter the language of a specific country, we recommend that you to change the
 **Length**
  
     Specify the number of a character string.
+    
     When the length of the character string entered exceeds the length specified, the excess characters are truncated.
 
     For a fixed-length character string type such as **CHAR**, the length is fixed at the declared length. Therefore, the right part (trailing space) of the character string is filled with space characters when the string is stored. For a variable-length character string type such as **VARCHAR**, only the entered character string is stored, and the space is not filled with space characters.
@@ -739,15 +754,11 @@ To enter the language of a specific country, we recommend that you to change the
 
 **Character Set, charset**
 
-    A character set (charset) is a set in which rules are defined that relate to what kind of codes can be used for encoding when specified characters (symbols) are stored in the computer.
-
-    The character used by CUBRID can be configured as the **CUBRID_CHARSET** environment variable. For details, see :doc:`/sql/i18n`.
+    A character set (charset) is a set in which rules are defined that relate to what kind of codes can be used for encoding when specified characters (symbols) are stored in the computer. The character used by CUBRID can be configured as the **CUBRID_CHARSET** environment variable. For details, see :doc:`/sql/i18n`.
 
 **Collating Character Sets**
 
     A collation is a set of rules used for comparing characters to search or sort values stored in the database when a certain character set is specified. For details, see :doc:`/sql/i18n`.
-
-    Therefore, such rules are applied only to character string data types such as **CHAR** or **VARCHAR**. For a national character string type such as **NCAHR()** or **NCHAR VARYING()** , the sorting rules are determined according to the encoding algorithm of the specified character set.
 
 **Character String Coercion**
 
@@ -816,6 +827,7 @@ NCHAR(n)
 **NCHAR** (*n*) is the same with **CHAR** (*n*).
 
 .. note::
+
     This type had been used to input the data for the languages except English 
     before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you newly create the schema, it is recommended to use **CHAR** instead of this type.
 
@@ -825,8 +837,8 @@ NCHAR VARYING(n)
 **NCHAR VARYING** (*n*) is the same with **VARCHAR** (*n*).
 
 .. note::
-    This type had been used to input the data for the languages except English 
-    before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you newly create the schema, it is recommended to use **VARCHAR** instead of this type.
+
+    This type had been used to input the data for the languages except English before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you newly create the schema, it is recommended to use **VARCHAR** instead of this type.
 
 .. _escape-characters:
 
@@ -837,7 +849,8 @@ CUBRID supports two kinds of methods to escape special characters. One is using 
 
 * Escape with Quotes
 
-    If you set **no** for the system parameter **ansi_quotes** in the **cubrid.conf** file, you can use both double quotes (") and singe quotes (') to wrap strings. The default value for the **ansi_quotes** parameter is **yes**, and you can use only single quotes to wrap the string. 
+    If you set **no** for the system parameter **ansi_quotes** in the **cubrid.conf** file, you can use both double quotes (") and singe quotes (') to wrap strings. 
+    The default value for the **ansi_quotes** parameter is **yes**, and you can use only single quotes to wrap the string. 
 
     *   You should use two single quotes ('') for the single quotes included in the strings wrapped in single quotes.
     *   You should use two double quotes ("") for the double quotes included in the strings wrapped in double quotes. (when **ansi_quotes** = **no**)
@@ -861,69 +874,113 @@ CUBRID supports two kinds of methods to escape special characters. One is using 
 
     **\\%** and **\\_** are used in the pattern matching syntax such as **LIKE** to search percent signs and underbars and are used as a wildcard character if there is no backslash. Outside of the pattern matching syntax, "\\%"and "\\_" are recognized as normal strings not wildcard characters. For details, see :ref:`like-expr`.
 
-The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is no, and a value for **no_backslash_escapes** is no.
+The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is yes(default), and a value for **no_backslash_escapes** is no.
 
 .. code-block:: sql
 
+    -- ansi_quotes=yes, no_backslash_escapes=no
     SELECT STRCMP('single quotes test('')', 'single quotes test(\')');
-     
+
+If you run the above query, backslash is regarded as an escape character. Therefore, above two strings are the same.
+    
+::
+
        strcmp('single quotes test('')', 'single quotes test('')')
     =============================================================
                                                                 0
-     
-    SELECT STRCMP("\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z", "a\bcdefghijklm\nopq\rs\tuvwxyz");
-     
+
+.. code-block:: sql
+
+    SELECT STRCMP('\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z', 'a\bcdefghijklm\nopq\rs\tuvwxyz');
+
+If you run the above query, backslash is regarded as an escape character. Therefore, above two strings are the same. 
+
+::
+
        strcmp('abcdefghijklm
     s       uvwxyz', 'abcdefghijklm
     s       uvwxyz')
     =====================================================================
-                                                                        0 
+                                                                        0
+
+.. code-block:: sql
 
     SELECT LENGTH('\\');
-     
+
+If you run the above query, backslash is regarded as an escape character. Therefore, the length of above string is 1.
+    
+::
+
        char_length('\')
     ===================
                       1
 
-The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is yes, and a value for **no_backslash_escapes** is yes.
+The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is yes(default), and a value for **no_backslash_escapes** is yes(default). Backslash character is regarded as a general character.
 
 .. code-block:: sql
 
+    -- ansi_quotes=yes, no_backslash_escapes=yes
+
     SELECT STRCMP('single quotes test('')', 'single quotes test(\')');
-     
-    In the command from line 2,
-    ERROR: unterminated string
-     
-    In the command from line 2,
-    ERROR: syntax error, unexpected UNTERMINATED_STRING
-     
-     
-    SELECT STRCMP("\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z", "a\bcdefghijklm\nopq\rs\tuvwxyz");
-     
-    In line 1, column 18,
-    ERROR: [\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z] is not defined.
-     
-    In line 1, column 18,
-    ERROR: [a\bcdefghijklm\nopq\rs\tuvwxyz] is not defined.
-     
+
+If you run the above query, the quotation mark is regarded as opened, so the below error occurs. 
+If you input this query on the CSQL interpreter's console, it waits the next quotation mark's input.
+
+::
+
+    ERROR: syntax error, unexpected UNTERMINATED_STRING, expecting SELECT or VALUE or VALUES or '('
+
+.. code-block:: sql
+
+    SELECT STRCMP('\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z', 'a\bcdefghijklm\nopq\rs\tuvwxyz');
+
+If you run the above query, backslash is regarded as a general character. Therefore, the result of the comparison between the above two strings shows different.
+    
+::
+
+       strcmp('\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z', 'a\bcdefghijklm\nopq\rs\tuvwxyz')
+    ===================================================================================================
+                                                                                                     -1
+
+.. code-block:: sql
+
     SELECT LENGTH('\\');
-     
+
+If you run the above query, backslash is regarded as a general character. Therefore, the length of above string is 2.
+
+::
+
        char_length('\\')
     ====================
                        2
 
-The following is the result of executing Escape if a value for the system parameter **ansi_quotes** in the **cubrid.conf** file is yes, and a value for **no_backslash_escapes** is no.
+The following shows the result of executing Escape about the LIKE clause when **ansi_quotes** is yes and **no_backslash_escapes** is no.
 
 .. code-block:: sql
+
+    -- ansi_quotes=yes, no_backslash_escapes=no
 
     CREATE TABLE t1 (a VARCHAR(200));
     INSERT INTO t1 VALUES ('aaabbb'), ('aaa%');
      
-    SELECT a FROM t1 WHERE a LIKE 'aaa\%' escape '\\';
-     
+    SELECT a FROM t1 WHERE a LIKE 'aaa\%' ESCAPE '\\';
+
+::
+
       a
     ======================
       'aaa%'
+
+If you run above query, it returns only one row because '%' character is regarded as a general character.
+      
+In the string of LIKE clause, backslash is always regarded as a general character. Therefore, if you want to make the '%' character as a general character, not as an pattern matching character, you should specify that '%' is an escape character by using ESCAPE clause.
+In the ESCAPE clause, backslash is regarded as an escape character. Therefore, we used two backslashes.
+
+If you want use other character than a backslash as an escape character, you can write the query as follows.
+
+.. code-block:: sql
+
+    SELECT a FROM t1 WHERE a LIKE 'aaa#%' ESCAPE '#';
 
 ENUM Data Type
 ==============
@@ -976,13 +1033,13 @@ When used in expressions, the **ENUM** type behaves either as a **CHAR** type or
 
     -- the first result column has ENUM type, the second has INTEGER type and the third has VARCHAR type
     SELECT color, color + 0, CONCAT(color, '') FROM tbl;
-     
+
+::
+    
       color                     color+0   concat(color, '')
     =========================================================
-      'red'                           1  'red'
       'yellow'                        2  'yellow'
-      'blue'                          3  'blue'
-      'green'                         4  'green'    
+      'red'                           1  'red' 
 
 When used in type contexts other than **CHAR** or numbers, the enum is coerced to that type using either the index or the enum value. The table below shows which part of an **ENUM** type is used in the coercion:
 
@@ -1035,7 +1092,7 @@ To understand these rules, consider the following table:
         color ENUM ('red', 'yellow', 'blue', 'green')
     );
     
-    INSERT INTO tbl (color) VALUES(1), (2), (3), (4);
+    INSERT INTO tbl (color) VALUES (1), (2), (3), (4);
 
 The following query will convert the constant 'red' to the enum value 'red' with index 1
 
@@ -1043,12 +1100,18 @@ The following query will convert the constant 'red' to the enum value 'red' with
 
     SELECT color FROM tbl WHERE color = 'red';
     
+::
+
       color
     ======================
       'red'
     
+.. code-block:: sql
+
     SELECT color FROM tbl WHERE color = 1;
     
+::
+
       color
     ======================
       'red'
@@ -1058,9 +1121,7 @@ The following queries will not return a conversion error but will not return any
 .. code-block:: sql
     
     SELECT color FROM tbl WHERE color = date'2010-01-01';
-
     SELECT color FROM tbl WHERE color = 15;
-
     SELECT color FROM tbl WHERE color = 'asdf';
     
 In the following queries the **ENUM** type will be converted to the type of the other operand:
@@ -1070,20 +1131,30 @@ In the following queries the **ENUM** type will be converted to the type of the 
     -- CHAR comparison using the enum value
     SELECT color FROM tbl WHERE color < 'pink';
     
+::
+
       color
     ======================
       'blue'
       'green'
 
+.. code-block:: sql
+
     -- INTEGER comparison using the enum index
     SELECT color FROM tbl WHERE color > 3;
+
+::
 
       color
     ======================
       'green'
 
+.. code-block:: sql
+
     -- Conversion error
     SELECT color FROM tbl WHERE color > date'2012-01-01';
+
+::
 
     ERROR: Cannot coerce value of domain "enum" to domain "date".
     
@@ -1095,6 +1166,8 @@ Values of the **ENUM** type are ordered by value index, not by enum value. When 
 .. code-block:: sql
 
     SELECT color FROM tbl ORDER BY color ASC;
+
+::
 
       color
     ======================
@@ -1109,13 +1182,14 @@ To order the values stored in an **ENUM** type column as **CHAR** values, users 
 
     SELECT color FROM tbl ORDER BY CAST (color AS VARCHAR) ASC;
 
+::
+
       color
     ======================
       'blue'
       'green'
       'red'
       'yellow'
-
 
 Notes
 -------
@@ -1127,7 +1201,6 @@ Using the **ALTER ... CHANGE** statement to modify the set of values of an **ENU
 .. code-block:: sql
     
     CREATE TABLE tbl(color enum ('red', 'green', 'blue'));
-
     INSERT INTO tbl VALUES('red'), ('green'), ('blue');
 
 The following statement will extend the **ENUM** type with the value 'yellow':
@@ -1135,10 +1208,10 @@ The following statement will extend the **ENUM** type with the value 'yellow':
 .. code-block:: sql
 
     ALTER TABLE tbl CHANGE color color enum ('red', 'green', 'blue', 'yellow');
-    
     INSERT into tbl VALUES(4);
-    
     SELECT color FROM tbl;
+
+::
 
       color
     ======================
@@ -1152,9 +1225,10 @@ The following statement will change all tuples with value 'green' to value 'red'
 .. code-block:: sql
 
     ALTER TABLE tbl CHANGE color color enum ('red', 'yellow', 'blue');
-    
     SELECT color FROM tbl;
     
+::
+
       color
     ======================
       'blue'
@@ -1266,7 +1340,7 @@ To Create and alter LOB
     ALTER TABLE doc_t ADD CONSTRAINT content_unique UNIQUE(content);
      
     -- an error occurs when creating an index on CLOB column
-    CREATE INDEX ON doc_t (content);
+    CREATE INDEX i_doc_t_content ON doc_t (content);
      
     -- creating a table and BLOB column
     CREATE TABLE image_t (image_id VARCHAR(36) PRIMARY KEY, doc_id VARCHAR(64) NOT NULL, image BLOB);
@@ -1338,6 +1412,8 @@ When you get a **LOB** type column, the data stored in a file to which the colum
     -- displaying locator value when selecting CLOB and BLOB column in CSQL interpreter
     SELECT doc_t.doc_id, content, image FROM doc_t, image_t WHERE doc_t.doc_id = image_t.doc_id;
      
+::
+
       doc_id                content               image
     ==================================================================
       'doc-1'               file:/home1/data1/ces_658/doc_t.00001282208855807171_7329  file:/home1/data1/ces_318/image_t.00001282208855809474_7474
@@ -1345,9 +1421,13 @@ When you get a **LOB** type column, the data stored in a file to which the colum
      
     2 rows selected.
      
+.. code-block:: sql
+
     -- using string functions after coercing its type by CLOB_TO_CHAR( )
     SELECT CLOB_TO_CHAR(content), SUBSTRING(CLOB_TO_CHAR(content), 10) FROM doc_t;
      
+::
+
        clob_to_char(content)  substring( clob_to_char(content) from 10)
     ============================================
       'This is a Dog'       ' Dog'
@@ -1355,22 +1435,46 @@ When you get a **LOB** type column, the data stored in a file to which the colum
      
     2 rows selected.
      
+.. code-block:: sql
+
     SELECT CLOB_TO_CHAR(content) FROM doc_t WHERE CLOB_TO_CHAR(content) LIKE '%Dog%';
      
+::
+
        clob_to_char(content)
     ======================
       'This is a Dog'
      
+.. code-block:: sql
+
     SELECT CLOB_TO_CHAR(content) FROM doc_t ORDER BY CLOB_TO_CHAR(content)
      
+::
+
        clob_to_char(content)
     ======================
       'This is a Cat'
       'This is a Dog'
      
-    -- an error occurs when LOB column specified in WHERE/ORDER BY/GROUP BY clauses
+.. code-block:: sql
+
     SELECT * FROM doc_t WHERE content LIKE 'This%';
+    
+::
+
+      doc_id                content
+    ============================================
+      'doc-1'               file:/home1/data1/ces_004/doc_t.00001366272829040346_0773
+      'doc-2'               file:/home1/data1/ces_256/doc_t.00001366272815153996_1229
+    
+.. code-block:: sql
+
+    -- an error occurs when LOB column specified in ORDER BY/GROUP BY clauses
     SELECT * FROM doc_t ORDER BY content;
+
+::
+
+    ERROR: doc_t.content can not be an ORDER BY column
 
 Functions and Operators for LOB
 -------------------------------
@@ -1444,19 +1548,25 @@ Commit/Rollback for **LOB** data changes are supported. That is, it ensures the 
 
 .. code-block:: sql
 
-    ;AUTOCOMMIT OFF
+    -- csql> ;AUTOCOMMIT OFF
      
     CREATE TABLE doc_t (doc_id VARCHAR(64) PRIMARY KEY, content CLOB);
     INSERT INTO doc_t VALUES ('doc-10', CHAR_TO_CLOB('This is content'));
     COMMIT;
-    UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 2') where doc_id = 'doc-10';
+    UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 2') WHERE doc_id = 'doc-10';
     ROLLBACK;
     SELECT doc_id, CLOB_TO_CHAR(content) FROM doc_t WHERE doc_id = 'doc-10';
     
+::
+
       doc_id   content                  
     =========================================================
-      'doc-10'  'This is content '
+      'doc-10'  'This is content'
      
+.. code-block:: sql
+
+    -- csql> ;AUTOCOMMIT OFF
+
     INSERT INTO doc_t VALUES ('doc-11', CHAR_TO_CLOB ('This is content'));
     COMMIT;
     UPDATE doc_t SET content = CHAR_TO_CLOB('This is content 3') WHERE doc_id = 'doc-11';
@@ -1464,6 +1574,8 @@ Commit/Rollback for **LOB** data changes are supported. That is, it ensures the 
     -- system crash occurred and then restart server
     SELECT doc_id, CLOB_TO_CHAR(content) FROM doc_t WHERE doc_id = 'doc-11';
      
+::
+
     -- Error : LOB Locator references to the previous LOB data because only LOB Locator is rollbacked.
 
 .. note:: 
@@ -1499,8 +1611,7 @@ Allowing multiple data values to be stored in a single attribute is an extended 
 
 As you see the table above, the value specified as a collection type can be inputted with curly braces ('{', '}') each value is separated with a comma (,).
 
-If the specified collection types are identical, the collection types can be cast explicitly by using the **CAST** operator. 
-The following table shows the collection types that allow explicit coercions.
+If the specified collection types are identical, the collection types can be cast explicitly by using the **CAST** operator. The following table shows the collection types that allow explicit coercions.
 
     +--------------+-----+----------+------+
     | FROM \\ TO   | SET | MULTISET | LIST |
@@ -1517,6 +1628,8 @@ Collection Types do not support collations. Therefore, Below query returns error
 .. code-block:: sql
 
         CREATE TABLE tbl (str SET (string) COLLATE utf8_en_ci);
+
+::
         
         Syntax error: unexpected 'COLLATE', expecting ',' or ')'
 
@@ -1532,6 +1645,8 @@ SET
     INSERT INTO set_tbl VALUES ({NULL});
     INSERT INTO set_tbl VALUES ({''});
     SELECT * FROM set_tbl;
+
+::
     
       col_1
     ======================
@@ -1539,17 +1654,25 @@ SET
     {NULL}
     {' '}
      
+.. code-block:: sql
+
     SELECT CAST (col_1 AS MULTISET), CAST (col_1 AS LIST) FROM set_tbl;
     
+::
+
        cast(col_1 as multiset)   cast(col_1 as sequence)
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'c'}
       {NULL}  {NULL}
       {' '}  {' '}
      
+.. code-block:: sql
+
     INSERT INTO set_tbl VALUES ('');
      
-    ERROR: Cannot coerce '' to type set.
+::
+
+    ERROR: Casting '' to type set is not supported.
 
 MULTISET
 --------
@@ -1562,12 +1685,18 @@ MULTISET
     INSERT INTO multiset_tbl VALUES ({'c','c','c','b','b', 'a'});
     SELECT * FROM multiset_tbl;
     
+::
+
       col_1
     ======================
       {'a', 'b', 'b', 'c', 'c', 'c'}
      
+.. code-block:: sql
+
     SELECT CAST(col_1 AS SET), CAST(col_1 AS LIST) FROM multiset_tbl;
     
+::
+
        cast(col_1 as set)   cast(col_1 as sequence)
     ============================================
       {'a', 'b', 'c'}  {'c', 'c', 'c', 'b', 'b', 'a'}
@@ -1583,12 +1712,18 @@ LIST/SEQUENCE
     INSERT INTO list_tbl VALUES ({'c','c','c','b','b', 'a'});
     SELECT * FROM list_tbl;
     
+::
+
       col_1
     ======================
       {'c', 'c', 'c', 'b', 'b', 'a'}
      
+.. code-block:: sql
+
     SELECT CAST(col_1 AS SET), CAST(col_1 AS MULTISET) FROM list_tbl;
     
+::
+
        cast(col_1 as set)  cast(col_1 as multiset)
     ============================================
       {'a', 'b', 'c'}  {'a', 'b', 'b', 'c', 'c', 'c'}
@@ -1695,6 +1830,8 @@ The type will be converted to the type of the column affected.
      
     SELECT * FROM t;
      
+::
+
                 i
     =============
               123
@@ -1708,6 +1845,8 @@ If the parameter value entered in the function can be converted to the specified
 
     SELECT MOD('123','2');
      
+::
+
                mod('123', '2')
     ==========================
          1.000000000000000e+00
@@ -1766,11 +1905,13 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
 
     .. code-block:: sql
 
-        CREATE TABLE t(i INT, s STRING);
-        INSERT INTO t VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
+        CREATE TABLE t1(i INT, s STRING);
+        INSERT INTO t1 VALUES(1,'1'),(2,'2'),(3,'3'),(4,'4'), (12,'12');
          
-        SELECT i FROM t WHERE i < '11.3';
-         
+        SELECT i FROM t1 WHERE i < '11.3';
+    
+    ::
+
                     i
         =============
                     1
@@ -1778,7 +1919,11 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
                     3
                     4
          
+    .. code-block:: sql
+    
         SELECT ('2' <= 11);
+        
+    ::
          
              ('2'<11)
         =============
@@ -1791,12 +1936,18 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
     .. code-block:: sql
 
         SELECT ('2010-01-01' < date'2010-02-02');
-         
+        
+    ::
+    
            ('2010-01-01'<date '2010-02-02')
         ==================================
                                         1
          
+    .. code-block:: sql
+
         SELECT (date'2010-02-02' >= '2010-01-01');
+        
+    ::
          
           (date '2010-02-02'>='2010-01-01')
         ===================================
@@ -1808,8 +1959,11 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
 
     .. code-block:: sql
 
-        PREPARE s FROM 'SELECT s FROM t WHERE s < ?';
+        PREPARE s FROM 'SELECT s FROM t1 WHERE s < ?';
         EXECUTE s USING 11;
+        
+    ::
+    
                s
         ===================
              '1'
@@ -1820,7 +1974,10 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
 
     .. code-block:: sql
 
-        SELECT s FROM t WHERE s > 11;
+        SELECT s FROM t1 WHERE s > 11;
+        
+    ::
+    
                s
         ==================
              '2'
@@ -1828,7 +1985,12 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
              '4'
              '12'
          
-        SELECT s FROM t WHERE s BETWEEN 11 AND 33;
+    .. code-block:: sql
+
+        SELECT s FROM t1 WHERE s BETWEEN 11 AND 33;
+        
+    ::
+    
                 s
         ======================
               '2'
@@ -1841,15 +2003,26 @@ If operand2 is a set operator( **IS IN**, **IS NOT IN**, **= ALL**, **= ANY**, *
 
     .. code-block:: sql
 
-        SELECT s FROM t;
+        CREATE TABLE t2 (s STRING);
+        INSERT INTO t2 VALUES ('01/01/1998'), ('01/01/1999'), ('01/01/2000');
+        SELECT s FROM t2;
          
+    ::
+
                    s
         ======================
             '01/01/1998'
             '01/01/1999'
             '01/01/2000'
          
-        SELECT s FROM t WHERE s <= date'02/02/1998';
+    .. code-block:: sql
+
+        SELECT s FROM t2 WHERE s <= date'02/02/1998';
+
+    In the above query, comparison operation is performed by converting date'02/02/1998' into string '02/02/1998'. 
+        
+    ::
+    
                     s
         ======================
             '01/01/1998'
@@ -1864,9 +2037,13 @@ Range Operation
     The string type operand will be converted to **DOUBLE**.
 
     .. code-block:: sql
-
-        SELECT i FROM t WHERE i <= all {'11','12'};
-         
+    
+        CREATE TABLE t3 (i INT);
+        INSERT INTO t3 VALUES (1), (2), (3), (4);
+        SELECT i FROM t3 WHERE i <= ALL {'11','12'};
+    
+    ::
+    
                     i
         =============
                     1
@@ -1881,18 +2058,24 @@ Range Operation
     .. code-block:: sql
 
         SELECT s FROM t2;
+    
+    ::
+    
+          s
+        =================
+          '01/01/1998'
+          '01/01/1999'
+          '01/01/2000'
          
-                  s
-        ======================
-              '01/01/2000'
-              '01/01/1999'
-              '01/01/1998'
-         
+    .. code-block:: sql
+
         SELECT s FROM t2 WHERE s <= ALL {date'02/02/1998',date'01/01/2000'};
          
-                  s
-        ======================
-               '01/01/1998'
+    ::
+
+          s
+        ================
+         '01/01/1998'
 
     An error will be returned if it cannot be converted to the corresponding type.
 
@@ -1906,6 +2089,8 @@ Arithmetic Operation
     .. code-block:: sql
 
         SELECT date'2002-01-01' - datetime'2001-02-02 12:00:00 am';
+
+    ::
 
            date '2002-01-01'- datetime '2001-02-02 12:00:00 am'
         =====================================================
@@ -1936,7 +2121,9 @@ Arithmetic Operation
     .. code-block:: sql
 
         SELECT date'2002-01-01' + '10';
-         
+    
+    ::
+    
           date '2002-01-01'+'10'
         ======================
           01/11/2002
@@ -1949,16 +2136,21 @@ Arithmetic Operation
     .. code-block:: sql
 
         SELECT date'2002-01-01'-'2001-01-01';
-         
+        
+    ::
+    
           date '2002-01-01'-'2001-01-01'
         ================================
                             31536000000
          
         -- this causes an error
+        
+    .. code-block:: sql
          
         SELECT date'2002-01-01'-'10';
          
-         In line 1, column 13,
+    ::
+    
          ERROR: Cannot coerce '10' to type datetime.    
      
 *   **Numeric Type & String Type Operands**
@@ -1971,6 +2163,8 @@ Arithmetic Operation
     .. code-block:: sql
 
         SELECT 4 + '5.2';
+        
+    ::
          
                         4+'5.2'
         ==========================
@@ -1981,9 +2175,17 @@ Arithmetic Operation
     .. code-block:: sql
 
         SELECT '2002-01-01'+1;
+        
+    ::
+    
            ERROR: Cannot coerce '2002-01-01' to type double.
         
+    .. code-block:: sql
+
         SELECT DATE'2002-01-01'+1;
+        
+    ::
+    
           date '2002-01-01'+1
         =====================
           01/02/2002
@@ -1995,31 +2197,37 @@ Arithmetic Operation
     .. code-block:: sql
 
         SELECT '3'*'2';
-         
+        
+    ::
+    
                              '3'*'2'
         ============================
                6.000000000000000e+00
 
     The '+' operator action depends on how to set the system parameter **plus_as_concat** in the **cubrid.conf** file. For details, see :ref:`stmt-type-parameters`.
 
-    * If a value for **plus_as_concat** is yes (default value), the concatenation of two strings will be returned.
+    *   If a value for **plus_as_concat** is yes (default value), the concatenation of two strings will be returned.
 
-      .. code-block:: sql
+        .. code-block:: sql
 
-        SELECT '1'+'1';
-         
-                       '1'+'1'
-        ======================
-                          '11'
-
-    * If a value for **plus_as_concat** is no and two strings can be converted to numbers, the **DOUBLE** type value will be returned by adding the two numbers.
-
-      .. code-block:: sql
-
-        SELECT '1'+'1';
-         
+            SELECT '1'+'1';
+        
+        ::
+    
                            '1'+'1'
-        ==========================
-             2.000000000000000e+00
+            ======================
+                              '11'
+
+    *   If a value for **plus_as_concat** is no and two strings can be converted to numbers, the **DOUBLE** type value will be returned by adding the two numbers.
+
+        .. code-block:: sql
+
+            SELECT '1'+'1';
+        
+        ::
+        
+                               '1'+'1'
+            ==========================
+                 2.000000000000000e+00
 
     An error will be returned if it cannot be converted to the corresponding type.

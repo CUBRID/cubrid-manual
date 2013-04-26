@@ -101,7 +101,9 @@ CREATE TRIGGER
      
     UPDATE participant SET gold = -5 WHERE nation_code = 'KOR'
     AND host_year = 2004;
-     
+
+::
+    
     ERROR: The operation has been rejected by trigger "medal_trigger".
 
 .. _trigger-event-time:
@@ -156,22 +158,22 @@ CREATE TRIGGER
 
 .. code-block:: sql
 
-    CREATE TRIGGER example
-    ...
-    BEFORE UPDATE ON history(score)
-    ...
+    CREATE TABLE update_logs(event_code INTEGER, score VARCHAR(10), dt DATETIME);
     
- 만약 *score* 칼럼의 첫 번째 인스턴스가 갱신되기 전에 트리거가 한 번만 호출되게 하려면, 아래의 예와 같이 **STATEMENT UPDATE** 형식을 사용한다.
+    CREATE TRIGGER example
+    BEFORE UPDATE ON history(score)
+    EXECUTE INSERT INTO update_logs VALUES (obj.event_code, obj.score, SYSDATETIME);
+
+만약 *score* 칼럼의 첫 번째 인스턴스가 갱신되기 전에 트리거가 한 번만 호출되게 하려면, 아래의 예와 같이 **STATEMENT UPDATE** 형식을 사용한다.
     
 다음은 문장 이벤트를 사용하는 예제이다. 문장 이벤트를 지정하면 갱신의 영향을 받는 인스턴스가 많더라도, 첫 번째 인스턴스가 갱신되기 전에 트리거가 한 번만 불려지게 된다.
 
 .. code-block:: sql
 
     CREATE TRIGGER example
-    ...
     BEFORE STATEMENT UPDATE ON history(score)
-    ...
-
+    EXECUTE PRINT 'There was an update on history table';
+    
 .. note:
 
     *   이벤트 타입으로 인스턴스 이벤트와 문장 이벤트를 지정할 경우에는 반드시 이벤트 대상을 명시해야 한다.
@@ -188,10 +190,11 @@ CREATE TRIGGER
 
 .. code-block:: sql
 
+    CREATE TABLE update_logs(event_code INTEGER, score VARCHAR(10), dt DATETIME);
+    
     CREATE TRIGGER example
-    ...
     BEFORE UPDATE ON history(score)
-    ...
+    EXECUTE INSERT INTO update_logs VALUES (obj.event_code, obj.score, SYSDATETIME);
 
 이벤트 타입과 대상 조합
 -----------------------
@@ -223,23 +226,23 @@ CREATE TRIGGER
 
 *   트리거의 조건 영역을 생략하면 조건 없는 트리거(unconditional trigger)가 되며 트리거가 호출될 때 항상 트리거의 실행 영역이 수행된다.
 
-다음은 조건 영역 내의 표현식에 상관명을 이용한 예제이다. 이벤트 타입이 **INSERT**, **UPDATE**, **DELETE** 인 경우에, 조건 영역 내의 표현식은 특정 칼럼 값에 접근하기 위하여 상관명 **obj**, **new**, **old** 를 사용할 수 있다. 예제에서 *example* 트리거는 *record* 칼럼의 현재 값을 이용해서 조건 영역을 검사하기 위해 트리거 조건 영역에 **obj** 를 칼럼 이름 앞에 사용하였다.
+다음은 조건 영역 내의 표현식에 상관명을 이용한 예제이다. 이벤트 타입이 **INSERT**, **UPDATE**, **DELETE** 인 경우에, 조건 영역 내의 표현식은 특정 칼럼 값에 접근하기 위하여 상관명 **obj**, **new**, **old** 를 사용할 수 있다. 예제에서 *example* 트리거는 칼럼의 새로운 값을 이용해서 조건 영역을 검사하기 위해 트리거 조건 영역에 **new** 를 칼럼 이름 앞에 사용하였다.
 
 .. code-block:: sql
 
     CREATE TRIGGER example
-    ........
-    IF obj.record * 1.20  < 500
-    .......
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
 
 다음은 조건 영역 내의 표현식에 **SELECT** 문을 사용한 예제이다. 예제의 트리거는 집계함수 **COUNT** (\*)를 사용하는 **SELECT** 문을 사용하여 그 값과 상수를 비교한다. **SELECT** 문은 반드시 괄호로 싸여 있어야 하고, 표현식의 마지막에 위치해야 한다.
 
 .. code-block:: sql
 
     CREATE TRIGGER example
-    ......
+    BEFORE INSERT ON participant
     IF 1000 >  (SELECT COUNT(*) FROM participant)
-    ......
+    EXECUTE REJECT;
 
 .. note:
 
@@ -472,13 +475,21 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
     INSERT INTO with_trigger VALUES (11) ON DUPLICATE KEY UPDATE id=22;
      
     SELECT * FROM trigger_actions;
+    
+::
+    
               va
     ==============
                 2
      
+.. code-block:: sql
+
     REPLACE INTO with_trigger VALUES (22);
      
     SELECT * FROM trigger_actions;
+    
+::
+    
               va
     ==============
                 2
@@ -548,6 +559,8 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
     SET TRIGGER MAXIMUM DEPTH 10;
     UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
      
+::
+
     ERROR: Maximum trigger depth 10 exceeded at trigger "loop_tgr".
 
 트리거를 이용한 응용
@@ -612,13 +625,15 @@ CUBRID에서는 **REPLACE** 문과 **INSERT … ON DUPLICATE KEY UPDATE** 문 �
 
 .. code-block:: sql
 
-    CREATE CLASS foo (n int);
+    CREATE TABLE foo (n int);
     CREATE TRIGGER foo_trigger
         DEFERRED UPDATE ON foo
         IF old.n = 100
         EXECUTE PRINT 'foo_trigger';
 
-위와 같이 트리거를 생성하려고 하면 다음과 같은 에러 메시지를 보여주고, 실패한다. ::
+위와 같이 트리거를 생성하려고 하면 다음과 같은 에러 메시지를 보여주고, 실패한다. 
+
+::
 
     ERROR: Error compiling condition for 'foo_trigger' : old.n is not defined.
 

@@ -78,7 +78,9 @@ SELECT
 .. code-block:: sql
 
     SELECT DISTINCT host_nation FROM olympic;
-    
+
+::
+
       host_nation
     ======================
       'Australia'
@@ -94,6 +96,8 @@ SELECT
 
     SELECT host_year as col1, host_nation as col2 FROM olympic ORDER BY col2 LIMIT 5;
     
+::
+    
              col1  col2
     ===================================
              2000  'Australia'
@@ -102,8 +106,12 @@ SELECT
              1976  'Canada'
              1948  'England'
      
+.. code-block:: sql
+
     SELECT CONCAT(host_nation, ', ', host_city) AS host_place FROM olympic
     ORDER BY host_place FOR ORDERBY_NUM() BETWEEN 1 AND 5;
+    
+::
     
       host_place
     ======================
@@ -157,12 +165,18 @@ FROM 절
     --FROM clause can be omitted in the statement
     SELECT 1+1 AS sum_value;
     
+::
+
         sum_value
     =============
                 2
      
+.. code-block:: sql
+
     SELECT CONCAT('CUBRID', '2008' , 'R3.0') AS db_version;
     
+::
+
       db_version
     ======================
       'CUBRID2008R3.0'
@@ -209,6 +223,8 @@ FROM 절
                         AND bronze > 0)
                        AS t(s));
               
+::
+
       nation_code      host_year      gold
     =========================================
       'JPN'                2004         16
@@ -301,35 +317,47 @@ SQL 표준에서는 **GROUP BY** 절에서 명시되지 않은 칼럼(hidden col
     FROM sales_tbl
     GROUP BY dept_no;
     
+::
+
           dept_no         avg(sales_amount)
     =======================================
               201     3.250000000000000e+02
               301     3.000000000000000e+02
               501     1.750000000000000e+02
     
+.. code-block:: sql
+
     -- conditions in WHERE clause operate first before GROUP BY
     SELECT dept_no, avg(sales_amount) 
     FROM sales_tbl
     WHERE sales_amount > 100 
     GROUP BY dept_no;
     
+::
+
           dept_no         avg(sales_amount)
     =======================================
               201     4.000000000000000e+02
               301     3.000000000000000e+02
               501     1.900000000000000e+02
      
+.. code-block:: sql
+
     -- conditions in HAVING clause operate last after GROUP BY
     SELECT dept_no, avg(sales_amount) 
     FROM sales_tbl
     WHERE sales_amount > 100 
     GROUP BY dept_no HAVING avg(sales_amount) > 200;
     
+::
+
           dept_no         avg(sales_amount)
     =======================================
               201     4.000000000000000e+02
               301     3.000000000000000e+02
      
+.. code-block:: sql
+
     -- selecting and sorting rows with using column alias
     SELECT dept_no AS a1, avg(sales_amount) AS a2 
     FROM sales_tbl
@@ -337,18 +365,24 @@ SQL 표준에서는 **GROUP BY** 절에서 명시되지 않은 칼럼(hidden col
     BY a1 HAVING a2 > 200 
     ORDER BY a2;
     
+::
+
                a1                        a2
     =======================================
               301     3.000000000000000e+02
               501     3.000000000000000e+02
               201     4.000000000000000e+02
      
+.. code-block:: sql
+
     -- selecting rows grouped by dept_no, name with WITH ROLLUP modifier
     SELECT dept_no AS a1, name AS a2, avg(sales_amount) AS a3 
     FROM sales_tbl
     WHERE sales_amount > 100 
     GROUP BY a1, a2 WITH ROLLUP;
     
+::
+
                a1  a2                                          a3
     =============================================================
               201  'George'                 3.500000000000000e+02
@@ -389,6 +423,8 @@ ORDER BY 절
     FROM sales_tbl
     ORDER BY dept_no DESC, name ASC;
     
+::
+
           dept_no  name                  sales_month  sales_amount
     ==============================================================
               501  'Chang'                         1           150
@@ -404,6 +440,8 @@ ORDER BY 절
               201  'Laura'                         1           100
               201  'Laura'                         2           500
      
+.. code-block:: sql
+
     -- sorting reversely and limiting result rows by LIMIT clause
     SELECT dept_no AS a1, avg(sales_amount) AS a2 
     FROM sales_tbl
@@ -411,18 +449,24 @@ ORDER BY 절
     ORDER BY a2 DESC
     LIMIT 0, 3;
     
+::
+
                a1           a2
     =======================================
               201     3.250000000000000e+02
               301     3.000000000000000e+02
               501     1.750000000000000e+02
      
+.. code-block:: sql
+
     -- sorting reversely and limiting result rows by FOR clause
     SELECT dept_no AS a1, avg(sales_amount) AS a2 
     FROM sales_tbl
     GROUP BY a1
     ORDER BY a2 DESC FOR ORDERBY_NUM() BETWEEN 1 AND 3;
     
+::
+
                a1           a2
     =======================================
               201     3.250000000000000e+02
@@ -448,8 +492,8 @@ LIMIT 절
 .. code-block:: sql
 
     -- LIMIT clause can be used in prepared statement
-    PREPARE STMT FROM 'SELECT * FROM sales_tbl LIMIT ?, ?';
-    EXECUTE STMT USING 0, 10;
+    PREPARE stmt FROM 'SELECT * FROM sales_tbl LIMIT ?, ?';
+    EXECUTE stmt USING 0, 10;
      
     -- selecting rows with LIMIT clause
     SELECT * 
@@ -457,6 +501,8 @@ LIMIT 절
     WHERE sales_amount > 100
     LIMIT 5;
     
+::
+
           dept_no  name                  sales_month  sales_amount
     ==============================================================
               201  'George'                        1           450
@@ -465,11 +511,15 @@ LIMIT 절
               301  'Max'                           1           300
               301  'Max'                           2           300
      
+.. code-block:: sql
+
     -- LIMIT clause can be used in subquery
     SELECT t1.*
     FROM (SELECT * FROM sales_tbl AS t2 WHERE sales_amount > 100 LIMIT 5) AS t1
     LIMIT 1,3;
     
+::
+
           dept_no  name                  sales_month  sales_amount
     ==============================================================
               201  'George'                        2           250
@@ -530,6 +580,8 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
     FROM history h, olympic o
     WHERE h.host_year = o.host_year AND o.host_year > 1950;
      
+::
+
         host_year  host_nation
     ===================================
              1968  'Mexico'
@@ -549,6 +601,8 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
     FROM history h RIGHT OUTER JOIN olympic o ON h.host_year = o.host_year 
     WHERE o.host_year > 1950;
      
+::
+
         host_year  host_nation
     ===================================
              NULL  'Australia'
@@ -574,6 +628,8 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
     FROM olympic o LEFT OUTER JOIN history h ON h.host_year = o.host_year 
     WHERE o.host_year > 1950;
      
+::
+
         host_year  host_nation
     ===================================
              NULL  'Australia'
@@ -598,6 +654,8 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
     SELECT DISTINCT h.host_year, o.host_nation
     FROM olympic o LEFT OUTER JOIN history h ON h.host_year = o.host_year AND o.host_year > 1950;
      
+::
+
         host_year  host_nation
     ===================================
              NULL  'Australia'
@@ -616,6 +674,8 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
     FROM history h, olympic o
     WHERE o.host_year = h.host_year(+) AND o.host_year > 1950;
      
+::
+
         host_year  host_nation
     ===================================
              NULL  'Australia'
@@ -643,7 +703,9 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
     SELECT DISTINCT h.host_year, o.host_nation 
     FROM history h, olympic o;
      
-    host_year  host_nation
+::
+
+        host_year  host_nation
     ===================================
              1968  'Australia'
              1968  'Belgium'
@@ -677,17 +739,19 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
            h.event_code, h.score, h.unit 
     FROM history h;
     
-        host_year host_nation              event_code  score                 unit
+::
+
+        host_year  host_nation            event_code  score                 unit
     ============================================================================================
-             2004  'Greece'                    20283  '07:53.0'             'time'
-             2004  'Greece'                    20283  '07:53.0'             'time'
-             2004  'Greece'                    20281  '03:57.0'             'time'
-             2004  'Greece'                    20281  '03:57.0'             'time'
-             2004  'Greece'                    20281  '03:57.0'             'time'
-             2004  'Greece'                    20281  '03:57.0'             'time'
-             2004  'Greece'                    20326  '210'                 'kg'
-             2000  'Australia'                 20328  '225'                 'kg'
-             2004  'Greece'                    20331  '237.5'               'kg'
+        2004       'Greece'               20283       '07:53.0'             'time'
+        2004       'Greece'               20283       '07:53.0'             'time'
+        2004       'Greece'               20281       '03:57.0'             'time'
+        2004       'Greece'               20281       '03:57.0'             'time'
+        2004       'Greece'               20281       '03:57.0'             'time'
+        2004       'Greece'               20281       '03:57.0'             'time'
+        2004       'Greece'               20326       '210'                 'kg'
+        2000       'Australia'            20328       '225'                 'kg'
+        2004       'Greece'               20331       '237.5'               'kg'
     ...
 
 다중 행 부질의
@@ -701,18 +765,20 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
 
     SELECT name, capital, list(SELECT host_city FROM olympic WHERE host_nation = name) AS host_cities
     FROM nation;
+
+::
     
-      name                  capital               host_cities
+      name                      capital                 host_cities
     ==================================================================
-      'Somalia'             'Mogadishu'           {}
-      'Sri Lanka'           'Sri Jayewardenepura Kotte'  {}
-      'Sao Tome & Principe'  'Sao Tome'            {}
-    ...
-      'U.S.S.R.'            'Moscow'              {'Moscow'}
-      'Uruguay'             'Montevideo'          {}
+      'Somalia'                   'Mogadishu'           {}
+      'Sri Lanka'                 'Sri Jayewardenepura Kotte' {}
+      'Sao Tome & Principe'       'Sao Tome'            {}
+      ...
+      'U.S.S.R.'                  'Moscow'              {'Moscow'}
+      'Uruguay'                   'Montevideo'          {}
       'United States of America'  'Washington.D.C'      {'Atlanta ', 'St. Louis', 'Los Angeles', 'Los Angeles'}
-      'Uzbekistan'          'Tashkent'            {}
-      'Vanuatu'             'Port Vila'           {}
+      'Uzbekistan'                'Tashkent'            {}
+      'Vanuatu'                   'Port Vila'           {}
   
 이런 형태의 다중 행 부질의 표현식은 컬렉션 타입의 값을 갖는 표현식이 허용되는 모든 곳에서 사용할 수 있다. 단, 클래스 속성 정의에서 **DEFAULT** 명세 부분과 같이 컬렉션 타입의 상수 값이 요구되는 곳에는 사용될 수 없다.
 
@@ -750,18 +816,20 @@ VALUES
 .. code-block:: sql
 
     INSERT INTO athlete (code, name, gender, nation_code, event)
-    VALUES ('21111', 'Miran Jang', 'F', 'KOR', 'Weight-lifting'),
-           ('21112', 'Yeonjae Son', 'F', 'KOR', 'Rhythmic gymnastics');
+    VALUES ('21111', 'Jang Mi-Ran ', 'F', 'KOR', 'Weight-lifting'),
+           ('21112', 'Son Yeon-Jae ', 'F', 'KOR', 'Rhythmic gymnastics');
                
 다음은 **FROM** 절에서 부질의(subquery)로 사용하는 예이다.
     
 .. code-block:: sql
     
     SELECT a.*
-    FROM athlete a, (VALUES ('Miran Jang', 'F'), ('Yeonjae Son', 'F')) AS t(name, gender)
+    FROM athlete a, (VALUES ('Jang Mi-ran', 'F'), ('Son Yeon-Jae', 'F')) AS t(name, gender)
     WHERE a.name=t.name AND a.gender=t.gender;
-     
+    
+::
+    
              code  name                gender   nation_code        event
     =====================================================================================================
-            21111  'Miran Jang'        'F'      'KOR'              'Weight-lifting'
-            21112  'Yeonjae Son'       'F'      'KOR'              'Rhythmic gymnastics'
+            21111  'Jang Mi-ran'       'F'      'KOR'              'Weight-lifting'
+            21112  'Son Yeon-Jae'      'F'      'KOR'              'Rhythmic gymnastics'

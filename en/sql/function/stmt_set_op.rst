@@ -18,17 +18,17 @@ The following table shows statement set operators supported by CUBRID and their 
 |                            | Duplicates are not allowed. | **UNION ALL**                                           |
 +----------------------------+-----------------------------+---------------------------------------------------------+
 | **DIFFERENCE**             | Difference                  | Same as the                                             |
-|                            | Duplicates are not allowed. | **EXCEPT**                                              |
-|                            |                             | operator                                                |
+|                            | Duplicates are not allowed. | **EXCEPT** operator.                                    |
 |                            |                             | Outputs all instance results containing duplicates with |
-|                            |                             | **DIFFERENCE ALL**                                      |
+|                            |                             | **DIFFERENCE ALL**.                                     |
 +----------------------------+-----------------------------+---------------------------------------------------------+
 | **INTERSECTION**           | Intersection                | Same as the                                             |
-|                            | Duplicates are not allowed. | **INTERSECTION**                                        |
-|                            |                             | operator                                                |
+|                            | Duplicates are not allowed. | **INTERSECTION** operator.                              |
 |                            |                             | Outputs all instance results containing duplicates with |
-|                            |                             | **INTERSECTION ALL**                                    |
+|                            |                             | **INTERSECTION ALL**.                                   |
 +----------------------------+-----------------------------+---------------------------------------------------------+
+
+**Syntax**
 
 ::
 
@@ -75,7 +75,9 @@ The following table shows statement set operators supported by CUBRID and their 
     SELECT id, name FROM nojoin_tbl_1
     UNION
     SELECT id, name FROM nojoin_tbl_2;
-     
+
+::
+    
                id  name
     ===================================
                 1  'Kim'
@@ -89,11 +91,15 @@ The following table shows statement set operators supported by CUBRID and their 
                 9  'Edwin'
                10  'Edwin'
      
+.. code-block:: sql
+
     --Using UNION ALL not eliminating duplicate selected rows
     SELECT id, name FROM nojoin_tbl_1
     UNION ALL
     SELECT id, name FROM nojoin_tbl_2;
      
+::
+    
                id  name
     ===================================
                 1  'Kim'
@@ -110,11 +116,15 @@ The following table shows statement set operators supported by CUBRID and their 
                 9  'Edwin'
                10  'Edwin'
      
+.. code-block:: sql
+
     --Using DEFFERENCE to get only rows returned by the first query but not by the second
     SELECT id, name FROM nojoin_tbl_1
     DIFFERENCE
     SELECT id, name FROM nojoin_tbl_2;
      
+::
+    
                id  name
     ===================================
                 1  'Kim'
@@ -122,11 +132,15 @@ The following table shows statement set operators supported by CUBRID and their 
                 3  'Jonas'
                 4  'Smith'
      
+.. code-block:: sql
+
     --Using INTERSECTION to get only those rows returned by both queries
     SELECT id, name FROM nojoin_tbl_1
     INTERSECT
     SELECT id, name FROM nojoin_tbl_2;
      
+::
+    
                id  name
     ===================================
                 5  'Kim'

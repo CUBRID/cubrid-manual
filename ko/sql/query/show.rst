@@ -35,6 +35,8 @@ SHOW TABLES
 .. code-block:: sql
 
     SHOW TABLES;
+
+::
     
     Tables_in_demodb
     ======================
@@ -49,8 +51,12 @@ SHOW TABLES
       'record'
       'stadium'
      
+.. code-block:: sql
+
     SHOW FULL TABLES;
     
+::
+
       Tables_in_demodb     Table_type
     ============================================
       'athlete'             'BASE TABLE'
@@ -64,8 +70,12 @@ SHOW TABLES
       'record'              'BASE TABLE'
       'stadium'             'BASE TABLE'
      
+.. code-block:: sql
+
     SHOW FULL TABLES LIKE '%c%';
     
+::
+
       Tables_in_demodb      Table_type
     ============================================
       'code'                'BASE TABLE'
@@ -73,8 +83,12 @@ SHOW TABLES
       'participant'         'BASE TABLE'
       'record'              'BASE TABLE'
      
+.. code-block:: sql
+
     SHOW FULL TABLES WHERE table_type = 'BASE TABLE' and TABLES_IN_demodb LIKE '%co%';
     
+::
+
       Tables_in_demodb      Table_type
     ============================================
       'code'                'BASE TABLE'
@@ -114,6 +128,8 @@ SHOW COLUMNS
 
     SHOW COLUMNS FROM athlete;
     
+::
+
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
@@ -122,21 +138,33 @@ SHOW COLUMNS
       'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
       'event'               'VARCHAR(30)'         'YES'      ''           NULL                  ''
      
+.. code-block:: sql
+
     SHOW COLUMNS FROM athlete WHERE field LIKE '%c%';
     
+::
+
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
       'nation_code'         'CHAR(3)'             'YES'      ''           NULL                  ''
      
+.. code-block:: sql
+
     SHOW COLUMNS FROM athlete  WHERE "type" = 'INTEGER' and "key"='PRI' AND extra='auto_increment';
     
+::
+
       Field                 Type                  Null       Key          Default               Extra
     ================================================================================================================
       'code'                'INTEGER'             'NO'       'PRI'        NULL                  'auto_increment'
     
+.. code-block:: sql
+
     SHOW FULL COLUMNS FROM athlete WHERE field LIKE '%c%';
     
+::
+
       Field                 Type                  Collation             Null      Key         Default               Extra
     ====================================================================================================================================
       'code'                'INTEGER'             NULL                  'NO'      'PRI'       NULL                  'auto_increment'
@@ -173,10 +201,14 @@ SHOW INDEX
 
     SHOW INDEX IN athlete;
     
+::
+
        Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type
     ==========================================================================================================================================
      'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'
      
+.. code-block:: sql
+
     CREATE TABLE t1 (i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
      
     CREATE INDEX i_t1_i1 ON t1 (i1 DESC);
@@ -186,6 +218,8 @@ SHOW INDEX
      
     SHOW INDEXES FROM t1;
     
+::
+
       Table  Non_unique  Key_name          Seq_in_index  Column_name   Collation   Cardinality     Sub_part    Packed   Null    Index_type
     ==========================================================================================================================================
       't1'           0  'i_t1_i2_s2'              1      'i2'          'A'            0               NULL        NULL     'NO'    'BTREE'
@@ -222,6 +256,8 @@ SHOW COLLATION
 
     SHOW COLLATION;
 
+::
+
       Collation             Charset                        Id  Built_in              Expansions            Strength
     ===========================================================================================================================
       'euckr_bin'           'euckr'                         8  'Yes'                 'No'                  'Not applicable'
@@ -247,8 +283,12 @@ SHOW COLLATION
       'utf8_tr_cs_uca'      'utf8'                        205  'No'                  'No'                  'Quaternary'
       'utf8_vi_cs'          'utf8'                        221  'No'                  'No'                  'Quaternary'
 
+.. code-block:: sql
+
     SHOW COLLATION LIKE '%_ko_%';
     
+::
+
       Collation             Charset                        Id  Built_in              Expansions            Strength
     ===========================================================================================================================
       'utf8_ko_cs'          'utf8'                          7  'Yes'                 'No'                  'Not applicable'
@@ -271,6 +311,8 @@ SHOW GRANTS
      
     SHOW GRANTS FOR user1;
     
+::
+
       Grants for USER1
     ======================
       'GRANT INSERT, SELECT ON testgrant TO USER1'
@@ -288,6 +330,8 @@ SHOW CREATE TABLE
 
     SHOW CREATE TABLE nation;
      
+::
+
       TABLE                 CREATE TABLE
     ============================================
       'nation'               'CREATE TABLE [nation] ([code] CHARACTER(3) NOT NULL, 
@@ -312,6 +356,8 @@ SHOW CREATE VIEW
 
     SHOW CREATE VIEW db_class;
      
+::
+
       View              Create View
     ========================================
       'db_class'       'SELECT c.class_name, CAST(c.owner.name AS VARCHAR(255)), CASE c.class_type WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE
@@ -334,11 +380,11 @@ SHOW EXEC STATISTICS
 
 *   통계 정보 수집 결과를 출력한다.
 
-    *   **SHOW EXEC STATISTICS** 는 data_page_fetches, data_page_dirties, data_page_ioreads, data_page_iowrites 이렇게 4가지 항목의 데이터 페이지 통계 정보를 출력하며, 결과 칼럼은 통계 정보 이름과 값에 해당하는 variable 칼럼과 value 칼럼으로 구성된다. **SHOW EXEC STATISTICS** 문을 실행하고 나면 그동안 누적되었던 통계 정보가 초기화된다.
+    *   **SHOW EXEC STATISTICS**\ 는 data_page_fetches, data_page_dirties, data_page_ioreads, data_page_iowrites 이렇게 4가지 항목의 데이터 페이지 통계 정보를 출력하며, 결과 칼럼은 통계 정보 이름과 값에 해당하는 variable 칼럼과 value 칼럼으로 구성된다. **SHOW EXEC STATISTICS** 문을 실행하고 나면 그동안 누적되었던 통계 정보가 초기화된다.
 
-    *   **SHOW EXEC STATISTICS ALL** 은 모든 항목의 통계 정보를 출력한다.
+    *   **SHOW EXEC STATISTICS ALL**\ 은 모든 항목의 통계 정보를 출력한다.
 
-통계 정보 각 항목에 대한 자세한 설명은 :ref:`statdump` 을 참고한다.
+통계 정보 각 항목에 대한 자세한 설명은 :ref:`statdump`\ 을 참고한다.
 
 ::
 
@@ -351,10 +397,12 @@ SHOW EXEC STATISTICS
     -- set session variable @collect_exec_stats as 1 to start collecting the statistical information.
     SET @collect_exec_stats = 1;
     SELECT * FROM db_class;
-    ...
      
     -- print the statistical information of the data pages.
     SHOW EXEC STATISTICS;
+    
+::
+
     variable value
     ============================================
     'data_page_fetches' 332
@@ -362,12 +410,15 @@ SHOW EXEC STATISTICS
     'data_page_ioreads' 18
     'data_page_iowrites' 28
      
+.. code-block:: sql
+
     SELECT * FROM db_index;
-    ...
-     
+    
     -- print all of the statistical information.
     SHOW EXEC STATISTICS ALL;
-     
+
+::
+    
     variable value
     ============================================
     'file_creates' 0

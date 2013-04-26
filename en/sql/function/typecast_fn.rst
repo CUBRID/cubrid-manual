@@ -55,7 +55,6 @@ The following table shows a summary of explicit type conversions (casts) using t
 | **SQ**         | No     | No     | No     | No     | No     | No     | No       | No       | No       | No    | No    | No     | No     | Yes   | Yes    | Yes    |
 +----------------+--------+--------+--------+--------+--------+--------+----------+----------+----------+-------+-------+--------+--------+-------+--------+--------+
 
-
 * The **CAST** operation is allowed only when the value expression and the data type to be cast have the same character set.
 
 * **Data Type Key**
@@ -82,95 +81,154 @@ The following table shows a summary of explicit type conversions (casts) using t
     --operation after casting character as INT type returns 2
     SELECT (1+CAST ('1' AS INT));
     
+::
+
       (1+ cast('1' as integer))
     ===========================
                               2
      
+.. code-block:: sql
+
     --cannot cast the string which is out of range as SMALLINT
     SELECT (1+CAST('1234567890' AS SMALLINT));
      
+::
+
     ERROR: Cannot coerce value of domain "character" to domain "smallint".
+    
+.. code-block:: sql
+
     --operation after casting returns 1+1234567890
     SELECT (1+CAST('1234567890' AS INT));
     
+::
+
      (1+ cast('1234567890' as integer))
     ====================================
                               1234567891
      
+.. code-block:: sql
+
     --'1234.567890' is casted to 1235 after rounding up
     SELECT (1+CAST('1234.567890' AS INT));
     
+::
+
      (1+ cast('1234.567890' as integer))
     ====================================
       1236
      
+.. code-block:: sql
+
     --'1234.567890' is casted to string containing only first 5 letters.
     SELECT (CAST('1234.567890' AS CHAR(5)));
     
+::
+
      ( cast('1234.567890' as char(5)))
     ====================================
       '1234.'
      
+.. code-block:: sql
+
     --numeric type can be casted to CHAR type only when enough length is specified
     SELECT (CAST(1234.567890 AS CHAR(5)));
      
+::
+
     ERROR: Cannot coerce value of domain "numeric" to domain "character".
     
+.. code-block:: sql
+
     --numeric type can be casted to CHAR type only when enough length is specified
     SELECT (CAST(1234.567890 AS CHAR(11)));
     
+::
+
      ( cast(1234.567890 as char(11)))
     ====================================
       '1234.567890'
      
+.. code-block:: sql
+
     --numeric type can be casted to CHAR type only when enough length is specified
     SELECT (CAST(1234.567890 AS VARCHAR));
     
+::
+
      ( cast(1234.567890 as varchar))
     ====================================
       '1234.567890'
      
+.. code-block:: sql
+
     --string can be casted to time/date types only when its literal is correctly specified
     SELECT (CAST('2008-12-25 10:30:20' AS TIMESTAMP));
     
+::
+
      ( cast('2008-12-25 10:30:20' as timestamp))
     =============================================
       10:30:20 AM 12/25/2008
      
+.. code-block:: sql
+
     SELECT (CAST('10:30:20' AS TIME));
     
+::
+
      ( cast('10:30:20' as time))
     ==================================================
       10:30:20 AM
      
+.. code-block:: sql
+
     --string can be casted to TIME type when its literal is same as TIME’s.
     SELECT (CAST('2008-12-25 10:30:20' AS TIME));
     
+::
+
      ( cast('2008-12-25 10:30:20' as time))
     ========================================
       10:30:20 AM
      
+.. code-block:: sql
+
     --string can be casted to TIME type after specifying its type of the string
     SELECT (CAST(TIMESTAMP'2008-12-25 10:30:20' AS TIME));
     
+::
+
      ( cast(timestamp '2008-12-25 10:30:20' as time))
     ==================================================
       10:30:20 AM
      
+.. code-block:: sql
+
     SELECT CAST('abcde' AS BLOB);
     
+::
+
      cast('abcde' as blob)
     ======================
     file:/home1/user1/db/tdb/lob/ces_743/ces_temp.00001283232024309172_1342
      
+.. code-block:: sql
+
     SELECT CAST(B'11010000' as varchar(10));
     
+::
+
       cast(B'11010000' as varchar(10))
     ====================================
       'd0'
      
+.. code-block:: sql
+
     SELECT CAST('1A' AS BLOB);
     
+::
+
      cast('1A' as bit(16))
     =================================
       X'1a00'
@@ -284,26 +342,38 @@ The following example shows the case when the system parameter **intl_date_lang*
 
     SELECT DATE_FORMAT('2009-10-04 22:23:00', '%W %M %Y');
     
+::
+
      date_format('2009-10-04 22:23:00', '%W %M %Y')
     ======================
       'Sunday October 2009'
      
-     
+.. code-block:: sql
+
     SELECT DATE_FORMAT('2007-10-04 22:23:00', '%H:%i:%s');
     
+::
+
      date_format('2007-10-04 22:23:00', '%H:%i:%s')
     ======================
       '22:23:00'
      
+.. code-block:: sql
+
     SELECT DATE_FORMAT('1900-10-04 22:23:00', '%D %y %a %d %m %b %j');
     
+::
+
      date_format('1900-10-04 22:23:00', '%D %y %a %d %m %b %j')
     ======================
       '4th 00 Thu 04 10 Oct 277'
      
-     
+.. code-block:: sql
+
     SELECT DATE_FORMAT('1999-01-01', '%X %V');
     
+::
+
      date_format('1999-01-01', '%X %V')
     ======================
       '1998 52'
@@ -312,32 +382,40 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. code-block:: sql
 
-    csql> ;se intl_date_lang="de_DE"
-     
+    SET SYSTEM PARAMETERS 'intl_date_lang="de_DE"';
     SELECT DATE_FORMAT('2009-10-04 22:23:00', '%W %M %Y');
     
+::
+
        date_format('2009-10-04 22:23:00', '%W %M %Y')
     ======================
       'Sonntag Oktober 2009'
      
+.. code-block:: sql
+
     SELECT DATE_FORMAT('2007-10-04 22:23:00', '%H:%i:%s %p');
     
+::
+
        date_format('2007-10-04 22:23:00', '%H:%i:%s %p')
     ======================
       '22:23:00 Nachm.'
      
-     
+.. code-block:: sql
+
     SELECT DATE_FORMAT('1900-10-04 22:23:00', '%D %y %a %d %m %b %j');
     
+::
+
        date_format('1900-10-04 22:23:00', '%D %y %a %d %m %b %j')
     ======================
       '4 00 Do. 04 10 Okt 277'
 
 .. note::
 
-    * When only the language is set to "en_US" (the initial value of **CUBRID_CHARSET** at installation of CUBRID) in the locale of the **CUBRID_CHARSET** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
+    *   When only the language is set to "en_US" (the initial value of **CUBRID_CHARSET** at installation of CUBRID) in the locale of the **CUBRID_CHARSET** environment variable and charset after "." is omitted, the charset is set to ISO-8859-1 (.iso88591).
 
-    * When the charset is ISO-8859-1, the language that can be changed in :func:`TO_DATE` function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`).
+    *   When the charset is ISO-8859-1, the language that can be changed in :func:`TO_DATE` function is "ko_KR" and "tr_TR" except "en_US". If the charset is UTF-8, it can be changed to any language supported by CUBRID. For details, see :ref:`Remark <tochar-remark>` in the :func:`TO_CHAR`).
 
 FORMAT
 ======
@@ -356,8 +434,11 @@ The following example shows command execution by setting the value of the **intl
 
 .. code-block:: sql
 
+    SET SYSTEM PARAMETERS 'intl_number_lang="en_US"';
     SELECT FORMAT(12000.123456,3), FORMAT(12000.123456,0);
     
+::
+
       format(12000.123456, 3)   format(12000.123456, 0)
     ============================================
       '12,000.123'          '12,000'
@@ -366,8 +447,11 @@ The following example shows command execution on the database by setting the val
 
 .. code-block:: sql
 
+    SET SYSTEM PARAMETERS 'intl_number_lang="de_DE"';
     SELECT FORMAT(12000.123456,3), FORMAT(12000.123456,0);
     
+::
+
        format(12000.123456, 3)   format(12000.123456, 0)
     ============================================
       '12.000,123'          '12.000'
@@ -385,6 +469,8 @@ STR_TO_DATE
 
 For the *format* argument to assign, see :ref:`Date/Time Format 2 <datetime-format2>`  table of the :func:`DATE_FORMAT`.
 
+If *string* is invalid date/time value or *format* is invalid, it returns an error.
+
 When the *format* argument is assigned, the *string* is interpreted according to the specified language. At that time, the language specified to the **intl_date_lang** system parameter is applied. For example, when the language is "de_DE" and the *format* is "%d %M %Y", the string "3 Oktober 2009" is interpreted as the **DATE** type of "2009-10-03". When the **intl_date_lang** value is not set, the language applied to the **CUBRID_CHARSET** environment variable is applied. When the *format* argument specified is not corresponding to the given *string*, an error is returned.
 
 0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, the value of **DATE** or **DATETIME** type that has 0 for every date and time value is returned as an exception. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property. For more information about zeroDateTimeBehavior, please refer :ref:`jdbc-connection-conf`.
@@ -392,33 +478,52 @@ When the *format* argument is assigned, the *string* is interpreted according to
 The following example shows the case when the system parameter **intl_date_lang** is "en_US".
 
 .. code-block:: sql
-    
+
+    SET SYSTEM PARAMETERS 'intl_date_lang="de_DE"';
     SELECT STR_TO_DATE('01,5,2013','%d,%m,%Y');
     
+::
+
      str_to_date('01,5,2013', '%d,%m,%Y')
     =======================================
       05/01/2013
      
+.. code-block:: sql
+
     SELECT STR_TO_DATE('May 1, 2013','%M %d,%Y');
     
+::
+
      str_to_date('May 1, 2013', '%M %d,%Y')
     =========================================
       05/01/2013
      
-    SELECT STR_TO_DATE('13:30:17','%h:%i');
+.. code-block:: sql
+
+    SELECT STR_TO_DATE('13:30:17','%H:%i');
     
-     str_to_date('13:30:17', '%h:%i')
+::
+
+     str_to_date('13:30:17', '%H:%i')
     ========================================
       01:30:00 PM
      
+.. code-block:: sql
+
     SELECT STR_TO_DATE('09:30:17 PM','%r');
     
+::
+
      str_to_date('09:30:17 PM', '%r')
     =======================================
       09:30:17 PM
      
+.. code-block:: sql
+
     SELECT STR_TO_DATE('0,0,0000','%d,%m,%Y');
     
+::
+
      str_to_date('0,0,0000', '%d,%m,%Y')
     ======================================
       00/00/0000
@@ -427,8 +532,11 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. code-block:: sql
 
+    SET SYSTEM PARAMETERS 'intl_date_lang="de_DE"';
     SELECT STR_TO_DATE('3 Oktober 2009', '%d %M %Y');
     
+::
+
        str_to_date('3 Oktober 2009', '%d %M %Y')
     ============================================
       10/03/2009
@@ -448,7 +556,6 @@ TIME_FORMAT
 
     :param time: A value of string with **TIME** (*HH*:*MI*:*SS*) or that of date/time data type (**TIME**, **TIMESTAMP**, **DATETIME**) can be specified.
     :param format: Specifies the output format. Use a string that contains ‘%’ as a specifier. See the table :ref:`Date/Time Format 2 <datetime-format2>` of :func:`DATE_FORMAT` function.
-
     :rtype: STRING
 
 When the *format* argument is assigned, the time is output according to the specified language. At this time, the language specified to the **intl_date_lang** system parameter is applied. For example, when the language is set to "de_DE" and the format is "%h:%i:%s %p", "08:46:53 PM" is output as "08:46:53 Nachm.". When **intl_date_lang** system parameter is not set, the language of **CUBRID_CHARSET** environment variable is applied. When the *format* argument specified does not correspond to the given string, an error is returned.
@@ -457,20 +564,31 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. code-block:: sql
 
+    SET SYSTEM PARAMETERS 'intl_date_lang="en_US"';
     SELECT TIME_FORMAT('22:23:00', '%H %i %s');
     
+::
+
      time_format('22:23:00', '%H %i %s')
     ======================
       '22 23 00'
      
+.. code-block:: sql
+
     SELECT TIME_FORMAT('23:59:00', '%H %h %i %s %f');
     
+::
+
      time_format('23:59:00', '%H %h %i %s %f')
     ======================
       '23 11 59 00 000'
      
+.. code-block:: sql
+
     SELECT SYSTIME, TIME_FORMAT(SYSTIME, '%p');
     
+::
+
      SYS_TIME     time_format( SYS_TIME , '%p')
     ===================================
       08:46:53 PM  'PM'
@@ -479,9 +597,11 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. code-block:: sql
 
-    csql> ;se intl_date_lang="de_DE"
+    SET SYSTEM PARAMETERS 'intl_date_lang="de_DE"';
     SELECT SYSTIME, TIME_FORMAT(SYSTIME, '%p');
      
+::
+
        SYS_TIME     time_format( SYS_TIME , '%p')
     ===================================
       08:46:53 PM  'Nachm.'
@@ -506,7 +626,6 @@ TO_CHAR(date_time)
 When the *format* argument is assigned, the *date_time* is output according to the specified language (see the :ref:`Date/Time Format 1 <datetime-format1>` table). At this time, the language specified to the *intl_date_lang* argument is applied. For example, when the language is set to "de_DE" and the format is "HH:MI:SS:AM", "08:46:53 PM" is output as "08:46:53 Nachm.". When **intl_date_lang** system parameter is not set, the language of **CUBRID_CHARSET** environment variable is applied. When the *format* argument specified does not correspond to the given *string*, an error is returned.
 
 When the *format* argument is omitted, the *date_time* is output as a string according to the default output format of the language set by **intl_date_lang** or **CUBRID_CHARSET** (see the following table :ref:`Default Date/Time Output Format for Each Language <tochar-default-datetime-format>`).
-
 
 .. note:: The **CUBRID_DATE_LANG** environment used in earlier version of CUBRID 9.0 is no longer supported.
 
@@ -550,8 +669,7 @@ When the *format* argument is omitted, the *date_time* is output as a string acc
 | **CC**             | Century                                                                   |
 +--------------------+---------------------------------------------------------------------------+
 | **YYYY**           | Year with 4 numbers, Year with 2 numbers                                  |
-| ,                  |                                                                           |
-| **YY**             |                                                                           |
+| , **YY**           |                                                                           |
 +--------------------+---------------------------------------------------------------------------+
 | **Q**              | Quarter (1, 2, 3, 4; January - March = 1)                                 |
 +--------------------+---------------------------------------------------------------------------+
@@ -568,21 +686,15 @@ When the *format* argument is omitted, the *date_time* is output as a string acc
 +--------------------+---------------------------------------------------------------------------+
 | **DY**             | Abbreviated day of the week                                               |
 +--------------------+---------------------------------------------------------------------------+
-| **D**              | Day of the week in numbers (1 - 7)                                        |
-| or                 |                                                                           |
-| **d**              |                                                                           |
+| **D** or **d**     | Day of the week in numbers (1 - 7)                                        |
 +--------------------+---------------------------------------------------------------------------+
-| **AM**             | AM/PM                                                                     |
-| or                 |                                                                           |
-| **PM**             |                                                                           |
+| **AM** or **PM**   | AM/PM                                                                     |
 +--------------------+---------------------------------------------------------------------------+
 | **A.M.**           | AM/PM with periods                                                        |
-| or                 |                                                                           |
-| **P.M.**           |                                                                           |
+| or **P.M.**        |                                                                           |
 +--------------------+---------------------------------------------------------------------------+
 | **HH**             | Hour (1 -12)                                                              |
-| or                 |                                                                           |
-| **HH12**           |                                                                           |
+| or **HH12**        |                                                                           |
 +--------------------+---------------------------------------------------------------------------+
 | **HH24**           | Hour (0 - 23)                                                             |
 +--------------------+---------------------------------------------------------------------------+
@@ -654,9 +766,7 @@ When the *format* argument is omitted, the *date_time* is output as a string acc
 **Example of Format Digits of Return Value**
 
 +-------------------------+---------------------------------------------------------------------+
-| **Format Element**      | **Digits**                                                          |
-|                         +----------------------------------+----------------------------------+
-|                         | en_US                            | ko_KR                            |
+| **Format Element**      | en_US **Digits**                 | ko_KR **Digits**                 |
 +=========================+==================================+==================================+
 | **MONTH(Month, month)** | 9                                | 4                                |
 +-------------------------+----------------------------------+----------------------------------+
@@ -678,7 +788,7 @@ The following example shows execution of the database by setting the environment
 .. code-block:: sql
 
     --set the initial locale as en_US.iso88591
-    export CUBRID_CHARSET=en_US.iso88591
+    -- export CUBRID_CHARSET=en_US.iso88591
      
     --creating a table having date/time type columns
     CREATE TABLE datetime_tbl(a TIME, b DATE, c TIMESTAMP, d DATETIME);
@@ -687,28 +797,38 @@ The following example shows execution of the database by setting the environment
     --selecting a VARCHAR type string from the data in the specified format
     SELECT TO_CHAR(b, 'DD, DY , MON, YYYY') FROM datetime_tbl;
     
+::
+
      to_char(b, 'DD, DY , MON, YYYY')
     ======================
       '04, THU , FEB, 2010'
      
+.. code-block:: sql
+
     SELECT TO_CHAR(c, 'HH24:MI, DD, MONTH, YYYY') FROM datetime_tbl;
     
+::
+
      to_char(c, 'HH24:MI, DD, MONTH, YYYY')
     ======================
       '16:50, 04, FEBRUARY , 2010'
      
-    SELECT TO_CHAR(c, 'HH24:MI:FF, DD, MONTH, YYYY') FROM datetime_tbl;
-     
-    ERROR: Invalid format.
-     
+.. code-block:: sql
+
     SELECT TO_CHAR(d, 'HH12:MI:SS:FF pm, YYYY-MM-DD-DAY') FROM datetime_tbl;
     
+::
+
      to_char(d, 'HH12:MI:SS:FF pm, YYYY-MM-DD-DAY')
     ======================
       '04:50:11:624 pm, 2010-02-04-THURSDAY '
      
+.. code-block:: sql
+
     SELECT TO_CHAR(TIMESTAMP'2009-10-04 22:23:00', 'Day Month yyyy');
     
+::
+
      to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy')
     ======================
       'Sunday October 2009'
@@ -719,12 +839,18 @@ The following example shows an additional language parameter given to the **TO_C
 
     SELECT TO_CHAR(TIMESTAMP'2009-10-04 22:23:00', 'Day Month yyyy','ko_KR');
     
+::
+
        to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy', 'ko_KR')
     ======================
       'Iryoil    10wol 2009'
      
+.. code-block:: sql
+
     SELECT TO_CHAR(TIMESTAMP'2009-10-04 22:23:00', 'Day Month yyyy','tr_TR');
     
+::
+
        to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy', 'tr_TR')
     ======================
       'Pazar     Ekim    2009'
@@ -743,7 +869,9 @@ The following example shows an additional language parameter given to the **TO_C
             -- and 'de_DE' only supports UTF-8 charset.
              
             SELECT TO_CHAR(TIMESTAMP'2009-10-04 22:23:00', 'Day Month yyyy','de_DE');
-             
+        
+        ::
+        
             ERROR: before ' , 'Day Month yyyy','de_DE'); '
             Locales for language 'de_DE' are not available with charset 'iso8859-1'.
 
@@ -752,7 +880,9 @@ The following example shows an additional language parameter given to the **TO_C
         .. code-block:: sql
 
             SELECT TO_CHAR(TIMESTAMP'2009-10-04 22:23:00', 'Day Month yyyy','de_DE');
-             
+        
+        ::
+        
                to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy', 'de_DE')
             ======================
               'Sonntag   Oktober 2009'
@@ -832,75 +962,107 @@ The following example shows execution of the database by setting the environment
 .. code-block:: sql
 
     --selecting a string casted from a number in the specified format
-     
     SELECT TO_CHAR(12345,'S999999'), TO_CHAR(12345,'S099999');
     
-       to_char(12345, 'S999999')   to_char(12345, 'S099999')
-    ============================================
-      ' +12345'             '+012345'
-     
-    SELECT TO_CHAR(1234567,'C9,999,999,999');
-    
-       to_char(1234567, 'C9,999,999,999')
-    ======================
-      '    $1,234,567'
-     
-    SELECT TO_CHAR(1234567,'C9.999.999.999');
-    
-       to_char(1234567, 'C9.999.999.999')
-    ======================
-      '##############'
-     
-    SELECT TO_CHAR(123.4567,'99'), TO_CHAR(123.4567,'999.99999'), TO_CHAR(123.4567,'99999.999');
-    
-       to_char(123.4567, '99')   to_char(123.4567, '999.99999')   to_char(123.4567, '99999.999')
-    ==================================================================
-      '##'                  '123.45670'           '  123.457'
+::
 
-The following example shows command execution by setting the value of the **intl_number_lang** system parameter to "de_DE". In the number output format of most European countries such as Germany and France, "." is the cipher identifier and "," is the decimal point symbol.
-
-.. code-block:: sql
-
-    csql> ;se intl_number_lang="de_DE"
-     
-    intl_number_lang="de_DE"
-     
-    --selecting a string casted from a number in the specified format
-    SELECT TO_CHAR(12345,'S999999'), TO_CHAR(12345,'S099999');
-    
       to_char(12345, 'S999999')   to_char(12345, 'S099999')
     ============================================
       ' +12345'             '+012345'
      
      
-    SELECT TO_CHAR(1234567,'C9,999,999,999');
+.. code-block:: sql
+
+    SELECT TO_CHAR(1234567,'9,999,999,999');
     
-      to_char(1234567, 'C9,999,999,999')
+::
+
+      to_char(1234567, '9,999,999,999')
+    ======================
+      '    1,234,567'
+     
+.. code-block:: sql
+
+    SELECT TO_CHAR(1234567,'9.999.999.999');
+    
+::
+
+      to_char(1234567, '9.999.999.999')
     ======================
       '##############'
      
-     
-    SELECT TO_CHAR(1234567,'C9.999.999.999');
+.. code-block:: sql
+
+    SELECT TO_CHAR(123.4567,'99'), TO_CHAR(123.4567,'999.99999'), TO_CHAR(123.4567,'99999.999');
     
-      to_char(1234567, 'C9.999.999.999')
-    ======================
-      '    EUR1.234.567'
+::
+
+      to_char(123.4567, '99')   to_char(123.4567, '999.99999')   to_char(123.4567, '99999.999')
+    ==================================================================
+      '##'                  '123.45670'           '  123.457'
+      
+The following example shows command execution by setting the value of the **intl_number_lang** system parameter to "de_DE". In the number output format of most European countries such as Germany and France, "." is the cipher identifier and "," is the decimal point symbol.
+
+.. code-block:: sql
+
+    SET SYSTEM PARAMETERS 'intl_number_lang="de_DE"';
      
+    --selecting a string casted from a number in the specified format
+    SELECT TO_CHAR(12345,'S999999'), TO_CHAR(12345,'S099999');
+
+::
+    
+      to_char(12345, 'S999999')   to_char(12345, 'S099999')
+    ============================================
+      ' +12345'             '+012345'
+     
+.. code-block:: sql
+     
+    SELECT TO_CHAR(1234567,'9,999,999,999');
+    
+::
+
+      to_char(1234567, '9,999,999,999')
+    ======================
+      '##############'
+     
+.. code-block:: sql
+     
+    SELECT TO_CHAR(1234567,'9.999.999.999');
+    
+::
+
+      to_char(1234567, '9.999.999.999')
+    ======================
+      '    1.234.567'
+     
+.. code-block:: sql
+
     SELECT TO_CHAR(123.4567,'99'), TO_CHAR(123.4567,'999,99999'), TO_CHAR(123.4567,'99999,999');
      
+::
+
       to_char(123.4567, '99')   to_char(123.4567, '999,99999')   to_char(123.4567, '99999,999')
     ==================================================================
       '##'                  '123,45670'           '  123,457'
      
+.. code-block:: sql
+
     SELECT TO_CHAR(123.4567,'99','en_US'), TO_CHAR(123.4567,'999.99999','en_US'), TO_CHAR(123.4567,'99999.999','en_US');
     
+::
+
      to_char(123.4567, '99', 'en_US')   to_char(123.4567, '999.99999', 'en_US')   to_char(123.4567, '99999.999', 'en_US')
     ==========================================================
       '##'                  '123.45670'           '  123.457'
      
+.. code-block:: sql
+
     SELECT TO_CHAR(1.234567,'99.999EEEE','en_US'), TO_CHAR(1.234567,'99,999EEEE','de_DE'), to_char(123.4567);
      
-       to_char(1.234567, '99.999EEEE', 'en_US')   to_char(1.234567, '99,999EEEE', 'de_DE')   to_char(123.4567)
+::
+
+      to_char(1.234567, '99.999EEEE', 'en_US')   to_char(1.234567, '99,999EEEE', 'de_DE')   to_char(123.4567)
     ==================================================================
       '1.235E+00'           '1,235E+00'           '123,4567'
 
@@ -928,24 +1090,38 @@ The following example shows execution of the database by setting the environment
      
     SELECT TO_DATE('12/25/2008');
     
+::
+
      to_date('12/25/2008')
     ===============================================
       12/25/2008
      
+.. code-block:: sql
+
     SELECT TO_DATE('25/12/2008', 'DD/MM/YYYY');
     
+::
+
      to_date('25/12/2008', 'DD/MM/YYYY')
     ===============================================
       12/25/2008
      
+.. code-block:: sql
+
     SELECT TO_DATE('081225', 'YYMMDD');
     
+::
+
      to_date('081225', 'YYMMDD', 'en_US')
     ===============================================
       12/25/2008
      
+.. code-block:: sql
+
     SELECT TO_DATE('2008-12-25', 'YYYY-MM-DD');
     
+::
+
      to_date('2008-12-25', 'YYYY-MM-DD', 'en_US')
     ===============================================
       12/25/2008
@@ -954,14 +1130,21 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. code-block:: sql
 
+    SET SYSTEM PARAMETERS 'intl_date_lang="de_DE"';
     SELECT TO_DATE('25.12.2012');
     
+::
+
        to_date('25.12.2012')
     ========================
        12/25/2012
      
+.. code-block:: sql
+
     SELECT TO_DATE('12/mai/2012','dd/mon/yyyy', 'de_DE');
     
+::
+
        to_date('12/mai/2012', 'dd/mon/yyyy')
     ========================================
        05/12/2012
@@ -997,18 +1180,28 @@ The following example shows execution of the database by setting the environment
      
     SELECT TO_DATETIME('13:10:30 12/25/2008');
     
+::
+
      to_datetime('13:10:30 12/25/2008')
     =====================================
       01:10:30.000 PM 12/25/2008
      
+.. code-block:: sql
+
     SELECT TO_DATETIME('08-Dec-25 13:10:30.999', 'YY-Mon-DD HH24:MI:SS.FF');
     
+::
+
      to_datetime('08-Dec-25 13:10:30.999', 'YY-Mon-DD HH24:MI:SS.FF')
     =====================================
       01:10:30.999 PM 12/25/2008
      
+.. code-block:: sql
+
     SELECT TO_DATETIME('DATE: 12-25-2008 TIME: 13:10:30.999', '"DATE:" MM-DD-YYYY "TIME:" HH24:MI:SS.FF');
     
+::
+
      to_datetime('DATE: 12-25-2008 TIME: 13:10:30.999', '"DATE:" MM-DD-YYYY "TIME:" HH24:MI:SS.FF')
     =====================================
       01:10:30.999 PM 12/25/2008
@@ -1017,14 +1210,21 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. code-block:: sql
 
+    SET SYSTEM PARAMETERS 'intl_date_lang="de_DE"';
     SELECT TO_DATETIME('13:10:30.999 25.12.2012');
     
+::
+
        to_datetime('13:10:30.999 25.12.2012')
     =========================================
       01:10:30.999 PM 12/25/2012
      
+.. code-block:: sql
+
     SELECT TO_DATETIME('12/mai/2012 12:10:00 Nachm.','DD/MON/YYYY HH:MI:SS AM', 'de_DE');
     
+::
+
        to_datetime('12/mai/2012 12:10:00 Nachm.', 'DD/MON/YYYY HH:MI:SS AM', 'de_DE')
     =================================================================================
       12:10:00.000 PM 05/12/2012
@@ -1049,34 +1249,47 @@ When the *format* argument is assigned, the string is interpreted according to t
 
 If the *format* argument is omitted, string is interpreted according to default output format set by **intl_date_lang** or **CUBRID_CHARSET** (see :ref:`Default Output of Number for Each Language <tochar-default-number-format>`).
 
-The following example shows execution of the database by setting the environment variable **CUBRID_CHARSET** to "en_US".
+The following example shows execution of the database by setting the value of system parameter **intl_number_lang** as "en_US".
 
 .. code-block:: sql
+
+    SET SYSTEM PARAMETERS 'intl_number_lang="en_US"';
 
     --selecting a number casted from a string in the specified format
     SELECT TO_NUMBER('-1234');
     
+::
+
      to_number('-1234')
     ============================================
       -1234
      
+.. code-block:: sql
      
     SELECT TO_NUMBER('12345','999999');
     
+::
+
      to_number('12345', '999999')
     ============================================
       12345
      
+.. code-block:: sql
      
-    SELECT TO_NUMBER('$12,345.67','C99,999.999');
+    SELECT TO_NUMBER('12,345.67','99,999.999');
     
-     to_number('$12,345.67', 'C99,999.999')
+::
+
+     to_number('12,345.67', '99,999.999')
     ======================
       12345.670
      
+.. code-block:: sql
      
     SELECT TO_NUMBER('12345.67','99999.999');
     
+::
+
      to_number('12345.67', '99999.999')
     ============================================
       12345.670
@@ -1085,11 +1298,11 @@ The following example shows command execution on the database by setting the val
 
 .. code-block:: sql
 
-    csql> ;se intl_number_lang="de_DE"
-    intl_number_lang="de_DE"
-     
+    SET SYSTEM PARAMETERS 'intl_number_lang="de_DE"';
     SELECT TO_NUMBER('12.345,67','99.999,999');
     
+::
+
        to_number('12.345,67', '99.999,999')
     ======================
       12345.670
@@ -1112,47 +1325,70 @@ If the *format* argument is omitted, *string* is interpreted according to defaul
 
 .. note:: The **CUBRID_DATE_LANG** environment used in earlier version of CUBRID 9.0 is no longer supported.
 
-The following example shows execution of the database by setting the environment variable **CUBRID_CHARSET** to "en_US".
+The following example shows execution of the database by setting the value of system parameter **intl_date_lang** as "en_US".
 
 .. code-block:: sql
+
+    SET SYSTEM PARAMETERS 'intl_date_lang="en_US"';
 
     --selecting a time type value casted from a string in the specified format
      
     SELECT TO_TIME ('13:10:30');
     
+::
+
      to_time('13:10:30')
     =============================================
       01:10:30 PM
      
+.. code-block:: sql
+
     SELECT TO_TIME('HOUR: 13 MINUTE: 10 SECOND: 30', '"HOUR:" HH24 "MINUTE:" MI "SECOND:" SS');
     
+::
+
      to_time('HOUR: 13 MINUTE: 10 SECOND: 30', '"HOUR:" HH24 "MINUTE:" MI "SECOND:" SS', 'en_US')
     =============================================
       01:10:30 PM
      
+.. code-block:: sql
+
     SELECT TO_TIME ('13:10:30', 'HH24:MI:SS');
     
+::
+
      to_time('13:10:30', 'HH24:MI:SS')
     =============================================
       01:10:30 PM
      
+.. code-block:: sql
+
     SELECT TO_TIME ('13:10:30', 'HH12:MI:SS');
      
+::
+
     ERROR: Conversion error in date format.
 
 The following example shows the case when the system parameter **intl_date_lang** is "de_DE".
 
 .. code-block:: sql
 
+    SET SYSTEM PARAMETERS 'intl_date_lang="de_DE"';
     SELECT TO_TIME('13:10:30');
     
-    to_time('13:10:30')
+::
+
+     to_time('13:10:30')
     ======================
       01:10:30 PM
      
+.. code-block:: sql
+
     SELECT TO_TIME('10:23:00 Nachm.', 'HH:MI:SS AM');
+
+::
     
-       to_time('10:23:00 Nachm.', 'HH:MI:SS AM')
+     to_time('10:23:00 Nachm.', 'HH:MI:SS AM')
     ==============================================
       10:23:00 PM
 
@@ -1177,26 +1413,38 @@ When the *format* argument is assigned, the *string* is interpreted according to
 
 When the *format* argument is not set, *string* is interpreted according to default format set by **intl_date_lang** or **CUBRID_CHARSET** (see the table :ref:`Default Date/Time Output Format for Each Language <tochar-default-datetime-format>`). For example, a language is "de_DE", the default format of the **TIMESTAMP** type is "HH24:MI:SS DD.MM.YYYY".
 
-The following example shows execution of the database by setting the environment variable **CUBRID_CHARSET** to "en_US".
+The following example shows execution of the database by setting the value of system parameter **intl_number_lang** as "en_US".
 
 .. code-block:: sql
+
+    SET SYSTEM PARAMETERS 'intl_date_lang="en_US"';
 
     --selecting a timestamp type value casted from a string in the specified format
      
     SELECT TO_TIMESTAMP('13:10:30 12/25/2008');
     
+::
+
      to_timestamp('13:10:30 12/25/2008')
     ======================================
       01:10:30 PM 12/25/2008
      
+.. code-block:: sql
+
     SELECT TO_TIMESTAMP('08-Dec-25 13:10:30', 'YY-Mon-DD HH24:MI:SS');
     
+::
+
      to_timestamp('08-Dec-25 13:10:30', 'YY-Mon-DD HH24:MI:SS')
     ======================================
       01:10:30 PM 12/25/2008
      
+.. code-block:: sql
+
     SELECT TO_TIMESTAMP('YEAR: 2008 DATE: 12-25 TIME: 13:10:30', '"YEAR:" YYYY "DATE:" MM-DD "TIME:" HH24:MI:SS');
     
+::
+
      to_timestamp('YEAR: 2008 DATE: 12-25 TIME: 13:10:30', '"YEAR:" YYYY "DATE:" MM-DD "TIME:" HH24:MI:SS')
     ======================================
       01:10:30 PM 12/25/2008
@@ -1205,14 +1453,21 @@ The following example shows the case when the system parameter **intl_date_lang*
 
 .. code-block:: sql
 
+    SET SYSTEM PARAMETERS 'intl_date_lang="de_DE"';
     SELECT TO_TIMESTAMP('13:10:30 25.12.2008');
     
+::
+
        to_timestamp('13:10:30 25.12.2008')
     ======================================
       01:10:30 PM 12/25/2008
      
+.. code-block:: sql
+
     SELECT TO_TIMESTAMP('10:23:00 Nachm.', 'HH12:MI:SS AM');
     
+::
+
        to_timestamp('10:23:00 Nachm.', 'HH12:MI:SS AM')
     ===================================================
       10:23:00 PM 08/01/2012

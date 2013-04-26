@@ -36,6 +36,8 @@ ROWNUM, INST_NUM
          ORDER BY gold DESC) AS T
     WHERE ROWNUM <5;
     
+::
+
       nation_code
     ======================
       'URS'
@@ -43,11 +45,15 @@ ROWNUM, INST_NUM
       'USA'
       'KOR'
      
+.. code-block:: sql
+
     --Limiting 4 rows using FOR ORDERBY_NUM()
     SELECT ROWNUM, nation_code FROM participant WHERE host_year = 1988
     ORDER BY gold DESC
     FOR ORDERBY_NUM() < 5;
     
+::
+
            rownum  nation_code
     ===================================
               156  'URS'
@@ -55,11 +61,15 @@ ROWNUM, INST_NUM
               154  'USA'
               153  'KOR'
      
+.. code-block:: sql
+
     --Unexpected results : ROWNUM operated before ORDER BY
     SELECT ROWNUM, nation_code FROM participant
     WHERE host_year = 1988 AND ROWNUM < 5
     ORDER BY gold DESC;
     
+::
+
            rownum  nation_code
     ===================================
                 1  'ZIM'
@@ -72,7 +82,9 @@ GROUPBY_NUM
 
 .. function:: GROUPBY_NUM ()
 
-    **GROUPBY_NUM()** 함수는 **ROWNUM** 혹은 **INST_NUM()** 함수와 함께, 결과 행들의 개수를 제한하는 목적으로 사용된다. 단, 차이점은 **GROUP BY** ... **HAVING** 절 뒤에 결합되어 사용되며, 이미 정렬을 수행한 결과에 대해 순서를 부여한다는 점이다. 또한, **INST_NUM()** 함수는 스칼라(scalar) 함수이지만, **GROUPBY_NUM()** 함수는 집계 함수의 일종이다. 즉, **GROUP BY** 절이 포함된 **SELECT** 문장에서 조건 절에 **ROWNUM** 을 이용하여 일부 결과 행들만 조회하는 경우, **ROWNUM** 이 먼저 적용된 후 **GROUP BY** 에 의한 그룹 정렬이 수행된다. 반면, **GROUPBY_NUM()** 함수를 이용하여 일부 결과 행들만 조회하는 경우, **GROUP BY** 에 의한 그룹 정렬이 이루어진 결과에 대해서 **ROWNUM** 이 적용된다.
+    **GROUPBY_NUM()** 함수는 **ROWNUM** 혹은 **INST_NUM()** 함수와 함께, 결과 행들의 개수를 제한하는 목적으로 사용된다. 단, 차이점은 **GROUP BY** ... **HAVING** 절 뒤에 결합되어 사용되며, 이미 정렬을 수행한 결과에 대해 순서를 부여한다는 점이다. 또한, **INST_NUM()** 함수는 스칼라(scalar) 함수이지만, **GROUPBY_NUM()** 함수는 집계 함수의 일종이다. 
+    
+    즉, **GROUP BY** 절이 포함된 **SELECT** 문장에서 조건 절에 **ROWNUM** 을 이용하여 일부 결과 행들만 조회하는 경우, **ROWNUM** 이 먼저 적용된 후 **GROUP BY** 에 의한 그룹 정렬이 수행된다. 반면, **GROUPBY_NUM()** 함수를 이용하여 일부 결과 행들만 조회하는 경우, **GROUP BY** 에 의한 그룹 정렬이 이루어진 결과에 대해서 **ROWNUM** 이 적용된다.
 
     :rtype: INT
     
@@ -84,6 +96,8 @@ GROUPBY_NUM
     SELECT host_year, MIN(score) FROM history  
     GROUP BY host_year HAVING GROUPBY_NUM() BETWEEN 1 AND 5;
     
+::
+
         host_year  min(score)
     ===================================
              1968  '8.9'
@@ -92,10 +106,14 @@ GROUPBY_NUM
              1988  '01:58.0'
              1992  '02:07.0'
      
+.. code-block:: sql
+
     --Limiting rows first and then Group-ordering using ROWNUM
     SELECT host_year, MIN(score) FROM history
     WHERE ROWNUM BETWEEN 1 AND 5 GROUP BY host_year;
     
+::
+
         host_year  min(score)
     ===================================
              2000  '03:41.0'
@@ -108,7 +126,7 @@ ORDERBY_NUM
 
     **ORDERBY_NUM()** 함수는 **ROWNUM** 혹은 **INST_NUM()** 함수와 함께, 결과 행들의 개수를 제한하는 목적으로 사용된다. 단, 차이점은 **ORDER BY** 절 뒤에 결합되어 사용되고, 이미 정렬을 수행한 결과에 대해 순서를 부여한다는 점이다. 즉, **ORDER BY** 절이 포함된 **SELECT** 문장에서 조건절에 **ROWNUM** 을 이용하여 일부 결과 행들만 조회하는 경우, **ROWNUM** 이 먼저 적용된 후 **ORDER BY** 에 의한 정렬이 수행된다. 반면, **ORDERBY_NUM()** 함수를 이용하여 일부 결과 행들만 조회하는 경우, **ORDER BY** 에 의한 정렬이 이루어진 결과에 대해서 **ROWNUM** 이 적용된다.
     
-    :rtype: INT
+    :rtype: INTs
     
 다음은 *demodb* 의 *history* 테이블에서 3위에서 5위까지의 선수 이름과 기록을 조회하는 예제이다.
 
@@ -118,16 +136,22 @@ ORDERBY_NUM
     SELECT athlete, score FROM history
     ORDER BY score FOR ORDERBY_NUM() BETWEEN 3 AND 5;
     
+::
+
       athlete               score
     ============================================
       'Luo Xuejuan'         '01:07.0'
       'Rodal Vebjorn'       '01:43.0'
       'Thorpe Ian'          '01:45.0'
      
+.. code-block:: sql
+
     --Limiting rows first and then Ordering using ROWNUM
     SELECT athlete, score FROM history
     WHERE ROWNUM BETWEEN 3 AND 5 ORDER BY score;
     
+::
+
       athlete               score
     ============================================
       'Thorpe Ian'          '01:45.0'

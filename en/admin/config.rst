@@ -81,17 +81,16 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
 
 **Database Server System Parameters**
 
-    The following are database server system parameters that can be used in the **cubrid.conf** configuration file.
-    On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server process.
+    The following are database server system parameters that can be used in the **cubrid.conf** configuration file. On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server process.
     For the scope of **client** and **server parameters**, see :ref:`scope-server-conf`.
 
     You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change client parameters.
 
     On the below table, if "Applied" is "server parameter", that parameter's applied scope is global. If  "Applied" is "client parameter" or "client/server parameter",  that parameter's applied scope is session.
   
-    * If "Dynamic Change" is "available" and "Applied" is "server parameter", that parameter's changed value is applied to DB server. Then applications use the changed value of the parameter until the DB server is restarted.
+    *   If "Dynamic Change" is "available" and "Applied" is "server parameter", that parameter's changed value is applied to DB server. Then applications use the changed value of the parameter until the DB server is restarted.
  
-    * If "Dynamic Change" is "available" and "Applied" is "client parameter" or "client/server parameter", that parameter's changed value is applied only to that DB session. In other words, the changed value is only applied to the applications which requested to change that value. For example, if **block_ddl_statement** parameter's value is changed into **no**, then only the application who requested to change cannot use DDL statements.
+    *   If "Dynamic Change" is "available" and "Applied" is "client parameter" or "client/server parameter", that parameter's changed value is applied only to that DB session. In other words, the changed value is only applied to the applications which requested to change that value. For example, if **block_ddl_statement** parameter's value is changed into **no**, then only the application who requested to change cannot use DDL statements.
     
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     | Category                      | Parameter Name                      | Applied                 | Type     | Default Value                  | Dynamic Change  |
@@ -388,9 +387,9 @@ The following are parameters related to the database server. The type and value 
 
 **max_clients**
 
-    **max_clients** is a parameter used to configure the maximum number of clients (usually broker application processes (CAS)) which allow concurrent connections to the database server. The **max_clients** parameter refers to the number of concurrent transactions. The default value is **100**.
+    **max_clients** is a parameter used to configure the maximum number of clients (usually broker application processes (CAS)) which allow concurrent connections to the database server. The **max_clients** parameter refers to the number of concurrent transactions per database server process. The default value is **100**.
 
-    To grantee performance while increasing the number of concurrent users in CUBRID environment, you need to make the appropriate value of the **max_clients** (**cubrid.conf**) parameter and the :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` (**cubrid_broker.conf**) parameter. That is, you are required to configure the number of concurrent connections allowed by databases with the **max_clients** parameter. You should also configure the number of concurrent connections allowed by brokers with the **MAX_NUM_APPL_SERVER** parameter.
+    To guarantee performance while increasing the number of concurrent users in CUBRID environment, you need to make the appropriate value of the **max_clients** (**cubrid.conf**) parameter and the :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` (**cubrid_broker.conf**) parameter. That is, you are required to configure the number of concurrent connections allowed by databases with the **max_clients** parameter. You should also configure the number of concurrent connections allowed by brokers with the **MAX_NUM_APPL_SERVER** parameter.
 
     For example, in the **cubrid_broker.conf** file, two node of a broker where the **MAX_NUM_APPL_SERVER** value of [%query_editor] is 50 and the **MAX_NUM_APPL_SERVER** value of [%BROKER1] is 50 is trying to connect one database server, the concurrent connections (**max_clients** value) allowed by the database server can be configured as follows:
 
@@ -400,6 +399,10 @@ The following are parameters related to the database server. The type and value 
 
     Note that the memory usage is affected by the value specified in **max_clients**. That is, if the number of value is high, the memory usage will increase regardless of whether or not the clients actually access the database.
 
+    .. note::
+        
+        In Linux system, max_clients parameter is related to "ulimit -n" command, which specifies the maximum number of file descriptors which a process can use. File descriptor includes not only a file, but also a network socket. Therefore, the number of "ulimit -n" should be larger than the number of max_clients.
+    
 .. _memory-parameters:
 
 Memory-Related Parameters
@@ -437,9 +440,9 @@ The following are parameters related to the memory used by the database server o
 
 **sort_buffer_size**
 
-    **sort_buffer_size** is a parameter used to configure the size of buffer to be used when sorting. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is 2M, and the minimum value is 64K.
-
-    The server assigns one sort buffer for each client request, and releases the assigned buffer memory when sorting is complete.
+    **sort_buffer_size** is a parameter used to configure the size of buffer to be used when a query is processing sorting. The server assigns one sort buffer for each client's sorting-request, and releases the assigned buffer memory when sorting is complete. 
+    
+    You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is 2M, and the minimum value is 64K.
 
 **temp_file_memory_size_in_pages**
 
@@ -890,20 +893,24 @@ The following are parameters related to SQL statements and data types supported 
 
     .. code-block:: sql
 
-        -- add_column_update_hard_default=no
+        SET SYSTEM PARAMETERS 'add_column_update_hard_default=no';
          
         CREATE TABLE tbl (i INT);
         INSERT INTO tbl VALUES (1),(2);
         ALTER TABLE tbl ADD COLUMN j INT NOT NULL;
          
-        SELECT * FROM TBL;
-         
-                    i          j
-        ========================
-                    2       NULL
-                    1       NULL
-         
-        -- add_column_update_hard_default=yes
+        SELECT * FROM tbl;
+        
+    ::
+    
+                    i            j
+        ==========================
+                    1         NULL
+                    2         NULL
+
+    .. code-block:: sql
+                    
+        SET SYSTEM PARAMETERS 'add_column_update_hard_default=yes';
          
         CREATE TABLE tbl (i int);
         INSERT INTO tbl VALUES (1),(2);
@@ -911,10 +918,12 @@ The following are parameters related to SQL statements and data types supported 
          
         SELECT * FROM tbl;
          
+    ::     
+    
                     i          j
         =========================
-                    2          0
                     1          0
+                    2          0
 
 **alter_table_change_type_strict**
 
@@ -924,9 +933,13 @@ The following are parameters related to SQL statements and data types supported 
 
     **ansi_quotes** is a parameter used to enclose symbols and character string to handle identifiers. The default value is **yes**. If this parameter value is set to **yes**, double quotations are handled as identifier symbols and single quotations are handled as character string symbols. If it is set to **no**, both double and single quotations are handled as character string symbols.
 
+.. _block_ddl_statement:
+
 **block_ddl_statement**
 
     **block_ddl_statement** is a parameter used to limit the execution of DDL (Data Definition Language) statements by the client. If the parameter is set to no, the given client is allowed to execute DDL statements. If it is set to yes, the client is not permitted to execute DDL statements. The default value is **no**.
+
+.. _block_nowhere_statement:
 
 **block_nowhere_statement**
 
@@ -1045,22 +1058,40 @@ The following are parameters related to SQL statements and data types supported 
 
         -- plus_as_concat = yes
         SELECT '1'+'1';
+        
+    ::
+    
                  '1'+'1'
         ======================
-                 '11'  SELECT '1'+'a';
+                 '11'  
+
+    .. code-block:: sql
+                 
+        SELECT '1'+'a';
+        
+    ::
          
                  '1'+'a'
         ======================
                  '1a'
-         
+
+    .. code-block:: sql
+                 
         -- plus_as_concat = no
         SELECT '1'+'1';
+        
+    ::
+    
                         '1'+'1'
         ==========================
          2.000000000000000e+000
-         
+    
+    .. code-block:: sql
+    
         SELECT '1'+'a';
-         
+    
+    ::
+    
         ERROR: Cannot coerce 'a' to type double.
 
 **require_like_escape_character**
@@ -1101,15 +1132,20 @@ The following are parameters related to SQL statements and data types supported 
 
     .. code-block:: sql
 
-        -- return_null_on_function_errors=no
-         
+        SET SYSTEM PARAMETERS 'return_null_on_function_errors=no';         
         SELECT YEAR('12:34:56');
+        
+    ::
+    
         ERROR: Conversion error in time format.
-         
-        -- return_null_on_function_errors=yes
-         
+    
+    .. code-block:: sql
+    
+        SET SYSTEM PARAMETERS 'return_null_on_function_errors=yes';         
         SELECT YEAR('12:34:56');
-         
+        
+    ::
+    
            year('12:34:56')
         ======================
            NULL

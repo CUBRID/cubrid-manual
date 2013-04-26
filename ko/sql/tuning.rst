@@ -89,15 +89,21 @@ CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값
 
     GET OPTIMIZATION LEVEL;
     
+::
+    
           Result
     =============
                 1
+
+.. code-block:: sql
 
     SET OPTIMIZATION LEVEL 258;
 
     SELECT a.name, b.host_year, b.medal
     FROM athlete a, game b 
     WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
+
+::
     
     Query plan:
       Nested loops
@@ -176,6 +182,8 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
     SELECT /*+ USE_NL ORDERED  */ a.name, b.host_year, b.medal
     FROM athlete a, game b 
     WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
+
+::
     
       name                    host_year  medal
     =========================================================
@@ -191,10 +199,16 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
     -- NO_STATS 힌트 미사용
     ALTER TABLE participant2 DROP partition before_2008;
 
+::
+
     SQL statement execution time:      31.684550 sec
 
+.. code-block:: sql
+    
     -- NO_STATS 힌트 사용
     ALTER /*+ NO_STATS */ TABLE participant2 DROP partition before_2008;
+
+::
 
     SQL statement execution time:      0.025773 sec
 
@@ -262,90 +276,90 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 .. code-block:: sql
 
-    CREATE TABLE athlete (
+    CREATE TABLE athlete2 (
        code             SMALLINT PRIMARY KEY,
        name             VARCHAR(40) NOT NULL,
        gender           CHAR(1),
        nation_code      CHAR(3),
        event            VARCHAR(30)
     );
-    CREATE UNIQUE INDEX athlete_idx1 ON athlete (code, nation_code);
-    CREATE INDEX athlete_idx2 ON athlete (gender, nation_code);
+    CREATE UNIQUE INDEX athlete2_idx1 ON athlete2 (code, nation_code);
+    CREATE INDEX athlete2_idx2 ON athlete2 (gender, nation_code);
 
-아래 2개의 질의는 같은 동작을 수행하며, 지정된 *athlete_idx2* 인덱스 스캔 비용이 순차 스캔 비용보다 작을 경우 해당 인덱스 스캔을 선택하게 된다. 
+아래 2개의 질의는 같은 동작을 수행하며, 지정된 *athlete2_idx2* 인덱스 스캔 비용이 순차 스캔 비용보다 작을 경우 해당 인덱스 스캔을 선택하게 된다. 
 
 .. code-block:: sql
 
     SELECT /*+ RECOMPILE */ * 
-    FROM athlete USE INDEX (athlete_idx2) 
+    FROM athlete2 USE INDEX (athlete2_idx2) 
     WHERE gender='M' AND nation_code='USA';
 
     SELECT /*+ RECOMPILE */ * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX athlete_idx2;
+    USING INDEX athlete2_idx2;
 
-아래 2개의 질의는 같은 동작을 수행하며, 항상 *athlete_idx2*\ 를 사용한다.
-
-.. code-block:: sql
-    
-    SELECT /*+ RECOMPILE */ * 
-    FROM athlete FORCE INDEX (athlete_idx2) 
-    WHERE gender='M' AND nation_code='USA';
-
-    SELECT /*+ RECOMPILE */ * 
-    FROM athlete 
-    WHERE gender='M' AND nation_code='USA'
-    USING INDEX athlete_idx2(+);
-
-아래 2개의 질의는 같은 동작을 수행하며, 질의 수행 시 *athlete_idx2*\ 를 사용하지 않는다.
+아래 2개의 질의는 같은 동작을 수행하며, 항상 *athlete2_idx2*\ 를 사용한다.
 
 .. code-block:: sql
     
     SELECT /*+ RECOMPILE */ * 
-    FROM athlete IGNORE INDEX (athlete_idx2) 
+    FROM athlete2 FORCE INDEX (athlete2_idx2) 
     WHERE gender='M' AND nation_code='USA';
 
     SELECT /*+ RECOMPILE */ * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX athlete_idx2(-);
+    USING INDEX athlete2_idx2(+);
+
+아래 2개의 질의는 같은 동작을 수행하며, 질의 수행 시 *athlete2_idx2*\ 를 사용하지 않는다.
+
+.. code-block:: sql
+    
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete2 IGNORE INDEX (athlete2_idx2) 
+    WHERE gender='M' AND nation_code='USA';
+
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete2 
+    WHERE gender='M' AND nation_code='USA'
+    USING INDEX athlete2_idx2(-);
 
 다음 질의는 수행 시 항상 순차 스캔을 선택한다.
 
 .. code-block:: sql
 
     SELECT * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
     USING INDEX NONE;
 
     SELECT * 
-    FROM athlete 
+    FROM athlete2
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX athlete.NONE;
+    USING INDEX athlete2.NONE;
 
-다음 질의는 수행 시 *athlete_idx2*\ 를 제외한 모든 인덱스의 사용이 가능하도록 한다.
+다음 질의는 수행 시 *athlete2_idx2*\ 를 제외한 모든 인덱스의 사용이 가능하도록 한다.
 
 .. code-block:: sql
 
     SELECT * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX ALL EXCEPT athlete_idx2;
+    USING INDEX ALL EXCEPT athlete2_idx2;
 
 다음과 같이 **USE INDEX** 구문 또는 **USING INDEX** 구문에서 여러 인덱스를 지정한 경우 질의 최적화기는 지정된 인덱스 중 하나를 선택한다.
 
 .. code-block:: sql
 
     SELECT * 
-    FROM athlete USE INDEX (athlete_idx2, athlete_idx1) 
+    FROM athlete2 USE INDEX (athlete2_idx2, athlete2_idx1) 
     WHERE gender='M' AND nation_code='USA';
 
     SELECT * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX athlete_idx2, athlete_idx1;
+    USING INDEX athlete2_idx2, athlete2_idx1;
 
 여러 개의 테이블에 대해 질의를 수행하는 경우, 한 테이블에서는 특정 인덱스를 사용하여 인덱스 스캔을 하고 다른 테이블에서는 순차 스캔을 하도록 지정할 수 있다. 이러한 질의는 다음과 같은 형태가 된다.
 
@@ -394,15 +408,54 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 *   <*filter_predicate*>: 칼럼과 상수 간 비교 조건. 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터가 될 수 있다. 필터 조건으로 CUBRID에서 지원하는 대부분의 연산자와 함수가 포함될 수 있다. 그러나 현재 날짜/시간을 출력하는 날짜/시간 함수(예: :func:`SYS_DATETIME`), 랜덤 함수(예: :func:`RAND`)와 같이 같은 입력에 대해 다른 결과를 출력하는 함수는 허용되지 않는다.
 
-필터링된 인덱스를 적용하여 질의를 처리하려면 **USING INDEX** 절 또는 **USE INDEX** 구문을 통해 해당 필터링된 인덱스를 반드시 명시해야 한다.
+필터링된 인덱스를 적용하여 질의를 처리하려면 **USE INDEX** 구문 또는 **FORCE INDEX** 구문을 통해 해당 필터링된 인덱스를 반드시 명시해야 한다.
 
-.. code-block:: sql
+*   **USING INDEX** 절 또는 **USE INDEX** 구문을 통해 필터링된 인덱스를 명시하는 경우: 
 
-    SELECT * 
-    FROM blogtopic 
-    WHERE postDate >'2010-01-01' 
-    USING INDEX my_filter_index;
+    인덱스를 구성하는 칼럼이 WHERE 절의 조건에 포함되어 있지 않으면 필터링된 인덱스를 사용하지 않는다. 
 
+    .. code-block:: sql
+
+        CREATE TABLE blogtopic 
+        (
+            blogID BIGINT NOT NULL, 
+            title VARCHAR(128),
+            author VARCHAR(128),
+            content VARCHAR(8096),
+            postDate TIMESTAMP NOT NULL,
+            deleted SMALLINT DEFAULT 0
+        );
+   
+        CREATE INDEX my_filter_index ON blogtopic(postDate) WHERE deleted=0;
+
+    아래 질의에서 my_filter_index를 구성하는 칼럼인 postDate가 WHERE 조건에 포함되어 있으므로, "USE INDEX" 구문으로도 인덱스를 사용할 수 있다.
+        
+    .. code-block:: sql
+        
+        SELECT * 
+        FROM blogtopic USE INDEX (my_filter_index)
+        WHERE postDate>'2010-01-01' AND deleted=0;
+    
+*   **USING INDEX** <index_name>(+) 절 또는 **FORCE INDEX** 구문을 통해 필터링된 인덱스를 명시하는 경우: 
+
+    인덱스를 구성하는 칼럼이 WHERE 절의 조건에 포함되어 있지 않더라도 필터링된 인덱스를 사용한다.
+
+    아래 질의에서는 my_filter_index의 인덱스를 구성하는 칼럼이 WHERE 조건에 포함되어 있지 않으므로, "USE INDEX" 구문으로는 인덱스를 사용할 수 없다.
+        
+    .. code-block:: sql
+        
+        SELECT * 
+        FROM blogtopic USE INDEX (my_filter_index)
+        WHERE author = 'David' AND deleted=0;
+
+    따라서, my_filter_index 인덱스를 사용하려면 다음과 같이 "FORCE INDEX" 구문을 사용하여 인덱스 사용을 강제해야 한다.
+    
+    .. code-block:: sql
+        
+        SELECT * 
+        FROM blogtopic FORCE INDEX (my_filter_index)
+        WHERE author = 'David' AND deleted=0;
+    
 다음은 버그/이슈를 유지하는 버그 트래킹 시스템의 예이다. 일정 기간의 개발 활동 이후 bugs 테이블에는 버그들이 기록되어 있는데, 이들 대부분은 오래 전에 종료된 상태이다. 버그 트래킹 시스템은 여전히 열린(open) 상태의 새로운 버그를 찾기 위해 해당 테이블에 질의를 한다. 이 경우 버그 테이블의 인덱스는 닫힌(closed) 버그의 레코드들에 대해 알 필요가 없다. 이런 경우 필터링된 인덱스는 열린 버그만 인덱싱하는 것을 허용한다.
 
 .. code-block:: sql
@@ -431,11 +484,13 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     SELECT * 
     FROM bugs
     WHERE Author = 'madden' AND Subject LIKE '%fopen%' AND Closed = 0
-    USING INDEX idx_open_bugs;
+    USING INDEX idx_open_bugs(+);
      
     SELECT * 
-    FROM bugs USE INDEX (idx_open_bugs)
+    FROM bugs FORCE INDEX (idx_open_bugs)
     WHERE CreationDate > CURRENT_DATE - 10 AND Closed = 0;
+
+위의 예에서 "USING INDEX idx_open_bugs" 절이나 "USE INDEX (idx_open_bugs)" 절을 사용하는 경우, 인덱스를 사용하지 않고 질의를 수행하게 된다.
     
 .. warning::
 
@@ -449,10 +504,11 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 .. code-block:: sql
 
     CREATE INDEX idx_open_bugs ON bugs (Author) WHERE Closed = 0;
+
+::
     
     ERROR: before ' ; '
     Invalid filter expression (bugs.Closed=0) for index.
-
     
 하지만 아래의 경우는 Author 값이 NULL이더라도 CreationDate 값이 NULL일 수 없으므로 허용한다.
 
@@ -467,12 +523,18 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     .. code-block:: sql
     
         CREATE INDEX idx ON bugs (creationdate) WHERE creationdate > SYS_DATETIME;
-            
+
+    ::
+        
         ERROR: before ' ; '
         'sys_datetime ' is not allowed in a filter expression for index.
-            
+
+    .. code-block:: sql
+        
         CREATE INDEX idx ON bugs (bugID) WHERE bugID > RAND();
-            
+
+    ::
+    
         ERROR: before ' ; '
         'rand ' is not allowed in a filter expression for index.
     
@@ -481,8 +543,8 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     .. code-block:: sql
 
         CREATE INDEX IDX ON bugs (bugID) WHERE bugID > 10 OR bugID = 3;
-         
-        In line 1, column 62,
+    
+    ::     
          
         ERROR: before ' ; '
         ' or ' is not allowed in a filter expression for index.
@@ -506,26 +568,42 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
         
         -- IS NULL cannot be used with expressions
         CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
-        
+
+    ::
+    
         ERROR: before ' ; '
         Invalid filter expression (( not t.a<>0) is null ) for index.
          
+    .. code-block:: sql
+
         CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
         
+    ::
+    
         ERROR: before ' ; '
         Invalid filter expression ((t.a+1) is null ) for index.
+
+    .. code-block:: sql
          
         -- At least one attribute must not be used with IS NULL
         CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
         
+    ::
+    
         ERROR: before '  ; '
         Invalid filter expression (t.a is null ) for index.
-         
+
+    .. code-block:: sql
+        
         CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
         
+    ::
+    
         ERROR: before ' ; '
         Invalid filter expression (t.a is null  and t.b is null ) for index.
-         
+
+    .. code-block:: sql
+        
         CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
 
 *   필터링된 인덱스에 대한 인덱스 스킵 스캔(ISS)은 지원되지 않는다.
@@ -537,8 +615,10 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
             
         CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) 
         WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND 
-        sqrt(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
+        SQRT(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
         
+    ::
+    
         ERROR: before ' ; '
         The maximum length of filter predicate string must be 128.
 
@@ -696,9 +776,11 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 .. code-block:: sql
 
-    csql> ;plan simple
+    -- csql> ;plan simple
     SELECT * FROM t WHERE col1 < 6;
-     
+    
+::
+    
     Query plan:
      Index scan(t t, i_t_col1_col2_col3, [(t.col1 range (min inf_lt t.col3))] (covers))
      
@@ -725,9 +807,11 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
     .. code-block:: sql
 
-        csql>;plan simple
+        -- csql>;plan simple
         SELECT * FROM tab WHERE c='abcd    ' USING INDEX i_tab_c(+);
-         
+        
+    ::
+    
         Query plan:
          Index scan(tab tab, i_tab_c, (tab.c='abcd    ') (covers))
          
@@ -743,6 +827,8 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
         SELECT * FROM tab WHERE c='abcd    ' USING INDEX tab.NONE;
          
+    ::
+    
         Query plan:
          Sequential scan(tab tab)
          
@@ -804,7 +890,9 @@ ORDER BY 절 최적화
     FROM tab 
     WHERE j > 0 
     ORDER BY j,k;
-     
+
+::
+    
     --  the  selection from the query plan dump shows that the ordering index i_tab_j_k was used and sorting was not necessary
     --  (/* --> skip ORDER BY */)
     Query plan:
@@ -835,7 +923,9 @@ ORDER BY 절 최적화
     FROM tab 
     WHERE j > 0 
     ORDER BY j,k;
-     
+
+::
+    
     --  in this case the index i_tab_j_k is a covering index and also respects the ordering index property.
     --  Therefore, it is used as a covering index and sorting is not performed.
      
@@ -868,7 +958,9 @@ ORDER BY 절 최적화
     FROM tab 
     WHERE i > 0 
     ORDER BY j,k;
-     
+
+::
+    
     -- since an index on (i,j,k) is now available, it will be used as covering index. However, sorting the results according to
     -- the ORDER BY  clause is needed.
     Query plan:
@@ -954,7 +1046,9 @@ ORDER BY 절 최적화
     FROM di 
     WHERE i > 0 
     LIMIT 3;
-     
+
+::
+    
     Query plan:
      
     Index scan(di di, i_di_i, (di.i range (0 gt_inf max) and inst_num() range (min inf_le 3)) (covers))
@@ -975,7 +1069,9 @@ ORDER BY 절 최적화
     FROM di 
     WHERE i > 0 
     LIMIT 3;
-     
+
+::
+    
     Query plan:
      Index scan(di di, i_di_i, (di.i range (0 gt_inf max) and inst_num() range (min inf_le 3)) (covers) (desc_index))
      
@@ -984,7 +1080,6 @@ ORDER BY 절 최적화
                 5
                 5
                 5
-
 
 다음 예는 **ORDER BY** 절을 통해 내림차순 정렬이 요구되는 경우이다. 이 경우 **USE_DESC_IDX** 힌트가 없지만 내림차순 스캔하게 된다.
 
@@ -999,7 +1094,9 @@ ORDER BY 절 최적화
     FROM di 
     WHERE i > 0 
     ORDER BY i DESC LIMIT 3;
-     
+
+::
+    
     Query plan:
      Index scan(di di, i_di_i, (di.i range (0 gt_inf max)) (covers) (desc_index))
      
@@ -1070,7 +1167,9 @@ GROUP BY 절 최적화
      
     --  the  selection from the query plan dump shows that the index i_tab_j_k was used and sorting was not necessary
     --  (/* ---> skip GROUP BY */)
-     
+
+::
+    
     Query plan:
     iscan
         class: tab node[0]
@@ -1099,7 +1198,9 @@ GROUP BY 절 최적화
     SELECT * 
     FROM tab 
     GROUP BY j,k;
-     
+
+::
+    
     --  the  selection from the query plan dump shows that the index i_tab_j_k was used (since j has the NOT NULL constraint )
     --  and sorting was not necessary (/* ---> skip GROUP BY */)
     Query plan:
@@ -1147,6 +1248,8 @@ GROUP BY 절 최적화
     ORDER BY b 
     LIMIT 2; 
 
+::
+    
     Query plan: 
     iscan 
     class: t node[0] 
@@ -1214,7 +1317,6 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 *   정렬 테이블과 외부 테이블들(outer tables) 간의 JOIN 조건에 명시된 정렬 테이블의 칼럼들은 모두 인덱스에 포함되어야 한다. 즉, 데이터 필터링 조건이 없어야 한다. 
 *   정렬 테이블과 내부 테이블들(inner tables) 간의 JOIN 조건에 명시된 정렬 테이블의 칼럼들은 범위 조건이 아닌 조건으로 WHERE 절에 포함되어야 한다. 
 
-
 .. note:: 다중 키 범위 최적화가 적용될 수 있는 대부분의 경우에 다중 키 범위 최적화가 가장 좋은 성능을 보장하지만, 특정한 상황에서 최적화를 원하지 않는다면 질의에 **NO_MULTI_RANGE_OPT** 힌트를 명시하면 된다. 힌트를 지정하는 방법은 :ref:`sql-hint`\ 를 참고하면 된다.
 
 .. _index-skip-scan:
@@ -1225,7 +1327,7 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 인덱스 스킵 스캔(index skip scan, 이하 ISS)은 인덱스의 첫 번째 칼럼이 조건에 명시되지 않아도 뒤따라오는 칼럼이 조건(주로 =)에 명시되면 해당 인덱스를 활용하여 질의를 처리하는 최적화 방식이다. 
 일반적으로 ISS는 여러 개의 칼럼들(C1, C2, …, Cn) 중에서 고려되어야 하는데, 여기에서 질의는 연속된 칼럼들에 대한 조건을 가지고 있고 이 조건들은 인덱스의 두 번째 칼럼(C2)부터 시작한다.
 
-.. code-block:: sql
+::
 
     INDEX (C1, C2, ..., Cn);
      

@@ -2,12 +2,167 @@
 집계/분석 함수
 **************
 
-**집계 함수(aggregate functions)**\ 는 행들의 그룹에 기반하여 하나의 결과를 반환한다. **GROUP BY** 절을 포함하면 각 그룹마다 한 행의 집계 결과를 반환한다. **GROUP BY**
+개요
+====
+
+집계/분석 함수는 데이터를 분석하여 어떤 결과를 추출하고자 할 때 사용하는 함수이다. 
+
+*   집계 함수는 그룹 별로 그룹핑된 결과를 리턴하며, 그룹핑 대상이 되는 칼럼만 출력한다.
+
+*   분석 함수는 그룹 별로 그룹핑된 결과를 리턴하되, 그룹핑되지 않은 칼럼을 포함하여 하나의 그룹에 대해 여러 개의 행을 출력할 수 있다.
+
+예를 들어 집계/분석 함수는 다음과 같은 질문에 대한 답을 구하기 위해 사용될 수 있다.
+
+1.  년도별 총 판매 금액은 어떻게 되는가?
+
+2.  년도별로 그룹지어 가장 판매 금액이 높은 월부터 순서대로 출력하려면 어떻게 하는가? 
+    
+3.  년도별로 그룹지어 년도별, 월별 순서대로 누적 판매 금액을 출력하려면 어떻게 하는가?
+
+1.은 집계 함수로 답을 구할 수 있으며, 2., 3.은 분석 함수로 답을 구할 수 있다. 위의  질문들은 다음의 SQL문으로 작성될 수 있다.
+
+다음은 각 년도의 월별 판매 금액을 저장하고 있는 테이블이다.
+
+.. code-block:: sql
+
+    CREATE TABLE sales_mon_tbl (
+        yyyy INT,
+        mm INT,
+        sales_sum INT
+    );
+    
+    INSERT INTO sales_mon_tbl VALUES
+        (2000, 1, 1000), (2000, 2, 770), (2000, 3, 630), (2000, 4, 890),
+        (2000, 5, 500), (2000, 6, 900), (2000, 7, 1300), (2000, 8, 1800), 
+        (2000, 9, 2100), (2000, 10, 1300), (2000, 11, 1500), (2000, 12, 1610), 
+        (2001, 1, 1010), (2001, 2, 700), (2001, 3, 600), (2001, 4, 900),
+        (2001, 5, 1200), (2001, 6, 1400), (2001, 7, 1700), (2001, 8, 1110), 
+        (2001, 9, 970), (2001, 10, 690), (2001, 11, 710), (2001, 12, 880), 
+        (2002, 1, 980), (2002, 2, 750), (2002, 3, 730), (2002, 4, 980),
+        (2002, 5, 1110), (2002, 6, 570), (2002, 7, 1630), (2002, 8, 1890), 
+        (2002, 9, 2120), (2002, 10, 970), (2002, 11, 420), (2002, 12, 1300);
+
+1.  년도별 총 판매 금액은 어떻게 되는가?
+
+.. code-block:: sql
+
+    SELECT yyyy, sum(sales_sum) 
+    FROM sales_mon_tbl
+    GROUP BY yyyy;
+
+::
+
+             yyyy  sum(sales_sum)
+    =============================
+             2000           14300
+             2001           11870
+             2002           13450
+ 
+2.  년도별로 그룹지어 가장 판매 금액이 높은 월부터 순서대로 출력하려면 어떻게 하는가?
+
+.. code-block:: sql
+
+    SELECT yyyy, mm, sales_sum, RANK() OVER (PARTITION BY yyyy ORDER BY sales_sum DESC) AS rnk
+    FROM sales_mon_tbl;
+
+::
+
+             yyyy           mm    sales_sum          rnk
+    ====================================================
+             2000            9         2100            1
+             2000            8         1800            2
+             2000           12         1610            3
+             2000           11         1500            4
+             2000            7         1300            5
+             2000           10         1300            5
+             2000            1         1000            7
+             2000            6          900            8
+             2000            4          890            9
+             2000            2          770           10
+             2000            3          630           11
+             2000            5          500           12
+             2001            7         1700            1
+             2001            6         1400            2
+             2001            5         1200            3
+             2001            8         1110            4
+             2001            1         1010            5
+             2001            9          970            6
+             2001            4          900            7
+             2001           12          880            8
+             2001           11          710            9
+             2001            2          700           10
+             2001           10          690           11
+             2001            3          600           12
+             2002            9         2120            1
+             2002            8         1890            2
+             2002            7         1630            3
+             2002           12         1300            4
+             2002            5         1110            5
+             2002            1          980            6
+             2002            4          980            6
+             2002           10          970            8
+             2002            2          750            9
+             2002            3          730           10
+             2002            6          570           11
+             2002           11          420           12
+
+3.  년도별로 그룹지어 년도별, 월별 순서대로 누적 판매 금액을 출력하려면 어떻게 하는가?
+
+.. code-block:: sql
+
+    SELECT yyyy, mm, sales_sum, SUM(sales_sum) OVER (PARTITION BY yyyy ORDER BY yyyy, mm) AS a_sum
+    FROM sales_mon_tbl;
+
+::
+
+             yyyy           mm    sales_sum        a_sum
+    ====================================================
+             2000            1         1000         1000
+             2000            2          770         1770
+             2000            3          630         2400
+             2000            4          890         3290
+             2000            5          500         3790
+             2000            6          900         4690
+             2000            7         1300         5990
+             2000            8         1800         7790
+             2000            9         2100         9890
+             2000           10         1300        11190
+             2000           11         1500        12690
+             2000           12         1610        14300
+             2001            1         1010         1010
+             2001            2          700         1710
+             2001            3          600         2310
+             2001            4          900         3210
+             2001            5         1200         4410
+             2001            6         1400         5810
+             2001            7         1700         7510
+             2001            8         1110         8620
+             2001            9          970         9590
+             2001           10          690        10280
+             2001           11          710        10990
+             2001           12          880        11870
+             2002            1          980          980
+             2002            2          750         1730
+             2002            3          730         2460
+             2002            4          980         3440
+             2002            5         1110         4550
+             2002            6          570         5120
+             2002            7         1630         6750
+             2002            8         1890         8640
+             2002            9         2120        10760
+             2002           10          970        11730
+             2002           11          420        12150
+             2002           12         1300        13450
+ 
+집계 함수와 분석 함수 비교
+==========================
+
+**집계 함수(aggregate functions)**\ 는 행들의 그룹에 기반하여 각 그룹 당 하나의 결과를 반환한다. **GROUP BY** 절을 포함하면 각 그룹마다 한 행의 집계 결과를 반환한다. **GROUP BY**
 절을 생략하면 전체 행에 대해 한 행의 집계 결과를 반환한다. **HAVING** 절은 **GROUP BY** 절이 있는 질의에 조건을 추가할 때 사용한다.
 
 대부분의 집계 함수에 **DISTINCT**, **UNIQUE** 한정자를 사용할 수 있다. **GROUP BY ... HAVING** 절에 대해서는 :ref:`group-by-clause` 을 참고한다.
 
-**분석 함수(analytic functions)**\ 는 행들의 결과에 기반하여 집계 값을 계산한다. 분석 함수는 **OVER** 절 뒤의 *query_partition_clause* 에 의해 지정된 그룹들(이 절이 생략되면 모든 행을 하나의 그룹으로 봄)을 기준으로 한 개 이상의 행을 반환할 수 있다는 점에서 집계 함수와 다르다.
+**분석 함수(analytic functions)**\ 는 행들의 그룹에 기반하여 집계 값을 계산한다. 분석 함수는 **OVER** 절 뒤의 *query_partition_clause* 에 의해 지정된 그룹들(이 절이 생략되면 모든 행을 하나의 그룹으로 봄)을 기준으로 한 개 이상의 행을 반환할 수 있다는 점에서 집계 함수와 다르다.
 
 분석 함수는 특정 행 집합에 대해 다양한 통계를 허용하기 위해 기존의 집계 함수들 일부에 **OVER** 라는 새로운 분석 절이 함께 사용된다. ::
 
@@ -52,6 +207,8 @@ AVG
     FROM participant
     WHERE nation_code = 'KOR';
     
+::
+
                      avg(gold)
     ==========================
          9.600000000000000e+00
@@ -64,6 +221,8 @@ AVG
         AVG (gold) OVER (PARTITION BY nation_code ORDER BY host_year) avg_gold
     FROM participant WHERE nation_code like 'AU%';
      
+::
+
         host_year  nation_code                  gold               avg_gold
     =======================================================================
              1988  'AUS'                           3  3.000000000000000e+00
@@ -84,6 +243,8 @@ AVG
     SELECT host_year, nation_code, gold, AVG (gold) OVER (PARTITION BY nation_code) avg_gold
     FROM participant WHERE nation_code LIKE 'AU%';
      
+::
+
         host_year  nation_code                  gold                  avg_gold
     ==========================================================================
              2004  'AUS'                          17     1.040000000000000e+01
@@ -119,6 +280,8 @@ COUNT
     FROM olympic
     WHERE mascot IS NOT NULL; 
     
+::
+
          count(*)
     =============
                 9
@@ -130,6 +293,8 @@ COUNT
     SELECT nation_code, event, name, COUNT(*) OVER (ORDER BY event) co
     FROM athlete WHERE nation_code='AUT';
     
+::
+
        nation_code           event                 name                           co
     ===============================================================================
       'AUT'                 'Athletics'           'Kiesl Theresia'                2
@@ -168,6 +333,8 @@ DENSE_RANK
     DENSE_RANK() OVER (PARTITION BY host_year ORDER BY gold DESC) AS d_rank
     FROM participant;
      
+::
+
     host_year  nation_code                  gold       d_rank
     =============================================================
          1988  'URS'                          55            1
@@ -240,20 +407,25 @@ GROUP_CONCAT
 결과 문자열에 문자형 데이터 타입이 아닌 다른 타입이 전달되면, 에러를 반환한다.
 
 **GROUP_CONCAT** 함수를 사용하려면 다음의 조건을 만족해야 한다.
-  * 입력 인자로 하나의 표현식(또는 칼럼)만 허용한다.
-  * **ORDER BY** 를 이용한 정렬은 오직 인자로 사용되는 표현식(또는 칼럼)에 의해서만 가능하다.
-  * 구분자로 사용되는 문자열은 문자형 타입만 허용하며, 다른 타입은 허용하지 않는다.
+
+*   입력 인자로 하나의 표현식(또는 칼럼)만 허용한다.
+*   **ORDER BY** 를 이용한 정렬은 오직 인자로 사용되는 표현식(또는 칼럼)에 의해서만 가능하다.
+*   구분자로 사용되는 문자열은 문자형 타입만 허용하며, 다른 타입은 허용하지 않는다.
 
 .. code-block:: sql
 
     SELECT GROUP_CONCAT(s_name) FROM code;
     
+::
+
       group_concat(s_name)
     ======================
       'X,W,M,B,S,G'
      
     SELECT GROUP_CONCAT(s_name ORDER BY s_name SEPARATOR ':') FROM code;
     
+::
+
       group_concat(s_name order by s_name separator ':')
     ======================
       'B:G:M:S:W:X'
@@ -263,6 +435,8 @@ GROUP_CONCAT
      
     SELECT GROUP_CONCAT(i*2+1 ORDER BY 1 SEPARATOR '') FROM t;
     
+::
+
       group_concat(i*2+1 order by 1 separator '')
     ======================
       '35791113'
@@ -296,6 +470,8 @@ LAG
     
     SELECT name, empno, LAG (empno, 1) OVER (ORDER BY empno) prev_empno
     FROM t_emp;
+
+::
 
       name                        empno   prev_empno
     ================================================
@@ -334,6 +510,8 @@ LEAD
     SELECT name, empno, LEAD (empno, 1) OVER (ORDER BY empno) next_empno
     FROM t_emp;
 
+::
+
       name                        empno   next_empno
     ================================================
       'David'                        55        11011
@@ -358,6 +536,8 @@ LEAD
         LAG (title,1,'no previous page') OVER (ORDER BY num) prev_title
     FROM tbl_board;
     
+::
+
       num  title                 next_title            prev_title
     ===============================================================================
         1  'title 1'             'title 2'             NULL
@@ -382,10 +562,11 @@ WHERE 조건이 괄호 안에 있으면 하나의 행만 선택되고, 이전 �
     ) 
     WHERE num=5;
     
+::
+
       num  title                 next_title            prev_title
     ===============================================================================
         5  'title 5'             'title 6'             'title 4'
-
 
 MAX
 ===
@@ -405,6 +586,8 @@ MAX
 
     SELECT MAX(gold) FROM participant WHERE nation_code = 'KOR';
     
+::
+
         max(gold)
     =============
                12
@@ -416,9 +599,11 @@ MAX
     SELECT host_year, nation_code, gold,
         MAX(gold) OVER (PARTITION BY nation_code) mx_gold
     FROM participant 
-    WHERE nation_code like 'AU%' 
+    WHERE nation_code LIKE 'AU%' 
     ORDER BY nation_code, host_year;
      
+::
+
         host_year  nation_code                  gold      mx_gold
     =============================================================
              1988  'AUS'                           3           17
@@ -450,6 +635,8 @@ MIN
 
     SELECT MIN(gold) FROM participant WHERE nation_code = 'KOR';
     
+::
+
         min(gold)
     =============
                 7
@@ -462,6 +649,8 @@ MIN
         MIN(gold) OVER (PARTITION BY nation_code) mn_gold
     FROM participant WHERE nation_code like 'AU%' ORDER BY nation_code, host_year;
      
+::
+
         host_year  nation_code                  gold      mn_gold
     =============================================================
              1988  'AUS'                           3            3
@@ -490,7 +679,6 @@ NTILE
 **NTILE** 함수는 주어진 버킷 개수로 행의 개수를 균등하게 나누어 버킷 번호를 부여한다. 즉, NTILE 함수는 equi-height histogram을 생성해준다. 각 버킷에 있는 행의 개수는 최대 1개까지 차이가 생길 수 있다. 나머지 값(행의 개수를 버킷 개수로 나눈 나머지)이 각 버킷에 대해 1번 버킷부터 하나씩 배포된다.
 
 반면에 :func:`WIDTH_BUCKET` 함수는 주어진 버킷 개수로 주어진 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
-
     
 다음은 8명의 고객을 생년월일을 기준으로 5개의 버킷으로 나누되, 각 버킷의 수가 균등하도록 나누는  예이다. 1, 2, 3번 버킷에는 2개의 행이, 4, 5번 버킷에는 2개의 행이 존재한다.
 
@@ -510,6 +698,8 @@ NTILE
     SELECT name, birthdate, NTILE(5) OVER (ORDER BY birthdate) age_group 
     FROM t_customer;
     
+::
+
       name                  birthdate     age_group
     ===============================================
       'James'               12/28/1948            1
@@ -520,7 +710,6 @@ NTILE
       'Lora'                03/26/1987            3
       'Peter'               10/25/1988            4
       'Ralph'               03/17/1995            5
-
 
 다음은 8명의 학생을 점수가 높은 순으로 5개의 버킷으로 나눈 후, 이름 순으로 출력하되, 각 버킷의 행의 개수는 균등하게 나누는 예이다. t_score 테이블의 score 칼럼에는 8개의 행이 존재하므로, 8을 5로 나눈 나머지 3개 행이 1번 버킷부터 각각 할당되어 1,2,3번 버킷은 4,5번 버킷에 비해 1개의 행이 더 존재한다.
 NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으로 균등하게 grade를 나눈다.
@@ -541,6 +730,8 @@ NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으�
     SELECT name, score, NTILE(5) OVER (ORDER BY score DESC) grade 
     FROM t_score 
     ORDER BY name;
+
+::
 
       name                        score        grade
     ================================================
@@ -570,6 +761,8 @@ RANK
         RANK() OVER (PARTITION BY host_year ORDER BY gold DESC) AS g_rank
     FROM participant;
      
+::
+
         host_year  nation_code                  gold       g_rank
     =============================================================
              1988  'URS'                          55            1
@@ -638,6 +831,8 @@ ROW_NUMBER
         ROW_NUMBER() OVER (PARTITION BY host_year ORDER BY gold DESC) AS r_num
     FROM participant;
      
+::
+
         host_year  nation_code                  gold       r_num
     =============================================================
              1988  'URS'                          55            1
@@ -723,6 +918,8 @@ STDDEV, STDDEV_POP
      
     SELECT STDDEV_POP (score) FROM student;
      
+::
+
              stddev_pop(score)
     ==========================
          2.329711474744362e+01
@@ -736,6 +933,8 @@ STDDEV, STDDEV_POP
     FROM student 
     ORDER BY subjects_id, name;
      
+::
+
       subjects_id  name                                     score                   std_pop
     =======================================================================================
                 1  'Bruce'                  6.300000000000000e+01     2.632869157402243e+01
@@ -787,6 +986,8 @@ STDDEV_SAMP
     ('Sara', 1, 17), ('Sara', 2, 55), ('Sara', 3, 43);
      
     SELECT STDDEV_SAMP (score) FROM student;
+    
+::    
      
             stddev_samp(score)
     ==========================
@@ -801,6 +1002,8 @@ STDDEV_SAMP
     FROM student 
     ORDER BY subjects_id, name;
      
+::
+
       subjects_id  name                                     score                  std_samp
     =======================================================================================
                 1  'Bruce'                  6.300000000000000e+01     2.943637205907005e+01
@@ -841,8 +1044,8 @@ SUM
     ORDER BY SUM(gold) DESC 
     LIMIT 10;
      
-    === <Result of SELECT Command in Line 1> ===
-     
+::
+
       nation_code             sum(gold)
     ===================================
       'USA'                         190
@@ -865,6 +1068,8 @@ SUM
     FROM participant 
     WHERE nation_code LIKE 'AU%';
      
+::
+
         host_year  nation_code                  gold     sum_gold
     =============================================================
              1988  'AUS'                           3            3
@@ -886,6 +1091,8 @@ SUM
     FROM participant 
     WHERE nation_code LIKE 'AU%';
     
+::
+
         host_year  nation_code                  gold     sum_gold
     =============================================================
              2004  'AUS'                          17           52
@@ -918,7 +1125,7 @@ VARIANCE, VAR_POP
 
 .. image:: /images/var_pop.jpg
 
-.. warning:: CUBRID 2008 R3.1 이하 버전에서 **VARIANCE** 함수는 :func:`VAR_SAMP` 와 같은 기능을 수행했다.
+.. note:: CUBRID 2008 R3.1 이하 버전에서 **VARIANCE** 함수는 :func:`VAR_SAMP` 와 같은 기능을 수행했다.
 
 다음은 전체 과목에 대해 전체 학생의 모분산을 출력하는 예제이다.
 
@@ -934,6 +1141,8 @@ VARIANCE, VAR_POP
      
     SELECT VAR_POP(score) FROM student;
      
+::
+
                 var_pop(score)
     ==========================
          5.427555555555550e+02
@@ -946,6 +1155,8 @@ VARIANCE, VAR_POP
     FROM student 
     ORDER BY subjects_id, name;
      
+::
+
       subjects_id  name                                     score                     v_pop
     =======================================================================================
                 1  'Bruce'                  6.300000000000000e+01     6.931999999999998e+02
@@ -996,6 +1207,8 @@ VAR_SAMP
     
     SELECT VAR_SAMP(score) FROM student;
     
+::
+
                var_samp(score)
     ==========================
          5.815238095238092e+02
@@ -1008,6 +1221,8 @@ VAR_SAMP
     FROM student 
     ORDER BY subjects_id, name;
      
+::
+
       subjects_id  name                                     score                    v_samp
     =======================================================================================
                 1  'Bruce'                  6.300000000000000e+01     8.665000000000000e+02

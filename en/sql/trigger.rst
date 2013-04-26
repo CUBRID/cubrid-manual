@@ -8,7 +8,7 @@ CREATE TRIGGER
 ==============
 
 Guidelines for Trigger Definition
------------------=---------------
+---------------------------------
 
 Trigger definition provides various and powerful functionalities. Before creating a trigger, you must consider the following:
 
@@ -102,6 +102,8 @@ As shown below, the update is rejected if you try to change the number of gold (
     UPDATE participant SET gold = -5 WHERE nation_code = 'KOR'
     AND host_year = 2004;
      
+::
+
     ERROR: The operation has been rejected by trigger "medal_trigger".
 
 .. _trigger-event-time:
@@ -156,10 +158,11 @@ The following example shows how to use an instance event. The *example* trigger 
 
 .. code-block:: sql
 
+    CREATE TABLE update_logs(event_code INTEGER, score VARCHAR(10), dt DATETIME);
+    
     CREATE TRIGGER example
-    ...
     BEFORE UPDATE ON history(score)
-    ...
+    EXECUTE INSERT INTO update_logs VALUES (obj.event_code, obj.score, SYSDATETIME);
 
 If you want the trigger to be called only once, before the first instance of the *score* column is updated, use the **STATEMENT** **UPDATE** type as the following example.
 
@@ -168,9 +171,8 @@ The following example shows how to use a statement event. If you define a statem
 .. code-block:: sql
 
     CREATE TRIGGER example
-    ...
     BEFORE STATEMENT UPDATE ON history(score)
-    ...
+    EXECUTE PRINT 'There was an update on history table';
 
 .. note:
 
@@ -188,10 +190,11 @@ The following example shows how to specify the *score* column of the *history* t
 
 .. code-block:: sql
 
+    CREATE TABLE update_logs(event_code INTEGER, score VARCHAR(10), dt DATETIME);
+    
     CREATE TRIGGER example
-    ...
     BEFORE UPDATE ON history(score)
-    ...
+    EXECUTE INSERT INTO update_logs VALUES (obj.event_code, obj.score, SYSDATETIME);
 
 Combination of Event Type and Target
 ------------------------------------
@@ -228,18 +231,18 @@ The following example shows how to use a correlation name in an expression withi
 .. code-block:: sql
 
     CREATE TRIGGER example
-    ........
-    IF obj.record * 1.20  < 500
-    .......
+    BEFORE UPDATE ON participant
+    IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
+    EXECUTE REJECT;
 
 The following example shows how to use the **SELECT** statement in an expression within a condition. The trigger in this example uses the **SELECT** statement that contains an aggregate function **COUNT** (\*) to compare the value with a constant. The **SELECT** statement must be enclosed in parentheses and must be placed at the end of the expression.
 
 .. code-block:: sql
 
     CREATE TRIGGER example
-    ......
+    BEFORE INSERT ON participant
     IF 1000 >  (SELECT COUNT(*) FROM participant)
-    ......
+    EXECUTE REJECT;
 
 .. note:
 
@@ -472,13 +475,21 @@ The following example shows that **INSERT ... ON DUPLICATE KEY UPDATE** and **RE
     INSERT INTO with_trigger VALUES (11) ON DUPLICATE KEY UPDATE id=22;
      
     SELECT * FROM trigger_actions;
+
+::
+    
               va
     ==============
                 2
      
+.. code-block:: sql
+
     REPLACE INTO with_trigger VALUES (22);
      
     SELECT * FROM trigger_actions;
+    
+::
+    
               va
     ==============
                 2
@@ -548,6 +559,8 @@ The following example shows how to configure the maximum number of times of recu
     SET TRIGGER MAXIMUM DEPTH 10;
     UPDATE participant SET gold = 15 WHERE nation_code = 'KOR' AND host_year = 1988;
      
+::
+
     ERROR: Maximum trigger depth 10 exceeded at trigger "loop_tgr".
 
 Trigger Example
@@ -612,13 +625,15 @@ Once completed, the update in the *record* table can be confirmed at the last po
 
 .. code-block:: sql
 
-    CREATE CLASS foo (n int);
+    CREATE TABLE foo (n int);
     CREATE TRIGGER foo_trigger
         DEFERRED UPDATE ON foo
         IF old.n = 100
         EXECUTE PRINT 'foo_trigger';
 
-If you try to create a trigger as shown above, an error message is displayed and the trigger fails. ::
+If you try to create a trigger as shown above, an error message is displayed and the trigger fails.
+
+::
 
     ERROR: Error compiling condition for 'foo_trigger' : old.n is not defined.
 

@@ -81,8 +81,7 @@ To extend class inheritance, add a super class to a class. A relationship betwee
 
 For the first *class_name*, specify the name of the class where a super class is to be added. Attributes and methods of the super class can be inherited by using the syntax above.
 
-Name conflicts can occur when adding a new super class. If a name conflict cannot be resolved by the database system, attributes or methods to inherit from the super class can be specified by using the **INHERIT** clause. You can use aliases to inherit all attributes or methods that cause the conflict. For details on super class name conflicts, see the
-:ref:`class-conflict-resolution` section.
+Name conflicts can occur when adding a new super class. If a name conflict cannot be resolved by the database system, attributes or methods to inherit from the super class can be specified by using the **INHERIT** clause. You can use aliases to inherit all attributes or methods that cause the conflict. For details on super class name conflicts, see :ref:`class-conflict-resolution`.
 
 The following example shows how to create the *female_event* class by inheriting the *event* class included in *demodb*.
 
@@ -167,7 +166,6 @@ The following example shows how to create the *soccer_stadium* class by inheriti
     CREATE CLASS soccer_stadium UNDER event, stadium
     INHERIT name OF stadium, code OF stadium;
 
-
 When the two super classes (*event* and *stadium*) have the *name* attribute, if the *soccer_stadium* class needs to inherit both attributes, it can inherit the *name* unchanged from the *stadium* class and the *name* changed from the *event* class by using the **alias** clause of the **INHERIT**.
 
 The following example shows in which the *name* attribute of the *stadium* class is inherited as it is, and that of the *event* class is inherited as the *purpose* alias.
@@ -181,20 +179,23 @@ The following example shows in which the *name* attribute of the *stadium* class
 
 A name conflict may occur again if a super class that explicitly inherited an attribute or method is dropped by using the **INHERIT**. In this case, you must specify the attribute or method to be explicitly inherited when dropping the super class.
 
-The following example shows how to create the *seoul_1988_soccer* class by inheriting *game*, *participant* and *stadium* classes from *demodb*, and delete the *participant* class from the *super* class. Because *nation_code* and *host_year* are explicitly inherited from the *participant* class, you must resolve their name conflicts before deleting it from the *super* class. However, *host_year* does not need to be specified explicitly because it exists only in the *game* class.
-
 .. code-block:: sql
 
-    CREATE CLASS seoul_1988_soccer UNDER game, participant, stadium
-    INHERIT nation_code OF participant, host_year OF participant;
-    
-    ALTER CLASS seoul_1988_soccer
-    DROP SUPERCLASS participant
-    INHERIT nation_code OF stadium;
+    CREATE CLASS a_tbl(a INT PRIMARY KEY, b INT);
+    CREATE CLASS b_tbl(a INT PRIMARY KEY, b INT, c INT);
+    CREATE CLASS c_tbl(b INT PRIMARY KEY, d INT);
+
+    CREATE CLASS a_b_c UNDER a_tbl, b_tbl, c_tbl INHERIT a OF b_tbl, b OF b_tbl;
+
+    ALTER CLASS a_b_c
+    DROP SUPERCLASS b_tbl
+    INHERIT b OF a_tbl;
+
+The above example shows how to create the *a_b_c* class by inheriting *a_tbl*, *b_tbl* and *c_tbl* classes, and delete the *b_tbl* class from the super class. Because *a* and *b* are explicitly inherited from the *b_tbl* class, you must resolve their name conflicts before deleting it from the super class. However, *a* does not need to be specified explicitly because it exists only in the *a_tbl* class except for the *b_tbl* class to be deleted.
 
 **Compatible Domains**
 
-When an attribute conflict occurs among two or more super classes, the statement resolving the conflict is not possible only if all attributes have compatible domains.
+If the conflicting attributes do not have compatible domains, the class hierarchy cannot be created.
 
 For example, the class that inherits a super class with the *phone* attribute of integer type cannot have another super class with the *phone* attribute of string type. If the types of the *phone* attributes of the two super classes are both String or Integer, you can add a new super class by resolving the conflict with the **INHERIT** clause.
 

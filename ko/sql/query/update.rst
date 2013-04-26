@@ -39,7 +39,9 @@ UPDATE
     --creating a new table having all records copied from a_tbl1
     CREATE TABLE a_tbl5 AS SELECT * FROM a_tbl1;
     SELECT * FROM a_tbl5 WHERE name IS NULL;
-     
+
+::
+    
                id  name                  phone
     =========================================================
              NULL  NULL                  '000-0000'
@@ -50,6 +52,8 @@ UPDATE
     UPDATE a_tbl5 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
     SELECT * FROM a_tbl5;
      
+::
+
                id  name                  phone
     =========================================================
              NULL  'yyy'                 '999-9999'
@@ -97,7 +101,7 @@ UPDATE
     CREATE TABLE b_tbl(rate_id INT, rate DOUBLE);
     INSERT INTO a_tbl VALUES (1, 100.0), (2, 1000.0), (3, 10000.0);
     INSERT INTO b_tbl VALUES (1, 0.1), (2, 0.0), (3, 0.2), (3, 0.5);
-     
+    
     UPDATE
      a_tbl INNER JOIN b_tbl ON a_tbl.id=b_tbl.rate_id
     SET

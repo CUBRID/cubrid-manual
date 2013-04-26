@@ -223,6 +223,8 @@ You must not delete archive logs by using the file deletion command such as rm o
 
 If you want to delete logs as much as possible while operating a database, configure the value of **log_max_archives** to 0 or as small as possible and configure the value of **force_remove_log_archives** to yes. Note that in an HA environment, if the value of **force_remove_log_archives** is yes, archive logs that have not replicated in a slave node are deleted, which can cause replication errors. Therefore, it is recommended that you configure it to no. Although the value of **force_remove_log_archives** is set to no, files that are complete for replication can be deleted by HA management process.
 
+.. _db-restore:
+
 Restoring Database
 ==================
 

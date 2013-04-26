@@ -56,8 +56,11 @@ You can insert a new record into a table in a database by using the **INSERT** s
     --insert a single row with SET clauses
     INSERT INTO a_tbl1 SET id=6, name='eee';
     INSERT INTO a_tbl1 SET id=7, phone='777-7777';
-     
+    
     SELECT * FROM a_tbl1;
+    
+::
+    
                id  name                  phone
     =========================================================
              NULL  NULL                  '000-0000'
@@ -69,17 +72,26 @@ You can insert a new record into a table in a database by using the **INSERT** s
                 6  'eee'                 '000-0000'
                 7  NULL                  '777-7777' 
      
+.. code-block:: sql
+
     INSERT INTO a_tbl1 SET id=6, phone='000-0000'
     ON DUPLICATE KEY UPDATE phone='666-6666';
-     
     SELECT * FROM a_tbl1 WHERE id=6;
+    
+::
+
                id  name                  phone
     =========================================================
                 6  'eee'                 '666-6666'
      
+.. code-block:: sql
+
     INSERT INTO a_tbl1 SELECT * FROM a_tbl1 WHERE id=7 ON DUPLICATE KEY UPDATE name='ggg';
-     
     SELECT * FROM a_tbl1 WHERE id=7;
+    
+::
+
+    
                id  name                  phone
     =========================================================
                 7  'ggg'                 '777-7777'
@@ -92,39 +104,45 @@ In **INSERT ... SET** syntax, the evaluation of an assignment expression is perf
     INSERT INTO tbl SET a=1, b=a+1, c=b+2;
     SELECT * FROM tbl;
     
+::
+
             a            b            c
     ===================================
             1            2            4
     
 In the above example, b's value will be 2 and c's value will be 4 since a's value is 1.
  
-::
+.. code-block:: sql
  
     CREATE TABLE tbl2 (a INT, b INT, c INT);
     INSERT INTO tbl2 SET a=b+1, b=1, c=b+2;
  
 In the above example, a's value will be **NULL** since b's value is not specified yet when assigning a's value.
  
-::
+.. code-block:: sql
     
     SELECT * FROM tbl2;
     
+::
+
             a            b            c
     ===================================
          NULL            1            3
   
  
-::
-         
+.. code-block:: sql
+    
     CREATE TABLE tbl3 (a INT, b INT default 10, c INT);
     INSERT INTO tbl3 SET a=b+1, b=1, c=b+2;
  
 In the above example, a's value will be 11 since b's value is not specified yet and b's default is 10.
    
-::
-    
+.. code-block:: sql
+
     SELECT * FROM tbl3;
     
+::
+ 
             a            b            c
     ===================================
            11            1            3
@@ -155,6 +173,8 @@ The **SELECT** statement can be used in place of the **VALUES** keyword, or be i
      
     SELECT * FROM a_tbl2;
     
+::
+
                id  name                  phone
     =========================================================
                 1  'aaa'                 '000-0000'
@@ -188,6 +208,8 @@ In a situation in which a duplicate value is inserted into a column for which th
     INSERT INTO a_tbl3 SELECT * FROM a_tbl1 WHERE id IS NOT NULL and name IS NOT NULL;
     SELECT * FROM a_tbl3;
     
+::
+
                id  name                  phone
     =========================================================
                 1  'aaa'                 '000-0000'
@@ -195,9 +217,13 @@ In a situation in which a duplicate value is inserted into a column for which th
                 3  'ccc'                 '333-3333'
                 6  'eee'                 '000-0000'
      
+.. code-block:: sql
+
     --insert duplicated value violating UNIQUE constraint
     INSERT INTO a_tbl3 VALUES(2, 'bbb', '222-2222');
      
+::
+
     ERROR: Operation would have caused one or more unique constraint violations.
 
 With ON DUPLICATE KEY UPDATE, "affected rows" value per row will be 1 if a new row is inserted, and 2 if an existing row is updated.
@@ -210,6 +236,8 @@ With ON DUPLICATE KEY UPDATE, "affected rows" value per row will be 1 if a new r
      
     SELECT * FROM a_tbl3 WHERE id=2;
     
+::
+
                id  name                  phone
     =========================================================
                 2  'ggg'                 '222-2222'

@@ -44,7 +44,7 @@ The **MERGE** statement is used to select rows from one or more sources and to u
     *   <*expr_list*>: Integer filter condition can be used to insert all source rows to the target table. ON (0=1) is an example of integer filter condition.
     *   This clause can be specified as it is or as <*merge_update_clause*>. If both of two are defined, the order does not matter.
 
-* <*merge_hint*>: Index hint of **MERGE** statement
+*   <*merge_hint*>: Index hint of **MERGE** statement
 
     *   **USE_UPDATE_IDX** (<*update_index_list*>): Index hint used in **UPDATE** clause of **MERGE** statement. Index names are listed on the *update_index_list* when **UPDATE** clause is run. This hint is applied to <*join_condition*> and <*update_condition*>.
     *   **USE_INSERT_IDX** (<*insert_index_list*>): Index hint used in **INSERT** clause of **MERGE** statement. Index names are listed on the *insert_index_list* when **INSERT** clause is run. This hint is applied to <*join_condition*>.
@@ -78,6 +78,9 @@ The following example shows how to merge the value of *source_table* to *target_
      
     -- the result of above query
     SELECT * FROM target_table;
+    
+::
+
                 a            b            c
     =======================================
                 1            2            5
@@ -133,6 +136,8 @@ The following example shows how to use the **MERGE** statement to arrange the re
     INSERT (t.std_id, t.addscore) VALUES (s.std_id, 10 + s.score * 0.1) WHERE s.score <= 30;
      
     SELECT * FROM bonus ORDER BY 1;
+    
+::
     
     std_id     addscore
     ==========================

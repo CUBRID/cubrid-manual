@@ -40,21 +40,21 @@ This section will explain how to use Ruby ActiveRecord adapter to work with CUBR
 
 .. code-block:: sql
 
-    CREATE TABLE "countries"(
-        "id" integer AUTO_INCREMENT,
-        "code" character varying(3) NOT NULL UNIQUE,
-        "name" character varying(40) NOT NULL UNIQUE,
-        "record_date" datetime DEFAULT sysdatetime NOT NULL,
-        CONSTRAINT pk_countries_id PRIMARY KEY("id")
+    CREATE TABLE countries(
+        id integer AUTO_INCREMENT,
+        code character varying(3) NOT NULL UNIQUE,
+        name character varying(40) NOT NULL UNIQUE,
+        record_date datetime DEFAULT sysdatetime NOT NULL,
+        CONSTRAINT pk_countries_id PRIMARY KEY(id)
     );
     
-    CREATE TABLE "cities"(
-        "id" integer AUTO_INCREMENT NOT NULL UNIQUE,
-        "name" character varying(40) NOT NULL,
-        "country_id" integer NOT NULL,
-        "record_date" datetime DEFAULT sysdatetime NOT NULL,
-        FOREIGN KEY ("country_id") REFERENCES "countries"("id") ON DELETE RESTRICT ON UPDATE RESTRICT,
-        CONSTRAINT pk_cities_id PRIMARY KEY("id")
+    CREATE TABLE cities(
+        id integer AUTO_INCREMENT NOT NULL UNIQUE,
+        name character varying(40) NOT NULL,
+        country_id integer NOT NULL,
+        record_date datetime DEFAULT sysdatetime NOT NULL,
+        FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        CONSTRAINT pk_cities_id PRIMARY KEY(id)
     );
 
 **Loading Library**

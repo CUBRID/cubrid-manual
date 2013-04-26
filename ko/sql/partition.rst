@@ -77,16 +77,16 @@
        ...
     )
     PARTITION BY RANGE ( <partitioning_key> ) (
-       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-       ... 
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        ... 
     )
     
     ALTER TABLE table_name 
     PARTITION BY RANGE ( <partitioning_key> ) (
-       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-       PARTITION partition_name VALUES LESS THAN ( <range_value> ),
-       ... 
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        PARTITION partition_name VALUES LESS THAN ( <range_value> ),
+        ... 
     )
 
 *   *partitioning_key*: :ref:`partitioning-key`\ 를 지정한다.
@@ -99,10 +99,16 @@
 
 .. code-block:: sql
 
-    CREATE TABLE participant2 (host_year INT, nation CHAR(3), gold INT, silver INT, bronze INT)
+    CREATE TABLE participant2 (
+        host_year INT, 
+        nation CHAR(3), 
+        gold INT, 
+        silver INT, 
+        bronze INT
+    )
     PARTITION BY RANGE (host_year) (
-      PARTITION before_2000 VALUES LESS THAN (2000),
-      PARTITION before_2008 VALUES LESS THAN (2008)
+        PARTITION before_2000 VALUES LESS THAN (2000),
+        PARTITION before_2008 VALUES LESS THAN (2008)
     );
      
 분할을 생성할 때, 사용자가 제공한 영역을 가장 작은 값부터 가장 큰 값까지 정렬하고 정렬된 리스트에서 겹치지 않는 간격을 생성한다. 위 예에서 생성된 영역의 간격은 [-∞, 2000)와 [2000, 2008)이다. 분할에 대한 무제한의 최대값을 지정하고 싶으면 **MAXVALUE** 식별자를 사용한다.
@@ -608,6 +614,10 @@ CUBRID 9.0 버전부터는 **ALTER** 문의 **ANALYZE PARTITION** 절은 더 이
         PARTITION p1 VALUES IN (_iso88591'y')
     );
 
+::
+
+    ERROR: Invalid codeset '_iso88591' for partition value. Expecting '_utf8' codeset.
+    
 분할 키에서 비교 작업을 수행할 때 분할 테이블에 정의된 콜레이션을 사용한다. 다음 예제에서  utf8_en_ci 콜레이션의 'test'는 'TEST'와 같으므로 오류를 반환한다.
 
 .. code-block:: sql
@@ -618,8 +628,12 @@ CUBRID 9.0 버전부터는 **ALTER** 문의 **ANALYZE PARTITION** 절은 더 이
         PARTITION p1 VALUES IN ('TEST')
     );
     
+::
+
     ERROR: Partition definition is duplicated. 'p1'
- 
-해시 분할 테이블에서 분할 키의 콜레이션은 바이너리여야 한다.
-    *   바이너리 콜레이션의 예: utf8_bin, iso88591_bin, euckr_bin
-    *   바이너리가 아닌 콜레이션의 예: utf8_de_exp_ai_ci
+
+.. CUBRIDSUS-10161 : 해시 분할 테이블에서 분할 키의 콜레이션은 바이너리여야 했던 9.1의 제약 사항이 없어짐. (이하는 커멘트 처리)
+
+    해시 분할 테이블에서 분할 키의 콜레이션은 바이너리여야 한다.
+        *   바이너리 콜레이션의 예: utf8_bin, iso88591_bin, euckr_bin
+        *   바이너리가 아닌 콜레이션의 예: utf8_de_exp_ai_ci

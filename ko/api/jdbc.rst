@@ -168,33 +168,33 @@ JDBC 프로그래밍
 
     --connection URL string when user name and password omitted
      
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::
      
     --connection URL string when zeroDateTimeBehavior property specified
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?zeroDateTimeBehavior=convertToNull
+    URL=jdbc:CUBRID:127.0.0.1:33000:demodb:public::?zeroDateTimeBehavior=convertToNull
      
     --connection URL string when charSet property specified
      
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?charSet=utf-8
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?charSet=utf-8
      
     --connection URL string when queryTimeout and charSet property specified
      
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?queryTimeout=1&charSet=utf-8
+    URL=jdbc:CUBRID:127.0.0.1:33000:demodb:public::?queryTimeout=1&charSet=utf-8
      
     --connection URL string when a property(altHosts) specified for HA
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?altHosts=192.168.0.2:33000,192.168.0.3:33000
      
     --connection URL string when properties(altHosts,rcTime, connectTimeout) specified for HA
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&connectTimeout=5
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&connectTimeout=5
      
     --connection URL string when properties(altHosts,rcTime, charSet) specified for HA
-    URL=jdbc:CUBRID:192.168.0.1:33000:db1:::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&charSet=utf-8
+    URL=jdbc:CUBRID:192.168.0.1:33000:demodb:public::?altHosts=192.168.0.2:33000,192.168.0.3:33000&rcTime=600&charSet=utf-8
 
 **예제 2**
 
 .. code-block:: java
 
-    String url = "jdbc:cubrid:192.168.0.1:33000:demodb:::";
+    String url = "jdbc:cubrid:192.168.0.1:33000:demodb:public::";
     String userid = "";
     String password = "";
      
@@ -362,7 +362,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
        public static void main (String args [])
        {
           // Making a connection
-          String url= "jdbc:cubrid:localhost:33000:demodb:::";
+          String url= "jdbc:cubrid:localhost:33000:demodb:public::";
           String user = "dba";
           String passwd = "";
 
@@ -470,7 +470,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
     {
        public static void main (String args [])
        {
-           String url= "jdbc:cubrid:127.0.0.1:33000:demodb:::";
+           String url= "jdbc:cubrid:127.0.0.1:33000:demodb:public::";
            String user = "";
            String passwd = "";
            String sql = "select settest,multisettest,listtest from collection_test";
@@ -527,7 +527,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
     {
        public static void main (String args [])
        {
-           String url = "jdbc:cubrid:127.0.0.1:33000:demodb:::";
+           String url = "jdbc:cubrid:127.0.0.1:33000:demodb:public::";
            String user = "";
            String passwd = "";
            String sql = "select collection_test from collection_test";
@@ -679,7 +679,7 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
 .. code-block:: java
 
     Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:::", "", "");
+    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:user1:password1:", "", "");
     
     PreparedStatement pstmt1 = conn.prepareStatement("INSERT INTO doc(image_id, doc_id, image) VALUES (?,?,?)");
     pstmt1.setString(1, "image-21");
@@ -705,7 +705,7 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
 .. code-block:: java
 
     Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:::", "", "");
+    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:user1:password1:", "", "");
     conn.setAutoCommit(false);
     
     PreparedStatement pstmt1 = conn.prepareStatement("SELECT image FROM doc WHERE image_id = ? ");
@@ -741,7 +741,7 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
 
 .. code-block:: java
 
-    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:::", "", "");
+    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:user1:password1:", "", "");
      
     // ResetSet에서 직접 데이터 인출
     PrepareStatement pstmt1 = conn.prepareStatement("SELECT content FROM doc_t WHERE doc_id = ? ");
@@ -758,7 +758,7 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
 
 .. code-block:: java
 
-    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:::", "", "");
+    Connection conn = DriverManager.getConnection ("jdbc:cubrid:localhost:33000:image_db:user1:password1:", "", "");
      
     //ResultSet에서 Blob 객체를 얻고 Blob 객체로부터 데이터 인출
     PrepareStatement pstmt2 = conn.prepareStatement("SELECT image FROM image_t WHERE image_id = ?");
@@ -774,6 +774,8 @@ JDBC에서 **LOB** 데이터를 처리하는 인터페이스는 JDBC 4.0 스펙�
 .. note::
 
     칼럼에서 정의한 크기보다 큰 문자열을 **INSERT** / **UPDATE** 하면 문자열이 잘려서 입력된다.
+
+.. _jdbc-error-codes:
 
 JDBC 에러 코드와 에러 메시지
 ----------------------------
@@ -1007,9 +1009,9 @@ JDBC 드라이버를 로드한 후 **DriverManager** 의 **getConnection** () �
                conn = connect();
      
                stmt = conn.createStatement();
-               stmt.executeUpdate("create class xoo ( a int, b int, c char(10))");
+               stmt.executeUpdate("CREATE TABLE xoo ( a INT, b INT, c CHAR(10))");
      
-               preStmt = conn.prepareStatement("insert into xoo values(?,?,''''100'''')");
+               preStmt = conn.prepareStatement("INSERT INTO xoo VALUES(?,?,''''100'''')");
                preStmt.setInt (1, 1) ;
                preStmt.setInt (2, 1*10) ;
                int rst = preStmt.executeUpdate () ;
@@ -1047,7 +1049,7 @@ JDBC 드라이버를 로드한 후 **DriverManager** 의 **getConnection** () �
                 Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 conn = DriverManager.getConnection("jdbc:cubrid:localhost:33000:demodb:::","dba","");
                
-                String sql = "select name, players from event";
+                String sql = "SELECT name, players FROM event";
                 stmt = conn.createStatement();
                 rs = stmt.executeQuery(sql);
                

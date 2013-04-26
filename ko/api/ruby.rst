@@ -40,21 +40,21 @@ Ruby 예제 프로그램
 
 .. code-block:: sql
 
-    CREATE TABLE "countries"(
-        "id" integer AUTO_INCREMENT,
-        "code" character varying(3) NOT NULL UNIQUE,
-        "name" character varying(40) NOT NULL UNIQUE,
-        "record_date" datetime DEFAULT sysdatetime NOT NULL,
-        CONSTRAINT pk_countries_id PRIMARY KEY("id")
+    CREATE TABLE countries(
+        id INTEGER AUTO_INCREMENT,
+        code CHARACTER VARYING(3) NOT NULL UNIQUE,
+        name CHARACTER VARYING(40) NOT NULL UNIQUE,
+        record_date DATETIME DEFAULT SYSDATETIME NOT NULL,
+        CONSTRAINT pk_countries_id PRIMARY KEY(id)
     );
     
-    CREATE TABLE "cities"(
-        "id" integer AUTO_INCREMENT NOT NULL UNIQUE,
-        "name" character varying(40) NOT NULL,
-        "country_id" integer NOT NULL,
-        "record_date" datetime DEFAULT sysdatetime NOT NULL,
-        FOREIGN KEY ("country_id") REFERENCES "countries"("id") ON DELETE RESTRICT ON UPDATE RESTRICT,
-        CONSTRAINT pk_cities_id PRIMARY KEY("id")
+    CREATE TABLE cities(
+        id INTEGER AUTO_INCREMENT NOT NULL UNIQUE,
+        name CHARACTER VARYING(40) NOT NULL,
+        country_id INTEGER NOT NULL,
+        record_date DATETIME DEFAULT SYSDATETIME NOT NULL,
+        FOREIGN KEY (country_id) REFERENCES countries(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        CONSTRAINT pk_cities_id PRIMARY KEY(id)
     );
 
 
@@ -267,7 +267,6 @@ http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#ruby_api
     *   `close <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#close>`_
     *   `commit <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#commit>`_
     *   `rollback <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#rollback>`_
-    *   `glo_new <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#glo_new>`_
     *   `query <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#query>`_
     *   `prepare <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#prepare>`_
     *   `to_s <http://www.cubrid.org/wiki_apis/entry/cubrid-ruby-api-documentation#to_s>`_

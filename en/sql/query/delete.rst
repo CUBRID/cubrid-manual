@@ -31,8 +31,6 @@ If you want to delete one table, :ref:`limit-clause` can be specified. You can l
 
     *   Previous versions of CUBRID 9.0 allow only one table for <*table_specifications*>.
 
-Below tables are created to explain **DELETE JOIN**.
-    
 .. code-block:: sql
 
     CREATE TABLE a_tbl(
@@ -40,10 +38,12 @@ Below tables are created to explain **DELETE JOIN**.
         phone VARCHAR(10));
     INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
      
-    DELETE FROM a_tbl WHERE phone IS NULL LIMIT 1;
-     
     --delete one record only from a_tbl
+    DELETE FROM a_tbl WHERE phone IS NULL LIMIT 1;
     SELECT * FROM a_tbl;
+    
+::
+    
                id  phone
     ===================================
                 1  '111-1111'
@@ -51,27 +51,27 @@ Below tables are created to explain **DELETE JOIN**.
                 3  '333-3333'
                 5  NULL
      
+.. code-block:: sql
+
     --delete all records from a_tbl
     DELETE FROM a_tbl;
+
+Below tables are created to explain **DELETE JOIN**.
 
 .. code-block:: sql
 
     CREATE TABLE a_tbl(
         id INT NOT NULL,
         phone VARCHAR(10));
-     
     CREATE TABLE b_tbl(
         id INT NOT NULL,
         phone VARCHAR(10));
-     
     CREATE TABLE c_tbl(
         id INT NOT NULL,
         phone VARCHAR(10));
      
     INSERT INTO a_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL), (5, NULL);
-     
     INSERT INTO b_tbl VALUES(1,'111-1111'), (2,'222-2222'), (3, '333-3333'), (4, NULL);
-     
     INSERT INTO c_tbl VALUES(1,'111-1111'), (2,'222-2222'), (10, '333-3333'), (11, NULL), (12, NULL);
 
 The below queries delete rows after joining multiple tables. They show the same result.

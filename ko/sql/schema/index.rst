@@ -62,7 +62,7 @@ ALTER INDEX
         ( column_name[ {, column_name} ...] ) [ WHERE <filter_predicate> ]
         | (function_name (argument_list) )
 
-*   **UNIQUE** : 유일한 값을 갖는 고유 인덱스를 생성한다.
+*   **UNIQUE** : 재생성하려는 인덱스가 고유 인덱스임을 지정한다.
 *   *index_name* : 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 *   *table_name* : 인덱스를 재생성할 테이블의 이름을 명시한다.
 *   *column_name* : 인덱스를 적용할 칼럼의 이름을 명시한다. 다중 칼럼 인덱스를 생성할 경우 둘 이상의 칼럼 이름을 명시한다.

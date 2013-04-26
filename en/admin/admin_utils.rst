@@ -79,6 +79,8 @@ By default, the database location file is stored in the **databases** directory 
 
 An error occurs if an invalid directory path is set in the **CUBRID_DATABASES** environment variable. If the directory path is valid but the database location file does not exist, a new location information file is created. If the **CUBRID_DATABASES** environment variable has not been configured at all, CUBRID retrieves the location information file in the current working directory.
 
+.. _db-create-add-delete:
+
 Creating Database, Adding Volume, Deleting Database
 ===================================================
 

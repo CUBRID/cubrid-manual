@@ -25,17 +25,17 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
 
 *   *serial_identifier*\ : Specifies the name of the serial to be generated(maximum: 254 bytes).
 
-*   **START WITH** *initial*\ : Specifies the initial value of serial with 38 digits or less. The default value of ascending serial is 1 and that of descending serial is -1.
+*   **START WITH** *initial*\ : Specifies the initial value of serial. The range of this value is between -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) and    9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1). The default value of ascending serial is 1 and that of descending serial is -1.
 
-*   **INCREMENT BY** *interval*\ : Specifies the increment of the serial. You can specify any integer with 38 digits or less except zero at *interval*. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order otherwise, it is in ascending order. The default value is **1**.
+*   **INCREMENT BY** *interval*\ : Specifies the increment of the serial. You can specify any integer between -9,999,999,999,999,999,999,999,999,999,999,999,999(-10^37+1) and  9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1) except zero at *interval*. The absolute value of the *interval* must be smaller than the difference between **MAXVALUE** and **MINVALUE**. If a negative number is specified, the serial is in descending order otherwise, it is in ascending order. The default value is **1**.
 
-*   **MINVALUE**\ : Specifies the minimum value of the serial, with 38 digits or less. **MINVALUE** must be smaller than or equal to the initial value and smaller than the maximum value.
+*   **MINVALUE**\ : Specifies the minimum value of the serial. The range of this value is between -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) and  9,999,999,999,999,999,999,999,999,999,999,999,999(10^37-1). **MINVALUE** must be smaller than or equal to the initial value and smaller than the maximum value.
 
-*   **NOMINVALUE**\ : 1 is set automatically as a minimum value for the ascending serial -10^38 for the descending serial.
+*   **NOMINVALUE**\ : 1 is set automatically as a minimum value for the ascending serial, -1,000,000,000,000,000,000,000,000,000,000,000,000(-10^36) for the descending serial.
 
-*   **MAXVALUE**\ : Specifies the maximum number of the serial with 38 digits or less. **MAXVALUE** must be smaller than or equal to the initial value and greater than the minimum value.
+*   **MAXVALUE**\ : Specifies the maximum number of the serial. The range of this value is between -999,999,999,999,999,999,999,999,999,999,999,999(-10^36+1) and  10,000,000,000,000,000,000,000,000,000,000,000,000(10^37). **MAXVALUE** must be greater than or equal to the initial value and greater than the minimum value.
 
-*   **NOMAXVALUE**\ : 10^37 is set automatically as a maximum value for the ascending serial -1 for the descending serial.
+*   **NOMAXVALUE**\ : 10,000,000,000,000,000,000,000,000,000,000,000,000(10^37) is set automatically as a maximum value for the ascending serial, -1 for the descending serial.
 
 *   **CYCLE**\ : Specifies that the serial will be generated continuously after reaching the maximum or minimum value. When a serial in ascending order reaches the maximum value, the minimum value is created as the next value; when a serial in descending order reaches the minimum value, the maximum value is created as the next value.
 
@@ -59,6 +59,8 @@ You can create a serial object in the database by using the **CREATE SERIAL** st
     --selecting serial information from the db_serial class
     SELECT * FROM db_serial;
      
+::
+
       name            current_val      increment_val         max_val         min_val         cyclic      started       cached_num        att_name
     ====================================================================================================================================================
     'order_no'      10006            2                     20000           10000                0            1                3            NULL
@@ -76,6 +78,8 @@ The following example shows how to create the *athlete_idx* table to store athle
     
     SELECT * FROM athlete_idx;
      
+::
+
              code  name
     ===================================
             10000  'Park'
@@ -128,7 +132,7 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial
 .. code-block:: sql
 
     --altering serial by changing start and incremental values
-    ALTER SERIAL order_no START WITH 100 INCREMENT BY 2;
+    ALTER SERIAL order_no START WITH 100 MINVALUE 100 INCREMENT BY 2;
      
     --altering serial to operate in cache mode
     ALTER SERIAL order_no CACHE 5;
@@ -169,12 +173,15 @@ The following example shows how to create a table *athlete_idx* where athlete nu
 
 .. code-block:: sql
 
-    CREATE TABLE athlete_idx( code INT, name VARCHAR(40) );
+    CREATE TABLE athlete_idx (code INT, name VARCHAR (40));
+    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Park');
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Kim');
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Choo');
     INSERT INTO athlete_idx VALUES (order_no.NEXT_VALUE, 'Lee');
     SELECT * FROM athlete_idx;
+    
+::
      
              code  name
     ===================================
@@ -183,7 +190,7 @@ The following example shows how to create a table *athlete_idx* where athlete nu
             10004  'Choo'
             10006  'Lee'
 
-.. note:: \
+.. note:: 
 
     When you use a serial for the first time after creating it, **NEXT_VALUE** returns the initial value. Subsequently, the sum of the current value and the increment are returned.
 
@@ -211,16 +218,29 @@ For example, if you create a serial starting 101 and increasing by 1 and call *
 
 .. code-block:: sql
 
-    CREATE SERIAL order_no START WITH 10000 INCREMENT BY 2 MAXVALUE 20000;
+    CREATE SERIAL order_no START WITH 101 INCREMENT BY 1 MAXVALUE 20000;
     SELECT SERIAL_CURRENT_VALUE(order_no);
-    10000
+    
+::
+
+    101
      
+.. code-block:: sql
+
     -- At first, the first serial value starts with the initial serial value, 10000. So the l0'th serial value will be 10009.
     SELECT SERIAL_NEXT_VALUE(order_no, 10);
-    10009
+    
+::
+
+    110
      
+.. code-block:: sql
+
     SELECT SERIAL_NEXT_VALUE(order_no, 10);
-    10019
+    
+::
+
+    120
 
 .. note:: \
 

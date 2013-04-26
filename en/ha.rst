@@ -44,7 +44,7 @@ A CUBRID HA node consists of one master process (cub_master), one or more databa
 
 *   **Database server process (cub_server)** : Provides services such as read or write to the user. For details, see :ref:`ha-server`.
 
-*   **Replication log copy process (copylogdb)** : Copies all transaction logs in a group. When the replication log copy process requests a transaction log from the database server process of the target node, the database server process returns the corresponding log. The location of copied transaction logs can be configured in the **REPL_LOG_HOME** of **cubrid-ha**. Use :ref:`cubrid-applyinfo` utility to verify the information of copied replication logs. The replication log copy process has following three modes: SYNC, SEMISYNC, and ASYNC. You can configure it with the **LW_SYNC_MODE** of **cubrid-ha**. For details on these modes, see :ref:`log-multiplexing`.
+*   **Replication log copy process (copylogdb)** : Copies all transaction logs in a group. When the replication log copy process requests a transaction log from the database server process of the target node, the database server process returns the corresponding log. The location of copied transaction logs can be configured in the **ha_copy_log_base** of **cubrid_ha.conf**. Use :ref:`cubrid-applyinfo` utility to verify the information of copied replication logs. The replication log copy process has following three modes: SYNC, SEMISYNC, and ASYNC. You can configure it with the **ha_copy_sync_mode** of **cubrid_ha.conf**. For details on these modes, see :ref:`log-multiplexing`.
 
 .. image:: /images/image15.png
 
@@ -1764,8 +1764,10 @@ Replication mismatch between replication nodes, indicating that data of the mast
 * Check the error log message created by the copylogdb process and the applylogdb process (see the error message).
 * Compare the number of records on the master database table to that on the slave database table.
 
-Error Messages
---------------
+.. _ha-error:
+
+HA Error Messages
+-----------------
 
 **Replication Log Copy Process (copylogdb)**
 

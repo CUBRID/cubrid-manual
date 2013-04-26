@@ -17,6 +17,8 @@ ABS
     --it returns the absolute value of the argument
     SELECT ABS(12.3), ABS(-12.3), ABS(-12.3000), ABS(0.0);
     
+::
+
       abs(12.3)             abs(-12.3)            abs(-12.3000)         abs(0.0)
     ================================================================================
       12.3                  12.3                  12.3000               .0
@@ -35,6 +37,8 @@ ACOS
 
     SELECT ACOS(1), ACOS(0), ACOS(-1);
     
+::
+
       acos(1)                   acos(0)                  acos(-1)
     ==================================================================================
       0.000000000000000e+00     1.570796326794897e+00     3.141592653589793e+00
@@ -52,6 +56,8 @@ ASIN
 .. code-block:: sql
 
     SELECT ASIN(1), ASIN(0), ASIN(-1);
+
+::
     
       asin(1)                   asin(0)                  asin(-1)
     ==============================================================================
@@ -70,7 +76,9 @@ ATAN
 .. code-block:: sql
 
     SELECT ATAN(1), ATAN(-1), ATAN(1,-1);
-     
+
+::
+    
                        atan(1)                  atan(-1)              atan2(1, -1)
     ==============================================================================
          7.853981633974483e-01    -7.853981633974483e-01     2.356194490192345e+000
@@ -88,7 +96,9 @@ ATAN2
 .. code-block:: sql
 
     SELECT ATAN2(1,1), ATAN2(-1,-1), ATAN2(Pi(),0);
-     
+
+::
+    
     atan2(1, 1)             atan2(-1, -1)           atan2( pi(), 0)
     ==============================================================================
      7.853981633974483e-01    -2.356194490192345e+00     1.570796326794897e+00
@@ -106,12 +116,16 @@ CEIL
 .. code-block:: sql
 
     SELECT CEIL(34567.34567), CEIL(-34567.34567);
+
+::
     
       ceil(34567.34567)     ceil(-34567.34567)
     ============================================
       34568.00000           -34567.00000
      
     SELECT CEIL(34567.1), CEIL(-34567.1);
+
+::
     
       ceil(34567.1)         ceil(-34567.1)
     =============================
@@ -132,12 +146,25 @@ CONV
 .. code-block:: sql
 
     SELECT CONV('f',16,2);
+
+::    
+
     '1111'
 
+.. code-block:: sql
+
     SELECT CONV('6H',20,8);
+    
+::    
+
     '211'
 
+.. code-block:: sql
+
     SELECT CONV(-30,10,-20);
+    
+::    
+
     '-1A'
 
 COS
@@ -153,6 +180,8 @@ COS
 .. code-block:: sql
 
     SELECT COS(pi()/6), COS(pi()/3), COS(pi());
+
+::
     
       cos( pi()/6)              cos( pi()/3)                cos( pi())
     ==============================================================================
@@ -171,6 +200,8 @@ COT
 .. code-block:: sql
 
     SELECT COT(1), COT(-1), COT(0);
+
+::
     
       cot(1)                   cot(-1)   cot(0)
     ==========================================================================
@@ -189,6 +220,8 @@ DEGREES
 .. code-block:: sql
 
     SELECT DEGREES(pi()/6), DEGREES(pi()/3), DEGREES (pi());
+
+::
     
       degrees( pi()/6)          degrees( pi()/3)            degrees( pi())
     ==============================================================================
@@ -210,12 +243,27 @@ DRANDOM, DRAND
 .. code-block:: sql
 
     SELECT DRAND(), DRAND(1), DRAND(1.4);
+
+::
     
                        drand()                  drand(1)                drand(1.4)
     ==============================================================================
         2.849646518006921e-001    4.163034446537495e-002    4.163034446537495e-002
      
+.. code-block:: sql
+
+    CREATE TABLE rand_tbl (
+        id INT,
+        name VARCHAR(255)
+    );
+    
+    INSERT INTO rand_tbl VALUES 
+        (1, 'a'), (2, 'b'), (3, 'c'), (4, 'd'), (5, 'e'), 
+        (6, 'f'), (7, 'g'), (8, 'h'), (9, 'i'), (10, 'j');
+    
     SELECT * FROM rand_tbl;
+
+::
     
                id  name
     ===================================
@@ -230,8 +278,12 @@ DRANDOM, DRAND
                 9  'i'
                10  'j'
      
+.. code-block:: sql
+
     --drandom() returns random values on every row
     SELECT DRAND(), DRANDOM() FROM rand_tbl;
+    
+::
     
        drand()                 drandom()
     ==============================================================================
@@ -246,8 +298,12 @@ DRANDOM, DRAND
        7.638782921842098e-001    5.279091769157994e-001
        7.638782921842098e-001    7.021088290047914e-001
      
+.. code-block:: sql
+
     --selecting rows in random order
     SELECT * FROM rand_tbl ORDER BY DRANDOM();
+    
+::
     
                id  name
     ===================================
@@ -275,12 +331,18 @@ EXP
 .. code-block:: sql
 
     SELECT EXP(1), EXP(0);
+
+::
     
       exp(1)                    exp(0)
     ====================================================
       2.718281828459045e+000 1.000000000000000e+000
      
+.. code-block:: sql
+
     SELECT EXP(-1), EXP(2.00);
+
+::
     
       exp(-1)                 exp(2.00)
     ====================================================
@@ -301,11 +363,17 @@ FLOOR
     --it returns the largest integer less than or equal to the arguments
     SELECT FLOOR(34567.34567), FLOOR(-34567.34567);
     
+::
+    
       floor(34567.34567)    floor(-34567.34567)
     ============================================
       34567.00000           -34568.00000
      
+.. code-block:: sql
+
     SELECT FLOOR(34567), FLOOR(-34567);
+    
+::
     
       floor(34567)   floor(-34567)
     =============================
@@ -324,7 +392,9 @@ HEX
 .. code-block:: sql
 
     SELECT HEX('ab'), HEX(128), CONV(HEX(128), 16, 10);
-    
+
+::    
+
     hex('ab')             hex(128)              conv(hex(128), 16, 10)
     ==================================================================
       '6162'                '80'                  '128'
@@ -342,6 +412,8 @@ LN
 .. code-block:: sql
 
     SELECT ln(1), ln(2.72);
+
+::
     
          ln(1)                     ln(2.72)
     =====================================================
@@ -361,6 +433,8 @@ LOG2
 
     SELECT log2(1), log2(8);
     
+::
+
          log2(1)                   log2(8)
     ======================================================
          0.000000000000000e+00     3.000000000000000e+00  
@@ -379,6 +453,8 @@ LOG10
 
     SELECT log10(1), log10(1000);
     
+::
+
          log10(1)                  log10(1000)
     ====================================================
          0.000000000000000e+00     3.000000000000000e+00
@@ -416,12 +492,18 @@ MOD
     --it returns the reminder of m divided by n
     SELECT MOD(11, 4), MOD(11, -4), MOD(-11, 4), MOD(-11, -4), MOD(11,0);
     
+::
+
         mod(11, 4)   mod(11, -4)   mod(-11, 4)   mod(-11, -4)   mod(11, 0)
     =====================================================================
                 3             3            -3             -3           11
+
+.. code-block:: sql
      
     SELECT MOD(11.0, 4), MOD(11.000, 4), MOD(11, 4.0), MOD(11, 4.000);
     
+::
+
       mod(11.0, 4)          mod(11.000, 4)        mod(11, 4.0)          mod(11, 4.000)
     =========================================================================
       3.0                   3.000                 3.0                   3.000
@@ -439,6 +521,8 @@ PI
 
     SELECT PI(), PI()/2;
     
+::
+
          pi()                      pi()/2
     ====================================================
          3.141592653589793e+00     1.570796326794897e+00
@@ -459,15 +543,21 @@ POW, POWER
 
     SELECT POWER(2, 5), POWER(-2, 5), POWER(0, 0), POWER(1,0);
     
-     power(2, 5)            power(-2, 5)           power(0, 0)           power(1, 0)
-    ======================================================================================
+::
+
+     power(2, 5)              power(-2, 5)               power(0, 0)               power(1, 0)
+    ====================================================================================================
      3.200000000000000e+01    -3.200000000000000e+01     1.000000000000000e+00     1.000000000000000e+00
      
+.. code-block:: sql
+
     --it returns an error when the negative base is powered by a non-int exponent
     SELECT POWER(-2, -5.1), POWER(-2, -5.1);
+    
+::
      
     ERROR: Argument of power() is out of range.
-
+    
 RADIANS
 =======
 
@@ -482,6 +572,8 @@ RADIANS
 
     SELECT RADIANS(90), RADIANS(180), RADIANS(360);
     
+::
+
          radians(90)               radians(180)              radians(360)
     ==============================================================================
          1.570796326794897e+00     3.141592653589793e+00     6.283185307179586e+00
@@ -494,7 +586,9 @@ RANDOM, RAND
 
     The function **RANDOM** or **RAND** returns any integer value, which is greater than or equal to 0 and less than 2 31, and a *seed* argument that is **INTEGER** type can be specified. It rounds up real numbers and an error is returned when it exceeds the range of **INTEGER**.
 
-    The **RAND** function performs the operation only once to produce only one random number regardless of the number of rows where the operation is output, but the **RANDOM** function performs the operation every time the statement is repeated to produce a different random value for each row. Therefore, to output rows in a random order, you must use the **RANDOM** function. To obtain a random real number, use the :func:`DRANDOM`.
+    The **RAND** function performs the operation only once to produce only one random number regardless of the number of rows where the operation is output, but the **RANDOM** function performs the operation every time the statement is repeated to produce a different random value for each row. Therefore, to output rows in a random order, you must use the **RANDOM** function. 
+    
+    To obtain a random real number, use the :func:`DRANDOM`.
 
     :param seed: 
     :rtype: INT
@@ -503,13 +597,19 @@ RANDOM, RAND
 
     SELECT RAND(), RAND(1), RAND(1.4);
     
+::
+
            rand()      rand(1)    rand(1.4)
     =======================================
        1526981144     89400484     89400484
      
+.. code-block:: sql
+
     --creating a new table
     SELECT * FROM rand_tbl;
     
+::
+
                id  name
     ===================================
                 1  'a'
@@ -523,9 +623,13 @@ RANDOM, RAND
                 9  'i'
                10  'j'
      
+.. code-block:: sql
+
     --random() returns random values on every row
     SELECT RAND(),RANDOM() FROM rand_tbl;
     
+::
+
            rand()       random()
     ============================
        2078876566     1753698891
@@ -540,9 +644,13 @@ RANDOM, RAND
        2078876566     2075234419
      
      
+.. code-block:: sql
+
     --selecting rows in random order
     SELECT * FROM rand_tbl ORDER BY RANDOM();
     
+::
+
                id  name
     ===================================
                 6  'f'
@@ -572,25 +680,34 @@ ROUND
     --it rounds a number to one decimal point when the second argument is omitted
     SELECT ROUND(34567.34567), ROUND(-34567.34567);
     
+::
+
       round(34567.34567, 0)   round(-34567.34567, 0)
     ============================================
       34567.00000           -34567.00000
      
+.. code-block:: sql
      
     --it rounds a number to three decimal point
     SELECT ROUND(34567.34567, 3), ROUND(-34567.34567, 3)  FROM db_root;
     
+::
+
      round(34567.34567, 3)   round(-34567.34567, 3)
     ============================================
       34567.34600           -34567.34600
      
+.. code-block:: sql
+
     --it rounds a number three digit to the left of the decimal point
     SELECT ROUND(34567.34567, -3), ROUND(-34567.34567, -3);
     
+::
+
      round(34567.34567, -3)   round(-34567.34567, -3)
     ============================================
       35000.00000           -35000.00000
-
+      
 SIGN
 ====
 
@@ -604,9 +721,10 @@ SIGN
 .. code-block:: sql
 
     --it returns the sign of the argument
-     
     SELECT SIGN(12.3), SIGN(-12.3), SIGN(0);
     
+::
+
         sign(12.3)   sign(-12.3)      sign(0)
     ========================================
                 1            -1            0
@@ -625,6 +743,8 @@ SIN
 
     SELECT SIN(pi()/6), SIN(pi()/3), SIN(pi());
     
+::
+
          sin( pi()/6)              sin( pi()/3)              sin( pi())
     ==============================================================================
          4.999999999999999e-01     8.660254037844386e-01     1.224646799147353e-16
@@ -643,6 +763,8 @@ SQRT
 
     SELECT SQRT(4), SQRT(16.0);
     
+::
+
          sqrt(4)                   sqrt(16.0)
     ====================================================
          2.000000000000000e+00     4.000000000000000e+00
@@ -661,6 +783,8 @@ TAN
 
     SELECT TAN(pi()/6), TAN(pi()/3), TAN(pi()/4);
     
+::
+
          tan( pi()/6)              tan( pi()/3)              tan( pi()/4)
     ==============================================================================
          5.773502691896257e-01     1.732050807568877e+00     9.999999999999999e-01
@@ -682,20 +806,30 @@ TRUNC, TRUNCATE
     --it returns a number truncated to 0 places
     SELECT TRUNC(34567.34567), TRUNCATE(34567.34567, 0);
     
+::
+
       trunc(34567.34567, 0)   trunc(34567.34567, 0)
     ============================================
       34567.00000            34567.00000
      
+.. code-block:: sql
+
     --it returns a number truncated to three decimal places
     SELECT TRUNC(34567.34567, 3), TRUNC(-34567.34567, 3);
     
+::
+
       trunc(34567.34567, 3)   trunc(-34567.34567, 3)
     ============================================
       34567.34500           -34567.34500
      
+.. code-block:: sql
+
     --it returns a number truncated to three digits left of the decimal point
     SELECT TRUNC(34567.34567, -3), TRUNC(-34567.34567, -3);
     
+::
+
       trunc(34567.34567, -3)   trunc(-34567.34567, -3)
     ============================================
       34000.00000           -34000.00000
@@ -746,6 +880,8 @@ The following example divides the range equal to 80 or smaller and larger than 5
     SELECT name, score, WIDTH_BUCKET (score, 80, 50, 3) grade 
     FROM t_score 
     ORDER BY grade ASC, score DESC;
+
+::
     
       name                        score        grade
     ================================================
@@ -776,6 +912,8 @@ In the following example, **WIDTH_BUCKET** function evenly divides the birthdate
     SELECT name, birthdate, WIDTH_BUCKET (birthdate, date'1950-01-01', date'2000-1-1', 5) age_group 
     FROM t_customer 
     ORDER BY birthdate;
+
+::
 
       name                  birthdate     age_group
     ===============================================

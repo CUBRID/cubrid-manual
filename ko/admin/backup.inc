@@ -223,6 +223,8 @@
 
 즉, 데이터베이스 운영 중에 보관 로그 볼륨을 가급적 남기고 싶지 않다면 **cubrid.conf** 에 설정하는 시스템 파라미터인 **log_max_archives** 의 값을 0 또는 작은 값으로 설정하고, **force_remove_log_archives** 의 값을 yes로 설정한다. 단, HA 환경에서는 **force_remove_log_archives** 의 값이 yes이면 슬레이브 노드에 복제되지 않은 보관 로그가 삭제되어 복제가 잘못될 수 있으므로, no로 설정할 것을 권장한다. **force_remove_log_archives** 의 값이 no이더라도 복제 반영이 끝난 파일은 HA 관리 프로세스에 의해 삭제될 수 있다.
 
+.. _db-restore:
+
 데이터베이스 복구
 =================
 

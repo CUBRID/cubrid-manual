@@ -69,7 +69,7 @@ The CUBRID query optimizer determines whether to perform query optimization and 
 
     *   0: Does not perform query optimization. The query is executed using the simplest query plan. This value is used only for debugging.
     
-    *   1: Create a query plan by performing query optimization and executes the query. This is a default value used in CUBRID, and does not have to be changed in most cases.
+    *   1: Creates a query plan by performing query optimization and executes the query. This is a default value used in CUBRID, and does not have to be changed in most cases.
     
     *   2: Creates a query plan by performing query optimization. However, the query itself is not executed. In general, this value is not used; it is used together with the following values to be set for viewing query plans.
     
@@ -89,15 +89,21 @@ The following example shows how to view query plan by using the example retrievi
 
     GET OPTIMIZATION LEVEL;
     
+::
+    
           Result
     =============
                 1
+
+.. code-block:: sql
 
     SET OPTIMIZATION LEVEL 258;
 
     SELECT a.name, b.host_year, b.medal
     FROM athlete a, game b 
-    WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code
+    WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
+
+::
     
     Query plan:
       Nested loops
@@ -177,6 +183,8 @@ The following example shows how to retrieve the years when Sim Kwon Ho won medal
     FROM athlete a, game b 
     WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
     
+::
+
       name                    host_year  medal
     =========================================================
       'Sim Kwon Ho'                2000  'G'
@@ -184,19 +192,25 @@ The following example shows how to retrieve the years when Sim Kwon Ho won medal
       
     2 rows selected.
 
-The following example shows how to retrieve query execution time with **NO_STAT** hint to improve the functionality of drop partitioned table (*before_2008*); any data is not stored in the table. Assuming that there are more than 1 million data in the *participant2* table. The execution time in the example depends on system performance and database configuration.
+The following example shows how to retrieve query execution time with **NO_STATS** hint to improve the functionality of drop partitioned table (*before_2008*); any data is not stored in the table. Assuming that there are more than 1 million data in the *participant2* table. The execution time in the example depends on system performance and database configuration.
 
 .. code-block:: sql
 
-    -- Not using NO_STATS hint
+    -- NO_STATS 힌트 미사용
     ALTER TABLE participant2 DROP partition before_2008;
 
-    SQL statement execution time: 31.684550 sec
+::
 
-    -- Using NO_STATS hint
+    SQL statement execution time:      31.684550 sec
+
+.. code-block:: sql
+    
+    -- NO_STATS 힌트 사용
     ALTER /*+ NO_STATS */ TABLE participant2 DROP partition before_2008;
 
-    SQL statement execution time: 0.025773 sec
+::
+
+    SQL statement execution time:      0.025773 sec
 
 .. _index-hint-syntax:
 
@@ -262,90 +276,90 @@ Examples of index hint
 
 .. code-block:: sql
 
-    CREATE TABLE athlete (
+    CREATE TABLE athlete2 (
        code             SMALLINT PRIMARY KEY,
        name             VARCHAR(40) NOT NULL,
        gender           CHAR(1),
        nation_code      CHAR(3),
        event            VARCHAR(30)
     );
-    CREATE UNIQUE INDEX athlete_idx1 ON athlete (code, nation_code);
-    CREATE INDEX athlete_idx2 ON athlete (gender, nation_code);
+    CREATE UNIQUE INDEX athlete2_idx1 ON athlete2 (code, nation_code);
+    CREATE INDEX athlete2_idx2 ON athlete2 (gender, nation_code);
 
-Below two queries do the same behavior and they select index scan if the specified index, *athlete_idx2*\'s scan cost is lower than sequential scan cost.
+Below two queries do the same behavior and they select index scan if the specified index, *athlete2_idx2*\'s scan cost is lower than sequential scan cost.
 
 .. code-block:: sql
 
     SELECT /*+ RECOMPILE */ * 
-    FROM athlete USE INDEX (athlete_idx2) 
+    FROM athlete2 USE INDEX (athlete2_idx2) 
     WHERE gender='M' AND nation_code='USA';
 
     SELECT /*+ RECOMPILE */ * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX athlete_idx2;
+    USING INDEX athlete2_idx2;
 
-Below two queries do the same behavior and they always use *athlete_idx2*
-
-.. code-block:: sql
-    
-    SELECT /*+ RECOMPILE */ * 
-    FROM athlete FORCE INDEX (athlete_idx2) 
-    WHERE gender='M' AND nation_code='USA';
-
-    SELECT /*+ RECOMPILE */ * 
-    FROM athlete 
-    WHERE gender='M' AND nation_code='USA'
-    USING INDEX athlete_idx2(+);
-
-Below two queries do the same behavior and they always don't use *athlete_idx2*
+Below two queries do the same behavior and they always use *athlete2_idx2*
 
 .. code-block:: sql
     
     SELECT /*+ RECOMPILE */ * 
-    FROM athlete IGNORE INDEX (athlete_idx2) 
+    FROM athlete2 FORCE INDEX (athlete2_idx2) 
     WHERE gender='M' AND nation_code='USA';
 
     SELECT /*+ RECOMPILE */ * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX athlete_idx2(-);
+    USING INDEX athlete2_idx2(+);
+
+Below two queries do the same behavior and they always don't use *athlete2_idx2*
+
+.. code-block:: sql
+    
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete2 IGNORE INDEX (athlete2_idx2) 
+    WHERE gender='M' AND nation_code='USA';
+
+    SELECT /*+ RECOMPILE */ * 
+    FROM athlete2 
+    WHERE gender='M' AND nation_code='USA'
+    USING INDEX athlete2_idx2(-);
     
 Below query always do the sequential scan.
 
 .. code-block:: sql
 
     SELECT * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
     USING INDEX NONE;
 
     SELECT * 
-    FROM athlete 
+    FROM athlete2
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX athlete.NONE;
-
-Below query forces to be possible to use all indexes except *athlete_idx2* index.
+    USING INDEX athlete2.NONE;
+    
+Below query forces to be possible to use all indexes except *athlete2_idx2* index.
 
 .. code-block:: sql
 
     SELECT * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX ALL EXCEPT athlete_idx2;
+    USING INDEX ALL EXCEPT athlete2_idx2;
     
 When two or more indexes have been specified in the **USING INDEX** clause, the query optimizer selects the proper one of the specified indexes.
 
 .. code-block:: sql
 
     SELECT * 
-    FROM athlete USE INDEX (char_idx, athlete_idx) 
+    FROM athlete2 USE INDEX (athlete2_idx2, athlete2_idx1) 
     WHERE gender='M' AND nation_code='USA';
 
     SELECT * 
-    FROM athlete 
+    FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
-    USING INDEX char_idx, athlete_idx;
+    USING INDEX athlete2_idx2, athlete2_idx1;
 
 When a query is run for several tables, you can specify a table to perform index scan by using a specific index and another table to perform sequential scan. The query has the following format.
 
@@ -394,15 +408,54 @@ The filtered index is used to sort, search, or operate a well-defined partials s
     
 *   <*filter_predicate*>: Condition to compare the column and the constant. When there are several conditions, filtering is available only when they are connected by using **AND**. The filter conditions can include most of the operators and functions supported by CUBRID. However, the date/time function that shows the current date/time (ex: :func:`SYS_DATETIME`) or random functions (ex: :func:`RAND`), which outputs different results for one input are not allowed.
 
-If you apply the filtered index, that filtered index must be specified by **USING INDEX** clause or **USE INDEX** syntax.
+If you apply the filtered index, that filtered index must be specified by **USE INDEX** syntax or **FORCE INDEX** syntax.
 
-.. code-block:: sql
+*   When a filtered index is specified by **USING INDEX** clause or **USE INDEX** syntax: 
+    
+    If columns of which an index consists are not included on the conditions of WHERE clause, the filtered index is not used.
 
-    SELECT * 
-    FROM blogtopic 
-    WHERE postDate>'2010-01-01' 
-    USING INDEX my_filter_index;
+    .. code-block:: sql
 
+        CREATE TABLE blogtopic 
+        (
+            blogID BIGINT NOT NULL, 
+            title VARCHAR(128),
+            author VARCHAR(128),
+            content VARCHAR(8096),
+            postDate TIMESTAMP NOT NULL,
+            deleted SMALLINT DEFAULT 0
+        );
+   
+        CREATE INDEX my_filter_index ON blogtopic(postDate) WHERE deleted=0;
+
+    On the below query, postDate, a column of which my_filter_index consists, is included on the conditions of WHERE condition. Therefore, this index can be used by "USE INDEX" syntax.
+        
+    .. code-block:: sql
+        
+        SELECT * 
+        FROM blogtopic USE INDEX (my_filter_index)
+        WHERE postDate>'2010-01-01' AND deleted=0;
+    
+*   When a filtered index is specified by **USING INDEX** <index_name>(+) clause or **FORCE INDEX** syntax:
+ 
+    Even if a column of which an index consists is not included on the condition of WHERE clause, the filtered index is used.
+
+    On the below query, my_filter_index cannot be used by "USE INDEX" syntax because a column of which my_filter_index consists is not included on the WHERE condition.
+    
+    .. code-block:: sql
+        
+        SELECT * 
+        FROM blogtopic USE INDEX (my_filter_index)
+        WHERE author = 'David' AND deleted=0;
+
+    Therefore, to use my_filter_index, it should be forced by "FORCE INDEX".
+    
+    .. code-block:: sql
+        
+        SELECT * 
+        FROM blogtopic FORCE INDEX (my_filter_index)
+        WHERE author = 'David' AND deleted=0;
+    
 The following example shows a bug tracking system that maintains bugs/issues. After a specified period of development, the bugs table records bugs. Most of the bugs have already been closed. The bug tracking system makes queries on the table to find new open bugs. In this case, the indexes on the bug table do not need to know the records on closed bugs. Then the filtered indexes allow indexing of open bugs only.
 
 .. code-block:: sql
@@ -424,19 +477,21 @@ Indexes for open bugs can be created by using the following sentence:
 
     CREATE INDEX idx_open_bugs ON bugs(bugID) WHERE Closed = 0;
 
-To process queries that are interested in open bugs, specify the index as an index hint. It will allow  creating query results by accessing less index pages through filtered indexes.
+To process queries that are interested in open bugs, specify the index as an index hint. It will allow creating query results by accessing less index pages through filtered indexes.
 
 .. code-block:: sql
 
     SELECT * 
     FROM bugs
     WHERE Author = 'madden' AND Subject LIKE '%fopen%' AND Closed = 0;
-    USING INDEX idx_open_bugs;
+    USING INDEX idx_open_bugs(+);
      
     SELECT * 
-    FROM bugs  USE INDEX (idx_open_bugs)
+    FROM bugs FORCE INDEX (idx_open_bugs)
     WHERE CreationDate > CURRENT_DATE - 10 AND Closed = 0;
 
+On the above example, if you use "USING INDEX idx_open_bugs" clause or "USE INDEX (idx_open_bugs)" syntax, a query is processed without using the idx_open_bugs index.
+    
 .. warning::
 
     If you execute queries by specifying indexes with index hint syntax, you may have incorrect query results as output even though the conditions of creating filtered indexes does not meet the query conditions.
@@ -449,6 +504,8 @@ For example, below is not allowed because Author is NULLable.
 .. code-block:: sql
 
     CREATE INDEX idx_open_bugs ON bugs (Author) WHERE Closed = 0;
+
+::
     
     ERROR: before ' ; '
     Invalid filter expression (bugs.Closed=0) for index.
@@ -466,12 +523,18 @@ The following cases are not allowed as filtering conditions.
     .. code-block:: sql
       
         CREATE INDEX idx ON bugs(creationdate) WHERE creationdate > SYS_DATETIME;
-         
+        
+    ::
+    
         ERROR: before ' ; '
         'sys_datetime ' is not allowed in a filter expression for index.
          
+    .. code-block:: sql
+      
         CREATE INDEX idx ON bugs(bugID) WHERE bugID > RAND();
-         
+        
+    ::
+    
         ERROR: before ' ; '
         'rand ' is not allowed in a filter expression for index.
     
@@ -479,9 +542,9 @@ The following cases are not allowed as filtering conditions.
 
     .. code-block:: sql
 
-        CREATE INDEX IDX ON bugs(bugID) WHERE bugID > 10 OR bugID = 3;
-         
-        In line 1, column 62,
+        CREATE INDEX IDX ON bugs (bugID) WHERE bugID > 10 OR bugID = 3;
+    
+    ::     
          
         ERROR: before ' ; '
         ' or ' is not allowed in a filter expression for index.
@@ -499,33 +562,49 @@ The following cases are not allowed as filtering conditions.
 
 *   The **IS NULL** operator can be used only when at least one column of an index is not NULL.
 
-  .. code-block:: sql
-  
-    CREATE TABLE t (a INT, b INT);
-     
-    -- IS NULL cannot be used with expressions
-    CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
+    .. code-block:: sql
     
-    ERROR: before ' ; '
-    Invalid filter expression (( not t.a<>0) is null ) for index.
-     
-    CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
+        CREATE TABLE t (a INT, b INT);
+        
+        -- IS NULL cannot be used with expressions
+        CREATE INDEX idx ON t (a) WHERE (not a) IS NULL;
+
+    ::
     
-    ERROR: before ' ; '
-    Invalid filter expression ((t.a+1) is null ) for index.
-     
-    -- At least one attribute must not be used with IS NULL
-    CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
+        ERROR: before ' ; '
+        Invalid filter expression (( not t.a<>0) is null ) for index.
+         
+    .. code-block:: sql
+
+        CREATE INDEX idx ON t (a) WHERE (a+1) IS NULL;
+        
+    ::
     
-    ERROR: before '  ; '
-    Invalid filter expression (t.a is null ) for index.
-     
-    CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
+        ERROR: before ' ; '
+        Invalid filter expression ((t.a+1) is null ) for index.
+
+    .. code-block:: sql
+         
+        -- At least one attribute must not be used with IS NULL
+        CREATE INDEX idx ON t(a,b) WHERE a IS NULL ;
+        
+    ::
     
-    ERROR: before ' ; '
-    Invalid filter expression (t.a is null  and t.b is null ) for index.
-     
-    CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
+        ERROR: before '  ; '
+        Invalid filter expression (t.a is null ) for index.
+
+    .. code-block:: sql
+        
+        CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NULL;
+        
+    ::
+    
+        ERROR: before ' ; '
+        Invalid filter expression (t.a is null  and t.b is null ) for index.
+
+    .. code-block:: sql
+        
+        CREATE INDEX idx ON t(a,b) WHERE a IS NULL and b IS NOT NULL;
 
 *   Index Skip Scan (ISS) is not allowed for the filtered indexes.
 *   The length of condition string used for the filtered index is limited to 128 characters.
@@ -533,11 +612,13 @@ The following cases are not allowed as filtering conditions.
     .. code-block:: sql
 
         CREATE TABLE t(VeryLongColumnNameOfTypeInteger INT);
-         
+            
         CREATE INDEX idx ON t(VeryLongColumnNameOfTypeInteger) 
-        WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND
-        sqrt(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
+        WHERE VeryLongColumnNameOfTypeInteger > 3 AND VeryLongColumnNameOfTypeInteger < 10 AND 
+        SQRT(VeryLongColumnNameOfTypeInteger) < 3 AND SQRT(VeryLongColumnNameOfTypeInteger) < 10;
         
+    ::
+    
         ERROR: before ' ; '
         The maximum length of filter predicate string must be 128.
 
@@ -695,9 +776,11 @@ The following example shows that the index is used as a covering index because c
 
 .. code-block:: sql
 
-    csql> ;plan simple
+    -- csql> ;plan simple
     SELECT * FROM t WHERE col1 < 6;
-     
+    
+::
+    
     Query plan:
      Index scan(t t, i_t_col1_col2_col3, [(t.col1 range (min inf_lt t.col3))] (covers))
      
@@ -724,9 +807,11 @@ The following example shows that the index is used as a covering index because c
 
     .. code-block:: sql
 
-        csql>;plan simple
-        SELECT * FROM tab where c='abcd    ' USING INDEX i_tab_c(+);
-         
+        -- csql>;plan simple
+        SELECT * FROM tab WHERE c='abcd    ' USING INDEX i_tab_c(+);
+        
+    ::
+    
         Query plan:
          Index scan(tab tab, i_tab_c, (tab.c='abcd    ') (covers))
          
@@ -742,6 +827,8 @@ The following example shows that the index is used as a covering index because c
 
         SELECT * FROM tab WHERE c='abcd    ' USING INDEX tab.NONE;
          
+    ::
+    
         Query plan:
          Sequential scan(tab tab)
          
@@ -803,7 +890,9 @@ The following example shows that indexes consisting of *tab* (*j*, *k*) become s
     FROM tab 
     WHERE j > 0 
     ORDER BY j,k;
-     
+
+::
+    
     --  the  selection from the query plan dump shows that the ordering index i_tab_j_k was used and sorting was not necessary
     --  (/* --> skip ORDER BY */)
     Query plan:
@@ -834,7 +923,9 @@ The following example shows that *j* and *k* columns execute **ORDER BY** and th
     FROM tab 
     WHERE j > 0 
     ORDER BY j,k;
-     
+
+::
+    
     --  in this case the index i_tab_j_k is a covering index and also respects the ordering index property.
     --  Therefore, it is used as a covering index and sorting is not performed.
      
@@ -867,7 +958,9 @@ The following example shows that *i* column exists, **ORDER BY** is executed by 
     FROM tab 
     WHERE i > 0 
     ORDER BY j,k;
-     
+
+::
+    
     -- since an index on (i,j,k) is now available, it will be used as covering index. However, sorting the results according to
     -- the ORDER BY  clause is needed.
     Query plan:
@@ -947,13 +1040,15 @@ The query will be executed as an ascending scan without **USE_DESC_IDX** hint.
 
 .. code-block:: sql
 
-    -- The same query, without the hint, will have a different output, since descending scan is not used.
+    -- The query will be executed with an ascending scan. 
      
     SELECT  * 
     FROM di 
     WHERE i > 0 
     LIMIT 3;
-     
+
+::
+    
     Query plan:
      
     Index scan(di di, i_di_i, (di.i range (0 gt_inf max) and inst_num() range (min inf_le 3)) (covers))
@@ -963,7 +1058,6 @@ The query will be executed as an ascending scan without **USE_DESC_IDX** hint.
                 1
                 2
                 3
-    
 
 If you add **USE_DESC_IDX** hint to the above query, a different result will be shown by descending scan.
 
@@ -976,6 +1070,8 @@ If you add **USE_DESC_IDX** hint to the above query, a different result will be 
     WHERE i > 0 
     LIMIT 3;
      
+::
+
     Query plan:
      Index scan(di di, i_di_i, (di.i range (0 gt_inf max) and inst_num() range (min inf_le 3)) (covers) (desc_index))
      
@@ -998,7 +1094,9 @@ The following example requires descending order by **ORDER BY** clause. In this 
     FROM di 
     WHERE i > 0 
     ORDER BY i DESC LIMIT 3;
-     
+
+::
+    
     Query plan:
      Index scan(di di, i_di_i, (di.i range (0 gt_inf max)) (covers) (desc_index))
      
@@ -1070,6 +1168,8 @@ The following example shows that indexes consisting of tab(j,k) are used and no 
     --  the  selection from the query plan dump shows that the index i_tab_j_k was used and sorting was not necessary
     --  (/* ---> skip GROUP BY */)
      
+::
+
     Query plan:
     iscan
         class: tab node[0]
@@ -1099,6 +1199,8 @@ The following example shows that an index consisting of tab(j,k) is used and no 
     FROM tab 
     GROUP BY j,k;
      
+::
+
     --  the  selection from the query plan dump shows that the index i_tab_j_k was used (since j has the NOT NULL constraint )
     --  and sorting was not necessary (/* ---> skip GROUP BY */)
     Query plan:
@@ -1146,6 +1248,8 @@ An example of Multiple Key Ranges Optimization is as follows.
     ORDER BY b 
     LIMIT 2; 
 
+::
+
     Query plan: 
     iscan 
     class: t node[0] 
@@ -1175,7 +1279,6 @@ Among columns that comprise the index,
 *   Columns in front of range condition(e.g. IN condition) are represented as equivalent condition(=).
 *   Only one column with range condition exists.
 *   Columns after range condition exist as key filters.
-*   There should be no data filtering condition. In other words, the index should include all columns used in **WHERE** clause.
 *   There should be no data filtering condition. In other words, the index should include all columns used in **WHERE** clause.
 *   Columns after the key filter exist in **ORDER BY** clause.
 *   Columns of key filter condition always should not the column of **ORDER BY** clause.
@@ -1224,7 +1327,7 @@ Index Skip Scan
 Index Skip Scan (also known as ISS) is an optimization method that allows ignoring the first column of an index when the first column of the index is not included in the condition but the following column is included in the condition (in most cases, =).
 Generally, ISS should consider several columns (C1, C2, ..., Cn). Here, a query has the conditions for the consecutive columns and the conditions are started from the second column (C2) of the index.
 
-.. code-block:: sql
+::
 
     INDEX (C1, C2, ..., Cn);
      
@@ -1253,4 +1356,3 @@ ISS is not applied in the following cases:
 *   The first column of an index is a range filter or key filter
 *   Hierarchical query
 *   Aggregate function included
-

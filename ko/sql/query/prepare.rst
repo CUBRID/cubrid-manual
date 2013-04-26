@@ -55,39 +55,57 @@ EXECUTE 문
 
     PREPARE st FROM 'SELECT 1 + ?';
     EXECUTE st USING 4;
+    
+::
+
        1+ ?:0
     ==========================
        5
      
+.. code-block:: sql
+
+    PREPARE st FROM 'SELECT 1 + ?';
     SET @a=3;
     EXECUTE st USING @a;
+    
+::
+
        1+ ?:0
     ==========================
        4
      
+.. code-block:: sql
+
     PREPARE st FROM 'SELECT ? + ?';
     EXECUTE st USING 1,3;
+    
+::
+
        ?:0 + ?:1
     ==========================
        4
      
+.. code-block:: sql
+
     PREPARE st FROM 'SELECT ? + ?';
     EXECUTE st USING 'a','b';
+    
+::
+
        ?:0 + ?:1
     ==========================
        'ab'
      
+.. code-block:: sql
+
     PREPARE st FROM 'SELECT FLOOR(?)';
     EXECUTE st USING '3.2';
+    
+::
+
        floor( ?:0 )
     ==========================
        3.000000000000000e+000
-     
-    PREPARE st FROM 'SELECT FLOOR(?)';
-    EXECUTE st USING 3.2;
-       floor( ?:0 )
-    ==========================
-       3.0
 
 DEALLOCATE PREPARE 문, DROP PREPARE 문
 ======================================
@@ -122,19 +140,26 @@ SET
      
     SELECT typeof(@v1), typeof(@v2), typeof(@v3), typeof(@v4);
      
+::
+
        typeof(@v1)         typeof(@v2)         typeof(@v3)         typeof(@v4)
     ======================================================================================
-      'integer'           'bigint'            'character var'     'character varying (10)'
+      'integer'           'bigint'            'character (-1)'     'character varying (10)'
 
 사용자 정의 변수의 타입은 사용자가 값을 지정할 때 바뀔 수 있다.
 
 .. code-block:: sql
 
+    SET @v = 'a'; 
+    SET @v1 = 10;
+
     SELECT @v := 1, typeof(@v1), @v1:='1', typeof(@v1);
      
+::
+
       @v := 1                typeof(@v1)          @v1 := '1'             typeof(@v1)
     ======================================================================================
-      1                     'integer'             '1'                   'character (1)'
+      1                     'integer'             '1'                   'character (-1)'
   
 ::
 
@@ -152,20 +177,18 @@ SET
     <variable_name_list>
            : <variable_name_list> ',' @<name>
 
-
 *   사용자 정의 변수의 이름은 영숫자(alphanumeric)와 언더바(_)로 정의한다.
 *   SQL 문 내에서 사용자 정의 변수를 선언할 때에는 ':=' 연산자를 사용한다.
-
-**예제**
 
 사용자 정의 변수 a를 선언하고, 값 1을 할당한다.
 
 .. code-block:: sql
 
     SET @a = 1;
-     
     SELECT @a;
-     
+
+::
+    
       @a
     ======================
       1
@@ -181,13 +204,16 @@ SET
      
     SELECT @a := @a+1 AS row_no, i FROM t;
      
+::
+
       row_no                          i
      ===================================
       1                               2
       2                               4
       3                               6
       4                               8
-    4 ROWS selected.
+      
+    4 rows selected.
 
 사용자 정의 변수를 prepared statement에서 지정한 바인드 파라미터의 입력으로 사용한다.
 
@@ -198,6 +224,8 @@ SET
     PREPARE stmt FROM 'SELECT i FROM t WHERE i < ?';
     EXECUTE stmt USING @a;
      
+::
+
                 i
     =============
                 2

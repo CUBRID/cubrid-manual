@@ -103,8 +103,11 @@ _db_class
 .. code-block:: sql
 
     SELECT class_name, SEQUENCE(SELECT class_name FROM _db_class s WHERE s IN c.sub_classes)
-     FROM _db_class c
-     WHERE c.owner.name = 'PUBLIC' AND c.sub_classes IS NOT NULL;
+    FROM _db_class c
+    WHERE c.owner.name = 'PUBLIC' AND c.sub_classes IS NOT NULL;
+     
+::
+
       class_name            sequence((select class_name from _db_class s where s in c.sub_classes))
     ============================================
       'event'               {'female_event'}
@@ -143,6 +146,7 @@ _db_attribute
 +----------------+------------------------+-----------------------------------------------------------------------------------------------------------------+
 | default_value  | VARCHAR (255)          | 기본값. 데이터 타입에 관계없이 모두 문자열로 저장된다. 기본값이 없으면                                          |
 |                |                        | **NULL** , 기본값이 **NULL** 이면 'NULL'로 표현된다.                                                            |
+|                |                        |                                                                                                                 |
 |                |                        | 데이터 타입이 객체 타입이면 'volume id | page id | slot id', 집합 타입이면                                      |
 |                |                        | '{element 1, element 2, ...}'로 표현된다.                                                                       |
 +----------------+------------------------+-----------------------------------------------------------------------------------------------------------------+
@@ -156,34 +160,31 @@ _db_attribute
 +-------+-----------+-------+----------+
 | 값    | 의미      | 값    | 의미     |
 +=======+===========+=======+==========+
-| 1     | INTEGER   | 18    | SHORT    |
+| 1     | INTEGER   | 20    | OID      |
 |       |           |       |          |
 +-------+-----------+-------+----------+
-| 2     | FLOAT     | 20    | OID      |
+| 2     | FLOAT     | 22    | NUMERIC  |
 |       |           |       |          |
 +-------+-----------+-------+----------+
-| 3     | DOUBLE    | 22    | NUMERIC  |
+| 3     | DOUBLE    | 23    | BIT      |
 |       |           |       |          |
 +-------+-----------+-------+----------+
-| 4     | STRING    | 23    | BIT      |
+| 4     | STRING    | 24    | VARBIT   |
 |       |           |       |          |
 +-------+-----------+-------+----------+
-| 5     | OBJECT    | 24    | VARBIT   |
+| 5     | OBJECT    | 25    | CHAR     |
 |       |           |       |          |
 +-------+-----------+-------+----------+
-| 6     | SET       | 25    | CHAR     |
+| 6     | SET       | 26    | NCHAR    |
 |       |           |       |          |
 +-------+-----------+-------+----------+
-| 7     | MULTISET  | 26    | NCHAR    |
+| 7     | MULTISET  | 27    | VARNCHAR |
 |       |           |       |          |
 +-------+-----------+-------+----------+
-| 8     | SEQUENCE  | 27    | VARNCHAR |
+| 8     | SEQUENCE  | 31    | BIGINT   |
 |       |           |       |          |
 +-------+-----------+-------+----------+
-| 9     | ELO       | 31    | BIGINT   |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 10    | TIME      | 32    | DATETIME |
+| 9     | ELO       | 32    | DATETIME |
 |       |           |       |          |
 +-------+-----------+-------+----------+
 | 11    | TIMESTAMP | 33    | BLOB     |
@@ -193,6 +194,9 @@ _db_attribute
 |       |           |       |          |
 +-------+-----------+-------+----------+
 | 13    | MONETARY  | 35    | ENUM     |
+|       |           |       |          |
++-------+-----------+-------+----------+
+| 18    | SHORT     |       |          |   
 |       |           |       |          |
 +-------+-----------+-------+----------+
 
@@ -218,8 +222,10 @@ _db_attribute
 
     SELECT class_of.class_name, attr_name
     FROM _db_attribute
-    WHERE class_of.owner.name = 'PUBLIC' AND FROM _class_of.is_system_class = 0
+    WHERE class_of.owner.name = 'PUBLIC' AND from_class_of.is_system_class = 0
     ORDER BY 1, def_order;
+
+::
     
     class_of.class_name   attr_name
     ============================================
@@ -296,6 +302,8 @@ _db_method
     WHERE c.owner.name = 'DBA' AND c.class_meth_count > 0
     ORDER BY 1;
     
+::
+    
       class_name            sequence((select meth_name from _db_method m where m in c.class_meths))
     ============================================
       'db_serial'           {'change_serial_owner'}
@@ -306,8 +314,8 @@ _db_method
       'db_root'             {'add_user', 'drop_user', 'find_user', 'print_authorizations', 'info', 'change_owner', 'change_trigg
     r_owner', 'get_owner', 'change_sp_owner'}
 
-
 _db_meth_sig
+------------
 
 메서드에 대한 C 함수의 구성 정보이며 meth_of에 대한 인덱스가 생성되어 있다.
 
@@ -335,9 +343,8 @@ _db_meth_arg
 +=============+========================+===========================================================+
 | meth_sig_of | _db_meth_sig           | 인자가 속한 함수 정보                                     |
 +-------------+------------------------+-----------------------------------------------------------+
-| data_type   | INTEGER                | 인자의 데이터 타입(                                       |
-|             |                        | :ref:`db-attribute`                                       |
-|             |                        | 의 'CUBRID가 지원하는 데이터 타입' 표의 '값' 중 하나)     |
+| data_type   | INTEGER                | 인자의 데이터 타입( :ref:`db-attribute`                   |
+|             |                        | 의 "CUBRID가 지원하는 데이터 타입" 표의 "값" 중 하나)     |
 +-------------+------------------------+-----------------------------------------------------------+
 | index_of    | INTEGER                | 함수정의에 인자가 나열된 순서. 리턴 값이면 0,             |
 |             |                        | 입력인자이면 1부터 시작함.                                |
@@ -411,6 +418,8 @@ _db_index
     FROM _db_index
     ORDER BY 1;
     
+::
+    
       class_of.class_name   index_name
     ============================================
       '_db_attribute'       'i__db_attribute_class_of_attr_name'
@@ -474,6 +483,8 @@ _db_index_key
     FROM _db_index i
     WHERE key_count >= 2;
     
+::
+    
       class_of.class_name   sequence((select key_attr_name from _db_index_key k where k in
     i.key_attrs))
     ============================================
@@ -521,6 +532,8 @@ CUBRID가 지원하는 권한 타입은 다음과 같다.
     SELECT grantor.name, grantee.name, auth_type
     FROM _db_auth
     WHERE class_of.class_name = 'db_trig';
+    
+::
 
       grantor.name          grantee.name          auth_type
     ==================================================================
@@ -547,6 +560,8 @@ CUBRID가 지원하는 데이터 타입(:ref:`db-attribute` 의 'CUBRID가 지�
     FROM _db_attribute a join _db_data_type t ON a.data_type = t.type_id
     WHERE class_of.class_name = 'event'
     ORDER BY a.def_order;
+
+::
 
       attr_name             type_name
     ============================================
@@ -632,27 +647,25 @@ _db_collation
 
 콜레이션에 대한 정보이다.
 
-+--------------+-------------+--------------------------------------+
-| 속성명       | 데이터 타입 | 설명                                 |
-+==============+=============+======================================+
-| coll_id      | INTEGER     | 콜레이션 ID                          |
-+--------------+-------------+--------------------------------------+
-| coll_name    | VARCHAR(32) | 콜레이션 이름                        |
-+--------------+-------------+--------------------------------------+
-| charset_id   | INTEGER     | 문자셋 ID                            |
-+--------------+-------------+--------------------------------------+
-| built_in     | INTEGER     | 제품 설치 시 콜레이션 포함 여부      |
-+--------------+-------------+--------------------------------------+
-| expansions   | INTEGER     | 확장 지원 여부                       |
-|              |             | (0: 지원 안 함, 1: 지원)             |
-+--------------+-------------+--------------------------------------+
-| contractions | INTEGER     | 축약 지원 여부                       |
-|              |             | (0: 지원 안 함, 1: 지원)             |
-+--------------+-------------+--------------------------------------+
-| uca_strength | INTEGER     | 가중치 세기(weight strength)         |
-+--------------+-------------+--------------------------------------+
-| checksum     | VARCHAR(32) | 콜레이션 파일의 체크섬               |
-+--------------+-------------+--------------------------------------+
++--------------+-------------+------------------------------------------------------------------+
+| 속성명       | 데이터 타입 | 설명                                                             |
++==============+=============+==================================================================+
+| coll_id      | INTEGER     | 콜레이션 ID                                                      |
++--------------+-------------+------------------------------------------------------------------+
+| coll_name    | VARCHAR(32) | 콜레이션 이름                                                    |
++--------------+-------------+------------------------------------------------------------------+
+| charset_id   | INTEGER     | 문자셋 ID                                                        |
++--------------+-------------+------------------------------------------------------------------+
+| built_in     | INTEGER     | 제품 설치 시 콜레이션 포함 여부                                  |
++--------------+-------------+------------------------------------------------------------------+
+| expansions   | INTEGER     | 확장 지원 여부 (0: 지원 안 함, 1: 지원)                          |
++--------------+-------------+------------------------------------------------------------------+
+| contractions | INTEGER     | 축약 지원 여부 (0: 지원 안 함, 1: 지원)                          |
++--------------+-------------+------------------------------------------------------------------+
+| uca_strength | INTEGER     | 가중치 세기(weight strength)                                     |
++--------------+-------------+------------------------------------------------------------------+
+| checksum     | VARCHAR(32) | 콜레이션 파일의 체크섬                                           |
++--------------+-------------+------------------------------------------------------------------+
 
 db_user
 -------
@@ -847,7 +860,6 @@ DB_CLASS
 
     CREATE VCLASS db_class (class_name, owner_name, class_type, is_system_class, partitioned, is_reuse_oid_class)
     AS
-     
     SELECT c.class_name, CAST(c.owner.name AS VARCHAR(255)),
         CASE c.class_type WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END,
         CASE WHEN MOD(c.is_system_class, 2) = 1 THEN 'YES' ELSE 'NO' END,
@@ -875,6 +887,8 @@ DB_CLASS
     FROM db_class
     WHERE owner_name = CURRENT_USER;
 
+::
+
       class_name
     ======================
       'stadium'
@@ -896,6 +910,8 @@ DB_CLASS
     SELECT class_name
     FROM db_class
     WHERE class_type = 'VCLASS';
+
+::
 
       class_name
     ======================
@@ -925,6 +941,8 @@ DB_CLASS
     WHERE is_system_class = 'YES' AND class_type = 'CLASS'
     ORDER BY 1;
     
+::
+
       class_name
     ======================
       'db_authorization'
@@ -952,22 +970,21 @@ DB_DIRECT_SUPER_CLASS
 
     CREATE VCLASS db_direct_super_class (class_name, super_class_name)
     AS
-    SELECT c.class_name, s.class_name
-    FROM _db_class c, TABLE(c.super_classes) AS t(s)
-    WHERE (CURRENT_USER = 'DBA' OR
-            {c.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {c} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
-
+    SELECT c.class_name, s.class_name 
+    FROM _db_class c, TABLE(c.super_classes) AS t(s) 
+    WHERE CURRENT_USER = 'DBA' OR 
+            {c.owner.name} SUBSETEQ (  
+                    SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
+                    FROM db_user u, TABLE(groups) AS t(g)  
+                    WHERE u.name = CURRENT_USER) OR 
+            {c} SUBSETEQ (
+                    SELECT SUM(SET{au.class_of})  
+                    FROM _db_auth au  
+                    WHERE {au.grantee.name} SUBSETEQ (
+                            SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
+                            FROM db_user u, TABLE(groups) AS t(g)  
+                            WHERE u.name = CURRENT_USER) AND 
+                                    au.auth_type = 'SELECT');
 
 다음 예제에서는 클래스 *female_event* 의 상위 클래스를 검색한다. (:ref:`add-superclass` 참조)
 
@@ -977,6 +994,8 @@ DB_DIRECT_SUPER_CLASS
     FROM db_direct_super_class
     WHERE class_name = 'female_event';
     
+::
+
       super_class_name
     ======================
       'event'
@@ -990,6 +1009,8 @@ DB_DIRECT_SUPER_CLASS
     WHERE c.class_name = s.class_name AND c.owner_name = user
     ORDER BY 1;
     
+::
+
       class_name            super_class_name
     ============================================
       'female_event'        'event'
@@ -1036,6 +1057,8 @@ DB_VCLASS
     SELECT vclass_def
     FROM db_vclass
     WHERE vclass_name = 'db_class';
+
+::
     
     'SELECT c.class_name, CAST(c.owner.name AS VARCHAR(255)), CASE c.class_type WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' WHEN 2 THEN 'PROXY' ELSE 'UNKNOW' END, CASE WHEN MOD(c.is_system_class, 2) = 1 THEN 'YES' ELSE 'NO' END, CASE WHEN c.sub_classes IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM _db_partition p WHERE p.class_of = c and p.pname IS NULL), 'NO') END FROM _db_class c WHERE CURRENT_USER = 'DBA' OR {c.owner.name} SUBSETEQ (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name = CURRENT_USER) OR {c} SUBSETEQ (  SELECT SUM(SET{au.class_of})  FROM _db_auth au  WHERE {au.grantee.name} SUBSETEQ (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name = CURRENT_USER) AND  au.auth_type = 'SELECT')'
 
@@ -1074,7 +1097,7 @@ DB_ATTRIBUTE
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | domain_class_name | VARCHAR (255) | 데이터 타입이 객체 타입인 경우 그 도메인 클래스명. 객체 타입이 아닌 경우 **NULL**                             |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
-| default_value     | VARCHAR (255) | 기본값으 로서 그 데이터 타입에 관계없이 모두 문자열로 저장. 기본값이 없으면                                   |
+| default_value     | VARCHAR (255) | 기본값으로서 그 데이터 타입에 관계없이 모두 문자열로 저장. 기본값이 없으면                                    |
 |                   |               | **NULL** , 기본값이 **NULL** 이면 'NULL'로 표현됨.                                                            |
 |                   |               | 데이터 타입이 객체 타입이면 'volume id | page id | slot id ', 컬렉션 타입이면                                 |
 |                   |               | ' {element 1, element 2, ...}'로 표현됨.                                                                      |
@@ -1121,6 +1144,8 @@ DB_ATTRIBUTE
     WHERE class_name = 'event'
     ORDER BY def_order;
     
+::
+
       attr_name             data_type             domain_class_name
     ==================================================================
       'code'                'INTEGER'             NULL
@@ -1138,6 +1163,8 @@ DB_ATTRIBUTE
     WHERE class_name = 'female_event'
     ORDER BY def_order;
     
+::
+
       attr_name             from_class_name
     ============================================
       'code'                'event'
@@ -1155,6 +1182,8 @@ DB_ATTRIBUTE
     WHERE c.owner_name = CURRENT_USER AND attr_name like '%name%'
     ORDER BY 1;
     
+::
+
       class_name            attr_name
     ============================================
       'athlete'             'name'
@@ -1239,6 +1268,8 @@ DB_ATTR_SETDOMAIN_ELM
     FROM db_attr_setdomain_elm
     WHERE class_name = 'city';
     
+::
+
       attr_name             attr_type             data_type             domain_class_name
     ==============================================================================
      
@@ -1303,6 +1334,8 @@ DB_METHOD
     WHERE class_name = 'db_user'
     ORDER BY meth_type, meth_name;
     
+::
+
       meth_name             meth_type             func_name
     ==================================================================
       'add_user'            'CLASS'               'au_add_user_method'
@@ -1379,6 +1412,8 @@ DB_METH_ARG
     FROM db_meth_arg
     WHERE class_name = 'db_user';
     
+::
+
       meth_name             data_type                    prec
     =========================================================
       'append_data'         'STRING'               1073741823
@@ -1538,6 +1573,8 @@ DB_INDEX
     FROM db_index
     ORDER BY 1;
     
+::
+
       class_name            index_name            is_unique
     ==================================================================
       'athlete'             'pk_athlete_code'     'YES'
@@ -1586,28 +1623,30 @@ DB_INDEX_KEY
 
 .. code-block:: sql
 
-    CREATE VCLASS db_index_key (index_name, class_name, key_attr_name, key_order, key_prefix_length, func)
+    CREATE VCLASS db_index_key (index_name, class_name, key_attr_name, key_order, asc_desc, key_prefix_length, func)
     AS
-    SELECT k.index_of.index_name, k.index_of.class_of.class_name, k.key_attr_name, k.key_order
-    CASE k.asc_desc
-    WHEN 0 THEN 'ASC'
-    WHEN 1 THEN 'DESC' ELSE 'UNKN' END,
-    k.key_prefix_length, k.func
-    FROM _db_index_key k
-    WHERE (CURRENT_USER = 'DBA' OR
-        {k.index_of.class_of.owner.name}
-        subseteq (
-            SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-            from db_user u, table(groups) as t(g)
-            where u.name = CURRENT_USER ) OR {k.index_of.class_of}
-            subseteq (
-                SELECT sum(set{au.class_of})
-                FROM _db_auth au
-                WHERE {au.grantee.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) AND
-                au.auth_type = 'SELECT'));
+    SELECT k.index_of.index_name, k.index_of.class_of.class_name, k.key_attr_name, k.key_order, 
+        CASE k.asc_desc 
+            WHEN 0 THEN 'ASC' 
+            WHEN 1 THEN 'DESC' 
+            ELSE 'UNKN' END, 
+        k.key_prefix_length, k.func 
+    FROM _db_index_key k 
+    WHERE CURRENT_USER = 'DBA' OR 
+        {k.index_of.class_of.owner.name} 
+        SUBSETEQ (  
+            SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
+            FROM db_user u, TABLE(groups) AS t(g)  
+            WHERE u.name = CURRENT_USER) OR {k.index_of.class_of} 
+                SUBSETEQ (  
+                    SELECT SUM(SET{au.class_of})  
+                    FROM _db_auth au  
+                    WHERE {au.grantee.name} SUBSETEQ (  
+                        SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})
+                        FROM db_user u, TABLE(groups) AS t(g)
+                        WHERE u.name = CURRENT_USER
+                        ) AND  au.auth_type = 'SELECT'
+                    );
 
 다음 예제에서는 클래스의 인덱스 키 정보를 검색한다.
 
@@ -1617,6 +1656,8 @@ DB_INDEX_KEY
     FROM db_index_key
     ORDER BY class_name, key_order;
     
+::
+
       'athlete'             'code'                'pk_athlete_code'
       'city'                'city_name'           'pk_city_city_name'
       'db_serial'           'name'                'pk_db_serial_name'
@@ -1681,6 +1722,8 @@ DB_AUTH
     WHERE class_name like 'db_a%'
     ORDER BY 1;
     
+::
+
       class_name            auth_type             grantor_name
     ==================================================================
       'db_attr_setdomain_elm'  'SELECT'             'DBA'
@@ -1769,44 +1812,46 @@ DB_PARTITION
 .. code-block:: sql
 
     CREATE VCLASS db_partition
-    (sp_name, sp_type, return_type, arg_count, lang, target, owner)
+    (class_name, partition_name, partition_class_name, partition_type, partition_expr, partition_values)
     AS
-    SELECT p.class_of.class_name AS class_name, p.pname AS partition_name,
-                p.class_of.class_name || '__p__' || p.pname AS partition_class_name,
-                CASE WHEN p.ptype = 0 THEN 'HASH'
-                     WHEN p.ptype = 1 THEN 'RANGE'
-                ELSE 'LIST' ENDASpartition_type,
-                TRIM(SUBSTRING( pi.pexpr FROM 8 FOR (POSITION(' FROM ' IN pi.pexpr)-8))) AS
-                    partition_expression,
-                p.pvalues AS partition_values
-    FROM _db_partition p,
-         ( select * from _db_partition sp
-    where sp.class_of =  p.class_of AND sp.pname is null) pi
-    WHERE p.pname is not null AND
-          ( CURRENT_USER = 'DBA'
-            OR
-            {p.class_of.owner.name} SUBSETEQ
-             ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{}) 
-               FROM db_user u, TABLE(groups) AS t(g) 
-               WHERE u.name = CURRENT_USER
-             )
-            OR
-            {p.class_of} SUBSETEQ
-             ( SELECT SUM(SET{au.class_of}) 
-               FROM _db_auth au 
-               WHERE {au.grantee.name} SUBSETEQ
-                     ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{}) 
-                       FROM db_user u, TABLE(groups) AS t(g) 
-                       WHERE u.name = CURRENT_USER) AND 
-                       au.auth_type = 'SELECT'
-             )
-          )
+    SELECT p.class_of.class_name AS class_name, p.pname AS partition_name, 
+        p.class_of.class_name + '__p__' + p.pname AS partition_class_name, 
+        CASE WHEN p.ptype = 0 THEN 'HASH'
+            WHEN p.ptype = 1 THEN 'RANGE' 
+            ELSE 'LIST' END AS partition_type, 
+        TRIM(SUBSTRING(pi.pexpr FROM 8 FOR (POSITION(' FROM ' IN pi.pexpr)-8))) AS partition_expression, 
+        p.pvalues AS partition_values 
+    FROM _db_partition p, 
+        (select * from _db_partition sp where sp.class_of =  p.class_of AND sp.pname is null) pi 
+    WHERE p.pname is not null AND 
+        (   CURRENT_USER = 'DBA' 
+            OR 
+            {p.class_of.owner.name} SUBSETEQ 
+                ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
+                  FROM db_user u, TABLE(groups) AS t(g)  
+                  WHERE u.name = CURRENT_USER
+                ) 
+                OR 
+                {p.class_of} SUBSETEQ 
+                    ( SELECT SUM(SET{au.class_of})  
+                      FROM _db_auth au  
+                      WHERE {au.grantee.name} SUBSETEQ 
+                        ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
+                          FROM db_user u, TABLE(groups) AS t(g)  
+                          WHERE u.name = CURRENT_USER
+                        ) 
+                        AND 
+                        au.auth_type = 'SELECT'
+                    )
+        );
 
 다음 예제에서는 :ref:`participant2 <range-participant2-table>` 클래스의 현재 구성된 분할 정보를 조회한다.
 
 .. code-block:: sql
 
     SELECT * from db_partition where class_name = 'participant2';
+
+::
 
       class_name            partition_name        partition_class_name         partition_type   partition_expr        partition_values
     ====================================================================================================================================
@@ -1854,14 +1899,16 @@ DB_STORED_PROCEDURE
                sp.arg_count,
                CASE sp.lang   WHEN 1 THEN 'JAVA'  
                ELSE '' END, sp.target, sp.owner.name
-    FROM _db_stored_procedure sp
+    FROM _db_stored_procedure sp;
 
 다음 예제에서는 현재 사용자가 소유하고 있는 Java 저장 함수를 조회한다.
 
 .. code-block:: sql
 
     SELECT sp_name, target from db_stored_procedure
-    WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER 
+    WHERE sp_type = 'FUNCTION' AND owner = CURRENT_USER; 
+
+::
 
       sp_name               target             
     ============================================
@@ -1909,7 +1956,9 @@ DB_STORED_PROCEDURE_ARGS
     SELECT index_of, arg_name, data_type, mode 
     FROM db_stored_procedure_args
     WHERE sp_name = 'phone_info'
-    ORDER BY index_of
+    ORDER BY index_of;
+
+::
 
          index_of  arg_name              data_type             mode
     ===============================================================
@@ -1998,20 +2047,29 @@ DB_COLLATION
     CREATE TABLE Foo(name varchar(255));
     SELECT class_name, partitioned FROM db_class WHERE class_name = 'Foo';
      
+::
+
     There are no results.
      
+.. code-block:: sql
+
     SELECT class_name, partitioned FROM db_class WHERE class_name = 'foo';
     
+::
+
       class_name   partitioned
     ============================
       'foo'       'NO'    
 
+.. code-block:: sql
+
     CREATE USER tester PASSWORD 'testpwd';
     SELECT name, password FROM db_user;
     
+::
+
       name                  password
     ============================================
       'DBA'                 NULL
       'PUBLIC'              NULL
       'TESTER'              db_password
-

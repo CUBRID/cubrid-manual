@@ -36,6 +36,8 @@ The following example shows how to retrieve country names ranked first to fourth
          ORDER BY gold DESC) AS T
     WHERE ROWNUM <5;
     
+::
+
       nation_code
     ======================
       'URS'
@@ -43,11 +45,15 @@ The following example shows how to retrieve country names ranked first to fourth
       'USA'
       'KOR'
      
+.. code-block:: sql
+
     --Limiting 4 rows using FOR ORDERBY_NUM()
     SELECT ROWNUM, nation_code FROM participant WHERE host_year = 1988
     ORDER BY gold DESC
     FOR ORDERBY_NUM() < 5;
     
+::
+
            rownum  nation_code
     ===================================
               156  'URS'
@@ -55,11 +61,15 @@ The following example shows how to retrieve country names ranked first to fourth
               154  'USA'
               153  'KOR'
      
+.. code-block:: sql
+
     --Unexpected results : ROWNUM operated before ORDER BY
     SELECT ROWNUM, nation_code FROM participant
     WHERE host_year = 1988 AND ROWNUM < 5
     ORDER BY gold DESC;
     
+::
+
            rownum  nation_code
     ===================================
                 1  'ZIM'
@@ -72,11 +82,11 @@ GROUPBY_NUM
 
 .. function:: GROUPBY_NUM ()
 
-    The **GROUPBY_NUM()** function is used with the **ROWNUM** or **INST_NUM()** function to limit the number of result rows. The difference is that the **GROUPBY_NUM()** function is combined after the **GROUP BY … HAVING** clause to give order to a result that has been already sorted. In addition, while the **INST_NUM()** function is a scalar function, the **GROUPBY_NUM()** function is kind of an aggregate function.
+    The **GROUPBY_NUM()** function is used with the **ROWNUM** or **INST_NUM()** function to limit the number of result rows. The difference is that the **GROUPBY_NUM()** function is combined after the **GROUP BY … HAVING** clause to give order to a result that has been already sorted. In addition, while the **INST_NUM()** function is a scalar function, the **GROUPBY_NUM()** function is kind of an aggregate function. 
+    
+    That is, when retrieving only some of the result rows by using **ROWNUM** in a condition clause of the **SELECT** statement that includes the **GROUP BY** clause, **ROWNUM** is applied first and then group sorting by **GROUP BY** is performed. On the other hand, when retrieving only some of the result rows by using the **GROUPBY_NUM()** function, **ROWNUM** is applied to the result of group sorting by **GROUP BY**.
 
     :rtype: INT
-
-That is, when retrieving only some of the result rows by using **ROWNUM** in a condition clause of the **SELECT** statement that includes the **GROUP BY** clause, **ROWNUM** is applied first and then group sorting by **GROUP BY** is performed. On the other hand, when retrieving only some of the result rows by using the **GROUPBY_NUM()** function, **ROWNUM** is applied to the result of group sorting by **GROUP BY**.
 
 The following example shows how to retrieve the fastest record in the previous five Olympic Games from the *history* table in the  *demodb* database.
 
@@ -86,6 +96,8 @@ The following example shows how to retrieve the fastest record in the previous f
     SELECT host_year, MIN(score) FROM history  
     GROUP BY host_year HAVING GROUPBY_NUM() BETWEEN 1 AND 5;
     
+::
+
         host_year  min(score)
     ===================================
              1968  '8.9'
@@ -94,10 +106,14 @@ The following example shows how to retrieve the fastest record in the previous f
              1988  '01:58.0'
              1992  '02:07.0'
      
+.. code-block:: sql
+
     --Limiting rows first and then Group-ordering using ROWNUM
     SELECT host_year, MIN(score) FROM history
     WHERE ROWNUM BETWEEN 1 AND 5 GROUP BY host_year;
     
+::
+
         host_year  min(score)
     ===================================
              2000  '03:41.0'
@@ -120,16 +136,22 @@ The following example shows how to retrieve athlete names ranked 3rd to 5th and 
     SELECT athlete, score FROM history
     ORDER BY score FOR ORDERBY_NUM() BETWEEN 3 AND 5;
     
+::
+
       athlete               score
     ============================================
       'Luo Xuejuan'         '01:07.0'
       'Rodal Vebjorn'       '01:43.0'
       'Thorpe Ian'          '01:45.0'
      
+.. code-block:: sql
+
     --Limiting rows first and then Ordering using ROWNUM
     SELECT athlete, score FROM history
     WHERE ROWNUM BETWEEN 3 AND 5 ORDER BY score;
     
+::
+
       athlete               score
     ============================================
       'Thorpe Ian'          '01:45.0'

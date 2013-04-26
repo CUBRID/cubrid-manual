@@ -72,26 +72,23 @@
 +--------------+--------------+--------------+--------------+--------------+--------------+
 |              | **INT**      | **NUMERIC**  | **FLOAT**    | **DOUBLE**   | **MONETARY** |
 +==============+==============+==============+==============+==============+==============+
-| **INT**      | INT          | **NUMERIC**  | **FLOAT**    | **DOUBLE**   | **MONETARY** |
+| **INT**      | INT          |   NUMERIC    |   FLOAT      |   DOUBLE     |   MONETARY   |
 |              | (            |              |              |              |              |
 |              | BIGINT       |              |              |              |              |
 |              | 범위까지     |              |              |              |              |
 |              | )            |              |              |              |              |
 +--------------+--------------+--------------+--------------+--------------+--------------+
-| **NUMERIC**  | **NUMERIC**  | NUMERIC      | **DOUBLE**   | **DOUBLE**   | **MONETARY** |
+| **NUMERIC**  |   NUMERIC    | NUMERIC      |   DOUBLE     |   DOUBLE     |   MONETARY   |
 |              |              | (            |              |              |              |
-|              |              | p            |              |              |              |
-|              |              | 와           |              |              |              |
-|              |              | s            |              |              |              |
-|              |              | 도           |              |              |              |
-|              |              | 변환됨       |              |              |              |
+|              |              | p와          |              |              |              |
+|              |              | s도 변환됨   |              |              |              |
 |              |              | )            |              |              |              |
 +--------------+--------------+--------------+--------------+--------------+--------------+
-| **FLOAT**    | **FLOAT**    | **DOUBLE**   | **FLOAT**    | **DOUBLE**   | **MONETARY** |
+| **FLOAT**    |   FLOAT      |   DOUBLE     |   FLOAT      |   DOUBLE     |   MONETARY   |
 +--------------+--------------+--------------+--------------+--------------+--------------+
-| **DOUBLE**   | **DOUBLE**   | **DOUBLE**   | **DOUBLE**   | **DOUBLE**   | **MONETARY** |
+| **DOUBLE**   |   DOUBLE     |   DOUBLE     |   DOUBLE     |   DOUBLE     |   MONETARY   |
 +--------------+--------------+--------------+--------------+--------------+--------------+
-| **MONETARY** | **MONETARY** | **MONETARY** | **MONETARY** | **MONETARY** | **MONETARY** |
+| **MONETARY** |   MONETARY   |   MONETARY   |   MONETARY   |   MONETARY   |   MONETARY   |
 +--------------+--------------+--------------+--------------+--------------+--------------+
 
 피연산자가 모두 동일한 데이터 타입이면 연산 결과의 타입이 변환되지 않으나, 나누기 연산의 경우 예외적으로 타입이 변환되므로 주의해야 한다. 분모, 즉 제수(divisor)가 0이면 에러가 발생한다.
@@ -122,94 +119,149 @@
     --int * int
     SELECT 123*123;
     
+::
+
           123*123
     =============
             15129
      
+.. code-block:: sql
+
     -- int * int returns overflow error
     SELECT (1234567890123*1234567890123);
-     
+
+::
+    
     ERROR: Data overflow on data type bigint.
      
+.. code-block:: sql
+
     -- int * numeric returns numeric type  
     SELECT (1234567890123*CAST(1234567890123 AS NUMERIC(15,2)));
     
+::
+
      (1234567890123* cast(1234567890123 as numeric(15,2)))
     ======================
       1524157875322755800955129.00
      
+.. code-block:: sql
+
     -- int * float returns float type
     SELECT (1234567890123*CAST(1234567890123 AS FLOAT));
     
+::
+
      (1234567890123* cast(1234567890123 as float))
     ===============================================
                                       1.524158e+024
      
+.. code-block:: sql
+
     -- int * double returns double type
     SELECT (1234567890123*CAST(1234567890123 AS DOUBLE));
     
+::
+
      (1234567890123* cast(1234567890123 as double))
     ================================================
                               1.524157875322756e+024
      
+.. code-block:: sql
+
     -- numeric * numeric returns numeric type   
     SELECT (CAST(1234567890123 AS NUMERIC(15,2))*CAST(1234567890123 AS NUMERIC(15,2)));
     
+::
+
      ( cast(1234567890123 as numeric(15,2))* cast(1234567890123 as numeric(15,2)))
     ======================
       1524157875322755800955129.0000
      
+.. code-block:: sql
+
     -- numeric * float returns double type  
     SELECT (CAST(1234567890123 AS NUMERIC(15,2))*CAST(1234567890123 AS FLOAT));
     
+::
+
      ( cast(1234567890123 as numeric(15,2))* cast(1234567890123 as float))
     =======================================================================
                                                      1.524157954716582e+024
      
+.. code-block:: sql
+
     -- numeric * double returns double type  
     SELECT (CAST(1234567890123 AS NUMERIC(15,2))*CAST(1234567890123 AS DOUBLE));
     
+::
+
      ( cast(1234567890123 as numeric(15,2))* cast(1234567890123 as double))
     ========================================================================
                                                       1.524157875322756e+024
      
+.. code-block:: sql
+
     -- float * float returns float type  
     SELECT (CAST(1234567890123 AS FLOAT)*CAST(1234567890123 AS FLOAT));
     
+::
+
      ( cast(1234567890123 as float)* cast(1234567890123 as float))
     ===============================================================
                                                       1.524158e+024
+
+.. code-block:: sql
+
     -- float * double returns float type  
     SELECT (CAST(1234567890123 AS FLOAT)*CAST(1234567890123 AS DOUBLE));
     
+::
+
      ( cast(1234567890123 as float)* cast(1234567890123 as double))
     ================================================================
                                               1.524157954716582e+024
      
+.. code-block:: sql
+
     -- double * double returns float type  
     SELECT (CAST(1234567890123 AS DOUBLE)*CAST(1234567890123 AS DOUBLE));
     
+::
+
      ( cast(1234567890123 as double)* cast(1234567890123 as double))
     =================================================================
                                                1.524157875322756e+024
      
+.. code-block:: sql
+
     -- int / int returns int type without type conversion or rounding
     SELECT 100100/100000;
     
+::
+
       100100/100000
     ===============
                   1
      
+.. code-block:: sql
+
     -- int / int returns int type without type conversion or rounding
     SELECT 100100/200200;
     
+::
+
       100100/200200
     ===============
                   0
      
+.. code-block:: sql
+
     -- int / zero returns error
     SELECT 100100/(100100-100100);
     
+::
+
     ERROR: Attempt to divide by zero.
 
 .. _arithmetic-op-type-casting:
@@ -254,46 +306,72 @@
     -- initial systimestamp value
     SELECT SYSDATETIME;
     
+::
+
       SYSDATETIME
     ===============================
       07:09:52.115 PM 01/14/2010
      
+.. code-block:: sql
+
     -- time type + 10(seconds) returns time type
     SELECT (CAST (SYSDATETIME AS TIME) + 10);
     
+::
+
      ( cast( SYS_DATETIME  as time)+10)
     ====================================
       07:10:02 PM
      
+.. code-block:: sql
+
     -- date type + 10 (days) returns date type
     SELECT (CAST (SYSDATETIME AS DATE) + 10);
     
+::
+
      ( cast( SYS_DATETIME  as date)+10)
     ====================================
       01/24/2010
      
+.. code-block:: sql
+
     -- timestamp type + 10(seconds) returns timestamp type
     SELECT (CAST (SYSDATETIME AS TIMESTAMP) + 10);
     
+::
+
      ( cast( SYS_DATETIME  as timestamp)+10)
     =========================================
       07:10:02 PM 01/14/2010
      
+.. code-block:: sql
+
     -- systimestamp type + 10(milliseconds) returns systimestamp type
     SELECT (SYSDATETIME  + 10);
     
+::
+
      ( SYS_DATETIME +10)
     ===============================
       07:09:52.125 PM 01/14/2010
      
+.. code-block:: sql
+
     SELECT DATETIME '09/01/2009 03:30:30.001 pm'- TIMESTAMP '08/31/2009 03:30:30 pm';
     
+::
+
      datetime '09/01/2009 03:30:30.001 pm'-timestamp '08/31/2009 03:30:30 pm'
     =======================================
       86400001
      
+.. code-block:: sql
+
     SELECT TIMESTAMP '09/01/2009 03:30:30 pm'- TIMESTAMP '08/31/2009 03:30:30 pm';
     
+::
+
      timestamp '09/01/2009 03:30:30 pm'-timestamp '08/31/2009 03:30:30 pm'
     =======================================
       86400

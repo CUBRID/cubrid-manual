@@ -528,7 +528,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_col_get (int conn_handle, char *oid_str, char *col_attr, int *col_size, int *col_type, T_CCI_ERROR *err_buf)
 
-    collection type의 속성 값을 가져온다. 클래스 이름이 C이고 set_attr의 domain이 set(multiset, sequence)인 경우 다음의 query와 같다.
+    collection type의 속성 값을 가져온다. 클래스 이름이 C이고 set_attr의 domain이 set(multiset, sequence)인 경우 다음의 질의와 같다.
 
     .. code-block:: sql
     

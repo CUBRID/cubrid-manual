@@ -16,13 +16,26 @@ CHARSET
 .. code-block:: sql
  
     SELECT CHARSET('abc');
+    
+::
+    
     'iso88591'
     
+.. code-block:: sql
+ 
     SELECT CHARSET(_utf8'abc');
+    
+::
+    
     'utf8'
     
+.. code-block:: sql
+ 
     SET NAMES utf8;
     SELECT CHARSET('abc');
+    
+::
+    
     'utf8'
     
 COERCIBILITY
@@ -39,9 +52,17 @@ COERCIBILITY
 .. code-block:: sql
 
     SELECT COERCIBILITY(USER());
+    
+::
+
     7
     
+.. code-block:: sql
+
     SELECT COERCIBILITY(_utf8'abc');
+    
+::
+    
     10
 
 COLLATION
@@ -58,9 +79,17 @@ COLLATION
 .. code-block:: sql
 
     SELECT COLLATION('abc');
+    
+::
+
     'iso88591_bin'
     
+.. code-block:: sql
+
     SELECT COLLATION(_utf8'abc');
+    
+::
+
     'utf8_bin'
 
 CURRENT_USER, USER
@@ -81,19 +110,29 @@ CURRENT_USER, USER
     --selecting the current user on the session
     SELECT USER;
     
+::
+
        CURRENT_USER
     ======================
       'PUBLIC'
      
+.. code-block:: sql
+
     SELECT USER(), CURRENT_USER;
     
+::
+
        user()                CURRENT_USER
     ============================================
       'PUBLIC@cdbs006.cub'  'PUBLIC'
      
+.. code-block:: sql
+
     --selecting all users of the current database from the system table
     SELECT name, id, password FROM db_user;
     
+::
+
       name                           id  password
     =========================================================
       'DBA'                        NULL  NULL
@@ -116,6 +155,8 @@ DATABASE, SCHEMA
 
     SELECT DATABASE(), SCHEMA();
     
+::
+
        database()            schema()
     ============================================
       'demodb'              'demodb'
@@ -132,19 +173,21 @@ DEFAULT
 
 .. code-block:: sql
 
-    CREATE TABLE info_tbl(id INT DEFAULT 0, name VARCHAR)
+    CREATE TABLE info_tbl(id INT DEFAULT 0, name VARCHAR);
     INSERT INTO info_tbl VALUES (1,'a'),(2,'b'),(NULL,'c');
-     
-    3 rows affected.
      
     SELECT id, DEFAULT(id) FROM info_tbl;
     
+::
+
                id   default(id)  
     =============================
                 1             0
                 2             0  
              NULL             0   
      
+.. code-block:: sql
+
     UPDATE info_tbl SET id = DEFAULT WHERE id IS NULL;
     DELETE FROM info_tbl WHERE id = DEFAULT(id);
     INSERT INTO info_tbl VALUES (DEFAULT,'d');
@@ -164,8 +207,8 @@ INDEX_CARDINALITY
     :param index: *table* 내에 존재하는 인덱스 이름
     :param key_pos: 부분 키의 위치. *key_pos* 는 0부터 시작하여 키를 구성하는 칼럼 개수보다 작은 범위를 갖는다. 즉, 첫 번째 칼럼의 *key_pos* 는 0이다. 단일 칼럼 인덱스의 경우에는 0이다. 다음 타입 중 하나가 될 수 있다.
     
-        * 숫자형 타입으로 변환할 수 있는 문자열. 
-        * 정수형으로 변환할 수 있는 숫자형 타입. FLOAT나 DOUBLE 타입은 ROUND 함수로 변환한 값이 된다.
+        *   숫자형 타입으로 변환할 수 있는 문자열. 
+        *   정수형으로 변환할 수 있는 숫자형 타입. FLOAT나 DOUBLE 타입은 ROUND 함수로 변환한 값이 된다.
 
     :rtype: INT
     
@@ -191,23 +234,38 @@ INDEX_CARDINALITY
      
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',0);
     
+::
+
        index_cardinality('t1', 'i_t1_i1_s1', 0)
     ===========================================
                                               2
      
+.. code-block:: sql
+
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',1);
     
+::
+
        index_cardinality('t1', 'i_t1_i1_s1', 1)
     ===========================================
                                               3
      
+.. code-block:: sql
+
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',2);
     
+::
+
        index_cardinality('t1', 'i_t1_i1_s1', 2)
     ===========================================
                                            NULL
      
+.. code-block:: sql
+
     SELECT INDEX_CARDINALITY('t123','i_t1_i1_s1',1);
+    
+::
+
       index_cardinality('t123', 'i_t1_i1_s1', 1)
     ============================================
                                            NULL
@@ -228,6 +286,8 @@ INET_ATON
 
     SELECT INET_ATON('192.168.0.10');
      
+::
+
        inet_aton('192.168.0.10')
     ============================
                       3232235530
@@ -246,6 +306,8 @@ INET_NTOA
 
     SELECT INET_NTOA(3232235530);
      
+::
+
        inet_ntoa(3232235530)
     ======================
       '192.168.0.10'
@@ -269,17 +331,33 @@ LAST_INSERT_ID
         INSERT INTO tbl VALUES (null, 1);
         INSERT INTO tbl VALUES (null, 1);
         
+    ::
+
         ERROR: Operation would have caused one or more unique constraint violations.
+
+    .. code-block:: sql
 
         INSERT INTO tbl VALUES (null, 1);
         
+    ::
+    
         ERROR: Operation would have caused one or more unique constraint violations.
 
+    .. code-block:: sql
+
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         1
+
+    .. code-block:: sql
 
         INSERT INTO tbl VALUES (null, 2);
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         4
         
 *   다중 행 **INSERT** 문(INSERT INTO tbl VALUES (), (), ..., ())에서 **LAST_INSERT_ID**\ ()는 첫 번째로 입력된 **AUTO_INCREMENT** 값을 반환한다. 즉, 두 번째 행부터는 입력이 되어도 **LAST_INSERT_ID**\ () 값이 변하지 않는다. 
@@ -288,32 +366,48 @@ LAST_INSERT_ID
     
         INSERT INTO tbl VALUES (null, 11), (null, 12), (null, 13);    
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         5
     
+    .. code-block:: sql
+
         INSERT INTO tbl VALUES (null, 21);
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         8
         
 *   **INSERT** 문이 실행에 성공한 경우, **LAST_INSERT_ID** () 값은 트랜잭션이 롤백되어도 이전의 **LAST_INSERT_ID** () 값으로 복구되지 않는다.
 
     .. code-block:: sql
 
-        csql> ;autocommit off
+        -- csql> ;autocommit off
         CREATE TABLE tbl2(a INT PRIMARY KEY AUTO_INCREMENT, b INT UNIQUE);
         INSERT INTO tbl2 VALUES (null, 1);
         COMMIT;
         
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         1
         
+    .. code-block:: sql
+    
         INSERT INTO tbl2 VALUES (null, 2);
         INSERT INTO tbl2 VALUES (null, 3);
+        
         ROLLBACK;
         
         SELECT LAST_INSERT_ID();
+        
+    ::
+    
         3
-        
-        
+
 *   트리거 내에서 사용한 **LAST_INSERT_ID**\ () 값은 트리거 밖에서 확인할 수 없다.
 
 *   **LAST_INSERT_ID**\ 는 각 응용 클라이언트의 세션마다 독립적으로 유지된다.
@@ -324,13 +418,19 @@ LAST_INSERT_ID
     INSERT INTO ss VALUES (NULL, 'cubrid');
     SELECT LAST_INSERT_ID ();
      
+::
+
          last_insert_id()
     =======================
                          1
      
+.. code-block:: sql
+
     INSERT INTO ss VALUES (NULL, 'database'), (NULL, 'manager');
     SELECT LAST_INSERT_ID ();
      
+::
+
          last_insert_id()
     =======================
                          2
@@ -341,19 +441,29 @@ LAST_INSERT_ID
     INSERT INTO tbl values (500), (NULL), (NULL);
     SELECT LAST_INSERT_ID();
      
+::
+
          last_insert_id()
     =======================
                          1
      
+.. code-block:: sql
+
     INSERT INTO tbl VALUES (500), (NULL), (NULL);
     SELECT LAST_INSERT_ID();
      
+::
+
          last_insert_id()
     =======================
                          3
      
+.. code-block:: sql
+
     SELECT * FROM tbl;
      
+::
+
                         id
     =======================
                        500
@@ -376,6 +486,8 @@ LIST_DBS
 
     SELECT LIST_DBS();
     
+::
+
       list_dbs()
     ======================
       'testdb demodb'
@@ -399,20 +511,30 @@ ROW_COUNT
     INSERT INTO rc VALUES (1),(2),(3),(4),(5),(6),(7);
     SELECT ROW_COUNT();
     
+::
+
        row_count()
     ===============
                   7
     
+.. code-block:: sql
+
     UPDATE rc SET i = 0 WHERE i >  3;
     SELECT ROW_COUNT();
     
+::
+
        row_count()
     ===============
                   4
      
+.. code-block:: sql
+
     DELETE FROM rc WHERE i = 0;
     SELECT ROW_COUNT();
     
+::
+
        row_count()
     ===============
                   4
@@ -435,19 +557,29 @@ USER, SYSTEM_USER
     --selecting the current user on the session
     SELECT SYSTEM_USER ();
     
+::
+
        user()
     ======================
       'PUBLIC@cubrid_host'
      
+.. code-block:: sql
+
     SELECT USER(), CURRENT_USER;
     
+::
+
        user()                CURRENT_USER
     ============================================
       'PUBLIC@cubrid_host'  'PUBLIC'
      
+.. code-block:: sql
+
     --selecting all users of the current database from the system table
     SELECT name, id, password FROM db_user;
     
+::
+
       name                           id  password
     =========================================================
       'DBA'                        NULL  NULL
@@ -469,6 +601,8 @@ VERSION
 
     SELECT VERSION();
     
+::
+
        version()
     =====================
       '9.1.0.0203'

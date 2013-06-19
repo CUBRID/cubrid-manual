@@ -20,7 +20,9 @@ def traverse(dir, depth, loop):
 			nfile += 1
 			if not ((obj.rfind('.rst') == -1) and (obj.rfind('.inc')) == -1):
 				f = open(os.path.abspath(obj), 'r')
-				print('# FILE: ' + os.path.abspath(obj) )
+				print csql_str
+				print('SELECT \'' + os.path.abspath(obj) + '\';' )
+				print "\""
 				str_array = f.readlines();
 
 				in_block_flag = 0

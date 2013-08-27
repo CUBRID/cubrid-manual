@@ -19,6 +19,20 @@
 
 *   **ALL CLASSES** : 키워드 **ALL CLASSES** 를 지정하였을 경우 데이터베이스 안에 존재하는 모든 테이블에 대한 통계 정보가 갱신된다.
 
+통계 정보 갱신 시작과 종료 시 서버 에러 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 통계 정보 갱신에 걸리는 시간을 확인할 수 있다.
+    
+::
+    
+    Time: 05/07/13 15:06:25.052 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 123  CODE = -1114 Tran = 1, CLIENT = testhost:csql(21060), EID = 4
+    Started to update statistics (class "code", oid : 0|522|3).
+
+    Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
+    Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
+
+.. note::
+
+    2008 R4.3 이하 및 9.1 버전에서는 인덱스 추가 시 기존의 모든 인덱스의 통계 정보가 갱신되면서 시스템의 부하로 작용했으나, 2008 R4.4, 9.2 버전부터는 추가되는 인덱스의 통계 정보만 갱신된다.
+
 통계 정보 확인
 ==============
 
@@ -46,7 +60,7 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
      Total pages in class heap: 1
      Total objects: 5
      Number of attributes: 1
-     Atrribute: code
+     Attribute: code
         id: 0
         Type: DB_TYPE_INTEGER
         Minimum value: 1
@@ -58,9 +72,17 @@ CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보
 질의 실행 계획 보기
 ===================
 
-CUBRID SQL 질의에 대한 실행 계획(query plan)을 보기 위해서는 **SET OPTIMIZATION** 구문을 이용해서 최적화 수준(optimization level) 값을 변경시킨다. 현재의 최적화 수준 값은 **GET OPTIMIZATION** 구문으로 얻을 수 있다.
+CUBRID SQL 질의에 대한 실행 계획(query plan)을 보기 위해서는 다음의 방법을 사용할 수 있다.
 
-CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값을 참조하여 최적화 여부와 질의 실행 계획의 출력 여부를 결정한다. 질의 실행 계획은 표준 출력으로 표시되므로 CSQL 인터프리터와 같은 터미널 기반의 프로그램에서 사용하는 것을 가정하고 설명한다. CSQL 질의 편집기에서는 **;plan** 명령어를 통해 질의 실행 계획을 볼 수 있다. 자세한 내용은 :ref:`csql-session-commands` 를 참고한다. CUBRID 매니저를 이용해서 질의 실행 계획을 보는 방법에 대해서는 `cubrid 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_ 을 참고한다. ::
+*   CUBRID 매니저 또는 CUBRID 쿼리 브라우저에서 플랜 보기 버튼을 누른다. CUBRID 매니저 또는 CUBRID 쿼리 브라우저의 사용 방법에 대해서는 `CUBRID 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_ 또는 `CUBRID 쿼리 브라우저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual_kr>`_\ 을 참고한다. 
+
+    .. image:: /images/query_plan_on_CM.png
+
+*   CSQL 인터프리터에서 ;plan simple 또는 ;plan detail 명령을 실행하거나 **SET OPTIMIZATION** 구문을 이용해서 최적화 수준(optimization level) 값을 변경시킨다. 현재의 최적화 수준 값은 **GET OPTIMIZATION** 구문으로 얻을 수 있다. CSQL 인터프리터에 대한 자세한 내용은 :ref:`csql-session-commands`\ 를 참고한다.
+
+**SET OPTIMIZATION** 또는 **GET OPTIMIZATION LEVEL** 구문은 다음과 같다.
+
+::
 
     SET OPTIMIZATION LEVEL opt-level [;]
     GET OPTIMIZATION LEVEL [ { TO | INTO } variable ] [;]
@@ -82,35 +104,370 @@ CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값
     *   514 : 질의 최적화를 수행하고 상세 질의 실행 계획을 출력하나 질의는 실행하지는 않는다. 512+2의 의미이다.
 
     .. note:: 2, 258, 514와 같이 질의를 실행하지 않게 최적화 수준을 설정하는 경우 SELECT 문 뿐만 아니라 INSERT, UPDATE, DELETE, REPLACE,  TRIGGER, SERIAL  문 등 모든 질의문이 실행되지 않는다.
+
+CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값을 참조하여 최적화 여부와 질의 실행 계획의 출력 여부를 결정한다. 
     
-다음은 심권호 선수가 메달을 획득한 연도와 메달 종류를 구하는 예제를 이용해 질의 실행 계획 보기를 수행한 것이다.
+다음은 CSQL에서 ";plan simple" 명령 입력 또는 "SET OPTIMIZATION LEVEL 257;"을 입력 후 질의를 수행한 결과이다.
 
 .. code-block:: sql
 
-    GET OPTIMIZATION LEVEL;
-    
-::
-    
-          Result
-    =============
-                1
+    SET OPTIMIZATION LEVEL 257;
+    --  csql> ;plan simple
+    SELECT /*+ recompile */  DISTINCT h.host_year, o.host_nation
+    FROM history h INNER JOIN olympic o 
+    ON h.host_year = o.host_year AND o.host_year > 1950;
 
-.. code-block:: sql
-
-    SET OPTIMIZATION LEVEL 258;
-
-    SELECT a.name, b.host_year, b.medal
-    FROM athlete a, game b 
-    WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
-
-::
-    
+::    
+     
     Query plan:
-      Nested loops
-            Sequential scan(game b)
-            Index scan(athlete a, pk_athlete_code, a.code=b.athlete_code)
-    There are no results.
-    0 rows selected.
+
+     Sort(distinct)
+        Nested-loop join(h.host_year=o.host_year)
+            Index scan(olympic o, pk_olympic_host_year, (o.host_year> ?:0 ))
+            Sequential scan(history h)
+
+    *   Sort(distinct): DISTINCT를 수행한다.
+    *   Nested-loop join: 조인 방식이 Nested-loop이다.
+    *   Index scan: olympic 테이블에 대해 pk_olympic_host_year를 사용하여 index scan. 이때 인덱스를 사용한 조건은 "o.host_year> ?"이다.
+
+CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 입력 후 질의를 수행하면 상세 내용을 출력한다.
+
+.. code-block:: sql
+
+    SET OPTIMIZATION LEVEL 513;
+    --  csql> ;plan detail
+    
+    SELECT /*+ RECOMPILE */  DISTINCT h.host_year, o.host_nation
+    FROM history h INNER JOIN olympic o 
+    ON h.host_year = o.host_year AND o.host_year > 1950;
+
+::
+
+    Join graph segments (f indicates final):
+    seg[0]: [0]
+    seg[1]: host_year[0] (f)
+    seg[2]: [1]
+    seg[3]: host_nation[1] (f)
+    seg[4]: host_year[1]
+    Join graph nodes:
+    node[0]: history h(147/1)
+    node[1]: olympic o(25/1) (sargs 1)
+    Join graph equivalence classes:
+    eqclass[0]: host_year[0] host_year[1]
+    Join graph edges:
+    term[0]: h.host_year=o.host_year (sel 0.04) (join term) (mergeable) (inner-join) (indexable host_year[1]) (loc 0)
+    Join graph terms:
+    term[1]: o.host_year range (1950 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (indexable host_year[1]) (loc 0)
+
+    Query plan:
+
+    temp(distinct)
+        subplan: nl-join (inner join)
+                     edge:  term[0]
+                     outer: iscan
+                                class: o node[1]
+                                index: pk_olympic_host_year term[1]
+                                cost:  1 card 2
+                     inner: sscan
+                                class: h node[0]
+                                sargs: term[0]
+                                cost:  1 card 147
+                     cost:  3 card 15
+        cost:  9 card 15
+
+    Query stmt:
+
+    select distinct h.host_year, o.host_nation from history h, olympic o where h.host_year=o.host_year and (o.host_year> ?:0 )
+
+위의 출력 결과에서 질의 계획과 관련하여 봐야 할 정보는 "Query plan:"이며, 가장 안쪽의 윗줄부터 순서대로 실행된다. 즉, outer: iscan -> inner:scan이 nl-join에서 반복 수행되고, 마지막으로 temp(distinct)가 수행된다. "Join graph segments"는 "Query plan:"에서 필요한 정보를 좀더 확인하는 용도로 사용한다. 예를 들어 "Query plan:"에서 "term[0]"는  "Join graph segments"에서 "term[0]: h.host_year=o.host_year (sel 0.04) (join term) (mergeable) (inner-join) (indexable host_year[1]) (loc 0)"로 표현됨을 확인할 수 있다.
+
+위의 "Query plan:" 각 항목에 대한 설명은 다음과 같다.
+
+    *   temp(distinct): (distinct)는 DISTINCT를 실행함을 의미한다. temp는 실행 결과를 임시 공간에 저장했음을 의미한다.
+    
+        *   nl-join: "nl-join"은 조인 방식이 중첩 루프 조인(Nested loop join)임을 의미한다. 
+        *   (inner join): 조인 종류가 "inner join"임을 의미한다. 
+        
+            *   outer: iscan: outer 테이블에서는 iscan(index scan)을 수행한다.
+            
+                *   class: o node[1]: o라는 테이블을 사용하며 상세 정보는 Join graph segments의 node[1]을 확인한다.
+                *   index: pk_olympic_host_year term[1]: pk_olympic_host_year 인덱스를 사용하며 상세 정보는 Join graph segments의 term[1]을 확인한다.
+                *   cost: 해당 구문을 수행하는데 드는 비용이다. 
+                
+                    *   card: 카디널리티(cardinality)를 의미한다.
+                    
+            *   inner: sscan: inner 테이블에 sscan(sequential scan)을 수행한다.
+            
+                *   class: h node[0]: h라는 테이블을 사용하며 상세 정보는 Join graph segments의 node[0]을 확인한다.
+                *   sargs: term[0]: sargs는 데이터 필터(인덱스를 사용하지 않는 WHERE 조건)를 나타내며, term[0]는 데이터 필터로 사용된 조건을 의미한다.
+                *   cost: 해당 구문을 수행하는데 드는 비용이다.
+                
+                    *   card: 카디널리티(cardinality)를 의미한다.
+                    
+        *   cost: 전체 구문을 수행하는데 드는 비용이다. 앞서 수행된 모든 비용을 포함한다.
+        
+            *   card: cardinality를 뜻한다.
+
+**질의 계획 관련 용어**
+
+다음은 질의 계획으로 출력되는 각 용어에 대한 의미를 정리한 것이다.
+
+*   조인 방식: 질의 계획에서 출력되는 조인 방식은 위에서 "nl-join" 부분으로 다음과 같다.
+
+    *   nl-join: 중첩 루프 조인, Nested loop join
+    *   m-join: 정렬 병합 조인, Sort merge join
+    *   idx_join: 중첩 루프 조인인데 outer 테이블의 행(row)을 읽으면서 inner 테이블에서 인덱스를 사용하는 조인
+    
+*   조인 종류: 위에서 (inner join) 부분으로, 질의 계획에서 출력되는 조인 종류는 다음과 같다.
+    
+    *   inner join
+    *   left outer join
+    *   right outer join: 질의 계획에서는 질의문의 "outer" 방향과 다른 방향이 출력될 수도 있다. 예를 들어, 질의문에서는 "right outer"로 지정했는데 질의 계획에는 "left outer"로 출력될 수도 있다.
+    *   cross join
+
+*   조인 테이블의 종류: 위에서 outer/inner 부분으로, 중첩 루프 조인에서 루프의 어느 쪽에 위치하는가를 기준으로 outer 테이블과 inner 테이블로 나뉜다.
+
+    *   outer 테이블: 조인할 때 가장 처음에 읽을 기준 테이블
+    *   inner 테이블: 조인할 때 나중에 읽을 대상 테이블
+
+*   스캔 방식: 위에서 iscan/sscan 부분으로, 해당 질의가 인덱스를 사용하는지 여부를 판단할 수 있다.
+    
+    *   sscan: 순차 스캔(sequential scan). 풀 테이블 스캔(full table scan)이라고도 하며 인덱스를 사용하지 않고 테이블 전체를 스캔한다.
+    *   iscan: 인덱스 스캔(index scan). 인덱스를 사용하여 스캔할 데이터의 범위를 한정한다.
+    
+*   cost: CPU, IO 등 주로 리소스의 사용과 관련하여 비용을 내부적으로 산정한다. 
+
+*   card: 카디널리티(cardinality)를 의미하며, 선택될 것으로 예측되는 행의 개수이다.
+    
+다음은 USE_MERGE 힌트를 명시하여 m-join(정렬 병합 조인, sort merge join)을 수행하는 경우의 예이다. 일반적으로 정렬 병합 조인은 outer 테이블과 inner 테이블을 정렬하여 병합하는 것이 인덱스를 사용하여 중첩 루프 조인(nested loop join)을 수행하는 것보다 유리하다고 판단될 때 사용되며, 조인되는 두 테이블 모두 행의 개수가 매우 많은 경우 유리할 수 있다. 대부분의 경우 정렬 병합 조인을 수행하지 않는 것이 바람직하다.
+
+.. code-block:: sql
+
+    SET OPTIMIZATION LEVEL 513;
+    -- csql> ;plan detail
+
+    SELECT /*+ RECOMPILE USE_MERGE*/  DISTINCT h.host_year, o.host_nation	
+    FROM history h LEFT OUTER JOIN olympic o ON h.host_year = o.host_year AND o.host_year > 1950;	
+    
+:: 
+
+	Query plan:
+	
+    temp(distinct)
+        subplan: temp
+                     order: host_year[0]
+                     subplan: m-join (left outer join)
+                                  edge:  term[0]
+                                  outer: temp
+                                             order: host_year[0]
+                                             subplan: sscan
+                                                          class: h node[0]
+                                                          cost:  1 card 147
+                                             cost:  10 card 147
+                                  inner: temp
+                                             order: host_year[1]
+                                             subplan: iscan
+                                                          class: o node[1]
+                                                          index: pk_olympic_host_year term[1]
+                                                          cost:  1 card 2
+                                             cost:  7 card 2
+                                  cost:  18 card 147
+                     cost:  24 card 147
+        cost:  30 card 147
+
+다음은 idx-join(인덱스 조인, index join)을 수행하는 경우의 예이다. inner 테이블의 조인 조건 칼럼에 인덱스가 있는 경우 inner 테이블의 인덱스를 사용하여 조인을 수행하는 것이 유리하다고 판단되면 **USE_IDX** 힌트를 명시하여 idx-join의 실행을 보장할 수 있다.
+
+.. code-block:: sql
+
+    SET OPTIMIZATION LEVEL 513;
+    -- csql> ;plan detail
+
+    CREATE INDEX i_history_host_year ON history(host_year);
+    
+    SELECT /*+ RECOMPILE */  DISTINCT h.host_year, o.host_nation
+    FROM history h INNER JOIN olympic o ON h.host_year = o.host_year;
+
+::
+
+    Query plan:
+
+    temp(distinct)
+        subplan: idx-join (inner join)
+                     outer: sscan
+                                class: o node[1]
+                                cost:  1 card 25
+                     inner: iscan
+                                class: h node[0]
+                                index: i_history_host_year term[0] (covers)
+                                cost:  1 card 147
+                     cost:  2 card 147
+        cost:  9 card 147
+
+위의 질의 계획에서 "inner: iscan"의 "index: i_history_host_year term[0]"에 "(covers)"가 출력되는데, 이는 :ref:`covering-index` 기능이 적용된다는 의미이다. 즉, inner 테이블에서 인덱스 내에 필요한 데이터가 있어서 데이터 저장소를 추가로 검색할 필요가 없게 된다.
+
+조인 테이블 중 왼쪽 테이블이 오른쪽 테이블보다 행의 개수가 훨씬 작음을 확신할 때 **ORDERED** 힌트를 명시하여 왼쪽 테이블을 outer 테이블로, 오른쪽 테이블을 inner 테이블로 지정할 수 있다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE ORDERED */  DISTINCT h.host_year, o.host_nation
+    FROM history h INNER JOIN olympic o ON h.host_year = o.host_year;
+
+.. _query-profiling:
+ 
+질의 프로파일링
+===============
+ 
+SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) 기능을 사용할 수 있다. 
+질의 프로파일링을 위해서는 **SET TRACE ON** 구문으로 SQL 트레이스를 설정해야 하며, 프로파일링 결과를 출력하려면 **SHOW TRACE** 구문을 수행해야 한다.
+ 
+또한 **SHOW TRACE** 결과 출력 시 질의 실행 계획을 항상 포함하려면 /\*+ RECOMPLIE \*/ 힌트를 추가해야 한다.
+
+**SET TRACE ON** 구문의 형식은 다음과 같다.
+ 
+::
+ 
+    SET TRACE {ON | OFF} [OUTPUT {TEXT | JSON}]
+ 
+*   ON: SQL 트레이스를 on한다.
+*   OFF: SQL 트레이스를 off한다.
+*   OUTPUT TEXT: 일반 TEXT 형식으로 출력한다. OUTPUT 이하 절을 생략하면 TEXT 형식으로 출력한다.
+*   OUTPUT JSON: JSON 형식으로 출력한다.
+    
+아래와 같이 **SHOW TRACE** 구문을 실행하면 SQL을 트레이스한 결과를 문자열로 출력한다.
+ 
+::
+    SHOW TRACE;
+    
+다음은 SQL 트레이스를 ON으로 설정하고 질의를 수행한 후, 해당 질의에 대해 트레이스 결과를 출력하는 예이다.
+ 
+::
+ 
+    csql> SET TRACE ON;
+    csql> SELECT /*+ RECOMPILE */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)  
+            FROM OLYMPIC o, PARTICIPANT p, NATION n
+            WHERE o.host_year = p.host_year AND p.nation_code = n.code AND p.gold > 10 
+            GROUP BY o.host_nation;
+    csql> SHOW TRACE;
+ 
+      trace
+    ======================
+      '
+    Query Plan:
+      SORT (group by)
+        NESTED LOOPS (inner join)
+          NESTED LOOPS (inner join)
+            TABLE SCAN (o)
+            INDEX SCAN (p.fk_participant_host_year) (key range: (o.host_year=p.host_year))
+          INDEX SCAN (n.pk_nation_code) (key range: p.nation_code=n.code)
+
+      rewritten query: select o.host_year, o.host_nation, o.host_city, n.[name], sum(p.gold), sum(p.silver), sum(p.bronze) from OLYMPIC o, PARTICIPANT p, NATION n where (o.host_year=p.host_year and p.nation_code=n.code and (p.gold> ?:0 )) group by o.host_nation
+
+    Trace Statistics:
+      SELECT (time: 1, fetch: 1059, ioread: 2)
+        SCAN (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
+          SCAN (index: participant.fk_participant_host_year), (btree time: 1, fetch: 945, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 38)
+            SCAN (index: nation.pk_nation_code), (btree time: 0, fetch: 76, ioread: 0, readkeys: 38, filteredkeys: 38, rows: 38) (lookup time: 0, rows: 38)
+        GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
+    '
+ 
+위에서 "Trace Statistics:" 이하가 트레이스 결과를 출력한 것이며, 트레이스 항목에 대한 설명은 다음과 같다.
+
+**SELECT**
+ 
+*   time: 해당 질의에 대한 전체 수행 시간(ms).
+*   fetch: 해당 질의에 대한 전체 fetch 건수
+*   ioread: 해당 질의에 대한 전체 I/O 읽기 회수. 데이터를 읽을 때 물리적으로 디스크에 접근한 회수.
+
+**SCAN**
+
+*   heap: 인덱스 없이 데이터를 스캔하는 작업
+
+    *   time, fetch, ioread: heap에서 해당 연산 수행 시 소요된 시간(ms), fetch 건수, I/O 읽기 회수
+    *   readrows: 해당 연산 수행 시 읽은 행의 개수
+    *   rows: 해당 연산에 대한 결과 행의 개수
+    
+*   btree: 인덱스 스캔하는 작업
+
+    *   time, fetch, ioread: btree에서 해당 연산 수행 시 소요된 시간(ms), fetch 건수, I/O 읽기 회수
+    *   readkeys: btree에서 해당 연산 수행 시 읽은 키의 개수
+    *   rows: 해당 연산에 대한 결과 행의 개수
+    
+*   lookup: 인덱스 스캔 후 데이터에 접근하는 작업
+
+    *   time: 해당 연산 수행 시 소요된 시간(ms)
+    *   rows: 해당 연산에 대한 결과 행의 개수
+
+**GROUPBY**    
+
+*   time: 해당 연산 수행 시 소요된 시간(ms)
+*   sort: 정렬 여부
+*   page: 해당 연산에 대해 읽은 페이지 개수
+*   rows: 해당 연산에 대한 결과 행의 개수
+
+위의 예는 JSON 형식으로도 출력할 수 있다.
+ 
+::
+ 
+    csql> SET TRACE ON OUTPUT JSON;
+    csql> SELECT n.name, a.name FROM athlete a, nation n WHERE n.code=a.nation_code;
+    csql> SHOW TRACE;
+    
+      trace
+    ======================
+      '{
+      "Trace Statistics": {
+        "SELECT": {
+          "time": 29,
+          "fetch": 5836,
+          "ioread": 3,
+          "SCAN": {
+            "access": "temp",
+            "temp": {
+              "time": 5,
+              "fetch": 34,
+              "ioread": 0,
+              "readrows": 6677,
+              "rows": 6677
+            }
+          },
+          "MERGELIST": {
+            "outer": {
+              "SELECT": {
+                "time": 0,
+                "fetch": 2,
+                "ioread": 0,
+                "SCAN": {
+                  "access": "table (nation)",
+                  "heap": {
+                    "time": 0,
+                    "fetch": 1,
+                    "ioread": 0,
+                    "readrows": 215,
+                    "rows": 215
+                  }
+                },
+                "ORDERBY": {
+                  "time": 0,
+                  "sort": true,
+                  "page": 21,
+                  "ioread": 3
+                }
+              }
+            }
+          }
+        }
+      }
+    }'
+
+CSQL 인터프리터에서 트레이스를 자동으로 설정하는 명령을 사용하면 **SHOW TRACE;** 구문을 별도로 실행하지 않아도 질의 실행 결과를 출력한 후 자동으로 트레이스 결과를 출력한다.
+
+CSQL 인터프리터에서 트레이스를 자동으로 설정하는 방법은 :ref:`SQL 트레이스 설정 <set-autotrace>`\ 을 참고한다.
+
+.. note::
+
+    *   독립 모드(-S 옵션 사용)로 실행한 CSQL 인터프리터는 SQL 트레이스 기능을 지원하지 않는다.
+
+    *   여러 개의 SQL을 한 번에 처리하는 경우(batch query, array query) 질의는 프로파일링되지 않는다.
 
 .. _sql-hint:
 
@@ -136,6 +493,7 @@ SQL 힌트
     NO_DESC_IDX |
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
+    NO_SORT_LIMIT |
     RECOMPILE
     
     <merge_statement_hint> ::=
@@ -165,6 +523,8 @@ SELECT, UPDATE, DELETE 문에는 다음 힌트가 지정될 수 있다.
 *   **NO_DESC_IDX** : 내림차순 스캔을 사용하지 않도록 하는 힌트이다.
 *   **NO_COVERING_IDX** : 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index` 를 참고한다.
 *   **NO_MULTI_RANGE_OPT** : 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt` 를 참고한다.
+*   **NO_SORT_LIMIT** : SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\ 를 참고한다.
+
 *   **RECOMPILE** : 질의 실행 계획을 리컴파일한다. 캐시에 저장된 기존 질의 실행 계획을 삭제하고 새로운 질의 실행 계획을 수립하기 위해 이 힌트를 사용한다.
 
     .. note:: *spec_name* 이 **USE_NL**, **USE_IDX**, **USE_MERGE** 와 함께 지정될 경우 해당 조인 방법은 *spec_name* 에 대해서만 적용된다. 만약 **USE_NL** 과 **USE_MERGE** 가 함께 지정된 경우 주어진 힌트는 무시된다. 일부 경우에 질의 최적화기는 주어진 힌트에 따라 질의 실행 계획을 만들지 못할 수 있다. 예를 들어 오른쪽 외부 조인에 대해 **USE_NL** 을 지정한 경우 이 질의는 내부적으로 왼쪽 외부 조인 질의로 변환이 되어 조인 순서는 보장되지 않을 수 있다.
@@ -192,25 +552,25 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
       
     2 rows selected.
 
-다음은 데이터가 없는 분할 테이블(*before_2008*)의 삭제 성능을 높이기 위해 **NO_STATS** 힌트를 사용하여 질의 실행 시간을 확인하는 예제이다. *participant2* 테이블에는 100만 건 이상의 데이터가 있는 것으로 가정한다. 아래 실행 시간의 차이는 시스템 성능 및 데이터베이스 구성 방법에 따라 다를 수 있다.
+다음은 데이터가 없는 분할 테이블(*before_2008*)의 DROP 성능을 높이기 위해 **NO_STATS** 힌트를 사용한 이후, 질의 실행 시간을 확인하는 예제이다. *participant2* 테이블에는 100만 건 이상의 데이터가 있는 것으로 가정한다. 아래 실행 시간의 차이는 시스템 성능 및 데이터베이스 구성 방법에 따라 다를 수 있다.
 
 .. code-block:: sql
 
-    -- NO_STATS 힌트 미사용
+    -- without NO_STATS hint
     ALTER TABLE participant2 DROP partition before_2008;
 
 ::
 
-    SQL statement execution time:      31.684550 sec
+    Execute OK. (31.684550 sec) Committed.
 
 .. code-block:: sql
     
-    -- NO_STATS 힌트 사용
+    -- with NO_STATS hint
     ALTER /*+ NO_STATS */ TABLE participant2 DROP partition before_2008;
 
 ::
 
-    SQL statement execution time:      0.025773 sec
+    Execute OK. (0.025773 sec) Committed.
 
 .. _index-hint-syntax:
 
@@ -269,7 +629,7 @@ FROM 절의 테이블 명세 뒤에 **USE**, **FORCE**, **IGNORE INDEX** 구문�
 *    **FORCE INDEX** ( <*index_spec*> ): 해당 인덱스 선택이 우선시 된다. 
 *    **IGNORE INDEX** ( <*index_spec*> ): 지정한 인덱스들은 선택에서 제외된다. 
 
-USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한 USING INDEX 구문으로 질의 재작성된다.
+USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한 USING INDEX 구문으로 재작성된다.
 
 인덱스 힌트 사용 예
 -------------------
@@ -1024,7 +1384,7 @@ ORDER BY 절 최적화
 
 *   순차 스캔 + 내림차순 정렬
 *   일반적인 오름차순 스캔 + 내림차순 정렬
-*   별도의 정렬 작업이 필요없는 내림차순 스캔
+*   별도의 정렬 작업이 필요 없는 내림차순 스캔
 
 내림차순 스캔을 위해 **USE_DESC_IDX** 힌트가 생략된다 하더라도 질의 최적화기는 위에서 나열한 3가지 중 제일 마지막 실행 계획을 최적의 계획으로 결정한다.
 
@@ -1261,13 +1621,13 @@ GROUP BY 절 최적화
 
 ::
 
-    SELECT /*+ hints */ … 
+    SELECT /*+ hints */ ... 
     FROM table
-    WHERE col_1 = ? AND col_2 = ? AND … AND col(j-1) = ?
-    AND col_(j) IN (?, ?, … )
-    AND col_(j+1) = ? AND … AND col_(p-1) = ?
+    WHERE col_1 = ? AND col_2 = ? AND ... AND col(j-1) = ?
+    AND col_(j) IN (?, ?, ... )
+    AND col_(j+1) = ? AND ... AND col_(p-1) = ?
     AND key_filter_terms
-    ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC],… col_(p+k-1) [ASC|DESC]
+    ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC], ... col_(p+k-1) [ASC|DESC]
     FOR orderbynum_pred | LIMIT n;
 
 먼저 *orderbynum_pred* 조건이 명시되었다면 이 조건은 유효해야 하고, **ORDERBY_NUM** 또는 **LIMIT**\ 를 통해서 지정된 최종 결과의 상한 크기(*n*)이 **multi_range_optimization_limit** 시스템 파라미터 값보다 작거나 같아야 한다.
@@ -1356,3 +1716,82 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 *   인덱스의 첫 번째 칼럼이 범위 필터나 키 필터인 경우
 *   계층 질의
 *   집계 함수가 포함된 경우
+
+.. _in-memory-sort:
+
+인-메모리 정렬
+--------------
+
+인-메모리 정렬(in memory sort, IMS) 기능은 ORDER BY 절을 명시한 LIMIT/ORDERBY_NUM() 질의에 적용되는 최적화이다. 일반적으로, ORDER BY와 LIMIT 절을 명시한 질의를 수행할 때, CUBRID는 전체 정렬 결과셋(full sorted resultset) 생성하고 나서 이 결과 셋에 LIMIT 연산을 적용한다. 전체 결과셋을 생성하는 대신 IMS 최적화를 사용하면, CUBRID는 ORDER BY ... LIMIT 절을 만족하는 투플만 정렬 버퍼(sort buffer)에 저장하는 인-메모리 바이너리 힙을 사용한다. 이 최적화는 정렬되지 않은 결과셋 전체를 정렬할 필요가 없게 하여 성능을 향상시킨다.
+
+이 최적화의 적용 여부는 사용자가 제어하는 것이 아니며, CUBRID는 다음 상황에서 IMS를 사용할 것을 결정한다.
+
+*   ORDER BY와 LIMIT 절을 명시한 질의
+*   LIMIT 절 적용 이후 최종 결과의 크기가 외부 정렬(external sort)에 의해 사용되는 메모리 양보다 작을 때(:ref:`memory-parameters`\ 의 **sort_buffer_size** 참고). 
+
+IMS는 결과 행의 개수가 아닌 결과의 실제 크기를 고려함에 주의한다. 예를 들어, 기본 정렬 버퍼 크기(2MB)에 대해, 4바이트 INTEGER 하나로 구성된 레코드는 524288개 행의 LIMIT까지 IMS가 적용되지만 CHAR(1024) 하나로 구성된 레코드는 2048개 행의 LIMIT까지만 IMS가 적용된다. 이 최적화는 DISTINCT 정렬 결과 셋을 요구하는 질의에는 적용되지 않는다.
+
+.. _sort-limit-optimization:
+
+SORT-LIMIT 최적화
+-----------------
+
+SORT-LIMIT 최적화는 ORDER BY 절과 LIMIT 절을 명시한 질의에 적용되는 최적화이다. 
+이 최적화는 조인하는 동안의 카디널리티(cardinality)를 줄이기 위해 질의 계획에서 가능한 빨리 LIMIT 연산자를 평가하고자 한다. 
+
+다음 조건이 만족될 때 SORT-LIMIT 계획이 고려될 수 있다.
+
+*   ORDER BY 절에서 참조되는 모든 테이블은 SORT-LIMIT 계획에 속한다.
+*   JOIN 테이블 중 다음 테이블이 SORT-LIMIT 계획에 포함된다.
+
+    *   외래 키/기본 키 관계에서 외래 키를 가지는 테이블
+    *   LEFT JOIN 시 왼쪽 테이블
+    *   RIGHT JOIN 시 오른쪽 테이블
+
+*   LIMIT 행은 **sort_limit_max_count** 시스템 파라미터(기본값: 1000) 값보다 작아야 한다. 
+*   질의가 CROSS JOIN을 하지 않는다.
+*   질의가 최소한 2개의 릴레이션으로 조인한다.
+*   질의는 GROUP BY 절을 가지지 않는다.
+*   질의는 DISTINCT를 명시하지 않는다.
+*   ORDER BY 표현식이 스캔하는 동안 평가될 수 있다. 
+
+    예를 들어, 아래와 같은 질의는 SORT-LIMIT 최적화가 적용될 수 없는데, SUM은 스캔하는 동안 평가될 수 없기 때문이다.
+    
+    ::
+    
+        SELECT SUM(u.i) FROM u, t where u.i = t.i ORDER BY 1 LIMIT 5;
+
+다음은 SORT-LIMIT을 계획하는 예이다.
+
+.. code-block:: sql
+
+    CREATE TABLE t(i int PRIMARY KEY, j int, k int);
+    CREATE TABLE u(i int, j int, k int);
+    ALTER TABLE u ADD constraint fk_t_u_i FOREIGN KEY(i) REFERENCES t(i);
+    CREATE INDEX i_u_j ON u(j); 
+
+    INSERT INTO t SELECT ROWNUM, ROWNUM, ROWNUM FROM _DB_CLASS a, _DB_CLASS b LIMIT 1000; 
+    INSERT INTO u SELECT 1+(ROWNUM % 1000), RANDOM(1000), RANDOM(1000) FROM _DB_CLASS a, _DB_CLASS b, _DB_CLASS c LIMIT 5000; 
+
+    SELECT /*+ RECOMPILE */ * FROM u, t WHERE u.i = t.i AND u.j > 10 ORDER BY u.j LIMIT 5; 
+
+위의 SELECT 질의 계획이 아래와 같이 출력될 때 "(sort limit)"을 확인할 수 있다.
+
+::
+
+    Query plan:
+
+    idx-join (inner join)
+        outer: temp(sort limit)
+                   subplan: iscan
+                                class: u node[0]
+                                index: i_u_j term[1]
+                                cost:  1 card 0
+                   cost:  1 card 0
+        inner: iscan
+                   class: t node[1]
+                   index: pk_t_i term[0]
+                   cost:  6 card 1000
+        sort:  2 asc
+        cost:  7 card 0
+

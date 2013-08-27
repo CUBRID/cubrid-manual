@@ -13,11 +13,11 @@
 
 예를 들어 집계/분석 함수는 다음과 같은 질문에 대한 답을 구하기 위해 사용될 수 있다.
 
-1.  년도별 총 판매 금액은 어떻게 되는가?
+1.  연도별 총 판매 금액은 어떻게 되는가?
 
-2.  년도별로 그룹지어 가장 판매 금액이 높은 월부터 순서대로 출력하려면 어떻게 하는가? 
+2.  연도별로 그룹지어 가장 판매 금액이 높은 월부터 순서대로 출력하려면 어떻게 하는가? 
     
-3.  년도별로 그룹지어 년도별, 월별 순서대로 누적 판매 금액을 출력하려면 어떻게 하는가?
+3.  연도별로 그룹지어 연도별, 월별 순서대로 누적 판매 금액을 출력하려면 어떻게 하는가?
 
 1.은 집계 함수로 답을 구할 수 있으며, 2., 3.은 분석 함수로 답을 구할 수 있다. 위의  질문들은 다음의 SQL문으로 작성될 수 있다.
 
@@ -42,7 +42,7 @@
         (2002, 5, 1110), (2002, 6, 570), (2002, 7, 1630), (2002, 8, 1890), 
         (2002, 9, 2120), (2002, 10, 970), (2002, 11, 420), (2002, 12, 1300);
 
-1.  년도별 총 판매 금액은 어떻게 되는가?
+1.  연도별 총 판매 금액은 어떻게 되는가?
 
 .. code-block:: sql
 
@@ -58,7 +58,7 @@
              2001           11870
              2002           13450
  
-2.  년도별로 그룹지어 가장 판매 금액이 높은 월부터 순서대로 출력하려면 어떻게 하는가?
+2.  연도별로 그룹지어 가장 판매 금액이 높은 월부터 순서대로 출력하려면 어떻게 하는가?
 
 .. code-block:: sql
 
@@ -106,7 +106,7 @@
              2002            6          570           11
              2002           11          420           12
 
-3.  년도별로 그룹지어 년도별, 월별 순서대로 누적 판매 금액을 출력하려면 어떻게 하는가?
+3.  연도별로 그룹지어 연도별, 월별 순서대로 누적 판매 금액을 출력하려면 어떻게 하는가?
 
 .. code-block:: sql
 
@@ -160,26 +160,26 @@
 **집계 함수(aggregate functions)**\ 는 행들의 그룹에 기반하여 각 그룹 당 하나의 결과를 반환한다. **GROUP BY** 절을 포함하면 각 그룹마다 한 행의 집계 결과를 반환한다. **GROUP BY**
 절을 생략하면 전체 행에 대해 한 행의 집계 결과를 반환한다. **HAVING** 절은 **GROUP BY** 절이 있는 질의에 조건을 추가할 때 사용한다.
 
-대부분의 집계 함수에 **DISTINCT**, **UNIQUE** 한정자를 사용할 수 있다. **GROUP BY ... HAVING** 절에 대해서는 :ref:`group-by-clause` 을 참고한다.
+대부분의 집계 함수는 **DISTINCT**, **UNIQUE** 제약 조건을 사용할 수 있다. **GROUP BY ... HAVING** 절에 대해서는 :ref:`group-by-clause` 을 참고한다.
 
-**분석 함수(analytic functions)**\ 는 행들의 그룹에 기반하여 집계 값을 계산한다. 분석 함수는 **OVER** 절 뒤의 *query_partition_clause* 에 의해 지정된 그룹들(이 절이 생략되면 모든 행을 하나의 그룹으로 봄)을 기준으로 한 개 이상의 행을 반환할 수 있다는 점에서 집계 함수와 다르다.
+**분석 함수(analytic functions)**\ 는 행들의 결과에 기반하여 집계 값을 계산한다. 분석 함수는 **OVER** 절 뒤의 *partition_clause* 에 의해 지정된 그룹들(이 절이 생략되면 모든 행을 하나의 그룹으로 봄)을 기준으로 한 개 이상의 행을 반환할 수 있다는 점에서 집계 함수와 다르다.
 
 분석 함수는 특정 행 집합에 대해 다양한 통계를 허용하기 위해 기존의 집계 함수들 일부에 **OVER** 라는 새로운 분석 절이 함께 사용된다. ::
 
     function_name ( [argument_list ] ) OVER (<analytic_clause>)
      
     <analytic_clause>::=
-         [ <query_partition_clause> ] [ <order_by_clause> ]
+         [ <partition_clause> ] [ <order_by_clause> ]
         
-    <query_partition_clause>::=
+    <partition_clause>::=
         PARTITION BY value_expr [, value_expr ]...
      
     <order_by_clause>::=
         ORDER BY { expr | position | column_alias } [ ASC | DESC ]
             [, { expr | position | column_alias } [ ASC | DESC ] ] ...
 
-*   <*query_partition_clause*> : 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
-*   <*order_by_clause*> : <*query_partition_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*query_partition_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 컬럼 값을 대상으로 함수를 적용하여 계산한다.
+*   <*partition_clause*> : 하나 이상의 *value_expr* 에 기반한 그룹들로, 질의 결과를 분할하기 위해 **PARTITION BY** 절을 사용한다.
+*   <*order_by_clause*> : <*partition_clause*>에 의한 분할(partition) 내에서 데이터의 정렬 방식을 명시한다. 여러 개의 키로 정렬할 수 있다. <*partition_clause*>가 생략될 경우 전체 결과 셋 내에서 데이터를 정렬한다. 정렬된 순서에 의해 이전 값을 포함하여 누적한 레코드의 컬럼 값을 대상으로 함수를 적용하여 계산한다.
 
 분석 함수의 OVER 절 뒤에 함께 사용되는  ORDER BY/PARTITION BY 절의 표현식에 따른 동작 방식은 다음과 같다.
 
@@ -316,6 +316,136 @@ COUNT
       'AUT'                 'Shooting'            'Planer Christian'             17
       'AUT'                 'Swimming'            'Rogan Markus'                 18
 
+CUME_DIST
+=========
+
+.. function:: CUME_DIST(expression[, expression] ...) WITHIN GROUP (order_by_clause)
+.. function:: CUME_DIST() OVER ([partition_clause] order_by_clause)
+
+    **CUME_DIST** 함수는 집계 함수 또는 분석 함수로 사용되며, 그룹의 값 내에서 명시한 값의 누적 분포 값을 반환한다. **CUME_DIST**\ 에 의해 반환되는 값의 범위는 0보다 크고 1보다 작거나 같다. 같은 값의 입력 인자에 대한 **CUME_DIST** 함수의 반환 값은 항상 같은 누적 분포 값으로 평가된다.
+
+    :param expression: 수치 또는 문자열을 반환하는 연산식. 칼럼이 올 수 없다.
+    :param order_by_clause: **ORDER BY** 절 뒤에 오는 칼럼 이름은 *expression* 개수만큼 매핑되어야 한다. 
+    :rtype: DOUBLE
+
+    .. seealso:: 
+    
+        :func:`PERCENT_RANK`, :ref:`CUME_DIST와 PERCENT_RANK 비교 <compare-cd-pr>`
+
+집계 함수인 경우, **CUME_DIST** 함수는 **ORDER BY** 절에 명시된 순서로 정렬한 후, 집계 그룹에 있는 행에서 가상(hypothetical) 행의 상대적인 위치를 반환한다. 이때, 가상 행이 새로 입력되는 것으로 간주하고 위치를 계산한다. 즉, ("어떤 행의 누적된 RANK" + 1)/("집계 그룹 전체 행의 개수" + 1)을 반환한다.
+
+분석 함수인 경우, **PARTITION BY**\ 에 의해 나누어진 그룹별로 각 행을 **ORDER BY** 절에 명시된 순서로 정렬한 후 그룹 내 값의 상대적인 위치를 반환한다. 상대적인 위치는 입력 인자 값보다 작거나 같은 값을 가진 행의 개수를 그룹 내 총 행(*partition_clause*\ 에 의해 그룹핑된 행 또는 전체 행)의 개수로 나눈 것이다. 즉, (어떤 행의 누적된 RANK)/(그룹 내 행의 개수)를 반환한다. 예를 들어, 전체 10개의 행 중에서 RANK가 1인 행의 개수가 2개이면 첫번째 행과 두번째 행의 **CUME_DUST** 값은 "2/10 = 0.2"가 된다. 
+
+다음은 이 함수의 예에서 사용될 스키마 및 데이터이다.
+        
+.. code-block:: sql
+
+    CREATE TABLE scores(id INT PRIMARY KEY AUTO_INCREMENT, math INT, english INT, pe CHAR, grade INT);
+
+    INSERT INTO scores(math, english, pe, grade) 
+           VALUES(60, 70, 'A', 1), 
+           (60, 70, 'A', 1), 
+           (60, 80, 'A', 1), 
+           (60, 70, 'B', 1), 
+           (70, 60, 'A', 1) , 
+           (70, 70, 'A', 1) , 
+           (80, 70, 'C', 1) , 
+           (70, 80, 'C', 1), 
+           (85, 60, 'C', 1), 
+           (75, 90, 'B', 1);  
+    INSERT INTO scores(math, english, pe, grade) 
+           VALUES(95, 90, 'A', 2), 
+           (85, 95, 'B', 2), 
+           (95, 90, 'A', 2), 
+           (85, 95, 'B', 2),
+           (75, 80, 'D', 2), 
+           (75, 85, 'D', 2),
+           (75, 70, 'c', 2), 
+           (65, 95, 'A', 2),
+           (65, 95, 'A', 2), 
+           (65, 95, 'A', 2);
+
+다음은 집계 함수로 사용되는 예로, *math*, *english*, *pe* 3개의 칼럼에 대한 각각의 누적 분포 값을 더해 3으로 나눈 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT CUME_DIST(60, 70, 'D') 
+    WITHIN GROUP(ORDER BY math, english, pe) AS cume
+    FROM scores; 
+
+::
+    
+    1.904761904761905e-01
+
+다음은 분석 함수로 사용되는 예로, *math*, *english*, *pe* 3개 칼럼을 기준으로 각 행의 누적 분포를 출력한다.
+
+.. code-block:: sql
+
+    SELECT id, math, english, pe, grade, CUME_DIST() OVER(ORDER BY math, english, pe) AS cume_dist 
+    FROM scores 
+    ORDER BY cume_dist;
+
+::
+
+               id         math      english  pe                          grade                 cume_dist
+    ====================================================================================================
+                1           60           70  'A'                             1     1.000000000000000e-01
+                2           60           70  'A'                             1     1.000000000000000e-01
+                4           60           70  'B'                             1     1.500000000000000e-01
+                3           60           80  'A'                             1     2.000000000000000e-01
+               18           65           95  'A'                             2     3.500000000000000e-01
+               19           65           95  'A'                             2     3.500000000000000e-01
+               20           65           95  'A'                             2     3.500000000000000e-01
+                5           70           60  'A'                             1     4.000000000000000e-01
+                6           70           70  'A'                             1     4.500000000000000e-01
+                8           70           80  'C'                             1     5.000000000000000e-01
+               17           75           70  'c'                             2     5.500000000000000e-01
+               15           75           80  'D'                             2     6.000000000000000e-01
+               16           75           85  'D'                             2     6.500000000000000e-01
+               10           75           90  'B'                             1     7.000000000000000e-01
+                7           80           70  'C'                             1     7.500000000000000e-01
+                9           85           60  'C'                             1     8.000000000000000e-01
+               12           85           95  'B'                             2     9.000000000000000e-01
+               14           85           95  'B'                             2     9.000000000000000e-01
+               11           95           90  'A'                             2     1.000000000000000e+00
+               13           95           90  'A'                             2     1.000000000000000e+00
+
+다음은 분석 함수로 사용되는 예로, *math*, *english*, *pe* 3개 칼럼을 기준으로 *grade* 칼럼으로 그룹핑하여 각 행의 누적 분포를 출력한다.
+
+.. code-block:: sql
+    
+    SELECT id, math, english, pe, grade, CUME_DIST() OVER(PARTITION BY grade ORDER BY math, english, pe) AS cume_dist
+    FROM scores
+    ORDER BY grade, cume_dist;
+    
+::
+
+       id         math      english  pe                          grade                 cume_dist
+    ============================================================================================
+        1           60           70  'A'                             1     2.000000000000000e-01
+        2           60           70  'A'                             1     2.000000000000000e-01
+        4           60           70  'B'                             1     3.000000000000000e-01
+        3           60           80  'A'                             1     4.000000000000000e-01
+        5           70           60  'A'                             1     5.000000000000000e-01
+        6           70           70  'A'                             1     6.000000000000000e-01
+        8           70           80  'C'                             1     7.000000000000000e-01
+       10           75           90  'B'                             1     8.000000000000000e-01
+        7           80           70  'C'                             1     9.000000000000000e-01
+        9           85           60  'C'                             1     1.000000000000000e+00
+       18           65           95  'A'                             2     3.000000000000000e-01
+       19           65           95  'A'                             2     3.000000000000000e-01
+       20           65           95  'A'                             2     3.000000000000000e-01
+       17           75           70  'c'                             2     4.000000000000000e-01
+       15           75           80  'D'                             2     5.000000000000000e-01
+       16           75           85  'D'                             2     6.000000000000000e-01
+       12           85           95  'B'                             2     8.000000000000000e-01
+       14           85           95  'B'                             2     8.000000000000000e-01
+       11           95           90  'A'                             2     1.000000000000000e+00
+       13           95           90  'A'                             2     1.000000000000000e+00
+
+위의 결과에서 *id*\ 가 1인 행은 *grade*\ 가 1인 10개의 행 중에서 첫번째와 두번째에 위치하며, **CUME_DUST**\ 의 값은 2/10, 즉 0.2가 된다.
+id가 5인 행은 *grade*\ 가 1인 10개의 행 중에서 다섯번째에 위치하며, **CUME_DUST**\ 의 값은 5/10, 즉 0.5가 된다.
+
 DENSE_RANK
 ==========
 
@@ -385,6 +515,96 @@ DENSE_RANK
          2004  'MEX'                           0           17
          2004  'LAT'                           0           17
          2004  'PRK'                           0           17
+
+FIRST_VALUE
+===========
+
+.. function:: FIRST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+
+    **FIRST_VALUE** 함수는 분석 함수로만 사용되며, 정렬된 값 집합에서 첫번째 값을 반환한다. 집합 내의 첫번째 값이 null이면 함수는 **NULL**\ 을 반환한다. 그러나, **IGNORE NULLS**\ 를 명시하면 집합 내에서 null이 아닌 첫번째 값을 반환하거나, 모든 값이 null인 경우 **NULL**\ 을 반환한다.
+
+    :param expression: 수치 또는 문자열을 반환하는 칼럼 또는 연산식. FIRST_VALUE 함수 또는 다른 분석 함수를 포함할 수 없다.
+    :rtype: expression의 타입
+
+    .. seealso:: 
+    
+        :func:`LAST_VALUE`, :func:`NTH_VALUE`
+
+다음은 예제 질의를 실행하기 위한 스키마와 데이터이다.
+
+.. code-block:: sql
+
+    CREATE TABLE test_tbl(groupid int,itemno int);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,1);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,2);
+    INSERT INTO test_tbl VALUES(1,3);
+    INSERT INTO test_tbl VALUES(1,4);
+    INSERT INTO test_tbl VALUES(1,5);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,6);
+    INSERT INTO test_tbl VALUES(2,7);
+
+다음은 **FIRST_VALUE** 함수를 수행하는 질의 및 결과이다. 
+
+.. code-block:: sql
+
+    SELECT groupid, itemno, FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    FROM test_tbl;
+
+::
+
+          groupid       itemno      ret_val
+    =======================================
+                1         NULL         NULL
+                1         NULL         NULL
+                1         NULL         NULL
+                1            1         NULL
+                1            2         NULL
+                1            3         NULL
+                1            4         NULL
+                1            5         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2            6         NULL
+                2            7         NULL
+    
+CUBRID는 **NULL** 값을 모든 값보다 앞의 순서로 정렬한다. 즉, 아래의 SQL1은 **ORDER BY** 절에 **NULLS FIRST**\ 가 포함된 SQL2로 해석된다.
+
+::
+
+    SQL1: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    SQL2: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val 
+    
+다음은 **IGNORE NULLS**\ 를 명시하는 예이다.
+
+.. code-block:: sql
+
+    SELECT groupid, itemno, FIRST_VALUE(itemno) IGNORE NULLS OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    FROM test_tbl;
+
+::
+
+          groupid       itemno      ret_val
+    =======================================
+                1         NULL         NULL
+                1         NULL         NULL
+                1         NULL         NULL
+                1            1            1
+                1            2            1
+                1            3            1
+                1            4            1
+                1            5            1
+                2         NULL         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2            6            6
+                2            7            6
 
 GROUP_CONCAT
 ============
@@ -486,6 +706,73 @@ LAG
 
 이와는 반대로, 현재 행을 기준으로 *offset* 이후 행의 expression 값을 반환하는 :func:`LEAD` 함수를 참고한다.
 
+LAST_VALUE
+==========
+
+.. function:: LAST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+
+    LAST_VALUE 함수는 분석 함수로만 사용되며, 정렬된 값 집합에서 마지막 값을 반환한다. 집합 내의 마지막 값이 null이면 함수는 NULL을 반환한다. 그러나, IGNORE NULLS를 명시하면 집합 내에서 null이 아닌 마지막 값을 반환하거나, 모든 값이 null인 경우 NULL을 반환한다.
+
+    :param expression: 수치 또는 문자열을 반환하는 칼럼 또는 연산식. LAST_VALUE 함수 또는 다른 분석 함수를 포함할 수 없다.
+    :rtype: expression의 타입
+
+    .. seealso:: 
+    
+        :func:`FIRST_VALUE`, :func:`NTH_VALUE`
+
+다음은 예제 질의를 실행하기 위한 스키마와 데이터이다.
+
+.. code-block:: sql
+
+    CREATE TABLE test_tbl(groupid int,itemno int);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,1);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,2);
+    INSERT INTO test_tbl VALUES(1,3);
+    INSERT INTO test_tbl VALUES(1,4);
+    INSERT INTO test_tbl VALUES(1,5);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,6);
+    INSERT INTO test_tbl VALUES(2,7);
+
+다음은 LAST_VALUE 함수를 수행하는 질의 및 결과이다. 
+
+.. code-block:: sql
+
+    SELECT groupid, itemno, LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    FROM test_tbl;
+
+::
+
+          groupid       itemno      ret_val
+    =======================================
+                1         NULL         NULL
+                1         NULL         NULL
+                1         NULL         NULL
+                1            1            1
+                1            2            2
+                1            3            3
+                1            4            4
+                1            5            5
+                2         NULL         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2            6            6
+                2            7            7
+
+LAST_VALUE 함수는 현재 행을 기준으로 계산된다. 즉, 아직 바인딩되지 않은 값은 계산에 포함되지 않는다. 예를 들어, 위의 결과에서 (groupid, itemno) = (1, 1)인 LAST_VALUE 함수의 값은 1이고, (groupid, itemno) = (1, 2)인 LAST_VALUE 함수의 값은 2이다.
+                
+CUBRID는 NULL 값을 모든 값보다 앞의 순서로 정렬한다. 즉, 아래의 SQL1은 ORDER BY 절에 NULLS FIRST가 포함된 SQL2로 해석된다.
+
+::
+
+    SQL1: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    SQL2: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val     
+
 LEAD
 ====
     
@@ -573,7 +860,7 @@ MAX
 
 .. function:: MAX ( [ DISTINCT | DISTINCTROW | UNIQUE | ALL ] expression )
 
-    **MAX** 함수는 함수는 집계 함수 또는 분석 함수로 사용되며,  모든 행에 대하여 연산식 값 중 최대 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 뒤에 나오는 문자열이 최대 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 큰 값이 최대 값이다.
+    **MAX** 함수는 집계 함수 또는 분석 함수로 사용되며,  모든 행에 대하여 연산식 값 중 최대 값을 구한다. 하나의 연산식 *expression* 만 인자로 지정된다. 문자열을 반환하는 연산식에 대해서는 사전 순서를 기준으로 뒤에 나오는 문자열이 최대 값이 되고, 수치를 반환하는 연산식에 대해서는 크기가 가장 큰 값이 최대 값이다.
 
     :param expression: 수치 또는 문자열을 반환하는 하나의 연산식을 지정한다. 컬렉션 타입의 데이터를 반환하는 연산식은 지정할 수 없다.
     :param ALL: 모든 값에 대해 최대 값을 구하기 위해 사용되며, 기본값이다.
@@ -616,6 +903,59 @@ MAX
              1996  'AUT'                           0            2
              2000  'AUT'                           2            2
              2004  'AUT'                           2            2
+
+MEDIAN
+======
+
+.. function:: MEDIAN(expression)
+.. function:: MEDIAN(expression) OVER ([partition_clause] order_by_clause)
+
+   **MEDIAN** 함수는 집계 함수 또는 분석 함수로 사용되며, 중앙값(median value)을 반환한다. 중앙값은 데이터의 최소값과 최대값의 중앙에 위치하게 되는 값을 말한다.
+    
+    :param expression: 숫자 또는 날짜로 변환될 수 있는 값을 가진 칼럼 또는 연산식
+    :rtype: **DOUBLE** 또는 **DATETIME**
+
+다음은 예제 질의를 실행하기 위한 테이블 스키마 및 데이터이다.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (col1 int, col2 double);
+    INSERT INTO tbl VALUES(1,2), (1,1.5), (1,1.7), (1,1.8), (2,3), (2,4), (3,5);
+
+다음은 집계 함수로 사용되는 예로서, col1을 기준으로 각 그룹별로 집계한 col2의 중앙값을 반환한다.
+
+.. code-block:: sql
+
+    SELECT col1, MEDIAN(col2) 
+    FROM tbl GROUP BY col1;
+
+::
+
+             col1  median(col2)
+    ===================================
+                1  1.750000000000000e+00
+                2  3.500000000000000e+00
+                3  5.000000000000000e+00
+
+    
+다음은 분석 함수로 사용되는 예로서, col1을 기준으로 각 그룹별 col2의 중앙값을 반환한다. 
+
+.. code-block:: sql
+
+    SELECT col1, MEDIAN(col2) OVER (PARTITION BY col1)
+    FROM tbl;
+    
+::
+
+         col1  median(col2) over (partition by col1)
+    ===================================
+            1  1.750000000000000e+00
+            1  1.750000000000000e+00
+            1  1.750000000000000e+00
+            1  1.750000000000000e+00
+            2  3.500000000000000e+00
+            2  3.500000000000000e+00
+            3  5.000000000000000e+00
 
 MIN
 ===
@@ -663,6 +1003,67 @@ MIN
              1996  'AUT'                           0            0
              2000  'AUT'                           2            0
              2004  'AUT'                           2            0
+
+NTH_VALUE
+=========
+
+.. function:: NTH_VALUE(expression, N) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+
+    **NTH_VALUE** 함수는 분석 함수로만 사용되며, 정렬된 값 집합에서 *N*\ 번째 행의 *expression* 값을 반환한다. 
+
+    :param expression: 수치 또는 문자열을 반환하는 칼럼 또는 연산식
+    :param N: 양의 정수로 해석될 수 있는 상수, 바인드 변수, 칼럼 또는 표현식
+    :rtype: *expression*\ 의 타입
+
+    .. seealso:: 
+    
+        :func:`FIRST_VALUE`, :func:`LAST_VALUE` 
+        
+**{RESPECT|IGNORE} NULLS** 구문은 *expression*\ 의 null 값을 계산에 포함시킬지 여부를 결정한다. 기본값은 **RESPECT NULLS**\ 이다.
+
+다음은 예제 질의를 실행하기 위한 스키마와 데이터이다.
+
+.. code-block:: sql
+
+    CREATE TABLE test_tbl(groupid int,itemno int);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,1);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,2);
+    INSERT INTO test_tbl VALUES(1,3);
+    INSERT INTO test_tbl VALUES(1,4);
+    INSERT INTO test_tbl VALUES(1,5);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,6);
+    INSERT INTO test_tbl VALUES(2,7);
+
+다음은 *N*\ 의 값을 2로 하여 **NTH_VALUE** 함수를 수행하는 질의 및 결과이다.
+
+.. code-block:: sql
+
+    SELECT groupid, itemno, NTH_VALUE(itemno, 2) IGNORE NULLS OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val 
+    FROM test_tbl;
+
+::
+
+          groupid       itemno      ret_val
+    =======================================
+                1         NULL         NULL
+                1         NULL         NULL
+                1         NULL         NULL
+                1            1            2
+                1            2            2
+                1            3            2
+                1            4            2
+                1            5            2
+                2         NULL         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2            6         NULL
+                2            7            7
 
 NTILE
 =====
@@ -743,6 +1144,176 @@ NTINE 함수는 점수의 범위와는 무관하게 행의 개수를 기준으�
       'Lora'                         60            3
       'David'                        55            4
       'Tom'                          30            5
+
+PERCENT_RANK
+============
+
+.. function:: PERCENT_RANK(expression[, expression] ...) WITHIN GROUP (order_by_clause)
+.. function:: PERCENT_RANK() OVER ([partition_clause] order_by_clause)
+
+    PERCENT_RANK 함수는 집계 함수 또는 분석 함수로 사용되며, 그룹에서 행의 상대적인 위치를 순위 퍼센트로 반환한다. CUME_DIST 함수(누적 분포 값을 반환)와 유사하다. PERCENT_RANK가 반환하는 값의 범위는 0부터 1까지이다. PERCENT_RANK의 첫번째 값은 항상 0이다. 
+
+    :param expression: 수치 또는 문자열을 반환하는 연산식. 칼럼이 올 수 없다.
+    :rtype: DOUBLE
+
+    .. seealso:: 
+    
+        :func:`CUME_DIST`, :func:`RANK`
+    
+집계 함수인 경우, 집계 그룹 전체 행에서 선택된 가상(hypothetical) 행의 RANK에서 1을 뺀 값에 대해 집계 그룹 내의 행의 개수로 나눈 값을 반환한다. 즉, (가상 행의 RANK - 1)/(집계 그룹 행의 개수)를 반환한다.
+
+분석 함수인 경우, PARTITION BY에 의해 나누어진 그룹별로 각 행을 ORDER BY 절에 명시된 순서로 정렬했을 때 (그룹별 RANK - 1)/(그룹 행의 개수 - 1)을 반환한다.
+예를 들어, 전체 10개의 행 중에서 첫번째 순서(RANK=1)로 등장한 행의 개수가 2개이면 첫번째 행과 두번째 행의 PERCENT_RANK 값은 (1-1)/(10-1)=0이 된다.
+
+.. _compare-cd-pr:
+
+다음은 입력 값 VAL이 존재할 때 집계 함수로 사용되는 **CUME_DIST**\ 와 **PERCENT_RANK**\ 의 반환 값을 비교한 표이다.
+
+==================== ==================== ==================== ==================== ====================
+VAL                  RANK()               DENSE_RANK()         CUME_DIST(VAL)       PERCENT_RANK(VAL)
+==================== ==================== ==================== ==================== ====================
+100                  1                    1                    0.33 => (1+1)/(5+1)  0    => (1-1)/5
+200                  2                    2                    0.67 => (2+1)/(5+1)  0.2  => (2-1)/5
+200                  2                    2                    0.67 => (2+1)/(5+1)  0.2  => (2-1)/5
+300                  4                    3                    0.83 => (4+1)/(5+1)  0.6  => (4-1)/5
+400                  5                    4                    1    => (5+1)/(5+1)  0.8  => (5-1)/5
+==================== ==================== ==================== ==================== ====================
+
+다음은 입력 값 VAL이 존재할 때 분석 함수로 사용되는 **CUME_DIST**\ 와 **PERCENT_RANK**\ 의 반환 값을 비교한 표이다.
+
+==================== ==================== ==================== ==================== ====================
+VAL                  RANK()               DENSE_RANK()         CUME_DIST()          PERCENT_RANK()
+==================== ==================== ==================== ==================== ====================
+100                  1                    1                    0.2 => 1/5           0    => (1-1)/(5-1)
+200                  2                    2                    0.6 => 3/5           0.25 => (2-1)/(5-1)
+200                  2                    2                    0.6 => 3/5           0.25 => (2-1)/(5-1)
+300                  4                    3                    0.8 => 4/5           0.75 => (4-1)/(5-1)
+400                  5                    4                    1   => 5/5           1    => (5-1)/(5-1)
+==================== ==================== ==================== ==================== ====================
+
+위의 표와 관련된 스키마 및 질의의 예는 다음과 같다.
+
+.. code-block:: sql
+
+    CREATE TABLE test_tbl(VAL INT);
+    INSERT INTO test_tbl VALUES (100), (200), (200), (300), (400);
+    
+
+    SELECT cume_dist(100) WITHIN GROUP (ORDER BY val) AS cume FROM test_tbl;
+    SELECT percent_rank(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl;
+
+    SELECT cume_dist() OVER (ORDER BY val) AS cume FROM test_tbl;
+    SELECT percent_rank() OVER (ORDER BY val) AS pct_rnk FROM test_tbl;
+
+다음은 아래에서 보여줄 질의에서 사용된 스키마 및 데이터이다.
+
+.. code-block:: sql
+
+    CREATE TABLE scores(id INT PRIMARY KEY AUTO_INCREMENT, math INT, english INT, pe CHAR, grade INT);
+
+    INSERT INTO scores(math, english, pe, grade) 
+           VALUES(60, 70, 'A', 1), 
+           (60, 70, 'A', 1), 
+           (60, 80, 'A', 1), 
+           (60, 70, 'B', 1), 
+           (70, 60, 'A', 1) , 
+           (70, 70, 'A', 1) , 
+           (80, 70, 'C', 1) , 
+           (70, 80, 'C', 1), 
+           (85, 60, 'C', 1), 
+           (75, 90, 'B', 1);  
+    INSERT INTO scores(math, english, pe, grade) 
+           VALUES(95, 90, 'A', 2), 
+           (85, 95, 'B', 2), 
+           (95, 90, 'A', 2), 
+           (85, 95, 'B', 2),
+           (75, 80, 'D', 2), 
+           (75, 85, 'D', 2),
+           (75, 70, 'c', 2), 
+           (65, 95, 'A', 2),
+           (65, 95, 'A', 2), 
+           (65, 95, 'A', 2);
+
+다음은 집계 함수로 사용되는 예로, *math*, *english*, *pe* 3개의 칼럼에 대한 **PERCENT_RANK** 값을 더한 후 3으로 나눈 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT PERCENT_RANK(60, 70, 'D') 
+    WITHIN GROUP(ORDER BY math, english, pe) AS percent_rank
+    FROM scores; 
+
+::
+    
+    1.500000000000000e-01
+
+다음은 분석 함수로 사용되는 예로, *math*, *english*, *pe* 3개 칼럼을 기준으로 행 전체의 **PERCENT_RANK** 값을 출력한다.
+
+.. code-block:: sql
+
+    SELECT id, math, english, pe, grade, PERCENT_RANK() OVER(ORDER BY math, english, pe) AS percent_rank 
+    FROM scores 
+    ORDER BY percent_rank;
+
+::
+
+               id         math      english  pe                          grade              percent_rank
+    ====================================================================================================
+                1           60           70  'A'                             1     0.000000000000000e+00
+                2           60           70  'A'                             1     0.000000000000000e+00
+                4           60           70  'B'                             1     1.052631578947368e-01
+                3           60           80  'A'                             1     1.578947368421053e-01
+               18           65           95  'A'                             2     2.105263157894737e-01
+               19           65           95  'A'                             2     2.105263157894737e-01
+               20           65           95  'A'                             2     2.105263157894737e-01
+                5           70           60  'A'                             1     3.684210526315789e-01
+                6           70           70  'A'                             1     4.210526315789473e-01
+                8           70           80  'C'                             1     4.736842105263158e-01
+               17           75           70  'c'                             2     5.263157894736842e-01
+               15           75           80  'D'                             2     5.789473684210527e-01
+               16           75           85  'D'                             2     6.315789473684210e-01
+               10           75           90  'B'                             1     6.842105263157895e-01
+                7           80           70  'C'                             1     7.368421052631579e-01
+                9           85           60  'C'                             1     7.894736842105263e-01
+               12           85           95  'B'                             2     8.421052631578947e-01
+               14           85           95  'B'                             2     8.421052631578947e-01
+               11           95           90  'A'                             2     9.473684210526315e-01
+               13           95           90  'A'                             2     9.473684210526315e-01
+
+다음은 분석 함수로 사용되는 예로, *math*, *english*, *pe* 3개 칼럼을 기준으로 *grade* 칼럼으로 그룹핑하여 **PERCENT_RANK** 값을 출력한다.
+
+.. code-block:: sql
+    
+    SELECT id, math, english, pe, grade, RANK(), PERCENT_RANK() OVER(PARTITION BY grade ORDER BY math, english, pe) AS percent_rank
+    FROM scores
+    ORDER BY grade, percent_rank;
+    
+::
+
+               id         math      english  pe                          grade              percent_rank
+    ====================================================================================================
+                1           60           70  'A'                             1     0.000000000000000e+00
+                2           60           70  'A'                             1     0.000000000000000e+00
+                4           60           70  'B'                             1     2.222222222222222e-01
+                3           60           80  'A'                             1     3.333333333333333e-01
+                5           70           60  'A'                             1     4.444444444444444e-01
+                6           70           70  'A'                             1     5.555555555555556e-01
+                8           70           80  'C'                             1     6.666666666666666e-01
+               10           75           90  'B'                             1     7.777777777777778e-01
+                7           80           70  'C'                             1     8.888888888888888e-01
+                9           85           60  'C'                             1     1.000000000000000e+00
+               18           65           95  'A'                             2     0.000000000000000e+00
+               19           65           95  'A'                             2     0.000000000000000e+00
+               20           65           95  'A'                             2     0.000000000000000e+00
+               17           75           70  'c'                             2     3.333333333333333e-01
+               15           75           80  'D'                             2     4.444444444444444e-01
+               16           75           85  'D'                             2     5.555555555555556e-01
+               12           85           95  'B'                             2     6.666666666666666e-01
+               14           85           95  'B'                             2     6.666666666666666e-01
+               11           95           90  'A'                             2     8.888888888888888e-01
+               13           95           90  'A'                             2     8.888888888888888e-01
+
+위의 결과에서 *id*\ 가 1인 행은 *grade*\ 가 1인 10개의 행 중에서 첫번째와 두번째에 위치하며, **PERCENT_RANK**\ 의 값은 (1-1)/(10-1)=0이 된다.
+id가 5인 행은 *grade*\ 가 1인 10개의 행 중에서 다섯번째에 위치하며, **PERCENT_RANK**\ 의 값은 (5-1)/(10-1)=0.44가 된다.
 
 RANK
 ====

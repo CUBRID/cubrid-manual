@@ -28,7 +28,7 @@ There are three ways to install CUBRID Python driver on Linux, UNIX, and UNIX-li
     *   CentOS: http://www.cubrid.org/?mid=yum_repository&os=centos
     *   Fedora: http://www.cubrid.org/?mid=yum_repository&os=fedora
 
-    For the example to install CUBRID 9.0 on Fedora 17 is as folllows: (fc17 means this operating system version). ::
+    For the example to install CUBRID 9.0 on Fedora 17 is as follows: (fc17 means this operating system version). ::
 
         rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc17.noarch.rpm
 
@@ -171,7 +171,7 @@ The entire script up to now looks like this:
     # Plain insert statement
     cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
      
-    # Parametrized insert statement
+    # Parameterized insert statement
     args = (2, 'Title 2', 'Test body #2')
     cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
      

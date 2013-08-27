@@ -19,6 +19,20 @@ With the **UPDATE STATISTICS ON** statement, you can generate internal statistic
 
 *   **ALL CLASSES** : If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
 
+When starting and ending an update of statistics information, NOTIFICATION message is written on the server error log. You can check the updating term of statistics information by these two messages.
+
+::
+    
+    Time: 05/07/13 15:06:25.052 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 123  CODE = -1114 Tran = 1, CLIENT = testhost:csql(21060), EID = 4
+    Started to update statistics (class "code", oid : 0|522|3).
+
+    Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
+    Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
+
+.. note::
+
+    In 2008 R4.3 or before and in 9.1, statistics information of all indexes was updated when an index was added, and it brought a high system load. However, from 2008 R4.4 and 9.2, only statistics information of an added index is created.
+
 Checking Statistics Information
 ===============================
 
@@ -28,7 +42,7 @@ You can check the statistics Information with the session command of the CSQL In
     
 *   *table_name* : Table name to check the statistics Information
 
-The following shows the statictical information of *t1* table in CSQL interpreter.
+The following shows the statistical information of *t1* table in CSQL interpreter.
 
 .. code-block:: sql
 
@@ -46,7 +60,7 @@ The following shows the statictical information of *t1* table in CSQL interprete
      Total pages in class heap: 1
      Total objects: 5
      Number of attributes: 1
-     Atrribute: code
+     Attribute: code
         id: 0
         Type: DB_TYPE_INTEGER
         Minimum value: 1
@@ -58,9 +72,17 @@ The following shows the statictical information of *t1* table in CSQL interprete
 Viewing Query Plan
 ==================
 
-To view a query plan for a CUBRID SQL query, change the value of the optimization level by using the **SET OPTIMIZATION** statement. You can get the current optimization level value by using the **GET OPTIMIZATION** statement. 
+To view a query plan for a CUBRID SQL query, you can use following methods.
 
-The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referencing the optimization level value set by the user. The query plan is displayed as standard output; the following explanations are based on the assumption that the plan is used in a terminal-based program such as the CSQL Interpreter. In the CSQL query editor, you can view execution plan by executing the **;plan** command. For details, see :ref:`csql-session-commands`. For the method how to view a query plan, see `CUBRID Manager manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_. ::
+*   Press "show plan" button on CUBRID Manager or CUBRID Query Browser. For how to use CUBRID Manager or CUBRID Query Browser, see `CUBRID Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual>`_ or `CUBRID Query Browser Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser-manual>`_.
+
+    .. image:: /images/query_plan_on_CM.png
+
+*   Change the value of the optimization level by running ";plan simple" or ";plan detail" on CSQL interpreter, or by using the **SET OPTIMIZATION** statement. You can get the current optimization level value by using the **GET OPTIMIZATION** statement. For details on CSQL Interpreter, see :ref:`csql-session-commands`.
+
+**SET OPTIMIZATION** or **GET OPTIMIZATION LEVEL** syntax is as following.
+
+::
 
     SET OPTIMIZATION LEVEL opt-level [;]
     GET OPTIMIZATION LEVEL [ { TO | INTO } variable ] [;]
@@ -83,34 +105,375 @@ The CUBRID query optimizer determines whether to perform query optimization and 
 
     .. note:: If you configure the optimization level as not executing the query like 2, 258, or 514, all queries(not only SELECT, but also INSERT, UPDATE, DELETE, REPLACE, TRIGGER, SERIAL, etc.) are not executed.   
 
-The following example shows how to view query plan by using the example retrieving year when Sim Kwon Ho won medal and metal type.
+The CUBRID query optimizer determines whether to perform query optimization and output the query plan by referencing the optimization level value set by the user. 
+    
+The following shows the result which ran the query after inputting ";plan simple" or "SET OPTIMIZATION LEVEL 257;" in CSQL.
 
 .. code-block:: sql
 
-    GET OPTIMIZATION LEVEL;
-    
-::
-    
-          Result
-    =============
-                1
+    SET OPTIMIZATION LEVEL 257;
+    --  csql> ;plan simple
+    SELECT /*+ recompile */  DISTINCT h.host_year, o.host_nation
+    FROM history h INNER JOIN olympic o 
+    ON h.host_year = o.host_year AND o.host_year > 1950;
 
-.. code-block:: sql
-
-    SET OPTIMIZATION LEVEL 258;
-
-    SELECT a.name, b.host_year, b.medal
-    FROM athlete a, game b 
-    WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
-
-::
-    
+::    
+     
     Query plan:
-      Nested loops
-            Sequential scan(game b)
-            Index scan(athlete a, pk_athlete_code, a.code=b.athlete_code)
-    There are no results.
-    0 rows selected.
+
+     Sort(distinct)
+        Nested-loop join(h.host_year=o.host_year)
+            Index scan(olympic o, pk_olympic_host_year, (o.host_year> ?:0 ))
+            Sequential scan(history h)
+
+    *   Sort(distinct): Perform DISTINCT.
+    *   Nested-loop join: Join method is Nested-loop.
+    *   Index scan: Perform index-scan by using pk_olympic_host_year index about olympic table. At that time, the condition which used this index is "o.host_year > ?".
+    
+The following shows the result which ran the query after inputting ";plan detail" or "SET OPTIMIZATION LEVEL 513;" in CSQL.
+
+.. code-block:: sql
+
+    SET OPTIMIZATION LEVEL 513;
+    --  csql> ;plan detail
+    
+    SELECT /*+ RECOMPILE */  DISTINCT h.host_year, o.host_nation
+    FROM history h INNER JOIN olympic o 
+    ON h.host_year = o.host_year AND o.host_year > 1950;
+
+::
+
+    Join graph segments (f indicates final):
+    seg[0]: [0]
+    seg[1]: host_year[0] (f)
+    seg[2]: [1]
+    seg[3]: host_nation[1] (f)
+    seg[4]: host_year[1]
+    Join graph nodes:
+    node[0]: history h(147/1)
+    node[1]: olympic o(25/1) (sargs 1)
+    Join graph equivalence classes:
+    eqclass[0]: host_year[0] host_year[1]
+    Join graph edges:
+    term[0]: h.host_year=o.host_year (sel 0.04) (join term) (mergeable) (inner-join) (indexable host_year[1]) (loc 0)
+    Join graph terms:
+    term[1]: o.host_year range (1950 gt_inf max) (sel 0.1) (rank 2) (sarg term) (not-join eligible) (indexable host_year[1]) (loc 0)
+
+    Query plan:
+
+    temp(distinct)
+        subplan: nl-join (inner join)
+                     edge:  term[0]
+                     outer: iscan
+                                class: o node[1]
+                                index: pk_olympic_host_year term[1]
+                                cost:  1 card 2
+                     inner: sscan
+                                class: h node[0]
+                                sargs: term[0]
+                                cost:  1 card 147
+                     cost:  3 card 15
+        cost:  9 card 15
+
+    Query stmt:
+
+    select distinct h.host_year, o.host_nation from history h, olympic o where h.host_year=o.host_year and (o.host_year> ?:0 )
+
+On the above output, the information which is related to the query plan is "Query plan:". Query plan is performed sequentially from the inside above line. In other words, "outer: iscan -> inner:scan" is repeatedly performed and at last, "temp(distinct)" is performed. "Join graph segments" is used for checking more information on "Query plan:". For example, "term[0]" in "Query plan:" is represented as "term[0]: h.host_year=o.host_year (sel 0.04) (join term) (mergeable) (inner-join) (indexable host_year[1]) (loc 0)" in "Join graph segments".
+
+The following shows the explanation of the above items of "Query plan:".
+
+    *   temp(distinct): (distinct) means that CUBRID performs DISTINCT query. temp means that it saves the result to the temporary space.
+    
+        *   nl-join: "nl-join" means nested loop join.
+        *   (inner join): join type is "inner join".
+        
+            *   outer: iscan: performs iscan(index scan) in the outer table.
+            
+                *   class: o node[1]: It uses o table. For details, see node[1] of "Join graph segments".
+                *   index: pk_olympic_host_year term[1]: use pk_olympic_host_year index and for details, see term[1] of "Join graph segments".
+                *   cost: a cost to perform this syntax.
+                
+                    *   card: It means cardinality.
+                    
+            *   inner: sscan: It performs sscan(sequential scan) in the inner table.
+            
+                *   class: h node[0]: It uses h table. For details, see node[0] of "Join graph segments".
+                *   sargs: term[0]: sargs represent data filter(WHERE condition which does not use an index); it means that term[0] is the condition used as data filter.
+                *   cost: A cost to perform this syntax.
+                
+                    *   card: It means cardinality.
+                    
+        *   cost: A cost to perform all syntaxes. It includes the previously performed cost.
+        
+            *   card: It means cardinality.
+
+**Query Plan Related Terms**
+
+The following show the meaning for each term which is printed as a query plan.
+
+*   Join method: It is printed as "nl-join" on the above. The following are the join methods which are printed on the query plan. 
+
+    *   nl-join: Nested loop join
+    *   m-join: Sort merge join
+    *   idx_join: Nested loop join, and it is a join which uses an index in the inner table as reading rows of the outer table.
+    
+*   Join type: It is printed as "(inner join)" on the above. The following are the join types which are printed on the query plan.
+    
+    *   inner join
+    *   left outer join
+    *   right outer join: On the query plan, the different "outer" direction with the query's direction can be printed. For example, even if you specified "right outer" on the query, but "left outer" can be printed on the query plan.
+    *   cross join
+
+*   Types of join tables: It is printed as outer or inner on the above. They are separated as outer table and inner table which are based on the position on either side of the loop, on the nested loop join.
+
+    *   outer table: The first base table to read when joining.
+    *   inner table: The target table to read later when joining.
+
+*   Scan method: It is printed as iscan or sscan. You can judge that if the query uses index or not.
+    
+    *   sscan: sequential scan. Also it can be called as full table scan; it scans all of the table without using an index.
+    *   iscan: index scan. It limits the range to scan by using an index.
+    
+*   cost: It internally calculate the cost related to CPU, IO etc., mainly the use of resources.
+
+*   card: It means cardinality. It is a number of rows which are predicted as selected.
+    
+The following is an example of performing m-join(sort merge join) as specifying USE_MERGE hint. In general, sort merge join is used when sorting and merging an outer table and an inner table is judged as having an advantage than performing nested loop join. In most cases, it is desired that you do not perform sort merge join.
+
+.. code-block:: sql
+
+    SET OPTIMIZATION LEVEL 513;
+    -- csql> ;plan detail
+
+    SELECT /*+ RECOMPILE USE_MERGE*/  DISTINCT h.host_year, o.host_nation	
+    FROM history h LEFT OUTER JOIN olympic o ON h.host_year = o.host_year AND o.host_year > 1950;	
+    
+:: 
+
+	Query plan:
+	
+    temp(distinct)
+        subplan: temp
+                     order: host_year[0]
+                     subplan: m-join (left outer join)
+                                  edge:  term[0]
+                                  outer: temp
+                                             order: host_year[0]
+                                             subplan: sscan
+                                                          class: h node[0]
+                                                          cost:  1 card 147
+                                             cost:  10 card 147
+                                  inner: temp
+                                             order: host_year[1]
+                                             subplan: iscan
+                                                          class: o node[1]
+                                                          index: pk_olympic_host_year term[1]
+                                                          cost:  1 card 2
+                                             cost:  7 card 2
+                                  cost:  18 card 147
+                     cost:  24 card 147
+        cost:  30 card 147
+
+The following performs the idx-join(index join). If performing join by using an index of inner table is judged as having an advantage, you can ensure performing idx-join by specifying **USE_IDX** hint.
+
+.. code-block:: sql
+
+    SET OPTIMIZATION LEVEL 513;
+    -- csql> ;plan detail
+
+    CREATE INDEX i_history_host_year ON history(host_year);
+    
+    SELECT /*+ RECOMPILE */  DISTINCT h.host_year, o.host_nation
+    FROM history h INNER JOIN olympic o ON h.host_year = o.host_year;
+
+::
+
+    Query plan:
+
+    temp(distinct)
+        subplan: idx-join (inner join)
+                     outer: sscan
+                                class: o node[1]
+                                cost:  1 card 25
+                     inner: iscan
+                                class: h node[0]
+                                index: i_history_host_year term[0] (covers)
+                                cost:  1 card 147
+                     cost:  2 card 147
+        cost:  9 card 147
+
+On the above query plan, "(covers)" is printed on the "index: i_history_host_year term[0]" of "inner: iscan", it means that :ref:`covering-index` functionality is applied. In other words, it does not retrieve data storage additionally because there are required data inside the index in inner table.
+
+If you ensure that left table's row number is a lot smaller than the right table's row number on the join tables, you can specify **ORDERED** hint. Then always the left table will be outer table, and the right table will be inner table.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE ORDERED */  DISTINCT h.host_year, o.host_nation
+    FROM history h INNER JOIN olympic o ON h.host_year = o.host_year;
+
+.. _query-profiling:
+ 
+Query Profiling
+===============
+ 
+If the performance analysis of SQL is required, you can use query profiling feature.
+To use query profiling, specify SQL trace with **SET TRACE ON** syntax; to print out the profiling result, run **SHOW TRACE** syntax.
+ 
+And if you want to always include the query plan when you run **SHOW TRACE**, you need to add /\*+ RECOMPLIE \*/ hint on the query.
+
+The format of **SET TRACE ON** syntax is as follows.
+ 
+::
+ 
+    SET TRACE {ON | OFF} [OUTPUT {TEXT | JSON}]
+ 
+*   ON: set on SQL trace.
+*   OFF: set off SQL trace.
+*   OUTPUT TEXT: print out as a general TEXT format. If you omit OUTPUT clause, TEXT format is specified.
+*   OUTPUT JSON: print out as a JSON format.
+    
+As below, if you run **SHOW TRACE** syntax, the trace result is shown.
+ 
+::
+    SHOW TRACE;
+    
+Below is an example that prints out the query tracing result after setting SQL trace ON.
+ 
+::
+ 
+    csql> SET TRACE ON;
+    csql> SELECT /*+ RECOMPILE */ o.host_year, o.host_nation, o.host_city, n.name, SUM(p.gold), SUM(p.silver), SUM(p.bronze)  
+            FROM OLYMPIC o, PARTICIPANT p, NATION n
+            WHERE o.host_year = p.host_year AND p.nation_code = n.code AND p.gold > 10 
+            GROUP BY o.host_nation;
+    csql> SHOW TRACE;
+ 
+      trace
+    ======================
+      '
+    Query Plan:
+      SORT (group by)
+        NESTED LOOPS (inner join)
+          NESTED LOOPS (inner join)
+            TABLE SCAN (o)
+            INDEX SCAN (p.fk_participant_host_year) (key range: (o.host_year=p.host_year))
+          INDEX SCAN (n.pk_nation_code) (key range: p.nation_code=n.code)
+
+      rewritten query: select o.host_year, o.host_nation, o.host_city, n.[name], sum(p.gold), sum(p.silver), sum(p.bronze) from OLYMPIC o, PARTICIPANT p, NATION n where (o.host_year=p.host_year and p.nation_code=n.code and (p.gold> ?:0 )) group by o.host_nation
+
+    Trace Statistics:
+      SELECT (time: 1, fetch: 1059, ioread: 2)
+        SCAN (table: olympic), (heap time: 0, fetch: 26, ioread: 0, readrows: 25, rows: 25)
+          SCAN (index: participant.fk_participant_host_year), (btree time: 1, fetch: 945, ioread: 2, readkeys: 5, filteredkeys: 5, rows: 916) (lookup time: 0, rows: 38)
+            SCAN (index: nation.pk_nation_code), (btree time: 0, fetch: 76, ioread: 0, readkeys: 38, filteredkeys: 38, rows: 38) (lookup time: 0, rows: 38)
+        GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
+    '
+ 
+On the above, later lines of "Trace Statistics:" are the output of the query trace. The following are the items of trace statistics.
+ 
+*   time: the estimated time when this operation is performed. The unit is millisecond(ms)
+*   fetch: fetching count
+*   page: page count.
+*   ioread: I/O read count.
+*   rows: the read rows count while this operation is performed.
+
+**SELECT**
+ 
+*   time: total estimated time when this query is performed(ms)
+*   fetch: total fetch about this query
+*   ioread: total I/O read count about this query. disk access count when the data is read
+
+**SCAN**
+
+*   heap: data scanning job without index
+
+    *   time, fetch, ioread: the estimated time(ms), fetched count and I/O read count in the heap of this operation 
+    *   readrows: the number of read rows when this operation is performed
+    *   rows: the number of result rows when this operation is performed
+    
+*   btree: index scanning job
+
+    *   time, fetch, ioread: the estimated time(ms), fetched count and I/O read count in the btree of this operation
+    *   readkeys: the number of the keys which are read in btree when this operation is performed
+    *   rows: the number of result rows when this operation is performed
+    
+*   lookup: data accessing job after index scanning
+
+    *   time: the estimated time(ms) in this operation
+    *   rows: the number of the result rows in this operation
+
+**GROUPBY**    
+
+*   time: the estimated time(ms) in this operation
+*   sort: sorting or not
+*   page: the number of pages which is read in this operation
+*   rows: the number of the result rows in this operation
+
+The above example can be output as JSON format.
+ 
+::
+ 
+    csql> SET TRACE ON OUTPUT JSON;
+    csql> SELECT n.name, a.name FROM athlete a, nation n WHERE n.code=a.nation_code;
+    csql> SHOW TRACE;
+    
+      trace
+    ======================
+      '{
+      "Trace Statistics": {
+        "SELECT": {
+          "time": 29,
+          "fetch": 5836,
+          "ioread": 3,
+          "SCAN": {
+            "access": "temp",
+            "temp": {
+              "time": 5,
+              "fetch": 34,
+              "ioread": 0,
+              "readrows": 6677,
+              "rows": 6677
+            }
+          },
+          "MERGELIST": {
+            "outer": {
+              "SELECT": {
+                "time": 0,
+                "fetch": 2,
+                "ioread": 0,
+                "SCAN": {
+                  "access": "table (nation)",
+                  "heap": {
+                    "time": 0,
+                    "fetch": 1,
+                    "ioread": 0,
+                    "readrows": 215,
+                    "rows": 215
+                  }
+                },
+                "ORDERBY": {
+                  "time": 0,
+                  "sort": true,
+                  "page": 21,
+                  "ioread": 3
+                }
+              }
+            }
+          }
+        }
+      }
+    }'
+
+On CSQL interpreter, if you use the command to set the SQL trace on automatically, the trace result is printed out automatically after printing the query result even if you do not run **SHOW TRACE;** syntax.
+
+For how to set the trace on automatically, see :ref:`Set SQL trace <set-autotrace>`.
+
+.. note::
+
+    *   CSQL interpreter which is run in the standalone mode(use -S option) does not support SQL trace feature.
+
+    *   When multiple queries are performed at once(batch query, array query), they are not profiled.
 
 .. _sql-hint:
 
@@ -136,6 +499,7 @@ Using hints can affect the performance of query execution. you can allow the que
     NO_DESC_IDX |
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
+    NO_SORT_LIMIT |
     RECOMPILE
     
     <merge_statement_hint> ::=
@@ -165,6 +529,7 @@ The following hints can be specified in UPDATE, DELETE and SELECT statements.
 *   **NO_DESC_IDX** : This is a hint not to use the descending index.
 *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 *   **NO_STATS** : Related to statistics information, the query optimizer does not update statistics information. Query performance for the corresponding queries can be improved; however, query plan is not optimized because the information is not updated.
+*   **NO_SORT_LIMIT** : This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
 *   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
 
     .. note:: If the *spec_name* is specified together with **USE_NL**, **USE_IDX** or **USE_MERGE**, the specified join method applies only to the *spec_name*. If **USE_NL** and **USE_MERGE** are specified together, the given hint is ignored. In some cases, the query optimizer cannot create a query execution plan based on the given hint. For example, if **USE_NL** is specified for a right outer join, the query is converted to a left outer join internally, and the join order may not be guaranteed.
@@ -192,25 +557,25 @@ The following example shows how to retrieve the years when Sim Kwon Ho won medal
       
     2 rows selected.
 
-The following example shows how to retrieve query execution time with **NO_STATS** hint to improve the functionality of drop partitioned table (*before_2008*); any data is not stored in the table. Assuming that there are more than 1 million data in the *participant2* table. The execution time in the example depends on system performance and database configuration.
+The following example shows how to retrieve query execution time with **NO_STATS** hint to improve the functionality of DROPping partitioned table (*before_2008*); any data is not stored in the table. Assuming that there are more than 1 million data in the *participant2* table. The execution time in the example depends on system performance and database configuration.
 
 .. code-block:: sql
 
-    -- NO_STATS 힌트 미사용
+    -- without NO_STATS hint
     ALTER TABLE participant2 DROP partition before_2008;
 
 ::
 
-    SQL statement execution time:      31.684550 sec
+    Execute OK. (31.684550 sec) Committed.
 
 .. code-block:: sql
     
-    -- NO_STATS 힌트 사용
+    -- with NO_STATS hint
     ALTER /*+ NO_STATS */ TABLE participant2 DROP partition before_2008;
 
 ::
 
-    SQL statement execution time:      0.025773 sec
+    Execute OK. (0.025773 sec) Committed.
 
 .. _index-hint-syntax:
 
@@ -412,7 +777,7 @@ If you apply the filtered index, that filtered index must be specified by **USE 
 
 *   When a filtered index is specified by **USING INDEX** clause or **USE INDEX** syntax: 
     
-    If columns of which an index consists are not included on the conditions of WHERE clause, the filtered index is not used.
+    If columns of which the index consists are not included on the conditions of WHERE clause, the filtered index is not used.
 
     .. code-block:: sql
 
@@ -438,7 +803,7 @@ If you apply the filtered index, that filtered index must be specified by **USE 
     
 *   When a filtered index is specified by **USING INDEX** <index_name>(+) clause or **FORCE INDEX** syntax:
  
-    Even if a column of which an index consists is not included on the condition of WHERE clause, the filtered index is used.
+    Even if a column of which the index consists is not included on the condition of WHERE clause, the filtered index is used.
 
     On the below query, my_filter_index cannot be used by "USE INDEX" syntax because a column of which my_filter_index consists is not included on the WHERE condition.
     
@@ -840,7 +1205,7 @@ The following example shows that the index is used as a covering index because c
 
     As you can see in the above comparison result, the value in the **VARCHAR** type retrieved from the index will appear with the following empty string truncated when the covering index has been applied.
     
-.. note:: If covering index optimization is available to be applied, the I/O performance can be improved because the disk I/O is decreased. Buf if you don't want covering index optimization in a special condition, specify a **NO_COVERING_IDX** hint to the query. For how to add a query, refer :ref:`sql-hint`.
+.. note:: If covering index optimization is available to be applied, the I/O performance can be improved because the disk I/O is decreased. But if you don't want covering index optimization in a special condition, specify a **NO_COVERING_IDX** hint to the query. For how to add a query, refer :ref:`sql-hint`.
 
 .. _order-by-skip-optimization:
 
@@ -1261,13 +1626,13 @@ On a single table, multiple key range optimization can be applied if below condi
 
 ::
 
-    SELECT /*+ hints */ … 
+    SELECT /*+ hints */ ...
     FROM table
-    WHERE col_1 = ? AND col_2 = ? AND … AND col(j-1) = ?
-    AND col_(j) IN (?, ?, … )
-    AND col_(j+1) = ? AND … AND col_(p-1) = ?
+    WHERE col_1 = ? AND col_2 = ? AND ... AND col(j-1) = ?
+    AND col_(j) IN (?, ?, ...)
+    AND col_(j+1) = ? AND ... AND col_(p-1) = ?
     AND key_filter_terms
-    ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC],… col_(p+k-1) [ASC|DESC]
+    ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC], ... col_(p+k-1) [ASC|DESC]
     FOR orderbynum_pred | LIMIT n;
 
 Firstly, if *orderbynum_pred* condition is specified, it should be valid. And upper limit(*n*) for **ORDERBY_NUM** or **LIMIT** should be less than or equal to the value of **multi_range_optimization_limit** system parameter.
@@ -1356,3 +1721,79 @@ ISS is not applied in the following cases:
 *   The first column of an index is a range filter or key filter
 *   Hierarchical query
 *   Aggregate function included
+
+.. _in-memory-sort:
+ 
+In Memory Sort
+--------------
+ 
+The "in memory sort(IMS)" feature is an optimization applied to the LIMIT/ORDERBY_NUM() queries specifying ORDER BY. Normally, when executing a query which specifies ORDER BY and LIMIT clauses, CUBRID generates the full sorted result set and then applies the LIMIT operator to this result set. With the IMS optimization, instead of generating the whole result set, CUBRID uses an in-memory binary heap in which only tuples satisfying the ORDER BY and LIMIT clauses are allowed. This optimization improves performance by eliminating the need for a full unordered result set.
+ 
+Whether this optimization is applied or not is not transparent to users. CUBRID decides to use in memory sort in the following situation:
+ 
+*   The query specifies ORDER BY and LIMIT clauses.
+*   The size of the final result (after applying the LIMIT clause) is less than the amount of memory used by external sort (see  **sort_buffer_size** in :ref:`memory-parameters`).
+ 
+Note that IMS considers the actual size of the result and not the count of tuples the result contains. For example, for the default sort buffer size (two megabytes), this optimization will be applied for a LIMIT value of 524,288 tuples consisting of one 4 byte INTEGER type but only for ~2,048 tuples of CHAR(1024) values. This optimization is not applied to queries requiring DISTINCT ordered result sets.
+ 
+.. _sort-limit-optimization:
+ 
+SORT-LIMIT optimization
+-----------------------
+ 
+The SORT-LIMIT optimization applies to queries specifying ORDER BY and LIMIT clauses. The idea behind it is to evaluate the LIMIT operator as soon as possible in the query plan in order to benefit from the reduced cardinality during joins. A SORT-LIMIT plan can be generated when the following conditions are met:
+ 
+*   All tables referenced in the ORDER BY clause belong to the SORT-LIMIT plan.
+*   A table belonging to a SORT-LIMIT plan is either:
+ 
+    *   The owner of a foreign key from a fk->pk join
+    *   The left side of a LEFT JOIN.
+    *   The right side of a RIGHT JOIN.
+ 
+*   LIMIT rows should be specified as less rows than the value of **sort_limit_max_count** system parameter(default: 1000). 
+*   Query does not have cross joins.
+*   Query joins at least two relations.
+*   Query does not have a GROUP BY clause.
+*   Query does not specify DISTINCT.
+*   ORDER BY expressions can be evaluated during scan.
+ 
+     For example, the below query cannot apply SORT-LIMIT plan because SUM cannot be evaluated during scan.
+     
+     .. code-block:: sql
+    
+         SELECT SUM(u.i) FROM u, t where u.i = t.i ORDER BY 1 LIMIT 5;
+ 
+The below is an example of planning SORT-LIMIT.
+ 
+.. code-block:: sql
+ 
+    CREATE TABLE t(i int PRIMARY KEY, j int, k int);
+    CREATE TABLE u(i int, j int, k int);
+    ALTER TABLE u ADD constraint fk_t_u_i FOREIGN KEY(i) REFERENCES t(i);
+    CREATE INDEX i_u_j ON u(j); 
+ 
+    INSERT INTO t SELECT ROWNUM, ROWNUM, ROWNUM FROM _DB_CLASS a, _DB_CLASS b LIMIT 1000; 
+    INSERT INTO u SELECT 1+(ROWNUM % 1000), RANDOM(1000), RANDOM(1000) FROM _DB_CLASS a, _DB_CLASS b, _DB_CLASS c LIMIT 5000; 
+ 
+    SELECT /*+ RECOMPILE */ * FROM u, t WHERE u.i = t.i AND u.j > 10 ORDER BY u.j LIMIT 5; 
+ 
+The above SELECT query's plan is printed out as below; we can see "(sort limit)".
+ 
+::
+ 
+    Query plan:
+ 
+    idx-join (inner join)
+        outer: temp(sort limit)
+                   subplan: iscan
+                                class: u node[0]
+                                index: i_u_j term[1]
+                                cost:  1 card 0
+                   cost:  1 card 0
+        inner: iscan
+                   class: t node[1]
+                   index: pk_t_i term[0]
+                   cost:  6 card 1000
+        sort:  2 asc
+        cost:  7 card 0
+ 

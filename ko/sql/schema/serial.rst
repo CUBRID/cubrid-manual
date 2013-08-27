@@ -121,14 +121,6 @@ ALTER SERIAL
 
 *   **NOCACHE**\ : 시리얼 캐시 기능을 사용하지 않으며, 매번 시리얼 값이 업데이트된다. 
 
-.. warning::
-
-    CUBRID 2008 R1.x 버전에서는 시스템 카탈로그인 **db_serial** 테이블을 업데이트하는 방식으로 시리얼 값을 변경할 수 있었으나, CUBRID 2008 R2.0 이상 버전부터는 **db_serial** 테이블의 수정은 허용되지 않고 **ALTER SERIAL** 구문을 이용하는 방식만 허용된다. 따라서 CUBRID 2008 R2.0 이상 버전에서 내보내기(unloaddb)한 데이터에 **ALTER SERIAL** 구문이 포함된 경우에는 이를 CUBRID 2008 R1.x 이하 버전에서 가져오기(loaddb)할 수 없다.
-
-.. warning::
-
-    CUBRID 9.0 미만 버전에서는 **ALTER SERIAL** 이후 첫번째 **NEXT_VALUE** 값을 구하면 **ALTER SERIAL** 로 설정한 초기값의 다음 값을 반환했으나, CUBRID 9.0 이상 버전에서는 **ALTER_SERIAL** 의 설정값을 반환한다.
-
 .. code-block:: sql
 
     --altering serial by changing start and incremental values
@@ -139,6 +131,25 @@ ALTER SERIAL
      
     --altering serial to operate in common mode
     ALTER SERIAL order_no NOCACHE;
+    
+.. warning::
+
+    CUBRID 2008 R1.x 버전에서는 시스템 카탈로그인 **db_serial** 테이블을 업데이트하는 방식으로 시리얼 값을 변경할 수 있었으나, CUBRID 2008 R2.0 이상 버전부터는 **db_serial** 테이블의 수정은 허용되지 않고 **ALTER SERIAL** 구문을 이용하는 방식만 허용된다. 따라서 CUBRID 2008 R2.0 이상 버전에서 내보내기(unloaddb)한 데이터에 **ALTER SERIAL** 구문이 포함된 경우에는 이를 CUBRID 2008 R1.x 이하 버전에서 가져오기(loaddb)할 수 없다.
+
+.. warning::
+
+    **ALTER SERIAL** 이후 첫번째 **NEXT_VALUE** 값을 구하면 CUBRID 9.0 미만 버전에서는 **ALTER SERIAL** 로 설정한 초기값의 다음 값을 반환했으나, CUBRID 9.0 이상 버전에서는 **ALTER_SERIAL** 의 설정값을 반환한다.
+    
+    ::
+    
+        CREATE SERIAL s1;
+        SELECT s1.NEXTVAL;
+
+        ALTER SERIAL s1 START WITH 10;
+        
+        SELECT s1.NEXTVAL;
+        -- From 9.0, above query returns 10
+        -- In the version less than 9.0, above query returns 11
 
 DROP SERIAL
 ===========
@@ -158,10 +169,10 @@ DROP SERIAL
 시리얼 사용
 ===========
 
-의사컬럼
---------
+의사 칼럼
+---------
 
-시리얼 이름과 의사컬럼을 통해서 해당 시리얼을 읽고 갱신할 수 있다. ::
+시리얼 이름과 의사 칼럼(pseudo column)을 통해서 해당 시리얼을 읽고 갱신할 수 있다. ::
 
     serial_identifier.CURRENT_VALUE
     serial_identifier.NEXT_VALUE

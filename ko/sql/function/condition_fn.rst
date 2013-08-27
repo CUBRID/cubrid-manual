@@ -305,7 +305,8 @@ LIKE 조건식의 이스케이프 문자 인식은 **cubrid.conf** 파일의 **n
 
 .. note::
 
-    CUBRID 9.0 미만 버전에서는 UTF-8과 같은 멀티바이트 문자셋 환경에서 입력된 데이터에 대해 문자열 비교 연산을 수행하려면, 1바이트 단위로 문자열 비교를 수행하도록 하는 파라미터(**single_byte_compare** = yes)를 **cubrid.conf** 파일에 추가해야 정상적인 검색 결과를 얻을 수 있었으나, CUBRID 9.0 이상 버전에서는 유니코드 문자셋을 지원하므로 **single_byte_compare** 파라미터를 더 이상 사용하지 않는다.
+    *   CUBRID 9.0 미만 버전에서는 UTF-8과 같은 멀티바이트 문자셋 환경에서 입력된 데이터에 대해 문자열 비교 연산을 수행하려면, 1바이트 단위로 문자열 비교를 수행하도록 하는 파라미터(**single_byte_compare** = yes)를 **cubrid.conf** 파일에 추가해야 정상적인 검색 결과를 얻을 수 있다.
+    *   CUBRID 9.0 이상 버전에서는 유니코드 문자셋을 지원하므로 **single_byte_compare** 파라미터를 더 이상 사용하지 않는다.
 
 .. code-block:: sql
 
@@ -352,7 +353,7 @@ REGEXP, RLIKE
 
 다음은 정규 표현식 패턴의 일부이다.
 
-*   "."은 문자 하나와 매칭된다(줄바꿈 문자(new line)와 캐리지 리턴 문자(carrage return)를 포함).
+*   "."은 문자 하나와 매칭된다(줄바꿈 문자(new line)와 캐리지 리턴 문자(carriage return)를 포함).
 
 *   "[...]"은 대괄호 안의 문자 중 하나와 매칭된다. 예를 들어, "[abc]"는 "a", "b" 또는 "c"와 매칭된다. 문자의 범위를 나타내려면 대시(-)를 사용한다. "[a-z]"은 임의의 알파벳 문자 하나와 매칭되고, "[0-9]"는 임의의 숫자 하나와 매칭된다.
 
@@ -556,7 +557,7 @@ REGEXP, RLIKE
 
 .. note::
 
-    다음은 **REGEXP** 조건식를 구현하기 위해 사용한 라이브러리인 RegEx-Specer의 라이선스이다. ::
+    다음은 **REGEXP** 조건식을 구현하기 위해 사용한 라이브러리인 RegEx-Specer의 라이선스이다. ::
 
         Copyright 1992, 1993, 1994 Henry Spencer. All rights reserved.
         This software is not subject to any license of the American Telephone
@@ -738,7 +739,7 @@ COALESCE
      
 .. code-block:: sql
 
-    --substituting a default value 10.0000 for NULL valuse
+    --substituting a default value 10.0000 for a NULL value
     SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
     
 ::
@@ -885,7 +886,7 @@ IF
      
 .. code-block:: sql
 
-    --IF function returns the second expression when the fist is TRUE
+    --IF function returns the second expression when the first is TRUE
     SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
     
 ::

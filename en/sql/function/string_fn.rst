@@ -96,7 +96,7 @@ BIN
 
 .. function:: BIN (n)
 
-    The **BIN** function converts a **BIGINT** type number into binary string. If an input string is **NULL**, **NULL** is returned.
+    The **BIN** function converts a **BIGINT** type number into binary string. If an input string is **NULL**, **NULL** is returned. When you input the string which cannot be transformed into **BIGINT**, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param n: A **BIGINT** type number
     :rtype: STRING
@@ -114,8 +114,9 @@ BIT_LENGTH
 
 .. function:: BIT_LENGTH (string)
 
-    The **BIT_LENGTH** function returns the length (bits) of a character string or bit string as an integer value. The return value of the **BIT_LENGTH** function may depend on the character set, because for the character string, the number of bytes taken up by a single character is different depending on the character set of the data input environment (e.g., UTF-8 Korean characters: one Korean character is 3*8 bits). For details about character sets supported by CUBRID, see :ref:`char-data-type`.
-
+    The **BIT_LENGTH** function returns the length (bits) of a character string or bit string as an integer value. The return value of the **BIT_LENGTH** function may depend on the character set, because for the character string, the number of bytes taken up by a single character is different depending on the character set of the data input environment (e.g., UTF-8 Korean characters: one Korean character is 3*8 bits). For details about character sets supported by CUBRID, see :ref:`char-data-type`. When you input the invalid value, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+    
+    
     :param string: Specifies the character string or bit string whose number of bits is to be calculated. If this value is **NULL**, **NULL** is returned. 
     :rtype: INT
 
@@ -254,8 +255,8 @@ CHR
 
 .. function:: CHR (number_operand  [USING charset_name])
 
-    The **CHR** function returns a character that corresponds to the return value of the expression specified as an argument. It returns 0 if it exceeds range of character code.
-
+    The **CHR** function returns a character that corresponds to the return value of the expression specified as an argument. When you input the code value within invalid ranges, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+    
     :param number_operand: Specifies an expression that returns a numeric value.
     :param charset_name: Characterset name. It supports utf8 and iso88591.
     :rtype: STRING
@@ -270,6 +271,8 @@ CHR
     ======================
       'DB'
             
+If you want to get a multibyte character with the **CHR** function, input a number with the valid range of the charset.
+
 .. code-block:: sql
 
     SELECT CHR(14909886 USING utf8); 
@@ -282,7 +285,33 @@ CHR
        chr(14909886 using utf8) 
     ====================== 
       'ま' 
-      
+
+If you want to get the hexadecimal string from a character, use **HEX** function.
+
+.. code-block:: sql
+
+    SET NAMES utf8; 
+    SELECT HEX('ま');
+
+::
+
+       hex(_utf8'ま')
+    ======================
+      'E381BE'
+
+If you want to get the decimal string from a hexadecimal string, use **CONV** function.
+
+.. code-block:: sql
+
+    SET NAMES utf8; 
+    SELECT CONV('E381BE',16,10);
+    
+::
+
+       conv(_utf8'E381BE', 16, 10)
+    ======================
+      '14909886'
+
 CONCAT
 ======
 
@@ -723,7 +752,33 @@ LCASE, LOWER
       lower('Cubrid')
     ======================
       'cubrid'
-      
+
+Note that the **LOWER** function may not work properly by specified collation. For example, when you try to change character Ă used in Romanian as lower character, this function works as follows by collation.
+
+If collation is utf8_bin, Ă is not changed.
+
+.. code-block:: sql
+    
+    SET NAMES utf8 COLLATE utf8_bin;
+    SELECT LOWER('Ă');
+    
+       lower(_utf8'Ă')
+    ======================
+      'Ă'
+
+If collation is utf8_ro_RO, Ă can be changed.
+
+.. code-block:: sql
+
+    SET NAMES utf8 COLLATE utf8_ro_cs;
+    SELECT LOWER('Ă');
+    
+       lower(_utf8'Ă' COLLATE utf8_ro_cs)
+    ======================
+      'ă'
+
+For supporting collations in CUBRID, see :ref:`cubrid-all-collation`.
+
 LEFT
 ====
 
@@ -1255,7 +1310,7 @@ The following shows how to print out the newline as "\\n".
 ::
 
     This is a test for\n\n new line.
-
+      
 REVERSE
 =======
 
@@ -1522,7 +1577,7 @@ STRCMP
      
 .. note::
 
-    Until the previous version of 9.0, STRCMP did not distinguish an upppercase and a lowercase. From 9.0, it compares the strings case-sensitively.    
+    Until the previous version of 9.0, STRCMP did not distinguish an uppercase and a lowercase. From 9.0, it compares the strings case-sensitively.    
     To make STRCMP case-insensitive, you should use case-insensitive collation(e.g.: utf8_en_ci).
     
     .. code-block:: sql
@@ -1537,7 +1592,7 @@ STRCMP
     .. code-block:: sql
     
         -- From 9.0 version, STRCMP distinguish the uppercase and the lowercase when the collation is case-sensitive.
-        -- export CUBRID_CHARSET=en_US.iso88591
+        -- charset is en_US.iso88591
         
         SELECT STRCMP ('ABC','abc');
         
@@ -1548,7 +1603,7 @@ STRCMP
     .. code-block:: sql
     
         -- If the collation is case-insensitive, it does not distinguish the uppercase and the lowercase.
-        -- export CUBRID_CHARSET=en_US.iso88591
+        -- charset is en_US.iso88591
 
         SELECT STRCMP ('ABC' COLLATE utf8_en_ci ,'abc' COLLATE utf8_en_ci);
         
@@ -1624,7 +1679,7 @@ SUBSTRING
 .. function:: SUBSTRING ( string, position [, substring_length]), 
 .. function:: SUBSTRING ( string FROM position [FOR substring_length] )
 
-    The **SUBSTRING** function, operating like **SUBSTR**, extracts a character string having the length of *substring_length* from a position, *position*, within character string, *string*, and returns it. If a negative number is specified to the *position* value, the **SUBSTRING** function calculates the position from the beginning of the string. And **SUBSTR** function calculates the position from the end of the string. If a negative number is specified to the *substring_length* value, the **SUBSTRING** function handles the argument is omitted, but the **SUBSTR** function returns **NULL**.
+    The **SUBSTRING** function, operating like **SUBSTR**, extracts a character string having the length of *substring_length* from a position, *position*, within character string, *string*, and returns it. If a negative number is specified as the *position* value, the **SUBSTRING** function calculates the position from the beginning of the string. And **SUBSTR** function calculates the position from the end of the string. If a negative number is specified as the *substring_length* value, the **SUBSTRING** function handles the argument is omitted, but the **SUBSTR** function returns **NULL**.
 
     :param string: Specifies the input character string. If the input value is **NULL**, **NULL** is returned.
     :param position: Specifies the position from where the string is to be extracted. If the position of the first character is specified as 0 or a negative number, it is considered as 1. If a value greater than the string length is specified, an empty string is returned. If **NULL**, **NULL** is returned.
@@ -1866,7 +1921,7 @@ UCASE, UPPER
 .. function:: UCASE ( string )
 .. function:: UPPER ( string )
 
-    The function **UCASE** or **UPPER** converts lowercase characters that are included in a character string to uppercase characters. Note that the **UPPER** function may not work properly in character sets that are not supported by CUBRID. For details about the character sets supported by CUBRID, see :doc:`/sql/i18n`.
+    The function **UCASE** or **UPPER** converts lowercase characters that are included in a character string to uppercase characters.
 
     :param string: Specifies the string in which lowercase characters are to be converted to uppercase. If the value is **NULL**, **NULL** is returned.
     :rtype: STRING
@@ -1900,4 +1955,29 @@ UCASE, UPPER
      upper('Cubrid')
     ======================
       'CUBRID'
-  
+
+Note that the **UPPER** function may not work properly by specified collation. For example, when you try to change character ă used in Romanian as upper character, this function works as follows by collation.
+
+If collation is utf8_bin, ă is not changed.
+
+.. code-block:: sql
+    
+    SET NAMES utf8 COLLATE utf8_bin;
+    SELECT UPPER('ă');
+    
+       upper(_utf8'ă')
+    ======================
+      'ă'
+
+If collation is utf8_ro_RO, ă can be changed.
+
+.. code-block:: sql
+
+    SET NAMES utf8 COLLATE utf8_ro_cs;
+    SELECT UPPER('ă');
+    
+       upper(_utf8'ă' COLLATE utf8_ro_cs)
+    ======================
+      'Ă'
+
+For supporting collations in CUBRID, see :ref:`cubrid-all-collation`.

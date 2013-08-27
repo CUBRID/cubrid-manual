@@ -199,7 +199,7 @@ CSQL 인터프리터에서 자동 커밋 모드를 설정하는 세션 명령어
     // set cursor holdability at the connection level
     conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
      
-    // set cursor holdability at the statement level which can override the connection’s
+    // set cursor holdability at the statement level which can override the connection
     PreparedStatement pStmt = conn.prepareStatement(sql,
                                         ResultSet.TYPE_SCROLL_SENSITIVE,
                                         ResultSet.CONCUR_UPDATABLE,
@@ -225,7 +225,7 @@ CCI 로 개발된 응용 프로그램 역시 커서 유지가 기본 동작이�
     rs1 = stmt.executeQuery(sql1);
     conn.commit();
     rs2 = stmt.executeQuery(sql2);
-    conn.rollback();  // 결과 셋 rs2와 rs1이 닫히게 되어 둘다 사용하지 못하게 됨.
+    conn.rollback();  // 결과 셋 rs2와 rs1이 닫히게 되어 둘 다 사용하지 못하게 됨.
 
 **결과 셋이 종료되는 경우**
 
@@ -287,6 +287,8 @@ CUBRID에서 트랜잭션 격리 수준의 기본 설정은 :ref:`isolation-leve
 +--------------------------------+-----------------------+--------+-----------+--------+----------------------+
 | :ref:`isolation-level-1` (1)   |                       | Y      | Y         | Y      | Y                    |
 +--------------------------------+-----------------------+--------+-----------+--------+----------------------+
+
+.. _lock-protocol:
 
 잠금 프로토콜
 =============
@@ -440,7 +442,7 @@ CUBRID는 트랜잭션이 수행하고자 하는 연산의 종류에 따라 획�
 |                                                                               |                                                                            |
 |   csql> SELECT nation_code, gold FROM participant WHERE nation_code='USA';    |                                                                            |
 |                                                                               |                                                                            |
-|   /* no results until transaction 2 releases a lock                           |                                                                            |
+|   /* no results until transaction 2 releases a lock */                        |                                                                            |
 |                                                                               |                                                                            |
 | ::                                                                            |                                                                            |
 |                                                                               |                                                                            |
@@ -473,8 +475,7 @@ CUBRID는 트랜잭션이 수행하고자 하는 연산의 종류에 따라 획�
 |                                                                               | ::                                                                         |
 |                                                                               |                                                                            |
 |                                                                               |   csql> COMMIT;                                                            |
-|                                                                               |                                                                            |
-|                                                                               |   Current transaction has been committed.                                  |
+|                                                                               |   Execute OK. (0.000192 sec)                                               |
 +-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
 | ::                                                                            |                                                                            |
 |                                                                               |                                                                            |
@@ -505,8 +506,7 @@ CUBRID는 트랜잭션이 수행하고자 하는 연산의 종류에 따라 획�
 | ::                                                                            |                                                                            |
 |                                                                               |                                                                            |
 |   csql> COMMIT;                                                               |                                                                            |
-|                                                                               |                                                                            |
-|   Current transaction has been committed.                                     |                                                                            |
+|   Execute OK. (0.000192 sec)                                                  |                                                                            |
 |                                                                               |                                                                            |
 | ::                                                                            |                                                                            |
 |                                                                               |                                                                            |
@@ -591,7 +591,7 @@ CUBRID는 트랜잭션이 수행하고자 하는 연산의 종류에 따라 획�
 |                                                                                                     |                                                      |
 |   csql> DELETE FROM lock_tbl WHERE host_year=2008;                                                  |                                                      |
 |                                                                                                     |                                                      |
-|   /* no result until transaction 2 releases a lock                                                  |                                                      |
+|   /* no result until transaction 2 releases a lock */                                               |                                                      |
 |                                                                                                     |                                                      |
 | ::                                                                                                  |                                                      |
 |                                                                                                     |                                                      |
@@ -642,7 +642,7 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
 
 **잠금 타임아웃 값 설정**
 
-**$CUBRID/conf/cubrid.conf** 파일 내의 시스템 파라미터 **lock_timeout_in_secs** 또는 **SET TRANSACTION** 구문을 통해 응용 프로그램이 잠금을 대기하는 타임아웃 시간(초 단위)을 설정하며, 설정된 시간이 경과된 이후에는 해당 트랜잭션을 롤백시키고 에러를 출력한다. **lock_timeout_in_secs** 파라미터의 기본값은 **-1** 이며, 이는 트랜잭션 잠금이 허용되는 시점까지 무한정 대기한다는 의미이다. 따라서, 사용자는 응용 프로그램의 트랜잭션 패턴에 맞게 이 값을 변경할 수 있다. 만약, 잠금 타임아웃 값이 0으로 설정되면 잠금이 발생하는 즉시 에러 메시지가 출력될 것이다. ::
+**$CUBRID/conf/cubrid.conf** 파일 내의 시스템 파라미터 **lock_timeout** 또는 **SET TRANSACTION** 구문을 통해 응용 프로그램이 잠금을 대기하는 타임아웃 시간(초 단위)을 설정하며, 설정된 시간이 경과된 이후에는 해당 트랜잭션을 롤백시키고 에러를 출력한다. **lock_timeout** 파라미터의 기본값은 **-1** 이며, 이는 트랜잭션 잠금이 허용되는 시점까지 무한정 대기한다는 의미이다. 따라서, 사용자는 응용 프로그램의 트랜잭션 패턴에 맞게 이 값을 변경할 수 있다. 만약, 잠금 타임아웃 값이 0으로 설정되면 잠금이 발생하는 즉시 에러 메시지가 출력될 것이다. ::
 
     SET TRANSACTION LOCK TIMEOUT timeout_spec [ ; ]
     timeout_spec:
@@ -651,8 +651,8 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
     - unsigned_integer
     - variable
 
-*   **INFINITE** : 트랜잭션 잠금이 허용될 때까지 무한정 대기한다. 시스템 파라미터 **lock_timeout_in_secs** 를 -1로 설정한 것과 같다.
-*   **OFF** : 잠금을 대기하지 않고, 해당 트랜잭션을 롤백시킨 후 에러 메시지를 출력한다. 시스템 파라미터 **lock_timeout_in_secs** 를 0으로 설정한 것과 같다.
+*   **INFINITE** : 트랜잭션 잠금이 허용될 때까지 무한정 대기한다. 시스템 파라미터 **lock_timeout**\ 을 -1로 설정한 것과 같다.
+*   **OFF** : 잠금을 대기하지 않고, 해당 트랜잭션을 롤백시킨 후 에러 메시지를 출력한다. 시스템 파라미터 **lock_timeout**\ 을 0으로 설정한 것과 같다.
 *   *unsigned_integer* : 초 단위로 설정되며, 설정된 시간만큼 트랜잭션 잠금을 대기한다.
 *   *variable* : 변수를 지정할 수 있으며, 변수에 저장된 값만큼 트랜잭션 잠금을 대기한다.
 
@@ -660,7 +660,7 @@ CUBRID는 트랜잭션 잠금 설정이 허용될 때까지 잠금을 대기하�
 
     vi $CUBRID/conf/cubrid.conf
     …
-    lock_timeout_in_secs = 10
+    lock_timeout = 10s
     …
 
 **예제 2** ::
@@ -1623,5 +1623,5 @@ CUBRID는 활성 로그가 꽉 차면 보관 로그로 복사하여 디스크에
 
 .. note::
 
-    데이터베이스의 정보를 잃어버릴 가능성을 줄이기 위해서 보관 로그가 디스크에서 삭제되기 전에 보관 로그의 스냅샷을 만들고 이를 백업 장치에 보관할 것을 권장한다. DBA는 **cubrid backupdb**, **cubrid restoredb** 유틸리티를 사용하여 데이터베이스를 백업하고 복원할 수 있다. 이 유틸리티에 대한 상세한 내용을 보려면 :ref:`db-backup` 를 참조한다.
+    데이터베이스의 정보를 잃어버릴 가능성을 줄이기 위해서 보관 로그가 디스크에서 삭제되기 전에 보관 로그의 스냅샷을 만들고 이를 백업 장치에 보관할 것을 권장한다. DBA는 **cubrid backupdb**, **cubrid restoredb** 유틸리티를 사용하여 데이터베이스를 백업하고 복원할 수 있다. 이 유틸리티에 대한 상세한 내용을 보려면 :ref:`db-backup`\ 을 참조한다.
 

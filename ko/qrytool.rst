@@ -85,13 +85,7 @@ csql을 실행하고 난 후에는 csql> 프롬프트에서 원하는 SQL문을 
     =============
                82
 
-
-    1 row selected.
-    SQL statement execution time:     0.106504 sec
-    
-    Current transaction has been committed.
-
-    1 command(s) successfully processed.
+    1 rows selected. (0.106504 sec) Committed.
 
     csql> ;exit
 
@@ -109,7 +103,7 @@ csql을 실행하고 난 후에는 csql> 프롬프트에서 원하는 SQL문을 
 |                          |                                                                             |                                                                 |                                                                     |   
 |                          | 2) CUBRID 설치 패키지에 내장되어 즉시 사용 가능(CUBRID 2008 R4.3 버전 이상) |                                                                 |                                                                     |
 |                          |                                                                             |                                                                 |                                                                     |   
-|                          | 3) 싱글 호스트 관리에 적합                                                  |                                                                 |                                                                     |
+|                          | 3) 단일 호스트 관리에 적합                                                  |                                                                 |                                                                     |
 |                          |                                                                             |                                                                 |                                                                     |   
 |                          | 4) CUBRID Manager 서버를 통해 DB 접속                                       |                                                                 |                                                                     |
 +--------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------+
@@ -158,7 +152,7 @@ CUBRID 2008 R4.3 이상 버전부터는 설치 패키지에 웹 매니저가 포
         C:\CUBRID>cubrid service start
         ++ cubrid service is running.
         
-#. 웹 브라우저 주소창에 https://localhost:8282/  로 접속한다. 기본 TCP 포트는 8282(HTTPS/SSL)를 사용하며, $CUBRID/conf/cm_httpd.conf 파일을 편집하여 포트를 변경할 수 있다. 이때, http가 아니라 https로 입력해야만 하므로 주의한다.
+#. 웹 브라우저 주소창에 https://localhost:8282/  로 접속한다. 기본 TCP 포트는 8282(HTTPS/SSL)를 사용하며, $CUBRID/conf/cm_ext.conf 파일을 편집하여 포트를 변경할 수 있다. 이때, http가 아니라 https로 입력해야만 하므로 주의한다.
 
 #. 먼저 호스트 로그인을 수행한다. 호스트 접속을 위해서 1차로 CM 서버 사용자(=호스트 사용자) 인증을 수행하며, 기본 사용자 이름/암호는 admin/admin이다.
 

@@ -2,20 +2,15 @@
 Administrator's Guide
 *********************
 
-The "Administrator's Guide" provides the database administrators (**DBA**) with details on how to operate the CUBRID system. The guide includes instructions on the following: database management tasks (creating and deleting databases, adding volume, etc.), migration tasks (moving database to a different location or making changes so that it fits the system's version), and making back-ups and rollbacks of the database in case of failures.
+The "Administrator's Guide" provides the database administrators (**DBA**) with details on how to operate the CUBRID system. 
 
-It also includes instructions on how to use the **cubrid** utility, which starts and stops various processes of the CUBRID server, the broker and manager server.
+*   It includes instructions on how to use the **cubrid** utility, which starts and stops various processes of the CUBRID server, the broker and manager server.
 
-This chapter contains the following:
+*   It includes instructions on the following: database management tasks (creating and deleting databases, adding volume, etc.), migration tasks (moving database to a different location or making changes so that it fits the system's version), and making back-ups and rollbacks of the database in case of failures.
 
-*   cubrid utility
-*   How to control the CUBRID (service, database server, broker, manager server)
-*   How to use the database administrative utilities
-*   Database migration
-*   Database backup and restore
-*   System configuration
-
-**cubrid Utilities**
+*   It includes instructions on the system configuration.
+   
+*   It includes instructions on troubleshooting.
 
 The **cubrid** utilities provide features that can be used to comprehensively manage the CUBRID service. The CUBRID utilities are divided into the service management utility, which is used to manage the CUBRID service process, and the database management utility, which is used to manage the database.
 
@@ -109,56 +104,6 @@ The database management utilities are as follows:
 
 See :ref:`cubrid-utilities` for details.
 
-The following result is displayed if **cubrid** is entered in a prompt.
-
-::
-
-    % cubrid
-     
-    cubrid utility, version 9.1
-    usage: cubrid <utility-name> [args]
-    Type 'cubrid <utility-name>' for help on a specific utility.
-     
-    Available service's utilities:
-        service
-        server
-        broker
-        manager
-        heartbeat
-     
-    Available administrator's utilities:
-        addvoldb
-        alterdbhost
-        backupdb
-        checkdb
-        compactdb
-        copydb
-        createdb
-        deletedb
-        diagdb
-        installdb
-        tranlist
-        killtran
-        loaddb
-        lockdb
-        optimizedb
-        plandump
-        renamedb
-        restoredb
-        spacedb
-        unloaddb
-        paramdump
-        statdump
-        changemode
-        copylogdb
-        applylogdb
-        applyinfo
-        genlocale
-        dumplocale
-        synccolldb
-     
-    cubrid is a tool for DBMS.
-
 .. _utility-on-windows:
 
 .. note::
@@ -173,3 +118,4 @@ The following result is displayed if **cubrid** is entered in a prompt.
     control.rst
     admin_utils.rst
     config.rst
+    troubleshoot.rst

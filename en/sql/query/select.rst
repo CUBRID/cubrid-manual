@@ -10,7 +10,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
         [ WHERE <search_condition> ]
         [ GROUP BY {col_name | expr} [ ASC | DESC ],...[ WITH ROLLUP ] ]
         [ HAVING  <search_condition> ]
-        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ FOR <orderby_for_condition> ] ]
+        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ] [ FOR <orderby_for_condition> ] ]
         [ LIMIT [offset,] row_count ]
         [ USING INDEX { index name [,index_name,...] | NONE }]
      
@@ -195,9 +195,10 @@ Subquery Derived Table
 
 Each instance in the derived table is created from the result of the subquery in the **FROM** clause. A derived table created form a subquery can have any number of columns and records. ::
 
-    FROM (subquery) [ AS ] derived_table_name [( column_name [ {, column_name } ... ] )]
+    FROM (subquery) [[ AS ] derived_table_name [( column_name [ {, column_name } ... ] )]]
 
 *   The number of *column_name* and the number of columns created by the *subquery* must be identical.
+*   *derived_table_name* can be omitted.
 
 The following example shows how to retrieve the sum of the number of gold (*gold*) medals won by Korea and that of silver medals won by Japan. This example shows a way of getting an intermediate result of the subquery and processing it as a single result, by using a derived table. The query returns the sum of the *gold* values whose *nation_code* is 'KOR' and the *silver* values whose *nation_code* column is 'JPN'.
 
@@ -404,7 +405,7 @@ ORDER BY Clause
 The **ORDER BY** clause sorts the query result set in ascending or descending order. If you do not specify a sorting option such as **ASC** or **DESC**, the result set in ascending order by default. If you do not specify the **ORDER BY** clause, the order of records to be queried may vary depending on query. ::
 
     SELECT ...
-    ORDER BY {col_name | expr | position } [ASC | DESC],...]
+    ORDER BY { col_name | expr | position } [ ASC | DESC ], ...] [ NULLS { FIRST | LAST } ]
         [ FOR <orderby_for_condition> ] ]
      
     <orderby_for_condition> ::=
@@ -415,6 +416,8 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
 *   *col_name* | *expr* | *position* : Specifies a column name, expression, alias, or column location. One or more column names, expressions or aliases can be specified. Items are separated by commas. A column that is not specified in the list of **SELECT** columns can be specified.
 
 *   [ **ASC** | **DESC** ] : **ASC** means sorting in ascending order, and **DESC** is sorting in descending order. If the sorting option is not specified, the default value is **ASC**.
+
+*   [ **NULLS** { **FIRST** | **LAST** } ] : **NULLS FIRST** sorts NULL at first, **NULLS LAST** sorts NULL at last. If this syntax is omitted, **ASC** sorts NULL at first, **DESC** sorts NULL at last.
 
 .. code-block:: sql
 
@@ -473,6 +476,54 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
               301     3.000000000000000e+02
               501     1.750000000000000e+02
 
+The following is an example how to specify the NULLS FIRST or NULLS LAST after ORDER BY clause.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (a INT, b VARCHAR);
+
+    INSERT INTO tbl VALUES
+    (1,NULL), (2,NULL), (3,'AB'), (4,NULL), (5,'AB'), 
+    (6,NULL), (7,'ABCD'), (8,NULL), (9,'ABCD'), (10,NULL);
+
+.. code-block:: sql
+    
+    SELECT * FROM tbl ORDER BY b NULLS FIRST;
+
+::
+
+                a  b
+    ===================================
+                1  NULL
+                2  NULL
+                4  NULL
+                6  NULL
+                8  NULL
+               10  NULL
+                3  'ab'
+                5  'ab'
+                7  'abcd'
+                9  'abcd'
+    
+.. code-block:: sql
+
+    SELECT * FROM tbl ORDER BY b NULLS LAST;
+
+::
+
+                a  b
+    ===================================
+                3  'ab'
+                5  'ab'
+                7  'abcd'
+                9  'abcd'
+                1  NULL
+                2  NULL
+                4  NULL
+                6  NULL
+                8  NULL
+               10  NULL
+
 .. _limit-clause:
 
 LIMIT Clause
@@ -517,6 +568,11 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
     SELECT t1.*
     FROM (SELECT * FROM sales_tbl AS t2 WHERE sales_amount > 100 LIMIT 5) AS t1
     LIMIT 1,3;
+    
+    -- above query and below query shows the same result
+    SELECT t1.*
+    FROM (SELECT * FROM sales_tbl AS t2 WHERE sales_amount > 100 LIMIT 5) AS t1
+    LIMIT 3 OFFSET 1;
     
 ::
 

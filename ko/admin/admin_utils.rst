@@ -7,7 +7,7 @@ cubrid 관리 유틸리티의 사용법(구문)은 다음과 같다. ::
 
     cubrid utility_name
     utility_name :
-        createdb [option] <database_name>   --- 데이터베이스 생성
+        createdb [option] <database_name> <locale_name> --- 데이터베이스 생성
         deletedb [option] <database_name>   --- 데이터베이스 삭제
         installdb [option] <database-name>   --- 데이터베이스 설치
         renamedb [option] <source-database-name> <target-database-name>  --- 데이터베이스 이름 변경
@@ -46,7 +46,7 @@ CUBRID는 **DBA** 와 **PUBLIC** 이라는 사용자를 기본으로 제공한�
 
 *   **DBA** 는 모든 사용자의 멤버가 되며 데이터베이스의 모든 객체에 접근할 수 있는 최고 권한 사용자이다. 또한, **DBA** 만이 데이터베이스 사용자를 추가, 편집, 삭제할 수 있는 권한을 갖는다.
 
-*   **DBA** 를 포함한 모든 사용자는 **PUBLIC** 의 멤버가 되므로 모든 데이터베이스 사용자는 **PUBLIC** 에 부여된 권한을 가진다. 예를 들어, **PUBLIC** 사용자에 권한 **B** 를 추가하면 데이터베이스의 모든 사용자에게 일괄적으로 권한 **B** 가 부여된다.
+*   **DBA** 를 포함한 모든 사용자는 **PUBLIC**\ 의 멤버가 되므로 모든 데이터베이스 사용자는 **PUBLIC** 에 부여된 권한을 가진다. 예를 들어, **PUBLIC** 사용자에 권한 **B** 를 추가하면 데이터베이스의 모든 사용자에게 일괄적으로 권한 **B** 가 부여된다.
 
 .. _databases-txt-file:
 
@@ -70,7 +70,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
     testdb /home1/user/CUBRID/databases/testdb d85007 /home1/user/CUBRID/databases/testdb
     demodb /home1/user/CUBRID/databases/demodb d85007 /home1/user/CUBRID/databases/demodb
 
-데이터베이스 위치 정보 파일의 저장 디렉터리는 기본적으로 설치 디렉터리의 **databases** 디렉터리로 지정되며, 시스템 환경 변수 **CUBRID_DATABASES** 의 설정을 변경하여 기본 디렉터리를 변경할 수 있다. 데이터베이스 위치 정보 파일의 저장 디렉터리 경로가 유효해야 데이터베이스 관리를 위한 **cubrid** 유틸리티가 데이터베이스 위치 정보 파일에 접근할 수 있게 된다. 이를 위해서 사용자는 디렉터리 경로를 정확하게 입력해야 하고, 해당 디렉터리 경로에 대해 쓰기 권한을 가지는지 확인해야 한다. 다음은 **CUBRID_DATABASES** 환경 변수에 설정된 값을 확인하는 예이다.
+데이터베이스 위치 정보 파일의 저장 디렉터리는 기본적으로 설치 디렉터리의 **databases** 디렉터리로 지정되며, 시스템 환경 변수 **CUBRID_DATABASES**\ 의 설정을 변경하여 기본 디렉터리를 변경할 수 있다. 데이터베이스 위치 정보 파일의 저장 디렉터리 경로가 유효해야 데이터베이스 관리를 위한 **cubrid** 유틸리티가 데이터베이스 위치 정보 파일에 접근할 수 있게 된다. 이를 위해서 사용자는 디렉터리 경로를 정확하게 입력해야 하고, 해당 디렉터리 경로에 대해 쓰기 권한을 가지는지 확인해야 한다. 다음은 **CUBRID_DATABASES** 환경 변수에 설정된 값을 확인하는 예이다.
 
 ::
 
@@ -84,20 +84,105 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 데이터베이스 생성, 볼륨 추가, 삭제
 ==================================
 
+CUBRID 데이터베이스의 볼륨은 크게 영구적 볼륨, 일시적 볼륨, 백업 볼륨으로 분류한다. 
+
+*   영구적 볼륨 중
+ 
+    *   데이터베이스 볼륨에는 범용(generic), 데이터(data), 인덱스(index), 임시(temp) 볼륨이 있고, 
+    *   로그 볼륨에는 활성(active) 로그, 보관(archiving) 로그, 백그라운드 보관(background archiving) 로그가 있다.
+    
+*   일시적 볼륨에는 일시적 임시(temporary temp) 볼륨이 있다.
+
+볼륨에 대한 자세한 내용은 :ref:`database-volume-structure`\ 를 참고한다.
+
+다음은 testdb 데이터베이스를 운영할 때 발생하는 데이터베이스 관련 파일의 예이다.
+
++----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
+| 파일 이름      | 크기  | 종류            | 분류           | 설명                                                                                                 |
++================+=======+=================+================+======================================================================================================+
+| testdb         | 40MB  | generic         | 데이터베이스   | DB 생성 시 최초로 생성되는 볼륨. **generic** 볼륨으로 사용되며, DB의 메타 정보를 포함한다.           |
+|                |       |                 | 볼륨           | cubrid.conf의 db_volume_size를 40M로 명시한 후 "cubrid createdb"를 수행했거나 "cubrid createdb"      |
+|                |       |                 |                | 수행 시 --db-volume-size를 40M로 명시했기 때문에 파일의 크기는 40MB가 되었다.                        |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x001    | 40MB  | generic, data   |                | 자동으로 생성된 **generic** 파일 또는 사용자의 볼륨 추가 명령으로 생성된 파일.                       |
+|                |       | index, temp     |                | cubrid.conf의 db_volume_size를 40M로 명시한 후 DB를 시작했기                                         |
+|                |       | 중 하나         |                | 때문에 자동으로 생성되는 **generic** 파일의 크기는 40MB가 되었다.                                    |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x002    | 40MB  | generic, data   |                | 자동으로 생성된 **generic** 파일 또는 사용자의 볼륨 추가 명령으로 생성된 파일                        |
+|                |       | index, temp     |                |                                                                                                      |
+|                |       | 중 하나         |                |                                                                                                      |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x003    | 40MB  | generic, data   |                | 자동으로 생성된 **generic** 파일 또는 사용자의 볼륨 추가 명령으로 생성된 파일                        |
+|                |       | index, temp     |                |                                                                                                      |
+|                |       | 중 하나         |                |                                                                                                      |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x004    | 40MB  | generic, data   |                | 자동으로 생성된 **generic** 파일 또는 사용자의 볼륨 추가 명령으로 생성된 파일                        |
+|                |       | index, temp     |                |                                                                                                      |
+|                |       | 중 하나         |                |                                                                                                      |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x005    | 40MB  | generic, data   |                | 자동으로 생성된 **generic** 파일 또는 사용자의 볼륨 추가 명령으로 생성된 파일                        |
+|                |       | index, temp     |                |                                                                                                      |
+|                |       | 중 하나         |                |                                                                                                      |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x006    | 2GB   | generic, data   |                | 자동으로 생성된 **generic** 파일 또는 사용자의 볼륨 추가 명령으로 생성된 파일.                       |
+|                |       | index, temp     |                | cubrid.conf의 db_volume_size를 2G로 변경한 후 DB를 재시작했거나                                      |
+|                |       | 중 하나         |                | "cubrid addvoldb" 수행 시 --db-volume-size를 2G로 명시했기 때문에 크기가 2GB가 되었다.               |
++----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
+| testdb_t32766  | 360MB | temporary temp  | 없음           | **temp** 볼륨이 필요한 질의(예: 정렬, 스캐닝, 인덱스 생성) 실행 중 **temp** 볼륨의 공간이            |
+|                |       |                 |                | 부족할 때 임시로 생성되는 파일. DB를 재시작하면 삭제된다. 하지만 임의로 삭제하면 안 된다.            |
++----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
+| testdb_lgar_t  | 40MB  | background      | 로그 볼륨      | 백그라운드 보관(background archiving) 기능과 관련된 로그 파일.                                       |
+|                |       | archiving       |                | 보관 로그를 저장할 때 사용된다.                                                                      |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_lgar224 | 40MB  | archiving       |                | 보관 로그(archiving log)가 계속 쌓이면서 세 자리 숫자로 끝나는 파일들이 생성되는데,                  |
+|                |       |                 |                | cubrid backupdb -r 옵션 또는 cubrid.conf의 log_max_archives 파라미터의 설정으로 인해 001~223까지의   |
+|                |       |                 |                | 보관 로그들은 정상적으로 삭제된 것으로 보인다. 보관 로그가  삭제되는 경우, lginf 파일의 REMOVE       |
+|                |       |                 |                | 섹션에서 삭제된 보관 로그 번호를 확인할 수 있다. :ref:`managing-archive-logs`\ 를 참고한다.          |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_lgat    | 40MB  | active          |                | 활성 로그(active log) 파일                                                                           |
++----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
+
+*   데이터베이스 볼륨 파일
+
+    *   위의 예에서 testdb, testdb_x001 ~ testdb_x006이 데이터베이스 볼륨 파일에 해당된다.
+    *   "cubrid createdb", "cubrid addvoldb" 명령 수행 시 "--db-volume-size" 옵션에 의해 크기가 정해진다. 
+    *   자동으로 생성되는 볼륨은 항상 **generic** 타입이다.
+    
+*   로그 볼륨 파일
+
+    *   위의 예에서 testdb_lgar_t, testdb_lgar224, testdb_lgat가 로그 볼륨 파일에 해당된다.
+    *   "cubrid createdb" 명령 수행 시 "--log-volume-size" 옵션에 의해 크기가 정해진다.  
+
 .. _creating-database:
 
 데이터베이스 생성
 -----------------
 
-**cubrid createdb** 유틸리티는 CUBRID 시스템에서 사용할 데이터베이스를 생성하고 미리 만들어진 CUBRID 시스템 테이블을 초기화한다. 데이터베이스에 권한이 주어진 초기 사용자를 정의할 수도 있다. 일반적으로 데이터베이스 관리자만이 **cubrid createdb** 유틸리티를 사용한다. 로그와 데이터베이스의 위치도 지정할 수 있다. ::
+**cubrid createdb** 유틸리티는 CUBRID 시스템에서 사용할 데이터베이스를 생성하고 미리 만들어진 CUBRID 시스템 테이블을 초기화한다. 데이터베이스에 권한이 주어진 초기 사용자를 정의할 수도 있다. 일반적으로 데이터베이스 관리자만이 **cubrid createdb** 유틸리티를 사용한다. 로그와 데이터베이스의 위치도 지정할 수 있다. 
 
-    cubrid createdb [options] database_name
+.. warning::
+
+    데이터베이스를 생성할 때 데이터베이스 이름 뒤에 로캘 이름과 문자셋(예: ko_KR.utf8)을 반드시 지정해야 한다. 문자셋에 따라 문자열 타입의 크기, 문자열 비교 연산 등에 영향을 끼친다. 데이터베이스 생성 시 지정된 문자셋은 변경할 수 없으므로 지정에 주의해야 한다.
+    
+    문자셋, 로캘 및 콜레이션 설정과 관련된 자세한 내용은 :doc:`/sql/i18n`\ 을 참고한다.
+
+::
+
+    cubrid createdb [options] database_name locale_name.charset
 
 *   **cubrid**: CUBRID 서비스 및 데이터베이스 관리를 위한 통합 유틸리티이다.
 
 *   **createdb**: 새로운 데이터베이스를 생성하기 위한 명령이다.
 
 *   *database_name*: 데이터베이스가 생성될 디렉터리 경로명을 포함하지 않고, 생성하고자 하는 데이터베이스의 이름을 고유하게 부여한다. 이 때, 지정한 데이터베이스 이름이 이미 존재하는 데이터베이스 이름과 중복되는 경우, CUBRID는 기존 파일을 보호하기 위하여 데이터베이스 생성을 더 이상 진행하지 않는다.
+
+*   *locale_name*: 데이터베이스에서 사용할 로캘 이름을 입력한다. CUBRID에서 사용 가능한 로캘 이름은 :ref:`locale-selection`\ 을 참고한다.
+
+*   *charset*: 데이터베이스에서 사용할 문자셋을 입력한다. CUBRID에서 사용 가능한 문자셋은 iso88591, euckr, utf8이다. 
+    
+    *   *locale_name*\ 이 en_US이고 *charset*\ 을 생략하면 문자셋은 iso88591이 된다.
+    *   *locale_name*\ 이 ko_KR이고 *charset*\ 을 생략하면 문자셋은 utf8이 된다.
+    *   나머지 *locale_name*\ 은 *charset*\ 을 생략할 수 없으며, utf8만 지정 가능하다.
 
 데이터베이스 이름의 최대 길이는 영문 17자이다.
 
@@ -111,7 +196,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 첫 번째로 생성되는 testdb의 볼륨 크기를 512MB로 지정하는 구문이다. ::
 
-        cubrid createdb --db-volume-size=512M testdb
+        cubrid createdb --db-volume-size=512M testdb en_US
     
 .. option:: --db-page-size=SIZE
 
@@ -119,7 +204,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 testdb를 생성하고, testdb의 데이터베이스 페이지 크기를 16K로 지정하는 구문이다. ::
 
-        cubrid createdb --db-page-size=16K testdb 
+        cubrid createdb --db-page-size=16K testdb en_US
 
 .. option:: --log-volume-size=SIZE 
 
@@ -127,7 +212,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb* 를 생성하고, *testdb* 의 로그 볼륨 크기를 256M로 지정하는 구문이다. ::
 
-        cubrid createdb --log-volume-size=256M testdb
+        cubrid createdb --log-volume-size=256M testdb en_US
 
 .. option:: --log-page-size=SIZE
 
@@ -136,7 +221,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb* 를 생성하고, *testdb*\ 의 로그 볼륨 페이지 크기를 8kbyte로 지정하는 구문이다. ::
 
-        cubrid createdb -log-page-size=8K testdb
+        cubrid createdb -log-page-size=8K testdb en_US
 
 .. option:: --comment=COMMENT
 
@@ -144,7 +229,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb* 를 생성하고, 데이터베이스 볼륨에 이에 대한 주석을 추가하는 구문이다. ::
 
-        cubrid createdb --comment "a new database for study" testdb
+        cubrid createdb --comment "a new database for study" testdb en_US
     
 .. option:: -F, --file-path=PATH
 
@@ -152,7 +237,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb* 라는 이름의 데이터베이스를 /dbtemp/new_db라는 디렉터리에 생성하는 구문이다. ::
 
-        cubrid createdb -F "/dbtemp/new_db/" testdb
+        cubrid createdb -F "/dbtemp/new_db/" testdb en_US
 
 .. option:: -L, --log-path=PATH
 
@@ -161,7 +246,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb*    라는 이름의 데이터베이스를 /dbtemp/newdb라는 디렉터리에 생성하고, 로그 파일을 /dbtemp/db_log 디렉터리에 생성하는 구문이다. ::
 
-        cubrid createdb -F "/dbtemp/new_db/" -L "/dbtemp/db_log/" testdb
+        cubrid createdb -F "/dbtemp/new_db/" -L "/dbtemp/db_log/" testdb en_US
     
 .. option:: -B, --lob-base-path=PATH
     
@@ -169,7 +254,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb*    를 현재 작업 디렉터리에 생성하고, **LOB** 데이터 파일이 저장될 디렉터리를 로컬 파일 시스템의 "/home/data1" 로 지정하는 구문이다. ::
 
-        cubrid createdb --lob-base-path "file:/home1/data1" testdb
+        cubrid createdb --lob-base-path "file:/home1/data1" testdb en_US
     
 .. option:: --server-name=HOST
 
@@ -177,23 +262,23 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb* 를 *aa_host* 호스트 상에 생성 및 등록하는 구문이다. ::
 
-        cubrid createdb --server-name aa_host testdb
+        cubrid createdb --server-name aa_host testdb en_US
 
 .. option:: -r, --replace
 
     **-r** 은 지정된 데이터베이스 이름이 이미 존재하는 데이터베이스 이름과 중복되더라도 새로운 데이터베이스를 생성하고, 기존의 데이터베이스를 덮어쓰도록 하는 옵션이다.
 
-    다음은 *testdb* 라는 이름의 데이터베이스가 이미 존재하더라도 기존의 *testdb* 를 덮어쓰기하고 새로운 *testdb* 를 생성하는 구문이다. ::
+    다음은 *testdb* 라는 이름의 데이터베이스가 이미 존재하더라도 기존의 *testdb* 를 덮어쓰고 새로운 *testdb* 를 생성하는 구문이다. ::
 
-        cubrid createdb -r testdb
+        cubrid createdb -r testdb en_US
 
 .. option:: --more-volume-file=FILE
 
-    데이터베이스가 생성되는 디렉터리에 추가 볼륨을 생성하는 옵션으로 지정된 파일에 저장된 명세에 따라 추가 볼륨을 생성한다. 이 옵션을 이용하지 않더라도,     **cubrid addvoldb**    유틸리티를 이용하여 볼륨을 추가할 수 있다.
+    데이터베이스가 생성되는 디렉터리에 추가 볼륨을 생성하는 옵션으로 지정된 파일에 저장된 명세에 따라 추가 볼륨을 생성한다. 이 옵션을 이용하지 않더라도, **cubrid addvoldb** 유틸리티를 이용하여 볼륨을 추가할 수 있다.
 
     다음은 *testdb* 를 생성함과 동시에 vol_info.txt에 저장된 명세를 기반으로 볼륨을 추가 생성하는 구문이다. ::
 
-        cubrid createdb --more-volume-file vol_info.txt testdb
+        cubrid createdb --more-volume-file vol_info.txt testdb en_US
 
     다음은 위 구문으로 vol_info.txt에 저장된 추가 볼륨에 관한 명세이다. 각 볼륨에 관한 명세는 라인 단위로 작성되어야 한다. ::
 
@@ -226,7 +311,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb* 를 생성함과 동시에 user_info.txt에 정의된 사용자 정보를 기반으로 *testdb* 에 대한 사용자를 추가하는 구문이다. ::
 
-        cubrid createdb --user-definition-file=user_info.txt testdb
+        cubrid createdb --user-definition-file=user_info.txt testdb en_US
 
     사용자 정보 파일의 구문은 아래와 같다. ::
 
@@ -259,7 +344,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
         USER tuscan GROUPS suv
         USER i30 GROUPS hatchback
 
-    위 예제와 동일한 사용자 관계를 정의하는 파일이다. 다만, 아래 예제에서는    **MEMBERS**    절을 이용하였다. ::
+    위 예제와 동일한 사용자 관계를 정의하는 파일이다. 다만, 아래 예제에서는 **MEMBERS**\ 절을 이용하였다. ::
 
         --
         -- 사용자 정보 파일의 예2
@@ -278,7 +363,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb* 를 생성함과 동시에 table_schema.sql에 정의된 SQL 구문을 CSQL 인터프리터에서 실행시키는 구문이다. ::
 
-        cubrid createdb --csql-initialization-file table_schema.sql testdb
+        cubrid createdb --csql-initialization-file table_schema.sql testdb en_US
 
 .. option:: -o, --output-file=FILE
 
@@ -287,7 +372,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb* 를 생성하면서 이에 관한 유틸리티의 출력을 콘솔 화면이 아닌 db_output 파일에 저장하는 구문이다. ::
     
-        cubrid createdb -o db_output testdb
+        cubrid createdb -o db_output testdb en_US
 
 .. option::  -v, --verbose
 
@@ -295,7 +380,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
     다음은 *testdb* 를 생성하면서 이에 관한 상세한 연산 정보를 화면에 출력하는 구문이다. ::
 
-        cubrid createdb -v testdb
+        cubrid createdb -v testdb en_US
 
 .. note::
 
@@ -305,18 +390,26 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 다음은 데이터베이스를 생성하고 볼륨 용도를 구분하여 데이터(**data**), 인덱스(**index**), 임시(**temp**) 볼륨을 추가하는 예이다. ::
 
-    cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
-    cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-    cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-    cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-    cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+    cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
+    cubrid addvoldb -S -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
 
 .. _adding-database-volume:    
     
 데이터베이스 볼륨 추가
 ----------------------
 
-데이터베이스 볼륨을 추가한다. ::
+전체 **generic** 볼륨의 여유 공간이 :ref:`disk-parameters`\ 에 속한 **generic_vol_prealloc_size** 파라미터에서 지정한 크기(기본값: 50M)보다 작아지면 자동으로 **generic** 볼륨이 추가된다. 볼륨 자동 추가는 새로운 페이지 할당 요청이 있을 때 이루어지며, SELECT만 수행되는 경우 볼륨이 확장되지 않는다.
+
+CUBRID의 볼륨은 데이터 저장, 인덱스 저장, 임시 결과 저장 등 용도에 따라 구분되는데, **generic** 볼륨은 데이터 및 인덱스 저장 용도로 사용될 수 있다.
+
+각 볼륨의 종류(용도)에 대해서는 :ref:`database-volume-structure`\ 를 참고한다.
+
+이에 비해, 사용자에 의해 수동으로 데이터베이스 볼륨을 추가하는 명령은 다음과 같다.
+
+::
 
     cubrid addvoldb [options] database_name
 
@@ -328,11 +421,11 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 다음은 데이터베이스를 생성하고 볼륨 용도를 구분하여 데이터(**data**), 인덱스(**index**), 임시(**temp**) 볼륨을 추가하는 예이다. ::
 
-    cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
-    cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-    cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-    cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-    cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+    cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
+    cubrid addvoldb -S -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
 
 다음은 cubrid addvoldb에 대한 [options]이다.
 
@@ -340,7 +433,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. option:: --db-volume-size=SIZE
 
-    추가되는 데이터베이스 볼륨의 크기를 지정하는 옵션으로, 기본값은 **cubrid.conf** 에 지정된 시스템 파라미터 **db_volume_size** 의 값이다. K, M, G, T로 단위를 설정할 수 있으며, 각각 KB(kilobytes), MB(megabytes), GB(gigabytes), TB(terabytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다.
+    추가되는 데이터베이스 볼륨의 크기를 지정하는 옵션으로, 기본값은 **cubrid.conf** 에 지정된 시스템 파라미터 **db_volume_size**\ 의 값이다. K, M, G, T로 단위를 설정할 수 있으며, 각각 KB(kilobytes), MB(megabytes), GB(gigabytes), TB(terabytes)를 의미한다. 단위를 생략하면 바이트 단위가 적용된다.
 
     다음은 *testdb* 에 데이터 볼륨을 추가하며 볼륨 크기를 256MB로 지정하는 구문이다. ::
 
@@ -545,19 +638,19 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. option:: --server-name=HOST
 
-    새로운 데이터베이스의 서버 호스트 이름을 명시하며, 이는 **databases.txt** 의 **db-host** 항목에 등록된다. 이 옵션을 생략하면, 로컬 호스트가 등록된다. ::
+    새로운 데이터베이스의 서버 호스트 이름을 명시하며, 이는 **databases.txt**\ 의 **db-host** 항목에 등록된다. 이 옵션을 생략하면, 로컬 호스트가 등록된다. ::
 
         cubrid copydb --server-name=cub_server1 demodb new_demodb
 
 .. option:: -F, --file-path=PATH
 
-    새로운 데이터베이스 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 현재 작업 디렉터리에 새로운 데이터베이스의 볼륨이 생성된다. 이 경로는 **databases.txt** 의 **vol-path** 항목에 등록된다. ::
+    새로운 데이터베이스 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 현재 작업 디렉터리에 새로운 데이터베이스의 볼륨이 생성된다. 이 경로는 **databases.txt**\ 의 **vol-path** 항목에 등록된다. ::
     
         cubrid copydb -F /home/usr/CUBRID/databases demodb new_demodb
 
 .. option:: -L, --log-path=PATH
 
-    새로운 데이터베이스 로그 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로에 로그 볼륨도 함께 생성된다. 이 경로는 **databases.txt** 의 **log-path** 항목에 등록된다. ::
+    새로운 데이터베이스 로그 볼륨이 저장되는 특정 디렉터리 경로를 지정할 수 있다. 절대 경로로 지정해야 하며, 존재하지 않는 디렉터리를 지정하면 에러를 출력한다. 이 옵션을 생략하면 새로운 데이터베이스 볼륨이 저장되는 경로에 로그 볼륨도 함께 생성된다. 이 경로는 **databases.txt**\ 의 **log-path** 항목에 등록된다. ::
     
         cubrid copydb -L /home/usr/CUBRID/databases/logs demodb new_demodb
 
@@ -595,7 +688,7 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
 
 .. option:: -d 또는 --delete-source
 
-    새로운 데이터베이스로 복사한 후, 원본 데이터베이스를 제거한다. 이 옵션이 주어지면 데이터베이스 복사 후 **cubrid deletedb** 를 수행하는 것과 동일하다. 단, 원본 데이터베이스에 **LOB** 데이터를 포함하는 경우, 원본 데이터베이스 대한 **LOB** 파일 디렉터리 경로가 새로운 데이터베이스로 복사되어 **databases.txt** 의 **lob-base-path** 항목에 등록된다. ::
+    새로운 데이터베이스로 복사한 후, 원본 데이터베이스를 제거한다. 이 옵션이 주어지면 데이터베이스 복사 후 **cubrid deletedb** 를 수행하는 것과 동일하다. 단, 원본 데이터베이스에 **LOB** 데이터를 포함하는 경우, 원본 데이터베이스 대한 **LOB** 파일 디렉터리 경로가 새로운 데이터베이스로 복사되어 **databases.txt**\ 의 **lob-base-path** 항목에 등록된다. ::
 
         cubrid copydb -d -F /home/usr/CUBRID/databases demodb new_demodb
 
@@ -711,14 +804,83 @@ CUBRID에 존재하는 모든 데이터베이스의 위치 정보는 **databases
     데이터베이스 볼륨의 공간을 지정한 크기 단위로 출력하기 위한 옵션이며, 기본값은 H이다.
     단위를 PAGE, M, G, T, H로 설정할 수 있으며, 각각 페이지, MB(megabytes), GB(gigabytes), TB(terabytes), 자동 지정을 의미한다. 자동 지정을 의미하는 H로 설정하면 데이터베이스 크기가 1MB 이상 1024MB 미만일 때 MB 단위로, 1GB 이상 1024GB 미만일 때 GB 단위로 결정된다. ::
 
-        cubrid spacedb --size_unit=M testdb
-        cubrid spacedb --size_unit=H testdb
+        $ cubrid spacedb --size-unit=M testdb
+        $ cubrid spacedb --size-unit=H testdb
+
+        Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+        Volid  Purpose    total_size   free_size  Vol Name
+
+            0   GENERIC       20.0 M      17.0 M  /home1/cubrid/testdb
+            1      DATA       20.0 M      19.5 M  /home1/cubrid/testdb_x001
+            2     INDEX       20.0 M      19.6 M  /home1/cubrid/testdb_x002
+            3      TEMP       20.0 M      19.6 M  /home1/cubrid/testdb_x003
+            4      TEMP       20.0 M      19.9 M  /home1/cubrid/testdb_x004
+        -------------------------------------------------------------------------------
+            5                100.0 M      95.6 M
+        Space description for temporary volumes for database 'testdb' with pagesize 16.0K.
+
+        Volid  Purpose    total_size   free_size  Vol Name
+
+        LOB space description file:/home1/cubrid/lob
 
 .. option:: -s, --summarize
 
     데이터 볼륨(DATA), 인덱스 볼륨(INDEX), 범용 볼륨(GENERIC), 임시 볼륨(TEMP), 일시적 임시 볼륨(TEMP TEMP)별로 전체 공간(total_pages), 사용 공간(used_pages), 빈 공간(free_pages)을 합산하여 출력한다. ::
 
-        cubrid spacedb -s testdb
+        $ cubrid spacedb -s testdb
+
+        Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+        Purpose     total_size   used_size   free_size  volume_count
+        -------------------------------------------------------------
+              DATA      20.0 M       0.5 M      19.5 M          1
+             INDEX      20.0 M       0.4 M      19.6 M          1
+           GENERIC      20.0 M       3.0 M      17.0 M          1
+              TEMP      40.0 M       0.5 M      39.5 M          2
+         TEMP TEMP       0.0 M       0.0 M       0.0 M          0
+        -------------------------------------------------------------
+             TOTAL     100.0 M       4.4 M      95.6 M          5
+
+.. option:: -p, --purpose
+
+    사용 중인 디스크 공간을 data_size, index_size, temp_size로 구분하여 출력한다.
+
+    ::
+    
+        Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+        Volid  Purpose    total_size   free_size   data_size  index_size   temp_size  Vol Name
+
+            0   GENERIC       20.0 M      17.0 M       2.1 M       0.9 M       0.0 M  /home1/cubrid/testdb
+            1      DATA       20.0 M      19.5 M       0.4 M       0.0 M       0.0 M  /home1/cubrid/testdb_x001
+            2     INDEX       20.0 M      19.6 M       0.0 M       0.4 M       0.0 M  /home1/cubrid/testdb_x002
+            3      TEMP       20.0 M      19.6 M       0.0 M       0.0 M       0.3 M  /home1/cubrid/testdb_x003
+            4      TEMP       20.0 M      19.9 M       0.0 M       0.0 M       0.1 M  /home1/cubrid/testdb_x004
+        ----------------------------------------------------------------------------------------------------
+            5                100.0 M      95.6 M       2.5 M       1.2 M       0.4 M
+        Space description for temporary volumes for database 'testdb' with pagesize 16.0K.
+
+        Volid  Purpose    total_size   free_size   data_size  index_size   temp_size  Vol Name
+
+        LOB space description file:/home1/cubrid/lob
+
+**-p**\ 와 **-s**\ 를 함께 사용하는 경우, 요약 정보를 출력할 때 사용 중인 디스크 공간을 data_size, index_size, temp_size로 구분하여 출력한다.
+
+::
+
+    $ cubrid spacedb -s -p testdb
+    Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+    Purpose     total_size   used_size   free_size   data_size  index_size   temp_size  volume_count
+    -------------------------------------------------------------------------------------------------
+          DATA      20.0 M       0.5 M      19.5 M       0.4 M       0.0 M       0.0 M          1
+         INDEX      20.0 M       0.4 M      19.6 M       0.0 M       0.4 M       0.0 M          1
+       GENERIC      20.0 M       3.0 M      17.0 M       2.1 M       0.9 M       0.0 M          1
+          TEMP      40.0 M       0.5 M      39.5 M       0.0 M       0.0 M       0.4 M          2
+     TEMP TEMP       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M          0
+    -------------------------------------------------------------------------------------------------
+         TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
 
 사용 공간 정리
 --------------
@@ -896,7 +1058,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
 
         cubrid statdump -i 5 testdb
          
-        Thu April 07 23:10:08 KST 2011
+        Thu April 07 23:10:08 KST 2013
          
          *** SERVER EXECUTION STATISTICS ***
         Num_file_creates              =          0
@@ -914,7 +1076,8 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_log_page_iowrites         =          0
         Num_log_append_records        =          0
         Num_log_archives              =          0
-        Num_log_checkpoints           =          0
+        Num_log_start_checkpoints     =          0
+        Num_log_end_checkpoints       =          0
         Num_log_wals                  =          0
         Num_page_locks_acquired       =          0
         Num_object_locks_acquired     =          0
@@ -953,7 +1116,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Num_adaptive_flush_pages      =          0
         Num_adaptive_flush_log_pages  =          0
         Num_adaptive_flush_max_pages  =        900
-         
+        
          *** OTHER STATISTICS ***
         Data_page_buffer_hit_ratio    =       0.00
 
@@ -999,7 +1162,9 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     |             +----------------------------------------+------------------------------------------------------------------------------+
     |             | Num_log_archives                       | 보관 로그의 개수                                                             |
     |             +----------------------------------------+------------------------------------------------------------------------------+
-    |             | Num_log_checkpoints                    | 체크포인트 수행 횟수                                                         |
+    |             | Num_log_start_checkpoints              | 체크포인트 시작 횟수                                                         |
+    |             +----------------------------------------+------------------------------------------------------------------------------+
+    |             | Num_log_end_checkpoints                | 체크포인트 종료 횟수                                                         |
     |             +----------------------------------------+------------------------------------------------------------------------------+
     |             | Num_log_wals                           | 현재 사용하지 않음                                                           |
     +-------------+----------------------------------------+------------------------------------------------------------------------------+
@@ -1011,7 +1176,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     |             +----------------------------------------+------------------------------------------------------------------------------+
     |             | Num_tran_start_topops                  | 시작한 top operation의 개수                                                  |
     |             +----------------------------------------+------------------------------------------------------------------------------+
-    |             | Num_tran_end_topops                    | 종료한 top peration의 개수                                                   |
+    |             | Num_tran_end_topops                    | 종료한 top operation의 개수                                                  |
     |             +----------------------------------------+------------------------------------------------------------------------------+
     |             | Num_tran_interrupts                    | 인터럽트 개수                                                                |
     +-------------+----------------------------------------+------------------------------------------------------------------------------+
@@ -1150,7 +1315,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
 출력 내용
 ^^^^^^^^^
 
-**cubrid lockdb** 의 출력 내용은 논리적으로 3개의 섹션으로 나뉘어져 있다.
+**cubrid lockdb**\ 의 출력 내용은 논리적으로 3개의 섹션으로 나뉘어져 있다.
 
     * 서버에 대한 잠금 설정
 
@@ -1173,7 +1338,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
 
 **현재 데이터베이스에 접속한 클라이언트들**
 
-**cubrid lockdb** 출력 내용의 두 번째 섹션은 데이터베이스에 연결된 모든 클라이언트의 정보를 포함한다. 이 정보에는 각각의 클라이언트에 대한 트랜잭션 인덱스, 프로그램 이름, 사용자 ID, 호스트 이름, 프로세스 ID, 고립 수준, 그리고 잠금 타임아웃 설정이 포함된다.
+**cubrid lockdb** 출력 내용의 두 번째 섹션은 데이터베이스에 연결된 모든 클라이언트의 정보를 포함한다. 이 정보에는 각각의 클라이언트에 대한 트랜잭션 인덱스, 프로그램 이름, 사용자 ID, 호스트 이름, 프로세스 ID, 격리 수준, 그리고 잠금 타임아웃 설정이 포함된다.
 
 ::
 
@@ -1181,7 +1346,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
     Isolation READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES
     Timeout_period -1
 
-위에서 트랜잭션 인덱스는 1이고, 프로그램 이름은 csql, 사용자 이름은 dba, 호스트 이름은 cubriddb, 클라이언트 프로세스 식별자는 12854, 고립 수준은 READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES, 그리고 잠금 타임아웃은 무제한이다.
+위에서 트랜잭션 인덱스는 1이고, 프로그램 이름은 csql, 사용자 이름은 dba, 호스트 이름은 cubriddb, 클라이언트 프로세스 식별자는 12854, 격리 수준은 READ COMMITTED CLASSES AND READ UNCOMMITTED INSTANCES, 그리고 잠금 타임아웃은 무제한이다.
 
 트랜잭션 인덱스가 0인 클라이언트는 내부적인 시스템 트랜잭션이다. 이것은 데이터베이스의 체크포인트 수행과 같이 특정한 시간에 잠금을 획득할 수 있지만 대부분의 경우 이 트랜잭션은 어떤 잠금도 획득하지 않을 것이다.
 
@@ -1211,7 +1376,7 @@ CSQL의 해당 연결에 대해서만 통계 정보를 확인하려면 CSQL의 �
         Tran_index = 1, Granted_mode = U_LOCK, Count = 3
         Blocked_mode = X_LOCK
                         Start_waiting_at = Fri May 3 14:44:31 2002
-                        Wait_for _nsecs = -1
+                        Wait_for_nsecs = -1
     LOCK WAITERS :
         Tran_index = 3, Blocked_mode = S_LOCK
                         Start_waiting_at = Fri May 3 14:45:14 2002
@@ -1229,7 +1394,7 @@ Object type이 Index key of class, 즉 인덱스 키인 경우 테이블의 인�
     LOCK HOLDERS:
         Tran_index =   1, Granted_mode =  NX_LOCK, Count =   1
         
-Granted_mode는 현재 획득한 잠금의 모드를 의미하고 Blocked_mode는 차된된 잠금의 모드를 의미한다. Starting_waiting_at은 잠금을 요청한 시간을 의미하고 Wait_for_nsecs는 잠금을 기다리는 시간을 의미한다. Wait_for_nsecs의 값은 lock_timeout_in_secs 시스템 파라미터에 의해 설정된다.
+Granted_mode는 현재 획득한 잠금의 모드를 의미하고 Blocked_mode는 차단된 잠금의 모드를 의미한다. Starting_waiting_at은 잠금을 요청한 시간을 의미하고 Wait_for_nsecs는 잠금을 기다리는 시간을 의미한다. Wait_for_nsecs의 값은 lock_timeout 시스템 파라미터에 의해 설정된다.
 
 Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 이것은 해당 테이블 내의 특정 트랜잭션이 획득하고 있는 레코드 잠금과 키 잠금을 합한 개수이다.
 
@@ -1257,6 +1422,51 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 "cubrid tranlist demodb"는 "cubrid killtran -q demodb"와 비슷한 결과를 출력하나, 후자에 비해 "User name"과 "Host name"을 더 출력한다.
 "cubrid tranlist -s demodb"는 "cubrid killtran -d demodb"와 동일한 결과를 출력한다.
 
+다음은 tranlist 출력 결과의 예이다. 
+
+::
+
+    $ cubrid tranlist demodb
+
+    Tran index          User name      Host name      Process id    Program name              Query time    Tran time       Wait for lock holder      SQL_ID       SQL Text
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+       1(ACTIVE)           public     test-server           1681    broker1_cub_cas_1               0.00         0.00                       -1     *** empty ***  
+       2(ACTIVE)           public     test-server           1682    broker1_cub_cas_2               0.00         0.00                       -1     *** empty ***  
+       3(ACTIVE)           public     test-server           1683    broker1_cub_cas_3               0.00         0.00                       -1     *** empty ***  
+       4(ACTIVE)           public     test-server           1684    broker1_cub_cas_4               1.80         1.80                  3, 2, 1     e5899a1b76253   update ta set a = 5 where a > 0
+       5(ACTIVE)           public     test-server           1685    broker1_cub_cas_5               0.00         0.00                       -1     *** empty ***  
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    SQL_ID: e5899a1b76253
+    Tran index : 4
+    update ta set a = 5 where a > 0
+
+위의 예는 3개의 트랜잭션이 각각 INSERT문을 실행 중일 때 또 다른 트랜잭션에서 UPDATE문의 실행을 시도한다. 위에서 Tran index가 4인 update문은 3,2,1(Wait for lock holder)번의 트랜잭션이 종료되기를 대기하고 있다.
+
+화면에 출력되는 질의문(SQL Text)은 질의 계획 캐시에 저장되어 있는 것으로, INSERT 문은 질의 계획 캐시에 저장되지 않으므로 cubrid tranlist에 출력되지 않는다. 
+
+각 칼럼의 의미는 다음과 같다.
+
+    *   Tran index: 트랜잭션 인덱스
+    *   User name: 데이터베이스 사용자 이름
+    *   Host name: 해당 트랜잭션이 수행되는 CAS의 호스트 이름
+    *   Process id: 클라이언트 프로세스 ID
+    *   Program name: 클라이언트 프로그램 이름
+    *   Query time: 수행중인 질의의 총 수행 시간(단위: 초)
+    *   Tran time: 현재 트랜잭션의 총 수행 시간(단위: 초)
+    *   Wait for lock holder: 현재 트랜잭션이 락 대기중이면 해당 락을 소유하고 있는 트랜잭션의 리스트
+    *   SQL ID: SQL Text에 대한 ID. cubrid killtran 명령의 --kill-sql-id 옵션에서 사용될 수 있다.
+    *   SQL Text: 수행중인 질의문(최대 30자)
+
+"Tran index"에 보여지는 transaction 상태 메시지는 다음과 같다.
+    
+    *   ACTIVE : 활성
+    *   RECOVERY : 복구중인 트랜잭션
+    *   COMMITTED : 커밋완료되어 종료될 트랜잭션
+    *   COMMITTING : 커밋중인 트랜잭션
+    *   ABORTED : 롤백되어 종료될 트랜잭션
+    *   KILLED : 서버에 의해 강제 종료 중인 트랜잭션
+
 다음은 **cubrid tranlist** 에 대한 [options]이다.
 
 .. program:: tranlist
@@ -1272,41 +1482,64 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 .. option:: -s, --summary
 
     요약 정보만 출력한다(질의 수행 정보 또는 잠금 관련 정보를 생략).
-
+       
     ::
     
-        $ cubrid tranlist demodb
+        $ cubrid tranlist -s demodb
         
-        Tran index         User name      Host name      Process id    Program name              Query time    Tran time              Wait for lock holder      SQL_ID       SQL Text
-        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-           1(ACTIVE)         PUBLIC          myhost           20080    query_editor_cub_cas_1          0.00         0.00                              -1     *** empty ***
-           2(ACTIVE)         PUBLIC          myhost           20082    query_editor_cub_cas_3          0.00         0.00                              -1     *** empty ***
-           3(ABORTED)        PUBLIC          myhost           20081    query_editor_cub_cas_2          0.00         0.00                              -1     *** empty ***
-           4(ACTIVE)         PUBLIC          myhost           20083    query_editor_cub_cas_4          1.80         1.80                         2, 3, 1     cdcb58552e320   update [ta] [ta] set [ta].[a]=
-        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        Tran index          User name      Host name      Process id      Program name
+        -------------------------------------------------------------------------------
+           1(ACTIVE)           public     test-server           1681 broker1_cub_cas_1
+           2(ACTIVE)           public     test-server           1682 broker1_cub_cas_2
+           3(ACTIVE)           public     test-server           1683 broker1_cub_cas_3
+           4(ACTIVE)           public     test-server           1684 broker1_cub_cas_4
+           5(ACTIVE)           public     test-server           1685 broker1_cub_cas_5
+        -------------------------------------------------------------------------------
 
-        Tran index : 2
-        update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
-    
+.. option:: --sort-key=NUMBER
+ 
+    해당 NUMBER 위치의 칼럼에 대해 오름차순으로 정렬된 값을 출력한다.
+    칼럼의 타입이 숫자인 경우는 숫자로 정렬되고, 그렇지 않은 경우 문자열로 정렬된다. 생략되면 "Tran index"에 대한 정렬값을 보여준다.
+
+    다음은 네번째 칼럼인 "Process id"를 지정하여 정렬한 정보를 출력하는 예이다.
+     
     ::
-    
-        $ cubrid tranlist -s tdb
+     
+        $ cubrid tranlist --sort-key=4 demodb
+     
+        Tran index          User name      Host name      Process id    Program name              Query time    Tran time       Wait for lock holder      SQL_ID       SQL Text
+        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+           1(ACTIVE)           public     test-server           1681    broker1_cub_cas_1               0.00         0.00                       -1     *** empty ***
+           2(ACTIVE)           public     test-server           1682    broker1_cub_cas_2               0.00         0.00                       -1     *** empty ***
+           3(ACTIVE)           public     test-server           1683    broker1_cub_cas_3               0.00         0.00                       -1     *** empty ***
+           4(ACTIVE)           public     test-server           1684    broker1_cub_cas_4               1.80         1.80                  3, 1, 2     e5899a1b76253   update ta set a = 5 where a > 0
+           5(ACTIVE)           public     test-server           1685    broker1_cub_cas_5               0.00         0.00                       -1     *** empty ***
+        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        SQL_ID: e5899a1b76253
+        Tran index : 4
+        update ta set a = 5 where a > 0
         
-        Tran index         User name      Host name      Process id              Program name
-        -------------------------------------------------------------------------------------
-           1(ACTIVE)         PUBLIC          myhost            1822         broker1_cub_cas_1
-           2(ACTIVE)            dba          myhost            1823         broker1_cub_cas_2
-           3(COMMITTED)         dba          myhost            1824         broker1_cub_cas_3
-        -------------------------------------------------------------------------------------
-    
-    **"Tran index"에 보여지는 transaction 상태 메시지**
-    
-        * ACTIVE : 활성
-        * RECOVERY : 복구중인 트랜잭션
-        * COMMITTED : 커밋완료되어 종료될 트랜잭션
-        * COMMITTING : 커밋중인 트랜잭션
-        * ABORTED : 롤백되어 종료될 트랜잭션
-        * KILLED : 서버에 의해 강제 종료 중인 트랜잭션
+.. option:: --reverse
+ 
+    역순으로 정렬된 값을 출력한다.
+ 
+    다음은 "Tran index"의 역순으로 정렬한 정보를 출력하는 예이다.
+     
+    ::
+     
+        Tran index          User name      Host name      Process id    Program name              Query time    Tran time     Wait for lock holder      SQL_ID       SQL Text
+        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+           5(ACTIVE)           public     test-server           1685    broker1_cub_cas_5               0.00         0.00                     -1     *** empty ***
+           4(ACTIVE)           public     test-server           1684    broker1_cub_cas_4               1.80         1.80                3, 2, 1     e5899a1b76253   update ta set a = 5 where a > 0
+           3(ACTIVE)           public     test-server           1683    broker1_cub_cas_3               0.00         0.00                     -1     *** empty ***
+           2(ACTIVE)           public     test-server           1682    broker1_cub_cas_2               0.00         0.00                     -1     *** empty ***
+           1(ACTIVE)           public     test-server           1681    broker1_cub_cas_1               0.00         0.00                     -1     *** empty ***
+        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        SQL_ID: e5899a1b76253
+        Tran index : 4
+        update ta set a = 5 where a > 0
 
 .. _killtran:
 
@@ -1327,7 +1560,7 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 ::
 
-    $ cubrid killtran testdb 
+    $ cubrid killtran demodb 
      
     Tran index      User name   Host name      Process id      Program name
     -------------------------------------------------------------------------------
@@ -1342,7 +1575,7 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 .. program:: killtran
 
-.. option:: -i, --kill-transation-index=ID1,ID2,ID3
+.. option:: -i, --kill-transaction-index=ID1,ID2,ID3
 
     지정한 인덱스에 해당하는 트랜잭션을 제거한다.  쉼표(,)로 구분하여 제거하고자 하는 트랜잭션 ID 여러 개를 지정할 수 있다. 제거할 트랜잭션 리스트에 유효하지 않은 트랜잭션 ID가 지정되면 무시된다.::
 
@@ -1351,8 +1584,8 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
         Tran index          User name      Host name      Process id      Program name
         -------------------------------------------------------------------------------
-           1(ACTIVE)              DBA    cdbs006.cub           15771              csql
-           2(ACTIVE)              DBA    cdbs006.cub            2171              csql
+           1(ACTIVE)              DBA         myhost           15771              csql
+           2(ACTIVE)              DBA         myhost            2171              csql
         -------------------------------------------------------------------------------
         Do you wish to proceed ? (Y/N)y
         Killing transaction associated with transaction index 1
@@ -1362,100 +1595,43 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
     지정한 OS 사용자 ID에 해당하는 트랜잭션을 제거한다. ::
 
-        cubrid killtran --kill-user-name=os_user_id testdb
+        cubrid killtran --kill-user-name=os_user_id demodb
 
 .. option:: --kill-host-name=HOST
     
     지정한 클라이언트 호스트의 트랜잭션을 제거한다. ::
 
-        cubrid killtran --kill-host-name=myhost testdb
+        cubrid killtran --kill-host-name=myhost demodb
 
 .. option:: --kill-program-name=NAME
         
     지정한 이름의 프로그램에 해당하는 트랜잭션을 제거한다. ::
 
-        cubrid killtran --kill-program-name=cub_cas testdb
+        cubrid killtran --kill-program-name=cub_cas demodb
 
 .. option:: --kill-sql-id=SQL_ID
         
     지정한 SQL ID에 해당하는 트랜잭션을 제거한다. ::
 
-        cubrid killtran --kill-sql-id=5377225ebc75a testdb
+        cubrid killtran --kill-sql-id=5377225ebc75a demodb
         
 .. option:: -p, --dba-password=PASSWORD
 
-    이 옵션 뒤에 오는 값은 **DBA** 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
-
-.. option:: -d, --display
-
-    기본 지정되는 옵션으로 트랜잭션의 요약 정보를 출력한다. 아래의 예는 cubrid tranlist -s demodb를 실행한 것과 동일한 결과를 출력한다.
-        
-    ::
-    
-        $ cubrid killtran -d testdb 
-                 
-        Tran index      User name      Host name      Process id      Program name
-        -------------------------------------------------------------------------------
-          2(ACTIVE)           dba         myhost            6700              csql
-          3(ACTIVE)           dba         myhost            2188           cub_cas
-          4(ACTIVE)           dba         myhost             696              csql
-          5(ACTIVE)        public         myhost            6944              csql
-        -------------------------------------------------------------------------------
+    이 옵션 뒤에 오는 값은 **DBA**\ 의 암호이며 생략하면 프롬프트에서 입력해야 한다.
 
 .. option:: -q, --query-exec-info
 
-    SQL Text를 포함하여 트랜잭션의 질의 수행 상태를 출력한다. 상태 정보를 출력하는 예는 다음과 같다. 출력 정보 중 SQL_ID는 --kill-sql-id 옵션에서 사용될 수 있다.
+    cubrid tranlist 명령에서 "User name" 칼럼과 "Host name" 칼럼이 출력되지 않는다는 점만 다르다. :ref:`tranlist`\ 를 참고한다.
 
-    ::
+.. option:: -d, --display
 
-        $ cubrid killtran --query-exec-info testdb
-         
-        Tran index   Process id  Program name  Query time Tran time  Wait for lock holder         SQL_ID     SQL Text
-        -------------------------------------------------------------------------------------------------------------------
-          1(ACTIVE)      8536    b1_cub_cas_1        0.00      0.00  -1                                      *** empty ***
-          2(ACTIVE)      8538    b1_cub_cas_3        0.00      0.00  -1                                      *** empty ***
-          3(ACTIVE)      8537    b1_cub_cas_2        0.00      0.00  -1                                      *** empty ***
-          4(ACTIVE)      8543    b1_cub_cas_4        1.80      1.80  3, 2, 1               5377225ebc75a     update [ta] [ta] set [a]=5 wher
-          5(ACTIVE)      8264    b1_cub_cas_5        0.00      0.60  -1                                      *** empty ***
-          6(ACTIVE)      8307    b1_cub_cas_6        0.00      0.00  -1                    cdcb58552e320     select [a].[index_name], ( cast
-          7(ACTIVE)      8308    b1_cub_cas_7        0.00      0.20  -1                    cdcb58552e320     select [a].[index_name], ( cast
-          .....
-         
-        ---------------------------------------------------------------------------------------------
-
-    *   Tran index: 트랜잭션 인덱스
-    *   Process id: 클라이언트 프로세스 ID
-    *   Program name: 클라이언트 프로그램 이름
-    *   Query time: 수행중인 질의의 총 수행 시간(단위: 초)
-    *   Tran time: 현재 트랜잭션의 총 수행 시간(단위: 초)
-    *   Wait for lock holder: 현재 트랜잭션이 락 대기중이면 해당 락을 소유하고 있는 트랜잭션의 리스트
-    *   SQL ID: SQL Text에 대한 ID
-    *   SQL Text: 수행중인 질의문(최대 30자)
-
-    위와 같이 트랜잭션 전체 정보가 출력된 후, 잠금 대기를 유발한 질의문이 다음과 같이 출력된다.
-
-    ::
-
-        Tran index : 4
-        update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
-        Tran index : 5, 6, 7
-        select [a].[index_name], ( cast(case when [a].[is_unique]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [a].[is_reverse]=0 then 'NO' else 'YES' end as varchar(3))), [a].[class_of].[class_name], [a].[key_count], ( cast(case when [a].[is_primary_key]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [a].[is_foreign_key]=0 then 'NO' else 'YES' end as varchar(3))), [b].[index_name], ( cast(case when [b].[is_unique]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [b].[is_reverse]=0 then 'NO' else 'YES' end as varchar(3))), [b].[class_of].[class_name], [b].[key_count], ( cast(case when [b].[is_primary_key]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [b].[is_foreign_key]=0 then 'NO' else 'YES' end as varchar(3))) from [_db_index] [a], [_db_index] [b] where (( CURRENT_USER ='DBA' or {[a].[class_of].[owner].[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) or {[a].[class_of]} subseteq (select sum(set{[au].[class_of]}) from [_db_auth] [au] where ({[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) and [au].[auth_type]= ?:0 ))) and ( CURRENT_USER ='DBA' or {[b].[class_of].[owner].[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) or {[b].[class_of]} subseteq (select sum(set{[au].[class_of]}) from [_db_auth] [au] where ({[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) and [au].[auth_type]= ?:1 ))))
-
-    화면에 출력되는 질의문은 질의 계획 캐시에 저장되어 있는 것으로, 응용 프로그램에서 수행되는 INSERT 문이나 질의 계획이 캐시되지 않는 질의문은 출력되지 않는다. 또한 출력 형태도 질의 파싱이 완료된 후의 질의문이 출력되므로, 사용자가 입력한 질의문과는 다른 형태일 수 있다.
-
-    예를 들어 사용자가 아래와 같은 질의문을 수행하면 ::
-
-        UPDATE ta SET a=5 WHERE a > 0
-
-    출력되는 질의문은 다음과 같다. ::
-
-        update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
+    기본 지정되는 옵션으로 트랜잭션의 요약 정보를 출력한다. cubrid tranlist 명령의 -s 옵션을 지정하여 실행한 것과 동일한 결과를 출력한다. :option:`tranlist -s`\ 를 참고한다.
 
 .. option:: -f, --force
 
     중지할 트랜잭션을 확인하는 프롬프트를 생략한다. ::
 
-        cubrid killtran -f -i 1 testdb
+        cubrid killtran -f -i 1 demodb
 
 데이터베이스 진단/파라미터 출력
 ===============================
@@ -1485,27 +1661,27 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
     서버 프로세스를 구동하지 않고 데이터베이스에 접근하는 독립 모드(standalone)로 작업하기 위해 지정되며, 인수는 없다. **-S** 옵션을 지정하지 않으면, 시스템은 클라이언트/서버 모드로 인식한다. ::
 
-        cubrid checkdb -S testdb
+        cubrid checkdb -S demodb
 
 .. option:: -C, --CS-mode
 
     서버 프로세스와 클라이언트 프로세스를 각각 구동하여 데이터베이스에 접근하는 클라이언트/서버 모드로 작업하기 위한 옵션이며, 인수는 없다. **-C** 옵션을 지정하지 않더라도 시스템은 기본적으로 클라이언트/서버 모드로 인식한다. ::
 
-        cubrid checkdb -C testdb
+        cubrid checkdb -C demodb
 
 .. option:: -r, --repair
 
     데이터베이스의 일관성에 문제가 발견되었을 때 복구를 수행한다. ::
 
-        cubrid checkdb -r testdb
+        cubrid checkdb -r demodb
 
 .. option:: -i, --input-class-file=FILE
 
     **-i** *FILE* 옵션을 지정하거나, 데이터베이스 이름 뒤에 테이블의 이름을 나열하여 일관성 확인 또는 복구 대상을 한정할 수 있다. 두 가지 방법을 같이 사용할 수도 있으며, 대상을 지정하지 않으면 전체 데이터베이스를 대상으로 일관성을 확인하거나 복구를 수행한다. 특정 대상이 지정되지 않으면 전체 데이터베이스가 일관성 확인  또는 복구의 대상이 된다. ::
 
-        cubrid checkdb testdb tbl1 tbl2
-        cubrid checkdb -r testdb tbl1 tbl2
-        cubrid checkdb -r -i table_list.txt testdb tbl1 tbl2
+        cubrid checkdb demodb tbl1 tbl2
+        cubrid checkdb -r demodb tbl1 tbl2
+        cubrid checkdb -r -i table_list.txt demodb tbl1 tbl2
 
     **-i** 옵션으로 지정하는 테이블 목록 파일은 공백, 탭, 줄바꿈, 쉼표로 테이블 이름을 구분한다. 다음은 테이블 목록 파일의 예로, t1부터 t10까지를 모두 일관성 확인 또는 복구를 위한 테이블로 인식한다. ::
 
@@ -1533,9 +1709,9 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 .. option:: -d, --dump-type=TYPE
 
-    testdb라는 데이터베이스의 전체 파일에 대한 기록 상태를 출력할 때 출력 범위를 지정한다. 생략하면 기본값인 1이 지정된다. ::
+    데이터베이스의 전체 파일에 대한 기록 상태를 출력할 때 출력 범위를 지정한다. 생략하면 기본값인 1이 지정된다. ::
 
-        cubrid diagdb -d 1 myhost testdb
+        cubrid diagdb -d 1 myhost demodb
 
     **-d** 옵션에 적용되는 타입은 모두 9가지로, 그 종류는 다음과 같다.
 
@@ -1554,7 +1730,7 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
     +--------+------------------------------------+
     | 5      | 클래스 이름 정보를 출력한다.       |
     +--------+------------------------------------+
-    | 6      | 디스크 비트맵 정보를출력한다.      |
+    | 6      | 디스크 비트맵 정보를 출력한다.     |
     +--------+------------------------------------+
     | 7      | 카탈로그 정보를 출력한다.          |
     +--------+------------------------------------+
@@ -1584,25 +1760,25 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
     데이터베이스의 서버/클라이언트 프로세스에서 사용하는 파라미터 정보를 지정된 파일에 저장하는 옵션이며, 파일은 현재 디렉터리에 생성된다. **-o** 옵션이 지정되지 않으면 메시지는 콘솔 화면에 출력한다. ::
 
-        cubrid paramdump -o db_output testdb
+        cubrid paramdump -o db_output demodb
 
 .. option:: -b, --both
 
     데이터베이스의 서버/클라이언트 프로세스에서 사용하는 파라미터 정보를 콘솔 화면에 출력하는 옵션이며, **-b** 옵션을 사용하지 않으면 서버 프로세스의 파라미터 정보만 출력한다. ::
 
-        cubrid paramdump -b testdb
+        cubrid paramdump -b demodb
 
 .. option:: -S, --SA-mode
 
     독립 모드에서 서버 프로세스의 파라미터 정보를 출력한다. ::
 
-        cubrid paramdump -S testdb
+        cubrid paramdump -S demodb
 
 .. option:: -C, --CS-mode
 
     클라이언트-서버 모드에서 서버 프로세스의 파라미터 정보를 출력한다. ::
 
-        cubrid paramdump -C testdb
+        cubrid paramdump -C demodb
 
 HA 모드 변경, 로그 복제/반영
 ============================

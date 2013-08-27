@@ -8,8 +8,8 @@ CUBRID HA is an implementation of High Availability. CUBRID HA ensures database 
 
 CUBRID HA is in a shared-nothing structure. To synchronize data from an active server to a standby server, CUBRID HA executes the following two steps.
 
-#. Transaction log multiplexing: Replicates the transaction logs created by an active server to another node in real time.
-#. Transaction log reflection: Analyzes replicated transaction logs in real time and reflects the data to a standby server.
+#.  Transaction log multiplexing: Replicates the transaction logs created by an active server to another node in real time.
+#.  Transaction log reflection: Analyzes replicated transaction logs in real time and reflects the data to a standby server.
 
 CUBRID HA executes the steps described above in order to always maintain data synchronization between an active server and a standby server. For this reason, if an active server is not working properly because of a failure occurring in the master node that had been providing service, the standby server of the slave node provides service instead of the failed server. CUBRID HA monitors the status of the system and CUBRID in real time. It uses heartbeat messages to execute an automatic failover when a failure occurs.
 
@@ -18,7 +18,7 @@ CUBRID HA executes the steps described above in order to always maintain data sy
 CUBRID HA Concept
 =================
 
-Groups and Nodes
+Nodes and Groups
 ----------------
 
 A node is a logical unit that makes up CUBRID HA. It can become one of the following nodes according to its status: master node, slave node, or replica node.
@@ -74,15 +74,14 @@ The server status changes based on the status of the node. You can use the :ref:
 
 When the node status is changed, on cub_master process log and cub_server process log, following error messages are saved. But, they are saved only when the value of **error_log_level** in cubrid.conf is **error** or less.
 
-* The following log information of cub_master process is saved on $CUBRID/log/<hostname>_master.err file. ::
+*   The following log information of cub_master process is saved on $CUBRID/log/<hostname>_master.err file. ::
 
-    HA generic: Send changemode request to the server. (state:1[active], args:[cub_server demodb ], pid:25728).
-    HA generic: Receive changemode response from the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+        HA generic: Send changemode request to the server. (state:1[active], args:[cub_server demodb ], pid:25728).
+        HA generic: Receive changemode response from the server. (state:1[active], args:[cub_server demodb ], pid:25728).
 
-* The following log information of cub_server is saved on $CUBRID/log/server/<db_name>_<date>_<time>.err file. ::
+*   The following log information of cub_server is saved on $CUBRID/log/server/<db_name>_<date>_<time>.err file. ::
 
-    Server HA mode is changed from 'to-be-active' to 'active'.
-
+        Server HA mode is changed from 'to-be-active' to 'active'.
 
 heartbeat Message
 -----------------
@@ -109,7 +108,7 @@ If a heartbeat message fails to deliver, a failover will occur. For this reason,
 Broker Mode
 -----------
 
-A broker can access a server with one of the following modes: **Read Write**, **Read Only**, **Slave Only**, or **Preferred Host Read Only**. This configuration value is determined by a user.
+A broker can access a server with one of the following modes: **Read Write**, **Read Only** or **Slave Only**. This configuration value is determined by a user.
 
 A broker finds and connects to a suitable server by trying to establish a connection in the order of server connections; this is, if it fails to establish a connection, it tries another connection to the next server defined until it reaches the last server. If no connection is made even after trying all servers, the broker fails to connect to a server.
 
@@ -121,11 +120,25 @@ A broker that provides read and write services. This broker is usually connected
 
 When the broker temporarily establishes a connection to a standby server, it will disconnect itself from the standby server at the end of every transaction so that it can attempt to find an active server at the beginning of the next transaction. When it is connected to the standby server, only read service is available. Any write requests will result in a server error.
 
-The order of server connection is described below:
+Connecting to a DB server is influenced by **PREFERRED_HOSTS** and **CONNECT_ORDER** parameters in **cubrid_broker.conf**, and a CAS tries to connect in the below order.
 
-*   The broker tries to establish a connection to an existing server connected (if exists). The active status of the server means the connection is complete.
-*   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence. The active status of the server means the connection is complete.
-*   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence and connects to the first available host.
+#.  If **PREFERRED_HOSTS** is 
+
+    a.  specified, a CAS tries to connect in the order in the specified hosts; if the status of the server is active, the connection is completed.
+    b.  not specified; if there is a server which has been connected already, a CAS tries to connect with that server; if the status of the server is active, the connection is completed.
+
+#.  After the failure of the connection in 1., if the value of **CONNECT_ORDER** is
+
+    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the status of the server is active, the connection is completed.
+    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the status of the server is active, the connection is completed.
+    
+#.  After the failure of the connection in 2., if the value of **CONNECT_ORDER** is
+
+    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the accessible server exists, the connection is completed.
+    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the accessible server exists, the connection is completed.
+
+
+The following picture shows how a CAS connects to the host through the db-host configuration when there are no settings about **PREFERRED_HOSTS** and **CONNECT_ORDER**.
 
 .. image:: /images/image20.png
 
@@ -133,15 +146,26 @@ The order of server connection is described below:
 
 A broker that provides the read service. This broker is connected to a standby server if possible. For this reason, the Read Only broker can be connected to an active server temporarily.
 
-Once it establishes a connection with an active server, it will maintain that connection even if a standby server exists. To disconnect from the active server and reconnect to a standby server, you should execute the
-**cubrid_broker reset**
-command. An error will occur when the Read Only broker receives write requests; therefore, only the read service will be available even if it is connected to an active server.
+Once it establishes a connection with an active server, it will maintain that connection even if a standby server exists. To disconnect from the active server and reconnect to a standby server, you should execute the **cubrid broker reset** command. An error will occur when the Read Only broker receives write requests; therefore, only the read service will be available even if it is connected to an active server.
 
-The order of server connection is described below:
+Connecting to a DB server is influenced by **PREFERRED_HOSTS** and **CONNECT_ORDER** parameters in **cubrid_broker.conf**, and a CAS tries to connect in the below order.
 
-*   The broker tries to establish a connection to an existing server connected (if exists). The standby status of the server means the connection is complete.
-*   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence. The standby status of the server means the connection is complete.
-*   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence and connects to the first available host.
+#.  If **PREFERRED_HOSTS** is 
+
+    a.  specified, a CAS tries to connect in the order in the specified hosts; if the status of the server is standby, the connection is completed.
+    b.  not specified; if there is a server which has been connected already, a CAS tries to connect with that server; if the status of the server is standby, the connection is completed.
+
+#.  After the failure of the connection in 1., if the value of **CONNECT_ORDER** is
+
+    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the status of the server is standby, the connection is completed.
+    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the status of the server is standby, the connection is completed.
+    
+#.  After the failure of the connection in 2., if the value of **CONNECT_ORDER** is
+
+    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the accessible server exists, the connection is completed.
+    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the accessible server exists, the connection is completed.
+
+The following picture shows how a CAS connects to the host through the db-host configuration when there are no settings about **PREFERRED_HOSTS** and **CONNECT_ORDER**.
 
 .. image:: /images/image21.png
 
@@ -149,24 +173,23 @@ The order of server connection is described below:
 
 A broker that provides the read service. This broker can only be connected to a standby server. If no standby server exists, no service will be provided.
 
-The order of server connection is described below:
+Connecting to a DB server is influenced by **PREFERRED_HOSTS** and **CONNECT_ORDER** parameters in **cubrid_broker.conf**, and a CAS tries to connect in the below order.
 
-*   The broker tries to establish a connection to an existing server connected (if exists). The standby status of the server means the connection is complete.
-*   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence. The standby status of the server means the connection is complete.
+#.  If **PREFERRED_HOSTS** is 
+
+    a.  specified, a CAS tries to connect in the order in the specified hosts; if the status of the server is standby, the connection is completed.
+    b.  not specified; if there is a server which has been connected already, a CAS tries to connect with that server; if the status of the server is standby, the connection is completed.
+
+#.  After the failure of the connection in 1., if the value of **CONNECT_ORDER** is
+
+    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the status of the server is standby, the connection is completed.
+    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the status of the server is standby, the connection is completed.
+    
+#.  If there is no standby status on the server, the connection is failed.
+
+The following picture shows how a CAS connects to the host through the db-host configuration when there are no settings about **PREFERRED_HOSTS** and **CONNECT_ORDER**.
 
 .. image:: /images/image22.png
-
-**Preferred Host Read Only**
-
-A broker that provides the read service. This works in the same manner as the Read Only broker except its server connection order and server selecting criteria. The server connection order and server selecting criteria can be configured in **PREFERRED_HOSTS**. For details on configuring these, see :ref:`ha-cubrid-broker-conf`.
-
-The order of server connection is described below:
-
-*   The broker tries to establish a connection to the hosts specified in PREFERRED_HOSTS in a sequence and connects to the first available host.
-*   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence. The standby status of the server means the connection is complete.
-*   The broker tries to establish a connection to the hosts specified in the **databases.txt** file in a sequence and connects to the first available host.
-
-.. image:: /images/image23.png
 
 CUBRID HA Features
 ==================
@@ -199,7 +222,7 @@ The configuration of broker redundancy is not determined by the configuration of
 
 To use the failover and failback functionalities of a broker, the **altHosts** attribute must be added to the connection URL of the JDBC, CCI, or PHP. For a description of this, see JDBC Configuration, CCI Configuration and PHP Configuration.
 
-To set a broker, configure the **cubrid_broker.conf** file. To set the order of failovers of a database server, configure the **databases.txt** file. For more information, see Broker Configuration.
+To set a broker, configure the **cubrid_broker.conf** file. To set the order of failovers of a database server, configure the **databases.txt** file. For more information, see :ref:`quick-broker-config`.
 
 The following is an example in which two Read Write (RW) brokers are configured. When the first connection broker of the application URL is set to *broker B1* and the second connection broker to *broker B2*, the application connects to *broker B2* when it cannot connect to *broker B1*. When broker B1 becomes available again, the application reconnects to *broker B1*.
 
@@ -209,7 +232,7 @@ The following is an example in which the Read Write (RW) broker and the Read Onl
 
 .. image:: /images/image26.png
 
-The following is an example of a configuration in which broker equipment includes one Read Write broker (master node) and two Preferred Host Read Only brokers (slave nodes). The Preferred Host Read Only brokers are connected to nodeB and nodeC to distribute read load.
+The following is an example of a configuration in which broker equipment includes one Read Write broker (master node) and two Preferred Host Read Only brokers (slave nodes). The Preferred Host Read Only brokers are connected to nodeB and nodeC to distribute the reading load.
 
 .. image:: /images/image27.png
 
@@ -291,10 +314,10 @@ Create databases to be included in CUBRID HA at each node of the CUBRID HA in th
     [nodeA]$ mkdir testdb
     [nodeA]$ cd testdb
     [nodeA]$ mkdir log
-    [nodeA]$ cubrid createdb -L ./log testdb
+    [nodeA]$ cubrid createdb -L ./log testdb en_US
     Creating database with 512.0M size. The total amount of disk space needed is 1.5G.
      
-    CUBRID 9.0
+    CUBRID 9.2
      
     [nodeA]$
 
@@ -354,11 +377,11 @@ Execute the **cubrid heartbeat** **start** at each node in the CUBRID HA group. 
 
 *   Master node ::
 
-    [nodeA]$ cubrid heartbeat start
+        [nodeA]$ cubrid heartbeat start
 
 *   Slave node ::
 
-    [nodeB]$ cubrid heartbeat start
+        [nodeB]$ cubrid heartbeat start
 
 **Verifying CUBRID HA Status**
 
@@ -378,15 +401,15 @@ Execute **cubrid heartbeat status** at each node in the CUBRID HA group to verif
 
 Use the **cubrid changemode** utility at each node in the CUBRID HA group to verify the status of the server.
 
-* Master node ::
+*   Master node ::
 
-    [nodeA]$ cubrid changemode testdb@localhost
-    The server 'testdb@localhost''s current HA running mode is active.
+        [nodeA]$ cubrid changemode testdb@localhost
+        The server 'testdb@localhost''s current HA running mode is active.
 
-* Slave node ::
+*   Slave node ::
 
-    [nodeB]$ cubrid changemode testdb@localhost
-    The server 'testdb@localhost''s current HA running mode is standby.
+        [nodeB]$ cubrid changemode testdb@localhost
+        The server 'testdb@localhost''s current HA running mode is standby.
 
 **Verifying the CUBRID HA Operation**
 
@@ -394,21 +417,20 @@ Verify that action is properly applied to standby server of the slave node after
 
 .. warning:: Ensure that primary key must exist when creating a table to have replication successfully processed.
 
-* Master node ::
+*   Master node ::
 
-    [nodeA]$ csql -u dba testdb@localhost -c "create table abc(a int, b int, c int, primary key(a));"
-    [nodeA]$ csql -u dba testdb@localhost -c "insert into abc values (1,1,1);"
-    [nodeA]$
+        [nodeA]$ csql -u dba testdb@localhost -c "create table abc(a int, b int, c int, primary key(a));"
+        [nodeA]$ csql -u dba testdb@localhost -c "insert into abc values (1,1,1);"
+        [nodeA]$
 
-* Slave node ::
+*   Slave node ::
 
-    [nodeB]$ csql -u dba testdb@localhost -l -c "select * from abc;"
-    === <Result of SELECT Command in Line 1> ===
-    <00001> a: 1
-            b: 1
-            c: 1
-    
-    [nodeB]$
+        [nodeB]$ csql -u dba testdb@localhost -l -c "select * from abc;"
+        === <Result of SELECT Command in Line 1> ===
+        <00001> a: 1
+                b: 1
+                c: 1
+        [nodeB]$
 
 .. _quick-broker-config:
 
@@ -419,29 +441,29 @@ Configuring and Starting Broker, and Verifying the Broker Status
 
 To provide normal service during a database failover, it is necessary to configure an available database node in the **db-host** of **databases.txt**. And **ACCESS_MODE** in the **cubrid_broker.conf** file must be specified; if it is omitted, the default value is configured to Read Write mode. If you want to divide into a separate device, you must configure **cubrid_broker.conf** and **databases.txt** in the broker device.
 
-* databases.txt ::
+*   databases.txt ::
 
-    #db-name        vol-path                db-host         log-path        lob-base-path
-    testdb          /home1/cubrid1/CUBRID/testdb  nodeA:nodeB        /home1/cubrid1/CUBRID/testdb/log file:/home1/cubrid1/CUBRID/testdb/lob
+        #db-name        vol-path                db-host         log-path        lob-base-path
+        testdb          /home1/cubrid1/CUBRID/testdb  nodeA:nodeB        /home1/cubrid1/CUBRID/testdb/log file:/home1/cubrid1/CUBRID/testdb/lob
 
-* cubrid_broker.conf ::
+*   cubrid_broker.conf ::
 
-    [%testdb_RWbroker]
-    SERVICE                 =ON
-    BROKER_PORT             =33000
-    MIN_NUM_APPL_SERVER     =5
-    MAX_NUM_APPL_SERVER     =40
-    APPL_SERVER_SHM_ID      =33000
-    LOG_DIR                 =log/broker/sql_log
-    ERROR_LOG_DIR           =log/broker/error_log
-    SQL_LOG                 =ON
-    TIME_TO_KILL            =120
-    SESSION_TIMEOUT         =300
-    KEEP_CONNECTION         =AUTO
-    CCI_DEFAULT_AUTOCOMMIT  =ON
-     
-    # broker mode parameter
-    ACCESS_MODE             =RW
+        [%testdb_RWbroker]
+        SERVICE                 =ON
+        BROKER_PORT             =33000
+        MIN_NUM_APPL_SERVER     =5
+        MAX_NUM_APPL_SERVER     =40
+        APPL_SERVER_SHM_ID      =33000
+        LOG_DIR                 =log/broker/sql_log
+        ERROR_LOG_DIR           =log/broker/error_log
+        SQL_LOG                 =ON
+        TIME_TO_KILL            =120
+        SESSION_TIMEOUT         =300
+        KEEP_CONNECTION         =AUTO
+        CCI_DEFAULT_AUTOCOMMIT  =ON
+         
+        # broker mode parameter
+        ACCESS_MODE             =RW
 
 **Starting Broker and Verifying its Status**
 
@@ -496,13 +518,17 @@ This parameter cannot be modified dynamically. To modify the value of this param
 
 **log_max_archives** is a parameter used to configure the minimum number of archive log files to be archived. The minimum value is 0 and the default is **INT_MAX** (2147483647). When CUBRID has installed for the first time, this value is set to 0 in the **cubrid.conf** file. The behavior of the parameter is affected by **force_remove_log_archives**.
 
-The existing archive log files to which the activated transaction refers or the archive log files of the master node not reflected to the slave node in HA environment will not be deleted. For details, see the following **force_remove_log_archives**. For details about **log_max_archives**, see :ref:`logging-parameters`.
+The existing archive log files to which the activated transaction refers or the archive log files of the master node not reflected to the slave node in HA environment will not be deleted. For details, see the following **force_remove_log_archives**. 
+
+For details about **log_max_archives**, see :ref:`logging-parameters`.
 
 **force_remove_log_archives**
 
-It is recommended to configure **force_remove_archives** to **no** so that archive logs to be used by HA-related processes always can be maintained to set up HA environment by configuring **ha_mode** to **on**.
+It is recommended to configure **force_remove_log_archives** to **no** so that archive logs to be used by HA-related processes always can be maintained to set up HA environment by configuring **ha_mode** to **on**.
 
-If you configure the value for **force_remove_log_archives** to yes, the archive log files which will be used in the HA-related process can be deleted, and this may lead to an inconsistency between replicated databases. If you want to maintain free disk space even though doing this could lead to risk, you can configure the value to yes. For details about **force_remove_log_archives**, see :ref:`logging-parameters`.
+If you configure the value for **force_remove_log_archives** to yes, the archive log files which will be used in the HA-related process can be deleted, and this may lead to an inconsistency between replicated databases. If you want to maintain free disk space even though doing this could lead to risk, you can configure the value to yes. 
+
+For details about **force_remove_log_archives**, see :ref:`logging-parameters`.
 
 .. note::
 
@@ -512,7 +538,9 @@ If you configure the value for **force_remove_log_archives** to yes, the archive
 
 **max_clients** is a parameter used to configure the maximum number of clients to be connected to a database server simultaneously. The default is **100**.
 
-Because the replication log copy and the replication log reflection processes start by default if CUBRID HA is used, you must configure the value to twice the number of all nodes in the CUBRID HA group, except the corresponding node. Furthermore, you must consider the case in which a client that is connected to another node at the time of failover attempts to connect to that node. For details about max_client, see :ref:`connection-parameters`.
+Because the replication log copy and the replication log reflection processes start by default if CUBRID HA is used, you must configure the value to twice the number of all nodes in the CUBRID HA group, except the corresponding node. Furthermore, you must consider the case in which a client that is connected to another node at the time of failover attempts to connect to that node. 
+
+For details about **max_clients**, see :ref:`connection-parameters`.
 
 **The Parameters That Must Have the Same Value for All Nodes**
 
@@ -563,15 +591,25 @@ The **cubrid_ha.conf** file that has generation information on CUBRID HA is loca
 
 **ha_node_list**
 
-**ha_node_list** is a parameter used to configure the group name to be used in the CUBRID HA group and the host name of member nodes in which failover is supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A colon (:) is used to separate individual host names. The default is **localhost@localhost**.
+**ha_node_list** is a parameter used to configure the group name to be used in the CUBRID HA group and the host name of member nodes in which failover is supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A comma(,) or colon(:) is used to separate individual host names. The default is **localhost@localhost**.
 
-The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **on** must be specified in **ha_node_list**. The value of the **ha_node_list** of all nodes in the CUBRID HA group must be identical. When a failover occurs, a node becomes a master node in the order specified in the parameter.
+.. note::
+
+    The host name of the member nodes specified in this parameter cannot be replaced with the IP. You should use the host names which are registered in **/etc/hosts**. 
+
+    If the host name is not specified properly, the below message is written into the server.err error log file.
+    
+    ::
+    
+        Time: 04/10/12 17:49:45.030 - ERROR *** file ../../src/connection/tcp.c, line 121 ERROR CODE = -353 Tran = 0, CLIENT = (unknown):(unknown)(-1), EID = 1 Cannot make connection to master server on host "Wrong_HOST_NAME".... Connection timed out
+
+A node in which the **ha_mode** value is set to **on** must be specified in **ha_node_list**. The value of the **ha_node_list** of all nodes in the CUBRID HA group must be identical. When a failover occurs, a node becomes a master node in the order specified in the parameter.
 
 This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
 **ha_replica_list**
 
-**ha_replica_list** is parameter used to configure the group name to be used in the CUBRID HA group and the host name of member nodes in which failover is not supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A colon (:) is used to separate individual host names. The default is **NULL**.
+**ha_replica_list** is parameter used to configure the group name to be used in the CUBRID HA group and the host name of member nodes in which failover is not supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A comma(,) or colon(:) is used to separate individual host names. The default is **NULL**.
 
 The group name must be identical to the name specified in **ha_replica_list**. The host names of member nodes and the host names of nodes specified in this parameter must be registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **replica** must be specified in **ha_replica_list**. The **ha_replica_list** values of all nodes in the CUBRID HA group must be identical.
 
@@ -585,17 +623,17 @@ If a firewall exists in the service environment, the firewall must be configured
 
 **ha_ping_hosts**
 
-**ha_ping_hosts** is a parameter used to configure the host which verifies whether or not a failover occurs due to unstable network when a failover has started in a slave node. The default is **NULL**.
+**ha_ping_hosts** is a parameter used to configure the host which verifies whether or not a failover occurs due to unstable network when a failover has started in a slave node. The default is **NULL**. A comma(,) or colon(:) is used to separate individual host names.
 
 The host name of the member nodes specified in this parameter can be replaced with the IP. When a host name is used, the name must be registered in **/etc/hosts**.
 
-Configuring this parameter can prevent split-brain, a phenomenon in which two master nodes simultaneously exist as a result of the slave node erroneously detecting an abnormal termination of the master node due to unstable network status and then promoting itself as the new master. When specifying multiple hosts, separate each host with a colon (:).
+Configuring this parameter can prevent split-brain, a phenomenon in which two master nodes simultaneously exist as a result of the slave node erroneously detecting an abnormal termination of the master node due to unstable network status and then promoting itself as the new master.
 
 **ha_copy_sync_mode**
 
-**ha_copy_sync_mode** is a parameter used to configure the mode of storing the transaction log copy. The default is **SYNC**.
+**ha_copy_sync_mode** is a parameter used to configure the mode of storing the replication log, which is a copy of transaction log. The default is **SYNC**.
 
-The value can be one of the followings: **SYNC**, **SEMISYNC**, or **ASYNC**. The number of values must be the same as the number of nodes specified in **ha_node_list**. They must be ordered by the specified value. You can specify multiple nodes by using a colon (:). The replica node is always working in **ASNYC** mode regardless of this value.
+The value can be one of the following: **SYNC**, **SEMISYNC**, or **ASYNC**. The number of values must be the same as the number of nodes specified in **ha_node_list**. They must be ordered by the specified value. You can specify multiple modes by using a comma(,) or colon(:). The replica node is always working in **ASNYC** mode regardless of this value.
 
 For details, see :ref:`log-multiplexing`.
 
@@ -604,6 +642,12 @@ For details, see :ref:`log-multiplexing`.
 **ha_copy_log_base** is a parameter used to configure the location of storing the transaction log copy. The default is **$CUBRID_DATABASES**.
 
 For details, see :ref:`log-multiplexing`.
+
+.. _ha_copy_log_max_archives:
+
+**ha_copy_log_max_archives**
+
+**ha_copy_log_max_archives** is a parameter used to configure the maximum number of keeping replication log files. The default is 1. If :ref:`rebuilding-replication` is needed by using the slave node or the replica node as a source, a newly added replication log files during rebuilding a replication should not be deleted by specifying **ha_copy_log_max_archives**. Therefore, the value of **ha_copy_log_max_archives** should be specified moderately largely. Except for this case, we recommend you to keep this value as the default value, 1, to prevent wasting disk space
 
 **ha_db_list**
 
@@ -615,54 +659,64 @@ For details, see :ref:`log-multiplexing`.
 
 **ha_applylogdb_ignore_error_list**
 
-**ha_applylogdb_ignore_error_lis** is a parameter used to configure for proceeding replication in CUBRID HA process by ignoring an error occurrence. The error codes to be ignored are separated by a comma (,). This value has a high priority. Therefore, when this value is the same as the value of the **ha_applylogdb_retry_error_list** parameter or the error code of "List of Retry Errors," the values of the **ha_applylogdb_retry_error_list** parameter or the error code of "List of Retry Errors" are ignored and the tasks that cause the error are not retried. For "List of Retry Errors," see the description of **ha_applylogdb_retry_error_list** below.
+**ha_applylogdb_ignore_error_list** is a parameter used to configure for proceeding replication in CUBRID HA process by ignoring an error occurrence. The error codes to be ignored are separated by a comma (,). This value has a high priority. Therefore, when this value is the same as the value of the **ha_applylogdb_retry_error_list** parameter or the error code of "List of Retry Errors," the values of the **ha_applylogdb_retry_error_list** parameter or the error code of "List of Retry Errors" are ignored and the tasks that cause the error are not retried. For "List of Retry Errors," see the description of **ha_applylogdb_retry_error_list** below.
 
 **ha_applylogdb_retry_error_list**
 
 **ha_applylogdb_retry_error_list** is a parameter used to configure for retrying tasks that caused an error in the replication log reflection process of CUBRID HA until the task succeeds. When specifying errors to be retried, separate each error with a comma (,). The following table shows the default "List of Retry Errors." If these values exist in **ha_applylogdb_ignore_error_list**, the error will be overridden.
 
-**List of Retry Errors**
+    **List of Retry Errors**
 
-+-------------------------------------+----------------+
-| Error Code Name                     | Error Code     |
-+=====================================+================+
-| ER_LK_UNILATERALLY_ABORTED          | -72            |
-+-------------------------------------+----------------+
-| ER_LK_OBJECT_TIMEOUT_SIMPLE_MSG     | -73            |
-+-------------------------------------+----------------+
-| ER_LK_OBJECT_TIMEOUT_CLASS_MSG      | -74            |
-+-------------------------------------+----------------+
-| ER_LK_OBJECT_TIMEOUT_CLASSOF_MSG    | -75            |
-+-------------------------------------+----------------+
-| ER_LK_PAGE_TIMEOUT                  | -76            |
-+-------------------------------------+----------------+
-| ER_PAGE_LATCH_TIMEDOUT              | -836           |
-+-------------------------------------+----------------+
-| ER_PAGE_LATCH_ABORTED               | -859           |
-+-------------------------------------+----------------+
-| ER_LK_OBJECT_DL_TIMEOUT_SIMPLE_MSG  | -966           |
-+-------------------------------------+----------------+
-| ER_LK_OBJECT_DL_TIMEOUT_CLASS_MSG   | -967           |
-+-------------------------------------+----------------+
-| ER_LK_OBJECT_DL_TIMEOUT_CLASSOF_MSG | -968           |
-+-------------------------------------+----------------+
-| ER_LK_DEADLOCK_CYCLE_DETECTED       | -1021          |
-+-------------------------------------+----------------+
+    +-------------------------------------+----------------+
+    | Error Code Name                     | Error Code     |
+    +=====================================+================+
+    | ER_LK_UNILATERALLY_ABORTED          | -72            |
+    +-------------------------------------+----------------+
+    | ER_LK_OBJECT_TIMEOUT_SIMPLE_MSG     | -73            |
+    +-------------------------------------+----------------+
+    | ER_LK_OBJECT_TIMEOUT_CLASS_MSG      | -74            |
+    +-------------------------------------+----------------+
+    | ER_LK_OBJECT_TIMEOUT_CLASSOF_MSG    | -75            |
+    +-------------------------------------+----------------+
+    | ER_LK_PAGE_TIMEOUT                  | -76            |
+    +-------------------------------------+----------------+
+    | ER_PAGE_LATCH_TIMEDOUT              | -836           |
+    +-------------------------------------+----------------+
+    | ER_PAGE_LATCH_ABORTED               | -859           |
+    +-------------------------------------+----------------+
+    | ER_LK_OBJECT_DL_TIMEOUT_SIMPLE_MSG  | -966           |
+    +-------------------------------------+----------------+
+    | ER_LK_OBJECT_DL_TIMEOUT_CLASS_MSG   | -967           |
+    +-------------------------------------+----------------+
+    | ER_LK_OBJECT_DL_TIMEOUT_CLASSOF_MSG | -968           |
+    +-------------------------------------+----------------+
+    | ER_LK_DEADLOCK_CYCLE_DETECTED       | -1021          |
+    +-------------------------------------+----------------+
 
-The following example shows how to configure **cubrid_ha.conf**. ::
+**ha_replica_delay**
 
-    [common]
-    ha_node_list=cubrid@nodeA:nodeB
-    ha_db_list=testdb
-    ha_copy_sync_mode=sync:sync
-    ha_apply_max_mem_size=500
+This parameter specifies the term of applying the replicated data between a master node and a replica node. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied. The default value is 0.
 
-**Remark**
+**ha_replica_time_bound**
 
-The following example shows how to configure the value of /etc/hosts (a host name of a member node: nodeA, IP: 192.168.0.1). ::
+In master node, only the transactions which have been run on the specified time with this parameter are applied to the replica node. The format of this value is "YYYY-MM-DD hh:mi:ss". There is no default value.
+    
+.. note:: \
 
-    127.0.0.1 localhost.localdomain localhost
-    192.168.0.1 nodeA
+    The following example shows how to configure **cubrid_ha.conf**. ::
+
+        [common]
+        ha_node_list=cubrid@nodeA:nodeB
+        ha_db_list=testdb
+        ha_copy_sync_mode=sync:sync
+        ha_apply_max_mem_size=500
+
+.. note:: \
+
+    The following example shows how to configure the value of /etc/hosts (a host name of a member node: nodeA, IP: 192.168.0.1). ::
+
+        127.0.0.1 localhost.localdomain localhost
+        192.168.0.1 nodeA
 
 .. _ha-cubrid-broker-conf:
 
@@ -675,15 +729,17 @@ The **cubrid_broker.conf** file that has general information on configuring CUBR
 
 **ACCESS_MODE** is a parameter used to configure the mode of a broker. The default is **RW**.
 
-Its value can be one of the followings: **RW** (Read Write), **RO** (Read Only), **SO** (Slave Only), or **PHRO** (Preferred Host Read Only). For details, see :ref:`broker-mode`.
+Its value can be one of the following: **RW** (Read Write), **RO** (Read Only), **SO** (Slave Only), or **PHRO** (Preferred Host Read Only). For details, see :ref:`broker-mode`.
 
 **PREFERRED_HOSTS**
 
-**PREFERRED_HOSTS** is a parameter used only when the **ACCESS_MODE** parameter value is **PHRO**. The default value is **NULL**.
+Specify the order to connect by listing host names. The default value is **NULL**.
 
 You can specify multiple nodes by using a colon (:). First, it tries to connect to host in the following order: host specified in the **PREFERRED_HOSTS** parameter first and then host specified in **$CUBRID_DATABASES/databases.txt**. For details, see :ref:`broker-mode`.
 
-The following example shows how to configure **cubrid_broker.conf**. ::
+The following example shows how to configure **cubrid_broker.conf**. To access localhost in a first priority, set **PREFERRED_HOSTS** as *localhost*.
+
+::
 
     [%PHRO_broker]
     SERVICE                 =ON
@@ -700,13 +756,13 @@ The following example shows how to configure **cubrid_broker.conf**. ::
     CCI_DEFAULT_AUTOCOMMIT  =ON
      
     # Broker mode setting parameter
-    ACCESS_MODE             =PHRO
-    PREFERRED_HOSTS         =nodeA:nodeB:nodeC
+    ACCESS_MODE             =RO
+    PREFERRED_HOSTS         =localhost
 
 databases.txt
 -------------
 
-The **databases.txt** file that has information on servers to be connected by a broker and their order is located in the **$CUBRID_DATABASES** (if not specified, $CUBRID/databases) directory; the information can be configured by using **db_hosts**. You can specify multiple nodes by using a colon (:).
+The **databases.txt** file has information on the order of servers for the CAS of a broker to connect. It is located in the **$CUBRID_DATABASES** (if not specified, $CUBRID/databases) directory; the information can be configured by using **db_hosts**. You can specify multiple nodes by using a colon (:). If "**CONNECT_ORDER**=**RANDOM**", the connection order is decided as randomly. But if **PREFERRED_HOSTS** is specified, the specified hosts have the first priority of the connection order.
 
 The following example shows how to configure **databases.txt**. ::
 
@@ -768,15 +824,15 @@ The following example shows how to configure PHP.
 
     If you want to run smoothly the broker's failover in the environment which the broker's failover is enabled by setting **altHosts**, you should set the value of **disconnectOnQueryTimeout** in URL as **true**.
     
-    If this value is **true**, an application program releases the existing connection from a broker and reconnect to the other broker which is specified on **altHosts**.
+    If this value is **true**, an application program releases the existing connection from a broker and reconnects to the other broker which is specified on **altHosts**.
 
 Running and Monitoring
 ======================
 
 .. _cubrid-heartbeat:
 
-Utilities of cubrid heartbeat
------------------------------
+cubrid heartbeat Utility
+------------------------
 
 **start**
 
@@ -806,6 +862,14 @@ Specify the database name at the end of the command to stop only the HA configur
 
     $ cubrid heartbeat stop testdb
 
+If you want to deactivate CUBRID HA feature immediately, add -i option into the "cubrid heartbeat stop" command. This option is used when the speedy quitting is required because the DB server process is working improperly.
+
+::
+ 
+    $ cubrid heartbeat stop -i
+    or
+    $cubrid heartbeat stop --immediately
+    
 **copylogdb**
 
 This utility is used to start or stop the **copylogdb** process that copies the transaction logs for the *db_name* of a specific peer_node in the CUBRID HA configuration. You can pause log copy for rebuilding replications in the middle of operation and then rerun it whenever you want.
@@ -820,7 +884,7 @@ When the **copylogdb** process is started/stopped, the configuration information
 
 **applylogdb**
 
-This utility is used to start or stop the **copylogdb** process that reflect the transaction logs for the *db_name* of a specific peer_node in the CUBRID HA configuration. You can pause log copy for rebuilding replications in the middle of operation and then rerun it whenever you want.
+This utility is used to start or stop the **copylogdb** process that reflects the transaction logs for the *db_name* of a specific peer_node in the CUBRID HA configuration. You can pause log copy for rebuilding replications in the middle of operation and then rerun it whenever you want.
 
 Even though only the **cubrid heartbeat copylogdb start** command has succeeded, the functions of detecting and recovering the failure between the nodes are executed. Since the node is the target of failover, the slave node can be changed to the master node.
 
@@ -838,11 +902,11 @@ How to use this utility is as shown below. ::
 
     $ cubrid heartbeat reload
 
+Reconfigurable parameters are **ha_node_list** and **ha_replica_list**. Even if an error occurs on a special node during running this command, the left jobs are continued. After **reload** command is finished, check if the reconfiguration of nodes is applied well or not. If it fails, find the reason and resolve it.
+
 **status**
 
-This utility is used to output the information of CUBRID HA group and CUBRID HA components.
-
-How to use this utility is as shown below. ::
+This utility is used to output the information of CUBRID HA group and CUBRID HA components. How to use this utility is as shown below. ::
 
     $ cubrid heartbeat status
     @ cubrid heartbeat status
@@ -861,8 +925,8 @@ How to use this utility is as shown below. ::
 
 .. _cubrid-service-util:
 
-Utilities of cubrid service
----------------------------
+Registering HA to cubrid service
+--------------------------------
 
 If you register heartbeat to CUBRID service, you can use the utilities of **cubrid service** to start, stop or check all the related processes at once. The processes specified by **service** parameter in [**service**] section in **cubrid.conf** file are registered to CUBRID service. If this parameter includes **heartbeat**, you can start/stop all the service processes and the HA-related processes by using **cubrid service start** / **stop** command.
 
@@ -907,8 +971,7 @@ The following shows the [options] used on **cubrid applyinfo**.
     
 .. option:: -a, --applied-info
 
-    Outputs the information of replication reflection of a node executing cubrid applyinfo. 
-    The **-L** option is required to use this option.
+    Outputs the information of replication reflection of a node executing cubrid applyinfo. The **-L** option is required to use this option.
     
 .. option:: -L, --copied-log-path=PATH
 
@@ -916,8 +979,7 @@ The following shows the [options] used on **cubrid applyinfo**.
     
 .. option:: -p, --pageid=ID
 
-    Outputs the information of a specific page in the copied logs. 
-    This is available only when the  **-L** option is enabled.  The default is 0, it means the active page. 
+    Outputs the information of a specific page in the copied logs. This is available only when the  **-L** option is enabled.  The default is 0, it means the active page. 
         
 .. option:: -v
 
@@ -934,8 +996,8 @@ The following example shows how to check log information (Active Info.) of the m
 *   Applied Info.: Shows the status information after the slave node applies the replication log.
 *   Copied Active Info.: Shows the status information after the slave node copies the replication log.
 *   Active Info.: Shows the status information after the master node records the transaction log.
-*    Delay in Copying Active Log: Shows the status information which the transaction logs’ copy is delayed.
-*    Delay in Applying Copied Log: Shows the status information which the transaction logs’ application is delayed.
+*   Delay in Copying Active Log: Shows the status information which the transaction logs' copy is delayed.
+*   Delay in Applying Copied Log: Shows the status information which the transaction logs' application is delayed.
 
 ::
 
@@ -956,7 +1018,7 @@ The following example shows how to check log information (Active Info.) of the m
     Append LSA                     : 27722 | 10088
     HA server state                : active
 
-     ***  Active Info. *** 
+     *** Active Info. *** 
     DB name                        : testdb
     DB creation time               : 04:29:00.000 PM 11/04/2012 (1352014140)
     EOF LSA                        : 27726 | 2512
@@ -973,41 +1035,84 @@ The following example shows how to check log information (Active Info.) of the m
 
 The items shown by each status are as follows:
 
-*    Applied Info.
+*   Applied Info.
     
-    *    Committed page: The information of committed pageid and offset of a transaction reflected last through replication log reflection process. The difference between this value and the EOF LSA of "Copied Active Info. represents the amount of replication delay.
-    *    Insert Count: The number of Insert queries reflected through replication log reflection process.
-    *    Update Count: The number of Update queries reflected through replication log reflection process.
-    *    Delete Count: The number of Delete queries reflected through replication log reflection process.
-    *    Schema Count: The number of DDL statements reflected through replication log reflection process.
-    *    Commit Count: The number of transactions reflected through replication log reflection process.
-    *    Fail Count: The number of DML and DDL statements in which log reflection through replication log reflection process fails.
+    *   Committed page: The information of committed pageid and offset of a transaction reflected last through replication log reflection process. The difference between this value and the EOF LSA of "Copied Active Info. represents the amount of replication delay.
+    *   Insert Count: The number of Insert queries reflected through replication log reflection process.
+    *   Update Count: The number of Update queries reflected through replication log reflection process.
+    *   Delete Count: The number of Delete queries reflected through replication log reflection process.
+    *   Schema Count: The number of DDL statements reflected through replication log reflection process.
+    *   Commit Count: The number of transactions reflected through replication log reflection process.
+    *   Fail Count: The number of DML and DDL statements in which log reflection through replication log reflection process fails.
     
-*    Copied Active Info.
+*   Copied Active Info.
     
-    *    DB name: Name of a target database in which the replication log copy process copies logs
-    *    DB creation time: The creation time of a database copied through replication log copy process
-    *    EOF LSA: Information of pageid and offset copied at the last time on the target node by the replication log copy process. There will be a delay in copying logs as much as difference with the EOF LSA value of "Active Info." and with the Append LSA value of "Copied Active Info."
-    *    Append LSA: Information of pageid and offset written at the last time on the disk by the replication log copy process. This value can be less than or equal to EOF LSA. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
-    *    HA server state: Status of a database server process which replication log copy process receives logs from. For details on status, see :ref:`ha-server`.
+    *   DB name: Name of a target database in which the replication log copy process copies logs
+    *   DB creation time: The creation time of a database copied through replication log copy process
     
-*    Active Info.
+    *   EOF LSA: Information of pageid and offset copied at the last time on the target node by the replication log copy process. There will be a delay in copying logs as much as difference with the EOF LSA value of "Active Info." and with the Append LSA value of "Copied Active Info."
     
-    *    DB name: Name of a database of which node was configured in the **-r** option.
-    *    DB creation time: Database creation time of a node that is configured in the **-r** option.
-    *    EOF LSA: The last information of pageid and offset of a database transaction log of a node that is configured in the **-r** option. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
-    *    Append LSA: Information of pageid and offset written at the last time on the disk by the database of which node was configured in the **-r** option.
-    *    HA server state: The server status of a database server of which node was configured in the **-r** option.
+    *   Append LSA: Information of pageid and offset written at the last time on the disk by the replication log copy process. This value can be less than or equal to EOF LSA. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
     
-*    Delay in Copying Active Log
+    *   HA server state: Status of a database server process which replication log copy process receives logs from. For details on status, see :ref:`ha-server`.
     
-    *    Delayed log page count: the count of transaction log pages which the copy is delayed.
-    *    Estimated Delay: the expected time which the logs copying is completed.
+*   Active Info.
     
-*    Delay in Applying Copied Log
+    *   DB name: Name of a database whose node was configured in the **-r** option.
+    *   DB creation time: Database creation time of a node that is configured in the **-r** option.
+    *   EOF LSA: The last information of pageid and offset of a database transaction log of a node that is configured in the **-r** option. There will be a delay in copying logs as much as difference between the EOF LSA value of "Copied Active Info." and this value.
+    
+    *   Append LSA: Information of pageid and offset written at the last time on the disk by the database whose node was configured in the **-r** option.
+    
+    *   HA server state: The server status of a database server whose node was configured in the **-r** option.
+    
+*   Delay in Copying Active Log
+    
+    *   Delayed log page count: the count of transaction log pages which the copy is delayed.
+    *   Estimated Delay: the expected time which the logs copying is completed.
+    
+*   Delay in Applying Copied Log
 
-    *    Delayed log page count: the count of transaction log pages which the application is delayed.
-    *    Estimated Delay: the expected time which the logs applying is completed.
+    *   Delayed log page count: the count of transaction log pages which the application is delayed.
+    *   Estimated Delay: the expected time which the logs applying is completed.
+
+When you run this command in replica node, if "ha_replica_delay=30s" is specified in cubrid.conf, the following information is printed out additionally.
+
+::
+
+     *** Replica-specific Info. ***
+    Deliberate lag                 : 30 second(s)
+    Last applied log record time   : 2013-06-20 11:20:10
+
+Each item of the status information is as below.
+
+*   Replica-specific Info.
+
+    *   Deliberate lag: delayed time a user defined by ha_replica_delay parameter
+    *   Last applied log record time: the time where the replication log of being applied in the replica node recently was actually applied in the master node.
+    
+When you run this command in replica node, if "ha_replica_delay=30s" and "ha_replica_time_bound=2013-06-20 11:31:00" are specified in cubrid.conf, "ha_replica_delay=30s" is ignored and the following information is printed out additionally.
+
+::
+
+     *** Replica-specific Info. ***
+    Last applied log record time   : 2013-06-20 11:25:17
+    Will apply log records up to   : 2013-06-20 11:31:00
+
+Each item of the status information is as below.
+
+*   Replica-specific Info.
+
+    *   Last applied log record time: the time where the replication log of being applied in the replica node recently was actually applied in the master node.
+    *   Will apply log records up to: the replica node will apply the master node's logs replicated up to this time.
+
+When applylogdb stops the replication after the time of being specified by **ha_replica_time_bound**,  the error message which is printed out in the file, **$CUBRID/log/**\ *db-name*\ **@**\ *local-node-name*\ **_applylogdb_**\ *db-name*\ **_**\ *remote-node-name*\ **.err** is as below.
+
+::
+
+    Time: 06/20/13 11:51:05.549 - ERROR *** file ../../src/transaction/log_applier.c, line 7913 ERROR CODE = -1040 Tran = 1, EID = 3
+    HA generic: applylogdb paused since it reached a log record committed on master at 2013-06-20 11:31:00 or later.
+    Adjust or remove ha_replica_time_bound and restart applylogdb to resume.
     
 .. _cubrid-changemode:
 
@@ -1016,16 +1121,17 @@ cubrid changemode
 
 This utility is used to check and change the server status of CUBRID HA. ::
 
-    cubrid changemode [option] <database-name@node-name>
+    cubrid changemode [options] <database-name@node-name>
 
 *   *database-name@node-name* : Specifies the name of a server to be checked or changed and separates each node name by using @.
 
+The following shows [options] used in **cubrid changemode**.
 
 .. program:: changemode
 
 .. option:: -m, --mode=MODE
 
-    Changes the server status. You can enter one of the followings:                                                                                                       
+    Changes the server status. You can enter one of the following:                                                                                                       
     
     **standby**, **maintenance** or **active**.
     
@@ -1038,9 +1144,7 @@ This utility is used to check and change the server status of CUBRID HA. ::
 
 .. option:: -t, --timeout=SECOND
     
-    The default is 5(seconds). 
-
-    Configures the waiting time for the normal completion of the transaction that is being processed when the node status switches from **standby** to **maintenance**. 
+    The default is 5(seconds). Configures the waiting time for the normal completion of the transaction that is being processed when the node status switches from **standby** to **maintenance**. 
     
     If the transaction is still in progress beyond the configured time, it will be forced to terminate and switch to **maintenance** status; if all transactions have completed normally within the configured time, it will switch to **maintenance** status immediately. 
 
@@ -1048,21 +1152,21 @@ This utility is used to check and change the server status of CUBRID HA. ::
 
 This table shows changeable modes depending on current status.
 
-+------------------------------------+----------------------------------------+
-|                                    | **Changeable**                         |
-|                                    +----------------+---------+-------------+
-|                                    | active         | standby | maintenance |
-+--------------------+---------------+----------------+---------+-------------+
-| **Current Status** | standby       | X              | O       | O           |
-|                    +---------------+----------------+---------+-------------+
-|                    | to-be-standby | X              | X       | X           |
-|                    +---------------+----------------+---------+-------------+
-|                    | active        | O              | X       | X           |
-|                    +---------------+----------------+---------+-------------+
-|                    | to-be-active  | O*             | X       | X           |
-|                    +---------------+----------------+---------+-------------+
-|                    | maintenance   | X              | O       | O           |
-+--------------------+---------------+----------------+---------+-------------+
++------------------------------------+-----------------------------------------------+
+|                                    | **Changeable**                                |
+|                                    +---------------+---------------+---------------+
+|                                    | active        | standby       | maintenance   |
++--------------------+---------------+---------------+---------------+---------------+
+| **Current Status** | standby       | X             | O             | O             |
+|                    +---------------+---------------+---------------+---------------+
+|                    | to-be-standby | X             | X             | X             |
+|                    +---------------+---------------+---------------+---------------+
+|                    | active        | O             | X             | X             |
+|                    +---------------+---------------+---------------+---------------+
+|                    | to-be-active  | O*            | X             | X             |
+|                    +---------------+---------------+---------------+---------------+
+|                    | maintenance   | X             | O             | O             |
++--------------------+---------------+---------------+---------------+---------------+
 
 \* When the server status is to-be-active, forcibly change may cause data inconsistency among replication nodes. It is not recommended if you are not skilled enough.
 
@@ -1083,24 +1187,25 @@ Monitoring CUBRID Manager HA
 
 CUBRID Manager is a dedicated CUBRID database management tool that provides the CUBRID database management and query features in a GUI environment. CUBRID Manager provides the HA dashboard, which shows the relationship diagram for the CUBRID HA group and server status. For details, see CUBRID Manager manual.
 
-Configuration
-=============
+Structures of HA
+================
 
 There are four possible structures for CUBRID HA: The default structure, multiple-slave node structure, load balancing structure, and multiple-standby server structure. In the table below, M stands for a master node, S for a slave node, and R for a replica node.
 
-+-----------------------------------+----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Structure                         | Node structure (M:S:R)     | Characteristic                                                                                                                                         |
-+===================================+============================+========================================================================================================================================================+
-| Default Structure                 | 1:1:0                      | The most basic structure of CUBRID HA consists of one master node and one slave node and provides availability which is a unique feature of CUBRID HA. |
-+-----------------------------------+----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Multiple-Slave Node Structure     | 1:N:0                      | This is a structure in which availability is increased by several slave nodes. However,                                                                |
-|                                   |                            | note that there may be a situation in which data is inconsistent in the CUBRID HA group when multiple failures occur.                                  |
-+-----------------------------------+----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Load Balancing Structure          | 1:1:N                      | Several replica nodes are added in the basic structure. Read service load can be distributed, and the HA load is reduced,                              |
-|                                   |                            | comparing to a multiple-slave node structure. Note that replica nodes do not failover.                                                                 |
-+-----------------------------------+----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Multiple-Standby Server Structure | 1:1:0                      | Basically, this structure is the same as the basic structure. However, several slave nodes are installed on a single physical server.                  |
-+-----------------------------------+----------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
++-----------------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------+
+| Structure                         | Node structure (M:S:R) | Characteristic                                                                                                                        |
++===================================+========================+=======================================================================================================================================+
+| Default Structure                 | 1:1:0                  | The most basic structure of CUBRID HA consists of one master node and one slave node and provides availability                        |
+|                                   |                        | which is a unique feature of CUBRID HA.                                                                                               |
++-----------------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------+
+| Multiple-Slave Node Structure     | 1:N:0                  | This is a structure in which availability is increased by several slave nodes. However,                                               |
+|                                   |                        | note that there may be a situation in which data is inconsistent in the CUBRID HA group when multiple failures occur.                 |
++-----------------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------+
+| Load Balancing Structure          | 1:1:N                  | Several replica nodes are added in the basic structure. Read service load can be distributed, and the HA load is reduced,             |
+|                                   |                        | comparing to a multiple-slave node structure. Note that replica nodes do not failover.                                                |
++-----------------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------+
+| Multiple-Standby Server Structure | 1:1:0                  | Basically, this structure is the same as the basic structure. However, several slave nodes are installed on a single physical server. |
++-----------------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------+
 
 Default Structure of HA
 -----------------------
@@ -1117,22 +1222,22 @@ You can configure each node in the basic structure of HA as shown below:
 
 *   **node A** (master node)
 
-    * Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
+    *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-        ha_mode=on
+            ha_mode=on
 
-    * The following example shows how to configure **cubrid_ha.conf**: ::
+    *   The following example shows how to configure **cubrid_ha.conf**: ::
 
-        ha_port_id=59901
-        ha_node_list=cubrid@nodeA:nodeB
-        ha_db_list=testdb
+            ha_port_id=59901
+            ha_node_list=cubrid@nodeA:nodeB
+            ha_db_list=testdb
 
 *   **node B** (slave node): Configure this node in the same manner as *node A*.
 
 For the **databases.txt** file of a broker node, it is necessary to configure the list of hosts configured as HA in **db-host** according to their priority. The following example shows the **databases.txt** file. ::
 
-    #db-name    vol-path                  db-host       log-path       lob-base-path
-    testdb     /home/cubrid/DB/testdb1   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
+    #db-name    vol-path                  db-host       log-path                   lob-base-path
+    testdb     /home/cubrid/DB/testdb     nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
 
 The **cubrid_broker.conf** file can be set in a variety of ways according to configuration of the broker. It can also be configured as separate equipment with the **databases.txt** file.
 
@@ -1150,7 +1255,7 @@ See :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, and :ref:`ha-php-conf` in Environme
 
 **Remark**
 
-The path of a transaction log in these configurations is as follows:
+The moving path of a transaction log in these configurations is as follows:
 
 .. image:: /images/image31.png
 
@@ -1173,28 +1278,24 @@ You can configure each node in the basic structure of HA as shown below:
 
 *   **node A** (master node)
 
-    * Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
+    *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-        ha_mode=on
+            ha_mode=on
 
-    * The following example shows how to configure **cubrid_ha.conf**: ::
+    *   The following example shows how to configure **cubrid_ha.conf**: ::
 
-        ha_port_id=59901
-        ha_node_list=cubrid@nodeA:nodeB:nodeC
-        ha_db_list=testdb
+            ha_port_id=59901
+            ha_node_list=cubrid@nodeA:nodeB:nodeC
+            ha_db_list=testdb
 
-*   **node B** (slave node): Configure this node in the same manner as *node A*.
-
-*   **node C** (slave node): Configure this node in the same manner as *node A*.
+*   **node B**, **node C** (slave node): Configure this node in the same manner as *node A*.
 
 You must enter the list of hosts configured in HA in order of priority in the **databases.txt** file of a broker node. The following is an example of the **databases.txt** file. ::
 
-    #db-name    vol-path                  db-host             log-path       lob-base-path
-    testdb     /home/cubrid/DB/testdb1   nodeA:nodeB:nodeC   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
+    #db-name   vol-path                   db-host             log-path                   lob-base-path
+    testdb     /home/cubrid/DB/testdb     nodeA:nodeB:nodeC   /home/cubrid/DB/testdb/log file:/home/cubrid/DB/testdb/lob
 
-The **cubrid_broker.conf** file can be set in a variety of ways according to configuration of the broker. It can also be configured as separate equipment with the **databases.txt** file.
-
-In this example, the RW broker is configured in *node A*, *node B*, and *node C*.
+The **cubrid_broker.conf** file can be set in a variety of ways according to configuration of the broker. It can also be configured as separate equipment with the **databases.txt** file. In this example, the RW broker is configured in *node A*, *node B*, and *node C*.
 
 The following is an example of the **databases.txt** file in *node A*, *node B*, and *node C*. ::
 
@@ -1215,20 +1316,20 @@ Connect the application to access to the broker of *node A*, *node B*, or *node 
 
 For details, see :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, and :ref:`ha-php-conf` in Environment Configuration.
 
+.. note::
+
+    The data in the CUBRID HA group may lose integrity when there are multiple failures in this structure and the example is shown below.
+
+    *   n a situation where a failover occurs in the first slave node while replication in the second slave node is being delayed due to restart
+    *   In a situation where a failover re-occurs before replication reflection of a new master node is not complete due to frequent failover
+
+    In addition, if the mode of replication log copy process is ASYNC, the data in the CUBRID HA group may lose integrity.
+
+    If the data in the CUBRID HA group loses integrity for any of the reasons above, you can fix it by using :ref:`rebuilding-replication`.
+
 **Remark**
 
-The data in the CUBRID HA group may lose integrity when there are multiple failures in this structure and the example is shown below.
-
-*   n a situation where a failover occurs in the first slave node while replication in the second slave node is being delayed due to restart
-*   In a situation where a failover re-occurs before replication reflection of a new master node is not complete due to frequent failover
-
-In addition, if the mode of replication log copy process is ASYNC, the data in the CUBRID HA group may lose integrity.
-
-If the data in the CUBRID HA group loses integrity for any of the reasons above, you can fix it by using :ref:`rebuilding-replication`.
-
-**Remark**
-
-The path of a transaction log in these configurations is as follows:
+The moving path of a transaction log in these configurations is as follows:
 
 .. image:: /images/image33.png
 
@@ -1249,51 +1350,34 @@ You can configure each node in load balancing structure as shown below:
 
 *   **node A** (master node)
 
-    * Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
+    *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
 
-        ha_mode=on
+            ha_mode=on
 
-    * The following example shows how to configure **cubrid_ha.conf**: ::
+    *   The following example shows how to configure **cubrid_ha.conf**: ::
 
-        ha_port_id=59901
-        ha_node_list=cubrid@nodeA:nodeB 
-        ha_replica_list=cubrid@nodeC:nodeD
-        ha_db_list=testdb
+            ha_port_id=59901
+            ha_node_list=cubrid@nodeA:nodeB 
+            ha_replica_list=cubrid@nodeC:nodeD:nodeE
+            ha_db_list=testdb
 
 *   **node B** (slave node): Configure this node in the same manner as *node A*.
 
-*   **node C** (replica node)
+*   **node C**, **node D**, **node E** (replica node)
 
-    * Configure the **ha_mode** of the **cubrid.conf** file to **replica**. ::
+    *   Configure the **ha_mode** of the **cubrid.conf** file to **replica**. ::
 
-        ha_mode=replica
+            ha_mode=replica
 
-    * You can configure the **cubrid_ha.conf** file in the same manner as *node A*.
-
-*   **node D** (replica node): Configure this node in the same manner as *node C*.
-
-You must enter the list of DB server hosts in the order so that each broker can be connected appropriate HA or load balancing server in the **databases.txt** file of a broker node.
-
-The following is an example of the **databases.txt** file in *node A* and *node B*. ::
-
-    #db-name    vol-path                  db-host       log-path             lob-base-path
-    testdb     /home/cubrid/DB/testdb1   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob
-
-The following is an example of the **databases.txt** file in *node C*. ::
-
-    #db-name    vol-path                  db-host       log-path             lob-base-path
-    testdb     /home/cubrid/DB/testdb   nodeC   /home/cubrid/DB/testdb/log        file:/home/cubrid/CUBRID/testdb/lob
-
-The following is an example the **databases.txt** in *node D*. ::
-
-    #db-name    vol-path                  db-host       log-path             lob-base-path
-    testdb     /home/cubrid/DB/testdb   nodeD   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob
+    *   You can configure the **cubrid_ha.conf** file in the same manner as *node A*.
 
 The **cubrid_broker.conf** can be set in a variety of ways according to configuration of the broker. It can also be configured as separate equipment with the **databases.txt** file.
 
-In this example, the RW broker is configured in *node A* and *node B* and the PHRO broker is configured in *node C* and *node D*.
+In this example, broker and DB server exist on the same machine; the RW broker is configured in *node A* and *node B*; the SO broker with "CONNECT_ORDER=RANDOM" and "PREFERRED_HOSTS=localhost" is configured in *node C*, *node D* and *node E*. each of *node C*, *node D* or *node E* tries to connect to local DB server first because they are set as "PREFERRED_HOSTS=localhost". When it is failed to connect to localhost, it tries to connect to one of db-hosts in databases.txt randomly because they are set as "CONNECT_ORDER=RANDOM".
 
-The following is an example of **cubrid_broker.conf** in *node A* and *node B*. ::
+The following is an example of **cubrid_broker.conf** in *node A* and *node B*.
+
+::
 
     [%RW_broker]
     ...
@@ -1301,23 +1385,26 @@ The following is an example of **cubrid_broker.conf** in *node A* and *node B*. 
     # Broker mode setting parameter
     ACCESS_MODE             =RW
 
-The following is an example **cubrid_broker.conf** in *node C*. ::
+The following is an example **cubrid_broker.conf** in *node C*, *node D* and *node E*. ::
 
     [%PHRO_broker]
     ...
      
     # Broker mode setting parameter
-    ACCESS_MODE             =PHRO
-    PREFERRED_HOSTS         =nodeC:nodeD
+    ACCESS_MODE             =SO
+    PREFERRED_HOSTS         =localhost
 
-The following is an example **cubrid_broker.conf** in *node D*. ::
+You must enter the list of DB server hosts in the order so that each broker can be connected appropriate HA or load balancing server in the **databases.txt** file of a broker node.
 
-    [%PHRO_broker]
-    ...
-     
-    # Broker mode setting parameter
-    ACCESS_MODE             =PHRO
-    PREFERRED_HOSTS         =nodeD:nodeC
+The following is an example of the **databases.txt** file in *node A* and *node B*. ::
+
+    #db-name    vol-path                  db-host       log-path             lob-base-path
+    testdb     /home/cubrid/DB/testdb   nodeA:nodeB   /home/cubrid/DB/testdb/log file:/home/cubrid/CUBRID/testdb/lob
+
+The following is an example of the **databases.txt** file in *node C*, *node D* and *node E*. ::
+
+    #db-name    vol-path                db-host             log-path                    lob-base-path
+    testdb     /home/cubrid/DB/testdb   nodeC:nodeD:nodeE   /home/cubrid/DB/testdb/log  file:/home/cubrid/CUBRID/testdb/lob
 
 **Connection Configuration of Applications**
 
@@ -1328,12 +1415,12 @@ Connect the application to access in read/write mode to the broker of *node A* o
     Connection connection = DriverManager.getConnection(
         "jdbc:CUBRID:nodeA:33000:testdb:::?charSet=utf-8&altHosts=nodeB:33000", "dba", "");
 
-Connect the application to access in read-only mode to the broker of *node C* or *node D*. The following is an example of a JDBC application.
+Connect the application to access in read-only mode to the broker of *node C*, *node D* or *node E*. The following is an example of a JDBC application. Configure "**loadBalance**\ =true" on the URL to connect randomly to the main host and hosts which are specified by **altHosts**.
 
 .. code-block:: java
 
     Connection connection = DriverManager.getConnection(
-        "jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&altHosts=nodeD:33000", "dba", "");
+        "jdbc:CUBRID:nodeC:33000:testdb:::?charSet=utf-8&loadBalance=true&altHosts=nodeD:33000,nodeE:33000", "dba", "");
 
 For details, see :ref:`ha-jdbc-conf`, :ref:`ha-cci-conf`, and :ref:`ha-php-conf` in Environment Configuration.
 
@@ -1348,7 +1435,7 @@ Multiple-Standby Server Structure
 
 Although its node structure has a single master node and a single slave node, many slave nodes from different services are physically configured in a single server.
 
-This structure is for very small services in which the read load of slave nodes are light. It is strictly for the availability of the CUBRID service. For this reason, when a master node that failed after a failover has been restored, the load must be moved back to the original master node to minimize the load of the server with multiple-slave nodes.
+This structure is for very small services in which the reading load of slave nodes is light. It is strictly for the availability of the CUBRID service. For this reason, when a master node that failed after a failover has been restored, the load must be moved back to the original master node to minimize the load of the server with multiple-slave nodes.
 
 .. image:: /images/image36.png
 
@@ -1358,54 +1445,70 @@ You can configure each node in the basic structure of HA as shown below:
 
 *   **node AM**, **node AS** : Configure them in the same manner.
 
-    * Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
+    *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. 
+    
+        ::
 
-        ha_mode=on
+            ha_mode=on
 
-    * The following example shows how to configure **cubrid_ha.conf**. ::
+    *   The following example shows how to configure **cubrid_ha.conf**. 
+    
+        ::
 
-        ha_port_id=10000
-        ha_node_list=cubridA@Host1:Host5
-        ha_db_list=testdbA1,testdbA2
+            ha_port_id=10000
+            ha_node_list=cubridA@Host1:Host5
+            ha_db_list=testdbA1,testdbA2
 
 *   **node BM**, **node BS** : Configure them in the same manner.
 
-    * Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
+    *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. 
+    
+        ::
 
-        ha_mode=on
+            ha_mode=on
 
-    * The following example shows how to configure **cubrid_ha.conf**. ::
+    *   The following example shows how to configure **cubrid_ha.conf**. 
+    
+        ::
 
-        ha_port_id=10001
-        ha_node_list=cubridB@Host2:Host5
-        ha_db_list=testdbB1,testdbB2
+            ha_port_id=10001
+            ha_node_list=cubridB@Host2:Host5
+            ha_db_list=testdbB1,testdbB2
 
 *   **node CM**, **node CS** : Configure them in the same manner.
 
-    * Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
+    *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. 
+    
+        ::
 
-        ha_mode=on
+            ha_mode=on
 
-    * The following example shows how to configure **cubrid_ha.conf**. ::
+    *   The following example shows how to configure **cubrid_ha.conf**. 
+    
+        ::
 
-        ha_port_id=10002
-        ha_node_list=cubridC@Host3:Host5
-        ha_db_list=testdbC1,testdbC2
+            ha_port_id=10002
+            ha_node_list=cubridC@Host3:Host5
+            ha_db_list=testdbC1,testdbC2
 
 *   **node DM**, **node DS** : Configure them in the same manner.
 
-    * Configure the **ha_mode** of the **cubrid.conf** file to **on**. ::
+    *   Configure the **ha_mode** of the **cubrid.conf** file to **on**. 
+    
+        ::
 
-        ha_mode=on
+            ha_mode=on
 
-    * The following is an example of the **cubrid_ha.conf** configuration. ::
+    *   The following is an example of the **cubrid_ha.conf** configuration. 
+    
+        ::
 
-        ha_port_id=10003
-        ha_node_list=cubridD@Host4:Host5
-        ha_db_list=testdbD1,testdbD2
+            ha_port_id=10003
+            ha_node_list=cubridD@Host4:Host5
+            ha_db_list=testdbD1,testdbD2
 
-Constraints
-===========
+HA Constraints
+==============
 
 **Supported Platforms**
 
@@ -1423,9 +1526,11 @@ On the partitioned table, the table which has promoted some partitions by the **
 
 Because using java stored procedures in CUBRID HA cannot be replicated, java stored procedures should be configured to all nodes. For more details, see :ref:`jsp-environment-configuration`.
 
-**Method and CUBRID Manager**
+**Method**
 
-CUBRID HA synchronizes data among nodes within CUBRID HA groups based on replication logs. Therefore, using method that does not generate replication logs or configuring **NOT NULL** through CUBRID Manager may cause data inconsistency among nodes within CUBRID HA groups. Therefore, in CUBRID HA environment, it is not recommended to use method and other menus of CUBRID Manager except for the query processor.
+CUBRID HA synchronizes data among nodes within CUBRID HA groups based on replication logs, So using method that does not generate replication logs may cause data inconsistency among nodes within CUBRID HA groups.
+
+Therefore, in CUBRID HA environment, it is not recommended to use method.
 
 **UPDATE STATISTICS Statement**
 
@@ -1442,6 +1547,16 @@ To enhance performance, a serial cache does not access Heap and does not generat
 **cubrid backupdb -r**
 
 This command is used to back up a specified database. If the **-r** option is used, logs that are not required for recovery will be deleted. This deletion may result in data inconsistency among nodes within CUBRID HA groups. Therefore, you must not use the **-r** option.
+
+**On-line backup**
+
+If you want to perform on-line backup in HA environment, add @\ *hostname*\ after the database name. *hostname*\ is a name defined in $CUBRID_DATABASES/databases.txt. Specify "@localhost" because you generally perform on-line backup on the local database.
+
+::
+
+    cubrid backupdb -C -D ./ -l 0 -z testdb@localhost
+
+Backup during running database may occur disk I/O load. Therefore, it is recommended to run backup on slave DB than master DB.
 
 **INCR/DECR Functions**
 
@@ -1463,108 +1578,147 @@ Scenario of Building New Slave Node
 
 This scenario involves building a new slave node while operating a single master node, making a 1:1 master-slave scheme. Please note that only tables with a default key can be replicated. In addition, all of the volume directories of the master node and the slave node must be identical.
 
-This scenario assumes that the database has been created using the **cubrid createdb testdb -L $CUBRID_DATABASES/testdb/log** command. At this time, the backup file is saved in the $CUBRID_DATABASES/testdb directory by default if the location is not specified.
+This scenario assumes that the database has been created by below commands. When you run createdb, a locale name and a charset should be the same between a master node and a slave node.
+
+::
+
+    export CUBRID_DATABASES=/home/cubrid/DB
+    mkdir $CUBRID_DATABASES/testdb
+    mkdir $CUBRID_DATABASES/testdb/log
+    cd $CUBRID_DATABASES/testdb
+    cubrid createdb testdb -L $CUBRID_DATABASES/testdb/log en_US.utf8
+
+At this time, the backup file is saved in the $CUBRID_DATABASES/testdb directory by default if the location is not specified.
 
 Using the above instructions, build a new slave node by following these steps, in the order specified.
 
-#. Stop the master node service. ::
+#.  Stop the master node service. 
 
-    [nodeA]$ cubrid service stop
+    ::
+
+        [nodeA]$ cubrid service stop
 
 #. Set the master node HA and the slave node HA.
 
-    * Set the **$CUBRID/conf/cubrid.conf** as identical for both the master node and the slave node. ::
+    *   Set the **$CUBRID/conf/cubrid.conf** as identical for both the master node and the slave node. 
+    
+        ::
 
-        ...
+            [service]
+            service=server,broker,manager
+                        
+            # Add the database name to run when starting the service
+            server=testdb
 
-        [common]
-        service=server,broker,manager
+            [common]
+            ...
 
-        # Add the database name to run when starting the service
-        server=testdb
+            # Add when configuring the HA (Logging parameters)
+            log_max_archives=100
+            force_remove_log_archives=no
 
-        ...
+            # Add when configuring the HA (HA mode)
+            ha_mode=on
 
-        # Add when configuring the HA (Logging parameters)
-        log_max_archives=100
-        force_remove_log_archives=no
+    *   Set the **$CUBRID/conf/cubrid_ha.conf** as identical for both the master node and the slave node. 
+    
+        ::
 
-        # Add when configuring the HA (HA mode)
-        ha_mode=on
+            [common]
+            ha_port_id=59901
+            
+            # cubrid is a group name of HA system, nodeA and nodeB are host names.
+            ha_node_list=cubrid@nodeA:nodeB
+            
+            ha_db_list=testdb
+            ha_copy_sync_mode=sync:sync
+            ha_apply_max_mem_size=500
 
-    * Set the **$CUBRID/conf/cubrid_ha.conf** as identical for both the master node and the slave node. ::
+    *   Set the **$CUBRID_DATABASES/databases.txt** as identical for both the master node and the slave node. 
+    
+        ::
 
-        [common]
-        ha_port_id=59901
-        ha_node_list=cubrid@nodeA:nodeB
-        ha_db_list=testdb
-        ha_copy_sync_mode=sync:sync
-        ha_apply_max_mem_size=500
+            #db-name    vol-path        db-host     log-path     lob-base-path
+            testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
 
-    * Set the **$CUBRID_DATABASES/databases.txt** as identical for both the master node and the slave node. ::
-
-        #db-name    vol-path        db-host     log-path     lob-base-path
-        testdb       /home/cubrid/DB/testdb nodeA:nodeB   /home/cubrid/DB/testdb/log  file:/home/cubrid/DB/testdb/lob
-
+    *   Set locale library as identical for both the master node and the slave node.
+    
+        ::
         
-    * Create a database directory to the slave node. ::
+            [nodeA]$ scp $CUBRID/conf/cubrid_locales.txt cubrid_usr@nodeB:/$CUBRID/conf/.
+            
+            [nodeB]$ make_locale.sh -t 64bit
+            
+    *   Create a database directory to the slave node. 
     
-        [nodeB]$ cd $CUBRID_DATABASES
-        [nodeB]$ mkdir testdb
-
-    * Create the log directory to the slave node(same location with the master node). ::
-
-        [nodeB]$ cd $CUBRID_DATABASES/testdb
-        [nodeB]$ mkdir log
-
-#. Back up the database of the master node and copy the backup file to the slave node. If the location where the backup file will be saved in the master node is not specified, the location is set as the log directory of *testdb* by default. Copy the backup file to the same location in the slave node. *testdb* _bk0v000 is the backup volume file and *testdb* _bkvinf is the backup volume information file. ::
-
-    [nodeA]$ cubrid backupdb -z -S testdb
-    Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 16:05:18 2012
-    [nodeA]$ cd $CUBRID_DATABASES/testdb/log
-    [nodeA]$ scp testdb_bk* cubrid_usr@nodeB:/home/cubrid_usr/CUBRID/databases/testdb/log
-    cubrid_usr@nodeB's password:
-    testdb_bk0v000                            100% 6157KB   6.0MB/s   00:00
-    testdb_bkvinf                             100%   66     0.1KB/s   00:00
-
-#. Recover the database in the slave node. At this time, the volume path of the master node must be identical to that of the slave node. ::
-
-    [nodeB]$ cubrid restoredb -B $CUBRID_DATABASES/testdb/log demodb
+        ::
     
-#. Start the master node ::
+            [nodeB]$ cd $CUBRID_DATABASES
+            [nodeB]$ mkdir testdb
 
-    [nodeA]$ cubrid heartbeat start
+    *   Create the log directory to the slave node(same location with the master node). 
+    
+        ::
 
-#. After confirming that the master node has started, start the slave node. If *nodeA* is changed from to-be-master to master, it means that the master node has been successfully started. ::
+            [nodeB]$ cd $CUBRID_DATABASES/testdb
+            [nodeB]$ mkdir log
 
-    [nodeA]$ cubrid heartbeat status
-    @ cubrid heartbeat status
-     
-     HA-Node Info (current nodeA, state master)
-       Node nodeB (priority 2, state unknown)
-       Node nodeA (priority 1, state master)
-     
-     HA-Process Info (master 123, state master)
-     
-       Applylogdb testdb@localhost:/home1/cubrid/DB/tdb01_nodeB (pid 234, state registered)
-       Copylogdb testdb@nodeB:/home1/cubrid/DB/tdb01_nodeB (pid 345, state registered)
-       Server tdb01 (pid 456, state registered_and_to_be_active)
-     
-    [nodeB]$ cubrid heartbeat start
+#.  Back up the database of the master node and copy the backup file to the slave node. If the location where the backup file will be saved in the master node is not specified, the location is set as the log directory of *testdb* by default. Copy the backup file to the same location in the slave node. *testdb* _bk0v000 is the backup volume file and *testdb* _bkvinf is the backup volume information file. 
 
-#. Confirm that the HA configurations of the master node and the slave node are successfully running ::
+    ::
 
-    [nodeA]$ csql -u dba testdb@localhost -c"create table tbl(i int primary key);insert into tbl values (1),(2),(3)"
-     
-    [nodeB]$ csql -u dba testdb@localhost -c"select * from tbl"
-     
-    === <Result of SELECT Command in Line 1> ===
-     
-                i
-    =============
-                1
-                2
-                3
+        [nodeA]$ cubrid backupdb -z -S testdb
+        Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 16:05:18 2012
+        [nodeA]$ cd $CUBRID_DATABASES/testdb/log
+        [nodeA]$ scp testdb_bk* cubrid_usr@nodeB:/home/cubrid_usr/CUBRID/databases/testdb/log
+        cubrid_usr@nodeB's password:
+        testdb_bk0v000                            100% 6157KB   6.0MB/s   00:00
+        testdb_bkvinf                             100%   66     0.1KB/s   00:00
+
+#.  Recover the database in the slave node. At this time, the volume path of the master node must be identical to that of the slave node. 
+
+    ::
+
+        [nodeB]$ cubrid restoredb -B $CUBRID_DATABASES/testdb/log demodb
+    
+#.  Start the master node 
+
+    ::
+
+        [nodeA]$ cubrid heartbeat start
+
+#.  After confirming that the master node has started, start the slave node. If *nodeA* is changed from to-be-master to master, it means that the master node has been successfully started. 
+
+    ::
+
+        [nodeA]$ cubrid heartbeat status
+        @ cubrid heartbeat status
+         
+         HA-Node Info (current nodeA, state master)
+           Node nodeB (priority 2, state unknown)
+           Node nodeA (priority 1, state master)
+         
+         HA-Process Info (master 123, state master)
+         
+           Applylogdb testdb@localhost:/home1/cubrid/DB/tdb01_nodeB (pid 234, state registered)
+           Copylogdb testdb@nodeB:/home1/cubrid/DB/tdb01_nodeB (pid 345, state registered)
+           Server tdb01 (pid 456, state registered_and_to_be_active)
+         
+        [nodeB]$ cubrid heartbeat start
+
+#.  Confirm that the HA configurations of the master node and the slave node are successfully running 
+
+    ::
+
+        [nodeA]$ csql -u dba testdb@localhost -c"create table tbl(i int primary key);insert into tbl values (1),(2),(3)"
+         
+        [nodeB]$ csql -u dba testdb@localhost -c"select * from tbl"
+         
+                    i
+        =============
+                    1
+                    2
+                    3
 
 Operation Scenario during Read/Write Service
 --------------------------------------------
@@ -1577,7 +1731,6 @@ You can perform the following operations without stopping and restarting nodes i
 
 +----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **General Operation**                        | **Scenario**                                                            | **Consideration**                                                                                                                                      |
-|                                              |                                                                         |                                                                                                                                                        |
 +==============================================+=========================================================================+========================================================================================================================================================+
 | Online Backup                                | Operation task is performed at each master node and slave node          | Note that there may be a delay in the transaction of master node due to the operation task.                                                            |
 |                                              | each during operation.                                                  |                                                                                                                                                        |
@@ -1585,25 +1738,16 @@ You can perform the following operations without stopping and restarting nodes i
 | Schema change (excluding basic key change),  | When an operation task occurs at a master node, it is automatically     | Because replication log is copied and reflected to a slave node after an operation task is completed in a master node, operation task time is doubled. |
 | index change, authorization change           | replication reflected to a slave node.                                  | Changing schema must be processed without any failover.                                                                                                |
 |                                              |                                                                         | Index change and authority change other than the schema change can be performed by stopping each node and executing standalone mode (ex: the           |
-|                                              |                                                                         | **-S**                                                                                                                                                 |
-|                                              |                                                                         | option of the                                                                                                                                          |
-|                                              |                                                                         | **csql**                                                                                                                                               |
-|                                              |                                                                         | utility) when the operation time is important.                                                                                                         |
-|                                              |                                                                         |                                                                                                                                                        |
+|                                              |                                                                         | **-S** option of the **csql** utility) when the operation time is important.                                                                           |
 +----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Add volume                                   | Operation task is performed at each DB regardless of HA structure.      | Note that there may be a delay in the transaction of master node due to the operation task.                                                            |
 |                                              |                                                                         | If operation task time is an issue, operation task can be performed by stopping each node and executing standalone mode (ex: the                       |
-|                                              |                                                                         | **-S**                                                                                                                                                 |
-|                                              |                                                                         | of the                                                                                                                                                 |
-|                                              |                                                                         | **cubrid addvoldb**                                                                                                                                    |
-|                                              |                                                                         | utility).                                                                                                                                              |
-|                                              |                                                                         |                                                                                                                                                        |
+|                                              |                                                                         | **-S**  of the **cubrid addvoldb**  utility).                                                                                                          |
 +----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Failure node server replacement              | It can be replaced without restarting the CUBRID HA group when          | The failure node must be registered in the ha_node_list of CUBRID HA group, and the node name must not be changed during replacement.                  |
 |                                              | a failure occurs.                                                       |                                                                                                                                                        |
 +----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Failure broker server replacement            | It can be replaced without restarting the broker when a failure occurs. | The connection to a broker replaced at a client can be made by rcTime which is configured in URL string.                                               |
-|                                              |                                                                         |                                                                                                                                                        |
 +----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
 | DB server expansion                          | You can execute                                                         | Starts or stops the                                                                                                                                    |
 |                                              | **cubrid heartbeat reload**                                             | **copylogdb/applylogdb**                                                                                                                               |
@@ -1611,7 +1755,6 @@ You can perform the following operations without stopping and restarting nodes i
 |                                              | without restarting the previously configured CUBRID HA group.           |                                                                                                                                                        |
 +----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Broker server expansion                      | Run additional brokers without restarting existing brokers.             | Modify the URL string to connect to a broker where a client is added.                                                                                  |
-|                                              |                                                                         |                                                                                                                                                        |
 +----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 **When Failover Occurs**
@@ -1620,20 +1763,16 @@ You must stop nodes in CUBRID HA group and complete operation before performing 
 
 +------------------------------------------------------------+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------+
 | **General Operation**                                      | **Scenario**                                                                   | **Consideration**                                                                           |
-|                                                            |                                                                                |                                                                                             |
 +============================================================+================================================================================+=============================================================================================+
 | DB server configuration change                             | A node whose configuration is changed is restarted when the configuration in   |                                                                                             |
 |                                                            | **cubrid.conf**                                                                |                                                                                             |
 |                                                            | is changed.                                                                    |                                                                                             |
-|                                                            |                                                                                |                                                                                             |
 +------------------------------------------------------------+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------+
 | Change broker configuration, add broker, and delete broker | A broker whose configuration is changed is restarted when the configuration in |                                                                                             |
 |                                                            | **cubrid_broker.conf**                                                         |                                                                                             |
 |                                                            | is changed.                                                                    |                                                                                             |
-|                                                            |                                                                                |                                                                                             |
 +------------------------------------------------------------+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------+
 | DBMS version patch                                         | Restart nodes and brokers in HA group after version patch.                     | Version patch means there is no change in the internal protocol, volume, and log of CUBRID. |
-|                                                            |                                                                                |                                                                                             |
 +------------------------------------------------------------+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------+
 
 Operation Scenario during Read Service
@@ -1645,36 +1784,32 @@ The operation scenario written in this page is only applied to read service. It 
 
 You can perform the following operations without stopping and restarting nodes in CUBRID HA groups.
 
-+--------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **General Operation**                                                          | **Scenario**                                                                                             | **Consideration**                                                                                                                                                                                                                                                                                         |
-|                                                                                |                                                                                                          |                                                                                                                                                                                                                                                                                                           |
-+================================================================================+==========================================================================================================+===========================================================================================================================================================================================================================================================================================================+
-| Schema change (primary key change)                                             | When an operation task is performed at the master node, it is automatically reflected to the slave node. | In order to change the primary key, the existing key must be deleted and a new one added. For this reason, replication reflection may not occur due to the HA internal structure which reflects primary key-based replication logs. Therefore, operation tasks must be performed during the read service. |
-|                                                                                |                                                                                                          |                                                                                                                                                                                                                                                                                                           |
-+--------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Schema change (excluding basic key change), index change, authorization change | When an operation task is performed at the master node, it is automatically reflected to the slave node. | Because replication log is copied and reflected to a slave node after an operation task is completed in a master node, operation task time is doubled.                                                                                                                                                    |
-|                                                                                |                                                                                                          | Changing schema must be processed without any failover.                                                                                                                                                                                                                                                   |
-|                                                                                |                                                                                                          | Index change and authority change other than the schema change can be performed by stopping each node and executing standalone mode (ex: the span class="nkeyword">-S option of                                                                                                                           |
-|                                                                                |                                                                                                          | **csql**                                                                                                                                                                                                                                                                                                  |
-|                                                                                |                                                                                                          | ) when the operation time is important.                                                                                                                                                                                                                                                                   |
-|                                                                                |                                                                                                          |                                                                                                                                                                                                                                                                                                           |
-+--------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++----------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **General Operation**                        | **Scenario**                                            | **Consideration**                                                                                                                                       |
++==============================================+=========================================================+=========================================================================================================================================================+
+| Schema change (primary key change)           | When an operation task is performed at the master node, | In order to change the primary key, the existing key must be deleted and a new one added.  For this reason, replication reflection may not occur due to |
+|                                              | it is automatically reflected to the slave node.        | the HA internal structure which reflects primary key-based replication logs. Therefore, operation tasks must be performed during the read service.      |
++----------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Schema change (excluding basic key change),  | When an operation task is performed at the master node, | Because replication log is copied and reflected to a slave node after an operation task is completed in a master node, operation task time is doubled.  |
+| index change, authorization change           | it is automatically reflected to the slave node.        | Changing schema must be processed without any failover.                                                                                                 |
+|                                              |                                                         | Index change and authority change other than the schema change can be performed by stopping each node and executing standalone mode                     |
+|                                              |                                                         | (ex: the span class="nkeyword">-S option of **csql** ) when the operation time is important.                                                            |
++----------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 **When Failover Occurs**
 
 You must stop nodes in CUBRID HA group and complete operation before performing the following operations. 
 
-+------------------------------------------------+-------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **General Operation**                          | **Scenario**                                                                              | **Consideration**                                                                                                                                                                                                                                                                              |
-|                                                |                                                                                           |                                                                                                                                                                                                                                                                                                |
-+================================================+===========================================================================================+================================================================================================================================================================================================================================================================================================+
-| DBMS version upgrade                           | Restart each node and broker in the CUBRID HA group after they are upgraded.              | A version upgrade means that there have been changed in the internal protocol, volume, or log of CUBRID.                                                                                                                                                                                       |
-|                                                |                                                                                           | Because there are two different versions of the protocols, volumes, and logs of a broker and server during an upgrade, an operation task must be performed to make sure that each client and broker (before/after upgrade) are connected to the corresponding counterpart in the same version. |
-|                                                |                                                                                           |                                                                                                                                                                                                                                                                                                |
-+------------------------------------------------+-------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Massive data processing (INSERT/UPDATE/DELETE) | Stop the node that must be changed, perform an operation task, and then execute the node. | This processes massive data that cannot be segmented.                                                                                                                                                                                                                                          |
-|                                                |                                                                                           |                                                                                                                                                                                                                                                                                                |
-+------------------------------------------------+-------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++------------------------------------------------+-------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **General Operation**                          | **Scenario**                                                                              | **Consideration**                                                                                                                                          |
+|                                                |                                                                                           |                                                                                                                                                            |
++================================================+===========================================================================================+============================================================================================================================================================+
+| DBMS version upgrade                           | Restart each node and broker in the CUBRID HA group after they are upgraded.              | A version upgrade means that there have been changed in the internal protocol, volume, or log of CUBRID.                                                   |
+|                                                |                                                                                           | Because there are two different versions of the protocols, volumes, and logs of a broker and server during an upgrade, an operation task must be performed |
+|                                                |                                                                                           | to make sure that each client and broker (before/after upgrade) are connected to the corresponding counterpart in the same version.                        |
++------------------------------------------------+-------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Massive data processing (INSERT/UPDATE/DELETE) | Stop the node that must be changed, perform an operation task, and then execute the node. | This processes massive data that cannot be segmented.                                                                                                      |
++------------------------------------------------+-------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Operation Scenario after Service Stop
 -------------------------------------
@@ -1682,16 +1817,27 @@ Operation Scenario after Service Stop
 You must stop all nodes in CUBRID HA group before performing the following operation.
 
 +----------------------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------+
-| **General Operation**                        | **Scenario**                                                                      | **Consideration**                                        |
+|   General Operation                          |   Scenario                                                                        |   Consideration                                          |
 |                                              |                                                                                   |                                                          |
 +==============================================+===================================================================================+==========================================================+
 | Changing the host name and IP of a DB server | Stop all nodes in the CUBRID HA group, and restart them after the operation task. | When a host name has been changed, change the            |
 |                                              |                                                                                   | **databases.txt**                                        |
 |                                              |                                                                                   | file of each broker and reset the broker connection with |
-|                                              |                                                                                   | **cubrid broker reset**                                  |
-|                                              |                                                                                   | .                                                        |
-|                                              |                                                                                   |                                                          |
+|                                              |                                                                                   | **cubrid broker reset**.                                 |
 +----------------------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------+
+
+Setting Replica Replication Delay
+---------------------------------
+
+This scenario delays the replication of the master node data in replica node, and stops the replication of the master node data at the specific time, to detect the case which someone deleted the data by mistake and stop the replication at the specified time.
+
++-------------------------------------+-------------------------------------------+--------------------------------------+
+| General Operation                   | Scenario                                  | Consideration                        |
++=====================================+===========================================+======================================+
+| Setting the delay of replication    | Specify the term of replicated delay      | specify **ha_replica_delay** and     |
+| in replica node                     | to replica node, and let the replication  | ha_replica_time_bound in cubrid.conf |
+|                                     | stop on the specified time                |                                      |
++-------------------------------------+-------------------------------------------+--------------------------------------+
 
 Detection of Replication Mismatch and Rebuild
 =============================================
@@ -1701,68 +1847,68 @@ Detection of Replication Mismatch
 
 Replication mismatch between replication nodes, indicating that data of the master node and the slave node is not identical, can be detected to some degree by the following process. However, please note that there is no more accurate way to detect a replication mismatch than by directly comparing the data of the master node to the data of the slave node. If it is determined that there has been a replication mismatch, you should rebuild the database of the master node to the slave node (see :ref:`rebuilding-replication`.)
 
-* On the slave node, execute **cubrid applyinfo** to check the "Fail count" value. If the "Fail count" is 0, it can be determined that no transaction has failed in replication (see :ref:`cubrid-applyinfo`.) ::
+*   On the slave node, execute **cubrid applyinfo** to check the "Fail count" value. If the "Fail count" is 0, it can be determined that no transaction has failed in replication (see :ref:`cubrid-applyinfo`.) ::
 
-    [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
+        [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
+         
+         *** Applied Info. ***
+        Committed page                 : 1913 | 2904
+        Insert count                   : 645
+        Update count                   : 0
+        Delete count                   : 0
+        Schema count                   : 60
+        Commit count                   : 15
+        Fail count                     : 0
+        ...
+
+*   To check whether copying replication logs has been delayed or not on the slave node, execute **cubrid applyinfo** and compare the "Append LSA" value of "Copied Active Info." to the "Append LSA" value of "Active Info.". If there is a big difference between the two values, it means that delay has occurred while copying the replication logs to the slave node (see :ref:`cubrid-applyinfo`.) ::
+
+        [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
      
-     *** Applied Info. ***
-    Committed page                 : 1913 | 2904
-    Insert count                   : 645
-    Update count                   : 0
-    Delete count                   : 0
-    Schema count                   : 60
-    Commit count                   : 15
-    Fail count                     : 0
-    ...
+        ...
+         
+         *** Copied Active Info. ***
+        DB name                        : testdb
+        DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
+        EOF LSA                        : 1913 | 2976
+        Append LSA                     : 1913 | 2976
+        HA server state                : active
+         
+         ***  Active Info. ***
+        DB name                        : testdb
+        DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
+        EOF LSA                        : 1913 | 2976
+        Append LSA                     : 1913 | 2976
+        HA server state                : active
 
-* To check whether copying replication logs has been delayed or not on the slave node, execute **cubrid applyinfo** and compare the "Append LSA" value of "Copied Active Info." to the "Append LSA" value of "Active Info.". If there is a big difference between the two values, it means that delay has occurred while copying the replication logs to the slave node (see :ref:`cubrid-applyinfo`.) ::
+*   If a delay seems to occur when copying the replication logs, check whether the network line speed is slow, whether there is sufficient free disk space, disk I/O is normal, etc.
 
-    [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
- 
-    ...
+*   To check the delay in applying the replication log in the slave node, execute **cubrid applyinfo** and compare the "Committed page" value of "Applied Info." to the "EOF LSA" value of "Copied Active Info.". If there is a big difference between the two values, it means that a delay has occurred while applying the replication logs to the slave database (see :ref:`cubrid-applyinfo`.) ::
+
+        [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
      
-     *** Copied Active Info. ***
-    DB name                        : testdb
-    DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-    EOF LSA                        : 1913 | 2976
-    Append LSA                     : 1913 | 2976
-    HA server state                : active
-     
-     ***  Active Info. ***
-    DB name                        : testdb
-    DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-    EOF LSA                        : 1913 | 2976
-    Append LSA                     : 1913 | 2976
-    HA server state                : active
+         *** Applied Info. ***
+        Committed page                 : 1913 | 2904
+        Insert count                   : 645
+        Update count                   : 0
+        Delete count                   : 0
+        Schema count                   : 60
+        Commit count                   : 15
+        Fail count                     : 0
+         
+         *** Copied Active Info. ***
+        DB name                        : testdb
+        DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
+        EOF LSA                        : 1913 | 2976
+        Append LSA                     : 1913 | 2976
+        HA server state                : active
+        ...
 
-* If a delay seems to occur when copying the replication logs, check whether the network line speed is slow, whether there is sufficient free disk space, disk I/O is normal, etc.
+*   If the delay in applying the replication logs is too long, it may be due to a transaction with a long execution time. If the transaction is performed normally, a delay in applying the replication logs may normally occur. To determine whether it is normal or abnormal, continuously execute **cubrid applyinfo** and check whether applylogdb continuously applies replication logs to the slave node or not.
 
-* To check the delay in applying the replication log in the slave node, execute **cubrid applyinfo** and compare the "Committed page" value of "Applied Info." to the "EOF LSA" value of "Copied Active Info.". If there is a big difference between the two values, it means that a delay has occurred while applying the replication logs to the slave database (see :ref:`cubrid-applyinfo`.) ::
+*   Check the error log message created by the copylogdb process and the applylogdb process (see the error message).
 
-    [nodeB]$ cubrid applyinfo -L /home/cubrid/DB/testdb_nodeA -r nodeA -a testdb
- 
-     *** Applied Info. ***
-    Committed page                 : 1913 | 2904
-    Insert count                   : 645
-    Update count                   : 0
-    Delete count                   : 0
-    Schema count                   : 60
-    Commit count                   : 15
-    Fail count                     : 0
-     
-     *** Copied Active Info. ***
-    DB name                        : testdb
-    DB creation time               : 11:28:00.000 AM 12/17/2010  (1292552880)
-    EOF LSA                        : 1913 | 2976
-    Append LSA                     : 1913 | 2976
-    HA server state                : active
-    ...
-
-
-* If the delay in applying the replication logs is too long, it may be due to a transaction with a long execution time. If the transaction is performed normally, a delay in applying the replication logs may normally occur. To determine whether it is normal or abnormal, continuously execute **cubrid applyinfo** and check whether applylogdb continuously applies replication logs to the slave node or not.
-
-* Check the error log message created by the copylogdb process and the applylogdb process (see the error message).
-* Compare the number of records on the master database table to that on the slave database table.
+*   Compare the number of records on the master database table to that on the slave database table.
 
 .. _ha-error:
 
@@ -1777,98 +1923,108 @@ HA Error Messages
 
 The error messages that can be found in initialization stage of replication log copy process are as follows:
 
-+----------------+-----------------------------------------------------------------------------------------------+--------------+-------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Error Code** | **Error Message**                                                                             | **Severity** | **Description**                                                                                                                     | **Solution**                                                                                                                                                                                                              |
-|                |                                                                                               |              |                                                                                                                                     |                                                                                                                                                                                                                           |
-+================+===============================================================================================+==============+=====================================================================================================================================+===========================================================================================================================================================================================================================+
-| 10             | Cannot mount the disk volume ?.                                                               | error        | Fails to open a replication log file.                                                                                               | Check if replication logs exist. For the location of replication logs, see                                                                                                                                                |
-|                |                                                                                               |              |                                                                                                                                     | `Default Environment Configuration <#admin_admin_ha_conf_ha_htm>`_                                                                                                                                                        |
-|                |                                                                                               |              |                                                                                                                                     | .                                                                                                                                                                                                                         |
-|                |                                                                                               |              |                                                                                                                                     |                                                                                                                                                                                                                           |
-+----------------+-----------------------------------------------------------------------------------------------+--------------+-------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| 78             | Internal error: an I/O error occurred while reading logical log page ? (physical page ?) of ? | fatal        | Fails to read a replication log.                                                                                                    | Check the replication log by using the cubrid applyinfo utility.                                                                                                                                                          |
-|                |                                                                                               |              |                                                                                                                                     |                                                                                                                                                                                                                           |
-+----------------+-----------------------------------------------------------------------------------------------+--------------+-------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| 81             | Internal error: logical log page ? may be corrupted.                                          | fatal        | A replication log page error, in which the replication log copy process has been copied from the connected database server process. | Check the error log of the database server process to which the replication log copy process is connected.                                                                                                                |
-|                |                                                                                               |              |                                                                                                                                     | This error log can be found in $CUBRID/log/server.                                                                                                                                                                        |
-|                |                                                                                               |              |                                                                                                                                     |                                                                                                                                                                                                                           |
-+----------------+-----------------------------------------------------------------------------------------------+--------------+-------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| 1039           | log writer: log writer has been started. mode: ?                                              | error        | The replication log copy process has been successfully initialized and started.                                                     | No action is required because this error message is recorded to display the start information of the replication log copy process.                                                                                        |
-|                |                                                                                               |              |                                                                                                                                     | Ignore any error messages which are displayed between the start of replication log copy process and output of this error message since there is a possibility that an error message is shown up even in normal situation. |
-|                |                                                                                               |              |                                                                                                                                     |                                                                                                                                                                                                                           |
-+----------------+-----------------------------------------------------------------------------------------------+--------------+-------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
+| Code  |                                                   |              |                                                     |                                                                      |
++=======+===================================================+==============+=====================================================+======================================================================+
+| 10    | Cannot mount the disk volume ?.                   | error        | Fails to open a replication log file.               | Check if replication logs exist. For the location of replication     |
+|       |                                                   |              |                                                     | logs, see `Default Environment Configuration                         |
+|       |                                                   |              |                                                     | <#admin_admin_ha_conf_ha_htm>`_.                                     |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 78    | Internal error: an I/O error occurred while       | fatal        | Fails to read a replication log.                    | Check the replication log by using the cubrid applyinfo utility.     |
+|       | reading logical log page ? (physical page ?) of ? |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 81    | Internal error: logical log page ? may be         | fatal        | A replication log page error, in which the          | Check the error log of the database server process to which the      |
+|       | corrupted.                                        |              | replication log copy process has been copied from   | replication log copy process is connected.                           |
+|       |                                                   |              | the connected database server process.              | This error log can be found in $CUBRID/log/server.                   |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1039  | log writer: log writer has been started. mode: ?  | error        | The replication log copy process has been           | No action is required because this error message is recorded to      |
+|       |                                                   |              | successfully initialized and started.               | display the start information of the replication log copy process.   |
+|       |                                                   |              |                                                     | Ignore any error messages which are displayed between the start of   |
+|       |                                                   |              |                                                     | replication log copy process and output of this error message since  |
+|       |                                                   |              |                                                     | there is a possibility that an error message is shown up even in     |
+|       |                                                   |              |                                                     | normal situation.                                                    |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Request and Reception Error Messages**
 
 The replication log copy process requests a replication log from the connected database server and receives the corresponding replication log. Error messages that can be found in this stage are as follows:
 
-+----------------+----------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Error Code** | **Error Message**                            | **Severity** | **Description**                                                                                                          | **Solution**                                                                                                                                                                                                                                    |
-|                |                                              |              |                                                                                                                          |                                                                                                                                                                                                                                                 |
-+================+==============================================+==============+==========================================================================================================================+=================================================================================================================================================================================================================================================+
-| 89             | Log ? is not included in the given database. | error        | The previously replicated log and the log to be replication do not match.                                                | Check information of the database server/host to which the replication log copy process is connected. If you need to change the database server/host information, reinitialize it by deleting the existing replication log and then restarting. |
-|                |                                              |              |                                                                                                                          |                                                                                                                                                                                                                                                 |
-+----------------+----------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| 186            | Data receiver error from the server          | error        | Incorrect information has been received from the database server to which the replication log copy process is connected. | It will be internally recovered.                                                                                                                                                                                                                |
-|                |                                              |              |                                                                                                                          |                                                                                                                                                                                                                                                 |
-+----------------+----------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| 199            | The server is not responding.                | error        | The connection to the database server has been terminated.                                                               | It will be internally recovered.                                                                                                                                                                                                                |
-|                |                                              |              |                                                                                                                          |                                                                                                                                                                                                                                                 |
-+----------------+----------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
+| Code  |                                                   |              |                                                     |                                                                      |
++=======+===================================================+==============+=====================================================+======================================================================+
+| 89    | Log ? is not included in the given database.      | error        | The previously replicated log and the log to be     | Check information of the database server/host to which the           |
+|       |                                                   |              | replication do not match.                           | replication log copy process is connected. If you need to change the |
+|       |                                                   |              |                                                     | database server/host information, reinitialize it by deleting the    |
+|       |                                                   |              |                                                     | existing replication log and then restarting.                        |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 186   | Data receiver error from the server               | error        | Incorrect information has been received from the    | It will be internally recovered.                                     |
+|       |                                                   |              | database server to which the replication log copy   |                                                                      |
+|       |                                                   |              | process is connected.                               |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 199   | The server is not responding.                     | error        | The connection to the database server has been      | It will be internally recovered.                                     |
+|       |                                                   |              | terminated.                                         |                                                                      |
+|       |                                                   |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Write Error Messages**
 
 The replication log copy process copies the replication log that was received from the connected database server process to the location (**ha_copy_log_base**) specified in the **cubrid_ha.conf** file. Error messages that can be found in this stage are as follows:
 
-+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+-------------------------------------------------------------------------+----------------------------------------------------------------+
-| **Error Code** | **Error Message**                                                                                                                                                  | **Severity** | **Description**                                                         | **Solution**                                                   |
-|                |                                                                                                                                                                    |              |                                                                         |                                                                |
-+================+====================================================================================================================================================================+==============+=========================================================================+================================================================+
-| 10             | Cannot mount the disk volume ?.                                                                                                                                    | error        | Fails to open a replication log file.                                   | Check if replication logs exist.                               |
-|                |                                                                                                                                                                    |              |                                                                         |                                                                |
-+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+-------------------------------------------------------------------------+----------------------------------------------------------------+
-| 79             | Internal error: an I/O error occurred while writing logical log page ? (physical page ?) of ?.                                                                     | fatal        | Fails to write a replication log.                                       | It will be internally recovered.                               |
-|                |                                                                                                                                                                    |              |                                                                         |                                                                |
-+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+-------------------------------------------------------------------------+----------------------------------------------------------------+
-| 80             | An error occurred due to insufficient space in operating system device while writing logical log page ? (physical page ?) of ?. Up to ? bytes in size are allowed. | fatal        | Fails to write a replication log due to insufficient file system space. | Check if there is sufficient space left in the disk partition. |
-|                |                                                                                                                                                                    |              |                                                                         |                                                                |
-+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+-------------------------------------------------------------------------+----------------------------------------------------------------+
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
+| Code  |                                                   |              |                                                     |                                                                      |
++=======+===================================================+==============+=====================================================+======================================================================+
+| 10    | Cannot mount the disk volume ?.                   | error        | Fails to open a replication log file.               | Check if replication logs exist.                                     |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 79    | Internal error: an I/O error occurred while       | fatal        | Fails to write a replication log.                   | It will be internally recovered.                                     |
+|       | writing logical log page ? (physical page ?)      |              |                                                     |                                                                      |
+|       | of ?.                                             |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 80    | An error occurred due to insufficient space in    | fatal        | Fails to write a replication log due to             | Check if there is sufficient space left in the disk partition.       |
+|       | operating system device while writing logical     |              | insufficient file system space.                     |                                                                      |
+|       | log page ?(physical page ?) of ?.                 |              |                                                     |                                                                      |
+|       | Up to ? bytes in size are allowed.                |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Archive Error Messages**
 
 The replication log copy process periodically archives the replication logs that have been received from the connected database server process. Error messages that can be found in this stage are as follows:
 
-+----------------+------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------+------------------------------------------------------------------------------------------------------------+
-| **Error Code** | **Error Message**                                                                              | **Severity** | **Description**                                         | **Solution**                                                                                               |
-|                |                                                                                                |              |                                                         |                                                                                                            |
-+================+================================================================================================+==============+=========================================================+============================================================================================================+
-| 78             | Internal error: an I/O error occurred while reading logical log page ? (physical page ?) of ?. | fatal        | Fails to read a replication log during archiving.       | Check the replication log by using the cubrid applyinfo utility.                                           |
-|                |                                                                                                |              |                                                         |                                                                                                            |
-+----------------+------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------+------------------------------------------------------------------------------------------------------------+
-| 79             | Internal error: an I/O error occurred while writing logical log page ? (physical page ?) of ?. | fatal        | Fails to write an archive log.                          | It will be internally recovered.                                                                           |
-|                |                                                                                                |              |                                                         |                                                                                                            |
-+----------------+------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------+------------------------------------------------------------------------------------------------------------+
-| 81             | Internal error: logical log page ? may be corrupted.                                           | fatal        | Found an error on the replication log during archiving. | Check the replication log by using the cubrid applyinfo utility.                                           |
-|                |                                                                                                |              |                                                         |                                                                                                            |
-+----------------+------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------+------------------------------------------------------------------------------------------------------------+
-| 98             | Cannot create an archive log ? to archive pages from ? to ?.                                   | fatal        | Fails to create an archive log file.                    | Check if there is sufficient space left in the disk partition.                                             |
-|                |                                                                                                |              |                                                         |                                                                                                            |
-+----------------+------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------+------------------------------------------------------------------------------------------------------------+
-| 974            | An archive log ? to archive pages from ? to ? has been created.                                | notification | Information on an archive log file                      | No action is required because this error message is recorded to keep information on newly created archive. |
-|                |                                                                                                |              |                                                         |                                                                                                            |
-+----------------+------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------+------------------------------------------------------------------------------------------------------------+
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
+| Code  |                                                   |              |                                                     |                                                                      |
++=======+===================================================+==============+=====================================================+======================================================================+
+| 78    | Internal error: an I/O error occurred while       | fatal        | Fails to read a replication log during archiving.   | Check the replication log by using the cubrid applyinfo utility.     |
+|       | reading logical log page ?                        |              |                                                     |                                                                      |
+|       | (physical page ?) of ?.                           |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 79    | Internal error: an I/O error occurred while       | fatal        | Fails to write an archive log.                      | It will be internally recovered.                                     |
+|       | writing logical log page ?                        |              |                                                     |                                                                      |
+|       | (physical page ?) of ?.                           |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 81    | Internal error: logical log page ? may be         | fatal        | Found an error on the replication log during        | Check the replication log by using the cubrid applyinfo utility.     |
+|       | corrupted.                                        |              | archiving.                                          |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 98    | Cannot create an archive log ? to archive pages   | fatal        | Fails to create an archive log file.                | Check if there is sufficient space left in the disk partition.       |
+|       | from ? to ?.                                      |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 974   | An archive log ? to archive pages from ? to ? has | notification | Information on an archive log file                  | No action is required because this error message is recorded to keep |
+|       | been created.                                     |              |                                                     | information on newly created archive.                                |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Stop and Restart Error Messages**
 
 Error messages that can be found in this stage are as follows:
 
-+----------------+-------------------------------------------------+--------------+------------------------------------------------------------------+----------------------------------+
-| **Error Code** | **Error Message**                               | **Severity** | **Description**                                                  | **Solution**                     |
-|                |                                                 |              |                                                                  |                                  |
-+================+=================================================+==============+==================================================================+==================================+
-| 1037           | log writer: log writer is terminated by signal. | error        | The copylogdb process has been terminated by a specified signal. | It will be internally recovered. |
-|                |                                                 |              |                                                                  |                                  |
-+----------------+-------------------------------------------------+--------------+------------------------------------------------------------------+----------------------------------+
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
+| Code  |                                                   |              |                                                     |                                                                      |
++=======+===================================================+==============+=====================================================+======================================================================+
+| 1037  | log writer: log writer is terminated by signal.   | error        | The copylogdb process has been terminated by a      | It will be internally recovered.                                     |
+|       |                                                   |              | specified signal.                                   |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Reflection Process (applylogdb)**
 
@@ -1878,111 +2034,126 @@ The error messages from the replication log reflection process are stored in **$
 
 The error messages that can be found in initialization stage of replication log reflection process are as follows:
 
-+----------------+----------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| **Error Code** | **Error Message**                                                                      | **Severity** | **Description**                                                                      | **Solution**                                                                                                                     |
-|                |                                                                                        |              |                                                                                      |                                                                                                                                  |
-+================+========================================================================================+==============+======================================================================================+==================================================================================================================================+
-| 10             | Cannot mount the disk volume ?.                                                        | error        | An applylogdb that is trying to reflect the same replication log is already running. | Check if there is an applylogdb process that is trying to reflect the same replication log.                                      |
-|                |                                                                                        |              |                                                                                      |                                                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------+
-| 1038           | log applier: log applier has been started. required LSA: ?|?. last committed LSA: ?|?. | error        | It will be started normally after initialization of applylogdb succeeds.             | No action is required because this error is recorded to display the start information of the replication log reflection process. |
-|                |                                                                                        |              |                                                                                      |                                                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------+
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
+| Code  |                                                   |              |                                                     |                                                                      |
++=======+===================================================+==============+=====================================================+======================================================================+
+| 10    | Cannot mount the disk volume ?.                   | error        | An applylogdb that is trying to reflect the same    | Check if there is an applylogdb process that is trying to reflect    |
+|       |                                                   |              | replication log is already running.                 | the same replication log.                                            |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1038  | log applier: log applier has been started.        | error        | It will be started normally after initialization of | No action is required because this error is recorded to display the  |
+|       | required LSA: ?|?. last committed LSA: ?|?.       |              | applylogdb succeeds.                                | start information of  the replication log reflection process.        |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Log Analysis Error Messages**
 
 The replication log reflection process reads, analyzes, and reflects the replications logs that have been copied by the replication log copy process. The error message that can be found in this stage are as follows:
 
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
-| **Error Code** | **Error Message**                                                                                                                      | **Severity** | **Description**                                                                                                                            | **Solution**                                                     |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+================+========================================================================================================================================+==============+============================================================================================================================================+==================================================================+
-| 13             | An I/O error occurred while reading page ? in volume ?.                                                                                | error        | Fails to read a log page to be reflected.                                                                                                  | Check the replication log by using the cubrid applyinfo utility. |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 17             | Internal error: Trying to read page ? of the volume ? which has been already released.                                                 | fatal        | Trying to read a log page that does not exist in the replication log.                                                                      | Check the replication log by using the cubrid applyinfo utility. |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 81             | Internal error: logical log page ? may be corrupted.                                                                                   | fatal        | There is an inconsistency between an old log under replication reflection and the current log, or there is a replication log record error. | Check the replication log by using the cubrid applyinfo utility. |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 82             | Cannot mount the disk volume/file ?.                                                                                                   | error        | No replication log file exists.                                                                                                            | Check if replication logs exist.                                 |
-|                |                                                                                                                                        |              |                                                                                                                                            | Check the replication log by using the cubrid applyinfo utility. |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 97             | Internal error: unable to find log page ? in log archives.                                                                             | error        | No log page exists in the replication log.                                                                                                 | Check the replication log by using the cubrid applyinfo utility. |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 897            | Decompression failure                                                                                                                  | error        | Fails to decompress the log record.                                                                                                        | Check the replication log by using the cubrid applyinfo utility. |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 1028           | log applier: Unexpected EOF log record exists in the Archive log. LSA: ?|?.                                                            | error        | Incorrect log record exists in the archive log.                                                                                            | Check the replication log by using the cubrid applyinfo utility. |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 1029           | log applier: Incorrect log page/offset. page HDR: ?|?, final: ?|?, append LSA: ?|?, EOF LSA: ?|?, ha file status: ?, is end-of-log: ?. | error        | Incorrect log record exists.                                                                                                               | Check the replication log by using the cubrid applyinfo utility. |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 1030           | log applier: Incorrect log record. LSA: ?|?, forw LSA: ?|?, backw LSA: ?|?, Trid: ?, prev tran LSA: ?|?, type: ?.                      | error        | Log record header error                                                                                                                    | Check the replication log by using the cubrid applyinfo utility. |
-|                |                                                                                                                                        |              |                                                                                                                                            |                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
+| Code  |                                                   |              |                                                     |                                                                      |
++=======+===================================================+==============+=====================================================+======================================================================+
+| 13    | An I/O error occurred while reading page ?        | error        | Fails to read a log page to be reflected.           | Check the replication log by using the cubrid applyinfo utility.     |
+|       | in volume ?.                                      |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 17    | Internal error: Trying to read page ? of the      | fatal        | Trying to read a log page that does not exist in    | Check the replication log by using the cubrid applyinfo utility.     |
+|       | volume ? which has been already released.         |              | the replication log.                                |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 81    | Internal error: logical log page ? may be         | fatal        | There is an inconsistency between an old log under  | Check the replication log by using the cubrid applyinfo utility.     |
+|       | corrupted.                                        |              | replication reflection and the current log, or      |                                                                      |
+|       |                                                   |              | there is a replication log record error.            |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 82    | Cannot mount the disk volume/file ?.              | error        | No replication log file exists.                     | Check if replication logs exist.                                     |
+|       |                                                   |              |                                                     | Check the replication log by using the cubrid applyinfo utility.     |
+|       |                                                   |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 97    | Internal error: unable to find log page ? in      | error        | No log page exists in the replication log.          | Check the replication log by using the cubrid applyinfo utility.     |
+|       | log archives.                                     |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 897   | Decompression failure                             | error        | Fails to decompress the log record.                 | Check the replication log by using the cubrid applyinfo utility.     |
+|       |                                                   |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1028  | log applier: Unexpected EOF log record exists     | error        | Incorrect log record exists in the archive log.     | Check the replication log by using the cubrid applyinfo utility.     |
+|       | in the Archive log. LSA: ?|?.                     |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1029  | log applier: Incorrect log page/offset. page      | error        | Incorrect log record exists.                        | Check the replication log by using the cubrid applyinfo utility.     |
+|       | HDR: ?|?, final: ?|?, append LSA: ?|?, EOF LSA:   |              |                                                     |                                                                      |
+|       | ?|?, ha file status: ?, is end-of-log: ?.         |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1030  | log applier: Incorrect log record. LSA: ?|?,      | error        | Log record header error                             | Check the replication log by using the cubrid applyinfo utility.     |
+|       | forw LSA: ?|?, backw LSA: ?|?, Trid: ?, prev      |              |                                                     |                                                                      |
+|       | tran LSA: ?|?, type: ?.                           |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Reflection Error Messages**
 
 The replication log reflection process reads, analyzes, and reflects the replication logs that have been copied by the replication log copy process. Error messages that can be found in this stage are as follows:
 
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| **Error Code** | **Error Message**                                                                                  | **Severity** | **Description**                                                                                                                                                     | **Solution**                                                                                     |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+================+====================================================================================================+==============+=====================================================================================================================================================================+==================================================================================================+
-| 72             | The transaction (index ?, ?@?|?) has been cancelled by system.                                     | error        | Fails to reflect replication due to deadlock, etc.                                                                                                                  | It will be recovered internally.                                                                 |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 111            | Your transaction has been cancelled due to server failure or a mode change.                        | error        | Fails to reflect replication because the database server process in which replication is supposed to be reflected has been terminated or its mode has been changed. | It will be recovered internally.                                                                 |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 191            | Cannot connect to server ? on ?.                                                                   | error        | The connection to the database server process in which replication is supposed to be reflected has been terminated.                                                 | It will be recovered internally.                                                                 |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 195            | Server communication error: ?.                                                                     | error        | The connection to the database server process in which replication is supposed to be reflected has been terminated.                                                 | It will be recovered internally.                                                                 |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 224            | The database has not been resumed.                                                                 | error        | The connection to the database server process in which replication is supposed to be reflected has been terminated.                                                 | It will be recovered internally.                                                                 |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 1027           | log applier: Failed to change the reflection status from ? to ?.                                   | error        | Fails to change of replication reflection.                                                                                                                          | It will be recovered internally.                                                                 |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 1031           | log applier: Failed to reflect the Schema replication log. class: ?, schema: ?, internal error: ?. | error        | Fails to reflect SCHEMA replication.                                                                                                                                | Check the consistency of the replication. If it is inconsistent, reconfigure the HA replication. |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 1032           | log applier: Failed to reflect the Insert replication log. class: ?, key: ?, internal error: ?.    | error        | Fails to reflect INSERT replication.                                                                                                                                | Check the consistency of the replication. If it is inconsistent, reconfigure the HA replication. |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 1033           | log applier: Failed to reflect the Update replication log. class: ?, key: ?, internal error: ?.    | error        | Fails to reflect UPDATE replication.                                                                                                                                | Check the consistency of the replication. If it is inconsistent, reconfigure the HA replication. |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 1034           | log applier: Failed to reflect the Delete replication log. class: ?, key: ?, internal error: ?.    | error        | Fails to reflect DELETE replication.                                                                                                                                | Check the consistency of the replication. If it is inconsistent, reconfigure the HA replication. |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-| 1040           | HA generic: ?.                                                                                     | notification | Changes the last record of the archive log or replication reflection status.                                                                                        | No action is required because this error message is recorded to provide general information.     |
-|                |                                                                                                    |              |                                                                                                                                                                     |                                                                                                  |
-+----------------+----------------------------------------------------------------------------------------------------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
+| Code  |                                                   |              |                                                     |                                                                      |
++=======+===================================================+==============+=====================================================+======================================================================+
+| 72    | The transaction (index ?, ?@?|?) has been         | error        | Fails to reflect replication due to deadlock, etc.  | It will be recovered internally.                                     |
+|       | cancelled by system.                              |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 111   | Your transaction has been cancelled due to        | error        | Fails to reflect replication because the database   | It will be recovered internally.                                     |
+|       | server failure or a mode change.                  |              | server process in which replication is supposed     |                                                                      |
+|       |                                                   |              | to be reflected has been terminated or its mode     |                                                                      |
+|       |                                                   |              | has been changed.                                   |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 191   | Cannot connect to server ? on ?.                  | error        | The connection to the database server process in    | It will be recovered internally.                                     |
+|       |                                                   |              | which replication is supposed to be reflected has   |                                                                      |
+|       |                                                   |              | been terminated.                                    |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 195   | Server communication error: ?.                    | error        | The connection to the database server process in    | It will be recovered internally.                                     |
+|       |                                                   |              | which replication is supposed to be reflected has   |                                                                      |
+|       |                                                   |              | been terminated.                                    |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 224   | The database has not been resumed.                | error        | The connection to the database server process in    | It will be recovered internally.                                     |
+|       |                                                   |              | which replication is supposed to be reflected has   |                                                                      |
+|       |                                                   |              | been terminated.                                    |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1027  | log applier: Failed to change the reflection      | error        | Fails to change of replication reflection.          | It will be recovered internally.                                     |
+|       | status from ? to ?.                               |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1031  | log applier: Failed to reflect the Schema         | error        | Fails to reflect SCHEMA replication.                | Check the consistency of the replication. If it is inconsistent,     |
+|       | replication log. class: ?, schema: ?, internal    |              |                                                     | reconfigure the HA replication.                                      |
+|       | error: ?.                                         |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1032  | log applier: Failed to reflect the Insert         | error        | Fails to reflect INSERT replication.                | Check the consistency of the replication. If it is inconsistent,     |
+|       | replication log. class: ?, key: ?, internal       |              |                                                     | reconfigure the HA replication.                                      |
+|       | error: ?.                                         |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1033  | log applier: Failed to reflect the Update         | error        | Fails to reflect UPDATE replication.                | Check the consistency of the replication. If it is inconsistent,     |
+|       | replication log. class: ?, key: ?, internal       |              |                                                     | reconfigure the HA replication.                                      |
+|       | error: ?.                                         |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1034  | log applier: Failed to reflect the Delete         | error        | Fails to reflect DELETE replication.                | Check the consistency of the replication. If it is inconsistent,     |
+|       | replication log. class: ?, key: ?, internal       |              |                                                     | reconfigure the HA replication.                                      |
+|       | error: ?.                                         |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1040  | HA generic: ?.                                    | notification | Changes the last record of the archive log or       | No action is required because this error message is recorded to      |
+|       |                                                   |              | replication reflection status.                      | provide general information.                                         |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Stop and Restart Error Messages**
 
 The error messages that can be found in this stage are as follows:
 
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+----------------------------------------------------------------------------------------------------------+----------------------------------+
-| **Error Code** | **Error Message**                                                                                                                                                                                        | **Severity** | **Description**                                                                                          | **Solution**                     |
-|                |                                                                                                                                                                                                          |              |                                                                                                          |                                  |
-+================+==========================================================================================================================================================================================================+==============+==========================================================================================================+==================================+
-| 1035           | log applier: The memory size (? MB) of the log applier is larger than the maximum memory size (? MB), or is doubled the starting memory size (? MB) or more. required LSA: ?|?. last committed LSA: ?|?. | error        | The replication log reflection process has been restarted due to reaching the maximum memory size limit. | It will be recovered internally. |
-|                |                                                                                                                                                                                                          |              |                                                                                                          |                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+----------------------------------------------------------------------------------------------------------+----------------------------------+
-| 1036           | log applier: log applier is terminated by signal.                                                                                                                                                        | error        | The replication log reflection process has been terminated by a specified signal.                        | It will be recovered internally. |
-|                |                                                                                                                                                                                                          |              |                                                                                                          |                                  |
-+----------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+----------------------------------------------------------------------------------------------------------+----------------------------------+
-
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
+| Code  |                                                   |              |                                                     |                                                                      |
++=======+===================================================+==============+=====================================================+======================================================================+
+| 1035  | log applier: The memory size (? MB) of the log    | error        | The replication log reflection process has been     | It will be recovered internally.                                     |
+|       | applier is larger than the maximum memory size    |              | restarted due to reaching the maximum memory size   |                                                                      |
+|       | (? MB), or is doubled the starting memory size    |              | limit.                                              |                                                                      |
+|       | (? MB) or more. required LSA: ?|?. last           |              |                                                     |                                                                      |
+|       | committed LSA: ?|?.                               |              |                                                     |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| 1036  | log applier: log applier is terminated by signal. | error        | The replication log reflection process has been     | It will be recovered internally.                                     |
+|       |                                                   |              | terminated by a specified signal.                   |                                                                      |
++-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+                                                                                                                         
 .. _rebuilding-replication:
 
 Rebuilding Replication
@@ -2002,22 +2173,28 @@ For rebuilding replications, the following environment must be the same in the s
 
 To rebuild replications, use the **ha_make_slavedb.sh** script. This script is located in **$CUBRID/share/scripts/ha**. Before rebuilding replications, the following items must be configured for the environment of the user. This script is supported since the version 2008 R2.2 Patch 9 and its configuration is different from 2008 R4.1 Patch 2 or earlier. This document describes it in CUBIRD 2008 R4.1 Patch 2 or later.
 
-*   **target_host** : The host name of the source node (master node in general) for rebuilding replication. It should be registered in **/etc/hosts**. A slave node can be replicated as the master node or the replica node. A replica node can be replicated and rebuilt as another replica node.
+*   **target_host** : The host name of the source node (master node in general) for rebuilding replication. It should be registered in **/etc/hosts**. A slave node can rebuild replication by using the master node or the replica node as the source. A replica node can rebuild replication by using the slave node or another replica node as the source. If you want rebuild replication by using the slave node or the replica node as the source, moderately large value of :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` parameter in cubrid_ha.conf should be specified.
 
 *   **repl_log_home** : Specifies the home directory of the replication log of the master node. It is usually the same as **$CUBRID_DATABASES**. You must enter an absolute path and should not use a symbolic link. You also cannot use a slash (/) after the path.
 
 The following are optional items:
 
 *   **db_name** : Specifies the name of the database to be replicated. If not specified, the first name that appears in **ha_db_list** in **$CUBRID/conf/cubrid_ha.conf** is used.
+
 *   **backup_dest_path** : Specifies the path in which the backup volume is created when executing **backupdb** in source node for rebuilding replication.
+
 *   **backup_option** : Specifies necessary options when executing **backupdb** in source node in which replication will be rebuilt.
+
 *   **restore_option** : Specifies necessary options when executing **restoredb** in slave node in which replication will be rebuilt.
+
 *   **scp_option** : Specifies the **scp** option which enables backup of source node in which replication is rebuilt to copy into the slave node. The default option is **-l 131072**, which does not impose an overload on network (limits the transfer rate to 16 MB).
 
 Once the script has been configured, execute the **ha_make_slavedb.sh** script in slave node in which replication will be rebuilt. When the script is executed, rebuilding replication happens in a number of phases. To move to the next stage, the user must enter an appropriate value. The following are the descriptions of available values.
 
 *   **yes** : Keeps going.
+
 *   **no** : Does not move forward with any stages from now on.
+
 *   **skip**: Skips to the next stage. This input value is used to ignore a stage that has not necessarily been executed when retrying the script after it has failed.
 
 **Constraints**
@@ -2043,7 +2220,9 @@ The following example shows how to configure an original node for rebuilding rep
 
 Rebuilding replications can be performed while the master node is running, however, it is recommended to execute this when there are just a few transactions per hour in order to minimize replication delay.
 
-Before starting to rebuild replications by executing the **ha_make_slavedb.sh** script, stop the HA service of the slave node and configure the **ha_make_slavedb.sh** script as shown below. Configure the host name of the master node to replicate (*nodeA*) to target_host and configure the home directory of the replication log (default value: $CUBRID_DATABASES) to repl_log_home. ::
+Before starting to rebuild replications by executing the **ha_make_slavedb.sh** script, stop the HA service of the slave node and configure the **ha_make_slavedb.sh** script as shown below. Configure the host name of the master node to replicate (*nodeA*) to target_host and configure the home directory of the replication log (default value: $CUBRID_DATABASES) to repl_log_home. 
+
+::
 
     [nodeB]$ cubrid heartbeat stop
      
@@ -2058,26 +2237,25 @@ After configuration, execute the **ha_make_slavedb.sh** script on the slave node
 
 When any error occurs while executing the script in step-by-step order, or if the script should be restarted before being stopped by entering n, you can enter s for the steps which have been succeeded and go to the next step.
 
-1. At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
+1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
  
-  ::
+    ::
 
-    ##### step 1 ###################################################################
-    #
-    # get HA/replica user password and DBA password
-    #
-    #  * warning !!!
-    #   - Because ha_make_slavedb.sh use expect (ssh, scp) to control HA/replica node,
-    #     the script has to know these passwords.
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
+        ##### step 1 ###################################################################
+        #
+        # get HA/replica user password and DBA password
+        #
+        #  * warning !!!
+        #   - Because ha_make_slavedb.sh uses expect (ssh, scp) to control HA/replica node,
+        #     the script has to know these passwords.
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
 
-  Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. 
-  If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
+    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
   
-  ::
+    ::
 
         HA/replica cubrid_usr's password :
         HA/replica cubrid_usr's password :
@@ -2085,519 +2263,517 @@ When any error occurs while executing the script in step-by-step order, or if th
         testdb's DBA password :
         Retype testdb's DBA password :
 
-2. At this step, check whether the environment variables of the slave node are correct. Enter y to the question. 
+2.  At this step, check whether the environment variables of the slave node are correct. Enter y to the question. 
 
-  ::
+    ::
 
-    ##### step 2 ###################################################################
-    #
-    #  ha_make_slavedb.sh is the script for making slave database more easily
-    #
-    #  * environment
-    #   - db_name           : testdb
-    #
-    #   - master_host       : nodeA
-    #   - slave_host        : nodeB
-    #   - replica_hosts     :
-    #
-    #   - current_host      : nodeB
-    #   - current_state     : slave
-    #
-    #   - target_host       : nodeA
-    #   - target_state      : master
-    #
-    #   - repl_log_home     : /home/cubrid_usr/CUBRID/databases
-    #   - backup_dest_path  : /home/cubrid_usr/.ha/backup
-    #   - backup_option     :
-    #   - restore_option    :
-    #
-    #  * warning !!!
-    #   - environment on slave must be same as master
-    #   - database and replication log on slave will be deleted
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
+        ##### step 2 ###################################################################
+        #
+        #  ha_make_slavedb.sh is the script for making slave database more easily
+        #
+        #  * environment
+        #   - db_name           : testdb
+        #
+        #   - master_host       : nodeA
+        #   - slave_host        : nodeB
+        #   - replica_hosts     :
+        #
+        #   - current_host      : nodeB
+        #   - current_state     : slave
+        #
+        #   - target_host       : nodeA
+        #   - target_state      : master
+        #
+        #   - repl_log_home     : /home/cubrid_usr/CUBRID/databases
+        #   - backup_dest_path  : /home/cubrid_usr/.ha/backup
+        #   - backup_option     :
+        #   - restore_option    :
+        #
+        #  * warning !!!
+        #   - environment on slave must be same as master
+        #   - database and replication log on slave will be deleted
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
 
-3. At this step, copy the HA-related scripts of the slave node to the master node. Enter y to the question. Then the password will be asked for when you access the master node in every step. In addition, the password will be asked for when you send a file by using the scp command. 
+3.  At this step, copy the HA-related scripts of the slave node to the master node. Enter y to the question. Then the password will be asked for when you access the master node in every step. In addition, the password will be asked for when you send a file by using the scp command. 
 
-  ::
+    ::
 
-    ##### step 3 ###################################################################
-    #
-    #  copy scripts to master node
-    #
-    #  * details
-    #   - scp scripts to '~/.ha' on nodeA(master).
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-    [nodeB]$ tar -zcf ha.tgz ha
-    [nodeA]$ rm -rf /home/cubrid_usr/.ha
-    cubrid_usr@nodeA's password:
-    Connection to nodeA closed.
-    [nodeB]$ scp -l 131072 -r ./../ha.tgz cubrid_usr@nodeA:/home1/cubrid_usr
-    cubrid_usr@nodeA's password:
-    ha.tgz                    100%   10KB  10.4KB/s   00:00
-    [nodeA]$ tar -zxf ha.tgz
-    cubrid_usr@nodeA's password:
-    Connection to nodeA closed.
-    [nodeA]$ mv ha /home/cubrid_usr/.ha
-    cubrid_usr@nodeA's password:
-    Connection to nodeA closed.
-    [nodeA]$ mkdir /home/cubrid_usr/.ha/backup
-    cubrid_usr@nodeA's password:
-    Connection to nodeA closed.
+        ##### step 3 ###################################################################
+        #
+        #  copy scripts to master node
+        #
+        #  * details
+        #   - scp scripts to '~/.ha' on nodeA(master).
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+        [nodeB]$ tar -zcf ha.tgz ha
+        [nodeA]$ rm -rf /home/cubrid_usr/.ha
+        cubrid_usr@nodeA's password:
+        Connection to nodeA closed.
+        [nodeB]$ scp -l 131072 -r ./../ha.tgz cubrid_usr@nodeA:/home1/cubrid_usr
+        cubrid_usr@nodeA's password:
+        ha.tgz                    100%   10KB  10.4KB/s   00:00
+        [nodeA]$ tar -zxf ha.tgz
+        cubrid_usr@nodeA's password:
+        Connection to nodeA closed.
+        [nodeA]$ mv ha /home/cubrid_usr/.ha
+        cubrid_usr@nodeA's password:
+        Connection to nodeA closed.
+        [nodeA]$ mkdir /home/cubrid_usr/.ha/backup
+        cubrid_usr@nodeA's password:
+        Connection to nodeA closed.
 
-    To skip the password entry while executing the scp command, configure the secret key of the scp to the slave node and the public key to the master node, as shown below. 
-    For more details, see How to Use ssh-keygen for Linux. 
+    To skip the password entry while executing the scp command, configure the secret key of the scp to the slave node and the public key to the master node, as shown below. For more details, see How to Use ssh-keygen for Linux. 
 
-    #. Execute **ssh-keygen -t rsa** to check that .ssh/id_rsa file and .ssh/id_rsa.pub file have been created under the home directory of the Linux user account.
-    #. Copy the id_rsa.pub file as a file named authorized_keys under the home directory of the Linux user account in master node.
-    #. Execute a test to check that the file is copied without asking for the password (scp test.txt cubrid_usr@:/home/cubrid_usr/).
+    #.  Execute **ssh-keygen -t rsa** to check that .ssh/id_rsa file and .ssh/id_rsa.pub file have been created under the home directory of the Linux user account.
+    #.  Copy the id_rsa.pub file as a file named authorized_keys under the home directory of the Linux user account in master node.
+    #.  Execute a test to check that the file is copied without asking for the password (scp test.txt cubrid_usr@:/home/cubrid_usr/).
 
-4. At this step, copy the HA-related scripts to the replica node. In this scenario, if there is no replica node, skip this step and go to the next step by entering. 
+4.  At this step, copy the HA-related scripts to the replica node. In this scenario, if there is no replica node, skip this step and go to the next step by entering. 
 
-  ::
+    ::
 
-    ##### step 4 #####################################
-    #
-    #  copy scripts to replication node
-    #
-    #  * details
-    #   - scp scripts to '~/.ha' on replication node.
-    #
-    ##################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-    There is no replication server to copy scripts.
+        ##### step 4 #####################################
+        #
+        #  copy scripts to replication node
+        #
+        #  * details
+        #   - scp scripts to '~/.ha' on replication node.
+        #
+        ##################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+        There is no replication server to copy scripts to.
 
-5. At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
+5.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
 
-  ::
+    ::
 
-    ##### step 5 ###################################################################
-    #
-    #  check environment of all ha node
-    #
-    #  * details
-    #   - test $CUBRID == /home1/cubrid_usr/CUBRID
-    #   - test $CUBRID_DATABASES == /home1/cubrid_usr/CUBRID/database
-    #   - test -d /home1/cubrid_usr/CUBRID/database/testdb
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
+        ##### step 5 ###################################################################
+        #
+        #  check environment of all ha nodes
+        #
+        #  * details
+        #   - test $CUBRID == /home1/cubrid_usr/CUBRID
+        #   - test $CUBRID_DATABASES == /home1/cubrid_usr/CUBRID/database
+        #   - test -d /home1/cubrid_usr/CUBRID/database/testdb
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
 
-6. At this step, stop replication of the master node. Enter y to the question. 
+6.  At this step, stop replication of the master node. Enter y to the question. 
 
-  ::
+    ::
 
-    ##### step 6 ###################################################################
-    #
-    #  suspend copylogdb/applylogdb on master if running
-    #
-    #  * details
-    #   - deregister copylogdb/applylogdb on nodeA(master).
-    #
-    ################################################################################
-    
-        continue ? ([y]es / [n]o / [s]kip) : y
-     
-    [nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_suspend.sh -l /home/cubrid_usr/CUBRID/databases -d testdb -h nodeB -o /home/cubrid_usr/.ha/repl_utils.output
-    cubrid_usr@nodeA's password:
-    [nodeA]$ cubrid heartbeat deregister 9408
-    suspend: (9408) cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
-    [nodeA]$ cubrid heartbeat deregister 9410
-    suspend: (9410) cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
-     
-     
-    3. heartbeat status on nodeA(master).
-     
-    [nodeA]$ cubrid heartbeat list
-    @ cubrid heartbeat list
-     
-     HA-Node Info (current nodeA, state master)
-       Node nodeB (priority 2, state unknown)
-       Node nodeA (priority 1, state master)
-     
-     
-     HA-Process Info (master 8362, state master)
-       Copylogdb testdb@nodeB:/home/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 9408, state deregistered)
-       Server testdb (pid 9196, state registered_and_active)
-     
-    Connection to nodeA closed.
-    Wait for 60s to deregister coppylogdb/applylogdb.
-    ............................................................
+        ##### step 6 ###################################################################
+        #
+        #  suspend copylogdb/applylogdb on master if running
+        #
+        #  * details
+        #   - deregister copylogdb/applylogdb on nodeA(master).
+        #
+        ################################################################################
+        
+            continue ? ([y]es / [n]o / [s]kip) : y
+         
+        [nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_suspend.sh -l /home/cubrid_usr/CUBRID/databases -d testdb -h nodeB -o /home/cubrid_usr/.ha/repl_utils.output
+        cubrid_usr@nodeA's password:
+        [nodeA]$ cubrid heartbeat deregister 9408
+        suspend: (9408) cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
+        [nodeA]$ cubrid heartbeat deregister 9410
+        suspend: (9410) cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
+         
+         
+        heartbeat status on nodeA(master).
+         
+        [nodeA]$ cubrid heartbeat list
+        @ cubrid heartbeat list
+         
+         HA-Node Info (current nodeA, state master)
+           Node nodeB (priority 2, state unknown)
+           Node nodeA (priority 1, state master)
+         
+         
+         HA-Process Info (master 8362, state master)
+           Copylogdb testdb@nodeB:/home/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 9408, state deregistered)
+           Server testdb (pid 9196, state registered_and_active)
+         
+        Connection to nodeA closed.
+        Wait for 60s to deregister copylogdb/applylogdb.
+        ............................................................
 
-7. At this step, delete the old replication log from the slave node and initialize the HA meta information table of the master node. Enter y to the question. 
+7.  At this step, delete the old replication log from the slave node and initialize the HA meta information table of the master node. Enter y to the question. 
 
-  ::
+    ::
 
-    ##### step 7 ###################################################################
-    #
-    #  remove old copy log of slave and init db_ha_apply_info on master
-    #
-    #  * details
-    #   - remove old copy log of slave
-    #   - init db_ha_apply_info on master
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-    - 1. remove old copy log.
-     
-    [nodeA]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeB/*
-    cubrid_usr@nodeA's password:
-    Connection to nodeA closed.
-     
-    - 2. init db_ha_apply_info.
-     
-    [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "delete from db_ha_apply_info where db_name='testdb'"
-    cubrid_usr@nodeA's password:
-    Connection to nodeA closed.
-    [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "select * from db_ha_apply_info where db_name='testdb'"
-    cubrid_usr@nodeA's password:
-     
-    === <Result of SELECT Command in Line 1> ===
-     
-    There are no results.
-    Connection to nodeA closed.
+        ##### step 7 ###################################################################
+        #
+        #  remove old copy log of slave and init db_ha_apply_info on master
+        #
+        #  * details
+        #   - remove old copy log of slave
+        #   - init db_ha_apply_info on master
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+        - 1. remove old copy log.
+         
+        [nodeA]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeB/*
+        cubrid_usr@nodeA's password:
+        Connection to nodeA closed.
+         
+        - 2. init db_ha_apply_info.
+         
+        [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "delete from db_ha_apply_info where db_name='testdb'"
+        cubrid_usr@nodeA's password:
+        Connection to nodeA closed.
+        [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "select * from db_ha_apply_info where db_name='testdb'"
+        cubrid_usr@nodeA's password:
+         
+        === <Result of SELECT Command in Line 1> ===
+         
+        There are no results.
+        Connection to nodeA closed.
 
-8. At this step, initialize the HA meta information table of replica node. In this scenario, if there is no replica node, skip this step and go to the next step by entering s. 
+8.  At this step, initialize the HA meta information table of replica node. In this scenario, if there is no replica node, skip this step and go to the next step by entering s. 
 
-  ::
+    ::
 
-    ##### step 8 ###################################################################
-    #
-    #  remove old copy log of slave and init db_ha_apply_info on replications
-    #
-    #  * details
-    #   - remove old copy log of replica
-    #   - init db_ha_apply_info on master
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-    There is no replication server to init ha_info
+        ##### step 8 ###################################################################
+        #
+        #  remove old copy log of slave and init db_ha_apply_info on replications
+        #
+        #  * details
+        #   - remove old copy log of replica
+        #   - init db_ha_apply_info on master
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+        There is no replication server to init ha_info
 
-9. At this step, create a backup volume from the master node (target_host) for HA replication rebuilding. You can skip this step and go to the next step by entering s if there is an existing backup volume. There are some constraints for rebuilding replication by using the existing backup volume, which are as follows:
+9.  At this step, create a backup volume from the master node (target_host) for HA replication rebuilding. You can skip this step and go to the next step by entering s if there is an existing backup volume. There are some constraints for rebuilding replication by using the existing backup volume, which are as follows:
 
     *   The archive log, including the transaction being executed during backup, must be in the master node (target_host); this means that a backup volume created long ago cannot be used.
-    *   The backup status information file must be created by using the **-o** option during backup. 
-        At this time, the path must be identical to the path of the backup volume file. 
-        The file name must be the db_name.bkup.output format. If the file name is not identical with the format, change the file name according to the format before executing the script.
-    *   The path of the existing backup volume and the status information file must be specified in the backup_dest_path parameter in the script.
-        In other words, specify the absolute path of the directory containing the backup volume on the master node (target_host) to this parameter.
 
-  ::
+    *   The backup status information file must be created by using the **-o** option during backup. At this time, the path must be identical to the path of the backup volume file. The file name must be the db_name.bkup.output format. If the file name is not identical with the format, change the file name according to the format before executing the script.
 
-    ##### step 9 ###################################################################
-    #
-    #  online backup database  on master
-    #
-    #  * details
-    #   - run 'cubrid backupdb -C -D ... -o ... testdb@localhost' on master
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-    [nodeA]$ cubrid backupdb  -C -D /home/cubrid_usr/.ha/backup -o /home/cubrid_usr/.ha/backup/testdb.bkup.output testdb@localhost
-    cubrid_usr@nodeA's password:
-    Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 18:52:03 2012
-    Connection to nodeA closed.
-    [nodeA]$ cat /home/cubrid_usr/.ha/backup/testdb.bkup.output
-    cubrid_usr@nodeA's password:
-    [ Database(testdb) Full Backup start ]
-     
-    - num-threads: 2
-     
-    - compression method: NONE
-     
-    - backup start time: Thu Apr 19 18:52:03 2012
-     
-    - number of permanent volumes: 1
-     
-    - HA apply info: testdb 1334739766 715 8680
-     
-    - backup progress status
-     
-    -----------------------------------------------------------------------------
-     volume name                  | # of pages | backup progress status    | done
-    -----------------------------------------------------------------------------
-     testdb_vinf                  |          1 | ######################### | done
-     testdb                       |       6400 | ######################### | done
-     testdb_lgar000               |       6400 | ######################### | done
-     testdb_lgar001               |       6400 | ######################### | done
-     testdb_lginf                 |          1 | ######################### | done
-     testdb_lgat                  |       6400 | ######################### | done
-    -----------------------------------------------------------------------------
-     
-    # backup end time: Thu Apr 19 18:52:06 2012
-     
-    [ Database(testdb) Full Backup end ]
-    Connection to nodeA closed.
+    *   The path of the existing backup volume and the status information file must be specified in the backup_dest_path parameter in the script. In other words, specify the absolute path of the directory containing the backup volume on the master node (target_host) to this parameter.
+
+    ::
+
+        ##### step 9 ###################################################################
+        #
+        #  online backup database  on master
+        #
+        #  * details
+        #   - run 'cubrid backupdb -C -D ... -o ... testdb@localhost' on master
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+        [nodeA]$ cubrid backupdb  -C -D /home/cubrid_usr/.ha/backup -o /home/cubrid_usr/.ha/backup/testdb.bkup.output testdb@localhost
+        cubrid_usr@nodeA's password:
+        Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 18:52:03 2012
+        Connection to nodeA closed.
+        [nodeA]$ cat /home/cubrid_usr/.ha/backup/testdb.bkup.output
+        cubrid_usr@nodeA's password:
+        [ Database(testdb) Full Backup start ]
+         
+        - num-threads: 2
+         
+        - compression method: NONE
+         
+        - backup start time: Thu Apr 19 18:52:03 2012
+         
+        - number of permanent volumes: 1
+         
+        - HA apply info: testdb 1334739766 715 8680
+         
+        - backup progress status
+         
+        -----------------------------------------------------------------------------
+         volume name                  | # of pages | backup progress status    | done
+        -----------------------------------------------------------------------------
+         testdb_vinf                  |          1 | ######################### | done
+         testdb                       |       6400 | ######################### | done
+         testdb_lgar000               |       6400 | ######################### | done
+         testdb_lgar001               |       6400 | ######################### | done
+         testdb_lginf                 |          1 | ######################### | done
+         testdb_lgat                  |       6400 | ######################### | done
+        -----------------------------------------------------------------------------
+         
+        # backup end time: Thu Apr 19 18:52:06 2012
+         
+        [ Database(testdb) Full Backup end ]
+        Connection to nodeA closed.
 
 10. At this step, copy the database backup of the master node to the slave node. Enter y to the question. 
 
-  ::
+    ::
 
-    ##### step 10 ###################################################################
-    #
-    #  copy testdb databases backup to current host
-    #
-    #  * details
-    #   - scp databases.txt from target host if there's no testdb info on current host
-    #   - remove old database and replication log if exist
-    #   - make new database volume and replication path
-    #   - scp  database backup to current host
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-     
-     - 1. check if the databases information is already registered.
-     
-     
-     - there is already testdb information in /home/cubrid_usr/CUBRID/databases/databases.txt
-    [nodeB]$ grep testdb /home/cubrid_usr/CUBRID/databases/databases.txt
-    testdb          /home/cubrid_usr/CUBRID/databases/testdb        nodeA:nodeB /home/cubrid_usr/CUBRID/databases/testdb/log file:/home/cubrid_usr/CUBRID/databases/testdb/lob
-     
-     - 2. get db_vol_path and db_log_path from databases.txt.
-     
-     
-     - 3. remove old database and replication log.
-     
-    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb/log
-    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb
-    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_*
-     
-     - 4. make new database volume and replication log directory.
-     
-    [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb
-    [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb/log
-    [nodeB]$ mkdir -p /home/cubrid_usr/.ha
-    [nodeB]$ rm -rf /home/cubrid_usr/.ha/backup
-    [nodeB]$ mkdir -p /home/cubrid_usr/.ha/backup
-     
-     - 5. copy backup volume and log from target host
-     
-    cubrid_usr@nodeA's password:
-    testdb_bkvinf              100%   49     0.1KB/s   00:00
-    cubrid_usr@nodeA's password:
-    testdb_bk0v000             100% 1540MB   7.8MB/s   03:18
-    testdb.bkup.output         100% 1023     1.0KB/s   00:00
+        ##### step 10 ###################################################################
+        #
+        #  copy testdb databases backup to current host
+        #
+        #  * details
+        #   - scp databases.txt from target host if there's no testdb info on current host
+        #   - remove old database and replication log if exists
+        #   - make new database volume and replication path
+        #   - scp  database backup to current host
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+         
+         - 1. check if the databases information is already registered.
+         
+         
+         - there is already testdb information in /home/cubrid_usr/CUBRID/databases/databases.txt
+        [nodeB]$ grep testdb /home/cubrid_usr/CUBRID/databases/databases.txt
+        testdb          /home/cubrid_usr/CUBRID/databases/testdb        nodeA:nodeB /home/cubrid_usr/CUBRID/databases/testdb/log file:/home/cubrid_usr/CUBRID/databases/testdb/lob
+         
+         - 2. get db_vol_path and db_log_path from databases.txt.
+         
+         
+         - 3. remove old database and replication log.
+         
+        [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb/log
+        [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb
+        [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_*
+         
+         - 4. make new database volume and replication log directory.
+         
+        [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb
+        [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb/log
+        [nodeB]$ mkdir -p /home/cubrid_usr/.ha
+        [nodeB]$ rm -rf /home/cubrid_usr/.ha/backup
+        [nodeB]$ mkdir -p /home/cubrid_usr/.ha/backup
+         
+         - 5. copy backup volume and log from target host
+         
+        cubrid_usr@nodeA's password:
+        testdb_bkvinf              100%   49     0.1KB/s   00:00
+        cubrid_usr@nodeA's password:
+        testdb_bk0v000             100% 1540MB   7.8MB/s   03:18
+        testdb.bkup.output         100% 1023     1.0KB/s   00:00
 
 11. At this step, restore the copied database backup to the slave node. Enter y to the question. 
 
-  ::
+    ::
 
-    ##### step 11 ###################################################################
-    #
-    #  restore database testdb on current host
-    #
-    #  * details
-    #   - cubrid restoredb -B ... testdb current host
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-    [nodeB]$ cubrid restoredb -B /home/cubrid_usr/.ha/backup  testdb
+        ##### step 11 ###################################################################
+        #
+        #  restore database testdb on current host
+        #
+        #  * details
+        #   - cubrid restoredb -B ... testdb current host
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+        [nodeB]$ cubrid restoredb -B /home/cubrid_usr/.ha/backup  testdb
 
 12. At this step, configure the HA meta information table value of the slave node. Enter y to the question. 
 
-  ::
+    ::
 
-    ##### step 12 ###################################################################
-    #
-    #  set db_ha_apply_info on slave
-    #
-    #  * details
-    #   - insert db_ha_apply_info on slave
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-     
-     
-    1. get db_ha_apply_info from backup output(/home1/cubrid_usr/.ha/backup/testdb.bkup.output).
-     
-     - db_name       : testdb
-     - db_creation   : 1349426614
-     - pageid        : 86
-     - offset        : 8800
-     - log_path      : /home1/cubrid_usr/CUBRID/databases/testdb_nodeA
-     
-     
-     
-    2. select old db_ha_apply_info.
-     
-    [nodeA]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
-     
-    === <Result of SELECT Command in Line 1> ===
-     
-    There are no results.
-     
-     
-     
-    3. insert new db_ha_apply_info on slave.
-     
-    [nodeB]$ csql --sysadm -u dba -S testdb -c "DELETE FROM db_ha_apply_info WHERE db_name='testdb'"
-    [nodeB]$ csql --sysadm -u DBA -S testdb -c "INSERT INTO  db_ha_apply_info VALUES (       'testdb',       datetime '10/05/2012 17:43:34',         '/home1/cubrid_usr/DB/testdb_nodeA',         86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       NULL,   NULL,   NULL,   0,      0,      0,      0,      0,      0,      0,      NULL )"
-    [nodeB]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
-     
-    === <Result of SELECT Command in Line 1> ===
-     
-    <00001> db_name             : 'testdb'
-            db_creation_time    : 05:43:34.000 PM 10/05/2012
-            copied_log_path     : '/home1/cubrid_usr/CUBRID/databases/testdb_nodeA'
-            committed_lsa_pageid: 86
-            committed_lsa_offset: 8800
-            committed_rep_pageid: 86
-            committed_rep_offset: 8800
-            required_lsa_pageid : 86
-            required_lsa_offset : 8800
+        ##### step 12 ###################################################################
+        #
+        #  set db_ha_apply_info on slave
+        #
+        #  * details
+        #   - insert db_ha_apply_info on slave
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+         
+         
+        1. get db_ha_apply_info from backup output(/home1/cubrid_usr/.ha/backup/testdb.bkup.output).
+         
+         - db_name       : testdb
+         - db_creation   : 1349426614
+         - pageid        : 86
+         - offset        : 8800
+         - log_path      : /home1/cubrid_usr/CUBRID/databases/testdb_nodeA
+         
+         
+         
+        2. select old db_ha_apply_info.
+         
+        [nodeA]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
+         
+        === <Result of SELECT Command in Line 1> ===
+         
+        There are no results.
+         
+         
+         
+        3. insert new db_ha_apply_info on slave.
+         
+        [nodeB]$ csql --sysadm -u dba -S testdb -c "DELETE FROM db_ha_apply_info WHERE db_name='testdb'"
+        [nodeB]$ csql --sysadm -u DBA -S testdb -c "INSERT INTO  db_ha_apply_info VALUES (       'testdb',       datetime '10/05/2012 17:43:34',         '/home1/cubrid_usr/DB/testdb_nodeA',         86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       86, 8800,       NULL,   NULL,   NULL,   0,      0,      0,      0,      0,      0,      0,      NULL )"
+        [nodeB]$ csql -u DBA -S testdb -l -c "SELECT db_name, db_creation_time, copied_log_path, committed_lsa_pageid, committed_lsa_offset, committed_rep_pageid, committed_rep_offset, required_lsa_pageid, required_lsa_offset FROM db_ha_apply_info WHERE db_name='testdb'"
+         
+        === <Result of SELECT Command in Line 1> ===
+         
+        <00001> db_name             : 'testdb'
+                db_creation_time    : 05:43:34.000 PM 10/05/2012
+                copied_log_path     : '/home1/cubrid_usr/CUBRID/databases/testdb_nodeA'
+                committed_lsa_pageid: 86
+                committed_lsa_offset: 8800
+                committed_rep_pageid: 86
+                committed_rep_offset: 8800
+                required_lsa_pageid : 86
+                required_lsa_offset : 8800
 
 13. At this step, initial the replication log of the master node and then copy the storage log of the master node to the slave node. Enter y to the question. 
 
-  ::
+    ::
 
-    ##### step 13 ###################################################################
-    #
-    #  make initial replication active log on master, and copy archive logs from
-    #  master
-    #
-    #  * details
-    #   - remove old replication log on master if exist
-    #   - start copylogdb to make replication active log
-    #   - copy archive logs from master
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-     
-     - 1. remove old replication log.
-     
-    [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeA
-    [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb_nodeA
-     
-     - 2. start copylogdb to initiate active log.
-     
-     
-     - cubrid service stop
-    [nodeB]$ cubrid service stop >/dev/null 2>&1
-     
-     - start cub_master
-    [nodeB]$ cub_master >/dev/null 2>&1
-     
-     - start copylogdb and wait until replication active log header to be initialized
-    [nodeB]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA -m 3 testdb@nodeA >/dev/null 2>&1 &
-     
-    ...
-     
-     - cubrid service stop
-    [nodeB]$ cubrid service stop >/dev/null 2>&1
-     
-     - check copied active log header
-    [nodeB]$  cubrid applyinfo -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA testdb | grep -wqs "DB name"
-     
-     - 3. copy archive log from target.
-     
-    cubrid_usr@nodeA's password:
-    testdb_lgar000             100%  512MB   3.9MB/s   02:11
+        ##### step 13 ###################################################################
+        #
+        #  make initial replication active log on master, and copy archive logs from
+        #  master
+        #
+        #  * details
+        #   - remove old replication log on master if exist
+        #   - start copylogdb to make replication active log
+        #   - copy archive logs from master
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+         
+         - 1. remove old replication log.
+         
+        [nodeB]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeA
+        [nodeB]$ mkdir -p /home/cubrid_usr/CUBRID/databases/testdb_nodeA
+         
+         - 2. start copylogdb to initiate active log.
+         
+         
+         - cubrid service stop
+        [nodeB]$ cubrid service stop >/dev/null 2>&1
+         
+         - start cub_master
+        [nodeB]$ cub_master >/dev/null 2>&1
+         
+         - start copylogdb and wait until replication active log header to be initialized
+        [nodeB]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA -m 3 testdb@nodeA >/dev/null 2>&1 &
+         
+        ...
+         
+         - cubrid service stop
+        [nodeB]$ cubrid service stop >/dev/null 2>&1
+         
+         - check copied active log header
+        [nodeB]$  cubrid applyinfo -L /home/cubrid_usr/CUBRID/databases/testdb_nodeA testdb | grep -wqs "DB name"
+         
+         - 3. copy archive log from target.
+         
+        cubrid_usr@nodeA's password:
+        testdb_lgar000             100%  512MB   3.9MB/s   02:11
 
 14. At this step, restart the copylogdb process and the applylogdb process of the master node. Enter y to the question. 
 
-  ::
+    ::
 
-    ##### step 14 ###################################################################
-    #
-    #  restart copylogdb/applylogdb on master
-    #
-    #  * details
-    #   - restart copylogdb/applylogdb
-    #
-    ################################################################################
-     
-       continue ? ([y]es / [n]o / [s]kip) : y
-     
-    [nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_resume.sh -i /home/cubrid_usr/.ha/repl_utils.output
-    cubrid_usr@nodeA's password:
-    [nodeA]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB >/dev/null 2>&1 &
-    resume: cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
-    [nodeA]$ cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost >/dev/null 2>&1 &
-    resume: cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
-     
-     - check heartbeat list on (master).
-     
-    [nodeA]$ cubrid heartbeat status
-    @ cubrid heartbeat status
-     
-     HA-Node Info (current nodeA, state master)
-       Node nodeB (priority 2, state unknown)
-       Node nodeA (priority 1, state master)
-     
-     HA-Process Info (master 11847, state master)
-       Server testdb (pid 11853, state registered_and_active)
-     
-     
-    Connection to nodeA closed.
+        ##### step 14 ###################################################################
+        #
+        #  restart copylogdb/applylogdb on master
+        #
+        #  * details
+        #   - restart copylogdb/applylogdb
+        #
+        ################################################################################
+         
+           continue ? ([y]es / [n]o / [s]kip) : y
+         
+        [nodeA]$ sh /home/cubrid_usr/.ha/functions/ha_repl_resume.sh -i /home/cubrid_usr/.ha/repl_utils.output
+        cubrid_usr@nodeA's password:
+        [nodeA]$ cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB >/dev/null 2>&1 &
+        resume: cub_admin copylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB -m sync testdb@nodeB
+        [nodeA]$ cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost >/dev/null 2>&1 &
+        resume: cub_admin applylogdb -L /home/cubrid_usr/CUBRID/databases/testdb_nodeB --max-mem-size=300 testdb@localhost
+         
+         - check heartbeat list on (master).
+         
+        [nodeA]$ cubrid heartbeat status
+        @ cubrid heartbeat status
+         
+         HA-Node Info (current nodeA, state master)
+           Node nodeB (priority 2, state unknown)
+           Node nodeA (priority 1, state master)
+         
+         HA-Process Info (master 11847, state master)
+           Server testdb (pid 11853, state registered_and_active)
+         
+         
+        Connection to nodeA closed.
 
 15. At this step, the result of building the slave node is printed to check whether it was successful or failed.
 
-  ::
+    ::
 
-    ##### step 15 ##################################################################
-    #
-    #  completed
-    #
-    ################################################################################
-    .
+        ##### step 15 ##################################################################
+        #
+        #  completed
+        #
+        ################################################################################
+        .
 
-After the **ha_make_slavedb.sh** script has been stopped, check the HA status from the slave node and then run the HA. 
+    After the **ha_make_slavedb.sh** script has been stopped, check the HA status from the slave node and then run the HA. 
 
-  ::
+      ::
 
-    [NodeB]$ cubrid heartbeat status
-    @ cubrid heartbeat status
-    ++ cubrid master is not running.
-    [NodeB]$ cubrid heartbeat start
-    @ cubrid heartbeat start
-    @ cubrid master start
-    ++ cubrid master start: success
-     
-    @ HA processes start
-    @ cubrid server start: testdb
-     
-    This may take a long time depending on the amount of recovery works to do.
-     
-    CUBRID 9.0
-     
-    ++ cubrid server start: success
-    @ copylogdb start
-    ++ copylogdb start: success
-    @ applylogdb start
-    ++ applylogdb start: success
-    ++ HA processes start: success
-    ++ cubrid heartbeat start: success
-    [nodeB ha]$ cubrid heartbeat status
-    @ cubrid heartbeat status
-     
-     HA-Node Info (current nodeB, state slave)
-       Node nodeB (priority 2, state slave)
-       Node nodeA (priority 1, state master)
-     
-     HA-Process Info (master 26611, state slave)
-       Applylogdb testdb@localhost:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26831, state registered)
-       Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
-       Server testdb (pid 26617, state registered_and_standby)
+        [NodeB]$ cubrid heartbeat status
+        @ cubrid heartbeat status
+        ++ cubrid master is not running.
+        [NodeB]$ cubrid heartbeat start
+        @ cubrid heartbeat start
+        @ cubrid master start
+        ++ cubrid master start: success
+         
+        @ HA processes start
+        @ cubrid server start: testdb
+         
+        This may take a long time depending on the amount of recovery works to do.
+         
+        CUBRID 9.2
+         
+        ++ cubrid server start: success
+        @ copylogdb start
+        ++ copylogdb start: success
+        @ applylogdb start
+        ++ applylogdb start: success
+        ++ HA processes start: success
+        ++ cubrid heartbeat start: success
+        [nodeB ha]$ cubrid heartbeat status
+        @ cubrid heartbeat status
+         
+         HA-Node Info (current nodeB, state slave)
+           Node nodeB (priority 2, state slave)
+           Node nodeA (priority 1, state master)
+         
+         HA-Process Info (master 26611, state slave)
+           Applylogdb testdb@localhost:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26831, state registered)
+           Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
+           Server testdb (pid 26617, state registered_and_standby)

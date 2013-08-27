@@ -203,7 +203,7 @@ Updating a Collection data type:
 
     conn.InsertElementInSequence(oid, attributeName, 5, value);
     SeqSize = conn.GetCollectionSize(oid, attributeName);
-    using (CUBRIDCommandcmd = newCUBRIDCommand("SELECT * FROM t", conn))
+    using (CUBRIDCommand cmd = new CUBRIDCommand("SELECT * FROM t", conn))
     {
         using (DbDataReader reader = cmd.ExecuteReader())
         {
@@ -233,7 +233,7 @@ Reading BLOB data:
     
     while (reader.Read())
     {
-        CUBRIDBlobbImage = (CUBRIDBlob)reader0;
+        CUBRIDBlob bImage = (CUBRIDBlob)reader0;
         byte[] bytes = newbyte(int)bImage.BlobLength;
         bytes = bImage.getBytes(1, (int)bImage.BlobLength);
         //...
@@ -245,7 +245,7 @@ Updating CLOB data:
 .. code-block:: c#
 
     string sql = "UPDATE t SET c = ?";
-    CUBRIDCommandcmd = new CUBRIDCommand(sql, conn);
+    CUBRIDCommand cmd = new CUBRIDCommand(sql, conn);
      
     CUBRIDClobClob = new CUBRIDClob(conn);
     str = conn.ConnectionString; //Use the ConnectionString for testing
@@ -336,7 +336,7 @@ DataTable Support
 The `DataTable <http://msdn.microsoft.com/en-us/library/system.data.datatable.aspx>`_ is a central object in the ADO.NET library and CUBRID ADO.NET Data Provider support the following features.
 
 *   `DataTable <http://msdn.microsoft.com/en-us/library/system.data.datatable.aspx>`_ populate
-*   Built-in commands constructure: **INSERT**, **UPDATE**, and  **DELETE**
+*   Built-in commands: **INSERT**, **UPDATE**, and  **DELETE**
 *   Column metadata/attributes
 *   `DataSet <http://msdn.microsoft.com/en-us/library/system.data.dataset.aspx>`_, `DataView <http://msdn.microsoft.com/en-us/library/system.data.dataview.aspx>`_ inter-connection
 
@@ -496,8 +496,8 @@ NHibernate
 
 CUBRID will be accessed from NHibernate using CUBRID ADO.NET Data Provider. For more information, see http://www.cubrid.org/wiki_apis/entry/cubrid-nhibernate-tutorial.
 
-Java Stored Prcedure
---------------------
+Java Stored Procedure
+---------------------
 
 For how to call Java stored procedure in .NET, see http://www.cubrid.org/wiki_apis/entry/how-to-calling-java-stored-functionprocedurec.
 

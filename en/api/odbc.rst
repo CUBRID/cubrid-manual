@@ -45,8 +45,6 @@ The following table shows the data type mapping relationship between CUBRID and 
 +-------------------------+--------------------------------+
 | DATETIME                | SQL_TYPE_TIMESTAMP             |
 +-------------------------+--------------------------------+
-| MONETARY                | SQL_DOUBLE                     |
-+-------------------------+--------------------------------+
 | OID                     | SQL_CHAR(32)                   |
 +-------------------------+--------------------------------+
 | SET, MULTISET, SEQUENCE | SQL_VARCHAR(MAX_STRING_LENGTH) |
@@ -241,17 +239,17 @@ The following example shows how to create cubrid.asp and store it in a virtual d
         Set rs = DBConn.Execute( strQuery )
         ' show the message by SQL.
         if InStr(Ucase(strQuery),"INSERT")>0 then
-            Response.Write "A recored is added."
+            Response.Write "A record is added."
             Response.End
         end if
            
         if InStr(Ucase(strQuery),"DELETE")>0  then
-            Response.Write "A recored is deleted."
+            Response.Write "A record is deleted."
             Response.End
         end if
            
         if InStr(Ucase(strQuery),"UPDATE")>0  then
-            Response.Write "A recored is updated."
+            Response.Write "A record is updated."
             Response.End
         end if   
     %>

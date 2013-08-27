@@ -33,7 +33,7 @@ Legal Identifiers
 
 **Enclosing in Double Quotes, Square Brackets, or Backtick Symbol**
 
-    Identifiers or reserved keywords shown as below are not allowed. However, if they are enclosed in double quotes, square brackets, or backtick symbol, they are allowed as an exception. Especially, the double quotations can be used as a symbol enclosing identifiers when the **ansi_quotes** parameter is set to **yes**. If this value is set to **no** double quotations are used as a symbol enclosing character strings. The followings are examples of legal identifiers. ::
+    Identifiers or reserved keywords shown as below are not allowed. However, if they are enclosed in double quotes, square brackets, or backtick symbol, they are allowed as an exception. Especially, the double quotations can be used as a symbol enclosing identifiers when the **ansi_quotes** parameter is set to **yes**. If this value is set to **no** double quotations are used as a symbol enclosing character strings. The following are examples of legal identifiers. ::
 
         " select"
         " @lowcost"
@@ -94,3 +94,7 @@ The following table summarizes the maximum byte length allowable for each identi
 +-----------------------+-------------------+
 | Serial                | 254               |
 +-----------------------+-------------------+
+
+.. note::
+
+    Automatically created constraint name like a name of primary key(pk_<table_name>_<column_name>) or foreign key(fk_<table_name>_<column_name>) also does not allow over the maximum name length of the identifier, 254 bytes.

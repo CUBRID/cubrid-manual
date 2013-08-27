@@ -7,7 +7,9 @@ A database backup is the procedure of storing CUBRID database volumes, control f
 
 To recover all database pages, control files and the database to the state at the time of backup, the **cubrid backupdb** utility copies all necessary log records. ::
 
-    cubrid backupdb [options] database_name
+    cubrid backupdb [options] database_name[@hostname]
+
+*   @\ *hostname*: It is omitted when you do backup in standalone mode. If you do backup on the HA environment, specify "@\ *hostname*" after the database name. *hostname* is a name specified in $CUBRID_DATABASES/databases.txt. If you want to setup a local server, you can specify it as "@localhost".
 
 The following table shows options available with the **cubrid backupdb** utility (options are case sensitive).
 
@@ -215,13 +217,13 @@ Managing Archive Logs
 
 You must not delete archive logs by using the file deletion command such as rm or del by yourself; the archive logs should be deleted by system configuration or the **cubrid backupdb** utility. In the following three cases, archive logs can be deleted.
 
-*   In an HA environment, configure the **force_remove_log_archives** values to no and delete it by specifying the number of  the **log_max_archives** values (it will be deleted after replication is applied).
+*   In an HA environment, configure the **force_remove_log_archives** values to no and archive logs are automatically deleted it by specifying the number of  the **log_max_archives** values (it will be deleted after replication is applied).
 
-*   In non-HA environment, configure the **force_remove_log_archives** value to yes and delete it by specifying the number of **log_max_archives** values (In initial installation, the **log_max_archives** value is set to 0).
+*   In non-HA environment, configure the **force_remove_log_archives** value to yes and archive logs are automatically deleted it by specifying the number of **log_max_archives** values.
 
-*   Use **cubrid backupdb -r**; note that it should not be used in an HA environment.
+*   Use **cubrid backupdb -r** and run this command then archive logs are deleted; note that **-r** option should not be used in an HA environment.
 
-If you want to delete logs as much as possible while operating a database, configure the value of **log_max_archives** to 0 or as small as possible and configure the value of **force_remove_log_archives** to yes. Note that in an HA environment, if the value of **force_remove_log_archives** is yes, archive logs that have not replicated in a slave node are deleted, which can cause replication errors. Therefore, it is recommended that you configure it to no. Although the value of **force_remove_log_archives** is set to no, files that are complete for replication can be deleted by HA management process.
+If you want to delete logs as much as possible while operating a database, configure the value of **log_max_archives** to a small value or 0 and configure the value of **force_remove_log_archives** to yes. Note that in an HA environment, if the value of **force_remove_log_archives** is yes, archive logs that have not replicated in a slave node are deleted, which can cause replication errors. Therefore, it is recommended that you configure it to no. Although the value of **force_remove_log_archives** is set to no, files that are complete for replication can be deleted by HA management process.
 
 .. _db-restore:
 
@@ -244,7 +246,7 @@ The following table shows options available with the **cubrid restoredb** utilit
 
 .. option:: -d, --up-to-date=DATE
 
-    A database can be restored to the given point by the date-time specified by the **-d** option. The user can specify the restoration point manually in the dd-mm-yyyy:hh:mm:ss (e.g. 14-10-2008:14:10:00) format. If no active log/archive log files are required to restore to the point specified, the database is restored only to the point of the last backup. ::
+    A database can be restored to the given point by the date-time specified by the **-d** option. The user can specify the restoration point manually in the dd-mm-yyyy:hh:mi:ss (e.g. 14-10-2008:14:10:00) format. If no active log/archive log files are required to restore to the point specified, the database is restored only to the point of the last backup. ::
 
         cubrid restoredb -d 14-10-2008:14:10:00 demodb
 
@@ -338,10 +340,22 @@ The following table shows options available with the **cubrid restoredb** utilit
 
         cubrid restoredb -u demodb
 
+NOTIFICATION messages, log recovery starting time and ending time are written into the server error log file or the restoredb error log file when database server is started or backup volume is restored; so you can check the elapsed time of these operations. In this message, the number of log records to be applied(redo) and the number of log pages are written together.
+
+To print out the NOTIFICATION message, error_log_level parameter in cubrid.conf should be specified as NOTIFICATION.
+    
+:: 
+  
+    Time: 06/14/13 21:29:04.059 - NOTIFICATION *** file ../../src/transaction/log_recovery.c, line 748 CODE = -1128 Tran = -1, EID = 1 
+    Log recovery is started. The number of log records to be applied: 96916. Log page: 343 ~ 5104. 
+    ..... 
+    Time: 06/14/13 21:29:05.170 - NOTIFICATION *** file ../../src/transaction/log_recovery.c, line 843 CODE = -1129 Tran = -1, EID = 4 
+    Log recovery is finished.
+
 Restoring Strategy and Procedure
 --------------------------------
 
-You must consider the followings before restoring databases.
+You must consider the following before restoring databases.
 
 *   **Preparing backup files**
 

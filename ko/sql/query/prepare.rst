@@ -17,9 +17,10 @@ prepared statement 기능은 보통 JDBC, PHP, ODBC 등의 인터페이스 함�
     {DEALLOCATE | DROP} PREPARE stmt_name
 
 .. note::
- 
-    * SQL 수준의 PREPARE 문은 DB 연결 당 개수가 최대 20개로 제한된다. SQL 수준의 PREPARE 문은 DB 서버의 메모리 자원을 사용하므로 DB 서버 메모리의 남용을 방지하기 위해 제한된다.
-    * 인터페이스 함수의 prepared statement는 브로커 파라미터인 :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` 를 통해 DB 연결 당 prepared statement 개수가 제한된다. CUBRID SHARD 를 사용하는 경우 shard proxy 파라미터인 :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` 를 통해 shard proxy 하나 당 prepared statement 개수가 제한된다.
+
+    *   SQL 수준의 PREPARE 문은 CSQL 인터프리터에서만 사용할 것을 권장한다. 응용 프로그램에서 사용하는 경우 정상 동작을 보장하지 않는다.
+    *   SQL 수준의 PREPARE 문은 DB 연결 당 개수가 최대 20개로 제한된다. SQL 수준의 PREPARE 문은 DB 서버의 메모리 자원을 사용하므로 DB 서버 메모리의 남용을 방지하기 위해 제한된다.
+    *   인터페이스 함수의 prepared statement는 브로커 파라미터인 :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` 를 통해 DB 연결 당 prepared statement 개수가 제한된다. CUBRID SHARD 를 사용하는 경우 shard proxy 파라미터인 :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` 를 통해 shard proxy 하나 당 prepared statement 개수가 제한된다.
 
 PREPARE 문
 ==========
@@ -144,8 +145,8 @@ SET
 
        typeof(@v1)         typeof(@v2)         typeof(@v3)         typeof(@v4)
     ======================================================================================
-      'integer'           'bigint'            'character (-1)'     'character varying (10)'
-
+      'integer'           'bigint'            'character (-1)'    'character varying (1073741823)
+  
 사용자 정의 변수의 타입은 사용자가 값을 지정할 때 바뀔 수 있다.
 
 .. code-block:: sql
@@ -159,7 +160,7 @@ SET
 
       @v := 1                typeof(@v1)          @v1 := '1'             typeof(@v1)
     ======================================================================================
-      1                     'integer'             '1'                   'character (-1)'
+      1                     'integer'            '1'                    'character (-1)'
   
 ::
 

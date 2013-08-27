@@ -2,9 +2,9 @@
 
 .. contents::
 
-************************
-CUBRID 9.1 Release Notes
-************************
+*****************
+9.1 Release Notes
+*****************
 
 
 Release Notes Information
@@ -377,9 +377,9 @@ When the ECHO(7) port is blocked by the firewall configuration, the server proce
 ENABLE_MONITOR_HANG broker parameter(CUBRIDSUS-7558)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add a functionality to block access to the corresponding broker when it is determined that a certain rate of CASs is hung. This functionality is enabled when the ENABLE_MONITOR_HANG parameter is set to ON.
+Add a functionality to block access to the corresponding broker when it is determined that a certain rate of CASes is hung. This functionality is enabled when the ENABLE_MONITOR_HANG parameter is set to ON.
 
-When a CAS hang continues for more than one minute, the broker process determines that the CAS is hung. If the broker process is determined as abnormal based on the number of CASs, applications attempting to access the broker are blocked and led to the alternative hosts (altHosts) specified in the access URL.
+When a CAS hang continues for more than one minute, the broker process determines that the CAS is hung. If the broker process is determined as abnormal based on the number of CASes, applications attempting to access the broker are blocked and led to the alternative hosts (altHosts) specified in the access URL.
 
 Administration Utility
 ----------------------
@@ -1133,7 +1133,7 @@ Fix the problem that would cause the LOB type operation, such as the CHAR_TO_BLO
 Session operations, such as LAST_INSERT_ID function, could continuously fail under network failure or HA failover(CUBRIDSUS-7549)(CUBRIDSUS-7669)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix a problem in which, although CASs were not supposed to share session ID for normal actions, when one of the CASs sharing the session ID due to a network failure or HA failover was terminated earlier than the others, session operation execution continuously failed in the applications connected to the remaining CASs. Session operations include: LAST_INSERT_ID functions, PREPARE statements, user session variables defined through SET, and ROW_COUNT() functions.
+Fix a problem in which, although CASes were not supposed to share session ID for normal actions, when one of the CASes sharing the session ID due to a network failure or HA failover was terminated earlier than the others, session operation execution continuously failed in the applications connected to the remaining CASes. Session operations include: LAST_INSERT_ID functions, PREPARE statements, user session variables defined through SET, and ROW_COUNT() functions.
 
 Query result would be wrong when there is a DESC column in the multi-column index with OR conditions(CUBRIDSUS-9314)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1461,10 +1461,10 @@ When executing INSERT by using the host variable for the NUMERIC type column, th
 
     ERROR: A domain conflict exists on attribute "a".
     
-Incorrect query result when the maximum value condition and NOCYCLE of the LEVEL Pseudo column were specified to the CONNECT BY clause of the hierarchy query statement(CUBRIDSUS-9581)
+Incorrect query result when the maximum value condition and NOCYCLE of the LEVEL Pseudo column were specified as the CONNECT BY clause of the hierarchy query statement(CUBRIDSUS-9581)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix a problem that would cause the output of an incorrect query result when the maximum value condition and NOCYCLE of the LEVEL pseudo column were specified to the CONNECT BY clause of the hierarchy query statement.
+Fix a problem that would cause the output of an incorrect query result when the maximum value condition and NOCYCLE of the LEVEL pseudo column were specified as the CONNECT BY clause of the hierarchy query statement.
 
 .. code-block:: sql
 
@@ -1953,7 +1953,7 @@ Generally, the current client charset is used to parse the query statement. The 
 
 .. code-block:: sql
 
-    -- When the system charset is specified to ko_KR.utf8
+    -- When the system charset is specified as ko_KR.utf8
     
     SET NAMES euckr;
     
@@ -1964,7 +1964,7 @@ The SHOW TABLES sentence caused a syntax analysis error, as shown in the above. 
 
 .. code-block:: sql
 
-    -- When the system charset has been specified to ko_KR.euck 
+    -- When the system charset has been specified as ko_KR.euck 
     
     SET NAMES utf8; 
     
@@ -2195,7 +2195,7 @@ Fix a problem that caused the view for a specific partition to not be updatable.
 Not to be normally partitioned when the partition key value in the partitioned table had a different charset from the column(CUBRIDSUS-9904)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As shown in the following example, data was not normally partitioned when the partition key value in the partitioned table had a different charset from the column. This has been fixed in order to not allow the partition key of which charset is different from the column.
+As shown in the following example, data was not normally partitioned when the partition key value in the partitioned table had a different charset from the column. This has been fixed in order to not allow the partition key whose charset is different from the column.
 
 .. code-block:: sql
 
@@ -2337,8 +2337,8 @@ No Response when receiving many prepare requests (CUBRIDSUS-10041)
 
 When there are many prepare requests for a query in the Shard environment, if one of the request has not been processed within the query timeout or PROXY_TIMEOUT, the remaining prepare requests were not responded to. This problem has been fixed.
 
-Continuous failure of requests from the application when the number of CASs was smaller than the load on the shard proxy(CUBRIDSUS-10012)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Continuous failure of requests from the application when the number of CASes was smaller than the load on the shard proxy(CUBRIDSUS-10012)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In shard proxy, even if rcTime of connection URL is specified, the behavior to return to the original connection did not occur(CUBRIDSUS-10823)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2743,10 +2743,10 @@ Modify to cancel the checkpoint when it took 1 minute or more to execute termina
 
 The database was set to be terminated by force when it took 1 minute or more to execute termination of the database by using the cubrid server stop command. When it took a long time to operate the checkpoint during shutdown, the database server was terminated by force, causing a long time to recover the database when restarting the database. This was fixed to cancel the checkpoint process and terminate the database when a timeout occurred during shutdown.
 
-The number of client wait CASs is larger than the total of CASs when outputting the broker status information(CUBRIDSUS-10235)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The number of client wait CASes is larger than the total of CASes when outputting the broker status information(CUBRIDSUS-10235)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When outputting the broker status information using the cubrid broker status -f command, if the number of CASs increased to be higher than the minimum number and then decreased, the number of CLIENT WAIT CASs was larger than the total number of CASs. This problem has been fixed.
+When outputting the broker status information using the cubrid broker status -f command, if the number of CASes increased to be higher than the minimum number and then decreased, the number of CLIENT WAIT CASes was larger than the total number of CASes. This problem has been fixed.
 
 Abnormal termination when interrupting the execution of createdb utility for Windows(CUBRIDSUS-9332)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3058,7 +3058,7 @@ Current CUBRID does not support ResultSet.HOLD_CURSORS_OVER_COMMIT in java.sql.X
 From 9.0, STRCMP behaves case-sensitively
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Until the previous version of 9.0, STRCMP did not distinguish an upppercase and a lowercase. From 9.0, it compares the strings case-sensitively.
+Until the previous version of 9.0, STRCMP did not distinguish an uppercase and a lowercase. From 9.0, it compares the strings case-sensitively.
 To make STRCMP case-insensitive, you should use case-insensitive collation(e.g.: utf8_en_ci).
 
 .. code-block:: sql

@@ -18,7 +18,7 @@ Revision history
 +----------------+--------------------------------------+
 | Revision Date  | Description                          |
 +================+======================================+
-| X.   2013      | CUBRID 9.2 Release (9.2.0.XXXX)      |
+| Aug. 2013      | CUBRID 9.2 Release (9.2.0.0133)      |
 +----------------+--------------------------------------+
 | Mar. 2013      | CUBRID 9.1 Release (9.1.0.0212)      |
 +----------------+--------------------------------------+
@@ -54,9 +54,10 @@ Regarding CUBRID Tool, see http://www.cubrid.org/wiki_tools\ .
 
 Regarding CUBRID Drivers, see http://www.cubrid.org/wiki_apis\ . 
 
+Regarding the recent CUBRID sources, see http://svn.cubrid.org/\ .
+
 Note on Drivers
 ---------------
 
 Currently, CUBRID supports the following drivers: JDBC, CCI(CUBRID C API), Node.js, PHP, PDO, Python, Perl, Ruby, ADO.NET, ODBC, OLE DB.
 These drivers except JDBC, Node.js and ADO.NET are developed on top of CCI. Therefore, CCI changes can affect CCI-based drivers.
-

@@ -7,7 +7,7 @@ The following shows how to use the cubrid management utilities. ::
 
     cubrid utility_name
     utility_name:
-        createdb [option] <database_name>   --- Creating a database
+        createdb [option] <database_name> <locale_name>  --- Creating a database
         deletedb [option] <database_name>   --- Deleting a database
         installdb [option] <database-name>   --- Installing a database 
         renamedb [option] <source-database-name> <target-database-name>  --- Renaming a database 
@@ -84,20 +84,107 @@ An error occurs if an invalid directory path is set in the **CUBRID_DATABASES** 
 Creating Database, Adding Volume, Deleting Database
 ===================================================
 
+The volumes of CUBRID database are classified as permanent volume, temporary volume and backup volume.
+
+*   In the permanent volumes,
+
+    *   there are generic, data, index and temp volumes in database volumes.
+    *   there are an active log, an archiving log and a background archiving log in log volumes.
+    
+*   In temporary volume, there is a temporary temp volume.
+
+For more details on volumes, see :ref:`database-volume-structure`.
+
+The following is an example of files related to the database when testdb database is operated.
+
++----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
+| File name      | Size  | Type            | Classification | Description                                                                                          |
++================+=======+=================+================+======================================================================================================+
+| testdb         | 40MB  | generic         | Database       | The firstly created volume when DB is created. This is used as **generic** volume and includes       |
+|                |       |                 | volume         | the meta information of DB. The file size is 40M because "cubrid createdb" is executed after         |
+|                |       |                 |                | db_volume_size in cubrid.conf is specified as 40M                                                    |
+|                |       |                 |                | or the option of "cubrid createdb", --db-volume-size is specified as 40M.                            |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x001    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
+|                |       | data, index and |                | The size of **generic** file which was automatically created became 40MB because DB was started      |
+|                |       | temp            |                | after specifying db_volume_size in cubrid.conf as 40M.                                               |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x002    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
+|                |       | data, index and |                |                                                                                                      |
+|                |       | temp            |                |                                                                                                      |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x003    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
+|                |       | data, index and |                |                                                                                                      |
+|                |       | temp            |                |                                                                                                      |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x004    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
+|                |       | data, index and |                |                                                                                                      |
+|                |       | temp            |                |                                                                                                      |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x005    | 40MB  | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
+|                |       | data, index and |                |                                                                                                      |
+|                |       | temp            |                |                                                                                                      |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_x006    | 2GB   | one of generic, |                | Automatically created **generic** file or a file created by the user's command for adding a volume.  |
+|                |       | data, index and |                | The size became 2GB because DB was restarted after specifying db_volume_size in cubrid.conf as 2G or |
+|                |       | temp            |                | the option of "cubrid addvoldb", --db-volume-size is specified as 2G.                                |
++----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
+| testdb_t32766  | 360MB | temporary temp  | None           | a file created temporarily when the space of **temp** volume is insufficient during running          |
+|                |       |                 |                | the **temp** volume required query(e.g.: sorting, scanning, index creation).                         |
+|                |       |                 |                | This is removed when DB is restarted. But, this should not be deleted arbitrarily.                   |
++----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
+| testdb_lgar_t  | 40MB  | background      | Log            | A log file which is related to the background archiving feature.                                     |
+|                |       | archiving       | volume         | This is used when storing the archiving log.                                                         |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_lgar224 | 40MB  | archiving       |                | Archiving logs are continuously archived and the files ending with three digits are created.         |
+|                |       |                 |                | At this time, archiving logs from 001~223 seem to be removed normally by "cubrid backupdb" -r option |
+|                |       |                 |                | or the setting of log_max_archives in cubrid.conf. When archiving logs are removed, you can see the  |
+|                |       |                 |                | removed archiving log numbers in the REMOVE section of lginf file. See :ref:`managing-archive-logs`. |
++----------------+-------+-----------------+                +------------------------------------------------------------------------------------------------------+
+| testdb_lgat    | 40MB  | active          |                | Active log file                                                                                      |
++----------------+-------+-----------------+----------------+------------------------------------------------------------------------------------------------------+
+
+*   Database volume file
+
+    *   In the above, testdb, testdb_x001 ~ testdb_x006 are classified as the database volume files.
+    *   File size is determined by "db_volume_size" in cubrid.conf or the "--db-volume-size" option of "cubrid createdb" and "cubrid addvoldb".
+    *  The type of an automatically created volume is always **generic**.
+    
+*   Log volume file
+
+    *   In the above, testdb_lgar_t, testdb_lgar22 and testdb_lgat are classified as the log volume files.
+    *   File size is determined by "log_volume_size" in cubrid.conf or the "--log-volume-size" option of "cubrid createdb".
+
 .. _creating-database:
 
 Creating Database
 -----------------
 
-The **cubrid createdb** utility creates databases and initializes them with the built-in CUBRID system tables. It can also define initial users to be authorized in the database and specify the locations of the logs and databases. In general, the **cubrid createdb** utility is used only by DBA. ::
+The **cubrid createdb** utility creates databases and initializes them with the built-in CUBRID system tables. It can also define initial users to be authorized in the database and specify the locations of the logs and databases. In general, the **cubrid createdb** utility is used only by DBA. 
 
-    cubrid createdb [options] database_name
+.. warning::
+
+    When you create database, a locale name and a charset name after a DB name must be specified(e.g. ko_KR.utf8). It affects the length of string type, string comparison operation, etc. The specified charset when creating database cannot be changed later, so you should be careful when specifying it.
+    
+    For charset, locale and collation setting, see :doc:`/sql/i18n`.
+
+::
+
+    cubrid createdb [options] database_name locale_name.charset
 
 * **cubrid**: An integrated utility for the CUBRID service and database management.
 
 * **createdb**: A command used to create a new database.
 
 * *database_name*: Specifies a unique name for the database to be created, without including the path name to the directory where the database will be created. If the specified database name is the same as that of an existing database name, CUBRID halts creation of the database to protect existing files.
+
+*   *locale_name*: A locale name to use in the database should be input. For a locale name which can be used in CUBRID, refer :ref:`locale-selection`.
+
+*   *charset*: A characterset to use in the database should be input. A character set which can be used in CUBRID is iso88591, euckr or utf8.
+    
+    *   If *locale_name* is en_US and *charset* is omitted, a character set will be iso88591.
+    *   If *locale_name* is ko_KR and *charset* is omitted, a character set will be utf8.
+    *   All locale names except en_US and ko_KR cannot omit *charset*, and a *charset* can be specified only with utf8.
 
 The maximum length of database name is 17 in English.
 
@@ -111,15 +198,15 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     The following example shows how to create a database named *testdb* and assign 512 MB to its first volume. ::
     
-        cubrid createdb --db-volume-size=512M testdb
+        cubrid createdb --db-volume-size=512M testdb en_US
 
 .. option:: --db-page-size=SIZE
 
-    This option specifies the size of the database page; the minimum value is 4K and the maximum value is **16K** (default). K stands for kilobytes (KB). The value of page size is one of the followings: 4K, 8K, or 16K. If a value between 4K and 16K is specified, system rounds up the number. If a value greater than 16K or less than 4K, the specified number is used.
+    This option specifies the size of the database page; the minimum value is 4K and the maximum value is **16K** (default). K stands for kilobytes (KB). The value of page size is one of the following: 4K, 8K, or 16K. If a value between 4K and 16K is specified, system rounds up the number. If a value greater than 16K or less than 4K, the specified number is used.
 
     The following example shows how to create a database named *testdb* and configure its page size 16K. ::
 
-        cubrid createdb --db-page-size=16K testdb
+        cubrid createdb --db-page-size=16K testdb en_US
 
 .. option:: --log-volume-size=SIZE
 
@@ -127,16 +214,16 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     The following example shows how to create a database named *testdb* and assign 256 MB to its log volume. ::
 
-        cubrid createdb --log-volume-size=256M testdb
+        cubrid createdb --log-volume-size=256M testdb en_US
 
 .. option:: --log-page-size=SIZE
 
     This option specifies the size of the log volume page. The default value is the same as data page size. The minimum value is 4K and the maximum value is 16K. K stands for kilobytes (KB).
-    The value of page size is one of the followings: 4K, 8K, or 16K. If a value between 4K and 16K is specified, system rounds up the number. If a value greater than 16K or less than 4K, the specified number is used.
+    The value of page size is one of the following: 4K, 8K, or 16K. If a value between 4K and 16K is specified, system rounds up the number. If a value greater than 16K or less than 4K, the specified number is used.
 
     The following example shows how to create  a database named *testdb* and configure its log volume page size 8K. ::
 
-        cubrid createdb --log-page-size=8K testdb
+        cubrid createdb --log-page-size=8K testdb en_US
 
 .. option:: --comment=COMMENT
 
@@ -144,7 +231,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     The following example shows how to create a database named *testdb* and add a comment to the database volume. ::
 
-        cubrid createdb --comment "a new database for study" testdb
+        cubrid createdb --comment "a new database for study" testdb en_US
 
 .. option:: -F, --file_path=PATH
 
@@ -152,7 +239,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
     
     The following example shows how to create a database named *testdb* in the directory /dbtemp/new_db. ::
     
-        cubrid createdb -F "/dbtemp/new_db/" testdb
+        cubrid createdb -F "/dbtemp/new_db/" testdb en_US
 
 .. option:: -L log_path=PATH
 
@@ -161,7 +248,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     The following example shows how to create a database named *testdb* in the directory /dbtemp/newdb and log files in the directory /dbtemp/db_log. ::
 
-        cubrid createdb -F "/dbtemp/new_db/" -L "/dbtemp/db_log/" testdb
+        cubrid createdb -F "/dbtemp/new_db/" -L "/dbtemp/db_log/" testdb en_US
 
 .. option:: -B, --lob-base-path=PATH
 
@@ -169,7 +256,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
     
     The following example shows how to create a database named *testdb* in the working directory and specify /home/data1 of local file system as a location of LOB data files. ::
 
-        cubrid createdb --lob-base-path "file:/home1/data1" testdb
+        cubrid createdb --lob-base-path "file:/home1/data1" testdb en_US
         
 .. option:: --server-name=HOST
 
@@ -177,7 +264,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
     
     The following example shows how to create a database named *testdb* and register it on the host *aa_host*. ::
 
-        cubrid createdb --server-name aa_host testdb
+        cubrid createdb --server-name aa_host testdb en_US
 
 .. option:: -r, --replace
 
@@ -185,7 +272,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
     
     The following example shows how to create a new database named *testdb* and overwrite the existing database with the same name. ::
     
-        cubrid createdb -r testdb
+        cubrid createdb -r testdb en_US
     
 .. option:: --more-volume-file=FILE
 
@@ -193,7 +280,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
     
     The following example shows how to create a database named *testdb* as well as an additional volume based on the specification stored in the **vol_info.txt** file. ::
 
-        cubrid createdb --more-volume-file vol_info.txt testdb
+        cubrid createdb --more-volume-file vol_info.txt testdb en_US
 
     The following is a specification of the additional volume contained in the **vol_info.txt** file. The specification of each volume must be written on a single line. ::
 
@@ -207,7 +294,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
         NAME generic_v1 COMMENTS "generic information volume" PURPOSE generic NPAGES 500
         #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-    As shown in the example, the specification of each volume consists followings. ::
+    As shown in the example, the specification of each volume consists following. ::
 
         NAME volname COMMENTS volcmnts PURPOSE volpurp NPAGES volnpgs
 
@@ -226,7 +313,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     The following example shows how to create a database named *testdb* and add users to *testdb* based on the user information defined in the **user_info.txt** file. ::
 
-        cubrid createdb --user-definition-file=user_info.txt testdb
+        cubrid createdb --user-definition-file=user_info.txt testdb en_US
 
     The syntax of a user information file is as follows: ::
 
@@ -278,7 +365,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     The following example shows how to create a database named *testdb* and execute the SQL statement defined in table_schema.sql through the CSQL Interpreter. ::
 
-        cubrid createdb --csql-initialization-file table_schema.sql testdb
+        cubrid createdb --csql-initialization-file table_schema.sql testdb en_US
 
 .. option:: -o, --output-file=FILE
 
@@ -287,7 +374,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     The following example shows how to create a database named *testdb* and store the output of the utility to the **db_output** file instead of displaying it on the console screen. ::
 
-        cubrid createdb -o db_output testdb
+        cubrid createdb -o db_output testdb en_US
 
 .. option:: -v, --verbose
 
@@ -295,28 +382,36 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
     The following example shows how to create a database named *testdb* and display detailed information on the operation onto the screen. ::
 
-        cubrid createdb -v testdb
+        cubrid createdb -v testdb en_US
 
 .. note::
 
     * **temp_file_max_size_in_pages** is a parameter used to configure the maximum number of pages assigned to store the temporary temp volume - used for complicated queries or storing arrays - on the disk. While the default value is **-1**, the temporary temp volume may be increased up to the amount of extra space on the disk specified by the **temp_volume_path** parameter. If the value is 0, the temporary temp volume cannot be created. In this case, the permanent temp volume should be added by using the :ref:`cubrid addvoldb <adding-database-volume>` utility. For the efficient management of the volume, it is recommended to add a volume for each usage. 
     
-    * By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the reaming space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. When adding a volume while managing the database, you are advised to do so when there is less system load. Once the assigned volume for a usage is completely in use, a generic volume will be created, so it is suggested to add extra volume for a usage that is expected to require more space.
+    * By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the reaming space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. When adding a volume while managing the database, you are advised to do so when there is less system load. Once the assigned volume for a usage is completely in use, a **generic** volume will be created, so it is suggested to add extra volume for a usage that is expected to require more space.
 
 The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
 
-    cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
-    cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-    cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-    cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-    cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+    cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
+    cubrid addvoldb -S -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
 
 .. _adding-database-volume:
 
 Adding Database Volume
 ----------------------
 
-Adds database volume. ::
+When the total free space size of the **generic** volumes has become smaller than the size which is specified at the system parameter **generic_vol_prealloc_size** (default: 50M) in :ref:`disk-parameters`, **generic** volume is added automatically. Automatically adding a volume is done when a new page is required; The volume is not expanded when only a SELECT queries are executed.
+
+CUBRID volumes are separated by the purpose of the usage such as data storage, index storage, temporary result storage; **generic** volume can be used for data and index storage.
+
+For the each type(purpose) of volumes, see :ref:`database-volume-structure`.
+
+In comparison, the command for adding a database volume manually is as follows.
+
+::
 
     cubrid addvoldb [options] database_name
 
@@ -328,11 +423,11 @@ Adds database volume. ::
 
 The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
 
-    cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb
-    cubrid addvoldb -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
-    cubrid addvoldb -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
-    cubrid addvoldb -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
-    cubrid addvoldb -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
+    cubrid createdb --db-volume-size=512M --log-volume-size=256M cubriddb en_US
+    cubrid addvoldb -S -p data -n cubriddb_DATA01 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p data -n cubriddb_DATA02 --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p index -n cubriddb_INDEX01 cubriddb --db-volume-size=512M cubriddb
+    cubrid addvoldb -S -p temp -n cubriddb_TEMP01 cubriddb --db-volume-size=512M cubriddb
 
 The following shows [options] available with the **cubrid addvoldb** utility.
 
@@ -415,7 +510,7 @@ cubrid deletedb  [options] database_name
 
 * *database_name*: Specifies the name of the database to be deleted without including the path name.
 
-The following shows [options] available with the **cubrid deleteldb** utility.
+The following shows [options] available with the **cubrid deletedb** utility.
     
 .. program:: deletedb
     
@@ -456,7 +551,7 @@ In contrast, the **cubrid alterdbhost** utility configures or changes the host n
 
 *   *dest_database_name*: The new name of the database. It must not be the same as that of an existing database. The path name to the directory where the database is to be created must not be included.
 
-The following shows [options] available with the **cubrid deleteldb** utility.
+The following shows [options] available with the **cubrid deletedb** utility.
      
 .. program:: renamedb
 
@@ -475,7 +570,7 @@ The following shows [options] available with the **cubrid deleteldb** utility.
     
         cubrid renamedb -i rename_path testdb testdb_1
 
-    The followings are the syntax and example of a file that contains the name of each volume, the current directory path and the directory path where renamed volumes will be stored. ::
+    The following are the syntax and example of a file that contains the name of each volume, the current directory path and the directory path where renamed volumes will be stored. ::
 
         volid source_fullvolname dest_fullvolname
 
@@ -711,14 +806,83 @@ The following shows [options] available with the **cubrid spacedb** utility.
     This option specifies the size unit of the space information of the database to be one of PAGE, M(MB), G(GB), T(TB), H(print-friendly). The default value is **H**. 
     If you set the value to H, the unit is automatically determined as follows: M if 1 MB = DB size < 1024 MB, G if 1 GB = DB size < 1024 GB. ::
     
-        cubrid spacedb --size_unit=M testdb
-        cubrid spacedb --size_unit=H testdb
+        $ cubrid spacedb --size-unit=M testdb
+        $ cubrid spacedb --size-unit=H testdb
+        
+        Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+        Volid  Purpose    total_size   free_size  Vol Name
+
+            0   GENERIC       20.0 M      17.0 M  /home1/cubrid/testdb
+            1      DATA       20.0 M      19.5 M  /home1/cubrid/testdb_x001
+            2     INDEX       20.0 M      19.6 M  /home1/cubrid/testdb_x002
+            3      TEMP       20.0 M      19.6 M  /home1/cubrid/testdb_x003
+            4      TEMP       20.0 M      19.9 M  /home1/cubrid/testdb_x004
+        -------------------------------------------------------------------------------
+            5                100.0 M      95.6 M
+        Space description for temporary volumes for database 'testdb' with pagesize 16.0K.
+
+        Volid  Purpose    total_size   free_size  Vol Name
+
+        LOB space description file:/home1/cubrid/lob
 
 .. option:: -s, --summarize
 
-    This option aggregates total_pages, used_pages and free_pages by DATA, INDEX, GENERIC, TEMP and TEMP TEMP, and outputs it. ::
+    This option aggregates total_pages, used_pages and free_pages by DATA, INDEX, GENERIC, TEMP and TEMP TEMP, and outputs them. ::
 
-        cubrid spacedb –s testdb
+        $ cubrid spacedb –s testdb
+
+        Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+        Purpose     total_size   used_size   free_size  volume_count
+        -------------------------------------------------------------
+              DATA      20.0 M       0.5 M      19.5 M          1
+             INDEX      20.0 M       0.4 M      19.6 M          1
+           GENERIC      20.0 M       3.0 M      17.0 M          1
+              TEMP      40.0 M       0.5 M      39.5 M          2
+         TEMP TEMP       0.0 M       0.0 M       0.0 M          0
+        -------------------------------------------------------------
+             TOTAL     100.0 M       4.4 M      95.6 M          5
+
+.. option:: -p, --purpose
+
+    This option separates the used space as data_size, index_size and temp_size, and outputs them.
+
+    ::
+    
+        Space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+        Volid  Purpose    total_size   free_size   data_size  index_size   temp_size  Vol Name
+
+            0   GENERIC       20.0 M      17.0 M       2.1 M       0.9 M       0.0 M  /home1/cubrid/testdb
+            1      DATA       20.0 M      19.5 M       0.4 M       0.0 M       0.0 M  /home1/cubrid/testdb_x001
+            2     INDEX       20.0 M      19.6 M       0.0 M       0.4 M       0.0 M  /home1/cubrid/testdb_x002
+            3      TEMP       20.0 M      19.6 M       0.0 M       0.0 M       0.3 M  /home1/cubrid/testdb_x003
+            4      TEMP       20.0 M      19.9 M       0.0 M       0.0 M       0.1 M  /home1/cubrid/testdb_x004
+        ----------------------------------------------------------------------------------------------------
+            5                100.0 M      95.6 M       2.5 M       1.2 M       0.4 M
+        Space description for temporary volumes for database 'testdb' with pagesize 16.0K.
+
+        Volid  Purpose    total_size   free_size   data_size  index_size   temp_size  Vol Name
+
+        LOB space description file:/home1/cubrid/lob
+
+If you use **-p** and **-s** together, the summarized information of the used space will be separated as data_size, index_size and temp_size.
+
+::
+
+    $ cubrid spacedb -s -p testdb
+    Summarized space description for database 'testdb' with pagesize 16.0K. (log pagesize: 16.0K)
+
+    Purpose     total_size   used_size   free_size   data_size  index_size   temp_size  volume_count
+    -------------------------------------------------------------------------------------------------
+          DATA      20.0 M       0.5 M      19.5 M       0.4 M       0.0 M       0.0 M          1
+         INDEX      20.0 M       0.4 M      19.6 M       0.0 M       0.4 M       0.0 M          1
+       GENERIC      20.0 M       3.0 M      17.0 M       2.1 M       0.9 M       0.0 M          1
+          TEMP      40.0 M       0.5 M      39.5 M       0.0 M       0.0 M       0.4 M          2
+     TEMP TEMP       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M       0.0 M          0
+    -------------------------------------------------------------------------------------------------
+         TOTAL     100.0 M       4.4 M      95.6 M       2.5 M       1.2 M       0.4 M          5
 
 Compacting Used Space
 ---------------------
@@ -741,7 +905,7 @@ Reference to the object deleted during compacting is displayed as **NULL**, whic
 
 **-I**, **-i**, **-c**, **-d**, **-p** options are applied in client/server mode only.
 
-The following shows [options] available with the **cubrid spacedb** utility.
+The following shows [options] available with the **cubrid compactdb** utility.
 
 .. program:: compactdb
 
@@ -776,7 +940,7 @@ The following options can be used in client/server mode only.
 
 .. option:: -d, --delete-old-repr
 
-    You can delete an existing table representation (schema structure) from catalog with this option. Generally you’d better keep the existing table representation because schema updating cost will be saved when you keep the status as referring the past schema for the old records.
+    You can delete an existing table representation (schema structure) from catalog with this option. Generally you'd better keep the existing table representation because schema updating cost will be saved when you keep the status as referring the past schema for the old records.
 
 .. option:: -I, --Instance-lock-timeout=NUMBER 
 
@@ -854,7 +1018,7 @@ The following shows [options] available with the **cubrid plandump** utility.
 Dumping Statistics Information of Server
 ----------------------------------------
 
-**cubrid statdump** utility checks statistics information processed by the CUBRID database server. The statistics information mainly consists of the followings: File I/O, Page buffer, Logs, Transactions, Concurrency/Lock, Index, and Network request.
+**cubrid statdump** utility checks statistics information processed by the CUBRID database server. The statistics information mainly consists of the following: File I/O, Page buffer, Logs, Transactions, Concurrency/Lock, Index, and Network request.
 
 You can also use CSQL's session commands to check the statistics information only about the CSQL's connection. For details, see :ref:`Dumping CSQL execution statistics information <csql-execution-statistics>`.
  
@@ -888,7 +1052,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     
         cubrid statdump demodb
         
-    The following ouputs the same values with the above. **-c** option doesn't work if it is not used with **-i** option together.
+    The following outputs the same values with the above. **-c** option doesn't work if it is not used with **-i** option together.
     
         cubrid statdump -c demodb
 
@@ -896,7 +1060,7 @@ The following shows [options] available with the **cubrid statdump** utility.
 
         cubrid statdump -i 5 testdb
          
-        Thu April 07 23:10:08 KST 2011
+        Thu April 07 23:10:08 KST 2013
          
          *** SERVER EXECUTION STATISTICS ***
         Num_file_creates              =          0
@@ -914,7 +1078,8 @@ The following shows [options] available with the **cubrid statdump** utility.
         Num_log_page_iowrites         =          0
         Num_log_append_records        =          0
         Num_log_archives              =          0
-        Num_log_checkpoints           =          0
+        Num_log_start_checkpoints     =          0
+        Num_log_end_checkpoints       =          0
         Num_log_wals                  =          0
         Num_page_locks_acquired       =          0
         Num_object_locks_acquired     =          0
@@ -953,11 +1118,11 @@ The following shows [options] available with the **cubrid statdump** utility.
         Num_adaptive_flush_pages      =          0
         Num_adaptive_flush_log_pages  =          0
         Num_adaptive_flush_max_pages  =        900
-         
+        
          *** OTHER STATISTICS ***
         Data_page_buffer_hit_ratio    =       0.00
 
-    The followings are the explanation about the above statistical informations
+    The following are the explanation about the above statistical information.
 
     +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
     | Category         | Item                                   | Description                                                                          |
@@ -999,6 +1164,10 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_log_archives                       | The number of logs archived                                                          |
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_log_start_checkpoints              | The number of started checkpoints                                                    |
+    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_log_end_checkpoints                | The number of ended checkpoints                                                      |
+    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_log_checkpoints                    | The number of checkpoints                                                            |
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_log_wals                           | Not used                                                                             |
@@ -1011,7 +1180,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_tran_start_topops                  | The number of top operations started                                                 |
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_tran_end_topops                    | The number of top perations stopped                                                  |
+    |                  | Num_tran_end_topops                    | The number of top operations stopped                                                 |
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_tran_interrupts                    | The number of interruptions                                                          |
     +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
@@ -1092,9 +1261,9 @@ The following shows [options] available with the **cubrid statdump** utility.
 
 .. option::  -s, --substr=STRING
 
-    You can display statistics about items of which name include the specified string by using **-s** option. 
+    You can display statistics about items, the names of which include the specified string by using **-s** option. 
     
-    The following example shows how to display statistics about items of which name include "data".
+    The following example shows how to display statistics about items, the names of which include "data".
  
     ::
     
@@ -1194,11 +1363,11 @@ The third section of the output of the **cubrid lockdb** includes the contents o
 ::
 
     Object lock Table:
-        Current number of ojbects which are locked = 2001
+        Current number of objects which are locked = 2001
 
 **cubrid lockdb** outputs the OID, object type and table name of each object that obtained lock. In addition, it outputs the number of transactions that hold lock for the object (Num holders), the number of transactions (Num blocked-holders) that hold lock but are blocked since it could not convert the lock to the upper lock (e.g., conversion from U_LOCK to X_LOCK), and the number of different transactions that are waiting for the lock of the object (Num waiters). It also outputs the list of client transactions that hold lock, blocked client transactions and waiting client transactions.
 
-The example below shows an object in which the object type is an instance of a class, or record that will be blocked, because the OID( 2| 50| 1) object that has S_LOCK for transaction 1 and S_LOCK for transaction 2 cannot be converted into X_LOCK. It also shows that transaction 3 is blocked because transaction 2 is waiting for X_LOCK even when transaction 3 is wating for S_LOCK.
+The example below shows an object in which the object type is an instance of a class, or record that will be blocked, because the OID( 2| 50| 1) object that has S_LOCK for transaction 1 and S_LOCK for transaction 2 cannot be converted into X_LOCK. It also shows that transaction 3 is blocked because transaction 2 is waiting for X_LOCK even when transaction 3 is waiting for S_LOCK.
 
 ::
 
@@ -1211,7 +1380,7 @@ The example below shows an object in which the object type is an instance of a c
         Tran_index = 1, Granted_mode = U_LOCK, Count = 3
         Blocked_mode = X_LOCK
                         Start_waiting_at = Fri May 3 14:44:31 2002
-                        Wait_for _nsecs = -1
+                        Wait_for_nsecs = -1
     LOCK WAITERS :
         Tran_index = 3, Blocked_mode = S_LOCK
                         Start_waiting_at = Fri May 3 14:45:14 2002
@@ -1229,7 +1398,7 @@ It outputs the lock information on the index of the table when the object type i
     LOCK HOLDERS:
         Tran_index =   1, Granted_mode =  NX_LOCK, Count =   1
 
-Granted_mode refers to the mode of the obtained lock, and Blocked_mode refers to the mode of the blocked lock. Starting_waiting_at refers to the time at which the lock was requested, and Wait_for_nsecs refers to the waiting time of the lock. The value of Wait_for_nsecs is determined by lock_timeout_in_secs, a system parameter.
+Granted_mode refers to the mode of the obtained lock, and Blocked_mode refers to the mode of the blocked lock. Starting_waiting_at refers to the time at which the lock was requested, and Wait_for_nsecs refers to the waiting time of the lock. The value of Wait_for_nsecs is determined by lock_timeout, a system parameter.
 
 When the object type is a class (table), Nsubgranules is displayed, which is the sum of the record locks and the key locks obtained by a specific transaction in the table.
 
@@ -1255,7 +1424,52 @@ The **cubrid tranlist** is used to check the transaction information of the targ
 If you omit the [options], it displays the total information about each transaction.
 
 "cubrid tranlist demodb" outputs the similar result with "cubrid killtran -q demodb", but tranlist outputs more items; "User name" and "Host name".
-"cubrid tranlist -s demodb"는 "cubrid killtran -d demodb"와 동일한 결과를 출력한다.
+"cubrid tranlist -s demodb" outputs the same result with "cubrid killtran -d demodb".
+
+The following shows what information is displayed when you run "cubrid tranlist demodb".
+
+::
+
+    $ cubrid tranlist demodb
+
+    Tran index          User name      Host name      Process id    Program name              Query time    Tran time       Wait for lock holder      SQL_ID       SQL Text
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+       1(ACTIVE)           public     test-server           1681    broker1_cub_cas_1               0.00         0.00                       -1     *** empty ***  
+       2(ACTIVE)           public     test-server           1682    broker1_cub_cas_2               0.00         0.00                       -1     *** empty ***  
+       3(ACTIVE)           public     test-server           1683    broker1_cub_cas_3               0.00         0.00                       -1     *** empty ***  
+       4(ACTIVE)           public     test-server           1684    broker1_cub_cas_4               1.80         1.80                  3, 2, 1     e5899a1b76253   update ta set a = 5 where a > 0
+       5(ACTIVE)           public     test-server           1685    broker1_cub_cas_5               0.00         0.00                       -1     *** empty ***  
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    SQL_ID: e5899a1b76253
+    Tran index : 4
+    update ta set a = 5 where a > 0
+
+In the above example, when each three transaction is running INSERT statement, UPDATE statement is tried to run in the other transaction. In the above, UPDATE statement with "Tran index" 4 waits for the transactions 3,2,1, which are found in "Wait for lock holder", to be ended.
+
+"SQL Text" is SQLs which are stored into the query plan cache; INSERT statements cannot be printed out on "cubrid tranlist" because it is not stored in the query plan cache.
+
+Each column's meaning is as following.
+
+    *   Tran index : the index of transaction
+    *   User name: database user's name
+    *   Host name: host name of CAS which running this transaction
+    *   Process id :  client's process id
+    *   Program name : program name of a client
+    *   Query time : total execution time for the running query (unit: second)
+    *   Tran time : total run time for the current transaction (unit: second)
+    *   Wait for lock holder : the list of transactions which own the lock when the current transaction is waiting for a lock
+    *   SQL ID: an ID for SQL Text
+    *   SQL Text : running  SQL text (maximum 30 characters)
+
+Transaction status messages, which are shown on "Tran index", are as follows.
+    
+    *   ACTIVE : active state
+    *   RECOVERY : recovering transaction
+    *   COMMITTED : transaction which is already committed and will be ended soon.
+    *   COMMITTING : transaction which is committing
+    *   ABORTED : transaction which is rolled back and will be ended soon. 
+    *   KILLED : transaction which is forcefully killed by the server.
 
 The following shows [options] available with the **cubrid tranlist** utility.
 
@@ -1275,38 +1489,61 @@ The following shows [options] available with the **cubrid tranlist** utility.
 
     ::
     
-        $ cubrid tranlist demodb
+        $ cubrid tranlist -s demodb
         
-        Tran index         User name      Host name      Process id    Program name              Query time    Tran time              Wait for lock holder      SQL_ID       SQL Text
-        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-           1(ACTIVE)         PUBLIC          myhost           20080    query_editor_cub_cas_1          0.00         0.00                              -1     *** empty ***
-           2(ACTIVE)         PUBLIC          myhost           20082    query_editor_cub_cas_3          0.00         0.00                              -1     *** empty ***
-           3(ABORTED)        PUBLIC          myhost           20081    query_editor_cub_cas_2          0.00         0.00                              -1     *** empty ***
-           4(ACTIVE)         PUBLIC          myhost           20083    query_editor_cub_cas_4          1.80         1.80                         2, 3, 1     cdcb58552e320   update [ta] [ta] set [ta].[a]=
-        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        Tran index          User name      Host name      Process id      Program name
+        -------------------------------------------------------------------------------
+           1(ACTIVE)           public     test-server           1681 broker1_cub_cas_1
+           2(ACTIVE)           public     test-server           1682 broker1_cub_cas_2
+           3(ACTIVE)           public     test-server           1683 broker1_cub_cas_3
+           4(ACTIVE)           public     test-server           1684 broker1_cub_cas_4
+           5(ACTIVE)           public     test-server           1685 broker1_cub_cas_5
+        -------------------------------------------------------------------------------
 
-        Tran index : 2
-        update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
-    
+.. option:: --sort-key=NUMBER
+ 
+    This option outputs the ascending values sorted by the NUMBERth column.
+    If the type of the column is the number, it is sorted by the number; if not, it is sorted by the string. If this option is omitted, the output is sorted by "Tran index".
+
+    The following is an example which outputs the sorted information by specifying the "Process id", the 4th column.
+     
     ::
-    
-        $ cubrid tranlist -s tdb
+     
+        $ cubrid tranlist --sort-key=4 demodb
+     
+        Tran index          User name      Host name      Process id    Program name              Query time    Tran time       Wait for lock holder      SQL_ID       SQL Text
+        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+           1(ACTIVE)           public     test-server           1681    broker1_cub_cas_1               0.00         0.00                       -1     *** empty ***
+           2(ACTIVE)           public     test-server           1682    broker1_cub_cas_2               0.00         0.00                       -1     *** empty ***
+           3(ACTIVE)           public     test-server           1683    broker1_cub_cas_3               0.00         0.00                       -1     *** empty ***
+           4(ACTIVE)           public     test-server           1684    broker1_cub_cas_4               1.80         1.80                  3, 1, 2     e5899a1b76253   update ta set a = 5 where a > 0
+           5(ACTIVE)           public     test-server           1685    broker1_cub_cas_5               0.00         0.00                       -1     *** empty ***
+        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        SQL_ID: e5899a1b76253
+        Tran index : 4
+        update ta set a = 5 where a > 0
         
-        Tran index         User name      Host name      Process id              Program name
-        -------------------------------------------------------------------------------------
-           1(ACTIVE)         PUBLIC          myhost            1822         broker1_cub_cas_1
-           2(ACTIVE)            dba          myhost            1823         broker1_cub_cas_2
-           3(COMMITTED)         dba          myhost            1824         broker1_cub_cas_3
-        -------------------------------------------------------------------------------------
-    
-    **Transaction status messages whihch are shown on "Tran index"**
-    
-        * ACTIVE : The transaction is active
-        * RECOVERY : The transaction is recovering
-        * COMMITTED : The transaction is committed and will be ended
-        * COMMITTING : The transactin is being committed
-        * ABORTED : The transaction is rollbacked and will be ended 
-        * KILLED : The transaction is forcefully killed by server and will be ended
+.. option:: --reverse
+ 
+    This option outputs the reversely sorted values.
+ 
+    The following is an example which outputs the reversely sorted values by the "Tran index".
+     
+    ::
+     
+        Tran index          User name      Host name      Process id    Program name              Query time    Tran time     Wait for lock holder      SQL_ID       SQL Text
+        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+           5(ACTIVE)           public     test-server           1685    broker1_cub_cas_5               0.00         0.00                     -1     *** empty ***
+           4(ACTIVE)           public     test-server           1684    broker1_cub_cas_4               1.80         1.80                3, 2, 1     e5899a1b76253   update ta set a = 5 where a > 0
+           3(ACTIVE)           public     test-server           1683    broker1_cub_cas_3               0.00         0.00                     -1     *** empty ***
+           2(ACTIVE)           public     test-server           1682    broker1_cub_cas_2               0.00         0.00                     -1     *** empty ***
+           1(ACTIVE)           public     test-server           1681    broker1_cub_cas_1               0.00         0.00                     -1     *** empty ***
+        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        SQL_ID: e5899a1b76253
+        Tran index : 4
+        update ta set a = 5 where a > 0
 
 .. _killtran:
 
@@ -1327,7 +1564,7 @@ Some options refer to killing specified transactions; others refer to print acti
  
 ::
 
-    cubrid killtran testdb 
+    cubrid killtran demodb 
      
     Tran index      User name   Host name      Process id      Program name
     -------------------------------------------------------------------------------
@@ -1342,17 +1579,17 @@ The following shows [options] available with the **cubrid killtran** utility.
 
 .. program:: killtran
 
-.. option:: -i, --kill-transation-index=ID1,ID2,ID3
+.. option:: -i, --kill-transaction-index=ID1,ID2,ID3
 
-    This option kills transactions in a specified index. Several transaction indexes can be specified by sperating with comma(,). If there is an invalid transaction ID among several IDs, it is ignored. ::
+    This option kills transactions in a specified index. Several transaction indexes can be specified by separating with comma(,). If there is an invalid transaction ID among several IDs, it is ignored. ::
 
-        $ cubrid killtran -i 1 testdb
+        $ cubrid killtran -i 1 demodb
         Ready to kill the following transactions:
          
         Tran index          User name      Host name      Process id      Program name
         -------------------------------------------------------------------------------
-           1(ACTIVE)              DBA    cdbs006.cub           15771              csql
-           2(ACTIVE)              DBA    cdbs006.cub            2171              csql
+           1(ACTIVE)              DBA         myhost           15771              csql
+           2(ACTIVE)              DBA         myhost            2171              csql
         -------------------------------------------------------------------------------
         Do you wish to proceed ? (Y/N)y
         Killing transaction associated with transaction index 1
@@ -1362,100 +1599,43 @@ The following shows [options] available with the **cubrid killtran** utility.
 
     This option kills transactions for a specified OS user ID. ::
 
-        cubrid killtran --kill-user-name=os_user_id testdb
+        cubrid killtran --kill-user-name=os_user_id demodb
 
 .. option::  --kill- host-name=HOST
 
-    This opotion kills transactions of a specified client host. ::
+    This option kills transactions of a specified client host. ::
 
-        cubrid killtran --kill-host-name=myhost testdb
+        cubrid killtran --kill-host-name=myhost demodb
 
 .. option:: --kill-program-name=NAME
 
     This option kills transactions for a specified program.  ::
     
-        cubrid killtran --kill-program-name=cub_cas testdb
+        cubrid killtran --kill-program-name=cub_cas demodb
 
 .. option:: --kill-sql-id=SQL_ID
         
     This option kills transactions for a specified SQL ID. ::
 
-        cubrid killtran --kill-sql-id=5377225ebc75a testdb
+        cubrid killtran --kill-sql-id=5377225ebc75a demodb
 
 .. option:: -p PASSWORD
         
     A value followed by the -p option is a password of the **DBA**, and should be entered in the prompt.
 
-.. option:: -d, --display
-
-    The **-d** option is specified, all transactions are displayed on the screen. 
-    
-    ::
-
-        cubrid killtran -d testdb
-  
-        Tran index      User name      Host name      Process id      Program name
-        -------------------------------------------------------------------------------
-          2(ACTIVE)           dba         myhost            6700              csql
-          3(ACTIVE)           dba         myhost            2188           cub_cas
-          4(ACTIVE)           dba         myhost             696              csql
-          5(ACTIVE)        public         myhost            6944              csql
-        -------------------------------------------------------------------------------
-
 .. option:: -q, --query-exec-info
 
-    Displays the query-running status of transactions. The following shows to display the query-running status.
+    The difference with the output of "cubrid tranlist" command is that there are no "User name" column and "Host name" column. See :ref:`tranlist`.
 
-    ::
-    
-        cubrid killtran --query-exec-info testdb
-         
-        Tran index   Process id  Program name  Query time Tran time  Wait for lock holder         SQL_ID     SQL Text
-        -------------------------------------------------------------------------------------------------------------------
-          1(ACTIVE)      8536    b1_cub_cas_1        0.00      0.00  -1                                      *** empty ***
-          2(ACTIVE)      8538    b1_cub_cas_3        0.00      0.00  -1                                      *** empty ***
-          3(ACTIVE)      8537    b1_cub_cas_2        0.00      0.00  -1                                      *** empty ***
-          4(ACTIVE)      8543    b1_cub_cas_4        1.80      1.80  3, 2, 1               5377225ebc75a     update [ta] [ta] set [a]=5 wher
-          5(ACTIVE)      8264    b1_cub_cas_5        0.00      0.60  -1                                      *** empty ***
-          6(ACTIVE)      8307    b1_cub_cas_6        0.00      0.00  -1                    cdcb58552e320     select [a].[index_name], ( cast
-          7(ACTIVE)      8308    b1_cub_cas_7        0.00      0.20  -1                    cdcb58552e320     select [a].[index_name], ( cast
-          .....
-         
-        ---------------------------------------------------------------------------------------------
-        
-    *   Tran index : the index of transaction
-    *   Process id :  client’s process id
-    *   Program name : program name of a client
-    *   Query time : total execution time for the running query (unit: second)
-    *   Tran time : total run time for the current transaction (unit: second)
-    *   Wait for lock holder : the list of transactions which own the lock when the current transaction is waiting for a lock
-    *   SQL ID: an ID for SQL Text
-    *   SQL Text : running  SQL text (maximum 30 characters)
-    
-    After the total information of transactions is displayed as above, the query which occurred the lock waiting is displayed as follows.
+.. option:: -d, --display
 
-    ::
-    
-        Tran index : 4
-        update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
-        Tran index : 5, 6, 7
-        select [a].[index_name], ( cast(case when [a].[is_unique]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [a].[is_reverse]=0 then 'NO' else 'YES' end as varchar(3))), [a].[class_of].[class_name], [a].[key_count], ( cast(case when [a].[is_primary_key]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [a].[is_foreign_key]=0 then 'NO' else 'YES' end as varchar(3))), [b].[index_name], ( cast(case when [b].[is_unique]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [b].[is_reverse]=0 then 'NO' else 'YES' end as varchar(3))), [b].[class_of].[class_name], [b].[key_count], ( cast(case when [b].[is_primary_key]=0 then 'NO' else 'YES' end as varchar(3))), ( cast(case when [b].[is_foreign_key]=0 then 'NO' else 'YES' end as varchar(3))) from [_db_index] [a], [_db_index] [b] where (( CURRENT_USER ='DBA' or {[a].[class_of].[owner].[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) or {[a].[class_of]} subseteq (select sum(set{[au].[class_of]}) from [_db_auth] [au] where ({[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) and [au].[auth_type]= ?:0 ))) and ( CURRENT_USER ='DBA' or {[b].[class_of].[owner].[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) or {[b].[class_of]} subseteq (select sum(set{[au].[class_of]}) from [_db_auth] [au] where ({[name]} subseteq (select set{ CURRENT_USER }+coalesce(sum(set{[t].[g].[name]}), set{}) from [db_user] [u], table([u].[groups]) [t] ([g]) where ([u].[name]= CURRENT_USER )) and [au].[auth_type]= ?:1 ))))
-        
-    As displayed queries are came from the query plan cache, they cannot be displayed if their plan is not cached or they are INSERT statements. Also, it can be different from the original query which the user wrote because the displayed query is came after the query parsing has been completed.
-
-    For example, if you run below query, ::
-
-        UPDATE ta SET a=5 WHERE a > 0
-        
-    Below query is displayed. ::
-
-        update [ta] [ta] set [a]=5 where (([ta].[a]> ?:0 ))
+    This is the default option and it displays the summary of transactions. Its output is the same as the output of "cubrid tranlist" with **-s** option. See :option:`tranlist -s`
         
 .. option:: -f, --force
 
     This option omits a prompt to check transactions to be stopped. ::
 
-        cubrid killtran -f -i 1 testdb
+        cubrid killtran -f -i 1 demodb
 
 Diagnosing database and dumping parameter
 =========================================
@@ -1485,27 +1665,27 @@ The following shows [options] available with the **cubrid checkdb** utility.
 
     The **-S** option is used to access a database in standalone, which means it works without processing server; it does not have an argument. If **-S** is not specified, the system recognizes that a database is running in client/server mode. ::
 
-        cubrid checkdb -S testdb
+        cubrid checkdb -S demodb
 
 .. option:: -C, --CS-mode
 
     The **-C** option is used to access a database in client/server mode, which means it works in client/server process respectively; it does not have an argument. If **-C** is not specified, the system recognize that a database is running in client/server mode by default. ::
 
-        cubrid checkdb -C testdb
+        cubrid checkdb -C demodb
 
 .. option:: -r, --repair
 
     The **-r** option is used to restore an issue if a consistency error occurs in a database. ::
 
-        cubrid checkdb -r testdb
+        cubrid checkdb -r demodb
 
 .. option:: -i, --input-class-file=FILE
 
     You can specify tables to check the consistency or to restore, by specifying the **-i** *FILE* option or listing the table names after a database name. Both ways can be used together. If a target is not specified, entire database will be a target of consistency check or restoration. ::
 
-        cubrid checkdb testdb tbl1 tbl2
-        cubrid checkdb -r testdb tbl1 tbl2
-        cubrid checkdb -r -i table_list.txt testdb tbl1 tbl2
+        cubrid checkdb demodb tbl1 tbl2
+        cubrid checkdb -r demodb tbl1 tbl2
+        cubrid checkdb -r -i table_list.txt demodb tbl1 tbl2
 
     Empty string, tab, carriage return and comma are separators among table names in the table list file specified by **-i** option. The following example shows the table list file; from t1 to t10, it is recognized as a table for consistency check or restoration. ::
 
@@ -1525,7 +1705,7 @@ You can check various pieces of internal information on the database with the **
 
 * **diagdb**: A command that is used to check the current storage state of the database by Dumping the information contained in the binary file managed by CUBRID in text format. It normally executes only when the database is in a stopped state. You can check the whole database or the file table, file size, heap size, class name or disk bitmap selectively by using the provided option.
 
-* *database_name*: The name of the database of which internal information is to be diagnosed.
+* *database_name*: The name of the database whose internal information is to be diagnosed.
 
 The following shows [options] available with the **cubrid diagdb** utility.
 
@@ -1533,9 +1713,9 @@ The following shows [options] available with the **cubrid diagdb** utility.
 
 .. option:: -d, --dump-type=TYPE
 
-    This option specifies the output range when you display the information of all files in the *testdb* database. If any option is not specified, the default value of 1 is used. ::
+    This option specifies the output range when you display the information of all files in the *demodb* database. If any option is not specified, the default value of 1 is used. ::
 
-        cubrid diagdb -d 1 myhost testdb
+        cubrid diagdb -d 1 myhost demodb
 
     The utility has 9 types of **-d** options as follows:
 
@@ -1584,32 +1764,32 @@ The following shows [options] available with the **cubrid paramdump** utility.
 
     The **-o** option is used to store information of the parameters used in the server/client process of the database into a specified file. The file is created in the current directory. If the **-o** option is not specified, the message is displayed on a console screen. ::
 
-        cubrid paramdump -o db_output testdb
+        cubrid paramdump -o db_output demodb
 
 .. option:: -b, --both
 
     The **-b** option is used to display parameter information used in server/client process on a console screen. If the **-b** option is not specified, only server-side information is displayed. ::
      
-        cubrid paramdump -b testdb
+        cubrid paramdump -b demodb
 
 .. option:: -S, --SA-mode
 
     This option displays parameter information of the server process in standalone mode. ::
 
-        cubrid paramdump -S testdb
+        cubrid paramdump -S demodb
 
 .. option:: -C, --CS-mode
 
     This option displays parameter information of the server process in client/server mode. ::
 
-        cubrid paramdump -C testdb
+        cubrid paramdump -C demodb
 
 Changing HA Mode, Copying/Applying Logs
 =======================================
 
 **cubrid changemode** utility prints or changes the HA mode.
 
-**cubrid copylogdb** utility mutiplies transaction logs to build the HA environment. This can be executed by **cubrid heartbeat** utility.
+**cubrid copylogdb** utility multiplies transaction logs to build the HA environment. This can be executed by **cubrid heartbeat** utility.
 
 **cubrid applylogdb** utility reads and applies the replicated logs from the transaction logs to build HA environment. This can be executed by **cubrid heartbeat** utility.
 

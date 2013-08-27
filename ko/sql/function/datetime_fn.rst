@@ -83,7 +83,7 @@ ADDDATE, DATE_ADD
      
 .. code-block:: sql
 
-    --it substracts days when argument < 0
+    --it subtracts days when argument < 0
     SELECT SYSDATE, ADDDATE(SYSDATE,INTERVAL -24 HOUR), ADDDATE(SYSDATE, -1);
      
 ::
@@ -714,7 +714,7 @@ FROM_UNIXTIME
 
 .. function:: FROM_UNIXTIME ( unix_timestamp[, format] )
 
-    **FROM_UNIXTIME** 함수는 지정된 인자로부터 'YYYY-MM-DD HH:MM:SS' 형태의 날짜와 시간을 반환한다. 인자로 UNIX의 타임스탬프에 해당하는 **INTEGER** 타입을 입력할 수 있으며, **VARCHAR** 타입을 반환한다. 리턴 값은 현재의 타임 존으로 표현된다.
+    **FROM_UNIXTIME** 함수는 지정된 인자로부터 'YYYY-MM-DD HH:MI:SS' 형태의 날짜와 시간을 반환한다. 인자로 UNIX의 타임스탬프에 해당하는 **INTEGER** 타입을 입력할 수 있으며, **VARCHAR** 타입을 반환한다. 리턴 값은 현재의 타임 존으로 표현된다.
 
     *format* 에 입력한 시간 형식에 맞게 결과를 출력하며, 시간 형식은 :func:`DATE_FORMAT` 의 날짜/시간 형식 2를 따른다.
 
@@ -1358,7 +1358,7 @@ TIME
 
 .. function:: TIME (time)
 
-    **TIME** 함수는 지정된 인자로부터 시간 부분을 추출하여 'HH:MM:SS' 형태의 **VARCHAR** 타입 문자열을 반환한다. 인자로 **TIME**, **TIMESTAMP**, **DATETIME** 타입을 지정할 수 있다.
+    **TIME** 함수는 지정된 인자로부터 시간 부분을 추출하여 'HH:MI:SS' 형태의 **VARCHAR** 타입 문자열을 반환한다. 인자로 **TIME**, **TIMESTAMP**, **DATETIME** 타입을 지정할 수 있다.
 
     :param time: 시간
     :rtype: STRING
@@ -1708,7 +1708,7 @@ UTC_TIME
 
 .. function:: UTC_TIME ()
 
-    **UTC_TIME** 함수는 UTC 시간을 'HH:MM:SS' 형태로 반환한다.
+    **UTC_TIME** 함수는 UTC 시간을 'HH:MI:SS' 형태로 반환한다.
 
     :rtype: STRING
 

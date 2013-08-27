@@ -83,7 +83,7 @@ Use **CREATE VIEW** statement to create a view. For how to write view name, see 
      
 .. code-block:: sql
 
-    --WITH CHECK OPTION doesn’t allow updating column value which violates WHERE clause
+    --WITH CHECK OPTION doesn't allow updating column value which violates WHERE clause
     UPDATE b_view SET phone=NULL;
      
 ::
@@ -285,9 +285,9 @@ You can drop a query defined in the query specification by using the **DROP QUER
 DROP VIEW
 =========
 
-You can drop a view by using the **DROP VIEW** clause. The way to drop a view is the same as to drop a regular table. ::
+You can drop a view by using the **DROP VIEW** clause. The way to drop a view is the same as to drop a regular table.  If you also specify IF EXISTS clause, no error will be happened even if a target view does not exist. ::
 
-    DROP [ VIEW | VCLASS ] view_name [ { ,view_name , ... } ]
+    DROP [ VIEW | VCLASS ] [ IF EXISTS ] view_name [ { ,view_name , ... } ]
     
 *   *view_name* : Specifies the name of a view to be dropped.
 

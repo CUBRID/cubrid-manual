@@ -10,8 +10,13 @@ You can call Java stored functions/procedures from SQL statements or from Java a
 
 The advantages of using Java stored functions/procedures are as follows:
 
-*   **Productivity and usability** : Java stored functions/procedures, once created, can be reused anytime. They can be called from SQL statements or from Java applications using JDBC.
-*   **Excellent interoperability and portability** : Java stored functions/procedures use the Java Virtual Machine. Therefore, they can be used on any system where the Java Virtual Machine is available.
+*   **Productivity and usability**: Java stored functions/procedures, once created, can be reused anytime. They can be called from SQL statements or from Java applications using JDBC.
+*   **Excellent interoperability and portability**: Java stored functions/procedures use the Java Virtual Machine. Therefore, they can be used on any system where the Java Virtual Machine is available.
+
+.. note::
+
+    *   The other languages except Java do not support stored function/procedure. In CUBRID, only Java can implement stored function/procedure.
+    *   Java stored function/procedure is executed in the Java Virtual Machine, not in DB engine; therefore, there is no strength in the performance.
 
 .. _jsp-environment-configuration:
 
@@ -125,7 +130,7 @@ Load the compiled Java class into CUBRID
 
 Load the compiled Java class into CUBRID. ::
 
-    % loadjava demodb
+    % loadjava demodb SpCubrid.class
 
 Publish the loaded Java class
 -----------------------------
@@ -254,12 +259,12 @@ loadjava Utility
 
 To load a compiled Java or JAR (Java Archive) file into CUBRID, use the **loadjava** utility. If you load a Java \*.class or \*.jar file using the **loadjava** utility, the file is moved to the specified database path. ::
 
-    loadjava <option> database-name java-class-file
+    loadjava [option] database-name java-class-file
 
-*   *database-name* : The name of the database where the Java file is to be loaded.
-*   *java-class-file* : The name of the Java class or jar file to be loaded.
-*   <*option*>
-    *   **-y** : Automatically overwrites a class file with the same name, if any. The default value is **no**. If you load the file without specifying the **-y** option, you will be prompted to ask if you want to overwrite the class file with the same name (if any).
+*   *database-name*: The name of the database where the Java file is to be loaded.
+*   *java-class-file*: The name of the Java class or jar file to be loaded.
+*   [*option*]
+    *   **-y**: Automatically overwrites a class file with the same name, if any. The default value is **no**. If you load the file without specifying the **-y** option, you will be prompted to ask if you want to overwrite the class file with the same name (if any).
 
 Loaded Java Class Publish
 =========================
@@ -591,15 +596,23 @@ Before the Java file returns **java.sql.ResultSet**, it is required to cast to t
 
 .. code-block:: java
 
-    public static class JavaSP2 {
+    import java.sql.Connection;
+    import java.sql.DriverManager;
+    import java.sql.ResultSet;
+    import java.sql.Statement;
+     
+    import cubrid.jdbc.driver.CUBRIDConnection;
+    import cubrid.jdbc.driver.CUBRIDResultSet;
+
+    public class JavaSP2 {
         public static ResultSet TResultSet(){
             try {
                 Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-                ((CUBRIDConnection)con).setCharset("euc_kr");
+                ((CUBRIDConnection)conn).setCharset("euc_kr");
                     
                 String sql = "select * from station";
-                Statement stmt=con.createStatement();
+                Statement stmt=conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 ((CUBRIDResultSet)rs).setReturnable();
                     
@@ -616,28 +629,29 @@ In the calling block, you must set the OUT argument with **Types.JAVA_OBJECT**, 
 
 .. code-block:: java
 
-    import java.sql.*;
-
+    import java.sql.CallableStatement;
+    import java.sql.Connection;
+    import java.sql.DriverManager;
+    import java.sql.ResultSet;
+    import java.sql.Types;
+     
     public class TestResultSet{
         public static void main(String[] args) {
             Connection conn = null;
-            Statement stmt= null;
-            int result;
-            int i;
-
+     
             try {
                 Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
-
-                CallableStatement cstmt = con.prepareCall("?=CALL rset()");
+                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:31001:tdemodb:::","","");
+     
+                CallableStatement cstmt = conn.prepareCall("?=CALL rset()");
                 cstmt.registerOutParameter(1, Types.JAVA_OBJECT);
                 cstmt.execute();
                 ResultSet rs = (ResultSet) cstmt.getObject(1);
-                
+     
                 while(rs.next()) {
                     System.out.println(rs.getString(1));
                 }
-                
+     
                 rs.close();
             } catch (Exception e) {
                 e.printStackTrace();

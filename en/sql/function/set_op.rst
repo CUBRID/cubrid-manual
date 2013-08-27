@@ -5,10 +5,24 @@ Set Arithmetic Operators
 SET, MULTISET, LIST
 ===================
 
-To compute union, difference or intersection of collections types (**SET**, **MULTISET**, and **LIST (SEQUENCE)**), you can use +, -, or * operators, respectively. The following table shows a result data type by the operator if collection type is an operand.
+To compute union, difference or intersection of collections types (**SET**, **MULTISET**, and **LIST (SEQUENCE)**), you can use +, -, or * operators, respectively. 
 
-Result Data Type by Operand Type
---------------------------------
+::
+
+    value_expression  set_arithmetic_operator value_expression
+     
+    value_expression :
+    • collection value
+    • NULL
+     
+    set_arithmetic_operator :
+    • + (union)
+    • - (difference)
+    • * (intersection)
+
+The following table shows a result data type by the operator if collection type is an operand.
+
+**Result Data Type by Operand Type**
 
 +-----------------+--------------+--------------+-----------------+
 |                 | SET          | MULTISET     | LIST            |
@@ -37,22 +51,7 @@ Result Data Type by Operand Type
 |                 |              |              | **MULTISET**    |
 +-----------------+--------------+--------------+-----------------+
 
-**Syntax**
-
-::
-
-    value_expression  set_arithmetic_operator value_expression
-     
-    value_expression :
-    • collection value
-    • NULL
-     
-    set_arithmetic_operator :
-    • + (union)
-    • - (difference)
-    • * (intersection)
-
-**Example**
+The following are the examples which execute arithmetic operations with collection types.
 
 .. code-block:: sql
 

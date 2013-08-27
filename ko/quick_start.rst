@@ -25,13 +25,13 @@ Linux 환경 또는 Windows 환경에서 아래와 같은 셸 명령어로 CUBRI
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.0
+    CUBRID 9.2
 
     ++ cubrid server start: success
 
     @ cubrid server status
 
-    Server demodb (rel 9.0, pid 31322)
+    Server demodb (rel 9.2, pid 31322)
 
 CUBRIDService 또는 CUBRID Service Tray
 --------------------------------------
@@ -59,7 +59,7 @@ Windows 환경에서는 다음과 같은 방법으로 CUBRID 서비스를 시작
 **--db-volume-size**, **--log-volume-size** 와 같은 별도의 옵션을 지정하지 않으면 기본적으로 범용 볼륨(generic volume) 512MB, 활성 로그(active log) 512MB, 백그라운드 보관 로그(background archive log) 512MB, 총 1.5GB의 볼륨 파일이 생성된다. ::
 
     % cd testdb
-    % cubrid createdb testdb
+    % cubrid createdb testdb en_US
     % ls -l
 
     -rw------- 1 cubrid dbms 536870912 Jan 11 15:04 testdb

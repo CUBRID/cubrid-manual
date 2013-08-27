@@ -157,48 +157,48 @@ Represents attribute information. Indexes for class_of and attr_name are created
 
 **Data Types Supported by CUBRID**
 
-+-------+-----------+-------+----------+
-| Value | Meaning   | Value | Meaning  |
-+=======+===========+=======+==========+
-| 1     | INTEGER   | 20    | OID      |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 2     | FLOAT     | 22    | NUMERIC  |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 3     | DOUBLE    | 23    | BIT      |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 4     | STRING    | 24    | VARBIT   |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 5     | OBJECT    | 25    | CHAR     |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 6     | SET       | 26    | NCHAR    |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 7     | MULTISET  | 27    | VARNCHAR |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 8     | SEQUENCE  | 31    | BIGINT   |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 9     | ELO       | 32    | DATETIME |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 11    | TIMESTAMP | 33    | BLOB     |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 12    | DATE      | 34    | CLOB     |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 13    | MONETARY  | 35    | ENUM     |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 18    | SHORT     |       |          |   
-|       |           |       |          |
-+-------+-----------+-------+----------+
++-------+-----------+-------+-----------+
+| Value | Meaning   | Value | Meaning   |
++=======+===========+=======+===========+
+| 1     | INTEGER   | 20    | OID       |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 2     | FLOAT     | 22    | NUMERIC   |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 3     | DOUBLE    | 23    | BIT       |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 4     | STRING    | 24    | VARBIT    |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 5     | OBJECT    | 25    | CHAR      |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 6     | SET       | 26    | NCHAR     |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 7     | MULTISET  | 27    | VARNCHAR  |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 8     | SEQUENCE  | 31    | BIGINT    |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 9     | ELO       | 32    | DATETIME  |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 10    | TIME      | 33    | BLOB      |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 11    | TIMESTAMP | 34    | CLOB      |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 12    | DATE      | 35    | ENUM      |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 18    | SHORT     |       |           |   
+|       |           |       |           |
++-------+-----------+-------+-----------+
 
 **Character Sets Supported by CUBRID**
 
@@ -854,31 +854,6 @@ Represents information of classes for which the current user has access authoriz
 | is_reuse_oid_class | VARCHAR(3)    | 'YES' for a REUSE_OID class, and 'NO' otherwise.         |
 +--------------------+---------------+----------------------------------------------------------+
 
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_class (class_name, owner_name, class_type, is_system_class, partitioned, is_reuse_oid_class)
-    AS
-    SELECT c.class_name, CAST(c.owner.name AS VARCHAR(255)),
-        CASE c.class_type WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END,
-        CASE WHEN MOD(c.is_system_class, 2) = 1 THEN 'YES' ELSE 'NO' END,
-        CASE WHEN c.sub_classes IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM _db_partition p WHERE p.class_of = c and p.pname IS NULL), 'NO') END,
-        CASE WHEN MOD(c.is_system_class / 8, 2) = 1 THEN 'YES' ELSE 'NO' END
-    FROM _db_class c
-    WHERE CURRENT_USER = 'DBA' OR
-        {c.owner.name} SUBSETEQ (  
-            SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-            FROM db_user u, TABLE(groups) AS t(g)  
-            WHERE u.name = CURRENT_USER) OR
-        {c} SUBSETEQ (
-            SELECT SUM(SET{au.class_of})  
-            FROM _db_auth au  
-            WHERE {au.grantee.name} SUBSETEQ(  
-                SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})
-                FROM db_user u, TABLE(groups) AS t(g)  
-                WHERE u.name = CURRENT_USER) AND  au.auth_type = 'SELECT');
-
 The following example shows how to retrieve classes owned by the current user.
 
 .. code-block:: sql
@@ -964,28 +939,6 @@ Represents the names of super classes (if any) of the class for which the curren
 | super_class_name   | VARCHAR(255)  | super class name |
 +--------------------+---------------+------------------+
 
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_direct_super_class (class_name, super_class_name)
-    AS
-    SELECT c.class_name, s.class_name 
-    FROM _db_class c, TABLE(c.super_classes) AS t(s) 
-    WHERE CURRENT_USER = 'DBA' OR 
-            {c.owner.name} SUBSETEQ (  
-                    SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-                    FROM db_user u, TABLE(groups) AS t(g)  
-                    WHERE u.name = CURRENT_USER) OR 
-            {c} SUBSETEQ (
-                    SELECT SUM(SET{au.class_of})  
-                    FROM _db_auth au  
-                    WHERE {au.grantee.name} SUBSETEQ (
-                            SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-                            FROM db_user u, TABLE(groups) AS t(g)  
-                            WHERE u.name = CURRENT_USER) AND 
-                                    au.auth_type = 'SELECT');
-
 The following example shows how to retrieve super classes of the *female_event* class (see :ref:`add-superclass`).
 
 .. code-block:: sql
@@ -1027,28 +980,6 @@ Represents SQL definition statements of virtual classes for which the current us
 +--------------------+---------------+-----------------------------------------------+
 | vclass_def         | VARCHAR(4096) | SQL definition statement of the virtual class |
 +--------------------+---------------+-----------------------------------------------+
-
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_vclass (vclass_name, vclass_def)
-    AS
-    SELECT q.class_of.class_name, q.spec
-    FROM _db_query_spec q
-    WHERE CURRENT_USER = 'DBA' OR
-            {q.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {q.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT');
 
 The following example shows how to retrieve SQL definition statements of the *db_class* virtual class.
 
@@ -1104,36 +1035,6 @@ Represents the attribute information of a class for which the current user has a
 +--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | is_nullable        | VARCHAR(3)    | 'NO' if a not null constraint is set, and 'YES' otherwise.                                                                                                                |
 +--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_attribute (
-    attr_name, class_name, attr_type, def_order, from_class_name, from_attr_name, data_type, prec, scale, code_set, domain_class_name, default_value, is_nullable)
-    AS
-    SELECT a.attr_name, c.class_name,
-           CASE WHEN a.attr_type = 0 THEN 'INSTANCE'
-                WHEN a.attr_type = 1 THEN 'CLASS'
-                ELSE 'SHARED' END,
-           a.def_order, a.from_class_of.class_name, a.from_attr_name, t.type_name,
-           d.prec, d.scale, d.code_set, d.class_of.class_name, a.default_value,
-           CASE WHEN a.is_nullable = 0 THEN 'YES' ELSE 'NO' END
-    FROM _db_class c, _db_attribute a, _db_domain d, _db_data_type t
-    WHERE a.class_of = c AND d.object_of = a AND d.data_type = t.type_id AND
-            (CURRENT_USER = 'DBA' OR
-            {c.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {c} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 The following example shows how to retrieve attributes and data types of the *event* class.
 
@@ -1219,35 +1120,6 @@ Among attributes of the class to which the current user has access authorization
 | domain_class_name  | VARCHAR(255)  | Domain class name if the data type of the element is an object                                            |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------+
 
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_attr_setdomain_elm (
-    attr_name, class_name, attr_type,data_type, prec, scale, code_set, domain_class_name)
-    AS
-    SELECT a.attr_name, c.class_name,
-           CASE WHEN a.attr_type = 0 THEN 'INSTANCE'
-                WHEN a.attr_type = 1 THEN 'CLASS'
-                ELSE 'SHARED' END,
-           et.type_name, e.prec, e.scale, e.code_set, e.class_of.class_name
-    FROM _db_class c, _db_attribute a, _db_domain d,
-          TABLE(d.set_domains) AS t(e), _db_data_type et
-    WHERE a.class_of = c AND d.object_of = a AND e.data_type = et.type_id AND
-            (CURRENT_USER = 'DBA' OR
-            {c.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {c} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT')); 
-
 If the set_attr attribute of class D is of a SET (A, B, C) type, the following three records exist.
 
 +---------------+----------------+---------------+---------------+----------+-----------+--------------+-----------------------+
@@ -1297,33 +1169,6 @@ Represents method information of a class for which the current user has access a
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
 | func_name          | VARCHAR(255)  | Name of the C function for the method                                                                                                         |
 +--------------------+---------------+-----------------------------------------------------------------------------------------------------------------------------------------------+
-
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_method (
-    meth_name, class_name, meth_type, from_class_name, from_meth_name, func_name)
-    AS
-     
-    SELECT m.meth_name, m.class_of.class_name,
-           CASE WHEN m.meth_type = 0 THEN 'INSTANCE' ELSE 'CLASS' END,
-           m.from_class_of.class_name, m.from_meth_name, s.func_name
-    FROM _db_method m, _db_meth_sig s
-    WHERE s.meth_of = m AND
-            (CURRENT_USER = 'DBA' OR
-            {m.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {m.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 The following example shows how to retrieve methods of the *db_user* class.
 
@@ -1376,34 +1221,6 @@ Represents the input/output argument information of the method of the class for 
 | domain_class_name  | VARCHAR(255)  | Domain class name if the data type of the argument is an object.                                                                         |
 +--------------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------+
 
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_meth_arg (
-    meth_name, class_name, meth_type,
-    index_of, data_type, prec, scale, code_set, domain_class_name)
-    AS
-    SELECT s.meth_of.meth_name, s.meth_of.class_of.class_name,
-           CASE WHEN s.meth_of.meth_type = 0 THEN 'INSTANCE' ELSE 'CLASS' END,
-           a.index_of, t.type_name, d.prec, d.scale, d.code_set,
-           d.class_of.class_name
-    FROM _db_meth_sig s, _db_meth_arg a, _db_domain d, _db_data_type t
-    WHERE a.meth_sig_of = s AND d.object_of = a AND d.data_type = t.type_id AND
-            (CURRENT_USER = 'DBA' OR
-            {s.meth_of.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {s.meth_of.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
-
 The following example shows how to retrieve input arguments of the method of the *db_user* class.
 
 .. code-block:: sql
@@ -1445,35 +1262,6 @@ If the data type of the input/output argument of the method of the class is a se
 | domain_class_name  | VARCHAR(255)  | Domain class name if the data type of the element is an object                                                                 |
 +--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------+
 
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_meth_arg_setdomain_elm(
-    meth_name, class_name, meth_type,
-    index_of, data_type, prec, scale, code_set, domain_class_name)
-    AS
-    SELECT s.meth_of.meth_name, s.meth_of.class_of.class_name,
-           CASE WHEN s.meth_of.meth_type = 0 THEN 'INSTANCE' ELSE 'CLASS' END,
-           a.index_of, et.type_name, e.prec, e.scale, e.code_set,
-           e.class_of.class_name
-    FROM _db_meth_sig s, _db_meth_arg a, _db_domain d,
-          TABLE(d.set_domains) AS t(e), _db_data_type et
-    WHERE a.meth_sig_of = s AND d.object_of = a AND e.data_type = et.type_id AND
-            (CURRENT_USER = 'DBA' OR
-            {s.meth_of.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {s.meth_of.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
-
 DB_METH_FILE
 ------------
 
@@ -1489,28 +1277,6 @@ Represents information of a file in which the method of the class for which the 
 | from_class_name    | VARCHAR(255)  | Name of the super class in which the method file is defined if the method is inherited, and otherwise |
 |                    |               | **NULL**                                                                                              |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------+
-
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_meth_file (class_name, path_name, from_class_name)
-    AS
-    SELECT f.class_of.class_name, f.path_name, f.from_class_of.class_name
-    FROM _db_meth_file f
-    WHERE (CURRENT_USER = 'DBA' OR
-            {f.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {f.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 DB_INDEX
 --------
@@ -1538,32 +1304,6 @@ Represents information of indexes created for the class for which the current us
 +--------------------+---------------+-------------------------------------------------+
 | have_function      | VARCHAR(3)    | 'YES' for function based and 'NO' otherwise.    |
 +--------------------+---------------+-------------------------------------------------+
-
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_index (index_name, is_unique, is_reverse, class_name, key_count, is_primary_key, is_foreign_key, filter_expression, have_function)
-    AS
-    SELECT i.index_name, CASE WHEN i.is_unique = 0 THEN 'NO' ELSE 'YES' END,
-    CASE WHEN i.is_reverse = 0 THEN 'NO' ELSE 'YES' END, i.class_of.class_name,
-    i.key_count,
-    CASE WHEN i.is_primary_key = 0 THEN 'NO' ELSE 'YES' END, CASE WHEN i.is_foreign_key = 0 THEN 'NO' ELSE 'YES' END, i.filter_expression,
-    CASE WHEN i.have_function = 0 THEN 'NO' ELSE 'YES' END
-    FROM _db_index i
-    WHERE (CURRENT_USER = 'DBA' OR
-            {i.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {i.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 The following example shows how to retrieve index information of the class.
 
@@ -1619,35 +1359,6 @@ Represents the key information of indexes created for the class for which the cu
 | func               | VARCHAR(255)  | Functional expression of function based index                               |
 +--------------------+---------------+-----------------------------------------------------------------------------+
 
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_index_key (index_name, class_name, key_attr_name, key_order, asc_desc, key_prefix_length, func)
-    AS
-    SELECT k.index_of.index_name, k.index_of.class_of.class_name, k.key_attr_name, k.key_order, 
-        CASE k.asc_desc 
-            WHEN 0 THEN 'ASC' 
-            WHEN 1 THEN 'DESC' 
-            ELSE 'UNKN' END, 
-        k.key_prefix_length, k.func 
-    FROM _db_index_key k 
-    WHERE CURRENT_USER = 'DBA' OR 
-        {k.index_of.class_of.owner.name} 
-        SUBSETEQ (  
-            SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-            FROM db_user u, TABLE(groups) AS t(g)  
-            WHERE u.name = CURRENT_USER) OR {k.index_of.class_of} 
-                SUBSETEQ (  
-                    SELECT SUM(SET{au.class_of})  
-                    FROM _db_auth au  
-                    WHERE {au.grantee.name} SUBSETEQ (  
-                        SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})
-                        FROM db_user u, TABLE(groups) AS t(g)
-                        WHERE u.name = CURRENT_USER
-                        ) AND  au.auth_type = 'SELECT'
-                    );
-
 The following example shows how to retrieve index key information of the class.
 
 .. code-block:: sql
@@ -1687,31 +1398,6 @@ Represents authorization information of classes for which the current user has a
 +--------------------+---------------+-----------------------------------------------------------------------------------------+
 | is_grantable       | VARCHAR(3)    | 'YES' if authorization for the class can be granted to other users, and 'NO' otherwise. |
 +--------------------+---------------+-----------------------------------------------------------------------------------------+
-
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_auth (grantor_name, grantee_name, class_name, auth_type, is_grantable )
-    AS
-    SELECT CAST(a.grantor.name AS VARCHAR(255)),
-            CAST(a.grantee.name AS VARCHAR(255)),
-            a.class_of.class_name, a.auth_type,
-            CASE WHEN a.is_grantable = 0 THEN 'NO' ELSE 'YES' END
-    FROM _db_auth a
-    WHERE (CURRENT_USER = 'DBA' OR
-            {a.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {a.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 The following example how to retrieve authorization information of the classes whose names begin with *db_a*.
 
@@ -1755,33 +1441,6 @@ Represents information of a trigger that has the class for which the current use
 | action_time        | INTEGER       | 1 for BEFORE, 2 for AFTER, and 3 for DEFERRED.                                                                                |
 +--------------------+---------------+-------------------------------------------------------------------------------------------------------------------------------+
 
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_trig (
-    trigger_name, target_class_name, target_attr_name, target_attr_type, action_type, action_time)
-    AS
-    SELECT CAST(t.name AS VARCHAR(255)), c.class_name,
-            CAST(t.target_attribute AS VARCHAR(255)),
-            CASE WHEN t.target_class_attribute = 0 THEN 'INSTANCE' ELSE 'CLASS' END,
-            t.action_type, t.action_time
-    FROM _db_class c, db_trigger t
-    WHERE t.target_class = c.class_of AND
-            (CURRENT_USER = 'DBA' OR
-            {c.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {c} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
-
 DB_PARTITION
 ------------
 
@@ -1806,44 +1465,6 @@ Represents information of partitioned classes for which the current user has acc
 |                      |               | **NULL**                |
 |                      |               | LIST - value list       |
 +----------------------+---------------+-------------------------+
-
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_partition
-    (class_name, partition_name, partition_class_name, partition_type, partition_expr, partition_values)
-    AS
-    SELECT p.class_of.class_name AS class_name, p.pname AS partition_name, 
-        p.class_of.class_name + '__p__' + p.pname AS partition_class_name, 
-        CASE WHEN p.ptype = 0 THEN 'HASH'
-            WHEN p.ptype = 1 THEN 'RANGE' 
-            ELSE 'LIST' END AS partition_type, 
-        TRIM(SUBSTRING(pi.pexpr FROM 8 FOR (POSITION(' FROM ' IN pi.pexpr)-8))) AS partition_expression, 
-        p.pvalues AS partition_values 
-    FROM _db_partition p, 
-        (select * from _db_partition sp where sp.class_of =  p.class_of AND sp.pname is null) pi 
-    WHERE p.pname is not null AND 
-        (   CURRENT_USER = 'DBA' 
-            OR 
-            {p.class_of.owner.name} SUBSETEQ 
-                ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-                  FROM db_user u, TABLE(groups) AS t(g)  
-                  WHERE u.name = CURRENT_USER
-                ) 
-                OR 
-                {p.class_of} SUBSETEQ 
-                    ( SELECT SUM(SET{au.class_of})  
-                      FROM _db_auth au  
-                      WHERE {au.grantee.name} SUBSETEQ 
-                        ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-                          FROM db_user u, TABLE(groups) AS t(g)  
-                          WHERE u.name = CURRENT_USER
-                        ) 
-                        AND 
-                        au.auth_type = 'SELECT'
-                    )
-        );
 
 The following example shows how to retrieve the partition information currently configured for the :ref:`participant2 <range-participant2-table>` class.
 
@@ -1881,26 +1502,6 @@ Represents information of Java stored procedure for which the current user has a
 | owner              | VARCHAR(256)  | Owner                                         |
 +--------------------+---------------+-----------------------------------------------+
 
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_stored_procedure
-    (sp_name, sp_type, return_type, arg_count, lang, target, owner)
-    AS
-    SELECT sp.sp_name,
-                CASE sp.sp_type   WHEN 1 THEN 'PROCEDURE'  
-                ELSE 'FUNCTION' END,
-                CASE WHEN sp.return_type = 0 THEN 'void'  
-                     WHEN sp.return_type = 28 THEN 'CURSOR'  
-                ELSE ( SELECT dt.type_name
-                       FROM _db_data_type dt
-                       WHERE sp.return_type = dt.type_id) END,
-               sp.arg_count,
-               CASE sp.lang   WHEN 1 THEN 'JAVA'  
-               ELSE '' END, sp.target, sp.owner.name
-    FROM _db_stored_procedure sp;
-
 The following example shows how to retrieve Java stored procedures owned by the current user.
 
 .. code-block:: sql
@@ -1933,21 +1534,6 @@ Represents argument information of Java stored procedure for which the current u
 +--------------------+---------------+---------------------------+
 |  mode              | VARCHAR(6)    | Mode (IN, OUT, INOUT)     |
 +--------------------+---------------+---------------------------+
-
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_stored_procedure_args (sp_name, index_of, arg_name, data_type, mode)
-    AS
-    SELECT sp.sp_name, sp.index_of, sp.arg_name,
-                CASE sp.data_type   WHEN 28 THEN 'CURSOR'  
-                ELSE ( SELECT dt.type_name FROM _db_data_type dt
-                       WHERE sp.data_type = dt.type_id) END,
-                CASE WHEN sp.mode = 1 THEN 'IN' WHEN sp.mode = 2 THEN 'OUT'  
-                ELSE 'INOUT' END
-    FROM _db_stored_procedure_args sp
-    ORDER BY sp.sp_name, sp.index_of;
 
 The following example shows how to retrieve arguments the 'phone_info' Java stored procedure in the order of the arguments.
 
@@ -1988,40 +1574,6 @@ The information on collation.
 | uca_strength       | VARCHAR(255)  | Weight strength                                                               |
 |                    |               | (Not applicable, Primary, Secondary, Tertiary, Quaternary, Identity, Unknown) |
 +--------------------+---------------+-------------------------------------------------------------------------------+
-
-**Definition**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_collation (coll_id, coll_name, charset_name, is_builtin, has_expansions, contractions)
-    AS
-    SELECT c.coll_id, c.coll_name,
-    CASE c.charset_id
-        WHEN 3 THEN 'iso8859-1'
-        WHEN 5 THEN 'utf-8'
-        WHEN 4 THEN 'ksc-euc'  
-        WHEN 0 THEN 'ascii'  
-        WHEN 1 THEN 'raw-bits'  
-        WHEN 2 THEN 'raw-bytes'  
-        WHEN -1 THEN 'NONE'  
-    ELSE 'OTHER' END,
-    CASE c.built_in  
-        WHEN 0 THEN 'No'  
-        WHEN 1 THEN 'Yes'  
-    ELSE 'ERROR' END,
-    CASE c.expansions  
-        WHEN 0 THEN 'No'  
-        WHEN 1 THEN 'Yes'  
-    ELSE 'ERROR' END, c.contractions,
-    CASE c.uca_strength  
-        WHEN 0 THEN 'Not applicable'  
-        WHEN 1 THEN 'Primary'  
-        WHEN 2 THEN 'Secondary'  
-        WHEN 3 THEN 'Tertiary'
-        WHEN 4 THEN 'Quaternary'  
-        WHEN 5 THEN 'Identity'  
-    ELSE 'Unknown' END
-    FROM _db_collation c ORDER BY c.coll_id;
 
 Catalog Class/Virtual Class Authorization
 =========================================

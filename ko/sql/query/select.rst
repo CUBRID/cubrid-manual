@@ -10,7 +10,7 @@ SELECT
         [ WHERE <search_condition> ]
         [ GROUP BY {col_name | expr} [ ASC | DESC ],...[ WITH ROLLUP ] ]
         [ HAVING  <search_condition> ]
-        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ FOR <orderby_for_condition> ] ]
+        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ] [ FOR <orderby_for_condition> ] ]
         [ LIMIT [offset,] row_count ]
         [ USING INDEX { index name [,index_name,...] | NONE }]
      
@@ -120,7 +120,7 @@ SELECT
       'Belgium,  Antwerp'
       'Canada,  Montreal'
       'England,  London'
-  
+      
 FROM 절
 =======
 
@@ -195,9 +195,10 @@ FROM 절
 
 유도 테이블의 각 레코드는 **FROM** 절에 주어진 부질의의 결과로부터 만들어진다. 부질의로부터 생성되는 유도 테이블은 임의의 개수의 칼럼과 레코드를 가질 수 있다. ::
 
-    FROM (subquery) [ AS ] derived_table_name [( column_name [ {, column_name } ... ] )]
+    FROM (subquery) [ AS ] [ derived_table_name [( column_name [ {, column_name } ... ] )]]
 
 *   *column_name* 파라미터의 개수와 *subquery* 에서 만들어지는 칼럼의 개수는 일치해야 한다.
+*   *derived_table_name*\ 을 생략할 수 있다.
 
 다음은 한국이 획득한 금메달 개수와 일본이 획득한 은메달 개수를 더한 값을 조회하는 예제이다. 이 예제는 유도 테이블을 이용하여 부질의의 중간 결과를 모으고 하나의 결과로 처리하는 방법을 보여준다. 이 질의는 *nation_code* 칼럼이 'KOR'인 *gold* 값과 *nation_code* 칼럼이 'JPN'인 *silver* 값의 전체 합을 반환한다.
 
@@ -404,7 +405,7 @@ ORDER BY 절
 **ORDER BY** 절은 질의 결과를 오름차순 또는 내림차순으로 정렬하며, **ASC** 또는 **DESC** 와 같은 정렬 옵션을 명시하지 않으면 오름차순으로 정렬한다. **ORDER BY** 절을 지정하지 않으면, 조회되는 레코드의 순서는 질의에 따라 다르다. ::
 
     SELECT ...
-    ORDER BY {col_name | expr | position } [ASC | DESC], ...]
+    ORDER BY { col_name | expr | position } [ ASC | DESC ], ...] [ NULLS { FIRST | LAST } ]
         [ FOR <orderby_for_condition> ] ]
      
     <orderby_for_condition> ::=
@@ -415,6 +416,8 @@ ORDER BY 절
 *   *col_name* | *expr* | *position* : 정렬 기준이 되는 칼럼 이름, 표현식, 별칭 또는 칼럼 위치를 지정한다. 하나 이상의 값을 지정할 수 있으며 각 항목은 쉼표로 구분한다. **SELECT** 칼럼 리스트에 명시되지 않은 칼럼도 지정할 수 있다.
 
 *   [ **ASC** | **DESC** ] : **ASC** 은 오름차순, **DESC** 은 내림차순으로 정렬하며, 정렬 옵션이 명시되지 않으면 오름차순으로 정렬한다.
+
+*   [ **NULLS** { **FIRST** | **LAST** } ] : **NULLS FIRST**\ 는 NULL을 앞에 정렬하며, **NULLS LAST**\ 는 NULL을 뒤에 정렬한다. 이 구문이 생략될 경우 **ASC**\ 는 NULL을 앞에 정렬하며, **DESC**\ 는 NULL을 뒤에 정렬한다.
 
 .. code-block:: sql
 
@@ -473,6 +476,54 @@ ORDER BY 절
               301     3.000000000000000e+02
               501     1.750000000000000e+02
 
+다음은 ORDER BY 절 뒤에 NULLS FIRST, NULLS LAST 구문을 지정하는 예제이다.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (a INT, b VARCHAR);
+
+    INSERT INTO tbl VALUES
+    (1,NULL), (2,NULL), (3,'AB'), (4,NULL), (5,'AB'), 
+    (6,NULL), (7,'ABCD'), (8,NULL), (9,'ABCD'), (10,NULL);
+
+.. code-block:: sql
+    
+    SELECT * FROM tbl ORDER BY b NULLS FIRST;
+
+::
+
+                a  b
+    ===================================
+                1  NULL
+                2  NULL
+                4  NULL
+                6  NULL
+                8  NULL
+               10  NULL
+                3  'ab'
+                5  'ab'
+                7  'abcd'
+                9  'abcd'
+    
+.. code-block:: sql
+
+    SELECT * FROM tbl ORDER BY b NULLS LAST;
+
+::
+
+                a  b
+    ===================================
+                3  'ab'
+                5  'ab'
+                7  'abcd'
+                9  'abcd'
+                1  NULL
+                2  NULL
+                4  NULL
+                6  NULL
+                8  NULL
+               10  NULL
+
 .. _limit-clause:
 
 LIMIT 절
@@ -517,6 +568,11 @@ LIMIT 절
     SELECT t1.*
     FROM (SELECT * FROM sales_tbl AS t2 WHERE sales_amount > 100 LIMIT 5) AS t1
     LIMIT 1,3;
+    
+    -- above query and below query shows the same result
+    SELECT t1.*
+    FROM (SELECT * FROM sales_tbl AS t2 WHERE sales_amount > 100 LIMIT 5) AS t1
+    LIMIT 3 OFFSET 1;
     
 ::
 

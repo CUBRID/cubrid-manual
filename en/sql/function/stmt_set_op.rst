@@ -7,29 +7,6 @@ UNION, DIFFERENCE, INTERSECTION
 
 Statement set operators are used to get union, difference or intersection on the result of more than one query statement specified as an operand. Note that the data types of the data to be retrieved from the target tables of the two query statements must be identical or implicitly castable.
 
-The following table shows statement set operators supported by CUBRID and their examples.
-
-**Statement Set Operators Supported by CUBRID**
-
-+----------------------------+-----------------------------+---------------------------------------------------------+
-| Statement Set Operator     | Description                 | Note                                                    |
-+============================+=============================+=========================================================+
-| **UNION**                  | Union                       | Outputs all instance results containing duplicates with |
-|                            | Duplicates are not allowed. | **UNION ALL**                                           |
-+----------------------------+-----------------------------+---------------------------------------------------------+
-| **DIFFERENCE**             | Difference                  | Same as the                                             |
-|                            | Duplicates are not allowed. | **EXCEPT** operator.                                    |
-|                            |                             | Outputs all instance results containing duplicates with |
-|                            |                             | **DIFFERENCE ALL**.                                     |
-+----------------------------+-----------------------------+---------------------------------------------------------+
-| **INTERSECTION**           | Intersection                | Same as the                                             |
-|                            | Duplicates are not allowed. | **INTERSECTION** operator.                              |
-|                            |                             | Outputs all instance results containing duplicates with |
-|                            |                             | **INTERSECTION ALL**.                                   |
-+----------------------------+-----------------------------+---------------------------------------------------------+
-
-**Syntax**
-
 ::
 
     query_term statement_set_operator [qualifier] query_term
@@ -48,7 +25,28 @@ The following table shows statement set operators supported by CUBRID and their 
     • DIFFERENCE (difference)
     • INTERSECT | INTERSECTION (intersection)
 
-**Example**
+The following table shows statement set operators supported by CUBRID.
+
+**Statement Set Operators**
+
++----------------------------+-----------------------------+---------------------------------------------------------+
+| Statement Set Operator     | Description                 | Note                                                    |
++============================+=============================+=========================================================+
+| **UNION**                  | Union                       | Outputs all instance results containing duplicates with |
+|                            | Duplicates are not allowed. | **UNION ALL**                                           |
++----------------------------+-----------------------------+---------------------------------------------------------+
+| **DIFFERENCE**             | Difference                  | Same as the                                             |
+|                            | Duplicates are not allowed. | **EXCEPT** operator.                                    |
+|                            |                             | Outputs all instance results containing duplicates with |
+|                            |                             | **DIFFERENCE ALL**.                                     |
++----------------------------+-----------------------------+---------------------------------------------------------+
+| **INTERSECTION**           | Intersection                | Same as the                                             |
+|                            | Duplicates are not allowed. | **INTERSECTION** operator.                              |
+|                            |                             | Outputs all instance results containing duplicates with |
+|                            |                             | **INTERSECTION ALL**.                                   |
++----------------------------+-----------------------------+---------------------------------------------------------+
+
+The following are the examples which execute queries with statement set operators.
 
 .. code-block:: sql
 

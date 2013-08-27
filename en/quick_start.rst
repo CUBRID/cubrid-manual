@@ -25,13 +25,13 @@ The following shell command can be used to start the CUBRID service and the *dem
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.0
+    CUBRID 9.2
 
     ++ cubrid server start: success
 
     @ cubrid server status
 
-    Server demodb (rel 9.0, pid 31322)
+    Server demodb (rel 9.2, pid 31322)
 
 CUBRIDService or CUBRID Service Tray
 ------------------------------------
@@ -56,7 +56,7 @@ Creating Databases
 You can create databases by using the **cubrid createdb** utility and execute it where database volumes and log volumes are located. If you do not specify additional options such as **--db-volume-size** or **--log-volume-size**, 1.5 GB volume files are created by default (generic volume is set to 512 MB, active log is set to 512 MB, and background archive log is set to 512 MB). ::
 
     % cd testdb
-    % cubrid createdb testdb
+    % cubrid createdb testdb en_US
     % ls -l
 
     -rw------- 1 cubrid dbms 536870912 Jan 11 15:04 testdb

@@ -83,7 +83,7 @@ ADDDATE, DATE_ADD
      
 .. code-block:: sql
 
-    --it substracts days when argument < 0
+    --it subtracts days when argument < 0
     SELECT SYSDATE, ADDDATE(SYSDATE,INTERVAL -24 HOUR), ADDDATE(SYSDATE, -1);
      
 ::
@@ -714,7 +714,7 @@ FROM_UNIXTIME
 
 .. function:: FROM_UNIXTIME ( unix_timestamp[, format] )
 
-    The **FROM_UNIXTIME** function returns the date and time in the format of 'YYYY-MM-DD HH:MM:SS.' You can specify **INTEGER** type that corresponds to the UNIX timestamp; the value is returned in **VARCHAR** type and is displayed in the current time zone.
+    The **FROM_UNIXTIME** function returns the date and time in the format of 'YYYY-MM-DD HH:MI:SS.' You can specify **INTEGER** type that corresponds to the UNIX timestamp; the value is returned in **VARCHAR** type and is displayed in the current time zone.
 
     It displays the result according to the format that you specified, and the time *format* format follows the Date/Time Format 2 table of :func:`DATE_FORMAT`.
 
@@ -1358,7 +1358,7 @@ TIME
 
 .. function:: TIME (time)
 
-    The **TIME** function extracts the time part from specified argument and returns the **VARCHAR** type string in the 'HH:MM:SS' format. You can specify the **TIME**, **TIMESTAMP** and **DATETIME** types.
+    The **TIME** function extracts the time part from specified argument and returns the **VARCHAR** type string in the 'HH:MI:SS' format. You can specify the **TIME**, **TIMESTAMP** and **DATETIME** types.
 
     :param time: Time
     :rtype: STRING
@@ -1708,7 +1708,7 @@ UTC_TIME
 
 .. function:: UTC_TIME ()
 
-    The **UTC_TIME** function returns the UTC time in 'HH:MM:SS' format.
+    The **UTC_TIME** function returns the UTC time in 'HH:MI:SS' format.
 
     :rtype: STRING
 

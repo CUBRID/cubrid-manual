@@ -38,13 +38,16 @@ The following diagram illustrates the CUBRID database volume structure. As you c
 
 .. image:: /images/image2.png
 
-**Permanent Volume**
+For commands to create, add or delete the database volume, see :ref:`db-create-add-delete`.
+
+Permanent Volume
+^^^^^^^^^^^^^^^^
 
 Permanent volume is a database volume that exists permanently once it is created. Its types include generic, data, temp, index, control, active log and archive log.
 
 **Generic Volume**
 
-For efficient management, the volume type to be added to the database can be specified as one of the followings: data, temp or index. If data usage is not specified, it is specified as a generic volume.
+For efficient management, the volume type to be added to the database can be specified as one of the following: data, temp or index. If data usage is not specified, it is specified as a generic volume and it stores data or index.
 
 **Data Volume**
 
@@ -77,11 +80,11 @@ Index volume is a space that holds the index information for query processing or
 
 The control file contains the volume, backup and log information in the database.
 
-*   **Volume Information** : The information that includes names, locations and internal volume identifiers of all the volumes in the database. When the database restarts, the CUBRID reads the volume information control file. It records a new entry to that file when a new database volume is added.
+*   **Volume Information**: The information that includes names, locations and internal volume identifiers of all the volumes in the database. When the database restarts, the CUBRID reads the volume information control file. It records a new entry to that file when a new database volume is added.
 
-*   **Backup Information** : Locations of all the backups for data, index, and generic volumes are recorded to a backup information control file. This control file is maintained where the log files are managed.
+*   **Backup Information**: Locations of all the backups for data, index, and generic volumes are recorded to a backup information control file. This control file is maintained where the log files are managed.
 
-*   **Log Information** : This information contains names of all active and archive logs. With the log information control file, you can verify the archive log information. The log information control file is created and managed at the same location as the log files.
+*   **Log Information**: This information contains names of all active and archive logs. With the log information control file, you can verify the archive log information. The log information control file is created and managed at the same location as the log files.
 
 Control files include the information about locations of database volumes, backups and logs. Since these files will be read when the database restarts, users must not modify them arbitrarily.
 
@@ -91,7 +94,7 @@ Active log is a log that contains recent changes to the database. If a problem o
 
 **Archive Log**
 
-Archive log is a volume to store logs continuously created after exhausting available active log space that contains recent changes. If the value of system parameter **log_max_archives** is larger than 0, the archive log volume will be generated only after exhausting available active log volume space. The initial value is set to 0 when installing CUBRID. The number of archive log files are kept on the storage by setting the value of **log_max_archives**. The unnecessary archive log files should be deleted for getting the free space by the configuration of log_max_archives, but this value should be set properly to use for restoring the database.
+Archive log is a volume to store logs continuously created after exhausting available active log space that contains recent changes. If the value of system parameter **log_max_archives** is larger than 0, the archive log volume will be generated only after exhausting available active log volume space. The initial value is set to 0 when installing CUBRID. The number of archive log files is kept on the storage by setting the value of **log_max_archives**. The unnecessary archive log files should be deleted for getting the free space by the configuration of log_max_archives, but this value should be set properly to use for restoring the database.
 
 To get more information on the above, see :ref:`managing-archive-logs`.
 
@@ -99,7 +102,8 @@ To get more information on the above, see :ref:`managing-archive-logs`.
 
 Background archive log is a volume used in the background with log archiving temporarily before creating archive logs. It is created as the same volume size as active log and stored.
 
-**Temporary Volume**
+Temporary Volume
+^^^^^^^^^^^^^^^^
 
 Temporary volume has the opposite meaning to the permanent volume. That is, the temporary volume is a storage created only when the accumulated data exceeds the space specified by the user as the permanent volume. The temporary volume is destroyed when the server process terminates. One of such volumes created or destroyed temporarily is the temporary temp volume.
 
@@ -109,15 +113,16 @@ Temporary temp volume is a temporary volume created temporarily by the system af
 
 **DBA** should consider space where temporary temp volume can be created when creating a database. Once temporary temp volume is created, it is maintained until a database restarts and its size cannot be reduced. It is recommended to make temporary temp volume automatically delete by restarting a database if its size is too big.
 
-*   **File name of the temporary temp volume** : The file name of the temporary temp volume of CUBRID has the format of *db_name*\ **_t**\ *num*, where *db_name* is the database name and *num* is the volume identifier. The volume identifier is decremented by 1 from 32766.
+*   **File name of the temporary temp volume**: The file name of the temporary temp volume of CUBRID has the format of *db_name*\ **_t**\ *num*, where *db_name* is the database name and *num* is the volume identifier. The volume identifier is decremented by 1 from 32766.
 
-*   **Configuring the temporary temp volume size** : The number of temporary temp volumes to be created is determined by the system depending on the space size needed for processing transactions. However, users can limit the temporary temp volume size by configuring the **temp_file_max_size_in_pages** parameter value in the system parameter configuration file (**cubrid.conf**). The default value is -1, which means it can be created as long as free space is available. If the **temp_file_max_size_in_pages** parameter value is configured to 0, the temporary temp volume will not be created even after exhausting the permanent temp volume.
+*   **Configuring the temporary temp volume size**: The number of temporary temp volumes to be created is determined by the system depending on the space size needed for processing transactions. However, users can limit the temporary temp volume size by configuring the **temp_file_max_size_in_pages** parameter value in the system parameter configuration file (**cubrid.conf**). The default value is -1, which means it can be created as long as free space is available. If the **temp_file_max_size_in_pages** parameter value is configured to 0, the temporary temp volume will not be created even after exhausting the permanent temp volume.
 
-*   **Configuring storing location of the temporary temp volume** : By default, the temporary temp volume is created where the first database volume was created. However, you can specify a different directory to store the temporary temp volume by configuring the **temp_volume_path** parameter value.
+*   **Configuring storing location of the temporary temp volume**: By default, the temporary temp volume is created where the first database volume was created. However, you can specify a different directory to store the temporary temp volume by configuring the **temp_volume_path** parameter value.
 
-*   **Deleting the temporary temp volume** : The temporary temp volume exists temporarily only while the database is running. Therefore, you must not delete the temporary temp volume when running servers. The temporary temp volume is deleted if database servers are normally terminated while it is deleted when the servers restart if database servers are abnormally terminated.
+*   **Deleting the temporary temp volume**: The temporary temp volume exists temporarily only while the database is running. Therefore, you must not delete the temporary temp volume when running servers. The temporary temp volume is deleted if database servers are normally terminated while it is deleted when the servers restart if database servers are abnormally terminated.
 
-**Backup Volume**
+Backup Volume
+^^^^^^^^^^^^^
 
 Backup volume is a database snapshot; based on such backup and log volumes, you can restore transactions to a certain point of time.
 
@@ -183,7 +188,7 @@ CUBRID provides various Application Programming Interfaces (APIs). The following
 
 All interface modules access the database server through the broker. The broker is a middleware that allows various application clients to connect to the database server. When it receives a request from an interface module, it calls a native C API provided by the database server's client library.
 
-You can find the latest information on interface modules, visit the Web site at `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_ .
+You can find the latest information on interface modules; visit the Web site at `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_ .
 
 CUBRID Characteristics
 ======================
@@ -253,9 +258,9 @@ To address this issue, CUBRID introduces the new concept of the Click Counter th
 
 For the relational data model, it is not allowed that a single column has multiple values. In CUBRID, however, you can create a column with several values. For this purpose, collection data types are provided in CUBRID. The collection data type is mainly divided into **SET**, **MULTISET** and **LIST**; the types are distinguished by duplicated availability and order.
 
-*   **SET** : A collection type that does not allow the duplication of elements. Elements are stored without duplication after being sorted regardless of their order of entry.
-*   **MULTISET** : A collection type that allows the duplication of elements. The order of entry is not considered.
-*   **LIST** : A collection type that allows the duplication of elements. Unlike with **SET** and **MULTISET**, the order of entry is maintained.
+*   **SET**: A collection type that does not allow the duplication of elements. Elements are stored without duplication after being sorted regardless of their order of entry.
+*   **MULTISET**: A collection type that allows the duplication of elements. The order of entry is not considered.
+*   **LIST**: A collection type that allows the duplication of elements. Unlike with **SET** and **MULTISET**, the order of entry is maintained.
 
 **Inheritance**
 

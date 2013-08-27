@@ -174,7 +174,7 @@ The following example shows how to use a statement event. If you define a statem
     BEFORE STATEMENT UPDATE ON history(score)
     EXECUTE PRINT 'There was an update on history table';
 
-.. note:
+.. note::
 
     *   You must specify the event target when you define an instance or statement event as the event type.
     *   **COMMIT** and **ROLLBACK** cannot have an event target.
@@ -244,7 +244,7 @@ The following example shows how to use the **SELECT** statement in an expression
     IF 1000 >  (SELECT COUNT(*) FROM participant)
     EXECUTE REJECT;
 
-.. note:
+.. note::
 
     The expression given in the trigger condition may cause side effects on the database if a method is called while the condition is performed. A trigger condition must be constructed to avoid unexpected side effects in the database.
 
@@ -308,7 +308,7 @@ The following example shows how to define an action when a trigger is created. T
     IF new.gold < 0 OR new.silver < 0 OR new.bronze < 0
     EXECUTE REJECT;
 
-.. note:
+.. note::
 
     *   Trigger may fall into an infinite loop when you use **INSERT** in an action of a trigger where an **INSERT** event is defined.
     *   If a trigger where an **UPDATE** event is defined runs on a partitioned table, you must be careful because the defined partition can be broken or unintended malfunction may occur. To prevent such situation, CUBRID outputs an error so that the **UPDATE** causing changes to the running partition is not executed. Trigger may fall into an infinite loop when you use **UPDATE** in an action of a trigger where an **UPDATE** event is defined.
@@ -345,7 +345,7 @@ The following example shows how to create the medal_trig trigger and then change
     ALTER TRIGGER medal_trig STATUS INACTIVE;
     ALTER TRIGGER medal_trig PRIORITY 0.7;
 
-.. note:
+.. note::
 
     *   Only one *trigger_option* can be specified in a single **ALTER TRIGGER** statement.
     *   To change a table trigger, you must be the trigger owner or granted the **ALTER** authorization on the table where the trigger belongs.
@@ -366,7 +366,7 @@ The following example shows how to drop the medal_trig trigger.
 
     DROP TRIGGER medal_trig;
 
-.. note:
+.. note::
 
     *   A user trigger (i.e. the trigger event is **COMMIT** or **ROLLBACK**) can be seen and dropped only by the owner.
     *   Only one trigger can be dropped by a single **DROP TRIGGER** statement. A table trigger can be dropped by a user who has an **ALTER** authorization on the table.
@@ -385,7 +385,7 @@ You can change a trigger name by using the **TRIGGER** reserved word in the **RE
 
     RENAME TRIGGER medal_trigger AS medal_trig;
 
-.. note:
+.. note::
 
     *   A trigger name must be unique among all trigger names. The name of a trigger can be the same as the table name in the database.
     *   To rename a table trigger, you must be the trigger owner or granted the **ALTER** authorization on the table where the trigger belongs. A user trigger can only be renamed by its user.
@@ -432,7 +432,7 @@ Granting Trigger Authorization
 
 Trigger authorization is not granted explicitly. Authorization on the table trigger is automatically granted to the user if the authorization is granted on the event target table described in the trigger definition. In other words, triggers that have table targets (**INSERT**, **UPDATE**, etc.) are seen by all users. User triggers (**COMMIT** and **ROLLBACK**) are seen only by the user who defined the triggers. All authorizations are automatically granted to the trigger owner.
 
-.. note:
+.. note::
 
     *   To define a table trigger, you must have an **ALTER** authorization on the table.
     *   To define a user trigger, the database must be accessed by a valid user.

@@ -3,7 +3,7 @@ CCI API 레퍼런스
 
 .. c:function::    int cci_bind_param (int req_handle, int index, T_CCI_A_TYPE a_type, void *value, T_CCI_U_TYPE u_type, char flag)
     
-    prepared statement에서 *bind* 변수에 데이터를 바인딩하기 위하여 사용되는 함수이다. 이때, 주어진 *a_type* 의 *value* 의 값을 실제 바인딩되어야 하는 타입으로 변환하여 저장한다. 이후, :c:func:`cci_execute` 가 호출될 때 저장된 데이터가 서버로 전송된다. 같은 *index* 에 대해서 여러 번 :c:func:`cci_bind_param` 을 호출할 경우 마지막으로 설정한 값이 유효하다. 
+    prepared statement에서 *bind* 변수에 데이터를 바인딩하기 위하여 사용되는 함수이다. 이때, 주어진 *a_type* 의 *value* 의 값을 실제 바인딩되어야 하는 타입으로 변환하여 저장한다. 이후, :c:func:`cci_execute`\ 가 호출될 때 저장된 데이터가 서버로 전송된다. 같은 *index* 에 대해서 여러 번 :c:func:`cci_bind_param`\ 을 호출할 경우 마지막으로 설정한 값이 유효하다. 
 
     :param req_handle: (IN) prepared statement의 요청 핸들.
     :param index: (IN) 바인딩될 위치이며, 1부터 시작.
@@ -19,7 +19,7 @@ CCI API 레퍼런스
         *   **CCI_ER_ATYPE**
         *   **CCI_ER_NO_MORE_MEMORY**
         
-    데이터베이스에 **NULL** 을 바인딩하려면 다음의 두 가지 중 하나를 설정한다.
+    데이터베이스에 **NULL**\ 을 바인딩하려면 다음의 두 가지 중 하나를 설정한다.
         
     *   *value* 값을 **NULL** 포인터로 설정
     *   *u_type* 을 :c:macro:`CCI_U_TYPE_NULL`\로 설정
@@ -99,9 +99,6 @@ CCI API 레퍼런스
     | **CCI_U_TYPE_SHORT**     | **CCI_A_TYPE_INT**    |
     |                          |                       |
     +--------------------------+-----------------------+
-    | **CCI_U_TYPE_MONETARY**  | **CCI_A_TYPE_DOUBLE** |
-    |                          |                       |
-    +--------------------------+-----------------------+
     | **CCI_U_TYPE_FLOAT**     | **CCI_A_TYPE_FLOAT**  |
     |                          |                       |
     +--------------------------+-----------------------+
@@ -136,7 +133,7 @@ CCI API 레퍼런스
     |                          |                       |
     +--------------------------+-----------------------+
 
-    날짜를 포함하는 문자열을 **DATE**, **DATETIME** 또는 **TIMESTAMP** 의 입력 인자로 할 때, 날짜 문자열의 형식은 "YYYY/MM/DD" 형식만 허용한다. 즉, "2012/01/31"과 같은 형식은 허용하지만 "01/31/2012" 혹은 "2012-01-31"과 같은 형식은 허용하지 않는다. 날짜를 포함하는 문자열을 날짜 타입의 입력 인자로 하는 예는 다음과 같다.
+    날짜를 포함하는 문자열을 **DATE**, **DATETIME** 또는 **TIMESTAMP** 의 입력 인자로 할 때, 날짜 문자열의 형식은 "YYYY/MM/DD" 형식 또는 "YYYY-MM-DD" 형식만 허용한다. 즉, "2012/01/31" 또는 "2012-01-31"과 같은 형식은 허용하지만 "01/31/2012"와 같은 형식은 허용하지 않는다. 날짜를 포함하는 문자열을 날짜 타입의 입력 인자로 하는 예는 다음과 같다.
 
     .. code-block:: c
 
@@ -145,7 +142,7 @@ CCI API 레퍼런스
         char *values[][3] =
         {
             {"1994/11/30", "1994/11/30 20:08:08"},
-            {"2008/10/31", "2008/10/31 20:08:08"}
+            {"2008-10-31", "2008-10-31 20:08:08"}
         };
         
         req = cci_prepare(conn, "insert into tbl (aa, bb) values ( ?, ?)", CCI_PREPARE_INCLUDE_OID, &error);
@@ -159,7 +156,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_bind_param_array(int req_handle, int index, T_CCI_A_TYPE a_type, void *value, int *null_ind, T_CCI_U_TYPE u_type)
 
-    prepare된 *req_handle* 에 대해서 파라미터 배열을 바인딩한다. 이후, :c:func:`cci_execute_array` 가 발생할 때 저장된 *value* 포인터에 의해 데이터가 서버로 전송된다. 같은 *index* 에 대해서 여러 번 :c:func:`cci_bind_param_array` 이 호출될 경우 마지막 설정된 값이 유효하다. 데이터에 **NULL** 을 바인딩할 경우 *null_ind* 에 0이 아닌 값을 설정한다. *value* 값이 **NULL** 포인터인 경우, 또는 *u_type* 이 **CCI_U_TYPE_NULL** 인 경우 모든 데이터가 **NULL** 로 바인딩 되며 *value* 에 의해 사용되는 데이터 버퍼는 재사용될 수 없다. *a_type* 에 대한 *value* 의 데이터 타입은 :c:func:`cci_bind_param` 의 설명을 참조한다.
+    prepare된 *req_handle* 에 대해서 파라미터 배열을 바인딩한다. 이후, :c:func:`cci_execute_array`\ 가 호출될 때 저장된 *value* 포인터에 의해 데이터가 서버로 전송된다. 같은 *index* 에 대해서 여러 번 :c:func:`cci_bind_param_array`\ 가 호출될 경우 마지막 설정된 값이 유효하다. 데이터에 **NULL**\ 을 바인딩할 경우 *null_ind*\ 에 0이 아닌 값을 설정한다. *value* 값이 **NULL** 포인터인 경우, 또는 *u_type*\ 이 **CCI_U_TYPE_NULL**\ 인 경우 모든 데이터가 **NULL**\ 로 바인딩되며 *value*\ 에 의해 사용되는 데이터 버퍼는 재사용될 수 없다. *a_type*\ 에 대한 *value*\ 의 데이터 타입은 :c:func:`cci_bind_param`\ 의 설명을 참조한다.
 
     :param req_handle: (IN) prepared statement의 요청 핸들
     :param index: (IN) 바인딩될 위치
@@ -177,7 +174,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_bind_param_array_size(int req_handle, int array_size)
 
-    :c:func:`cci_bind_param_array` 에서 사용될 array의 크기를 결정한다. :c:func:`cci_bind_param_array` 가 사용되기 전에 반드시 :c:func:`cci_bind_param_array_size` 가 먼저 호출 되어야 한다.
+    :c:func:`cci_bind_param_array`\ 에서 사용될 array의 크기를 결정한다. :c:func:`cci_bind_param_array`\ 가 사용되기 전에 반드시 :c:func:`cci_bind_param_array_size`\ 가 먼저 호출 되어야 한다.
 
     :param req_handle: (IN) prepared statement의 요청 핸들
     :param array_size: (IN) binding array size
@@ -208,7 +205,7 @@ CCI API 레퍼런스
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
 
-.. c:function:: int cci_blob_read(int conn_handle, T_CCI_BLOB blob, long start_pos, int length, const char *buf, T_CCI_ERROR* error_buf)
+.. c:function:: int cci_blob_read(int conn_handle, T_CCI_BLOB blob, long start_pos, int length, char *buf, T_CCI_ERROR* error_buf)
 
     *blob* 에 명시한 **LOB** 데이터 파일의 *start_pos* 부터 *length* 만큼 데이터를 읽어 *buf* 에 저장한 후 이를 반환한다.
 
@@ -216,6 +213,7 @@ CCI API 레퍼런스
     :param blob: (OUT) **LOB** Locator
     :param start_pos: (IN) **LOB** 데이터 파일의 위치 인덱스
     :param length: (IN) 파일로부터 가져올 **LOB** 데이터 길이
+    :param buf: (IN) 데이터 읽기 버퍼
     :param error_buf: (OUT) 에러 버퍼
     :return: 에러 코드(0: 성공)
     
@@ -244,6 +242,7 @@ CCI API 레퍼런스
     :param blob: (OUT) **LOB** Locator
     :param start_pos: (IN) **LOB** 데이터 파일의 위치 인덱스
     :param length: (IN) 버퍼로부터 가져올 데이터 길이
+    :param buf: (OUT) 데이터 쓰기 버퍼
     :param error_buf: (OUT) 에러 버퍼
     :return: write한 크기(>=0 : 성공), 에러 코드(<0 : 에러)
 
@@ -415,9 +414,9 @@ CCI API 레퍼런스
                 }
             }
 
-             if ((res = cci_close_query_result (req)) < 0)
+            if ((res = cci_close_query_result (req, &error)) < 0)
             {
-                snprintf (error_msg, 128, "cci_close_query_result ERROR\n");
+                snprintf (error_msg, 128, "cci_close_query_result ERROR: %s\n", error.err_msg);
                 return error_msg;
             }
 
@@ -460,7 +459,7 @@ CCI API 레퍼런스
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
 
-.. c:function:: int cci_clob_read(int conn_handle, T_CCI_CLOB clob, long start_pos, int length, const char *buf, T_CCI_ERROR* error_buf)
+.. c:function:: int cci_clob_read(int conn_handle, T_CCI_CLOB clob, long start_pos, int length, char *buf, T_CCI_ERROR* error_buf)
 
     *clob* 에 명시한 **LOB** 데이터 파일의 *start_pos* 부터 *length* 만큼 데이터를 읽어 *buf* 에 저장한 후 이를 반환한다.
     
@@ -468,6 +467,7 @@ CCI API 레퍼런스
     :param clob: (IN) **LOB** Locator
     :param start_pos: (IN) **LOB** 데이터 파일의 위치 인덱스
     :param length: (IN) 파일로부터 가져올 **LOB** 데이터 길이
+    :param buf: (IN) 데이터 읽기 버퍼
     :param error_buf: (OUT) 에러 버퍼
     :return: read한 크기(>=0 : 성공), 에러 코드(<0 : 에러)
 
@@ -496,6 +496,7 @@ CCI API 레퍼런스
     :param clob: (IN) **LOB** Locator
     :param start_pos: (IN) **LOB** 데이터 파일의 위치 인덱스
     :param length: (IN) 버퍼로부터 가져올 데이터 길이
+    :param buf: (OUT) 데이터 쓰기 버퍼
     :param error_buf: (OUT) 에러 버퍼
     :return: write한 크기(>=0 : 성공), 에러 코드(<0 : 에러)
 
@@ -506,11 +507,12 @@ CCI API 레퍼런스
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
 
-.. c:function::  int cci_close_query_result(int req_handle)
+.. c:function::  int cci_close_query_result(int req_handle, T_CCI_ERROR *err_buf)
 
-    :c:func:`cci_execute`, :c:func:`cci_execute_array` 또는 :c:func:`cci_execute_batch` 함수가 반환한 resultset을 종료(close)한다. 요청 핸들(req_handle)의 종료 없이 :c:func:`cci_prepare`를 반복 수행하는 경우 :c:func:`cci_close_req_handle` 함수를 호출하기 전에 이 함수를 호출할 것을 권장한다.
+    :c:func:`cci_execute`, :c:func:`cci_execute_array` 또는 :c:func:`cci_execute_batch` 함수가 반환한 resultset을 종료(close)한다. 요청 핸들(req_handle)의 종료 없이 :c:func:`cci_prepare`\ 를 반복 수행하는 경우 :c:func:`cci_close_req_handle` 함수를 호출하기 전에 이 함수를 호출할 것을 권장한다.
     
     :param req_handle: (IN) 요청 핸들
+    :param err_buf: (OUT) 에러 버퍼
     :return: 에러 코드 (0: 성공)
     
         *    **CCI_ER_REQ_HANDLE**
@@ -518,7 +520,7 @@ CCI API 레퍼런스
         
 .. c:function:: int cci_close_req_handle(int req_handle)
 
-    :c:func:`cci_prepare` 로 획득한 요청 핸들을 종료(close)한다. 
+    :c:func:`cci_prepare`\ 로 획득한 요청 핸들을 종료(close)한다. 
 
     :param req_handle: (IN) 요청 핸들
     :return: 에러 코드(0 : 성공)
@@ -677,7 +679,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_connect_ex(char *ip, int port, char *db_name, char *db_user, char *db_password, T_CCI_ERROR * err_buf)
 
-    **CCI_ER_DBMS** 에러를 반환하면 세부 에러 내용을 DB 에러 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect` 와 다르고 나머지는 동일하다.
+    **CCI_ER_DBMS** 에러를 반환하면 세부 에러 내용을 DB 에러 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect`\ 와 다르고 나머지는 동일하다.
 
     :param ip: (IN) 서버 IP 문자 스트링 (호스트 이름)
     :param port: (IN) 브로커 포트( **$CUBRID/conf/cubrid_broker.conf** 파일에 설정된 포트를 사용)
@@ -746,10 +748,14 @@ CCI API 레퍼런스
     *   **rcTime** : 첫 번째로 접속했던 브로커에 장애가 발생한 이후 **altHosts** 에 명시한 브로커로 접속한다(브로커 failover). 이후, **rcTime** 만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초).
 
     *   **loadBalance** : 이 값이 true면 응용 프로그램이 메인 호스트와 **altHosts**\에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false)
+
+        .. note:: 메인 호스트와 **altHosts** 브로커들의 **ACCESS_MODE**\ 설정에 **RW**\ 와 **RO**\ 가 섞여 있다 하더라도, 응용 프로그램은 **ACCESS_MODE**\ 와 무관하게 접속 대상 호스트를 결정한다. 따라서 사용자는 접속 대상 브로커의 **ACCESS_MODE**\ 를 감안해서 메인 호스트와 **altHosts**\ 를 정해야 한다.
     
     *   **login_timeout** | **loginTimeout** : 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 에러를 반환한다. 기본값은 **0** 이며, 무한 대기를 의미한다.
 
-    *   **query_timeout** | **queryTimeout** : :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout** 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout** 을 참고한다.
+    *   **query_timeout** | **queryTimeout** : :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 
+    
+        .. note:: :c:func:`cci_execute`\ 에 CCI_EXEC_QUERY_ALL 플래그를 설정하거나 :c:func:`cci_execute_batch` 또는 :c:func:`cci_execute_array`\ 를 사용하여 여러 개의 질의를 한 번에 실행하는 경우, 질의 타임 아웃은 질의 하나에 대해 적용되는 것이 아니라 함수 하나에 대해 적용된다. 즉, 함수 시작 이후 타임아웃이 발생하면 함수 수행이 중단된다.
 
     *   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : 질의 요청 타임아웃 시 즉시 소켓 연결 종료 여부. :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 **query_timeout** 으로 설정한 시간이 지나면 질의 취소 요청 후 즉시 소켓 연결을 종료할 것인지, 아니면 질의 취소 요청을 받아들인다는 서버의 응답을 기다릴 것인지를 설정한다. 기본값은 **false** 로, 서버의 응답을 기다린다. 이 값이 **true** 이면 :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수 호출 도중 질의 타임아웃이 발생할 때 서버에 질의 취소 메시지를 보낸 후, 소켓을 닫고 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. (브로커가 아닌 데이터베이스 서버 쪽에서 에러가 발생한 경우 -1을 반환한다. 상세 에러를 확인하고 싶으면 "데이터베이스 에러 버퍼"의 에러 코드를 확인한다. 데이터베이스 에러 버퍼에서 에러 코드를 확인하는 방법은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.) 이 경우 사용자는 명시적으로 :c:func:`cci_disconnect` 함수를 통해 데이터베이스 연결 핸들을 닫아야 한다. 응용 프로그램이 질의 취소 메시지를 보낸 후 에러를 반환했음에도 불구하고, 데이터베이스 서버는 그 메시지를 받지 못하고 해당 질의를 수행할 수 있음을 주의한다. **false** 이면 서버에 취소 메시지를 보낸 후, 서버의 질의 요청에 대한 응답이 올 때 까지 대기한다.
 
@@ -778,7 +784,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_connect_with_url_ex (char *url, char *db_user, char *db_password, T_CCI_ERROR * err_buf)
 
-    **CCI_ER_DBMS** 에러를 반환하면 세부 에러 내용을 데이터베이스 에러 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect_with_url` 과 다르고 나머지는 동일하다.
+    **CCI_ER_DBMS** 에러를 반환하면 세부 에러 내용을 데이터베이스 에러 버퍼(*err_buf*)를 통해 확인할 수 있다는 점만 :c:func:`cci_connect_with_url`\ 과 다르고 나머지는 동일하다.
 
     :param url: (IN) 서버 연결 정보 문자 스트링
     :param db_user: (IN) 데이터베이스 사용자 이름. NULL 혹은 빈 문자열인 경우 *url* 의 <*db_user*>를 사용한다.
@@ -797,7 +803,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_cursor(int req_handle, int offset, T_CCI_CURSOR_POS origin, T_CCI_ERROR *err_buf)
 
-    :c:func:`cci_execute` 로 실행한 질의 결과 내의 특정 레코드에 접근하기 위하여 요청 핸들에 설정된 커서를 이동시킨다. 인자로 지정되는 *origin* 변수 값과 *offset* 값을 통해 커서의 위치가 이동되며, 이동할 커서의 위치가 유효하지 않을 경우 **CCI_ER_NO_MORE_DATA** 를 반환한다.
+    :c:func:`cci_execute`\ 로 실행한 질의 결과 내의 특정 레코드에 접근하기 위하여 요청 핸들에 설정된 커서를 이동시킨다. 인자로 지정되는 *origin* 변수 값과 *offset* 값을 통해 커서의 위치가 이동되며, 이동할 커서의 위치가 유효하지 않을 경우 **CCI_ER_NO_MORE_DATA** 를 반환한다.
 
     :param req_handle: (IN) 요청 핸들
     :param offset: (IN) 이동할 오프셋
@@ -827,7 +833,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_cursor_update(int req_handle, int cursor_pos, int index, T_CCI_A_TYPE a_type, void *value, T_CCI_ERROR *err_buf)
 
-    *cursor_pos* 의 커서 위치에 대해서 *index* 번째의 칼럼 값을 *value* 값으로 update한다. 데이터베이스에 **NULL** 로 update할 경우 *value* 를 **NULL** 로 한다. update할 수 있는 조건은 :c:func:`cci_prepare` 를 참조한다. 
+    *cursor_pos* 의 커서 위치에 대해서 *index* 번째의 칼럼 값을 *value* 값으로 update한다. 데이터베이스에 **NULL** 로 update할 경우 *value* 를 **NULL** 로 한다. update할 수 있는 조건은 :c:func:`cci_prepare`\ 를 참조한다. 
     
     :param req_handle: (IN) 요청 핸들
     :param cursor_pos: (IN) 커서 위치
@@ -890,7 +896,7 @@ CCI API 레퍼런스
 
     CCI의 DATASOURCE를 생성한다.
 
-    :param properties: (IN) 설정이 저장된 **T_CCI_PROPERTIES** 구조체 포인터. :c:func:`cci_property_set` 으로 속성 값들을 설정한다.
+    :param properties: (IN) 설정이 저장된 **T_CCI_PROPERTIES** 구조체 포인터. :c:func:`cci_property_set`\ 으로 속성 값들을 설정한다.
     :param err_buf: (OUT) 에러 버퍼 (에러가 발생하면 에러 코드와 메시지를 반환)
     :return: 생성된 **T_CCI_DATASOURCE** 구조체 포인터 (성공), NULL (실패)
 
@@ -941,7 +947,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_disconnect(int conn_handle, T_CCI_ERROR * err_buf)
 
-    *conn_handle* 에 대해 생성된 모든 요청 핸들을 삭제한다. 트랜잭션이 진행 중일 경우 :c:func:`cci_end_tran` 을 실행한 다음 삭제된다.
+    *conn_handle* 에 대해 생성된 모든 요청 핸들을 삭제한다. 트랜잭션이 진행 중일 경우 :c:func:`cci_end_tran`\ 을 실행한 다음 삭제된다.
 
     :param conn_handle: (IN) 연결 핸들
     :param err_buf: (OUT) 에러 버퍼
@@ -996,14 +1002,14 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_execute(int req_handle, char flag, int max_col_size, T_CCI_ERROR *err_buf)
 
-    :c:func:`cci_prepare` 를 수행한 SQL 문(prepared statement)을 실행한다. 이 함수의 인자로 요청 핸들, *flag*, fetch하는 칼럼의 문자열 최대 길이, 오류 정보를 담을 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다.
+    :c:func:`cci_prepare`\ 를 수행한 SQL 문(prepared statement)을 실행한다. 이 함수의 인자로 요청 핸들, *flag*, fetch하는 칼럼의 문자열 최대 길이, 오류 정보를 담을 **T_CCI_ERROR** 구조체 변수의 주소가 지정된다.
 
     :param req_handle: (IN) prepared statement의 요청 핸들
-    :param flag: (IN) exec flag ( **CCI_EXEC_ASYNC** 또는 **CCI_EXEC_QUERY_ALL** )
+    :param flag: (IN) exec flag ( **CCI_EXEC_QUERY_ALL** )
     :param max_col_size: (IN) 문자열 타입인 경우 fetch하는 칼럼의 문자열 최대 길이(단위: 바이트). 이 값이 0이면 전체 길이를 fetch한다.
     :param err_buf: (OUT) 에러 버퍼
     :return: 
-        * **SELECT** : sync mode인 경우 결과 행의 개수를 반환. async mode인 경우 0을 반환
+        * **SELECT** : 결과 행의 개수를 반환
         * **INSERT**, **UPDATE** : 반영된 행의 개수
         * 기타 질의 : 0
         * 실패 : 에러 코드
@@ -1015,18 +1021,20 @@ CCI API 레퍼런스
             *   **CCI_ER_QUERY_TIMEOUT**
             *   **CCI_ER_LOGIN_TIMEOUT**
 
-    *flag*\를 통해 서버로부터 질의 결과를 가져오는 방식을 동기식 또는 비동기식으로 설정하는 것이 가능하며, 질의문 수행 방식을 모두 수행하게 하거나 첫번째 질의문만 수행하도록 지정할 수 있다. 
+    *flag*\를 통해 질의문 수행 방식을 모두 수행하게 하거나 첫번째 질의문만 수행하도록 지정할 수 있다. 
+  
+    .. note::
     
-    *flag*\에 **CCI_EXEC_ASYNC** 를 설정하면 질의 결과가 생성될 때마다 즉시 결과를 가져오는 비동기 방식으로 동작하며, 그렇지 않으면 질의 결과가 모두 생성된 뒤에 결과를 가져오는 동기 방식으로 동작한다. 
+        2008 R4.4와 9.2 이상 버전에서 *flag* 설정 시 비동기 방식으로 결과를 가져오게 하는 **CCI_EXEC_ASYNC**\ 를 더 이상 지원하지 않는다.
     
-    *flag*\에 **CCI_EXEC_QUERY_ALL** 을 설정하면 prepare 시에 전달된 여러 개의 질의문(세미콜론으로 여러 개의 질의문을 구분)을 모두 수행하며, 그렇지 않은 경우 제일 앞에 있는 질의문만 수행한다. 
+    *flag*\에 **CCI_EXEC_QUERY_ALL**\ 을 설정하면 prepare 시에 전달된 여러 개의 질의문(세미콜론으로 여러 개의 질의문을 구분)을 모두 수행하며, 그렇지 않은 경우 제일 앞에 있는 질의문만 수행한다. 
     
-    *flag*\에 **CCI_EXEC_QUERY_ALL** 을 설정하면 다음의 규칙이 적용된다.
+    *flag*\에 **CCI_EXEC_QUERY_ALL**\ 을 설정하면 다음의 규칙이 적용된다.
 
     *   리턴 값은 첫 번째 질의에 대한 결과이다.
     *   어느 하나의 질의에서 에러가 발생할 경우 execute는 실패한 것으로 처리된다.
     *   q1; q2; q3와 같이 구성된 질의에 대해서 q1을 성공하고 q2에서 에러가 발생해도 q1의 수행 결과는 유효하다. 즉, 에러가 발생했을 때 이전에 성공한 질의 수행에 대해서 롤백하지 않는다.
-    *   질의가 성공적으로 수행된 경우 두 번째 질의에 대한 결과는 :c:func:`cci_next_result` 를 통해서 얻을 수 있다.
+    *   질의가 성공적으로 수행된 경우 두 번째 질의에 대한 결과는 :c:func:`cci_next_result`\ 를 통해서 얻을 수 있다.
 
     *max_col_size* 는 prepared statement의 칼럼이 **CHAR**, **VARCHAR**, **BIT**, **VARBIT** 일 경우 클라이언트로 전송되는 칼럼의 문자열 최대 길이를 결정하기 위한 값이며, 이 값이 0이면 전체 길이를 fetch한다.
 
@@ -1167,7 +1175,7 @@ CCI API 레퍼런스
         *   **CCI_ER_QUERY_TIMEOUT**
         *   **CCI_ER_LOGIN_TIMEOUT**
     
-    인자로 지정된 *num_sql_stmt* 개의 *sql_stmt* 를 수행하며, *query_result* 변수로 수행된 질의 개수를 반환한다. 각각의 질의에 대한 결과는 :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE`\ 매크로를 이용할 수 있다. 전체 매크로에 대한 요약 설명은 :c:func:`cci_execute_array`\를 참고한다.
+    인자로 지정된 *num_sql_stmt* 개의 *sql_stmt* 를 수행하며, *query_result* 변수로 수행된 질의 개수를 반환한다. 각각의 질의에 대한 결과는 :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE`\ 매크로를 이용할 수 있다. 전체 매크로에 대한 요약 설명은 :c:func:`cci_execute_array`\ 를 참고한다.
     
     매크로에서는 입력받은 인자에 대한 유효성을 검사하지 않으므로 주의한다.
 
@@ -1263,7 +1271,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_fetch(int req_handle, T_CCI_ERROR *err_buf)
 
-    :c:func:`cci_execute` 로 실행한 질의 결과를 서버 측 CAS로부터 fetch하여 클라이언트 버퍼에 저장한다. fetch된 질의 결과에서 특정 칼럼의 데이터는 :c:func:`cci_get_data` 함수를 이용해서 확인할 수 있다.
+    :c:func:`cci_execute`\ 로 실행한 질의 결과를 서버 측 CAS로부터 fetch하여 클라이언트 버퍼에 저장한다. fetch된 질의 결과에서 특정 칼럼의 데이터는 :c:func:`cci_get_data` 함수를 이용해서 확인할 수 있다.
 
     :param req_handle: (IN) 요청 핸들
     :param err_buf: (OUT) 에러 버퍼
@@ -1288,7 +1296,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_fetch_sensitive(int req_handle, T_CCI_ERROR *err_buf)
 
-    서버에서 클라이언트로 **SELECT** 질의의 결과가 전송될 때 sensitive column에 대해서 변경된 값으로 전송되도록 한다. *req_handle* 에 의한 결과가 sensitive result가 아닐 경우 :c:func`cci_fetch` 와 동일하다. 리턴 값이 **CCI_ER_DELETED_TUPLE** 일 경우 해당 레코드는 삭제된 경우이다.
+    서버에서 클라이언트로 **SELECT** 질의의 결과가 전송될 때 sensitive column에 대해서 변경된 값으로 전송되도록 한다. *req_handle* 에 의한 결과가 sensitive result가 아닐 경우 :c:func:`cci_fetch`\ 와 동일하다. 리턴 값이 **CCI_ER_DELETED_TUPLE**\ 일 경우 해당 레코드는 삭제된 경우이다.
 
     :param req_handle: (IN) 요청 핸들
     :param err_buf: (OUT) 데이터베이스 에러 버퍼
@@ -1306,7 +1314,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_fetch_size(int req_handle, int fetch_size)
 
-    :c:func:`cci_fetch` 를 통해 서버에서 클라이언트로 전송되는 레코드의 개수를 정한다.
+    :c:func:`cci_fetch`\ 를 통해 서버에서 클라이언트로 전송되는 레코드의 개수를 정한다.
 
     :param req_handle: (IN) 요청 핸들
     :param fetch_size: (IN) fetch size
@@ -1329,6 +1337,33 @@ CCI API 레퍼런스
     :return: 입력 바인딩 개수
 
         *   **CCI_ER_REQ_HANDLE**
+
+.. c:function:: int cci_get_cas_info (int conn_handle, char *info_buf, int buf_length, T_CCI_ERROR * err_buf) 
+  
+    conn_handle에 연결되어 있는 CAS 정보를 조회한다. info_buf에 아래와 같은 형식의 문자열이 리턴된다. 
+  
+    :: 
+  
+        <host>:<port>,<cas id>,<cas process id> 
+
+    출력 예는 다음과 같다.
+    
+    ::
+    
+        127.0.0.1:33000,1,12916 
+  
+    CAS ID를 통해 해당 CAS의 SQL 로그 파일을 쉽게 확인할 수 있다. 
+  
+    보다 자세한 사항은 :ref:`sql-log-check`\ 을 참고한다.
+         
+    :param conn_handle: (IN) 연결 핸들 
+    :param info_buf: (OUT) 연결 정보 버퍼 
+    :param buf_length: (IN) 연결 정보 버퍼 길이 
+    :param err_buf: (OUT) 에러 버퍼 
+    :return: 에러 코드 
+     
+        * **CCI_ER_INVALID_ARGS** 
+        * **CCI_ER_CON_HANDLE** 
 
 .. c:function:: int cci_get_class_num_objs(int conn_handle, char *class_name, int flag, int *num_objs, int *num_pages, T_CCI_ERROR *err_buf)
 
@@ -1459,7 +1494,7 @@ CCI API 레퍼런스
     | **CCI_PARAM_MAX_STRING_LENGTH** | int \*       | get only |
     +---------------------------------+--------------+----------+
 
-    :c:func:`cci_get_db_parameter`, :c:func:`cci_set_db_parameter` 에서 **CCI_PARAM_LOCK_TIMEOUT** 의 입출력 단위는 밀리초이다.
+    :c:func:`cci_get_db_parameter`, :c:func:`cci_set_db_parameter`\ 에서 **CCI_PARAM_LOCK_TIMEOUT** 의 입출력 단위는 밀리초이다.
 
     .. warning:: CUBRID 9.0 이전 버전에서 **CCI_PARAM_LOCK_TIMEOUT** 의 출력 단위는 초이므로 주의해야 한다.
 
@@ -1480,19 +1515,66 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_get_err_msg(int err_code, char *msg_buf, int msg_buf_size)
 
-    CCI 에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. 에러 코드와 에러 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.
+    에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. 에러 코드와 에러 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.
 
     :param err_code: (IN) 에러 코드
     :param msg_buf: (OUT) 에러 메시지 버퍼
     :param msg_buf_size: (IN) *msg_buf* 크기
     :return: 0 (성공), -1 (실패)
 
+    note:: CUBRID 9.1 부터는 err_buf가 있는 모든 함수에서 err_buf에 값이 저장되는 것을 보장하므로 err_buf 인자가 있는 함수에서는 cci_get_err_msg 함수를 사용할 필요가 없다. 
+    
+        .. code-block:: c
+        
+            req = cci_prepare (con, query, 0, &err_buf);
+            if (req < 0)
+            {
+                printf ("error: %d, %s\n", err_buf.err_code, err_buf.err_msg);
+                goto handle_error;
+            }
+    
+        9.1 이전 버전에서는 CCI_ER_DBMS가 발생했을 때만 err_buf에 값이 저장되므로 CCI_ER_DBMS에 따라 다음과 같이 분기하여 처리해야 했다.
+        
+        .. code-block:: c
+        
+            req = cci_prepare (con, query, 0, &err_buf);
+            if (req < 0)
+            {
+                if (req == CCI_ER_DBMS)
+                {
+                    printf ("error: %s\n", err_buf.err_msg);
+                }
+                else
+                {
+                    char msg_buf[1024];
+                    cci_get_err_msg(req, msg_buf, 1024);
+                    printf ("error: %s\n", msg_buf);
+                }
+                goto handle_error;
+            }
+
+        또는 위의 분기 코드를 단순화하기 위해 cci_get_error_msg 함수를 사용할 수 있다.
+        
+        .. code-block:: c
+
+            req = cci_prepare (con, query, 0, &err_buf);
+            if (req < 0)
+            {
+
+                char msg_buf[1024];
+                cci_get_error_msg(req, err_buf, msg_buf, 1024);
+                printf ("error: %s\n", msg_buf);
+                goto handle_error;
+            }
+
 .. c:function:: int cci_get_error_msg(int err_code, T_CCI_ERROR *err_buf, char *msg_buf, int msg_buf_size)
 
-    CCI 에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. CCI 에러 코드의 값이 **CCI_ER_DBMS** 이면 데이터베이스 서버에서 발생한 에러 메시지를 데이터베이스 에러 버퍼(*err_buf*)에서 전달받아 메시지 버퍼에 저장한다. 에러 코드와 에러 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>`\를 참고한다.
+    CCI 에러 코드에 대응되는 에러 메시지를 에러 메시지 버퍼에 저장한다. CCI 에러 코드의 값이 **CCI_ER_DBMS** 이면 데이터베이스 서버에서 발생한 에러 메시지를 데이터베이스 에러 버퍼(*err_buf*)에서 전달받아 메시지 버퍼(*msg_buf*)에 저장한다.
+        
+    에러 코드와 에러 메시지에 대한 내용은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>`\를 참고한다.
 
     :param err_code: (IN) 에러 코드
-    :param err_buf: (OUT) 데이터베이스 에러 버퍼        
+    :param err_buf: (IN) 데이터베이스 에러 버퍼        
     :param msg_buf: (OUT) 에러 메시지 버퍼
     :param msg_buf_size: (IN) *msg_buf* 크기
     :return: 0 (성공), -1 (실패)
@@ -1505,240 +1587,6 @@ CCI API 레퍼런스
     :return: 0 (not holdable), 1 (holdable)
     
         *   **CCI_ER_CON_HANDLE**
-
-.. c:function:: int cci_get_query_plan(int req_handle, char **out_buf_p)
-
-    cci_prepare 함수가 리턴한 요청 핸들(req_handle)에 대한 질의 계획을 결과 버퍼에 출력한다. cci_execute 함수의 호출 여부와 상관 없이 cci_get_query_plan 함수를 호출할 수 있다.
-    cci_get_query_plan 함수 호출 후 결과 버퍼의 사용이 끝나면 :c:func:`cci_query_info_free` 함수를 이용하여 cci_get_query_plan 함수에서 생성된 결과 버퍼를 해제해야 한다.
-
-    ::
-        
-        char *out_buf;
-        ...
-        req = cci_prepare (con, query, 0, &cci_error);
-        ...
-        ret = cci_get_query_plan(req, &out_buf); 
-        ...
-        printf("plan = %s", out_buf);
-        cci_query_info_free(out_buf);
-        
-    :param req_handle: (IN) 요청 핸들
-    :param out_buf_p: (OUT) 결과 버퍼 포인터의 포인터
-    :return: 에러 코드
-        
-        *    **CCI_ER_REQ_HANDLE**
-        *    **CCI_ER_CON_HANDLE**
-        *    **CCI_ER_USED_CONNECTION**
-    
-    .. seealso:: 
-    
-        :c:func:`cci_query_info_free`
-
-.. c:function:: int cci_query_info_free(char *out_buf)
-
-    cci_get_query_plan 함수에서 할당된 결과 버퍼 메모리를 해제한다.
-
-    :param req_handle: (IN) 요청 핸들
-    :param out_buf: (OUT) 결과 버퍼 포인터
-    :return: 에러 코드
-    
-        *    **CCI_ER_NO_MORE_MEMORY**
-        
-    .. seealso:: 
-    
-        :c:func:`cci_get_query_plan`
-
-.. c:function:: int cci_get_query_timeout (int req_handle)
-
-    질의 수행에 대해 설정된 타임아웃 시간을 반환한다.
-
-    :param req_handle: (IN) 요청 핸들
-    :return: 현재 요청 핸들에 설정된 제한 시간(timeout) 값. 단위는 msec
-    
-        *   CCI_ER_REQ_HANDLE
-
-.. c:function:: T_CCI_COL_INFO* cci_get_result_info(int req_handle, T_CCI_CUBRID_STMT *stmt_type, int *num)
-
-    prepared statement가 **SELECT** 일 경우, 이 함수를 이용하여 실행 결과에 대한 칼럼 정보가 저장되어 있는 **T_CCI_COL_INFO** 구조체를 가져올 수 있다. **SELECT** 질의가 아닌 경우, **NULL** 을 반환하고 *num* 값은 0이 된다.
-
-    :param req_handle: (IN) prepared statement에 대한 요청 핸들
-    :param stmt_type: (OUT) command 타입
-    :param num: (OUT) **SELECT** 문의 칼럼 개수(*stmt_type* 이 **CUBRID_STMT_SELECT** 일 경우)
-    :return: result info 포인터 (성공), **NULL** (실패)
-    
-    **T_CCI_COL_INFO** 구조체에서 칼럼 정보를 가져오기 위해서 구조체에 직접 접근해도 되지만, 다음과 같이 정의된 매크로를 이용하여 정보를 가져올 수 있다. 각 매크로의 인자로 **T_CCI_COL_INFO** 구조체의 주소와 칼럼 인덱스가 지정되며, 매크로는 **SELECT** 질의에 대해서만 호출할 수 있다. 매크로에서 입력받는 각 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. 매크로 리턴 값의 타입이 char*인 경우 메모리 포인터를 해제(free)하지 않아야 한다.
-
-    +--------------------------------------------+------------------+----------------------+
-    | 매크로                                     | 리턴 값 타입     | 의미                 |
-    +============================================+==================+======================+
-    | :c:macro:`CCI_GET_RESULT_INFO_TYPE`        | **T_CCI_U_TYPE** | 칼럼의 type          |
-    +--------------------------------------------+------------------+----------------------+
-    | :c:macro:`CCI_GET_RESULT_INFO_SCALE`       | short            | 칼럼의 scale         |
-    +--------------------------------------------+------------------+----------------------+
-    | :c:macro:`CCI_GET_RESULT_INFO_PRECISION`   | int              | 칼럼의 precision     |
-    +--------------------------------------------+------------------+----------------------+
-    | :c:macro:`CCI_GET_RESULT_INFO_NAME`        | char \*          | 칼럼의 이름          |
-    +--------------------------------------------+------------------+----------------------+
-    | :c:macro:`CCI_GET_RESULT_INFO_ATTR_NAME`   | char \*          | 칼럼의 속성 이름     |
-    +--------------------------------------------+------------------+----------------------+
-    | :c:macro:`CCI_GET_RESULT_INFO_CLASS_NAME`  | char \*          | 칼럼의 클래스 이름   |
-    +--------------------------------------------+------------------+----------------------+
-    | :c:macro:`CCI_GET_RESULT_INFO_IS_NON_NULL` | char (0 or 1)    | 칼럼이               |
-    |                                            |                  | **NULL**             |
-    |                                            |                  | 인지 여부            |
-    +--------------------------------------------+------------------+----------------------+
-
-    .. code-block:: c
-    
-        col_info = cci_get_result_info (req, &stmt_type, &col_count);
-        if (col_info == NULL)
-        {
-          printf ("get_result_info error: %d, %s\n", cci_error.err_code,
-                  cci_error.err_msg);
-          goto handle_error;
-        }
-        
-        for (i = 1; i <= col_count; i++)
-        {
-          printf ("%-12s = %d\n", "type", CCI_GET_RESULT_INFO_TYPE (col_info, i));
-          printf ("%-12s = %d\n", "scale",
-                  CCI_GET_RESULT_INFO_SCALE (col_info, i));
-          printf ("%-12s = %d\n", "precision",
-                  CCI_GET_RESULT_INFO_PRECISION (col_info, i));
-          printf ("%-12s = %s\n", "name", CCI_GET_RESULT_INFO_NAME (col_info, i));
-          printf ("%-12s = %s\n", "attr_name",
-                  CCI_GET_RESULT_INFO_ATTR_NAME (col_info, i));
-          printf ("%-12s = %s\n", "class_name",
-                  CCI_GET_RESULT_INFO_CLASS_NAME (col_info, i));
-          printf ("%-12s = %s\n", "is_non_null",
-                  CCI_GET_RESULT_INFO_IS_NON_NULL (col_info,i) ? "true" : "false");
-        }
-
-.. c:macro:: #define CCI_GET_RESULT_INFO_ATTR_NAME(T_CCI_COL_INFO* res_info, int index)
-
-    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 실제 속성 이름을 가져오는 매크로이다. 속성 이름이 없는 경우(상수값, 함수 등)는 빈 문자열 (empty string)을 반환한다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 반환된 메모리 포인터는 사용자가 :c:func:`free` 를 통해 제거할 수 없다.
-
-    :param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
-    :return: 속성 이름 (char \*)
-
-.. c:macro:: #define CCI_GET_RESULT_INFO_CLASS_NAME(T_CCI_COL_INFO* res_info, int index)
-
-    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 클래스 이름을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 반환된 메모리 포인터는 사용자가 :c:func:`free` 를 통해 제거할 수 없다. 반환된 값은 **NULL** 을 가질 수 있다.
-
-    :param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
-    :return: 클래스 이름 (char \*)
-
-.. c:macro:: #define CCI_GET_RESULT_INFO_IS_NON_NULL(T_CCI_COL_INFO* res_info, int index)
-
-    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼이 nullable인지에 대한 값을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
-
-    :param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
-    :return: 0 : nullable, 1 : non **NULL**
-
-.. c:macro:: #define CCI_GET_RESULT_INFO_NAME(T_CCI_COL_INFO* res_info, int index)
-
-    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 이름을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 반환된 메모리 포인터는 사용자가 :c:func:`free` 를 통해 제거할 수 없다.
-
-    :param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
-    :return: 칼럼 이름 (char \*)
-
-.. c:macro:: #define CCI_GET_RESULT_INFO_PRECISION(T_CCI_COL_INFO* res_info, int index)
-
-    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 precision을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
-
-    :param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
-    :return: precision (int)
-
-.. c:macro:: #define CCI_GET_RESULT_INFO_SCALE(T_CCI_COL_INFO* res_info, int index)
-
-    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 scale을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
-
-    :param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
-    :return: scale (int)
-
-.. c:macro:: #define CCI_GET_RESULT_INFO_TYPE(T_CCI_COL_INFO* res_info, int index)
-
-    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 타입을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
-
-    :param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
-    :param index: (IN) 칼럼 인덱스
-    :return: 칼럼 타입 (**T_CCI_U_TYPE**)
-
-.. c:macro:: #define CCI_IS_SET_TYPE(u_type)
-
-    *u_type* 이 set type인지를 검사한다.
-
-    :param u_type: (IN)
-    :return: 1 : set, 0 : not set
-
-.. c:macro:: #define CCI_IS_MULTISET_TYPE(u_type)
-
-    *u_type* 이 multiset type인지를 검사한다.
-
-    :param u_type: (IN)
-    :return: 1 : multiset, 0 : not multiset
-
-.. c:macro:: #define CCI_IS_SEQUENCE_TYPE(u_type)
-
-    *u_type* 이 sequence type인지를 검사한다.
-
-    :param u_type: (IN)
-    :return: 1 : sequence, 0 : not sequence
-
-.. c:macro:: #define CCI_IS_COLLECTION_TYPE(u_type)
-
-    *u_type* 이 collection (set, multiset, sequence) type인지를 검사한다.
-
-    :param u_type: (IN)
-    :return: 1 : collection (set, multiset, sequence), 0 : not collection
-
-.. c:function:: int cci_get_version(int *major, int *minor, int *patch)
-
-    CCI 라이브러리의 버전을 가져온다. 예를 들어 버전 스트링이 "9.0.0.0001" 인 경우, major 버전은 9, minor 버전은 0, patch 버전은 0이 된다.
-
-    :param major: (OUT) major 버전
-    :param minor: (OUT) minor 버전
-    :param patch: (OUT) patch 버전
-    :return: 항상 0(성공)
-
-    .. note::
-
-        Linux용 CUBRID에서는 **strings** 명령을 이용하여 CCI 라이브러리 파일의 버전을 확인할 수 있다 ::
-        
-            $ strings /home/usr1/CUBRID/lib/libcascci.so | grep VERSION
-            VERSION=9.0.0.1
-
-.. c:function::  void cci_init()
-
-    Windows용 CCI 응용 프로그램을 static linking library(.lib)로 컴파일하는 경우에는 반드시 호출해야 하고, 그 이외의 경우는 이 함수를 사용할 필요가 없다.
-
-.. c:function:: int cci_is_holdable(int req_handle)
-
-    **cci_is_holdable** 함수는 요청 핸들의 연결 유지(holdable) 가능 여부를 리턴한다.
-
-    :param req_handle: (IN) prepared statement에 대한 요청 핸들
-    :return: 1 : 연결 유지, 0 : 연결 유지 안 됨
-
-        *   **CCI_ER_REQ_HANDLE**
-
-    .. seealso:: 
-    
-        :c:func:`cci_prepare`
-    
-.. c:function:: int cci_is_updatable(int req_handle)
-
-    :c:func:`cci_prepare` 를 수행한 SQL 문이 업데이트 가능한 결과 셋을 만들 수 있는 질의인지(:c:func:`cci_prepare` 수행 시 *flag* 에 **CCI_PREPARE_UPDATABLE** 이 설정되었는지) 확인하는 함수이다. 업데이트 가능한 질의이면 1을 반환한다.
-
-    :param req_handle: (IN) prepared statement에 대한 요청 핸들
-    :return: 1 : updatable, 0 : not updatable
-
-        *   **CCI_ER_REQ_HANDLE**
 
 .. c:function:: int cci_get_last_insert_id(int conn_handle, void *value, T_CCI_ERROR *err_buf)
 
@@ -1807,15 +1655,249 @@ CCI API 레퍼런스
             return 0;
         }
 
+.. c:function:: int cci_get_query_plan(int req_handle, char **out_buf_p)
+
+    cci_prepare 함수가 리턴한 요청 핸들(req_handle)에 대한 질의 계획을 결과 버퍼에 출력한다. cci_execute 함수의 호출 여부와 상관 없이 cci_get_query_plan 함수를 호출할 수 있다.
+    cci_get_query_plan 함수 호출 후 결과 버퍼의 사용이 끝나면 :c:func:`cci_query_info_free` 함수를 이용하여 cci_get_query_plan 함수에서 생성된 결과 버퍼를 해제해야 한다.
+
+    ::
+        
+        char *out_buf;
+        ...
+        req = cci_prepare (con, query, 0, &cci_error);
+        ...
+        ret = cci_get_query_plan(req, &out_buf); 
+        ...
+        printf("plan = %s", out_buf);
+        cci_query_info_free(out_buf);
+        
+    :param req_handle: (IN) 요청 핸들
+    :param out_buf_p: (OUT) 결과 버퍼 포인터의 포인터
+    :return: 에러 코드
+        
+        *    **CCI_ER_REQ_HANDLE**
+        *    **CCI_ER_CON_HANDLE**
+        *    **CCI_ER_USED_CONNECTION**
+    
+    .. seealso:: 
+    
+        :c:func:`cci_query_info_free`
+
+.. c:function:: int cci_query_info_free(char *out_buf)
+
+    cci_get_query_plan 함수에서 할당된 결과 버퍼 메모리를 해제한다.
+
+    :param req_handle: (IN) 요청 핸들
+    :param out_buf: (OUT) 결과 버퍼 포인터
+    :return: 에러 코드
+    
+        *    **CCI_ER_NO_MORE_MEMORY**
+        
+    .. seealso:: 
+    
+        :c:func:`cci_get_query_plan`
+
+.. c:function:: int cci_get_query_timeout (int req_handle)
+
+    질의 수행에 대해 설정된 타임아웃 시간을 반환한다.
+
+    :param req_handle: (IN) 요청 핸들
+    :return: 현재 요청 핸들에 설정된 제한 시간(timeout) 값. 단위는 msec
+    
+        *   CCI_ER_REQ_HANDLE
+
+.. c:function:: T_CCI_COL_INFO* cci_get_result_info(int req_handle, T_CCI_CUBRID_STMT *stmt_type, int *num)
+
+    prepared statement가 **SELECT** 일 경우, 이 함수를 이용하여 실행 결과에 대한 칼럼 정보가 저장되어 있는 **T_CCI_COL_INFO** 구조체를 가져올 수 있다. **SELECT** 질의가 아닌 경우, **NULL**\ 을 반환하고 *num* 값은 0이 된다.
+
+    :param req_handle: (IN) prepared statement에 대한 요청 핸들
+    :param stmt_type: (OUT) command 타입
+    :param num: (OUT) **SELECT** 문의 칼럼 개수(*stmt_type* 이 **CUBRID_STMT_SELECT** 일 경우)
+    :return: result info 포인터 (성공), **NULL** (실패)
+    
+    **T_CCI_COL_INFO** 구조체에서 칼럼 정보를 가져오기 위해서 구조체에 직접 접근해도 되지만, 다음과 같이 정의된 매크로를 이용하여 정보를 가져올 수 있다. 각 매크로의 인자로 **T_CCI_COL_INFO** 구조체의 주소와 칼럼 인덱스가 지정되며, 매크로는 **SELECT** 질의에 대해서만 호출할 수 있다. 매크로에서 입력받는 각 인자에 대한 유효성 검사가 이루어지지 않으므로 주의한다. 매크로 리턴 값의 타입이 char*인 경우 메모리 포인터를 해제(free)하지 않아야 한다.
+
+    +--------------------------------------------+------------------+----------------------+
+    | 매크로                                     | 리턴 값 타입     | 의미                 |
+    +============================================+==================+======================+
+    | :c:macro:`CCI_GET_RESULT_INFO_TYPE`        | **T_CCI_U_TYPE** | 칼럼의 type          |
+    +--------------------------------------------+------------------+----------------------+
+    | :c:macro:`CCI_GET_RESULT_INFO_SCALE`       | short            | 칼럼의 scale         |
+    +--------------------------------------------+------------------+----------------------+
+    | :c:macro:`CCI_GET_RESULT_INFO_PRECISION`   | int              | 칼럼의 precision     |
+    +--------------------------------------------+------------------+----------------------+
+    | :c:macro:`CCI_GET_RESULT_INFO_NAME`        | char \*          | 칼럼의 이름          |
+    +--------------------------------------------+------------------+----------------------+
+    | :c:macro:`CCI_GET_RESULT_INFO_ATTR_NAME`   | char \*          | 칼럼의 속성 이름     |
+    +--------------------------------------------+------------------+----------------------+
+    | :c:macro:`CCI_GET_RESULT_INFO_CLASS_NAME`  | char \*          | 칼럼의 클래스 이름   |
+    +--------------------------------------------+------------------+----------------------+
+    | :c:macro:`CCI_GET_RESULT_INFO_IS_NON_NULL` | char (0 or 1)    | 칼럼이               |
+    |                                            |                  | **NULL**             |
+    |                                            |                  | 인지 여부            |
+    +--------------------------------------------+------------------+----------------------+
+
+    .. code-block:: c
+    
+        col_info = cci_get_result_info (req, &stmt_type, &col_count);
+        if (col_info == NULL)
+        {
+          printf ("get_result_info error: %d, %s\n", cci_error.err_code,
+                  cci_error.err_msg);
+          goto handle_error;
+        }
+        
+        for (i = 1; i <= col_count; i++)
+        {
+          printf ("%-12s = %d\n", "type", CCI_GET_RESULT_INFO_TYPE (col_info, i));
+          printf ("%-12s = %d\n", "scale",
+                  CCI_GET_RESULT_INFO_SCALE (col_info, i));
+          printf ("%-12s = %d\n", "precision",
+                  CCI_GET_RESULT_INFO_PRECISION (col_info, i));
+          printf ("%-12s = %s\n", "name", CCI_GET_RESULT_INFO_NAME (col_info, i));
+          printf ("%-12s = %s\n", "attr_name",
+                  CCI_GET_RESULT_INFO_ATTR_NAME (col_info, i));
+          printf ("%-12s = %s\n", "class_name",
+                  CCI_GET_RESULT_INFO_CLASS_NAME (col_info, i));
+          printf ("%-12s = %s\n", "is_non_null",
+                  CCI_GET_RESULT_INFO_IS_NON_NULL (col_info,i) ? "true" : "false");
+        }
+
+.. c:macro:: #define CCI_GET_RESULT_INFO_ATTR_NAME(T_CCI_COL_INFO* res_info, int index)
+
+    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 실제 속성 이름을 가져오는 매크로이다. 속성 이름이 없는 경우(상수값, 함수 등)는 빈 문자열 (empty string)을 반환한다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 반환된 메모리 포인터는 사용자가 **free**\ ()를 통해 제거할 수 없다.
+
+    :param res_info: (IN) :c:func:`cci_get_result_info` 에 의한 칼럼 정보 포인터
+    :param index: (IN) 칼럼 인덱스
+    :return: 속성 이름 (char \*)
+
+.. c:macro:: #define CCI_GET_RESULT_INFO_CLASS_NAME(T_CCI_COL_INFO* res_info, int index)
+
+    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 클래스 이름을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 반환된 메모리 포인터는 사용자가 **free**\ ()를 통해 제거할 수 없다. 반환된 값은 **NULL**\ 을 가질 수 있다.
+
+    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param index: (IN) 칼럼 인덱스
+    :return: 클래스 이름 (char \*)
+
+.. c:macro:: #define CCI_GET_RESULT_INFO_IS_NON_NULL(T_CCI_COL_INFO* res_info, int index)
+
+    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼이 nullable인지에 대한 값을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
+
+    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param index: (IN) 칼럼 인덱스
+    :return: 0 : nullable, 1 : non **NULL**
+
+.. c:macro:: #define CCI_GET_RESULT_INFO_NAME(T_CCI_COL_INFO* res_info, int index)
+
+    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 이름을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다. 반환된 메모리 포인터는 사용자가 **free**\ ()를 통해 제거할 수 없다.
+
+    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param index: (IN) 칼럼 인덱스
+    :return: 칼럼 이름 (char \*)
+
+.. c:macro:: #define CCI_GET_RESULT_INFO_PRECISION(T_CCI_COL_INFO* res_info, int index)
+
+    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 precision을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
+
+    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param index: (IN) 칼럼 인덱스
+    :return: precision (int)
+
+.. c:macro:: #define CCI_GET_RESULT_INFO_SCALE(T_CCI_COL_INFO* res_info, int index)
+
+    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 scale을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
+
+    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param index: (IN) 칼럼 인덱스
+    :return: scale (int)
+
+.. c:macro:: #define CCI_GET_RESULT_INFO_TYPE(T_CCI_COL_INFO* res_info, int index)
+
+    prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 타입을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
+
+    :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
+    :param index: (IN) 칼럼 인덱스
+    :return: 칼럼 타입 (**T_CCI_U_TYPE**)
+
+.. c:macro:: #define CCI_IS_SET_TYPE(u_type)
+
+    *u_type* 이 set type인지를 검사한다.
+
+    :param u_type: (IN)
+    :return: 1 : set, 0 : not set
+
+.. c:macro:: #define CCI_IS_MULTISET_TYPE(u_type)
+
+    *u_type* 이 multiset type인지를 검사한다.
+
+    :param u_type: (IN)
+    :return: 1 : multiset, 0 : not multiset
+
+.. c:macro:: #define CCI_IS_SEQUENCE_TYPE(u_type)
+
+    *u_type* 이 sequence type인지를 검사한다.
+
+    :param u_type: (IN)
+    :return: 1 : sequence, 0 : not sequence
+
+.. c:macro:: #define CCI_IS_COLLECTION_TYPE(u_type)
+
+    *u_type* 이 collection (set, multiset, sequence) type인지를 검사한다.
+
+    :param u_type: (IN)
+    :return: 1 : collection (set, multiset, sequence), 0 : not collection
+
+.. c:function:: int cci_get_version(int *major, int *minor, int *patch)
+
+    CCI 라이브러리의 버전을 가져온다. 예를 들어 버전 스트링이 "9.2.0.0001" 인 경우, major 버전은 9, minor 버전은 2, patch 버전은 0이 된다.
+
+    :param major: (OUT) major 버전
+    :param minor: (OUT) minor 버전
+    :param patch: (OUT) patch 버전
+    :return: 항상 0(성공)
+
+    .. note::
+
+        Linux용 CUBRID에서는 **strings** 명령을 이용하여 CCI 라이브러리 파일의 버전을 확인할 수 있다 ::
+        
+            $ strings /home/usr1/CUBRID/lib/libcascci.so | grep VERSION
+            VERSION=9.2.0.0001
+
+.. c:function::  void cci_init()
+
+    Windows용 CCI 응용 프로그램을 static linking library(.lib)로 컴파일하는 경우에는 반드시 호출해야 하고, 그 이외의 경우는 이 함수를 사용할 필요가 없다.
+
+.. c:function:: int cci_is_holdable(int req_handle)
+
+    **cci_is_holdable** 함수는 요청 핸들의 연결 유지(holdable) 가능 여부를 리턴한다.
+
+    :param req_handle: (IN) prepared statement에 대한 요청 핸들
+    :return: 1 : 연결 유지, 0 : 연결 유지 안 됨
+
+        *   **CCI_ER_REQ_HANDLE**
+
+    .. seealso:: 
+    
+        :c:func:`cci_prepare`
+
+.. c:function:: int cci_is_updatable(int req_handle)
+
+    :c:func:`cci_prepare`\ 를 수행한 SQL 문이 업데이트 가능한 결과 셋을 만들 수 있는 질의인지(:c:func:`cci_prepare` 수행 시 *flag* 에 **CCI_PREPARE_UPDATABLE** 이 설정되었는지) 확인하는 함수이다. 업데이트 가능한 질의이면 1을 반환한다.
+
+    :param req_handle: (IN) prepared statement에 대한 요청 핸들
+    :return: 1 : updatable, 0 : not updatable
+
+        *   **CCI_ER_REQ_HANDLE**
+
 .. c:function:: int cci_next_result(int req_handle, T_CCI_ERROR *err_buf)
 
-    :c:func:`cci_execute` 시 **CCI_EXEC_QUERY_ALL** *flag* 가 설정된 경우 실행된 다음 질의의 결과를 가져온다. next_result에 의해 얻은 질의에 대한 정보는 :c:func:`cci_get_result_info` 를 통해서 얻을 수 있다. next_result가 성공적으로 수행될 경우 현재의 질의에 대한 정보로 수정된다.
+    :c:func:`cci_execute` 수행 시 **CCI_EXEC_QUERY_ALL** *flag*\ 가 설정된 경우 실행된 다음 질의의 결과를 가져온다. next_result에 의해 얻은 질의에 대한 정보는 :c:func:`cci_get_result_info`\ 를 통해서 얻을 수 있다. next_result가 성공적으로 수행될 경우 현재의 질의에 대한 정보로 수정된다.
     
     :param req_handle: (IN) prepared statement에 대한 요청 핸들
     :param err_buf: (OUT) 에러 버퍼        
     :return: 
 
-      * **SELECT** (sync mode) : 결과 개수, (async mode) : 0
+      * **SELECT** : 결과 개수
       * **INSERT**, **UPDATE** : 반영된 레코드 개수
       * 기타 : 0
       * 실패 : 에러 코드
@@ -1982,7 +2064,7 @@ CCI API 레퍼런스
     *flag* 에 **CCI_PREPARE_UPDATABLE**, **CCI_PREPARE_INCLUDE_OID**, **CCI_PREPARE_HOLDABLE** 또는 **CCI_PREPARE_CALL** 이 설정될 수 있다. *flag*\에 **CCI_PREPARE_UPDATABLE**\이 설정되면 갱신 가능한 결과 셋(updatable resultset)을 만들 수 있으며, 이 경우 **CCI_PREPARE_INCLUDE_OID**\는 자동 설정된다. *flag*\에 **CCI_PREPARE_UPDATABLE**\과 **CCI_PREPARE_HOLDABLE**\을 동시에 사용할 수 없다.
     자바 저장 함수를 호출하고 싶으면 **flag**\에 **CCI_PREPARE_CALL**\을 설정한다. 자바 저장 함수와 관련된 예는 :c:func:`cci_register_out_param` 함수를 참고한다.
 
-    커밋 이후 결과 셋 유지 여부에 대한 설정의 기본값은 커서 유지이다. 따라서 :c:func:`cci_prepare`\의 *flag*\에 **CCI_PREPARE_UPDATABLE**\을 설정하고 싶으면 :c:func:`cci_prepare`\를 호출하기 전에 :c:func:`cci_set_holdable`\을 호출하여 커서를 유지하지 않도록 설정해야 한다.
+    커밋 이후 결과 셋 유지 여부에 대한 설정의 기본값은 커서 유지이다. 따라서 :c:func:`cci_prepare`\의 *flag*\에 **CCI_PREPARE_UPDATABLE**\을 설정하고 싶으면 :c:func:`cci_prepare`\를 호출하기 전에 :c:func:`cci_set_holdability`\을 호출하여 커서를 유지하지 않도록 설정해야 한다.
 
     **CCI_PREPARE_UPDATABLE** 이 설정되더라도 모든 질의에 대해 갱신 가능한 결과를 만들 수 있는 것은 아니므로 SQL 문을 prepare한 후 :c:func:`cci_is_updatable` 함수를 이용하여 갱신 가능한 결과를 만들 수 있는 질의인지 확인해야 한다. 결과 셋을 갱신하려면 :c:func:`cci_oid_put` 함수 또는 :c:func:`cci_oid_put2` 함수를 사용할 수 있다.
 
@@ -2084,15 +2166,15 @@ CCI API 레퍼런스
     *   **login_timeout**: 로그인 타임아웃 시간(기본값: 0(무제한))
     *   **query_timeout**: 질의 타임아웃 시간(기본값: 0(무제한))
     *   **disconnect_on_query_timeout** : 질의 실행이 타임아웃 시간을 초과하여 실행이 취소될 때 연결의 종료 여부(기본값: no)
-    *   **default_autocommit** : :c:func:`cci_datasource_borrow` 가 호출될 때마다 재설정되는 자동 커밋 모드. true 또는 false
-    *   **default_isolation** : :c:func:`cci_datasource_borrow` 호출될 때마다 재설정되는 트랜잭션 격리 수준
-    *   **default_lock_timeout** : :c:func:`cci_datasource_borrow` 호출될 때마다 재설정되는 lock_timeout
+    *   **default_autocommit** : :c:func:`cci_datasource_borrow`\ 가 호출될 때마다 재설정되는 자동 커밋 모드. true 또는 false
+    *   **default_isolation** : :c:func:`cci_datasource_borrow`\ 가 호출될 때마다 재설정되는 트랜잭션 격리 수준
+    *   **default_lock_timeout** : :c:func:`cci_datasource_borrow`\ 가 호출될 때마다 재설정되는 lock_timeout
     
-    prepared statemet의 개수가 **max_open_prepared_statement** 값을 초과하면 가장 오래된 prepared statemet가 statement pool에서 해제되며, 추후 재사용하면 다시 statement pool에 추가된다. 
+    prepared statement의 개수가 **max_open_prepared_statement** 값을 초과하면 가장 오래된 prepared statement가 statement pool에서 해제되며, 추후 재사용하면 다시 statement pool에 추가된다. 
     
-    **default_autocommit**, **default_isolation**, **default_lock_timeout** 의 값을 설정하면 :c:func:`cci_datasource_borrow` 를 호출할 때 각각 autocommit, isolation, lock_timeout에 대하여 설정한 값에 따라 연결을 반환한다. 설정하지 않으면 :c:func:`cci_datasource_borrow` 를 호출할 때 각각 autocommit, isolation, lock_timeout에 대하여 사용자가 이전에 변경했던 값을 유지한 채로 연결을 반환한다.
+    **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 의 값을 설정하면 :c:func:`cci_datasource_borrow`\ 를 호출할 때 각각 autocommit, isolation, lock_timeout에 대하여 설정한 값에 따라 연결을 반환한다. 설정하지 않으면 :c:func:`cci_datasource_borrow`\ 를 호출할 때 각각 autocommit, isolation, lock_timeout에 대하여 사용자가 이전에 변경했던 값을 유지한 채로 연결을 반환한다.
 
-    **default_isolation** 은 다음 값 중 하나의 설정값을 가지며, 격리 수준에 대한 자세한 내용은 :ref:`set-transaction-isolation-level` 을 참조한다.
+    **default_isolation**\ 은 다음 값 중 하나의 설정값을 가지며, 격리 수준에 대한 자세한 내용은 :ref:`set-transaction-isolation-level`\ 을 참조한다.
 
     +----------------------------+---------------------------------------+
     | isolation_level            | 설정값                                |
@@ -2118,7 +2200,7 @@ CCI API 레퍼런스
 
     DB 사용자 이름과 암호는 **user** 와 **password** 값을 직접 지정하거나 **url** 속성 내에서 **user** 와 **password** 값을 지정한다. 두 가지 경우가 같이 사용되는 경우 우선 순위는 다음과 같다.
     
-    * 둘다 입력되면 직접 지정하는 값이 우선한다. 
+    * 둘 다 입력되면 직접 지정하는 값이 우선한다. 
     * 둘 중 하나가 NULL이면 NULL이 아닌 값이 사용된다. 
     * 둘 다 NULL이면 NULL 값으로 사용된다. 
     * DB 사용자를 직접 지정한 값이 NULL이면 "public", 암호를 직접 지정한 값이 NULL이면 NULL로 설정된다.
@@ -2131,7 +2213,7 @@ CCI API 레퍼런스
         cci_property_set(ps, "user", "dba");
         cci_property_set(ps, "password", "cubridpwd");
           ...
-        cci_property_set(ps, "url", "cci:cubrid:192.168.0.1:33000:demodb:public:mypwd:?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
+        cci_property_set(ps, "url", "cci:cubrid:192.168.0.1:33000:demodb:dba:mypwd:?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
         
     .. seealso:: 
     
@@ -2206,7 +2288,7 @@ CCI API 레퍼런스
 .. c:function:: int cci_register_out_param(int req_handle, int index)
 
     자바 저장 프로시저에서 아웃 바인드로 정의한 파라미터를 바인딩하기 위해 사용하며, index는 1부터 시작한다.
-    이 함수를 호출하기 전에 cci_prepare 함수의 플래그에 CCI_PREPARE_CALL을 설정해야 한다.
+    이 함수를 호출하기 전에 cci_prepare 함수의 플래그에 **CCI_PREPARE_CALL**\ 을 설정해야 한다.
     
     다음은 "Hello, CUBRID"라는 문자열을 출력하는 자바 저장 프로시저의 예이다.
     
@@ -2315,21 +2397,21 @@ CCI API 레퍼런스
             else // if ind== -1, then data is NULL
                 printf ("NULL\n");
 
-            if ((res = cci_close_query_result (req)) < 0)
+            if ((res = cci_close_query_result (req, &error)) < 0)
             {
-                printf ("%s(%d): cci_close_query_result fail", __FILE__, __LINE__);
+                printf ("%s(%d): cci_close_query_result fail(%d)\n", __FILE__, __LINE__, error.err_code);
                 goto handle_error;
             }
             
             if ((res = cci_close_req_handle (req)) < 0)
             {
-                printf ("%s(%d): cci_close_req_handle fail", __FILE__, __LINE__);
+                printf ("%s(%d): cci_close_req_handle fail\n", __FILE__, __LINE__);
                 goto handle_error;
             }
 
             if ((res = cci_disconnect (con, &error)) < 0)
             {
-                printf ("%s(%d): cci_disconnect fail(%d)", __FILE__, __LINE__,
+                printf ("%s(%d): cci_disconnect fail(%d)\n", __FILE__, __LINE__,
                     error.err_code);
                 goto handle_error;
             }
@@ -2405,7 +2487,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_schema_info(int conn_handle, T_CCI_SCHEMA_TYPE type, char *class_name, char *attr_name, char flag, T_CCI_ERROR *err_buf)
 
-    스키마 정보를 읽어온다. 성공적으로 수행되었을 경우 결과는 request handle에 의해 관리되고, fetch, getdata를 통해서 결과를 가져올 수 있다. *class_name*, *attr_name* 을 **LIKE** 절의 패턴 매칭에 의해서 검색해야 할 경우 *flag* 를 설정한다.
+    스키마 정보를 읽어온다. 성공적으로 수행되었을 경우 결과는 request handle에 의해 관리되고, fetch, getdata를 통해서 결과를 가져올 수 있다. *class_name*, *attr_name* 을 **LIKE** 절의 패턴 매칭에 의해서 검색해야 할 경우 *flag* 를 설정한다.    
 
     :param conn_handle: (IN) 연결 핸들
     :param type: (IN) 스키마 타입
@@ -2570,8 +2652,8 @@ CCI API 레퍼런스
     |                                                                                         |           |                    |                  |
     | 주어진 테이블의 외래 키 칼럼들이 참조하고 있는 기본 키 칼럼들의 정보를 조회하며,        |           |                    |                  |
     | 결과는 PKTABLE_NAME 및 KEY_SEQ 순서로 정렬된다.                                         |           |                    |                  |
-    | 이 타입을 인자로 지정하면, *class_name* 에는 외래 키 테이블,                            |           |                    |                  |
-    | *attr_name* 에는 **NULL** 을 지정한다.                                                  |           |                    |                  |
+    | 이 타입을 인자로 지정하면, *class_name*\ 에는 외래 키 테이블,                           |           |                    |                  |
+    | *attr_name*\ 에는 **NULL**\ 을 지정한다.                                                |           |                    |                  |
     |                                                                                         +-----------+--------------------+------------------+
     |                                                                                         | 2         | PKCOLUMN_NAME      | char**           |
     |                                                                                         +-----------+--------------------+------------------+
@@ -2601,8 +2683,8 @@ CCI API 레퍼런스
     |                                                                                         |           |                    |                  |
     | 주어진 테이블의 기본 키 칼럼들을 참조하는 모든 외래 키 칼럼들의 정보를 조회하며,        |           |                    |                  |
     | 결과는 FKTABLE_NAME 및 KEY_SEQ 순서로 정렬된다.                                         |           |                    |                  |
-    | 이 타입을 인자로 지정하면, *class_name* 에는 기본 키 테이블,                            |           |                    |                  |
-    | *attr_name* 에는 **NULL** 을 지정한다.                                                  |           |                    |                  |
+    | 이 타입을 인자로 지정하면, *class_name*\ 에는 기본 키 테이블,                           |           |                    |                  |
+    | *attr_name*\ 에는 **NULL**\ 을 지정한다.                                                |           |                    |                  |
     |                                                                                         +-----------+--------------------+------------------+
     |                                                                                         | 2         | PKCOLUMN_NAME      | char**           |
     |                                                                                         +-----------+--------------------+------------------+
@@ -2630,9 +2712,9 @@ CCI API 레퍼런스
     +-----------------------------------------------------------------------------------------+-----------+--------------------+------------------+
     | CCI_SCH_CROSS_REFERENCE                                                                 | 1         | PKTABLE_NAME       | char**           |
     |                                                                                         |           |                    |                  |
-    | 주어진 테이블의 기본 키와 주어진 테이블의 외래 키가 상호 참조하는경우,                  |           |                    |                  |
+    | 주어진 테이블의 기본 키와 주어진 테이블의 외래 키가 상호 참조하는 경우,                 |           |                    |                  |
     | 해당 외래 키 칼럼들의 정보를 조회하며, 결과는 FKTABLE_NAME 및 KEY_SEQ 순서로 정렬된다.  |           |                    |                  |
-    | 이 타입을 인자로 *class_name* 에는 기본 키 테이블,                                      |           |                    |                  |
+    | 이 타입을 인자로 *class_name*\ 에는 기본 키 테이블,                                     |           |                    |                  |
     | *attr_name*  에는 외래 키 테이블을 지정한다.                                            |           |                    |                  |
     |                                                                                         +-----------+--------------------+------------------+
     |                                                                                         | 2         | PKCOLUMN_NAME      | char**           |
@@ -2694,10 +2776,10 @@ CCI API 레퍼런스
     
             conn = cci_connect ("localhost", 33000, "demodb", "dba", "");
          
-            // get all columns’ information of table "athlete"
+            // get all columns' information of table "athlete"
             req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", NULL, CCI_ATTR_NAME_PATTERN_MATCH, &error);
          
-            // get info. of table "athlete"’s column "code".
+            // get info. of table "athlete"'s column "code".
             //req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", "code", 0, &error);
             if (req < 0 )
             {
@@ -2761,10 +2843,10 @@ CCI API 레퍼런스
                 }
             }
         _END_WHILE:
-            res = cci_close_query_result(req);
+            res = cci_close_query_result(req, &error);
             if ( res < 0)
             {
-                fprintf (stdout, "(%s, %d) ERROR: cci_close_query_result\n", __FILE__, __LINE__);
+                fprintf (stdout, "(%s, %d) ERROR: cci_close_query_result(%d)\n", __FILE__, __LINE__, error.err_code);
                 goto _END;
             }
             res = cci_close_req_handle(req);
@@ -2782,7 +2864,7 @@ CCI API 레퍼런스
                 fprintf(stdout, "Result : %s\n", query_result_buffer);
          
             return 0;
-
+       
 .. c:function:: int cci_set_allocators(CCI_MALLOC_FUNCTION malloc_func, CCI_FREE_FUNCTION free_func, CCI_REALLOC_FUNCTION realloc_func, CCI_CALLOC_FUNCTION calloc_func)
 
     사용자가 정의한 메모리 할당 및 해제 함수들을 등록하여 사용할 수 있게 한다. 이 함수를 실행하면 CCI API 내부에서 사용되는 모든 메모리 할당 및 해제 작업은 사용자가 정의한 메모리 할당 함수들을 사용하게 된다. 이를 사용하지 않으면 기본적인 시스템 함수들(malloc, free, realloc, calloc)이 사용된다.
@@ -2902,10 +2984,10 @@ CCI API 레퍼런스
                  printf ("\n");
             }
             //Closing the query result
-            error = cci_close_query_result(req);
+            error = cci_close_query_result(req, &cci_error);
              if (error < 0)
             {
-                printf ("cci_close_query_result error\n");
+                printf ("cci_close_query_result error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
                 goto handle_error;
             }
 
@@ -2971,7 +3053,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_set_db_parameter(int conn_handle, T_CCI_DB_PARAM param_name, void* value, T_CCI_ERROR *err_buf)
 
-    시스템 파라미터를 설정한다. 설정할 수 있는 *param_name* 은 :c:func:`cci_get_db_parameter` 를 참조한다.
+    시스템 파라미터를 설정한다. 설정할 수 있는 *param_name* 은 :c:func:`cci_get_db_parameter`\ 를 참조한다.
 
     :param conn_handle: (IN) 연결 핸들
     :param param_name: (IN) 시스템 파라미터 이름
@@ -2994,7 +3076,7 @@ CCI API 레퍼런스
 
 .. c:function:: void cci_set_free(T_CCI_SET set)
 
-    :c:func:`cci_get_data` 에 대해 **CCI_A_TYPE_SET** 에 의해 가져온 **T_CCI_SET** 타입 값에 할당된 메모리를 제거한다. **T_CCI_SET** 타입 값은 :c:func:`cci_get_data` 함수를 통해 가져오거나 :c:func:`cci_set_make` 함수를 통해 생성할 수 있다.
+    :c:func:`cci_get_data`\ 에 대해 **CCI_A_TYPE_SET** 에 의해 가져온 **T_CCI_SET** 타입 값에 할당된 메모리를 제거한다. **T_CCI_SET** 타입 값은 :c:func:`cci_get_data` 함수를 통해 가져오거나 :c:func:`cci_set_make` 함수를 통해 생성할 수 있다.
 
     :param set: (IN) cci set 포인터
 
@@ -3014,7 +3096,7 @@ CCI API 레퍼런스
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_COMMUNICATION**
     
-    *a_type* 에 대한 *value* 의 타입은다음과 같다.
+    *a_type*\ 에 대한 *value*\ 의 타입은 다음과 같다.
 
     +-----------------------+------------------------------+
     |   a_type              | value 타입                   |
@@ -3071,7 +3153,7 @@ CCI API 레퍼런스
     
 .. c:function:: int cci_set_make(T_CCI_SET *set, T_CCI_U_TYPE u_type, int size, void *value, int *indicator)
 
-    새로운 **CCI_A_TYPE_SET** 타입의 set을 만든다. 만들어진 set은 :c:func:`cci_bind_param` 을 통해 **CCI_A_TYPE_SET** 으로 서버에 전달된다. :c:func:`cci_set_make` 에 의해 만들어진 set은 반드시 :c:func:`cci_set_free` 를 통해 사용된 메모리를 제거해야 한다. *u_type* 에 따른 *value* 의 타입은 :c:func:`cci_bind_param` 을 참고한다.
+    새로운 **CCI_A_TYPE_SET** 타입의 set을 만든다. 만들어진 set은 :c:func:`cci_bind_param`\ 을 통해 **CCI_A_TYPE_SET** 으로 서버에 전달된다. :c:func:`cci_set_make`\ 에 의해 만들어진 set은 반드시 :c:func:`cci_set_free`\ 를 통해 사용된 메모리를 제거해야 한다. *u_type* 에 따른 *value* 의 타입은 :c:func:`cci_bind_param`\ 을 참고한다.
 
     :param set: (OUT) cci set 포인터
     :param u_type: (IN) 엘리먼트 타입
@@ -3082,7 +3164,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_set_max_row(int req_handle, int max)
 
-    :c:func:`cci_execute` 에 의해 수행되는 **SELECT** 문의 결과에 대해 최대 레코드 수를 지정한다. *max* 값이 0일 경우 지정하지 않은 것과 동일하다.
+    :c:func:`cci_execute`\ 에 의해 수행되는 **SELECT** 문의 결과에 대해 최대 레코드 수를 지정한다. *max* 값이 0일 경우 지정하지 않은 것과 동일하다.
 
     :param req_handle: (IN) 요청 핸들
     :param max: (IN) 최대 행

@@ -157,48 +157,48 @@ _db_attribute
 
 **CUBRID가 지원하는 데이터 타입**
 
-+-------+-----------+-------+----------+
-| 값    | 의미      | 값    | 의미     |
-+=======+===========+=======+==========+
-| 1     | INTEGER   | 20    | OID      |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 2     | FLOAT     | 22    | NUMERIC  |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 3     | DOUBLE    | 23    | BIT      |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 4     | STRING    | 24    | VARBIT   |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 5     | OBJECT    | 25    | CHAR     |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 6     | SET       | 26    | NCHAR    |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 7     | MULTISET  | 27    | VARNCHAR |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 8     | SEQUENCE  | 31    | BIGINT   |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 9     | ELO       | 32    | DATETIME |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 11    | TIMESTAMP | 33    | BLOB     |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 12    | DATE      | 34    | CLOB     |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 13    | MONETARY  | 35    | ENUM     |
-|       |           |       |          |
-+-------+-----------+-------+----------+
-| 18    | SHORT     |       |          |   
-|       |           |       |          |
-+-------+-----------+-------+----------+
++-------+-----------+-------+-----------+
+| 값    | 의미      | 값    | 의미      |
++=======+===========+=======+===========+
+| 1     | INTEGER   | 20    | OID       |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 2     | FLOAT     | 22    | NUMERIC   |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 3     | DOUBLE    | 23    | BIT       |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 4     | STRING    | 24    | VARBIT    |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 5     | OBJECT    | 25    | CHAR      |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 6     | SET       | 26    | NCHAR     |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 7     | MULTISET  | 27    | VARNCHAR  |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 8     | SEQUENCE  | 31    | BIGINT    |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 9     | ELO       | 32    | DATETIME  |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 10    | TIME      | 33    | BLOB      |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 11    | TIMESTAMP | 34    | CLOB      |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 12    | DATE      | 35    | ENUM      |
+|       |           |       |           |
++-------+-----------+-------+-----------+
+| 18    | SHORT     |       |           |
+|       |           |       |           |
++-------+-----------+-------+-----------+
 
 **CUBRID가 지원하는 문자셋**
 
@@ -506,7 +506,7 @@ _db_auth
 +==============+=============+=============================================================================+
 | grantor      | db_user     | 권한 부여자                                                                 |
 +--------------+-------------+-----------------------------------------------------------------------------+
-| grantee      | db_user     | 권한 받은자                                                                 |
+| grantee      | db_user     | 권한 피부여자                                                               |
 +--------------+-------------+-----------------------------------------------------------------------------+
 | class_of     | _db_class   | 권한부여 대상인 클래스 객체                                                 |
 +--------------+-------------+-----------------------------------------------------------------------------+
@@ -854,31 +854,6 @@ DB_CLASS
 | is_reuse_oid_class | VARCHAR (3)   | REUSE_OID 클래스이면 'YES', 아니면 'NO'      |
 +--------------------+---------------+----------------------------------------------+
 
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_class (class_name, owner_name, class_type, is_system_class, partitioned, is_reuse_oid_class)
-    AS
-    SELECT c.class_name, CAST(c.owner.name AS VARCHAR(255)),
-        CASE c.class_type WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' ELSE 'UNKNOW' END,
-        CASE WHEN MOD(c.is_system_class, 2) = 1 THEN 'YES' ELSE 'NO' END,
-        CASE WHEN c.sub_classes IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM _db_partition p WHERE p.class_of = c and p.pname IS NULL), 'NO') END,
-        CASE WHEN MOD(c.is_system_class / 8, 2) = 1 THEN 'YES' ELSE 'NO' END
-    FROM _db_class c
-    WHERE CURRENT_USER = 'DBA' OR
-        {c.owner.name} SUBSETEQ (  
-            SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-            FROM db_user u, TABLE(groups) AS t(g)  
-            WHERE u.name = CURRENT_USER) OR
-        {c} SUBSETEQ (
-            SELECT SUM(SET{au.class_of})  
-            FROM _db_auth au  
-            WHERE {au.grantee.name} SUBSETEQ(  
-                SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})
-                FROM db_user u, TABLE(groups) AS t(g)  
-                WHERE u.name = CURRENT_USER) AND  au.auth_type = 'SELECT');
-
 다음 예제에서는 현재 사용자가 소유하고 있는 클래스를 검색한다.
 
 .. code-block:: sql
@@ -964,28 +939,6 @@ DB_DIRECT_SUPER_CLASS
 | super_class_name | VARCHAR (255) | 한 단계 상위 클래스명 |
 +------------------+---------------+-----------------------+
 
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_direct_super_class (class_name, super_class_name)
-    AS
-    SELECT c.class_name, s.class_name 
-    FROM _db_class c, TABLE(c.super_classes) AS t(s) 
-    WHERE CURRENT_USER = 'DBA' OR 
-            {c.owner.name} SUBSETEQ (  
-                    SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-                    FROM db_user u, TABLE(groups) AS t(g)  
-                    WHERE u.name = CURRENT_USER) OR 
-            {c} SUBSETEQ (
-                    SELECT SUM(SET{au.class_of})  
-                    FROM _db_auth au  
-                    WHERE {au.grantee.name} SUBSETEQ (
-                            SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-                            FROM db_user u, TABLE(groups) AS t(g)  
-                            WHERE u.name = CURRENT_USER) AND 
-                                    au.auth_type = 'SELECT');
-
 다음 예제에서는 클래스 *female_event* 의 상위 클래스를 검색한다. (:ref:`add-superclass` 참조)
 
 .. code-block:: sql
@@ -1027,28 +980,6 @@ DB_VCLASS
 +-------------+---------------+--------------------------+
 | vclass_def  | VARCHAR 4096) | 가상 클래스의 SQL 정의문 |
 +-------------+---------------+--------------------------+
-
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_vclass (vclass_name, vclass_def)
-    AS
-    SELECT q.class_of.class_name, q.spec
-    FROM _db_query_spec q
-    WHERE CURRENT_USER = 'DBA' OR
-            {q.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {q.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT');
 
 다음 예제에서는 가상 클래스 *db_class* 의 SQL 정의문을 검색한다.
 
@@ -1104,36 +1035,6 @@ DB_ATTRIBUTE
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | is_nullable       | VARCHAR (3)   | not null 제약이 설정되어 있으면 'NO', 그렇지 않으면 'YES'                                                     |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
-
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_attribute (
-    attr_name, class_name, attr_type, def_order, from_class_name, from_attr_name, data_type, prec, scale, code_set, domain_class_name, default_value, is_nullable)
-    AS
-    SELECT a.attr_name, c.class_name,
-           CASE WHEN a.attr_type = 0 THEN 'INSTANCE'
-                WHEN a.attr_type = 1 THEN 'CLASS'
-                ELSE 'SHARED' END,
-           a.def_order, a.from_class_of.class_name, a.from_attr_name, t.type_name,
-           d.prec, d.scale, d.code_set, d.class_of.class_name, a.default_value,
-           CASE WHEN a.is_nullable = 0 THEN 'YES' ELSE 'NO' END
-    FROM _db_class c, _db_attribute a, _db_domain d, _db_data_type t
-    WHERE a.class_of = c AND d.object_of = a AND d.data_type = t.type_id AND
-            (CURRENT_USER = 'DBA' OR
-            {c.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {c} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 다음 예제에서는 클래스 *event* 의 속성과 각 데이터 타입을 검색한다.
 
@@ -1219,36 +1120,7 @@ DB_ATTR_SETDOMAIN_ELM
 | domain_class_name | VARCHAR (255) | 원소의 데이터 타입이 객체 타입인 경우 그 도메인 클래스명                      |
 +-------------------+---------------+-------------------------------------------------------------------------------+
 
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_attr_setdomain_elm (
-    attr_name, class_name, attr_type,data_type, prec, scale, code_set, domain_class_name)
-    AS
-    SELECT a.attr_name, c.class_name,
-           CASE WHEN a.attr_type = 0 THEN 'INSTANCE'
-                WHEN a.attr_type = 1 THEN 'CLASS'
-                ELSE 'SHARED' END,
-           et.type_name, e.prec, e.scale, e.code_set, e.class_of.class_name
-    FROM _db_class c, _db_attribute a, _db_domain d,
-          TABLE(d.set_domains) AS t(e), _db_data_type et
-    WHERE a.class_of = c AND d.object_of = a AND e.data_type = et.type_id AND
-            (CURRENT_USER = 'DBA' OR
-            {c.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {c} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT')); 
-
-가령 클래스 D의 속성 set_attr 이 SET(A, B, C) 타입이면 다음 세 개의 레코드들이 존재하게 된다.
+예를 들어 클래스 D의 속성 set_attr 이 SET(A, B, C) 타입이면 다음 세 개의 레코드들이 존재하게 된다.
 
 +---------------+----------------+---------------+---------------+----------+-----------+--------------+-----------------------+
 | Attr_name     | Class_name     | Attr_type     | Data_type     | Prec     | Scale     | Code_set     | Domain_class_name     |
@@ -1297,33 +1169,6 @@ DB_METHOD
 +-----------------+---------------+-------------------------------------------------------------------------------------+
 | func_name       | VARCHAR (255) | 메서드에 대한 C 함수명                                                              |
 +-----------------+---------------+-------------------------------------------------------------------------------------+
-
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_method (
-    meth_name, class_name, meth_type, from_class_name, from_meth_name, func_name)
-    AS
-     
-    SELECT m.meth_name, m.class_of.class_name,
-           CASE WHEN m.meth_type = 0 THEN 'INSTANCE' ELSE 'CLASS' END,
-           m.from_class_of.class_name, m.from_meth_name, s.func_name
-    FROM _db_method m, _db_meth_sig s
-    WHERE s.meth_of = m AND
-            (CURRENT_USER = 'DBA' OR
-            {m.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {m.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 다음 예제에서는 클래스 *db_user* 의 메서드를 검색한다.
 
@@ -1376,34 +1221,6 @@ DB_METH_ARG
 | domain_class_name | VARCHAR (255) | 인자의 데이터 타입이 객체 타입인 경우 도메인 클래스명                    |
 +-------------------+---------------+--------------------------------------------------------------------------+
 
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_meth_arg (
-    meth_name, class_name, meth_type,
-    index_of, data_type, prec, scale, code_set, domain_class_name)
-    AS
-    SELECT s.meth_of.meth_name, s.meth_of.class_of.class_name,
-           CASE WHEN s.meth_of.meth_type = 0 THEN 'INSTANCE' ELSE 'CLASS' END,
-           a.index_of, t.type_name, d.prec, d.scale, d.code_set,
-           d.class_of.class_name
-    FROM _db_meth_sig s, _db_meth_arg a, _db_domain d, _db_data_type t
-    WHERE a.meth_sig_of = s AND d.object_of = a AND d.data_type = t.type_id AND
-            (CURRENT_USER = 'DBA' OR
-            {s.meth_of.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {s.meth_of.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
-
 다음 예제에서는 클래스 *db_user* 의 메서드 입력 인자를 검색한다.
 
 .. code-block:: sql
@@ -1445,35 +1262,6 @@ DB_METH_ARG_SETDOMAIN_ELM
 | domain_class_name | VARCHAR(255) | 원소의 데이터 타입이 객체 타입인 경우 도메인 클래스명.                   |
 +-------------------+--------------+--------------------------------------------------------------------------+
 
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_meth_arg_setdomain_elm(
-    meth_name, class_name, meth_type,
-    index_of, data_type, prec, scale, code_set, domain_class_name)
-    AS
-    SELECT s.meth_of.meth_name, s.meth_of.class_of.class_name,
-           CASE WHEN s.meth_of.meth_type = 0 THEN 'INSTANCE' ELSE 'CLASS' END,
-           a.index_of, et.type_name, e.prec, e.scale, e.code_set,
-           e.class_of.class_name
-    FROM _db_meth_sig s, _db_meth_arg a, _db_domain d,
-          TABLE(d.set_domains) AS t(e), _db_data_type et
-    WHERE a.meth_sig_of = s AND d.object_of = a AND e.data_type = et.type_id AND
-            (CURRENT_USER = 'DBA' OR
-            {s.meth_of.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {s.meth_of.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
-
 DB_METH_FILE
 ------------
 
@@ -1489,28 +1277,6 @@ DB_METH_FILE
 | from_class_name | VARCHAR(255) | 상속받은 메서드이면 그 메서드 파일이 정의되어 있는 상위 클래스명이 설정. 그렇지 않으면 |
 |                 |              | **NULL**                                                                               |
 +-----------------+--------------+----------------------------------------------------------------------------------------+
-
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_meth_file (class_name, path_name, from_class_name)
-    AS
-    SELECT f.class_of.class_name, f.path_name, f.from_class_of.class_name
-    FROM _db_meth_file f
-    WHERE (CURRENT_USER = 'DBA' OR
-            {f.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {f.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 DB_INDEX
 --------
@@ -1538,32 +1304,6 @@ DB_INDEX
 +-------------------+--------------+---------------------------------------------------------+
 | have_function     | VARCHAR(3)   | 함수 기반 인덱스이면 'YES', 그렇지 않으면 'NO'          |
 +-------------------+--------------+---------------------------------------------------------+
-
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_index (index_name, is_unique, is_reverse, class_name, key_count, is_primary_key, is_foreign_key, filter_expression, have_function)
-    AS
-    SELECT i.index_name, CASE WHEN i.is_unique = 0 THEN 'NO' ELSE 'YES' END,
-    CASE WHEN i.is_reverse = 0 THEN 'NO' ELSE 'YES' END, i.class_of.class_name,
-    i.key_count,
-    CASE WHEN i.is_primary_key = 0 THEN 'NO' ELSE 'YES' END, CASE WHEN i.is_foreign_key = 0 THEN 'NO' ELSE 'YES' END, i.filter_expression,
-    CASE WHEN i.have_function = 0 THEN 'NO' ELSE 'YES' END
-    FROM _db_index i
-    WHERE (CURRENT_USER = 'DBA' OR
-            {i.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {i.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 다음 예제에서는 클래스의 인덱스 정보를 검색한다.
 
@@ -1619,35 +1359,6 @@ DB_INDEX_KEY
 | func              | VARCHAR(255) | 함수 기반 인덱스의 함수 표현식                            |
 +-------------------+--------------+-----------------------------------------------------------+
 
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_index_key (index_name, class_name, key_attr_name, key_order, asc_desc, key_prefix_length, func)
-    AS
-    SELECT k.index_of.index_name, k.index_of.class_of.class_name, k.key_attr_name, k.key_order, 
-        CASE k.asc_desc 
-            WHEN 0 THEN 'ASC' 
-            WHEN 1 THEN 'DESC' 
-            ELSE 'UNKN' END, 
-        k.key_prefix_length, k.func 
-    FROM _db_index_key k 
-    WHERE CURRENT_USER = 'DBA' OR 
-        {k.index_of.class_of.owner.name} 
-        SUBSETEQ (  
-            SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-            FROM db_user u, TABLE(groups) AS t(g)  
-            WHERE u.name = CURRENT_USER) OR {k.index_of.class_of} 
-                SUBSETEQ (  
-                    SELECT SUM(SET{au.class_of})  
-                    FROM _db_auth au  
-                    WHERE {au.grantee.name} SUBSETEQ (  
-                        SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})
-                        FROM db_user u, TABLE(groups) AS t(g)
-                        WHERE u.name = CURRENT_USER
-                        ) AND  au.auth_type = 'SELECT'
-                    );
-
 다음 예제에서는 클래스의 인덱스 키 정보를 검색한다.
 
 .. code-block:: sql
@@ -1687,31 +1398,6 @@ DB_AUTH
 +--------------+--------------+------------------------------------------------------------------------------------+
 | is_grantable | VARCHAR(3)   | 권한 받은 클래스에 대해 다른 사용자에게 권한을 부여할 수 있으면 'YES', 아니면 'NO' |
 +--------------+--------------+------------------------------------------------------------------------------------+
-
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_auth (grantor_name, grantee_name, class_name, auth_type, is_grantable )
-    AS
-    SELECT CAST(a.grantor.name AS VARCHAR(255)),
-            CAST(a.grantee.name AS VARCHAR(255)),
-            a.class_of.class_name, a.auth_type,
-            CASE WHEN a.is_grantable = 0 THEN 'NO' ELSE 'YES' END
-    FROM _db_auth a
-    WHERE (CURRENT_USER = 'DBA' OR
-            {a.class_of.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {a.class_of} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
 
 다음 예제에서는 이름이 *db_a* 로 시작되는 클래스의 권한 정보를 검색한다.
 
@@ -1755,33 +1441,6 @@ DB_TRIG
 | action_time       | INTEGER      | BEFORE는 1, AFTER는 2, DEFERRED는 3으로 설정                                                        |
 +-------------------+--------------+-----------------------------------------------------------------------------------------------------+
 
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_trig (
-    trigger_name, target_class_name, target_attr_name, target_attr_type, action_type, action_time)
-    AS
-    SELECT CAST(t.name AS VARCHAR(255)), c.class_name,
-            CAST(t.target_attribute AS VARCHAR(255)),
-            CASE WHEN t.target_class_attribute = 0 THEN 'INSTANCE' ELSE 'CLASS' END,
-            t.action_type, t.action_time
-    FROM _db_class c, db_trigger t
-    WHERE t.target_class = c.class_of AND
-            (CURRENT_USER = 'DBA' OR
-            {c.owner.name} subseteq (
-                    SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                    from db_user u, table(groups) as t(g)
-                    where u.name = CURRENT_USER ) OR
-            {c} subseteq (
-    SELECT sum(set{au.class_of})
-                    FROM _db_auth au
-                    WHERE {au.grantee.name} subseteq (
-                                SELECT set{CURRENT_USER} + coalesce(sum(set{t.g.name}), set{})
-                                from db_user u, table(groups) as t(g)
-                                where u.name = CURRENT_USER ) AND
-                                        au.auth_type = 'SELECT'));
-                                        
 DB_PARTITION
 ------------
 
@@ -1806,44 +1465,6 @@ DB_PARTITION
 |                      |              | **NULL**              |
 |                      |              | LIST - value list     |
 +----------------------+--------------+-----------------------+
-
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_partition
-    (class_name, partition_name, partition_class_name, partition_type, partition_expr, partition_values)
-    AS
-    SELECT p.class_of.class_name AS class_name, p.pname AS partition_name, 
-        p.class_of.class_name + '__p__' + p.pname AS partition_class_name, 
-        CASE WHEN p.ptype = 0 THEN 'HASH'
-            WHEN p.ptype = 1 THEN 'RANGE' 
-            ELSE 'LIST' END AS partition_type, 
-        TRIM(SUBSTRING(pi.pexpr FROM 8 FOR (POSITION(' FROM ' IN pi.pexpr)-8))) AS partition_expression, 
-        p.pvalues AS partition_values 
-    FROM _db_partition p, 
-        (select * from _db_partition sp where sp.class_of =  p.class_of AND sp.pname is null) pi 
-    WHERE p.pname is not null AND 
-        (   CURRENT_USER = 'DBA' 
-            OR 
-            {p.class_of.owner.name} SUBSETEQ 
-                ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-                  FROM db_user u, TABLE(groups) AS t(g)  
-                  WHERE u.name = CURRENT_USER
-                ) 
-                OR 
-                {p.class_of} SUBSETEQ 
-                    ( SELECT SUM(SET{au.class_of})  
-                      FROM _db_auth au  
-                      WHERE {au.grantee.name} SUBSETEQ 
-                        ( SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  
-                          FROM db_user u, TABLE(groups) AS t(g)  
-                          WHERE u.name = CURRENT_USER
-                        ) 
-                        AND 
-                        au.auth_type = 'SELECT'
-                    )
-        );
 
 다음 예제에서는 :ref:`participant2 <range-participant2-table>` 클래스의 현재 구성된 분할 정보를 조회한다.
 
@@ -1881,26 +1502,6 @@ DB_STORED_PROCEDURE
 | owner       | VARCHAR(256)  | 소유자                          |
 +-------------+---------------+---------------------------------+
 
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_stored_procedure
-    (sp_name, sp_type, return_type, arg_count, lang, target, owner)
-    AS
-    SELECT sp.sp_name,
-                CASE sp.sp_type   WHEN 1 THEN 'PROCEDURE'  
-                ELSE 'FUNCTION' END,
-                CASE WHEN sp.return_type = 0 THEN 'void'  
-                     WHEN sp.return_type = 28 THEN 'CURSOR'  
-                ELSE ( SELECT dt.type_name
-                       FROM _db_data_type dt
-                       WHERE sp.return_type = dt.type_id) END,
-               sp.arg_count,
-               CASE sp.lang   WHEN 1 THEN 'JAVA'  
-               ELSE '' END, sp.target, sp.owner.name
-    FROM _db_stored_procedure sp;
-
 다음 예제에서는 현재 사용자가 소유하고 있는 Java 저장 함수를 조회한다.
 
 .. code-block:: sql
@@ -1933,21 +1534,6 @@ DB_STORED_PROCEDURE_ARGS
 +-----------+--------------+-----------------------+
 | mode      | VARCHAR(6)   | 모드 (IN, OUT, INOUT) |
 +-----------+--------------+-----------------------+
-
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_stored_procedure_args (sp_name, index_of, arg_name, data_type, mode)
-    AS
-    SELECT sp.sp_name, sp.index_of, sp.arg_name,
-                CASE sp.data_type   WHEN 28 THEN 'CURSOR'  
-                ELSE ( SELECT dt.type_name FROM _db_data_type dt
-                       WHERE sp.data_type = dt.type_id) END,
-                CASE WHEN sp.mode = 1 THEN 'IN' WHEN sp.mode = 2 THEN 'OUT'  
-                ELSE 'INOUT' END
-    FROM _db_stored_procedure_args sp
-    ORDER BY sp.sp_name, sp.index_of ;
 
 다음 예제에서는 'phone_info' Java 저장 프로시저의 인수 정보를 순서대로 조회한다.
 
@@ -1988,40 +1574,6 @@ DB_COLLATION
 | uca_strength   | VARCHAR(255) | 가중치 세기(weight strength)                                                  |
 |                |              | (Not applicable, Primary, Secondary, Tertiary, Quaternary, Identity, Unknown) |
 +----------------+--------------+-------------------------------------------------------------------------------+
-
-**정의**
-
-.. code-block:: sql
-
-    CREATE VCLASS db_collation (coll_id, coll_name, charset_name, is_builtin, has_expansions, contractions)
-    AS
-    SELECT c.coll_id, c.coll_name,
-    CASE c.charset_id
-        WHEN 3 THEN 'iso8859-1'
-        WHEN 5 THEN 'utf-8'
-        WHEN 4 THEN 'euckr'  
-        WHEN 0 THEN 'ascii'  
-        WHEN 1 THEN 'raw-bits'  
-        WHEN 2 THEN 'raw-bytes'  
-        WHEN -1 THEN 'NONE'  
-    ELSE 'OTHER' END,
-    CASE c.built_in  
-        WHEN 0 THEN 'No'  
-        WHEN 1 THEN 'Yes'  
-    ELSE 'ERROR' END,
-    CASE c.expansions  
-        WHEN 0 THEN 'No'  
-        WHEN 1 THEN 'Yes'  
-    ELSE 'ERROR' END, c.contractions,
-    CASE c.uca_strength  
-        WHEN 0 THEN 'Not applicable'  
-        WHEN 1 THEN 'Primary'  
-        WHEN 2 THEN 'Secondary'  
-        WHEN 3 THEN 'Tertiary'
-        WHEN 4 THEN 'Quaternary'  
-        WHEN 5 THEN 'Identity'  
-    ELSE 'Unknown' END
-    FROM _db_collation c ORDER BY c.coll_id;
 
 카탈로그 클래스/가상 클래스 사용 권한
 =====================================

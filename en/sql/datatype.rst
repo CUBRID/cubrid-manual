@@ -8,7 +8,7 @@ Numeric Types
 CUBRID supports the following numeric data types to store integers or real numbers.
 
 +----------------------+-----------+---------------------------------+--------------------------------+---------------------+
-| Type                 | Bytes     | Mix                             | Max                            | Exact/approx.       |
+| Type                 | Bytes     | Min                             | Max                            | Exact/approx.       |
 +======================+===========+=================================+================================+=====================+
 | **SHORT**,           | 2         | -32,768                         | 32,767                         | exact numeric       |
 | **SMALLINT**         |           |                                 |                                |                     |
@@ -28,10 +28,8 @@ CUBRID supports the following numeric data types to store integers or real numbe
 | **DOUBLE**,          | 8         | -1.7976931348623157E+308        | +1.7976931348623157E+308       | approximate numeric |
 | **DOUBLE PRECISION** |           | (ANSI/IEEE 754-1985 standard)   | (ANSI/IEEE 754-1985 standard)  | floating point : 15 |
 +----------------------+-----------+---------------------------------+--------------------------------+---------------------+
-| **MONETARY**         | 12        | -3.402823466E+38                | +3.402823466E+38               | approximate numeric |
-+----------------------+-----------+---------------------------------+--------------------------------+---------------------+
 
-Numeric data types are divided into exact and approximate types. Exact numeric data types (**SMALLINT**, **INT**, **BIGINT**, **NUMERIC**) are used for numbers whose values must be precise and consistent, such as the numbers used in financial accounting. Note that even when the literal values are equal, approximate numeric data types (**FLOAT**, **DOUBLE**, **MONETARY**) can be interpreted differently depending on the system.
+Numeric data types are divided into exact and approximate types. Exact numeric data types (**SMALLINT**, **INT**, **BIGINT**, **NUMERIC**) are used for numbers whose values must be precise and consistent, such as the numbers used in financial accounting. Note that even when the literal values are equal, approximate numeric data types (**FLOAT**, **DOUBLE**) can be interpreted differently depending on the system.
 
 CUBRID does not support the UNSIGNED type for numeric data types.
 
@@ -52,6 +50,38 @@ On the above table, two types on the same cell are identical types but it always
 
     All numeric data type values can be compared with each other. To do this, automatic coercion to the common numeric data type is performed. For explicit coercion, use the **CAST** operator. When different data types are sorted or calculated in a numerical expression, the system performs automatic coercion. For example, when adding a **FLOAT** attribute value to an **INTEGER** attribute value, the system automatically coerces the **INTEGER** value to the most approximate **FLOAT** value before it performs the addition operation.
 
+    The following is an example to print out the value of **FLOAT** type when adding the value of **INTEGER** type to the value of **FLOAT** type.
+    
+    .. code-block:: sql
+    
+        CREATE TABLE tbl (a INT, b FLOAT);
+        INSERT INTO tbl VALUES (10, 5.5);
+        SELECT a + b FROM tbl;
+    
+    ::
+
+        1.550000e+01
+
+    
+    This is an example of overflow error occurred when adding two integer values, the following can be an **INTEGER** type value for the result.
+    
+    .. code-block:: sql
+    
+        SELECT 100000000*1000000;
+        
+    ::
+        ERROR: Data overflow on data type integer.
+
+    In the above case, if you specify one of two integers as the **BIGINT** type, it will determine the result value into the **BIGINT** type, and then output the normal result.    
+    
+    .. code-block:: sql
+    
+        SELECT CAST(100000000 AS BIGINT)*1000000;
+        
+    ::
+    
+        100000000000000
+    
     .. warning:: 
 
         Earlier version than CUBRID 2008 R2.0, the input constant value exceeds **INTEGER**, it is handled as **NUMERIC**. However, 2008 R2.0 or later versions, it is handled as **BIGINT** .
@@ -174,18 +204,7 @@ The precision *p* is not specified. The data specified as this data type is repr
     If you specify 1234.56789 as DOUBLE, 1234.56789 is stored and 1.234567890000000e+03 is displayed.
     If you specify 9007199254740993 as DOUBLE, 9007199254740992 is stored and 9.007199254740992e+15 is displayed.
 
-MONETARY
---------
-
-The **MONETARY** data type is an approximate numeric data type. The range of valid value is the same as **DOUBLE**, which is represented to two decimal places; the value range can be different based on system. A comma is appended to every 1000th place.
-
-*   You can use a dollar sign or a decimal point, but a comma is not allowed.
-*   **DEFAULT** constraint can be specified in a column of this type.
-
-::
-
-    If you specify 12345.67898934 as MONETARY, $12,345.68 is stored (it is rounded to third decimal place).
-    If you specify 123456789 as MONETARY, $123,456.789.00 is stored.
+.. note:: MONETARY type is deprecated, and it is not recommended to use any more.
 
 .. _date-time-type:
 
@@ -215,7 +234,7 @@ Date/time data types are used to represent the date or time (or both together). 
 
 *   From the CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 00 to 69 is converted into a number from 2000 to 2069; a number from 70 to 99 is converted into a number from 1970 to 1999. In earlier than CUBRID 2008 R3.0 version, if time value is represented with two-digit numbers, a number from 01 to 99 is converted into a number from 0001 to 0099.
 
-*   The range of **TIMESTAMP** is between 1970-01-01 00:00:01 - 2038-01-19 03 03:14:07 (GMT). For KST (GMT+9), values from 1970-01-01 00:00:01 to 2038-01-19 12:14:07 can be stored. timestamp'1970-01-01 00:00:00' (GMT) is the same as timestamp'0000-00-00 00:00:00'.
+*   The range of **TIMESTAMP** is between 1970-01-01 00:00:01 and 2038-01-19 03 03:14:07 (GMT). For KST (GMT+9), values from 1970-01-01 09:00:01 to 2038-01-19 12:14:07 can be stored. timestamp'1970-01-01 00:00:00' (GMT) is the same as timestamp'0000-00-00 00:00:00'.
 
 *   The results of date, time and timestamp operations may depend on the rounding mode. In these cases, for Time and Timestamp, the most approximate second is used as the minimum resolution; for Date, the most approximate date is used as the minimum resolution.
 
@@ -240,8 +259,8 @@ The **Date** / **Time** types can be cast explicitly using the **CAST** operator
 In general, zero is not allowed in **DATE**, **DATETIME**, and **TIMESTAMP** types. However, if both date and time values are 0, it is allowed as an exception. This is useful in terms that this value can be used if an index exists upon query execution of a column corresponding to the type.
 
 *   Some functions in which the **DATE**, **DATETIME**, and **TIMESTAMP** types are specified as an argument return different value based on the **return_null_on_function_errors** system parameter if every input argument value for date and time is 0. If **return_null_on_function_errors** is yes, **NULL** is returned; if no, an error is returned. The default value is **no**.
-*   The functions that return **DATE**, **DATETIME**, and **TIMESTAMP** types can return a value of 0 for date and time. However, these values cannot be stored in Date objects in Java applications. Therefore, it will be processed with one of the followings based on the configuration of zeroDateTimeBehavior, the connection URL property: being handled as an exception, returning **NULL**, or returning a minimum value (see :ref:`jdbc-connection-conf`).
-*   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_DATETIME`, and :func:`TO_TIMESTAMP` functions follows the corresponding locale date format. For details, see :ref:`stmt-type-parameters` and the description of each function.
+*   The functions that return **DATE**, **DATETIME**, and **TIMESTAMP** types can return a value of 0 for date and time. However, these values cannot be stored in Date objects in Java applications. Therefore, it will be processed with one of the following based on the configuration of zeroDateTimeBehavior, the connection URL property: being handled as an exception, returning **NULL**, or returning a minimum value (see :ref:`jdbc-connection-conf`).
+*   If the **intl_date_lang** system is configured, input string of :func:`TO_DATE`, :func:`TO_TIME`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP`, :func:`DATE_FORMAT`, :func:`TIME_FORMAT`, :func:`TO_CHAR` and :func:`STR_TO_DATE` functions follows the corresponding locale date format. For details, see :ref:`stmt-type-parameters` and the description of each function.
 
 DATE
 ----
@@ -282,7 +301,7 @@ The **TIME** data type is used to represent the hour (hh), minute (mm) and secon
 
 ::
 
-    TIME'00:00:00’ is outputted as '12:00:00 AM'.
+    TIME'00:00:00' is outputted as '12:00:00 AM'.
     TIME'1:15' is regarded as '01:15:00 AM'.
     TIME'13:15:45' is regarded as '01:15:45 PM'.
     TIME'13:15:45 pm' is stored normally.
@@ -355,30 +374,44 @@ The input format of **TIMESTAMP** is as follows: ::
 CASTing a String to Date/Time Type
 ----------------------------------
 
+.. _cast-to-datetime-recommend:
+
 Recommended Format for Strings in Date/Time Type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When you casting a string to Date/Time type by using the :func:`CAST` function, it is recommended to write the string in the following format: Note that date/time string formats used in the :func:`CAST` function are not affected by locale (which is specified as the **CUBRID_CHARSET** environment variable).
+When you casting a string to Date/Time type by using the :func:`CAST` function, it is recommended to write the string in the following format: Note that date/time string formats used in the :func:`CAST` function are not affected by locale which is specified by creating DB.
 
-* **DATE** Type ::
+Also, in :func:`TO_DATE`, :func:`TO_TIME`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP` functions, when date/time format is omitted, write the date/time string in the following format.
 
-    YYYY-MM-DD
-    MM/DD/YYYY
+*   **DATE** Type ::
+    
+        YYYY-MM-DD
+        MM/DD/YYYY
+    
+*   **TIME** Type ::
+    
+        HH:MI:SS [AM|PM]
+    
+*   **DATETIME** Type ::
+    
+        YYYY-MM-DD HH:MI:SS[.msec] [AM|PM]
+        HH:MI:SS[.msec] [AM|PM] YYYY-MM-DD
+        
+        MM/DD/YYYY HH:MI:SS[.msec] [AM|PM]
+        HH:MI:SS[.msec] [AM|PM] MM/DD/YYYY
+    
+*   **TIMESTAMP** Type ::
 
-* **TIME** Type ::
-
-    HH:MM:SS [AM|PM]
-
-* **DATETIME** Type ::
-
-    YYYY-MM-DD HH:MM:SS[.msec] [AM|PM]
-
-* **TIMESTAMP** Type ::
-
-    YYYY-MM-DD HH:MM:SS [AM|PM]
-
+        YYYY-MM-DD HH:MI:SS [AM|PM]
+        HH:MI:SS [AM|PM] YYYY-MM-DD
+        
+        MM/DD/YYYY HH:MI:SS [AM|PM]
+        HH:MI:SS [AM|PM] MM/DD/YYYY
+    
 Available Format for Strings in Date/Time Type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:func:`CAST` function allows the below format for date/time strings.
 
 **Available DATE String Format**
 
@@ -421,7 +454,7 @@ Available Format for Strings in Date/Time Type
 
     ::
 
-        [[[[[[Y]Y]Y]Y]M]MDD]HHMMSS[.[msec]] [am|pm]
+        [[[[[[Y]Y]Y]Y]M]MDD]HHMISS[.[msec]] [am|pm]
         
     *   20110420091015.359 am: 9 hours 10 minutes 15 seconds AM
     *   0420091015: 9 hours 10 minutes 15 seconds AM
@@ -485,14 +518,14 @@ Available Format for Strings in Date/Time Type
 
     ::
 
-        YYMMDDHHMM[SS[.msec]]
+        YYMMDDHHMI[SS[.msec]]
         
     *   1104200910.359: April 20th, 2011, 9 hours 10 minutes AM (0.359 seconds will be truncated)
     *   110420091000.359: April 20th, 2011, 9 hours 10 minutes 0.359 seconds AM
 
     ::
 
-        YYYYMMDDHHMMSS[.msec]
+        YYYYMMDDHHMISS[.msec]
 
     *   201104200910.359: November 4th, 2020 8 hours 9 minutes 10.359 seconds PM
     *   20110420091000.359: April 20th, 2011, 9 hours 10 minutes 0.359 seconds AM
@@ -643,7 +676,9 @@ The letters used in hexadecimal numbers are not case-sensitive. That is, X'4f' a
 BIT(n)
 ------
 
-Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1. If *n* is not specified, the length is set to 1. The bit string is filled with 4-bit values from the left side. For example, the value of B'1' is the same as the value of B'1000'.
+Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1. If *n* is not specified, the length is set to 1. The bit string is filled with 8-bit unit from the left side. For example, the value of B'1' is the same as the value of B'10000000'. Therefore, it is recommended to declare a length by 8-bit unit, and input a value by 8-bit unit.
+
+.. note:: If you input B'1' to the BIT(4) column, it is printed out X'8' on CSQL, X'80' on CUBRID Manager, Query Browser or application program.
 
 *   *n* must be a number greater than 0.
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
@@ -672,7 +707,9 @@ Fixed-length binary or hexadecimal bit strings are represented as **BIT** (*n*),
 BIT VARYING(n)
 --------------
 
-A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1,073,741,823 (maximum value). *n* is the maximum number of bits. If *n* is not specified, the maximum length is set to 1,073,741,823. The bit string is filled with 4-bit values from the left side. For example, the value of B'1' is the same as the value of B'1000'.
+A variable-length bit string is represented as **BIT VARYING** (*n*), where *n* is the maximum number of bits. If *n* is not specified, the length is set to 1,073,741,823 (maximum value). *n* is the maximum number of bits. If *n* is not specified, the maximum length is set to 1,073,741,823. The bit string is filled with 8-bit values from the left side. For example, the value of B'1' is the same as the value of B'10000000'. Therefore, it is recommended to declare a length by 8-bit unit, and input a value by 8-bit unit.
+
+.. note:: If you input B'1' to the BIT VARYING(4) column, it is printed out X'8' on CSQL, X'80' on CUBRID Manager, Query Browser or application program.
 
 *   If the length of the string exceeds *n*, it is truncated and filled with 0s.
 *   The remainder of the string is not filled with 0s even if a bit string smaller than *n* is stored.
@@ -717,7 +754,7 @@ CUBRID supports the following two types of character strings:
 
 .. note:: From CUBRID 9.0 version, **NCHAR**, **NCHAR VARYING** is the same with **CHAR**, **VARCHAR**.
 
-The followings are the rules that are applied when using the character string types.
+The following are the rules that are applied when using the character string types.
 
 *   In general, single quotations are used to enclose character string. Double quotations may be used as well depending on the value of **ansi_quotes**, which is a parameter related to SQL statement. If the **ansi_quotes** value is set to **no**, character string enclosed by double quotations is handled as character string, not as an identifier. The default value is **yes**. For details, :ref:`stmt-type-parameters`.
 
@@ -726,7 +763,7 @@ The followings are the rules that are applied when using the character string ty
     'abc'
     'def'
 
-    The two strings above are considered identical to one string below. ::
+    The above two strings and the below string are considered identical. ::
 
     'abcdef'
 
@@ -736,7 +773,7 @@ The followings are the rules that are applied when using the character string ty
 
 *   The maximum size of the token for all the character strings is 16 KB.
 
-To enter the language of a specific country, we recommend that you to change the locale by using the **CUBRID_CHARSET** environment variable or introducer **CHARSET** (or **COLLATE** modifier). For a more information, see :doc:`/sql/i18n`.
+To enter the language of a specific country, we recommend that you to specify the locale when creating DB, then you can change locale by the introducer **CHARSET**(or **COLLATE** modifier). For more information, see :doc:`/sql/i18n`.
 
 **Length**
  
@@ -820,7 +857,7 @@ When the length of a character string exceeds *n*, they are truncated. When char
 STRING
 ------
 
-**STRING** is a variable-length character string data type. **STRING** is the same as the VARCHAR with the length specified to the maximum value. That is, **STRING** and **VARCHAR** (1,073,741,823) have the same value.
+**STRING** is a variable-length character string data type. **STRING** is the same as the VARCHAR with the length specified as the maximum value. That is, **STRING** and **VARCHAR** (1,073,741,823) have the same value.
 
 NCHAR(n)
 --------
@@ -829,7 +866,7 @@ NCHAR(n)
 .. note::
 
     This type had been used to input the data for the languages except English 
-    before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you newly create the schema, it is recommended to use **CHAR** instead of this type.
+    before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you create a new schema, it is recommended to use **CHAR** instead of this type.
 
 NCHAR VARYING(n)
 ----------------
@@ -838,7 +875,7 @@ NCHAR VARYING(n)
 
 .. note::
 
-    This type had been used to input the data for the languages except English before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you newly create the schema, it is recommended to use **VARCHAR** instead of this type.
+    This type had been used to input the data for the languages except English before CUBRID 9.0 version. However, from 9.0, as the charset and the collation by the locale setting are supported, this type remained only for the syntax compatibility. Therefore, if you create a new schema, it is recommended to use **VARCHAR** instead of this type.
 
 .. _escape-characters:
 
@@ -1058,8 +1095,6 @@ When used in type contexts other than **CHAR** or numbers, the enum is coerced t
     +---------------+-------------------------+
     | NUMERIC       | Index                   |
     +---------------+-------------------------+
-    | MONETARY      | Index                   |
-    +---------------+-------------------------+
     | TIME          | Value                   |
     +---------------+-------------------------+
     | DATE          | Value                   |
@@ -1196,18 +1231,18 @@ Notes
 
 The **ENUM** type is not a reusable type. If several columns require the same set of values, an **ENUM** type must be defined for each one. When comparing two columns of **ENUM** type, the comparison is performed as if the columns were coerced to **CHAR** type even if the two **ENUM** types define the same set of values.
 
-Using the **ALTER ... CHANGE** statement to modify the set of values of an **ENUM** type is only allowed if the value of the system parameter **alter_table_change_type_strict** is set to yes. In this case, CUBRID uses enum value (the char-literal) to convert values to the new domain. If a value is outside of the new **ENUM** type values set, it is automatically mapped to the first value of the **ENUM** type.
+Using the **ALTER ... CHANGE** statement to modify the set of values of an **ENUM** type is only allowed if the value of the system parameter **alter_table_change_type_strict** is set to yes. In this case, CUBRID uses enum value (the char-literal) to convert values to the new domain. If a value is outside of the new **ENUM** type values set, it is automatically mapped to the empty string('').
 
 .. code-block:: sql
     
-    CREATE TABLE tbl(color enum ('red', 'green', 'blue'));
+    CREATE TABLE tbl(color ENUM ('red', 'green', 'blue'));
     INSERT INTO tbl VALUES('red'), ('green'), ('blue');
 
 The following statement will extend the **ENUM** type with the value 'yellow':
 
 .. code-block:: sql
 
-    ALTER TABLE tbl CHANGE color color enum ('red', 'green', 'blue', 'yellow');
+    ALTER TABLE tbl CHANGE color color ENUM ('red', 'green', 'blue', 'yellow');
     INSERT into tbl VALUES(4);
     SELECT color FROM tbl;
 
@@ -1215,9 +1250,9 @@ The following statement will extend the **ENUM** type with the value 'yellow':
 
       color
     ======================
-      'blue'
+      'red'
       'green'
-      'red'    
+      'blue'
       'yellow'
 
 The following statement will change all tuples with value 'green' to value 'red' because the value 'green' cannot be converted the new **ENUM** type:
@@ -1231,10 +1266,10 @@ The following statement will change all tuples with value 'green' to value 'red'
 
       color
     ======================
+      'red'
+      ''
       'blue'
-      'red'
-      'red'
-      'yellow'    
+      'yellow'
 
 The **ENUM** type is mapped to char-string types in CUBRID drivers. The following example shows how to use the **ENUM** type in a JDBC application:
 
@@ -1506,10 +1541,10 @@ To create and manage LOB storage
 By default, the **LOB** data file is stored in the <db-volume-path>/lob directory where database volume is created. However, if the lob base path is specified with :option:`createdb -B` option when creating the database, **LOB** data files will be stored in the directory designated. However, if the specified directory does not exist, CUBRID tries to create the directory and display an error message when it fails to create it. For more details, see :option:`createdb -B` option. ::
 
     # image_db volume is created in the current work directory, and a LOB data file will be stored.
-    % cubrid createdb image_db
+    % cubrid createdb image_db en_US
 
     # LOB data file is stored in the "/home1/data1" path within a local file system.
-    % cubrid createdb --lob-base-path="file:/home1/data1" image_db
+    % cubrid createdb --lob-base-path="file:/home1/data1" image_db en_US
 
 You can identify a directory where a LOB file will be stored by executing the cubrid spacedb utility.
 
@@ -1768,8 +1803,6 @@ The implicit type conversion executed by CUBRID is as follows:
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
     | **SHORT**     |              |          |          |               | O          | O         | O           | O          |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
-    | **MONETARY**  |              |          |          |               | O          | O         | O           | O          |
-    +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
     | **BIT**       |              |          |          |               |            |           |             |            |
     +---------------+--------------+----------+----------+---------------+------------+-----------+-------------+------------+
     | **VARBIT**    |              |          |          |               |            |           |             |            |
@@ -1781,39 +1814,37 @@ The implicit type conversion executed by CUBRID is as follows:
 
 **Implicit Type Conversion Table 2**
 
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | From \\ To    | INT     | SHORT     | MONETARY     | BIT     | VARBIT     | CHAR     | VARCHAR     |
-    +===============+=========+===========+==============+=========+============+==========+=============+
-    | **DATETIME**  |         |           |              |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **DATE**      |         |           |              |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **TIME**      |         |           |              |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **TIMESTAMP** |         |           |              |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **DOUBLE**    | O       | O         | O            |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **FLOAT**     | O       | O         | O            |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **NUMERIC**   | O       | O         | O            |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **BIGINT**    | O       | O         | O            |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **INT**       | \-      | O         | O            |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **SHORT**     | O       | \-        | O            |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **MONETARY**  | O       | O         | \-           |         |            | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **BIT**       |         |           |              | \-      | O          | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **VARBIT**    |         |           |              | O       | \-         | O        | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **CHAR**      | O       | O         | O            | O       | O          | \-       | O           |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
-    | **VARCHAR**   | O       | O         | O            | O       | O          | O        | \-          |
-    +---------------+---------+-----------+--------------+---------+------------+----------+-------------+
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | From \\ To    | INT     | SHORT     | BIT     | VARBIT     | CHAR     | VARCHAR     |
+    +===============+=========+===========+=========+============+==========+=============+
+    | **DATETIME**  |         |           |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **DATE**      |         |           |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **TIME**      |         |           |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **TIMESTAMP** |         |           |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **DOUBLE**    | O       | O         |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **FLOAT**     | O       | O         |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **NUMERIC**   | O       | O         |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **BIGINT**    | O       | O         |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **INT**       | \-      | O         |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **SHORT**     | O       | \-        |         |            | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **BIT**       |         |           | \-      | O          | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **VARBIT**    |         |           | O       | \-         | O        | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **CHAR**      | O       | O         | O       | O          | \-       | O           |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
+    | **VARCHAR**   | O       | O         | O       | O          | O        | \-          |
+    +---------------+---------+-----------+---------+------------+----------+-------------+
 
 Conversion Rules
 ----------------
@@ -1854,7 +1885,7 @@ If the parameter value entered in the function can be converted to the specified
 You can enter multiple type values in the function. If the type value not specified in the function is delivered, the type will be converted depending on the following priority order.
 
 *   Date/Time Type ( **DATETIME** > **TIMESTAMP** > **DATE** > **TIME** )
-*   Approximate Numeric Type ( **MONETARY** > **DOUBLE** > **FLOAT** )
+*   Approximate Numeric Type ( **DOUBLE** > **FLOAT** )
 *   Exact Numeric Type ( **NUMERIC** > **BIGINT** > **INT** > **SHORT** )
 *   String Type ( **CHAR** > **VARCHAR** )
 
@@ -2158,7 +2189,7 @@ Arithmetic Operation
     If a numeric type and a string type are operands, they will be applied according to the following rules.
 
     *   Strings will be converted to **DOUBLE** when possible.
-    *   The result type is **DOUBLE** or **MONETARY** and depends on the type of the numeric operand.
+    *   The result type is **DOUBLE** and depends on the type of the numeric operand.
 
     .. code-block:: sql
 

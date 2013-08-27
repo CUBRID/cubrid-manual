@@ -48,7 +48,7 @@ The following table provides conventions on definitions used in the CUBRID Datab
 |                                      |                                                                                                                                                         |                      |
 +======================================+=========================================================================================================================================================+======================+
 | *Italics*                            | *Italics*                                                                                                                                               | *persistent*         |
-|                                      | type represents variable names and user-defined values (system, database, table, column, file) in examples.                                             | :                    |
+|                                      | type represents variable names and user-defined values (system, database, table, column and file) in examples.                                          | :                    |
 |                                      |                                                                                                                                                         | *stringVariableName* |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | **Boldface**                         | **Boldface**                                                                                                                                            | **fetch**            |
@@ -56,9 +56,7 @@ The following table provides conventions on definitions used in the CUBRID Datab
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Constant Width                       | Constant Width type represents segments of code example or describes a command's execution and results.                                                 | csql database_name   |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
-| UPPER-CASE                           | UPPER-CASE represents the CUBRID keyword (see                                                                                                           | **SELECT**           |
-|                                      | **Boldface**                                                                                                                                            |                      |
-|                                      | ).                                                                                                                                                      |                      |
+| UPPER-CASE                           | UPPER-CASE represents the CUBRID keyword (see **Boldface**).                                                                                            | **SELECT**           |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | Single Quotes (' ')                  | Single quotes (' ') are used with braces and brackets and represent the necessary sections of a syntax. Single quotes are also used to enclose strings. | {'{'                 |
 |                                      |                                                                                                                                                         | *const_list*         |
@@ -83,7 +81,7 @@ The following table provides conventions on definitions used in the CUBRID Datab
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
 | A value enclosed by braces ({ })     | A value enclosed by braces an element consisting of collection.                                                                                         | {2, 4, 6}            |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
-| Braces with ellipsis({ }...)         | Braces before an ellipsis represents that a parameter can be repeated.                                                                                  | {,                   |
+| Braces with ellipsis ({ }...)        | Braces before an ellipsis represents that a parameter can be repeated.                                                                                  | {,                   |
 |                                      |                                                                                                                                                         | *class_name*         |
 |                                      |                                                                                                                                                         | }...                 |
 +--------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+
@@ -96,10 +94,10 @@ Version Name and Version String Conventions
 Rules for version naming and string since CUBRID 9.0 are as follows:
 
 *  Version name: CUBRID x.x Patch x (major version, minor version, patch version if necessary)
-   CUBRID 9.0 Patch 1 (CUBRID 9.0 P1 in short)
+   CUBRID 9.2 Patch 1 (CUBRID 9.2 P1 in short)
 
 *  Version string: x.x.x.x (major version, minor version, patch version, build number)
-   9.0.1.0012
+   9.2.1.0012
    
 Rules for version naming and string before CUBRID 9.0 are as follows:
 

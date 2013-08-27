@@ -8,7 +8,7 @@ CUBRID processes can be controlled by **cubrid** utility.
 Controlling CUBRID Service
 --------------------------
 
-The following **cubrid** utility syntax shows how to control services registered in the configuration file. One of the followings can be specified in *command*: 
+The following **cubrid** utility syntax shows how to control services registered in the configuration file. One of the following can be specified in <command>: 
 **start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to check status. No additional options or arguments are required. 
 
 ::
@@ -20,7 +20,7 @@ Controlling Database Server
 ---------------------------
 
 The following **cubrid** utility syntax shows how to control database server process. 
-One of the followings can be specified in *command*: **start**, **stop**, **restart**, or **status**. **start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to check status. Every command except **status** must have a database name as an argument. 
+One of the following can be specified in <command>: **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to check status. Every command except **status** must have a database name as an argument. 
 
 ::
 
@@ -31,20 +31,34 @@ Controlling Broker
 ------------------
 
 The following **cubrid** utility syntax shows how to control CUBRID broker process. 
-One of the followings can be specified in *command*: **start**, **stop**, **restart**, or **status**; **start** is used to run services; **stop** is used to stop services; **restart** is used to restart services; **status** is used to checkstatus. In addition, **on** (to start a specific broker) and **off** (to stop a specific broker) are provided. 
+One of the following can be specified in <command>: 
+**start** is used to run services; **stop** is used to stop services; 
+**restart** is used to restart services; **status** is used to check status;  
+**acl** is used to limit broker access; 
+**on**/**off** is used to enable/disable the specified broker; 
+**reset** is used to reset the connection to broker; 
+**info** is used to display the broker configuration information; 
+**getid** is used to get the SHARD ID(SHARD database ID) with SHARD key.
+
+And more, SHARD feature can be used only after the broker is started and "SHARD", the broker parameter, whose value in cubrid_broker.conf is set to ON.
 
 ::
 
     cubrid broker <command> 
-    <command>: {start|stop|restart|status [broker_name] 
+    <command>: start
+               |stop
+               |restart
+               |status [options] [broker_name_expr]
+               |acl {status|reload} broker_name
+               |on <broker_name> |off <broker_name>
+               |reset broker_name 
                |info
-               |on broker_name |off broker_name 
-               |reset broker_name |acl {status|reload} broker_name }
+               |getid -b <broker_name> [-f] shard_key
 
 Controlling CUBRID Manager Server
 ---------------------------------
 
-To use the CUBRID Manager, the Manager server must be running where database server is running. The following **cubrid** utility syntax shows how to control the CUBRID Manager processes. One of the followings can be specified in *command*: **start**, **stop**, or **status**; **start** is used to run services; **stop** is used to stop services; **status** is used to check status. 
+To use the CUBRID Manager, the Manager server must be running where database server is running. The following **cubrid** utility syntax shows how to control the CUBRID Manager processes. One of the following can be specified in *command*: **start**, **stop**, or **status**; **start** is used to run services; **stop** is used to stop services; **status** is used to check status. 
 
 ::
 
@@ -55,14 +69,14 @@ To use the CUBRID Manager, the Manager server must be running where database ser
 Controlling CUBRID HA
 ---------------------
 
-The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. One of the followings can be specified in *command*: 
-**start**, **stop**, **reload**, **deact**, or **act**; **start** is used to run HA-related processes; **stop** is used to stop them; **reload** is used to reload information on HA configuration; **deact** is used to exclude nodes from the CUBRID HA groups; **act** is used to include nodes which have been excluded from the CUBRID HA groups. For details, see :ref:`cubrid-heartbeat`. 
+The following **cubrid heartbeat** utility syntax shows how to use CUBRID HA. One of the following can be specified in *command*: 
+**start**, **stop**, **copylogdb**, **applylogdb**, **reload** or **status**; **start** is used to run HA-related processes; **stop** is used to stop them; **copylogdb** is used to start or stop copylogdb process; **applylogdb** is used to start or stop applylogdb process; ; **reload** is used to reload information on HA configuration; **status** is used to check HA status. For details, see :ref:`cubrid-heartbeat`. 
 
 ::
 
     cubrid heartbeat <command>
-    <command>: {start|stop|reload|deact|act}
-
+    <command>: {start|stop|copylogdb|applylogdb|reload|status}
+    
 .. _control-cubrid-services:
 
 CUBRID Services
@@ -71,7 +85,9 @@ CUBRID Services
 Registering Services
 --------------------
 
-You can register one or more database servers, CUBRID brokers, CUBRID Manager(s) or CUBRID HAs as CUBRID service in the configuration file ( **cubrid.conf** ). If you do not register any service, only master process is registered by default. 
+You can register database servers, CUBRID brokers, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
+
+If you do not register any service, only master process is registered by default. 
 It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
 
 The following example shows how to register database server and broker as service in the **cubrid.conf** file and enable databases ( *demodb* and *testdb* ) to start automatically at once when CUBRID server starts running.
@@ -133,13 +149,13 @@ After registering service as explained in :ref:`control-cubrid-services`, enter 
     @ cubrid server start: demodb
 
     This may take a long time depending on the amount of restore works to do.
-    CUBRID 9.0
+    CUBRID 9.2
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
-    CUBRID 9.0
+    CUBRID 9.2
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -214,14 +230,14 @@ Enter code below to restart registered CUBRID service. You can verify that serve
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.0
+    CUBRID 9.2
 
     ++ cubrid server start: success
     @ cubrid server start: testdb
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.0
+    CUBRID 9.2
 
     ++ cubrid server start: success
     @ cubrid broker start
@@ -240,8 +256,8 @@ The following example shows how to check the status of master process and databa
     ++ cubrid master is running.
     @ cubrid server status
 
-    Server testdb (rel 9.0, pid 31059)
-    Server demodb (rel 9.0, pid 30950)
+    Server testdb (rel 9.2, pid 31059)
+    Server demodb (rel 9.2, pid 30950)
 
     @ cubrid broker status
     % query_editor
@@ -283,7 +299,7 @@ The following example shows how to run *demodb* server.
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.0
+    CUBRID 9.2
 
     ++ cubrid server start: success
     
@@ -299,7 +315,7 @@ If you start *demodb* server while master process has stopped, master process au
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.0
+    CUBRID 9.2
 
     ++ cubrid server start: success
 
@@ -356,7 +372,7 @@ The following example shows how to restart *demodb* server. *demodb* server that
 
     This may take a long time depending on the amount of recovery works to do.
 
-    CUBRID 9.0
+    CUBRID 9.2
 
     ++ cubrid server start: success
 
@@ -370,8 +386,8 @@ The following example shows how to check the status of a database server. Names 
     % cubrid server status
     
     @ cubrid server status
-    Server testdb (rel 9.0, pid 24465)
-    Server demodb (rel 9.0, pid 24342)
+    Server testdb (rel 9.2, pid 24465)
+    Server demodb (rel 9.2, pid 24342)
 
 The following example shows the message when master process has stopped. 
 
@@ -405,8 +421,8 @@ The following example shows the format of the **access_ip_control_file** file.
     <ip_addr>
     ...
 
-*   <db_name> : The name of a database in which access is allowed
-*   <ip_addr> : The IP address allowed to access a database. Using an asterisk (*) at the last digit means that all IP addresses are allowed. Several lines of <ip_addr> can be added in the next line of the name of a database.
+*   <db_name>: The name of a database in which access is allowed
+*   <ip_addr>: The IP address allowed to access a database. Using an asterisk (*) at the last digit means that all IP addresses are allowed. Several lines of <ip_addr> can be added in the next line of the name of a database.
 
 To configure several databases, it is possible to specify additional [@<db_name>] and <ip_addr>.
 
@@ -447,6 +463,9 @@ To display the IP configuration of a server which is currently running, use the 
 Database Server Log
 -------------------
 
+Error Log
+^^^^^^^^^
+
 The following log is created in the file of a server error log if an IP address that is not allowed to access is used. 
 
 ::
@@ -454,9 +473,194 @@ The following log is created in the file of a server error log if an IP address 
     Time: 10/29/10 17:32:42.360 - ERROR *** ERROR CODE = -1022, Tran = 0, CLIENT = (unknown):(unknown)(-1), EID = 2
     Address(10.24.18.66) is not authorized.
 
+An error log of the database server is saved into $CUBRID/log/server directory, and the format of the file name is  <db_name>_<yyyymmdd>_<hhmi>.err. The extension is ".err".
+ 
+::
+ 
+    demodb_20130618_1655.err
+
 .. note:: 
 
     For details on how to limit an access to the broker server, see :ref:`limiting-broker-access`.
+    
+.. _server-event-log:
+ 
+Event Log
+^^^^^^^^^
+ 
+If an event which affects on the query performance occurs, this is saved into the event log.
+
+The events which are saved on the event log are SLOW_QUERY, MANY_IOREADS, LOCK_TIMEOUT, DEADLOCK and TEMP_VOLUME_EXPAND.
+
+This log file is saved into the $CUBRID/log/server directory, and the format of the file name is  <db_name>_<yyyymmdd>_<hhmi>.event. The extension is ".event".
+ 
+::
+ 
+    demodb_20130618_1655.event
+ 
+**SLOW_QUERY**
+ 
+If a slow query occurs, this event is written. If **sql_trace_slow** parameter value of cubrid.conf is set, this event will arise. The output example is as follows.
+ 
+::
+ 
+    06/12/13 16:41:05.558 - SLOW_QUERY
+      client: PUBLIC@testhost|csql(13173)
+      sql: update [y] [y] set [y].[a]= ?:1  where [y].[a]= ?:0  using index [y].[pk_y_a](+)
+      bind: 5
+      bind: 200
+      time: 1015
+      buffer: fetch=48, ioread=2, iowrite=0
+      wait: cs=1, lock=1010, latch=0
+ 
+*   client: <DB user>@<application client host name>|<program name>(<process ID>)
+*   sql: slow query
+*   bind: binding value. it is printed out as the number of <num> in the sql item, "?:<num>". The value of "?:0" is 5, and the value of "?:1" is 200.
+*   time: execution time(ms)
+*   buffer: execution statistics in the buffer
+    *   fetch: fetching pages count
+    *   ioread: I/O read pages count
+    *   iowrite: I/O write pages count
+    
+*   wait: waiting time
+    *   cs: waiting time on the critical section(ms)
+    *   lock: waiting time to acquire the lock(ms)
+    *   latch: waiting time to acquire the latch(ms)
+ 
+On the above example, the query execution time was 1015ms, and lock waiting time was 1010ms, so we can indicate that almost all execution time was from lock waiting.
+    
+**MANY_IOREADS**
+ 
+Queries which brought many I/O reads are written on the event log. If I/O reads occurs more than **sql_trace_ioread_pages** parameter value of cubrid.conf, the event is written on the event log. The following is an output example.
+ 
+::
+ 
+    06/12/13 17:07:29.457 - MANY_IOREADS
+      client: PUBLIC@testhost|csql(12852)
+      sql: update [x] [x] set [x].[a]= ?:1  where ([x].[a]> ?:0 ) using index [x].[idx](+)
+      bind: 8
+      bind: 100
+      time: 528
+      ioreads: 15648 
+ 
+*   client: <DB user>@<application client host name>|<process name>(<process ID>)
+*   sql: an SQL which brought many I/O reads
+*   bind: binding value. it is printed out as the number of <num> in the sql item, "?:<num>". The value of "?:0" is 8, and the value of "?:1" is 100.
+*   time: execution time(ms)
+*   ioread: I/O read pages count
+
+**LOCK_TIMEOUT**
+ 
+When lock timeout occurs, queries of a holder and a waiter are written on the event log. The following is an output example.
+ 
+::
+ 
+    06/13/13 20:56:18.650 - LOCK_TIMEOUT
+    waiter:
+      client: public@testhost|csql(21529)
+      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
+      sql: update [y] [y] set [a]=400 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 1
+ 
+    blocker:
+      client: public@testhost|csql(21541)
+      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
+      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 1
+      
+*   waiter: a waiting client to acquire locks.
+    *   lock: lock type, table and index names
+    *   sql: a waiting SQL to acquire locks.
+    *   bind: binding value.
+ 
+*   blocker: a client to have locks.
+    *   lock: lock type, table and index names
+    *   sql: a SQL which is acquiring locks
+    *   bind: binding value
+ 
+On the above, you can indicate the blocker which brought lock timeout and the waiter which is waiting locks.
+    
+**DEADLOCK**
+ 
+When a deadlock occurs, lock information of that transaction is written into the event log. The following is an output example.
+ 
+::
+ 
+    06/13/13 20:56:17.638 - DEADLOCK
+    client: public@testhost|csql(21541)
+    hold:
+      lock:   NX_LOCK (oid=-532|540|16385, table=y, index=pk_y_a)
+      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 1
+ 
+      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
+      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 1
+ 
+      lock:    X_LOCK (oid=0|540|1, table=y)
+      sql: update [y] [y] set [a]=100 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 1
+ 
+    wait:
+      lock:   NX_LOCK (oid=-532|540|16390, table=y, index=pk_y_a)
+      sql: update [y] [y] set [a]=300 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 5
+ 
+    client: public@testhost|csql(21529)
+    hold:
+      lock:   NX_LOCK (oid=-532|540|16389, table=y, index=pk_y_a)
+      sql: update [y] [y] set [a]=200 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 5
+ 
+      lock:   NX_LOCK (oid=-532|540|16390, table=y, index=pk_y_a)
+      sql: update [y] [y] set [a]=200 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 5
+ 
+      lock:    X_LOCK (oid=0|540|5, table=y)
+      sql: update [y] [y] set [a]=200 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 5
+ 
+    wait:
+      lock:   NX_LOCK (oid=-532|540|16386, table=y, index=pk_y_a)
+      sql: update [y] [y] set [a]=400 where ([y].[a]= ?:0 ) using index [y].[pk_y_a](+)
+      bind: 1
+ 
+*   client: <DB user>@<application client host name>|<process name>(<process ID>)
+    *   hold: an object which is acquiring a lock
+    
+        *   lock: lock type, table and index names
+        *   sql: SQL which is acquiring locks
+        *   bind: binding value
+        
+    *   wait: an object which is waiting a lock
+    
+        *   lock: lock type, table and index names
+        *   sql: SQL which is waiting a lock
+        *   bind: binding value
+ 
+On the above output, you can check the application clients and SQLs which brought the deadlock.
+      
+For more details on locks, see :ref:`lockdb` and :ref:`lock-protocol`.
+
+**TEMP_VOLUME_EXPAND**
+ 
+When a temporary temp volume is expanded, this time is written to the event log. By this log, you can check what transaction brought the expansion of a temporary temp volume.
+ 
+::
+  
+    06/15/13 18:55:43.458 - TEMP_VOLUME_EXPAND
+      client: public@testhost|csql(17540)
+      sql: select [x].[a], [x].[b] from [x] [x] where (([x].[a]< ?:0 )) group by [x].[b] order by 1
+      bind: 1000
+      time: 44
+      pages: 24399
+ 
+*   client: <DB user>@<application client host name>|<process name>(<process ID>)
+*   sql: SQL which requires a temporary temp volume. All INSERT statement except for INSERT ... SELECT syntax, and DDL statement are not delivered to the DB server, so it is shown as EMPTY
+    SELECT, UPDATE and DELETE statements are shown on this item
+*   bind: binding value
+*   time: a required time to create a temporary temp volume(ms)
+*   pages: a required number of pages to create a temporary temp volume
 
 .. _database-server-error:
 
@@ -502,7 +706,6 @@ When you write code, it is recommended to use the error code name rather than th
     #define ER_LK_DEADLOCK_CYCLE_DETECTED               -1021
     #define ER_LK_DEADLOCK_SPECIFIC_INFO                -1083
     ...
-    #define ER_LAST_ERROR                               -1089
 
 The following are some of the server error code names, error code numbers, and error messages.
 
@@ -534,13 +737,15 @@ The following are some of the server error code names, error code numbers, and e
 | ER_LK_DEADLOCK_SPECIFIC_INFO        | -1083                 | Specific information about deadlock.                                                                                                                     |
 +-------------------------------------+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+.. _broker:
+
 Broker
 ======
 
 Starting Broker
 ---------------
 
-Enter the command below to start the broker. 
+Enter the command below to start the broker. SHARD feature is activated when the broker parameter **SHARD** in cubrid_broker.conf is set to ON.
 
 ::
 
@@ -556,10 +761,14 @@ The following message is returned if the broker is already running.
     @ cubrid broker start
     ++ cubrid broker is running.
 
+.. warning::
+ 
+    The number of required file descriptor(fd) when starting SHARD in Linux system will be a little bit more than SHARD_MAX_CLIENTS in cubrid_broker.conf. Therefore, when you limit the number of fd by using "ulimit -n", it should be a little bit greater than the value of SHARD_MAX_CLIENTS. When the limited number of fd in Linux system is smaller than the fd number which is required in SHARD, starting SHARD fails and the required fd number is displayed in the error message.
+
 Stopping Broker
 ---------------
 
-Enter the command below to stop the broker. 
+Enter the command below to stop the broker. SHARD feature is stopped when the broker parameter SHARD in cubrid_broker.conf is set to ON.
 
 ::
 
@@ -584,10 +793,13 @@ Enter the command below to restart the whole brokers.
 
     $ cubrid broker restart
 
+.. _broker-status:
+
 Checking Broker Status
 ----------------------
 
 The **cubrid broker status** utility allows you to check the broker status such as number of completed jobs and the number of standby jobs by providing various options. 
+The status of clients accessed SHARD or the status of SHARD can be displayed by using **-c** and **-m** options when the **SHARD** broker parameter in **cubrid_broker.conf** is set to ON.
 
 ::
 
@@ -609,9 +821,11 @@ The following [options] are available with the **cubrid broker status** utility.
     
     If it is used with the **-b** option, additional information on CAS is displayed. But SELECT, INSERT, UPDATE, DELETE, OTHERS items which shown on **-b** option are excluded.
     
+    If it is used with the **-m** option, more detailed SHARD statistics information is displayed.
+    
 .. option:: -l SECOND
 
-    The **-l** option is only used with -f option together. It specifies accumulation period (unit : sec.) when displaying the number of application servers whose client status is Waiting or Busy. If it is omitted, the default value (1 second) is specified. 
+    The **-l** option is only used with -f option together. It specifies accumulation period (unit: sec.) when displaying the number of application servers whose client status is Waiting or Busy. If it is omitted, the default value (1 second) is specified. 
 
 .. option:: -q
 
@@ -624,6 +838,14 @@ The following [options] are available with the **cubrid broker status** utility.
 .. option:: -s SECOND    
 
     Regularly displays the status of broker based on specified period. It returns to a command prompt if q is entered.
+
+.. option:: -c
+ 
+    Displays the information of clients which access the proxy when **SHARD** in cubrid_broker.conf is set to ON.
+
+.. option:: -m
+
+    Displays the SHARD status and the statistical information when **SHARD** in cubrid_broker.conf is set to ON.
 
 If you do not specify an option or argument to check the status of all brokers, the following result is displayed. 
 
@@ -652,6 +874,21 @@ If you do not specify an option or argument to check the status of all brokers, 
 *   STATUS: The current status of CAS (BUSY, IDLE, CLIENT_WAIT, CLOSE_WAIT)
 *   % broker1 OFF: broker1's SERVICE parameter is set to OFF. So, broker1 is not started.
 
+.. note:: 
+
+    ID column which is displayed when checking the SHARD status shows the composition of " (serial number of proxy) – (serial number of shard DB) – (serial number of CAS accessing shard DB)"
+
+::
+
+    $ cubrid broker status
+    @ cubrid broker status
+    % shard1
+    ----------------------------------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS
+    ----------------------------------------------------------------
+    1-1-1  2580     100     3 55968 IDLE
+    1-2-1  2581     200     4 55968 IDLE
+
 To check the detail status of broker for 5 seconds, enter the command as below. The display will reset per 5 seconds as the new status information. To escape the display of the status, press <Q>.
 
 ::
@@ -659,10 +896,10 @@ To check the detail status of broker for 5 seconds, enter the command as below. 
     $ cubrid broker status -b -s 5
     @ cubrid broker status
 
-     NAME                   PID  PORT    AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT
-    =================================================================================================================================================================================================
-    * query_editor         13200 30000     5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0
-    * broker1              13269 33000     5    0                   70                   60       10       20       10       10       10     0/60.0     0/60.0            30            10       213
+     NAME                    PID  PORT   AS   JQ                  TPS                  QPS   SELECT   INSERT   UPDATE   DELETE   OTHERS     LONG-T     LONG-Q         ERR-Q  UNIQUE-ERR-Q  #CONNECT
+    ================================================================================================================================================================================================
+    * query_editor         13200 30000    5    0                    0                    0        0        0        0        0        0     0/60.0     0/60.0             0             0         0
+    * broker1              13269 33000    5    0                   70                   60       10       20       10       10       10     0/60.0     0/60.0            30            10       213
 
 *   NAME: The broker name
 *   PID: Process ID of the broker
@@ -682,7 +919,7 @@ To check the detail status of broker for 5 seconds, enter the command as below. 
 *   UNIQUE-ERR-Q: The number of queries with unique key errors found. When there is an option of "-b -s <sec>", it is updated every time with the number of unique key errors which have occurred during the seconds specified by this option.
 *   #CONNECT: The number of connections that an application client accesses to CAS after starting the broker. 
 
-Enter code below to check the status of broker whose name includes broker1 with the **-q** option and job status of a specific broker in the job queue. If you do not specify broker1 as an argument, list of jobs in the job queue for all brokers is displayed. 
+Enter the command below with the **-q** option to check the status of broker whose name includes broker1 and job status of a specific broker in the job queue. If you do not specify broker1 as an argument, list of jobs in the job queue for all brokers is displayed. 
 
 ::
 
@@ -698,7 +935,7 @@ Enter code below to check the status of broker whose name includes broker1 with 
      4 28447     0     0 50144 IDLE
      5 28448     0     0 50144 IDLE
 
-Enter code below to input the monitoring interval of broker whose name includes broker1 with the **-s** option and monitor broker status regularly. If you do not specify broker1 as an argument, monitoring status for all brokers is performed regularly. It returns to a command prompt if q is not entered. 
+Enter the command below with the **-s** option to monitor the status of a broker whose name includes broker1. If you do not specify broker1 as an argument, monitoring status for all brokers is performed regularly. It returns to a command prompt if q is not entered. 
 
 ::
 
@@ -713,75 +950,194 @@ Enter code below to input the monitoring interval of broker whose name includes 
      4 28447     0     0 50144 IDLE
      5 28448     0     0 50144 IDLE
 
-Display information of TPS and QPS to a file with the **-t** option. To cancel the process, press <Ctrl+C> to stop program. 
+With the **-t** option, it display information of TPS and QPS to a file. To cancel displaying, press <Ctrl+C> to stop program.
 
 ::
 
     % cubrid broker status -b -t -s 1 > log_file
 
-Enter code below to regularly monitor status of all brokers including TPS and QPS with the **-b** and **-s** options. 
-
-::
-
-    % cubrid broker status -b -s 1
-    NAME           PID  PORT  AS  JQ      REQ  TPS  QPS  LONG-T  LONG-Q ERR-Q
-    ===========================================================================
-    * query_editor 28433 40820   5   0        0    0    0    0/60    0/60    0
-    * broker1      28443 40821   5   0        0    0    0    0/60    0/60    0
-
-Enter code below to view information of server/database accessed by broker, access time, the IP addresses accessed to CAS with the **-f** option. 
+Enter the command below with the **-f** option to view information of server/database accessed by broker, access time, the IP addresses accessed to CAS 
 
 ::
 
     $ cubrid broker status -f broker1
     @ cubrid broker status
-    % broker1
-    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    ID   PID   QPS   LQS PSIZE STATUS         LAST ACCESS TIME      DB       HOST   LAST CONNECT TIME       CLIENT IP   SQL_LOG_MODE   TRANSACTION STIME # CONNECT # RESTART
-    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    1 26946     0     0 51168 IDLE         2011/11/16 16:23:42  demodb  localhost 2011/11/16 16:23:40      10.0.1.101           NONE 2011/11/16 16:23:42         0         0
-    2 26947     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0              -                   -         0         0
-    3 26948     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0              -                   -         0         0
-    4 26949     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0              -                   -         0         0
-    5 26950     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0              -                   -         0         0
+    % broker1 
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ID   PID   QPS   LQS PSIZE STATUS         LAST ACCESS TIME      DB       HOST   LAST CONNECT TIME       CLIENT IP   CLIENT VERSION    SQL_LOG_MODE   TRANSACTION STIME # CONNECT # RESTART
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    1 26946     0     0 51168 IDLE         2011/11/16 16:23:42  demodb  localhost 2011/11/16 16:23:40      10.0.1.101     9.2.0.0062              NONE 2011/11/16 16:23:42         0         0
+    2 26947     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+    3 26948     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+    4 26949     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+    5 26950     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
 
-Meaning of every column in code above is as follows:
+Meaning of each column in code above is as follows:
 
 *   LAST ACCESS TIME: Time when CAS runs or the latest time when an application client accesses CAS
 *   DB: Name of a database which CAS accesses most recently    
 *   HOST: Name of a which CAS accesses most recently
 *   LAST CONNECT TIME: Most recent time when CAS accesses a database
-*   CLIENT IP: IP of an application clients currently being connected to an application server (CAS). If no application client is connected, 0.0.0.0 is displayed.
+*   CLIENT IP: IP of an application clients currently being connected to an application server(CAS). If no application client is connected, 0.0.0.0 is displayed.
+*   CLIENT VERSION: A driver's version of an application client currently being connected to a CAS
 *   SQL_LOG_MODE: SQL logging mode of CAS. If the mode is same as the mode configured in the broker, "-" is displayed.
 *   TRANSACTION STIME: Transaction start time
 *   # CONNECT: The number of connections that an application client accesses to CAS after starting the broker
 *   # RESTART: The number of connection that CAS is re-running after starting the broker
 
-Enter code below to display information on AS (T W B Ns-W Ns-B) and CANCELED with the **-b** and **-f** options. 
+Enter the command below with the **-b** and **-f** options to display AS(T W B Ns-W Ns-B) and CANCELED.
 
 ::
 
     // The -f option is added upon execution of broker status information. Configuring Ns-W and Ns-B are displayed as long as N seconds by using the -l.
     % cubrid broker status -b -f -l 2
     @ cubrid broker status
-    NAME          PID    PSIZE PORT  AS(T W B 2s-W 2s-B) JQ REQ TPS QPS LONG-T LONG-Q ERR-Q CANCELED ACCESS_MODE SQL_LOG
-    ====================================================================================================================
-    query_editor 16784 56700 30000      5 0 0     0   0   0   0  0    0 0/60.0 0/60.0     0        0          RW     ALL
+    NAME          PID    PSIZE PORT  AS(T W B 2s-W 2s-B) JQ TPS QPS LONG-T LONG-Q  ERR-Q UNIQUE-ERR-Q CANCELED ACCESS_MODE SQL_LOG  #CONNECT
+    ========================================================================================================================================
+    query_editor 16784 56700 30000      5 0 0     0   0   0  16  29 0/60.0 0/60.0      1            1        0          RW     ALL         4
 
-Meaning of every column in code above is as follows:
+Meaning of each column in code above is as follows:
 
 *   AS(T): Total number of CAS being executed
 *   AS(W): The number of CAS in the status of Waiting
 *   AS(B): The number of CAS in the status of Busy
 *   AS(Ns-W): The number of CAS that the client belongs to has been waited for N seconds.
 *   AS(Ns-B): The number of CAS that the client belongs to has been Busy for N seconds.
-*   CANCELED: The number of queries have canceled by user interruption since the broker starts (if it is used with the **-l** **N** option, it specifies the number of accumulations for N seconds).
-*   CANCELED: The number of queries have canceled by user interruption since the broker starts (if it is used with the **-l** **N** option, it specifies the number of accumulations for N seconds).
+*   CANCELED: The number of queries have canceled by user interruption since the broker starts (if it is used with the **-l** *N* option, it specifies the number of accumulations for *N* seconds).
+
+Use the **-m** option to display SHARD status and statistics information. For details on the parameter of **cubrid_broker.conf**, see :ref:`broker-configuration`. 
+
+::
+
+    $ cubrid broker status -m
+    @ cubrid broker status
+    % shard1 
+    MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
+    ACTIVE-PROXY : 1, NUM-NO-HINT-ERR-Q : 0
+
+    SHARD STATISTICS
+       ID  NUM-KEY-Q   NUM-ID-Q   NUM-NO-HINT-Q             SUM
+    ------------------------------------------------------------
+        0       1281          0               0            1281
+        1       1281          0               0            1281
+        2       1281          0               0            1281
+        3       1281          0               0            1281
+
+    NUM_SHARD_Q
+       PROXY_ID       1
+    SHARD_ID
+    0                1
+    1                0
+    2                0
+    3                2
+
+The below explains what each column means.
+
+*   shard1: The broker name
+*   MODULAR: The **SHARD_KEY_MODULR** parameter value of **cubrid_broker.conf**
+*   LIBRARY_NAME: The **SHARD_KEY_LIBRARY_NAME** parameter value of **cubrid_broker.conf**
+*   FUNCTION_NAME: The **SHARD_KEY_FUNCTION_NAME** parameter value of **cubrid_broker.conf**
+*   ACTIVE-PROXY: The number of proxy processes which are running
+*   NUM-NO-HINT-ERR-Q: The number of errored queries because of no shard hints
+*   SHARD STATISTICS: The shard ID query information
+
+    *   ID: The shard DB serial number (shard ID)
+    *   NUM-KEY-Q: The number of query requests which include the shard key
+    *   NUM-ID-Q: The number of query requests which include the shard ID
+    *   NUM-NO-HINT-Q: The number of requests handled by load balancing without hint when **SHARD_IGNORE_HINT** is configured
+    *   SUM: NUM-KEY-Q + NUM-ID-Q
+
+*   NUM_SHARD_Q: The number of requests to run queries waiting on SHARD-Q
+
+    *   PROXY_ID: The proxy serial number
+    *   SHARD_ID: The shard DB serial number
+
+SHARD-Q is an abbreviation of "Shard Waiting Queue". If proxy process requested to run the query but there was no CAS process to run this, then this request is waiting on SHARD-Q for a while. If the value of SHARD-Q is larger, it means that waiting cases are more. Therefore, you can consider to enlarge the value of MAX_NUM_APPL_SERVER.
+
+Use the **-m -f** option to display more detailed SHARD statistics information. For details on the parameter of **cubrid_broker.conf**, see :ref:`broker-configuration`. 
+
+::
+
+    $ cubrid broker status -m -f
+    @ cubrid broker status
+    % shard1 
+    MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
+    SHARD : 0 [HostA] [shard1], 1 [HostB] [shard1], 2 [HostC] [shard1], 3 [HostD] [shard1]
+    ACTIVE-PROXY : 1, NUM-NO-HINT-ERR-Q : 0
+
+    SHARD STATISTICS
+           ID  NUM-KEY-Q   NUM-ID-Q   NUM-NO-HINT-Q             SUM
+        ------------------------------------------------------------
+            0       2309          0               0            2309
+            1       2309          0               0            2309
+            2       2309          0               0            2309
+            3       2309          0               0            2309
+
+    NUM_SHARD_Q
+       PROXY_ID       1
+    SHARD_ID
+    0                1
+    1                0
+    2                0
+    3                2
+
+    RANGE STATISTICS : user_no
+          MIN ~   MAX :      SHARD     NUM-Q
+        ------------------------------------
+            0 ~    31 :          0      1157
+           32 ~    63 :          1      1157
+           64 ~    95 :          2      1157
+           96 ~   127 :          3      1157
+          128 ~   159 :          0      1152
+          160 ~   191 :          1      1152
+          192 ~   223 :          2      1152
+          224 ~   255 :          3      1152
+
+    DB Alias : shard1 [USER : shard, PASSWD : shard123]
+
+The below explains the added columns by the **-f** option.
+
+*   SHARD: The shard DB information in the proxy
+
+    *   0: The shard DB serial number (shard ID)
+    *   [HostA]: The shard access information
+    *   [shard1]: The actual DB name
+
+*   RANGE STATISTICS: The shard key query information
+
+    *   user_no: The shard key name
+    *   MIN: The minimum range of a shard key
+    *   MAX: The maximum range of a shard key
+    *   SHARD: The shard DB serial number (shard ID)
+    *   NUM-Q: The number of query requests which include the shard key
+
+     
+The below displays the information of clients which access the proxy by using the **-c** option when **SHARD** in cubrid_broker.conf is set to ON. 
+
+::
+
+
+
+    $ cubrid broker status -c
+    @ cubrid broker status
+    % test_shard(0), MAX-CLIENT : 10000
+    ------------------------------------------------------------------------------------------------
+    CLIENT-ID           CLIENT-IP             CONN-TIME         LAST-REQ-TIME         LAST-RES-TIME
+    ------------------------------------------------------------------------------------------------
+            0         10.24.18.68   2011/12/15 16:33:31   2011/12/15 16:33:31   2011/12/15 16:33:31
+
+The below explains what each column means.
+
+*   CLIENT-ID: The client serial number sequentially given in the proxy
+*   CLIENT-IP: The client IP address
+*   CONN-TIME: The time that the proxy has been accessed
+*   LAST-REQ-TIME: The time at which the last request had been made to the proxy
+*   LAST-RES-TIME: The time at which the last response has been received from the proxy
 
 .. _limiting-broker-access:
 
-Limiting Broker Server Access
------------------------------
+Limiting Broker Access
+----------------------
 
 To limit the client applications accessing the broker, set to **ON** for the **ACCESS_ CONTROL** parameter in the **cubrid_broker.conf** file, and enter a name of the file in which the users and the list of databases and IP addresses allowed to access the **ACCESS_CONTROL_FILE** parameter value are written. 
 The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified.
@@ -799,8 +1155,9 @@ The format of **ACCESS_CONTROL_FILE** is as follows:
 *   <db_user>: A database user ID. If it is specified as \*, all database user IDs are allowed to access the broker server.
 *   <ip_list_file>: Names of files in which the list of accessible IPs are stored. Several files such as ip_list_file1, ip_list_file2, ... can be specified by using a comma (,).
 
-[%<broker_name>] and <db_name>:<db_user>:<ip_list_file> can be specified separately for each broker.
-
+[%<*broker_name*>] and <*db_name*>:<*db_user*>:<*ip_list_file*> can be specified separately for each broker. A separated line can be specified for the same <*db_name*> and the same <*db_user*>.
+List of IPs can be written up to the maximum of 256 lines per <*db_name*>:<*db_user*> in a broker.
+ 
 The format of the ip_list_file is as follows:  
 
 ::
@@ -935,12 +1292,19 @@ Enter the code below to reset broker1.
 
     % cubrid broker reset broker1
 
+.. _changing-broker-parameter:
+
 Dynamically Changing Broker Parameters
 --------------------------------------
 
 You can configure the parameters related to running the broker in the configuration file ( **cubrid_broker.conf** ). You can also modify some broker parameters temporarily while the broker is running by using the **broker_changer** utility. For details, see :ref:`broker-configuration`.
 
 The syntax for the **broker_changer** utility, which is used to change broker parameters while the broker is running, is as follows. Enter the name of the currently running broker for the *broker_name* . The *parameters* can be used only for dynamically modifiable parameters. The *value* must be specified based on the parameter to be modified. You can specify the broker CAS identifier ( *cas_id* ) to apply the changes to the specific broker CAS. 
+
+.. note::
+    
+    When CUBRID SHARD feature is activated(SHARD=ON in cubrid_broker.conf), you cannot apply the changes to the specific broker CAS by specifying the broker CAS identifier(cas_id).
+
 *cas_id* is an ID to be output by **cubrid broker status** command.
 
 ::
@@ -965,6 +1329,8 @@ Enter the following to change the **ACCESS_MODE** to **Read Only** and automatic
 
     If you want to control the service using cubrid utilities on Windows Vista or the later versions of Window, you are recommended to open the command prompt window as an administrator. For details, see the notes of :ref:`CUBRID Utilities <utility-on-windows>`.
 
+.. _broker-configuration-info:
+
 Broker configuration information
 --------------------------------
 
@@ -976,12 +1342,52 @@ Broker configuration information
 
 As a reference, to see the configuration information of the currently "working" system(cubrid.conf), use **cubrid paramdump** *database_name* command. By **SET SYSTEM PARAMETERS** syntax, the configuration information of the system parameters can be changed dynamically; with **cubrid broker info** command, you can see the configuration information of the system parameters.
 
+Checking CUBRID SHARD ID
+------------------------
+**cubrid broker getid** prints out SHARD ID to know in what DB a specific key is included. :: 
+
+    cubrid broker getid -b <broker-name> [-f] shard-key
+    
+*   -b <*broker-name*>: broker name
+*   -f: prints detail information
+*   *shard-key*: shard key
+
+The following shows how to print out the SHARD ID for the key 1 within the shard1 broker.
+
+::
+
+    $ cubrid broker getid -b shard1 1
+    @ cubrid broker getid
+    % shard1
+     SHARD_ID : 0, SHARD_KEY: 1
+
+The following shows how to print the detail information using the **-f** option.
+
+::
+    
+    $ cubrid broker getid -b shard1 -f 1
+    @ cubrid broker getid
+    % shard1
+     SHARD_ID : 0, SHARD_KEY : 1, KEY_COLUMN : student_no
+     MODULAR : 256, LIBRARY_NAME : NOT DEFINED, FUNCTION_NAME : NOT DEFINED
+     RANGE STATISTICS : student_no
+          MIN ~   MAX :      SHARD
+        ---------------------------
+            0 ~    31 :          0
+
+     SHARD CONNECTION :
+        SHARD_ID          DB NAME          CONNECTION_INFO
+        ---------------------------------------------------
+               0           shard1                192.168.10.1
+
 .. _broker-logs:
 
 Broker Logs
 -----------
 
 There are three types of logs that relate to starting the broker: access, error and SQL logs. Each log can be found in the log directory under the installation directory. You can change the directory where these logs are to be stored through **LOG_DIR** and **ERROR_LOG_DIR** parameters of the broker configuration file (**cubrid_broker.conf**).
+
+When **SHARD** = ON, the log directory of CUBRID proxy can be configured by using the **SHARD_PROXY_LOG_DIR** parameter. 
 
 **Checking the Access Log**
 
@@ -1030,26 +1436,61 @@ There are three types of logs that relate to starting the broker: access, error 
     The following examples and descriptions show SQL log files: 
     
     ::
+    
+        13-06-11 15:07:39.282 (0) STATE idle
+        13-06-11 15:07:44.832 (0) CLIENT IP 192.168.10.100
+        13-06-11 15:07:44.835 (0) CLIENT VERSION 9.2.0.0062
+        13-06-11 15:07:44.835 (0) session id for connection 0
+        13-06-11 15:07:44.836 (0) connect db demodb user dba url jdbc:cubrid:192.168.10.200:30000:demodb:dba:********: session id 12
+        13-06-11 15:07:44.836 (0) DEFAULT isolation_level 3, lock_timeout -1
+        13-06-11 15:07:44.840 (0) end_tran COMMIT
+        13-06-11 15:07:44.841 (0) end_tran 0 time 0.000
+        13-06-11 15:07:44.841 (0) *** elapsed time 0.004
+        
+        13-06-11 15:07:44.844 (0) check_cas 0
+        13-06-11 15:07:44.848 (0) set_db_parameter lock_timeout 1000
+        13-06-11 15:09:36.299 (0) check_cas 0
+        13-06-11 15:09:36.303 (0) get_db_parameter isolation_level 3
+        13-06-11 15:09:36.375 (1) prepare 0 CREATE TABLE unique_tbl (a INT PRIMARY key);
+        13-06-11 15:09:36.376 (1) prepare srv_h_id 1
+        13-06-11 15:09:36.419 (1) set query timeout to 0 (no limit)
+        13-06-11 15:09:36.419 (1) execute srv_h_id 1 CREATE TABLE unique_tbl (a INT PRIMARY key);
+        13-06-11 15:09:38.247 (1) execute 0 tuple 0 time 1.827
+        13-06-11 15:09:38.247 (0) auto_commit
+        13-06-11 15:09:38.344 (0) auto_commit 0
+        13-06-11 15:09:38.344 (0) *** elapsed time 1.968
+        
+        13-06-11 15:09:54.481 (0) get_db_parameter isolation_level 3
+        13-06-11 15:09:54.484 (0) close_req_handle srv_h_id 1
+        13-06-11 15:09:54.484 (2) prepare 0 INSERT INTO unique_tbl VALUES (1);
+        13-06-11 15:09:54.485 (2) prepare srv_h_id 1
+        13-06-11 15:09:54.488 (2) set query timeout to 0 (no limit)
+        13-06-11 15:09:54.488 (2) execute srv_h_id 1 INSERT INTO unique_tbl VALUES (1);
+        13-06-11 15:09:54.488 (2) execute 0 tuple 1 time 0.001
+        13-06-11 15:09:54.488 (0) auto_commit
+        13-06-11 15:09:54.505 (0) auto_commit 0
+        13-06-11 15:09:54.505 (0) *** elapsed time 0.021
+        
+        ...
+        
+        13-06-11 15:19:04.593 (0) get_db_parameter isolation_level 3
+        13-06-11 15:19:04.597 (0) close_req_handle srv_h_id 2
+        13-06-11 15:19:04.597 (7) prepare 0 SELECT * FROM unique_tbl  WHERE ROWNUM BETWEEN 1 AND 5000;
+        13-06-11 15:19:04.598 (7) prepare srv_h_id 2 (PC)
+        13-06-11 15:19:04.602 (7) set query timeout to 0 (no limit)
+        13-06-11 15:19:04.602 (7) execute srv_h_id 2 SELECT * FROM unique_tbl  WHERE ROWNUM BETWEEN 1 AND 5000;
+        13-06-11 15:19:04.602 (7) execute 0 tuple 1 time 0.001
+        13-06-11 15:19:04.607 (0) end_tran COMMIT
+        13-06-11 15:19:04.607 (0) end_tran 0 time 0.000
+        13-06-11 15:19:04.607 (0) *** elapsed time 0.009
 
-        02/04 13:45:17.687 (38) prepare 0 insert into unique_tbl values (1)
-        02/04 13:45:17.687 (38) prepare srv_h_id 1
-        02/04 13:45:17.687 (38) execute srv_h_id 1 insert into unique_tbl values (1)
-        02/04 13:45:17.687 (38) execute error:-670 tuple 0 time 0.000, EID = 39
-        02/04 13:45:17.687 (0) auto_rollback
-        02/04 13:45:17.687 (0) auto_rollback 0
-        *** 0.000
+    *   13-06-11 15:07:39.282: Time when the application sent the request
 
-        02/04 13:45:17.687 (39) prepare 0 select * from unique_tbl
-        02/04 13:45:17.687 (39) prepare srv_h_id 1 (PC)
-        02/04 13:45:17.687 (39) execute srv_h_id 1 select * from unique_tbl
-        02/04 13:45:17.687 (39) execute 0 tuple 1 time 0.000
-        02/04 13:45:17.687 (0) auto_commit
-        02/04 13:45:17.687 (0) auto_commit 0
-        *** 0.000
+    *   (1): Sequence number of the SQL statement group. If prepared statement pooling is used, it is uniquely assigned to each SQL statement in the file.
 
-    *   02/04 13:45:17.687: Time when the application sent the request
-
-    *   (39): Sequence number of the SQL statement group. If prepared statement pooling is used, it is uniquely assigned to each SQL statement in the file.
+    *   CLIENT IP: An IP of an application client
+    
+    *   CLIENT VERSION: A driver's version of an application client
 
     *   prepare 0: Whether or not it is a prepared statement
 
@@ -1057,9 +1498,7 @@ There are three types of logs that relate to starting the broker: access, error 
 
     *   (PC): It is displayed if the data in the plan cache is used.
 
-    *   SELECT...: SQL statement to be executed. (An ellipsis ( ... ) indicates omission.) For statement pooling, the binding variable of the WHERE clause is represented as a question mark (?).
-
-    *   Execute 0 tuple 1 time 0.000: One row is executed. The time spent is 0.000 seconds.
+    *   Execute 0 tuple 1 time 0.001: One row is executed. The time spent is 0.001 seconds.
 
     *   auto_commit/auto_rollback: Automatically committed or rolled back. The second auto_commit/auto_rollback is an error code. 0 indicates that the transaction has been completed without an error.
 
@@ -1083,7 +1522,7 @@ There are three types of logs that relate to starting the broker: access, error 
 
     .. option:: -F DATE
 
-        This option specifies the execution start date of the SQL statements to be analyzed. The input format is MM[/DD[ hh[:mm[:ss[.msec]]]]], and the part enclosed by [] can be omitted. If you omit the value, it is regarded as that 01 is input for DD, and 0 is input for hh, mm, ss and msec.
+        This option specifies the execution start date of the SQL statements to be analyzed. The input format is YY[-MM[-DD[ hh[:mm[:ss[.msec]]]]]], and the part enclosed by [] can be omitted. If you omit the value, it is regarded as that 01 is input for MM and DD, and 0 is input for hh, mm, ss and msec.
 
     :: option:: -T DATE
 
@@ -1186,7 +1625,7 @@ There are three types of logs that relate to starting the broker: access, error 
 
     The following is [options] used in **broker_log_runner**.
 
-    .. program::broker_log_runner
+    .. program:: broker_log_runner
 
     .. option:: -u NAME
 
@@ -1202,7 +1641,7 @@ There are three types of logs that relate to starting the broker: access, error 
         
     .. option:: -r COUNT
 
-        The number of times that the query is to be executed (default value : 1)
+        The number of times that the query is to be executed (default value: 1)
 
     .. option:: -o FILE
 
@@ -1283,7 +1722,7 @@ There are three types of logs that relate to starting the broker: access, error 
 Broker Error
 ------------
 
-Broker error is an error which occurrs in broker application server(CAS), and it can happen on all applications which access to CAS with drivers.
+Broker error is an error which occurs in broker application server(CAS), and it can happen on all applications which access to CAS with drivers.
 
 Below shows the CAS error code table. CCI and JDBC's error messages can be different each other on the same CAS error code.
 If there is only one message, they are the same, but if there are two messages, then the first one is CCI error message and the second one is JDBC error message.
@@ -1458,7 +1897,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
 **CM Users**
 
-    Information about CM users consists of the followings:
+    Information about CM users consists of the following:
 
     *   CM user authority: Includes the following information.
 
@@ -1504,7 +1943,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         You can use **none** (default) and **admin** as *AUTHORITY*.
 
-        The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure database creation authority to admin.    ::
+        The following example shows how to create a CM user whose name is *testcm* and password is *testcmpwd* and then configure database creation authority to admin.  ::
 
             cm_admin adduser -c admin testcm testcmpwd
 
@@ -1685,7 +2124,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         Specifies the ID of a database user to be added. The default value is **dba**.
 
-        The following example shows how to add a database of which name is *testdb* and user ID is *uid* to a CM user named *testcm*. 
+        The following example shows how to add a database whose name is *testdb* and user ID is *uid* to a CM user named *testcm*. 
         
         ::
 
@@ -1695,7 +2134,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
         Specifies the host IP of a broker used when clients access a database. The default value is **localhost**.
 
-        The following example shows how to add a database of which name is *testdb* and the host IP of is *127.0.0.1* to a CM user named *testcm*. ::
+        The following example shows how to add a database whose name is *testdb* and the host IP of is *127.0.0.1* to a CM user named *testcm*. ::
 
             cm_admin adddbinfo -h 127.0.0.1 testcm testdb
 
@@ -1714,7 +2153,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
     *   *cmuser-name*: CM user name
     *   *database-name*: The name of a database to be deleted
 
-    The following example shows how to delete database information of which name is *testdb* from a CM user named *testcm* . ::
+    The following example shows how to delete database information whose name is *testdb* from a CM user named *testcm* . ::
 
         cm_admin deldbinfo  testcm testdb
 

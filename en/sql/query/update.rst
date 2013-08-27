@@ -65,6 +65,8 @@ The following example shows how to update one table.
                 6  'eee'                 '000-0000'
                 7  NULL                  '777-7777'
      
+.. code-block:: sql
+
     -- using triggers, that the order in which the rows are updated is modified by the ORDER BY clause.
      
     CREATE TABLE t (i INT,d INT);
@@ -73,6 +75,8 @@ The following example shows how to update one table.
     INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
     UPDATE t  SET i = i + 1 WHERE 1 = 1;
      
+::
+
     trigger2 executed
     trigger1 executed
     trigger2 executed
@@ -81,10 +85,14 @@ The following example shows how to update one table.
     trigger2 executed
     trigger1 executed
      
+.. code-block:: sql
+
     TRUNCATE TABLE t;
     INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
     UPDATE t SET i = i + 1 WHERE 1 = 1  ORDER BY i;
      
+::
+
     trigger1 executed
     trigger1 executed
     trigger1 executed

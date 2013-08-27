@@ -268,12 +268,12 @@ Users can also access partitions directly (independent of the partitioned table)
 .. code-block:: sql
 
     -- to specify a partition with its table name
-    SELECT * FROM olympic2__p__before2008;
+    SELECT * FROM olympic2__p__before_2008;
     
     -- to specify a partition with PARTITION clause
-    SELECT * FROM olympic2 PARTITION (before2008);
+    SELECT * FROM olympic2 PARTITION (before_2008);
 
-Both of the queries above access partition *before2008* as if it were a normal table (not a partition). This is a very useful feature because it allows certain query optimizations to be used even though they are disabled on partitioned tables (see :ref:`partitioning-notes` for more info). Users should note that, when accessing partitions directly, the scope of the query is limited to that partition. This means that tuples from other partitions are not considered (even though the **WHERE** clause would include them) and, for **INSERT** and **UPDATE** statements, if the tuple inserted/updated does not belong to the specified partition, an error is returned.
+Both of the queries above access partition *before_2008* as if it were a normal table (not a partition). This is a very useful feature because it allows certain query optimizations to be used even though they are disabled on partitioned tables (see :ref:`partitioning-notes` for more info). Users should note that, when accessing partitions directly, the scope of the query is limited to that partition. This means that tuples from other partitions are not considered (even though the **WHERE** clause would include them) and, for **INSERT** and **UPDATE** statements, if the tuple inserted/updated does not belong to the specified partition, an error is returned.
 
 By executing queries on a partition rather than the partitioned table, some of the benefits of partitioning are lost. For example, if users only execute queries on the partitioned table, this table can be repartitioned or partitions can be dropped without having to modify the user application. If users access partitions directly, this benefit is lost. Users should also note that, even though using partitions in **INSERT** statements is allowed (for consistency), it is discouraged because there is no performance gain from it.
 
@@ -299,7 +299,7 @@ Changing a partitioned table into a regular table can be done using the **REMOVE
 
 *   *table_name* : Specifies the name of the table to be altered.
 
-When removing partitioning, CUBRID moves all data from partitions into the partitioned table. This is a costly operation and should be carefully planed.
+When removing partitioning, CUBRID moves all data from partitions into the partitioned table. This is a costly operation and should be carefully planned.
 
 .. _reorganize-partitions:
 
@@ -362,7 +362,7 @@ The following example shows how to combine the *event2_1* and *event2_2* partiti
 .. note::
 
     *   In a range-partitioned table, only adjacent partitions can be reorganized.
-    *   During partition reorganization, CUBRID moves data between partitions in order to reflect the new partitioning schema. Depending on the size of the reorganized partitions, this might be a time consuming operations and should be carefully planed.
+    *   During partition reorganization, CUBRID moves data between partitions in order to reflect the new partitioning schema. Depending on the size of the reorganized partitions, this might be a time consuming operations and should be carefully planned.
     *   The **REORGANIZE PARTITION** clause cannot be used to change the partitioning method. For example, a range-partitioned table cannot be changed into a hash-partitioned one.
     *   There must be at least one partition remaining after deleting partitions.
 
@@ -440,7 +440,7 @@ The following example shows how to decrease the number of partitions in the :ref
 
 .. code-block:: sql
 
-    ALTER TABLE nation2 COALESCE PARTITION 1;
+    ALTER TABLE nation2 COALESCE PARTITION 1;
 
 The number of partitions defined on a hash partitioned table can be increased using the **ADD PARTITION** clause of the **ALTER** statement. ::
 
@@ -454,14 +454,14 @@ The following example shows how to add 3 partitions to the :ref:`nation2 <hash-n
 
 .. code-block:: sql
 
-    ALTER TABLE nation2 ADD PARTITION PARTITIONS 3;
+    ALTER TABLE nation2 ADD PARTITION PARTITIONS 3;
 
 .. _promote-partitions:
 
 Partition Promotion
 -------------------
 
-The **PROMOTE** clause of the **ALTER** statement promotes a partition of a partitioned table to a regular table. This feature is useful when a certain partition contains historic data which is almost never used. By promoting the partition to a regular table, performance on the partitioned table is increased and the data removed from this table (contained in the promoted partition) can still be accessed. Promoting a partition is an ireversible process, promoted partitions cannot be added back to the partitioned table.
+The **PROMOTE** clause of the **ALTER** statement promotes a partition of a partitioned table to a regular table. This feature is useful when a certain partition contains historic data which is almost never used. By promoting the partition to a regular table, performance on the partitioned table is increased and the data removed from this table (contained in the promoted partition) can still be accessed. Promoting a partition is an irreversible process, promoted partitions cannot be added back to the partitioned table.
 
 The partition **PROMOTE** statement is allowed only on range and list-partitioned tables. Since users do not control how data is distributed among hash partitions, promoting such a partition does not make sense.
 
@@ -595,9 +595,10 @@ The following restrictions apply to partitioned tables:
 * The following query optimizations are not performed on partitioned tables:
     * ORDER BY skip (for details, see :ref:`order-by-skip-optimization`)
     * GROUP BY skip (for details, see :ref:`group-by-skip-optimization`)
-    * Index Skip Scan (for details, see :ref:`index-skip-scan`)
     * Multi-key range optimization (for details, see :ref:`multi-key-range-opt`)
     * INDEX JOIN
+
+    .. 7583: 분할 테이블에서 인덱스 스킵 스캔이 수행됨
 
 Partitioning Key and Charset, Collation
 ----------------------------------------

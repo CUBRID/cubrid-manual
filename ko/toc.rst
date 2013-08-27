@@ -107,10 +107,10 @@ CUBRID는 상속의 개념을 사용하는 객체 관계형 데이터베이스 �
 CUBRID 9.0 이상 버전의 버전 명 및 버전 스트링은 다음과 같이 표기한다.
 
 *   버전 명: CUBRID x.x Patch x (major 버전, minor 버전, patch 버전을 표기)
-    예: CUBRID 9.0 Patch 1
+    예: CUBRID 9.2 Patch 1
 
 *   버전 스트링: x.x.x.x (major 버전, minor 버전, patch 버전, build 번호를 표기)
-    예: 9.0.1.0012
+    예: 9.2.1.0012
 
 CUBRID 9.0 미만 버전의 버전 명과 버전 스트링은 다음과 같이 표기한다.
 

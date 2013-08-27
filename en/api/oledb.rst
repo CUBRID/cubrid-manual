@@ -10,45 +10,36 @@ CUBRID OLE DB driver is written based on CCI API so affected by CCI configuratio
 
 To download OLD DB driver or get the latest information, click http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver .
 
+.. note::
+
+    *   If your CUBRID OLEDB driver version is 9.1.0.p1 or later, only one installation package is needed for both Windows 32 bit and 64 bit. Our new OLEDB installer supports CUBRID DB engine 8.4.1 or later.
+    *   If your CUBRID OLEDB Driver version is 9.1.0 or older, it may have a problem on 64 bit operating system. Please see our installation tutorial for an old version: http://www.cubrid.org/wiki_apis/entry/cubrid-oledb-driver-installation-instructions-old
+
 Installing and Configuring OLE DB
 =================================
 
-**Requirements**
-
-*   Windows Vista or Windows 7 (32-bit version)
-*   CUBRID 2008 R4.1 (8.4.1.) or later (32-bit version)
-*   Visual Studio 2010 Express Edition ( http://www.microsoft.com/visualstudio/en-us/products/2010-editions/express )
-*   .NET Framework 3.5 or later ( http://www.microsoft.com/download/en/details.aspx?id=21 )
-
 **CUBRID OLE DB Provider**
 
-Before you start developing applications with CUBRID, you will need the Provider driver (**CUBRIDProvider.dll**). Make sure to download the appropriate DLL according to your CUBRID installation. You can check the CUBRID version by entering the command, **cubrid -- version**. You have four options to get the driver.
+Before you start developing applications with CUBRID, you will need the Provider driver (**CUBRIDProvider.dll**). You have two options to get the driver.
 
-*   **Using an official installer** : Use the official CUBRID OLE DB Data Provider installer. You can download it below.
+*   **Installing the driver**: Download the CUBRID OLE DB driver's .exe file at the location http://ftp.cubrid.org/CUBRID_Drivers/OLEDB_Driver/ or http://www.cubrid.org/?mid=downloads&item=oledb_driver. From OLE DB driver 9.1.0.p1 version(available from CUBRID server 2008 R4.1), both of 32 bit and 64 bit driver are installed on one installation.
 
-    http://www.cubrid.org/?mid=downloads&item=oledb_driver
+    .. image:: /images/oledb_install.jpg
 
-    We provide brief video tutorial to see how to install CUBRID Provider using the installer; to watch that video, go to the website below.
+    *   There are below files in the installed directory.
+    
+        *   CUBRIDProvider32.dll
+        *   CUBRIDProvider64.dll
+        *   README.txt
+        *   uninstall.exe    
 
-    http://www.youtube.com/watch?v=FN_6c9x9UOA
+*   **Building from source code**: If you want to change CUBRID OLED DB Data Provider Installer, you can build it for yourself by compiling the source code. For details, see below:
 
-*   **Modifying the official installer** : If you want to modify the official installer, you can build the CUBRID OLE DB Provide installer by compiling source code yourself. For information about modifying an installer, see the link below.
+    http://www.cubrid.org/wiki_apis/entry/compiling-the-cubrid-ole-db-installer 
 
-    http://www.cubrid.org/wiki_apis/entry/compiling-the-cubrid-ole-db-installer
+    If you do not use the CUBRID OLED DB Provider installer, you should execute the command below to register the driver. The version of the driver should match the version of your operating system. For 32 bit, the **regsvr32** command should be executed in the **C:\Windows\system32** directory; for 64 bit, the **regsvr32** command should be executed in the **C:\Windows\SysWOW64** directory. ::
 
-*   **Installing the driver** : Download the CUBRID OLE DB driver at the location below. You should choose the appropriate version of the driver depending on your operating system (32 bit or 64 bit).
-
-    http://www.cubrid.org/?mid=downloads&item=oledb_driver
-
-*   **Building from source code** : Compile the driver source code. You can check out the source code at the SVN storage below. To compile the source code, the Visual Studio Express Edition ( http://www.microsoft.com/express/Downloads/#2010-Visual-CPP ) is required. If you are using CUBRID 9.1.0 version, enter 9.1.0 in <*CUBRID version*>.
-
-    ::
-
-        http://svn.cubrid.org/cubridapis/oledb/branches/RB-*<CUBRID version>*/Source/
-
-If you do not use the CUBRID OLED DB Provider installer, you should execute the command below to register the driver. The version of the driver should match the version of your operating system. For 32 bit, the **regsvr32** command should be executed in the **C:\Windows\system32** directory; for 64 bit, the **regsvr32** command should be executed in the **C:\Windows\SysWOW64** directory. ::
-
-    regsvr32 CUBRIDProvider.dll
+        regsvr32 CUBRIDProvider.dll
 
 OLE DB Programming
 ==================
@@ -56,57 +47,92 @@ OLE DB Programming
 Using Data Link Properties Dialog Box
 -------------------------------------
 
-In the [Data Link Properties] dialog box, you can check and configure various OLE DB providers provided by the Windows operating system that you are currently using.
+To access this dialog box in Visual Studio .NET, select Connect to Database from the Tools menu or click the Connect to Database icon in Server Explorer. 
 
-If you have properly installed the CUBRID OLE DB Provider for Windows, "CUBRID OLE DB Provider" will be displayed in the provider list of the [Data Link Properties] dialog box as shown below.
+*   you must install Visual Studio first, click “Connect to Database”
 
-.. image:: /images/image84.png
+    .. image:: /images/oledb_1_connect.jpg
 
-If you click the [Next] button after selecting "CUBRID OLE DB Provider," the [Connection] tab will appear as shown below. Set the desired link properties in the [Connection] tab.
+*   Choose <other>,and .Net Framework Data Provider for OLE DB, Then click Continue button 
 
-.. image:: /images/image85.png
+    .. image:: /images/oledb_2_select.jpg
 
-*   **Data Source**: Enter the name of the CUBRID database.
-*   **Location**: Enter the IP address or host name of the server where the CUBRID broker is running.
-*   **User name**: Enter the user name to be used for logon to the database server.
-*   **Password**: Enter the password to be used for logon to the database server.
+*   Choose CUBRID OLE DB Provider, then click Data links button
 
-Set all values of connection properties and then click the [All] tab.
+   .. image:: /images/oledb_3_datalink.jpg
 
-.. image:: /images/image86.png
+*   Fill in the information, and click Test Connection button, if driver connect database successful, success dialog will pop up.
 
-You can check every value currently configured in the [All] tab; to edit the value within the tab, double-click the item you want to edit. Enter the desired value in the [Edit Property Value] dialog box and then click [OK]. The figure above shows an example which configures the value of [Port] to "31000," and the value of [Fetch Size] is "100."
+    More information can found in msdn: http://msdn.microsoft.com/en-us/library/79t8s5dk(v=vs.71).aspx
+   
+     .. image:: /images/oledb_4_confconn.jpg
 
-You can check whether the connection is working properly by clicking the [Test Connection] button in the [Connection] tab after completing all configurations.
+Or you also can open this dialog box by double-clicking a universal data link (.udl) file in Windows Explorer, and in a variety of other ways, including programmatically.
 
-.. image:: /images/image87.png
+*   First, create a text file, and modify extension to udl: 1.txt -> 1.udl. Second, double click 1.udl, dialog will pop up.
 
+    At this time, change the Provider as "CUBRID OLE DB Provider".
+
+       .. image:: /images/oledb_confbox.jpg
+
+*   Setting a character set
+
+    If you open universal data link(.udl) file on the text editor then the below string appears;  "Charset=utf-8;" is the part of setting a character set.
+    
+    "Provider=CUBRIDProvider;Data Source=demodb;Location=127.0.0.1;User ID=dba;Password=;Port=33000;Fetch Size=100;Charset=utf-8;"
+
+*   Setting isolation level
+
+    In the below string, "Autocommit Isolation Levels=256;" is the part of setting isolation level. This feature is only supported in the driver version 9.1.0.p2 or later; if you do not specify this in the connection string, 4096 is the default value.
+    
+    ::
+    
+        "Provider=CUBRIDProvider;Data Source=demodb;Location=10.34.64.104;User ID=dba;Password=;Port=30000;Fetch Size=100;Charset=utf-8;Autocommit Isolation Levels=256;"
+
+    +--------------------------------+-------------------------------------+---------+
+    | OLE DB	                     | CUBRID                              | Value   |
+    +================================+=====================================+=========+
+    | ISOLATIONLEVEL_READUNCOMMITTED | TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE | 256     |
+    +--------------------------------+-------------------------------------+---------+
+    | ISOLATIONLEVEL_READCOMMITTED   | TRAN_COMMIT_CLASS_COMMIT_INSTANCE   | 4096    |
+    +--------------------------------+-------------------------------------+---------+
+    | ISOLATIONLEVEL_REPEATABLEREAD  | TRAN_REP_CLASS_REP_INSTANCE         | 65536   |
+    +--------------------------------+-------------------------------------+---------+
+    | ISOLATIONLEVEL_SERIALIZABLE    | TRAN_SERIALIZABLE                   | 1048576 |
+    +--------------------------------+-------------------------------------+---------+
+
+    note:: In CUBRID OLE DB, "Autocommit Isolation Levels" only acts on the isolation level of OLEDB Connection, but not for the transaction. Therefore, even if you specify the isolation level in the function OleDbConnection.BeginTransaction(), it is not applied.
+    
 Configuring Connection String
 -----------------------------
 
-When you do programming on the CUBRID OLE DB Provider using ActiveX Data Objects (ADO) or ADO.NET, you should write connection string as follows:
+When you do programming with the CUBRID OLE DB Provider, you should write connection string as follows:
 
-+-------------+----------------+---------------------------------------------------------+
-| Item        | Example        | Description                                             |
-+=============+================+=========================================================+
-| Provider    | CUBRIDProvider | Provider name                                           |
-+-------------+----------------+---------------------------------------------------------+
-| Data Source | demodb         | Database name                                           |
-+-------------+----------------+---------------------------------------------------------+
-| Location    | 127.0.0.1      | The IP address or host name of the CUBRID broker server |
-+-------------+----------------+---------------------------------------------------------+
-| User ID     | PUBLIC         | User ID                                                 |
-+-------------+----------------+---------------------------------------------------------+
-| Password    | xxx            | Password                                                |
-+-------------+----------------+---------------------------------------------------------+
-| Port        | 33000          | The broker port number                                  |
-+-------------+----------------+---------------------------------------------------------+
-| Fetch Size  | 100            | Fetch size                                              |
-+-------------+----------------+---------------------------------------------------------+
++-----------------------------+----------------+---------------------------------------------------------+
+| Item                        | Example        | Description                                             |
++=============================+================+=========================================================+
+| Provider                    | CUBRIDProvider | Provider name                                           |
++-----------------------------+----------------+---------------------------------------------------------+
+| Data Source                 | demodb         | Database name                                           |
++-----------------------------+----------------+---------------------------------------------------------+
+| Location                    | 127.0.0.1      | The IP address or host name of the CUBRID broker server |
++-----------------------------+----------------+---------------------------------------------------------+
+| User ID                     | PUBLIC         | User ID                                                 |
++-----------------------------+----------------+---------------------------------------------------------+
+| Password                    | xxx            | Password                                                |
++-----------------------------+----------------+---------------------------------------------------------+
+| Port                        | 33000          | The broker port number                                  |
++-----------------------------+----------------+---------------------------------------------------------+
+| Fetch Size                  | 100            | Fetch size                                              |
++-----------------------------+----------------+---------------------------------------------------------+
+| Charset                     | utf-8          | Character set                                           |
++-----------------------------+----------------+---------------------------------------------------------+
+| Autocommit Isolation Levels | 4096           | isolation level                                         |
++-----------------------------+----------------+---------------------------------------------------------+
 
 A connection string using the example above is as follows: ::
 
-    "Provider=CUBRIDProvider;Data Source=demodb;Location=127.0.0.1;User ID=PUBLIC;Password=xxx;Port= 33000;Fetch Size=100"
+    "Provider=CUBRIDProvider;Data Source=demodb;Location=127.0.0.1;User ID=PUBLIC;Password=xxx;Port= 33000;Fetch Size=100;Charset=utf-8;Autocommit Isolation Levels=256;"
 
 .. note::
 

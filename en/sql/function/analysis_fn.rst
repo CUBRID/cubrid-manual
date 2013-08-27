@@ -154,32 +154,32 @@ Below is the table which stores the sales amounts per month of each year.
              2002           11          420        12150
              2002           12         1300        13450
  
-집계 함수와 분석 함수 비교
-==========================
+Aggregate vs. Analytic
+======================
 
 **Aggregate function** returns one result based on the group of rows. When the **GROUP BY** clause is included, a one-row aggregate result per group is returned. When the **GROUP BY** clause is omitted, a one-row aggregate result for all rows is returned. The **HAVING** clause is used to add a condition to the query which contains the **GROUP BY** clause.
 
 Most aggregate functions can use **DISTINCT**, **UNIQUE** constraints. For the **GROUP BY ... HAVING** clause, see :ref:`group-by-clause`.
 
-**Analytic function** calculates the aggregate value based on the result of rows. The analytic function is different from the aggregate function since it can return one or more rows based on the groups specified by the *query_partition_clause* after the **OVER** clause (when this clause is omitted, all rows are regarded as a group).
+**Analytic function** calculates the aggregate value based on the result of rows. The analytic function is different from the aggregate function since it can return one or more rows based on the groups specified by the *partition_clause* after the **OVER** clause (when this clause is omitted, all rows are regarded as a group).
 
 The analytic function is used along with a new analytic clause, **OVER**, for the existing aggregate functions to allow a variety of statistics for a group of specific rows. ::
 
     function_name ( [argument_list ] ) OVER (<analytic_clause>)
      
     <analytic_clause>::=
-         [ <query_partition_clause> ] [ <order_by_clause> ]
+         [ <partition_clause> ] [ <order_by_clause> ]
         
-    <query_partition_clause>::=
+    <partition_clause>::=
         PARTITION BY value_expr [, value_expr ]...
      
     <order_by_clause>::=
         ORDER BY { expr | position | column_alias } [ ASC | DESC ]
             [, { expr | position | column_alias } [ ASC | DESC ] ] ...
 
-*   <*query_partition_clause*> : Groups based on one or more *value_expr*. It uses the **PARTITION BY** clause to partition the query result.
+*   <*partition_clause*> : Groups based on one or more *value_expr*. It uses the **PARTITION BY** clause to partition the query result.
 
-*   <*order_by_clause*> : defines the data sorting method in the partition made by <*query_partition_clause*>. The result can be sorted with several keys. <When *query_partition_clause*> is omitted, the data is sorted within the overall result sets. Based on the sorting order, the function is applied to the column values of accumulated records, including the previous values.
+*   <*order_by_clause*> : defines the data sorting method in the partition made by <*partition_clause*>. The result can be sorted with several keys. When <*partition_clause*> is omitted, the data is sorted within the overall result sets. Based on the sorting order, the function is applied to the column values of accumulated records, including the previous values.
 
 The behavior of a query with the expression of ORDER BY/PARTITION BY clause which is used together after the OVER clause is as follows.
 
@@ -316,6 +316,137 @@ The following example shows how to output the number of players whose nation_cod
       'AUT'                 'Shooting'            'Planer Christian'             17
       'AUT'                 'Swimming'            'Rogan Markus'                 18
 
+CUME_DIST
+=========
+
+.. function:: CUME_DIST(expression[, expression] ...) WITHIN GROUP (order_by_clause)
+.. function:: CUME_DIST() OVER ([partition_clause] order_by_clause)
+
+    **CUME_DIST** function is used as an aggregate function or an analytic function. It returns the value of cumulated distribution about the specified value within the group. The range of a return value by CUME_DIST is 0> and 1<=. The return value of **CUME_DIST** about the same input argument is evaluated as the same cumulated distribution value.
+
+    :param expression: an expression which returns the number or string. This should not be a column.
+    :param order_by_clause: column names followed by ORDER BY clause should be matched to the number of expressions
+    :rtype: DOUBLE
+
+    .. seealso:: 
+    
+        :func:`PERCENT_RANK`, :ref:`CUME_DIST vs. PERCENT_RANK<compare-cd-pr>`
+
+If it is used as an aggregate function, **CUME_DIST** sorts the data by the order specified in **ORDER BY** clause; then it returns the relative position of a hypothetical row in the rows of aggregate group. At this time, the position is calculated as if a hypothetical row is newly inserted. That is, **CUME_DIST** returns ("cumulated RANK of a hypothetical row" + 1)/("the number of total rows in an aggregate group").
+
+If it is used as an analytic function, **CUME_DIST** returns the relative position in the value of the group after sorting each row(**ORDER BY**) with each partitioned group(**PARTITION BY**). The relative position is that the number of rows which have values less than or equal to the input argument is divided by the number of total rows within the group(rows grouped by the partition_clause or the total rows). That is, it returns (cumulated RANK of a certain row)/(the number or rows within the group). For example, the number of rows which has the RANK 1 is 2, **CUME_DUST** values of the first and the second rows will be "2/10 = 0.2".
+
+The following is a schema and data to use in the example of this function.
+
+.. code-block:: sql
+
+    CREATE TABLE scores(id INT PRIMARY KEY AUTO_INCREMENT, math INT, english INT, pe CHAR, grade INT);
+
+    INSERT INTO scores(math, english, pe, grade) 
+           VALUES(60, 70, 'A', 1), 
+           (60, 70, 'A', 1), 
+           (60, 80, 'A', 1), 
+           (60, 70, 'B', 1), 
+           (70, 60, 'A', 1) , 
+           (70, 70, 'A', 1) , 
+           (80, 70, 'C', 1) , 
+           (70, 80, 'C', 1), 
+           (85, 60, 'C', 1), 
+           (75, 90, 'B', 1);  
+    INSERT INTO scores(math, english, pe, grade) 
+           VALUES(95, 90, 'A', 2), 
+           (85, 95, 'B', 2), 
+           (95, 90, 'A', 2), 
+           (85, 95, 'B', 2),
+           (75, 80, 'D', 2), 
+           (75, 85, 'D', 2),
+           (75, 70, 'c', 2), 
+           (65, 95, 'A', 2),
+           (65, 95, 'A', 2), 
+           (65, 95, 'A', 2);
+
+The following is an example to be used as an aggregate function; it returns the result that the sum of each cumulated distribution about each column - *math*, *english* and *pe* - is divided by 3.
+
+.. code-block:: sql
+
+    SELECT CUME_DIST(60, 70, 'D') 
+    WITHIN GROUP(ORDER BY math, english, pe) AS cume
+    FROM scores; 
+
+::
+    
+    1.904761904761905e-01
+
+The following is an example to be used as an analytic function; it returns the cumulated distributions of each row about the 3 columns - *math*, *english* and *pe*.
+
+.. code-block:: sql
+
+    SELECT id, math, english, pe, grade, CUME_DIST() OVER(ORDER BY math, english, pe) AS cume_dist 
+    FROM scores 
+    ORDER BY cume_dist;
+
+::
+
+               id         math      english  pe                          grade                 cume_dist
+    ====================================================================================================
+                1           60           70  'A'                             1     1.000000000000000e-01
+                2           60           70  'A'                             1     1.000000000000000e-01
+                4           60           70  'B'                             1     1.500000000000000e-01
+                3           60           80  'A'                             1     2.000000000000000e-01
+               18           65           95  'A'                             2     3.500000000000000e-01
+               19           65           95  'A'                             2     3.500000000000000e-01
+               20           65           95  'A'                             2     3.500000000000000e-01
+                5           70           60  'A'                             1     4.000000000000000e-01
+                6           70           70  'A'                             1     4.500000000000000e-01
+                8           70           80  'C'                             1     5.000000000000000e-01
+               17           75           70  'c'                             2     5.500000000000000e-01
+               15           75           80  'D'                             2     6.000000000000000e-01
+               16           75           85  'D'                             2     6.500000000000000e-01
+               10           75           90  'B'                             1     7.000000000000000e-01
+                7           80           70  'C'                             1     7.500000000000000e-01
+                9           85           60  'C'                             1     8.000000000000000e-01
+               12           85           95  'B'                             2     9.000000000000000e-01
+               14           85           95  'B'                             2     9.000000000000000e-01
+               11           95           90  'A'                             2     1.000000000000000e+00
+               13           95           90  'A'                             2     1.000000000000000e+00
+
+The following is an example to be used as an analytic function; it returns the cumulated distributions of each row about the 3 columns - *math*, *english* and *pe* - by grouping as *grade* column.
+
+.. code-block:: sql
+    
+    SELECT id, math, english, pe, grade, CUME_DIST() OVER(PARTITION BY grade ORDER BY math, english, pe) AS cume_dist
+    FROM scores
+    ORDER BY grade, cume_dist;
+    
+::
+
+       id         math      english  pe                          grade                 cume_dist
+    ============================================================================================
+        1           60           70  'A'                             1     2.000000000000000e-01
+        2           60           70  'A'                             1     2.000000000000000e-01
+        4           60           70  'B'                             1     3.000000000000000e-01
+        3           60           80  'A'                             1     4.000000000000000e-01
+        5           70           60  'A'                             1     5.000000000000000e-01
+        6           70           70  'A'                             1     6.000000000000000e-01
+        8           70           80  'C'                             1     7.000000000000000e-01
+       10           75           90  'B'                             1     8.000000000000000e-01
+        7           80           70  'C'                             1     9.000000000000000e-01
+        9           85           60  'C'                             1     1.000000000000000e+00
+       18           65           95  'A'                             2     3.000000000000000e-01
+       19           65           95  'A'                             2     3.000000000000000e-01
+       20           65           95  'A'                             2     3.000000000000000e-01
+       17           75           70  'c'                             2     4.000000000000000e-01
+       15           75           80  'D'                             2     5.000000000000000e-01
+       16           75           85  'D'                             2     6.000000000000000e-01
+       12           85           95  'B'                             2     8.000000000000000e-01
+       14           85           95  'B'                             2     8.000000000000000e-01
+       11           95           90  'A'                             2     1.000000000000000e+00
+       13           95           90  'A'                             2     1.000000000000000e+00
+
+In the above result, the row that *id* is 1, is located at the first and the second on the total 10 rows, and the value of CUME_DUST is 2/10, that is, 0.2.
+
+The row that *id* is 5, is located at the fifth on the total 10 rows, and the value of **CUME_DUST** is 5/10, that is, 0.5.
+
 DENSE_RANK
 ==========
 
@@ -385,6 +516,96 @@ The following example shows output of the number of Olympic gold medals of each 
          2004  'MEX'                           0           17
          2004  'LAT'                           0           17
          2004  'PRK'                           0           17
+
+FIRST_VALUE
+===========
+
+.. function:: FIRST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+
+    **FIRST_VALUE** function is used as an analytic function only. It returns **NULL** if the first value in the set is null. But, if you specify **IGNORE NULLS**, the first value will be returned as excluding null or **NULL** will be returned if all values are null.
+
+    :param expression: a column or an expression which returns a number or a string. **FIRST_VALUE** function or other analytic function cannot be included.
+    :rtype: a type of an expression
+
+    .. seealso:: 
+    
+        :func:`LAST_VALUE`, :func:`NTH_VALUE`
+
+The following is schema and data to run the example.
+
+.. code-block:: sql
+
+    CREATE TABLE test_tbl(groupid int,itemno int);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,1);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,2);
+    INSERT INTO test_tbl VALUES(1,3);
+    INSERT INTO test_tbl VALUES(1,4);
+    INSERT INTO test_tbl VALUES(1,5);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,6);
+    INSERT INTO test_tbl VALUES(2,7);
+
+The following is a query and a result to run **FIRST_VALUE** function.
+
+.. code-block:: sql
+
+    SELECT groupid, itemno, FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    FROM test_tbl;
+
+::
+
+          groupid       itemno      ret_val
+    =======================================
+                1         NULL         NULL
+                1         NULL         NULL
+                1         NULL         NULL
+                1            1         NULL
+                1            2         NULL
+                1            3         NULL
+                1            4         NULL
+                1            5         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2            6         NULL
+                2            7         NULL
+    
+CUBRID sorts **NULL** value as first order than other values. The below SQL1 is interpreted as SQL2 which includes **NULLS FIRST** in ORDER BY clause.
+
+::
+
+    SQL1: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    SQL2: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val 
+    
+The following is an example to specify **IGNORE NULLS**.
+
+.. code-block:: sql
+
+    SELECT groupid, itemno, FIRST_VALUE(itemno) IGNORE NULLS OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    FROM test_tbl;
+
+::
+
+          groupid       itemno      ret_val
+    =======================================
+                1         NULL         NULL
+                1         NULL         NULL
+                1         NULL         NULL
+                1            1            1
+                1            2            1
+                1            3            1
+                1            4            1
+                1            5            1
+                2         NULL         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2            6            6
+                2            7            6
 
 GROUP_CONCAT
 ============
@@ -486,6 +707,73 @@ The following example shows how to sort employee numbers and output the previous
 
 On the contrary, :func:`LEAD` function returns the expression value from a subsequent row, after *offset* that follows the current row.
 
+LAST_VALUE
+==========
+
+.. function:: LAST_VALUE(expression) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+
+    **LAST_VALUE** function is used as an analytic function only. It returns **NULL** if the last value in the set is null. But, if you specify **IGNORE NULLS**, the last value will be returned as excluding null or **NULL** will be returned if all values are null.
+
+    :param expression: a column or an expression which returns a number or a string. **LAST_VALUE** function or other analytic function cannot be included.
+    :rtype: a type of an *expression*
+    
+    .. seealso:: 
+    
+        :func:`FIRST_VALUE`, :func:`NTH_VALUE`
+
+The following is schema and data to run the example.
+
+.. code-block:: sql
+
+    CREATE TABLE test_tbl(groupid int,itemno int);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,1);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,2);
+    INSERT INTO test_tbl VALUES(1,3);
+    INSERT INTO test_tbl VALUES(1,4);
+    INSERT INTO test_tbl VALUES(1,5);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,6);
+    INSERT INTO test_tbl VALUES(2,7);
+
+The following is a query and a result to run **LAST_VALUE** function.
+
+.. code-block:: sql
+
+    SELECT groupid, itemno, LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    FROM test_tbl;
+
+::
+
+          groupid       itemno      ret_val
+    =======================================
+                1         NULL         NULL
+                1         NULL         NULL
+                1         NULL         NULL
+                1            1            1
+                1            2            2
+                1            3            3
+                1            4            4
+                1            5            5
+                2         NULL         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2            6            6
+                2            7            7
+
+**LAST_VALUE** function is calculated by the current row. That is, values which are not binded are not included on the calculation. For example, on the above result, the value of **LAST_VALUE** is 1 when "(groupid, itemno) = (1, 1)"; 2 when "(groupid, itemno) = (1, 2)
+
+CUBRID sorts **NULL** value as first order than other values. The below SQL1 is interpreted as SQL2 which includes **NULLS FIRST** in **ORDER BY** clause.
+
+::
+
+    SQL1: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+    SQL2: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val     
+
 LEAD
 ====
     
@@ -493,9 +781,9 @@ LEAD
 
     **LEAD** is an analytic function that returns the *expression* value from a subsequent row, after *offset* that follows the current row. It can be used to access several rows simultaneously without making any self join.
 
-    :param expression: 숫자 또는 문자열을 반환하는 칼럼 또는 연산식
-    :param offset: 오프셋 위치를 나타내는 정수. 생략 시 기본값 1
-    :param default: 현재 위치에서 *offset* 이전에 위치한 *expression* 값이 NULL인 경우 출력하는 값. 기본값 NULL 
+    :param expression: a column or an expression which returns a number or a string.
+    :param offset: the number which indicates the offset location. If it's omitted, the default is 1. 
+    :param default: the output value when the *expression* value located before *offset* is **NULL**. The default is **NULL**.
     :rtype: NUMBER or STRING
 
 The following example shows how to sort employee numbers and output the next employee number on the same row:
@@ -549,7 +837,7 @@ The following example shows how to output the title of the previous row and the 
         7  'title 7'             NULL                  'title 6'
 
 The following example shows how to output the title of the previous row and the title of the next row along with the title of a specified row on the tbl_board table. 
-If a WHERE condition is enclosed in parentheses, the values of next_title and prev_title are NULL as only one row is selected but the previous row and the subsequent row.
+If a WHERE condition is enclosed in parentheses, the values of next_title and prev_title are **NULL** as only one row is selected but the previous row and the subsequent row.
     
 ..  code-block:: sql
 
@@ -617,6 +905,59 @@ The following example shows how to output the number of gold medals by year and 
              2000  'AUT'                           2            2
              2004  'AUT'                           2            2
 
+MEDIAN
+======
+
+.. function:: MEDIAN(expression)
+.. function:: MEDIAN(expression) OVER ([partition_clause] order_by_clause)
+
+    **MEDIAN** function is used as an aggregate function or an analytic function. It returns the median value. The median value is the value which is located on the middle between the minimum value and the maximum value.
+    
+    :param expression: column with value or expression which can be converted as number or date
+    :rtype: **DOUBLE** or **DATETIME**
+
+The following is a schema and data to run examples.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (col1 int, col2 double);
+    INSERT INTO tbl VALUES(1,2), (1,1.5), (1,1.7), (1,1.8), (2,3), (2,4), (3,5);
+
+The following is an example to be used as an aggregate function. It returns the median values of aggregated col2 by each group of col1.
+
+.. code-block:: sql
+
+    SELECT col1, MEDIAN(col2) 
+    FROM tbl GROUP BY col1;
+
+::
+
+             col1  median(col2)
+    ===================================
+                1  1.750000000000000e+00
+                2  3.500000000000000e+00
+                3  5.000000000000000e+00
+
+    
+The following is an example to be used as an analytic function. It returns the median values of col2 by each group of col1.
+
+.. code-block:: sql
+
+    SELECT col1, MEDIAN(col2) OVER (PARTITION BY col1)
+    FROM tbl;
+    
+::
+
+         col1  median(col2) over (partition by col1)
+    ===================================
+            1  1.750000000000000e+00
+            1  1.750000000000000e+00
+            1  1.750000000000000e+00
+            1  1.750000000000000e+00
+            2  3.500000000000000e+00
+            2  3.500000000000000e+00
+            3  5.000000000000000e+00
+
 MIN
 ===
 
@@ -627,7 +968,7 @@ MIN
     :param expression: Specifies an expression that returns a numeric or string value. A collection expression cannot be specified.
     :param ALL: Gets the minimum value for all data (default).
     :param DISTINCT,DISTINCTROW,UNIQUE: Gets the maximum value without duplicates.
-    :rtype: same type as that the expression
+    :rtype: same type as the *expression*
 
 The following example shows how to retrieve the minimum number of gold (*gold*) medals that Korea won in the Olympics in the *demodb* database.
 
@@ -663,6 +1004,72 @@ The following example shows how to output the number of gold medals by year and 
              1996  'AUT'                           0            0
              2000  'AUT'                           2            0
              2004  'AUT'                           2            0
+
+
+NTH_VALUE
+=========
+
+.. function:: NTH_VALUE(expression, N) [{RESPECT|IGNORE} NULLS] OVER ([partition_clause] order_by_clause)
+
+    NTH_VALUE is used as an analytic function only. It returns an *expression* value of *N*\ -th row in the set of sorted values. 
+
+    :param expression: a column or an expression which returns a number or a string 
+    :param N: a constant, a binding variable, a column or an expression which can be interpreted as a positive integer
+    :rtype: a type of an *expression*
+
+    
+    **LAST_VALUE** function is used as an analytic function only. It returns **NULL** if the last value in the set is null. But, if you specify **IGNORE NULLS**, the last value will be returned as excluding null or **NULL** will be returned if all values are null.
+
+   
+    .. seealso:: 
+    
+        :func:`FIRST_VALUE`, :func:`LAST_VALUE` 
+        
+**{RESPECT|IGNORE} NULLS** syntax decides if null value of *expression* is included in the calculation or not. The default is **RESPECT NULLS**.
+
+The following is a schema and data to run examples.
+
+.. code-block:: sql
+
+    CREATE TABLE test_tbl(groupid int,itemno int);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,1);
+    INSERT INTO test_tbl VALUES(1,null);
+    INSERT INTO test_tbl VALUES(1,2);
+    INSERT INTO test_tbl VALUES(1,3);
+    INSERT INTO test_tbl VALUES(1,4);
+    INSERT INTO test_tbl VALUES(1,5);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,null);
+    INSERT INTO test_tbl VALUES(2,6);
+    INSERT INTO test_tbl VALUES(2,7);
+
+The following is a query and results to run **NTH_VALUE** function by the value of *N* as 2.
+
+.. code-block:: sql
+
+    SELECT groupid, itemno, NTH_VALUE(itemno, 2) IGNORE NULLS OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val 
+    FROM test_tbl;
+
+::
+
+          groupid       itemno      ret_val
+    =======================================
+                1         NULL         NULL
+                1         NULL         NULL
+                1         NULL         NULL
+                1            1            2
+                1            2            2
+                1            3            2
+                1            4            2
+                1            5            2
+                2         NULL         NULL
+                2         NULL         NULL
+                2         NULL         NULL
+                2            6         NULL
+                2            7            7
 
 NTILE
 =====
@@ -741,6 +1148,176 @@ The NTILE function equally divides the grade based on the number of rows, regard
       'Lora'                         60            3
       'David'                        55            4
       'Tom'                          30            5
+
+PERCENT_RANK
+============
+
+.. function:: PERCENT_RANK(expression[, expression] ...) WITHIN GROUP (order_by_clause)
+.. function:: PERCENT_RANK() OVER ([partition_clause] order_by_clause)
+
+    **PERCENT_RANK** function is used as an aggregate function or an analytic function. It returns the relative position of the row in the group as a ranking percent. It is similar to **CUME_DIST** function(returns cumulated distribution value). The range of this function is from 0 to 1. The first value of **PERCENT_RANK** is always 0.
+
+    :param expression: an expression which returns a number or a string. It should not be a column.
+    :rtype: **DOUBLE**
+
+    .. seealso:: 
+    
+        :func:`CUME_DIST`, :func:`RANK`
+    
+If it is an aggregate function, it returns the value that the RANK minus 1 of a hypothetical row selected in the whole aggregated rows is divided by the number of rows in the aggregated group. That is, ("RANK of a hypothetical row" - 1)/(the number or rows in the aggregated group).
+
+If it is an analytic function, it returns ("RANK per group" -1)/("the number of rows in the group" - 1) when each row with the group divided by **PARTITION BY** is sorted by the specified order by the **ORDER BY** clause.
+For example, if the number of rows appeared as the first rank(RANK=1) in the total 10 rows is 2, **PERCENT_RANK** values of the first and second rows are (1-1)/(10-1)=0.
+
+.. _compare-cd-pr:
+
+The following is a table which compares the return values of **CUME_DIST** and **PERCENT_RANK** which are used as aggregate functions when there are input arguments *VAL*. 
+
+==================== ==================== ==================== ==================== ====================
+VAL                  RANK()               DENSE_RANK()         CUME_DIST(VAL)       PERCENT_RANK(VAL)
+==================== ==================== ==================== ==================== ====================
+100                  1                    1                    0.33 => (1+1)/(5+1)  0    => (1-1)/5
+200                  2                    2                    0.67 => (2+1)/(5+1)  0.2  => (2-1)/5
+200                  2                    2                    0.67 => (2+1)/(5+1)  0.2  => (2-1)/5
+300                  4                    3                    0.83 => (4+1)/(5+1)  0.6  => (4-1)/5
+400                  5                    4                    1    => (5+1)/(5+1)  0.8  => (5-1)/5
+==================== ==================== ==================== ==================== ====================
+
+The following is a table which compares the return values of **CUME_DIST** and **PERCENT_RANK** which are used as analytic functions when there are input arguments *VAL*. 
+
+==================== ==================== ==================== ==================== ====================
+VAL                  RANK()               DENSE_RANK()         CUME_DIST()          PERCENT_RANK()
+==================== ==================== ==================== ==================== ====================
+100                  1                    1                    0.2 => 1/5           0    => (1-1)/(5-1)
+200                  2                    2                    0.6 => 3/5           0.25 => (2-1)/(5-1)
+200                  2                    2                    0.6 => 3/5           0.25 => (2-1)/(5-1)
+300                  4                    3                    0.8 => 4/5           0.75 => (4-1)/(5-1)
+400                  5                    4                    1   => 5/5           1    => (5-1)/(5-1)
+==================== ==================== ==================== ==================== ====================
+
+The following is a schema and examples of queries which are related to the above tables.
+
+.. code-block:: sql
+
+    CREATE TABLE test_tbl(VAL INT);
+    INSERT INTO test_tbl VALUES (100), (200), (200), (300), (400);
+    
+
+    SELECT CUME_DIST(100) WITHIN GROUP (ORDER BY val) AS cume FROM test_tbl;
+    SELECT PERCENT_RANK(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl;
+
+    SELECT CUME_DIST() OVER (ORDER BY val) AS cume FROM test_tbl;
+    SELECT PERCENT_RANK() OVER (ORDER BY val) AS pct_rnk FROM test_tbl;
+
+The following is a schema and data which will be used in the below.
+
+.. code-block:: sql
+
+    CREATE TABLE scores(id INT PRIMARY KEY AUTO_INCREMENT, math INT, english INT, pe CHAR, grade INT);
+
+    INSERT INTO scores(math, english, pe, grade) 
+           VALUES(60, 70, 'A', 1), 
+           (60, 70, 'A', 1), 
+           (60, 80, 'A', 1), 
+           (60, 70, 'B', 1), 
+           (70, 60, 'A', 1) , 
+           (70, 70, 'A', 1) , 
+           (80, 70, 'C', 1) , 
+           (70, 80, 'C', 1), 
+           (85, 60, 'C', 1), 
+           (75, 90, 'B', 1);  
+    INSERT INTO scores(math, english, pe, grade) 
+           VALUES(95, 90, 'A', 2), 
+           (85, 95, 'B', 2), 
+           (95, 90, 'A', 2), 
+           (85, 95, 'B', 2),
+           (75, 80, 'D', 2), 
+           (75, 85, 'D', 2),
+           (75, 70, 'c', 2), 
+           (65, 95, 'A', 2),
+           (65, 95, 'A', 2), 
+           (65, 95, 'A', 2);
+
+The following is an example of aggregate function. It displays the result that each **PERCENT_RANK** about three columns, *math*, *english* and *pe* are added and divided by 3.
+
+.. code-block:: sql
+
+    SELECT PERCENT_RANK(60, 70, 'D') 
+    WITHIN GROUP(ORDER BY math, english, pe) AS percent_rank
+    FROM scores; 
+
+::
+    
+    1.500000000000000e-01
+
+The following is an example of analytic function. It returns the **PERCENT_RANK** values of the entire rows based on three columns, *math*, *english* and **pe**.
+
+.. code-block:: sql
+
+    SELECT id, math, english, pe, grade, PERCENT_RANK() OVER(ORDER BY math, english, pe) AS percent_rank 
+    FROM scores 
+    ORDER BY percent_rank;
+
+::
+
+               id         math      english  pe                          grade              percent_rank
+    ====================================================================================================
+                1           60           70  'A'                             1     0.000000000000000e+00
+                2           60           70  'A'                             1     0.000000000000000e+00
+                4           60           70  'B'                             1     1.052631578947368e-01
+                3           60           80  'A'                             1     1.578947368421053e-01
+               18           65           95  'A'                             2     2.105263157894737e-01
+               19           65           95  'A'                             2     2.105263157894737e-01
+               20           65           95  'A'                             2     2.105263157894737e-01
+                5           70           60  'A'                             1     3.684210526315789e-01
+                6           70           70  'A'                             1     4.210526315789473e-01
+                8           70           80  'C'                             1     4.736842105263158e-01
+               17           75           70  'c'                             2     5.263157894736842e-01
+               15           75           80  'D'                             2     5.789473684210527e-01
+               16           75           85  'D'                             2     6.315789473684210e-01
+               10           75           90  'B'                             1     6.842105263157895e-01
+                7           80           70  'C'                             1     7.368421052631579e-01
+                9           85           60  'C'                             1     7.894736842105263e-01
+               12           85           95  'B'                             2     8.421052631578947e-01
+               14           85           95  'B'                             2     8.421052631578947e-01
+               11           95           90  'A'                             2     9.473684210526315e-01
+               13           95           90  'A'                             2     9.473684210526315e-01
+
+The following is an example of analytic function. It returns the **PERCENT_RANK** values grouped by *grade* column, based on three columns, *math*, *english* and **pe**.
+
+.. code-block:: sql
+    
+    SELECT id, math, english, pe, grade, RANK(), PERCENT_RANK() OVER(PARTITION BY grade ORDER BY math, english, pe) AS percent_rank
+    FROM scores
+    ORDER BY grade, percent_rank;
+    
+::
+
+               id         math      english  pe                          grade              percent_rank
+    ====================================================================================================
+                1           60           70  'A'                             1     0.000000000000000e+00
+                2           60           70  'A'                             1     0.000000000000000e+00
+                4           60           70  'B'                             1     2.222222222222222e-01
+                3           60           80  'A'                             1     3.333333333333333e-01
+                5           70           60  'A'                             1     4.444444444444444e-01
+                6           70           70  'A'                             1     5.555555555555556e-01
+                8           70           80  'C'                             1     6.666666666666666e-01
+               10           75           90  'B'                             1     7.777777777777778e-01
+                7           80           70  'C'                             1     8.888888888888888e-01
+                9           85           60  'C'                             1     1.000000000000000e+00
+               18           65           95  'A'                             2     0.000000000000000e+00
+               19           65           95  'A'                             2     0.000000000000000e+00
+               20           65           95  'A'                             2     0.000000000000000e+00
+               17           75           70  'c'                             2     3.333333333333333e-01
+               15           75           80  'D'                             2     4.444444444444444e-01
+               16           75           85  'D'                             2     5.555555555555556e-01
+               12           85           95  'B'                             2     6.666666666666666e-01
+               14           85           95  'B'                             2     6.666666666666666e-01
+               11           95           90  'A'                             2     8.888888888888888e-01
+               13           95           90  'A'                             2     8.888888888888888e-01
+
+In the above result, the rows with *id* 1 are located at the first and the second in the 10 rows whose *grade* is 1, and the values of **PERCENT_RANK** will be (1-1)/(10-1)=0.
+A row whose *id* is 5 is located at the fifth in the 10 rows whose *grade* is 1, and the value of **PERCENT_RANK** will be (5-1)/(10-1)=0.44.
 
 RANK
 ====

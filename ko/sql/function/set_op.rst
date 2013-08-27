@@ -5,10 +5,24 @@
 SET, MULTISET, LIST
 ===================
 
-컬렉션 타입(**SET**, **MULTISET**, **LIST** (= **SEQUENCE**)) 데이터에 대해 합집합, 차집합, 교집합을 구하기 위해서 각각 +, -, * 연산자를 사용할 수 있다. 다음은 컬렉션 타입이 피연산자인 경우, 연산별 결과 데이터 타입을 나타낸 표이다.
+컬렉션 타입(**SET**, **MULTISET**, **LIST** (= **SEQUENCE**)) 데이터에 대해 합집합, 차집합, 교집합을 구하기 위해서 각각 +, -, * 연산자를 사용할 수 있다. 
 
-피연산자의 타입별 결과 데이터 타입
-----------------------------------
+::
+
+    value_expression  set_arithmetic_operator value_expression
+     
+    value_expression :
+    • collection value
+    • NULL
+     
+    set_arithmetic_operator :
+    • + (합집합)
+    • - (차집합)
+    • * (교집합)
+
+다음은 컬렉션 타입이 피연산자인 경우, 연산별 결과 데이터 타입을 나타낸 표이다.
+
+**피연산자의 타입별 결과 데이터 타입**
 
 +-----------------+--------------+--------------+-----------------+
 |                 | SET          | MULTISET     | LIST            |
@@ -37,22 +51,7 @@ SET, MULTISET, LIST
 |                 |              |              | **MULTISET**    |
 +-----------------+--------------+--------------+-----------------+
 
-**구문**
-
-::
-
-    value_expression  set_arithmetic_operator value_expression
-     
-    value_expression :
-    • collection value
-    • NULL
-     
-    set_arithmetic_operator :
-    • + (합집합)
-    • - (차집합)
-    • * (교집합)
-
-**예제**
+다음은 컬렉션 타입을 가지고 산술 연산을 수행하는 예이다.
 
 .. code-block:: sql
 

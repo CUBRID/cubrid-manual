@@ -101,7 +101,7 @@ CURRENT_USER, USER
 
     **CURRENT_USER** and **USER** are pseudo-columns and can be used interchangeably. They return the user name that is currently logged in to the database as a string.
 
-    Please note that :func:`USER` and :func:`SYSTEM_USER` functions return the user name with a host name.
+    Please note that :func:`SYSTEM_USER` and :func:`USER` functions return the user name with a host name.
 
     :rtype: STRING
     
@@ -194,7 +194,7 @@ If any of constraints is not defined or the **UNIQUE** constraint is defined for
 
 .. note::
 
-    In version lower than CUBRID 9.0, the value at the time of CREATE TABLE has been saved when the DATE value of the DATE, DATETIME, TIME, TIMESTAMP column has been specified to SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP while creating a table. Therefore, to enter the value at the time of data INSERT in version lower than CUBRID 9.0, the function should be entered to the VALUES clause of the INSERT syntax.
+    In version lower than CUBRID 9.0, the value at the time of CREATE TABLE has been saved when the value of the DATE, DATETIME, TIME, TIMESTAMP column has been specified as SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP while creating a table. Therefore, to enter the value at the time of data INSERT in version lower than CUBRID 9.0, the function should be entered to the VALUES clause of the INSERT syntax.
     
 INDEX_CARDINALITY
 =================
@@ -203,6 +203,8 @@ INDEX_CARDINALITY
 
     The **INDEX_CARDINALITY** function returns the index cardinality in a table. The index cardinality is the number of unique values defining the index. The index cardinality can be applied even to the partial key of the multiple column index and displays the number of the unique value for the partial key by specifying the column location with the third parameter.
 
+    If you want the updated result from this function, you should run **UPDATE STATISTICS** statement.
+    
     :param table: Table name
     :param index: Index name that exists in the *table*
     :param key_pos: Partial key location. It *key_pos* starts from 0 and has a range that is smaller than the number of columns consisting of keys; that is, the *key_pos* of the first column is 0. For the single column index, it is 0. It can be one of the following types.
@@ -232,6 +234,7 @@ The return value is 0 or a positive integer and if any of the input parameters i
     INSERT INTO t1 VALUES (2,2,2,'zabc','zabc','zabc');
     INSERT INTO t1 VALUES (2,3,3,'+abc','+abc','+abc');
      
+    UPDATE STATISTICS ON t1;
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',0);
     
 ::
@@ -323,7 +326,11 @@ LAST_INSERT_ID
     
 The value returned by the **LAST_INSERT_ID** function has the following characteristics.
 
-*   The latest **LAST_INSERT_ID** value which was INSERTed successfully will be maintained. If it fails to INSERT, there is no change for **LAST_INSERT_ID**\() value, but **AUTO_INCREMENT** value will be internally increased. Therefore, **LAST_INSERT_ID**\() value after the next **INSERT** statement's success reflects the internally increased **AUTO_INCREMENT** value.
+*   The latest **LAST_INSERT_ID** value which was INSERTed successfully will be maintained. If it fails to INSERT, there is no change for **LAST_INSERT_ID**\() value, but **AUTO_INCREMENT** value is internally increased. Therefore, **LAST_INSERT_ID**\() value after the next **INSERT** statement's success reflects the internally increased **AUTO_INCREMENT** value.
+
+    .. note::
+
+        In the version of CUBRID 2008 R4.x or before, when **INSERT** statement is failed, **AUTO_INCREMENT** value will be internally increased and there is a change for **LAST_INSERT_ID**\() value.
 
     .. code-block:: sql
 
@@ -350,6 +357,8 @@ The value returned by the **LAST_INSERT_ID** function has the following characte
     ::
     
         1
+
+        -- In 2008 R4.4 or before, above value is 3.
 
     .. code-block:: sql
 

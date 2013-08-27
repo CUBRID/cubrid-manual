@@ -1,7 +1,7 @@
 .. _install-execute:
 
-Installation and Running CUBRID
-===============================
+Installing and Running CUBRID
+=============================
 
 Supported Platforms and System Requirements
 -------------------------------------------
@@ -20,7 +20,7 @@ The platforms supported by CUBRID and hardware/software requirements for the ins
 
 Beginning with 2008 R4.0, CUBRID Manager Client is not automatically installed when installing the CUBRID package. For this reason, if you require CUBRID Manager you must install it separately. The CUBRID can be downloaded from http://ftp.cubrid.org.
 
-Including CUBRID Query Browser, a variety of drivers such as PHP, ODBC, OLE, and DB can also be downloaded from http://ftp.cubrid.org.
+Including CUBRID Query Browser, a variety of drivers such as PHP, ODBC and OLE DB can also be downloaded from http://ftp.cubrid.org.
 
 For more information on the CUBRID engine, tools, and drivers, see http://www.cubrid.org.
 
@@ -38,13 +38,13 @@ Compatibility
 
 **CUBRID Manager Compatibility**
 
-*   CUBRID Manager guarantees backward compatibility with the servers using CUBRID 2008 R2.1 or higher and uses the CUBRID JDBC driver that matches each server version. However, you must use a CUBRID Manager that is higher than CUBRID servers in version in order to utilize all the features of CUBRID Manager. The CUBRID JDBC driver is included in the $CUBRID/jdbc directory when CUBRID is installed.($CUBRID on Linux, %CUBRID% on Windows).
+*   CUBRID Manager guarantees backward compatibility with the servers using CUBRID 2008 R2.1 or higher and uses the CUBRID JDBC driver that matches each server version. However, you must use a CUBRID Manager that is higher than CUBRID servers in version in order to utilize all the features of CUBRID Manager. The CUBRID JDBC driver is included in the $CUBRID/jdbc directory when CUBRID is installed($CUBRID on Linux, %CUBRID% on Windows).
 
 *   The bit version of CUBRID Manager must be identical to the bit version of JRE. For example, if a 64-bit DB server uses CUBRID Manager 32-bit version, JRE or JDK 32-bit version should be installed.
 
 *   Drivers for 2008 R2.2 and higher versions are included in CUBRID Manager by default, which you can download separately from the http://www.cubrid.org Website.
 
-.. note:: 9.0 Beta version user should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 9.2 version.
+.. note:: Old version user should upgrade all of driver, broker, DB server; Data migration should be done because its DB volume is not compatible with 9.2 version.
     For upgrade and data migration, see :doc:`/upgrade`.
 
 Interoperability
@@ -53,8 +53,6 @@ Interoperability
 *   If the CUBRID DB server and its broker server are operated separately, their interoperability is guaranteed, even when the operating systems are different. However, the bit version of a DB server must be identical to the bit version of a broker server. For example, the 64-bit DB server for Linux is interoperable with the 64-bit broker server for Windows, but it is not interoperable with a 32-bit broker server.
 
     For the relation between DB server and broker, see :doc:`intro`.For CUBRID SHARD, see :doc:`shard`.
-
-*   If the CUBRID DB server and its broker server are operated separately, their system locales should be the same. For example, if CUBRID_CHARSET of DB server is en_US.utf8, CUBRID_CHARSET of broker server should be en_US.utf8, too.
 
 Installation and Running CUBRID on Linux
 ----------------------------------------
@@ -77,7 +75,7 @@ Installation and Running CUBRID on Linux
         % uname -a
         Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
 
-      Make sure to install the CUBRID 32-bit version on 32-bit Linux and the CUBRID 64-bit version on 64-bit Linux. The followings are the libraries that should be added.
+      Make sure to install the CUBRID 32-bit version on 32-bit Linux and the CUBRID 64-bit version on 64-bit Linux. The following are the libraries that should be added.
 
       * Curses Library (rpm -q ncurses)
       * gcrypt Library (rpm -q libgcrypt)
@@ -149,7 +147,9 @@ Installation and Running CUBRID on Linux
         
         *   **Running CUBRID automatically in Linux when the system is started**
         
-            How to use service or chkconfig command If you use SH or RPM package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, **CUBRID_USER**. If you change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command to run CUBRID automatically when the Linux system is started.
+            When you use SH package to install CUBRID, the cubrid script will be included in the $CUBRID/share/init.d directory. In this file, you can find the environment variable, **CUBRID_USER**. You should change this variable to the Linux account with which CUBRID has been installed and register it in /etc/init.d, then you can use service or chkconfig command to run CUBRID automatically when the Linux system is started.
+
+            When you use RPM package to install CUBRID, the cubrid script will be included in /etc/init.d. But you still need to change the environment variable in "cubrid" script file, $CUBRID_USER into "cubrid" account.
     
         *   **In /etc/hosts file, check if a host name and an IP address mapping is normal**
 
@@ -213,7 +213,7 @@ Installation and Running CUBRID on Linux
 
 **Configuring Environment**
 
-    You can modify the environment such as service ports etc. edit the parameters of a configuration file located in the **$CUBRID/conf** directory. See :ref:`Installin-and-Running-on-Windows` for more information.
+    You can modify the environment such as service ports etc. edit the parameters of a configuration file located in the **$CUBRID/conf** directory. See :ref:`Installing-and-Running-on-Windows` for more information.
 
 **Installing CUBRID Interfaces**
 
@@ -227,14 +227,14 @@ Installation and Running CUBRID on Linux
 
     CUBRID Web Manager is started when the CUBRID is installed, and you can see this by accessing to https://localhost:8282/ .
 
-.. _Installin-and-Running-on-Windows:
+.. _Installing-and-Running-on-Windows:
 
-Installation and Running CUBRID on Windows
-------------------------------------------
+Installing and Running CUBRID on Windows
+----------------------------------------
 
 **Details to Check when Install**
 
-    You should check the belows before installing CUBRID for Windows.
+    You should check the below before installing CUBRID for Windows.
     
     * 64-bit
 
@@ -250,9 +250,9 @@ Installation and Running CUBRID on Windows
     
     **Step 2: Selecting Setup Type**
 
-    *   **Server and Driver Installation** : CUBRID Server, CSQL (a command line tool), interface drivers (OLE DB Provider, ODBC, JDBC, C API) are all installed.
+    *   **Server and Driver Installation** : CUBRID Server, CSQL (a command line tool), interface drivers (JDBC, C API) are all installed.
 
-    *   **Driver Installation** : Only the interface drivers (OLE DB Provider, ODBC, JDBC, C API) are  installed. You can select this type of installation if development or operation is performed by remote connection to the computer in which the CUBRID database server is installed.
+    *   **Driver Installation** : Only the interface drivers (JDBC, C API) are  installed. You can select this type of installation if development or operation is performed by remote connection to the computer in which the CUBRID database server is installed.
 
     **Step 3: Creating a sample database**
         
@@ -272,8 +272,6 @@ Installation and Running CUBRID on Windows
 
     For more information on upgrading a database from a previous version to a new version, see :doc:`upgrade`.
 
-    .. _Configuring-Environment-on-Windows:
-
 **Configuring Environment**
 
     You can change configuration such as service ports to meet the user environment by changing the parameter values of following files which are located in the **%CUBRID%\\conf** directory. If a firewall has been configured, the ports used in CUBRID need to be opened.
@@ -282,7 +280,7 @@ Installation and Running CUBRID on Windows
 
       A configuration file for CUBRID Manager. The port that the Manager server process uses is called  **cm_port** and its default value is **8001** . Two ports are used and the port number is determined by the **cm_port** parameter. If 8001 is specified, 8001 and 8002 (configured number plus 1) ports will be used. For details, see `CUBRID Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual>`_ .
 
-    * **cm_httpd.conf**
+    * **cm_ext.conf**
      
       A configuration file for CUBRID Web Manager. **listen** is the port to be used in the web manager server process, and its default value is **8282**. For more details, see `CUBRID Web Manager Manual <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_ .
 
@@ -294,7 +292,7 @@ Installation and Running CUBRID on Windows
 
       A configuration file for broker. You can use it to configure the following values: broker port, the number of application servers (CAS), SQL LOG, etc. The port that a broker uses is called **BROKER_PORT**. A port you see in the drivers such as JDBC is its corresponding broker's port. **APPL_SERVER_PORT** is a port that a broker application server (CAS) uses and it is added only in Windows. The default value is  **BROKER_PORT** +1. The number of ports used is the same as the number of CAS, starting from the specified port's number plus 1. For details, see :ref:`parameter-by-broker`.
 
-      For example, if the value of **APPL_SERVER_PORT** is 35000 and the maximum number of CASs by **MAX_NUM_APPL_SERVER** is 50, then listening ports on CASs are 35000, 35001, ..., 35049.
+      For example, if the value of **APPL_SERVER_PORT** is 35000 and the maximum number of CASes by **MAX_NUM_APPL_SERVER** is 50, then listening ports on CASes are 35000, 35001, ..., 35049.
       For more details, see :ref:`parameter-by-broker`. 
       
       The **CCI_DEFAULT_AUTOCOMMIT** broker parameter is supported since 2008 R4.0. The default value in the version is **OFF** and it is later changed to **ON** .  Therefore, users who have upgraded from 2008 R4.0 to 2008 R4.1 or later versions should change this value to **OFF** or configure the auto-commit mode to **OFF** .

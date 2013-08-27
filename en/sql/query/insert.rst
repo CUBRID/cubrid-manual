@@ -191,6 +191,11 @@ ON DUPLICATE KEY UPDATE Clause
 
 In a situation in which a duplicate value is inserted into a column for which the **UNIQUE** index or the **PRIMARY KEY** constraint has been set, you can update to a new value by specifying the **ON DUPLICATE KEY UPDATE** clause in the **INSERT** statement.
 
+.. note::
+
+    *   If **PRIMARY KEY** and **UNIQUE** or multiple **UNIQUE** constraints exist on a table together, constraint violation can happen by one of them; so in this case, **ON DUPLICATE KEY UPDATE** clause is not recommended.
+    *   Even if **UPDATE** is executed after failing executing **INSERT**, **AUTO_INCREMENT** value which is increased once cannot be rolled back into the previous value.
+
 ::
 
     <INSERT … VALUES statement>

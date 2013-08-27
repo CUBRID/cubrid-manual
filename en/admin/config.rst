@@ -39,7 +39,7 @@ Changing Database Server Configuration
 
     *   Parameter names are not case-sensitive.
     *   The name and value of a parameter must be entered in the same line.
-    *   An equal sign (=) can be used to configure the parameter value. Spaces are allowed before and after the equal sign.
+    *   An equal sign (=) can be to configure the parameter value. Spaces are allowed before and after the equal sign.
     *   If the value of a parameter is a character string, enter the character string without quotes. However, use quotes if spaces are included in the character string.
 
 **Using SQL Statements**
@@ -84,7 +84,7 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     The following are database server system parameters that can be used in the **cubrid.conf** configuration file. On the following table, "Applied" column's "client parameter" means that they are applied to CAS, CSQL, **cubrid** utilities. Its "server parameter" means that they are applied to the DB server process.
     For the scope of **client** and **server parameters**, see :ref:`scope-server-conf`.
 
-    You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change client parameters.
+    You can change the parameters that are capable of changing dynamically the setting value through the **SET SYSTEM PARAMETERS** statement or a session command of the CSQL Interpreter, **;set** while running the DB. If you are a DBA, you can change parameters regardless of the applied classification. However, if you are not a DBA, you can only change "client" or "client/server" parameters.
 
     On the below table, if "Applied" is "server parameter", that parameter's applied scope is global. If  "Applied" is "client parameter" or "client/server parameter",  that parameter's applied scope is session.
   
@@ -95,45 +95,50 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     | Category                      | Parameter Name                      | Applied                 | Type     | Default Value                  | Dynamic Change  |
     +===============================+=====================================+=========================+==========+================================+=================+
-    | :ref:`connection-parameters`  | cubrid_port_id                      | client parameter        | int      | 1523                           |                 |
+    | :ref:`connection-parameters`  | cubrid_port_id                      | client parameter        | int      | 1523                           |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | check_peer_alive                    | client/server parameter | string   | both                           | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | db_hosts                            | client parameter        | string   | NULL                           | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | max_clients                         | server parameter        | int      | 100                            |                 |
+    |                               | max_clients                         | server parameter        | int      | 100                            |                 |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`memory-parameters`      | data_buffer_size                    | server parameter        | int      | 512M                           |                 |
+    | :ref:`memory-parameters`      | data_buffer_size                    | server parameter        | byte     | 32768 *                        |                 |
+    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | index_scan_oid_buffer_size          | server parameter        | int      | 64K                            | available       |
+    |                               | index_scan_oid_buffer_size          | server parameter        | byte     | 4 *                            |                 |
+    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | sort_buffer_size                    | server parameter        | int      | 2M                             | available       |
+    |                               | sort_buffer_size                    | server parameter        | byte     | 128 *                          |                 |
+    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | temp_file_memory_size_in_pages      | server parameter        | int      | 4                              | available       |
+    |                               | temp_file_memory_size_in_pages      | server parameter        | int      | 4                              |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | thread_stacksize                    | server parameter        | int      | 1048576                        |                 |
+    |                               | thread_stacksize                    | server parameter        | byte     | 1048576                        |                 |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`disk-parameters`        | db_volume_size                      | server parameter        | int      | 512M                           |                 |
+    | :ref:`disk-parameters`        | db_volume_size                      | server parameter        | byte     | 512M                           |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | dont_reuse_heap_file                | server parameter        | bool     | no                             |                 |
+    |                               | dont_reuse_heap_file                | server parameter        | bool     | no                             |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | temp_file_max_size_in_pages         | server parameter        | int      | -1                             |                 |
+    |                               | generic_vol_prealloc_size           | server parameter        | byte     | 50M                            |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | temp_volume_path                    | server parameter        | string   | NULL                           |                 |
+    |                               | log_volume_size                     | server parameter        | byte     | 512M                           |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | unfill_factor                       | server parameter        | float    | 0.1                            | available       |
+    |                               | temp_file_max_size_in_pages         | server parameter        | int      | -1                             |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | volume_extension_path               | server parameter        | string   | NULL                           | available       |
+    |                               | temp_volume_path                    | server parameter        | string   | NULL                           |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | log_volume_size                     | server parameter        | int      | 512M                           |                 |
+    |                               | unfill_factor                       | server parameter        | float    | 0.1                            |                 |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | volume_extension_path               | server parameter        | string   | NULL                           |                 |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter | string   | NULL                           | available       |
+    | :ref:`error-parameters`       | call_stack_dump_activation_list     | client/server parameter | string   | DEFAULT                        | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | call_stack_dump_deactivation_list   | client/server parameter | string   | NULL                           | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | call_stack_dump_on_error            | client/server parameter | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | error_log                           | client/server parameter | string   | cub_client.err, cub_server.err |                 |
+    |                               | error_log                           | client/server parameter | string   | cub_client.err, cub_server.err |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | error_log_level                     | client/server parameter | string   | SYNTAX                         | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
@@ -145,37 +150,43 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | isolation_level                     | client parameter        | int      | 3                              | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | lock_escalation                     | server parameter        | int      | 100000                         | available       |
+    |                               | lock_escalation                     | server parameter        | int      | 100000                         |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | lock_timeout_in_secs                | client parameter        | int      | -1                             | available       |
+    |                               | lock_timeout                        | client parameter        | msec     | -1                             | available       |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | rollback_on_lock_escalation         | server parameter        | bool     | no                             | available       |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     | :ref:`logging-parameters`     | adaptive_flush_control              | server parameter        | bool     | yes                            | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | background_archiving                | server parameter        | bool     | yes                            | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | checkpoint_every_npages             | server parameter        | int      | 10000                          | available       |
+    |                               | checkpoint_every_size               | server parameter        | byte     | 10000 *                        |                 |
+    |                               |                                     |                         |          | :ref:`log_page_size <lpg>`     |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | checkpoint_interval_in_mins         | server parameter        | int      | 720                            | available       |
+    |                               | checkpoint_interval                 | server parameter        | msec     | 6min                           | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | force_remove_log_archives           | server parameter        | bool     | yes                            | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | log_buffer_size                     | server parameter        | int      | 2M                             |                 |
+    |                               | log_buffer_size                     | server parameter        | byte     | 128 *                          |                 |
+    |                               |                                     |                         |          | :ref:`log_page_size <lpg>`     |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | log_max_archives                    | server parameter        | int      | INT_MAX                        | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | max_flush_pages_per_second          | server parameter        | int      | 10000                          | available       |
+    |                               | max_flush_size_per_second           | server parameter        | byte     | 10000 *                        | available       |
+    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | sync_on_nflush                      | server parameter        | int      | 200                            | available       |
+    |                               | sync_on_flush_size                  | server parameter        | byte     | 200 *                          | available       |
+    |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`transaction-parameters` | async_commit                        | server parameter        | bool     | no                             | available       |
+    | :ref:`transaction-parameters` | async_commit                        | server parameter        | bool     | no                             |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | group_commit_interval_in_msecs      | server parameter        | int      | 0                              | available       |
+    |                               | group_commit_interval_in_msecs      | server parameter        | msec     | 0                              | available       |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client parameter        | bool     | no                             | available       |
+    | :ref:`stmt-type-parameters`   | add_column_update_hard_default      | client/server parameter | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | alter_table_change_type_strict      | client/server parameter | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | ansi_quotes                         | client parameter        | bool     | yes                            |                 |
+    |                               | ansi_quotes                         | client parameter        | bool     | yes                            |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | block_ddl_statement                 | client parameter        | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
@@ -185,76 +196,88 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | default_week_format                 | client/server parameter | int      | 0                              | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | group_concat_max_len                | server parameter        | int      | 1024                           | available       |
+    |                               | group_concat_max_len                | server parameter        | byte     | 1024                           | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | intl_check_input_string             | client parameter        | bool     | no                             | available       |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | intl_collation                      | client parameter        | string   |                                | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | intl_date_lang                      | client parameter        | string   |                                | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | intl_number_lang                    | client parameter        | string   |                                | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | no_backslash_escapes                | client parameter        | bool     | yes                            |                 |
+    |                               | no_backslash_escapes                | client parameter        | bool     | yes                            |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | only_full_group_by                  | client parameter        | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | oracle_style_empty_string           | client parameter        | bool     | no                             |                 |
+    |                               | oracle_style_empty_string           | client parameter        | bool     | no                             |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | pipes_as_concat                     | client parameter        | bool     | yes                            |                 |
+    |                               | pipes_as_concat                     | client parameter        | bool     | yes                            |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | plus_as_concat                      | client parameter        | bool     | yes                            |                 |
+    |                               | plus_as_concat                      | client parameter        | bool     | yes                            |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | require_like_escape_character       | client parameter        | bool     | no                             |                 |
+    |                               | require_like_escape_character       | client parameter        | bool     | no                             |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | return_null_on_function_errors      | client/server parameter | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | string_max_size_bytes               | client/server parameter | int      | 1048576                        | available       |
+    |                               | string_max_size_bytes               | client/server parameter | byte     | 1048576                        | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | unicode_input_normalization         | client parameter        | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | unicode_output_normalization        | client parameter        | bool     | no                             | available       |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`plan-cache-parameters`  | max_plan_cache_entries              | client/server parameter | int      | 1000                           |                 |
+    | :ref:`plan-cache-parameters`  | max_plan_cache_entries              | client/server parameter | int      | 1000                           |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | max_filter_pred_cache_entries       | client/server parameter | int      | 1000                           |                 |
+    |                               | max_filter_pred_cache_entries       | client/server parameter | int      | 1000                           |                 |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        | int      | -1                             |                 |
+    | :ref:`utility-parameters`     | backup_volume_max_size_bytes        | server parameter        | byte     | 0                              |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | communication_histogram             | client parameter        | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | compactdb_page_reclaim_only         | server parameter        | int      | 0                              |                 |
+    |                               | compactdb_page_reclaim_only         | server parameter        | int      | 0                              |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | csql_history_num                    | client parameter        | int      | 50                             | available       |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`ha-parameters`          | ha_mode                             | server parameter        | string   | off                            |                 |
+    | :ref:`ha-parameters`          | ha_mode                             | server parameter        | string   | off                            |                 |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    | :ref:`other-parameters`       | access_ip_control                   | server parameter        | bool     | no                             | available       |
+    | :ref:`other-parameters`       | access_ip_control                   | server parameter        | bool     | no                             |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | access_ip_control_file              | server parameter        | string   |                                | available       |
+    |                               | access_ip_control_file              | server parameter        | string   |                                |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | auto_restart_server                 | server parameter        | bool     | yes                            | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | index_scan_in_oid_order             | client parameter        | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | index_unfill_factor                 | server parameter        | float    | 0.05                           | available       |
+    |                               | index_unfill_factor                 | server parameter        | float    | 0.05                           |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | java_stored_procedure               | server parameter        | bool     | no                             |                 |
+    |                               | java_stored_procedure               | server parameter        | bool     | no                             |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | multi_range_optimization_limit      | server parameter        | int      | 100                            | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | pthread_scope_process               | server parameter        | bool     | yes                            |                 |
+    |                               | pthread_scope_process               | server parameter        | bool     | yes                            |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | server                              | server parameter        | string   |                                |                 |
+    |                               | server                              | server parameter        | string   |                                |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | service                             | server parameter        | string   |                                |                 |
+    |                               | service                             | server parameter        | string   |                                |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | session_state_timeout               | server parameter        | int      | 21600                          |                 |
+    |                               | session_state_timeout               | server parameter        | sec      | 21600                          |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
-    |                               | sql_trace_slow_msecs                | server parameter        | int      | -1                             | available       |
+    |                               | sort_limit_max_count                | client parameter        | int      | 1000                           | available       |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | sql_trace_slow                      | server parameter        | msec     | -1                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | sql_trace_execution_plan            | server parameter        | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | use_orderby_sort_limit              | server parameter        | bool     | yes                            | available       |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+
+.. _lpg:
+    
+*   log_page_size: A log volume page size specified by **--log-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. log page related parameter's value is rounded off by page unit. For example, the value of checkpoint_every_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
+
+.. _dpg:
+
+*   log_page_size: A DB volume page size specified by **--db-page-size** option when you are :ref:`creating database<creating-database>`. Default: 16KB. DB page related parameter's value is rounded off by page unit. For example, the value of data_buffer_size is divided by 16KB and its decimal point is dropped, then it is multiplied by 16KB.
 
 **Section by Parameter**
 
@@ -358,26 +381,26 @@ The following are parameters related to the database server. The type and value 
 
 **cubrid_port_id**
 
-    **cubrid_port_id** is a parameter used to configure the port to be used by the master process. The default value is **1,523**. If the port 1,523 is already being used on the server where CUBRID is installed or it is blocked by a firewall, an error message, which means the master server is not connected because the master process cannot be running properly, is displayed. If such port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
+    **cubrid_port_id** is a parameter to configure the port to be used by the master process. The default value is **1,523**. If the port 1,523 is already being used on the server where CUBRID is installed or it is blocked by a firewall, an error message, which means the master server is not connected because the master process cannot be running properly, is displayed. If such port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
 
 **check_peer_alive**
 
     **check_peer_alive** is a parameter to decide whether you execute the function checking that the client/server processes work well. The default is **both**. 
 
-    The client processes connecting with a server process are the broker application server(cub_cas) process, the process copying replication logs(copylogdb), the process applying replication logs. (applylogdb), CSQL interpreter(csql), etc. The server process and the client process which connected with it wait each other’s response. But if one of them cannot get the data for a long time(example: exceeding 5 sec), it will check or not if the other works well based on the configuration of check_peer_alive parameter. During this processes, if it is judged  that the process doesn’t work properly, it disconnect forcibly.
+    The client processes connecting with a server process are the broker application server(cub_cas) process, the process copying replication logs(copylogdb), the process applying replication logs. (applylogdb), CSQL interpreter(csql), etc. The server process and the client process which connected with it wait each other's response. But if one of them cannot get the data for a long time(example: exceeding 5 sec), it will check or not if the other works well based on the configuration of check_peer_alive parameter. During this processes, if it is judged  that the process doesn't work properly, it disconnect forcibly.
 
     The values and the working methods are as follows.
 
-    *    **both**: As the server process access to the client process by ECHO(7) port, it checks if the client process works well. The client process also do the same thing to the server process(The default value).
+    *    **both**: As the server process accesses to the client process by ECHO(7) port, it checks if the client process works well. The client process also does the same thing to the server process(The default value).
     *    **server_only**: Only the server process checks whether the client process works well.
     *    **client_only**: Only the client process checks whether the server process works well.
-    *    **none**: Both of the server and client processes do not check whether the other process works well.
+    *    **none**: None of the server and client processes check whether the other process works well.
 
-    Specially, if ECHO(7) port is blocked by the firewall configuration, each process can mistake that the other process  was exited. Therefore, you should avoid this problem by setting this parameter’s value as none.
+    Specially, if ECHO(7) port is blocked by the firewall configuration, each process can mistake that the other process  was exited. Therefore, you should avoid this problem by setting this parameter's value as none.
 
 **db_hosts**
 
-    **db_hosts** is a parameter used to configure a list of the database server hosts to which clients can connect, and the connection order. The server host list consists of multiple server host names, and host names are separated by spaces or colons (:). Duplicate or non-existent names are ignored.
+    **db_hosts** is a parameter to configure a list of the database server hosts to which clients can connect, and the connection order. The server host list consists of multiple server host names, and host names are separated by spaces or colons (:). Duplicate or non-existent names are ignored.
 
     The following example shows the values of the **db_hosts** parameter. In this example, connections are attempted in the order of **host1** > **host2** > **host3**. ::
 
@@ -385,9 +408,11 @@ The following are parameters related to the database server. The type and value 
 
     To connect to the server, the client first tries to connect to the specified server host referring to the database location file (**databases.txt**). If the connection fails, the client then tries to connect to the first one of the secondarily specified server hosts by referring to the value of the **db_hosts** parameter in the database configuration file (**cubrid.conf**).
 
+.. _max_clients:
+
 **max_clients**
 
-    **max_clients** is a parameter used to configure the maximum number of clients (usually broker application processes (CAS)) which allow concurrent connections to the database server. The **max_clients** parameter refers to the number of concurrent transactions per database server process. The default value is **100**.
+    **max_clients** is a parameter to configure the maximum number of clients (usually broker application processes (CAS)) which allow concurrent connections to the database server. The **max_clients** parameter refers to the number of concurrent transactions per database server process. The default value is **100**.
 
     To guarantee performance while increasing the number of concurrent users in CUBRID environment, you need to make the appropriate value of the **max_clients** (**cubrid.conf**) parameter and the :ref:`MAX_NUM_APPL_SERVER <max-num-appl-server>` (**cubrid_broker.conf**) parameter. That is, you are required to configure the number of concurrent connections allowed by databases with the **max_clients** parameter. You should also configure the number of concurrent connections allowed by brokers with the **MAX_NUM_APPL_SERVER** parameter.
 
@@ -410,43 +435,50 @@ Memory-Related Parameters
 
 The following are parameters related to the memory used by the database server or client. The type and value range for each parameter are as follows:
 
-+--------------------------------+----------+-------------------+---------+-------------+
-| Parameter Name                 | Type     | Default Value     | Min     | Max         |
-+================================+==========+===================+=========+=============+
-| data_buffer_size               | int      | 512M              | 16M     | 2G (32 bit) |
-+--------------------------------+----------+-------------------+---------+-------------+
-| index_scan_oid_buffer_size     | int      | 64K               | 1K      | 256K        |
-+--------------------------------+----------+-------------------+---------+-------------+
-| sort_buffer_size               | int      | 2M                | 64K     |             |
-+--------------------------------+----------+-------------------+---------+-------------+
-| temp_file_memory_size_in_pages | int      | 4                 | 0       | 20          |
-+--------------------------------+----------+-------------------+---------+-------------+
-| thread_stacksize               | int      | 1048576           | 65536   |             |
-+--------------------------------+----------+-------------------+---------+-------------+
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| Parameter Name                 | Type   | Default Value             | Min                       | Max                       |
++================================+========+===========================+===========================+===========================+
+| data_buffer_size               | byte   | 32768 *                   | 1024 *                    | 2G(32bit),                |
+|                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
+|                                |        |                           |                           | :ref:`db_page_size <dpg>` |
+|                                |        |                           |                           | (64bit)                   |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| index_scan_oid_buffer_size     | byte   | 4 *                       | 0.05 *                    | 16 *                      |
+|                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
+|                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
+|                                |        |                           |                           | :ref:`db_page_size <dpg>` |
+|                                |        |                           |                           | (64bit)                   |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| temp_file_memory_size_in_pages | int    | 4                         | 0                         | 20                        |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| thread_stacksize               | byte   | 1048576                   | 65536                     |                           |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 
 **data_buffer_size**
 
-    **data_buffer_size** is a parameter used to configure the size of data buffer to be cached in the memory by the database server. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes(MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is 512M, and the minimum value is 16M. Note that the maximum value of 32-bit CUBRID is 2 GB.
-
+    **data_buffer_size** is a parameter to configure the size of data buffer to be cached in the memory by the database server. You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is 32768 * :ref:`db_page_size <dpg>` (**512M** when db_page_size is 16K), and the minimum value is 1024 * :ref:`db_page_size <dpg>` (**16M** when db_page_size is 16K). The maximum value in 64-bit CUBRID is INT_MAX * :ref:`db_page_size <dpg>`. Note that the maximum value in 32-bit CUBRID is **2G**.
+    
     The greater the value of the **data_buffer_size** parameter, the more data pages to be cached in the buffer, thus providing the advantage of decreased disk I/O cost. However, if this parameter is too large, the buffer pool can be swapped out by the operating system because the system memory is excessively occupied. It is recommended to configure the **data_buffer_size** parameter in a way the required memory size is less than two-thirds of the system memory size.
 
     *   Required memory size = data buffer size (**data_buffer_size**)
 
 **index_scan_oid_buffer_size**
 
-    **index_scan_oid_buffer_size** is a parameter used to configure the size of buffer where the OID list is to be temporarily stored during the index scan. You can set unit K, which stands for KB (kilobytes). If you omit the unit, bytes will be applied. The default value is 64K, the minimum value is 1K, and the maximum value is 256K.
+    **index_scan_oid_buffer_size** is a parameter to configure the size of buffer where the OID list is to be temporarily stored during the index scan. You can set unit K, which stands for KB (kilobytes). If you omit the unit, bytes will be applied. The default value is  4 * :ref:`db_page_size <dpg>` (**64K** when db_page_size is 16K), and the minimum value is 0.05 * :ref:`db_page_size <dpg>` (about **1K** when db_page_size is 16K).
 
     The size of the OID buffer tends to vary in proportion to the value of the **index_scan_oid_buffer_size** parameter and the page size set when the database was created. In addition, the bigger the size of such OID buffer, the more the index scan cost. You can set the value of the **index_scan_oid_buffer_size** by considering these factors.
 
 **sort_buffer_size**
 
-    **sort_buffer_size** is a parameter used to configure the size of buffer to be used when a query is processing sorting. The server assigns one sort buffer for each client's sorting-request, and releases the assigned buffer memory when sorting is complete. 
+    **sort_buffer_size** is a parameter to configure the size of buffer to be used when a query is processing sorting. The server assigns one sort buffer for each client's sorting-request, and releases the assigned buffer memory when sorting is complete. 
     
-    You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is 2M, and the minimum value is 64K.
-
+    You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is 128 * :ref:`db_page_size <dpg>` (**2M** when db_page_size is 16K), and the minimum value is 1 * :ref:`db_page_size <dpg>` (**16K** when db_page_size is 16K).
+    
 **temp_file_memory_size_in_pages**
 
-    **temp_file_memory_size_in_pages** is a parameter used to configure the number of buffer pages to cache temporary result of a query. The default value is **4** and the maximum value is 20.
+    **temp_file_memory_size_in_pages** is a parameter to configure the number of buffer pages to cache temporary result of a query. The default value is **4** and the maximum value is 20.
 
     *   Required memory size = the number of temporary memory buffer pages (**temp_file_memory_size_in_pages** \* **page size**)
     *   The number of temporary memory buffer pages = the value of the **temp_file_memory_size_in_pages** parameter
@@ -454,7 +486,7 @@ The following are parameters related to the memory used by the database server o
 
 **thread_stacksize**
 
-    **thread_stacksize** is a parameter used to configure the stack size of a thread. The default value is **1048576** bytes. The value of the **thread_stacksize** parameter must not exceed the stack size allowed by the operating system.
+    **thread_stacksize** is a parameter to configure the stack size of a thread. The default value is **1048576** bytes. The value of the **thread_stacksize** parameter must not exceed the stack size allowed by the operating system.
 
 .. _disk-parameters:
 
@@ -463,54 +495,62 @@ Disk-Related Parameters
 
 The following are disk-related parameters for defining database volumes and storing files. The type and value range for each parameter are as follows:
 
-+-----------------------------+----------+-------------------+----------+----------+
-| Parameter Name              | Type     | Default Value     | Min      | Max      |
-+=============================+==========+===================+==========+==========+
-| db_volume_size              | int      | 512M              | 20M      | 20G      |
-+-----------------------------+----------+-------------------+----------+----------+
-| dont_reuse_heap_file        | bool     | no                |          |          |
-+-----------------------------+----------+-------------------+----------+----------+
-| log_volume_size             | int      | 512M              | 20M      | 4G       |
-+-----------------------------+----------+-------------------+----------+----------+
-| temp_file_max_size_in_pages | int      | -1                |          |          |
-+-----------------------------+----------+-------------------+----------+----------+
-| temp_volume_path            | string   | NULL              |          |          |
-+-----------------------------+----------+-------------------+----------+----------+
-| unfill_factor               | float    | 0.1               | 0.0      | 0.3      |
-+-----------------------------+----------+-------------------+----------+----------+
-| volume_extension_path       | string   | NULL              |          |          |
-+-----------------------------+----------+-------------------+----------+----------+
++-----------------------------+----------+----------+----------+----------+
+| Parameter Name              | Type     | Default  | Min      | Max      |
++=============================+==========+==========+==========+==========+
+| db_volume_size              | byte     | 512M     | 20M      | 20G      |
++-----------------------------+----------+----------+----------+----------+
+| dont_reuse_heap_file        | bool     | no       |          |          |
++-----------------------------+----------+----------+----------+----------+
+| generic_vol_prealloc_size   | byte     | 50M      | 0        | 20G      |
++-----------------------------+----------+----------+----------+----------+
+| log_volume_size             | byte     | 512M     | 20M      | 4G       |
++-----------------------------+----------+----------+----------+----------+
+| temp_file_max_size_in_pages | int      | -1       |          |          |
++-----------------------------+----------+----------+----------+----------+
+| temp_volume_path            | string   | NULL     |          |          |
++-----------------------------+----------+----------+----------+----------+
+| unfill_factor               | float    | 0.1      | 0.0      | 0.3      |
++-----------------------------+----------+----------+----------+----------+
+| volume_extension_path       | string   | NULL     |          |          |
++-----------------------------+----------+----------+----------+----------+
 
 **db_volume_size**
 
-    **db_volume_size** is a parameter used to configure the following values. The default value is **512M**.
+    **db_volume_size** is a parameter to configure the following values. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
     *   The default database volume size when **cubrid createdb** and **cubrid addvoldb** utility is used without **--db-volume-size** option.
-    *   The default size of generic volume that is added automatically when database volume is full.
+    *   The default size of **generic** volume that is added automatically when database volume is full.
 
 **dont_reuse_heap_file**
 
-    **dont_reuse_heap_file** is a parameter used to configure whether or not heap files, which are deleted when deleting the table (DROP TABLE), are to be reused when creating a new table (CREATE TABLE). If this parameter is set to 0, the deleted heap files can be reused; if it is set to 1, the deleted heap files are not used when creating a new table. The default value is **0**.
+    **dont_reuse_heap_file** is a parameter to configure whether or not heap files, which are deleted when deleting the table (DROP TABLE), are to be reused when creating a new table (CREATE TABLE). If this parameter is set to 0, the deleted heap files can be reused; if it is set to 1, the deleted heap files are not used when creating a new table. The default value is **0**.
+
+**generic_vol_prealloc_size**
+
+    Specifies the size of free space which the **generic** volume should always keep. If the free space size is lower than a specified size, the free space will be additionally expanded.
+
+    You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **50M**. The minimum value is 0 and the maximum value is 20G.
 
 **log_volume_size**
 
-    **log_volume_size** is a parameter used to configure the default size of log volume file when the **cubrid createdb** utility is used without --log-volume-size option. You can set units as K, M, G and T, which stand for kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
+    **log_volume_size** is a parameter to configure the default size of log volume file when the **cubrid createdb** utility is used without --log-volume-size option. You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB) and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **512M**.
 
 **temp_file_max_size_in_pages**
 
-    **temp_file_max_size_in_pages** is a parameter used to configure the maximum number of pages to store temporary volumes in the disk, which are used for the execution of complex queries or sorting; the default value is **-1**. If this parameter is configured to the default value, unlimited number of temporary temp volumes are created and stored in the directory specified by the **temp_volume_path** parameter. If it is configured to 0, the administrator must create permanent temp volumes manually by using the **cubrid addvoldb** utility because temporary temp volumes are not created automatically.
+    **temp_file_max_size_in_pages** is a parameter to configure the maximum number of pages to store temporary volumes in the disk, which are used for the execution of complex queries or sorting; the default value is **-1**. If this parameter is configured to the default value, unlimited number of temporary temp volumes are created and stored in the directory specified by the **temp_volume_path** parameter. If it is configured to 0, the administrator must create permanent temp volumes manually by using the **cubrid addvoldb** utility because temporary temp volumes are not created automatically.
 
 **temp_volume_path**
 
-    **temp_volume_path** is a parameter used to configure the directory in which to create temporary temp volumes used for the execution of complex queries or sorting. The default value is the volume location configured during the database creation.
+    **temp_volume_path** is a parameter to configure the directory in which to create temporary temp volumes used for the execution of complex queries or sorting. The default value is the volume location configured during the database creation.
 
 **unfill_factor**
 
-    **unfill_factor** is a parameter used to configure the rate of disk space to be allocated in a heap page for data updates. The default value is **0.1**. That is, the rate of free space is configured to 10%. In principle, data in the table is inserted in physical order. However, if the size of the data increases due to updates and there is not enough space for storage in the given page, performance may degrade because updated data must be relocated to another page. To prevent such a problem, you can configure the rate of space for a heap page by using the **unfill_factor** parameter. The allowable maximum value is 0.3 (30%). In a database where data updates rarely occur, you can configure this parameter to 0.0 so that space will not be allocated in a heap page for data updates. If the value of the **unfill_factor** parameter is negative or greater than the maximum value, the default value (**0.1**) is used.
+    **unfill_factor** is a parameter to configure the rate of disk space to be allocated in a heap page for data updates. The default value is **0.1**. That is, the rate of free space is configured to 10%. In principle, data in the table is inserted in physical order. However, if the size of the data increases due to updates and there is not enough space for storage in the given page, performance may degrade because updated data must be relocated to another page. To prevent such a problem, you can configure the rate of space for a heap page by using the **unfill_factor** parameter. The allowable maximum value is 0.3 (30%). In a database where data updates rarely occur, you can configure this parameter to 0.0 so that space will not be allocated in a heap page for data updates. If the value of the **unfill_factor** parameter is negative or greater than the maximum value, the default value (**0.1**) is used.
 
 **volume_extension_path**
 
-    **volume_extension_path** is a parameter used to configure the directory where automatically extended volumes are to be created. The default value is the volume location configured during the database creation.
+    **volume_extension_path** is a parameter to configure the directory where automatically extended volumes are to be created. The default value is the volume location configured during the database creation.
 
 .. _error-parameters:
 
@@ -539,7 +579,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **call_stack_dump_activation_list**
 
-    **call_stack_dump_activation_list** is a parameter used to configure a certain error number for which a call stack is to be dumped as an exception even when you configure that a call stack will not be dumped for any errors. Therefore, the **call_stack_dump_activation_list** parameter is effective only when **call_stack_dump_on_error=no**.
+    **call_stack_dump_activation_list** is a parameter to configure a certain error number for which a call stack is to be dumped as an exception even when you configure that a call stack will not be dumped for any errors. Therefore, the **call_stack_dump_activation_list** parameter is effective only when **call_stack_dump_on_error=no**.
     
     If this value is not configured, the default value is "DEFAULT" keyword. This keyword includes below errors. "DEFAULT" keyword can be used together with other error numbers.
 
@@ -633,7 +673,7 @@ The following are parameters related to processing error messages recorded by CU
 
 **call_stack_dump_deactivation_list**
 
-    **call_stack_dump_deactivation_list** is a parameter used to configure a certain error number for which a call stack is not to be dumped when you configure that a call stack will be dumped for any errors. Therefore, the **call_stack_dump_deactivation_list** parameter is effective only when **call_stack_dump_on_error** is set to **yes**.
+    **call_stack_dump_deactivation_list** is a parameter to configure a certain error number for which a call stack is not to be dumped when you configure that a call stack will be dumped for any errors. Therefore, the **call_stack_dump_deactivation_list** parameter is effective only when **call_stack_dump_on_error** is set to **yes**.
     
     The following example shows how to configure the parameter so that call stacks will be dumped for any errors, except the ones whose numbers are -115 and -116. ::
 
@@ -642,23 +682,23 @@ The following are parameters related to processing error messages recorded by CU
 
 **call_stack_dump_on_error**
 
-    **call_stack_dump_on_error** is a parameter used to configure whether or not to dump a call stack when an error occurs in the database server. If this parameter is set to no, a call stack for any errors is not dumped. If it is set to yes, a call stack for all errors is dumped. The default value is **no**.
+    **call_stack_dump_on_error** is a parameter to configure whether or not to dump a call stack when an error occurs in the database server. If this parameter is set to no, a call stack for any errors is not dumped. If it is set to yes, a call stack for all errors is dumped. The default value is **no**.
 
 **error_log**
 
-    **error_log** is a server/client parameter used to configure the name of the error log file when an error occurs in the database server. The name of the error log file must be in the form of *<database_name>_<date>_<time>.err*. However, the naming rule of the error log file does not apply to errors for which the system cannot find the database server information. Therefore, error logs are recorded in the **cubrid.err** file. The error log file **cubrid.err** is stored in the **$CUBRID/log/server** directory.
+    **error_log** is a server/client parameter to configure the name of the error log file when an error occurs in the database server. The name of the error log file must be in the form of *<database_name>_<date>_<time>.err*. However, the naming rule of the error log file does not apply to errors for which the system cannot find the database server information. Therefore, error logs are recorded in the **cubrid.err** file. The error log file **cubrid.err** is stored in the **$CUBRID/log/server** directory.
 
 **error_log_level**
 
-    **error_log_level** is a server parameter used to configure an error message to be stored based on severity. There are five different levels which ranges from **NOTIFICATION** (lowest level), **WARNING**, **SYNTAX**, **ERROR**, and **SYNTAX** (highest level). An error message with **SYNTAX**, **ERROR**, and FATAL levels are stored in the log file if severity of error is **SYNTAX**, default value.
+    **error_log_level** is a server parameter to configure an error message to be stored based on severity. There are five different levels which ranges from **NOTIFICATION** (lowest level), to **FATAL** (highest level). The inclusion relation in messages is **FATAL** ⊂ **ERROR** ⊂ **SYNTAX** ⊂ **WARNING** ⊂ **NOTIFICATION**\ . The default is **SYNTAX**. If severity of error is **SYNTAX**, error messages with **SYNTAX**, **ERROR**, and FATAL levels are stored in the log file.
 
 **error_log_warning**
 
-    **error_log_warning** is a parameter used to configure whether or not error messages with a severity level of **WARNING** are to be displayed. Its default value is no. Therefore, only error messages with levels other than **WARNING** will be stored even when **error_log_level** is set to **NOTIFICATION**. For this reason, you must set **error_log_warning** to **yes** to store WARNING messages to an error log file.
+    **error_log_warning** is a parameter to configure whether or not error messages with a severity level of **WARNING** are to be displayed. Its default value is no. Therefore, only error messages with levels other than **WARNING** will be stored even though **error_log_level** is set to **NOTIFICATION**. For this reason, you must set **error_log_warning** to **yes** to store WARNING messages to an error log file.
 
 **error_log_size**
 
-    **error_log_size** is a parameter used to configure the maximum number of lines per an error log file. The default value is **8,000,000**. If it reaches up the specified number, the *<database_name>_<date>_<time>.err.bak* file is created. 
+    **error_log_size** is a parameter to configure the maximum number of lines per an error log file. The default value is **8,000,000**. If it reaches up the specified number, the *<database_name>_<date>_<time>.err.bak* file is created. 
 
 .. _lock-parameters:
 
@@ -667,25 +707,27 @@ Concurrency/Lock-Related Parameters
 
 The following are parameters related to concurrency control and locks of the database server. The type and value range for each parameter are as follows:
 
-+-------------------------------------+----------+-------------------+---------+---------+
-| Parameter Name                      | Type     | Default Value     | Min     | Max     |
-+=====================================+==========+===================+=========+=========+
-| deadlock_detection_interval_in_secs | float    | 1.0               | 0.1     |         |
-+-------------------------------------+----------+-------------------+---------+---------+
-| isolation_level                     | int      | 3                 | 1       | 6       |
-+-------------------------------------+----------+-------------------+---------+---------+
-| lock_escalation                     | int      | 100000            | 5       |         |
-+-------------------------------------+----------+-------------------+---------+---------+
-| lock_timeout_in_secs                | int      | -1                | -1      |         |
-+-------------------------------------+----------+-------------------+---------+---------+
++-------------------------------------+--------+-------------+-------------+-------------+
+| Parameter Name                      | Type   | Default     | Min         | Max         |
++=====================================+========+=============+=============+=============+
+| deadlock_detection_interval_in_secs | float  | 1.0         | 0.1         |             |
++-------------------------------------+--------+-------------+-------------+-------------+
+| isolation_level                     | int    | 3           | 1           | 6           |
++-------------------------------------+--------+-------------+-------------+-------------+
+| lock_escalation                     | int    | 100000      | 5           |             |
++-------------------------------------+--------+-------------+-------------+-------------+
+| lock_timeout                        | msec   | -1(inf)     | 0(no wait)  | INT_MAX     |
++-------------------------------------+--------+-------------+-------------+-------------+
+| rollback_on_lock_escalation         | bool   | no          |             |             |
++-------------------------------------+--------+-------------+-------------+-------------+
 
 **deadlock_detection_interval_in_secs**
 
-    **deadlock_detection_interval_in_secs** is a parameter used to configure the interval (in seconds) in which deadlocks are detected for stopped transactions. If a deadlock occurs, CUBRID resolves the problem by rolling back one of the transactions. The default value is 1 second and the minimum value is 0.1 second. This value is rounded up by 0.1 sec. unit. For example, if an input value is 0.12 seconds, the value is rounded up to 0.2 seconds. Note that deadlocks cannot be detected if the detection interval is too long.
+    **deadlock_detection_interval_in_secs** is a parameter to configure the interval (in seconds) in which deadlocks are detected for stopped transactions. If a deadlock occurs, CUBRID resolves the problem by rolling back one of the transactions. The default value is 1 second and the minimum value is 0.1 second. This value is rounded up by 0.1 sec. unit. For example, if an input value is 0.12 seconds, the value is rounded up to 0.2 seconds. Note that deadlocks cannot be detected if the detection interval is too long.
 
 **isolation_level**
 
-    **isolation_level** is a parameter used to configure the isolation level of a transaction. The higher the isolation level, the less concurrency and the less interruption by other concurrent transactions. The **isolation_level** parameter can be configured to an integer value from 1 to 6, which represent isolation levels, or character strings. The default value is **TRAN_REP_CLASS_UNCOMMIT_INSTANCE**. For details about each isolation level and parameter values, see :ref:`transaction-isolation-level` and the following table.
+    **isolation_level** is a parameter to configure the isolation level of a transaction. The higher the isolation level, the less concurrency and the less interruption by other concurrent transactions. The **isolation_level** parameter can be configured to an integer value from 1 to 6, which represent isolation levels, or character strings. The default value is **TRAN_REP_CLASS_UNCOMMIT_INSTANCE**. For details about each isolation level and parameter values, see :ref:`transaction-isolation-level` and the following table.
 
     +--------------------------------------------------------------------------+-------------------------------------------------------------------------------------------+
     | Isolation Level                                                          | isolation_level Parameter Value                                                           |
@@ -705,79 +747,96 @@ The following are parameters related to concurrency control and locks of the dat
 
     *   **TRAN_SERIALIZABLE** : This isolation level ensures the highest level of consistency. For details, see :ref:`isolation-level-6`.
 
-    *   **TRAN_REP_CLASS_REP_INSTANCE** : This isolation level can occur phantom read. For details, see :ref:`isolation-level-5`.
+    *   **TRAN_REP_CLASS_REP_INSTANCE** : This isolation level can incur phantom read. For details, see :ref:`isolation-level-5`.
 
-    *   **TRAN_REP_CLASS_COMMIT_INSTANCE** : This isolation level can occur unrepeatable read. For details, see :ref:`isolation-level-4`.
+    *   **TRAN_REP_CLASS_COMMIT_INSTANCE** : This isolation level can incur unrepeatable read. For details, see :ref:`isolation-level-4`.
 
-    *   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : This isolation level can occur dirty read. For details, see :ref:`isolation-level-3`.
+    *   **TRAN_REP_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read. For details, see :ref:`isolation-level-3`.
 
-    *   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : This isolation level can occur unrepeatable read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-2`.
+    *   **TRAN_COMMIT_CLASS_COMMIT_INSTANCE** : This isolation level can incur unrepeatable read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-2`.
 
-    *   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : This isolation level can occur dirty read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-1`.
+    *   **TRAN_COMMIT_CLASS_UNCOMMIT_INSTANCE** : This isolation level can incur dirty read. It allows modification of table schema by current transactions while data is being retrieved. For details, see :ref:`isolation-level-1`.
 
 **lock_escalation**
 
-    **lock_escalation** is a parameter used to configure the maximum number of locks permitted before row level locking is extended to table level locking. The default value is **100,000**. If the value of the **lock_escalation** parameter is small, the overhead by memory lock management is small as well; however, the concurrency decreases. On the other hand, if the configured value is large, the overhead is large as well; however, the concurrency increases.
+    **lock_escalation** is a parameter to configure the maximum number of locks permitted before row level locking is extended to table level locking. The default value is **100,000**. If the value of the **lock_escalation** parameter is small, the overhead by memory lock management is small as well; however, the concurrency decreases. On the other hand, if the configured value is large, the overhead is large as well; however, the concurrency increases.
 
-**lock_timeout_in_secs**
+**lock_timeout**
 
-    **lock_timeout_in_secs** is a client parameter used to configure the lock waiting time. If the lock is not permitted within the specified time period, the given transaction is canceled, and an error message is returned. If the     parameter is configured to **-1**, which is the default value, the waiting time is infinite until the lock is permitted. If it is configured to 0, there is no waiting for locks.
+    **lock_timeout** is a client parameter to configure the lock waiting time. If the lock is not permitted within the specified time period, the given transaction is canceled, and an error message is returned. If the parameter is configured to **-1**, which is the default value, the waiting time is infinite until the lock is permitted. If it is configured to 0, there is no waiting for locks.
 
+    You can set a unit as s, min or h, which stands for seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied, and it is rounded up to seconds. For example, 1ms will be 1s, and 1001ms will be 2s.
+
+
+**rollback_on_lock_escalation**
+  
+    It specifies rolling back the transaction or not when the lock escalation occurs. The default is **no**. 
+  
+    If this parameter is specified with **yes**, the error log is written without lock escalation on the lock-escalating time and this lock escalation request is failed with rolling back the transaction.
+    If it is specified with **no**, the lock escalation is performed and the transaction is continued.
+
+    When the lock escalation occurs, record locks are transformed into a table lock and lock-releasing time can take long, so other transaction's access to the table can be impossible.
+    However, if you specify the value of **lock_escalation** parameter(it specifies the number of record locks occurring the lock escalation) bigger, the system can overuse the memory resource.
+    
 .. _logging-parameters:
 
 Logging-Related Parameters
 --------------------------
 
-    The following are parameters related to logs used for database backup and restore. The types and value range for each parameter are as follows:
+The following are parameters related to logs used for database backup and restore. The types and value range for each parameter are as follows:
 
-    +------------------------------+----------+-------------------+----------+----------+
-    | Parameter Name               | Type     | Default Value     | Min      | Max      |
-    +==============================+==========+===================+==========+==========+
-    | adaptive_flush_control       | bool     | yes               |          |          |
-    +------------------------------+----------+-------------------+----------+----------+
-    | background_archiving         | bool     | yes               |          |          |
-    +------------------------------+----------+-------------------+----------+----------+
-    | checkpoint_every_npages      | int      | 10000             | 10       |          |
-    +------------------------------+----------+-------------------+----------+----------+
-    | checkpoint_interval_in_mins  | int      | 720               | 1        |          |
-    +------------------------------+----------+-------------------+----------+----------+
-    | force_remove_log_archives    | bool     | yes               |          |          |
-    +------------------------------+----------+-------------------+----------+----------+
-    | log_buffer_size              | int      | 2 MB              | 192 KB   |          |
-    +------------------------------+----------+-------------------+----------+----------+
-    | log_max_archives             | int      | INT_MAX           | 0        |          |
-    +------------------------------+----------+-------------------+----------+----------+
-    | max_flush_pages_per_second   | int      | 10000             | 1        | INT_MAX  |
-    +------------------------------+----------+-------------------+----------+----------+
-    | sync_on_nflush               | int      | 200               | 1        | INT_MAX  |
-    +------------------------------+----------+-------------------+----------+----------+
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| Parameter Name               | Type   | Default Value              | Min                        | Max                        |
++==============================+========+============================+============================+============================+
+| adaptive_flush_control       | bool   | yes                        |                            |                            |
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| background_archiving         | bool   | yes                        |                            |                            |
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| checkpoint_every_size        | byte   | 10000 *                    | 10  *                      |                            |
+|                              |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| checkpoint_interval          | msec   | 6min                       | 1min                       | INT_MAX                    |
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| force_remove_log_archives    | bool   | yes                        |                            |                            |
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| log_buffer_size              | byte   | 128 *                      | 3 *                        | INT_MAX *                  |
+|                              |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| log_max_archives             | int    | INT_MAX                    | 0                          | INT_MAX                    |
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| max_flush_size_per_second    | byte   | 10000 *                    | 1 *                        | INT_MAX *                  |    
+|                              |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |    
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| sync_on_flush_size           | byte   | 200 *                      | 1 *                        | INT_MAX *                  |
+|                              |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |    
++------------------------------+--------+----------------------------+----------------------------+----------------------------+
 
 **adaptive_flush_control**
 
-    **adaptive_flush_control** is a parameter used automatically to adjust the flush capacity at every 50 ms depending on the current status of the flushing operation. Its default value is **yes**. That is, this capacity is increased if a large number of **INSERT** or **UPDATE** operations are concentrated at a certain point of time and the number of flushed pages reaches the **max_flush_pages_per_second** parameter value; and is decreased otherwise. In the same way, you can distribute the I/O load by adjusting the flush capacity on a regular basis depending on the workload.
+    **adaptive_flush_control** is a parameter used automatically to adjust the flush capacity at every 50 ms depending on the current status of the flushing operation. Its default value is **yes**. That is, this capacity is increased if a large number of **INSERT** or **UPDATE** operations are concentrated at a certain point of time and the number of flushed pages reaches the **max_flush_size_per_second** parameter value; and is decreased otherwise. In the same way, you can distribute the I/O load by adjusting the flush capacity on a regular basis depending on the workload.
 
 **background_archiving**
 
     **background_archiving** is a parameter used to create temporary archive logs periodically at a specific time. It is useful when balancing disk I/O load which has been caused by archiving logs. The default is **yes**.
 
-**checkpoint_every_npages**
+**checkpoint_every_size**
 
-    **checkpoint_every_npages** is a parameter used to configure checkpoint interval by log page. The default value is **10,000**.
-
-    You can distribute disk I/O overload at the checkpoint by specifying lower number in the **checkpoint_every_npages** parameter, especially  in the environment where
+    **checkpoint_every_size** is a parameter to configure checkpoint interval by log page. You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is **10,000** * :ref:`log_page_size <lpg>` (**156.25M** when log_page_size is 16K).
+   
+    You can distribute disk I/O overload at the checkpoint by specifying lower size in the **checkpoint_every_size** parameter, especially  in the environment where
     **INSERT** / **UPDATE** are heavily loaded at a specific time.
 
     Checkpoint is a job to record every modified page in data buffers to database volumes (disk) at a specific point. It can restore data back to the latest checkpoint if database failure occurs. It is important to choose efficient checkpoint interval because large increase of log files stored in a disk may affect database operation, causing unnecessary disk I/O.
 
-    The **checkpoint_interval_in_mins** and **checkpoint_every_npages** parameters are related to setting checkpoint cycle. The checkpoint is periodically executed whenever the time specified in **checkpoint_interval_in_mins** parameter has elapsed or the number of log pages specified in **checkpoint_every_npages** parameter has reached.
+    The **checkpoint_interval** and **checkpoint_every_size** parameters are related to setting checkpoint cycle. The checkpoint is periodically executed whenever the time specified in **checkpoint_interval** parameter has elapsed or the number of log pages specified in **checkpoint_every_size** parameter has reached.
+    
+**checkpoint_interval**
 
-**checkpoint_interval_in_mins**
-
-    **checkpoint_interval_in_mins** is a parameter used to configure execution period of checkpoint in minutes. The default value is **720**.
+    **checkpoint_interval** is a parameter to configure execution period of checkpoint. You can set a unit as s, min or h, which stands for seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied, and it is rounded up to seconds. For example, 1ms will be 1s, and 1001ms will be 2s. The default value is **6min** and the minimum value is 1min.
 
 **force_remove_log_archives**
 
-    **force_remove_log_archives** is a parameter used to configure whether to allow the deletion of the files other than the recent log archive files of which the number is specified by **log_max_archives**. The default value is **yes**.
+    **force_remove_log_archives** is a parameter to configure whether to allow the deletion of the files other than the recent log archive files whose number is specified by **log_max_archives**. The default value is **yes**.
 
     If the value is set to yes, the files will be deleted other than the recent log archive files for which the number is specified by **log_max_archives**. If it is set to no, the log archive files will not be deleted. Exceptionally, if **ha_mode** is set to on, the files other than the log archive files required for the HA-related processes and the recent log archive files of which the number is specified by **log_max_archives** will be deleted.
 
@@ -785,7 +844,7 @@ Logging-Related Parameters
     
 **log_buffer_size**
 
-    **log_buffer_size** is a parameter used to configure the size of log buffer to be cached in the memory. There are four types of unit available: K, M, G, and T; K stands for kilobytes (KB), M stands for megabytes (MB), G stands for gigabytes (GB), and T stands for terabytes (TB). If unit is omitted, byte-unit is applied and the default value is **2M**.
+    **log_buffer_size** is a parameter to configure the size of log buffer to be cached in the memory. You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is 128 * :ref:`log_page_size <dpg>` (**2M** when log_page_size is 16K).
 
     If the value of the **log_buffer_size** parameter is large, performance can be improved (due to the decrease in disk I/O) in an environment where transactions are long and numerous. It is recommended to configure an appropriate value considering the memory size and operations of the system where CUBRID is installed.
 
@@ -793,21 +852,28 @@ Logging-Related Parameters
 
 **log_max_archives**
 
-    **log_max_archives** is a parameter used to configure the maximum number of archive log files. The minimum value is 0 and default value is **INT_MAX** (2147483647). It is set to 0 in the **cubrid.conf** file when CUBRID has installed. Its operations can differ depending on the configuration of **force_remove_log_archives**. For example, when **log_max_archives** is 3 and **force_remove_log_archives** is **yes** in the cubrid.conf file, the most recent three archive log files are recorded and when a fourth archiving log file is generated, the oldest archive log file is automatically deleted; the information about the deleted archive logs are recorded in the ***_lginf** file.
+    **log_max_archives** is a parameter to configure the maximum number of archive log files. The minimum value is 0 and default value is **INT_MAX** (2147483647). Its operations can differ depending on the configuration of **force_remove_log_archives**. For example, when **log_max_archives** is 3 and **force_remove_log_archives** is **yes** in the cubrid.conf file, the most recent three archive log files are recorded and when a fourth archiving log file is generated, the oldest archive log file is automatically deleted; the information about the deleted archive logs are recorded in the ***_lginf** file.
 
     However, if an active transaction still refers to an existing archive log file, the archive log file will not be deleted. That is, if a transaction starts at the point that the first archive log file is generated, and it is still active until the fifth archive log is generated, the first archive log file cannot be deleted.
 
+    If you change the value of **log_max_archives** dynamically during database operation, changed value will be applied when a new log archive file is created. For example, if you change this value from 10 to 5, old 5 files will be deleted when a new log archive file is created.
+    
     For setting up the CUBRID HA environment, see :ref:`ha-configuration`.
 
-**max_flush_pages_per_second**
+    .. note::
+    
+        In 2008 R4.3 or lower and in 9.1, **log_max_archives** was also used for specifying the maximum number of keeping replication log files in HA environment. From 2008 R4.4 and 9.2, :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` of  cubrid_ha.conf is in charge of this role.
 
-    **max_flush_pages_per_second** is a parameter used to configure the maximum flush capacity when the flushing operation is performed from a buffer to a disk. Its default value is **10,000**. That is, you can prevent concentration of I/O load at a certain point of time by configuring this parameter to control the maximum flush capacity per second.
+**max_flush_size_per_second**
+
+    **max_flush_size_per_second** is a parameter to configure the maximum flush capacity when the flushing operation is performed from a buffer to a disk. You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is 10000 * :ref:`db_page_size <dpg>` (**156.25M** when db_page_size is 16K).
+    That is, you can prevent concentration of I/O load at a certain point of time by configuring this parameter to control the maximum flush capacity per second.
 
     If a large number of **INSERT** or **UPDATE** operations are concentrated at a certain point of time, and the flush capacity reaches the maximum capacity set by this parameter, only log pages are flushed to the disk, and data pages are no longer flushed. Therefore, you must set an appropriate value for this parameter considering the workload of the service environment.
 
-**sync_on_nflush**
+**sync_on_flush_size**
 
-    **sync_on_nflush** is a parameter used to configure the interval in pages between after data and log pages are flushed from buffer and before they are synchronized with FILE I/O of operating system. Its default value is **200**. That is, the CUBRID Server performs synchronization with the FILE I/O of the operating system whenever 200 pages have been flushed. This is also a parameter related to I/O load.
+    **sync_on_flush_size** is a parameter to configure the interval in pages between after data and log pages are flushed from buffer and before they are synchronized with FILE I/O of operating system. The default value is 200 * :ref:`db_page_size <dpg>` (**3.125M** when db_page_size is 16K)이다. That is, the CUBRID Server performs synchronization with the FILE I/O of the operating system whenever 200 pages have been flushed. This is also a parameter related to I/O load.
 
 .. _transaction-parameters:
 
@@ -821,7 +887,7 @@ The following are parameters for improving transaction commit performance. The t
 +================================+==========+===================+=========+=========+
 | async_commit                   | bool     | no                |         |         |
 +--------------------------------+----------+-------------------+---------+---------+
-| group_commit_interval_in_msecs | int      | 0                 | 0       |         |
+| group_commit_interval_in_msecs | msec     | 0                 | 0       |         |
 +--------------------------------+----------+-------------------+---------+---------+
 
 **async_commit**
@@ -830,7 +896,7 @@ The following are parameters for improving transaction commit performance. The t
 
 **group_commit_interval_in_msecs**
 
-    **group_commit_interval_in_msecs** is a parameter used to configure the interval (in milliseconds), at which the group commit is to be performed. If the parameter is configured to **0**, which is the default value, the group commit is not performed. The group commit is a functionality that improves commit performance by combining multiple commits that occurred in the specified time period into a group so that commit logs are flushed on the disk at once.
+    **group_commit_interval_in_msecs** is a parameter to configure the interval (in milliseconds), at which the group commit is to be performed. If the parameter is configured to **0**, which is the default value, the group commit is not performed. The group commit is a functionality that improves commit performance by combining multiple commits that occurred in the specified time period into a group so that commit logs are flushed on the disk at once.
 
 .. _stmt-type-parameters:
 
@@ -856,9 +922,11 @@ The following are parameters related to SQL statements and data types supported 
 +--------------------------------+----------+-------------------+----------------+----------------+
 | default_week_format            | int      | 0                 |                |                |
 +--------------------------------+----------+-------------------+----------------+----------------+
-| group_concat_max_len           | int      | 1024              | 4              | 33554432       |
+| group_concat_max_len           | byte     | 1024              | 4              | 33554432       |
 +--------------------------------+----------+-------------------+----------------+----------------+
 | intl_check_input_string        | bool     | no                |                |                |
++--------------------------------+----------+-------------------+----------------+----------------+
+| intl_collation                 | string   |                   |                |                |
 +--------------------------------+----------+-------------------+----------------+----------------+
 | intl_date_lang                 | string   |                   |                |                |
 +--------------------------------+----------+-------------------+----------------+----------------+
@@ -878,7 +946,7 @@ The following are parameters related to SQL statements and data types supported 
 +--------------------------------+----------+-------------------+----------------+----------------+
 | return_null_on_function_errors | bool     | no                |                |                |
 +--------------------------------+----------+-------------------+----------------+----------------+
-| string_max_size_bytes          | int      | 1048576           | 64             | 33554432       |
+| string_max_size_bytes          | byte     | 1048576           | 64             | 33554432       |
 +--------------------------------+----------+-------------------+----------------+----------------+
 | unicode_input_normalization    | bool     | no                |                |                |
 +--------------------------------+----------+-------------------+----------------+----------------+
@@ -887,26 +955,9 @@ The following are parameters related to SQL statements and data types supported 
 
 **add_column_update_hard_default**
 
-    **add_column_update_hard_default** is a parameter used to configure whether or not to provide the hard_default value as the input value for a column when you add a new column to the **ALTER TABLE ... ADD COLUMN** clause.
+    **add_column_update_hard_default** is a parameter to configure whether or not to provide the hard default value as the input value for a column when you add a new column to the **ALTER TABLE ... ADD COLUMN** clause.
 
-    If a value for this parameter is set to yes, enter a new input value of a column as a hard default value when you have **NOT NULL** constraints but no **DEFAULT** constraints. If the parameter value is set to no, enter **NULL**, even if **NOT NULL** constraints exist. If a value for this parameter is set to yes and there is no hard default value for the column type to add, an error message will be displayed and a roll-back occurs. For the hard default for each type, see the :ref:`change-column` of the **ALTER TABLE** statement.
-
-    .. code-block:: sql
-
-        SET SYSTEM PARAMETERS 'add_column_update_hard_default=no';
-         
-        CREATE TABLE tbl (i INT);
-        INSERT INTO tbl VALUES (1),(2);
-        ALTER TABLE tbl ADD COLUMN j INT NOT NULL;
-         
-        SELECT * FROM tbl;
-        
-    ::
-    
-                    i            j
-        ==========================
-                    1         NULL
-                    2         NULL
+    When there is **NOT NULL** constraint and no **DEFAULT** constraint, if a value of this parameter is set to **yes**, the value of newly added column will be inserted as hard default value; if it is set to **no**, CUBRID returns an error. For the hard default for each type, see the :ref:`change-column` of the **ALTER TABLE** statement.
 
     .. code-block:: sql
                     
@@ -925,9 +976,21 @@ The following are parameters related to SQL statements and data types supported 
                     1          0
                     2          0
 
+    .. code-block:: sql
+
+        SET SYSTEM PARAMETERS 'add_column_update_hard_default=no';
+         
+        CREATE TABLE tbl (i INT);
+        INSERT INTO tbl VALUES (1),(2);
+        ALTER TABLE tbl ADD COLUMN j INT NOT NULL;
+
+    ::
+    
+        ERROR: Cannot add NOT NULL constraint for attribute "j": there are existing NULL values for this attribute.
+
 **alter_table_change_type_strict**
 
-    **alter_table_change_type_strict** is a parameter used to configure whether or not to allow the conversion of column values according to the type change, and the default value is **no**. If a value for this parameter is set to no, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to yes, the value is not changed. For details, see CHANGE Clause in the :ref:`change-column`.
+    **alter_table_change_type_strict** is a parameter to configure whether or not to allow the conversion of column values according to the type change, and the default value is **no**. If a value for this parameter is set to no, the value may be changed when you change the column types or when you add **NOT NULL** constraints; if it is set to yes, the value is not changed. For details, see CHANGE Clause in the :ref:`change-column`.
 
 **ansi_quotes**
 
@@ -947,11 +1010,11 @@ The following are parameters related to SQL statements and data types supported 
 
 **compat_numeric_division_scale**
 
-    **compat_numeric_division_scale** is a parameter used to configure the scale to be displayed in the result (quotient) of a division operation. If the parameter is set to no, the scale of the quotient is 9 if it is set to yes, the scale is determined by that of the operand. The default value is **no**.
+    **compat_numeric_division_scale** is a parameter to configure the scale to be displayed in the result (quotient) of a division operation. If the parameter is set to no, the scale of the quotient is 9 if it is set to yes, the scale is determined by that of the operand. The default value is **no**.
 
 **default_week_format**
 
-    **default_week_format** is a parameter used to configure default value for the *mode* attribute of the :func:`WEEK` function. The default value is **0**. For details, see :func:`WEEK`.
+    **default_week_format** is a parameter to configure default value for the *mode* attribute of the :func:`WEEK` function. The default value is **0**. For details, see :func:`WEEK`.
 
 **intl_check_input_string**
 
@@ -961,7 +1024,8 @@ The following are parameters related to SQL statements and data types supported 
 
 **group_concat_max_len**
 
-    **group_concat_max_len** is a parameter used to limit the return value size of the :func:`GROUP_CONCAT` function. The default value is **1024** bytes, the minimum value is 4 bytes, and the maximum value is 33,554,432 bytes. If the return value of the :func:`GROUP_CONCAT` function exceeds the limitation, **NULL** will be returned.
+    **group_concat_max_len** is a parameter used to limit the return value size of the :func:`GROUP_CONCAT` function.
+    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is 1024. The minimum value is 4 and the maximum value is INT_MAX. If the return value of the :func:`GROUP_CONCAT` function exceeds the limitation, **NULL** will be returned.
 
 **intl_check_input_string**
 
@@ -969,6 +1033,19 @@ The following are parameters related to SQL statements and data types supported 
 
     UTF-8 and EUC-KR can be checked; ISO-8859-1 is one-byte encoding so it does not have to be checked because every byte is valid.
 
+**intl_collation**
+
+    **intl_collation** is a parameter which specifies a collation name about a specific application client. Specifying this parameter is the same as changing a collation of application client by using "SET NAMES" statement. Specifying a collation includes a charset.
+    
+    The following two statements behave the same.
+
+    .. code-block:: sql
+
+        SET NAMES utf8;
+        SET SYSTEM PARAMETERS 'intl_collation=utf8_bin';
+
+    For an available value of **intl_collation**, see :ref:`collation-setting`.
+    
 **intl_date_lang**
 
     **intl_date_lang** is a parameter used to input/output the values of **TIME**, **DATE**, **DATETIME**, and **TIMESTAMP**. If language name is omitted, it specifies a locale format of string of localized calendar (month, weekday, and AM/PM).
@@ -1000,6 +1077,8 @@ The following are parameters related to SQL statements and data types supported 
     +--------------+-----------------------------+
     | Chinese      | zh_CN                       |
     +--------------+-----------------------------+
+    | Romanian     | ro_RO                       |
+    +--------------+-----------------------------+
 
     The function recognizing input string based on calendar format of specified language is as follows:
 
@@ -1017,7 +1096,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **intl_number_lang**
 
-    **intl_number_lane**  is a parameter used to specify locale applied when numeric format is assigned to input/output string in the function where a string is converted to number or number is converted to string. A delimiter and decimal symbol are used for numeric localization. In general, a comma and period are used; however, it can be changeable based on locale. For example, while number 1000.12 is used as 1,000.12 in most locale, it used as 1.000,12 in , tr_TR locale.
+    **intl_number_lang**  is a parameter used to specify locale applied when numeric format is assigned to input/output string in the function where a string is converted to number or number is converted to string. A delimiter and decimal symbol are used for numeric localization. In general, a comma and period are used; however, it can be changeable based on locale. For example, while number 1000.12 is used as 1,000.12 in most locale, it used as 1.000,12 in , tr_TR locale.
 
     The function recognizing input string based on calendar format of specified language is as follows:
 
@@ -1030,11 +1109,11 @@ The following are parameters related to SQL statements and data types supported 
 
 **no_backslash_escapes**
 
-    **no_backslash_escapes** is a parameter used to configure whether or not to use backslash (\\) as an escape character, and the default value is **yes**. If a value for this parameter is set to no, backslash (\\) will be used as an escape character; if it is set to yes, backslash (\\) will be used as a normal character. For example, if this value is set to no, "\\n" means a newline character. For details, see :ref:`escape-characters`.
+    **no_backslash_escapes** is a parameter to configure whether or not to use backslash (\\) as an escape character, and the default value is **yes**. If a value for this parameter is set to no, backslash (\\) will be used as an escape character; if it is set to yes, backslash (\\) will be used as a normal character. For example, if this value is set to no, "\\n" means a newline character. For details, see :ref:`escape-characters`.
 
 **only_full_group_by**
 
-    **only_full_group_by** is a parameter used to configure whether to use extended syntax about using **GROUP BY** statement.
+    **only_full_group_by** is a parameter to configure whether to use extended syntax about using **GROUP BY** statement.
 
     If this parameter value is set to **no**, an extended syntax is applied thus, a column that is not specified in the **GROUP BY** statement can be specified in the **SELECT** column list. If it is set to yes, a column that is only specified in the **GROUP BY** statement can be the **SELECT** column list.
 
@@ -1048,11 +1127,11 @@ The following are parameters related to SQL statements and data types supported 
 
 **pipes_as_concat**
 
-    **pipes_as_concat** is a parameter used to configure how to handle a double pipe symbol. The default value is **yes**. If this parameter value is set to **yes**, a double pipe symbol is handled as a concatenation operator if no, it is handled as the **OR** operator.
+    **pipes_as_concat** is a parameter to configure how to handle a double pipe symbol. The default value is **yes**. If this parameter value is set to **yes**, a double pipe symbol is handled as a concatenation operator if no, it is handled as the **OR** operator.
 
 **plus_as_concat**
 
-    **plus_as_concat** is a parameter used to configure the plus (+) operator, and the default value is **yes**. If a value for this parameter is set to yes, the plus (+) operator will be interpreted as a concatenation operator; if it is set to no, the operator will be interpreted as a numeric operator.
+    **plus_as_concat** is a parameter to configure the plus (+) operator, and the default value is **yes**. If a value for this parameter is set to yes, the plus (+) operator will be interpreted as a concatenation operator; if it is set to no, the operator will be interpreted as a numeric operator.
 
     .. code-block:: sql
 
@@ -1096,7 +1175,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **require_like_escape_character**
 
-    **require_like_escape_character** is parameter used to configure whether or not to use an ESCAPE character in the **LIKE** clause, and the default value is **no**. If a value for this parameter is set to yes and a value for **no_backslash_escapes** is set to no, backslash (\\) will be used as an ESCAPE character in the strings of the LIKE clause, otherwise you should specify an ESCAPE character by using the **LIKE ... ESCAPE** clause. For details, see :ref:`like-expr`.
+    **require_like_escape_character** is parameter to configure whether or not to use an ESCAPE character in the **LIKE** clause, and the default value is **no**. If a value for this parameter is set to yes and a value for **no_backslash_escapes** is set to no, backslash (\\) will be used as an ESCAPE character in the strings of the LIKE clause, otherwise you should specify an ESCAPE character by using the **LIKE ... ESCAPE** clause. For details, see :ref:`like-expr`.
 
 **return_null_on_function_errors**
 
@@ -1104,6 +1183,8 @@ The following are parameters related to SQL statements and data types supported 
 
     The following SQL functions are affected by this system parameter.
 
+    **Date/Time functions**
+    
     *   :func:`ADDDATE`
     *   :func:`ADDTIME`
     *   :func:`DATEDIFF`
@@ -1130,6 +1211,40 @@ The following are parameters related to SQL statements and data types supported 
     *   :func:`WEEKDAY`
     *   :func:`YEAR`
 
+    **String functions**
+    
+    *   :func:`ASCII`
+    *   :func:`BIN`
+    *   :func:`BIT_LENGTH`
+    *   :func:`CHR`
+    
+    **Numeric functions**
+    
+    *   :func:`ABS`
+    *   :func:`ACOS`
+    *   :func:`ASIN`
+    *   :func:`ATAN`
+    *   :func:`ATAN2`
+    *   :func:`CEIL`
+    *   :func:`CONV`
+    *   :func:`COS`
+    *   :func:`COT`
+    *   :func:`DEGREES`
+    *   :func:`EXP`
+    *   :func:`FLOOR`
+    *   :func:`LN`
+    *   :func:`LOG2`
+    *   :func:`LOG10`
+    *   :func:`MOD`
+    *   :func:`POW`
+    *   :func:`RADIANS`
+    *   :func:`SIGN`
+    *   :func:`SIN`
+    *   :func:`SQRT`
+    *   :func:`TAN`
+    *   :func:`TRUNC`
+    *   :func:`WIDTH_BUCKET`
+    
     .. code-block:: sql
 
         SET SYSTEM PARAMETERS 'return_null_on_function_errors=no';         
@@ -1152,7 +1267,8 @@ The following are parameters related to SQL statements and data types supported 
 
 **string_max_size_bytes**
 
-    **string_max_size_bytes** is a parameter used to define the maximum byte allowable in string functions or operators. The default value is **1048576** (1 MB). The minimum value is 64 bytes and the maximum value is 33,554,432 bytes (32 MB).
+    **string_max_size_bytes** is a parameter used to define the maximum byte allowable in string functions or operators. 
+    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is 1048576(1M). The minimum value is 64 and the maximum value is 33,554,432(32M).
 
     The functions and operators affected by this parameter are as follows:
 
@@ -1172,7 +1288,7 @@ The following are parameters related to SQL statements and data types supported 
 
     In general, unicode text can be stored in "fully composed" or "fully decomposed". When character 'Ä' has 00C4 (if it is encoded in UTF-8, it becomes 2 bytes of C3 84) which is only one code point. In "fully decomposed" mode, it has two code points/characters. It is 0041 (character "A") and 0308(COMBINING DIAERESIS). In case of UTF-8 encoding, it becomes 3 bytes of 41 CC 88.
 
-    CUBRID can work with fully composed unicode. For clients which have fully decomposed texts, configure the value of **unicode_input_normalization** to yes so that it can be converted to fully composed mode; and then it can be reverted to fully decomposed mode. For normalization of unicode encapsulation of CUBRID, compatibility equivalence is not applied. In general, normalization of unicode is not possible to revert after composition, CUBRID supports revert for characters an many as possible, it applies normalization of unicode encapsulation. The characteristics of CUBRID normalization are as follows:
+    CUBRID can work with fully composed unicode. For clients which have fully decomposed texts, configure the value of **unicode_input_normalization** to yes so that it can be converted to fully composed mode; and then it can be reverted to fully decomposed mode. For normalization of unicode encapsulation of CUBRID, compatibility equivalence is not applied. In general, normalization of unicode is not possible to revert after composition, CUBRID supports revert for characters an many as possible, and it applies normalization of unicode encapsulation. The characteristics of CUBRID normalization are as follows:
 
     *   In case of language specific, normalization does not depend on locale. 
     
@@ -1215,7 +1331,7 @@ The following are parameters related to the query plan cache functionality. The 
 
 **max_plan_cache_entries**
 
-    **max_plan_cache_entries** is a parameter used to configure the maximum number of query plans to be cached in the memory. If the **max_plan_cache_entries** parameter is configured to -1 or 0, generated query plans are not stored in the memory cache; if it is configured to an integer value equal to or greater than 1, a specified number of query plans are cached in the memory.
+    **max_plan_cache_entries** is a parameter to configure the maximum number of query plans to be cached in the memory. If the **max_plan_cache_entries** parameter is configured to -1 or 0, generated query plans are not stored in the memory cache; if it is configured to an integer value equal to or greater than 1, a specified number of query plans are cached in the memory.
 
     The following example shows how to cache up to 1,000 queries. ::
 
@@ -1235,7 +1351,7 @@ The following are parameters related to utilities used in CUBRID. The type and v
 +------------------------------+----------+-------------------+----------+----------+
 | Parameter Name               | Type     | Default Value     | Min      | Max      |
 +==============================+==========+===================+==========+==========+
-| backup_volume_max_size_bytes | int      | -1                | 1024*32  |          |
+| backup_volume_max_size_bytes | byte     | 0                 | 32K      |          |
 +------------------------------+----------+-------------------+----------+----------+
 | communication_histogram      | bool     | no                |          |          |
 +------------------------------+----------+-------------------+----------+----------+
@@ -1246,15 +1362,18 @@ The following are parameters related to utilities used in CUBRID. The type and v
 
 **backup_volume_max_size_bytes**
 
-    **backup_volume_max_size_bytes** is a parameter used to configure the size of the backup volume file created by the **cubrid backupdb** utility in byte unit. If the parameter is configured to **-1**, which is the default value, the created backup volume is not partitioned; otherwise, the backup volume is partitioned as much as it is specified size.
-
+    **backup_volume_max_size_bytes** is a parameter to configure the size of the backup volume file created by the **cubrid backupdb** utility in byte unit. 
+    You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is 0, and the minimum value is 32K.    
+    
+    If the parameter is configured to 0, which is the default value, the created backup volume is not partitioned; if it is configured to a value larger than 0, the backup volume is partitioned as much as it is specified size.
+    
 **communication_histogram**
 
     **communication_histogram** is a parameter associated with :ref:`csql-session-commands` "**;.h**" of the CSQL Interpreter and the default value is **no**. For details, see :ref:`Dumping CSQL execution statistics information <csql-execution-statistics>`.
 
 **compactdb_page_reclaim_only**
 
-    **compactdb_page_reclaim_only** is a parameter used to configure the **compactdb** utility, which compacts the storage of already deleted objects to reuse OIDs of the already assigned storage. Storage optimization with the **compactdb** utility can be divided into three steps. The optimization steps can be selected through the **compactdb_page_reclaim_only** parameter. If the parameter is configured to **0**, which is the default value, step 1, 2 and 3 are all performed, so the storage is optimized in data, table and file units. If it is configured to 1, step 1 is skipped to have the storage optimized in table and file units. If it is configured to 2, steps 1 and 2 are skipped to have the storage optimized only in file units.
+    **compactdb_page_reclaim_only** is a parameter to configure the **compactdb** utility, which compacts the storage of already deleted objects to reuse OIDs of the already assigned storage. Storage optimization with the **compactdb** utility can be divided into three steps. The optimization steps can be selected through the **compactdb_page_reclaim_only** parameter. If the parameter is configured to **0**, which is the default value, step 1, 2 and 3 are all performed, so the storage is optimized in data, table and file units. If it is configured to 1, step 1 is skipped to have the storage optimized in table and file units. If it is configured to 2, steps 1 and 2 are skipped to have the storage optimized only in file units.
 
     *   Step 1: Optimizes the storage only in data unit.
     *   Step 2: Optimizes the storage in table unit.
@@ -1262,7 +1381,7 @@ The following are parameters related to utilities used in CUBRID. The type and v
 
 **csql_history_num**
 
-    **csql_history_num** is a parameter used to configure the CSQL Interpreter and the number of SQL statements to be stored in the history of the CSQL Interpreter. The default value is **50**.
+    **csql_history_num** is a parameter to configure the CSQL Interpreter and the number of SQL statements to be stored in the history of the CSQL Interpreter. The default value is **50**.
 
 .. _ha-parameters:
 
@@ -1294,57 +1413,59 @@ Other Parameters
 
 The following are other parameters. The type and value range for each parameter are as follows:
 
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| Parameter Name                 | Type     | Default Value     | Min           | Max               |
-+================================+==========+===================+===============+===================+
-| access_ip_control              | bool     | no                |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| access_ip_control_file         | string   |                   |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| auto_restart_server            | bool     | yes               |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| index_scan_in_oid_order        | bool     | no                |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| index_unfill_factor            | float    | 0.05              | 0             | 0.5               |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| java_stored_procedure          | bool     | no                |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| multi_range_optimization_limit | int      | 100               | 0             | 10000             |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| pthread_scope_process          | bool     | yes               |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| server                         | string   |                   |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| service                        | string   |                   |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| session_state_timeout          | int      | 21600 (6 hours)   | 60 (1 minute) | 31536000 (1 year) |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| sql_trace_slow_msecs           | int      | -1                | 0             | 86400000(24hour)  |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| sql_trace_execution_plan       | bool     | no                |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
-| use_orderby_sort_limit         | bool     | yes               |               |                   |
-+--------------------------------+----------+-------------------+---------------+-------------------+
++--------------------------------+----------+-------------------+---------------+--------------------+
+| Parameter Name                 | Type     | Default Value     | Min           | Max                |
++================================+==========+===================+===============+====================+
+| access_ip_control              | bool     | no                |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| access_ip_control_file         | string   |                   |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| auto_restart_server            | bool     | yes               |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| index_scan_in_oid_order        | bool     | no                |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| index_unfill_factor            | float    | 0.05              | 0             | 0.5                |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| java_stored_procedure          | bool     | no                |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| multi_range_optimization_limit | int      | 100               | 0             | 10000              |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| pthread_scope_process          | bool     | yes               |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| server                         | string   |                   |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| service                        | string   |                   |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| session_state_timeout          | sec      | 21600(6 hours)    | 60(1 minute)  | 31536000(1 year)   |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| sort_limit_max_count           | int      | 1000              | 0             | INT_MAX            |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| sql_trace_slow                 | msec     | -1(inf)           | 0             | 86400000(24 hours) |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| sql_trace_execution_plan       | bool     | no                |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
+| use_orderby_sort_limit         | bool     | yes               |               |                    |
++--------------------------------+----------+-------------------+---------------+--------------------+
 
 **access_ip_control**
 
-    **access_ip_control** is a parameter used to configure whether to use feature limiting the IP addresses that allow server access. The default value is **no**. For details, see :ref:`limiting-server-access`.
+    **access_ip_control** is a parameter to configure whether to use feature limiting the IP addresses that allow server access. The default value is **no**. For details, see :ref:`limiting-server-access`.
 
 **access_ip_control_file**
 
-    **access_ip_control_file** is a parameter used to configure the file name in which the list of IP addresses allowed by servers is stored. If **access_ip_control** value is set to **yes**, database server allows the list of IP addresses only stored in the file specified by this parameter. For details, see :ref:`limiting-server-access`.
+    **access_ip_control_file** is a parameter to configure the file name in which the list of IP addresses allowed by servers is stored. If **access_ip_control** value is set to **yes**, database server allows the list of IP addresses only stored in the file specified by this parameter. For details, see :ref:`limiting-server-access`.
 
 **auto_restart_server**
 
-    **auto_restart_server** is a parameter used to configure whether to restart the process when it stops due to fatal errors being occurred in database server process. If **auto_restart_server** value is set to **yes**, the server process automatically restarts when it has stopped due to errors; it does not restart in case it stops by following normal process (by using **STOP** command).
+    **auto_restart_server** is a parameter to configure whether to restart the process when it stops due to fatal errors being occurred in database server process. If **auto_restart_server** value is set to **yes**, the server process automatically restarts when it has stopped due to errors; it does not restart in case it stops by following normal process (by using **STOP** command).
 
 **index_scan_in_oid_order**
 
-    **index_scan_in_oid_order** is a parameter used to configure the result data to be retrieved in OID order after the index scan. If the parameter is set to **no**, which is the default value, results are retrieved in data order; if it is set to **yes**, they are retrieved in OID order.
+    **index_scan_in_oid_order** is a parameter to configure the result data to be retrieved in OID order after the index scan. If the parameter is set to **no**, which is the default value, results are retrieved in data order; if it is set to **yes**, they are retrieved in OID order.
 
 **index_unfill_factor**
 
-    If there is no free space because index pages are full when the **INSERT** or **UPDATE** operation is executed after the first index is created, the split of index page nodes occurs. This substantially affects the performance by increasing the operation time. **index_unfill_factor** is a parameter used to configure the percent of free space defined for each index page node when an index is created. The **index_unfill_factor** value is applied only when an index is created for the first time. The percent of free space defined for the page is not maintained dynamically. Its value ranges between 0 and 0.5. The default value is **0.05**.
+    If there is no free space because index pages are full when the **INSERT** or **UPDATE** operation is executed after the first index is created, the split of index page nodes occurs. This substantially affects the performance by increasing the operation time. **index_unfill_factor** is a parameter to configure the percent of free space defined for each index page node when an index is created. The **index_unfill_factor** value is applied only when an index is created for the first time. The percent of free space defined for the page is not maintained dynamically. Its value ranges between 0 and 0.5. The default value is **0.05**.
 
     If an index is created without any free space for the index page node (**index_unfill_factor** is set to 0), the split of index page nodes occurs every time an additional insertion is made. This may degrade the performance.
 
@@ -1354,7 +1475,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **java_stored_procedure**
 
-    **java_stored_procedure** is a parameter used to configure whether to use Java stored procedures by running the Java Virtual Machine (JVM). If the parameter is set to **no**, which is the default value, JVM is not executed; if it is set to **yes**, JVM is executed so you can use Java stored procedures. Therefore, configure the parameter to yes if you plan to use Java stored procedures.
+    **java_stored_procedure** is a parameter to configure whether to use Java stored procedures by running the Java Virtual Machine (JVM). If the parameter is set to **no**, which is the default value, JVM is not executed; if it is set to **yes**, JVM is executed so you can use Java stored procedures. Therefore, configure the parameter to yes if you plan to use Java stored procedures.
 
 **multi_range_optimization_limit**
 
@@ -1366,7 +1487,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **pthread_scope_process**
 
-    **pthread_scope_process** is a parameter used to configure the contention scope of threads. It only applies to AIX systems. If the parameter is set to **no**, the contention scope becomes **PTHREAD_SCOPE_SYSTEM**; if it is set to **yes**, it becomes **PTHREAD_SCOPE_PROCESS**. The default value is **yes**.
+    **pthread_scope_process** is a parameter to configure the contention scope of threads. It only applies to AIX systems. If the parameter is set to **no**, the contention scope becomes **PTHREAD_SCOPE_SYSTEM**; if it is set to **yes**, it becomes **PTHREAD_SCOPE_PROCESS**. The default value is **yes**.
 
 **server**
 
@@ -1374,7 +1495,7 @@ The following are other parameters. The type and value range for each parameter 
 
 **service**
 
-    **service** is a parameter used to configure process that starts automatically when the CUBRID service starts. There are four types of processes: **server**, **broker**, **manager**, and **heartbeat**. Three processes are usually registered as in **service=server,broker,manager**.
+    **service** is a parameter to configure process that starts automatically when the CUBRID service starts. There are four types of processes: **server**, **broker**, **manager**, and **heartbeat**. Three processes are usually registered as in **service=server,broker,manager**.
 
     *   If the parameter is set to **server**, the database process specified by the **@server** parameter gets started.
     *   If the parameter is set to **broker**, the broker process gets started.
@@ -1387,30 +1508,38 @@ The following are other parameters. The type and value range for each parameter 
 
     Custom variables defined by **SET** and **PREPARE** statements can be deleted by **DROP** / **DEALLOCATE** statements before session timeout.
 
-    The default value is **21600** seconds (6 hours).
+    The default value is **21600** seconds(6 hours), and this parameter's unit is second.
 
-**sql_trace_slow_msecs**
+**sort_limit_max_count**
 
-    **sql_trace_slow_msecs** is a parameter used to configure the execution time of a query which will be judged as a long time execution. The default value is -1 and the maximum value is 86400000 msec (24 hour). -1 means that the infinite time, so any queries will not be judged as a long duration query. For details, see the below **sql_trace_execution_plan**.
+    Regarding SORT-LIMIT optimization which can be applied when top-N rows are sorted by "ORDER BY ... LIMIT *N*\ " statement, this parameter specifies the LIMIT count to limit applying this optimization. When the value of *N* is smaller than a value of **sort_limit_max_count**, SORT-LIMIT optimization is applied. The default is 1000, the minimum is 0(which means that this optimization is disabled), and the maximum is INT_MAX.
+    
+    For more details, see :ref:`sort-limit-optimization`.
 
+**sql_trace_slow**
+
+    **sql_trace_slow** is a parameter to configure the execution time of a query which will be judged as a long time execution. 
+    You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied. The default value is -1 and the maximum value is 86400000 msec (24 hour). -1 means that the infinite time, so any queries will not be judged as a long duration query. For details, see the below **sql_trace_execution_plan**.
+    
     .. note::
-        the system parameter **sql_trace_slow_msecs** judges the query execution time based on the server, but the broker parameter **MAX_QUERY_TIMEOUT** judges the query execution time based on the broker.
+
+        The system parameter **sql_trace_slow** judges the query execution time based on the server, but the broker parameter **MAX_QUERY_TIMEOUT** judges the query execution time based on the broker.
         
 **sql_trace_execution_plan**
 
-    **sql_trace_execution_plan** is a parameter used to configure if the query plan of the long running query is written to the log or not. The default value is no.
+    **sql_trace_execution_plan** is a parameter to configure if the query plan of the long running query is written to the log or not. The default value is no.
 
     If it is set to yes, a long running SQL, a query plan and the output of cubrid statdump command  are written to the server error log file(located on $CUBRID/log/server directory) and CAS log file(located on $CUBRID/log/broker/sql_log directory) .
 
     If it is set to no, only a long running SQL is written to the server error log file and CAS log file, and this SQL is displayed when you execute **cubrid statdump** command.
 
-    For example, if you want to write the execution plan of the slow query to the log file, and specify the query which executes more than 5 seconds as the slow query, then configure the value of the **sql_trace_slow_msecs** parameter as 5000(ms) and configure the value of the **sql_trace_execution_plan** parameter as yes.
+    For example, if you want to write the execution plan of the slow query to the log file, and specify the query which executes more than 5 seconds as the slow query, then configure the value of the **sql_trace_slow** parameter as 5000(ms) and configure the value of the **sql_trace_execution_plan** parameter as yes.
 
-    But, on the server error log file, the related informations are written only when the value of error_log_level is NOTIFICATION. 
+    But, on the server error log file, the related information is written only when the value of error_log_level is NOTIFICATION. 
 
 **use_orderby_sort_limit**
 
-    **use_orderby_sort_limit** is a parameter used to configure whether to keep the intermediate result of sorting and merging process in the statement including the **ORDER BY ... LIMIT** *row_count* clause as many as *row_count*. If it is set to **yes**, you can decrease unnecessary comparing and merging processes because as many as intermediate results will be kept as the value of *row_count*. The default value is **yes**.
+    **use_orderby_sort_limit** is a parameter to configure whether to keep the intermediate result of sorting and merging process in the statement including the **ORDER BY ... LIMIT** *row_count* clause as many as *row_count*. If it is set to **yes**, you can decrease unnecessary comparing and merging processes because as many as intermediate results will be kept as the value of *row_count*. The default value is **yes**.
 
 .. _broker-configuration:
 
@@ -1424,87 +1553,124 @@ cubrid_broker.conf Configuration File and Default Parameters
 
     The following table shows the broker parameters available in the broker configuration file (**cubrid_broker.conf**). For details, see :ref:`broker-common-parameters` and :ref:`parameter-by-broker`. You can temporarily change the parameter of which configuration values can be dynamically changed by using the **broker_changer** utility. To apply configuration values even after restarting all brokers with **cubrid broker restart**, you should change the values in the **cubrid_broker.conf** file.
 
-    +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------------+
-    | Category                        | Use                     | Parameter Name                  | Type   | Default Value                | Dynamic Changes |
-    +=================================+=========================+=================================+========+==============================+=================+
-    | :ref:`broker-common-parameters` | Access                  | ACCESS_CONTROL                  | bool   | no                           |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | ACCESS_CONTROL_FILE             | string |                              |                 |
-    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------------+
-    |                                 | Logging                 | ADMIN_LOG_FILE                  | string | log/broker/cubrid_broker.log |                 |
-    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------------+
-    |                                 | Broker(cub_broker)      | MASTER_SHM_ID                   | int    | 30001                        |                 |
-    +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------------+
-    | :ref:`parameter-by-broker`      | Access                  | ACCESS_LIST                     | string | -                            |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | ACCESS_LOG                      | string | ON                           | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | ACCESS_MODE                     | string | RW                           | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | BROKER_PORT                     | int    | 30000(최대값 : 65535)        |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | ENABLE_MONITOR_HANG             | string | OFF                          |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | KEEP_CONNECTION                 | string | AUTO                         | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | PREFERRED_HOSTS                 | string | -                            |                 |
-    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------------+
-    |                                 | Broker App. Server(CAS) | APPL_SERVER                     | string | CAS                          |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | APPL_SERVER_MAX_SIZE            | int    | Windows 32비트: 40           | available       |
-    |                                 |                         |                                 |        | Windows 64비트: 80           |                 |
-    |                                 |                         |                                 |        | Linux: 0                     |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | APPL_SERVER_MAX_SIZE_HARD_LIMIT | int    | 1024                         | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | APPL_SERVER_PORT                | int    | BROKER_PORT+1                |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | APPL_SERVER_SHM_ID              | int    | 30000                        |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | AUTO_ADD_APPL_SERVER            | string | ON                           |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | MAX_NUM_APPL_SERVER             | int    | 40                           |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | MIN_NUM_APPL_SERVER             | int    | 5                            |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | TIME_TO_KILL                    | int    | 120                          | available       |
-    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------------+
-    |                                 | Transaction & Query     | CCI_DEFAULT_AUTOCOMMIT          | string | ON                           |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | LONG_QUERY_TIME                 | int    | 60                           | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | LONG_TRANSACTION_TIME           | int    | 60                           | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | MAX_QUERY_TIMEOUT               | int    | 0(최대값: 86400(초))         | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | MAX_PREPARED_STMT_COUNT         | int    | 2000(최소값: 1)              |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | SESSION_TIMEOUT                 | int    | 300                          |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | STATEMENT_POOLING               | string | ON                           | available       |
-    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------------+
-    |                                 | Logging                 | ERROR_LOG_DIR                   | string | log/broker/error_log         |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | LOG_BACKUP                      | string | OFF                          | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | LOG_DIR                         | string | log/broker/sql_log           |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | SLOW_LOG                        | string | ON                           | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | SLOW_LOG_DIR                    | string | log/broker/sql_log           |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | SQL_LOG                         | string | ON                           | available       |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | SQL_LOG_MAX_SIZE                | int    | 100000                       | available       |
-    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------------+
-    |                                 | Etc                     | SERVICE                         | string | ON                           |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | SOURCE_ENV                      | string | cubrid.env                   |                 |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------------+
-    |                                 |                         | MAX_STRING_LENGTH               | int    | -1                           |                 |
-    +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------------+
-
-
+    +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
+    | Category                        | Use                     | Parameter Name                  | Type   | Default Value                | Dynamic   |
+    |                                 |                         |                                 |        |                              | Changes   |
+    +=================================+=========================+=================================+========+==============================+===========+
+    | :ref:`broker-common-parameters` | Access                  | ACCESS_CONTROL                  | bool   | no                           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | ACCESS_CONTROL_FILE             | string |                              |           |
+    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+    |                                 | Logging                 | ADMIN_LOG_FILE                  | string | log/broker/cubrid_broker.log |           |
+    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+    |                                 | Broker(cub_broker)      | MASTER_SHM_ID                   | int    | 30001                        |           |
+    +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
+    | :ref:`parameter-by-broker`      | Access                  | ACCESS_LIST                     | string |                              |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | ACCESS_LOG                      | string | ON                           | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | ACCESS_MODE                     | string | RW                           | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | BROKER_PORT                     | int    | 30000(max : 65535)           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | CONNECT_ORDER                   | string | SEQ                          | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | ENABLE_MONITOR_HANG             | string | OFF                          |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | KEEP_CONNECTION                 | string | AUTO                         | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | PREFERRED_HOSTS                 | string |                              |           |
+    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+    |                                 | Broker App. Server(CAS) | APPL_SERVER                     | string | CAS                          |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | APPL_SERVER_MAX_SIZE            | MB     | Windows 32bit: 40            | available |
+    |                                 |                         |                                 |        | Windows 64bit: 80            |           |
+    |                                 |                         |                                 |        | Linux: 0                     |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | APPL_SERVER_MAX_SIZE_HARD_LIMIT | MB     | 1024                         | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | APPL_SERVER_PORT                | int    | BROKER_PORT+1                |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | APPL_SERVER_SHM_ID              | int    | 30000                        |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | AUTO_ADD_APPL_SERVER            | string | ON                           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | MAX_NUM_APPL_SERVER             | int    | 40                           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | MIN_NUM_APPL_SERVER             | int    | 5                            |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | TIME_TO_KILL                    | sec    | 120                          | available |
+    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+    |                                 | Transaction & Query     | CCI_DEFAULT_AUTOCOMMIT          | string | ON                           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | LONG_QUERY_TIME                 | sec    | 60                           | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | LONG_TRANSACTION_TIME           | sec    | 60                           | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | MAX_PREPARED_STMT_COUNT         | int    | 2000(min: 1)                 |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | MAX_QUERY_TIMEOUT               | sec    | 0(max: 86400(sec))           | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SESSION_TIMEOUT                 | sec    | 300                          |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | STATEMENT_POOLING               | string | ON                           | available |
+    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+    |                                 | Logging                 | ERROR_LOG_DIR                   | string | log/broker/error_log         |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | LOG_BACKUP                      | string | OFF                          | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | LOG_DIR                         | string | log/broker/sql_log           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SLOW_LOG                        | string | ON                           | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SLOW_LOG_DIR                    | string | log/broker/sql_log           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SQL_LOG                         | string | ON                           | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SQL_LOG_MAX_SIZE                | KB     | 10000                        | available |
+    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+    |                                 | SHARD                   | SHARD                           | string | OFF                          |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_CONNECTION_FILE           | string | shard_connection.txt         |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_DB_NAME                   | string |                              |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_DB_PASSWORD               | string |                              |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_DB_USER                   | string |                              |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_IGNORE_HINT               | string | OFF                          |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_KEY_FILE                  | string | shard_key.txt                |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_KEY_FUNCTION_NAME         | string |                              |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_KEY_LIBRARY_NAME          | string |                              |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_KEY_MODULAR               | int    | 256                          |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_MAX_CLIENTS               | int    | 256                          |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_MAX_PREPARED_STMT_COUNT   | int    | 2000                         |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_NUM_PROXY                 | int    | 1                            |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_PROXY_LOG                 | string | ERROR                        | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_PROXY_LOG_DIR             | string | log/broker/proxy_log         |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_PROXY_LOG_MAX_SIZE        | KB     | 100000                       | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_PROXY_SHM_ID              | int    |                              |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_PROXY_TIMEOUT             | sec    | 30(sec)                      |           |
+    |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
+    |                                 | Etc                     | MAX_STRING_LENGTH               | int    | -1                           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SERVICE                         | string | ON                           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SOURCE_ENV                      | string | cubrid.env                   |           |
+    +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
 
 **Default Parameters**
 
@@ -1553,17 +1719,26 @@ Common Parameters
 
 The following are parameters commonly applied to entire brokers; it is written under [broker] section.
 
+Access
+^^^^^^
+
 **ACCESS_CONTROL**
 
     **ACCESS_CONTROL** is a parameter used to limit applications which are trying to connect a broker. The default value is **OFF**. For details, see :ref:`limiting-broker-access`.
 
 **ACCESS_CONTROL_FILE**
 
-    **ACCESS_CONTROL_FILE** is a parameter used to configure the name of a file in which a database name, database user ID, and the list of IPs are stored. For details, see :ref:`limiting-broker-access`.
+    **ACCESS_CONTROL_FILE** is a parameter to configure the name of a file in which a database name, database user ID, and the list of IPs are stored. List of IPs can be written up to the maximum of 256 lines per <*db_name*>:<*db_user*> in a broker. For details, see :ref:`limiting-broker-access`.
+
+Logging
+^^^^^^^
 
 **ADMIN_LOG_FILE**
 
-    **ADMIN_LOG_FILE** is a parameter used to configure the file in which time of running CUBRID broker is stored. The default value is a **log/broker/cubrid_broker.log** file.
+    **ADMIN_LOG_FILE** is a parameter to configure the file in which time of running CUBRID broker is stored. The default value is a **log/broker/cubrid_broker.log** file.
+
+Broker(cub_broker)
+^^^^^^^^^^^^^^^^^^
 
 **MASTER_SHM_ID**
 
@@ -1576,25 +1751,54 @@ Parameter by Broker
 
 The following describes parameters to configure the environment variables of brokers; each parameter is located under *[%broker_name]*. The maximum length of *broker_name* is 63 characters in English.
 
+Access
+^^^^^^
+
 **ACCESS_LIST**
 
-    **ACCESS_LIST** is a parameter used to configure the name of a file where the list of IP addresses of an application which allows access to the CUBRID broker is stored. To allow access by IP addresses access 210.192.33.* and 210.194.34.*, store them to a file (ip_lists.txt) and then assign the file name with the value of this parameter.
+    **ACCESS_LIST** is a parameter to configure the name of a file where the list of IP addresses of an application which allows access to the CUBRID broker is stored. To allow access by IP addresses access 210.192.33.* and 210.194.34.*, store them to a file (ip_lists.txt) and then assign the file name with the value of this parameter.
 
 **ACCESS_LOG**
 
-    **ACCESS_LOG** is a parameter used to configure whether to store the access log of the broker. The default value is **ON**. The name of the access log file for the broker is *broker_name_id.access* and the file is stored under **$CUBRID/log/broker** directory.
+    **ACCESS_LOG** is a parameter to configure whether to store the access log of the broker. The default value is **ON**. The name of the access log file for the broker is *broker_name_id.access* and the file is stored under **$CUBRID/log/broker** directory.
 
 **ACCESS_MODE**
 
-    **ACCESS_MODE** is a parameter used to configure default mode of the broker. The default value is **RW**. For details, see :ref:`ha-cubrid-broker-conf`.
+    **ACCESS_MODE** is a parameter to configure default mode of the broker. The default value is **RW**. For details, see :ref:`ha-cubrid-broker-conf`.
+
+**BROKER_PORT**
+
+    **BROKER_PORT** is a parameter to configure the port number of the broker; the value must be unique and smaller than 65,535. The default port value of **query_editor**' broker is **30,000** and the port value of the **broker1** is **33,000**.
+
+**CONNECT_ORDER**
+
+    **CONNECT_ORDER** is a parameter to specify whether a CAS tries to connect to one of hosts in the order or randomly in **$CUBRID_DATABASES/databases.txt**, when a CAS decides the order of connecting to a host.
+    The default is **SEQ**; a CAS tries to connect to a host in the order. if this value is **RANDOM**, a CAS tries to connect to a host randomly. If **PREFERRED_HOSTS** parameter is specified, firstly a CAS tries to connect to one of hosts specified in **PREFERRED_HOSTS**, then uses db-host values in **$CUBRID_DATABASES/databases.txt** only when the connection is failed.
+    
+**ENABLE_MONITOR_HANG**
+
+    **ENABLE_MONITOR_HANG** is a parameter to configure whether to block the access from the application to the broker or not, when more than a certain ratio of CASes on that broker are hung. If the **ENABLE_MONITOR_HANG** parameter value is **ON**, blocking feature is processed. The default value is **OFF**. If its **OFF**, don't do the behavior.
+    
+    The broker process judges the CAS as hung if the hanging status of the CAS keeps more than one minute, then block the access from applications to that broker; it brings the behavior which the applications try to access to the alternative hosts(altHosts) configured by the connection URL.
+
+**KEEP_CONNECTION**
+
+    **KEEP_CONNECTION** is a parameter to configure the way of connection between CAS and application clients; it is set to one of the following: **ON** or **AUTO**. If this value is **ON**, it is connected in connection unit. If it is **AUTO** and the number of servers is more than that of clients, transaction unit is used; in the reverse case, connection unit is used. The default value is **AUTO**.
+
+**PREFERRED_HOSTS**
+
+    **PREFERRED_HOSTS** is a parameter to specify the order of a host to which a CAS tries to connect in a first priority. If the connection is failed after trying connection in the order specified in **PREFERRED_HOSTS**, a CAS tries to connect to the one of hosts specified in **$CUBRID_DATABASES/databases.txt**. The default value is **NULL**. For details, see :ref:`ha-cubrid-broker-conf`.
+
+Broker App. Server(CAS)
+^^^^^^^^^^^^^^^^^^^^^^^
 
 **APPL_SERVER**
 
-    **APPL_SERVER** is a parameter used to configure types of CAS generated and managed by the CUBRID broker. The default value is **CAS**.
+    **APPL_SERVER** is a parameter to configure types of CAS generated and managed by the CUBRID broker. The default value is **CAS**.
 
 **APPL_SERVER_MAX_SIZE**
 
-    **APPL_SERVER_MAX_SIZE** is a parameter used to configure the maximum size of the process memory usage handled by CAS; the unit is MB.
+    **APPL_SERVER_MAX_SIZE** is a parameter to configure the maximum size of the process memory usage handled by CAS. You can set a unit as B, K, M or G, which stands for bytes, kilobytes(KB), megabytes(MB) or gigabytes(GB) respectively. If you omit the unit, M will be applied.    
 
     Specifying this parameter makes transactions terminate (commit or rollback) only when it is executed by a user. In contrast to this, specifying **APPL_SERVER_MAX_SIZE_HARD_LIMIT** makes transactions forcibly terminate (rollback) and restart CAS.
 
@@ -1613,7 +1817,7 @@ The following describes parameters to configure the environment variables of bro
 
 **APPL_SERVER_MAX_SIZE_HARD_LIMIT**
 
-    **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is a parameter used to configure the maximum size of process memory usage handled by CAS; the unit is MB and default value is **1024** MB.
+    **APPL_SERVER_MAX_SIZE_HARD_LIMIT** is a parameter to configure the maximum size of process memory usage handled by CAS. You can set a unit as B, K, M or G, which stands for bytes, kilobytes(KB), megabytes(MB) or gigabytes(GB) respectively. If you omit the unit, M will be applied. The default value is **1024** (MB), and the maximum value is 2,097,151 (MB).
 
     Specifying this parameter makes transactions being processed forcibly terminate (rollback) and restart CAS. In contrast to this, specifying **APPL_SERVER_MAX_SIZE** makes transactions terminate only when it is executed by a user. 
 
@@ -1623,7 +1827,7 @@ The following describes parameters to configure the environment variables of bro
 
 **APPL_SERVER_PORT**
 
-    **APPL_SERVER_PORT** is a parameter used to configure the connection port of CAS that communicates with application clients; it is used only in Windows. In Linux, the application clients and CAS use the UNIX domain socket for communication; therefore, **APPL_SERVER_PORT** is not used. The default value is determined by adding plus 1 to the **BROKER_PORT** parameter value. The number of ports used is the same as the number of CAS, starting from the specified port's number plus 1. For example, when the value of **BROKER_PORT** is 30,000 and the **APPL_SERVER_PORT** parameter value has been configured, and if the **MIN_NUM_APPL_SERVER** value is 5, five CASs uses the ports numbering between 30,001 and 30,005, respectively. The maximum number of CAS specified in the **MAX_NUM_APPL_SERVER** parameter in **cubrid_broker_conf**; therefore, the maximum number of connection ports is also determined by the value of **MAX_NUM_APPL_SERVER** parameter.
+    **APPL_SERVER_PORT** is a parameter to configure the connection port of CAS that communicates with application clients; it is used only in Windows. In Linux, the application clients and CAS use the UNIX domain socket for communication; therefore, **APPL_SERVER_PORT** is not used. The default value is determined by adding plus 1 to the **BROKER_PORT** parameter value. The number of ports used is the same as the number of CAS, starting from the specified port's number plus 1. For example, when the value of **BROKER_PORT** is 30,000 and the **APPL_SERVER_PORT** parameter value has been configured, and if the **MIN_NUM_APPL_SERVER** value is 5, five CASes uses the ports numbering between 30,001 and 30,005, respectively. The maximum number of CAS specified in the **MAX_NUM_APPL_SERVER** parameter in **cubrid_broker_conf**; therefore, the maximum number of connection ports is also determined by the value of **MAX_NUM_APPL_SERVER** parameter.
 
     On the Windows system, if a firewall exists between an application and a CUBRID broker, the communication port specified in **BROKER_PORT** and **APPL_SERVER_PORT** must be opened.
 
@@ -1633,19 +1837,36 @@ The following describes parameters to configure the environment variables of bro
 
 **APPL_SERVER_SHM_ID**
 
-    **APPL_SERVER_SHM_ID** is a parameter used to configure the ID of shared memory used by CAS; the value must be unique within system. The default value is the same as the port value of the broker.
+    **APPL_SERVER_SHM_ID** is a parameter to configure the ID of shared memory used by CAS; the value must be unique within system. The default value is the same as the port value of the broker.
 
 **AUTO_ADD_APPL_SERVER**
 
-    **AUTO_ADD_APPL_SERVER** is a parameter used to configure whether CAS increase automatically to the value specified in **MAX_NUM_APPL_SERVER** in case of needed; the value will be either **ON** or **OFF** (default: **ON**).  
+    **AUTO_ADD_APPL_SERVER** is a parameter to configure whether CAS increase automatically to the value specified in **MAX_NUM_APPL_SERVER** in case of needed; the value will be either **ON** or **OFF** (default: **ON**).  
 
-**BROKER_PORT**
+.. _max-num-appl-server:
 
-    **BROKER_PORT** is a parameter used to configure the port number of the broker; the value must be unique and smaller than 65,535. The default port value of **query_editor**' broker is **30,000** and the port value of the **broker1** is **33,000**.
+**MAX_NUM_APPL_SERVER**
+
+    **MAX_NUM_APPL_SERVER** is a parameter to configure the maximum number of simultaneous connections allowed. The default value is **40**.
+
+**MIN_NUM_APPL_SERVER**
+
+    **MIN_NUM_APPL_SERVER** is a parameter to configure the minimum number of CAS even if any request to connect the broker has not been made. The default value is **5**.
+
+**TIME_TO_KILL**
+
+    **TIME_TO_KILL** is a parameter to configure the time to remove CAS in idle state among CAS added dynamically. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, s will be applied. The default value is **120** (seconds). 
+    
+    An idle state is one in which the server is not involved in any jobs. If this state continues exceeding the value specified in **TIME_TO_KILL**, CAS is removed.
+
+    The value configured in this parameter affects only CAS added dynamically, so it applies only when the **AUTO_ADD_APPL_SERVER** parameter is configured to **ON**. Note that times to add or remove CAS will be increased more if the **TIME_TO_KILL** value is so small.
+
+Transaction & Query
+^^^^^^^^^^^^^^^^^^^
 
 **CCI_DEFAULT_AUTOCOMMIT**
 
-    **CCI_DEFAULT_AUTOCOMMIT** is a parameter used to configure whether to make application implemented in CCI interface or CCI-based interface such as PHP, ODBC, OLE DB, Perl, Python, and Ruby commit automatically. The default value is **ON**. This parameter does not affect applications implemented in JDBC. In case of using ODBC, malfunction can occur if this parameter is **ON**; you must set it to **OFF**, in this case.
+    **CCI_DEFAULT_AUTOCOMMIT** is a parameter to configure whether to make application implemented in CCI interface or CCI-based interface such as PHP, ODBC, OLE DB, Perl, Python, and Ruby commit automatically. The default value is **ON**. This parameter does not affect applications implemented in JDBC. In case of using ODBC, malfunction can occur if this parameter is **ON**; you must set it to **OFF**, in this case.
 
     If the **CCI_DEFAULT_AUTOCOMMIT** parameter value is **OFF**, the broker application server (CAS) process is occupied until the transaction is terminated. Therefore, it is recommended to execute commit after completing fetch when executing the **SELECT** statement.
 
@@ -1653,48 +1874,17 @@ The following describes parameters to configure the environment variables of bro
 
         The **CCI_DEFAULT_AUTOCOMMIT** parameter has been supported from 2008 R4.0, and the default value is **OFF** for the version. Therefore, if you use CUBRID 2008 R4.1 or later versions and want to keep the configuration **OFF**, you should manually change it to **OFF** to avoid auto-commit of unexpected transaction.
 
-**ERROR_LOG_DIR**
-
-    **ERROR_LOG_DIR** is a parameter used to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log file name for the broker error is *broker_ name_id.err*.
-
-**ENABLE_MONITOR_HANG**
-
-    **ENABLE_MONITOR_HANG** is a parameter used to configure whether to block the access from the application to the broker or not, when more than a certain ratio of CASs on that broker are hung. If the **ENABLE_MONITOR_HANG** parameter value is **ON**, blocking feature is processed. The default value is **OFF**. If it's **OFF**, don't do the behavior.
-    
-    The broker process judges the CAS as hung if the hanging status of the CAS keeps more than one minute, then block the access from applications to that broker; it brings the behavior which the applications try to access to the alternative hosts(altHosts) configured by the connection URL.
-    
-
-**KEEP_CONNECTION**
-
-    **KEEP_CONNECTION** is a parameter used to configure the way of connection between CAS and application clients; it is set to one of the followings: **ON**, **OFF** or **AUTO**. If this value is **OFF**, clients are connected to servers in transaction unit; for **ON**, it is connected in connection unit. If it is **AUTO** and the number of servers is more than that of clients, transaction unit is used; in the reverse case, connection unit is used. The default value is **AUTO**.
-
-**LOG_BACKUP**
-
-    **LOG_BACKUP** is a parameter used to configure whether to back up access and error log files of the broker when CUBRID stops. The default value is set to **OFF**. An access log file (*broker_name.access*) in the **$CUBRID/log/broker** directory is deleted when CUBRID stops. If the value is set to **ON**, an access log file is stored (backed up) as *broker_name.access.yyyymmdd.hhmm* when CUBRID stops.
-
-**LOG_DIR**
-
-    **LOG_DIR** is a parameter used to configure the directory where SQL logs are stored. The default value is **log/broker/sql_log**. The file name of the SQL logs is *broker_name_id.sql.log*.
-
 **LONG_QUERY_TIME**
 
-    **LONG_QUERY_TIME** is a parameter used to configure execution time of query which is evaluated as long-duration query. The default value is **60** (seconds) and can be value in msec. with a decimal separator. For example, the value should be configured into 0.5 to configure 500 msec. Note that a parameter value is configured to 0, it is not evaluated as a long-duration query.
+    **LONG_QUERY_TIME** is a parameter to configure execution time of query which is evaluated as long-duration query. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied. The default value is **60** (seconds). 
+    
+    This value can be valued in milliseconds with a decimal separator. For example, the value can be configured into 0.5 to configure 500 msec. 
+    
+    Note that if a parameter value is configured to 0, a long-duration query is not evaluated.
 
 **LONG_TRANSACTION_TIME**
 
-    **LONG_TRANSACTION_TIME** is a parameter used to configure execution time of query which is evaluated as long-duration transaction. The default value is **60** (seconds) and can be value in msec. with a decimal separator. For example, the value should be configured into 0.5 to configure 500 msec. Note that a parameter is configured to 0, it is not evaluated as a long-duration transaction.
-
-.. _max-num-appl-server:
-
-**MAX_NUM_APPL_SERVER**
-
-    **MAX_NUM_APPL_SERVER** is a parameter used to configure the maximum number of simultaneous connections allowed. The default value is **40**.
-
-    In the environment where connection pool is maintained by using middleware such as DBCP or WAS, the value of **MAX_NUM_APPL_SERVER** parameter and the number of connection pools should be same.
-
-**MIN_NUM_APPL_SERVER**
-
-    **MIN_NUM_APPL_SERVER** is a parameter used to configure the minimum number of CAS even if any request to connect the broker has not been made. The default value is **5**.
+    **LONG_TRANSACTION_TIME** is a parameter to configure execution time of query which is evaluated as long-duration transaction. The default value is **60** (seconds) and can be value in msec. with a decimal separator. For example, the value should be configured into 0.5 to configure 500 msec. Note that a parameter is configured to 0, it is not evaluated as a long-duration transaction.
 
 .. _max-prepared-stmt-count:
 
@@ -1704,47 +1894,58 @@ The following describes parameters to configure the environment variables of bro
 
 **MAX_QUERY_TIMEOUT**
 
-    **MAX_ QUERY_TIMEOUT** is a parameter used to configure timeout value of query execution. When time exceeds a value specified in this parameter after starting query execution, the query being executed stops and rolls back.
-
-    The default value is **0** (seconds) and it means infinite wait. The value range is available from 8 to 86,400 seconds (one day). The smallest value (except 0) between the **MAX_QUERY_TIMEOUT** value and query timeout value of an application is applied if query timeout is configured in an application.
+    **MAX_ QUERY_TIMEOUT** is a parameter to configure timeout value of query execution. When time exceeds a value specified in this parameter after starting query execution, the query being executed stops and rolls back.
+    You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied. The default value is **0** (seconds) and it means infinite waiting. The value range is available from 0 to 86,400 seconds(one day). 
+    
+    The smallest value (except 0) between the **MAX_QUERY_TIMEOUT** value and query timeout value of an application is applied if query timeout is configured in an application.
 
     .. note::
 
         See the :c:func:`cci_connect_with_url` and :c:func:`cci_set_query_timeout` functions to configure query timeout of CCI applications. For configuring query timeout of JDBC applications, see the **setQueryTimeout** method.
 
-**MAX_STRING_LENGTH**
-
-    **MAX_STRING_LENGTH** is a parameter used to configure the maximum string length for BIT, VARBIT, CHAR and VARCHAR data types. If the value is **-1**, which is the default value, the length defined in the database is used. If the value is **100**, the value acts like 100 being applied even when a certain attribute is defined as VARCHAR(1000).
-
-**PREFERRED_HOSTS**
-
-    **PREFERRED_HOSTS** is a parameter that must be configured if the broker mode is set to PHRO. The default value is **NULL**. FOR details, see :ref:`ha-cubrid-broker-conf` of "Administrator's Guide."
-
-**SERVICE**
-
-    **SERVICE** is a parameter used to configure whether to run the broker. It can be either **ON** or **OFF**. The default value is **ON**. The broker can run only when this value is configured to **ON**.
-
 **SESSION_TIMEOUT**
 
-    **SESSION_TIMEOUT** is a parameter used to configure timeout value for the session of the broker. If there is no response to the job request for the specified time period, session will be terminated. If a value exceeds the value specified in this parameter without any action taken after starting transaction, the connections are terminated. The default value is **300** (seconds).
+    **SESSION_TIMEOUT** is a parameter to configure timeout value for the session of the broker.
+    You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied. The default value is **300** (seconds).
+
+    If there is no response to the job request for the specified time period, session will be terminated. If a value exceeds the value specified in this parameter without any action taken after starting transaction, the connections are terminated.
+
+**STATEMENT_POOLING**
+
+    **STATEMENT_POOLING** is a parameter to configure whether to use statement pool feature. The default value is **ON**.
+
+    CUBRID closes all handles of prepared statement in the corresponding client sessions when transaction commit or rollback is made. If the value of **STATEMENT_POOLING** is set to **ON**, the handles are reusable because they are maintained in the pool. Therefore, in an environment where libraries, such as general applications reusing prepared statement or DBCP where statement pooling is implemented is applied, the default configuration (**ON**) should be maintained.
+
+    If the prepared statement is executed after transaction commit or termination while **STATEMENT_POOLING** is set to **OFF**, the following message will be displayed. ::
+
+        Caused by: cubrid.jdbc.driver.CUBRIDException: Attempt to access a closed Statement.
+
+Logging
+^^^^^^^
+
+**ERROR_LOG_DIR**
+
+    **ERROR_LOG_DIR** is a parameter to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log file name for the broker error is *broker_ name_id.err*.
+
+**LOG_BACKUP**
+
+    **LOG_BACKUP** is a parameter to configure whether to back up access and error log files of the broker when CUBRID stops. The default value is set to **OFF**. An access log file (*broker_name.access*) in the **$CUBRID/log/broker** directory is deleted when CUBRID stops. If the value is set to **ON**, an access log file is stored (backed up) as *broker_name.access.YYYYMMDD.HHMI* when CUBRID stops.
+
+**LOG_DIR**
+
+    **LOG_DIR** is a parameter to configure the directory where SQL logs are stored. The default value is **log/broker/sql_log**. The file name of the SQL logs is *broker_name_id.sql.log*.
 
 **SLOW_LOG**
 
-    **SLOW_LOG** is a parameter used to configure whether to log. The default value is **ON**. If the value is **ON**, long transaction query which exceeds the time specified in **LONG_QUERY_TIME** or query where an error occurred is stored in the **SLOW SQL** log file. The name of file created is *broker_name_id.slow.log* and it is located under **SLOW_LOG_DIR**.
+    **SLOW_LOG** is a parameter to configure whether to log. The default value is **ON**. If the value is **ON**, long transaction query which exceeds the time specified in **LONG_QUERY_TIME** or query where an error occurred is stored in the **SLOW SQL** log file. The name of file created is *broker_name_id.slow.log* and it is located under **SLOW_LOG_DIR**.
 
 **SLOW_LOG_DIR**
 
-    **SLOW_LOG_DIR** is a parameter used to configure the location of directory where the log file is generated. The default value is **log/broker/sql_log**.
-
-**SOURCE_ENV**
-
-    **SOURCE_ENV** is a parameter used to determine the file where the operating system variable for each broker is configured. The extension of the file must be **env**. All parameters specified in **cubrid.conf** can also be configured by environment variables. For example, the **lock_timeout_in_secs** parameter in **cubrid.conf** can also be configured by the **CUBRID_LOCK_TIMEOUT_IN_SECS** environment variable. As another example, to block execution of DDL statements on broker1, you can configure **CUBRID_BLOCK_DDL_STATEMENT** to 1 in the file specified by **SOURCE_ENV**.
-
-    An environment variable, if exists, has priority over **cubrid.conf**. The default value is **cubrid.env**.
+    **SLOW_LOG_DIR** is a parameter to configure the location of directory where the log file is generated. The default value is **log/broker/sql_log**.
 
 **SQL_LOG**
 
-    **SQL_LOG** is a parameter used to configure whether to leave logs for SQL statements processed by CAS when CAS handles requests from a client. The default value is **ON**. When this parameter is configured to **ON**, all logs are stored. The log file name becomes *broker_name_id.sql.log*. The file is created in the **log/broker/sql_log** directory under the installation directory. The parameter values are as follows:
+    **SQL_LOG** is a parameter to configure whether to leave logs for SQL statements processed by CAS when CAS handles requests from a client. The default value is **ON**. When this parameter is configured to **ON**, all logs are stored. The log file name becomes *broker_name_id.sql.log*. The file is created in the **log/broker/sql_log** directory under the installation directory. The parameter values are as follows:
 
     *   **OFF** : Does not leave any logs.
     *   **ERROR** : Stores logs for queries which occur an error. only queries where an error occurs.
@@ -1754,20 +1955,165 @@ The following describes parameters to configure the environment variables of bro
 
 **SQL_LOG_MAX_SIZE**
 
-    **SQL_LOG_MAX_SIZE** is a parameter used to configure the maximum size of the SQL log file. The default value is **100,000** (KB). If the size of the SQL log file, which is created when the **SQL_LOG** parameter is configured to **ON**, reaches the value configured by the parameter, *broker_name_id.sql.log.bak* is created.
+    **SQL_LOG_MAX_SIZE** is a parameter to configure the maximum size of the SQL log file. 
+    You can set a unit as B, K, M or G, which stands for bytes, kilobytes(KB) or megabytes(MB) or gigabytes(GB) respectively. If you omit the unit, M will be applied. The default value is **10,000*** (KB).
+    
+    *   If the size of the SQL log file, which is created when the **SQL_LOG** parameter is configured to **ON**, reaches to the size configured by the parameter, *broker_name_id.sql.log.bak* is created.
+    *   If the size of the SLOW SQL log file, which is created when the **SLOW_LOG** parameter is configured to **ON**, reaches to the size configured by the parameter, *broker_name_id.slow.log.bak* is created.
 
-**STATEMENT_POOLING**
+SHARD
+^^^^^
 
-    **STATEMENT_POOLING** is a parameter used to configure whether to use statement pool feature. The default value is **ON**.
+To use SHARD feature, configure the below parameters in **cubrid_broker.conf** as referring **cubrid_broker.conf.shard**.
 
-    CUBRID closes all handles of prepared statement in the corresponding client sessions when transaction commit or rollback is made. If the value of **STATEMENT_POOLING** is set to **ON**, the handles are reusable because they are maintained in the pool. Therefore, in an environment where libraries, such as general applications reusing prepared statement or DBCP where statement pooling is implemented, are applied, the default configuration (**ON**) should be maintained.
+**SHARD**
 
-    If the prepared statement is executed after transaction commit or termination while **STATEMENT_POOLING** is set to **OFF**, the following message will be displayed. ::
+    It specifies to activate/deactivate SHARD feature. You can set this value as **ON** or **OFF**. The default is **OFF**.
 
-        Caused by: cubrid.jdbc.driver.CUBRIDException: Attempt to access a closed Statement.
+**SHARD_CONNECTION_FILE**
 
-**TIME_TO_KILL**
+    The path of the shard connection file. The shard connection file should be located in **$CUBRID/conf**. For more information, see the :ref:`shard connection file <shard-connection-file>`.
 
-    **TIME_TO_KILL** is a parameter used to configure the time to remove CAS in idle state among CAS added dynamically. The default value is **120** (seconds). An idle state is one in which the server is not involved in any jobs. If this state continues exceeding the value specified in **TIME_TO_KILL**, CAS is removed.
+**SHARD_DB_NAME**
 
-    The value configured in this parameter affects only CAS added dynamically, so it applies only when the **AUTO_ADD_APPL_SERVER** parameter is configured to **ON**. Note that times to add or remove CAS will be increased more if the **TIME_TO_KILL** value is so small.
+    The name of the shard DB, used to verify the request for connection from an application.
+    
+**SHARD_DB_PASSWORD**
+
+    The user password of the backend shard DB, used to connect to the backend DBMS for the CAS process as well as to verify the request for connection from an application. Passwords of all shard DBs should be identical.
+    
+    The environment variable can be used when you don't want to expose **SHARD_DB_PASSWORD** to cubrid_broker.conf. The format of this environment variable name is <*broker_name*>\ **_SHARD_DB_PASSWORD**, and <*broker_name*> always should be changed as upper cases. For example, if the name of broker is *shard1*, the name of an environment variable which configures the shard DB password will be **SHARD1_SHARD_DB_PASSWORD**. But, if the SHARD feature is restarted by "cubrid broker restart" command, the environment variable of **SHARD_DB_PASSWORD** or the value of **SHARD_DB_PASSWORD** in cubrid_broker.conf must be configured.
+    
+    ::
+
+        export SHARD1_SHARD_DB_PASSWORD=shard123
+
+**SHARD_DB_USER**
+
+    The name of the backend shard DB user, used to connect to the backend DBMS for the CAS process as well as to verify the request for connection from an application. User names on all shard DBs should be identical.
+
+**SHARD_IGNORE_HINT**
+
+    When this value is **ON**, the hint provided to connect to a specific shard is ignored and the database to connect is selected based on the defined rule. The default value is **OFF**. It can be used to balance the read load while all databases are copied with the same data. For example, to give the load of an application to only one node among several replication nodes, the proxy automatically determines the node (database) with one connection to a specific shard.
+    
+**SHARD_KEY_FILE**
+
+    The path of the shard key configuration file. The shard key configuration file should be located in **$CUBRID/conf**. For more information, see the :ref:`shard key configuration file <shard-key-configuration-file>`.
+    
+**SHARD_KEY_FUNCTION_NAME**
+
+    The parameter to specify the name of the user hash function for shard key. For more information, see :ref:`setting-user-defined-hash-function`.
+
+**SHARD_KEY_LIBRARY_NAME**
+
+    Specify the library path loadable at runtime to specify the user hash function for the shard key. If the **SHARD_KEY_LIBRARY_NAME** parameter is set, the **SHARD_KEY_FUNCTION_NAME** parameter should also be set. For more information, see :ref:`setting-user-defined-hash-function`.
+
+**SHARD_KEY_MODULAR**
+
+    The parameter to specify the range of results of the default shard key hash function. The result of the function is shard_key(integer) % SHARD_KEY_MODULAR.  The minimum value is 1, and the maximum value is 256. For related issues, see :ref:`shard key configuration file <shard-key-configuration-file>` and :ref:`setting-user-defined-hash-function`.
+
+**SHARD_MAX_CLIENTS**
+
+    The number of applications that can be concurrently connected by using the proxy. The default value is 256 and the maximum value is 10,000 per proxy.
+    
+.. _proxy-max-prepared-stmt-count:
+
+**SHARD_MAX_PREPARED_STMT_COUNT**
+
+    The maximum size of statement pool managed by proxy
+    
+**SHARD_NUM_PROXY**
+
+    The number of proxy processes.
+
+**SHARD_PROXY_LOG**
+
+    The proxy log level. It can be set to one of the following values:
+
+    *   **ALL** : All logs
+    *   **ON** : All logs
+    *   **SHARD** : Logs for selecting and processing shard DBs.
+    *   **SCHEDULE** : Logs for scheduling tasks.
+    *   **NOTICE** : Logs for key notices.
+    *   **TIMEOUT** : Logs for timeouts.
+    *   **ERROR** : Logs for errors.
+    *   **NONE** : No logs recorded.
+    *   **OFF** : No logs recorded.
+
+**SHARD_PROXY_LOG_DIR**
+
+    The directory path where the proxy logs will be saved.
+
+**SHARD_PROXY_LOG_MAX_SIZE**
+
+    The maximum size of the proxy log file. You can set a unit as B, K, M or G, which stands for bytes, kilobytes(KB) or megabytes(MB) or gigabytes(GB) respectively. If you omit the unit, K will be applied. The maximum value is 1,000,000(KB).
+
+**SHARD_PROXY_SHM_ID**
+
+    A parameter to configure the ID of shared memory used by proxy
+    
+**SHARD_PROXY_TIMEOUT**
+
+    The maximum waiting time by which the statement is prepared or CAS is available to use. The default value is 30(seconds). If this value is 0, the waiting time is decided by the value of the query_timeout system parameter; if the value of query_timeout is also 0, the waiting time is infinite. IF the value SHARD_PROXY_TIMEOUT is larger than 0, the maximum value between query_timeout and PROXY_TIMEOUT decides the waiting time. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, s will be applied.
+    
+
+.. note:: Required parameters for configuring proxy
+
+    To configure CUBRID proxy, you should specify SHARD_MAX_CLIENTS, MAX_NUM_APPL_SERVER and SHARD_NUM_PROXY.
+     
+    *   In Linux, the number of file descriptors(fd) per proxy process is limited as follows.
+
+        *   "((SHARD_MAX_CLIENTS + MAX_NUM_APPL_SERVER) / SHARD_NUM_PROXY) + 256" <= 10000
+        
+    *   In Windows, the number of sockets per proxy process is limited as follows.
+
+        *   "((SHARD_MAX_CLIENTS + MAX_NUM_APPL_SERVER) / SHARD_NUM_PROXY) + 128" <= 1024
+     
+    The following are detail descriptions on above formulas.
+     
+    *   SHARD_MAX_CLIENTS is the maximum number of applications which access the SHARD system.
+    *   MAX_NUM_APPL_SERVER is the maximum number of all CASes which can access proxy system.
+    *   SHARD_NUM_PROXY is the maximum number of proxy processes which can use on the SHARD system.
+    *   "SHARD_MAX_CLIENTS / SHARD_NUM_PROXY" is the maximum number of applications which can access per proxy process.
+    *   "MAX_NUM_APPL_SERVER / SHARD_NUM_PROXY" is the maximum number of CASes which can access per proxy process.
+    *   256 is the number of file descriptors which are used internally per process on Linux, and 128 is the number of sockets which are used internally per process on Windows.
+
+    As an example of configuring SHARD parameters in Linux system, if you specify the maximum concurrent access number of applications (SHARD_MAX_CLIENTS) as 5000, the maximum number of CASes(MAX_NUM_APPL_SERVER) as 200 and the maximum number of proxy process(SHARD_NUM_PROXY) as 1, then file descriptors per proxy process becomes (5000 + 200)/1 + 256 = 5456, and it is less than 10000; it is possible configuration.
+     
+    If you configure as above in Windows system, then sockets per proxy process becomes (5000 + 200)/1 + 128 = 5328, and it is larger than 1024; it is impossible configuration. To make it possible, you should specify the value of SHARD_NUM_PROXY larger.
+    If you specify the value of SHARD_NUM_PROXY as 6, then sockets per proxy process becomes (5000 + 200)/6 + 128 = 995, and it is smaller than 1024; it is possible configuration.
+     
+    Regarding above, the following is the connection-relationship between each process. "proxy" intermediates a connection between "app. client" and "CAS".
+
+    In the below, [] indicates a process, and -> indicates the requesting direction.
+
+    ::
+     
+        [app. client]   --(initial access request)-----------> [broker] (select proxy)
+                        <--(announce proxy to access)---
+                        -------------------------------------> [proxy] --(select CAS)--> [CAS] ---> [DB server]
+                        <-------------------------------------         <----------------       <--- 
+                        <--(now use the same proxy)---------->         <--------------->       <-->
+
+    broker is used only once when the application client requires the initial access, and then CUBRID keep connections among "[app. client] - [proxy] - [CAS] - [DB Server]".
+
+    Also, CAS keeps connection with DB server after DB connection is completed.
+        
+    
+Etc
+^^^
+
+**MAX_STRING_LENGTH**
+
+    **MAX_STRING_LENGTH** is a parameter to configure the maximum string length for BIT, VARBIT, CHAR and VARCHAR data types. If the value is **-1**, which is the default value, the length defined in the database is used. If the value is **100**, the value acts like 100 being applied even when a certain attribute is defined as VARCHAR(1000).
+
+**SERVICE**
+
+    **SERVICE** is a parameter to configure whether to run the broker. It can be either **ON** or **OFF**. The default value is **ON**. The broker can run only when this value is configured to **ON**.
+
+
+**SOURCE_ENV**
+
+    **SOURCE_ENV** is a parameter used to determine the file where the operating system variable for each broker is configured. The extension of the file must be **env**. All parameters specified in **cubrid.conf** can also be configured by environment variables. For example, the **lock_timeout** parameter in **cubrid.conf** can also be configured by the **CUBRID_LOCK_TIMEOUT** environment variable. As another example, to block execution of DDL statements on broker1, you can configure **CUBRID_BLOCK_DDL_STATEMENT** to 1 in the file specified by **SOURCE_ENV**.
+
+    An environment variable, if exists, has priority over **cubrid.conf**. The default value is **cubrid.env**.

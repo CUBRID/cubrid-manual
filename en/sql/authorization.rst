@@ -116,11 +116,11 @@ The following example shows how to grant retrieving authorization on the *record
 
     GRANT SELECT ON record, history TO brown WITH GRANT OPTION;
 
-.. note: \
+.. note:: \
 
-*   The grantor of authorization must be the owner of all tables listed before the grant operation or have **WITH GRANT OPTION** specified.
-*   Before granting **SELECT**, **UPDATE**, **DELETE** and **INSERT** authorization for a virtual table, the owner of the virtual table must have **SELECT** and **GRANT** authorization for all the tables included in the query specification. The **DBA** user and the members of the **DBA** group are automatically granted all authorization for all tables.
-*   To execute the **TRUNCATE** statement, the **ALTER**, **INDEX**, and **DELETE** authorization is **required**.
+    *   The grantor of authorization must be the owner of all tables listed before the grant operation or have **WITH GRANT OPTION** specified.
+    *   Before granting **SELECT**, **UPDATE**, **DELETE** and **INSERT** authorization for a virtual table, the owner of the virtual table must have **SELECT** and **GRANT** authorization for all the tables included in the query specification. The **DBA** user and the members of the **DBA** group are automatically granted all authorization for all tables.
+    *   To execute the **TRUNCATE** statement, the **ALTER**, **INDEX**, and **DELETE** authorization is **required**.
 
 Revoking Authorization
 ======================

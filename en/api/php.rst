@@ -41,7 +41,7 @@ If **PECL** package has been installed on your system, the installation of CUBRI
     
 #.  Edit the configuration file.
     
-    If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named **pdo_cubrid.ini**, enter a command line **extension=pdo_cubrid.so**, and store the fine in the **/etc/php.d** directory.
+    If you are using CentOS 6.0 and later or Fedora 15 and later, create a file named **cubrid.ini**, enter a command line **extension=cubrid.so**, and store the fine in the **/etc/php.d** directory.
     
     If you are using earlier versions of CentOS 6.0 or Fedora 15, edit the **php.ini** file (default location: **/etc/php5/apache2/** or **/etc/**) and add the following two command lines at the end of the file. 
     
@@ -274,7 +274,7 @@ For Windows
 
 In this section, we will introduce three ways of building CUBRID PHP driver for Windows.
 
-If you have no idea of which version you choose, read the following contents first.
+If you have no idea which version you choose, read the following contents first.
 
 *   If you are using PHP with Apache 1 or Apache 2, you should use the VC6 versions of PHP.
 *   If you are using PHP with IIS, you should use the VC9 versions of PHP.
@@ -303,7 +303,7 @@ In the [Property Pages] dialog box, select [General] under the [C/C++] tree node
 
   .. image:: /images/image58.jpg
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which version is the same as the version of CUBRID that have been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that have been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
 
 .. note::
 
@@ -345,7 +345,7 @@ You can configure the default settings without using this SDK; however, there is
 
   .. image:: /images/image62.jpg
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which version is the same as the version of CUBRID that has been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that has been installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
 
 .. note::
 
@@ -393,7 +393,7 @@ There is no official Apache for 64-bit Windows either. Instead, you can use IIS 
 
 *   PHP 5.3 source code: Remember to get the src package that matches your binary version. After you extract the PHP 5.3 src, add system environment variable **%PHP5_SRC%** and set its value to the path of PHP 5.3 source code. In the VC9 [Property Pages] dialog box, select [General] under the [C/C++] tree node. You can see **$(PHP5_SRC)** in [Additional Include Directories].
 
-*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which version is the same as the version of CUBRID that is installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
+*   CUBRID PHP driver source code: You can download CUBRID PHP driver source code of which the version is the same as the version of CUBRID that is installed on your system. You can get it from http://www.cubrid.org/?mid=downloads&item=php_driver .
 
 .. note::
 
@@ -474,11 +474,7 @@ Transactions and Auto-Commit
 
 CUBRID PHP supports transaction and auto-commit mode. Auto-commit mode means that every query that you run has its own implicit transaction. You can use the `cubrid_get_autocommit <http://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () function to get the status of current connection auto-commit mode and use the `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function to enable/disable auto-commit mode of current connection. In auto-commit mode, any transactions being executed are committed regardless of whether it is set to **ON** or **OFF**.
 
-The default value of auto-commit mode upon application startup is configured by the **CCI_DEFAULT_AUTOCOMMIT** (broker parameter). If the broker parameter value is not configured, the default value is set to **ON**. You can also use the `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () function to set auto-commit mode as example shown below.
-
-.. code-block:: php
-
-    $con = cubrid_connect_with_url("cci:CUBRID:localhost:33000:demodb:dba::?autocommit=true");
+The default value of auto-commit mode upon application startup is configured by the **CCI_DEFAULT_AUTOCOMMIT** (broker parameter). If the broker parameter value is not configured, the default value is set to **ON**. 
 
 If you set auto-commit mode to **OFF** in the `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () function, you can handle transactions by specifying a proper function; to commit transactions, use the `cubrid_commit <http://www.php.net/manual/en/function.cubrid-commit.php>`_ () function and to roll back transactions, use the `cubrid_rollback <http://www.php.net/manual/en/function.cubrid-rollback.php>`_ () function. If you use the `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () function, transactions will be disconnected and jobs which have not been committed will be rolled back.
 
@@ -487,7 +483,7 @@ Processing Queries
 
 **Executing queries**
 
-Followings are the basic steps to execute queries.
+The following are the basic steps to execute queries.
 
 *   Creating a connection handle
 *   Creating a request handle for an SQL query request
@@ -587,7 +583,7 @@ The `cubrid_schema <http://www.php.net/manual/en/function.cubrid-schema.php>`_ (
 When an error occurs, most of PHP interfaces display error messages and return false or -1. The `cubrid_error_msg <http://www.php.net/manual/en/function.cubrid-error-msg.php>`_ (),
 `cubrid_error_code <http://www.php.net/manual/en/function.cubrid-error-code.php>`_ () and `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () functions are used to check error messages, error codes, and error facility codes.
 
-The return value of the `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () function is one of the followings (**CUBRID_FACILITY_DBMS** (DBMS error), **CUBRID_FACILITY_CAS** (CAS server error), **CUBRID_FACILITY_CCI** (CCI error), or **CUBRID_FACILITY_CLIENT** (PHP module error).
+The return value of the `cubrid_error_code_facility <http://www.php.net/manual/en/function.cubrid-error-code-facility.php>`_ () function is one of the following (**CUBRID_FACILITY_DBMS** (DBMS error), **CUBRID_FACILITY_CAS** (CAS server error), **CUBRID_FACILITY_CCI** (CCI error), or **CUBRID_FACILITY_CLIENT** (PHP module error).
 
 **Using OIDs**
 

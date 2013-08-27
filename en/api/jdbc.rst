@@ -146,12 +146,17 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 *   *password*: The password of a user who is to be connected to a database. If no password is set, enter an empty string ("").
 
 *   **altHosts**: The host IP addresses and connection ports of one or more stand by brokers which will perform failover in the HA environment.
+
+    .. note:: Even if there are **RW** and **RO** together in *ACCESS_MODE** setting of brokers of main host and **altHosts**, application decides the target host to access without the relation for the setting of **ACCESS_MODE**. Therefore, you should define the main host and **altHosts** as considering **ACCESS_MODE** of target brokers.
+
 *   **rcTime**: Interval time (in seconds) to try to connect active brokers during failover in the HA environment. See the below URL example.
-*   **loadBalance** : If this value is true, the application tries to connect with main host and althosts in random order(default value: false). 
+*   **loadBalance** : If this value is true, the application tries to connect with main host and altHosts in random order(default value: false). 
 
 *   **connectTimeout** : Timeout value (in seconds) for database connection (default value: 0). The **DriverManger.setLoginTimeout** () method can be used to configure it; however, value configured in this method will be ignored if a value is configured in the connection URL.
 
-*   **queryTimeout** : Timeout value (in seconds) for query execution (default value: 0, infinite). This value can be changed by the **DriverManger.setQueryTimeout** () method.
+*   **queryTimeout** : Timeout value (in seconds) for query execution (default value: 0, infinite). The maximum value is 2,000,000. This value can be changed by the **DriverManger.setQueryTimeout** () method. 
+
+    .. note:: When you run executeBatch() method, the query timeout is applied in one method call, not in one query.
 
 *   **charSet** : The character set of a database to be connected
 
@@ -160,7 +165,7 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
     The default operation is **exception**. The operation for each configuration is as follows:
 
     *   **exception** : Default operation. It is handled as an SQLException exception.
-    *   **round** : Converts to the minimum value allowed for a type to be returned.
+    *   **round** : Converts to the minimum value allowed for a type to be returned. Exceptionally, when the value's type is TIMESTAMP, this value is rounded as '1970-01-01 00:00:00'(GST). (yyyy-mm-dd hh24:mi:ss)
     *   **convertToNull** : Converts to **NULL**.
 
 *   **logFile** : The name of a log file for debugging (default value: cubrid_jdbc.log). If a path is not configured, it is stored the location where applications are running.
@@ -217,10 +222,25 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 
 .. note::
 
-    * Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a user name (*user-id*) and a password (*password*) as a separate argument in the **getConnection** method.
-    * The database connection in thread-based programming must be used independently each other.
-    * The rollback method requesting transaction rollback will be ended after a server completes the rollback job.
-    * In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
+    *   Because a colon (:) and a question mark are used as a separator in the URL string, it is not allowed to use them as parts of a password. To use them in a password, you must specify a user name (*user-id*) and a password (*password*) as a separate argument in the **getConnection** method.
+    *   The database connection in thread-based programming must be used independently each other.
+    *   The rollback method requesting transaction rollback will be ended after a server completes the rollback job.
+    *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
+
+.. _jdbc-con-tostring:
+
+Checking SQL LOG  
+----------------
+
+The connection URL information can be printed out by calling cubrid.jdbc.driver.CUBRIDConnection.toString() method.
+  
+:: 
+  
+    e.g.) cubrid.jdbc.driver.CUBRIDConnection(CAS ID : 1, PROCESS ID : 22922) 
+  
+You can find SQL log of that CAS easily by CAS ID which is printed out.
+  
+For more details, see :ref:`sql-log-check`. 
 
 Checking Foreign Key Information
 --------------------------------
@@ -570,7 +590,7 @@ Auto increment is recognized as automatically created keys in the JDBC programs.
 
 **Steps**
 
-*   Use one of the followings to indicate whether or not to return keys created automatically. The following method forms are used for tables of the database server that supports the auto increment columns. Each method form can be applied only to a single-row **INSERT** statement.
+*   Use one of the following to indicate whether or not to return keys created automatically. The following method forms are used for tables of the database server that supports the auto increment columns. Each method form can be applied only to a single-row **INSERT** statement.
 
     *   Write the **PreparedStatement** object as shown below.
 

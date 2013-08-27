@@ -82,7 +82,7 @@ Define the connection parameters as follows:
 
 **Inserting Objects into a Database**
 
-Before starting to operate on tables, you must declare the two tables mappings in the database as ActiveRecord classes.
+Before starting to operate on tables, you must declare the two tables' mapping in the database as ActiveRecord classes.
 
 .. code-block:: ruby
 
@@ -203,7 +203,7 @@ A new table can be defined using **ActiveRecord::Schema.define**. Let's create t
      add_index :books, :author_id
     end
 
-CUBRID-supported column types are **:string**, **:text**, **:integer**, **:float**, **:decimal**, **:datetime**, **:timestamp**, **:time**, **:boolean**, **:bit**, **:monetary**, **:smallint**, **:bigint**, and **:char**. Currently, **:binary** is not supported.
+CUBRID-supported column types are **:string**, **:text**, **:integer**, **:float**, **:decimal**, **:datetime**, **:timestamp**, **:time**, **:boolean**, **:bit**, **:smallint**, **:bigint**, and **:char**. Currently, **:binary** is not supported.
 
 **Managing table columns**
 
@@ -228,9 +228,9 @@ You can add, update, delete columns by using features from **ActiveRecord::Migr
 
 You can use **ActiveRecord::SchemaDumper.dump** to dump information for currently used schema. This is done into a platform independent format that is understood by Ruby ActiveRecord.
 
-Note that if you are using custom column types database specific (**:bigint**, **:bit**, **:monetary**), this may work.
+Note that if you are using custom column types database specific (**:bigint**, **:bit**), this may work.
 
-**Obtaing Server Capabilities**
+**Obtaining Server Capabilities**
 
 You can get database information extracted from the current connections as in the example below:
 

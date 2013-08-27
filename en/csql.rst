@@ -59,7 +59,7 @@ CSQL Interpreter usually operates as a client process and accesses the server pr
 
 **System Administration Mode**
 
-You can use this mode when you  run checkpoint through CSQL interpreter or exit the transaction monitoring. Also, it allows one connection on CSQL interpreter even if the server  access count exceeds the value of max_client system parameter. In this mode, allowed connection count by CSQL interpreter is only one.
+You can use this mode when you  run checkpoint through CSQL interpreter or exit the transaction monitoring. Also, it allows one connection on CSQL interpreter even if the server  access count exceeds the value of **max_clients** system parameter. In this mode, allowed connection count by CSQL interpreter is only one.
 
 ::
 
@@ -200,11 +200,7 @@ To display the option list in the prompt, execute the **csql** utilities withou
                 10000  'Aardewijn Pepijn'    'M'                   'NED'                 'Rowing'            
 
 
-        1 row selected.
-
-        Current transaction has been committed.
-
-        1 command(s) successfully processed.
+        1 rows selected. (0.006433 sec) Committed.
 
 .. option:: -r, --read-only
 
@@ -377,15 +373,15 @@ This command executes SQL statements in the query buffer. The buffer will be cle
 This command commits the current transaction. You must enter a commit command explicitly if it is not in auto-commit mode. In auto-commit mode, transactions are automatically committed whenever SQL is executed. ::
 
     csql> ;commit
-    Current transaction has been committed.
-
+    Execute OK. (0.000192 sec)
+    
 **Rolling back transaction (;ROllback)**
 
 This command rolls back the current transaction. Like a commit command (**;COmmit**), it must enter a rollback command explicitly if it is not in auto-commit mode (**OFF**). ::
 
     csql> ;rollback
-    Current transaction has been rolled back.
-
+    Execute OK. (0.000166 sec)
+    
 **Setting the auto-commit mode (;AUtocommit)**
 
 This command sets auto-commit mode to **ON** or **OFF**. If any value is not specified, current configured value is applied by default. The default value is **ON**. ::
@@ -397,7 +393,7 @@ This command sets auto-commit mode to **ON** or **OFF**. If any value is not spe
 
 This command executes the checkpoint within the CSQL session. This command can only be executed when a DBA group member, who is specified for the custom option (**-u** *user_name*), connects to the CSQL Interpreter in system administrator mode (**--sysadm**).
 
-**Checkpoint** is an operation of flushing all dirty pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval_in_mins** and **checkpoint_every_npages**). For more information, see :ref:`logging-parameters`. ::
+**Checkpoint** is an operation of flushing all dirty pages within the current data buffer to disks. You can also change the checkpoint interval using a command (**;set** *parameter_name* value) to set the parameter values in the CSQL session. You can see the examples of the parameter related to the checkpoint execution interval (**checkpoint_interval** and **checkpoint_every_size**). For more information, see :ref:`logging-parameters`. ::
 
     csql> ;checkpoint
     Checkpoint has been issued.
@@ -434,7 +430,7 @@ The **;DATE** command displays the current date and time in the CSQL Interpreter
 
 **Displaying the database information (;DATAbase)**
 
-This command displays the database name and host name where the CSQL Interpreter is working. If the database is running, the HA mode (one of those followings: active, standby, or maintenance) will be displayed as well.  ::
+This command displays the database name and host name where the CSQL Interpreter is working. If the database is running, the HA mode (one of those following: active, standby, or maintenance) will be displayed as well.  ::
 
     csql> ;database
          demodb@cubridhost (active)
@@ -456,7 +452,7 @@ The **;SChema** session command displays schema information of the specified tab
      <Constraints>
          PRIMARY KEY pk_event_event_code ON event (code)
 
-**Displaying the trigger (;TRriger)**
+**Displaying the trigger (;TRigger)**
 
 This command searches and displays the trigger specified. If there is no trigger name specified, all the triggers defined will be displayed. ::
 
@@ -526,6 +522,28 @@ You can use the **;PLan** session command to set the view level of executing que
 *   **simple** : Displaying the query execution plan in simple version (OPT LEVEL=257)
 *   **detail** : Displaying the query execution plan in detailed version (OPT LEVEL=513)
 
+.. _set-autotrace:
+ 
+**Setting SQL trace(;trace)**
+ 
+The **;trace** session command specifies if SQL trace result is printed out together with query result or not.
+When you set SQL trace ON by using this command, the result of query profiling is automatically shown even if you do not run "**SHOW TRACE**;" syntax.
+
+For more information, see :ref:`query-profiling`.
+ 
+The command format is as follows.
+ 
+::
+ 
+    ;trace {on | off} [{text | json}]
+ 
+*   on: set on SQL trace.
+*   off: set off SQL trace.
+*   text: print out as a general TEXT format. If you omit OUTPUT clause, TEXT format is specified.
+*   json: print out as a JSON format.
+
+.. note:: CSQL interpreter which is run in the standalone mode(use -S option) does not support SQL trace feature.
+    
 **Displaying information (;Info)**
 
 The **;Info** session command allows you to check information such as schema, triggers, the working environment, locks and statistics. ::
@@ -550,7 +568,7 @@ This command is a CSQL session command for starting to collect the statistics in
 
 This command is executable while the **communication_histogram** parameter in the **cubrid.conf** file is set to **yes**. You can also view this information by using the **cubrid statdump** utility. 
 
-After running "**;.Hist on**", the execution commands such as **;.dump_hist** or **;.x** must be entered to output the statistics information. After **;.dump_hist** or **;.x**, all accumulated informations are dumped and initiated.
+After running "**;.Hist on**", the execution commands such as **;.dump_hist** or **;.x** must be entered to output the statistics information. After **;.dump_hist** or **;.x**, all accumulated data are dumped and initiated.
 
 As a reference, you should use **cubrid statdump** utility to check all queries' statistics information of a database server.
 

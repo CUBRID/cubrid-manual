@@ -191,6 +191,11 @@ ON DUPLICATE KEY UPDATE 절
 
 **INSERT** 문에 **ON DUPLICATE KEY UPDATE** 절을 명시하여 **UNIQUE** 인덱스 또는 **PRIMARY KEY** 제약 조건이 설정된 칼럼에 중복된 값이 삽입되는 상황에서 에러를 출력하지 않고 새로운 값으로 갱신할 수 있다. 
 
+.. note::
+
+    *   **PRIMARY KEY**\ 와 **UNIQUE** 또는 다수의 **UNIQUE**\ 가 한 테이블에 같이 존재하는 경우, 둘 중 하나에 의해 제약 조건 위반이 발생할 수 있으므로 **ON DUPLICATE KEY UPDATE** 절의 사용을 권장하지 않는다. 
+    *   **INSERT**\ 에 실패하여 **UPDATE**\ 가 실행되더라도 한 번 증가한 **AUTO_INCREMENT** 값은 이전 값으로 롤백되지 않는다.
+
 ::
 
     <INSERT … VALUES statement>

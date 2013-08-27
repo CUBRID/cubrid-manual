@@ -101,7 +101,7 @@ CURRENT_USER, USER
 
     **CURRENT_USER**\ 와 **USER** 의사 컬럼(pseudo column)은 동일하며, 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
 
-    기능이 비슷한 :func:`USER` 함수와 :func:`SYSTEM_USER` 함수는 사용자 이름을 호스트 이름과 함께 반환한다.
+    기능이 비슷한 :func:`SYSTEM_USER` 함수와 :func:`USER` 함수는 사용자 이름을 호스트 이름과 함께 반환한다.
 
     :rtype: STRING
     
@@ -194,7 +194,7 @@ DEFAULT
 
 .. note::
 
-    CUBRID 9.0 미만 버전에서는 테이블 생성 시 DATE, DATETIME, TIME, TIMESTAMP 칼럼의 DEFAULT 값을 SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP로 지정하면, CREATE TABLE 시점의 값이 저장되었다. 따라서 CUBRID 9.0 미만 버전에서 데이터가 INSERT되는 시점의 값을 입력하려면 INSERT 구문의 VALUES 절에 해당 함수를 입력해야 했다.
+    CUBRID 9.0 미만 버전에서는 테이블 생성 시 DATE, DATETIME, TIME, TIMESTAMP 칼럼의 DEFAULT 값을 SYS_DATE, SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP로 지정하면, CREATE TABLE 시점의 값이 저장된다. 따라서 데이터가 INSERT되는 시점의 값을 입력하려면 INSERT 구문의 VALUES 절에 해당 함수를 입력해야 한다.
     
 INDEX_CARDINALITY
 =================
@@ -202,6 +202,8 @@ INDEX_CARDINALITY
 .. function:: INDEX_CARDINALITY(table, index, key_pos)
 
     **INDEX_CARDINALITY** 함수는 테이블에서 인덱스 카디널리티(cardinality)를 반환한다. 인덱스 카디널리티는 인덱스를 정의하는 고유한 값의 개수이다. 인덱스 카디널리티는 다중 칼럼 인덱스의 부분 키에 대해서도 적용할 수 있는데, 이때 세 번째 인자로 칼럼의 위치를 지정하여 부분 키에 대한 고유 값의 개수를 나타낸다.
+    
+    해당 함수에 대해 갱신된 결과를 얻으려면 반드시 **UPDATE STATISTICS** 문을 먼저 수행해야 한다.
 
     :param table: 테이블 이름
     :param index: *table* 내에 존재하는 인덱스 이름
@@ -232,6 +234,7 @@ INDEX_CARDINALITY
     INSERT INTO t1 VALUES (2,2,2,'zabc','zabc','zabc');
     INSERT INTO t1 VALUES (2,3,3,'+abc','+abc','+abc');
      
+    UPDATE STATISTICS ON t1;
     SELECT INDEX_CARDINALITY('t1','i_t1_i1_s1',0);
     
 ::
@@ -350,6 +353,8 @@ LAST_INSERT_ID
     ::
     
         1
+
+        -- In 2008 R4.x, above value was 3.
 
     .. code-block:: sql
 
@@ -548,7 +553,7 @@ USER, SYSTEM_USER
 
     **USER** 함수와 **SYSTEM_USER** 함수는 동일하며, 사용자 이름을 호스트 이름과 함께 반환한다.
 
-    기능이 비슷한 :c:macro:`USER`\ 와 :c:macro:`CURRENT_USER` 의사컬럼은 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
+    기능이 비슷한 :c:macro:`USER`\ 와 :c:macro:`CURRENT_USER` 의사 칼럼(pseudo column)은 현재 데이터베이스에 로그인한 사용자의 이름을 문자열로 반환한다.
 
     :rtype: STRING
 

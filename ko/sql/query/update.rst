@@ -49,6 +49,8 @@ UPDATE
                 5  NULL                  '000-0000'
                 7  NULL                  '777-7777'
      
+.. code-block:: sql
+
     UPDATE a_tbl5 SET name='yyy', phone='999-9999' WHERE name IS NULL LIMIT 3;
     SELECT * FROM a_tbl5;
      
@@ -73,6 +75,8 @@ UPDATE
     INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
     UPDATE t  SET i = i + 1 WHERE 1 = 1;
      
+::
+
     trigger2 executed
     trigger1 executed
     trigger2 executed
@@ -81,10 +85,14 @@ UPDATE
     trigger2 executed
     trigger1 executed
      
+.. code-block:: sql
+
     TRUNCATE TABLE t;
     INSERT INTO t VALUES (15,1),(8,0),(11,2),(16,1), (6,0),(1311,3),(3,0);
     UPDATE t SET i = i + 1 WHERE 1 = 1  ORDER BY i;
      
+::
+
     trigger1 executed
     trigger1 executed
     trigger1 executed

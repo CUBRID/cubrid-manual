@@ -1,13 +1,13 @@
-****************
-Number Functions
-****************
+*****************
+Numeric Functions
+*****************
 
 ABS
 ===
 
 .. function:: ABS (number_expr)
 
-    The **ABS** function returns the absolute value of a given number. The data type of the return value is the same as that of the argument.
+    The **ABS** function returns the absolute value of a given number. The data type of the return value is the same as that of the argument. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param number_expr: An operator which returns a numeric value
     :rtype: same as that of the argument
@@ -28,7 +28,7 @@ ACOS
 
 .. function:: ACOS ( x )
 
-    The **ACOS** function returns an arc cosine value of the argument. That is, it returns a value whose cosine is *x* in radian. The return value is a **DOUBLE** type. x must be a value between -1 and 1, inclusive. Otherwise, **NULL** is returned.
+    The **ACOS** function returns an arc cosine value of the argument. That is, it returns a value whose cosine is *x* in radian. The return value is a **DOUBLE** type. x must be a value between -1 and 1, inclusive. Otherwise, **NULL** is returned. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :rtype: DOUBLE
@@ -48,7 +48,7 @@ ASIN
 
 .. function:: ASIN ( x )
 
-    The **ASIN** function returns an arc sine value of the argument. That is, it returns a value whose sine is *x* in radian. The return value is a **DOUBLE** type. x must be a value between -1 and 1, inclusive. Otherwise, **NULL** is returned.
+    The **ASIN** function returns an arc sine value of the argument. That is, it returns a value whose sine is *x* in radian. The return value is a **DOUBLE** type. x must be a value between -1 and 1, inclusive. Otherwise, **NULL** is returned. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :rtype: DOUBLE
@@ -68,8 +68,8 @@ ATAN
 
 .. function:: ATAN ( [y,] x )
 
-    The **ATAN** function returns a value whose tangent is *x* in radian. The argument *y* can be omitted. If *y* is specified, the function calculates the arc tangent value of *y/x*. The return value is a **DOUBLE** type.
-
+    The **ATAN** function returns a value whose tangent is *x* in radian. The argument *y* can be omitted. If *y* is specified, the function calculates the arc tangent value of *y/x*. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+    
     :param x,y: An expression that returns a numeric value
     :rtype: DOUBLE
 
@@ -88,7 +88,7 @@ ATAN2
      
 .. function:: ATAN2 ( y, x )
 
-    The **ATAN2** function returns the arc tangent value of *y/x* in radian. This function is working like the :func:`ATAN`. Arguments *x* and *y* must be specified. The return value is a **DOUBLE** type.
+    The **ATAN2** function returns the arc tangent value of *y/x* in radian. This function is working like the :func:`ATAN`. Arguments *x* and *y* must be specified. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x,y: An expression that returns a numeric value
     :rtype: DOUBLE
@@ -108,7 +108,7 @@ CEIL
 
 .. function:: CEIL( number_operand )
 
-    The **CEIL** function returns the smallest integer that is not less than its argument. The return value is determined based on the valid number of digits that are specified as the *number_operand* argument.
+    The **CEIL** function returns the smallest integer that is not less than its argument. The return value is determined based on the valid number of digits that are specified as the *number_operand* argument. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param number_operand: An expression that returns a numeric value
     :rtype: INT
@@ -136,7 +136,8 @@ CONV
 
 .. function:: CONV (number,from_base,to_base)
 
-    The **CONV** function converts numbers between different number bases. This function returns a string representation of a converted number. The minimum value is 2 and the maximum value is 36. If *to_base* (representing the base to be returned) is negative, *number* is regarded as a signed number. Otherwise, it regarded as a unsigned number.
+    The **CONV** function converts numbers between different number bases. This function returns a string representation of a converted number. The minimum value is 2 and the maximum value is 36. If *to_base* (representing the base to be returned) is negative, *number* is regarded as a signed number. Otherwise, it regarded as a unsigned number. When you input the string which cannot be transformed into the number to *from_base* or *to_base*, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+
 
     :param number: An input number
     :param from_base: The base of an input number
@@ -172,7 +173,7 @@ COS
 
 .. function:: COS ( x )
 
-    The **COS** function returns a cosine value of the argument. The argument *x* must be a radian value. The return value is a **DOUBLE** type.
+    The **COS** function returns a cosine value of the argument. The argument *x* must be a radian value. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :rtype: DOUBLE
@@ -192,7 +193,7 @@ COT
 
 .. function:: COT ( x )
 
-    The **COT** function returns the cotangent value of the argument *x*. That is, it returns a value whose tangent is *x* in radian. The return value is a **DOUBLE** type.
+    The **COT** function returns the cotangent value of the argument *x*. That is, it returns a value whose tangent is *x* in radian. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :rtype: DOUBLE
@@ -212,7 +213,7 @@ DEGREES
 
 .. function:: DEGREES ( x )
 
-    The **DEGREES** function returns the argument *x* specified in radian converted to a degree value. The return value is a **DOUBLE** type.
+    The **DEGREES** function returns the argument *x* specified in radian converted to a degree value. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :rtype: DOUBLE
@@ -237,7 +238,7 @@ DRANDOM, DRAND
 
     The **DRAND** function performs the operation only once to produce only one random number regardless of the number of rows where the operation is output, but the **DRANDOM** function performs the operation every time the statement is repeated to produce a different random value for each row. Therefore, to output rows in a random order, you must use the **DRANDOM** function in the **ORDER BY** clause. To obtain a random integer value, use the :func:`RANDOM`.
 
-    :param seed: 
+    :param seed: seed value
     :rtype: DOUBLE
 
 .. code-block:: sql
@@ -323,8 +324,7 @@ EXP
 
 .. function:: EXP( x )
 
-    The **EXP** function returns e x (the base of natural logarithm) raised to a power.
-
+    The **EXP** function returns e x (the base of natural logarithm) raised to a power. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
     :param x: An operator which returns a numeric value
     :rtype: DOUBLE
 
@@ -353,7 +353,7 @@ FLOOR
 
 .. function:: FLOOR( number_operand )
 
-    The **FLOOR** function returns the largest integer that is not greater than its argument. The data type of the return value is the same as that of the argument.
+    The **FLOOR** function returns the largest integer that is not greater than its argument. The data type of the return value is the same as that of the argument. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param number_operand: An operator which returns a numeric value
     :rtype: same as that of the argument
@@ -384,9 +384,9 @@ HEX
 
 .. function:: HEX(n)
 
-    The **HEX** function returns a decimal string if a hexadecimal string is specified as an argument; it returns a hexadecimal string if a decimal string is specified as an argument. If a number is specified as an argument, it returns a value like CONV(num, 10, 16).
+    The **HEX** function returns a hexadecimal string about the string which is specified as an argument; it returns a hexadecimal string of the number if a number is specified as an argument. If a number is specified as an argument, it returns a value like CONV(num, 10, 16).
 
-    :param n: A hexadecimal string or A decimal string
+    :param n: A string or a number
     :rtype: STRING
     
 .. code-block:: sql
@@ -404,8 +404,8 @@ LN
 
 .. function:: LN ( x )
 
-    The **LN** function returns the natural log value (base = e) of an antilogarithm *x*. The return value is a **DOUBLE** type. If the antilogarithm is 0 or a negative number, an error is returned.
-
+    The **LN** function returns the natural log value (base = e) of an antilogarithm *x*. The return value is a **DOUBLE** type. If the antilogarithm is 0 or a negative number, an error is returned. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+    
     :param x: An expression that returns a positive number
     :rtype: DOUBLE
 
@@ -424,7 +424,7 @@ LOG2
 
 .. function:: LOG2 ( x )
 
-    The **LOG2** function returns a log value whose antilogarithm is *x* and base is 2. The return value is a **DOUBLE** type. If the antilogarithm is 0 or a negative number, an error is returned.
+    The **LOG2** function returns a log value whose antilogarithm is *x* and base is 2. The return value is a **DOUBLE** type. If the antilogarithm is 0 or a negative number, an error is returned. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a positive number
     :rtype: DOUBLE
@@ -444,7 +444,7 @@ LOG10
 
 .. function:: LOG10 ( x )
 
-    The **LOG10** function returns the common log value of an antilogarithm *x*. The return value is a **DOUBLE** type. If the antilogarithm is 0 or a negative number, an error is returned.
+    The **LOG10** function returns the common log value of an antilogarithm *x*. The return value is a **DOUBLE** type. If the antilogarithm is 0 or a negative number, an error is returned. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a positive number
     :rtype: DOUBLE
@@ -464,7 +464,9 @@ MOD
 
 .. function:: MOD (m, n)
 
-    The **MOD** function returns the remainder of the first parameter *m* divided by the second parameter *n*. If *n* is 0, *m* is returned without the division operation being performed. Note that if the dividend, the parameter m of the **MOD** function, is a negative number, the function operates differently from a typical operation (classical modulus) method.
+    The **MOD** function returns the remainder of the first parameter *m* divided by the second parameter *n*. If *n* is 0, *m* is returned without the division operation being performed. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+    
+    Note that if the dividend, the parameter m of the **MOD** function, is a negative number, the function operates differently from a typical operation (classical modulus) method. 
 
     **Result of MOD**
 
@@ -513,7 +515,7 @@ PI
 
 .. function:: PI ()
 
-    The **PI** function returns the π value of type **DOUBLE**.
+    The **PI** function returns the π value of type **DOUBLE**. 
 
     :rtype: DOUBLE
 
@@ -533,7 +535,7 @@ POW, POWER
 .. function:: POW( x, y )
 .. function:: POWER( x, y )
 
-    The **POW** function returns *x* to the power of *y*. The functions **POW** and **POWER** are used interchangeably. The return value is a **DOUBLE** type.
+    The **POW** function returns *x* to the power of *y*. The functions **POW** and **POWER** are used interchangeably. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: It represents the base. It is an expression that returns a numeric value. An expression that returns a numeric value.
     :param y: It represents the exponent. An expression that returns a numeric value. If the base is a negative number, an integer must specified as the exponent.
@@ -563,7 +565,7 @@ RADIANS
 
 .. function:: RADIANS ( x )
 
-    The **RADIANS** function returns the argument *x* specified in degrees converted to a radian value. The return value is a **DOUBLE** type.
+    The **RADIANS** function returns the argument *x* specified in degrees converted to a radian value. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :rtype: DOUBLE
@@ -584,7 +586,7 @@ RANDOM, RAND
 .. function:: RANDOM ( [seed] )
 .. function:: RAND ( [seed] )
 
-    The function **RANDOM** or **RAND** returns any integer value, which is greater than or equal to 0 and less than 2 31, and a *seed* argument that is **INTEGER** type can be specified. It rounds up real numbers and an error is returned when it exceeds the range of **INTEGER**.
+    The function **RANDOM** or **RAND** returns any integer value, which is greater than or equal to 0 and less than 2 31, and a *seed* argument that is **INTEGER** type can be specified. It rounds up real numbers and an error is returned when it exceeds the range of **INTEGER**. 
 
     The **RAND** function performs the operation only once to produce only one random number regardless of the number of rows where the operation is output, but the **RANDOM** function performs the operation every time the statement is repeated to produce a different random value for each row. Therefore, to output rows in a random order, you must use the **RANDOM** function. 
     
@@ -669,7 +671,7 @@ ROUND
 
 .. function:: ROUND ( number_operand, integer )
 
-    The **ROUND** function returns the specified argument, *number_operand*, rounded to the number of places after the decimal point specified by the *integer*. If the *integer* argument is a negative number, it rounds to a place before the decimal point, that is, at the integer part.
+    The **ROUND** function returns the specified argument, *number_operand*, rounded to the number of places after the decimal point specified by the *integer*. If the *integer* argument is a negative number, it rounds to a place before the decimal point, that is, at the integer part. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param number_operand: An expression that returns a numeric value
     :param integer: Specifies the place to round to. If a positive integer *n* is specified, the number is represented to the nth place after the decimal point; if a negative integer *n* is specified, the number is rounded to the *n* th place before the decimal point.
@@ -713,8 +715,8 @@ SIGN
 
 .. function:: SIGN (number_operand)
 
-    The **SIGN** function returns the sign of a given number. It returns 1 for a positive value, -1 for a negative value, and 0 for zero.
-
+    The **SIGN** function returns the sign of a given number. It returns 1 for a positive value, -1 for a negative value, and 0 for zero. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
+    
     :param number_operand: An operator which returns a numeric value
     :rtype: INT
 
@@ -734,7 +736,7 @@ SIN
 
 .. function:: SIN ( x )
 
-    The **SIN** function returns a sine value of the parameter. The argument *x* must be a radian value. The return value is a **DOUBLE** type.
+    The **SIN** function returns a sine value of the parameter. The argument *x* must be a radian value. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :rtype: DOUBLE
@@ -754,7 +756,7 @@ SQRT
 
 .. function:: SQRT ( x )
 
-    The **SQRT** function returns the square root of *x* as a **DOUBLE** type.
+    The **SQRT** function returns the square root of *x* as a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value. An error is returned if this value is a negative number.
     :rtype: DOUBLE
@@ -774,7 +776,7 @@ TAN
 
 .. function:: TAN ( x )
 
-    The **TAN** function returns a tangent value of the argument. The argument *x* must be a radian value. The return value is a **DOUBLE** type.  
+    The **TAN** function returns a tangent value of the argument. The argument *x* must be a radian value. The return value is a **DOUBLE** type. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :rtype: DOUBLE
@@ -795,7 +797,7 @@ TRUNC, TRUNCATE
 .. function:: TRUNC ( x[, dec] )
 .. function:: TRUNCATE ( x, dec )
 
-    The function **TRUNC** or **TRUNCATE** truncates the numbers of the specified argument *x* to the right of the *dec* position. If the *dec* argument is a negative number, it displays 0s to the *dec-* th position left to the decimal point. Note that the *dec* argument of the **TRUNC** function can be omitted, but that of the **TRUNCATE** function cannot be omitted. If the *dec* argument is a negative number, it displays 0s to the *dec* -th position left to the decimal point. The number of digits of the return value to be represented follows the argument *x*.
+    The function **TRUNC** or **TRUNCATE** truncates the numbers of the specified argument *x* to the right of the *dec* position. If the *dec* argument is a negative number, it displays 0s to the *dec-* th position left to the decimal point. Note that the *dec* argument of the **TRUNC** function can be omitted, but that of the **TRUNCATE** function cannot be omitted. If the *dec* argument is a negative number, it displays 0s to the *dec* -th position left to the decimal point. The number of digits of the return value to be represented follows the argument *x*. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
 
     :param x: An expression that returns a numeric value
     :param dec: The place to be truncated is specified. If a positive integer *n* is specified, the number is represented to the *n-*\th place after the decimal point; if a negative integer *n* is specified, the number is truncated to the *n-*\th place before the decimal point. It truncates to the first place after the decimal point if the *dec* argument is 0 or omitted. Note that the *dec* argument cannot be omitted in the **TRUNCATE** function.
@@ -839,7 +841,7 @@ WIDTH_BUCKET
 
 .. function:: WIDTH_BUCKET(expression, from, to, num_buckets)
 
-    **WIDTH_BUCKET** distributes the rows in an ordered partition into a specified number of buckets. The buckets are numbered, starting from one. That is, **WIDTH_BUCKET** function creates an equi-width histogram. The return value is an integer.
+    **WIDTH_BUCKET** distributes the rows in an ordered partition into a specified number of buckets. The buckets are numbered, starting from one. That is, **WIDTH_BUCKET** function creates an equi-width histogram. The return value is an integer. When you input the string which cannot be transformed into the number, it returns an error if the value of **return_null_on_function_errors** in **cubrid.conf** is no(the default), or returns NULL if it is yes.
     
     This function equally divides the range by the given number of buckets and assigns the bucket number to each bucket. That is, every interval (bucket) has the identical size.
 

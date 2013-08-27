@@ -255,21 +255,31 @@ Schema Invariant
 Invariants of a database schema are a property of the schema that must be preserved consistently (before and after the schema change). There are four types of invariants: invariants of class hierarchy, name, inheritance and consistency.
 
 *   **Invariant of class hierarchy**
+
     has a single root and defines a class hierarchy as a Directed Acyclic Graph (DAG) where all connected classes have a single direction. That is, all classes except the root have one or more super classes, and cannot become their own super classes. The root of DAG is "object," a system-defined class.
 
 *   **Invariant of name**
+
     means that all classes in the class hierarchy and all attributes in a class must have unique names. That is, attempts to create classes with the same name or to create attributes or methods with the same name in a single class are not allowed. Invariant of name is redefined by the 'rename' qualifier. The 'rename' qualifier allows the name of an attribute or method to be changed.
 
 *   **Invariant of inheritance**
+
     means that a class must inherit all attributes and methods from all super classes. This invariant can be distinguished with three qualifiers: source, conflict and domain. The names of inherited attributes and methods can be modified. For default or shared value attributes, the default or shared value can be modified. Invariant of inheritance means that such changes will be propagated to all classes that inherit these attributes and methods.
 
-    *   A **source qualifier** means that if class *C* inherits sub classes of class *S*, only one of the sub class attributes (methods) inherited from class *S* can be inherited to class *C*. That is, if an attribute (method) defined in class *S* is inherited by other classes, it is in effect a single attribute (method), even though it exists in many sub classes. Therefore, if a class multiply inherits from classes that have attributes (methods) of the same source, only one appearance of the attribute (method) is inherited.
+    *   A **source qualifier** 
+    
+        means that if class *C* inherits sub classes of class *S*, only one of the sub class attributes (methods) inherited from class *S* can be inherited to class *C*. That is, if an attribute (method) defined in class *S* is inherited by other classes, it is in effect a single attribute (method), even though it exists in many sub classes. Therefore, if a class multiply inherits from classes that have attributes (methods) of the same source, only one appearance of the attribute (method) is inherited.
 
-    *   A **conflict qualifier** means that if class *C* inherits from two or more classes that have attributes (methods) with the same name but of different sources, it can inherit more than one class. To inherit attributes (methods) with the same name, you must change their names so as not to violate the invariant of name.
+    *   A **conflict qualifier** 
+    
+        means that if class *C* inherits from two or more classes that have attributes (methods) with the same name but of different sources, it can inherit more than one class. To inherit attributes (methods) with the same name, you must change their names so as not to violate the invariant of name.
 
-    *   A **domain qualifier** means that a domain of an inherited attribute can be converted to the domain's sub class.
+    *   A **domain qualifier** 
+    
+        means that a domain of an inherited attribute can be converted to the domain's sub class.
 
 *   **Invariant of consistency**
+
     means that the database schema must always follow the invariants of a schema and all rules except when it is being changed.
 
 Rule for Schema Changes
@@ -283,74 +293,74 @@ Seven conflict-resolution rules reinforce the invariant of inheritance. Most sch
 
 **Conflict-Resolution Rules**
 
-* **Rule 1** : If an attribute (method) name of class *C* and an attribute name of the super class *S* conflict with each other (that is, their names are same), the attribute of class *C* is used. The attribute of *S* is not inherited.
+*   **Rule 1**: If an attribute (method) name of class *C* and an attribute name of the super class *S* conflict with each other (that is, their names are same), the attribute of class *C* is used. The attribute of *S* is not inherited.
 
-  If a class has one or more super classes, three aspects of the attribute (method) of each super class must be considered to determine whether the attributes are semantically equal and which attribute to inherit. The three aspects of the attribute (method) are the name, domain and source. The following table shows eight combinations of these three aspects that can happen with two super classes. In Case 1 (two different super classes have attributes with the same name, domain and source), only one of the two sub classes should be inherited because two attributes are identical. In Case 8 (two different super classes have attributes with different names, domains and sources), both classes should be inherited because two attributes are totally different ones.
+    If a class has one or more super classes, three aspects of the attribute (method) of each super class must be considered to determine whether the attributes are semantically equal and which attribute to inherit. The three aspects of the attribute (method) are the name, domain and source. The following table shows eight combinations of these three aspects that can happen with two super classes. In Case 1 (two different super classes have attributes with the same name, domain and source), only one of the two sub classes should be inherited because two attributes are identical. In Case 8 (two different super classes have attributes with different names, domains and sources), both classes should be inherited because two attributes are totally different ones.
 
-  +----------+-----------+------------+------------+
-  | Case     | Name      | Domain     | Source     |
-  +==========+===========+============+============+
-  | 1        | Same      | Same       | Same       |
-  +----------+-----------+------------+------------+
-  | 2        | Same      | Same       | Different  |
-  +----------+-----------+------------+------------+
-  | 3        | Same      | Different  | Same       |
-  +----------+-----------+------------+------------+
-  | 4        | Same      | Different  | Different  |
-  +----------+-----------+------------+------------+
-  | 5        | Different | Same       | Same       |
-  +----------+-----------+------------+------------+
-  | 6        | Different | Same       | Different  |
-  +----------+-----------+------------+------------+
-  | 7        | Different | Different  | Same       |
-  +----------+-----------+------------+------------+
-  | 8        | Different | Different  | Different  |
-  +----------+-----------+------------+------------+
+    +----------+-----------+------------+------------+
+    | Case     | Name      | Domain     | Source     |
+    +==========+===========+============+============+
+    | 1        | Same      | Same       | Same       |
+    +----------+-----------+------------+------------+
+    | 2        | Same      | Same       | Different  |
+    +----------+-----------+------------+------------+
+    | 3        | Same      | Different  | Same       |
+    +----------+-----------+------------+------------+
+    | 4        | Same      | Different  | Different  |
+    +----------+-----------+------------+------------+
+    | 5        | Different | Same       | Same       |
+    +----------+-----------+------------+------------+
+    | 6        | Different | Same       | Different  |
+    +----------+-----------+------------+------------+
+    | 7        | Different | Different  | Same       |
+    +----------+-----------+------------+------------+
+    | 8        | Different | Different  | Different  |
+    +----------+-----------+------------+------------+
+    
+    Five cases (1, 5, 6, 7, 8) out of eight have clear meaning. Invariant of inheritance is a guideline for resolving conflicts in such cases. In other cases (2, 3, 4), it is very difficult to resolve conflicts automatically. Rules 2 and 3 can be resolutions for these conflicts.
 
-  Five cases (1, 5, 6, 7, 8) out of eight have clear meaning. Invariant of inheritance is a guideline for resolving conflicts in such cases. In other cases (2, 3, 4), it is very difficult to resolve conflicts automatically. Rules 2 and 3 can be resolutions for these conflicts.
+*   **Rule 2**: When two or more super classes have attributes (methods) with different sources but the same name and domain, one or more attributes (methods) can be inherited if the conflict-resolution statement is used. If the conflict-resolution statement is not used, the system will select and inherit one of the two attributes.
 
-* **Rule 2** : When two or more super classes have attributes (methods) with different sources but the same name and domain, one or more attributes (methods) can be inherited if the conflict-resolution statement is used. If the conflict-resolution statement is not used, the system will select and inherit one of the two attributes.
+    This rule is a guideline for resolving conflicts of Case 2 in the table above.
 
-  This rule is a guideline for resolving conflicts of Case 2 in the table above.
+*   **Rule 3**: If two or more super classes have attributes with different sources and domains but the same name, attributes (methods) with more detailed (lower in the inheritance hierarchy) domains are inherited. If there is no inheritance relationship between domains, schema change is not allowed.
 
-* **Rule 3** : If two or more super classes have attributes with different sources and domains but the same name, attributes (methods) with more detailed (lower in the inheritance hierarchy) domains are inherited. If there is no inheritance relationship between domains, schema change is not allowed.
+    This rule is a guideline for resolving conflicts of Case 3 and 4. If Case 3 and 4 conflict with each other, Case 3 has the priority.
 
-  This rule is a guideline for resolving conflicts of Case 3 and 4. If Case 3 and 4 conflict with each other, Case 3 has the priority.
+*   **Rule 4**: The user can make any changes except the ones in Case 3 and 4. In addition, the resolution of sub class conflicts cannot cause changes in the super class.
+    
+    The philosophy of Rule 4 is that "an inheritance is a privilege that sub class has obtained from a super class, so changes in a sub class cannot affect the super class." Rule 4 means that the name of the attribute (method) included in the super class cannot be changed to resolve conflicts between class *C* and super classes. Rule 4 has an exception in cases where the schema change causes conflicts in Case 3 and 4.
+    
+    *   For example, suppose that class *A* is the super class of class *B*, and class B has the playing_date attribute of **DATE** type. If an attribute of **STRING** type named *playing_date* is added to class *A*, it conflicts with the *playing_date* attribute in class *B*. This is what happens in Case 4. The precise way to resolve such conflict is for the user to specify that class *B* must inherit the *playing_date* attribute of class *A*. If a method refers to the attribute, the user of class *B* needs to modify the method properly so that the appropriate *playing_date* attribute will be referenced. Schema change of class *A* is not allowed because the schema falls into an inconsistent state if the user of class *B* does not describe an explicit statement to resolve the conflict occurring from the schema change.
+    
+    .. image:: /images/image7.png
 
-* **Rule 4** : The user can make any changes except the ones in Case 3 and 4. In addition, the resolution of sub class conflicts cannot cause changes in the super class.
+*   **Rule 5**: If a conflict occurs due to a schema change of the super class, the original resolution is maintained as long as the change does not violate the rules. However, if the original resolution becomes invalid due to the schema change, the system will apply another resolution.
 
-  The philosophy of Rule 4 is that "an inheritance is a privilege that sub class has obtained from a super class, so changes in a sub class cannot affect the super class." Rule 4 means that the name of the attribute (method) included in the super class cannot be changed to resolve conflicts between class *C* and super classes. Rule 4 has an exception in cases where the schema change causes conflicts in Case 3 and 4.
+    Rule 5 is for cases where a conflict is caused to a conflict-free class or where the original resolution becomes invalid.
+    
+    This is the case where the name or domain of an attribute (method) is modified or a super class is deleted when the attribute (method) is added to the super class or the one inherited from the super class is deleted. The philosophy of Rule 5 coincides with that of Rule 4. That is, the user can change the class freely without considering what effects the sub class that inherits from the given class will have on the inherited attribute (method).
+    
+    When you change the schema of class *C*, if you decide to inherit an attribute of the class due to an earlier conflict with another class, this may cause attribute (method) loss of class *C*. Instead, you must inherit one of the attributes (methods) that caused conflicts earlier.
+    
+    The schema change of the super class can cause a conflict between the attribute (method) of the super class and the (locally declared or inherited) attribute (method) of class *C*. In this case, the system resolves the conflict automatically by applying Rule 2 or 3 and may inform the user.
+    
+    Rule 5 cannot be applied to cases where a new conflict occurs due to the addition or deletion of the relationship with the super class. The addition/deletion of a super class must be limited to within the class. That is, the user must provide an explicit resolution.
+    
+*   **Rule 6**: Changes of attributes or methods are propagated only to sub classes without conflicts.
 
-  *   For example, suppose that class *A* is the super class of class *B*, and class B has the playing_date attribute of **DATE** type. If an attribute of **STRING** type named *playing_date* is added to class *A*, it conflicts with the *playing_date* attribute in class *B*. This is what happens in Case 4. The precise way to resolve such conflict is for the user to specify that class *B* must inherit the *playing_date* attribute of class *A*. If a method refers to the attribute, the user of class *B* needs to modify the method properly so that the appropriate *playing_date* attribute will be referenced. Schema change of class *A* is not allowed because the schema falls into an inconsistent state if the user of class *B* does not describe an explicit statement to resolve the conflict occurring from the schema change.
+    This rule limits the application of Rule 5 and the invariant of inheritance. Conflicts can be detected and resolved by applying Rule 2 and 3.
 
-  .. image:: /images/image7.png
-
-* **Rule 5** : If a conflict occurs due to a schema change of the super class, the original resolution is maintained as long as the change does not violate the rules. However, if the original resolution becomes invalid due to the schema change, the system will apply another resolution.
-
-  Rule 5 is for cases where a conflict is caused to a conflict-free class or where the original resolution becomes invalid.
-
-  This is the case where the name or domain of an attribute (method) is modified or a super class is deleted when the attribute (method) is added to the super class or the one inherited from the super class is deleted. The philosophy of Rule 5 coincides with that of Rule 4. That is, the user can change the class freely without considering what effects the sub class that inherits from the given class will have on the inherited attribute (method).
-
-  When you change the schema of class *C*, if you decide to inherit an attribute of the class due to an earlier conflict with another class, this may cause attribute (method) loss of class *C*. Instead, you must inherit one of the attributes (methods) that caused conflicts earlier.
-  
-  The schema change of the super class can cause a conflict between the attribute (method) of the super class and the (locally declared or inherited) attribute (method) of class *C*. In this case, the system resolves the conflict automatically by applying Rule 2 or 3 and may inform the user.
-
-  Rule 5 cannot be applied to cases where a new conflict occurs due to the addition or deletion of the relationship with the super class. The addition/deletion of a super class must be limited to within the class. That is, the user must provide an explicit resolution.
-
-* **Rule 6** : Changes of attributes or methods are propagated only to sub classes without conflicts.
-
-  This rule limits the application of Rule 5 and the invariant of inheritance. Conflicts can be detected and resolved by applying Rule 2 and 3.
-
-* **Rule 7** : Class *C* can be dropped even when an attribute of class *R* uses class *C* as a domain. In this case, the domain of the attribute that uses class *C* as a domain can be changed to *object*.
+*   **Rule 7**: Class *C* can be dropped even when an attribute of class *R* uses class *C* as a domain. In this case, the domain of the attribute that uses class *C* as a domain can be changed to *object*.
 
 **Domain-Change Rules**
 
-* **Rule 8** : If the domain of an attribute of class *C* is changed from *D* to a super class of *D*, the new domain is less generic than the corresponding domain in the super class from which class *C* inherited the attribute. The following example explains the principle of this rule.
-
-  Suppose that in the database there are the *game* class with the *player* attribute and the *female_game* class which inherits game. The domain of the player attribute of the *game* class is the *athlete* class, but the domain of the player attribute of the *female_game* class is changed to *female_athlete* which is a sub class of *athlete*. The following diagram shows such relationship. The domain of the *player* attribute of the *female_game* class can be changed back to *athlete*, which is the super class of *female_athlete*.
-
-  .. image:: /images/image8.png
+*   **Rule 8**: If the domain of an attribute of class *C* is changed from *D* to a super class of *D*, the new domain is less generic than the corresponding domain in the super class from which class *C* inherited the attribute. The following example explains the principle of this rule.
+    
+    Suppose that in the database there are the *game* class with the *player* attribute and the *female_game* class which inherits game. The domain of the player attribute of the *game* class is the *athlete* class, but the domain of the player attribute of the *female_game* class is changed to *female_athlete* which is a sub class of *athlete*. The following diagram shows such relationship. The domain of the *player* attribute of the *female_game* class can be changed back to *athlete*, which is the super class of *female_athlete*.
+    
+    .. image:: /images/image8.png
 
 **Class-Hierarchy Rules**
 
-* **Rule 9** : A class without a super class becomes a direct sub class of object. The class-hierarchy rule defines characteristics of classes without super classes. If you create a class without a super class, object becomes the super class. If you delete the super class *S*, which is a unique super class of class *C*, class *C* becomes a direct sub class of object.
+*   **Rule 9**: A class without a super class becomes a direct sub class of object. The class-hierarchy rule defines characteristics of classes without super classes. If you create a class without a super class, object becomes the super class. If you delete the super class *S*, which is a unique super class of class *C*, class *C* becomes a direct sub class of object.

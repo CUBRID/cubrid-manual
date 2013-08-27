@@ -43,7 +43,7 @@ Linux
 
 #.  설정 파일을 수정한다.
 
-    CentOS 6.0 이상 버전이나 Fedora 15 이상 버전을 사용한다면 **pdo_cubrid.ini** 파일을 생성하고 내용에 **extension=pdo_cubrid.so** 를 입력하여 **/etc/php.d** 디렉터리에 저장한다.
+    CentOS 6.0 이상 버전이나 Fedora 15 이상 버전을 사용한다면 **cubrid.ini** 파일을 생성하고 내용에 **extension=cubrid.so** 를 입력하여 **/etc/php.d** 디렉터리에 저장한다.
     
     다른 운영체제를 사용한다면 **php.ini** 파일 끝에 다음 두 줄의 내용을 추가한다. **php.ini** 파일의 기본 위치는 **/etc/php5/apache2** 또는 **/etc** 이다. 
     
@@ -60,7 +60,7 @@ Linux
     
         sudo apt-get install php5
     
-#.  **apt-get** 를 이용하여 CUBRID PHP 드라이버를 설치하려면, Unbuntu가 패키지 다운로드 위치를 알고 인덱스를 업데이트하도록 CUBRID 저장소를 추가해야 한다. ::
+#.  **apt-get** 를 이용하여 CUBRID PHP 드라이버를 설치하려면, Ubuntu가 패키지 다운로드 위치를 알고 인덱스를 업데이트하도록 CUBRID 저장소를 추가해야 한다. ::
     
         sudo add-apt-repository ppa:cubrid/cubrid
         sudo apt-get update
@@ -121,7 +121,7 @@ Windows
 
 CUBRID PHP API Installer는 자동으로 CUBRID와 PHP의 버전을 인식하여 해당 버전에 맞는 드라이버를 설치하는 Windows 설치 관리자이다. 드라이버를 기본 PHP 확장 디렉터리( **C:\\Program Files\\PHP\\ext** )에 복사하고 **php.ini** 파일을 수정한다. 여기에서는 CUBRID PHP API Installer를 이용하여 Windows에 CUBRID PHP 확장을 설치하는 방법을 설명한다.
 
-CUBRID PHP 드라이버를 제거하려면 CUBRID PHP API Installer를 다시 실행하여 프로그램 제거를 선텍한다. 이 방법으로 CUBRID PHP 드라이버를 제거하면 설치할 때 발생한 모든 변경 사항이 복구된다.
+CUBRID PHP 드라이버를 제거하려면 CUBRID PHP API Installer를 다시 실행하여 프로그램 제거를 선택한다. 이 방법으로 CUBRID PHP 드라이버를 제거하면 설치할 때 발생한 모든 변경 사항이 복구된다.
 
 CUBRID PHP 드라이버를 설치하기 전에 PHP와 CUBRID의 경로가 시스템 변수의 **Path** 에 추가되어 있어야 한다.
 
@@ -469,11 +469,7 @@ PHP 프로그래밍
 
 CUBRID PHP는 트랜잭션과 자동 커밋 모드를 지원한다. 자동 커밋 모드에서는 하나의 질의마다 하나의 트랜잭션이 이루어진다. `cubrid_get_autocommit <http://www.php.net/manual/en/function.cubrid-get-autocommit.php>`_ () 함수를 사용하면 현재 연결의 자동 커밋 모드 여부를 확인할 수 있다. `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () 함수를 사용하면 현재 연결의 자동 커밋 모드 여부를 설정할 수 있으며, 진행 중이던 트랜잭션은 모드 설정과 상관없이 커밋된다.
 
-응용 프로그램 시작 시 자동 커밋 모드의 기본값은 브로커 파라미터인 **CCI_DEFAULT_AUTOCOMMIT** 으로 설정한다. 브로커 파라미터 설정을 생략하면 기본값은 **ON** 이다. 다음 예와 같이 `cubrid_connect_with_url <http://www.php.net/manual/en/function.cubrid-connect-with-url.php>`_ () 함수를 사용해도 자동 커밋 모드 여부를 설정할 수 있다.
-
-.. code-block:: php
-
-    $con = cubrid_connect_with_url("cci:CUBRID:localhost:33000:demodb:dba::?autocommit=true");
+응용 프로그램 시작 시 자동 커밋 모드의 기본값은 브로커 파라미터인 **CCI_DEFAULT_AUTOCOMMIT** 으로 설정한다. 브로커 파라미터 설정을 생략하면 기본값은 **ON** 이다.
 
 `cubrid_set_autocommit <http://www.php.net/manual/en/function.cubrid-set-autocommit.php>`_ () 함수에서 자동 커밋 모드를 OFF로 설정하면 커밋 또는 롤백을 명시하여 트랜잭션을 처리할 수 있다. 트랜잭션을 커밋하려면 `cubrid_commit <http://www.php.net/manual/en/function.cubrid-commit.php>`_ () 함수를 사용하고 트랜잭션을 롤백하려면 `cubrid_rollback <http://www.php.net/manual/en/function.cubrid-rollback.php>`_ () 함수를 사용한다. `cubrid_disconnect <http://www.php.net/manual/en/function.cubrid-disconnect.php>`_ () 함수는 트랜잭션을 종료하고 커밋되지 않은 작업을 롤백한다.
 

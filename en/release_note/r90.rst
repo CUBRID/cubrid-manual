@@ -2,9 +2,9 @@
 
 .. contents::
 
-************************
-CUBRID 9.0 Release Notes
-************************
+*****************
+9.0 Release Notes
+*****************
 
 Release Notes Information
 =========================
@@ -793,7 +793,7 @@ Modify to set the initial value of the system parameter that sets the maximum nu
 
     In installing CUBRID, "log_max_archives=0" has been added to cubrid.conf.
 
-    If the value of log_max_archivies is 0, archive log files do not occupy the disk space as they are not kept, but when a media failure occurs, it could be impossible to restore the database back to the desired time. To restore a database in case of a media failure, this parameter value should be set properly considering a backup cycle.
+    If the value of log_max_archives is 0, archive log files do not occupy the disk space as they are not kept, but when a media failure occurs, it could be impossible to restore the database back to the desired time. To restore a database in case of a media failure, this parameter value should be set properly considering a backup cycle.
 
 Modify the memory usage of the replication log reflection process not to exceed 500MB (CUBRIDSUS-6068)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1094,7 +1094,7 @@ A smaller join result when the CONCAT_WS function was a condition of LEFT OUTER 
 Server would be abnormally terminated when using the INTERVAL value of the DATE_ADD function as a host variable (CUBRIDSUS-7610)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Fix a problem in which the server was abnormally terminated during a query was executed if the INTERVAL value of theDATE_ADD, which is an SQL function, was used as a host variable when the query was prepared. In the previous version, only the INTERGER was available as the type of the input value according to the INTERVAL unit of the DATE_ADD function. Now you can also use VARCHAR.
+    Fix a problem in which the server was abnormally terminated during a query was executed if the INTERVAL value of theDATE_ADD, which is an SQL function, was used as a host variable when the query was prepared. In the previous version, only the INTEGER was available as the type of the input value according to the INTERVAL unit of the DATE_ADD function. Now you can also use VARCHAR.
 
     .. code-block:: sql
 
@@ -1190,7 +1190,7 @@ Removal of unused reserved words (CUBRIDSUS-6250)
 
     Remove unused reserved words, such as ALIAS, TYPE, VIRTUAL, TEST, and WAIT, and now it is possible to use them as an identifier, such as the name of a table or column.
     
-    The followings are the previous reserved words which are removed on the new version.
+    The following are the previous reserved words which are removed on the new version.
 
     +---------+----------+-----------+------------+------------+
     | ALIAS   | ASYNC    | CLUSTER   | COMPLETION | DICTIONARY |
@@ -1701,7 +1701,7 @@ NULL would be entered into the primary key when the INSERT ... ON DUPLICATE KEY 
     .. code-block:: sql
 
 
-        CREATE TABLE t1( id int AUTO_INCREMENT NOT NULL, c CHAR(1) NOT NULL , counter int NOT NULL DEFAULT 1, PRIMARY KEY(id), UNIQUE KEY(c) ) ;
+        CREATE TABLE t1( id INT AUTO_INCREMENT NOT NULL, c CHAR(1) NOT NULL , counter INT NOT NULL DEFAULT 1, PRIMARY KEY(id), UNIQUE KEY(c) ) ;
         INSERT INTO t1 (id, c) VALUES (NULL, 'a'), (NULL, 'a') ON DUPLICATE KEY UPDATE id = null, counter = counter + 1;
 
 Incorrect result of a COUNT(*) query when the value of a UNIQUE column was entered as NULL in the execution of the INSERT ... SELECT statement (CUBRIDSUS-8338)
@@ -2573,7 +2573,7 @@ Server process would be abnormally terminated when executing a query to a range 
     .. code-block:: sql
 
     
-        CREATE TABLE u(id int AUTO_INCREMENT,v varchar(5))
+        CREATE TABLE u(id INT AUTO_INCREMENT,v VARCHAR(5))
         PARTITION BY RANGE (id) (
           PARTITION l5 VALUES LESS THAN (5),
           PARTITION l10 VALUES LESS than (10),
@@ -3070,7 +3070,7 @@ ALTER... CHANGE COLUMN statement would not be reflected to a slave node (CUBRIDS
     ::
     
         // When the query above was executed, the following error occurred in slave node.
-        log applier: failed to apply schema replication log. class: "coo", schema: "'alter class [coo] change attribute [col1] [col1] integerafter [col3] '", internal error: -492.
+        log applier: failed to apply schema replication log. class: "coo", schema: "'alter class [coo] change attribute [col1] [col1] integer after [col3] '", internal error: -492.
 
     .. code-block:: sql
         
@@ -3363,7 +3363,7 @@ Add a connection URL attribute used to allow debugging logs to be written (CUBRI
 [CCI] Error if CAS was restarted when executing cci_prepare_and_execute() (CUBRIDSUS-9278)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Fix a problem in which the "Cannot communcation with broker" would occur when executing cci_prepare_and_execute() because there was no routine for reconnecting to the restarted CAS.
+    Fix a problem in which the "Cannot communication with broker" would occur when executing cci_prepare_and_execute() because there was no routine for reconnecting to the restarted CAS.
 
 [CCI] Query timeout would not occur when the value of query timeout was configured as a very small value in cci_prepare_and_execute() (CUBRIDSUS-8102)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

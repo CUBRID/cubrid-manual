@@ -206,7 +206,7 @@ ActiveRecord를 사용하면 코드를 수정하지 않아도 다른 데이터�
      add_index :books, :author_id
     end
 
-CUBRID에서 지원하는 칼럼 타입은 **:string**, **:text**, **:integer**, **:float**, **:decimal**, **:datetime**, **:timestamp**, **:time**, **:boolean**, **:bit**, **:monetary**, **:smallint**, **:bigint**, **:char** 이다. 현재 **:binary** 는 지원하지 않는다.
+CUBRID에서 지원하는 칼럼 타입은 **:string**, **:text**, **:integer**, **:float**, **:decimal**, **:datetime**, **:timestamp**, **:time**, **:boolean**, **:bit**, **:smallint**, **:bigint**, **:char** 이다. 현재 **:binary** 는 지원하지 않는다.
 
 **테이블 칼럼 관리**
 
@@ -229,7 +229,7 @@ CUBRID에서 지원하는 칼럼 타입은 **:string**, **:text**, **:integer**,
 
 **데이터베이스 스키마 덤프**
 
-**ActiveRecord::SchemaDumper.dump** 를 사용하여 현재 사용 중인 스키마의 정보를 덤프할 수 있다. 덤프된 스키마 정보는 플랫폼과 상관없이 사용할 수 있는 형식으로 저장되며 Ruby ActiveRecord에서도 사용할 수 있다. 단, **:bigint**, **:bit**, **:monetary** 등과 같이 특정 데이터베이스에서 사용되는 커스텀 칼럼 타입을 사용한다면 제대로 동작하지 않을 수 있다.
+**ActiveRecord::SchemaDumper.dump** 를 사용하여 현재 사용 중인 스키마의 정보를 덤프할 수 있다. 덤프된 스키마 정보는 플랫폼과 상관없이 사용할 수 있는 형식으로 저장되며 Ruby ActiveRecord에서도 사용할 수 있다. 단, **:bigint**, **:bit** 등과 같이 특정 데이터베이스에서 사용되는 커스텀 칼럼 타입을 사용한다면 제대로 동작하지 않을 수 있다.
 
 **서버 용량 정보 획득**
 

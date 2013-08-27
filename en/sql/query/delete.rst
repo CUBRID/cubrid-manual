@@ -23,7 +23,7 @@ You can delete records in the table by using the **DELETE** statement. You can s
 
 *   *row_count*: Specifies the number of records to be deleted in the :ref:`limit-clause`. An integer greater than 0 can be given.
 
-If you want to delete one table, :ref:`limit-clause` can be specified. You can limit the number of records by specifying the :ref:`limit-clause`.  If the number of records satisfying the :ref:`where-clause` exceeds *row_count*, only the number of records specified in *row_count* will be deleted.
+When a table to delete records is only one, :ref:`limit-clause` can be specified. You can limit the number of records by specifying the :ref:`limit-clause`.  If the number of records satisfying the :ref:`where-clause` exceeds *row_count*, only the number of records specified in *row_count* will be deleted.
 
 .. note:: \
 

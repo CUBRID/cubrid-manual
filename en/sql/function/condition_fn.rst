@@ -305,7 +305,9 @@ Whether to detect the escape characters of the LIKE conditional expression is de
 
 .. note::
 
-    In CUBRID 2008 R4.x or lower versions, to execute string comparison operation for data entered in the multibyte charset environment such as UTF-8, the parameter setting (**single_byte_compare** = yes) which compares strings by 1 byte should be added to the **cubrid.conf** file for a successful search result. However, the versions after CUBRID 2008 R4.x support Unicode charset so the **single_byte_compare** parameter is no longer used.
+    *   To execute string comparison operation for data entered in the multibyte charset environment such as UTF-8, the parameter setting (**single_byte_compare** = yes) which compares strings by 1 byte should be added to the **cubrid.conf** file for a successful search result. 
+    
+    *   Versions after CUBRID 9.0 support Unicode charset, so the **single_byte_compare** parameter is no longer used.
 
 .. code-block:: sql
 
@@ -738,7 +740,7 @@ For example, if a type of a is **INT**, b, **BIGINT**, c, **SHORT**, and d, **FL
      
 .. code-block:: sql
 
-    --substituting a default value 10.0000 for NULL valuse
+    --substituting a default value 10.0000 for a NULL value
     SELECT a, COALESCE(a, 10.0000) FROM case_tbl;
     
 ::
@@ -885,7 +887,7 @@ IF
      
 .. code-block:: sql
 
-    --IF function returns the second expression when the fist is TRUE
+    --IF function returns the second expression when the first is TRUE
     SELECT a, IF(a=1, 'one', 'other') FROM case_tbl;
     
 ::

@@ -147,16 +147,22 @@ JDBC 프로그래밍
 
 *   **altHosts** : HA 환경에서 장애 시 fail-over할 하나 이상의 standby 브로커의 호스트 IP와 접속 포트이다.
 *   **rcTime** : 첫 번째로 접속했던 브로커에 장애가 발생한 이후 altHosts 에 명시한 브로커로 접속한다(failover). 이후, rcTime만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초). 입력 방법은 아래 URL 예제를 참고한다.
-*   **loadBalance** : 이 값이 true면 응용 프로그램이 메인 호스트와 althosts에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false). 
+*   **loadBalance** : 이 값이 true면 응용 프로그램이 메인 호스트와 altHosts에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false). 
+
+    .. note:: 메인 호스트와 **altHosts** 브로커들의 **ACCESS_MODE**\ 설정에 **RW**\ 와 **RO**\ 가 섞여 있다 하더라도, 응용 프로그램은 **ACCESS_MODE**\ 와 무관하게 접속 대상 호스트를 결정한다. 따라서 사용자는 접속 대상 브로커의 **ACCESS_MODE**\ 를 감안해서 메인 호스트와 **altHosts**\ 를 정해야 한다.
+
 *   **connectTimeout** : 데이터베이스 접속에 대한 타임아웃 시간을 초 단위로 설정한다(기본값: 0). **DriverManger.setLoginTimeout** () 메서드로 설정할 수도 있으나, 연결 URL에 이 값을 설정하면 메서드로 설정한 값은 무시된다.
-*   **queryTimeout** : 질의 수행에 대한 타임아웃 시간을 초 단위로 설정한다(기본값: 0, 무제한). 이 값은 **DriverManger.setQueryTimeout** () 메서드에 의해 변경될 수 있다.
+*   **queryTimeout** : 질의 수행에 대한 타임아웃 시간을 초 단위로 설정한다(기본값: 0, 무제한). 최대값은 2,000,000이다. 이 값은 **DriverManger.setQueryTimeout** () 메서드에 의해 변경될 수 있다.  executeBatch() 메서드를 수행하는 경우 한 개의 질의에 대한 타임아웃이 아닌 한 번의 메서드 호출에 대한 타임아웃이 적용된다.
+
+    .. note:: executeBatch() 메서드를 수행하는 경우 한 개의 질의에 대한 타임아웃이 아닌 한 번의 메서드 호출에 대한 타임아웃이 적용된다.
+
 *   **charSet** : 접속하고자 하는 DB의 문자셋(charSet)이다.
 *   **zeroDateTimeBehavior** : JDBC에서는 java.sql.Date 형 객체에 날짜와 시간 값이 모두 0인 값을 허용하지 않으므로 이 값을 출력해야 할 때 어떻게 처리할 것인지를 정하는 속성. 기본 동작은 **exception** 이다. 날짜와 시간 값이 모두 0인 값에 대한 설명은 :ref:`date-time-type` 을 참고한다.
 
     설정값에 따른 동작은 다음과 같다.
 
     *   **exception** : 기본 동작. SQLException 예외로 처리한다.
-    *   **round** : 반환할 타입의 최소값으로 변환한다.
+    *   **round** : 반환할 타입의 최소값으로 변환한다. 단, TIMESTAMP 타입은 '1970-01-01 00:00:00'(GST)를 반환한다.
     *   **convertToNull** : **NULL** 로 변환한다.
 
 *   **logFile** : 디버깅용 로그 파일 이름(기본값: cubrid_jdbc.log). 별도의 경로 설정이 없으면 응용 프로그램을 실행하는 위치에 저장된다.
@@ -217,6 +223,21 @@ JDBC 프로그래밍
     *   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
     *   트랜잭션 롤백을 요청하는 rollback 메서드는 서버가 롤백 작업을 완료한 후 종료된다.
     *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
+
+.. _jdbc-con-tostring:
+
+SQL LOG 확인 
+------------
+
+cubrid.jdbc.driver.CUBRIDConnection 클래스의 toString() 메서드를 사용하여 다음과 같은 연결 정보를 출력할 수 있다. 
+  
+:: 
+  
+    예) cubrid.jdbc.driver.CUBRIDConnection(CAS ID : 1, PROCESS ID : 22922) 
+  
+위에서 출력되는 CAS ID를 통해 해당 CAS의 SQL 로그 파일을 쉽게 확인할 수 있다. 
+  
+보다 자세한 사항은 :ref:`sql-log-check`\ 을 참고한다. 
     
 외래 키 정보 확인
 -----------------
@@ -1149,3 +1170,5 @@ JDBC API에 대한 자세한 내용은 Java API Specification 문서(http://docs
     
     * 2008 R4.3부터 자동 커밋이 ON일 때 질의문을 일괄 처리하는 메서드의 동작 방식이 변경되었음에 주의한다. 질의문을 일괄 처리하는 메서드는 PreparedStatement.executeBatch와 Statement.executeBatch이다. 이들은 2008 R4.1 버전까지 자동 커밋 모드에서 배열 내의 모든 질의를 수행한 후에 커밋했으나, 2008 R4.3버전부터는 각 질의를 수행할 때마다 커밋하도록 변경되었다.
     * 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 메서드에서 배열 내의 질의 수행 중 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
+    
+

@@ -2,7 +2,7 @@
 Python 드라이버
 ***************
 
-**CUBRIDdb** 는 Python Database API 2.0을 준수하며 CUBRID 데이터베이를 지원하는 Python 확장 패키지이다. CUBRID Python API는 Pythond Database API가 제공하는 기본 기능 외에도, CUBRID 데이터베이스 엔진에서 제공하는 기능을 **_cubrid** 모듈에서 제공한다.
+**CUBRIDdb** 는 Python Database API 2.0을 준수하며 CUBRID 데이터베이를 지원하는 Python 확장 패키지이다. CUBRID Python API는 Python Database API가 제공하는 기본 기능 외에도, CUBRID 데이터베이스 엔진에서 제공하는 기능을 **_cubrid** 모듈에서 제공한다.
 
 CUBRID Python 드라이버는 CCI API를 기반으로 작성되었으므로, CCI API 및 CCI에 적용되는 **CCI_DEFAULT_AUTOCOMMIT** 과 같은 설정 파라미터에 영향을 받는다.
 
@@ -158,7 +158,7 @@ Python 예제 프로그램
 
 CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비활성화되어 있다. 따라서 SQL문을 실행한 후에는 수동으로 `commit <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#commit>`_ () 함수를 사용하여 커밋을 수행해야 한다. 이 함수는 **cur.execute("COMMIT")** 와 같은 동작을 수행한다. 반대로 현재 트랜잭션을 중단하고 롤백하려면 `rollback <http://packages.python.org/CUBRID-Python/_cubrid.connection-class.html#rollback>`_ () 함수를 사용한다.
 
-데이터를 입력하는 다른 방법으로 prepared statement를 사용할 수도 있다. 다음과 같이 파라미터를 포함하는 튜플을 정의한 후 `execute <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#execute>`_ () 함수에 전달하여 안전하게 데이터베이스에 데이터를 입력할 수 있다.
+데이터를 입력하는 다른 방법으로 prepared statement를 사용할 수도 있다. 다음과 같이 파라미터를 포함하는 투플을 정의한 후 `execute <http://packages.python.org/CUBRID-Python/CUBRIDdb.cursors.Cursor-class.html#execute>`_ () 함수에 전달하여 안전하게 데이터베이스에 데이터를 입력할 수 있다.
 
 .. code-block:: python
 
@@ -176,7 +176,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
     # Plain insert statement
     cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (1, 'Title 1', 'Test body #1', CURRENT_TIMESTAMP)")
      
-    # Parametrized insert statement
+    # Parameterized insert statement
     args = (2, 'Title 2', 'Test body #2')
     cur.execute("INSERT INTO posts (id, title, body, last_updated) VALUES (?, ?, ?, CURRENT_TIMESTAMP)", args)
      
@@ -239,7 +239,7 @@ CUBRID Python 드라이버에서는 기본적으로 자동 커밋 모드가 비�
     ('body', 2, 0, 0, 1073741823, 0, 0)
     ('last_updated', 15, 0, 0, 0, 0, 0)
 
-각 튜플은 다음과 같은 정보를 포함한다. ::
+각 투플은 다음과 같은 정보를 포함한다. ::
 
     (column_name, data_type, display_size, internal_size, precision, scale, nullable)
 

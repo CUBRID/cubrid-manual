@@ -2,7 +2,7 @@
 REPLACE
 *******
 
-The **REPLACE** statement is working like :doc:`insert`, but the difference is that it inserts a new record after deleting the existing record without displaying the error when a duplicate value is to be inserted into a column for which **PRIMARY KEY** or **UNIQUE** constraints have defined. You must have both **INSERT** and **DELETE** authorization to use the **REPLACE** statement, because it performs insertion or insertion after deletion operations. Please refer :ref:`granting-authorization` for more information about authorization.
+The **REPLACE** statement works like :doc:`insert`, but the difference is that it inserts a new record after deleting the existing record without displaying the error when a duplicate value is to be inserted into a column for which **PRIMARY KEY** or **UNIQUE** constraints have defined. You must have both **INSERT** and **DELETE** authorization to use the **REPLACE** statement, because it performs insertion or insertion after deletion operations. Please refer :ref:`granting-authorization` for more information about authorization.
 
 ::
 

@@ -33,7 +33,7 @@ To create a table, use the **CREATE TABLE** statement.
     AUTO_INCREMENT [(seed, increment)]
      
     <column_constraint> ::=
-    NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+    [CONSTRAINT <constraint_name>] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition> }
      
     <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
 
@@ -76,7 +76,7 @@ To create a table, use the **CREATE TABLE** statement.
 *   *column_name* : Specifies the name of the column to be created (maximum: 254 bytes).
 *   *column_type* : Specifies the data type of the column.
 *   [**SHARED** *value* | **DEFAULT** *value*] : Specifies the initial value of the column.
-*   *column_constraints* : Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see :ref:`constraint-definition` For details).
+*   *column_constraint* : Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see :ref:`constraint-definition` For details).
 
 .. code-block:: sql
 
@@ -158,7 +158,7 @@ The pseudocolumn allows for the **DEFAULT** value as follows.
 
 .. note::
 
-    In version lower than CUBRID 9.0, the value at the time of **CREATE TABLE** has been saved when the **DATE** value of the **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** column has been specified to **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** while creating a table. Therefore, to enter the value at the time of data **INSERT** in version lower than CUBRID 9.0, the function should be entered to the **VALUES** clause of the **INSERT** syntax.
+    In version lower than CUBRID 9.0, the value at the time of **CREATE TABLE** has been saved when the **DATE** value of the **DATE**, **DATETIME**, **TIME**, **TIMESTAMP** column has been specified as **SYS_DATE**, **SYS_DATETIME**, **SYS_TIME**, **SYS_TIMESTAMP** while creating a table. Therefore, to enter the value at the time of data **INSERT** in version lower than CUBRID 9.0, the function should be entered to the **VALUES** clause of the **INSERT** syntax.
 
 .. code-block:: sql
 
@@ -209,7 +209,7 @@ The pseudocolumn allows for the **DEFAULT** value as follows.
                 5  'BBB'                 '000-0000'
                 6  'BBB'                 '111-1111'
 
-The **DEFAULT** value of the pseudocolumn can be specified to one or more columns.
+The **DEFAULT** value of the pseudocolumn can be specified as one or more columns.
 
 .. code-block:: sql
 
@@ -227,15 +227,16 @@ You can define the **AUTO_INCREMENT** attribute for the column to automatically 
 You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABLE** statement. For details, see :ref:`alter-auto-increment` of **ALTER TABLE**. 
 
 ::
-    CREATE TABLE table_name (id int AUTO_INCREMENT[(seed, increment)]);
+
+    CREATE TABLE table_name (id INT AUTO_INCREMENT[(seed, increment)]);
     
-    CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
+    CREATE TABLE table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed;
 
 
 *   *seed* : The initial value from which the number starts. All integers (positive, negative, and zero) are allowed. The default value is **1**.
 *   *increment* : The increment value of each row. Only positive integers are allowed. The default value is **1**.
 
-When you use the **CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; statement, the constraints are as follows:
+When you use the **CREATE TABLE** *table_name* (id INT **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; statement, the constraints are as follows:
 
 *   You should define only one column with the **AUTO_INCREMENT** attribute.
 *   Don't use (*seed*, *increment*) and AUTO_INCREMENT = *seed* together.
@@ -259,7 +260,7 @@ When you use the **CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUT
      
 .. code-block:: sql
 
-    CREATE TABLE tbl (id int AUTO_INCREMENT, val string) AUTO_INCREMENT = 3;
+    CREATE TABLE tbl (id INT AUTO_INCREMENT, val string) AUTO_INCREMENT = 3;
     INSERT INTO tbl VALUES (NULL, 'cubrid');
      
     SELECT * FROM tbl;
@@ -272,7 +273,7 @@ When you use the **CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUT
      
 .. code-block:: sql
 
-    CREATE TABLE t (id int AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
+    CREATE TABLE t (id INT AUTO_INCREMENT, id2 int AUTO_INCREMENT) AUTO_INCREMENT = 5;
     
 ::
     
@@ -280,7 +281,7 @@ When you use the **CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUT
      
 .. code-block:: sql
 
-    CREATE TABLE t (i int AUTO_INCREMENT(100, 2)) AUTO_INCREMENT = 3;
+    CREATE TABLE t (i INT AUTO_INCREMENT(100, 2)) AUTO_INCREMENT = 3;
     
 ::
 
@@ -290,6 +291,7 @@ When you use the **CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUT
 
     *   Even if a column has auto increment, the **UNIQUE** constraint is not satisfied.
     *   If **NULL** is specified in the column where auto increment is defined, the value of auto increment is stored.
+    *   Even if a value is directly specified in the column where auto increment is defined, AUTO_INCREMENT value is not changed.
     *   **SHARED** or **DEFAULT** attribute cannot be specified in the column in which AUTO_INCREMENT is defined.
     *   The initial value and the final value obtained by auto increment cannot exceed the minimum and maximum values allowed in the given type.
     *   Because auto increment has no cycle, an error occurs when the maximum value of the type exceeds, and no rollback is executed. Therefore, you must delete and recreate the column in such cases.
@@ -547,7 +549,7 @@ KEY or INDEX
 Column Option
 -------------
 
-You can specify options such as **ASC** or **DESC** after the column name when defining **UNIQUE** or **INDEX** for a specific column. This keyword is specified to store the index value in ascending or descending order. ::
+You can specify options such as **ASC** or **DESC** after the column name when defining **UNIQUE** or **INDEX** for a specific column. This keyword is specified as store the index value in ascending or descending order. ::
 
     column_name [ASC|DESC]
 
@@ -879,12 +881,6 @@ ADD COLUMN Clause
 
 You can add a new column by using the **ADD COLUMN** clause. You can specify the location of the column to be added by using the **FIRST** or **AFTER** keyword.
 
-If the newly added column has the **NOT NULL** constraint but no **DEFAULT** constraint, it will have the hard default when the database server configuration parameter, **add_column_update_hard_default** is set to yes. However, when the parameter is set to no, the column will have **NULL** even with the **NOT NULL** constraint.
-
-If the newly added column has the **PRIMARY KEY** or **UNIQUE** constraints, an error will be returned when the database server configuration parameter **add_column_update_hard_default** is set to yes. When the parameter is set to no, all data will have **NULL**. The default value of **add_column_update_hard_default** is **no**.
-
-For **add_column_update_hard_default** and the hard default, see :ref:`change-column`. 
-
 ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
@@ -913,7 +909,7 @@ For **add_column_update_hard_default** and the hard default, see :ref:`change-co
     <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : Specifies the name of a table that has a column to be added.
-*   *column_definition* : Specifies the name, data type, and constraints of a column to be added.
+*   *column_definition* : Specifies the name(max 254 bytes), data type, and constraints of a column to be added.
 *   **AFTER** *oid_column_name* : Specifies the name of an existing column before the column to be added.
 
 .. code-block:: sql
@@ -937,6 +933,65 @@ For **add_column_update_hard_default** and the hard default, see :ref:`change-co
      
     --adding multiple columns
     ALTER TABLE a_tbl ADD COLUMN (age1 int, age2 int, age3 int);
+
+The result when you add a new column depends on what constraints are added.
+
+*   If there is a **DEFAULT** constraint on the newly added column, **DEFAULT** value is inserted.
+*   If there is no **DEFAULT** constraint and there is a **NOT NULL** constraint, hard default value is inserted when a value of system parameter **add_column_update_hard_default** is **yes**; however, it returns an error when a value of **add_column_update_hard_default** is **no**. 
+ 
+The default of add_column_update_hard_default is **no**.
+ 
+Depending on **DEFAULT** constraint and **add_column_update_hard_default**\ 's value, if they do not violate their constraints, it is possible to add **PRIMARY KEY** constraint or **UNIQUE** constraint.
+ 
+*   If the newly added column when there is no data on the table, or the newly added column with **NOT NULL** and **UNIQUE** data can have **PRIMARY KEY** constraint.
+*   If you try to add a new column with **PRIMARY KEY** constraint when there is data on the table, it returns an error.
+ 
+    .. code-block:: sql
+    
+        CREATE TABLE tbl (a INT);
+        INSERT INTO tbl VALUES (1), (2);
+        ALTER TABLE tbl ADD COLUMN (b int PRIMARY KEY);
+ 
+    ::
+    
+        ERROR: NOT NULL constraints do not allow NULL value.
+ 
+*   If there is data and **UNIQUE** constraint is specified on the newly added data, **NULL** is inserted when there is no **DEFAULT** constraint.
+ 
+    .. code-block:: sql
+ 
+        ALTER TABLE tbl ADD COLUMN (b int UNIQUE);
+        SELECT * FROM tbl;
+ 
+    ::
+    
+            a            b
+        ==================
+            1         NULL
+            2         NULL
+ 
+*   If there is data on the table and **UNIQUE** constraint is specified on the newly added column, unique violation error is returned when there is **DEFAULT** constraint.
+ 
+    .. code-block:: sql
+    
+        ALTER TABLE tbl ADD COLUMN (c int UNIQUE DEFAULT 10);
+        
+    ::
+    
+        ERROR: Operation would have caused one or more unique constraint violations.
+ 
+*   If there is data on the table and **UNIQUE** constraint is specified on the newly added column, unique violation error is returned when there is **NOT NULL** constraint and the value of system parameter  add_column_update_hard_default is yes.
+ 
+    .. code-block:: sql
+ 
+        SET SYSTEM PARAMETERS 'add_column_update_hard_default=yes';
+        ALTER TABLE tbl ADD COLUMN (c int UNIQUE NOT NULL);
+ 
+    ::
+    
+        ERROR: Operation would have caused one or more unique constraint violations.
+        
+For **add_column_update_hard_default** and the hard default, see :ref:`change-column`. 
 
 ADD CONSTRAINT Clause
 ---------------------
@@ -1118,9 +1173,9 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 
 .. warning::
 
-    * **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.
-    * When converting a number type to character type, if the length of the string is shorter than that of the number, the string is truncated and saved according to the length of the converted character type.
-    * If the column attributes like a type, a collation, etc. are changed, the changed attributes are not applied into the view created with the table before the change. Therefore, if you change the attributes of a table, it is recommended to recreate the related views.
+    *   **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> syntax supported in CUBRID 2008 R3.1 or earlier version is no longer supported.
+    *   When converting a number type to character type, if alter_table_change_type_strict=no and the length of the string is shorter than that of the number, the string is truncated and saved according to the length of the converted character type. If alter_table_change_type_strict=yes, it returns an error.
+    *   If the column attributes like a type, a collation, etc. are changed, the changed attributes are not applied into the view created with the table before the change. Therefore, if you change the attributes of a table, it is recommended to recreate the related views.
 
 ::
 
@@ -1364,8 +1419,6 @@ The hard default value is a value that will be used when you add columns with th
 | DATETIME  | Yes                                 | datetime'01/01/0001 00:00'              |
 +-----------+-------------------------------------+-----------------------------------------+
 | TIMESTAMP | Yes                                 | timestamp'00:00:01 AM 01/01/1970' (GMT) |
-+-----------+-------------------------------------+-----------------------------------------+
-| MONETARY  | Yes                                 | 0                                       |
 +-----------+-------------------------------------+-----------------------------------------+
 | NUMERIC   | Yes                                 | 0                                       |
 +-----------+-------------------------------------+-----------------------------------------+

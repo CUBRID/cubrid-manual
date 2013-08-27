@@ -7,26 +7,6 @@ Arithmetic Operators
 
 For arithmetic operators, there are binary operators for addition, subtraction, multiplication, or division, and unary operators to represent whether the number is positive or negative. The unary operators to represent the numbers' positive/negative status have higher priority over the binary operators.
 
-**Arithmetic Operators Supported by CUBRID**
-
-+-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
-| Arithmetic Operator     | Description                                                                                        | Operator     | Return Value     |
-+=============+================================================================================================================+==============+==================+
-| **+**                   | Addition                                                                                           | 1+2          | 3                |
-+-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
-| **-**                   | Subtraction                                                                                        | 1-2          | -1               |
-+-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
-| **\***                  | Multiplication                                                                                     | 1*2          | 2                |
-+-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
-| **/**                   | Division. Returns quotient.                                                                        | 1/2.0        | 0.500000000      |
-+-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
-| **DIV**                 | Division. Returns quotient.                                                                        | 1 DIV 2      | 0                |
-+-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
-| **%**                   | Division. Returns quotient. An operator must be an integer type, and it always returns integer.    | 1 % 2        | 1                |
-| ,                       | If an operand is real number, the **MOD**                                                          | 1 MOD 2      |                  |
-| **MOD**                 | function can be used.                                                                              |              |                  |
-+-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
-
 ::
 
     expression  mathematical_operator  expression 
@@ -60,6 +40,28 @@ For arithmetic operators, there are binary operators for addition, subtraction, 
 *   *set_arithmetic_operator* : A set arithmetic operator that performs operations such as union, difference and intersection on collection type operands.
 *   *arithmetic_operator* : An operator to perform the four fundamental arithmetic operations.
 
+The following table shows the arithmetic operators supported by CUBRID and their return values.
+
+**Arithmetic Operators**
+
++-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
+| Arithmetic Operator     | Description                                                                                        | Operator     | Return Value     |
++=============+================================================================================================================+==============+==================+
+| **+**                   | Addition                                                                                           | 1+2          | 3                |
++-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
+| **-**                   | Subtraction                                                                                        | 1-2          | -1               |
++-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
+| **\***                  | Multiplication                                                                                     | 1*2          | 2                |
++-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
+| **/**                   | Division. Returns quotient.                                                                        | 1/2.0        | 0.500000000      |
++-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
+| **DIV**                 | Division. Returns quotient.                                                                        | 1 DIV 2      | 0                |
++-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
+| **%**                   | Division. Returns quotient. An operator must be an integer type, and it always returns integer.    | 1 % 2        | 1                |
+| ,                       | If an operand is real number, the **MOD**                                                          | 1 MOD 2      |                  |
+| **MOD**                 | function can be used.                                                                              |              |                  |
++-------------------------+----------------------------------------------------------------------------------------------------+--------------+------------------+
+
 .. _numeric-data-type-op-and-conversion:
 
 Arithmetic Operations and Type Casting of Numeric Data Types
@@ -69,31 +71,27 @@ All numeric data types can be used for arithmetic operations. The result type of
 
 **Result Data Type by Operand Type**
 
-+--------------+--------------+---------------------+--------------+--------------+--------------+
-|              | INT          | NUMERIC             | FLOAT        | DOUBLE       | MONETARY     |
-+==============+==============+=====================+==============+==============+==============+
-| **INT**      | INT          |   NUMERIC           |   FLOAT      |   DOUBLE     |   MONETARY   |
-|              | (            |                     |              |              |              |
-|              | BIGINT       |                     |              |              |              |
-|              | )            |                     |              |              |              |
-+--------------+--------------+---------------------+--------------+--------------+--------------+
-| **NUMERIC**  |   NUMERIC    | NUMERIC             |   DOUBLE     |   DOUBLE     |   MONETARY   |
-|              |              | (                   |              |              |              |
-|              |              | p                   |              |              |              |
-|              |              | and                 |              |              |              |
-|              |              | s                   |              |              |              |
-|              |              | are also converted) |              |              |              |
-+--------------+--------------+---------------------+--------------+--------------+--------------+
-| **FLOAT**    |   FLOAT      |   DOUBLE            |   FLOAT      |   DOUBLE     |   MONETARY   |
-+--------------+--------------+---------------------+--------------+--------------+--------------+
-| **DOUBLE**   |   DOUBLE     |   DOUBLE            |   DOUBLE     |   DOUBLE     |   MONETARY   |
-+--------------+--------------+---------------------+--------------+--------------+--------------+
-| **MONETARY** |   MONETARY   |   MONETARY          |   MONETARY   |   MONETARY   |   MONETARY   |
-+--------------+--------------+---------------------+--------------+--------------+--------------+
++--------------+--------------+---------------------+--------------+--------------+
+|              | INT          | NUMERIC             | FLOAT        | DOUBLE       |
++==============+==============+=====================+==============+==============+
+| **INT**      | INT          |   NUMERIC           |   FLOAT      |   DOUBLE     |
+|              | (            |                     |              |              |
+|              | BIGINT       |                     |              |              |
+|              | )            |                     |              |              |
++--------------+--------------+---------------------+--------------+--------------+
+| **NUMERIC**  |   NUMERIC    | NUMERIC             |   DOUBLE     |   DOUBLE     |
+|              |              | (                   |              |              |
+|              |              | p                   |              |              |
+|              |              | and                 |              |              |
+|              |              | s                   |              |              |
+|              |              | are also converted) |              |              |
++--------------+--------------+---------------------+--------------+--------------+
+| **FLOAT**    |   FLOAT      |   DOUBLE            |   FLOAT      |   DOUBLE     |
++--------------+--------------+---------------------+--------------+--------------+
+| **DOUBLE**   |   DOUBLE     |   DOUBLE            |   DOUBLE     |   DOUBLE     |
++--------------+--------------+---------------------+--------------+--------------+
 
 Note that the result type of the operation does not change if all operands are of the same data type but type casting occurs exceptionally in division operations. An error occurs when a denominator, i.e. a divisor, is 0.
-
-If one of the operands is a **MONETARY** type, all operation results are cast to **MONETARY** type because a **MONETARY** type uses the same operation methods as the DOUBLE type.
 
 The following table shows the total number of digits (*p*) and the number of digits after the decimal point (*s*) of the operation results when all operands are of the **NUMERIC** type. 
 

@@ -2,20 +2,15 @@
 관리자 안내서
 *************
 
-관리자 안내서는 데이터베이스 관리자(**DBA**)가 CUBRID 시스템을 사용하는데 필요한 작업 방법을 설명한다. 데이터베이스 생성 및 삭제, 볼륨 추가와 같은 데이터베이스 관리 작업, 데이터베이스를 다른 곳으로 이동하거나 시스템 버전에 맞춰서 변경하는 마이그레이션 작업, 장애 대비를 위한 데이터베이스의 백업 및 복구 작업 등에 대한 내용을 포함한다.
+관리자 안내서는 데이터베이스 관리자(**DBA**)가 CUBRID 시스템을 사용하는데 필요한 작업 방법을 설명한다. 
 
-그리고 CUBRID 서버, 브로커 및 매니저 서버 등의 다양한 프로세스들을 구동하고 정지하는 **cubrid** 유틸리티의 사용법을 설명한다.
+*   CUBRID 서버, 브로커 및 매니저 서버 등의 다양한 프로세스들을 구동하고 정지하는 방법을 설명한다.
 
-이 장에서 설명하는 주요 내용은 다음과 같다.
+*   데이터베이스 생성 및 삭제, 볼륨 추가와 같은 데이터베이스 관리 작업, 데이터베이스를 다른 곳으로 이동하거나 시스템 버전에 맞춰서 변경하는 마이그레이션 작업, 장애 대비를 위한 데이터베이스의 백업 및 복구 작업 등에 대한 내용을 포함한다.
 
-*   cubrid 유틸리티
-*   CUBRID 제어 (서비스, DB 서버, 브로커, 매니저 서버)
-*   데이터베이스 관리
-*   데이터베이스 마이그레이션
-*   데이터베이스 백업 및 복구
-*   시스템 설정
-
-**cubrid 유틸리티**
+*   시스템 설정 방법에 대해 설명한다.
+   
+*   트러블슈팅 방법에 대해 설명한다.
 
 **cubrid** 유틸리티는 CUBRID 서비스를 통합 관리할 수 있는 기능을 제공하며, CUBRID 서비스 프로세스를 관리하는 서비스 관리 유틸리티와 데이터베이스를 관리하는 데이터베이스 관리 유틸리티로 구분된다.
 
@@ -110,56 +105,6 @@
 
 자세한 설명은 :ref:`cubrid-utilities` 를 참조한다.
 
-프롬프트에서 **cubrid** 를 입력하면 다음과 같은 구문 안내문이 출력된다. 
-
-::
-
-    % cubrid
-     
-    cubrid utility, version 9.1
-    usage: cubrid <utility-name> [args]
-    Type 'cubrid <utility-name>' for help on a specific utility.
-     
-    Available service's utilities:
-        service
-        server
-        broker
-        manager
-        heartbeat
-     
-    Available administrator's utilities:
-        addvoldb
-        alterdbhost
-        backupdb
-        checkdb
-        compactdb
-        copydb
-        createdb
-        deletedb
-        diagdb
-        installdb
-        tranlist
-        killtran
-        loaddb
-        lockdb
-        optimizedb
-        plandump
-        renamedb
-        restoredb
-        spacedb
-        unloaddb
-        paramdump
-        statdump
-        changemode
-        copylogdb
-        applylogdb
-        applyinfo
-        genlocale
-        dumplocale
-        synccolldb
-     
-    cubrid is a tool for DBMS.
-
 .. _utility-on-windows:
 
 .. note::
@@ -174,3 +119,4 @@
     control.rst
     admin_utils.rst
     config.rst
+    troubleshoot.rst

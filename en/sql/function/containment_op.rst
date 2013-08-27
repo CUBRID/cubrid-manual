@@ -4,6 +4,33 @@ Containment Operators
 
 Containment operators are used to check the containment relationship by performing comparison operation on operands of the collection data type. Collection data types or subqueries can be specified as operands. The operation returns **TRUE** or **FALSE** if there is a containment relationship between the two operands of identical/different/subset/proper subset.
 
+::
+
+    collection_operand  containment_operator  collection_operand
+     
+    collection_operand:
+    • set
+    • multiset
+    • sequence(or list)
+    • subquery
+    • NULL
+     
+    containment_operator:
+    • SETEQ
+    • SETNEQ
+    • SUPERSET
+    • SUBSET
+    • SUPERSETEQ
+    • SUBSETEQ
+
+*   *collection_operand* : This expression that can be specified as an operand is a single SET-valued attribute, an arithmetic expression containing a SET operator or a SET value enclosed in braces. If the type is not specified, the SET value enclosed in braces is treated as a **LIST** type by default.
+
+    Subqueries can be specified as operands. If a column which is not a collection type is searched, a collection data type keyword is required for the subquery like **SET** (*subquery*). The column retrieved by a subquery must return a single set so that it can be compared with the set of the other operands.
+
+    If the element type of collection is an object, the OIDs, not its contents, are compared. For example, two objects with different OIDs are considered to be different even though they have the same attribute values.
+
+    *   **NULL** : Any of operands to be compared is **NULL**, **NULL** is returned.
+
 The description and return values about the containment operators supported by CUBRID are as follows:
 
 **Containment Operators Supported by CUBRID**
@@ -55,35 +82,6 @@ The following table shows than possibility of operation by operand and type conv
 |                     |                    | is converted into  | Error occurs for the rest of |
 |                     |                    | **MULTISET**)      | operators.                   |
 +---------------------+--------------------+--------------------+------------------------------+
-
-**Syntax**
-
-::
-
-    collection_operand  containment_operator  collection_operand
-     
-    collection_operand:
-    • set
-    • multiset
-    • sequence(or list)
-    • subquery
-    • NULL
-     
-    containment_operator:
-    • SETEQ
-    • SETNEQ
-    • SUPERSET
-    • SUBSET
-    • SUPERSETEQ
-    • SUBSETEQ
-
-*   *collection_operand* : This expression that can be specified as an operand is a single SET-valued attribute, an arithmetic expression containing a SET operator or a SET value enclosed in braces. If the type is not specified, the SET value enclosed in braces is treated as a **LIST** type by default.
-
-    Subqueries can be specified as operands. If a column which is not a collection type is searched, a collection data type keyword is required for the subquery like **SET** (*subquery*). The column retrieved by a subquery must return a single set so that it can be compared with the set of the other operands.
-
-    If the element type of collection is an object, the OIDs, not its contents, are compared. For example, two objects with different OIDs are considered to be different even though they have the same attribute values.
-
-    *   **NULL** : Any of operands to be compared is **NULL**, **NULL** is returned.
 
 **Example**
 

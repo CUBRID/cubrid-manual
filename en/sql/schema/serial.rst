@@ -121,14 +121,6 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial
 
 *   **NOCACHE** : It does not use the serial cache feature. The serial value is updated every time and a new serial value is fetched from the disk upon each request.
 
-.. warning::
-
-     In CUBRID 2008 R1.x version, the serial value can be modified by updating the db_serial table, a system catalog. However, in CUBRID 2008 R2.0 version or above, the modification of the db_serial table is not allowed but use of the **ALTER SERIAL** statement is allowed. Therefore, if an **ALTER SERIAL** statement is included in the data exported (unloaddb) from CUBRID 2008 R2.0 or above, it is not allowed to import (loaddb) the data in CUBRID 2008 R1.x or below.
-
-.. warning::
-
-    In version lower than CUBRID 9.0, the next value of the initial value set as **ALTER SERILAL** is returned when the first **NEXT_VALUE** value is calculated after **ALTER SERIAL**. However, in version of CUBRID 9.0 or higher, the setting value of **ALTER_SERILAL** is returned.
-
 .. code-block:: sql
 
     --altering serial by changing start and incremental values
@@ -139,6 +131,25 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial
      
     --altering serial to operate in common mode
     ALTER SERIAL order_no NOCACHE;
+    
+.. warning::
+
+     In CUBRID 2008 R1.x version, the serial value can be modified by updating the db_serial table, a system catalog. However, in CUBRID 2008 R2.0 version or above, the modification of the db_serial table is not allowed but use of the **ALTER SERIAL** statement is allowed. Therefore, if an **ALTER SERIAL** statement is included in the data exported (unloaddb) from CUBRID 2008 R2.0 or above, it is not allowed to import (loaddb) the data in CUBRID 2008 R1.x or below.
+    
+.. warning::
+
+    When you get the value of **NEXT_VALUE** after running **ALTER SERIAL**, in the version lower than CUBRID 9.0, the next value of the initial value was returned. From CUBRID 9.0, the setting value of **ALTER_SERIAL** is returned.
+
+    ::
+    
+        CREATE SERIAL s1;
+        SELECT s1.NEXTVAL;
+
+        ALTER SERIAL s1 START WITH 10;
+        
+        SELECT s1.NEXTVAL;
+        -- From 9.0, above query returns 10
+        -- In the version less than 9.0, above query returns 11
 
 DROP SERIAL
 ===========

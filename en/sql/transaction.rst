@@ -4,7 +4,7 @@ Transaction and Lock
 
 This chapter covers issues relating to concurrency and restore, as well as how to commit or rollback transactions.
 
-In multi-user environment, controlling access and update is essential to protect database integrity and ensure that a user’s transaction will have accurate and consistent data. Without appropriate control, data could be updated incorrectly in the wrong order.
+In multi-user environment, controlling access and update is essential to protect database integrity and ensure that a user's transaction will have accurate and consistent data. Without appropriate control, data could be updated incorrectly in the wrong order.
 
 To control parallel operations on the same data, data must be locked during transaction, and unacceptable access to the data by another transaction must be blocked until the end of the transaction. In addition, any updates to a certain class must not be seen by other users before they are committed. If updates are not committed, all queries entered after the last commit or rollback of the update can be invalidated.
 
@@ -72,7 +72,7 @@ If the update is properly done, the changes can be semi-permanently fixed. In th
 
 .. note:: In CUBRID, an auto-commit mode is set by default for transaction management.
 
-An auto-commit mode is a mode that commits or rolls back all SQL statements. The transaction is committed automatically if the SQL is executed successfully, or is rolled back automatically if an error occurs.Such auto commit modes are supported in any interfaces.
+An auto-commit mode is a mode that commits or rolls back all SQL statements. The transaction is committed automatically if the SQL is executed successfully, or is rolled back automatically if an error occurs. Such auto commit modes are supported in any interfaces.
 
 In CCI, PHP, ODBC and OLE DB interfaces, you can configure auto-commit mode by using **CCI_DEFAULT_AUTOCOMMIT** upon startup of an application. If configuration on broker parameter is omitted, the default value is set to **ON**. To change auto-commit mode, use the following functions by interface: **cci_set_autocommit** () for CCI interface and **cubrid_set_autocommit** () for PHP interface.
 
@@ -113,7 +113,7 @@ Later, remove the *s_name* column by entering the **ALTER TABLE** again and modi
 
 .. code-block:: sql
 
-    ALTER TABLE code drop s_name;
+    ALTER TABLE code DROP s_name;
     INSERT INTO code (f_name) VALUES ('Diamond');
 
     COMMIT WORK;
@@ -190,7 +190,7 @@ The following example shows how to roll back to SP1.
 Cursor Holdability
 ==================
 
-Cursor holdability is when an application holds the record set of the **SELECT** query result to fetch the next record even after performing an explicit commit or an automatic commit. In each application, cursor holdability can be specified to Connection level or Statement level. If it is not specified, the cursor is held by default. Therefore, **HOLD_CURSORS_OVER_COMMIT** is the default setting.
+Cursor holdability is when an application holds the record set of the **SELECT** query result to fetch the next record even after performing an explicit commit or an automatic commit. In each application, cursor holdability can be specified as Connection level or Statement level. If it is not specified, the cursor is held by default. Therefore, **HOLD_CURSORS_OVER_COMMIT** is the default setting.
 
 The following code shows how to set cursor holdability in JDBC:
 
@@ -199,7 +199,7 @@ The following code shows how to set cursor holdability in JDBC:
     // set cursor holdability at the connection level
     conn.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
      
-    // set cursor holdability at the statement level which can override the connection’s
+    // set cursor holdability at the statement level which can override the connection
     PreparedStatement pStmt = conn.prepareStatement(sql,
                                         ResultSet.TYPE_SCROLL_SENSITIVE,
                                         ResultSet.CONCUR_UPDATABLE,
@@ -287,6 +287,8 @@ The default value of CUBRID isolation level is :ref:`isolation-level-3`.
 +------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
 | :ref:`isolation-level-1` (1)             |                             | Y      | Y             | Y        | Y                      |
 +------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
+
+.. _lock-protocol:
 
 Lock Protocol
 =============
@@ -440,7 +442,7 @@ The following table briefly shows the lock compatibility between the locks descr
 |                                                                               |                                                                            |
 |   csql> SELECT nation_code, gold FROM participant WHERE nation_code='USA';    |                                                                            |
 |                                                                               |                                                                            |
-|   /* no results until transaction 2 releases a lock                           |                                                                            |
+|   /* no results until transaction 2 releases a lock */                        |                                                                            |
 |                                                                               |                                                                            |
 | ::                                                                            |                                                                            |
 |                                                                               |                                                                            |
@@ -473,8 +475,7 @@ The following table briefly shows the lock compatibility between the locks descr
 |                                                                               | ::                                                                         |
 |                                                                               |                                                                            |
 |                                                                               |   csql> COMMIT;                                                            |
-|                                                                               |                                                                            |
-|                                                                               |   Current transaction has been committed.                                  |
+|                                                                               |   Execute OK. (0.000192 sec)                                               |
 +-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
 | ::                                                                            |                                                                            |
 |                                                                               |                                                                            |
@@ -505,8 +506,7 @@ The following table briefly shows the lock compatibility between the locks descr
 | ::                                                                            |                                                                            |
 |                                                                               |                                                                            |
 |   csql> COMMIT;                                                               |                                                                            |
-|                                                                               |                                                                            |
-|   Current transaction has been committed.                                     |                                                                            |
+|   Execute OK. (0.000192 sec)                                                  |                                                                            |
 |                                                                               |                                                                            |
 | ::                                                                            |                                                                            |
 |                                                                               |                                                                            |
@@ -591,7 +591,7 @@ In the following error log file, (1) indicates a table name which causes deadloc
 |                                                                                                     |                                                      |
 |   csql> DELETE FROM lock_tbl WHERE host_year=2008;                                                  |                                                      |
 |                                                                                                     |                                                      |
-|   /* no result until transaction 2 releases a lock                                                  |                                                      |
+|   /* no result until transaction 2 releases a lock */                                               |                                                      |
 |                                                                                                     |                                                      |
 | ::                                                                                                  |                                                      |
 |                                                                                                     |                                                      |
@@ -642,7 +642,7 @@ If the lock is allowed within the lock timeout, CUBRID rolls back the transactio
 
 **Setting the Lock Timeout**
 
-The system parameter **lock_timeout_in_secs** in the **$CUBRID/conf/cubrid.conf** file or the **SET TRANSACTION** statement sets the timeout (in seconds) during which the application will wait for the lock and rolls back the transaction and outputs an error message when the specified time has passed. The default value of the **lock_timeout_in_secs** parameter is **-1**, which means the application will wait indefinitely until the transaction lock is allowed. Therefore, the user can change this value depending on the transaction pattern of the application. If the lock timeout value has been set to 0, an error message will be displayed as soon as a lock occurs. ::
+The system parameter **lock_timeout** in the **$CUBRID/conf/cubrid.conf** file or the **SET TRANSACTION** statement sets the timeout (in seconds) during which the application will wait for the lock and rolls back the transaction and outputs an error message when the specified time has passed. The default value of the **lock_timeout** parameter is **-1**, which means the application will wait indefinitely until the transaction lock is allowed. Therefore, the user can change this value depending on the transaction pattern of the application. If the lock timeout value has been set to 0, an error message will be displayed as soon as a lock occurs. ::
 
     SET TRANSACTION LOCK TIMEOUT timeout_spec [ ; ]
     timeout_spec:
@@ -651,8 +651,8 @@ The system parameter **lock_timeout_in_secs** in the **$CUBRID/conf/cubrid.conf*
     - unsigned_integer
     - variable
 
-*   **INFINITE** : Wait indefinitely until the transaction lock is allowed. Has the same effect as setting the system parameter **lock_timeout_in_secs** to -1.
-*   **OFF** : Do not wait for the lock, but roll back the transaction and display an error message. Has the same effect as setting the system parameter **lock_timeout_in_secs** to 0.
+*   **INFINITE** : Wait indefinitely until the transaction lock is allowed. Has the same effect as setting the system parameter **lock_timeout** to -1.
+*   **OFF** : Do not wait for the lock, but roll back the transaction and display an error message. Has the same effect as setting the system parameter **lock_timeout** to 0.
 *   *unsigned_integer* : Set in seconds. Wait for the transaction lock for the specified time period.  
 *   *variable* : A variable can be specified. Wait for the transaction lock for the value stored by the variable.
 
@@ -660,7 +660,7 @@ The system parameter **lock_timeout_in_secs** in the **$CUBRID/conf/cubrid.conf*
 
     vi $CUBRID/conf/cubrid.conf
     ...    
-    lock_timeout_in_secs = 10
+    lock_timeout = 10s
     ...
 
 **Example 2** ::

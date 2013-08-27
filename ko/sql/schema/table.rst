@@ -33,7 +33,7 @@ CREATE TABLE
     AUTO_INCREMENT [(seed, increment)]
      
     <column_constraint> ::=
-    NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+    [CONSTRAINT <constraint_name>] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition> }
      
     <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
 
@@ -76,7 +76,7 @@ CREATE TABLE
 *   *column_name* : 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type* : 칼럼의 데이터 타입을 지정한다.
 *   [**SHARED** *value* | **DEFAULT** *value*] : 칼럼의 초기값을 지정한다.
-*   *column_constraints* : 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다(자세한 내용은 :ref:`constraint-definition` 참조).
+*   *column_constraint* : 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다(자세한 내용은 :ref:`constraint-definition` 참조).
 
 .. code-block:: sql
 
@@ -224,7 +224,7 @@ CREATE TABLE
 
 동일한 칼럼에 **AUTO_INCREMENT** 속성과 **SHARED** 또는 **DEFAULT** 속성을 동시에 정의할 수 없으며, 사용자가 직접 입력한 값과 자동 증가 특성에 의해 입력된 값이 서로 충돌되지 않도록 주의해야 한다.
 
-**AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 :ref:`alter-auto-increment` 을 참고한다.
+**AUTO_INCREMENT** 의 초기값은 **ALTER TABLE** 문을 이용하여 바꿀 수 있다. 자세한 내용은 **ALTER TABLE** 의 :ref:`alter-auto-increment`\ 을 참고한다.
 
 ::
 
@@ -238,7 +238,7 @@ CREATE TABLE
 **CREATE TABLE** *table_name* (id int **AUTO_INCREMENT**) **AUTO_INCREMENT** = *seed*; 구문을 사용할 때에는 다음과 같은 제약 사항이 있다.
 
 *   **AUTO_INCREMENT** 속성을 갖는 칼럼은 하나만 정의해야 한다.
-*   (*seed*, *increment*)와 **AUTO_INCREMENT** = *seed* 는 같이 사용하지 않는다.
+*   (*seed*, *increment*)와 **AUTO_INCREMENT** = *seed*\ 는 같이 사용하지 않는다.
 
 .. code-block:: sql
 
@@ -290,6 +290,7 @@ CREATE TABLE
 
     *   자동 증가 특성만으로는 **UNIQUE** 제약 조건을 가지지 않는다.
     *   자동 증가 특성이 정의된 칼럼에 **NULL** 을 입력하면 자동 증가된 값이 저장된다.
+    *   자동 증가 특성이 정의된 칼럼에 값을 직접 입력해도 AUTO_INCREMENT 값은 변하지 않는다.
     *   자동 증가 특성이 정의된 칼럼에 **SHARED** 또는 **DEFAULT** 속성을 설정할 수 없다.
     *   초기값 및 자동 증가 특성에 의해 증가된 최종 값은 해당 타입에서 허용되는 최소/최대값을 넘을 수 없다.
     *   자동 증가 특성은 순환되지 않으므로 타입의 최대값을 넘어갈 경우 오류가 발생하며, 이에 대한 롤백이 일어나지 않는다. 따라서 이와 같은 경우 해당 칼럼을 삭제 후 다시 생성해야 한다. 
@@ -879,12 +880,6 @@ ADD COLUMN 절
 
 **ADD COLUMN** 절을 사용하여 새로운 칼럼을 추가할 수 있다. **FIRST** 또는 **AFTER** 키워드를 사용하여 새로 추가할 칼럼의 위치를 지정할 수 있다.
 
-새로 추가되는 칼럼이 **NOT NULL** 제약 조건이 있으나 **DEFAULT** 제약 조건이 없는 경우, 데이터베이스 서버 설정 파라미터인 **add_column_update_hard_default** 값이 yes이면 고정 기본값(hard default)을 갖게 되고, no이면 **NOT NULL** 제약 조건이 있어도 **NULL** 값을 갖게 된다. 
-
-새로 추가되는 칼럼에 **PRIMARY KEY** 혹은 **UNIQUE** 제약 조건을 지정하는 경우에 데이터베이스 서버 설정 파라미터인 **add_column_update_hard_default** 값이 yes이면 에러를 반환하고, no이면 모든 데이터는 **NULL** 값을 갖게 된다. **add_column_update_hard_default**\ 의 기본값은 **no** 이다.
-
-**add_column_update_hard_default** 및 고정 기본값에 대해서는 :ref:`change-column` 을 참고한다. 
-
 ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
@@ -938,6 +933,65 @@ ADD COLUMN 절
     --adding multiple columns
     ALTER TABLE a_tbl ADD COLUMN (age1 int, age2 int, age3 int);
 
+새로 추가되는 칼럼에 어떤 제약 조건이 오느냐에 따라 다른 결과를 보여준다.
+
+*   새로 추가되는 칼럼에 **DEFAULT** 제약 조건이 있으면 **DEFAULT** 값이 입력된다.
+*   새로 추가되는 칼럼에 **DEFAULT** 제약 조건이 없고 **NOT NULL** 제약 조건이 있는 경우, 시스템 파라미터 **add_column_update_hard_default**\ 가 **yes**\ 이면 고정 기본값(hard default)을 갖게 되고, **no**\ 이면 에러를 반환한다. 
+ 
+**add_column_update_hard_default**\ 의 기본값은 **no**\ 이다.
+ 
+**DEFAULT** 제약 조건 및 **add_column_update_hard_default** 값의 설정에 따라 해당 제약 조건을 위배하지 않는 한도 내에서 **PRIMARY KEY** 혹은 **UNIQUE** 제약 조건의 추가가 가능하다.
+ 
+*   테이블에 데이터가 없거나 **NOT NULL**\ 이고 **UNIQUE**\ 인 값을 가지는 기존 칼럼에 **PRIMARY KEY** 제약 조건을 지정할 수 있다.
+*   테이블에 데이터가 있고 새로 추가되는 칼럼에 **PRIMARY KEY** 제약 조건을 지정하는 경우, 에러를 반환한다. 
+ 
+    .. code-block:: sql
+    
+        CREATE TABLE tbl (a INT);
+        INSERT INTO tbl VALUES (1), (2);
+        ALTER TABLE tbl ADD COLUMN (b int PRIMARY KEY);
+ 
+    ::
+    
+        ERROR: NOT NULL constraints do not allow NULL value.
+ 
+*   테이블에 데이터가 있고 새로 추가되는 칼럼에 UNIQUE 제약 조건을 지정하는 경우, DEFAULT 제약 조건이 없으면 NULL이 입력된다.
+ 
+    .. code-block:: sql
+ 
+        ALTER TABLE tbl ADD COLUMN (b int UNIQUE);
+        SELECT * FROM tbl;
+ 
+    ::
+    
+            a            b
+        ==================
+            1         NULL
+            2         NULL
+ 
+*   테이블에 데이터가 있고 새로 추가되는 칼럼에 UNIQUE 제약 조건을 지정하는 경우, DEFAULT 제약 조건이 있으면 고유 키 위반 에러를 반환한다.
+ 
+    .. code-block:: sql
+    
+        ALTER TABLE tbl ADD COLUMN (c int UNIQUE DEFAULT 10);
+        
+    ::
+    
+        ERROR: Operation would have caused one or more unique constraint violations.
+ 
+*   테이블에 데이터가 있고 새로 추가되는 칼럼에 UNIQUE 제약 조건을 지정하는 경우, NOT NULL 제약 조건이 있고 add_column_update_hard_default가 yes이면 고유 키 위반 에러를 반환한다.
+ 
+    .. code-block:: sql
+ 
+        SET SYSTEM PARAMETERS 'add_column_update_hard_default=yes';
+        ALTER TABLE tbl ADD COLUMN (c int UNIQUE NOT NULL);
+ 
+    ::
+    
+        ERROR: Operation would have caused one or more unique constraint violations.
+        
+**add_column_update_hard_default** 및 고정 기본값에 대해서는 :ref:`change-column`\ 을 참고한다. 
+
 ADD CONSTRAINT 절
 -----------------
 
@@ -963,7 +1017,7 @@ ADD CONSTRAINT 절
 
 *   *table_name* : 제약 조건을 추가할 테이블의 이름을 지정한다.
 *   *constraint_name* : 새로 추가할 제약 조건의 이름(최대 254 바이트)을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
-*   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
+*   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name*\ 을 무시하고 이 이름을 사용한다.
 *   *column_constraint* : 지정된 칼럼에 대해 제약 조건을 정의한다. 제약 조건에 대한 자세한 설명은 :ref:`constraint-definition` 를 참고한다.
 
 .. code-block:: sql
@@ -1017,7 +1071,7 @@ ADD INDEX 절
 ALTER COLUMN … SET DEFAULT 절
 ------------------------------
 
-**ALTER COLUMN** ... **SET DEFAULT** 절은 기본값이 없는 칼럼에 기본값을 지정하거나 기존의 기본값을 변경할 수 있다. :ref:`change-column` 을 이용하면, 단일 구문으로 여러 칼럼의 기본값을 변경할 수 있다. ::
+**ALTER COLUMN** ... **SET DEFAULT** 절은 기본값이 없는 칼럼에 기본값을 지정하거나 기존의 기본값을 변경할 수 있다. :ref:`change-column`\ 을 이용하면, 단일 구문으로 여러 칼럼의 기본값을 변경할 수 있다. ::
 
     ALTER [ TABLE | CLASS ] table_name ALTER [COLUMN] column_name SET DEFAULT value
 
@@ -1118,9 +1172,9 @@ CHANGE/MODIFY 절
 
 .. warning::
 
-    * CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> 구문은 더 이상 지원하지 않는다.
-    * 숫자를 문자 타입으로 변환할 때 해당 문자열의 길이가 숫자의 길이보다 짧으면, alter_table_change_type_strict=no인 경우에 한해 변환되는 문자 타입의 길이에 맞추어 문자열이 잘린 상태로 저장된다. alter_table_change_type_strict=yes일 때 해당 문자열의 길이가 숫자의 길이보다 짧으면 **ALTER** ... **CHANGE** 구문 실행 시 오류를 발생한다.
-    * 테이블의 칼럼 타입, 콜레이션 등 칼럼 속성을 변경하는 경우 변경된 속성이 변경 이전 테이블을 이용하여 생성한 뷰에 반영되지는 않는다. 따라서 테이블의 칼럼 속성을 변경하는 경우 뷰를 재생성할 것을 권장한다.
+    *   CUBRID 2008 R3.1 이하 버전에서 사용되었던 **ALTER TABLE** <table_name> **CHANGE** <column_name> **DEFAULT** <default_value> 구문은 더 이상 지원하지 않는다.
+    *   숫자를 문자 타입으로 변환할 때, alter_table_change_type_strict=no이고 해당 문자열의 길이가 숫자의 길이보다 짧으면 변환되는 문자 타입의 길이에 맞추어 문자열이 잘린 상태로 저장된다. alter_table_change_type_strict=yes이면 오류를 발생한다.
+    *   테이블의 칼럼 타입, 콜레이션 등 칼럼 속성을 변경하는 경우 변경된 속성이 변경 이전 테이블을 이용하여 생성한 뷰에 반영되지는 않는다. 따라서 테이블의 칼럼 속성을 변경하는 경우 뷰를 재생성할 것을 권장한다.
 
 ::
 
@@ -1364,8 +1418,6 @@ CHANGE/MODIFY 절
 | DATETIME  | 유               | datetime'01/01/0001 00:00'              |
 +-----------+------------------+-----------------------------------------+
 | TIMESTAMP | 유               | timestamp'00:00:01 AM 01/01/1970' (GMT) |
-+-----------+------------------+-----------------------------------------+
-| MONETARY  | 유               | 0                                       |
 +-----------+------------------+-----------------------------------------+
 | NUMERIC   | 유               | 0                                       |
 +-----------+------------------+-----------------------------------------+

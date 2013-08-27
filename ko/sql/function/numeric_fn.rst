@@ -7,7 +7,7 @@ ABS
 
 .. function:: ABS (number_expr)
 
-    함수는 지정된 인자 값의 절대값을 반환하며, 리턴 값의 타입은 주어진 인자의 타입과 같다.
+    함수는 지정된 인자 값의 절대값을 반환하며, 리턴 값의 타입은 주어진 인자의 타입과 같다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param number_expr: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: number_expr의 타입
@@ -28,7 +28,7 @@ ACOS
 
 .. function:: ACOS ( x )
 
-    **ACOS** 함수는 인자의 아크 코사인(arc cosine) 값을 반환한다. 즉, 코사인이 *x* 인 값을 라디안 단위로 반환하며, 리턴 값은 **DOUBLE** 타입이다. *x* 는 -1 이상 1 이하의 값이어야 하며, 그 외의 경우 에러를 반환한다.
+    **ACOS** 함수는 인자의 아크 코사인(arc cosine) 값을 반환한다. 즉, 코사인이 *x* 인 값을 라디안 단위로 반환하며, 리턴 값은 **DOUBLE** 타입이다. *x* 는 -1 이상 1 이하의 값이어야 하며, 그 외의 경우 에러를 반환한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -48,7 +48,7 @@ ASIN
 
 .. function:: ASIN ( x )
 
-    **ASIN** 함수는 인자의 아크 사인(arc sine) 값을 반환한다. 즉, 사인이 *x* 인 값을 라디안 단위로 반환하며, 리턴 값은 DOUBLE 타입이다. *x* 는 -1 이상 1 이하의 값이어야 하며, 그 외의 경우 에러를 반환한다.
+    **ASIN** 함수는 인자의 아크 사인(arc sine) 값을 반환한다. 즉, 사인이 *x* 인 값을 라디안 단위로 반환하며, 리턴 값은 DOUBLE 타입이다. *x* 는 -1 이상 1 이하의 값이어야 하며, 그 외의 경우 에러를 반환한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -68,7 +68,7 @@ ATAN
 
 .. function:: ATAN ( [y,] x )
 
-    **ATAN** 함수는 탄젠트가 *x* 인 값을 라디안 단위로 반환한다. 인자 *y* 는 생략될 수 있으며, *y* 가 지정되는 경우 함수는 *y* / *x* 의 아크 탄젠트 값을 계산한다. 리턴 값은 **DOUBLE** 타입이다.
+    **ATAN** 함수는 탄젠트가 *x* 인 값을 라디안 단위로 반환한다. 인자 *y* 는 생략될 수 있으며, *y* 가 지정되는 경우 함수는 *y* / *x* 의 아크 탄젠트 값을 계산한다. 리턴 값은 **DOUBLE** 타입이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x,y: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -88,7 +88,7 @@ ATAN2
 
 .. function:: ATAN2 ( y, x )
 
-    **ATAN2** 함수는 *y* / *x* 의 아크 탄젠트 값을 라디안 단위로 반환하며, :func:`ATAN` 와 유사하게 동작한다. 인자 *x*, *y* 가 모두 지정되어야 한다. 리턴 값은 **DOUBLE** 타입이다.
+    **ATAN2** 함수는 *y* / *x* 의 아크 탄젠트 값을 라디안 단위로 반환하며, :func:`ATAN` 와 유사하게 동작한다. 인자 *x*, *y* 가 모두 지정되어야 한다. 리턴 값은 **DOUBLE** 타입이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x,y: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -108,7 +108,7 @@ CEIL
 
 .. function:: CEIL( number_operand )
 
-    **CEIL** 함수는 인자보다 크거나 같은 최소 정수 값을 인자의 타입으로 반환한다. 리턴 값은 *number_operand* 인자로 지정된 값의 유효 자릿수를 따른다. 
+    **CEIL** 함수는 인자보다 크거나 같은 최소 정수 값을 인자의 타입으로 반환한다. 리턴 값은 *number_operand* 인자로 지정된 값의 유효 자릿수를 따른다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
     
     :param number_operand: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: INT
@@ -136,7 +136,7 @@ CONV
 
 .. function:: CONV (number,from_base,to_base)
 
-    **CONV** 함수는 숫자의 진수를 변환하는 함수이며, 진수가 변환된 숫자를 문자열로 반환한다. 진수의 최소값은 2, 최대값은 36이다. 반환할 숫자의 진수를 나타내는 *to_base* 가 음수이면 입력 숫자인 *number* 가 부호 있는(signed) 숫자로 간주되고, 그 외의 경우에는 부호 없는(unsigned) 숫자로 간주된다.
+    **CONV** 함수는 숫자의 진수를 변환하는 함수이며, 진수가 변환된 숫자를 문자열로 반환한다. 진수의 최소값은 2, 최대값은 36이다. 반환할 숫자의 진수를 나타내는 *to_base* 가 음수이면 입력 숫자인 *number* 가 부호 있는(signed) 숫자로 간주되고, 그 외의 경우에는 부호 없는(unsigned) 숫자로 간주된다. *from_base* 또는 *to_base*\ 에 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param number: 입력 숫자
     :param from_base: 입력 숫자의 진수
@@ -172,7 +172,7 @@ COS
 
 .. function:: COS ( x )
 
-    **COS** 함수는 인자의 코사인(cosine) 값을 반환하며, 인자 *x* 는 라디안 값이어야 한다. 리턴 값은 **DOUBLE** 타입이다.
+    **COS** 함수는 인자의 코사인(cosine) 값을 반환하며, 인자 *x* 는 라디안 값이어야 한다. 리턴 값은 **DOUBLE** 타입이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -192,7 +192,7 @@ COT
 
 .. function:: COT ( x )
 
-    **COT** 함수는 인자 *x* 의 코탄젠트(cotangent) 값을 반환한다. 즉, 탄젠트가 *x* 인 값을 라디안 단위로 반환하며, 리턴 값은 **DOUBLE** 타입이다.
+    **COT** 함수는 인자 *x* 의 코탄젠트(cotangent) 값을 반환한다. 즉, 탄젠트가 *x* 인 값을 라디안 단위로 반환하며, 리턴 값은 **DOUBLE** 타입이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -212,7 +212,7 @@ DEGREES
 
 .. function:: DEGREES ( x )
 
-    **DEGREES** 함수는 라디안 단위로 지정된 인자 *x* 를 각도로 환산하여 반환한다. 리턴 값은 **DOUBLE** 타입이다.
+    **DEGREES** 함수는 라디안 단위로 지정된 인자 *x* 를 각도로 환산하여 반환한다. 리턴 값은 **DOUBLE** 타입이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -235,9 +235,9 @@ DRANDOM, DRAND
 
     **DRANDOM** / **DRAND** 함수는 구간 0.0 이상 1.0 미만의 구간에서 임의의 이중 정밀도(double-precision) 부동 소수점 값을 반환하며, *seed* 인자를 지정할 수 있다. *seed* 인자의 타입은 **INTEGER** 이며, 실수가 지정되면 반올림하고, **INTEGER** 범위를 초과하면 에러를 반환한다.
 
-    **DRAND** 함수는 연산을 출력하는 행(row)의 개수와 관계없이 한 문장 내에서 1회만 연산을 수행하여 오직 한 개의 임의값만 생성하는 반면, **DRANDOM** 함수는 함수가 호출될 때마다 매번 연산을 수행하므로 한 문장 내에서 여러 개의 다른 임의 값을 생성한다. 따라서, 무작위 순서로 행을 출력하기 위해서는 **ORDER BY** 절에 **DRANDOM** 함수를 이용해야 한다. 무작위 정수값을 구하기 위해서는 :func:`RANDOM` 를 사용한다.
+    **DRAND** 함수는 연산을 출력하는 행(row)의 개수와 관계없이 한 문장 내에서 1회만 연산을 수행하여 오직 한 개의 임의값만 생성하는 반면, **DRANDOM** 함수는 함수가 호출될 때마다 매번 연산을 수행하므로 한 문장 내에서 여러 개의 다른 임의 값을 생성한다. 따라서, 무작위 순서로 행을 출력하기 위해서는 **ORDER BY** 절에 **DRANDOM** 함수를 이용해야 한다. 무작위 정수값을 구하기 위해서는 :func:`RANDOM`\ 를 사용한다.
 
-    :param seed: 
+    :param seed: seed 값
     :rtype: DOUBLE
 
 .. code-block:: sql
@@ -323,7 +323,7 @@ EXP
 
 .. function:: EXP( x )
 
-    **EXP** 함수는 자연로그의 밑수인 e를 *x* 제곱한 값을 **DOUBLE** 타입으로 반환한다. 
+    **EXP** 함수는 자연로그의 밑수인 e를 *x* 제곱한 값을 **DOUBLE** 타입으로 반환한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -353,7 +353,7 @@ FLOOR
 
 .. function:: FLOOR( number_operand )
 
-    **FLOOR** 함수는 인자보다 작거나 같은 최대 정수 값을 반환하며, 리턴 값의 타입은 인자의 타입과 같다.
+    **FLOOR** 함수는 인자보다 작거나 같은 최대 정수 값을 반환하며, 리턴 값의 타입은 인자의 타입과 같다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param number_operand: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: number_operand의 타입
@@ -384,9 +384,9 @@ HEX
 
 .. function:: HEX(n)
 
-    **HEX** 함수는 16진수 문자열을 인자로 지정하면 10진수 문자열을 반환하고, 10진수 숫자를 인자로 지정하면 16진수 문자열을 반환한다. 숫자를 인자로 지정하면 CONV(num, 10, 16)과 같은 값을 반환한다.
-
-    :param n: 16진수 문자열 or 10진수 숫자
+    **HEX** 함수는 문자열을 인자로 지정하면 해당 문자열에 대한 16진수 문자열을 반환하고, 숫자를 인자로 지정하면 해당 숫자에 대한 16진수 문자열을 반환한다. 숫자를 인자로 지정하면 CONV(num, 10, 16)과 같은 값을 반환한다.
+    
+    :param n: 문자열 또는 숫자
     :rtype: STRING
 
 .. code-block:: sql
@@ -404,7 +404,7 @@ LN
 
 .. function:: LN ( x )
 
-    **LN** 함수는 진수 *x* 의 자연 로그(밑수가 e인 로그) 값을 반환하며, 리턴 값은 **DOUBLE** 타입이다. 진수 *x* 가 0이거나 음수인 경우, 에러를 반환한다.
+    **LN** 함수는 진수 *x* 의 자연 로그(밑수가 e인 로그) 값을 반환하며, 리턴 값은 **DOUBLE** 타입이다. 진수 *x* 가 0이거나 음수인 경우, 에러를 반환한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 양수 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -424,7 +424,7 @@ LOG2
 
 .. function:: LOG2 ( x )
 
-    **LOG2** 함수는 진수가 *x* 이고, 밑수가 2인 로그 값을 반환하며, 리턴 값은 **DOUBLE** 타입이다. 진수 *x* 가 0이거나 음수인 경우, 에러를 반환한다.
+    **LOG2** 함수는 진수가 *x* 이고, 밑수가 2인 로그 값을 반환하며, 리턴 값은 **DOUBLE** 타입이다. 진수 *x* 가 0이거나 음수인 경우, 에러를 반환한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 양수 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -444,7 +444,7 @@ LOG10
 
 .. function:: LOG10 ( x )
 
-    **LOG10** 함수는 진수 *x* 의 상용 로그 값을 반환하며, 리턴 값은 **DOUBLE** 타입이다. 진수 *x* 가 0이거나 음수인 경우, 에러를 반환한다.
+    **LOG10** 함수는 진수 *x* 의 상용 로그 값을 반환하며, 리턴 값은 **DOUBLE** 타입이다. 진수 *x* 가 0이거나 음수인 경우, 에러를 반환한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 양수 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -464,7 +464,9 @@ MOD
 
 .. function:: MOD (m, n)
 
-    **MOD** 함수는 첫 번째 인자 *m* 을 두 번째 인자 *n* 으로 나눈 나머지 값을 정수로 반환하며, 만약 *n* 이 0이면, 나누기 연산을 수행하지 않고 *m* 값을 그대로 반환한다. 주의할 점은 피제수, 즉 **MOD** 함수의 인자 *m* 이 음수인 경우, 전형적인 연산(classical modulus) 방식과 다르게 동작한다는 점이다. 아래의 표를 참고한다.
+    **MOD** 함수는 첫 번째 인자 *m* 을 두 번째 인자 *n* 으로 나눈 나머지 값을 정수로 반환하며, 만약 *n* 이 0이면, 나누기 연산을 수행하지 않고 *m* 값을 그대로 반환한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
+        
+    주의할 점은 피제수, 즉 **MOD** 함수의 인자 *m* 이 음수인 경우, 전형적인 연산(classical modulus) 방식과 다르게 동작한다는 점이다. 아래의 표를 참고한다.
 
     **MOD 함수의 결과**
 
@@ -486,7 +488,7 @@ MOD
     :param m: 피제수를 나타내며, 수치 값을 반환하는 연산식이다.
     :param n: 제수를 나타내며, 수치 값을 반환하는 연산식이다.
     :rtype: INT
-
+    
 .. code-block:: sql
 
     --it returns the reminder of m divided by n
@@ -533,7 +535,7 @@ POW, POWER
 .. function:: POW( x, y )
 .. function:: POWER( x, y )
 
-    **POW** 함수와 **POWER** 함수는 동일하며, 지정된 밑수 *x* 를 지수 *y* 만큼 거듭제곱한 값을 반환한다. 리턴 값은 **DOUBLE** 타입이다.
+    **POW** 함수와 **POWER** 함수는 동일하며, 지정된 밑수 *x* 를 지수 *y* 만큼 거듭제곱한 값을 반환한다. 리턴 값은 **DOUBLE** 타입이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 밑수를 나타내며, 수치 값을 반환하는 연산식이다.
     :param y: 지수를 나타내며, 수치 값을 반환하는 연산식이다. 밑수가 음수인 경우, 지수는 반드시 정수가 지정되어야 한다.
@@ -563,7 +565,7 @@ RADIANS
 
 .. function:: RADIANS ( x )
 
-    **RADIANS** 함수는 각도 단위로 지정된 인자 *x* 를 라디안 단위로 환산하여 리턴한다. 리턴 값은 **DOUBLE** 타입이다.
+    **RADIANS** 함수는 각도 단위로 지정된 인자 *x* 를 라디안 단위로 환산하여 리턴한다. 리턴 값은 **DOUBLE** 타입이다. 리턴 값은 **DOUBLE** 타입이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -669,7 +671,7 @@ ROUND
 
 .. function:: ROUND( number_operand, integer )
 
-    **ROUND** 함수는 지정된 인자 *number_operand* 를 소수점 아래 *integer* 자리까지 반올림한 값을 반환한다. 반올림할 자릿수를 지정하는 *integer* 인자가 생략되거나 0인 경우에는 소수점 아래 첫째 자리에서 반올림한다. 그리고 *integer* 인자가 음수이면, 소수점 위 자리, 즉 정수부에서 반올림한다.
+    **ROUND** 함수는 지정된 인자 *number_operand* 를 소수점 아래 *integer* 자리까지 반올림한 값을 반환한다. 반올림할 자릿수를 지정하는 *integer* 인자가 생략되거나 0인 경우에는 소수점 아래 첫째 자리에서 반올림한다. 그리고 *integer* 인자가 음수이면, 소수점 위 자리, 즉 정수부에서 반올림한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param number_operand: 수치 값을 반환하는 임의의 연산식이다.
     :param integer: 반올림 처리할 위치를 지정한다. 양의 정수 *n* 이 지정되면 소수점 아래 *n* 자리까지 표현되고, 음의 정수 *n* 이 지정되면 소수점 위 *n* 자리에서 반올림한다.
@@ -713,7 +715,7 @@ SIGN
 
 .. function:: SIGN (number_operand)
 
-    **SIGN** 함수는 지정된 인자 값의 부호를 반환한다. 양수이면 1을, 음수이면 -1을, 0이면 0을 반환한다.
+    **SIGN** 함수는 지정된 인자 값의 부호를 반환한다. 양수이면 1을, 음수이면 -1을, 0이면 0을 반환한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param number_operand: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: INT
@@ -734,7 +736,7 @@ SIN
 
 .. function:: SIN ( x )
 
-    **SIN** 함수는 인자의 사인(sine) 값을 반환하며, 인자 *x* 는 라디안 값이어야 한다. 리턴 값은 **DOUBLE** 타입이다.
+    **SIN** 함수는 인자의 사인(sine) 값을 반환하며, 인자 *x* 는 라디안 값이어야 한다. 리턴 값은 **DOUBLE** 타입이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -754,7 +756,7 @@ SQRT
 
 .. function:: SQRT ( x )
 
-    **SQRT** 함수는 *x* 의 제곱근(square root) 값을 **DOUBLE** 타입으로 반환한다.
+    **SQRT** 함수는 *x* 의 제곱근(square root) 값을 **DOUBLE** 타입으로 반환한다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
     
     :param x: 수치 값을 반환하는 임의의 연산식이다. 만약, 음수이면 에러를 반환한다.
     :rtype: DOUBLE
@@ -774,7 +776,7 @@ TAN
 
 .. function:: TAN ( x )
 
-    **TAN** 함수는 인자의 탄젠트(tangent) 값을 반환하며, 인자 *x* 는 라디안 값이어야 한다. 리턴 값은 **DOUBLE** 타입이다.
+    **TAN** 함수는 인자의 탄젠트(tangent) 값을 반환하며, 인자 *x* 는 라디안 값이어야 한다. 리턴 값은 **DOUBLE** 타입이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :rtype: DOUBLE
@@ -795,7 +797,7 @@ TRUNC, TRUNCATE
 .. function:: TRUNC ( x[, dec] )
 .. function:: TRUNCATE ( x, dec )
 
-    **TRUNC** 함수와 **TRUNCATE** 함수는 지정된 인자 *x* 의 소수점 아래 숫자가 *dec* 자리까지 표현되도록 버림(trunctation)한 값을 반환한다. 단, **TRUNC** 함수의 *dec* 인자는 생략할 수 있지만, **TRUNCATE** 함수의 *dec* 인자는 생략할 수 없다. 버림할 위치를 지정하는 *dec* 인자가 음수이면 정수부의 소수점 위 *dec* 번째 자리까지 0으로 표시한다. 리턴 값의 표현 자릿수는 인자 *x* 를 따른다.
+    **TRUNC** 함수와 **TRUNCATE** 함수는 지정된 인자 *x* 의 소수점 아래 숫자가 *dec* 자리까지 표현되도록 버림(truncation)한 값을 반환한다. 단, **TRUNC** 함수의 *dec* 인자는 생략할 수 있지만, **TRUNCATE** 함수의 *dec* 인자는 생략할 수 없다. 버림할 위치를 지정하는 *dec* 인자가 음수이면 정수부의 소수점 위 *dec* 번째 자리까지 0으로 표시한다. 리턴 값의 표현 자릿수는 인자 *x* 를 따른다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param x: 수치 값을 반환하는 임의의 연산식이다.
     :param dec: 버림할 위치를 지정한다. 양의 정수 *n* 이 지정되면 소수점 아래 *n* 자리까지 표현되고, 음의 정수 *n* 이 지정되면 소수점 위 *n* 자리까지 0으로 표시한다. *dec* 인자가 0이거나 생략되면 소수부를 버림한다. 단, **TRUNCATE** 함수에서는 *dec* 인자를 생략할 수 없다.
@@ -839,7 +841,7 @@ WIDTH_BUCKET
 
 .. function:: WIDTH_BUCKET(expression, from, to, num_buckets)
 
-    **WIDTH_BUCKET** 함수는 순차적인 데이터 집합을 균등한 범위로 부여된 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다. 즉, WIDTH_BUCKET 함수는 equi-width histogram을 생성한다. 반환되는 값은 정수이다.
+    **WIDTH_BUCKET** 함수는 순차적인 데이터 집합을 균등한 범위로 부여된 일련의 버킷으로 나누며, 각 행에 적당한 버킷 번호를 1부터 할당한다. 즉, WIDTH_BUCKET 함수는 equi-width histogram을 생성한다. 반환되는 값은 정수이다. 숫자로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
     
     이 함수는 주어진 버킷 개수로 범위를 균등하게 나누어 버킷 번호를 부여한다. 즉, 버킷마다 각 범위의 넓이는 균등하다.
     

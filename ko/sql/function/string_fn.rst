@@ -7,7 +7,7 @@
 
 병합 연산자는 피연산자로 문자열 또는 비트열 데이터 타입이 지정되며, 병합(concatenation)된 문자열 또는 비트열을 반환한다. 문자열 데이터의 병합 연산자로 덧셈 기호(**+**)와 두 개의 파이프 기호(**||**)가 제공된다. 피연산자로 **NULL** 이 지정된 경우는 **NULL** 값이 반환된다.
 
-SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: yes)가 no이면 이중 파이프 기호(||)가 부울린(Boolean) OR 연산자로 해석되며 **plus_as_concat** 파라미터(기본값: yes)가 no이면 덧셈 기호가 + 연산자로 해석되므로, 이러한 경우 **CONCAT** 함수를 사용하여 문자열 또는 비트열을 병합하는 것이 좋다. ::
+SQL 구문 관련 파라미터인 **pipes_as_concat** 파라미터(기본값: yes)가 no이면 이중 파이프 기호(||)가 불리언(Boolean) OR 연산자로 해석되며 **plus_as_concat** 파라미터(기본값: yes)가 no이면 덧셈 기호가 + 연산자로 해석되므로, 이러한 경우 **CONCAT** 함수를 사용하여 문자열 또는 비트열을 병합하는 것이 좋다. ::
 
     concat_operand1   +  concat_operand1
     concat_operand2   ||  concat_operand2
@@ -96,7 +96,7 @@ BIN
 
 .. function:: BIN (n)
 
-    **BIN** 함수는 **BIGINT** 타입의 숫자를 이진 문자열로 표현한다. 입력 인자가 **NULL** 이면 **NULL** 을 반환한다.
+    **BIN** 함수는 **BIGINT** 타입의 숫자를 이진 문자열로 표현한다. 입력 인자가 **NULL** 이면 **NULL** 을 반환한다. **BIGNIT**\ 로 변환되지 않는 문자열을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param n: **BIGINT** 타입의 숫자
     :rtype: STRING
@@ -114,7 +114,7 @@ BIT_LENGTH
 
 .. function:: BIT_LENGTH (string)
 
-    **BIT_LENGTH** 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, **BIT_LENGTH** 함수의 리턴 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
+    **BIT_LENGTH** 함수는 문자열 또는 비트열의 길이(bit)를 정수값으로 반환한다. 단, 문자열의 경우 데이터 입력 환경의 문자셋(character set)에 따라 한 문자가 차지하는 바이트 수가 다르므로, **BIT_LENGTH** 함수의 리턴 값 역시 문자셋에 따라 다를 수 있다(예: UTF-8 한글: 한 글자에 3*8비트). CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다. 유효하지 않은 값을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param string: 비트 단위로 길이를 구할 문자열 또는 비트열을 지정한다. **NULL** 이 지정된 경우는 **NULL** 값이 반환된다. 
     :rtype: INT
@@ -254,7 +254,7 @@ CHR
 
 .. function:: CHR (number_operand [USING charset_name])
 
-    **CHR** 함수는 인자로 지정된 연산식의 리턴 값에 대응하는 문자를 반환하는 함수이다. 문자 코드 범위를 초과하면 '0'을 반환한다.
+    **CHR** 함수는 인자로 지정된 연산식의 리턴 값에 대응하는 문자를 반환하는 함수이다. 유효하지 않은 범위의 코드 값을 입력할 때 **cubrid.conf**\ 의 **return_null_on_function_errors** 파라미터의 값이 no(기본값)면 에러, yes면 NULL을 반환한다.
 
     :param number_operand: 수치값을 반환하는 임의의 연산식을 지정한다. 
     :param charset_name: 문자셋 이름. 지원하는 문자셋은 utf8과 iso88591이다.
@@ -269,7 +269,9 @@ CHR
        chr(68)|| chr(68-2)
     ======================
       'DB'
-            
+
+**CHR** 함수를 사용해서 멀티바이트 문자를 반환하려면 해당 문자셋에 대해 유효한 범위의 숫자를 입력한다. 
+
 .. code-block:: sql
 
     SELECT CHR(14909886 USING utf8); 
@@ -282,6 +284,32 @@ CHR
        chr(14909886 using utf8) 
     ====================== 
       'ま' 
+
+문자를 16진수 문자열로 반환하려면 **HEX** 함수를 사용한다.
+
+.. code-block:: sql
+
+    SET NAMES utf8; 
+    SELECT HEX('ま');
+
+::
+
+       hex(_utf8'ま')
+    ======================
+      'E381BE'
+
+16진수 문자열을 10진수로 반환하려면 **CONV** 함수를 사용한다.
+
+.. code-block:: sql
+
+    SET NAMES utf8; 
+    SELECT CONV('E381BE',16,10);
+    
+::
+
+       conv(_utf8'E381BE', 16, 10)
+    ======================
+      '14909886'
 
 CONCAT
 ======
@@ -375,11 +403,11 @@ ELT
 
 .. function:: ELT (N, string1, string2, ... )
 
-    **ELT** 함수는 *N* 이 1이면 *string1* 을 반환하고, *N* 이 2이면 *string2* 를 반환한다. 리턴 값은 **VARCHAR** 타입이다. 조건식은 필요에 따라 늘릴 수 있다.
+    **ELT** 함수는 *N*\ 이 1이면 *string1*\ 을 반환하고, *N*\ 이 2이면 *string2*\ 를 반환한다. 리턴 값은 **VARCHAR** 타입이다. 조건식은 필요에 따라 늘릴 수 있다.
 
-    문자열의 최대 바이트 길이는 33,554,432이며 이를 초과하면 **NULL** 을 반환한다.
+    문자열의 최대 바이트 길이는 33,554,432이며 이를 초과하면 **NULL**\ 을 반환한다.
     
-    *N* 이 0 또는 음수이면 빈 문자열을 반환한다. *N* 이 입력 문자열의 개수보다 크면 범위를 벗어나므로 **NULL** 을 반환한다. *N* 이 정수로 변환할 수 없는 타입이면 에러를 반환한다.
+    *N*\ 이 0 또는 음수이면 빈 문자열을 반환한다. *N*\ 이 입력 문자열의 개수보다 크면 범위를 벗어나므로 **NULL**\ 을 반환한다. *N*\ 이 정수로 변환할 수 없는 타입이면 에러를 반환한다.
 
     :param N: 문자열 리스트 중 반환할 문자열의 위치
     :param strings: 문자열 리스트
@@ -448,9 +476,9 @@ FIELD
 
 .. function:: FIELD ( search_string, string1 [,string2 [, ... [, stringN]...]])
 
-    **FIELD** 함수는 *string1* , *string2* 등의 인자 중 *search_string* 과 동일한 인자의 위치 인덱스 값(포지션)을 반환한다. *search_string* 과 동일한 인자가 없으면 0을 반환한다. *search_string* 이 **NULL** 이면 다른 인자와 비교 연산을 수행할 수 없으므로 0을 반환한다.
+    **FIELD** 함수는 *string1* , *string2* 등의 인자 중 *search_string*\ 과 동일한 인자의 위치 인덱스 값(포지션)을 반환한다. *search_string*\ 과 동일한 인자가 없으면 0을 반환한다. *search_string*\ 이 **NULL**\ 이면 다른 인자와 비교 연산을 수행할 수 없으므로 0을 반환한다.
 
-    **FIELD** 함수에서 지정된 모든 인자가 문자열 타입이면 문자열 비교 연산을 수행하고, 모두 수치 타입이면 수치 비교 연산을 수행한다. 어느 한 인자의 타입이 나머지와 다른 경우, 모든 인자를 첫 번째 인자의 타입으로 변환하여 비교 연산을 수행한다. 각 인자와의 비교 연산 도중 타입 변환에 실패하면 비교 연산의 결과를 **FALSE** 로 간주하고, 나머지 연산을 계속 진행한다.
+    **FIELD** 함수에서 지정된 모든 인자가 문자열 타입이면 문자열 비교 연산을 수행하고, 모두 수치 타입이면 수치 비교 연산을 수행한다. 어느 한 인자의 타입이 나머지와 다른 경우, 모든 인자를 첫 번째 인자의 타입으로 변환하여 비교 연산을 수행한다. 각 인자와의 비교 연산 도중 타입 변환에 실패하면 비교 연산의 결과를 **FALSE**\ 로 간주하고, 나머지 연산을 계속 진행한다.
 
     :param search_string: 검색할 문자열 패턴
     :param strings: 검색되는 문자열들의 리스트
@@ -536,7 +564,7 @@ INSERT
 
     :param str: 입력 문자열
     :param pos: *str* 의 위치. 1부터 시작한다. *pos* 가 1보다 작거나 *string* 의 길이+1보다 크면, *string* 을 삽입하지 않고 *str* 을 리턴한다.
-    :param len: *str* 의 *pos* 에 삽입할 *string* 의 길이. *len* 이 부분 문자열의 길이를 초과하면, *str* 의 *pos* 에서 *string* 만큼 삽입한다. *len* 이 음수이면 *str* 이 문자열의 끝이된다.
+    :param len: *str* 의 *pos* 에 삽입할 *string* 의 길이. *len* 이 부분 문자열의 길이를 초과하면, *str* 의 *pos* 에서 *string* 만큼 삽입한다. *len* 이 음수이면 *str* 이 문자열의 끝이 된다.
     :param string: *str* 에 삽입할 부분 문자열
     :rtype: STRING
     
@@ -689,8 +717,8 @@ LCASE, LOWER
 .. function:: LCASE (string)
 .. function:: LOWER (string)
 
-    **LCASE** 함수와 **LOWER** 함수는 동일하며, 문자열에 포함된 대문자를 소문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는 문자셋에 관한 상세한 설명은 :ref:`char-data-type` 을 참고한다.
-
+    **LCASE** 함수와 **LOWER** 함수는 동일하며, 문자열에 포함된 대문자를 소문자로 변환한다.
+    
     :param string: 소문자로 변환할 문자열을 지정한다. 값이 **NULL** 이면 결과는 **NULL** 이 반환된다.
     :rtype: STRING
 
@@ -723,6 +751,34 @@ LCASE, LOWER
       lower('Cubrid')
     ======================
       'cubrid'
+
+단, 콜레이션의 지정에 따라 정상 동작하지 않을 수 있으므로 주의한다. 예를 들어, 루마니아어에서 사용되는 문자 Ă을 소문자로 변환하고자 할 때 콜레이션에 따라 다음과 같이 동작한다.
+
+콜레이션이 utf8_bin이면 변환이 되지 않는다.
+
+.. code-block:: sql
+    
+    SET NAMES utf8 COLLATE utf8_bin;
+    SELECT LOWER('Ă');
+
+       lower(_utf8'Ă')
+    ======================
+      'Ă'
+    
+콜레이션이 utf8_ro_cs이면 변환이 가능하다.
+
+.. code-block:: sql
+
+    SET NAMES utf8 COLLATE utf8_ro_cs;
+    SELECT LOWER('Ă');
+    
+
+       lower(_utf8'Ă' COLLATE utf8_ro_cs)
+    ======================
+      'ă'
+
+   
+CUBRID가 지원하는 콜레이션에 관한 상세한 설명은 :ref:`cubrid-all-collation`\ 을 참고한다.
 
 LEFT
 ====
@@ -1537,7 +1593,7 @@ STRCMP
     .. code-block:: sql
     
         -- From 9.0 version, STRCMP distinguish the uppercase and the lowercase when the collation is case-sensitive.
-        -- export CUBRID_CHARSET=en_US.iso88591
+        -- charset is en_US.iso88591
         
         SELECT STRCMP ('ABC','abc');
         
@@ -1548,7 +1604,7 @@ STRCMP
     .. code-block:: sql
     
         -- If the collation is case-insensitive, it does not distinguish the uppercase and the lowercase.
-        -- export CUBRID_CHARSET=en_US.iso88591
+        -- charset is en_US.iso88591
 
         SELECT STRCMP ('ABC' COLLATE utf8_en_ci ,'abc' COLLATE utf8_en_ci);
         
@@ -1866,8 +1922,8 @@ UCASE, UPPER
 .. function:: UCASE ( string )
 .. function:: UPPER ( string )
 
-    **UCASE** 함수와 **UPPER** 함수는 동일하며, 문자열에 포함된 소문자를 대문자로 변환한다. 단, CUBRID가 지원하지 않는 문자셋에서는 정상 동작하지 않을 수 있으므로 주의한다. CUBRID가 지원하는 문자셋에 관한 자세한 내용은 :doc:`/sql/i18n` 을 참고한다.
-
+    **UCASE** 함수와 **UPPER** 함수는 동일하며, 문자열에 포함된 소문자를 대문자로 변환한다. 
+    
     :param string: 대문자로 변환할 문자열을 지정한다. 값이 **NULL** 이면 결과는 **NULL** 이 반환된다.
     :rtype: STRING
 
@@ -1900,4 +1956,29 @@ UCASE, UPPER
      upper('Cubrid')
     ======================
       'CUBRID'
-  
+
+단, 콜레이션의 지정에 따라 정상 동작하지 않을 수 있으므로 주의한다. 예를 들어, 루마니아어에서 사용되는 문자 ă을 대문자로 변환하고자 할 때 콜레이션에 따라 다음과 같이 동작한다.
+
+콜레이션이 utf8_bin이면 변환이 되지 않는다.
+
+.. code-block:: sql
+    
+    SET NAMES utf8 COLLATE utf8_bin;
+    SELECT UPPER('ă');
+    
+       upper(_utf8'ă')
+    ======================
+      'ă'
+
+콜레이션이 utf8_ro_cs이면 변환이 가능하다.
+
+.. code-block:: sql
+
+    SET NAMES utf8 COLLATE utf8_ro_cs;
+    SELECT UPPER('ă');
+    
+       upper(_utf8'ă' COLLATE utf8_ro_cs)
+    ======================
+      'Ă'
+   
+CUBRID가 지원하는 콜레이션에 관한 상세한 설명은 :ref:`cubrid-all-collation`\ 을 참고한다.

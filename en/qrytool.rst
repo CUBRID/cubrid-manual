@@ -84,13 +84,7 @@ After the CSQL has been executed, you can enter the SQL into the CSQL prompt. Ea
     =============
                82
 
-
-    1 row selected.
-    SQL statement execution time:     0.106504 sec
-    
-    Current transaction has been committed.
-
-    1 command(s) successfully processed.
+    1 rows selected. (0.106504 sec) Committed.
 
     csql> ;exit
 
@@ -158,7 +152,7 @@ Because CUBRID 2008 R4.3 or higher version includes Web Manager on the installat
         C:\CUBRID>cubrid service start
         ++ cubrid service is running.
         
-#. Access to https://localhost:8282/ which is written on the address bar. The default TCP port is 8282 (HTTPS/SSL) and it is possible to change by editing the cm_httpd.conf file at $CUBRID/conf/. Note that the header of address is not http, but https.
+#. Access to https://localhost:8282/ which is written on the address bar. The default TCP port is 8282 (HTTPS/SSL) and it is possible to change by editing the cm_ext.conf file at $CUBRID/conf/. Note that the header of address is not http, but https.
 
 #. First, log-in to the host. To access to the host, you should perform the CUBRID Manager server user (=the host user)'s authentication primarily. The default user ID/password is admin/admin.
 

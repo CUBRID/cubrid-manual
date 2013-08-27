@@ -139,9 +139,9 @@ The following keywords are previously reserved as a command, a function name or 
 +--------------------+------------------+----------------------+
 | MINUTE_MILLISECOND | MINUTE_SECOND    | MOD                  |
 +--------------------+------------------+----------------------+
-| MODIFY             | MODULE           | MONETARY             |
+| MODIFY             | MODULE           | MONTH                |
 +--------------------+------------------+----------------------+
-| MONTH              | MULTISET         | MULTISET_OF          |
+| MULTISET           | MULTISET_OF      |                      |
 +--------------------+------------------+----------------------+
 | NA                 | NAMES            | NATIONAL             |
 +--------------------+------------------+----------------------+

@@ -203,7 +203,7 @@ CUBRID 컬렉션
 
     conn.InsertElementInSequence(oid, attributeName, 5, value);
     SeqSize = conn.GetCollectionSize(oid, attributeName);
-    using (CUBRIDCommandcmd = newCUBRIDCommand("SELECT * FROM t", conn))
+    using (CUBRIDCommand cmd = new CUBRIDCommand("SELECT * FROM t", conn))
     {
         using (DbDataReader reader = cmd.ExecuteReader())
         {
@@ -231,7 +231,7 @@ CUBRID 2008 R4.0(8.4.0) 이상 버전에서는 GLO 데이터 타입을 더 이�
     
     while (reader.Read())
     {
-        CUBRIDBlobbImage = (CUBRIDBlob)reader0;
+        CUBRIDBlob bImage = (CUBRIDBlob)reader0;
         byte[] bytes = newbyte(int)bImage.BlobLength;
         bytes = bImage.getBytes(1, (int)bImage.BlobLength);
         //...
@@ -243,7 +243,7 @@ CUBRID 2008 R4.0(8.4.0) 이상 버전에서는 GLO 데이터 타입을 더 이�
 .. code-block:: c#
 
     string sql = "UPDATE t SET c = ?";
-    CUBRIDCommandcmd = new CUBRIDCommand(sql, conn);
+    CUBRIDCommand cmd = new CUBRIDCommand(sql, conn);
      
     CUBRIDClobClob = new CUBRIDClob(conn);
     str = conn.ConnectionString; //Use the ConnectionString for testing
@@ -337,7 +337,7 @@ DataTable 지원
 은 ADO.NET에서 가장 중심이 되는 객체로, CUBRID ADO.NET Data Provider는 다음과 같은 기능을 지원한다.
 
 *   `DataTable <http://msdn.microsoft.com/en-us/library/system.data.datatable.aspx>`_ 데이터 채우기
-*   기본 제공 명령어 구조: **INSERT**, **UPDATE**, **DELETE**
+*   기본 제공 명령어: **INSERT**, **UPDATE**, **DELETE**
 *   칼럼 메타데이터/속성
 *   `DataSet <http://msdn.microsoft.com/en-us/library/system.data.dataset.aspx>`_ , `DataView <http://msdn.microsoft.com/en-us/library/system.data.dataview.aspx>`_ 상호 연결
 

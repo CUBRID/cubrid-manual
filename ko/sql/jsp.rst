@@ -10,8 +10,13 @@ Java 저장 함수/프로시저는 SQL에서도 호출할 수 있으며, JDBC를
 
 Java 저장 함수/프로시저를 사용할 때 얻을 수 있는 이점은 다음과 같다.
 
-*   **생산성과 사용성** : Java 저장 함수/프로시저는 한번 만들어 놓으면 계속해서 사용할 수 있다. 사용자가 저장 함수와 저장 프로시저를 SQL에서도 호출하여 사용할 수 있고, JDBC를 사용하여 쉽게 Java 응용 프로그램에서 호출할 수 있다.
-*   **뛰어난 상호 운용성, 이식성** : Java 저장 함수/프로시저는 Java 가상 머신을 사용하므로, 시스템에 Java 가상 머신을 사용할 수만 있다면 언제 어디서나 사용할 수 있다.
+*   **생산성과 사용성**: Java 저장 함수/프로시저는 한번 만들어 놓으면 계속해서 사용할 수 있다. 사용자가 저장 함수와 저장 프로시저를 SQL에서도 호출하여 사용할 수 있고, JDBC를 사용하여 쉽게 Java 응용 프로그램에서 호출할 수 있다.
+*   **뛰어난 상호 운용성, 이식성**: Java 저장 함수/프로시저는 Java 가상 머신을 사용하므로, 시스템에 Java 가상 머신을 사용할 수만 있다면 언제 어디서나 사용할 수 있다.
+
+.. note::
+
+    *   Java를 제외한 다른 언어에서는 저장 함수/프로시저를 지원하지 않는다. CUBRID에서 저장 함수/프로시저는 오직 Java로만 구현 가능하다.
+    *   Java 저장 함수/프로시저는 DB 엔진이 아닌 Java 가상 머신을 사용하여 실행되므로 성능 상 이점이 없다.
 
 .. _jsp-environment-configuration:
 
@@ -55,7 +60,7 @@ SUN의 Java 가상 머신을 사용하지 않고 다른 벤더의 구현을 사�
 Linux/Unix 환경
 ---------------
 
-CUBRID는 Linux/Unix 환경에서 **libjvm.so** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 **LD_LIBRARY_PATH** 환경 변수에서 **libjvm.so** 파일을 찾아 로딩한다. 만약 찾지 못하면 **JAVA_HOME** 환경 변수를 이용하여 찾는다. 리눅스의 경우 glibc 2.3.4 이상만 지원되며, 아래는 리눅스 환경 설정 파일(예 : **.profile**, **.cshrc**, **.bashrc**, **.bash_profile** 등)에 환경 변수를 설정하는 예이다.
+CUBRID는 Linux/Unix 환경에서 **libjvm.so** 파일을 로딩하여 Java 가상 머신을 실행시킨다. CUBRID는 먼저 **LD_LIBRARY_PATH** 환경 변수에서 **libjvm.so** 파일을 찾아 로딩한다. 만약 찾지 못하면 **JAVA_HOME** 환경 변수를 이용하여 찾는다. 리눅스의 경우 glibc 2.3.4 이상만 지원되며, 아래는 리눅스 환경 설정 파일(예: **.profile**, **.cshrc**, **.bashrc**, **.bash_profile** 등)에 환경 변수를 설정하는 예이다.
 
 *   JDK 1.6 64비트 버전을 설치하고, bash 셸에서 환경 변수를 설정한 예 ::
 
@@ -254,12 +259,12 @@ loadjava 유틸리티
 
 컴파일된 Java 파일이나 JAR(Java Archive) 파일을 CUBRID로 로드하기 위해서 **loadjava** 유틸리티를 사용한다. **loadjava** 유틸리티를 사용하여 Java \*.class 파일이나 \*.jar 파일을 로드하면 해당 파일이 해당 데이터베이스 경로로 이동한다. ::
 
-    loadjava <option> database-name java-class-file
+    loadjava [option] database-name java-class-file
 
-*   *database-name* : Java 파일을 로드하려고 하는 데이터베이스 이름
-*   *java-class-file* : 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
-*   < *option* >
-    *   **-y** : 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
+*   *database-name*: Java 파일을 로드하려고 하는 데이터베이스 이름
+*   *java-class-file*: 로드하려는 Java 클래스 파일 이름 또는 jar 파일 이름
+*   [*option*]
+    *   **-y**: 이름이 같은 클래스 파일이 존재하면 자동으로 덮어쓰기 한다. 기본값은 **no** 이다. 만약 **-y** 옵션을 명시하지 않고 로드할 때 이름이 같은 클래스 파일이 존재하면 덮어쓰기를 할 것인지 묻는다.
 
 로딩한 Java 클래스 등록
 =======================
@@ -591,15 +596,23 @@ Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResu
 
 .. code-block:: java
 
-    public static class JavaSP2 {
+    import java.sql.Connection;
+    import java.sql.DriverManager;
+    import java.sql.ResultSet;
+    import java.sql.Statement;
+     
+    import cubrid.jdbc.driver.CUBRIDConnection;
+    import cubrid.jdbc.driver.CUBRIDResultSet;
+
+    public class JavaSP2 {
         public static ResultSet TResultSet(){
             try {
                 Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
                 Connection conn = DriverManager.getConnection("jdbc:default:connection:");
-                ((CUBRIDConnection)con).setCharset("euc_kr");
+                ((CUBRIDConnection)conn).setCharset("euc_kr");
                     
                 String sql = "select * from station";
-                Statement stmt=con.createStatement();
+                Statement stmt=conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
                 ((CUBRIDResultSet)rs).setReturnable();
                     
@@ -616,28 +629,29 @@ Java 파일에서는 **java.sql.ResultSet** 을 반환하기 전에 **CUBRIDResu
 
 .. code-block:: java
 
-    import java.sql.*;
-
+    import java.sql.CallableStatement;
+    import java.sql.Connection;
+    import java.sql.DriverManager;
+    import java.sql.ResultSet;
+    import java.sql.Types;
+     
     public class TestResultSet{
         public static void main(String[] args) {
-            Connnection conn = null;
-            Statement stmt= null;
-            int result;
-            int i;
-
+            Connection conn = null;
+     
             try {
                 Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
-                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:33000:demodb:::","","");
-
-                CallableStatement cstmt = con.prepareCall("?=CALL rset()");
+                conn = DriverManager.getConnection("jdbc:CUBRID:localhost:31001:tdemodb:::","","");
+     
+                CallableStatement cstmt = conn.prepareCall("?=CALL rset()");
                 cstmt.registerOutParameter(1, Types.JAVA_OBJECT);
                 cstmt.execute();
                 ResultSet rs = (ResultSet) cstmt.getObject(1);
-                
+     
                 while(rs.next()) {
                     System.out.println(rs.getString(1));
                 }
-                
+     
                 rs.close();
             } catch (Exception e) {
                 e.printStackTrace();

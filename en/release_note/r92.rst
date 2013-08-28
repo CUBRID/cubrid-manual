@@ -15,7 +15,7 @@ CUBRID 9.2 includes all of the fixed errors and improved features that were dete
 
 For details on CUBRID 9.0 Beta and CUBRID 9.1, see :doc:`r90` and :doc:`r91`.
 
-For details on CUBRID 2008 R4.3 or less, see http://release.cubrid.org/ko.
+For details on CUBRID 2008 R4.3 or less, see http://release.cubrid.org/en.
 
 Overview
 ========

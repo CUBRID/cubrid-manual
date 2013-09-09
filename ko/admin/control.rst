@@ -463,6 +463,8 @@ CUBRID 서비스를 재구동하려면 다음과 같이 입력한다. 사용자�
 
     cubrid server acl status <database_name>
 
+.. _server-logs:
+
 데이터베이스 서버 로그
 ----------------------
 
@@ -642,7 +644,7 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
  
 위에서 교착 상태를 유발한 응용 클라이언트들과 SQL을 확인할 수 있다.
       
-잠금(lock)에 대한 자세한 설명은 :ref:`lockdb`\ 와 :ref:`lock-protocol`\ 를 참고한다.
+잠금(lock)에 대한 자세한 설명은 :ref:`lockdb`\ 과 :ref:`lock-protocol`\ 을 참고한다.
 
 **TEMP_VOLUME_EXPAND**
  
@@ -807,7 +809,11 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
 
     cubrid broker status [options] [expr]
 
-[expr]이 주어지면 이름이 [expr]을 포함하는 브로커에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID 브로커 환경 설정 파일( **cubrid_broker.conf** )에 등록된 전체 브로커에 대해 상태 모니터링을 수행한다. 
+*   expr: 브로커 이름의 일부 또는 "SERVICE=ON|OFF"
+    
+[expr]이 명시되면 이름이 [expr]을 포함하는 브로커에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID 브로커 환경 설정 파일( **cubrid_broker.conf** )에 등록된 전체 브로커에 대해 상태 모니터링을 수행한다. 
+
+[expr]에 "SERVICE=ON"이 명시되면 구동 중인 브로커의 상태만 출력하며, "SERVICE=OFF"가 명시되면 멈춰있는 브로커의 이름만 출력한다.
 
 **cubrid broker status** 에서 사용하는 [options]는 다음과 같다.
 

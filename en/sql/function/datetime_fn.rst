@@ -714,17 +714,17 @@ FROM_UNIXTIME
 
 .. function:: FROM_UNIXTIME ( unix_timestamp[, format] )
 
-    The **FROM_UNIXTIME** function returns the date and time in the format of 'YYYY-MM-DD HH:MI:SS.' You can specify **INTEGER** type that corresponds to the UNIX timestamp; the value is returned in **VARCHAR** type and is displayed in the current time zone.
+    The **FROM_UNIXTIME** function returns the string of the specified format in **VARCHAR** type if the argument *format* is specified; if the argument *format* is omitted, it returns a value of **TIMESTAMP** type. Specify the arguement *unix_timestamp* as an **INTEGER** type that corresponds to the UNIX timestamp. The returned value is displayed in the current time zone.
+    
+    It displays the result according to the format that you specified, and the date/time format, *format* follows the Date/Time Format 2 table of :func:`DATE_FORMAT`.
 
-    It displays the result according to the format that you specified, and the time *format* format follows the Date/Time Format 2 table of :func:`DATE_FORMAT`.
-
-    The relationship is not one of one-to-one correspondence between **TIMESTAMP** and UNIX timestamp so if you use :func:`UNIX_TIMESTAMP` or **FROM_UNIXTIME** function, partial value could be lost. For details, see :func:`UNIX_TIMESTAMP`.
+    The relation is not one of one-to-one correspondence between **TIMESTAMP** and UNIX timestamp so if you use :func:`UNIX_TIMESTAMP` or **FROM_UNIXTIME** function, partial value could be lost. For details, see :func:`UNIX_TIMESTAMP`.
 
     0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, string where 0 is specified for every date and time value is returned. Note that operation in JDBC program is determined by the configuration of zeroDateTimeBehavior, connection URL property (see :ref:`jdbc-connection-conf` for details).
 
     :param unix_timestamp: Positive integer
-    :param format: 시간 형식. : Time format. Follows the date/time format of the :func:`DATE_FORMAT`.
-    :rtype: STRING
+    :param format: Time format. Follows the date/time format of the :func:`DATE_FORMAT`.
+    :rtype: STRING, INT
 
 .. code-block:: sql
 
@@ -1657,7 +1657,7 @@ UNIX_TIMESTAMP
 
 .. function:: UNIX_TIMESTAMP ( [date] )
 
-    The arguments of the **UNIX_TIMESTAMP** function can be omitted. If they are omitted, the function returns the interval between '1970-01-01 00:00:00' UTC and the current system date/time in seconds as **INTEGER** type. If the date argument is specified, the function returns the interval between '1970-01-01 00:00:00' UTC and the specified date/time in seconds. 
+    The argument of the **UNIX_TIMESTAMP** function can be omitted. If it is omitted, the function returns the interval between '1970-01-01 00:00:00' UTC and the current system date/time in seconds as **INTEGER** type. If the date argument is specified, the function returns the interval between '1970-01-01 00:00:00' UTC and the specified date/time in seconds. 
     
     0 is not allowed in the argument value corresponding to year, month, and day; however, if 0 is inputted in every argument value corresponding to date and time, 0 is returned as an exception.
 

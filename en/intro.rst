@@ -183,7 +183,7 @@ CUBRID provides various Application Programming Interfaces (APIs). The following
 *   JDBC: A standard API used to create database applications in Java.
 *   ODBC: A standard API used to create database applications on Windows. ODBC driver is written based on CCI library.
 *   OLE DB: An API used to create COM-based database applications on Windows. OLE DB provider is written based on CCI library.
-*   PHP: CUBIRD provides a PHP interface module to create database applications in the PHP environment. PHP driver is written based on CCI library.
+*   PHP: CUBRID provides a PHP interface module to create database applications in the PHP environment. PHP driver is written based on CCI library.
 *   CCI: CCI is a C language interface provided by CUBRID. The interface module is provided as a C library.
 
 All interface modules access the database server through the broker. The broker is a middleware that allows various application clients to connect to the database server. When it receives a request from an interface module, it calls a native C API provided by the database server's client library.

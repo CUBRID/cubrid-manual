@@ -96,7 +96,7 @@ cubrid.conf의 error_log_level 파라미터의 설정에 따라 서버 에러 �
 
 인덱스와 데이터 사이의 불일치가 감지되는 경우 트랜잭션의 격리 수준(isolation level)에 따라 에러일 수도 있고, 에러인지 불확실할 수도 있다.
 
-cubrid.conf의 isolation_level 파라미터가 1 또는 3으로서, UNCOMMITTED INSTANCE를 허용하는 경우 인덱스와 데이터가 순간적으로 불일치할 수 있다. 따라서 이러한 경우를 서버 에러 로그에 출력하려면 cubrid.conf의 error_log_level 파라미터의 값이 NOTIFICATION여야 한다. 출력되는 메시지는 다음과 같다.
+cubrid.conf의 isolation_level 파라미터가 1 또는 3으로서, UNCOMMITTED INSTANCE를 허용하는 경우 인덱스와 데이터가 순간적으로 불일치할 수 있다. 따라서 이러한 경우를 서버 에러 로그에 출력하려면 cubrid.conf의 error_log_level 파라미터의 값이 NOTIFICATION이어야 한다. 출력되는 메시지는 다음과 같다.
 
 ::
 
@@ -104,7 +104,7 @@ cubrid.conf의 isolation_level 파라미터가 1 또는 3으로서, UNCOMMITTED 
     Time: 03/15/11 15:20:31.804 - NOTIFICATION *** CODE = -545, Tran = 1, CLIENT = cdbs034.cub:csql(3926), EID = 3
     Internal error: INDEX u_foo_i ON CLASS foo (CLASS_OID: 0|550|8). Key and OID: 0|600|16 entry on B+tree: 0|209|590 is incorrect. The object does not exist.
 
-cubrid.conf의 isolation_level 파라미터가 2 또는 4 이상의 값으로서, COMMITTED INSTANCE만 허용하는 경우 인덱스와 데이터가 불일치하면 안 된다. 따라서 이러한 경우를 서버 에러 로그에 출력하려면 cubrid.conf의 error_log_level 파라미터의 값이 ERROR이어야 한다. 출력되는 메시지는 다음과 같다.
+cubrid.conf의 isolation_level 파라미터가 2 또는 4 이상의 값으로서, COMMITTED INSTANCE만 허용하는 경우 인덱스와 데이터가 불일치하면 안 된다. 따라서 이러한 경우를 서버 에러 로그에 출력하려면 cubrid.conf의 error_log_level 파라미터의 값이 ERROR여야 한다. 출력되는 메시지는 다음과 같다.
 
 ::
 

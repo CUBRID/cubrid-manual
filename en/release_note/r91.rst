@@ -703,12 +703,22 @@ Changes on "cubrid broker status" command(CUBRIDSUS-9602)
 
 Changes on "cubrid broker status" command are as follows:
 
-*	Only the status of the executing brokers are shown when the SERVICE parameter is ON.
+*	Only the status of the executing brokers are shown when you run "cubrid broker status SERVICE=ON".
 
     ::
-
-        % cubrid broker status SERVICE=ON
     
+        $ cubrid broker status SERVICE=ON
+        
+        % query_editor
+        ----------------------------------------------------------------------
+                ID   PID                  QPS        LQS   PSIZE STATUS
+        ----------------------------------------------------------------------
+                 1 20370                    0          0   52456 IDLE
+                 2 20371                    0          0   52456 IDLE
+                 3 20372                    0          0   52456 IDLE
+                 4 20373                    0          0   52456 IDLE
+                 5 20374                    0          0   52456 IDLE
+            
 * 	with -b option,
 
     *	The first 20 characters of the broker name are shown. When the broker name exceeds 20 characters, '...' is printed right after the first 20 characters of the broker name.

@@ -155,7 +155,7 @@ If you have received an error messages, follow the steps below; if you can see C
     
         php --version
     
-    You can see the CUBIRD version like below if it is properly configured. ::
+    You can see the CUBRID version like below if it is properly configured. ::
     
         C:\Users\Administrator>cubrid --version
         cubrid <cubrid utilities> R2.1
@@ -234,7 +234,7 @@ In this section, we will introduce the way of building CUBRID PHP driver for Lin
         extension_dir = "/usr/local/php/lib/php/extension/no-debug-zts-xxx"
         extension = cubrid.so
     
-**Testing CUBIRD PHP driver installation**
+**Testing CUBRID PHP driver installation**
     
 #.  Create a **test.php** file as follows:
     

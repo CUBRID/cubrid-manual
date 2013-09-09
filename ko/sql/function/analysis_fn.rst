@@ -1200,10 +1200,10 @@ VAL                  RANK()               DENSE_RANK()         CUME_DIST()      
     
 
     SELECT cume_dist(100) WITHIN GROUP (ORDER BY val) AS cume FROM test_tbl;
-    SELECT percent_rank(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl;
+    SELECT PERCENT_RANK(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl;
 
     SELECT cume_dist() OVER (ORDER BY val) AS cume FROM test_tbl;
-    SELECT percent_rank() OVER (ORDER BY val) AS pct_rnk FROM test_tbl;
+    SELECT PERCENT_RANK() OVER (ORDER BY val) AS pct_rnk FROM test_tbl;
 
 다음은 아래에서 보여줄 질의에서 사용된 스키마 및 데이터이다.
 

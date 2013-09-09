@@ -714,17 +714,17 @@ FROM_UNIXTIME
 
 .. function:: FROM_UNIXTIME ( unix_timestamp[, format] )
 
-    **FROM_UNIXTIME** 함수는 지정된 인자로부터 'YYYY-MM-DD HH:MI:SS' 형태의 날짜와 시간을 반환한다. 인자로 UNIX의 타임스탬프에 해당하는 **INTEGER** 타입을 입력할 수 있으며, **VARCHAR** 타입을 반환한다. 리턴 값은 현재의 타임 존으로 표현된다.
+    **FROM_UNIXTIME** 함수는 *format* 인자가 명시된 경우 **VARCHAR** 타입으로 해당 형식의 문자열을 반환하며, *format* 인자가 생략될 경우 **TIMESTASMP** 타입의 값을 반환한다. *unix_timestamp* 인자로 UNIX의 타임스탬프에 해당하는 **INTEGER** 타입을 입력한다. 리턴 값은 현재의 타임 존으로 표현된다.
 
-    *format* 에 입력한 시간 형식에 맞게 결과를 출력하며, 시간 형식은 :func:`DATE_FORMAT` 의 날짜/시간 형식 2를 따른다.
+    *format*\ 에 입력하는 시간 형식은 :func:`DATE_FORMAT` 의 날짜/시간 형식 2를 따른다.
 
-    **TIMESTAMP** 와 UNIX 타임스탬프는 일대일 대응 관계가 아니기 때문에 변환할 때 :func:`UNIX_TIMESTAMP` 함수나 **FROM_UNIXTIME** 함수를 사용하면 값의 일부가 유실될 수 있다. 자세한 설명은 :func:`UNIX_TIMESTAMP` 를 참고한다.
+    **TIMESTAMP**\ 와 UNIX 타임스탬프는 일대일 대응 관계가 아니기 때문에 변환할 때 :func:`UNIX_TIMESTAMP` 함수나 **FROM_UNIXTIME** 함수를 사용하면 값의 일부가 유실될 수 있다. 자세한 설명은 :func:`UNIX_TIMESTAMP` 를 참고한다.
 
     인자의 연, 월, 일에는 0을 입력할 수 없으나, 예외적으로 날짜와 시간이 모두 0인 값을 입력한 경우에는 날짜와 시간 값이 모두 0인 문자열을 반환한다. 그러나 JDBC 프로그램에서는 연결 URL 속성인 zeroDateTimeBehavior의 설정에 따라 동작이 달라진다("API 레퍼런스 > JDBC API > JDBC 프로그래밍 > 연결 설정" 참고).
 
     :param unix_timestamp: 양의 정수
     :param format: 시간 형식. :func:`DATE_FORMAT` 의 날짜/시간 형식 2를 따른다.
-    :rtype: STRING
+    :rtype: STRING, INT
 
 .. code-block:: sql
 
@@ -1657,7 +1657,7 @@ UNIX_TIMESTAMP
 
 .. function:: UNIX_TIMESTAMP ( [date] )
 
-    **UNIX_TIMESTAMP** 함수는 인자를 생략할 수 있으며, 인자를 생략하면 '1970-01-01 00:00:00' UTC 이후 현재 시스템 날짜/시간까지의 초 단위 시간 간격(interval)을 **INTEGER** 타입의 리턴 값을 반환한다. *date* 인자가 지정되면 '1970-01-01 00:00:00' UTC 이후 지정된 날짜/시간까지의 초 단위 시간 간격을 반환한다.
+    **UNIX_TIMESTAMP** 함수는 인자를 생략할 수 있으며, 인자를 생략하면 '1970-01-01 00:00:00' UTC 이후 현재 시스템 날짜/시간까지의 초 단위 시간 간격(interval)을 반환한다. *date* 인자가 지정되면 '1970-01-01 00:00:00' UTC 이후 지정된 날짜/시간까지의 초 단위 시간 간격을 반환한다.
 
     인자의 연, 월, 일에는 0을 입력할 수 없으나, 예외적으로 날짜와 시간이 모두 0인 값을 입력한 경우에는 0을 반환한다.
 

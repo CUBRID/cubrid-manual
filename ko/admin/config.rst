@@ -539,6 +539,8 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
     **generic** 볼륨이 항상 유지해야 할 여유 공간(free space)의 크기를 지정한다. 여유 공간이 지정한 값보다 줄어들게 되면 **generic** 볼륨의 여유 공간을 추가로 확보한다.
 
+    여유 공간의 검사는 **generic**, **data**, 또는 **index** 볼륨에 대한 새로운 페이지 요청이 있을 때만 이루어진다.
+    
     값 뒤에 B, K, M, G, T로 단위를 붙일 수 있으며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes를 의미한다. 단위를 생략하면 바이트 단위가 적용된다. 기본값은 50M, 최소값은 0, 최대값은 20G이다.
 
 **log_volume_size**

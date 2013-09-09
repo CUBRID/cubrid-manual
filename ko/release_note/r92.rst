@@ -136,13 +136,13 @@ tranlist 명령에 지정된 칼럼으로 정렬하여 출력하는 기능 추�
   
     % cubrid tranlist --sort-key=4 tdb 
   
-    Tran index User name Host name Process id Program name Query time Tran time Wait for lock holder SQL_ID SQL Text 
-    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-       1(ACTIVE) PUBLIC myhost 20080 query_editor_cub_cas_1 0.00 0.00 -1 *** empty *** 
-       3(ABORTED) PUBLIC myhost 20081 query_editor_cub_cas_2 0.00 0.00 -1 *** empty *** 
-       2(ACTIVE) PUBLIC myhost 20082 query_editor_cub_cas_3 0.00 0.00 -1 *** empty *** 
-       4(ACTIVE) PUBLIC myhost 20083 query_editor_cub_cas_4 1.80 1.80 2, 3, 1 cdcb58552e320 update ta set a=5 where a > ? 
-    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+    Tran index    User name Host name Process id           Program name  Query time Tran time Wait for lock holder  SQL_ID         SQL Text 
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------
+       1(ACTIVE)     PUBLIC    myhost      20080 query_editor_cub_cas_1        0.00      0.00                   -1  *** empty *** 
+       3(ABORTED)    PUBLIC    myhost      20081 query_editor_cub_cas_2        0.00      0.00                   -1  *** empty *** 
+       2(ACTIVE)     PUBLIC    myhost      20082 query_editor_cub_cas_3        0.00      0.00                   -1  *** empty *** 
+       4(ACTIVE)     PUBLIC    myhost      20083 query_editor_cub_cas_4        1.80      1.80              2, 3, 1  cdcb58552e320  update ta set a=5 where a > ? 
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------
   
     Tran index : 4 
     update ta set a=5 where a > ? 
@@ -177,7 +177,7 @@ split-brain 상태를 해소하기 위해 스스로 종료하는 마스터 노�
     ================================================================================
      * group_id : hagrp   host_name : testhost02    state : unknown
     --------------------------------------------------------------------------------
-    name                 priority   state           score      missed heartbeat
+    name                priority   state          score      missed heartbeat
     --------------------------------------------------------------------------------
     testhost03          3          slave          3          0
     testhost02          2          master         2          0
@@ -257,8 +257,8 @@ PERCENT_RANK 함수 추가(CUBRIDSUS-10533)
     INSERT INTO test_tbl VALUES (100), (200), (200), (300), (400); 
      
 
-    SELECT percent_rank(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl; 
-    SELECT percent_rank() OVER (ORDER BY val) AS pct_rnk FROM test_tbl; 
+    SELECT PERCENT_RANK(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl; 
+    SELECT PERCENT_RANK() OVER (ORDER BY val) AS pct_rnk FROM test_tbl; 
 
 MEDIAN 함수 추가(CUBRIDSUS-11087)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -352,10 +352,10 @@ no로 설정되면 기존처럼 잠금 에스컬레이션이 수행되고 트랜
 
 CONNECT_ORDER 브로커 파라미터를 추가했다. 기본값은 SEQ로 기존과 동일하게 databases.txt의 db-hosts에 설정된 순서대로 접속을 시도한다. 이 값이 RANDOM이면 db-hosts에 설정된 호스트들에 랜덤한 순서로 접속을 시도한다. 
 
-GENERIC 볼륨의 여유공간 크기를 일정량으로 유지할 수 있도록 generic_vol_pre_alloc_size 시스템 파라미터 추가(CUBRIDSUS-10987)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+GENERIC 볼륨의 여유공간 크기를 일정량으로 유지할 수 있도록 generic_vol_prealloc_size 시스템 파라미터 추가(CUBRIDSUS-10987)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-GENERIC 볼륨의 여유공간이 시스템 파라미터 generic_vol_pre_alloc_size(기본값 50M)보다 작아진 상태에서 새 페이지가 할당되면, 자동으로 generic볼륨을 확장(또는 추가)하여 여유공간이 generic_vol_pre_alloc_size 이상으로 유지되도록 하였다. 
+GENERIC 볼륨의 여유공간이 시스템 파라미터 generic_vol_prealloc_size(기본값 50M)보다 작아진 상태에서 새 페이지가 할당되면, 자동으로 generic볼륨을 확장(또는 추가)하여 여유 공간이 generic_vol_prealloc_size 이상으로 유지되도록 하였다. 
 
 다국어
 ------
@@ -656,8 +656,8 @@ CSQL 인터프리터에서 질의를 수행하거나 cci_execute 함수에 CCI_E
 
 .. 4.4new
 
-같은 질의문에 대해 prepare를 재수행할 때 적정 데이터 양을 초과하면 질의 계획을 재작성하도록 수정(CUBRIDSUS-3382)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+데이터가 매우 작은 상태에서 만든 플랜은 데이터가 증가한 경우 플랜을 다시 만들도록 수정(CUBRIDSUS-3382)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
 같은 질의문에 대해 prepare를 재수행할 때 이전에 prepare 한 이후로 변경된 데이터 양이 임계치를 초과하면 질의 계획을 재작성하도록 수정했다. 
   
@@ -1075,7 +1075,7 @@ ALTER 문으로 ENUM 원소 변경 이후 기존 테이블에 있던 값들이 �
 자동커밋이 OFF인 상태에서 PREPARE한 statement를 실행하고 해당 테이블을 DROP/CREATE 후 다시 해당 statement를 실행하면 CAS 프로세스가 비정상 종료하는 현상(CUBRIDSUS-11876)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
-:: 
+.. code-block:: java
   
     conn.setAutoCommit(false); 
 
@@ -1106,7 +1106,7 @@ INSERT 문에서 SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP을 사용하면 서머 �
     INSERT INTO t1 (a, b) VALUES (3, 3), (2, 2), (3, 3), (2, 2), (3, 3), (4, 4); 
     SELECT (SELECT SUM(outr.a + innr.a) FROM t1 AS innr LIMIT 1) AS tt FROM t1 AS outr; 
 
-    // In the previous version, below error occurred. 
+    // 수정 이전 버전에서는 아래의 오류가 발생한다. 
     ERROR: System error (generate xasl) in ../../src/parser/xasl_generation.c (line: 16294)
     
 뷰에서 상수를 ENUM 타입으로 변경하게 되는 경우 발생하는 오류(CUBRIDSUS-10852)
@@ -1123,7 +1123,7 @@ INSERT 문에서 SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP을 사용하면 서머 �
 
 ::
     
-    // 수정 이전 버전에서는 아래의 오류가 발생했다. 
+    // 수정 이전 버전에서는 아래의 오류가 발생한다. 
     ERROR: System error (type check) in ../../src/parser/type_checking.c 
 
 ENUM 타입이 CAST 함수를 통해 정의될 때 원소가 중복되는 것을 허용하는 문제(CUBRIDSUS-10854)
@@ -1152,7 +1152,7 @@ ENUM 타입이 CAST 함수를 통해 정의될 때 원소가 중복되는 것을
     CREATE TABLE clob_tbl(c1 clob); 
     SELECT * FROM clob_tbl;
 
-여러 개의 왼쪽 외부 조인 중 일부가 재작성된 내부 조인이 잘못되어 잘못된 질의 결과가 출력되는 현상(CUBRIDSUS-11129)
+여러 개의 왼쪽 외부 조인 중 재작성된 내부 조인의 일부가 잘못되어 잘못된 질의 결과가 출력되는 현상(CUBRIDSUS-11129)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: sql 
@@ -1277,19 +1277,10 @@ UPDATE 트리거가 존재하는 테이블에 호스트 변수가 포함된 UPDA
     ERROR: before ' from t1; ' 
     '>' requires arguments with compatible collations. 
 
-멀티 바이트 문자셋으로 매우 긴 길이의 식별자 이름 지정 시 입력한 이름이 달라질 수 있는 문제(CUBRIDSUS-10641) 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+멀티바이트 문자셋으로 매우 긴 길이의 식별자 이름 지정 시 입력한 이름이 달라질 수 있는 문제(CUBRIDSUS-10641) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 
-멀티 바이트 문자셋으로 매우 긴 길이의 식별자(테이블, 칼럼, 인덱스 등) 이름 지정 시 UMR(Uninitialized Memory Read) 오류로 인해 입력한 이름과 달라질 수 있는 문제를 수정했다. 또한, 기본 키의 이름 등 자동으로 생성되는 제약조건(constraint)이 식별자의 최대 길이를 넘지 않도록 수정했다. 
-
-멀티 바이트 문자셋끼리 문자셋 변환이 가능하도록 수정(CUBRIDSUS-10753) 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
-
-UTF-8에서 EUC-KR로, EUC-KR에서 UTF-8로, 또는 ISO8859-1에서 EUC-KR로 문자셋 변환이 가능하도록 수정했다. 
- 
-.. code-block:: sql 
- 
-    SELECT CAST(iso_str AS STRING CHARSET utf8) FROM t_iso; 
+멀티바이트 문자셋으로 매우 긴 길이의 식별자(테이블, 칼럼, 인덱스 등) 이름 지정 시 UMR(Uninitialized Memory Read) 오류로 인해 입력한 이름과 달라질 수 있는 문제를 수정했다. 또한, 기본 키의 이름 등 자동으로 생성되는 제약조건(constraint)이 식별자의 최대 길이를 넘지 않도록 수정했다. 
 
 CUBRID 로캘이 en_US.iso88591인 데이터베이스에서 UTF-8 또는 EUC-KR 문자에 MD5 함수 수행 시 실패하는 현상(CUBRIDSUS-10775) 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1421,6 +1412,184 @@ UNION 문 수행 시 SELECT 리스트끼리 콜레이션 호환 여부를 검사
 
 수정 이전 버전에서 숫자나 날짜는 DB 생성 시 결정된 콜레이션을 따른다. 따라서 위의 예에서 CONCAT('ț',123)를 수행하는 경우 'ț'의 콜레이션은 utf8_bin, '123'의 콜레이션은 iso88591_bin이 되고, 그 결과 비정상적인 문자열을 반환한다.
 
+멀티바이트 문자셋을 단일바이트 문자셋(ISO88591)으로 변환할 때 문자열 변환 함수의 오동작 수정(CUBRIDSUS-12127)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+문자열 변환 함수가 멀티바이트 문자셋을 단일바이트 문자셋으로 변환할 때 결과 값에 결과 자리수까지 공백을 붙이도록 수정했다. 따라서 아래 Q1과 Q2는 같은 결과를 출력한다.
+
+.. code-block:: sql
+
+    // create DB with en_US.iso88591
+
+    SET NAMES utf8;
+    CREATE TABLE tbl (a CHAR(10));
+    CREATE INDEX i_t2_a ON tbl(a);
+    INSERT INTO tbl VALUES ('1234567890');
+    
+    PREPARE STMT FROM 'SELECT  a FROM tbl WHERE a LIKE CAST((?+''%'') AS CHAR(11))'
+    EXECUTE STMT USING '123456789';  -- Q1
+
+    SELECT a FROM tbl WHERE a LIKE '123456789% ';   -- Q2
+
+멀티바이트 문자셋끼리 문자셋 변환이 가능하도록 수정(CUBRIDSUS-10753) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+
+UTF-8에서 EUC-KR로, EUC-KR에서 UTF-8로, 또는 ISO8859-1에서 EUC-KR로 문자셋 변환이 가능하도록 수정했다. 
+ 
+.. code-block:: sql 
+ 
+    SELECT CAST(iso_str AS STRING CHARSET utf8) FROM t_iso; 
+
+뷰, 트리거, 분할 표현식, 함수 인덱스 표현식, 필터 인덱스 표현식에 대해 출력되는 질의의 문자열에 CHARSET과 COLLATE 수정자를 포함하도록 수정(CUBRIDSUS-12195)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+DB의 문자셋/콜레이션과 다른 문자셋/콜레이션을 가진 뷰, 트리거, 분할 표현식, 함수 인덱스 표현식, 필터 인덱스 표현식에 대해 질의를 수행하면 오류가 발생하는 문제를 수정했다.
+
+::
+
+    ERROR: Required character set and collation are not compatible.
+
+수정 이후 위의 오류는 발생하지 않는다. 예를 들어 "CREATE INDEX i_a on t(a) WHERE LOWER(a)<'John';"에 대해 출력되는 필터 인덱스 표현식은 
+
+.. code-block:: sql
+ 
+
+    LOWER(a)<'John' 
+
+에서
+
+.. code-block:: sql
+
+    LOWER(a)<_iso88591'John' collate iso88591_bin
+
+로 바뀌었다.
+
+EUC-KR 문자셋의 고정 길이 CHAR 타입 문자열로 해시 분할하여 분할 테이블을 생성할 때 잘못 분할되는 문제(CUBRIDSUS-12220)  
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql
+
+    -- EUC-KR로 DB 생성
+    
+    CREATE TABLE hash_test
+    (
+        id INT NOT NULL PRIMARY KEY ,
+        test_char char(50)
+    )
+    PARTITION BY HASH(test_char)
+    PARTITIONS 4;
+    INSERT INTO hash_test values(2,'bbb');
+    
+    UPDATE hash_test set test_char = 'ddd' where test_char = 'bbb';    
+    -- 수정 이전 버전에서는 위의 질의를 수행해도 UPDATE되는 레코드가 없다.
+    
+    0 row affected.
+    
+분할 테이블에 대한 ALTER 문을 수행하면서 분할 키 타입의 콜레이션이 변환되는 경우 응용 프로그램이 비정상 종료되는 현상(CUBRIDSUS-12179)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+
+.. code-block:: sql 
+
+    // en_US.utf8로 DB 생성 
+    // 콜레이션 변경 
+
+    SET NAMES utf8 COLLATE utf8_gen; 
+    CREATE TABLE list_test(id INT NOT NULL PRIMARY KEY , 
+                            test_int INT, 
+                            test_char CHAR(50), 
+                            test_varchar VARCHAR(2000), 
+                            test_datetime TIMESTAMP) 
+    PARTITION BY LIST (test_char) ( 
+    PARTITION P0 VALUES IN ('10'), 
+    PARTITION P1 VALUES IN ('20')); 
+
+    ALTER TABLE list_test ADD PARTITION ( 
+    PARTITION P1024 VALUES IN ('20000')); 
+
+분할 테이블에서 콜레이션 변경 후 필터링 인덱스 생성에 실패하는 현상(CUBRIDSUS-12173)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    // en_US.utf8로 DB 생성 
+    // 콜레이션 변경 
+    SET NAMES utf8 collate utf8_gen; 
+    CREATE TABLE part 
+    ( 
+        id INTEGER UNIQUE, 
+        textlabel VARCHAR(255), 
+        description VARCHAR(4096) 
+    ) 
+    PARTITION BY RANGE (ID) 
+    ( 
+        PARTITION p1 VALUES LESS THAN (10), 
+        PARTITION p2 VALUES LESS THAN (20), 
+        PARTITION p3 VALUES LESS THAN (30), 
+        PARTITION p4 VALUES LESS THAN MAXVALUE 
+    ); 
+
+    CREATE INDEX idx_part ON part(id, textlabel) WHERE textlabel LIKE '%$_%' ESCAPE '$'; 
+
+    -- 수정 이전 버전에서는 아래의 오류를 출력한다. 
+    ERROR: No error message available. 
+
+DB 생성 시 명시한 문자셋과 다른 문자셋으로 변경한 후 ENUM 타입을 포함하는 질의문 수행에 실패하는 현상(CUBRIDSUS-12159)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    // create DB with en_US.iso88591 
+    // change charset 
+    SET NAMES utf8; 
+    CREATE TABLE tbl ( 
+        A ENUM('你', '我', '他') 
+    ); 
+    CREATE INDEX IDX ON tbl(LOG10(A)); 
+    INSERT INTO tbl VALUES(2); 
+    SELECT * FROM tbl; 
+    INSERT INTO tbl VALUES ('我'), ('你'), (2), ('他'); 
+
+DB 생성 시 명시한 문자셋과 다른 문자셋으로 변경한 후 CREATE TABLE ... LIKE 문 수행에 실패하는 현상(CUBRIDSUS-12142)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    // en_US.iso88591로 DB 생성 
+    SET NAMES utf8 COLLATE utf8_gen; 
+    CREATE TABLE t1(a CHAR(1200), b VARCHAR(1200)); 
+    CREATE INDEX i_t1_b on t1(b) WHERE b='1234567890'; 
+     
+    CREATE TABLE t2 LIKE t1; 
+
+    // 수정 이전 버전에서 다음의 에러가 발생한다. 
+    ERROR: In line 1, column 45 before ' utf8_bin' 
+    Syntax error: unexpected 'collate', expecting SELECT or VALUE or VALUES or '(' 
+
+CSQL -S 옵션으로 실행해서 intl_date_lang 시스템 파라미터 값을 변경할 때 TO_CHAR 함수가 잘못된 결과를 출력하는 현상(CUBRIDSUS-12135)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    // de_DE.utf8로 DB 생성 
+    // -S 옵션으로 CSQL 실행 
+     
+    // intl_date_lang 시스템 파라미터 값 변경 
+    SET SYSTEM PARAMETERS 'intl_date_lang=ko_KR';
+     
+    // 수정 이전 버전에서는 de_DE 포맷으로 출력된다. 
+    SELECT TO_CHAR(datetime'03:36:16 pm 2013-04-12', 'HH12:MI:SS.FF pm, YYYY-MM-DD-DAY'); 
+    '03:36:16.000 nachm., 2013-04-12-FREITAG ' 
+    
+TO_CHAR 함수에서 호스트 변수로 SELECT를 수행할 때 잘못된 결과를 출력하는 현상(CUBRIDSUS-12130)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    PREPARE st FROM 'SELECT TO_CHAR(?)'; 
+    EXECUTE st USING 'a'; 
+    // 수정 이전 버전에서는 공백 문자를 출력한다. 
+    '' 
+    
 분할(Partitioning)
 ------------------
 
@@ -1739,13 +1908,11 @@ JDBC 응용 프로그램에서 queryTimeout을 매우 큰 값으로 설정하면
 [JDBC] UNION 질의에서 SELECT 리스트의 타입이 서로 다를 때 잘못된 결과를 출력하는 문제(CUBRIDSUS-12112)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+수정 이전 버전에서 위의 질의 수행 시 JDBC 프로그램이 비정상 결과를 출력하는 현상을 수정했다. 하지만, CSQL은 수정 이전 버전에서도 SELECT 리스트의 타입을 DOUBLE로 변환하면서 결과를 정상 출력한다.
+
 .. code-block:: sql
 
-    // create db with en_US.utf8.
-    SET NAMES iso88591;
     SELECT 1 UNION ALL SELECT '4';
-
-수정 이전 버전에서 위의 질의 수행 시 CSQL은 SELECT 리스트의 타입을 DOUBLE로 변환하면서 결과를 정상 출력하지만, JDBC은 비정상 결과를 출력한다.
 
 .. 4.4new
 
@@ -2047,10 +2214,10 @@ cubrid lockdb 명령 수행 시 아래와 같이 잘못된 "Run Deadlock interva
 
 .. 4.4new
 
-SA모드로 checkdb 수행 시 데이터베이스 볼륨의 페이지 할당 테이블 정보가 유효한지 검사하도록 수정(CUBRIDSUS-10755)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SA(standalone) 모드로 checkdb 수행 시 데이터베이스 볼륨의 페이지 할당 테이블 정보가 유효한지 검사하도록 수정(CUBRIDSUS-10755)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-데이터베이스 볼륨의 헤더 부분에는 현재 볼륨에서 사용중인 페이지에 대한 할당 테이블이 유지되는데, SA모드로 checkdb를 수행하면 각 볼륨의 페이지 할당 테이블 정보와 데이터베이스에서 유지되는 페이지 정보가 일치하는지 검사하도록 하였다. 
+데이터베이스 볼륨의 헤더 부분에는 현재 볼륨에서 사용중인 페이지에 대한 할당 테이블이 유지되는데, SA 모드로 checkdb를 수행하면 각 볼륨의 페이지 할당 테이블 정보와 데이터베이스에서 유지되는 페이지 정보가 일치하는지 검사하도록 하였다. 
   
 두 정보가 불일치하는 경우 아래와 같은 오류 메시지를 남긴다. 
 
@@ -2071,13 +2238,13 @@ CSQL의 클라이언트/서버 모드에서 질의 수행 결과가 가끔씩 �
 
     CSQL의 클라이언트/서버 모드(csql -C)에서 질의 수행 결과가 가끔씩 안 나올 수 있는 현상을 수정했다.
 
-독립 모드로 CSQL을 실행할 때 통계 정보가 업데이트 되도록 수정(CUBRIDSUS-11417)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SA(standalone) 모드로 CSQL을 실행할 때 통계 정보가 업데이트 되도록 수정(CUBRIDSUS-11417)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-독립 모드로 CSQL을 실행할 때(csql -S) 통계 정보가 업데이트되지 않는 문제를 수정했다.
+SA 모드로 CSQL을 실행할 때(csql -S) 통계 정보가 업데이트되지 않는 문제를 수정했다.
 
 
-spacedb 명령으로 GENERIC 볼륨에 대해 용도별 사용량 확인이 가능해도록 수정(CUBRIDSUS-11161)
+spacedb 명령으로 GENERIC 볼륨에 대해 용도별 사용량 확인이 가능하도록 수정(CUBRIDSUS-11161)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "cubrid spacedb" 명령으로 볼륨 사용량을 확인할 때 -p 옵션을 사용하면 GENERIC 볼륨에 대해 용도 별 사용량을 확인할 수 있도록 수정했다. 
@@ -2088,29 +2255,29 @@ GENERIC 볼륨에서 data, index 용도에 따른 사용량을 확인할 수 있
     $ cubrid spacedb -p --size-unit=M tdb 
     Space description for database 'tdb' with pagesize 16.0K. (log pagesize: 16.0K) 
 
-    Volid Purpose total_size free_size data_size index_size temp_size Vol Name 
-
-        0 GENERIC 20.0 M 17.0 M 2.1 M 0.9 M 0.0 M /home1/cubrid/tdb 
-        1 DATA 20.0 M 19.5 M 0.4 M 0.0 M 0.0 M /home1/cubrid/tdb_x001 
-        2 INDEX 20.0 M 19.6 M 0.0 M 0.4 M 0.0 M /home1/cubrid/tdb_x002 
-        3 TEMP 20.0 M 19.6 M 0.0 M 0.0 M 0.3 M /home1/cubrid/tdb_x003 
-        4 TEMP 20.0 M 19.9 M 0.0 M 0.0 M 0.1 M /home1/cubrid/tdb_x004 
+    Volid Purpose  total_size  free_size  data_size  index_size  temp_size  Vol Name 
+                                                                            
+        0 GENERIC      20.0 M     17.0 M      2.1 M       0.9 M      0.0 M  /home1/cubrid/tdb 
+        1    DATA      20.0 M     19.5 M      0.4 M       0.0 M      0.0 M  /home1/cubrid/tdb_x001 
+        2   INDEX      20.0 M     19.6 M      0.0 M       0.4 M      0.0 M  /home1/cubrid/tdb_x002 
+        3    TEMP      20.0 M     19.6 M      0.0 M       0.0 M      0.3 M  /home1/cubrid/tdb_x003 
+        4    TEMP      20.0 M     19.9 M      0.0 M       0.0 M      0.1 M  /home1/cubrid/tdb_x004 
     ---------------------------------------------------------------------------------------------------- 
-        5 100.0 M 95.6 M 2.5 M 1.2 M 0.4 M 
+        5             100.0 M     95.6 M      2.5 M       1.2 M      0.4 M 
     Space description for temporary volumes for database 'tdb' with pagesize 16.0K. 
 
     $ cubrid spacedb -s --size-unit=M tdb 
     Summarized space description for database 'tdb' with pagesize 16.0K. (log pagesize: 16.0K) 
 
-    Purpose total_size used_size free_size volume_count 
+       Purpose  total_size  used_size  free_size  volume_count 
     ------------------------------------------------------------- 
-          DATA 20.0 M 0.5 M 19.5 M 1 
-         INDEX 20.0 M 0.4 M 19.6 M 1 
-       GENERIC 20.0 M 3.0 M 17.0 M 1 
-          TEMP 40.0 M 0.5 M 39.5 M 2 
-     TEMP TEMP 0.0 M 0.0 M 0.0 M 0 
+          DATA      20.0 M      0.5 M     19.5 M             1 
+         INDEX      20.0 M      0.4 M     19.6 M             1 
+       GENERIC      20.0 M      3.0 M     17.0 M             1 
+          TEMP      40.0 M      0.5 M     39.5 M             2 
+     TEMP TEMP       0.0 M      0.0 M      0.0 M             0 
     ------------------------------------------------------------- 
-         TOTAL 100.0 M 4.4 M 95.6 M 5 
+         TOTAL     100.0 M      4.4 M     95.6 M             5 
 
 Windows에서 "cubrid loaddb" 명령 수행 시 발생하는 에러 메시지 중 일부 인자값이 출력되지 않는 현상(CUBRIDSUS-11859)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

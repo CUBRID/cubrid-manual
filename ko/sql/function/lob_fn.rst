@@ -109,4 +109,4 @@ CLOB_TO_CHAR
 
     :param clob_type_column: 변환 대상 칼럼
     :param charset: 변환할 문자열의 문자셋. utf8, euckr, iso88591이 올 수 있다.
-    :rtype: VARCHAR
+    :rtype: STRING

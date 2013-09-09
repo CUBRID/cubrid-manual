@@ -55,7 +55,7 @@ Behavioral Changes
 ------------------
 *   Fix so that there is no case to violate NOT NULL or PRIMARY KEY constraints as running "ALTER ... ADD COLUMN" in a table that has a record.
 *   Remove SELECT_AUTO_COMMIT, the broker parameter.
-*   The range of a value ​​for APPL_SERVER_MAX_SIZE_HARD_LIMIT broker parameter was limited to a value between 1 and 2,097,151.
+*   The range of a value for APPL_SERVER_MAX_SIZE_HARD_LIMIT broker parameter was limited to a value between 1 and 2,097,151.
 *   The default setting for SQL_LOG_MAX_SIZE broker parameter to specify the size of the SQL log file has been changed to 10MB from 100MB.
 *   In a JDBC application, zero date of TIMESTAMP is changed into '1970-01-01 00:00:00'(GST) from '0001-01-01 00:00:00' when the value of zeroDateTimeBehavior property in the connection URL is "round".
 *   Remove "PHRO" in values of ACCESS_MODE, the broker parameter.
@@ -139,13 +139,13 @@ The following example shows how to sort by specifying the fourth column, "Proces
   
     % cubrid tranlist --sort-key=4 tdb 
   
-    Tran index User name Host name Process id Program name Query time Tran time Wait for lock holder SQL_ID SQL Text 
-    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-       1(ACTIVE) PUBLIC myhost 20080 query_editor_cub_cas_1 0.00 0.00 -1 *** empty *** 
-       3(ABORTED) PUBLIC myhost 20081 query_editor_cub_cas_2 0.00 0.00 -1 *** empty *** 
-       2(ACTIVE) PUBLIC myhost 20082 query_editor_cub_cas_3 0.00 0.00 -1 *** empty *** 
-       4(ACTIVE) PUBLIC myhost 20083 query_editor_cub_cas_4 1.80 1.80 2, 3, 1 cdcb58552e320 update ta set a=5 where a > ? 
-    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+    Tran index    User name Host name Process id           Program name  Query time Tran time Wait for lock holder  SQL_ID         SQL Text 
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------
+       1(ACTIVE)     PUBLIC    myhost      20080 query_editor_cub_cas_1        0.00      0.00                   -1  *** empty *** 
+       3(ABORTED)    PUBLIC    myhost      20081 query_editor_cub_cas_2        0.00      0.00                   -1  *** empty *** 
+       2(ACTIVE)     PUBLIC    myhost      20082 query_editor_cub_cas_3        0.00      0.00                   -1  *** empty *** 
+       4(ACTIVE)     PUBLIC    myhost      20083 query_editor_cub_cas_4        1.80      1.80              2, 3, 1  cdcb58552e320  update ta set a=5 where a > ? 
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------
   
     Tran index : 4 
     update ta set a=5 where a > ? 
@@ -179,7 +179,7 @@ The cub_master log file of the master node, which terminates itself to clear the
     ================================================================================
      * group_id : hagrp   host_name : testhost02    state : unknown
     --------------------------------------------------------------------------------
-    name                 priority   state           score      missed heartbeat
+    name                priority   state          score      missed heartbeat
     --------------------------------------------------------------------------------
     testhost03          3          slave          3          0
     testhost02          2          master         2          0
@@ -259,8 +259,8 @@ Add the PERCENT_RANK function which returns the relative position of the row as 
     INSERT INTO test_tbl VALUES (100), (200), (200), (300), (400); 
      
 
-    SELECT percent_rank(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl; 
-    SELECT percent_rank() OVER (ORDER BY val) AS pct_rnk FROM test_tbl; 
+    SELECT PERCENT_RANK(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl; 
+    SELECT PERCENT_RANK() OVER (ORDER BY val) AS pct_rnk FROM test_tbl; 
 
 
 MEDIAN function(CUBRIDSUS-11087)
@@ -355,10 +355,10 @@ Parameter to specify the order that the broker accesses the DB where  multiple H
 
 The CONNECT_ORDER broker parameter is added. The default value is SEQ and the order to attempt access specified in db-hosts of the databases.txt is unchanged. If it is configured to RANDOM, the broker attempts access to the hosts specified in db-hosts randomly.
 
-Add the generic_vol_pre_alloc_size system parameter to maintain free space of the GENERIC volume to a certain level(CUBRIDSUS-10987)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Add the generic_vol_prealloc_size system parameter to maintain free space of the GENERIC volume to a certain level(CUBRIDSUS-10987)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When the free space of the GENERIC volume is smaller than the generic_vol_pre_alloc_size system parameter (default value 50M) and a new page is allocated, the GENERIC volume is automatically expanded (or added) to maintain the free space.
+When the free space of the GENERIC volume is smaller than the generic_vol_prealloc_size system parameter (default value 50M) and a new page is allocated, the GENERIC volume is automatically expanded (or added) to maintain the free space.
 
 Globalization
 -------------
@@ -384,7 +384,7 @@ Hash partitioning was not supported for the non-binary collation; however, it ha
     INSERT INTO t2(code) VALUES ('ae'); 
     INSERT INTO t2(code) VALUES ('Ä'); 
     INSERT INTO t2(code) VALUES ('ä'); 
-
+    
 Output the SHOW CREATE TABLE result including the collation of the column(CUBRIDSUS-11134)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -660,8 +660,8 @@ Performance and Optimization
 
 .. 4.4new
 
-Query plan is rewritten when the proper data volume is exceeded during the re-executuion of prepare for the same query statement(CUBRIDSUS-3382)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Query plan is rewritten when the data volume is increased from the small data(CUBRIDSUS-3382)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
 If the data volume changed after the previous prepare exceeds critical when prepare is re-executed for the same query, the query plan is rewritten.
   
@@ -692,10 +692,10 @@ In the following query, the idx1 index is used when the first SELECT statement i
 Statistical information of only the added index is updated(CUBRIDSUS-10709)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the previous versions, the statistical information of all existing indexes was updated and it became a burden on the system. Now, to remove this burden, the statistical information of the added indexes is only created.
+In the previous versions, the statistical information of all existing indexes was updated and it became a burden on the system. Now, to remove this burden, only the statistical information of the added indexes is created.
 
-In-memory sort optimizastion while executing the ORDER BY ... LIMIT clause(CUBRIDSUS-10934)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+In-memory sort optimization while executing the ORDER BY ... LIMIT clause(CUBRIDSUS-10934)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The in-memory sort optimization is added to process the query by saving the tuples that match the ORDER BY ... LIMIT condition to the sort buffer.
 
@@ -800,7 +800,7 @@ Stability
 Query scanning index was not stopped(CUBRIDSUS-11945)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The issue of query that scans index not closing and temporary temp volume being infinitely increased has been fixed.
+The issue of a query that scans an index not closing and temporary temp volume being infinitely increased has been fixed.
 
 .. 4.4new
 
@@ -850,8 +850,8 @@ After the update, only the volume required for executing the query is added; aft
 Multiple CASs with the same ID existed because CAS, being supposed to be terminated by the TIME_TO_KILL broker parameter, was not terminated(CUBRIDSUS-11857)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Abnormal server process termination when several applications executed DML simultaneously(CUBRIDSUS-11428)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Abnormal termination of a server process when several applications executed DML simultaneously(CUBRIDSUS-11428)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 CAS was not terminated along with the broker when CAS, which had been automatically started by the broker, failed to access the DB within a certain time(CUBRIDSUS-11772)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -970,7 +970,7 @@ Wrong result was output when the SELECT statement that had scanned the index was
  
 ::
  
-    -- In the previous version, above query shows a wrong result. 
+    -- in the previous version, above query shows a wrong result. 
   
                 a            b            c  d
     ======================================================================
@@ -1021,10 +1021,10 @@ The CONV value for the second column was returned when the first column of the t
 
 .. 4.4new
 
-When there is an type casting because types between SELECT list and INSERT list are different in INSERT ... SELECT syntax, and ORDER BY clause exists in SELECT query, INSERTed order became different(CUBRIDSUS-12031)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When there is an type casting because types between SELECT list and INSERT list are different in INSERT ... SELECT syntax, and ORDER BY clause exists in SELECT query, INSERTed order becomes different(CUBRIDSUS-12031)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix the case that when there is an type casting because types between SELECT list and INSERT list are different in INSERT ... SELECT syntax, and ORDER BY clause exists in SELECT query, INSERTed order became different.
+Fix the case that when there is an type casting because types between SELECT list and INSERT list are different in INSERT ... SELECT syntax, and ORDER BY clause exists in SELECT query, INSERTed order becomes different.
 
 If an AUTO_INCREMENT column exists in the INSERT list columns, INSERTed order becomes important.
  
@@ -1048,7 +1048,7 @@ When the plan cache was OFF by configuring the max_plan_cache_entries value of c
 Abnormal application termination when 255-byte or longer string was included in the DELETE condition(CUBRIDSUS-11067)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This issue has occurred in version 9.1 only.
+This issue occurs only in version 9.1.
   
 .. code-block:: sql 
   
@@ -1072,7 +1072,7 @@ If the ENUM elements were changed by using the ALTER statement and the values in
 Abnormal CAS process termination when executing the PREPARE statement, executing DROP/CREATE, and then executing the statement again with auto commit OFF(CUBRIDSUS-11876)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
-:: 
+.. code-block:: java
   
     conn.setAutoCommit(false); 
 
@@ -1102,7 +1102,7 @@ An error occurred when the aggregate function was executed for the operation whi
     INSERT INTO t1 (a, b) VALUES (3, 3), (2, 2), (3, 3), (2, 2), (3, 3), (4, 4); 
     SELECT (SELECT SUM(outr.a + innr.a) FROM t1 AS innr LIMIT 1) AS tt FROM t1 AS outr; 
 
-    // In the previous version, below error occurred. 
+    -- in the previous version, below error occurred. 
     ERROR: System error (generate xasl) in ../../src/parser/xasl_generation.c (line: 16294)
     
 An error occurred when a constant was changed to the ENUM type in view(CUBRIDSUS-10852)
@@ -1119,7 +1119,7 @@ When a constant was changed to the ENUM type in view (e.g., a query was executed
 
 ::
     
-    // before the update, below error has occcurred.
+    -- in the previous version, below error occurred. 
     ERROR: System error (type check) in ../../src/parser/type_checking.c 
 
 Duplicate element allowed when the ENUM type was defined by using the CAST function(CUBRIDSUS-10854)
@@ -1134,7 +1134,7 @@ When the ENUM type was defined by using the CAST function, the duplicate element
 
     CREATE TABLE t2 AS SELECT CAST(a AS ENUM('a', 'b', 'c', 'a', 'a', 'a')) col, a FROM t1; 
 
-    // after the update, duplicated elements are not allowed in ENUM type.
+    -- after the update, duplicated elements are not allowed in ENUM type.
     ERROR: before ' , 'a', 'a')) col, a from t1; ' 
     Duplicate values in enum type. 
 
@@ -1227,8 +1227,6 @@ Data was not changed or wrong data was changed when the UPDATE statement with th
 CAS is sometimes abnormally terminated  when gettring interrupted during preparing SQL with VIEW(CUBRIDSUS-10846) 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
 Globalization
 -------------
 
@@ -1249,7 +1247,7 @@ As shown in the following example, when the charset of the database was en_US.ut
         PARTITION a1 VALUES IN (_utf8'AEäÄ'), 
         PARTITION a2 VALUES IN (_utf8'ääÄ'), 
         PARTITION a3 VALUES IN (_utf8'ÄÄAE') 
-    ); 
+    );
 
 Multi-byte charset data different from the system charset can be compared with the number(CUBRIDSUS-10589)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1278,15 +1276,6 @@ Name entered became different when a long identifier name was specified with a m
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 
 The name entered might have been different because of the Uninitialized Memory Read (UMR) error when a long identifier name (table, column, index, etc.) was specified with a multi-byte charset. This problem has been fixed. In addition, the constraint that is automatically created, such as the default key name, has been fixed not to exceed the maximum length of the identifier.
-
-Charset conversion between multi-byte charsets available(CUBRIDSUS-10753)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The charset can be converted from UTF-8 to EUC-KR, from EUC-KR to UTF-8, or from ISO8859-1 to EUC-KR.
- 
-.. code-block:: sql 
- 
-    SELECT CAST(iso_str AS STRING CHARSET utf8) FROM t_iso; 
 
 Failure to execute MD5 function to the UTF-8 or EUC-KR characters in the database of which CUBRID locale was en_US.iso88591(CUBRIDSUS-10775)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1363,24 +1352,24 @@ collections which are host variables.
 
 .. code-block:: sql
 
-    //  create DB with utf8: cubrid createdb en_US.utf8
+    --  create DB with utf8: cubrid createdb en_US.utf8
     
-    //  collation is changed(utf8_bin -> iso88591_bin) because charset is changed.
+    --  collation is changed(utf8_bin -> iso88591_bin) because charset is changed.
     SET NAMES iso88591;
     CREATE TABLE t1(i int, e1 enum ('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', '01/01/2012'));
     INSERT INTO T1 VALUES (1, 1), (3, 3), (2, 'Monday'), (6, 'Friday'), (7, 7), (4, 4), (5, 5), (8, 8);
     
     PREPARE X FROM 'select /*+ recompile */ * from t1 where e1 < all {''T'', ?, ''Sunday'', ?}  order by i';
 
-    // 
+    -- 
     EXECUTE x USING 50, 3;
 
 ::
 
-    // before the update
+    -- before the update
     8 '01/01/2012'
 
-    // after the update
+    -- after the update
     ERROR: Domain "character varying" is not compatible with domain "integer".
 
 Fix collation inference when having host variable arguments and client charset different than system charset(CUBRIDSUS-12111)
@@ -1390,7 +1379,7 @@ In the below example, a charset of a client is ISO-88591 than a charset of a ser
 
 .. code-block:: sql
 
-    //create db with en_US.utf8
+    --create db with en_US.utf8
     SET NAMES iso88591;
     PREPARE s FROM 'SELECT FIELD (?, ?, ?, ?) INTO :result';
 
@@ -1417,6 +1406,180 @@ Fix to coerce a number/date-argument's collation into always the other string-ar
     SELECT * FROM test_ro;
 
 In the previous version, number or date follows the collation which is decided when DB is created. Therefore, when CONCAT('ț',123) is run on the above example, the collation of 'ț' becomes 'utf8_bin' and the collation of 123' becomes iso88591_bin; as a result, it returns a corrupted string.
+
+Fix the wrong behavior of character string coercion function, when converting from a multibyte charset to a single byte charset(ISO88591)(CUBRIDSUS-12127)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When string coercion function converts from a multibyte charset to a single byte charset, the destination value of the fixed version is padded up to destination precision length. Therefore, the below Q1 and Q2 show the same result.
+
+.. code-block:: sql
+
+    -- create DB with en_US.iso88591
+    
+    SET NAMES utf8;
+    CREATE TABLE tbl (a CHAR(10));
+    CREATE INDEX i_t2_a ON tbl(a);
+    INSERT INTO tbl VALUES ('1234567890');
+
+    PREPARE STMT FROM 'SELECT a FROM tbl WHERE a LIKE CAST((?+''%'') AS CHAR(11))'
+    EXECUTE STMT USING '123456789';  -- Q1
+
+    SELECT a FROM tbl WHERE a LIKE '123456789% ';   -- Q2
+
+Charset conversion between multi-byte charsets available(CUBRIDSUS-10753)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The charset can be converted from UTF-8 to EUC-KR, from EUC-KR to UTF-8, or from ISO8859-1 to EUC-KR.
+ 
+.. code-block:: sql 
+ 
+    SELECT CAST(iso_str AS STRING CHARSET utf8) FROM t_iso; 
+
+The printed queries for views, triggers, partition expressions, function index expressions, filter index expressions now contain both charset and collate modifiers for string literals(CUBRIDSUS-12195)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fix an error occurred when you ran queries for views, triggers, partition expressions, function index expressions, filter index expressions which have a different charset/collation with DB's charset/collation.
+
+::
+
+    ERROR: Required character set and collation are not compatible.
+
+After fixing, the above error does not occur. As an example, for filter index "CREATE INDEX i_a on t(a) WHERE LOWER(a)<'John';", the printed filter index expression is changed from:
+
+:: 
+
+    LOWER(a)<'John' 
+
+to
+
+::
+
+    LOWER(a)<_iso88591'John' collate iso88591_bin
+    
+Partitioning is wrong when the partition table is hash-partitioned by the fixed-length CHAR string with EUC-KR charset(CUBRIDSUS-12220)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql
+
+    -- create DB with EUC-KR.
+    
+    CREATE TABLE hash_test
+    (
+        id INT NOT NULL PRIMARY KEY ,
+        test_char char(50)
+    )
+    PARTITION BY HASH(test_char)
+    PARTITIONS 4;
+    INSERT INTO hash_test values(2,'bbb');
+    
+    UPDATE hash_test set test_char = 'ddd' where test_char = 'bbb';
+    -- in the previous version, there is no UPDATEd record even if the above query is executed.
+    
+    0 row affected.
+
+An application was abnormally terminated when the collation of the type of a partition key is changed as ALTER statement about a partitioned table is performed(CUBRIDSUS-12179)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    -- create db with en_US.utf8 
+    -- change collation 
+    SET NAMES utf8 COLLATE utf8_gen; 
+    CREATE TABLE list_test(id INT NOT NULL PRIMARY KEY , 
+                            test_int INT, 
+                            test_char CHAR(50), 
+                            test_varchar VARCHAR(2000), 
+                            test_datetime TIMESTAMP) 
+    PARTITION BY LIST (test_char) ( 
+    PARTITION P0 VALUES IN ('10'), 
+    PARTITION P1 VALUES IN ('20')); 
+
+    ALTER TABLE list_test ADD PARTITION ( 
+    PARTITION P1024 VALUES IN ('20000'));
+    
+Creating a filtering index was failed after changing a collation in the partitioned table(CUBRIDSUS-12173)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    -- create DB with en_US.utf8 
+    -- change collation 
+    SET NAMES utf8 collate utf8_gen; 
+    CREATE TABLE part 
+    ( 
+        id INTEGER UNIQUE, 
+        textlabel VARCHAR(255), 
+        description VARCHAR(4096) 
+    ) 
+    PARTITION BY RANGE (ID) 
+    ( 
+        PARTITION p1 VALUES LESS THAN (10), 
+        PARTITION p2 VALUES LESS THAN (20), 
+        PARTITION p3 VALUES LESS THAN (30), 
+        PARTITION p4 VALUES LESS THAN MAXVALUE 
+    ); 
+
+    CREATE INDEX idx_part ON part(id, textlabel) WHERE textlabel LIKE '%$_%' ESCAPE '$'; 
+
+    -- in the previous version, the below error occurs. 
+    ERROR: No error message available.
+    
+Executing SQL with ENUM type was failed after changing the charset specified in creating DB into the other charset(CUBRIDSUS-12159)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    -- create DB with en_US.iso88591 
+    -- change charset 
+    SET NAMES utf8; 
+    CREATE TABLE tbl ( 
+        A ENUM('你', '我', '他') 
+    ); 
+    CREATE INDEX IDX ON tbl(LOG10(A)); 
+    INSERT INTO tbl VALUES(2); 
+    SELECT * FROM tbl; 
+    INSERT INTO tbl VALUES ('我'), ('你'), (2), ('他');
+    
+Executing CREATE TABLE ... LIKE statement was failed after changing the charset specified in creating DB into the other charset(CUBRIDSUS-12142)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    -- create DB with en_US.iso88591 
+    SET NAMES utf8 COLLATE utf8_gen; 
+    CREATE TABLE t1(a CHAR(1200), b VARCHAR(1200)); 
+    CREATE INDEX i_t1_b on t1(b) WHERE b='1234567890'; 
+     
+    CREATE TABLE t2 LIKE t1; 
+
+    -- in the previous version, the below error occurs 
+    ERROR: In line 1, column 45 before ' utf8_bin' 
+    Syntax error: unexpected 'collate', expecting SELECT or VALUE or VALUES or '(' 
+    
+The result of TO_CHAR function was incorrect when running CSQL with -S option and changing the value of intl_date_lang system parameter(CUBRIDSUS-12135)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    -- create DB with de_DE.utf8 
+    -- run CSQL with -S option 
+     
+    -- change the value of intl_date_lang system parameter 
+    SET SYSTEM PARAMETERS 'intl_date_lang=ko_KR';
+     
+    -- in the previous version, TO_CHAR returns the result as de_DE format 
+    SELECT TO_CHAR(datetime'03:36:16 pm 2013-04-12', 'HH12:MI:SS.FF pm, YYYY-MM-DD-DAY'); 
+    '03:36:16.000 nachm., 2013-04-12-FREITAG ' 
+    
+The result of TO_CHAR function was incorrect when selecting with host variables(CUBRIDSUS-12130)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    PREPARE st FROM 'SELECT TO_CHAR(?)'; 
+    EXECUTE st USING 'a'; 
+    -- in the previous version, it returns an empty string 
+    '' 
 
 Partitioning
 ------------
@@ -1544,10 +1707,10 @@ A counterpart node name was not included in the applylogdb error message outputt
   
 :: 
   
-    // before
+    -- before
     HA generic: change HA server state from from 'idle' to 'active'.. 
   
-    // after
+    -- after
     HA generic: change the state of HA server (testdb@cdbs037.cub) from 'idle' to 'active'.
 
 .. 4.4new
@@ -1714,10 +1877,10 @@ In the JDBC application, when the zeroDateTimeBehavior property of the connectio
   
 ::
 
-    // before message
+    -- before message
     invalid argument 
   
-    // after message
+    -- after message
     Zero date can not be represented as java.sql.Timestamp. 
      
 For reference, in the 2008 R4.0 or lower versions, TIMESTAMP '1970-01-01 00:00:00'(GMT) is the minimum value of TIMESTAMP; however, in the 2008 4.1 or higher versions, it is recognized as zerodate and TIMESTAMP '1970-01-01 00:00:01'(GMT) is the minimum value of TIMESTAMP.
@@ -1732,13 +1895,11 @@ Fix abnormal query timeout error in the JDBC application when the queryTimeout w
 [JDBC] In UNION query, an abnormal result was output when each type of SELECT list is different(CUBRIDSUS-12112)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+If you run the above query in the previous versions, JDBC program returns the abnormal result. But, CSQL returns the normal output even in the previous versions, as changing the types of SELECT list as DOUBLE.
+
 .. code-block:: sql
 
-    // create db with en_US.utf8.
-    SET NAMES iso88591;
     SELECT 1 UNION ALL SELECT '4';
-
-In the previous versions, if you run the above query, CSQL returns the normal output as changing the types of SELECT list as DOUBLE, but JDBC program returns the abnormal result.
 
 .. 4.4new
 
@@ -2010,9 +2171,9 @@ When the CAS log file, the input file of broker_log_top, had no year information
 Fix the errors relating to broker_log_converter and broker_log_runner(CUBRIDSUS-10822)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When the varchar column existed in the bind value, the result file of broker_log_converter had a wrong binding value. When the datetime column existed in the binding value, while executing broker_log_runner the CCI application had the "type conversion" error. These problems have been fixed.
+When the VARCHAR column existed in the bind value, the result file of broker_log_converter had a wrong binding value. When the DATETIME column existed in the binding value, while executing broker_log_runner the CCI application had the "type conversion" error. These problems have been fixed.
   
-In addition, when the binding value included the datetime column, the date string format of the cci_bind_param was only "YYYY/MM/DD." Now, "YYYY/MM/DD" or "YYYY-MM-DD" is also allowed.
+In addition, when the binding value included the DATETIME column, the date string format of the cci_bind_param was only "YYYY/MM/DD." Now, "YYYY/MM/DD" or "YYYY-MM-DD" is also allowed.
 
 .. 4.4new
 
@@ -2035,8 +2196,8 @@ In the previous versions, the existing connection between the CAS and the DB ser
 
 .. 4.4new
 
-Validation of the page allocation table information of the database volume is performed when checkdb is executed in SA mode(CUBRIDSUS-10755)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Validation of the page allocation table information of the database volume is performed when checkdb is executed in SA(standalone) mode(CUBRIDSUS-10755)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 At the header of the database volume, the allocation table for the page used by the current volume is kept. When checkdb is executed in the SA mode, a validation check is made to check whether the page allocation table information of each volume is identical with the page information kept by the database.
   
@@ -2059,10 +2220,10 @@ Query execution result was not output at times in the client/server mode of CSQL
 
 At times the query execution result was not output in the client/server mode (csql -C) of CSQL. This problem has been fixed.
 
-Change to update statistical information with execution of CSQL in the standalone mode(CUBRIDSUS-11417)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Change to update statistical information with execution of CSQL in the SA(standalone) mode(CUBRIDSUS-11417)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The statistical information was not updated when CSQL was executed in the standalone mode. This problem has been fixed.
+The statistical information was not updated when CSQL was executed in the SA mode. This problem has been fixed.
 
 The used space of GENERIC volume per purpose can be checked by using spacedb command(CUBRIDSUS-11161)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2074,29 +2235,31 @@ When checking the used space of the GENERIC volume by using the "cubrid spacedb"
     $ cubrid spacedb -p --size-unit=M tdb 
     Space description for database 'tdb' with pagesize 16.0K. (log pagesize: 16.0K) 
 
-    Volid Purpose total_size free_size data_size index_size temp_size Vol Name 
-
-        0 GENERIC 20.0 M 17.0 M 2.1 M 0.9 M 0.0 M /home1/cubrid/tdb 
-        1 DATA 20.0 M 19.5 M 0.4 M 0.0 M 0.0 M /home1/cubrid/tdb_x001 
-        2 INDEX 20.0 M 19.6 M 0.0 M 0.4 M 0.0 M /home1/cubrid/tdb_x002 
-        3 TEMP 20.0 M 19.6 M 0.0 M 0.0 M 0.3 M /home1/cubrid/tdb_x003 
-        4 TEMP 20.0 M 19.9 M 0.0 M 0.0 M 0.1 M /home1/cubrid/tdb_x004 
+    Volid Purpose  total_size  free_size  data_size  index_size  temp_size  Vol Name 
+                                                                            
+        0 GENERIC      20.0 M     17.0 M      2.1 M       0.9 M      0.0 M  /home1/cubrid/tdb 
+        1    DATA      20.0 M     19.5 M      0.4 M       0.0 M      0.0 M  /home1/cubrid/tdb_x001 
+        2   INDEX      20.0 M     19.6 M      0.0 M       0.4 M      0.0 M  /home1/cubrid/tdb_x002 
+        3    TEMP      20.0 M     19.6 M      0.0 M       0.0 M      0.3 M  /home1/cubrid/tdb_x003 
+        4    TEMP      20.0 M     19.9 M      0.0 M       0.0 M      0.1 M  /home1/cubrid/tdb_x004 
     ---------------------------------------------------------------------------------------------------- 
-        5 100.0 M 95.6 M 2.5 M 1.2 M 0.4 M 
+        5             100.0 M     95.6 M      2.5 M       1.2 M      0.4 M 
     Space description for temporary volumes for database 'tdb' with pagesize 16.0K. 
 
     $ cubrid spacedb -s --size-unit=M tdb 
     Summarized space description for database 'tdb' with pagesize 16.0K. (log pagesize: 16.0K) 
 
-    Purpose total_size used_size free_size volume_count 
+       Purpose  total_size  used_size  free_size  volume_count 
     ------------------------------------------------------------- 
-          DATA 20.0 M 0.5 M 19.5 M 1 
-         INDEX 20.0 M 0.4 M 19.6 M 1 
-       GENERIC 20.0 M 3.0 M 17.0 M 1 
-          TEMP 40.0 M 0.5 M 39.5 M 2 
-     TEMP TEMP 0.0 M 0.0 M 0.0 M 0 
+          DATA      20.0 M      0.5 M     19.5 M             1 
+         INDEX      20.0 M      0.4 M     19.6 M             1 
+       GENERIC      20.0 M      3.0 M     17.0 M             1 
+          TEMP      40.0 M      0.5 M     39.5 M             2 
+     TEMP TEMP       0.0 M      0.0 M      0.0 M             0 
     ------------------------------------------------------------- 
-         TOTAL 100.0 M 4.4 M 95.6 M 5 
+         TOTAL     100.0 M      4.4 M     95.6 M             5 
+
+
 
 Some argument values were not output in the error message that occurred when executing the "cubrid loaddb" command in Windows(CUBRIDSUS-11859)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2449,8 +2612,8 @@ Specifying a question mark when entering connection information as a URL string 
 
 When entering connection information as a URL string in JDBC, property information was applied even if you did not enter a question mark (?) in the earlier version. However, you must specify a question mark depending on syntax in this CUBRID 2008 R3.0 version. If not, an error is displayed. In addition, you must specify colon (:) even if there is no username or password in the connection information. ::
 
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::altHosts=127.0.0.2:31000,127.0.0.3:31000 – Error
-    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?altHosts=127.0.0.2:31000,127.0.0.3:31000 – Normal
+    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::altHosts=127.0.0.2:31000,127.0.0.3:31000 -- Error
+    URL=jdbc:CUBRID:127.0.0.1:31000:db1:::?altHosts=127.0.0.2:31000,127.0.0.3:31000 -- Normal
 
 Not allowed to include @ in a database name(CUBRIDSUS-2828)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

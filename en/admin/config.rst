@@ -530,6 +530,8 @@ The following are disk-related parameters for defining database volumes and stor
 
     Specifies the size of free space which the **generic** volume should always keep. If the free space size is lower than a specified size, the free space will be additionally expanded.
 
+    Checking the free space is done only when there is a new page request for the **generic**, **data** or **index** volume.
+
     You can set a unit as B, K, M, G or T, which stand for bytes, kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB) respectively. If you omit the unit, bytes will be applied. The default value is **50M**. The minimum value is 0 and the maximum value is 20G.
 
 **log_volume_size**

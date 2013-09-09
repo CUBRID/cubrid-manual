@@ -44,7 +44,7 @@ A CUBRID HA node consists of one master process (cub_master), one or more databa
 
 *   **Database server process (cub_server)** : Provides services such as read or write to the user. For details, see :ref:`ha-server`.
 
-*   **Replication log copy process (copylogdb)** : Copies all transaction logs in a group. When the replication log copy process requests a transaction log from the database server process of the target node, the database server process returns the corresponding log. The location of copied transaction logs can be configured in the **ha_copy_log_base** of **cubrid_ha.conf**. Use :ref:`cubrid-applyinfo` utility to verify the information of copied replication logs. The replication log copy process has following three modes: SYNC, SEMISYNC, and ASYNC. You can configure it with the **ha_copy_sync_mode** of **cubrid_ha.conf**. For details on these modes, see :ref:`log-multiplexing`.
+*   **Replication log copy process (copylogdb)** : Copies all transaction logs in a group. When the replication log copy process requests a transaction log from the database server process of the target node, the database server process returns the corresponding log. The location of copied transaction logs can be configured in the **ha_copy_log_base** of **cubrid_ha.conf**. Use :ref:`cubrid-applyinfo` utility to verify the information of copied replication logs. The replication log copy process has following two modes: SYNC and ASYNC. You can configure it with the **ha_copy_sync_mode** of **cubrid_ha.conf**. For details on these modes, see :ref:`log-multiplexing`.
 
 .. image:: /images/image15.png
 
@@ -253,23 +253,22 @@ CUBRID HA keeps every node in the CUBRID HA group with the identical structure b
 
 .. image:: /images/image28.png
 
-The transaction log copy modes include **SYNC**, **SEMISYNC**, and **ASYNC**. This value can be configured by the user in :ref:`cubrid-ha-conf` file.
+The transaction log copy modes include **SYNC** and **ASYNC**. This value can be configured by the user in :ref:`cubrid-ha-conf` file.
 
 **SYNC Mode**
 
 When transactions are committed, the created transaction logs are copied to the slave node and stored as a file. The transaction commit is complete after receiving a notice on its success. Although the time it takes to execute commit in this mode may be longer than that in other modes, this is the safest method because the copied transaction logs are always guaranteed to be reflected to the standby server even if a failover occurs.
 
-**SEMISYNC Mode**
-
-When transactions are committed, the created transaction logs are copied to the slave node and stored as a file according to the internally optimized interval. The transaction commit is complete after receiving a notice of its success. The committed transactions in this mode are guaranteed to be reflected to the slave node sometime in the future.
-
-Because SEMISYNC mode does not always store replication logs as a file, the execution time of commit can decrease, comparing to the SYNC mode. However, data synchronization between nodes may be delayed because replication logs are not reflected until it is stored as a file.
-
 **ASYNC Mode**
 
 When transactions are committed, commit is complete without verifying the transfer of transaction logs to a slave node. Therefore, it is not guaranteed that committed transactions are reflected to a slave node in a master node side.
 
-Although ASYNC mode provides a better performance as it has almost no delay when executing commit, there may be data inconsistency in its nodes.
+Although **ASYNC** mode provides a better performance as it has almost no delay when executing commit, there may be data inconsistency in its nodes.
+
+.. note::
+
+    **SEMISYNC** mode operates in the same way as **SYNC** mode.
+
 
 Quick Start
 ===========
@@ -504,7 +503,7 @@ The **cubrid.conf** file that has general information on configuring CUBRID is l
 
 **ha_mode** is a parameter used to configure whether to use CUBRID HA. The default value is **off**. CUBRID HA does not support Windows; it supports Linux only.
 
-*   **off** : CUBIRD HA is not used.
+*   **off** : CUBRID HA is not used.
 *   **on** : CUBRID HA is used. Failover is supported for its node.
 *   **replica** : CUBRID HA is used. Failover is not supported for its node.
 
@@ -633,7 +632,7 @@ Configuring this parameter can prevent split-brain, a phenomenon in which two ma
 
 **ha_copy_sync_mode** is a parameter used to configure the mode of storing the replication log, which is a copy of transaction log. The default is **SYNC**.
 
-The value can be one of the following: **SYNC**, **SEMISYNC**, or **ASYNC**. The number of values must be the same as the number of nodes specified in **ha_node_list**. They must be ordered by the specified value. You can specify multiple modes by using a comma(,) or colon(:). The replica node is always working in **ASNYC** mode regardless of this value.
+The value can be one of the following: **SYNC** and **ASYNC**. The number of values must be the same as the number of nodes specified in **ha_node_list**. They must be ordered by the specified value. You can specify multiple modes by using a comma(,) or colon(:). The replica node is always working in **ASNYC** mode regardless of this value.
 
 For details, see :ref:`log-multiplexing`.
 
@@ -2171,7 +2170,7 @@ For rebuilding replications, the following environment must be the same in the s
 
 **ha_make_slavedb.sh Script**
 
-To rebuild replications, use the **ha_make_slavedb.sh** script. This script is located in **$CUBRID/share/scripts/ha**. Before rebuilding replications, the following items must be configured for the environment of the user. This script is supported since the version 2008 R2.2 Patch 9 and its configuration is different from 2008 R4.1 Patch 2 or earlier. This document describes it in CUBIRD 2008 R4.1 Patch 2 or later.
+To rebuild replications, use the **ha_make_slavedb.sh** script. This script is located in **$CUBRID/share/scripts/ha**. Before rebuilding replications, the following items must be configured for the environment of the user. This script is supported since the version 2008 R2.2 Patch 9 and its configuration is different from 2008 R4.1 Patch 2 or earlier. This document describes it in CUBRID 2008 R4.1 Patch 2 or later.
 
 *   **target_host** : The host name of the source node (master node in general) for rebuilding replication. It should be registered in **/etc/hosts**. A slave node can rebuild replication by using the master node or the replica node as the source. A replica node can rebuild replication by using the slave node or another replica node as the source. If you want rebuild replication by using the slave node or the replica node as the source, moderately large value of :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` parameter in cubrid_ha.conf should be specified.
 

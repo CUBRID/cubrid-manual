@@ -460,6 +460,8 @@ To display the IP configuration of a server which is currently running, use the 
 
     cubrid server acl status <database_name>
 
+.. _server-logs:
+
 Database Server Log
 -------------------
 

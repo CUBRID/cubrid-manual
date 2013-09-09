@@ -109,6 +109,6 @@ CLOB_TO_CHAR
 
     :param clob_type_column: Target column to convert
     :param charset: The character set of string to convert. It can be utf8, euckr or iso88591.
-    :rtype: VARCHAR
+    :rtype: STRING
 
 

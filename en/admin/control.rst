@@ -553,7 +553,7 @@ Queries which brought many I/O reads are written on the event log. If I/O reads 
 
 **LOCK_TIMEOUT**
  
-When lock timeout occurs, queries of a holder and a waiter are written on the event log. The following is an output example.
+When lock timeout occurs, queries of a waiter and a blocker are written on the event log. The following is an output example.
  
 ::
  
@@ -571,11 +571,13 @@ When lock timeout occurs, queries of a holder and a waiter are written on the ev
       bind: 1
       
 *   waiter: a waiting client to acquire locks.
+
     *   lock: lock type, table and index names
     *   sql: a waiting SQL to acquire locks.
     *   bind: binding value.
  
 *   blocker: a client to have locks.
+
     *   lock: lock type, table and index names
     *   sql: a SQL which is acquiring locks
     *   bind: binding value
@@ -628,6 +630,7 @@ When a deadlock occurs, lock information of that transaction is written into the
       bind: 1
  
 *   client: <DB user>@<application client host name>|<process name>(<process ID>)
+
     *   hold: an object which is acquiring a lock
     
         *   lock: lock type, table and index names

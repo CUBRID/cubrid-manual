@@ -126,9 +126,9 @@ The following shows the result which ran the query after inputting ";plan simple
             Index scan(olympic o, pk_olympic_host_year, (o.host_year> ?:0 ))
             Sequential scan(history h)
 
-    *   Sort(distinct): Perform DISTINCT.
-    *   Nested-loop join: Join method is Nested-loop.
-    *   Index scan: Perform index-scan by using pk_olympic_host_year index about olympic table. At that time, the condition which used this index is "o.host_year > ?".
+*   Sort(distinct): Perform DISTINCT.
+*   Nested-loop join: Join method is Nested-loop.
+*   Index scan: Perform index-scan by using pk_olympic_host_year index about olympic table. At that time, the condition which used this index is "o.host_year > ?".
     
 The following shows the result which ran the query after inputting ";plan detail" or "SET OPTIMIZATION LEVEL 513;" in CSQL.
 
@@ -336,6 +336,7 @@ The format of **SET TRACE ON** syntax is as follows.
 As below, if you run **SHOW TRACE** syntax, the trace result is shown.
  
 ::
+
     SHOW TRACE;
     
 Below is an example that prints out the query tracing result after setting SQL trace ON.
@@ -372,42 +373,37 @@ Below is an example that prints out the query tracing result after setting SQL t
  
 On the above, later lines of "Trace Statistics:" are the output of the query trace. The following are the items of trace statistics.
  
-*   time: the estimated time when this operation is performed. The unit is millisecond(ms)
-*   fetch: fetching count
-*   page: page count.
-*   ioread: I/O read count.
-*   rows: the read rows count while this operation is performed.
-
 **SELECT**
  
 *   time: total estimated time when this query is performed(ms)
-*   fetch: total fetch about this query
+*   fetch: total page fetching count about this query
 *   ioread: total I/O read count about this query. disk access count when the data is read
 
 **SCAN**
 
 *   heap: data scanning job without index
 
-    *   time, fetch, ioread: the estimated time(ms), fetched count and I/O read count in the heap of this operation 
+    *   time, fetch, ioread: the estimated time(ms), page fetching count and I/O read count in the heap of this operation 
     *   readrows: the number of read rows when this operation is performed
     *   rows: the number of result rows when this operation is performed
     
 *   btree: index scanning job
 
-    *   time, fetch, ioread: the estimated time(ms), fetched count and I/O read count in the btree of this operation
+    *   time, fetch, ioread: the estimated time(ms), page fetching count and I/O read count in the btree of this operation
     *   readkeys: the number of the keys which are read in btree when this operation is performed
-    *   rows: the number of result rows when this operation is performed
+    *   filteredkeys: the number of the keys to which the key filter is applied from the read keys
+    *   rows: the number of result rows when this operation is performed; the number of result rows to which key filter is applied
     
 *   lookup: data accessing job after index scanning
 
     *   time: the estimated time(ms) in this operation
-    *   rows: the number of the result rows in this operation
+    *   rows: the number of the result rows in this operation; the number of result rows to which the data filter is applied
 
 **GROUPBY**    
 
 *   time: the estimated time(ms) in this operation
 *   sort: sorting or not
-*   page: the number of pages which is read in this operation
+*   page: the number of pages which is read in this operation; the number of used pages except the internal sorting buffer
 *   rows: the number of the result rows in this operation
 
 The above example can be output as JSON format.

@@ -40,18 +40,21 @@ All string data types support precision. Special care is required with fixed cha
 Related Terms
 -------------
 
-*   **Character set** : A group of encoded symbols (giving a specific number to a certain symbol)
-*   **Collation** : A set of rules for comparison of characters in the character set and for sorting data
+*   **Character set**: A group of encoded symbols (giving a specific number to a certain symbol)
+*   **Collation**: A set of rules for comparison of characters in the character set and for sorting data
 
-*   **Locale** : A set of parameters that defines any special variant preferences such as number format, calendar format (month and day in characters), date/time format, collation, and currency format depending on the operator's language and country. Locale defines the linguistic localization. Character set of locale defines how the month in characters and other data are encoded. A locale identifier consists of at least a language identifier and a region identifier, and it is expressed as language[_territory][.codeset] (For example, Australian English using UTF-8 encoding is written as en_AU.UTF-8).
+.. In the below, currency part is removed because MONETARY is deprecated.
+.. *   **Locale**: A set of parameters that defines any special variant preferences such as number format, calendar format (month and day in characters), date/time format, collation, and currency format depending on the operator's language and country. Locale defines the linguistic localization. Character set of locale defines how the month in characters and other data are encoded. A locale identifier consists of at least a language identifier and a region identifier, and it is expressed as language[_territory][.codeset] (For example, Australian English using UTF-8 encoding is written as en_AU.UTF-8).
 
-*   **Unicode normalization** : The specification by the Unicode character encoding standard where some sequences of code points represent essentially the same character. CUBRID uses Normalization Form C (NFC: codepoint is decomposed and then composed) for input and Normalization Form D (NFD: codepoint is composed and then decomposed) for output. However, CUBRID does not apply the canonical equivalence rule as an exception.
+*   **Locale**: A set of parameters that defines any special variant preferences such as number format, calendar format (month and day in characters), date/time format, and collation depending on the operator's language and country. Locale defines the linguistic localization. Character set of locale defines how the month in characters and other data are encoded. A locale identifier consists of at least a language identifier and a region identifier, and it is expressed as language[_territory][.codeset] (For example, Australian English using UTF-8 encoding is written as en_AU.UTF-8).
+
+*   **Unicode normalization**: The specification by the Unicode character encoding standard where some sequences of code points represent essentially the same character. CUBRID uses Normalization Form C (NFC: codepoint is decomposed and then composed) for input and Normalization Form D (NFD: codepoint is composed and then decomposed) for output. However, CUBRID does not apply the canonical equivalence rule as an exception.
 
 For example, canonical equivalence is applied in general NFC rule so codepoint 212A (Kelvin K) is converted to codepoint 4B (ASCII code uppercase K). Since CUBRID does not perform the conversion by using the canonical equivalence rule to make normalization algorithm quicker and easier, it does not perform reverse-conversion, too.
 
-*   **Canonical equivalence** : A basic equivalence between characters or sequences of characters, which cannot be visually distinguished when they are correctly rendered. For example, let's see 'Å' ('A' with an angstrom). 'Å' (Unicode U + 212B) and Latin 'A' (Unicode U + 00C5) have same A and different codepoints, however, the decomposed result is 'A' and U+030A, so it is canonical equivalence.
+*   **Canonical equivalence**: A basic equivalence between characters or sequences of characters, which cannot be visually distinguished when they are correctly rendered. For example, let's see 'Å' ('A' with an angstrom). 'Å' (Unicode U + 212B) and Latin 'A' (Unicode U + 00C5) have same A and different codepoints, however, the decomposed result is 'A' and U+030A, so it is canonical equivalence.
 
-*   **Compatibility equivalence** : A weaker equivalence between characters or sequences of characters that represent the same abstract character. For example, let's see number '2' (Unicode U + 0032) and superscript '²'(Unicode U + 00B2). '²' is a different format of number '2', however, it is visually distinguished and has a different meaning, so it is not canonical equivalence. When normalizing '2²' with NFC, '2²' is maintained since it uses canonical equivalence. However, with NFKC, '²' is decomposed to '2' which is compatibility equivalence and then it can be recomposed to '22'. Unicode normalization of CUBRID does not apply the compatibility equivalence rule.
+*   **Compatibility equivalence**: A weaker equivalence between characters or sequences of characters that represent the same abstract character. For example, let's see number '2' (Unicode U + 0032) and superscript '²'(Unicode U + 00B2). '²' is a different format of number '2', however, it is visually distinguished and has a different meaning, so it is not canonical equivalence. When normalizing '2²' with NFC, '2²' is maintained since it uses canonical equivalence. However, with NFKC, '²' is decomposed to '2' which is compatibility equivalence and then it can be recomposed to '22'. Unicode normalization of CUBRID does not apply the compatibility equivalence rule.
 
 For explanation on Unicode normalization, see :ref:`unicode-normalization`. 
 For more details, see http://unicode.org/reports/tr15/. 
@@ -63,13 +66,16 @@ Locale Attributes
 
 Locale is defined by following attributes.
 
-*   **Charset (codeset)** : How bytes are interpreted into single characters (Unicode codepoints)
-*   **Collations** : Among all collations defined in locale of `LDML(UNICODE Locale Data Markup Language) <http://www.unicode.org/reports/tr35/>`_ file, the last one is the default collation. Locale data may contain several collations.
-*   **Alphabet (casing rules)** : One locale data may have up 2 alphabets, one for identifier and one for user data. One locale data can have two types of alphabets.
-*   **Calendar** : Names of weekdays, months, day periods (AM/PM)
-*   **Numbering settings** : Symbols for digit grouping, monetary currency
-*   **Text conversion data** :  For CSQL conversion. Option.
-*   **Unicode normalization data** : Data converted by normalizing several characters with the same shape into one based on a specified rule. After normalization, characters with the same shape will have the same code value even though the locale is different. Each locale can activate/deactivate the normalization functionality.
+*   **Charset (codeset)**: How bytes are interpreted into single characters (Unicode codepoints)
+*   **Collations**: Among all collations defined in locale of `LDML(UNICODE Locale Data Markup Language) <http://www.unicode.org/reports/tr35/>`_ file, the last one is the default collation. Locale data may contain several collations.
+*   **Alphabet (casing rules)**: One locale data may have up 2 alphabets, one for identifier and one for user data. One locale data can have two types of alphabets.
+*   **Calendar**: Names of weekdays, months, day periods (AM/PM)
+*   **Numbering settings**: Symbols for digit grouping
+
+.. ", monetary currency" is removed from above: MONETARY is deprecated.
+
+*   **Text conversion data**:  For CSQL conversion. Option.
+*   **Unicode normalization data**: Data converted by normalizing several characters with the same shape into one based on a specified rule. After normalization, characters with the same shape will have the same code value even though the locale is different. Each locale can activate/deactivate the normalization functionality.
 
 .. note::
 
@@ -82,7 +88,7 @@ Collation Properties
 
 A collation is an assembly of information which defines an order for characters and strings. In CUBRID, collation has the following properties.
 
-*   **Strength** : This is a measure of how "different" basic comparable items (characters) are. This affects selectivity. In LDML files, collation strength is configurable and has four levels. For example a Case insensitive collation should be set with level = "secondary" (2) or "primary" (1).
+*   **Strength**: This is a measure of how "different" basic comparable items (characters) are. This affects selectivity. In LDML files, collation strength is configurable and has four levels. For example a Case insensitive collation should be set with level = "secondary" (2) or "primary" (1).
 *   Whether it supports or not **expansions** and **contractions**
 
 Each column has a collation, so when applying :func:`LOWER`, :func:`UPPER` functions the casing rules of locale which defines the collation's default language is used.
@@ -114,16 +120,16 @@ The collation name in CUBRID follows the conversion: ::
         
     *   bin/binary: it means that the sorting order under such collation is almost the same with the order of codepoints; If memory (byte) compare is used, then almost the same result would be obtain. Space character and EUC double-byte padding character are always sorted as zero in "bin" collation. No collations with such setting are currently configured in LDML (they are already available as built-in), but a similar one can be obtained using the maximum setting strength="quaternary" or strength="identical".
             
-    *   ai : accent insensitive; this means that 'Á' is sorted the same as 'A'. Due to particularities of the UCA based algorithms, an accent insensitive collation is also a case insensitive collation. In LDML, can be obtained using: strength="primary".
+    *   ai: accent insensitive; this means that 'Á' is sorted the same as 'A'. Due to particularities of the UCA based algorithms, an accent insensitive collation is also a case insensitive collation. In LDML, can be obtained using: strength="primary".
         
-    *   uca : this signals a UCA based collation; this is used only to differentiate such collations from similar built-in variants. All LDML collations are based on UCA, but in order to keep shorter names only two collations ( 'utf8_ko_cs_uca' , 'utf8_tr_cs_uca' ) have this description in their names, in order to differentiate them from 'utf8_ko_cs' and 'utf8_tr_cs' collations.
+    *   uca: this signals a UCA based collation; this is used only to differentiate such collations from similar built-in variants. All LDML collations are based on UCA, but in order to keep shorter names only two collations ( 'utf8_ko_cs_uca' , 'utf8_tr_cs_uca' ) have this description in their names, in order to differentiate them from 'utf8_ko_cs' and 'utf8_tr_cs' collations.
         
-    *   exp : this collations use a full-word matching/compare algorithm, contrary to the rest of collations which use character-by-character compare. This collation uses a more complex algorithm, with multiple passes which is much slower, but may prove useful for alphabetical sorts. In LDML, the :ref:`expansion` needs to be explicit by adding CUBRIDExpansions="use".
+    *   exp: this collations use a full-word matching/compare algorithm, contrary to the rest of collations which use character-by-character compare. This collation uses a more complex algorithm, with multiple passes which is much slower, but may prove useful for alphabetical sorts. In LDML, the :ref:`expansion` needs to be explicit by adding CUBRIDExpansions="use".
     
-    *   ab : accent backwards; it is particularity of French-Canadian sorting, where level 2 of UCA (used to store accents weights) is compared from end of string towards the beginning. This collation setting can be used only when :ref`expansion` setting is also activated. The "backwards" setting allows for the following sorting:
+    *   ab: accent backwards; it is particularity of French-Canadian sorting, where level 2 of UCA (used to store accents weights) is compared from end of string towards the beginning. This collation setting can be used only when :ref`expansion` setting is also activated. The "backwards" setting allows for the following sorting:
     
-        *   Normal Accent Ordering : cote < coté < côte < côté 
-        *   Backward Accent Ordering : cote < côte < coté < côté
+        *   Normal Accent Ordering: cote < coté < côte < côté 
+        *   Backward Accent Ordering: cote < côte < coté < côté
     
     *   cbm: contraction boundary match; it is a particularity of collations with :ref:`expansion` and :ref:`contraction` and refers to how it behaves at string matching when a :ref:`contraction` is found.
         Suppose the collation has defined the :ref:`contraction` "ch"; then normally, the pattern "bac" will not match the string"bachxxx" But when the collation is configured to allow "matching the characters starting a contraction", the above matching will return a positive. Only one collation is configured in this manner - 'utf8_ja_exp_cbm' - Japanese sorting requires a lot of contractions.
@@ -132,8 +138,8 @@ The collation names are not dynamically generated. They are user defined (config
 
 The name of collation influences the internal numeric id of the collation. For instance, in CUBRID only 256 collations are allowed, and the numeric IDs are assigned as:
 
-*   0 -31 : built-in collations (for these collations the name and id are hard-coded)
-*   32 - 46 : LDML collations having "gen" as "language" part
+*   0 -31: built-in collations (for these collations the name and id are hard-coded)
+*   32 - 46: LDML collations having "gen" as "language" part
 *   47 - 255: the rest of LDML collations
 
 If you want to include all locales into the database which CUBRID provide, first, copy cubrid_locales.all.txt of $CUBRID/conf directory into cubrid_locales.txt and next, run make_locale script(in extension, Linux is .sh, Windows is .bat). 
@@ -323,10 +329,10 @@ Usage can be displayed by running **make_locale.sh -h** (**make_locale /h** in W
     
 *   *options*
 
-    *   **-t** : Selects 32bit or 64bit (default value: **32**).
-    *   **-m** : Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves. Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves.  
+    *   **-t**: Selects 32bit or 64bit (default value: **32**).
+    *   **-m**: Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves. Selects release or debug. In general, release is selected (default value: release). The debug mode is provided for developers who would like to write the locale library themselves.  
 
-*   *locale* : The locale name of the library to build. If *locale* is not specified, the build includes data from all configured locales. In this case, library file is stored in **$CUBRID/lib** directory with the name of **libcubrid_all_locales.so** (**.dll** for Windows).
+*   *locale*: The locale name of the library to build. If *locale* is not specified, the build includes data from all configured locales. In this case, library file is stored in **$CUBRID/lib** directory with the name of **libcubrid_all_locales.so** (**.dll** for Windows).
 
 To create user defined locale shared libraries, two choices are available:
 
@@ -363,7 +369,7 @@ In addition to the possibility of specifying a default locale, one can override 
 
 *   The locale will be in the format: <*locale_name*>.[**utf8** | **iso**] (e.g. tr_TR.utf8, en_EN.ISO, ko_KR.utf8)
 
-*   **intl_date_lang** : <*locale_name*>. The possible values for <*locale_name*> are listed on :ref:`locale-selection`.
+*   **intl_date_lang**: <*locale_name*>. The possible values for <*locale_name*> are listed on :ref:`locale-selection`.
 
 .. note:: **Setting the Month/Day in Characters, AM/PM, and Number Format**
 
@@ -756,7 +762,7 @@ Charset Conversion
 
 When **collation** / **charset** modifiers or normal collation inference requires it, character conversion may occur. Conversions are not reversible. Generally, charset conversion is character transcoding (the bytes representing a character in one charset are replaced with other bytes representing the same character but in the destination charset).
 
-However, in CUBRID, to keep backward compatibility, there is one exception : conversion from UTF-8 or EUC-KR to ISO-8859-1 charset is a simple data stream re-interpretations (this is a trade-off since most Unicode characters do not have ISO-8859-1 correspondents, and transcoding would cause many losses). ASCII characters are not affected by conversions: bytes in range 00-7F are encodings of the same characters in both ISO-8859-1  and UTF-8 character sets.
+However, in CUBRID, to keep backward compatibility, there is one exception: conversion from UTF-8 or EUC-KR to ISO-8859-1 charset is a simple data stream re-interpretations (this is a trade-off since most Unicode characters do not have ISO-8859-1 correspondents, and transcoding would cause many losses). ASCII characters are not affected by conversions: bytes in range 00-7F are encodings of the same characters in both ISO-8859-1  and UTF-8 character sets.
  
 With any conversion, losses may occur. The most complete charset is UTF-8 (and since it encodes Unicode, one expects that all character can be encoded). However, during conversion from ISO-8859-1 to UTF-8 some "losses" occur: bytes  range 80-A0 are not valid ISO-8859-1 characters but may appear in strings. After conversion to UTF-8 this characters are replaced with '?'.
 
@@ -805,8 +811,8 @@ Each **collation** has an associated **charset**. For this reason, it is not all
 
 When **COLLATE** modifier is specified without **CHARSET** modifier, then the default charset of collation is set. When **CHARSET** modifier is specified without **COLLATE** modifier, then the default collation is set. The default collation for character sets are the binary collation:
 
-*   ISO-8859-1 : iso88591_bin
-*   UTF-8 : utf8_bin
+*   ISO-8859-1: iso88591_bin
+*   UTF-8: utf8_bin
 *   EUC-KR: euckr_bin
 
 For more information on how to determine the collation among the expression parameters (operands) with different collations (and charsets), see :ref:`determine-collation-columns`.
@@ -930,7 +936,7 @@ The following shows converting two parameters with different collation to one co
 
         SELECT s1, s2 FROM t WHERE s1 > CAST (s2 AS STRING COLLATE utf8_en_cs);
 
-    Also, by **CAST** s2 to binary collation, the s1 collation coercibility is 5, "fully convertible".
+    Also, by **CAST** s2 to binary collation, the collation coercibility of CAST (6) is higher then coercibility of s1 (1).
 
     .. code-block:: sql
 
@@ -966,7 +972,7 @@ The following shows converting two parameters with different collation to one co
         );
         SELECT s1, s2 FROM t WHERE s1 > s2;
 
-    In this case, s2 column's coercibility is 5(binary collation) and s2 can be "fully convertible" to the collation of s1. utf8_en_cs is used.
+    In this case, s2 column's coercibility is 6(binary collation) and s2 can be "fully convertible" to the collation of s1. utf8_en_cs is used.
 
     .. code-block:: sql
 
@@ -1031,6 +1037,26 @@ The following shows converting two parameters with different collation to one co
 *   **Converting Collation of Number, Date**
         
     Number or date constant which is convertible into string during operation always coercible into the other string's collation.
+
+Charset and Collation of an ENUM type column
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Charset and Collation of an ENUM type column follow the locale specified when creating DB.
+
+For example, create the below table after creating DB with en_US.iso88591.
+
+.. code-block:: sql
+    
+    CREATE TABLE tbl (e ENUM (_utf8'a', _utf8'b')); 
+
+a column 'e' of the above table has ISO88591 charset and iso88591_bin collation even if the charset of the element is defined as UTF8. If the user want to apply the other charset or collation, it should be specified to the column of the table.
+
+Below is an example to specify the collation about the column of the table.
+
+.. code-block:: sql
+
+    CREATE TABLE t (e ENUM (_utf8'a', _utf8'b') COLLATE utf8_bin); 
+    CREATE TABLE t (e ENUM (_utf8'a', _utf8'b')) COLLATE utf8_bin;
     
 .. _collation-charset-table:
 
@@ -1092,8 +1118,8 @@ The **SET NAMES** statement changes the default client charset and the collation
 
     SET NAMES [ charset_name ] [ COLLATE collation_name]
 
-*   *charset_name* : Valid charset name is iso88591, utf8 and euckr.
-*   *collation_name* : Collation setting can be omitted and all available collations can be set. The collation should be compatible with the charset; otherwise, an error occurs. To find the available collation names, look up the **db_collation** catalog VIEW (see :ref:`collation-charset-column`).
+*   *charset_name*: Valid charset name is iso88591, utf8 and euckr.
+*   *collation_name*: Collation setting can be omitted and all available collations can be set. The collation should be compatible with the charset; otherwise, an error occurs. To find the available collation names, look up the **db_collation** catalog VIEW (see :ref:`collation-charset-column`).
 
 Specifying a collation with **SET NAMES** statement is the same as specifying a system parameter **intl_collation**. Therefore, the following two statements are the same behavior.
 
@@ -1124,9 +1150,9 @@ In front of the constant string, the charset introducer and the **COLLATE** modi
 
     [charset_introducer]'constant-string' [ COLLATE collation_name ]
 
-*   *charset_introducer* : a charset name starting with an underscore (_), can be omitted. One of _utf8, _iso88591, and _euckr can be entered.
-*   *constant-string* : a constant string value.
-*   *collation_name* : the name of a collation, which can be used in the system, can be omitted.
+*   *charset_introducer*: a charset name starting with an underscore (_), can be omitted. One of _utf8, _iso88591, and _euckr can be entered.
+*   *constant-string*: a constant string value.
+*   *collation_name*: the name of a collation, which can be used in the system, can be omitted.
 
 The default charset and collation of the constant string is determined based on the current database connected (the **SET NAMES** statement executed last or the default value). 
 
@@ -1193,7 +1219,7 @@ Using a LDML locale (built-in variants can also be overridden with a LDML varian
 
 As previously mentioned, a set of casing rules and supported characters (letters) forms an "alphabet" in CUBRID (this is actually a tag in LDML). Some locales, like tr_TR and de_DE have specific casing rules: - in Turkish: lower('I')='ı' (dot-less lower i); upper ('i') = 'İ' (capital I with dot). - in German: upper ('ß')='SS' (two capital S letters).
 
-Because of this, such locales have two sets of alphabets : one which applies to system data (identifiers) and one which applies to user data. The alphabet applying to user data include the special rules, while the system (identifiers) alphabet do not, thus making the system alphabets compatible between locales. This is required to avoid issues with identifiers (like in Turkish, where casing of the group name "public" results in errors -> "PUBLİC" != "PUBLIC"). 
+Because of this, such locales have two sets of alphabets: one which applies to system data (identifiers) and one which applies to user data. The alphabet applying to user data include the special rules, while the system (identifiers) alphabet do not, thus making the system alphabets compatible between locales. This is required to avoid issues with identifiers (like in Turkish, where casing of the group name "public" results in errors -> "PUBLİC" != "PUBLIC"). 
 
 It also provides a compatibility between databases with different locales (should be able to export - import schema and data).
 
@@ -1258,14 +1284,14 @@ At input, the console conversion process takes all input (including statements) 
 Unicode Normalization
 ^^^^^^^^^^^^^^^^^^^^^
 
-Glyphs [#f1]_ can be written in various forms using Unicode characters/codepoints. Most known are the decomposed and composed forms. For instance, the glyph 'Ä' is written in composed form with a single codepoint : 00C4, in UTF-8 these has two bytes : C3 84. In (fully) decomposed form, it written with two codepoints: 0041 ('A') and 0308 (COMBINING DIAERESIS), and in UTF-8 is encode using 3 bytes : 41 CC 88. Most text editors are able to handle both forms, so both encodings will appear as the same glyph : 'Ä'. Internally, CUBRID "knows" to work only with "fully composed" text.
+Glyphs [#f1]_ can be written in various forms using Unicode characters/codepoints. Most known are the decomposed and composed forms. For instance, the glyph 'Ä' is written in composed form with a single codepoint: 00C4, in UTF-8 these has two bytes: C3 84. In (fully) decomposed form, it written with two codepoints: 0041 ('A') and 0308 (COMBINING DIAERESIS), and in UTF-8 is encode using 3 bytes: 41 CC 88. Most text editors are able to handle both forms, so both encodings will appear as the same glyph: 'Ä'. Internally, CUBRID "knows" to work only with "fully composed" text.
 
 For clients working with "fully decomposed" text, CUBRID can be configured to convert such text to "fully composed" and serve them back as "fully decomposed". Normalization is not a locale specific feature, it does not depend on locale.
 
 **unicode_input_normalization** system parameter controls the composition at system level. 
 For more details, see :ref:`unicode_input_normalization <unicode_input_normalization>`.
 
-The main use case is with both enabled (**unicode_input_normalization**,  **unicode_output_normalization**) : this ensures that a string from a client knowing only decomposed Unicode is still properly handled by CUBRID. A second use case is with **unicode_input_normalization** = yes and **unicode_output_normalization** = no, for a client able to handle both types of Unicode writing.
+The main use case is with both enabled (**unicode_input_normalization**,  **unicode_output_normalization**): this ensures that a string from a client knowing only decomposed Unicode is still properly handled by CUBRID. A second use case is with **unicode_input_normalization** = yes and **unicode_output_normalization** = no, for a client able to handle both types of Unicode writing.
     
 .. _collation-cont-exp:
     
@@ -1283,7 +1309,7 @@ A contraction is a sequence consisting of two or more codepoints, considered a s
 See http://userguide.icu-project.org/collation/concepts for additional information.
 There are also some contractions defined in `http://www.unicode.org/Public/UCA/latest/allkeys.txt DUCET <http://www.unicode.org/Public/UCA/latest/allkeys.txt%20DUCET>`_.
 
-Contractions are supported in both collation variants : with expansions and without expansions. Contractions support requires changes in a significant number of key areas. It also involves storing a contraction table inside the collation data. The handling of contractions is controlled by LDML parameters **DUCETContractions="ignore/use"** **TailoringContractions="ignore/use"** in <settings> tag of collation definition. The first one controls if contractions in DUCET file are loaded into collation, the second one controls if contractions defined by rules in LDML are ignore or not (easier way then adding-deleting all rules introducing contractions).
+Contractions are supported in both collation variants: with expansions and without expansions. Contractions support requires changes in a significant number of key areas. It also involves storing a contraction table inside the collation data. The handling of contractions is controlled by LDML parameters **DUCETContractions="ignore/use"** **TailoringContractions="ignore/use"** in <settings> tag of collation definition. The first one controls if contractions in DUCET file are loaded into collation, the second one controls if contractions defined by rules in LDML are ignore or not (easier way then adding-deleting all rules introducing contractions).
 
 .. _expansion:
 
@@ -1375,7 +1401,7 @@ Operations Requiring Collation and Charset
 Charset
 ^^^^^^^
 
-Charset information is required for functions which use character primitives. There are exceptions : :func:`OCTET_LENGTH` and :func:`BIT_LENGTH` do not require charset internally to return the length in bytes and bits. However, for the same glyph (character symbol) stored in different charset, they return different values:
+Charset information is required for functions which use character primitives. There are exceptions: :func:`OCTET_LENGTH` and :func:`BIT_LENGTH` do not require charset internally to return the length in bytes and bits. However, for the same glyph (character symbol) stored in different charset, they return different values:
 
 .. code-block:: sql 
     
@@ -1391,7 +1417,7 @@ The previous example should be run from console (or a client) with ISO-8859-1 ch
 Collation
 ^^^^^^^^^
 
-Collation is required in functions and operators which involves a comparison between two strings or matching two strings. These includes functions like : :func:`STRCMP`, :func:`POSITION`, LIKE condition, and operators (<,= , >=, etc.). Also clauses like ORDER BY, GROUP BY and aggregates(:func:`MIN`, :func:`MAX`, :func:`GROUP_CONCAT`) use collation.
+Collation is required in functions and operators which involves a comparison between two strings or matching two strings. These includes functions like: :func:`STRCMP`, :func:`POSITION`, LIKE condition, and operators (<,= , >=, etc.). Also clauses like ORDER BY, GROUP BY and aggregates(:func:`MIN`, :func:`MAX`, :func:`GROUP_CONCAT`) use collation.
 
 Also, collation is considered in :func:`UPPER` and :func:`LOWER` functions, in the following manner: 
 
@@ -1417,7 +1443,7 @@ Charset conversion
 For the three charsets supported by CUBRID the conversion rules are:
 
 *   General rules is that character transcoding occurs (representation of bytes is changed to the destination charset) - precision is kept, while byte size may change (for variable character data). When changing charset of a column with fixed precision (ALTER..CHANGE), the size in bytes always changes (size = precision x charset multiplier).
-*   Exceptions are : utf8 and euckr to iso88591 - the precision is kept and data can be truncated.
+*   Exceptions are: utf8 and euckr to iso88591 - the precision is kept and data can be truncated.
 
 The following is an example that you run queries by changing the charset as utf8 in the database that the locale specified when creating DB is en_US(.iso88591).
 
@@ -1565,7 +1591,7 @@ CHAR and VARCHAR
 *   The precision of columns refers to the number of characters (glyphs).
 *   After choosing precision, charset and collation should be set according to most used scenarios.
 
-Choosing charset
+Choosing Charset
 ----------------
 
 *   Even if your text contains non-ASCII character, use utf8 or euckr charsets only if application requires character counting, inserting, replacing
@@ -1573,7 +1599,7 @@ Choosing charset
 *   For both CHAR and VARCHAR data, there is some overhead when inserting/updating data: counting the precision (number of characters) of each instance is more consuming for non-ISO charsets.
 *   In queries, charset of expressions may be converted using :func:`CAST` operator.
 
-Choosing collation
+Choosing Collation
 ------------------
 
 *   If no collation dependent operations are performed (string searching, sorting, comparisons, casing), than choose binary collation for that charset
@@ -1602,6 +1628,250 @@ Remark
 *   Only the Unicode code-points in range 0000-FFFF (Basic Multilingual Plan) are normalized.
 *   Some locales use space character as separator for digit grouping (thousands, millions, ..). Space is allowed but not working properly in some cases of localized conversion from string to number.
 *   User defined variable cannot be changed into the different collation from the system collation. For example, "set @v1='a' collate utf8_en_cs;" syntax cannot be executed when the system collation is iso88591.
+
+Guide for Adding Locales and Collations
+=======================================
+Most new locales and/or collations can be added by user simply by adding (or changing) a new (existing) LDML file.
+The LDML files format used by CUBRID are derived from generic Unicode Locale Data Markup Language (http://www.unicode.org/reports/tr35/).
+The tags and attributes which are specific only to CUBRID can be easily identified (they contain a "cubrid" into the naming).
+
+The best approach to add a new locale is to copy existing LDML file and tweak various setting until desired results are obtained.
+The filename must be formatted like cubrid_<*language*>.xml and be placed in the folder $CUBRID/locales/data/ldml.
+The <*language*> part should be a ASCII string (normally five characters) in IETF format (http://en.wikipedia.org/wiki/BCP_47).
+After creating the LDML file, the <*language*> part string must be added into CUBRID configuration file $CUBRID/conf/cubrid_locales.txt.
+Note that the order in this file is the order of generating (compiling) locale library and loading locales at start-up.
+
+The make_locale script must be used to compile the new added locale and add its data into the CUBRID locales library (locale in $CUBRID/lib/).
+
+The LDML file is expected in UTF-8 encoding.
+It is not possible to add more than one locale into the same LDML file.
+Adding a new locale in LDML file requires:
+
+*   to specify calendar information (CUBRID date formats, name of months and week days in various forms, names for AM/PM day periods). CUBRID supports only Gregorian calendar (generic LDML specifies other calendar types which are not supported by CUBRID).
+*   to specify number settings (digit grouping symbols)
+
+..  "and currency" is removed because MONETARY is deprecated.
+
+*   providing an alphabet (set of rules for how letters are upper-cased and lower-cased)
+
+    *   optionally, some collations can be added
+    *   also optionally, console conversion rules for Windows CSQL application can be defined
+
+LDML Calendar Information
+-------------------------
+
+*   The first part consists in providing default CUBRID formats for DATE, DATETIME, TIME and TIMESTAMP data type conversion to/from string. This formats are used by functions :func:`TO_DATE`, :func:`TO_TIME`, :func:`TO_DATETIME`, :func:`TO_TIMESTAMP`, :func:`TO_CHAR`. The formats elements allowed depend on data type and are the ones used for :func:`TO_CHAR` function (:ref:`Date/Time Format 1 <datetime-format1>`). Only ASCII characters are allowed in the format strings. The allowed size are 30 bytes (characters) for DATE and TIME formats and 48 characters for DATETIME and  TIMESTAMP formats.
+*   The <months> requires to specify the names for months in both long form and abbreviated form. The allowed size are 15 (or 60 bytes) for abbreviated form and 25 characters (or 100 bytes) for normal form.
+*   The <days> requires week day names in both long and abbreviated form. The allowed size are 10 characters (or 40 bytes) for abbreviated form and 15 characters (or 60 bytes) for full day name.
+
+    *   The <dayperiods> sub-tree requires to define the string for AM/PM format varints (according to type attribute). The allowed size is 10 characters (or 40 bytes).
+
+The months and week-days names (in both long and abbreviated form) must be specified in Camel case format (first letter upper case, the rest in lower case).
+CUBRID checks only the maximum allowed size in bytes; the size in characters is computed only for full-width UTF-8 characters (4 bytes), so it would be possible to set a month name having 100 ASCII-only characters (the 25 characters limit is when each character from month name is encoded on 4 bytes in UTF-8).
+
+.. LDML Numbers and currency information
+
+    .. currency part will not be used because it is used only in MONETARY, and MONETARY will be deprecated.
+    .. keep the currency related info as comments for the future.(if currency part is revised, it's explanation can be used again.)
+    
+LDML Numbers information    
+------------------------
+
+*    The <symbols> tag defines the characters used as symbols for splitting decimal part from integer part in numbers and for grouping the digits. CUBRID expects only ASCII characters for these symbols. Empty of space character is not allowed. CUBRID performs grouping for 3 digits.
+
+
+..    *     The <currency> tag defines the three letter ISO 4217 code (http://en.wikipedia.org/wiki/ISO_4217) for default currency of the locale. Only one currency for locale is allowed. Setting the currency, instructs CUBRID how to interpret conversions were MONETARY data type is implied (:func:`TO_NUMBER`).
+
+..  CUBRID supports a limited number of currencies.
+
+    +------------------------+----------------------+
+    | Currency ISO symbol    |  Meaning             |
+    +========================+======================+
+    | USD                    |     dollar sign      |
+    +------------------------+----------------------+
+    | JPY                    |     japanese yen     |
+    +------------------------+----------------------+   
+    | GBP                    |     british pound    |
+    +------------------------+----------------------+
+    | KRW                    |     Korean won       |
+    +------------------------+----------------------+
+    | TRY                    |     turkish lira     |
+    +------------------------+----------------------+
+    | KHR                    |     cambodian riel   |
+    +------------------------+----------------------+
+    | CNY                    |     chinese renminbi |
+    +------------------------+----------------------+  
+    | INR                    |     indian rupee     |
+    +------------------------+----------------------+  
+    | RUB                    |     russian ruble    |
+    +------------------------+----------------------+     
+    | AUD                    |     australian dollar|
+    +------------------------+----------------------+   
+    | CAD                    |     canadian dollar  |
+    +------------------------+----------------------+   
+    | BRL                    |     brasilian real   |
+    +------------------------+----------------------+    
+    | RON                    |     romanian leu     |
+    +------------------------+----------------------+    
+    | EUR                    |     euro             |
+    +------------------------+----------------------+  
+    | CHF                    |     swiss franc      |
+    +------------------------+----------------------+   
+    | DKK                    |     danish krone     |
+    +------------------------+----------------------+     
+    | NOK                    |     norwegian krone  |
+    +------------------------+----------------------+    
+    | BGN                    |     bulgarian lev    |
+    +------------------------+----------------------+  
+    | VND                    |     vietnamese dong  |
+    +------------------------+----------------------+  
+    | CZK                    |     Czech koruna     |
+    +------------------------+----------------------+    
+    | PLN                    |     Polish zloty     |
+    +------------------------+----------------------+
+    | SEK                    |     Swedish krona    |    
+    +------------------------+----------------------+
+    | HRK                    |     Croatian kuna    |
+    +------------------------+----------------------+    
+    | RSD                    |     serbian dinar    |
+    +------------------------+----------------------+
+
+LDML Alphabet
+-------------
+
+These allow to define casing rules for alphabet of the locale.
+The 'CUBRIDAlphabetMode' attribute defines the primary source of data for characters. Normally, this should be set to "UNICODEDATAFILE", values which instructs CUBRID to use the Unicode data file ($CUBRID/locales/data/unicodedata.txt).
+This file must not be modified, any customization on certain characters should be done in LDML file. If such value is configured, all Unicode characters up to codepoint 65535 are loaded with casing information.
+The other allowed value for `CUBRIDAlphabetMode` is "ASCII" which will lead to only ASCII character can be lower case, upper case or case-insenstive compare in matching functions.
+This does not affect CUBRID's ability to support all UTF-8 4 bytes encoded Unicode characters, it just limits the casing ability for characters not included.
+
+The casing rules are optional and apply on top of the primary source of character information (UNICODEDATAFILE or ASCII).
+CUBRID allows to define upper casing rules (<u> tag) and lower casing rules (<l> tag).
+Each of upper and lower casing rules set consists for pairs of source-destination (<s> = source, <d> destination).
+For instance, the following defines a rule that each character "A" is lower cased to "aa" (two character "a").
+
+    .. code-block:: xml
+
+            <l>
+                <s>A</s>
+                <d>aa</d>
+            </l>
+       
+
+
+LDML Console Conversion
+-----------------------
+
+In Windows, the console does not support UTF-8 encoding, so CUBRID allows to translate characters from their UTF-8 encoding to a desired encoding.
+After configuring console conversion for a locale, the user must set prior to starting CSQL application the codepage of the console using 'chcp' command (the codepage argument must match the 'windows_codepage' attribute in LDML).
+Conversion will work bidirectionally (input and output in CSQL), but is only limited to Unicode characters which can be converted in the configured codepage.
+
+
+The <consoleconversion> element is optional and allows to instruct CSQL how to print (in which character encoding) the text in interactive command.
+The 'type' attribute defines the conversion scheme. The allowed values are:
+
+*   ISO: is a generic scheme in which the destination codepage is a single byte charset
+*   ISO88591: is a predefined single byte scheme for ISO-8859-1 charset  (the 'file' attribute is not required, is ignored)
+*   ISO88599: is a predefined single byte scheme for ISO-8859-9 charset  (also the 'file' attribute is not required)
+*   DBCS: Double Byte Code-Set; it is a generic scheme in which the destination codepage is a double byte charset
+
+The 'windows_codepage' is the value for Windows codepage which CUBRID automatically activates console conversion.
+The 'linux_charset' is corresponding value for charset part in LANG environment variable from UNIX system. It is recommended to use native CUBRID charset in Linux console.
+The 'file' attribute is required only for "ISO" and "DBCS" values of 'type' attribute and is the file containing the translation information ($CUBRID/locales/data/codepages/).
+
+LDML Collation
+--------------
+
+Configuring a collation is the most complex task for adding LDML locale in CUBRID.
+Only collation having UTF-8 codeset can be configured.
+CUBRID allows to configure most constructs specified by UCA - Unicode Collation Algorithm (http://www.unicode.org/reports/tr10/) including contractions and expansions, but the properties for the collation are mostly controlled via the 'settings' attribute.
+
+A LDML file can contain multiple collations. Collations can be included from external file using the 'include' tag. The 'validSubLocales' attribute of 'collations' tag is a filter allowing to control locale compilation when external collations (from external files) are included. Its values can be either a list of locales or "*" in which case the collations in sub-tree are added in all locales from which the file is included.
+
+One collation is defined using the 'collation' tag and its sub-tree. The 'type' attribute indicates the name for the collation as it will be added in CUBRID.
+The 'settings' tag defines the properties of the collation:
+
+*   'id' is the (internal) numeric identifier used by CUBRID. It is integer value in range (32 - 255) and is optional, but is strongly recommended that an explicit unassigned values is set. Please see  :ref:`collation-naming-rules`.
+*   'strength' is a measure of how strings compare. See  :ref:`collation-properties`. The allowed values are :
+
+    *   "quaternary": different graphic symbols of the same character compare differently, but different Unicode codepoints may compare equal.
+    *   "tertiary": graphic symbols of the same character are equal, case-sensitive collation.
+    *   "secondary": case insensitive collation, characters with accents compare different
+    *   "primary": accents are ignored, all characters compare as the base character.
+	
+*   'caseLevel': special setting to enable case sensitive compare for collations having strength < tertiary. Valid values are "on" or "off".
+*   'caseFirst': order of casing. Valid values are "lower", "upper" and "off". The "upper" values means upper case letters are ordered before the corresponding lower case letter.
+*   'CUBRIDMaxWeights': it is the number of codepoints (or last codepoint + 1) which are customized in the collation. Maximum value is 65536. Increasing this value increases the size of collation data.
+*   'DUCETContractions': valid values are "use" or "ignore". When "use" - enable CUBRID to use in the collation the contractions defined by DUCET file ($CUBRID/locales/data/ducet.txt) or ignoring them.
+*   'TailoringContractions': same as previous but refers to the contractions defined or derived from explicit collation rules. Enabling contractions leads to a more complex collation (slower string compares).
+*   'CUBRIDExpansions': allowed values are "use" or "ignore" (default) and refers to usage of collation expansions from both the DUCET file and tailoring rules; This has the most influence on collation properties. Enabling it will result in a compare with multiple passes (up to collation strength) when comparing strings. Also it greatly increases collation data, with the benefit of obtaining a more "natural" sort order. See :ref:`expansion`.
+*   'backwards': "on" or "off": used to obtain "french" order by performing an end-to-start compare on secondary level (for accents). It has effect only when 'CUBRIDExpansions' are enabled.
+*   'MatchContractionBoundary': "true" or "false". This is used in collation having expansions and contractions to configure behavior at string matching when a contraction is found.
+
+The main data for a collation is loaded from the DUCET file. After this step, the collation may be customized using "tailoring rules". These are the "<rules>" (LDML) and "<cubridrules>" (CUBRID specific).
+
+The 'cubridrules' tag is optional and can be used to explicitely set weight values for a codepoint or a range of codepoints. The cubridrules apply after loading the primary collation data from DUCET file and before applying the UCA rules (from '<rules>' tag).
+Each of these rule is enclosed in '<set>' tag. If the rule refers to only one Unicode codepoint, then a '<scp>' tag is provided which contains the hexadecimal value of codepoint.
+All available CUBRID collations contain this cubrid-rule:
+
+    .. code-block:: xml
+
+            <cubridrules>
+                <set>
+                    <scp>20</scp>
+                    <w>[0.0.0.0]</w>
+                </set>
+            </cubridrules>
+            
+This rule says that weight values (UCA defines four weight values per collation element) of the codepoints starting with 20 (which is ASCII space character) are all set to zero. Since there is no '<ecp>' tag, the only codepoint affected is 20. In CUBRID, space character compares as zero.
+The allowed tags inside of a '<set>' rule are:
+
+*   '<cp>': rule to set the weights for single codepoint.
+*   '<ch>': rule to set the weights for single character. Similar to previous one, but instead of codepoint it expects a Unicode character (in UTF-8 encoding).
+*   '<scp>': rule to set the weights for a range of codepoints. This is the starting codepoint.
+*   '<sch>': rule to set the weights for a range of characters. This is the starting character. In this context, the order of characters is given by their Unicode codepoints.
+*   '<ecp>': end codepoint for a range rule.
+*   '<ech>': end character for a range rule.
+*   '<w>': weight values to set (single value). The weight values are expected in hexadecimal. Each collation element has four values which are delimited by point and enclosed by square brackets([]). There can be up to 10 collation elements.
+*   '<wr>': starting weight values to set for a range. Optionally, there is 'step' attribute of this tag, which sets the increasing step after each codepoint. By default the step is [0001.0000.0000.0000], which means that after setting the first weight values for the starting codepoint, one value is added to primary level weight and set to the next codepoint in range, and the process is repeated until end codepoint.
+
+Examples:
+
+    .. code-block:: xml
+
+            <cubridrules>
+                <set>                            <!-- Rule 1 -->
+                    <scp>0</scp>
+                    <ecp>20</ecp>
+                    <w>[0.0.0.0]</w>
+                </set>
+                
+                <set>                            <!-- Rule 2 -->
+                    <scp>30</scp>
+                    <ecp>39</ecp>
+                    <wr step="[1.0.0.0][1.0.0.0]">[30.0.0.0][30.0.0.0]</wr>
+                </set>                
+                
+            </cubridrules>
+            
+The Rule 1, sets for codepoints ranging from 0 to 20 (including) the weight values 0.
+The Rule 2, sets for codepoints ranging from 30 to 39 (which are the digits), a set of two collation elements with increasing weights; In this example, codepoint 39 (character "9") will have the weights with two collation elements [39.0.0.0][39.0.0.0].
+
+The '<rules>' tag is also optional but is according to LDML and UCA specifications.
+The meanings of sub-ordinates tags are :
+
+*   '<reset>': anchor collation element. It defines the reference to which subsequent rules (up to next `<reset>`) are tailored. It can be a single characters or multiple characters in which case is either a contraction or an expansion. By default, all the tailoring rules after the anchor are sort "after" (element from first rule is after the anchor, element from second rule sorts after element in first rule); if the optional attribute "before" is present, then only the first rule after the <reset> sorts before the anchor, while the second and the following rules resumes the normal "after" sort (element in second rule sorts after element in first rule).
+
+*   '<p>': the character comes after (or before, if the anchor had the `before` attribute) the previously tailored one at primary level.
+*   '<s>': the character comes after (or before, if the anchor had the `before` attribute) the previously tailored one at secondary level.
+*   '<t>': the character comes after (or before, if the anchor had the `before` attribute) the previously tailored one at tertiary level.
+*   '<i>': the character sorts identically to previous one
+*   '<pc>', '<sc>', '<tc>', '<ic>': same as '<p>', '<s>', '<t>', '<i>' but applies to a range of characters
+*   '<x>': specifies the expansion character
+*   '<extend>': specifies the second character of expansion.
+*   '<context>': specifies the context in which a rule applies. A variant to specify contractions and expansions.
+
+For more information on UCA tailoring with LDML rules see http://www.unicode.org/reports/tr35/tr35-collation.html.
 
 .. rubric:: Footnotes
 

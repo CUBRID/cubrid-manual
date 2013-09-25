@@ -157,7 +157,7 @@ The broker is a middleware that allows various application clients to connect to
 
 **Application Client**
 
-The interfaces that can be used in application clients include C-API (CCI, CUBRID Call Interface), ODBC, JDBC, PHP, Python, and Ruby, OLE DB, ADO.NET, Node.js, etc.
+The interfaces that can be used in application clients include C-API (CCI, CUBRID Call Interface), ODBC, JDBC, PHP, Python, Ruby, OLE DB, ADO.NET, Node.js, etc.
 
 **cub_cas**
 

@@ -1585,8 +1585,8 @@ cubrid_broker.conf Configuration File and Default Parameters
     |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
     |                                 | Broker App. Server(CAS) | APPL_SERVER                     | string | CAS                          |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
-    |                                 |                         | APPL_SERVER_MAX_SIZE            | MB     | Windows 32bit: 40            | available |
-    |                                 |                         |                                 |        | Windows 64bit: 80            |           |
+    |                                 |                         | APPL_SERVER_MAX_SIZE            | MB     | Windows 32bit: 40,           | available |
+    |                                 |                         |                                 |        | Windows 64bit: 80,           |           |
     |                                 |                         |                                 |        | Linux: 0                     |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | APPL_SERVER_MAX_SIZE_HARD_LIMIT | MB     | 1024                         | available |

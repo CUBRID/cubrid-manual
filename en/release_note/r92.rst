@@ -449,6 +449,25 @@ For the CUBRID default date/time format, see :ref:`cast-to-datetime-recommend`.
     -- after change: Before trying to interpret it with the TIMESTAMP string format of ko_KR, CUBRID tries to interpret it with CUBRID default date/time format; so it works properly.
       10:12:13 AM 12/23/2013
 
+The collation and charset of an ENUM type attribute is no longer propagated from its components(CUBRIDSUS-12269)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For a DB having ISO88591 charset, the statement: 
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (e ENUM (_utf8'a', _utf8'b')); 
+    
+In previous version, the attribute'e' had charset UTF8, collation utf8_bin (propagated from string literal components).
+
+In current version, the attribute 'e' has charset iso88591, collation iso88591_bin. The string literal components are coerced from UTF8 charset to iso88591, when the attribute is created. If user wants to apply another charset (or collation), this has to be explicitly specified for attribute or for table: 
+
+.. code-block:: sql
+
+    CREATE TABLE t (e ENUM (_utf8'a', _utf8'b') COLLATE utf8_bin); 
+    or 
+    CREATE TABLE t (e ENUM (_utf8'a', _utf8'b')) COLLATE utf8_bin;
+          
 HA
 --
 
@@ -744,6 +763,16 @@ In addition, the NO_SORT_LIMIT hint is added to configure the sort-limit query p
     SELECT /*+ NO_SORT_LIMIT */ * FROM t, u WHERE t.i = u.i ORDER BY u.j LIMIT 10; 
      
 Also, "sort_limit_max_count" system parameter is added. If the number of rows of the LIMIT clause is larger than the number specified in the "sort_limit_max_count" parameter, SORT-LIMIT optimization is not performed.
+
+Fix to use an index when a subquery is given in a START WITH clause as a condition in a hierarchical query(CUBRIDSUS-9613)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    SELECT /*+ RECOMPILE use_idx*/ a, b 
+    FROM foo 
+    START WITH a IN ( SELECT a FROM foo1 ) 
+    CONNECT BY PRIOR a = b;
 
 Resource
 --------
@@ -1224,8 +1253,8 @@ Wrong result was output when the GROUP BY ... WITH ROLLUP syntax was executed wi
 Data was not changed or wrong data was changed when the UPDATE statement with the host variable was executed for the table which included the UPDATE trigger(CUBRIDSUS-11918)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CAS is sometimes abnormally terminated  when gettring interrupted during preparing SQL with VIEW(CUBRIDSUS-10846) 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CAS is sometimes abnormally terminated  when getting interrupted during preparing SQL with VIEW(CUBRIDSUS-10846) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Globalization
 -------------
@@ -1435,10 +1464,10 @@ The charset can be converted from UTF-8 to EUC-KR, from EUC-KR to UTF-8, or from
  
     SELECT CAST(iso_str AS STRING CHARSET utf8) FROM t_iso; 
 
-The printed queries for views, triggers, partition expressions, function index expressions, filter index expressions now contain both charset and collate modifiers for string literals(CUBRIDSUS-12195)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The printed queries for views, partition expressions, function index expressions, filter index expressions now contain both charset and collate modifiers for string literals(CUBRIDSUS-12195)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fix an error occurred when you ran queries for views, triggers, partition expressions, function index expressions, filter index expressions which have a different charset/collation with DB's charset/collation.
+Fix an error occurred when you ran queries for views, partition expressions, function index expressions, filter index expressions which have a different charset/collation with DB's charset/collation.
 
 ::
 
@@ -1450,7 +1479,7 @@ After fixing, the above error does not occur. As an example, for filter index "C
 
     LOWER(a)<'John' 
 
-to
+to:
 
 ::
 
@@ -1580,6 +1609,32 @@ The result of TO_CHAR function was incorrect when selecting with host variables(
     EXECUTE st USING 'a'; 
     -- in the previous version, it returns an empty string 
     '' 
+
+COERCIBILITY function returned not the coercibility level of the expression, but the coercibility level of the constant when its argument had an expression with a constant(CUBRIDSUS-12278) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    SELECT COERCIBILITY( IFNULL(date '2010-01-01', _euckr'a'));
+
+Column change failed when "alter_table_change_type_strict=yes" and the precision of the column type was tried to change in multibyte charset(CUBRIDSUS-12268) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the EUC-KR, UTF-8 charset except for ISO-88591, a column change failed when "alter_table_change_type_strict=yes" and the precision of the column type was tried to change. 
+
+.. code-block:: sql 
+
+    CREATE TABLE t2 ( s1 CHAR(2) CHARSET utf8); 
+    INSERT INTO t2 VALUES (REPEAT(CHR(15052985 USING utf8),2)); 
+    SET SYSTEM PARAMETERS 'alter_table_change_type_strict=yes'; 
+     
+    ALTER TABLE t2 CHANGE s1 s CHAR(3) CHARSET utf8; 
+
+In the previous version, even if you just try to change only the precision by ALTER statement, the below error occurs. 
+
+:: 
+
+    ERROR: ALTER TABLE .. CHANGE : changing to new domain : cast failed, current configuration doesn't allow truncation or overflow. 
 
 Partitioning
 ------------
@@ -1734,8 +1789,8 @@ Failure to replicate the slave node when a collation was specified in the ENUM d
 
     CREATE TABLE tbl(i INT, e ENUM('e','D','a') COLLATE utf8_en_ci);
 
-Replication failed when NOT NULL was specified in front of PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK etc. when defining the column of the ALTER TABLE statement(CUBRIDSUS-11964)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Replication failed when NOT NULL was specified in front of PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK etc. as defining the column of the ALTER TABLE statement(CUBRIDSUS-11964)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sharding
 --------
@@ -1925,6 +1980,9 @@ When the cci_datasource_release function was called while the transaction had no
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The CCI_ER_CON_HANDLE error, not the CCI_ER_REQ_HANDLE error, was returned when the CCI function was executed in the order of Execute (cci_execute) -> Disconnect (cci_disconnect) -> Close the query result set (cci_close_query_result). This problem has been fixed.
+
+[CCI] An application is abormally terminated when multiple threads run borrow -> execute -> release at the same time by using DATASOURCE of CCI(CUBRIDSUS-12264)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. 4.4new
 

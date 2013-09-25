@@ -555,7 +555,7 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
  
 **LOCK_TIMEOUT**
  
-잠금 타임아웃(lock timeout)이 발생하면 holder와 waiter의 질의문을 기록한다. 다음은 출력 예이다.
+잠금 타임아웃(lock timeout)이 발생하면 waiter와 blocker의 질의문을 기록한다. 다음은 출력 예이다.
  
 ::
  
@@ -573,11 +573,13 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
       bind: 1
       
 *   waiter: 잠금(lock)을 획득하려고 대기하는 클라이언트
+
     *   lock: 잠금 종류, 테이블 및 인덱스 이름
     *   sql: 잠금을 획득하려고 대기하는 SQL
     *   bind: 바인딩된 값
  
 *   blocker: 잠금(lock)을 소유하고 있는 클라이언트
+
     *   lock: 잠금 종류, 테이블 및 인덱스 이름
     *   sql: 잠금을 획득 중인 SQL
     *   bind: 바인딩된 값
@@ -630,6 +632,7 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
       bind: 1
  
 *   client: <DB 사용자>@<응용 클라이언트 호스트 명>|<프로세스 이름>(<프로세스 ID>)
+
     *   hold: 잠금을 소유하고 있는 객체
     
         *   lock: 잠금 종류, 테이블 및 인덱스 이름

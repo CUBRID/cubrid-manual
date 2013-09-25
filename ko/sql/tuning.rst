@@ -106,7 +106,7 @@ CUBRID SQL 질의에 대한 실행 계획(query plan)을 보기 위해서는 다
     .. note:: 2, 258, 514와 같이 질의를 실행하지 않게 최적화 수준을 설정하는 경우 SELECT 문 뿐만 아니라 INSERT, UPDATE, DELETE, REPLACE,  TRIGGER, SERIAL  문 등 모든 질의문이 실행되지 않는다.
 
 CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값을 참조하여 최적화 여부와 질의 실행 계획의 출력 여부를 결정한다. 
-    
+
 다음은 CSQL에서 ";plan simple" 명령 입력 또는 "SET OPTIMIZATION LEVEL 257;"을 입력 후 질의를 수행한 결과이다.
 
 .. code-block:: sql
@@ -126,9 +126,9 @@ CUBRID 질의 최적화기는 사용자에 의해 설정된 최적화 수준 값
             Index scan(olympic o, pk_olympic_host_year, (o.host_year> ?:0 ))
             Sequential scan(history h)
 
-    *   Sort(distinct): DISTINCT를 수행한다.
-    *   Nested-loop join: 조인 방식이 Nested-loop이다.
-    *   Index scan: olympic 테이블에 대해 pk_olympic_host_year를 사용하여 index scan. 이때 인덱스를 사용한 조건은 "o.host_year> ?"이다.
+*   Sort(distinct): DISTINCT를 수행한다.
+*   Nested-loop join: 조인 방식이 Nested-loop이다.
+*   Index scan: olympic 테이블에 대해 pk_olympic_host_year를 사용하여 index scan. 이때 인덱스를 사용한 조건은 "o.host_year> ?"이다.
 
 CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 입력 후 질의를 수행하면 상세 내용을 출력한다.
 
@@ -336,6 +336,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 아래와 같이 **SHOW TRACE** 구문을 실행하면 SQL을 트레이스한 결과를 문자열로 출력한다.
  
 ::
+
     SHOW TRACE;
     
 다음은 SQL 트레이스를 ON으로 설정하고 질의를 수행한 후, 해당 질의에 대해 트레이스 결과를 출력하는 예이다.
@@ -374,34 +375,35 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 
 **SELECT**
  
-*   time: 해당 질의에 대한 전체 수행 시간(ms).
-*   fetch: 해당 질의에 대한 전체 fetch 건수
-*   ioread: 해당 질의에 대한 전체 I/O 읽기 회수. 데이터를 읽을 때 물리적으로 디스크에 접근한 회수.
+*   time: 해당 질의에 대한 전체 수행 시간(ms)
+*   fetch: 해당 질의에 대해 페이지를 fetch한 회수
+*   ioread: 해당 질의에 대한 전체 I/O 읽기 회수. 데이터를 읽을 때 물리적으로 디스크에 접근한 회수
 
 **SCAN**
 
 *   heap: 인덱스 없이 데이터를 스캔하는 작업
 
-    *   time, fetch, ioread: heap에서 해당 연산 수행 시 소요된 시간(ms), fetch 건수, I/O 읽기 회수
+    *   time, fetch, ioread: heap에서 해당 연산 수행 시 소요된 시간(ms), fetch 회수, I/O 읽기 회수
     *   readrows: 해당 연산 수행 시 읽은 행의 개수
     *   rows: 해당 연산에 대한 결과 행의 개수
     
 *   btree: 인덱스 스캔하는 작업
 
-    *   time, fetch, ioread: btree에서 해당 연산 수행 시 소요된 시간(ms), fetch 건수, I/O 읽기 회수
+    *   time, fetch, ioread: btree에서 해당 연산 수행 시 소요된 시간(ms), fetch 회수, I/O 읽기 회수
     *   readkeys: btree에서 해당 연산 수행 시 읽은 키의 개수
-    *   rows: 해당 연산에 대한 결과 행의 개수
+    *   filteredkeys: 읽은 키 중에 키 필터가 적용된 키의 개수
+    *   rows: 해당 연산에 대한 결과 행의 개수로, 키 필터가 적용된 결과 행의 개수
     
 *   lookup: 인덱스 스캔 후 데이터에 접근하는 작업
 
     *   time: 해당 연산 수행 시 소요된 시간(ms)
-    *   rows: 해당 연산에 대한 결과 행의 개수
+    *   rows: 해당 연산에 대한 결과 행의 개수로, 데이터 필터가 적용된 결과 행의 개수
 
 **GROUPBY**    
 
 *   time: 해당 연산 수행 시 소요된 시간(ms)
 *   sort: 정렬 여부
-*   page: 해당 연산에 대해 읽은 페이지 개수
+*   page: 정렬에 사용된 임시 페이지 개수로, 내부 정렬 버퍼 외에 사용한 페이지 개수.
 *   rows: 해당 연산에 대한 결과 행의 개수
 
 위의 예는 JSON 형식으로도 출력할 수 있다.

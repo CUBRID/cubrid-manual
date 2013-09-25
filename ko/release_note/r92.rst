@@ -446,6 +446,25 @@ CUBRID 기본 날짜/시간 형식은 :ref:`cast-to-datetime-recommend`\ 을 참
     -- 수정 이후: ko_KR의 TIMESTAMP 문자열 형식으로 문자열 인식을 시도하기 전에 CUBRID 기본 날짜/시간 형식으로 문자열 인식을 시도하므로 정상 수행된다.
       10:12:13 AM 12/23/2013
 
+ENUM 타입의 콜레이션과 문자셋이 더 이상 원소에서 전파되지 않도록 수정(CUBRIDSUS-12269)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ISO88591 문자셋으로 생성한 DB에서 다음 문장을 실행한다.
+
+.. code-block:: sql
+
+    CREATE TABLE tbl (e ENUM (_utf8'a', _utf8'b')); 
+
+수정 이전 버전에서, 칼럼 'e'는 UTF8 문자셋, utf8_bin 콜레이션을 가진다(ENUM 타입의 원소에서 전파됨).
+
+수정 이후 버전에서, 칼럼 'e'는 ISO88591 문자셋, iso88591_bin 콜레이션을 가진다. 문자열 원소는 칼럼이 생성될 때 UTF8 문자셋에서 ISO88591 문자셋으로 변환된다. 사용자가 다른 문자셋이나 콜레이션을 적용하고 싶으면 테이블의 칼럼에 대해 이를 명시해야 한다.
+
+.. code-block:: sql
+
+    CREATE TABLE t (e ENUM (_utf8'a', _utf8'b') COLLATE utf8_bin); 
+    or 
+    CREATE TABLE t (e ENUM (_utf8'a', _utf8'b')) COLLATE utf8_bin;
+
 HA
 --
 
@@ -740,6 +759,16 @@ LIMIT 연산에 의해 외부 테이블(outer table)의 투플 개수를 줄이�
     SELECT /*+ NO_SORT_LIMIT */ * FROM t, u WHERE t.i = u.i ORDER BY u.j LIMIT 10; 
      
 또한, "sort_limit_max_count" 시스템 파라미터를 추가했다. LIMIT 절의 행 개수가 "sort_limit_max_count" 파라미터에서 지정한 개수보다 크면 SORT-LIMIT 최적화를 수행하지 않는다. 
+
+계층 질의문에서 START WITH 절에 부질의를 조건으로 부여하는 경우 인덱스를 사용하도록 수정(CUBRIDSUS-9613)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql 
+
+    SELECT /*+ RECOMPILE use_idx*/ a, b 
+    FROM foo
+    START WITH a IN ( SELECT a FROM foo1 ) 
+    CONNECT BY PRIOR a = b;
 
 리소스
 ------
@@ -1440,10 +1469,10 @@ UTF-8에서 EUC-KR로, EUC-KR에서 UTF-8로, 또는 ISO8859-1에서 EUC-KR로 �
  
     SELECT CAST(iso_str AS STRING CHARSET utf8) FROM t_iso; 
 
-뷰, 트리거, 분할 표현식, 함수 인덱스 표현식, 필터 인덱스 표현식에 대해 출력되는 질의의 문자열에 CHARSET과 COLLATE 수정자를 포함하도록 수정(CUBRIDSUS-12195)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+뷰, 분할 표현식, 함수 인덱스 표현식, 필터 인덱스 표현식에 대해 출력되는 질의의 문자열에 CHARSET과 COLLATE 수정자를 포함하도록 수정(CUBRIDSUS-12195)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-DB의 문자셋/콜레이션과 다른 문자셋/콜레이션을 가진 뷰, 트리거, 분할 표현식, 함수 인덱스 표현식, 필터 인덱스 표현식에 대해 질의를 수행하면 오류가 발생하는 문제를 수정했다.
+DB의 문자셋/콜레이션과 다른 문자셋/콜레이션을 가진 뷰, 분할 표현식, 함수 인덱스 표현식, 필터 인덱스 표현식에 대해 질의를 수행하면 오류가 발생하는 문제를 수정했다.
 
 ::
 
@@ -1589,6 +1618,32 @@ TO_CHAR 함수에서 호스트 변수로 SELECT를 수행할 때 잘못된 결�
     EXECUTE st USING 'a'; 
     // 수정 이전 버전에서는 공백 문자를 출력한다. 
     '' 
+
+COERCIBILITY 함수의 인자로 상수를 포함하는 표현식이 입력될 때 표현식의 변환도가 아닌 상수의 변환도를 출력하는 문제(CUBRIDSUS-12278) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+
+.. code-block:: sql 
+
+    SELECT COERCIBILITY( IFNULL(date '2010-01-01', _euckr'a'));
+
+다중 바이트 문자셋에서 "alter_table_change_type_strict=yes"일 때 칼럼 타입의 자리수를 변경하려고 하면 실패하는 문제(CUBRIDSUS-12268) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+
+ISO-88591을 제외한 EUC-KR, UTF-8 문자셋에서 "alter_table_change_type_strict=yes"일 때 칼럼 타입의 자리수를 변경하려고 하면 실패하는 문제를 수정했다. 
+
+.. code-block:: sql 
+
+    CREATE TABLE t2 ( s1 CHAR(2) CHARSET utf8); 
+    INSERT INTO t2 VALUES (REPEAT(CHR(15052985 USING utf8),2)); 
+    SET SYSTEM PARAMETERS 'alter_table_change_type_strict=yes'; 
+     
+    ALTER TABLE t2 CHANGE s1 s CHAR(3) CHARSET utf8; 
+
+수정 이전 버전에서 위의 ALTER 문을 수행하여 자리수만 바꾸려고 시도해도 아래의 오류가 발생한다. 
+
+:: 
+
+    ERROR: ALTER TABLE .. CHANGE : changing to new domain : cast failed, current configuration doesn't allow truncation or overflow. 
     
 분할(Partitioning)
 ------------------
@@ -1937,6 +1992,9 @@ cci_datasource_release 함수가 트랜잭션이 종료되지 않은 상태로 �
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 실행(cci_execute) -> 연결 종료(cci_disconnect) -> 질의 결과셋 종료(cci_close_query_result) 순으로 CCI 함수를 실행하면 CCI_ER_REQ_HANDLE 오류가 아닌 CCI_ER_CON_HANDLE 오류가 반환되는 현상을 수정했다.
+
+[CCI] DATASOURCE를 사용할 때 여러 스레드가 borrow->execute->release를 동시에 수행하면 프로그램이 비정상 종료하는 현상(CUBRIDSUS-12264)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. 4.4new
 

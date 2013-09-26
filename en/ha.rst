@@ -1728,51 +1728,53 @@ The operation scenario written in this page is not affected by read/write servic
 
 You can perform the following operations without stopping and restarting nodes in CUBRID HA groups.
 
-+----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **General Operation**                        | **Scenario**                                                            | **Consideration**                                                                                                                                      |
-+==============================================+=========================================================================+========================================================================================================================================================+
-| Online Backup                                | Operation task is performed at each master node and slave node          | Note that there may be a delay in the transaction of master node due to the operation task.                                                            |
-|                                              | each during operation.                                                  |                                                                                                                                                        |
-+----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Schema change (excluding basic key change),  | When an operation task occurs at a master node, it is automatically     | Because replication log is copied and reflected to a slave node after an operation task is completed in a master node, operation task time is doubled. |
-| index change, authorization change           | replication reflected to a slave node.                                  | Changing schema must be processed without any failover.                                                                                                |
-|                                              |                                                                         | Index change and authority change other than the schema change can be performed by stopping each node and executing standalone mode (ex: the           |
-|                                              |                                                                         | **-S** option of the **csql** utility) when the operation time is important.                                                                           |
-+----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Add volume                                   | Operation task is performed at each DB regardless of HA structure.      | Note that there may be a delay in the transaction of master node due to the operation task.                                                            |
-|                                              |                                                                         | If operation task time is an issue, operation task can be performed by stopping each node and executing standalone mode (ex: the                       |
-|                                              |                                                                         | **-S**  of the **cubrid addvoldb**  utility).                                                                                                          |
-+----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Failure node server replacement              | It can be replaced without restarting the CUBRID HA group when          | The failure node must be registered in the ha_node_list of CUBRID HA group, and the node name must not be changed during replacement.                  |
-|                                              | a failure occurs.                                                       |                                                                                                                                                        |
-+----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Failure broker server replacement            | It can be replaced without restarting the broker when a failure occurs. | The connection to a broker replaced at a client can be made by rcTime which is configured in URL string.                                               |
-+----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DB server expansion                          | You can execute                                                         | Starts or stops the                                                                                                                                    |
-|                                              | **cubrid heartbeat reload**                                             | **copylogdb/applylogdb**                                                                                                                               |
-|                                              | in each node after configuration change (ha_node_list, ha_replica_list) | processes which were added or deleted by loading changed configuration information.                                                                    |
-|                                              | without restarting the previously configured CUBRID HA group.           |                                                                                                                                                        |
-+----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Broker server expansion                      | Run additional brokers without restarting existing brokers.             | Modify the URL string to connect to a broker where a client is added.                                                                                  |
-+----------------------------------------------+-------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+|   General Operation                          |   Scenario                                              |   Consideration                                                                                                    |
++==============================================+=========================================================+====================================================================================================================+
+| Online Backup                                | Operation task is performed at each master node and     | Note that there may be a delay in the transaction of master node due to the operation task.                        |
+|                                              | slave node each during operation.                       |                                                                                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| Schema change (excluding basic key change),  | When an operation task occurs at a master node, it is   | Because replication log is copied and reflected to a slave node after an operation task is completed in a master   |
+| index change, authorization change           | automatically replication reflected to a slave node.    | node, operation task time is doubled. Changing schema must be processed without any failover.                      |
+|                                              |                                                         | Index change and authority change other than the schema change can be performed by stopping each node and          |
+|                                              |                                                         | executing standalone mode (ex: the **-S** option of the **csql** utility) when the operation time is important.    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| Add volume                                   | Operation task is performed at each DB regardless of    | Note that there may be a delay in the transaction of master node due to the operation task.                        |
+|                                              | HA structure.                                           | If operation task time is an issue, operation task can be performed by stopping each node and executing standalone |
+|                                              |                                                         | mode (ex: the **-S**  of the **cubrid addvoldb**  utility).                                                        |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| Failure node server replacement              | It can be replaced without restarting the CUBRID HA     | The failure node must be registered in the ha_node_list of CUBRID HA group, and the node name must not be changed  |
+|                                              | group when a failure occurs.                            | during replacement.                                                                                                |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| Failure broker server replacement            | It can be replaced without restarting the broker when   | The connection to a broker replaced at a client can be made by rcTime which is configured in URL string.           |
+|                                              | a failure occurs.                                       |                                                                                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| DB server expansion                          | You can execute **cubrid heartbeat reload** in each     | Starts or stops the **copylogdb/applylogdb**                                                                       |
+|                                              | node after configuration change (ha_node_list,          | processes which were added or deleted by loading changed configuration information.                                |
+|                                              | ha_replica_list) without restarting the previously      |                                                                                                                    |
+|                                              | configured CUBRID HA group.                             |                                                                                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| Broker server expansion                      | Run additional brokers without restarting               | Modify the URL string to connect to a broker where a client is added.                                              |
+|                                              | existing brokers.                                       |                                                                                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
 **When Failover Occurs**
 
 You must stop nodes in CUBRID HA group and complete operation before performing the following operations. 
 
-+------------------------------------------------------------+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------+
-| **General Operation**                                      | **Scenario**                                                                   | **Consideration**                                                                           |
-+============================================================+================================================================================+=============================================================================================+
-| DB server configuration change                             | A node whose configuration is changed is restarted when the configuration in   |                                                                                             |
-|                                                            | **cubrid.conf**                                                                |                                                                                             |
-|                                                            | is changed.                                                                    |                                                                                             |
-+------------------------------------------------------------+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------+
-| Change broker configuration, add broker, and delete broker | A broker whose configuration is changed is restarted when the configuration in |                                                                                             |
-|                                                            | **cubrid_broker.conf**                                                         |                                                                                             |
-|                                                            | is changed.                                                                    |                                                                                             |
-+------------------------------------------------------------+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------+
-| DBMS version patch                                         | Restart nodes and brokers in HA group after version patch.                     | Version patch means there is no change in the internal protocol, volume, and log of CUBRID. |
-+------------------------------------------------------------+--------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------+
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+|   General Operation                          |   Scenario                                              |   Consideration                                                                                                    |
++==============================================+=========================================================+====================================================================================================================+
+| DB server configuration change               | A node whose configuration is changed is restarted when |                                                                                                                    |
+|                                              | the configuration in  **cubrid.conf** is changed.       |                                                                                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| Change broker configuration, add broker      | A broker whose configuration is changed is restarted    |                                                                                                                    |
+| , and delete broker                          | when the configuration in **cubrid_broker.conf**        |                                                                                                                    |
+|                                              | is changed.                                             |                                                                                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| DBMS version patch                           | Restart nodes and brokers in HA group after version     | Version patch means there is no change in the internal protocol, volume, and log of CUBRID.                        |
+|                                              | patch.                                                  |                                                                                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
 Operation Scenario during Read Service
 --------------------------------------
@@ -1783,60 +1785,60 @@ The operation scenario written in this page is only applied to read service. It 
 
 You can perform the following operations without stopping and restarting nodes in CUBRID HA groups.
 
-+----------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **General Operation**                        | **Scenario**                                            | **Consideration**                                                                                                                                       |
-+==============================================+=========================================================+=========================================================================================================================================================+
-| Schema change (primary key change)           | When an operation task is performed at the master node, | In order to change the primary key, the existing key must be deleted and a new one added.  For this reason, replication reflection may not occur due to |
-|                                              | it is automatically reflected to the slave node.        | the HA internal structure which reflects primary key-based replication logs. Therefore, operation tasks must be performed during the read service.      |
-+----------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Schema change (excluding basic key change),  | When an operation task is performed at the master node, | Because replication log is copied and reflected to a slave node after an operation task is completed in a master node, operation task time is doubled.  |
-| index change, authorization change           | it is automatically reflected to the slave node.        | Changing schema must be processed without any failover.                                                                                                 |
-|                                              |                                                         | Index change and authority change other than the schema change can be performed by stopping each node and executing standalone mode                     |
-|                                              |                                                         | (ex: the span class="nkeyword">-S option of **csql** ) when the operation time is important.                                                            |
-+----------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+|   General Operation                          |   Scenario                                              |   Consideration                                                                                                    |
++==============================================+=========================================================+====================================================================================================================+
+| Schema change (primary key change)           | When an operation task is performed at the master node, | In order to change the primary key, the existing key must be deleted and a new one added.  For this reason,        |
+|                                              | it is automatically reflected to the slave node.        | replication reflection may not occur due to the HA internal structure which reflects primary key-based replication |
+|                                              |                                                         | logs. Therefore, operation tasks must be performed during the read service.                                        |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| Schema change (excluding basic key change),  | When an operation task is performed at the master node, | Because replication log is copied and reflected to a slave node after an operation task is completed in a master   |
+| index change, authorization change           | it is automatically reflected to the slave node.        | node, operation task time is doubled. Changing schema must be processed without any failover. Index change         |
+|                                              |                                                         | and authority change other than the schema change can be performed by stopping each node and executing             |
+|                                              |                                                         | standalone mode(ex: the span class="nkeyword">-S option of **csql**) when the operation time is important.         |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
 **When Failover Occurs**
 
 You must stop nodes in CUBRID HA group and complete operation before performing the following operations. 
 
-+------------------------------------------------+-------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **General Operation**                          | **Scenario**                                                                              | **Consideration**                                                                                                                                          |
-|                                                |                                                                                           |                                                                                                                                                            |
-+================================================+===========================================================================================+============================================================================================================================================================+
-| DBMS version upgrade                           | Restart each node and broker in the CUBRID HA group after they are upgraded.              | A version upgrade means that there have been changed in the internal protocol, volume, or log of CUBRID.                                                   |
-|                                                |                                                                                           | Because there are two different versions of the protocols, volumes, and logs of a broker and server during an upgrade, an operation task must be performed |
-|                                                |                                                                                           | to make sure that each client and broker (before/after upgrade) are connected to the corresponding counterpart in the same version.                        |
-+------------------------------------------------+-------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Massive data processing (INSERT/UPDATE/DELETE) | Stop the node that must be changed, perform an operation task, and then execute the node. | This processes massive data that cannot be segmented.                                                                                                      |
-+------------------------------------------------+-------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+|   General Operation                          |   Scenario                                              |   Consideration                                                                                                    |
+|                                              |                                                         |                                                                                                                    |
++==============================================+=========================================================+====================================================================================================================+
+| DBMS version upgrade                         | Restart each node and broker in the CUBRID HA group     | A version upgrade means that there have been changed in the internal protocol, volume, or log of CUBRID.           |
+|                                              | after they are upgraded.                                | Because there are two different versions of the protocols, volumes, and logs of a broker and server during an      |
+|                                              |                                                         | upgrade, an operation task must be performed to make sure that each client and broker (before/after upgrade) are   |
+|                                              |                                                         | connected to the corresponding counterpart in the same version.                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| Massive data processing                      | Stop the node that must be changed, perform an          | This processes massive data that cannot be segmented.                                                              |
+| (INSERT/UPDATE/DELETE)                       | operation task, and then execute the node.              |                                                                                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
 Operation Scenario after Service Stop
 -------------------------------------
 
 You must stop all nodes in CUBRID HA group before performing the following operation.
 
-+----------------------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------+
-|   General Operation                          |   Scenario                                                                        |   Consideration                                          |
-|                                              |                                                                                   |                                                          |
-+==============================================+===================================================================================+==========================================================+
-| Changing the host name and IP of a DB server | Stop all nodes in the CUBRID HA group, and restart them after the operation task. | When a host name has been changed, change the            |
-|                                              |                                                                                   | **databases.txt**                                        |
-|                                              |                                                                                   | file of each broker and reset the broker connection with |
-|                                              |                                                                                   | **cubrid broker reset**.                                 |
-+----------------------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------+
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+|   General Operation                          |   Scenario                                              |   Consideration                                                                                                    |
+|                                              |                                                         |                                                                                                                    |
++==============================================+=========================================================+====================================================================================================================+
+| Changing the host name and IP of a DB server | Stop all nodes in the CUBRID HA group, and restart      | When a host name has been changed, change the **databases.txt** file of each broker and reset the broker           |
+|                                              | them after the operation task.                          | connection with **cubrid broker reset**.                                                                           |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
 Setting Replica Replication Delay
 ---------------------------------
 
 This scenario delays the replication of the master node data in replica node, and stops the replication of the master node data at the specific time, to detect the case which someone deleted the data by mistake and stop the replication at the specified time.
 
-+-------------------------------------+-------------------------------------------+--------------------------------------+
-| General Operation                   | Scenario                                  | Consideration                        |
-+=====================================+===========================================+======================================+
-| Setting the delay of replication    | Specify the term of replicated delay      | specify **ha_replica_delay** and     |
-| in replica node                     | to replica node, and let the replication  | ha_replica_time_bound in cubrid.conf |
-|                                     | stop on the specified time                |                                      |
-+-------------------------------------+-------------------------------------------+--------------------------------------+
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+| General Operation                            | Scenario                                                | Consideration                                                                                                      |
++==============================================+=========================================================+====================================================================================================================+
+| Setting the delay of replication             | Specify the term of replicated delay to replica node,   | specify **ha_replica_delay** and ha_replica_time_bound in cubrid.conf                                              |
+| in replica node                              | and let the replication stop on the specified time      |                                                                                                                    |
++----------------------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
 
 Detection of Replication Mismatch and Rebuild
 =============================================
@@ -1922,108 +1924,108 @@ HA Error Messages
 
 The error messages that can be found in initialization stage of replication log copy process are as follows:
 
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
-| Code  |                                                   |              |                                                     |                                                                      |
-+=======+===================================================+==============+=====================================================+======================================================================+
-| 10    | Cannot mount the disk volume ?.                   | error        | Fails to open a replication log file.               | Check if replication logs exist. For the location of replication     |
-|       |                                                   |              |                                                     | logs, see `Default Environment Configuration                         |
-|       |                                                   |              |                                                     | <#admin_admin_ha_conf_ha_htm>`_.                                     |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 78    | Internal error: an I/O error occurred while       | fatal        | Fails to read a replication log.                    | Check the replication log by using the cubrid applyinfo utility.     |
-|       | reading logical log page ? (physical page ?) of ? |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 81    | Internal error: logical log page ? may be         | fatal        | A replication log page error, in which the          | Check the error log of the database server process to which the      |
-|       | corrupted.                                        |              | replication log copy process has been copied from   | replication log copy process is connected.                           |
-|       |                                                   |              | the connected database server process.              | This error log can be found in $CUBRID/log/server.                   |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1039  | log writer: log writer has been started. mode: ?  | error        | The replication log copy process has been           | No action is required because this error message is recorded to      |
-|       |                                                   |              | successfully initialized and started.               | display the start information of the replication log copy process.   |
-|       |                                                   |              |                                                     | Ignore any error messages which are displayed between the start of   |
-|       |                                                   |              |                                                     | replication log copy process and output of this error message since  |
-|       |                                                   |              |                                                     | there is a possibility that an error message is shown up even in     |
-|       |                                                   |              |                                                     | normal situation.                                                    |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Code  |                                                      |              |                                                     |                                                                      |
++=======+======================================================+==============+=====================================================+======================================================================+
+| -10   | Cannot mount the disk volume ?.                      | error        | Fails to open a replication log file.               | Check if replication logs exist. For the location of replication     |
+|       |                                                      |              |                                                     | logs, see `Default Environment Configuration                         |
+|       |                                                      |              |                                                     | <#admin_admin_ha_conf_ha_htm>`_.                                     |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -78   | Internal error: an I/O error occurred while          | fatal        | Fails to read a replication log.                    | Check the replication log by using the cubrid applyinfo utility.     |
+|       | reading logical log page ? (physical page ?) of ?    |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -81   | Internal error: logical log page ? may be            | fatal        | A replication log page error, in which the          | Check the error log of the database server process to which the      |
+|       | corrupted.                                           |              | replication log copy process has been copied from   | replication log copy process is connected.                           |
+|       |                                                      |              | the connected database server process.              | This error log can be found in $CUBRID/log/server.                   |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1039 | log writer: log writer has been started. mode: ?     | error        | The replication log copy process has been           | No action is required because this error message is recorded to      |
+|       |                                                      |              | successfully initialized and started.               | display the start information of the replication log copy process.   |
+|       |                                                      |              |                                                     | Ignore any error messages which are displayed between the start of   |
+|       |                                                      |              |                                                     | replication log copy process and output of this error message since  |
+|       |                                                      |              |                                                     | there is a possibility that an error message is shown up even in     |
+|       |                                                      |              |                                                     | normal situation.                                                    |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Request and Reception Error Messages**
 
 The replication log copy process requests a replication log from the connected database server and receives the corresponding replication log. Error messages that can be found in this stage are as follows:
 
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
-| Code  |                                                   |              |                                                     |                                                                      |
-+=======+===================================================+==============+=====================================================+======================================================================+
-| 89    | Log ? is not included in the given database.      | error        | The previously replicated log and the log to be     | Check information of the database server/host to which the           |
-|       |                                                   |              | replication do not match.                           | replication log copy process is connected. If you need to change the |
-|       |                                                   |              |                                                     | database server/host information, reinitialize it by deleting the    |
-|       |                                                   |              |                                                     | existing replication log and then restarting.                        |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 186   | Data receiver error from the server               | error        | Incorrect information has been received from the    | It will be internally recovered.                                     |
-|       |                                                   |              | database server to which the replication log copy   |                                                                      |
-|       |                                                   |              | process is connected.                               |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 199   | The server is not responding.                     | error        | The connection to the database server has been      | It will be internally recovered.                                     |
-|       |                                                   |              | terminated.                                         |                                                                      |
-|       |                                                   |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Code  |                                                      |              |                                                     |                                                                      |
++=======+======================================================+==============+=====================================================+======================================================================+
+| -89   | Log ? is not included in the given database.         | error        | The previously replicated log and the log to be     | Check information of the database server/host to which the           |
+|       |                                                      |              | replication do not match.                           | replication log copy process is connected. If you need to change the |
+|       |                                                      |              |                                                     | database server/host information, reinitialize it by deleting the    |
+|       |                                                      |              |                                                     | existing replication log and then restarting.                        |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -186  | Data receiver error from the server                  | error        | Incorrect information has been received from the    | It will be internally recovered.                                     |
+|       |                                                      |              | database server to which the replication log copy   |                                                                      |
+|       |                                                      |              | process is connected.                               |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -199  | The server is not responding.                        | error        | The connection to the database server has been      | It will be internally recovered.                                     |
+|       |                                                      |              | terminated.                                         |                                                                      |
+|       |                                                      |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Write Error Messages**
 
 The replication log copy process copies the replication log that was received from the connected database server process to the location (**ha_copy_log_base**) specified in the **cubrid_ha.conf** file. Error messages that can be found in this stage are as follows:
 
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
-| Code  |                                                   |              |                                                     |                                                                      |
-+=======+===================================================+==============+=====================================================+======================================================================+
-| 10    | Cannot mount the disk volume ?.                   | error        | Fails to open a replication log file.               | Check if replication logs exist.                                     |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 79    | Internal error: an I/O error occurred while       | fatal        | Fails to write a replication log.                   | It will be internally recovered.                                     |
-|       | writing logical log page ? (physical page ?)      |              |                                                     |                                                                      |
-|       | of ?.                                             |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 80    | An error occurred due to insufficient space in    | fatal        | Fails to write a replication log due to             | Check if there is sufficient space left in the disk partition.       |
-|       | operating system device while writing logical     |              | insufficient file system space.                     |                                                                      |
-|       | log page ?(physical page ?) of ?.                 |              |                                                     |                                                                      |
-|       | Up to ? bytes in size are allowed.                |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Code  |                                                      |              |                                                     |                                                                      |
++=======+======================================================+==============+=====================================================+======================================================================+
+| -10   | Cannot mount the disk volume ?.                      | error        | Fails to open a replication log file.               | Check if replication logs exist.                                     |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -79   | Internal error: an I/O error occurred while          | fatal        | Fails to write a replication log.                   | It will be internally recovered.                                     |
+|       | writing logical log page ? (physical page ?)         |              |                                                     |                                                                      |
+|       | of ?.                                                |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -80   | An error occurred due to insufficient space in       | fatal        | Fails to write a replication log due to             | Check if there is sufficient space left in the disk partition.       |
+|       | operating system device while writing logical        |              | insufficient file system space.                     |                                                                      |
+|       | log page ?(physical page ?) of ?.                    |              |                                                     |                                                                      |
+|       | Up to ? bytes in size are allowed.                   |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Archive Error Messages**
 
 The replication log copy process periodically archives the replication logs that have been received from the connected database server process. Error messages that can be found in this stage are as follows:
 
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
-| Code  |                                                   |              |                                                     |                                                                      |
-+=======+===================================================+==============+=====================================================+======================================================================+
-| 78    | Internal error: an I/O error occurred while       | fatal        | Fails to read a replication log during archiving.   | Check the replication log by using the cubrid applyinfo utility.     |
-|       | reading logical log page ?                        |              |                                                     |                                                                      |
-|       | (physical page ?) of ?.                           |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 79    | Internal error: an I/O error occurred while       | fatal        | Fails to write an archive log.                      | It will be internally recovered.                                     |
-|       | writing logical log page ?                        |              |                                                     |                                                                      |
-|       | (physical page ?) of ?.                           |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 81    | Internal error: logical log page ? may be         | fatal        | Found an error on the replication log during        | Check the replication log by using the cubrid applyinfo utility.     |
-|       | corrupted.                                        |              | archiving.                                          |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 98    | Cannot create an archive log ? to archive pages   | fatal        | Fails to create an archive log file.                | Check if there is sufficient space left in the disk partition.       |
-|       | from ? to ?.                                      |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 974   | An archive log ? to archive pages from ? to ? has | notification | Information on an archive log file                  | No action is required because this error message is recorded to keep |
-|       | been created.                                     |              |                                                     | information on newly created archive.                                |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Code  |                                                      |              |                                                     |                                                                      |
++=======+======================================================+==============+=====================================================+======================================================================+
+| -78   | Internal error: an I/O error occurred while          | fatal        | Fails to read a replication log during archiving.   | Check the replication log by using the cubrid applyinfo utility.     |
+|       | reading logical log page ?                           |              |                                                     |                                                                      |
+|       | (physical page ?) of ?.                              |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -79   | Internal error: an I/O error occurred while          | fatal        | Fails to write an archive log.                      | It will be internally recovered.                                     |
+|       | writing logical log page ?                           |              |                                                     |                                                                      |
+|       | (physical page ?) of ?.                              |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -81   | Internal error: logical log page ? may be            | fatal        | Found an error on the replication log during        | Check the replication log by using the cubrid applyinfo utility.     |
+|       | corrupted.                                           |              | archiving.                                          |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -98   | Cannot create an archive log ? to archive pages      | fatal        | Fails to create an archive log file.                | Check if there is sufficient space left in the disk partition.       |
+|       | from ? to ?.                                         |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -974  | An archive log ? to archive pages from ? to ? has    | notification | Information on an archive log file                  | No action is required because this error message is recorded to keep |
+|       | been created.                                        |              |                                                     | information on newly created archive.                                |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Stop and Restart Error Messages**
 
 Error messages that can be found in this stage are as follows:
 
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
-| Code  |                                                   |              |                                                     |                                                                      |
-+=======+===================================================+==============+=====================================================+======================================================================+
-| 1037  | log writer: log writer is terminated by signal.   | error        | The copylogdb process has been terminated by a      | It will be internally recovered.                                     |
-|       |                                                   |              | specified signal.                                   |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Code  |                                                      |              |                                                     |                                                                      |
++=======+======================================================+==============+=====================================================+======================================================================+
+| -1037 | log writer: log writer is terminated by signal.      | error        | The copylogdb process has been terminated by a      | It will be internally recovered.                                     |
+|       |                                                      |              | specified signal.                                   |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Reflection Process (applylogdb)**
 
@@ -2033,125 +2035,126 @@ The error messages from the replication log reflection process are stored in **$
 
 The error messages that can be found in initialization stage of replication log reflection process are as follows:
 
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
-| Code  |                                                   |              |                                                     |                                                                      |
-+=======+===================================================+==============+=====================================================+======================================================================+
-| 10    | Cannot mount the disk volume ?.                   | error        | An applylogdb that is trying to reflect the same    | Check if there is an applylogdb process that is trying to reflect    |
-|       |                                                   |              | replication log is already running.                 | the same replication log.                                            |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1038  | log applier: log applier has been started.        | error        | It will be started normally after initialization of | No action is required because this error is recorded to display the  |
-|       | required LSA: ?|?. last committed LSA: ?|?.       |              | applylogdb succeeds.                                | start information of  the replication log reflection process.        |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Code  |                                                      |              |                                                     |                                                                      |
++=======+======================================================+==============+=====================================================+======================================================================+
+| -10   | Cannot mount the disk volume ?.                      | error        | An applylogdb that is trying to reflect the same    | Check if there is an applylogdb process that is trying to reflect    |
+|       |                                                      |              | replication log is already running.                 | the same replication log.                                            |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1038 | log applier: log applier has been started.           | error        | It will be started normally after initialization of | No action is required because this error is recorded to display the  |
+|       | required LSA: ?|?. last committed LSA: ?|?.          |              | applylogdb succeeds.                                | start information of  the replication log reflection process.        |
+|       | last committed repl LSA: ?|?                         |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Log Analysis Error Messages**
 
 The replication log reflection process reads, analyzes, and reflects the replications logs that have been copied by the replication log copy process. The error message that can be found in this stage are as follows:
 
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
-| Code  |                                                   |              |                                                     |                                                                      |
-+=======+===================================================+==============+=====================================================+======================================================================+
-| 13    | An I/O error occurred while reading page ?        | error        | Fails to read a log page to be reflected.           | Check the replication log by using the cubrid applyinfo utility.     |
-|       | in volume ?.                                      |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 17    | Internal error: Trying to read page ? of the      | fatal        | Trying to read a log page that does not exist in    | Check the replication log by using the cubrid applyinfo utility.     |
-|       | volume ? which has been already released.         |              | the replication log.                                |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 81    | Internal error: logical log page ? may be         | fatal        | There is an inconsistency between an old log under  | Check the replication log by using the cubrid applyinfo utility.     |
-|       | corrupted.                                        |              | replication reflection and the current log, or      |                                                                      |
-|       |                                                   |              | there is a replication log record error.            |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 82    | Cannot mount the disk volume/file ?.              | error        | No replication log file exists.                     | Check if replication logs exist.                                     |
-|       |                                                   |              |                                                     | Check the replication log by using the cubrid applyinfo utility.     |
-|       |                                                   |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 97    | Internal error: unable to find log page ? in      | error        | No log page exists in the replication log.          | Check the replication log by using the cubrid applyinfo utility.     |
-|       | log archives.                                     |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 897   | Decompression failure                             | error        | Fails to decompress the log record.                 | Check the replication log by using the cubrid applyinfo utility.     |
-|       |                                                   |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1028  | log applier: Unexpected EOF log record exists     | error        | Incorrect log record exists in the archive log.     | Check the replication log by using the cubrid applyinfo utility.     |
-|       | in the Archive log. LSA: ?|?.                     |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1029  | log applier: Incorrect log page/offset. page      | error        | Incorrect log record exists.                        | Check the replication log by using the cubrid applyinfo utility.     |
-|       | HDR: ?|?, final: ?|?, append LSA: ?|?, EOF LSA:   |              |                                                     |                                                                      |
-|       | ?|?, ha file status: ?, is end-of-log: ?.         |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1030  | log applier: Incorrect log record. LSA: ?|?,      | error        | Log record header error                             | Check the replication log by using the cubrid applyinfo utility.     |
-|       | forw LSA: ?|?, backw LSA: ?|?, Trid: ?, prev      |              |                                                     |                                                                      |
-|       | tran LSA: ?|?, type: ?.                           |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Code  |                                                      |              |                                                     |                                                                      |
++=======+======================================================+==============+=====================================================+======================================================================+
+| -13   | An I/O error occurred while reading page ?           | error        | Fails to read a log page to be reflected.           | Check the replication log by using the cubrid applyinfo utility.     |
+|       | in volume ?.                                         |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -17   | Internal error: Trying to read page ? of the         | fatal        | Trying to read a log page that does not exist in    | Check the replication log by using the cubrid applyinfo utility.     |
+|       | volume ? which has been already released.            |              | the replication log.                                |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -81   | Internal error: logical log page ? may be            | fatal        | There is an inconsistency between an old log under  | Check the replication log by using the cubrid applyinfo utility.     |
+|       | corrupted.                                           |              | replication reflection and the current log, or      |                                                                      |
+|       |                                                      |              | there is a replication log record error.            |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -82   | Cannot mount the disk volume/file ?.                 | error        | No replication log file exists.                     | Check if replication logs exist.                                     |
+|       |                                                      |              |                                                     | Check the replication log by using the cubrid applyinfo utility.     |
+|       |                                                      |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -97   | Internal error: unable to find log page ? in         | error        | No log page exists in the replication log.          | Check the replication log by using the cubrid applyinfo utility.     |
+|       | log archives.                                        |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -897  | Decompression failure                                | error        | Fails to decompress the log record.                 | Check the replication log by using the cubrid applyinfo utility.     |
+|       |                                                      |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1028 | log applier: Unexpected EOF log record exists        | error        | Incorrect log record exists in the archive log.     | Check the replication log by using the cubrid applyinfo utility.     |
+|       | in the Archive log. LSA: ?|?.                        |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1029 | log applier: Incorrect log page/offset. page         | error        | Incorrect log record exists.                        | Check the replication log by using the cubrid applyinfo utility.     |
+|       | HDR: ?|?, final: ?|?, append LSA: ?|?, EOF LSA:      |              |                                                     |                                                                      |
+|       | ?|?, ha file status: ?, is end-of-log: ?.            |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1030 | log applier: Incorrect log record. LSA: ?|?,         | error        | Log record header error                             | Check the replication log by using the cubrid applyinfo utility.     |
+|       | forw LSA: ?|?, backw LSA: ?|?, Trid: ?, prev         |              |                                                     |                                                                      |
+|       | tran LSA: ?|?, type: ?.                              |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Replication Log Reflection Error Messages**
 
 The replication log reflection process reads, analyzes, and reflects the replication logs that have been copied by the replication log copy process. Error messages that can be found in this stage are as follows:
 
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
-| Code  |                                                   |              |                                                     |                                                                      |
-+=======+===================================================+==============+=====================================================+======================================================================+
-| 72    | The transaction (index ?, ?@?|?) has been         | error        | Fails to reflect replication due to deadlock, etc.  | It will be recovered internally.                                     |
-|       | cancelled by system.                              |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 111   | Your transaction has been cancelled due to        | error        | Fails to reflect replication because the database   | It will be recovered internally.                                     |
-|       | server failure or a mode change.                  |              | server process in which replication is supposed     |                                                                      |
-|       |                                                   |              | to be reflected has been terminated or its mode     |                                                                      |
-|       |                                                   |              | has been changed.                                   |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 191   | Cannot connect to server ? on ?.                  | error        | The connection to the database server process in    | It will be recovered internally.                                     |
-|       |                                                   |              | which replication is supposed to be reflected has   |                                                                      |
-|       |                                                   |              | been terminated.                                    |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 195   | Server communication error: ?.                    | error        | The connection to the database server process in    | It will be recovered internally.                                     |
-|       |                                                   |              | which replication is supposed to be reflected has   |                                                                      |
-|       |                                                   |              | been terminated.                                    |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 224   | The database has not been resumed.                | error        | The connection to the database server process in    | It will be recovered internally.                                     |
-|       |                                                   |              | which replication is supposed to be reflected has   |                                                                      |
-|       |                                                   |              | been terminated.                                    |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1027  | log applier: Failed to change the reflection      | error        | Fails to change of replication reflection.          | It will be recovered internally.                                     |
-|       | status from ? to ?.                               |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1031  | log applier: Failed to reflect the Schema         | error        | Fails to reflect SCHEMA replication.                | Check the consistency of the replication. If it is inconsistent,     |
-|       | replication log. class: ?, schema: ?, internal    |              |                                                     | reconfigure the HA replication.                                      |
-|       | error: ?.                                         |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1032  | log applier: Failed to reflect the Insert         | error        | Fails to reflect INSERT replication.                | Check the consistency of the replication. If it is inconsistent,     |
-|       | replication log. class: ?, key: ?, internal       |              |                                                     | reconfigure the HA replication.                                      |
-|       | error: ?.                                         |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1033  | log applier: Failed to reflect the Update         | error        | Fails to reflect UPDATE replication.                | Check the consistency of the replication. If it is inconsistent,     |
-|       | replication log. class: ?, key: ?, internal       |              |                                                     | reconfigure the HA replication.                                      |
-|       | error: ?.                                         |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1034  | log applier: Failed to reflect the Delete         | error        | Fails to reflect DELETE replication.                | Check the consistency of the replication. If it is inconsistent,     |
-|       | replication log. class: ?, key: ?, internal       |              |                                                     | reconfigure the HA replication.                                      |
-|       | error: ?.                                         |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1040  | HA generic: ?.                                    | notification | Changes the last record of the archive log or       | No action is required because this error message is recorded to      |
-|       |                                                   |              | replication reflection status.                      | provide general information.                                         |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Code  |                                                      |              |                                                     |                                                                      |
++=======+======================================================+==============+=====================================================+======================================================================+
+| -72   | The transaction (index ?, ?@?|?) has been            | error        | Fails to reflect replication due to deadlock, etc.  | It will be recovered internally.                                     |
+|       | cancelled by system.                                 |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -111  | Your transaction has been cancelled due to           | error        | Fails to reflect replication because the database   | It will be recovered internally.                                     |
+|       | server failure or a mode change.                     |              | server process in which replication is supposed     |                                                                      |
+|       |                                                      |              | to be reflected has been terminated or its mode     |                                                                      |
+|       |                                                      |              | has been changed.                                   |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -191  | Cannot connect to server ? on ?.                     | error        | The connection to the database server process in    | It will be recovered internally.                                     |
+|       |                                                      |              | which replication is supposed to be reflected has   |                                                                      |
+|       |                                                      |              | been terminated.                                    |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -195  | Server communication error: ?.                       | error        | The connection to the database server process in    | It will be recovered internally.                                     |
+|       |                                                      |              | which replication is supposed to be reflected has   |                                                                      |
+|       |                                                      |              | been terminated.                                    |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -224  | The database has not been resumed.                   | error        | The connection to the database server process in    | It will be recovered internally.                                     |
+|       |                                                      |              | which replication is supposed to be reflected has   |                                                                      |
+|       |                                                      |              | been terminated.                                    |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1027 | log applier: Failed to change the reflection         | error        | Fails to change of replication reflection.          | It will be recovered internally.                                     |
+|       | status from ? to ?.                                  |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1031 | log applier: Failed to reflect the Schema            | error        | Fails to reflect SCHEMA replication.                | Check the consistency of the replication. If it is inconsistent,     |
+|       | replication log. class: ?, schema: ?, internal       |              |                                                     | reconfigure the HA replication.                                      |
+|       | error: ?.                                            |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1032 | log applier: Failed to reflect the Insert            | error        | Fails to reflect INSERT replication.                | Check the consistency of the replication. If it is inconsistent,     |
+|       | replication log. class: ?, key: ?, internal          |              |                                                     | reconfigure the HA replication.                                      |
+|       | error: ?.                                            |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1033 | log applier: Failed to reflect the Update            | error        | Fails to reflect UPDATE replication.                | Check the consistency of the replication. If it is inconsistent,     |
+|       | replication log. class: ?, key: ?, internal          |              |                                                     | reconfigure the HA replication.                                      |
+|       | error: ?.                                            |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1034 | log applier: Failed to reflect the Delete            | error        | Fails to reflect DELETE replication.                | Check the consistency of the replication. If it is inconsistent,     |
+|       | replication log. class: ?, key: ?, internal          |              |                                                     | reconfigure the HA replication.                                      |
+|       | error: ?.                                            |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1040 | HA generic: ?.                                       | notification | Changes the last record of the archive log or       | No action is required because this error message is recorded to      |
+|       |                                                      |              | replication reflection status.                      | provide general information.                                         |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
 **Stop and Restart Error Messages**
 
 The error messages that can be found in this stage are as follows:
 
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                     | severity     | Description                                         | Solution                                                             |
-| Code  |                                                   |              |                                                     |                                                                      |
-+=======+===================================================+==============+=====================================================+======================================================================+
-| 1035  | log applier: The memory size (? MB) of the log    | error        | The replication log reflection process has been     | It will be recovered internally.                                     |
-|       | applier is larger than the maximum memory size    |              | restarted due to reaching the maximum memory size   |                                                                      |
-|       | (? MB), or is doubled the starting memory size    |              | limit.                                              |                                                                      |
-|       | (? MB) or more. required LSA: ?|?. last           |              |                                                     |                                                                      |
-|       | committed LSA: ?|?.                               |              |                                                     |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| 1036  | log applier: log applier is terminated by signal. | error        | The replication log reflection process has been     | It will be recovered internally.                                     |
-|       |                                                   |              | terminated by a specified signal.                   |                                                                      |
-+-------+---------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Code  |                                                      |              |                                                     |                                                                      |
++=======+======================================================+==============+=====================================================+======================================================================+
+| -1035 | log applier: The memory size (? MB) of the log       | error        | The replication log reflection process has been     | It will be recovered internally.                                     |
+|       | applier is larger than the maximum memory size       |              | restarted due to reaching the maximum memory size   |                                                                      |
+|       | (? MB), or is doubled the starting memory size       |              | limit.                                              |                                                                      |
+|       | (? MB) or more. required LSA: ?|?. last              |              |                                                     |                                                                      |
+|       | committed LSA: ?|?.                                  |              |                                                     |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
+| -1036 | log applier: log applier is terminated by signal.    | error        | The replication log reflection process has been     | It will be recovered internally.                                     |
+|       |                                                      |              | terminated by a specified signal.                   |                                                                      |
++-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
                                                                                                                          
 .. _rebuilding-replication:
 

@@ -9,7 +9,7 @@
 릴리스 노트 정보
 ================
 
-본 문서는 CUBRID 9.2(빌드번호 9.2.0.0133)에 관한 정보를 포함한다.
+본 문서는 CUBRID 9.2(빌드번호 9.2.0.0155)에 관한 정보를 포함한다.
 CUBRID 9.2는 CUBRID 9.1에서 발견된 오류 수정 및 기능 개선과 이전 버전들에 반영된 모든 오류 수정 및 기능 개선을 포함한다.
 
 9.0 Beta, 9.1에 대한 정보는 :doc:`r90`, :doc:`r91`\ 에서 확인할 수 있다.
@@ -26,29 +26,40 @@ CUBRID 9.2는 CUBRID 9.1과 데이터베이스 볼륨이 호환되지 않으므�
 
 운영 편의성 개선
 ----------------
-*   SQL 프로파일링 기능을 추가했다.
-*   각종 상태 정보 출력 또는 트랜잭션 관리 등을 수행하는 CUBRID 운영 도구(유틸리티)의 기능을 추가 또는 개선했다.
-*   각종 상태 정보의 확인이 용이하도록 로그 메시지를 강화했다.
+*   SQL 프로파일링 기능을 제공한다.
+*   각종 상태 정보 출력 또는 트랜잭션 관리 등을 수행하는 CUBRID 운영 도구의 기능을 추가 및 개선했다.
+*   질의 성능 관련 이벤트 로그를 제공한다.
 
 SQL 함수 및 구문 추가
 ---------------------
-*   FIRST_VALUE, LAST_VALUE, NTH_VALUE 함수를 추가했다.
-*   CUME_DIST, PERCENT_RANK, MEDEAN 함수를 추가했다.
-*   NULL의 순서 지정이 가능하도록 구문을 추가했다.
+*   FIRST_VALUE, LAST_VALUE, NTH_VALUE 분석 함수와 CUME_DIST, PERCENT_RANK, MEDIAN 집계 및 분석 함수를 제공한다.
+*   ORDER BY 절에 NULLS FIRST, NULLS LAST 구문을 지원한다.
+
+성능 향상
+---------
+*   서버의 동시성을 개선하여 보다 scalable하도록 개선하였다. YCSB의 select workload는 23% 정도 향상되었다.
+*   LIMIT 절 처리 성능 향상을 위하여 여러 최적화 기법을 적용하였다.
 
 HA 복제 안정화    
 --------------
-*   레플리카 노드로 복제가 진행될 때 복제 지연 간격과 복제 정지 시간을 지정할 수 있게 했다. 
+*   레플리카 노드로 복제가 진행될 때 복제 지연 간격과 복제 정지 시간을 지정할 수 있다. 
 *   특정 질의문에 대해 복제가 되지 않는 현상들을 수정했다.
 *   접속 오류 또는 복제 지연 현상들을 수정했다.
 
 Sharding 기능 개선 및 안정화 
 ----------------------------
-*   shard.conf로 설정하고 "cubrid shard" 명령으로 구동하던 SHARD 기능을 브로커 기능으로 통합했다. 이와 함께 SHARD 관련 파라미터 이름 대부분이 변경되었다.
+*   shard.conf로 설정하고 "cubrid shard" 명령으로 구동하던 SHARD 기능을 브로커 기능으로 통합했다. 명령어와 함께 SHARD 관련 파라미터 이름 대부분이 변경되었다.
 *   SHARD key에 해당하는 shard ID를 확인할 수 있도록 하는 명령을 추가했다.
 *   SHARD proxy에 대한 CAS의 개수가 동적으로 조정될 수 있도록 수정했다.
 *   접속 오류 또는 질의 처리 오류 등을 수정했다.
 
+다국어
+------
+*   데이터베이스 생성 시에 로캘을 반드시 지정해야 하며, CUBRID_CHARSET 환경변수는 더 이상 사용되지 않는다.
+*   바이너리가 아닌(non-binary) 콜레이션에서는 지원하지 않았던 해시 분할을 지원하도록 수정했다. 
+*   일부 질의에서 콜레이션이 적용되지 않는 오류를 수정했다.
+*   다국어 관련한 다수의 오류가 수정되었다.
+    
 동작 변경
 ---------
 *   레코드가 있는 테이블에 "ALTER .. ADD COLUMN" 수행 시 PRIMARY KEY 또는 NOT NULL 제약 조건을 위배하는 경우가 없도록 수정했다.
@@ -56,27 +67,22 @@ Sharding 기능 개선 및 안정화
 *   브로커 파라미터 APPL_SERVER_MAX_SIZE_HARD_LIMIT의 값의 범위가 1과 2,097,151 사이의 값으로 제한되었다.
 *   SQL 로그 파일 크기를 지정하는 브로커 파라미터 SQL_LOG_MAX_SIZE의 기본 설정값이 100MB에서 10MB로 변경되었다.
 *   JDBC 응용 프로그램에서 연결 URL의 zeroDateTimeBehavior 속성 값이 "round"일 때 TIMESTAMP의 zero date를 '0001-01-01 00:00:00'에서 '1970-01-01 00:00:00'(GST)으로 변경하도록 수정했다.
-*   브로커의 ACCESS_MODE 중 PHRO를 제거했다.
+*   브로커의 ACCESS_MODE 중 PHRO 모드를 더 이상 지원하지 않는다.
 
 설정
 ----
 *   시간 또는 용량을 입력하는 파라미터에 시간 단위 또는 용량 단위를 지정할 수 있게 했다.
-*   GENERIC 볼륨의 여유 공간을 일정량 유지할 수 있게 하는 파라미터를 추가했다.
+*   GENERIC 볼륨의 급작스런 증가로 인한 성능 저하 방지를 위해 GENERIC 볼륨의 여유 공간을 유지할 수 있도록 하는 generic_vol_prealloc_size 파라미터를 추가했다.
 
 설치
 ----
-*   ODBC, OLE DB 드라이버는 더 이상 Windows용 CUBRID 설치 패키지에 포함되지 않는다. 이들을 설치하려면 http://ftp.cubrid.org/CUBRID_Drivers/\ 에서 다운받아야 한다.
+*   ODBC, OLE DB 드라이버는 더 이상 Windows용 CUBRID 설치 패키지에 포함되지 않는다. http://ftp.cubrid.org/CUBRID_Drivers/\ 에서 별도로 내려받아 설치할 수 있다. 
 
-다국어
-------
-*   바이너리가 아닌(non-binary) 콜레이션에서는 지원하지 않았던 해시 분할을 지원하도록 수정했다. 
-*   일부 질의에서 콜레이션이 적용되지 않는 오류를 수정했다.
-    
 드라이버 호환성
 ---------------
 *   9.2 버전의 JDBC와 CCI 드라이버는 CUBRID 9.1 및 CUBRID 2008 R4.1, R4.3, R4.4 버전의 DB와 연동된다.
 
-보다 자세한 변경 사항은 아래의 내용을 참고하며, 이전 버전 사용자는 :ref:`changed-behaviors92` 절과 :ref:`new-cautions92` 절을 반드시 확인하도록 한다.
+이외에도 많은 안정성 이슈가 수정되었다. 보다 자세한 변경 사항은 아래의 내용을 참고하며, 이전 버전 사용자는 :ref:`changed-behaviors92` 절과 :ref:`new-cautions92` 절을 반드시 확인하도록 한다.
 
 기능 추가
 =========
@@ -86,10 +92,10 @@ Sharding 기능 개선 및 안정화
 
 .. 4.4new
 
-SQL 프로파일링 기능 추가(CUBRIDSUS-10984)
+SQL 프로파일링 기능 제공(CUBRIDSUS-10984)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-질의 성능 분석을 위한 SQL 프로파일링(profiling) 기능을 추가했다. 
+질의 성능 분석을 위한 SQL 프로파일링(profiling) 기능을 제공한다. 
 
 다음과 같이 "SET TRACE ON" 문장을 실행하고 질의를 실행한 후, "SHOW TRACE" 문장을 실행하면 SQL 프로파일링 정보가 출력된다. 
 
@@ -125,8 +131,8 @@ SQL 프로파일링 기능 추가(CUBRIDSUS-10984)
 
 .. 4.4new
 
-tranlist 명령에 지정된 칼럼으로 정렬하여 출력하는 기능 추가(CUBRIDSUS-9655)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cubrid tranlist 명령에 지정된 칼럼으로 정렬하여 출력하는 기능 추가(CUBRIDSUS-9655)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "cubrid tranlist"에 지정된 칼럼으로 정렬하여 출력하는 기능을 추가했다. 
   
@@ -149,10 +155,10 @@ tranlist 명령에 지정된 칼럼으로 정렬하여 출력하는 기능 추�
 
 .. 4.4new
 
-질의 성능에 영향을 주는 상태를 기록하는 이벤트 로그 파일 추가(CUBRIDSUS-10986)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+질의 성능에 영향을 주는 상태를 기록하는 이벤트 로그 제공(CUBRIDSUS-10986)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-질의 성능에 영향을 주는 SLOW_QUERY, MANY_IOREADS, LOCK_TIMEOUT, DEADLOCK, TEMP_VOLUME_EXPAND 상태를 기록하는 별도의 이벤트 로그 파일을 추가했다.
+질의 성능에 영향을 주는 SLOW_QUERY, MANY_IOREADS, LOCK_TIMEOUT, DEADLOCK, TEMP_VOLUME_EXPAND 상태를 기록하는 별도의 이벤트 로그를 제공한다.
 
 보다 자세한 사항은 매뉴얼의 :ref:`server-event-log` 절을 참고한다.
 
@@ -206,8 +212,8 @@ fail-over 후 마스터로 변경되는 노드 혹은 fail-back 후 슬레이브
 SQL
 ---
 
-NULL에 대한 순서 지정이 가능하도록 수정(CUBRIDSUS-7395)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ORDER BY 절에 NULLS FIRST 또는 NULLS LAST 구문을 지원(CUBRIDSUS-7395)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ORDER BY 절 뒤에 NULLS FIRST 또는 NULLS LAST 구문을 지원하여 NULL 값에 대한 순서를 지정할 수 있도록 수정했다. 
 
@@ -217,10 +223,10 @@ ORDER BY 절 뒤에 NULLS FIRST 또는 NULLS LAST 구문을 지원하여 NULL �
     SELECT col1 FROM TABLE1 ORDER BY col1 NULLS LAST; 
 
 
-FIRST_VALUE, LAST_VALUE, NTH_VALUE 함수 추가(CUBRIDSUS-10531)
+FIRST_VALUE, LAST_VALUE, NTH_VALUE 함수 지원(CUBRIDSUS-10531)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-정렬된 값 집합에서 첫번째 값, 마지막 값, N번째 값을 각각 반환하는 FIRST_VALUE, LAST_VALUE, NTH_VALUE 함수를 추가했다. 
+정렬된 값 집합에서 첫번째 값, 마지막 값, N번째 값을 각각 반환하는 FIRST_VALUE, LAST_VALUE, NTH_VALUE 함수를 지원한다. 
 
 .. code-block:: sql 
 
@@ -231,10 +237,10 @@ FIRST_VALUE, LAST_VALUE, NTH_VALUE 함수 추가(CUBRIDSUS-10531)
     SELECT groupid, itemno, NTH_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
     FROM test_tbl; 
 
-CUME_DIST 함수 추가(CUBRIDSUS-10532)
+CUME_DIST 함수 지원(CUBRIDSUS-10532)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-값의 그룹에서 누적 분포값을 반환하는 CUME_DIST 함수를 추가했다. 
+값의 그룹에서 누적 분포값을 반환하는 CUME_DIST 함수를 지원한다. 
 
 .. code-block:: sql 
 
@@ -246,10 +252,10 @@ CUME_DIST 함수 추가(CUBRIDSUS-10532)
     FROM scores 
     ORDER BY cume_dist; 
 
-PERCENT_RANK 함수 추가(CUBRIDSUS-10533)
+PERCENT_RANK 함수 지원(CUBRIDSUS-10533)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-값의 그룹에서 행의 상대적인 위치를 순위 퍼센트로 반환하는 PERCENT_RANK 함수를 추가했다. 
+값의 그룹에서 행의 상대적인 위치를 순위 퍼센트로 반환하는 PERCENT_RANK 함수를 지원한다. 
 
 .. code-block:: sql 
 
@@ -260,10 +266,10 @@ PERCENT_RANK 함수 추가(CUBRIDSUS-10533)
     SELECT PERCENT_RANK(100) WITHIN GROUP (ORDER BY val) AS pct_rnk FROM test_tbl; 
     SELECT PERCENT_RANK() OVER (ORDER BY val) AS pct_rnk FROM test_tbl; 
 
-MEDIAN 함수 추가(CUBRIDSUS-11087)
+MEDIAN 함수 지원(CUBRIDSUS-11087)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-중앙값(median value)을 반환하는 MEDIAN 함수를 추가했다. 
+중앙값(median value)을 반환하는 MEDIAN 함수를 지원한다. 
 
 .. code-block:: sql 
 
@@ -324,36 +330,36 @@ cubrid_broker.conf의 SHARD_DB_PASSWORD를 환경 변수로 지정할 수 있도
 
 ::
 
-    export SHARD1_SHARD_DB_PASSWORD=shard123
+    $ export SHARD1_SHARD_DB_PASSWORD=shard123
 
 설정
 ----
 
 .. 4.4new
 
-복제 로그의 최대 보존 개수를 조절하는 파라미터 추가(CUBRIDSUS-11377)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+복제 로그의 최대 보존 개수를 조절하는 ha_copy_log_max_archives 파라미터 추가(CUBRIDSUS-11377)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 복제 로그의 최대 보존 개수를 조절하는 ha_copy_log_max_archives 파라미터를 추가했다. 
 수정 이전 버전에서는 log_max_archives 파라미터를 통해서 트랜잭션 보관 로그 파일의 최대 보존 개수와 복제 로그 파일의 최대 보존 개수를 모두 지정했다. 
 
 .. 4.4new
 
-잠금 에스컬레이션 발생 시 트랜잭션의 롤백 여부를 지정하는 시스템 파라미터 추가(CUBRIDSUS-11384)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+잠금 에스컬레이션 발생 시 트랜잭션의 롤백 여부를 지정하는 rollback_on_lock_escalation 시스템 파라미터 추가(CUBRIDSUS-11384)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
 잠금 에스컬레이션 발생 시 트랜잭션의 롤백 여부를 지정하는 rollback_on_lock_escalation 파라미터를 추가했다. 
   
 이 파라미터가 yes로 설정되면, 잠금 에스컬레이션 발생 시점에 에스컬레이션 없이 에러 로그를 기록하고, 해당 잠금 요청은 실패하면서 트랜잭션을 롤백한다. 
 no로 설정되면 기존처럼 잠금 에스컬레이션이 수행되고 트랜잭션을 계속 진행한다. 
 
-다수의 HA/REPLICA DB로 구성된 환경에서, 브로커에서 DB로 접속하는 순서를 지정하는 파라미터 추가(CUBRIDSUS-11446)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+다수의 HA/REPLICA DB로 구성된 환경에서, 브로커에서 DB로 접속하는 순서를 지정하는 CONNECT_ORDER 파라미터 추가(CUBRIDSUS-11446)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 CONNECT_ORDER 브로커 파라미터를 추가했다. 기본값은 SEQ로 기존과 동일하게 databases.txt의 db-hosts에 설정된 순서대로 접속을 시도한다. 이 값이 RANDOM이면 db-hosts에 설정된 호스트들에 랜덤한 순서로 접속을 시도한다. 
 
-GENERIC 볼륨의 여유공간 크기를 일정량으로 유지할 수 있도록 generic_vol_prealloc_size 시스템 파라미터 추가(CUBRIDSUS-10987)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+GENERIC 볼륨의 급작스런 증가로 인한 성능 저하 방지를 위해 GENERIC 볼륨 여유 공간을 유지할 수 있도록 generic_vol_prealloc_size 시스템 파라미터 추가(CUBRIDSUS-10987)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 GENERIC 볼륨의 여유공간이 시스템 파라미터 generic_vol_prealloc_size(기본값 50M)보다 작아진 상태에서 새 페이지가 할당되면, 자동으로 generic볼륨을 확장(또는 추가)하여 여유 공간이 generic_vol_prealloc_size 이상으로 유지되도록 하였다. 
 
@@ -373,7 +379,6 @@ CUBRID 9.2에 루마니아어 로캘을 추가로 지원한다.
  
 .. code-block:: sql 
 
-    .. 
     SET NAMES utf8 COLLATE utf8_de_exp_ai_ci; 
 
     CREATE TABLE t2 ( code VARCHAR(10)) collate utf8_de_exp_ai_ci PARTITION BY HASH (code) PARTITIONS 4; 
@@ -524,10 +529,10 @@ CCI의 cci_execute_batch 함수나 cci_execute_array 함수를 사용하거나, 
 유틸리티
 --------
 
-cubrid createdb 수행 시 로캘을 명시하도록 수정(CUBRIDSUS-11040)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+데이터베이스 생성 시에 로캘을 명시하도록 수정(CUBRIDSUS-11040)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-cubrid createdb 수행 시 로캘을 명시하도록 수정했다. DB 생성 시 로캘을 명시하게 되면서 기존의 CUBRID_CHARSET 환경변수는 더 이상 사용되지 않게 되었다. 
+데이터베이스 생성 시에 로캘을 명시하도록 수정했다. 이로 인해 기존의 CUBRID_CHARSET 환경변수는 더 이상 사용되지 않는다. 
 
 :: 
      
@@ -673,52 +678,21 @@ CSQL 인터프리터에서 질의를 수행하거나 cci_execute 함수에 CCI_E
 성능 및 최적화
 --------------
 
-.. 4.4new
+서버의 동시성 향상을 통해 scalability 개선
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-데이터가 매우 작은 상태에서 만든 플랜은 데이터가 증가한 경우 플랜을 다시 만들도록 수정(CUBRIDSUS-3382)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-같은 질의문에 대해 prepare를 재수행할 때 이전에 prepare 한 이후로 변경된 데이터 양이 임계치를 초과하면 질의 계획을 재작성하도록 수정했다. 
-  
-아래 질의에서 첫 번째 SELECT 문 수행 시 idx1 인덱스를 사용하지만, 두 번째 SELECT 문 수행 시 질의 계획을 재작성하여 idx2 인덱스를 활용하게 된다.
-  
-.. code-block:: sql 
-  
-    CREATE TABLE foo (a INT, b INT, c STRING); 
-    INSERT INTO foo VALUES(1, 1, REPEAT('c', 3000)); 
-    CREATE UNIQUE INDEX idx1 ON foo (a, c); 
-    CREATE INDEX idx2 ON foo (a); 
-      
-    SELECT a, b FROM foo WHERE a = 1; -- 1st 
-      
-    INSERT INTO foo SELECT a+1, b, c FROM foo; 
-    INSERT INTO foo SELECT a+2, b, c FROM foo; 
-    INSERT INTO foo SELECT a+4, b, c FROM foo; 
-    INSERT INTO foo SELECT a+8, b, c FROM foo; 
-    INSERT INTO foo SELECT a+16, b, c FROM foo; 
-    INSERT INTO foo SELECT a+32, b, c FROM foo; 
-    INSERT INTO foo SELECT a+64, b, c FROM foo; 
-    INSERT INTO foo SELECT a+128, b, c FROM foo; 
-      
-    SELECT a, b FROM foo WHERE a = 1; -- 2nd
-
-.. 4.4new
-
-인덱스 추가 시 해당 인덱스의 통계 정보만 갱신되도록 수정(CUBRIDSUS-10709)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-이전 버전에서는 인덱스 추가 시 기존의 모든 인덱스의 통계 정보가 갱신되면서 시스템의 부하로 작용했으나, 추가되는 인덱스의 통계 정보만 생성하도록 수정했다. 
+서버의 동시성을 향상시켜 보다 scalable하도록 개선했다. 질의 수행 시간이 짧은 질의가 많을수록 그 효과가 극명하게 드러나는데, 예를 들어 YCSB의 select workload는 기존 9.1 버전 대비 23% 정도 향상되었다.
 
 ORDER BY ... LIMIT 구문 수행 시 인-메모리 정렬 최적화(CUBRIDSUS-10934)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-ORDER BY ... LIMIT 조건을 만족하는 투플만 정렬 버퍼(sort buffer)에 저장하여 질의를 처리하는 인-메모리 정렬 최적화 기능을 추가했다. 
+ORDER BY ... LIMIT 조건을 만족하는 레코드만 정렬 버퍼(sort buffer)에 저장하여 질의를 처리하는 인-메모리 정렬 최적화 기능을 추가했다. 
 
 조인 질의에서 ORDER BY ... LIMIT 수행 시 SORT-LIMIT 최적화를 적용하여 질의 성능 개선(CUBRIDSUS-11050)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 조인 질의에서 ORDER BY ... LIMIT 절을 수행하는 경우, SORT-LIMIT 최적화를 적용하여 질의 성능을 개선했다. 
-LIMIT 연산에 의해 외부 테이블(outer table)의 투플 개수를 줄이며, 전체를 정렬한 후 LIMIT 연산을 수행하는 것이 아니기 때문에 성능이 개선된다. 
+LIMIT 연산에 의해 외부 테이블(outer table)의 레코드 개수를 줄이며, 전체를 정렬한 후 LIMIT 연산을 수행하는 것이 아니기 때문에 성능이 개선된다. 
 
 .. code-block:: sql 
 
@@ -759,6 +733,43 @@ LIMIT 연산에 의해 외부 테이블(outer table)의 투플 개수를 줄이�
     SELECT /*+ NO_SORT_LIMIT */ * FROM t, u WHERE t.i = u.i ORDER BY u.j LIMIT 10; 
      
 또한, "sort_limit_max_count" 시스템 파라미터를 추가했다. LIMIT 절의 행 개수가 "sort_limit_max_count" 파라미터에서 지정한 개수보다 크면 SORT-LIMIT 최적화를 수행하지 않는다. 
+
+.. 4.4new
+
+데이터가 매우 작은 상태에서 만든 플랜은 데이터가 증가한 경우 플랜을 다시 만들도록 수정(CUBRIDSUS-3382)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  
+같은 질의문에 대해 prepare를 재수행할 때 이전에 prepare 한 이후로 변경된 데이터 양이 임계치를 초과하면 질의 계획을 재작성하도록 수정했다. 
+  
+아래 질의에서 첫 번째 SELECT 문 수행 시 idx1 인덱스를 사용하지만, 두 번째 SELECT 문 수행 시 질의 계획을 재작성하여 idx2 인덱스를 활용하게 된다.
+  
+.. code-block:: sql 
+  
+    CREATE TABLE foo (a INT, b INT, c STRING); 
+    INSERT INTO foo VALUES(1, 1, REPEAT('c', 3000)); 
+    CREATE UNIQUE INDEX idx1 ON foo (a, c); 
+    CREATE INDEX idx2 ON foo (a); 
+      
+    SELECT a, b FROM foo WHERE a = 1; -- 1st 
+      
+    INSERT INTO foo SELECT a+1, b, c FROM foo; 
+    INSERT INTO foo SELECT a+2, b, c FROM foo; 
+    INSERT INTO foo SELECT a+4, b, c FROM foo; 
+    INSERT INTO foo SELECT a+8, b, c FROM foo; 
+    INSERT INTO foo SELECT a+16, b, c FROM foo; 
+    INSERT INTO foo SELECT a+32, b, c FROM foo; 
+    INSERT INTO foo SELECT a+64, b, c FROM foo; 
+    INSERT INTO foo SELECT a+128, b, c FROM foo; 
+      
+    SELECT a, b FROM foo WHERE a = 1; -- 2nd
+
+.. 4.4new
+
+인덱스 추가 시 해당 인덱스의 통계 정보만 갱신되도록 수정(CUBRIDSUS-10709)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+이전 버전에서는 인덱스 추가 시 기존의 모든 인덱스의 통계 정보가 갱신되면서 시스템의 부하로 작용했으나, 추가되는 인덱스의 통계 정보만 생성하도록 수정했다. 
+
 
 계층 질의문에서 START WITH 절에 부질의를 조건으로 부여하는 경우 인덱스를 사용하도록 수정(CUBRIDSUS-9613)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -870,7 +881,7 @@ Windows에서 DB 서버를 재시작할 때 멈춰있는 문제를 수정했다.
 데이터베이스 볼륨이 조금씩 확장되도록 수정(CUBRIDSUS-10987)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-기존에는 질의 수행중 공간이 부족하면 시스템 파라미터인 db_volume_size 크기 만큼의 GENERIC 볼륨이 새로 추가되었고, 이 시간동안 질의 수행은 정지되었다. 
+기존에는 질의 수행중 공간이 부족하면 시스템 파라미터인 db_volume_size 크기 만큼의 GENERIC 볼륨이 새로 추가되었고, 이 시간동안 새로운 저장 공간을 요구하는 질의 수행은 정지되었다. 
 
 수정 이후에는 질의에서 요구되는 크기만 볼륨을 추가한 뒤 더 이상 볼륨을 확보하지 않고, 질의가 진행될 수 있도록 수정하였다. 
 이후 다른 질의를 수행하면서 공간이 부족하면 추가된 볼륨에서 조금씩 공간을 확장한다. 
@@ -1098,7 +1109,7 @@ ALTER 문으로 ENUM 원소 변경 이후 기존 테이블에 있던 값들이 �
     INSERT INTO t2 VALUES ('NONE'); 
     ALTER TABLE t2 MODIFY a ENUM('YES', 'NO'); 
     SELECT * FROM t2; 
-     
+    
     '' 
 
 자동커밋이 OFF인 상태에서 PREPARE한 statement를 실행하고 해당 테이블을 DROP/CREATE 후 다시 해당 statement를 실행하면 CAS 프로세스가 비정상 종료하는 현상(CUBRIDSUS-11876)
@@ -1129,13 +1140,15 @@ INSERT 문에서 SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP을 사용하면 서머 �
 
 상관 부질의 밖의 칼럼과 안의 칼럼을 포함하는 연산식에 집계 함수 수행 시 오류가 발생하는 현상을 수정했다. 
 
-.. code-block:: sql 
+.. code-block:: sql
 
-    CREATE TABLE t1 (a INT , b INT , c INT); 
+    CREATE TABLE t1 (a INT, b INT, c INT); 
     INSERT INTO t1 (a, b) VALUES (3, 3), (2, 2), (3, 3), (2, 2), (3, 3), (4, 4); 
     SELECT (SELECT SUM(outr.a + innr.a) FROM t1 AS innr LIMIT 1) AS tt FROM t1 AS outr; 
 
-    // 수정 이전 버전에서는 아래의 오류가 발생한다. 
+::
+    
+    -- 수정 이전 버전에서는 아래의 오류가 발생한다. 
     ERROR: System error (generate xasl) in ../../src/parser/xasl_generation.c (line: 16294)
     
 뷰에서 상수를 ENUM 타입으로 변경하게 되는 경우 발생하는 오류(CUBRIDSUS-10852)
@@ -1152,7 +1165,7 @@ INSERT 문에서 SYS_DATETIME, SYS_TIME, SYS_TIMESTAMP을 사용하면 서머 �
 
 ::
     
-    // 수정 이전 버전에서는 아래의 오류가 발생한다. 
+    -- 수정 이전 버전에서는 아래의 오류가 발생한다. 
     ERROR: System error (type check) in ../../src/parser/type_checking.c 
 
 ENUM 타입이 CAST 함수를 통해 정의될 때 원소가 중복되는 것을 허용하는 문제(CUBRIDSUS-10854)
@@ -1167,7 +1180,9 @@ ENUM 타입이 CAST 함수를 통해 정의될 때 원소가 중복되는 것을
 
     CREATE TABLE t2 AS SELECT CAST(a AS ENUM('a', 'b', 'c', 'a', 'a', 'a')) col, a FROM t1; 
 
-    // 수정 이후 ENUM 타입에서 원소의 중복을 허용하지 않는다. 
+::
+    
+    -- 수정 이후 ENUM 타입에서 원소의 중복을 허용하지 않는다. 
     ERROR: before ' , 'a', 'a')) col, a from t1; ' 
     Duplicate values in enum type. 
 
@@ -1263,8 +1278,8 @@ UPDATE 트리거가 존재하는 테이블에 호스트 변수가 포함된 UPDA
 다국어
 ------
 
-서로 다른 로캘 사이에 공유되는 콜레이션 정보는 common_colaltions.xml에서 공유되도록 수정(CUBRIDSUS-10160)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+서로 다른 로캘 사이에 공유되는 콜레이션 정보는 common_collaltions.xml에서 공유되도록 수정(CUBRIDSUS-10160)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 테이블의 콜레이션이 분할 조건에 적용되지 않는 현상(CUBRIDSUS-11794)
@@ -1326,10 +1341,10 @@ CUBRID 로캘이 en_US.iso88591인 데이터베이스에서 UTF-8 또는 EUC-KR 
 
     ERROR: No error message available.
 
-"SET NAMES" 문이 응용 프로그램의 문자셋과 콜레이션을 변경할 수 있도록 수정하고, 응용 프로그램의 콜레이션 이름을 저장하는 시스템 파라미터 추가(CUBRIDSUS-10952)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SET NAMES 문이 응용 프로그램의 문자셋과 콜레이션을 변경할 수 있도록 수정하고, 응용 프로그램의 콜레이션 이름을 저장하는 시스템 파라미터 추가(CUBRIDSUS-10952)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-"SET NAMES" 문이 응용 프로그램의 문자셋과 콜레이션을 변경할 수 있도록 수정하고, 응용 프로그램의 콜레이션 이름을 저장하는 시스템 파라미터인 intl_collation을 추가했다. 수정 이후 "SET NAMES" 문으로 콜레이션을 변경하는 경우와 intl_collation 시스템 파라미터를 변경하는 경우는 같은 동작을 수행한다. 
+SET NAMES 문이 응용 프로그램의 문자셋과 콜레이션을 변경할 수 있도록 수정하고, 응용 프로그램의 콜레이션 이름을 저장하는 시스템 파라미터인 intl_collation을 추가했다. 수정 이후 SET NAMES 문으로 콜레이션을 변경하는 경우와 intl_collation 시스템 파라미터를 변경하는 경우는 같은 동작을 수행한다. 
 
 아래의 두 문장은 같은 동작을 수행한다. 
 
@@ -1387,9 +1402,8 @@ UNION 문 수행 시 SELECT 리스트끼리 콜레이션 호환 여부를 검사
 
 .. code-block:: sql
 
-    //  utf8로 DB 생성: cubrid createdb en_US.utf8
-    
-    //  문자셋 변경으로 인해 콜레이션이 변경됨(utf8_bin -> iso88591_bin)
+    --  cubrid createdb en_US.utf8
+    --  collation is changed because the charset is changed(utf8_bin -> iso88591_bin).
     SET NAMES iso88591;
     CREATE TABLE t1(i int, e1 enum ('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', '01/01/2012'));
     INSERT INTO T1 VALUES (1, 1), (3, 3), (2, 'Monday'), (6, 'Friday'), (7, 7), (4, 4), (5, 5), (8, 8);
@@ -1400,10 +1414,10 @@ UNION 문 수행 시 SELECT 리스트끼리 콜레이션 호환 여부를 검사
 
 ::
 
-    // 수정 이전
+    -- 수정 이전
     8 '01/01/2012'
 
-    // 수정 이후
+    -- 수정 이후
     ERROR: Domain "character varying" is not compatible with domain "integer".
 
 호스트 변수 인자와 클라이언트 문자셋이 시스템 문자셋과 다를 때 발생하는 콜레이션 추론 오류(CUBRIDSUS-12111)
@@ -1413,7 +1427,7 @@ UNION 문 수행 시 SELECT 리스트끼리 콜레이션 호환 여부를 검사
 
 .. code-block:: sql
 
-    //create db with en_US.utf8
+    -- create db with en_US.utf8
     SET NAMES iso88591;
     PREPARE s FROM 'SELECT FIELD (?, ?, ?, ?) INTO :result';
 
@@ -1448,7 +1462,7 @@ UNION 문 수행 시 SELECT 리스트끼리 콜레이션 호환 여부를 검사
 
 .. code-block:: sql
 
-    // create DB with en_US.iso88591
+    -- create DB with en_US.iso88591
 
     SET NAMES utf8;
     CREATE TABLE tbl (a CHAR(10));
@@ -1519,8 +1533,8 @@ EUC-KR 문자셋의 고정 길이 CHAR 타입 문자열로 해시 분할하여 �
 
 .. code-block:: sql 
 
-    // en_US.utf8로 DB 생성 
-    // 콜레이션 변경 
+    -- en_US.utf8로 DB 생성 
+    -- 콜레이션 변경 
 
     SET NAMES utf8 COLLATE utf8_gen; 
     CREATE TABLE list_test(id INT NOT NULL PRIMARY KEY , 
@@ -1540,8 +1554,8 @@ EUC-KR 문자셋의 고정 길이 CHAR 타입 문자열로 해시 분할하여 �
 
 .. code-block:: sql 
 
-    // en_US.utf8로 DB 생성 
-    // 콜레이션 변경 
+    -- en_US.utf8로 DB 생성 
+    -- 콜레이션 변경 
     SET NAMES utf8 collate utf8_gen; 
     CREATE TABLE part 
     ( 
@@ -1567,8 +1581,8 @@ DB 생성 시 명시한 문자셋과 다른 문자셋으로 변경한 후 ENUM �
 
 .. code-block:: sql 
 
-    // create DB with en_US.iso88591 
-    // change charset 
+    -- create DB with en_US.iso88591 
+    -- change charset 
     SET NAMES utf8; 
     CREATE TABLE tbl ( 
         A ENUM('你', '我', '他') 
@@ -1583,14 +1597,14 @@ DB 생성 시 명시한 문자셋과 다른 문자셋으로 변경한 후 CREATE
 
 .. code-block:: sql 
 
-    // en_US.iso88591로 DB 생성 
+    -- en_US.iso88591로 DB 생성 
     SET NAMES utf8 COLLATE utf8_gen; 
     CREATE TABLE t1(a CHAR(1200), b VARCHAR(1200)); 
     CREATE INDEX i_t1_b on t1(b) WHERE b='1234567890'; 
      
     CREATE TABLE t2 LIKE t1; 
 
-    // 수정 이전 버전에서 다음의 에러가 발생한다. 
+    -- 수정 이전 버전에서 다음의 에러가 발생한다. 
     ERROR: In line 1, column 45 before ' utf8_bin' 
     Syntax error: unexpected 'collate', expecting SELECT or VALUE or VALUES or '(' 
 
@@ -1599,13 +1613,13 @@ CSQL -S 옵션으로 실행해서 intl_date_lang 시스템 파라미터 값을 �
 
 .. code-block:: sql 
 
-    // de_DE.utf8로 DB 생성 
-    // -S 옵션으로 CSQL 실행 
+    -- de_DE.utf8로 DB 생성 
+    -- -S 옵션으로 CSQL 실행 
      
-    // intl_date_lang 시스템 파라미터 값 변경 
+    -- intl_date_lang 시스템 파라미터 값 변경 
     SET SYSTEM PARAMETERS 'intl_date_lang=ko_KR';
      
-    // 수정 이전 버전에서는 de_DE 포맷으로 출력된다. 
+    -- 수정 이전 버전에서는 de_DE 포맷으로 출력된다. 
     SELECT TO_CHAR(datetime'03:36:16 pm 2013-04-12', 'HH12:MI:SS.FF pm, YYYY-MM-DD-DAY'); 
     '03:36:16.000 nachm., 2013-04-12-FREITAG ' 
     
@@ -1616,7 +1630,7 @@ TO_CHAR 함수에서 호스트 변수로 SELECT를 수행할 때 잘못된 결�
 
     PREPARE st FROM 'SELECT TO_CHAR(?)'; 
     EXECUTE st USING 'a'; 
-    // 수정 이전 버전에서는 공백 문자를 출력한다. 
+    -- 수정 이전 버전에서는 공백 문자를 출력한다. 
     '' 
 
 COERCIBILITY 함수의 인자로 상수를 포함하는 표현식이 입력될 때 표현식의 변환도가 아닌 상수의 변환도를 출력하는 문제(CUBRIDSUS-12278) 
@@ -1645,8 +1659,8 @@ ISO-88591을 제외한 EUC-KR, UTF-8 문자셋에서 "alter_table_change_type_st
 
     ERROR: ALTER TABLE .. CHANGE : changing to new domain : cast failed, current configuration doesn't allow truncation or overflow. 
     
-분할(Partitioning)
-------------------
+분할
+----
 
 분할 테이블에서 XOR 연산 수행 시 잘못된 결과를 출력하는 현상(CUBRIDSUS-11091)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1774,10 +1788,10 @@ applylogdb 에러 메시지 중 상대편 노드의 서버 상태를 출력하�
   
 :: 
   
-    // 수정 이전 
+    -- 수정 이전 
     HA generic: change HA server state from from 'idle' to 'active'.. 
   
-    // 수정 이후 
+    -- 수정 이후 
     HA generic: change the state of HA server (testdb@cdbs037.cub) from 'idle' to 'active'.
 
 .. 4.4new
@@ -1945,10 +1959,10 @@ JDBC 응용 프로그램에서 연결 URL의 zeroDateTimeBehavior 프로퍼티 �
   
 ::
 
-    // 수정 이전 에러 메시지 
+    -- 수정 이전 에러 메시지 
     invalid argument 
   
-    // 수정 이후 에러 메시지 
+    -- 수정 이후 에러 메시지 
     Zero date can not be represented as java.sql.Timestamp. 
      
 참고로, 2008 R4.0 이하 버전에서 TIMESTAMP '1970-01-01 00:00:00'(GMT)는 TIMESTAMP의 최소값이지만, 2008 4.1 이상 버전에서는 zerodate로 인식되며 TIMESTAMP '1970-01-01 00:00:01'(GMT)이 TIMESTAMP의 최소값이다. 
@@ -2434,11 +2448,15 @@ DB 서버 프로세스가 비정상 종료된 이후 복구 도중 ER_FILE_TABLE
 
 9.1 이전 버전과 DB 볼륨이 호환되지 않으므로 cubrid unloaddb/loaddb를 이용하여 데이터를 마이그레이션해야 한다. 보다 자세한 사항은  :doc:`/upgrade`\ 를 참고한다.
 
-CUBRID_LANG 환경 변수 대신에 CUBRID_MSG_LANG 환경 변수로 변경
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+데이터베이스 생성 시에 로캘(언어 및 문자셋) 명시
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-9.1 버전부터 CUBRID_LANG 환경 변수는 더 이상 사용되지 않으며, 유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용한다. 
-DB의 로캘 및 문자셋 지정 시 CUBRID_CHARSET이 9.1 버전에서 사용되었으나, 9.2부터는 CUBRID_CHARSET이 더 이상 사용되지 않으며 DB 생성 시 로캘 및 문자셋을 지정하도록 바뀌었다.
+데이터베이스 생성 시에 로캘을 지정하도록 변경되었다.
+
+CUBRID_CHARSET 환경 변수 제거
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+데이터베이스 생성 시에 로캘을 지정하도록 변경됨으로 인하여 9.2부터는 CUBRID_CHARSET 환경변수는 더 이상 사용되지 않는다.
 
 .. 4.4new
 
@@ -2447,8 +2465,30 @@ DB의 로캘 및 문자셋 지정 시 CUBRID_CHARSET이 9.1 버전에서 사용�
  
 2008 R4.4부터, 연결 URL의 zeroDateTimeBehavior 속성 값이 "round"일 때 TIMESTAMP의 zero date 값이 '0001-01-01 00:00:00'에서 '1970-01-01 00:00:00'(GST)로 변경되었으므로, 응용 프로그램에서 zero date를 사용하는 경우 주의해야 한다.
 
+AIX용 CUBRID를 SH 패키지로 설치 시 권장 사항(CUBRIDSUS-12251)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AIX OS에서 ksh를 사용하여 CUBRID SH 설치 패키지를 설치하는 경우, 다음의 경고 메시지와 함께 실패하므로, 
+  
+:: 
+  
+    0403-065 An incomplete or invalid multibyte character encountered. 
+  
+CUBRID SH 설치 패키지를 실행하려면 ksh 대신 ksh93 또는 bash를 사용할 것을 권장한다. 
+  
+:: 
+  
+    $ ksh93 ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
+    $ bash ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
+
 기존 주의 사항
 --------------
+
+CUBRID_LANG 환경 변수 제거, CUBRID_MSG_LANG 환경 변수 추가
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+9.1 버전부터 CUBRID_LANG 환경 변수는 더 이상 사용되지 않는다.
+유틸리티 메시지 및 오류 메시지를 출력할 때는 CUBRID_MSG_LANG 환경 변수를 사용한다. 
 
 CCI 응용 프로그램에서 여러 개의 질의를 한 번에 수행한 결과의 배열에 대한 에러 처리 방식 수정(CUBRIDSUS-9364)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

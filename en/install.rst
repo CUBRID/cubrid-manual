@@ -24,6 +24,20 @@ Including CUBRID Query Browser, a variety of drivers such as PHP, ODBC and OLE D
 
 For more information on the CUBRID engine, tools, and drivers, see http://www.cubrid.org.
 
+.. note:: 
+  
+    If you install CUBRID SH package by using ksh in AIX OS, it fails with the following error. 
+  
+    :: 
+  
+        0403-065 An incomplete or invalid multibyte character encountered. 
+  
+    Therefore, it is recommended to use ksh93 or bash instead of ksh.
+    
+    ::
+  
+        $ ksh93 ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
+        $ bash ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
 
 Compatibility
 -------------

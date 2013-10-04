@@ -3166,7 +3166,7 @@ CCI API Reference
         cci_set_max_row(req, 1);
         cci_execute( ... );
 
-.. c:function:: int cci_set_query_timeout (int req_handle, int milli_sec);
+.. c:function:: int cci_set_query_timeout(int req_handle, int milli_sec)
 
     The **cci_set_query_timeout** function configures timeout value for query execution.
 

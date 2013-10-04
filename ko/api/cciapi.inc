@@ -3176,7 +3176,7 @@ CCI API 레퍼런스
         cci_set_max_row(req, 1);
         cci_execute( ... );
 
-.. c:function:: int cci_set_query_timeout (int req_handle, int milli_sec);
+.. c:function:: int cci_set_query_timeout(int req_handle, int milli_sec)
 
     질의 수행의 타임아웃 시간을 설정한다.
 

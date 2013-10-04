@@ -24,6 +24,20 @@ CUBRID 매니저 및 CUBRID 쿼리 브라우저 설치 패키지와 JDBC, PHP, O
 
 CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http://www.cubrid.org\ 를 참고한다.
 
+.. note:: 
+  
+    AIX OS에서 ksh를 사용하여 CUBRID SH 설치 패키지를 설치하는 경우 다음의 경고 메시지와 함께 실패하므로, 
+  
+    :: 
+  
+        0403-065 An incomplete or invalid multibyte character encountered. 
+  
+    ksh 대신 ksh93 또는 bash를 사용할 것을 권장한다. 
+  
+    :: 
+  
+        $ ksh93 ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
+        $ bash ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
 
 버전 호환성
 -----------

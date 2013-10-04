@@ -10,7 +10,7 @@
 Release Notes Information
 =========================
 
-This document includes information on CUBRID 9.2(Build No. 9.2.0.0133). 
+This document includes information on CUBRID 9.2(Build No. 9.2.0.0155). 
 CUBRID 9.2 includes all of the fixed errors and improved features that were detected in the CUBRID 9.1 and were applied to the previous versions.
 
 For details on CUBRID 9.0 Beta and CUBRID 9.1, see :doc:`r90` and :doc:`r91`.
@@ -28,15 +28,19 @@ CUBRID 9.2's DB volume is not compatible with CUBRID 9.1. Therefore, if you use 
 
 Improvement of Administrative Convenience
 -----------------------------------------
-*   Add SQL profiling features
+*   Provide SQL profiling features
 *   Add or Improve the features of CUBRID administrative tools(utilities) which execute features such as printing various status information or managing transactions.
-*   Strengthen the log messages to facilitate the verification of information on each status.
+*   Provide event log which is related to the performance.
 
 Additions in SQL functions and statements
 -----------------------------------------
-*   Add FIRST_VALUE, LAST_VALUE and NTH_VALUE functions.
-*   Add CUME_DIST, PERCENT_RANK and MEDEAN functions.
-*   NULL's order can be specified with added syntax.
+*   Provide analytic functions which are FIRST_VALUE, LAST_VALUE and NTH_VALUE, and aggregate-analytic functions which are CUME_DIST, PERCENT_RANK and MEDIAN functions.
+*   Support NULLS FIRST, NULLS LAST syntax to the ORDER BY clause.
+
+Improvement of Performance
+--------------------------
+*   Improve to be more scalable than before as improving the concurrency of the server. Select-workload of YCSB test is improved by 23%.
+*   Apply various optimization techniques to improve the performance of the LIMIT clause processing.
 
 Stablization in HA replication
 ------------------------------
@@ -51,6 +55,13 @@ Improvements and Stablization in Sharding Features
 *   The number of CASes about SHARD proxy can be controlled dynamically.
 *   Fix access error or query processing error.
 
+Globalization
+-------------
+*   Locale should be specified as creating database and CUBRID_CHARSET environment variable is not used anymore.
+*   Fix to support the hash partitioning which was not supported in the non-binary collation.
+*   Fix the errors that the collation in some queries is not applied.
+*   Fix many bugs related to the globalization.
+
 Behavioral Changes
 ------------------
 *   Fix so that there is no case to violate NOT NULL or PRIMARY KEY constraints as running "ALTER ... ADD COLUMN" in a table that has a record.
@@ -58,28 +69,22 @@ Behavioral Changes
 *   The range of a value for APPL_SERVER_MAX_SIZE_HARD_LIMIT broker parameter was limited to a value between 1 and 2,097,151.
 *   The default setting for SQL_LOG_MAX_SIZE broker parameter to specify the size of the SQL log file has been changed to 10MB from 100MB.
 *   In a JDBC application, zero date of TIMESTAMP is changed into '1970-01-01 00:00:00'(GST) from '0001-01-01 00:00:00' when the value of zeroDateTimeBehavior property in the connection URL is "round".
-*   Remove "PHRO" in values of ACCESS_MODE, the broker parameter.
+*   "PHRO", one of the values in ACCESS_MODE of broker, is not supported anymore.
 
 Configuration
 -------------
 *   A user can specify capacity units or time units in the parameters to enter the capacity or time.
-*   Add a parameter that allows you to maintain a certain amount of free space GENERIC volume.
+*   Add a generic_vol_prealloc_sizeparameter that allows you to maintain a certain amount of free space GENERIC volume to prevent the low performance caused by the sudden increase of a GENERIC volume.
 
 Installation
 ------------
 *   ODBC, OLE DB driver is not included in the CUBRID installation package for Windows.  To install them, you have to download from http://ftp.cubrid.org/CUBRID_Drivers/ \.
 
-Globalization
--------------
-*   Fix to support the hash partitioning which was not supported in the non-binary callation.
-*   Fix the errors that the collation in some queries is not applied.
-    
 Driver Compatibility
 --------------------
 *   The JDBC and CCI driver of CUBRID 9.2 are compatible with the DB server of CUBRID 2008 R4.1, R4.3 or R4.4.
 
-For more details on changes, see the following. Users of previous versions should check the :ref:`changed-behaviors92` and :ref:`new-cautions92` sections.
-
+Not only the above issues, but also many issues for stability are fixed. For more details on changes, see the following. Users of previous versions should check the :ref:`changed-behaviors92` and :ref:`new-cautions92` sections.
 
 New Features
 ============
@@ -89,10 +94,10 @@ Administrative Convenience
 
 .. 4.4new
 
-Support SQL profiling(CUBRIDSUS-10984)
+Provide SQL profiling(CUBRIDSUS-10984)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The SQL profiling feature is added for analyzing query performance.
+The SQL profiling feature is provided for analyzing query performance.
 
 The SQL profiling information is output when executing the "SHOW TRACE" statement after executing the "SET TRACE ON" statement and queries as follows:
 
@@ -128,8 +133,8 @@ The SQL profiling information is output when executing the "SHOW TRACE" statemen
     
 .. 4.4new
 
-Sort by the column specified in the tranlist command and output the result(CUBRIDSUS-9655)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sort by the column specified in the cubrid tranlist command and output the result(CUBRIDSUS-9655)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A feature to sort by the column specified in the "cubrid tranlist" command and output the result is added.
 
@@ -152,10 +157,10 @@ The following example shows how to sort by specifying the fourth column, "Proces
     
 .. 4.4new
 
-Event log file to record the status which affects query performance(CUBRIDSUS-10986)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Provide Event log file to record the status which affects query performance(CUBRIDSUS-10986)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-An additional event log file is added to record the status such as SLOW_QUERY, MANY_IOREADS, LOCK_TIMEOUT, DEADLOCK, and TEMP_VOLUME_EXPAND that affects query performance.
+An additional event log file is provided to record the status such as SLOW_QUERY, MANY_IOREADS, LOCK_TIMEOUT, DEADLOCK, and TEMP_VOLUME_EXPAND that affects query performance.
 
 For more details, see :ref:`server-event-log`.
 
@@ -208,8 +213,8 @@ The cub_master log file of the node that is changed to the master after fail-ove
 SQL
 ---
 
-Order of NULL can be specified(CUBRIDSUS-7395)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support NULLS FIRST and NULLS LAST in the ORDER BY clause(CUBRIDSUS-7395)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The order for NULL values can be specified by supporting the NULLS FIRST statement or the NULLS LAST statement after the ORDER BY clause.
 
@@ -219,10 +224,10 @@ The order for NULL values can be specified by supporting the NULLS FIRST stateme
     SELECT col1 FROM TABLE1 ORDER BY col1 NULLS LAST; 
 
 
-FIRST_VALUE, LAST_VALUE, and NTH_VALUE functions(CUBRIDSUS-10531)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support FIRST_VALUE, LAST_VALUE, and NTH_VALUE functions(CUBRIDSUS-10531)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add the functions of FIRST_VALUE, LAST_VALUE, and NTH_VALUE which return the first value, the last value, and the N-th value, respectively, from the group of sorted values.
+Support the functions of FIRST_VALUE, LAST_VALUE, and NTH_VALUE which return the first value, the last value, and the N-th value, respectively, from the group of sorted values.
 
 .. code-block:: sql 
 
@@ -233,10 +238,10 @@ Add the functions of FIRST_VALUE, LAST_VALUE, and NTH_VALUE which return the fir
     SELECT groupid, itemno, NTH_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
     FROM test_tbl; 
 
-CUME_DIST function(CUBRIDSUS-10532)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support CUME_DIST function(CUBRIDSUS-10532)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add the CUME_DIST function which returns the cumulative distribution value from the group of values.
+Support the CUME_DIST function which returns the cumulative distribution value from the group of values.
 
 .. code-block:: sql 
 
@@ -248,10 +253,10 @@ Add the CUME_DIST function which returns the cumulative distribution value from 
     FROM scores 
     ORDER BY cume_dist; 
 
-PERCENT_RANK function(CUBRIDSUS-10533)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support PERCENT_RANK function(CUBRIDSUS-10533)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add the PERCENT_RANK function which returns the relative position of the row as the ranking percent.
+Support the PERCENT_RANK function which returns the relative position of the row as the ranking percent.
 
 .. code-block:: sql 
 
@@ -263,10 +268,10 @@ Add the PERCENT_RANK function which returns the relative position of the row as 
     SELECT PERCENT_RANK() OVER (ORDER BY val) AS pct_rnk FROM test_tbl; 
 
 
-MEDIAN function(CUBRIDSUS-11087)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support MEDIAN function(CUBRIDSUS-11087)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add the MEDIAN function which returns the median value.
+Support the MEDIAN function which returns the median value.
 
 .. code-block:: sql 
 
@@ -329,34 +334,34 @@ The name format of this environment variable is "<broker_name>_SHARD_DB_PASSWORD
 
 ::
 
-    export SHARD1_SHARD_DB_PASSWORD=shard123
+    $ export SHARD1_SHARD_DB_PASSWORD=shard123
 
 Configuration
 -------------
 
 .. 4.4new
 
-Add a parameter to adjust the maximum number of replication archive logs(CUBRIDSUS-11377)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Add ha_copy_log_max_archives parameter to adjust the maximum number of replication archive logs(CUBRIDSUS-11377)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ha_copy_log_max_archives parameter, which adjusts the maximum number of replication archive logs, is added. In the previous versions, the log_max_archives parameter was used to specify both the maximum number of transaction archive logs and the maximum number of replication archive logs.
 
 .. 4.4new
 
-Add a system parameter to specify transaction rollback when lock escalation occurs(CUBRIDSUS-11384)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Add rollback_on_lock_escalation parameter to specify transaction rollback when lock escalation occurs(CUBRIDSUS-11384)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
 The rollback_on_lock_escalation parameter is added to specify transaction rollback when lock escalation occurs.
   
 When this parameter is configured to yes, an error log is recorded without escalation when lock escalation occurs; the corresponding lock request fails and the transaction is rolled back. When it is configured to no, lock escalation is executed and the transaction continues to proceed.
 
-Parameter to specify the order that the broker accesses the DB where  multiple HA/REPLICA DBs are configured(CUBRIDSUS-11446)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Add CONNECT_ORDER parameter to specify the order that the broker accesses the DB where  multiple HA/REPLICA DBs are configured(CUBRIDSUS-11446)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The CONNECT_ORDER broker parameter is added. The default value is SEQ and the order to attempt access specified in db-hosts of the databases.txt is unchanged. If it is configured to RANDOM, the broker attempts access to the hosts specified in db-hosts randomly.
 
-Add the generic_vol_prealloc_size system parameter to maintain free space of the GENERIC volume to a certain level(CUBRIDSUS-10987)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Add a generic_vol_prealloc_sizeparameter that allows you to maintain a certain amount of free space GENERIC volume to prevent the low performance caused by the sudden increase of a GENERIC volume(CUBRIDSUS-10987)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the free space of the GENERIC volume is smaller than the generic_vol_prealloc_size system parameter (default value 50M) and a new page is allocated, the GENERIC volume is automatically expanded (or added) to maintain the free space.
 
@@ -527,10 +532,10 @@ When the value of the property "zeroDateTimeBehavior" in the connection URL is "
 Utility
 -------
 
-Locale is specified when the cubrid createdb is executed(CUBRIDSUS-11040)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Locale should be specified when creating DB(CUBRIDSUS-11040)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The locale is specified when cubrid createdb is executed. As the locale is specified when creating a DB, the existing CUBRID_CHARSET environment variable is no longer used.
+Locale should be specified when creating DB. Therefore, the existing CUBRID_CHARSET environment variable is no longer used.
 
 :: 
      
@@ -545,9 +550,6 @@ When memory size or file size is output with some utilities, such as createdb, s
 
 Configuration
 -------------
-
-.. page_flush_interval, index_scan_key_buffer_pages은 내부 파라미터로 매뉴얼 노출 안 됨
-.. 9.2에서 PROXY_LOG_MAX_SIZE, PROXY_TIMEOUT은 SHARD_PROXY_LOG_MAX_SIZE, SHARD_PROXY_TIMEOUT으로 이름이 바뀌며, 브로커 파라미터로 통합됨.
 
 .. 4.4new, 4.4-10412
 
@@ -677,52 +679,16 @@ Improvements and Fixes
 Performance and Optimization
 ----------------------------
 
-.. 4.4new
-
-Query plan is rewritten when the data volume is increased from the small data(CUBRIDSUS-3382)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-If the data volume changed after the previous prepare exceeds critical when prepare is re-executed for the same query, the query plan is rewritten.
-  
-In the following query, the idx1 index is used when the first SELECT statement is executed. When the second SELECT statement is executed, the query plan is rewritten to use the idx2 index.
-  
-.. code-block:: sql 
-  
-    CREATE TABLE foo (a INT, b INT, c STRING); 
-    INSERT INTO foo VALUES(1, 1, REPEAT('c', 3000)); 
-    CREATE UNIQUE INDEX idx1 ON foo (a, c); 
-    CREATE INDEX idx2 ON foo (a); 
-      
-    SELECT a, b FROM foo WHERE a = 1; -- 1st 
-      
-    INSERT INTO foo SELECT a+1, b, c FROM foo; 
-    INSERT INTO foo SELECT a+2, b, c FROM foo; 
-    INSERT INTO foo SELECT a+4, b, c FROM foo; 
-    INSERT INTO foo SELECT a+8, b, c FROM foo; 
-    INSERT INTO foo SELECT a+16, b, c FROM foo; 
-    INSERT INTO foo SELECT a+32, b, c FROM foo; 
-    INSERT INTO foo SELECT a+64, b, c FROM foo; 
-    INSERT INTO foo SELECT a+128, b, c FROM foo; 
-      
-    SELECT a, b FROM foo WHERE a = 1; -- 2nd
-
-.. 4.4new
-
-Statistical information of only the added index is updated(CUBRIDSUS-10709)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-In the previous versions, the statistical information of all existing indexes was updated and it became a burden on the system. Now, to remove this burden, only the statistical information of the added indexes is created.
-
 In-memory sort optimization while executing the ORDER BY ... LIMIT clause(CUBRIDSUS-10934)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The in-memory sort optimization is added to process the query by saving the tuples that match the ORDER BY ... LIMIT condition to the sort buffer.
+The in-memory sort optimization is added to process the query by saving the records that match the ORDER BY ... LIMIT condition to the sort buffer.
 
 Query performance improved by applying SORT-LIMIT optimization while executing the ORDER BY ... LIMIT clause in the join query(CUBRIDSUS-11050)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The query performance is improved by applying SORT-LIMIT optimization while executing the ORDER BY ... LIMIT clause in the join query. 
-The performance is improved because the LIMIT operation reduces the number of tuples in the outer table and it is not required to sort all tuples before executing the LIMIT operation.
+The performance is improved because the LIMIT operation reduces the number of records in the outer table and it is not required to sort all records before executing the LIMIT operation.
 
 .. code-block:: sql 
 
@@ -763,6 +729,42 @@ In addition, the NO_SORT_LIMIT hint is added to configure the sort-limit query p
     SELECT /*+ NO_SORT_LIMIT */ * FROM t, u WHERE t.i = u.i ORDER BY u.j LIMIT 10; 
      
 Also, "sort_limit_max_count" system parameter is added. If the number of rows of the LIMIT clause is larger than the number specified in the "sort_limit_max_count" parameter, SORT-LIMIT optimization is not performed.
+
+.. 4.4new
+
+Query plan is rewritten when the data volume is increased from the small data(CUBRIDSUS-3382)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  
+If the data volume changed after the previous prepare exceeds critical when prepare is re-executed for the same query, the query plan is rewritten.
+  
+In the following query, the idx1 index is used when the first SELECT statement is executed. When the second SELECT statement is executed, the query plan is rewritten to use the idx2 index.
+  
+.. code-block:: sql 
+  
+    CREATE TABLE foo (a INT, b INT, c STRING); 
+    INSERT INTO foo VALUES(1, 1, REPEAT('c', 3000)); 
+    CREATE UNIQUE INDEX idx1 ON foo (a, c); 
+    CREATE INDEX idx2 ON foo (a); 
+      
+    SELECT a, b FROM foo WHERE a = 1; -- 1st 
+      
+    INSERT INTO foo SELECT a+1, b, c FROM foo; 
+    INSERT INTO foo SELECT a+2, b, c FROM foo; 
+    INSERT INTO foo SELECT a+4, b, c FROM foo; 
+    INSERT INTO foo SELECT a+8, b, c FROM foo; 
+    INSERT INTO foo SELECT a+16, b, c FROM foo; 
+    INSERT INTO foo SELECT a+32, b, c FROM foo; 
+    INSERT INTO foo SELECT a+64, b, c FROM foo; 
+    INSERT INTO foo SELECT a+128, b, c FROM foo; 
+      
+    SELECT a, b FROM foo WHERE a = 1; -- 2nd
+
+.. 4.4new
+
+Statistical information of only the added index is updated(CUBRIDSUS-10709)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the previous versions, the statistical information of all existing indexes was updated and it became a burden on the system. Now, to remove this burden, only the statistical information of the added indexes is created.
 
 Fix to use an index when a subquery is given in a START WITH clause as a condition in a hierarchical query(CUBRIDSUS-9613)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -871,7 +873,7 @@ Fix the problem that DB server process is hung when it is restarted in Windows. 
 Volume expansion little by little(CUBRIDSUS-10987)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the previous versions, when free space was insufficient while executing a query, the GENERIC volume as large as the system parameter, db_volume_size, size was newly added and query execution was stopped during the time to add the volume.
+In the previous versions, when free space was insufficient while executing a query, the GENERIC volume as large as the system parameter, db_volume_size was newly added, and during this time, the query execution which required the newly added storage was stopped.
 
 After the update, only the volume required for executing the query is added; after that, no more volume is expanded and the query execution continues. When free space is insufficient for another query, the space is expanded little by little from the added volume. As the volume is expanded little by little, the volume size may be smaller than the db_volume_size value at a specific time. The automatically added GENERIC volume is expanded up to the db_volume_size size of the added time.
 
@@ -1131,6 +1133,8 @@ An error occurred when the aggregate function was executed for the operation whi
     INSERT INTO t1 (a, b) VALUES (3, 3), (2, 2), (3, 3), (2, 2), (3, 3), (4, 4); 
     SELECT (SELECT SUM(outr.a + innr.a) FROM t1 AS innr LIMIT 1) AS tt FROM t1 AS outr; 
 
+::
+    
     -- in the previous version, below error occurred. 
     ERROR: System error (generate xasl) in ../../src/parser/xasl_generation.c (line: 16294)
     
@@ -1163,6 +1167,8 @@ When the ENUM type was defined by using the CAST function, the duplicate element
 
     CREATE TABLE t2 AS SELECT CAST(a AS ENUM('a', 'b', 'c', 'a', 'a', 'a')) col, a FROM t1; 
 
+::
+    
     -- after the update, duplicated elements are not allowed in ENUM type.
     ERROR: before ' , 'a', 'a')) col, a from t1; ' 
     Duplicate values in enum type. 
@@ -1259,8 +1265,8 @@ CAS is sometimes abnormally terminated  when getting interrupted during preparin
 Globalization
 -------------
 
-Collation information shared among different locales is included in common_colaltions.xml(CUBRIDSUS-10160)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Collation information shared among different locales is included in common_collaltions.xml(CUBRIDSUS-10160)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Table collation was not applied to the partitioning condition(CUBRIDSUS-11794)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1321,10 +1327,10 @@ Failure to execute MD5 function to the UTF-8 or EUC-KR characters in the databas
 
     ERROR: No error message available.
 
-"SET NAMES" statement can change the charset and collation of the application and the system parameter saving the collation name of the application is added(CUBRIDSUS-10952)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SET NAMES statement can change the charset and collation of the application and the system parameter saving the collation name of the application is added(CUBRIDSUS-10952)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The "SET NAMES" statement can change the charset and collation of the application. The system parameter, intl_collation, is added to save the collation name of the application. After the update, changing the collation with the "SET NAMES" statement executes the same action with changing the intl_collation system parameter.
+The SET NAMES statement can change the charset and collation of the application. The system parameter, intl_collation, is added to save the collation name of the application. After the update, changing the collation with the SET NAMES statement executes the same action with changing the intl_collation system parameter.
 
 The following two queries execute the same action.
 
@@ -1382,7 +1388,6 @@ collections which are host variables.
 .. code-block:: sql
 
     --  create DB with utf8: cubrid createdb en_US.utf8
-    
     --  collation is changed(utf8_bin -> iso88591_bin) because charset is changed.
     SET NAMES iso88591;
     CREATE TABLE t1(i int, e1 enum ('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', '01/01/2012'));
@@ -1408,7 +1413,7 @@ In the below example, a charset of a client is ISO-88591 than a charset of a ser
 
 .. code-block:: sql
 
-    --create db with en_US.utf8
+    -- create db with en_US.utf8
     SET NAMES iso88591;
     PREPARE s FROM 'SELECT FIELD (?, ?, ?, ?) INTO :result';
 
@@ -2412,11 +2417,16 @@ DB volume of 9.2 version and the lower versions of 9.1 version are not compatibl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As the DB volume of version 9.2 and versions lower than 9.1 are not compatible, the user should migrate the data using cubrid unloaddb/loaddb. For more details, see :doc:`/upgrade`\.
-   
-Change to CUBRID_CHARSET and CUBRID_MSG_LANG environment variables instead of CUBRID_LANG
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Since version 9.1, CUBRID_LANG environment variable is no longer used. To create or run the database, the CUBRID_CHARSET environment variable should be set because it determines the charset type. To output the utility message and the error message, the CUBRID_MSG_LANG environment variable is used. If the setting is omitted, the setting of CUBRID_CHARSET environment variable is used. 
+Locale(language and charset) is specified when creating DB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is changed as locale is specified when creating DB.
+   
+CUBRID_CHAERSET environment variable is removed
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As locale(language and charset) is specified when creating DB from 9.2 version, CUBRID_CHARSET is not used anymore.
 
 .. 4.4new
 
@@ -2425,13 +2435,36 @@ Since version 9.1, CUBRID_LANG environment variable is no longer used. To create
  
 From 2008 R4.4, when the value of the property "zeroDateTimeBehavior" in the connection URL is "round", the  zero date value of TIMESTAMP is changed into '1970-01-01 00:00:00'(GST) from '0001-01-01 00:00:00'. You should be cautious when using zero date in your application.
 
+
+Recommendation for installing CUBRID SH package in AIX(CUBRIDSUS-12251)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you install CUBRID SH package by using ksh in AIX OS, it fails with the following error. 
+  
+:: 
+  
+    0403-065 An incomplete or invalid multibyte character encountered. 
+  
+Therefore, it is recommended to use ksh93 or bash instead of ksh.
+  
+:: 
+  
+    $ ksh93 ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
+    $ bash ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
+
 Existing Cautions
 -----------------
 
-Modify how to process an error for the array of the result of executing several queries at once in the CCI application(CUBRIDSUS-9364)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CUBRID_LANG is removed, CUBRID_MSG_LANG is added
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When executing several queries at once in the CCI application, if an error has occurs from at least one query among the results of executing queries by using the cci_execute_array function, the cci_execute_batch function, the error code of the corresponding query was returned from 2008 R3.0 to 2008 R4.1. This problem has been fixed to return the number of the entire queries and check the error of each query by using the CCI_QUERY_RESULT_* macros from 2008 R4.3 and 9.1 version.
+From version 9.1, CUBRID_LANG environment variable is no longer used.
+To output the utility message and the error message, the CUBRID_MSG_LANG environment variable is used. 
+
+Modify how to process an error for the array of the result of executing several queries at once in the CCI application(CUBRIDSUS-9364)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When executing several queries at once in the CCI application, if an error has occurs from at least one query among the results of executing queries by using the cci_execute_array function, the cci_execute_batch function, the error code of the corresponding query was returned from 2008 R3.0 to 2008 R4.1. This problem has been fixed to return the number of the entire queries and check the error of each query by using the CCI_QUERY_RESULT_* macros from 2008 R4.3 and 9.1.
 
 In earlier versions of this modification, there is no way to know whether each query in the array is success or failure when an error occurs; therefore, it it requires certain conditions.
 

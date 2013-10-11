@@ -13,71 +13,64 @@ To create a table, use the **CREATE TABLE** statement.
 ::
 
     CREATE {TABLE | CLASS} table_name
-    [ <subclass_definition> ]
-    [ ( <column_definition> [,<table_constraint>]... ) ]
-    [ AUTO_INCREMENT = initial_value ] ]
-    [ CLASS ATTRIBUTE ( <column_definition_comma_list> ) ]
-    [ METHOD <method_definition_comma_list> ]
-    [ FILE <method_file_comma_list> ]
-    [ INHERIT <resolution_comma_list> ]
-    [ REUSE_OID ]
-    [ CHARSET charset_name ] [ COLLATE collation_name ]
-                       
-    <column_definition> ::=
-    column_name <data_type> [[ <default_or_shared> ] | [ <column_constraint> ]]...
-    
-    <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+    [<subclass_definition>]
+    [(<column_definition>, ... [, <table_constraint>, ...])] 
+    [AUTO_INCREMENT = initial_value]
+    [CLASS ATTRIBUTE (<column_definition>, ...)]
+    [INHERIT <resolution>, ...]
+    [REUSE_OID]
+    [CHARSET charset_name] [COLLATE collation_name]
 
-    <default_or_shared> ::=
-    {SHARED <value_specification> | DEFAULT <value_specification> } |
-    AUTO_INCREMENT [(seed, increment)]
-     
-    <column_constraint> ::=
-    [CONSTRAINT <constraint_name>] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition> }
-     
-    <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
+        <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
+        
+        <column_definition> ::= 
+                                column_name <data_type> [[<default_or_shared_or_ai>] | 
+                                [ <column_constraint> ]]
+        
+            <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
 
-    <collation_modifier_clause> ::= COLLATE { <char_string_literal> | <identifier> }
+            <default_or_shared_or_ai> ::=
+                                        {SHARED <value_specification> | 
+                                        DEFAULT <value_specification> } |
+                                        AUTO_INCREMENT [(seed, increment)]
+         
+            <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+         
+            <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
-    <table_constraint> ::=
-    [ CONSTRAINT [ <constraint_name> ] ] UNIQUE [ KEY | INDEX ]( column_name_comma_list ) |
-    [ { KEY | INDEX } [ <constraint_name> ]( column_name_comma_list ) |
-    [ PRIMARY KEY ( column_name_comma_list )] |
-    [ <referential_constraint> ]
+            <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
+
+        <table_constraint> ::=
+                                [CONSTRAINT [constraint_name]] 
+                                    { 
+                                        UNIQUE [KEY|INDEX](column_name, ...) |
+                                        {KEY|INDEX} [constraint_name](column_name, ...) |
+                                        PRIMARY KEY (column_name, ...) |
+                                        <referential_constraint>
+                                    }
+         
+            <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
+         
+                <referential_definition> ::=
+                                            REFERENCES [referenced_table_name] (column_name, ...)
+                                            [<referential_triggered_action> ...]
+         
+                    <referential_triggered_action> ::=
+                                                    {ON UPDATE <referential_action>} |
+                                                    {ON DELETE <referential_action>} 
+        
+                        <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
      
-    <referential_constraint> ::=
-    FOREIGN KEY [ <foreign_key_name> ]( column_name_comma_list ) <referential definition>
-     
-    <referential definition> ::=
-    REFERENCES [ referenced_table_name ] ( column_name_comma_list )
-    [ <referential_triggered_action> ... ]
-     
-    <referential_triggered_action> ::=
-    { ON UPDATE <referential_action> } |
-    { ON DELETE <referential_action> } 
-    
-    <referential_action> ::=
-    CASCADE | RESTRICT | NO ACTION | SET NULL
-     
-    <subclass_definition> ::=
-    { UNDER | AS SUBCLASS OF } table_name_comma_list
-     
-    <method_definition> ::=
-    [ CLASS ] method_name
-    [ ( [ argument_type_comma_list ] ) ]
-    [ result_type ]
-    [ FUNCTION  function_name ]
-     
-    <resolution> ::=
-    [ CLASS ] { column_name | method_name } OF superclass_name
-    [ AS alias ]
+    <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
 *   *table_name* : Specifies the name of the table to be created (maximum: 254 bytes).
 *   *column_name* : Specifies the name of the column to be created (maximum: 254 bytes).
 *   *column_type* : Specifies the data type of the column.
 *   [**SHARED** *value* | **DEFAULT** *value*] : Specifies the initial value of the column.
 *   *column_constraint* : Specifies the constraint of the column. Available constraints are **NOT NULL**, **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** (see :ref:`constraint-definition` For details).
-
+*   <default_or_shared_or_ai>: only one of DEFAULT, SHARED, AUTO_INCREMENT can be used.
+    When AUTO_INCREMENT is specified, "(seed, increment)" and "AUTO_INCREMENT = initial_value" cannot be defined at the same time.
+    
 .. code-block:: sql
 
     CREATE TABLE olympic2 (
@@ -101,21 +94,20 @@ A column is a set of data values of a particular simple type, one for each row o
     ::
 
         <column_definition> ::=
-        column_name <data_type> [[ <default_or_shared> ] | [ <column_constraint> ]]...
+                            column_name <data_type> [[ <default_or_shared_or_ai> ] | [ <column_constraint> ]]...
     
-        <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+            <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
 
-        <default_or_shared> ::=
-        {SHARED <value_specification> | DEFAULT <value_specification> } |
-        AUTO_INCREMENT [(seed, increment)]
+        <default_or_shared_or_ai> ::=
+                                {SHARED <value_specification> | DEFAULT <value_specification> } |
+                                AUTO_INCREMENT [(seed, increment)]
          
-        <column_constraint> ::=
-        NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+        <column_constraint> ::= NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>
          
         <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
 
         <collation_modifier_clause> ::= COLLATE { <char_string_literal> | <identifier> }
-
+        
 Column Name
 ^^^^^^^^^^^
 
@@ -311,28 +303,24 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 
 ::
 
-    <column_constraint> ::=
-    NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential definition>
+    <column_constraint> ::= NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>
      
     <table_constraint> ::=
-    [ CONSTRAINT [ <constraint_name> ] ] UNIQUE [ KEY | INDEX ]( column_name_comma_list ) |
-    [ { KEY | INDEX } <constraint_name> ( column_name_comma_list ) |
-    [ PRIMARY KEY ( column_name_comma_list )] |
-    [ <referential_constraint> ]
+                            [ CONSTRAINT [ <constraint_name> ] ] UNIQUE [ KEY | INDEX ]( column_name, ... ) |
+                            [ { KEY | INDEX } <constraint_name> ( column_name, ... ) |
+                            [ PRIMARY KEY ( column_name, ... )] |
+                            [ <referential_constraint> ]
      
-    <referential_constraint> ::=
-    FOREIGN KEY ( column_name_comma_list ) <referential definition>
+    <referential_constraint> ::= FOREIGN KEY ( column_name, ... ) <referential_definition>
      
-    <referential definition> ::=
-    REFERENCES [ referenced_table_name ] ( column_name_comma_list )
-    [ <referential_triggered_action> ... ]
+    <referential_definition> ::=
+                                REFERENCES [ referenced_table_name ] ( column_name, ... ) [ <referential_triggered_action> ... ]
      
     <referential_triggered_action> ::=
-    { ON UPDATE <referential_action> } |
-    { ON DELETE <referential_action> }
+                                    { ON UPDATE <referential_action> } |
+                                    { ON DELETE <referential_action> }
      
-    <referential_action> ::=
-    CASCADE | RESTRICT | NO ACTION  | SET NULL
+    <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
 
 NOT NULL Constraint
 ^^^^^^^^^^^^^^^^^^^
@@ -442,23 +430,20 @@ FOREIGN KEY Constraint
 
 A foreign key is a column or a set of columns that references the primary key in other tables in order to maintain reference relationship. The foreign key and the referenced primary key must have the same data type. Consistency between two tables is maintained by the foreign key referencing the primary key, which is called referential integrity. ::
 
-    [ CONSTRAINT < constraint_name > ]
-    FOREIGN KEY [ <foreign_key_name> ] ( column_name_comma_list1 )
-    REFERENCES [ referenced_table_name ] ( column_name_comma_list2 )
-    [ <referential_triggered_action> ]
+    [ CONSTRAINT < constraint_name > ] FOREIGN KEY [ <foreign_key_name> ] ( <column_name_comma_list1> ) REFERENCES [ referenced_table_name ] ( <column_name_comma_list2> ) [ <referential_triggered_action> ]
      
-    <referential_triggered_action> :
-    ON UPDATE <referential_action>
-    [ ON DELETE <referential_action> ]
-     
-    <referential_action> :
-    CASCADE | RESTRICT | NO ACTION | SET NULL
-
-*   *constraint_name* : Specifies the name of the table to be created.
-*   *foreign_key_name* : Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
-*   *column_name_comma_list1* : Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
-*   *referenced_table_name* : Specifies the name of the table to be referenced.
-*   *column_name_comma_list2* : Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
+        <referential_triggered_action> ::=
+                                            ON UPDATE <referential_action>
+                                            [ ON DELETE <referential_action> ]
+         
+        <referential_action> ::=
+            CASCADE | RESTRICT | NO ACTION | SET NULL
+        
+*   *constraint_name*: Specifies the name of the table to be created.
+*   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
+*   <column_name_comma_list1>: Specifies the name of the column to be defined as a foreign key after the **FOREIGN KEY** keyword. The column number of foreign keys defined and primary keys must be same.
+*   *referenced_table_name*: Specifies the name of the table to be referenced.
+*   <column_name_comma_list2>: Specifies the name of the referred primary key column after the **FOREIGN KEY** keyword.
 *   *referential_triggered_action* : Specifies the trigger action that responds to a certain operation in order to maintain referential integrity. **ON UPDATE** or **ON DELETE** can be specified. Each action can be defined multiple times, and the definition order is not significant.
 
     *   **ON UPDATE** : Defines the action to be performed when attempting to update the primary key referenced by the foreign key. You can use either **NO ACTION**, **RESTRICT**, or **SET NULL** option. The default is **RESTRICT**.
@@ -822,55 +807,50 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
 
 ::
 
-    ALTER [ <class_type> ] <table_name> <alter_clause> ;
+    ALTER [ <class_type> ] <table_name> <alter_clause>
      
-    <class_type> ::= TABLE | CLASS | VCLASS | VIEW
+        <class_type> ::= TABLE | CLASS | VCLASS | VIEW
      
-    <alter_clause> ::= ADD <alter_add> [ INHERIT <resolution_comma_list> ] | 
-                       ADD { KEY | INDEX } <index_name> (<index_col_name>) |
-                       ALTER [ COLUMN ] column_name SET DEFAULT <value_specification> |
-                       DROP <alter_drop> [ INHERIT <resolution_comma_list> ] |
-                       DROP { KEY | INDEX } index_name |
-                       DROP FOREIGN KEY constraint_name |
-                       DROP PRIMARY KEY |                   
-                       RENAME <alter_rename> [ INHERIT <resolution_comma_list> ] |
-                       CHANGE <alter_change> |
-                       INHERIT <resolution_comma_list>
-                       AUTO_INCREMENT = <initial_value>
+        <alter_clause> ::= ADD <alter_add> [ INHERIT <resolution>, ... ] | 
+                           ADD { KEY | INDEX } <index_name> (<index_col_name>) |
+                           ALTER [ COLUMN ] column_name SET DEFAULT <value_specification> |
+                           DROP <alter_drop> [ INHERIT <resolution>, ... ] |
+                           DROP { KEY | INDEX } index_name |
+                           DROP FOREIGN KEY constraint_name |
+                           DROP PRIMARY KEY |                   
+                           RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
+                           CHANGE <alter_change> |
+                           INHERIT <resolution>, ...
+                           AUTO_INCREMENT = <initial_value>
+                           
+            <alter_add> ::= [ ATTRIBUTE | COLUMN ] [(]<class_element>, ...[)] [ FIRST | AFTER old_column_name ] |
+                            CLASS ATTRIBUTE <column_definition>, ... |
+                            CONSTRAINT < constraint_name > <column_constraint> ( column_name )|
+                            QUERY <select_statement> |
+                            SUPERCLASS <class_name>, ...
+                            
+                <class_element> ::= <column_definition> | <table_constraint>
      
-    <alter_add> ::= [ ATTRIBUTE | COLUMN ] [(]<class_element_comma_list>[)] [ FIRST | AFTER old_column_name ] |
-                    CLASS ATTRIBUTE <column_definition_comma_list> |
-                    CONSTRAINT < constraint_name > <column_constraint> ( column_name )|
-                    FILE <file_name_comma_list> |
-                    METHOD <method_definition_comma_list> |
-                    QUERY <select_statement> |
-                    SUPERCLASS <class_name_comma_list>
+                <column_constraint> ::= UNIQUE [ KEY ] | PRIMARY KEY | FOREIGN KEY
      
-    <alter_change> ::= FILE <file_path_name> AS <file_path_name> |
-                       METHOD <method_definition_comma_list> |
-                       QUERY [ <unsigned_integer_literal> ] <select_statement> |
-                       <column_name> DEFAULT <value_specification>
      
-    <alter_drop> ::= [ ATTRIBUTE | COLUMN | METHOD ]
-                     <column_name_comma_list> |
-                     FILE <file_name_comma_list> |
-                     QUERY [ <unsigned_integer_literal> ] |
-                     SUPERCLASS <class_name_comma_list> |
-                     CONSTRAINT <constraint_name>
-     
-    <alter_rename> ::= [ ATTRIBUTE | COLUMN | METHOD ]
-                       <old_column_name> AS <new_column_name> |
-                       FUNCTION OF <column_name> AS <function_name>
-                       FILE <file_path_name> AS <file_path_name>
-     
-    <resolution> ::= { column_name | method_name } OF <superclass_name>
-                     [ AS alias ]
-     
-    <class_element> ::= <column_definition> | <table_constraint>
-     
-    <column_constraint> ::= UNIQUE [ KEY ] | PRIMARY KEY | FOREIGN KEY
-     
-    <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
+            <alter_drop> ::= [ ATTRIBUTE | COLUMN ]
+                             column_name, ... |
+                             QUERY [ <unsigned_integer_literal> ] |
+                             SUPERCLASS class_name, ... |
+                             CONSTRAINT constraint_name
+                             
+            <alter_rename> ::= [ ATTRIBUTE | COLUMN ]
+                               <old_column_name> AS <new_column_name> |
+                               FUNCTION OF <column_name> AS <function_name>
+                             
+            <alter_change> ::= 
+                               QUERY [ <unsigned_integer_literal> ] <select_statement> |
+                               <column_name> DEFAULT <value_specification>
+             
+            <resolution> ::= { column_name } OF <superclass_name> [ AS alias ]
+
+            <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
 .. warning::
 
@@ -893,7 +873,7 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
               | AUTO_INCREMENT [(seed, increment)] ] |
           [ UNIQUE [ KEY ] |
               [ PRIMARY KEY | FOREIGN KEY REFERENCES
-                  [ referenced_table_name ]( column_name_comma_list )
+                  [ referenced_table_name ]( column_name, ... )
                   [ <referential_triggered_action> ... ]
               ]
           ] } ...
@@ -1001,20 +981,18 @@ You can add a new constraint by using the **ADD CONSTRAINT** clause.
 By default, the index created when you add **PRIMARY KEY** constraints is created in ascending order, and you can define the key sorting order by specifying the **ASC** or **DESC** keyword next to the column name. ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    ADD CONSTRAINT < constraint_name > column_constraint ( column_name_comma_list )
+    ADD CONSTRAINT constraint_name <column_constraint> ( column_name, ... )
      
-    column_constraint ::=
-    UNIQUE [ KEY ] |
-    PRIMARY KEY |
-    FOREIGN KEY [ <foreign_key_name> ] REFERENCES [referenced_table_name]( column_name_comma_list )
-                           [ <referential_triggered_action> ... ]
+        <column_constraint> ::=
+                                UNIQUE [ KEY ] |
+                                PRIMARY KEY |
+                                FOREIGN KEY [ <foreign_key_name> ] REFERENCES [referenced_table_name]( column_name, ... ) [ <referential_triggered_action> ... ]
      
-    <referential_triggered_action> ::=
-    { ON UPDATE <referential_action> } |
-    { ON DELETE <referential_action> }
-     
-    <referential_action> ::=
-    CASCADE | RESTRICT | NO ACTION | SET NULL
+            <referential_triggered_action> ::=
+                                                { ON UPDATE <referential_action> } |
+                                                { ON DELETE <referential_action> } 
+                                                
+                <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : Specifies the name of a table that has a constraint to be added.
 *   *constraint_name* : Specifies the name of a constraint to be added, or it can be omitted. If omitted, a name is automatically assigned(maximum: 254 bytes).
@@ -1461,7 +1439,51 @@ You can change the name of the column by using the **RENAME COLUMN** clause. ::
 
 .. code-block:: sql
 
+    CREATE TABLE a_tbl (id INT, name VARCHAR(50));
     ALTER TABLE a_tbl RENAME COLUMN name AS name1;
+
+.. _rename-index: 
+
+RENAME INDEX/CONSTRAINT Clause 
+------------------------------ 
+
+:: 
+     
+    ALTER TABLE table_name RENAME {CONSTRAINT | {INDEX|KEY}} old_name {AS|TO} new_name 
+
+*   CONSTRAINT: UNIQUE, PRIMARY KEY, FOREIGN KEY
+*   INDEX or KEY: INDEX (Functionally, this is the same as changing an index name in :ref:`alter-index`) 
+
+*   *old_name*: old name of an index or a constraint
+*   *new_name*: new name of an index or a constraint
+
+.. note::
+
+    *   The name of an index or a constraint in an inherited table cannot be changed.
+    *   The name of an index or a constraint which belongs to a partitioning table.
+
+::
+
+    CREATE TABLE a_tbl (
+      id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+      phone VARCHAR(10),
+      name VARCHAR(50),
+      INDEX i_id_name(id, name)
+    );
+    
+    ALTER TABLE a_tbl RENAME INDEX i_id_name  AS i_in;
+    
+    DROP TABLE a_tbl;
+    CREATE TABLE a_tbl ( 
+        id INT NOT NULL DEFAULT 0,
+        phone VARCHAR(10),
+        name VARCHAR(50),
+        CONSTRAINT c_u UNIQUE KEY (name), 
+        CONSTRAINT pk_id PRIMARY KEY (id)
+    );
+    
+    ALTER TABLE a_tbl RENAME CONSTRAINT c_u AS c_unique_name;
+    ALTER TABLE a_tbl RENAME CONSTRAINT pk_id AS primary_key_id;
 
 DROP COLUMN Clause
 ------------------
@@ -1477,7 +1499,7 @@ You can delete a column in a table by using the **DROP COLUMN** clause. You can 
 .. code-block:: sql
 
     ALTER TABLE a_tbl DROP COLUMN age1,age2,age3;
-
+    
 DROP CONSTRAINT Clause
 ----------------------
 

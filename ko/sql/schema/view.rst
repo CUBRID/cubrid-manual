@@ -11,53 +11,23 @@ CREATE VIEW
 
 ::
 
-    CREATE [OR REPLACE] {VIEW | VCLASS} <view_name>
-                               [ <subclass_definition> ]
-                               [ ( <view_column_def_comma_list> ) ]
-                               [ CLASS ATTRIBUTE
-                                 ( <column_definition_comma_list> ) ]
-                               [ METHOD <method_definition_comma_list> ]
-                               [ FILE <method_file_comma_list> ]
-                               [ INHERIT <resolution_comma_list> ]
-                               [ AS <select_statement> ]
-                               [ WITH CHECK OPTION ]
+    CREATE [OR REPLACE] {VIEW | VCLASS} view_name
+    [<subclass_definition>]
+    [(view_column_name, ...)]
+    [INHERIT <resolution>, ...]
+    [AS <select_statement>]
+    [WITH CHECK OPTION] ;
+                                    
+        <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
      
-    <view_column_definition> ::= <column_definition> | <column_name>
-     
-    <column_definition> :
-    column_name column_type [ <default_or_shared> ] [ <column_constraint_list>]
-     
-    <default_or_shared> :
-    {SHARED [ <value_specification> ] | DEFAULT <value_specification> } |
-    AUTO_INCREMENT [ (seed, increment) ]
-     
-    <column_constraint> :
-    NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY REFERENCES...
-     
-    <subclass_definition> :
-    { UNDER | AS SUBCLASS OF } table_name_comma_list
-     
-    <method_definition> :
-    [ CLASS ] method_name
-    [ ( [ argument_type_comma_list ] ) ]
-    [ result_type ]
-    [ FUNCTION function_name ]
-     
-    <resolution> :
-    [ CLASS ] { column_name | method_name } OF superclass_name
-    [ AS alias ]
+        <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
-*   **OR REPLACE** : **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name* 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
+*   **OR REPLACE**: **CREATE** 뒤에 **OR REPLACE** 키워드가 명시되면, *view_name* 이 기존의 뷰와 이름이 중복되더라도 에러를 출력하지 않고 기존의 뷰를 새로운 뷰로 대체한다.
 
-*   *view_name* : 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
-*   *view_column_definition*
-
-    *   *column_name* : 뷰의 칼럼을 정의한다.
-    *   *column_type* : 칼럼의 데이터 타입을 정의한다.
-    
-*   **AS** *select_statement* : 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가 생성된다.
-
-*   **WITH CHECK OPTION** : 이 옵션이 명시되면 *select_statement* 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
+*   *view_name*: 생성하려는 뷰의 이름을 지정한다. 뷰의 이름은 데이터베이스 내에서 고유해야 한다.
+*   *view_column_name*: 생성하려는 뷰의 칼럼 이름을 지정한다.
+*   **AS** *<select_statement>*: 유효한 **SELECT** 문이 명시되어야 한다. 이를 기반으로 뷰가 생성된다.
+*   **WITH CHECK OPTION**: 이 옵션이 명시되면 *<select_statement>* 내 **WHERE** 절에 명시된 조건식을 만족하는 경우에만 업데이트 또는 삽입이 가능하다. 조건식을 위반하는 가상 테이블에 대한 갱신을 허용하지 않기 위해서 사용한다.
 
 **예제**
 
@@ -139,15 +109,14 @@ ADD QUERY 절
 
 **ALTER VIEW** 문에 **ADD QUERY** 절을 사용하여 뷰의 질의 명세부에 질의를 추가할 수 있다. 뷰 생성 시 정의된 질의문에는 1이 부여되고, **ADD QUERY** 절에서 추가한 질의문에는 2가 부여된다. ::
 
-    ALTER [ VIEW | VCLASS ] view_name
-    ADD QUERY select_statement
-    [ INHERIT resolution [ {, resolution }_ ] ]
+    ALTER [VIEW | VCLASS] view_name
+    ADD QUERY <select_statement>
+    [INHERIT <resolution> , ...] ;
      
-    resolution :
-    { column_name | method_name } OF superclass_name [ AS alias ]
+        <resolution> ::= {column_name} OF superclass_name [AS alias]
 
-*   *view_name* : 질의를 추가할 뷰의 이름 명시한다.
-*   *select_statement* : 추가할 질의를 명시한다.
+*   *view_name*: 질의를 추가할 뷰의 이름 명시한다.
+*   *<select_statement>*: 추가할 질의를 명시한다.
 
 **예제**
 
@@ -187,10 +156,10 @@ AS SELECT 절
 
 **ALTER VIEW** 문에 **AS SELECT** 절을 사용하여 가상 테이블에 정의된 **SELECT** 질의를 변경할 수 있다. 이는 **CREATE OR REPLACE** 문과 유사하게 동작한다. **ALTER VIEW** 문의 **CHANGE QUERY** 절에 질의 번호 1을 명시하여 질의를 변경할 수도 있다. ::
 
-    ALTER [ VIEW | VCLASS ] view_name AS select_statement
+    ALTER [VIEW | VCLASS] view_name AS <select_statement> ;
 
-*   *view_name* : 변경할 가상 테이블의 이름을 명시한다.
-*   *select_statement* : 가상 테이블 생성 시 정의된 **SELECT** 문을 대체할 새로운 질의문을 명시한다.
+*   *view_name*: 변경할 가상 테이블의 이름을 명시한다.
+*   *<select_statement>*: 가상 테이블 생성 시 정의된 **SELECT** 문을 대체할 새로운 질의문을 명시한다.
 
 **예제**
 
@@ -212,12 +181,12 @@ CHANGE QUERY 절
 
 **ALTER VIEW** 문의 **CHANGE QUERY** 절을 사용하여 뷰 질의 명세부에 정의된 질의를 변경할 수 있다. ::
 
-    ALTER [ VIEW | VCLASS ] view_name
-        CHANGE QUERY [ integer ] select_statement [ ; ]
+    ALTER [VIEW | VCLASS] view_name
+    CHANGE QUERY [integer] <select_statement> ;
     
-*   *view_name* : 변경할 뷰의 이름을 명시한다.
-*   *integer* : 변경할 질의의 번호를 명시한다. 기본값은 1이다.
-*   *select_statement* : 질의 번호가 *integer* 인 질의를 대치할 새로운 질의를 명시한다.
+*   *view_name*: 변경할 뷰의 이름을 명시한다.
+*   *integer*: 변경할 질의의 번호를 명시한다. 기본값은 1이다.
+*   *<select_statement>*: 질의 번호가 *integer* 인 질의를 대치할 새로운 질의를 명시한다.
 
 **예제**
 
@@ -287,7 +256,7 @@ DROP VIEW
 
 뷰는 **DROP VIEW** 문을 이용하여 삭제할 수 있다. 뷰를 삭제하는 방법은 일반 테이블을 삭제하는 방법과 동일하다. IF EXISTS 절을 함께 사용하면 해당 뷰가 존재하지 않더라도 에러가 발생하지 않는다. ::
 
-    DROP [ VIEW | VCLASS ] [ IF EXISTS ] view_name [ { ,view_name , ... } ]
+    DROP [VIEW | VCLASS] [IF EXISTS] view_name [{ ,view_name , ... }] ;
 
 *   *view_name* : 삭제하려는 뷰의 이름을 지정한다.
 
@@ -302,7 +271,7 @@ RENAME VIEW
 
 뷰의 이름은 **RENAME VIEW** 문을 사용하여 변경할 수 있다. ::
 
-    RENAME [ TABLE |CLASS | VIEW | VCLASS ] old_view_name AS new_view_name [ ; ]
+    RENAME [VIEW | VCLASS] old_view_name {AS | TO} new_view_name[, old_view_name {AS | TO} new_view_name, ...] ;
 
 *   *old_view_name* : 변경할 뷰의 이름을 지정한다.
 *   *new_view_name* : 뷰의 새로운 이름을 지정한다.

@@ -11,53 +11,23 @@ Use **CREATE VIEW** statement to create a view. For how to write view name, see 
 
 ::
 
-    CREATE [OR REPLACE] {VIEW | VCLASS} <view_name>
-                               [ <subclass_definition> ]
-                               [ ( <view_column_def_comma_list> ) ]
-                               [ CLASS ATTRIBUTE
-                                 ( <column_definition_comma_list> ) ]
-                               [ METHOD <method_definition_comma_list> ]
-                               [ FILE <method_file_comma_list> ]
-                               [ INHERIT <resolution_comma_list> ]
-                               [ AS <select_statement> ]
-                               [ WITH CHECK OPTION ]
+    CREATE [OR REPLACE] {VIEW | VCLASS} view_name
+    [<subclass_definition>]
+    [(view_column_name, ...)]
+    [INHERIT <resolution>, ...]
+    [AS <select_statement>]
+    [WITH CHECK OPTION] ;
+                                    
+        <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
      
-    <view_column_definition> ::= <column_definition> | <column_name>
-     
-    <column_definition> :
-    column_name column_type [ <default_or_shared> ] [ <column_constraint_list>]
-     
-    <default_or_shared> :
-    {SHARED [ <value_specification> ] | DEFAULT <value_specification> } |
-    AUTO_INCREMENT [ (seed, increment) ]
-     
-    <column_constraint> :
-    NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY REFERENCES...
-     
-    <subclass_definition> :
-    { UNDER | AS SUBCLASS OF } table_name_comma_list
-     
-    <method_definition> :
-    [ CLASS ] method_name
-    [ ( [ argument_type_comma_list ] ) ]
-    [ result_type ]
-    [ FUNCTION function_name ]
-     
-    <resolution> :
-    [ CLASS ] { column_name | method_name } OF superclass_name
-    [ AS alias ]
+        <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
-*   **OR REPLACE** : If the keyword **OR REPLACE** is specified after **CREATE**, the existing view is replaced by a new one without displaying any error message, even when the *view_name* overlaps with the existing view name.
+*   **OR REPLACE**: If the keyword **OR REPLACE** is specified after **CREATE**, the existing view is replaced by a new one without displaying any error message, even when the *view_name* overlaps with the existing view name.
 
-*   *view_name* : Specifies the name of a view to be created. It must be unique in a database.
-*   *view_column_definition*
-
-    *   *column_name* : Defines the column of a view.
-    *   *column_type* : Specifies the data type of a column.
-
-*   **AS** *select_statement* : A valid **SELECT** statement must be specified. A view is created based on this.
-
-*   **WITH CHECK OPTION** : If this option is specified, the update or insert operation is possible only when the condition specified in the **WHERE** clause of the *select_statement* is satisfied. Therefore, this option is used to disallow the update of a virtual table that violates the condition.
+*   *view_name*: Specifies the name of a view to be created. It must be unique in a database.
+*   *view_column_name*: Defines the column of a view.
+*   **AS** *<select_statement>*: A valid **SELECT** statement must be specified. A view is created based on this.
+*   **WITH CHECK OPTION**: If this option is specified, the update or insert operation is possible only when the condition specified in the **WHERE** clause of the *select_statement* is satisfied. Therefore, this option is used to disallow the update of a virtual table that violates the condition.
 
 **Example**
 
@@ -139,15 +109,14 @@ ADD QUERY Clause
 
 You can add a new query to a query specification by using the **ADD QUERY** clause of the **ALTER VIEW** statement. 1 is assigned to the query defined when a virtual table was created, and 2 is assigned to the query added by the **ADD QUERY** clause. ::
 
-    ALTER [ VIEW | VCLASS ] view_name
-    ADD QUERY select_statement
-    [ INHERIT resolution [ {, resolution }_ ] ]
+    ALTER [VIEW | VCLASS] view_name
+    ADD QUERY <select_statement>
+    [INHERIT <resolution> , ...] ;
      
-    resolution :
-    { column_name | method_name } OF superclass_name [ AS alias ]
+        <resolution> ::= {column_name} OF superclass_name [AS alias]
 
-*   *view_name* : Specifies the name of a view where the query to be added.
-*   *select_statement* : Specifies the query to be added.
+*   *view_name*: Specifies the name of a view where the query to be added.
+*   *<select_statement>*: Specifies the query to be added.
 
 **Example**
 
@@ -187,10 +156,10 @@ AS SELECT Clause
 
 You can change the **SELECT** query defined in the virtual table by using the **AS SELECT** clause in the **ALTER VIEW** statement. This function is working like the **CREATE OR REPLACE** statement. You can also change the query by specifying the query number 1 in the **CHANGE QUERY** clause of the **ALTER VIEW** statement. ::
 
-    ALTER [ VIEW | VCLASS ] view_name AS select_statement
+    ALTER [VIEW | VCLASS] view_name AS <select_statement> ;
     
-*   *view_name* : Specifies the name of a view to be modified.
-*   *select_statement* : Specifies the new query statement to replace the **SELECT** statement defined when a view is created.
+*   *view_name*: Specifies the name of a view to be modified.
+*   *<select_statement>*: Specifies the new query statement to replace the **SELECT** statement defined when a view is created.
 
 **Example**
 
@@ -212,12 +181,12 @@ CHANGE QUERY Clause
 
 You can change the query defined in the query specification by using the **CHANGE QUERY** clause reserved word of the **ALTER VIEW** statement. ::
 
-    ALTER [ VIEW | VCLASS ] view_name
-        CHANGE QUERY [ integer ] select_statement [ ; ]
+    ALTER [VIEW | VCLASS] view_name
+    CHANGE QUERY [integer] <select_statement> ;
 
-*   *view_name* : Specifies the name of a view to be modified.
-*   *integer* : Specifies the number value of the query to be modified. The default value is 1.
-*   *select_statement* : Specifies the new query statement to replace the query whose query number is *integer*.
+*   *view_name*: Specifies the name of a view to be modified.
+*   *integer*: Specifies the number value of the query to be modified. The default value is 1.
+*   *<select_statement>*: Specifies the new query statement to replace the query whose query number is *integer*.
 
 **Example**
 
@@ -287,7 +256,7 @@ DROP VIEW
 
 You can drop a view by using the **DROP VIEW** clause. The way to drop a view is the same as to drop a regular table.  If you also specify IF EXISTS clause, no error will be happened even if a target view does not exist. ::
 
-    DROP [ VIEW | VCLASS ] [ IF EXISTS ] view_name [ { ,view_name , ... } ]
+    DROP [VIEW | VCLASS] [IF EXISTS] view_name [{ ,view_name , ... }] ;
     
 *   *view_name* : Specifies the name of a view to be dropped.
 
@@ -302,8 +271,8 @@ RENAME VIEW
 
 You can change the view name by using the **RENAME VIEW** statement. ::
 
-    RENAME [ TABLE |CLASS | VIEW | VCLASS ] old_view_name AS new_view_name [ ; ]
-
+    RENAME [VIEW | VCLASS] old_view_name {AS | TO} new_view_name[, old_view_name {AS | TO} new_view_name, ...] ;
+    
 *   *old_view_name* : Specifies the name of a view to be modified.
 *   *new_view_name* : Specifies the new name of a view.
 

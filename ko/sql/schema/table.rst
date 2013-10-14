@@ -19,49 +19,56 @@ CREATE TABLE
     [CLASS ATTRIBUTE (<column_definition>, ...)]
     [INHERIT <resolution>, ...]
     [REUSE_OID]
-    [CHARSET charset_name] [COLLATE collation_name]
+    [CHARSET charset_name] [COLLATE collation_name];
 
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         
         <column_definition> ::= 
-                                column_name <data_type> [[<default_or_shared_or_ai>] | 
-                                [ <column_constraint> ]]
+            column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]]
         
             <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
 
+                <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
+
+                <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
+            
             <default_or_shared_or_ai> ::=
-                                        {SHARED <value_specification> | 
-                                        DEFAULT <value_specification> } |
-                                        AUTO_INCREMENT [(seed, increment)]
+                SHARED <value_specification> | 
+                DEFAULT <value_specification>  |
+                AUTO_INCREMENT [(seed, increment)]
          
             <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+
+                <referential_definition> ::=
+                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
          
-            <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
-
-            <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
-
+                    <referential_triggered_action> ::=
+                        ON UPDATE <referential_action> |
+                        ON DELETE <referential_action> 
+        
+                        <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+                        
         <table_constraint> ::=
-                                [CONSTRAINT [constraint_name]] 
-                                    { 
-                                        UNIQUE [KEY|INDEX](column_name, ...) |
-                                        {KEY|INDEX} [constraint_name](column_name, ...) |
-                                        PRIMARY KEY (column_name, ...) |
-                                        <referential_constraint>
-                                    }
+            [CONSTRAINT [constraint_name]] 
+            { 
+                UNIQUE [KEY|INDEX](column_name, ...) |
+                {KEY|INDEX} [constraint_name](column_name, ...) |
+                PRIMARY KEY (column_name, ...) |
+                <referential_constraint>
+            }
          
             <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
          
                 <referential_definition> ::=
-                                            REFERENCES [referenced_table_name] (column_name, ...)
-                                            [<referential_triggered_action> ...]
+                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
-                                                    {ON UPDATE <referential_action>} |
-                                                    {ON DELETE <referential_action>} 
+                        ON UPDATE <referential_action> |
+                        ON DELETE <referential_action> 
         
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
      
-    <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
+        <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
 *   *table_name* : 생성할 테이블의 이름을 지정한다(최대 254바이트).
 *   *column_name* : 생성할 칼럼의 이름을 지정한다(최대 254바이트).
@@ -74,14 +81,14 @@ CREATE TABLE
 .. code-block:: sql
 
     CREATE TABLE olympic2 (
-       host_year        INT    NOT NULL PRIMARY KEY,
-       host_nation      VARCHAR(40) NOT NULL,
-       host_city        VARCHAR(20) NOT NULL,
-       opening_date     DATE        NOT NULL,
-       closing_date     DATE        NOT NULL,
-       mascot           VARCHAR(20),
-       slogan           VARCHAR(40),
-       introduction     VARCHAR(1500)
+        host_year        INT    NOT NULL PRIMARY KEY,
+        host_nation      VARCHAR(40) NOT NULL,
+        host_city        VARCHAR(20) NOT NULL,
+        opening_date     DATE        NOT NULL,
+        closing_date     DATE        NOT NULL,
+        mascot           VARCHAR(20),
+        slogan           VARCHAR(40),
+        introduction     VARCHAR(1500)
     );
 
 .. _column-definition:
@@ -91,22 +98,23 @@ CREATE TABLE
 
 칼럼은 테이블에서 각 열에 해당하는 항목이며, 칼럼은 칼럼 이름과 데이터 타입을 명시하여 정의한다. 
 
-    ::
+::
 
-        <column_definition> ::=
-                            column_name <data_type> [[ <default_or_shared_or_ai> ] | [ <column_constraint> ]]...
+    <column_definition> ::= 
+        column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]]
     
-            <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+        <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
 
-            <default_or_shared_or_ai> ::=
-                                    {SHARED <value_specification> | DEFAULT <value_specification> } |
-                                    AUTO_INCREMENT [(seed, increment)]
-             
-            <column_constraint> ::= NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>
-             
-            <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
+            <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
-            <collation_modifier_clause> ::= COLLATE { <char_string_literal> | <identifier> }
+            <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
+        
+        <default_or_shared_or_ai> ::=
+            SHARED <value_specification> | 
+            DEFAULT <value_specification>  |
+            AUTO_INCREMENT [(seed, increment)]
+     
+        <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
 
 칼럼 이름
 ^^^^^^^^^
@@ -302,24 +310,27 @@ CREATE TABLE
 
 ::
 
-    <column_constraint> ::= NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>
-     
+    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+
     <table_constraint> ::=
-                            [ CONSTRAINT [ <constraint_name> ] ] UNIQUE [ KEY | INDEX ]( column_name, ... ) |
-                            [ { KEY | INDEX } <constraint_name> ( column_name, ... ) |
-                            [ PRIMARY KEY ( column_name, ... )] |
-                            [ <referential_constraint> ]
+        [CONSTRAINT [constraint_name]] 
+        { 
+            UNIQUE [KEY|INDEX](column_name, ...) |
+            {KEY|INDEX} [constraint_name](column_name, ...) |
+            PRIMARY KEY (column_name, ...) |
+            <referential_constraint>
+        }
      
-    <referential_constraint> ::= FOREIGN KEY ( column_name, ... ) <referential_definition>
+        <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
      
-    <referential_definition> ::=
-                                REFERENCES [ referenced_table_name ] ( column_name, ... ) [ <referential_triggered_action> ... ]
+            <referential_definition> ::=
+                REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
      
-    <referential_triggered_action> ::=
-                                    { ON UPDATE <referential_action> } |
-                                    { ON DELETE <referential_action> }
-     
-    <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
+                <referential_triggered_action> ::=
+                    ON UPDATE <referential_action> |
+                    ON DELETE <referential_action> 
+    
+                    <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 NOT NULL 제약
 ^^^^^^^^^^^^^
@@ -402,26 +413,26 @@ PRIMARY KEY 제약
     CREATE TABLE pk_tbl (a INT, b INT, PRIMARY KEY (a, b DESC));
 
     CREATE TABLE const_tbl7 (
-      id INT NOT NULL,
-      phone VARCHAR,
-      CONSTRAINT pk_id PRIMARY KEY (id)
+        id INT NOT NULL,
+        phone VARCHAR,
+        CONSTRAINT pk_id PRIMARY KEY (id)
     );
      
     -- CONSTRAINT keyword
     CREATE TABLE const_tbl8 (
-      id INT NOT NULL PRIMARY KEY,
-      phone VARCHAR
+        id INT NOT NULL PRIMARY KEY,
+        phone VARCHAR
     );
      
     -- primary key is defined on multiple columns
     CREATE TABLE const_tbl8 (
-      host_year    INT NOT NULL,
-      event_code   INT NOT NULL,
-      athlete_code INT NOT NULL,
-      medal        CHAR (1)  NOT NULL,
-      score        VARCHAR (20),
-      unit         VARCHAR (5),
-      PRIMARY KEY (host_year, event_code, athlete_code, medal)
+        host_year    INT NOT NULL,
+        event_code   INT NOT NULL,
+        athlete_code INT NOT NULL,
+        medal        CHAR (1)  NOT NULL,
+        score        VARCHAR (20),
+        unit         VARCHAR (5),
+        PRIMARY KEY (host_year, event_code, athlete_code, medal)
     );
 
 FOREIGN KEY 제약
@@ -429,46 +440,45 @@ FOREIGN KEY 제약
 
 외래키(foreign key)란 참조 관계에 있는 다른 테이블의 기본키를 참조하는 칼럼 또는 칼럼들의 집합을 말한다. 외래키와 참조되는 기본키는 동일한 데이터 타입을 가져야 한다. 외래키가 기본키를 참조함에 따라 연관되는 두 테이블 사이에는 일관성이 유지되는데, 이를 참조 무결성(referential integrity)이라 한다. ::
 
-    [ CONSTRAINT < constraint_name > ] FOREIGN KEY [ <foreign_key_name> ] ( <column_name_comma_list1> ) REFERENCES [ referenced_table_name ] ( <column_name_comma_list2> ) [ <referential_triggered_action> ]
+    [CONSTRAINT < constraint_name >] FOREIGN KEY [<foreign_key_name>] (<column_name_comma_list1>) REFERENCES [referenced_table_name] (<column_name_comma_list2>) [<referential_triggered_action> ...]
      
         <referential_triggered_action> ::=
-                                            ON UPDATE <referential_action>
-                                            [ ON DELETE <referential_action> ]
-         
-        <referential_action> ::=
-            CASCADE | RESTRICT | NO ACTION | SET NULL
+            ON UPDATE <referential_action> |
+            ON DELETE <referential_action>
+
+            <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
 
 *   *constraint_name*: 제약 조건의 이름을 지정한다.
-*   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정한다. 생략할 수 있으며, 이 값을 지정하면 *constraint_name* 을 무시하고 이 이름을 사용한다.
+*   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정한다. 생략할 수 있으며, 이 값을 지정하면 *constraint_name*\ 을 무시하고 이 이름을 사용한다.
 *   <column_name_comma_list1>: **FOREIGN KEY** 키워드 뒤에 외래키로 정의하고자 하는 칼럼 이름을 명시한다. 정의되는 외래키의 칼럼 개수는 참조되는 기본키의 칼럼 개수와 동일해야 한다.
 *   *referenced_table_name*: 참조되는 테이블의 이름을 지정한다.
 *   <column_name_comma_list2>: **REFERENCES** 키워드 뒤에 참조되는 기본키 칼럼 이름을 지정한다.
 *   *referential_triggered_action*: 참조 무결성이 유지되도록 특정 연산에 따라 대응하는 트리거 동작을 정의하는 것이며, **ON UPDATE**, **ON DELETE**\ 가 올 수 있다. 각각의 동작은 중복하여 정의 가능하며, 정의 순서는 무관하다.
 
-    *   **ON UPDATE**: 외래키가 참조하는 기본키 값을 갱신하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT** 이다.
-    *   **ON DELETE**: 외래키가 참조하는 기본키 값을 삭제하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **CASCADE**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT** 이다.
+    *   **ON UPDATE**: 외래키가 참조하는 기본키 값을 갱신하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT**\ 이다.
+    *   **ON DELETE**: 외래키가 참조하는 기본키 값을 삭제하려 할 때 수행할 작업을 정의한다. 사용자는 **NO ACTION**, **RESTRICT**, **CASCADE**, **SET NULL** 중 하나의 옵션을 지정할 수 있으며, 기본은 **RESTRICT**\ 이다.
 
 *   *referential_ action*: 기본키 값이 삭제 또는 갱신될 때 이를 참조하는 외래키의 값을 유지할 것인지 또는 변경할 것인지 지정할 수 있다.
 
     *   **CASCADE**: 기본키가 삭제되면 외래키도 삭제한다. **ON DELETE** 연산에 대해서만 지원된다.
     *   **RESTRICT**: 기본키 값이 삭제되거나 업데이트되지 않도록 제한한다. 삭제 또는 업데이트를 시도하는 트랜잭션은 롤백된다.
-    *   **SET NULL**: 기본키가 삭제되거나 업데이트되면, 이를 참조하는 외래키 칼럼 값을 **NULL** 로 업데이트한다.
+    *   **SET NULL**: 기본키가 삭제되거나 업데이트되면, 이를 참조하는 외래키 칼럼 값을 **NULL**\ 로 업데이트한다.
     *   **NO ACTION**: **RESTRICT** 옵션과 동일하게 동작한다.
 
 .. code-block:: sql
 
     -- creating two tables where one is referencing the other
     CREATE TABLE a_tbl (
-      id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-      phone VARCHAR(10)
+        id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+        phone VARCHAR(10)
     );
      
     CREATE TABLE b_tbl (
-      ID INT NOT NULL,
-      name VARCHAR (10) NOT NULL,
-      CONSTRAINT pk_id PRIMARY KEY (id),
-      CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES a_tbl (id)
-      ON DELETE CASCADE ON UPDATE RESTRICT
+        ID INT NOT NULL,
+        name VARCHAR (10) NOT NULL,
+        CONSTRAINT pk_id PRIMARY KEY (id),
+        CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES a_tbl (id)
+        ON DELETE CASCADE ON UPDATE RESTRICT
     );
      
     INSERT INTO a_tbl VALUES (1,'111-1111'), (2,'222-2222'), (3, '333-3333');
@@ -540,9 +550,9 @@ KEY 또는 INDEX
 .. code-block:: sql
 
     CREATE TABLE const_tbl (
-      id VARCHAR,
-      name VARCHAR,
-      CONSTRAINT UNIQUE INDEX (id DESC, name ASC)
+        id VARCHAR,
+        name VARCHAR,
+        CONSTRAINT UNIQUE INDEX (id DESC, name ASC)
     );
      
     INSERT INTO const_tbl VALUES ('1000', 'john'), ('1000','johnny'), ('1000', 'jone');
@@ -696,8 +706,7 @@ CREATE TABLE AS SELECT
 
 ::
 
-    CREATE {TABLE | CLASS} <table_name> [( <column_definition> [,<table_constraint>]... )]
-    [REPLACE] AS <select_statement>;
+    CREATE {TABLE | CLASS} <table_name> [(<column_definition> [,<table_constraint>], ...)] [REPLACE] AS <select_statement>;
 
 *   *table_name*: 새로 생성할 테이블 이름이다.
 *   *column_definition*, *table_constraint*: 칼럼을 정의한다. 생략하면 **SELECT** 문의 칼럼 스키마가 복제된다. **SELECT** 문의 칼럼 제약 조건이나 **AUTO_INCREMENT** 속성은 복제되지 않는다.
@@ -806,50 +815,57 @@ ALTER TABLE
 
 ::
 
-    ALTER [ <class_type> ] <table_name> <alter_clause> ;
+    ALTER [<class_type>] <table_name> <alter_clause> ;
      
         <class_type> ::= TABLE | CLASS | VCLASS | VIEW
      
-        <alter_clause> ::= ADD <alter_add> [ INHERIT <resolution>, ... ] | 
-                           ADD { KEY | INDEX } <index_name> (<index_col_name>) |
-                           ALTER [ COLUMN ] column_name SET DEFAULT <value_specification> |
-                           DROP <alter_drop> [ INHERIT <resolution>, ... ] |
-                           DROP { KEY | INDEX } index_name |
-                           DROP FOREIGN KEY constraint_name |
-                           DROP PRIMARY KEY |                   
-                           RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
-                           CHANGE <alter_change> |
-                           INHERIT <resolution>, ...
-                           AUTO_INCREMENT = <initial_value>
+        <alter_clause> ::= 
+            ADD <alter_add> [INHERIT <resolution>, ...] | 
+            ADD {KEY | INDEX} <index_name> (<index_col_name>) |
+            ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
+            DROP <alter_drop> [ INHERIT <resolution>, ... ] |
+            DROP {KEY | INDEX} index_name |
+            DROP FOREIGN KEY constraint_name |
+            DROP PRIMARY KEY |                   
+            RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
+            CHANGE <alter_change> |
+            INHERIT <resolution>, ... |
+            AUTO_INCREMENT = <initial_value>
                            
-            <alter_add> ::= [ ATTRIBUTE | COLUMN ] [(]<class_element>, ...[)] [ FIRST | AFTER old_column_name ] |
-                            CLASS ATTRIBUTE <column_definition>, ... |
-                            CONSTRAINT < constraint_name > <column_constraint> ( column_name )|
-                            QUERY <select_statement> |
-                            SUPERCLASS <class_name>, ...
+            <alter_add> ::= 
+                [ATTRIBUTE|COLUMN] [(]<class_element>, ...[)] [FIRST|AFTER old_column_name] |
+                CLASS ATTRIBUTE <column_definition>, ... |
+                CONSTRAINT <constraint_name> <column_constraint> (column_name) |
+                QUERY <select_statement> |
+                SUPERCLASS <class_name>, ...
                             
                 <class_element> ::= <column_definition> | <table_constraint>
      
-                <column_constraint> ::= UNIQUE [ KEY ] | PRIMARY KEY | FOREIGN KEY
+                <column_constraint> ::= UNIQUE [KEY] | PRIMARY KEY | FOREIGN KEY
      
-     
-            <alter_drop> ::= [ ATTRIBUTE | COLUMN ]
-                             column_name, ... |
-                             QUERY [ <unsigned_integer_literal> ] |
-                             SUPERCLASS class_name, ... |
-                             CONSTRAINT constraint_name
+            <alter_drop> ::= 
+                [ATTRIBUTE | COLUMN]
+                {
+                    column_name, ... |
+                    QUERY [<unsigned_integer_literal>] |
+                    SUPERCLASS class_name, ... |
+                    CONSTRAINT constraint_name
+                }
                              
-            <alter_rename> ::= [ ATTRIBUTE | COLUMN ]
-                               <old_column_name> AS <new_column_name> |
-                               FUNCTION OF <column_name> AS <function_name>
-                             
+            <alter_rename> ::= 
+                [ATTRIBUTE | COLUMN]
+                {
+                    <old_column_name> AS <new_column_name> |
+                    FUNCTION OF <column_name> AS <function_name>
+                }
+                
             <alter_change> ::= 
-                               QUERY [ <unsigned_integer_literal> ] <select_statement> |
-                               <column_name> DEFAULT <value_specification>
+                QUERY [<unsigned_integer_literal>] <select_statement> |
+                <column_name> DEFAULT <value_specification>
              
-            <resolution> ::= { column_name } OF <superclass_name> [ AS alias ]
+            <resolution> ::= {column_name} OF <superclass_name> [AS alias]
 
-            <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
+            <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
 .. warning::
 
@@ -862,30 +878,33 @@ ADD COLUMN 절
 
 ::
 
-    ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    ADD [ COLUMN | ATTRIBUTE ] [(]<column_definition>[)] [ FIRST | AFTER old_column_name ]
-     
-    column_definition ::=
-    column_name <data_type>
-        { [ NOT NULL | NULL ] |
-          [ { SHARED <value_specification> | DEFAULT <value_specification> }
-              | AUTO_INCREMENT [(seed, increment)] ] |
-          [ UNIQUE [ KEY ] |
-              [ PRIMARY KEY | FOREIGN KEY REFERENCES
-                  [ referenced_table_name ]( <column_name>, ... )
-                  [ <referential_triggered_action> ... ]
-              ]
-          ] } ...
-    
-    <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
+    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
+    ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [)] [FIRST | AFTER old_column_name] ;
 
-    <charset_modifier_clause> ::= {CHARACTER_SET | CHARSET} {<char_string_literal> | <identifier> }
+        <column_definition> ::= 
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]]
+        
+            <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
-    <collation_modifier_clause> ::= COLLATE {<char_string_literal> | <identifier> } 
-    
-    <referential_triggered_action> ::= { ON UPDATE <referential_action> } | { ON DELETE <referential_action> }
-     
-    <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+                <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
+
+                <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
+            
+            <default_or_shared_or_ai> ::=
+                SHARED <value_specification> | 
+                DEFAULT <value_specification>  |
+                AUTO_INCREMENT [(seed, increment)]
+            
+            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+
+                <referential_definition> ::=
+                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+         
+                    <referential_triggered_action> ::=
+                        ON UPDATE <referential_action> |
+                        ON DELETE <referential_action> 
+
+                        <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : 칼럼을 추가할 테이블의 이름을 지정한다.
 *   *column_definition* : 새로 추가할 칼럼의 이름(최대 254 바이트), 데이터 타입, 제약 조건을 정의한다.
@@ -895,20 +914,21 @@ ADD COLUMN 절
 
     CREATE TABLE a_tbl;
     ALTER TABLE a_tbl ADD COLUMN age INT DEFAULT 0 NOT NULL;
-    INSERT INTO a_tbl(age) VALUES(20),(30),(40);
     ALTER TABLE a_tbl ADD COLUMN name VARCHAR FIRST;
-    ALTER TABLE a_tbl ADD COLUMN id INT NOT NULL AUTO_INCREMENT UNIQUE;
+    ALTER TABLE a_tbl ADD COLUMN id INT NOT NULL AUTO_INCREMENT UNIQUE FIRST;
+    INSERT INTO a_tbl(age) VALUES(20),(30),(40);
+
     ALTER TABLE a_tbl ADD COLUMN phone VARCHAR(13) DEFAULT '000-0000-0000' AFTER name;
      
     SELECT * FROM a_tbl;
      
 ::
 
-      name                  phone                         age           id
-    ======================================================================
-      NULL                  '000-0000-0000'                20         NULL
-      NULL                  '000-0000-0000'                30         NULL
-      NULL                  '000-0000-0000'                40         NULL
+       id  name                  phone                         age
+    ==============================================================
+        1  NULL                  '000-0000-0000'                20
+        2  NULL                  '000-0000-0000'                30
+        3  NULL                  '000-0000-0000'                40
      
     --adding multiple columns
     ALTER TABLE a_tbl ADD COLUMN (age1 int, age2 int, age3 int);
@@ -980,25 +1000,32 @@ ADD CONSTRAINT 절
 **PRIMARY KEY** 제약 조건을 추가할 때 생성되는 인덱스는 기본적으로 오름차순으로 생성되며, 칼럼 이름 뒤에 **ASC** 또는 **DESC** 키워드를 명시하여 키의 정렬 순서를 지정할 수 있다. ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    ADD CONSTRAINT < constraint_name > column_constraint ( column_name, ... )
-     
-    column_constraint ::=
-    UNIQUE [ KEY ] |
-    PRIMARY KEY |
-    FOREIGN KEY [ <foreign_key_name> ] REFERENCES [referenced_table_name]( column_name, ... )
-                           [ <referential_triggered_action> ... ]
-     
-    <referential_triggered_action> ::=
-    { ON UPDATE <referential_action> } |
-    { ON DELETE <referential_action> } 
+    ADD <table_constraint> ;
     
-    <referential_action> ::=
-    CASCADE | RESTRICT | NO ACTION | SET NULL
+        <table_constraint> ::=
+            [CONSTRAINT [constraint_name]] 
+            { 
+                UNIQUE [KEY|INDEX](column_name, ...) |
+                {KEY|INDEX} [constraint_name](column_name, ...) |
+                PRIMARY KEY (column_name, ...) |
+                <referential_constraint>
+            }
+     
+            <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
+         
+                <referential_definition> ::=
+                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+         
+                    <referential_triggered_action> ::=
+                        ON UPDATE <referential_action> |
+                        ON DELETE <referential_action> 
 
+                        <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+    
 *   *table_name* : 제약 조건을 추가할 테이블의 이름을 지정한다.
 *   *constraint_name* : 새로 추가할 제약 조건의 이름(최대 254 바이트)을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name*\ 을 무시하고 이 이름을 사용한다.
-*   *column_constraint* : 지정된 칼럼에 대해 제약 조건을 정의한다. 제약 조건에 대한 자세한 설명은 :ref:`constraint-definition` 를 참고한다.
+*   *table_constraint* : 지정된 테이블에 대해 제약 조건을 정의한다. 제약 조건에 대한 자세한 설명은 :ref:`constraint-definition` 를 참고한다.
 
 .. code-block:: sql
 
@@ -1012,10 +1039,9 @@ ADD INDEX 절
 
 **ADD INDEX** 절은 특정 칼럼에 대해 인덱스 속성을 추가로 정의할 수 있다. ::
 
-    ALTER [ TABLE | CLASS ] table_name ADD { KEY | INDEX } index_name (<index_col_name>)
+    ALTER [TABLE | CLASS] table_name ADD {KEY | INDEX} index_name (<index_col_name>) ;
      
-    <index_col_name> ::=
-    column_name [(length)] [ ASC | DESC ]
+        <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
 *   *table_name* : 변경하고자 하는 테이블의 이름을 지정한다.
 *   *index_name* : 인덱스의 이름을 지정한다(최대 254 바이트).
@@ -1053,7 +1079,7 @@ ALTER COLUMN … SET DEFAULT 절
 
 **ALTER COLUMN** ... **SET DEFAULT** 절은 기본값이 없는 칼럼에 기본값을 지정하거나 기존의 기본값을 변경할 수 있다. :ref:`change-column`\ 을 이용하면, 단일 구문으로 여러 칼럼의 기본값을 변경할 수 있다. ::
 
-    ALTER [ TABLE | CLASS ] table_name ALTER [COLUMN] column_name SET DEFAULT value
+    ALTER [TABLE | CLASS] table_name ALTER [COLUMN] column_name SET DEFAULT value
 
 *   *table_name* : 기본값을 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *column_name* : 새로운 기본값을 적용할 칼럼의 이름을 지정한다.
@@ -1116,7 +1142,7 @@ AUTO_INCREMENT 절
 
 **AUTO_INCREMENT** 절은 기존에 정의한 자동 증가값의 초기값을 변경할 수 있다. 단, 테이블 내에 **AUTO_INCREMENT** 칼럼이 한 개만 정의되어 있어야 한다. ::
 
-    ALTER TABLE table_name AUTO_INCREMENT = initial_value;
+    ALTER TABLE table_name AUTO_INCREMENT = initial_value ;
 
 *   *table_name* : 테이블 이름
 *   *initial_value* : 새로 변경할 초기값
@@ -1160,14 +1186,12 @@ CHANGE/MODIFY 절
 
     ALTER TABLE tbl_name table_options;
      
-    table_options :
-         table_option[, table_option]
-     
-    table_option :
-        CHANGE [COLUMN | CLASS ATTRIBUTE ] old_col_name new_col_name column_definition
-                 [FIRST | AFTER col_name]
-      | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
-                 [FIRST | AFTER col_name]
+        <table_options> ::=
+            <table_option> [, <table_option>]
+            
+            <table_option> ::=
+                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition [FIRST | AFTER col_name] |
+                MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition [FIRST | AFTER col_name]
 
 *   *tbl_name* : 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *old_col_name* : 기존 칼럼의 이름을 지정한다.
@@ -1298,7 +1322,7 @@ CHANGE/MODIFY 절
      
     CREATE TABLE t1 (i1 INT);
     INSERT INTO t1 VALUES (1), (-2147483648), (2147483647);
-     
+    
     ALTER TABLE t1 CHANGE i1 s1 CHAR(4);
     SELECT * FROM t1;
      
@@ -1432,7 +1456,7 @@ RENAME COLUMN 절
 **RENAME COLUMN** 절을 사용하여 칼럼의 이름을 변경할 수 있다. ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name
+    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name;
 
 *   *table_name* : 이름을 변경할 칼럼의 테이블 이름을 지정한다.
 *   *old_column_name* : 현재의 칼럼 이름을 지정한다.
@@ -1466,10 +1490,10 @@ RENAME INDEX/CONSTRAINT 절
 ::
 
     CREATE TABLE a_tbl (
-      id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-      phone VARCHAR(10),
-      name VARCHAR(50),
-      INDEX i_id_name(id, name)
+        id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+        phone VARCHAR(10),
+        name VARCHAR(50),
+        INDEX i_id_name(id, name)
     );
     
     ALTER TABLE a_tbl RENAME INDEX i_id_name  AS i_in;
@@ -1492,7 +1516,7 @@ DROP COLUMN 절
 **DROP COLUMN** 절을 사용하여 테이블에 존재하는 칼럼을 삭제할 수 있다. 삭제하고자 하는 칼럼들을 쉼표(,)로 구분하여 여러 개의 칼럼을 한 번에 삭제할 수 있다. ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    DROP [ COLUMN | ATTRIBUTE ] column_name, ...
+    DROP [ COLUMN | ATTRIBUTE ] column_name, ... ;
 
 *   *table_name* : 삭제할 칼럼의 테이블 이름을 명시한다.
 *   *column_ name* : 삭제할 칼럼의 이름을 명시한다. 쉼표로 구분하여 여러 개의 칼럼을 지정할 수 있다.
@@ -1507,7 +1531,7 @@ DROP CONSTRAINT 절
 **DROP CONSTRAINT** 절을 사용하여, 테이블에 이미 정의된 **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 제약 조건을 삭제할 수 있다. 삭제할 제약 조건 이름을 지정해야 하며, 이는 CSQL 명령어( **;schema table_name** )를 사용하여 확인할 수 있다. ::
 
     ALTER [ TABLE | CLASS ] table_name
-    DROP CONSTRAINT constraint_name
+    DROP CONSTRAINT constraint_name ;
 
 *   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *constraint_name* : 삭제할 제약 조건의 이름을 지정한다.
@@ -1552,7 +1576,7 @@ DROP PRIMARY KEY 절
 
 **DROP PRIMARY KEY** 절을 사용하여 테이블에 정의된 기본키 제약 조건을 삭제할 수 있다. 하나의 테이블에는 하나의 기본키만 정의될 수 있으므로 기본키 제약 조건 이름을 지정하지 않아도 된다. ::
 
-    ALTER [ TABLE | CLASS ] table_name DROP PRIMARY KEY
+    ALTER [TABLE | CLASS] table_name DROP PRIMARY KEY;
 
 *   *table_name* : 기본키 제약 조건을 삭제할 테이블의 이름을 지정한다.
 
@@ -1565,7 +1589,7 @@ DROP FOREIGN KEY 절
 
 **DROP FOREIGN KEY** 절을 사용하여 테이블에 정의된 외래키 제약 조건을 모두 삭제할 수 있다. ::
 
-    ALTER [ TABLE | CLASS ] table_name DROP FOREIGN KEY constraint_name
+    ALTER [TABLE | CLASS] table_name DROP FOREIGN KEY constraint_name;
 
 *   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *constraint_name* : 삭제할 외래키 제약 조건의 이름을 지정한다.
@@ -1573,7 +1597,6 @@ DROP FOREIGN KEY 절
 .. code-block:: sql
 
     ALTER TABLE b_tbl ADD CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES a_tbl (id);
-    
     ALTER TABLE b_tbl DROP FOREIGN KEY fk_id;
 
 DROP TABLE
@@ -1583,18 +1606,15 @@ DROP TABLE
 
 ::
 
-    DROP [ TABLE | CLASS ] [ IF EXISTS ] <table_spec>, ...
+    DROP [TABLE | CLASS] [IF EXISTS] <table_spec>, ...;
      
-    <table_spec> ::=
-    |[ ONLY ] table_name
-    | ALL table_name [ ( EXCEPT table_name, ... ) ]
+        <table_spec> ::=
+            [ONLY] table_name |
+            ALL table_name [(EXCEPT table_name, ...)]
 
 *   *table_name* : 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
-
 *   **ONLY** 키워드 뒤에 수퍼클래스 이름이 명시되면, 해당 수퍼클래스만 삭제하고 이를 상속받는 서브클래스는 삭제하지 않는다.
-
 *   **ALL** 키워드 뒤에 수퍼클래스 이름이 지정되면, 해당 수퍼클래스 및 이를 상속받는 서브클래스를 모두 삭제한다.
-
 *   **EXCEPT** 키워드 뒤에 삭제하지 않을 서브클래스 리스트를 명시할 수 있다.
 
 .. code-block:: sql
@@ -1616,7 +1636,7 @@ RENAME TABLE
 
 **RENAME TABLE** 구문을 사용하여 테이블 이름을 변경할 수 있으며, 여러 개의 테이블 이름을 변경하는 경우 테이블 이름 리스트를 명시할 수 있다. ::
 
-    RENAME  [ TABLE | CLASS | VIEW | VCLASS ] old_table_name { AS | TO } new_table_name [, old_table_name { AS | TO } new_table_name, ... ]
+    RENAME  [TABLE | CLASS] old_table_name {AS | TO} new_table_name [, old_table_name {AS | TO} new_table_name, ...] ;
 
 *   *old_table_name* : 변경할 테이블의 이름을 지정한다.
 *   *new_table_name* : 새로운 테이블 이름을 지정한다(최대 254 바이트).

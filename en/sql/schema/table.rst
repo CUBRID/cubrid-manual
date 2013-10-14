@@ -19,49 +19,56 @@ To create a table, use the **CREATE TABLE** statement.
     [CLASS ATTRIBUTE (<column_definition>, ...)]
     [INHERIT <resolution>, ...]
     [REUSE_OID]
-    [CHARSET charset_name] [COLLATE collation_name]
+    [CHARSET charset_name] [COLLATE collation_name];
 
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         
         <column_definition> ::= 
-                                column_name <data_type> [[<default_or_shared_or_ai>] | 
-                                [ <column_constraint> ]]
+            column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]]
         
             <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
 
+                <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
+
+                <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
+            
             <default_or_shared_or_ai> ::=
-                                        {SHARED <value_specification> | 
-                                        DEFAULT <value_specification> } |
-                                        AUTO_INCREMENT [(seed, increment)]
+                SHARED <value_specification> | 
+                DEFAULT <value_specification>  |
+                AUTO_INCREMENT [(seed, increment)]
          
             <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+
+                <referential_definition> ::=
+                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
          
-            <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
-
-            <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
-
+                    <referential_triggered_action> ::=
+                        ON UPDATE <referential_action> |
+                        ON DELETE <referential_action> 
+        
+                        <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+                        
         <table_constraint> ::=
-                                [CONSTRAINT [constraint_name]] 
-                                    { 
-                                        UNIQUE [KEY|INDEX](column_name, ...) |
-                                        {KEY|INDEX} [constraint_name](column_name, ...) |
-                                        PRIMARY KEY (column_name, ...) |
-                                        <referential_constraint>
-                                    }
+            [CONSTRAINT [constraint_name]] 
+            { 
+                UNIQUE [KEY|INDEX](column_name, ...) |
+                {KEY|INDEX} [constraint_name](column_name, ...) |
+                PRIMARY KEY (column_name, ...) |
+                <referential_constraint>
+            }
          
             <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
          
                 <referential_definition> ::=
-                                            REFERENCES [referenced_table_name] (column_name, ...)
-                                            [<referential_triggered_action> ...]
+                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
          
                     <referential_triggered_action> ::=
-                                                    {ON UPDATE <referential_action>} |
-                                                    {ON DELETE <referential_action>} 
+                        ON UPDATE <referential_action> |
+                        ON DELETE <referential_action> 
         
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
      
-    <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
+        <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
 *   *table_name* : Specifies the name of the table to be created (maximum: 254 bytes).
 *   *column_name* : Specifies the name of the column to be created (maximum: 254 bytes).
@@ -74,14 +81,14 @@ To create a table, use the **CREATE TABLE** statement.
 .. code-block:: sql
 
     CREATE TABLE olympic2 (
-       host_year        INT    NOT NULL PRIMARY KEY,
-       host_nation      VARCHAR(40) NOT NULL,
-       host_city        VARCHAR(20) NOT NULL,
-       opening_date     DATE        NOT NULL,
-       closing_date     DATE        NOT NULL,
-       mascot           VARCHAR(20),
-       slogan           VARCHAR(40),
-       introduction     VARCHAR(1500)
+        host_year        INT    NOT NULL PRIMARY KEY,
+        host_nation      VARCHAR(40) NOT NULL,
+        host_city        VARCHAR(20) NOT NULL,
+        opening_date     DATE        NOT NULL,
+        closing_date     DATE        NOT NULL,
+        mascot           VARCHAR(20),
+        slogan           VARCHAR(40),
+        introduction     VARCHAR(1500)
     );
 
 .. _column-definition:
@@ -91,22 +98,23 @@ Column Definition
 
 A column is a set of data values of a particular simple type, one for each row of the table.
 
-    ::
+::
 
-        <column_definition> ::=
-                            column_name <data_type> [[ <default_or_shared_or_ai> ] | [ <column_constraint> ]]...
+    <column_definition> ::= 
+        column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]]
     
-            <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+        <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
 
+            <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
+
+            <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
+        
         <default_or_shared_or_ai> ::=
-                                {SHARED <value_specification> | DEFAULT <value_specification> } |
-                                AUTO_INCREMENT [(seed, increment)]
-         
-        <column_constraint> ::= NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>
-         
-        <charset_modifier_clause> ::= { CHARACTER_SET | CHARSET } { <char_string_literal> | <identifier> }
-
-        <collation_modifier_clause> ::= COLLATE { <char_string_literal> | <identifier> }
+            SHARED <value_specification> | 
+            DEFAULT <value_specification>  |
+            AUTO_INCREMENT [(seed, increment)]
+     
+        <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
         
 Column Name
 ^^^^^^^^^^^
@@ -221,9 +229,8 @@ You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABL
 ::
 
     CREATE TABLE table_name (id INT AUTO_INCREMENT[(seed, increment)]);
-    
-    CREATE TABLE table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed;
 
+    CREATE TABLE table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed;
 
 *   *seed* : The initial value from which the number starts. All integers (positive, negative, and zero) are allowed. The default value is **1**.
 *   *increment* : The increment value of each row. Only positive integers are allowed. The default value is **1**.
@@ -303,24 +310,27 @@ You can define **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** as the
 
 ::
 
-    <column_constraint> ::= NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>
-     
+    <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+
     <table_constraint> ::=
-                            [ CONSTRAINT [ <constraint_name> ] ] UNIQUE [ KEY | INDEX ]( column_name, ... ) |
-                            [ { KEY | INDEX } <constraint_name> ( column_name, ... ) |
-                            [ PRIMARY KEY ( column_name, ... )] |
-                            [ <referential_constraint> ]
+        [CONSTRAINT [constraint_name]] 
+        { 
+            UNIQUE [KEY|INDEX](column_name, ...) |
+            {KEY|INDEX} [constraint_name](column_name, ...) |
+            PRIMARY KEY (column_name, ...) |
+            <referential_constraint>
+        }
      
-    <referential_constraint> ::= FOREIGN KEY ( column_name, ... ) <referential_definition>
+        <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
      
-    <referential_definition> ::=
-                                REFERENCES [ referenced_table_name ] ( column_name, ... ) [ <referential_triggered_action> ... ]
+            <referential_definition> ::=
+                REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
      
-    <referential_triggered_action> ::=
-                                    { ON UPDATE <referential_action> } |
-                                    { ON DELETE <referential_action> }
-     
-    <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
+                <referential_triggered_action> ::=
+                    ON UPDATE <referential_action> |
+                    ON DELETE <referential_action> 
+    
+                    <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 NOT NULL Constraint
 ^^^^^^^^^^^^^^^^^^^
@@ -403,26 +413,26 @@ By default, the index created by defining the primary key is created in ascendin
     CREATE TABLE pk_tbl (a INT, b INT, PRIMARY KEY (a, b DESC));
 
     CREATE TABLE const_tbl7 (
-      id INT NOT NULL,
-      phone VARCHAR,
-      CONSTRAINT pk_id PRIMARY KEY (id)
+        id INT NOT NULL,
+        phone VARCHAR,
+        CONSTRAINT pk_id PRIMARY KEY (id)
     );
      
     -- CONSTRAINT keyword
     CREATE TABLE const_tbl8 (
-      id INT NOT NULL PRIMARY KEY,
-      phone VARCHAR
+        id INT NOT NULL PRIMARY KEY,
+        phone VARCHAR
     );
      
     -- primary key is defined on multiple columns
     CREATE TABLE const_tbl8 (
-      host_year    INT NOT NULL,
-      event_code   INT NOT NULL,
-      athlete_code INT NOT NULL,
-      medal        CHAR (1)  NOT NULL,
-      score        VARCHAR (20),
-      unit         VARCHAR (5),
-      PRIMARY KEY (host_year, event_code, athlete_code, medal)
+        host_year    INT NOT NULL,
+        event_code   INT NOT NULL,
+        athlete_code INT NOT NULL,
+        medal        CHAR (1)  NOT NULL,
+        score        VARCHAR (20),
+        unit         VARCHAR (5),
+        PRIMARY KEY (host_year, event_code, athlete_code, medal)
     );
 
 FOREIGN KEY Constraint
@@ -430,14 +440,13 @@ FOREIGN KEY Constraint
 
 A foreign key is a column or a set of columns that references the primary key in other tables in order to maintain reference relationship. The foreign key and the referenced primary key must have the same data type. Consistency between two tables is maintained by the foreign key referencing the primary key, which is called referential integrity. ::
 
-    [ CONSTRAINT < constraint_name > ] FOREIGN KEY [ <foreign_key_name> ] ( <column_name_comma_list1> ) REFERENCES [ referenced_table_name ] ( <column_name_comma_list2> ) [ <referential_triggered_action> ]
+    [CONSTRAINT < constraint_name >] FOREIGN KEY [<foreign_key_name>] (<column_name_comma_list1>) REFERENCES [referenced_table_name] (<column_name_comma_list2>) [<referential_triggered_action> ...]
      
         <referential_triggered_action> ::=
-                                            ON UPDATE <referential_action>
-                                            [ ON DELETE <referential_action> ]
-         
-        <referential_action> ::=
-            CASCADE | RESTRICT | NO ACTION | SET NULL
+            ON UPDATE <referential_action> |
+            ON DELETE <referential_action>
+
+            <referential_action> ::= CASCADE | RESTRICT | NO ACTION  | SET NULL
         
 *   *constraint_name*: Specifies the name of the table to be created.
 *   *foreign_key_name*: Specifies a name of the **FOREIGN KEY** constraint. You can skip the name specification. However, if you specify this value, *constraint_name* will be ignored, and the specified value will be used.
@@ -460,16 +469,16 @@ A foreign key is a column or a set of columns that references the primary key in
 
     -- creating two tables where one is referencing the other
     CREATE TABLE a_tbl (
-      id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-      phone VARCHAR(10)
+        id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+        phone VARCHAR(10)
     );
      
     CREATE TABLE b_tbl (
-      ID INT NOT NULL,
-      name VARCHAR (10) NOT NULL,
-      CONSTRAINT pk_id PRIMARY KEY (id),
-      CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES a_tbl (id)
-      ON DELETE CASCADE ON UPDATE RESTRICT
+        ID INT NOT NULL,
+        name VARCHAR (10) NOT NULL,
+        CONSTRAINT pk_id PRIMARY KEY (id),
+        CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES a_tbl (id)
+        ON DELETE CASCADE ON UPDATE RESTRICT
     );
      
     INSERT INTO a_tbl VALUES (1,'111-1111'), (2,'222-2222'), (3, '333-3333');
@@ -541,9 +550,9 @@ You can specify options such as **ASC** or **DESC** after the column name when d
 .. code-block:: sql
 
     CREATE TABLE const_tbl(
-      id VARCHAR,
-      name VARCHAR,
-      CONSTRAINT UNIQUE INDEX(id DESC, name ASC)
+        id VARCHAR,
+        name VARCHAR,
+        CONSTRAINT UNIQUE INDEX(id DESC, name ASC)
     );
      
     INSERT INTO const_tbl VALUES('1000', 'john'), ('1000','johnny'), ('1000', 'jone');
@@ -697,8 +706,7 @@ You can create a new table that contains the result records of the **SELECT** st
 
 ::
 
-    CREATE {TABLE | CLASS} <table_name> [( <column_definition> [,<table_constraint>]... )]
-    [REPLACE] AS <select_statement>
+    CREATE {TABLE | CLASS} <table_name> [( <column_definition> [,<table_constraint>]... )] [REPLACE] AS <select_statement>;
 
 *   *table_name*: A name of the table to be created.
 *   *column_definition*: Defines a column. If it is omitted, the column schema of **SELECT** statement is replicated; however, the constraint or the **AUTO_INCREMENT** attribute is not replicated.
@@ -807,50 +815,57 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
 
 ::
 
-    ALTER [ <class_type> ] <table_name> <alter_clause>
+    ALTER [<class_type>] <table_name> <alter_clause> ;
      
         <class_type> ::= TABLE | CLASS | VCLASS | VIEW
      
-        <alter_clause> ::= ADD <alter_add> [ INHERIT <resolution>, ... ] | 
-                           ADD { KEY | INDEX } <index_name> (<index_col_name>) |
-                           ALTER [ COLUMN ] column_name SET DEFAULT <value_specification> |
-                           DROP <alter_drop> [ INHERIT <resolution>, ... ] |
-                           DROP { KEY | INDEX } index_name |
-                           DROP FOREIGN KEY constraint_name |
-                           DROP PRIMARY KEY |                   
-                           RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
-                           CHANGE <alter_change> |
-                           INHERIT <resolution>, ...
-                           AUTO_INCREMENT = <initial_value>
+        <alter_clause> ::= 
+            ADD <alter_add> [INHERIT <resolution>, ...] | 
+            ADD {KEY | INDEX} <index_name> (<index_col_name>) |
+            ALTER [COLUMN] column_name SET DEFAULT <value_specification> |
+            DROP <alter_drop> [ INHERIT <resolution>, ... ] |
+            DROP {KEY | INDEX} index_name |
+            DROP FOREIGN KEY constraint_name |
+            DROP PRIMARY KEY |                   
+            RENAME <alter_rename> [ INHERIT <resolution>, ... ] |
+            CHANGE <alter_change> |
+            INHERIT <resolution>, ... |
+            AUTO_INCREMENT = <initial_value>
                            
-            <alter_add> ::= [ ATTRIBUTE | COLUMN ] [(]<class_element>, ...[)] [ FIRST | AFTER old_column_name ] |
-                            CLASS ATTRIBUTE <column_definition>, ... |
-                            CONSTRAINT < constraint_name > <column_constraint> ( column_name )|
-                            QUERY <select_statement> |
-                            SUPERCLASS <class_name>, ...
+            <alter_add> ::= 
+                [ATTRIBUTE|COLUMN] [(]<class_element>, ...[)] [FIRST|AFTER old_column_name] |
+                CLASS ATTRIBUTE <column_definition>, ... |
+                CONSTRAINT <constraint_name> <column_constraint> (column_name) |
+                QUERY <select_statement> |
+                SUPERCLASS <class_name>, ...
                             
                 <class_element> ::= <column_definition> | <table_constraint>
      
-                <column_constraint> ::= UNIQUE [ KEY ] | PRIMARY KEY | FOREIGN KEY
+                <column_constraint> ::= UNIQUE [KEY] | PRIMARY KEY | FOREIGN KEY
      
-     
-            <alter_drop> ::= [ ATTRIBUTE | COLUMN ]
-                             column_name, ... |
-                             QUERY [ <unsigned_integer_literal> ] |
-                             SUPERCLASS class_name, ... |
-                             CONSTRAINT constraint_name
+            <alter_drop> ::= 
+                [ATTRIBUTE | COLUMN]
+                {
+                    column_name, ... |
+                    QUERY [<unsigned_integer_literal>] |
+                    SUPERCLASS class_name, ... |
+                    CONSTRAINT constraint_name
+                }
                              
-            <alter_rename> ::= [ ATTRIBUTE | COLUMN ]
-                               <old_column_name> AS <new_column_name> |
-                               FUNCTION OF <column_name> AS <function_name>
-                             
+            <alter_rename> ::= 
+                [ATTRIBUTE | COLUMN]
+                {
+                    <old_column_name> AS <new_column_name> |
+                    FUNCTION OF <column_name> AS <function_name>
+                }
+                
             <alter_change> ::= 
-                               QUERY [ <unsigned_integer_literal> ] <select_statement> |
-                               <column_name> DEFAULT <value_specification>
+                QUERY [<unsigned_integer_literal>] <select_statement> |
+                <column_name> DEFAULT <value_specification>
              
-            <resolution> ::= { column_name } OF <superclass_name> [ AS alias ]
+            <resolution> ::= {column_name} OF <superclass_name> [AS alias]
 
-            <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
+            <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
 .. warning::
 
@@ -863,30 +878,33 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
 ::
 
-    ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    ADD [ COLUMN | ATTRIBUTE ] [(]<column_definition>[)] [ FIRST | AFTER old_column_name ]
-     
-    column_definition ::=
-    column_name <data_type>
-        { [ NOT NULL | NULL ] |
-          [ { SHARED <value_specification> | DEFAULT <value_specification> }
-              | AUTO_INCREMENT [(seed, increment)] ] |
-          [ UNIQUE [ KEY ] |
-              [ PRIMARY KEY | FOREIGN KEY REFERENCES
-                  [ referenced_table_name ]( column_name, ... )
-                  [ <referential_triggered_action> ... ]
-              ]
-          ] } ...
-    
-    <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
+    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
+    ADD [COLUMN | ATTRIBUTE] [(] <column_definition> [)] [FIRST | AFTER old_column_name] ;
 
-    <charset_modifier_clause> ::= {CHARACTER_SET | CHARSET} {<char_string_literal> | <identifier> }
+        <column_definition> ::= 
+            column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]]
+        
+            <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
-    <collation_modifier_clause> ::= COLLATE {<char_string_literal> | <identifier> } 
-    
-    <referential_triggered_action> ::= { ON UPDATE <referential_action> } | { ON DELETE <referential_action> }
-     
-    <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+                <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
+
+                <collation_modifier_clause> ::= COLLATE {<char_string_literal>|<identifier>}
+            
+            <default_or_shared_or_ai> ::=
+                SHARED <value_specification> | 
+                DEFAULT <value_specification>  |
+                AUTO_INCREMENT [(seed, increment)]
+            
+            <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
+
+                <referential_definition> ::=
+                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+         
+                    <referential_triggered_action> ::=
+                        ON UPDATE <referential_action> |
+                        ON DELETE <referential_action> 
+
+                        <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : Specifies the name of a table that has a column to be added.
 *   *column_definition* : Specifies the name(max 254 bytes), data type, and constraints of a column to be added.
@@ -896,20 +914,21 @@ You can add a new column by using the **ADD COLUMN** clause. You can specify the
 
     CREATE TABLE a_tbl;
     ALTER TABLE a_tbl ADD COLUMN age INT DEFAULT 0 NOT NULL;
-    INSERT INTO a_tbl(age) VALUES(20),(30),(40);
     ALTER TABLE a_tbl ADD COLUMN name VARCHAR FIRST;
-    ALTER TABLE a_tbl ADD COLUMN id INT NOT NULL AUTO_INCREMENT UNIQUE;
+    ALTER TABLE a_tbl ADD COLUMN id INT NOT NULL AUTO_INCREMENT UNIQUE FIRST;
+    INSERT INTO a_tbl(age) VALUES(20),(30),(40);
+
     ALTER TABLE a_tbl ADD COLUMN phone VARCHAR(13) DEFAULT '000-0000-0000' AFTER name;
      
     SELECT * FROM a_tbl;
      
 ::
 
-      name                  phone                         age           id
-    ======================================================================
-      NULL                  '000-0000-0000'                20         NULL
-      NULL                  '000-0000-0000'                30         NULL
-      NULL                  '000-0000-0000'                40         NULL
+       id  name                  phone                         age
+    ==============================================================
+        1  NULL                  '000-0000-0000'                20
+        2  NULL                  '000-0000-0000'                30
+        3  NULL                  '000-0000-0000'                40
      
     --adding multiple columns
     ALTER TABLE a_tbl ADD COLUMN (age1 int, age2 int, age3 int);
@@ -981,18 +1000,27 @@ You can add a new constraint by using the **ADD CONSTRAINT** clause.
 By default, the index created when you add **PRIMARY KEY** constraints is created in ascending order, and you can define the key sorting order by specifying the **ASC** or **DESC** keyword next to the column name. ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    ADD CONSTRAINT constraint_name <column_constraint> ( column_name, ... )
+    ADD <table_constraint> ;
+    
+        <table_constraint> ::=
+            [CONSTRAINT [constraint_name]] 
+            { 
+                UNIQUE [KEY|INDEX](column_name, ...) |
+                {KEY|INDEX} [constraint_name](column_name, ...) |
+                PRIMARY KEY (column_name, ...) |
+                <referential_constraint>
+            }
      
-        <column_constraint> ::=
-                                UNIQUE [ KEY ] |
-                                PRIMARY KEY |
-                                FOREIGN KEY [ <foreign_key_name> ] REFERENCES [referenced_table_name]( column_name, ... ) [ <referential_triggered_action> ... ]
-     
-            <referential_triggered_action> ::=
-                                                { ON UPDATE <referential_action> } |
-                                                { ON DELETE <referential_action> } 
-                                                
-                <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
+            <referential_constraint> ::= FOREIGN KEY [<foreign_key_name>](column_name, ...) <referential_definition>
+         
+                <referential_definition> ::=
+                    REFERENCES [referenced_table_name] (column_name, ...) [<referential_triggered_action> ...]
+         
+                    <referential_triggered_action> ::=
+                        ON UPDATE <referential_action> |
+                        ON DELETE <referential_action> 
+
+                        <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
 
 *   *table_name* : Specifies the name of a table that has a constraint to be added.
 *   *constraint_name* : Specifies the name of a constraint to be added, or it can be omitted. If omitted, a name is automatically assigned(maximum: 254 bytes).
@@ -1011,10 +1039,9 @@ ADD INDEX Clause
 
 You can define the index attributes for a specific column by using the **ADD INDEX** clause. ::
 
-    ALTER [ TABLE | CLASS ] table_name ADD { KEY | INDEX } index_name (<index_col_name>)
+    ALTER [TABLE | CLASS] table_name ADD {KEY | INDEX} index_name (<index_col_name>) ;
      
-    <index_col_name> ::=
-    column_name [(length)] [ ASC | DESC ]
+        <index_col_name> ::= column_name [(length)] [ ASC | DESC ]
 
 *   *table_name* : Specifies the name of a table to be modified.
 *   *index_name* : Specifies the name of an index(maximum: 254 bytes). If omitted, a name is automatically assigned.
@@ -1115,7 +1142,7 @@ AUTO_INCREMENT Clause
 
 The **AUTO_INCREMENT** clause can change the initial value of the increment value that is currently defined. However, there should be only one **AUTO_INCREMENT** column defined. ::
 
-    ALTER TABLE table_name AUTO_INCREMENT = initial_value;
+    ALTER TABLE table_name AUTO_INCREMENT = initial_value ;
     
 *   *table_name* : Table name
 *   *initial_value* : Initial value to alter
@@ -1159,14 +1186,12 @@ When you change data types using the **CHANGE** clause or the **MODIFY** clause,
 
     ALTER TABLE tbl_name table_options;
      
-    table_options :
-         table_option[, table_option]
-     
-    table_option :
-        CHANGE [COLUMN | CLASS ATTRIBUTE ] old_col_name new_col_name column_definition
-                 [FIRST | AFTER col_name]
-      | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
-                 [FIRST | AFTER col_name]
+        <table_options> ::=
+            <table_option> [, <table_option>]
+            
+            <table_option> ::=
+                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition [FIRST | AFTER col_name] |
+                MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition [FIRST | AFTER col_name]
 
 *   *tbl_name* : Specifies the name of the table including the column to change.
 *   *old_col_name* : Specifies the existing column name.
@@ -1431,7 +1456,7 @@ RENAME COLUMN Clause
 You can change the name of the column by using the **RENAME COLUMN** clause. ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name
+    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name;
 
 *   *table_name* : Specifies the name of a table that has a column to be renamed.
 *   *old_column_name* : Specifies the name of a column.
@@ -1465,10 +1490,10 @@ RENAME INDEX/CONSTRAINT Clause
 ::
 
     CREATE TABLE a_tbl (
-      id INT NOT NULL DEFAULT 0 PRIMARY KEY,
-      phone VARCHAR(10),
-      name VARCHAR(50),
-      INDEX i_id_name(id, name)
+        id INT NOT NULL DEFAULT 0 PRIMARY KEY,
+        phone VARCHAR(10),
+        name VARCHAR(50),
+        INDEX i_id_name(id, name)
     );
     
     ALTER TABLE a_tbl RENAME INDEX i_id_name  AS i_in;
@@ -1491,7 +1516,7 @@ DROP COLUMN Clause
 You can delete a column in a table by using the **DROP COLUMN** clause. You can specify multiple columns to delete simultaneously by separating them with commas (,). ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    DROP [ COLUMN | ATTRIBUTE ] column_name, ...
+    DROP [ COLUMN | ATTRIBUTE ] column_name, ... ;
     
 *   *table_name* : Specifies the name of a table that has a column to be deleted.
 *   *column_ name* : Specifies the name of a column to be deleted. Multiple columns can be specified by separating them with commas (,).
@@ -1506,7 +1531,7 @@ DROP CONSTRAINT Clause
 You can drop the constraints pre-defined for the table, such as **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** by using the **DROP CONSTRAINT** clause. In this case, you must specify a constraint name. You can check these names by using the CSQL command (**;schema table_name**). ::
 
     ALTER [ TABLE | CLASS ] table_name
-    DROP CONSTRAINT constraint_name
+    DROP CONSTRAINT constraint_name ;
 
 *   *table_name* : Specifies the name of a table that has a constraint to be dropped.
 *   *constraint_name* : Specifies the name of a constraint to be dropped.  
@@ -1564,7 +1589,7 @@ DROP FOREIGN KEY Clause
 
 You can drop a foreign key constraint defined for a table using the **DROP FOREIGN KEY** clause. ::
 
-    ALTER [ TABLE | CLASS ] table_name DROP FOREIGN KEY constraint_name
+    ALTER [TABLE | CLASS] table_name DROP FOREIGN KEY constraint_name;
 
 *   *table_name* : Specifies the name of a table whose constraint is to be deleted.
 *   *constraint_name* : Specifies the name of foreign key constraint to be deleted.
@@ -1572,7 +1597,6 @@ You can drop a foreign key constraint defined for a table using the **DROP FOREI
 .. code-block:: sql
 
     ALTER TABLE b_tbl ADD CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES a_tbl (id);
-    
     ALTER TABLE b_tbl DROP FOREIGN KEY fk_id;
 
 DROP TABLE
@@ -1582,21 +1606,15 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
 
 ::
 
-    DROP [ TABLE | CLASS ] [ IF EXISTS ] <table_specification_comma_list>
+    DROP [TABLE | CLASS] [IF EXISTS] <table_spec>, ...;
      
-    <table_specification_comma_list> ::=
-    <single_table_spec> | ( <table_specification_comma_list> )
-     
-    <single_table_spec> ::=
-    |[ ONLY ] table_name
-    | ALL table_name [ ( EXCEPT table_name, ... ) ]
+        <table_spec> ::=
+            [ONLY] table_name |
+            ALL table_name [(EXCEPT table_name, ...)]
 
 *   *table_name* : Specifies the name of the table to be dropped. You can delete multiple tables simultaneously by separating them with commas.
-
 *   If a super class name is specified after the **ONLY** keyword, only the super class, not the sub classes inheriting from it, is deleted. If a super class name is specified after the **ALL** keyword, the super classes as well as the sub classes inheriting from it are all deleted. You can specify the list of sub classes not to be deleted after the **EXCEPT** keyword.
-
 *   If sub classes that inherit from the super class specified after the **ALL** keyword are specified after the **EXCEPT** keyword, they are not deleted.
-
 *   Specifies the list of subclasses which are not to be deleted after the **EXCEPT** keyword.
 
 .. code-block:: sql
@@ -1618,7 +1636,7 @@ RENAME TABLE
 
 You can change the name of a table by using the **RENAME TABLE** statement and specify a list of the table name to change the names of multiple tables. ::
 
-    RENAME  [ TABLE | CLASS | VIEW | VCLASS ] old_table_name { AS | TO } new_table_name [, old_table_name { AS | TO } new_table_name, ... ]
+    RENAME  [TABLE | CLASS] old_table_name {AS | TO} new_table_name [, old_table_name {AS | TO} new_table_name, ...];
 
 *   *old_table_name* : Specifies the old table name to be renamed.
 *   *new_table_name* : Specifies a new table name(maximum: 254 bytes).

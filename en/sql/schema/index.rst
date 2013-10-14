@@ -54,7 +54,7 @@ ALTER INDEX
 
 The **ALTER INDEX** statement rebuilds an index or renames an index name. Rebuilding an index is a job which drops and recreates an index. If column names are added at the end of a table name, a new index is recreated with the table and column names. 
 
-The following is a syntax to rebuild an index.
+The following is a syntax of rebuilding an index.
 
 ::
 
@@ -85,6 +85,19 @@ The following is an example of re-creating indexes in various ways:
     ALTER INDEX i_game_medal ON game(nation_code) REBUILD;
     ALTER INDEX char_idx ON athlete(gender, nation_code) WHERE gender='M' AND nation_code='USA' REBUILD;
 
+The following is a syntax of renaming an index.
+
+:: 
+
+    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name 
+     
+An index name can be changed by not only ALTER INDEX statement, but also :ref:`rename-index`.
+
+The following is an example of changing an index name:
+
+.. code-block:: sql 
+
+    ALTER INDEX i_game_medal ON game RENAME TO i_new_game_medal; 
 
 DROP INDEX
 ==========

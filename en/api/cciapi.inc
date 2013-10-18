@@ -26,13 +26,13 @@ CCI API Reference
 
     The following shows a part of code to bind NULL.
     
-    .. code-block:
+    .. code-block:: c
     
         res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_STR, NULL, CCI_U_TYPE_STRING, CCI_BIND_PTR);
         
     or
     
-    .. code-block:
+    .. code-block:: c
     
         res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_STR, data, CCI_U_TYPE_NULL, CCI_BIND_PTR);
 

@@ -26,13 +26,13 @@ CCI API 레퍼런스
 
     다음은 NULL을 바인딩하는 코드의 일부이다.
     
-    .. code-block:
+    .. code-block:: c
     
         res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_STR, NULL, CCI_U_TYPE_STRING, CCI_BIND_PTR);
         
     또는 
     
-    .. code-block:
+    .. code-block:: c
     
         res = cci_bind_param (req, 2 /* binding index*/, CCI_A_TYPE_STR, data, CCI_U_TYPE_NULL, CCI_BIND_PTR);
 

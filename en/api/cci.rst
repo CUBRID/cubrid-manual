@@ -49,15 +49,18 @@ General process for writing applications is as follows. For using the prepared s
 *   Using database connection pool (related functions: :c:func:`cci_property_create`), :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`)
 
 .. note::
-    * If you want to compile the CCI application on Windows, "WINDOWS" should be defined. Therefore, "-DWINDOWS" option should be defined on the compiler.
-    * The database connection in thread-based programming must be used independently each other.
-    * In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by calling :c:func:`cci_end_tran` if some error occurs during fetching for the resultset.
+
+    *   If you want to compile the CCI application on Windows, "WINDOWS" should be defined. Therefore, "-DWINDOWS" option should be defined on the compiler.
+    *   The database connection in thread-based programming must be used independently each other.
+    *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by calling :c:func:`cci_end_tran` if some error occurs during fetching for the resultset.
 
 **Example 1**
 
 .. code-block:: c
 
-    //Example to execute a simple query
+    // Example to execute a simple query
+    // In Linux: gcc -o simple simple.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    
     #include <stdio.h>
     #include "cas_cci.h"  
     #define BUFSIZE  (1024)
@@ -72,7 +75,7 @@ General process for writing applications is as follows. For using the prepared s
         T_CCI_COL_INFO *col_info;
         T_CCI_CUBRID_STMT stmt_type;
         char *query = "select * from code";
-     
+        
         //getting a connection handle for a connection with a server
         con = cci_connect ("localhost", 33000, "demodb", "dba", "");
         if (con < 0)
@@ -86,7 +89,7 @@ General process for writing applications is as follows. For using the prepared s
         if (req < 0)
         {
             printf ("prepare error: %d, %s\n", cci_error.err_code,
-                cci_error.err_msg);
+                    cci_error.err_msg);
             goto handle_error;
         }
      
@@ -95,7 +98,7 @@ General process for writing applications is as follows. For using the prepared s
         if (col_info == NULL)
         {
             printf ("get_result_info error: %d, %s\n", cci_error.err_code,
-                cci_error.err_msg);
+                    cci_error.err_msg);
             goto handle_error;
         }
      
@@ -104,7 +107,7 @@ General process for writing applications is as follows. For using the prepared s
         if (error < 0)
         {
             printf ("execute error: %d, %s\n", cci_error.err_code,
-                cci_error.err_msg);
+                    cci_error.err_msg);
             goto handle_error;
         }
         while (1)
@@ -151,7 +154,7 @@ General process for writing applications is as follows. For using the prepared s
         if (error < 0)
         {
             printf ("close_req_handle error: %d, %s\n", cci_error.err_code,
-                cci_error.err_msg);
+                    cci_error.err_msg);
             goto handle_error;
         }
      
@@ -169,7 +172,7 @@ General process for writing applications is as follows. For using the prepared s
         if (req > 0)
             cci_close_req_handle (req);
         if (con > 0)
-            cci_disconnect (con, &cci_error);
+        cci_disconnect (con, &cci_error);
      
         return 1;
     }
@@ -178,47 +181,164 @@ General process for writing applications is as follows. For using the prepared s
 
 .. code-block:: c
 
-    //Example to execute a query with a bind variable
-     
-    char *query = "select * from nation where name = ?";
-    char namebuf[128];
-     
-    //getting a connection handle for a connection with a server
-    con = cci_connect ("localhost", 33000, "demodb", "dba", "");
-    if (con < 0)
+    // Example to execute a query with a bind variable
+    // In Linux: gcc -o cci_bind cci_bind.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+
+    #include <stdio.h>
+    #include <string.h>
+    #include "cas_cci.h"
+    #define BUFSIZE  (1024)
+
+    int
+    main (void)
     {
-        printf ("cannot connect to database ");
-        return 1;
-    }
-     
-    //preparing the SQL statement
-    req = cci_prepare (con, query, 0, &cci_error);
-    if (req < 0)
-    {
-        printf ("prepare error: %d, %s ", cci_error.err_code,
-                cci_error.err_msg);
+        int con = 0, req = 0, col_count = 0, i, ind;
+        int error;
+        char *data;
+        T_CCI_ERROR cci_error;
+        T_CCI_COL_INFO *col_info;
+        T_CCI_CUBRID_STMT stmt_type;
+        char *query = "select * from nation where name = ?";
+        char namebuf[128];
+
+        //getting a connection handle for a connection with a server
+        con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+        if (con < 0)
+        {
+            printf ("cannot connect to database\n");
+            return 1;
+        }
+
+        //preparing the SQL statement
+        req = cci_prepare (con, query, 0, &cci_error);
+        if (req < 0)
+        {
+            printf ("prepare error: %d, %s\n", cci_error.err_code,
+                  cci_error.err_msg);
             goto handle_error;
-    }
-     
-    //Binding date into a value
-    strcpy (namebuf, "Korea");
-    error =
+        }
+
+        //Binding date into a value
+        strcpy (namebuf, "Korea");
+        error =
         cci_bind_param (req, 1, CCI_A_TYPE_STR, namebuf, CCI_U_TYPE_STRING,
                         CCI_BIND_PTR);
-    if (error < 0)
-    {
-        printf ("bind_param error: %d ", error);
-        goto handle_error;
+        if (error < 0)
+        {
+            printf ("bind_param error: %d ", error);
+            goto handle_error;
+        }
+
+        //getting column information when the prepared statement is the SELECT query
+        col_info = cci_get_result_info (req, &stmt_type, &col_count);
+        if (col_info == NULL)
+        {
+            printf ("get_result_info error: %d, %s\n", cci_error.err_code,
+                  cci_error.err_msg);
+            goto handle_error;
+        }
+
+        //Executing the prepared SQL statement
+        error = cci_execute (req, 0, 0, &cci_error);
+        if (error < 0)
+        {
+            printf ("execute error: %d, %s\n", cci_error.err_code,
+                  cci_error.err_msg);
+            goto handle_error;
+        }
+
+        //Executing the prepared SQL statement
+        error = cci_execute (req, 0, 0, &cci_error);
+        if (error < 0)
+        {
+            printf ("execute error: %d, %s\n", cci_error.err_code,
+                  cci_error.err_msg);
+            goto handle_error;
+        }
+
+        while (1)
+        {
+        
+            //Moving the cursor to access a specific tuple of results
+            error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &cci_error);
+            if (error == CCI_ER_NO_MORE_DATA)
+            {
+                break;
+            }
+            if (error < 0)
+            {
+                printf ("cursor error: %d, %s\n", cci_error.err_code,
+                      cci_error.err_msg);
+                goto handle_error;
+            }
+
+            //Fetching the query result into a client buffer
+            error = cci_fetch (req, &cci_error);
+            if (error < 0)
+            {
+                printf ("fetch error: %d, %s\n", cci_error.err_code,
+                      cci_error.err_msg);
+                goto handle_error;
+            }
+            for (i = 1; i <= col_count; i++)
+            {
+
+                //Getting data from the fetched result
+                error = cci_get_data (req, i, CCI_A_TYPE_STR, &data, &ind);
+                if (error < 0)
+                {
+                    printf ("get_data error: %d, %d\n", error, i);
+                    goto handle_error;
+                }
+                if (ind == -1)
+                {
+                    printf ("NULL\t");
+                }
+                else
+                {
+                    printf ("%s\t|", data);
+                }
+            }
+                printf ("\n");
+        }
+
+        //Closing the request handle
+        error = cci_close_req_handle (req);
+        if (error < 0)
+        {
+            printf ("close_req_handle error: %d, %s\n", cci_error.err_code,
+                    cci_error.err_msg);
+            goto handle_error;
+        }
+
+        //Disconnecting with the server
+        error = cci_disconnect (con, &cci_error);
+        if (error < 0)
+        {
+            printf ("error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+            goto handle_error;
+        }
+
+        return 0;
+      
+    handle_error:
+        if (req > 0)
+            cci_close_req_handle (req);
+        if (con > 0)
+            cci_disconnect (con, &cci_error);
+        return 1;
     }
 
 **Example 3**
 
 .. code-block:: c
 
+    // Example to use connection/statement pool in CCI
+    // In Linux: gcc -o cci_pool cci_pool.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+
     #include <stdio.h>
     #include "cas_cci.h"
      
-    //Example to use connection/statement pool in CCI
     int main ()
     {
         T_CCI_PROPERTIES *ps = NULL;
@@ -234,7 +354,7 @@ General process for writing applications is as follows. For using the prepared s
             rc = 0;
             goto cci_pool_end;
         }
-     
+        
         cci_property_set (ps, "user", "dba");
         cci_property_set (ps, "url", "cci:cubrid:localhost:33000:demodb:::");
         cci_property_set (ps, "pool_size", "10");
@@ -245,7 +365,7 @@ General process for writing applications is as follows. For using the prepared s
         cci_property_set (ps, "default_lock_timeout", "10");
         cci_property_set (ps, "login_timeout", "300000");
         cci_property_set (ps, "query_timeout", "3000");
-     
+        
         ds = cci_datasource_create (ps, &err);
         if (ds == NULL)
         {
@@ -270,7 +390,7 @@ General process for writing applications is as follows. For using the prepared s
         }
         
         sleep (1);
-     
+        
         for (i = 0; i < 3; i++)
         {
             if (cons[i] < 0)
@@ -281,10 +401,10 @@ General process for writing applications is as follows. For using the prepared s
         }
         
     cci_pool_end:
-        cci_property_destroy (ps);
-        cci_datasource_destroy (ds);
+      cci_property_destroy (ps);
+      cci_datasource_destroy (ds);
      
-        return 0;
+      return 0;
     }
      
     // working code
@@ -341,10 +461,10 @@ General process for writing applications is as follows. For using the prepared s
             printf ("get data error: %d\n", error);
             goto cci_work_end;
         }
-            printf ("%d\n", data);
+        printf ("%d\n", data);
         }
-        error = 1;
         
+        error = 1;
     cci_work_end:
         cci_close_req_handle (req);
         return error;

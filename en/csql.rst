@@ -127,7 +127,7 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
 .. option:: -S, --SA-mode
 
-    The following example shows how to connect to a database in standalone mode and execute the **csql** utility. If you want to use the database exclusively, use the **-S** option. If both **-S** and **-C** options are omitted, the **-C** option will be specified. ::
+    The following example shows how to connect to a database in standalone mode and execute the **csql** utility. If you want to use the database exclusively, use the **-S** option. If **csql** is running in standalone mode, it is impossible to use another **csql** or utility. If both **-S** and **-C** options are omitted, the **-C** option will be specified. ::
 
         csql -S demodb
 

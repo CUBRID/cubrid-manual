@@ -40,31 +40,27 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
 기본적인 작성 순서는 다음과 같으며, prepared statement 사용을 위해서는 변수에 데이터를 바인딩하는 작업이 추가된다. 이를 예제 1 및 예제 2에 구현하였다.
 
 *   데이터베이스 연결 핸들 열기(관련 함수: :c:func:`cci_connect`, :c:func:`cci_connect_with_url`)
-
 *   prepared statement를 위한 요청 핸들 얻기 (관련 함수: :c:func:`cci_prepare`)
-
 *   prepared statement에 데이터 바인딩하기(관련 함수: :c:func:`cci_bind_param`)
-
 *   prepared statement 실행하기(관련 함수: :c:func:`cci_execute`)
-
 *   실행 결과 처리하기(관련 함수: :c:func:`cci_cursor`, :c:func:`cci_fetch`, :c:func:`cci_get_data`, :c:func:`cci_get_result_info`)
-
 *   요청 핸들 닫기(관련 함수: :c:func:`cci_close_req_handle`)
-
 *   데이터베이스 연결 핸들 닫기(관련 함수: :c:func:`cci_disconnect`)
-
 *   데이터베이스 연결 풀 사용하기(관련 함수: :c:func:`cci_property_create`), :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`)
 
 .. note::
-    * Windows에서 CCI 응용 프로그램을 컴파일하려면 "WINDOWS"가 define되어야 하므로 "-DWINDOWS" 옵션을 컴파일러에 반드시 포함하도록 한다.
-    * 스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
-    * 자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 :c:func:`cci_end_tran` 을 호출하여 트랜잭션을 종료 처리하도록 한다. 
+
+    *   Windows에서 CCI 응용 프로그램을 컴파일하려면 "WINDOWS"가 define되어야 하므로 "-DWINDOWS" 옵션을 컴파일러에 반드시 포함하도록 한다.
+    *   스레드 기반 프로그램에서 데이터베이스 연결은 각 스레드마다 독립적으로 사용해야 한다.
+    *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 :c:func:`cci_end_tran` 을 호출하여 트랜잭션을 종료 처리하도록 한다. 
 
 **예제 1**
 
 .. code-block:: c
 
-    //Example to execute a simple query
+    // Example to execute a simple query
+    // In Linux: gcc -o simple simple.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+    
     #include <stdio.h>
     #include "cas_cci.h"  
     #define BUFSIZE  (1024)
@@ -185,47 +181,164 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
 
 .. code-block:: c
 
-    //Example to execute a query with a bind variable
-     
-    char *query = "select * from nation where name = ?";
-    char namebuf[128];
-     
-    //getting a connection handle for a connection with a server
-    con = cci_connect ("localhost", 33000, "demodb", "dba", "");
-    if (con < 0)
+    // Example to execute a query with a bind variable
+    // In Linux: gcc -o cci_bind cci_bind.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+
+    #include <stdio.h>
+    #include <string.h>
+    #include "cas_cci.h"
+    #define BUFSIZE  (1024)
+
+    int
+    main (void)
     {
-        printf ("cannot connect to database ");
-        return 1;
-    }
-     
-    //preparing the SQL statement
-    req = cci_prepare (con, query, 0, &cci_error);
-    if (req < 0)
-    {
-        printf ("prepare error: %d, %s ", cci_error.err_code,
-            cci_error.err_msg);
-        goto handle_error;
-    }
-     
-    //Binding date into a value
-    strcpy (namebuf, "Korea");
-    error =
+        int con = 0, req = 0, col_count = 0, i, ind;
+        int error;
+        char *data;
+        T_CCI_ERROR cci_error;
+        T_CCI_COL_INFO *col_info;
+        T_CCI_CUBRID_STMT stmt_type;
+        char *query = "select * from nation where name = ?";
+        char namebuf[128];
+
+        //getting a connection handle for a connection with a server
+        con = cci_connect ("localhost", 33000, "demodb", "dba", "");
+        if (con < 0)
+        {
+            printf ("cannot connect to database\n");
+            return 1;
+        }
+
+        //preparing the SQL statement
+        req = cci_prepare (con, query, 0, &cci_error);
+        if (req < 0)
+        {
+            printf ("prepare error: %d, %s\n", cci_error.err_code,
+                  cci_error.err_msg);
+            goto handle_error;
+        }
+
+        //Binding date into a value
+        strcpy (namebuf, "Korea");
+        error =
         cci_bind_param (req, 1, CCI_A_TYPE_STR, namebuf, CCI_U_TYPE_STRING,
                         CCI_BIND_PTR);
-    if (error < 0)
-    {
-        printf ("bind_param error: %d ", error);
-        goto handle_error;
+        if (error < 0)
+        {
+            printf ("bind_param error: %d ", error);
+            goto handle_error;
+        }
+
+        //getting column information when the prepared statement is the SELECT query
+        col_info = cci_get_result_info (req, &stmt_type, &col_count);
+        if (col_info == NULL)
+        {
+            printf ("get_result_info error: %d, %s\n", cci_error.err_code,
+                  cci_error.err_msg);
+            goto handle_error;
+        }
+
+        //Executing the prepared SQL statement
+        error = cci_execute (req, 0, 0, &cci_error);
+        if (error < 0)
+        {
+            printf ("execute error: %d, %s\n", cci_error.err_code,
+                  cci_error.err_msg);
+            goto handle_error;
+        }
+
+        //Executing the prepared SQL statement
+        error = cci_execute (req, 0, 0, &cci_error);
+        if (error < 0)
+        {
+            printf ("execute error: %d, %s\n", cci_error.err_code,
+                  cci_error.err_msg);
+            goto handle_error;
+        }
+
+        while (1)
+        {
+        
+            //Moving the cursor to access a specific tuple of results
+            error = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &cci_error);
+            if (error == CCI_ER_NO_MORE_DATA)
+            {
+                break;
+            }
+            if (error < 0)
+            {
+                printf ("cursor error: %d, %s\n", cci_error.err_code,
+                      cci_error.err_msg);
+                goto handle_error;
+            }
+
+            //Fetching the query result into a client buffer
+            error = cci_fetch (req, &cci_error);
+            if (error < 0)
+            {
+                printf ("fetch error: %d, %s\n", cci_error.err_code,
+                      cci_error.err_msg);
+                goto handle_error;
+            }
+            for (i = 1; i <= col_count; i++)
+            {
+
+                //Getting data from the fetched result
+                error = cci_get_data (req, i, CCI_A_TYPE_STR, &data, &ind);
+                if (error < 0)
+                {
+                    printf ("get_data error: %d, %d\n", error, i);
+                    goto handle_error;
+                }
+                if (ind == -1)
+                {
+                    printf ("NULL\t");
+                }
+                else
+                {
+                    printf ("%s\t|", data);
+                }
+            }
+                printf ("\n");
+        }
+
+        //Closing the request handle
+        error = cci_close_req_handle (req);
+        if (error < 0)
+        {
+            printf ("close_req_handle error: %d, %s\n", cci_error.err_code,
+                    cci_error.err_msg);
+            goto handle_error;
+        }
+
+        //Disconnecting with the server
+        error = cci_disconnect (con, &cci_error);
+        if (error < 0)
+        {
+            printf ("error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
+            goto handle_error;
+        }
+
+        return 0;
+      
+    handle_error:
+        if (req > 0)
+            cci_close_req_handle (req);
+        if (con > 0)
+            cci_disconnect (con, &cci_error);
+        return 1;
     }
-    
+
 **예제 3**
 
 .. code-block:: c
 
+    // Example to use connection/statement pool in CCI
+    // In Linux: gcc -o cci_pool cci_pool.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+
     #include <stdio.h>
     #include "cas_cci.h"
      
-    //Example to use connection/statement pool in CCI
     int main ()
     {
         T_CCI_PROPERTIES *ps = NULL;
@@ -353,10 +466,9 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
         
         error = 1;
     cci_work_end:
-      cci_close_req_handle (req);
-      return error;
+        cci_close_req_handle (req);
+        return error;
     }
-
 
 라이브러리 적용
 ---------------

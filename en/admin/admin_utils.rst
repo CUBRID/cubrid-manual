@@ -1713,9 +1713,9 @@ The following shows [options] available with the **cubrid diagdb** utility.
 
 .. option:: -d, --dump-type=TYPE
 
-    This option specifies the output range when you display the information of all files in the *demodb* database. If any option is not specified, the default value of 1 is used. ::
+    This option specifies the output range when you display the information of all files in the *demodb* database. If any option is not specified, the default value of -1 is used. ::
 
-        cubrid diagdb -d 1 myhost demodb
+        cubrid diagdb -d 1 demodb
 
     The utility has 9 types of **-d** options as follows:
 

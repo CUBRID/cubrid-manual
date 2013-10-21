@@ -1709,9 +1709,9 @@ Object type이 Class, 즉 테이블인 경우 Nsubgranules가 출력되는데 �
 
 .. option:: -d, --dump-type=TYPE
 
-    데이터베이스의 전체 파일에 대한 기록 상태를 출력할 때 출력 범위를 지정한다. 생략하면 기본값인 1이 지정된다. ::
+    데이터베이스의 전체 파일에 대한 기록 상태를 출력할 때 출력 범위를 지정한다. 생략하면 기본값인 -1이 지정된다. ::
 
-        cubrid diagdb -d 1 myhost demodb
+        cubrid diagdb -d 1 demodb
 
     **-d** 옵션에 적용되는 타입은 모두 9가지로, 그 종류는 다음과 같다.
 

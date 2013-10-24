@@ -143,6 +143,14 @@ Create a CUBRID stored function and publish the Java class as shown below.
     AS LANGUAGE JAVA 
     NAME 'SpCubrid.HelloCubrid() return java.lang.String';
 
+Or with **OR REPLACE** syntax, you can replace the current stored function/procedure or create the new stored function/procedure.
+
+.. code-block:: java
+
+    CREATE OR REPLACE FUNCTION hello() RETURN STRING
+    AS LANGUAGE JAVA
+    NAME 'SpCubrid.HelloCubrid() return java.lang.String';    
+    
 Call the Java stored function/procedure
 ---------------------------------------
 

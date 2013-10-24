@@ -143,6 +143,14 @@ Java 소스 작성 및 컴파일
     AS LANGUAGE JAVA 
     NAME 'SpCubrid.HelloCubrid() return java.lang.String';
 
+또는 **OR REPLACE** 구문을 사용하여 현재의 저장 함수/프로시저를 대체 혹은 새로 생성하는 문장을 작성할 수 있다.
+
+.. code-block:: java
+
+    CREATE OR REPLACE FUNCTION hello() RETURN STRING
+    AS LANGUAGE JAVA
+    NAME 'SpCubrid.HelloCubrid() return java.lang.String';    
+
 Java 저장 함수/프로시저 호출
 ----------------------------
 

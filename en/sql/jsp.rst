@@ -93,6 +93,8 @@ To use other vendor's implementation instead of Sun's Java Virtual Machine, add 
 How to Write Java Stored Function/Procedure
 ===========================================
 
+The following is an example to write a Java stored function/procedure.
+
 Check the cubrid.conf file
 --------------------------
 
@@ -282,9 +284,17 @@ In CUBRID, it is required to publish Java classes to call Java methods from SQL 
 Call Specifications
 -------------------
 
-To use a Java stored function/procedure in CUBRID, you must write call specifications. With call specifications, Java function names, parameter types, return values and their types can be accessed by SQL statements or Java applications. To write call specifications, use **CREATE FUNCTION** or **CREATE PROCEDURE** statement. Java stored function/procedure names are not case sensitive. The maximum number of characters a Java stored function/procedure can have is 254 bytes. The maximum number of parameters a Java stored function/procedure can have is 64. ::
+To use a Java stored function/procedure in CUBRID, you must write call specifications. With call specifications, Java function names, parameter types, return values and their types can be accessed by SQL statements or Java applications. To write call specifications, use **CREATE FUNCTION** or **CREATE PROCEDURE** statement. Java stored function/procedure names are not case sensitive. The maximum number of characters a Java stored function/procedure can have is 254 bytes. The maximum number of parameters a Java stored function/procedure can have is 64. 
 
-    CREATE {PROCEDURE procedure_name[(param[, param] …)] | FUNCTION function_name[(param[, param]…)] RETURN sql_type }
+If there is a return value, it is a function; if not, it is a procedure.
+
+::
+
+    CREATE [OR REPLACE] FUNCTION function_name[(param[, param]…)] RETURN sql_type
+    {IS | AS} LANGUAGE JAVA
+    NAME 'method_fullname (java_type_fullname[,java_type_fullname]…) [return java_type_fullname]';
+
+    CREATE [OR REPLACE] PROCEDURE procedure_name[(param[, param] …)]
     {IS | AS} LANGUAGE JAVA
     NAME 'method_fullname (java_type_fullname[,java_type_fullname]…) [return java_type_fullname]';
 

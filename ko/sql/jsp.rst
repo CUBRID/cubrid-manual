@@ -93,6 +93,8 @@ SUN 이외의 다른 벤더가 제공하는 Java 가상 머신을 사용하는 �
 함수/프로시저 작성
 ==================
 
+다음은 Java 저장 함수/프로시저를 작성하는 예이다.
+
 cubrid.conf 확인
 ----------------
 
@@ -282,9 +284,17 @@ CUBRID는 클라이언트나 SQL 문이나 Java 응용 프로그램에서 Java �
 Call Specifications
 -------------------
 
-CUBRID에서는 Java 저장 함수/프로시저를 사용하기 위해서는 Call Specifications를 작성해야 한다. Call Specifications는 Java 함수 이름과 인자 타입 그리고 리턴 값과 리턴 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다. Call Specifications를 작성하는 구문은 **CREATE FUNCTION** 또는 **CREATE PROCEDURE** 구문을 사용하여 작성한다. Java 저장 함수/프로시저의 이름은 대소문자를 구별하지 않는다. Java 저장 함수/프로시저 이름의 최대 길이는 254바이트이다. 또한 하나의 Java 저장 함수/프로시저가 가질 수 있는 인자의 최대 개수는 64개이다. ::
+CUBRID에서 Java 저장 함수/프로시저를 사용하기 위해서는 Call Specifications를 작성해야 한다. Call Specifications는 Java 함수 이름과 인자 타입 그리고 리턴 값과 리턴 값의 타입을 SQL 문이나 Java 응용프로그램에서 접근할 수 있도록 해주는 역할을 한다. Call Specifications를 작성하는 구문은 **CREATE FUNCTION** 또는 **CREATE PROCEDURE** 구문을 사용하여 작성한다. Java 저장 함수/프로시저의 이름은 대소문자를 구별하지 않는다. Java 저장 함수/프로시저 이름의 최대 길이는 254바이트이다. 또한 하나의 Java 저장 함수/프로시저가 가질 수 있는 인자의 최대 개수는 64개이다. 
 
-    CREATE {PROCEDURE procedure_name[(param[, param] …)] | FUNCTION function_name[(param[, param]…)] RETURN sql_type }
+리턴 값이 있으면 함수, 없으면 프로시저로 구분한다.
+
+::
+
+    CREATE [OR REPLACE] FUNCTION function_name[(param[, param]…)] RETURN sql_type
+    {IS | AS} LANGUAGE JAVA
+    NAME 'method_fullname (java_type_fullname[,java_type_fullname]…) [return java_type_fullname]';
+
+    CREATE [OR REPLACE] PROCEDURE procedure_name[(param[, param] …)]
     {IS | AS} LANGUAGE JAVA
     NAME 'method_fullname (java_type_fullname[,java_type_fullname]…) [return java_type_fullname]';
 

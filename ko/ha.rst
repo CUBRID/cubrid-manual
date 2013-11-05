@@ -2271,7 +2271,7 @@ ha_make_slavedb.sh 스크립트
             
     *   *nodeA*\에 DB의 재구동 없이 **log_max_archives** 적용
 
-        슬레이브 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 변경하지 않는다.
+        슬레이브 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 구축/재구축 이후 기존 설정을 유지할 것이므로 변경하지 않는다.
     
         ::
         
@@ -2705,7 +2705,7 @@ ha_make_slavedb.sh 스크립트
 
 #.  *nodeB*\에 DB의 재구동 없이 **log_max_archives**\의 변경된 값을 적용한다.
 
-    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 변경하지 않는다.
+    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeC*\ 의 구축/재구축 이후 기존 설정을 유지할 것이므로 변경하지 않는다.
     
     ::
     
@@ -3085,7 +3085,7 @@ ha_make_slavedb.sh 스크립트
 
 #.  *nodeC*\에 DB의 재구동 없이 **log_max_archives**\의 변경된 값을 적용한다.
 
-    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 변경하지 않는다.
+    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeD*\의 구축/재구축 이후 기존 설정을 유지할 것이므로 변경하지 않는다.
     
     ::
     
@@ -3510,7 +3510,7 @@ ha_make_slavedb.sh 스크립트
 
 #.  *nodeC*\에 DB의 재구동 없이 **log_max_archives**\의 변경된 값을 적용한다.
 
-    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 변경하지 않는다.
+    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeB*\ 의 재구축 이후 기존 설정을 유지할 것이므로 변경하지 않는다.
     
     ::
     

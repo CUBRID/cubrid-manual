@@ -2345,7 +2345,7 @@ CCI API 레퍼런스
             int con = 0, req = 0, res, ind, i, col_count;
             T_CCI_ERROR error;
             T_CCI_COL_INFO *res_col_info;
-            T_CCI_SQLX_CMD cmd_type;
+            T_CCI_CUBRID_STMT cmd_type;
             char *buffer, db_ver[16];;
     
             if ((con = cci_connect ("localhost", 33000, "demodb", "dba", "")) < 0)
@@ -2774,96 +2774,112 @@ CCI API 레퍼런스
 
     .. code-block:: c
     
-            conn = cci_connect ("localhost", 33000, "demodb", "dba", "");
-         
-            // get all columns' information of table "athlete"
-            req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", NULL, CCI_ATTR_NAME_PATTERN_MATCH, &error);
-         
-            // get info. of table "athlete"'s column "code".
-            //req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", "code", 0, &error);
-            if (req < 0 )
-            {
-                fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
-                goto _END;
-            }
-            res_col_info = cci_get_result_info(req, &cmd_type, &col_count);
-            if (!res_col_info && col_count == 0)
-            {
-                fprintf(stdout, "(%s, %d) ERROR : cci_get_result_info\n\n", __FILE__, __LINE__);
-                goto _END;
-            }
-            res = cci_cursor(req, 1, CCI_CURSOR_FIRST, &error);
-            if (res == CCI_ER_NO_MORE_DATA)
-            {
-                goto _END_WHILE;
-            }
-            if (res < 0)
-            {
-                fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
-                goto _END_WHILE;
-            }
-         
-         
-            while (1)
-            {
-                res = cci_fetch(req, &error);
-                if (res <  0)
+        // gcc -o schema_info schema_info.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
+
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <string.h>
+
+        #include "cas_cci.h"
+
+        int
+        main ()
+        {
+          int conn = 0, req = 0, col_count = 0, res = 0, i, ind;
+          T_CCI_ERROR error;
+          char *data, query_result_buffer[1024];
+          T_CCI_ERROR cci_error;
+          T_CCI_COL_INFO *col_info;
+          T_CCI_CUBRID_STMT cmd_type;
+
+
+          conn = cci_connect ("localhost", 33000, "demodb", "dba", "");
+          // get all columns' information of table "athlete"
+          // req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", "code", 0, &cci_error);
+          req =
+            cci_schema_info (conn, CCI_SCH_ATTRIBUTE, "athlete", NULL,
+                             CCI_ATTR_NAME_PATTERN_MATCH, &error);
+
+          if (req < 0)
+          {
+              fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,
+                       cci_error.err_msg, cci_error.err_code);
+              goto _END;
+          }
+          col_info = cci_get_result_info (req, &cmd_type, &col_count);
+          if (!col_info && col_count == 0)
+          {
+              fprintf (stdout, "(%s, %d) ERROR : cci_get_result_info\n\n", __FILE__,
+                       __LINE__);
+              goto _END;
+          }
+          res = cci_cursor (req, 1, CCI_CURSOR_FIRST, &cci_error);
+          if (res == CCI_ER_NO_MORE_DATA)
+          {
+              goto _END;
+          }
+          if (res < 0)
+          {
+              fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,
+                       cci_error.err_msg, cci_error.err_code);
+              goto _END;
+          }
+
+
+          while (1)
+          {
+              res = cci_fetch (req, &cci_error);
+              if (res < 0)
+              {
+                  fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__,
+                           __LINE__, cci_error.err_msg, cci_error.err_code);
+                  goto _END;
+              }
+
+              for (i = 1; i <= col_count; i++)
+              {
+                  if ((res = cci_get_data (req, i, CCI_A_TYPE_STR, &data, &ind)) < 0)
+                  {
+                      goto _END;
+                  }
+                  if (ind != -1)
+                  {
+                      strcat (query_result_buffer, data);
+                      strcat (query_result_buffer, "|");
+                  }
+                  else
+                  {
+                      strcat (query_result_buffer, "NULL|");
+                  }
+              }
+              strcat (query_result_buffer, "\n");
+
+              res = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &cci_error);
+              if (res == CCI_ER_NO_MORE_DATA)
+              {
+                  goto _END;
+              }
+              if (res < 0)
                 {
-                    fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
-                    goto _END_WHILE;
+                  fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__,
+                           __LINE__, cci_error.err_msg, cci_error.err_code);
+                  goto _END;
                 }
-         
-                for (i = 1; i <= col_count; i++)
-                {
-                    if ((res = cci_get_data(req, i, CCI_A_TYPE_STR, &buffer, &ind))<0)
-                    {
-                        goto _END_WHILE;
-                    }
-                    if ( ind != -1)
-                    {
-                        strcat(query_result_buffer, buffer);
-                        strcat(query_result_buffer, "|");
-                    } 
-                    else
-                    {
-                        strcat(query_result_buffer, "NULL|");
-                    }
-                }
-                strcat(query_result_buffer, "\n");
-         
-                res = cci_cursor(req, 1, CCI_CURSOR_CURRENT, &error);
-                if (res == CCI_ER_NO_MORE_DATA)
-                {
-                    goto _END_WHILE;
-                }
-                if (res < 0)
-                {
-                    fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
-                    goto _END_WHILE;
-                }
-            }
-        _END_WHILE:
-            res = cci_close_query_result(req, &error);
-            if ( res < 0)
-            {
-                fprintf (stdout, "(%s, %d) ERROR: cci_close_query_result(%d)\n", __FILE__, __LINE__, error.err_code);
-                goto _END;
-            }
-            res = cci_close_req_handle(req);
-            if (res <  0)
-                goto _END;
-         
+          }
+
         _END:
-            if (req > 0)
-                cci_close_req_handle(req);
-            if ( conn > 0)
-                res = cci_disconnect(conn, &error);
-            if (res < 0)
-                fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
-         
-                fprintf(stdout, "Result : %s\n", query_result_buffer);
-         
-            return 0;
+          if (req > 0)
+            cci_close_req_handle (req);
+          if (conn > 0)
+            res = cci_disconnect (conn, &cci_error);
+          if (res < 0)
+            fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,
+                     cci_error.err_msg, cci_error.err_code);
+
+          fprintf (stdout, "Result : %s\n", query_result_buffer);
+
+          return 0;
+        }
        
 .. c:function:: int cci_set_allocators(CCI_MALLOC_FUNCTION malloc_func, CCI_FREE_FUNCTION free_func, CCI_REALLOC_FUNCTION realloc_func, CCI_CALLOC_FUNCTION calloc_func)
 
@@ -3042,12 +3058,12 @@ CCI API 레퍼런스
 .. c:function:: int cci_set_autocommit (int conn_handle, CCI_AUTOCOMMIT_MODE  autocommit_mode)
 
     현재 데이터베이스 연결의 자동 커밋 모드 여부를 설정한다. 이 함수는 자동 커밋 모드를 설정하거나 해제하는 데에만 사용되며, 이 함수를 호출하면 진행 중이던 트랜잭션은 모드 설정과 상관없이 커밋된다.
+    
+    .. note:: **cubrid_broker.conf**\ 의 :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>`\ 은 프로그램 시작 시의 기본 자동 커밋 모드를 설정한다.
 
     :param conn_handle: (IN) 연결 핸들
     :param autocommit_mode: (IN) 자동 커밋모드 설정. CCI_AUTOCOMMIT_FALSE 또는 CCI_AUTOCOMMIT_TRUE 중 하나의 값을 가진다.
     :return: 에러 코드(0: 성공)
-    
-    **cubrid_broker.conf** 에서 설정하는 브로커 파라미터인 **CCI_DEFAULT_AUTOCOMMIT** 은 프로그램 시작 시의 기본 자동 커밋 모드를 설정한다.
 
         *   **CCI_ER_CON_HANDLE**
 

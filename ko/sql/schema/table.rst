@@ -12,7 +12,7 @@ CREATE TABLE
 
 ::
 
-    CREATE {TABLE | CLASS} table_name
+    CREATE {TABLE | CLASS} [IF NOT EXISTS] table_name
     [<subclass_definition>]
     [(<column_definition>, ... [, <table_constraint>, ...])] 
     [AUTO_INCREMENT = initial_value]
@@ -70,6 +70,7 @@ CREATE TABLE
      
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
+*   IF NOT EXISTS: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다. 
 *   *table_name* : 생성할 테이블의 이름을 지정한다(최대 254바이트).
 *   *column_name* : 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type* : 칼럼의 데이터 타입을 지정한다.
@@ -1606,11 +1607,14 @@ DROP TABLE
 
 ::
 
-    DROP [TABLE | CLASS] [IF EXISTS] <table_spec>, ...;
-     
-        <table_spec> ::=
-            [ONLY] table_name |
-            ALL table_name [(EXCEPT table_name, ...)]
+    DROP [ TABLE | CLASS ] [ IF EXISTS ] <table_specification_comma_list> [ CASCADE CONSTRAINTS ] ;
+
+        <table_specification_comma_list> ::= 
+            <single_table_spec> | ( <table_specification_comma_list> ) 
+
+            <single_table_spec> ::= 
+                |[ ONLY ] table_name 
+                | ALL table_name [ ( EXCEPT table_name, ... ) ] 
 
 *   *table_name* : 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
 *   **ONLY** 키워드 뒤에 수퍼클래스 이름이 명시되면, 해당 수퍼클래스만 삭제하고 이를 상속받는 서브클래스는 삭제하지 않는다.
@@ -1631,6 +1635,25 @@ DROP TABLE
 
     ERROR: Unknown class "a_tbl".
 
+* **CASCADE CONSTRAINTS**\ 가 명시되면 DROP 대상 테이블의 기본 키를 참조하는 다른 테이블들이 있어도 DROP되며, 이 테이블을 참조하는 다른 테이블들의 외래 키 역시 DROP된다. 단, 참조하는 테이블들의 데이터는 삭제되지 않는다. 
+
+다음은 b_child 테이블이 참조하는 a_parent 테이블을 DROP하는 예이다. b_child의 외래 키 역시 DROP되며, b_child의 데이터는 유지된다. 
+
+.. code-block:: sql 
+
+    CREATE TABLE a_parent ( 
+        id INTEGER PRIMARY KEY, 
+        name VARCHAR(10) 
+    ); 
+    CREATE TABLE b_child ( 
+        id INTEGER PRIMARY KEY, 
+        parent_id INTEGER, 
+        CONSTRAINT fk_parent_id FOREIGN KEY(parent_id) REFERENCES a_parent(id) ON DELETE CASCADE ON UPDATE RESTRICT 
+    ); 
+
+    DROP TABLE a_parent CASCADE CONSTRAINTS;     
+    
+    
 RENAME TABLE
 ============
 

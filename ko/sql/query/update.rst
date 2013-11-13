@@ -2,12 +2,12 @@
 UPDATE
 ******
 
-**UPDATE** 문을 사용하면 대상 테이블에 저장된 레코드의 칼럼 값을 새로운 값으로 업데이트할 수 있다. **SET** 절에는 업데이트할 칼럼 이름과 새로운 값을 명시하며, :ref:`where-clause`\ 에는 업데이트할 레코드를 추출하기 위한 조건을 명시한다. 하나의 **UPDATE** 문으로 하나 이상의 테이블을 업데이트할 수 있다.
+**UPDATE** 문을 사용하면 대상 테이블에 저장된 레코드의 칼럼 값을 새로운 값으로 업데이트할 수 있다. **SET** 절에는 업데이트할 칼럼 이름과 새로운 값을 명시하며, :ref:`where-clause`\ 에는 업데이트할 레코드를 추출하기 위한 조건을 명시한다. 하나의 **UPDATE** 문으로 하나 이상의 테이블을 업데이트할 수 있다. 또한, **UPDATE** 문으로 뷰를 업데이터할 수 있다.
 
 ::
 
     <UPDATE single table>
-    UPDATE table_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT} ...]
+    UPDATE table_name|view_name SET column_name = {expr | DEFAULT} [, column_name = {expr | DEFAULT} ...]
         [WHERE search_condition]
         [ORDER BY {col_name | expr}]
         [LIMIT row_count]
@@ -121,3 +121,45 @@ UPDATE
 위의 예에서 **JOIN** 조건 칼럼인 *id* = 5 인 행의 개수가 *a_tbl* 에는 한 개 있고 *b_tbl* 에는 두 개 있다면, *a_tbl.id* = 5 인 행의 업데이트 대상 칼럼인 *a_tbl.charge*\ 는 *b_tbl*\ 의 첫 번째 행의 *rate* 칼럼 값만 사용한다.
 
 조인 구문에 대한 자세한 설명은 :ref:`join-query`\ 를 참고한다.
+
+다음은 뷰에 대해 업데이트를 수행하는 예이다.
+
+.. code-block:: sql 
+
+    CREATE TABLE tbl1(a INT, b INT); 
+    CREATE TABLE tbl2(a INT, b INT); 
+    INSERT INTO tbl1 VALUES (5,5),(4,4),(3,3),(2,2),(1,1); 
+    INSERT INTO tbl2 VALUES (6,6),(4,4),(3,3),(2,2),(1,1); 
+    CREATE VIEW vw AS SELECT tbl2.* FROM tbl2 LEFT JOIN tbl1 ON tbl2.a=tbl1.a WHERE tbl2.a<=3; 
+
+    UPDATE vw SET a=1000; 
+
+아래의 UPDATE 문 결과는 :ref:`update_use_attribute_references <update_use_attribute_references>` 파라미터의 값에 따라 달라진다. 
+      
+.. code-block:: sql 
+
+    CREATE TABLE tbl(a INT, b INT); 
+    INSERT INTO tbl values (10, NULL); 
+
+    UPDATE tbl SET a=1, b=a; 
+      
+이 파라미터의 값이 yes이면, 위의 UPDATE 질의에서 갱신되는 b의 값은 "a=1"의 영향을 받아 1이 된다. 
+
+.. code-block:: sql 
+  
+    SELECT * FROM tbl; 
+
+:: 
+  
+    1, 1 
+      
+이 파라미터의 값이 no이면, 위의 UPDATE 질의에서 갱신되는 b의 값은 "a=1"의 영향을 받지 않고 해당 레코드에 저장되어 있는 a 값의 영향을 받아 NULL이 된다. 
+
+.. code-block:: sql 
+  
+    SELECT * FROM tbl; 
+      
+:: 
+  
+    1, NULL
+    

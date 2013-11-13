@@ -1389,6 +1389,322 @@ CUBRID SHARD ID 확인
         ---------------------------------------------------
                0           shard1                192.168.10.1
 
+.. _broker-test: 
+
+브로커와 DB 간 연결 테스트 
+========================== 
+
+**cubrid broker test**\ 는 지정한 브로커와 접속하는 DB에 사용자가 정의한 질의문을 수행해 보는 명령이다. 샤드 기능이 활성화되면 모든 SHARD DB에 질의를 수행해 본다. 질의 수행 후 트랜잭션은 롤백된다. 이 명령어를 통해 지정한 브로커에 접속하는 모든 SHARD DB에 질의를 수행하면 각 SHARD DB에 대한 질의 성공 여부를 확인할 수 있고, SHARD HASH 기능을 설정한 경우 입력한 질의가 어떤 SHARD DB에서 수행되었는지 확인할 수 있다. 
+
+:: 
+
+    cubrid broker test <broker_name> [-D <db_name>] [-u <db_user>] [-p <db_password>] {-c <query> | -i <input_file>} [-o <output_file>] [-s] [-v] 
+
+* db_name: DB 이름 
+* db_user: DB 사용자 계정 
+* db_password: DB 사용자 암호 
+* query: 질의문 
+* input_file: 입력할 질의문을 저장한 파일 
+* output_file: 결과를 저장할 파일 
+
+**cubrid broker test**\ 에서 사용하는 옵션은 다음과 같다. 
+
+.. program:: broker_test 
+
+.. option:: -D DB_NAME 
+     
+    테스트 대상 DB 이름을 지정한다. 이 옵션이 생략될 때 cubrid_broker.conf의 SHARD 파라미터 값이 ON이면 SHARD_DB_NAME 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 에러가 발생한다. 
+     
+.. option:: -u DB_USER 
+
+    테스트 대상 DB 사용자 계정을 지정한다. 이 옵션이 생략될 때 cubrid_broker.conf의 SHARD 파라미터 값이 ON이면 SHARD_DB_USER 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 CUBRID에서는 "public"이, MySQL에서는 "root"가 입력된다. 
+     
+.. option:: -p DB_PASSWORD 
+
+    테스트 대상 DB 사용자 계정의 암호를 지정한다. cubrid_broker.conf의 SHARD 파라미터 값이 ON일 때 이 옵션이 생략되면 SHARD_DB_PASSWORD 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 CUBRID, MySQL 둘 다 빈 문자열("")이 입력된다. 
+     
+.. option:: -c QUERY 
+
+    질의 문자열을 지정한다. 질의를 지정하기 위해 -c 또는 -i 옵션이 사용될 수 있다. -c 옵션과 -i 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
+     
+.. option:: -i FILE_NAME 
+
+    입력할 질의들을 저장한 파일을 지정한다. 질의를 지정하기 위해 -c 또는 -i 옵션이 사용될 수 있다. -c 옵션과 -i 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
+     
+.. option:: -o FILE_NAME 
+
+    화면에 출력되는 수행 결과를 저장할 파일 이름을 지정한다. 이 옵션이 생략되면 수행 결과를 화면에만 출력한다. 
+     
+.. option:: -s 
+
+    SHARD 힌트가 포함된 질의는 해당 SHARD DB에서만 수행된다. 이 옵션이 생략되면 모든 SHARD DB에 대해 질의를 수행한다. 
+     
+    SHARD 파라미터 값이 OFF이면 이 파라미터의 영향을 받지 않는다. 
+
+.. option:: -v 
+
+    아래의 정보와 함께 에러 메시지와 SELECT의 결과셋을 같이 출력한다. 
+     
+    * RESULT : 질의 수행 후 에러가 반환되었는지 여부. [OK | FAIL] 출력 
+    * SHARD_ID : 질의가 수행된 SHARD DB의 ID(SHARD OFF 인 경우 해당 항목은 출력되지 않음) 
+    * ROW COUNT : DML에 의해 영향을 받는 행(affected rows)의 개수, 또는 SELECT 질의인 경우 행의 개수. 질의 수행 에러 시 -1을 출력 
+    * EXECUTION TIME : 질의가 수행된 시간 
+    * QUERY : 사용자가 입력한 질의 
+     
+    이 옵션이 생략되면 "RESULT, SHARD_ID, ROW COUNT, EXECUTION TIME, QUERY"만 출력한다. 
+
+다음은 위의 옵션을 사용한 예이다. 
+
+*   DB에 질의 
+
+    **cubrid_broker.conf의 SHARD 파라미터 값이 OFF일 때** 
+     
+    DB 접속이 잘 되는지 확인한다. 
+
+    :: 
+
+        $ cubrid broker test shard1 -D shard -u shard -p shard123 -c "select 1 from db_root where charset = 3" 
+     
+        @ cubrid broker test 
+        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
+
+        @ SHARD OFF 
+
+        RESULT ROW COUNT EXECUTION TIME QUERY 
+        ======================================================== 
+        OK 1 0.011341 sec select 1,'a' from db_root where charset = 3 
+        @ [OK] QUERY TEST 
+         
+    **cubrid_broker.conf의 SHARD 파라미터 값이 ON일 때** 
+
+    모든 SHARD DB에 대해 접속이 잘 되는지 확인한다. 
+
+    :: 
+     
+        $ cubrid broker test shard1 -D shard -u shard -p shard123 -c "select 1 from db_root where charset = 3" 
+
+        @ cubrid broker test 
+        @ [OK] CONNECT shard1 DB [shard] USER [shard] 
+
+        @ SHARD ON 
+
+        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
+        ================================================================== 
+        OK 0 1 0.003436 sec select 1 from db_root where charset = 3 
+        OK 1 1 0.003010 sec select 1 from db_root where charset = 3 
+        OK 2 1 0.003039 sec select 1 from db_root where charset = 3 
+        OK 3 1 0.002916 sec select 1 from db_root where charset = 3 
+        @ [OK] QUERY TEST 
+
+*   사용자 권한 확인 
+
+    **SHARD DB 중 하나에 INSERT 권한이 없는 경우** 
+     
+    INSERT 권한이 없으면 RESULT가 FAIL로 표시된다. 
+     
+    :: 
+     
+        $ cubrid broker test shard1 -c "insert into foo values (1,"a") " -v 
+         
+        @ cubrid broker test 
+        @ [OK] CONNECT shard1 DB [shard] USER [shard] 
+
+        @ SHARD ON 
+
+        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
+        ================================================================== 
+        OK 0 1 0.001322 sec insert into foo values(1,'a') 
+        FAIL(-494) -1 -1 0.001608 sec insert into foo values(1,'a') 
+        <Error> 
+        ERROR CODE : -494 
+        Semantic: INSERT is not authorized on foo. insert into foo foo (foo.a, foo.b) values (1, cast('a' as v...[CAS INFO - 127.0.0.1:52002, 1, 18145]. 
+
+        OK 2 1 0.001334 sec insert into foo values(1,'a') 
+        OK 3 1 0.001325 sec insert into foo values(1,'a') 
+        @ [FAIL] QUERY TEST 
+     
+    **브로커에 접속하는 DB 중 하나에 UPDATE 권한이 없는 경우** 
+     
+    UPDATE 권한이 없으면 RESULT가 FAIL로 표시된다. 
+     
+    :: 
+     
+        $ vi dml.txt 
+     
+        #query 
+        select a from foo 
+        insert into foo(b) values(3) 
+        update foo set c = 2 where b = 3 
+        delete foo where b = 3 
+     
+    :: 
+     
+        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt -v 
+
+        @ cubrid broker test 
+        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
+
+        @ SHARD OFF 
+
+        RESULT ROW COUNT EXECUTION TIME QUERY 
+        ======================================================== 
+        OK 1 0.001612 sec select a from foo 
+        <Result of SELECT Command> 
+          a 
+        ------------ 
+          1 
+
+        OK 1 0.001215 sec insert into foo(b) values(3) 
+        FAIL(-494) -1 0.001291 sec update foo set c = 2 where b = 3 
+        <Error> 
+        ERROR CODE : -494 
+        Semantic: UPDATE is not authorized on foo. update foo foo set foo.c=2 where foo.b=3[CAS INFO - 127.0.0.1:52001, 1, 18139]. 
+
+        OK 0 0.001534 sec delete foo where b = 3 
+        @ [FAIL] QUERY TEST 
+
+*   SHARD HASH 정상 동작 확인 
+
+    특정 키에 대해 해싱이 잘 되는지 확인한다. 
+
+    :: 
+     
+        $ vi test_query.txt 
+         
+        #query 
+        select number from demo_db where key = /*+ shard_key */ 14 
+        select number from demo_db where key = /*+ shard_key */ 50 
+        select number from demo_db where key = /*+ shard_key */ 80 
+        select number from demo_db where key = /*+ shard_key */ 120 
+        .. 
+
+    :: 
+     
+        $ cubrid broker test shard1 -D shard -u shard -p shard123 -i shard_key.txt -v -s 
+
+        @ cubrid broker test 
+        @ [OK] CONNECT shard1 DB [shard] USER [shard] 
+
+        @ SHARD ON 
+
+        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
+        ================================================================== 
+        OK 0 1 0.002225 sec select * from foo where a = /*+ shard_key */ 10 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          10 'aaaa' 
+
+        OK 1 1 0.001870 sec select * from foo where a = /*+ shard_key */ 40 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          40 'bbb' 
+
+        OK 2 1 0.002004 sec select * from foo where a = /*+ shard_key */ 70 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          70 'cccc' 
+
+        OK 3 1 0.002025 sec select * from foo where a = /*+ shard_key */ 100 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          100 'dddd' 
+
+        @ [OK] QUERY TEST 
+         
+*   -v 옵션 사용 여부 
+
+    **-v 옵션을 사용할 때** 
+     
+    질의 성공 시 SELECT 질의인 경우 결과셋을 출력하며, 실패 시 에러 메시지를 출력한다. 
+     
+    :: 
+     
+        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt -v 
+        @ cubrid broker test 
+        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
+
+        @ SHARD OFF 
+
+        RESULT ROW COUNT EXECUTION TIME QUERY 
+        OK 1 0.001311 sec select a from foo 
+        <Result of SELECT Command> 
+          a 
+        ------------ 
+          1 
+
+        OK 1 0.001083 sec insert into foo(b) values(3) 
+        FAIL(-494) -1 0.001166 sec update foo set c = 2 where b = 3 
+        <Error> 
+        ERROR CODE : -494 
+        Semantic: UPDATE is not authorized on foo. update foo foo set foo.c=2 where foo.b=3[CAS INFO - 127.0.0.1:52001, 1, 18139]. 
+
+        OK 0 0.001399 sec delete foo where b = 3 
+        @ [FAIL] QUERY TEST 
+         
+    **-v 옵션을 사용하지 않을 때** 
+
+    질의 성공, 실패 여부만 출력한다. 
+     
+    :: 
+     
+        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt 
+         
+        @ cubrid broker test 
+        @ [OK] CONNECT broker1 DB [demodb] USER [shard] 
+
+        @ SHARD OFF 
+
+        RESULT ROW COUNT EXECUTION TIME QUERY 
+        OK 1 0.001485 sec select a from foo 
+        OK 1 0.001123 sec insert into foo(b) values(3) 
+        FAIL(-494) -1 0.001180 sec update foo set c = 2 where b = 3 
+        OK 0 0.001393 sec delete foo where b = 3 
+        @ [FAIL] QUERY TEST 
+         
+*   SHARD 키 값 확인 
+
+    -s 옵션과 함께 SHARD 키 힌트가 주어지면 해당 SHARD DB에 질의를 수행하며, 그 결과를 출력한다. SHARD_ID로 어느 SHARD DB에서 질의가 수행되었는지 확인할 수 있다. 
+     
+    :: 
+     
+        $ cubrid broker test shard1 -i shard_key.txt -s -v 
+         
+        @ cubrid broker test 
+        @ [OK] CONNECT shard1 DB [shard1] USER [shard] 
+
+        @ SHARD ON 
+
+        RESULT SHARD_ID ROW COUNT EXECUTION TIME QUERY 
+        OK 0 1 0.144730 sec select * from foo where a = /*+ shard_key */ 10 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          10 'aaaa' 
+
+        OK 1 1 0.001870 sec select * from foo where a = /*+ shard_key */ 40 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          40 'bbb' 
+
+        OK 2 1 0.002004 sec select * from foo where a = /*+ shard_key */ 70 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          70 'cccc' 
+
+        OK 3 1 0.002025 sec select * from foo where a = /*+ shard_key */ 100 
+        <Result of SELECT Command> 
+          a b 
+        ---------------------------------- 
+          100 'dddd' 
+
+        @ [OK] QUERY TEST
+
 .. _broker-logs:
     
 브로커 로그

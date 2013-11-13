@@ -39,6 +39,7 @@ HA 복제 안정화
 --------------
 
 
+
 Sharding 기능 개선 및 안정화 
 ----------------------------
 
@@ -346,6 +347,13 @@ cubrid_broker.conf에 REPLICA_ONLY 파라미터를 추가하여, 이 값이 ON�
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
 CUBRIDSUS-12136의 수정으로, --sysadm과 함께 --write-on-standby 옵션 사용 시 슬레이브 노드 또는 레플리카 노드에서 UPDATE STATISTICS 문의 수행이 가능해졌다. 
+
+CAS와 DB 서버 간 복제 지연 시 다른 노드로 재접속을 시도하게 하는 기능 추가(CUBRIDSUS-11707)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  
+cubrid_ha.conf에 ha_delay_limit와 ha_delay_limit_delta를 추가하여 standby 서버에 ha_delay_limit 이상의 복제 지연 발생 시 CAS는 해당 DB와 연결을 끊고 다른 DB로 접속을 시도하는 기능을 추가했다. ha_delay_limit 이상의 복제 지연 발생 시 서버는 스스로 복제 지연 상태라 판단하고 복제 지연 시간이 ha_delay_limit에서 ha_delay_limit_delta를 뺀 시간 보다 낮아질 경우 복제 지연이 해소되었다고 판단한다. 
+
+복제 지연으로 인해 우선 순위가 낮은 DB에서 연결된 CAS는 cubrid_broker.conf의 RECONNECT_TIME으로 명시한 시간이 경과하면 복제 지연이 해소되었을 것으로 기대하여, 우선 순위가 높은 standby DB 서버에 재접속을 시도한다. 
 
 Sharding
 --------

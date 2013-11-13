@@ -5,20 +5,35 @@
 통계 정보 갱신
 ==============
 
-**UPDATE STATISTICS ON** 문은 질의 처리기에서 사용되는 내부 통계 정보를 생성한다. 이러한 통계 정보는 데이터베이스 시스템이 질의를 처리하는데 효과적인 방법을 사용할 수 있게 한다. ::
+**UPDATE STATISTICS ON** 문은 질의 처리기에서 사용되는 내부 통계 정보를 생성한다. 이러한 통계 정보는 데이터베이스 시스템이 질의를 처리하는데 효과적인 방법을 사용할 수 있게 한다. 
 
-    UPDATE STATISTICS ON { table_spec [ {, table_spec } ] | ALL CLASSES | CATALOG CLASSES } [ ; ]
-    
-    table_spec ::=
-    single_table_spec
-    | ( single_table_spec [ {, single_table_spec } ] )
-    
-    single_table_spec ::=
-    [ ONLY ] table_name
-    | ALL table_name [ ( EXCEPT table_name ) ]
+::
 
-*   **ALL CLASSES** : 키워드 **ALL CLASSES** 를 지정하였을 경우 데이터베이스 안에 존재하는 모든 테이블에 대한 통계 정보가 갱신된다.
+    UPDATE STATISTCIS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
+     
+    UPDATE STATISTCIS ON ALL CLASSES [WITH FULLSCAN]; 
+  
+    UPDATE STATISTCIS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
+*   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 
+*   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
+*   **CATALOG CLASSES**: 카탈로그 테이블에 대한 통계 정보를 업데이트한다. 
+
+.. code-block:: sql 
+  
+    CREATE TABLE foo (a INT, b INT); 
+    CREATE INDEX idx1 ON foo (a); 
+    CREATE INDEX idx2 ON foo (b); 
+  
+    UPDATE STATISTICS ON foo; 
+    UPDATE STATISTICS ON foo WITH FULLSCAN; 
+  
+    UPDATE STATISTICS ON ALL CLASSES; 
+    UPDATE STATISTICS ON ALL CLASSES WITH FULLSCAN; 
+  
+    UPDATE STATISTICS ON CATALOG CLASSES; 
+    UPDATE STATISTICS ON CATALOG CLASSES WITH FULLSCAN; 
+  
 통계 정보 갱신 시작과 종료 시 서버 에러 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 통계 정보 갱신에 걸리는 시간을 확인할 수 있다.
     
 ::
@@ -28,10 +43,6 @@
 
     Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
     Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
-
-.. note::
-
-    2008 R4.3 이하 및 9.1 버전에서는 인덱스 추가 시 기존의 모든 인덱스의 통계 정보가 갱신되면서 시스템의 부하로 작용했으나, 2008 R4.4, 9.2 버전부터는 추가되는 인덱스의 통계 정보만 갱신된다.
 
 통계 정보 확인
 ==============

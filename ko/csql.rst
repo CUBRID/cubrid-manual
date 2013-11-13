@@ -226,6 +226,23 @@ CSQL 시작 옵션
 
         csql --no-single-line demodb
 
+.. option::  --sysadm
+
+    이 옵션은 **-u dba**\와 같이 사용해야 하며, 시스템 관리자 모드로 실행하고자 할 때 지정한다.
+    
+    ::
+
+        csql -u dba --sysadm demodb          
+        
+        
+.. option::  --write-on-standby
+
+    이 옵션은 시스템 관리자 모드 옵션(**--sysadm--**)과 함께 사용해야 한다. 이 옵션으로 CSQL을 실행한 dba는 standby 상태의 DB 즉, 슬레이브 DB 또는 레플리카 DB에 쓰기 작업을 수행할 수 있다.
+    
+    :: 
+
+         csql --sysadm --write-on-standby -u dba testdb@localhost 
+         
 .. _csql-session-commands:
 
 세션 명령어

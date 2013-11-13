@@ -570,6 +570,10 @@ cubrid_broker.conf
 
 **cubrid_broker.conf** 는 CUBRID SHARD 기능을 설정할 때 사용한다. 설정 시 **cubrid_broker.conf.shard**\ 를 참고하며, **cubrid_broker.conf**\ 에 대한 자세한 내용은 :ref:`broker-configuration`\ 을 참고한다.
 
+**대상 shard DB 설정** 
+  
+**APPL_SERVER** 파라미터에 의해 대상 shard DB를 설정할 수 있다. CUBRID를 사용하는 경우는 별도의 설정이 필요없지만, MySQL을 사용하고자 하는 경우 이 값을 반드시 설정해야 한다. 설정 방법은 :ref:`APPL_SERVER <appl_server>`\ 를 참고한다. 
+
 .. _shard-connection-file:
 
 shard 연결 파일(SHARD_CONNECTION_FILE)
@@ -652,6 +656,7 @@ CUBRID SHARD는 시작 시 기본 설정 파일인 **cubrid_broker.conf** 의 **
 
 shard key 설정 파일의 예와 형식은 다음과 같다. ::
 
+    [%student_no]
     [%student_no]
     #min    max     shard_id
     0       31      0   
@@ -846,6 +851,12 @@ CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 �
         SHARD_KEY_LIBRARY_NAME =$CUBRID/conf/shard_key_udf.so
         SHARD_KEY_FUNCTION_NAME =fn_shard_key_udf
 
+        
+    .. note:: 
+    
+        *   응용 프로그램에서 사용자 해시 함수를 정의할 때 shard key의 입력 값으로 16bit(short), 32bit(int), 64bit(INT64) integer를 사용할 수 있다.
+        *   VARCHAR를 사용해야 되는 경우 사용자가 해시 함수를 정의해야 한다. 
+
 .. _shard-start-monitoring:
 
 구동 및 모니터링
@@ -853,6 +864,11 @@ CUBRID SHARD는 기본 내장된 해시 함수 외에 사용자 정의 해시 �
 
 cubrid broker 유틸리티를 이용하여 CUBRID SHARD 기능을 구동하거나 정지할 수 있고, 각종 상태 정보를 조회할 수 있다.
 보다 자세한 내용은 :ref:`broker`\ 를 참고한다.    
+
+설정 테스트 
+=========== 
+
+cubrid broker test 명령을 이용하여 설정이 정상 동작하는지 테스트할 수 있다. 보다 자세한 내용은 :ref:`broker-test`\ 를 참고한다. 
 
 .. _shard-logs:
 

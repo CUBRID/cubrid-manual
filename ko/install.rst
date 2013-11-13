@@ -44,7 +44,7 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
 **응용 프로그램의 호환성**
 
-*   2008 R2.0 또는 그 이상 버전에서 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 9.2 DB에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 9.2 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다.
+*   2008 R4.1 또는 그 이상 버전에서 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 10.0 DB에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 10.0 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다.
 
 *   새로운 예약어 추가 및 일부 질의에 대한 스펙 변경으로 인해 질의 결과가 이전 버전과 다를 수 있으므로 주의한다.
 
@@ -64,10 +64,14 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 상호 운용성
 -----------
 
+**CUBRID DB 서버와 브로커 간 상호 운용성**
+
 *   CUBRID DB 서버와 브로커 서버를 분리하여 운영하는 경우, 서버 장비의 운영 체제가 다르더라도 상호 운용성을 보장한다. 단, DB 서버의 Bit 버전과 브로커 서버의 Bit 버전은 서로 동일해야 한다. 예를 들어, Linux용 64Bit 버전 DB 서버는 Windows용 64Bit 버전 브로커 서버와 상호 운용이 가능하지만, 32Bit 버전 브로커 서버와는 상호 운용이 불가능하다.
 
-    DB 서버와 브로커 서버 사이의 관계에 대한 설명은 :doc:`intro`\ 를 참고한다. CUBRID SHARD에 대한 설명은 :doc:`shard` 를 참고한다.
+    DB 서버와 브로커 서버 사이의 관계에 대한 설명은 :doc:`intro`\를 참고한다. CUBRID SHARD에 대한 설명은 :doc:`shard`\를 참고한다.
 
+.. _Installing-and-Running-on-Linux:
+    
 Linux에서의 설치와 실행
 -----------------------
 
@@ -75,173 +79,176 @@ Linux에서의 설치와 실행
 
 Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
 
-* 운영체제 버전
+*   운영체제 버전
 
-  운영체제 버전에 상관 없이 glibc 2.3.4 버전 이상만 지원한다.
-  glibc 버전은 다음과 같은 방법으로 확인한다. ::
+    운영체제 버전에 상관 없이 glibc 2.3.4 버전 이상만 지원한다.
+    glibc 버전은 다음과 같은 방법으로 확인한다. ::
       
-    % rpm -q glibc
+        % rpm -q glibc
+
+*   64비트 여부 
+    
+    CUBRID 2008 R2.0 버전부터 32비트 버전과 64비트 버전을 각각 지원한다.
+    Linux버전은 다음과 같은 방법으로 확인한다. ::
         
-* 64비트 여부 
+        % uname -a
+        Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
+    
+    32비트 Linux에서는 CUBRID 32비트 버전을, 64비트 Linux에서는 CUBRID 64비트 버전을 설치한다. 
+    설치할 추가 라이브러리는 다음과 같다.
+    
+    * Curses Library (rpm -q ncurses)
+    * gcrypt Library (rpm -q libgcrypt)
+    * stdc++ Library (rpm -q libstdc++)
+    
+*   /etc/hosts 파일에 호스트 이름과 IP 주소 매핑이 정상인지 확인하기
 
-  CUBRID 2008 R2.0 버전부터 32비트 버전과 64비트 버전을 각각 지원한다.
-  Linux버전은 다음과 같은 방법으로 확인한다. ::
-      
-    % uname -a
-    Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
-
-  32비트 Linux에서는 CUBRID 32비트 버전을, 64비트 Linux에서는 CUBRID 64비트 버전을 설치한다. 
-  설치할 추가 라이브러리는 다음과 같다.
+    호스트 이름과 이에 맞는 IP 주소가 비정상적으로 매핑되어 있으면 DB 서버를 구동할 수 없으므로, 정상적으로 매핑되어 있는지 확인한다.
   
-  * Curses Library (rpm -q ncurses)
-  * gcrypt Library (rpm -q libgcrypt)
-  * stdc++ Library (rpm -q libstdc++)
-
 **CUBRID 설치**
 
-    설치 프로그램은 바이너리를 포함한 셸 스크립트로 되어 있어 자동으로 설치할 수 있다. 다음은 리눅스에서 "CUBRID-9.2.0.0201-linux.x86_64.sh" 파일을 이용하여 CUBRID를 설치하는 예제이다. ::
+설치 프로그램은 바이너리를 포함한 셸 스크립트로 되어 있어 자동으로 설치할 수 있다. 다음은 리눅스에서 "CUBRID-9.2.0.0201-linux.x86_64.sh" 파일을 이용하여 CUBRID를 설치하는 예제이다. ::
 
-        $ sh CUBRID-9.2.0.0201-linux.x86_64.sh
-        Do you agree to the above license terms? (yes or no) : yes
-        Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
-        Install CUBRID to '/home1/cub_user/CUBRID' ...
-        In case a different version of the CUBRID product is being used in other machines, 
-        please note that the CUBRID 9.2 servers are only compatible with the CUBRID 9.2 clients and vice versa.
-        Do you want to continue? (yes or no) [Default: yes] : yes
-        Copying old .cubrid.sh to .cubrid.sh.bak ...
+    $ sh CUBRID-9.2.0.0201-linux.x86_64.sh
+    Do you agree to the above license terms? (yes or no) : yes
+    Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
+    Install CUBRID to '/home1/cub_user/CUBRID' ...
+    In case a different version of the CUBRID product is being used in other machines, 
+    please note that the CUBRID 9.2 servers are only compatible with the CUBRID 9.2 clients and vice versa.
+    Do you want to continue? (yes or no) [Default: yes] : yes
+    Copying old .cubrid.sh to .cubrid.sh.bak ...
 
-        CUBRID has been successfully installed.
+    CUBRID has been successfully installed.
 
-        demodb has been successfully created.
+    demodb has been successfully created.
 
-        If you want to use CUBRID, run the following commands
-        $ . /home1/cub_user/.cubrid.sh
-        $ cubrid service start
+    If you want to use CUBRID, run the following commands
+    $ . /home1/cub_user/.cubrid.sh
+    $ cubrid service start
 
-    위의 예제와 같이 다운로드한 파일(CUBRID-9.2.0.0201-linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 CUBRID 관련 환경 정보를 설정해야 한다. 이 설정은 해당 터미널에 로그인할 때 자동 설정되도록 지정되어 있으므로 설치 후 최초 한 번만 수행하면 된다. ::
+위의 예제와 같이 다운로드한 파일(CUBRID-9.2.0.0201-linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 CUBRID 관련 환경 정보를 설정해야 한다. 이 설정은 해당 터미널에 로그인할 때 자동 설정되도록 지정되어 있으므로 설치 후 최초 한 번만 수행하면 된다. ::
 
-        $ . /home1/cub_user/.cubrid.sh
+    $ . /home1/cub_user/.cubrid.sh
 
-    CUBRID가 설치 완료되면 CUBRID 매니저 서버와 브로커를 다음과 같이 구동시킬 수 있다. ::
+CUBRID가 설치 완료되면 CUBRID 매니저 서버와 브로커를 다음과 같이 구동시킬 수 있다. ::
 
-        $ cubrid service start
+    $ cubrid service start
 
-    cubrid service를 구동시킨 후 정상적으로 구동되었는지 확인하려면 Linux에서는 다음과 같이 grep으로 cub_* 프로세스들이 구동되어 있는지를 확인한다. ::
+cubrid service를 구동시킨 후 정상적으로 구동되었는지 확인하려면 Linux에서는 다음과 같이 grep으로 cub_* 프로세스들이 구동되어 있는지를 확인한다. ::
 
-        $ ps -ef | grep cub_
-        cub_user 15200 1 0 18:57   00:00:00 cub_master
-        cub_user 15205 1 0 18:57 pts/17 00:00:00 cub_broker
-        cub_user 15210 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_1
-        cub_user 15211 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_2
-        cub_user 15212 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_3
-        cub_user 15213 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_4
-        cub_user 15214 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_5
-        cub_user 15217 1 0 18:57 pts/17 00:00:00 cub_broker
-        cub_user 15222 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_1
-        cub_user 15223 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_2
-        cub_user 15224 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_3
-        cub_user 15225 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_4
-        cub_user 15226 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_5
-        cub_user 15229 1 0 18:57   00:00:00 cub_auto start
-        cub_user 15232 1 0 18:57   00:00:00 cub_js start
+    $ ps -ef | grep cub_
+    cub_user 15200 1 0 18:57   00:00:00 cub_master
+    cub_user 15205 1 0 18:57 pts/17 00:00:00 cub_broker
+    cub_user 15210 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_1
+    cub_user 15211 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_2
+    cub_user 15212 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_3
+    cub_user 15213 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_4
+    cub_user 15214 1 0 18:57 pts/17 00:00:00 query_editor_cub_cas_5
+    cub_user 15217 1 0 18:57 pts/17 00:00:00 cub_broker
+    cub_user 15222 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_1
+    cub_user 15223 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_2
+    cub_user 15224 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_3
+    cub_user 15225 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_4
+    cub_user 15226 1 0 18:57 pts/17 00:00:00 broker1_cub_cas_5
+    cub_user 15229 1 0 18:57   00:00:00 cub_auto start
+    cub_user 15232 1 0 18:57   00:00:00 cub_js start
 
 **RPM으로 CUBRID 설치**
 
-    CentOS5 환경에서 생성한 RPM 파일을 사용하여 CUBRID를 설치할 수 있으며, 일반적인 RPM 유틸리티와 동일한 방법으로 설치하고 삭제할 수 있다. 설치하면 새로운 시스템 그룹(cubrid) 및 사용자 계정(cubrid)이 생성되며, 설치 후에는 cubrid 사용자 계정으로 로그인하여 CUBRID 서비스를 시작해야 한다. ::
+CentOS5 환경에서 생성한 RPM 파일을 사용하여 CUBRID를 설치할 수 있으며, 일반적인 RPM 유틸리티와 동일한 방법으로 설치하고 삭제할 수 있다. 설치하면 새로운 시스템 그룹(cubrid) 및 사용자 계정(cubrid)이 생성되며, 설치 후에는 cubrid 사용자 계정으로 로그인하여 CUBRID 서비스를 시작해야 한다. ::
 
-        $ rpm -Uvh cubrid-9.2.0.0201-el5.x86_64.rpm
+    $ rpm -Uvh cubrid-9.2.0.0201-el5.x86_64.rpm
 
-    RPM을 실행하면 CUBRID는 "cubrid" 홈 디렉터리(/opt/cubrid)에 설치되고, CUBRID 관련 환경 설정 파일(cubrid.[c]sh)이 /etc/profile.d 디렉터리에 설치된다. 단, demodb는 자동으로 설치되지 않으므로 "cubrid" Linux 계정으로 로그인하여 /opt/cubrid/demo/make_cubrid_demo.sh를 실행하여야 한다. CUBRID가 설치 완료되면 "cubrid" Linux 계정으로 로그인하여 CUBRID 서비스를 다음과 같이 시작한다. ::
+RPM을 실행하면 CUBRID는 "cubrid" 홈 디렉터리(/opt/cubrid)에 설치되고, CUBRID 관련 환경 설정 파일(cubrid.[c]sh)이 /etc/profile.d 디렉터리에 설치된다. 단, demodb는 자동으로 설치되지 않으므로 "cubrid" Linux 계정으로 로그인하여 /opt/cubrid/demo/make_cubrid_demo.sh를 실행하여야 한다. CUBRID가 설치 완료되면 "cubrid" Linux 계정으로 로그인하여 CUBRID 서비스를 다음과 같이 시작한다. ::
 
-        $ cubrid service start
+    $ cubrid service start
 
-    .. note:: \
+.. note:: 
 
-        *   **RPM과 의존성**
+    *   **RPM과 의존성**
+    
+        RPM으로 설치할 때에는 의존성을 꼭 확인해야 한다. 의존성을 무시(--nodeps)하고 설치하면 실행되지 않을 수 있다.
         
-            RPM으로 설치할 때에는 의존성을 꼭 확인해야 한다. 의존성을 무시(--nodeps)하고 설치하면 실행되지 않을 수 있다.
-            RPM을 삭제하더라도 cubrid 사용자 계정 및 설치 후 생성한 데이터베이스는 보관되므로, 더 이상 필요하지 않은 경우 수동으로 삭제해야 한다.
-
-        *   **Linux에서 시스템 구동 시 CUBRID 자동 구동하기**
-        
-            SH 패키지로 CUBRID를 설치했다면 $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **CUBRID_USER** 라는 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용하여 Linux 시스템 구동 시 CUBRID를 자동으로 구동할 수 있다.
-            
-            RPM 패키지로 CUBRID를 설치했다면 /etc/init.d 디렉터리에 cubrid 스크립트가 추가된다. 그러나 cubrid 스크립트 파일 안의 $CUBRID_USER 환경 변수를 cubrid 계정으로 변경하는 작업이 필요하다.
-            
-        *   **/etc/hosts 파일에 호스트 이름과 IP 주소 매핑이 정상인지 확인하기**
-
-            호스트 이름과 이에 맞는 IP 주소가 비정상적으로 매핑되어 있으면 DB 서버를 구동할 수 없으므로, 정상적으로 매핑되어 있는지 확인한다.
+    *   **RPM 삭제 후에도 계정 및 DB는 남아 있음**
+    
+        RPM을 삭제하더라도 cubrid 사용자 계정 및 설치 후 생성한 데이터베이스는 보관되므로, 더 이상 필요하지 않은 경우 수동으로 삭제해야 한다.
 
 **Fedora/CentOS에서 CUBRID 설치**
 
-    yum 명령어를 사용하여 CUBRID를 설치하려면, CUBRID 패키지의 위치를 알아야 한다. 운영체제에 따라 다음 주소로 이동하여 자신의 운영체제에 맞는 파일을 선택한다.    `http://www.cubrid.org/yum_repository <http://www.cubrid.org/yum_repository>`_
+yum 명령어를 사용하여 CUBRID를 설치하려면, CUBRID 패키지의 위치를 알아야 한다. 운영체제에 따라 다음 주소로 이동하여 자신의 운영체제에 맞는 파일을 선택한다.    `http://www.cubrid.org/yum_repository <http://www.cubrid.org/yum_repository>`_
 
-    예를 들어, 운영체제가 Fedora 16이면 다음과 같은 명령을 실행한다. fc16은 Fedora 16을 의미한다. ::
+예를 들어, 운영체제가 Fedora 16이면 다음과 같은 명령을 실행한다. fc16은 Fedora 16을 의미한다. ::
 
-        $ rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
+    $ rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.fc16.noarch.rpm
 
-    운영체제가 CentOS 6.2이면 다음과 같은 명령을 실행한다. el6.2는 CentOS 6.2를 의미한다. ::
+운영체제가 CentOS 6.2이면 다음과 같은 명령을 실행한다. el6.2는 CentOS 6.2를 의미한다. ::
 
-        $ rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
+    $ rpm -i http://yumrepository.cubrid.org/cubrid_repo_settings/9.0.0/cubridrepo-9.0.0-1.el6.2.noarch.rpm
 
-    위의 명령을 실행하면 원하는 CUBRID 패키지를 설치할 수 있다. CUBRID 최신 버전을 설치하려면 다음 명령을 실행한다. ::
+위의 명령을 실행하면 원하는 CUBRID 패키지를 설치할 수 있다. CUBRID 최신 버전을 설치하려면 다음 명령을 실행한다. ::
 
-        $ yum install cubrid
+    $ yum install cubrid
 
-    이전 버전을 설치하려면 다음과 같이 명령에 버전을 포함해야 한다. ::
+이전 버전을 설치하려면 다음과 같이 명령에 버전을 포함해야 한다. ::
 
-        $ yum install cubrid-8.4.3
+    $ yum install cubrid-8.4.3
 
-    설치를 완료하면 CUBRID 경로를 포함한 환경 변수들을 설정하고, 이를 시스템에 적용한다.
+설치를 완료하면 CUBRID 경로를 포함한 환경 변수들을 설정하고, 이를 시스템에 적용한다.
 
 **Ubuntu에서 CUBRID 설치**
 
-    Ubuntu에서 apt-get 명령어를 사용하여 CUBRID를 설치하려면, 먼저 CUBRID 저장소를 추가하고, apt 인덱스를 업데이트한다. ::
+Ubuntu에서 apt-get 명령어를 사용하여 CUBRID를 설치하려면, 먼저 CUBRID 저장소를 추가하고, apt 인덱스를 업데이트한다. ::
 
-        $ sudo add-apt-repository ppa:cubrid/cubrid
-        $ sudo apt-get update
+    $ sudo add-apt-repository ppa:cubrid/cubrid
+    $ sudo apt-get update
 
-    CUBRID 최신 버전을 설치하려면 다음 명령을 실행한다. ::
+CUBRID 최신 버전을 설치하려면 다음 명령을 실행한다. ::
 
-        $ sudo apt-get install cubrid
+    $ sudo apt-get install cubrid
 
-    이전 버전을 설치하려면 다음과 같이 명령에 버전을 포함해야 한다. ::
+이전 버전을 설치하려면 다음과 같이 명령에 버전을 포함해야 한다. ::
 
-        $ sudo apt-get install cubrid-8.4.3
+    $ sudo apt-get install cubrid-8.4.3
 
-    설치를 완료하면 CUBRID 경로를 포함한 환경 변수들을 설정하고, 이를 시스템에 적용한다.
+설치를 완료하면 CUBRID 경로를 포함한 환경 변수들을 설정하고, 이를 시스템에 적용한다.
 
 **CUBRID 업그레이드**
 
-    다른 버전의 CUBRID가 설치된 디렉터리를 CUBRID를 설치할 디렉터리로 지정하면, 해당 디렉터리가 존재하는 것을 알리고 덮어쓸 것인지 확인한다. **no** 를 입력하면 설치가 중단된다. ::
+다른 버전의 CUBRID가 설치된 디렉터리를 CUBRID를 설치할 디렉터리로 지정하면, 해당 디렉터리가 존재하는 것을 알리고 덮어쓸 것인지 확인한다. **no** 를 입력하면 설치가 중단된다. ::
 
-        Directory '/home1/cub_user/CUBRID' exist!
-        If a CUBRID service is running on this directory, it may be terminated abnormally.
-        And if you don't have right access permission on this directory(subdirectories or files), install operation will be failed.
-        Overwrite anyway? (yes or no) [Default: no] : yes
+    Directory '/home1/cub_user/CUBRID' exist!
+    If a CUBRID service is running on this directory, it may be terminated abnormally.
+    And if you don't have right access permission on this directory(subdirectories or files), install operation will be failed.
+    Overwrite anyway? (yes or no) [Default: no] : yes
 
-    CUBRID를 설치하고 설정 파일을 구성할 때 기존의 설정 파일을 그대로 사용할 것인지, 새 설정 파일을 사용할 것인지 확인한다. **yes** 를 입력하면 기존의 설정 파일을 확장자가 .bak인 백업 파일로 보관한다. ::
+CUBRID를 설치하고 설정 파일을 구성할 때 기존의 설정 파일을 그대로 사용할 것인지, 새 설정 파일을 사용할 것인지 확인한다. **yes** 를 입력하면 기존의 설정 파일을 확장자가 .bak인 백업 파일로 보관한다. ::
 
-        The configuration file (.conf or .pass) already exists. Do you want to overwrite it? (yes or no) : yes
+    The configuration file (.conf or .pass) already exists. Do you want to overwrite it? (yes or no) : yes
 
-    이전 버전에서 새 버전으로 데이터베이스를 업그레이드하는 방법에 대한 보다 자세한 내용은 :doc:`upgrade` 를 참고한다.
+이전 버전에서 새 버전으로 데이터베이스를 업그레이드하는 방법에 대한 보다 자세한 내용은 :doc:`upgrade` 를 참고한다.
 
 **환경 설정**
 
-    서비스 포트 등 사용자 환경에 맞춰 설정을 변경하려면 **$CUBRID/conf** 디렉터리에서 설정 파일의 파라미터를 수정한다. 
-    자세한 내용은 :ref:`Installing-and-Running-on-Windows`\ 의 환경 설정을 참고한다.
+서비스 포트 등 사용자 환경에 맞춰 설정을 변경하려면 **$CUBRID/conf** 디렉터리에서 설정 파일의 파라미터를 수정한다. 
+자세한 내용은 :ref:`Installing-and-Running-on-Windows`\ 의 환경 설정을 참고한다.
 
+**Linux에서 시스템 구동 시 CUBRID 자동 구동하기**
+
+SH 패키지로 CUBRID를 설치했다면 $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **CUBRID_USER** 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용하여 Linux 시스템 구동 시 CUBRID를 자동으로 구동할 수 있다.
+
+RPM 패키지로 CUBRID를 설치했다면 /etc/init.d 디렉터리에 cubrid 스크립트가 추가된다. 그러나 cubrid 스크립트 파일 안의 $CUBRID_USER 환경 변수를 cubrid 계정으로 변경하는 작업이 필요하다.
+        
 **CUBRID 인터페이스 설치**
 
-    CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python, Node.js 등의 인터페이스 모듈은 `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
+CCI, JDBC, PHP, ODBC, OLE DB, ADO.NET, Ruby, Python, Node.js 등의 인터페이스 모듈은 `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
 
-    각 드라이버에 대한 간단한 설명은 :doc:`/api/index` 를 참고한다.
+각 드라이버에 대한 간단한 설명은 :doc:`/api/index` 를 참고한다.
     
 **CUBRID 도구 설치**
 
-    CUBRID 매니저, CUBRID 쿼리 브라우저 등의 도구는 `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
+CUBRID 매니저, CUBRID 쿼리 브라우저 등의 도구는 `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
 
-    CUBRID 웹매니저는 CUBRID 설치 시 구동되며 `https://localhost:8282/ <https://localhost:8282/>`_\ 에서 확인할 수 있다.
+CUBRID 웹매니저는 CUBRID 설치 시 구동되며 `https://localhost:8282/ <https://localhost:8282/>`_\ 에서 확인할 수 있다.
         
 .. _Installing-and-Running-on-Windows:
 
@@ -250,85 +257,323 @@ Windows에서의 설치와 실행
 
 **설치 시 확인 사항**
 
-    Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
+Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
 
-    * 64비트 여부
+*   64비트 여부
 
-      CUBRID 2008 R2.0 버전부터 32비트 버전과 64비트 버전을 각각 지원한다. [내 컴퓨터] > [시스템 등록 정보] 창을 활성화하여 Windows 버전 비트를 확인할 수 있다. 32비트 Windows에서는 CUBRID 32비트 버전을 설치하고, 64비트 Windows에서는 CUBRID 64비트 버전을 설치한다.
+    CUBRID는 32비트 버전과 64비트 버전을 각각 지원한다. [내 컴퓨터] > [시스템 등록 정보] 창을 활성화하여 Windows 버전 비트를 확인할 수 있다. 32비트 Windows에서는 CUBRID 32비트 버전을 설치하고, 64비트 Windows에서는 CUBRID 64비트 버전을 설치한다.
 
-    Windows Vista 이상 버전에서 CUBRID를 설치하려면 설치 파일을 관리자 권한으로 실행하도록 한다.
+*   관리자 권한으로 실행
 
-    * CUBRID 설치 파일에 대고 마우스 오른쪽 버튼을 클릭하여 나타난 팝업 메뉴에서 [관리자 권한으로 실행(A)]을 선택한다.
-      
-    시스템을 시작할 때 CUBRID Service Tray가 자동으로 구동되지 않는다면 다음 사항을 확인하도록 한다.
-
-    * [제어판] > [관리 도구] > [서비스]의 Task Scheduler가 시작되어 있는지 확인하고, 그렇지 않으면 Task Scheduler를 시작한다.
-    * [제어판] > [관리 도구] > [작업 스케줄러]에 CUBRID Service Tray가 등록되어 있는지 확인하고, 그렇지 않으면 CUBRID Service Tray를 등록한다.
+    Windows Vista 이상 버전에서 CUBRID를 설치하려면 설치 파일을 관리자 권한으로 실행하도록 한다. CUBRID 설치 파일에 대고 마우스 오른쪽 버튼을 클릭하여 나타난 팝업 메뉴에서 [관리자 권한으로 실행(A)]을 선택한다.
 
 **설치 과정**
 
-    **1단계: 설치 디렉터리 지정**
+**1단계: 설치 디렉터리 지정**
+
+**2단계: 설치 유형 선택**
+
+* **전체 설치** : CUBRID 서버와 명령행 도구 및 인터페이스 드라이버(JDBC, C API)가 모두 설치된다.
+      
+**3단계: 샘플 데이터베이스 생성**
     
-    **2단계: 설치 유형 선택**
+    샘플 데이터베이스를 생성하려면 약 300MB의 디스크 공간이 필요하다. 
 
-    * **전체 설치** : CUBRID 서버와 명령행 도구 및 인터페이스 드라이버(JDBC, C API)가 모두 설치된다.
+**4단계: 설치 완료**
 
-    * **인터페이스 드라이버 설치** : 인터페이스 드라이버(JDBC, C API)만 설치된다. CUBRID 데이터베이스 서버가 설치된 컴퓨터에 원격 접근하여 개발하는 경우, 이 설치 유형을 선택할 수 있다.
-          
-    **3단계: 샘플 데이터베이스 생성**
+    우측 하단에 CUBRID Service Tray가 나타난다. 
+    
+.. note:: 
+
+    CUBRID는 설치하고 나면 시스템 재구동 시 자동으로 실행하게 되어 있다. 시스템 재구동 시 자동 실행을 중단하려면 "제어판 > 시스템 및 보안 > 관리 도구 > 서비스 > CUBRIDService" 에서 더블클릭한 후 나타난 팝업 창에서 시작 유형을 수동으로 변경한다.
+
+**설치 후 확인 사항**
+
+*   CUBRID Service Tray 구동 여부
+
+    시스템을 시작할 때 CUBRID Service Tray가 자동으로 구동되지 않는다면 다음 사항을 확인하도록 한다.
+
+    *   [시작 버튼] > [제어판] > [관리 도구] > [서비스]의 Task Scheduler가 시작되어 있는지 확인하고, 그렇지 않으면 Task Scheduler를 시작한다.
+    *   [시작 버튼] > [모든 프로그램] > [시작프로그램]에 CUBRID Service Tray가 등록되어 있는지 확인하고, 그렇지 않으면 CUBRID Service Tray를 등록한다.
         
-        샘플 데이터베이스를 생성하려면 약 300MB의 디스크 공간이 필요하다. 
-    
-    **4단계: 설치 완료**
-    
-        우측 하단에 CUBRID Service Tray가 나타난다. 
-        
-    .. note:: 
-    
-        CUBRID는 설치하고 나면 시스템 재구동 시 자동으로 실행하게 되어 있다. 시스템 재구동 시 자동 실행을 중단하려면 "제어판 > 시스템 및 보안 > 관리 도구 > 서비스 > CUBRIDService" 에서 더블클릭한 후 나타난 팝업 창에서 시작 유형을 수동으로 변경한다.
-
-    
 **CUBRID 업그레이드**
 
-    이전 버전의 CUBRID가 이미 설치된 환경에 새로운 버전의 CUBRID를 설치하는 경우, 시스템 트레이에서 [CUBRID Service Tray] > [Exit]를 선택하여 운영 중인 서비스를 종료한 후 이전 버전의 CUBRID를 제거해야 한다. "데이터베이스와 설정 파일을 모두 삭제하겠습니까?"라고 묻는 대화 상자가 나타나면, 이전 버전의 데이터베이스가 삭제되지 않도록?[아니오]를 클릭한다.
+이전 버전의 CUBRID가 이미 설치된 환경에 새로운 버전의 CUBRID를 설치하는 경우, 시스템 트레이에서 [CUBRID Service Tray] > [Exit]를 선택하여 운영 중인 서비스를 종료한 후 이전 버전의 CUBRID를 제거해야 한다. "데이터베이스와 설정 파일을 모두 삭제하겠습니까?"라고 묻는 대화 상자가 나타나면, 이전 버전의 데이터베이스가 삭제되지 않도록?[아니오]를 클릭한다.
 
-    이전 버전에서 새 버전으로 데이터베이스를 업그레이드하는 방법에 대한 보다 자세한 내용은 :doc:`upgrade` 를 참고한다.
+이전 버전에서 새 버전으로 데이터베이스를 업그레이드하는 방법에 대한 보다 자세한 내용은 :doc:`upgrade` 를 참고한다.
 
 **환경 설정**
 
-    서비스 포트 등 사용자 환경에 맞춰 설정을 변경하려면 **%CUBRID%\\conf** 디렉터리에서 다음 설정 파일의 파라미터 값을 변경한다. 방화벽이 설정되어 있다면 CUBRID에서 사용하는 포트들을 열어두어야(open) 한다. CUBRID가 사용하는 포트에 대한 자세한 내용은 :ref:`connect-to-cubrid-server`\ 을 참고한다.
+서비스 포트 등 사용자 환경에 맞춰 설정을 변경하려면 **%CUBRID%\\conf** 디렉터리에서 다음 설정 파일의 파라미터 값을 변경한다. 방화벽이 설정되어 있다면 CUBRID에서 사용하는 포트들을 열어두어야(open) 한다. CUBRID가 사용하는 포트에 대한 자세한 내용은 :ref:`connect-to-cubrid-server`\ 을 참고한다.
 
-    * **cm.conf**
+*   **cm.conf**
 
-      CUBRID 매니저용 설정 파일이다. **cm_port** 는 매니저 서버 프로세스가 사용하는 포트로 기본값은 **8001** 이며, 설정된 포트와 설정된 포트 번호+1 두 개의 포트가 사용된다. 즉, 8001 포트를 설정하면 8001, 8002 두 개의 포트가 사용된다. 자세한 내용은 `CUBRID 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_\ 을 참고한다.
+    CUBRID 매니저용 설정 파일이다. **cm_port** 는 매니저 서버 프로세스가 사용하는 포트로 기본값은 **8001** 이며, 설정된 포트와 설정된 포트 번호+1 두 개의 포트가 사용된다. 즉, 8001 포트를 설정하면 8001, 8002 두 개의 포트가 사용된다. 자세한 내용은 `CUBRID 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-manager-manual_kr>`_\ 을 참고한다.
 
-    * **cm_ext.conf**
-     
-      CUBRID 웹 매니저용 설정 파일이다. **listen**\은 웹 매니저 서버 프로세스가 사용하는 포트로 기본값은 **8282** 이다. 자세한 내용은 `CUBRID 웹 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_\ 을 참고한다.
-      
-    * **cubrid.conf**
+*   **cm_ext.conf**
+    
+    CUBRID 웹 매니저용 설정 파일이다. **listen**\은 웹 매니저 서버 프로세스가 사용하는 포트로 기본값은 **8282** 이다. 자세한 내용은 `CUBRID 웹 매니저 매뉴얼 <http://www.cubrid.org/wiki_tools/entry/cubrid-web-manager-manual>`_\ 을 참고한다.
+    
+*   **cubrid.conf**
 
-      서버 설정용 파일로, 운영하려는 데이터베이스의 메모리, 동시 사용자 수에 따른 스레드 수, 브로커와 서버 사이의 통신 포트 등을 설정한다. **cubrid_port_id** 는 마스터 프로세스가 사용하는 포트로, 기본값은 *1523* 이다. 자세한 내용은 :ref:`cubrid-conf-default-parameters`\ 를 참조한다.
+    서버 설정용 파일로, 운영하려는 데이터베이스의 메모리, 동시 사용자 수에 따른 스레드 수, 브로커와 서버 사이의 통신 포트 등을 설정한다. **cubrid_port_id** 는 마스터 프로세스가 사용하는 포트로, 기본값은 *1523* 이다. 자세한 내용은 :ref:`cubrid-conf-default-parameters`\ 를 참조한다.
 
-    * **cubrid_broker.conf**
+*   **cubrid_broker.conf**
 
-      브로커 설정용 파일로, 운영하려는 브로커가 사용하는 포트, 응용서버(CAS) 수, SQL LOG 등을 설정한다. **BROKER_PORT** 는 브로커가 사용하는 포트이며, 실제 JDBC와 같은 드라이버에서 보는 포트는 해당 브로커의 포트이다. **APPL_SERVER_PORT** 는 Windows에서만 추가하는 파라미터로, 브로커 응용 서버(CAS)가 사용하는 포트이다. 기본값은 **BROKER_PORT** + 1이다. **APPL_SERVER_PORT** 값을 기준으로 1씩 더한 포트들이 CAS 개수만큼 사용된다.
-      예를 들어 **APPL_SERVER_PORT** 값이 35000이고 **MAX_NUM_APPL_SERVER** 값에 의한 CAS의 최대 개수가 50이면 CAS에서 listen하는 포트는 35000, 35001, ..., 35049이다.
-      자세한 내용은 :ref:`parameter-by-broker`\ 를 참조한다. 
-      
-      **CCI_DEFAULT_AUTOCOMMIT** 브로커 파라미터는 2008 R4.0부터 지원하기 시작했고, 이때 기본값은 **OFF** 였다가 2008 R4.1부터는 기본값이 **ON** 으로 바뀌었다. 따라서 2008 R4.0에서 2008 R4.1 이상 버전으로 업그레이드하는 사용자는 이 값을 OFF로 바꾸거나, 응용 프로그램의 함수에서 자동 커밋 모드를 OFF로 설정해야 한다.
+    브로커 설정용 파일로, 운영하려는 브로커가 사용하는 포트, 응용서버(CAS) 수, SQL LOG 등을 설정한다. **BROKER_PORT** 는 브로커가 사용하는 포트이며, 실제 JDBC와 같은 드라이버에서 보는 포트는 해당 브로커의 포트이다. **APPL_SERVER_PORT** 는 Windows에서만 추가하는 파라미터로, 브로커 응용 서버(CAS)가 사용하는 포트이다. 기본값은 **BROKER_PORT** + 1이다. **APPL_SERVER_PORT** 값을 기준으로 1씩 더한 포트들이 CAS 개수만큼 사용된다.
+    예를 들어 **APPL_SERVER_PORT** 값이 35000이고 **MAX_NUM_APPL_SERVER** 값에 의한 CAS의 최대 개수가 50이면 CAS에서 listen하는 포트는 35000, 35001, ..., 35049이다.
+    자세한 내용은 :ref:`parameter-by-broker`\ 를 참조한다. 
+    
+    **CCI_DEFAULT_AUTOCOMMIT** 브로커 파라미터는 2008 R4.0부터 지원하기 시작했고, 이때 기본값은 **OFF** 였다가 2008 R4.1부터는 기본값이 **ON** 으로 바뀌었다. 따라서 2008 R4.0에서 2008 R4.1 이상 버전으로 업그레이드하는 사용자는 이 값을 OFF로 바꾸거나, 응용 프로그램의 함수에서 자동 커밋 모드를 OFF로 설정해야 한다.
 
 **CUBRID 인터페이스 설치**
 
-    JDBC, PHP, ODBC, OLE DB 등 인터페이스 모듈은 `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
-    
-    각 드라이버에 대한 간단한 설명은 :doc:`/api/index`\ 를 참고한다.
+JDBC, PHP, ODBC, OLE DB 등 인터페이스 모듈은 `http://www.cubrid.org/wiki_apis <http://www.cubrid.org/wiki_apis>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
+
+각 드라이버에 대한 간단한 설명은 :doc:`/api/index`\ 를 참고한다.
 
 **CUBRID 도구 설치**
 
-    CUBRID 매니저, CUBRID 쿼리 브라우저 등의 도구는 `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
+CUBRID 매니저, CUBRID 쿼리 브라우저 등의 도구는 `http://www.cubrid.org/wiki_tools <http://www.cubrid.org/wiki_tools>`_\ 에서 최신 정보를 확인할 수 있고 관련 파일을 내려받아 설치할 수 있다.
 
-    CUBRID 웹매니저는 CUBRID 설치 시 구동되며 https://localhost:8282/\ 에서 확인할 수 있다.
+CUBRID 웹매니저는 CUBRID 설치 시 구동되며 https://localhost:8282/\ 에서 확인할 수 있다.
+
     
+압축 파일로 설치하기
+--------------------
 
+Linux에서 tar.gz 파일로 CUBRID 설치
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**설치 시 확인 사항**
+
+Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
+
+*   glibc 버전
+
+    glibc 2.3.4 버전 이상만 지원한다.
+    glibc 버전은 다음과 같은 방법으로 확인한다. ::
+      
+        % rpm -q glibc
+
+*   64비트 여부 
+    
+    CUBRID 2008 R2.0 버전부터 32비트 버전과 64비트 버전을 각각 지원한다.
+    Linux 버전은 다음과 같은 방법으로 확인한다. ::
+        
+        % uname -a
+        Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
+    
+    32비트 Linux에서는 CUBRID 32비트 버전을, 64비트 Linux에서는 CUBRID 64비트 버전을 설치한다. 
+    설치할 추가 라이브러리는 다음과 같다.
+    
+    * Curses Library (rpm -q ncurses)
+    * gcrypt Library (rpm -q libgcrypt)
+    * stdc++ Library (rpm -q libstdc++)
+    
+*   /etc/hosts 파일에 호스트 이름과 IP 주소 매핑이 정상인지 확인하기
+
+    호스트 이름과 이에 맞는 IP 주소가 비정상적으로 매핑되어 있으면 DB 서버를 구동할 수 없으므로, 정상적으로 매핑되어 있는지 확인한다.
+
+**설치 과정**
+
+    **설치 디렉터리 지정**
+
+    *   압축 파일을 설치하려는 경로에 풀어 놓는다.
+
+        ::
+        
+            tar xvfz CUBRID-10.0.0.0181-linux.x86_64.tar.gz /home1/cub_user/
+
+        /home1/cub_user/ 이하에 CUBRID 디렉터리가 생기고 그 이하에 파일이 생성된다.
+
+    **환경 변수 설정**
+
+    #.  사용자의 홈 디렉터리(/home1/cub_user) 이하에서 자동으로 실행되는 셸 스크립트에 아래의 환경 변수를 추가한다.
+    
+        다음은 bash 셸로 수행하는 경우 .bash_profile에 다음을 추가하는 예이다.
+
+       ::
+        
+            export CUBRID=/home1/cub_user/CUBRID
+            export CUBRID_DATABASES=$CUBRID/databases
             
+    #.  CLASSPATH 환경 변수에  CUBRID JDBC 라이브러리 파일 이름을 추가한다.
+    
+        ::
+        
+            export CLASSPATH=$CUBRID/jdbc/cubrid_jdbc.jar:$CLASSPATH
+            
+    #.  Path 시스템 변수에 CUBRID bin 디렉터리를 추가한다.
+      
+        ::
+        
+            export PATH=$CUBRID/bin:$PATH
+                
+    **DB 생성**
+        
+    *   콘솔 창에서 DB를 생성할 디렉터리로 이동해서 DB를 직접 생성한다.
+
+        ::
+        
+            cd $CUBRID_DATABASES
+            mkdir testdb
+            cd testdb
+            cubrid createdb --db-volume-size=100M --log-volume-size=100M testdb en_US
+
+    **부팅 시 자동 시작**
+
+    *   $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **CUBRID_USER** 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용하여 Linux 시스템 구동 시 CUBRID를 자동으로 구동할 수 있다.
+            
+    **DB 자동 구동**    
+
+    *   부팅 시 생성한 DB가 구동되게 하려면 C:\\CUBRID\\conf\\cubrid.conf에서 다음을 수정한다.
+
+        ::
+            
+            [service]
+            service=server, broker, manager
+            server=testdb
+
+    *   service 파라미터에는 자동으로 구동할 프로세스들을 지정한다.
+    *   server 파라미터에는 자동으로 구동할 DB 이름을 지정한다.
+        
+CUBRID 설치 이후 환경 설정, 도구 설치, 인터페이스 설치 등은 :ref:`Installing-and-Running-on-Linux`\을 확인하도록 한다.
+            
+Windows에서 zip 파일로 CUBRID 설치
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**설치 시 확인 사항**
+
+Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
+
+*   64비트 여부
+
+    CUBRID는 32비트 버전과 64비트 버전을 각각 지원한다. [내 컴퓨터] > [시스템 등록 정보] 창을 활성화하여 Windows 버전 비트를 확인할 수 있다. 32비트 Windows에서는 CUBRID 32비트 버전을 설치하고, 64비트 Windows에서는 CUBRID 64비트 버전을 설치한다.
+    
+**설치 과정**
+
+    **설치 디렉터리 지정**
+
+    *   압축 파일을 설치하려는 경로에 풀어 놓는다.
+
+        ::
+        
+            C:\CUBRID
+
+    **환경 변수 설정**
+
+    #.  내 컴퓨터(오른쪽 마우스 클릭) -> 속성 -> 고급 -> 환경변수를 선택한다.
+    #.  시스템 변수 항목에 새로 만들기를 클릭한 후 아래와 같이 시스템 변수를 추가한다.
+    
+        ::
+        
+            CUBRID = C:\CUBRID
+            CUBRID_DATABASES = %CUBRID%\databases
+            
+    #.  CLASSPATH 시스템 변수에  CUBRID JDBC 라이브러리 파일 이름을 추가한다.
+    
+        ::
+        
+            %CUBRID%\jdbc\cubrid_jdbc.jar       
+            
+    #.  Path 시스템 변수에 CUBRID bin 디렉터리를 추가한다.
+      
+        ::
+        
+            %CUBRID%\bin
+                
+    **DB 생성**
+        
+    *   cmd 명령으로 콘솔 창을 띄운 후 DB를 생성할 디렉터리로 이동해서 DB를 직접 생성한다.
+
+        ::
+        
+            cd C:\CUBRID\databases
+            md testdb
+            cd testdb
+            c:\CUBRID\databases\testdb>cubrid createdb --db-volume-size=100M --log-volume-size=100M testdb en_US
+    
+    **부팅 시 자동 시작**
+    
+    *   설치한 CUBRID가 Windows 시스템 부팅 시 자동으로 시작되게 하려면 CUBRID 서비스가 먼저 Windows 서비스에 등록되어야 한다. 
+        
+        #.  CUBRID 서비스를 Windows 서비스에 등록한다.
+
+            ::
+            
+                C:\CUBRID\bin\ctrlService.exe -i C:\CUBRID\bin
+            
+        #.  CUBRID 서비스를 구동/정지하는 방법은 아래와 같다.
+        
+            ::
+            
+                C:\CUBRID\bin\ctrlService.exe -start/-stop
+            
+    **DB 자동 구동**    
+
+    *   Windows 부팅 시 DB가 구동되게 하려면 C:\\CUBRID\conf\\cubrid.conf에서 다음을 수정한다.
+
+        ::
+            
+            [service]
+            service=server, broker, manager
+            server=testdb
+
+        *   service 파라미터에는 자동으로 구동할 프로세스들을 지정한다.
+        *   server 파라미터에는 자동으로 구동할 DB 이름을 지정한다.
+
+    **서비스에서 제거**
+
+    *   등록한 CUBRID Service를 제거하려면 다음을 수행한다.
+
+        ::
+        
+            C:\CUBRID\bin\ctrlService.exe -u
+
+**CUBRID Service Tray 등록**
+    
+zip 파일로 CUBRID를 설치하는 경우 CUBRID Service Tray가 자동으로 등록되지 않으므로, 이를 사용하려면 수동으로 등록하는 절차가 필요하다.
+    
+#.  C:\\CUBRID\\bin\\CUBRID_Service_Tray.exe 파일의 바로 가기를 시작 > 모든프로그램 > 시작프로그램에 생성한다.
+
+#.  시작 > 보조 프로그램 > 실행 창에서 regedit를 입력하면 레지스트리 편집기가 실행된다.
+
+#.  컴퓨터 > HKEY_LOCAL_MACHINE > SOFTWARE에 CUBRID 폴더를 생성한다.
+
+#.  생성한 CUBRID 폴더에 cmclient 폴더를 생성(새로 만들기 > 키)하고 아래의 항목을 추가(새로 만들기 > 문자열 값)한다.
+
+    ::
+    
+        이름          종류      데이터
+
+        ROOT_PATH     REG_SZ     C:\CUBRID\cubridmanager
+        
+#.  생성한 CUBRID 폴더에 cmserver 폴더를 생성(새로 만들기 > 키)하고 아래의 항목을 추가(새로 만들기 > 문자열 값)한다.
+
+    ::
+    
+        이름          종류      데이터
+
+        ROOT_PATH     REG_SZ     C:\CUBRID
+
+#.  생성한 CUBRID 폴더에 CUBRID 폴더를 생성(새로 만들기 > 키)하고 아래의 항목을 추가(새로 만들기 > 문자열 값)한다.
+
+    ::
+    
+        이름          종류      데이터
+
+        ROOT_PATH     REG_SZ     C:\CUBRID
+
+#.  Windows를 재부팅하면 CUBRID Service Tray가 오른쪽 하단에 생긴다.
+    
+**설치 후 확인 사항**
+
+*   CUBRID Service Tray 구동 여부
+
+    시스템을 시작할 때 CUBRID Service Tray가 자동으로 구동되지 않는다면 다음 사항을 확인하도록 한다.
+
+    *   [시작 버튼] > [제어판] > [관리 도구] > [서비스]의 Task Scheduler가 시작되어 있는지 확인하고, 그렇지 않으면 Task Scheduler를 시작한다.
+    *   [시작 버튼] > [모든 프로그램] > [시작프로그램]에 CUBRID Service Tray가 등록되어 있는지 확인하고, 그렇지 않으면 CUBRID Service Tray를 등록한다.
+
+CUBRID 설치 이후 환경 설정, 도구 설치, 인터페이스 설치 등은 :ref:`Installing-and-Running-on-Windows`\을 확인하도록 한다.

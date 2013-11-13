@@ -268,6 +268,20 @@ _db_domain
 |             |                        | 이 설정됨                                                     |
 +-------------+------------------------+---------------------------------------------------------------+
 
+_db_charset
+-----------
+
+문자셋에 대한 정보이다.
+
+=================== ======================== ========================
+속성명              데이터 타입              설명
+=================== ======================== ========================
+charset_id          INTEGER                  문자셋 ID
+charset_name        CHARACTER VARYING(32)    문자셋 이름
+default_collation   INTEGER                  기본 문자셋 ID
+char_size           INTEGER                  한 문자의 바이트 크기
+=================== ======================== ========================
+
 _db_method
 ----------
 
@@ -981,17 +995,13 @@ DB_VCLASS
 | vclass_def  | VARCHAR 4096) | 가상 클래스의 SQL 정의문 |
 +-------------+---------------+--------------------------+
 
-다음 예제에서는 가상 클래스 *db_class* 의 SQL 정의문을 검색한다.
+다음 예제에서는 가상 클래스 *db_vclass* 의 SQL 정의문을 검색한다.
 
 .. code-block:: sql
 
     SELECT vclass_def
     FROM db_vclass
     WHERE vclass_name = 'db_class';
-
-::
-    
-    'SELECT c.class_name, CAST(c.owner.name AS VARCHAR(255)), CASE c.class_type WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' WHEN 2 THEN 'PROXY' ELSE 'UNKNOW' END, CASE WHEN MOD(c.is_system_class, 2) = 1 THEN 'YES' ELSE 'NO' END, CASE WHEN c.sub_classes IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM _db_partition p WHERE p.class_of = c and p.pname IS NULL), 'NO') END FROM _db_class c WHERE CURRENT_USER = 'DBA' OR {c.owner.name} SUBSETEQ (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name = CURRENT_USER) OR {c} SUBSETEQ (  SELECT SUM(SET{au.class_of})  FROM _db_auth au  WHERE {au.grantee.name} SUBSETEQ (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name = CURRENT_USER) AND  au.auth_type = 'SELECT')'
 
 DB_ATTRIBUTE
 ------------
@@ -1022,9 +1032,9 @@ DB_ATTRIBUTE
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | scale             | INTEGER       | 데이터 타입의 소수점 이하의 자릿수. 소수점 이하의 자릿수가 명시되지 않은 경우 0임                             |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
-| code_set          | INTEGER       | 문자열 타입인 경우, 문자셋(                                                                                   |
-|                   |               | :ref:`db-attribute`                                                                                           |
-|                   |               | 의 'CUBRID가 지원하는 문자셋' 표의 '값' 중 하나). 스트링 타입이 아닌 경우 0.                                  |
+| charset           | VARCHAR (32)  | 문자셋 이름                                                                                                   |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| collation         | VARCHAR (32)  | 콜레이션 이름                                                                                                 |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 | domain_class_name | VARCHAR (255) | 데이터 타입이 객체 타입인 경우 그 도메인 클래스명. 객체 타입이 아닌 경우 **NULL**                             |
 +-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
@@ -1147,6 +1157,20 @@ DB_ATTR_SETDOMAIN_ELM
      
     'sports'              'INSTANCE'            'STRING'              NULL
 
+DB_CHARSET
+----------
+
+문자셋에 대한 정보이다.
+
+=================== ======================== ========================
+속성명              데이터 타입              설명
+=================== ======================== ========================
+charset_id          INTEGER                  문자셋 ID
+charset_name        CHARACTER VARYING(32)    문자셋 이름
+default_collation   CHARACTER VARYING(32)    기본 문자셋 이름
+char_size           INTEGER                  한 문자의 바이트 크기
+=================== ======================== ========================
+    
 DB_METHOD
 ---------
 

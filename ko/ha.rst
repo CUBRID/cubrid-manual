@@ -654,7 +654,11 @@ CUBRID HA 그룹 내의 노드들이 heartbeat 메시지를 주고 받으며 노
 
 복제 로그의 최대 보존 개수를 지정한다. 기본값은 1이다. 현재 데이터베이스에 반영되지 않은 복제 로그 파일은 삭제되지 않는다. 
 
-불필요한 디스크의 공간 낭비를 방지하기 위해 이 값을 기본값인 1로 유지할 것을 권장한다. 다만, 슬레이브 노드 또는 레플리카 노드를 원본으로 하여 :ref:`rebuilding-replication`\ 을 수행하는 경우 원본 노드의 복제 로그가 필요하므로, 복제 재구축 수행 시간 동안 원본 노드의 복제 로그가 삭제되어서는 안된다. 따라서, 이 경우는 원본 노드의 **ha_copy_log_max_archives**\ 값을 복제 재구축이 끝날 때까지 복제 로그가 삭제되지 않을 만큼의 값으로 변경하여 복제 재구축 작업을 수행하고, 작업이 완료되면 원래 설정한 값으로 복원해야 한다.
+불필요한 디스크의 공간 낭비를 방지하기 위해 이 값을 기본값인 1로 유지할 것을 권장한다. 
+
+.. 아래 내용은 복제 재구축 스크립트의 동작 방식이 변경되기 전까지는 틀린 내용이므로 제거. 물론 수동으로 구축한다면 복제로그를 사용할 수는 있음.
+
+    다만, 슬레이브 노드 또는 레플리카 노드를 원본으로 하여 :ref:`rebuilding-replication`\ 을 수행하는 경우 원본 노드의 복제 로그가 필요하므로, 복제 재구축 수행 시간 동안 원본 노드의 복제 로그가 삭제되어서는 안된다. 따라서, 이 경우는 원본 노드의 **ha_copy_log_max_archives**\ 값을 복제 재구축이 끝날 때까지 복제 로그가 삭제되지 않을 만큼의 값으로 변경하여 복제 재구축 작업을 수행하고, 작업이 완료되면 원래 설정한 값으로 복원해야 한다.
 
 **ha_db_list**
 
@@ -2246,7 +2250,11 @@ ha_make_slavedb.sh 스크립트
 
 **ha_make_slavedb.sh** 스크립트를 이용하여 복제 재구축을 수행할 수 있다. 이 스크립트는 **$CUBRID/share/scripts/ha** 에 위치하며, 복제 재구축에 들어가기 전에 다음의 항목을 사용자 환경에 맞게 설정해야 한다. 이 스크립트는 2008 R2.2 Patch 9 버전부터 지원하지만 2008 R4.1 Patch 2 미만 버전과는 일부 설정 방법이 다르며, 이 문서에서는 2008 R4.1 Patch 2 이상 버전에서의 설정 방법에 대해 설명한다.
 
-*   **target_host** : 복제 재구축을 위한 원본 노드(주로 마스터 노드)의 호스트명으로, **/etc/hosts**\ 에 등록되어 있어야 한다. 슬레이브 노드는 마스터 노드 또는 레플리카 노드를 원본으로 하여 복제 재구축이 가능하며, 레플리카 노드는 슬레이브 노드 또는 또 다른 레플리카 노드를 원본으로 하여 복제 재구축이 가능하다. 슬레이브 노드 또는 레플리카 노드를 원본으로 하여 복제 재구축을 수행하고자 하는 경우, 복제 재구축이 끝날 때까지 cubrid_ha.conf의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 파라미터 값을 복제 로그가 삭제되지 않을 만큼의 값으로 변경해야 한다.
+*   **target_host** : 복제 재구축을 위한 원본 노드(주로 마스터 노드)의 호스트명으로, **/etc/hosts**\ 에 등록되어 있어야 한다. 슬레이브 노드는 마스터 노드 또는 레플리카 노드를 원본으로 하여 복제 재구축이 가능하며, 레플리카 노드는 슬레이브 노드 또는 또 다른 레플리카 노드를 원본으로 하여 복제 재구축이 가능하다. 
+
+    ..  아래 내용은 복제 재구축 스크립트 변경 전까지는 불필요
+    
+        슬레이브 노드 또는 레플리카 노드를 원본으로 하여 복제 재구축을 수행하고자 하는 경우, 복제 재구축이 끝날 때까지 cubrid_ha.conf의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 파라미터 값을 복제 로그가 삭제되지 않을 만큼의 값으로 변경해야 한다.
 
 *   **repl_log_home** : 마스터 노드의 복제 로그의 홈 디렉터리를 설정한다. 일반적으로 **$CUBRID_DATABASES** 와 동일하다. 반드시 절대 경로를 입력해야 하며, 심볼릭 링크를 사용하면 안 된다. 경로 뒤에 슬래시(/)를 붙이면 안 된다.
 
@@ -2282,7 +2290,13 @@ ha_make_slavedb.sh 스크립트
     
     *   **복제 재구축 도중 원본 노드의 온라인 백업**
     
-        **ha_make_slavedb.sh** 스크립트는 수행 도중 원본 노드에 대해 온라인 백업을 수행한다. 따라서 온라인 백업이 진행되는 동안 원본 노드에 추가되는 보관 로그와 복제 로그가 삭제되지 않도록 **cubrid.conf**\의 *force_remove_log_max_archives**\, **log_max_archives** 그리고 **cubrid_ha.conf**\의 **ha_copy_log_max_archives**\를 적절히 설정해야 한다. 자세한 내용은 아래의 구축 예들을 참고한다.
+        **ha_make_slavedb.sh** 스크립트는 수행 도중 원본 노드에 대해 온라인 백업을 수행한다. 
+        따라서 온라인 백업이 진행되는 동안 원본 노드에 추가되는 보관 로그가 삭제되지 않도록 **cubrid.conf**\의 *force_remove_log_max_archives**\, **log_max_archives**\ 를 적절히 설정해야 한다. 자세한 내용은 아래의 구축 예들을 참고한다.
+
+            .. 아래 내용은 스크립트 변경 전까지 위와 같이 작성됨.
+            
+                따라서 온라인 백업이 진행되는 동안 원본 노드에 추가되는 보관 로그와 복제 로그가 삭제되지 않도록 **cubrid.conf**\의 *force_remove_log_max_archives**\, **log_max_archives** 그리고 **cubrid_ha.conf**\의 **ha_copy_log_max_archives**\를 적절히 설정해야 한다. 자세한 내용은 아래의 구축 예들을 참고한다.
+
 
     *   **복제 재구축 스크립트 수행 중 오류 발생**
     
@@ -2320,7 +2334,7 @@ ha_make_slavedb.sh 스크립트
             
     *   *nodeA*\에 DB의 재구동 없이 **log_max_archives** 적용
 
-        슬레이브 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 구축/재구축 이후 기존 설정을 유지할 것이므로 변경하지 않는다.
+        슬레이브 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 구축/재구축 이후 기존 설정을 사용할 것이므로 변경하지 않는다.
     
         ::
         
@@ -2737,26 +2751,28 @@ ha_make_slavedb.sh 스크립트
             
         하지만 **databases.txt**\의 **db-host** 부분은 브로커에서 DB 서버에 접속하는 순서와 관련된 설정 파일이므로 원하는대로 변경이 가능하다.
 
-#.  **cubrid_ha.conf**\의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 값을 변경한다.
+    .. 스크립트 수정 전까지는 아래 내용 적용 안 됨.
+    
+        #.  **cubrid_ha.conf**\의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 값을 변경한다.
 
-    *nodeC*\ 의 복제 재구축이 진행될 때 원본 노드인 *nodeB*\ 의 복제 로그(*nodeA*\ 로부터 복제된 로그. 보통 복제된 로그가 *nodeB* DB에 반영될 때 사용됨)가 사용되므로, 복제 재구축이 끝날 때까지 *nodeB*\ 의 복제 로그가 삭제되지 않을 정도로 **ha_copy_log_max_archives** 값이 변경되어야 한다. 이 값을 10이라고 가정하고 아래와 같이 설정한다.
+            *nodeC*\ 의 복제 재구축이 진행될 때 원본 노드인 *nodeB*\ 의 복제 로그(*nodeA*\ 로부터 복제된 로그. 보통 복제된 로그가 *nodeB* DB에 반영될 때 사용됨)가 사용되므로, 복제 재구축이 끝날 때까지 *nodeB*\ 의 복제 로그가 삭제되지 않을 정도로 **ha_copy_log_max_archives** 값이 변경되어야 한다. 이 값을 10이라고 가정하고 아래와 같이 설정한다.
 
-    *   *nodeB*\ 의 **cubrid_ha.conf**\에 설정
-    
-        ::
+            *   *nodeB*\ 의 **cubrid_ha.conf**\에 설정
             
-            ha_copy_log_max_archives=10
-    
-    *   *nodeB*\ 에서 다음을 수행하여 **ha_copy_log_max_archives**\의 변경된 설정 값을 적용
-    
-        ::
+                ::
+                    
+                    ha_copy_log_max_archives=10
             
-            [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
-            [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
+            *   *nodeB*\ 에서 다음을 수행하여 **ha_copy_log_max_archives**\의 변경된 설정 값을 적용
+            
+                ::
+                    
+                    [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
+                    [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
 
 #.  *nodeB*\에 DB의 재구동 없이 **log_max_archives**\의 변경된 값을 적용한다.
 
-    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeC*\ 의 구축/재구축 이후 기존 설정을 유지할 것이므로 변경하지 않는다.
+    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeC*\ 의 구축/재구축 이후 기존 설정을 사용할 것이므로 변경하지 않는다.
     
     ::
     
@@ -2994,18 +3010,21 @@ ha_make_slavedb.sh 스크립트
         ################################################################################
 
 **ha_make_slavedb.sh** 스크립트의 수행이 완료되면 다음 작업을 수행한다.
-        
-*   *nodeC*\ 에서 예상되는 복제 지연 정도에 따라 *nodeA*\ 와 *nodeB*\ 에서 **cubrid_ha.conf**\의 **ha_copy_log_max_archives** 값을 변경한 후, 다음을 수행하여 변경된 설정 값을 적용한다.
 
-    ::
+
+..  아래 내용은 복제 재구축 스크립트 변경 전까진 불필요.
         
-        [nodeA]$ cubrid heartbeat applylogdb stop testdb nodeB
-        [nodeA]$ cubrid heartbeat applylogdb start testdb nodeB
+    *   *nodeC*\ 에서 예상되는 복제 지연 정도에 따라 *nodeA*\ 와 *nodeB*\ 에서 **cubrid_ha.conf**\의 **ha_copy_log_max_archives** 값을 변경한 후, 다음을 수행하여 변경된 설정 값을 적용한다.
+
+        ::
+            
+            [nodeA]$ cubrid heartbeat applylogdb stop testdb nodeB
+            [nodeA]$ cubrid heartbeat applylogdb start testdb nodeB
+            
+        ::
         
-    ::
-    
-        [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
-        [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
+            [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
+            [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
 
 *   레플리카 노드를 새로 구축하는 경우 *nodeA*\ 와 *nodeB*\ 에서 변경된 **cubrid_ha.conf**\의 **ha_node_list, ha_replica_list**\를 적용한다.
 
@@ -3119,33 +3138,37 @@ ha_make_slavedb.sh 스크립트
             
         하지만 **databases.txt**\의 **db-host** 부분은 브로커에서 DB 서버에 접속하는 순서와 관련된 설정 파일이므로 원하는대로 변경이 가능하다.
 
-#.  **cubrid_ha.conf**\의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 값을 변경한다.
-
-    *   *nodeD*\ 의 복제 재구축이 진행될 때 원본 노드인 *nodeC*\ 의 복제 로그(*nodeA*\ 로부터 복제된 로그. 보통 복제된 로그가 *nodeC* DB에 반영될 때 사용됨)가 사용되므로, 복제 재구축이 끝날 때까지 *nodeC*\의 복제 로그가 삭제되지 않을 정도로 **ha_copy_log_max_archives** 값이 변경되어야 한다. 이 값을 10이라고 가정하고 아래와 같이 설정한다.
-
-    *   *nodeC*\의 **cubrid_ha.conf**\에 설정
-    
-        ::
         
-            ha_copy_log_max_archives=10        
-    
-    *   *nodeC*\에서 다음을 수행하여 ha_copy_log_max_archives의 변경된 설정 값을 적용
-    
-        ::
         
-            [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeA
-            [nodeC]$ cubrid heartbeat applylogdb start testdb nodeA
+    ..  아래 내용은 복제 재구축 스크립트 변경 전까진 불필요.
+            
+        #.  **cubrid_ha.conf**\의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 값을 변경한다.
+
+            *   *nodeD*\ 의 복제 재구축이 진행될 때 원본 노드인 *nodeC*\ 의 복제 로그(*nodeA*\ 로부터 복제된 로그. 보통 복제된 로그가 *nodeC* DB에 반영될 때 사용됨)가 사용되므로, 복제 재구축이 끝날 때까지 *nodeC*\의 복제 로그가 삭제되지 않을 정도로 **ha_copy_log_max_archives** 값이 변경되어야 한다. 이 값을 10이라고 가정하고 아래와 같이 설정한다.
+
+            *   *nodeC*\의 **cubrid_ha.conf**\에 설정
+            
+                ::
+                
+                    ha_copy_log_max_archives=10        
+            
+            *   *nodeC*\에서 다음을 수행하여 ha_copy_log_max_archives의 변경된 설정 값을 적용
+            
+                ::
+                
+                    [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeA
+                    [nodeC]$ cubrid heartbeat applylogdb start testdb nodeA
 
 #.  *nodeC*\에 DB의 재구동 없이 **log_max_archives**\의 변경된 값을 적용한다.
 
-    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeD*\의 구축/재구축 이후 기존 설정을 유지할 것이므로 변경하지 않는다.
+    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeD*\의 구축/재구축 이후 기존 설정을 사용할 것이므로 변경하지 않는다.
     
     ::
     
         [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'force_remove_log_archives=no'" testdb@localhost
         [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=10'" testdb@localhost
 
-#.  *nodeD*\의 **ha_make_slavedb.sh** 스크립트를 설정해야 한다. target_host에는 복사할 원본, 즉 *nodeC*\ 를 설정하고, **repl_log_home**\에는 복제 로그의 홈 디렉터리(기본값: **$CUBRID_DATABASES**)를 설정한다. 
+#.  *nodeD*\의 **ha_make_slavedb.sh** 스크립트를 설정해야 한다. **target_host**\ 에는 복사할 원본, 즉 *nodeC*\ 를 설정하고, **repl_log_home**\에는 복제 로그의 홈 디렉터리(기본값: **$CUBRID_DATABASES**)를 설정한다. 
 
     ::
          
@@ -3401,26 +3424,29 @@ ha_make_slavedb.sh 스크립트
         ################################################################################
 
 **ha_make_slavedb.sh** 스크립트의 수행이 완료되면 다음 작업을 수행한다.
-        
-*   *nodeC*, *nodeD*\에서 예상되는 복제 지연 정도에 따라 모든 노드에서 **cubrid_ha.conf**\의 **ha_copy_log_max_archives** 값을 변경한 후, 다음을 수행하여 변경된 설정 값을 적용한다.
 
-    ::
-        
-        [nodeA]$ cubrid heartbeat applylogdb stop testdb nodeB
-        [nodeA]$ cubrid heartbeat applylogdb start testdb nodeB
-        
-    ::
-    
-        [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
-        [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
+..  아래 내용은 복제 재구축 스크립트 변경 전까진 불필요.
 
-        
-    ::
     
-        [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeA
-        [nodeC]$ cubrid heartbeat applylogdb start testdb nodeA
-        [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeB
-        [nodeC]$ cubrid heartbeat applylogdb start testdb nodeB        
+    *   *nodeC*, *nodeD*\에서 예상되는 복제 지연 정도에 따라 모든 노드에서 **cubrid_ha.conf**\의 **ha_copy_log_max_archives** 값을 변경한 후, 다음을 수행하여 변경된 설정 값을 적용한다.
+
+        ::
+            
+            [nodeA]$ cubrid heartbeat applylogdb stop testdb nodeB
+            [nodeA]$ cubrid heartbeat applylogdb start testdb nodeB
+            
+        ::
+        
+            [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
+            [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
+
+            
+        ::
+        
+            [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeA
+            [nodeC]$ cubrid heartbeat applylogdb start testdb nodeA
+            [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeB
+            [nodeC]$ cubrid heartbeat applylogdb start testdb nodeB        
         
 *   *nodeD*\ 를 새로 구축하는 경우 *nodeA*, *nodeB*, *nodeC*\ 에서 변경된 **cubrid_ha.conf**\의 **ha_node_list, ha_replica_list**\를 적용한다.
 
@@ -3546,26 +3572,28 @@ ha_make_slavedb.sh 스크립트
             
         하지만 **databases.txt**\의 **db-host** 부분은 브로커에서 DB 서버에 접속하는 순서와 관련된 설정 파일이므로 원하는대로 변경이 가능하다.
 
-#.  **cubrid_ha.conf**\의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 값을 변경한다.
+    ..  아래 내용은 복제 재구축 스크립트 변경 전까진 불필요.
+    
+        #.  **cubrid_ha.conf**\의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 값을 변경한다.
 
-    *nodeB*\ 의 복제 재구축이 진행될 때 원본 노드인 *nodeC*\ 의 복제 로그(*nodeA*\ 로부터 복제된 로그. 보통 복제된 로그가 *nodeC* DB에 반영될 때 사용됨)가 사용되므로, 복제 재구축이 끝날 때까지 *nodeC*\ 의 복제 로그가 삭제되지 않을 정도로 **ha_copy_log_max_archives** 값이 변경되어야 한다. 이 값을 10이라고 가정하고 아래와 같이 설정한다.
+            *nodeB*\ 의 복제 재구축이 진행될 때 원본 노드인 *nodeC*\ 의 복제 로그(*nodeA*\ 로부터 복제된 로그. 보통 복제된 로그가 *nodeC* DB에 반영될 때 사용됨)가 사용되므로, 복제 재구축이 끝날 때까지 *nodeC*\ 의 복제 로그가 삭제되지 않을 정도로 **ha_copy_log_max_archives** 값이 변경되어야 한다. 이 값을 10이라고 가정하고 아래와 같이 설정한다.
 
-    *   *nodeC*\ 의 **cubrid_ha.conf**\에 설정
-    
-        ::
+            *   *nodeC*\ 의 **cubrid_ha.conf**\에 설정
             
-            ha_copy_log_max_archives=10
-    
-    *   *nodeC*\ 에서 다음을 수행하여 **ha_copy_log_max_archives**\의 변경된 설정 값을 적용
-    
-        ::
+                ::
+                    
+                    ha_copy_log_max_archives=10
             
-            [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeA
-            [nodeC]$ cubrid heartbeat applylogdb start testdb nodeA
+            *   *nodeC*\ 에서 다음을 수행하여 **ha_copy_log_max_archives**\의 변경된 설정 값을 적용
+            
+                ::
+                    
+                    [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeA
+                    [nodeC]$ cubrid heartbeat applylogdb start testdb nodeA
 
 #.  *nodeC*\에 DB의 재구동 없이 **log_max_archives**\의 변경된 값을 적용한다.
 
-    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeB*\ 의 재구축 이후 기존 설정을 유지할 것이므로 변경하지 않는다.
+    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeB*\ 의 재구축 이후 기존 설정을 사용할 것이므로 변경하지 않는다.
     
     ::
     

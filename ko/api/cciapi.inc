@@ -13,16 +13,17 @@ CCI API 레퍼런스
     :param flag: (IN)bind_flag(:c:type:`CCI_BIND_PTR`).
     :return: 에러 코드(0: 성공)
     
+        *   **CCI_ER_BIND_INDEX**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_TYPE_CONVERSION**
-        *   **CCI_ER_BIND_INDEX**
-        *   **CCI_ER_ATYPE**
-        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_USED_CONNECTION**
         
     데이터베이스에 **NULL**\ 을 바인딩하려면 다음의 두 가지 중 하나를 설정한다.
         
     *   *value* 값을 **NULL** 포인터로 설정
-    *   *u_type* 을 :c:macro:`CCI_U_TYPE_NULL`\로 설정
+    *   *u_type*\ 을 :c:macro:`CCI_U_TYPE_NULL`\로 설정
 
     다음은 NULL을 바인딩하는 코드의 일부이다.
     
@@ -166,11 +167,13 @@ CCI API 레퍼런스
     :param u_type: (IN) 데이터베이스에 반영될 데이터 타입
     :return: 에러 코드(0: 성공)
     
+        *   **CCI_ER_BIND_INDEX**
+        *   **CCI_ER_BIND_ARRAY_SIZE**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_TYPE_CONVERSION**
-        *   **CCI_ER_BIND_INDEX**
-        *   **CCI_ER_ATYPE**
-        *   **CCI_ER_BIND_ARRAY_SIZE**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_bind_param_array_size(int req_handle, int array_size)
 
@@ -180,7 +183,9 @@ CCI API 레퍼런스
     :param array_size: (IN) binding array size
     :return: 에러 코드(0: 성공)
     
+        *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_REQ_HANDLE**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_blob_free(T_CCI_BLOB blob)
 
@@ -199,12 +204,16 @@ CCI API 레퍼런스
     :param error_buf: (OUT) 에러 버퍼
     :return: 에러 코드(0: 성공)
     
-        *   **CCI_ER_CONNECT**
         *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_CONNECT**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
-
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_USED_CONNECTION**
+        
+        
 .. c:function:: int cci_blob_read(int conn_handle, T_CCI_BLOB blob, long start_pos, int length, char *buf, T_CCI_ERROR* error_buf)
 
     *blob* 에 명시한 **LOB** 데이터 파일의 *start_pos* 부터 *length* 만큼 데이터를 읽어 *buf* 에 저장한 후 이를 반환한다.
@@ -217,13 +226,16 @@ CCI API 레퍼런스
     :param error_buf: (OUT) 에러 버퍼
     :return: 에러 코드(0: 성공)
     
-        *   **CCI_ER_INVALID_LOB_READ_POS**
+        *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
+        *   **CCI_ER_INVALID_LOB_READ_POS**
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: long long cci_blob_size(T_CCI_BLOB* blob)
 
@@ -246,16 +258,26 @@ CCI API 레퍼런스
     :param error_buf: (OUT) 에러 버퍼
     :return: write한 크기(>=0 : 성공), 에러 코드(<0 : 에러)
 
+        *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
-
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_USED_CONNECTION**
+        
 .. c:function:: int cci_cancel(int conn_handle)
 
     다른 스레드에서 실행 중인 질의를 취소시킨다. Java의 Statement.cancel() 메서드와 같은 기능을 수행한다.
+    
+    :param conn_handle: (IN) 연결 핸들
+    :return: 에러 코드
+        
+        *    **CCI_ER_COMMUNICATION**
+        *    **CCI_ER_CON_HANDLE**
+        *    **CCI_ER_CONNECT**
     
     다음은 main 함수에서 스레드의 질의 실행을 취소하는 예이다.
     
@@ -429,12 +451,6 @@ CCI API 레퍼런스
             return error_msg;
         }
 
-    :param conn_handle: (IN) 연결 핸들
-    
-    :return: 에러 코드
-        
-        *    **CCI_ER_CON_HANDLE**
-
 .. c:function:: int cci_clob_free(T_CCI_CLOB clob)
 
     **CLOB** 구조체에 대한 메모리를 해제한다.
@@ -453,11 +469,14 @@ CCI API 레퍼런스
     :param error_buf: (OUT) 에러 버퍼
     :return: 에러 코드(<0 : 에러)
 
-        *   **CCI_ER_CONNECT**
         *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_CONNECT**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_clob_read(int conn_handle, T_CCI_CLOB clob, long start_pos, int length, char *buf, T_CCI_ERROR* error_buf)
 
@@ -471,13 +490,16 @@ CCI API 레퍼런스
     :param error_buf: (OUT) 에러 버퍼
     :return: read한 크기(>=0 : 성공), 에러 코드(<0 : 에러)
 
-        *   **CCI_ER_INVALID_LOB_READ_POS**
+        *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
+        *   **CCI_ER_INVALID_LOB_READ_POS**
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: long long cci_clob_size(T_CCI_CLOB* clob)
 
@@ -500,12 +522,15 @@ CCI API 레퍼런스
     :param error_buf: (OUT) 에러 버퍼
     :return: write한 크기(>=0 : 성공), 에러 코드(<0 : 에러)
 
+        *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function::  int cci_close_query_result(int req_handle, T_CCI_ERROR *err_buf)
 
@@ -515,9 +540,14 @@ CCI API 레퍼런스
     :param err_buf: (OUT) 에러 버퍼
     :return: 에러 코드 (0: 성공)
     
-        *    **CCI_ER_REQ_HANDLE**
-        *    **CCI_ER_COMMUNICATION**
-        
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_COMMUNICATION**
+        *   **CCI_ER_DBMS**   
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_REQ_HANDLE**
+        *   **CCI_ER_RESULT_SET_CLOSED**
+        *   **CCI_ER_USED_CONNECTION**
+
 .. c:function:: int cci_close_req_handle(int req_handle)
 
     :c:func:`cci_prepare`\ 로 획득한 요청 핸들을 종료(close)한다. 
@@ -525,9 +555,13 @@ CCI API 레퍼런스
     :param req_handle: (IN) 요청 핸들
     :return: 에러 코드(0 : 성공)
 
+        *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_COMMUNICATION**
-
+        *   **CCI_ER_DBMS**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_USED_CONNECTION**
+        
 .. c:function:: int cci_col_get (int conn_handle, char *oid_str, char *col_attr, int *col_size, int *col_type, T_CCI_ERROR *err_buf)
 
     collection type의 속성 값을 가져온다. 클래스 이름이 C이고 set_attr의 domain이 set(multiset, sequence)인 경우 다음의 질의와 같다.
@@ -1522,7 +1556,7 @@ CCI API 레퍼런스
     :param msg_buf_size: (IN) *msg_buf* 크기
     :return: 0 (성공), -1 (실패)
 
-    note:: CUBRID 9.1 부터는 err_buf가 있는 모든 함수에서 err_buf에 값이 저장되는 것을 보장하므로 err_buf 인자가 있는 함수에서는 cci_get_err_msg 함수를 사용할 필요가 없다. 
+    note:: CUBRID 9.1 부터는 err_buf가 있는 모든 함수에서 err_buf에 값이 저장되는 것을 보장하므로 err_buf 인자가 있는 함수에서는 cci_get_err_msg 함수를 사용할 필요가 없으며, :c:func:`cci_get_error_msg` 함수를 사용할 것을 권장한다.
     
         .. code-block:: c
         
@@ -1533,7 +1567,7 @@ CCI API 레퍼런스
                 goto handle_error;
             }
     
-        9.1 이전 버전에서는 CCI_ER_DBMS가 발생했을 때만 err_buf에 값이 저장되므로 CCI_ER_DBMS에 따라 다음과 같이 분기하여 처리해야 했다.
+        9.1 이전 버전에서는 CCI_ER_DBMS 에러가 발생했을 때만 err_buf에 에러 정보가 저장되므로 CCI_ER_DBMS에 따라 다음과 같이 분기하여 처리해야 했다.
         
         .. code-block:: c
         
@@ -1553,14 +1587,13 @@ CCI API 레퍼런스
                 goto handle_error;
             }
 
-        또는 위의 분기 코드를 단순화하기 위해 cci_get_error_msg 함수를 사용할 수 있다.
+        9.1 버전부터는 cci_get_error_msg 함수를 사용하여 위의 분기 코드를 단순화할 수 있다.
         
         .. code-block:: c
 
             req = cci_prepare (con, query, 0, &err_buf);
             if (req < 0)
             {
-
                 char msg_buf[1024];
                 cci_get_error_msg(req, err_buf, msg_buf, 1024);
                 printf ("error: %s\n", msg_buf);

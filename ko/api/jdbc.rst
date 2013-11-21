@@ -29,7 +29,7 @@ JDBC 드라이버 버전은 다음과 같은 방법으로 확인할 수 있다. 
 
 **CUBRID JDBC 드라이버 등록**
 
-JDBC 드라이버 등록은 **Class.forName** (*driver-class-name*) 명령을 사용하며, 아래는 CUBRID JDBC 드라이버를 등록하기 위해 cubrid.jdbc.driver.CUBRIDDriver 클래스를 로드하는 예제이다.
+JDBC 드라이버 등록은 **Class.forName** (*driver-class-name*) 메서드를 사용하며, 아래는 CUBRID JDBC 드라이버를 등록하기 위해 cubrid.jdbc.driver.CUBRIDDriver 클래스를 로드하는 예제이다.
 
 .. code-block:: java
 
@@ -224,6 +224,82 @@ JDBC 프로그래밍
     *   트랜잭션 롤백을 요청하는 rollback 메서드는 서버가 롤백 작업을 완료한 후 종료된다.
     *   자동 커밋 모드에서 SELECT 문 수행 이후 모든 결과 셋이 fetch되지 않으면 커밋이 되지 않는다. 따라서, 자동 커밋 모드라 하더라도 프로그램 내에서 결과 셋에 대한 fetch 도중 어떠한 오류가 발생한다면 반드시 커밋 또는 롤백을 수행하여 트랜잭션을 종료 처리하도록 한다. 
 
+.. _jdbc-conn-datasource:
+
+DataSource 객체로 연결
+--------------------------
+
+DataSource는 JDBC 2.0 확장 API에 소개된 개념으로, 연결 풀링(connection pooling)과 분산 트랜잭션을 지원한다. CUBRID는 연결 풀링만 지원하며, 분산 트랜잭션과 JNDI는 지원하지 않는다.
+
+CUBRIDDataSource는 CUBRID에서 구현한 DataSource이다.
+
+**DataSource 객체 생성하기**
+
+DataSource 객체를 생성하려면 다음과 같이 호출한다.
+
+.. code-block:: java
+
+    CUBRIDDataSource ds = null;
+    ds = new CUBRIDDataSource();
+
+**연결 속성 설정하기**
+
+**연결 속성**\ (connection properties)은 datasource와 CUBRID DBMS 사이에 연결을 설정하는데 사용된다. 일반적인 속성은 DB 이름, 호스트 이름, 포트 번호, 사용자 이름, 암호이다.
+
+속성(property) 값을 설정하거나 얻기 위해서는 cubrid.jdbc.driver.CUBRIDDataSource에서 구현된 다음 메서드들을 사용한다.
+
+.. code-block:: java
+
+    public PrintWriter getLogWriter();
+    public void setLogWriter(PrintWriter out);
+    public void setLoginTimeout(int seconds);
+    public int getLoginTimeout();
+    public String getDatabaseName();
+    public String getDatabaseName();
+    public String getDataSourceName();
+    public String getDescription();
+    public String getNetworkProtocol();
+    public String getPassword();
+    public int getPortNumber();
+    public int getPort();
+    public String getRoleName();
+    public String getServerName();
+    public String getUser();
+    public String getURL();
+    public String getUrl();
+    public void setDatabaseName(String dbName);
+    public void setDescription(String desc);
+    public void setNetworkProtocol(String netProtocol);
+    public void setPassword(String psswd);
+    public void setPortNumber(int p);
+    public void setPort(int p);
+    public void setRoleName(String rName);
+    public void setServerName(String svName);
+    public void setUser(String uName);
+    public void setUrl(String urlString);
+    public void setURL(String urlString);
+
+특히, URL 문자열을 통해 속성을 지정하고자 하는 경우 setURL() 메서드를 사용한다. URL 문자열에 대해서는 :ref:`jdbc-connection-conf`\ 을 참고한다.
+  
+.. code-block:: java 
+  
+    import cubrid.jdbc.driver.CUBRIDDataSource; 
+    ... 
+    CUBRIDDataSource ds = null;
+    ds = new CUBRIDDataSource(); 
+    ds.setUrl("jdbc:cubrid:10.113.153.144:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+
+DataSource로부터 연결 객체를 얻기 위해서는 getConnection 메서드를 호출한다.
+
+.. code-block:: java
+
+    Connection connection = null;
+    connection = ds.getConnection("dba", "");
+
+CUBRIDConnectionPoolDataSource는 connectionpool datasource를 CUBRID에서 구현한 객체인데, CUBRIDDataSource의 메서드들과 같은 이름의 메서드들을 포함하고 있다.
+
+보다 자세한 예제는 :ref:`jdbc-examples`\ 의 **DataSource 객체로 연결**\ 을 참고한다.
+    
 .. _jdbc-con-tostring:
 
 SQL LOG 확인 
@@ -596,7 +672,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
 
 *   다음 방법 중 하나를 사용하여 자동 생성된 키를 반환하려는지 표시한다. 자동 증가 특성 칼럼을 지원하는 데이터베이스 서버의 테이블에 대해 다음의 양식을 사용하며, 각 양식은 단일 행 **INSERT** 문에 대해서만 적용 가능하다.
 
-    *   아래와 같이 **PreparedStatement** 오브젝트를 작성한다.
+    *   아래와 같이 **PreparedStatement** 객체를 작성한다.
     
     .. code-block:: java
     
@@ -608,7 +684,7 @@ OID를 사용할 때 다음의 규칙을 지켜야 한다.
 
         Statement.execute(sql statement, Statement.RETURN_GENERATED_KEYS);
         
-*   **PreparedStatement.getGeneratedKeys** 메서드 또는 **Statement.getGeneratedKeys** 메서드를 호출하여 자동 생성된 키 값이 포함된 **ResultSet** 오브젝트를 검색한다.
+*   **PreparedStatement.getGeneratedKeys** 메서드 또는 **Statement.getGeneratedKeys** 메서드를 호출하여 자동 생성된 키 값이 포함된 **ResultSet** 객체를 검색한다.
     **ResultSet** 에서 자동 생성된 키의 데이터 유형은 해당 도메인의 데이터 유형에 상관 없이 **DECIMAL** 이다.
 
 **예제**
@@ -943,6 +1019,8 @@ SQLException에서 발생하는 JDBC 에러 코드는 다음과 같다.
 | -21141     | Request timed out.                                                                   |
 +------------+--------------------------------------------------------------------------------------+
 
+.. _jdbc-examples:
+
 JDBC 예제 프로그램
 ==================
 
@@ -969,21 +1047,185 @@ JDBC 드라이버를 로드한 후 **DriverManager** 의 **getConnection** () �
 
     Connection conn = DriverManager.getConnection(url,userid,password);
 
+DataSource 객체를 사용하여 데이터베이스에 연결할 수도 있다. 연결 URL 문자열에 연결 속성(connection property)을 포함하고자 하는 경우, CUBRIDDataSource에 구현된 setURL 메서드를 사용할 수 있다.
+
+.. code-block:: java 
+
+    import cubrid.jdbc.driver.CUBRIDDataSource; 
+    ... 
+     
+    ds = new CUBRIDDataSource(); 
+    ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+
+CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 참고한다.
+
+**DataSource 객체로 연결**
+
+다음은 CUBRID에 구현된 DataSource인 CUBRIDDataSource의 setURL을 이용하여 DB에 접속하고, 여러 개의 스레드에서 SELECT 문을 실행하는 예제이다.
+소스는 DataSourceMT.java와 DataSourceExample.java의 두 개로 나뉘어져 있다.
+ 
+*   DataSourceMT.java는 main 함수를 포함하고 있다. CUBRIDDataSource 객체를 생성하고 setURL 메서드를 호출하여 DB에 접속한 후, 여러 개의 스레드가 DataSourceExample.test 메서드를 수행한다.
+ 
+*   DataSourceExample.java에는 DataSourceMT.java에서 생성된 스레드가 수행할 DataSourceExample.test 메서드가 구현되어 있다.
+ 
+`DataSourceMT.java`
+ 
+.. code-block:: java
+ 
+    import cubrid.jdbc.driver.*;
+ 
+    public class DataSourceMT {
+        static int num_thread = 20;
+ 
+        public static void main(String[] args) {
+            CUBRIDDataSource ds = null;
+            thrCPDSMT thread[];
+ 
+            ds = new CUBRIDDataSource();
+            ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
+ 
+            try {
+                thread = new thrCPDSMT[num_thread];
+ 
+                for (int i = 0; i < num_thread; i++) {
+                    Thread.sleep(1);
+                    thread[i] = new thrCPDSMT(i, ds);
+                    try {
+                        Thread.sleep(1);
+                        thread[i].start();
+                    } catch (Exception e) {
+                    }
+                }
+ 
+                for (int i = 0; i < num_thread; i++) {
+                    thread[i].join();
+                    System.err.println("join thread : " + i);
+                }
+ 
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
+    }
+ 
+    class thrCPDSMT extends Thread {
+        CUBRIDDataSource thread_ds;
+        int thread_id;
+ 
+        thrCPDSMT(int tid, CUBRIDDataSource ds) {
+            thread_id = tid;
+            thread_ds = ds;
+        }
+ 
+        public void run() {
+            try {
+                DataSourceExample.test(thread_ds);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+ 
+        }
+    }
+ 
+`DataSourceExample.java`
+ 
+.. code-block:: java
+ 
+    import java.sql.*;
+    import javax.sql.*;
+    import cubrid.jdbc.driver.*;
+ 
+    public class DataSourceExample {
+ 
+        public static void printdata(ResultSet rs) throws SQLException {
+            try {
+                ResultSetMetaData rsmd = null;
+ 
+                rsmd = rs.getMetaData();
+                int numberofColumn = rsmd.getColumnCount();
+ 
+                while (rs.next()) {
+                    for (int j = 1; j <= numberofColumn; j++)
+                        System.out.print(rs.getString(j) + "  ");
+                    System.out.println("");
+                }
+            } catch (SQLException e) {
+                System.out.println("SQLException : " + e.getMessage());
+                throw e;
+            }
+        }
+ 
+        public static void test(CUBRIDDataSource ds) throws Exception {
+            Connection connection = null;
+            Statement statement = null;
+            ResultSet resultSet = null;
+ 
+            for (int i = 1; i <= 20; i++) {
+                try {
+                    connection = ds.getConnection("dba", "");
+                    statement = connection.createStatement();
+                    String SQL = "SELECT * FROM code";
+                    resultSet = statement.executeQuery(SQL);
+ 
+                    while (resultSet.next()) {
+                        printdata(resultSet);
+                    }
+ 
+                    if (i % 5 == 0) {
+                        System.gc();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    closeAll(resultSet, statement, connection);
+                }
+            }
+        }
+        
+        public static void closeAll(ResultSet resultSet, Statement statement,
+                Connection connection) {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+    }
+        
 **데이터베이스 조작(질의 수행 및 ResultSet 처리)**
 
 접속된 데이터베이스에 질의문을 전달하고 실행시키기 위하여 **Statement** , **PrepardStatement** , **CallableStatement** 객체를 생성한다.
 **Statement** 객체가 생성되면, **Statement** 객체의 **executeQuery** () 메서드나 **executeUpdate** () 메서드를 사용하여 질의문을 실행한다.
 **next** () 메서드를 사용하여 **executeQuery** () 메서드의 결과로 반환된 **ResultSet** 의 다음 행을 처리할 수 있다.
 
-.. warning::
+.. note::
 
-    질의 수행 후 커밋을 수행하면 ResultSet을 자동으로 닫으므로, 커밋 이후에는 ResultSet을 사용하지 않아야 한다. CUBRID는 기본적으로 자동 커밋 모드로 수행되므로, 이를 원하지 않으면 반드시 **conn.setAutocommit(false);** 를 코드에 명시해야 한다.
+    2008 R4.x 이하 버전에서 질의 수행 후 커밋을 수행하면 ResultSet을 자동으로 닫으므로, 커밋 이후에는 ResultSet을 사용하지 않아야 한다. CUBRID는 기본적으로 자동 커밋 모드로 수행되므로, 이를 원하지 않으면 반드시 **conn.setAutocommit(false);** 를 코드에 명시해야 한다.
+    
+    9.1 이상 버전부터는 :ref:`커서 유지(cursor holdability) <cursor-holding>`\ 가 되므로 커밋 이후에도 ResultSet을 사용할 수 있다.
 
 **데이터베이스 연결 해제**
 
 각 객체에 대해 **close** () 메서드를 수행하여 데이터베이스와의 연결을 해제할 수 있다.
 
-다음은 *demodb* 에 접속하여 테이블을 생성하고, prepared statement로 질의문을 수행한 후 질의를 롤백시키는 예제 코드이며, **getConnection** () 메서드의 인자값을 적절하게 수정하여 실습할 수 있다.
+**CREATE, INSERT**
+
+다음은 *demodb* 에 접속하여 테이블을 생성하고, prepared statement로 질의문을 수행한 후 질의를 롤백시키는 예제 코드이며, **getConnection**\() 메서드의 인자값을 적절하게 수정하여 실습할 수 있다.
 
 .. code-block:: java
 
@@ -1053,6 +1295,9 @@ JDBC 드라이버를 로드한 후 **DriverManager** 의 **getConnection** () �
        }
     }
 
+    
+**SELECT**
+    
 다음은 CUBRID 설치 시 기본 제공되는 *demodb* 에 접속하여 **SELECT** 질의를 수행하는 예제이다.
 
 .. code-block:: java
@@ -1095,6 +1340,8 @@ JDBC 드라이버를 로드한 후 **DriverManager** 의 **getConnection** () �
         }
     }
 
+**INSERT**
+    
 다음은 CUBRID 설치 시 기본 제공되는 *demodb* 에 접속하여 **INSERT** 질의를 수행하는 예제이다. 데이터 삭제 및 갱신 방법은 데이터 삽입 방법과 동일하므로 아래 코드에서 질의문만 변경하여 사용할 수 있다.
 
 .. code-block:: java
@@ -1124,6 +1371,7 @@ JDBC 드라이버를 로드한 후 **DriverManager** 의 **getConnection** () �
            }
        }
     }
+
 
 JDBC API
 ========
@@ -1168,7 +1416,10 @@ JDBC API에 대한 자세한 내용은 Java API Specification 문서(http://docs
 
 .. note::
     
-    * 2008 R4.3부터 자동 커밋이 ON일 때 질의문을 일괄 처리하는 메서드의 동작 방식이 변경되었음에 주의한다. 질의문을 일괄 처리하는 메서드는 PreparedStatement.executeBatch와 Statement.executeBatch이다. 이들은 2008 R4.1 버전까지 자동 커밋 모드에서 배열 내의 모든 질의를 수행한 후에 커밋했으나, 2008 R4.3버전부터는 각 질의를 수행할 때마다 커밋하도록 변경되었다.
-    * 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 메서드에서 배열 내의 질의 수행 중 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
+    *   :ref:`커서 유지(cursor holdability) <cursor-holding>`\ 와 관련하여 설정을 명시하지 않으면 기본으로 커서가 유지된다.
+
+    *   2008 R4.3부터 자동 커밋이 ON일 때 질의문을 일괄 처리하는 메서드의 동작 방식이 변경되었음에 주의한다. 질의문을 일괄 처리하는 메서드는 PreparedStatement.executeBatch와 Statement.executeBatch이다. 이들은 2008 R4.1 버전까지 자동 커밋 모드에서 배열 내의 모든 질의를 수행한 후에 커밋했으나, 2008 R4.3버전부터는 각 질의를 수행할 때마다 커밋하도록 변경되었다.
+    
+    *   자동 커밋이 OFF일 때 질의문을 일괄 처리하는 메서드에서 배열 내의 질의 수행 중 일부에서 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
     
 

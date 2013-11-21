@@ -19,7 +19,7 @@ CREATE TABLE
     [CLASS ATTRIBUTE (<column_definition>, ...)]
     [INHERIT <resolution>, ...]
     [REUSE_OID]
-    [CHARSET charset_name] [COLLATE collation_name];
+    [CHARSET charset_name] [COLLATE collation_name] ;
 
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         
@@ -229,7 +229,7 @@ CREATE TABLE
 
 ::
 
-    CREATE TABLE table_name (id int AUTO_INCREMENT [(seed, increment)] );
+    CREATE TABLE table_name (id int AUTO_INCREMENT [(seed, increment)] ) ;
     
     CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
 
@@ -1457,7 +1457,7 @@ RENAME COLUMN 절
 **RENAME COLUMN** 절을 사용하여 칼럼의 이름을 변경할 수 있다. ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name;
+    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name ;
 
 *   *table_name* : 이름을 변경할 칼럼의 테이블 이름을 지정한다.
 *   *old_column_name* : 현재의 칼럼 이름을 지정한다.
@@ -1475,7 +1475,7 @@ RENAME INDEX/CONSTRAINT 절
 
 :: 
      
-    ALTER TABLE table_name RENAME {CONSTRAINT | {INDEX|KEY}} old_name {AS|TO} new_name 
+    ALTER TABLE table_name RENAME {CONSTRAINT | {INDEX|KEY}} old_name {AS|TO} new_name ;
 
 *   CONSTRAINT: UNIQUE, PRIMARY KEY, FOREIGN KEY
 *   INDEX 또는 KEY: INDEX (기능적으로 :ref:`alter-index` 문에서 인덱스 이름을 변경하는 것과 같다.) 
@@ -1560,11 +1560,12 @@ DROP CONSTRAINT 절
 DROP INDEX 절
 -------------
 
-**DROP INDEX** 절을 사용하여 인덱스를 삭제할 수 있다. ::
+**DROP INDEX** 절을 사용하여 인덱스를 삭제할 수 있다. 고유 인덱스는 **DROP CONSTRAINT** 절로도 삭제할 수 있다.
 
-    ALTER [ TABLE | CLASS ] table_name DROP [ UNIQUE ] INDEX index_name
+::
 
-*   **UNIQUE** : 삭제하려는 인덱스가 고유 인덱스임을 지정한다. 고유 인덱스는 **DROP CONSTRAINT** 절로도 삭제할 수 있다.
+    ALTER [ TABLE | CLASS ] table_name DROP INDEX index_name ;
+
 *   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *index_name* : 삭제할 인덱스의 이름을 지정한다.
 
@@ -1577,7 +1578,7 @@ DROP PRIMARY KEY 절
 
 **DROP PRIMARY KEY** 절을 사용하여 테이블에 정의된 기본키 제약 조건을 삭제할 수 있다. 하나의 테이블에는 하나의 기본키만 정의될 수 있으므로 기본키 제약 조건 이름을 지정하지 않아도 된다. ::
 
-    ALTER [TABLE | CLASS] table_name DROP PRIMARY KEY;
+    ALTER [TABLE | CLASS] table_name DROP PRIMARY KEY ;
 
 *   *table_name* : 기본키 제약 조건을 삭제할 테이블의 이름을 지정한다.
 
@@ -1590,7 +1591,7 @@ DROP FOREIGN KEY 절
 
 **DROP FOREIGN KEY** 절을 사용하여 테이블에 정의된 외래키 제약 조건을 모두 삭제할 수 있다. ::
 
-    ALTER [TABLE | CLASS] table_name DROP FOREIGN KEY constraint_name;
+    ALTER [TABLE | CLASS] table_name DROP FOREIGN KEY constraint_name ;
 
 *   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *constraint_name* : 삭제할 외래키 제약 조건의 이름을 지정한다.

@@ -11,12 +11,11 @@ CREATE INDEX
 
 ::
 
-    CREATE [ UNIQUE ] INDEX index_name
-    ON table_name <index_col_desc>
+    CREATE [ UNIQUE ] INDEX index_name ON table_name <index_col_desc> ;
      
-    <index_col_desc> ::=
-        ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
-        | (function_name (argument_list) )
+        <index_col_desc> ::=
+            ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
+            | (function_name (argument_list) )
 
 *   **UNIQUE**: 유일한 값을 갖는 고유 인덱스를 생성한다.
 *   *index_name*: 생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
@@ -60,8 +59,7 @@ ALTER INDEX
 
 ::
 
-    ALTER [ UNIQUE ] INDEX index_name
-    ON table_name [<index_col_desc>] REBUILD
+    ALTER [ UNIQUE ] INDEX index_name ON table_name [<index_col_desc>] REBUILD ;
      
     <index_col_desc> ::=
         ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
@@ -106,12 +104,12 @@ ALTER INDEX 문이 아닌 :ref:`rename-index`\ 을 이용해서도 인덱스 이
 DROP INDEX
 ==========
 
-**DROP INDEX** 문을 사용하여 인덱스를 삭제할 수 있다. ::
+**DROP INDEX** 문을 사용하여 인덱스를 삭제할 수 있다. 고유 인덱스는 **DROP CONSTRAINT** 절로도 삭제할 수 있다.
 
-    DROP [ UNIQUE ] INDEX index_name
-    ON table_name
+::
 
-*   **UNIQUE**: 삭제하려는 인덱스가 고유 인덱스임을 지정한다. 고유 인덱스는 **DROP CONSTRAINT** 절로도 삭제할 수 있다.
+    DROP INDEX index_name ON table_name ;
+
 *   *index_name*: 삭제할 인덱스의 이름을 지정한다.
 *   *table_name*: 삭제할 인덱스가 지정된 테이블 이름을 지정한다.
 

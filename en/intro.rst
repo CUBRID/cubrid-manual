@@ -12,7 +12,7 @@ This chapter covers the following topics:
 System Architecture
 ===================
 
-System Architecture
+System Organization
 -------------------
 
 CUBRID is an object-relational database management system (DBMS) consisting of the database server, the broker, and the CUBRID Manager.
@@ -47,7 +47,7 @@ Permanent volume is a database volume that exists permanently once it is created
 
 **Generic Volume**
 
-For efficient management, the volume type to be added to the database can be specified as one of the following: data, temp or index. If data usage is not specified, it is specified as a generic volume and it stores data or index.
+For efficient management, the volume type to be added to the database can be specified as one of the following: data, temp or index. If data usage is not specified, it is specified as a generic volume and it stores data and index. Also it is specified as the generic volume when a volume file is automatically added.
 
 **Data Volume**
 

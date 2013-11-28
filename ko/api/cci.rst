@@ -46,7 +46,7 @@ CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 
 *   실행 결과 처리하기(관련 함수: :c:func:`cci_cursor`, :c:func:`cci_fetch`, :c:func:`cci_get_data`, :c:func:`cci_get_result_info`)
 *   요청 핸들 닫기(관련 함수: :c:func:`cci_close_req_handle`)
 *   데이터베이스 연결 핸들 닫기(관련 함수: :c:func:`cci_disconnect`)
-*   데이터베이스 연결 풀 사용하기(관련 함수: :c:func:`cci_property_create`), :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`)
+*   데이터베이스 연결 풀 사용하기(관련 함수: :c:func:`cci_property_create`, :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`, :c:func:`cci_datasource_change_property`)
 
 .. note::
 

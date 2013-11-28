@@ -545,7 +545,7 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **dont_reuse_heap_file**
 
-    **dont_reuse_heap_file**\ 은 테이블 삭제(**DROP TABLE**)로 인해 삭제된 힙 파일을 새로운 테이블 생성(**CREATE TABLE**) 시 재사용하지 않도록 설정하는 파라미터로, 0으로 설정되면 삭제된 힙 파일을 재사용하고, 1로 설정되면 삭제된 힙 파일을 새로운 테이블 생성 시 재사용하지 않는다. 기본값은 **0**\ 이다.
+    **dont_reuse_heap_file**\ 은 테이블 삭제(**DROP TABLE**)로 인해 삭제된 힙 파일을 새로운 테이블 생성(**CREATE TABLE**) 시 재사용하지 않도록 설정하는 파라미터로, no로 설정되면 삭제된 힙 파일을 재사용하고, yes로 설정되면 삭제된 힙 파일을 새로운 테이블 생성 시 재사용하지 않는다. 기본값은 **no**\ 이다.
 
 **generic_vol_prealloc_size**
 
@@ -2030,7 +2030,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
     **ERROR_LOG_DIR**\ 은 브로커에 대한 에러 로그가 저장되는 디렉터리를 지정하는 파라미터로, 기본값은 **log/broker/error_log**\ 이다. 브로커 에러 로그 파일명은 *broker_ name_id.err*\ 이다.
 
 **LOG_BACKUP**
-    **LOG_BACKUP**\ 은 CUBRID 브로커가 종료될 때 브로커의 접속 로그 파일을 백업할 것인지 지정하는 파라미터이다. 기본값은 **OFF**\ 이며, CUBRID 브로커가 종료될 때 $CUBRID/log/broker에 있는 접속 로그 파일(*broker_name.access*)이 삭제된다. **ON** 으로 설정되면 CUBRID 브로커가 종료될 때 접속 로그 파일이 다른 이름으로 백업된다. 이때, 접속 로그의 백업 파일명은 *broker_name.access.YYYYMMDD.HHMI* 가 된다.
+    **LOG_BACKUP**\ 은 CUBRID 브로커가 종료될 때 브로커의 접속 로그 파일을 백업할 것인지 지정하는 파라미터이다. 기본값은 **OFF**\ 이며, CUBRID 브로커가 종료될 때 $CUBRID/log/broker에 있는 접속 로그 파일(*broker_name*\ **.access**)이 삭제된다. **ON** 으로 설정되면 CUBRID 브로커가 종료될 때 접속 로그 파일이 다른 이름으로 백업된다. 이때, 접속 로그의 백업 파일명은 *broker_name.access.YYYYMMDD.HHMI* 가 된다.
 
 **LOG_DIR**
                        

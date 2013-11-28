@@ -36,15 +36,15 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
   
     :: 
   
-        $ ksh93 ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
-        $ bash ./CUBRID-9.2.0.0146-AIX-ppc64.sh 
+        $ ksh93 ./CUBRID-10.0.0.0146-AIX-ppc64.sh 
+        $ bash ./CUBRID-10.0.0.0146-AIX-ppc64.sh 
 
 버전 호환성
 -----------
 
 **응용 프로그램의 호환성**
 
-*   2008 R4.1 또는 그 이상 버전에서 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 10.0 DB에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 10.0 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다.
+*   2008 R4.1 또는 그 이상 버전에서 JDBC, PHP, CCI API 등을 사용하는 응용 프로그램은 CUBRID 10.0 브로커에 접근할 수 있다. 다만, JDBC, PHP, CCI 인터페이스에 추가/개선된 기능을 사용하기 위해서는 CUBRID 10.0 버전의 라이브러리를 링크하거나 드라이버를 사용해야 한다.
 
 *   새로운 예약어 추가 및 일부 질의에 대한 스펙 변경으로 인해 질의 결과가 이전 버전과 다를 수 있으므로 주의한다.
 
@@ -54,22 +54,27 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 
 *   CUBRID 매니저는 CUBRID 2008 R2.1 이상 버전의 서버에 대해서 하위 호환성을 보장하며, 각 서버 버전과 일치하는 CUBRID JDBC 드라이버를 사용한다. 하지만 CUBRID 매니저에서 제공하는 모든 기능을 제대로 사용하기 위해서는 CUBRID 서버 버전보다 높은 버전의 CUBRID 매니저를 사용해야 한다. CUBRID JDBC 드라이버는 CUBRID 설치 시 $CUBRID/jdbc 디렉터리에 포함되어 있다(Linux 환경에서 $CUBRID는 Windows 환경에서는 %CUBRID% 형식으로 사용됨).
 
-*   CUBRID 매니저의 Bit 버전과 JRE의 Bit 버전은 서로 동일해야 한다. 예를 들어, 64Bit 버전 DB 서버라도 CUBRID Manager 32Bit 버전을 사용한다면 JRE 또는 JDK 32Bit 버전을 설치해야 한다.
+*   CUBRID 매니저의 Bit 버전과 JRE의 Bit 버전은 서로 동일해야 한다. 
+
+    예를 들어, 64Bit 버전 DB 서버라도 CUBRID Manager 32Bit 버전을 사용한다면 JRE 또는 JDK 32Bit 버전을 설치해야 한다.
 
 *   CUBRID 2008 R2.2 이상 버전의 드라이버는 CUBRID 매니저에 기본으로 내장되어 있으며, cubrid.org에서 별도로 받을 수도 있다.
 
-.. note:: 이전 버전 사용자는 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 하며, DB 볼륨이 9.2와 호환되지 않으므로 반드시 데이터 마이그레이션을 해야 한다.
+.. note:: 이전 버전 사용자는 드라이버, 브로커, DB 서버 모두를 반드시 업그레이드해야 하며, DB 볼륨이 10.0과 호환되지 않으므로 반드시 데이터 마이그레이션을 해야 한다.
     업그레이드 및 데이터 마이그레이션은 :doc:`/upgrade`\ 를 참고한다.
-
-상호 운용성
------------
 
 **CUBRID DB 서버와 브로커 간 상호 운용성**
 
-*   CUBRID DB 서버와 브로커 서버를 분리하여 운영하는 경우, 서버 장비의 운영 체제가 다르더라도 상호 운용성을 보장한다. 단, DB 서버의 Bit 버전과 브로커 서버의 Bit 버전은 서로 동일해야 한다. 예를 들어, Linux용 64Bit 버전 DB 서버는 Windows용 64Bit 버전 브로커 서버와 상호 운용이 가능하지만, 32Bit 버전 브로커 서버와는 상호 운용이 불가능하다.
+*   CUBRID DB 서버와 브로커를 분리하여 운영하는 경우, 두 장비 간 CUBRID 버전은 동일해야 한다. 그러나 패치 버전이 다른 경우는 호환된다.
+
+    예를 들어, 2008 R4.1 Patch1의 브로커는 2008 R4.1 Patch 10의 DB 서버와 호환되지만 2008 R4.3 DB 서버와는 호환되지 않는다. 9.1 Patch 1의 브로커는 9.1 Patch 10의 DB 서버와 호환되지만 9.2 DB 서버와는 호환되지 않는다.
+
+*   CUBRID DB 서버와 브로커 장비의 운영 체제가 서로 다르더라도 DB 서버의 Bit 버전과 브로커 서버의 Bit 버전이 서로 동일하면 상호 운용성을 보장한다. 
+
+    예를 들어, Linux용 64Bit 버전 DB 서버는 Windows용 64Bit 버전 브로커 서버와 상호 운용이 가능하지만, 32Bit 버전 브로커 서버와는 상호 운용이 불가능하다.
 
     DB 서버와 브로커 서버 사이의 관계에 대한 설명은 :doc:`intro`\를 참고한다. CUBRID SHARD에 대한 설명은 :doc:`shard`\를 참고한다.
-
+    
 .. _Installing-and-Running-on-Linux:
     
 Linux에서의 설치와 실행
@@ -107,14 +112,14 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
   
 **CUBRID 설치**
 
-설치 프로그램은 바이너리를 포함한 셸 스크립트로 되어 있어 자동으로 설치할 수 있다. 다음은 리눅스에서 "CUBRID-9.2.0.0201-linux.x86_64.sh" 파일을 이용하여 CUBRID를 설치하는 예제이다. ::
+설치 프로그램은 바이너리를 포함한 셸 스크립트로 되어 있어 자동으로 설치할 수 있다. 다음은 리눅스에서 "CUBRID-10.0.0.0201-linux.x86_64.sh" 파일을 이용하여 CUBRID를 설치하는 예제이다. ::
 
-    $ sh CUBRID-9.2.0.0201-linux.x86_64.sh
+    $ sh CUBRID-10.0.0.0201-linux.x86_64.sh
     Do you agree to the above license terms? (yes or no) : yes
     Do you want to install this software(CUBRID) to the default(/home1/cub_user/CUBRID) directory? (yes or no) [Default: yes] : yes
     Install CUBRID to '/home1/cub_user/CUBRID' ...
     In case a different version of the CUBRID product is being used in other machines, 
-    please note that the CUBRID 9.2 servers are only compatible with the CUBRID 9.2 clients and vice versa.
+    please note that the CUBRID 10.0 servers are only compatible with the CUBRID 10.0 clients and vice versa.
     Do you want to continue? (yes or no) [Default: yes] : yes
     Copying old .cubrid.sh to .cubrid.sh.bak ...
 
@@ -126,7 +131,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
     $ . /home1/cub_user/.cubrid.sh
     $ cubrid service start
 
-위의 예제와 같이 다운로드한 파일(CUBRID-9.2.0.0201-linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 CUBRID 관련 환경 정보를 설정해야 한다. 이 설정은 해당 터미널에 로그인할 때 자동 설정되도록 지정되어 있으므로 설치 후 최초 한 번만 수행하면 된다. ::
+위의 예제와 같이 다운로드한 파일(CUBRID-10.0.0.0201-linux.x86_64.sh)을 설치한 후, CUBRID 데이터베이스를 사용하기 위해서는 CUBRID 관련 환경 정보를 설정해야 한다. 이 설정은 해당 터미널에 로그인할 때 자동 설정되도록 지정되어 있으므로 설치 후 최초 한 번만 수행하면 된다. ::
 
     $ . /home1/cub_user/.cubrid.sh
 
@@ -157,7 +162,7 @@ cubrid service를 구동시킨 후 정상적으로 구동되었는지 확인하�
 
 CentOS5 환경에서 생성한 RPM 파일을 사용하여 CUBRID를 설치할 수 있으며, 일반적인 RPM 유틸리티와 동일한 방법으로 설치하고 삭제할 수 있다. 설치하면 새로운 시스템 그룹(cubrid) 및 사용자 계정(cubrid)이 생성되며, 설치 후에는 cubrid 사용자 계정으로 로그인하여 CUBRID 서비스를 시작해야 한다. ::
 
-    $ rpm -Uvh cubrid-9.2.0.0201-el5.x86_64.rpm
+    $ rpm -Uvh cubrid-10.0.0.0201-el5.x86_64.rpm
 
 RPM을 실행하면 CUBRID는 "cubrid" 홈 디렉터리(/opt/cubrid)에 설치되고, CUBRID 관련 환경 설정 파일(cubrid.[c]sh)이 /etc/profile.d 디렉터리에 설치된다. 단, demodb는 자동으로 설치되지 않으므로 "cubrid" Linux 계정으로 로그인하여 /opt/cubrid/demo/make_cubrid_demo.sh를 실행하여야 한다. CUBRID가 설치 완료되면 "cubrid" Linux 계정으로 로그인하여 CUBRID 서비스를 다음과 같이 시작한다. ::
 

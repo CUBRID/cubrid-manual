@@ -1514,7 +1514,7 @@ GROUP BY 절 최적화
 
 **WHERE** 절이 없어도 **GROUP BY** 칼럼으로 구성된 인덱스가 있고 그 인덱스의 첫번째 칼럼이 **NOT NULL** 이면 **GROUP BY** 최적화가 적용된다.
 
-집계 함수 사용 시 **GROUP BY** 최적화가 적용되는 경우는 **MIN** ()이나 **MAX** ()를 사용할 때뿐이며, 두 집계 함수가 같이 쓰이려면 같은 칼럼을 사용하는 경우에만 적용된다.
+집계 함수 사용 시에도 **GROUP BY** 칼럼으로 구성된 인덱스가 있으면 **GROUP BY** 최적화가 적용된다. 
 
 .. code-block:: sql
 
@@ -1596,6 +1596,68 @@ GROUP BY 절 최적화
                 1            5            5
                 2            6            6
 
+
+.. code-block:: sql
+
+    CREATE TABLE tab (k1 int, k2 int, k3 int, v double);
+    INSERT INTO tab
+        SELECT
+            RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 5,
+            RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 10,
+            RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 100000,
+            RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 100000
+        FROM db_class a, db_class b, db_class c, db_class d LIMIT 20000;
+    CREATE INDEX idx ON tab(k1, k2, k3);
+ 
+위의 테이블과 인덱스를 생성했을 때 다음의 예는 k1, k2 칼럼으로 **GROUP BY**\를 수행하며 k3로 집계 함수를 수행하므로 tab(k1, k2, k3)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다. 또한 **SELECT** 리스트에 있는 k1, k2, k3 칼럼이 모두 tab(k1, k2, k3)로 구성된 인덱스 내에 존재하므로 커버링 인덱스가 적용된다.
+    
+.. code-block:: sql
+
+    SELECT /*+ recompile */ k1, k2, SUM(DISTINCT k3)
+    FROM tab 
+    WHERE k2 > -1 GROUP BY k1, k2;
+
+::
+
+    Query plan:
+
+    iscan
+        class: tab node[0]
+        index: idx term[0] (covers) (index skip scan)
+        sort:  1 asc, 2 asc
+        cost:  85 card 2000
+
+    Query stmt:
+
+    select tab.k1, tab.k2, sum(distinct tab.k3) from tab tab where (tab.k2> ?:0 ) group by tab.k1, tab.k2
+
+    /* ---> skip GROUP BY */
+
+다음의 예는 k1, k2 칼럼으로 **GROUP BY**\를 수행하므로 tab(k1, k2, k3)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다. 하지만 **SELECT** 리스트에 있는 v 칼럼은 tab(k1, k2, k3)로 구성된 인덱스 내에 존재하지 않으므로 커버링 인덱스가 적용되지 않는다.
+    
+.. code-block:: sql
+    
+    SELECT /*+ recompile */ k1, k2, stddev_samp(v)  
+    FROM tab 
+    WHERE k2 > -1 GROUP BY k1, k2
+
+::
+
+    Query plan:
+
+    iscan
+        class: tab node[0]
+        index: idx term[0] (index skip scan)
+        sort:  1 asc, 2 asc
+        cost:  85 card 2000
+
+    Query stmt:
+
+    select tab.k1, tab.k2, stddev_samp(tab.v) from tab tab where (tab.k2> ?:0 ) group by tab.k1, tab.k2
+
+    /* ---> skip GROUP BY */
+                
+                
 .. _multi-key-range-opt:
 
 다중 키 범위 최적화

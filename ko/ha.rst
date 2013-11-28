@@ -316,7 +316,7 @@ CUBRID HA에 포함할 데이터베이스를 모든 CUBRID HA 노드에서 동�
     [nodeA]$ cubrid createdb -L ./log testdb en_US
     Creating database with 512.0M size. The total amount of disk space needed is 1.5G.
      
-    CUBRID 9.2
+    CUBRID 10.0
      
     [nodeA]$
 
@@ -2262,15 +2262,15 @@ ha_make_slavedb.sh 스크립트
 
 *   **db_name** : 복제 재구축할 데이터베이스 이름을 설정한다. 설정하지 않으면 **$CUBRID/conf/cubrid_ha.conf** 내 **ha_db_list** 의 가장 처음에 위치한 이름을 사용한다.
 
-*   **backup_dest_path** : 복제 재구축 원본 노드에서 **backupdb** 수행 시 백업 볼륨을 생성할 경로를 설정한다.
+*   **backup_dest_path** : 복제 원본 노드에서 **backupdb** 수행 시 백업 볼륨을 생성할 경로를 설정한다.
 
-*   **backup_option** : 복제 재구축 원본 노드에서 **backupdb** 수행 시 필요한 옵션을 설정한다.
+*   **backup_option** : 복제 원본 노드에서 **backupdb** 수행 시 필요한 옵션을 설정한다.
 
-*   **restore_option** : 복제를 재구축할 슬레이브 노드에서 **restoredb** 수행 시 필요한 옵션을 설정한다.
+*   **restore_option** : 복제 대상 노드에서 **restoredb** 수행 시 필요한 옵션을 설정한다.
 
-*   **scp_option** : 복제 재구축 원본 노드의 백업 볼륨을 슬레이브 노드로 복사해 오기 위한 **scp** 옵션을 설정할 수 있는 항목으로 기본값은 복제 재구축 원본 노드의 네트워크 부하를 주지 않기 위해 **-l 131072** 옵션을 사용한다(전송 속도를 16M로 제한).
+*   **scp_option** : 복제 원본 노드의 백업 볼륨을 복제 대상 노드로 복사해 오기 위한 **scp** 옵션을 설정할 수 있는 항목으로 기본값은 복제 원본 노드의 네트워크 부하를 주지 않기 위해 **-l 131072** 옵션을 사용한다(전송 속도를 16M로 제한).
 
-스크립트의 설정이 끝나면 **ha_make_slavedb.sh** 스크립트를 복제 재구축할 슬레이브 노드에서 수행한다. 스크립트 수행 시 여러 단계에 의해 복제 재구축이 이루어지며 각 단계의 진행을 위해서 사용자가 적절한 값을 입력해야 한다. 다음은 입력할 수 있는 값에 대한 설명이다.
+스크립트의 설정이 끝나면 **ha_make_slavedb.sh** 스크립트를 복제 대상 노드에서 수행한다. 스크립트 수행 시 여러 단계에 의해 복제 재구축이 이루어지며 각 단계의 진행을 위해서 사용자가 적절한 값을 입력해야 한다. 다음은 입력할 수 있는 값에 대한 설명이다.
 
 *   **yes** : 계속 진행한다.
 
@@ -2286,12 +2286,13 @@ ha_make_slavedb.sh 스크립트
 
     *   **복제 재구축에는 백업 볼륨이 필요**
     
-        복제 재구축을 수행하려면 원본 노드에 있는 데이터베이스 볼륨의 물리적 이미지를 복제 대상 노드의 데이터베이스에 복사해야 한다. 그런데 **cubrid unloaddb** 는 논리적인 이미지를 백업하므로  **cubrid unloaddb** 와 **cubrid loaddb** 를 이용해서는 복제 재구축을 할 수 없다. **cubrid backupdb** 는 물리적 이미지를 백업하므로 이를 이용한 복제 재구축이 가능하며, **ha_make_slavedb.sh** 스크립트는 **cubrid backupdb** 를 이용하여 복제 재구축을 수행한다.
+        복제 재구축을 수행하려면 원본 노드에 있는 데이터베이스 볼륨의 물리적 이미지를 복제 대상 노드의 데이터베이스에 복사해야 한다. 그런데 **cubrid unloaddb** 는 논리적인 이미지를 백업하므로  **cubrid unloaddb** 와 **cubrid loaddb**\ 를 이용해서는 복제 재구축을 할 수 없다. **cubrid backupdb** 는 물리적 이미지를 백업하므로 이를 이용한 복제 재구축이 가능하며, **ha_make_slavedb.sh** 스크립트는 **cubrid backupdb** 를 이용하여 복제 재구축을 수행한다.
     
-    *   **복제 재구축 도중 원본 노드의 온라인 백업**
+    *   **복제 재구축 도중 원본 노드의 온라인 백업 및 재구축되는 노드로의 복구**
     
-        **ha_make_slavedb.sh** 스크립트는 수행 도중 원본 노드에 대해 온라인 백업을 수행한다. 
-        따라서 온라인 백업이 진행되는 동안 원본 노드에 추가되는 보관 로그가 삭제되지 않도록 **cubrid.conf**\의 *force_remove_log_max_archives**\, **log_max_archives**\ 를 적절히 설정해야 한다. 자세한 내용은 아래의 구축 예들을 참고한다.
+        **ha_make_slavedb.sh** 스크립트는 수행 도중 원본 노드에 대해 온라인 백업을 수행하고, 재구축되는 노드에 복구를 수행한다. 백업을 시작한 이후 추가로 진행된 트랜잭션들을 복구되는 노드에 반영하기 위해 **ha_make_slavedb.sh** 스크립트는 "마스터" 노드의 보관 로그를 복사해서 사용한다(슬레이브에서 레플리카를 구축할 때, 레플리카에서 레플리카를 구축할 때, 그리고 레플리카에서 슬레이브를 구축할 때 모두 "마스터"의 보관 로그를 사용).
+
+        따라서 온라인 백업이 진행되는 동안 원본 노드에 추가되는 보관 로그가 삭제되지 않도록 마스터 노드에서 **cubrid.conf**\의 **force_remove_log_max_archives**\, **log_max_archives**\ 를 적절히 설정해야 한다. 자세한 내용은 아래의 구축 예들을 참고한다.
 
             .. 아래 내용은 스크립트 변경 전까지 위와 같이 작성됨.
             
@@ -2300,7 +2301,7 @@ ha_make_slavedb.sh 스크립트
 
     *   **복제 재구축 스크립트 수행 중 오류 발생**
     
-        복제 재구축 스크립트는 수행 도중 오류가 발생해도 이전 상황으로 자동 롤백되지 않는다. 이는 복제 재구축 스크립트를 수행하기 전에도 슬레이브 노드가 이미 정상적으로 서비스하기 힘든 상황이기 때문이다. 복제 재구축 스크립트를 수행하기 전 상황으로 돌아가려면, 복제 재구축 스크립트를 수행하기 전에 마스터 노드와 슬레이브 노드의 내부 카탈로그인 **db_ha_apply_info** 정보와 기존의 복제 로그를 백업해야 한다.
+        복제 재구축 스크립트는 수행 도중 오류가 발생해도 이전 상황으로 자동 롤백되지 않는다. 이는 복제 재구축 스크립트를 수행하기 전에도 복제 대상 노드가 이미 정상적으로 서비스하기 힘든 상황이기 때문이다. 복제 재구축 스크립트를 수행하기 전 상황으로 돌아가려면, 복제 재구축 스크립트를 수행하기 전에 복제 원본 노드와 복제 대상 노드의 내부 카탈로그인 **db_ha_apply_info** 정보와 기존의 복제 로그를 백업해야 한다.
 
 마스터에서 슬레이브 구축
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2681,7 +2682,7 @@ ha_make_slavedb.sh 스크립트
         
         This may take a long time depending on the amount of recovery works to do.
         
-        CUBRID 9.2
+        CUBRID 10.0
         
         ++ cubrid server start: success
         @ copylogdb start
@@ -3063,7 +3064,7 @@ ha_make_slavedb.sh 스크립트
 
         This may take a long time depending on the amount of recovery works to do.
 
-        CUBRID 9.2
+        CUBRID 10.0
 
         ++ cubrid server start: success
         @ copylogdb start
@@ -3491,7 +3492,7 @@ ha_make_slavedb.sh 스크립트
 
         This may take a long time depending on the amount of recovery works to do.
 
-        CUBRID 9.2
+        CUBRID 10.0
 
         ++ cubrid server start: success
         @ copylogdb start
@@ -3887,7 +3888,7 @@ ha_make_slavedb.sh 스크립트
 
         This may take a long time depending on the amount of recovery works to do.
 
-        CUBRID 9.2
+        CUBRID 10.0
 
         ++ cubrid server start: success
         @ copylogdb start

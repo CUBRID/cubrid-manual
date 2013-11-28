@@ -1102,6 +1102,8 @@ The following shows [options] available with the **cubrid statdump** utility.
         Num_btree_noncovered          =          0
         Num_btree_resumes             =          0
         Num_btree_multirange_optimization =      0
+        Num_btree_splits              =          0
+        Num_btree_merges              =          0
         Num_query_selects             =          0
         Num_query_inserts             =          0
         Num_query_deletes             =          0
@@ -1114,6 +1116,9 @@ The following shows [options] available with the **cubrid statdump** utility.
         Num_query_nljoins             =          0
         Num_query_mjoins              =          0
         Num_query_objfetches          =          0
+        Num_query_holdable_cursors    =          0
+        Num_sort_io_pages             =          0
+        Num_sort_data_pages           =          0
         Num_network_requests          =          1
         Num_adaptive_flush_pages      =          0
         Num_adaptive_flush_log_pages  =          0
@@ -1155,6 +1160,10 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_adaptive_flush_max_pages           | The maximum number of pages allowed to flush from data and the log buffer            |
     |                  |                                        | to the disk                                                                          |
+    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_sort_io_pages                      | Number of pages fetched from disk during sort                                        |
+    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_sort_data_pages                    | Number of pages found in the page buffer during sort                                 |
     +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
     | Logs             | Num_log_page_ioreads                   | The number of log pages read                                                         |
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+
@@ -1214,6 +1223,10 @@ The following shows [options] available with the **cubrid statdump** utility.
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_btree_multirange_optimization      | The number of executions on multi-range optimization for the WHERE … IN …            |
     |                  |                                        | LIMIT condition query statement                                                      |
+    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_splits                       | Number of B-tree node split operations                                               |
+    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_merges                       | Number of B-tree merge operations                                                    |
     +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
     | Query            | Num_query_selects                      | The number of SELECT query execution                                                 |
     |                  +----------------------------------------+--------------------------------------------------------------------------------------+

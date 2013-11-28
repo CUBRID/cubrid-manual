@@ -908,7 +908,7 @@ CCI API 레퍼런스
     | **CCI_A_TYPE_CLOB**         | **T_CCI_CLOB**              |
     +-----------------------------+-----------------------------+
 
-.. c:function:: T_CCI_CONN cci_datasource_borrow (T_CCI_DATASOURCE * datasource, T_CCI_ERROR * err_buf)
+.. c:function:: T_CCI_CONN cci_datasource_borrow (T_CCI_DATASOURCE *datasource, T_CCI_ERROR *err_buf)
 
     **T_CCI_DATASOURCE** 구조체에서 사용할 CCI 연결을 획득한다.
 
@@ -924,9 +924,62 @@ CCI API 레퍼런스
         :c:func:`cci_property_set`,
         :c:func:`cci_datasource_create`,
         :c:func:`cci_datasource_destroy`,
-        :c:func:`cci_datasource_release`
+        :c:func:`cci_datasource_release`,
+        :c:func:`cci_datasource_change_property`
+        
+.. c:function:: int cci_datasource_change_property (T_CCI_DATASOURCE * datasource, const char *key, const char *val)
+ 
+    CCI의 DATASOURCE에 대해 key에 명시한 속성(property)의 값을 val에 설정한다. 이 함수를 사용하여 변경한 속성 값은 datasource 내 모든 연결에 적용된다.
+     
+    :param datasource: (IN) CCI 연결을 획득할 T_CCI_DATASOURCE 구조체 포인터
+    :param key: (IN) 속성 이름 문자열에 대한 포인터
+    :param val: (IN) 속성 값 문자열에 대한  포인터
+    :return: 에러 코드(0: 성공)
+    
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_NO_PROPERTY**
+        *   **CCI_ER_PROPERTY_TYPE**
+    
+    변경 가능한 속성(property)의 이름 및 값은 다음과 같다.
+ 
+    ========================= =========== ============================== ===========================================================================================================
+    속성 이름                 타입        값                             의미
+    ========================= =========== ============================== ===========================================================================================================
+    default_autocommit        bool        true/false                     autocommit 여부. 기본값은 cubrid_broker.conf의 CCI_DEFAULT_AUTOCOMMIT이며, 이 값의 기본값은 ON(true)임.
+    default_lock_timeout      msec        숫자                           lock timeout
+    default_isolation         string      :c:func:`cci_property_set`\의  isolation level. 기본값은 cubrid.conf의 isolation_level이며, 
+                                          표 참고                        이 값의 기본값은 "TRAN_READ_UNCOMMITTED"임.
+    login_timeout             msec        숫자                           login timeout.  기본값은 0(무한대기)임. prepare 또는 execute 함수 호출 시 내부적으로 재접속이 
+                                                                         발생할 수 있으며, 이 때에도 사용됨.
+    ========================= =========== ============================== ===========================================================================================================
 
-.. c:function:: T_CCI_DATASOURCE * cci_datasource_create (T_CCI_PROPERTIES * properties, T_CCI_ERROR * err_buf)
+    **예제**
+
+    .. code-block:: c
+    
+        ...
+        ps = cci_property_create ();
+        ...
+        ds = cci_datasource_create (ps, &err);
+        ...
+        cci_datasource_change_property(ds, "login_timeout", "5000");
+        cci_datasource_change_property(ds, "default_lock_timeout", "2000");
+        cci_datasource_change_property(ds, "default_isolation", "TRAN_REP_CLASS_COMMIT_INSTANCE");
+        cci_datasource_change_property(ds, "default_autocommit", "true");
+        ...
+
+    .. seealso:: 
+    
+        :c:func:`cci_property_create`,
+        :c:func:`cci_property_destroy`,
+        :c:func:`cci_property_get`,
+        :c:func:`cci_property_set`,
+        :c:func:`cci_datasource_create`,
+        :c:func:`cci_datasource_borrow`,
+        :c:func:`cci_datasource_destroy`,
+        :c:func:`cci_datasource_release`
+        
+.. c:function:: T_CCI_DATASOURCE * cci_datasource_create (T_CCI_PROPERTIES * properties, T_CCI_ERROR *err_buf)
 
     CCI의 DATASOURCE를 생성한다.
 
@@ -940,10 +993,11 @@ CCI API 레퍼런스
         :c:func:`cci_property_destroy`,
         :c:func:`cci_property_get`,
         :c:func:`cci_property_set`,
-        :c:func:`cci_datasource_create`,
+        :c:func:`cci_datasource_borrow`
         :c:func:`cci_datasource_destroy`,
-        :c:func:`cci_datasource_release`
-    
+        :c:func:`cci_datasource_release`,
+        :c:func:`cci_datasource_change_property`
+
 .. c:function:: void cci_datasource_destroy (T_CCI_DATASOURCE * datasource)
 
     CCI의 DATASOURCE를 삭제한다.
@@ -958,15 +1012,17 @@ CCI API 레퍼런스
         :c:func:`cci_property_get`,
         :c:func:`cci_property_set`,
         :c:func:`cci_datasource_create`,
-        :c:func:`cci_datasource_destroy`,
-        :c:func:`cci_datasource_release`
+        :c:func:`cci_datasource_borrow`,
+        :c:func:`cci_datasource_release`,
+        :c:func:`cci_datasource_change_property`
 
-.. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * datasource, T_CCI_CONN conn)
+.. c:function:: int cci_datasource_release (T_CCI_DATASOURCE *datasource, T_CCI_CONN conn, T_CCI_ERROR *err_buf)
 
     **T_CCI_DATASOURCE** 구조체에 사용을 끝낸 CCI 연결을 반환한다. 연결이 연결 풀에 반환된 이후 재사용하려면 반드시 c:func:`cci_datasource_borrow` 함수를 재호출해야 한다.
 
     :param datasource: (IN) CCI 연결을 반환할 **T_CCI_DATASOURCE** 구조체 포인터
     :param conn: (IN) 사용을 끝낸 CCI 연결의 핸들 식별자
+    :param err_buf: (OUT) 에러 버퍼 (에러가 발생하면 에러 코드와 메시지를 반환)
     :return: 1 (성공), 0 (실패)
 
     .. seealso:: 
@@ -977,9 +1033,10 @@ CCI API 레퍼런스
         :c:func:`cci_property_set`,
         :c:func:`cci_datasource_create`,
         :c:func:`cci_datasource_destroy`,
-        :c:func:`cci_datasource_release`
+        :c:func:`cci_datasource_borrow`,
+        :c:func:`cci_datasource_change_property`
 
-.. c:function:: int cci_disconnect(int conn_handle, T_CCI_ERROR * err_buf)
+.. c:function:: int cci_disconnect(int conn_handle, T_CCI_ERROR *err_buf)
 
     *conn_handle* 에 대해 생성된 모든 요청 핸들을 삭제한다. 트랜잭션이 진행 중일 경우 :c:func:`cci_end_tran`\ 을 실행한 다음 삭제된다.
 
@@ -1688,6 +1745,19 @@ CCI API 레퍼런스
             return 0;
         }
 
+.. c:function:: int cci_get_login_timeout(int conn_handle, int *timeout, T_CCI_ERROR *err_buf)
+ 
+    로그인 타임아웃 값을 timeout에 반환한다.
+    
+    :param conn_handle: (IN) 연결 핸들
+    :param timeout: (OUT) 로그인 타임아웃 값(단위: 밀리 초)에 대한 포인터
+    :param err_buf: (OUT) 에러 버퍼
+    :return: 에러 코드(0: 성공)
+ 
+        *   **CCI_ER_INVALID_ARGS**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_USED_CONNECTION**
+        
 .. c:function:: int cci_get_query_plan(int req_handle, char **out_buf_p)
 
     cci_prepare 함수가 리턴한 요청 핸들(req_handle)에 대한 질의 계획을 결과 버퍼에 출력한다. cci_execute 함수의 호출 여부와 상관 없이 cci_get_query_plan 함수를 호출할 수 있다.
@@ -2178,35 +2248,50 @@ CCI API 레퍼런스
         :c:func:`cci_datasource_destroy`,
         :c:func:`cci_datasource_release`
 
-.. c:function:: int cci_property_set (T_CCI_PROPERTIES * properties, char * key, char * value)
-
+.. c:function:: int cci_property_set (T_CCI_PROPERTIES* properties, char* key, char* value)
+ 
     **T_CCI_PROPERTIES** 구조체에 속성 값을 설정한다. 
     
     :param properties: *key* 와 *value* 를 저장할 **T_CCI_PROPERTIES** 구조체 포인터
     :param key: 속성 이름의 문자열 포인터
-    :param key: 속성 값의 문자열 포인터
+    :param value: 속성 값의 문자열 포인터
     :return: 성공: 1, 실패: 0
     
     구조체에 설정할 수 있는 속성의 이름 및 의미는 다음과 같다.
-
-    *   **user**: DB 사용자 이름
-    *   **password**: DB 사용자 암호
-    *   **url**: 연결 URL. 연결 URL 문자열을 정의하는 방법은 :c:func:`cci_connect_with_url` 참고
-    *   **pool_size**: 연결 풀이 가질 수 있는 최대 연결 개수(기본값: 10)
-    *   **max_wait**: 연결을 가져오기 위해 대기하는 최대 시간(기본값: 1000 msec)
-    *   **pool_prepared_statement**: statement 풀링 가능 여부(기본값: false)
-    *   **max_open_prepared_statement**: statement pool에 유지할 prepared statement의 최대 개수(기본값 1000)
-    *   **login_timeout**: 로그인 타임아웃 시간(기본값: 0(무제한))
-    *   **query_timeout**: 질의 타임아웃 시간(기본값: 0(무제한))
-    *   **disconnect_on_query_timeout** : 질의 실행이 타임아웃 시간을 초과하여 실행이 취소될 때 연결의 종료 여부(기본값: no)
-    *   **default_autocommit** : :c:func:`cci_datasource_borrow`\ 가 호출될 때마다 재설정되는 자동 커밋 모드. true 또는 false
-    *   **default_isolation** : :c:func:`cci_datasource_borrow`\ 가 호출될 때마다 재설정되는 트랜잭션 격리 수준
-    *   **default_lock_timeout** : :c:func:`cci_datasource_borrow`\ 가 호출될 때마다 재설정되는 lock_timeout
+ 
+    ============================= =========== =============================================== ==========================================================================================================
+    속성 이름                     타입        기본값                                          의미
+    ============================= =========== =============================================== ==========================================================================================================
+    user                          string                                                      DB 사용자 이름
+    password                      string                                                      DB 사용자 암호
+    url                           string                                                      연결 URL. 연결 URL 문자열을 정의하는 방법은 :c:func:`cci_connect_with_url` 참고
+    pool_size                     int         10                                              연결 풀이 가질 수 있는 최대 연결 개수
+    max_wait                      msec        1000                                            연결을 가져오기 위해 대기하는 최대 시간
+    pool_prepared_statement       bool        false                                           statement 풀링 가능 여부. true 또는 false
+    max_open_prepared_statement   int         1000                                            statement pool에 유지할 prepared statement의 최대 개수
+    login_timeout                 msec        0(무제한)                                       :c:func:`cci_datasource_create`\ 함수로 datasource를 생성하거나 prepare/execute 함수에서  
+                                                                                              내부적인 재접속이 발생할 때마다 적용되는 로그인 타임아웃 시간
+    query_timeout                 msec        0(무제한)                                       질의 타임아웃 시간
+    disconnect_on_query_timeout   bool        no                                              질의 실행이 타임아웃 시간을 초과하여 실행이 취소될 때 연결의 종료 여부. yes 또는 no
+    default_autocommit            bool        cubrid_broker.conf의 CCI_DEFAULT_AUTOCOMMIT 값  :c:func:`cci_datasource_create`\ 함수로 datasource를 생성할 때 설정되는 자동 커밋 모드. true 또는 false
+    default_isolation             string      cubrid.conf의 isolation_level 값                :c:func:`cci_datasource_create`\ 함수로 datasource를 생성할 때 설정되는 트랜잭션 격리 수준. 아래 표 참고
+    default_lock_timeout          msec        cubrid.conf의 lock_timeout 값                   :c:func:`cci_datasource_create`\ 함수로 datasource를 생성할 때 설정되는 잠금 타임아웃
+    ============================= =========== =============================================== ==========================================================================================================
     
-    prepared statement의 개수가 **max_open_prepared_statement** 값을 초과하면 가장 오래된 prepared statement가 statement pool에서 해제되며, 추후 재사용하면 다시 statement pool에 추가된다. 
+    prepared statement의 개수가 **max_open_prepared_statement** 값을 초과하면 가장 오래된 prepared statement가 statement pool에서 해제되며, 추후 해제된 prepared statement가 재사용되면 다시 statement pool에 추가된다. 
     
-    **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 의 값을 설정하면 :c:func:`cci_datasource_borrow`\ 를 호출할 때 각각 autocommit, isolation, lock_timeout에 대하여 설정한 값에 따라 연결을 반환한다. 설정하지 않으면 :c:func:`cci_datasource_borrow`\ 를 호출할 때 각각 autocommit, isolation, lock_timeout에 대하여 사용자가 이전에 변경했던 값을 유지한 채로 연결을 반환한다.
-
+    **login_timeout**, **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 의 값을 설정하면 :c:func:`cci_datasource_borrow`\ 를 호출할 때 각각 login_timeout, autocommit, isolation, lock_timeout에 대하여 설정한 값에 따라 연결을 반환한다.
+ 
+    **login_timeout**, **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 은 :c:func:`cci_datasource_borrow` 함수 호출 이후에도 변경할 수 있다. 각각 :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`\ 을 참고한다. **cci_set_**\ 으로 시작하는 함수들은 변경한 연결 객체에만 적용되며, 연결이 해제된 이후에는 cci_property_set으로 설정한 값으로 복원된다. cci_property_set으로 설정한 값이 없을 경우에는 기본값으로 복원된다.
+    
+    .. note:: 
+    
+        **login_timeout**\은 DATASOURCE 객체를 생성하는 경우와 prepare 또는 execute 함수에서 내부적인 재접속이 발생하는 경우에 적용된다. 내부적인 재접속은 DATASOURCE에서 연결 객체를 얻은 경우와 cci_connect/cci_connect_with_url 함수로 연결 객체를 얻은 경우에서 모두 발생한다.
+        
+        DATASOURCE 객체를 생성하는 시간은 내부적인 재접속 시간보다 오래 걸릴 수 있으므로, 두 가지 경우의 **login_timeout**\ 을 다르게 적용하는 것을 감안할 수 있다. 예를 들어, 전자의 경우를 5000(5초), 후자의 경우를 2000(2초)로 설정하고 싶다면, 후자의 설정을 위해 DATASOURCE 생성 후 :c:func:`cci_set_login_timeout` 함수를 사용한다.
+    
+        10.0 이전 버전에서는 DATASOURCE 객체를 생성할 때만 login_timeout이 적용되고, 내부적으로 재접속하는 경우에는 login_timeout이 적용되지 않아 무한 대기하는 현상 발생 시 이 작업을 취소하는 방법이 없는 문제가 존재한다.
+        
     **default_isolation**\ 은 다음 값 중 하나의 설정값을 가지며, 격리 수준에 대한 자세한 내용은 :ref:`set-transaction-isolation-level`\ 을 참조한다.
 
     +----------------------------+---------------------------------------+
@@ -2323,6 +2408,15 @@ CCI API 레퍼런스
     자바 저장 프로시저에서 아웃 바인드로 정의한 파라미터를 바인딩하기 위해 사용하며, index는 1부터 시작한다.
     이 함수를 호출하기 전에 cci_prepare 함수의 플래그에 **CCI_PREPARE_CALL**\ 을 설정해야 한다.
     
+    :param req_handle: (IN) 요청 핸들
+    
+    :return: 에러 코드
+            
+        *    **CCI_ER_BIND_INDEX**
+        *    **CCI_ER_REQ_HANDLE**
+        *    **CCI_ER_CON_HANDLE**
+        *    **CCI_ER_USED_CONNECTION**
+        
     다음은 "Hello, CUBRID"라는 문자열을 출력하는 자바 저장 프로시저의 예이다.
     
     먼저 cubrid.conf에 있는 java_stored_procedure 파라미터의 값을 yes로 설정하고, 데이터베이스를 구동한다.
@@ -2464,16 +2558,6 @@ CCI API 레퍼런스
 
         :c:func:`cci_prepare`
         
-    :param req_handle: (IN) 요청 핸들
-     int cci_register_out_param(int req_handle, int index)
-    
-    :return: 에러 코드
-            
-        *    **CCI_ER_BIND_INDEX**
-        *    **CCI_ER_REQ_HANDLE**
-        *    **CCI_ER_CON_HANDLE**
-        *    **CCI_ER_USED_CONNECTION**
-
 .. c:function:: int cci_row_count(int conn_handle, int *row_count, T_CCI_ERROR * err_buf)
 
     가장 최근 수행한 질의에 의해 영향을 받은 행의 개수를 얻는다.
@@ -3199,7 +3283,26 @@ CCI API 레퍼런스
     
     :param conn_handle: (IN) 연결 핸들
     :param locktimeout: (IN) 잠금 타임아웃 시간(단위: 밀리 초).
+    :return: 에러 코드(0: 성공)
+
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_PARAM_NAME**
+        *   **CCI_ER_DBMS**
+        *   **CCI_ER_COMMUNICATION**
+        *   **CCI_ER_CONNECT**
+
+.. c:function:: int cci_set_login_timeout(int conn_handle, int timeout, T_CCI_ERROR *err_buf)
     
+    로그인 타임아웃을 밀리초 단위로 설정한다. prepare 함수나 execute 함수를 호출하면서 내부적으로 재접속이 발생할 때 로그인 타임 아웃이 적용된다. 이 변경은 현재의 연결에만 적용된다.
+   
+    :param conn_handle: (IN) 연결 핸들
+    :param timeout: (IN) 로그인 타임아웃(단위: 밀리초)
+    :param err_buf: (OUT) 에러 버퍼
+    :return: 에러 코드(0: 성공)
+        
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_USED_CONNECTION**
+        
 .. c:function:: int cci_set_make(T_CCI_SET *set, T_CCI_U_TYPE u_type, int size, void *value, int *indicator)
 
     새로운 **CCI_A_TYPE_SET** 타입의 set을 만든다. 만들어진 set은 :c:func:`cci_bind_param`\ 을 통해 **CCI_A_TYPE_SET** 으로 서버에 전달된다. :c:func:`cci_set_make`\ 에 의해 만들어진 set은 반드시 :c:func:`cci_set_free`\ 를 통해 사용된 메모리를 제거해야 한다. *u_type* 에 따른 *value* 의 타입은 :c:func:`cci_bind_param`\ 을 참고한다.
@@ -3233,7 +3336,7 @@ CCI API 레퍼런스
     :param milli_sec:  타임아웃(timeout) 시간, 단위는 msec.
     :return: 성공 : 요청 핸들 ID, 실패 : 에러 코드
 
-        *   CCI_ER_REQ_HANDLE
+        *   **CCI_ER_REQ_HANDLE**
 
     **cci_set_query_timeout** 으로 설정된 타임아웃 시간은 :c:func:`cci_prepare`, :c:func:`cci_execute`, :c:func:`cci_execute_array`, :c:func:`cci_execute_batch` 함수들에 영향을 미친다. 각 함수에서 타임아웃이 발생했을 때 :c:func:`cci_connect_with_url` 연결 URL에 설정한 **disconnect_on_query_timeout** 의 값이 yes이면 **CCI_ER_QUERY_TIMEOUT** 에러를 반환한다.
 

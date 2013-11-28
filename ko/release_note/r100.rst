@@ -170,6 +170,28 @@ update_use_attribute_references 시스템 파라미터를 추가하고, 이 값�
 .. code-block:: sql
 
     CREATE TABLE IF NOT EXISTS tbl1;
+
+드라이버
+--------
+
+[CCI] 로그인 타임아웃 값 변경 함수 추가 및 datasource 속성 변경 함수 추가(CUBRIDSUS-12530)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+다음 함수들이 추가되었다.
+ 
+*   cci_set_login_timeout  
+ 
+        로그인 타임아웃을 밀리초 단위로 설정한다.
+    
+*   cci_get_login_timeout
+ 
+        로그인 타임아웃 값을 반환한다.
+ 
+    
+*   cci_datasource_change_property
+ 
+    CCI의 DATASOURCE에 대해 key에 명시한 속성(property)의 값을 val에 설정한다. 이 함수를 사용하여 변경한 속성 값은 datasource 내 모든 연결에 적용된다.
+ 
     
 운영 편의성
 -----------
@@ -383,6 +405,8 @@ Sharding
 설정
 ----
 
+
+
 .. _changed-behaviors100:
 
 동작 변경
@@ -434,6 +458,29 @@ statement pool에서 statement가 재사용될 때의 성능을 개선했다.
 
 하나의 테이블에 대해 많은 양의 DELETE가 발생해서 데이터 페이지에 대한 빈 공간이 많이진 이후, 여러 클라이언트들이 해당 테이블에 대해 동시에 INSERT를 수행할 때 비정상적으로 많은 시간이 소요되는 현상을 수정했다.
 
+
+집계 함수와 GROUP BY 절을 포함하며 커버링 인덱스가 적용되는 질의에서 GROUP BY 절 최적화(skip group by)에 의한 인덱스 스킵 스캔이 적용되도록 수정(CUBRIDSUS-7508)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: sql
+
+    CREATE TABLE tab (k1 int, k2 int, k3 int, v double);
+    INSERT INTO tab
+    SELECT
+        RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 5,
+        RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 10,
+        RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 100000,
+        RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 100000
+    FROM db_class a, db_class b, db_class c, db_class d LIMIT 20000;
+    CREATE INDEX idx ON tab(k1, k2, k3);
+ 
+    SELECT /*+ recompile */ k1, k2, SUM(DISTINCT k3)          
+    FROM tab 
+    WHERE k2 > -1 
+    GROUP BY k1, k2;
+
+위의 예는 k1, k2 칼럼으로 GROUP BY를 수행하며 k3로 집계 함수를 수행하므로 tab(k1, k2, k3)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다. 또한 SELECT 리스트에 있는 k1, k2, k3 칼럼이 모두 tab(k1, k2, k3)로 구성된 인덱스 내에 존재하므로 커버링 인덱스가 적용된다.
+    
 안정성
 ------
 
@@ -441,6 +488,14 @@ statement pool에서 statement가 재사용될 때의 성능을 개선했다.
 SQL
 ---
 
+고유 인덱스를 DROP할 때 UNQUE 키워드를 명시하지 않아도 정상 수행되도록 수정(CUBRIDSUS-9352)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  
+.. code-block:: sql 
+  
+    DROP INDEX unique_index_name ON table_name ; 
+    ALTER TABLE table_name DROP INDEX unique_index_name ; 
+    
 LIMIT 절 또는 ORDER BY 절을 포함한 UNION ALL 질의로 생성한 뷰에 대해 SELECT 수행 시 LIMIT 절 또는 ORDER BY 절이 무시되는 현상(CUBRIDSUS-8059)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -812,6 +867,11 @@ SHARD 환경에서 SQL 주석 뒤에 "\n"이 없으면 에러가 발생하는 �
 드라이버
 --------
 
+[CCI] prepare 또는 execute 함수에서 내부적인 재접속 시 login_timeout 속성이 적용되도록 수정(CUBRIDSUS-12530)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+수정 이전 버전에서는 prepare 또는 execute 함수에서 내부적인 재접속 시 로그인 타임아웃이 적용되지 않았으나 login_timeout이 설정되어 있을 경우 반영되도록 수정했다.
+
 [CCI] shard_key가 VARCHAR인 경우 hash 함수의 결과가 모두 동일한 값이 되는 현상(CUBRIDSUS-11487)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -823,6 +883,20 @@ CCI 응용 프로그램에서 shard_key가 VARCHAR인 경우 hash 함수의 결�
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 CAS에서 사용하는 소켓의 keepalive 패킷전송 주기가 OS 설정을 따라가도록 수정했고, JDBC와 CCI드라이버의 소켓도 CAS 소켓과 동일하게 keepalive 시간을 사용하도록 수정했다. 이 수정으로 인해 드라이버와 CAS 간 방화벽에 의해 연결이 끊기는 현상이 줄어들게 되었다.
+
+[JDBC] Datasource을 이용한 접속 시 연결 URL 문자열을 사용할 수 있도록 수정(CUBRIDSUS-12429)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CUBRIDDataSource 클래스에 setURL 메서드를 추가하여, 연결 URL 문자열을 사용할 수 있도록 수정했다. 연결 URL 문자열에는 IP, 포트, DB 이름 뿐만 아니라 charset, logSlowQueries 등과 같이 CUBRID에서 정의한 속성(property)들을 포함할 수 있다.
+ 
+.. code-block:: java
+ 
+    import cubrid.jdbc.driver.CUBRIDDataSource;
+    ...
+    
+    ds = new CUBRIDDataSource();
+    ds.setUrl("jdbc:cubrid:10.113.153.144:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
+ 
 
 운영 편의성
 -----------

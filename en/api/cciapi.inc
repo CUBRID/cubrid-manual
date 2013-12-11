@@ -13,16 +13,17 @@ CCI API Reference
     :param flag: (IN) bind_flag(:c:type:`CCI_BIND_PTR`).
     :return: Error code (0: success)
     
+        *   **CCI_ER_BIND_INDEX**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_TYPE_CONVERSION**
-        *   **CCI_ER_BIND_INDEX**
-        *   **CCI_ER_ATYPE**
-        *   **CCI_ER_NO_MORE_MEMORY**
-
+        *   **CCI_ER_USED_CONNECTION**
+        
     To bind **NULL** to the database, choose one of below settings.
 
     *   Set the value of *value* to a **NULL** pointer
-    *   Set the value of *u_type* to **CCI_U_TYPE_NULL**
+    *   Set the value of *u_type* to :c:macro:`CCI_U_TYPE_NULL`
 
     The following shows a part of code to bind NULL.
     
@@ -38,7 +39,8 @@ CCI API Reference
 
     can be used.
     
-    If **CCI_BIND_PTR** is configured for *flag*, the pointer of *value* variable is copied (shallow copy), but no value is copied. If it is not configured for *flag*, the value of *value* variable is copied (deep copy) by allocating memory. If multiple columns are bound by using the same memory buffer, **CCI_BIND_PTR** must not be configured for the *flag*.
+    If **CCI_BIND_PTR** is configured for *flag*, the pointer of *value* variable is copied (shallow copy), but no value is copied. 
+    If it is not configured for *flag*, the value of *value* variable is copied (deep copy) by allocating memory. If multiple columns are bound by using the same memory buffer, **CCI_BIND_PTR** must not be configured for the *flag*.
 
     **T_CCI_A_TYPE** is a C language type that is used in CCI applications for data binding, and consists of primitive types such as int and float, and user-defined types defined by CCI such as **T_CCI_BIT** and **T_CCI_DATE**. The identifier for each type is defined as shown in the table below.
 
@@ -67,7 +69,8 @@ CCI API Reference
     | **CCI_A_TYPE_CLOB**         | **T_CCI_CLOB**              |
     +-----------------------------+-----------------------------+
 
-    **T_CCI_U_TYPE** is a column type of database and data bound though the *value* argument is converted into this type. The **cci_bind_param** () function uses two kinds of types to send information which is used to convert U-type data from A-type data; the U-type data can be interpreted by database language and the A-type data can be interpreted by C language.
+    **T_CCI_U_TYPE** is a column type of database and data bound though the *value* argument is converted into this type. 
+    The **cci_bind_param** () function uses two kinds of types to send information which is used to convert U-type data from A-type data; the U-type data can be interpreted by database language and the A-type data can be interpreted by C language.
 
     There are various A-type data that are allowed by U-type data. For example, **CCI_U_TYPE_INT** can receive **CCI_A_TYPE_STR** as A-type data including **CCI_A_TYPE_INT**. For information on type conversion, see :ref:`implicit-type-conversion`.
     
@@ -146,11 +149,13 @@ CCI API Reference
     :param u_type: (IN) Data type to be applied to the database.
     :return: Error code (0: success)
     
+        *   **CCI_ER_BIND_INDEX**
+        *   **CCI_ER_BIND_ARRAY_SIZE**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_TYPE_CONVERSION**
-        *   **CCI_ER_BIND_INDEX**
-        *   **CCI_ER_ATYPE**
-        *   **CCI_ER_BIND_ARRAY_SIZE**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_bind_param_array_size(int req_handle, int array_size)
 
@@ -160,7 +165,9 @@ CCI API Reference
     :param array_size: (IN) binding array size
     :return: Error code (0: success)
     
+        *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_REQ_HANDLE**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_blob_free(T_CCI_BLOB blob)
 
@@ -179,11 +186,14 @@ CCI API Reference
     :param error_buf: (OUT) Error buffer
     :return: Error code (0: success)
     
-        *   **CCI_ER_CONNECT**
         *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_CONNECT**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_blob_read(int conn_handle, T_CCI_BLOB blob, long start_pos, int length, char *buf, T_CCI_ERROR* error_buf)
 
@@ -197,13 +207,16 @@ CCI API Reference
     :param error_buf: (OUT) Error buffer
     :return: Size of read value (>= 0: success), Error code (< 0: error)
     
-        *   **CCI_ER_INVALID_LOB_READ_POS**
+        *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
+        *   **CCI_ER_INVALID_LOB_READ_POS**
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: long long cci_blob_size(T_CCI_BLOB* blob)
 
@@ -226,16 +239,26 @@ CCI API Reference
     :param error_buf: (OUT) Error buffer
     :return: Size of written value (>= 0: success), Error code (< 0: error)
 
+        *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_cancel(int conn_handle)
 
     Cancel the running query on the other thread. This function executes the same behavior as Statement.cancel() method in JAVA.
+    
+    :param conn_handle: (IN) Connection handle
+    :return: Error code
+        
+        *    **CCI_ER_COMMUNICATION**
+        *    **CCI_ER_CON_HANDLE**
+        *    **CCI_ER_CONNECT**
     
     The following shows how to cancel the query execution of a thread.
     
@@ -407,12 +430,6 @@ CCI API Reference
             return error_msg;
         }
 
-    :param conn_handle: (IN) Connection handle
-    
-    :return: Error code
-        
-        *    **CCI_ER_CON_HANDLE**
-
 .. c:function:: int cci_clob_free(T_CCI_CLOB clob)
 
     The **cci_clob_free** function frees memory of **CLOB** struct.
@@ -431,11 +448,14 @@ CCI API Reference
     :param error_buf: (OUT) Error buffer
     :return: Error code (0: success)
 
-        *   **CCI_ER_CONNECT**
         *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_CONNECT**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_clob_read(int conn_handle, T_CCI_CLOB clob, long start_pos, int length, char *buf, T_CCI_ERROR* error_buf)
 
@@ -449,13 +469,16 @@ CCI API Reference
     :param error_buf: (OUT) Error buffer
     :return: Size of read value (>= 0: success), Error code (< 0: Error)
 
-        *   **CCI_ER_INVALID_LOB_READ_POS**
+        *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
+        *   **CCI_ER_INVALID_LOB_READ_POS**
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: long long cci_clob_size(T_CCI_CLOB* clob)
 
@@ -478,25 +501,31 @@ CCI API Reference
     :param error_buf: (OUT) Error buffer
     :return: Size of written value (>= 0: success), Error code (< 0: Error)
 
+        *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_CONNECT**
-        *   **CCI_ER_COMMUNICATION**
-        *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_DBMS**
         *   **CCI_ER_INVALID_LOB_HANDLE**
-
+        *   **CCI_ER_LOGIN_TIMEOUT**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_QUERY_TIMEOUT**
+        *   **CCI_ER_USED_CONNECTION**
         
 .. c:function::  int cci_close_query_result(int req_handle, T_CCI_ERROR *err_buf)
 
-    The **cci_close_query_result** funciton closes the resultset returned by :c:func:`cci_execute`, :c:func:`cci_execute_array` or :c:func:`cci_execute_batch`.
-    If you run :c:func:`cci_prepare` repeatedly without closing the request handle(req_handle), it is recommended to call this function before calling :c:func:`cci_close_req_handle`.
+    The **cci_close_query_result** funciton closes the resultset returned by :c:func:`cci_execute`, :c:func:`cci_execute_array` or :c:func:`cci_execute_batch`. If you run :c:func:`cci_prepare` repeatedly without closing the request handle(req_handle), it is recommended to call this function before calling :c:func:`cci_close_req_handle`.
     
     :param req_handle: (IN) Request handle
     :param err_buf: (OUT) Error buffer
     :return: Error code (0: success)
     
-        *    **CCI_ER_REQ_HANDLE**
-        *    **CCI_ER_COMMUNICATION**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_COMMUNICATION**
+        *   **CCI_ER_DBMS**   
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_REQ_HANDLE**
+        *   **CCI_ER_RESULT_SET_CLOSED**
+        *   **CCI_ER_USED_CONNECTION**
         
 .. c:function:: int cci_close_req_handle(int req_handle)
 
@@ -505,8 +534,12 @@ CCI API Reference
     :param req_handle: (IN) Request handle
     :return: Error code (0: success)
 
+        *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_COMMUNICATION**
+        *   **CCI_ER_DBMS**
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_col_get (int conn_handle, char *oid_str, char *col_attr, int *col_size, int *col_type, T_CCI_ERROR *err_buf)
 
@@ -827,6 +860,8 @@ CCI API Reference
         *   **CCI_ER_TYPE_CONVERSION**
         *   **CCI_ER_ATYPE**
 
+    data types of *value* for *a_type* are as below.
+        
     +-----------------------------+-----------------------------+
     | a_type                      | value type                  |
     +=============================+=============================+
@@ -869,8 +904,61 @@ CCI API Reference
         :c:func:`cci_datasource_create`,
         :c:func:`cci_datasource_destroy`,
         :c:func:`cci_datasource_release`
+        :c:func:`cci_datasource_change_property`
 
-.. c:function:: T_CCI_DATASOURCE * cci_datasource_create (T_CCI_PROPERTIES * properties, T_CCI_ERROR * err_buf)
+.. c:function:: int cci_datasource_change_property (T_CCI_DATASOURCE * datasource, const char *key, const char *val)
+ 
+    [번역] CCI의 DATASOURCE에 대해 key에 명시한 속성(property)의 값을 val에 설정한다. 이 함수를 사용하여 변경한 속성 값은 datasource 내 모든 연결에 적용된다.
+     
+    :param datasource: (IN) CCI 연결을 획득할 T_CCI_DATASOURCE 구조체 포인터
+    :param key: (IN) 속성 이름 문자열에 대한 포인터
+    :param val: (IN) 속성 값 문자열에 대한  포인터
+    :return: 에러 코드(0: 성공)
+    
+        *   **CCI_ER_NO_MORE_MEMORY**
+        *   **CCI_ER_NO_PROPERTY**
+        *   **CCI_ER_PROPERTY_TYPE**
+    
+    변경 가능한 속성(property)의 이름 및 값은 다음과 같다.
+ 
+    ========================= =========== ============================== ===========================================================================================================
+    속성 이름                 타입        값                             의미
+    ========================= =========== ============================== ===========================================================================================================
+    default_autocommit        bool        true/false                     autocommit 여부. 기본값은 cubrid_broker.conf의 CCI_DEFAULT_AUTOCOMMIT이며, 이 값의 기본값은 ON(true)임.
+    default_lock_timeout      msec        숫자                           lock timeout
+    default_isolation         string      :c:func:`cci_property_set`\의  isolation level. 기본값은 cubrid.conf의 isolation_level이며, 
+                                          표 참고                        이 값의 기본값은 "TRAN_READ_UNCOMMITTED"임.
+    login_timeout             msec        숫자                           login timeout.  기본값은 0(무한대기)임. prepare 또는 execute 함수 호출 시 내부적으로 재접속이 
+                                                                         발생할 수 있으며, 이 때에도 사용됨.
+    ========================= =========== ============================== ===========================================================================================================
+
+    **예제**
+
+    .. code-block:: c
+    
+        ...
+        ps = cci_property_create ();
+        ...
+        ds = cci_datasource_create (ps, &err);
+        ...
+        cci_datasource_change_property(ds, "login_timeout", "5000");
+        cci_datasource_change_property(ds, "default_lock_timeout", "2000");
+        cci_datasource_change_property(ds, "default_isolation", "TRAN_REP_CLASS_COMMIT_INSTANCE");
+        cci_datasource_change_property(ds, "default_autocommit", "true");
+        ...
+
+    .. seealso:: 
+    
+        :c:func:`cci_property_create`,
+        :c:func:`cci_property_destroy`,
+        :c:func:`cci_property_get`,
+        :c:func:`cci_property_set`,
+        :c:func:`cci_datasource_create`,
+        :c:func:`cci_datasource_borrow`,
+        :c:func:`cci_datasource_destroy`,
+        :c:func:`cci_datasource_release`
+        
+.. c:function:: T_CCI_DATASOURCE * cci_datasource_create (T_CCI_PROPERTIES * properties, T_CCI_ERROR *err_buf)
 
     The **cci_datasource_create** function creates DATASOURCE of CCI.
 
@@ -884,9 +972,10 @@ CCI API Reference
         :c:func:`cci_property_destroy`,
         :c:func:`cci_property_get`,
         :c:func:`cci_property_set`,
-        :c:func:`cci_datasource_create`,
+        :c:func:`cci_datasource_borrow`
         :c:func:`cci_datasource_destroy`,
-        :c:func:`cci_datasource_release`
+        :c:func:`cci_datasource_release`,
+        :c:func:`cci_datasource_change_property`
 
 .. c:function:: void cci_datasource_destroy (T_CCI_DATASOURCE * datasource)
 
@@ -902,15 +991,17 @@ CCI API Reference
         :c:func:`cci_property_get`,
         :c:func:`cci_property_set`,
         :c:func:`cci_datasource_create`,
-        :c:func:`cci_datasource_destroy`,
-        :c:func:`cci_datasource_release`
+        :c:func:`cci_datasource_borrow`,
+        :c:func:`cci_datasource_release`,
+        :c:func:`cci_datasource_change_property`
 
-.. c:function:: int cci_datasource_release (T_CCI_DATASOURCE * datasource, T_CCI_CONN conn)
+.. c:function:: int cci_datasource_release (T_CCI_DATASOURCE *datasource, T_CCI_CONN conn, T_CCI_ERROR *err_buf)
 
     The **cci_datasource_release** function returns CCI connection released in **T_CCI_DATASOURCE** struct. If you want to reuse the connection after calling this function, recall c:func:`cci_datasource_borrow`.
 
     :param datasource: (IN) **T_CCI_DATASOURCE** struct pointer which returns CCI connection
     :param conn: (IN) CCI connection handler identifier released
+    :param err_buf: (OUT) Error buffer (returns error code and error message when error occurs )
     :return: Success: 1, Failure: 0
 
     .. seealso:: 
@@ -921,9 +1012,10 @@ CCI API Reference
         :c:func:`cci_property_set`,
         :c:func:`cci_datasource_create`,
         :c:func:`cci_datasource_destroy`,
-        :c:func:`cci_datasource_release`
+        :c:func:`cci_datasource_borrow`,
+        :c:func:`cci_datasource_change_property`
 
-.. c:function:: int cci_disconnect(int conn_handle, T_CCI_ERROR * err_buf)
+.. c:function:: int cci_disconnect(int conn_handle, T_CCI_ERROR *err_buf)
 
     The **cci_disconnect** function disconnects all request handles created for *conn_handle*. If a transaction is being performed, the handles are disconnected after :c:func:`cci_end_tran` is executed.
 
@@ -1531,7 +1623,7 @@ CCI API Reference
                 goto handle_error;
             }
         
-        Or you can use cci_get_error_msg function for simplifying the branch of the above code.
+        From 9.1, you can simplify the brance of the above code by using cci_get_error_msg function.
         
         .. code-block:: c
 
@@ -1631,6 +1723,19 @@ CCI API Reference
             return 0;
         }
 
+.. c:function:: int cci_get_login_timeout(int conn_handle, int *timeout, T_CCI_ERROR *err_buf)
+ 
+    [번역] 로그인 타임아웃 값을 timeout에 반환한다.
+    
+    :param conn_handle: (IN) 연결 핸들
+    :param timeout: (OUT) 로그인 타임아웃 값(단위: 밀리 초)에 대한 포인터
+    :param err_buf: (OUT) 에러 버퍼
+    :return: 에러 코드(0: 성공)
+ 
+        *   **CCI_ER_INVALID_ARGS**
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_USED_CONNECTION**
+        
 .. c:function:: int cci_get_query_plan(int req_handle, char **out_buf_p)
 
     Saves the query plan to the result buffer; the query plan about the request handle which the cci_prepare function returned.
@@ -2122,34 +2227,51 @@ CCI API Reference
         :c:func:`cci_datasource_destroy`,
         :c:func:`cci_datasource_release`
 
-.. c:function:: int cci_property_set (T_CCI_PROPERTIES * properties, char * key, char * value)
+.. c:function:: int cci_property_set (T_CCI_PROPERTIES *properties, char *key, char *value)
 
     It configures a property value in **T_CCI_PROPERTIES** struct.
     
     :param properties: **T_CCI_PROPERTIES** struct pointer in which *key* and *value* are stored
     :param key: String pointer of property name
-    :param key: String pointer of property value
+    :param value: String pointer of property value
     :return: Success: 1, Failure: 0
 
     The property names and its meanings that can be configured in the struct are as follows:
     
-    *   **user**: DB user name
-    *   **password**: DB user password
-    *   **url**: connection URL. For specifying connection URL string, refer :c:func:`cci_connect_with_url`.
-    *   **pool_size** : Maximum number of connection (default value: 10)
-    *   **max_wait** : Maximum waiting time to get connection (default value: 1000 msec.)
-    *   **pool_prepared_statement** : Whether to enable statement pooling (default value: false)
-    *    **max_open_prepared_statement** : The maximum number of prepared statements to maintain in the statement pool.(default value: 1000)
-    *   **login_timeout** : Login timeout time (default value: 0 (unlimited))
-    *   **query_timeout** : Query timeout time (default value: 0 (unlimited))
-    *   **disconnect_on_query_timeout** : Whether to terminate connection when execution is discarded due to query execution timeout (default value: no)
-    *   **default_autocommit** : Auto-commit mode refreshed whenever **cci_datasource_borrow** is called; true or false
-    *   **default_isolation** : Transaction isolation level refreshed whenever **cci_datasource_borrow** is called
-    *   **default_lock_timeout** : lock_timeout refreshed whenever **cci_datasource_borrow** is called
+ 
+    ============================= =========== =============================================== ===========================================================================================================
+    property name                 type        default                                         description
+    ============================= =========== =============================================== ===========================================================================================================
+    user                          string                                                      DB user name
+    password                      string                                                      DB user password
+    url                           string                                                      connection URL. For specifying connection URL string, refer :c:func:`cci_connect_with_url`.
+    pool_size                     int         10                                              Maximum number of connection which the connection pool can have
+    max_wait                      msec        1000                                            Maximum waiting time to get connection
+    pool_prepared_statement       bool        false                                           Whether to enable statement pooling. true or false
+    max_open_prepared_statement   int         1000                                            The maximum number of prepared statements to maintain in the statement pool
+    login_timeout                 msec        0(unlimited)                                    Login timeout time which is applied when datasource by :c:func:`cci_datasource_create` function is created
+                                                                                              or internal reconnection by prepare/execute function occurs
+    query_timeout                 msec        0(unlimited)                                    Query timeout time
+    disconnect_on_query_timeout   bool        no                                              Whether to terminate connection when execution is discarded due to query execution timeout; true or false
+    default_autocommit            bool        CCI_DEFAULT_AUTOCOMMIT in cubrid_broker.conf    Auto-commit mode refreshed whenever :c:func:`cci_datasource_create` function is called; true or false
+    default_isolation             string      isolation_level in cubrid.conf                  Transaction isolation level refreshed whenever :c:func:`cci_datasource_create`\ function is called
+                                                                                              See below table
+    default_lock_timeout          msec        lock_timeout in cubrid_broker.conf              lock_timeout specified whenever :c:func:`cci_datasource_create` function is called
+    ============================= =========== =============================================== ===========================================================================================================
 
     If the number of prepared statements exceeds **max_open_prepared_statement** value, the oldest prepared statement is released from the statement pool. If you reuse it later, it is added to the statement pool again.
     
-    If you configure **default_autocommit**, **default_isolation**, or **default_lock_timeout** value, connection for autocommit, isolation, or lock_timeout based on current configured value is returned when **cci_datasource_borrow** is called. If you do not configure it, connection for autocommit, isolation, or lock_timeout is returned with keeping the value that a user changed before.
+    If you configure **login_timeout**, **default_autocommit**, **default_isolation**, or **default_lock_timeout** value, connection is returned with this configuration.
+
+    **login_timeout**, **default_autocommit**, **default_isolation** or **default_lock_timeout** can be changed after calling :c:func:`cci_datasource_borrow` function. See :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`. Changed values by the functions of which the names start with **cci_set_** are only applied to the changed connection objects; after the connection is released, they are restored as the values which :c:func:`cci_property_set` configured. If there is no value specified by :c:func`cci_property_set`, it is restored as the default.
+    
+    .. note:: 
+    
+        [번역] **login_timeout**\은 DATASOURCE 객체를 생성하는 경우와 :c:func:`cci_prepare` 또는 :c:`cci_execute` 함수에서 내부적인 재접속이 발생하는 경우에 적용된다. 내부적인 재접속은 DATASOURCE에서 연결 객체를 얻은 경우와 :c:func:`cci_connect`/:c:func:`cci_connect_with_url` 함수로 연결 객체를 얻은 경우에서 모두 발생한다.
+        
+        DATASOURCE 객체를 생성하는 시간은 내부적인 재접속 시간보다 오래 걸릴 수 있으므로, 두 가지 경우의 **login_timeout**\ 을 다르게 적용하는 것을 감안할 수 있다. 예를 들어, 전자의 경우를 5000(5초), 후자의 경우를 2000(2초)로 설정하고 싶다면, 후자의 설정을 위해 DATASOURCE 생성 후 :c:func:`cci_set_login_timeout` 함수를 사용한다.
+    
+        10.0 이전 버전에서는 DATASOURCE 객체를 생성할 때만 login_timeout이 적용되고, 내부적으로 재접속하는 경우에는 login_timeout이 적용되지 않아 무한 대기하는 현상 발생 시 이 작업을 취소하는 방법이 없는 문제가 존재한다.
 
     **default_isolation** has one of the following configuration values. For details on isolation level, see :ref:`set-transaction-isolation-level`.
 
@@ -2269,6 +2391,16 @@ CCI API Reference
 
     The **cci_register_out_param** function is used to bind the parameters as outbind in Java Stored Procedure. The index value begins from 1.
     To call this function, **CCI_PREPARE_CALL** flag of **cci_prepare** function should be specified.
+
+    :param req_handle: (IN) Request handle
+     int cci_register_out_param(int req_handle, int index)
+    
+    :return: Error code
+            
+        *    **CCI_ER_BIND_INDEX**
+        *    **CCI_ER_REQ_HANDLE**
+        *    **CCI_ER_CON_HANDLE**
+        *    **CCI_ER_USED_CONNECTION**
     
     The following shows to print out "Hello, CUBRID" string with Java Stored Procedure.
     
@@ -2325,8 +2457,8 @@ CCI API Reference
             int con = 0, req = 0, res, ind, i, col_count;
             T_CCI_ERROR error;
             T_CCI_COL_INFO *res_col_info;
-            T_CCI_SQLX_CMD cmd_type;
-            char *buffer, db_ver[16];;
+            T_CCI_CUBRID_STMT cmd_type;
+            char *buffer, db_ver[16];
     
             if ((con = cci_connect ("localhost", 33000, "demodb", "dba", "")) < 0)
             {
@@ -2410,16 +2542,6 @@ CCI API Reference
     .. seealso:: 
 
         :c:func:`cci_prepare`
-        
-    :param req_handle: (IN) Request handle
-     int cci_register_out_param(int req_handle, int index)
-    
-    :return: Error code
-            
-        *    **CCI_ER_BIND_INDEX**
-        *    **CCI_ER_REQ_HANDLE**
-        *    **CCI_ER_CON_HANDLE**
-        *    **CCI_ER_USED_CONNECTION**
 
 .. c:function:: int cci_row_count(int conn_handle, int *row_count, T_CCI_ERROR * err_buf)
 
@@ -2763,97 +2885,112 @@ CCI API Reference
 
     .. code-block:: c
     
-            conn = cci_connect ("localhost", 33000, "demodb", "dba", "");
-         
-            // get all columns' information of table "athlete"
-            req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", NULL, CCI_ATTR_NAME_PATTERN_MATCH, &error);
-         
-            // get info. of table "athlete"'s column "code".
-            //req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", "code", 0, &error);
-            if (req < 0 )
-            {
-                fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
-                goto _END;
-            }
-            res_col_info = cci_get_result_info(req, &cmd_type, &col_count);
-            if (!res_col_info && col_count == 0)
-            {
-                fprintf(stdout, "(%s, %d) ERROR : cci_get_result_info\n\n", __FILE__, __LINE__);
-                goto _END;
-            }
-            res = cci_cursor(req, 1, CCI_CURSOR_FIRST, &error);
-            if (res == CCI_ER_NO_MORE_DATA)
-            {
-                goto _END_WHILE;
-            }
-            if (res < 0)
-            {
-                fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
-                goto _END_WHILE;
-            }
-         
-         
-            while (1)
-            {
-                res = cci_fetch(req, &error);
-                if (res <  0)
-                {
-                    fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
-                    goto _END_WHILE;
-                }
-         
-                for (i = 1; i <= col_count; i++)
-                {
-                    if ((res = cci_get_data(req, i, CCI_A_TYPE_STR, &buffer, &ind))<0)
-                    {
-                        goto _END_WHILE;
-                    }
-                    if ( ind != -1)
-                    {
-                        strcat(query_result_buffer, buffer);
-                        strcat(query_result_buffer, "|");
-                    } 
-                    else 
-                    {
-                        strcat(query_result_buffer, "NULL|");
-                    }
+        // gcc -o schema_info schema_info.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
 
-                }
-                strcat(query_result_buffer, "\n");
-         
-                res = cci_cursor(req, 1, CCI_CURSOR_CURRENT, &error);
-                if (res == CCI_ER_NO_MORE_DATA)
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <string.h>
+
+        #include "cas_cci.h"
+
+        int
+        main ()
+        {
+          int conn = 0, req = 0, col_count = 0, res = 0, i, ind;
+          T_CCI_ERROR error;
+          char *data, query_result_buffer[1024];
+          T_CCI_ERROR cci_error;
+          T_CCI_COL_INFO *col_info;
+          T_CCI_CUBRID_STMT cmd_type;
+
+
+          conn = cci_connect ("localhost", 33000, "demodb", "dba", "");
+          // get all columns' information of table "athlete"
+          // req = cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", "code", 0, &cci_error);
+          req =
+            cci_schema_info (conn, CCI_SCH_ATTRIBUTE, "athlete", NULL,
+                             CCI_ATTR_NAME_PATTERN_MATCH, &error);
+
+          if (req < 0)
+          {
+              fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,
+                       cci_error.err_msg, cci_error.err_code);
+              goto _END;
+          }
+          col_info = cci_get_result_info (req, &cmd_type, &col_count);
+          if (!col_info && col_count == 0)
+          {
+              fprintf (stdout, "(%s, %d) ERROR : cci_get_result_info\n\n", __FILE__,
+                       __LINE__);
+              goto _END;
+          }
+          res = cci_cursor (req, 1, CCI_CURSOR_FIRST, &cci_error);
+          if (res == CCI_ER_NO_MORE_DATA)
+          {
+              goto _END;
+          }
+          if (res < 0)
+          {
+              fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,
+                       cci_error.err_msg, cci_error.err_code);
+              goto _END;
+          }
+
+
+          while (1)
+          {
+              res = cci_fetch (req, &cci_error);
+              if (res < 0)
+              {
+                  fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__,
+                           __LINE__, cci_error.err_msg, cci_error.err_code);
+                  goto _END;
+              }
+
+              for (i = 1; i <= col_count; i++)
+              {
+                  if ((res = cci_get_data (req, i, CCI_A_TYPE_STR, &data, &ind)) < 0)
+                  {
+                      goto _END;
+                  }
+                  if (ind != -1)
+                  {
+                      strcat (query_result_buffer, data);
+                      strcat (query_result_buffer, "|");
+                  }
+                  else
+                  {
+                      strcat (query_result_buffer, "NULL|");
+                  }
+              }
+              strcat (query_result_buffer, "\n");
+
+              res = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &cci_error);
+              if (res == CCI_ER_NO_MORE_DATA)
+              {
+                  goto _END;
+              }
+              if (res < 0)
                 {
-                    goto _END_WHILE;
+                  fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__,
+                           __LINE__, cci_error.err_msg, cci_error.err_code);
+                  goto _END;
                 }
-                if (res < 0)
-                {
-                    fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,error.err_msg, error.err_code );
-                    goto _END_WHILE;
-                }
-            }
-        _END_WHILE:
-            res = cci_close_query_result(req, &error);
-            if ( res < 0)
-            {
-                fprintf (stdout, "(%s, %d) ERROR: cci_close_query_result(%d)\n", __FILE__, __LINE__, error.err_code);
-                goto _END;
-            }
-            res = cci_close_req_handle(req);
-            if (res <  0)
-                goto _END;
-         
+          }
+
         _END:
-            if (req > 0)
-                cci_close_req_handle(req);
-            if ( conn > 0)
-                res = cci_disconnect(conn, &error);
-            if (res < 0)
-                fprintf(stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, _._LINE__,error.err_msg, error.err_code );
-         
-            fprintf(stdout, "Result : %s\n", query_result_buffer);
-         
-            return 0;
+          if (req > 0)
+            cci_close_req_handle (req);
+          if (conn > 0)
+            res = cci_disconnect (conn, &cci_error);
+          if (res < 0)
+            fprintf (stdout, "(%s, %d) ERROR : %s [%d] \n\n", __FILE__, __LINE__,
+                     cci_error.err_msg, cci_error.err_code);
+
+          fprintf (stdout, "Result : %s\n", query_result_buffer);
+
+          return 0;
+        }
 
 .. c:function:: int cci_set_allocators(CCI_MALLOC_FUNCTION malloc_func, CCI_FREE_FUNCTION free_func, CCI_REALLOC_FUNCTION realloc_func, CCI_CALLOC_FUNCTION calloc_func)
 
@@ -3035,11 +3172,11 @@ CCI API Reference
 
     The **cci_set_autocommit** function configures the auto-commit mode of current database connection. It is only used to turn ON/OFF of auto-commit mode. When this function is called, every transaction being processed is committed regardless of configured mode.
 
+    .. note:: :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` in **cubrid_broker.conf** determines the default autocommit mode upon program startup.
+
     :param conn_handle: (IN) Connection handle
     :param autocommit_mode: (IN) Configures the auto-commit mode. It has one of the following value: CCI_AUTOCOMMIT_FALSE or CCI_AUTOCOMMIT_TRUE
     :return: Error code (0: success)
-
-    Note that **CCI_DEFAULT_AUTOCOMMIT**, broker parameter configured in the **cubrid_broker.conf** file, determines whether it is in auto-commit mode upon program startup.
 
 .. c:function:: int cci_set_db_parameter(int conn_handle, T_CCI_DB_PARAM param_name, void* value, T_CCI_ERROR *err_buf)
 
@@ -3141,6 +3278,26 @@ CCI API Reference
     :param conn_handle: (IN) Connection handle
     :param locktimeout: (IN) lock timeout value(Unit: milliseconds).
 
+    :return: Error code(0: Success)
+
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_PARAM_NAME**
+        *   **CCI_ER_DBMS**
+        *   **CCI_ER_COMMUNICATION**
+        *   **CCI_ER_CONNECT**
+
+.. c:function:: int cci_set_login_timeout(int conn_handle, int timeout, T_CCI_ERROR *err_buf)
+    
+    The **cci_set_login_timeout** function specifies the login timeout with millisecond unit. Login timeout is applied when internal connection occurs as calling :c:func:`cci_prepare` or :c:func:`cci_execute`. This change is only applied to the current connection.
+   
+    :param conn_handle: (IN) Connection handle
+    :param timeout: (IN) Login timeout(unit: millisecond)
+    :param err_buf: (OUT) Error buffer
+    :return: Error code(0: Success)
+        
+        *   **CCI_ER_CON_HANDLE**
+        *   **CCI_ER_USED_CONNECTION**
+
 .. c:function:: int cci_set_make(T_CCI_SET *set, T_CCI_U_TYPE u_type, int size, void *value, int *indicator)
 
     The **cci_set_make** function makes a set of a new **CCI_A_TYPE_SET** type. The created set is sent to the server as **CCI_A_TYPE_SET** by :c:func:`cci_bind_param`. The memory for the set created by **cci_set_make()** must be freed by :c:func:`cci_set_free`. The type of *value* for *u_type* is shown in the table below.
@@ -3174,7 +3331,7 @@ CCI API Reference
     :param milli_sec:  Timeout (unit: msec.)
     :return: Success: Request handle ID (int), Failure: Error code
 
-        *   CCI_ER_REQ_HANDLE
+        *   **CCI_ER_REQ_HANDLE**
 
     The timeout value configured by **cci_set_query_timeout** affects :c:func:`cci_prepare`, :c:func:`cci_execute`, :c:func:`cci_execute_array`, :c:func:`cci_execute_batch` functions. When timeout occurs in the function and if the **disconnect_on_query_timeout** value configured in :c:func:`cci_connect_with_url` connection URL is yes, it returns the **CCI_ER_QUERY_TIMEOUT** error.
 

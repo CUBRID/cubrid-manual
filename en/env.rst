@@ -157,8 +157,8 @@ This method can be used for the case that it is difficult to specify a specific 
 *   Add "%CUBRID%\\bin\\cub_cmserver.exe" to open all ports for the CUBRID Manager.
 *   Add "%CUBRID%\\bin\\cub_cmhttpd.exe" to open all ports for the CUBRID Web Manager.
     
-If you use CUBRID for Linux at the broker equipment or the DB server equipment, all of Linux ports should be opened. 
-If you use CUBRID for Windows at the broker equipment or the DB server equipment, all of Linux ports should be opened or the related processes should be added to the program list allowed for the Windows firewall.
+If you use CUBRID for Linux at the broker machine or the DB server machine, all of Linux ports should be opened. 
+If you use CUBRID for Windows at the broker machine or the DB server machine, all of Linux ports should be opened or the related processes should be added to the program list allowed for the Windows firewall.
      
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 | Label         | Listener      | Requester     | Linux Port     | Windows Port                                        | Firewall Port Setting    | Description            |
@@ -174,10 +174,10 @@ If you use CUBRID for Windows at the broker equipment or the DB server equipment
 |               |               |               |                |                                                     | Windows: Program         |                        |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | Client        | cub_server    | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
-|               | equipment     |               |                |                                                     |                          |                        |
+|               | machine       |               |                |                                                     |                          |                        |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | Server        | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
-|               | equipment     |               |                |                                                     |                          |                        |
+|               | machine       |               |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 | HA used       | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
@@ -196,10 +196,10 @@ If you use CUBRID for Windows at the broker equipment or the DB server equipment
 |               | cub_server    | CAS           | cubrid_port_id | Not supported                                       | Open                     | Keep connected         |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | Client        | cub_server    | ECHO(7)        | Not supported                                       | Open                     | Periodical connection  |
-|               | equipment     |               |                |                                                     |                          |                        |
+|               | machine       |               |                |                                                     |                          |                        |
 |               +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 |               | Server        | CAS, CSQL,    | ECHO(7)        | Not supported                                       | Open                     | Periodical connection  |
-|               | equipment     | copylogdb,    |                |                                                     |                          |                        |
+|               | machine       | copylogdb,    |                |                                                     |                          |                        |
 |               |               | applylogdb    |                |                                                     |                          |                        |
 +---------------+---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 | SHARD used    | cub_broker    | application   | BROKER_PORT    | Not supported                                       | Open                     | One-time connection    |
@@ -236,19 +236,19 @@ The following table summarizes the ports required for each OS, based on the list
 |               |               |                |                                                     | Windows: Program         |                        |
 +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 | Client        | cub_server    | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
-| equipment(*)  |               |                |                                                     |                          |                        |
+| machine(*)    |               |                |                                                     |                          |                        |
 +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
 | Server        | CAS, CSQL     | ECHO(7)        | ECHO(7)                                             | Open                     | Periodical connection  |
-| equipment(**) |               |                |                                                     |                          |                        |
+| machine(**)   |               |                |                                                     |                          |                        |
 +---------------+---------------+----------------+-----------------------------------------------------+--------------------------+------------------------+
     
-(*): The equipment which has the CAS or CSQL process
+(*): The machine which has the CAS or CSQL process
 
-(**): The equipment which has the cub_server
+(**): The machine which has the cub_server
     
 .. note:: In Windows, you cannot specify the ports to open because CAS randomly specifies the ports as accessing the cub_server. In this case, add "%CUBRID%\\bin\\cub_server.exe" to "Windows Firewall > Allowed programs".
 
-As the server process (cub_server) and the client processes (CAS, CSQL) cross-check if the opposite node is normally running or not by using the ECHO(7) port, you should open the ECHO(7) port if there is a firewall. If the ECHO port cannot be opened for both the server and the client, set the **check_peer_alive**  parameter value of the cubrid.conf to none.
+As the server process (cub_server) and the client processes (CAS, CSQL) cross-check if the opposite node is normally running or not by using the ECHO(7) port, you should open the ECHO(7) port if there is a firewall. If the ECHO port cannot be opened for both the server and the client, set the :ref:`check_peer_alive <check_peer_alive>` parameter value of the cubrid.conf to none.
 
 The relation of connection between processes is as follows:
 
@@ -288,7 +288,7 @@ The connection process between the application and the DB is as follows:
 #.  CAS sends a request of connecting with the cub_server to the cub_master through the cubrid_port_id port set in the cubrid.conf.
 #.  CAS and the cub_server are connected.
     
-    In Linux, you should use the cubrid_port_id port as CAS is connected to the cub_server through the Unix domain socket. In Windows, CAS is connected to the cub_server through a random available port as the Unix domain socket cannot be used. If the DB server is running in Windows, a random available port is used between the broker equipment and the DB server equipment. In this case, note that the operation may not be successful if a firewall blocks the port for the process between the two equipment.
+    In Linux, you should use the cubrid_port_id port as CAS is connected to the cub_server through the Unix domain socket. In Windows, CAS is connected to the cub_server through a random available port as the Unix domain socket cannot be used. If the DB server is running in Windows, a random available port is used between the broker machine and the DB server machine. In this case, note that the operation may not be successful if a firewall blocks the port for the process between the two machine.
     
 #.  After that, CAS keeps connection with the cub_server even if the application is terminated until the CAS restarts.
 
@@ -321,16 +321,16 @@ The following table summarizes the ports required for each OS, based on the list
 | cub_server    | CAS           | cubrid_port_id | Open                     | Keep connected         |
 +---------------+---------------+----------------+--------------------------+------------------------+
 | Client        | cub_server    | ECHO(7)        | Open                     | Periodical connection  |
-| equipment(*)  |               |                |                          |                        |
+| machine(*)  |               |                |                          |                        |
 +---------------+---------------+----------------+--------------------------+------------------------+
 | Server        | CAS, CSQL,    | ECHO(7)        | Open                     | Periodical connection  |
-| equipment(**) | copylogdb,    |                |                          |                        |
+| machine(**) | copylogdb,    |                |                          |                        |
 |               | applylogdb    |                |                          |                        |
 +---------------+---------------+----------------+--------------------------+------------------------+
     
-(*): The equipment which has the CAS, CSQL, copylogdb, or applylogdb process
+(*): The machine which has the CAS, CSQL, copylogdb, or applylogdb process
 
-(**): The equipment which has the cub_server
+(**): The machine which has the cub_server
 
 As the server process (cub_server) and the client processes (CAS, CSQL, copylogdb, applylogdb, etc.) cross-check if the opposite node is normally running or not by using the ECHO(7) port, you should open the ECHO(7) port if there is a firewall. If the ECHO port cannot be opened for both the server and the client, set the **check_peer_alive** parameter value of the cubrid.conf to none.
 
@@ -396,7 +396,7 @@ The connection process between the application and the server for the CUBRID SHA
     *   The port used to connect the application to the cub_proxy(2): 45000, the port used to connect the CAS to the cub_proxy(2): None
     *   The port used to connect the application to the cub_proxy(3): 45000, the port used to connect the CAS to the cub_proxy(3): None
 
-#.  The CAS and the cub_proxy have already been connected when starting the CUBRID SHARD (cubrid broker start). In addition, the processes are always in one equipment, requiring no remote access.
+#.  The CAS and the cub_proxy have already been connected when starting the CUBRID SHARD (cubrid broker start). In addition, the processes are always in one machine, requiring no remote access.
     
     When the CAS is connected to the cub_proxy, the Unix domain socket is used in Linux. Multiple CASes can be connected to one cub_proxy. The minimum number and the maximum number of the CAS are determined by MIN_NUM_APPL_SERVER and MAX_NUM_APPL_SERVER of the cubrid_broker.conf. The maximum number of CASes which can be connected to one  cub_proxy simultaneously is determined based on SHARD_MAX_CLIENTS of the cubrid_broker.conf.
 

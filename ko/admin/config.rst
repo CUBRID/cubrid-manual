@@ -831,11 +831,11 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
 | log_max_archives              | int    | INT_MAX                    | 0                          | INT_MAX                    |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| max_flush_size_per_second     | byte   | 10000 *                    | 1 *                        | INT_MAX *                  |    
-|                               |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |    
+| max_flush_size_per_second     | byte   | 10000 *                    | 1 *                        | INT_MAX *                  |
+|                               |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
 | sync_on_flush_size            | byte   | 200 *                      | 1 *                        | INT_MAX *                  |
-|                               |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |    
+|                               |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
 
 **adaptive_flush_control**
@@ -2133,8 +2133,8 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
 
 **SHARD_PROXY_CONN_WAIT_TIMEOUT**
   
-이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊는다. 기본값은 8h이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
-이전 비밀번호 정보를 지닌 CAS는 더 이상 사용할 수 없으므로 종료되어야 되는데, 이 기능은 이러한 CAS가 불필요하게 계속 유지되는 것을 방지한다. 
+    이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊는다. 기본값은 8h이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
+    이전 비밀번호 정보를 지닌 CAS는 더 이상 사용할 수 없으므로 종료되어야 되는데, 이 기능은 이러한 CAS가 불필요하게 계속 유지되는 것을 방지한다. 
     
 **SHARD_PROXY_LOG**
 
@@ -2158,13 +2158,13 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
 
     proxy 로그 파일의 최대크기이다. 값 뒤에 B, K, M, G의 단위 지정이 가능하며, 각각 Bytes, Kilobytes, Megabytes, Gigabytes를 의미한다. 단위 생략 시 K로 지정된다. 최대 1,000,000(KB)까지 설정할 수 있다.
 
-**SHARD_PROXY_TIMEOUT**
-
-    proxy에서 CAS가 사용 가능해지기를 기다리거나 statement가 준비(prepare)되기를 기다리는 최대 시간. 대기 시간이 만료되면 드라이버의 요청을 에러 처리함. 기본값: 30(초). 이 값이 0이면 시스템 파라미터 query_timeout의 값에 의해 대기 시간이 결정되며, query_timeout의 값도 0이면 무한 대기한다. SHARD_PROXY_TIMEOUT의 값이 0보다 크면 query_timeout 값과 SHARD_PROXY_TIMEOUT 값 중 큰 값에 의해 대기 시간이 결정된다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다.
-    
 **SHARD_PROXY_SHM_ID**
 
     proxy가 이용하는 공유 메모리 ID 를 지정하기 위한 파라미터로 시스템 내에서 유일한 값이어야 한다. 
+    
+**SHARD_PROXY_TIMEOUT**
+
+    proxy에서 CAS가 사용 가능해지기를 기다리거나 statement가 준비(prepare)되기를 기다리는 최대 시간. 대기 시간이 만료되면 드라이버의 요청을 에러 처리함. 기본값: 30(초). 이 값이 0이면 시스템 파라미터 query_timeout의 값에 의해 대기 시간이 결정되며, query_timeout의 값도 0이면 무한 대기한다. SHARD_PROXY_TIMEOUT의 값이 0보다 크면 query_timeout 값과 SHARD_PROXY_TIMEOUT 값 중 큰 값에 의해 대기 시간이 결정된다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다.
 
 .. note:: proxy 설정을 위해 필요한 파라미터
 

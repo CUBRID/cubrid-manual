@@ -523,6 +523,57 @@ You can specify **NOCYCLE** to prevent an error from occurring as follows:
     START WITH ParentID IS NULL
     CONNECT BY NOCYCLE ParentID=PRIOR ID;
 
+[번역]
+    
+다음은 계층 질의를 사용하여 2013년 3월(201303)의 날짜들을 출력하는 예제이다.
+
+.. code-block:: sql
+
+    SELECT TO_CHAR(base_month + lvl -1, 'YYYYMMDD') h_date
+    FROM (
+        SELECT LEVEL lvl, base_month
+        FROM ( 
+                SELECT TO_DATE('201303', 'YYYYMM') base_month FROM db_root
+        )
+        CONNECT BY LEVEL <= LAST_DAY(base_month) - base_month + 1
+    );
+    
+      h_date
+    ======================
+      '20130301'
+      '20130302'
+      '20130303'
+      '20130304'
+      '20130305'
+      '20130306'
+      '20130307'
+      '20130308'
+      '20130309'
+      '20130310'
+      '20130311'
+      '20130312'
+      '20130313'
+      '20130314'
+      '20130315'
+      '20130316'
+      '20130317'
+      '20130318'
+      '20130319'
+      '20130320'
+      '20130321'
+      '20130322'
+      '20130323'
+      '20130324'
+      '20130325'
+      '20130326'
+      '20130327'
+      '20130328'
+      '20130329'
+      '20130330'
+      '20130331'
+
+    31 rows selected. (0.066175 sec) Committed.
+
 Performance of Hierarchical Query
 =================================
 

@@ -102,6 +102,8 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     |                               | db_hosts                            | client parameter        | string   | NULL                           | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | max_clients                         | server parameter        | int      | 100                            |                 |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | tcp_keepalive                       | client/server parameter | bool     | yes                            |                 |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     | :ref:`memory-parameters`      | data_buffer_size                    | server parameter        | byte     | 32768 *                        |                 |
     |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
@@ -225,6 +227,8 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     |                               | unicode_input_normalization         | client parameter        | bool     | no                             | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | unicode_output_normalization        | client parameter        | bool     | no                             | available       |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | update_use_attribute_references     | client parameter        | bool     | no                             | 가능            |
     +-------------------------------+-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     | :ref:`plan-cache-parameters`  | max_plan_cache_entries              | client/server parameter | int      | 1000                           |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
@@ -378,11 +382,15 @@ The following are parameters related to the database server. The type and value 
 +--------------------+----------+-------------------+---------+---------+
 | max_clients        | int      | 100               | 10      | 10000   |
 +--------------------+----------+-------------------+---------+---------+
+| tcp_keepalive      | bool     | yes               |         |         |
++--------------------+----------+-------------------+---------+---------+
 
 **cubrid_port_id**
 
     **cubrid_port_id** is a parameter to configure the port to be used by the master process. The default value is **1,523**. If the port 1,523 is already being used on the server where CUBRID is installed or it is blocked by a firewall, an error message, which means the master server is not connected because the master process cannot be running properly, is displayed. If such port conflict occurs, the administrator must change the value of **cubrid_port_id** considering the server environment.
 
+.. _check_peer_alive:
+    
 **check_peer_alive**
 
     **check_peer_alive** is a parameter to decide whether you execute the function checking that the client/server processes work well. The default is **both**. 
@@ -428,6 +436,10 @@ The following are parameters related to the database server. The type and value 
         
         In Linux system, max_clients parameter is related to "ulimit -n" command, which specifies the maximum number of file descriptors which a process can use. File descriptor includes not only a file, but also a network socket. Therefore, the number of "ulimit -n" should be larger than the number of max_clients.
     
+**tcp_keepalive** 
+  
+    **tcp_keepalive** is a parameter which specifies if you apply SO_KEEPALIVE option to TCP network protocol or not. The default is **yes**. If this value is **no**, DB server-side connection can be disconnected when transaction logs are not copied for a long time in the firewall environment between master and slave.
+ 
 .. _memory-parameters:
 
 Memory-Related Parameters
@@ -524,7 +536,7 @@ The following are disk-related parameters for defining database volumes and stor
 
 **dont_reuse_heap_file**
 
-    **dont_reuse_heap_file** is a parameter to configure whether or not heap files, which are deleted when deleting the table (DROP TABLE), are to be reused when creating a new table (CREATE TABLE). If this parameter is set to 0, the deleted heap files can be reused; if it is set to 1, the deleted heap files are not used when creating a new table. The default value is **0**.
+    **dont_reuse_heap_file** is a parameter to configure whether or not heap files, which are deleted when deleting the table (DROP TABLE), are to be reused when creating a new table (CREATE TABLE). If this parameter is set to no, the deleted heap files can be reused; if it is set to yes, the deleted heap files are not used when creating a new table. The default value is **no**.
 
 **generic_vol_prealloc_size**
 
@@ -787,31 +799,31 @@ Logging-Related Parameters
 
 The following are parameters related to logs used for database backup and restore. The types and value range for each parameter are as follows:
 
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| Parameter Name               | Type   | Default Value              | Min                        | Max                        |
-+==============================+========+============================+============================+============================+
-| adaptive_flush_control       | bool   | yes                        |                            |                            |
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| background_archiving         | bool   | yes                        |                            |                            |
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| checkpoint_every_size        | byte   | 10000 *                    | 10  *                      |                            |
-|                              |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| checkpoint_interval          | msec   | 6min                       | 1min                       | INT_MAX                    |
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| force_remove_log_archives    | bool   | yes                        |                            |                            |
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| log_buffer_size              | byte   | 128 *                      | 3 *                        | INT_MAX *                  |
-|                              |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| log_max_archives             | int    | INT_MAX                    | 0                          | INT_MAX                    |
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| max_flush_size_per_second    | byte   | 10000 *                    | 1 *                        | INT_MAX *                  |    
-|                              |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |    
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| sync_on_flush_size           | byte   | 200 *                      | 1 *                        | INT_MAX *                  |
-|                              |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |    
-+------------------------------+--------+----------------------------+----------------------------+----------------------------+
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| Parameter Name                | Type   | Default Value              | Min                        | Max                        |
++===============================+========+============================+============================+============================+
+| adaptive_flush_control        | bool   | yes                        |                            |                            |
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| background_archiving          | bool   | yes                        |                            |                            |
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| checkpoint_every_size         | byte   | 10000 *                    | 10  *                      |                            |
+|                               |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| checkpoint_interval           | msec   | 6min                       | 1min                       | INT_MAX                    |
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| force_remove_log_archives     | bool   | yes                        |                            |                            |
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| log_buffer_size               | byte   | 128 *                      | 3 *                        | INT_MAX *                  |
+|                               |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| log_max_archives              | int    | INT_MAX                    | 0                          | INT_MAX                    |
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| max_flush_size_per_second     | byte   | 10000 *                    | 1 *                        | INT_MAX *                  |    
+|                               |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |    
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
+| sync_on_flush_size            | byte   | 200 *                      | 1 *                        | INT_MAX *                  |
+|                               |        | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  | :ref:`db_page_size <dpg>`  |    
++-------------------------------+--------+----------------------------+----------------------------+----------------------------+
 
 **adaptive_flush_control**
 
@@ -907,53 +919,55 @@ Statement/Type-Related Parameters
 
 The following are parameters related to SQL statements and data types supported by CUBRID. The type and value range for each parameter are as follows:
 
-+--------------------------------+----------+-------------------+----------------+----------------+
-| Parameter Name                 | Type     | Default Value     | Min            | Max            |
-+================================+==========+===================+================+================+
-| add_column_update_hard_default | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| alter_table_change_type_strict | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| ansi_quotes                    | bool     | yes               |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| block_ddl_statement            | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| block_nowhere_statement        | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| compat_numeric_division_scale  | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| default_week_format            | int      | 0                 |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| group_concat_max_len           | byte     | 1024              | 4              | 33554432       |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| intl_check_input_string        | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| intl_collation                 | string   |                   |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| intl_date_lang                 | string   |                   |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| intl_number_lang               | string   |                   |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| no_backslash_escapes           | bool     | yes               |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| only_full_group_by             | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| oracle_style_empty_string      | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| pipes_as_concat                | bool     | yes               |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| plus_as_concat                 | bool     | yes               |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| require_like_escape_character  | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| return_null_on_function_errors | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| string_max_size_bytes          | byte     | 1048576           | 64             | 33554432       |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| unicode_input_normalization    | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
-| unicode_output_normalization   | bool     | no                |                |                |
-+--------------------------------+----------+-------------------+----------------+----------------+
++---------------------------------+--------+---------+---------+----------+
+| Parameter Name                  | Type   | Default | Min     | Max      |
++=================================+========+=========+=========+==========+
+| add_column_update_hard_default  | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| alter_table_change_type_strict  | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| ansi_quotes                     | bool   | yes     |         |          |
++---------------------------------+--------+---------+---------+----------+
+| block_ddl_statement             | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| block_nowhere_statement         | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| compat_numeric_division_scale   | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| default_week_format             | int    | 0       |         |          |
++---------------------------------+--------+---------+---------+----------+
+| group_concat_max_len            | byte   | 1024    | 4       | INT_MAX  |
++---------------------------------+--------+---------+---------+----------+
+| intl_check_input_string         | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| intl_collation                  | string |         |         |          |
++---------------------------------+--------+---------+---------+----------+
+| intl_date_lang                  | string |         |         |          |
++---------------------------------+--------+---------+---------+----------+
+| intl_number_lang                | string |         |         |          |
++---------------------------------+--------+---------+---------+----------+
+| no_backslash_escapes            | bool   | yes     |         |          |
++---------------------------------+--------+---------+---------+----------+
+| only_full_group_by              | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| oracle_style_empty_string       | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| pipes_as_concat                 | bool   | yes     |         |          |
++---------------------------------+--------+---------+---------+----------+
+| plus_as_concat                  | bool   | yes     |         |          |
++---------------------------------+--------+---------+---------+----------+
+| require_like_escape_character   | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| return_null_on_function_errors  | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| string_max_size_bytes           | byte   | 1048576 | 64      | 33554432 |
++---------------------------------+--------+---------+---------+----------+
+| unicode_input_normalization     | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| unicode_output_normalization    | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
+| update_use_attribute_references | bool   | no      |         |          |
++---------------------------------+--------+---------+---------+----------+
 
 **add_column_update_hard_default**
 
@@ -1316,6 +1330,43 @@ The following are parameters related to SQL statements and data types supported 
 
     **unicode_output_normalization** is a parameter used to whether to output unicode stored in system level. The default value is **no**. For details, see the above **unicode_input_normalization** description.
 
+.. _update_use_attribute_references:
+
+[번역]
+    
+**update_use_attribute_references** 
+
+    **update_use_attribute_references**\는 **UPDATE** 문에서 갱신 대상 칼럼을 명시할 때 먼저 명시한 칼럼의 값이 질의문에서 해당 칼럼을 사용하는 또 다른 칼럼의 갱신에 영향을 줄 것인지 여부를 설정하는 파라미터로서, 기본값은 **no**\ 이다. 
+      
+    아래의 UPDATE 문 결과는 **update_use_attribute_references** 파라미터의 값에 따라 달라진다. 
+      
+    .. code-block:: sql 
+
+        CREATE TABLE tbl(a INT, b INT); 
+        INSERT INTO tbl values (10, NULL); 
+
+        UPDATE tbl SET a=1, b=a; 
+          
+    이 파라미터의 값이 yes이면, 위의 UPDATE 질의에서 갱신되는 b의 값은 "a=1"의 영향을 받아 1이 된다. 
+
+    .. code-block:: sql 
+      
+        SELECT * FROM tbl; 
+
+    :: 
+      
+        1, 1 
+          
+    이 파라미터의 값이 no이면, 위의 UPDATE 질의에서 갱신되는 b의 값은 "a=1"의 영향을 받지 않고 해당 레코드에 저장되어 있는 a 값의 영향을 받아 NULL이 된다. 
+
+    .. code-block:: sql 
+      
+        SELECT * FROM tbl; 
+          
+    :: 
+      
+        1, NULL
+        
 .. _plan-cache-parameters:
 
 Query Plan Cache-Related Parameters
@@ -1565,7 +1616,8 @@ cubrid_broker.conf Configuration File and Default Parameters
     |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
     |                                 | Logging                 | ADMIN_LOG_FILE                  | string | log/broker/cubrid_broker.log |           |
     |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-    |                                 | Broker(cub_broker)      | MASTER_SHM_ID                   | int    | 30001                        |           |
+    |                                 | Broker server           | MASTER_SHM_ID                   | int    | 30001                        |           |
+    |                                 | (cub_broker)            |                                 |        |                              |           |
     +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
     | :ref:`parameter-by-broker`      | Access                  | ACCESS_LIST                     | string |                              |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -1582,6 +1634,10 @@ cubrid_broker.conf Configuration File and Default Parameters
     |                                 |                         | KEEP_CONNECTION                 | string | AUTO                         | available |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | PREFERRED_HOSTS                 | string |                              |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | RECONNECT_TIME                  | sec    | 600                          | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | REPLICA_ONLY                    | string | OFF                          |           |
     |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
     |                                 | Broker App. Server(CAS) | APPL_SERVER                     | string | CAS                          |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -1653,9 +1709,11 @@ cubrid_broker.conf Configuration File and Default Parameters
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | SHARD_MAX_CLIENTS               | int    | 256                          |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
-    |                                 |                         | SHARD_MAX_PREPARED_STMT_COUNT   | int    | 2000                         |           |
+    |                                 |                         | SHARD_MAX_PREPARED_STMT_COUNT   | int    | 10000                        |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | SHARD_NUM_PROXY                 | int    | 1                            |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | SHARD_PROXY_CONN_WAIT_TIMEOUT   | sec    | 8h                           |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | SHARD_PROXY_LOG                 | string | ERROR                        | available |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -1739,8 +1797,8 @@ Logging
 
     **ADMIN_LOG_FILE** is a parameter to configure the file in which time of running CUBRID broker is stored. The default value is a **log/broker/cubrid_broker.log** file.
 
-Broker(cub_broker)
-^^^^^^^^^^^^^^^^^^
+Broker Server(cub_broker)
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **MASTER_SHM_ID**
 
@@ -1791,12 +1849,50 @@ Access
 
     **PREFERRED_HOSTS** is a parameter to specify the order of a host to which a CAS tries to connect in a first priority. If the connection is failed after trying connection in the order specified in **PREFERRED_HOSTS**, a CAS tries to connect to the one of hosts specified in **$CUBRID_DATABASES/databases.txt**. The default value is **NULL**. For details, see :ref:`ha-cubrid-broker-conf`.
 
+.. _reconnect_time:
+    
+[번역]
+    
+**RECONNECT_TIME** 
+  
+    특정 상황에서 **RECONNECT_TIME**\으로 명시한 시간이 경과하면 CAS가 서버에 재연결을 시도한다. 기본값은 600s이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
+  
+    CAS가 서버에 재연결을 시도하는 특정 상황은 다음과 같다. 
+     
+    *   **PREFERRED_HOSTS**\가 아닌 다른 호스트에 연결한 경우 
+    *   RO 브로커인데 active 서버에 연결한 경우 
+     
+    **RECONNECT_TIME** 값이 0이면 재연결을 시도하지 않는다. 
+    
+.. _replica_only: 
+
+**REPLICA_ONLY**
+  
+    **REPLICA_ONLY**\의 값이 **ON**\이면 레플리카에만 접속된다. 기본값은 **OFF**\이다. **REPLICA_ONLY**\의 값이 **ON**\이더라도 **ACCESS_MODE**\의 값이 **RW**\이면 레플리카 DB에도 쓰기 작업을 수행할 수 있다.
+
 Broker App. Server(CAS)
 ^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _appl_server:
 
 **APPL_SERVER**
 
     **APPL_SERVER** is a parameter to configure types of CAS generated and managed by the CUBRID broker. The default value is **CAS**.
+
+[번역]
+    
+    SHARD 환경에서 shard DB를 CUBRID가 아닌 다른 DB로 변경하고자 할 때 사용하며, 이 값이 **CAS**\이면 CUBRID를 사용한다.
+    SHARD 환경에서 shard DB로 MySQL을 사용하고자 한다면 아래의 값 중 하나를 설정한다. 
+      
+    ====================== ==================================== 
+    APPL_SERVER 설정 값    설명 
+    ====================== ==================================== 
+    CAS_MYSQL	           MySQL C Connector 6.1 버전을 사용 
+    CAS_MYSQL51	           MySQL C Connector 5.1 버전을 사용 
+    CAS_MYSQL61	           MySQL C Connector 6.1 버전을 사용 
+    ====================== ==================================== 
+      
+    설정값에 따라 해당 버전의 MySQL 라이브러리를 반드시 설치해야 하며, MySQL 라이브러리는 MySQL 홈페이지(http://dev.mysql.com/downloads/connector/c)에서 다운받을 수 있다. 
 
 **APPL_SERVER_MAX_SIZE**
 
@@ -1866,10 +1962,14 @@ Broker App. Server(CAS)
 Transaction & Query
 ^^^^^^^^^^^^^^^^^^^
 
+.. _cci_default_autocommit:
+
 **CCI_DEFAULT_AUTOCOMMIT**
 
-    **CCI_DEFAULT_AUTOCOMMIT** is a parameter to configure whether to make application implemented in CCI interface or CCI-based interface such as PHP, ODBC, OLE DB, Perl, Python, and Ruby commit automatically. The default value is **ON**. This parameter does not affect applications implemented in JDBC. In case of using ODBC, malfunction can occur if this parameter is **ON**; you must set it to **OFF**, in this case.
-
+    **CCI_DEFAULT_AUTOCOMMIT** is a parameter to configure whether to make application implemented in CCI interface or CCI-based interface such as PHP, ODBC, OLE DB, Perl, Python, and Ruby commit automatically. The default value is **ON**. This parameter does not affect applications implemented in JDBC.
+    
+    .. warning:: In case of using ODBC, malfunction can occur if this parameter is **ON**; you must set it to **OFF**, in this case.
+    
     If the **CCI_DEFAULT_AUTOCOMMIT** parameter value is **OFF**, the broker application server (CAS) process is occupied until the transaction is terminated. Therefore, it is recommended to execute commit after completing fetch when executing the **SELECT** statement.
 
     .. note::
@@ -1931,7 +2031,7 @@ Logging
 
 **LOG_BACKUP**
 
-    **LOG_BACKUP** is a parameter to configure whether to back up access and error log files of the broker when CUBRID stops. The default value is set to **OFF**. An access log file (*broker_name.access*) in the **$CUBRID/log/broker** directory is deleted when CUBRID stops. If the value is set to **ON**, an access log file is stored (backed up) as *broker_name.access.YYYYMMDD.HHMI* when CUBRID stops.
+    **LOG_BACKUP** is a parameter to configure whether to back up access and error log files of the broker when CUBRID stops. The default value is set to **OFF**. An access log file (*broker_name*\ **.access**) in the **$CUBRID/log/broker** directory is deleted when CUBRID stops. If the value is set to **ON**, an access log file is stored (backed up) as *broker_name.access.YYYYMMDD.HHMI* when CUBRID stops.
 
 **LOG_DIR**
 
@@ -1990,9 +2090,13 @@ To use SHARD feature, configure the below parameters in **cubrid_broker.conf** a
 
         export SHARD1_SHARD_DB_PASSWORD=shard123
 
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD parameters is deprecated. Therefore, it is recommended to deliver the connection information in an application.
+        
 **SHARD_DB_USER**
 
     The name of the backend shard DB user, used to connect to the backend DBMS for the CAS process as well as to verify the request for connection from an application. User names on all shard DBs should be identical.
+
+    .. note:: SHARD_DB_USER/SHARD_DB_PASSWORD parameters is deprecated. Therefore, it is recommended to deliver the connection information in an application.
 
 **SHARD_IGNORE_HINT**
 
@@ -2018,15 +2122,21 @@ To use SHARD feature, configure the below parameters in **cubrid_broker.conf** a
 
     The number of applications that can be concurrently connected by using the proxy. The default value is 256 and the maximum value is 10,000 per proxy.
     
-.. _proxy-max-prepared-stmt-count:
+.. _shard-proxy-max-prepared-stmt-count:
 
 **SHARD_MAX_PREPARED_STMT_COUNT**
 
-    The maximum size of statement pool managed by proxy
+    The maximum size of statement pool managed by proxy. The default is 10,000.
     
 **SHARD_NUM_PROXY**
 
     The number of proxy processes.
+
+**SHARD_PROXY_CONN_WAIT_TIMEOUT**
+
+    [번역]
+    이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊는다. 기본값은 8h이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
+    이전 비밀번호 정보를 지닌 CAS는 더 이상 사용할 수 없으므로 종료되어야 되는데, 이 기능은 이러한 CAS가 불필요하게 계속 유지되는 것을 방지한다. 
 
 **SHARD_PROXY_LOG**
 
@@ -2056,8 +2166,7 @@ To use SHARD feature, configure the below parameters in **cubrid_broker.conf** a
     
 **SHARD_PROXY_TIMEOUT**
 
-    The maximum waiting time by which the statement is prepared or CAS is available to use. The default value is 30(seconds). If this value is 0, the waiting time is decided by the value of the query_timeout system parameter; if the value of query_timeout is also 0, the waiting time is infinite. IF the value SHARD_PROXY_TIMEOUT is larger than 0, the maximum value between query_timeout and PROXY_TIMEOUT decides the waiting time. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, s will be applied.
-    
+    The maximum waiting time by which the statement is prepared or CAS is available to use. The default value is 30(seconds). If this value is 0, the waiting time is decided by the value of the query_timeout system parameter; if the value of query_timeout is also 0, the waiting time is infinite. IF the value SHARD_PROXY_TIMEOUT is larger than 0, the maximum value between query_timeout and SHARD_PROXY_TIMEOUT decides the waiting time. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, s will be applied.
 
 .. note:: Required parameters for configuring proxy
 
@@ -2067,10 +2176,6 @@ To use SHARD feature, configure the below parameters in **cubrid_broker.conf** a
 
         *   "((SHARD_MAX_CLIENTS + MAX_NUM_APPL_SERVER) / SHARD_NUM_PROXY) + 256" <= 10000
         
-    *   In Windows, the number of sockets per proxy process is limited as follows.
-
-        *   "((SHARD_MAX_CLIENTS + MAX_NUM_APPL_SERVER) / SHARD_NUM_PROXY) + 128" <= 1024
-     
     The following are detail descriptions on above formulas.
      
     *   SHARD_MAX_CLIENTS is the maximum number of applications which access the SHARD system.
@@ -2078,12 +2183,9 @@ To use SHARD feature, configure the below parameters in **cubrid_broker.conf** a
     *   SHARD_NUM_PROXY is the maximum number of proxy processes which can use on the SHARD system.
     *   "SHARD_MAX_CLIENTS / SHARD_NUM_PROXY" is the maximum number of applications which can access per proxy process.
     *   "MAX_NUM_APPL_SERVER / SHARD_NUM_PROXY" is the maximum number of CASes which can access per proxy process.
-    *   256 is the number of file descriptors which are used internally per process on Linux, and 128 is the number of sockets which are used internally per process on Windows.
+    *   256 is the number of file descriptors which are used internally per process on Linux.
 
     As an example of configuring SHARD parameters in Linux system, if you specify the maximum concurrent access number of applications (SHARD_MAX_CLIENTS) as 5000, the maximum number of CASes(MAX_NUM_APPL_SERVER) as 200 and the maximum number of proxy process(SHARD_NUM_PROXY) as 1, then file descriptors per proxy process becomes (5000 + 200)/1 + 256 = 5456, and it is less than 10000; it is possible configuration.
-     
-    If you configure as above in Windows system, then sockets per proxy process becomes (5000 + 200)/1 + 128 = 5328, and it is larger than 1024; it is impossible configuration. To make it possible, you should specify the value of SHARD_NUM_PROXY larger.
-    If you specify the value of SHARD_NUM_PROXY as 6, then sockets per proxy process becomes (5000 + 200)/6 + 128 = 995, and it is smaller than 1024; it is possible configuration.
      
     Regarding above, the following is the connection-relationship between each process. "proxy" intermediates a connection between "app. client" and "CAS".
 

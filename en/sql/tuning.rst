@@ -5,19 +5,34 @@ Query Optimization
 Updating Statistics
 ===================
 
-With the **UPDATE STATISTICS ON** statement, you can generate internal statistics used by the query processor. Such statistics allow the database system to perform query optimization more efficiently. ::
+With the **UPDATE STATISTICS ON** statement, you can generate internal statistics used by the query processor. Such statistics allow the database system to perform query optimization more efficiently. 
 
-    UPDATE STATISTICS ON { table_spec [ {, table_spec } ] | ALL CLASSES | CATALOG CLASSES } [ ; ]
-    
-    table_spec ::=
-    single_table_spec
-    | ( single_table_spec [ {, single_table_spec } ] )
-    
-    single_table_spec ::=
-    [ ONLY ] table_name
-    | ALL table_name [ ( EXCEPT table_name ) ]
+::
 
+    UPDATE STATISTCIS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
+     
+    UPDATE STATISTCIS ON ALL CLASSES [WITH FULLSCAN]; 
+  
+    UPDATE STATISTCIS ON CATALOG CLASSES [WITH FULLSCAN]; 
+
+*   **WITH FULLSCAN**: [번역]  지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다.
 *   **ALL CLASSES** : If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
+*   **CATALOG CLASSES**: 카탈로그 테이블에 대한 통계 정보를 업데이트한다. 
+
+.. code-block:: sql 
+  
+    CREATE TABLE foo (a INT, b INT); 
+    CREATE INDEX idx1 ON foo (a); 
+    CREATE INDEX idx2 ON foo (b); 
+  
+    UPDATE STATISTICS ON foo; 
+    UPDATE STATISTICS ON foo WITH FULLSCAN; 
+  
+    UPDATE STATISTICS ON ALL CLASSES; 
+    UPDATE STATISTICS ON ALL CLASSES WITH FULLSCAN; 
+  
+    UPDATE STATISTICS ON CATALOG CLASSES; 
+    UPDATE STATISTICS ON CATALOG CLASSES WITH FULLSCAN; 
 
 When starting and ending an update of statistics information, NOTIFICATION message is written on the server error log. You can check the updating term of statistics information by these two messages.
 
@@ -28,10 +43,6 @@ When starting and ending an update of statistics information, NOTIFICATION messa
 
     Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
     Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
-
-.. note::
-
-    In 2008 R4.3 or before and in 9.1, statistics information of all indexes was updated when an index was added, and it brought a high system load. However, from 2008 R4.4 and 9.2, only statistics information of an added index is created.
 
 Checking Statistics Information
 ===============================
@@ -1502,7 +1513,7 @@ Row sorting by **GROUP BY** is not required, because you can get the result as t
 
 If the index consisting of the **GROUP BY** column and the first column of the index is **NOT NULL**, even though there is no **WHERE** clause, the **GROUP BY** optimization will be applied.
 
-**GROUP BY** optimization is applied only when **MIN** () or **MAX** () are used in an aggregate function, and to use the two aggregate functions together, an identical column must be used.
+[번역] 집계 함수 사용 시에도 **GROUP BY** 칼럼으로 구성된 인덱스가 있으면 **GROUP BY** 최적화가 적용된다. 
 
 .. code-block:: sql
 
@@ -1583,6 +1594,69 @@ The following example shows that an index consisting of tab(j,k) is used and no 
                 3            5            4
                 1            5            5
                 2            6            6
+
+
+.. code-block:: sql
+
+    CREATE TABLE tab (k1 int, k2 int, k3 int, v double);
+    INSERT INTO tab
+        SELECT
+            RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 5,
+            RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 10,
+            RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 100000,
+            RAND(CAST(UNIX_TIMESTAMP() AS INT)) MOD 100000
+        FROM db_class a, db_class b, db_class c, db_class d LIMIT 20000;
+    CREATE INDEX idx ON tab(k1, k2, k3);
+
+[번역]
+
+위의 테이블과 인덱스를 생성했을 때 다음의 예는 k1, k2 칼럼으로 **GROUP BY**\를 수행하며 k3로 집계 함수를 수행하므로 tab(k1, k2, k3)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다. 또한 **SELECT** 리스트에 있는 k1, k2, k3 칼럼이 모두 tab(k1, k2, k3)로 구성된 인덱스 내에 존재하므로 커버링 인덱스가 적용된다.
+    
+.. code-block:: sql
+
+    SELECT /*+ recompile */ k1, k2, SUM(DISTINCT k3)
+    FROM tab 
+    WHERE k2 > -1 GROUP BY k1, k2;
+
+::
+
+    Query plan:
+
+    iscan
+        class: tab node[0]
+        index: idx term[0] (covers) (index skip scan)
+        sort:  1 asc, 2 asc
+        cost:  85 card 2000
+
+    Query stmt:
+
+    select tab.k1, tab.k2, sum(distinct tab.k3) from tab tab where (tab.k2> ?:0 ) group by tab.k1, tab.k2
+
+    /* ---> skip GROUP BY */
+
+다음의 예는 k1, k2 칼럼으로 **GROUP BY**\를 수행하므로 tab(k1, k2, k3)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다. 하지만 **SELECT** 리스트에 있는 v 칼럼은 tab(k1, k2, k3)로 구성된 인덱스 내에 존재하지 않으므로 커버링 인덱스가 적용되지 않는다.
+    
+.. code-block:: sql
+    
+    SELECT /*+ recompile */ k1, k2, stddev_samp(v)  
+    FROM tab 
+    WHERE k2 > -1 GROUP BY k1, k2
+
+::
+
+    Query plan:
+
+    iscan
+        class: tab node[0]
+        index: idx term[0] (index skip scan)
+        sort:  1 asc, 2 asc
+        cost:  85 card 2000
+
+    Query stmt:
+
+    select tab.k1, tab.k2, stddev_samp(tab.v) from tab tab where (tab.k2> ?:0 ) group by tab.k1, tab.k2
+
+    /* ---> skip GROUP BY */
 
 .. _multi-key-range-opt:
 

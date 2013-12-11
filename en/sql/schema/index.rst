@@ -11,12 +11,11 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
 
 ::
 
-    CREATE [ UNIQUE ] INDEX index_name
-    ON table_name <index_col_desc>
+    CREATE [ UNIQUE ] INDEX index_name ON table_name <index_col_desc> ;
      
-    <index_col_desc> ::=
-        ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
-        | (function_name (argument_list) )
+        <index_col_desc> ::=
+            ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
+            | (function_name (argument_list) )
 
 *   **UNIQUE**: Creates an index with unique values.
 *   *index_name*: Specifies the name of the index to be created. The index name must be unique in the table.
@@ -52,18 +51,13 @@ The following example shows how to create a prefix index. In this example, 1-byt
 ALTER INDEX
 ===========
 
-The **ALTER INDEX** statement rebuilds an index or renames an index name. Rebuilding an index is a job which drops and recreates an index. If column names are added at the end of a table name, a new index is recreated with the table and column names. 
+The **ALTER INDEX** statement rebuilds an index or renames an index name. Rebuilding an index is a job which drops and recreates an index.
 
 The following is a syntax of rebuilding an index.
 
 ::
 
-    ALTER [ UNIQUE ] INDEX index_name
-    ON table_name [<index_col_desc>] REBUILD
-    
-    <index_col_desc> ::=
-        ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
-        | (function_name (argument_list) )
+    ALTER [ UNIQUE ] INDEX index_name ON table_name REBUILD ;
      
 *   **UNIQUE**: Specifies that an index to be recreated is an unique index.
 *   *index_name*: Specifies the name of the index to be recreated. The index name must be unique in the table.
@@ -74,7 +68,13 @@ The following is a syntax of rebuilding an index.
 *   <*filter_predicate*>: Defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**.
 *   *function_name* (*argument_list*): Defines the conditions to create function-based indexes.
 
-.. warning:: From the CUBRID 10.0 version, table name should not be omitted.
+.. warning:: 
+
+    From CUBRID 10.0, table name should not be omitted.
+
+.. note:: 
+
+    From CUBRID 10.0, even if you add column names at the end of a table name, these will be ignored and recreated with the same columns with the previous index.
 
 The following is an example of re-creating indexes in various ways:
 
@@ -102,12 +102,12 @@ The following is an example of changing an index name:
 DROP INDEX
 ==========
 
-Use the **DROP INDEX** statement to drop an index. ::
+Use the **DROP INDEX** statement to drop an index. An index also can be dropped with **DROP CONSTRAINT** clause.
 
-    DROP [ UNIQUE ] INDEX index_name
-    ON table_name
+::
 
-*   **UNIQUE**: Specifies that the index to be dropped is a unique index. This also can be dropped with **DROP CONSTRAINT** clause.
+    DROP [ UNIQUE ] INDEX index_name ON table_name ;
+
 *   *index_name*: Specifies the name of the index to be dropped.
 *   *table_name*: Specifies the name of the table whose index is dropped.
 

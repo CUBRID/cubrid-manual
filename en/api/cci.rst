@@ -46,7 +46,7 @@ General process for writing applications is as follows. For using the prepared s
 *   Processing the execution result (related functions: :c:func:`cci_cursor`, :c:func:`cci_fetch`, :c:func:`cci_get_data`, :c:func:`cci_get_result_info`)
 *   Closing the request handle (related function: :c:func:`cci_close_req_handle`)
 *   Closing the database connection handle (related function: :c:func:`cci_disconnect`)
-*   Using database connection pool (related functions: :c:func:`cci_property_create`), :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`)
+*   Using database connection pool (related functions: :c:func:`cci_property_create`, :c:func:`cci_property_destroy`, :c:func:`cci_property_set`, :c:func:`cci_datasource_create`, :c:func:`cci_datasource_destroy`, :c:func:`cci_datasource_borrow`, :c:func:`cci_datasource_release`, :c:func:`cci_datasource_change_property`)
 
 .. note::
 
@@ -643,7 +643,7 @@ CCI API functions return a negative number as CCI or CAS (broker application ser
 *   All error codes and error messages of functions which have "T_CCI_ERROR err_buf" as a parameter can be found on err_buf.err_code and err_buf.err_msg.
 *   All error messages of functions which have no "T_CCI_ERROR err_buf" as a parameter can output by using :c:func:`cci_get_err_msg`.
 *   If the value of error code is between -20002 and -20999, it is caused by CCI API functions.
-*   If the value of error code is between -10000 and -10999, it is caused by CAS and transferred by CCI API functions. For CAS errors, see :ref:`broker-error`. 
+*   If the value of error code is between -10000 and -10999, it is caused by CAS and transferred by CCI API functions. For CAS errors, see :ref:`cas-error`. 
 *   If the value of error code is **CCI_ER_DBMS** (-20001), it is caused by database server. You can check server error codes in err_buf.err_code of the database error buffer (err_buf). For database server errors, see :ref:`database-server-error`.
 
 .. warning::
@@ -703,7 +703,7 @@ and the error message, 'Syntax: Unknown class "notable". select * from notable'Â
         // ...
     }
 
-The following list shows CCI error codes. For CAS errors, see :ref:`broker-error`.
+The following list shows CCI error codes. For CAS errors, see :ref:`cas-error`.
 
 +------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | Error Code                               | Error Message                                                 | Note                                                                                                    |

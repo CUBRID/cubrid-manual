@@ -149,7 +149,7 @@ Parameter configuration
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
 
-For more details, see :ref:`changed-config92`.
+For more details, see :ref:`changed-config100`.
 
 .. _up-from-41:
 
@@ -277,7 +277,7 @@ Parameter configuration
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
 
-For more details, see :ref:`changed-config92`.
+For more details, see :ref:`changed-config100`.
 
 .. _up-from-40:
 
@@ -343,7 +343,7 @@ Parameter configuration
         
         For charset, locale and collation setting, see :doc:`/sql/i18n`.
     
-For more details, see :ref:`changed-config92`.
+For more details, see :ref:`changed-config100`.
 
 .. _ha-db-migration:
 

@@ -569,7 +569,9 @@ cubrid_broker.conf
 
 The **cubrid_broker.conf** file is used for setting the CUBRID SHARD feature. Refer **cubrid_broker.conf.shard** when configuring **cubrid_broker.conf**. For details of **cubrid_broker.conf**, see :ref:`broker-configuration`.
 
-In addition to **cubrid_broker.conf**, the CUBRID SHARD has configuration files for shard key and for connecting with the shard DB.
+[번역] **대상 shard DB 설정** 
+  
+**APPL_SERVER** 파라미터에 의해 대상 shard DB를 설정할 수 있다. CUBRID를 사용하는 경우는 별도의 설정이 필요없지만, MySQL을 사용하고자 하는 경우 이 값을 반드시 설정해야 한다. 설정 방법은 :ref:`APPL_SERVER <appl_server>`\ 를 참고한다. 
 
 .. _shard-connection-file:
 
@@ -843,6 +845,13 @@ The CUBRID SHARD can hash the shard key by using the user-defined hash function,
         SHARD_KEY_LIBRARY_NAME =$CUBRID/conf/shard_key_udf.so
         SHARD_KEY_FUNCTION_NAME =fn_shard_key_udf
 
+[번역]
+        
+    .. note:: 
+    
+        *   응용 프로그램에서 사용자 해시 함수를 정의할 때 shard key의 입력 값으로 16bit(short), 32bit(int), 64bit(INT64) integer를 사용할 수 있다.
+        *   VARCHAR를 사용해야 되는 경우 사용자가 해시 함수를 정의해야 한다. 
+
 .. _shard-start-monitoring:
 
 Running and Monitoring
@@ -850,6 +859,13 @@ Running and Monitoring
 
 By using the CUBRID SHARD utility, CUBRID SHARD function can be started or stopped and various status information can be retrieved.
 For more details, see :ref:`broker`.
+
+[번역]
+
+설정 테스트 
+=========== 
+
+cubrid broker test 명령을 이용하여 설정이 정상 동작하는지 테스트할 수 있다. 보다 자세한 내용은 :ref:`broker-test`\ 를 참고한다. 
 
 .. _shard-logs:
 

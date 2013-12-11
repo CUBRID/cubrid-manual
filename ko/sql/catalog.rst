@@ -278,7 +278,7 @@ _db_charset
 =================== ======================== ========================
 charset_id          INTEGER                  문자셋 ID
 charset_name        CHARACTER VARYING(32)    문자셋 이름
-default_collation   INTEGER                  기본 문자셋 ID
+default_collation   INTEGER                  기본 콜레이션 ID
 char_size           INTEGER                  한 문자의 바이트 크기
 =================== ======================== ========================
 
@@ -995,7 +995,7 @@ DB_VCLASS
 | vclass_def  | VARCHAR 4096) | 가상 클래스의 SQL 정의문 |
 +-------------+---------------+--------------------------+
 
-다음 예제에서는 가상 클래스 *db_vclass* 의 SQL 정의문을 검색한다.
+다음 예제에서는 가상 클래스 *db_class* 의 SQL 정의문을 검색한다.
 
 .. code-block:: sql
 
@@ -1167,7 +1167,7 @@ DB_CHARSET
 =================== ======================== ========================
 charset_id          INTEGER                  문자셋 ID
 charset_name        CHARACTER VARYING(32)    문자셋 이름
-default_collation   CHARACTER VARYING(32)    기본 문자셋 이름
+default_collation   CHARACTER VARYING(32)    기본 콜레이션 이름
 char_size           INTEGER                  한 문자의 바이트 크기
 =================== ======================== ========================
     

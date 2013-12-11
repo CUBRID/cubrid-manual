@@ -23,7 +23,7 @@ CUBRID is an object-relational database management system (DBMS) consisting of t
 
 *   The CUBRID Manager is a GUI tool that allows users to remotely manage the database and the broker. It also provides the Query Editor, a convenient tool that allows users to execute SQL queries on the database server. For more information about CUBRID Manager, see `http://www.cubrid.org/wiki_tools/entry/cubrid-manager <http://www.cubrid.org/wiki_tools/entry/cubrid-manager>`_ .
 
-.. note:: 
+.. note::
 
     CUBRID Query Browser is a light version of CUBRID Manager and provides only the features which application developers require: the database management and query editor features. For more details on CUBRID Query Browser, see http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser .
 

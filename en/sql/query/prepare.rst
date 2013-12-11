@@ -20,7 +20,7 @@ In general, the prepared statement is executed through the interface functions o
 
     *   In SQL level, PREPARE statement is recommended to use only in CSQL interpreter. If it is used in the application program, it is not guaranteed to work normally.
     *   In SQL level, the number of PREPARE statements is limited to 20 per DB connection. It is limited to protect abusing DB server memory, because PREPARE statement in SQL level uses the memory of DB server.
-    *   In the interface function, the number of prepared statements is limited to :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` of broker parameter per DB connection.  If you use CUBRID SHARD, the number of prepared statements is limited to :ref:`PROXY_MAX_PREPARED_STMT_COUNT <proxy-max-prepared-stmt-count>` of shard parameter per shard proxy.
+    *   In the interface function, the number of prepared statements is limited to :ref:`MAX_PREPARED_STMT_COUNT <max-prepared-stmt-count>` of broker parameter per DB connection. If you use CUBRID SHARD, the number of prepared statements per shard proxy is limited to :ref:`SHARD_MAX_PREPARED_STMT_COUNT <shard-max-prepared-stmt-count>`, shard parameter.
 
 PREPARE Statement
 =================

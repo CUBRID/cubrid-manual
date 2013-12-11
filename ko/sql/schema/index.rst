@@ -53,18 +53,14 @@ CREATE INDEX
 ALTER INDEX
 ===========
 
-**ALTER INDEX** 문을 사용하여 인덱스를 재생성하거나 인덱스 이름을 변경한다. 인덱스 재성성은 인덱스를 제거하고 재생성하는 작업이다. 테이블 이름 뒤에 칼럼 이름이 추가되면 해당 칼럼 이름으로 인덱스를 재생성한다.
+**ALTER INDEX** 문을 사용하여 인덱스를 재생성하거나 인덱스 이름을 변경한다. 인덱스 재성성은 인덱스를 제거하고 재생성하는 작업이다. 
 
 다음은 인덱스를 재생성하는 구문이다.
 
 ::
 
-    ALTER [ UNIQUE ] INDEX index_name ON table_name [<index_col_desc>] REBUILD ;
+    ALTER [ UNIQUE ] INDEX index_name ON table_name REBUILD ;
      
-    <index_col_desc> ::=
-        ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
-        | (function_name (argument_list) )
-
 *   **UNIQUE**: 재생성하려는 인덱스가 고유 인덱스임을 지정한다.
 *   *index_name*: 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 *   *table_name*: 인덱스를 재생성할 테이블의 이름을 명시한다.
@@ -78,6 +74,10 @@ ALTER INDEX
 
     CUBRID 10.0 버전부터는 테이블 이름을 생략할 수 없다.
 
+.. note::
+
+    CUBRID 10.0 버전부터는 테이블 이름 뒤에 칼럼 이름을 추가하더라도 이는 무시되며, 이전 인덱스와 동일한 칼럼으로 재생성된다.
+    
 다음은 인덱스를 재생성하는 여러 가지 방법을 보여주는 예제이다.
 
 .. code-block:: sql
@@ -91,7 +91,7 @@ ALTER INDEX
 
 :: 
 
-    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name 
+    ALTER INDEX old_index_name ON table_name RENAME TO new_index_name ;
      
 ALTER INDEX 문이 아닌 :ref:`rename-index`\ 을 이용해서도 인덱스 이름을 바꿀 수도 있다. 
 

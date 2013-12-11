@@ -524,7 +524,6 @@ SYS_CONNECT_BY_PATH
     START WITH ParentID IS NULL
     CONNECT BY NOCYCLE ParentID=PRIOR ID;
 
-
 다음은 계층 질의를 사용하여 2013년 3월(201303)의 날짜들을 출력하는 예제이다.
 
 .. code-block:: sql

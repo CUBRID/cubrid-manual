@@ -2,7 +2,7 @@
 
 #########################
 CUBRID 10.0 사용자 매뉴얼
-######################%##
+#########################
 
 .. **Topic Quick Reference Table**
 
@@ -22,7 +22,7 @@ CUBRID 10.0 사용자 매뉴얼
 | :doc:`/sql/index`              | :doc:`/admin/admin_utils`       | :doc:`/sql/tuning`              | :ref:`DDL 제한                  | :doc:`/api/pdo`                 | :ref:`database-server-error`    |                                 |
 |                                |                                 |                                 | <block_ddl_statement>`          |                                 |                                 |                                 |
 +--------------------------------+---------------------------------+---------------------------------+---------------------------------+---------------------------------+---------------------------------+---------------------------------+
-|                                | :ref:`db-create-add-delete`     | :doc:`/sql/partition`           | :ref:`WHERE 조건 없는 DML 제한  | :doc:`/api/odbc`                | :ref:`broker-error`             |                                 |
+|                                | :ref:`db-create-add-delete`     | :doc:`/sql/partition`           | :ref:`WHERE 조건 없는 DML 제한  | :doc:`/api/odbc`                | :ref:`cas-error`                |                                 |
 |                                |                                 |                                 | <block_nowhere_statement>`      |                                 |                                 |                                 |
 +--------------------------------+---------------------------------+---------------------------------+---------------------------------+---------------------------------+---------------------------------+---------------------------------+
 |                                | :ref:`db-backup`                | :ref:`cursor-holding`           |                                 | :doc:`/api/adodotnet`           | :ref:`ha-error`                 |                                 |

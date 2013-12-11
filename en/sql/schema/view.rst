@@ -86,8 +86,12 @@ A virtual table is updatable if it satisfies the following conditions:
 
 *   The **FROM** clause must include the updatable table or view only.
 
-    In version lower than CUBRID 9.0, only one updatable table can be included to the **FROM** clause it requires. However, two tables in parentheses like FROM (class_x, class_y) can be updated since the two were expressed as one table. In version of CUBRID 9.0 or higher, more than one updatable table is allowed. The **FROM** clause must include only one table or updatable view. However, two tables included in parentheses as in **FROM** (class_x, class_y) can be updated because they represent one table.
+    In versions lower than CUBRID 9.0, only one updatable table can be included to the **FROM** clause it requires. However, two tables in parentheses like FROM (class_x, class_y) can be updated since the two were expressed as one table. In version of CUBRID 9.0 or higher, more than one updatable table is allowed. The **FROM** clause must include only one table or updatable view. However, two tables included in parentheses as in **FROM** (class_x, class_y) can be updated because they represent one table.
 
+*   You can update a view which is created with a **JOIN** syntax.
+
+    .. note:: In versions lower than CUBRID 10.0, you cannot update a view which is created with a **JOIN** syntax.
+    
 *   The **DISTINCT** or **UNIQUE** statement should not be included.
 *   The **GROUP BY... HAVING** statement should not be included.
 *   Aggregate functions such as **SUM** or **AVG** should not be included.

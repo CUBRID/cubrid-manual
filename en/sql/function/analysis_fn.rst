@@ -642,7 +642,9 @@ To use the **GROUP_CONCAT** function, you must meet the following conditions.
       group_concat(s_name)
     ======================
       'X,W,M,B,S,G'
-     
+
+.. code-block:: sql
+      
     SELECT GROUP_CONCAT(s_name ORDER BY s_name SEPARATOR ':') FROM code;
     
 ::
@@ -651,6 +653,8 @@ To use the **GROUP_CONCAT** function, you must meet the following conditions.
     ======================
       'B:G:M:S:W:X'
      
+.. code-block:: sql
+
     CREATE TABLE t(i int);
     INSERT INTO t VALUES (4),(2),(3),(6),(1),(5);
      

@@ -12,14 +12,14 @@ To create a table, use the **CREATE TABLE** statement.
 
 ::
 
-    CREATE {TABLE | CLASS} table_name
+    CREATE {TABLE | CLASS} [IF NOT EXISTS] table_name
     [<subclass_definition>]
     [(<column_definition>, ... [, <table_constraint>, ...])] 
     [AUTO_INCREMENT = initial_value]
     [CLASS ATTRIBUTE (<column_definition>, ...)]
     [INHERIT <resolution>, ...]
     [REUSE_OID]
-    [CHARSET charset_name] [COLLATE collation_name];
+    [CHARSET charset_name] [COLLATE collation_name] ;
 
         <subclass_definition> ::= {UNDER | AS SUBCLASS OF} table_name, ...
         
@@ -70,6 +70,7 @@ To create a table, use the **CREATE TABLE** statement.
      
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
+*   IF NOT EXISTS: If an identically named table already exists, a new table will not be created without an error.
 *   *table_name* : Specifies the name of the table to be created (maximum: 254 bytes).
 *   *column_name* : Specifies the name of the column to be created (maximum: 254 bytes).
 *   *column_type* : Specifies the data type of the column.
@@ -230,7 +231,7 @@ You can change the initial value of **AUTO_INCREMENT** by using the **ALTER TABL
 
     CREATE TABLE table_name (id INT AUTO_INCREMENT[(seed, increment)]);
 
-    CREATE TABLE table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed;
+    CREATE TABLE table_name (id INT AUTO_INCREMENT) AUTO_INCREMENT = seed ;
 
 *   *seed* : The initial value from which the number starts. All integers (positive, negative, and zero) are allowed. The default value is **1**.
 *   *increment* : The increment value of each row. Only positive integers are allowed. The default value is **1**.
@@ -1456,7 +1457,7 @@ RENAME COLUMN Clause
 You can change the name of the column by using the **RENAME COLUMN** clause. ::
 
     ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name;
+    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name ;
 
 *   *table_name* : Specifies the name of a table that has a column to be renamed.
 *   *old_column_name* : Specifies the name of a column.
@@ -1474,7 +1475,7 @@ RENAME INDEX/CONSTRAINT Clause
 
 :: 
      
-    ALTER TABLE table_name RENAME {CONSTRAINT | {INDEX|KEY}} old_name {AS|TO} new_name 
+    ALTER TABLE table_name RENAME {CONSTRAINT | {INDEX|KEY}} old_name {AS|TO} new_name ;
 
 *   CONSTRAINT: UNIQUE, PRIMARY KEY, FOREIGN KEY
 *   INDEX or KEY: INDEX (Functionally, this is the same as changing an index name in :ref:`alter-index`) 
@@ -1559,11 +1560,14 @@ You can drop the constraints pre-defined for the table, such as **UNIQUE**, **PR
 DROP INDEX Clause
 -----------------
 
-You can delete an index defined for a column by using the **DROP INDEX** clause. ::
 
-    ALTER [ TABLE | CLASS ] table_name DROP [ UNIQUE ] INDEX index_name
+You can delete an index defined for a column by using the **DROP INDEX** clause. An unique index can be dropped with a **DROP CONSTRAINT** clause.
 
-*   **UNIQUE** : Specifies that the index to be dropped is a unique index. The unique index can be dropped by using the **DROP CONSTRAINT** statement.
+::
+
+    ALTER [ TABLE | CLASS ] table_name DROP [ UNIQUE ] INDEX index_name ;
+
+*   **UNIQUE** : Specifies that the index to be dropped is a unique index. The unique index can be dropped with a **DROP CONSTRAINT** statement.
 *   *table_name* : Specifies the name of a table of which constraints will be deleted.
 *   *index_name* : Specifies the name of an index to be deleted.
 
@@ -1576,7 +1580,7 @@ DROP PRIMARY KEY Clause
 
 You can delete a primary key constraint defined for a table by using the **DROP PRIMARY KEY** clause. You do have to specify the name of the primary key constraint because only one primary key can be defined by table. ::
 
-    ALTER [ TABLE | CLASS ] table_name DROP PRIMARY KEY
+    ALTER [ TABLE | CLASS ] table_name DROP PRIMARY KEY ;
 
 *   *table_name* : Specifies the name of a table that has a primary key constraint to be deleted.
 
@@ -1602,16 +1606,19 @@ You can drop a foreign key constraint defined for a table using the **DROP FOREI
 DROP TABLE
 ==========
 
-You can drop an existing table by the **DROP** statement. Multiple tables can be dropped by a single **DROP** statement. All rows of table are also dropped. If you also specify **IF EXISTS** clause, no error will be happened even if a target table does not exist. 
+You can drop an existing table by the **DROP** statement. Multiple tables can be dropped with a single **DROP** statement. All rows of table are also dropped. If you also specify **IF EXISTS** clause, no error will be happened even if a target table does not exist. 
 
 ::
 
-    DROP [TABLE | CLASS] [IF EXISTS] <table_spec>, ...;
-     
-        <table_spec> ::=
-            [ONLY] table_name |
-            ALL table_name [(EXCEPT table_name, ...)]
+    DROP [ TABLE | CLASS ] [ IF EXISTS ] <table_specification_comma_list> [ CASCADE CONSTRAINTS ] ;
+    
+        <table_specification_comma_list> ::= 
+            <single_table_spec> | ( <table_specification_comma_list> ) 
 
+            <single_table_spec> ::= 
+                |[ ONLY ] table_name 
+                | ALL table_name [ ( EXCEPT table_name, ... ) ] 
+                
 *   *table_name* : Specifies the name of the table to be dropped. You can delete multiple tables simultaneously by separating them with commas.
 *   If a super class name is specified after the **ONLY** keyword, only the super class, not the sub classes inheriting from it, is deleted. If a super class name is specified after the **ALL** keyword, the super classes as well as the sub classes inheriting from it are all deleted. You can specify the list of sub classes not to be deleted after the **EXCEPT** keyword.
 *   If sub classes that inherit from the super class specified after the **ALL** keyword are specified after the **EXCEPT** keyword, they are not deleted.
@@ -1631,6 +1638,26 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
 
     ERROR: Unknown class "a_tbl".
 
+[번역]
+
+* **CASCADE CONSTRAINTS**\ 가 명시되면 DROP 대상 테이블의 기본 키를 참조하는 다른 테이블들이 있어도 DROP되며, 이 테이블을 참조하는 다른 테이블들의 외래 키 역시 DROP된다. 단, 참조하는 테이블들의 데이터는 삭제되지 않는다. 
+
+다음은 b_child 테이블이 참조하는 a_parent 테이블을 DROP하는 예이다. b_child의 외래 키 역시 DROP되며, b_child의 데이터는 유지된다. 
+
+.. code-block:: sql 
+
+    CREATE TABLE a_parent ( 
+        id INTEGER PRIMARY KEY, 
+        name VARCHAR(10) 
+    ); 
+    CREATE TABLE b_child ( 
+        id INTEGER PRIMARY KEY, 
+        parent_id INTEGER, 
+        CONSTRAINT fk_parent_id FOREIGN KEY(parent_id) REFERENCES a_parent(id) ON DELETE CASCADE ON UPDATE RESTRICT 
+    ); 
+
+    DROP TABLE a_parent CASCADE CONSTRAINTS;     
+    
 RENAME TABLE
 ============
 

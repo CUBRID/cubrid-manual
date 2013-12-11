@@ -264,8 +264,8 @@ You can set an isolation level by using the :ref:`set-transaction-isolation-leve
 The read operations that allow interference between transactions with isolation levels are as follows:
 
 *   **Dirty read** : A transaction T2 can read D' before a transaction T1 updates data D to D' and commits it.
-*   **Non-repeatable read** : A transaction T1 can read other value, if a transaction T2 updates data while data is retrieved in the transaction T2 multiple times.
-*   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E while data is retrieved in the transaction T1 multiple times.
+*   **Non-repeatable read** (unrepeatable read) : A transaction T1 can read other value, if a transaction T2 updates data and commits while data is retrieved in the transaction T2 multiple times.
+*   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E and commits while data is retrieved in the transaction T1 multiple times.
 
 The default value of CUBRID isolation level is :ref:`isolation-level-3`.
 

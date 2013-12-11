@@ -268,6 +268,20 @@ Represents domain information. An index for object_of is created.
 |                    |                        | otherwise.                                                                                              |
 +--------------------+------------------------+---------------------------------------------------------------------------------------------------------+
 
+_db_charset
+-----------
+
+Represents charset information.
+
+=================== ======================== ==========================
+Attribute Name      Data type                Description
+=================== ======================== ==========================
+charset_id          INTEGER                  Charset ID
+charset_name        CHARACTER VARYING(32)    Charset name
+default_collation   INTEGER                  Default collation ID
+char_size           INTEGER                  One character's byte size
+=================== ======================== ==========================
+
 _db_method
 ----------
 
@@ -989,52 +1003,49 @@ The following example shows how to retrieve SQL definition statements of the *db
     FROM db_vclass
     WHERE vclass_name = 'db_class';
 
-::
-    
-    'SELECT c.class_name, CAST(c.owner.name AS VARCHAR(255)), CASE c.class_type WHEN 0 THEN 'CLASS' WHEN 1 THEN 'VCLASS' WHEN 2 THEN 'PROXY' ELSE 'UNKNOW' END, CASE WHEN MOD(c.is_system_class, 2) = 1 THEN 'YES' ELSE 'NO' END, CASE WHEN c.sub_classes IS NULL THEN 'NO' ELSE NVL((SELECT 'YES' FROM _db_partition p WHERE p.class_of = c and p.pname IS NULL), 'NO') END FROM _db_class c WHERE CURRENT_USER = 'DBA' OR {c.owner.name} SUBSETEQ (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name = CURRENT_USER) OR {c} SUBSETEQ (  SELECT SUM(SET{au.class_of})  FROM _db_auth au  WHERE {au.grantee.name} SUBSETEQ (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name = CURRENT_USER) AND  au.auth_type = 'SELECT')'
-
 DB_ATTRIBUTE
 ------------
 
 Represents the attribute information of a class for which the current user has access authorization in the database.
 
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|   Attribute Name   |   Data Type   |   Description                                                                                                                                                             |
-+====================+===============+===========================================================================================================================================================================+
-| attr_name          | VARCHAR(255)  | Attribute name                                                                                                                                                            |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| class_name         | VARCHAR(255)  | Name of the class to which the attribute belongs                                                                                                                          |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| attr_type          | VARCHAR(8)    | 'INSTANCE' for an instance attribute, 'CLASS' for a class attribute, and 'SHARED' for a shared attribute.                                                                 |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| def_order          | INTEGER       | Order of attributes in the class. Begins with 0. If the attribute is inherited, the order is the one defined in the super class.                                          |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| from_class_name    | VARCHAR(255)  | If the attribute is inherited, the super class in which it is defined is used. Otherwise, **NULL**.                                                                       |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| from_attr_name     | VARCHAR(255)  | If the attribute is inherited and its name is changed to resolve a name conflict, the original name defined in the super class is used. Otherwise,                        |
-|                    |               | **NULL**.                                                                                                                                                                 |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| data_type          | VARCHAR(9)    | Data type of the attribute (one in the "Meaning" column of the "Data Types Supported by CUBRID" table in                                                                  |
-|                    |               | :ref:`db-attribute`)                                                                                                                                                      |
-|                    |               |                                                                                                                                                                           |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| prec               | INTEGER       | Precision of the data type. 0 is used if the precision is not specified.                                                                                                  |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| scale              | INTEGER       | Scale of the data type. 0 is used if the scale is not specified.                                                                                                          |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| code_set           | INTEGER       | Character set (value of table "character sets supported by CUBRID" in                                                                                                     |
-|                    |               | :ref:`db-attribute`                                                                                                                                                       |
-|                    |               | ) if it is string type. 0 otherwise.                                                                                                                                      |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| domain_class_name  | VARCHAR(255)  | Domain class name if the data type is an object.  **NULL** otherwise.                                                                                                     |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| default_value      | VARCHAR(255)  | Saved as a character string by default, regardless of data types. If no default value is specified,                                                                       |
-|                    |               | **NULL** is stored. If a default value is  **NULL**, it is displayed as 'NULL'.                                                                                           |
-|                    |               | An object data type is represented as 'volume id | page id | slot id' while a set data type is represented as '{element 1, element 2, ... }'.                             |
-|                    |               |                                                                                                                                                                           |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| is_nullable        | VARCHAR(3)    | 'NO' if a not null constraint is set, and 'YES' otherwise.                                                                                                                |
-+--------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| Attribute Name    |   Data Type   |   Description                                                                                                 |
++===================+===============+===============================================================================================================+
+| attr_name         | VARCHAR(255)  | Attribute name                                                                                                |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| class_name        | VARCHAR(255)  | Name of the class to which the attribute belongs                                                              |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| attr_type         | VARCHAR(8)    | 'INSTANCE' for an instance attribute, 'CLASS' for a class attribute, and 'SHARED' for a shared attribute.     |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| def_order         | INTEGER       | Order of attributes in the class. Begins with 0. If the attribute is inherited, the order is the one defined  |
+|                   |               | in the super class.                                                                                           |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| from_class_name   | VARCHAR(255)  | If the attribute is inherited, the super class in which it is defined is used. Otherwise, **NULL**.           |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| from_attr_name    | VARCHAR(255)  | If the attribute is inherited and its name is changed to resolve a name conflict, the original name           |
+|                   |               | defined in the super class is used. Otherwise, **NULL**.                                                      |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| data_type         | VARCHAR(9)    | Data type of the attribute (one in the "Meaning" column of the "Data Types Supported by CUBRID" table in      |
+|                   |               | :ref:`db-attribute`)                                                                                          |
+|                   |               |                                                                                                               |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| prec              | INTEGER       | Precision of the data type. 0 is used if the precision is not specified.                                      |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| scale             | INTEGER       | Scale of the data type. 0 is used if the scale is not specified.                                              |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| charset           | VARCHAR (32)  | charset name                                                                                                  |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| collation         | VARCHAR (32)  | collation name                                                                                                |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| domain_class_name | VARCHAR(255)  | Domain class name if the data type is an object.  **NULL** otherwise.                                         |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| default_value     | VARCHAR(255)  | Saved as a character string by default, regardless of data types. If no default value is specified,           |
+|                   |               | **NULL** is stored. If a default value is  **NULL**, it is displayed as 'NULL'.                               |
+|                   |               | An object data type is represented as 'volume id | page id | slot id' while a set data type is represented    |
+|                   |               | as '{element 1, element 2, ... }'.                                                                            |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
+| is_nullable       | VARCHAR(3)    | 'NO' if a not null constraint is set, and 'YES' otherwise.                                                    |
++-------------------+---------------+---------------------------------------------------------------------------------------------------------------+
 
 The following example shows how to retrieve attributes and data types of the *event* class.
 
@@ -1146,6 +1157,20 @@ The following example shows how to retrieve collection type attributes and data 
     ==============================================================================
      
     'sports'              'INSTANCE'            'STRING'              NULL
+
+DB_CHARSET
+----------
+
+Represents charset information.
+
+=================== ======================== ==========================
+Attribute name      Data type                Description
+=================== ======================== ==========================
+charset_id          INTEGER                  Charset ID
+charset_name        CHARACTER VARYING(32)    Charset name
+default_collation   CHARACTER VARYING(32)    Default collation name
+char_size           INTEGER                  One character's byte size
+=================== ======================== ==========================
 
 DB_METHOD
 ---------

@@ -657,7 +657,6 @@ CUBRID SHARD는 시작 시 기본 설정 파일인 **cubrid_broker.conf** 의 **
 shard key 설정 파일의 예와 형식은 다음과 같다. ::
 
     [%student_no]
-    [%student_no]
     #min    max     shard_id
     0       31      0   
     32      63      1   

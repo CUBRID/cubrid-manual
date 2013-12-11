@@ -231,7 +231,7 @@ CREATE TABLE
 
     CREATE TABLE table_name (id int AUTO_INCREMENT [(seed, increment)] ) ;
     
-    CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed;
+    CREATE TABLE table_name (id int AUTO_INCREMENT) AUTO_INCREMENT = seed ;
 
 *   *seed* : 번호가 시작하는 초기값이다. 모든 정수가 허용되며 기본값은 **1** 이다.
 *   *increment* : 행마다 증가되는 증가값이다. 양의 정수만 허용되며 기본값은 **1** 이다.
@@ -1653,8 +1653,7 @@ DROP TABLE
     ); 
 
     DROP TABLE a_parent CASCADE CONSTRAINTS;     
-    
-    
+
 RENAME TABLE
 ============
 

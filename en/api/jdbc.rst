@@ -30,7 +30,7 @@ You can verify the version of JDBC driver as follows: ::
 
 **Registering CUBRID JDBC Driver**
 
-Use the **Class.forName** (*driver-class-name*) command to register CUBRID JDBC driver. The following example shows how to load the **cubrid.jdbc.driver.CUBRIDDriver** class to register CUBRID JDBC driver.
+Use the **Class.forName** (*driver-class-name*) method to register CUBRID JDBC driver. The following example shows how to load the **cubrid.jdbc.driver.CUBRIDDriver** class to register CUBRID JDBC driver.
 
 .. code-block:: java
 
@@ -226,6 +226,82 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
     *   The database connection in thread-based programming must be used independently each other.
     *   The rollback method requesting transaction rollback will be ended after a server completes the rollback job.
     *   In autocommit mode, the transaction is not committed if all results are not fetched after running the SELECT statement. Therefore, although in autocommit mode, you should end the transaction by executing COMMIT or ROLLBACK if some error occurs during fetching for the resultset.
+
+.. _jdbc-conn-datasource:
+
+DataSource 객체로 연결
+--------------------------
+
+[번역] DataSource는 JDBC 2.0 확장 API에 소개된 개념으로, 연결 풀링(connection pooling)과 분산 트랜잭션을 지원한다. CUBRID는 연결 풀링만 지원하며, 분산 트랜잭션과 JNDI는 지원하지 않는다.
+
+CUBRIDDataSource는 CUBRID에서 구현한 DataSource이다.
+
+**DataSource 객체 생성하기**
+
+DataSource 객체를 생성하려면 다음과 같이 호출한다.
+
+.. code-block:: java
+
+    CUBRIDDataSource ds = null;
+    ds = new CUBRIDDataSource();
+
+**연결 속성 설정하기**
+
+**연결 속성**\ (connection properties)은 datasource와 CUBRID DBMS 사이에 연결을 설정하는데 사용된다. 일반적인 속성은 DB 이름, 호스트 이름, 포트 번호, 사용자 이름, 암호이다.
+
+속성(property) 값을 설정하거나 얻기 위해서는 cubrid.jdbc.driver.CUBRIDDataSource에서 구현된 다음 메서드들을 사용한다.
+
+.. code-block:: java
+
+    public PrintWriter getLogWriter();
+    public void setLogWriter(PrintWriter out);
+    public void setLoginTimeout(int seconds);
+    public int getLoginTimeout();
+    public String getDatabaseName();
+    public String getDatabaseName();
+    public String getDataSourceName();
+    public String getDescription();
+    public String getNetworkProtocol();
+    public String getPassword();
+    public int getPortNumber();
+    public int getPort();
+    public String getRoleName();
+    public String getServerName();
+    public String getUser();
+    public String getURL();
+    public String getUrl();
+    public void setDatabaseName(String dbName);
+    public void setDescription(String desc);
+    public void setNetworkProtocol(String netProtocol);
+    public void setPassword(String psswd);
+    public void setPortNumber(int p);
+    public void setPort(int p);
+    public void setRoleName(String rName);
+    public void setServerName(String svName);
+    public void setUser(String uName);
+    public void setUrl(String urlString);
+    public void setURL(String urlString);
+
+특히, URL 문자열을 통해 속성을 지정하고자 하는 경우 setURL() 메서드를 사용한다. URL 문자열에 대해서는 :ref:`jdbc-connection-conf`\ 을 참고한다.
+  
+.. code-block:: java 
+  
+    import cubrid.jdbc.driver.CUBRIDDataSource; 
+    ... 
+    CUBRIDDataSource ds = null;
+    ds = new CUBRIDDataSource(); 
+    ds.setUrl("jdbc:cubrid:10.113.153.144:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+
+DataSource로부터 연결 객체를 얻기 위해서는 getConnection 메서드를 호출한다.
+
+.. code-block:: java
+
+    Connection connection = null;
+    connection = ds.getConnection("dba", "");
+
+CUBRIDConnectionPoolDataSource는 connectionpool datasource를 CUBRID에서 구현한 객체인데, CUBRIDDataSource의 메서드들과 같은 이름의 메서드들을 포함하고 있다.
+
+보다 자세한 예제는 :ref:`jdbc-examples`\ 의 **DataSource 객체로 연결**\ 을 참고한다.
 
 .. _jdbc-con-tostring:
 
@@ -794,7 +870,7 @@ JDBC error codes which occur in SQLException are as follows.
 *   All error codes are negative.
 *   After SQLException, error number can be shown by SQLException.getErrorCode() and error message can be shown by SQLException.getMessage().
 *   If the value of error code is between -21001 and -21999, it is caused by CUBRID JDBC methods.
-*   If the value of error code is between -10000 and -10999, it is caused by CAS and transferred by JDBC methods. For CAS errors, see :ref:`broker-error`. 
+*   If the value of error code is between -10000 and -10999, it is caused by CAS and transferred by JDBC methods. For CAS errors, see :ref:`cas-error`. 
 *   If the value of error code is between 0 and -9999, it is caused by database server. For database server errors, see :ref:`database-server-error`.
 
 +---------------+--------------------------------------------------------------------------------------+
@@ -931,6 +1007,8 @@ JDBC error codes which occur in SQLException are as follows.
 | -21141        | Request timed out.                                                                   |
 +---------------+--------------------------------------------------------------------------------------+
 
+.. _jdbc-examples:
+
 JDBC Sample Program
 ===================
 
@@ -956,19 +1034,185 @@ After loading the JDBC driver, use the **getConnection** () method of the **Driv
 
     Connection conn = DriverManager.getConnection(url,userid,password);
 
+[번역] DataSource 객체를 사용하여 데이터베이스에 연결할 수도 있다. 연결 URL 문자열에 연결 속성(connection property)을 포함하고자 하는 경우, CUBRIDDataSource에 구현된 setURL 메서드를 사용할 수 있다.
+
+.. code-block:: java 
+
+    import cubrid.jdbc.driver.CUBRIDDataSource; 
+    ... 
+     
+    ds = new CUBRIDDataSource(); 
+    ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
+
+CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 참고한다.
+
+**DataSource 객체로 연결**
+
+다음은 CUBRID에 구현된 DataSource인 CUBRIDDataSource의 setURL을 이용하여 DB에 접속하고, 여러 개의 스레드에서 SELECT 문을 실행하는 예제이다.
+소스는 DataSourceMT.java와 DataSourceExample.java의 두 개로 나뉘어져 있다.
+ 
+*   DataSourceMT.java는 main 함수를 포함하고 있다. CUBRIDDataSource 객체를 생성하고 setURL 메서드를 호출하여 DB에 접속한 후, 여러 개의 스레드가 DataSourceExample.test 메서드를 수행한다.
+ 
+*   DataSourceExample.java에는 DataSourceMT.java에서 생성된 스레드가 수행할 DataSourceExample.test 메서드가 구현되어 있다.
+ 
+`DataSourceMT.java`
+ 
+.. code-block:: java
+ 
+    import cubrid.jdbc.driver.*;
+ 
+    public class DataSourceMT {
+        static int num_thread = 20;
+ 
+        public static void main(String[] args) {
+            CUBRIDDataSource ds = null;
+            thrCPDSMT thread[];
+ 
+            ds = new CUBRIDDataSource();
+            ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
+ 
+            try {
+                thread = new thrCPDSMT[num_thread];
+ 
+                for (int i = 0; i < num_thread; i++) {
+                    Thread.sleep(1);
+                    thread[i] = new thrCPDSMT(i, ds);
+                    try {
+                        Thread.sleep(1);
+                        thread[i].start();
+                    } catch (Exception e) {
+                    }
+                }
+ 
+                for (int i = 0; i < num_thread; i++) {
+                    thread[i].join();
+                    System.err.println("join thread : " + i);
+                }
+ 
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
+    }
+ 
+    class thrCPDSMT extends Thread {
+        CUBRIDDataSource thread_ds;
+        int thread_id;
+ 
+        thrCPDSMT(int tid, CUBRIDDataSource ds) {
+            thread_id = tid;
+            thread_ds = ds;
+        }
+ 
+        public void run() {
+            try {
+                DataSourceExample.test(thread_ds);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+ 
+        }
+    }
+ 
+`DataSourceExample.java`
+ 
+.. code-block:: java
+ 
+    import java.sql.*;
+    import javax.sql.*;
+    import cubrid.jdbc.driver.*;
+ 
+    public class DataSourceExample {
+ 
+        public static void printdata(ResultSet rs) throws SQLException {
+            try {
+                ResultSetMetaData rsmd = null;
+ 
+                rsmd = rs.getMetaData();
+                int numberofColumn = rsmd.getColumnCount();
+ 
+                while (rs.next()) {
+                    for (int j = 1; j <= numberofColumn; j++)
+                        System.out.print(rs.getString(j) + "  ");
+                    System.out.println("");
+                }
+            } catch (SQLException e) {
+                System.out.println("SQLException : " + e.getMessage());
+                throw e;
+            }
+        }
+ 
+        public static void test(CUBRIDDataSource ds) throws Exception {
+            Connection connection = null;
+            Statement statement = null;
+            ResultSet resultSet = null;
+ 
+            for (int i = 1; i <= 20; i++) {
+                try {
+                    connection = ds.getConnection("dba", "");
+                    statement = connection.createStatement();
+                    String SQL = "SELECT * FROM code";
+                    resultSet = statement.executeQuery(SQL);
+ 
+                    while (resultSet.next()) {
+                        printdata(resultSet);
+                    }
+ 
+                    if (i % 5 == 0) {
+                        System.gc();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    closeAll(resultSet, statement, connection);
+                }
+            }
+        }
+        
+        public static void closeAll(ResultSet resultSet, Statement statement,
+                Connection connection) {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+    }
+
 **Manipulating Database (Executing Queries and Processing ResultSet)**
 
 To send a query statement to the connected database and execute it, create **Statement**, **PrepardStatement**, and **CallableStatemen** objects. After the **Statement** object is created, execute the query statement by using **executeQuery** () or **executeUpdate** () method of the **Statement** object. You can use the **next** () method to process the next row from the **ResultSet** that has been returned as a result of executing the **executeQuery** () method.
 
-.. warning::
+.. note::
 
-    If you execute commit after query execution, **ResultSet** will be automatically closed. Therefore, you must not use **ResultSet** after commit. Generally CUBRID is executed in auto-commit mode; if you do not want for CUBRID being executed in auto-commit mode, you should specify **conn.setAutocommit(false);** in the code.
+    In the 2008 R4.x or lower, if you execute commit after query execution, **ResultSet** will be automatically closed. Therefore, you must not use **ResultSet** after commit. Generally CUBRID is executed in auto-commit mode; if you do not want for CUBRID being executed in auto-commit mode, you should specify **conn.setAutocommit(false);** in the code.
+   
+    From 9.1, :ref:`Cursor holdability <cursor-holding>` is supported; therefore, you can use ResultSet after commit.
 
 **Disconnecting from Database**
 
 You can disconnect from a database by executing the **close** () method for each object.
 
 The following example shows how to connect to the *demodb* database, create a table, execute a query statement with the prepared statement, and roll back the query statement. You can also practice it yourself by appropriately modifying argument values of the **getConnection** () method.
+
+**CREATE, INSERT**
+
+[번역] 다음은 *demodb* 에 접속하여 테이블을 생성하고, prepared statement로 질의문을 수행한 후 질의를 롤백시키는 예제 코드이며, **getConnection**\() 메서드의 인자값을 적절하게 수정하여 실습할 수 있다.
 
 .. code-block:: java
 
@@ -1038,6 +1282,8 @@ The following example shows how to connect to the *demodb* database, create a ta
        }
     }
 
+**SELECT**
+
 The following example shows how to execute the **SELECT** statement by connecting to *demodb* which is automatically created when installing CUBRID.
 
 .. code-block:: java
@@ -1079,6 +1325,8 @@ The following example shows how to execute the **SELECT** statement by connectin
             }
         }
     }
+
+**INSERT**
 
 The following example shows how to execute the **INSERT** statement by connecting to *demodb* which is automatically created when installing CUBRID. You can delete or update data the same way as you insert data so you can reuse the code below by simply modifying the query statement in the code.
 
@@ -1150,6 +1398,9 @@ The following table shows the JDBC standard and extended interface supported by 
 
 .. note::
 
-    * From CUBRID 2008 R4.3 version, the behavior of batching the queries on the autocommit mode was changed. The methods that batch the queries are PreparedStatement.executeBatch and Statement.executeBatch. Until 2008 R4.1 version, these methods had  committed the transaction after executing all queries on the array. From 2008 R4.3, they commit each query on the array.
-    * In autocommit mode off, if the general error occurs during executing one of the queries in the array on the method which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 
-        
+    *   If :ref:`cursor holdability <cursor-holding>` is not specified, cursor is hold in default.
+    
+    *   From CUBRID 2008 R4.3 version, the behavior of batching the queries on the autocommit mode was changed. The methods that batch the queries are PreparedStatement.executeBatch and Statement.executeBatch. Until 2008 R4.1 version, these methods had  committed the transaction after executing all queries on the array. From 2008 R4.3, they commit each query on the array.
+    
+    *   In autocommit mode off, if the general error occurs during executing one of the queries in the array on the method which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 
+    

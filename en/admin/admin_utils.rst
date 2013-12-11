@@ -1676,21 +1676,37 @@ The following shows [options] available with the **cubrid checkdb** utility.
 
 .. option::    -S, --SA-mode
 
-    The **-S** option is used to access a database in standalone, which means it works without processing server; it does not have an argument. If **-S** is not specified, the system recognizes that a database is running in client/server mode. ::
+    This option is used to access a database in standalone, which means it works without processing server; it does not have an argument. If **-S** is not specified, the system recognizes that a database is running in client/server mode. ::
 
         cubrid checkdb -S demodb
 
 .. option:: -C, --CS-mode
 
-    The **-C** option is used to access a database in client/server mode, which means it works in client/server process respectively; it does not have an argument. If **-C** is not specified, the system recognize that a database is running in client/server mode by default. ::
+    This option is used to access a database in client/server mode, which means it works in client/server process respectively; it does not have an argument. If **-C** is not specified, the system recognize that a database is running in client/server mode by default. ::
 
         cubrid checkdb -C demodb
 
 .. option:: -r, --repair
 
-    The **-r** option is used to restore an issue if a consistency error occurs in a database. ::
+    This option is used to restore an issue if a consistency error occurs in a database. ::
 
         cubrid checkdb -r demodb
+
+.. option:: --check-prev-link 
+  
+    This option is used to check if there are errors on previous links of an index.
+     
+    :: 
+  
+        $ cubrid checkdb --check-prev-link demodb 
+  
+.. option:: --repair-prev-link 
+  
+    This option is used to restore if there are errors on previous links of an index.
+     
+    :: 
+  
+        $ cubrid checkdb --repair-prev-link demodb
 
 .. option:: -i, --input-class-file=FILE
 

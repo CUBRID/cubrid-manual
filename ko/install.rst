@@ -80,13 +80,13 @@ CUBRID 엔진, 사용 도구 및 드라이버에 대한 자세한 정보는 http
 Linux에서의 설치와 실행
 -----------------------
 
-**설치 시 확인 사항**
+**설치 전 확인 사항**
 
 Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
 
-*   운영체제 버전
+*   glibc 버전
 
-    운영체제 버전에 상관 없이 glibc 2.3.4 버전 이상만 지원한다.
+    glibc 2.3.4 버전 이상만 지원한다.
     glibc 버전은 다음과 같은 방법으로 확인한다. ::
       
         % rpm -q glibc
@@ -100,7 +100,8 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
         Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
     
     32비트 Linux에서는 CUBRID 32비트 버전을, 64비트 Linux에서는 CUBRID 64비트 버전을 설치한다. 
-    설치할 추가 라이브러리는 다음과 같다.
+    
+*   추가로 설치할 라이브러리
     
     *   Curses Library (rpm -q ncurses)
     *   gcrypt Library (rpm -q libgcrypt)
@@ -239,9 +240,9 @@ CUBRID를 설치하고 설정 파일을 구성할 때 기존의 설정 파일을
 
 **Linux에서 시스템 구동 시 CUBRID 자동 구동하기**
 
-SH 패키지로 CUBRID를 설치했다면 $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **CUBRID_USER** 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용하여 Linux 시스템 구동 시 CUBRID를 자동으로 구동할 수 있다.
+SH 패키지로 CUBRID를 설치했다면 $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **$CUBRID_USER** 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용하여 Linux 시스템 구동 시 CUBRID를 자동으로 구동할 수 있다.
 
-RPM 패키지로 CUBRID를 설치했다면 /etc/init.d 디렉터리에 cubrid 스크립트가 추가된다. 그러나 cubrid 스크립트 파일 안의 $CUBRID_USER 환경 변수를 cubrid 계정으로 변경하는 작업이 필요하다.
+RPM 패키지로 CUBRID를 설치했다면 /etc/init.d 디렉터리에 cubrid 스크립트가 추가된다. 그러나 cubrid 스크립트 파일 안의 **$CUBRID_USER** 환경 변수를 "cubrid" 계정으로 변경하는 작업이 필요하다.
         
 **CUBRID 인터페이스 설치**
 
@@ -260,7 +261,7 @@ CUBRID 웹매니저는 CUBRID 설치 시 구동되며 `https://localhost:8282/ <
 Windows에서의 설치와 실행
 -------------------------
 
-**설치 시 확인 사항**
+**설치 전 확인 사항**
 
 Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
 
@@ -350,7 +351,7 @@ CUBRID 웹매니저는 CUBRID 설치 시 구동되며 https://localhost:8282/\ �
 Linux에서 tar.gz 파일로 CUBRID 설치
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**설치 시 확인 사항**
+**설치 전 확인 사항**
 
 Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
 
@@ -370,7 +371,8 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
         Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
     
     32비트 Linux에서는 CUBRID 32비트 버전을, 64비트 Linux에서는 CUBRID 64비트 버전을 설치한다. 
-    설치할 추가 라이브러리는 다음과 같다.
+    
+*   추가로 설치할 라이브러리
     
     * Curses Library (rpm -q ncurses)
     * gcrypt Library (rpm -q libgcrypt)
@@ -398,7 +400,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
     
         다음은 bash 셸로 수행하는 경우 .bash_profile에 다음을 추가하는 예이다.
 
-       ::
+        ::
         
             export CUBRID=/home1/cub_user/CUBRID
             export CUBRID_DATABASES=$CUBRID/databases
@@ -409,7 +411,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
         
             export CLASSPATH=$CUBRID/jdbc/cubrid_jdbc.jar:$CLASSPATH
             
-    #.  Path 시스템 변수에 CUBRID bin 디렉터리를 추가한다.
+    #.  PATH 환경 변수에 CUBRID bin 디렉터리를 추가한다.
       
         ::
         
@@ -432,7 +434,7 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
             
     **DB 자동 구동**    
 
-    *   부팅 시 생성한 DB가 구동되게 하려면 C:\\CUBRID\\conf\\cubrid.conf에서 다음을 수정한다.
+    *   부팅 시 생성한 DB가 구동되게 하려면 $CUBRID/conf/cubrid.conf에서 다음을 수정한다.
 
         ::
             
@@ -448,7 +450,7 @@ CUBRID 설치 이후 환경 설정, 도구 설치, 인터페이스 설치 등은
 Windows에서 zip 파일로 CUBRID 설치
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**설치 시 확인 사항**
+**설치 전 확인 사항**
 
 Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
 
@@ -468,8 +470,8 @@ Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항
 
     **환경 변수 설정**
 
-    #.  내 컴퓨터(오른쪽 마우스 클릭) -> 속성 -> 고급 -> 환경변수를 선택한다.
-    #.  시스템 변수 항목에 새로 만들기를 클릭한 후 아래와 같이 시스템 변수를 추가한다.
+    #.  [시작 버튼] > [컴퓨터] > (오른쪽 마우스 버튼 클릭) > [속성] -> [고급 시스템 설정] > [환경변수]를 선택한다.
+    #.  시스템 변수 항목에 [새로 만들기]를 클릭한 후 아래와 같이 시스템 변수를 추가한다.
     
         ::
         

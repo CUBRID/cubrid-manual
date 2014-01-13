@@ -229,27 +229,27 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 
 .. _jdbc-conn-datasource:
 
-DataSource 객체로 연결
---------------------------
+Connect with DataSource
+-----------------------
 
-[번역] DataSource는 JDBC 2.0 확장 API에 소개된 개념으로, 연결 풀링(connection pooling)과 분산 트랜잭션을 지원한다. CUBRID는 연결 풀링만 지원하며, 분산 트랜잭션과 JNDI는 지원하지 않는다.
+DataSource is the concept to be introduced in JDBC 2.0 API extention; it supports connection pooling and distributed transaction. CUBRID supports only connection pooling and do not supports distributed transaction and JNDI.
 
-CUBRIDDataSource는 CUBRID에서 구현한 DataSource이다.
+CUBRIDDataSource is DataSource implemented in CUBRID.
 
-**DataSource 객체 생성하기**
+**Creating a DataSource Object**
 
-DataSource 객체를 생성하려면 다음과 같이 호출한다.
+To create a DataSource object, call as follows.
 
 .. code-block:: java
 
     CUBRIDDataSource ds = null;
     ds = new CUBRIDDataSource();
 
-**연결 속성 설정하기**
+**Setting Connection Properties**
 
-**연결 속성**\ (connection properties)은 datasource와 CUBRID DBMS 사이에 연결을 설정하는데 사용된다. 일반적인 속성은 DB 이름, 호스트 이름, 포트 번호, 사용자 이름, 암호이다.
+**Connection properties** are used to configure connections between datasource and CUBRID DBMS. General properties are a DB name, a host name, a port number, a user name and a password.
 
-속성(property) 값을 설정하거나 얻기 위해서는 cubrid.jdbc.driver.CUBRIDDataSource에서 구현된 다음 메서드들을 사용한다.
+To set or get the values of properties, use below methods which is implemented in cubrid.jdbc.driver.CUBRIDDataSource.
 
 .. code-block:: java
 
@@ -282,7 +282,7 @@ DataSource 객체를 생성하려면 다음과 같이 호출한다.
     public void setUrl(String urlString);
     public void setURL(String urlString);
 
-특히, URL 문자열을 통해 속성을 지정하고자 하는 경우 setURL() 메서드를 사용한다. URL 문자열에 대해서는 :ref:`jdbc-connection-conf`\ 을 참고한다.
+Especially, use a setURL() method to set the property through a URL string. Regarding URL string, see :ref:`jdbc-connection-conf`.
   
 .. code-block:: java 
   
@@ -292,16 +292,16 @@ DataSource 객체를 생성하려면 다음과 같이 호출한다.
     ds = new CUBRIDDataSource(); 
     ds.setUrl("jdbc:cubrid:10.113.153.144:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
 
-DataSource로부터 연결 객체를 얻기 위해서는 getConnection 메서드를 호출한다.
+Call getConnection method to get a connection object from DataSource.
 
 .. code-block:: java
 
     Connection connection = null;
     connection = ds.getConnection("dba", "");
 
-CUBRIDConnectionPoolDataSource는 connectionpool datasource를 CUBRID에서 구현한 객체인데, CUBRIDDataSource의 메서드들과 같은 이름의 메서드들을 포함하고 있다.
+CUBRIDConnectionPoolDataSource is an object which connection-pool datasource is implemented in CUBRID; it includes the methods of the same names with the methods of CUBRIDDataSource.
 
-보다 자세한 예제는 :ref:`jdbc-examples`\ 의 **DataSource 객체로 연결**\ 을 참고한다.
+For detail examples, see **Connecting to a DataSource Object** in  :ref:`jdbc-examples`.
 
 .. _jdbc-con-tostring:
 
@@ -1022,7 +1022,7 @@ To connect to CUBRID, load the JDBC driver by using the **forName** () method of
 
     Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
 
-**Connecting to Database**
+**Connecting to a Database**
 
 After loading the JDBC driver, use the **getConnection** () method of the **DriverManager** to connect to the database. To create a **Connection** object, you must specify information such as the URL which indicates the location of a database, user name, password, etc. For more information, see :ref:`jdbc-connection-conf`.
 
@@ -1034,7 +1034,7 @@ After loading the JDBC driver, use the **getConnection** () method of the **Driv
 
     Connection conn = DriverManager.getConnection(url,userid,password);
 
-[번역] DataSource 객체를 사용하여 데이터베이스에 연결할 수도 있다. 연결 URL 문자열에 연결 속성(connection property)을 포함하고자 하는 경우, CUBRIDDataSource에 구현된 setURL 메서드를 사용할 수 있다.
+To connect to a database, it is possible to use a DataSource object, too. If you want to include connection properties to a connection URL string, setURL method implemented in CUBRIDDataSource can be used.
 
 .. code-block:: java 
 
@@ -1044,16 +1044,17 @@ After loading the JDBC driver, use the **getConnection** () method of the **Driv
     ds = new CUBRIDDataSource(); 
     ds.setURL("jdbc:cubrid:127.0.0.1:33000:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true"); 
 
-CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 참고한다.
+For details about CUBRIDDataSource, see :ref:`jdbc-conn-datasource`.
 
-**DataSource 객체로 연결**
+**Connecting to a DataSource Object*
 
-다음은 CUBRID에 구현된 DataSource인 CUBRIDDataSource의 setURL을 이용하여 DB에 접속하고, 여러 개의 스레드에서 SELECT 문을 실행하는 예제이다.
-소스는 DataSourceMT.java와 DataSourceExample.java의 두 개로 나뉘어져 있다.
+The following is an example to execute SELECT statements in multiple threads; they connect to DB with the setURL of CUBRIDDataSource, which is a DataSource implemented in CUBRID.
+
+Codes are separated with DataSourceMT.java and DataSourceExample.java.
  
-*   DataSourceMT.java는 main 함수를 포함하고 있다. CUBRIDDataSource 객체를 생성하고 setURL 메서드를 호출하여 DB에 접속한 후, 여러 개의 스레드가 DataSourceExample.test 메서드를 수행한다.
+*   DataSourceMT.java includes a main() function. After a CUBRIDDataSource object is created and a setURL method is called to connect to DB, multiple threads run DataSourceExample.test method.
  
-*   DataSourceExample.java에는 DataSourceMT.java에서 생성된 스레드가 수행할 DataSourceExample.test 메서드가 구현되어 있다.
+*   In DataSourceExample.java, DataSourceExample.test is implemented; it is run on the threads in DataSourceMT.java.
  
 `DataSourceMT.java`
  
@@ -1202,7 +1203,7 @@ To send a query statement to the connected database and execute it, create **Sta
 
     In the 2008 R4.x or lower, if you execute commit after query execution, **ResultSet** will be automatically closed. Therefore, you must not use **ResultSet** after commit. Generally CUBRID is executed in auto-commit mode; if you do not want for CUBRID being executed in auto-commit mode, you should specify **conn.setAutocommit(false);** in the code.
    
-    From 9.1, :ref:`Cursor holdability <cursor-holding>` is supported; therefore, you can use ResultSet after commit.
+    From 9.1, :ref:`Cursor holdability <cursor-holding>` is supported; therefore, you can use **ResultSet** after commit.
 
 **Disconnecting from Database**
 
@@ -1212,7 +1213,7 @@ The following example shows how to connect to the *demodb* database, create a ta
 
 **CREATE, INSERT**
 
-[번역] 다음은 *demodb* 에 접속하여 테이블을 생성하고, prepared statement로 질의문을 수행한 후 질의를 롤백시키는 예제 코드이며, **getConnection**\() 메서드의 인자값을 적절하게 수정하여 실습할 수 있다.
+The following is an example which connects to *demodb*, creates a table, executes a query with prepared statement and rolls back the query.
 
 .. code-block:: java
 

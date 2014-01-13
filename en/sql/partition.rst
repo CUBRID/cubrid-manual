@@ -69,7 +69,7 @@ The following restrictions apply to the partitioning key:
 Range Partitioning
 ==================
 
-Range partitioning is a partitioning method in which a table is partitioned using an user specified range of values of the partitioning key for each partition. Ranges are defined as continuous non-overlapping intervals. This partitioning method is most useful when table data can be divided into range intervals (e.g. order placement date for an orders table or age intervals for an users table). Range partitioning is the most versatile partitioning method in terms of :ref:`partition-pruning` because almost all search predicates can be used to identify matching ranges.
+Range partitioning is a partitioning method in which a table is partitioned using a user specified range of values of the partitioning key for each partition. Ranges are defined as continuous non-overlapping intervals. This partitioning method is most useful when table data can be divided into range intervals (e.g. order placement date for an orders table or age intervals for a user's table). Range partitioning is the most versatile partitioning method in terms of :ref:`partition-pruning` because almost all search predicates can be used to identify matching ranges.
 
 Tables can be partitioned by range by using the **PARTITION BY RANGE** clause in **CREATE** or **ALTER** statements. ::
 
@@ -113,14 +113,14 @@ The following example shows how to create the *participant2* table which holds c
      
 When creating partitions, CUBRID sorts the user supplied range values from smallest to largest and creates the non-overlapping intervals from the sorted list. The identifier **MAXVALUE** can be used to specify an infinite upper limit for a partition. In the example above, the created range intervals are [-∞, 2000) and [2000, 2008).
 
-When inserting a tuple into a range-partitioned table, CUBRID identifies the range to which the tuple belongs by evaluating the partitioning key. If the partitioning key value is **NULL**, the data is stored in the partition with the smallest specified range value. If there is no range which would accept the partitioning key value, CUBRID returns an error. CUBRID also returns an error when updating a tuple if the new value of the partitioning key does not belong to any of the defined ranges.
+When inserting a tuple into a range-partitioned table, CUBRID identifies the range to which the tuple belongs by evaluating the partitioning key. If the partitioning key value is **NULL**, the data is stored in the partition with the smallest specified range value. If there is no range which accepts the partitioning key value, CUBRID returns an error. CUBRID also returns an error when updating a tuple if the new value of the partitioning key does not belong to any of the defined ranges.
 
 .. _hash-partitioning:
 
 Hash Partitioning
 =================
 
-Hash partitioning is a partitioning method which is used to distribute data across a specified number of partition. This partitioning method is useful when table data contains values for which ranges or lists would be meaningless (for example, a keywords table or an users table for which user_id is the most interesting value). If the values for the partitioning key are evenly distributed across the table data, hash-partitioning technique divides table data evenly between the defined partitions. For hash partitioning, :ref:`partition-pruning` can only be applied on equality predicates (e.g. predicates using **=** and :ref:`IN <in-expr>` expressions), making hash partitioning useful only if most of the queries specify such a predicate for the partitioning key. 
+Hash partitioning is a partitioning method which is used to distribute data across a specified number of partition. This partitioning method is useful when table data contains values for which ranges or lists is meaningless (for example, a keywords table or a user's table for which user_id is the most interesting value). If the values for the partitioning key are evenly distributed across the table data, hash-partitioning technique divides table data evenly between the defined partitions. For hash partitioning, :ref:`partition-pruning` can only be applied on equality predicates (e.g. predicates using **=** and :ref:`IN <in-expr>` expressions), making hash partitioning useful only if most of the queries specify such a predicate for the partitioning key. 
 
 Tables can be partitioned by hash by using the **PARTITION BY HASH** clause in **CREATE** or **ALTER** statements::
 
@@ -156,7 +156,7 @@ When a value is inserted into a hash-partitioned table, the partition to store t
 List Partitioning
 =================
 
-List partitioning is a partitioning method in which a table is divided into partitions according to user specified list of values for the partitioning key. The lists of values for partitions must be disjoint sets. This partitioning method is useful when table data can be divided into lists of possible values which have a certain meaning (e.g. department id for an employees table or country code for an users table). As for hash partitioning, :ref:`partition-pruning` for list partitioned tables can only be applied on equality predicates (e.g. predicates using **=** and :ref:`IN <in-expr>` expressions). 
+List partitioning is a partitioning method in which a table is divided into partitions according to user specified list of values for the partitioning key. The lists of values for partitions must be disjoint sets. This partitioning method is useful when table data can be divided into lists of possible values which have a certain meaning (e.g. department id for an employees table or country code for a user's table). As for hash partitioning, :ref:`partition-pruning` for list partitioned tables can only be applied on equality predicates (e.g. predicates using **=** and :ref:`IN <in-expr>` expressions). 
 
 Tables can be partitioned by list by using the **PARTITION BY LIST** clause in **CREATE** or **ALTER** statements::
 
@@ -209,7 +209,7 @@ When inserting a tuple into a list-partitioned table, the value of the partition
 Partition Pruning
 =================
 
-Partition pruning is an optimization, limiting the scope of a query on a partitioned table by eliminating partitions. During partition pruning, CUBRID examines the **WHERE** clause of the query to identify partitions for which this clause would be always false (considering to the way partitioning was defined). In the following example, the **SELECT** query will only be applied to partitions *before_2008* and *before_2012*, since CUBRID knows that the rest of partitions hold data for which *YEAR (opening_date)* is less than 2004.
+Partition pruning is an optimization method, limiting the scope of a search on a partitioned table by eliminating partitions. During partition pruning, CUBRID examines the **WHERE** clause of the query to identify partitions for which this clause is always false, as considering the way partitioning was defined. In the following example, the **SELECT** query will only be applied to partitions *before_2008* and *before_2012*, since CUBRID knows that the rest of partitions hold data for which *YEAR (opening_date)* is less than 2004.
 
 .. code-block:: sql
 
@@ -273,7 +273,7 @@ Users can also access partitions directly (independent of the partitioned table)
     -- to specify a partition with PARTITION clause
     SELECT * FROM olympic2 PARTITION (before_2008);
 
-Both of the queries above access partition *before_2008* as if it were a normal table (not a partition). This is a very useful feature because it allows certain query optimizations to be used even though they are disabled on partitioned tables (see :ref:`partitioning-notes` for more info). Users should note that, when accessing partitions directly, the scope of the query is limited to that partition. This means that tuples from other partitions are not considered (even though the **WHERE** clause would include them) and, for **INSERT** and **UPDATE** statements, if the tuple inserted/updated does not belong to the specified partition, an error is returned.
+Both of the queries above access partition *before_2008* as if it were a normal table (not a partition). This is a very useful feature because it allows certain query optimizations to be used even though they are disabled on partitioned tables (see :ref:`partitioning-notes` for more info). Users should note that, when accessing partitions directly, the scope of the query is limited to that partition. This means that tuples from other partitions are not considered (even though the **WHERE** clause includes them) and, for **INSERT** and **UPDATE** statements, if the tuple inserted/updated does not belong to the specified partition, an error is returned.
 
 By executing queries on a partition rather than the partitioned table, some of the benefits of partitioning are lost. For example, if users only execute queries on the partitioned table, this table can be repartitioned or partitions can be dropped without having to modify the user application. If users access partitions directly, this benefit is lost. Users should also note that, even though using partitions in **INSERT** statements is allowed (for consistency), it is discouraged because there is no performance gain from it.
 
@@ -549,7 +549,7 @@ Indexes created on a partitioning table are either local or global indexes. Glob
 *   Primary keys are always global indexes.
 *   Foreign keys are always local indexes.
 *   All non-unique indexes are local.
-*   An unique index is local only if the partitioning key is part of the index definition.
+*   A unique index is local only if the partitioning key is part of the index definition.
 
 The following examples show how CUBRID decides between local and global indexes:
 

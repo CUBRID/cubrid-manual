@@ -1561,11 +1561,11 @@ DROP INDEX Clause
 -----------------
 
 
-You can delete an index defined for a column by using the **DROP INDEX** clause. An unique index can be dropped with a **DROP CONSTRAINT** clause.
+You can delete an index defined for a column by using the **DROP INDEX** clause. A unique index can be dropped with a **DROP CONSTRAINT** clause.
 
 ::
 
-    ALTER [ TABLE | CLASS ] table_name DROP [ UNIQUE ] INDEX index_name ;
+    ALTER [ TABLE | CLASS ] table_name DROP INDEX index_name ;
 
 *   **UNIQUE** : Specifies that the index to be dropped is a unique index. The unique index can be dropped with a **DROP CONSTRAINT** statement.
 *   *table_name* : Specifies the name of a table of which constraints will be deleted.
@@ -1637,12 +1637,10 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
 ::
 
     ERROR: Unknown class "a_tbl".
+    
+*   If **CASCADE CONSTRAINTS** is specified, the specified table is dropped even if some tables refer the dropping table's primary key; foreign keys of other tables which refer this table are also dropped. However, the data of tables which are referred are not deleted.
 
-[번역]
-
-* **CASCADE CONSTRAINTS**\ 가 명시되면 DROP 대상 테이블의 기본 키를 참조하는 다른 테이블들이 있어도 DROP되며, 이 테이블을 참조하는 다른 테이블들의 외래 키 역시 DROP된다. 단, 참조하는 테이블들의 데이터는 삭제되지 않는다. 
-
-다음은 b_child 테이블이 참조하는 a_parent 테이블을 DROP하는 예이다. b_child의 외래 키 역시 DROP되며, b_child의 데이터는 유지된다. 
+The below shows to drop a_parent table which b_child table refers. A foreign key of b_child table also dropped, and the data of b_child table are kept.
 
 .. code-block:: sql 
 

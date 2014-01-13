@@ -59,7 +59,7 @@ The following is a syntax of rebuilding an index.
 
     ALTER [ UNIQUE ] INDEX index_name ON table_name REBUILD ;
      
-*   **UNIQUE**: Specifies that an index to be recreated is an unique index.
+*   **UNIQUE**: Specifies that an index to be recreated is a unique index.
 *   *index_name*: Specifies the name of the index to be recreated. The index name must be unique in the table.
 *   *table_name*: Specifies the name of the table where the index is recreated.
 *   *column_name*: Specifies the name of the column where the index is to be applied. To create a composite index, specify two or more column names.
@@ -106,12 +106,14 @@ Use the **DROP INDEX** statement to drop an index. An index also can be dropped 
 
 ::
 
-    DROP [ UNIQUE ] INDEX index_name ON table_name ;
+    DROP INDEX index_name ON table_name ;
 
 *   *index_name*: Specifies the name of the index to be dropped.
 *   *table_name*: Specifies the name of the table whose index is dropped.
 
-.. warning:: From the CUBRID 10.0 version, table name should not be omitted.
+.. warning:: 
+
+    From the CUBRID 10.0 version, table name cannot be omitted.
 
 The following is an example of dropping an index:
 

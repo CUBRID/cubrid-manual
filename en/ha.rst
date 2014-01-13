@@ -74,12 +74,12 @@ The server status changes based on the status of the node. You can use the :ref:
 
 When the node status is changed, on cub_master process log and cub_server process log, following error messages are saved. But, they are saved only when the value of **error_log_level** in cubrid.conf is **error** or less.
 
-*   The following log information of cub_master process is saved on **$CUBRID/log/**\ `<hostname>` **_master.err** file. ::
+*   The following log information of cub_master process is saved on **$CUBRID/log/**\ *<hostname>*\ **_master.err** file. ::
 
         HA generic: Send changemode request to the server. (state:1[active], args:[cub_server demodb ], pid:25728).
         HA generic: Receive changemode response from the server. (state:1[active], args:[cub_server demodb ], pid:25728).
 
-*   The following log information of cub_server is saved on **$CUBRID/log/server/**\ `<db_name>_<date>_<time>`\ **.err** file. ::
+*   The following log information of cub_server is saved on **$CUBRID/log/server/**\ *<db_name>_<date>_<time>*\ **.err** file. ::
 
         Server HA mode is changed from 'to-be-active' to 'active'.
 
@@ -271,7 +271,7 @@ Although **ASYNC** mode provides a better performance as it has almost no delay 
 Quick Start
 ===========
 
-[번역] DB 생성 시점부터 마스터 노드와 슬레이브 노드를 1:1로 구축하는 방법에 대해 간단히 설명한다. 기존 운영 중인 DB 서버에서 슬레이브를 새로 구축하려면 :ref:`build-new-slave`\ 를 참고한다.
+This chapter simply explains how to build a master node and a slave node as 1:1 from DB creation. To build a new slave node from already operating DB server, see :ref:`build-new-slave`.
 
 Preparation
 -----------
@@ -650,9 +650,9 @@ For details, see :ref:`log-multiplexing`.
 
 **ha_copy_log_max_archives**
 
-**ha_copy_log_max_archives** is a parameter used to configure the maximum number of keeping replication log files. The default is 1. [번역]  현재 데이터베이스에 반영되지 않은 복제 로그 파일은 삭제되지 않는다. 
+**ha_copy_log_max_archives** is a parameter used to configure the maximum number of keeping replication log files. The default is 1. Replicated log files which are not applied to the current database are not deleted.
 
-불필요한 디스크의 공간 낭비를 방지하기 위해 이 값을 기본값인 1로 유지할 것을 권장한다. 
+To prevent wasting needless disk space, it is recommended to keep this value as 1, the default.
 
 .. 아래 내용은 복제 재구축 스크립트의 동작 방식이 변경되기 전까지는 틀린 내용이므로 제거. 물론 수동으로 구축한다면 복제로그를 사용할 수는 있음.
 
@@ -708,7 +708,7 @@ This parameter specifies the term of applying the replicated data between a mast
 
 **ha_replica_time_bound**
 
-In master node, only the transactions which have been run on the specified time with this parameter are applied to the replica node. The format of this value is "YYYY-MM-DD hh:mi:ss". There is no default value.
+In a master node, only the transactions which have been run on the specified time with this parameter are applied to the replica node. The format of this value is "YYYY-MM-DD hh:mi:ss". There is no default value.
     
 .. note:: \
 
@@ -728,19 +728,19 @@ In master node, only the transactions which have been run on the specified time 
         192.168.0.1 nodeA
 
 **ha_delay_limit** 
-  
-**ha_delay_limit**\은 DB가 스스로 복제 지연 상태임을 판단하는 기준 시간이고 **ha_delay_limit_delta**\는 복제 지연 시간에서 복제 지연 해제 시간을 뺀 값이다. 한번 복제 지연이라고 판단된 서버는 복제 지연 시간이 (**ha_delay_limit** - **ha_delay_limit_delta**) 이하로 낮아질 경우에 복제 지연이 해소되었다고 판단한다. 
-슬레이브 노드 또는 레플리카 노드가 standby DB 서버에 해당한다. 
-  
-예를 들어 복제 지연 시간을 10분으로 설정하고 복제 지연 해제는 8분으로 하고 싶다면, **ha_delay_limit**\의 값은 600S(또는 10M), **ha_delay_limit_delta**\의 값은 120S(또는 2M)이다. 
-  
-복제 지연으로 판단되면 CAS는 현재 접속 중인 standby DB가 작업 처리에 문제가 있다고 판단하고, 다른 standby DB로 재접속을 시도한다. 
 
-복제 지연으로 인해 우선 순위가 낮은 DB에서 연결된 CAS는 **cubrid_broker.conf**\의 :ref:`RECONNECT_TIME <reconnect_time>` 파라미터로 명시한 시간이 경과하면 복제 지연이 해소되었을 것으로 기대하여, 우선 순위가 높은 standby DB 서버에 재접속을 시도한다. 
+**ha_delay_limit** is a standard time for CUBRID itself to measure replication delay status, and **ha_delay_limit_delta** is a value to subtract a time which replication delay is released from a replication delay time. Once a server is measured as a replication delay, it keeps this status until the replication delay time is equal or lower than (**ha_delay_limit** - **ha_delay_limit_delta**).
+A slave node or a replica node corresponds to a standby DB server. 
+
+For example, if you want set replication delay time as 10 minutes and replication-delay-releasing time as 8 minutes, the value of **ha_delay_limit** will be 600S(or 10M) and the value of **ha_delay_limit_delta** will be 120S(or 2M).
+
+If it is measured as replication delay, CAS judges that there is a problem for standby DB to process jobs, and attempts to reconnect the other standby DBs.
+
+CAS, which is connected to the DB which has the lower priority because of the replication delay, expects that the replication delay is released when the time by :ref:`RECONNECT_TIME <reconnect_time>` in **cubrid_broker.conf** is elapsed, then attempts to reconnect to the standby DB which has higher priority.
 
 **ha_delay_limit_delta** 
   
-위의 **ha_delay_limit** 설명을 참고한다. 
+See the above description of **ha_delay_limit**.
 
 .. _ha-cubrid-broker-conf:
 
@@ -904,7 +904,7 @@ How to use this utility is as shown below. ::
 
     $ cubrid heartbeat copylogdb <start|stop> db_name peer_node
 
-[번역] 명령을 수행하는 노드가 *nodeB*\ 이고, peer_node가 *nodeA*\ 라면, 다음과 같이 명령을 수행할 수 있다.
+When *nodeB* is a node to run a command and *nodeA* is *peer_node*, you can run the command as follows.
     
 ::
     
@@ -923,7 +923,7 @@ How to use this utility is as shown below. ::
 
     $ cubrid heartbeat applylogdb <start|stop> db_name peer_node
 
-[번역] 명령을 수행하는 노드가 *nodeB*\ 이고, peer_node가 *nodeA*\ 라면, 다음과 같이 명령을 수행할 수 있다.
+When *nodeB* is a node to run a command and *nodeA* is *peer_node*, you can run the command as follows.
     
 ::
     
@@ -1245,7 +1245,7 @@ There are four possible structures for CUBRID HA: The default structure, multipl
 | Multiple-Standby Server Structure | 1:1:0                  | Basically, this structure is the same as the basic structure. However, several slave nodes are installed on a single physical server. |
 +-----------------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------+
 
-[번역] 이하에서 설명할 각 구성의 설정 전에, 각 노드에는 데이터가 없는 상태의 testdb 데이터베이스를 생성했다고 가정한다. 이미 데이터가 존재하는 데이터베이스를 복제하여 HA를 구성하기 위해서는 :ref:`rebuilding-replication`\ 를 참고한다.
+In the following description , it is assumed that there is no data in the testdb database on each node. To build HA feature as replicating database, see :ref:`rebuilding-replication`.
 
 Basic Structure of HA
 ---------------------
@@ -1613,6 +1613,8 @@ In a CUBRID HA environment, the meta data (Locator) of a **LOB** column is repli
 Operational Scenarios
 =====================
 
+.. _build-new-slave:
+
 Scenario of Building New Slave Node
 -----------------------------------
 
@@ -1957,42 +1959,44 @@ Replication mismatch between replication nodes, indicating that data of the mast
 HA Error Messages
 -----------------
 
-CAS 프로세스(cub_cas)
-^^^^^^^^^^^^^^^^^^^^^
+CAS process(cub_cas)
+^^^^^^^^^^^^^^^^^^^^
 
-[번역] CAS 프로세스의 오류 메시지는  **$CUBRID/log/broker/error_log**\ `<broker_name>_<app_server_num>`\ **.err**\ 에 기록된다. 아래는 HA 환경에서 접속 시 발생하는 오류 메시지를 별도로 정리한 것이다.
+Error messages in CAS process are written to **$CUBRID/log/broker/error_log**\ *<broker_name>_<app_server_num>*\ **.err**. The following table shows connection error messages in the HA environment.
 
-**브로커와 DB 서버 간 handshake 오류 메시지**
+**Error messages for handshaking between a broker and a DB server**
 
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
-| 오류  | 오류 메시지                                         | severity     | 설명                                                 | 조치 사항                                                            |
-| 코드  |                                                     |              |                                                      |                                                                      |
+| Error | Error message                                       | Severity     | Description                                          | Solution                                                             |
+| Code  |                                                     |              |                                                      |                                                                      |
 +=======+=====================================================+==============+======================================================+======================================================================+
-| -1139 | Handshake error (peer host ?): incompatible         | error        | 브로커 ACCESS_MODE와 서버의 상태 (active/standby)    |                                                                      |
-|       | read/write mode. (client: ?, server: ?)             |              | 불일치(:ref:`broker-mode` 참고)                      |                                                                      |
+| -1139 | Handshake error (peer host ?): incompatible         | error        | ACCESS_MODE of broker and the status of server       |                                                                      |
+|       | read/write mode. (client: ?, server: ?)             |              | (active/standby) is not the same                     |                                                                      |
+|       |                                                     |              | (see :ref:`broker-mode`).                            |                                                                      |
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
-| -1140 | Handshake error (peer host ?):                      | error        | ha_delay_limit을 설정한 서버에서 복제 지연 발생      |                                                                      |
-|       | HA replication delayed.                             |              |                                                      |                                                                      |
+| -1140 | Handshake error (peer host ?):                      | error        | Replication is delayed in the server which           |                                                                      |
+|       | HA replication delayed.                             |              | set **ha_delay_limit**.                              |                                                                      |
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
-| -1141 | Handshake error (peer host ?): replica-only         | error        | 레플리카만 접속 가능한 브로커(CAS)가 레플리카가      |                                                                      |
-|       | client to non-replica server.                       |              | 아닌 서버에 접속 시도(:ref:`broker-mode` 참고)       |                                                                      |
+| -1141 | Handshake error (peer host ?): replica-only         | error        | A broker(CAS) which can access only a replica        |                                                                      |
+|       | client to non-replica server.                       |              | attempts to connect to the server which is not       |                                                                      |
+|       |                                                     |              | a replica(see :ref:`broker-mode`).                   |                                                                      |
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
-| -1142 | Handshake error (peer host ?): remote access to     | error        | HA maintenance 모드인 서버에 원격                    |                                                                      |
-|       | server not allowed.                                 |              | (:ref:`ha-server` 참고)                              |                                                                      |
+| -1142 | Handshake error (peer host ?): remote access to     | error        | It attempts to connect to a server with              |                                                                      |
+|       | server not allowed.                                 |              | HA maintenance mode(see :ref:`ha-server`).           |                                                                      |
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
-| -1143 | Handshake error (peer host ?): unidentified         | error        | 서버 버전 알 수 없음                                 |                                                                      |
+| -1143 | Handshake error (peer host ?): unidentified         | error        | Server version is unidentified.                      |                                                                      |
 |       | server version.                                     |              |                                                      |                                                                      |
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
 
-**연결 오류 메시지**
+**Connection Error Messages**
 
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
-| 오류  | 오류 메시지                                         | severity     | 설명                                                 | 조치 사항                                                            |
-| 코드  |                                                     |              |                                                      |                                                                      |
+| Error | Error message                                       | Severity     | Description                                          | Solution                                                             |
+| Code  |                                                     |              |                                                      |                                                                      |
 +=======+=====================================================+==============+======================================================+======================================================================+
-| -353  | Cannot make connection to master server on host ?.  | error        | cub_master 프로세스 down                             |                                                                      |
+| -353  | Cannot make connection to master server on host ?.  | error        | cub_master process went down.                        |                                                                      |
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
-| -1144 | Timed out attempting to connect to ?.               | error        | 장비 down                                            |                                                                      |
+| -1144 | Timed out attempting to connect to ?.               | error        | The machine went down.                               |                                                                      |
 |       | (timeout: ? sec(s))                                 |              |                                                      |                                                                      |
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
 
@@ -2006,7 +2010,7 @@ Replication Log Copy Process (copylogdb)
 The error messages that can be found in initialization stage of replication log copy process are as follows:
 
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Error | Error Message                                        | Severity     | Description                                         | Solution                                                             |
 | Code  |                                                      |              |                                                     |                                                                      |
 +=======+======================================================+==============+=====================================================+======================================================================+
 | -10   | Cannot mount the disk volume ?.                      | error        | Fails to open a replication log file.               | Check if replication logs exist. For the location of replication     |
@@ -2033,7 +2037,7 @@ The error messages that can be found in initialization stage of replication log 
 The replication log copy process requests a replication log from the connected database server and receives the corresponding replication log. Error messages that can be found in this stage are as follows:
 
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Error | Error Message                                        | Severity     | Description                                         | Solution                                                             |
 | Code  |                                                      |              |                                                     |                                                                      |
 +=======+======================================================+==============+=====================================================+======================================================================+
 | -89   | Log ? is not included in the given database.         | error        | The previously replicated log and the log to be     | Check information of the database server/host to which the           |
@@ -2055,7 +2059,7 @@ The replication log copy process requests a replication log from the connected d
 The replication log copy process copies the replication log that was received from the connected database server process to the location (**ha_copy_log_base**) specified in the **cubrid_ha.conf** file. Error messages that can be found in this stage are as follows:
 
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Error | Error Message                                        | Severity     | Description                                         | Solution                                                             |
 | Code  |                                                      |              |                                                     |                                                                      |
 +=======+======================================================+==============+=====================================================+======================================================================+
 | -10   | Cannot mount the disk volume ?.                      | error        | Fails to open a replication log file.               | Check if replication logs exist.                                     |
@@ -2075,7 +2079,7 @@ The replication log copy process copies the replication log that was received fr
 The replication log copy process periodically archives the replication logs that have been received from the connected database server process. Error messages that can be found in this stage are as follows:
 
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Error | Error Message                                        | Severity     | Description                                         | Solution                                                             |
 | Code  |                                                      |              |                                                     |                                                                      |
 +=======+======================================================+==============+=====================================================+======================================================================+
 | -78   | Internal error: an I/O error occurred while          | fatal        | Fails to read a replication log during archiving.   | Check the replication log by using the cubrid applyinfo utility.     |
@@ -2101,7 +2105,7 @@ The replication log copy process periodically archives the replication logs that
 Error messages that can be found in this stage are as follows:
 
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Error | Error Message                                        | Severity     | Description                                         | Solution                                                             |
 | Code  |                                                      |              |                                                     |                                                                      |
 +=======+======================================================+==============+=====================================================+======================================================================+
 | -1037 | log writer: log writer is terminated by signal.      | error        | The copylogdb process has been terminated by a      | It will be internally recovered.                                     |
@@ -2118,7 +2122,7 @@ The error messages from the replication log reflection process are stored in **$
 The error messages that can be found in initialization stage of replication log reflection process are as follows:
 
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Error | Error Message                                        | Severity     | Description                                         | Solution                                                             |
 | Code  |                                                      |              |                                                     |                                                                      |
 +=======+======================================================+==============+=====================================================+======================================================================+
 | -10   | Cannot mount the disk volume ?.                      | error        | An applylogdb that is trying to reflect the same    | Check if there is an applylogdb process that is trying to reflect    |
@@ -2134,7 +2138,7 @@ The error messages that can be found in initialization stage of replication log 
 The replication log reflection process reads, analyzes, and reflects the replications logs that have been copied by the replication log copy process. The error message that can be found in this stage are as follows:
 
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Error | Error Message                                        | Severity     | Description                                         | Solution                                                             |
 | Code  |                                                      |              |                                                     |                                                                      |
 +=======+======================================================+==============+=====================================================+======================================================================+
 | -13   | An I/O error occurred while reading page ?           | error        | Fails to read a log page to be reflected.           | Check the replication log by using the cubrid applyinfo utility.     |
@@ -2174,7 +2178,7 @@ The replication log reflection process reads, analyzes, and reflects the replica
 The replication log reflection process reads, analyzes, and reflects the replication logs that have been copied by the replication log copy process. Error messages that can be found in this stage are as follows:
 
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Error | Error Message                                        | Severity     | Description                                         | Solution                                                             |
 | Code  |                                                      |              |                                                     |                                                                      |
 +=======+======================================================+==============+=====================================================+======================================================================+
 | -72   | The transaction (index ?, ?@?|?) has been            | error        | Fails to reflect replication due to deadlock, etc.  | It will be recovered internally.                                     |
@@ -2225,7 +2229,7 @@ The replication log reflection process reads, analyzes, and reflects the replica
 The error messages that can be found in this stage are as follows:
 
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
-| Error | Error Message                                        | severity     | Description                                         | Solution                                                             |
+| Error | Error Message                                        | Severity     | Description                                         | Solution                                                             |
 | Code  |                                                      |              |                                                     |                                                                      |
 +=======+======================================================+==============+=====================================================+======================================================================+
 | -1035 | log applier: The memory size (? MB) of the log       | error        | The replication log reflection process has been     | It will be recovered internally.                                     |
@@ -2253,11 +2257,11 @@ For rebuilding replications, the following environment must be the same in maste
 *   Username and password of the Linux server
 *   HA-related parameters except for **ha_mode** and **ha_copy_sync_mode**, **ha_ping_hosts**
 
-[번역] 복제 재구축은 ha_make_slavedb.sh 스크립트를 실행하여 가능하며, 재구축이 아닌 신규 구축인 경우 cubrid.conf, cubrid_ha.conf, databases.txt의 파일들이 설정되어야 한다.
+Rebuilding replication can be done by running ha_make_slavedb.sh script. If it is not rebuilding but new building, cubrid.conf, cubrid_ha.conf and databases.txt should be configured.
 
-먼저 복제 재구축에 필요한 ha_make_slavedb.sh 스크립트를 살펴보고, 마스터에서 슬레이브 구축, 슬레이브에서 레플리카 구축, 레플리카에서 레플리카 구축에 대해 알아본다.
+In the below description, first, we will look over **ha_make_slavedb.sh script**, which is used to rebuilding replication; then look into how to build slave from master, how to build replica from slave and how to build replica from replica.
 
-참고로, 다중 슬레이브 노드를 구축하고자 하는 경우 ha_make_slavedb.sh 스크립트를 사용할 수 없다.
+As a reference, you cannot use ha_make_slavedb.sh script when you want to build multiple slave nodes.
 
 ha_make_slavedb.sh Script
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2304,32 +2308,25 @@ Once the script has been configured, execute the **ha_make_slavedb.sh** script i
    
     *   Online-backup of a source node and restoration of a rebuilding node during rebuilding replication.
 
-        [번역] **ha_make_slavedb.sh** 스크립트는 수행 도중 원본 노드에 대해 온라인 백업을 수행하고, 재구축되는 노드에 복구를 수행한다. 백업을 시작한 이후 추가로 진행된 트랜잭션들을 복구되는 노드에 반영하기 위해 **ha_make_slavedb.sh** 스크립트는 "마스터" 노드의 보관 로그를 복사해서 사용한다(슬레이브에서 레플리카를 구축할 때, 레플리카에서 레플리카를 구축할 때, 그리고 레플리카에서 슬레이브를 구축할 때 모두 "마스터"의 보관 로그를 사용).
+        **ha_make_slavedb.sh** script executes online backup about a source node during DB operation, and restore to the being-rebuilt node. To apply added transactions after backup to the being-rebuilt node, **ha_make_slavedb.sh** script use the archive logs of "master" node by copying(in all cases, archive logs of "master" are used; all cases include how to build slave from master, how to build replica from slave and how to build replica from replica).
 
-        따라서 온라인 백업이 진행되는 동안 원본 노드에 추가되는 보관 로그가 삭제되지 않도록 마스터 노드에서 **cubrid.conf**\의 **force_remove_log_max_archives**\, **log_max_archives**\ 를 적절히 설정해야 한다. 자세한 내용은 아래의 구축 예들을 참고한다.
-
-            .. 아래 내용은 스크립트 변경 전까지 위와 같이 작성됨.
-            
-                따라서 온라인 백업이 진행되는 동안 원본 노드에 추가되는 보관 로그와 복제 로그가 삭제되지 않도록 **cubrid.conf**\의 *force_remove_log_max_archives**\, **log_max_archives** 그리고 **cubrid_ha.conf**\의 **ha_copy_log_max_archives**\를 적절히 설정해야 한다. 자세한 내용은 아래의 구축 예들을 참고한다.
+        Therefore, so as not to remove archive logs which have been added to the source node during the execution of the online backup, there is a need to properly set **force_remove_log_max_archives** and **log_max_archives** in cubrid.conf from the master node. For details, see the below building examples.
 
     *   **Error while executing the rebuilding replication script**
     
         The rebuilding replication script is not automatically rolled back to its previous stage even when an error occurs during the execution. This is because the slave node cannot provide normal service before rebuilding replication script is executed. To return to the phase before rebuilding replication script is executed, you must back up the existing replication logs and **db_ha_apply_info** information which is internal catalog of the master and slave nodes before building replication is executed.
         
-[번역]
-        
-마스터에서 슬레이브 구축
-^^^^^^^^^^^^^^^^^^^^^^^^
+Building Slave from Master
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following example shows how to configure an original node for rebuilding replications as a master mode and rebuild a slave node from the master node. [번역] 새로 구축하는 경우 Master:Slave는 1:0에서 1:1이 된다.
-
+The following example shows how to configure an original node for rebuilding replications as a master mode and rebuild a slave node from the master node. When you build this node newly, "Master:Slave" will be from 1:0 to 1:1.
 
 .. image:: /images/image37.png
 
-*   The host name in master node: *nodeA*
-*   The host name in slave node: *nodeB*
+*   The host name of a master: *nodeA*
+*   The host name of a slave: *nodeB*
 
-Rebuilding replications can be performed while the system is running, however, to minimize replication delay, it is recommended to execute this when there are just a few transactions per hour.
+Rebuilding replications can be performed while the system is running, however, to minimize replication delay, it is recommended to execute when there are just a few transactions per hour.
 
 Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
@@ -2339,41 +2336,41 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
     
         [nodeB]$ cubrid heartbeat stop
 
-#.  [번역] *nodeB*\ 를 새로 구축한다면 :ref:`ha-configuration`\ 을 참고하여 *nodeA*\ 와 *nodeB*\ 의 **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf**, **databases.txt**\를 설정한다.
+#.  If you newly build *nodeB*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA* and *nodeB*, by referring :ref:`ha-configuration`.
 
-    *   *nodeA*\ 와 *nodeB*\ 의 cubrid.conf에 설정
+    *   Configure parameters in cubrid.conf about *nodeA* and *nodeB*.
 
         ::
         
             ha_mode=on
             force_remove_log_archives=no
             
-    *   *nodeA*\에 DB의 재구동 없이 **log_max_archives** 적용
+    *   Apply **log_max_archives** to *nodeA* without restarting DB.
 
-        슬레이브 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 구축/재구축 이후 기존 설정을 사용할 것이므로 변경하지 않는다.
+        The below supposes that the number of archive logs which can store running transactions during slave building time as 10. Set "10" with "SET SYSTEM PARAMETERS" statement, and **log_max_archives** in **cubrid.conf** will not be changed because it's value will be used as the existing one after building/rebuilding *nodeB*.
     
         ::
         
             [nodeA]$ csql -u dba -c "SET SYSTEM PARAMETERS 'force_remove_log_archives=no'" testdb@localhost
             [nodeA]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=10'" testdb@localhost
 
-    *   *nodeA*\의 **cubrid_ha.conf**\에 설정
+    *   Configure a parameter in **cubrid_ha.conf** about *nodeA*.
     
-        **ha_node_list**\에 `nodeB`\를 추가한 후 마스터 노드에서 HA 서비스를 구동해 놓으면 슬레이브 노드가 구동되기 전까지 마스터 노드에서 쓰기 작업을 할 수 없게 되므로 `nodeA`\만 추가한다.
+        If you start HA service in the master node after adding *nodeB* to **ha_node_list**, it is impossible to do write-operations in a master node until a slave node is started; therefore, add only *nodeA*.
         
         ::
         
             ha_node_list=cubrid@nodeA
     
-    *   **databases.txt**\의 **db-host** 설정
+    *   Configure **db-host** in **databases.txt**.
     
         ::
         
             nodeA:nodeB
             
-        하지만 **databases.txt**\의 **db-host** 부분은 브로커에서 DB 서버에 접속하는 순서와 관련된 설정 파일이므로 원하는대로 변경이 가능하다.
+        But **db-host** in **databases.txt** is related to the order of which DB is connected from broker; therefore, it is possible to change as you want.
     
-#.  *nodeB*\ 에서 **ha_make_slavedb.sh** 스크립트를 설정해야 한다. **target_host**\에는 복사 원본, 즉 마스터 노드의 호스트 이름(*nodeA*)을 설정하고, **repl_log_home**\에는 복제 로그의 홈 디렉터리(기본값: **$CUBRID_DATABASES**)를 설정한다. 
+#.  **ha_make_slavedb.sh** script should be configured in *nodeB*. In **target_host**, the source of the copied one, that is the master node's host name(*nodeA*) should be configured; in **repl_log_home**, the home directory of replication logs(default: **$CUBRID_DATABASES**) should be configured.
 
     ::
          
@@ -2381,7 +2378,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         [nodeB]$ vi ha_make_slavedb.sh
         target_host=nodeA
 
-#.  설정 후에는 다음과 같이 슬레이브에서 **ha_make_slavedb.sh** 스크립트를 실행한다.
+#.  After configuration, **ha_make_slavedb.sh** script should be run on a slave node.
 
     ::
 
@@ -2390,18 +2387,25 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
 .. _scp-setting:
         
-.. note:: **ha_make_slavedb.sh** 스크립트를 수행할 때 scp 명령을 사용하게 되는데, scp 수행 시 암호 요청 과정을 생략하려면 다음과 같이 scp의 개인키를 대상 노드에, 공개키를 원본 노드에 설정하면 된다. 보다 자세한 내용은 Linux의 ssh-keygen 사용법을 참고한다.
+.. note:: scp command is used when you run **ha_make_slavedb.sh**; to skip a password request when you run scp, you should configure a personal key to the target node, and a public key to the source node. For details, see the usage of ssh-keygen in Linux.
 
-    #.  대상 노드에 **ssh-keygen -t rsa** 를 실행하여 리눅스 사용자 계정의 홈 디렉터리 이하에 .ssh/id_rsa와 .ssh/id_rsa.pub 파일이 생성되었음을 확인한다.
-
-    #.  대상 노드의 id_rsa.pub을 원본 노드 Linux 사용자 계정의 홈 디렉터리/.ssh 디렉터리 이하에 authorized_keys라는 파일명으로 복사한다.
-
-    #.  authorized_keys 파일의 속성을 640, .ssh 디렉터리의 속성을 700으로 수정한다. (chmod 640 authorized_keys; cd ..; chmod 700 .ssh)
-
-    #.  테스트를 통해 암호 요청 없이 파일이 복사되는지 확인한다. (scp test.txt cubrid_usr@:/home/cubrid_usr/.)
+    #.  Run **ssh-keygen -t rsa** in the target node and check if .ssh/id_rsa and .ssh/id_rsa.pub files are created on the Linux user's home directory.
     
+    #.  Copy id_rsa.pub file of the target node into the /.ssh directory under the Linux user's home directory; change a file name as authorized_keys.
+
+    #.  Change the modes of authorized_keys file as 640, .ssh directory as 700
     
-**ha_make_slavedb.sh** 스크립트를 각 단계의 순서대로 실행하는 도중 오류가 발생하거나 n을 입력하여 실행을 중단한 이후에 재실행할 경우, 그 이전까지 실행에 성공한 단계에 대해서는 s를 입력하여 다음 단계로 넘어가도 된다.
+        ::
+        
+            chmod 640 authorized_keys; cd ..; chmod 700 .ssh
+
+    #.  Check if it is possible to copy without password request.
+    
+        ::
+        
+            scp test.txt cubrid_usr@:/home/cubrid_usr/.
+
+If you find an error or quit the step by pressing "n" during executing each step of  **ha_make_slavedb.sh**, you should re-execute the script. When you re-execute the script, you can skip the succeeded step as pressing "n".
    
 1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
  
@@ -2421,6 +2425,14 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
     Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
 
+    ::
+    
+        HA/replica cubrid_usr's password :
+        HA/replica cubrid_usr's password :
+         
+        testdb's DBA password :
+        Retype testdb's DBA password :
+        
 2.  At this step, check whether the environment variables of the slave node are correct. Enter y to the question. 
 
     ::
@@ -2455,7 +2467,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
 
-3.  At this step, copy the HA-related scripts of the slave node to the master node. Enter y to the question. Then the password will be asked for if you did not set the public key with ssh-keygen when you sent a file with **scp** command. 
+3.  At this step, copy the HA-related scripts of the slave node to the master node. Enter y to the question. Then the password will be asked if you did not set the public key with ssh-keygen when you sent a file with **scp** command. 
 
     ::
 
@@ -2470,7 +2482,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
          
-4.  At this step, copy the HA-related scripts to the replica node. In this scenario, if there is no replica node, skip this step and go to the next step by entering. 
+4.  At this step, copy the HA-related scripts to the replica node. In this scenario, there is no replica node; therefore, you can skip this step and go to the next step by entering. 
 
     ::
 
@@ -2489,7 +2501,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
 5.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
 
-    [번역] expect 명령이 설치(root 계정에서 yum install expect)되어 있지 않으면 이 단계에서 오류가 발생할 수 있다.
+    If **expect** command is not installed('yum install expect' in root account), this step can occur an error.
     
     ::
 
@@ -2556,7 +2568,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         There are no results.
         Connection to nodeA closed.
 
-8.  At this step, initialize the HA meta information table of replica node. In this scenario, if there is no replica node, skip this step and go to the next step by entering s. 
+8.  At this step, initialize the HA meta information table of replica node. In this scenario, there is no replica node; therefore, you can skip this step and go to the next step by entering s. 
 
     ::
 
@@ -2578,7 +2590,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
     *   The archive logs, including the transaction being executed during backup, must be in the master node (**target_host**); this means that a backup volume created long ago cannot be used.
 
-    *   The backup status information file must be created by using the **-o** option during backup. At this time, the path must be identical to the path of the backup volume file. The file name must be `db_name`\ **.bkup.output** format. If the file name is not identical with the format, change the file name according to the format before executing the script.
+    *   The backup status information file must be created by using the **-o** option during backup. At this time, the path must be identical to the path of the backup volume file. The file name must be *db_name*\ **.bkup.output** format. If the file name is not identical with the format, change the file name according to the format before executing the script.
 
     *   The path of the existing backup volume and the status information file must be specified in the **backup_dest_path** parameter in the script. In other words, specify the absolute path of the directory containing the backup volume on the master node (**target_host**) to this parameter.
 
@@ -2645,7 +2657,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
          
-13. At this step, initial the replication log of the master node and then copy the storage log of the master node to the slave node. Enter y to the question. 
+13. At this step, initialize the replication log of the master node and then copy the archive logs of the master node to the slave node. Enter y to the question. 
 
     ::
 
@@ -2663,7 +2675,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
          
-14. At this step, restart the copylogdb process and the applylogdb process of the master node. Enter y to the question. 
+14. At this step, restart replication of the master node. Enter y to the question. 
 
     ::
 
@@ -2678,7 +2690,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
 
-15. At this step, the result of building the slave node is printed to check whether it was successful or failed.
+15. At this step, the result of building the slave node is printed to check whether it was successful or not.
 
     ::
 
@@ -2689,19 +2701,19 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         ################################################################################
         .
 
-[번역]  **ha_make_slavedb.sh** 스크립트의 수행이 완료되면 다음 작업을 수행한다.
+Operate the below process when you complete to run **ha_make_slavedb.sh** script.
         
-*   슬레이브를 새로 구축하는 경우 다음과 같이 마스터와 슬레이브의 **ha_node_list**\에 *nodeB*\를 추가한다.
+*   If you build a slave node newly, add *nodeB* to **ha_node_list** of a master node and a slave node. 
 
-    *   마스터와 슬레이브의 **cubrid_ha.conf**\에 "ha_node_list=cubrid\@nodeA:nodeB"를 설정한다.
-    *   마스터에서 **cubrid heartbeat reload** 명령을 실행하여 **ha_node_list** 정보를 다시 읽는다.
-    *   다음과 같이 마스터의 보관 로그 개수인 **log_max_archives** 설정을 **cubrid.conf**\에 지정된 값으로 재설정한다.
+    *   Set "ha_node_list=cubrid\@nodeA:nodeB" in **cubrid_ha.conf** of a master and a slave.
+    *   In a master, reload **ha_node_list** by executing **cubrid heartbeat reload** command.
+    *   As the following, reconfigure **log_max_archives**, the number of archive logs in a master as the specified value in **cubrid.conf**.
 
         ::
         
             $ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=0'" testdb@localhost
     
-*   슬레이브 노드에서 HA 상태를 확인하고, **cubrid heartbeat start** 명령으로 HA를 구동한다. 
+*   Check the HA status on a slave node, then start HA service with **cubrid heartbeat start** command.
 
     ::
 
@@ -2741,83 +2753,64 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
         Server testdb (pid 26617, state registered_and_standby)
 
-:ref:`ha-cubrid-broker-conf`\ 를 참고하여 브로커를 설정하고, **cubrid broker restart** 명령으로 브로커를 구동한다.
+Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
 
-슬레이브에서 레플리카 구축
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Building Replica from Slave
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-다음은 복제 재구축 원본 노드를 슬레이브 노드로 하여, 슬레이브 노드에서 레플리카 노드를 새로 구축하거나 재구축하는 예이다.
-새로 구축하는 경우 Master:Slave:Replica는 1:1:0에서 1:1:1이 된다.
+The below is an example to build newly or rebuild a replica node from a slave node; at this time, the source node for replication rebuilding would be slave node.
+When you build this node newly, "Master:Slave:Replica" will be from 1:1:0 to 1:1:1.
 
 .. image:: /images/s2r.png
 
-*   마스터 노드 호스트 명: *nodeA*
-*   슬레이브 노드 호스트 명: *nodeB*
-*   레플리카 노드 호스트 명: *nodeC*
+*   A host name of a master: *nodeA*
+*   A host name of a slave: *nodeB*
+*   A host name of a replica: *nodeC*
 
-복제 재구축은 시스템이 운영 중인 상태에서도 수행할 수 있으나, 복제 지연을 최소화하기 위해 시간 당 트랜잭션 수가 적을 때 수행하는 것을 권장한다.
+Rebuilding replications can be performed while the system is running, however, to minimize replication delay, it is recommended to execute when there are just a few transactions per hour.
 
-**ha_make_slavedb.sh** 스크립트를 실행하기 전에 다음을 수행한다.
+Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
-#.  *nodeC*\ 의 HA 서비스를 종료한다. *nodeC*\ 를 새로 구축한다면 이 과정은 불필요하다.
+#.  Stop the HA service of *nodeC*. If you build the *nodeC* newly, this is not necessary.
 
     ::
 
         [nodeC]$ cubrid heartbeat stop
         [nodeC]$ cubrid service stop
 
-#.  *nodeC*\를 새로 구축한다면 :ref:`ha-configuration`\을 참고하여 *nodeA*, *nodeB*\, *nodeC*\의 **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf**, **databases.txt**\를 설정한다.
+#.  If you newly build *nodeC*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB* and *nodeC*, by referring :ref:`ha-configuration`.
 
-    *   *nodeC*\ 의 **cubrid.conf**\에 설정
+    *   Configure a parameter in **cubrid.conf** about *nodeC*.
     
         ::
         
             ha_mode=replica
             
-    *   모든 노드의 **cubrid_ha.conf**\에 설정
+    *   Configure parameters in **cubrid_ha.conf** about all nodes.
 
         ::
         
             ha_node_list=cubrid@nodeA:nodeB
             ha_replica_list=cubrid@nodeC
             
-    *   모든 노드에서 **databases.txt**\의 **db-host** 설정
+    *   Configure **db-host** in **databases.txt** about all nodes.
     
         ::
         
             nodeA:nodeB:nodeC
             
-        하지만 **databases.txt**\의 **db-host** 부분은 브로커에서 DB 서버에 접속하는 순서와 관련된 설정 파일이므로 원하는대로 변경이 가능하다.
+        But **db-host** in **databases.txt** is related to the order of which DB is connected from broker; therefore, it is possible to change as you want.
 
-    .. 스크립트 수정 전까지는 아래 내용 적용 안 됨.
-    
-        #.  **cubrid_ha.conf**\의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 값을 변경한다.
+#.  Apply the changed value of **log_max_archives** to *nodeB* without restarting DB.
 
-            *nodeC*\ 의 복제 재구축이 진행될 때 원본 노드인 *nodeB*\ 의 복제 로그(*nodeA*\ 로부터 복제된 로그. 보통 복제된 로그가 *nodeB* DB에 반영될 때 사용됨)가 사용되므로, 복제 재구축이 끝날 때까지 *nodeB*\ 의 복제 로그가 삭제되지 않을 정도로 **ha_copy_log_max_archives** 값이 변경되어야 한다. 이 값을 10이라고 가정하고 아래와 같이 설정한다.
-
-            *   *nodeB*\ 의 **cubrid_ha.conf**\에 설정
-            
-                ::
-                    
-                    ha_copy_log_max_archives=10
-            
-            *   *nodeB*\ 에서 다음을 수행하여 **ha_copy_log_max_archives**\의 변경된 설정 값을 적용
-            
-                ::
-                    
-                    [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
-                    [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
-
-#.  *nodeB*\에 DB의 재구동 없이 **log_max_archives**\의 변경된 값을 적용한다.
-
-    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeC*\ 의 구축/재구축 이후 기존 설정을 사용할 것이므로 변경하지 않는다.
+    The below supposes that the number of archive logs which can store running transactions during replica building time as 10. Set "10" with "SET SYSTEM PARAMETERS" statement, and **log_max_archives** in **cubrid.conf** will not be changed because it's value will be used as the existing one after building/rebuilding of *nodeC*.
     
     ::
     
         [nodeB]$ csql -u dba -c "SET SYSTEM PARAMETERS 'force_remove_log_archives=no'" testdb@localhost
         [nodeB]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=10'" testdb@localhost
-            
-#.  *nodeC*\ 의 **ha_make_slavedb.sh** 스크립트를 설정해야 한다. **target_host**\에는 복사할 원본, 즉 *nodeB*\ 를 설정하고, **repl_log_home**\에는 복제 로그의 홈 디렉터리(기본값: **$CUBRID_DATABASES**)를 설정한다. 
+
+#.  **ha_make_slavedb.sh** script should be configured in *nodeC*. In **target_host**, the source of the copied one, that is *nodeB* should be configured; in **repl_log_home**, the home directory of replication logs(default: **$CUBRID_DATABASES**) should be configured.
 
     ::
          
@@ -2825,18 +2818,18 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         [nodeC]$ vi ha_make_slavedb.sh
         target_host=nodeB
 
-#.  설정 후에는 *nodeC*\ 에서 **ha_make_slavedb.sh** 스크립트를 실행한다 
+#.  After configuration, **ha_make_slavedb.sh** script should be run on *nodeC*.
 
     ::
 
         [nodeC]$ cd $CUBRID/share/scripts/ha
         [nodeC]$ ./ha_make_slavedb.sh
 
-.. note::   스크립트를 수행할 때 scp 명령을 사용하게 되는데, scp 수행 시 암호 요청 과정을 생략하려면 scp의 개인키를 재구축하려는 레플리카 노드(*nodeC*)에, 공개키를 복제 원본에 해당하는 슬레이브 노드(*nodeB*)에 설정하면 된다. 이와 관련하여 :ref:`scp 설정하기 <scp-setting>`\ 를 참고한다.
+.. note::   scp command is used when you run **ha_make_slavedb.sh**; to skip a password request when you run scp, you should configure a personal key to the replica node to build(*nodeC*), and a public key to the slave node(*nodeB*), the source of the replication. For details, see ref:`scp setting <scp-setting>`.
 
-**ha_make_slavedb.sh** 스크립트를 각 단계의 순서대로 실행하는 도중 오류가 발생하거나 n을 입력하여 실행을 중단한 이후에 재실행할 경우, 그 이전까지 실행에 성공한 단계에 대해서는 s를 입력하여 다음 단계로 넘어가도 된다.
+If you find an error or quit the step by pressing "n" during executing each step of  **ha_make_slavedb.sh**, you should re-execute the script. When you re-execute the script, you can skip the succeeded step as pressing "n".
 
-1.  HA 복제 재구축을 위한 Linux 계정의 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력하는 단계이다. 질문에 y를 입력한다. 
+1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
 
     ::
 
@@ -2852,7 +2845,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
    
-    HA 노드의 Linux 계정 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력한다. 처음 CUBRID 설치 후 **dba** 암호를 변경하지 않았을 경우, **dba** 암호의 입력 없이 <Enter> 키를 누르면 된다. 
+    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
    
     ::
     
@@ -2862,7 +2855,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         testdb's DBA password :
         Retype testdb's DBA password :
 
-2.  레플리카 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. 
+2.  At this step, check whether the environment variables of the replica node are correct. Enter y to the question. 
 
     ::
 
@@ -2875,7 +2868,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         #
         #   - master_host       : nodeA
         #   - slave_host        : nodeB
-        #   - replica_hosts     : nocdC
+        #   - replica_hosts     : nodeC
         #
         #   - current_host      : nodeC
         #   - current_state     : replica
@@ -2896,7 +2889,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
      
            continue ? ([y]es / [n]o / [s]kip) : y
 
-3.  레플리카 노드의 HA 관련 스크립트들을 마스터 노드에 복사하는 단계이다. 질문에 y를 입력한다. 이후 모든 단계에서도 마스터 노드에 접속 시 암호를 요구하게 되며, scp 명령을 이용하여 필요한 파일을 전송할 때에도 암호를 요구한다. 
+3.  At this step, copy the HA-related scripts of the replica node to the master node. Enter y to the question. Then the password will be asked if you did not set the public key with ssh-keygen when you sent a file with **scp** command. 
 
     ::
 
@@ -2911,7 +2904,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
 
-4.  레플리카 노드의 HA 관련 스크립트들을 슬레이브 노드에 복사하는 단계이다.
+4.  At this step, copy the HA-related scripts of the replica node to the slave node.
 
     ::
 
@@ -2926,9 +2919,9 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
          
-5.  모든 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. 
+5.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
 
-    expect 명령이 설치(root 계정에서 yum install expect)되어 있지 않으면 이 단계에서 오류가 발생할 수 있다.
+    If **expect** command is not installed('yum install expect' in root account), this step can occur an error.
 
     ::
 
@@ -2945,13 +2938,14 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
            
-6.  HA 복제 재구축을 위해 슬레이브 노드(**target_host**)로부터 백업 볼륨을 생성하는 단계로서, 기존에 이미 생성한 백업 볼륨이 있다면 s를 입력하여 다음 단계로 넘어갈 수 있다. 기존 백업 볼륨을 사용하여 복제 재구축을 수행하기 위해서는 다음과 같은 제약 조건이 있다.
+6.  At this step, create backup volumes from a slave node(**target_host**) to rebuild HA replication; if you already have backup volumes which was created before, you can skip this step by entering "s". To rebuild replication with previous backup volumes, there are some constraints as follows.
    
-    *   백업 시작 이후 생성된 보관 로그(archive logs), 원본 DB에 미반영된 복제 로그와 복제 재구축 이후 진행 중인 트랜잭션에 대한 복제 로그가 반드시 슬레이브 노드(**target_host**) 내에 존재해야 한다(즉, 오래 전에 생성한 백업 볼륨은 사용할 수 없음).
+    *   Archive logs created after starting backup, replication logs for the transactions after replication rebuilding must exist within a slave node(**target_host**); that is, backup volumes created a long time ago cannot be used).
+ 
+    *   Backup status information files should be left with "-o" option when doing backup. At this time, a stored path should be the same with the path of backup volume files. The file name should be the format such as *db_name*\ **.bkup.output**; if the file name is not this format, you should change it before running the script.
 
-    *   백업 시 -o 옵션을 사용하여 백업 상태 정보 파일을 남겨야 한다. 이 때 저장되는 경로는 백업 볼륨 파일의 경로와 같아야 한다. 파일 이름은 `db_name`\ **.bkup.output** 형식이어야 하며, 파일 이름이 다른 경우 스크립트 수행 전에 형식에 맞게 변경한다.
-
-    *   기존 백업 볼륨 및 상태 정보 파일의 경로는 스크립트 내의 **backup_dest_path** 파라미터에 지정해야 한다. 즉, 슬레이브 노드(**target_host**)에 존재하는 백업 볼륨이 포함된 디렉터리의 절대 경로를 이 파라미터에 지정하면 된다.
+    
+    *   The path of existing backup volumes and status informatin files should be specified in **backup_dest_path** parameter of the script. That is, the absolute path of the directory with backup volumes which exists in a slave node(**target_host**) is specified to this parameter.
 
     ::
     
@@ -2966,7 +2960,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-7.  슬레이브 노드의 데이터베이스 백업본을 레플리카 노드에 복사하는 단계이다. 질문에 y를 입력한다. 
+7. At this step, copy the database backup of the slave node to the replica node. Enter y to the question. 
            
     ::       
            
@@ -2985,7 +2979,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
            continue ? ([y]es / [n]o / [s]kip) : y
 
        
-8.  복사한 데이터베이스 백업본을 레플리카 노드에 복구하는 단계이다. 질문에 y를 입력한다. 
+8.  At this step, restore the copied database backup to the replica node. Enter y to the question. 
 
     ::
 
@@ -3000,7 +2994,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-9.  레플리카 노드의 HA 메타 정보 테이블 값을 설정하는 단계이다. 질문에 y를 입력한다. 
+9.  At this step, configure the HA meta information table value of the replica node. Enter y to the question. 
 
     ::
 
@@ -3019,7 +3013,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
            continue ? ([y]es / [n]o / [s]kip) : y
    
 
-10. 슬레이브에 있는 복제 로그를 초기화하고, 슬레이브 노드의 저장 로그를 레플리카 노드에 복사하는 단계이다. 질문에 y를 입력한다. 
+10. At this step, initialize the replication log of the slave node and then copy the archive logs of the slave node to the replica node. Enter y to the question. 
 
     ::
        
@@ -3037,7 +3031,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-11. 레플리카 노드 구축이 정상적으로 완료되었는지 여부를 출력하는 단계이다. 
+11. At this step, the result of building the replica node is printed to check whether it was successful or not.
 
     ::
 
@@ -3046,25 +3040,11 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         #  completed
         #
         ################################################################################
-
-**ha_make_slavedb.sh** 스크립트의 수행이 완료되면 다음 작업을 수행한다.
-
-
-..  아래 내용은 복제 재구축 스크립트 변경 전까진 불필요.
+        .
         
-    *   *nodeC*\ 에서 예상되는 복제 지연 정도에 따라 *nodeA*\ 와 *nodeB*\ 에서 **cubrid_ha.conf**\의 **ha_copy_log_max_archives** 값을 변경한 후, 다음을 수행하여 변경된 설정 값을 적용한다.
+Operate the below process when you complete to run **ha_make_slavedb.sh** script.
 
-        ::
-            
-            [nodeA]$ cubrid heartbeat applylogdb stop testdb nodeB
-            [nodeA]$ cubrid heartbeat applylogdb start testdb nodeB
-            
-        ::
-        
-            [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
-            [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
-
-*   레플리카 노드를 새로 구축하는 경우 *nodeA*\ 와 *nodeB*\ 에서 변경된 **cubrid_ha.conf**\의 **ha_node_list, ha_replica_list**\를 적용한다.
+*   When you build a replica node newly, apply **ha_node_list** and **ha_replica_list** of **cubrid_ha.conf** which were changed in *nodeA* and *nodeB*.
 
     ::
     
@@ -3074,13 +3054,13 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
     
         [nodeB]$ cubrid heartbeat reload
     
-*   슬레이브 노드에서 **log_max_archives** 설정을 **cubrid.conf**\에 지정된 값으로 재설정한다.
+*   In a slave node, reconfigure the **log_max_archives** parameter as the specified value.
 
     ::
     
         $ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=0'" testdb@localhost
 
-*   레플리카 노드에서 HA 상태를 확인하고, **cubrid heartbeat start** 명령으로 HA를 구동한다. 
+*   Check the HA status on a replica node, then start HA service with **cubrid heartbeat start** command.
 
     ::
     
@@ -3127,86 +3107,65 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
            Copylogdb testdb@dhtest001.ncl:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
            Server testdb (pid 5590, state registered_and_standby)
 
-*   :ref:`ha-cubrid-broker-conf`\ 를 참고하여 브로커를 설정하고, **cubrid broker restart** 명령으로 브로커를 구동한다.
+*   Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
 
-레플리카에서 레플리카 구축
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Building Replica from Replica
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-다음은 복제 재구축 원본 노드를 레플리카 노드로 하여, 레플리카 노드로부터 레플리카 노드를 새로 구축하거나 재구축하는 예이다.
-새로 구축하는 경우 Master:Slave:Replica는 1:1:1에서 1:1:2가 된다.
+The below is an example to build newly or rebuild a replica node from a replica node; at this time, the source node for replication rebuilding would be replica node.
+When you build this node newly, "Master:Slave:Replica" will be from 1:1:1 to 1:1:2.
 
 .. image:: /images/r2r.png
 
-*   마스터 노드 호스트 명: *nodeA*
-*   슬레이브 노드 호스트 명: *nodeB*
-*   레플리카 노드 호스트 명: *nodeC*
-*   레플리카 노드 호스트 명: *nodeD*
+*   A host name of a master: *nodeA*
+*   A host name of a slave: *nodeB*
+*   A host name of a replica: *nodeC*
+*   A host name of a replica: *nodeD*
 
-복제 재구축은 마스터 노드가 운영 중인 상태에서도 수행할 수 있으나, 복제 지연을 최소화하기 위해 시간 당 트랜잭션 수가 적을 때 수행하는 것을 권장한다.
+Rebuilding replications can be performed while the system is running, however, to minimize replication delay, it is recommended to execute when there are just a few transactions per hour.
 
-**ha_make_slavedb.sh** 스크립트를 실행하기 전에 다음을 수행한다.
+Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
-#.  *nodeD*\ 의 HA 서비스를 종료한다. *nodeD*\ 를 새로 구축한다면 이 과정은 불필요하다. 
+#.  Stop the HA service of *nodeD*. If you build the *nodeD* newly, this is not necessary.
 
     ::
 
         [nodeD]$ cubrid heartbeat stop
         [nodeD]$ cubrid service stop
 
-#.  *nodeD*\ 를 새로 구축한다면 :ref:`ha-configuration`\ 을 참고하여 마스터, 슬레이브, 복제 원본 레플리카, 복제 대상 레플리카의 **cubrid.conf, cubrid_ha.conf, cubrid_broker.conf, databases.txt**\를 설정한다.
+#.  If you newly build *nodeD*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB*, *nodeC* and *nodeD*, by referring :ref:`ha-configuration`.
 
-    *   *nodeC*, *nodeD*\의 **cubrid.conf**\에 설정
+    *   Configure a parameter in **cubrid.conf** about *nodeC* and *nodeD*.
     
         ::
         
             ha_mode=replica
             
-    *   모든 노드의 **cubrid_ha.conf**\에 설정
+    *   Configure parameters in **cubrid_ha.conf** about all nodes.
     
         ::
         
             ha_node_list=cubrid@nodeA:nodeB
             ha_replica_list=cubrid@nodeC:nodeD
             
-    *   모든 노드에서 **databases.txt**\의 **db-host** 설정
+    *   Configure **db-host** in **databases.txt** about all nodes.
     
         ::
         
             nodeA:nodeB:nodeC:nodeD
             
-        하지만 **databases.txt**\의 **db-host** 부분은 브로커에서 DB 서버에 접속하는 순서와 관련된 설정 파일이므로 원하는대로 변경이 가능하다.
+        But **db-host** in **databases.txt** is related to the order of which DB is connected from broker; therefore, it is possible to change as you want.
 
-        
-        
-    ..  아래 내용은 복제 재구축 스크립트 변경 전까진 불필요.
-            
-        #.  **cubrid_ha.conf**\의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 값을 변경한다.
+#.  Apply the changed value of **log_max_archives** to *nodeC* without restarting DB.
 
-            *   *nodeD*\ 의 복제 재구축이 진행될 때 원본 노드인 *nodeC*\ 의 복제 로그(*nodeA*\ 로부터 복제된 로그. 보통 복제된 로그가 *nodeC* DB에 반영될 때 사용됨)가 사용되므로, 복제 재구축이 끝날 때까지 *nodeC*\의 복제 로그가 삭제되지 않을 정도로 **ha_copy_log_max_archives** 값이 변경되어야 한다. 이 값을 10이라고 가정하고 아래와 같이 설정한다.
-
-            *   *nodeC*\의 **cubrid_ha.conf**\에 설정
-            
-                ::
-                
-                    ha_copy_log_max_archives=10        
-            
-            *   *nodeC*\에서 다음을 수행하여 ha_copy_log_max_archives의 변경된 설정 값을 적용
-            
-                ::
-                
-                    [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeA
-                    [nodeC]$ cubrid heartbeat applylogdb start testdb nodeA
-
-#.  *nodeC*\에 DB의 재구동 없이 **log_max_archives**\의 변경된 값을 적용한다.
-
-    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeD*\의 구축/재구축 이후 기존 설정을 사용할 것이므로 변경하지 않는다.
+    The below supposes that the number of archive logs which can store running transactions during replica building time as 10. Set "10" with "SET SYSTEM PARAMETERS" statement, and **log_max_archives** in **cubrid.conf** will not be changed because it's value will be used as the existing one after building/rebuilding of *nodeD*.
     
     ::
     
         [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'force_remove_log_archives=no'" testdb@localhost
         [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=10'" testdb@localhost
 
-#.  *nodeD*\의 **ha_make_slavedb.sh** 스크립트를 설정해야 한다. **target_host**\ 에는 복사할 원본, 즉 *nodeC*\ 를 설정하고, **repl_log_home**\에는 복제 로그의 홈 디렉터리(기본값: **$CUBRID_DATABASES**)를 설정한다. 
+#.  **ha_make_slavedb.sh** script should be configured in *nodeD*. In **target_host**, the source of the copied one, that is *nodeC* should be configured; in **repl_log_home**, the home directory of replication logs(default: **$CUBRID_DATABASES**) should be configured.
 
     ::
          
@@ -3214,18 +3173,18 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         [nodeD]$ vi ha_make_slavedb.sh
         target_host=nodeC
         
-#.  설정 후에는 *nodeD*\ 에서 **ha_make_slavedb.sh** 스크립트를 실행한다 
+#.  After configuration, **ha_make_slavedb.sh** script should be run on *nodeD*.
 
     ::
 
         [nodeD]$ cd $CUBRID/share/scripts/ha
         [nodeD]$ ./ha_make_slavedb.sh
-        
-.. note::   스크립트를 수행할 때 scp 명령을 사용하게 되는데, scp 수행 시 암호 요청 과정을 생략하려면 scp의 개인키를 재구축하려는 레플리카 노드(*nodeD*)에, 공개키를 복제 원본 레플리카 노드(*nodeC*)에 설정하면 된다. 이와 관련하여 :ref:`scp 설정하기 <scp-setting>`\ 를 참고한다.
 
-**ha_make_slavedb.sh** 스크립트를 각 단계의 순서대로 실행하는 도중 오류가 발생하거나 n을 입력하여 실행을 중단한 이후에 재실행할 경우, 그 이전까지 실행에 성공한 단계에 대해서는 s를 입력하여 다음 단계로 넘어가도 된다.
+.. note::   scp command is used when you run **ha_make_slavedb.sh**; to skip a password request when you run scp, you should configure a personal key to the replica node, which is replication target(*nodeD*), and a public key to the other replica node, which is replication source(*nodeC*). For details, see ref:`scp setting <scp-setting>`.
 
-1.  HA 복제 재구축을 위한 Linux 계정의 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력하는 단계이다. 질문에 y를 입력한다. 
+If you find an error or quit the step by pressing "n" during executing each step of  **ha_make_slavedb.sh**, you should re-execute the script. When you re-execute the script, you can skip the succeeded step as pressing "n".
+
+1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
 
     ::
 
@@ -3241,7 +3200,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
    
-    HA 노드의 Linux 계정 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력한다. 처음 CUBRID 설치 후 **dba** 암호를 변경하지 않았을 경우, **dba** 암호의 입력 없이 <Enter> 키를 누르면 된다. 
+    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
    
     ::
     
@@ -3251,7 +3210,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         testdb's DBA password :
         Retype testdb's DBA password :
 
-2.  레플리카 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. 
+2.  At this step, check whether the environment variables of the replica node are correct. Enter y to the question. 
 
     ::
 
@@ -3285,7 +3244,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
      
            continue ? ([y]es / [n]o / [s]kip) : y
 
-3.  대상 레플리카 노드의 HA 관련 스크립트들을 마스터 노드에 복사하는 단계이다. 질문에 y를 입력한다. 이후 모든 단계에서도 마스터 노드에 접속 시 암호를 요구하게 되며, scp 명령을 이용하여 필요한 파일을 전송할 때에도 암호를 요구한다. 
+3.  At this step, copy the HA-related scripts of the replica node to the master node. Enter y to the question. Then the password will be asked if you did not set the public key with ssh-keygen when you sent a file with **scp** command. 
 
     ::
 
@@ -3300,7 +3259,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
 
-4.  대상 레플리카 노드의 HA 관련 스크립트들을 슬레이브 노드에 복사하는 단계이다.
+4.  At this step, copy the HA-related scripts of the replica node to the slave node.
 
     ::
 
@@ -3315,7 +3274,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
 
-5.  대상 레플리카 노드의 HA 관련 스크립트들을 원본 레플리카 노드에 복사하는 단계이다.
+5.  At this step, copy the HA-related scripts of one replica node to the other replica node.
 
     ::
     
@@ -3331,9 +3290,9 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
            continue ? ([y]es / [n]o / [s]kip) : y
 
            
-6.  모든 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다.
+6.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
 
-    expect 명령이 설치(root 계정에서 yum install expect)되어 있지 않으면 이 단계에서 오류가 발생할 수 있다.
+    If **expect** command is not installed('yum install expect' in root account), this step can occur an error.
 
     ::
 
@@ -3350,13 +3309,13 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
          
            continue ? ([y]es / [n]o / [s]kip) : y
    
-7.  HA 복제 재구축을 위해 원본 노드(**target_host**)로부터 백업 볼륨을 생성하는 단계로서, 기존에 이미 생성한 백업 볼륨이 있다면 s를 입력하여 다음 단계로 넘어갈 수 있다. 기존 백업 볼륨을 사용하여 복제 재구축을 수행하기 위해서는 다음과 같은 제약 조건이 있다.
+7.  At this step, create backup volumes from a source node(**target_host**) to rebuild HA replication; if you already have backup volumes which was created before, you can skip this step by entering "s". To rebuild replication with previous backup volumes, there are some constraints as follows.
    
-    *   백업 시작 이후 생성된 보관 로그(archive logs), 원본 DB에 미반영된 복제 로그와 복제 재구축 이후 진행 중인 트랜잭션에 대한 복제 로그가 반드시 원본 레플리카 노드(**target_host**) 내에 존재해야 한다(즉, 오래 전에 생성한 백업 볼륨은 사용할 수 없음).
-
-    *   백업 시 -o 옵션을 사용하여 백업 상태 정보 파일을 남겨야 한다. 이 때 저장되는 경로는 백업 볼륨 파일의 경로와 같아야 한다. 파일 이름은 `db_name`\ **.bkup.output** 형식이어야 하며, 파일 이름이 다른 경우 스크립트 수행 전에 형식에 맞게 변경한다.
-
-    *   기존 백업 볼륨 및 상태 정보 파일의 경로는 스크립트 내의 **backup_dest_path** 파라미터에 지정해야 한다. 즉, 원본 노드(**target_host**)에 존재하는 백업 볼륨이 포함된 디렉터리의 절대 경로를 이 파라미터에 지정하면 된다.
+    *   Archive logs created after starting backup, replication logs for the transactions after replication rebuilding must exist within a source replica node(**target_host**); that is, backup volumes created a long time ago cannot be used).
+ 
+    *   Backup status information files should be left with "-o" option when doing backup. At this time, a stored path should be the same with the path of backup volume files. The file name should be the format such as *db_name*\ **.bkup.output**; if the file name is not this format, you should change it before running the script.
+    
+    *   The path of existing backup volumes and status informatin files should be specified in **backup_dest_path** parameter of the script. That is, the absolute path of the directory with backup volumes which exists in a source node(**target_host**) is specified to this parameter.
     
     ::
     
@@ -3371,7 +3330,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-8.  원본 레플리카 노드의 데이터베이스 백업본을 대상 레플리카 노드에 복사하는 단계이다. 질문에 y를 입력한다. 
+8. At this step, copy the database backup of the source replica node to the target replica node. Enter y to the question. 
            
     ::       
            
@@ -3390,7 +3349,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
            continue ? ([y]es / [n]o / [s]kip) : y
 
        
-9.  복사한 데이터베이스 백업본을 대상 레플리카 노드에 복구하는 단계이다. 질문에 y를 입력한다. 
+9.  At this step, restore the copied database backup to the target replica node. Enter y to the question. 
 
     ::
 
@@ -3405,7 +3364,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-10. 복제 원본 레플리카 노드에서 수행 중인 copylogdb/applylogdb 프로세스가 있으면 종료시키는 단계이다. 질문에 y를 입력한다.
+10. At this step, stop replication of a source replica node. Enter y to the question.
 
     ::
            
@@ -3420,7 +3379,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-11. 원본 레플리카 노드에 있는 복제 로그를 초기화하고, 원본 레플리카 노드의 저장 로그를 레플리카 노드에 복사하는 단계이다. 질문에 y를 입력한다. 
+11. At this step, initialize the replication log of the source replica node and then archive logs of the source replica node to the target replica node. Enter y to the question.
 
     ::
        
@@ -3438,7 +3397,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-12. 복제 원본 레플리카 노드의 copylogdb/applylogdb 프로세스를 재구동한다.
+12. At this step, restart replication of the source replica node. Enter y to the question. 
 
     ::
 
@@ -3451,7 +3410,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         #
         ################################################################################
 
-13. 레플리카 노드 구축이 정상적으로 완료되었는지 여부를 출력하는 단계이다. 
+13. At this step, the result of building the replica node is printed to check whether it was successful or not.
 
     ::
 
@@ -3461,32 +3420,9 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         #
         ################################################################################
 
-**ha_make_slavedb.sh** 스크립트의 수행이 완료되면 다음 작업을 수행한다.
+Operate the below process when you complete to run **ha_make_slavedb.sh** script.
 
-..  아래 내용은 복제 재구축 스크립트 변경 전까진 불필요.
-
-    
-    *   *nodeC*, *nodeD*\에서 예상되는 복제 지연 정도에 따라 모든 노드에서 **cubrid_ha.conf**\의 **ha_copy_log_max_archives** 값을 변경한 후, 다음을 수행하여 변경된 설정 값을 적용한다.
-
-        ::
-            
-            [nodeA]$ cubrid heartbeat applylogdb stop testdb nodeB
-            [nodeA]$ cubrid heartbeat applylogdb start testdb nodeB
-            
-        ::
-        
-            [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
-            [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
-
-            
-        ::
-        
-            [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeA
-            [nodeC]$ cubrid heartbeat applylogdb start testdb nodeA
-            [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeB
-            [nodeC]$ cubrid heartbeat applylogdb start testdb nodeB        
-        
-*   *nodeD*\ 를 새로 구축하는 경우 *nodeA*, *nodeB*, *nodeC*\ 에서 변경된 **cubrid_ha.conf**\의 **ha_node_list, ha_replica_list**\를 적용한다.
+*   When you build *nodeD* newly, apply **ha_node_list** and **ha_replica_list** of **cubrid_ha.conf** which were changed in *nodeA*, *nodeB* and *nodeC*.
 
     ::
     
@@ -3500,15 +3436,13 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
     
         [nodeC]$ cubrid heartbeat reload
         
-*   *nodeC*\에서 **log_max_archives** 설정을 **cubrid.conf**\에 지정된 값으로 재설정한다.
+*   In *nodeC*, reconfigure the **log_max_archives** parameter as the specified value.
 
     ::
     
         [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=0'" testdb@localhost
 
-*   *nodeD*\에서 HA 상태를 확인하고, **cubrid heartbeat start** 명령으로 HA를 구동한다. 
-
-
+*   Check the HA status at *nodeD*, then start HA service with **cubrid heartbeat start** command.
 
     ::
     
@@ -3556,89 +3490,66 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
            Copylogdb testdb@dhtest001.ncl:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
            Server testdb (pid 5590, state registered_and_standby)
 
-*   :ref:`ha-cubrid-broker-conf`\ 를 참고하여 브로커를 설정하고, "cubrid broker restart" 명령으로 브로커를 구동한다.
+*   Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
 
-*   CUBRID 서비스를 구동한다.
+Building Slave from Replica
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    ::
-    
-        [nodeD]$ cubrid service start
-
-레플리카에서 슬레이브 재구축
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-다음은 복제 재구축 원본 노드를 레플리카 노드로 하여, 레플리카 노드에서 슬레이브 노드를 재구축하는 예이다. **ha_make_slavedb.sh** 스크립트를 사용하는 경우, 재구축 이후에 슬레이브 노드는 하나만 존재해야 한다.
+The below is an example to build newly or rebuild a slave node from a replica node; at this time, the source node for replication rebuilding would be replica node. 
+When you build this node newly, "Master:Slave:Replica" will be from 1:0:2 to 1:1:2.
+When you use **ha_make_slavedb.sh** script, a slave node after rebuilding should exist only one.
 
 .. image:: /images/r2s.png
 
-*   마스터 노드 호스트 명: *nodeA*
-*   슬레이브 노드 호스트 명: *nodeB*
-*   레플리카 노드 호스트 명: *nodeC*
-*   레플리카 노드 호스트 명: *nodeD*
+*   A host name of a master: *nodeA*
+*   A host name of a slave: *nodeB*
+*   A host name of a replica: *nodeC*
+*   A host name of a replica: *nodeD*
 
-복제 재구축은 시스템이 운영 중인 상태에서도 수행할 수 있으나, 복제 지연을 최소화하기 위해 시간 당 트랜잭션 수가 적을 때 수행하는 것을 권장한다.
+Rebuilding replications can be performed while the system is running, however, to minimize replication delay, it is recommended to execute when there are just a few transactions per hour.
 
-**ha_make_slavedb.sh** 스크립트를 실행하기 전에 다음을 수행한다.
+Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
-#.  *nodeB*\ 의 HA 서비스를 종료한다. *nodeB*\ 를 기존의 장비를 제거하고 새로운 장비에서 구축한다면 이 과정은 불필요하다.
+#.  Stop the HA service of *nodeB*. If you build the *nodeB* newly, this is not necessary.
 
     ::
 
         [nodeB]$ cubrid heartbeat stop
         [nodeB]$ cubrid service stop
         
-#.  *nodeB*\를 새로운 장비에서 재구축한다면 :ref:`ha-configuration`\을 참고하여 *nodeB*\의 **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf**, **databases.txt**\를 설정해야 한다. 이때 *nodeA*, *nodeC*, *nodeD*\에는 *nodeB*\가 이미 설정되어 있다고 가정한다.
+#.  If you newly build *nodeB*, configure **cubrid.conf**, **cubrid_ha.conf**, **cubrid_broker.conf** and **databases.txt** of *nodeA*, *nodeB*, *nodeC* and *nodeD*, by referring :ref:`ha-configuration`.
 
-    *   *nodeB*\ 의 **cubrid.conf**\에 설정
-    
+    *   Configure a parameter in **cubrid.conf** about *nodeB*.
+
         ::
         
             ha_mode=on
             
-    *   모든 노드의 **cubrid_ha.conf**\에 설정
+    *   Configure parameters in **cubrid_ha.conf** about all nodes.
 
         ::
         
             ha_node_list=cubrid@nodeA:nodeB
             ha_replica_list=cubrid@nodeC:nodeD
             
-    *   모든 노드에서 **databases.txt**\의 **db-host** 설정
+    *   Configure **db-host** in **databases.txt** about all nodes.
     
         ::
         
             nodeA:nodeB:nodeC:nodeD
             
-        하지만 **databases.txt**\의 **db-host** 부분은 브로커에서 DB 서버에 접속하는 순서와 관련된 설정 파일이므로 원하는대로 변경이 가능하다.
+        But **db-host** in **databases.txt** is related to the order of which DB is connected from broker; therefore, it is possible to change as you want.
 
-    ..  아래 내용은 복제 재구축 스크립트 변경 전까진 불필요.
-    
-        #.  **cubrid_ha.conf**\의 :ref:`ha_copy_log_max_archives <ha_copy_log_max_archives>` 값을 변경한다.
+#.  Apply the changed value of **log_max_archives** to *nodeC* without restarting DB.
 
-            *nodeB*\ 의 복제 재구축이 진행될 때 원본 노드인 *nodeC*\ 의 복제 로그(*nodeA*\ 로부터 복제된 로그. 보통 복제된 로그가 *nodeC* DB에 반영될 때 사용됨)가 사용되므로, 복제 재구축이 끝날 때까지 *nodeC*\ 의 복제 로그가 삭제되지 않을 정도로 **ha_copy_log_max_archives** 값이 변경되어야 한다. 이 값을 10이라고 가정하고 아래와 같이 설정한다.
-
-            *   *nodeC*\ 의 **cubrid_ha.conf**\에 설정
-            
-                ::
-                    
-                    ha_copy_log_max_archives=10
-            
-            *   *nodeC*\ 에서 다음을 수행하여 **ha_copy_log_max_archives**\의 변경된 설정 값을 적용
-            
-                ::
-                    
-                    [nodeC]$ cubrid heartbeat applylogdb stop testdb nodeA
-                    [nodeC]$ cubrid heartbeat applylogdb start testdb nodeA
-
-#.  *nodeC*\에 DB의 재구동 없이 **log_max_archives**\의 변경된 값을 적용한다.
-
-    레플리카 구축 시간 동안 수행되는 트랜잭션을 보관할 수 있는 보관 로그(archive logs) 개수를 10이라고 가정한다. "SET SYSTEM PARAMETERS" 문을 사용하여 "10"으로 설정하며, **cubrid.conf**\의 **log_max_archives**\는 *nodeB*\ 의 재구축 이후 기존 설정을 사용할 것이므로 변경하지 않는다.
+    The below supposes that the number of archive logs which can store running transactions during replica building time as 10. Set "10" with "SET SYSTEM PARAMETERS" statement, and **log_max_archives** in **cubrid.conf** will not be changed because it's value will be used as the existing one after building/rebuilding of *nodeB*.
     
     ::
     
         [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'force_remove_log_archives=no'" testdb@localhost
         [nodeC]$ csql -u dba -c "SET SYSTEM PARAMETERS 'log_max_archives=10'" testdb@localhost
 
-#.  *nodeB*\ 의 **ha_make_slavedb.sh** 스크립트를 설정해야 한다. **target_host**\에는 복사할 원본, 즉 *nodeB*\ 를 설정하고, **repl_log_home**\에는 복제 로그의 홈 디렉터리(기본값: **$CUBRID_DATABASES**)를 설정한다. 
+#.  **ha_make_slavedb.sh** script should be configured in *nodeB*. In **target_host**, the source of the copied one, that is *nodeB* should be configured; in **repl_log_home**, the home directory of replication logs(default: **$CUBRID_DATABASES**) should be configured.
 
     ::
          
@@ -3646,19 +3557,19 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         [nodeB]$ vi ha_make_slavedb.sh
         target_host=nodeC
 
-#.  설정 후에는 *nodeB*\ 에서 **ha_make_slavedb.sh** 스크립트를 실행한다 
+#.  After configuration, **ha_make_slavedb.sh** script should be run on *nodeB*.
 
     ::
 
         [nodeB]$ cd $CUBRID/share/scripts/ha
         [nodeB]$ ./ha_make_slavedb.sh
-        
-.. note::   스크립트를 수행할 때 scp 명령을 사용하게 되는데, scp 수행 시 암호 요청 과정을 생략하려면 scp의 개인키를 재구축하려는 슬레이브 노드(*nodeB*)에, 공개키를 복제 원본에 해당하는 레플리카 노드(*nodeC*)에 설정하면 된다. 이와 관련하여 :ref:`scp 설정하기 <scp-setting>`\ 를 참고한다.
 
-**ha_make_slavedb.sh** 스크립트를 각 단계의 순서대로 실행하는 도중 오류가 발생하거나 n을 입력하여 실행을 중단한 이후에 재실행할 경우, 그 이전까지 실행에 성공한 단계에 대해서는 s를 입력하여 다음 단계로 넘어가도 된다.
+.. note::   scp command is used when you run **ha_make_slavedb.sh**; to skip a password request when you run scp, you should configure a personal key to the replica node, which is replication target(*nodeB*), and a public key to the other replica node, which is replication source(*nodeC*). For details, see ref:`scp setting <scp-setting>`.
+
+If you find an error or quit the step by pressing "n" during executing each step of  **ha_make_slavedb.sh**, you should re-execute the script. When you re-execute the script, you can skip the succeeded step as pressing "n".
 
 
-1.  HA 복제 재구축을 위한 Linux 계정의 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력하는 단계이다. 질문에 y를 입력한다. 
+1.  At this step, enter the password of a Linux account and password of **DBA**, the CUBRID database account, for HA rebuilding replication. Enter y to the question.
 
     ::
 
@@ -3674,10 +3585,17 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-    HA 노드의 Linux 계정 암호와, CUBRID DB 계정인 **dba** 의 암호를 입력한다. 처음 CUBRID 설치 후 **dba** 암호를 변경하지 않았을 경우, **dba** 암호의 입력 없이 <Enter> 키를 누르면 된다. 
-
+    Enter the password of a Linux account of the HA node and the password of **DBA**, the CUBRID database account. If you have not changed the password of **DBA** after installing CUBRID, press the <Enter> key without entering the password of **DBA**. 
+   
+    ::
     
-2.  슬레이브 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. 
+        HA/replica cubrid_usr's password :
+        HA/replica cubrid_usr's password :
+         
+        testdb's DBA password :
+        Retype testdb's DBA password :
+    
+2.  At this step, check whether the environment variables of the slave node are correct. Enter y to the question. 
 
     ::    
 
@@ -3711,7 +3629,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
             continue ? ([y]es / [n]o / [s]kip) : y
 
-3.  슬레이브 노드의 HA 관련 스크립트들을 마스터 노드에 복사하는 단계이다. 질문에 y를 입력한다. 이후 scp 명령을 이용하여 필요한 파일을 전송할 때 ssh-keygen으로 공개 키를 설정하지 않았으면 암호를 요구한다. 
+3.  At this step, copy the HA-related scripts of the slave node to the master node. Enter y to the question. Then the password will be asked if you did not set the public key with ssh-keygen when you sent a file with **scp** command. 
 
     ::
 
@@ -3726,7 +3644,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-4.  HA 관련 스크립트들을 레플리카 노드에 복사하는 단계이다. 질문에 y를 입력한다. 
+4.  At this step, copy the HA-related scripts to the replica node.
 
     ::   
 
@@ -3742,10 +3660,9 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
+5.  At this step, check whether the environment variables of all nodes are correct. Enter y to the question. 
 
-5.  모든 노드의 환경 변수 설정이 올바른지 확인하는 단계이다. 질문에 y를 입력한다. 
-
-    expect 명령이 설치(root 계정에서 yum install expect)되어 있지 않으면 이 단계에서 오류가 발생할 수 있다.
+    If **expect** command is not installed('yum install expect' in root account), this step can occur an error.
 
     ::
 
@@ -3762,8 +3679,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-6.  마스터 노드의 복제 진행을 멈추도록 하는 단계이다. 질문에 y를 입력한다. 
-
+6. At this step, stop replication of a master node. Enter y to the question.
     ::
 
         ##### step 6 ###################################################################
@@ -3777,7 +3693,8 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-7.  이전에 슬레이브 노드에 존재했던 오래된 복제 로그를 삭제하고 마스터 노드의 HA 메타 정보 테이블을 초기화하는 단계이다. 질문에 y를 입력한다. 
+7.  At this step, delete the old replication log from the slave node and initialize the HA meta information table of the master node. Enter y to the question. 
+
 
     ::
 
@@ -3793,7 +3710,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-8.  레플리카 노드의 HA 메타 정보 테이블을 초기화하는 단계이다. 이 시나리오에서는 레플리카 노드가 없으므로 질문에 s를 입력하여 넘어가도 된다. 
+8.  At this step, initialize the HA meta information table of replica node. In this scenario, there is no replica node; therefore, you can skip this step and go to the next step by entering s. 
 
     ::
     
@@ -3809,13 +3726,13 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-9.  HA 복제 재구축을 위해 레플리카 노드(**target_host**)로부터 백업 볼륨을 생성하는 단계로서, 기존에 이미 생성한 백업 볼륨이 있다면 s를 입력하여 다음 단계로 넘어갈 수 있다. 기존 백업 볼륨을 사용하여 복제 재구축을 수행하기 위해서는 다음과 같은 제약 조건이 있다.
-   
-    *   백업 시 실행 중인 트랜잭션을 포함하는 보관 로그(archive logs)가 반드시 레플리카  노드(**target_host**) 내에 존재해야 한다(즉, 오래 전에 생성한 백업 볼륨은 사용할 수 없음).
+9.  At this step, create a backup volume from the replica node (**target_host**) for HA replication rebuilding. You can skip this step and go to the next step by entering s if there is an existing backup volume. There are some constraints for rebuilding replication by using the existing backup volume, which are as follows:
 
-    *   백업 시 -o 옵션을 사용하여 백업 상태 정보 파일을 남겨야 한다. 이 때 저장되는 경로는 백업 볼륨 파일의 경로와 같아야 한다. 파일 이름은 `db_name`\ **.bkup.output** 형식이어야 하며, 파일 이름이 다른 경우 스크립트 수행 전에 형식에 맞게 변경한다.
+    *   The archive logs, including the transaction being executed during backup, must be in the replica node (**target_host**); this means that a backup volume created long ago cannot be used.
 
-    *   기존 백업 볼륨 및 상태 정보 파일의 경로는 스크립트 내의 **backup_dest_path** 파라미터에 지정해야 한다. 즉, 레플리카 노드(**target_host**)에 존재하는 백업 볼륨이 포함된 디렉터리의 절대 경로를 이 파라미터에 지정하면 된다.
+    *   The backup status information file must be created by using the **-o** option during backup. At this time, the path must be identical to the path of the backup volume file. The file name must be *db_name*\ **.bkup.output** format. If the file name is not identical with the format, change the file name according to the format before executing the script.
+
+    *   The path of the existing backup volume and the status information file must be specified in the **backup_dest_path** parameter in the script. In other words, specify the absolute path of the directory containing the backup volume on the replica node (**target_host**) to this parameter.
 
     ::
    
@@ -3830,7 +3747,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-10. 레플리카 노드의 데이터베이스 백업본을 슬레이브 노드에 복사하는 단계이다. 질문에 y를 입력한다. 
+10. At this step, copy the database backup of the replica node to the slave node. Enter y to the question. 
 
     ::
     
@@ -3848,7 +3765,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-11. 복사한 데이터베이스 백업본을 슬레이브 노드에 복구하는 단계이다. 질문에 y를 입력한다. 
+11. At this step, restore the copied database backup to the slave node. Enter y to the question. 
 
     ::
     
@@ -3863,7 +3780,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-12. 마스터에 있는 복제 로그를 초기화하고, 마스터 노드의 저장 로그를 슬레이브 노드에 복사하는 단계이다. 질문에 y를 입력한다. 
+12. At this step, initialize the replication log of the master node and then copy the storage log of the master node to the slave node. Enter y to the question. 
 
     ::
 
@@ -3881,7 +3798,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-13. 마스터 노드의 copylogdb, applylogdb 프로세스를 재시작하는 단계이다. 질문에 y를 입력한다. 
+13. At this step, restart replication of the master node. Enter y to the question. 
 
     ::
 
@@ -3896,7 +3813,7 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
 
            continue ? ([y]es / [n]o / [s]kip) : y
 
-14. 슬레이브 노드 구축이 정상적으로 완료되었는지 여부를 출력하는 단계이다. 
+14. At this step, the result of building the slave node is printed to check whether it was successful or not.
 
     ::
    
@@ -3906,9 +3823,9 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
         #
         ################################################################################
 
-**ha_make_slavedb.sh** 스크립트의 수행이 완료되면 다음 작업을 수행한다.
+Operate the below process when you complete to run **ha_make_slavedb.sh** script.
         
-*   슬레이브 노드에서 HA 상태를 확인하고, **cubrid heartbeat start** 명령으로 HA를 구동한다. 
+*   Check the HA status on a slave node, then start HA service with **cubrid heartbeat start** command.
 
     ::
 
@@ -3950,5 +3867,5 @@ Before starting to execute the **ha_make_slavedb.sh** script, run the following.
            Copylogdb testdb@nodeA:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27453, state registered)
            Server testdb (pid 27228, state registered_and_standby)
     
-:ref:`ha-cubrid-broker-conf`\ 를 참고하여 브로커를 설정하고, **cubrid broker restart** 명령으로 브로커를 구동한다.
+Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
 

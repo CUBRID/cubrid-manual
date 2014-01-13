@@ -19,7 +19,7 @@ For details on CUBRID 2008 R4.3 or less, see http://release.cubrid.org/en.
 Overview
 ========
 
-CUBRID 10.0 is the version which stablized and improved CUBRID 9.2.
+CUBRID 10.0 is the version which stabilized and improved CUBRID 9.2.
 
 CUBRID 10.0's DB volume is not compatible with CUBRID 9.2. Therefore, if you use CUBRID 9.2 or less, you must **migrate the database**. Regarding this, see :doc:`/upgrade`.
 
@@ -35,13 +35,13 @@ Improvement of Performance
 --------------------------
 
 
-Stablization in HA replication
-------------------------------
+Stabilization in HA replication
+-------------------------------
 
 
 
-Improvements and Stablization in Sharding Features
---------------------------------------------------
+Improvements and Stabilization in Sharding Features
+---------------------------------------------------
 
 
 Globalization

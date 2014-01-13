@@ -267,40 +267,47 @@ The read operations that allow interference between transactions with isolation 
 *   **Non-repeatable read** (unrepeatable read) : A transaction T1 can read other value, if a transaction T2 updates data and commits while data is retrieved in the transaction T2 multiple times.
 *   **Phantom read** : A transaction T1 can read E, if a transaction T2 inserts new record E and commits while data is retrieved in the transaction T1 multiple times.
 
-The default value of CUBRID isolation level is :ref:`isolation-level-3`.
+The default value of CUBRID isolation level is :ref:`isolation-level-3` (3).
 
 **Isolation Levels Provided by CUBRID**
 
-+------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| CUBRID Isolation Level(isolation_level)  | Other DBMS Isolation Level  | DIRTY  | UNREPEATABLE  | PHANTOM  | Schema Changes of the  |
-|                                          | (isolation_level)           | READ   | READ          | READ     | Table Being Retrieved  |
-+==========================================+=============================+========+===============+==========+========================+
-| :ref:`isolation-level-6` (6)             | SERIALIZABLE (4)            | N      | N             | N        | N                      |
-+------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-5` (5)             | REPEATABLE READ (3)         | N      | N             | Y        | N                      |
-+------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-4` (4)             | READ COMMITTED (2)          | N      | Y             | Y        | N                      |
-+------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-3` (3)             | READ UNCOMMITTED (1)        | Y      | Y             | Y        | N                      |
-+------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-2` (2)             |                             | N      | Y             | Y        | Y                      |
-+------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
-| :ref:`isolation-level-1` (1)             |                             | Y      | Y             | Y        | Y                      |
-+------------------------------------------+-----------------------------+--------+---------------+----------+------------------------+
+(O: YES, X: NO)
+
++--------------------------------+-----------------------+--------+---------------+----------+------------------------+
+| CUBRID Isolation Level         | Other DBMS            | DIRTY  | UNREPEATABLE  | PHANTOM  | Schema Changes of the  |
+| (isolation_level)              | Isolation Level       | READ   | READ          | READ     | Table Being Retrieved  |
++================================+=======================+========+===============+==========+========================+
+| :ref:`isolation-level-6` (6)   | SERIALIZABLE          | X      | X             | X        | X                      |
++--------------------------------+-----------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-5` (5)   | REPEATABLE READ       | X      | X             | O        | X                      |
++--------------------------------+-----------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-4` (4)   | READ COMMITTED        | X      | O             | O        | X                      |
++--------------------------------+-----------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-3` (3)   | READ UNCOMMITTED      | O      | O             | O        | X                      |
++--------------------------------+-----------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-2` (2)   |                       | X      | O             | O        | O                      |
++--------------------------------+-----------------------+--------+---------------+----------+------------------------+
+| :ref:`isolation-level-1` (1)   |                       | O      | O             | O        | O                      |
++--------------------------------+-----------------------+--------+---------------+----------+------------------------+
+
+*   **READ UNCOMMITTED** allows dirty read, unrepeatable read and phantom read.
+*   **READ COMMITTED** does not allow dirty read but allows unrepeatable read and phantom read.
+*   **REPEATABLE READ** does not allow dirty read and unrepeatable read but allows phantom read.
+*   **SERIALIZABLE** does not allow interrupts between transactions when doing read operation.
 
 .. _lock-protocol:
 
 Lock Protocol
 =============
 
-In the two-phase locking protocol used by CUBRID, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously. If transaction T1 requires a lock, CUBRID checks if the requested lock conflicts with the existing one. If it does, transaction T1 enters a standby state and delays the lock. If another transaction T2 releases the lock, transaction T1 resumes and obtains it. Once the lock is released, the transaction do not require any more new locks.
+In the two-phase locking protocol followed by CUBRID, a transaction obtains a shared lock before it reads an object, and an exclusive lock before it updates the object so that conflicting operations are not executed simultaneously. If transaction T1 requires a lock, CUBRID checks if the requested lock conflicts with the existing one. If it does, transaction T1 enters a standby state and delays the lock. If another transaction T2 releases the lock, transaction T1 resumes and obtains it. Once the lock is released, the transaction do not require any more new locks.
 
 Granularity Locking
 -------------------
 
 CUBRID uses a granularity locking protocol to decrease the number of locks. In the granularity locking protocol, a database can be modeled as a hierarchy of lockable units: row lock, table lock and database lock. Bigger locks have more granular locks.
 
-If the locking granularities overlap, effects of a finer granularity are propagated in order to prevent conflicts. That is, if a shared lock is required on an instance of a table, an intention shared lock will be set on the table. If an exclusive lock is required on an instance of a table, an intention exclusive lock will be set on the table. An intention shared lock on a table means that a shared lock can be set on an instance of the table. An intention exclusive lock on a table means that a shared/exclusive lock can be set on an instance of the table. That is, if an intention shared lock on a table is allowed in one transaction, another transaction cannot obtain an exclusive lock on the table (for example, to add a new column). However, the second transaction may obtain a shared lock on the table. If an intention exclusive lock on the table is allowed in one transaction, another transaction cannot obtain a shared lock on the table (for example, a query on an instance of the tables cannot be executed because it is being changed).
+If the locking granularities overlap, effects of a finer granularity are propagated in order to prevent conflicts. That is, if a shared lock is required on an instance of a table, an intent shared lock will be set on the table. If an exclusive lock is required on an instance of a table, an intent exclusive lock will be set on the table. An intent shared lock on a table means that a shared lock can be set on an instance of the table. An intent exclusive lock on a table means that a shared/exclusive lock can be set on an instance of the table. That is, if an intent shared lock on a table is allowed in one transaction, another transaction cannot obtain an exclusive lock on the table (for example, to add a new column). However, the second transaction may obtain a shared lock on the table. If an intent exclusive lock on the table is allowed in one transaction, another transaction cannot obtain a shared lock on the table (for example, a query on an instance of the tables cannot be executed because it is being changed).
 
 A mechanism called lock escalation is used to limit the number of locks being managed. If a transaction has more than a certain number of locks (a number which can be changed by the **lock_escalation** system parameter), the system begins to require locks at the next higher level of granularity. This escalates the locks to a coarser level of granularity. CUBRID performs lock escalation when no transactions have a higher level of granularity in order to avoid a deadlock caused by lock conversion.
 
@@ -315,7 +322,9 @@ CUBRID determines the lock mode depending on the type of operation to be perform
 
     This lock is obtained before the read operation is executed on the object. 
     
-    It can be obtained by multiple transactions for the same object. Transaction T1 obtains the shared lock first before it performs the read operation on a certain object X, and releases it immediately after it completes the operation even before transaction T1 is committed. Here, transaction T2 and T3 can perform the read operation on  X concurrently, but not the update operation.
+    It can be obtained by multiple transactions for the same object. Transaction T1 obtains the shared lock first before it performs the read operation on a certain object, and releases it immediately after it completes the operation even before transaction T1 is committed. At this time, transaction T2 and T3 can perform the read operation on the object concurrently, but not the update operation.
+
+    .. note:: If an isolation level is REPEATABLE READ(2), it keeps shared locks until a transaction T1 is committed.
 
 *   **Exclusive lock (exclusive lock, X_LOCK)**
 
@@ -329,195 +338,328 @@ CUBRID determines the lock mode depending on the type of operation to be perform
     
     For example, when an UPDATE statement combined with a **WHERE** clause is executed, execute the operation by obtaining the update lock for each row and the exclusive lock only for the result rows that satisfy the condition when performing index search or full scan search in the **WHERE** clause. The update lock is converted to an exclusive lock when the actual update operation is performed. It can be called a quasi-exclusive lock because it does not allow read lock on the same object for another transaction.
 
-*   **Intention lock (intention lock)**
+*   **Intent lock**
     
-    A lock that is set inherently in a higher-level object than X to protect the lock on the object X of a certain level.
+    This lock is set inherently in a higher-level object than a certain object to protect the lock on the object of a certain level.
     
-    For example, when a shared lock is requested for a certain row, prevent a situation from occurring in which the table is locked by another transaction by setting the intention shared lock as well on the table at the higher level in hierarchy. Therefore, the intention lock is not set on rows at the lowest level, but is set on higher-level objects. The types of intention locks are as follows:
+    For example, when a shared lock is requested for a certain row, prevent a situation from occurring in which the table is locked by another transaction by setting the intent shared lock as well on the table at the higher level in hierarchy. Therefore, the intent lock is not set on rows at the lowest level, but is set on higher-level objects. The types of intent locks are as follows:
 
-    *   **Intention shared lock (intention shared lock, IS_LOCK)**
+    *   **Intent shared lock (IS_LOCK)**
     
-        If the intention shared lock is set on the table, which is the higher-level object, as a result of the shared lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table (e.g. adding a column or changing the table name) or updating all rows. However updating some rows or viewing all rows is allowed.
+        If the intent shared lock is set on the table, which is the higher-level object, as a result of the shared lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table (e.g. adding a column or changing the table name) or updating all rows. However updating some rows or viewing all rows is allowed.
 
-    *   **Intention exclusive lock (intention exclusive lock, IX_LOCK)**
+    *   **Intent exclusive lock (IX_LOCK)**
     
-        If the intention exclusive lock is set on the table, which is the higher-level object, as a result of the exclusive lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table, updating or viewing all rows. However updating some rows is allowed.
+        If the intent exclusive lock is set on the table, which is the higher-level object, as a result of the exclusive lock set on a certain row, another transaction cannot perform operations such as changing the schema of the table, updating or viewing all rows. However updating some rows is allowed.
 
-    *   **Shared with intent exclusive (shared with intent exclusive, SIX_LOCK)**
+    *   **Shared with intent exclusive lock(SIX_LOCK)**
 
-        This lock is set on the higher-level object inherently to protect the shared lock set on all objects at the lower hierarchical level and the intention exclusive lock on some object at the lower hierarchical level.
+        This lock is set on the higher-level object inherently to protect the shared lock set on all objects at the lower hierarchical level and the intent exclusive lock on some object at the lower hierarchical level.
     
-        Once the shared intention exclusive lock is set on a table, another transaction cannot change the schema of the table, update all/some rows or view all rows. However, viewing some rows is allowed.
+        Once the shared intent exclusive lock is set on a table, another transaction cannot change the schema of the table, update all/some rows or view all rows. However, viewing some rows is allowed.
 
-The following table briefly shows the lock compatibility between the locks described below. Compatibility means that the lock requester can obtain a lock while the lock holder is keeping the lock obtained for the object X. N/a means 'not applicable'.
+**Key Lock**
+
+    A key lock is acquired when doing SELECT, INSERT, UPDATE or DELETE operation about a record with a unique key.
+    
+    However, to acquire a key lock, a unique key must exist on the WHERE condition's column.
+    
+    For example, if you INSERT a value, X_LOCK is acquired to this value and NS_LOCK is acuquired to the next key of this value.
+    
+    If you UPDATE/DELETE a value, NX_LOCKs are acquired at the closest smaller key than the defined minimum range and at the closest larger key than the defined maximum range.
+    
+    *   **Next-key shared lock, NS**
+
+        When you perform an INSERT operation on a row that a unique key exists, acquire next key lock to protect the range that affect their task.
+    
+    *   **Next-key exclusive lock, NX**
+    
+        When you perform an UPDATE or a DELETE operation on rows that a unique key exists, acquire next and previous key lock to protect the range that affect their task. 
+    
+*   **Schema Lock**
+        
+    *   **Schema stability lock, SCH-S**
+
+        This lock is acquired during compiling a query and it guarantees that the schema which is included in this query is not changed.
+
+    *   **Schema modification lock, SCH-M**
+
+        This lock is acquired during running DDL(ALTER/CREATE/DROP) and it protects that other transactions access the modified schema.
+
+    Some DDL operation like ALTER, CREATE INDEX does not acquire SCH-M lock directly. For example, CUBRID operates type checking about filtering expression when you create a filtered index; during this term, the lock which is kept to the target table is SCH-S like other type checking operations. The method has a strength to increase the concurrency by allowing other transaction's operation during DDL operation's compilation.
+    
+    However, it also has a weakness not to avoid a deadlock when DDL operations are operated at the same table at the same time. A deadlock case by SCH-S lock is as follows.
+   
+    +---------------------------------------------------------------+---------------------------------------------------------------+
+    | T1                                                            | T2                                                            |
+    +===============================================================+===============================================================+
+    | ::                                                            | ::                                                            |
+    |                                                               |                                                               |
+    |  CREATE INDEX i_t_i on t( i ) WHERE i > 0                     |   CREATE INDEX i_t_j on t(j) WHERE j > 0                      |
+    +---------------------------------------------------------------+---------------------------------------------------------------+
+    | SCH-S lock during checking types of "i > 0" case.             |                                                               |
+    +---------------------------------------------------------------+---------------------------------------------------------------+
+    |                                                               | SCH-S lock during checking types of "j > 0" case."j > 0"      |
+    +---------------------------------------------------------------+---------------------------------------------------------------+
+    | requesting SCH-M lock but waiting T2's SCH-S lock is released |                                                               |
+    +---------------------------------------------------------------+---------------------------------------------------------------+
+    |                                                               | requesting SCH-M lock but waiting T1's SCH-S lock is released |
+    +---------------------------------------------------------------+---------------------------------------------------------------+
+    
+The following table briefly shows the lock compatibility between the locks described above. Compatibility means that the lock requester can obtain a lock while the lock holder is keeping the lock obtained for a certain object.
 
 **Lock Compatibility**
 
-+--------------------------------------+---------------------------------------------------------------------------------------------------+
-|                                      | **Lock Holder**                                                                                   |
-|                                      +-----------------+-------------+------------+-------------+--------------+------------+------------+
-|                                      | **NULL_LOCK**   | **IS_LOCK** | **S_LOCK** | **IX_LOCK** | **SIX_LOCK** | **U_LOCK** | **X_LOCK** |
-+----------------------+---------------+-----------------+-------------+------------+-------------+--------------+------------+------------+
-| **Lock Requester**   | **NULL_LOCK** | TRUE            | TRUE        | TRUE       | TRUE        | TRUE         | TRUE       | TRUE       |
-| **(lock requester)** |               |                 |             |            |             |              |            |            |
-|                      +---------------+-----------------+-------------+------------+-------------+--------------+------------+------------+
-|                      | **IS_LOCK**   | TRUE            | TRUE        | TRUE       | TRUE        | TRUE         | N/A        | FALSE      |
-|                      +---------------+-----------------+-------------+------------+-------------+--------------+------------+------------+
-|                      | **S_LOCK**    | TRUE            | TRUE        | TRUE       | FALSE       | FALSE        | FALSE      | FALSE      |
-|                      +---------------+-----------------+-------------+------------+-------------+--------------+------------+------------+
-|                      | **IX_LOCK**   | TRUE            | TRUE        | FALSE      | TRUE        | FALSE        | N/A        | FALSE      |
-|                      +---------------+-----------------+-------------+------------+-------------+--------------+------------+------------+
-|                      | **SIX_LOCK**  | TRUE            | TRUE        | FALSE      | FALSE       | FALSE        | N/A        | FALSE      |
-|                      +---------------+-----------------+-------------+------------+-------------+--------------+------------+------------+
-|                      | **U_LOCK**    | TRUE            | N/A         | TRUE       | N/A         | N/A          | FALSE      | FALSE      |
-|                      +---------------+-----------------+-------------+------------+-------------+--------------+------------+------------+
-|                      | **X_LOCK**    | TRUE            | FALSE       | FALSE      | FALSE       | FALSE        | FALSE      | FALSE      |
-+----------------------+---------------+-----------------+-------------+------------+-------------+--------------+------------+------------+
+(O: TRUE, X: FALSE, -: N/A)
 
-*   **NULL_LOCK** : No lock
++----------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+|                                  | **Lock holder**                                                                                                                   |
+|                                  +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                                  | **NULL**  | **SCH-S** | **IS**    | **S**     | **IX**    | **SIX**   | **U**     | **X**     | **NS**    | **NX**    | **SCH-M** |
++----------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+| **Lock requester**   | **NULL**  | O         | O         | O         | O         | O         | O         | O         | O         | O         | O         | O         |
+|                      |           |           |           |           |           |           |           |           |           |           |           |           |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **SCH-S** | O         | O         | O         | O         | O         | O         | \-        | O         | \-        | \-        | O         |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **IS**    | O         | O         | O         | O         | O         | O         | \-        | X         | \-        | \-        | X         |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **S**     | O         | O         | O         | O         | X         | X         | X         | X         | X         | X         | X         |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **IX**    | O         | O         | O         | X         | O         | X         | \-        | X         | \-        | \-        | X         |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **SIX**   | O         | O         | O         | X         | X         | X         | \-        | X         | \-        | \-        | X         |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **U**     | O         | \-        | \-        | O         | \-        | \-        | X         | X         | \-        | \-        | \-        |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **X**     | O         | O         | X         | X         | X         | X         | X         | X         | \-        | \-        | X         |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **NS**    | O         | \-        | \-        | X         | \-        | \-        | \-        | \-        | O         | X         | \-        |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **NX**    | O         | \-        | \-        | X         | \-        | \-        | \-        | \-        | X         | X         | \-        |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **SCH-M** | O         | X         | X         | X         | X         | X         | \-        | X         | \-        | \-        | X         |
++----------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
 
-**Example**
+*   **NULL**\: The status that any lock exists.
 
-+-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
-| session 1                                                                     | session 2                                                                  |
-+===============================================================================+============================================================================+
-| ::                                                                            | ::                                                                         |
-|                                                                               |                                                                            |
-|   csql> ;autocommit off                                                       |   csql> ;autocommit off                                                    |
-|                                                                               |                                                                            |
-|   AUTOCOMMIT IS OFF                                                           |   AUTOCOMMIT IS OFF                                                        |
-|                                                                               |                                                                            |
-|   csql> set transaction isolation level 4;                                    |   csql> set transaction isolation level 4;                                 |
-|                                                                               |                                                                            |
-|   Isolation level set to:                                                     |   Isolation level set to:                                                  |
-|   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                           |   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                        |
-|                                                                               |                                                                            |
-|                                                                               | ::                                                                         |
-|                                                                               |                                                                            |
-|                                                                               |   $ cubrid lockdb demodb                                                   |
-|                                                                               |                                                                            |
-|                                                                               |   *** Lock Table Dump ***                                                  |
-|                                                                               |                                                                            |
-|                                                                               |   ...                                                                      |
-|                                                                               |                                                                            |
-|                                                                               |   Object Lock Table:                                                       |
-|                                                                               |         Current number of objects which are locked    = 0                  |
-|                                                                               |         Maximum number of objects which can be locked = 10000              |
-|                                                                               |                                                                            |
-|                                                                               |   ...                                                                      |
-+-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                                            |                                                                            |
-|                                                                               |                                                                            |
-|   csql> SELECT nation_code, gold FROM participant WHERE nation_code='USA';    |                                                                            |
-|                                                                               |                                                                            |
-|    nation_code                  gold                                          |                                                                            |
-|   ======================================                                      |                                                                            |
-|   'USA'                          36                                           |                                                                            |
-|   'USA'                          37                                           |                                                                            |
-|   'USA'                          44                                           |                                                                            |
-|   'USA'                          37                                           |                                                                            |
-|   'USA'                          36                                           |                                                                            |
-|                                                                               |                                                                            |
-| ::                                                                            |                                                                            |
-|                                                                               |                                                                            |
-|   $ cubrid lockdb demodb                                                      |                                                                            |
-|                                                                               |                                                                            |
-|   *** Lock Table Dump ***                                                     |                                                                            |
-|                                                                               |                                                                            |
-|   ...                                                                         |                                                                            |
-|                                                                               |                                                                            |
-|   Object type: Root class.                                                    |                                                                            |
-|   LOCK HOLDERS:                                                               |                                                                            |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   1, Nsubgranules =  1 |                                                                            |
-|                                                                               |                                                                            |
-|   Object type: Class = participant.                                           |                                                                            |
-|   LOCK HOLDERS:                                                               |                                                                            |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   2, Nsubgranules =  0 |                                                                            |
-+-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
-|                                                                               | ::                                                                         |
-|                                                                               |                                                                            |
-|                                                                               |   csql> UPDATE participant SET gold = 11 WHERE nation_code = 'USA';        |
-+-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                                            |                                                                            |
-|                                                                               |                                                                            |
-|   csql> SELECT nation_code, gold FROM participant WHERE nation_code='USA';    |                                                                            |
-|                                                                               |                                                                            |
-|   /* no results until transaction 2 releases a lock */                        |                                                                            |
-|                                                                               |                                                                            |
-| ::                                                                            |                                                                            |
-|                                                                               |                                                                            |
-|   $ cubrid lockdb demodb                                                      |                                                                            |
-|                                                                               |                                                                            |
-|   *** Lock Table Dump ***                                                     |                                                                            |
-|                                                                               |                                                                            |
-|   ...                                                                         |                                                                            |
-|                                                                               |                                                                            |
-|   Object type: Instance of class ( 0|   551|   7) = participant.              |                                                                            |
-|   LOCK HOLDERS:                                                               |                                                                            |
-|       Tran_index =   3, Granted_mode =   X_LOCK, Count =   2                  |                                                                            |
-|                                                                               |                                                                            |
-|   ...                                                                         |                                                                            |
-|                                                                               |                                                                            |
-|   Object type: Root class.                                                    |                                                                            |
-|   LOCK HOLDERS:                                                               |                                                                            |
-|     Tran_index =   3, Granted_mode =  IX_LOCK, Count =   1, Nsubgranules =  3 |                                                                            |
-|                                                                               |                                                                            |
-|   NON_2PL_RELEASED:                                                           |                                                                            |
-|     Tran_index =   2, Non_2_phase_lock =  IS_LOCK                             |                                                                            |
-|                                                                               |                                                                            |
-|   ...                                                                         |                                                                            |
-|                                                                               |                                                                            |
-|   Object type: Class = participant.                                           |                                                                            |
-|   LOCK HOLDERS:                                                               |                                                                            |
-|     Tran_index =   3, Granted_mode =  IX_LOCK, Count =   3, Nsubgranules =  5 |                                                                            |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   2, Nsubgranules =  0 |                                                                            |
-+-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
-|                                                                               | ::                                                                         |
-|                                                                               |                                                                            |
-|                                                                               |   csql> COMMIT;                                                            |
-|                                                                               |   Execute OK. (0.000192 sec)                                               |
-+-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                                            |                                                                            |
-|                                                                               |                                                                            |
-|   nation_code                  gold                                           |                                                                            |
-|   =================================                                           |                                                                            |
-|   'USA'                          11                                           |                                                                            |
-|   'USA'                          11                                           |                                                                            |
-|   'USA'                          11                                           |                                                                            |
-|   'USA'                          11                                           |                                                                            |
-|   'USA'                          11                                           |                                                                            |
-|                                                                               |                                                                            |
-| ::                                                                            |                                                                            |
-|                                                                               |                                                                            |
-|   $ cubrid lockdb demodb                                                      |                                                                            |
-|                                                                               |                                                                            |
-|   ...                                                                         |                                                                            |
-|                                                                               |                                                                            |
-|   Object type: Root class.                                                    |                                                                            |
-|   LOCK HOLDERS:                                                               |                                                                            |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   1, Nsubgranules =  1 |                                                                            |
-|                                                                               |                                                                            |
-|   Object type: Class = participant.                                           |                                                                            |
-|   LOCK HOLDERS:                                                               |                                                                            |
-|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   3, Nsubgranules =  0 |                                                                            |
-|                                                                               |                                                                            |
-|   ...                                                                         |                                                                            |
-+-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
-| ::                                                                            |                                                                            |
-|                                                                               |                                                                            |
-|   csql> COMMIT;                                                               |                                                                            |
-|   Execute OK. (0.000192 sec)                                                  |                                                                            |
-|                                                                               |                                                                            |
-| ::                                                                            |                                                                            |
-|                                                                               |                                                                            |
-|   $ cubrid lockdb demodb                                                      |                                                                            |
-|                                                                               |                                                                            |
-|   ...                                                                         |                                                                            |
-|                                                                               |                                                                            |
-|   Object Lock Table:                                                          |                                                                            |
-|           Current number of objects which are locked    = 0                   |                                                                            |
-|           Maximum number of objects which can be locked = 10000               |                                                                            |
-+-------------------------------------------------------------------------------+----------------------------------------------------------------------------+
+**Lock Transformation Table**
+
++----------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+|                                  | **Granted lock mode**                                                                                                             |
+|                                  +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                                  | **NULL**  | **SCH-S** | **IS**    | **S**     | **IX**    | **SIX**   | **U**     | **X**     | **NS**    | **NX**    | **SCH-M** |
++----------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+| **Requested lock**   | **NULL**  | NULL      | SCH-S     | IS        | S         | IX        | SIX       | U         | X         | NS        | NX        | SCH-M     |
+| **mode**             +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **SCH-S** | SCH-S     | SCH-S     | IS        | S         | IX        | SIX       | \-        | X         | \-        | \-        | SCH-M     |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **IS**    | IS        | IS        | IS        | S         | IX        | SIX       | \-        | X         | \-        | \-        | SCH-M     |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **S**     | S         | S         | S         | S         | SIX       | SIX       | U         | X         | NX        | NX        | SCH-M     |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **IX**    | IX        | IX        | IX        | SIX       | IX        | SIX       | \-        | X         | \-        | \-        | SCH-M     |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **SIX**   | SIX       | SIX       | SIX       | SIX       | SIX       | SIX       | \-        | X         | \-        | \-        | SCH-M     |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **U**     | U         | \-        | \-        | U         | \-        | \-        | U         | X         | \-        | \-        | \-        |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **X**     | X         | X         | X         | X         | X         | X         | X         | X         | \-        | \-        | SCH-M     |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **NS**    | NS        | \-        | \-        | NX        | \-        | \-        | \-        | \-        | NS        | NX        | \-        |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **NX**    | NX        | \-        | \-        | NX        | \-        | \-        | \-        | \-        | NX        | NX        | \-        |
+|                      +-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+|                      | **SCH-M** | SCH-M     | SCH-M     | SCH-M     | SCH-M     | SCH-M     | SCH-M     | \-        | SCH-M     | \-        | \-        | SCH-M     |
++----------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+
+The below shows that INSERTed data sets X_LOCK to a row and NS_LOCK to a key when the isolation level is 4.
+
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+| T1                                                      | T2                                                      | Description                                                                |
++=========================================================+=========================================================+============================================================================+
+| ::                                                      | ::                                                      | AUTOCOMMIT OFF and READ COMMITTED                                          |
+|                                                         |                                                         |                                                                            |
+|   csql> ;au off                                         |   csql> ;au off                                         |                                                                            |
+|   SET TRANSACTION ISOLATION LEVEL 4;                    |   SET TRANSACTION ISOLATION LEVEL 4;                    |                                                                            |
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                      |                                                         |                                                                            |
+|                                                         |                                                         |                                                                            |
+|   CREATE TABLE tbl(a INT PRIMARY KEY, b INT);           |                                                         |                                                                            |
+|   INSERT INTO tbl                                       |                                                         |                                                                            |
+|     VALUES (10, 10), (30, 30), (50, 50), (70, 70);      |                                                         |                                                                            |
+|   COMMIT;                                               |                                                         |                                                                            |
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                      |                                                         | Acquire X_LOCK to a row 20, NS_LOCK to a key 30.                           |
+|                                                         |                                                         |                                                                            |
+|   INSERT INTO tbl VALUES (20, 20);                      |                                                         |                                                                            |
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                         | ::                                                      | Wait. X_LOCK is locked on a row 20; therefore, T2's S_LOCK is not allowed. |
+|                                                         |                                                         |                                                                            |
+|                                                         |   SELECT * FROM tbl WHERE a <= 20;                      |                                                                            |
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                         | 인터럽트(ctrl-C)로 작업 취소                            |                                                                            |
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                         | ::                                                      | Allow. S_LOCK which is bigger than 25 of T2 is asked, so it's not          |
+|                                                         |                                                         |  related to a key lock.                                                    |
+|                                                         |   SELECT * FROM tbl WHERE a > 25;                       |                                                                            |
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+|                                                         | ::                                                      | Allow. NS_LOCK is locked on a key 30, but T2 acquires U_LOCK and X_LOCK    |
+|                                                         |                                                         | about a row; and this is not related to T1's key lock. T2 also acquire     |
+|                                                         |   UPDATE tbl SET b=100 WHERE a > 25 AND a < 40;         | NX_LOCK about a key 30 and a key 50.                                       |
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                      |                                                         | T1's lock is released.                                                     |
+|                                                         |                                                         |                                                                            |
+|   COMMIT;                                               |                                                         |                                                                            |
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+| ::                                                      |                                                         | Wait. To INSERT a row 22 when T2 has NX_LOCKs on a key 20, 30 and 50       |
+|                                                         |                                                         | , T1 has to get NS_LOCK on a key 30; therefore, T1 waits                   |
+|   INSERT INTO tbl VALUES (22, 22);                      |                                                         | T2's lock release.                                                         |
++---------------------------------------------------------+---------------------------------------------------------+----------------------------------------------------------------------------+
+
+
+The below is an example that T1 waits a lock until T2 commits updated data when isolation level is 4.
+
++-------------------------------------------------------------------------------+-------------------------------------------------------------------------------+
+| T1                                                                            | T2                                                                            |
++===============================================================================+===============================================================================+
+| ::                                                                            | ::                                                                            |
+|                                                                               |                                                                               |
+|   csql> ;autocommit off                                                       |   csql> ;autocommit off                                                       |
+|                                                                               |                                                                               |
+|   AUTOCOMMIT IS OFF                                                           |   AUTOCOMMIT IS OFF                                                           |
+|                                                                               |                                                                               |
+|   csql> SET TRANSACTION ISOLATION LEVEL 4;                                    |   csql> SET TRANSACTION ISOLATION LEVEL 4;                                    |
+|                                                                               |                                                                               |
+|   Isolation level set to:                                                     |   Isolation level set to:                                                     |
+|   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                           |   REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES.                           |
+|                                                                               |                                                                               |
+|                                                                               | ::                                                                            |
+|                                                                               |                                                                               |
+|                                                                               |   $ cubrid lockdb demodb                                                      |
+|                                                                               |                                                                               |
+|                                                                               |   *** Lock Table Dump ***                                                     |
+|                                                                               |                                                                               |
+|                                                                               |   ...                                                                         |
+|                                                                               |                                                                               |
+|                                                                               |   Object Lock Table:                                                          |
+|                                                                               |         Current number of objects which are locked    = 0                     |
+|                                                                               |         Maximum number of objects which can be locked = 10000                 |
+|                                                                               |                                                                               |
+|                                                                               |   ...                                                                         |
++-------------------------------------------------------------------------------+-------------------------------------------------------------------------------+
+| ::                                                                            |                                                                               |
+|                                                                               |                                                                               |
+|   csql> SELECT nation_code, gold FROM participant WHERE nation_code='USA';    |                                                                               |
+|                                                                               |                                                                               |
+|    nation_code                  gold                                          |                                                                               |
+|   ======================================                                      |                                                                               |
+|   'USA'                          36                                           |                                                                               |
+|   'USA'                          37                                           |                                                                               |
+|   'USA'                          44                                           |                                                                               |
+|   'USA'                          37                                           |                                                                               |
+|   'USA'                          36                                           |                                                                               |
+|                                                                               |                                                                               |
+| ::                                                                            |                                                                               |
+|                                                                               |                                                                               |
+|   $ cubrid lockdb demodb                                                      |                                                                               |
+|                                                                               |                                                                               |
+|   *** Lock Table Dump ***                                                     |                                                                               |
+|                                                                               |                                                                               |
+|   ...                                                                         |                                                                               |
+|                                                                               |                                                                               |
+|   Object type: Root class.                                                    |                                                                               |
+|   LOCK HOLDERS:                                                               |                                                                               |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   1, Nsubgranules =  1 |                                                                               |
+|                                                                               |                                                                               |
+|   Object type: Class = participant.                                           |                                                                               |
+|   LOCK HOLDERS:                                                               |                                                                               |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   2, Nsubgranules =  0 |                                                                               |
++-------------------------------------------------------------------------------+-------------------------------------------------------------------------------+
+|                                                                               | ::                                                                            |
+|                                                                               |                                                                               |
+|                                                                               |   csql> UPDATE participant SET gold = 11 WHERE nation_code = 'USA';           |
++-------------------------------------------------------------------------------+-------------------------------------------------------------------------------+
+| ::                                                                            |                                                                               |
+|                                                                               |                                                                               |
+|   csql> SELECT nation_code, gold FROM participant WHERE nation_code='USA';    |                                                                               |
+|                                                                               |                                                                               |
+|   /* no results until transaction 2 releases a lock */                        |                                                                               |
+|                                                                               |                                                                               |
+| ::                                                                            |                                                                               |
+|                                                                               |                                                                               |
+|   $ cubrid lockdb demodb                                                      |                                                                               |
+|                                                                               |                                                                               |
+|   *** Lock Table Dump ***                                                     |                                                                               |
+|                                                                               |                                                                               |
+|   ...                                                                         |                                                                               |
+|                                                                               |                                                                               |
+|   Object type: Instance of class ( 0|   551|   7) = participant.              |                                                                               |
+|   LOCK HOLDERS:                                                               |                                                                               |
+|       Tran_index =   3, Granted_mode =   X_LOCK, Count =   2                  |                                                                               |
+|                                                                               |                                                                               |
+|   ...                                                                         |                                                                               |
+|                                                                               |                                                                               |
+|   Object type: Root class.                                                    |                                                                               |
+|   LOCK HOLDERS:                                                               |                                                                               |
+|     Tran_index =   3, Granted_mode =  IX_LOCK, Count =   1, Nsubgranules =  3 |                                                                               |
+|                                                                               |                                                                               |
+|   NON_2PL_RELEASED:                                                           |                                                                               |
+|     Tran_index =   2, Non_2_phase_lock =  IS_LOCK                             |                                                                               |
+|                                                                               |                                                                               |
+|   ...                                                                         |                                                                               |
+|                                                                               |                                                                               |
+|   Object type: Class = participant.                                           |                                                                               |
+|   LOCK HOLDERS:                                                               |                                                                               |
+|     Tran_index =   3, Granted_mode =  IX_LOCK, Count =   3, Nsubgranules =  5 |                                                                               |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   2, Nsubgranules =  0 |                                                                               |
++-------------------------------------------------------------------------------+-------------------------------------------------------------------------------+
+|                                                                               | ::                                                                            |
+|                                                                               |                                                                               |
+|                                                                               |   csql> COMMIT;                                                               |
+|                                                                               |   Execute OK. (0.000192 sec)                                                  |
++-------------------------------------------------------------------------------+-------------------------------------------------------------------------------+
+| ::                                                                            |                                                                               |
+|                                                                               |                                                                               |
+|   nation_code                  gold                                           |                                                                               |
+|   =================================                                           |                                                                               |
+|   'USA'                          11                                           |                                                                               |
+|   'USA'                          11                                           |                                                                               |
+|   'USA'                          11                                           |                                                                               |
+|   'USA'                          11                                           |                                                                               |
+|   'USA'                          11                                           |                                                                               |
+|                                                                               |                                                                               |
+| ::                                                                            |                                                                               |
+|                                                                               |                                                                               |
+|   $ cubrid lockdb demodb                                                      |                                                                               |
+|                                                                               |                                                                               |
+|   ...                                                                         |                                                                               |
+|                                                                               |                                                                               |
+|   Object type: Root class.                                                    |                                                                               |
+|   LOCK HOLDERS:                                                               |                                                                               |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   1, Nsubgranules =  1 |                                                                               |
+|                                                                               |                                                                               |
+|   Object type: Class = participant.                                           |                                                                               |
+|   LOCK HOLDERS:                                                               |                                                                               |
+|     Tran_index =   2, Granted_mode =  IS_LOCK, Count =   3, Nsubgranules =  0 |                                                                               |
+|                                                                               |                                                                               |
+|   ...                                                                         |                                                                               |
++-------------------------------------------------------------------------------+-------------------------------------------------------------------------------+
+| ::                                                                            |                                                                               |
+|                                                                               |                                                                               |
+|   csql> COMMIT;                                                               |                                                                               |
+|   Execute OK. (0.000192 sec)                                                  |                                                                               |
+|                                                                               |                                                                               |
+| ::                                                                            |                                                                               |
+|                                                                               |                                                                               |
+|   $ cubrid lockdb demodb                                                      |                                                                               |
+|                                                                               |                                                                               |
+|   ...                                                                         |                                                                               |
+|                                                                               |                                                                               |
+|   Object Lock Table:                                                          |                                                                               |
+|           Current number of objects which are locked    = 0                   |                                                                               |
+|           Maximum number of objects which can be locked = 10000               |                                                                               |
++-------------------------------------------------------------------------------+-------------------------------------------------------------------------------+
 
 Transaction Deadlock
 --------------------
@@ -544,94 +686,96 @@ In the following error log file, (1) indicates a table name which causes deadloc
 
 **Example**
 
-+-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
-| session 1                                                                                           | session 2                                            |
-+=====================================================================================================+======================================================+
-| ::                                                                                                  | ::                                                   |
-|                                                                                                     |                                                      |
-|   csql> ;autocommit off                                                                             |   csql> ;autocommit off                              |
-|                                                                                                     |                                                      |
-|   AUTOCOMMIT IS OFF                                                                                 |   AUTOCOMMIT IS OFF                                  |
-|                                                                                                     |                                                      |
-|   csql> set transaction isolation level 6;                                                          |   csql> set transaction isolation level 6;           |
-|                                                                                                     |                                                      |
-|   Isolation level set to:                                                                           |   Isolation level set to:                            |
-|   SERIALIZABLE                                                                                      |   SERIALIZABLE                                       |
-+-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
-| ::                                                                                                  |                                                      |
-|                                                                                                     |                                                      |
-|   csql> CREATE TABLE lock_tbl(host_year integer, nation_code char(3));                              |                                                      |
-|   csql> INSERT INTO lock_tbl VALUES (2004, 'KOR');                                                  |                                                      |
-|   csql> INSERT INTO lock_tbl VALUES (2004, 'USA');                                                  |                                                      |
-|   csql> INSERT INTO lock_tbl VALUES (2004, 'GER');                                                  |                                                      |
-|   csql> INSERT INTO lock_tbl VALUES (2008, 'GER');                                                  |                                                      |
-|   csql> COMMIT;                                                                                     |                                                      |
-|                                                                                                     |                                                      |
-|   csql> SELECT * FROM lock_tbl;                                                                     |                                                      |
-|                                                                                                     |                                                      |
-|       host_year  nation_code                                                                        |                                                      |
-|   ===================================                                                               |                                                      |
-|            2004  'KOR'                                                                              |                                                      |
-|            2004  'USA'                                                                              |                                                      |
-|            2004  'GER'                                                                              |                                                      |
-|            2008  'GER'                                                                              |                                                      |
-+-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
-|                                                                                                     | ::                                                   |
-|                                                                                                     |                                                      |
-|                                                                                                     |   csql> SELECT * FROM lock_tbl;                      |
-|                                                                                                     |                                                      |
-|                                                                                                     |       host_year  nation_code                         |
-|                                                                                                     |   ===================================                |
-|                                                                                                     |            2004  'KOR'                               |
-|                                                                                                     |            2004  'USA'                               |
-|                                                                                                     |            2004  'GER'                               |
-|                                                                                                     |            2008  'GER'                               |
-+-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
-| ::                                                                                                  |                                                      |
-|                                                                                                     |                                                      |
-|   csql> DELETE FROM lock_tbl WHERE host_year=2008;                                                  |                                                      |
-|                                                                                                     |                                                      |
-|   /* no result until transaction 2 releases a lock */                                               |                                                      |
-|                                                                                                     |                                                      |
-| ::                                                                                                  |                                                      |
-|                                                                                                     |                                                      |
-|   $ cubrid lockdb demodb                                                                            |                                                      |
-|                                                                                                     |                                                      |
-|   *** Lock Table Dump ***                                                                           |                                                      |
-|                                                                                                     |                                                      |
-|   ...                                                                                               |                                                      |
-|                                                                                                     |                                                      |
-|                                                                                                     |                                                      |
-|   Object type: Class = lock_tbl.                                                                    |                                                      |
-|   LOCK HOLDERS:                                                                                     |                                                      |
-|       Tran_index =   2, Granted_mode =   S_LOCK, Count =   2, Nsubgranules =  0                     |                                                      |
-|                                                                                                     |                                                      |
-|   BLOCKED LOCK HOLDERS:                                                                             |                                                      |
-|       Tran_index =   1, Granted_mode =   S_LOCK, Count =   3, Nsubgranules =  0                     |                                                      |
-|       Blocked_mode = SIX_LOCK                                                                       |                                                      |
-|       Start_waiting_at = Fri Feb 12 14:22:58 2010                                                   |                                                      |
-|       Wait_for_nsecs = -1                                                                           |                                                      |
-+-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
-|                                                                                                     | ::                                                   |
-|                                                                                                     |                                                      |
-|                                                                                                     |   csql> INSERT INTO lock_tbl VALUES (2004, 'AUS');   |
-+-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
-| ::                                                                                                  |                                                      |
-|                                                                                                     |                                                      |
-|   ERROR: Your transaction (index 1, dba@ 090205|4760) has been unilaterally aborted by the system.  |                                                      |
-|                                                                                                     |                                                      |
-|   /* System rolled back the transaction 1 to resolve a deadlock */                                  |                                                      |
-|                                                                                                     |                                                      |
-| ::                                                                                                  |                                                      |
-|                                                                                                     |                                                      |
-|   $ cubrid lockdb demodb                                                                            |                                                      |
-|                                                                                                     |                                                      |
-|   *** Lock Table Dump ***                                                                           |                                                      |
-|                                                                                                     |                                                      |
-|   Object type: Class = lock_tbl.                                                                    |                                                      |
-|   LOCK HOLDERS:                                                                                     |                                                      |
-|       Tran_index =   2, Granted_mode = SIX_LOCK, Count =   3, Nsubgranules =  0                     |                                                      |
-+-----------------------------------------------------------------------------------------------------+------------------------------------------------------+
+
++----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
+| session 1                                                                                          | session 2                                                                                          |
++====================================================================================================+====================================================================================================+
+| ::                                                                                                 | ::                                                                                                 |
+|                                                                                                    |                                                                                                    |
+|   csql> ;autocommit off                                                                            |   csql> ;autocommit off                                                                            |
+|                                                                                                    |                                                                                                    |
+|   AUTOCOMMIT IS OFF                                                                                |   AUTOCOMMIT IS OFF                                                                                |
+|                                                                                                    |                                                                                                    |
+|   csql> set transaction isolation level 6;                                                         |   csql> set transaction isolation level 6;                                                         |
+|                                                                                                    |                                                                                                    |
+|   Isolation level set to:                                                                          |   Isolation level set to:                                                                          |
+|   SERIALIZABLE                                                                                     |   SERIALIZABLE                                                                                     |
++----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
+| ::                                                                                                 |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   csql> CREATE TABLE lock_tbl(host_year integer, nation_code char(3));                             |                                                                                                    |
+|   csql> INSERT INTO lock_tbl VALUES (2004, 'KOR');                                                 |                                                                                                    |
+|   csql> INSERT INTO lock_tbl VALUES (2004, 'USA');                                                 |                                                                                                    |
+|   csql> INSERT INTO lock_tbl VALUES (2004, 'GER');                                                 |                                                                                                    |
+|   csql> INSERT INTO lock_tbl VALUES (2008, 'GER');                                                 |                                                                                                    |
+|   csql> COMMIT;                                                                                    |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   csql> SELECT * FROM lock_tbl;                                                                    |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|       host_year  nation_code                                                                       |                                                                                                    |
+|   ===================================                                                              |                                                                                                    |
+|            2004  'KOR'                                                                             |                                                                                                    |
+|            2004  'USA'                                                                             |                                                                                                    |
+|            2004  'GER'                                                                             |                                                                                                    |
+|            2008  'GER'                                                                             |                                                                                                    |
++----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
+|                                                                                                    | ::                                                                                                 |
+|                                                                                                    |                                                                                                    |
+|                                                                                                    |   csql> SELECT * FROM lock_tbl;                                                                    |
+|                                                                                                    |                                                                                                    |
+|                                                                                                    |       host_year  nation_code                                                                       |
+|                                                                                                    |   ===================================                                                              |
+|                                                                                                    |            2004  'KOR'                                                                             |
+|                                                                                                    |            2004  'USA'                                                                             |
+|                                                                                                    |            2004  'GER'                                                                             |
+|                                                                                                    |            2008  'GER'                                                                             |
++----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
+| ::                                                                                                 |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   csql> DELETE FROM lock_tbl WHERE host_year=2008;                                                 |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   /* no result until transaction 2 releases a lock */                                              |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+| ::                                                                                                 |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   $ cubrid lockdb demodb                                                                           |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   *** Lock Table Dump ***                                                                          |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   ...                                                                                              |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   Object type: Class = lock_tbl.                                                                   |                                                                                                    |
+|   LOCK HOLDERS:                                                                                    |                                                                                                    |
+|       Tran_index =   2, Granted_mode =   S_LOCK, Count =   2, Nsubgranules =  0                    |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   BLOCKED LOCK HOLDERS:                                                                            |                                                                                                    |
+|       Tran_index =   1, Granted_mode =   S_LOCK, Count =   3, Nsubgranules =  0                    |                                                                                                    |
+|       Blocked_mode = SIX_LOCK                                                                      |                                                                                                    |
+|       Start_waiting_at = Fri Feb 12 14:22:58 2010                                                  |                                                                                                    |
+|       Wait_for_nsecs = -1                                                                          |                                                                                                    |
++----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
+|                                                                                                    | ::                                                                                                 |
+|                                                                                                    |                                                                                                    |
+|                                                                                                    |   csql> INSERT INTO lock_tbl VALUES (2004, 'AUS');                                                 |
++----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
+| ::                                                                                                 |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   ERROR: Your transaction (index 1, dba@ 090205|4760) has been unilaterally aborted by the system. |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   /* System rolled back the transaction 1 to resolve a deadlock */                                 |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+| ::                                                                                                 |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   $ cubrid lockdb demodb                                                                           |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   *** Lock Table Dump ***                                                                          |                                                                                                    |
+|                                                                                                    |                                                                                                    |
+|   Object type: Class = lock_tbl.                                                                   |                                                                                                    |
+|   LOCK HOLDERS:                                                                                    |                                                                                                    |
+|       Tran_index =   2, Granted_mode = SIX_LOCK, Count =   3, Nsubgranules =  0                    |                                                                                                    |
++----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
+
 
 Transaction Lock Timeout
 ------------------------
@@ -718,24 +862,22 @@ SET TRANSACTION ISOLATION LEVEL
 
 You can set the level of transaction isolation by using **isolation_level** and the **SET TRANSACTION** statement in the **$CUBRID/conf/cubrid.conf**. The level of **REPEATABLE READ CLASS** and **READ UNCOMMITTED INSTANCES** are set by default, which indicates the level 3 through level 1 to 6. For details, see :ref:`database-concurrency`. ::
 
-    SET TRANSACTION ISOLATION LEVEL isolation_level_spec [ ; ]
+    SET TRANSACTION ISOLATION LEVEL isolation_level_spec ;
+    
     isolation_level_spec:
-    _ SERIALIZABLE
-    _ CURSOR STABILITY
-    _ isolation_level [ { CLASS | SCHEMA } [ , isolation_level INSTANCES ] ]
-    _ isolation_level [ INSTANCES [ , isolation_level { CLASS | SCHEMA } ] ]
-    _ variable
-    isolation_level:
-    _ REPEATABLE READ
-    _ READ COMMITTED
-    _ READ UNCOMMITTED
+        SERIALIZABLE | 6
+        REPEATABLE READ SCHEMA, REPETABLE READ INSTANCES | 5
+        REPEATABLE READ SCHEMA, READ COMMITTED INSTANCES | CURSOR STABILITY | 4
+        REPEATABLE READ SCHEMA, READ UNCOMMITTED INSTANCES | 3
+        READ COMMITTED SCHEMA, READ COMMITTED INSTANCES | 2
+        READ COMMITTED SCHEMA, READ UNCOMMITTED INSTANCES | 1
 
 **Example 1** ::
 
     vi $CUBRID/conf/cubrid.conf
     ...
 
-    isolation_level = 1
+    isolation_level = 3
     ...
      
     or
@@ -744,7 +886,7 @@ You can set the level of transaction isolation by using **isolation_level** and 
 
 **Example 2** ::
 
-    SET TRANSACTION ISOLATION LEVEL 1;
+    SET TRANSACTION ISOLATION LEVEL 3;
     -- or
     SET TRANSACTION ISOLATION LEVEL READ COMMITTED CLASS,READ UNCOMMITTED INSTANCES;
 
@@ -806,7 +948,7 @@ The following are the rules of this isolation level:
 *   Transaction T1 cannot read or modify the record being viewed by another transaction T2.
 *   Another transaction T2 cannot insert a new record into table A while transaction T1 is retrieving the records of table A.
 
-This isolation level uses a two-phase locking protocol for shared and exclusive lock: the lock is held until the transaction ends even after the operation has been executed.
+This isolation level follows a two-phase locking protocol for shared and exclusive lock: the lock is held until the transaction ends even after the operation has been executed.
 
 **Example**
 
@@ -927,7 +1069,7 @@ The following are the rules of this isolation level:
 *   Transaction T1 cannot read or modify the record being viewed by another transaction T2.
 *   Another transaction T2 can insert a new record into table A while transaction T1 is retrieving records of table A. However, transaction T1 and T2 cannot set the lock on the same record.
 
-This isolation level uses a two-phase locking protocol.
+This isolation level follows a two-phase locking protocol.
 
 **Example**
 
@@ -1060,7 +1202,7 @@ The following are the rules of this isolation level:
 *   Transaction T1 can update/insert record to the table being viewed by another transaction T2.
 *   Transaction T1 cannot change the schema of the table being viewed by another transaction T2.
 
-This isolation level uses a two-phase locking protocol for an exclusive lock. A shared lock on a row is released immediately after it is read; however, an intention lock on a table is released when a transaction terminates to ensure repeatable read on the schema.
+This isolation level follows a two-phase locking protocol for an exclusive lock. A shared lock on a row is released immediately after it is read; however, an intent lock on a table is released when a transaction terminates to ensure repeatable read on the schema.
 
 **Example**
 
@@ -1193,7 +1335,7 @@ The following are the rules of this isolation level:
 *   Transaction T1 can update/insert record to the table being viewed by another transaction T2.
 *   Transaction T1 cannot change the schema of the table being viewed by another transaction T2.
 
-This isolation level uses a two-phase locking protocol for an exclusive and update lock. However, the shared lock on the rows is released immediately after it is retrieved. The intention lock on the table is released when the transaction ends to ensure repeatable reads.
+This isolation level follows a two-phase locking protocol for an exclusive and update lock. However, the shared lock on the rows is released immediately after it is retrieved. The intent lock on the table is released when the transaction ends to ensure repeatable reads.
 
 **Example**
 
@@ -1330,7 +1472,7 @@ The following are the rules of this isolation level:
 *   Transaction T1 can update/insert a record to the table being viewed by another transaction T2.
 *   Transaction T1 can change the schema of the table being viewed by another transaction T2.
 
-This isolation level uses a two-phase locking protocol for an exclusive lock. However, non-repeatable read may occur because the shared lock on the rows is released immediately after it is retrieved and the intention lock on the table is released immediately as well.
+This isolation level follows a two-phase locking protocol for an exclusive lock. However, non-repeatable read may occur because the shared lock on the rows is released immediately after it is retrieved and the intent lock on the table is released immediately as well.
 
 **Example**
 
@@ -1448,7 +1590,7 @@ The following are the rules of this isolation level:
 *   Transaction T1 can update/insert record to the table being viewed by another transaction T2.
 *   Transaction T1 can change the schema of the table being viewed by another transaction T2.
 
-This isolation level uses a two-phase locking protocol for an exclusive and update lock. However, the shared lock on the rows is released immediately after it is retrieved. The intention lock on the table is released immediately after the retrieval as well.
+This isolation level follows a two-phase locking protocol for an exclusive and update lock. However, the shared lock on the rows is released immediately after it is retrieved. The intent lock on the table is released immediately after the retrieval as well.
 
 **Example**
 

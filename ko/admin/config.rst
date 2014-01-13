@@ -1855,12 +1855,12 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
     
 **RECONNECT_TIME** 
   
-    특정 상황에서 **RECONNECT_TIME**\으로 명시한 시간이 경과하면 CAS가 서버에 재연결을 시도한다. 기본값은 600s이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
+    특정 상황에서 **RECONNECT_TIME**\으로 명시한 시간이 경과하면 CAS가 다른 DB 서버에 재연결을 시도한다. 기본값은 600s(10min)이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
   
     CAS가 서버에 재연결을 시도하는 특정 상황은 다음과 같다. 
      
-    *   **PREFERRED_HOSTS**\가 아닌 다른 호스트에 연결한 경우 
-    *   RO 브로커인데 active 서버에 연결한 경우 
+    *   CAS가 **PREFERRED_HOSTS**\가 아닌 다른 DB 서버에 연결한 경우 
+    *   "ACCESS_MODE=RO"(Read Only)인 CAS가 active DB 서버에 연결한 경우 
      
     **RECONNECT_TIME** 값이 0이면 재연결을 시도하지 않는다. 
     
@@ -1868,7 +1868,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 
 **REPLICA_ONLY**
   
-    **REPLICA_ONLY**\의 값이 **ON**\이면 레플리카에만 접속된다. 기본값은 **OFF**\이다. **REPLICA_ONLY**\의 값이 **ON**\이더라도 **ACCESS_MODE**\의 값이 **RW**\이면 레플리카 DB에도 쓰기 작업을 수행할 수 있다.
+    **REPLICA_ONLY**\의 값이 **ON**\이면 CAS가 레플리카에만 접속된다. 기본값은 **OFF**\이다. **REPLICA_ONLY**\의 값이 **ON**\이더라도 **ACCESS_MODE**\의 값이 **RW**\이면 레플리카 DB에도 쓰기 작업을 수행할 수 있다.
     
 브로커 응용 서버(CAS)
 ^^^^^^^^^^^^^^^^^^^^^
@@ -1880,7 +1880,7 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
     **APPL_SERVER**\ 는 CUBRID 브로커가 생성하고 관리하는 브로커 응용 서버(CAS)의 종류를 지정하는 파라미터로 기본값은 **CAS**\ 이다.
 
     SHARD 환경에서 shard DB를 CUBRID가 아닌 다른 DB로 변경하고자 할 때 사용하며, 이 값이 **CAS**\이면 CUBRID를 사용한다.
-    SHARD 환경에서 shard DB로 MySQL을 사용하고자 한다면 아래의 값 중 하나를 설정한다. 
+    shard DB로 MySQL을 사용하고자 한다면 아래의 값 중 하나를 설정한다. 
       
     ====================== ==================================== 
     APPL_SERVER 설정 값    설명 
@@ -2133,7 +2133,7 @@ SHARD 기능을 사용하려면 **cubrid_broker.conf.shard**\ 를 참고하여 *
 
 **SHARD_PROXY_CONN_WAIT_TIMEOUT**
   
-    이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊는다. 기본값은 8h이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
+    이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊는다. 기본값은 **8h**\ 이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
     이전 비밀번호 정보를 지닌 CAS는 더 이상 사용할 수 없으므로 종료되어야 되는데, 이 기능은 이러한 CAS가 불필요하게 계속 유지되는 것을 방지한다. 
     
 **SHARD_PROXY_LOG**

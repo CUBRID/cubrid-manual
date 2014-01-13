@@ -860,7 +860,7 @@ CCI API Reference
         *   **CCI_ER_TYPE_CONVERSION**
         *   **CCI_ER_ATYPE**
 
-    data types of *value* for *a_type* are as below.
+    Data types of *value* for *a_type* are as below.
         
     +-----------------------------+-----------------------------+
     | a_type                      | value type                  |
@@ -906,33 +906,33 @@ CCI API Reference
         :c:func:`cci_datasource_release`
         :c:func:`cci_datasource_change_property`
 
-.. c:function:: int cci_datasource_change_property (T_CCI_DATASOURCE * datasource, const char *key, const char *val)
+.. c:function:: int cci_datasource_change_property (T_CCI_DATASOURCE *datasource, const char *key, const char *val)
  
-    [번역] CCI의 DATASOURCE에 대해 key에 명시한 속성(property)의 값을 val에 설정한다. 이 함수를 사용하여 변경한 속성 값은 datasource 내 모든 연결에 적용된다.
-     
-    :param datasource: (IN) CCI 연결을 획득할 T_CCI_DATASOURCE 구조체 포인터
-    :param key: (IN) 속성 이름 문자열에 대한 포인터
-    :param val: (IN) 속성 값 문자열에 대한  포인터
-    :return: 에러 코드(0: 성공)
+    Set the name of a property of DATASOURCE is specified to *key*, and set a value of the property to *val*.A property's value which is set with this function is applied to all connections in *datasource*.
+    
+    :param datasource: (IN) A pointer to a structure T_CCI_DATASOURCE to get the CCI connection
+    :param key: (IN) A pointer to a string of property names
+    :param val: (IN) A pointer to a string of attribute value
+    :return:  Error code (0: success)
     
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_NO_PROPERTY**
         *   **CCI_ER_PROPERTY_TYPE**
     
-    변경 가능한 속성(property)의 이름 및 값은 다음과 같다.
+    The below is changable properties.
  
-    ========================= =========== ============================== ===========================================================================================================
-    속성 이름                 타입        값                             의미
-    ========================= =========== ============================== ===========================================================================================================
-    default_autocommit        bool        true/false                     autocommit 여부. 기본값은 cubrid_broker.conf의 CCI_DEFAULT_AUTOCOMMIT이며, 이 값의 기본값은 ON(true)임.
-    default_lock_timeout      msec        숫자                           lock timeout
-    default_isolation         string      :c:func:`cci_property_set`\의  isolation level. 기본값은 cubrid.conf의 isolation_level이며, 
-                                          표 참고                        이 값의 기본값은 "TRAN_READ_UNCOMMITTED"임.
-    login_timeout             msec        숫자                           login timeout.  기본값은 0(무한대기)임. prepare 또는 execute 함수 호출 시 내부적으로 재접속이 
-                                                                         발생할 수 있으며, 이 때에도 사용됨.
-    ========================= =========== ============================== ===========================================================================================================
+    ========================= =========== ============================== =========================================================================================================================
+    Property name             Type        Value                          Description
+    ========================= =========== ============================== =========================================================================================================================
+    default_autocommit        bool        true/false                     Turn on autocommit or not. The default is CCI_DEFAULT_AUTOCOMMIT in cubrid_broker.conf; the default of this is ON(true).
+    default_lock_timeout      msec        number                         lock timeout                                                      
+    default_isolation         string      See the table of               isolation level. The default is isolation_level in cubrid.conf; the default of this is "TRAN_READ_UNCOMMITTED".
+                                          :c:func:`cci_property_set`                                                                     
+    login_timeout             msec        number                         login timeout. The default is 0(infinite wait). It can also be used when you call prepare or execute functions; 
+                                                                         at this time reconnection can happen.
+    ========================= =========== ============================== =========================================================================================================================
 
-    **예제**
+    **Examples**
 
     .. code-block:: c
     
@@ -1511,9 +1511,9 @@ CCI API Reference
     | CCI_A_TYPE_BIGINT   | int64_t \*                   | value copy                                |
     |                     | (For Windows: __int64 \*)    |                                           |
     +---------------------+------------------------------+-------------------------------------------+
-    | CCI_A_TYPE_BLOB     | **T_CCI_BLOB**               | memory allocation and value copy          |
+    | CCI_A_TYPE_BLOB     | **T_CCI_BLOB** \*            | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
-    | CCI_A_TYPE_CLOB     | **T_CCI_CLOB**               | memory allocation and value copy          |
+    | CCI_A_TYPE_CLOB     | **T_CCI_CLOB** \*            | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
 
     **Remark**
@@ -1664,7 +1664,7 @@ CCI API Reference
     :param value: (OUT) The pointer of the result buffer pointer(char \*\*). It stores the last primary key of INSERT statement executed on the last time. The memory which this pointer indicates doesn't need to be released, because it is the fixed buffer inside the connection handle.
     :param err_buf: (OUT) Error buffer
 
-    :return: Error code
+    :return: Error code (0: success)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_USED_CONNECTION**
@@ -1725,12 +1725,12 @@ CCI API Reference
 
 .. c:function:: int cci_get_login_timeout(int conn_handle, int *timeout, T_CCI_ERROR *err_buf)
  
-    [번역] 로그인 타임아웃 값을 timeout에 반환한다.
+    Return login timeout value to *timeout*.
     
-    :param conn_handle: (IN) 연결 핸들
-    :param timeout: (OUT) 로그인 타임아웃 값(단위: 밀리 초)에 대한 포인터
-    :param err_buf: (OUT) 에러 버퍼
-    :return: 에러 코드(0: 성공)
+    :param conn_handle: (IN) Connection handle
+    :param timeout: (OUT) A pointer to login timeout value(unit: millisecond)
+    :param err_buf: (OUT) Error buffer
+    :return: Error code (0: success)
  
         *   **CCI_ER_INVALID_ARGS**
         *   **CCI_ER_CON_HANDLE**
@@ -2267,12 +2267,12 @@ CCI API Reference
     
     .. note:: 
     
-        [번역] **login_timeout**\은 DATASOURCE 객체를 생성하는 경우와 :c:func:`cci_prepare` 또는 :c:`cci_execute` 함수에서 내부적인 재접속이 발생하는 경우에 적용된다. 내부적인 재접속은 DATASOURCE에서 연결 객체를 얻은 경우와 :c:func:`cci_connect`/:c:func:`cci_connect_with_url` 함수로 연결 객체를 얻은 경우에서 모두 발생한다.
-        
-        DATASOURCE 객체를 생성하는 시간은 내부적인 재접속 시간보다 오래 걸릴 수 있으므로, 두 가지 경우의 **login_timeout**\ 을 다르게 적용하는 것을 감안할 수 있다. 예를 들어, 전자의 경우를 5000(5초), 후자의 경우를 2000(2초)로 설정하고 싶다면, 후자의 설정을 위해 DATASOURCE 생성 후 :c:func:`cci_set_login_timeout` 함수를 사용한다.
-    
-        10.0 이전 버전에서는 DATASOURCE 객체를 생성할 때만 login_timeout이 적용되고, 내부적으로 재접속하는 경우에는 login_timeout이 적용되지 않아 무한 대기하는 현상 발생 시 이 작업을 취소하는 방법이 없는 문제가 존재한다.
+        **login_timeout** is applied when DATASOURCE object is created and when an internal reconnection in :c:func:`cci_prepare` or :c:`cci_execute` occurs. An internal reconnection occurs when getting a connection object from DATASOURCE and when getting a connection object from :c:func:`cci_connect`/:c:func:`cci_connect_with_url` function.
 
+        The time creating a DATASOURCE object can take a long time than an internal reconnection time; therefore, in these two cases, you can consider that **login_tiemout** can be applied differently. For example, if you want to set a former **login_tiemout** as 5000(5 sec.) and a latter one as 2000(2 sec.), to set the latter one, use :c:func:`cci_set_login_timeout` function after creating DATASOURCE.
+        
+        In less than 10.0 version, **login_timeout** is applied only when creating a DATASOURCE object, and not applied when internal reconnection occurs; therefore, there is no way to cancel the infinitely waiting job when it occurs.
+        
     **default_isolation** has one of the following configuration values. For details on isolation level, see :ref:`set-transaction-isolation-level`.
 
     +----------------------------+---------------------------------------+
@@ -2315,7 +2315,6 @@ CCI API Reference
         cci_property_set(ps, "password", "cubridpwd");
           ...
         cci_property_set(ps, "url", "cci:cubrid:192.168.0.1:33000:demodb:public:mypwd:?logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
-        
 
     .. seealso:: 
     

@@ -906,9 +906,9 @@ CCI API 레퍼런스
         :c:func:`cci_datasource_release`,
         :c:func:`cci_datasource_change_property`
         
-.. c:function:: int cci_datasource_change_property (T_CCI_DATASOURCE * datasource, const char *key, const char *val)
+.. c:function:: int cci_datasource_change_property (T_CCI_DATASOURCE *datasource, const char *key, const char *val)
  
-    CCI의 DATASOURCE에 대해 key에 명시한 속성(property)의 값을 val에 설정한다. 이 함수를 사용하여 변경한 속성 값은 datasource 내 모든 연결에 적용된다.
+    DATASOURCE의 속성(property) 이름은 *key*에 명시하고, 값을 *val*\에 설정한다. 이 함수를 사용하여 변경한 속성 값은 *datasource* 내 모든 연결에 적용된다.
      
     :param datasource: (IN) CCI 연결을 획득할 T_CCI_DATASOURCE 구조체 포인터
     :param key: (IN) 속성 이름 문자열에 대한 포인터
@@ -1511,9 +1511,9 @@ CCI API 레퍼런스
     | CCI_A_TYPE_BIGINT   | int64_t \*                   | value copy                                |
     |                     | (For Windows: __int64 \*)    |                                           |
     +---------------------+------------------------------+-------------------------------------------+
-    | CCI_A_TYPE_BLOB     | **T_CCI_BLOB**               | memory allocation and value copy          |
+    | CCI_A_TYPE_BLOB     | **T_CCI_BLOB** \*            | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
-    | CCI_A_TYPE_CLOB     | **T_CCI_CLOB**               | memory allocation and value copy          |
+    | CCI_A_TYPE_CLOB     | **T_CCI_CLOB** \*            | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
 
     **참고 사항**
@@ -1665,7 +1665,7 @@ CCI API 레퍼런스
     :param value: (OUT) 결과 버퍼 포인터의 포인터(char \*\*). 가장 마지막에 수행한 INSERT 문의 기본 키 값을 저장. 이 포인터가 가리키는 메모리는 연결 핸들 내부의 고정된 버퍼로 별도로 해제할 필요가 없다.
     :param err_buf: (OUT) 에러 버퍼
 
-    :return: 에러 코드
+    :return: 에러 코드(0: 성공)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_USED_CONNECTION**
@@ -1726,7 +1726,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_get_login_timeout(int conn_handle, int *timeout, T_CCI_ERROR *err_buf)
  
-    로그인 타임아웃 값을 timeout에 반환한다.
+    로그인 타임아웃 값을 *timeout*\ 에 반환한다.
     
     :param conn_handle: (IN) 연결 핸들
     :param timeout: (OUT) 로그인 타임아웃 값(단위: 밀리 초)에 대한 포인터
@@ -2269,7 +2269,7 @@ CCI API 레퍼런스
         
         DATASOURCE 객체를 생성하는 시간은 내부적인 재접속 시간보다 오래 걸릴 수 있으므로, 두 가지 경우의 **login_timeout**\ 을 다르게 적용하는 것을 감안할 수 있다. 예를 들어, 전자의 경우를 5000(5초), 후자의 경우를 2000(2초)로 설정하고 싶다면, 후자의 설정을 위해 DATASOURCE 생성 후 :c:func:`cci_set_login_timeout` 함수를 사용한다.
     
-        10.0 이전 버전에서는 DATASOURCE 객체를 생성할 때만 login_timeout이 적용되고, 내부적으로 재접속하는 경우에는 login_timeout이 적용되지 않아 무한 대기하는 현상 발생 시 이 작업을 취소하는 방법이 없는 문제가 존재한다.
+        10.0 이전 버전에서는 DATASOURCE 객체를 생성할 때만 **login_timeout**\이 적용되고, 내부적으로 재접속하는 경우에는 **login_timeout**\이 적용되지 않아 무한 대기하는 현상 발생 시 이 작업을 취소하는 방법이 없는 문제가 존재한다.
         
     **default_isolation**\ 은 다음 값 중 하나의 설정값을 가지며, 격리 수준에 대한 자세한 내용은 :ref:`set-transaction-isolation-level`\ 을 참조한다.
 

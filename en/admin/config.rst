@@ -1034,7 +1034,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **intl_check_input_string**
 
-    **intl_check_input_string** is a parameter used to whether to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is no and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be terminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
+    **intl_check_input_string** is a parameter to determine whether or not to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is no and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be terminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
 
     UTF-8 and EUC-KR can be checked; ISO-8859-1 is one-byte encoding so it does not have to be checked because every byte is valid.
 
@@ -1045,7 +1045,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **intl_check_input_string**
 
-    **intl_check_input_string** is a parameter used to whether to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is no and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be terminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
+    **intl_check_input_string** is a parameter to determine whether or not to check that string entered is correctly corresponded to character set used. The default value is **no**. If this value is no and character set is UTF-8 and incorrect data is enter which violate UTF-8 byte sequence, it can show abnormal behavior or database server and applications can be terminated abnormally. However, if it is guaranteed this problem does not happen, it has advantage in performance not to do it.
 
     UTF-8 and EUC-KR can be checked; ISO-8859-1 is one-byte encoding so it does not have to be checked because every byte is valid.
 
@@ -1129,7 +1129,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **only_full_group_by**
 
-    **only_full_group_by** is a parameter to configure whether to use extended syntax about using **GROUP BY** statement.
+    **only_full_group_by** is a parameter to configure whether or not to use extended syntax about using **GROUP BY** statement.
 
     If this parameter value is set to **no**, an extended syntax is applied thus, a column that is not specified in the **GROUP BY** statement can be specified in the **SELECT** column list. If it is set to yes, a column that is only specified in the **GROUP BY** statement can be the **SELECT** column list.
 
@@ -1283,7 +1283,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **string_max_size_bytes**
 
-    **string_max_size_bytes** is a parameter used to define the maximum byte allowable in string functions or operators. 
+    **string_max_size_bytes** is a parameter to define the maximum byte allowable in string functions or operators. 
     You can set a unit as B, K, M, G or T, which stands for bytes, kilobytes(KB), megabytes(MB), gigabytes(GB) or terabytes(TB) respectively. If you omit the unit, bytes will be applied. The default value is 1048576(1M). The minimum value is 64 and the maximum value is 33,554,432(32M).
 
     The functions and operators affected by this parameter are as follows:
@@ -1300,7 +1300,7 @@ The following are parameters related to SQL statements and data types supported 
 
 **unicode_input_normalization**
 
-    **unicode_input_normalization** is a parameter used to whether to input unicode stored in system level. The default value is **no**.
+    **unicode_input_normalization** is a parameter to determine whether or not to input unicode stored in system level or not. The default value is **no**.
 
     In general, unicode text can be stored in "fully composed" or "fully decomposed". When character 'Ä' has 00C4 (if it is encoded in UTF-8, it becomes 2 bytes of C3 84) which is only one code point. In "fully decomposed" mode, it has two code points/characters. It is 0041 (character "A") and 0308(COMBINING DIAERESIS). In case of UTF-8 encoding, it becomes 3 bytes of 41 CC 88.
 
@@ -1328,17 +1328,15 @@ The following are parameters related to SQL statements and data types supported 
 
 **unicode_output_normalization**
 
-    **unicode_output_normalization** is a parameter used to whether to output unicode stored in system level. The default value is **no**. For details, see the above **unicode_input_normalization** description.
+    **unicode_output_normalization** is a parameter to determine whether or not to output unicode stored in system level. The default value is **no**. For details, see the above **unicode_input_normalization** description.
 
 .. _update_use_attribute_references:
 
-[번역]
-    
 **update_use_attribute_references** 
 
-    **update_use_attribute_references**\는 **UPDATE** 문에서 갱신 대상 칼럼을 명시할 때 먼저 명시한 칼럼의 값이 질의문에서 해당 칼럼을 사용하는 또 다른 칼럼의 갱신에 영향을 줄 것인지 여부를 설정하는 파라미터로서, 기본값은 **no**\ 이다. 
-      
-    아래의 UPDATE 문 결과는 **update_use_attribute_references** 파라미터의 값에 따라 달라진다. 
+    **update_use_attribute_references** is a parameter whether a value X of a column to be updated in an **UPDATE** statement affects to another column's update which uses X. The default is **no**.
+    
+    The below result of an **UPDATE** statement is dependent on the value of **update_use_attribute_references** parameter.
       
     .. code-block:: sql 
 
@@ -1346,8 +1344,8 @@ The following are parameters related to SQL statements and data types supported 
         INSERT INTO tbl values (10, NULL); 
 
         UPDATE tbl SET a=1, b=a; 
-          
-    이 파라미터의 값이 yes이면, 위의 UPDATE 질의에서 갱신되는 b의 값은 "a=1"의 영향을 받아 1이 된다. 
+    
+    If this parameter's value is **yes**, the updated value of the column "b" will be "1" which is affected by "a=1". 
 
     .. code-block:: sql 
       
@@ -1357,7 +1355,7 @@ The following are parameters related to SQL statements and data types supported 
       
         1, 1 
           
-    이 파라미터의 값이 no이면, 위의 UPDATE 질의에서 갱신되는 b의 값은 "a=1"의 영향을 받지 않고 해당 레코드에 저장되어 있는 a 값의 영향을 받아 NULL이 된다. 
+    If this parameter's value is **no**, the updated value of the column "b" will be "NULL", which is affected by the value of "a" stored in the record, not by "a=1". 
 
     .. code-block:: sql 
       
@@ -1851,24 +1849,22 @@ Access
 
 .. _reconnect_time:
     
-[번역]
-    
 **RECONNECT_TIME** 
   
-    특정 상황에서 **RECONNECT_TIME**\으로 명시한 시간이 경과하면 CAS가 서버에 재연결을 시도한다. 기본값은 600s이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
-  
-    CAS가 서버에 재연결을 시도하는 특정 상황은 다음과 같다. 
+    If the time specified by **RECONNECT_TIME** is elapsed in a certain status, CAS will try to reconnect to the other DB server. The default of this parameter is **600s**. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, s will be applied.
+    
+    a certain status which CAS tries to reconnect is as follows.
      
-    *   **PREFERRED_HOSTS**\가 아닌 다른 호스트에 연결한 경우 
-    *   RO 브로커인데 active 서버에 연결한 경우 
+    *   when CAS is connected to the other DB server, not a DB server in **PREFERRED_HOSTS**.
+    *   when CAS with "ACCESS_MODE=RO"(Read Only) is connected to the active DB server.
      
-    **RECONNECT_TIME** 값이 0이면 재연결을 시도하지 않는다. 
+    When **RECONNECT_TIME** is 0, CAS does not try to reconnect.
     
 .. _replica_only: 
 
 **REPLICA_ONLY**
   
-    **REPLICA_ONLY**\의 값이 **ON**\이면 레플리카에만 접속된다. 기본값은 **OFF**\이다. **REPLICA_ONLY**\의 값이 **ON**\이더라도 **ACCESS_MODE**\의 값이 **RW**\이면 레플리카 DB에도 쓰기 작업을 수행할 수 있다.
+    If a value of **REPLICA_ONLY** is **ON**, CAS is connected only to replicas. The default is **OFF**. Even though the value of **REPLICA_ONLY** is **ON**, when a value of **ACCESS_MODE** is  **RW**, it is possible to write to the replica DB.
 
 Broker App. Server(CAS)
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -1879,20 +1875,18 @@ Broker App. Server(CAS)
 
     **APPL_SERVER** is a parameter to configure types of CAS generated and managed by the CUBRID broker. The default value is **CAS**.
 
-[번역]
+    In SHARD environment, it is used when you want to change the shard DB not CUBRID, but the other DB; if this value is **CAS**, CUBRID is used.
+    If you want to use MySQL as a shard DB, set one of below values.
     
-    SHARD 환경에서 shard DB를 CUBRID가 아닌 다른 DB로 변경하고자 할 때 사용하며, 이 값이 **CAS**\이면 CUBRID를 사용한다.
-    SHARD 환경에서 shard DB로 MySQL을 사용하고자 한다면 아래의 값 중 하나를 설정한다. 
+    ========================== ==================================== 
+    APPL_SERVER setting value  Description
+    ========================== ==================================== 
+    CAS_MYSQL	               MySQL C Connector 6.1 is used
+    CAS_MYSQL51	               MySQL C Connector 5.1 is used
+    CAS_MYSQL61	               MySQL C Connector 6.1 is used
+    ========================== ==================================== 
       
-    ====================== ==================================== 
-    APPL_SERVER 설정 값    설명 
-    ====================== ==================================== 
-    CAS_MYSQL	           MySQL C Connector 6.1 버전을 사용 
-    CAS_MYSQL51	           MySQL C Connector 5.1 버전을 사용 
-    CAS_MYSQL61	           MySQL C Connector 6.1 버전을 사용 
-    ====================== ==================================== 
-      
-    설정값에 따라 해당 버전의 MySQL 라이브러리를 반드시 설치해야 하며, MySQL 라이브러리는 MySQL 홈페이지(http://dev.mysql.com/downloads/connector/c)에서 다운받을 수 있다. 
+    By the setting vaule, that version's MySQL library should be installed; you can download MySQL library MySQL in MySQL homepage(http://dev.mysql.com/downloads/connector/c). 
 
 **APPL_SERVER_MAX_SIZE**
 
@@ -2122,7 +2116,7 @@ To use SHARD feature, configure the below parameters in **cubrid_broker.conf** a
 
     The number of applications that can be concurrently connected by using the proxy. The default value is 256 and the maximum value is 10,000 per proxy.
     
-.. _shard-proxy-max-prepared-stmt-count:
+.. _shard-max-prepared-stmt-count:
 
 **SHARD_MAX_PREPARED_STMT_COUNT**
 
@@ -2134,10 +2128,9 @@ To use SHARD feature, configure the below parameters in **cubrid_broker.conf** a
 
 **SHARD_PROXY_CONN_WAIT_TIMEOUT**
 
-    [번역]
-    이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊는다. 기본값은 8h이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 
-    이전 비밀번호 정보를 지닌 CAS는 더 이상 사용할 수 없으므로 종료되어야 되는데, 이 기능은 이러한 CAS가 불필요하게 계속 유지되는 것을 방지한다. 
-
+    If there is no request anymore during the time specified in this parameter, CAS disconnect with DB. The default is **8h**. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, second(s) will be applied.
+    CAS which has a previous password should be exit because it cannot be used anymore; this feature protects that CAS is still kept unnecessarily.
+    
 **SHARD_PROXY_LOG**
 
     The proxy log level. It can be set to one of the following values:

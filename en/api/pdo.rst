@@ -357,7 +357,7 @@ Using prepare and bind
 Prepared statements are one of the major features offered by PDO and you can take following benefits by using them.
 
 *   SQL prepared statements need to be parsed only once even if they are executed multiple times with different parameter values. Therefore, using a prepared statement minimizes the resources and ,in general, the prepared statements run faster.
-*   It helps to prevent SQL injection attacks by eliminating the need to manually quote the parameters; however, if other parts of the SQL query are being built up with unescaped input, SQL injection would still be possible.
+*   It helps to prevent SQL injection attacks by eliminating the need to manually quote the parameters; however, if other parts of the SQL query are being built up with unescaped input, SQL injection is still possible.
 
 The example script below shows how to retrieve data by using a prepared statement.
 

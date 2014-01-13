@@ -29,46 +29,47 @@ CSQL 인터프리터는 셸에서 다음과 같이 시작할 수 있다. 처음 
        can precede the prefix. Capitalized characters represent the minimum
        abbreviation that you need to enter to execute the specified command.
 
-       ;REAd   [<file-name>]       - read a file into command buffer.
-       ;Write  [<file-name>]       - (over)write command buffer into a file.
-       ;APpend [<file-name>]       - append command buffer into a file.
-       ;PRINT                      - print command buffer.
-       ;SHELL                      - invoke shell.
-       ;CD                         - change current working directory.
-       ;EXit                       - exit program.
+       ;REAd   [<file-name>]        - read a file into command buffer.
+       ;Write  [<file-name>]        - (over)write command buffer into a file.
+       ;APpend [<file-name>]        - append command buffer into a file.
+       ;PRINT                       - print command buffer.
+       ;SHELL                       - invoke shell.
+       ;CD                          - change current working directory.
+       ;EXit                        - exit program.
 
-       ;CLear                      - clear command buffer.
-       ;EDIT                       - invoke system editor with command buffer.
-       ;LISt                       - display the content of command buffer.
+       ;CLear                       - clear command buffer.
+       ;EDIT                        - invoke system editor with command buffer.
+       ;LISt                        - display the content of command buffer.
 
-       ;RUn                        - execute sql in command buffer.
-       ;Xrun                       - execute sql in command buffer,
-                                     and clear the command buffer.
-       ;COmmit                     - commit the current transaction.
-       ;ROllback                   - roll back the current transaction.
-       ;AUtocommit [ON|OFF]        - enable/disable auto commit mode.
-       ;REStart                    - restart database.
+       ;RUn                         - execute sql in command buffer.
+       ;Xrun                        - execute sql in command buffer,
+                                      and clear the command buffer.
+       ;COmmit                      - commit the current transaction.
+       ;ROllback                    - roll back the current transaction.
+       ;AUtocommit [ON|OFF]         - enable/disable auto commit mode.
+       ;REStart                     - restart database.
 
-       ;SHELL_Cmd  [shell-cmd]     - set default shell, editor, print and pager
-       ;EDITOR_Cmd [editor-cmd]      command to new one, or display the current
-       ;PRINT_Cmd  [print-cmd]       one, respectively.
-       ;PAger_cmd  [pager-cmd]
+       ;SHELL_Cmd  [shell-cmd]      - set default shell, editor, print and pager
+       ;EDITOR_Cmd [editor-cmd]       command to new one, or display the current
+       ;PRINT_Cmd  [print-cmd]        one, respectively.
+       ;PAger_cmd  [pager-cmd]      
 
-       ;DATE                       - display the local time, date.
-       ;DATAbase                   - display the name of database being accessed.
-       ;SChema class-name          - display schema information of a class.
-       ;SYntax [sql-cmd-name]      - display syntax of a command.
-       ;TRigger [`*'|trigger-name] - display trigger definition.
-       ;Get system_parameter       - get the value of a system parameter.
-       ;SEt system_parameter=value - set the value of a system parameter.
-       ;PLan [simple/detail/off]   - show query execution plan.
-       ;Info <command>             - display internal information.
-       ;TIme [ON/OFF]              - enable/disable to display the query
-                                     execution time.
-       ;LINe-output [ON/OFF]       - enable/disable to display each value in a line
-       ;HISTORYList                - display list of the executed queries.
-       ;HISTORYRead <history_num>  - read entry on the history number into command buffer.
-       ;HElp                       - display this help message.
+       ;DATE                        - display the local time, date.
+       ;DATAbase                    - display the name of database being accessed.
+       ;SChema class-name           - display schema information of a class.
+       ;SYntax [sql-cmd-name]       - display syntax of a command.
+       ;TRigger [`*'|trigger-name]  - display trigger definition.
+       ;Get system_parameter        - get the value of a system parameter.
+       ;SEt system_parameter=value  - set the value of a system parameter.
+       ;PLan [simple/detail/off]    - show query execution plan.
+       ;Info <command>              - display internal information.
+       ;TIme [ON/OFF]               - enable/disable to display the query
+                                      execution time.
+       ;LINe-output [ON/OFF]        - enable/disable to display each value in a line
+       ;HISTORYList                 - display list of the executed queries.
+       ;HISTORYRead <history_num>   - read entry on the history number into command buffer.
+       ;TRAce [ON/OFF] [text/json]  - enable/disable sql auto trace.
+       ;HElp                        - display this help message.
 
 **CSQL에서 SQL 실행**
 

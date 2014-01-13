@@ -122,9 +122,7 @@ In the above example, when the number of rows with *id* = 5, the **JOIN** condit
 
 For more details on join syntax, see :ref:`join-query`.
 
-[번역]
-
-수행하는 예이다.
+The following shows to update a view.
 
 .. code-block:: sql 
 
@@ -136,7 +134,7 @@ For more details on join syntax, see :ref:`join-query`.
 
     UPDATE vw SET a=1000; 
 
-아래의 UPDATE 문 결과는 :ref:`update_use_attribute_references <update_use_attribute_references>` 파라미터의 값에 따라 달라진다. 
+The below result for an UPDATE statement depends on the value of the  :ref:`update_use_attribute_references <update_use_attribute_references>` parameter.
       
 .. code-block:: sql 
 
@@ -145,7 +143,7 @@ For more details on join syntax, see :ref:`join-query`.
 
     UPDATE tbl SET a=1, b=a; 
       
-이 파라미터의 값이 yes이면, 위의 UPDATE 질의에서 갱신되는 b의 값은 "a=1"의 영향을 받아 1이 된다. 
+If the value of this parameter is yes, the updated value of "b" from the above UPDATE query will be 1 as being affected by "a=1".
 
 .. code-block:: sql 
   
@@ -155,7 +153,7 @@ For more details on join syntax, see :ref:`join-query`.
   
     1, 1 
       
-이 파라미터의 값이 no이면, 위의 UPDATE 질의에서 갱신되는 b의 값은 "a=1"의 영향을 받지 않고 해당 레코드에 저장되어 있는 a 값의 영향을 받아 NULL이 된다. 
+If the value of this parameter is no, the updated value of "b" from the above UPDATE query will be NULL as being affected by the value of "a" which is stored at this record, not by "a=1".
 
 .. code-block:: sql 
   
@@ -164,4 +162,3 @@ For more details on join syntax, see :ref:`join-query`.
 :: 
   
     1, NULL
-    

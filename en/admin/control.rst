@@ -1385,79 +1385,77 @@ The following shows how to print the detail information using the **-f** option.
         ---------------------------------------------------
                0           shard1                192.168.10.1
 
-[번역]
-
 .. _broker-test: 
 
-브로커와 DB 간 연결 테스트 
-========================== 
+Connection test between a broker and a DB
+========================================= 
 
-**cubrid broker test**\ 는 지정한 브로커와 접속하는 DB에 사용자가 정의한 질의문을 수행해 보는 명령이다. 샤드 기능이 활성화되면 모든 SHARD DB에 질의를 수행해 본다. 질의 수행 후 트랜잭션은 롤백된다. 이 명령어를 통해 지정한 브로커에 접속하는 모든 SHARD DB에 질의를 수행하면 각 SHARD DB에 대한 질의 성공 여부를 확인할 수 있고, SHARD HASH 기능을 설정한 경우 입력한 질의가 어떤 SHARD DB에서 수행되었는지 확인할 수 있다. 
+**cubrid broker test** is a command to run the user-defined query to the DBs connected with a specified broker. If a SHARD feature is enabled, you can try to run a query to all SHARD DBs. After running this query, the transaction is rolled back. If you run a query to all SHARD DBs connected with a specified broker by this command, it is possible to confirm the success of a query for each SHARD DB; if you specify the SHARD HASH function, it is possible to confirm what SHARD DB is used for the query.
 
 :: 
 
     cubrid broker test <broker_name> [-D <db_name>] [-u <db_user>] [-p <db_password>] {-c <query> | -i <input_file>} [-o <output_file>] [-s] [-v] 
 
-* db_name: DB 이름 
-* db_user: DB 사용자 계정 
-* db_password: DB 사용자 암호 
-* query: 질의문 
-* input_file: 입력할 질의문을 저장한 파일 
-* output_file: 결과를 저장할 파일 
+* db_name: DB name
+* db_user: DB user's account
+* db_password: DB user's password
+* query: query statement
+* input_file: a file which stores input queries
+* output_file: a file in which to save the results
 
-**cubrid broker test**\ 에서 사용하는 옵션은 다음과 같다. 
+The following options are available with the **cubrid broker test** utility.
 
 .. program:: broker_test 
 
 .. option:: -D DB_NAME 
      
-    테스트 대상 DB 이름을 지정한다. 이 옵션이 생략될 때 cubrid_broker.conf의 SHARD 파라미터 값이 ON이면 SHARD_DB_NAME 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 에러가 발생한다. 
+    Specify the DB name of the test target. When this option is omitted, the value of SHARD_DB_NAME parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an error occurs.
      
 .. option:: -u DB_USER 
 
-    테스트 대상 DB 사용자 계정을 지정한다. 이 옵션이 생략될 때 cubrid_broker.conf의 SHARD 파라미터 값이 ON이면 SHARD_DB_USER 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 CUBRID에서는 "public"이, MySQL에서는 "root"가 입력된다. 
+    Specify the DB account of the test target. When this option is omitted, the value of SHARD_DB_USER parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, "public" is input in CUBRID, or "root" is input in MySQL.
      
 .. option:: -p DB_PASSWORD 
 
-    테스트 대상 DB 사용자 계정의 암호를 지정한다. cubrid_broker.conf의 SHARD 파라미터 값이 ON일 때 이 옵션이 생략되면 SHARD_DB_PASSWORD 파라미터의 값이 사용된다. SHARD 파라미터의 값이 OFF이면 CUBRID, MySQL 둘 다 빈 문자열("")이 입력된다. 
+    Specify the DB password of the test target. When this option is omitted, the value of SHARD_DB_PASSWORD parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an empty string("") is input in CUBRID and MySQL.
      
 .. option:: -c QUERY 
 
-    질의 문자열을 지정한다. 질의를 지정하기 위해 -c 또는 -i 옵션이 사용될 수 있다. -c 옵션과 -i 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
+    Specify the query string. **-c** or **-i** option can be used to specify a query. If they are omitted, only the connection information between a broker and a DB is printed.
      
 .. option:: -i FILE_NAME 
 
-    입력할 질의들을 저장한 파일을 지정한다. 질의를 지정하기 위해 -c 또는 -i 옵션이 사용될 수 있다. -c 옵션과 -i 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
+    Specify the file where you saved the queries to input. **-c** or **-i** option can be used to specify a query.  If they are omitted, only the connection information between a broker and a DB is printed. 
      
 .. option:: -o FILE_NAME 
 
-    화면에 출력되는 수행 결과를 저장할 파일 이름을 지정한다. 이 옵션이 생략되면 수행 결과를 화면에만 출력한다. 
+    Specify the file name to save the execution result to be displayed to the console. If this is omitted, the execution result is output only to the console.
      
 .. option:: -s 
 
-    SHARD 힌트가 포함된 질의는 해당 SHARD DB에서만 수행된다. 이 옵션이 생략되면 모든 SHARD DB에 대해 질의를 수행한다. 
+    A query which includes a SHARD hint is performed only in the SHARD DB. If this is omitted, a query is performed on all SHARD DBs.
      
-    SHARD 파라미터 값이 OFF이면 이 파라미터의 영향을 받지 않는다. 
+    If the value of a SHARD parameter is OFF, this option does not affect to the query execution.
 
 .. option:: -v 
 
-    아래의 정보와 함께 에러 메시지와 SELECT의 결과셋을 같이 출력한다. 
+    Output an error message and a result set of a SELECT query with the following information.
      
-    * RESULT : 질의 수행 후 에러가 반환되었는지 여부. [OK | FAIL] 출력 
-    * SHARD_ID : 질의가 수행된 SHARD DB의 ID(SHARD OFF 인 경우 해당 항목은 출력되지 않음) 
-    * ROW COUNT : DML에 의해 영향을 받는 행(affected rows)의 개수, 또는 SELECT 질의인 경우 행의 개수. 질의 수행 에러 시 -1을 출력 
-    * EXECUTION TIME : 질의가 수행된 시간 
-    * QUERY : 사용자가 입력한 질의 
+    *   RESULT: Whether an error is returned after the execution of a query. Output [OK | FAIL].
+    *   SHARD_ID: an ID of SHAR DB which a query is performed(no output when a value of SHARD parameter is OFF).
+    *   ROW COUNT: A number of affected rows by DML, or a number of rows if SELECT query. -1 is returned when a query error.
+    *   EXECUTION TIME: an execution time of a query.
+    *   QUERY: a query by a user's input.
      
-    이 옵션이 생략되면 "RESULT, SHARD_ID, ROW COUNT, EXECUTION TIME, QUERY"만 출력한다. 
+    If this option is omitted, only "RESULT, SHARD_ID, ROW COUNT, EXECUTION TIME, QUERY" are output.
 
-다음은 위의 옵션들을 사용한 예이다. 
+The following are examples to use the above options.
 
-*   DB에 질의 
+*   Query to DB
 
-    **cubrid_broker.conf의 SHARD 파라미터 값이 OFF일 때** 
+    **When the value of SHARD parameter in cubrid_broker.conf is OFF** 
      
-    DB 접속이 잘 되는지 확인한다. 
+    Check if a DB is accessible.
 
     :: 
 
@@ -1473,9 +1471,9 @@ The following shows how to print the detail information using the **-f** option.
         OK 1 0.011341 sec select 1,'a' from db_root where charset = 3 
         @ [OK] QUERY TEST 
          
-    **cubrid_broker.conf의 SHARD 파라미터 값이 ON일 때** 
+    **When the value of SHARD parameter in cubrid_broker.conf is ON**
 
-    모든 SHARD DB에 대해 접속이 잘 되는지 확인한다. 
+    Check if all SHARD DBs are accessible.
 
     :: 
      
@@ -1494,11 +1492,11 @@ The following shows how to print the detail information using the **-f** option.
         OK 3 1 0.002916 sec select 1 from db_root where charset = 3 
         @ [OK] QUERY TEST 
 
-*   사용자 권한 확인 
+*   Check a user's authority
 
-    **SHARD DB 중 하나에 INSERT 권한이 없는 경우** 
+    **When there is no INSERT authority on one of SHARD DBs** 
      
-    INSERT 권한이 없으면 RESULT가 FAIL로 표시된다. 
+    RESULT is output as FAIL if there is no INSERT authority.
      
     :: 
      
@@ -1521,10 +1519,10 @@ The following shows how to print the detail information using the **-f** option.
         OK 3 1 0.001325 sec insert into foo values(1,'a') 
         @ [FAIL] QUERY TEST 
      
-    **브로커에 접속하는 DB 중 하나에 UPDATE 권한이 없는 경우** 
-     
-    UPDATE 권한이 없으면 RESULT가 FAIL로 표시된다. 
-     
+    **When there is no UPDATE authority on one of DBs which access a broker** 
+
+    RESULT is output as FAIL if there is no UPDATE authority.
+    
     :: 
      
         $ vi dml.txt 
@@ -1561,9 +1559,9 @@ The following shows how to print the detail information using the **-f** option.
         OK 0 0.001534 sec delete foo where b = 3 
         @ [FAIL] QUERY TEST 
 
-*   SHARD HASH 정상 동작 확인 
+*   Check whether SHARD HASH works well
 
-    특정 키에 대해 해싱이 잘 되는지 확인한다. 
+    Check if a hashing function works well on a special key.
 
     :: 
      
@@ -1613,11 +1611,11 @@ The following shows how to print the detail information using the **-f** option.
 
         @ [OK] QUERY TEST 
          
-*   -v 옵션 사용 여부 
+*   Whether to use -v option or not
 
-    **-v 옵션을 사용할 때** 
+    **When using -v option**
      
-    질의 성공 시 SELECT 질의인 경우 결과셋을 출력하며, 실패 시 에러 메시지를 출력한다. 
+    When SELECT query succeeds, it returns a resultset; if it fails, it returns an error message.
      
     :: 
      
@@ -1643,9 +1641,9 @@ The following shows how to print the detail information using the **-f** option.
         OK 0 0.001399 sec delete foo where b = 3 
         @ [FAIL] QUERY TEST 
          
-    **-v 옵션을 사용하지 않을 때** 
+    **When not using -v option**
 
-    질의 성공, 실패 여부만 출력한다. 
+    It just returns a success or a failure of a query.
      
     :: 
      
@@ -1663,10 +1661,10 @@ The following shows how to print the detail information using the **-f** option.
         OK 0 0.001393 sec delete foo where b = 3 
         @ [FAIL] QUERY TEST 
          
-*   SHARD 키 값 확인 
+*   Check the value of SHARD key
 
-    -s 옵션과 함께 SHARD 키 힌트가 주어지면 해당 SHARD DB에 질의를 수행하며, 그 결과를 출력한다. SHARD_ID로 어느 SHARD DB에서 질의가 수행되었는지 확인할 수 있다. 
-     
+    When SHARD key hint is given with the -s option, query to its SHARD DB, and outputs the result. With SHARD_ID, you can confirm that the query is executed from any SHARD DB.
+    
     :: 
      
         $ cubrid broker test shard1 -i shard_key.txt -s -v 

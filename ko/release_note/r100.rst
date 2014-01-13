@@ -474,7 +474,7 @@ statement pool에서 statement가 재사용될 때의 성능을 개선했다.
     FROM db_class a, db_class b, db_class c, db_class d LIMIT 20000;
     CREATE INDEX idx ON tab(k1, k2, k3);
  
-    SELECT /*+ recompile */ k1, k2, SUM(DISTINCT k3)          
+    SELECT /*+ RECOMPILE */ k1, k2, SUM(DISTINCT k3)          
     FROM tab 
     WHERE k2 > -1 
     GROUP BY k1, k2;

@@ -677,7 +677,7 @@ CSQL 인터프리터에서 작업 중인 데이터베이스 이름 및 호스트
 
 이 값을 **ON** 으로 설정하면 질의 결과 레코드를 칼럼 당 한 라인으로 출력한다. 기본 설정은 OFF로서, 한 레코드는 한 라인으로 출력한다. ::
 
-    csql> ;line-output OFF
+    csql> ;line-output ON
     csql> select * from athlete;
 
     === <Result of SELECT Command in Line 1> ===

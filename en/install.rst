@@ -75,14 +75,14 @@ Compatibility
 
 .. _Installing-and-Running-on-Linux:
 
-Installation and Running CUBRID on Linux
-----------------------------------------
+Installing and Running CUBRID on Linux
+--------------------------------------
 
-**Details to Check when Installing**
+**Checklist before Installing**
 
 Check the following before installing CUBRID for Linux.
 
-*   Operating system 
+*   glibc version 
     
     Only supports glibc 2.3.4 or later.
     The glibc version can be checked as follows: ::
@@ -96,7 +96,9 @@ Check the following before installing CUBRID for Linux.
         % uname -a
         Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
     
-    Make sure to install the CUBRID 32-bit version on 32-bit Linux and the CUBRID 64-bit version on 64-bit Linux. The following are the libraries that should be added.
+    Make sure to install the CUBRID 32-bit version on 32-bit Linux and the CUBRID 64-bit version on 64-bit Linux. 
+    
+*   The libraries that should be added.
     
     *   Curses Library (rpm -q ncurses)
     *   gcrypt Library (rpm -q libgcrypt)
@@ -244,13 +246,11 @@ For more information on upgrading a database from a previous version to a new ve
 
 You can modify the environment such as service ports etc. edit the parameters of a configuration file located in the **$CUBRID/conf** directory. See :ref:`Installing-and-Running-on-Windows` for more information.
 
-[번역]
-**Linux에서 시스템 구동 시 CUBRID 자동 구동하기**
+**Starting CUBRID automatically when starting a system on Linux**
 
-SH 패키지로 CUBRID를 설치했다면 $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **CUBRID_USER** 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용하여 Linux 시스템 구동 시 CUBRID를 자동으로 구동할 수 있다.
+If you have installed CUBRID with SH package, it includes "cubrid" script on the $CUBRID/share/init.d directory. Change **$CUBRID_USER** environment variable in this script as a Linux account which installed CUBRID; if you register this script to /etc/init.d directory, CUBRID can be started automatically when Linux system is started by using a **service** command or a **chkconfig** command.
 
-RPM 패키지로 CUBRID를 설치했다면 /etc/init.d 디렉터리에 cubrid 스크립트가 추가된다. 그러나 cubrid 스크립트 파일 안의 $CUBRID_USER 환경 변수를 cubrid 계정으로 변경하는 작업이 필요하다.
-        
+If you have installed CUBRID with RPM package, "cubrid" script is added to the /etc/init.d directory. But you need to change **$CUBRID_USER** environment variable into "cubrid" account.        
 
 **Installing CUBRID Interfaces**
 
@@ -269,7 +269,7 @@ CUBRID Web Manager is started when the CUBRID is installed, and you can see this
 Installing and Running CUBRID on Windows
 ----------------------------------------
 
-**Details to Check when Install**
+**Checklist before Installing**
 
 You should check the below before installing CUBRID for Windows.
 
@@ -302,14 +302,14 @@ You should check the below before installing CUBRID for Windows.
     CUBRID Service is automatically started when the system is rebooted. If you want to stop the  when the system is rebooted, change the "Start parameters" of "CUBRIDService" as "Stop"; "Control Panel > Administrative Tools > Services" and double-clicking "CUBRIDService", then pop-up window will be shown.
 
 
-[번역] **설치 후 확인 사항**
+**Checklist After Installation**
 
-*   CUBRID Service Tray 구동 여부
+*   Whether the start of CUBRID Service Tray or not
 
-    시스템을 시작할 때 CUBRID Service Tray가 자동으로 구동되지 않는다면 다음 사항을 확인하도록 한다.
+    If CUBRID Service Tray is not automatically started when starting a system, confirm the following.
 
-    *   [시작 버튼] > [제어판] > [관리 도구] > [서비스]의 Task Scheduler가 시작되어 있는지 확인하고, 그렇지 않으면 Task Scheduler를 시작한다.
-    *   [시작 버튼] > [모든 프로그램] > [시작프로그램]에 CUBRID Service Tray가 등록되어 있는지 확인하고, 그렇지 않으면 CUBRID Service Tray를 등록한다.
+    *   Check if Task Scheduler is started in [Start button] > [Control panel] > [Administrative Tools] > [Services]; if not, start Task Scheduler.
+    *   Check if CUBRID Service Tray is registered in [Start button] > [All Programs] > [Startup]; if not, register CUBRID Service Tray.
     
 **Upgrading CUBRID**
 
@@ -353,82 +353,80 @@ You can see the latest information on tools such as CUBRID Manager and CUBRID Qu
 
 CUBRID Web Manager is started when the CUBRID is installed, and you can see this by accessing to https://localhost:8282/.
 
-[번역]
+Installing with a Compressed Package
+------------------------------------
 
-압축 파일로 설치하기
---------------------
+Installing CUBRID with tar.gz on Linux
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Linux에서 tar.gz 파일로 CUBRID 설치
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Checklist before Installing**
 
-**설치 시 확인 사항**
+Check the following before installing CUBRID for Linux.
 
-Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
-
-*   glibc 버전
-
-    glibc 2.3.4 버전 이상만 지원한다.
-    glibc 버전은 다음과 같은 방법으로 확인한다. ::
-      
-        % rpm -q glibc
-
-*   64비트 여부 
+*   glibc version 
     
-    CUBRID 2008 R2.0 버전부터 32비트 버전과 64비트 버전을 각각 지원한다.
-    Linux 버전은 다음과 같은 방법으로 확인한다. ::
-        
+    Only supports glibc 2.3.4 or later.
+    The glibc version can be checked as follows: ::
+    
+        %rpm -q glibc
+    
+*   64-bit or 32-bit
+    
+    CUBRID supports both 32-bit and 64-bit Linux. You can check the version as follows: ::
+    
         % uname -a
         Linux host_name 2.6.18-53.1.14.el5xen #1 SMP Wed Mar 5 12:08:17 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
     
-    32비트 Linux에서는 CUBRID 32비트 버전을, 64비트 Linux에서는 CUBRID 64비트 버전을 설치한다. 
-    설치할 추가 라이브러리는 다음과 같다.
+    Make sure to install the CUBRID 32-bit version on 32-bit Linux and the CUBRID 64-bit version on 64-bit Linux. 
     
-    * Curses Library (rpm -q ncurses)
-    * gcrypt Library (rpm -q libgcrypt)
-    * stdc++ Library (rpm -q libstdc++)
+*   The libraries that should be added.
     
-*   /etc/hosts 파일에 호스트 이름과 IP 주소 매핑이 정상인지 확인하기
+    *   Curses Library (rpm -q ncurses)
+    *   gcrypt Library (rpm -q libgcrypt)
+    *   stdc++ Library (rpm -q libstdc++)
+    
+*   Check if the mapping between host names and IP addresses are correct in the /etc/hosts file.
 
-    호스트 이름과 이에 맞는 IP 주소가 비정상적으로 매핑되어 있으면 DB 서버를 구동할 수 없으므로, 정상적으로 매핑되어 있는지 확인한다.
+    If host names and IP addresses are matched incorrectly, DB server cannot be started normally. Therefore, check if they are correctly mapped.
 
-**설치 과정**
+**Installation Process**
 
-    **설치 디렉터리 지정**
+    **Specifying the Directory to Install**
 
-    *   압축 파일을 설치하려는 경로에 풀어 놓는다.
+    *   Decompress the compressed file to the directory to install.
 
         ::
         
             tar xvfz CUBRID-10.0.0.0181-linux.x86_64.tar.gz /home1/cub_user/
 
-        /home1/cub_user/ 이하에 CUBRID 디렉터리가 생기고 그 이하에 파일이 생성된다.
+        CUBRID directory is created under /home1/cub_user/ and files are created under CUBRID directory.
 
-    **환경 변수 설정**
+    **Specifying Environment Variables**
 
-    #.  사용자의 홈 디렉터리(/home1/cub_user) 이하에서 자동으로 실행되는 셸 스크립트에 아래의 환경 변수를 추가한다.
+    #.  Add below environment variables to a shell script which is run automatically and located under the home direcoty of a user.
     
-        다음은 bash 셸로 수행하는 경우 .bash_profile에 다음을 추가하는 예이다.
+        The below is an example to add environemt variables to .bash_profile when you run on the bash shell.
 
-       ::
+        ::
         
             export CUBRID=/home1/cub_user/CUBRID
             export CUBRID_DATABASES=$CUBRID/databases
             
-    #.  CLASSPATH 환경 변수에  CUBRID JDBC 라이브러리 파일 이름을 추가한다.
+    #.  Add CUBRID JDBC library file name to the CLASSPATH environment variable.
     
         ::
         
             export CLASSPATH=$CUBRID/jdbc/cubrid_jdbc.jar:$CLASSPATH
             
-    #.  Path 시스템 변수에 CUBRID bin 디렉터리를 추가한다.
+    #.  Add CUBRID bin directory to PATH environment variables.
       
         ::
         
             export PATH=$CUBRID/bin:$PATH
                 
-    **DB 생성**
+    **Creating DB**
         
-    *   콘솔 창에서 DB를 생성할 디렉터리로 이동해서 DB를 직접 생성한다.
+    *   Move to the directory to create DB on the console and create DB.
 
         ::
         
@@ -437,13 +435,13 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
             cd testdb
             cubrid createdb --db-volume-size=100M --log-volume-size=100M testdb en_US
 
-    **부팅 시 자동 시작**
+    **Auto-starting when Booting**
 
-    *   $CUBRID/share/init.d 디렉터리에 cubrid라는 스크립트가 포함되어 있다. 이 파일 안의 **CUBRID_USER** 환경 변수 값을 CUBRID를 설치한 Linux 계정으로 변경한 후, /etc/init.d에 등록하면 service나 chkconfig 명령을 사용하여 Linux 시스템 구동 시 CUBRID를 자동으로 구동할 수 있다.
+    *   "cubrid" script is included in the $CUBRID/share/init.d directory. Change the value of **$CUBRID_USER** environment variable into the Linux accout which installed CUBRID and register this script to /etc/init.d; then you can start automatically by using "service" or "chkconfig" command.
             
-    **DB 자동 구동**    
+    **Auto-starting DB**    
 
-    *   부팅 시 생성한 DB가 구동되게 하려면 C:\\CUBRID\\conf\\cubrid.conf에서 다음을 수정한다.
+    *   To start DB automatically when you booting a system, change the below in  $CUBRID/conf/cubrid.conf.
 
         ::
             
@@ -451,57 +449,57 @@ Linux 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항�
             service=server, broker, manager
             server=testdb
 
-    *   service 파라미터에는 자동으로 구동할 프로세스들을 지정한다.
-    *   server 파라미터에는 자동으로 구동할 DB 이름을 지정한다.
+    *   In the "service" parameter, processes to be auto-started are specified.
+    *   In the "server" parameter, DB name to be auto-started is specified.
         
-CUBRID 설치 이후 환경 설정, 도구 설치, 인터페이스 설치 등은 :ref:`Installing-and-Running-on-Linux`\을 확인하도록 한다.
+For environment setting, tools installation and interfaces installation after CUBRID installation,  see :ref:`Installing-and-Running-on-Linux`.
             
-Windows에서 zip 파일로 CUBRID 설치
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Installing CUBRID with zip on Windows
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**설치 시 확인 사항**
+**Checklist before Installing**
 
-Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항을 점검한다.
+Check below list before installing CUBRID database of Windows version.
 
-*   64비트 여부
+*   64bit or 32bit
 
-    CUBRID는 32비트 버전과 64비트 버전을 각각 지원한다. [내 컴퓨터] > [시스템 등록 정보] 창을 활성화하여 Windows 버전 비트를 확인할 수 있다. 32비트 Windows에서는 CUBRID 32비트 버전을 설치하고, 64비트 Windows에서는 CUBRID 64비트 버전을 설치한다.
+    CUBRID supports both 32-bit and 64-bit Windows. You can check the version by selecting [My Computer] > [System Properties]. Make sure to install the CUBRID 32-bit version on 32-bit Windows and the CUBRID 64-bit version on 64-bit Windows.
     
-**설치 과정**
+**Installation Process**
 
-    **설치 디렉터리 지정**
+    **Specifying the Directory to Install**
 
-    *   압축 파일을 설치하려는 경로에 풀어 놓는다.
+    *   Decompress the compressed file to the directory to install.
 
         ::
         
             C:\CUBRID
 
-    **환경 변수 설정**
+    **Specifying Environment Variables**
 
-    #.  내 컴퓨터(오른쪽 마우스 클릭) -> 속성 -> 고급 -> 환경변수를 선택한다.
-    #.  시스템 변수 항목에 새로 만들기를 클릭한 후 아래와 같이 시스템 변수를 추가한다.
+    #.  Select [Start button] > [Computer] > (click right mouse button) > [Properties] > [Advanced system settings] > [Environment Variables].
+    #.  Click [New ...] under the system variables and add system variables as below.
     
         ::
         
             CUBRID = C:\CUBRID
             CUBRID_DATABASES = %CUBRID%\databases
             
-    #.  CLASSPATH 시스템 변수에  CUBRID JDBC 라이브러리 파일 이름을 추가한다.
+    #.  Add CUBRID JDBC library name to CLASSPATH system variable.
     
         ::
         
             %CUBRID%\jdbc\cubrid_jdbc.jar       
             
-    #.  Path 시스템 변수에 CUBRID bin 디렉터리를 추가한다.
+    #.  Add CUBRID bin directory to Path system variable.
       
         ::
         
             %CUBRID%\bin
                 
-    **DB 생성**
+    **Creating DB**
         
-    *   cmd 명령으로 콘솔 창을 띄운 후 DB를 생성할 디렉터리로 이동해서 DB를 직접 생성한다.
+    *   Run **cmd** command and open the colsole; move to the directory to create DB and create DB.
 
         ::
         
@@ -510,25 +508,25 @@ Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항
             cd testdb
             c:\CUBRID\databases\testdb>cubrid createdb --db-volume-size=100M --log-volume-size=100M testdb en_US
     
-    **부팅 시 자동 시작**
+    **Auto-starting when Booting**
     
-    *   설치한 CUBRID가 Windows 시스템 부팅 시 자동으로 시작되게 하려면 CUBRID 서비스가 먼저 Windows 서비스에 등록되어야 한다. 
+    *   To start CUBRID automatically when booting the Windows system, CUBRID Service should be registered to Windows Service.
         
-        #.  CUBRID 서비스를 Windows 서비스에 등록한다.
+        #.  Register CUBRID Service to Windows Service.
 
             ::
             
                 C:\CUBRID\bin\ctrlService.exe -i C:\CUBRID\bin
             
-        #.  CUBRID 서비스를 구동/정지하는 방법은 아래와 같다.
+        #.  The below shows how to start/stop CUBRID Service.
         
             ::
             
                 C:\CUBRID\bin\ctrlService.exe -start/-stop
             
-    **DB 자동 구동**    
+    **Auto-starting DB**    
 
-    *   Windows 부팅 시 DB가 구동되게 하려면 C:\\CUBRID\conf\\cubrid.conf에서 다음을 수정한다.
+    *   To start DB when booting on Windows, change below in C:\\CUBRID\conf\\cubrid.conf.
 
         ::
             
@@ -536,61 +534,62 @@ Windows 버전의 CUBRID 데이터베이스를 설치하기 전에 다음 사항
             service=server, broker, manager
             server=testdb
 
-        *   service 파라미터에는 자동으로 구동할 프로세스들을 지정한다.
-        *   server 파라미터에는 자동으로 구동할 DB 이름을 지정한다.
+        *   Specify the processes to start automatically on the "service" parameter.
+        *   Specify the DB name to start automatically on the "server" parameter.
 
-    **서비스에서 제거**
+    **Removing from Service**
 
-    *   등록한 CUBRID Service를 제거하려면 다음을 수행한다.
+    *   To remove registered CUBRID Service, run the following.
 
         ::
         
             C:\CUBRID\bin\ctrlService.exe -u
 
-**CUBRID Service Tray 등록**
+**Registering CUBRID Service Tray**
     
-zip 파일로 CUBRID를 설치하는 경우 CUBRID Service Tray가 자동으로 등록되지 않으므로, 이를 사용하려면 수동으로 등록하는 절차가 필요하다.
+Since CUBRID Service Tray is not automatically registered when installing CUBRID with zip file, it is required to register manually if you want CUBRID Service Tray.
     
-#.  C:\\CUBRID\\bin\\CUBRID_Service_Tray.exe 파일의 바로 가기를 시작 > 모든프로그램 > 시작프로그램에 생성한다.
+#.  Create a link of C:\\CUBRID\\bin\\CUBRID_Service_Tray.exe in [Start button] > [All Programs] > [Startup].
 
-#.  시작 > 보조 프로그램 > 실행 창에서 regedit를 입력하면 레지스트리 편집기가 실행된다.
+#.  Input "regedit" in [Start button] > [Accessories] > [Run] to run a registry editor.
 
-#.  컴퓨터 > HKEY_LOCAL_MACHINE > SOFTWARE에 CUBRID 폴더를 생성한다.
+#.  Create CUBRID folder under [Computer] > [HKEY_LOCAL_MACHINE] > [SOFTWARE].
 
-#.  생성한 CUBRID 폴더에 cmclient 폴더를 생성(새로 만들기 > 키)하고 아래의 항목을 추가(새로 만들기 > 문자열 값)한다.
+#.  Create [cmclient] folder under [CUBRID] folder(Edit > New > Key) and add below items(Edit > New > String Value).
 
     ::
     
-        이름          종류      데이터
+        Name          Type       Data
 
         ROOT_PATH     REG_SZ     C:\CUBRID\cubridmanager
         
-#.  생성한 CUBRID 폴더에 cmserver 폴더를 생성(새로 만들기 > 키)하고 아래의 항목을 추가(새로 만들기 > 문자열 값)한다.
+#.  Create [cmserver] folder under [CUBRID] folder(Edit > New > Key) and add below items(Edit > New > String Value).
 
     ::
     
-        이름          종류      데이터
+        Name          Type       Data
 
         ROOT_PATH     REG_SZ     C:\CUBRID
 
-#.  생성한 CUBRID 폴더에 CUBRID 폴더를 생성(새로 만들기 > 키)하고 아래의 항목을 추가(새로 만들기 > 문자열 값)한다.
+#.  Create [CUBRID] folder under [CUBRID] folder(Edit > New > Key) and add below items(Edit > New > String Value).
+
 
     ::
     
-        이름          종류      데이터
+        Name          Type       Data
 
         ROOT_PATH     REG_SZ     C:\CUBRID
 
-#.  Windows를 재부팅하면 CUBRID Service Tray가 오른쪽 하단에 생긴다.
+#.  When rebooting Windows, CUBRID Service Tray is created under right side.
     
-**설치 후 확인 사항**
+**Checklist After Installation**
 
-*   CUBRID Service Tray 구동 여부
+*   Whether the start of CUBRID Service Tray or not
 
-    시스템을 시작할 때 CUBRID Service Tray가 자동으로 구동되지 않는다면 다음 사항을 확인하도록 한다.
+    If CUBRID Service Tray is not automatically started when starting a system, confirm the following.
 
-    *   [시작 버튼] > [제어판] > [관리 도구] > [서비스]의 Task Scheduler가 시작되어 있는지 확인하고, 그렇지 않으면 Task Scheduler를 시작한다.
-    *   [시작 버튼] > [모든 프로그램] > [시작프로그램]에 CUBRID Service Tray가 등록되어 있는지 확인하고, 그렇지 않으면 CUBRID Service Tray를 등록한다.
+    *   Check if Task Scheduler is started in [Start button] > [Control panel] > [Administrative Tools] > [Services]; if not, start Task Scheduler.
+    
+    *   Check if CUBRID Service Tray is registered in [Start button] > [All Programs] > [Startup]; if not, register CUBRID Service Tray.
 
-CUBRID 설치 이후 환경 설정, 도구 설치, 인터페이스 설치 등은 :ref:`Installing-and-Running-on-Windows`\을 확인하도록 한다.
-            
+For environment setting, tools installation and interfaces installation after CUBRID installation,  see :ref:`Installing-and-Running-on-Windows`.

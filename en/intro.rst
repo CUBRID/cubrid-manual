@@ -12,8 +12,8 @@ This chapter covers the following topics:
 System Architecture
 ===================
 
-System Organization
--------------------
+Process Structure
+-----------------
 
 CUBRID is an object-relational database management system (DBMS) consisting of the database server, the broker, and the CUBRID Manager.
 

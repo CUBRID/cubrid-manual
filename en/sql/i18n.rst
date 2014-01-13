@@ -118,7 +118,7 @@ The collation name in CUBRID follows the conversion: ::
         
     *   cs: case sensitive; By default all collations are case sensitive. In LDML, can be obtained using at least: strength="tertiary".
         
-    *   bin/binary: it means that the sorting order under such collation is almost the same with the order of codepoints; If memory (byte) compare is used, then almost the same result would be obtain. Space character and EUC double-byte padding character are always sorted as zero in "bin" collation. No collations with such setting are currently configured in LDML (they are already available as built-in), but a similar one can be obtained using the maximum setting strength="quaternary" or strength="identical".
+    *   bin/binary: it means that the sorting order under such collation is almost the same with the order of codepoints; If memory (byte) comparison is used, then almost the same result is obtained. Space character and EUC double-byte padding character are always sorted as zero in "bin" collation. No collations with such setting are currently configured in LDML (they are already available as built-in), but a similar one can be obtained using the maximum setting strength="quaternary" or strength="identical".
             
     *   ai: accent insensitive; this means that 'Á' is sorted the same as 'A'. Due to particularities of the UCA based algorithms, an accent insensitive collation is also a case insensitive collation. In LDML, can be obtained using: strength="primary".
         

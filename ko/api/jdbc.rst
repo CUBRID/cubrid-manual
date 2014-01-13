@@ -1217,7 +1217,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
 
     2008 R4.x 이하 버전에서 질의 수행 후 커밋을 수행하면 ResultSet을 자동으로 닫으므로, 커밋 이후에는 ResultSet을 사용하지 않아야 한다. CUBRID는 기본적으로 자동 커밋 모드로 수행되므로, 이를 원하지 않으면 반드시 **conn.setAutocommit(false);** 를 코드에 명시해야 한다.
     
-    9.1 이상 버전부터는 :ref:`커서 유지(cursor holdability) <cursor-holding>`\ 가 되므로 커밋 이후에도 ResultSet을 사용할 수 있다.
+    9.1 이상 버전부터는 :ref:`커서 유지(cursor holdability) <cursor-holding>`\ 가 지원되므로 커밋 이후에도 ResultSet을 사용할 수 있다.
 
 **데이터베이스 연결 해제**
 
@@ -1225,7 +1225,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
 
 **CREATE, INSERT**
 
-다음은 *demodb* 에 접속하여 테이블을 생성하고, prepared statement로 질의문을 수행한 후 질의를 롤백시키는 예제 코드이며, **getConnection**\() 메서드의 인자값을 적절하게 수정하여 실습할 수 있다.
+다음은 *demodb*\ 에 접속하여 테이블을 생성하고, prepared statement로 질의문을 수행한 후 질의를 롤백시키는 예제 코드이다.
 
 .. code-block:: java
 

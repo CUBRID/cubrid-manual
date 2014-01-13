@@ -228,8 +228,8 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
 .. option::  --sysadm
 
-    [번역] 이 옵션은 **-u dba**\와 같이 사용해야 하며, 시스템 관리자 모드로 실행하고자 할 때 지정한다.
-    
+    This option should be used together with **-u dba**. It is specified when you want to run CSQL in a system administrator's mode.
+   
     ::
 
         csql -u dba --sysadm demodb          
@@ -237,7 +237,7 @@ To display the option list in the prompt, execute the **csql** utilities withou
         
 .. option::  --write-on-standby
 
-    이 옵션은 시스템 관리자 모드 옵션(**--sysadm--**)과 함께 사용해야 한다. 이 옵션으로 CSQL을 실행한 dba는 standby 상태의 DB 즉, 슬레이브 DB 또는 레플리카 DB에 쓰기 작업을 수행할 수 있다.
+    This option should be used together with a system administrator's mode option(**--sysadm--**). dba which run CSQL with this option can execute write-operation to the standby DB(slave DB or replica DB).
     
     :: 
 
@@ -676,9 +676,9 @@ The **SELECT** query includes the time of outputting the fetched records. Theref
 
 **Displaying a column of result record in one line(;LINe-output)**
 
-If this value is set to ON, it would make the record display in several lines by column. The default value is OFF, which makes one record display in one line. ::
+If this value is set to ON, it makes the record display in several lines by column unit. The default value is OFF, which makes one record display in one line. ::
 
-    csql> ;line-output OFF
+    csql> ;line-output ON
     csql> select * from athlete;
      
     === <Result of SELECT Command in Line 1> ===

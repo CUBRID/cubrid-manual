@@ -1425,11 +1425,11 @@ CUBRID SHARD ID 확인
      
 .. option:: -c QUERY 
 
-    질의 문자열을 지정한다. 질의를 지정하기 위해 -c 또는 -i 옵션이 사용될 수 있다. -c 옵션과 -i 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
+    질의 문자열을 지정한다. 질의를 지정하기 위해 **-c** 또는 **-i** 옵션이 사용될 수 있다. **-c** 옵션과 **-i** 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
      
 .. option:: -i FILE_NAME 
 
-    입력할 질의들을 저장한 파일을 지정한다. 질의를 지정하기 위해 -c 또는 -i 옵션이 사용될 수 있다. -c 옵션과 -i 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
+    입력할 질의들을 저장한 파일을 지정한다. 질의를 지정하기 위해 **-c** 또는 **-i** 옵션이 사용될 수 있다. **-c** 옵션과 **-i** 옵션이 생략되면 브로커와 DB 간 연결 여부만 출력한다. 
      
 .. option:: -o FILE_NAME 
 
@@ -1445,11 +1445,11 @@ CUBRID SHARD ID 확인
 
     아래의 정보와 함께 에러 메시지와 SELECT의 결과셋을 같이 출력한다. 
      
-    * RESULT : 질의 수행 후 에러가 반환되었는지 여부. [OK | FAIL] 출력 
-    * SHARD_ID : 질의가 수행된 SHARD DB의 ID(SHARD OFF 인 경우 해당 항목은 출력되지 않음) 
-    * ROW COUNT : DML에 의해 영향을 받는 행(affected rows)의 개수, 또는 SELECT 질의인 경우 행의 개수. 질의 수행 에러 시 -1을 출력 
-    * EXECUTION TIME : 질의가 수행된 시간 
-    * QUERY : 사용자가 입력한 질의 
+    *   RESULT: 질의 수행 후 에러가 반환되었는지 여부. [OK | FAIL] 출력 
+    *   SHARD_ID: 질의가 수행된 SHARD DB의 ID(SHARD 파라미터 값이 OFF이면 해당 항목은 출력되지 않음) 
+    *   ROW COUNT: DML에 의해 영향을 받는 행(affected rows)의 개수, 또는 SELECT 질의인 경우 행의 개수. 질의 수행 에러 시 -1을 출력 
+    *   EXECUTION TIME: 질의가 수행된 시간 
+    *   QUERY: 사용자가 입력한 질의 
      
     이 옵션이 생략되면 "RESULT, SHARD_ID, ROW COUNT, EXECUTION TIME, QUERY"만 출력한다. 
 
@@ -1619,7 +1619,7 @@ CUBRID SHARD ID 확인
 
     **-v 옵션을 사용할 때** 
      
-    질의 성공 시 SELECT 질의인 경우 결과셋을 출력하며, 실패 시 에러 메시지를 출력한다. 
+    SELECT 질의가 성공하면 결과셋을 출력하며, 실패 시 에러 메시지를 출력한다. 
      
     :: 
      

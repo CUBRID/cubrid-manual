@@ -523,9 +523,7 @@ You can specify **NOCYCLE** to prevent an error from occurring as follows:
     START WITH ParentID IS NULL
     CONNECT BY NOCYCLE ParentID=PRIOR ID;
 
-[번역]
-    
-다음은 계층 질의를 사용하여 2013년 3월(201303)의 날짜들을 출력하는 예제이다.
+The belows shows to output dates of March, 2013(201303) with a hierarchical query.     
 
 .. code-block:: sql
 

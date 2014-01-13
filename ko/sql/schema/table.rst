@@ -1636,7 +1636,7 @@ DROP TABLE
 
     ERROR: Unknown class "a_tbl".
 
-* **CASCADE CONSTRAINTS**\ 가 명시되면 DROP 대상 테이블의 기본 키를 참조하는 다른 테이블들이 있어도 DROP되며, 이 테이블을 참조하는 다른 테이블들의 외래 키 역시 DROP된다. 단, 참조하는 테이블들의 데이터는 삭제되지 않는다. 
+*   **CASCADE CONSTRAINTS**\ 가 명시되면 다른 테이블들이 DROP할 테이블의 기본 키를 참조하더라도 지정된 테이블은 DROP되며, 이 테이블을 참조하는 다른 테이블들의 외래 키 역시 DROP된다. 단, 참조하는 테이블들의 데이터는 삭제되지 않는다. 
 
 다음은 b_child 테이블이 참조하는 a_parent 테이블을 DROP하는 예이다. b_child의 외래 키 역시 DROP되며, b_child의 데이터는 유지된다. 
 

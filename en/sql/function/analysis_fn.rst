@@ -1064,7 +1064,7 @@ The following is a query and results to run **NTH_VALUE** function by the value 
                 1         NULL         NULL
                 1         NULL         NULL
                 1         NULL         NULL
-                1            1            2
+                1            1         NULL
                 1            2            2
                 1            3            2
                 1            4            2

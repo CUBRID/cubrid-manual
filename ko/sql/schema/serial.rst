@@ -156,7 +156,7 @@ DROP SERIAL
 
 **DROP SERIAL** 문으로 시리얼 객체를 데이터베이스에서 삭제할 수 있다. ::
 
-    DROP SERIAL serial_identifier
+    DROP SERIAL [ IF EXISTS ] serial_identifier ; 
 
 *   *serial_identifier*\ : 삭제할 시리얼의 이름을 지정한다.
 
@@ -165,7 +165,8 @@ DROP SERIAL
 .. code-block:: sql
 
     DROP SERIAL order_no;
-
+    DROP SERIAL IF EXISTS order_no;
+    
 시리얼 사용
 ===========
 

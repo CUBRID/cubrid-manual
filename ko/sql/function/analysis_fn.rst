@@ -574,12 +574,12 @@ FIRST_VALUE
                 2            6         NULL
                 2            7         NULL
     
-CUBRID는 **NULL** 값을 모든 값보다 앞의 순서로 정렬한다. 즉, 아래의 SQL1은 **ORDER BY** 절에 **NULLS FIRST**\ 가 포함된 SQL2로 해석된다.
+.. note:: CUBRID는 **NULL** 값을 모든 값보다 앞의 순서로 정렬한다. 즉, 아래의 SQL1은 **ORDER BY** 절에 **NULLS FIRST**\ 가 포함된 SQL2로 해석된다.
 
-::
+    ::
 
-    SQL1: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
-    SQL2: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val 
+        SQL1: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+        SQL2: FIRST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val 
     
 다음은 **IGNORE NULLS**\ 를 명시하는 예이다.
 
@@ -770,12 +770,12 @@ LAST_VALUE
 
 LAST_VALUE 함수는 현재 행을 기준으로 계산된다. 즉, 아직 바인딩되지 않은 값은 계산에 포함되지 않는다. 예를 들어, 위의 결과에서 (groupid, itemno) = (1, 1)인 LAST_VALUE 함수의 값은 1이고, (groupid, itemno) = (1, 2)인 LAST_VALUE 함수의 값은 2이다.
                 
-CUBRID는 NULL 값을 모든 값보다 앞의 순서로 정렬한다. 즉, 아래의 SQL1은 ORDER BY 절에 NULLS FIRST가 포함된 SQL2로 해석된다.
+.. note::  CUBRID는 NULL을 모든 값보다 앞의 순서로 정렬한다. 즉, 아래의 SQL1은 ORDER BY 절에 NULLS FIRST가 포함된 SQL2로 해석된다.
 
-::
+    ::
 
-    SQL1: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
-    SQL2: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val     
+        SQL1: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+        SQL2: LAST_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val     
 
 LEAD
 ====
@@ -912,7 +912,7 @@ MEDIAN
 ======
 
 .. function:: MEDIAN(expression)
-.. function:: MEDIAN(expression) OVER ([partition_clause] order_by_clause)
+.. function:: MEDIAN(expression) OVER ([partition_clause])
 
    **MEDIAN** 함수는 집계 함수 또는 분석 함수로 사용되며, 중앙값(median value)을 반환한다. 중앙값은 데이터의 최소값과 최대값의 중앙에 위치하게 되는 값을 말한다.
     
@@ -1069,6 +1069,13 @@ NTH_VALUE
                 2            6         NULL
                 2            7            7
 
+.. note::  CUBRID는 NULL을 모든 값보다 앞의 순서로 정렬한다. 즉, 아래의 SQL1은 ORDER BY 절에 NULLS FIRST가 포함된 SQL2로 해석된다.
+
+    ::
+
+        SQL1: NTH_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno) AS ret_val 
+        SQL2: NTH_VALUE(itemno) OVER(PARTITION BY groupid ORDER BY itemno NULLS FIRST) AS ret_val
+        
 NTILE
 =====
 

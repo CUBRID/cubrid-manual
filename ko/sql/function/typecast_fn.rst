@@ -892,6 +892,16 @@ TO_CHAR(date_time)
             ======================
               'Sonntag   Oktober 2009'
   
+    *   첫번째 인자가 zerodate이고 두번째 인자에 'Month', 'Day'와 같은 리터럴 형식이 지정되면 TO_CHAR 함수는 NULL을 반환한다.
+    
+        .. code-block:: sql
+        
+            SELECT TO_CHAR(timestamp '0000-00-00 00:00:00', 'Month Day YYYY');
+            
+        ::
+        
+            NULL
+
 TO_CHAR(number)
 ================
 

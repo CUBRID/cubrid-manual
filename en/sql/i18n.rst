@@ -40,17 +40,17 @@ All string data types support precision. Special care is required with fixed cha
 Related Terms
 -------------
 
-*   **Character set**: A group of encoded symbols (giving a specific number to a certain symbol)
-*   **Collation**: A set of rules for comparison of characters in the character set and for sorting data
-
 .. In the below, currency part is removed because MONETARY is deprecated.
-.. *   **Locale**: A set of parameters that defines any special variant preferences such as number format, calendar format (month and day in characters), date/time format, collation, and currency format depending on the operator's language and country. Locale defines the linguistic localization. Character set of locale defines how the month in characters and other data are encoded. A locale identifier consists of at least a language identifier and a region identifier, and it is expressed as language[_territory][.codeset] (For example, Australian English using UTF-8 encoding is written as en_AU.UTF-8).
+
+*   **Character set**: A group of encoded symbols (giving a specific number to a certain symbol)
+
+*   **Collation**: A set of rules for comparison of characters in the character set and for sorting data
 
 *   **Locale**: A set of parameters that defines any special variant preferences such as number format, calendar format (month and day in characters), date/time format, and collation depending on the operator's language and country. Locale defines the linguistic localization. Character set of locale defines how the month in characters and other data are encoded. A locale identifier consists of at least a language identifier and a region identifier, and it is expressed as language[_territory][.codeset] (For example, Australian English using UTF-8 encoding is written as en_AU.UTF-8).
 
 *   **Unicode normalization**: The specification by the Unicode character encoding standard where some sequences of code points represent essentially the same character. CUBRID uses Normalization Form C (NFC: codepoint is decomposed and then composed) for input and Normalization Form D (NFD: codepoint is composed and then decomposed) for output. However, CUBRID does not apply the canonical equivalence rule as an exception.
 
-For example, canonical equivalence is applied in general NFC rule so codepoint 212A (Kelvin K) is converted to codepoint 4B (ASCII code uppercase K). Since CUBRID does not perform the conversion by using the canonical equivalence rule to make normalization algorithm quicker and easier, it does not perform reverse-conversion, too.
+    For example, canonical equivalence is applied in general NFC rule so codepoint 212A (Kelvin K) is converted to codepoint 4B (ASCII code uppercase K). Since CUBRID does not perform the conversion by using the canonical equivalence rule to make normalization algorithm quicker and easier, it does not perform reverse-conversion, too.
 
 *   **Canonical equivalence**: A basic equivalence between characters or sequences of characters, which cannot be visually distinguished when they are correctly rendered. For example, let's see 'Å' ('A' with an angstrom). 'Å' (Unicode U + 212B) and Latin 'A' (Unicode U + 00C5) have same A and different codepoints, however, the decomposed result is 'A' and U+030A, so it is canonical equivalence.
 
@@ -66,15 +66,20 @@ Locale Attributes
 
 Locale is defined by following attributes.
 
-*   **Charset (codeset)**: How bytes are interpreted into single characters (Unicode codepoints)
-*   **Collations**: Among all collations defined in locale of `LDML(UNICODE Locale Data Markup Language) <http://www.unicode.org/reports/tr35/>`_ file, the last one is the default collation. Locale data may contain several collations.
-*   **Alphabet (casing rules)**: One locale data may have up 2 alphabets, one for identifier and one for user data. One locale data can have two types of alphabets.
-*   **Calendar**: Names of weekdays, months, day periods (AM/PM)
-*   **Numbering settings**: Symbols for digit grouping
-
 .. ", monetary currency" is removed from above: MONETARY is deprecated.
 
+*   **Charset (codeset)**: How bytes are interpreted into single characters (Unicode codepoints)
+
+*   **Collations**: Among all collations defined in locale of `LDML(UNICODE Locale Data Markup Language) <http://www.unicode.org/reports/tr35/>`_ file, the last one is the default collation. Locale data may contain several collations.
+
+*   **Alphabet (casing rules)**: One locale data may have up 2 alphabets, one for identifier and one for user data. One locale data can have two types of alphabets.
+
+*   **Calendar**: Names of weekdays, months, day periods (AM/PM)
+
+*   **Numbering settings**: Symbols for digit grouping
+
 *   **Text conversion data**:  For CSQL conversion. Option.
+
 *   **Unicode normalization data**: Data converted by normalizing several characters with the same shape into one based on a specified rule. After normalization, characters with the same shape will have the same code value even though the locale is different. Each locale can activate/deactivate the normalization functionality.
 
 .. note::
@@ -96,7 +101,9 @@ Each column has a collation, so when applying :func:`LOWER`, :func:`UPPER` funct
 Depending on collation properties some CUBRID optimizations may be disabled for some collations:
 
 *   **LIKE** rewrite: is disabled for collations which maps several different character to the same weight (case insensitive collations for example) and for collations with expansions.
+
 *   Covering index scan: disabled for collations which maps several different character to the same weight (see :ref:`covering-index`).
+
 *   Prefix index: cannot be created on columns using collation with expansions.
 
 For more information, see :ref:`collation-setting-impacted-features` .
@@ -111,7 +118,9 @@ The collation name in CUBRID follows the conversion: ::
     <charset>_<lang specific>_<desc1>_<desc2>_...
     
 *   <charset>: The full charset name as used by CUBRID. iso88591, utf8, euckr.
+
 *   <lang specific>: a region/language specific. The language code is expected as two characters; en, de, es, fr, it, ja, km, ko, tr, vi, zh, ro. "gen" if it does not address a specific language, but a more general sorting rule.
+
 *   <desc1>_<desc2>_...: They have the following meaning. Most of them apply only to LDML collations. 
 
     *   ci: case insensitive In LDML, can be obtained using the settings: strength="secondary" caseLevel="off" caseFirst="off".

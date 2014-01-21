@@ -12,7 +12,7 @@ SELECT
         [ HAVING  <search_condition> ]
         [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ] [ FOR <orderby_for_condition> ] ]
         [ LIMIT [offset,] row_count ]
-        [ USING INDEX { index name [,index_name,...] | NONE }]
+        [ USING INDEX { index_name [,index_name,...] | NONE }]
      
     <qualifier> ::= ALL | DISTINCT | DISTINCTROW | UNIQUE
     
@@ -21,14 +21,16 @@ SELECT
     <variable_comma_list> ::= [:] identifier, [:] identifier, ...
     
     <extended_table_specification_comma_list> ::=
-    <table specification> [ {, <table specification> | <join_table_specification> }... ]
+        <table_specification> [ {, <table_specification> } ...
+                                | <join_table_specification> ... 
+                                | <join_table_specification2> ... ]
      
     <table_specification> ::=
-     <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
-     <metaclass_specification> [ <correlation> ] |
-     <subquery> <correlation> |
-     TABLE ( <expression> ) <correlation>
-     
+        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
+        <metaclass_specification> [ <correlation> ] |
+        <subquery> <correlation> |
+        TABLE ( <expression> ) <correlation>
+
     <correlation> ::= [ AS ] <identifier> [ ( <identifier_comma_list> ) ]
      
     <single_table_spec> ::= [ ONLY ] <table_name> |
@@ -37,7 +39,7 @@ SELECT
     <metaclass_specification> ::= CLASS <class_name>
      
     <join_table_specification> ::=
-    [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN <table specification> ON <search condition>
+        [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN <table_specification> ON <search_condition>
      
     <join_table_specification2> ::= CROSS JOIN <table_specification>
      
@@ -133,8 +135,8 @@ FROM 절
 ::
 
     SELECT [ <qualifier> ] <select_expressions>
-    [ FROM <table_specification> [ {, <table specification>
-    | <join_table_specification> }... ]]
+    [ FROM <table_specification> [ {, <table_specification>
+                                    | <join_table_specification> }... ]]
      
      
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
@@ -240,17 +242,17 @@ WHERE 절
 
 질의에서 칼럼은 조건에 따라 처리될 수 있다. **WHERE** 절은 조회하려는 데이터의 조건을 명시한다. ::
 
-    WHERE search_condition
+    WHERE <search_condition>
 
-    search_condition :
-    • comparison_predicate
-    • between_predicate
-    • exists_predicate
-    • in_predicate
-    • null_predicate
-    • like_predicate
-    • quantified predicate
-    • set_predicate
+    <search_condition> ::=
+        comparison_predicate
+        between_predicate
+        exists_predicate
+        in_predicate
+        null_predicate
+        like_predicate
+        quantified_predicate
+        set_predicate
 
 **WHERE** 절은 *search_condition* 또는 질의에서 조회되는 데이터를 결정하는 조건식을 지정한다. 조건식이 참인 데이터만 질의 결과로 조회된다(**NULL** 값은 알 수 없는 값으로서 질의 결과로 조회되지 않는다).
 
@@ -591,7 +593,7 @@ LIMIT 절
 
 조인 질의에서 동등 연산자( **=** )를 이용한 조인 조건을 포함하는 조인 질의를 동등 조인(equi-join)이라 하고, 조인 조건이 없는 조인 질의를 카티션 곱(cartesian products)이라 한다. 또한, 하나의 테이블을 조인하는 경우를 자체 조인(self join)이라 하는데, 자체 조인에서는 **FROM** 절에 같은 테이블이 두 번 사용되므로 테이블 별칭(alias)을 사용하여 칼럼을 구분한다.
 
-한편, 조인된 테이블에 대해 조인 조건을 만족하는 행만 결과를 출력하는 경우를 내부 조인(inner join) 또는 간단 조인(simple join)이라고 하며, 조인된 테이블에 대해 조인 조건을 만족하는 행은 물론, 조인 조건을 만족하지 못하는 행도 포함하여 출력하는 경우를 외부 조인(outer join)이라 한다. 외부 조인은 왼쪽 테이블의 모든 행이 결과로 출력되는 왼쪽 외부 조인과(left outer join)과 오른쪽 테이블의 모든 행이 결과로 출력되는 오른쪽 외부 조인(right outer join)이 있으며, 양쪽의 행이 모두 출력되는 완전 외부 조인(full outer join)이 있다. 이때, 외부 조인 질의 결과에서 한쪽 테이블에 대해 대응되는 칼럼 값이 없는 경우, 이는 모두 **NULL** 로 반환된다. ::
+한편, 조인된 테이블에 대해 조인 조건을 만족하는 행만 결과를 출력하는 경우를 내부 조인(inner join) 또는 간단 조인(simple join)이라고 하며, 조인된 테이블에 대해 조인 조건을 만족하는 행은 물론, 조인 조건을 만족하지 못하는 행도 포함하여 출력하는 경우를 외부 조인(outer join)이라 한다. 외부 조인은 왼쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 오른쪽 테이블의 칼럼들은 NULL로 출력됨) 왼쪽 외부 조인과(left outer join)과 오른쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 왼쪽 테이블의 칼럼들은 NULL로 출력됨) 오른쪽 외부 조인(right outer join)이 있으며, 양쪽의 행이 모두 출력되는 완전 외부 조인(full outer join)이 있다. 이때, 외부 조인 질의 결과에서 한쪽 테이블에 대해 대응되는 칼럼 값이 없는 경우, 이는 모두 **NULL** 로 반환된다. ::
 
     FROM table_specification [{, table_specification | { join_table_specification | join_table_specification2 }...]
      

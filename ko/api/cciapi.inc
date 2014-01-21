@@ -57,7 +57,7 @@ CCI API 레퍼런스
     +-----------------------------+-----------------------------+
     | **CCI_A_TYPE_BIT**          | **T_CCI_BIT** \*            |
     +-----------------------------+-----------------------------+
-    | **CCI_A_TYPE_SET**          | **T_CCI_SET** \*            |
+    | **CCI_A_TYPE_SET**          | **T_CCI_SET**               |
     +-----------------------------+-----------------------------+
     | **CCI_A_TYPE_DATE**         | **T_CCI_DATE** \*           |
     +-----------------------------+-----------------------------+
@@ -378,11 +378,6 @@ CCI API 레퍼런스
     
             if (res >= 0)
             {
-                if ((res = cci_fetch_size (req, 100)) < 0)
-                {
-                    snprintf (error_msg, 128, "cci_fetch_size ERROR\n");
-                    goto execute_error;
-                }
 
                 while (1)
                 {
@@ -875,7 +870,7 @@ CCI API 레퍼런스
     +-----------------------------+-----------------------------+
     | **CCI_A_TYPE_BIT**          | **T_CCI_BIT** \*            |
     +-----------------------------+-----------------------------+
-    | **CCI_A_TYPE_SET**          | **T_CCI_SET** \*            |
+    | **CCI_A_TYPE_SET**          | **T_CCI_SET**               |
     +-----------------------------+-----------------------------+
     | **CCI_A_TYPE_DATE**         | **T_CCI_DATE** \*           |
     +-----------------------------+-----------------------------+
@@ -1384,13 +1379,7 @@ CCI API 레퍼런스
 
 .. c:function:: int cci_fetch_size(int req_handle, int fetch_size)
 
-    :c:func:`cci_fetch`\ 를 통해 서버에서 클라이언트로 전송되는 레코드의 개수를 정한다.
-
-    :param req_handle: (IN) 요청 핸들
-    :param fetch_size: (IN) fetch size
-    :return: 에러 코드(0: 성공)
-
-        *   **CCI_ER_REQ_HANDLE**
+    이 함수는 더 이상 사용되지 않으며(deprecated), 제거될 예정이다. 호출되더라도 무시되어 동작에 어떠한 변화도 발생하지 않는다.
 
 .. c:function:: CCI_AUTOCOMMIT_MODE cci_get_autocommit(int conn_handle)
 
@@ -1896,6 +1885,8 @@ CCI API 레퍼런스
 .. c:macro:: #define CCI_GET_RESULT_INFO_TYPE(T_CCI_COL_INFO* res_info, int index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 타입을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
+    
+    어떤 칼럼의 SET 타입 여부를 확인하려면 :c:macro:`CCI_IS_SET_TYPE`\ 을 사용한다.
 
     :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
     :param index: (IN) 칼럼 인덱스
@@ -1903,7 +1894,7 @@ CCI API 레퍼런스
 
 .. c:macro:: #define CCI_IS_SET_TYPE(u_type)
 
-    *u_type* 이 set type인지를 검사한다.
+    *u_type* 이 set type인지를 검사한다. 
 
     :param u_type: (IN)
     :return: 1 : set, 0 : not set

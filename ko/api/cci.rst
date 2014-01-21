@@ -596,7 +596,6 @@ CCI 응용 프로그램에서 다음 함수를 사용하여 **LOB** 데이터를
     }
      
     res = cci_execute (req, 0/*flag*/, 0/*max_col_size*/, &error);
-    res = cci_fetch_size (req, 100 /* fetch size */);
      
     while (1) {
         res = cci_cursor (req, 1/* offset */, CCI_CURSOR_CURRENT/* cursor position */, &error);
@@ -1205,10 +1204,6 @@ CCI 예제 프로그램
             if (req < 0) {
                 printf( "%s(%d): cci_execute fail(%d)\n", __FILE__, __LINE__,error.err_code);
             }
-            goto handle_error;
-        }
-        if ((res=cci_fetch_size(req, 100))<0) {
-            printf( "%s(%d): cci_fetch_size fail\n", __FILE__, __LINE__);
             goto handle_error;
         }
        

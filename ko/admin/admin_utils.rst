@@ -36,7 +36,12 @@ cubrid 관리 유틸리티의 사용법(구문)은 다음과 같다. ::
         synccolldb [option] <database-name>  --- DB 콜레이션을 시스템 콜레이션에 맞게 변경하는 도구
         genlocale [option] <database-name>  --- 사용하고자 하는 로캘 정보를 컴파일하는 도구
         dumplocale [option] <database-name>   --- 컴파일된 바이너리 로캘 정보를 사람이 읽을 수 있는 텍스트로 출력하는 도구
-        
+
+cubrid 유틸리티 로깅
+--------------------
+ 
+CUBRID는 cubrid 유틸리티의 수행 결과에 대한 로깅 기능을 제공하며, 자세한 내용은 :ref:`cubrid-utility-logging`\ 을 참고한다.
+         
 데이터베이스 사용자
 ===================
 

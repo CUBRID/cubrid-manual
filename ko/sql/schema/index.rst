@@ -59,16 +59,12 @@ ALTER INDEX
 
 ::
 
-    ALTER [ UNIQUE ] INDEX index_name ON table_name REBUILD ;
+    ALTER INDEX index_name 
+	ON table_name REBUILD ;
      
-*   **UNIQUE**: 재생성하려는 인덱스가 고유 인덱스임을 지정한다.
 *   *index_name*: 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 *   *table_name*: 인덱스를 재생성할 테이블의 이름을 명시한다.
-*   *column_name*: 인덱스를 적용할 칼럼의 이름을 명시한다. 다중 칼럼 인덱스를 생성할 경우 둘 이상의 칼럼 이름을 명시한다.
-*   *prefix_length*: 문자열 또는 비트열 타입의 칼럼에 인덱스를 설정하는 경우, 칼럼 값의 앞 부분 일부를 prefix로 지정하여 인덱스를 생성하기 위하여 칼럼 이름 뒤 괄호 안에 문자 개수로 prefix 길이를 지정할 수 있다. 단, *prefix_length* 는 다중 칼럼 인덱스 및 **UNIQUE** 인덱스에는 지정할 수 없다. 또한 *prefix_length* 를 호스트 변수로 지정하여 인덱스를 생성할 수 없다. *prefix_length* 가 지정된 인덱스에서 질의 결과의 순서를 보장하려면 반드시 **ORDER BY** 절을 명시해야 한다.
-*   **ASC** | **DESC**: 칼럼의 정렬 방향을 설정한다.
-*   <*filter_predicate*>: 필터링된 인덱스를 만드는 조건을 명시한다. 칼럼과 상수 간 비교 조건이 여러 개인 경우 **AND** 로 연결된 경우에만 필터가 될 수 있다.
-*   *function_name* (*argument_list*): 함수 기반 인덱스를 만드는 조건을 명시한다.
+* 	REBUILD: 이미 생성된 것과 같은 구조의 인덱스를 재생성한다. 
 
 .. warning::
 
@@ -84,8 +80,6 @@ ALTER INDEX
 
     CREATE INDEX i_game_medal ON game(medal);
     ALTER INDEX i_game_medal ON game REBUILD;
-    ALTER INDEX i_game_medal ON game(nation_code) REBUILD;
-    ALTER INDEX char_idx ON athlete(gender, nation_code) WHERE gender='M' AND nation_code='USA' REBUILD;
 
 다음은 인덱스 이름을 변경하는 구문이다.
 

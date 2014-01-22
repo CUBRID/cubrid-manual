@@ -2236,6 +2236,7 @@ CCI API 레퍼런스
     password                      string                                                      DB 사용자 암호
     url                           string                                                      연결 URL. 연결 URL 문자열을 정의하는 방법은 :c:func:`cci_connect_with_url` 참고
     pool_size                     int         10                                              연결 풀이 가질 수 있는 최대 연결 개수
+    max_pool_size                 int         pool_size                                       최초 datasource 생성 시 생성할 전체 연결 개수. 최대값은 INT_MAX
     max_wait                      msec        1000                                            연결을 가져오기 위해 대기하는 최대 시간
     pool_prepared_statement       bool        false                                           statement 풀링 가능 여부. true 또는 false
     max_open_prepared_statement   int         1000                                            statement pool에 유지할 prepared statement의 최대 개수
@@ -2250,17 +2251,23 @@ CCI API 레퍼런스
     
     prepared statement의 개수가 **max_open_prepared_statement** 값을 초과하면 가장 오래된 prepared statement가 statement pool에서 해제되며, 추후 해제된 prepared statement가 재사용되면 다시 statement pool에 추가된다. 
     
+	pool은 필요 시 c:func:`cci_datasource_chagne_property`\ 를 통해 값을 변경할 수 있지만, max_pool_size를 초과할 수 없다. 연결 개수의 제한을 조절하고자 할 때 이 값을 변경할 수 있다. 예를 들어 평소에는 max_pool_size보다 작게 설정해서 사용하다가 기대 이상으로 많은 연결이 필요해질 때 값을 높이고, 많은 연결이 필요하지 않으면 값을 다시 줄인다.
+	
+	연결 풀이 가질 수 있는 연결 개수는 pool_size까지 제한되는데, pool_size는 최대 max_pool_size까지 변경될 수 있다.
+	
     **login_timeout**, **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 의 값을 설정하면 :c:func:`cci_datasource_borrow`\ 를 호출할 때 이 설정 값을 가지고 연결을 반환한다.
  
     **login_timeout**, **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 은 :c:func:`cci_datasource_borrow` 함수 호출 이후에도 변경할 수 있다. :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`\ 을 참고한다. **이름이 cci_set_**\ 으로 시작하는 함수들에 의해 변경된 값은 변경한 연결 객체에만 적용되며, 연결이 해제된 이후에는 :c:func:`cci_property_set`\ 으로 설정한 값으로 복원된다. :c:func:`cci_property_set`\ 으로 설정한 값이 없을 경우에는 기본값으로 복원된다.
     
     .. note:: 
     
-        **login_timeout**\은 DATASOURCE 객체를 생성하는 경우와 :c:func:`cci_prepare` 또는 :c:func:`cci_execute` 함수에서 내부적인 재접속이 발생하는 경우에 적용된다. 내부적인 재접속은 DATASOURCE에서 연결 객체를 얻은 경우와 :c:func:`cci_connect`/:c:func:`cci_connect_with_url` 함수로 연결 객체를 얻은 경우에서 모두 발생한다.
+		*	:c:func:`cci_property_set` 함수와 URL 문자열에서 동시에 속성 값을 명시하는 경우, :c:func:`cci_property_set` 함수에서 정의한 값으로 적용된다.
+		
+        *	**login_timeout**\은 DATASOURCE 객체를 생성하는 경우와 :c:func:`cci_prepare` 또는 :c:func:`cci_execute` 함수에서 내부적인 재접속이 발생하는 경우에 적용된다. 내부적인 재접속은 DATASOURCE에서 연결 객체를 얻은 경우와 :c:func:`cci_connect`/:c:func:`cci_connect_with_url` 함수로 연결 객체를 얻은 경우에서 모두 발생한다.
         
-        DATASOURCE 객체를 생성하는 시간은 내부적인 재접속 시간보다 오래 걸릴 수 있으므로, 두 가지 경우의 **login_timeout**\ 을 다르게 적용하는 것을 감안할 수 있다. 예를 들어, 전자의 경우를 5000(5초), 후자의 경우를 2000(2초)로 설정하고 싶다면, 후자의 설정을 위해 DATASOURCE 생성 후 :c:func:`cci_set_login_timeout` 함수를 사용한다.
+        *	DATASOURCE 객체를 생성하는 시간은 내부적인 재접속 시간보다 오래 걸릴 수 있으므로, 두 가지 경우의 **login_timeout**\ 을 다르게 적용하는 것을 감안할 수 있다. 예를 들어, 전자의 경우를 5000(5초), 후자의 경우를 2000(2초)로 설정하고 싶다면, 후자의 설정을 위해 DATASOURCE 생성 후 :c:func:`cci_set_login_timeout` 함수를 사용한다.
     
-        10.0 이전 버전에서는 DATASOURCE 객체를 생성할 때만 **login_timeout**\이 적용되고, 내부적으로 재접속하는 경우에는 **login_timeout**\이 적용되지 않아 무한 대기하는 현상 발생 시 이 작업을 취소하는 방법이 없는 문제가 존재한다.
+        *	10.0 이전 버전에서는 DATASOURCE 객체를 생성할 때만 **login_timeout**\이 적용되고, 내부적으로 재접속하는 경우에는 **login_timeout**\이 적용되지 않아 무한 대기하는 현상 발생 시 이 작업을 취소하는 방법이 없는 문제가 존재한다.
         
     **default_isolation**\ 은 다음 값 중 하나의 설정값을 가지며, 격리 수준에 대한 자세한 내용은 :ref:`set-transaction-isolation-level`\ 을 참조한다.
 

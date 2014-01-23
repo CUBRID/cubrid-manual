@@ -190,6 +190,7 @@ SHOW INDEX
 *   Packed : 키가 어떻게 팩되었는지(packed)를 나타냄. 팩되지 않은 경우 **NULL** .
 *   Null : 칼럼이 **NULL** 을 포함할 수 있으면 YES, 그렇지 않으면 NO.
 *   Index_type : 사용되는 인덱스(현재 BTREE만 지원한다).
+*   Func: 함수 인덱스에서 사용되는 함수
 
 ::
 
@@ -203,9 +204,9 @@ SHOW INDEX
     
 ::
 
-       Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type
-    ==========================================================================================================================================
-     'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'
+       Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type  Func
+    =============================================================================================================================================
+     'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'   NULL
      
 .. code-block:: sql
 
@@ -220,16 +221,17 @@ SHOW INDEX
     
 ::
 
-      Table  Non_unique  Key_name          Seq_in_index  Column_name   Collation   Cardinality     Sub_part    Packed   Null    Index_type
-    ==========================================================================================================================================
-      't1'           0  'i_t1_i2_s2'              1      'i2'          'A'            0               NULL        NULL     'NO'    'BTREE'
-      't1'           0  'i_t1_i2_s2'              2      's2'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           0  'u_t1_i3'                 1      'i3'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           0  'u_t1_s3'                 1      's3'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           1  'i_t1_i1'                 1      'i1'          NULL           0               NULL        NULL     'YES'   'BTREE'
-      't1'           1  'i_t1_i1_s1'              1      'i1'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           1  'i_t1_i1_s1'              2      's1'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           1  'i_t1_s1'                 1      's1'          'A'            0                  7        NULL     'YES'   'BTREE'
+      Table  Non_unique  Key_name      Seq_in_index  Column_name  Collation  Cardinality     Sub_part  Packed  Null    Index_type   Func
+    =====================================================================================================================================
+      't1'            1  'i_t1_i1'                1  'i1'         'D'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            1  'i_t1_i1_s1'             1  'i1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            1  'i_t1_i1_s1'             2  's1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            0  'i_t1_i2_s2'             1  'i2'         'A'                  0         NULL  NULL    'NO'    'BTREE'      NULL
+      't1'            0  'i_t1_i2_s2'             2  's2'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            1  'i_t1_s1'                1  's1'         'A'                  0            7  NULL    'YES'   'BTREE'      NULL
+      't1'            0  'u_t1_i3'                1  'i3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            0  'u_t1_s3'                1  's3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+
 
 .. _show-collation-statement:
  

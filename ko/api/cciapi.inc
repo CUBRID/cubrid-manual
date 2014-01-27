@@ -39,7 +39,7 @@ CCI API 레퍼런스
 
     가 사용될 수 있다.
     
-    *flag* 에 :c:type:`CCI_BIND_PTR` 이 설정되어 있을 경우 *value* 변수의 포인터만 복사하고(shallow copy) 값은 복사하지 않는다.
+    *flag* 에 :c:type:`CCI_BIND_PTR`\ 이 설정되어 있을 경우 *value* 변수의 포인터만 복사하고(shallow copy) 값은 복사하지 않는다.
     *flag* 가 설정되지 않는 경우 메모리를 할당하여 *value* 변수의 값을 복사(deep copy)한다. 만약 같은 메모리 버퍼를 이용하여 여러 개의 칼럼을 바인딩할 경우라면, :c:type:`CCI_BIND_PTR` *flag* 를 설정하지 않아야 한다.
 
     :c:type:`T_CCI_A_TYPE`\ 은 CCI 응용 프로그램 내에서 데이터 바인딩에 사용되는 C 언어의 타입을 의미하며, int, float 등의 primitive 타입과 :c:type:`T_CCI_BIT`, :c:type:`T_CCI_DATE` 등의 CCI 가 정의한 user-defined 타입으로 구성된다. 각 타입에 대한 식별자는 아래의 표와 같이 정의되어 있다.
@@ -2251,7 +2251,7 @@ CCI API 레퍼런스
     
     prepared statement의 개수가 **max_open_prepared_statement** 값을 초과하면 가장 오래된 prepared statement가 statement pool에서 해제되며, 추후 해제된 prepared statement가 재사용되면 다시 statement pool에 추가된다. 
     
-	pool은 필요 시 c:func:`cci_datasource_chagne_property`\ 를 통해 값을 변경할 수 있지만, max_pool_size를 초과할 수 없다. 연결 개수의 제한을 조절하고자 할 때 이 값을 변경할 수 있다. 예를 들어 평소에는 max_pool_size보다 작게 설정해서 사용하다가 기대 이상으로 많은 연결이 필요해질 때 값을 높이고, 많은 연결이 필요하지 않으면 값을 다시 줄인다.
+	pool은 필요 시 c:func:`cci_datasource_change_property`\ 를 통해 값을 변경할 수 있지만, max_pool_size를 초과할 수 없다. 연결 개수의 제한을 조절하고자 할 때 이 값을 변경할 수 있다. 예를 들어 평소에는 max_pool_size보다 작게 설정해서 사용하다가 기대 이상으로 많은 연결이 필요해질 때 값을 높이고, 많은 연결이 필요하지 않으면 값을 다시 줄인다.
 	
 	연결 풀이 가질 수 있는 연결 개수는 pool_size까지 제한되는데, pool_size는 최대 max_pool_size까지 변경될 수 있다.
 	
@@ -2266,9 +2266,9 @@ CCI API 레퍼런스
         *	**login_timeout**\은 DATASOURCE 객체를 생성하는 경우와 :c:func:`cci_prepare` 또는 :c:func:`cci_execute` 함수에서 내부적인 재접속이 발생하는 경우에 적용된다. 내부적인 재접속은 DATASOURCE에서 연결 객체를 얻은 경우와 :c:func:`cci_connect`/:c:func:`cci_connect_with_url` 함수로 연결 객체를 얻은 경우에서 모두 발생한다.
         
         *	DATASOURCE 객체를 생성하는 시간은 내부적인 재접속 시간보다 오래 걸릴 수 있으므로, 두 가지 경우의 **login_timeout**\ 을 다르게 적용하는 것을 감안할 수 있다. 예를 들어, 전자의 경우를 5000(5초), 후자의 경우를 2000(2초)로 설정하고 싶다면, 후자의 설정을 위해 DATASOURCE 생성 후 :c:func:`cci_set_login_timeout` 함수를 사용한다.
-    
-        *	10.0 이전 버전에서는 DATASOURCE 객체를 생성할 때만 **login_timeout**\이 적용되고, 내부적으로 재접속하는 경우에는 **login_timeout**\이 적용되지 않아 무한 대기하는 현상 발생 시 이 작업을 취소하는 방법이 없는 문제가 존재한다.
         
+        .. CUBRIDSUS-12567 참고
+
     **default_isolation**\ 은 다음 값 중 하나의 설정값을 가지며, 격리 수준에 대한 자세한 내용은 :ref:`set-transaction-isolation-level`\ 을 참조한다.
 
     +----------------------------+---------------------------------------+

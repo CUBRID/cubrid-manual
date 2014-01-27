@@ -196,179 +196,10 @@ update_use_attribute_references 시스템 파라미터를 추가하고, 이 값�
 운영 편의성
 -----------
 
-DB에 지정한 질의가 정상 수행되는지 테스트해 보는 명령 추가(CUBRIDSUS-11760)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-DB에 질의 수행을 테스트해 보고 성공 여부를 출력하는 명령을 추가했다. 질의 수행 후 트랜잭션은 롤백된다. SHARD 기능이 설정된 경우, 모든 SHARD DB에 질의를 수행해 볼 수 있다. 이 명령어를 통해 DB 연결 상태, 사용자의 질의 권한, SHARD DB의 해싱 결과 등을 확인할 수 있다.
-
-::
-
-    cubrid broker test <broker_name> [-D <db_name>] [-u <db_user>] [-p <db_password>] {-c <query> | -i <input_file>} [-o <output_file>] [-s] [-v]
-
-다음은 사용 예이다.
-    
-*   DB에 질의
-
-    **cubrid_broker.conf의 SHARD 파라미터 값이 OFF일 때**
-    
-    ::
-    
-        $ cubrid broker test shard1 -D shard -u shard -p shard123 -c "select 1 from db_root where charset = 3"
-
-        @ cubrid broker test
-        @ [OK] CONNECT broker1 DB [demodb] USER [shard]
-
-        @ SHARD OFF
-
-        RESULT         ROW COUNT      EXECUTION TIME      QUERY
-        ========================================================
-        OK             1              0.011341 sec        select 1,'a' from db_root where charset = 3
-        @ [OK] QUERY TEST
-        
-    **cubrid_broker.conf의 SHARD 파라미터 값이 ON일 때**
-
-    ::
-    
-        $ cubrid broker test shard1 -D shard -u shard -p shard123 -c "select 1 from db_root where charset = 3"
-
-        @ cubrid broker test
-        @ [OK] CONNECT shard1 DB [shard] USER [shard]
-
-        @ SHARD ON
-
-        RESULT         SHARD_ID  ROW COUNT      EXECUTION TIME      QUERY
-        ==================================================================
-        OK             0         1              0.003436 sec        select 1 from db_root where charset = 3
-        OK             1         1              0.003010 sec        select 1 from db_root where charset = 3
-        OK             2         1              0.003039 sec        select 1 from db_root where charset = 3
-        OK             3         1              0.002916 sec        select 1 from db_root where charset = 3
-        @ [OK] QUERY TEST
-
-*   사용자 권한 확인
-
-    **SHARD DB 중 하나에 INSERT 권한이 없는 경우**
-    
-    ::
-    
-        $ cubrid broker test shard1 -c "insert into foo values (1,"a") " -v
-        
-        @ cubrid broker test
-        @ [OK] CONNECT shard1 DB [shard] USER [shard]
-
-        @ SHARD ON
-
-        RESULT         SHARD_ID  ROW COUNT      EXECUTION TIME      QUERY
-        ==================================================================
-        OK             0         1              0.001322 sec        insert into foo values(1,'a')
-        FAIL(-494)     -1        -1             0.001608 sec        insert into foo values(1,'a')
-        <Error>
-        ERROR CODE : -494
-        Semantic: INSERT is not authorized on foo. insert into foo foo (foo.a, foo.b) values (1,  cast('a' as v...[CAS INFO - 127.0.0.1:52002, 1, 18145].
-
-        OK             2         1              0.001334 sec        insert into foo values(1,'a')
-        OK             3         1              0.001325 sec        insert into foo values(1,'a')
-        @ [FAIL] QUERY TEST
-    
-    **SHARD DB 중 하나에 UPDATE 권한이 없는 경우**
-    
-    ::
-    
-        $ vi dml.txt
-    
-        #query
-        select a from foo
-        insert into foo(b) values(3)
-        update foo set c = 2 where b = 3
-        delete foo where b = 3
-    
-    ::
-    
-        $ cubrid broker test broker1 -D demodb -u shard -p shard123 -i dml.txt -v
-
-        @ cubrid broker test
-        @ [OK] CONNECT broker1 DB [demodb] USER [shard]
-
-        @ SHARD OFF
-
-        RESULT         ROW COUNT      EXECUTION TIME      QUERY
-        ========================================================
-        OK             1              0.001612 sec        select a from foo
-        <Result of SELECT Command>
-          a
-        ------------
-          1
-
-        OK             1              0.001215 sec        insert into foo(b) values(3)
-        FAIL(-494)     -1             0.001291 sec        update foo set c = 2 where b = 3
-        <Error>
-        ERROR CODE : -494
-        Semantic: UPDATE is not authorized on foo. update foo foo set foo.c=2 where foo.b=3[CAS INFO - 127.0.0.1:52001, 1, 18139].
-
-        OK             0              0.001534 sec        delete foo where b = 3
-        @ [FAIL] QUERY TEST
-
-*   SHARD HASH 정상 동작 확인
-
-    ::
-    
-        $ vi test_query.txt
-        
-        #query
-        select number from demo_db where key = /*+ shard_key */ 14
-        select number from demo_db where key = /*+ shard_key */ 50
-        select number from demo_db where key = /*+ shard_key */ 80
-        select number from demo_db where key = /*+ shard_key */ 120
-        ..
-
-    ::
-    
-        $ cubrid broker test shard1 -D shard -u shard -p shard123 -i shard_key.txt -v -s
-
-        @ cubrid broker test
-        @ [OK] CONNECT shard1 DB [shard] USER [shard]
-
-        @ SHARD ON
-
-        RESULT         SHARD_ID  ROW COUNT      EXECUTION TIME      QUERY
-        ==================================================================
-        OK             0         1              0.002225 sec        select * from foo where a = /*+ shard_key */ 10
-        <Result of SELECT Command>
-          a           b
-        ----------------------------------
-          10          'aaaa'
-
-        OK             1         1              0.001870 sec        select * from foo where a = /*+ shard_key */ 40
-        <Result of SELECT Command>
-          a           b
-        ----------------------------------
-          40          'bbb'
-
-        OK             2         1              0.002004 sec        select * from foo where a = /*+ shard_key */ 70
-        <Result of SELECT Command>
-          a           b
-        ----------------------------------
-          70          'cccc'
-
-        OK             3         1              0.002025 sec        select * from foo where a = /*+ shard_key */ 100
-        <Result of SELECT Command>
-          a           b
-        ----------------------------------
-          100         'dddd'
-
-        @ [OK] QUERY TEST
 
 HA
 --
 
-브로커가 레플리카에만 접속하도록 설정하는 파라미터 추가(CUBRIDSUS-12136)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-cubrid_broker.conf에 REPLICA_ONLY 파라미터를 추가하여, 이 값이 ON이면 레플리카에만 접속되도록 수정했다. ACCESS_MODE의 값이 RW이고 REPLICA_ONLY의 값이 ON이면 레플리카에 쓰기가 가능해진다. 
-
-슬레이브 노드 또는 레플리카 노드에서 통계 정보 갱신이 가능해짐(CUBRIDSUS-12198)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-CUBRIDSUS-12136의 수정으로, --sysadm과 함께 --write-on-standby 옵션 사용 시 슬레이브 노드 또는 레플리카 노드에서 UPDATE STATISTICS 문의 수행이 가능해졌다. 
 
 CAS와 DB 서버 간 복제 지연 시 다른 노드로 재접속을 시도하게 하는 기능 추가(CUBRIDSUS-11707)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -386,20 +217,6 @@ Sharding
 
 유틸리티
 --------
-
-"cubrid unloaddb" 명령에 DB 계정과 암호를 지정하는 옵션 추가(CUBRIDSUS-12070)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-수정 이전 버전에서는 DB 계정과 암호의 지정이 없이 "cubrid unloaddb"를 수행할 수 있어 
-전체 데이터를 덤프할 수 있는 보안 문제가 존재했으나, 
-"cubrid unloaddb"에 DB 계정과 암호를 지정해야만 수행 가능하도록 수정했다. 
-수정 이후 버전에서 DB 계정과 암호가 지정되지 않을 경우 DB 계정은 "DBA", 암호는 빈 문자열("")이 된다.
-
-
-"cubrid checkdb"에 --check-prev-link와 --repair-prev-link 옵션 추가(CUBRIDSUS-12077)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
---check-prev-link는 인덱스의 이전 링크(previous link)에 오류가 있는지를 검사하고, --repair-prev-link는 index의 이전 링크(previous link)에 오류가 있으면 복구한다. 
 
 
 설정
@@ -445,18 +262,6 @@ HA
 
 성능 및 최적화
 --------------
-
-SHARD의 statement pool에서 statement가 재사용될 때의 성능 개선(CUBRIDSUS-11996)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-statement pool에서 statement가 재사용될 때의 성능을 개선했다. 
-  
-또한, SHARD_MAX_PREPARED_STMT_COUNT의 기본값을 2000에서 10000으로 늘렸다. 
-
-테이블에 대해 다량의 DELETE가 수행되어 데이터 페이지에 빈 공간이 많아진 이후, INSERT 수행 시간이 오래 소요되는 현상(CUBRIDSUS-12405)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-하나의 테이블에 대해 많은 양의 DELETE가 발생해서 데이터 페이지에 대한 빈 공간이 많이진 이후, 여러 클라이언트들이 해당 테이블에 대해 동시에 INSERT를 수행할 때 비정상적으로 많은 시간이 소요되는 현상을 수정했다.
 
 
 집계 함수와 GROUP BY 절을 포함하며 커버링 인덱스가 적용되는 질의에서 GROUP BY 절 최적화(skip group by)에 의한 인덱스 스킵 스캔이 적용되도록 수정(CUBRIDSUS-7508)
@@ -554,22 +359,6 @@ VIEW에 LIMIT 절이 있을 때 INSERT .. ON DUPLICATE KEY UPDATE 문 수행에 
 
 수정 이후 CHAR, VARCHAR, NCHAR, VARNCHAR 그리고 ENUM 타입에 대해 db_attribute 뷰의 collation 칼럼과 charset 칼럼 정보를 출력한다. 
 
-
-TO_CHAR 함수에서 zerodate와 함께 리터럴 형식을 출력하도록 인자를 지정하는 경우 NULL을 반환하도록 수정(CUBRIDSUS-11880)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-zerodate에 대해 'Month', 'Day'와 같은 리터럴 형식을 지정하는 경우 NULL을 반환하도록 수정했다. 
-
-.. code-block:: sql 
-
-    SELECT TO_ CHAR(timestamp '0000-00-00 00:00:00', 'Month Day YYYY') 
-
-:: 
-     
-    NULL 
-     
-참고로, 수정 이전 버전에서는 "Sunday Dec 0000"을 출력한다.
-
 DEFAULT 속성과 SHARED 속성 간 변환 시 정상 동작하지 않는 오류(CUBRIDSUS-11135)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -633,18 +422,6 @@ SHOW INDEX 문 또는 INDEX_CARDINALITY 함수를 사용하여 카디널리티 �
     SHOW INDEX IN tbl; 
     SELECT INDEX_CARDINALITY('foo', 'idx1', 8); 
 
-NULLIF 함수의 첫 번째 인자가 호스트 변수이고, NULL로 바인딩되면 DB 서버가 비정상 종료하는 현상(CUBRIDSUS-12119)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-.. code-block:: sql 
-  
-    PREPARE stmt FROM 'SELECT NULLIF(?, ?)'; 
-    EXECUTE stmt USING NULL, '1';
-    
-UNION ALL이 많은 질의 또는 표현식의 중첩이 많은 질의 수행 시 DB 서버가 비정상 종료하는 현상(CUBRIDSUS-12208)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-UNION ALL이 많은 질의 또는 표현식의 중첩이 많은 질의 수행 시 DB 서버가 비정상 종료했으나, 오류 처리하도록 수정했다. 
 
 다국어
 ------
@@ -657,53 +434,6 @@ UNION ALL이 많은 질의 또는 표현식의 중첩이 많은 질의 수행 �
 HA
 --
 
-12234  broker와 DB 사이에 발생하는 에러 세분화
-
-broker와 DB 사이에 발생하는 핸드쉐이크(handshake) 에러 및 연결 에러를 세분화했다.
-
-에러 원인에 따라 세분화된 에러 코드 및 에러 메시지는 다음과 같다.
-
-
-*   handshake 관련 에러
-
-    +------------------------------------------------------+----------------+-----------------------------------------------------+----------------+-----------------------------------------------------+
-    | 에러 원인                                            | 기존 에러 코드 | 기존 에러 메시지                                    | 새 에러 코드   | 새 에러 메시지                                      |
-    +======================================================+================+=====================================================+================+=====================================================+
-    | 브로커 ACCESS_MODE와 서버의 상태 (active/standby)    | -743           | Failed on handshake between client and server.      | -1139          | Handshake error (peer host ?): incompatible         |
-    | 불일치                                               |                | (peer host ?)                                       |                | read/write mode. (client: ?, server: ?)             |
-    +------------------------------------------------------+                |                                                     +----------------+-----------------------------------------------------+
-    | ha_delay_limit을 설정한 서버에서 복제 지연 발생      |                |                                                     | -1140          | Handshake error (peer host ?):                      |
-    |                                                      |                |                                                     |                | HA replication delayed.                             |
-    +------------------------------------------------------+                |                                                     +----------------+-----------------------------------------------------+
-    | 레플리카만 접속 가능한 브로커(CAS)가 레플리카가      |                |                                                     | -1141          | Handshake error (peer host ?): replica-only         |
-    | 아닌 서버 접속 시도                                  |                |                                                     |                | client to non-replica server.                       |
-    +------------------------------------------------------+                |                                                     +----------------+-----------------------------------------------------+
-    | HA maintenance 모드인 서버에 원격 접속               |                |                                                     | -1142          | Handshake error (peer host ?): remote access to     |
-    |                                                      |                |                                                     |                | server not allowed.                                 |
-    +------------------------------------------------------+                |                                                     +----------------+-----------------------------------------------------+
-    | 서버 버전 알 수 없음                                 |                |                                                     | -1143          | Handshake error (peer host ?): unidentified         |
-    |                                                      |                |                                                     |                | server version.                                     |
-    +------------------------------------------------------+----------------+-----------------------------------------------------+----------------+-----------------------------------------------------+
-
-*   연결 관련 에러
-
-    +------------------------------------------------------+----------------+-----------------------------------------------------+----------------+-----------------------------------------------------+
-    | 에러 원인                                            | 기존 에러 코드 | 기존 에러 메시지                                    | 새 에러 코드   | 새 에러 메시지                                      |
-    +======================================================+================+=====================================================+================+=====================================================+
-    | cub_master 프로세스 down                             | -353           | Cannot make connection to master server on  .       | -353           | Cannot make connection to master server on host ?.  |
-    |                                                      |                | host ?.                                             |                |                                                     |
-    +------------------------------------------------------+                |                                                     +----------------+-----------------------------------------------------+
-    | 장비 down                                            |                |                                                     | -1144          | Timed out attempting to connect to ?.               |
-    |                                                      |                |                                                     |                | (timeout: ? sec(s))                                 |
-    +------------------------------------------------------+----------------+-----------------------------------------------------+----------------+-----------------------------------------------------+
-
-HA 환경에서 빈번한 롤백, 커밋이 수행될 때 DB 서버가 비정상 종료되는 현상(CUBRIDSUS-12215)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-슬레이브 노드 또는 레플리카 노드에서 CSQL에 --sysadm 옵션만 사용하는 경우 DDL, INSERT 질의가 성공하지 못하도록 수정(CUBRIDSUS-12187)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-수정 이후 슬레이브 노드 또는 레플리카 노드에서 DDL, INSERT를 포함한 쓰기 질의가 성공하려면 --sysadm과 함께 --write-on-standby 옵션을 사용해야 한다.
 
 
 INHERIT 절이 있는 질의의 복제에 실패하는 현상(CUBRIDSUS-11409)
@@ -751,118 +481,15 @@ copylogdb를 두 번 구동하는 경우 잘못된 에러 메시지가 출력됨
     or 
     Applylogdb for haid@cubhost:/home1/cubrid1/DB/haid_cubhost already exists. 
 
-HA 환경에서 copylogdb가 요청한 로그 페이지가 없는 경우 copylogdb 에러 로그에 에러 메시지를 기록하도록 수정(CUBRIDSUS-12249)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-HA 환경에서 copylogdb가 요청한 로그 페이지가 없는 경우 copylogdb와 서버의 에러 로그에 다음 메시지를 기록하도록 수정했다. 
-  
-:: 
-  
-    log writer: failed to get log page(s) starting from page id 108.
-
     
-CAS가 특정 상황에서 일정 시간 경과 시 서버에 재연결을 시도하도록 수정(CUBRIDSUS-12042)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    CAS가 다음의 상황에서 일정 시간 경과 시 서버에 재연결을 시도하도록 수정했다. 
-     
-    *   PREFERRED_HOSTS가 아닌 다른 호스트에 연결한 경우 
-    *   RO 브로커인데 active 서버에 연결한 경우 
-     
-    일정 시간은 RECONNECT_TIME(기본값: 600s) 브로커 파라미터로 명시하며, 이 값이 0이면 재연결을 시도하지 않는다. 
-
-"cubrid broker reset"이 동작하지 않는 현상(CUBRIDSUS-11959)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-다수의 standby HA 서버 구성 (host1:host2)에서 host1의 서버 이상으로 RO/SO 브로커가 host2에 연결된 경우 host1이 서버 복구 후 "cubrid broker reset" 명령을 수행해도 host1에 재연결되지 않고 host2에 연결이 유지되는 현상을 수정했다. 
-
-슬레이브 노드의 DB 볼륨이 마스터 노드의 DB 볼륨보다 커지는 현상(CUBRIDSUS-11994)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-슬레이브 노드의 DB 볼륨이 마스터 노드의 DB 볼륨보다 커지는 현상을 줄이기 위해, 슬레이브 노드의 복제 반영 주기(커밋 주기)가 자동으로 조절되도록 수정했다.
-
-복제 로그를 슬레이브 노드의 DB에 반영하는 applylogdb 프로세스는 일정 시간 단위로 복제 로그에 대한 커밋을 수행하는데, 주기가 짧을수록 볼륨 재사용률이 높아져서 볼륨 크기가 불필요하게 증가하지 않게 된다. 반면, 주기가 짧아지면 복제 반영 속도가 늦어져서 복제 지연의 가능성이 높아진다. 수정 이전 버전에서는 복제 반영 주기가 고정되었으나, 수정 이후 버전에서는 복제 지연 정도를 계산하여 복제 반영 주기를 자동으로 조정한다. 
-
-마스터 노드와 슬레이브 노드 간 방화벽이 설정되어 있는 경우 장시간 동안 트랜잭션 로그가 복사되지 않으면 DB 서버 쪽 연결이 종료되는 현상(CUBRIDSUS-12038)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-TCP 네트워크 프로토콜에 SO_KEEPALIVE 옵션을 적용하여, 위 제목의 현상으로 인해 마스터 DB에서 장애 발생 시 failover가 정상 동작하지 않을 수 있는 문제를 수정했다. 
-  
-또한, cubrid.conf에 tcp_keepalive 파라미터(기본값: yes)를 추가하여 TCP 네트워크 프로토콜에 SO_KEEPALIVE 옵션을 적용할지 여부를 지정할 수 있도록 수정했다. 
-
 Sharding
 --------
 
-.. 9.3 반영 
-
-SHARD 환경에서 CAS가 드라이버의 접속 정보를 이용하여 DB에 접속하도록 수정(CUBRIDSUS-6560)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-SHARD_DB_USER/SHARD_DB_PASSWORD 파라미터는 제거될 예정(deprecated)이므로, 수정 이후 버전에서는 응용 프로그램에서 제공하는 DB 접속 방법을 사용할 것을 권장한다. 
-
-SHARD 환경에서 특정 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊도록 수정(CUBRIDSUS-6560)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-SHARD_PROXY_CONN_WAIT_TIMEOUT(기본값: 8시간) 브로커 파라미터를 추가하여, 이 파라미터로 명시한 시간 동안 아무런 요청이 없으면 CAS가 DB와의 접속을 끊도록 수정했다. 이 기능은 이전 비밀번호 정보를 지닌 CAS가 계속 유지되는 것을 방지한다. 
-
-Sharding 환경에서 질의 에러 발생 시 발생한 SHARD/CAS 위치를 알 수 있도록 에러 메시지 개선(CUBRIDSUS-11968)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-Sharding 환경에서 질의 에러 발생 시 어느 SHARD/CAS에서 발생했는지 알 수 있도록 에러 메시지를 개선했다. 
-  
-CAS 에러 메시지의 가장 마지막에는 아래 형식의 SHARD/CAS 정보가 출력된다. 
-  
-:: 
-  
-    [SHARD/CAS ID %d,%d] 
-     
-드라이버 에러 메시지에는 기존의 CAS 정보 대신 PROXY 정보를 출력한다. 
-  
-:: 
-  
-    // 수정 이전 
-     
-    [CAS INFO %s],[SESSION - %d],[URL - %s] 
-     
-    // 수정 이후 
-    [PROXY INFO %s],[URL - %s]
-
-SHARD 환경에서 스키마 변경으로 인한 오류 발생 시 이후 변경된 테이블에 질의를 수행하면 잘못된 결과를 출력하거나 오류가 발생하는 현상(CUBRIDSUS-11189)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. 4.5: 9.2 P1, CUBRIDSUS-11977
-
-SHARD 환경에서 한 응용 프로그램이 동일한 SQL 문에 대해 동시에 여러 개를 PREPARE한 후 실행하면 질의 결과가 잘못되는 현상(CUBRIDSUS-11349)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-.. code-block:: java 
-  
-    PreparedStatement pstmt1 = con.prepareStatement(sql); 
-    PreparedStatement pstmt2 = con.prepareStatement(sql); 
-     
-    pstmt1.setInt(1, 2); 
-    ResultSet rs1 = pstmt1.executeQuery(); 
-    pstmt2.setInt(1, 4); 
-    ResultSet rs2 = pstmt2.executeQuery(); 
-     
-    // 수정 이전 버전에서 아래를 실행하면 rs2의 결과가 섞여서 출력되는 오류가 존재한다. 
-    while (rs1.next()) { 
-      System.out.println(rs1.getInt(1) + " : " + rs1.getInt(2)); 
-    } 
 
 응용 프로그램에서 shard key의 입력 값 타입으로 16bit, 64bit integer를 추가로 지원하도록 수정(CUBRIDSUS-11920)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
 응용 프로그램에서 shard key의 입력 값에 대한 정수형 타입으로 수정 이전에는 32bit integer만 지원했으나 수정 이후 16bit(short), 32bit(int), 64bit(INT64) integer를 모두 지원한다. 
-
-SHARD 환경에서 SQL 주석 뒤에 개행문자가 없으면 에러가 발생하는 현상(CUBRIDSUS-11922)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-SHARD 환경에서 SQL 주석 뒤에 "\n"이 없으면 에러가 발생하는 현상을 수정했다. 
-  
-:: 
-  
-    select 1; --this is comment 
 
 드라이버
 --------
@@ -879,23 +506,7 @@ CCI 응용 프로그램에서 shard_key가 VARCHAR인 경우 hash 함수의 결�
 참고로, JDBC 응용 프로그램에서는 이 현상이 발생하지 않는다. 
 수정된 버전에서는 shard_key가 VARCHAR인 경우의 hash 함수를 지원하지 않는다. 
 
-[JDBC][CCI] CAS의 keepalive 패킷 전송 주기가 OS 설정을 따라가도록 수정하고, 드라이버의 소켓에 keepalive 시간을 사용하도록 수정(CUBRIDSUS-12354)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CAS에서 사용하는 소켓의 keepalive 패킷전송 주기가 OS 설정을 따라가도록 수정했고, JDBC와 CCI드라이버의 소켓도 CAS 소켓과 동일하게 keepalive 시간을 사용하도록 수정했다. 이 수정으로 인해 드라이버와 CAS 간 방화벽에 의해 연결이 끊기는 현상이 줄어들게 되었다.
-
-[JDBC] Datasource을 이용한 접속 시 연결 URL 문자열을 사용할 수 있도록 수정(CUBRIDSUS-12429)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-CUBRIDDataSource 클래스에 setURL 메서드를 추가하여, 연결 URL 문자열을 사용할 수 있도록 수정했다. 연결 URL 문자열에는 IP, 포트, DB 이름 뿐만 아니라 charset, logSlowQueries 등과 같이 CUBRID에서 정의한 속성(property)들을 포함할 수 있다.
- 
-.. code-block:: java
- 
-    import cubrid.jdbc.driver.CUBRIDDataSource;
-    ...
-    
-    ds = new CUBRIDDataSource();
-    ds.setUrl("jdbc:cubrid:10.113.153.144:55300:demodb:::?charset=utf8&logSlowQueries=true&slowQueryThresholdMillis=1000&logTraceApi=true&logTraceNetwork=true");
  
 
 운영 편의성
@@ -905,11 +516,6 @@ CUBRIDDataSource 클래스에 setURL 메서드를 추가하여, 연결 URL 문�
 유틸리티
 --------
 
-백업 수행 시 -B 혹은 -D 옵션으로 주어진 경로에 접근 권한이 없거나 디스크 여유 공간이 없으면 멈춰있는(hang) 현상(CUBRIDSUS-12286)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-수정 이전 버전에서 위의 현상이 발생하면 체크포인트가 실행되지 않아서 보관 로그 파일이 삭제되지 않을 수 있다. 
-
 Windows에서 DB 생성 시 --lob-base-path 옵션 값에 "D:"와 같이 드라이브 이름을 포함하면 실패하는 현상(CUBRIDSUS-10590)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
@@ -917,36 +523,11 @@ Windows에서 DB 생성 시 --lob-base-path 옵션 값에 "D:"와 같이 드라�
   
     cubrid createdb testdb --lob-base-path=D:\lob_base
     
-다중 키 칼럼의 인덱스가 비정상인 상태에서 "cubrid checkdb" 명령이 비정상 종료되는 현상(CUBRIDSUS-12176)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-SHARD 힌트로 인해 broker_log_top 수행 결과에서 동일한 질의가 구분되어 집계되는 현상(CUBRIDSUS-12410)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-broker_log_top 수행 시 질의 힌트를 제거한 이후에 질의 개수를 집계하도록 수정했다.
 
 설정, 빌드 및 설치
 ------------------
 
-access_ip_control_file에서 ip 주소에 0 이 포함되어 있으면 DB 서버 구동에 실패(CUBRIDSUS-12188)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**cubrid.conf** 
-     
-:: 
-  
-    access_ip_control=yes 
-    access_ip_control_file=db.access 
-  
-수정 이전 버전에서 아래 db.access 파일의 IP 주소에 0이 포함되면 DB 서버 구동에 실패한다. 
-  
-**db.access** 
-  
-:: 
-  
-    [@TESTDB] 
-    10.100.0.1 
-    
 기타
 ----
 

@@ -1964,8 +1964,6 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 **CCI_DEFAULT_AUTOCOMMIT**
 
     **CCI_DEFAULT_AUTOCOMMIT**\ 은 CCI 인터페이스 또는 CCI기반 인터페이스(PHP, ODBC, OLE DB, Perl, Python, Ruby 등)로 개발된 응용 프로그램의 자동 커밋 여부를 설정하는 파라미터로 기본값은 **ON**\ 이다. 이 파라미터는 JDBC로 개발된 응용 프로그램에는 영향을 끼치지 않는다. 
-    
-    .. warning:: ODBC 사용자는 **CCI_DEFAULT_AUTOCOMMIT**\ 이 ON인 경우 오동작을 일으킬 수 있으므로, 반드시 OFF로 설정해야 한다.
 
     **CCI_DEFAULT_AUTOCOMMIT** 파라미터의 값이 OFF인 경우 트랜잭션이 종료될 때까지 브로커 응용 서버(CAS) 프로세스를 점유한 상태가 되므로, **SELECT** 문 수행 시에도 fetch 완료 후 반드시 커밋을 수행할 것을 권장한다.
 
@@ -1973,6 +1971,8 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 
         **CCI_DEFAULT_AUTOCOMMIT**  파라미터는 2008 R4.0부터 지원하기 시작했고, 이 때 기본값은 OFF였다. **CCI_DEFAULT_AUTOCOMMIT**\ 을 설정하지 않은 2008 R4.0 혹은 그 이전 버전 사용자는 자동 커밋 모드가 OFF이므로, 2008 R4.1 이상 버전으로 업그레이드한 사용자가 기존 응용 프로그램을 그대로 사용하고자 하는 경우, 이 값을 OFF로 설정해야 의도하지 않은 트랜잭션의 자동 커밋을 방지할 수 있다.
 
+    .. warning:: 9.3 버전부터 ODBC 사용자는 **CCI_DEFAULT_AUTOCOMMIT**\ 의 설정이 무시되어 항상 OFF인 상태로 동작하므로, 프로그램에서 자동 커밋 여부를 직접 설정해야 한다.
+        
 **LONG_QUERY_TIME**
 
     **LONG_QUERY_TIME**\ 은 장기 실행 질의(long-duration query)로 판단될 질의 실행 시간을 설정하는 파라미터이다. 값 뒤에 ms, s, min, h의 단위 지정이 가능하며, 각각 milliseconds, seconds, minutes, hours를 의미한다. 단위가 생략되면 s로 지정된다. 기본값은 **60** (초)이고 소수점을 사용하여 밀리초(msec) 단위의 값을 설정할 수 있다. 예를 들어 500밀리초로 설정하려면 값을 0.5로 설정한다. 파라미터 값을 0으로 설정하면 장기 실행 질의를 판단하지 않는다.
@@ -2034,13 +2034,9 @@ cubrid_broker.conf 설정 파일과 기본 제공 파라미터
 
     **ACCESS_LOG_MAX_SIZE**\ 는 브로커 접속 로그(ACCESS_LOG) 파일의 최대 크기를 지정하며, 브로커 접속 로그 파일이 지정한 크기보다 커지면 *broker_name*\ **.access.**\ *YYYYMMDDHHMISS* 형식의 이름으로 백업된 후 새 파일(`broker_name`.\ **access**)에 로그가 기록된다. 기본값은 10M 이고, 최대 2G로 설정할 수 있으며, 브로커 구동중 동적으로 변경이 가능하다. 
 
-
 **ERROR_LOG_DIR**
 
     **ERROR_LOG_DIR**\ 은 브로커에 대한 에러 로그가 저장되는 디렉터리를 지정하는 파라미터로, 기본값은 **log/broker/error_log**\ 이다. 브로커 에러 로그 파일명은 *broker_ name_id.err*\ 이다.
-
-**LOG_BACKUP**
-    **LOG_BACKUP**\ 은 CUBRID 브로커가 종료될 때 브로커의 접속 로그 파일을 백업할 것인지 지정하는 파라미터이다. 기본값은 **OFF**\ 이며, CUBRID 브로커가 종료될 때 $CUBRID/log/broker에 있는 접속 로그 파일(*broker_name*\ **.access**)이 삭제된다. **ON** 으로 설정되면 CUBRID 브로커가 종료될 때 접속 로그 파일이 다른 이름으로 백업된다. 이때, 접속 로그의 백업 파일명은 *broker_name.access.YYYYMMDD.HHMI* 가 된다.
 
 **LOG_DIR**
                        

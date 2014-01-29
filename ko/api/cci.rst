@@ -35,7 +35,7 @@ CCI 응용 프로그램 작성
 
 CCI를 이용하는 응용 프로그램은 기본적으로 CAS와 연결하기, 질의 준비, 질의 수행, 응답 처리, 연결 끊기의 과정을 통해 CUBRID를 이용한다. 각 과정에서 CCI는 연결 핸들(connection handle), 질의 핸들(query handle), 응답 핸들(response handle)을 통해 응용 프로그램과 소통한다.
 
-브로커 파라미터인 **CCI_DEFAULT_AUTOCOMMIT** 으로 응용 프로그램 시작 시 자동 커밋 모드의 기본값을 설정할 수 있으며, 브로커 파라미터 설정을 생략하면 기본값은 **ON** 이다. 응용 프로그램 내에서 자동 커밋 모드를 변경하려면 :c:func:`cci_set_autocommit` 함수를 이용하며, 자동 커밋 모드가 **OFF** 이면 :c:func:`cci_end_tran` 함수를 이용하여 명시적으로 트랜잭션을 커밋하거나 롤백해야 한다.
+브로커 파라미터인 :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>`\ 으로 응용 프로그램 시작 시 자동 커밋 모드의 기본값을 설정할 수 있으며, 브로커 파라미터 설정을 생략하면 기본값은 **ON** 이다. 응용 프로그램 내에서 자동 커밋 모드를 변경하려면 :c:func:`cci_set_autocommit` 함수를 이용하며, 자동 커밋 모드가 **OFF** 이면 :c:func:`cci_end_tran` 함수를 이용하여 명시적으로 트랜잭션을 커밋하거나 롤백해야 한다.
 
 기본적인 작성 순서는 다음과 같으며, prepared statement 사용을 위해서는 변수에 데이터를 바인딩하는 작업이 추가된다. 이를 예제 1 및 예제 2에 구현하였다.
 

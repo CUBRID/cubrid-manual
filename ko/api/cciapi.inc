@@ -1036,7 +1036,7 @@ CCI API 레퍼런스
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_TRAN_TYPE**
 
-    브로커 파라미터인 **CCI_DEFAULT_AUTOCOMMIT** 으로 응용 프로그램 시작 시 자동 커밋 모드의 기본값을 설정할 수 있으며, 브로커 파라미터 설정을 생략하면 기본값은 **ON** 이다. 응용 프로그램 내에서 자동 커밋 모드를 변경하려면 :c:func:`cci_set_autocommit` 함수를 이용하며, 자동 커밋 모드가 **OFF** 이면 :c:func:`cci_end_tran` 함수를 이용하여 명시적으로 트랜잭션을 커밋하거나 롤백해야 한다.
+    브로커 파라미터인 :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>`\ 으로 응용 프로그램 시작 시 자동 커밋 모드의 기본값을 설정할 수 있으며, 브로커 파라미터 설정을 생략하면 기본값은 **ON**\ 이다. 응용 프로그램 내에서 자동 커밋 모드를 변경하려면 :c:func:`cci_set_autocommit` 함수를 이용하며, 자동 커밋 모드가 **OFF** 이면 :c:func:`cci_end_tran` 함수를 이용하여 명시적으로 트랜잭션을 커밋하거나 롤백해야 한다.
 
 .. c:function:: long cci_escape_string(int conn_handle, char *to, const char *from, unsigned long length, T_CCI_ERROR *err_buf)
 

@@ -23,11 +23,11 @@ CUBRID는 객체 관계형 데이터베이스 관리 시스템으로서, 데이�
 
 *   브로커는 서버와 외부 응용 프로그램 간의 통신을 중계하는 CUBRID 전용 미들웨어로서, 커넥션 풀링, 모니터링, 로그 추적 및 분석 기능을 제공한다.
 
-*   CUBRID 매니저는 데이터베이스와 브로커를 원격에서 관리할 수 있는 GUI 툴이다. 또한, CUBRID 매니저는 사용자가 데이터베이스 서버에 SQL 질의를 수행할 수 있는 편리한 기능의 질의 편집기를 제공한다. CUBRID 매니저에 대한 자세한 내용은   `http://www.cubrid.org/wiki_tools/entry/cubrid-manager <http://www.cubrid.org/wiki_tools/entry/cubrid-manager>`_ 를 참조한다.
+*   CUBRID 매니저는 데이터베이스와 브로커를 원격에서 관리할 수 있는 GUI 툴이다. 또한, CUBRID 매니저는 사용자가 데이터베이스 서버에 SQL 질의를 수행할 수 있는 편리한 기능의 질의 편집기를 제공한다. CUBRID 매니저에 대한 자세한 내용은 http://www.cubrid.org/wiki_tools/entry/cubrid-manager\ 를 참조한다.
 
 .. note::
  
-    CUBRID 쿼리 브라우저는 CUBRID 매니저의 기능을 경량화한 도구로, 응용 개발자에게 필수 기능인 데이터베이스 관리 기능과 질의 편집기 기능만을 제공한다. CUBRID 쿼리 브라우저에 대한 자세한 내용은 http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser 를 참고한다.
+    CUBRID 쿼리 브라우저는 CUBRID 매니저의 기능을 경량화한 도구로, 응용 개발자에게 필수 기능인 데이터베이스 관리 기능과 질의 편집기 기능만을 제공한다. CUBRID 쿼리 브라우저에 대한 자세한 내용은 http://www.cubrid.org/wiki_tools/entry/cubrid-query-browser\ 를 참고한다.
 
 .. image:: /images/image1.png
 

@@ -144,7 +144,7 @@ CUBRID 9.1에서 DB를 마이그레이션하는 경우는 "migrate_91_to_92 <db_
         
         문자셋, 로캘 및 콜레이션 설정과 관련된 자세한 내용은 :doc:`/sql/i18n`\ 을 참고한다.
 
-보다 자세한 설명은 릴리스 노트의 :ref:`changed-config100` 절을 참고한다.
+보다 자세한 설명은 릴리스 노트의 :ref:`changed-config100`\ 을 참고한다.
 
 .. _up-from-41:
 
@@ -325,7 +325,7 @@ DB 마이그레이션
         
         문자셋, 로캘 및 콜레이션 설정과 관련된 자세한 내용은 :doc:`/sql/i18n`\ 을 참고한다.
 
-보다 자세한 설명은 :ref:`changed-config100` 절을 참고한다.
+보다 자세한 설명은 :ref:`changed-config100`\ 을 참고한다.
 
 .. _ha-db-migration:
 

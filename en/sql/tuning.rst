@@ -5,7 +5,9 @@ Query Optimization
 Updating Statistics
 ===================
 
-With the **UPDATE STATISTICS ON** statement, you can generate internal statistics used by the query processor. Such statistics allow the database system to perform query optimization more efficiently. 
+Statistics for tables and indexes enables queries of the database system to process efficiently. Statistics are updated automatically when DDL statements such as CREATE TABLE, CREATE/DROP INDEX are executed. However, since it is not automatically updated when DML statements such as INSERT and DELETE is performed, it is necessary to update the statistics by **UPDATE STATISTICS** statement(See :ref:`info-stats`).
+
+**UPDATE STATISTICS** statement is recommended only when a mass of INSERT or DELETE statements make the big difference between the statistics and the actual information.
 
 ::
 
@@ -45,6 +47,8 @@ When starting and ending an update of statistics information, NOTIFICATION messa
 
     Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
     Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
+
+.. _info-stats:
 
 Checking Statistics Information
 ===============================
@@ -489,12 +493,8 @@ For how to set the trace on automatically, see :ref:`Set SQL trace <set-autotrac
 Using SQL Hint
 ==============
 
-Using hints can affect the performance of query execution. you can allow the query optimizer to create more efficient execution plan by referring the SQL HINT. The SQL HINTs related tale join, index, and statistics information are provided by CUBRID. ::
+Using hints can affect the performance of query execution. you can allow the query optimizer to create more efficient execution plan by referring the SQL HINT. The SQL HINTs related tale join and index are provided by CUBRID. ::
 
-    { CREATE | ALTER } /*+ NO_STATS */ { TABLE | CLASS } ...;
-        
-    { CREATE | ALTER | DROP } /*+ NO_STATS */ INDEX ...;
-     
     { SELECT | UPDATE | DELETE } /*+ <hint> [ { <hint> } ... ] */ ...;
 
     MERGE /*+ <merge_statement_hint> [ { <merge_statement_hint> } ... ] */ INTO ...;
@@ -522,11 +522,7 @@ SQL hints are specified by using a plus sign(+) to comments. To use a hint, ther
 * --+ hint
 * //+ hint
 
-The hint comment must appear after the **SELECT**, **CREATE**, **ALTER**, etc. keyword, and the comment must begin with a plus sign (+), following the comment delimiter.  When you specify several hints, they are  separated by blanks.
-
-The following hints can be specified in CREATE/ALTER TABLE statements and CREATE/ALTER/DROP INDEX statements.
-
-*   **NO_STATS** : Related to a statistical information hint. If it is specified, query optimizer does not update the statistical information after running the DDL statement. Therefore, the DDL performance  is improved, but note that the query plan is not optimized.
+The hint comment must appear after the keyword such as **SELECT**, **UPDATE** or **DELETE**, and the comment must begin with a plus sign (+), following the comment delimiter.  When you specify several hints, they are  separated by blanks.
 
 The following hints can be specified in UPDATE, DELETE and SELECT statements.
 
@@ -537,7 +533,6 @@ The following hints can be specified in UPDATE, DELETE and SELECT statements.
 *   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
 *   **NO_DESC_IDX** : This is a hint not to use the descending index.
 *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
-*   **NO_STATS** : Related to statistics information, the query optimizer does not update statistics information. Query performance for the corresponding queries can be improved; however, query plan is not optimized because the information is not updated.
 *   **NO_SORT_LIMIT** : This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
 *   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
 
@@ -565,26 +560,6 @@ The following example shows how to retrieve the years when Sim Kwon Ho won medal
       'Sim Kwon Ho'                1996  'G'
       
     2 rows selected.
-
-The following example shows how to retrieve query execution time with **NO_STATS** hint to improve the functionality of DROPping partitioned table (*before_2008*); any data is not stored in the table. Assuming that there are more than 1 million data in the *participant2* table. The execution time in the example depends on system performance and database configuration.
-
-.. code-block:: sql
-
-    -- without NO_STATS hint
-    ALTER TABLE participant2 DROP partition before_2008;
-
-::
-
-    Execute OK. (31.684550 sec) Committed.
-
-.. code-block:: sql
-    
-    -- with NO_STATS hint
-    ALTER /*+ NO_STATS */ TABLE participant2 DROP partition before_2008;
-
-::
-
-    Execute OK. (0.025773 sec) Committed.
 
 .. _index-hint-syntax:
 

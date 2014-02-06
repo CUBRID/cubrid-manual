@@ -5,7 +5,9 @@
 통계 정보 갱신
 ==============
 
-**UPDATE STATISTICS ON** 문은 질의 처리기에서 사용되는 내부 통계 정보를 생성한다. 이러한 통계 정보는 데이터베이스 시스템이 질의를 처리하는데 효과적인 방법을 사용할 수 있게 한다. 
+테이블과 인덱스에 대한 통계 정보는 데이터베이스 시스템이 질의를 효과적으로 처리할 수 있게 한다. 통계 정보는 테이블의 생성, 인덱스의 생성/삭제 등 DDL 문이 수행되면 자동으로 갱신된다. 그러나, INSERT, DELETE 등 DML 문이 수행되면 자동으로 갱신되지 않으므로 **UPDATE STATISTICS** 문을 수행하여 통계 정보를 갱신해야 한다(:ref:`info-stats` 참고).
+
+**UPDATE STATISTICS** 문은 대량의 INSERT, 혹은 DELETE 문이 수행되어 실제 정보와 통계 정보 사이에 차이가 커질 때 수행할 것을 권장한다.
 
 ::
 
@@ -43,6 +45,8 @@
 
     Time: 05/07/13 15:06:25.053 - NOTIFICATION *** file ../../src/storage/statistics_sr.c, line 330  CODE = -1115 Tran = 1, CLIENT = testhost:csql(21060), EID = 5
     Finished to update statistics (class "code", oid : 0|522|3, error code : 0).
+
+.. _info-stats:
 
 통계 정보 확인
 ==============

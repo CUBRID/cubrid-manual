@@ -12,23 +12,25 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
         [ HAVING  <search_condition> ]
         [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ] [ FOR <orderby_for_condition> ] ]
         [ LIMIT [offset,] row_count ]
-        [ USING INDEX { index name [,index_name,...] | NONE }]
+        [ USING INDEX { index_name [,index_name,...] | NONE }]
      
     <qualifier> ::= ALL | DISTINCT | DISTINCTROW | UNIQUE
-     
-    <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
     
+    <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
+     
     <variable_comma_list> ::= [:] identifier, [:] identifier, ...
     
     <extended_table_specification_comma_list> ::=
-    <table specification> [ {, <table specification> | <join table specification> }... ]
+        <table_specification> [ {, <table_specification> } ...
+                                | <join_table_specification> ... 
+                                | <join_table_specification2> ... ]
      
     <table_specification> ::=
-     <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
-     <metaclass_specification> [ <correlation> ] |
-     <subquery> <correlation> |
-     TABLE ( <expression> ) <correlation>
-     
+        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
+        <metaclass_specification> [ <correlation> ] |
+        <subquery> <correlation> |
+        TABLE ( <expression> ) <correlation>
+
     <correlation> ::= [ AS ] <identifier> [ ( <identifier_comma_list> ) ]
      
     <single_table_spec> ::= [ ONLY ] <table_name> |
@@ -37,14 +39,16 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
     <metaclass_specification> ::= CLASS <class_name>
      
     <join_table_specification> ::=
-    [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN <table specification> ON <search condition>
+        { [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN | 
+        STRAIGHT_JOIN } <table_specification> ON <search_condition>
      
-    <join_table_specification2> ::= CROSS JOIN <table_specification>
-     
+    <join_table_specification2> ::= { CROSS JOIN | 
+        NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
+    
     <lock_hint> ::= READ UNCOMMITTED
      
     <orderby_for_condition> ::=
-    ORDERBY_NUM() { BETWEEN int AND int } |
+        ORDERBY_NUM() { BETWEEN int AND int } |
         { { = | =< | < | > | >= } int } |
         IN ( int, ...)
 
@@ -133,8 +137,8 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
 ::
 
     SELECT [ <qualifier> ] <select_expressions>
-    [ FROM <table_specification> [ {, <table specification>
-    | <join table specification> }... ]]
+    [ FROM <table_specification> [ {, <table_specification>
+                                    | <join_table_specification> }... ]]
      
      
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
@@ -242,15 +246,15 @@ In a query, a column can be processed based on conditions. The **WHERE** clause 
 
     WHERE search_condition
 
-    search_condition :
-    • comparison_predicate
-    • between_predicate
-    • exists_predicate
-    • in_predicate
-    • null_predicate
-    • like_predicate
-    • quantified predicate
-    • set_predicate
+    <search_condition> ::=
+        comparison_predicate
+        between_predicate
+        exists_predicate
+        in_predicate
+        null_predicate
+        like_predicate
+        quantified_predicate
+        set_predicate
 
 The **WHERE** clause specifies a condition that determines the data to be retrieved by *search_condition* or a query. Only data for which the condition is true is retrieved for the query results. (**NULL** value is not retrieved for the query results because it is evaluated as unknown value.)
 
@@ -591,21 +595,27 @@ A join is a query that combines the rows of two or more tables or virtual tables
 
 A join query using an equality operator (=) is called an equi-join, and one without any join condition is called a cartesian product. Meanwhile, joining a single table is called a self join. In a self join, table **ALIAS** is used to distinguish columns, because the same table is used twice in the **FROM** clause.
 
-A join that outputs only rows that satisfy the join condition from a joined table is called an inner or a simple join, whereas a join that outputs both rows that satisfy and do not satisfy the join condition from a joined table is called an outer join. An outer join is divided into a left outer join which outputs all rows of the left table as a result, a right outer join which outputs all rows of the right table as a result and a full outer join which outputs all rows of both tables. If there is no column value that corresponds to a table on one side in the result of an outer join query, all rows are returned as **NULL**. ::
+A join that outputs only rows that satisfy the join condition from a joined table is called an inner or a simple join, whereas a join that outputs both rows that satisfy and do not satisfy the join condition from a joined table is called an outer join. 
 
-    FROM table_specification [{, table_specification | { join_table_specification | join_table_specification2 }...]
+An outer join is divided into a left outer join which outputs all rows of the left table as a result(outputs NULL when the right table's columns don't match conditions), a right outer join which outputs all rows of the right table as a result(outputs NULL when the left table's columns don't match conditions) and a full outer join which outputs all rows of both tables. If there is no column value that corresponds to a table on one side in the result of an outer join query, all rows are returned as **NULL**.
+
+::
+
+    FROM <table_specification> [{, <table_specification> 
+        | { <join_table_specification> | <join_table_specification2> } ...]
      
-    table_specification :
-    table_specification [ correlation ]
-    CLASS table_name [ correlation ]
-    subquery correlation
-    TABLE (expression) correlation
+    <table_specification> ::=
+        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
+        <metaclass_specification> [ <correlation> ] |
+        <subquery> <correlation> |
+        TABLE ( <expression> ) <correlation>
+        
+    <join_table_specification> :
+       { [ INNER | {LEFT | RIGHT} [ OUTER ] ] JOIN |
+       STRAIGHT_JOIN } <table_specification> ON <search_condition>
      
-    join_table_specification :
-    [ INNER | {LEFT | RIGHT} [ OUTER ] ] JOIN table_specification ON search_condition
-     
-    join_table_specification2 :
-    CROSS JOIN table_specification
+    <join_table_specification2> ::= { CROSS JOIN | 
+        NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
 
 *   *join_table_specification*
 
@@ -613,17 +623,17 @@ A join that outputs only rows that satisfy the join condition from a joined tabl
 
     *   { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** : **LEFT** is used for a left outer join query, and **RIGHT** is for a right outer join query.
 
+    *   **STRAIGHT_JOIN** : (작성중)
+    
+*   *join_table_specification2*
+
     *   **CROSS JOIN** : Used for cross join and requires no join conditions.
+    *   **NATURAL [ **LEFT** | **RIGHT** ] JOIN** : Used for natural join and join condition is not used. It operates in the equivalent same way to have a condition between columns equivalent of the same name .
+
+Inner Join
+----------
 
 The inner join requires join conditions. The **INNER JOIN** keyword can be omitted. When it is omitted, the table is separated by a comma (,). The **ON** join condition can be replaced with the **WHERE** condition.
-
-CUBRID does not support full outer joins; it supports only left and right joins. Path expressions that include subqueries and sub-columns cannot be used in the join conditions of an outer join.
-
-Join conditions of an outer join are specified in a different way from those of an inner join. In an inner join, join conditions can be expressed in the **WHERE** clause; in an outer join, they appear after the **ON** keyword within the **FROM** clause. Other retrieval conditions can be used in the **WHERE** or **ON** clause, but the retrieval result depends on whether the condition is used in the **WHERE** or **ON** clause.
-
-The table execution order is fixed according to the order specified in the **FROM** clause. Therefore, when using an outer join, you should create a query statement in consideration of the table order. It is recommended to use standard statements using { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN**, because using an Oracle-style join query statements by specifying an outer join operator (**+**) in the **WHERE** clause, even if possible, might lead the execution result or plan in an unwanted direction.
-
-The cross join is a cartesian product, meaning that it is a combination of two tables, without any condition. For the cross join, the **CROSS JOIN** keyword can be omitted. When it is omitted, the table is separated by a comma (,).
 
 The following example shows how to retrieve the years and host countries of the Olympic Games since 1950 where a world record has been set. The following query retrieves instances whose values of the *host_year* column in the *history* table are greater than 1950. The following two queries output the same result.
 
@@ -649,105 +659,142 @@ The following example shows how to retrieve the years and host countries of the 
              2000  'Australia'
              2004  'Greece'
 
+Outer Join
+----------
+
+CUBRID does not support full outer joins; it supports only left and right joins. Path expressions that include subqueries and sub-columns cannot be used in the join conditions of an outer join.
+
+Join conditions of an outer join are specified in a different way from those of an inner join. In an inner join, join conditions can be expressed in the **WHERE** clause; in an outer join, they appear after the **ON** keyword within the **FROM** clause. Other retrieval conditions can be used in the **WHERE** or **ON** clause, but the retrieval result depends on whether the condition is used in the **WHERE** or **ON** clause.
+
+The table execution order is fixed according to the order specified in the **FROM** clause. Therefore, when using an outer join, you should create a query statement in consideration of the table order. It is recommended to use standard statements using { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN**, because using an Oracle-style join query statements by specifying an outer join operator (**+**) in the **WHERE** clause, even if possible, might lead the execution result or plan in an unwanted direction.
+
+The cross join is a cartesian product, meaning that it is a combination of two tables, without any condition. For the cross join, the **CROSS JOIN** keyword can be omitted. When it is omitted, the table is separated by a comma (,).
+
 The following example shows how to retrieve the years and host countries of the Olympic Games since 1950 where a world record has been set, but including the Olympic Games where any world records haven't been set in the result. This example can be expressed in the following right outer join query. In this example, all instances whose values of the *host_year* column in the *history* table are not greater than 1950 are also retrieved. All instances of *host_nation* are included because this is a right outer join. *host_year* that does not have a value is represented as **NULL**.
 
 .. code-block:: sql
 
-    SELECT DISTINCT h.host_year, o.host_nation
-    FROM history h RIGHT OUTER JOIN olympic o ON h.host_year=o.host_year 
-    WHERE o.host_year>1950;
-     
+    SELECT DISTINCT h.host_year, o.host_year, o.host_nation
+    FROM history h RIGHT OUTER JOIN olympic o ON h.host_year = o.host_year 
+    WHERE o.host_year > 1950;
+    
 ::
 
-        host_year  host_nation
-    ===================================
-             NULL  'Australia'
-             NULL  'Canada'
-             NULL  'Finland'
-             NULL  'Germany'
-             NULL  'Italy'
-             NULL  'Japan'
-             1968  'Mexico'
-             1980  'U.S.S.R.'
-             1984  'United States of America'
-             1988  'Korea'
-             1992  'Spain'
-             1996  'United States of America'
-             2000  'Australia'
-             2004  'Greece'
+        host_year    host_year  host_nation
+    ================================================
+             NULL         1952  'Finland'
+             NULL         1956  'Australia'
+             NULL         1960  'Italy'
+             NULL         1964  'Japan'
+             NULL         1972  'Germany'
+             NULL         1976  'Canada'
+             1968         1968  'Mexico'
+             1980         1980  'USSR'
+             1984         1984  'USA'
+             1988         1988  'Korea'
+             1992         1992  'Spain'
+             1996         1996  'USA'
+             2000         2000  'Australia'
+             2004         2004  'Greece'
 
 A right outer join query can be converted to a left outer join query by switching the position of two tables in the **FROM** clause. The right outer join query in the previous example can be expressed as a left outer join query as follows:
 
 .. code-block:: sql
 
-    SELECT DISTINCT h.host_year, o.host_nation
-    FROM olympic o LEFT OUTER JOIN history h ON h.host_year=o.host_year 
-    WHERE o.host_year>1950;
+    SELECT DISTINCT h.host_year, o.host_year, o.host_nation
+    FROM olympic o LEFT OUTER JOIN history h ON h.host_year = o.host_year 
+    WHERE o.host_year > 1950;
      
 ::
 
-        host_year  host_nation
-    ===================================
-             NULL  'Australia'
-             NULL  'Canada'
-             NULL  'Finland'
-             NULL  'Germany'
-             NULL  'Italy'
-             NULL  'Japan'
-             1968  'Mexico'
-             1980  'U.S.S.R.'
-             1984  'United States of America'
-             1988  'Korea'
-             1992  'Spain'
-             1996  'United States of America'
-             2000  'Australia'
-             2004  'Greece'
+        host_year    host_year  host_nation
+    ================================================
+             NULL         1952  'Finland'
+             NULL         1956  'Australia'
+             NULL         1960  'Italy'
+             NULL         1964  'Japan'
+             NULL         1972  'Germany'
+             NULL         1976  'Canada'
+             1968         1968  'Mexico'
+             1980         1980  'USSR'
+             1984         1984  'USA'
+             1988         1988  'Korea'
+             1992         1992  'Spain'
+             1996         1996  'USA'
+             2000         2000  'Australia'
+             2004         2004  'Greece'
 
-In this example, *h.host_year=o.host_year* is an outer join condition, and *o.host_year > 1950* is a search condition. If the search condition is used not in the **WHERE** clause but in the **ON** clause, the meaning and the result will be different. The following query also includes instances whose values of *o.host_year* are not greater than 1950.
-
-.. code-block:: sql
-
-    SELECT DISTINCT h.host_year, o.host_nation
-    FROM olympic o LEFT OUTER JOIN history h ON h.host_year=o.host_year AND o.host_year>1950;
-     
-::
-
-        host_year  host_nation
-    ===================================
-             NULL  'Australia'
-             NULL  'Belgium'
-             NULL  'Canada'
-    ...
-             1996  'United States of America'
-             2000  'Australia'
-             2004  'Greece'
-
+             
 Outer joins can also be represented by using **(+)** in the **WHERE** clause. The above example is a query that has the same meaning as the example using the **LEFT** **OUTER** **JOIN**. The **(+)** syntax is not ISO/ANSI standard, so it can lead to ambiguous situations. It is recommended to use the standard syntax **LEFT** **OUTER** **JOIN** (or **RIGHT** **OUTER** **JOIN**) if possible.
 
 .. code-block:: sql
 
-    SELECT DISTINCT h.host_year, o.host_nation 
+    SELECT DISTINCT h.host_year, o.host_year, o.host_nation 
     FROM history h, olympic o
-    WHERE o.host_year=h.host_year(+) AND o.host_year>1950;
+    WHERE o.host_year = h.host_year(+) AND o.host_year > 1950;
      
 ::
 
-        host_year  host_nation
-    ===================================
-             NULL  'Australia'
-             NULL  'Canada'
-             NULL  'Finland'
-             NULL  'Germany'
-             NULL  'Italy'
-             NULL  'Japan'
-             1968  'Mexico'
-             1980  'U.S.S.R.'
-             1984  'United States of America'
-             1988  'Korea'
-             1992  'Spain'
-             1996  'United States of America'
-             2000  'Australia'
-             2004  'Greece'
+        host_year    host_year  host_nation
+    ================================================
+             NULL         1952  'Finland'
+             NULL         1956  'Australia'
+             NULL         1960  'Italy'
+             NULL         1964  'Japan'
+             NULL         1972  'Germany'
+             NULL         1976  'Canada'
+             1968         1968  'Mexico'
+             1980         1980  'USSR'
+             1984         1984  'USA'
+             1988         1988  'Korea'
+             1992         1992  'Spain'
+             1996         1996  'USA'
+             2000         2000  'Australia'
+             2004         2004  'Greece'
+
+In the above examples, *h.host_year=o.host_year* is an outer join condition, and *o.host_year > 1950* is a search condition. If the search condition is not written in the **WHERE** clause but in the **ON** clause, the meaning and the result will be different. The following query also includes instances whose values of *o.host_year* are not greater than 1950.
+
+.. code-block:: sql
+
+    SELECT DISTINCT h.host_year, o.host_year, o.host_nation
+    FROM olympic o LEFT OUTER JOIN history h ON h.host_year = o.host_year AND o.host_year > 1950;
+     
+::
+
+        host_year    host_year  host_nation
+    ================================================
+             NULL         1896  'Greece'
+             NULL         1900  'France'
+             NULL         1904  'USA'
+             NULL         1908  'United Kingdom'
+             NULL         1912  'Sweden'
+             NULL         1920  'Belgium'
+             NULL         1924  'France'
+             NULL         1928  'Netherlands'
+             NULL         1932  'USA'
+             NULL         1936  'Germany'
+             NULL         1948  'England'
+             NULL         1952  'Finland'
+             NULL         1956  'Australia'
+             NULL         1960  'Italy'
+             NULL         1964  'Japan'
+             NULL         1972  'Germany'
+             NULL         1976  'Canada'
+             1968         1968  'Mexico'
+             1980         1980  'USSR'
+             1984         1984  'USA'
+             1988         1988  'Korea'
+             1992         1992  'Spain'
+             1996         1996  'USA'
+             2000         2000  'Australia'
+             2004         2004  'Greece'
+
+In the above example, **LEFT OUTER JOIN** should attach all rows to the result rows even if the left table's rows do not match to the condition; therefore, the left table's condition, "AND o.host_year > 1950" is ignored. But "WHERE o.host_year > 1950" is applied after the join operation is completed. Please consider that a condition after **ON** clause and a condition after **WHERE** clause can be applied differently in **OUTER JOIN**.
+
+Cross Join
+----------
+
+The cross join is a cartesian product, meaning that it is a combination of two tables, without any condition. For the cross join, the **CROSS JOIN** keyword can be omitted. When it is omitted, the table is separated by a comma (,).
 
 The following example shows how to write cross join. The following two queries will output the same results.
 
@@ -777,6 +824,118 @@ The following example shows how to write cross join. The following two queries w
              2004  'USSR'
              2004  'United Kingdom'
 
+    144 rows selected. (1.283548 sec) Committed.
+
+번역
+
+자연 조인
+---------
+
+The NATURAL [LEFT] JOIN of two tables is defined to be semantically equivalent to an INNER JOIN or a LEFT JOIN with a USING clause that names all columns that exist in both tables.
+
+각 테이블에서 조인할 칼럼 이름이 같은 경우 즉, 해당 칼럼끼리 동등 조건(=)을 부여하고자 하는 경우 내부/외부 조인을 대체하는 자연 조인(natural join)을 사용할 수 있다.
+
+.. code-block:: sql
+
+    CREATE TABLE t1 (a int, b1 int); 
+    CREATE TABLE t2 (a int, b2 int);
+
+    INSERT INTO t1 values(1,1);
+    INSERT INTO t1 values(3,3);
+    INSERT INTO t2 values(1,1);
+    INSERT INTO t2 values(2,2);
+
+다음은 **NATURAL JOIN**\ 을 수행하는 예이다.
+
+.. code-block:: sql
+    
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 NATURAL JOIN t2;
+
+위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 INNER JOIN t2 ON t1.a=t2.a;
+
+::
+
+
+            a           b1            a           b2
+    ================================================
+            1            1            1            1
+
+다음은 **NATURAL LEFT JOIN**\ 을 수행하는 예이다.
+    
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 NATURAL LEFT JOIN t2;
+    
+위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 LEFT JOIN t2 ON t1.a=t2.a;
+
+::
+
+                a           b1            a           b2
+    ====================================================
+                1            1            1            1
+                3            3         NULL         NULL
+
+다음은 **NATURAL RIGHT JOIN**\ 을 수행하는 예이다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 NATURAL RIGHT JOIN t2;
+
+위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 RIGHT JOIN t2 ON t1.a=t2.a;
+    
+::
+
+                a           b1            a           b2
+    ====================================================
+                1            1            1            1
+             NULL         NULL            2            2
+
+STRAIGHT_JOIN
+-------------
+(작성중): CUBRIDSUS-12814
+
+**STRAIGHT_JOIN**\이 SELECT 리스트에서 사용되는 경우. 
+
+**STRAIGHT_JOIN**\ 은 **INNER JOIN**\ 과 같은 동작을 수행한다. 다만, 질의 최적화기가 항상 중첩된 루프 조인(nested loop join)을 선택하여 왼쪽 테이블을 외부 테이블(outer table)로, 그리고 오른쪽 테이블을 내부 테이블(inner table)로 결정한다. **INNER JOIN** 구문에서 **USE_NL** 힌트를 사용하는 것과 마찬가지로 동작하므로 **USE_MERGE**\ 와 같은 힌트는 무시된다.
+
+다음은 **STRAIGHT_JOIN**\ 을 수행하는 예이다.
+
+.. code-block:: sql
+    
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 STRAIGHT_JOIN t2 ON t1.a=t2.a;
+
+위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE USE_NL*/ * 
+    FROM t1 INNER JOIN t2 ON t1.a=t2.a;
+
+::
+
+    (수행 결과)
+
+
+    
 Subquery
 ========
 

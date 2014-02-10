@@ -37,6 +37,13 @@ The following shows how to use the cubrid management utilities. ::
         genlocale [option] <database-name>  --- Compiling the locale information to use
         dumplocale [option] <database-name>   --- Printing human readable text for the compiled binary locale information
 
+(번역)
+
+cubrid Utility Logging
+----------------------
+ 
+CUBRID supports logging feature for the execution result of **cubrid** utilities; for details, see :ref:`cubrid-utility-logging`.
+
 Database Users
 ==============
 
@@ -241,7 +248,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
     
         cubrid createdb -F "/dbtemp/new_db/" testdb en_US
 
-.. option:: -L log_path=PATH
+.. option:: -L, --log_path=PATH
 
     The **-L** option specifies an absolute path to the directory where database log files are created. If the **-L** option is not specified, log files are created in the directory specified by the **-F** option. 
     If neither **-F** nor **-L** option is specified, database log files are created in the current working directory.
@@ -475,13 +482,13 @@ The following shows [options] available with the **cubrid addvoldb** utility.
     
         cubrid addvoldb -S -p index --db-volume-size=256M testdb
 
-.. option::  -S, --SA-mode
+.. option:: -S, --SA-mode
 
     This option accesses the database in standalone mode without running the server process. This option has no parameter. If the **-S** option is not specified, the system assumes to be in client/server mode. ::
 
         cubrid addvoldb -S --db-volume-size=256M testdb
 
-.. option::  -C, --CS-mode
+.. option:: -C, --CS-mode
 
     This option accesses the database in client/server mode by running the server and the client separately. There is no parameter. Even when the **-C** option is not specified, the system assumes to be in client/server mode by default. ::
 
@@ -922,13 +929,13 @@ The following shows [options] available with the **cubrid compactdb** utility.
 
         cubrid compactdb --SA-mode testdb
 
-.. option:: C, --CS-mode
+.. option:: -C, --CS-mode
 
     This option specifies to compact used space in client/server mode while database server is running; no argument is specified. Even though this option is omitted, system recognizes that the job is executed in client/server mode. 
     
 The following options can be used in client/server mode only.
 
-.. option:: - i, --input-class-file=FILE
+.. option:: -i, --input-class-file=FILE
 
     You can specify an input file name that contains the table name with this option. Write one table name in a single line; invalid table name is ignored. Note that you cannot specify the list of the table names after a database name in case of you use this option.
 

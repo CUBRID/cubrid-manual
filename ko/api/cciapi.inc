@@ -1853,6 +1853,7 @@ CCI API 레퍼런스
 .. c:macro:: #define CCI_GET_RESULT_INFO_IS_NON_NULL(T_CCI_COL_INFO* res_info, int index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼이 nullable인지에 대한 값을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
+    **SELECT** 리스트의 칼럼이 테이블의 칼럼이 아닌 표현식인 경우 NON_NULL 여부를 알 수 없으므로 CCI_GET_RESULT_INFO_IS_NON_NULL 매크로는 일관되게 0을 반환한다.
 
     :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
     :param index: (IN) 칼럼 인덱스

@@ -306,7 +306,7 @@ When removing partitioning, CUBRID moves all data from partitions into the parti
 Partition Reorganization
 ------------------------
 
-Partition reorganization is a process through which a partition can be divided into smaller partitions or a group of partitions can be merged into a single partition. For this purpose, CUBRID implements the **REORGANIZE PARTITIONS** clause of the **ALTER** statement::
+Partition reorganization is a process through which a partition can be divided into smaller partitions or a group of partitions can be merged into a single partition. For this purpose, CUBRID implements the **REORGANIZE PARTITION** clause of the **ALTER** statement::
 
     ALTER {TABLE | CLASS} table_name
     REORGANIZE PARTITION <alter_partition_name_comma_list>

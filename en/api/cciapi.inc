@@ -1865,6 +1865,8 @@ CCI API Reference
 
     The **CCI_GET_RESULT_INFO_IS_NON_NULL** macro gets a value indicating whether the *index*-th column of a prepared **SELECT** list is nullable. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
 
+    (번역)**SELECT** 리스트의 칼럼이 테이블의 칼럼이 아닌 표현식인 경우 NON_NULL 여부를 알 수 없으므로 CCI_GET_RESULT_INFO_IS_NON_NULL 매크로는 일관되게 0을 반환한다.
+
     :param res_info: (IN) Column info pointer by :c:func:`cci_get_result_info`
     :param index: (IN) Column index
     :return: 0: nullable, 1: non **NULL**
@@ -2263,11 +2265,11 @@ CCI API Reference
     
     If you configure **login_timeout**, **default_autocommit**, **default_isolation**, or **default_lock_timeout** value, connection is returned with this configuration.
 
-    **login_timeout**, **default_autocommit**, **default_isolation** or **default_lock_timeout** can be changed after calling :c:func:`cci_datasource_borrow` function. See :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`. Changed values by the functions of which the names start with **cci_set_** are only applied to the changed connection objects; after the connection is released, they are restored as the values which :c:func:`cci_property_set` configured. If there is no value specified by :c:func`cci_property_set`, it is restored as the default.
+    **login_timeout**, **default_autocommit**, **default_isolation** or **default_lock_timeout** can be changed after calling :c:func:`cci_datasource_borrow` function. See :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`. Changed values by the functions of which the names start with **cci_set_** are only applied to the changed connection objects; after the connection is released, they are restored as the values which :c:func:`cci_property_set` configured. If there is no value specified by :c:func:`cci_property_set`, it is restored as the default.
     
     .. note:: 
     
-        **login_timeout** is applied when DATASOURCE object is created and when an internal reconnection in :c:func:`cci_prepare` or :c:`cci_execute` occurs. An internal reconnection occurs when getting a connection object from DATASOURCE and when getting a connection object from :c:func:`cci_connect`/:c:func:`cci_connect_with_url` function.
+        **login_timeout** is applied when DATASOURCE object is created and when an internal reconnection in :c:func:`cci_prepare` or :c:func:`cci_execute` occurs. An internal reconnection occurs when getting a connection object from DATASOURCE and when getting a connection object from :c:func:`cci_connect`/:c:func:`cci_connect_with_url` function.
 
         The time creating a DATASOURCE object can take a long time than an internal reconnection time; therefore, in these two cases, you can consider that **login_tiemout** can be applied differently. For example, if you want to set a former **login_tiemout** as 5000(5 sec.) and a latter one as 2000(2 sec.), to set the latter one, use :c:func:`cci_set_login_timeout` function after creating DATASOURCE.
         

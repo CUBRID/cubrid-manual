@@ -2268,7 +2268,7 @@ The following shows how to use the CUBRID Manager (hereafter, CM) Administrator 
 
             cm_admin adduser -c admin testcm testcmpwd
 
-    .. option:: -m, monitor AUTHORITY
+    .. option:: -m, --monitor AUTHORITY
 
         Specifies the authority to monitor status which will be granted to a new CM user. You can use **admin**, **none** (default), and **monitor** as *AUTHORITY*
 

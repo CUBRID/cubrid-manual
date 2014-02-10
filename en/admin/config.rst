@@ -25,8 +25,7 @@ System parameters for the database server, which can be set in the **cubrid.conf
 
 **Location of cubrid.conf File and How It Works**
 
-    *   A database server process refers only to the **$CUBRID/conf/cubrid.conf** file. Database-specific configurations are distinguished by sections in the **cubrid.conf** file.
-    *   A client process (i) refers to the **$CUBRID/conf/cubrid.conf** file and then (ii) additionally refers to the **cubrid.conf** file in the current directory (**$PWD**). The configuration of the file in the current directory (**$PWD/cubrid.conf**) overwrites that of the **$CUBRID/conf/cubrid.conf** file. That is, if the same parameter configuration exists in **$PWD/cubrid.conf** and in **$CUBRID/conf/cubrid.conf**, the configuration in **$PWD/cubrid.conf** has the priority.
+    *   The **cubrid.conf** file ls localted on the **$CUBRID/conf directory. For setting by database, it divides into a section in the **cubrid.conf** file.
 
 Changing Database Server Configuration
 --------------------------------------
@@ -1619,8 +1618,6 @@ cubrid_broker.conf Configuration File and Default Parameters
     +---------------------------------+-------------------------+---------------------------------+--------+------------------------------+-----------+
     | :ref:`parameter-by-broker`      | Access                  | ACCESS_LIST                     | string |                              |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
-    |                                 |                         | ACCESS_LOG                      | string | ON                           | available |
-    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | ACCESS_MODE                     | string | RW                           | available |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | BROKER_PORT                     | int    | 30000(max : 65535)           |           |
@@ -1671,9 +1668,13 @@ cubrid_broker.conf Configuration File and Default Parameters
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | STATEMENT_POOLING               | string | ON                           | available |
     |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
-    |                                 | Logging                 | ERROR_LOG_DIR                   | string | log/broker/error_log         |           |
+    |                                 | Logging                 | ACCESS_LOG                      | string | OFF                          | available |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
-    |                                 |                         | LOG_BACKUP                      | string | OFF                          | available |
+    |                                 |                         | ACCESS_LOG_DIR                  | string | log/broker                   |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | ACCESS_LOG_MAX_SIZE             | KB     | 10M(max: 2G)                 | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | ERROR_LOG_DIR                   | string | log/broker/error_log         |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | LOG_DIR                         | string | log/broker/sql_log           |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -1815,10 +1816,6 @@ Access
 **ACCESS_LIST**
 
     **ACCESS_LIST** is a parameter to configure the name of a file where the list of IP addresses of an application which allows access to the CUBRID broker is stored. To allow access by IP addresses access 210.192.33.* and 210.194.34.*, store them to a file (ip_lists.txt) and then assign the file name with the value of this parameter.
-
-**ACCESS_LOG**
-
-    **ACCESS_LOG** is a parameter to configure whether to store the access log of the broker. The default value is **ON**. The name of the access log file for the broker is *broker_name_id.access* and the file is stored under **$CUBRID/log/broker** directory.
 
 **ACCESS_MODE**
 
@@ -1962,13 +1959,13 @@ Transaction & Query
 
     **CCI_DEFAULT_AUTOCOMMIT** is a parameter to configure whether to make application implemented in CCI interface or CCI-based interface such as PHP, ODBC, OLE DB, Perl, Python, and Ruby commit automatically. The default value is **ON**. This parameter does not affect applications implemented in JDBC.
     
-    .. warning:: In case of using ODBC, malfunction can occur if this parameter is **ON**; you must set it to **OFF**, in this case.
-    
     If the **CCI_DEFAULT_AUTOCOMMIT** parameter value is **OFF**, the broker application server (CAS) process is occupied until the transaction is terminated. Therefore, it is recommended to execute commit after completing fetch when executing the **SELECT** statement.
 
     .. note::
 
         The **CCI_DEFAULT_AUTOCOMMIT** parameter has been supported from 2008 R4.0, and the default value is **OFF** for the version. Therefore, if you use CUBRID 2008 R4.1 or later versions and want to keep the configuration **OFF**, you should manually change it to **OFF** to avoid auto-commit of unexpected transaction.
+        
+    .. warning:: In case of using ODBC in a 9.3 version, the setting of **CCI_DEFAULT_AUTOCOMMIT** is ignored and worked as **OFF**; therefore, you should set the autocommit on or off in the program directly.
 
 **LONG_QUERY_TIME**
 
@@ -2019,13 +2016,21 @@ Transaction & Query
 Logging
 ^^^^^^^
 
+**ACCESS_LOG**
+
+    **ACCESS_LOG** is a parameter to configure whether to store the access log of the broker. The default value is **OFF**. The name of the access log file for the broker is *broker_name*\ **.access**  and the file is stored under **$CUBRID/log/broker** directory.
+
+**ACCESS_LOG_DIR** 
+     
+    **ACCESS_LOG_DIR** specifies the directory for broker access logging files(ACCESS_LOB) to be created. The default is **log/broker**. 
+
+**ACCESS_LOG_MAX_SIZE**
+
+    **ACCESS_LOG_MAX_SIZE** specifies the maximum size of broker access logging files(ACCESS_LOG); if a broker access logging file is bigger than a specified size, this file is backed up into  the name of *broker_name*\ **.access.**\ *YYYYMMDDHHMISS*, then logging messages are written to the new file(`broker_name`.\ **access**). The default is 10M and the maximum is 2G. It can be dynamically changed during operating a broker.
+
 **ERROR_LOG_DIR**
 
     **ERROR_LOG_DIR** is a parameter to configure default directory in which error logs about broker is stored. The default value is **log/broker/error_log**. The log file name for the broker error is *broker_ name_id.err*.
-
-**LOG_BACKUP**
-
-    **LOG_BACKUP** is a parameter to configure whether to back up access and error log files of the broker when CUBRID stops. The default value is set to **OFF**. An access log file (*broker_name*\ **.access**) in the **$CUBRID/log/broker** directory is deleted when CUBRID stops. If the value is set to **ON**, an access log file is stored (backed up) as *broker_name.access.YYYYMMDD.HHMI* when CUBRID stops.
 
 **LOG_DIR**
 

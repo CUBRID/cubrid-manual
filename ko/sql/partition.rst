@@ -306,7 +306,7 @@ CUBRID 9.0 이전 버전에서 분할 프루닝은 질의 컴파일 단계에서
 분할 재구성
 -----------
 
-분할 재구성은 하나의 분할을 더 작은 분할들로 나누거나 한 그룹의 분할들을 하나의 분할로 병합하는 작업이다. 이를 수행하려면 **ALTER** 문의 **REORGANIZE PARTITIONS** 절을 사용한다. ::
+분할 재구성은 하나의 분할을 더 작은 분할들로 나누거나 한 그룹의 분할들을 하나의 분할로 병합하는 작업이다. 이를 수행하려면 **ALTER** 문의 **REORGANIZE PARTITION** 절을 사용한다. ::
 
     ALTER {TABLE | CLASS} table_name
     REORGANIZE PARTITION <alter_partition_name_comma_list>

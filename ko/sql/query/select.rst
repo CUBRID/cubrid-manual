@@ -39,14 +39,16 @@ SELECT
     <metaclass_specification> ::= CLASS <class_name>
      
     <join_table_specification> ::=
-        [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN <table_specification> ON <search_condition>
+        { [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN | 
+        STRAIGHT_JOIN } <table_specification> ON <search_condition>
      
-    <join_table_specification2> ::= CROSS JOIN <table_specification>
-     
+    <join_table_specification2> ::= { CROSS JOIN | 
+        NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
+    
     <lock_hint> ::= READ UNCOMMITTED
      
     <orderby_for_condition> ::=
-    ORDERBY_NUM() { BETWEEN int AND int } |
+        ORDERBY_NUM() { BETWEEN int AND int } |
         { { = | =< | < | > | >= } int } |
         IN ( int, ...)
 
@@ -593,21 +595,27 @@ LIMIT 절
 
 조인 질의에서 동등 연산자( **=** )를 이용한 조인 조건을 포함하는 조인 질의를 동등 조인(equi-join)이라 하고, 조인 조건이 없는 조인 질의를 카티션 곱(cartesian products)이라 한다. 또한, 하나의 테이블을 조인하는 경우를 자체 조인(self join)이라 하는데, 자체 조인에서는 **FROM** 절에 같은 테이블이 두 번 사용되므로 테이블 별칭(alias)을 사용하여 칼럼을 구분한다.
 
-한편, 조인된 테이블에 대해 조인 조건을 만족하는 행만 결과를 출력하는 경우를 내부 조인(inner join) 또는 간단 조인(simple join)이라고 하며, 조인된 테이블에 대해 조인 조건을 만족하는 행은 물론, 조인 조건을 만족하지 못하는 행도 포함하여 출력하는 경우를 외부 조인(outer join)이라 한다. 외부 조인은 왼쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 오른쪽 테이블의 칼럼들은 NULL로 출력됨) 왼쪽 외부 조인과(left outer join)과 오른쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 왼쪽 테이블의 칼럼들은 NULL로 출력됨) 오른쪽 외부 조인(right outer join)이 있으며, 양쪽의 행이 모두 출력되는 완전 외부 조인(full outer join)이 있다. 이때, 외부 조인 질의 결과에서 한쪽 테이블에 대해 대응되는 칼럼 값이 없는 경우, 이는 모두 **NULL** 로 반환된다. ::
+조인된 테이블에 대해 조인 조건을 만족하는 행만 결과를 출력하는 경우를 내부 조인(inner join) 또는 간단 조인(simple join)이라고 하는 반면, 조인된 테이블에 대해 조인 조건을 만족하는 행은 물론, 조인 조건을 만족하지 못하는 행도 포함하여 출력하는 경우를 외부 조인(outer join)이라 한다. 
 
-    FROM table_specification [{, table_specification | { join_table_specification | join_table_specification2 }...]
+외부 조인은 왼쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 오른쪽 테이블의 칼럼들은 NULL로 출력됨) 왼쪽 외부 조인과(left outer join)과 오른쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 왼쪽 테이블의 칼럼들은 NULL로 출력됨) 오른쪽 외부 조인(right outer join)이 있으며, 양쪽의 행이 모두 출력되는 완전 외부 조인(full outer join)이 있다. 외부 조인 질의 결과에서 한쪽 테이블에 대해 대응되는 칼럼 값이 없는 경우, 이는 모두 **NULL** 을 반환된다. 
+
+::
+
+    FROM <table_specification> [{, <table_specification> 
+        | { <join_table_specification> | <join_table_specification2> } ...]
      
-    table_specification :
-    table_specification [ correlation ]
-    CLASS table_name [ correlation ]
-    subquery correlation
-    TABLE (expression) correlation
+    <table_specification> ::=
+        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
+        <metaclass_specification> [ <correlation> ] |
+        <subquery> <correlation> |
+        TABLE ( <expression> ) <correlation>
+        
+    <join_table_specification> :
+       { [ INNER | {LEFT | RIGHT} [ OUTER ] ] JOIN |
+       STRAIGHT_JOIN } <table_specification> ON <search_condition>
      
-    join_table_specification :
-    [ INNER | {LEFT | RIGHT} [ OUTER ] ] JOIN table_specification ON search_condition
-     
-    join_table_specification2 :
-    CROSS JOIN table_specification
+    <join_table_specification2> ::= { CROSS JOIN | 
+        NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
 
 *   *join_table_specification*
 
@@ -615,17 +623,18 @@ LIMIT 절
 
     *   { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** : **LEFT** 는 왼쪽 외부 조인을 수행하는 질의를 만드는데 사용되고, **RIGHT** 는 오른쪽 외부 조인을 수행하는 질의를 만드는데 사용된다.
 
-    *   **CROSS JOIN** : 교차 조인에 사용되며, 조인 조건을 사용하지 않는다.
+    *   **STRAIGHT_JOIN** : (작성중)
+     
+*   *join_table_specification2*
 
+    *   **CROSS JOIN** : 교차 조인에 사용되며, 조인 조건을 사용하지 않는다.
+    *   **NATURAL [ **LEFT** | **RIGHT** ] JOIN** : 자연 조인에 사용되며, 조인 조건을 사용하지 않는다. 같은 이름의 칼럼끼리 동등 조건을 가지는 것과 같이 동작한다.
+    
+내부 조인
+---------
+    
 내부 조인은 조인을 위한 조건이 반드시 필요하다. **INNER JOIN** 키워드는 생략할 수 있으며, 생략하면 테이블 사이를 쉼표(,)로 구분하고, **ON** 조인 조건을 **WHERE** 조건으로 대체할 수 있다.
 
-CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 지원하며, 완전 외부 조인(full outer join)을 지원하지 않는다. 또한, 외부 조인에서 조인 조건에 부질의와 하위 칼럼을 포함하는 경로 표현식을 사용할 수 없다.
-
-외부 조인의 경우 조인 조건은 내부 조인의 경우와는 다른 방법으로 지정된다. 내부 조인의 조인 조건은 **WHERE** 절에서도 표현될 수 있지만, 외부 조인의 경우에는 조인 조건이 **FROM** 절 내의 **ON** 키워드 뒤에 나타난다. 다른 검색 조건은 **WHERE** 절이나 **ON** 절에서 사용할 수 있지만 검색 조건이 **WHERE** 절에 있을 때와 **ON** 절에 있을 때 질의 결과가 달라질 수 있다.
-
-**FROM** 절에 명시된 순서대로 테이블 실행 순서가 고정되므로, 외부 조인을 사용하는 경우 테이블 순서에 주의하여 질의문을 작성한다. 외부 조인 연산자 '**(+)**' 를 **WHERE** 절에 명시하여 Oracle 스타일의 조인 질의문도 작성 가능하나, 실행 결과나 실행 계획이 원하지 않는 방향으로 유도될 수 있으므로 { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** 을 이용한 표준 구문을 사용할 것을 권장한다.
-
-교차 조인은 아무런 조건 없이 두 개의 테이블을 결합한 것, 즉 카티션 곱(cartesian product)이다. 교차 조인에서 **CROSS JOIN** 키워드는 생략할 수 있으며, 생략하려면 테이블 사이를 쉼표(,)로 구분한다.
 
 다음은 내부 조인을 이용하여 1950년 이후에 열린 올림픽 중에서 신기록이 세워진 올림픽의 개최연도와 개최국가를 조회하는 예제이다. 다음 질의는 *history* 테이블의 *host_year* 가 1950보다 큰 범위에서 값이 존재하는 레코드를 가져온다. 다음 두 개의 질의는 같은 결과를 출력한다.
 
@@ -651,105 +660,141 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
              2000  'Australia'
              2004  'Greece'
 
-다음은 외부 조인을 이용하여 1950년 이후에 열린 올림픽에서 신기록이 세워진 올림픽의 개최국가와 개최연도를 조회하되, 신기록이 세워지지 않은 올림픽에 대한 정보도 포함하는 예제이다. 이 예제는 오른쪽 외부 조인이므로, *olympic* 테이블의 *host_nation* 의 모든 레코드를 포함하고, 값이 존재하지 않는 *history* 테이블의 *host_year* 에 대해서는 칼럼 값으로 **NULL** 을 반환한다.
+외부 조인
+---------
+
+CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 지원하며, 완전 외부 조인(full outer join)을 지원하지 않는다. 또한, 외부 조인에서 조인 조건에 부질의와 하위 칼럼을 포함하는 경로 표현식을 사용할 수 없다.
+
+외부 조인의 경우 조인 조건은 내부 조인의 경우와는 다른 방법으로 지정된다. 내부 조인의 조인 조건은 **WHERE** 절에서도 표현될 수 있지만, 외부 조인의 경우에는 조인 조건이 **FROM** 절 내의 **ON** 키워드 뒤에 나타난다. 다른 검색 조건은 **WHERE** 절이나 **ON** 절에서 사용할 수 있지만 검색 조건이 **WHERE** 절에 있을 때와 **ON** 절에 있을 때 질의 결과가 달라질 수 있다.
+
+**FROM** 절에 명시된 순서대로 테이블 실행 순서가 고정되므로, 외부 조인을 사용하는 경우 테이블 순서에 주의하여 질의문을 작성한다. 외부 조인 연산자 '**(+)**' 를 **WHERE** 절에 명시하여 Oracle 스타일의 조인 질의문도 작성 가능하나, 실행 결과나 실행 계획이 원하지 않는 방향으로 유도될 수 있으므로 { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** 을 이용한 표준 구문을 사용할 것을 권장한다.
+
+다음은 오른쪽 외부 조인을 이용하여 1950년 이후에 열린 올림픽에서 신기록이 세워진 올림픽의 개최국가와 개최연도를 조회하되, 신기록이 세워지지 않은 올림픽에 대한 정보도 포함하는 예제이다. 이 예제는 오른쪽 외부 조인이므로, *olympic* 테이블의 *host_nation* 의 모든 레코드를 포함하고, 값이 존재하지 않는 *history* 테이블의 *host_year* 에 대해서는 칼럼 값으로 **NULL** 을 반환한다.
 
 .. code-block:: sql
 
-    SELECT DISTINCT h.host_year, o.host_nation
+    SELECT DISTINCT h.host_year, o.host_year, o.host_nation
     FROM history h RIGHT OUTER JOIN olympic o ON h.host_year = o.host_year 
     WHERE o.host_year > 1950;
-     
+    
 ::
 
-        host_year  host_nation
-    ===================================
-             NULL  'Australia'
-             NULL  'Canada'
-             NULL  'Finland'
-             NULL  'Germany'
-             NULL  'Italy'
-             NULL  'Japan'
-             1968  'Mexico'
-             1980  'U.S.S.R.'
-             1984  'United States of America'
-             1988  'Korea'
-             1992  'Spain'
-             1996  'United States of America'
-             2000  'Australia'
-             2004  'Greece'
+        host_year    host_year  host_nation
+    ================================================
+             NULL         1952  'Finland'
+             NULL         1956  'Australia'
+             NULL         1960  'Italy'
+             NULL         1964  'Japan'
+             NULL         1972  'Germany'
+             NULL         1976  'Canada'
+             1968         1968  'Mexico'
+             1980         1980  'USSR'
+             1984         1984  'USA'
+             1988         1988  'Korea'
+             1992         1992  'Spain'
+             1996         1996  'USA'
+             2000         2000  'Australia'
+             2004         2004  'Greece'
 
-다음은 왼쪽 외부 조인을 이용하여 예제 2와 동일한 결과를 출력하는 예제이다. **FROM** 절에서 두 테이블의 순서를 바꾸어 명시한 후, 왼쪽 외부 조인을 수행한다.
+다음은 왼쪽 외부 조인을 이용하여 위와 동일한 결과를 출력하는 예제이다. **FROM** 절에서 두 테이블의 순서를 바꾸어 명시한 후, 왼쪽 외부 조인을 수행한다.
 
 .. code-block:: sql
 
-    SELECT DISTINCT h.host_year, o.host_nation
+    SELECT DISTINCT h.host_year, o.host_year, o.host_nation
     FROM olympic o LEFT OUTER JOIN history h ON h.host_year = o.host_year 
     WHERE o.host_year > 1950;
      
 ::
 
-        host_year  host_nation
-    ===================================
-             NULL  'Australia'
-             NULL  'Canada'
-             NULL  'Finland'
-             NULL  'Germany'
-             NULL  'Italy'
-             NULL  'Japan'
-             1968  'Mexico'
-             1980  'U.S.S.R.'
-             1984  'United States of America'
-             1988  'Korea'
-             1992  'Spain'
-             1996  'United States of America'
-             2000  'Australia'
-             2004  'Greece'
+        host_year    host_year  host_nation
+    ================================================
+             NULL         1952  'Finland'
+             NULL         1956  'Australia'
+             NULL         1960  'Italy'
+             NULL         1964  'Japan'
+             NULL         1972  'Germany'
+             NULL         1976  'Canada'
+             1968         1968  'Mexico'
+             1980         1980  'USSR'
+             1984         1984  'USA'
+             1988         1988  'Korea'
+             1992         1992  'Spain'
+             1996         1996  'USA'
+             2000         2000  'Australia'
+             2004         2004  'Greece'
 
-이 예에서 *h.host_year* = *o.host_year* 는 외부 조인 조건이고 *o.host_year* > 1950은 검색 조건이다. 만약 검색 조건이 **WHERE** 절이 아닌 **ON** 절에서 조인 조건으로 사용될 경우 질의의 의미와 결과는 달라진다. 다음 질의는 *o.host_year* 가 1950보다 크지 않은 값도 질의 결과에 포함된다. 
-
-.. code-block:: sql
-
-    SELECT DISTINCT h.host_year, o.host_nation
-    FROM olympic o LEFT OUTER JOIN history h ON h.host_year = o.host_year AND o.host_year > 1950;
-     
-::
-
-        host_year  host_nation
-    ===================================
-             NULL  'Australia'
-             NULL  'Belgium'
-             NULL  'Canada'
-    ...
-             1996  'United States of America'
-             2000  'Australia'
-             2004  'Greece'
-
-다음은 **WHERE** 절에서 **(+)** 를 사용해서 외부 조인 질의를 작성한 예이며, 예제 2, 예제 3과 같은 결과를 출력한다. 단, **(+)** 연산자를 이용한 Oracle 스타일의 외부 조인 질의문은 ISO/ANSI 표준이 아니며 모호한 상황을 만들어 낼 수 있으므로 가능하면 표준 구문인 **LEFT OUTER JOIN** (또는 **RIGHT OUTER JOIN** )을 사용할 것을 권장한다.
+다음은 **WHERE** 절에서 **(+)** 를 사용해서 외부 조인 질의를 작성한 예이며, 위와 같은 결과를 출력한다. 단, **(+)** 연산자를 이용한 Oracle 스타일의 외부 조인 질의문은 ISO/ANSI 표준이 아니며 모호한 상황을 만들어 낼 수 있으므로 가능하면 표준 구문인 **LEFT OUTER JOIN** (또는 **RIGHT OUTER JOIN** )을 사용할 것을 권장한다.
 
 .. code-block:: sql
 
-    SELECT DISTINCT h.host_year, o.host_nation 
+    SELECT DISTINCT h.host_year, o.host_year, o.host_nation 
     FROM history h, olympic o
     WHERE o.host_year = h.host_year(+) AND o.host_year > 1950;
      
 ::
 
-        host_year  host_nation
-    ===================================
-             NULL  'Australia'
-             NULL  'Canada'
-             NULL  'Finland'
-             NULL  'Germany'
-             NULL  'Italy'
-             NULL  'Japan'
-             1968  'Mexico'
-             1980  'U.S.S.R.'
-             1984  'United States of America'
-             1988  'Korea'
-             1992  'Spain'
-             1996  'United States of America'
-             2000  'Australia'
-             2004  'Greece'
+        host_year    host_year  host_nation
+    ================================================
+             NULL         1952  'Finland'
+             NULL         1956  'Australia'
+             NULL         1960  'Italy'
+             NULL         1964  'Japan'
+             NULL         1972  'Germany'
+             NULL         1976  'Canada'
+             1968         1968  'Mexico'
+             1980         1980  'USSR'
+             1984         1984  'USA'
+             1988         1988  'Korea'
+             1992         1992  'Spain'
+             1996         1996  'USA'
+             2000         2000  'Australia'
+             2004         2004  'Greece'
+
+이상의 예에서 *h.host_year* = *o.host_year* 는 외부 조인 조건이고 *o.host_year* > 1950은 검색 조건이다. 만약 검색 조건이 **WHERE** 절이 아닌 **ON** 절에서 조인 조건으로 사용될 경우 질의의 의미와 결과는 달라진다. 다음 질의는 *o.host_year* 가 1950보다 크지 않은 값도 질의 결과에 포함된다. 
+
+.. code-block:: sql
+
+    SELECT DISTINCT h.host_year, o.host_year, o.host_nation
+    FROM olympic o LEFT OUTER JOIN history h ON h.host_year = o.host_year AND o.host_year > 1950;
+     
+::
+
+        host_year    host_year  host_nation
+    ================================================
+             NULL         1896  'Greece'
+             NULL         1900  'France'
+             NULL         1904  'USA'
+             NULL         1908  'United Kingdom'
+             NULL         1912  'Sweden'
+             NULL         1920  'Belgium'
+             NULL         1924  'France'
+             NULL         1928  'Netherlands'
+             NULL         1932  'USA'
+             NULL         1936  'Germany'
+             NULL         1948  'England'
+             NULL         1952  'Finland'
+             NULL         1956  'Australia'
+             NULL         1960  'Italy'
+             NULL         1964  'Japan'
+             NULL         1972  'Germany'
+             NULL         1976  'Canada'
+             1968         1968  'Mexico'
+             1980         1980  'USSR'
+             1984         1984  'USA'
+             1988         1988  'Korea'
+             1992         1992  'Spain'
+             1996         1996  'USA'
+             2000         2000  'Australia'
+             2004         2004  'Greece'
+
+위의 예에서 **LEFT OUTER JOIN**\ 은 왼쪽 테이블의 행이 조건에 부합하지 않더라도 모든 행을 결과 행에 결합해야 하므로, 왼쪽 테이블의 칼럼 조건인 "AND o.host_year > 1950"는 이므로 무시된다. 그러나 "WHERE o.host_year > 1950"는 조인이 완료된 이후에 적용된다. **OUTER JOIN**\ 에서는 **ON** 절 뒤의 조건과 **WHERE** 절 뒤의 조건이 다르게 적용될 수 있음에 주의해야 한다.
+
+교차 조인
+---------
+
+교차 조인은 아무런 조건 없이 두 개의 테이블을 결합한 것, 즉 카티션 곱(cartesian product)이다. 교차 조인에서 **CROSS JOIN** 키워드는 생략할 수 있으며, 생략하려면 테이블 사이를 쉼표(,)로 구분한다.
+
+다음은 내부 조인을 이용하여 1950년 이후에 열린 올림픽 중에서 신기록이 세워진 올림픽의 개최연도와 개최국가를 조회하는 예제이다. 다음 질의는 *history* 테이블의 *host_year* 가 1950보다 큰 범위에서 값이 존재하는 레코드를 가져온다. 
 
 다음은 교차 조인을 작성한 예이다. 다음 두 개의 질의는 같은 결과를 출력한다.
 
@@ -778,6 +823,110 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
              2004  'USA'
              2004  'USSR'
              2004  'United Kingdom'
+
+자연 조인
+---------
+
+각 테이블에서 조인할 칼럼 이름이 같은 경우 즉, 해당 칼럼끼리 동등 조건(=)을 부여하고자 하는 경우 내부/외부 조인을 대체하는 자연 조인(natural join)을 사용할 수 있다.
+
+.. code-block:: sql
+
+    CREATE TABLE t1 (a int, b1 int); 
+    CREATE TABLE t2 (a int, b2 int);
+
+    INSERT INTO t1 values(1,1);
+    INSERT INTO t1 values(3,3);
+    INSERT INTO t2 values(1,1);
+    INSERT INTO t2 values(2,2);
+
+다음은 **NATURAL JOIN**\ 을 수행하는 예이다.
+
+.. code-block:: sql
+    
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 NATURAL JOIN t2;
+
+위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 INNER JOIN t2 ON t1.a=t2.a;
+
+::
+
+
+            a           b1            a           b2
+    ================================================
+            1            1            1            1
+
+다음은 **NATURAL LEFT JOIN**\ 을 수행하는 예이다.
+    
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 NATURAL LEFT JOIN t2;
+    
+위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 LEFT JOIN t2 ON t1.a=t2.a;
+
+::
+
+                a           b1            a           b2
+    ====================================================
+                1            1            1            1
+                3            3         NULL         NULL
+
+다음은 **NATURAL RIGHT JOIN**\ 을 수행하는 예이다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 NATURAL RIGHT JOIN t2;
+
+위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 RIGHT JOIN t2 ON t1.a=t2.a;
+    
+::
+
+                a           b1            a           b2
+    ====================================================
+                1            1            1            1
+             NULL         NULL            2            2
+
+STRAIGHT_JOIN
+-------------
+(작성중): CUBRIDSUS-12814
+
+**STRAIGHT_JOIN**\이 SELECT 리스트에서 사용되는 경우. 
+
+**STRAIGHT_JOIN**\ 은 **INNER JOIN**\ 과 같은 동작을 수행한다. 다만, 질의 최적화기가 항상 중첩된 루프 조인(nested loop join)을 선택하여 왼쪽 테이블을 외부 테이블(outer table)로, 그리고 오른쪽 테이블을 내부 테이블(inner table)로 결정한다. **INNER JOIN** 구문에서 **USE_NL** 힌트를 사용하는 것과 마찬가지로 동작하므로 **USE_MERGE**\ 와 같은 힌트는 무시된다.
+
+다음은 **STRAIGHT_JOIN**\ 을 수행하는 예이다.
+
+.. code-block:: sql
+    
+    SELECT /*+ RECOMPILE*/ * 
+    FROM t1 STRAIGHT_JOIN t2 ON t1.a=t2.a;
+
+위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+
+.. code-block:: sql
+
+    SELECT /*+ RECOMPILE USE_NL*/ * 
+    FROM t1 INNER JOIN t2 ON t1.a=t2.a;
+
+::
+
+    (수행 결과)
 
 부질의
 ======

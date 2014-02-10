@@ -1046,7 +1046,7 @@ To connect to a database, it is possible to use a DataSource object, too. If you
 
 For details about CUBRIDDataSource, see :ref:`jdbc-conn-datasource`.
 
-**Connecting to a DataSource Object*
+**Connecting to a DataSource Object**
 
 The following is an example to execute SELECT statements in multiple threads; they connect to DB with the setURL of CUBRIDDataSource, which is a DataSource implemented in CUBRID.
 

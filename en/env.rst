@@ -321,10 +321,10 @@ The following table summarizes the ports required for each OS, based on the list
 | cub_server    | CAS           | cubrid_port_id | Open                     | Keep connected         |
 +---------------+---------------+----------------+--------------------------+------------------------+
 | Client        | cub_server    | ECHO(7)        | Open                     | Periodical connection  |
-| machine(*)  |               |                |                          |                        |
+| machine(*)    |               |                |                          |                        |
 +---------------+---------------+----------------+--------------------------+------------------------+
 | Server        | CAS, CSQL,    | ECHO(7)        | Open                     | Periodical connection  |
-| machine(**) | copylogdb,    |                |                          |                        |
+| machine(**)   | copylogdb,    |                |                          |                        |
 |               | applylogdb    |                |                          |                        |
 +---------------+---------------+----------------+--------------------------+------------------------+
     

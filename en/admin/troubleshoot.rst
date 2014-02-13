@@ -21,7 +21,7 @@ Function getting CAS information
  
 :func:`cci_get_cas_info` function or :ref:`cubrid.jdbc.driver.CUBRIDConnection.toString() method in JDBC <jdbc-con-tostring>`) prints out the information including the broker host and CAS ID in which the query is executed when the query is run; with this information, you can find an SQL log file of that CAS easily.
 
-:: 
+::
 
     <host>:<port>,<cas id>,<cas process id> 
     e.g. 127.0.0.1:33000,1,12916 
@@ -232,3 +232,60 @@ The following is the log file of the cub_master that is changed as slave node af
     ================================================================================ 
   
 Above example is an information which is printed out to the cub_master log; it is the process that the 'testhost02' host changes the role from slave to master because of the fail-over.
+
+Failure on HA Start
+===================
+
+The following is examples that replicated DB volumes' restoration is impossible without user intervention.
+
+*   When logs to copy in copylogdb process are deleted from a source node.
+
+*   When archive logs to apply from active server are already deleted.
+
+*   When a restoration of server is failed.
+
+When replicated DB volumes' restoration is impossible like above cases, "cubrid heartbeat start" command is failed; for each case, you should fix it properly.
+
+
+Typical Unrestorable Failure
+----------------------------
+
+If server process is the cause of the cases that automatic restoration of DB volumes without user intervention is impossible, that cases will be very various, so descriptions for those are omitted.
+The following describes the error messages when copylogdb or applylogdb process is the cause.
+
+*   When copylogdb process is the cause
+
++===============================================================+==================================================================================================+
+| Cause	                                                        | Error message                                                                                    |
++===============================================================+==================================================================================================+
+| A log not copied yet is already deleted from the target node. | log writer: failed to get log page(s) starting from page id 80.                                  |
++---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+| Detected as the other DB's log.                               | Log \"/home1/cubrid/DB/tdb01_cdbs037.cub/tdb01_lgat\" does not belong to the given database.     |
++---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+
+*   When applylogdb process is the cause
+
++===============================================================+==================================================================================================+
+| Cause	                                                        | Error message                                                                                    |
++===============================================================+==================================================================================================+
+| Archive logs including logs to apply in replication           | Internal error: unable to find log page 81 in log archives.                                      |
+| are already deleted.                                          |                                                                                                  |
+|                                                               | Internal error: logical log page 81 may be corrupted.                                            |
++---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+| Different between db_ha_apply_info catalog time and           | HA generic: Failed to initialize db_ha_apply_info.                                               |
+| DB creation time in the current replication logs.             |                                                                                                  |
+| That is, it's not the previous log to be being applied.       |                                                                                                  |
++---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+| Diffent database locale.                                      | Locale initialization: Active log file(/home1/cubrid/DB/tdb01_cdbs037.cub/tdb01_lgat) charset    |
+|                                                               | is not valid (iso88591), expecting utf8.                                                         |
++---------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+
+How to fix when a Failure on HA start
+-------------------------------------
+
+================================================================= ==================================================================================================
+Status                                                            How to fix                                                         
+================================================================= ==================================================================================================
+When the source node, the cause of failure, is in master status.  Rebuild replication.
+When the source node, the cause of failure, is in slave status.	  Initialize replicated logs and db_ha_apply_info catalog then restart.
+================================================================= ==================================================================================================

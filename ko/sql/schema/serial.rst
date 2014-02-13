@@ -154,7 +154,10 @@ ALTER SERIAL
 DROP SERIAL
 ===========
 
-**DROP SERIAL** 문으로 시리얼 객체를 데이터베이스에서 삭제할 수 있다. ::
+**DROP SERIAL** 문으로 시리얼 객체를 데이터베이스에서 삭제할 수 있다. 
+**IF EXISTS** 절을 함께 지정하는 경우, 대상 시리얼이 없어도 에러가 발생하지 않는다.
+
+::
 
     DROP SERIAL [ IF EXISTS ] serial_identifier ; 
 

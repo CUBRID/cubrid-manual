@@ -154,9 +154,12 @@ With the **ALTER SERIAL** statement, you can update the increment of the serial
 DROP SERIAL
 ===========
 
-With the **DROP SERIAL** statement, you can drop a serial object from the database. ::
+With the **DROP SERIAL** statement, you can drop a serial object from the database. 
+If you also specify **IF EXISTS** clause, no error will be happened even if a target serial does not exist.
 
-    DROP SERIAL serial_identifier
+::
+
+    DROP SERIAL [ IF EXISTS ] serial_identifier ;
 
 *   *serial_identifier*\ : Specifies the name of the serial to be dropped.
 
@@ -165,6 +168,7 @@ The following example shows how to drop the *order_no* serial.
 .. code-block:: sql
 
     DROP SERIAL order_no;
+    DROP SERIAL IF EXISTS order_no;
 
 Accessing Serial
 ================

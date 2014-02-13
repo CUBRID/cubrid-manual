@@ -177,19 +177,22 @@ SHOW INDEX
 
 The **SHOW INDEX** statement displays the index information. This query has the following columns:
 
-* Table: Table Name
-* Non_unique
+*   Table: Table Name
+*   Non_unique
+
     *   0: Duplicate data are not allowed
     *   1: Duplicate data are allowed
-* Key_name: Index name
-* Seq_in_index: Serial number of the column in the index. Starts from 1.
-* Column_name: Column name
-* Collation: Method of sorting columns in the index. 'A' means ascending and **NULL** means not sorted.
-* Cardinality: The number of values measuring the unique values in the index. Higher cardinality increases the opportunity of using an index. This value is updated every time **SHOW INDEX** is executed.
-* Sub_part: The number of bytes of the indexed characters if the columns are indexed partially. **NULL** if all columns are indexed.
-* Packed: Shows how keys are packed. If they are not packed, it will be **NULL**.
-* Null: YES if a column can include **NULL**, NO if not.
-* Index_type: Index to be used (currently, only the BTREE is supported.)
+    
+*   Key_name: Index name
+*   Seq_in_index: Serial number of the column in the index. Starts from 1.
+*   Column_name: Column name
+*   Collation: Method of sorting columns in the index. 'A' means ascending and **NULL** means not sorted.
+*   Cardinality: The number of values measuring the unique values in the index. Higher cardinality increases the opportunity of using an index. This value is updated every time **SHOW INDEX** is executed.
+*   Sub_part: The number of bytes of the indexed characters if the columns are indexed partially. **NULL** if all columns are indexed.
+*   Packed: Shows how keys are packed. If they are not packed, it will be **NULL**.
+*   Null: YES if a column can include **NULL**, NO if not.
+*   Index_type: Index to be used (currently, only the BTREE is supported.)
+*   Func: A function which is used in a function-based index
 
 ::
 
@@ -203,9 +206,9 @@ The following is the result of a query in the *demodb* database.
     
 ::
 
-       Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type
-    ==========================================================================================================================================
-     'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'
+       Table     Non_unique   Key_name       Seq_in_index  Column_name    Collation     Cardinality   Sub_part  Packed   Null   Index_type  Func
+    =============================================================================================================================================
+     'athlete'     0      'pk_athlete_code'     1          'code'           'A'           6677         NULL     NULL    'NO'      'BTREE'   NULL
      
 .. code-block:: sql
 
@@ -220,16 +223,16 @@ The following is the result of a query in the *demodb* database.
     
 ::
 
-      Table  Non_unique  Key_name          Seq_in_index  Column_name   Collation   Cardinality     Sub_part    Packed   Null    Index_type
-    ==========================================================================================================================================
-      't1'           0  'i_t1_i2_s2'              1      'i2'          'A'            0               NULL        NULL     'NO'    'BTREE'
-      't1'           0  'i_t1_i2_s2'              2      's2'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           0  'u_t1_i3'                 1      'i3'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           0  'u_t1_s3'                 1      's3'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           1  'i_t1_i1'                 1      'i1'          NULL           0               NULL        NULL     'YES'   'BTREE'
-      't1'           1  'i_t1_i1_s1'              1      'i1'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           1  'i_t1_i1_s1'              2      's1'          'A'            0               NULL        NULL     'YES'   'BTREE'
-      't1'           1  'i_t1_s1'                 1      's1'          'A'            0      
+      Table  Non_unique  Key_name      Seq_in_index  Column_name  Collation  Cardinality     Sub_part  Packed  Null    Index_type   Func
+    =====================================================================================================================================
+      't1'            1  'i_t1_i1'                1  'i1'         'D'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            1  'i_t1_i1_s1'             1  'i1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            1  'i_t1_i1_s1'             2  's1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            0  'i_t1_i2_s2'             1  'i2'         'A'                  0         NULL  NULL    'NO'    'BTREE'      NULL
+      't1'            0  'i_t1_i2_s2'             2  's2'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            1  'i_t1_s1'                1  's1'         'A'                  0            7  NULL    'YES'   'BTREE'      NULL
+      't1'            0  'u_t1_i3'                1  'i3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      't1'            0  'u_t1_s3'                1  's3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
 
 .. _show-collation-statement:
  

@@ -288,7 +288,7 @@ The connection process between the application and the DB is as follows:
 #.  CAS sends a request of connecting with the cub_server to the cub_master through the cubrid_port_id port set in the cubrid.conf.
 #.  CAS and the cub_server are connected.
     
-    In Linux, you should use the cubrid_port_id port as CAS is connected to the cub_server through the Unix domain socket. In Windows, CAS is connected to the cub_server through a random available port as the Unix domain socket cannot be used. If the DB server is running in Windows, a random available port is used between the broker machine and the DB server machine. In this case, note that the operation may not be successful if a firewall blocks the port for the process between the two machine.
+    In Linux, you should use the cubrid_port_id port as CAS is connected to the cub_server through the Unix domain socket. In Windows, CAS is connected to the cub_server through a random available port as the Unix domain socket cannot be used. If the DB server is running in Windows, a random available port is used between the broker machine and the DB server machine. In this case, note that the operation may not be successful if a firewall blocks the port for the process between the two machines.
     
 #.  After that, CAS keeps connection with the cub_server even if the application is terminated until the CAS restarts.
 
@@ -332,7 +332,7 @@ The following table summarizes the ports required for each OS, based on the list
 
 (**): The machine which has the cub_server
 
-As the server process (cub_server) and the client processes (CAS, CSQL, copylogdb, applylogdb, etc.) cross-check if the opposite node is normally running or not by using the ECHO(7) port, you should open the ECHO(7) port if there is a firewall. If the ECHO port cannot be opened for both the server and the client, set the **check_peer_alive** parameter value of the cubrid.conf to none.
+As the server process (cub_server) and the client processes (CAS, CSQL, copylogdb, applylogdb, etc.) cross-check if the opposite node is normally running or not by using the ECHO(7) port, you should open the ECHO(7) port if there is a firewall. If the ECHO port cannot be opened for both the server and the client, set the ref:`check_peer_alive <check_peer_alive>` parameter value of the cubrid.conf to none.
 
 The relation of connection between processes is as follows:
 

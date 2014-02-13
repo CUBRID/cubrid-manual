@@ -1068,7 +1068,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
  
 *   DataSourceExample.java에는 DataSourceMT.java에서 생성된 스레드가 수행할 DataSourceExample.test 메서드가 구현되어 있다.
  
-`DataSourceMT.java`
+*DataSourceMT.java*
  
 .. code-block:: java
  
@@ -1129,7 +1129,7 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
         }
     }
  
-`DataSourceExample.java`
+*DataSourceExample.java*
  
 .. code-block:: java
  
@@ -1294,7 +1294,6 @@ CUBRIDDataSource에 대한 자세한 설명은 :ref:`jdbc-conn-datasource`\ 을 
           }
        }
     }
-
     
 **SELECT**
     

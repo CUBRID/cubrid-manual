@@ -35,7 +35,7 @@ Writing CCI Applications
 
 The applications using CCI interact with CUBRID in the process of connecting to CAS, preparing queries, executing queries, handling response, and disconnecting. In each process, CCI communicates with applications through connection handle, query handle, and response handle.
 
-The default value of auto-commit mode can be configured by using **CCI_DEFAULT_AUTOCOMMIT** (which is a broker parameter). If it is omitted, the default value is set to **ON**. To change auto-commit mode within applications, you should use the :c:func:`cci_set_autocommit` function. If auto-commit mode is **OFF**, you should explicitly commit or roll back transactions by using the :c:func:`cci_end_tran` function.
+The default value of auto-commit mode can be configured by using :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` which is a broker parameter. If it is omitted, the default value is set to **ON**. To change auto-commit mode within applications, you should use the :c:func:`cci_set_autocommit` function. If auto-commit mode is **OFF**, you should explicitly commit or roll back transactions by using the :c:func:`cci_end_tran` function.
 
 General process for writing applications is as follows. For using the prepared statement, additional step binding data to a variable is required; the examples 1 and 2 show the way to implement this.
 
@@ -597,7 +597,6 @@ You can retrieve **LOB** data by using the following functions in CCI applicatio
     }
      
     res = cci_execute (req, 0/*flag*/, 0/*max_col_size*/, &error);
-    res = cci_fetch_size (req, 100 /* fetch size */);
      
     while (1) {
         res = cci_cursor (req, 1/* offset */, CCI_CURSOR_CURRENT/* cursor position */, &error);
@@ -1201,10 +1200,6 @@ The code below a command line that makes a test program build by using a dynamic
             if (req < 0) {
                 printf( "%s(%d): cci_execute fail(%d)\n", __FILE__, __LINE__,error.err_code);
             }
-            goto handle_error;
-        }
-        if ((res=cci_fetch_size(req, 100))<0) {
-            printf( "%s(%d): cci_fetch_size fail\n", __FILE__, __LINE__);
             goto handle_error;
         }
        

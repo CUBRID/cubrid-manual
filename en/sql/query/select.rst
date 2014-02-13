@@ -826,14 +826,11 @@ The following example shows how to write cross join. The following two queries w
 
     144 rows selected. (1.283548 sec) Committed.
 
-번역
 
-자연 조인
----------
+Natural Join
+------------
 
-The NATURAL [LEFT] JOIN of two tables is defined to be semantically equivalent to an INNER JOIN or a LEFT JOIN with a USING clause that names all columns that exist in both tables.
-
-각 테이블에서 조인할 칼럼 이름이 같은 경우 즉, 해당 칼럼끼리 동등 조건(=)을 부여하고자 하는 경우 내부/외부 조인을 대체하는 자연 조인(natural join)을 사용할 수 있다.
+When column names to be joined to each table are the same, that is, when you want to grant equivalent conditions between each column with the same name, a natural join, which can replace inner/outer join, can be used.
 
 .. code-block:: sql
 
@@ -845,14 +842,14 @@ The NATURAL [LEFT] JOIN of two tables is defined to be semantically equivalent t
     INSERT INTO t2 values(1,1);
     INSERT INTO t2 values(2,2);
 
-다음은 **NATURAL JOIN**\ 을 수행하는 예이다.
+The below is an example of running **NATURAL JOIN**.
 
 .. code-block:: sql
     
     SELECT /*+ RECOMPILE*/ * 
     FROM t1 NATURAL JOIN t2;
 
-위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+Running the above query is the same as running the below query, and they display the same result.
 
 .. code-block:: sql
 
@@ -866,14 +863,14 @@ The NATURAL [LEFT] JOIN of two tables is defined to be semantically equivalent t
     ================================================
             1            1            1            1
 
-다음은 **NATURAL LEFT JOIN**\ 을 수행하는 예이다.
+The below is an example of running **NATURAL LEFT JOIN**.
     
 .. code-block:: sql
 
     SELECT /*+ RECOMPILE*/ * 
     FROM t1 NATURAL LEFT JOIN t2;
     
-위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+Running the above query is the same as running the below query, and they display the same result.
 
 .. code-block:: sql
 
@@ -887,14 +884,14 @@ The NATURAL [LEFT] JOIN of two tables is defined to be semantically equivalent t
                 1            1            1            1
                 3            3         NULL         NULL
 
-다음은 **NATURAL RIGHT JOIN**\ 을 수행하는 예이다.
+The below is an example of running **NATURAL RIGHT JOIN**.
 
 .. code-block:: sql
 
     SELECT /*+ RECOMPILE*/ * 
     FROM t1 NATURAL RIGHT JOIN t2;
 
-위의 질의는 아래의 질의를 수행하는 것과 동일하며, 같은 결과를 출력한다.
+Running the above query is the same as running the below query, and they display the same result.
 
 .. code-block:: sql
 
@@ -907,6 +904,8 @@ The NATURAL [LEFT] JOIN of two tables is defined to be semantically equivalent t
     ====================================================
                 1            1            1            1
              NULL         NULL            2            2
+
+(번역)
 
 STRAIGHT_JOIN
 -------------

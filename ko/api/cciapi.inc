@@ -907,7 +907,7 @@ CCI API 레퍼런스
      
     :param datasource: (IN) CCI 연결을 획득할 T_CCI_DATASOURCE 구조체 포인터
     :param key: (IN) 속성 이름 문자열에 대한 포인터
-    :param val: (IN) 속성 값 문자열에 대한  포인터
+    :param val: (IN) 속성 값 문자열에 대한 포인터
     :return: 에러 코드(0: 성공)
     
         *   **CCI_ER_NO_MORE_MEMORY**
@@ -953,7 +953,7 @@ CCI API 레퍼런스
         :c:func:`cci_datasource_destroy`,
         :c:func:`cci_datasource_release`
         
-.. c:function:: T_CCI_DATASOURCE * cci_datasource_create (T_CCI_PROPERTIES * properties, T_CCI_ERROR *err_buf)
+.. c:function:: T_CCI_DATASOURCE *cci_datasource_create (T_CCI_PROPERTIES *properties, T_CCI_ERROR *err_buf)
 
     CCI의 DATASOURCE를 생성한다.
 
@@ -972,7 +972,7 @@ CCI API 레퍼런스
         :c:func:`cci_datasource_release`,
         :c:func:`cci_datasource_change_property`
 
-.. c:function:: void cci_datasource_destroy (T_CCI_DATASOURCE * datasource)
+.. c:function:: void cci_datasource_destroy (T_CCI_DATASOURCE *datasource)
 
     CCI의 DATASOURCE를 삭제한다.
 
@@ -1895,28 +1895,28 @@ CCI API 레퍼런스
 
 .. c:macro:: #define CCI_IS_SET_TYPE(u_type)
 
-    *u_type* 이 set type인지를 검사한다. 
+    *u_type*\ 이 set type인지를 검사한다. 
 
     :param u_type: (IN)
     :return: 1 : set, 0 : not set
 
 .. c:macro:: #define CCI_IS_MULTISET_TYPE(u_type)
 
-    *u_type* 이 multiset type인지를 검사한다.
+    *u_type*\ 이 multiset type인지를 검사한다.
 
     :param u_type: (IN)
     :return: 1 : multiset, 0 : not multiset
 
 .. c:macro:: #define CCI_IS_SEQUENCE_TYPE(u_type)
 
-    *u_type* 이 sequence type인지를 검사한다.
+    *u_type*\ 이 sequence type인지를 검사한다.
 
     :param u_type: (IN)
     :return: 1 : sequence, 0 : not sequence
 
 .. c:macro:: #define CCI_IS_COLLECTION_TYPE(u_type)
 
-    *u_type* 이 collection (set, multiset, sequence) type인지를 검사한다.
+    *u_type*\ 이 collection (set, multiset, sequence) type인지를 검사한다.
 
     :param u_type: (IN)
     :return: 1 : collection (set, multiset, sequence), 0 : not collection
@@ -2201,7 +2201,7 @@ CCI API 레퍼런스
         :c:func:`cci_datasource_destroy`,
         :c:func:`cci_datasource_release`
 
-.. c:function:: char * cci_property_get (T_CCI_PROPERTIES * properties, char *key)
+.. c:function:: char *cci_property_get (T_CCI_PROPERTIES * properties, char *key)
 
     **T_CCI_PROPERTIES** 구조체에 설정된 속성값을 조회한다.
 
@@ -2252,7 +2252,7 @@ CCI API 레퍼런스
     
     prepared statement의 개수가 **max_open_prepared_statement** 값을 초과하면 가장 오래된 prepared statement가 statement pool에서 해제되며, 추후 해제된 prepared statement가 재사용되면 다시 statement pool에 추가된다. 
     
-	pool은 필요 시 c:func:`cci_datasource_change_property`\ 를 통해 값을 변경할 수 있지만, max_pool_size를 초과할 수 없다. 연결 개수의 제한을 조절하고자 할 때 이 값을 변경할 수 있다. 예를 들어 평소에는 max_pool_size보다 작게 설정해서 사용하다가 기대 이상으로 많은 연결이 필요해질 때 값을 높이고, 많은 연결이 필요하지 않으면 값을 다시 줄인다.
+	하나의 연결 풀이 가질 수 있는 연결 개수는 필요 시 c:func:`cci_datasource_change_property`\ 를 통해 값을 변경할 수 있지만, max_pool_size를 초과할 수 없다. 연결 개수의 제한을 조절하고자 할 때 이 값을 변경할 수 있다. 예를 들어 평소에는 max_pool_size보다 작게 설정해서 사용하다가 기대 이상으로 많은 연결이 필요해질 때 값을 높이고, 많은 연결이 필요하지 않으면 값을 다시 줄인다.
 	
 	연결 풀이 가질 수 있는 연결 개수는 pool_size까지 제한되는데, pool_size는 최대 max_pool_size까지 변경될 수 있다.
 	
@@ -2387,7 +2387,6 @@ CCI API 레퍼런스
     이 함수를 호출하기 전에 cci_prepare 함수의 플래그에 **CCI_PREPARE_CALL**\ 을 설정해야 한다.
     
     :param req_handle: (IN) 요청 핸들
-    
     :return: 에러 코드
             
         *    **CCI_ER_BIND_INDEX**

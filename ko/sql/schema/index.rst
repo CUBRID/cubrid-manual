@@ -59,8 +59,7 @@ ALTER INDEX
 
 ::
 
-    ALTER INDEX index_name 
-	ON table_name REBUILD ;
+    ALTER INDEX index_name ON table_name REBUILD ;
      
 *   *index_name*: 재생성하려는 인덱스의 이름을 명시한다. 인덱스 이름은 테이블 안에서 고유한 값이어야 한다.
 *   *table_name*: 인덱스를 재생성할 테이블의 이름을 명시한다.

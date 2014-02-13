@@ -256,7 +256,7 @@ The transaction log copy modes include **SYNC** and **ASYNC**. This value can be
 
 **SYNC Mode**
 
-When transactions are committed, the created transaction logs are copied to the slave node and stored as a file. The transaction commit is complete after receiving a notice on its success. Although the time it takes to execute commit in this mode may be longer than that in ASYNC modes, this is the safest method because the copied transaction logs are always guaranteed to be reflected to the standby server even if a failover occurs.
+When transactions are committed, the created transaction logs are copied to the slave node and stored as a file. The transaction commit is complete after receiving a notice on its success. Although the time to execute commit in this mode may take longer than that in **ASYNC** mode, this is the safest method because the copied transaction logs are always guaranteed to be reflected to the standby server even if a failover occurs.
 
 **ASYNC Mode**
 
@@ -612,7 +612,7 @@ This parameter can be modified dynamically. If you modify the value of this para
 
 **ha_replica_list**
 
-**ha_replica_list** is parameter used to configure the group name, which is used in the CUBRID HA group, and the replica nodes, that is host name of member nodes in which failover is not supported. There is no need to specify if you do not construct replica nodes. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A comma(,) or colon(:) is used to separate individual host names. The default is **NULL**.
+**ha_replica_list** is parameter used to configure the group name, which is used in the CUBRID HA group, and the replica nodes, that is host name of member nodes in which failover is not supported. There is no need to specify this if you do not construct replica nodes. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A comma(,) or colon(:) is used to separate individual host names. The default is **NULL**.
 
 The group name must be identical to the name specified in **ha_replica_list**. The host names of member nodes and the host names of nodes specified in this parameter must be registered in **/etc/hosts**. A node in which the **ha_mode** value is set to **replica** must be specified in **ha_replica_list**. The **ha_replica_list** values of all nodes in the CUBRID HA group must be identical.
 
@@ -1245,7 +1245,7 @@ There are four possible structures for CUBRID HA: The default structure, multipl
 | Multiple-Standby Server Structure | 1:1:0                  | Basically, this structure is the same as the basic structure. However, several slave nodes are installed on a single physical server. |
 +-----------------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------+
 
-In the following description , it is assumed that there is no data in the testdb database on each node. To build HA feature as replicating database, see :ref:`rebuilding-replication`.
+In the following description, it is assumed that there is no data in the testdb database on each node. To build HA feature as replicating database, see :ref:`rebuilding-replication`.
 
 Basic Structure of HA
 ---------------------
@@ -2000,8 +2000,8 @@ Error messages in CAS process are written to **$CUBRID/log/broker/error_log**\ *
 |       | (timeout: ? sec(s))                                 |              |                                                      |                                                                      |
 +-------+-----------------------------------------------------+--------------+------------------------------------------------------+----------------------------------------------------------------------+
 
-Replication Log Copy Process (copylogdb)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Replication Log Copy Process(copylogdb)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     The error messages from the replication log copy process are stored in **$CUBRID/log/db-name@remote-node-name_copylogdb.err**. The severity levels of error messages found in the replication log copy process are as follows: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see :ref:`error-parameters`.
 
@@ -2112,8 +2112,8 @@ Error messages that can be found in this stage are as follows:
 |       |                                                      |              | specified signal.                                   |                                                                      |
 +-------+------------------------------------------------------+--------------+-----------------------------------------------------+----------------------------------------------------------------------+
 
-Replication Log Reflection Process (applylogdb)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Replication Log Reflection Process(applylogdb)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The error messages from the replication log reflection process are stored in **$CUBRID/log/**\ *db-name*\ **@**\ *local-node-name*\ **_applylogdb_**\ *db-name*\ **_**\ *remote-node-name*\ **.err**. The severity levels of error message found in the replication log reflection process are as follow: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see :ref:`error-parameters`.
 

@@ -1667,8 +1667,7 @@ GROUP BY 절 최적화
     select tab.k1, tab.k2, stddev_samp(tab.v) from tab tab where (tab.k2> ?:0 ) group by tab.k1, tab.k2
 
     /* ---> skip GROUP BY */
-                
-                
+
 .. _multi-key-range-opt:
 
 다중 키 범위 최적화

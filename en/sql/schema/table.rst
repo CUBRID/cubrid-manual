@@ -1567,7 +1567,6 @@ You can delete an index defined for a column by using the **DROP INDEX** clause.
 
     ALTER [ TABLE | CLASS ] table_name DROP INDEX index_name ;
 
-*   **UNIQUE** : Specifies that the index to be dropped is a unique index. The unique index can be dropped with a **DROP CONSTRAINT** statement.
 *   *table_name* : Specifies the name of a table of which constraints will be deleted.
 *   *index_name* : Specifies the name of an index to be deleted.
 
@@ -1593,7 +1592,7 @@ DROP FOREIGN KEY Clause
 
 You can drop a foreign key constraint defined for a table using the **DROP FOREIGN KEY** clause. ::
 
-    ALTER [TABLE | CLASS] table_name DROP FOREIGN KEY constraint_name;
+    ALTER [TABLE | CLASS] table_name DROP FOREIGN KEY constraint_name ;
 
 *   *table_name* : Specifies the name of a table whose constraint is to be deleted.
 *   *constraint_name* : Specifies the name of foreign key constraint to be deleted.

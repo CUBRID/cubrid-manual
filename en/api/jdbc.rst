@@ -229,8 +229,8 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 
 .. _jdbc-conn-datasource:
 
-Connect with DataSource
------------------------
+Connecting with DataSource
+--------------------------
 
 DataSource is the concept to be introduced in JDBC 2.0 API extention; it supports connection pooling and distributed transaction. CUBRID supports only connection pooling and do not supports distributed transaction and JNDI.
 
@@ -1056,7 +1056,7 @@ Codes are separated with DataSourceMT.java and DataSourceExample.java.
  
 *   In DataSourceExample.java, DataSourceExample.test is implemented; it is run on the threads in DataSourceMT.java.
  
-`DataSourceMT.java`
+*DataSourceMT.java*
  
 .. code-block:: java
  
@@ -1117,7 +1117,7 @@ Codes are separated with DataSourceMT.java and DataSourceExample.java.
         }
     }
  
-`DataSourceExample.java`
+*DataSourceExample.java*
  
 .. code-block:: java
  
@@ -1208,8 +1208,6 @@ To send a query statement to the connected database and execute it, create **Sta
 **Disconnecting from Database**
 
 You can disconnect from a database by executing the **close** () method for each object.
-
-The following example shows how to connect to the *demodb* database, create a table, execute a query statement with the prepared statement, and roll back the query statement. You can also practice it yourself by appropriately modifying argument values of the **getConnection** () method.
 
 **CREATE, INSERT**
 
@@ -1347,7 +1345,7 @@ The following example shows how to execute the **INSERT** statement by connectin
                String sql = "insert into olympic(host_year, host_nation, host_city, opening_date, closing_date) values (2008, 'China', 'Beijing', to_date('08-08-2008','mm-dd-yyyy'), to_date('08-24-2008','mm-dd-yyyy'))";
                stmt = conn.createStatement();
                stmt.executeUpdate(sql);
-               System.out.println("데이터가 입력되었습니다.");
+               System.out.println("A row is inserted.");
                stmt.close();
            } catch ( SQLException e ) {
                System.err.println(e.getMessage());
@@ -1404,4 +1402,3 @@ The following table shows the JDBC standard and extended interface supported by 
     *   From CUBRID 2008 R4.3 version, the behavior of batching the queries on the autocommit mode was changed. The methods that batch the queries are PreparedStatement.executeBatch and Statement.executeBatch. Until 2008 R4.1 version, these methods had  committed the transaction after executing all queries on the array. From 2008 R4.3, they commit each query on the array.
     
     *   In autocommit mode off, if the general error occurs during executing one of the queries in the array on the method which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 
-    

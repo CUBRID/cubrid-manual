@@ -159,5 +159,3 @@ If either argument is NULL or the hash length is not one of the permitted values
        sha2('cubrid', 224)
     ======================
       '8E5E18B5B47646C31CCEA98A87B19CBEF084036716FBD13D723AC9B2'
-
-     

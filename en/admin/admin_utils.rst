@@ -37,8 +37,6 @@ The following shows how to use the cubrid management utilities. ::
         genlocale [option] <database-name>  --- Compiling the locale information to use
         dumplocale [option] <database-name>   --- Printing human readable text for the compiled binary locale information
 
-(번역)
-
 cubrid Utility Logging
 ----------------------
  

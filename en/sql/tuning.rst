@@ -493,7 +493,7 @@ For how to set the trace on automatically, see :ref:`Set SQL trace <set-autotrac
 Using SQL Hint
 ==============
 
-Using hints can affect the performance of query execution. you can allow the query optimizer to create more efficient execution plan by referring the SQL HINT. The SQL HINTs related tale join and index are provided by CUBRID. ::
+Using hints can affect the performance of query execution. You can allow the query optimizer to create more efficient execution plan by referring the SQL HINT. The SQL HINTs related tale join and index are provided by CUBRID. ::
 
     { SELECT | UPDATE | DELETE } /*+ <hint> [ { <hint> } ... ] */ ...;
 
@@ -843,7 +843,7 @@ On the above example, if you use "USING INDEX idx_open_bugs" clause or "USE INDE
     
 .. warning::
 
-    If you execute queries by specifying indexes with index hint syntax, you may have incorrect query results as output even though the conditions of creating filtered indexes does not meet the query conditions.
+    Even though the conditions of creating filtered indexes does not match the query conditions,  if you execute queries by specifying indexes with index hint syntax, CUBRID performs a query by choosing a specified index. Therefore, query results can be different with the given searching conditions.
 
 **Constraints**
 
@@ -1460,7 +1460,7 @@ The following example requires descending order by **ORDER BY** clause. In this 
 Optimizing GROUP BY Clause
 --------------------------
 
-**GROUP BY** clause optimization works on the premise that if all columns in the **GROUP BY** clause are included in an index, you can use the index upon executing a query, so you don't execute a separate sorting job. 
+**GROUP BY** clause optimization works on the premise that if all columns in the **GROUP BY** clause are included in an index, CUBRID can use the index upon executing a query, so CUBRID don't execute a separate sorting job. 
 The columns in the **GROUP BY** clause must exist in front side of the column forming the index.
 
 .. code-block:: sql
@@ -1490,7 +1490,7 @@ Row sorting by **GROUP BY** is not required, because you can get the result as t
 
 If the index consisting of the **GROUP BY** column and the first column of the index is **NOT NULL**, even though there is no **WHERE** clause, the **GROUP BY** optimization will be applied.
 
-If there is an index made ​​up of ** GROUP BY ** columns even when using aggregate functions, ** GROUP BY ** optimization is applied.
+If there is an index made of **GROUP BY** columns even when using aggregate functions, **GROUP BY** optimization is applied.
 
 .. code-block:: sql
 
@@ -1509,11 +1509,13 @@ If there is an index made ​​up of ** GROUP BY ** columns even when using agg
     CREATE INDEX i_tab_j_k ON tab (j, k);
     INSERT INTO tab VALUES (1,2,3),(6,4,2),(3,4,1),(5,2,1),(1,5,5),(2,6,6),(3,5,4);
 
+    UPDATE STATISTICS on tab;
+
 The following example shows that indexes consisting of tab(j,k) are used and no separate sorting process is required because **GROUP BY** is executed by j and k columns.
 
 .. code-block:: sql
 
-    SELECT i,j,k 
+    SELECT /*+ RECOMPILE */ j,k 
     FROM tab 
     WHERE j > 0 
     GROUP BY j,k;
@@ -1771,36 +1773,22 @@ ISS is not applied in the following cases:
 *   Hierarchical query
 *   Aggregate function included
 
-.. _in-memory-sort:
- 
-In Memory Sort
---------------
- 
-The "in memory sort(IMS)" feature is an optimization applied to the LIMIT/ORDERBY_NUM() queries specifying ORDER BY. Normally, when executing a query which specifies ORDER BY and LIMIT clauses, CUBRID generates the full sorted result set and then applies the LIMIT operator to this result set. With the IMS optimization, instead of generating the whole result set, CUBRID uses an in-memory binary heap in which only tuples satisfying the ORDER BY and LIMIT clauses are allowed. This optimization improves performance by eliminating the need for a full unordered result set.
- 
-Whether this optimization is applied or not is not transparent to users. CUBRID decides to use in memory sort in the following situation:
- 
-*   The query specifies ORDER BY and LIMIT clauses.
-*   The size of the final result (after applying the LIMIT clause) is less than the amount of memory used by external sort (see **sort_buffer_size** in :ref:`memory-parameters`).
- 
-Note that IMS considers the actual size of the result and not the count of tuples the result contains. For example, for the default sort buffer size (two megabytes), this optimization will be applied for a LIMIT value of 524,288 tuples consisting of one 4 byte INTEGER type but only for ~2,048 tuples of CHAR(1024) values. This optimization is not applied to queries requiring DISTINCT ordered result sets.
-
 .. _loose-index-scan:
 
 Loose Index Scan
 ----------------
 
-When a column of **DISTINCT** or a **GROUP BY** clause contains the subkey of a index, loose index scan adjusts the scope dynamically to unique values ​​of each of the columns constituting the partial key, and starts the search of a B-tree. Therefore, it is possible to significantly reduce the scanning area of the B -tree.
+When **GROUP BY** clause or **DISTINCT** column includes a subkey of a index, loose index scan starts B-tree search by adjusting the range dynamically for unique value of each of the columns that make up the subkey. Therefore, it is possible to significantly reduce the scanning area of B-tree.
 
-A loose index scan is applied when satisfying the case of the following.
+Loose index scan optimization is applied if below cases are satisfied.
 
-1.  When the index covers all parts of the SELECT list, that is, when the covering index is applied.
-2.  SELECT DISTINCT, SELECT ... GROUP BY statement or single tuple SELECT statment.
-3.  If an aggregate function is used, it is necessary to input argument of the function should always include DISTINCT. However, MIN/MAX functions are the exception.
+1.  When an index covers all SELECT list, that is, covered index is applied.
+2.  SELECT DISTINCT, SELECT ... GROUP BY statement or SELECT statement with a single tuple.
+3.  If you use an aggregate function, it is necessary that an input argument of the function always includes DISTINCT. However, MIN / MAX function exception.
 4.  COUNT(*) should not be used.
-5.  When the cardinality of the used subkey is smaller than that of a total index.
+5.  When cardinality of the used subkey is 100 times smaller than that of the entire index.
 
-The following is a case where a loose index scan is applied.
+The following shows the cases when loose index scan optimization is applied.
 
 .. code-block:: sql
 
@@ -2021,7 +2009,7 @@ The following is a case where a loose index scan is applied.
         index: idx (covers) (loose index scan on prefix 2)
         cost:  402 card 720000
     
-The following is a case where a loose index scan is not applied.
+The following shows the cases when loose index scan optimization is not applied.
 
 .. code-block:: sql
 
@@ -2145,6 +2133,20 @@ The following is a case where a loose index scan is not applied.
     sscan
         class: tbl1 node[0]
         cost:  3573 card 720000
+
+.. _in-memory-sort:
+ 
+In Memory Sort
+--------------
+ 
+The "in memory sort(IMS)" feature is an optimization applied to the LIMIT/ORDERBY_NUM() queries specifying ORDER BY. Normally, when executing a query which specifies ORDER BY and LIMIT clauses, CUBRID generates the full sorted result set and then applies the LIMIT operator to this result set. With the IMS optimization, instead of generating the whole result set, CUBRID uses an in-memory binary heap in which only tuples satisfying the ORDER BY and LIMIT clauses are allowed. This optimization improves performance by eliminating the need for a full unordered result set.
+ 
+Whether this optimization is applied or not is not transparent to users. CUBRID decides to use in memory sort in the following situation:
+ 
+*   The query specifies ORDER BY and LIMIT clauses.
+*   The size of the final result (after applying the LIMIT clause) is less than the amount of memory used by external sort (see **sort_buffer_size** in :ref:`memory-parameters`).
+ 
+Note that IMS considers the actual size of the result and not the count of tuples the result contains. For example, for the default sort buffer size (two megabytes), this optimization will be applied for a LIMIT value of 524,288 tuples consisting of one 4 byte INTEGER type but only for ~2,048 tuples of CHAR(1024) values. This optimization is not applied to queries requiring DISTINCT ordered result sets.
 
 .. _sort-limit-optimization:
  

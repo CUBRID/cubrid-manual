@@ -891,6 +891,16 @@ The following example shows an additional language parameter given to the **TO_C
                to_char(timestamp '2009-10-04 22:23:00', 'Day Month yyyy', 'de_DE')
             ======================
               'Sonntag   Oktober 2009'
+              
+    *   If the first argument is zerodate and the second argument has a literal like 'Month', 'Day', then  TO_CHAR function returns NULL.
+    
+        .. code-block:: sql
+        
+            SELECT TO_CHAR(timestamp '0000-00-00 00:00:00', 'Month Day YYYY');
+            
+        ::
+        
+            NULL
 
 TO_CHAR(number)
 ===============

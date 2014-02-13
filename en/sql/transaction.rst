@@ -255,7 +255,7 @@ Database Concurrency
 
 If there are multiple users with read and write authorization to a database, possibility exists that more than one user will access the database simultaneously. Controlling access and update in multi-user environment is essential to protect database integrity and ensure that users and transactions should have accurate and consistent data. Without appropriate control, data could be updated incorrectly in the wrong order.
 
-Like most commercial database systems, CUBRID adopts serializability, an element that is essential to maintaining data concurrency within the database. Serializability ensures no interference between transactions when multiple transactions are executed at once. It is guaranteed more with the higher isolation level. This principle is based on the assumption that database consistency is guaranteed as long as transaction is executed automatically.
+Like most commercial database systems, CUBRID adopts serializability, an element that is essential to maintaining data concurrency within the database. Serializability ensures no interference between transactions when multiple transactions are executed at once. It is guaranteed more with the higher isolation level. This principle is based on the assumption that database consistency is guaranteed as long as transaction is executed automatically. In CUBRID, serializability is managed by the well-known two-phase locking protocol.
 
 The transaction must ensure database concurrency, and each transaction must guarantee appropriate results. When multiple transactions are being executed at once, an event in transaction T1 should not affect an event in transaction T2. This means isolation. Transaction isolation level is the degree to which a transaction is separated from all other concurrent transactions. The higher isolation level means the lower interference from other transactions. The lower isolation level means the higher the concurrency. A database determines whether which lock is applied to tables and records based on these isolation levels. Therefore, can control the level of consistency and concurrency specific to a service by setting appropriate isolation level.
 
@@ -686,7 +686,6 @@ In the following error log file, (1) indicates a table name which causes deadloc
 
 **Example**
 
-
 +----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
 | session 1                                                                                          | session 2                                                                                          |
 +====================================================================================================+====================================================================================================+
@@ -775,7 +774,6 @@ In the following error log file, (1) indicates a table name which causes deadloc
 |   LOCK HOLDERS:                                                                                    |                                                                                                    |
 |       Tran_index =   2, Granted_mode = SIX_LOCK, Count =   3, Nsubgranules =  0                    |                                                                                                    |
 +----------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+
-
 
 Transaction Lock Timeout
 ------------------------

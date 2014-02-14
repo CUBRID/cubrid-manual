@@ -491,44 +491,40 @@ CSQL 인터프리터에서 트레이스를 자동으로 설정하는 방법은 :
 SQL 힌트
 ========
 
-사용자는 질의문에 힌트를 주어 해당 질의 성능을 높일 수 있다. 질의 최적화기는 질의문에 대한 최적화 작업을 수행할 때 SQL 힌트를 참고하여 효율적인 실행 계획을 생성한다. CUBRID에서 지원하는 SQL 힌트는 테이블 조인 관련 힌트, 인덱스 관련 힌트, 통계 정보 관련 힌트가 있다. ::
+사용자는 질의문에 힌트를 주어 해당 질의 성능을 높일 수 있다. 질의 최적화기는 질의문에 대한 최적화 작업을 수행할 때 SQL 힌트를 참고하여 효율적인 실행 계획을 생성한다. CUBRID에서 지원하는 SQL 힌트는 테이블 조인 관련 힌트, 인덱스 관련 힌트가 있다. ::
 
-    { CREATE | ALTER } /*+ NO_STATS */ { TABLE | CLASS } ...;
-        
-    { CREATE | ALTER | DROP } /*+ NO_STATS */ INDEX ...;
-     
     { SELECT | UPDATE | DELETE } /*+ <hint> [ { <hint> } ... ] */ ...;
 
     MERGE /*+ <merge_statement_hint> [ { <merge_statement_hint> } ... ] */ INTO ...;
     
     <hint> ::=
-    USE_NL [ (spec_name_comma_list) ] |
-    USE_IDX [ (spec_name_comma_list) ] |
-    USE_MERGE [ (spec_name_comma_list) ] |
+    USE_NL [ (<spec_name_comma_list>) ] |
+    USE_IDX [ (<spec_name_comma_list>) ] |
+    USE_MERGE [ (<spec_name_comma_list>) ] |
     ORDERED |
     USE_DESC_IDX |
     NO_DESC_IDX |
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
+    NO_HASH_AGGREGATE |
     RECOMPILE
-    
+
+    <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
+        <spec_name> ::= table_name | view_name
+        
     <merge_statement_hint> ::=
     USE_UPDATE_INDEX (<update_index_list>) |
     USE_DELETE_INDEX (<insert_index_list>) |
     RECOMPILE
 
-SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다. 힌트를 사용하는 방법은 :doc:`comment` 절에 소개된 바와 같이 3 가지 방식이 있다. 따라서 SQL 힌트도 다음과 같이 3 가지 방식으로 사용할 수 있다.
+SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다. 힌트를 사용하는 방법은 :doc:`comment` 절에 소개된 바와 같이 세 가지 방식이 있다. 따라서 SQL 힌트도 다음과 같이 세 가지 방식으로 사용할 수 있다.
 
 * /\*+ hint \*/
 * --+ hint
 * //+ hint
 
-힌트 주석은 반드시 키워드 **SELECT**, **CREATE**, **ALTER** 등의 예약어 다음에 나타나야 하고, 더하기 기호(+)가 주석에서 첫 번째 문자로 시작되어야 한다. 여러 개의 힌트를 지정할 때는 공백이 구분자로 사용된다.
-
-CREATE/ALTER TABLE 문과 CREATE/ALTER/DROP INDEX 문에는 다음 힌트가 지정될 수 있다.
-
-*   **NO_STATS** : 통계 정보 관련 힌트로서 해당 DDL 수행 후에 통계 정보를 갱신하지 않는다. 해당 DDL 문의 성능은 향상되나 통계 정보를 갱신하지 않으므로 질의 계획이 최적화되지 않음에 유의한다.
+힌트 주석은 반드시 키워드 **SELECT**, **UPDATE** or **DELETE** 등의 예약어 다음에 나타나야 하고, 더하기 기호(+)가 주석에서 첫 번째 문자로 시작되어야 한다. 여러 개의 힌트를 지정할 때는 공백이 구분자로 사용된다. 여러 개의 힌트를 지정할 때는 공백이 구분자로 사용된다.
 
 SELECT, UPDATE, DELETE 문에는 다음 힌트가 지정될 수 있다.
 
@@ -542,9 +538,29 @@ SELECT, UPDATE, DELETE 문에는 다음 힌트가 지정될 수 있다.
 *   **NO_MULTI_RANGE_OPT** : 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt` 를 참고한다.
 *   **NO_SORT_LIMIT** : SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\ 를 참고한다.
 
+.. _no-hash-aggregate:
+
+*   **NO_HASH_AGGREGATE** : 집계 함수에서 투플을 정렬할 때 해싱을 사용하지 않도록 하는 힌트이다. 그 대신, 외부 정렬(external sorting)이 집계 함수에서 사용된다. 인-메모리(in-memory) 해시 테이블을 사용하여, CUBRID는 정렬할 때 필요로 하는 데이터의 양을 줄이거나 심지어는 제거할 수 있다. 그러나, 어떤 경우에는 해시 집계 방식이 실패할 것이라는 것을 미리 알고 전체적으로 해시 집계 과정을 생략하기 위해 이 힌트를 사용할 수 있다. 해시 집계 방식의 메모리 크기를 설정하기 위해서는 :ref:`max_agg_hash_size <max_agg_hash_size>`\ 를 참고한다.
+
+    .. note::
+    
+        DISTINCT한 값을 계산하는 함수들(예. AVG(DISTINCT x))과 GROUP_CONCAT, MEDIAN 함수들은 각 그룹의 투플들에 대해 외부 정렬(external sorting) 과정을 요구하므로 해시 집계 방식이 동작하지 않을 것이다.
+
+.. _recompile:
+
 *   **RECOMPILE** : 질의 실행 계획을 리컴파일한다. 캐시에 저장된 기존 질의 실행 계획을 삭제하고 새로운 질의 실행 계획을 수립하기 위해 이 힌트를 사용한다.
 
-    .. note:: *spec_name* 이 **USE_NL**, **USE_IDX**, **USE_MERGE** 와 함께 지정될 경우 해당 조인 방법은 *spec_name* 에 대해서만 적용된다. 만약 **USE_NL** 과 **USE_MERGE** 가 함께 지정된 경우 주어진 힌트는 무시된다. 일부 경우에 질의 최적화기는 주어진 힌트에 따라 질의 실행 계획을 만들지 못할 수 있다. 예를 들어 오른쪽 외부 조인에 대해 **USE_NL** 을 지정한 경우 이 질의는 내부적으로 왼쪽 외부 조인 질의로 변환이 되어 조인 순서는 보장되지 않을 수 있다.
+.. note:: <*spec_name*>\ 이 **USE_NL**, **USE_IDX**, **USE_MERGE**\ 와 함께 지정될 경우 해당 조인 방법은 <*spec_name*>\ 에 대해서만 적용된다. 
+
+    .. code-block:: sql
+    
+        SELECT /*+ ORDERED USE_NL(B) USE_NL(C) USE_MERGE(D) */ * 
+        FROM A INNER JOIN B ON A.col=B.col 
+        INNER JOIN C ON B.col=C.col INNER JOIN D  ON C.col=D.col;
+        
+    위와 같은 질의를 수행한다면 A와 B가 조인될 때는 **USE_NL**\ 이 적용되고 C가 조인될 때도 **USE_NL**\ 이 적용되며, D가 조인될 때는 **USE_MERGE**\ 가 적용된다.
+
+    <*spec_name*>\ 이 주어지지 않고 **USE_NL**\ 과 **USE_MERGE**\ 가 함께 지정된 경우 주어진 힌트는 무시된다. 일부 경우에 질의 최적화기는 주어진 힌트에 따라 질의 실행 계획을 만들지 못할 수 있다. 예를 들어 오른쪽 외부 조인에 대해 **USE_NL**\ 을 지정한 경우 이 질의는 내부적으로 왼쪽 외부 조인 질의로 변환이 되어 조인 순서는 보장되지 않을 수 있다.
 
 MERGE 문에는 다음과 같은 힌트를 사용할 수 있다. 
 
@@ -568,26 +584,6 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
       'Sim Kwon Ho'                1996  'G'
       
     2 rows selected.
-
-다음은 데이터가 없는 분할 테이블(*before_2008*)의 DROP 성능을 높이기 위해 **NO_STATS** 힌트를 사용한 이후, 질의 실행 시간을 확인하는 예제이다. *participant2* 테이블에는 100만 건 이상의 데이터가 있는 것으로 가정한다. 아래 실행 시간의 차이는 시스템 성능 및 데이터베이스 구성 방법에 따라 다를 수 있다.
-
-.. code-block:: sql
-
-    -- without NO_STATS hint
-    ALTER TABLE participant2 DROP partition before_2008;
-
-::
-
-    Execute OK. (31.684550 sec) Committed.
-
-.. code-block:: sql
-    
-    -- with NO_STATS hint
-    ALTER /*+ NO_STATS */ TABLE participant2 DROP partition before_2008;
-
-::
-
-    Execute OK. (0.025773 sec) Committed.
 
 .. _index-hint-syntax:
 
@@ -871,7 +867,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
     
 .. warning::
 
-    필터링된 인덱스 생성 조건과 질의 조건이 부합되지 않음에도 불구하고 인덱스 힌트 구문으로 인덱스를 명시하여 질의를 수행하면 잘못된 질의 결과를 출력할 수 있음에 주의한다.
+    필터링된 인덱스 생성 조건과 질의 조건이 부합되지 않음에도 불구하고 인덱스 힌트 구문으로 인덱스를 명시하여 질의를 수행하면 명시된 인덱스를 선택하여 수행하므로, 주어진 검색 조건에 부합하지 않는 질의 결과를 출력할 수 있음에 주의한다.
 
 **제약 사항**
 

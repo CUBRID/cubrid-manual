@@ -110,6 +110,8 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     |                               | index_scan_oid_buffer_size          | server parameter        | byte     | 4 *                            |                 |
     |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | max_agg_hash_size                   | server parameter        | byte     | 2,097,152(2M)                  |                 |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | sort_buffer_size                    | server parameter        | byte     | 128 *                          |                 |
     |                               |                                     |                         |          | :ref:`db_page_size <dpg>`      |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
@@ -246,6 +248,8 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
     | :ref:`other-parameters`       | access_ip_control                   | server parameter        | bool     | no                             |                 |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | access_ip_control_file              | server parameter        | string   |                                |                 |
+    |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
+    |                               | agg_hash_respect_order              | client parameter        | bool     | yes                            | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
     |                               | auto_restart_server                 | server parameter        | bool     | yes                            | available       |
     |                               +-------------------------------------+-------------------------+----------+--------------------------------+-----------------+
@@ -457,6 +461,8 @@ The following are parameters related to the memory used by the database server o
 | index_scan_oid_buffer_size     | byte   | 4 *                       | 0.05 *                    | 16 *                      |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` |
 +--------------------------------+--------+---------------------------+---------------------------+---------------------------+
+| max_agg_hash_size              | byte   | 2,097,152(2M)             | 32,768(32K)               | 134,217,728(128MB)        |
++--------------------------------+--------+---------------------------+---------------------------+---------------------------+
 | sort_buffer_size               | byte   | 128 *                     | 1 *                       | 2G(32bit),                |
 |                                |        | :ref:`db_page_size <dpg>` | :ref:`db_page_size <dpg>` | INT_MAX *                 |
 |                                |        |                           |                           | :ref:`db_page_size <dpg>` |
@@ -480,6 +486,14 @@ The following are parameters related to the memory used by the database server o
     **index_scan_oid_buffer_size** is a parameter to configure the size of buffer where the OID list is to be temporarily stored during the index scan. You can set unit K, which stands for KB (kilobytes). If you omit the unit, bytes will be applied. The default value is  4 * :ref:`db_page_size <dpg>` (**64K** when db_page_size is 16K), and the minimum value is 0.05 * :ref:`db_page_size <dpg>` (about **1K** when db_page_size is 16K).
 
     The size of the OID buffer tends to vary in proportion to the value of the **index_scan_oid_buffer_size** parameter and the page size set when the database was created. In addition, the bigger the size of such OID buffer, the more the index scan cost. You can set the value of the **index_scan_oid_buffer_size** by considering these factors.
+
+.. _max_agg_hash_size:
+
+**max_agg_hash_size**
+
+    **max_agg_hash_size** is a parameter to configure the maximum memory per transaction allocated for hashing the tuple groups in a query containing aggregation. The default is **2,097,152**\ (2M), the minimum size is 32,768(32K), and the maximum size is  134,217,728(128MB). 
+    
+    If :ref:`NO_HASH_AGGREGATE <no-hash-aggregate>` hint is specified, hash aggregate evaluation will not be used. As a reference, see :ref:`agg_hash_respect_order <agg_hash_respect_order>`.
 
 **sort_buffer_size**
 
@@ -1470,6 +1484,8 @@ The following are other parameters. The type and value range for each parameter 
 +--------------------------------+----------+--------------------+--------------------+--------------------+
 | access_ip_control_file         | string   |                    |                    |                    |
 +--------------------------------+----------+--------------------+--------------------+--------------------+
+| agg_hash_respect_order         | bool     | yes                |                    |                    |
++--------------------------------+----------+--------------------+--------------------+--------------------+
 | auto_restart_server            | bool     | yes                |                    |                    |
 +--------------------------------+----------+--------------------+--------------------+--------------------+
 | index_scan_in_oid_order        | bool     | no                 |                    |                    |
@@ -1505,6 +1521,14 @@ The following are other parameters. The type and value range for each parameter 
 **access_ip_control_file**
 
     **access_ip_control_file** is a parameter to configure the file name in which the list of IP addresses allowed by servers is stored. If **access_ip_control** value is set to **yes**, database server allows the list of IP addresses only stored in the file specified by this parameter. For details, see :ref:`limiting-server-access`.
+
+.. _agg_hash_respect_order:
+    
+**agg_hash_respect_order**
+
+    **agg_hash_respect_order** is a parameter to configure whether the groups in an aggregate function will be returned ordered or not. The default is **yes**. As a reference, see :ref:`max_agg_hash_size <max_agg_hash_size>`. 
+    
+    If all the groups (keys and accumulators) can fit into hash memory, then "agg_hash_respect_order=no" will skip sorting them before writing to output, so it is fair to assume that the order cannot be guaranteed in this case. However, when overflows occur, then a sort step must be performed and you will get the results in-order even with "agg_hash_respect_order=no". 
 
 **auto_restart_server**
 

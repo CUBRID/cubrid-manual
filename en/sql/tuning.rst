@@ -509,8 +509,12 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_COVERING_IDX |
     NO_MULTI_RANGE_OPT |
     NO_SORT_LIMIT |
+    NO_HASH_AGGREGATE |
     RECOMPILE
     
+    <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
+        <spec_name> ::= table_name | view_name
+        
     <merge_statement_hint> ::=
     USE_UPDATE_INDEX (<update_index_list>) |
     USE_DELETE_INDEX (<insert_index_list>) |
@@ -527,17 +531,45 @@ The hint comment must appear after the keyword such as **SELECT**, **UPDATE** or
 The following hints can be specified in UPDATE, DELETE and SELECT statements.
 
 *   **USE_NL** : Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
+
 *   **USE_MERGE** : Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
+
 *   **ORDERED** : Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
+
 *   **USE_IDX** : Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
+
 *   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
+
 *   **NO_DESC_IDX** : This is a hint not to use the descending index.
+
 *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
-*   **NO_SORT_LIMIT** : This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
+
+.. _no-hash-aggregate:
+
+*   **NO_HASH_AGGREGATE** : This is a hint not to use hashing for the sorting tuples in aggregate functions. Instead, external sorting is used in aggregate functions. By using an in-memory hash table, we can reduce or even eliminate the amount of data that needs to be sorted. However, in some scenarios the user may know beforehand that hash aggregation will fail and can use the hint to skip hash aggregation entirely. For setting the memory size of hashing aggregate, see :ref:`max_agg_hash_size <max_agg_hash_size>`.
+
+    .. note::
+    
+        Hash aggregate evaluation will not work for functions evaluated on distinct values (e.g. AVG(DISTINCT x)) and for the GROUP_CONCAT and MEDIAN functions, since they require an extra sort step for the tuples of each group.
+
+.. _recompile:
+        
 *   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
 
-    .. note:: If the *spec_name* is specified together with **USE_NL**, **USE_IDX** or **USE_MERGE**, the specified join method applies only to the *spec_name*. If **USE_NL** and **USE_MERGE** are specified together, the given hint is ignored. In some cases, the query optimizer cannot create a query execution plan based on the given hint. For example, if **USE_NL** is specified for a right outer join, the query is converted to a left outer join internally, and the join order may not be guaranteed.
+.. note::
 
+    If <*spec_name*> is specified together with **USE_NL**, **USE_IDX** or **USE_MERGE**, the specified join method applies only to the <*spec_name*>. 
+    
+    .. code-block:: sql
+    
+        SELECT /*+ ORDERED USE_NL(B) USE_NL(C) USE_MERGE(D) */ * 
+        FROM A INNER JOIN B ON A.col=B.col 
+        INNER JOIN C ON B.col=C.col INNER JOIN D  ON C.col=D.col;
+        
+    If you run the above query, **USE_NL** is applied when A and B are joined; **USE_NL** is applied when C is joined, too; **USE_MERGE** is applied when D is joined.
+    
+    If **USE_NL** and **USE_MERGE** are specified together without <*spec_name*>, the given hint is ignored. In some cases, the query optimizer cannot create a query execution plan based on the given hint. For example, if **USE_NL** is specified for a right outer join, the query is converted to a left outer join internally, and the join order may not be guaranteed.
+    
 MERGE statement can have below hints.
 
 *   **USE_INSERT_INDEX** (<*insert_index_list*>) : An index hint which is used in INSERT clause of MERGE statement. Lists index names to *insert_index_list* to use when executing INSERT clause. This hint is applied to  <*join_condition*> of MERGE statement.

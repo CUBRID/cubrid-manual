@@ -402,15 +402,15 @@ SHOW EXEC STATISTICS
      
     -- print the statistical information of the data pages.
     SHOW EXEC STATISTICS;
-    
+
 ::
 
-    variable value
-    ============================================
-    'data_page_fetches' 332
-    'data_page_dirties' 85
-    'data_page_ioreads' 18
-    'data_page_iowrites' 28
+    variable                value
+    ===============================
+    'data_page_fetches'     332
+    'data_page_dirties'     85
+    'data_page_ioreads'     18
+    'data_page_iowrites'    28
      
 .. code-block:: sql
 
@@ -421,62 +421,109 @@ SHOW EXEC STATISTICS
 
 ::
     
-    variable value
+    variable                                value
     ============================================
-    'file_creates' 0
-    'file_removes' 0
-    'file_ioreads' 6
-    'file_iowrites' 0
-    'file_iosynches' 0
-    'data_page_fetches' 548
-    'data_page_dirties' 34
-    'data_page_ioreads' 6
-    'data_page_iowrites' 0
-    'data_page_victims' 0
-    'data_page_iowrites_for_replacement' 0
-    'log_page_ioreads' 0
-    'log_page_iowrites' 0
-    'log_append_records' 0
-    'log_checkpoints' 0
-    'log_wals' 0
-    'page_locks_acquired' 13
-    'object_locks_acquired' 9
-    'page_locks_converted' 0
-    'object_locks_converted' 0
-    'page_locks_re-requested' 0
-    'object_locks_re-requested' 8
-    'page_locks_waits' 0
-    'object_locks_waits' 0
-    'tran_commits' 3
-    'tran_rollbacks' 0
-    'tran_savepoints' 0
-    'tran_start_topops' 6
-    'tran_end_topops' 6
-    'tran_interrupts' 0
-    'btree_inserts' 0
-    'btree_deletes' 0
-    'btree_updates' 0
-    'btree_covered' 0
-    'btree_noncovered' 2
-    'btree_resumes' 0
-    'btree_multirange_optimization' 0
-    'query_selects' 4
-    'query_inserts' 0
-    'query_deletes' 0
-    'query_updates' 0
-    'query_sscans' 2
-    'query_iscans' 4
-    'query_lscans' 0
-    'query_setscans' 2
-    'query_methscans' 0
-    'query_nljoins' 2
-    'query_mjoins' 0
-    'query_objfetches' 0
-    'network_requests' 88
-    'adaptive_flush_pages' 0
-    'adaptive_flush_log_pages' 0
-    'adaptive_flush_max_pages' 0
-    'network_requests' 88
-    'adaptive_flush_pages' 0
-    'adaptive_flush_log_pages' 0
-    'adaptive_flush_max_pages' 0
+    'file_creates'                          0
+    'file_removes'                          0
+    'file_ioreads'                          6
+    'file_iowrites'                         0
+    'file_iosynches'                        0
+    'data_page_fetches'                     548
+    'data_page_dirties'                     34
+    'data_page_ioreads'                     6
+    'data_page_iowrites'                    0
+    'data_page_victims'                     0
+    'data_page_iowrites_for_replacement'    0
+    'log_page_ioreads'                      0
+    'log_page_iowrites'                     0
+    'log_append_records'                    0
+    'log_checkpoints'                       0
+    'log_wals'                              0
+    'page_locks_acquired'                   13
+    'object_locks_acquired'                 9
+    'page_locks_converted'                  0
+    'object_locks_converted'                0
+    'page_locks_re-requested'               0
+    'object_locks_re-requested'             8
+    'page_locks_waits'                      0
+    'object_locks_waits'                    0
+    'tran_commits'                          3
+    'tran_rollbacks'                        0
+    'tran_savepoints'                       0
+    'tran_start_topops'                     6
+    'tran_end_topops'                       6
+    'tran_interrupts'                       0
+    'btree_inserts'                         0
+    'btree_deletes'                         0
+    'btree_updates'                         0
+    'btree_covered'                         0
+    'btree_noncovered'                      2
+    'btree_resumes'                         0
+    'btree_multirange_optimization'         0
+    'query_selects'                         4
+    'query_inserts'                         0
+    'query_deletes'                         0
+    'query_updates'                         0
+    'query_sscans'                          2
+    'query_iscans'                          4
+    'query_lscans'                          0
+    'query_setscans'                        2
+    'query_methscans'                       0
+    'query_nljoins'                         2
+    'query_mjoins'                          0
+    'query_objfetches'                      0
+    'network_requests'                      88
+    'adaptive_flush_pages'                  0
+    'adaptive_flush_log_pages'              0
+    'adaptive_flush_max_pages'              0
+    'network_requests'                      88
+    'adaptive_flush_pages'                  0
+    'adaptive_flush_log_pages'              0
+    'adaptive_flush_max_pages'              0
+    
+    
+SHOW VOLUME HEADER
+==================
+
+**SHOW VOLUME HEADER OF** *volume_id* 문은 명시한 볼륨의 헤더 정보를 하나의 행으로 출력한다.
+
+::
+
+    SHOW VOLUME HEADER OF volume_id;
+    
+해당 구문은 다음과 같은 칼럼을 출력한다.
+
+*   Volume_id: 볼륨 식별자
+*   Magic_symbol: 볼륨 파일의 매직 값
+*   Io_page_size: DB 볼륨의 페이지 크기
+*   Purpose: 볼륨 사용 목적, 목적 타입: DATA, INDEX, GENERIC, TEMP TEMP, TEMP
+*   Sector_size_in_pages: 페이지 내 섹터의 크기
+*   Num_total_sectors: 섹터 전체 개수
+*   Num_free_sectors: 여유 섹터 개수
+*   Hint_alloc_sector: 할당될 다음 섹터에 대한 힌트
+*   Num_total_pages: 페이지의 전체 개수
+*   Num_free_pages: 여유 페이지 개수
+*   Sector_alloc_table_size_in_pages: 페이지 내 섹터 할당 테이블 크기
+*   Sector_alloc_table_first_page: 섹터 할당 테이블의 첫번째 페이지
+*   Page_alloc_table_size_in_pages: 페이지 내 페이지 할당 테이블의 크기
+*   Page_alloc_table_first_page: 페이지 할당 테이블의 첫번째 페이지
+*   Last_system_page: 마지막 시스템 페이지
+*   Creation_time: 데이터베이스 생성 시간
+*   Num_max_pages: 이 볼륨의 최대 페이지 카운트. 자동 확장된 볼륨인 경우 이 값은 total_pages와는 다르다. 
+*   Num_used_data_pages: DATA 목적으로 할당된 페이지
+*   Num_used_index_pages: INDEX 목적으로 할당된 페이지
+*   Checkpoint_lsa: 이 볼륨의 복구 절차를 시작하는 가장 작은 로그 일련 주소
+*   Boot_hfid: 부팅 목적을 위한 시스템 힙 파일과 다중 볼륨
+*   Full_name: 볼륨의 전체 경로
+*   Next_vol_full_name: 다음 볼륨의 전체 경로
+*   Remarks: 볼륨의 주석
+
+다음은 해당 질의를 실행한 결과이다.
+
+.. code-block:: sql
+
+    SHOW VOLUME HEADER OF 1;
+    
+    Volume_id   Magic_symbol                            Io_page_size    Purpose                     Sector_size_in_pages    Num_total_sectors   Num_free_sectors    Hint_alloc_sector   Num_total_pages Num_free_pages  Sector_alloc_table_size_in_pages    Sector_alloc_table_first_page   Page_alloc_table_size_in_pages  Page_alloc_table_first_page Last_system_page    Creation_time               Num_max_pages   Num_used_data_pages Num_used_index_pages    Checkpoint_lsa  Boot_hfid       Full_name                       Next_vol_full_name  Remarks
+    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    1           'CUBRID/Volume at disk location = 32'   16384           'Permanent GENERIC Volume'  10                      4                   3                   1                   40              37              1                                   1                               1                               2                           2                   'Mon Nov 11 16:39:07 2013'  32768            0                  0                       1               '(284|2800)'    '/data/cubrid/bin/TestDB_x001'  ''                  'Volume Extension'

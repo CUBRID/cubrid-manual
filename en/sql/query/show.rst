@@ -406,12 +406,12 @@ The following example shows the result of executing query in the *demodb* databa
     
 ::
 
-    variable value
-    ============================================
-    'data_page_fetches' 332
-    'data_page_dirties' 85
-    'data_page_ioreads' 18
-    'data_page_iowrites' 28
+    variable                value
+    ===============================
+    'data_page_fetches'     332
+    'data_page_dirties'     85
+    'data_page_ioreads'     18
+    'data_page_iowrites'    28
      
 .. code-block:: sql
 
@@ -422,62 +422,109 @@ The following example shows the result of executing query in the *demodb* databa
 
 ::
     
-    variable value
+    variable                                value
     ============================================
-    'file_creates' 0
-    'file_removes' 0
-    'file_ioreads' 6
-    'file_iowrites' 0
-    'file_iosynches' 0
-    'data_page_fetches' 548
-    'data_page_dirties' 34
-    'data_page_ioreads' 6
-    'data_page_iowrites' 0
-    'data_page_victims' 0
-    'data_page_iowrites_for_replacement' 0
-    'log_page_ioreads' 0
-    'log_page_iowrites' 0
-    'log_append_records' 0
-    'log_checkpoints' 0
-    'log_wals' 0
-    'page_locks_acquired' 13
-    'object_locks_acquired' 9
-    'page_locks_converted' 0
-    'object_locks_converted' 0
-    'page_locks_re-requested' 0
-    'object_locks_re-requested' 8
-    'page_locks_waits' 0
-    'object_locks_waits' 0
-    'tran_commits' 3
-    'tran_rollbacks' 0
-    'tran_savepoints' 0
-    'tran_start_topops' 6
-    'tran_end_topops' 6
-    'tran_interrupts' 0
-    'btree_inserts' 0
-    'btree_deletes' 0
-    'btree_updates' 0
-    'btree_covered' 0
-    'btree_noncovered' 2
-    'btree_resumes' 0
-    'btree_multirange_optimization' 0
-    'query_selects' 4
-    'query_inserts' 0
-    'query_deletes' 0
-    'query_updates' 0
-    'query_sscans' 2
-    'query_iscans' 4
-    'query_lscans' 0
-    'query_setscans' 2
-    'query_methscans' 0
-    'query_nljoins' 2
-    'query_mjoins' 0
-    'query_objfetches' 0
-    'network_requests' 88
-    'adaptive_flush_pages' 0
-    'adaptive_flush_log_pages' 0
-    'adaptive_flush_max_pages' 0
-    'network_requests' 88
-    'adaptive_flush_pages' 0
-    'adaptive_flush_log_pages' 0
-    'adaptive_flush_max_pages' 0
+    'file_creates'                          0
+    'file_removes'                          0
+    'file_ioreads'                          6
+    'file_iowrites'                         0
+    'file_iosynches'                        0
+    'data_page_fetches'                     548
+    'data_page_dirties'                     34
+    'data_page_ioreads'                     6
+    'data_page_iowrites'                    0
+    'data_page_victims'                     0
+    'data_page_iowrites_for_replacement'    0
+    'log_page_ioreads'                      0
+    'log_page_iowrites'                     0
+    'log_append_records'                    0
+    'log_checkpoints'                       0
+    'log_wals'                              0
+    'page_locks_acquired'                   13
+    'object_locks_acquired'                 9
+    'page_locks_converted'                  0
+    'object_locks_converted'                0
+    'page_locks_re-requested'               0
+    'object_locks_re-requested'             8
+    'page_locks_waits'                      0
+    'object_locks_waits'                    0
+    'tran_commits'                          3
+    'tran_rollbacks'                        0
+    'tran_savepoints'                       0
+    'tran_start_topops'                     6
+    'tran_end_topops'                       6
+    'tran_interrupts'                       0
+    'btree_inserts'                         0
+    'btree_deletes'                         0
+    'btree_updates'                         0
+    'btree_covered'                         0
+    'btree_noncovered'                      2
+    'btree_resumes'                         0
+    'btree_multirange_optimization'         0
+    'query_selects'                         4
+    'query_inserts'                         0
+    'query_deletes'                         0
+    'query_updates'                         0
+    'query_sscans'                          2
+    'query_iscans'                          4
+    'query_lscans'                          0
+    'query_setscans'                        2
+    'query_methscans'                       0
+    'query_nljoins'                         2
+    'query_mjoins'                          0
+    'query_objfetches'                      0
+    'network_requests'                      88
+    'adaptive_flush_pages'                  0
+    'adaptive_flush_log_pages'              0
+    'adaptive_flush_max_pages'              0
+    'network_requests'                      88
+    'adaptive_flush_pages'                  0
+    'adaptive_flush_log_pages'              0
+    'adaptive_flush_max_pages'              0
+
+SHOW VOLUME HEADER
+==================
+
+**SHOW VOLUME HEADER OF** *volume_id* shows the volume header of the specified volume in one row.
+
+::
+
+    SHOW VOLUME HEADER OF volume_id;
+    
+This query has the following columns:
+
+
+*   Volume_id: Volume identifier
+*   Magic_symbol: Magic value for a volume file
+*   Io_page_size: Size of DB volume
+*   Purpose: Volume purposes, purposes type: DATA, INDEX, GENERIC, TEMP TEMP, TEMP
+*   Sector_size_in_pages: Size of sector in pages
+*   Num_total_sectors: Total number of sectors
+*   Num_free_sectors: Number of free sectors
+*   Hint_alloc_sector: Hint for next sector to be allocated
+*   Num_total_pages: Total number of pages
+*   Num_free_pages: Number of free pages
+*   Sector_alloc_table_size_in_pages: Size of sector allocation table in page
+*   Sector_alloc_table_first_page: First page of sector allocation table
+*   Page_alloc_table_size_in_pages: Size of page allocation table in page
+*   Page_alloc_table_first_page: First page of page allocation table
+*   Last_system_page: Last system page
+*   Creation_time: Database creation time
+*   Num_max_pages: max page count of this volume, this is not equal to the total_pages,if this volume is auto extended
+*   Num_used_data_pages: allocated pages for DATA purpose
+*   Num_used_index_pages: allocated pages for INDEX purpose
+*   Checkpoint_lsa: Lowest log sequence address to start the recovery process of this volume
+*   Boot_hfid: System Heap file for booting purposes and multi volumes
+*   Full_name: The full path of volume
+*   Next_vol_full_name: The full path of next volume
+*   Remarks: Volume's remark
+
+The following example shows the result of executing this query.
+
+.. code-block:: sql
+
+    SHOW VOLUME HEADER OF 1;
+    
+    Volume_id   Magic_symbol                            Io_page_size    Purpose                     Sector_size_in_pages    Num_total_sectors   Num_free_sectors    Hint_alloc_sector   Num_total_pages Num_free_pages  Sector_alloc_table_size_in_pages    Sector_alloc_table_first_page   Page_alloc_table_size_in_pages  Page_alloc_table_first_page Last_system_page    Creation_time               Num_max_pages   Num_used_data_pages Num_used_index_pages    Checkpoint_lsa  Boot_hfid       Full_name                       Next_vol_full_name  Remarks
+    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    1           'CUBRID/Volume at disk location = 32'   16384           'Permanent GENERIC Volume'  10                      4                   3                   1                   40              37              1                                   1                               1                               2                           2                   'Mon Nov 11 16:39:07 2013'  32768            0                  0                       1               '(284|2800)'    '/data/cubrid/bin/TestDB_x001'  ''                  'Volume Extension'

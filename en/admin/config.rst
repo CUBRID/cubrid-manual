@@ -842,7 +842,7 @@ The following are parameters related to logs used for database backup and restor
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
 | force_remove_log_archives     | bool   | yes                        |                            |                            |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
-| log_buffer_size               | byte   | 128 *                      | 3 *                        | INT_MAX *                  |
+| log_buffer_size               | byte   | 128 *                      | 128 *                      | INT_MAX *                  |
 |                               |        | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` | :ref:`log_page_size <lpg>` |
 +-------------------------------+--------+----------------------------+----------------------------+----------------------------+
 | log_max_archives              | int    | INT_MAX                    | 0                          | INT_MAX                    |

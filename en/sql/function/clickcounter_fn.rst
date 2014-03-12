@@ -57,7 +57,7 @@ If you want to increase or decrease the click counter without specifying **INCR*
         CREATE TRIGGER event_tr BEFORE UPDATE ON event EXECUTE REJECT;
         SELECT INCR(players) FROM event WHERE gender='M';
 
-    *   The **INCR** / **DECR** functions returns an error in the write-protected broker mode such as slave mode of HA configuration, CSQL Interpreter (csql -r) of read-only, Read Only, Slave Only or Preferred Host Read Only mode.
+    *   The **INCR** / **DECR** functions returns an error in the write-protected broker mode such as slave mode of HA configuration, CSQL Interpreter (csql -r) of read-only, Read Only or Standby Only mode(ACCESS_MODE=RO or SO in cubrid_broker.conf).
 
 **Example**
 

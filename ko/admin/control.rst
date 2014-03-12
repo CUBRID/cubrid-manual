@@ -576,11 +576,13 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
 *   bind: 바인딩되는 값. sql 항목에 나타난 ?:<num>에서 <num>의 순서대로 출력된다. ?:0의 값이 5이고, ?:1의 값이 200이다.
 *   time: 수행 시간 (ms)
 *   buffer: buffer 수행 통계
+
     *   fetch: 페치 페이지 개수
     *   ioread: I/O 읽기 페이지 개수
     *   iowrite: I/O 쓰기 페이지 개수
     
 *   wait: 대기 시간 
+
     *   cs: 크리티컬 섹션에서 대기한 시간(ms)
     *   lock: 잠금을 획득하려고 대기한 시간(ms)
     *   latch: 래치를 획득하려고 대기한 시간(ms)

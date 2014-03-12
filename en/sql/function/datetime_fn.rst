@@ -1162,7 +1162,11 @@ ROUND
 
 .. function:: ROUND(date, fmt)
 
-    This function rounds date to the unit specified by the format string, *fmt*.
+    This function rounds date to the unit specified by the format string, *fmt*. It returns a value of DATE type.
+    
+    :param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
+    :param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
+    :rtype: DATE
     
     The format and its unit and the return value are as follows:
     
@@ -1186,10 +1190,6 @@ ROUND
     +-------------------+----------+-----------------------------------------------------------------------+
     | 'ss'              | second   | a value rounded to second                                             |
     +-------------------+----------+-----------------------------------------------------------------------+
-
-    :param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
-    :param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
-    :rtype: DATE
 
 .. code-block:: sql
 
@@ -1587,7 +1587,11 @@ TRUNC
 
 .. function:: TRUNC( date[, fmt] )
 
-    This function truncates date to the unit specified by the format string, *fmt*.
+    This function truncates date to the unit specified by the format string, *fmt*. It returns a value of DATE type.
+    
+    :param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
+    :param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
+    :rtype: DATE
     
     The format and its unit and the return value are as follows:
     
@@ -1604,10 +1608,6 @@ TRUNC
     +-------------------+----------+-----------------------------------------------------------------------+
     | 'dd'              | day      | the same date with *date*                                             |
     +-------------------+----------+-----------------------------------------------------------------------+
-
-    :param date: The value of **DATE**, **TIMESTAMP** or **DATETIME**
-    :param fmt: Specifies the format for the truncating unit. If omitted, "dd" is default.
-    :rtype: DATE
 
 .. code-block:: sql
 

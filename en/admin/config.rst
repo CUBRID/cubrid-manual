@@ -1653,6 +1653,8 @@ cubrid_broker.conf Configuration File and Default Parameters
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | KEEP_CONNECTION                 | string | AUTO                         | available |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | MAX_NUM_DELAYED_HOSTS_LOOKUP    | int    | -1                           |           |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | PREFERRED_HOSTS                 | string |                              |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | RECONNECT_TIME                  | sec    | 600                          | available |
@@ -1692,6 +1694,8 @@ cubrid_broker.conf Configuration File and Default Parameters
     |                                 |                         | SESSION_TIMEOUT                 | sec    | 300                          |           |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
     |                                 |                         | STATEMENT_POOLING               | string | ON                           | available |
+    |                                 |                         +---------------------------------+--------+------------------------------+-----------+
+    |                                 |                         | TRIGGER_ACTION                  | string | ON                           | available |
     |                                 +-------------------------+---------------------------------+--------+------------------------------+-----------+
     |                                 | Logging                 | ACCESS_LOG                      | string | OFF                          | available |
     |                                 |                         +---------------------------------+--------+------------------------------+-----------+
@@ -1865,6 +1869,10 @@ Access
 
     **KEEP_CONNECTION** is a parameter to configure the way of connection between CAS and application clients; it is set to one of the following: **ON** or **AUTO**. If this value is **ON**, it is connected in connection unit. If it is **AUTO** and the number of servers is more than that of clients, transaction unit is used; in the reverse case, connection unit is used. The default value is **AUTO**.
 
+**MAX_NUM_DELAYED_HOSTS_LOOKUP**
+
+    When almost all DB servers have the delay of replication in the HA environment where multiple DB servers on db-host of databases.txt are specified, check if the connection is established or not until the number of delayed replication servers; the number is specified in **MAX_NUM_DELAYED_HOSTS_LOOKUP** (whether the delay of replication in the DB server is judged only with the standby hosts; it is determined by the setting of ref:`ha_delay_limit <ha_delay_limit>`). See :ref:`MAX_NUM_DELAYED_HOSTS_LOOKUP <MAX_NUM_DELAYED_HOSTS_LOOKUP>` for further information.
+
 **PREFERRED_HOSTS**
 
     **PREFERRED_HOSTS** is a parameter to specify the order of a host to which a CAS tries to connect in a first priority. If the connection is failed after trying connection in the order specified in **PREFERRED_HOSTS**, a CAS tries to connect to the one of hosts specified in **$CUBRID_DATABASES/databases.txt**. The default value is **NULL**. For details, see :ref:`ha-cubrid-broker-conf`.
@@ -1877,8 +1885,9 @@ Access
     
     a certain status which CAS tries to reconnect is as follows.
      
-    *   when CAS is connected to the other DB server, not a DB server in **PREFERRED_HOSTS**.
-    *   when CAS with "ACCESS_MODE=RO"(Read Only) is connected to the active DB server.
+    *   when CAS is connected to not a DB server in **PREFERRED_HOSTS**, but the DB server of db-host in databases.txt.
+    *   when CAS with "ACCESS_MODE=RO"(Read Only) is connected to not the standby DB server, but the active DB server.
+    *   when CAS is connected to the DB server of which replication is delayed.
      
     When **RECONNECT_TIME** is 0, CAS does not try to reconnect.
     
@@ -2041,6 +2050,12 @@ Transaction & Query
     If the prepared statement is executed after transaction commit or termination while **STATEMENT_POOLING** is set to **OFF**, the following message will be displayed. ::
 
         Caused by: cubrid.jdbc.driver.CUBRIDException: Attempt to access a closed Statement.
+
+.. _trigger_action:
+
+**TRIGGER_ACTION**
+
+    Turn on or off of the trigger's action about the broker which specified this parameter. Specify ON or OFF as a value; The default is **ON**. 
 
 Logging
 ^^^^^^^
@@ -2248,3 +2263,13 @@ Etc
     **SOURCE_ENV** is a parameter used to determine the file where the operating system variable for each broker is configured. The extension of the file must be **env**. All parameters specified in **cubrid.conf** can also be configured by environment variables. For example, the **lock_timeout** parameter in **cubrid.conf** can also be configured by the **CUBRID_LOCK_TIMEOUT** environment variable. As another example, to block execution of DDL statements on broker1, you can configure **CUBRID_BLOCK_DDL_STATEMENT** to 1 in the file specified by **SOURCE_ENV**.
 
     An environment variable, if exists, has priority over **cubrid.conf**. The default value is **cubrid.env**.
+
+HA Configuration
+================
+
+Regarding HA configuration, see :ref:`ha-configuration`.
+
+SHARD Configuration
+===================
+
+Regarding SHARD configuration, see :ref:`default-shard-conf`.

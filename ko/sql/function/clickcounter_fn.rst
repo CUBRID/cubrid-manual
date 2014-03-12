@@ -57,7 +57,7 @@ INCR, DECR
         CREATE TRIGGER event_tr BEFORE UPDATE ON event EXECUTE REJECT;
         SELECT INCR(players) FROM event WHERE gender='M';
 
-    * **INCR** / **DECR** 함수는 HA 구성의 슬레이브 노드나 read-only 모드의 CSQL 인터프리터(csql -r) 또는 Read Only, Slave Only, Preferred Host Read Only 모드처럼 쓰기가 금지된 모드의 브로커에서 사용 시 오류를 반환한다.
+    * **INCR** / **DECR** 함수는 HA 구성의 슬레이브 노드나 read-only 모드의 CSQL 인터프리터(csql -r) 또는 Read Only, Standby Only 모드처럼 쓰기가 금지된 모드(cubrid_broker.conf의 ACCESS_MODE=RO 또는 SO)의 브로커에서 사용 시 오류를 반환한다.
 
 **예제**
 

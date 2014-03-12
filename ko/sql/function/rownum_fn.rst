@@ -22,7 +22,7 @@ ROWNUM, INST_NUM
 
 *   **ROWNUM** 함수는 각각의 **SELECT** 문장에 종속된다. 즉, **ROWNUM** 함수가 부질의에 쓰인 경우, 부질의를 수행하는 동안에 부질의 결과에 대하여 일련 번호를 반환한다. 내부적으로, **ROWNUM** 함수 결과는 조회된 레코드를 질의 결과 셋에 쓰기 직전에 생성된다. 이 순간에 질의 결과 셋의 레코드에 대한 일련 번호를 생성하는 카운터 값이 증가된다.
 
-*   **SELECT** 문에 **ORDER BY** 절이 포함된 경우 **WHERE** 절에 명시된 **ROWNUM** 함수의 값은 **ORDER BY** 절 처리를 위한 정렬 과정 전에 생성된다. **SELECT** 문에 **GROUP BY** 절이 포함된 경우에는 **HAVING** 절에 명시된 **GROUPBY_NUM()** 함수의 값은 질의 결과가 그룹화된 이후에 계산된다. **ORDER BY** 절에 의한 정렬 과정이 완료된 이후에 결과 레코드의 일련 번호를 얻어내기 위해서는 **ORDER BY** 절에 **ORDERBY_NUM()** 함수를 사용해야 한다.
+*   **SELECT** 문에 **ORDER BY** 절이 포함된 경우 **WHERE** 절에 명시된 **ROWNUM** 함수의 값은 **ORDER BY** 절 처리를 위한 정렬 과정 전에 생성된다. **SELECT** 문에 **GROUP BY** 절이 포함된 경우에는 **HAVING** 절에 명시된 **GROUPBY_NUM()** 함수의 값은 질의 결과가 그룹화된 이후에 계산된다. **ORDER BY** 절에 의한 정렬 과정이 완료된 이후에 결과 레코드의 일련 번호를 얻어내기 위해서는 **ORDER BY** 절에 **LIMIT** 절을 사용해야 한다.
 
 *   **ROWNUM** 함수는 **SELECT** 문 뿐만 아니라 **INSERT**, **DELETE**, **UPDATE** 와 같은 SQL 문에도 쓸 수 있다. 예를 들어, **INSERT INTO** *table_name* **SELECT** ... **FROM** ... **WHERE** ... 질의와 같이 한 테이블의 행(row) 중 일부를 조회하여 다른 테이블에 삽입하고자 할 때, **WHERE** 절에 **ROWNUM** 함수를 사용할 수 있다.
 
@@ -47,10 +47,10 @@ ROWNUM, INST_NUM
      
 .. code-block:: sql
 
-    --Limiting 4 rows using FOR ORDERBY_NUM()
+    --Limiting 4 rows using LIMIT
     SELECT ROWNUM, nation_code FROM participant WHERE host_year = 1988
     ORDER BY gold DESC
-    FOR ORDERBY_NUM() < 5;
+    LIMIT 4;
     
 ::
 
@@ -119,22 +119,18 @@ GROUPBY_NUM
              2000  '03:41.0'
              2004  '01:45.0'
 
-ORDERBY_NUM
-===========
+LIMIT 절과 ROWNUM 비교
+======================
 
-.. function:: ORDERBY_NUM ()
-
-    **ORDERBY_NUM()** 함수는 **ROWNUM** 혹은 **INST_NUM()** 함수와 함께, 결과 행들의 개수를 제한하는 목적으로 사용된다. 단, 차이점은 **ORDER BY** 절 뒤에 결합되어 사용되고, 이미 정렬을 수행한 결과에 대해 순서를 부여한다는 점이다. 즉, **ORDER BY** 절이 포함된 **SELECT** 문장에서 조건절에 **ROWNUM** 을 이용하여 일부 결과 행들만 조회하는 경우, **ROWNUM** 이 먼저 적용된 후 **ORDER BY** 에 의한 정렬이 수행된다. 반면, **ORDERBY_NUM()** 함수를 이용하여 일부 결과 행들만 조회하는 경우, **ORDER BY** 에 의한 정렬이 이루어진 결과에 대해서 **ROWNUM** 이 적용된다.
-    
-    :rtype: INT
+**LIMIT** 절은 **ROWNUM** 혹은 **INST_NUM()** 함수와 함께, 결과 행들의 개수를 제한하는 목적으로 사용된다. 단, 차이점은 **LIMIT** 절은 **ORDER BY** 절 뒤에 결합되어 사용될 수 있고, 이미 정렬을 수행한 결과에 대해 순서를 부여한다는 점이다. 즉, **ORDER BY** 절이 포함된 **SELECT** 문장에서 조건절에 **ROWNUM** 을 이용하여 일부 결과 행들만 조회하는 경우, **ROWNUM** 이 먼저 적용된 후 **ORDER BY** 에 의한 정렬이 수행된다. 반면, **LIMIT** 절을 이용하여 일부 결과 행들만 조회하는 경우, **ORDER BY** 에 의한 정렬이 이루어진 결과에 대해서 **ROWNUM** 이 적용된다.
     
 다음은 *demodb* 의 *history* 테이블에서 3위에서 5위까지의 선수 이름과 기록을 조회하는 예제이다.
 
 .. code-block:: sql
 
-    --Ordering first and then limiting rows using FOR ORDERBY_NUM()
+    --Ordering first and then limiting rows using LIMIT
     SELECT athlete, score FROM history
-    ORDER BY score FOR ORDERBY_NUM() BETWEEN 3 AND 5;
+    ORDER BY score LIMIT 2, 3;
     
 ::
 
@@ -157,3 +153,5 @@ ORDERBY_NUM
       'Thorpe Ian'          '01:45.0'
       'Thorpe Ian'          '03:41.0'
       'Hackett Grant'       '14:43.0'
+
+.. note:: **LIMIT** 절처럼 정렬된 결과 행들의 개수를 제한하는 목적으로 사용되는 **FOR ORDERBY_NUM()** 구문은 제거될 예정(deprecated)이므로, 더 이상 사용을 권장하지 않는다.

@@ -10,7 +10,7 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
         [ WHERE <search_condition> ]
         [ GROUP BY {col_name | expr} [ ASC | DESC ],...[ WITH ROLLUP ] ]
         [ HAVING  <search_condition> ]
-        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ] [ FOR <orderby_for_condition> ] ]
+        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ]
         [ LIMIT [offset,] row_count ]
         [ USING INDEX { index_name [,index_name,...] | NONE }]
      
@@ -47,11 +47,6 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
     
     <lock_hint> ::= READ UNCOMMITTED
      
-    <orderby_for_condition> ::=
-        ORDERBY_NUM() { BETWEEN int AND int } |
-        { { = | =< | < | > | >= } int } |
-        IN ( int, ...)
-
 *   *qualifier* : A qualifier. When omitted, it is set to **ALL**.
 
     *   **ALL** : Retrieves all records of the table.
@@ -81,7 +76,8 @@ The following example shows how to retrieve host countries of the Olympic Games 
 
 .. code-block:: sql
 
-    SELECT DISTINCT host_nation FROM olympic;
+    SELECT DISTINCT host_nation 
+    FROM olympic;
     
 ::
 
@@ -94,11 +90,13 @@ The following example shows how to retrieve host countries of the Olympic Games 
       'France'
     ...
 
-The following example shows how to define an alias to a column to be queried and sort the result record by using the column alias in the **ORDER BY** clause. At this time, the number of the result records is limited to 5 by using the **LIMIT** clause and FOR **ORDERBY_NUM()**.
+The following example shows how to define an alias to a column to be queried and sort the result record by using the column alias in the **ORDER BY** clause. At this time, the number of the result records is limited to 5 by using the **LIMIT** clause.
 
 .. code-block:: sql
 
-    SELECT host_year as col1, host_nation as col2 FROM olympic ORDER BY col2 LIMIT 5;
+    SELECT host_year as col1, host_nation as col2 
+    FROM olympic 
+    ORDER BY col2 LIMIT 5;
     
 ::
     
@@ -112,8 +110,9 @@ The following example shows how to define an alias to a column to be queried and
      
 .. code-block:: sql
 
-    SELECT CONCAT(host_nation, ', ', host_city) AS host_place FROM olympic
-    ORDER BY host_place FOR ORDERBY_NUM() BETWEEN 1 AND 5;
+    SELECT CONCAT(host_nation, ', ', host_city) AS host_place 
+    FROM olympic
+    ORDER BY host_place LIMIT 5;
     
 ::
     
@@ -410,12 +409,6 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
 
     SELECT ...
     ORDER BY { col_name | expr | position } [ ASC | DESC ], ...] [ NULLS { FIRST | LAST } ]
-        [ FOR <orderby_for_condition> ] ]
-     
-    <orderby_for_condition> ::=
-    ORDERBY_NUM() { BETWEEN bigint AND bigint } |
-        { { = | =< | < | > | >= } bigint } |
-        IN (bigint, ...)
 
 *   *col_name* | *expr* | *position* : Specifies a column name, expression, alias, or column location. One or more column names, expressions or aliases can be specified. Items are separated by commas. A column that is not specified in the list of **SELECT** columns can be specified.
 
@@ -453,8 +446,7 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
     SELECT dept_no AS a1, avg(sales_amount) AS a2 
     FROM sales_tbl
     GROUP BY a1
-    ORDER BY a2 DESC
-    LIMIT 0, 3;
+    ORDER BY a2 DESC LIMIT 3;
     
 ::
 
@@ -464,22 +456,6 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
               301     3.000000000000000e+02
               501     1.750000000000000e+02
      
-.. code-block:: sql
-
-    -- sorting reversely and limiting result rows by FOR clause
-    SELECT dept_no AS a1, avg(sales_amount) AS a2 
-    FROM sales_tbl
-    GROUP BY a1
-    ORDER BY a2 DESC FOR ORDERBY_NUM() BETWEEN 1 AND 3;
-    
-::
-
-               a1           a2
-    =======================================
-              201     3.250000000000000e+02
-              301     3.000000000000000e+02
-              501     1.750000000000000e+02
-
 The following is an example how to specify the NULLS FIRST or NULLS LAST after ORDER BY clause.
 
 .. code-block:: sql
@@ -535,7 +511,7 @@ LIMIT Clause
 
 The **LIMIT** clause can be used to limit the number of records displayed. You can specify a very big integer for *row_count* to display to the last row, starting from a specific row. The **LIMIT** clause can be used as a prepared statement. In this case, the bind parameter (?) can be used instead of an argument.
 
-**INST_NUM** () and **ROWNUM** cannot be included in the **WHERE** clause in a query that contains the **LIMIT** clause. Also, **LIMIT** cannot be used together with FOR **ORDERBY_NUM** () or **HAVING GROUPBY_NUM** (). 
+**INST_NUM** () and **ROWNUM** cannot be included in the **WHERE** clause in a query that contains the **LIMIT** clause. Also, **LIMIT** cannot be used together with **HAVING GROUPBY_NUM** (). 
 
 ::
 

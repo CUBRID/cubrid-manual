@@ -118,6 +118,7 @@ To display the option list in the prompt, execute the **csql** utilities withou
           --no-auto-commit         disable auto commit mode execution
           --no-pager               do not use pager
           --no-single-line         turn off single line oriented execution
+          --no-trigger-action      disable trigger action
 
     For additional information, see http://www.cubrid.com
     
@@ -243,6 +244,10 @@ To display the option list in the prompt, execute the **csql** utilities withou
 
          csql --sysadm --write-on-standby -u dba testdb@localhost 
 
+.. option::  --no-trigger-action
+
+    If you specify this option, triggers of the queries executed in this CSQL are not triggered.
+      
 .. _csql-session-commands:
 
 Session Commands

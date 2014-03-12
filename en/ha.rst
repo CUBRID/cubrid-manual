@@ -108,87 +108,68 @@ If a heartbeat message fails to deliver, a failover will occur. For this reason,
 Broker Mode
 -----------
 
-A broker can access a server with one of the following modes: **Read Write**, **Read Only** or **Slave Only**. This configuration value is determined by a user.
+A broker can access a server with one of the following modes: **Read Write**, **Read Only** or **Standby Only**. This configuration value is determined by a user.
 
-A broker finds and connects to a suitable server by trying to establish a connection in the order of server connections; this is, if it fails to establish a connection, it tries another connection to the next server defined until it reaches the last server. If no connection is made even after trying all servers, the broker fails to connect to a server.
+A broker finds and connects to a suitable DB server by trying to establish a connection in the order of DB server connections; this is, if it fails to establish a connection, it tries another connection to the next DB server defined until it reaches the last DB server. If no connection is made even after trying all servers, the broker fails to connect to a DB server.
 
 For details on how to configure broker mode, see :ref:`ha-cubrid-broker-conf`.
 
+DB connection is affected by **PREFERRED_HOSTS**, **CONNECT_ORDER** and **MAX_NUM_DELAYED_HOSTS_LOOKUP** parameters in **cubrid_broker.conf**.
+See :ref:`ha-connect-broker-db` for further information.
+
+The below is the description if the above parameters are not specified.
+
 **Read Write**
 
-A broker that provides read and write services. This broker is usually connected to an active server. If no active servers exist, this broker will be connected to a standby server. For this reason, a Read Write broker can be temporarily connected to a standby server.
+"ACCESS_MODE=RW"
+
+A broker that provides read and write services. This broker is usually connected to an active server. If there is no active server, this broker will be connected to a standby server temporarily. Therefore, a Read Write broker can be temporarily connected to a standby server.
 
 When the broker temporarily establishes a connection to a standby server, it will disconnect itself from the standby server at the end of every transaction so that it can attempt to find an active server at the beginning of the next transaction. When it is connected to the standby server, only read service is available. Any write requests will result in a server error.
 
-Connecting to a DB server is influenced by **PREFERRED_HOSTS** and **CONNECT_ORDER** parameters in **cubrid_broker.conf**, and a CAS tries to connect in the below order.
-
-#.  If **PREFERRED_HOSTS** is 
-
-    a.  specified, a CAS tries to connect in the order in the specified hosts; if the status of the server is active, the connection is completed.
-    b.  not specified; if there is a server which has been connected already, a CAS tries to connect with that server; if the status of the server is active, the connection is completed.
-
-#.  After the failure of the connection in 1., if the value of **CONNECT_ORDER** is
-
-    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the status of the server is active, the connection is completed.
-    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the status of the server is active, the connection is completed.
-    
-#.  After the failure of the connection in 2., if the value of **CONNECT_ORDER** is
-
-    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the accessible server exists, the connection is completed.
-    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the accessible server exists, the connection is completed.
-
-The following picture shows how a CAS connects to the host through **db-host** configuration when there are no settings about **PREFERRED_HOSTS** and **CONNECT_ORDER**.
+The following picture shows how a broker connects to the host through the **db-host** configuration.
 
 .. image:: /images/image20.png
 
+The broker tries to connect as the order of B, C, A because db-host in databases.txt is "node B:node C:node A". At this time, "node B:node C:node A" specified in db-host is the real host names defined in the /etc/hosts file.
+
+*   Example 1.  node B is crashed, node C is in standby status, and node A is in active status. Therefore, at last, the broker connects to node A.
+*   Example 2.  node B is crashed, and node C is in active status. Therefore, at last, the broker connects to node C.
+
 **Read Only**
 
-A broker that provides the read service. This broker is connected to a standby server if possible. For this reason, the Read Only broker can be connected to an active server temporarily.
+"ACCESS_MODE=RO"
 
-Once it establishes a connection with an active server, it will maintain that connection even if a standby server exists. To disconnect from the active server and reconnect to a standby server, you should execute the **cubrid broker reset** command. An error will occur when the Read Only broker receives write requests; therefore, only the read service will be available even if it is connected to an active server.
+A broker that provides the read service. This broker is connected to a standby server if possible. Therefore, the Read Only broker can be connected to an active server temporarily.
 
-Connecting to a DB server is influenced by **PREFERRED_HOSTS** and **CONNECT_ORDER** parameters in **cubrid_broker.conf**, and a CAS tries to connect in the below order.
+Once it establishes a connection with an active server, it will maintain that connection until the time specified by :ref:`RECONNECT_TIME <RECONNECT_TIME>`. After RECONNECT_TIME, the broker tries to reconnect as disconnecting the old connection. Or you can reconnect to the standby server by running **cubrid broker reset**. If a write request is delivered to the Read Only broker, an error occurs in the broker; therefore, only the read service will be available even if it is connected to an active server.
 
-#.  If **PREFERRED_HOSTS** is 
-
-    a.  specified, a CAS tries to connect in the order in the specified hosts; if the status of the server is standby, the connection is completed.
-    b.  not specified; if there is a server which has been connected already, a CAS tries to connect with that server; if the status of the server is standby, the connection is completed.
-
-#.  After the failure of the connection in 1., if the value of **CONNECT_ORDER** is
-
-    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the status of the server is standby, the connection is completed.
-    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the status of the server is standby, the connection is completed.
-    
-#.  After the failure of the connection in 2., if the value of **CONNECT_ORDER** is
-
-    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the accessible server exists, the connection is completed.
-    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the accessible server exists, the connection is completed.
-
-The following picture shows how a CAS connects to the host through **db-host** configuration when there are no settings about **PREFERRED_HOSTS** and **CONNECT_ORDER**.
+The following picture shows how a broker connects to the host through the **db-host** configuration.
 
 .. image:: /images/image21.png
 
-**Slave Only**
+The broker tries to connect as the order of A, B, C because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real host names defined in the /etc/hosts file.
+
+*   Example 1.  node A is in active status, node B is in standby status. Therefore, at last, the broker connects to node B.
+*   Example 2.  node A is in active status, node B is crashed, and node C is in standby status. Therefore, at last, the broker connects to node C.
+*   Example 3.  node A is in active status, node B and node C are crashed. Therefore, at last, the broker connects to node A.
+
+**Standby Only**
+
+"ACCESS_MODE=SO"
 
 A broker that provides the read service. This broker can only be connected to a standby server. If no standby server exists, no service will be provided.
 
-Connecting to a DB server is influenced by **PREFERRED_HOSTS** and **CONNECT_ORDER** parameters in **cubrid_broker.conf**, and a CAS tries to connect in the below order.
 
-#.  If **PREFERRED_HOSTS** is 
-
-    a.  specified, a CAS tries to connect in the order in the specified hosts; if the status of the server is standby, the connection is completed.
-    b.  not specified; if there is a server which has been connected already, a CAS tries to connect with that server; if the status of the server is standby, the connection is completed.
-
-#.  After the failure of the connection in 1., if the value of **CONNECT_ORDER** is
-
-    a.  specified as **SEQ** or not specified, a CAS tries to connect in the order to the hosts specified in **databases.txt**; if the status of the server is standby, the connection is completed.
-    b.  specified as **RANDOM**, a CAS tries to connect randomly to the hosts specified in **databases.txt**; if the status of the server is standby, the connection is completed.
-    
-#.  If there is no standby status on the server, the connection is failed.
-
-The following picture shows how a CAS connects to the host through the db-host configuration when there are no settings about **PREFERRED_HOSTS** and **CONNECT_ORDER**.
+The following picture shows how a broker connects to the host through the **db-host** configuration.
 
 .. image:: /images/image22.png
+
+The broker tries to connect as the order of A, B, C because db-host in databases.txt is "node A:node B:node C". At this time, "node A:node B:node C" specified in db-host is the real host names defined in the /etc/hosts file.
+
+*   Example 1.  node A is in active status, node B is in standby status. Therefore, at last, the broker connects to node B.
+*   Example 2.  node A is in active status, node B is crashed, and node C is in standby status. Therefore, at last, the broker connects to node C.
+*   Example 3.  node A is in active status, node B and node C are crashed. Therefore, at last, the broker does not connect to any node. This is the difference with Read Only broker.
 
 CUBRID HA Features
 ==================
@@ -494,10 +475,15 @@ Specifies the host name (*nodeA_broker*, *nodeB_broker*) and port for an applica
 Environment Configuration
 =========================
 
+The below is the description for setting the HA environment. See :ref:`ha-connect-broker-db` for further information regarding the process connecting between a broker and a DB server. 
+
 cubrid.conf
 -----------
 
 The **cubrid.conf** file that has general information on configuring CUBRID is located in the **$CUBRID/conf** directory. This page provides information about **cubrid.conf** parameters used by CUBRID HA.
+
+HA or Not
+^^^^^^^^^
 
 **ha_mode**
 
@@ -512,6 +498,9 @@ The **ha_mode** parameter can be re-configured in the **[@<database>]** section;
 If **ha_mode** is **on**, the CUBRID HA values are configured by reading **cubrid_ha.conf**.
 
 This parameter cannot be modified dynamically. To modify the value of this parameter, you must restart it.
+
+Logging
+^^^^^^^
 
 .. _ha-log_max_archives:
 
@@ -536,6 +525,9 @@ For details about **force_remove_log_archives**, see :ref:`logging-parameters`.
 .. note::
 
     From 2008 R4.3 in replica mode, it will be always deleted except for archive logs as many as specified in the **log_max_archives** parameter, regardless the **force_remove_log_archives** value specified.
+
+Access
+^^^^^^
 
 **max_clients**
 
@@ -592,6 +584,11 @@ cubrid_ha.conf
 
 The **cubrid_ha.conf** file that has generation information on CUBRID HA is located in the **$CUBRID/conf** directory. CUBRID HA does not support Windows; it supports Linux only.
 
+See :ref:`ha-connect-broker-db` for further information regarding the process connecting between a broker and a DB server. 
+
+Node
+^^^^
+
 **ha_node_list**
 
 **ha_node_list** is a parameter used to configure the group name to be used in the CUBRID HA group and the host name of member nodes in which failover is supported. The group name is separated by @. The name before @ is for the group, and the names after @ are for host names of member nodes. A comma(,) or colon(:) is used to separate individual host names. The default is **localhost@localhost**.
@@ -618,6 +615,13 @@ The group name must be identical to the name specified in **ha_replica_list**. T
 
 This parameter can be modified dynamically. If you modify the value of this parameter, you must execute :ref:`cubrid heartbeat reload <cubrid-heartbeat>` to apply the changes.
 
+**ha_db_list**
+
+**ha_db_list** is a parameter used to configure the name of the database that will run in CUBRID HA mode. The default is **NULL**. You can specify multiple databases by using a comma (,).
+
+Access
+^^^^^^
+
 **ha_port_id**
 
 **ha_port_id** is a parameter used to configure the UDP port number; the UDP port is used to detect failure when exchanging heartbeat messages. The default is **59,901**.
@@ -632,6 +636,9 @@ The host name of the member nodes specified in this parameter can be replaced wi
 
 Configuring this parameter can prevent split-brain, a phenomenon in which two master nodes simultaneously exist as a result of the slave node erroneously detecting an abnormal termination of the master node due to unstable network status and then promoting itself as the new master.
 
+Replication
+^^^^^^^^^^^
+
 **ha_copy_sync_mode**
 
 **ha_copy_sync_mode** is a parameter used to configure the mode of storing the replication log, which is a copy of transaction log. The default is **SYNC**.
@@ -642,7 +649,7 @@ For details, see :ref:`log-multiplexing`.
 
 **ha_copy_log_base**
 
-**ha_copy_log_base** is a parameter used to configure the location of storing the transaction log copy. The default is **$CUBRID_DATABASES**.
+**ha_copy_log_base** is a parameter used to configure the location of storing the transaction log copy. The default is **$CUBRID_DATABASES**/\ *<db_name>*/\ *<host_name>*.
 
 For details, see :ref:`log-multiplexing`.
 
@@ -657,10 +664,6 @@ To prevent wasting needless disk space, it is recommended to keep this value as 
 .. 아래 내용은 복제 재구축 스크립트의 동작 방식이 변경되기 전까지는 틀린 내용이므로 제거. 물론 수동으로 구축한다면 복제로그를 사용할 수는 있음.
 
     If :ref:`rebuilding-replication` is needed by using the slave node or the replica node as a source, a newly added replication log files during rebuilding a replication should not be deleted by specifying **ha_copy_log_max_archives**. Therefore, the value of **ha_copy_log_max_archives** should be specified moderately largely. Except for this case, we recommend you to keep this value as the default value, 1, to prevent wasting disk space
-
-**ha_db_list**
-
-**ha_db_list** is a parameter used to configure the name of the database that will run in CUBRID HA mode. The default is **NULL**. You can specify multiple databases by using a comma (,).
 
 **ha_apply_max_mem_size**
 
@@ -704,15 +707,17 @@ To prevent wasting needless disk space, it is recommended to keep this value as 
 
 **ha_replica_delay**
 
-This parameter specifies the term of applying the replicated data between a master node and a replica node. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied. The default value is 0.
+This parameter specifies the term of applying the replicated data between a master node and a replica node. CUBRID intentionally delays replicating by the specified time. You can set a unit as ms, s, min or h, which stands for milliseconds, seconds, minutes or hours respectively. If you omit the unit, milliseconds(ms) will be applied. The default value is 0.
 
 **ha_replica_time_bound**
 
 In a master node, only the transactions which have been run on the specified time with this parameter are applied to the replica node. The format of this value is "YYYY-MM-DD hh:mi:ss". There is no default value.
     
-.. note:: \
+.. note::
 
-    The following example shows how to configure **cubrid_ha.conf**. ::
+    The following example shows how to configure **cubrid_ha.conf**. 
+    
+    ::
 
         [common]
         ha_node_list=cubrid@nodeA:nodeB
@@ -720,19 +725,23 @@ In a master node, only the transactions which have been run on the specified tim
         ha_copy_sync_mode=sync:sync
         ha_apply_max_mem_size=500
 
-.. note:: \
+.. note::
 
-    The following example shows how to configure the value of /etc/hosts (a host name of a member node: nodeA, IP: 192.168.0.1). ::
+    The following example shows how to configure the value of /etc/hosts (a host name of a member node: nodeA, IP: 192.168.0.1). 
+    
+    ::
 
         127.0.0.1 localhost.localdomain localhost
         192.168.0.1 nodeA
 
+.. _ha_delay_limit:
+
 **ha_delay_limit** 
 
 **ha_delay_limit** is a standard time for CUBRID itself to measure replication delay status, and **ha_delay_limit_delta** is a value to subtract a time which replication delay is released from a replication delay time. Once a server is measured as a replication delay, it keeps this status until the replication delay time is equal or lower than (**ha_delay_limit** - **ha_delay_limit_delta**).
-A slave node or a replica node corresponds to a standby DB server. 
+A slave node or a replica node corresponds to a standby DB server, that is a target server to judge whether replication is delayed or not.
 
-For example, if you want set replication delay time as 10 minutes and replication-delay-releasing time as 8 minutes, the value of **ha_delay_limit** will be 600S(or 10M) and the value of **ha_delay_limit_delta** will be 120S(or 2M).
+For example, if you want set replication delay time as 10 minutes and replication-delay-releasing time as 8 minutes, the value of **ha_delay_limit** will be 600s(or 10min) and the value of **ha_delay_limit_delta** will be 120s(or 2min).
 
 If it is measured as replication delay, CAS judges that there is a problem for standby DB to process jobs, and attempts to reconnect the other standby DBs.
 
@@ -742,6 +751,68 @@ CAS, which is connected to the DB which has the lower priority because of the re
   
 See the above description of **ha_delay_limit**.
 
+**ha_unacceptable_proc_restart_timediff**
+
+When the abnormal status of a server process is kept, the server can be restarted infinitely; it is better to remove this kind of node from the HA components. Because the server is restarted within a short time when the abnormal status is continued, specify this term with this parameter to detect this situation. If the server is restarted within the specified term, CUBRID assumes that this server is abnormal and remove(demote) this node from the HA components.
+The default is 2min. If the unit is omitted, it is specified as milliseconds(msec).
+
+SQL Logging
+^^^^^^^^^^^
+
+**ha_enable_sql_logging**
+
+If the value of this parameter is **yes**, CUBRID generates the log file of SQL which **aplylogdb** process applies to the DB volume. The log file is located under the sql_log of the replication log directory(**ha_copy_log_base**). The default is **no**.
+
+The format of this log file name is *<db name>_<master hostname>*\ **.sql.log.**\ *<id>*, and *<id>* starts from 0.
+If this size is over **ha_sql_log_max_size_in_mbytes**, a new file with "*<id>* + 1" is created.
+For example, if "ha_sql_log_max_size_in_mbytes=100", demodb_nodeA.sql.log.1 is newly created as the size of demodb_nodeA.sql.log.0 file becomes 100MB.
+
+SQL log files are piled up when this parameter is on; therefore, a user should remove log files manually for retaining the free space.
+
+The SQL log format is as follows.
+
+*   INSERT/DELETE/UPDATE
+
+    ::
+    
+        -- date | SQL id | SELECT query's length for sampling | the length of a transformed query
+        -- SELECT query for sampling
+        transformed query
+
+    ::
+    
+        -- 2013-01-25 15:16:41 | 40083 | 33 | 114
+        -- SELECT * FROM [t1] WHERE "c1"=79186;
+        INSERT INTO [t1]("c1", "c2", "c3") VALUES (79186,'b3beb3decd2a6be974',0);
+
+*   DDL
+
+    ::
+    
+        -- date | SQL id | 0 | the length of a transformed query
+        DDL query
+        (GRANT query will follow when CREATE TABLE, to grant the authority to the table created with DBA authority.)
+
+    ::
+    
+        -- 2013-01-25 14:22:59 | 1 | 0 | 50
+        create class t1 ( id integer, primary key (id)  );
+        -- 2013-01-25 14:22:59 | 2 | 0 | 38
+        GRANT ALL PRIVILEGES ON [t1] TO public;
+
+.. warning::
+
+    When you apply this SQL log from a specific point as creating other DB, triggers should be turned off because the jobs performed by triggers from master node are written to the SQL log file.
+    
+    *   See :ref:`TRIGGER_ACTION <TRIGGER_ACTION>` for turning off the triggers with a broker configuration.
+    *   See :option:`csql --no-trigger-action` for tunning off the triggers when you run CSQL.
+    
+.. unique key update 문 중복 적용 시 발생하는 unique 에러 문제에 대해서는 아직 선별 전이므로 warning에 반영 보류. [보류]
+
+**ha_sql_log_max_size_in_mbytes**
+
+The value of this parameter is the maximum size of the file which is created when SQL applied to DB by **applylogdb** process is logged. The new file is created when the size of a log file is over this value.
+
 .. _ha-cubrid-broker-conf:
 
 cubrid_broker.conf
@@ -749,17 +820,39 @@ cubrid_broker.conf
 
 The **cubrid_broker.conf** file that has general information on configuring CUBRID broker is located in the **$CUBRID/conf** directory. This section explains the parameters of **cubrid_broker.conf** that are used by CUBRID HA.
 
+See :ref:`ha-connect-broker-db` for further information regarding the process connecting between a broker and a DB server.
+
+Access Target
+^^^^^^^^^^^^^
+
 **ACCESS_MODE**
 
 **ACCESS_MODE** is a parameter used to configure the mode of a broker. The default is **RW**.
 
-Its value can be one of the following: **RW** (Read Write), **RO** (Read Only), **SO** (Slave Only), or **PHRO** (Preferred Host Read Only). For details, see :ref:`broker-mode`.
+Its value can be one of the following: **RW** (Read Write), **RO** (Read Only), **SO** (Standby Only), or **PHRO** (Preferred Host Read Only). For details, see :ref:`broker-mode`.
+
+**REPLICA_ONLY**
+
+CAS is only accessed to the replica DB if the value of **REPLICA_ONLY** is **ON**. The default is **OFF**. If the value of **REPLICA_ONLY** is **ON** and the value of **ACCESS_MODE** is **RW**, writing job is possible to even replica DB.
+
+
+Access Order
+^^^^^^^^^^^^
+
+**CONNECT_ORDER**
+
+This parameter specifies whether the host-connecting order from a CAS is sequential or random. The host is configured from **db-host** of **$CUBRID_DATABASES/databases.txt**.
+
+The default is **SEQ**; CAS tries to connect in the order. When this vaule is **RANDOM**, CAS tries to connect at random.
+If **PREFERRED_HOSTS** parameter is specified, CAS tries to connect to the hosts configured in *PREFERRED_HOSTS** in the order, then use the value of **db-host** only when the connection by *PREFERRED_HOSTS** fails; and **CONNECT_ORDER** does not affects on the order of **PREFERRED_HOSTS**.
+
+If you concern that the connections are centralized into one DB, set this value as **RANDOM**.
 
 **PREFERRED_HOSTS**
 
 Specify the order to connect by listing host names. The default value is **NULL**.
 
-You can specify multiple nodes by using a colon (:). First, it tries to connect to host in the following order: host specified in the **PREFERRED_HOSTS** parameter first and then host specified in **$CUBRID_DATABASES/databases.txt**. For details, see :ref:`broker-mode`.
+You can specify multiple nodes by using a colon (:). First, it tries to connect to host in the following order: host specified in the **PREFERRED_HOSTS** parameter first and then host specified in **$CUBRID_DATABASES/databases.txt**.
 
 The following example shows how to configure **cubrid_broker.conf**. To access localhost in a first priority, set **PREFERRED_HOSTS** as *localhost*.
 
@@ -782,6 +875,60 @@ The following example shows how to configure **cubrid_broker.conf**. To access l
     # Broker mode setting parameter
     ACCESS_MODE             =RO
     PREFERRED_HOSTS         =localhost
+
+Access Limit
+^^^^^^^^^^^^
+
+.. _MAX_NUM_DELAYED_HOSTS_LOOKUP:
+ 
+**MAX_NUM_DELAYED_HOSTS_LOOKUP**
+
+When replication is delayed on all DB servers in the HA environment which specified multiple DB servers to **db-host** of **databases.txt**, CUBRID checks the replication-delayed servers until only the specified numbers in the **MAX_NUM_DELAYED_HOSTS_LOOKUP** parameter and decides the connection(checking the delay of replication is judged for the standby hosts; the delayed time is decided by the :ref:`ha_delay_limit <ha_delay_limit>` parameter). Also, **MAX_NUM_DELAYED_HOSTS_LOOKUP** is not applied to **PREFERRED_HOSTS**.
+
+For example, when **db-host** is specified as "host1:host2:host3:host4:host5" and "MAX_NUM_DELAYED_HOSTS_LOOKUP=2", if the status of them as follows,
+
+*   host1: active status
+*   host2: standby status, replication is delayed
+*   host3: unable to access
+*   host4: standby status, replication is delayed
+*   host5: standby status, replication is not delayed
+
+then the broker tries to access the two hosts, hosts and host4 which their replications are delayed, then decides to access host4.
+
+The reason to behave like the above is that CUBRID assumes that the replication will be delayed to the other hosts if the replication of the number(specified by **MAX_NUM_DELAYED_HOSTS_LOOKUP**) of hosts are delayed; therefore, CUBRID decides to connect to the last hosts which CUBRID have tried to access, as CUBRID does not try to access for the left hosts. However, if **PREFERRED_HOSTS** is specified together, CUBRID tries to access to them first and then tries to access to the hosts of db-host list from the first.
+
+The step which the broker access CUBRID is divided into the primary connection and the secondary connection.
+
+*   The primary connection: the step which the broker tries to access DB at first. 
+
+    It checks the DB status(active/standby) and whether the replication is delayed or not. At this time, the broker checks DB's status if it's active or standby based on the **ACCESS_MODE** then decides the connection.
+
+*   The secondary connection: After the failure of the primary connection, the broker tries to connect from the failed position. At this time, the broker ignores the DB status(active/standby) and the delay of replication. However, SO broker alway accepts a connection only to a standby DB.
+
+    At this time, the connection is decided if the DB is accessible, by ignoring the delay of replication and DB status(active/standby). However, the error can occur during the query execution. For example, If ACCESS_MODE of the broker is RW but the broker access standby DB, it occurs an error during INSERT operation. Regardless of the error, after it is connected to a standby DB and the transaction is executed, the broker retries the primary connection. However, SO broker can never connect to the active DB.
+
+Depending on the value of **MAX_NUM_DELAYED_HOSTS_LOOKUP**, how the number of hosts, attempting to connect is limited as follows.
+
+*   MAX_NUM_DELAYED_HOSTS_LOOKUP=-1
+
+    The same as you do not specify this parameter, which is the default value. In this case, at the primary step, the delay of replication and the DB status are checked to the end, then the connection is decided. At the secondary step, even if there is a replication, or even if that is not the expected DB status(active/standby), the broker connects to the last host which was accessible.
+
+*   MAX_NUM_DELAYED_HOSTS_LOOKUP=0
+
+    The secondary connection is processed after the connection is tried only to **PREFERRED_HOSTS** at the primary step; and at the secondary step, the broker tries to connect to a host even it is delayed in replication or it is not an expected DB status(active/standby). That is, because it is the secondary connection, RW broker can connect to a standby host and RO broker can connect to an active host. However, SO broker can never connect to the active DB.
+
+*   MAX_NUM_DELAYED_HOSTS_LOOKUP=n(>0)
+
+    The broker tries to connect until the specified number of replication-delayed hosts. At the primary connection, the broker inspects until the specified number of replication-delayed hosts; at the secondary connection, the broker connects to a host that there is a delay of replication.
+
+Reconnection
+^^^^^^^^^^^^
+
+**RECONNECT_TIME**
+
+When a broker tries to connect a DB server which are not in **PREFERRED_HOSTS**, RO broker tries to connect to active DB server, or a broker tries to connect to the replication-delayed DB server, if connecting time is over  **RECONNECT_TIME**\ (default: 10min), the broker tries to reconnect.
+
+See :ref:`RECONNECT_TIME <reconnect_time>` for further information.
 
 databases.txt
 -------------
@@ -849,6 +996,209 @@ The following example shows how to configure PHP.
     If you want to run smoothly the broker's failover in the environment which the broker's failover is enabled by setting **altHosts**, you should set the value of **disconnectOnQueryTimeout** in URL as **true**.
     
     If this value is **true**, an application program releases the existing connection from a broker and reconnects to the other broker which is specified on **altHosts**.
+
+.. _ha-connect-broker-db:
+    
+Connecting a Broker to DB
+=========================
+
+A broker in HA environment should decide the one DB server to connect among multiple DB servers. At this time, it is different depending on the setting of the DB server and broker; how to connect to the DB server and what DB server should be chosen. In this chapter, we will look over how a broker choose DB server by the setting of HA environment. See :ref:`ha-configuration` for the description about each parameters used in the environment setting.
+
+Here are the main parameters used in the DB connection with the broker.
+
++------------+----------------------+-------------------------------+-----------------------------------------------------------------------+
+| Location   | Configuration file   | Parameter name                | Description                                                           |
++============+======================+===============================+=======================================================================+
+| DB server  | cubrid.conf          | ha_mode                       | HA mode(on/off/replica) of DB server. Default: off                    |
+|            +----------------------+-------------------------------+-----------------------------------------------------------------------+
+|            | cubrid_ha.conf       | ha_delay_limit                | A period to determine whether the replication-delay                   |
+|            |                      +-------------------------------+-----------------------------------------------------------------------+
+|            |                      | ha_delay_limit_delta          | Time subtracting the resolution time of replication-delay from        |
+|            |                      |                               | the time of replication-delay                                         |
++------------+----------------------+-------------------------------+-----------------------------------------------------------------------+
+| Broker     | cubrid_broker.conf   | ACCESS_MODE                   | Broker mode(RW/RO/SO). Default: RW                                    |
+|            |                      +-------------------------------+-----------------------------------------------------------------------+
+|            |                      | REPLICA_ONLY                  | Connectible to REPLICA server or not(ON/OFF). Default: OFF            |
+|            |                      +-------------------------------+-----------------------------------------------------------------------+
+|            |                      | PREFERRED_HOSTS               | Connecting to the host that is specified here in priority to the host |
+|            |                      |                               | that you set in the db-host of databases.txt                          |
+|            |                      +-------------------------------+-----------------------------------------------------------------------+
+|            |                      | MAX_NUM_DELAYED_HOSTS_LOOKUP  | The number of hosts to determine the delay of replication in          |
+|            |                      |                               | databases.txt. If up to the specified number of hosts was determined  |
+|            |                      |                               | as the delay of replication, the broker is connected to the host      |
+|            |                      |                               | checked at last.                                                      |
+|            |                      |                               |                                                                       |
+|            |                      |                               | * -1: check all hosts specified in databases.txt whether replication  | 
+|            |                      |                               |       is delayed or not                                               |
+|            |                      |                               | * 0: do not check whether replication-delay or not, and process       | 
+|            |                      |                               |       the secondary connection immediately                            |
+|            |                      |                               | * n(>0): check up to n hosts whether replication is delayed or not    | 
+|            |                      +-------------------------------+-----------------------------------------------------------------------+
+|            |                      | RECONNECT_TIME                | Time to try reconnecting after the broker is connected to the         |
+|            |                      |                               | improper DB server. Default: 600s.                                    |
+|            |                      |                               | If this value is 0, no try for reconnection.                          |
+|            |                      +-------------------------------+-----------------------------------------------------------------------+
+|            |                      | CONNECT_ORDER                 | A parameter specifying the connecting order whether to connect as     |
+|            |                      |                               | or the random order(SEQ/RANDOM). Default: SEQ                         |
++------------+----------------------+-------------------------------+-----------------------------------------------------------------------+
+
+Connection Process
+------------------
+
+When a broker accesses DB server, it tries the primary connection; if it fails, it tries the secondary connection.
+
+*  The primary connection: Check the DB status(active/standby) and the delay of replication.
+
+    1.  A broker tries to connect as the order specified by **PREFERRED_HOSTS**. The broker rejects connecting to the improper DB of which the status does not match with **ACCESS_MODE** or in which the replication is delayed.
+    2.  By the **CONNECT_ORDER**, a broker tries to connect to the host in the order specified in **databases.txt** or the random order. The broker checks the DB status followed by the **ACCESS_MODE** and checks the replication-delayed host up to the number specified in **MAX_NUM_DELAYED_HOSTS_LOOKUP**.
+
+*  The secondary connection: Ignore the DB status(active/standby) and the delay of replication. However, SO broker always accepts to connect only to standby DB.
+
+    1.  A broker tries to connect as the order specified by **PREFERRED_HOSTS**. The broker accepts connecting to the improper DB of which status does not match with **ACCESS_MODE** or in which the replication is delayed. However, SO broker can never connect to active DB.
+    
+    2.  By the **CONNECT_ORDER**, a broker tries to connect to the host in the order specified in **databases.txt** or the random order. The broker ignores the DB status(active/standby) and the delay of replication; it is connected if possible.
+   
+Samples of Behaviors by Configuration
+-------------------------------------
+
+The following shows the example of configuration.
+
+**Host DB status**
+
+*   host1: active
+*   host2: standby, replication is delayed.
+*   host3: standby, replica, unable to access.
+*   host4: standby, replica, replication is delayed.
+*   host5: standby, replica, replication is delayed.
+
+When the status of host DBs are as the above, the below shows samples of behaviors by the configuration.
+
+**Behaviors by configuration**
+
+*   2-1, 2-2, 2-3: From 2, (+) is addition and (#) is modification.
+
+*   3-1, 3-2, 3-3: From 3, (+) is addition and (#) is modification.
+
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
+| No.   | Configuration                              | Behavior                                                                                             |
++=======+============================================+======================================================================================================+
+| 1     | * **ACCESS_MODE=RW**                       | At the primary connection try, a broker checks if DB status is active.                               |
+|       | * PREFERRED_HOSTS=host2:host3              |                                                                                                      |
+|       | * db-host=host1:host2:host3:host4:host5    | * host2 of PREFERRED_HOSTS is replication-delay and host3 is unable to access;                       |
+|       | * MAX_NUM_DELAYED_HOSTS_LOOKUP=-1          |   therefore, it tries to connect to db-host                                                          |
+|       | * CONNECT_ORDER=SEQ                        | * connection is established because host1 is on active status.                                       |
+|       |                                            |                                                                                                      |
+|       |                                            | The broker tries to reconnect after the RECONNECT_TIME because it did not connect to                 |
+|       |                                            | PREFERRED_HOSTS.                                                                                     |
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 2     | * **ACCESS_MODE=RO**                       | At the primary connection try, a broker checks if DB status is standby.                              |
+|       | * db-host=host1:host2:host3:host4:host5    |                                                                                                      |
+|       | * MAX_NUM_DELAYED_HOSTS_LOOKUP=-1          | * All hosts of which DB status is standby are all replication-delayed or unable to access;           |
+|       | * CONNECT_ORDER=SEQ                        |   therefore, it will be failed at the primary connection.                                            |
+|       |                                            |                                                                                                      |
+|       |                                            | At the secondary connection try, a broker ignores DB status and replication-delay.                   |
+|       |                                            |                                                                                                      |
+|       |                                            | * The last accessed host, host5 is successful to connect to a broker.                                |
+|       |                                            |                                                                                                      |
+|       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
+|       |                                            | RECONNECT_TIME.                                                                                      |
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 2-1   | * (+)PREFERRED_HOSTS=host1:host3           | At the primary connection try, a broker checks if DB status is standby.                              |
+|       |                                            |                                                                                                      |
+|       |                                            | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access;                                 |
+|       |                                            |   therefore, the broker tries to connect to db-host.                                                 |
+|       |                                            | * Because hosts of which DB status is standby are all replication-delayed or unable to access;       |
+|       |                                            |   therefore, it will be failed at the primary connection.                                            |
+|       |                                            |                                                                                                      |
+|       |                                            | At the secondary connection try, a broker ignores DB status and replication-delay.                   |
+|       |                                            |                                                                                                      |
+|       |                                            | * host1 in PREFERRED_HOSTS is active, but it is possible to access;                                  |
+|       |                                            |   therefore, it is successful to connect to a broker.                                                |
+|       |                                            |                                                                                                      |
+|       |                                            | Because the broker accessed the active server, it tries to reconnect after RECONNECT_TIME.           |
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 2-2   | * (+)PREFERRED_HOSTS=host1:host3           | At the primary connection try, a broker checks if DB status is standby.                              |
+|       |                                            |                                                                                                      |
+|       | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=0        | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access.                                 |
+|       |                                            | * no tries to connect to db-host.                                                                    |
+|       |                                            |                                                                                                      |
+|       |                                            | At the secondary connection try, a broker ignores DB status and replication-delay.                   |
+|       |                                            |                                                                                                      |
+|       |                                            | * In PREFERRED_HOSTS, host1 is active, but it is possible to access;                                 |
+|       |                                            |   therefore, it is successful to connect to a broker.                                                |
+|       |                                            |                                                                                                      |
+|       |                                            | Because the broker accessed the active server, it tries to reconnect after RECONNECT_TIME.           |
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 2-3   | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=2        | At the primary connection try, a broker checks if DB status is standby.                              |
+|       |                                            |                                                                                                      |
+|       |                                            | * It fails at the primary connection after checking that host2, host4 are replication-delayed        |
+|       |                                            |   where DB status is standby.                                                                        |
+|       |                                            |                                                                                                      |
+|       |                                            | At the secondary connection try, a broker ignores DB status and replication-delay.                   |
+|       |                                            |                                                                                                      |
+|       |                                            | * The lastly accessed host4 is successful to connect to a broker.                                    |
+|       |                                            |                                                                                                      |
+|       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
+|       |                                            | RECONNECT_TIME.                                                                                      |
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 3     | * **ACCESS_MODE=SO**                       | At the primary connection try, a broker checks if DB status is standby.                              |
+|       |                                            |                                                                                                      |
+|       | * db-host=host1:host2:host3:host4:host5    | * It fails at the primary connection because hosts of which status is standby are all                |
+|       |                                            |   replication-delayed or unable to access.                                                           |
+|       | * MAX_NUM_DELAYED_HOSTS_LOOKUP=-1          |                                                                                                      |
+|       | * CONNECT_ORDER=SEQ                        | At the secondary connection try, a broker checks if DB status is standby but ignores                 |
+|       |                                            | replication-delay.                                                                                   |
+|       |                                            |                                                                                                      |
+|       |                                            | * The lastly accessed host4 is successful to connect to a broker.                                    |
+|       |                                            |                                                                                                      |
+|       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
+|       |                                            | RECONNECT_TIME.                                                                                      |
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 3-1   | * (+)PREFERRED_HOSTS=host1:host3           | At the primary connection try, a broker checks if DB status is standby.                              |
+|       |                                            |                                                                                                      |
+|       |                                            | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access; therefore, it tries to connect  |
+|       |                                            |   to db-host.                                                                                        |
+|       |                                            | * It fails at the primary connection because hosts of which status is standby are all                |
+|       |                                            |   replication-delayed or unable to access.                                                           |
+|       |                                            |                                                                                                      |
+|       |                                            | At the secondary connection try, a broker checks if DB status is standby but ignores                 |
+|       |                                            | replication-delay.                                                                                   |
+|       |                                            |                                                                                                      |
+|       |                                            | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access; therefore, it tries to connect  |
+|       |                                            |   to db-host.                                                                                        |
+|       |                                            | * The first host of which DB status is standby is host2; therefore, it connects to host2.            |
+|       |                                            |                                                                                                      |
+|       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
+|       |                                            | RECONNECT_TIME.                                                                                      | 
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 3-2   | * PREFERRED_HOSTS=host1:host3              | At the primary connection try, a broker checks if DB status is standby.                              |
+|       |                                            |                                                                                                      |
+|       | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=0        | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access.                                 |
+|       |                                            | * It does not try to connect to db-host.                                                             |
+|       |                                            |                                                                                                      |
+|       |                                            | At the secondary connection try, a broker checks if DB status is standby but ignores                 |
+|       |                                            | replication-delay.                                                                                   |
+|       |                                            |                                                                                                      |
+|       |                                            | * In PREFERRED_HOSTS, host1 is active and host3 is unable to access; therefore, it tries to connect  |
+|       |                                            |   to db-host.                                                                                        |
+|       |                                            | * The first host of which DB status is standby is host2; therefore, it connects to host2.            |
+|       |                                            |                                                                                                      |
+|       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
+|       |                                            | RECONNECT_TIME.                                                                                      |
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
+| 3-3   | * (#)MAX_NUM_DELAYED_HOSTS_LOOKUP=2        | At the primary connection try, a broker checks if DB status is standby.                              |
+|       |                                            |                                                                                                      |
+|       |                                            | * It fails at the primary connection after checking that host2, host4 are replication-delayed        |
+|       |                                            |   where DB status is standby.                                                                        |
+|       |                                            |                                                                                                      |
+|       |                                            | At the secondary connection try, a broker checks if DB status is standby but ignores                 |
+|       |                                            | replication-delay.                                                                                   |
+|       |                                            |                                                                                                      |
+|       |                                            | * The lastly accessed host4 is successful to connect to a broker.                                    |
+|       |                                            |                                                                                                      |
+|       |                                            | Because the broker accessed the replication-delayed server, it tries to reconnect after              |
+|       |                                            | RECONNECT_TIME.                                                                                      |
++-------+--------------------------------------------+------------------------------------------------------------------------------------------------------+
 
 Running and Monitoring
 ======================
@@ -1962,7 +2312,7 @@ HA Error Messages
 CAS process(cub_cas)
 ^^^^^^^^^^^^^^^^^^^^
 
-Error messages in CAS process are written to **$CUBRID/log/broker/error_log**\ *<broker_name>_<app_server_num>*\ **.err**. The following table shows connection error messages in the HA environment.
+Error messages in CAS process are written to **$CUBRID/log/broker/error_log**/\ *<broker_name>_<app_server_num>*\ **.err**. The following table shows connection error messages in the HA environment.
 
 **Error messages for handshaking between a broker and a DB server**
 
@@ -2003,7 +2353,7 @@ Error messages in CAS process are written to **$CUBRID/log/broker/error_log**\ *
 Replication Log Copy Process(copylogdb)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    The error messages from the replication log copy process are stored in **$CUBRID/log/db-name@remote-node-name_copylogdb.err**. The severity levels of error messages found in the replication log copy process are as follows: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see :ref:`error-parameters`.
+The error messages from the replication log copy process are stored in **$CUBRID/log/**\ *<db-name>*\ **@**\ *<remote-node-name>*\ **_copylogdb.err**. The severity levels of error messages found in the replication log copy process are as follows: fatal, error, and notification. The default level is error. Therefore, to record notification error messages, it is necessary to change the value of **error_log_level** in the **cubrid.conf** file. For details, see :ref:`error-parameters`.
 
 **Initialization Error Messages**
 
@@ -2749,7 +3099,7 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
         Node nodeA (priority 1, state master)
         
         HA-Process Info (master 26611, state slave)
-        Applylogdb testdb@localhost:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26831, state registered)
+        Applylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26831, state registered)
         Copylogdb testdb@nodeA:/home/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 26829, state registered)
         Server testdb (pid 26617, state registered_and_standby)
 
@@ -3101,10 +3451,10 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
 
 
          HA-Process Info (master 5214, state slave)
-           Applylogdb testdb@localhost:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5816, state registered)
-           Applylogdb testdb@localhost:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5814, state registered)
-           Copylogdb testdb@test-dhlee002.ncl:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5812, state registered)
-           Copylogdb testdb@dhtest001.ncl:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
+           Applylogdb testdb@nodeB:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5816, state registered)
+           Applylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5814, state registered)
+           Copylogdb testdb@nodeB:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5812, state registered)
+           Copylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
            Server testdb (pid 5590, state registered_and_standby)
 
 *   Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
@@ -3484,10 +3834,10 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
 
 
          HA-Process Info (master 5214, state slave)
-           Applylogdb testdb@localhost:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5816, state registered)
-           Applylogdb testdb@localhost:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5814, state registered)
-           Copylogdb testdb@test-dhlee002.ncl:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5812, state registered)
-           Copylogdb testdb@dhtest001.ncl:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
+           Applylogdb testdb@nodeB:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5816, state registered)
+           Applylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5814, state registered)
+           Copylogdb testdb@nodeB:/home1/cubrid_usr/CUBRID/databases/testdb_nodeB (pid 5812, state registered)
+           Copylogdb testdb@nodeA:/home1/cubrid_usr/CUBRID/databases/testdb_nodeA (pid 5810, state registered)
            Server testdb (pid 5590, state registered_and_standby)
 
 *   Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
@@ -3856,16 +4206,15 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
         @ cubrid heartbeat status
 
          HA-Node Info (current test-dhlee002.ncl, state slave)
-           Node test-dhlee005.ncl (priority 32767, state replica)
-           Node test-dhlee004.ncl (priority 32767, state replica)
-           Node test-dhlee002.ncl (priority 2, state slave)
-           Node dhtest001.ncl (priority 1, state master)
-
-
+           Node nodeD (priority 32767, state replica)
+           Node nodeC (priority 32767, state replica)
+           Node nodeB(priority 2, state slave)
+           Node nodeA (priority 1, state master)
+           
+           
          HA-Process Info (master 27221, state slave)
-           Applylogdb testdb@localhost:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27455, state registered)
+           Applylogdb testdb@nodeA:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27455, state registered)
            Copylogdb testdb@nodeA:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27453, state registered)
            Server testdb (pid 27228, state registered_and_standby)
     
 Set a broker as referring :ref:`ha-cubrid-broker-conf`\ and start the broker with **cubrid broker restart** command.
-

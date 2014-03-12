@@ -1267,7 +1267,7 @@ CCI API 레퍼런스
         queries[1] =
             "insert into athlete(name, gender, nation_code, event) values('Joo-young Park', 'M', 'KOR', 'Soccer')";
         queries[2] =
-            "select * from athlete order by code desc for orderby_num() < 3";
+            "select * from athlete order by code desc limit 2";
             
         //calling cci_execute_batch()
         n_executed = cci_execute_batch (con, count, queries, &result, &cci_error);

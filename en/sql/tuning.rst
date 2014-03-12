@@ -1716,9 +1716,9 @@ On a single table, multiple key range optimization can be applied if below condi
     AND col_(j+1) = ? AND ... AND col_(p-1) = ?
     AND key_filter_terms
     ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC], ... col_(p+k-1) [ASC|DESC]
-    FOR orderbynum_pred | LIMIT n;
+    LIMIT n;
 
-Firstly, if *orderbynum_pred* condition is specified, it should be valid. And upper limit(*n*) for **ORDERBY_NUM** or **LIMIT** should be less than or equal to the value of **multi_range_optimization_limit** system parameter.
+Firstly, upper limit(*n*) for **LIMIT** should be less than or equal to the value of **multi_range_optimization_limit** system parameter.
 
 And you need the proper index to the multiple key range optimization, this index should cover all *k* columns specified in the **ORDER BY** clause. In other words, this index should include all *k* columns specified in the **ORDER BY** clause and the sorting order should be the same as the columns' order. Also this index should include all columns used in **WHERE** clause.
 
@@ -2171,7 +2171,7 @@ The following shows the cases when loose index scan optimization is not applied.
 In Memory Sort
 --------------
  
-The "in memory sort(IMS)" feature is an optimization applied to the LIMIT/ORDERBY_NUM() queries specifying ORDER BY. Normally, when executing a query which specifies ORDER BY and LIMIT clauses, CUBRID generates the full sorted result set and then applies the LIMIT operator to this result set. With the IMS optimization, instead of generating the whole result set, CUBRID uses an in-memory binary heap in which only tuples satisfying the ORDER BY and LIMIT clauses are allowed. This optimization improves performance by eliminating the need for a full unordered result set.
+The "in memory sort(IMS)" feature is an optimization applied to the LIMIT queries specifying ORDER BY. Normally, when executing a query which specifies ORDER BY and LIMIT clauses, CUBRID generates the full sorted result set and then applies the LIMIT operator to this result set. With the IMS optimization, instead of generating the whole result set, CUBRID uses an in-memory binary heap in which only tuples satisfying the ORDER BY and LIMIT clauses are allowed. This optimization improves performance by eliminating the need for a full unordered result set.
  
 Whether this optimization is applied or not is not transparent to users. CUBRID decides to use in memory sort in the following situation:
  

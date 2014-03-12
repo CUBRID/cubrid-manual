@@ -10,7 +10,7 @@ SELECT
         [ WHERE <search_condition> ]
         [ GROUP BY {col_name | expr} [ ASC | DESC ],...[ WITH ROLLUP ] ]
         [ HAVING  <search_condition> ]
-        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ] [ FOR <orderby_for_condition> ] ]
+        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ]
         [ LIMIT [offset,] row_count ]
         [ USING INDEX { index_name [,index_name,...] | NONE }]
      
@@ -47,11 +47,6 @@ SELECT
     
     <lock_hint> ::= READ UNCOMMITTED
      
-    <orderby_for_condition> ::=
-        ORDERBY_NUM() { BETWEEN int AND int } |
-        { { = | =< | < | > | >= } int } |
-        IN ( int, ...)
-
 *   *qualifier* : 한정어. 생략이 가능하며 지정하지 않을 경우에는 **ALL** 로 지정된다.
 
     *   **ALL** : 테이블의 모든 레코드를 조회한다.
@@ -81,7 +76,8 @@ SELECT
 
 .. code-block:: sql
 
-    SELECT DISTINCT host_nation FROM olympic;
+    SELECT DISTINCT host_nation 
+    FROM olympic;
 
 ::
 
@@ -94,11 +90,13 @@ SELECT
       'France'
     ...
 
-다음은 조회하고자 하는 칼럼에 칼럼 별칭을 부여하고, **ORDER BY** 절에서 칼럼 별칭을 이용하여 결과 레코드를 정렬하는 예제이다. 이때, **LIMIT** 절 및 **FOR ORDERBY_NUM** 함수를 사용하여 결과 레코드 수를 5개로 제한한다.
+다음은 조회하고자 하는 칼럼에 칼럼 별칭을 부여하고, **ORDER BY** 절에서 칼럼 별칭을 이용하여 결과 레코드를 정렬하는 예제이다. 이때, **LIMIT** 절을 사용하여 결과 레코드 수를 5개로 제한한다.
 
 .. code-block:: sql
 
-    SELECT host_year as col1, host_nation as col2 FROM olympic ORDER BY col2 LIMIT 5;
+    SELECT host_year as col1, host_nation as col2 
+    FROM olympic 
+    ORDER BY col2 LIMIT 5;
     
 ::
     
@@ -112,8 +110,9 @@ SELECT
      
 .. code-block:: sql
 
-    SELECT CONCAT(host_nation, ', ', host_city) AS host_place FROM olympic
-    ORDER BY host_place FOR ORDERBY_NUM() BETWEEN 1 AND 5;
+    SELECT CONCAT(host_nation, ', ', host_city) AS host_place 
+    FROM olympic
+    ORDER BY host_place LIMIT 5;
     
 ::
     
@@ -410,12 +409,6 @@ ORDER BY 절
 
     SELECT ...
     ORDER BY { col_name | expr | position } [ ASC | DESC ], ...] [ NULLS { FIRST | LAST } ]
-        [ FOR <orderby_for_condition> ] ]
-     
-    <orderby_for_condition> ::=
-    ORDERBY_NUM() { BETWEEN bigint AND bigint } |
-        { { = | =< | < | > | >= } bigint } |
-        IN (bigint, ...)
 
 *   *col_name* | *expr* | *position* : 정렬 기준이 되는 칼럼 이름, 표현식, 별칭 또는 칼럼 위치를 지정한다. 하나 이상의 값을 지정할 수 있으며 각 항목은 쉼표로 구분한다. **SELECT** 칼럼 리스트에 명시되지 않은 칼럼도 지정할 수 있다.
 
@@ -464,22 +457,6 @@ ORDER BY 절
               301     3.000000000000000e+02
               501     1.750000000000000e+02
      
-.. code-block:: sql
-
-    -- sorting reversely and limiting result rows by FOR clause
-    SELECT dept_no AS a1, avg(sales_amount) AS a2 
-    FROM sales_tbl
-    GROUP BY a1
-    ORDER BY a2 DESC FOR ORDERBY_NUM() BETWEEN 1 AND 3;
-    
-::
-
-               a1           a2
-    =======================================
-              201     3.250000000000000e+02
-              301     3.000000000000000e+02
-              501     1.750000000000000e+02
-
 다음은 ORDER BY 절 뒤에 NULLS FIRST, NULLS LAST 구문을 지정하는 예제이다.
 
 .. code-block:: sql
@@ -535,7 +512,7 @@ LIMIT 절
 
 **LIMIT** 절은 출력되는 레코드의 개수를 제한할 때 사용한다. **LIMIT** 절은 prepared statement에 포함하여 사용할 수 있으며, 인자로 바인드 파라미터를 사용할 수 있다.
 
-**LIMIT** 절을 포함하는 질의에서는 **WHERE** 절에 **INST_NUM** (), **ROWNUM** 을 포함할 수 없으며, **FOR ORDERBY_NUM** (), **HAVING GROUPBY_NUM** ()과 함께 사용할 수 없다.
+**LIMIT** 절을 포함하는 질의에서는 **WHERE** 절에 **INST_NUM** (), **ROWNUM** 을 포함할 수 없으며, **HAVING GROUPBY_NUM** ()과 함께 사용할 수 없다.
 
 ::
 

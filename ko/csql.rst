@@ -118,6 +118,7 @@ CSQL 시작 옵션
           --no-auto-commit         disable auto commit mode execution
           --no-pager               do not use pager
           --no-single-line         turn off single line oriented execution
+          --no-trigger-action      disable trigger action
 
     For additional information, see http://www.cubrid.com
 
@@ -243,6 +244,10 @@ CSQL 시작 옵션
 
          csql --sysadm --write-on-standby -u dba testdb@localhost 
          
+.. option::  --no-trigger-action
+
+    이 옵션을 지정하면 해당 CSQL에서 수행되는 질의문의 트리거는 동작하지 않는다.
+      
 .. _csql-session-commands:
 
 세션 명령어

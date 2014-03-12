@@ -572,11 +572,13 @@ If a slow query occurs, this event is written. If **sql_trace_slow** parameter v
 *   bind: binding value. it is printed out as the number of <num> in the sql item, "?:<num>". The value of "?:0" is 5, and the value of "?:1" is 200.
 *   time: execution time(ms)
 *   buffer: execution statistics in the buffer
+
     *   fetch: fetching pages count
     *   ioread: I/O read pages count
     *   iowrite: I/O write pages count
     
 *   wait: waiting time
+
     *   cs: waiting time on the critical section(ms)
     *   lock: waiting time to acquire the lock(ms)
     *   latch: waiting time to acquire the latch(ms)

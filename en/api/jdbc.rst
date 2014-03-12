@@ -152,7 +152,8 @@ The **DriverManager** is an interface for managing the JDBC driver. It is used t
 *   **rcTime**: Interval time (in seconds) to try to connect active brokers during failover in the HA environment. See the below URL example.
 *   **loadBalance** : If this value is true, the application tries to connect with main host and altHosts in random order(default value: false). 
 
-*   **connectTimeout** : Timeout value (in seconds) for database connection (default value: 0). The **DriverManger.setLoginTimeout** () method can be used to configure it; however, value configured in this method will be ignored if a value is configured in the connection URL.
+*   **connectTimeout** : Timeout value (in seconds) for database connection. The default value is 30 seconds. If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection. The **DriverManger.setLoginTimeout** () method can be used to configure it; however, the value configured in this method will be ignored if a value is configured in the connection URL.
+
 
 *   **queryTimeout** : Timeout value (in seconds) for query execution (default value: 0, infinite). The maximum value is 2,000,000. This value can be changed by the **DriverManger.setQueryTimeout** () method. 
 

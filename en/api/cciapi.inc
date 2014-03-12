@@ -761,7 +761,7 @@ CCI API Reference
     
     *    **loadBalance** : When this value is true, the applications try to connect to the main host and alternative hosts specified with the **altHosts** property as a random order. (default value: false).
     
-    *   **login_timeout** | **loginTimeout** : Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is 0, which means infinite postponement.
+    *   **login_timeout** | **loginTimeout** : Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is  **30,000**\ (30 sec.). If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection.
 
     *   **query_timeout** | **queryTimeout** : If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
         
@@ -2154,7 +2154,7 @@ CCI API Reference
     :param conn_handle: (IN) Connection handle
     :param sql_stmt: (IN) SQL statement
     :param max_col_size: (IN) The maximum length of a column to be fetched when it is a string data type in bytes. If this value is 0, full length is fetched.
-    :param exec_retval: (OUT) Error code
+    :param exec_retval: (OUT) Success: Affected rows, Failure: Error code
     :param err_buf: (OUT) Database error buffer        
     :return: Success: Request handle ID (int), Failure: Error code
 
@@ -2258,11 +2258,11 @@ CCI API Reference
     
     .. note:: 
     
-		*	When specifying values together in :c:func:`cci_property_set` function and URL string, values specified in :c:func:`cci_property_set` function have the first priority.
+        *   When specifying values together in :c:func:`cci_property_set` function and URL string, values specified in :c:func:`cci_property_set` function have the first priority.
 
-        *	**login_timeout** is applied when you create a DATASOURCE object and internal reconnection occurs in :c:func:`cci_prepare` or :c:func:`cci_execute` function. Internal reconnection occurs when you get the connection object from DATASOURCE and from :c:func:`cci_connect`/:c:func:`cci_connect_with_url` function.
+        *   **login_timeout** is applied when you create a DATASOURCE object and internal reconnection occurs in :c:func:`cci_prepare` or :c:func:`cci_execute` function. Internal reconnection occurs when you get the connection object from DATASOURCE and from :c:func:`cci_connect`/:c:func:`cci_connect_with_url` function.
         
-        *	Creating time of a DATASOURCE object can take more than an internal reconnection time; therefore, you can consider to apply  **login_timeout** differently on these two cases. For example, if you want to set 5000(5 sec.) in the former and 2000(2 sec.) in the later, for the later, use :c:func:`cci_set_login_timeout` after creating a DATASOURCE.
+        *   Creating time of a DATASOURCE object can take more than an internal reconnection time; therefore, you can consider to apply  **login_timeout** differently on these two cases. For example, if you want to set 5000(5 sec.) in the former and 2000(2 sec.) in the later, for the later, use :c:func:`cci_set_login_timeout` after creating a DATASOURCE.
 
         .. CUBRIDSUS-12567 참고
         

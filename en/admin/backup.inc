@@ -256,7 +256,9 @@ The following table shows options available with the **cubrid restoredb** utilit
 
 .. option:: --list
 
-    This option displays information on backup files of a database; restoration procedure is not performed. ::
+    This option displays information on backup files of a database; restoration procedure is not performed. This option is available even if the database is working, from CUBRID 9.3. 
+    
+    ::
 
         cubrid restoredb --list demodb
 

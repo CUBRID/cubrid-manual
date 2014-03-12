@@ -120,3 +120,4 @@
     admin_utils.rst
     config.rst
     troubleshoot.rst
+    systemtap.rst

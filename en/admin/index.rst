@@ -119,3 +119,4 @@ See :ref:`cubrid-utilities` for details.
     admin_utils.rst
     config.rst
     troubleshoot.rst
+    systemtap.rst

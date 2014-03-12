@@ -11,7 +11,7 @@ The basic idea of ​​SystemTap script is that you can specify the name of the
 
 To monitor the performance of CUBRID using SystemTap, you need to install SystemTap. After installing SystemTap, you can write and run a SystemTap script which is like a C language. With this script, you can monitor the performance of the System.
 
-SystemTap supports only on Linux
+SystemTap supports only on Linux.
 
 See http://sourceware.org/systemtap/index.html for further information and installation.
 
@@ -42,9 +42,9 @@ Checking Installation
 Version
 -------
 
-To execute SystemTap scripts in CUBRID, you should use SystemTap 2.2 or higher
+To execute SystemTap scripts in CUBRID, you should use SystemTap 2.2 or higher.
 
-The below is an example to install SystemTap in CentOS 6.3. Checking version and installing this can be different among Linux distributors. 
+The below is an example to install SystemTap in CentOS 6.3. Checking version and installing SystemTap can be different among Linux distributors. 
 
 1.  Check the current version of the installed SystemTap.
 
@@ -109,7 +109,7 @@ For CUBRID's markers, see :ref:`cubrid-marker`.
 Asynchronous Events
 -------------------
 
-Asynchronous events are defined internally; it is not dependent on a special jobs or locations on the code. These kinds of probe events are mainly counter and timer, etc.
+Asynchronous events are defined internally; it is not dependent on special jobs or locations on the code. These kinds of probing events are mainly counter and timer, etc.
 
 Examples of asynchronous events are as follows.
 

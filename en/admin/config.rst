@@ -288,13 +288,29 @@ CUBRID consists of the database server, the broker and the CUBRID Manager. The n
 
 **Section by Parameter**
 
-    Parameters specified in **cubrid.conf** have the following three sections:
+    Parameters specified in **cubrid.conf** have the following four sections:
 
     *   Used when the CUBRID service starts: [service] section
     *   Applied commonly to all databases: [common] section
     *   Applied individually to each database: [@<*database*>] section
-
+    *   Used only when the cubrid utilities are run with stand-alone mode(--SA-mode): [standalone] section
+    
     Where <*database*> is the name of the database to which each parameter applies. If a parameter configured in [common] is the same as the one configured in [@<*database*>], the one configured in [@<*database*>] is applied.
+
+    ::
+
+        ..... 
+        [common] 
+        ..... 
+        sort_buffer_size=2M 
+        ..... 
+        [standalone] 
+      
+        sort_buffer_size=256M 
+        ..... 
+
+    Configuration defined in [standalone] is used only when cubrid utilities started with "cubrid" are run with stand-alone mode.
+    For example, on the above configuration, if DB is started with --CS-mode(default)(cubrid databases start db_name), "sort_buffer_size=2M" is applied. However, if DB is stopped and "cubrid loaddb --SA-mode" is executed, "sort_buffer_size=256M" is applied. If you run "cubrid loaddb --SA-mode", bigger size of sort buffer will be required during index creation; therefore, increasing sort buffer size will be better for the performance of "loaddb" execution.
 
 **Default Parameters**
 

@@ -296,14 +296,30 @@ CUBRID는 데이터베이스 서버, 브로커, CUBRID 매니저로 구성된다
 
 **파라미터의 섹션별 분류**
 
-    **cubrid.conf** 에 지정된 파라미터는 다음과 같이 세 가지 섹션으로 제공된다.
+    **cubrid.conf** 에 지정된 파라미터는 다음과 같이 네 가지 섹션으로 제공된다.
 
     *   CUBRID 서비스를 시작할 때 사용 : [service] 섹션
     *   전체 데이터베이스에 공통으로 적용 : [common] 섹션
     *   각 데이터베이스에 개별적으로 적용 : [@<*database*>] 섹션
+    *   cubrid 유틸리티가 독립 모드(stand-alone, --SA-mode)로 구동할 때만 사용 : [standalone] 섹션 
 
     여기서 <*database*>는 파라미터를 개별적으로 적용할 데이터베이스 이름이며, [common]에 설정된 파라미터가 [@<*database*>]에 설정된 파라미터와 동일한 경우 [@<*database*>]에 설정된 파라미터가 최종 적용된다.
-
+    
+    ::
+    
+        ..... 
+        [common] 
+        ..... 
+        sort_buffer_size=2M 
+        ..... 
+        [standalone] 
+      
+        sort_buffer_size=256M 
+        ..... 
+  
+    [standalone] 섹션에 정의된 설정은 "cubrid"로 시작하는 cubrid 유틸리티들이 독립 모드로 구동할 때만 사용된다. 
+    예를 들어, 위와 같이 설정한 상태에서 --CS-mode(기본값)으로 DB를 구동(cubrid database start db_name)하면 "sort_buffer_size=2M"가 적용된다. 하지만 DB를 정지하고 "cubrid loaddb --SA-mode"를 실행할 때는 "sort_buffer_size=256M"가 적용된다. "cubrid loaddb --SA-mode"를 실행할 때 인덱스 생성 과정에서 정렬 버퍼(sort buffer)를 더 많이 사용할 것으로 예상되므로 이를 늘려주는 것이 "loaddb" 수행 성능에 도움이 된다.
+    
 **기본 제공 파라미터**
 
     CUBRID 설치 시 생성되는 기본 데이터베이스 환경 설정 파일(**cubrid.conf**)에는 데이터베이스 서버 파라미터 중 반드시 변경해야 할 일부 파라미터가 기본적으로 포함된다. 기본으로 포함되지 않는 파라미터의 설정값을 변경하기 원할 경우 직접 추가/편집해서 사용하면 된다.

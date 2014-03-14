@@ -2258,7 +2258,7 @@ CCI API 레퍼런스
 	
     **login_timeout**, **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 의 값을 설정하면 :c:func:`cci_datasource_borrow`\ 를 호출할 때 이 설정 값을 가지고 연결을 반환한다.
  
-    **login_timeout**, **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 은 :c:func:`cci_datasource_borrow` 함수 호출 이후에도 변경할 수 있다. :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`\ 을 참고한다. **이름이 cci_set_**\ 으로 시작하는 함수들에 의해 변경된 값은 변경한 연결 객체에만 적용되며, 연결이 해제된 이후에는 :c:func:`cci_property_set`\ 으로 설정한 값으로 복원된다. :c:func:`cci_property_set`\ 으로 설정한 값이 없을 경우에는 기본값으로 복원된다.
+    **login_timeout**, **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 은 :c:func:`cci_datasource_borrow` 함수 호출 이후에도 변경할 수 있다. :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`\ 을 참고한다. 이름이 **cci_set_**\ 으로 시작하는 함수들에 의해 변경된 값은 변경한 연결 객체에만 적용되며, 연결이 해제된 이후에는 :c:func:`cci_property_set`\ 으로 설정한 값으로 복원된다. :c:func:`cci_property_set`\ 으로 설정한 값이 없을 경우에는 기본값으로 복원된다.
     
     .. note:: 
     

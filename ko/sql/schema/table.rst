@@ -1046,7 +1046,7 @@ ADD INDEX 절
 
 *   *table_name* : 변경하고자 하는 테이블의 이름을 지정한다.
 *   *index_name* : 인덱스의 이름을 지정한다(최대 254 바이트).
-*   *index_col_name* : 인덱스를 정의할 대상 칼럼을 지정하며, 이때 칼럼 옵션으로 인덱스 키의 *prefix_length* 와 **ASC** 또는 **DESC** 을 함께 지정할 수 있다.
+*   *index_col_name* : 인덱스를 정의할 대상 칼럼을 지정하며, 이때 칼럼 옵션으로 **ASC** 또는 **DESC** 을 함께 지정할 수 있다.
 
 .. code-block:: sql
 

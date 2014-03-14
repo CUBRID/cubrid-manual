@@ -14,21 +14,24 @@ For how to use indexes on the **SELECT** statement like Using SQL Hint, Descendi
     CREATE [ UNIQUE ] INDEX index_name ON table_name <index_col_desc> ;
      
         <index_col_desc> ::=
-            ( column_name[(prefix_length)] [ASC | DESC] [ {, column_name[(prefix_length)] [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
+            ( column_name [ASC | DESC] [ {, column_name [ASC | DESC]} ...] ) [ WHERE <filter_predicate> ]
             | (function_name (argument_list) )
 
 *   **UNIQUE**: Creates an index with unique values.
 *   *index_name*: Specifies the name of the index to be created. The index name must be unique in the table.
 *   *table_name*: Specifies the name of the table where the index is to be created.
 *   *column_name*: Specifies the name of the column where the index is to be applied. To create a composite index, specify two or more column names.
-*   *prefix_length*: When you specify an index for character- or bit string-type column, you can create an index by specifying the beginning part of the column name as a prefix. You can specify the length of the prefix as the number of characters in parentheses next to the column name. You cannot specify *prefix_length* in a multiple column index or a **UNIQUE** index. It is impossible to create an index by specifying *prefix_length* as a host variable. If you want to guarantee the query result order in the index in which *prefix_length* is specified, you must specify the **ORDER BY** clause.
 *   **ASC** | **DESC**: Specifies the sorting order of columns. 
 
 *   <*filter_predicate*>: Defines the conditions to create filtered indexes. When there are several comparison conditions between a column and a constant, filtering is available only when the conditions are connected by using **AND**. Regarding this, definitely watch :ref:`filtered-index`.
 
 *   *function_name* (*argument_list*): Defines the conditions to create function-based indexes. Regarding this, definitely watch :ref:`function-index`.
 
-.. warning:: In versions lower than CUBRID 9.0, index name can be omitted; however, from the CUBRID 9.0 version, this should not be omitted.
+..  note::
+
+    *   From CUBRID 9.0, the index name should not be omitted.
+
+    *   prefix index feature is deprecated, so it is not recommended anymore.
 
 The following example shows how to create a descending index.
 
@@ -41,12 +44,6 @@ The following example shows how to create a multiple column index.
 .. code-block:: sql
 
     CREATE INDEX name_nation_idx ON athlete(name, nation_code);
-
-The following example shows how to create a prefix index. In this example, 1-byte long prefix is specified for the *nation_code* column when creating an index.
-
-.. code-block:: sql
-
-    CREATE INDEX idx_game_nation_code ON game(nation_code(1));
 
 .. _alter-index:
 
@@ -63,7 +60,7 @@ The following is a syntax of rebuilding an index.
      
 *   *index_name*: Specifies the name of the index to be recreated. The index name must be unique in the table.
 *   *table_name*: Specifies the name of the table where the index is recreated.
-* 	REBUILD:  Recreate an index with the same structure as the one already created.
+*   **REBUILD**:  Recreate an index with the same structure as the one already created.
 
 .. warning:: 
 
@@ -73,6 +70,16 @@ The following is a syntax of rebuilding an index.
 
     From CUBRID 10.0, even if you add column names at the end of a table name, these will be ignored and recreated with the same columns with the previous index.
 
+.. note::
+
+    *   From CUBRID 9.0, the index name should not be omitted.
+
+    *   From CUBRID 10.0, table name should not be omitted.
+    
+    *   From CUBRID 10.0, even if you add column names at the end of a table name, these will be ignored and recreated with the same columns with the previous index.
+
+    *   prefix index feature is deprecated, so it is not recommended anymore.
+    
 The following is an example of recreating indexes in various ways:
 
 .. code-block:: sql

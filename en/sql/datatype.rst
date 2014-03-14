@@ -204,7 +204,7 @@ The precision *p* is not specified. The data specified as this data type is repr
     If you specify 1234.56789 as DOUBLE, 1234.56789 is stored and 1.234567890000000e+03 is displayed.
     If you specify 9007199254740993 as DOUBLE, 9007199254740992 is stored and 9.007199254740992e+15 is displayed.
 
-.. note:: MONETARY type is deprecated, and it is not recommended to use any more.
+.. note:: MONETARY type is deprecated, and it is not recommended any more.
 
 .. _date-time-type:
 

@@ -1046,7 +1046,7 @@ You can define the index attributes for a specific column by using the **ADD IND
 
 *   *table_name* : Specifies the name of a table to be modified.
 *   *index_name* : Specifies the name of an index(maximum: 254 bytes). If omitted, a name is automatically assigned.
-*   *index_col_name* : Specifies the column that has an index to be defined. **ASC** or **DESC** can be specified for a column option; *prefix_length* of an index key also can be specified for a column option.
+*   *index_col_name* : Specifies the column that has an index to be defined. **ASC** or **DESC** can be specified for a column option.
 
 .. code-block:: sql
 

@@ -154,4 +154,4 @@ The following example shows how to retrieve athlete names ranked 3rd to 5th and 
       'Thorpe Ian'          '03:41.0'
       'Hackett Grant'       '14:43.0'
 
-.. note:: **FOR ORDERBY_NUM()**, which limits the sorted results like **LIMIT** clause, will be deprecated; so this is not recommended to use any more.
+.. note:: **FOR ORDERBY_NUM()**, which limits the sorted results like **LIMIT** clause, will be deprecated; so this is not recommended anymore.

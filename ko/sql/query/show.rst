@@ -9,8 +9,8 @@ DESC, DESCRIBE
 
 ::
 
-    DESC tbl_name
-    DESCRIBE tbl_name
+    DESC tbl_name;
+    DESCRIBE tbl_name;
     
 EXPLAIN
 =======
@@ -19,7 +19,7 @@ EXPLAIN
 
 ::
 
-    EXPLAIN tbl_name
+    EXPLAIN tbl_name;
 
 .. _show-tables-statement:
 
@@ -28,7 +28,7 @@ SHOW TABLES
 
 데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *table_type* 이라는 이름의 두 번째 칼럼을 함께 출력하며, 테이블은 **BASE TABLE**, 뷰는 **VIEW** 라는 값을 가진다. ::
 
-    SHOW [FULL] TABLES [LIKE 'pattern' | WHERE expr]
+    SHOW [FULL] TABLES [LIKE 'pattern' | WHERE expr];
 
 다음은 *demodb* 를 가지고 해당 질의를 실행한 결과이다.
 
@@ -103,7 +103,7 @@ SHOW COLUMNS
 
 ::
 
-    SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr]
+    SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr];
 
 **FULL** 키워드가 사용되면 Collation 정보를 추가로 출력한다.
 
@@ -185,7 +185,7 @@ SHOW INDEX
 
 ::
 
-    SHOW {INDEX | INDEXES | KEYS } {FROM | IN} tbl_name
+    SHOW {INDEX | INDEXES | KEYS } {FROM | IN} tbl_name;
 
 해당 질의는 다음과 같은 칼럼을 가진다. 
 
@@ -255,7 +255,7 @@ SHOW COLLATION
 
 ::
 
-    SHOW COLLATION [ LIKE 'pattern' ]
+    SHOW COLLATION [ LIKE 'pattern' ];
 
 해당 질의는 다음과 같은 칼럼을 가진다.
 
@@ -319,7 +319,7 @@ SHOW GRANTS
 
 **SHOW GRANT** 문은 데이터베이스의 사용자 계정에 부여된 권한을 출력한다. ::
 
-    SHOW GRANTS FOR 'user'
+    SHOW GRANTS FOR 'user';
 
 .. code-block:: sql
 
@@ -366,7 +366,7 @@ SHOW CREATE VIEW
 
 **SHOW CREATE VIEW** 문은 뷰 이름을 지정하면 해당 **CREATE VIEW** 문을 출력한다. ::
 
-    SHOW CREATE VIEW view_name
+    SHOW CREATE VIEW view_name;
 
 다음은 해당 질의를 실행한 결과이다.
 
@@ -406,7 +406,7 @@ SHOW EXEC STATISTICS
 
 ::
 
-    SHOW EXEC STATISTICS [ALL]
+    SHOW EXEC STATISTICS [ALL];
 
 다음은 해당 질의를 실행한 결과이다.
 
@@ -578,7 +578,7 @@ SHOW LOG HEADER
 
 ::
 
-    SHOW LOG HEADER [OF file_name]
+    SHOW LOG HEADER [OF file_name];
     
 OF file_name을 생략하면 메모리의 헤더 정보를 출력하며, OF file_name을 포함하면 file_name의 헤더 정보를 출력한다.
 
@@ -710,7 +710,7 @@ SHOW ARCHIVE LOG HEADER
 
 ::
 
-    SHOW ARCHIVE LOG HEADER OF file_name
+    SHOW ARCHIVE LOG HEADER OF file_name;
 
 해당 구문은 다음의 칼럼을 출력한다.
 
@@ -742,3 +742,421 @@ Archive_num                         INT             보관 로그 번호
             Num_pages            : 1278
             First_page_id        : 1278
             Archive_num          : 1
+
+SHOW HEAP HEADER
+================
+
+**SHOW HEAP HEADER OF** *table_name* 문은 지정한 테이블의 헤더 페이지를 출력한다. 
+
+::
+
+    SHOW [ALL] HEAP HEADER OF table_name;
+
+*   ALL: 분할 테이블에서 "ALL" 키워드가 주어지면 기반 테이블과 분할 테이블이 같이 출력된다.
+
+해당 구문은 다음의 칼럼을 출력한다.
+
+=================================== =============== ======================================================================================================================================
+칼럼 이름                           타입            설명
+=================================== =============== ======================================================================================================================================
+Class_name                          VARCHAR(256)    테이블 이름
+Class_oid                           VARCHAR(64)     포맷: (volid|pageid|slotid)
+Volume_id                           INT             파일이 위치해 있는 볼륨의 식별자
+File_id                             INT             파일 식별자
+Header_page_id                      INT             첫 페이지 식별자(헤더 페이지)
+Overflow_vfid                       VARCHAR(64)     오버플로우 파일 식별자(존재하는 경우)
+Next_vpid                           VARCHAR(64)     다음 페이지 (예: 힙 파일의 두번째 페이지)
+Unfill_space                        INT             페이지 공간이 이 값보다 작을 때 INSERT 중지. UPDATE 시에는 이 값을 사용 안 함
+Estimates_num_pages                 BIGINT          힙 페이지 개수의 추정치
+Estimates_num_recs                  BIGINT          힙 내 객체 개수의 추정치
+Estimates_avg_rec_len               INT             레코드 전체 길이의 추정치
+Estimates_num_high_best             INT             최소의 HEAP_DROP_FREE_SPACE를 가진 것으로 추정되는 베스트 페이지의 배열에 있는 페이지 개수. 이 숫자가 0이고 최소한 다른 
+                                                    HEAP_NUM_BEST_SPACESTATS 개수만큼의 베스트 페이지가 있으면, 그것을 찾는다.
+Estimates_num_others_high_best      INT             베스트 페이지로 알려진 것으로 추정되는 전체 개수. 이 베스트 페이지는 베스트 배열에는 포함되어 있지 않고 
+                                                    최소한 HEAP_DROP_FREE_SPACE를 가진 것으로 추정한다.
+Estimates_head                      INT             베스트 순환 배열의 헤드
+Estimates_best_list                 VARCHAR(512)    포맷: '((best[0].vpid.volid|best[0].vpid.pageid), best[0].freespace), ... , ((best[9].vpid.volid|best[9].vpid.pageid), best[9].freespace)'
+Estimates_num_second_best           INT             두번째 베스트 힌트의 개수. 이 힌트는 두번째 베스트 배열에 존재한다. 이들은 새로운 베스트 페이지를 찾을 때 사용됨.
+Estimates_head_second_best          INT             두번째 베스트 힌트의 헤드의 인덱스. 새로운 두번째 베스트 힌트는 이 인덱스에 저장된다.
+Estimates_num_substitutions         INT             페이지 대체(substitution) 개수. 새로운 두번째 베스트 페이지를 두번째 베스트 힌트로 입력하기 위해 사용된다.
+Estimates_second_best_list          VARCHAR(512)    포맷: '(second_best[0].vpid.volid|second_best[0].vpid.pageid), ... , (second_best[9].vpid.volid|second_best[9].vpid.pageid)'
+Estimates_last_vpid                 VARCHAR(64)     포맷: '(volid|pageid)'
+Estimates_full_search_vpid          VARCHAR(64)     포맷: '(volid|pageid)'
+=================================== =============== ======================================================================================================================================
+
+다음은 해당 질의를 실행한 결과이다.
+
+::
+
+    csql> ;line on
+    csql> SHOW HEAP HEADER OF athlete;
+
+    <00001> Class_name                    : 'athlete'
+            Class_oid                     : '(0|463|8)'
+            Volume_id                     : 0
+            File_id                       : 147
+            Header_page_id                : 590
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(0|591)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 27
+            Estimates_num_recs            : 6677
+            Estimates_avg_rec_len         : 54
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 0
+            Estimates_best_list           : '((0|826), 14516), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1),0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|826)'
+            Estimates_full_search_vpid    : '(0|590)'
+
+::
+
+    CREATE TABLE participant2 (
+        host_year INT,
+        nation CHAR(3),
+        gold INT,
+        silver INT,
+        bronze INT
+    )
+    PARTITION BY RANGE (host_year) (
+        PARTITION before_2000 VALUES LESS THAN (2000),
+        PARTITION before_2008 VALUES LESS THAN (2008)
+    );
+    
+::
+    
+    csql> SHOW ALL HEAP HEADER OF participant2;
+    
+    <00001> Class_name                    : 'participant2'
+            Class_oid                     : '(0|467|6)'
+            Volume_id                     : 0
+            File_id                       : 374
+            Header_page_id                : 940
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(-1|-1)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 1
+            Estimates_num_recs            : 0
+            Estimates_avg_rec_len         : 0
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 1
+            Estimates_best_list           : '((0|940), 16308), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|940)'
+            Estimates_full_search_vpid    : '(0|940)'
+    <00002> Class_name                    : 'participant2__p__before_2000'
+            Class_oid                     : '(0|467|7)'
+            Volume_id                     : 0
+            File_id                       : 376
+            Header_page_id                : 950
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(-1|-1)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 1
+            Estimates_num_recs            : 0
+            Estimates_avg_rec_len         : 0
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 1
+            Estimates_best_list           : '((0|950), 16308), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|950)'
+            Estimates_full_search_vpid    : '(0|950)'
+    <00003> Class_name                    : 'participant2__p__before_2008'
+            Class_oid                     : '(0|467|8)'
+            Volume_id                     : 0
+            File_id                       : 378
+            Header_page_id                : 960
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(-1|-1)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 1
+            Estimates_num_recs            : 0
+            Estimates_avg_rec_len         : 0
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 1
+            Estimates_best_list           : '((0|960), 16308), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|960)'
+            Estimates_full_search_vpid    : '(0|960)'
+
+    3 rows selected. (3.208305 sec) Committed.
+    
+::
+
+    csql> SHOW HEAP HEADER OF participant2__p__before_2008;
+
+    <00001> Class_name                    : 'participant2__p__before_2008'
+            Class_oid                     : '(0|467|8)'
+            Volume_id                     : 0
+            File_id                       : 378
+            Header_page_id                : 960
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(-1|-1)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 1
+            Estimates_num_recs            : 0
+            Estimates_avg_rec_len         : 0
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 1
+            Estimates_best_list           : '((0|960), 16308), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|960)'
+            Estimates_full_search_vpid    : '(0|960)'
+
+SHOW HEAP CAPACITY
+==================
+
+**SHOW HEAP CAPACITY OF** *table_name* 구문은 지정한 테이블의 용량을 출력한다. 
+
+::
+
+    SHOW [ALL] HEAP CAPACITY OF table_name;
+
+*   ALL: 분할 테이블에서 "ALL" 키워드가 주어지면 기반 테이블과 분할된 테이블이 같이 출력된다.
+
+해당 구문은 다음의 칼럼을 출력한다.
+
+=========================================== =============== ===============================================================================================================================
+칼럼 이름                                   타입            설명                                                                                                                           
+=========================================== =============== ===============================================================================================================================
+Class_name                                  VARCHAR(256)    테이블 이름
+Class_oid                                   VARCHAR(64)     힙 파일 식별자
+Volume_id                                   INT             파일이 존재하는 볼륨 식별자       
+File_id                                     INT             파일 식별자
+Header_page_id                              INT             첫번째 페이지 식별자(헤더 페이지)                                                                                        
+Num_recs                                    BIGINT          객체의 전체 개수
+Num_relocated_recs                          BIGINT          재할당된 레코드의 개수                         
+Num_overflowed_recs                         BIGINT          큰 레코드의 개수
+Num_pages                                   BIGINT          힙 페이지의 전체 개수
+Avg_rec_len                                 INT             평균 객체 길이
+Avg_free_space_per_page                     INT             페이지 당 평균 여유 공간                    
+Avg_free_space_per_page_without_last_page   INT             마지막 페이지를 고려하지 않은 페이지 당 평균 여유 공간
+Avg_overhead_per_page                       INT             페이지 당 평균 오버헤드                       
+Repr_id                                     INT             현재 캐시된 카탈로그 칼럼 정보  
+Num_total_attrs                             INT             칼럼의 전체 개수
+Num_fixed_width_attrs                       INT             고정 길이 칼럼의 개수                    
+Num_variable_width_attrs                    INT             가변 길이 칼럼의 개수                     
+Num_shared_attrs                            INT             공유(shared) 칼럼의 개수                          
+Num_class_attrs                             INT             테이블 칼럼 개수 
+Total_size_fixed_width_attrs                INT             고정 길이 칼럼의 전체 크기           
+=========================================== =============== ===============================================================================================================================
+
+다음은 해당 질의를 실행한 결과이다.
+
+::
+
+    csql> ;line on
+    csql> SHOW HEAP CAPACITY OF athlete;
+    <00001> Class_name                             : 'athlete'
+            Class_oid                              : '(0|463|8)'
+            Volume_id                              : 0
+            File_id                                : 147
+            Header_page_id                         : 590
+            Num_recs                               : 6677
+            Num_relocated_recs                     : 0
+            Num_overflowed_recs                    : 0
+            Num_pages                              : 27
+            Avg_rec_len                            : 53
+            Avg_free_space_per_page                : 2139
+            Avg_overhead_per_page_without_last_page: 1663
+            Avg_overhead_per_page                  : 993
+            Repr_id                                : 1
+            Num_total_attrs                        : 5
+            Num_fixed_width_attrs                  : 3
+            Num_variable_width_attrs               : 2
+            Num_shared_attrs                       : 0
+            Num_class_attrs                        : 0
+            Total_size_fixed_width_attrs           : 8
+    
+::
+
+    csql> SHOW ALL HEAP CAPACITY OF participant2;
+    
+    <00001> Class_name                             : 'participant2'
+            Class_oid                              : '(0|467|6)'
+            Volume_id                              : 0
+            File_id                                : 374
+            Header_page_id                         : 940
+            Num_recs                               : 0
+            Num_relocated_recs                     : 0
+            Num_overflowed_recs                    : 0
+            Num_pages                              : 1
+            Avg_rec_len                            : 0
+            Avg_free_space_per_page                : 16016
+            Avg_overhead_per_page_without_last_page: 0
+            Avg_overhead_per_page                  : 4
+            Repr_id                                : 1
+            Num_total_attrs                        : 5
+            Num_fixed_width_attrs                  : 5
+            Num_variable_width_attrs               : 0
+            Num_shared_attrs                       : 0
+            Num_class_attrs                        : 0
+            Total_size_fixed_width_attrs           : 20
+    <00002> Class_name                             : 'participant2__p__before_2000'
+            Class_oid                              : '(0|467|7)'
+            Volume_id                              : 0
+            File_id                                : 376
+            Header_page_id                         : 950
+            Num_recs                               : 0
+            Num_relocated_recs                     : 0
+            Num_overflowed_recs                    : 0
+            Num_pages                              : 1
+            Avg_rec_len                            : 0
+            Avg_free_space_per_page                : 16016
+            Avg_overhead_per_page_without_last_page: 0
+            Avg_overhead_per_page                  : 4
+            Repr_id                                : 1
+            Num_total_attrs                        : 5
+            Num_fixed_width_attrs                  : 5
+            Num_variable_width_attrs               : 0
+            Num_shared_attrs                       : 0
+            Num_class_attrs                        : 0
+            Total_size_fixed_width_attrs           : 20
+    <00003> Class_name                             : 'participant2__p__before_2008'
+            Class_oid                              : '(0|467|8)'
+            Volume_id                              : 0
+            File_id                                : 378
+            Header_page_id                         : 960
+            Num_recs                               : 0
+            Num_relocated_recs                     : 0
+            Num_overflowed_recs                    : 0
+            Num_pages                              : 1
+            Avg_rec_len                            : 0
+            Avg_free_space_per_page                : 16016
+            Avg_overhead_per_page_without_last_page: 0
+            Avg_overhead_per_page                  : 4
+            Repr_id                                : 1
+            Num_total_attrs                        : 5
+            Num_fixed_width_attrs                  : 5
+            Num_variable_width_attrs               : 0
+            Num_shared_attrs                       : 0
+            Num_class_attrs                        : 0
+            Total_size_fixed_width_attrs           : 20
+
+    3 rows selected. (0.920090 sec) Committed.
+
+SHOW SLOTTED PAGE HEADER
+========================
+
+**SHOW SLOTTED PAGE HEADER** 문은 명시된 슬롯 페이지의 헤더 정보를 출력한다.
+
+::
+
+    SHOW SLOTTED PAGE HEADER { WHERE|OF } VOLUME = volume_num AND PAGE = page_num;
+
+해당 구문은 다음의 칼럼을 출력한다.
+
+=================================== =============== ======================================================================================================================================
+칼럼 이름                           타입            설명
+=================================== =============== ======================================================================================================================================
+Volume_id                           INT             페이지의 볼륨 식별자
+Page_id                             INT             페이지 식별자
+Num_slots                           INT             페이지에 할당된 슬롯 개수
+Num_records                         INT             페이지에 대한 레코드 개수
+Anchor_type                         VARCHAR(32)     다음 값 중 하나: ANCHORED, ANCHORED_DONT_REUSE_SLOTS, UNANCHORED_ANY_SEQUENCE, UNANCHORED_KEEP_SEQUENCE
+Alignment                           VARCHAR(8)      레코드에 대한 정렬(alignment), 다음 값 중 하나: CHAR, SHORT, INT, DOUBLE
+Total_free_area                     INT             페이지 전체 여유 공간
+Contiguous_free_area                INT             페이지 내 연속된 여유 공간
+Free_space_offset                   INT             페이지의 처음부터 페이지 내 첫번째 여유 공간 바이트 영역까지의 바이트 오프셋
+Need_update_best_hint               INT             undo 복구를 위해 저장이 필요하면 true
+Is_saving                           INT             이 페이지를 위해 베스트 페이지를 업데이트해야 되면 true
+=================================== =============== ======================================================================================================================================
+
+다음은 해당 질의를 실행한 결과이다.
+
+::
+
+    csql> ;line on
+    csql> SHOW SLOTTED PAGE HEADER OF VOLUME=0 AND PAGE=140;
+    
+    <00001> Volume_id            : 0
+            Page_id              : 140
+            Num_slots            : 3
+            Num_records          : 3
+            Anchor_type          : 'ANCHORED_DONT_REUSE_SLOTS'
+            Alignment            : 'INT'
+            Total_free_area      : 15880
+            Contiguous_free_area : 15880
+            Free_space_offset    : 460
+            Need_update_best_hint: 1
+            Is_saving            : 0
+
+    
+SHOW SLOTTED PAGE SLOTS
+========================
+
+**SHOW SLOTTED PAGE SLOTS** 문은 명시된 슬롯 페이지의 모든 슬롯 정보를 출력한다.
+
+::
+
+    SHOW SLOTTED PAGE SLOTS { WHERE|OF } VOLUME = volume_num AND PAGE = page_num;
+    
+해당 구문은 다음의 칼럼을 출력한다.
+
+=================================== =============== ======================================================================================================================================
+칼럼 이름                           타입            설명
+=================================== =============== ======================================================================================================================================
+Volume_id                           INT             페이지의 볼륨 식별자
+Page_id                             INT             페이지 식별자
+Slot_id                             INT             슬롯 식별자
+Offset                              INT             페이지의 시작부터 레코드의 시작까지의 바이트 오프셋
+Type                                VARCHAR(32)     레코드 타입, 다음 값 중 하나: REC_UNKNOWN, REC_ASSIGN_ADDRESS, REC_HOME, REC_NEWHOME, REC_RELOCATION, REC_BIGONE, REC_MARKDELETED, REC_DELETED_WILL_REUSE
+Length                              INT             레코드 길이
+Waste                               INT             버릴 것인지 여부
+=================================== =============== ======================================================================================================================================
+
+다음은 해당 질의를 실행한 결과이다.
+
+::
+
+    csql> ;line on
+    csql> SHOW SLOTTED PAGE SLOTS OF VOLUME=0 AND PAGE=140;
+
+    <00001> Volume_id: 0
+            Page_id  : 140
+            Slot_id  : 0
+            Offset   : 40
+            Type     : 'HOME'
+            Length   : 292
+            Waste    : 0
+    <00002> Volume_id: 0
+            Page_id  : 140
+            Slot_id  : 1
+            Offset   : 332
+            Type     : 'HOME'
+            Length   : 64
+            Waste    : 0
+    <00003> Volume_id: 0
+            Page_id  : 140
+            Slot_id  : 2
+            Offset   : 396
+            Type     : 'HOME'
+            Length   : 64
+            Waste    : 0
+
+    3 rows selected. (0.023168 sec) Committed.

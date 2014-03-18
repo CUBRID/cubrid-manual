@@ -9,8 +9,8 @@ DESC, DESCRIBE
 
 ::
 
-    DESC tbl_name
-    DESCRIBE tbl_name
+    DESC tbl_name;
+    DESCRIBE tbl_name;
     
 EXPLAIN
 =======
@@ -19,7 +19,7 @@ EXPLAIN
 
 ::
 
-    EXPLAIN tbl_name
+    EXPLAIN tbl_name;
 
 .. _show-tables-statement:
 
@@ -103,7 +103,7 @@ Displays the column information of a table. You can use the **LIKE** clause to s
 
 ::
 
-    SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr]
+    SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr];
 
 If a **FULL** keyword is used, it displays the additional information, collation.
 
@@ -185,7 +185,7 @@ The **SHOW INDEX** statement displays the index information.
 
 ::
 
-    SHOW {INDEX | INDEXES | KEYS } {FROM | IN} tbl_name
+    SHOW {INDEX | INDEXES | KEYS } {FROM | IN} tbl_name;
     
 This query has the following columns:
 
@@ -321,7 +321,7 @@ SHOW GRANTS
 
 The **SHOW GRANT** statement displays the permissions associated with the database user accounts. ::
 
-    SHOW GRANTS FOR 'user'
+    SHOW GRANTS FOR 'user';
 
 .. code-block:: sql
 
@@ -344,7 +344,7 @@ SHOW CREATE TABLE
 
 When a table name is specified, the **SHOW CREATE TABLE** statement outputs the **CREATE TABLE** statement of the table. ::
 
-    SHOW CREATE TABLE table_name
+    SHOW CREATE TABLE table_name;
     
 .. code-block:: sql
 
@@ -368,7 +368,7 @@ SHOW CREATE VIEW
 
 The **SHOW CREATE VIEW** statement outputs the corresponding **CREATE VIEW** statement if view name is specified. ::
 
-    SHOW CREATE VIEW view_name
+    SHOW CREATE VIEW view_name;
 
 The following example shows the result of executing query in the *demodb* database.
 
@@ -408,7 +408,7 @@ For details, see :ref:`statdump`.
 
 ::
 
-    SHOW EXEC STATISTICS [ALL]
+    SHOW EXEC STATISTICS [ALL];
 
 The following example shows the result of executing query in the *demodb* database.
 
@@ -541,13 +541,35 @@ Remarks                             VARCHAR(64)
 
 The following example shows the result of executing this query.
 
-.. code-block:: sql
+::
 
-    SHOW VOLUME HEADER OF 1;
-    
-    Volume_id   Magic_symbol                            Io_page_size    Purpose                     Sector_size_in_pages    Num_total_sectors   Num_free_sectors    Hint_alloc_sector   Num_total_pages Num_free_pages  Sector_alloc_table_size_in_pages    Sector_alloc_table_first_page   Page_alloc_table_size_in_pages  Page_alloc_table_first_page Last_system_page    Creation_time               Num_max_pages   Num_used_data_pages Num_used_index_pages    Checkpoint_lsa  Boot_hfid       Full_name                       Next_vol_full_name  Remarks
-    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    1           'CUBRID/Volume at disk location = 32'   16384           'Permanent GENERIC Volume'  10                      4                   3                   1                   40              37              1                                   1                               1                               2                           2                   'Mon Nov 11 16:39:07 2013'  32768            0                  0                       1               '(284|2800)'    '/data/cubrid/bin/TestDB_x001'  ''                  'Volume Extension'
+    csql> ;line on
+    csql> SHOW VOLUME HEADER OF 0;
+
+    <00001> Volume_id                       : 0
+            Magic_symbol                    : 'MAGIC SYMBOL = CUBRID/Volume at disk location = 32'
+            Io_page_size                    : 16384
+            Purpose                         : 'Permanent GENERIC Volume'
+            Sector_size_in_pages            : 10
+            Num_total_sectors               : 640
+            Num_free_sectors                : 550
+            Hint_alloc_sector               : 94
+            Num_total_pages                 : 6400
+            Num_free_pages                  : 6025
+            Sector_alloc_table_size_in_pages: 1
+            Sector_alloc_table_first_page   : 1
+            Page_alloc_table_size_in_pages  : 1
+            Page_alloc_table_first_page     : 2
+            Last_system_page                : 2
+            Creation_time                   : 06:09:27.000 PM 02/27/2014
+            Num_max_pages                   : 6400
+            Num_used_data_pages             : 192
+            Num_used_index_pages            : 180
+            Checkpoint_lsa                  : '(0|12832)'
+            Boot_hfid                       : '(0|41|50)'
+            Full_name                       : '/home1/brightest/CUBRID/databases/demodb/demodb'
+            Next_vol_full_name              : ''
+            Remarks                         : ''
 
 SHOW LOG HEADER
 ===============
@@ -556,7 +578,7 @@ SHOW LOG HEADER
 
 ::
 
-    SHOW LOG HEADER [OF file_name]
+    SHOW LOG HEADER [OF file_name];
     
 If you omit **OF** *file_name*, it shows the header information of a memory; if you include **OF** *file_name*, it shows the header information of *file_name*.
 
@@ -643,6 +665,8 @@ The following example shows the result of executing this query.
             Eof_lsa                        : '(66637|14672)'
             Smallest_lsa_at_last_checkpoint: '(66637|14280)'
             
+::
+
     csql> SHOW LOG HEADER OF 'demodb_lgat';
 
     <00001> Volume_id                      : -2
@@ -688,7 +712,7 @@ SHOW ARCHIVE LOG HEADER
 
 ::
 
-    SHOW ARCHIVE LOG HEADER OF file_name
+    SHOW ARCHIVE LOG HEADER OF file_name;
 
 This query has the following columns:
 
@@ -720,3 +744,419 @@ The following example shows the result of executing this query.
             Num_pages            : 1278
             First_page_id        : 1278
             Archive_num          : 1
+
+SHOW HEAP HEADER
+================
+
+**SHOW HEAP HEADER OF** *table_name* syntax shows shows the header page of the table. 
+
+::
+
+    SHOW [ALL] HEAP HEADER OF table_name;
+
+*   ALL: If "ALL" is given in syntax in the partition table, the basic table and its partitioned tables are shown.
+
+This query has the following columns:
+
+=================================== =============== ======================================================================================================================================
+Column name                         Type            Description
+=================================== =============== ======================================================================================================================================
+Class_name                          VARCHAR(256)    Table name
+Class_oid                           VARCHAR(64)     Format: (volid|pageid|slotid)
+Volume_id                           INT             Volume identifier where the file reside
+File_id                             INT             File identifier
+Header_page_id                      INT             First page identifier (the header page)
+Overflow_vfid                       VARCHAR(64)     Overflow file identifier (if any)
+Next_vpid                           VARCHAR(64)     Next page (i.e., the 2nd page of heap file)
+Unfill_space                        INT             Stop inserting when page has run below this. leave it for updates
+Estimates_num_pages                 BIGINT          Estimation of number of heap pages.
+Estimates_num_recs                  BIGINT          Estimation of number of objects in heap
+Estimates_avg_rec_len               INT             Estimation total length of records
+Estimates_num_high_best             INT             Number of pages in the best array that we believe have at least HEAP_DROP_FREE_SPACE. When this number goes to zero and there is at least other 
+                                                    HEAP_NUM_BEST_SPACESTATS best pages, we look for them
+Estimates_num_others_high_best      INT             Total of other believed known best pages, which are not included in the best array and we believe they have at least HEAP_DROP_FREE_SPACE
+Estimates_head                      INT             Head of best circular array
+Estimates_best_list                 VARCHAR(512)    Format: '((best[0].vpid.volid|best[0].vpid.pageid), best[0].freespace), ... , ((best[9].vpid.volid|best[9].vpid.pageid), best[9].freespace)'
+Estimates_num_second_best           INT             Number of second best hints. The hints are in "second_best" array. They are used when finding new best pages.
+Estimates_head_second_best          INT             Index of head of second best hints. A new second best hint will be stored on this index.
+Estimates_num_substitutions         INT             Number of page substitutions. This will be used to insert a new second best page into second best hints.
+Estimates_second_best_list          VARCHAR(512)    Format: '(second_best[0].vpid.volid|second_best[0].vpid.pageid), ... , (second_best[9].vpid.volid|second_best[9].vpid.pageid)'
+Estimates_last_vpid                 VARCHAR(64)     Format: '(volid|pageid)'
+Estimates_full_search_vpid          VARCHAR(64)     Format: '(volid|pageid)'
+=================================== =============== ======================================================================================================================================
+
+The following example shows the result of executing this query.
+
+::
+
+    csql> ;line on
+    csql> SHOW HEAP HEADER OF athlete;
+
+    <00001> Class_name                    : 'athlete'
+            Class_oid                     : '(0|463|8)'
+            Volume_id                     : 0
+            File_id                       : 147
+            Header_page_id                : 590
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(0|591)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 27
+            Estimates_num_recs            : 6677
+            Estimates_avg_rec_len         : 54
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 0
+            Estimates_best_list           : '((0|826), 14516), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1),0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|826)'
+            Estimates_full_search_vpid    : '(0|590)'
+
+::
+
+    CREATE TABLE participant2 (
+        host_year INT,
+        nation CHAR(3),
+        gold INT,
+        silver INT,
+        bronze INT
+    )
+    PARTITION BY RANGE (host_year) (
+        PARTITION before_2000 VALUES LESS THAN (2000),
+        PARTITION before_2008 VALUES LESS THAN (2008)
+    );
+    
+::
+    
+    csql> SHOW ALL HEAP HEADER OF participant2;
+    
+    <00001> Class_name                    : 'participant2'
+            Class_oid                     : '(0|467|6)'
+            Volume_id                     : 0
+            File_id                       : 374
+            Header_page_id                : 940
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(-1|-1)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 1
+            Estimates_num_recs            : 0
+            Estimates_avg_rec_len         : 0
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 1
+            Estimates_best_list           : '((0|940), 16308), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|940)'
+            Estimates_full_search_vpid    : '(0|940)'
+    <00002> Class_name                    : 'participant2__p__before_2000'
+            Class_oid                     : '(0|467|7)'
+            Volume_id                     : 0
+            File_id                       : 376
+            Header_page_id                : 950
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(-1|-1)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 1
+            Estimates_num_recs            : 0
+            Estimates_avg_rec_len         : 0
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 1
+            Estimates_best_list           : '((0|950), 16308), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|950)'
+            Estimates_full_search_vpid    : '(0|950)'
+    <00003> Class_name                    : 'participant2__p__before_2008'
+            Class_oid                     : '(0|467|8)'
+            Volume_id                     : 0
+            File_id                       : 378
+            Header_page_id                : 960
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(-1|-1)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 1
+            Estimates_num_recs            : 0
+            Estimates_avg_rec_len         : 0
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 1
+            Estimates_best_list           : '((0|960), 16308), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|960)'
+            Estimates_full_search_vpid    : '(0|960)'
+
+    3 rows selected. (3.208305 sec) Committed.
+    
+::
+
+    csql> SHOW HEAP HEADER OF participant2__p__before_2008;
+
+    <00001> Class_name                    : 'participant2__p__before_2008'
+            Class_oid                     : '(0|467|8)'
+            Volume_id                     : 0
+            File_id                       : 378
+            Header_page_id                : 960
+            Overflow_vfid                 : '(-1|-1)'
+            Next_vpid                     : '(-1|-1)'
+            Unfill_space                  : 1635
+            Estimates_num_pages           : 1
+            Estimates_num_recs            : 0
+            Estimates_avg_rec_len         : 0
+            Estimates_num_high_best       : 1
+            Estimates_num_others_high_best: 0
+            Estimates_head                : 1
+            Estimates_best_list           : '((0|960), 16308), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0), ((-1|-1), 0)'
+            Estimates_num_second_best     : 0
+            Estimates_head_second_best    : 0
+            Estimates_tail_second_best    : 0
+            Estimates_num_substitutions   : 0
+            Estimates_second_best_list    : '(-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1), (-1|-1)'
+            Estimates_last_vpid           : '(0|960)'
+            Estimates_full_search_vpid    : '(0|960)'
+
+SHOW HEAP CAPACITY
+==================
+
+**SHOW HEAP CAPACITY OF** *table_name* syntax shows the capacity of the table. 
+
+::
+
+    SHOW [ALL] HEAP CAPACITY OF table_name;
+
+*   ALL: If "all" is given in syntax, the basic table and its partition table(s) is shown.
+
+This query has the following columns:
+
+=========================================== =============== ===============================================================================================================================
+Column name                                 Type            Description
+=========================================== =============== ===============================================================================================================================
+Class_name                                  VARCHAR(256)    Table name
+Class_oid                                   VARCHAR(64)     Heap file descriptor
+Volume_id                                   INT             Volume identifier where the file reside
+File_id                                     INT             File identifier
+Header_page_id                              INT             First page identifier (the header page)
+Num_recs                                    BIGINT          Total Number of objects
+Num_relocated_recs                          BIGINT          Number of relocated records
+Num_overflowed_recs                         BIGINT          Number of big records
+Num_pages                                   BIGINT          Total number of heap pages
+Avg_rec_len                                 INT             Average object length
+Avg_free_space_per_page                     INT             Average free space per page
+Avg_free_space_per_page_without_last_page   INT             Average free space per page without taking in consideration last page
+Avg_overhead_per_page                       INT             Average overhead per page
+Repr_id                                     INT             Currently cached catalog column info
+Num_total_attrs                             INT             total number of columns
+Num_fixed_width_attrs                       INT             Number of the fixed width columns
+Num_variable_width_attrs                    INT             Number of variable width columns
+Num_shared_attrs                            INT             Number of shared columns
+Num_class_attrs                             INT             Number of table columns
+Total_size_fixed_width_attrs                INT             Total size of the fixed width columns
+=========================================== =============== ===============================================================================================================================
+
+The following example shows the result of executing this query.
+
+::
+
+    csql> ;line on
+    csql> SHOW HEAP CAPACITY OF athlete;
+    <00001> Class_name                             : 'athlete'
+            Class_oid                              : '(0|463|8)'
+            Volume_id                              : 0
+            File_id                                : 147
+            Header_page_id                         : 590
+            Num_recs                               : 6677
+            Num_relocated_recs                     : 0
+            Num_overflowed_recs                    : 0
+            Num_pages                              : 27
+            Avg_rec_len                            : 53
+            Avg_free_space_per_page                : 2139
+            Avg_overhead_per_page_without_last_page: 1663
+            Avg_overhead_per_page                  : 993
+            Repr_id                                : 1
+            Num_total_attrs                        : 5
+            Num_fixed_width_attrs                  : 3
+            Num_variable_width_attrs               : 2
+            Num_shared_attrs                       : 0
+            Num_class_attrs                        : 0
+            Total_size_fixed_width_attrs           : 8
+    
+::
+
+    csql> SHOW ALL HEAP CAPACITY OF participant2;
+    
+    <00001> Class_name                             : 'participant2'
+            Class_oid                              : '(0|467|6)'
+            Volume_id                              : 0
+            File_id                                : 374
+            Header_page_id                         : 940
+            Num_recs                               : 0
+            Num_relocated_recs                     : 0
+            Num_overflowed_recs                    : 0
+            Num_pages                              : 1
+            Avg_rec_len                            : 0
+            Avg_free_space_per_page                : 16016
+            Avg_overhead_per_page_without_last_page: 0
+            Avg_overhead_per_page                  : 4
+            Repr_id                                : 1
+            Num_total_attrs                        : 5
+            Num_fixed_width_attrs                  : 5
+            Num_variable_width_attrs               : 0
+            Num_shared_attrs                       : 0
+            Num_class_attrs                        : 0
+            Total_size_fixed_width_attrs           : 20
+    <00002> Class_name                             : 'participant2__p__before_2000'
+            Class_oid                              : '(0|467|7)'
+            Volume_id                              : 0
+            File_id                                : 376
+            Header_page_id                         : 950
+            Num_recs                               : 0
+            Num_relocated_recs                     : 0
+            Num_overflowed_recs                    : 0
+            Num_pages                              : 1
+            Avg_rec_len                            : 0
+            Avg_free_space_per_page                : 16016
+            Avg_overhead_per_page_without_last_page: 0
+            Avg_overhead_per_page                  : 4
+            Repr_id                                : 1
+            Num_total_attrs                        : 5
+            Num_fixed_width_attrs                  : 5
+            Num_variable_width_attrs               : 0
+            Num_shared_attrs                       : 0
+            Num_class_attrs                        : 0
+            Total_size_fixed_width_attrs           : 20
+    <00003> Class_name                             : 'participant2__p__before_2008'
+            Class_oid                              : '(0|467|8)'
+            Volume_id                              : 0
+            File_id                                : 378
+            Header_page_id                         : 960
+            Num_recs                               : 0
+            Num_relocated_recs                     : 0
+            Num_overflowed_recs                    : 0
+            Num_pages                              : 1
+            Avg_rec_len                            : 0
+            Avg_free_space_per_page                : 16016
+            Avg_overhead_per_page_without_last_page: 0
+            Avg_overhead_per_page                  : 4
+            Repr_id                                : 1
+            Num_total_attrs                        : 5
+            Num_fixed_width_attrs                  : 5
+            Num_variable_width_attrs               : 0
+            Num_shared_attrs                       : 0
+            Num_class_attrs                        : 0
+            Total_size_fixed_width_attrs           : 20
+
+    3 rows selected. (0.920090 sec) Committed.
+
+SHOW SLOTTED PAGE HEADER
+========================
+
+**SHOW SLOTTED PAGE HEADER** syntax shows the header information of specified slotted page.
+
+::
+
+    SHOW SLOTTED PAGE HEADER { WHERE|OF } VOLUME = volume_num AND PAGE = page_num;
+
+This query has the following columns:
+
+=================================== =============== ======================================================================================================================================
+Column name                         Type            Description
+=================================== =============== ======================================================================================================================================
+Volume_id                           INT             Volume id of the page
+Page_id                             INT             page id of the page
+Num_slots                           INT             Number of allocated slots for the page
+Num_records                         INT             Number of records on page
+Anchor_type                         VARCHAR(32)     One of flowing: ANCHORED, ANCHORED_DONT_REUSE_SLOTS, UNANCHORED_ANY_SEQUENCE, UNANCHORED_KEEP_SEQUENCE
+Alignment                           VARCHAR(8)      Alignment for records, one of flowing: CHAR, SHORT, INT, DOUBLE
+Total_free_area                     INT             Total free space on page
+Contiguous_free_area                INT             Contiguous free space on page
+Free_space_offset                   INT             Byte offset from the beginning of the page to the first free byte area on the page
+Need_update_best_hint               INT             True if saving is need for recovery (undo)
+Is_saving                           INT             True if we should update best pages hint for this page.
+=================================== =============== ======================================================================================================================================
+
+The following example shows the result of executing this query.
+
+::
+
+    csql> ;line on
+    csql> SHOW SLOTTED PAGE HEADER OF VOLUME=0 AND PAGE=140;
+    
+    <00001> Volume_id            : 0
+            Page_id              : 140
+            Num_slots            : 3
+            Num_records          : 3
+            Anchor_type          : 'ANCHORED_DONT_REUSE_SLOTS'
+            Alignment            : 'INT'
+            Total_free_area      : 15880
+            Contiguous_free_area : 15880
+            Free_space_offset    : 460
+            Need_update_best_hint: 1
+            Is_saving            : 0
+
+SHOW SLOTTED PAGE SLOTS
+========================
+
+**SHOW SLOTTED PAGE SLOTS** syntax shows the information of all slots in the specified slotted page.
+
+::
+
+    SHOW SLOTTED PAGE SLOTS { WHERE|OF } VOLUME = volume_num AND PAGE = page_num;
+    
+This query has the following columns:
+
+=================================== =============== ======================================================================================================================================
+Column name                         Type            Description
+=================================== =============== ======================================================================================================================================
+Volume_id                           INT             Volume id of the page
+Page_id                             INT             Page id of the page
+Slot_id                             INT             The slot id
+Offset                              INT             Byte offset from the beginning of the page to the beginning of the record
+Type                                VARCHAR(32)     Record type, one of flowing: REC_UNKNOWN, REC_ASSIGN_ADDRESS, REC_HOME, REC_NEWHOME, REC_RELOCATION, REC_BIGONE, REC_MARKDELETED, REC_DELETED_WILL_REUSE
+Length                              INT             Length of record
+Waste                               INT             Whether or not wasted
+=================================== =============== ======================================================================================================================================
+
+The following example shows the result of executing this query.
+
+::
+
+    csql> ;line on
+    csql> SHOW SLOTTED PAGE SLOTS OF VOLUME=0 AND PAGE=140;
+
+    <00001> Volume_id: 0
+            Page_id  : 140
+            Slot_id  : 0
+            Offset   : 40
+            Type     : 'HOME'
+            Length   : 292
+            Waste    : 0
+    <00002> Volume_id: 0
+            Page_id  : 140
+            Slot_id  : 1
+            Offset   : 332
+            Type     : 'HOME'
+            Length   : 64
+            Waste    : 0
+    <00003> Volume_id: 0
+            Page_id  : 140
+            Slot_id  : 2
+            Offset   : 396
+            Type     : 'HOME'
+            Length   : 64
+            Waste    : 0
+
+    3 rows selected. (0.023168 sec) Committed.

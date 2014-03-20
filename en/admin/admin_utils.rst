@@ -622,8 +622,7 @@ The following shows the option available with the **cubrid alterdbhost** utility
 Copying/Moving Database
 -----------------------
 
-The **cubrid copydb** utility copy or move a database to another location. As arguments, source and target name of database must be given. A target database name must be different from a source database name. When the target name argument is specified, the location of target database name is registered in the **databases.txt**
-file. 
+The **cubrid copydb** utility copy or move a database to another location. As arguments, source and target name of database must be given. A target database name must be different from a source database name. When the target name argument is specified, the location of target database name is registered in the **databases.txt** file. 
 
 The **cubrid copydb** utility can be executed only offline (that is, state of a source database stop). ::
 
@@ -750,7 +749,6 @@ The following shows [options] available with the **cubrid installdb** utility.
 
         cubrid installdb -L /home/cubrid/CUBRID/databases/logs/testdb testdb
 
-        
 .. include:: backup.inc
 
 .. _unload-load:
@@ -1065,7 +1063,7 @@ The following shows [options] available with the **cubrid statdump** utility.
 
         cubrid statdump -i 5 testdb
          
-        Thu April 07 23:10:08 KST 2013
+        Thu March 07 23:10:08 KST 2014
          
          *** SERVER EXECUTION STATISTICS ***
         Num_file_creates              =          0
@@ -1073,6 +1071,8 @@ The following shows [options] available with the **cubrid statdump** utility.
         Num_file_ioreads              =          0
         Num_file_iowrites             =          0
         Num_file_iosynches            =          0
+        Num_file_page_allocs          =          0
+        Num_file_page_deallocs        =          0
         Num_data_page_fetches         =          0
         Num_data_page_dirties         =          0
         Num_data_page_ioreads         =          0
@@ -1128,141 +1128,177 @@ The following shows [options] available with the **cubrid statdump** utility.
         Num_adaptive_flush_pages      =          0
         Num_adaptive_flush_log_pages  =          0
         Num_adaptive_flush_max_pages  =        900
+        Num_prior_lsa_list_size       =          0
+        Num_prior_lsa_list_maxed      =          0
+        Num_prior_lsa_list_removed    =          0
+        Num_heap_stats_bestspace_entries =          0
+        Num_heap_stats_bestspace_maxed =          0
+        Time_ha_replication_delay     =          0
+        Num_plan_cache_add            =          0
+        Num_plan_cache_lookup         =          0
+        Num_plan_cache_hit            =          0
+        Num_plan_cache_miss           =          0
+        Num_plan_cache_full           =          0
+        Num_plan_cache_delete         =          0
+        Num_plan_cache_invalid_xasl_id =          0
+        Num_plan_cache_query_string_hash_entries =          0
+        Num_plan_cache_xasl_id_hash_entries =          0
+        Num_plan_cache_class_oid_hash_entries =          0
         
          *** OTHER STATISTICS ***
         Data_page_buffer_hit_ratio    =       0.00
 
     The following are the explanation about the above statistical information.
 
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    | Category         | Item                                   | Description                                                                          |
-    +==================+========================================+======================================================================================+
-    | File I/O         | Num_file_removes                       | The number of files removed                                                          |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_file_creates                       | The number of files created                                                          |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_file_ioreads                       | The number of files read                                                             |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_file_iowrites                      | The number of files stored                                                           |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_file_iosynches                     | The number of file synchronization                                                   |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    | Page buffer      | Num_data_page_fetches                  | The number of pages fetched                                                          |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_data_page_dirties                  | The number of duty pages                                                             |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_data_page_ioreads                  | The number of pages read                                                             |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_data_page_iowrites                 | The number of pages stored                                                           |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_data_page_victims                  | The number specifying the victim data to be flushed from the data page to the disk   |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_data_page_iowrites_for_replacement | The number of the written data pages specified as victim                             |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_adaptive_flush_pages               | The number of data pages flushed from the data buffer to the disk                    |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_adaptive_flush_log_pages           | The number of log pages flushed from the log buffer to the disk                      |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_adaptive_flush_max_pages           | The maximum number of pages allowed to flush from data and the log buffer            |
-    |                  |                                        | to the disk                                                                          |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_sort_io_pages                      | Number of pages fetched from disk during sort                                        |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_sort_data_pages                    | Number of pages found in the page buffer during sort                                 |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    | Logs             | Num_log_page_ioreads                   | The number of log pages read                                                         |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_log_page_iowrites                  | The number of log pages stored                                                       |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_log_append_records                 | The number of log records appended                                                   |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_log_archives                       | The number of logs archived                                                          |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_log_start_checkpoints              | The number of started checkpoints                                                    |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_log_end_checkpoints                | The number of ended checkpoints                                                      |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_log_checkpoints                    | The number of checkpoints                                                            |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_log_wals                           | Not used                                                                             |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    | Transactions     | Num_tran_commits                       | The number of commits                                                                |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_tran_rollbacks                     | The number of rollbacks                                                              |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_tran_savepoints                    | The number of savepoints                                                             |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_tran_start_topops                  | The number of top operations started                                                 |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_tran_end_topops                    | The number of top operations stopped                                                 |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_tran_interrupts                    | The number of interruptions                                                          |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    | Concurrency/lock | Num_page_locks_acquired                | The number of locked pages acquired                                                  |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_object_locks_acquired              | The number of locked objects acquired                                                |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_page_locks_converted               | The number of locked pages converted                                                 |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_object_locks_converted             | The number of locked objects converted                                               |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_page_locks_re-requested            | The number of locked pages requested                                                 |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_object_locks_re-requested          | The number of locked objects requested                                               |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_page_locks_waits                   | The number of locked pages waited                                                    |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_object_locks_waits                 | The number of locked objects waited                                                  |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    | Index            | Num_btree_inserts                      | The number of nodes inserted                                                         |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_btree_deletes                      | The number of nodes deleted                                                          |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_btree_updates                      | The number of nodes updated                                                          |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_btree_covered                      | The number of cases in which an index includes all data upon query execution         |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_btree_noncovered                   | The number of cases in which an index includes some or no data upon query execution  |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_btree_resumes                      | The exceeding number of index scan specified in index_scan_oid_buffer_pages          |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_btree_multirange_optimization      | The number of executions on multi-range optimization for the WHERE … IN …            |
-    |                  |                                        | LIMIT condition query statement                                                      |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_btree_splits                       | Number of B-tree node split operations                                               |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_btree_merges                       | Number of B-tree merge operations                                                    |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    | Query            | Num_query_selects                      | The number of SELECT query execution                                                 |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_inserts                      | The number of INSERT query execution                                                 |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_deletes                      | The number of DELETE query execution                                                 |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_updates                      | The number of UPDATE query execution                                                 |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_sscans                       | The number of sequential scans (full scan)                                           |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_iscans                       | The number of index scans                                                            |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_lscans                       | The number of LIST scans                                                             |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_setscans                     | The number of SET scans                                                              |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_methscans                    | The number of METHOD scans                                                           |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_nljoins                      | The number of nested loop joins                                                      |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_mjoins                       | The number of parallel joins                                                         |
-    |                  +----------------------------------------+--------------------------------------------------------------------------------------+
-    |                  | Num_query_objfetches                   | The number of fetch objects                                                          |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    | Network request  | Num_network_requests                   | The number of network requested                                                      |
-    |                  |                                        |                                                                                      |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
-    | Buffer hit rate  | Data_page_buffer_hit_ratio             | Hit Ratio of page buffers                                                            |
-    |                  |                                        | (Num_data_page_fetches - Num_data_page_ioreads)*100 / Num_data_page_fetches          |
-    +------------------+----------------------------------------+--------------------------------------------------------------------------------------+
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Category         | Item                                     | Description                                                                          |
+    +==================+==========================================+======================================================================================+
+    | File I/O         | Num_file_removes                         | The number of files removed                                                          |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_file_creates                         | The number of files created                                                          |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_file_ioreads                         | The number of files read                                                             |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_file_iowrites                        | The number of files stored                                                           |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_file_iosynches                       | The number of file synchronization                                                   |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Page buffer      | Num_data_page_fetches                    | The number of pages fetched                                                          |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_data_page_dirties                    | The number of duty pages                                                             |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_data_page_ioreads                    | The number of pages read                                                             |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_data_page_iowrites                   | The number of pages stored                                                           |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_data_page_victims                    | The number specifying the victim data to be flushed from the data page to the disk   |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_data_page_iowrites_for_replacement   | The number of the written data pages specified as victim                             |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_adaptive_flush_pages                 | The number of data pages flushed from the data buffer to the disk                    |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_adaptive_flush_log_pages             | The number of log pages flushed from the log buffer to the disk                      |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_adaptive_flush_max_pages             | The maximum number of pages allowed to flush from data and the log buffer            |
+    |                  |                                          | to the disk                                                                          |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_sort_io_pages                        | The number of pages fetched on the disk during sorting                               |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_sort_data_pages                      | The number of pages found on the page buffer during sorting                          |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Logs             | Num_log_page_ioreads                     | The number of log pages read                                                         |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_log_page_iowrites                    | The number of log pages stored                                                       |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_log_append_records                   | The number of log records appended                                                   |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_log_archives                         | The number of logs archived                                                          |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_log_start_checkpoints                | The number of started checkpoints                                                    |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_log_end_checkpoints                  | The number of ended checkpoints                                                      |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_log_wals                             | Not used                                                                             |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Transactions     | Num_tran_commits                         | The number of commits                                                                |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_tran_rollbacks                       | The number of rollbacks                                                              |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_tran_savepoints                      | The number of savepoints                                                             |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_tran_start_topops                    | The number of top operations started                                                 |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_tran_end_topops                      | The number of top operations stopped                                                 |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_tran_interrupts                      | The number of interruptions                                                          |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Concurrency/lock | Num_page_locks_acquired                  | The number of locked pages acquired                                                  |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_object_locks_acquired                | The number of locked objects acquired                                                |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_page_locks_converted                 | The number of locked pages converted                                                 |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_object_locks_converted               | The number of locked objects converted                                               |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_page_locks_re-requested              | The number of locked pages requested                                                 |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_object_locks_re-requested            | The number of locked objects requested                                               |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_page_locks_waits                     | The number of locked pages waited                                                    |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_object_locks_waits                   | The number of locked objects waited                                                  |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Index            | Num_btree_inserts                        | The number of nodes inserted                                                         |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_deletes                        | The number of nodes deleted                                                          |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_updates                        | The number of nodes updated                                                          |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_covered                        | The number of cases in which an index includes all data upon query execution         |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_noncovered                     | The number of cases in which an index includes some or no data upon query execution  |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_resumes                        | The exceeding number of index scan specified in index_scan_oid_buffer_pages          |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_multirange_optimization        | The number of executions on multi-range optimization for the WHERE … IN …            |
+    |                  |                                          | LIMIT condition query statement                                                      |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_splits                         | The number of B-tree split-operations                                                |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_btree_merges                         | The number of B-tree merge-operations                                                |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Query            | Num_query_selects                        | The number of SELECT query execution                                                 |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_inserts                        | The number of INSERT query execution                                                 |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_deletes                        | The number of DELETE query execution                                                 |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_updates                        | The number of UPDATE query execution                                                 |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_sscans                         | The number of sequential scans (full scan)                                           |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_iscans                         | The number of index scans                                                            |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_lscans                         | The number of LIST scans                                                             |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_setscans                       | The number of SET scans                                                              |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_methscans                      | The number of METHOD scans                                                           |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_nljoins                        | The number of nested loop joins                                                      |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_mjoins                         | The number of parallel joins                                                         |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_query_objfetches                     | The number of fetch objects                                                          |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Network request  | Num_network_requests                     | The number of network requested                                                      |
+    |                  |                                          |                                                                                      |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Buffer hit rate  | Data_page_buffer_hit_ratio               | Hit Ratio of page buffers                                                            |
+    |                  |                                          | (Num_data_page_fetches - Num_data_page_ioreads)*100 / Num_data_page_fetches          |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    | Query plan cache | Num_plan_cache_add                       | The number of newly added cache entry                                                |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_plan_cache_lookup                    | The number of lookup try with a special key                                          |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_plan_cache_hit                       | The number of the hit entries in the query string hash table                         |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_plan_cache_miss                      | The number of the missed entries in the query string hash table                      |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_plan_cache_full                      | The number of the victim retrieval by the full plan cache                            |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_plan_cache_delete                    | The number of victimized cache entries                                               |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_plan_cache_invalid_xasl_id           | The number of missed entries in the xasl_id hash table.                              |
+    |                  |                                          | The number of errors occurred when some entries are requested in the client          |
+    |                  |                                          | during those entries are victimized in the server                                    |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_plan_cache_query_string_hash_entries | The current entry number of the query string hash table                              |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_plan_cache_xasl_id_hash_entries      | The current entry number of xasl id hash table                                       |
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  | Num_plan_cache_class_oid_hash_entries    | The current entry number of class oid hash table                                     |
+    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
 
 .. option:: -o, --output-file=FILE
 
@@ -1704,7 +1740,7 @@ The following shows [options] available with the **cubrid checkdb** utility.
     :: 
   
         $ cubrid checkdb --check-prev-link demodb 
-  
+
 .. option:: --repair-prev-link 
   
     This option is used to restore if there are errors on previous links of an index.

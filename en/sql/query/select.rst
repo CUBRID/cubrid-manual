@@ -604,7 +604,7 @@ An outer join is divided into a left outer join which outputs all rows of the le
 *   *join_table_specification2*
 
     *   **CROSS JOIN** : Used for cross join and requires no join conditions.
-    *   **NATURAL [ **LEFT** | **RIGHT** ] JOIN** : Used for natural join and join condition is not used. It operates in the equivalent same way to have a condition between columns equivalent of the same name .
+    *   **NATURAL** [ **LEFT** | **RIGHT** ] **JOIN** : Used for natural join and join condition is not used. It operates in the equivalent same way to have a condition between columns equivalent of the same name .
 
 Inner Join
 ----------

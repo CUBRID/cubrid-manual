@@ -120,7 +120,7 @@ CSQL 시작 옵션
           --no-single-line         turn off single line oriented execution
           --no-trigger-action      disable trigger action
 
-    For additional information, see http://www.cubrid.com
+    For additional information, see http://www.cubrid.org
 
 **옵션**
 

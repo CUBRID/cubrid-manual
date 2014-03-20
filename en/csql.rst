@@ -120,7 +120,7 @@ To display the option list in the prompt, execute the **csql** utilities withou
           --no-single-line         turn off single line oriented execution
           --no-trigger-action      disable trigger action
 
-    For additional information, see http://www.cubrid.com
+    For additional information, see http://www.cubrid.org
     
 **Options**
 

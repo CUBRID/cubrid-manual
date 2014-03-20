@@ -2,58 +2,60 @@
 암호화 함수
 ***********
 
-AES_ENCRYPT
-===========
+.. CUBRIDSUS-13314: bit string에 대한 charset 지원이 있어야 AES_ENCRYPT/AES_DECRYPT 함수들 쓸 수 있음.
 
-.. function:: AES_ENCRYPT(string,key_string)
+    AES_ENCRYPT
+    ===========
 
-    **AES_ENCRYPT** 함수와 **AES_DECRYPT** 함수는 공식 AES(Advanced Encryption Standard) 알고리즘(Rijndael 암호에 기반함)을 사용하는 데이터의 암호화와 복호화를 가능하게 한다. AES_ENCRYPT() 함수는 128 비트 키로 인코딩되며 문자열을 암호화하여 바이너리 열을 반환한다.
-    
-    :param string: 암호화할 대상 문자열
-    :param key_string: 키 문자열
-    :rtype: STRING 
+    .. function:: AES_ENCRYPT(string,key_string)
+
+        **AES_ENCRYPT** 함수와 **AES_DECRYPT** 함수는 공식 AES(Advanced Encryption Standard) 알고리즘(Rijndael 암호에 기반함)을 사용하는 데이터의 암호화와 복호화를 가능하게 한다. AES_ENCRYPT() 함수는 128 비트 키로 인코딩되며 문자열을 암호화하여 바이너리 열을 반환한다.
+        
+        :param string: 암호화할 대상 문자열
+        :param key_string: 키 문자열
+        :rtype: STRING 
 
 
-    
-AES는 블럭 단위의 알고리즘이므로 일정하지 않은 길의의 문자열을 인코딩하기 위해 패딩(padding)이 사용되며, 결과 문자열의 길이가 AES/ECB/PKCS7의 공식을 사용하여 계산될 수 있다.
+        
+    AES는 블럭 단위의 알고리즘이므로 일정하지 않은 길의의 문자열을 인코딩하기 위해 패딩(padding)이 사용되며, 결과 문자열의 길이가 AES/ECB/PKCS7의 공식을 사용하여 계산될 수 있다.
 
-반환되는 값은 바이너리 문자열이므로, 화면에는 비정상적으로 출력될 수 있다.
+    반환되는 값은 바이너리 문자열이므로, 화면에는 비정상적으로 출력될 수 있다.
 
-.. code-block:: sql
-
-    SELECT HEX(AES_ENCRYPT('cubrid', 'encr_key'));
-
-::
-    
-       hex( aes_encrypt('cubrid', 'encr_key'))
-    ======================
-      'BCE9FDE7AA8D2009248C595CC0C87AD0'
-    
-AES_DECRYPT
-===========
-
-.. function:: AES_DECRYPT(crypt_string, key_string)
-
-    AES_DECRYPT() 함수는 :func:`AES_ENCRYPT` 함수의 암호화된 문자열을 복호화한다.
-    
-    :param crypt_string: 암호화된 문자열
-    :param key_string: 키 문자열
-    :rtype: STRING 
-
-입력 인자의 길이는 제한이 없다. 입력 인자 값이 NULL이면 NULL을 반환한다.
-
-AES_DECRYPT() 함수의 입력 인자가 무효한 데이터 또는 잘못된 패딩을 감지하면, 이 함수는 NULL을 반환한다. 그러나, 입력 데이터 또는 키가 무효한 경우, NULL이 아닌 값(아마도 쓰레기 값)을 반환할 수 있다.
-    
     .. code-block:: sql
 
-        SELECT AES_DECRYPT(AES_ENCRYPT('cubrid', 'encr_key'), 'encr_key');
+        SELECT HEX(AES_ENCRYPT('cubrid', 'encr_key'));
 
     ::
-    
-           aes_decrypt( aes_encrypt('cubrid', 'encr_key'), 'encr_key')
+        
+           hex( aes_encrypt('cubrid', 'encr_key'))
         ======================
-          'cubrid'
-    
+          'BCE9FDE7AA8D2009248C595CC0C87AD0'
+        
+    AES_DECRYPT
+    ===========
+
+    .. function:: AES_DECRYPT(crypt_string, key_string)
+
+        AES_DECRYPT() 함수는 :func:`AES_ENCRYPT` 함수의 암호화된 문자열을 복호화한다.
+        
+        :param crypt_string: 암호화된 문자열
+        :param key_string: 키 문자열
+        :rtype: STRING 
+
+    입력 인자의 길이는 제한이 없다. 입력 인자 값이 NULL이면 NULL을 반환한다.
+
+    AES_DECRYPT() 함수의 입력 인자가 무효한 데이터 또는 잘못된 패딩을 감지하면, 이 함수는 NULL을 반환한다. 그러나, 입력 데이터 또는 키가 무효한 경우, NULL이 아닌 값(아마도 쓰레기 값)을 반환할 수 있다.
+        
+        .. code-block:: sql
+
+            SELECT AES_DECRYPT(AES_ENCRYPT('cubrid', 'encr_key'), 'encr_key');
+
+        ::
+        
+               aes_decrypt( aes_encrypt('cubrid', 'encr_key'), 'encr_key')
+            ======================
+              'cubrid'
+        
 MD5
 ===
 

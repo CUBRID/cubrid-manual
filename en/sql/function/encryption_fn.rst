@@ -2,56 +2,58 @@
 Encryption Function
 *******************
 
-AES_ENCRYPT
-===========
+.. CUBRIDSUS-13314: bit string에 대한 charset 지원이 있어야 AES_ENCRYPT/AES_DECRYPT 함수들 쓸 수 있음.
 
-.. function:: AES_ENCRYPT(str,key_str)
+    AES_ENCRYPT
+    ===========
 
-    The **AES_ENCRYPT** and **AES_DECRYPT** functions enable encryption and decryption of data using the official AES (Advanced Encryption Standard) algorithm(based on "Rijndael" encryption). Encoding with a 128-bit key length is used, and AES_ENCRYPT() encrypts a string and returns a binary string.
+    .. function:: AES_ENCRYPT(str,key_str)
 
-    :param string: target string to be encrypted
-    :param key_string: key string
-    :rtype: STRING 
-    
+        The **AES_ENCRYPT** and **AES_DECRYPT** functions enable encryption and decryption of data using the official AES (Advanced Encryption Standard) algorithm(based on "Rijndael" encryption). Encoding with a 128-bit key length is used, and AES_ENCRYPT() encrypts a string and returns a binary string.
 
-Because AES is a block-level algorithm, padding is used to encode uneven length strings and so the result string length may be calculated using AES/ECB/PKCS7 formula.
+        :param string: target string to be encrypted
+        :param key_string: key string
+        :rtype: STRING 
+        
 
-Because a return value is binary string, it can be displayed abnormally.
+    Because AES is a block-level algorithm, padding is used to encode uneven length strings and so the result string length may be calculated using AES/ECB/PKCS7 formula.
 
-.. code-block:: sql
+    Because a return value is binary string, it can be displayed abnormally.
 
-    SELECT HEX(AES_ENCRYPT('cubrid', 'encr_key'));
-
-::
-    
-       hex( aes_encrypt('cubrid', 'encr_key'))
-    ======================
-      'BCE9FDE7AA8D2009248C595CC0C87AD0'
-
-AES_DECRYPT
-===========
-
-.. function:: AES_DECRYPT(crypt_str, key_str)
-
-    The **AES_DECRYPT** function decrypts the encrypted string by func:`AES_ENCRYPT`.
-
-    :param crypt_string: encrypted string
-    :param key_string: key string
-    :rtype: STRING 
-
-The input arguments may be any length. If either argument is NULL, the result of this function is also NULL. 
-
-If AES_DECRYPT() detects invalid data or incorrect padding, it returns NULL. However, it is possible for AES_DECRYPT() to return a non-NULL value (possibly garbage) if the input data or the key is invalid. 
-    
     .. code-block:: sql
 
-        SELECT AES_DECRYPT(AES_ENCRYPT('cubrid', 'encr_key'), 'encr_key');
+        SELECT HEX(AES_ENCRYPT('cubrid', 'encr_key'));
 
     ::
-    
-           aes_decrypt( aes_encrypt('cubrid', 'encr_key'), 'encr_key')
+        
+           hex( aes_encrypt('cubrid', 'encr_key'))
         ======================
-          'cubrid'
+          'BCE9FDE7AA8D2009248C595CC0C87AD0'
+
+    AES_DECRYPT
+    ===========
+
+    .. function:: AES_DECRYPT(crypt_str, key_str)
+
+        The **AES_DECRYPT** function decrypts the encrypted string by func:`AES_ENCRYPT`.
+
+        :param crypt_string: encrypted string
+        :param key_string: key string
+        :rtype: STRING 
+
+    The input arguments may be any length. If either argument is NULL, the result of this function is also NULL. 
+
+    If AES_DECRYPT() detects invalid data or incorrect padding, it returns NULL. However, it is possible for AES_DECRYPT() to return a non-NULL value (possibly garbage) if the input data or the key is invalid. 
+        
+        .. code-block:: sql
+
+            SELECT AES_DECRYPT(AES_ENCRYPT('cubrid', 'encr_key'), 'encr_key');
+
+        ::
+        
+               aes_decrypt( aes_encrypt('cubrid', 'encr_key'), 'encr_key')
+            ======================
+              'cubrid'
           
 MD5
 ===

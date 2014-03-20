@@ -5,7 +5,7 @@ SHOW
 DESC, DESCRIBE
 ==============
 
-**DESC** or **DESCRIBE** statement displays the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
+It shows the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
 
 ::
 
@@ -15,7 +15,7 @@ DESC, DESCRIBE
 EXPLAIN
 =======
 
-**EXPLAIN** statement displays the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
+It shows the column information of a table, and it's like a **SHOW COLUMNS** statement. For more details, see :ref:`show-columns-statement`.
 
 ::
 
@@ -26,11 +26,11 @@ EXPLAIN
 SHOW TABLES
 ===========
 
-Displays the list of all table names within a database. The name of the result column will be *tables_in_<database name>* and it will have one column. If you use the **LIKE** clause, you can search the table names matching this and if you use the **WHERE** clause, you can search table names with more general terms. **SHOW FULL TABLES** displays the second column, *table_type* together. The table must have the value, **BASE TABLE** and the view has the value, **VIEW**. ::
+It shows the list of all table names within a database. The name of the result column will be *tables_in_<database name>* and it will have one column. If you use the **LIKE** clause, you can search the table names matching this and if you use the **WHERE** clause, you can search table names with more general terms. **SHOW FULL TABLES** displays the second column, *table_type* together. The table must have the value, **BASE TABLE** and the view has the value, **VIEW**. ::
 
-    SHOW [FULL] TABLES [LIKE 'pattern' | WHERE expr]
+    SHOW [FULL] TABLES [LIKE 'pattern' | WHERE expr];
 
-The following is the result of executing the query in the *demodb* database.
+The following shows the examples of this syntax.
 
 .. code-block:: sql
 
@@ -99,13 +99,13 @@ The following is the result of executing the query in the *demodb* database.
 SHOW COLUMNS
 ============
 
-Displays the column information of a table. You can use the **LIKE** clause to search the column names matching it. If you use the **WHERE** clause, you can search column names with more general terms like, "General Considerations for All **SHOW** Statements."  :
+It shows the column information of a table. You can use the **LIKE** clause to search the column names matching it. If you use the **WHERE** clause, you can search column names with more general terms like, "General Considerations for All **SHOW** Statements.".
 
 ::
 
     SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr];
 
-If a **FULL** keyword is used, it displays the additional information, collation.
+If a **FULL** keyword is used, It shows the additional information, collation.
 
 **SHOW FIELDS** is the same statement as **SHOW COLUMNS**.
 
@@ -128,7 +128,7 @@ Default                             VARCHAR         Default value defined in the
 Extra                               VARCHAR         Additional information available on the given column. For the column with **AUTO_INCREMENT** constraint, it shows the 'auto_increment'.
 =================================== =============== ======================================================================================================================================
 
-The following is the result of a query in the *demodb* database.
+The following shows the examples of this syntax.
 
 .. code-block:: sql
 
@@ -181,12 +181,12 @@ The following is the result of a query in the *demodb* database.
 SHOW INDEX
 ==========
 
-The **SHOW INDEX** statement displays the index information. 
+It shows the index information. 
 
 ::
 
     SHOW {INDEX | INDEXES | KEYS } {FROM | IN} tbl_name;
-    
+
 This query has the following columns:
 
 =================================== =============== ======================================================================================================================================
@@ -209,7 +209,7 @@ Index_type                          VARCHAR         Index to be used (currently,
 Func                                VARCHAR         A function which is used in a function-based index
 =================================== =============== ======================================================================================================================================
 
-The following is the result of a query in the *demodb* database.
+The following shows the examples of this syntax.
 
 .. code-block:: sql
 
@@ -223,38 +223,38 @@ The following is the result of a query in the *demodb* database.
      
 .. code-block:: sql
 
-    CREATE TABLE t1 (i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
+    CREATE TABLE tbl1 (i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
      
-    CREATE INDEX i_t1_i1 ON t1 (i1 DESC);
-    CREATE INDEX i_t1_s1 ON t1 (s1 (7));
-    CREATE INDEX i_t1_i1_s1 ON t1 (i1, s1);
-    CREATE UNIQUE INDEX i_t1_i2_s2 ON t1 (i2, s2);
+    CREATE INDEX i_tbl1_i1 ON tbl1 (i1 DESC);
+    CREATE INDEX i_tbl1_s1 ON tbl1 (s1 (7));
+    CREATE INDEX i_tbl1_i1_s1 ON tbl1 (i1, s1);
+    CREATE UNIQUE INDEX i_tbl1_i2_s2 ON tbl1 (i2, s2);
      
-    SHOW INDEXES FROM t1;
+    SHOW INDEXES FROM tbl1;
     
 ::
 
-      Table  Non_unique  Key_name      Seq_in_index  Column_name  Collation  Cardinality     Sub_part  Packed  Null    Index_type   Func
+      Table  Non_unique  Key_name       Seq_in_index  Column_name  Collation  Cardinality     Sub_part  Packed  Null    Index_type   Func
     =====================================================================================================================================
-      't1'            1  'i_t1_i1'                1  'i1'         'D'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            1  'i_t1_i1_s1'             1  'i1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            1  'i_t1_i1_s1'             2  's1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            0  'i_t1_i2_s2'             1  'i2'         'A'                  0         NULL  NULL    'NO'    'BTREE'      NULL
-      't1'            0  'i_t1_i2_s2'             2  's2'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            1  'i_t1_s1'                1  's1'         'A'                  0            7  NULL    'YES'   'BTREE'      NULL
-      't1'            0  'u_t1_i3'                1  'i3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            0  'u_t1_s3'                1  's3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          1  'i_tbl1_i1'               1  'i1'         'D'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          1  'i_tbl1_i1_s1'            1  'i1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          1  'i_tbl1_i1_s1'            2  's1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          0  'i_tbl1_i2_s2'            1  'i2'         'A'                  0         NULL  NULL    'NO'    'BTREE'      NULL
+      'tbl1'          0  'i_tbl1_i2_s2'            2  's2'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          1  'i_tbl1_s1'               1  's1'         'A'                  0            7  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          0  'u_tbl1_i3'               1  'i3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          0  'u_tbl1_s3'               1  's3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
 
 .. _show-collation-statement:
  
 SHOW COLLATION
 ==============
 
-**SHOW COLLATION** statement lists collations supported by the database. If LIKE clause is present, it indicates which collation names to match. 
+It lists collations supported by the database. If LIKE clause is present, it indicates which collation names to match. 
 
 ::
 
-    SHOW COLLATION [ LIKE 'pattern' ]
+    SHOW COLLATION [ LIKE 'pattern' ];
 
 This query has the following columns:
 
@@ -266,11 +266,11 @@ Charset                             CHAR(1)         Charset name
 Id                                  INTEGER         Collation ID
 Built_in                            CHAR(1)         Built-in collation or not. Built-in collations are impossible to add or remove because they are hard-coded.
 Expansions                          CHAR(1)         Collation with expansion or not. For details, see :ref:`expansion`.
-Strength                            CHAR(1)         The number of levels that are to be considered in comparison, and the character order can be different by this number. 
+Strength                            CHAR(1)         The number of levels to be considered in comparison, and the character order can be different by this number. 
                                                     For details, see :ref:`collation-properties`.
 =================================== =============== ======================================================================================================================================
 
-The following shows **SHOW COLLATION** examples.
+The following shows the examples of this syntax.
 
 .. code-block:: sql
 
@@ -319,9 +319,11 @@ The following shows **SHOW COLLATION** examples.
 SHOW GRANTS
 ===========
 
-The **SHOW GRANT** statement displays the permissions associated with the database user accounts. ::
+It shows the permissions associated with the database user accounts. ::
 
-    SHOW GRANTS FOR 'user';
+    SHOW GRANTS FOR 'user'
+
+The following shows the examples of this syntax.
 
 .. code-block:: sql
 
@@ -342,9 +344,9 @@ The **SHOW GRANT** statement displays the permissions associated with the databa
 SHOW CREATE TABLE
 =================
 
-When a table name is specified, the **SHOW CREATE TABLE** statement outputs the **CREATE TABLE** statement of the table. ::
+When a table name is specified, It shows the **CREATE TABLE** statement of the table. ::
 
-    SHOW CREATE TABLE table_name;
+    SHOW CREATE TABLE table_name
     
 .. code-block:: sql
 
@@ -366,11 +368,11 @@ When a table name is specified, the **SHOW CREATE TABLE** statement outputs the 
 SHOW CREATE VIEW
 ================
 
-The **SHOW CREATE VIEW** statement outputs the corresponding **CREATE VIEW** statement if view name is specified. ::
+It shows the corresponding **CREATE VIEW** statement if view name is specified. ::
 
-    SHOW CREATE VIEW view_name;
+    SHOW CREATE VIEW view_name
 
-The following example shows the result of executing query in the *demodb* database.
+The following shows the examples of this syntax.
 
 .. code-block:: sql
 
@@ -394,7 +396,7 @@ The following example shows the result of executing query in the *demodb* databa
 SHOW EXEC STATISTICS
 ====================
 
-The **SHOW EXEC STATISTICS** statement outputs statistics information of executing query.
+It shows statistics information of executing query.
 
 *   To start collecting **@collect_exec_stats** statistics information, configure the value of session variable **@collect_exec_stats** to 1; to stop, configure it to 0.
 
@@ -410,7 +412,7 @@ For details, see :ref:`statdump`.
 
     SHOW EXEC STATISTICS [ALL];
 
-The following example shows the result of executing query in the *demodb* database.
+The following shows the examples of this syntax.
 
 .. code-block:: sql
 
@@ -502,12 +504,12 @@ The following example shows the result of executing query in the *demodb* databa
 SHOW VOLUME HEADER
 ==================
 
-**SHOW VOLUME HEADER OF** *volume_id* shows the volume header of the specified volume in one row.
+It shows the volume header of the specified volume in one row.
 
 ::
 
     SHOW VOLUME HEADER OF volume_id;
- 
+    
 This query has the following columns:
 
 =================================== =============== ======================================================================================================================================
@@ -539,12 +541,14 @@ Next_vol_full_name                  VARCHAR(255)    The full path of next volume
 Remarks                             VARCHAR(64)     
 =================================== =============== ======================================================================================================================================
 
-The following example shows the result of executing this query.
+The following shows the examples of this syntax.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW VOLUME HEADER OF 0;
+    
 ::
-
-    csql> ;line on
-    csql> SHOW VOLUME HEADER OF 0;
 
     <00001> Volume_id                       : 0
             Magic_symbol                    : 'MAGIC SYMBOL = CUBRID/Volume at disk location = 32'
@@ -574,7 +578,7 @@ The following example shows the result of executing this query.
 SHOW LOG HEADER
 ===============
 
-**SHOW LOG HEADER OF** *file_name* sytax shows the header information of an active log file.
+It shows the header information of an active log file.
 
 ::
 
@@ -623,12 +627,15 @@ Eof_lsa                             VARCHAR(64)
 Smallest_lsa_at_last_checkpoint     VARCHAR(64)     
 =================================== =============== ======================================================================================================================================
 
-The following example shows the result of executing this query.
+The following shows the examples of this syntax.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW LOG HEADER;
+    
 ::
 
-    csql> ;line on
-    csql> SHOW LOG HEADER;
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16
@@ -664,10 +671,12 @@ The following example shows the result of executing this query.
             Ha_file                        : 'unknown'
             Eof_lsa                        : '(66637|14672)'
             Smallest_lsa_at_last_checkpoint: '(66637|14280)'
-            
-::
 
-    csql> SHOW LOG HEADER OF 'demodb_lgat';
+.. code-block:: sql
+            
+    SHOW LOG HEADER OF 'demodb_lgat';
+
+::
 
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
@@ -708,7 +717,7 @@ The following example shows the result of executing this query.
 SHOW ARCHIVE LOG HEADER
 =======================
 
-**SHOW ARCHIVE LOG HEADER OF** *file_name* shows the header information of an archive log file.
+It shows the header information of an archive log file.
 
 ::
 
@@ -729,12 +738,14 @@ First_page_id                       BIGINT          Logical page id at physical 
 Archive_num                         INT             The archive log number
 =================================== =============== ======================================================================================================================================
 
-The following example shows the result of executing this query.
+The following shows the examples of this syntax.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW ARCHIVE LOG HEADER OF 'demodb_lgar001';
+    
 ::
-
-    csql> ;line on
-    csql> SHOW ARCHIVE LOG HEADER OF 'demodb_lgar001';
 
     <00001> Volume_id            : -20
             Magic_symbol         : 'CUBRID/LogArchive'
@@ -748,7 +759,7 @@ The following example shows the result of executing this query.
 SHOW HEAP HEADER
 ================
 
-**SHOW HEAP HEADER OF** *table_name* syntax shows shows the header page of the table. 
+It shows shows the header page of the table. 
 
 ::
 
@@ -772,9 +783,10 @@ Unfill_space                        INT             Stop inserting when page has
 Estimates_num_pages                 BIGINT          Estimation of number of heap pages.
 Estimates_num_recs                  BIGINT          Estimation of number of objects in heap
 Estimates_avg_rec_len               INT             Estimation total length of records
-Estimates_num_high_best             INT             Number of pages in the best array that we believe have at least HEAP_DROP_FREE_SPACE. When this number goes to zero and there is at least other 
-                                                    HEAP_NUM_BEST_SPACESTATS best pages, we look for them
-Estimates_num_others_high_best      INT             Total of other believed known best pages, which are not included in the best array and we believe they have at least HEAP_DROP_FREE_SPACE
+Estimates_num_high_best             INT             Number of pages in the best array that we believe have at least HEAP_DROP_FREE_SPACE. When this number goes to zero and
+                                                    there are at least other HEAP_NUM_BEST_SPACESTATS best pages, we look for them
+Estimates_num_others_high_best      INT             Total of other believed known best pages, which are not included in the best array and 
+                                                    we believe they have at least HEAP_DROP_FREE_SPACE
 Estimates_head                      INT             Head of best circular array
 Estimates_best_list                 VARCHAR(512)    Format: '((best[0].vpid.volid|best[0].vpid.pageid), best[0].freespace), ... , ((best[9].vpid.volid|best[9].vpid.pageid), best[9].freespace)'
 Estimates_num_second_best           INT             Number of second best hints. The hints are in "second_best" array. They are used when finding new best pages.
@@ -785,12 +797,14 @@ Estimates_last_vpid                 VARCHAR(64)     Format: '(volid|pageid)'
 Estimates_full_search_vpid          VARCHAR(64)     Format: '(volid|pageid)'
 =================================== =============== ======================================================================================================================================
 
-The following example shows the result of executing this query.
+The following shows the examples of this syntax.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW HEAP HEADER OF athlete;
+    
 ::
-
-    csql> ;line on
-    csql> SHOW HEAP HEADER OF athlete;
 
     <00001> Class_name                    : 'athlete'
             Class_oid                     : '(0|463|8)'
@@ -815,7 +829,7 @@ The following example shows the result of executing this query.
             Estimates_last_vpid           : '(0|826)'
             Estimates_full_search_vpid    : '(0|590)'
 
-::
+.. code-block:: sql
 
     CREATE TABLE participant2 (
         host_year INT,
@@ -829,9 +843,11 @@ The following example shows the result of executing this query.
         PARTITION before_2008 VALUES LESS THAN (2008)
     );
     
-::
+.. code-block:: sql
     
-    csql> SHOW ALL HEAP HEADER OF participant2;
+    SHOW ALL HEAP HEADER OF participant2;
+    
+::
     
     <00001> Class_name                    : 'participant2'
             Class_oid                     : '(0|467|6)'
@@ -900,11 +916,11 @@ The following example shows the result of executing this query.
             Estimates_last_vpid           : '(0|960)'
             Estimates_full_search_vpid    : '(0|960)'
 
-    3 rows selected. (3.208305 sec) Committed.
+.. code-block:: sql
+
+    SHOW HEAP HEADER OF participant2__p__before_2008;
     
 ::
-
-    csql> SHOW HEAP HEADER OF participant2__p__before_2008;
 
     <00001> Class_name                    : 'participant2__p__before_2008'
             Class_oid                     : '(0|467|8)'
@@ -932,7 +948,7 @@ The following example shows the result of executing this query.
 SHOW HEAP CAPACITY
 ==================
 
-**SHOW HEAP CAPACITY OF** *table_name* syntax shows the capacity of the table. 
+It shows the capacity of the table. 
 
 ::
 
@@ -967,12 +983,15 @@ Num_class_attrs                             INT             Number of table colu
 Total_size_fixed_width_attrs                INT             Total size of the fixed width columns
 =========================================== =============== ===============================================================================================================================
 
-The following example shows the result of executing this query.
+The following shows the examples of this syntax.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW HEAP CAPACITY OF athlete;
+    
 ::
 
-    csql> ;line on
-    csql> SHOW HEAP CAPACITY OF athlete;
     <00001> Class_name                             : 'athlete'
             Class_oid                              : '(0|463|8)'
             Volume_id                              : 0
@@ -994,9 +1013,11 @@ The following example shows the result of executing this query.
             Num_class_attrs                        : 0
             Total_size_fixed_width_attrs           : 8
     
-::
+.. code-block:: sql
 
-    csql> SHOW ALL HEAP CAPACITY OF participant2;
+    SHOW ALL HEAP CAPACITY OF participant2;
+    
+::
     
     <00001> Class_name                             : 'participant2'
             Class_oid                              : '(0|467|6)'
@@ -1059,12 +1080,10 @@ The following example shows the result of executing this query.
             Num_class_attrs                        : 0
             Total_size_fixed_width_attrs           : 20
 
-    3 rows selected. (0.920090 sec) Committed.
-
 SHOW SLOTTED PAGE HEADER
 ========================
 
-**SHOW SLOTTED PAGE HEADER** syntax shows the header information of specified slotted page.
+It shows the header information of specified slotted page.
 
 ::
 
@@ -1088,13 +1107,15 @@ Need_update_best_hint               INT             True if saving is need for r
 Is_saving                           INT             True if we should update best pages hint for this page.
 =================================== =============== ======================================================================================================================================
 
-The following example shows the result of executing this query.
+The following shows the examples of this syntax.
+
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW SLOTTED PAGE HEADER OF VOLUME=0 AND PAGE=140;
 
 ::
 
-    csql> ;line on
-    csql> SHOW SLOTTED PAGE HEADER OF VOLUME=0 AND PAGE=140;
-    
     <00001> Volume_id            : 0
             Page_id              : 140
             Num_slots            : 3
@@ -1110,7 +1131,7 @@ The following example shows the result of executing this query.
 SHOW SLOTTED PAGE SLOTS
 ========================
 
-**SHOW SLOTTED PAGE SLOTS** syntax shows the information of all slots in the specified slotted page.
+It shows the information of all slots in the specified slotted page.
 
 ::
 
@@ -1130,12 +1151,14 @@ Length                              INT             Length of record
 Waste                               INT             Whether or not wasted
 =================================== =============== ======================================================================================================================================
 
-The following example shows the result of executing this query.
+The following shows the examples of this syntax.
+
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW SLOTTED PAGE HEADER OF VOLUME=0 AND PAGE=140;
 
 ::
-
-    csql> ;line on
-    csql> SHOW SLOTTED PAGE SLOTS OF VOLUME=0 AND PAGE=140;
 
     <00001> Volume_id: 0
             Page_id  : 140
@@ -1159,4 +1182,219 @@ The following example shows the result of executing this query.
             Length   : 64
             Waste    : 0
 
-    3 rows selected. (0.023168 sec) Committed.
+SHOW INDEX HEADER
+=================
+
+It shows the index header page of the index of the table.
+
+::
+
+    SHOW INDEX HEADER OF table_name.index_name;
+
+If ALL keyword is used and an index name is omitted, it shows the entire headers of the indexes of the table.
+
+::
+
+    SHOW ALL INDEXES HEADER OF table_name;
+
+This query has the following columns:
+
+=================================== =============== ======================================================================================================================================
+Column name                         Type            Description
+=================================== =============== ======================================================================================================================================
+Table_name                          VARCHAR(256)    Table name
+Index_name                          VARCHAR(256)    Index name
+Btid                                VARCHAR(64)     BTID (volid|fileid|root_pageid)
+Prev_vpid                           VARCHAR(32)     VPID (volid|pageid)
+Next_vpid                           VARCHAR(32)     VPID (volid|pageid)
+Node_type                           VARCHAR(16)     'LEAF' or 'NON_LEAF'
+Max_key_len                         INT             Maximum key length for the subtree
+Num_oids                            INT             Number of OIDs stored in the Btree
+Num_nulls                           INT             Number of NULLs (they aren't stored)
+Num_keys                            INT             Number of unique keys in the Btree
+Topclass_oid                        VARCHAR(64)     Topclass oid or NULL OID (non unique index)(volid|pageid|slotid)
+Unique                              INT             Unique or non-unique
+Overflow_vfid                       VARCHAR(32)     VFID (volid|fileid)
+Key_type                            VARCHAR(32)     Type name
+=================================== =============== ======================================================================================================================================
+
+The following shows the examples of this syntax.
+
+.. code-block:: sql
+
+    -- Prepare test environment
+    CREATE TABLE tbl1(a INT, b VARCHAR(5));
+    CREATE INDEX index_a ON tbl1(a ASC);
+    CREATE INDEX index_b ON tbl1(b ASC);  
+
+..  code-block:: sql
+    
+    -- csql> ;line on
+    SHOW INDEX HEADER OF tbl1.index_a;
+    
+::
+
+    <00001> Table_name   : 'tbl1'
+            Index_name   : 'index_a'
+            Btid         : '(0|378|950)'
+            Prev_vpid    : '(-1|-1)'
+            Next_vpid    : '(-1|-1)'
+            Node_type    : 'LEAF'
+            Max_key_len  : 0
+            Num_oids     : -1
+            Num_nulls    : -1
+            Num_keys     : -1
+            Topclass_oid : '(0|469|4)'
+            Unique       : 0
+            Overflow_vfid: '(-1|-1)'
+            Key_type     : 'integer'
+
+.. code-block:: sql
+      
+    SHOW ALL INDEXES HEADER OF tbl1;
+    
+::
+
+    <00001> Table_name   : 'tbl1'
+            Index_name   : 'index_a'
+            Btid         : '(0|378|950)'
+            Prev_vpid    : '(-1|-1)'
+            Next_vpid    : '(-1|-1)'
+            Node_type    : 'LEAF'
+            Max_key_len  : 0
+            Num_oids     : -1
+            Num_nulls    : -1
+            Num_keys     : -1
+            Topclass_oid : '(0|469|4)'
+            Unique       : 0
+            Overflow_vfid: '(-1|-1)'
+            Key_type     : 'integer'
+    <00002> Table_name   : 'tbl1'
+            Index_name   : 'index_b'
+            Btid         : '(0|381|960)'
+            Prev_vpid    : '(-1|-1)'
+            Next_vpid    : '(-1|-1)'
+            Node_type    : 'LEAF'
+            Max_key_len  : 0
+            Num_oids     : -1
+            Num_nulls    : -1
+            Num_keys     : -1
+            Topclass_oid : '(0|469|4)'
+            Unique       : 0
+            Overflow_vfid: '(-1|-1)'
+            Key_type     : 'character varying'
+
+SHOW INDEX CAPACITY
+===================
+
+It shows the index capacity of the index of the table.
+
+::
+
+    SHOW INDEX CAPACITY OF table_name.index_name;
+
+If ALL keyword is used and an index name is omitted, it shows the entire capacity of the indexes of the table.
+
+::
+
+    SHOW ALL INDEXES CAPACITY OF table_name;
+
+This query has the following columns:
+
+=================================== =============== ======================================================================================================================================
+Column name                         Type            Description
+=================================== =============== ======================================================================================================================================
+Table_name                          VARCHAR(256)    Table name
+Index_name                          VARCHAR(256)    Index name
+Btid                                VARCHAR(64)     BTID (volid|fileid|root_pageid)
+Num_distinct_key                    INT             Distinct key count (in leaf pages)
+Total_value                         INT             Total number of values stored in tree
+Avg_num_value_per_key               INT             Average number of values (OIDs) per key
+Num_leaf_page                       INT             Leaf page count
+Num_non_leaf_page                   INT             NonLeaf page count
+Num_total_page                      INT             Total page count
+Height                              INT             Height of the tree
+Avg_key_len                         INT             Average key length
+Avg_rec_len                         INT             Average page record length
+Total_space                         VARCHAR(64)     Total space occupied by index
+Total_used_space                    VARCHAR(64)     Total used space in index
+Total_free_space                    VARCHAR(64)     Total free space in index
+Avg_num_page_key                    INT             Average page key count (in leaf pages)
+Avg_page_free_space                 VARCHAR(64)     Average page free space
+=================================== =============== ======================================================================================================================================
+
+The following shows the examples of this syntax.
+
+.. code-block:: sql
+
+    -- Prepare test environment
+    CREATE TABLE tbl1(a INT, b VARCHAR(5));
+    CREATE INDEX index_a ON tbl1(a ASC);
+    CREATE INDEX index_b ON tbl1(b ASC);  
+
+..  code-block:: sql
+
+    -- csql> ;line on
+    SHOW INDEX CAPACITY OF tbl1.index_a;
+    
+::
+    
+    <00001> Table_name           : 'tbl1'
+            Index_name           : 'index_a'
+            Btid                 : '(0|378|950)'
+            Num_distinct_key     : 0
+            Total_value          : 0
+            Avg_num_value_per_key: 0
+            Num_leaf_page        : 1
+            Num_non_leaf_page    : 0
+            Num_total_page       : 1
+            Height               : 1
+            Avg_key_len          : 0
+            Avg_rec_len          : 0
+            Total_space          : '16.0K'
+            Total_used_space     : '116.0B'
+            Total_free_space     : '15.9K'
+            Avg_num_page_key     : 0
+            Avg_page_free_space  : '15.9K'
+
+
+.. code-block:: sql
+      
+    SHOW ALL INDEXES CAPACITY OF tbl1;
+    
+::
+
+    <00001> Table_name           : 'tbl1'
+            Index_name           : 'index_a'
+            Btid                 : '(0|378|950)'
+            Num_distinct_key     : 0
+            Total_value          : 0
+            Avg_num_value_per_key: 0
+            Num_leaf_page        : 1
+            Num_non_leaf_page    : 0
+            Num_total_page       : 1
+            Height               : 1
+            Avg_key_len          : 0
+            Avg_rec_len          : 0
+            Total_space          : '16.0K'
+            Total_used_space     : '116.0B'
+            Total_free_space     : '15.9K'
+            Avg_num_page_key     : 0
+            Avg_page_free_space  : '15.9K'
+    <00002> Table_name           : 'tbl1'
+            Index_name           : 'index_b'
+            Btid                 : '(0|381|960)'
+            Num_distinct_key     : 0
+            Total_value          : 0
+            Avg_num_value_per_key: 0
+            Num_leaf_page        : 1
+            Num_non_leaf_page    : 0
+            Num_total_page       : 1
+            Height               : 1
+            Avg_key_len          : 0
+            Avg_rec_len          : 0
+            Total_space          : '16.0K'
+            Total_used_space     : '120.0B'
+            Total_free_space     : '15.9K'
+            Avg_num_page_key     : 0
+            Avg_page_free_space  : '15.9K'

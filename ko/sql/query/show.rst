@@ -5,7 +5,7 @@ SHOW
 DESC, DESCRIBE
 ==============
 
-**DESC** 또는 **DESCRIBE** 문은 테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
+테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
 
 ::
 
@@ -15,7 +15,7 @@ DESC, DESCRIBE
 EXPLAIN
 =======
 
-**EXPLAIN** 문은 테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
+테이블의 칼럼 정보를 출력하며 **SHOW COLUMNS** 문과 같다. 보다 자세한 사항은 :ref:`show-columns-statement`\ 를 참고한다.
 
 ::
 
@@ -28,9 +28,9 @@ SHOW TABLES
 
 데이터베이스의 전체 테이블 이름 목록을 출력한다. 결과 칼럼의 이름은 *tables_in_<데이터베이스 이름>* 이 되며 하나의 칼럼을 지닌다. **LIKE** 절을 사용하면 이와 매칭되는 테이블 이름을 검색할 수 있으며, **WHERE** 절을 사용하면 좀더 일반적인 조건으로 테이블 이름을 검색할 수 있다. **SHOW FULL TABLES** 는 *table_type* 이라는 이름의 두 번째 칼럼을 함께 출력하며, 테이블은 **BASE TABLE**, 뷰는 **VIEW** 라는 값을 가진다. ::
 
-    SHOW [FULL] TABLES [LIKE 'pattern' | WHERE expr];
+    SHOW [FULL] TABLES [LIKE 'pattern' | WHERE expr]
 
-다음은 *demodb* 를 가지고 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
 .. code-block:: sql
 
@@ -104,7 +104,7 @@ SHOW COLUMNS
 ::
 
     SHOW [FULL] COLUMNS {FROM | IN} tbl_name [LIKE 'pattern' | WHERE expr];
-
+    
 **FULL** 키워드가 사용되면 Collation 정보를 추가로 출력한다.
 
 **SHOW FIELDS** 는 **SHOW COLUMNS** 와 같은 구문이다.
@@ -128,7 +128,7 @@ Default                             VARCHAR         칼럼에 정의된 기본�
 Extra                               VARCHAR         주어진 칼럼에 대해 가능한 추가 정보. **AUTO_INCREMENT** 속성인 칼럼은 'auto_increment'라는 값을 갖는다.
 =================================== =============== ======================================================================================================================================
 
-다음은 해당 질의들을 수행한 예이다.
+다음은 이 구문을 수행한 예이다.
 
 .. code-block:: sql
 
@@ -181,7 +181,7 @@ Extra                               VARCHAR         주어진 칼럼에 대해 �
 SHOW INDEX
 ==========
 
-**SHOW INDEX** 문은 인덱스 정보를 출력한다. 
+인덱스 정보를 출력한다. 
 
 ::
 
@@ -209,7 +209,7 @@ Index_type                          VARCHAR         사용되는 인덱스(현�
 Func                                VARCHAR         함수 인덱스에서 사용되는 함수
 =================================== =============== ======================================================================================================================================
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
 .. code-block:: sql
 
@@ -223,35 +223,34 @@ Func                                VARCHAR         함수 인덱스에서 사�
      
 .. code-block:: sql
 
-    CREATE TABLE t1 (i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
+    CREATE TABLE tbl1 (i1 INTEGER , i2 INTEGER NOT NULL, i3 INTEGER UNIQUE, s1 VARCHAR(10), s2 VARCHAR(10), s3 VARCHAR(10) UNIQUE);
      
-    CREATE INDEX i_t1_i1 ON t1 (i1 DESC);
-    CREATE INDEX i_t1_s1 ON t1 (s1 (7));
-    CREATE INDEX i_t1_i1_s1 ON t1 (i1, s1);
-    CREATE UNIQUE INDEX i_t1_i2_s2 ON t1 (i2, s2);
+    CREATE INDEX i_tbl1_i1 ON tbl1 (i1 DESC);
+    CREATE INDEX i_tbl1_s1 ON tbl1 (s1 (7));
+    CREATE INDEX i_tbl1_i1_s1 ON tbl1 (i1, s1);
+    CREATE UNIQUE INDEX i_tbl1_i2_s2 ON tbl1 (i2, s2);
      
-    SHOW INDEXES FROM t1;
+    SHOW INDEXES FROM tbl1;
     
 ::
 
-      Table  Non_unique  Key_name      Seq_in_index  Column_name  Collation  Cardinality     Sub_part  Packed  Null    Index_type   Func
+      Table  Non_unique  Key_name       Seq_in_index  Column_name  Collation  Cardinality     Sub_part  Packed  Null    Index_type   Func
     =====================================================================================================================================
-      't1'            1  'i_t1_i1'                1  'i1'         'D'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            1  'i_t1_i1_s1'             1  'i1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            1  'i_t1_i1_s1'             2  's1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            0  'i_t1_i2_s2'             1  'i2'         'A'                  0         NULL  NULL    'NO'    'BTREE'      NULL
-      't1'            0  'i_t1_i2_s2'             2  's2'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            1  'i_t1_s1'                1  's1'         'A'                  0            7  NULL    'YES'   'BTREE'      NULL
-      't1'            0  'u_t1_i3'                1  'i3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-      't1'            0  'u_t1_s3'                1  's3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
-
+      'tbl1'          1  'i_tbl1_i1'               1  'i1'         'D'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          1  'i_tbl1_i1_s1'            1  'i1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          1  'i_tbl1_i1_s1'            2  's1'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          0  'i_tbl1_i2_s2'            1  'i2'         'A'                  0         NULL  NULL    'NO'    'BTREE'      NULL
+      'tbl1'          0  'i_tbl1_i2_s2'            2  's2'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          1  'i_tbl1_s1'               1  's1'         'A'                  0            7  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          0  'u_tbl1_i3'               1  'i3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
+      'tbl1'          0  'u_tbl1_s3'               1  's3'         'A'                  0         NULL  NULL    'YES'   'BTREE'      NULL
 
 .. _show-collation-statement:
  
 SHOW COLLATION
 ==============
 
-**SHOW COLLATION** 문은 데이터베이스에서 지원하는 콜레이션 리스트를 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
+데이터베이스에서 지원하는 콜레이션 리스트를 출력한다. LIKE 절은 콜레이션 이름이 매칭되는 정보를 출력한다. 
 
 ::
 
@@ -267,9 +266,12 @@ Charset                             CHAR(1)         문자셋 이름
 Id                                  INTEGER         콜레이션 ID
 Built_in                            CHAR(1)         내장 콜레이션 여부. 내장 콜레이션들은 하드-코딩되어 있어 추가 혹은 삭제가 불가능하다.
 Expansions                          CHAR(1)         확장이 있는 콜레이션인지 여부. 자세한 내용은 :ref:`expansion`\ 을 참조한다.
-Strength                            CHAR(1)         문자 간 비교를 위한 기준. 이 기준에 따라 문자 순서가 달라질 수 있다. 이에 대한 설명은 :ref:`collation-properties`\ 를 참고한다.
+Strength                            CHAR(1)         문자 간 비교를 위한 기준. 이 기준에 따라 문자 순서가 달라질 수 있다. 
+                                                    이에 대한 설명은 :ref:`collation-properties`\ 를 참고한다.
 =================================== =============== ======================================================================================================================================
-    
+
+다음은 이 구문을 수행한 예이다.
+
 .. code-block:: sql
 
     SHOW COLLATION;
@@ -317,9 +319,11 @@ Strength                            CHAR(1)         문자 간 비교를 위한 
 SHOW GRANTS
 ===========
 
-**SHOW GRANT** 문은 데이터베이스의 사용자 계정에 부여된 권한을 출력한다. ::
+데이터베이스의 사용자 계정에 부여된 권한을 출력한다. ::
 
     SHOW GRANTS FOR 'user';
+    
+다음은 이 구문을 수행한 예이다.
 
 .. code-block:: sql
 
@@ -340,7 +344,7 @@ SHOW GRANTS
 SHOW CREATE TABLE
 =================
 
-**SHOW CREATE TABLE** 문은 테이블 이름을 지정하면 해당 테이블의 **CREATE TABLE** 문을 출력한다. ::
+테이블 이름을 지정하면 해당 테이블의 **CREATE TABLE** 문을 출력한다. ::
 
     SHOW CREATE TABLE table_name
 
@@ -364,11 +368,11 @@ SHOW CREATE TABLE
 SHOW CREATE VIEW
 ================
 
-**SHOW CREATE VIEW** 문은 뷰 이름을 지정하면 해당 **CREATE VIEW** 문을 출력한다. ::
+뷰 이름을 지정하면 해당 **CREATE VIEW** 문을 출력한다. ::
 
     SHOW CREATE VIEW view_name;
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
 .. code-block:: sql
 
@@ -392,7 +396,7 @@ SHOW CREATE VIEW
 SHOW EXEC STATISTICS
 ====================
 
-**SHOW EXEC STATISTICS** 문은 실행한 질의들의 실행 통계 정보를 출력한다.
+실행한 질의들의 실행 통계 정보를 출력한다.
 
 *   통계 정보 수집을 시작하려면 세션 변수 **@collect_exec_stats** 의 값을 1로 설정하며, 종료하려면 0으로 설정한다.
 
@@ -408,7 +412,7 @@ SHOW EXEC STATISTICS
 
     SHOW EXEC STATISTICS [ALL];
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
 .. code-block:: sql
 
@@ -418,7 +422,7 @@ SHOW EXEC STATISTICS
      
     -- print the statistical information of the data pages.
     SHOW EXEC STATISTICS;
-
+    
 ::
 
     variable                value
@@ -496,11 +500,11 @@ SHOW EXEC STATISTICS
     'adaptive_flush_pages'                  0
     'adaptive_flush_log_pages'              0
     'adaptive_flush_max_pages'              0
-    
+
 SHOW VOLUME HEADER
 ==================
 
-**SHOW VOLUME HEADER OF** *volume_id* 문은 명시한 볼륨의 헤더 정보를 하나의 행으로 출력한다.
+명시한 볼륨의 헤더 정보를 출력한다.
 
 ::
 
@@ -509,7 +513,7 @@ SHOW VOLUME HEADER
 해당 구문은 다음과 같은 칼럼을 출력한다.
 
 =================================== =============== ======================================================================================================================================
-Column name                         Type            Description
+칼럼 이름                           타입            설명
 =================================== =============== ======================================================================================================================================
 Volume_id                           INT             볼륨 식별자
 Magic_symbol                        VARCHAR(100)    볼륨 파일의 매직 값
@@ -537,14 +541,14 @@ Next_vol_full_name                  VARCHAR(255)    다음 볼륨의 전체 경�
 Remarks                             VARCHAR(64)     
 =================================== =============== ======================================================================================================================================
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
 .. code-block:: sql
 
-    SHOW VOLUME HEADER OF 1;
+    -- csql> ;line on
+    SHOW VOLUME HEADER OF 0;
     
-    csql> ;line on
-    csql> SHOW VOLUME HEADER OF 0;
+::
 
     <00001> Volume_id                       : 0
             Magic_symbol                    : 'MAGIC SYMBOL = CUBRID/Volume at disk location = 32'
@@ -574,7 +578,7 @@ Remarks                             VARCHAR(64)
 SHOW LOG HEADER
 ===============
 
-**SHOW LOG HEADER OF** *file_name* 구문은 활성 로그(active log) 파일의 헤더 정보를 출력한다.
+활성 로그(active log) 파일의 헤더 정보를 출력한다.
 
 ::
 
@@ -585,7 +589,7 @@ OF file_name을 생략하면 메모리의 헤더 정보를 출력하며, OF file
 해당 구문은 다음의 칼럼을 출력한다.
 
 =================================== =============== ======================================================================================================================================
-Column name                         Type            Description
+칼럼 이름                           타입            설명
 =================================== =============== ======================================================================================================================================
 Magic_symbol                        VARCHAR(32)     로그 파일의 매직 값
 Magic_symbol_location               INT             로그 페이지로부터 매직 심볼 위치
@@ -623,12 +627,15 @@ Eof_lsa                             VARCHAR(64)
 Smallest_lsa_at_last_checkpoint     VARCHAR(64)     
 =================================== =============== ======================================================================================================================================
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW LOG HEADER;
+    
 ::
 
-    csql> ;line on
-    csql> SHOW LOG HEADER;
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16
@@ -664,9 +671,13 @@ Smallest_lsa_at_last_checkpoint     VARCHAR(64)
             Ha_file                        : 'unknown'
             Eof_lsa                        : '(66637|14672)'
             Smallest_lsa_at_last_checkpoint: '(66637|14280)'
-            
-    csql> SHOW LOG HEADER OF 'demodb_lgat';
 
+.. code-block:: sql
+            
+    SHOW LOG HEADER OF 'demodb_lgat';
+
+::
+    
     <00001> Volume_id                      : -2
             Magic_symbol                   : 'CUBRID/LogActive'
             Magic_symbol_location          : 16
@@ -706,7 +717,7 @@ Smallest_lsa_at_last_checkpoint     VARCHAR(64)
 SHOW ARCHIVE LOG HEADER
 =======================
 
-**SHOW ARCHIVE LOG HEADER OF** *file_name* 구문은 보관 로그(archive log) 파일의 헤더 정보를 출력한다.
+보관 로그(archive log) 파일의 헤더 정보를 출력한다.
 
 ::
 
@@ -715,7 +726,7 @@ SHOW ARCHIVE LOG HEADER
 해당 구문은 다음의 칼럼을 출력한다.
 
 =================================== =============== ======================================================================================================================================
-Column name                         Type            Description
+칼럼 이름                           타입            설명
 =================================== =============== ======================================================================================================================================
 Volume_id                           INT             로그 볼륨 ID
 Magic_symbol                        VARCHAR(32)     보관 로그 파일의 매직 값
@@ -727,12 +738,14 @@ First_page_id                       BIGINT          보관 로그에서 물리�
 Archive_num                         INT             보관 로그 번호
 =================================== =============== ======================================================================================================================================
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW ARCHIVE LOG HEADER OF 'demodb_lgar001';
+    
 ::
-
-    csql> ;line on
-    csql> SHOW ARCHIVE LOG HEADER OF 'demodb_lgar001';
 
     <00001> Volume_id            : -20
             Magic_symbol         : 'CUBRID/LogArchive'
@@ -746,7 +759,7 @@ Archive_num                         INT             보관 로그 번호
 SHOW HEAP HEADER
 ================
 
-**SHOW HEAP HEADER OF** *table_name* 문은 지정한 테이블의 헤더 페이지를 출력한다. 
+명시한 테이블의 헤더 페이지를 출력한다. 
 
 ::
 
@@ -784,12 +797,14 @@ Estimates_last_vpid                 VARCHAR(64)     포맷: '(volid|pageid)'
 Estimates_full_search_vpid          VARCHAR(64)     포맷: '(volid|pageid)'
 =================================== =============== ======================================================================================================================================
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW HEAP HEADER OF athlete;
+    
 ::
-
-    csql> ;line on
-    csql> SHOW HEAP HEADER OF athlete;
 
     <00001> Class_name                    : 'athlete'
             Class_oid                     : '(0|463|8)'
@@ -814,7 +829,7 @@ Estimates_full_search_vpid          VARCHAR(64)     포맷: '(volid|pageid)'
             Estimates_last_vpid           : '(0|826)'
             Estimates_full_search_vpid    : '(0|590)'
 
-::
+.. code-block:: sql
 
     CREATE TABLE participant2 (
         host_year INT,
@@ -828,9 +843,11 @@ Estimates_full_search_vpid          VARCHAR(64)     포맷: '(volid|pageid)'
         PARTITION before_2008 VALUES LESS THAN (2008)
     );
     
-::
+.. code-block:: sql
     
-    csql> SHOW ALL HEAP HEADER OF participant2;
+    SHOW ALL HEAP HEADER OF participant2;
+    
+::
     
     <00001> Class_name                    : 'participant2'
             Class_oid                     : '(0|467|6)'
@@ -899,11 +916,11 @@ Estimates_full_search_vpid          VARCHAR(64)     포맷: '(volid|pageid)'
             Estimates_last_vpid           : '(0|960)'
             Estimates_full_search_vpid    : '(0|960)'
 
-    3 rows selected. (3.208305 sec) Committed.
+.. code-block:: sql
+
+    SHOW HEAP HEADER OF participant2__p__before_2008;
     
 ::
-
-    csql> SHOW HEAP HEADER OF participant2__p__before_2008;
 
     <00001> Class_name                    : 'participant2__p__before_2008'
             Class_oid                     : '(0|467|8)'
@@ -931,7 +948,7 @@ Estimates_full_search_vpid          VARCHAR(64)     포맷: '(volid|pageid)'
 SHOW HEAP CAPACITY
 ==================
 
-**SHOW HEAP CAPACITY OF** *table_name* 구문은 지정한 테이블의 용량을 출력한다. 
+명시한 테이블의 용량을 출력한다. 
 
 ::
 
@@ -966,12 +983,15 @@ Num_class_attrs                             INT             테이블 칼럼 개
 Total_size_fixed_width_attrs                INT             고정 길이 칼럼의 전체 크기           
 =========================================== =============== ===============================================================================================================================
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW HEAP CAPACITY OF athlete;
+    
 ::
 
-    csql> ;line on
-    csql> SHOW HEAP CAPACITY OF athlete;
     <00001> Class_name                             : 'athlete'
             Class_oid                              : '(0|463|8)'
             Volume_id                              : 0
@@ -993,9 +1013,11 @@ Total_size_fixed_width_attrs                INT             고정 길이 칼럼
             Num_class_attrs                        : 0
             Total_size_fixed_width_attrs           : 8
     
-::
+.. code-block:: sql
 
-    csql> SHOW ALL HEAP CAPACITY OF participant2;
+    SHOW ALL HEAP CAPACITY OF participant2;
+    
+::
     
     <00001> Class_name                             : 'participant2'
             Class_oid                              : '(0|467|6)'
@@ -1058,12 +1080,10 @@ Total_size_fixed_width_attrs                INT             고정 길이 칼럼
             Num_class_attrs                        : 0
             Total_size_fixed_width_attrs           : 20
 
-    3 rows selected. (0.920090 sec) Committed.
-
 SHOW SLOTTED PAGE HEADER
 ========================
 
-**SHOW SLOTTED PAGE HEADER** 문은 명시된 슬롯 페이지의 헤더 정보를 출력한다.
+명시한 슬롯 페이지의 헤더 정보를 출력한다.
 
 ::
 
@@ -1087,13 +1107,15 @@ Need_update_best_hint               INT             undo 복구를 위해 저장
 Is_saving                           INT             이 페이지를 위해 베스트 페이지를 업데이트해야 되면 true
 =================================== =============== ======================================================================================================================================
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
+
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW SLOTTED PAGE HEADER OF VOLUME=0 AND PAGE=140;
 
 ::
 
-    csql> ;line on
-    csql> SHOW SLOTTED PAGE HEADER OF VOLUME=0 AND PAGE=140;
-    
     <00001> Volume_id            : 0
             Page_id              : 140
             Num_slots            : 3
@@ -1106,11 +1128,10 @@ Is_saving                           INT             이 페이지를 위해 베�
             Need_update_best_hint: 1
             Is_saving            : 0
 
-    
 SHOW SLOTTED PAGE SLOTS
 ========================
 
-**SHOW SLOTTED PAGE SLOTS** 문은 명시된 슬롯 페이지의 모든 슬롯 정보를 출력한다.
+명시한 슬롯 페이지의 모든 슬롯 정보를 출력한다.
 
 ::
 
@@ -1130,12 +1151,14 @@ Length                              INT             레코드 길이
 Waste                               INT             버릴 것인지 여부
 =================================== =============== ======================================================================================================================================
 
-다음은 해당 질의를 실행한 결과이다.
+다음은 이 구문을 수행한 예이다.
 
+.. code-block:: sql
+
+    -- csql> ;line on
+    SHOW SLOTTED PAGE SLOTS OF VOLUME=0 AND PAGE=140;
+    
 ::
-
-    csql> ;line on
-    csql> SHOW SLOTTED PAGE SLOTS OF VOLUME=0 AND PAGE=140;
 
     <00001> Volume_id: 0
             Page_id  : 140
@@ -1159,4 +1182,219 @@ Waste                               INT             버릴 것인지 여부
             Length   : 64
             Waste    : 0
 
-    3 rows selected. (0.023168 sec) Committed.
+SHOW INDEX HEADER
+=================
+
+특정 테이블 내 인덱스의 헤더 페이지 정보를 출력한다.
+
+::
+
+    SHOW INDEX HEADER OF table_name.index_name;
+
+ALL 키워드를 사용하고 인덱스 이름을 생략하면 해당 테이블의 전체 인덱스의 헤더 정보를 출력한다.
+
+::
+
+    SHOW ALL INDEXES HEADER OF table_name;
+
+해당 구문은 다음의 칼럼을 출력한다.
+
+=================================== =============== ======================================================================================================================================
+칼럼 이름                           타입            설명
+=================================== =============== ======================================================================================================================================
+Table_name                          VARCHAR(256)    테이블 이름
+Index_name                          VARCHAR(256)    인덱스 이름
+Btid                                VARCHAR(64)     BTID (volid|fileid|root_pageid)
+Prev_vpid                           VARCHAR(32)     VPID (volid|pageid)
+Next_vpid                           VARCHAR(32)     VPID (volid|pageid)
+Node_type                           VARCHAR(16)     'LEAF' 또는 'NON_LEAF'
+Max_key_len                         INT             서브트리에 대한 최대 키 길이
+Num_oids                            INT             B-트리에 저장된 OID의 개수
+Num_nulls                           INT             NULL의 개수
+Num_keys                            INT             B-트리에 존재하는 고유 키의 개수
+Topclass_oid                        VARCHAR(64)     탑클래스 OID 또는 NULL OID(비고유 인덱스)(volid|pageid|slotid)
+Unique                              INT             고유 또는 비고유
+Overflow_vfid                       VARCHAR(32)     VFID (volid|fileid)
+Key_type                            VARCHAR(32)     타입 이름
+=================================== =============== ======================================================================================================================================
+
+다음은 이 구문을 수행한 예이다.
+
+.. code-block:: sql
+
+    -- Prepare test environment
+    CREATE TABLE tbl1(a INT, b VARCHAR(5));
+    CREATE INDEX index_a ON tbl1(a ASC);
+    CREATE INDEX index_b ON tbl1(b ASC);  
+
+..  code-block:: sql
+    
+    -- csql> ;line on
+    SHOW INDEX HEADER OF tbl1.index_a;
+    
+::
+
+    <00001> Table_name   : 'tbl1'
+            Index_name   : 'index_a'
+            Btid         : '(0|378|950)'
+            Prev_vpid    : '(-1|-1)'
+            Next_vpid    : '(-1|-1)'
+            Node_type    : 'LEAF'
+            Max_key_len  : 0
+            Num_oids     : -1
+            Num_nulls    : -1
+            Num_keys     : -1
+            Topclass_oid : '(0|469|4)'
+            Unique       : 0
+            Overflow_vfid: '(-1|-1)'
+            Key_type     : 'integer'
+
+.. code-block:: sql
+      
+    SHOW ALL INDEXES HEADER OF tbl1;
+    
+::
+
+    <00001> Table_name   : 'tbl1'
+            Index_name   : 'index_a'
+            Btid         : '(0|378|950)'
+            Prev_vpid    : '(-1|-1)'
+            Next_vpid    : '(-1|-1)'
+            Node_type    : 'LEAF'
+            Max_key_len  : 0
+            Num_oids     : -1
+            Num_nulls    : -1
+            Num_keys     : -1
+            Topclass_oid : '(0|469|4)'
+            Unique       : 0
+            Overflow_vfid: '(-1|-1)'
+            Key_type     : 'integer'
+    <00002> Table_name   : 'tbl1'
+            Index_name   : 'index_b'
+            Btid         : '(0|381|960)'
+            Prev_vpid    : '(-1|-1)'
+            Next_vpid    : '(-1|-1)'
+            Node_type    : 'LEAF'
+            Max_key_len  : 0
+            Num_oids     : -1
+            Num_nulls    : -1
+            Num_keys     : -1
+            Topclass_oid : '(0|469|4)'
+            Unique       : 0
+            Overflow_vfid: '(-1|-1)'
+            Key_type     : 'character varying'
+
+SHOW INDEX CAPACITY
+===================
+
+테이블의 인덱스 용량 정보를 출력한다.
+
+::
+
+    SHOW INDEX CAPACITY OF table_name.index_name;
+
+ALL 키워드를 사용하고 인덱스 이름을 생략하면 해당 테이블의 전체 인덱스의 용량 정보를 출력한다.
+
+::
+
+    SHOW ALL INDEXES CAPACITY OF table_name;
+
+해당 구문은 다음의 칼럼을 출력한다.
+
+=================================== =============== ======================================================================================================================================
+칼럼 이름                           타입            설명
+=================================== =============== ======================================================================================================================================
+Table_name                          VARCHAR(256)    테이블 이름
+Index_name                          VARCHAR(256)    인덱스 이름
+Btid                                VARCHAR(64)     BTID (volid|fileid|root_pageid)
+Num_distinct_key                    INT             Distinct key count (in leaf pages)
+Total_value                         INT             트리에 저장된 값의 총 개수
+Avg_num_value_per_key               INT             키 당 OID 값의 평균 개수
+Num_leaf_page                       INT             단말 노드(leaf) 페이지 개수
+Num_non_leaf_page                   INT             비단말(NonLeaf) 노드 페이지 개수
+Num_total_page                      INT             전체 페이지 개수
+Height                              INT             트리의 높이
+Avg_key_len                         INT             평균 키 길이
+Avg_rec_len                         INT             평균 페이지 레코드 길이
+Total_space                         VARCHAR(64)     인덱스에 의해 점유되는 전체 공간
+Total_used_space                    VARCHAR(64)     인덱스의 전체 사용 공간
+Total_free_space                    VARCHAR(64)     인덱스의 전체 여유 공간
+Avg_num_page_key                    INT             단말 노드 페이지에서 페이지 당 평균 키 개수
+Avg_page_free_space                 VARCHAR(64)     페이지 당 평균 여유 공간
+=================================== =============== ======================================================================================================================================
+
+다음은 이 구문을 수행한 예이다.
+
+.. code-block:: sql
+
+    -- Prepare test environment
+    CREATE TABLE tbl1(a INT, b VARCHAR(5));
+    CREATE INDEX index_a ON tbl1(a ASC);
+    CREATE INDEX index_b ON tbl1(b ASC);  
+
+..  code-block:: sql
+
+    -- csql> ;line on
+    SHOW INDEX CAPACITY OF tbl1.index_a;
+    
+::
+    
+    <00001> Table_name           : 'tbl1'
+            Index_name           : 'index_a'
+            Btid                 : '(0|378|950)'
+            Num_distinct_key     : 0
+            Total_value          : 0
+            Avg_num_value_per_key: 0
+            Num_leaf_page        : 1
+            Num_non_leaf_page    : 0
+            Num_total_page       : 1
+            Height               : 1
+            Avg_key_len          : 0
+            Avg_rec_len          : 0
+            Total_space          : '16.0K'
+            Total_used_space     : '116.0B'
+            Total_free_space     : '15.9K'
+            Avg_num_page_key     : 0
+            Avg_page_free_space  : '15.9K'
+
+
+.. code-block:: sql
+      
+    SHOW ALL INDEXES CAPACITY OF tbl1;
+    
+::
+
+    <00001> Table_name           : 'tbl1'
+            Index_name           : 'index_a'
+            Btid                 : '(0|378|950)'
+            Num_distinct_key     : 0
+            Total_value          : 0
+            Avg_num_value_per_key: 0
+            Num_leaf_page        : 1
+            Num_non_leaf_page    : 0
+            Num_total_page       : 1
+            Height               : 1
+            Avg_key_len          : 0
+            Avg_rec_len          : 0
+            Total_space          : '16.0K'
+            Total_used_space     : '116.0B'
+            Total_free_space     : '15.9K'
+            Avg_num_page_key     : 0
+            Avg_page_free_space  : '15.9K'
+    <00002> Table_name           : 'tbl1'
+            Index_name           : 'index_b'
+            Btid                 : '(0|381|960)'
+            Num_distinct_key     : 0
+            Total_value          : 0
+            Avg_num_value_per_key: 0
+            Num_leaf_page        : 1
+            Num_non_leaf_page    : 0
+            Num_total_page       : 1
+            Height               : 1
+            Avg_key_len          : 0
+            Avg_rec_len          : 0
+            Total_space          : '16.0K'
+            Total_used_space     : '120.0B'
+            Total_free_space     : '15.9K'
+            Avg_num_page_key     : 0
+            Avg_page_free_space  : '15.9K'

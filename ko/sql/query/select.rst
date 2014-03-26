@@ -46,7 +46,7 @@ SELECT
         NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
     
     <lock_hint> ::= READ UNCOMMITTED
-     
+
 *   *qualifier* : 한정어. 생략이 가능하며 지정하지 않을 경우에는 **ALL** 로 지정된다.
 
     *   **ALL** : 테이블의 모든 레코드를 조회한다.
@@ -143,10 +143,10 @@ FROM 절
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
     <table_specification> ::=
-     <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ] |
-     <metaclass_specification> [ <correlation> ] |
-     <subquery> <correlation> |
-     TABLE ( <expression> ) <correlation>
+        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ] |
+        <metaclass_specification> [ <correlation> ] |
+        <subquery> <correlation> |
+        TABLE ( <expression> ) <correlation>
      
     <correlation> ::= [ AS ] <identifier> [ ( <identifier_comma_list> ) ]
      
@@ -447,7 +447,7 @@ ORDER BY 절
     FROM sales_tbl
     GROUP BY a1
     ORDER BY a2 DESC
-    LIMIT 0, 3;
+    LIMIT 3;
     
 ::
 
@@ -504,6 +504,54 @@ ORDER BY 절
                 6  NULL
                 8  NULL
                10  NULL
+
+.. note::
+
+    **GROUP BY 별칭(alias)의 해석**
+
+    .. code-block:: sql
+
+        CREATE TABLE t1(a INT, b INT, c INT);
+        INSERT INTO t1 VALUES(1,1,1);
+        INSERT INTO t1 VALUES(2,NULL,2);
+        INSERT INTO t1 VALUES(2,2,2);
+
+        SELECT a, NVL(b,2) AS b 
+        FROM t1 
+        GROUP BY a, b;  -- Q1
+
+    위의 SELECT 질의를 수행할 때 "GROUP BY a, b"는 
+
+    *   9.2 이하 버전에서 GROUP BY NVL(b, 2) (별칭 이름 b)로 해석되며, 아래 Q2와 동일한 결과를 출력한다.
+
+        .. code-block:: sql
+        
+            SELECT a, NVL(b,2) AS bxxx 
+            FROM t1 
+            GROUP BY a, bxxx;  -- Q2
+
+        ::
+
+                    a            b
+            ======================
+                    1            1
+                    2            2
+
+    *   9.3 이상 버전에서 GROUP BY b (칼럼 이름 b)로 해석되며, 아래 Q3와 동일한 결과를 출력한다.
+
+        .. code-block:: sql
+        
+            SELECT a, NVL(b,2) AS bxxx
+            FROM t1 
+            GROUP BY a, b;  -- Q3
+
+        ::
+
+                    a            b
+            ======================
+                    1            1
+                    2            2
+                    2            2
 
 .. _limit-clause:
 
@@ -572,9 +620,9 @@ LIMIT 절
 
 조인 질의에서 동등 연산자( **=** )를 이용한 조인 조건을 포함하는 조인 질의를 동등 조인(equi-join)이라 하고, 조인 조건이 없는 조인 질의를 카티션 곱(cartesian products)이라 한다. 또한, 하나의 테이블을 조인하는 경우를 자체 조인(self join)이라 하는데, 자체 조인에서는 **FROM** 절에 같은 테이블이 두 번 사용되므로 테이블 별칭(alias)을 사용하여 칼럼을 구분한다.
 
-조인된 테이블에 대해 조인 조건을 만족하는 행만 결과를 출력하는 경우를 내부 조인(inner join) 또는 간단 조인(simple join)이라고 하는 반면, 조인된 테이블에 대해 조인 조건을 만족하는 행은 물론, 조인 조건을 만족하지 못하는 행도 포함하여 출력하는 경우를 외부 조인(outer join)이라 한다. 
+조인된 테이블에 대해 조인 조건을 만족하는 행만 결과를 출력하는 경우를 내부 조인(inner join) 또는 간단 조인(simple join)이라고 하는 반면, 조인된 테이블에 대해 조인 조건을 만족하는 행은 물론 조인 조건을 만족하지 못하는 행도 포함하여 출력하는 경우를 외부 조인(outer join)이라 한다. 
 
-외부 조인은 왼쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 오른쪽 테이블의 칼럼들은 NULL로 출력됨) 왼쪽 외부 조인과(left outer join)과 오른쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 왼쪽 테이블의 칼럼들은 NULL로 출력됨) 오른쪽 외부 조인(right outer join)이 있으며, 양쪽의 행이 모두 출력되는 완전 외부 조인(full outer join)이 있다. 외부 조인 질의 결과에서 한쪽 테이블에 대해 대응되는 칼럼 값이 없는 경우, 이는 모두 **NULL** 을 반환된다. 
+외부 조인은 왼쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 오른쪽 테이블의 칼럼들은 NULL로 출력됨) 왼쪽 외부 조인과(left outer join)과 오른쪽 테이블의 모든 행이 결과로 출력되는(조건과 일치하지 않는 왼쪽 테이블의 칼럼들은 NULL로 출력됨) 오른쪽 외부 조인(right outer join)이 있으며, 양쪽의 행이 모두 출력되는 완전 외부 조인(full outer join)이 있다. 외부 조인 질의 결과에서 한쪽 테이블에 대해 대응되는 칼럼 값이 없는 경우, 이는 모두 **NULL**\ 을 반환된다.
 
 ::
 
@@ -587,14 +635,14 @@ LIMIT 절
         <subquery> <correlation> |
         TABLE ( <expression> ) <correlation>
         
-    <join_table_specification> :
+    <join_table_specification> ::=
        { [ INNER | {LEFT | RIGHT} [ OUTER ] ] JOIN |
        STRAIGHT_JOIN } <table_specification> ON <search_condition>
      
     <join_table_specification2> ::= { CROSS JOIN | 
         NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
 
-*   *join_table_specification*
+*   <*join_table_specification*>
 
     *   [ **INNER** ] **JOIN** : 내부 조인에 사용되며 조인 조건이 반드시 필요하다.
 
@@ -602,7 +650,7 @@ LIMIT 절
 
     *   **STRAIGHT_JOIN** : (작성중)
      
-*   *join_table_specification2*
+*   <*join_table_specification2*>
 
     *   **CROSS JOIN** : 교차 조인에 사용되며, 조인 조건을 사용하지 않는다.
     *   **NATURAL** [ **LEFT** | **RIGHT** ] **JOIN** : 자연 조인에 사용되며, 조인 조건을 사용하지 않는다. 같은 이름의 칼럼끼리 동등 조건을 가지는 것과 같이 동작한다.
@@ -644,9 +692,9 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
 
 외부 조인의 경우 조인 조건은 내부 조인의 경우와는 다른 방법으로 지정된다. 내부 조인의 조인 조건은 **WHERE** 절에서도 표현될 수 있지만, 외부 조인의 경우에는 조인 조건이 **FROM** 절 내의 **ON** 키워드 뒤에 나타난다. 다른 검색 조건은 **WHERE** 절이나 **ON** 절에서 사용할 수 있지만 검색 조건이 **WHERE** 절에 있을 때와 **ON** 절에 있을 때 질의 결과가 달라질 수 있다.
 
-**FROM** 절에 명시된 순서대로 테이블 실행 순서가 고정되므로, 외부 조인을 사용하는 경우 테이블 순서에 주의하여 질의문을 작성한다. 외부 조인 연산자 '**(+)**' 를 **WHERE** 절에 명시하여 Oracle 스타일의 조인 질의문도 작성 가능하나, 실행 결과나 실행 계획이 원하지 않는 방향으로 유도될 수 있으므로 { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** 을 이용한 표준 구문을 사용할 것을 권장한다.
+**FROM** 절에 명시된 순서대로 테이블 실행 순서가 고정되므로, 외부 조인을 사용하는 경우 테이블 순서에 주의하여 질의문을 작성한다. 외부 조인 연산자 '**(+)**'\ 를 **WHERE** 절에 명시하여 Oracle 스타일의 조인 질의문도 작성 가능하나, 실행 결과나 실행 계획이 원하지 않는 방향으로 유도될 수 있으므로 { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN**\ 을 이용한 표준 구문을 사용할 것을 권장한다.
 
-다음은 오른쪽 외부 조인을 이용하여 1950년 이후에 열린 올림픽에서 신기록이 세워진 올림픽의 개최국가와 개최연도를 조회하되, 신기록이 세워지지 않은 올림픽에 대한 정보도 포함하는 예제이다. 이 예제는 오른쪽 외부 조인이므로, *olympic* 테이블의 *host_nation* 의 모든 레코드를 포함하고, 값이 존재하지 않는 *history* 테이블의 *host_year* 에 대해서는 칼럼 값으로 **NULL** 을 반환한다.
+다음은 오른쪽 외부 조인을 이용하여 1950년 이후에 열린 올림픽에서 신기록이 세워진 올림픽의 개최국가와 개최연도를 조회하되, 신기록이 세워지지 않은 올림픽에 대한 정보도 포함하는 예제이다. 이 예제는 오른쪽 외부 조인이므로, *olympic* 테이블의 *host_nation* 의 모든 레코드를 포함하고, 값이 존재하지 않는 *history* 테이블의 *host_year*\ 에 대해서는 칼럼 값으로 **NULL**\ 을 반환한다.
 
 .. code-block:: sql
 
@@ -800,6 +848,8 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
              2004  'USA'
              2004  'USSR'
              2004  'United Kingdom'
+
+    144 rows selected. (1.283548 sec) Committed.
 
 자연 조인
 ---------
@@ -1008,12 +1058,12 @@ VALUES
 .. code-block:: sql
     
     SELECT a.*
-    FROM athlete a, (VALUES ('Jang Mi-ran', 'F'), ('Son Yeon-Jae', 'F')) AS t(name, gender)
+    FROM athlete a, (VALUES ('Jang Mi-Ran', 'F'), ('Son Yeon-Jae', 'F')) AS t(name, gender)
     WHERE a.name=t.name AND a.gender=t.gender;
     
 ::
     
              code  name                gender   nation_code        event
     =====================================================================================================
-            21111  'Jang Mi-ran'       'F'      'KOR'              'Weight-lifting'
+            21111  'Jang Mi-Ran'       'F'      'KOR'              'Weight-lifting'
             21112  'Son Yeon-Jae'      'F'      'KOR'              'Rhythmic gymnastics'

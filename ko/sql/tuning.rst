@@ -5,17 +5,17 @@
 통계 정보 갱신
 ==============
 
-테이블과 인덱스에 대한 통계 정보는 데이터베이스 시스템이 질의를 효과적으로 처리할 수 있게 한다. 통계 정보는 테이블의 생성, 인덱스의 생성/삭제 등 DDL 문이 수행되면 자동으로 갱신된다. 그러나, INSERT, DELETE 등 DML 문이 수행되면 자동으로 갱신되지 않으므로 **UPDATE STATISTICS** 문을 수행하여 통계 정보를 갱신해야 한다(:ref:`info-stats` 참고).
+테이블과 인덱스에 대한 통계 정보는 데이터베이스 시스템이 질의를 효과적으로 처리할 수 있게 한다. 통계 정보는 테이블의 생성, 인덱스의 생성/삭제 등 DDL 문이 수행되면 자동으로 갱신된다. 그러나, INSERT, DELETE 등 DML 문이 수행되면 자동으로 갱신되지 않으므로 필요한 경우 사용자가 직접 **UPDATE STATISTICS** 문을 수행하여 통계 정보를 갱신해야 한다(:ref:`info-stats` 참고)
 
 **UPDATE STATISTICS** 문은 대량의 INSERT, 혹은 DELETE 문이 수행되어 실제 정보와 통계 정보 사이에 차이가 커질 때 수행할 것을 권장한다.
 
 ::
 
-    UPDATE STATISTCIS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
      
-    UPDATE STATISTCIS ON ALL CLASSES [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON ALL CLASSES [WITH FULLSCAN]; 
   
-    UPDATE STATISTCIS ON CATALOG CLASSES [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
 *   **WITH FULLSCAN**: 지정된 테이블의 전체 데이터를 가지고 통계 정보를 업데이트한다. 생략 시 샘플링한 데이터를 가지고 통계 정보를 업데이트한다. 
 *   **ALL CLASSES**: 모든 테이블의 통계 정보를 업데이트한다. 
@@ -35,7 +35,7 @@
   
     UPDATE STATISTICS ON CATALOG CLASSES; 
     UPDATE STATISTICS ON CATALOG CLASSES WITH FULLSCAN; 
-  
+
 통계 정보 갱신 시작과 종료 시 서버 에러 로그에 NOTIFICATION 메시지를 출력하며, 이를 통해 통계 정보 갱신에 걸리는 시간을 확인할 수 있다.
     
 ::
@@ -51,7 +51,9 @@
 통계 정보 확인
 ==============
 
-CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보를 확인한다. ::
+CSQL 인터프리터의 세션 명령어로 지정한 테이블의 통계 정보를 확인한다.
+
+::
 
     csql> ;info stats table_name
 
@@ -209,7 +211,7 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
                 *   index: pk_olympic_host_year term[1]: pk_olympic_host_year 인덱스를 사용하며 상세 정보는 Join graph segments의 term[1]을 확인한다.
                 *   cost: 해당 구문을 수행하는데 드는 비용이다. 
                 
-                    *   card: 카디널리티(cardinality)를 의미한다.
+                    *   card: 카디널리티(cardinality)를 의미한다. 이 값은 근사치임에 유의한다.
                     
             *   inner: sscan: inner 테이블에 sscan(sequential scan)을 수행한다.
             
@@ -217,11 +219,11 @@ CSQL에서 ";plan detail" 명령 입력 또는 "SET OPTIMIZATION LEVEL 513;"을 
                 *   sargs: term[0]: sargs는 데이터 필터(인덱스를 사용하지 않는 WHERE 조건)를 나타내며, term[0]는 데이터 필터로 사용된 조건을 의미한다.
                 *   cost: 해당 구문을 수행하는데 드는 비용이다.
                 
-                    *   card: 카디널리티(cardinality)를 의미한다.
+                    *   card: 카디널리티(cardinality)를 의미한다. 이 값은 근사치임에 유의한다.
                     
         *   cost: 전체 구문을 수행하는데 드는 비용이다. 앞서 수행된 모든 비용을 포함한다.
         
-            *   card: cardinality를 뜻한다.
+            *   card: 카디널리티(cardinality)를 의미한다. 이 값은 근사치임에 유의한다.
 
 **질의 계획 관련 용어**
 
@@ -385,8 +387,10 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
             SCAN (index: nation.pk_nation_code), (btree time: 0, fetch: 76, ioread: 0, readkeys: 38, filteredkeys: 38, rows: 38) (lookup time: 0, rows: 38)
         GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
     '
- 
-위에서 "Trace Statistics:" 이하가 트레이스 결과를 출력한 것이며, 트레이스 항목에 대한 설명은 다음과 같다.
+
+위에서 "Trace Statistics:" 이하가 트레이스 결과를 출력한 것이다. 
+
+다음은 트레이스 항목에 대한 설명이다.
 
 **SELECT**
  
@@ -420,6 +424,13 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
 *   sort: 정렬 여부
 *   page: 정렬에 사용된 임시 페이지 개수로, 내부 정렬 버퍼 외에 사용한 페이지 개수.
 *   rows: 해당 연산에 대한 결과 행의 개수
+
+**INDEX SCAN**
+
+*   key range: 키의 범위
+*   covered: 커버링 인덱스 적용 여부(true/false)
+*   loose: 느슨한 인덱스 스캔 적용 여부(true/false)
+*   hash: 집계 함수에서 투플 정렬 시 해시 집계 방식 적용 여부(true/false). :ref:`NO_HASH_AGGREGATE <no-hash-aggregate>` 힌트를 참고한다.
 
 위의 예는 JSON 형식으로도 출력할 수 있다.
  
@@ -491,7 +502,9 @@ CSQL 인터프리터에서 트레이스를 자동으로 설정하는 방법은 :
 SQL 힌트
 ========
 
-사용자는 질의문에 힌트를 주어 해당 질의 성능을 높일 수 있다. 질의 최적화기는 질의문에 대한 최적화 작업을 수행할 때 SQL 힌트를 참고하여 효율적인 실행 계획을 생성한다. CUBRID에서 지원하는 SQL 힌트는 테이블 조인 관련 힌트, 인덱스 관련 힌트가 있다. ::
+사용자는 질의문에 힌트를 주어 해당 질의 성능을 높일 수 있다. 질의 최적화기는 질의문에 대한 최적화 작업을 수행할 때 SQL 힌트를 참고하여 효율적인 실행 계획을 생성한다. CUBRID에서 지원하는 SQL 힌트는 테이블 조인 관련 힌트, 인덱스 관련 힌트가 있다. 
+
+::
 
     { SELECT | UPDATE | DELETE } /*+ <hint> [ { <hint> } ... ] */ ...;
 
@@ -512,7 +525,7 @@ SQL 힌트
 
     <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
         <spec_name> ::= table_name | view_name
-        
+    
     <merge_statement_hint> ::=
     USE_UPDATE_INDEX (<update_index_list>) |
     USE_DELETE_INDEX (<insert_index_list>) |
@@ -566,7 +579,7 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
 
 *   **USE_INSERT_INDEX** (<*insert_index_list*>) : MERGE 문의 INSERT 절에서 사용되는 인덱스 힌트. *insert_index_list*\ 에 INSERT 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>에 해당 힌트가 적용된다.
 *   **USE_UPDATE_INDEX** (<*update_index_list*>) : MERGE 문의 UPDATE 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 UPDATE 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
-*   **RECOMPILE** : 질의 실행 계획을 리컴파일한다. 캐시에 저장된 기존 질의 실행 계획을 삭제하고 새로운 질의 실행 계획을 수립하기 위해 이 힌트를 사용한다.
+*   **RECOMPILE** : 위의 :ref:`RECOMPILE <recompile>`\ 을 참고한다.
 
 다음은 심권호 선수가 메달을 획득한 연도와 메달 종류를 구하는 예제이다. 단, *athlete* 테이블을 외부 테이블로 하고 *game* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만들어야 한다. 다음과 같은 질의로 표현이 되는데, 질의최적화기는 *game* 테이블을 외부 테이블로 하고, *athlete* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만든다.
 
@@ -1298,7 +1311,7 @@ ORDER BY 절 최적화
     ORDER BY j,k;
 
 ::
-    
+
     --  in this case the index i_tab_j_k is a covering index and also respects the ordering index property.
     --  Therefore, it is used as a covering index and sorting is not performed.
      
@@ -1524,7 +1537,7 @@ GROUP BY 절 최적화
 .. note::
 
     GROUP BY 절 또는 DISTINCT의 칼럼이 인덱스 부분 키(subkey)를 포함할 때, 부분 키를 구성하는 칼럼 각각의 고유(unique) 값에 대해 동적으로 범위를 조정하여 B-트리 검색을 시작한다. 이와 관련하여 :ref:`loose-index-scan`\ 을 참고한다.
-    
+
 **예제**
 
 .. code-block:: sql
@@ -1535,7 +1548,6 @@ GROUP BY 절 최적화
 
     UPDATE STATISTICS on tab;
 
-    
 다음의 예는 *j*, *k* 칼럼으로 **GROUP BY** 를 수행하므로 *tab* (*j*, *k*)로 구성된 인덱스가 사용되고 별도의 정렬 과정이 필요 없다.
 
 .. code-block:: sql
@@ -1602,7 +1614,6 @@ GROUP BY 절 최적화
                 3            5            4
                 1            5            5
                 2            6            6
-
 
 .. code-block:: sql
 
@@ -1711,7 +1722,7 @@ GROUP BY 절 최적화
     ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC], ... col_(p+k-1) [ASC|DESC]
     LIMIT n;
 
-먼저 **LIMIT**\ 를 통해서 지정된 최종 결과의 상한 크기(*n*)가 **multi_range_optimization_limit** 시스템 파라미터 값보다 작거나 같아야 한다.
+먼저 **LIMIT** 절을 통해서 지정된 최종 결과의 상한 크기(*n*)가 **multi_range_optimization_limit** 시스템 파라미터 값보다 작거나 같아야 한다.
 
 또한 다중 키 범위 최적화에 적합한 인덱스가 필요한데, **ORDER BY** 절에 명시된 모든 *k* 개의 칼럼을 커버해야 한다. 즉, 인덱스 상에서 **ORDER BY** 절에 명시된 칼럼들을 모두 포함해야 하고, 칼럼들의 순서와 정렬 방향이 일치해야 한다. 또한 **WHERE** 절에서 사용되는 모든 칼럼을 포함해야 한다.
 
@@ -1766,6 +1777,15 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 ----------------
 
 인덱스 스킵 스캔(index skip scan, 이하 ISS)은 인덱스의 첫 번째 칼럼이 조건에 명시되지 않아도 뒤따라오는 칼럼이 조건(주로 =)에 명시되면 해당 인덱스를 활용하여 질의를 처리하는 최적화 방식이다. 
+
+질의문 힌트로 **INDEX_SS**\가 입력되고 다음의 경우를 만족할 때 인덱스 스킵 스캔이 적용된다.
+
+1.  인덱스의 두번째 칼럼부터 조건에 명시된다.
+2.  필터링된 인덱스가 아니어야 한다.
+3.  인덱스의 첫 번째 칼럼이 범위 필터나 키 필터가 아니어야 한다.
+4.  계층 질의는 지원하지 않는다.
+5.  집계 함수가 포함된 경우는 지원하지 않는다.
+
 일반적으로 ISS는 여러 개의 칼럼들(C1, C2, …, Cn) 중에서 고려되어야 하는데, 여기에서 질의는 연속된 칼럼들에 대한 조건을 가지고 있고 이 조건들은 인덱스의 두 번째 칼럼(C2)부터 시작한다.
 
 ::
@@ -1781,22 +1801,50 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
 .. code-block:: sql
 
-    CREATE TABLE t (name STRING, gender CHAR (1), birthday DATETIME);
-     
-    CREATE INDEX idx_t_gen_name ON t (gender, name);
-    -- Note that gender can only have 2 values, 'M' and 'F' (low cardinality)
-     
-    -- this would qualify to use Index Skip Scanning:
-    SELECT * 
-    FROM t 
-    WHERE name = 'SMITH';
+    CREATE TABLE tbl (name STRING, gender CHAR (1), birthday DATETIME);
     
-다음과 같은 경우에는 ISS가 적용되지 않는다.
+    INSERT INTO tbl 
+    SELECT ROWNUM, CASE (ROWNUM MOD 2) WHEN 1 THEN 'M' ELSE 'F' END, SYSDATETIME  
+    FROM db_class a, db_class b, db_class c, db_class d, db_class e LIMIT 360000;
+    
+    CREATE INDEX idx_tbl_gen_name ON tbl (gender, name);
+    -- Note that gender can only have 2 values, 'M' and 'F' (low cardinality)
+    
+    UPDATE STATISTICS ON ALL CLASSES;
+    
+.. code-block:: sql
 
-*   필터링된 인덱스
-*   인덱스의 첫 번째 칼럼이 범위 필터나 키 필터인 경우
-*   계층 질의
-*   집계 함수가 포함된 경우
+    -- csql>;plan simple
+    -- this would qualify to use Index Skip Scanning:
+    SELECT /*+ RECOMPILE INDEX_SS */ * 
+    FROM tbl 
+    WHERE name = '1000';
+
+::
+
+    Query plan:
+
+    iscan
+        class: tbl node[0]
+        index: idx_tbl_gen_name term[0] (index skip scan)
+        cost:  1334 card 360
+
+.. code-block:: sql
+
+    -- csql>;plan simple
+    -- this would qualify to use Index Skip Scanning:
+    SELECT /*+ RECOMPILE INDEX_SS */ * 
+    FROM tbl 
+    WHERE name between '1000' and '1050';
+
+::
+
+    Query plan:
+
+    iscan
+        class: tbl node[0]
+        index: idx_tbl_gen_name term[0] (index skip scan)
+        cost:  1334 card 3600
 
 .. _loose-index-scan:
 
@@ -1805,10 +1853,10 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
 **GROUP BY** 절 또는 **DISTINCT**\의 칼럼이 인덱스 부분 키(subkey)를 포함할 때, 느슨한 인덱스 스캔은 부분 키를 구성하는 칼럼 각각의 고유(unique) 값에 대해 동적으로 범위를 조정하여 B-트리 검색을 시작한다. 따라서 B-트리의 스캔 영역을 상당 부분 줄일 수 있다.
 
-다음의 경우를 만족할 때 느슨한 인덱스 스캔이 적용된다.
+질의문 힌트로 **INDEX_LS**\가 입력되고 다음의 경우를 만족할 때 느슨한 인덱스 스캔이 적용된다.
 
 1.  인덱스가 SELECT 리스트의 모든 부분을 커버할 때, 즉 커버링 인덱스가 적용될 때.
-2.  SELECT DISTINCT, SELECT ... GROUP BY 문 또는 단일 튜플 SELECT 문.
+2.  DISTINCT 질의 또는 GROUP BY 질의
 3.  집계 함수를 사용하는 경우, 해당 함수의 입력 인자가 DISTINCT를 반드시 포함해야 함. 단, MIN/MAX 함수는 예외.
 4.  COUNT(*)가 사용되어선 안 됨.
 5.  사용되는 부분 키(subkey)의 카디널리티(cardinality)가 전체 인덱스의 카디널리티보다 100배 작을 때.
@@ -1829,7 +1877,6 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
     FROM db_class a, db_class b, db_class c, db_class d, db_class e LIMIT 360000;
     
     CREATE INDEX idx ON tbl1 (k1, k2, k3);
-    UPDATE STATISTICS ON tbl1;
 
     CREATE TABLE tbl2 (
         k1 INT, 
@@ -1838,11 +1885,266 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
     
     INSERT INTO tbl2 VALUES (0, 0), (1, 1), (0, 2), (1, 3), (0, 4), (0, 100), (1000, 1000);
 
+    UPDATE STATISTICS ON ALL CLASSES;
+
+.. code-block:: sql
+    
+    -- csql>;plan simple
+    -- different key ranges/filters
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1 
+    FROM tbl1 
+    WHERE k1 >= 0 AND k1 <= 1;
+
+::
+
+    Query plan:
+
+    temp(distinct)
+        subplan: iscan
+                     class: tbl1 node[0]
+                     index: idx term[0] (covers) (loose index scan on prefix 1)
+                     sort:  1 asc
+                     cost:  481 card 3600
+        cost:  499 card 3600
+
+.. code-block:: sql
+    
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1, k2 
+    FROM tbl1 
+    WHERE k1 >= 0 AND k1 <= 1 AND k2 > 3 AND k2 < 11;
+    
+::
+
+    Query plan:
+
+    temp(distinct)
+        subplan: iscan
+                     class: tbl1 node[0]
+                     index: idx term[1] (covers) (loose index scan on prefix 2)
+                     filtr: term[0]
+                     sort:  1 asc, 2 asc
+                     cost:  481 card 36
+        cost:  487 card 36
+
+
+.. code-block:: sql
+    
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1, k2 
+    FROM tbl1 
+    WHERE k1 >= 0 AND k1 + k2 <= 10;
+
+::
+
+    Query plan:
+
+    temp(distinct)
+        subplan: iscan
+                     class: tbl1 node[0]
+                     index: idx term[1] (covers) (loose index scan on prefix 2)
+                     filtr: term[0]
+                     sort:  1 asc, 2 asc
+                     cost:  481 card 3600
+        cost:  500 card 3600
+
+.. code-block:: sql
+    
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ tbl1.k1, tbl1.k2 
+    FROM tbl2 INNER JOIN tbl1 
+    ON tbl2.k1 = tbl1.k1 AND tbl2.k2 = tbl1.k2 
+    GROUP BY tbl1.k1, tbl1.k2;
+
+::
+
+    Query plan:
+
+    temp(group by)
+        subplan: idx-join (inner join)
+                     outer: sscan
+                                class: tbl2 node[0]
+                                cost:  1 card 7
+                     inner: iscan
+                                class: tbl1 node[1]
+                                index: idx term[0] AND term[1] (covers) (loose index scan on prefix 2)
+                                cost:  5 card 360000
+                     cost:  6 card 630
+        sort:  1 asc, 2 asc
+        cost:  13 card 630
+
+.. code-block:: sql
+        
+    -- aggregate functions
+    SELECT /*+ RECOMPILE INDEX_LS */ MIN(k2), MAX(k2) 
+    FROM tbl1;
+
+::
+
+    Query plan:
+
+    iscan
+        class: tbl1 node[0]
+        index: idx (covers) (loose index scan on prefix 2)
+        cost:  2157 card 360000
+
+.. code-block:: sql
+
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ SUM(DISTINCT k1), SUM(DISTINCT k2)
+    FROM tbl1;
+
+::
+
+    Query plan:
+
+    iscan
+        class: tbl1 node[0]
+        index: idx (covers) (loose index scan on prefix 2)
+        cost:  2157 card 360000
+
+.. code-block:: sql
+
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1 
+    FROM tbl1 
+    WHERE k2 > 0;
+
+::
+
+    Query plan:
+
+    temp(distinct)
+        subplan: iscan
+                     class: tbl1 node[0]
+                     index: idx (covers) (loose index scan on prefix 2)
+                     filtr: term[0]
+                     sort:  1 asc
+                     cost:  2157 card 36000
+        cost:  2287 card 36000
+    
+다음은 느슨한 인덱스 스캔이 적용되지 않는 경우이다.
+
+
+.. code-block:: sql
+
+    -- csql>;plan simple
+    -- not enabled when full key is used
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1, k2, k3 
+    FROM tbl1 
+    ORDER BY 1, 2, 3 LIMIT 10;
+    
+::
+
+    Query plan:
+
+    temp(distinct)
+        subplan: sscan
+                     class: tbl1 node[0]
+                     cost:  1688 card 360000
+        sort:  1 asc, 2 asc, 3 asc
+        cost:  3296 card 360000
+
+    
+.. code-block:: sql
+
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, k2, k3 
+    FROM tbl1 
+    GROUP BY k1, k2, k3 LIMIT 10;
+
+::
+
+    Query plan:
+
+    temp(group by)
+        subplan: sscan
+                     class: tbl1 node[0]
+                     cost:  1688 card 360000
+        sort:  1 asc, 2 asc, 3 asc
+        cost:  3296 card 360000
+
+.. code-block:: sql
+    
+    -- csql>;plan simple
+    -- not enabled when using count star
+    SELECT /*+ RECOMPILE INDEX_LS */ COUNT(*), k1 
+    FROM tbl1 
+    GROUP BY k1;
+
+::
+
+    Query plan:
+
+    temp(group by)
+        subplan: sscan
+                     class: tbl1 node[0]
+                     cost:  1688 card 360000
+        sort:  2 asc
+        cost:  2945 card 360000
+    
+.. code-block:: sql
+
+    -- csql>;plan simple
+    -- not enabled when index is not covering
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, k2, SUM(k4) 
+    FROM tbl1 
+    GROUP BY k1, k2 LIMIT 10;
+    
+::
+
+    Query plan:
+
+    temp(group by)
+        subplan: sscan
+                     class: tbl1 node[0]
+                     cost:  1688 card 360000
+        sort:  1 asc, 2 asc
+        cost:  3296 card 360000
+
+.. code-block:: sql
+
+    -- csql>;plan simple
+    -- not enabled for non-distinct aggregates
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, SUM(k2) 
+    FROM tbl1 
+    GROUP BY k1;
+    
+::
+
+    Query plan:
+
+    temp(group by)
+        subplan: sscan
+                     class: tbl1 node[0]
+                     cost:  1688 card 360000
+        sort:  1 asc
+        cost:  3120 card 360000
+
+.. code-block:: sql
+
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE */ SUM(k1), SUM(k2) 
+    FROM tbl1;
+
+::
+    
+    Query plan:
+
+    sscan
+        class: tbl1 node[0]
+        cost:  1688 card 360000
+
+===============================================================
+(검토)적용 안 되게 된 것들. (CUBRIDSUS-13449 수정 이후 다시 검토해 볼 것
+릴리스노트의 9024도 수정 여부 검토할 것)
+
+
 .. code-block:: sql
 
     -- basic scenarios
 
-    SELECT /*+ RECOMPILE */ DISTINCT k1     
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1     
     FROM tbl1 LIMIT 20;
         
 ::
@@ -1858,132 +2160,10 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
                  cost:  402 card 720000
     cost:  2910 card 720000
 
-        
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE */ k1, k2     
-    FROM tbl1 GROUP BY k1
-    LIMIT 20;
-    
-::
-
-    Query plan:
-
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 1)
-                     sargs: term[0]
-                     sort:  1 asc
-                     cost:  368 card 360000
-        cost:  1625 card 360000
 
 .. code-block:: sql
-    
-    -- different key ranges/filters
-    SELECT /*+ RECOMPILE */ DISTINCT k1 
-    FROM tbl1 
-    WHERE k1 >= 0 AND k1 <= 1;
 
-::
-
-    Query plan:
-
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[0] (covers) (loose index scan on prefix 1)
-                     sort:  1 asc
-                     cost:  43 card 7200
-        cost:  73 card 7200
-
-.. code-block:: sql
-    
-    SELECT /*+ RECOMPILE */ DISTINCT k1, k2 
-    FROM tbl1 
-    WHERE k1 >= 0 AND k1 <= 1 AND k2 > 3 AND k2 < 11;
-    
-::
-
-    Query plan:
-
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[1] (covers) (loose index scan on prefix 2)
-                     filtr: term[0]
-                     sort:  1 asc, 2 asc
-                     cost:  43 card 72
-        cost:  49 card 72
-
-.. code-block:: sql
-    
-    SELECT /*+ RECOMPILE */ DISTINCT k1, k2 
-    FROM tbl1 
-    WHERE k1 >= 0 AND k1 + k2 <= 10;
-
-::
-
-    Query plan:
-
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[1] (covers) (loose index scan on prefix 2)
-                     filtr: term[0]
-                     sort:  1 asc, 2 asc
-                     cost:  402 card 7200
-        cost:  436 card 7200
-
-.. code-block:: sql
-    
-    -- joins
-
-    SELECT /*+ RECOMPILE */ tbl1.k1, tbl1.k2 
-    FROM tbl2 INNER JOIN tbl1 
-    ON tbl2.k1 = tbl1.k1 AND tbl2.k2 = tbl1.k2 
-    GROUP BY tbl1.k1, tbl1.k2;
-
-::
-
-    Query plan:
-
-    temp(group by)
-        subplan: idx-join (inner join)
-                     outer: sscan
-                                class: tbl2 node[0]
-                                cost:  1 card 14
-                     inner: iscan
-                                class: tbl1 node[1]
-                                index: idx term[0] AND term[1] (covers) (loose index scan on prefix 2)
-                                cost:  19 card 720000
-                     cost:  20 card 10080
-        sort:  1 asc, 2 asc
-        cost:  65 card 10080
-    
-.. code-block:: sql
-        
-    -- aggregate functions
-    SELECT /*+ RECOMPILE */ k1, MIN(K2), MAX(k2) 
-    FROM tbl1 
-    GROUP BY k1;
-        
-::
-
-    Query plan:
-
-    temp(group by)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 2)
-                     sort:  1 asc
-                     cost:  402 card 720000
-        sort:  1 asc
-        cost:  3262 card 720000
-        
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE */ k1, SUM(DISTINCT k2) 
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, SUM(DISTINCT k2) 
     FROM tbl1 
     GROUP BY k1;
 
@@ -2003,7 +2183,7 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 .. code-block:: sql
 
     -- aggregate functions, single tuple
-    SELECT /*+ RECOMPILE */ k1, MIN(k2), max(k2) 
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, MIN(k2), max(k2) 
     FROM tbl1 
     GROUP BY k1;
 
@@ -2018,33 +2198,14 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
                      sort:  1 asc
                      cost:  402 card 720000
         sort:  1 asc
-        cost:  3262 card 720000
-    
+        cost:  3262 card 720000        
+        
 .. code-block:: sql
 
-    SELECT /*+ RECOMPILE */ SUM(DISTINCT k1), SUM(DISTINCT k2)
-    FROM tbl1;
-
-::
-
-    Query plan:
-
-    iscan
-        class: tbl1 node[0]
-        index: idx (covers) (loose index scan on prefix 2)
-        cost:  402 card 720000
-
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, k2     
+    FROM tbl1 GROUP BY k1
+    LIMIT 20;
     
-    
-다음은 느슨한 인덱스 스캔이 적용되지 않는 경우이다.
-
-.. code-block:: sql
-
-    -- not enabled in skip scan scenarios
-    SELECT /*+ RECOMPILE */ DISTINCT k1 
-    FROM tbl1 
-    WHERE k2 > 0;
-
 ::
 
     Query plan:
@@ -2052,114 +2213,11 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
     temp(distinct)
         subplan: iscan
                      class: tbl1 node[0]
-                     index: idx term[0] (covers) (index skip scan)
+                     index: idx (covers) (loose index scan on prefix 1)
+                     sargs: term[0]
                      sort:  1 asc
-                     cost:  405 card 72000
-        cost:  660 card 72000
-    
-.. code-block:: sql
-
-    -- not enabled when full key is used
-    SELECT /*+ RECOMPILE */ DISTINCT k1, k2, k3 
-    FROM tbl1 
-    ORDER BY 1, 2, 3 LIMIT 10;
-    
-::
-
-    Query plan:
-
-    temp(distinct)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  1 asc, 2 asc, 3 asc
-        cost:  6784 card 720000
-    
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE */ k1, k2, k3 
-    FROM tbl1 
-    GROUP BY k1, k2, k3 LIMIT 10;
-
-::
-
-    Query plan:
-
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  1 asc, 2 asc, 3 asc
-        cost:  6784 card 720000
-
-    
-.. code-block:: sql
-    
-    -- not enabled when using count star
-    SELECT /*+ RECOMPILE */ COUNT(*), k1 
-    FROM tbl1 
-    GROUP BY k1;
-
-::
-
-    Query plan:
-
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  2 asc
-        cost:  6081 card 720000
-    
-.. code-block:: sql
-
-    -- not enabled when index is not covering
-    SELECT /*+ RECOMPILE */ k1, k2, SUM(k4) 
-    FROM tbl1 
-    GROUP BY k1, k2 LIMIT 10;
-    
-::
-
-    Query plan:
-
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  1 asc, 2 asc
-        cost:  6784 card 720000
-    
-
-.. code-block:: sql
-
-    -- not enabled for non-distinct aggregates
-    SELECT /*+ RECOMPILE */ k1, SUM(k2) 
-    FROM tbl1 
-    GROUP BY k1;
-    
-::
-
-    Query plan:
-
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  1 asc
-        cost:  6433 card 720000
-
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE */ SUM(k1), SUM(k2) 
-    FROM tbl1;
-
-::
-    
-    Query plan:
-
-    sscan
-        class: tbl1 node[0]
-        cost:  3573 card 720000
+                     cost:  368 card 360000
+        cost:  1625 card 360000
 
 .. _in-memory-sort:
 

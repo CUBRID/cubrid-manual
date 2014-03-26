@@ -19,7 +19,7 @@ CCI API Reference
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_TYPE_CONVERSION**
         *   **CCI_ER_USED_CONNECTION**
-        
+
     To bind **NULL** to the database, choose one of below settings.
 
     *   Set the value of *value* to a **NULL** pointer
@@ -259,7 +259,7 @@ CCI API Reference
         *    **CCI_ER_COMMUNICATION**
         *    **CCI_ER_CON_HANDLE**
         *    **CCI_ER_CONNECT**
-    
+
     The following shows how to cancel the query execution of a thread.
     
     .. code-block:: c
@@ -507,7 +507,8 @@ CCI API Reference
         
 .. c:function::  int cci_close_query_result(int req_handle, T_CCI_ERROR *err_buf)
 
-    The **cci_close_query_result** funciton closes the resultset returned by :c:func:`cci_execute`, :c:func:`cci_execute_array` or :c:func:`cci_execute_batch`. If you run :c:func:`cci_prepare` repeatedly without closing the request handle(req_handle), it is recommended to call this function before calling :c:func:`cci_close_req_handle`.
+    The **cci_close_query_result** funciton closes the resultset returned by :c:func:`cci_execute`, :c:func:`cci_execute_array` or :c:func:`cci_execute_batch`.
+    If you run :c:func:`cci_prepare` repeatedly without closing the request handle(req_handle), it is recommended to call this function before calling :c:func:`cci_close_req_handle`.
     
     :param req_handle: (IN) Request handle
     :param err_buf: (OUT) Error buffer
@@ -897,24 +898,24 @@ CCI API Reference
         :c:func:`cci_property_set`,
         :c:func:`cci_datasource_create`,
         :c:func:`cci_datasource_destroy`,
-        :c:func:`cci_datasource_release`
+        :c:func:`cci_datasource_release`,
         :c:func:`cci_datasource_change_property`
 
 .. c:function:: int cci_datasource_change_property (T_CCI_DATASOURCE *datasource, const char *key, const char *val)
  
-    Set the name of a property of DATASOURCE is specified to *key*, and set a value of the property to *val*.A property's value which is set with this function is applied to all connections in *datasource*.
-    
-    :param datasource: (IN) A pointer to a structure T_CCI_DATASOURCE to get the CCI connection
-    :param key: (IN) A pointer to a string of property names
-    :param val: (IN) A pointer to a string of attribute value
-    :return:  Error code (0: success)
+    A property name of a DATASOURCE is specified in *key*, a value in *val*. The changed property value by this function is applied to all connections in the *datasource*.
+     
+    :param datasource: (IN) T_CCI_DATASOURCE struct pointer to obtain CCI connections.
+    :param key: (IN) A pointer to the string of a property name
+    :param val: (IN) A pointer to the string of a property value
+    :return: Error code(0: success)
     
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_NO_PROPERTY**
         *   **CCI_ER_PROPERTY_TYPE**
     
-    The below is changable properties.
- 
+    The following shows names and values of changeable properties.
+
     ========================= =========== ============================== =========================================================================================================================
     Property name             Type        Value                          Description
     ========================= =========== ============================== =========================================================================================================================
@@ -957,7 +958,7 @@ CCI API Reference
     The **cci_datasource_create** function creates DATASOURCE of CCI.
 
     :param properties: (IN) **T_CCI_PROPERTIES** struct pointer in which configuration of struct pointer is stored. Values of properties will be set with :c:func:`cci_property_set`.
-    :param err_buf: (OUT) Error code and message returned upon error occurrence
+    :param err_buf: (OUT) Error buffer. Error code and message returned upon error occurrence
     :return: Success: **T_CCI_DATASOURCE** struct pointer created, Failure: **NULL**
 
     .. seealso:: 
@@ -971,7 +972,7 @@ CCI API Reference
         :c:func:`cci_datasource_release`,
         :c:func:`cci_datasource_change_property`
 
-.. c:function:: void cci_datasource_destroy (T_CCI_DATASOURCE * datasource)
+.. c:function:: void cci_datasource_destroy (T_CCI_DATASOURCE *datasource)
 
     The **cci_datasource_destroy** function destroys DATASOURCE of CCI.
 
@@ -1035,7 +1036,7 @@ CCI API Reference
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_TRAN_TYPE**
         
-    You can configure the default value of auto-commit mode by using :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` which is a broker parameter upon startup of an application. If configuration on broker parameter is omitted, the default value is **ON**; use the :c:func:`cci_set_autocommit` function to change auto-commit mode within an application. If auto-commit mode is **OFF**, you must explicitly commit or roll back transaction by using the :c:func:`cci_end_tran` function.
+    You can configure the default value of auto-commit mode by using :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>` broker parameter upon startup of an application. If configuration on broker parameter is omitted, the default value is **ON**; use the :c:func:`cci_set_autocommit` function to change auto-commit mode within an application. If auto-commit mode is **OFF**, you must explicitly commit or roll back transaction by using the :c:func:`cci_end_tran` function.
 
 
 .. c:function:: long cci_escape_string(int conn_handle, char *to, const char *from, unsigned long length, T_CCI_ERROR *err_buf)
@@ -1296,7 +1297,7 @@ CCI API Reference
 
 .. c:function:: int cci_execute_result(int req_handle, T_CCI_QUERY_RESULT **query_result, T_CCI_ERROR *err_buf)
 
-    The **cci_execute_result**  function stores the execution results (e.g. statement type, result count) performed by :c:func:`cci_execute` to the array of **T_CCI_QUERY_RESULT** structure. You can use :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` macros to get the results of each query. Regarding the summary of these macros, see the :c:func:`cci_execute_array` function.
+    The **cci_execute_result** function stores the execution results (e.g. statement type, result count) performed by :c:func:`cci_execute` to the array of **T_CCI_QUERY_RESULT** structure. You can use :c:macro:`CCI_QUERY_RESULT_RESULT`, :c:macro:`CCI_QUERY_RESULT_ERR_NO`, :c:macro:`CCI_QUERY_RESULT_ERR_MSG`, :c:macro:`CCI_QUERY_RESULT_STMT_TYPE` macros to get the results of each query. Regarding the summary of these macros, see the :c:func:`cci_execute_array` function.
 
     Note that the validity check is not performed for each parameter entered in the macro.
     
@@ -1886,6 +1887,8 @@ CCI API Reference
 
     The **CCI_GET_RESULT_INFO_TYPE** macro gets the *index*-th column's type of a prepared **SELECT** list. It does not check whether the specified argument, *res_info*, is **NULL** and whether *index* is valid.
 
+    If you want to check which column is a SET type or not, use :c:macro:`CCI_IS_SET_TYPE`.
+
     :param res_info: (IN) pointer to the column information fetched by :c:func:`cci_get_result_info`
     :param index: (IN) Column index
     :return: Column type (**T_CCI_U_TYPE**)
@@ -2226,7 +2229,7 @@ CCI API Reference
     :return: Success: 1, Failure: 0
 
     The property names and its meanings that can be configured in the struct are as follows:
-    
+
     ============================= =========== =============================================== ==========================================================================================================
     Property name                 Type        Default                                         Description
     ============================= =========== =============================================== ==========================================================================================================
@@ -2249,12 +2252,15 @@ CCI API Reference
     default_lock_timeout          msec        lock_timeout in cubrid.conf                     lock timeout specified when a datasource is created by :c:func:`cci_datasource_create` function.
     ============================= =========== =============================================== ==========================================================================================================
     
-    
     If the number of prepared statements exceeds **max_open_prepared_statement** value, the oldest prepared statement is released from the statement pool. If you reuse it later, it is added to the statement pool again.
     
-    If you configure **login_timeout**, **default_autocommit**, **default_isolation**, or **default_lock_timeout** value, connection is returned with this configuration.
-
-    **login_timeout**, **default_autocommit**, **default_isolation** or **default_lock_timeout** can be changed after calling :c:func:`cci_datasource_borrow` function. See :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`. Changed values by the functions of which the names start with **cci_set_** are only applied to the changed connection objects; after the connection is released, they are restored as the values which :c:func:`cci_property_set` configured. If there is no value specified by :c:func:`cci_property_set`, it is restored as the default.
+    A number of connections which a connection pool can contain is changable by using c:func:`cci_datasource_change_property` function when it's required, but it cannot exceed **max_pool_size**. You can change this number when you want to handle the limitation of the number of connections. For example, usually set the number less than **max_pool_size**; raise the number when more connections are required than expected; shrink the number again when many connections are not required.
+    
+    The number of connections which a connection pool can contain is limited until **pool_size**; it's maximum value is **max_pool_size**.
+        
+    When you set **login_timeout**, **default_autocommit**, **default_isolation** or **default_lock_timeout**, these specified values are used in a connection which is returend when calling :c:func:`cci_datasource_borrow` function.
+ 
+    **login_timeout**, **default_autocommit**, **default_isolation** or **default_lock_timeout** can be changed even after calling :c:func:`cci_datasource_borrow` function. Regarding this, see :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`. Changed values by functions which the name starts with **cci_set_** are only applied to the changed connection objects, and after the connection is released, they are restored as the specified values by :c:func:`cci_property_set`. It is restored as the default value when there is no value specified by :c:func:`cci_property_set` function.
     
     .. note:: 
     
@@ -2264,8 +2270,8 @@ CCI API Reference
         
         *   Creating time of a DATASOURCE object can take more than an internal reconnection time; therefore, you can consider to apply  **login_timeout** differently on these two cases. For example, if you want to set 5000(5 sec.) in the former and 2000(2 sec.) in the later, for the later, use :c:func:`cci_set_login_timeout` after creating a DATASOURCE.
 
-        .. CUBRIDSUS-12567 참고
-        
+        .. CUBRIDSUS-12567
+    
     **default_isolation** has one of the following configuration values. For details on isolation level, see :ref:`set-transaction-isolation-level`.
 
     +----------------------------+---------------------------------------+
@@ -2385,8 +2391,6 @@ CCI API Reference
     To call this function, **CCI_PREPARE_CALL** flag of **cci_prepare** function should be specified.
 
     :param req_handle: (IN) Request handle
-     int cci_register_out_param(int req_handle, int index)
-    
     :return: Error code
             
         *    **CCI_ER_BIND_INDEX**
@@ -3170,6 +3174,10 @@ CCI API Reference
     :param autocommit_mode: (IN) Configures the auto-commit mode. It has one of the following value: CCI_AUTOCOMMIT_FALSE or CCI_AUTOCOMMIT_TRUE
     :return: Error code (0: success)
 
+    .. note::
+    
+        **CCI_DEFAULT_AUTOCOMMIT**, a broker parameter configured in the **cubrid_broker.conf** file, determines whether it is in auto-commit mode upon program startup.
+
 .. c:function:: int cci_set_db_parameter(int conn_handle, T_CCI_DB_PARAM param_name, void* value, T_CCI_ERROR *err_buf)
 
     The **cci_set_db_parameter** function configures a system parameter. For the type of *value* for *param_name*, see :c:func:`cci_get_db_parameter`.
@@ -3269,7 +3277,7 @@ CCI API Reference
     
     :param conn_handle: (IN) Connection handle
     :param locktimeout: (IN) lock timeout value(Unit: milliseconds).
-    :return: Error code(0: Success)
+    :return: Error code(0: success)
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_PARAM_NAME**
@@ -3279,12 +3287,12 @@ CCI API Reference
 
 .. c:function:: int cci_set_login_timeout(int conn_handle, int timeout, T_CCI_ERROR *err_buf)
     
-    The **cci_set_login_timeout** function specifies the login timeout with millisecond unit. Login timeout is applied when internal connection occurs as calling :c:func:`cci_prepare` or :c:func:`cci_execute`. This change is only applied to the current connection.
+    The **cci_set_login_timeout** function specifies the login timeout as milliseconds. The login timeout is applied when an internal reconnection occurs as :c:func:`cci_prepare` or :c:func:`cci_execute` function is called. This change is only applied to the current connection.
    
     :param conn_handle: (IN) Connection handle
-    :param timeout: (IN) Login timeout(unit: millisecond)
+    :param timeout: (IN) Login timeout(unit: milliseconds)
     :param err_buf: (OUT) Error buffer
-    :return: Error code(0: Success)
+    :return: Error code(0: success)
         
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_USED_CONNECTION**

@@ -138,15 +138,14 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
     SELECT [ <qualifier> ] <select_expressions>
     [ FROM <table_specification> [ {, <table_specification>
                                     | <join_table_specification> }... ]]
-     
-     
+
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
     <table_specification> ::=
-     <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ] |
-     <metaclass_specification> [ <correlation> ] |
-     <subquery> <correlation> |
-     TABLE ( <expression> ) <correlation>
+        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
+        <metaclass_specification> [ <correlation> ] |
+        <subquery> <correlation> |
+        TABLE ( <expression> ) <correlation>
      
     <correlation> ::= [ AS ] <identifier> [ ( <identifier_comma_list> ) ]
      
@@ -161,7 +160,7 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
 
 *   <*table_specification*> : At least one table name is specified after the **FROM** clause. Subqueries and derived tables can also be used in the **FROM** clause. For details on subquery derived tables, see :ref:`subquery-derived-table`.
 
-*   <*lock_hint*> : You can set **READ UNCOMMITTED** for the table isolation level. **READ UNCOMMITTED** is a level where dirty reads are allowed; see :ref:`transaction-isolation-level` For details on the CUBRID transaction isolation level.
+*   <*lock_hint*> : You can set **READ UNCOMMITTED** for the table isolation level. **READ UNCOMMITTED** is a level where dirty reads are allowed; see :ref:`transaction-isolation-level` for details on the CUBRID transaction isolation level.
 
 .. code-block:: sql
 
@@ -243,7 +242,7 @@ WHERE Clause
 
 In a query, a column can be processed based on conditions. The **WHERE** clause specifies a search condition for data. ::
 
-    WHERE search_condition
+    WHERE <search_condition>
 
     <search_condition> ::=
         comparison_predicate
@@ -455,7 +454,7 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
               201     3.250000000000000e+02
               301     3.000000000000000e+02
               501     1.750000000000000e+02
-     
+
 The following is an example how to specify the NULLS FIRST or NULLS LAST after ORDER BY clause.
 
 .. code-block:: sql
@@ -503,6 +502,54 @@ The following is an example how to specify the NULLS FIRST or NULLS LAST after O
                 6  NULL
                 8  NULL
                10  NULL
+
+.. note::
+
+    **Translatioin of GROUP BY alias**
+
+    .. code-block:: sql
+
+        CREATE TABLE t1(a INT, b INT, c INT);
+        INSERT INTO t1 VALUES(1,1,1);
+        INSERT INTO t1 VALUES(2,NULL,2);
+        INSERT INTO t1 VALUES(2,2,2);
+
+        SELECT a, NVL(b,2) AS b 
+        FROM t1 
+        GROUP BY a, b;  -- Q1
+
+    When you run the above SELECT query, "GROUP BY a, b" is translated as:
+
+    *   GROUP BY NVL(b, 2) (alias name b) in 9.2 or before. The result is the same as Q2's result as below.
+
+        .. code-block:: sql
+        
+            SELECT a, NVL(b,2) AS bxxx 
+            FROM t1 
+            GROUP BY a, bxxx;  -- Q2
+
+        ::
+
+                    a            b
+            ======================
+                    1            1
+                    2            2
+
+	*   GROUP BY b (column name b) in 9.3 or higher. The result is the same as Q3's result as below.
+
+        .. code-block:: sql
+        
+            SELECT a, NVL(b,2) AS bxxx
+            FROM t1 
+            GROUP BY a, b;  -- Q3
+
+        ::
+
+                    a            b
+            ======================
+                    1            1
+                    2            2
+                    2            2
 
 .. _limit-clause:
 
@@ -579,21 +626,21 @@ An outer join is divided into a left outer join which outputs all rows of the le
 
     FROM <table_specification> [{, <table_specification> 
         | { <join_table_specification> | <join_table_specification2> } ...]
-     
+        
     <table_specification> ::=
         <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
         <metaclass_specification> [ <correlation> ] |
         <subquery> <correlation> |
         TABLE ( <expression> ) <correlation>
         
-    <join_table_specification> :
+    <join_table_specification> ::=
        { [ INNER | {LEFT | RIGHT} [ OUTER ] ] JOIN |
        STRAIGHT_JOIN } <table_specification> ON <search_condition>
      
     <join_table_specification2> ::= { CROSS JOIN | 
         NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
 
-*   *join_table_specification*
+*   <*join_table_specification*>
 
     *   [ **INNER** ] **JOIN** : Used for inner join and requires join conditions.
 
@@ -601,7 +648,7 @@ An outer join is divided into a left outer join which outputs all rows of the le
 
     *   **STRAIGHT_JOIN** : (작성중)
     
-*   *join_table_specification2*
+*   <*join_table_specification2*>
 
     *   **CROSS JOIN** : Used for cross join and requires no join conditions.
     *   **NATURAL** [ **LEFT** | **RIGHT** ] **JOIN** : Used for natural join and join condition is not used. It operates in the equivalent same way to have a condition between columns equivalent of the same name .
@@ -642,9 +689,7 @@ CUBRID does not support full outer joins; it supports only left and right joins.
 
 Join conditions of an outer join are specified in a different way from those of an inner join. In an inner join, join conditions can be expressed in the **WHERE** clause; in an outer join, they appear after the **ON** keyword within the **FROM** clause. Other retrieval conditions can be used in the **WHERE** or **ON** clause, but the retrieval result depends on whether the condition is used in the **WHERE** or **ON** clause.
 
-The table execution order is fixed according to the order specified in the **FROM** clause. Therefore, when using an outer join, you should create a query statement in consideration of the table order. It is recommended to use standard statements using { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN**, because using an Oracle-style join query statements by specifying an outer join operator (**+**) in the **WHERE** clause, even if possible, might lead the execution result or plan in an unwanted direction.
-
-The cross join is a cartesian product, meaning that it is a combination of two tables, without any condition. For the cross join, the **CROSS JOIN** keyword can be omitted. When it is omitted, the table is separated by a comma (,).
+The table execution order is fixed according to the order specified in the **FROM** clause. Therefore, when using an outer join, you should create a query statement in consideration of the table order. It is recommended to use standard statements using { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN**, because using an Oracle-style join query statements by specifying an outer join operator **(+)** in the **WHERE** clause, even if possible, might lead the execution result or plan in an unwanted direction.
 
 The following example shows how to retrieve the years and host countries of the Olympic Games since 1950 where a world record has been set, but including the Olympic Games where any world records haven't been set in the result. This example can be expressed in the following right outer join query. In this example, all instances whose values of the *host_year* column in the *history* table are not greater than 1950 are also retrieved. All instances of *host_nation* are included because this is a right outer join. *host_year* that does not have a value is represented as **NULL**.
 
@@ -700,7 +745,6 @@ A right outer join query can be converted to a left outer join query by switchin
              2000         2000  'Australia'
              2004         2004  'Greece'
 
-             
 Outer joins can also be represented by using **(+)** in the **WHERE** clause. The above example is a query that has the same meaning as the example using the **LEFT** **OUTER** **JOIN**. The **(+)** syntax is not ISO/ANSI standard, so it can lead to ambiguous situations. It is recommended to use the standard syntax **LEFT** **OUTER** **JOIN** (or **RIGHT** **OUTER** **JOIN**) if possible.
 
 .. code-block:: sql
@@ -1014,12 +1058,12 @@ The following example shows how to use subquery in the **FROM** statement.
 .. code-block:: sql
     
     SELECT a.*
-    FROM athlete a, (VALUES ('Miran Jang', 'F'), ('Yeonjae Son', 'F')) AS t(name, gender)
+    FROM athlete a, (VALUES ('Jang Mi-Ran', 'F'), ('Son Yeon-Jae', 'F')) AS t(name, gender)
     WHERE a.name=t.name AND a.gender=t.gender;
      
 ::
 
              code  name                gender   nation_code        event
     =====================================================================================================
-            21111  'Jang Mi-ran'       'F'      'KOR'              'Weight-lifting'
+            21111  'Jang Mi-Ran'       'F'      'KOR'              'Weight-lifting'
             21112  'Son Yeon-Jae'      'F'      'KOR'              'Rhythmic gymnastics'

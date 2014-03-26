@@ -11,11 +11,11 @@ Statistics for tables and indexes enables queries of the database system to proc
 
 ::
 
-    UPDATE STATISTCIS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON class-name[, class-name, ...] [WITH FULLSCAN]; 
      
-    UPDATE STATISTCIS ON ALL CLASSES [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON ALL CLASSES [WITH FULLSCAN]; 
   
-    UPDATE STATISTCIS ON CATALOG CLASSES [WITH FULLSCAN]; 
+    UPDATE STATISTICS ON CATALOG CLASSES [WITH FULLSCAN]; 
 
 *   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data.
 
@@ -211,7 +211,7 @@ The following shows the explanation of the above items of "Query plan:".
                 *   index: pk_olympic_host_year term[1]: use pk_olympic_host_year index and for details, see term[1] of "Join graph segments".
                 *   cost: a cost to perform this syntax.
                 
-                    *   card: It means cardinality.
+                    *   card: It means cardinality. Note that this is an approximate value.
                     
             *   inner: sscan: It performs sscan(sequential scan) in the inner table.
             
@@ -219,11 +219,11 @@ The following shows the explanation of the above items of "Query plan:".
                 *   sargs: term[0]: sargs represent data filter(WHERE condition which does not use an index); it means that term[0] is the condition used as data filter.
                 *   cost: A cost to perform this syntax.
                 
-                    *   card: It means cardinality.
+                    *   card: It means cardinality. Note that this is an approximate value.
                     
         *   cost: A cost to perform all syntaxes. It includes the previously performed cost.
         
-            *   card: It means cardinality.
+            *   card: It means cardinality. Note that this is an approximate value.
 
 **Query Plan Related Terms**
 
@@ -388,7 +388,9 @@ Below is an example that prints out the query tracing result after setting SQL t
         GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
     '
  
-On the above, later lines of "Trace Statistics:" are the output of the query trace. The following are the items of trace statistics.
+On the above, later lines of "Trace Statistics:" are the output of the query trace. 
+
+The following are the items of trace statistics.
  
 **SELECT**
  
@@ -422,6 +424,13 @@ On the above, later lines of "Trace Statistics:" are the output of the query tra
 *   sort: sorting or not
 *   page: the number of pages which is read in this operation; the number of used pages except the internal sorting buffer
 *   rows: the number of the result rows in this operation
+
+**INDEX SCAN**
+
+*   key range: the range of a key
+*   covered: covered index or not(true/false)
+*   loose: loose index scan or not(true/false)
+*   hash: hash aggregate evaluation or not, when sorting tuples in the aggregate function(true/false). See :ref:`NO_HASH_AGGREGATE <no-hash-aggregate>` hint.
 
 The above example can be output as JSON format.
  
@@ -500,9 +509,9 @@ Using hints can affect the performance of query execution. You can allow the que
     MERGE /*+ <merge_statement_hint> [ { <merge_statement_hint> } ... ] */ INTO ...;
     
     <hint> ::=
-    USE_NL [ (spec_name_comma_list) ] |
-    USE_IDX [ (spec_name_comma_list) ] |
-    USE_MERGE [ (spec_name_comma_list) ] |
+    USE_NL [ (<spec_name_comma_list>) ] |
+    USE_IDX [ (<spec_name_comma_list>) ] |
+    USE_MERGE [ (<spec_name_comma_list>) ] |
     ORDERED |
     USE_DESC_IDX |
     NO_DESC_IDX |
@@ -544,13 +553,15 @@ The following hints can be specified in UPDATE, DELETE and SELECT statements.
 
 *   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
 
+*   **NO_SORT_LIMIT** : This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
+
 .. _no-hash-aggregate:
 
 *   **NO_HASH_AGGREGATE** : This is a hint not to use hashing for the sorting tuples in aggregate functions. Instead, external sorting is used in aggregate functions. By using an in-memory hash table, we can reduce or even eliminate the amount of data that needs to be sorted. However, in some scenarios the user may know beforehand that hash aggregation will fail and can use the hint to skip hash aggregation entirely. For setting the memory size of hashing aggregate, see :ref:`max_agg_hash_size <max_agg_hash_size>`.
 
     .. note::
     
-        Hash aggregate evaluation will not work for functions evaluated on distinct values (e.g. AVG(DISTINCT x)) and for the GROUP_CONCAT and MEDIAN functions, since they require an extra sort step for the tuples of each group.
+        Hash aggregate evaluation will not work for functions evaluated on distinct values (e.g. AVG(DISTINCT x)) and for the GROUP_CONCAT and MEDIAN functions, since they require an extra sorting step for the tuples of each group.
 
 .. _recompile:
         
@@ -574,7 +585,7 @@ MERGE statement can have below hints.
 
 *   **USE_INSERT_INDEX** (<*insert_index_list*>) : An index hint which is used in INSERT clause of MERGE statement. Lists index names to *insert_index_list* to use when executing INSERT clause. This hint is applied to  <*join_condition*> of MERGE statement.
 *   **USE_UPDATE_INDEX** (<*update_index_list*>) : An index hint which is used in UPDATE clause of MERGE statement. Lists index names to *update_index_list* to use when executing UPDATE clause. This hint is applied to <*join_condition*> and <*update_condition*> of MERGE statement.
-*   **RECOMPILE** : Recompile the query execution plan. Use this hint to remove the old query plan and set the new one to the query plan cache.
+*   **RECOMPILE** : See the above :ref:`RECOMPILE <recompile>`.
 
 The following example shows how to retrieve the years when Sim Kwon Ho won medals and the types of medals. Here, a nested loop join execution plan needs to be created which has the *athlete* table as an outer table and the *game* table as an inner table. It can be expressed by the following query. The query optimizer creates a nested loop join execution plan that has the *game* table as an outer table and the *athlete* table as an inner table.
 
@@ -1531,7 +1542,7 @@ If there is an index made of **GROUP BY** columns even when using aggregate func
 
 .. note::
 
-    When a column of **DISTINCT** or a **GROUP BY** clause contains the subkey of a index, loose index scan adjusts the scope dynamically to unique values ​​of each of the columns constituting the partial key, and starts the search of a B-tree. Regarding this, see :ref:`loose-index-scan`.
+    When a column of **DISTINCT** or a **GROUP BY** clause contains the subkey of a index, loose index scan adjusts the scope dynamically to unique values ?�​of each of the columns constituting the partial key, and starts the search of a B-tree. Regarding this, see :ref:`loose-index-scan`.
 
 **Example**
 
@@ -1609,7 +1620,6 @@ The following example shows that an index consisting of tab(j,k) is used and no 
                 3            5            4
                 1            5            5
                 2            6            6
-
 
 .. code-block:: sql
 

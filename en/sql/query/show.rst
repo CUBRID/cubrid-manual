@@ -201,7 +201,7 @@ Seq_in_index                        INTEGER         Serial number of the column 
 Column_name                         VARCHAR         Column name
 Collation                           VARCHAR         Method of sorting columns in the index. 'A' means ascending and **NULL** means not sorted.
 Cardinality                         INTEGER         The number of values measuring the unique values in the index. Higher cardinality increases the opportunity of using an index.
-                                                    This value is updated every time **SHOW INDEX** is executed.
+                                                    This value is updated every time **SHOW INDEX** is executed. Note that this is an approximate value.
 Sub_part                            INTEGER         The number of bytes of the indexed characters if the columns are indexed partially. **NULL** if all columns are indexed.
 Packed                                              Shows how keys are packed. If they are not packed, it will be **NULL**. Currently no support.
 Null                                VARCHAR         YES if a column can include **NULL**, NO if not.

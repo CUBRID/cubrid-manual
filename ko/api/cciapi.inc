@@ -194,7 +194,7 @@ CCI API 레퍼런스
         *   **CCI_ER_LOGIN_TIMEOUT**
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_USED_CONNECTION**
-        
+
 .. c:function:: int cci_blob_read(int conn_handle, T_CCI_BLOB blob, long start_pos, int length, char *buf, T_CCI_ERROR* error_buf)
 
     *blob* 에 명시한 **LOB** 데이터 파일의 *start_pos* 부터 *length* 만큼 데이터를 읽어 *buf* 에 저장한 후 이를 반환한다.
@@ -248,11 +248,11 @@ CCI API 레퍼런스
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_QUERY_TIMEOUT**
         *   **CCI_ER_USED_CONNECTION**
-        
+
 .. c:function:: int cci_cancel(int conn_handle)
 
     다른 스레드에서 실행 중인 질의를 취소시킨다. Java의 Statement.cancel() 메서드와 같은 기능을 수행한다.
-    
+
     :param conn_handle: (IN) 연결 핸들
     :return: 에러 코드
         
@@ -378,7 +378,6 @@ CCI API 레퍼런스
     
             if (res >= 0)
             {
-
                 while (1)
                 {
                     res = cci_cursor (req, 1, CCI_CURSOR_CURRENT, &error);
@@ -535,7 +534,7 @@ CCI API 레퍼런스
         *   **CCI_ER_DBMS**
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_USED_CONNECTION**
-        
+
 .. c:function:: int cci_col_get (int conn_handle, char *oid_str, char *col_attr, int *col_size, int *col_type, T_CCI_ERROR *err_buf)
 
     collection type의 속성 값을 가져온다. 클래스 이름이 C이고 set_attr의 domain이 set(multiset, sequence)인 경우 다음의 질의와 같다.
@@ -1464,10 +1463,10 @@ CCI API 레퍼런스
     :param col_no: (IN) 칼럼 인덱스. 1부터 시작.
     :param type: (IN) *value* 변수의 데이터 타입(**T_CCI_A_TYPE** 에 정의된 타입을 사용)
     :param value: (OUT) 데이터를 저장할 변수의 주소
-    :param indicator: (OUT) **NULL** indicator. (-1 : **NULL**)
+    :param indicator: (OUT) **NULL** indicator. (-1: **NULL**, >0: 문자열의 길이)
     
-     * *type* 이 **CCI_A_TYPE_STR** 인 경우 : **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 *value* 에 저장된 문자열의 길이를 반환
-     * *type* 이 **CCI_A_TYPE_STR** 이 아닌 경우 : **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 0을 반환
+        *   *type* 이 **CCI_A_TYPE_STR** 인 경우: **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 *value* 에 저장된 문자열의 바이트 길이를 반환
+        *   *type* 이 **CCI_A_TYPE_STR** 이 아닌 경우: **NULL** 이면 -1을 반환하고, **NULL** 이 아니면 0을 반환
      
     :return: 에러 코드(0: 성공)
     
@@ -1475,7 +1474,7 @@ CCI API 레퍼런스
         *   **CCI_ER_TYPE_CONVERSION**
         *   **CCI_ER_COLUMN_INDEX**
         *   **CCI_ER_ATYPE**
-    
+
     주어진 *type* 인자에 따라 *value* 변수의 타입이 결정되고, 이에 따라 *value* 변수로 값 또는 포인터가 복사된다. 값을 복사하는 경우 *value* 변수로 전달되는 주소에 대한 메모리가 할당되어 있어야 한다. 포인터 복사의 경우 응용 클라이언트 라이브러리 내의 포인터를 반환하는 것이므로, 다음 :c:func:`cci_get_data` 함수 호출 시 해당 값이 유효하지 않게 되므로 주의한다.
 
     포인터 복사에 의해 반환된 포인터는 해제(free)하면 안 된다. 단, 타입이 **CCI_A_TYPE_SET** 인 경우 **T_CCI_SET** 타입의 set 포인터를 메모리에 할당한 후 이를 반환하므로, set 포인터를 사용한 후에는 :c:func:`cci_set_free` 함수를 이용하여 할당된 메모리를 해제해야 한다. 아래는 *type* 인자와 그에 대응하는 *value* 의 데이터 타입을 정리한 표이다.
@@ -1505,10 +1504,10 @@ CCI API 레퍼런스
     | CCI_A_TYPE_CLOB     | **T_CCI_CLOB** \*            | memory allocation and value copy          |
     +---------------------+------------------------------+-------------------------------------------+
 
-    **참고 사항**
+    .. note::
 
-    *   **LOB** 타입에 대해 :c:func:`cci_get_data`\ 를 호출하면 **LOB** 타입 칼럼의 메타 데이터(Locator)를 출력하며, **LOB** 타입 칼럼의 데이터를 인출하려면 :c:func:`cci_blob_read`\ 를 호출해야 한다.
-
+        *   **LOB** 타입에 대해 :c:func:`cci_get_data`\ 를 호출하면 **LOB** 타입 칼럼의 메타 데이터(Locator)를 출력하며, **LOB** 타입 칼럼의 데이터를 인출하려면 :c:func:`cci_blob_read`\ 를 호출해야 한다.
+    
     다음 예제는 페치한 결과 값을 :c:func:`cci_get_data`\ 를 이용하여 출력하는 코드의 일부이다.
         
     .. code-block:: c
@@ -1886,7 +1885,7 @@ CCI API 레퍼런스
 .. c:macro:: #define CCI_GET_RESULT_INFO_TYPE(T_CCI_COL_INFO* res_info, int index)
 
     prepare된 **SELECT** 리스트에서 *index* 번째 칼럼의 타입을 가져오는 매크로이다. 지정된 인자 *res_info* 가 **NULL** 인지, *index* 가 유효한지에 대한 검사는 하지 않는다.
-    
+
     어떤 칼럼의 SET 타입 여부를 확인하려면 :c:macro:`CCI_IS_SET_TYPE`\ 을 사용한다.
 
     :param res_info: (IN) :c:func:`cci_get_result_info`\ 에 의한 칼럼 정보 포인터
@@ -1895,7 +1894,7 @@ CCI API 레퍼런스
 
 .. c:macro:: #define CCI_IS_SET_TYPE(u_type)
 
-    *u_type*\ 이 set type인지를 검사한다. 
+    *u_type*\ 이 set type인지를 검사한다.
 
     :param u_type: (IN)
     :return: 1 : set, 0 : not set
@@ -2159,7 +2158,7 @@ CCI API 레퍼런스
     :param max_col_size: (IN) 문자열 타입인 경우 fetch하는 칼럼의 문자열 최대 길이(단위: 바이트). 이 값이 0이면 전체 길이를 fetch한다.
     :param exec_retval: (OUT) 성공: 영향을 받은 행의 개수, 실패: 에러 코드
     :param err_buf: (OUT) 에러 버퍼        
-    :return: 성공 : 요청 핸들 ID , 실패 : 에러 코드
+    :return: 성공 : 요청 핸들 ID, 실패 : 에러 코드
 
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_DBMS**
@@ -2219,8 +2218,8 @@ CCI API 레퍼런스
         :c:func:`cci_datasource_destroy`,
         :c:func:`cci_datasource_release`
 
-.. c:function:: int cci_property_set (T_CCI_PROPERTIES* properties, char* key, char* value)
- 
+.. c:function:: int cci_property_set (T_CCI_PROPERTIES *properties, char *key, char *value)
+
     **T_CCI_PROPERTIES** 구조체에 속성 값을 설정한다. 
     
     :param properties: *key* 와 *value* 를 저장할 **T_CCI_PROPERTIES** 구조체 포인터
@@ -2252,21 +2251,21 @@ CCI API 레퍼런스
     
     prepared statement의 개수가 **max_open_prepared_statement** 값을 초과하면 가장 오래된 prepared statement가 statement pool에서 해제되며, 추후 해제된 prepared statement가 재사용되면 다시 statement pool에 추가된다. 
     
-	하나의 연결 풀이 가질 수 있는 연결 개수는 필요 시 c:func:`cci_datasource_change_property`\ 를 통해 값을 변경할 수 있지만, max_pool_size를 초과할 수 없다. 연결 개수의 제한을 조절하고자 할 때 이 값을 변경할 수 있다. 예를 들어 평소에는 max_pool_size보다 작게 설정해서 사용하다가 기대 이상으로 많은 연결이 필요해질 때 값을 높이고, 많은 연결이 필요하지 않으면 값을 다시 줄인다.
-	
-	연결 풀이 가질 수 있는 연결 개수는 pool_size까지 제한되는데, pool_size는 최대 max_pool_size까지 변경될 수 있다.
-	
+    하나의 연결 풀이 가질 수 있는 연결 개수는 필요 시 c:func:`cci_datasource_change_property`\ 를 통해 값을 변경할 수 있지만, max_pool_size를 초과할 수 없다. 연결 개수의 제한을 조절하고자 할 때 이 값을 변경할 수 있다. 예를 들어 평소에는 max_pool_size보다 작게 설정해서 사용하다가 기대 이상으로 많은 연결이 필요해질 때 값을 높이고, 많은 연결이 필요하지 않으면 값을 다시 줄인다.
+    
+    연결 풀이 가질 수 있는 연결 개수는 pool_size까지 제한되는데, pool_size는 최대 max_pool_size까지 변경될 수 있다.
+    
     **login_timeout**, **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 의 값을 설정하면 :c:func:`cci_datasource_borrow`\ 를 호출할 때 이 설정 값을 가지고 연결을 반환한다.
  
     **login_timeout**, **default_autocommit**, **default_isolation**, **default_lock_timeout**\ 은 :c:func:`cci_datasource_borrow` 함수 호출 이후에도 변경할 수 있다. :c:func:`cci_set_login_timeout`, :c:func:`cci_set_autocommit`, :c:func:`cci_set_isolation_level`, :c:func:`cci_set_lock_timeout`\ 을 참고한다. 이름이 **cci_set_**\ 으로 시작하는 함수들에 의해 변경된 값은 변경한 연결 객체에만 적용되며, 연결이 해제된 이후에는 :c:func:`cci_property_set`\ 으로 설정한 값으로 복원된다. :c:func:`cci_property_set`\ 으로 설정한 값이 없을 경우에는 기본값으로 복원된다.
     
     .. note:: 
     
-		*	:c:func:`cci_property_set` 함수와 URL 문자열에서 동시에 속성 값을 명시하는 경우, :c:func:`cci_property_set` 함수에서 정의한 값으로 적용된다.
-		
-        *	**login_timeout**\은 DATASOURCE 객체를 생성하는 경우와 :c:func:`cci_prepare` 또는 :c:func:`cci_execute` 함수에서 내부적인 재접속이 발생하는 경우에 적용된다. 내부적인 재접속은 DATASOURCE에서 연결 객체를 얻은 경우와 :c:func:`cci_connect`/:c:func:`cci_connect_with_url` 함수로 연결 객체를 얻은 경우에서 모두 발생한다.
+        *   :c:func:`cci_property_set` 함수와 URL 문자열에서 동시에 속성 값을 명시하는 경우, :c:func:`cci_property_set` 함수에서 정의한 값으로 적용된다.
         
-        *	DATASOURCE 객체를 생성하는 시간은 내부적인 재접속 시간보다 오래 걸릴 수 있으므로, 두 가지 경우의 **login_timeout**\ 을 다르게 적용하는 것을 감안할 수 있다. 예를 들어, 전자의 경우를 5000(5초), 후자의 경우를 2000(2초)로 설정하고 싶다면, 후자의 설정을 위해 DATASOURCE 생성 후 :c:func:`cci_set_login_timeout` 함수를 사용한다.
+        *   **login_timeout**\은 DATASOURCE 객체를 생성하는 경우와 :c:func:`cci_prepare` 또는 :c:func:`cci_execute` 함수에서 내부적인 재접속이 발생하는 경우에 적용된다. 내부적인 재접속은 DATASOURCE에서 연결 객체를 얻은 경우와 :c:func:`cci_connect`/:c:func:`cci_connect_with_url` 함수로 연결 객체를 얻은 경우에서 모두 발생한다.
+        
+        *   DATASOURCE 객체를 생성하는 시간은 내부적인 재접속 시간보다 오래 걸릴 수 있으므로, 두 가지 경우의 **login_timeout**\ 을 다르게 적용하는 것을 감안할 수 있다. 예를 들어, 전자의 경우를 5000(5초), 후자의 경우를 2000(2초)로 설정하고 싶다면, 후자의 설정을 위해 DATASOURCE 생성 후 :c:func:`cci_set_login_timeout` 함수를 사용한다.
         
         .. CUBRIDSUS-12567 참고
 
@@ -2393,7 +2392,7 @@ CCI API 레퍼런스
         *    **CCI_ER_REQ_HANDLE**
         *    **CCI_ER_CON_HANDLE**
         *    **CCI_ER_USED_CONNECTION**
-        
+
     다음은 "Hello, CUBRID"라는 문자열을 출력하는 자바 저장 프로시저의 예이다.
     
     먼저 cubrid.conf에 있는 java_stored_procedure 파라미터의 값을 yes로 설정하고, 데이터베이스를 구동한다.
@@ -2534,7 +2533,7 @@ CCI API 레퍼런스
     .. seealso:: 
 
         :c:func:`cci_prepare`
-        
+
 .. c:function:: int cci_row_count(int conn_handle, int *row_count, T_CCI_ERROR * err_buf)
 
     가장 최근 수행한 질의에 의해 영향을 받은 행의 개수를 얻는다.
@@ -2865,7 +2864,6 @@ CCI API 레퍼런스
 
         **CCI_SCH_CLASS**, **CCI_SCH_VCLASS** 의 TYPE 칼럼 : proxy 타입이 추가됨. OLEDB, ODBC, PHP에서 사용할 경우 proxy와 vclass를 구분하지 않고 vclass로 보임.
 
-
     .. code-block:: c
     
         // gcc -o schema_info schema_info.c -m64 -I${CUBRID}/include -lnsl ${CUBRID}/lib/libcascci.so -lpthread
@@ -3152,7 +3150,7 @@ CCI API 레퍼런스
 .. c:function:: int cci_set_autocommit (int conn_handle, CCI_AUTOCOMMIT_MODE  autocommit_mode)
 
     현재 데이터베이스 연결의 자동 커밋 모드 여부를 설정한다. 이 함수는 자동 커밋 모드를 설정하거나 해제하는 데에만 사용되며, 이 함수를 호출하면 진행 중이던 트랜잭션은 모드 설정과 상관없이 커밋된다.
-    
+
     .. note:: **cubrid_broker.conf**\ 의 :ref:`CCI_DEFAULT_AUTOCOMMIT <cci_default_autocommit>`\ 은 프로그램 시작 시의 기본 자동 커밋 모드를 설정한다.
 
     :param conn_handle: (IN) 연결 핸들
@@ -3279,7 +3277,7 @@ CCI API 레퍼런스
         
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_USED_CONNECTION**
-        
+
 .. c:function:: int cci_set_make(T_CCI_SET *set, T_CCI_U_TYPE u_type, int size, void *value, int *indicator)
 
     새로운 **CCI_A_TYPE_SET** 타입의 set을 만든다. 만들어진 set은 :c:func:`cci_bind_param`\ 을 통해 **CCI_A_TYPE_SET** 으로 서버에 전달된다. :c:func:`cci_set_make`\ 에 의해 만들어진 set은 반드시 :c:func:`cci_set_free`\ 를 통해 사용된 메모리를 제거해야 한다. *u_type* 에 따른 *value* 의 타입은 :c:func:`cci_bind_param`\ 을 참고한다.

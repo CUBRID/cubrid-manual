@@ -47,7 +47,10 @@ Permanent volume is a database volume that exists permanently once it is created
 
 **Generic Volume**
 
-For efficient management, the volume type to be added to the database can be specified as one of the following: data, temp or index. If data usage is not specified, it is specified as a generic volume and it stores data and index. Also it is specified as the generic volume when a volume file is automatically added.
+For efficient management, the volume type to be added to the database can be specified as one of the following: data, temp or index. If the volume type is not specified, it is specified as a generic volume and it stores data and index. 
+However, schema is stored only on the generic volume; there is no specific volume type for storing schema.
+
+It is specified as the generic volume when a volume is automatically increased.
 
 **Data Volume**
 

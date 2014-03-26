@@ -859,6 +859,7 @@ Checking Broker Status
 
 The **cubrid broker status** utility allows you to check the broker status such as number of completed jobs and the number of standby jobs by providing various options. 
 The status of clients accessed SHARD or the status of SHARD can be displayed by using **-c** and **-m** options when the **SHARD** broker parameter in **cubrid_broker.conf** is set to ON.
+Also, by using **-S** option or **-P** option, each shard DB or each proxy information can be displayed.
 
 ::
 
@@ -901,11 +902,11 @@ The following [options] are available with the **cubrid broker status** utility.
     If it is used with the **-b** option, additional information on CAS is displayed. But SELECT, INSERT, UPDATE, DELETE, OTHERS items which shown on **-b** option are excluded.
     
     If it is used with the **-m** option, more detailed SHARD statistics information is displayed.
-
+    
     If it is used with the **-c** option, for each shard proxy, CLIENT-ID, CLIENT-IP, CONN-TIME, LAST-REQ-TIME, LAST-RES-TIME and LAST-REQ-CODE items are additionally printed.
 
     If it is used with the **-P** option, STMT-POOL-RATIO is additionally printed. This item shows the ratio to use statements in the pool when you are using prepared statements.
-
+    
 .. option:: -l SECOND
 
     The **-l** option is only used with -f option together. It specifies accumulation period (unit: sec.) when displaying the number of application servers whose client status is Waiting or Busy. If it is omitted, the default value (1 second) is specified. 
@@ -1038,12 +1039,12 @@ The following views information of server/database accessed by broker, the last 
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     ID   PID   QPS   LQS PSIZE STATUS         LAST ACCESS TIME      DB       HOST   LAST CONNECT TIME       CLIENT IP   CLIENT VERSION    SQL_LOG_MODE   TRANSACTION STIME  #CONNECT  #RESTART
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    1 26946     0     0 51168 IDLE         2011/11/16 16:23:42  demodb  localhost 2011/11/16 16:23:40      10.0.1.101     9.2.0.0062              NONE 2011/11/16 16:23:42         0         0
-    2 26947     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
-    3 26948     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
-    4 26949     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
-    5 26950     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
-
+     1 26946     0     0 51168 IDLE         2011/11/16 16:23:42  demodb  localhost 2011/11/16 16:23:40      10.0.1.101     9.2.0.0062              NONE 2011/11/16 16:23:42         0         0
+     2 26947     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+     3 26948     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+     4 26949     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+     5 26950     0     0 51172 IDLE         2011/11/16 16:23:34      -          -                   -          0.0.0.0                                -                   -         0         0
+    
 Meaning of each column in code above is as follows:
 
 *   LAST ACCESS TIME: Time when CAS runs or the latest time when an application client accesses CAS
@@ -1216,7 +1217,7 @@ If **-f** option is added when **-c** option is used, more detail client informa
     ---------------------------------------------------------------------------------------------------------------
      CLIENT-ID           CLIENT-IP             CONN-TIME         LAST-REQ-TIME         LAST-RES-TIME  LAST-REQ-CODE
     ---------------------------------------------------------------------------------------------------------------
-    
+
 The below explains the added columns.
 
 *   CLIENT-ID: The client serial number sequentially given in the proxy
@@ -1263,7 +1264,7 @@ The below displays the information for each proxy with **-P** option.
     ================================================================================================================================================================
              1     4       0   22174    26160    26160        0        0        0        0     0/60.0     0/60.0    5256             0       165        0         0
              2     4       0   35257    37903    23599     5152     4576     4576        0     0/60.0     0/60.0    4300             0       264        1         0
-
+                                                                                                                                                                                   
 The additional displayed items with **-P** option compared to **-b** option are as below.
 
 *   PROXY_ID: The index of a proxy(starting from 1)
@@ -1282,7 +1283,7 @@ If **-f** option is added to **-S** option, AS items are divided into (T W B 1s-
     ==========================================================================================================================================================
              1     4      0      0      0      0       0     0     0   0/60.0   0/60.0      0             0       165        0         0                    -
              2     4      0      0      0      0       0     0     0   0/60.0   0/60.0      0             0       264        1         0                    -
-                                    
+
 The following explains for the added item.
 
 *   STMT-POOL-RATIO: The ratio to use statements in the pool when you are using prepared statements.
@@ -1433,7 +1434,9 @@ To configure databases, database user IDs and IPs allowed to access the broker a
 
 *   <BR_NAME>: A broker name. If you specify this value, you can apply the changes only to specified brokers. If you omit it, you can apply the changes to all brokers.
 
-To display the databases, database user IDs and IPs that are allowed to access the broker in running on the screen, use the following command.  ::
+To display the databases, database user IDs and IPs that are allowed to access the broker in running on the screen, use the following command.  
+
+::
 
     cubrid broker acl status [<BR_NAME>]
 
@@ -1949,7 +1952,7 @@ When **SHARD** = ON, the log directory of CUBRID proxy can be configured by usin
 
 **Checking the Error Log**
 
-    The error log file records information on errors that occurred during the client's request processing and is stored to **$CUBRID/log/broker/error_log**\ `<broker_name>_<app_server_num>`\ **.err** file.
+    The error log file records information on errors that occurred during the client's request processing and is stored to **$CUBRID/log/broker/error_log**\ `<broker_name>_<app_server_num>`\ **.err** file. For error codes and error messages, see :ref:`cas-error`.
 
     The following example and description show an error log: 
     
@@ -2173,7 +2176,7 @@ When **SHARD** = ON, the log directory of CUBRID proxy can be configured by usin
         
     .. option:: -t NUMBER    
 
-        스레드의 개수 지정(기본값: 1)
+        The number of threads(default: 1)
         
     .. option:: -r COUNT
 

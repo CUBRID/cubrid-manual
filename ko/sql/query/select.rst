@@ -42,7 +42,8 @@ SELECT
         { [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN | 
         STRAIGHT_JOIN } <table_specification> ON <search_condition>
      
-    <join_table_specification2> ::= { CROSS JOIN | 
+    <join_table_specification2> ::= 
+		{ CROSS JOIN | 
         NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
     
     <lock_hint> ::= READ UNCOMMITTED
@@ -522,7 +523,7 @@ ORDER BY 절
 
     위의 SELECT 질의를 수행할 때 "GROUP BY a, b"는 
 
-    *   9.2 이하 버전에서 GROUP BY NVL(b, 2) (별칭 이름 b)로 해석되며, 아래 Q2와 동일한 결과를 출력한다.
+    *   9.2 이하 버전에서 "GROUP BY a, NVL(b, 2)"(별칭 이름 b)로 해석되며, 아래 Q2와 동일한 결과를 출력한다.
 
         .. code-block:: sql
         
@@ -537,7 +538,7 @@ ORDER BY 절
                     1            1
                     2            2
 
-    *   9.3 이상 버전에서 GROUP BY b (칼럼 이름 b)로 해석되며, 아래 Q3와 동일한 결과를 출력한다.
+    *   9.3 이상 버전에서 "GROUP BY a, b"(칼럼 이름 b)로 해석되며, 아래 Q3와 동일한 결과를 출력한다.
 
         .. code-block:: sql
         

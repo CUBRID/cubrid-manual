@@ -175,26 +175,7 @@ update_use_attribute_references 시스템 파라미터를 추가하고, 이 값�
 
 드라이버
 --------
-
-[CCI] 로그인 타임아웃 값 변경 함수 추가 및 datasource 속성 변경 함수 추가(CUBRIDSUS-12530)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-다음 함수들이 추가되었다.
- 
-*   cci_set_login_timeout  
- 
-        로그인 타임아웃을 밀리초 단위로 설정한다.
-    
-*   cci_get_login_timeout
- 
-        로그인 타임아웃 값을 반환한다.
- 
-    
-*   cci_datasource_change_property
- 
-    CCI의 DATASOURCE에 대해 key에 명시한 속성(property)의 값을 val에 설정한다. 이 함수를 사용하여 변경한 속성 값은 datasource 내 모든 연결에 적용된다.
- 
-    
+   
 운영 편의성
 -----------
 

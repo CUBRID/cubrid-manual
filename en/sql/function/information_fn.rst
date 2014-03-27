@@ -201,7 +201,7 @@ INDEX_CARDINALITY
 
 .. function:: INDEX_CARDINALITY(table, index, key_pos)
 
-    The **INDEX_CARDINALITY** function returns the index cardinality in a table. The index cardinality is the number of unique values defining the index. The index cardinality can be applied even to the partial key of the multiple column index and displays the number of the unique value for the partial key by specifying the column location with the third parameter. Please pay attention that this value is an approximate value.
+    The **INDEX_CARDINALITY** function returns the index cardinality in a table. The index cardinality is the number of unique values defining the index. The index cardinality can be applied even to the partial key of the multiple column index and displays the number of the unique value for the partial key by specifying the column location with the third parameter. Note that this value is an approximate value.
 
     If you want the updated result from this function, you should run **UPDATE STATISTICS** statement.
     

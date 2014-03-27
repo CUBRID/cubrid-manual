@@ -102,9 +102,9 @@ A column is a set of data values of a particular simple type, one for each row o
 ::
 
     <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]]
+        column_name <data_type> [[<default_or_shared_or_ai>] | [<column_constraint>]] ...
     
-        <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
+        <data_type> ::= <column_type> [<charset_modifier_clause>] [<collation_modifier_clause>]
 
             <charset_modifier_clause> ::= {CHARACTER_SET|CHARSET} {<char_string_literal>|<identifier>}
 
@@ -115,7 +115,7 @@ A column is a set of data values of a particular simple type, one for each row o
             DEFAULT <value_specification>  |
             AUTO_INCREMENT [(seed, increment)]
      
-        <column_constraint> ::= [CONSTRAINT constraint_name] { NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition> }
+        <column_constraint> ::= [CONSTRAINT constraint_name] {NOT NULL | UNIQUE | PRIMARY KEY | FOREIGN KEY <referential_definition>}
         
 Column Name
 ^^^^^^^^^^^
@@ -633,7 +633,7 @@ You cannot create the column definition because the **CREATE TABLE ... LIKE** st
     CREATE {TABLE | CLASS} <new_table_name> LIKE <source_table_name>;
 
 * *new_table_name*: A table name to be created
-* *source_table_name*: The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE … LIKE** statement.
+* *source_table_name*: The name of the original table that already exists in the database. The following tables cannot be specified as original tables in the **CREATE TABLE ??LIKE** statement.
     * Partition table
     * Table that contains an **AUTO_INCREMENT** column
     * Table that uses inheritance or methods
@@ -856,8 +856,12 @@ You can modify the structure of a table by using the **ALTER** statement. You ca
             <alter_rename> ::= 
                 [ATTRIBUTE | COLUMN]
                 {
-                    <old_column_name> AS <new_column_name> |
-                    FUNCTION OF <column_name> AS <function_name>
+                    old_column_name AS new_column_name |
+                    FUNCTION OF column_name AS function_name
+                } |
+                [CONSTRAINT | {INDEX|KEY}]
+                {
+                    old_name {AS|TO} new_name
                 }
                 
             <alter_change> ::= 
@@ -1078,7 +1082,7 @@ You can define the index attributes for a specific column by using the **ADD IND
 ALTER COLUMN ... SET DEFAULT Clause
 -----------------------------------
 
-You can specify a new default value for a column that has no default value or modify the existing default value by using the **ALTER COLUMN** … **SET DEFAULT**. You can use the **CHANGE** clause to change the default value of multiple columns with a single statement. For details, see the :ref:`change-column`. ::
+You can specify a new default value for a column that has no default value or modify the existing default value by using the **ALTER COLUMN** ??**SET DEFAULT**. You can use the **CHANGE** clause to change the default value of multiple columns with a single statement. For details, see the :ref:`change-column`. ::
 
     ALTER [ TABLE | CLASS ] table_name ALTER [COLUMN] column_name SET DEFAULT value
 
@@ -1475,7 +1479,8 @@ RENAME INDEX/CONSTRAINT Clause
 
 :: 
      
-    ALTER TABLE table_name RENAME {CONSTRAINT | {INDEX|KEY}} old_name {AS|TO} new_name ;
+    ALTER TABLE table_name 
+    RENAME {CONSTRAINT | {INDEX|KEY}} old_name {AS|TO} new_name ;
 
 *   CONSTRAINT: UNIQUE, PRIMARY KEY, FOREIGN KEY
 *   INDEX or KEY: INDEX (Functionally, this is the same as changing an index name in :ref:`alter-index`) 
@@ -1516,8 +1521,8 @@ DROP COLUMN Clause
 
 You can delete a column in a table by using the **DROP COLUMN** clause. You can specify multiple columns to delete simultaneously by separating them with commas (,). ::
 
-    ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    DROP [ COLUMN | ATTRIBUTE ] column_name, ... ;
+    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
+    DROP [COLUMN | ATTRIBUTE] column_name, ... ;
     
 *   *table_name* : Specifies the name of a table that has a column to be deleted.
 *   *column_ name* : Specifies the name of a column to be deleted. Multiple columns can be specified by separating them with commas (,).
@@ -1531,7 +1536,7 @@ DROP CONSTRAINT Clause
 
 You can drop the constraints pre-defined for the table, such as **UNIQUE**, **PRIMARY KEY** and **FOREIGN KEY** by using the **DROP CONSTRAINT** clause. In this case, you must specify a constraint name. You can check these names by using the CSQL command (**;schema table_name**). ::
 
-    ALTER [ TABLE | CLASS ] table_name
+    ALTER [TABLE | CLASS] table_name
     DROP CONSTRAINT constraint_name ;
 
 *   *table_name* : Specifies the name of a table that has a constraint to be dropped.
@@ -1609,7 +1614,7 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
 
 ::
 
-    DROP [ TABLE | CLASS ] [ IF EXISTS ] <table_specification_comma_list> [ CASCADE CONSTRAINTS ] ;
+    DROP [TABLE | CLASS] [IF EXISTS] <table_specification_comma_list> [CASCADE CONSTRAINTS] ;
     
         <table_specification_comma_list> ::= 
             <single_table_spec> | ( <table_specification_comma_list> ) 
@@ -1622,6 +1627,7 @@ You can drop an existing table by the **DROP** statement. Multiple tables can be
 *   If a super class name is specified after the **ONLY** keyword, only the super class, not the sub classes inheriting from it, is deleted. If a super class name is specified after the **ALL** keyword, the super classes as well as the sub classes inheriting from it are all deleted. You can specify the list of sub classes not to be deleted after the **EXCEPT** keyword.
 *   If sub classes that inherit from the super class specified after the **ALL** keyword are specified after the **EXCEPT** keyword, they are not deleted.
 *   Specifies the list of subclasses which are not to be deleted after the **EXCEPT** keyword.
+*	**CASCADE CONSTRAINTS**: The table is dropped and also forein keys of other tables which refer this table are dropped.
 
 .. code-block:: sql
 

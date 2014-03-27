@@ -32,8 +32,10 @@ Controlling Broker
 
 The following **cubrid** utility syntax shows how to control CUBRID broker process. 
 One of the following can be specified in <command>: 
-**start** is used to run services; **stop** is used to stop services; 
-**restart** is used to restart services; **status** is used to check status;  
+**start** is used to run services; 
+**stop** is used to stop services; 
+**restart** is used to restart services; 
+**status** is used to check status;  
 **acl** is used to limit broker access; 
 **on**/**off** is used to enable/disable the specified broker; 
 **reset** is used to reset the connection to broker; 
@@ -87,8 +89,9 @@ Registering Services
 
 You can register database servers, CUBRID brokers, CUBRID Manager(s) or CUBRID HA as CUBRID service in the configuration file ( **cubrid.conf** ). To register services, you can input for each **server**, **broker**, **manager** or **heartbeat** as a parameter value, and it is possible to input several values by concatenating them in comma(,).
 
-If you do not register any service, only master process is registered by default. 
-It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
+If you do not register any service, only master process is registered by default. It is convenient for you to view status of all related processes at a glance or start and stop the processes at once with the **cubrid** **service** utility once it is registered as CUBRID service. 
+
+For details on CUBRID HA configuration, see :ref:`cubrid-service-util`.
 
 The following example shows how to register database server and broker as service in the **cubrid.conf** file and enable databases ( *demodb* and *testdb* ) to start automatically at once when CUBRID server starts running.
 
@@ -858,14 +861,17 @@ Checking Broker Status
 ----------------------
 
 The **cubrid broker status** utility allows you to check the broker status such as number of completed jobs and the number of standby jobs by providing various options. 
-The status of clients accessed SHARD or the status of SHARD can be displayed by using **-c** and **-m** options when the **SHARD** broker parameter in **cubrid_broker.conf** is set to ON.
-Also, by using **-S** option or **-P** option, each shard DB or each proxy information can be displayed.
+The status of clients accessed SHARD or the status of SHARD can be displayed by using **-c** and **-m** options when the **SHARD** broker parameter in **cubrid_broker.conf** is set to ON. Also, by using **-S** option or **-P** option, each shard DB or each proxy information can be displayed.
 
 ::
 
     cubrid broker status [options] [expr]
-    
-Specifying [expr] performs that the status of specific brokers which include [expr] in their names is monitored; specifying no argument means that status of all brokers which are registered in the broker environment configuration file ( **cubrid_broker.conf** ) is monitored.  
+
+*   *expr*: A part of the broker name or "SERVICE=ON|OFF"
+
+Specifying *expr* performs that the status of specific brokers which include *expr* in their names is monitored; specifying no argument means that status of all brokers which are registered in the broker environment configuration file ( **cubrid_broker.conf** ) is monitored.  
+
+If "SERVICE=ON" is specified on *expr*, only the status of working brokers is displayed; if "SERVICE=OFF" is specified, only the status of stopped brokers is displayed.
 
 The following [options] are available with the **cubrid broker status** utility. -b, -q, -c, -m, -S, -P and -f are options to define the information to print; -s, -l and -t are options to control printing; -c, -m, -S and -P are options applied when using SHARD feature. All of these are possible to use as combining each other.
 
@@ -1338,7 +1344,8 @@ Limiting Broker Access
 ----------------------
 
 To limit the client applications accessing the broker, set to **ON** for the **ACCESS_ CONTROL** parameter in the **cubrid_broker.conf** file, and enter a name of the file in which the users and the list of databases and IP addresses allowed to access the **ACCESS_CONTROL_FILE** parameter value are written. 
-The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified.
+The default value of the **ACCESS_CONTROL** broker parameter is **OFF**. 
+The **ACCESS_CONTROL** and **ACCESS_CONTROL_FILE** parameters must be written under [broker] which common parameters are specified.
 
 The format of **ACCESS_CONTROL_FILE** is as follows: 
 
@@ -1627,27 +1634,27 @@ The following options are available with the **cubrid broker test** utility.
 
 .. option:: -D DB_NAME 
      
-    Specify the DB name of the test target. When this option is omitted, the value of SHARD_DB_NAME parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an error occurs.
+    Specifies the DB name of the test target. When this option is omitted, the value of SHARD_DB_NAME parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an error occurs.
      
 .. option:: -u DB_USER 
 
-    Specify the DB account of the test target. When this option is omitted, the value of SHARD_DB_USER parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, "public" is input in CUBRID, or "root" is input in MySQL.
+    Specifies the DB account of the test target. When this option is omitted, the value of SHARD_DB_USER parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, "public" is input in CUBRID, or "root" is input in MySQL.
      
 .. option:: -p DB_PASSWORD 
 
-    Specify the DB password of the test target. When this option is omitted, the value of SHARD_DB_PASSWORD parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an empty string("") is input in CUBRID and MySQL.
+    Specifies the DB password of the test target. When this option is omitted, the value of SHARD_DB_PASSWORD parameter is used if the value of a SHARD parameter in cubrid_broker.conf is ON. If the value of a SHARD parameter is OFF, an empty string("") is input in CUBRID and MySQL.
      
 .. option:: -c QUERY 
 
-    Specify the query string. **-c** or **-i** option can be used to specify a query. If they are omitted, only the connection information between a broker and a DB is printed.
+    Specifies the query string. **-c** or **-i** option can be used to specify a query. If they are omitted, only the connection information between a broker and a DB is printed.
      
 .. option:: -i FILE_NAME 
 
-    Specify the file where you saved the queries to input. **-c** or **-i** option can be used to specify a query.  If they are omitted, only the connection information between a broker and a DB is printed. 
+    Specifies the file where you saved the queries to input. **-c** or **-i** option can be used to specify a query.  If they are omitted, only the connection information between a broker and a DB is printed. 
      
 .. option:: -o FILE_NAME 
 
-    Specify the file name to save the execution result to be displayed to the console. If this is omitted, the execution result is output only to the console.
+    Specifies the file name to save the execution result to be displayed to the console. If this is omitted, the execution result is output only to the console.
      
 .. option:: -s 
 
@@ -1928,333 +1935,450 @@ There are three types of logs that relate to starting the broker: access, error 
 
 When **SHARD** = ON, the log directory of CUBRID proxy can be configured by using the **SHARD_PROXY_LOG_DIR** parameter. 
 
-**Checking the Access Log**
+Checking the Access Log
+^^^^^^^^^^^^^^^^^^^^^^^
 
-    The access log file records information on the application client and is stored to **$CUBRID/log/broker/**\ `<broker_name>`\ **.access** file. If the **LOG_BACKUP** parameter is configured to **ON** in the broker configuration file, when the broker stops properly, the access log file is stored with the date and time that the broker has stopped. For example, if broker1 stopped at 12:27 P.M. on June 17, 2008, an access file named broker1.access.20080617.1227 is generated in the **log/broker** directory. The following example shows an access log.
+The access log file records information on the application client and is stored to **$CUBRID/log/broker/**\ `<broker_name>`\ **.access** file. If the **LOG_BACKUP** parameter is configured to **ON** in the broker configuration file, when the broker stops properly, the access log file is stored with the date and time that the broker has stopped. For example, if broker1 stopped at 12:27 P.M. on June 17, 2008, an access file named broker1.access.20080617.1227 is generated in the **log/broker** directory. The following example shows an access log.
 
-    The following example and description show an access log file created in the log directory: 
+The following example and description show an access log file created in the log directory: 
+
+::
+
+    1 192.168.1.203 - - 972523031.298 972523032.058 2008/06/17 12:27:46~2008/06/17 12:27:47 7118 - -1
+    2 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:47~2008/06/17 12:27:47 7119 ERR 1025
+    1 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:49~2008/06/17 12:27:49 7118 - -1
+
+*   1: ID assigned to the application server of the broker
+*   192.168.1.203: IP address of the application client
+*   972523031.298: UNIX timestamp value when the client's request processing started
+*   2008/06/17 12:27:46: Time when the client's request processing started
+*   972523032.058: UNIX timestamp value when the client's request processing finished
+*   2008/06/17 12:27:47: Time when the client's request processing finished
+*   7118: Process ID of the application server
+*   -1: No error occurred during the request processing
+*   ERR 1025: Error occurred during the request processing. Error information exists in offset=1025 of the error log file
+
+Checking the Error Log
+^^^^^^^^^^^^^^^^^^^^^^
+
+The error log file records information on errors that occurred during the client's request processing and is stored to **$CUBRID/log/broker/error_log**\ `<broker_name>_<app_server_num>`\ **.err** file. For error codes and error messages, see :ref:`cas-error`.
+
+The following example and description show an error log: 
+
+::
+
+    Time: 02/04/09 13:45:17.687 - SYNTAX ERROR *** ERROR CODE = -493, Tran = 1, EID = 38
+    Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
+
+*   Time: 02/04/09 13:45:17.687: Time when the error occurred
+*   - SYNTAX ERROR: Type of error (e.g. SYNTAX ERROR, ERROR, etc.)
+*   \*\*\* ERROR CODE = -493: Error code
+*   Tran = 1: Transaction ID. -1 indicates that no transaction ID is assigned.
+*   EID = 38: Error ID. This ID is used to find the SQL log related to the server or client logs when an error occurs during SQL statement processing.
+*   Syntax ...: Error message (An ellipsis ( ... ) indicates omission.)
+
+.. _sql-log-manage:
+
+Managing the SQL Log
+^^^^^^^^^^^^^^^^^^^^
+
+The SQL log file records SQL statements requested by the application client and is stored with the name of *<broker_name>_<app_server_num>*. sql.log. The SQL log is generated in the log/broker/sql_log directory when the SQL_LOG parameter is set to ON. Note that the size of the SQL log file to be generated cannot exceed the value set for the SQL_LOG_MAX_SIZE parameter. CUBRID offers the **broker_log_top**, **broker_log_converter**, and **broker_log_runner** utilities to manage SQL logs. Each utility should be executed in a directory where the corresponding SQL log exists.
+
+The following examples and descriptions show SQL log files: 
+
+::
+
+    13-06-11 15:07:39.282 (0) STATE idle
+    13-06-11 15:07:44.832 (0) CLIENT IP 192.168.10.100
+    13-06-11 15:07:44.835 (0) CLIENT VERSION 9.2.0.0062
+    13-06-11 15:07:44.835 (0) session id for connection 0
+    13-06-11 15:07:44.836 (0) connect db demodb user dba url jdbc:cubrid:192.168.10.200:30000:demodb:dba:********: session id 12
+    13-06-11 15:07:44.836 (0) DEFAULT isolation_level 3, lock_timeout -1
+    13-06-11 15:07:44.840 (0) end_tran COMMIT
+    13-06-11 15:07:44.841 (0) end_tran 0 time 0.000
+    13-06-11 15:07:44.841 (0) *** elapsed time 0.004
     
-    ::
-
-        1 192.168.1.203 - - 972523031.298 972523032.058 2008/06/17 12:27:46~2008/06/17 12:27:47 7118 - -1
-        2 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:47~2008/06/17 12:27:47 7119 ERR 1025
-        1 192.168.1.203 - - 972523052.778 972523052.815 2008/06/17 12:27:49~2008/06/17 12:27:49 7118 - -1
-
-    *   1: ID assigned to the application server of the broker
-    *   192.168.1.203: IP address of the application client
-    *   972523031.298: UNIX timestamp value when the client's request processing started
-    *   2008/06/17 12:27:46: Time when the client's request processing started
-    *   972523032.058: UNIX timestamp value when the client's request processing finished
-    *   2008/06/17 12:27:47: Time when the client's request processing finished
-    *   7118: Process ID of the application server
-    *   -1: No error occurred during the request processing
-    *   ERR 1025: Error occurred during the request processing. Error information exists in offset=1025 of the error log file
-
-**Checking the Error Log**
-
-    The error log file records information on errors that occurred during the client's request processing and is stored to **$CUBRID/log/broker/error_log**\ `<broker_name>_<app_server_num>`\ **.err** file. For error codes and error messages, see :ref:`cas-error`.
-
-    The following example and description show an error log: 
+    13-06-11 15:07:44.844 (0) check_cas 0
+    13-06-11 15:07:44.848 (0) set_db_parameter lock_timeout 1000
+    13-06-11 15:09:36.299 (0) check_cas 0
+    13-06-11 15:09:36.303 (0) get_db_parameter isolation_level 3
+    13-06-11 15:09:36.375 (1) prepare 0 CREATE TABLE unique_tbl (a INT PRIMARY key);
+    13-06-11 15:09:36.376 (1) prepare srv_h_id 1
+    13-06-11 15:09:36.419 (1) set query timeout to 0 (no limit)
+    13-06-11 15:09:36.419 (1) execute srv_h_id 1 CREATE TABLE unique_tbl (a INT PRIMARY key);
+    13-06-11 15:09:38.247 (1) execute 0 tuple 0 time 1.827
+    13-06-11 15:09:38.247 (0) auto_commit
+    13-06-11 15:09:38.344 (0) auto_commit 0
+    13-06-11 15:09:38.344 (0) *** elapsed time 1.968
     
-    ::
-
-        Time: 02/04/09 13:45:17.687 - SYNTAX ERROR *** ERROR CODE = -493, Tran = 1, EID = 38
-        Syntax: Unknown class "unknown_tbl". select * from unknown_tbl
-
-    *   Time: 02/04/09 13:45:17.687: Time when the error occurred
-    *   - SYNTAX ERROR: Type of error (e.g. SYNTAX ERROR, ERROR, etc.)
-    *   \*\*\* ERROR CODE = -493: Error code
-    *   Tran = 1: Transaction ID. -1 indicates that no transaction ID is assigned.
-    *   EID = 38: Error ID. This ID is used to find the SQL log related to the server or client logs when an error occurs during SQL statement processing.
-    *   Syntax ...: Error message (An ellipsis ( ... ) indicates omission.)
-
-**Managing the SQL Log**
-
-    The SQL log file records SQL statements requested by the application client and is stored with the name of *<broker_name>_<app_server_num>*. sql.log. The SQL log is generated in the log/broker/sql_log directory when the SQL_LOG parameter is set to ON. Note that the size of the SQL log file to be generated cannot exceed the value set for the SQL_LOG_MAX_SIZE parameter. CUBRID offers the **broker_log_top**, **broker_log_converter**, and **broker_log_runner** utilities to manage SQL logs. Each utility should be executed in a directory where the corresponding SQL log exists.
-
-    The following examples and descriptions show SQL log files: 
+    13-06-11 15:09:54.481 (0) get_db_parameter isolation_level 3
+    13-06-11 15:09:54.484 (0) close_req_handle srv_h_id 1
+    13-06-11 15:09:54.484 (2) prepare 0 INSERT INTO unique_tbl VALUES (1);
+    13-06-11 15:09:54.485 (2) prepare srv_h_id 1
+    13-06-11 15:09:54.488 (2) set query timeout to 0 (no limit)
+    13-06-11 15:09:54.488 (2) execute srv_h_id 1 INSERT INTO unique_tbl VALUES (1);
+    13-06-11 15:09:54.488 (2) execute 0 tuple 1 time 0.001
+    13-06-11 15:09:54.488 (0) auto_commit
+    13-06-11 15:09:54.505 (0) auto_commit 0
+    13-06-11 15:09:54.505 (0) *** elapsed time 0.021
     
-    ::
+    ...
     
-        13-06-11 15:07:39.282 (0) STATE idle
-        13-06-11 15:07:44.832 (0) CLIENT IP 192.168.10.100
-        13-06-11 15:07:44.835 (0) CLIENT VERSION 9.2.0.0062
-        13-06-11 15:07:44.835 (0) session id for connection 0
-        13-06-11 15:07:44.836 (0) connect db demodb user dba url jdbc:cubrid:192.168.10.200:30000:demodb:dba:********: session id 12
-        13-06-11 15:07:44.836 (0) DEFAULT isolation_level 3, lock_timeout -1
-        13-06-11 15:07:44.840 (0) end_tran COMMIT
-        13-06-11 15:07:44.841 (0) end_tran 0 time 0.000
-        13-06-11 15:07:44.841 (0) *** elapsed time 0.004
-        
-        13-06-11 15:07:44.844 (0) check_cas 0
-        13-06-11 15:07:44.848 (0) set_db_parameter lock_timeout 1000
-        13-06-11 15:09:36.299 (0) check_cas 0
-        13-06-11 15:09:36.303 (0) get_db_parameter isolation_level 3
-        13-06-11 15:09:36.375 (1) prepare 0 CREATE TABLE unique_tbl (a INT PRIMARY key);
-        13-06-11 15:09:36.376 (1) prepare srv_h_id 1
-        13-06-11 15:09:36.419 (1) set query timeout to 0 (no limit)
-        13-06-11 15:09:36.419 (1) execute srv_h_id 1 CREATE TABLE unique_tbl (a INT PRIMARY key);
-        13-06-11 15:09:38.247 (1) execute 0 tuple 0 time 1.827
-        13-06-11 15:09:38.247 (0) auto_commit
-        13-06-11 15:09:38.344 (0) auto_commit 0
-        13-06-11 15:09:38.344 (0) *** elapsed time 1.968
-        
-        13-06-11 15:09:54.481 (0) get_db_parameter isolation_level 3
-        13-06-11 15:09:54.484 (0) close_req_handle srv_h_id 1
-        13-06-11 15:09:54.484 (2) prepare 0 INSERT INTO unique_tbl VALUES (1);
-        13-06-11 15:09:54.485 (2) prepare srv_h_id 1
-        13-06-11 15:09:54.488 (2) set query timeout to 0 (no limit)
-        13-06-11 15:09:54.488 (2) execute srv_h_id 1 INSERT INTO unique_tbl VALUES (1);
-        13-06-11 15:09:54.488 (2) execute 0 tuple 1 time 0.001
-        13-06-11 15:09:54.488 (0) auto_commit
-        13-06-11 15:09:54.505 (0) auto_commit 0
-        13-06-11 15:09:54.505 (0) *** elapsed time 0.021
-        
-        ...
-        
-        13-06-11 15:19:04.593 (0) get_db_parameter isolation_level 3
-        13-06-11 15:19:04.597 (0) close_req_handle srv_h_id 2
-        13-06-11 15:19:04.597 (7) prepare 0 SELECT * FROM unique_tbl  WHERE ROWNUM BETWEEN 1 AND 5000;
-        13-06-11 15:19:04.598 (7) prepare srv_h_id 2 (PC)
-        13-06-11 15:19:04.602 (7) set query timeout to 0 (no limit)
-        13-06-11 15:19:04.602 (7) execute srv_h_id 2 SELECT * FROM unique_tbl  WHERE ROWNUM BETWEEN 1 AND 5000;
-        13-06-11 15:19:04.602 (7) execute 0 tuple 1 time 0.001
-        13-06-11 15:19:04.607 (0) end_tran COMMIT
-        13-06-11 15:19:04.607 (0) end_tran 0 time 0.000
-        13-06-11 15:19:04.607 (0) *** elapsed time 0.009
+    13-06-11 15:19:04.593 (0) get_db_parameter isolation_level 3
+    13-06-11 15:19:04.597 (0) close_req_handle srv_h_id 2
+    13-06-11 15:19:04.597 (7) prepare 0 SELECT * FROM unique_tbl  WHERE ROWNUM BETWEEN 1 AND 5000;
+    13-06-11 15:19:04.598 (7) prepare srv_h_id 2 (PC)
+    13-06-11 15:19:04.602 (7) set query timeout to 0 (no limit)
+    13-06-11 15:19:04.602 (7) execute srv_h_id 2 SELECT * FROM unique_tbl  WHERE ROWNUM BETWEEN 1 AND 5000;
+    13-06-11 15:19:04.602 (7) execute 0 tuple 1 time 0.001
+    13-06-11 15:19:04.607 (0) end_tran COMMIT
+    13-06-11 15:19:04.607 (0) end_tran 0 time 0.000
+    13-06-11 15:19:04.607 (0) *** elapsed time 0.009
 
-    *   13-06-11 15:07:39.282: Time when the application sent the request
+*   13-06-11 15:07:39.282: Time when the application sent the request
 
-    *   (1): Sequence number of the SQL statement group. If prepared statement pooling is used, it is uniquely assigned to each SQL statement in the file.
+*   (1): Sequence number of the SQL statement group. If prepared statement pooling is used, it is uniquely assigned to each SQL statement in the file.
 
-    *   CLIENT IP: An IP of an application client
+*   CLIENT IP: An IP of an application client
+
+*   CLIENT VERSION: A driver's version of an application client
+
+*   prepare 0: Whether or not it is a prepared statement
+
+*   prepare srv_h_id 1: Prepares the SQL statement as srv_h_id 1.
+
+*   (PC): It is displayed if the data in the plan cache is used.
+
+*   Execute 0 tuple 1 time 0.001: One row is executed. The time spent is 0.001 seconds.
+
+*   auto_commit/auto_rollback: Automatically committed or rolled back. The second auto_commit/auto_rollback is an error code. 0 indicates that the transaction has been completed without an error.
+
+.. _broker_log_top:
+
+broker_log_top
+""""""""""""""
+
+The **broker_log_top** utility analyzes the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in **log.top.res**, respectively.
+
+The **broker_log_top** utility is useful to analyze a long running query. The syntax is as follows: 
     
-    *   CLIENT VERSION: A driver's version of an application client
+::
 
-    *   prepare 0: Whether or not it is a prepared statement
+    broker_log_top [options] sql_log_file_list
 
-    *   prepare srv_h_id 1: Prepares the SQL statement as srv_h_id 1.
+* *sql_log_file_list*: names of log files to analyze.
 
-    *   (PC): It is displayed if the data in the plan cache is used.
+The following is [options] used on **broker_log_top**.
 
-    *   Execute 0 tuple 1 time 0.001: One row is executed. The time spent is 0.001 seconds.
+.. program:: broker_log_top
 
-    *   auto_commit/auto_rollback: Automatically committed or rolled back. The second auto_commit/auto_rollback is an error code. 0 indicates that the transaction has been completed without an error.
+.. option:: -t
 
-    The **broker_log_top** utility analyzes the SQL logs which are generated for a specific period. As a result, the information of SQL statements and time execution are displayed in files by order of the longest execution time; the results of SQL statements are stored in **log.top.q** and those of execution time are stored in **log.top.res**, respectively.
+    The result is displayed in transaction unit.
 
-    The **broker_log_top** utility is useful to analyze a long running query. The syntax is as follows: 
-        
-    ::
+.. option:: -F DATETIME
 
-        broker_log_top [options] sql_log_file_list
+    Specifies the execution start date and time of the SQL statements to be analyzed. The input format is YY[-MM[-DD[ hh[:mm[:ss[.msec]]]]]], and the part enclosed by [] can be omitted. If you omit the value, it is regarded as that 01 is input for MM and DD, and 0 is input for hh, mm, ss and msec.
 
-    * *sql_log_file_list*: names of log files to analyze.
+.. option:: -T DATETIME
 
-    The following is [options] used on **broker_log_top**.
+    Specifies the execution end date and time of the SQL statements to be analyzed. The input format is the same with the *DATE* in the **-F** options.
 
-    .. program:: broker_log_top
-
-    .. option:: -t
-
-        The result is displayed in transaction unit.
-
-    .. option:: -F DATE
-
-        This option specifies the execution start date of the SQL statements to be analyzed. The input format is YY[-MM[-DD[ hh[:mm[:ss[.msec]]]]]], and the part enclosed by [] can be omitted. If you omit the value, it is regarded as that 01 is input for MM and DD, and 0 is input for hh, mm, ss and msec.
-
-    :: option:: -T DATE
-
-        This option specifies the execution end date of the SQL statements to be analyzed. The input format is the same with the *DATE* in the **-F** options.
-
-    All logs are displayed by SQL statement if any option is not specified.
-        
-    The following sets the search range to milliseconds 
+All logs are displayed by SQL statement if any option is not specified.
     
-    ::
+The following sets the search range to milliseconds 
 
-        broker_log_top -F "01/19 15:00:25.000" -T "01/19 15:15:25.180" log1.log
-        
-    The part where the time format is omitted is set to 0 by default. This means that -F "01/19 00:00:00.000" -T "01/20 00:00:00.000" is input. 
+::
+
+    broker_log_top -F "01/19 15:00:25.000" -T "01/19 15:15:25.180" log1.log
     
-    ::
+The part where the time format is omitted is set to 0 by default. This means that -F "01/19 00:00:00.000" -T "01/20 00:00:00.000" is input. 
 
-        broker_log_top -F "01/19" -T "01/20" log1.log
+::
 
-    The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a white space on Windows. 
+    broker_log_top -F "01/19" -T "01/20" log1.log
+
+The following logs are the results of executing the broker_log_top utility; logs are generated from Nov. 11th to Nov. 12th, and it is displayed in the order of the longest execution of SQL statements. Each month and day are separated by a slash (/) when specifying period. Note that "\*.sql.log" is not recognized so the SQL logs should be separated by a white space on Windows. 
+
+::
+
+    --Execution broker_log_top on Linux
+    % broker_log_top -F "11/11" -T "11/12" -t *.sql.log
+
+    query_editor_1.sql.log
+    query_editor_2.sql.log
+    query_editor_3.sql.log
+    query_editor_4.sql.log
+    query_editor_5.sql.log
+
+    --Executing broker_log_top on Windows
+    % broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
+
+The **log.top.q** and **log.top.res** files are generated in the same directory where the analyzed logs are stored when executing the example above; 
+In the **log.top.q** file, you can see each SQL statement, and its line number. In the **log.top.res** file, you can see the minimum execution time, the maximum execution time, the average execution time, and the number of execution queries for each SQL statement. 
+
+::
+
+    --log.top.q file
+    [Q1]-------------------------------------------
+    broker1_6.sql.log:137734
+    11/11 18:17:59.396 (27754) execute_all srv_h_id 34 select a.int_col, b.var_col from dml_v_view_6 a, dml_v_view_6 b, dml_v_view_6 c , dml_v_view_6 d, dml_v_view_6 e where a.int_col=b.int_col and b.int_col=c.int_col and c.int_col=d.int_col and d.int_col=e.int_col order by 1,2;
+    11/11 18:18:58.378 (27754) execute_all 0 tuple 497664 time 58.982
+    .
+    .
+    [Q4]-------------------------------------------
+    broker1_100.sql.log:142068
+    11/11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
+    11/11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
+
+    --log.top.res file
+
+                  max       min        avg   cnt(err)
+    -----------------------------------------------------
+    [Q1]        58.982    30.371    44.676    2 (0)
+    [Q2]        49.556    24.023    32.688    6 (0)
+    [Q3]        35.548    25.650    30.599    2 (0)
+    [Q4]        30.469     0.001     0.103 1050 (0)
+
+.. _broker_log_converter:
+
+broker_log_converter
+""""""""""""""""""""
+
+To store SQL logs created in log/broker/sql_log under the installation directory to a separate file, the **broker_log_converter** utility is executed. The syntax of the **broker_log_converter** utility is as follows. The example shows how to store queries in the query_editor_1.sql.log file to the query_convert.in file. 
+
+::
+
+    broker_log_converter [option] SQL_log_file output_file
     
-    ::
+* *SQL_log_file*: SQL log file located in $CUBRID/log/broker/sql_log directory. It only saves SQL log when the application sends a query through only a driver, and does not save SQL log when the query is executed through CSQL interpreter.
+* *output_file*: an output file which the input format is followed by **broker_log_runner**
 
-        --Execution broker_log_top on Linux
-        % broker_log_top -F "11/11" -T "11/12" -t *.sql.log
+The following is the [option] used in **broker_log_converter**.
 
-        query_editor_1.sql.log
-        query_editor_2.sql.log
-        query_editor_3.sql.log
-        query_editor_4.sql.log
-        query_editor_5.sql.log
+.. program:: broker_log_converter
 
-        --Executing broker_log_top on Windows
-        % broker_log_top -F "11/11" -T "11/12" -t query_editor_1.sql.log query_editor_2.sql.log query_editor_3.sql.log query_editor_4.sql.log query_editor_5.sql.log
-
-    The **log.top.q** and **log.top.res** files are generated in the same directory where the analyzed logs are stored when executing the example above; 
-    In the **log.top.q** file, you can see each SQL statement, and its line number. In the **log.top.res** file, you can see the minimum execution time, the maximum execution time, the average execution time, and the number of execution queries for each SQL statement. 
+.. option:: -i
     
-    ::
+    It prints QUERY_ID comment in front of the query.
 
-        --log.top.q file
-        [Q1]-------------------------------------------
-        broker1_6.sql.log:137734
-        11/11 18:17:59.396 (27754) execute_all srv_h_id 34 select a.int_col, b.var_col from dml_v_view_6 a, dml_v_view_6 b, dml_v_view_6 c , dml_v_view_6 d, dml_v_view_6 e where a.int_col=b.int_col and b.int_col=c.int_col and c.int_col=d.int_col and d.int_col=e.int_col order by 1,2;
-        11/11 18:18:58.378 (27754) execute_all 0 tuple 497664 time 58.982
-        .
-        .
-        [Q4]-------------------------------------------
-        broker1_100.sql.log:142068
-        11/11 18:12:38.387 (27268) execute_all srv_h_id 798 drop table list_test;
-        11/11 18:13:08.856 (27268) execute_all 0 tuple 0 time 30.469
+If QUERY_ID comment exists on the query, tracing a query is easier since QUERY_ID information is printed to the SQL log(located in $CUBRID/log/broker/sql_log) of the broker when replaying the queries of **output_file**.
 
-        --log.top.res file
+The following example shows how to convert the query in the query_editor_1.sql.log file into the query_convert.in file. 
 
-                      max       min        avg   cnt(err)
-        -----------------------------------------------------
-        [Q1]        58.982    30.371    44.676    2 (0)
-        [Q2]        49.556    24.023    32.688    6 (0)
-        [Q3]        35.548    25.650    30.599    2 (0)
-        [Q4]        30.469     0.001     0.103 1050 (0)
+::
 
-    To store SQL logs created in log/broker/sql_log under the installation directory to a separate file, the **broker_log_converter** utility is executed. The syntax of the **broker_log_converter** utility is as follows. The example shows how to store queries in the query_editor_1.sql.log file to the query_convert.in file. 
+    % cd CUBRID/log/broker/sql_log
+    % broker_log_converter query_editor_1.sql.log query_convert.in
+
+.. _broker_log_runner:
+
+broker_log_runner
+"""""""""""""""""
+
+To re-execute queries stored in the query file which has been created by the **broker_log_converter** utility, execute the **broker_log_runner** utility.
+
+The syntax of the **broker_log_runner** utility is as follows: 
+
+::
+
+    broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
     
-    ::
+*   *broker_host*: IP address or host name of the CUBRID broker
+*   *broker_port*: Port number of the CUBRID broker
+*   *dbname*: Name of the database against which queries are to be executed  
+*   *exec_script_file*: Name of the file where execution results are to be stored.
 
-        broker_log_converter [option] SQL_log_file output_file
-        
-    * *SQL_log_file*: SQL log file located in $CUBRID/log/broker/sql_log directory. It only saves SQL log when the application sends a query through only a driver, and does not save SQL log when the query is executed through CSQL interpreter.
-    * *output_file*: an output file which the input format is followed by **broker_log_runner**
+The following is [options] used in **broker_log_runner**.
 
-    The following is the [option] used in **broker_log_converter**.
+.. program:: broker_log_runner
 
-    .. program:: broker_log_converter
+.. option:: -u NAME
 
-    .. option:: -i
-        
-        It prints QUERY_ID comment in front of the query.
+    Database user name (default: **PUBLIC**)
     
-    If QUERY_ID comment exists on the query, tracing a query is easier since QUERY_ID information is printed to the SQL log(located in $CUBRID/log/broker/sql_log) of the broker when replaying the queries of **output_file**.
+.. option:: -p PASSWORD
+
+    Database password
     
-    The following example shows how to convert the query in the query_editor_1.sql.log file into the query_convert.in file. 
+.. option:: -t NUMBER    
+
+    The number of threads(default: 1)
     
-    ::
+.. option:: -r COUNT
 
-        % cd CUBRID/log/broker/sql_log
-        % broker_log_converter query_editor_1.sql.log query_convert.in
+    The number of times that the query is to be executed (default value: 1)
 
-    To re-execute queries stored in the query file which has been created by the **broker_log_converter** utility, execute the **broker_log_runner** utility.
+.. option:: -o FILE
+
+    Name of the file where execution results are to be stored 
     
-    The syntax of the **broker_log_runner** utility is as follows: 
+.. option:: -Q
     
-    ::
+    Stores the query plan in the FILE specified in the **-o** option.
 
-        broker_log_runner -I broker_host -P broker_port -d dbname [options] exec_script_file 
-        
-    *   *broker_host*: IP address or host name of the CUBRID broker
-    *   *broker_port*: Port number of the CUBRID broker
-    *   *dbname*: Name of the database against which queries are to be executed  
-    *   *exec_script_file*: Name of the file where execution results are to be stored.
-
-    The following is [options] used in **broker_log_runner**.
-
-    .. program:: broker_log_runner
-
-    .. option:: -u NAME
-
-        Database user name (default: **PUBLIC**)
-        
-    .. option:: -p PASSWORD
-
-        Database password
-        
-    .. option:: -t NUMBER    
-
-        The number of threads(default: 1)
-        
-    .. option:: -r COUNT
-
-        The number of times that the query is to be executed (default value: 1)
-
-    .. option:: -o FILE
-
-        Name of the file where execution results are to be stored 
-        
-    .. option:: -Q
-        
-        Stores the query plan in the FILE specified in the **-o** option.
-
-    .. option:: -s
-        
-        Prints the information by the "cubrid statdump" command per each query. See :ref:`statdump`.
-        
-    .. option:: -a
-
-        Sets autocommit mode as ON.
-        
-    The following example re-executes the queries saved on *query_convert.in* on *demodb*, and it assumes that the broker IP is specified in 192.168.1.10, and broker port is specified in 30000. 
+.. option:: -s
     
-    ::
-
-        % broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
-        broker_ip = 192.168.1.10
-        broker_port = 30000
-        num_thread = 2
-        repeat = 1
-        dbname = demodb
-        dbuser = public
-        dbpasswd =
-        exec_time : 0.001
-        exec_time : 0.000
-        0.000500 0.000500
-
-    The following example saves the query plan only without running the query. 
+    Prints the information by the "cubrid statdump" command per each query. See :ref:`statdump`.
     
-    ::
-        
-        % broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
-        ... 
-        %cat result.0
-        -------------- query -----------------
-        SELECT * FROM athlete where code=10099;
-        cci_prepare exec_time : 0.000
-        cci_execute_exec_time : 0.000
-        cci_execute:1
-        ---------- query plan --------------
-        Join graph segments (f indicates final):
-        seg[0]: [0]
-        seg[1]: code[0] (f)
-        seg[2]: name[0] (f)
-        seg[3]: gender[0] (f)
-        seg[4]: nation_code[0] (f)
-        seg[5]: event[0] (f)
-        Join graph nodes:
-        node[0]: athlete athlete(6677/107) (sargs 0)
-        Join graph terms:
-        term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
+.. option:: -a
 
-        Query plan:
+    Sets autocommit mode as ON.
+    
+The following example re-executes the queries saved on *query_convert.in* on *demodb*, and it assumes that the broker IP is specified in 192.168.1.10, and broker port is specified in 30000. 
 
-        iscan
-            class: athlete node[0]
-            index: pk_athlete_code term[0]
-            cost:  0 card 1
+::
 
-        Query stmt:
+    % broker_log_runner -I 192.168.1.10  -P 30000 -d demodb -t 2 query_convert.in
+    broker_ip = 192.168.1.10
+    broker_port = 30000
+    num_thread = 2
+    repeat = 1
+    dbname = demodb
+    dbuser = public
+    dbpasswd =
+    exec_time : 0.001
+    exec_time : 0.000
+    0.000500 0.000500
 
-        select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code=  :0 )
+The following example saves the query plan only without running the query. 
 
-        ---------- query result --------------
-        10099|Andersson Magnus|M|SWE|Handball|
-        -- 1 rows ----------------------------
+::
+    
+    % broker_log_runner -I 192.168.1.10 -P 30000 -d demodb -o result -Q query_convert.in
+    ... 
+    %cat result.0
+    -------------- query -----------------
+    SELECT * FROM athlete where code=10099;
+    cci_prepare exec_time : 0.000
+    cci_execute_exec_time : 0.000
+    cci_execute:1
+    ---------- query plan --------------
+    Join graph segments (f indicates final):
+    seg[0]: [0]
+    seg[1]: code[0] (f)
+    seg[2]: name[0] (f)
+    seg[3]: gender[0] (f)
+    seg[4]: nation_code[0] (f)
+    seg[5]: event[0] (f)
+    Join graph nodes:
+    node[0]: athlete athlete(6677/107) (sargs 0)
+    Join graph terms:
+    term[0]: (athlete.code=10099) (sel 0.000149768) (sarg term) (not-join eligible) (indexable code[0]) (loc 0)
 
-        cci_end_tran exec_time : 0.000
+    Query plan:
+
+    iscan
+        class: athlete node[0]
+        index: pk_athlete_code term[0]
+        cost:  0 card 1
+
+    Query stmt:
+
+    select athlete.code, athlete.[name], athlete.gender, athlete.nation_code, athlete.event from athlete athlete where (athlete.code=  :0 )
+
+    ---------- query result --------------
+    10099|Andersson Magnus|M|SWE|Handball|
+    -- 1 rows ----------------------------
+
+    cci_end_tran exec_time : 0.000
+
+.. _cubrid_replay:
+
+cubrid_replay 
+""""""""""""" 
+  
+**cubrid_replay** utility replays the SQL log in the broker and outputs the results sorted in order from the large difference(from the slower query than the existing one) by comparing the difference in the execution time of playback and the existing execution time.
+
+This utility plays back the queries that are logged in the SQL log, but does not execute the queries to change the data. If any options are not given, only SELECT queries are run; if **-r** option is given, it changes the UPDATE and DELETE queries into SELECT queries and runs them.
+  
+This utility can be used to compare the performance between two different hosts; for example, there can be a performance difference for a same query between master and slave even if their h/w specs are the same.
+
+:: 
+  
+    cubrid_replay -I <broker_host> -P <broker_port> -d <db_name> [options] <sql_log_file> <output_file> 
+     
+*   *broker_host*: IP address or host name of the CUBRID broker
+*   *broker_port*: Port number of the CUBRID broker
+*   *db_name*: The name of database to run the query
+*   *sql_log_file*: SQL log file of the CUBRID broker($CUBRID/log/broker/sql_log/\*.log, \*.log.bak) 
+*   *output_file*: File name to save the execution result
+  
+The following is [options] used in **cubrid_replay**.
+
+.. program:: cubrid_replay 
+  
+.. option:: -u DB_USER 
+  
+    Specifies the DB account(default: public).
+
+.. option:: -p DB_PASSWORD 
+  
+    Specifies database password
+    
+.. option:: -r 
+  
+    Changes UPDATE and DELETE queries into SELECT queries
+  
+.. option:: -h SECOND 
+  
+    Specifies the term to wait between queries to run(default: 0.01 sec)
+  
+.. option:: -D SECOND
+  
+    The queries are output to *output_file* only when the specified term is bigger than (replayed execution time - previous execution time)(default: 0.01 sec).
+
+.. option:: -F DATETIME 
+  
+    Specifies the execution start date and time of the SQL statements to be replayed. The input format is YY[-MM[-DD[ hh[:mm[:ss[.msec]]]]]], and the part enclosed by [] can be omitted. If you omit the value, it is regarded as that 01 is input for MM and DD, and 0 is input for hh, mm, ss and msec.
+
+.. option:: -T DATETIME 
+  
+    Specifies the execution end date and time of the SQL statements to be replayed. The input format is the same with the *DATE* in the **-F** options.
+
+:: 
+  
+    $ cubrid_replay -I testhost -P 33000 -d testdb -u dba -r testdb_1_11_1.sql.log.bak output.txt 
+  
+If you run the above command, the summary of execution result is displayed on th console.
+  
+:: 
+     
+    ------------------- Result Summary -------------------------- 
+    * Total queries : 153103 
+    * Skipped queries (out : skip.sql) : 5127 
+    * Error queries (out : replay.err) : 30 
+    * Longer than difftime lower : 89987 
+    * Max different time : 0.016 
+    * Average different time : -0.001 
+     
+    cubrid_replay run time : 245.308417 sec 
+  
+*   Total queries: Number of total queries within the specified date and time. They include DDL and DML
+*   Skipped queries: Number of queries which cannot be changed from UPDATE/DELETE into SELECT when **-r** option is specified. These queries are saved into skip.sql
+*   Longer than difftime lower: Number of queries of which execution time difference is bigger than the specified value by **-D** option(the replayed execution time is slower than the previous execution time plus the specified value). If you omit the **-D** option, this option value is specified as 0.01 second
+*   Max different time: The biggest value among the differences of the execution time(unit: sec)
+*   Average different time: Average value of the differences of the execution time(unit: sec)
+*   cubrid_replay run time: Execution time of this utility
+
+"Skipped queries" are the cases which query-transform from UPDATE/DELETE to SELECT is impossible by the internal reason; the queries which are written to skip.sql are needed to check separately.
+
+Also, you should consider that the execution time of the transformed queries does not include the data modification time.
+
+In the *output.txt* file, SQLs that the replayed SQL execution time is slower than the SQL execution time in SQL log are written. That is, {(the replayed SQL execution time) - {(the execution time in SQL log) + (the specified time by **-D** option)} is sorted in descending order. Because **-r** option is used, UPDATE/DELETE is rewritten into SELECT and run.
+
+:: 
+  
+    EXEC TIME (REPLAY / SQL_LOG / DIFF): 0.003 / 0.001 / 0.002 
+    SQL: UPDATE NDV_QUOTA_INFO SET last_mod_date = now() , used_quota = ( SELECT IFNULL(sum(file_size),0) FROM NDV_RECYCLED_FILE_INFO WHERE user_id = ? ) + ( SELECT IFNULL(sum(file_size),0) FROM NDV_FILE_INFO WHERE user_id = ? ) WHERE user_id = ? /+shard_val(6900403)/ /* SQL : NDVMUpdResetUsedQuota */ 
+    REWRITE SQL: select NDV_QUOTA_INFO, class NDV_QUOTA_INFO, cast( SYS_DATETIME as datetime), cast((select ifnull(sum(NDV_RECYCLED_FILE_INFO.file_size), 0) from NDV_RECYCLED_FILE_INFO NDV_RECYCLED_FILE_INFO where (NDV_RECYCLED_FILE_INFO.user_id= ?:0 ))+(select ifnull(sum(NDV_FILE_INFO.file_size), 0) from NDV_FILE_INFO NDV_FILE_INFO where (NDV_FILE_INFO.user_id= ?:1 )) as bigint) from NDV_QUOTA_INFO NDV_QUOTA_INFO where (NDV_QUOTA_INFO.user_id= ?:2 ) 
+    BIND 1: 'babaemo' 
+    BIND 2: 'babaemo' 
+    BIND 3: 'babaemo' 
+  
+*   EXEC TIME: (replay time / execution time in the SQL log / difference between the two execution times) 
+*   SQL: The original SQL which exists in the SQL log of the broker
+*   REWRITE SQL: Transformed SELECT queries from UPDATE/DELETE queries by **-r** option.
 
 .. _cas-error:
         

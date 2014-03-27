@@ -327,7 +327,6 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
     13-11-19 15:27:31.671 (17868) cubrid service stop
     13-11-19 15:27:34.909 (17868) SUCCESS
  
- 
 단, Windows 환경에서는 일부 cubrid 명령이 서비스 프로세스를 통해 다시 실행되는 구조이므로 Linux와 달리 중첩된 정보가 출력될 수 있다.
  
 ::
@@ -337,8 +336,7 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
     13-11-13 17:17:56.027 ( 7848) SUCCESS
     13-11-13 17:17:57.136 ( 3820) SUCCESS
 
-또한 Windows 환경에서는 서비스 프로세스를 통해 수행되는 프로세스는 오류 메시지를 출력하지 못하므로, 
-서비스 구동과 관련된 오류메시지는 반드시 cubrid_utility.log를 통해 확인해야 한다.
+또한 Windows 환경에서는 서비스 프로세스를 통해 수행되는 프로세스는 오류 메시지를 출력하지 못하므로, 서비스 구동과 관련된 오류메시지는 반드시 cubrid_utility.log를 통해 확인해야 한다.
 
 데이터베이스 서버
 =================
@@ -550,6 +548,7 @@ cubrid_utility.log 파일의 크기는 cubrid.conf의 error_log_size 파라미�
 질의 성능에 영향을 주는 이벤트가 발생하면 해당 이벤트를 이벤트 로그에 기록한다.
 
 이벤트 로그에 저장되는 이벤트는 SLOW_QUERY, MANY_IOREADS, LOCK_TIMEOUT, DEADLOCK, 그리고 TEMP_VOLUME_EXPAND가 있다.
+
 해당 로그 파일은 $CUBRID/log/server 디렉터리에 생성되며, 파일 이름은 <db_name>_<yyyymmdd>_<hhmi>.event 형식으로 저장된다. 확장자는 .event이다.
  
 ::
@@ -868,11 +867,11 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
 
     cubrid broker status [options] [expr]
 
-*   expr: 브로커 이름의 일부 또는 "SERVICE=ON|OFF"
+*   *expr*: 브로커 이름의 일부 또는 "SERVICE=ON|OFF"
     
-[expr]이 명시되면 이름이 [expr]을 포함하는 브로커에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID 브로커 환경 설정 파일( **cubrid_broker.conf** )에 등록된 전체 브로커에 대해 상태 모니터링을 수행한다. 
+*expr*\이 명시되면 이름이 *expr*을 포함하는 브로커에 대한 상태 모니터링을 수행하고, 생략되면 CUBRID 브로커 환경 설정 파일( **cubrid_broker.conf** )에 등록된 전체 브로커에 대해 상태 모니터링을 수행한다. 
 
-[expr]에 "SERVICE=ON"이 명시되면 구동 중인 브로커의 상태만 출력하며, "SERVICE=OFF"가 명시되면 멈춰있는 브로커의 이름만 출력한다.
+*expr*\에 "SERVICE=ON"이 명시되면 구동 중인 브로커의 상태만 출력하며, "SERVICE=OFF"가 명시되면 멈춰있는 브로커의 이름만 출력한다.
 
 **cubrid broker status**\에서 사용하는 [options]는 다음과 같다. 이들 중 -b, -q, -c, -m, -S, -P, -f는 출력할 정보를 정의하는 모니터링 옵션이고, -s, -l, -t는 출력을 제어하는 옵션이다. 또한, -c, -m, -S, -P는 주로 SHARD 기능을 사용할 때 적용하는 옵션이다. 이 모든 옵션들은 서로 조합하여 사용하는 것이 가능하다.
 
@@ -995,7 +994,6 @@ I/O 읽기를 많이 발생시킨 질의를 기록한다. cubrid.conf의 **sql_t
 *   LONG-T: LONG_TRANSACTION_TIME 시간을 초과한 트랜잭션 개수 / LONG_TRANSACTION_TIME 파라미터의 값. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 트랜잭션 개수로 매번 갱신됨.
 *   LONG-Q: LONG_QUERY_TIME 시간을 초과한 질의의 개수 / LONG_QUERY_TIME 파라미터의 값. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 질의 개수로 매번 갱신됨.
 *   ERR-Q: 에러가 발생한 질의의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 에러 개수로 매번 갱신됨. cubrid_broker.conf의 SHARD 파라미터가 ON으로 설정된 경우, proxy에서 에러가 발생하는 경우에도 ERR-Q의 값이 증가한다.
-
 *   UNIQUE-ERR-Q: 고유 키 에러가 발생한 질의의 개수. 옵션이 "-b -s <sec>"인 경우 -s 옵션으로 지정한 초 동안의 고유 키 에러 개수로 매번 갱신됨.
 *   #CONNECT: 브로커 시작 후 응용 클라이언트가 CAS에 접속한 회수
 *   #REJECT: 브로커 시작 후 ACL에 포함되지 않은 IP로부터 접속하는 응용 클라이언트가 CAS에 접속하는 것을 거부당한 회수. ACL 설정과 관련하여 :ref:`limiting-broker-access`\ 를 참고한다.
@@ -1355,7 +1353,7 @@ SHARD-Q는 Shard Waiting Queue를 줄인 말이다. SHARD proxy 프로세스가 
 
     [%<broker_name>]
     <db_name>:<db_user>:<ip_list_file>
-    …
+    ...
 
 *   <broker_name>: 브로커 이름. **cubrid_broker.conf**\에서 지정한 브로커 이름 중 하나이다.
 *   <db_name>: 데이터베이스 이름. \*로 지정하면 모든 데이터베이스를 허용한다.
@@ -1370,7 +1368,7 @@ ip_list_file의 작성 형식은 다음과 같다.
 ::
 
     <ip_addr>
-    …
+    ...
 
 *   <ip_addr>: 접근을 허용할 IP 명. 뒷자리를 \*로 입력하면 뒷자리의 모든 IP를 허용한다.
 
@@ -2290,11 +2288,11 @@ broker_log_runner
 cubrid_replay 
 """"""""""""" 
   
-**cubrid_replay** 유틸리티는 브로커의 SQL 로그를 재생하여, 기존의 수행 시간과 재생할 때의 수행 시간 차이를 비교하여 차이가 큰 것부터 순서대로 정렬하여 결과를 출력한다. 
+**cubrid_replay** 유틸리티는 브로커의 SQL 로그를 재생하여, 기존의 수행 시간과 재생할 때의 수행 시간 차이를 비교하여 차이가 큰 것부터(기존보다 느린 것부터) 순서대로 정렬한 결과를 출력한다. 
   
 이 유틸리티는 SQL 로그에 기록된 질의들을 재생하되, 데이터의 변경이 발생하는 질의는 실행하지 않는다. 별도의 옵션을 주지 않으면 SELECT 문만 수행되며, -r 옵션을 부여하면 UPDATE, DELETE 문을 SELECT 문으로 변환하여 수행한다. 
   
-이 유틸리티는 서로 다른 두 장비 간 성능을 비교할 때 사용할 수 있는데, 예를 들어 마스터와 슬레이브 사이에서도 같은 질의에 대해 성능 차이가 존재할 수 있다. 
+이 유틸리티는 서로 다른 두 장비 간 성능을 비교할 때 사용할 수 있는데, 예를 들어 하드웨어 스펙이 동일한 마스터와 슬레이브 사이에서도 같은 질의에 대해 성능 차이가 존재할 수 있다. 
   
 :: 
   
@@ -2324,19 +2322,19 @@ cubrid_replay
   
 .. option:: -h SECOND 
   
-    질의 실행 간격 (기본값: 0.01초) 
+    질의 실행 간격을 지정(기본값: 0.01초) 
   
 .. option:: -D SECOND 
   
-    기존에 실행된 질의 수행 시간과 재생된 질의 수행 시간의 차이가 설정 값보다 큰 경우만 *output_file*\에 출력됨 (기본값: 0.01초) 
+    (재생된 질의 수행 시간 - 기존에 실행된 질의 수행 시간)이 이 설정 값보다 큰 경우만 해당 질의가 *output_file*\에 출력됨(기본값: 0.01초) 
   
 .. option:: -F DATETIME 
   
-        재생 대상 SQL의 시작 날짜 및 시간을 지정한다. 입력 형식은 YY[-MM[-DD[ hh[:mm[:ss[.msec]]]]]]이며 []로 감싼 부분은 생략할 수 있다. 생략하면 MM, DD는 01을 입력한 것과 같고, hh, mm, ss, msec은 0을 입력한 것과 같다. 
+    재생 대상 SQL의 시작 날짜 및 시간을 지정한다. 입력 형식은 YY[-MM[-DD[ hh[:mm[:ss[.msec]]]]]]이며 []로 감싼 부분은 생략할 수 있다. 생략하면 MM, DD는 01을 입력한 것과 같고, hh, mm, ss, msec은 0을 입력한 것과 같다. 
          
 .. option:: -T DATETIME 
   
-        재생 대상 SQL의 끝 날짜 및 시간을 지정한다. 입력 형식은 **-F** 옵션의 *DATE* 와 같다. 
+    재생 대상 SQL의 끝 날짜 및 시간을 지정한다. 입력 형식은 **-F** 옵션의 *DATE* 와 같다. 
   
 :: 
   
@@ -2356,18 +2354,18 @@ cubrid_replay
      
     cubrid_replay run time : 245.308417 sec 
   
-*   Total queries: 날짜 및 시간이 지정된 범위 안의 전체 질의 개수. SELEC 
-*   Skipped queries: **-r** 옵션이 사용되었을 때 UPDATE/DELETE 문을 SELECT 문으로 변환할 수 없는 질의 개수. 이 질의는 skip.sql 파일에 기록됨. 
-*   Longer than difftime lower: -D 옵션의 설정 값보다 수행 시간의 차이가 더 큰 질의 개수. -D 옵션을 사용하지 않으면 0.01초보다 차이가 큰 질의 개수 
-*   Max different time: 수행 시간의 차이 중 가장 큰 값. (단위: 초) 
-*   Average different time: 수행 시간의 차이의 평균 값. (단위: 초) 
-*   cubrid_replay run time: 유틸리티의 수행 시간 
+*   Total queries: 날짜 및 시간이 지정된 범위 안의 전체 질의 개수. DDL, DML을 포함
+*   Skipped queries: **-r** 옵션이 사용되었을 때 UPDATE/DELETE 문을 SELECT 문으로 변환할 수 없는 질의 개수. 이 질의는 skip.sql 파일에 기록됨
+*   Longer than difftime lower: **-D** 옵션의 설정 값보다 수행 시간의 차이가 더 큰(재생된 실행 시간이 기존 실행 시간에 설정한 값을 더한 것보다 느린) 질의 개수. **-D** 옵션을 생략하면 0.01초를 기본으로 설정함.
+*   Max different time: 수행 시간의 차이 중 가장 큰 값(단위: 초)
+*   Average different time: 수행 시간의 차이의 평균 값(단위: 초)
+*   cubrid_replay run time: 유틸리티의 수행 시간
   
-"Skipped queries"는 내부적인 동작 과정에서 질의 변환이 불가능한 경우로, skip.sql 파일에 기록된 질의문의 성능에 대해서는 별도로 확인해볼 필요가 있다. 
-  
-또한, UPDATE/DELETE 문이 SELECT 문으로 변환된 질의문의 수행 시간은 데이터 변경 시간이 빠진 것임을 감안해야 한다. 
-  
-*output.txt* 파일에는 SQL 로그의 수행 시간보다 재생된 SQL 수행 시간이 더 느린 SQL부터 정렬되어 기록된다. 즉, (재생된 SQL 수행 시간 - SQL 로그의 수행시간)이 큰 순서로 정렬되어 기록된다. "-r" 옵션이 사용되었으므로 UPDATE 문은 SELECT 문으로 재작성되어 실행된다. 
+"Skipped queries"는 내부 요인에 의해 UPDATE/DELETE 문에서 SELECT 문으로 질의 변환이 불가능한 경우로, skip.sql 파일에 기록된 질의문의 성능에 대해서는 별도로 확인해볼 필요가 있다. 
+
+또한, 변환된 질의문의 수행 시간은 데이터 변경 시간이 빠진 것임을 감안해야 한다. 
+
+*output.txt* 파일에는 SQL 로그의 수행 시간보다 재생된 SQL 수행 시간이 더 느린 SQL부터 정렬되어 기록된다. 즉, {(재생된 SQL 수행 시간) - {(SQL 로그의 수행 시간) + (**-D** 옵션 설정 시간)}}이 내림차순으로 정렬되어 기록된다. "-r" 옵션이 사용되었으므로 UPDATE/DELETE 문은 SELECT 문으로 재작성되어 실행된다. 
   
 :: 
   
@@ -2378,7 +2376,7 @@ cubrid_replay
     BIND 2: 'babaemo' 
     BIND 3: 'babaemo' 
   
-*   EXEC TIME: (재생 시간 / SQL 로그에서의 수행 시간 / 재생된 수행 시간과의 차이) 
+*   EXEC TIME: (재생 시간 / SQL 로그에서의 수행 시간 / 두 수행 시간의 차이) 
 *   SQL: 브로커의 SQL 로그에 존재하는 원본 SQL 
 *   REWRITE SQL: **-r** 옵션이 지정되어 UPDATE 또는 DELETE 문에서 변환된 SELECT 문
 

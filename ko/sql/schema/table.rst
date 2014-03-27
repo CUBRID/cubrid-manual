@@ -70,15 +70,15 @@ CREATE TABLE
      
         <resolution> ::= [CLASS] {column_name} OF superclass_name [AS alias]
 
-*   IF NOT EXISTS: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다. 
+*   **IF NOT EXISTS**: 생성하려는 테이블이 존재하는 경우 에러 없이 테이블을 생성하지 않는다. 
 *   *table_name* : 생성할 테이블의 이름을 지정한다(최대 254바이트).
 *   *column_name* : 생성할 칼럼의 이름을 지정한다(최대 254바이트).
 *   *column_type* : 칼럼의 데이터 타입을 지정한다.
 *   [**SHARED** *value* | **DEFAULT** *value*] : 칼럼의 초기값을 지정한다.
 *   *column_constraint* : 칼럼의 제약 조건을 지정하며 제약 조건의 종류에는 **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, **FOREIGN KEY** 가 있다(자세한 내용은 :ref:`constraint-definition` 참조).
-*   <default_or_shared_or_ai>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
+*   <*default_or_shared_or_ai*>: DEFAULT, SHARED, AUTO_INCREMENT 중 하나만 사용될 수 있다.
     AUTO_INCREMENT이 지정될 때 "(seed, increment)"와 "AUTO_INCREMENT = initial_value"는 동시에 정의될 수 없다.
-    
+
 .. code-block:: sql
 
     CREATE TABLE olympic2 (
@@ -102,7 +102,7 @@ CREATE TABLE
 ::
 
     <column_definition> ::= 
-        column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]]
+        column_name <data_type> [[<default_or_shared_or_ai>] | [ <column_constraint> ]] ...
     
         <data_type> ::= <column_type> [ <charset_modifier_clause> ] [ <collation_modifier_clause> ]
 
@@ -856,15 +856,19 @@ ALTER TABLE
             <alter_rename> ::= 
                 [ATTRIBUTE | COLUMN]
                 {
-                    <old_column_name> AS <new_column_name> |
-                    FUNCTION OF <column_name> AS <function_name>
+                    old_column_name AS new_column_name |
+                    FUNCTION OF column_name AS function_name
+                } |
+                [CONSTRAINT | {INDEX|KEY}]
+                {
+                    old_name {AS|TO} new_name
                 }
                 
             <alter_change> ::= 
                 QUERY [<unsigned_integer_literal>] <select_statement> |
                 <column_name> DEFAULT <value_specification>
              
-            <resolution> ::= {column_name} OF <superclass_name> [AS alias]
+            <resolution> ::= column_name OF <superclass_name> [AS alias]
 
             <index_col_name> ::= column_name [(length)] [ASC | DESC]
 
@@ -1000,7 +1004,7 @@ ADD CONSTRAINT 절
 
 **PRIMARY KEY** 제약 조건을 추가할 때 생성되는 인덱스는 기본적으로 오름차순으로 생성되며, 칼럼 이름 뒤에 **ASC** 또는 **DESC** 키워드를 명시하여 키의 정렬 순서를 지정할 수 있다. ::
 
-    ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
+    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
     ADD <table_constraint> ;
     
         <table_constraint> ::=
@@ -1023,10 +1027,10 @@ ADD CONSTRAINT 절
 
                         <referential_action> ::= CASCADE | RESTRICT | NO ACTION | SET NULL
     
-*   *table_name* : 제약 조건을 추가할 테이블의 이름을 지정한다.
-*   *constraint_name* : 새로 추가할 제약 조건의 이름(최대 254 바이트)을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
+*   *table_name*: 제약 조건을 추가할 테이블의 이름을 지정한다.
+*   *constraint_name*: 새로 추가할 제약 조건의 이름(최대 254 바이트)을 지정할 수 있으며, 생략할 수 있다. 생략하면 자동으로 부여된다.
 *   *foreign_key_name*: **FOREIGN KEY** 제약 조건의 이름을 지정할 수 있다. 생략할 수 있으며, 지정하면 *constraint_name*\ 을 무시하고 이 이름을 사용한다.
-*   *table_constraint* : 지정된 테이블에 대해 제약 조건을 정의한다. 제약 조건에 대한 자세한 설명은 :ref:`constraint-definition` 를 참고한다.
+*   <*table_constraint*>: 지정된 테이블에 대해 제약 조건을 정의한다. 제약 조건에 대한 자세한 설명은 :ref:`constraint-definition` 를 참고한다.
 
 .. code-block:: sql
 
@@ -1185,20 +1189,23 @@ CHANGE/MODIFY 절
 
 ::
 
-    ALTER TABLE tbl_name table_options;
+    ALTER [/*+ SKIP_UPDATE_NULL */] TABLE tbl_name <table_options> ;
      
-        <table_options> ::=
-            <table_option> [, <table_option>]
-            
-            <table_option> ::=
-                CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition [FIRST | AFTER col_name] |
-                MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition [FIRST | AFTER col_name]
+    <table_options> ::=
+         <table_option>[, <table_option>, ...]
+     
+    <table_option> ::=
+        CHANGE [COLUMN | CLASS ATTRIBUTE] old_col_name new_col_name column_definition
+                 [FIRST | AFTER col_name]
+      | MODIFY [COLUMN | CLASS ATTRIBUTE] col_name column_definition
+                 [FIRST | AFTER col_name]
 
 *   *tbl_name* : 변경할 칼럼이 속한 테이블의 이름을 지정한다.
 *   *old_col_name* : 기존 칼럼의 이름을 지정한다.
 *   *new_col_name* : 변경할 칼럼의 이름을 지정한다.
 *   *column_definition* : 변경할 칼럼의 타입, 크기 및 속성을 지정한다.
 *   *col_name* : 변경할 칼럼의 타입, 크기 및 속성을 적용할 칼럼의 이름을 지정한다.
+*   **SKIP_UPDATE_NULL**: NOT NULL 제약 조건을 추가할 때 기존의 NULL 값을 검사하지 않는다. :ref:`SKIP_UPDATE_NULL <skip-update-null>`\ 을 참고한다.
 
 .. code-block:: sql
 
@@ -1323,7 +1330,7 @@ CHANGE/MODIFY 절
      
     CREATE TABLE t1 (i1 INT);
     INSERT INTO t1 VALUES (1), (-2147483648), (2147483647);
-    
+     
     ALTER TABLE t1 CHANGE i1 s1 CHAR(4);
     SELECT * FROM t1;
      
@@ -1336,6 +1343,16 @@ CHANGE/MODIFY 절
       '1   '
       '-214'
       '2147'
+
+.. _skip-update-null:
+
+.. note:: 
+  
+    NULL을 NOT NULL로 제약 조건을 변경하는 경우 hard default로 값을 업데이트하는 과정으로 인해 많은 시간이 소요되는데, 이를 해소하기 위한 방법으로 이미 존재하는 NULL 값의 UPDATE는 생략하는 **SKIP_UPDATE_NULL** 힌트를 사용할 수 있다. 단, 이 힌트 사용 이후 사용자는 제약 조건과 불일치되는 NULL 값이 존재할 수 있음을 인지해야 한다. 
+  
+    .. code-block:: sql 
+  
+        ALTER /*+ SKIP_UPDATE_NULL */ TABLE foo MODIFY col INT NOT NULL; 
 
 칼럼의 타입 변경에 따른 테이블 속성의 변경
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1456,8 +1473,8 @@ RENAME COLUMN 절
 
 **RENAME COLUMN** 절을 사용하여 칼럼의 이름을 변경할 수 있다. ::
 
-    ALTER [ TABLE | CLASS | VCLASS | VIEW ] table_name
-    RENAME [ COLUMN | ATTRIBUTE ] old_column_name { AS | TO } new_column_name ;
+    ALTER [TABLE | CLASS | VCLASS | VIEW] table_name
+    RENAME [COLUMN | ATTRIBUTE] old_column_name { AS | TO } new_column_name
 
 *   *table_name* : 이름을 변경할 칼럼의 테이블 이름을 지정한다.
 *   *old_column_name* : 현재의 칼럼 이름을 지정한다.
@@ -1475,7 +1492,8 @@ RENAME INDEX/CONSTRAINT 절
 
 :: 
      
-    ALTER TABLE table_name RENAME {CONSTRAINT | {INDEX|KEY}} old_name {AS|TO} new_name ;
+    ALTER TABLE table_name 
+    RENAME [CONSTRAINT | {INDEX|KEY}] old_name {AS|TO} new_name ;
 
 *   CONSTRAINT: UNIQUE, PRIMARY KEY, FOREIGN KEY
 *   INDEX 또는 KEY: INDEX (기능적으로 :ref:`alter-index` 문에서 인덱스 이름을 변경하는 것과 같다.) 
@@ -1564,7 +1582,7 @@ DROP INDEX 절
 
 ::
 
-    ALTER [ TABLE | CLASS ] table_name DROP INDEX index_name ;
+    ALTER [TABLE | CLASS] table_name DROP INDEX index_name ;
 
 *   *table_name* : 제약 조건을 삭제할 테이블의 이름을 지정한다.
 *   *index_name* : 삭제할 인덱스의 이름을 지정한다.
@@ -1608,19 +1626,20 @@ DROP TABLE
 
 ::
 
-    DROP [ TABLE | CLASS ] [ IF EXISTS ] <table_specification_comma_list> [ CASCADE CONSTRAINTS ] ;
+    DROP [TABLE | CLASS] [IF EXISTS] <table_specification_comma_list> [CASCADE CONSTRAINTS] ;
 
         <table_specification_comma_list> ::= 
             <single_table_spec> | ( <table_specification_comma_list> ) 
 
             <single_table_spec> ::= 
-                |[ ONLY ] table_name 
+                |[ONLY] table_name 
                 | ALL table_name [ ( EXCEPT table_name, ... ) ] 
 
 *   *table_name* : 삭제할 테이블의 이름을 지정한다. 쉼표로 구분하여 여러 개의 테이블을 한 번에 삭제할 수 있다.
 *   **ONLY** 키워드 뒤에 수퍼클래스 이름이 명시되면, 해당 수퍼클래스만 삭제하고 이를 상속받는 서브클래스는 삭제하지 않는다.
 *   **ALL** 키워드 뒤에 수퍼클래스 이름이 지정되면, 해당 수퍼클래스 및 이를 상속받는 서브클래스를 모두 삭제한다.
 *   **EXCEPT** 키워드 뒤에 삭제하지 않을 서브클래스 리스트를 명시할 수 있다.
+*	**CASCADE CONSTRAINTS**: 테이블이 DROP되고 이 테이블을 참조하는 다른 테이블들의 외래 키도 DROP된다.
 
 .. code-block:: sql
 

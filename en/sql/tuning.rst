@@ -1274,7 +1274,7 @@ If the query doesn't include any conditions and uses an ordered index, the order
     CREATE INDEX i_tab_j_k on tab (j,k);
     INSERT INTO tab VALUES (1,2,3),(6,4,2),(3,4,1),(5,2,1),(1,5,5),(2,6,6),(3,5,4);
 
-The following example shows that indexes consisting of *tab* (*j*, *k*) become sorted indexes and no separate sorting process is required because **GROUP BY** is executed by *j* and *k* columns.
+The following example shows that indexes consisting of *tab* (*j*, *k*) become sorted indexes and no separate sorting process is required because **GROUP BY** is executed by *j* and *k* columns.
 
 .. code-block:: sql
 
@@ -1412,7 +1412,7 @@ When a query is executed by sorting in descending order as follows, it usually c
     [WHERE ...] 
     ORDER BY a DESC
 
-However, if you create an ascending index and an descending index in the same column, the possibility of deadlock increases. In order to decrease the possibility of such case, CUBRID supports the descending scan only with ascending index. Users can use the **USE_DESC_IDX** hint to specify the use of the descending scan. If the hint is not specified, the following three query executions should be considered, provided that the columns listed in the **ORDER BY** clause can use the index.
+However, if you create an ascending index and an descending index in the same column, the possibility of deadlock increases. In order to decrease the possibility of such case, CUBRID supports the descending scan only with ascending index. Users can use the **USE_DESC_IDX** hint to specify the use of the descending scan. If the hint is not specified, the following three query executions should be considered, provided that the columns listed in the **ORDER BY** clause can use the index.
 
 *   Sequential scan + Sort in descending order
 *   Scan in general ascending order + sort in descending
@@ -1542,7 +1542,7 @@ If there is an index made of **GROUP BY** columns even when using aggregate func
 
 .. note::
 
-    When a column of **DISTINCT** or a **GROUP BY** clause contains the subkey of a index, loose index scan adjusts the scope dynamically to unique values ?�​of each of the columns constituting the partial key, and starts the search of a B-tree. Regarding this, see :ref:`loose-index-scan`.
+    When a column of **DISTINCT** or a **GROUP BY** clause contains the subkey of a index, loose index scan adjusts the scope dynamically to unique values of the each columns constituting the partial key, and starts the search of a B-tree. Regarding this, see :ref:`loose-index-scan`.
 
 **Example**
 

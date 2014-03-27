@@ -120,7 +120,7 @@ You can add a new query to a query specification by using the **ADD QUERY** clau
         <resolution> ::= {column_name} OF superclass_name [AS alias]
 
 *   *view_name*: Specifies the name of a view where the query to be added.
-*   *<select_statement>*: Specifies the query to be added.
+*   <*select_statement*>: Specifies the query to be added.
 
 **Example**
 
@@ -163,7 +163,7 @@ You can change the **SELECT** query defined in the virtual table by using the **
     ALTER [VIEW | VCLASS] view_name AS <select_statement> ;
     
 *   *view_name*: Specifies the name of a view to be modified.
-*   *<select_statement>*: Specifies the new query statement to replace the **SELECT** statement defined when a view is created.
+*   <*select_statement*>: Specifies the new query statement to replace the **SELECT** statement defined when a view is created.
 
 **Example**
 
@@ -190,7 +190,7 @@ You can change the query defined in the query specification by using the **CHANG
 
 *   *view_name*: Specifies the name of a view to be modified.
 *   *integer*: Specifies the number value of the query to be modified. The default value is 1.
-*   *<select_statement>*: Specifies the new query statement to replace the query whose query number is *integer*.
+*   <*select_statement*>: Specifies the new query statement to replace the query whose query number is *integer*.
 
 **Example**
 

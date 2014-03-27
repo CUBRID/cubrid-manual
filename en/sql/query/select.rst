@@ -520,7 +520,7 @@ The following is an example how to specify the NULLS FIRST or NULLS LAST after O
 
     When you run the above SELECT query, "GROUP BY a, b" is translated as:
 
-    *   GROUP BY NVL(b, 2) (alias name b) in 9.2 or before. The result is the same as Q2's result as below.
+    *   "GROUP BY a, NVL(b, 2)"(alias name b) in 9.2 or before. The result is the same as Q2's result as below.
 
         .. code-block:: sql
         
@@ -535,7 +535,7 @@ The following is an example how to specify the NULLS FIRST or NULLS LAST after O
                     1            1
                     2            2
 
-	*   GROUP BY b (column name b) in 9.3 or higher. The result is the same as Q3's result as below.
+	*   "GROUP BY a, b"(column name b) in 9.3 or higher. The result is the same as Q3's result as below.
 
         .. code-block:: sql
         
@@ -637,7 +637,8 @@ An outer join is divided into a left outer join which outputs all rows of the le
        { [ INNER | {LEFT | RIGHT} [ OUTER ] ] JOIN |
        STRAIGHT_JOIN } <table_specification> ON <search_condition>
      
-    <join_table_specification2> ::= { CROSS JOIN | 
+    <join_table_specification2> ::= 
+		{ CROSS JOIN | 
         NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
 
 *   <*join_table_specification*>

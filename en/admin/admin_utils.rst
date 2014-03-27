@@ -49,9 +49,9 @@ A CUBRID database user can have members with the same authorization. If authoriz
 
 CUBRID provides **DBA** and **PUBLIC** users by default.
 
-* **DBA** can access every object in the database, that is, it has authorization at the highest level. Only **DBA** has sufficient authorization to add, alter and delete the database users.
+*   **DBA** can access every object in the database, that is, it has authorization at the highest level. Only **DBA** has sufficient authorization to add, alter and delete the database users.
 
-* All users including **DBA** are members of **PUBLIC**. Therefore, all database users have the authorization granted to **PUBLIC** . For example, if authorization **B** is added to **PUBLIC** group, all database members will automatically have the **B** authorization.
+*   All users including **DBA** are members of **PUBLIC**. Therefore, all database users have the authorization granted to **PUBLIC** . For example, if authorization **B** is added to **PUBLIC** group, all database members will automatically have the **B** authorization.
 
 .. _databases-txt-file:
 
@@ -177,11 +177,11 @@ The **cubrid createdb** utility creates databases and initializes them with the 
 
     cubrid createdb [options] database_name locale_name.charset
 
-* **cubrid**: An integrated utility for the CUBRID service and database management.
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
 
-* **createdb**: A command used to create a new database.
+*   **createdb**: A command used to create a new database.
 
-* *database_name*: Specifies a unique name for the database to be created, without including the path name to the directory where the database will be created. If the specified database name is the same as that of an existing database name, CUBRID halts creation of the database to protect existing files.
+*   *database_name*: Specifies a unique name for the database to be created, without including the path name to the directory where the database will be created. If the specified database name is the same as that of an existing database name, CUBRID halts creation of the database to protect existing files.
 
 *   *locale_name*: A locale name to use in the database should be input. For a locale name which can be used in CUBRID, refer :ref:`locale-selection`.
 
@@ -257,7 +257,7 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
 .. option:: -B, --lob-base-path=PATH
 
-    This option specifies a directory where LOB data files are stored when BLOB/CLOB data is used. If the **--lob-base-path** option is not specified, LOB data files are store in <*location of database volumes created*>/**lob** directory. 
+    This option specifies a directory where **LOB** data files are stored when **BLOB/CLOB** data is used. If the **--lob-base-path** option is not specified, LOB data files are store in <*location of database volumes created*>/**lob** directory. 
     
     The following example shows how to create a database named *testdb* in the working directory and specify /home/data1 of local file system as a location of LOB data files. ::
 
@@ -303,13 +303,13 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
         NAME volname COMMENTS volcmnts PURPOSE volpurp NPAGES volnpgs
 
-    * *volname*: The name of the volume to be created. It must follow the UNIX file name conventions and be a simple name not including the directory path. The specification of a volume name can be omitted. If it is, the "database name to be created by the system_volume identifier" becomes the volume name.
-
-    * *volcmnts*: Comment to be written in the volume header. It contains information on the additional volume to be created. The specification of the comment on a volume can also be omitted.
-
-    * *volpurp*: It must be one of the following types: **data**, **index**, **temp**, or **generic** based on the purpose of storing volumes. The specification of the purpose of a volume can be omitted in which case the default value is **generic**.
-
-    * *volnpgs*: The number of pages of the additional volume to be created. The specification of the number of pages of the volume cannot be omitted; it must be specified.
+    *   *volname*: The name of the volume to be created. It must follow the UNIX file name conventions and be a simple name not including the directory path. The specification of a volume name can be omitted. If it is, the "database name to be created by the system_volume identifier" becomes the volume name.
+    
+    *   *volcmnts*: Comment to be written in the volume header. It contains information on the additional volume to be created. The specification of the comment on a volume can also be omitted.
+    
+    *   *volpurp*: It must be one of the following types: **data**, **index**, **temp**, or **generic** based on the purpose of storing volumes. The specification of the purpose of a volume can be omitted in which case the default value is **generic**.
+    
+    *   *volnpgs*: The number of pages of the additional volume to be created. The specification of the number of pages of the volume cannot be omitted; it must be specified.
 
 .. option:: --user-definition-file=FILE
 
@@ -330,11 +330,11 @@ The following shows [options] available with the **cubrid** **createdb** utility
         <members_clause>: 
             [ MEMBERS <member_name> [ { <member_name> }... ] ]
 
-    * The *user_name* is the name of the user who has access to the database. It must not include spaces.
+    *   The *user_name* is the name of the user who has access to the database. It must not include spaces.
 
-    * The **GROUPS** clause is optional. The *group_name* is the upper level group that contains the *user_name* . Here, the *group_name* can be multiply specified and must be defined as **USER** in advance.
+    *   The **GROUPS** clause is optional. The *group_name* is the upper level group that contains the *user_name* . Here, the *group_name* can be multiply specified and must be defined as **USER** in advance.
 
-    * The **MEMBERS** clause is optional. The *member_name* is the name of the lower level member that belongs to the *user_name* . Here, the *member_name* can be multiply specified and must be defined as **USER** in advance.
+    *   The **MEMBERS** clause is optional. The *member_name* is the name of the lower level member that belongs to the *user_name* . Here, the *member_name* can be multiply specified and must be defined as **USER** in advance.
 
     Comments can be used in a user information file. A comment line must begin with a consecutive hyphen lines (--). Blank lines are ignored.
 
@@ -391,9 +391,9 @@ The following shows [options] available with the **cubrid** **createdb** utility
 
 .. note::
 
-    * **temp_file_max_size_in_pages** is a parameter used to configure the maximum number of pages assigned to store the temporary temp volume - used for complicated queries or storing arrays - on the disk. While the default value is **-1**, the temporary temp volume may be increased up to the amount of extra space on the disk specified by the **temp_volume_path** parameter. If the value is 0, the temporary temp volume cannot be created. In this case, the permanent temp volume should be added by using the :ref:`cubrid addvoldb <adding-database-volume>` utility. For the efficient management of the volume, it is recommended to add a volume for each usage. 
-    
-    * By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the reaming space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. When adding a volume while managing the database, you are advised to do so when there is less system load. Once the assigned volume for a usage is completely in use, a **generic** volume will be created, so it is suggested to add extra volume for a usage that is expected to require more space.
+    *   **temp_file_max_size_in_pages** is a parameter used to configure the maximum number of pages assigned to store the temporary temp volume - used for complicated queries or storing arrays - on the disk. While the default value is **-1**, the temporary temp volume may be increased up to the amount of extra space on the disk specified by the **temp_volume_path** parameter. If the value is 0, the temporary temp volume cannot be created. In this case, the permanent temp volume should be added by using the :ref:`cubrid addvoldb <adding-database-volume>` utility. For the efficient management of the volume, it is recommended to add a volume for each usage. 
+        
+    *   By using the :ref:`cubrid spacedb <spacedb>` utility, you can check the reaming space of each volume. By using the :ref:`cubrid addvoldb <adding-database-volume>` utility, you can add more volumes as needed while managing the database. When adding a volume while managing the database, you are advised to do so when there is less system load. Once the assigned volume for a usage is completely in use, a **generic** volume will be created, so it is suggested to add extra volume for a usage that is expected to require more space.
 
 The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
 
@@ -420,11 +420,11 @@ In comparison, the command for adding a database volume manually is as follows.
 
     cubrid addvoldb [options] database_name
 
-* **cubrid**: An integrated utility for CUBRID service and database management.
-
-* **addvoldb**: A command that adds a specified number of pages of the new volume to a specified database.
-
-* *database_name*: Specifies the name of the database to which a volume is to be added without including the path name to the directory where the database is to be created.
+*   **cubrid**: An integrated utility for CUBRID service and database management.
+    
+*   **addvoldb**: A command that adds a specified number of pages of the new volume to a specified database.
+    
+*   *database_name*: Specifies the name of the database to which a volume is to be added without including the path name to the directory where the database is to be created.
 
 The following example shows how to create a database, classify volume usage, and add volumes such as **data**, **index**, and **temp**. ::
 
@@ -509,11 +509,11 @@ The **cubrid deletedb** utility also deletes the information on the database fro
 
 cubrid deletedb  [options] database_name
 
-* **cubrid**: An integrated utility for the CUBRID service and database management.
-
-* **deletedb**: A command to delete a database, its related data, logs and all backup files. It can be executed successfully only when the database is in a stopped state.
-
-* *database_name*: Specifies the name of the database to be deleted without including the path name.
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+    
+*   **deletedb**: A command to delete a database, its related data, logs and all backup files. It can be executed successfully only when the database is in a stopped state.
+    
+*   *database_name*: Specifies the name of the database to be deleted without including the path name.
 
 The following shows [options] available with the **cubrid deletedb** utility.
     
@@ -579,11 +579,11 @@ The following shows [options] available with the **cubrid deletedb** utility.
 
         volid source_fullvolname dest_fullvolname
 
-    * *volid*: An integer that is used to identify each volume. It can be checked in the database volume control file (database_name_vinf).
-
-    * *source_fullvolname*: The current directory path to each volume.
-
-    * *dest_fullvolname*: The target directory path where renamed volumes will be moved. If the target directory path is invalid, the database rename operation is not executed.
+    *   *volid*: An integer that is used to identify each volume. It can be checked in the database volume control file (database_name_vinf).
+    
+    *   *source_fullvolname*: The current directory path to each volume.
+    
+    *   *dest_fullvolname*: The target directory path where renamed volumes will be moved. If the target directory path is invalid, the database rename operation is not executed.
 
     ::
 
@@ -607,9 +607,9 @@ The **cubrid alterdbhost** utility sets or changes the host name of the specifie
 
     cubrid alterdbhost [option] database_name
     
-* **cubrid**: An integrated utility for the CUBRID service and database management
-
-* **alterdbhost**: A command used to change the host name of the current database
+*   **cubrid**: An integrated utility for the CUBRID service and database management
+    
+*   **alterdbhost**: A command used to change the host name of the current database
 
 The following shows the option available with the **cubrid alterdbhost** utility.
 
@@ -628,13 +628,13 @@ The **cubrid copydb** utility can be executed only offline (that is, state of a 
 
     cubrid copydb [options] src-database-name dest-database-name
 
-* **cubrid**: An integrated utility for the CUBRID service and database management.
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
 
-* **copydb**: A command that copy or move a database from one to another location.
+*   **copydb**: A command that copy or move a database from one to another location.
 
-* *src-database-name*: The names of source and target databases to be copied or moved.
+*   *src-database-name*: The names of source and target databases to be copied or moved.
 
-* *dest-database-name*: A new (target) database name.
+*   *dest-database-name*: A new (target) database name.
 
 If options are omitted, a target database is copied into the same directory of a source database.
 
@@ -719,11 +719,11 @@ The **cubrid installdb** utility is used to register the information of a newly 
 
     cubrid installdb [options] database_name 
     
-* **cubrid**: An integrated utility for the CUBRID service and database management.
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
 
-* **installdb**: A command that registers the information of a moved or copied database to **databases.txt**.
+*   **installdb**: A command that registers the information of a moved or copied database to **databases.txt**.
 
-* *database_name*: The name of database to be registered to **databases.txt**.
+*   *database_name*: The name of database to be registered to **databases.txt**.
 
 If no [options] are used, the command must be executed in the directory where the corresponding database exists.
 
@@ -775,11 +775,11 @@ It shows a brief description of all permanent data volumes in the database. Info
 
     cubrid spacedb [options] database_name
 
-*  **cubrid** : An integrated utility for the CUBRID service and database management.
+*   **cubrid** : An integrated utility for the CUBRID service and database management.
 
-*  **spacedb** : A command that checks the space in the database. It executes successfully only when the database is in a stopped state.
+*   **spacedb** : A command that checks the space in the database. It executes successfully only when the database is in a stopped state.
 
-*  *database_name* : The name of the database whose space is to be checked. The path-name to the directory where the database is to be created must not be included.
+*   *database_name* : The name of the database whose space is to be checked. The path-name to the directory where the database is to be created must not be included.
 
 The following shows [options] available with the **cubrid spacedb** utility.
  
@@ -963,11 +963,11 @@ Updates statistical information such as the number of objects, the number of pag
 
     cubrid optimizedb [option] database_name
 
-* **cubrid**: An integrated utility for the CUBRID service and database management.
-
-* **optimizedb**: Updates the statistics information, which is used for cost-based query optimization of the database. If the option is specified, only the information of the specified class is updated.
-
-* *database_name*: The name of the database whose cost-based query optimization statistics are to be updated.
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+    
+*   **optimizedb**: Updates the statistics information, which is used for cost-based query optimization of the database. If the option is specified, only the information of the specified class is updated.
+    
+*   *database_name*: The name of the database whose cost-based query optimization statistics are to be updated.
 
 The following example shows how to update the query statistics information of all classes in the database. ::
 
@@ -990,11 +990,11 @@ The **cubrid plandump** utility is used to display information on the query plan
 
     cubrid plandump options database_name 
 
-* **cubrid**: An integrated utility for the CUBRID service and database management.
-
-* **plandump**: A utility that displays the query plans stored in the current cache of a specific database.
-
-* *database_name*: The name of the database where the query plans are to be checked or dropped from its server cache.
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+    
+*   **plandump**: A utility that displays the query plans stored in the current cache of a specific database.
+    
+*   *database_name*: The name of the database where the query plans are to be checked or dropped from its server cache.
 
 If no option is used, it checks the query plans stored in the cache. ::
 
@@ -1029,11 +1029,11 @@ You can also use CSQL's session commands to check the statistics information onl
 
     cubrid statdump [options] database_name
 
-* **cubrid**: An integrated utility for the CUBRID service and database management.
-
-* **installdb**: A command that dumps the statistics information on the database server execution.
-
-* *database_name*: The name of database which has the statistics data to be dumped.
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+    
+*   **installdb**: A command that dumps the statistics information on the database server execution.
+    
+*   *database_name*: The name of database which has the statistics data to be dumped.
 
 The following shows [options] available with the **cubrid statdump** utility.
 
@@ -1154,7 +1154,7 @@ The following shows [options] available with the **cubrid statdump** utility.
     | Category         | Item                                     | Description                                                                          |
     +==================+==========================================+======================================================================================+
     | File I/O         | Num_file_removes                         | The number of files removed                                                          |
-    +------------------+------------------------------------------+--------------------------------------------------------------------------------------+
+    |                  +------------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_file_creates                         | The number of files created                                                          |
     |                  +------------------------------------------+--------------------------------------------------------------------------------------+
     |                  | Num_file_ioreads                         | The number of files read                                                             |
@@ -1350,11 +1350,11 @@ The **cubrid lockdb** utility is used to check the information on the lock being
 
     cubrid lockdb [options] database_name
 
-*  **cubrid**: An integrated utility for the CUBRID service and database management.
-
-*  **lockdb**: A command used to check the information on the lock being used by the current transaction in the database.
-
-*  *database_name*: The name of the database where lock information of the current transaction is to be checked.
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+    
+*   **lockdb**: A command used to check the information on the lock being used by the current transaction in the database.
+    
+*   *database_name*: The name of the database where lock information of the current transaction is to be checked.
 
 The following example shows how to display lock information of the *testdb* database on a screen without any option. ::
 
@@ -1375,11 +1375,11 @@ Output Contents
 
 The output contents of **cubrid lockdb** are divided into three logical sections.
 
-*  Server lock settings
-
-*  Clients that are accessing the database
-
-*  The contents of an object lock table
+*   Server lock settings
+    
+*   Clients that are accessing the database
+    
+*   The contents of an object lock table
 
 **Server lock settings**
 
@@ -1608,11 +1608,11 @@ The **cubrid killtran** is used to check transactions or abort specific transact
 
     cubrid killtran [options] database_name
 
-* **cubrid**: An integrated utility for the CUBRID service and database management
-
-* **killtran**: A utility that manages transactions for a specified database
-
-* *database_name*: The name of database whose transactions are to be killed
+*   **cubrid**: An integrated utility for the CUBRID service and database management
+    
+*   **killtran**: A utility that manages transactions for a specified database
+    
+*   *database_name*: The name of database whose transactions are to be killed
 
 Some options refer to killing specified transactions; others refer to print active transactions. If no option is specified, **-d** is specified by default so all transactions are displayed on the screen.
  
@@ -1771,11 +1771,11 @@ You can check various pieces of internal information on the database with the **
 
     cubrid diagdb options database_name
 
-* **cubrid**: An integrated utility for the CUBRID service and database management.
-
-* **diagdb**: A command that is used to check the current storage state of the database by Dumping the information contained in the binary file managed by CUBRID in text format. It normally executes only when the database is in a stopped state. You can check the whole database or the file table, file size, heap size, class name or disk bitmap selectively by using the provided option.
-
-* *database_name*: The name of the database whose internal information is to be diagnosed.
+*   **cubrid**: An integrated utility for the CUBRID service and database management.
+    
+*   **diagdb**: A command that is used to check the current storage state of the database by Dumping the information contained in the binary file managed by CUBRID in text format. It normally executes only when the database is in a stopped state. You can check the whole database or the file table, file size, heap size, class name or disk bitmap selectively by using the provided option.
+    
+*   *database_name*: The name of the database whose internal information is to be diagnosed.
 
 The following shows [options] available with the **cubrid diagdb** utility.
 

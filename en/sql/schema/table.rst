@@ -221,7 +221,7 @@ The **DEFAULT** value of the pseudocolumn can be specified as one or more column
 AUTO INCREMENT
 ^^^^^^^^^^^^^^
 
-You can define the **AUTO_INCREMENT** attribute for the column to automatically give serial numbers to column values. This can be defined only for **SMALLINT**, **INTEGER**, **BIGINT** and **NUMERIC**\ (*p*, 0) types.
+You can define the **AUTO_INCREMENT** attribute for the column to automatically give serial numbers to column values. This can be defined only for **SMALLINT**, **INTEGER**, **BIGINT** and **NUMERIC**\ (*p*, 0) types.
 
 **DEFAULT**, **SHARED** and **AUTO_INCREMENT** cannot be defined for the same column. Make sure the value entered directly by the user and the value entered by the auto increment attribute do not conflict with each other.
 
@@ -695,7 +695,7 @@ CREATE TABLE AS SELECT
 
 You can create a new table that contains the result records of the **SELECT** statement by using the **CREATE TABLE...AS SELECT** statement. You can define column and table constraints for the new table. The following rules are applied to reflect the result records of the **SELECT** statement.
 
-*   If *col_1* is defined in the new table and the same column *col_1* is specified in *select_statement*, the result record of the **SELECT** statement is stored as *col_1* value in the new table. Type casting is attempted if the column names are identical but the columns types are different.
+*   If *col_1* is defined in the new table and the same column *col_1* is specified in *select_statement*, the result record of the **SELECT** statement is stored as *col_1* value in the new table. Type casting is attempted if the column names are identical but the columns types are different.
 
 *   If *col_1* and  *col_2* are defined in the new table, *col_1*, col_2 and *col_3* are specified in the column list of the *select_statement* and there is a containment relationship between all of them, *col_1*, *col_2* and *col_3* are created in the new table and the result data of the **SELECT** statement is stored as values for all columns. Type casting is attempted if the column names are identical but the columns types are different.
 
@@ -1050,7 +1050,7 @@ You can define the index attributes for a specific column by using the **ADD IND
 
 *   *table_name* : Specifies the name of a table to be modified.
 *   *index_name* : Specifies the name of an index(maximum: 254 bytes). If omitted, a name is automatically assigned.
-*   *index_col_name* : Specifies the column that has an index to be defined. **ASC** or **DESC** can be specified for a column option.
+*   *index_col_name* : Specifies the column that has an index to be defined. **ASC** or **DESC** can be specified for a column option.
 
 .. code-block:: sql
 
@@ -1179,7 +1179,7 @@ The **MODIFY** clause can modify type, size, and attribute of a column but canno
 
 If you set the type, size, and attribute to apply to a new column with the **CHANGE** clause or the **MODIFY** clause, the attribute that is currently defined will not be passed to the attribute of the new column.
 
-When you change data types using the **CHANGE** clause or the **MODIFY** clause, the data can be modified. For example, if you shorten the length of a column, the character string may be truncated.
+When you change data types using the **CHANGE** clause or the **MODIFY** clause, the data can be modified. For example, if you shorten the length of a column, the character string may be truncated.
 
 .. warning::
 
@@ -1366,15 +1366,15 @@ Changes of Table Attributes based on Changes of Column Type
     *   If the **PRIMARY KEY** constraint is specified in the column to change but doesn't exist in the existing column, a **PRIMARY KEY** will be created.
     *   If a **PRIMARY KEY** constraint exists but is not specified in the column to change, the **PRIMARY KEY** will be maintained.
 
-*   Multicolumn **PRIMARY KEY** : If the **PRIMARY KEY** constraint is specified and the type is upgraded, a **PRIMARY KEY** will be re-created.
+*   Multicolumn **PRIMARY KEY**: If the **PRIMARY KEY** constraint is specified and the type is upgraded, a **PRIMARY KEY** will be re-created.
 
-*   Single Column **UNIQUE KEY**
+*   Single Column **UNIQUE KEY**
 
-    *   If the type is upgraded, a **UNIQUE KEY** will be re-created.
-    *   If a **UNIQUE KEY** exists in the existing column and it is not specified in the column to change, it will be maintained.
-    *   If a **UNIQUE KEY** exists in the existing column to change, it will be created.
+    *   If the type is upgraded, a **UNIQUE KEY** will be re-created.
+    *   If a **UNIQUE KEY** exists in the existing column and it is not specified in the column to change, it will be maintained.
+    *   If a **UNIQUE KEY** exists in the existing column to change, it will be created.
 
-*   Multicolumn **UNIQUE KEY** : If the column type is changed, an index will be re-created.
+*   Multicolumn **UNIQUE KEY**: If the column type is changed, an index will be re-created.
 
 *   Column with a Non-unique Index : If the column type is changed, an index will be re-created.
 
@@ -1405,7 +1405,7 @@ If the value of the **alter_table_change_type_strict** parameter is yes, an erro
 
 The **ALTER CHANGE** statement checks the possibility of type conversion before updating a record but the type conversion of specific values may fail. For example, if the value format is not correct when you convert **VARCHAR** to **DATE**, the conversion may fail. In this case, the hard default value of the **DATE** type will be assigned.
 
-The hard default value is a value that will be used when you add columns with the **ALTER TABLE ... ADD  COLUMN** statement, add or change by converting types with the **ALTER TABLE ... CHANGE/MODIFY** statement. The operation will vary depending on the system parameter, **add_column_update_hard_default** in the **ADD COLUMN** statement.
+The hard default value is a value that will be used when you add columns with the **ALTER TABLE ... ADD COLUMN** statement, add or change by converting types with the **ALTER TABLE ... CHANGE/MODIFY** statement. The operation will vary depending on the system parameter, **add_column_update_hard_default** in the **ADD COLUMN** statement.
 
 **Hard Default Value by Type**
 
@@ -1442,15 +1442,15 @@ The hard default value is a value that will be used when you add columns with th
 +-----------+-------------------------------------+-----------------------------------------+
 | BIGINT    | Yes                                 | 0                                       |
 +-----------+-------------------------------------+-----------------------------------------+
-| BIT       | NO                                  |                                         |
+| BIT       | NO                                  |                                         |
 +-----------+-------------------------------------+-----------------------------------------+
-| VARBIT    | No                                  |                                         |
+| VARBIT    | No                                  |                                         |
 +-----------+-------------------------------------+-----------------------------------------+
-| OBJECT    | No                                  |                                         |
+| OBJECT    | No                                  |                                         |
 +-----------+-------------------------------------+-----------------------------------------+
-| BLOB      | No                                  |                                         |
+| BLOB      | No                                  |                                         |
 +-----------+-------------------------------------+-----------------------------------------+
-| CLOB      | No                                  |                                         |
+| CLOB      | No                                  |                                         |
 +-----------+-------------------------------------+-----------------------------------------+
 
 .. _rename-column:
@@ -1470,7 +1470,7 @@ You can change the name of the column by using the **RENAME COLUMN** clause. ::
 .. code-block:: sql
 
     CREATE TABLE a_tbl (id INT, name VARCHAR(50));
-    ALTER TABLE a_tbl RENAME COLUMN name AS name1;
+    ALTER TABLE a_tbl RENAME COLUMN name AS name1;
 
 .. _rename-index: 
 
@@ -1540,7 +1540,7 @@ You can drop the constraints pre-defined for the table, such as **UNIQUE**, **PR
     DROP CONSTRAINT constraint_name ;
 
 *   *table_name* : Specifies the name of a table that has a constraint to be dropped.
-*   *constraint_name* : Specifies the name of a constraint to be dropped.  
+*   *constraint_name*: Specifies the name of a constraint to be dropped.
 
 .. code-block:: sql
 

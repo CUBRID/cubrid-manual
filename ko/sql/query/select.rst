@@ -5,67 +5,74 @@ SELECT
 **SELECT** 문은 지정된 테이블에서 원하는 칼럼을 조회한다. ::
 
     SELECT [ <qualifier> ] <select_expressions>
-        [ { TO | INTO } <variable_comma_list> ]
-        [ FROM <extended_table_specification_comma_list> ]
-        [ WHERE <search_condition> ]
-        [ GROUP BY {col_name | expr} [ ASC | DESC ],...[ WITH ROLLUP ] ]
-        [ HAVING  <search_condition> ]
-        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ]
-        [ LIMIT [offset,] row_count ]
-        [ USING INDEX { index_name [,index_name,...] | NONE }]
-     
-    <qualifier> ::= ALL | DISTINCT | DISTINCTROW | UNIQUE
+        [{TO | INTO} <variable_comma_list>]
+        [FROM <extended_table_specification_comma_list>]
+        [WHERE <search_condition>]
+        [GROUP BY {col_name | expr} [ASC | DESC], ...[WITH ROLLUP]]
+        [HAVING  <search_condition> ]
+        [ORDER BY {col_name | expr} [ASC | DESC], ... [NULLS {FIRST | LAST}]
+        [LIMIT [offset,] row_count]
+        [USING INDEX { index_name [,index_name, ...] | NONE }]
+        [FOR UPDATE [OF <spec_name_comma_list>]]
+        
+        <qualifier> ::= ALL | DISTINCT | DISTINCTROW | UNIQUE
     
-    <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
+        <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
-    <variable_comma_list> ::= [:] identifier, [:] identifier, ...
+        <variable_comma_list> ::= [:] identifier, [:] identifier, ...
     
-    <extended_table_specification_comma_list> ::=
-        <table_specification> [ {, <table_specification> } ...
-                                | <join_table_specification> ... 
-                                | <join_table_specification2> ... ]
+        <extended_table_specification_comma_list> ::=
+            <table_specification>   [   
+                                        {, <table_specification> } ... |
+                                        <join_table_specification> ... |
+                                        <join_table_specification2> ...
+                                    ]
      
     <table_specification> ::=
-        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
+        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
         <metaclass_specification> [ <correlation> ] |
         <subquery> <correlation> |
         TABLE ( <expression> ) <correlation>
 
-    <correlation> ::= [ AS ] <identifier> [ ( <identifier_comma_list> ) ]
+    <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
-    <single_table_spec> ::= [ ONLY ] <table_name> |
+    <single_table_spec> ::= [ONLY] <table_name> |
                           ALL <table_name> [ EXCEPT <table_name> ]
      
     <metaclass_specification> ::= CLASS <class_name>
      
     <join_table_specification> ::=
-        { [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN | 
-        STRAIGHT_JOIN } <table_specification> ON <search_condition>
+        {
+            [INNER | {LEFT | RIGHT} [OUTER]] JOIN | 
+            STRAIGHT_JOIN
+        } <table_specification> ON <search_condition>
      
     <join_table_specification2> ::= 
-		{ CROSS JOIN | 
-        NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
+        { 
+            CROSS JOIN | 
+            NATURAL [ LEFT | RIGHT ] JOIN 
+        } <table_specification>
     
     <lock_hint> ::= READ UNCOMMITTED
 
-*   *qualifier* : 한정어. 생략이 가능하며 지정하지 않을 경우에는 **ALL** 로 지정된다.
+*   *qualifier*: 한정어. 생략이 가능하며 지정하지 않을 경우에는 **ALL** 로 지정된다.
 
-    *   **ALL** : 테이블의 모든 레코드를 조회한다.
-    *   **DISTINCT** : 중복을 허용하지 않고 유일한 값을 갖는 레코드에 대해서만 조회한다. **DISTINCTROW**, **UNIQUE** 와 동일하다.
+    *   **ALL**: 테이블의 모든 레코드를 조회한다.
+    *   **DISTINCT**: 중복을 허용하지 않고 유일한 값을 갖는 레코드에 대해서만 조회한다. **DISTINCTROW**, **UNIQUE** 와 동일하다.
 
-*   <*select_expressions*> :
+*   <*select_expressions*>:
 
-    *   \* : **SELECT** * 구문을 사용하면 **FROM** 절에서 명시한 테이블에 대한 모든 칼럼을 조회할 수 있다.
+    *   \*: **SELECT** * 구문을 사용하면 **FROM** 절에서 명시한 테이블에 대한 모든 칼럼을 조회할 수 있다.
 
     *   *expression_comma_list* : *expression* 은 칼럼 이름이나 경로 표현식(예: *tbl_name.col_name*), 변수, 테이블 이름이 될 수 있으며 산술 연산을 포함하는 일반적인 표현식도 모두 사용될 수 있다. 쉼표(,)는 리스트에서 개별 표현식을 구분하는데 사용된다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY**, **FOR** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
 
-      *expression* 에는 **AVG**, **COUNT**, **MAX**, **MIN**, **SUM** 과 같이 조회된 데이터를 조작하는 집계 함수가 사용될 수 있다. 
+        *expression*\ 에는 **AVG**, **COUNT**, **MAX**, **MIN**, **SUM** 과 같이 조회된 데이터를 조작하는 집계 함수가 사용될 수 있다. 
 
-*   *table_name*.\* : 테이블 이름을 지정한다. \*을 사용하면 명시한 테이블의 모든 칼럼을 지정하는 것과 같다.
+*   *table_name*.\*: 테이블 이름을 지정한다. \*을 사용하면 명시한 테이블의 모든 칼럼을 지정하는 것과 같다.
 
-*   *variable_comma_list* : *select_expressions* 이 조회하는 데이터는 하나 이상의 변수에 저장될 수 있다.
+*   *variable_comma_list*: *select_expressions* 이 조회하는 데이터는 하나 이상의 변수에 저장될 수 있다.
 
-*   [:]\ *identifier* : **TO** (또는 **INTO**) 다음에 *:identifier*\를  조회하는 데이터를 ':identifier'의 변수에 저장할 수 있다.
+*   [:]\ *identifier*: **TO** (또는 **INTO**) 다음에 *:identifier*\를  조회하는 데이터를 ':identifier'의 변수에 저장할 수 있다.
 
 *   <*single_table_spec*>
 
@@ -124,7 +131,7 @@ SELECT
       'Belgium,  Antwerp'
       'Canada,  Montreal'
       'England,  London'
-      
+
 FROM 절
 =======
 
@@ -136,33 +143,33 @@ FROM 절
 
 ::
 
-    SELECT [ <qualifier> ] <select_expressions>
-    [ FROM <table_specification> [ {, <table_specification>
-                                    | <join_table_specification> }... ]]
-     
+    SELECT [<qualifier>] <select_expressions>
+    [
+        FROM <table_specification> [ {, <table_specification> | <join_table_specification> }... ]
+    ]
      
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
     <table_specification> ::=
-        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ] |
-        <metaclass_specification> [ <correlation> ] |
+        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
+        <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
-        TABLE ( <expression> ) <correlation>
+        TABLE (<expression>) <correlation>
      
-    <correlation> ::= [ AS ] <identifier> [ ( <identifier_comma_list> ) ]
+    <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
-    <single_table_spec> ::= [ ONLY ] <table_name> |
-                          ALL <table_name> [ EXCEPT <table_name> ]
+    <single_table_spec> ::= [ONLY] <table_name> |
+                          ALL <table_name> [EXCEPT <table_name>]
      
     <metaclass_specification> ::= CLASS <class_name>
      
     <lock_hint> ::= READ UNCOMMITTED
 
-*   <*select_expressions*> : 조회하고자 하는 칼럼 또는 연산식을 하나 이상 지정할 수 있으며, 테이블 내 모든 칼럼을 조회할 때에는 * 를 지정한다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY**, **FOR** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
+*   <*select_expressions*>: 조회하고자 하는 칼럼 또는 연산식을 하나 이상 지정할 수 있으며, 테이블 내 모든 칼럼을 조회할 때에는 * 를 지정한다. 조회하고자 하는 칼럼 또는 연산식에 대해 **AS** 키워드를 사용하여 별칭(alias)를 지정할 수 있으며, 지정된 별칭은 칼럼 이름으로 사용되어 **GROUP BY**, **HAVING**, **ORDER BY**, **FOR** 절 내에서 사용될 수 있다. 칼럼의 위치 인덱스(position)는 칼럼이 명시된 순서대로 부여되며, 시작 값은 1이다.
 
-*   <*table_specification*> : **FROM** 절 뒤에 하나 이상의 테이블 이름이 명시되며, 부질의와 유도 테이블도 지정될 수 있다. 부질의 유도 테이블에 대한 설명은 :ref:`subquery-derived-table` 을 참고한다.
+*   <*table_specification*>: **FROM** 절 뒤에 하나 이상의 테이블 이름이 명시되며, 부질의와 유도 테이블도 지정될 수 있다. 부질의 유도 테이블에 대한 설명은 :ref:`subquery-derived-table`\ 을 참고한다.
 
-*   <*lock_hint*> : 해당 테이블에 대한 격리 수준(isolation level)을 **READ UNCOMMITTED** 수준으로 설정할 수 있다. **READ UNCOMMITTED** 은 오손 읽기(dirty read)가 발생할 수 있는 격리 수준으로서, CUBRID 트랜잭션의 격리 수준에 관한 자세한 설명은 :ref:`transaction-isolation-level` 을 참고한다.
+*   <*lock_hint*> : 해당 테이블에 대한 격리 수준(isolation level)을 **READ UNCOMMITTED** 수준으로 설정할 수 있다. **READ UNCOMMITTED**\은 오손 읽기(dirty read)가 발생할 수 있는 격리 수준으로서, CUBRID 트랜잭션의 격리 수준에 관한 자세한 설명은 :ref:`transaction-isolation-level`\ 을 참고한다.
 
 .. code-block:: sql
 
@@ -197,9 +204,11 @@ FROM 절
 부질의 유도 테이블
 ------------------
 
-유도 테이블의 각 레코드는 **FROM** 절에 주어진 부질의의 결과로부터 만들어진다. 부질의로부터 생성되는 유도 테이블은 임의의 개수의 칼럼과 레코드를 가질 수 있다. ::
+유도 테이블의 각 레코드는 **FROM** 절에 주어진 부질의의 결과로부터 만들어진다. 부질의로부터 생성되는 유도 테이블은 임의의 개수의 칼럼과 레코드를 가질 수 있다. 
 
-    FROM (subquery) [ AS ] [ derived_table_name [( column_name [ {, column_name } ... ] )]]
+::
+
+    FROM (subquery) [AS] [derived_table_name [(column_name [{, column_name } ... ])]]
 
 *   *column_name* 파라미터의 개수와 *subquery* 에서 만들어지는 칼럼의 개수는 일치해야 한다.
 *   *derived_table_name*\ 을 생략할 수 있다.
@@ -246,27 +255,27 @@ WHERE 절
 
     WHERE <search_condition>
 
-    <search_condition> ::=
-        comparison_predicate
-        between_predicate
-        exists_predicate
-        in_predicate
-        null_predicate
-        like_predicate
-        quantified_predicate
-        set_predicate
+        <search_condition> ::=
+            <comparison_predicate>
+            <between_predicate>
+            <exists_predicate>
+            <in_predicate>
+            <null_predicate>
+            <like_predicate>
+            <quantified_predicate>
+            <set_predicate>
 
 **WHERE** 절은 *search_condition* 또는 질의에서 조회되는 데이터를 결정하는 조건식을 지정한다. 조건식이 참인 데이터만 질의 결과로 조회된다(**NULL** 값은 알 수 없는 값으로서 질의 결과로 조회되지 않는다).
 
-* *search_condition* : 자세한 내용은 다음의 항목을 참고한다.
+*   *search_condition*: 자세한 내용은 다음의 항목을 참고한다.
 
-  *   :ref:`basic-cond-expr`
-  *   :ref:`between-expr`
-  *   :ref:`exists-expr`
-  *   :ref:`in-expr`
-  *   :ref:`is-null-expr`
-  *   :ref:`like-expr`
-  *   :ref:`any-some-all-expr`
+    *   :ref:`basic-cond-expr`
+    *   :ref:`between-expr`
+    *   :ref:`exists-expr`
+    *   :ref:`in-expr`
+    *   :ref:`is-null-expr`
+    *   :ref:`like-expr`
+    *   :ref:`any-some-all-expr`
 
 복수의 조건은 논리연산자 **AND**, **OR** 를 사용할 수 있다. **AND** 가 지정된 경우 모든 조건이 참이어야 하고, **OR** 로 지정된 경우에는 하나의 조건만 참이어도 된다. 만약 키워드 **NOT** 이 조건 앞에 붙는다면 조건은 반대의 의미를 갖는다. 논리 연산이 평가되는 순서는 다음 표와 같다.
 
@@ -291,19 +300,21 @@ GROUP BY ... HAVING 절
 
 **GROUP BY** 절 뒤에 **HAVING** 절을 결합하여 그룹 선택을 위한 조건식을 설정할 수 있다. 즉, **GROUP BY** 절로 구성되는 모든 그룹 중 **HAVING** 절에 명시된 조건식을 만족하는 그룹만 조회한다.
 
-SQL 표준에서는 **GROUP BY** 절에서 명시되지 않은 칼럼(hidden column)을 **SELECT** 칼럼 리스트에 명시할 수 없지만, CUBRID는 문법을 확장하여 **GROUP BY** 절에서 명시되지 않은 칼럼도 **SELECT** 칼럼 리스트에 명시할 수 있다. 확장된 문법을 사용하지 않으려면 **only_full_group_by** 파라미터 값을 yes로 설정해야 한다. 이에 대한 자세한 내용은 :ref:`stmt-type-parameters` 를 참고한다. ::
+SQL 표준에서는 **GROUP BY** 절에서 명시되지 않은 칼럼(hidden column)을 **SELECT** 칼럼 리스트에 명시할 수 없지만, CUBRID는 문법을 확장하여 **GROUP BY** 절에서 명시되지 않은 칼럼도 **SELECT** 칼럼 리스트에 명시할 수 있다. 확장된 문법을 사용하지 않으려면 **only_full_group_by** 파라미터 값을 yes로 설정해야 한다. 이에 대한 자세한 내용은 :ref:`stmt-type-parameters` 를 참고한다. 
+
+::
 
     SELECT ...
-    GROUP BY { col_name | expr | position } [ ASC | DESC ], ...
-              [ WITH ROLLUP ][ HAVING <search_condition> ]
+    GROUP BY {col_name | expr | position} [ASC | DESC], ...
+              [WITH ROLLUP] [HAVING <search_condition>]
 
-*   *col_name* | *expr* | *position* : 하나 이상의 칼럼 이름, 표현식, 별칭 또는 칼럼 위치가 지정될 수 있으며, 각 항목은 쉼표로 구분된다. 이를 기준으로 칼럼들이 정렬된다.
+*   *col_name* | *expr* | *position*: 하나 이상의 칼럼 이름, 표현식, 별칭 또는 칼럼 위치가 지정될 수 있으며, 각 항목은 쉼표로 구분된다. 이를 기준으로 칼럼들이 정렬된다.
 
-*   [ **ASC** | **DESC** ] : **GROUP BY** 절 내에 명시된 칼럼 뒤에 **ASC** 또는 **DESC** 의 정렬 옵션을 명시할 수 있다. 정렬 옵션이 명시되지 않으면 기본 옵션은 **ASC** 가 된다.
+*   [**ASC** | **DESC**]: **GROUP BY** 절 내에 명시된 칼럼 뒤에 **ASC** 또는 **DESC** 의 정렬 옵션을 명시할 수 있다. 정렬 옵션이 명시되지 않으면 기본 옵션은 **ASC** 가 된다.
 
-*   <*search_condition*> : **HAVING** 절에 검색 조건식을 명시한다. **HAVING** 절에는 **GROUP BY** 절 내에 명시된 칼럼, 별칭, 집계 함수에서 사용되는 칼럼 또는 **GROUP BY** 절에서 명시되지 않은 칼럼(hidden columns)을 참조할 수 있다.
+*   <*search_condition*>: **HAVING** 절에 검색 조건식을 명시한다. **HAVING** 절에는 **GROUP BY** 절 내에 명시된 칼럼, 별칭, 집계 함수에서 사용되는 칼럼 또는 **GROUP BY** 절에서 명시되지 않은 칼럼(hidden columns)을 참조할 수 있다.
 
-*   **WITH ROLLUP** : **GROUP BY** 절에 **WITH ROLLUP** 수정자를 명시하면, **GROUP BY** 된 칼럼 각각에 대한 결과 값이 그룹별로 집계되고 나서, 해당 그룹 행의 전체를 집계한 결과 값이 추가로 출력된다. 즉, 그룹별로 집계한 값에 대해 다시 전체 집계를 수행한다. 그룹 대상 칼럼이 두 개 이상일 경우 앞의 그룹을 큰 단위, 뒤의 그룹을 작은 단위로 간주하여 작은 단위 별 전체 집계 행과 큰 단위의 전체 집계 행이 추가된다. 예를 들어 부서별, 사람별 영업 실적의 집계를 하나의 질의문으로 확인할 수 있다.
+*   **WITH ROLLUP**: **GROUP BY** 절에 **WITH ROLLUP** 수정자를 명시하면, **GROUP BY** 된 칼럼 각각에 대한 결과 값이 그룹별로 집계되고 나서, 해당 그룹 행의 전체를 집계한 결과 값이 추가로 출력된다. 즉, 그룹별로 집계한 값에 대해 다시 전체 집계를 수행한다. 그룹 대상 칼럼이 두 개 이상일 경우 앞의 그룹을 큰 단위, 뒤의 그룹을 작은 단위로 간주하여 작은 단위 별 전체 집계 행과 큰 단위의 전체 집계 행이 추가된다. 예를 들어 부서별, 사람별 영업 실적의 집계를 하나의 질의문으로 확인할 수 있다.
 
 .. code-block:: sql
 
@@ -409,13 +420,13 @@ ORDER BY 절
 **ORDER BY** 절은 질의 결과를 오름차순 또는 내림차순으로 정렬하며, **ASC** 또는 **DESC** 와 같은 정렬 옵션을 명시하지 않으면 오름차순으로 정렬한다. **ORDER BY** 절을 지정하지 않으면, 조회되는 레코드의 순서는 질의에 따라 다르다. ::
 
     SELECT ...
-    ORDER BY { col_name | expr | position } [ ASC | DESC ], ...] [ NULLS { FIRST | LAST } ]
+    ORDER BY {col_name | expr | position} [ASC | DESC], ...] [NULLS {FIRST | LAST}]
 
-*   *col_name* | *expr* | *position* : 정렬 기준이 되는 칼럼 이름, 표현식, 별칭 또는 칼럼 위치를 지정한다. 하나 이상의 값을 지정할 수 있으며 각 항목은 쉼표로 구분한다. **SELECT** 칼럼 리스트에 명시되지 않은 칼럼도 지정할 수 있다.
+*   *col_name* | *expr* | *position*: 정렬 기준이 되는 칼럼 이름, 표현식, 별칭 또는 칼럼 위치를 지정한다. 하나 이상의 값을 지정할 수 있으며 각 항목은 쉼표로 구분한다. **SELECT** 칼럼 리스트에 명시되지 않은 칼럼도 지정할 수 있다.
 
-*   [ **ASC** | **DESC** ] : **ASC** 은 오름차순, **DESC** 은 내림차순으로 정렬하며, 정렬 옵션이 명시되지 않으면 오름차순으로 정렬한다.
+*   [**ASC** | **DESC**]: **ASC** 은 오름차순, **DESC** 은 내림차순으로 정렬하며, 정렬 옵션이 명시되지 않으면 오름차순으로 정렬한다.
 
-*   [ **NULLS** { **FIRST** | **LAST** } ] : **NULLS FIRST**\ 는 NULL을 앞에 정렬하며, **NULLS LAST**\ 는 NULL을 뒤에 정렬한다. 이 구문이 생략될 경우 **ASC**\ 는 NULL을 앞에 정렬하며, **DESC**\ 는 NULL을 뒤에 정렬한다.
+*   [**NULLS** {**FIRST** | **LAST**}]: **NULLS FIRST**\ 는 NULL을 앞에 정렬하며, **NULLS LAST**\ 는 NULL을 뒤에 정렬한다. 이 구문이 생략될 경우 **ASC**\ 는 NULL을 앞에 정렬하며, **DESC**\ 는 NULL을 뒤에 정렬한다.
 
 .. code-block:: sql
 
@@ -457,7 +468,7 @@ ORDER BY 절
               201     3.250000000000000e+02
               301     3.000000000000000e+02
               501     1.750000000000000e+02
-     
+
 다음은 ORDER BY 절 뒤에 NULLS FIRST, NULLS LAST 구문을 지정하는 예제이다.
 
 .. code-block:: sql
@@ -565,10 +576,10 @@ LIMIT 절
 
 ::
 
-    LIMIT { [offset,] row_count | row_count [ OFFSET offset ] }
+    LIMIT {[offset,] row_count | row_count [OFFSET offset]}
 
-*   *offset* : 출력할 레코드의 시작 행 오프셋 값을 지정한다. 결과 셋의 시작 행 오프셋 값은 0이다. 생략할 수 있으며, 기본값은 **0** 이다.
-*   *row_count* : 출력하고자 하는 레코드 개수를 명시한다. 0보다 큰 정수를 지정할 수 있다.
+*   *offset*: 출력할 레코드의 시작 행 오프셋 값을 지정한다. 결과 셋의 시작 행 오프셋 값은 0이다. 생략할 수 있으며, 기본값은 **0** 이다.
+*   *row_count*: 출력하고자 하는 레코드 개수를 명시한다. 0보다 큰 정수를 지정할 수 있다.
 
 .. code-block:: sql
 
@@ -629,36 +640,41 @@ LIMIT 절
 
     FROM <table_specification> [{, <table_specification> 
         | { <join_table_specification> | <join_table_specification2> } ...]
-     
+
     <table_specification> ::=
-        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
-        <metaclass_specification> [ <correlation> ] |
+        <single_table_spec> [<correlation>] [WITH (<lock_hint>)]|
+        <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
-        TABLE ( <expression> ) <correlation>
+        TABLE (<expression>) <correlation>
         
     <join_table_specification> ::=
-       { [ INNER | {LEFT | RIGHT} [ OUTER ] ] JOIN |
-       STRAIGHT_JOIN } <table_specification> ON <search_condition>
+        {
+            [INNER | {LEFT | RIGHT} [OUTER]] JOIN |
+            STRAIGHT_JOIN
+        } <table_specification> ON <search_condition>
      
-    <join_table_specification2> ::= { CROSS JOIN | 
-        NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
+    <join_table_specification2> ::= 
+        {
+            CROSS JOIN | 
+            NATURAL [LEFT | RIGHT] JOIN
+        } <table_specification>
 
 *   <*join_table_specification*>
 
-    *   [ **INNER** ] **JOIN** : 내부 조인에 사용되며 조인 조건이 반드시 필요하다.
+    *   [**INNER**] **JOIN**: 내부 조인에 사용되며 조인 조건이 반드시 필요하다.
 
-    *   { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** : **LEFT** 는 왼쪽 외부 조인을 수행하는 질의를 만드는데 사용되고, **RIGHT** 는 오른쪽 외부 조인을 수행하는 질의를 만드는데 사용된다.
+    *   {**LEFT** | **RIGHT**} [**OUTER**] **JOIN**: **LEFT** 는 왼쪽 외부 조인을 수행하는 질의를 만드는데 사용되고, **RIGHT** 는 오른쪽 외부 조인을 수행하는 질의를 만드는데 사용된다.
 
-    *   **STRAIGHT_JOIN** : (작성중)
+    *   **STRAIGHT_JOIN**: (작성중)
      
 *   <*join_table_specification2*>
 
-    *   **CROSS JOIN** : 교차 조인에 사용되며, 조인 조건을 사용하지 않는다.
-    *   **NATURAL** [ **LEFT** | **RIGHT** ] **JOIN** : 자연 조인에 사용되며, 조인 조건을 사용하지 않는다. 같은 이름의 칼럼끼리 동등 조건을 가지는 것과 같이 동작한다.
-    
+    *   **CROSS JOIN**: 교차 조인에 사용되며, 조인 조건을 사용하지 않는다.
+    *   **NATURAL** [ **LEFT** | **RIGHT** ] **JOIN**: 자연 조인에 사용되며, 조인 조건을 사용하지 않는다. 같은 이름의 칼럼끼리 동등 조건을 가지는 것과 같이 동작한다.
+
 내부 조인
 ---------
-    
+
 내부 조인은 조인을 위한 조건이 반드시 필요하다. **INNER JOIN** 키워드는 생략할 수 있으며, 생략하면 테이블 사이를 쉼표(,)로 구분하고, **ON** 조인 조건을 **WHERE** 조건으로 대체할 수 있다.
 
 
@@ -693,7 +709,7 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
 
 외부 조인의 경우 조인 조건은 내부 조인의 경우와는 다른 방법으로 지정된다. 내부 조인의 조인 조건은 **WHERE** 절에서도 표현될 수 있지만, 외부 조인의 경우에는 조인 조건이 **FROM** 절 내의 **ON** 키워드 뒤에 나타난다. 다른 검색 조건은 **WHERE** 절이나 **ON** 절에서 사용할 수 있지만 검색 조건이 **WHERE** 절에 있을 때와 **ON** 절에 있을 때 질의 결과가 달라질 수 있다.
 
-**FROM** 절에 명시된 순서대로 테이블 실행 순서가 고정되므로, 외부 조인을 사용하는 경우 테이블 순서에 주의하여 질의문을 작성한다. 외부 조인 연산자 '**(+)**'\ 를 **WHERE** 절에 명시하여 Oracle 스타일의 조인 질의문도 작성 가능하나, 실행 결과나 실행 계획이 원하지 않는 방향으로 유도될 수 있으므로 { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN**\ 을 이용한 표준 구문을 사용할 것을 권장한다.
+**FROM** 절에 명시된 순서대로 테이블 실행 순서가 고정되므로, 외부 조인을 사용하는 경우 테이블 순서에 주의하여 질의문을 작성한다. 외부 조인 연산자 '**(+)**'\ 를 **WHERE** 절에 명시하여 Oracle 스타일의 조인 질의문도 작성 가능하나, 실행 결과나 실행 계획이 원하지 않는 방향으로 유도될 수 있으므로 {**LEFT** | **RIGHT**} [**OUTER**] **JOIN**\ 을 이용한 표준 구문을 사용할 것을 권장한다.
 
 다음은 오른쪽 외부 조인을 이용하여 1950년 이후에 열린 올림픽에서 신기록이 세워진 올림픽의 개최국가와 개최연도를 조회하되, 신기록이 세워지지 않은 올림픽에 대한 정보도 포함하는 예제이다. 이 예제는 오른쪽 외부 조인이므로, *olympic* 테이블의 *host_nation* 의 모든 레코드를 포함하고, 값이 존재하지 않는 *history* 테이블의 *host_year*\ 에 대해서는 칼럼 값으로 **NULL**\ 을 반환한다.
 
@@ -749,7 +765,7 @@ CUBRID는 외부 조인 중 왼쪽 외부 조인과 오른쪽 외부 조인만 �
              2000         2000  'Australia'
              2004         2004  'Greece'
 
-다음은 **WHERE** 절에서 **(+)** 를 사용해서 외부 조인 질의를 작성한 예이며, 위와 같은 결과를 출력한다. 단, **(+)** 연산자를 이용한 Oracle 스타일의 외부 조인 질의문은 ISO/ANSI 표준이 아니며 모호한 상황을 만들어 낼 수 있으므로 가능하면 표준 구문인 **LEFT OUTER JOIN** (또는 **RIGHT OUTER JOIN** )을 사용할 것을 권장한다.
+다음은 **WHERE** 절에서 **(+)** 를 사용해서 외부 조인 질의를 작성한 예이며, 위와 같은 결과를 출력한다. 단, **(+)** 연산자를 이용한 Oracle 스타일의 외부 조인 질의문은 ISO/ANSI 표준이 아니며 모호한 상황을 만들어 낼 수 있으므로 가능하면 표준 구문인 **LEFT OUTER JOIN**(또는 **RIGHT OUTER JOIN**)을 사용할 것을 권장한다.
 
 .. code-block:: sql
 
@@ -1002,7 +1018,7 @@ STRAIGHT_JOIN
     FROM nation;
 
 ::
-    
+
       name                      capital                 host_cities
     ==================================================================
       'Somalia'                   'Mogadishu'           {}
@@ -1014,7 +1030,7 @@ STRAIGHT_JOIN
       'United States of America'  'Washington.D.C'      {'Atlanta ', 'St. Louis', 'Los Angeles', 'Los Angeles'}
       'Uzbekistan'                'Tashkent'            {}
       'Vanuatu'                   'Port Vila'           {}
-  
+
 이런 형태의 다중 행 부질의 표현식은 컬렉션 타입의 값을 갖는 표현식이 허용되는 모든 곳에서 사용할 수 있다. 단, 클래스 속성 정의에서 **DEFAULT** 명세 부분과 같이 컬렉션 타입의 상수 값이 요구되는 곳에는 사용될 수 없다.
 
 부질의 내에서 **ORDER BY** 절을 명시적으로 사용하지 않는 경우 다중 행 부질의 결과의 순서는 지정되지 않으므로, **LIST** (= **SEQUENCE**)를 생성하는 다중 행 부질의는 **ORDER BY** 절을 사용하여 결과의 순서를 지정해야 한다.
@@ -1053,17 +1069,17 @@ VALUES
     INSERT INTO athlete (code, name, gender, nation_code, event)
     VALUES ('21111', 'Jang Mi-Ran ', 'F', 'KOR', 'Weight-lifting'),
            ('21112', 'Son Yeon-Jae ', 'F', 'KOR', 'Rhythmic gymnastics');
-               
+
 다음은 **FROM** 절에서 부질의(subquery)로 사용하는 예이다.
-    
+
 .. code-block:: sql
     
     SELECT a.*
     FROM athlete a, (VALUES ('Jang Mi-Ran', 'F'), ('Son Yeon-Jae', 'F')) AS t(name, gender)
     WHERE a.name=t.name AND a.gender=t.gender;
-    
+
 ::
-    
+
              code  name                gender   nation_code        event
     =====================================================================================================
             21111  'Jang Mi-Ran'       'F'      'KOR'              'Weight-lifting'

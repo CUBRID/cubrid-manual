@@ -5,66 +5,69 @@ SELECT
 The **SELECT** statement specifies columns that you want to retrieve from a table. ::
 
     SELECT [ <qualifier> ] <select_expressions>
-        [ { TO | INTO } <variable_comma_list> ]
-        [ FROM <extended_table_specification_comma_list> ]
-        [ WHERE <search_condition> ]
-        [ GROUP BY {col_name | expr} [ ASC | DESC ],...[ WITH ROLLUP ] ]
-        [ HAVING  <search_condition> ]
-        [ ORDER BY {col_name | expr} [ ASC | DESC ],... [ NULLS { FIRST | LAST } ]
-        [ LIMIT [offset,] row_count ]
-        [ USING INDEX { index_name [,index_name,...] | NONE }]
-     
-    <qualifier> ::= ALL | DISTINCT | DISTINCTROW | UNIQUE
+        [{TO | INTO} <variable_comma_list>]
+        [FROM <extended_table_specification_comma_list>]
+        [WHERE <search_condition>]
+        [GROUP BY {col_name | expr} [ASC | DESC], ...[WITH ROLLUP]]
+        [HAVING  <search_condition> ]
+        [ORDER BY {col_name | expr} [ASC | DESC], ... [NULLS {FIRST | LAST}]
+        [LIMIT [offset,] row_count]
+        [USING INDEX { index_name [,index_name, ...] | NONE }]
+        [FOR UPDATE [OF <spec_name_comma_list>]]
+        
+        <qualifier> ::= ALL | DISTINCT | DISTINCTROW | UNIQUE
     
-    <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
+        <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
-    <variable_comma_list> ::= [:] identifier, [:] identifier, ...
+        <variable_comma_list> ::= [:] identifier, [:] identifier, ...
     
-    <extended_table_specification_comma_list> ::=
-        <table_specification> [ {, <table_specification> } ...
-                                | <join_table_specification> ... 
-                                | <join_table_specification2> ... ]
+        <extended_table_specification_comma_list> ::=
+            <table_specification>   [   
+                                        {, <table_specification> } ... |
+                                        <join_table_specification> ... |
+                                        <join_table_specification2> ...
+                                    ]
      
     <table_specification> ::=
-        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
+        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
         <metaclass_specification> [ <correlation> ] |
         <subquery> <correlation> |
         TABLE ( <expression> ) <correlation>
 
-    <correlation> ::= [ AS ] <identifier> [ ( <identifier_comma_list> ) ]
+    <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
-    <single_table_spec> ::= [ ONLY ] <table_name> |
+    <single_table_spec> ::= [ONLY] <table_name> |
                           ALL <table_name> [ EXCEPT <table_name> ]
      
     <metaclass_specification> ::= CLASS <class_name>
      
     <join_table_specification> ::=
-        { [ INNER | { LEFT | RIGHT } [ OUTER ] ] JOIN | 
+        {[INNER | {LEFT | RIGHT} [OUTER]] JOIN |
         STRAIGHT_JOIN } <table_specification> ON <search_condition>
      
     <join_table_specification2> ::= { CROSS JOIN | 
         NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
     
     <lock_hint> ::= READ UNCOMMITTED
-     
-*   *qualifier* : A qualifier. When omitted, it is set to **ALL**.
 
-    *   **ALL** : Retrieves all records of the table.
-    *   **DISTINCT** : Retrieves only records with unique values without allowing duplicates. **DISTINCT**, **DISTINCTROW**, and **UNIQUE** are used interchangeably.
+*   *qualifier*: A qualifier. When omitted, it is set to **ALL**.
 
-*   <*select_expressions*> :
+    *   **ALL**: Retrieves all records of the table.
+    *   **DISTINCT**: Retrieves only records with unique values without allowing duplicates. **DISTINCT**, **DISTINCTROW**, and **UNIQUE** are used interchangeably.
 
-    *   \* : By using **SELECT** * statement, you can retrieve all columns from the table specified in the **FROM** clause.
-    
-    *   *expression_comma_list* : *expression* can be a path expression (ex.: *tbl_name.col_name*), variable or table name. All general expressions including arithmetic operations can also be used. Use a comma (,) to separate each expression in the list. You can specify aliases by using the **AS** keyword for columns or expressions to be queried. Specified aliases are used as column names in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of a column is assigned based on the order in which the column was specified. The starting value is 1.
+*   <*select_expressions*>:
+
+    *   \*: By using **SELECT** * statement, you can retrieve all columns from the table specified in the **FROM** clause.
+
+    *   *expression_comma_list*: *expression* can be a path expression (ex.: *tbl_name.col_name*), variable or table name. All general expressions including arithmetic operations can also be used. Use a comma (,) to separate each expression in the list. You can specify aliases by using the **AS** keyword for columns or expressions to be queried. Specified aliases are used as column names in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of a column is assigned based on the order in which the column was specified. The starting value is 1.
 
         As **AVG**, **COUNT**, **MAX**, **MIN**, or **SUM**, an aggregate function that manipulates the retrieved data can also be used in the *expression*. 
 
-*   *table_name*. \*: Specifies the table name and using \* has the same effect as specifying all columns for the given table.
+*   *table_name*.\*: Specifies the table name and using \* has the same effect as specifying all columns for the given table.
 
-*   *variable_comma_list* : The data retrieved by the *select_expressions* can be stored in more than one variable.
+*   *variable_comma_list*: The data retrieved by the *select_expressions* can be stored in more than one variable.
 
-*   [:]\ *identifier* : By using the *:identifier* after **TO** (or **INTO**), you can store the data to be retrieved in the ':identifier' variable.
+*   [:]\ *identifier*: By using the *:identifier* after **TO** (or **INTO**), you can store the data to be retrieved in the ':identifier' variable.
 
 *   <*single_table_spec*>
 
@@ -78,7 +81,7 @@ The following example shows how to retrieve host countries of the Olympic Games 
 
     SELECT DISTINCT host_nation 
     FROM olympic;
-    
+
 ::
 
       host_nation
@@ -135,32 +138,33 @@ The **FROM** clause specifies the table in which data is to be retrieved in the 
 
 ::
 
-    SELECT [ <qualifier> ] <select_expressions>
-    [ FROM <table_specification> [ {, <table_specification>
-                                    | <join_table_specification> }... ]]
-
+    SELECT [<qualifier>] <select_expressions>
+    [
+        FROM <table_specification> [ {, <table_specification> | <join_table_specification> }... ]
+    ]
+     
     <select_expressions> ::= * | <expression_comma_list> | *, <expression_comma_list>
      
     <table_specification> ::=
-        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
-        <metaclass_specification> [ <correlation> ] |
+        <single_table_spec> [<correlation>] [WITH (<lock_hint>)] |
+        <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
-        TABLE ( <expression> ) <correlation>
+        TABLE (<expression>) <correlation>
      
-    <correlation> ::= [ AS ] <identifier> [ ( <identifier_comma_list> ) ]
+    <correlation> ::= [AS] <identifier> [(<identifier_comma_list>)]
      
-    <single_table_spec> ::= [ ONLY ] <table_name> |
-                          ALL <table_name> [ EXCEPT <table_name> ]
+    <single_table_spec> ::= [ONLY] <table_name> |
+                          ALL <table_name> [EXCEPT <table_name>]
      
     <metaclass_specification> ::= CLASS <class_name>
      
     <lock_hint> ::= READ UNCOMMITTED
-    
-*   <*select_expressions*> : One or more columns or expressions to query is specified. Use * to query all columns in the table. You can also specify an alias for a column or an expression to be queried by using the AS keyword. This keyword can be used in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of the column is given according to the order in which the column was specified. The starting value is 1.
 
-*   <*table_specification*> : At least one table name is specified after the **FROM** clause. Subqueries and derived tables can also be used in the **FROM** clause. For details on subquery derived tables, see :ref:`subquery-derived-table`.
+*   <*select_expressions*>: One or more columns or expressions to query is specified. Use * to query all columns in the table. You can also specify an alias for a column or an expression to be queried by using the AS keyword. This keyword can be used in **GROUP BY**, **HAVING**, **ORDER BY** and **FOR** clauses. The position index of the column is given according to the order in which the column was specified. The starting value is 1.
 
-*   <*lock_hint*> : You can set **READ UNCOMMITTED** for the table isolation level. **READ UNCOMMITTED** is a level where dirty reads are allowed; see :ref:`transaction-isolation-level` for details on the CUBRID transaction isolation level.
+*   <*table_specification*>: At least one table name is specified after the **FROM** clause. Subqueries and derived tables can also be used in the **FROM** clause. For details on subquery derived tables, see :ref:`subquery-derived-table`.
+
+*   <*lock_hint*>: You can set **READ UNCOMMITTED** for the table isolation level. **READ UNCOMMITTED** is a level where dirty reads are allowed; see :ref:`transaction-isolation-level` for details on the CUBRID transaction isolation level.
 
 .. code-block:: sql
 
@@ -195,9 +199,11 @@ Derived tables are also used to access the individual element of an attribute th
 Subquery Derived Table
 ----------------------
 
-Each instance in the derived table is created from the result of the subquery in the **FROM** clause. A derived table created form a subquery can have any number of columns and records. ::
+Each instance in the derived table is created from the result of the subquery in the **FROM** clause. A derived table created form a subquery can have any number of columns and records. 
 
-    FROM (subquery) [[ AS ] derived_table_name [( column_name [ {, column_name } ... ] )]]
+::
+
+    FROM (subquery) [AS] [derived_table_name [(column_name [{, column_name } ... ])]]
 
 *   The number of *column_name* and the number of columns created by the *subquery* must be identical.
 *   *derived_table_name* can be omitted.
@@ -244,19 +250,19 @@ In a query, a column can be processed based on conditions. The **WHERE** clause 
 
     WHERE <search_condition>
 
-    <search_condition> ::=
-        comparison_predicate
-        between_predicate
-        exists_predicate
-        in_predicate
-        null_predicate
-        like_predicate
-        quantified_predicate
-        set_predicate
+        <search_condition> ::=
+            <comparison_predicate>
+            <between_predicate>
+            <exists_predicate>
+            <in_predicate>
+            <null_predicate>
+            <like_predicate>
+            <quantified_predicate>
+            <set_predicate>
 
 The **WHERE** clause specifies a condition that determines the data to be retrieved by *search_condition* or a query. Only data for which the condition is true is retrieved for the query results. (**NULL** value is not retrieved for the query results because it is evaluated as unknown value.)
 
-*   *search_condition* : It is described in detail in the following sections.
+*   *search_condition*: It is described in detail in the following sections.
 
     *   :ref:`basic-cond-expr`
     *   :ref:`between-expr`
@@ -289,19 +295,21 @@ The **GROUP BY** clause is used to group the result retrieved by the **SELECT** 
 
 You can also set a condition for group selection by including the **HAVING** clause after the **GROUP BY** clause. That is, only groups satisfying the condition specified by the **HAVING** clause are queried out of all groups that are grouped by the **GROUP BY** clause.
 
-By SQL standard, you cannot specify a column (hidden column) not defined in the **GROUP BY** clause to the SELECT column list. However, by using extended CUBRID grammars, you can specify the hidden column to the SELECT column list. If you do not use the extended CUBRID grammars, the **only_full_group_by** parameter should be set to **yes**. For details, see :ref:`stmt-type-parameters`. ::
+By SQL standard, you cannot specify a column (hidden column) not defined in the **GROUP BY** clause to the SELECT column list. However, by using extended CUBRID grammars, you can specify the hidden column to the SELECT column list. If you do not use the extended CUBRID grammars, the **only_full_group_by** parameter should be set to **yes**. For details, see :ref:`stmt-type-parameters`. 
+
+::
 
     SELECT ...
-    GROUP BY { col_name | expr | position } [ ASC | DESC ],...
-              [ WITH ROLLUP ][ HAVING <search_condition> ]
+    GROUP BY {col_name | expr | position} [ASC | DESC], ...
+              [WITH ROLLUP] [HAVING <search_condition>]
 
-*   *col_name* | *expr* | *position* : Specifies one or more column names, expressions, aliases or column location. Items are separated by commas. Columns are sorted on this basis.
+*   *col_name* | *expr* | *position*: Specifies one or more column names, expressions, aliases or column location. Items are separated by commas. Columns are sorted on this basis.
 
-*   [ **ASC** | **DESC** ] : Specifies the **ASC** or **DESC** sorting option after the columns specified in the **GROUP BY** clause. If the sorting option is not specified, the default value is **ASC**.
+*   [**ASC** | **DESC**]: Specifies the **ASC** or **DESC** sorting option after the columns specified in the **GROUP BY** clause. If the sorting option is not specified, the default value is **ASC**.
 
-*   <*search_condition*> : Specifies the search condition in the **HAVING** clause. In the **HAVING** clause you can refer to the hidden columns not specified in the **GROUP BY** clause as well as to columns and aliases specified in the **GROUP BY** clause and columns used in aggregate functions.
+*   <*search_condition*>: Specifies the search condition in the **HAVING** clause. In the **HAVING** clause you can refer to the hidden columns not specified in the **GROUP BY** clause as well as to columns and aliases specified in the **GROUP BY** clause and columns used in aggregate functions.
 
-*   **WITH ROLLUP** : If you specify the **WITH ROLLUP** modifier in the **GROUP BY** clause, the aggregate information of the result value of each GROUPed BY column is displayed for each group, and the total of all result rows is displayed at the last row. When a **WITH ROLLUP** modifier is defined in the **GROUP BY** clause, the result value for all rows of the group is additionally displayed. In other words, total aggregation is made for the value aggregated by group. When there are two columns for Group By, the former is considered as a large unit and the latter is considered as a small unit, so the total aggregation row for the small unit and the total aggregation row for the large unit are added. For example, you can check the aggregation of the sales result per department and salesperson through one query.
+*   **WITH ROLLUP**: If you specify the **WITH ROLLUP** modifier in the **GROUP BY** clause, the aggregate information of the result value of each GROUPed BY column is displayed for each group, and the total of all result rows is displayed at the last row. When a **WITH ROLLUP** modifier is defined in the **GROUP BY** clause, the result value for all rows of the group is additionally displayed. In other words, total aggregation is made for the value aggregated by group. When there are two columns for Group By, the former is considered as a large unit and the latter is considered as a small unit, so the total aggregation row for the small unit and the total aggregation row for the large unit are added. For example, you can check the aggregation of the sales result per department and salesperson through one query.
 
 .. code-block:: sql
 
@@ -407,13 +415,13 @@ ORDER BY Clause
 The **ORDER BY** clause sorts the query result set in ascending or descending order. If you do not specify a sorting option such as **ASC** or **DESC**, the result set in ascending order by default. If you do not specify the **ORDER BY** clause, the order of records to be queried may vary depending on query. ::
 
     SELECT ...
-    ORDER BY { col_name | expr | position } [ ASC | DESC ], ...] [ NULLS { FIRST | LAST } ]
+    ORDER BY {col_name | expr | position} [ASC | DESC], ...] [NULLS {FIRST | LAST}]
 
-*   *col_name* | *expr* | *position* : Specifies a column name, expression, alias, or column location. One or more column names, expressions or aliases can be specified. Items are separated by commas. A column that is not specified in the list of **SELECT** columns can be specified.
+*   *col_name* | *expr* | *position*: Specifies a column name, expression, alias, or column location. One or more column names, expressions or aliases can be specified. Items are separated by commas. A column that is not specified in the list of **SELECT** columns can be specified.
 
-*   [ **ASC** | **DESC** ] : **ASC** means sorting in ascending order, and **DESC** is sorting in descending order. If the sorting option is not specified, the default value is **ASC**.
+*   [**ASC** | **DESC**]: **ASC** means sorting in ascending order, and **DESC** is sorting in descending order. If the sorting option is not specified, the default value is **ASC**.
 
-*   [ **NULLS** { **FIRST** | **LAST** } ] : **NULLS FIRST** sorts NULL at first, **NULLS LAST** sorts NULL at last. If this syntax is omitted, **ASC** sorts NULL at first, **DESC** sorts NULL at last.
+*   [**NULLS** {**FIRST** | **LAST**}]: **NULLS FIRST** sorts NULL at first, **NULLS LAST** sorts NULL at last. If this syntax is omitted, **ASC** sorts NULL at first, **DESC** sorts NULL at last.
 
 .. code-block:: sql
 
@@ -445,7 +453,8 @@ The **ORDER BY** clause sorts the query result set in ascending or descending or
     SELECT dept_no AS a1, avg(sales_amount) AS a2 
     FROM sales_tbl
     GROUP BY a1
-    ORDER BY a2 DESC LIMIT 3;
+    ORDER BY a2 DESC
+    LIMIT 3;
     
 ::
 
@@ -505,7 +514,7 @@ The following is an example how to specify the NULLS FIRST or NULLS LAST after O
 
 .. note::
 
-    **Translatioin of GROUP BY alias**
+    **Translation of GROUP BY alias**
 
     .. code-block:: sql
 
@@ -562,12 +571,12 @@ The **LIMIT** clause can be used to limit the number of records displayed. You c
 
 ::
 
-    LIMIT { [offset,] row_count | row_count [ OFFSET offset ] }
+    LIMIT {[offset,] row_count | row_count [OFFSET offset]}
 
-*   *offset* : Specifies the offset value of the starting row to be displayed. The offset value of the starting row of the result set is 0; it can be omitted and the default value is **0**.
-*   *row_count* : Specifies the number of records to be displayed. You can specify an integer greater than 0.
+*   *offset*: Specifies the offset value of the starting row to be displayed. The offset value of the starting row of the result set is 0; it can be omitted and the default value is **0**.
+*   *row_count*: Specifies the number of records to be displayed. You can specify an integer greater than 0.
 
-... code-block:: sql
+.. code-block:: sql
 
     -- LIMIT clause can be used in prepared statement
     PREPARE stmt FROM 'SELECT * FROM sales_tbl LIMIT ?, ?';
@@ -626,33 +635,37 @@ An outer join is divided into a left outer join which outputs all rows of the le
 
     FROM <table_specification> [{, <table_specification> 
         | { <join_table_specification> | <join_table_specification2> } ...]
-        
+
     <table_specification> ::=
-        <single_table_spec> [ <correlation> ] [ WITH (<lock_hint>) ]|
-        <metaclass_specification> [ <correlation> ] |
+        <single_table_spec> [<correlation>] [WITH (<lock_hint>)]|
+        <metaclass_specification> [<correlation>] |
         <subquery> <correlation> |
-        TABLE ( <expression> ) <correlation>
+        TABLE (<expression>) <correlation>
         
     <join_table_specification> ::=
-       { [ INNER | {LEFT | RIGHT} [ OUTER ] ] JOIN |
-       STRAIGHT_JOIN } <table_specification> ON <search_condition>
+        {
+            [INNER | {LEFT | RIGHT} [OUTER]] JOIN |
+            STRAIGHT_JOIN 
+         } <table_specification> ON <search_condition>
      
-    <join_table_specification2> ::= 
-		{ CROSS JOIN | 
-        NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
+    <join_table_specification2> ::=
+		{
+            CROSS JOIN |
+            NATURAL [ LEFT | RIGHT ] JOIN 
+        } <table_specification>
 
 *   <*join_table_specification*>
 
-    *   [ **INNER** ] **JOIN** : Used for inner join and requires join conditions.
+    *   [**INNER**] **JOIN**: Used for inner join and requires join conditions.
 
-    *   { **LEFT** | **RIGHT** } [ **OUTER** ] **JOIN** : **LEFT** is used for a left outer join query, and **RIGHT** is for a right outer join query.
+    *   {**LEFT** | **RIGHT**} [**OUTER**] **JOIN**: **LEFT** is used for a left outer join query, and **RIGHT** is for a right outer join query.
 
-    *   **STRAIGHT_JOIN** : (작성중)
-    
+    *   **STRAIGHT_JOIN**: (작성중)
+   
 *   <*join_table_specification2*>
 
-    *   **CROSS JOIN** : Used for cross join and requires no join conditions.
-    *   **NATURAL** [ **LEFT** | **RIGHT** ] **JOIN** : Used for natural join and join condition is not used. It operates in the equivalent same way to have a condition between columns equivalent of the same name .
+    *   **CROSS JOIN**: Used for cross join and requires no join conditions.
+    *   **NATURAL** [ **LEFT** | **RIGHT** ] **JOIN**: Used for natural join and join condition is not used. It operates in the equivalent same way to have a condition between columns equivalent of the same name .
 
 Inner Join
 ----------
@@ -829,7 +842,7 @@ The following example shows how to write cross join. The following two queries w
      
 ::
 
-    host_year  host_nation
+        host_year  host_nation
     ===================================
              1968  'Australia'
              1968  'Belgium'
@@ -955,7 +968,6 @@ STRAIGHT_JOIN
     (수행 결과)
 
 
-    
 Subquery
 ========
 
@@ -1000,7 +1012,7 @@ The following example shows how to retrieve nations, capitals and host cities fo
 
     SELECT name, capital, list(SELECT host_city FROM olympic WHERE host_nation = name) AS host_cities
     FROM nation;
-    
+
 ::
 
       name                      capital                 host_cities
@@ -1025,7 +1037,7 @@ VALUES
 The **VALUES** clause prints out the values of rows defined in the expression. In most cases, the **VALUES** clause is used for creating a constant table, however, the clause itself can be used. When one or more rows are specified in the **VALUES** clause, all rows should have the same number of the elements.
 
     VALUES (expression[, ...])[, ...]
-    
+
 *   *expression* : An expression enclosed within parentheses stands for one row in a table.
 
 The **VALUES** clause can be used to express the **UNION** query, which consists of constant values in a simpler way. For example, the following query can be executed.
@@ -1044,7 +1056,7 @@ The above query prints out the following result.
     UNION ALL
     SELECT 3, 'third'
     UNION ALL
-    SELECT 4, 'forth';
+    SELECT 4, 'fourth';
 
 The following example shows use of the **VALUES** clause with multiple rows in the **INSERT** statement.
 
@@ -1061,7 +1073,7 @@ The following example shows how to use subquery in the **FROM** statement.
     SELECT a.*
     FROM athlete a, (VALUES ('Jang Mi-Ran', 'F'), ('Son Yeon-Jae', 'F')) AS t(name, gender)
     WHERE a.name=t.name AND a.gender=t.gender;
-     
+
 ::
 
              code  name                gender   nation_code        event

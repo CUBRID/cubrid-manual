@@ -42,11 +42,16 @@ The **SELECT** statement specifies columns that you want to retrieve from a tabl
     <metaclass_specification> ::= CLASS <class_name>
      
     <join_table_specification> ::=
-        {[INNER | {LEFT | RIGHT} [OUTER]] JOIN |
-        STRAIGHT_JOIN } <table_specification> ON <search_condition>
+        {
+            [INNER | {LEFT | RIGHT} [OUTER]] JOIN |
+            STRAIGHT_JOIN 
+        } <table_specification> ON <search_condition>
      
-    <join_table_specification2> ::= { CROSS JOIN | 
-        NATURAL [ LEFT | RIGHT ] JOIN } <table_specification>
+    <join_table_specification2> ::= 
+        { 
+            CROSS JOIN | 
+            NATURAL [ LEFT | RIGHT ] JOIN 
+        } <table_specification>
     
     <lock_hint> ::= READ UNCOMMITTED
 
@@ -665,7 +670,7 @@ An outer join is divided into a left outer join which outputs all rows of the le
 *   <*join_table_specification2*>
 
     *   **CROSS JOIN**: Used for cross join and requires no join conditions.
-    *   **NATURAL** [ **LEFT** | **RIGHT** ] **JOIN**: Used for natural join and join condition is not used. It operates in the equivalent same way to have a condition between columns equivalent of the same name .
+    *   **NATURAL** [**LEFT** | **RIGHT**] **JOIN**: Used for natural join and join condition is not used. It operates in the equivalent same way to have a condition between columns equivalent of the same name .
 
 Inner Join
 ----------
@@ -1080,3 +1085,50 @@ The following example shows how to use subquery in the **FROM** statement.
     =====================================================================================================
             21111  'Jang Mi-Ran'       'F'      'KOR'              'Weight-lifting'
             21112  'Son Yeon-Jae'      'F'      'KOR'              'Rhythmic gymnastics'
+
+FOR UPDATE
+==========
+
+The **FOR UPDATE** clause can be used in **SELECT** statements for locking rows returned by the statement for a later **UPDATE/DELETE**.
+
+:: 
+
+    SELECT ... [FOR UPDATE [OF <spec_name_comma_list>]]
+
+        <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
+            <spec_name> ::= table_name | view_name 
+         
+* <*spec_name_comma_list*>: A list of table/view names referenced from the FROM clause.
+
+Only table/view referenced in <*spec_name_comma_list*> will be locked. If the <*spec_name_comma_list*> is missing but **FOR UPDATE** is present then we assume that all tables/views from the FROM clause of the SELECT statement are referenced. 
+
+The locks which have been acquired by **FOR UPDATE** clause are released in the **UPDATE/DELETE** statement. When **SELECT .. FOR UPDATE** is being executed, the locks on keys aren't acquired.
+
+.. note:: Restrictions
+
+    *   It CAN'T be used in subqueries (but it CAN reference subqueries). 
+    *   It can't be used in a statement that has GROUP BY, DISTINCT or aggregate functions. 
+    *   It can't reference **UNION**\s. 
+
+The following shows how to use **SELECT ... FOR UPDATE** statements.
+
+.. code-block:: sql 
+
+
+    CREATE TABLE t1(i INT); 
+    INSERT INTO t1 VALUES (1), (2), (3), (4), (5); 
+
+    CREATE TABLE t2(i INT); 
+    INSERT INTO t2 VALUES (1), (2), (3), (4), (5); 
+    CREATE INDEX idx_t2_i ON t2(i); 
+
+    CREATE VIEW v12 AS SELECT t1.i AS i1, t2.i AS i2 FROM t1 INNER JOIN t2 ON t1.i=t2.i; 
+
+    SELECT * FROM t1 ORDER BY 1 FOR UPDATE; 
+    SELECT * FROM t1 ORDER BY 1 FOR UPDATE OF t1; 
+    SELECT * FROM t1 INNER JOIN t2 ON t1.i=t2.i ORDER BY 1 FOR UPDATE OF t1, t2; 
+
+    SELECT * FROM t1 INNER JOIN (SELECT * FROM t2 WHERE t2.i > 0) r ON t1.i=r.i WHERE t1.i > 0 ORDER BY 1 FOR UPDATE; 
+
+    SELECT * FROM v12 ORDER BY 1 FOR UPDATE; 
+    SELECT * FROM t1, (SELECT * FROM v12, t2 WHERE t2.i > 0 AND t2.i=v12.i1) r WHERE t1.i > 0 AND t1.i=r.i ORDER BY 1 FOR UPDATE OF r;

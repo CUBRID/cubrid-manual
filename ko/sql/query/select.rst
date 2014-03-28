@@ -1084,3 +1084,50 @@ VALUES
     =====================================================================================================
             21111  'Jang Mi-Ran'       'F'      'KOR'              'Weight-lifting'
             21112  'Son Yeon-Jae'      'F'      'KOR'              'Rhythmic gymnastics'
+
+FOR UPDATE
+==========
+
+**FOR UPDATE** 절은 **UPDATE/DELETE** 문을 수행하기 위해 **SELECT** 문에서 반환되는 행들에 잠금을 부여하기 위해 사용될 수 있다.
+
+:: 
+
+    SELECT ... [FOR UPDATE [OF <spec_name_comma_list>]]
+
+        <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
+            <spec_name> ::= table_name | view_name 
+         
+* <*spec_name_comma_list*>: FROM 절에서 참조하는 테이블/뷰들의 목록
+
+<*spec_name_comma_list*>에서 참조되는 테이블/뷰에만 잠금이 적용된다. FOR UPDATE 절에 <*spec_name_comma_list*>가 명시되지 않는 경우, FROM 절의 모든 테이블/뷰가 잠금 대상인 것으로 간주한다. 
+
+**FOR UPDATE** 절에서 잠금된 행들은 **UPDATE/DELETE** 문에서 잠금이 해제된다. **SELECT .. FOR UPDATE** 문 수행 시 키 잠금은 획득되지 않는다. 
+
+.. note:: 제약 사항 
+
+    *   부질의 안에서 **FOR UPDATE** 절을 사용할 수 없다. 단, **FOR UPDATE** 절이 부질의를 참조할 수는 있다. 
+    *   **GROUP BY, DISTINCT** 또는 집계 함수를 가진 질의문에서 사용할 수 없다. 
+    *   **UNION**\을 참조할 수 없다. 
+
+다음은 **SELECT ... FOR UPDATE** 문을 사용하는 예이다. 
+
+.. code-block:: sql 
+
+
+    CREATE TABLE t1(i INT); 
+    INSERT INTO t1 VALUES (1), (2), (3), (4), (5); 
+
+    CREATE TABLE t2(i INT); 
+    INSERT INTO t2 VALUES (1), (2), (3), (4), (5); 
+    CREATE INDEX idx_t2_i ON t2(i); 
+
+    CREATE VIEW v12 AS SELECT t1.i AS i1, t2.i AS i2 FROM t1 INNER JOIN t2 ON t1.i=t2.i; 
+
+    SELECT * FROM t1 ORDER BY 1 FOR UPDATE; 
+    SELECT * FROM t1 ORDER BY 1 FOR UPDATE OF t1; 
+    SELECT * FROM t1 INNER JOIN t2 ON t1.i=t2.i ORDER BY 1 FOR UPDATE OF t1, t2; 
+
+    SELECT * FROM t1 INNER JOIN (SELECT * FROM t2 WHERE t2.i > 0) r ON t1.i=r.i WHERE t1.i > 0 ORDER BY 1 FOR UPDATE; 
+
+    SELECT * FROM v12 ORDER BY 1 FOR UPDATE; 
+    SELECT * FROM t1, (SELECT * FROM v12, t2 WHERE t2.i > 0 AND t2.i=v12.i1) r WHERE t1.i > 0 AND t1.i=r.i ORDER BY 1 FOR UPDATE OF r;

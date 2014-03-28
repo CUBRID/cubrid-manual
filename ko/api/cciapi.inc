@@ -2,7 +2,7 @@ CCI API 레퍼런스
 ================
 
 .. c:function::    int cci_bind_param (int req_handle, int index, T_CCI_A_TYPE a_type, void *value, T_CCI_U_TYPE u_type, char flag)
-    
+
     prepared statement에서 *bind* 변수에 데이터를 바인딩하기 위하여 사용되는 함수이다. 이때, 주어진 *a_type* 의 *value* 의 값을 실제 바인딩되어야 하는 타입으로 변환하여 저장한다. 이후, :c:func:`cci_execute`\ 가 호출될 때 저장된 데이터가 서버로 전송된다. 같은 *index* 에 대해서 여러 번 :c:func:`cci_bind_param`\ 을 호출할 경우 마지막으로 설정한 값이 유효하다. 
 
     :param req_handle: (IN) prepared statement의 요청 핸들.
@@ -10,7 +10,7 @@ CCI API 레퍼런스
     :param a_type: (IN) *value* 의 타입.
     :param value: (IN) 바인딩될 데이터 값.
     :param u_type: (IN) 데이터베이스에 반영될 데이터 타입.
-    :param flag: (IN)bind_flag(:c:type:`CCI_BIND_PTR`).
+    :param flag: (IN) bind_flag(:c:type:`CCI_BIND_PTR`).
     :return: 에러 코드(0: 성공)
     
         *   **CCI_ER_BIND_INDEX**
@@ -19,7 +19,7 @@ CCI API 레퍼런스
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_TYPE_CONVERSION**
         *   **CCI_ER_USED_CONNECTION**
-        
+
     데이터베이스에 **NULL**\ 을 바인딩하려면 다음의 두 가지 중 하나를 설정한다.
         
     *   *value* 값을 **NULL** 포인터로 설정
@@ -69,7 +69,7 @@ CCI API 레퍼런스
     | **CCI_A_TYPE_CLOB**         | **T_CCI_CLOB**              |
     +-----------------------------+-----------------------------+
 
-    :c:type:`T_CCI_U_TYPE` 은 데이터베이스의 칼럼 타입으로, value 인자를 통해 바인딩된 데이터를 이 타입으로 변환한다.
+    :c:type:`T_CCI_U_TYPE`\ 은 데이터베이스의 칼럼 타입으로, value 인자를 통해 바인딩된 데이터를 이 타입으로 변환한다.
     :c:func:`cci_bind_param` 함수는 C 언어가 이해하는 A 타입의 데이터를 데이터베이스가 이해할 수 있는 U 타입의 데이터로 변환하기 위한 정보를 전달하기 위해서 두 가지 타입을 사용한다.
 
     U 타입이 허용하는 A 타입은 여러 가지이다. 예를 들어 **CCI_U_TYPE_INT** 는 **CCI_A_TYPE_INT** 외에 **CCI_A_TYPE_STR** 도 A 타입으로 받을 수 있다. 타입 변환은 :ref:`implicit-type-conversion`\ 을 따른다.
@@ -145,7 +145,7 @@ CCI API 레퍼런스
     :param index: (IN) 바인딩될 위치
     :param a_type: (IN) *value* 의 타입
     :param value: (IN) 바인딩될 데이터 값
-    :param null_ind: (IN) **NULL** indicator array (0 : not **NULL**, 1 : **NULL**)
+    :param null_ind: (IN) **NULL** 식별자 배열(0 : not **NULL**, 1 : **NULL**)
     :param u_type: (IN) 데이터베이스에 반영될 데이터 타입
     :return: 에러 코드(0: 성공)
     
@@ -162,12 +162,32 @@ CCI API 레퍼런스
     :c:func:`cci_bind_param_array`\ 에서 사용될 array의 크기를 결정한다. :c:func:`cci_bind_param_array`\ 가 사용되기 전에 반드시 :c:func:`cci_bind_param_array_size`\ 가 먼저 호출 되어야 한다.
 
     :param req_handle: (IN) prepared statement의 요청 핸들
-    :param array_size: (IN) binding array size
+    :param array_size: (IN) 바인딩할 배열 크기
     :return: 에러 코드(0: 성공)
     
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_USED_CONNECTION**
+
+.. c:function:: int cci_bind_param_ex (int req_handle, int index, T_CCI_A_TYPE a_type, void *value, int length, T_CCI_U_TYPE u_type, char flag) 
+     
+    :c:func:`cci_bind_param`\과 동일한 동작을 수행한다. 다만 문자열 타입인 경우 문자열의 바이트 길이를 지정하는 *length* 인자가 추가로 존재한다. 
+     
+    :param req_handle: (IN) prepared statement의 요청 핸들
+    :param index: (IN) 바인딩될 위치이며, 1부터 시작
+    :param a_type: (IN) *value* 의 타입 
+    :param value: (IN) 바인딩할 데이터 값
+    :param length: (IN) 바인딩할 문자열의 바이트 길이
+    :param u_type: (IN) 데이터베이스에 반영될 데이터 타입
+    :param flag: (IN) bind_flag(:c:type:`CCI_BIND_PTR`)
+     
+    :return: 에러 코드(0: 성공) 
+  
+    *length* 인자는 아래와 같이 '\0'을 포함하는 문자열을 바인딩하기 위해 사용할 수 있다. 
+     
+    .. code-block:: c 
+  
+        cci_bind_param_ex(statement, 1, CCI_A_TYPE_STR, "aaa\0bbb", 7, CCI_U_TYPE_STRING, 0); 
 
 .. c:function:: int cci_blob_free(T_CCI_BLOB blob)
 
@@ -259,7 +279,7 @@ CCI API 레퍼런스
         *    **CCI_ER_COMMUNICATION**
         *    **CCI_ER_CON_HANDLE**
         *    **CCI_ER_CONNECT**
-    
+
     다음은 main 함수에서 스레드의 질의 실행을 취소하는 예이다.
     
     .. code-block:: c
@@ -741,42 +761,39 @@ CCI API 레퍼런스
         <host> := HOSTNAME | IP_ADDR
         <time> := SECOND
         <milli_sec> := MILLI SECOND    
-    
+
     연결 대상과 관련된 속성은 **altHosts** 이며, 타임아웃과 관련된 속성은 **loginTimeout**, **queryTimeout**, **disconnectOnQueryTimeout** 이다. 디버깅용 로그 정보 설정과 관련된 속성은 **logSlowQueries**, **logTraceApi**, **logTraceNetwork** 이다. *url* 인자에 입력하는 모든 속성(property) 이름은 대소문자 구별을 하지 않는다.
 
-    *   *host* : 마스터 데이터베이스의 호스트 이름 또는 IP 주소
-    *   *port* : 포트 번호
-    *   *db_name* : 데이터베이스 이름
-    *   *db_user* : 데이터베이스 사용자 이름
-    *   *db_password* : 데이터베이스 사용자 비밀번호
-    
-    *   **altHosts** = *standby_broker1_host*, *standby_broker2_host*, ... : active 서버에 연결할 수 없는 경우, 그 다음으로 연결을 시도(failover)할 standby 서버의 브로커 정보를 나타낸다. failover할 브로커를 여러 개 지정할 수 있고, **altHosts** 에 나열한 순서대로 연결을 시도한다.
+    *   *host*: 마스터 데이터베이스의 호스트 이름 또는 IP 주소
+    *   *port*: 포트 번호
+    *   *db_name*: 데이터베이스 이름
+    *   *db_user*: 데이터베이스 사용자 이름
+    *   *db_password*: 데이터베이스 사용자 비밀번호
 
-    *   **rcTime** : 첫 번째로 접속했던 브로커에 장애가 발생한 이후 **altHosts** 에 명시한 브로커로 접속한다(브로커 failover). 이후, **rcTime** 만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초).
-
-    *   **loadBalance** : 이 값이 true면 응용 프로그램이 메인 호스트와 **altHosts**\에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false)
+    *   **altHosts** = *standby_broker1_host*, *standby_broker2_host*, ...: active 서버에 연결할 수 없는 경우, 그 다음으로 연결을 시도(failover)할 standby 서버의 브로커 정보를 나타낸다. failover할 브로커를 여러 개 지정할 수 있고, **altHosts** 에 나열한 순서대로 연결을 시도한다.
 
         .. note:: 메인 호스트와 **altHosts** 브로커들의 **ACCESS_MODE**\ 설정에 **RW**\ 와 **RO**\ 가 섞여 있다 하더라도, 응용 프로그램은 **ACCESS_MODE**\ 와 무관하게 접속 대상 호스트를 결정한다. 따라서 사용자는 접속 대상 브로커의 **ACCESS_MODE**\ 를 감안해서 메인 호스트와 **altHosts**\ 를 정해야 한다.
-    
-    *   **login_timeout** | **loginTimeout** : 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 에러를 반환한다. 기본값은 **30,000**\ (30초)이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다.
 
-    *   **query_timeout** | **queryTimeout** : :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 
+    *   **rcTime**: 첫 번째로 접속했던 브로커에 장애가 발생한 이후 **altHosts** 에 명시한 브로커로 접속한다(브로커 failover). 이후, **rcTime** 만큼 시간이 경과할 때마다 원래의 브로커에 재접속을 시도한다(기본값 600초).
+
+    *   **loadBalance**: 이 값이 true면 응용 프로그램이 메인 호스트와 **altHosts**\에 지정한 호스트들에 랜덤한 순서로 연결한다(기본값: false)
+    
+    *   **login_timeout** | **loginTimeout**: 데이터베이스에 로그인 시 타임아웃 값 (단위: msec). 이 시간을 초과하면 **CCI_ER_LOGIN_TIMEOUT** (-38) 에러를 반환한다. 기본값은 **30,000**\ (30초)이다. 이 값이 0인 경우 무한 대기를 의미한다. 이 값은 최초 접속 이후 내부적인 재접속이 발생하는 경우에도 적용된다.
+
+    *   **query_timeout** | **queryTimeout**: :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 이 값으로 설정한 시간이 지나면 서버로 보낸 질의 요청에 대한 취소 메시지를 보내고 호출된 함수는 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. 질의를 수행한 함수에서 타임아웃 발생 시 함수의 반환 값은 **disconnect_on_query_timeout**\ 의 설정에 따라 달라질 수 있다. 자세한 내용은 다음의 **disconnect_on_query_timeout**\ 을 참고한다. 
     
         .. note:: :c:func:`cci_execute`\ 에 CCI_EXEC_QUERY_ALL 플래그를 설정하거나 :c:func:`cci_execute_batch` 또는 :c:func:`cci_execute_array`\ 를 사용하여 여러 개의 질의를 한 번에 실행하는 경우, 질의 타임 아웃은 질의 하나에 대해 적용되는 것이 아니라 함수 하나에 대해 적용된다. 즉, 함수 시작 이후 타임아웃이 발생하면 함수 수행이 중단된다.
 
     *   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : 질의 요청 타임아웃 시 즉시 소켓 연결 종료 여부. :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수를 호출했을 때 **query_timeout** 으로 설정한 시간이 지나면 질의 취소 요청 후 즉시 소켓 연결을 종료할 것인지, 아니면 질의 취소 요청을 받아들인다는 서버의 응답을 기다릴 것인지를 설정한다. 기본값은 **false** 로, 서버의 응답을 기다린다. 이 값이 **true** 이면 :c:func:`cci_prepare`, :c:func:`cci_execute` 등의 함수 호출 도중 질의 타임아웃이 발생할 때 서버에 질의 취소 메시지를 보낸 후, 소켓을 닫고 **CCI_ER_QUERY_TIMEOUT** (-39) 에러를 반환한다. (브로커가 아닌 데이터베이스 서버 쪽에서 에러가 발생한 경우 -1을 반환한다. 상세 에러를 확인하고 싶으면 "데이터베이스 에러 버퍼"의 에러 코드를 확인한다. 데이터베이스 에러 버퍼에서 에러 코드를 확인하는 방법은 :ref:`CCI 에러 코드와 에러 메시지 <cci-error-codes>` 를 참고한다.) 이 경우 사용자는 명시적으로 :c:func:`cci_disconnect` 함수를 통해 데이터베이스 연결 핸들을 닫아야 한다. 응용 프로그램이 질의 취소 메시지를 보낸 후 에러를 반환했음에도 불구하고, 데이터베이스 서버는 그 메시지를 받지 못하고 해당 질의를 수행할 수 있음을 주의한다. **false** 이면 서버에 취소 메시지를 보낸 후, 서버의 질의 요청에 대한 응답이 올 때 까지 대기한다.
 
-    *   **logFile** : 디버깅용 로그 파일 이름(기본값: *cci_<handle_id>.log*). <*handle_id*>는 이 함수가 반환하는 연결 핸들 ID이다.
+    *   **logFile**: 디버깅용 로그 파일 이름(기본값: *cci_<handle_id>.log*). <*handle_id*>는 이 함수가 반환하는 연결 핸들 ID이다.
 
-    *   **logBaseDir** : 디버깅용 로그 파일이 생성되는 디렉터리. 경로를 포함한 파일 이름의 형식은 logBaseDir/logFile이 되며, 상대 경로로 지정할 수 있다.
+    *   **logBaseDir**: 디버깅용 로그 파일이 생성되는 디렉터리. 경로를 포함한 파일 이름의 형식은 logBaseDir/logFile이 되며, 상대 경로로 지정할 수 있다.
 
-    *   **logSlowQueries** : 디버깅용 슬로우 쿼리 로깅 여부(기본값: **false**)
-
-    *   **slowQueryThresholdMillis** : 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: **60000**). 단위는 밀리 초이다.
-    
-    *   **logTraceApi** : CCI 함수 시작과 끝의 로깅 여부
-
-    *   **logTraceNetwork** : CCI 함수 네트워크 데이터 전송 내용의 로깅 여부
+    *   **logSlowQueries**: 디버깅용 슬로우 쿼리 로깅 여부(기본값: **false**)
+    *   **slowQueryThresholdMillis**: 디버깅용 슬로우 쿼리 로깅 시 슬로우 쿼리 제한 시간(기본값: **60000**). 단위는 밀리 초이다.
+    *   **logTraceApi**: CCI 함수 시작과 끝의 로깅 여부
+    *   **logTraceNetwork**: CCI 함수 네트워크 데이터 전송 내용의 로깅 여부
 
     **예제** ::
 
@@ -1142,10 +1159,9 @@ CCI API 레퍼런스
 
     .. note :: 
     
-        * 2008 R4.3 이전 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
-        
-        * 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_array 함수에서 배열 내의 질의 일부에 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
-        
+        *   2008 R4.3 이전 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
+        *   자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_array 함수에서 배열 내의 질의 일부에 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
+
     .. code-block:: c
 
         char *query =
@@ -1249,8 +1265,8 @@ CCI API 레퍼런스
     
     .. note :: 
 
-        * 2008 R4.3 이전 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
-        * 자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_batch 함수에서 배열 내의 질의 일부에 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
+        *   2008 R4.3 이전 버전에서 자동 커밋이 ON인 경우 배열 내의 모든 질의가 수행된 이후에 커밋되었으나, 2008 R4.3부터는 질의 하나가 수행될 때마다 커밋된다.
+        *   자동 커밋이 OFF일 때 질의문을 일괄 처리하는 cci_execute_batch 함수에서 배열 내의 질의 일부에 일반적인 오류가 발생하는 경우, 이를 건너뛰고 다음 질의를 계속 수행한다. 그러나, 교착 상태가 발생하면 트랜잭션을 롤백하고 오류 처리한다.
 
     .. code-block:: c
 
@@ -2505,7 +2521,7 @@ CCI API 레퍼런스
                 printf ("%s(%d): cci_close_query_result fail(%d)\n", __FILE__, __LINE__, error.err_code);
                 goto handle_error;
             }
-            
+
             if ((res = cci_close_req_handle (req)) < 0)
             {
                 printf ("%s(%d): cci_close_req_handle fail\n", __FILE__, __LINE__);
@@ -2595,9 +2611,9 @@ CCI API 레퍼런스
         *   **CCI_ER_COMMUNICATION**
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_CONNECT**
-    
+
     **CCI_CLASS_NAME_PATTERN_MATCH**, **CCI_ATTR_NAME_PATTERN_MATCH** 두 개의 *flag* 가 사용되며, OR 연산자( | )로 둘 다 설정할 수 있다. 패턴 매칭을 사용할 경우 **LIKE** 절을 이용하여 검색한다. 예를 들어, *class_name* 이 "athlete"이고 *attr_name* 이 "code"로 끝나는 칼럼에 대한 정보를 검색하고 싶다면, *attr_name* 의 값을 "%code"로 하여 다음과 같이 입력할 수 있다. ::
-    
+
         cci_schema_info(conn, CCI_SCH_ATTRIBUTE, "athlete", "%code", CCI_ATTR_NAME_PATTERN_MATCH, &error);
 
     각 *type* 에 대한 레코드의 구성은 아래 표와 같다.
@@ -2855,10 +2871,10 @@ CCI API 레퍼런스
     | CCI_SCH_TRIGGER                     | 문자열 또는 NULL  | 항상 NULL                                                                     |
     +-------------------------------------+-------------------+-------------------------------------------------------------------------------+
 
-    * class_name이 "항상 NULL"인 type은 테이블 이름에 대해 패턴 매칭을 지원하지 않는다.
-    * attr_name이 "항상 NULL"인 type은 칼럼 이름에 대해 패턴 매칭을 지원하지 않는다.
-    * 패턴 *flag* 가 설정되지 않을 경우 주어진 테이블 이름 또는 칼럼 이름은 동등 조건(=) 매칭을 사용하므로 **NULL** 이 주어지면 결과는 없다. 
-    * 패턴 *flag* 가 설정되어 있을 경우 테이블 이름 또는 칼럼 이름이 **NULL** 이면 **LIKE** 절의 "%"와 동일한 결과, 즉 모든 테이블 또는 칼럼에 대한 결과를 얻는다.
+    *   class_name이 "항상 NULL"인 type은 테이블 이름에 대해 패턴 매칭을 지원하지 않는다.
+    *   attr_name이 "항상 NULL"인 type은 칼럼 이름에 대해 패턴 매칭을 지원하지 않는다.
+    *   패턴 *flag* 가 설정되지 않을 경우 주어진 테이블 이름 또는 칼럼 이름은 동등 조건(=) 매칭을 사용하므로 **NULL** 이 주어지면 결과는 없다. 
+    *   패턴 *flag* 가 설정되어 있을 경우 테이블 이름 또는 칼럼 이름이 **NULL** 이면 **LIKE** 절의 "%"와 동일한 결과, 즉 모든 테이블 또는 칼럼에 대한 결과를 얻는다.
 
     .. note::
 

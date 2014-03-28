@@ -73,7 +73,7 @@ CCI API Reference
     The **cci_bind_param** () function uses two kinds of types to send information which is used to convert U-type data from A-type data; the U-type data can be interpreted by database language and the A-type data can be interpreted by C language.
 
     There are various A-type data that are allowed by U-type data. For example, **CCI_U_TYPE_INT** can receive **CCI_A_TYPE_STR** as A-type data including **CCI_A_TYPE_INT**. For information on type conversion, see :ref:`implicit-type-conversion`.
-    
+
     Both **T_CCI_A_TYPE** and **T_CCI_U_TYPE** enum(s) are defined in the **cas_cci.h** file. The definition of each identifier is described in the table below.
 
     +--------------------------+------------------------------------+
@@ -168,6 +168,26 @@ CCI API Reference
         *   **CCI_ER_CON_HANDLE**
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_USED_CONNECTION**
+
+.. c:function:: int cci_bind_param_ex (int req_handle, int index, T_CCI_A_TYPE a_type, void *value, int length, T_CCI_U_TYPE u_type, char flag) 
+     
+    The **cci_bind_param_ex** function works as the same with :c:func:`cci_bind_param`. However, it has an additional argument, *length*, which specifies the byte length of a string if bound data is a string.
+     
+    :param req_handle: (IN) Request handle of the prepared statement 
+    :param index: (IN) Binding location, starting from 1
+    :param a_type: (IN) Data type of *value* 
+    :param value: (IN) Data value to be bound
+    :param length: (IN) Byte length of a string to be bound
+    :param u_type: (IN) Data type to be applied to the database.
+    :param flag: (IN) bind_flag(:c:type:`CCI_BIND_PTR`). 
+     
+    :return: Error code(0: success) 
+  
+    The *length* argument can be used for binding a string which includes '\0' as below.
+     
+    .. code-block:: c 
+  
+        cci_bind_param_ex(statement, 1, CCI_A_TYPE_STR, "aaa\0bbb", 7, CCI_U_TYPE_STRING, 0); 
 
 .. c:function:: int cci_blob_free(T_CCI_BLOB blob)
 
@@ -409,7 +429,7 @@ CCI API Reference
                     }
                 }
             }
-            
+
             if ((res = cci_close_query_result (req, &error)) < 0)
             {
                 snprintf (error_msg, 128, "cci_close_query_result ERROR: %s\n", error.err_msg);
@@ -504,7 +524,7 @@ CCI API Reference
         *   **CCI_ER_NO_MORE_MEMORY**
         *   **CCI_ER_QUERY_TIMEOUT**
         *   **CCI_ER_USED_CONNECTION**
-        
+
 .. c:function::  int cci_close_query_result(int req_handle, T_CCI_ERROR *err_buf)
 
     The **cci_close_query_result** funciton closes the resultset returned by :c:func:`cci_execute`, :c:func:`cci_execute_array` or :c:func:`cci_execute_batch`.
@@ -521,7 +541,7 @@ CCI API Reference
         *   **CCI_ER_REQ_HANDLE**
         *   **CCI_ER_RESULT_SET_CLOSED**
         *   **CCI_ER_USED_CONNECTION**
-        
+
 .. c:function:: int cci_close_req_handle(int req_handle)
 
     The **cci_close_req_handle** function closes the request handle obtained by :c:func:`cci_prepare`.
@@ -744,40 +764,38 @@ CCI API Reference
         <time> := SECOND
         <milli_sec> := MILLI SECOND    
 
-    **altHosts** is the property related to connection target and **loginTimeout**, **queryTimeout**, and **disconnectOnQueryTimeout** are the properties related to timeout; **logSlowQueries**, **logTraceApi**, and **logTraceNetwork** are the properties related to log information configuration for debugging.
+    **altHosts** is the property related to connection target and **loginTimeout**, **queryTimeout**, and **disconnectOnQueryTimeout** are the properties related to timeout; **logSlowQueries**, **logTraceApi**, and **logTraceNetwork** are the properties related to log information configuration for debugging. Note that a property name which is a value to be entered in the *url* argument is not case sensitive.
 
-    Note that a property name which is a value to be entered in the *url* argument is not case sensitive.
+    *   *host*: A host name or IP address of the master database
+    *   *port*: A port number
+    *   *db_name*: A name of the database
+    *   *db_user*: A name of the database user
+    *   *db_password*: A database user password
 
-    *   *host* : A host name or IP address of the master database
-    *   *port* : A port number
-    *   *db_name* : A name of the database
-    *   *db_user* : A name of the database user
-    *   *db_password* : A database user password
-
-    *   **altHosts** = *standby_broker1_host*, *standby_broker2_host,* . . .: Specifies the broker information of the standby server, which is used for failover when it is impossible to connect to the active server. You can specify multiple brokers for failover, and the connection to the brokers is attempted in the order listed in **alhosts**.
+    *   **altHosts** = *standby_broker1_host*, *standby_broker2_host*, ...: Specifies the broker information of the standby server, which is used for failover when it is impossible to connect to the active server. You can specify multiple brokers for failover, and the connection to the brokers is attempted in the order listed in **alhosts**.
     
         .. note:: Even if there are **RW** and **RO** together in *ACCESS_MODE** setting of brokers of main host and **altHosts**, application decides the target host to access without the relation for the setting of **ACCESS_MODE**. Therefore, you should define the main host and **altHosts** as considering **ACCESS_MODE** of target brokers.
 
-    *   **rcTime** : After the failure occurred on the first connected broker, the application connects to the broker specified by **altHosts**\(broker failover). Then it attempts to reconnect to the first connected broker at every **rcTime**\(default value: 600 seconds).
+    *   **rcTime**: After the failure occurred on the first connected broker, the application connects to the broker specified by **altHosts**\(broker failover). Then it attempts to reconnect to the first connected broker at every **rcTime**\(default value: 600 seconds).
     
-    *    **loadBalance** : When this value is true, the applications try to connect to the main host and alternative hosts specified with the **altHosts** property as a random order. (default value: false).
+    *    **loadBalance**: When this value is true, the applications try to connect to the main host and alternative hosts specified with the **altHosts** property as a random order. (default value: false).
     
-    *   **login_timeout** | **loginTimeout** : Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is  **30,000**\ (30 sec.). If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection.
+    *   **login_timeout** | **loginTimeout**: Timeout value (unit: msec.) for database login. Upon timeout, a **CCI_ER_LOGIN_TIMEOUT** (-38) error is returned. The default value is  **30,000**\ (30 sec.). If this value is 0, it means infinite waiting. This value is also applied when internal reconnection occurs after the initial connection.
 
-    *   **query_timeout** | **queryTimeout** : If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
-        
+    *   **query_timeout** | **queryTimeout**: If time specified in these properties has expired when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. a cancellation message for query request which was sent to a server will be delivered and called function returns a **CCI_ER_QUERY_TIMEOUT** (-39) error. The value returned upon timeout may vary depending on a value specified in **disconnect_on_query_timeout**. For details, see **disconnect_on_query_timeout**.
+
         .. note:: If you use :c:func:`cci_execute_batch` or :c:func:`cci_execute_array`\ function, or set **CCI_EXEC_QUERY_ALL** in :c:func:`cci_execute` function to run multiple queries at once, query timeout is applied to one function, not to one query. In other words, if query timeout occurs after the start of a function, a function running is quit.
-        
-    *   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout** : Whether to disconnect socket immediately after time for query request has expired. It determines whether to terminate a socket connection immediately or wait for server response after sending cancellation message for query request to a server when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. The default value is **false**, meaning that it will wait for server response. It this value is true, a socket will be closed immediately after sending a cancellation message to a server upon timeout and returns the **CCI_ER_QUERY_TIMEOUT** (-39) error. (If an error occurs on database server side, not on broker side, it returns -1. If you want to view error details, see error codes in "database error buffer." You can get information how to check error codes in :ref:`CCI Error Codes and Error Messages <cci-error-codes>`.) In this case, you must explicitly close the database connection handle by using the :c:func:`cci_disconnect` function. Please note that there is a possibility that a database server does not get a cancellation message and execute a query even after an error is returned.
 
-    *   **logFile** : A log file name for debugging (default value: **cci_** <*handle_id*> **.log**). <*handle_id*> indicates the ID of a connection handle returned by this function.
+    *   **disconnect_on_query_timeout** | **disconnectOnQueryTimeout**: Whether to disconnect socket immediately after time for query request has expired. It determines whether to terminate a socket connection immediately or wait for server response after sending cancellation message for query request to a server when calling :c:func:`cci_prepare`, :c:func:`cci_execute`, etc. The default value is **false**, meaning that it will wait for server response. It this value is true, a socket will be closed immediately after sending a cancellation message to a server upon timeout and returns the **CCI_ER_QUERY_TIMEOUT** (-39) error. (If an error occurs on database server side, not on broker side, it returns -1. If you want to view error details, see error codes in "database error buffer." You can get information how to check error codes in :ref:`CCI Error Codes and Error Messages <cci-error-codes>`.) In this case, you must explicitly close the database connection handle by using the :c:func:`cci_disconnect` function. Please note that there is a possibility that a database server does not get a cancellation message and execute a query even after an error is returned.
+
+    *   **logFile**: A log file name for debugging (default value: **cci_** <*handle_id*> **.log**). <*handle_id*> indicates the ID of a connection handle returned by this function.
     
-    *   **logBaseDir** : A directory where a debug log file is created. The file name including the path will be logBaseDir/logFile, and the relative path is possible.
+    *   **logBaseDir**: A directory where a debug log file is created. The file name including the path will be logBaseDir/logFile, and the relative path is possible.
     
-    *   **logSlowQueries** : Whether to log slow query for debugging (default value: **false**)
-    *   **slowQueryThresholdMillis** : Timeout for slow query logging if slow query logging is enabled (default value: **60000**, unit: milliseconds)
-    *   **logTraceApi** : Whether to log the start and end of CCI functions
-    *   **logTraceNetwork** : Whether to log network data content transferred of CCI functions
+    *   **logSlowQueries**: Whether to log slow query for debugging (default value: **false**)
+    *   **slowQueryThresholdMillis**: Timeout for slow query logging if slow query logging is enabled (default value: **60000**, unit: milliseconds)
+    *   **logTraceApi**: Whether to log the start and end of CCI functions
+    *   **logTraceNetwork**: Whether to log network data content transferred of CCI functions
 
     **Example** ::
 
@@ -1144,8 +1162,8 @@ CCI API Reference
     
     .. note:: 
     
-        * In the previous version of 2008 R4.3, if the autocommit mode is on, all queries in the array were committed after all of them are executed.  From 2008 R4.3 version, the transaction is committed every time when a query is executed.
-        * In autocommit mode off, if the general error occurs during executing one of the queries in the array on the cci_execute_array function which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 
+        *   In the previous version of 2008 R4.3, if the autocommit mode is on, all queries in the array were committed after all of them are executed.  From 2008 R4.3 version, the transaction is committed every time when a query is executed.
+        *   In autocommit mode off, if the general error occurs during executing one of the queries in the array on the cci_execute_array function which does a batch processing of the queries, the query with an error is ignored and the next query is executed continuously. But if the deadlock occurs, the error occurs as rolling back the transaction. 
     
     .. code-block:: c
 
@@ -1250,8 +1268,8 @@ CCI API Reference
     
     .. note:: 
     
-        * In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. From 2008 R4.3 version, each query in the array is committed right after each running.
-        * If autocommit mode is off, after the general error occurs during executing one of the queries in the array on the cci_execute_batch function which does a batch processing of the queries, the query with an error is ignored and the next query is executed. But if the deadlock occurs, the error occurs as rolling back the transaction. 
+        *   In the previous version of 2008 R4.3, if the autocommit is on, all queries in the array were committed after all of them are executed. From 2008 R4.3 version, each query in the array is committed right after each running.
+        *   If autocommit mode is off, after the general error occurs during executing one of the queries in the array on the cci_execute_batch function which does a batch processing of the queries, the query with an error is ignored and the next query is executed. But if the deadlock occurs, the error occurs as rolling back the transaction. 
 
     .. code-block:: c
 
@@ -2660,6 +2678,8 @@ CCI API Reference
     |                                                                                                                    | 13               | IS_KEY             | short            |
     |                                                                                                                    |                  |                    | 1 : key          |
     +--------------------------------------------------------------------------------------------------------------------+------------------+--------------------+------------------+
+    | CCI_SCH_CLASS_ATTRIBUTE                                                                                            |                  |                    |                  |
+    |                                                                                                                    |                  |                    |                  |
     | When the attribute of the CCI_SCH_CLASS_ATTRIBUTE column is INSTANCE or SHARED,                                    |                  |                    |                  |
     | the order and the name values are identical to those of the column of CCI_SCH_ATTRIBUTE.                           |                  |                    |                  |
     +--------------------------------------------------------------------------------------------------------------------+------------------+--------------------+------------------+
@@ -2870,10 +2890,10 @@ CCI API Reference
     | CCI_SCH_TRIGGER                     | string or NULL | always NULL                                                            |
     +-------------------------------------+----------------+------------------------------------------------------------------------+
 
-    * The type with "NULL" in class_name doesn't support the pattern matching about the table name.
-    * The type with "NULL" in attr_name doesn't support the pattern matching about the column name.
-    * If the pattern *flag* is not configured, exact matching will be used for the given table and column names; in this case, no result will be returned if the value is **NULL**.
-    * If *flag* is configured and the value is **NULL**, the result will be the same as when "%" is given in the **LIKE** statement. In other words, the result about all tables or all columns will be returned.
+    *   The type with "NULL" in class_name doesn't support the pattern matching about the table name.
+    *   The type with "NULL" in attr_name doesn't support the pattern matching about the column name.
+    *   If the pattern *flag* is not configured, exact matching will be used for the given table and column names; in this case, no result will be returned if the value is **NULL**.
+    *   If *flag* is configured and the value is **NULL**, the result will be the same as when "%" is given in the **LIKE** statement. In other words, the result about all tables or all columns will be returned.
 
     .. note::
     
@@ -3106,7 +3126,7 @@ CCI API Reference
                 }
                  printf ("\n");
             }
-            
+
             //Closing the query result
             error = cci_close_query_result(req, &cci_error);
              if (error < 0)
@@ -3114,7 +3134,7 @@ CCI API Reference
                 printf ("cci_close_query_result error: %d, %s\n", cci_error.err_code, cci_error.err_msg);
                 goto handle_error;
             }
-            
+
             //Closing the request handle
             error = cci_close_req_handle(req);
             if (error < 0)
@@ -3162,7 +3182,6 @@ CCI API Reference
             test_simple (con);
             return 0;
         }
-
 
 .. c:function:: int cci_set_autocommit (int conn_handle, CCI_AUTOCOMMIT_MODE  autocommit_mode)
 
@@ -3330,13 +3349,13 @@ CCI API Reference
     :param milli_sec:  Timeout (unit: msec.)
     :return: Success: Request handle ID (int), Failure: Error code
 
-        *   **CCI_ER_REQ_HANDLE**
+        *   CCI_ER_REQ_HANDLE
 
     The timeout value configured by **cci_set_query_timeout** affects :c:func:`cci_prepare`, :c:func:`cci_execute`, :c:func:`cci_execute_array`, :c:func:`cci_execute_batch` functions. When timeout occurs in the function and if the **disconnect_on_query_timeout** value configured in :c:func:`cci_connect_with_url` connection URL is yes, it returns the **CCI_ER_QUERY_TIMEOUT** error.
 
     These functions can return the **CCI_ER_LOGIN_TIMEOUT** error if **login_timeout** is configured in the connection URL, which is an argument of :c:func:`cci_connect_with_url` function; this means that login timeout happens between application client and CAS during re-connection.
 
-    It is going through the process of re-connection between application client and CAS when an application restarts or it is re-scheduled. Re-scheduling is a process that CAS chooses an application client, and starts and stops connection in the unit of transaction. If **KEEP_CONNECTION**, broker parameter, is OFF, it always happens; if AUTO, it can happen depending on its situation. For details, see the description of **KEEP_CONNECTION** in the :ref:`parameter-by-broker`
+    It is going through the process of re-connection between application client and CAS when an application restarts or it is re-scheduled. Re-scheduling is a process that CAS chooses an application client, and starts and stops connection in the unit of transaction. If **KEEP_CONNECTION**, broker parameter, is OFF, it always happens; if AUTO, it can happen depending on its situation. For details, see the description of **KEEP_CONNECTION** in the :ref:`parameter-by-broker`
 
 .. c:function:: int cci_set_size(T_CCI_SET set)
 

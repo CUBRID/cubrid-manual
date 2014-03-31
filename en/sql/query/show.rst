@@ -321,7 +321,7 @@ SHOW GRANTS
 
 It shows the permissions associated with the database user accounts. ::
 
-    SHOW GRANTS FOR 'user'
+    SHOW GRANTS FOR 'user';
 
 The following shows the examples of this syntax.
 
@@ -346,7 +346,7 @@ SHOW CREATE TABLE
 
 When a table name is specified, It shows the **CREATE TABLE** statement of the table. ::
 
-    SHOW CREATE TABLE table_name
+    SHOW CREATE TABLE table_name;
     
 .. code-block:: sql
 
@@ -370,7 +370,7 @@ SHOW CREATE VIEW
 
 It shows the corresponding **CREATE VIEW** statement if view name is specified. ::
 
-    SHOW CREATE VIEW view_name
+    SHOW CREATE VIEW view_name;
 
 The following shows the examples of this syntax.
 
@@ -390,6 +390,39 @@ The following shows the examples of this syntax.
                        u.name = CURRENT_USER) OR {c} SUBSETEQ (  SELECT SUM(SET{au.class_of})  FROM _db_auth au  WHERE {au.grantee.name} SUBSETEQ
                        (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name =
                        CURRENT_USER) AND  au.auth_type = 'SELECT')'
+
+SHOW ACCESS STATUS 
+================== 
+  
+**SHOW ACCESS STATUS** statement displays login information regarding database accounts. Only database's DBA account can use this statement.
+  
+:: 
+  
+    SHOW ACCESS STATUS [LIKE 'pattern' | WHERE expr] ; 
+
+This statement displays the following columns.
+
+=================== =========== =================================================================== 
+Column name         Type        Description
+=================== =========== =================================================================== 
+user_name           VARCHAR(32) DB user's account
+last_access_time    DATETIME    Last time that the database user accessed
+last_access_host    VARCHAR(32) Lastly accessed host
+program_name        VARCHAR(32) The name of client program(broker_cub_cas_1, csql ..) 
+=================== =========== =================================================================== 
+  
+The following shows the result of running this statement.
+  
+.. code-block:: sql 
+  
+    SHOW ACCESS STATUS; 
+  
+:: 
+  
+      user_name last_access_time last_access_host program_name 
+    ============================================================================= 
+      'DBA' 08:19:31.000 PM 02/10/2014 127.0.0.1 'csql' 
+      'PUBLIC' NULL NULL NULL
 
 .. _show-exec-statistics-statement:
 

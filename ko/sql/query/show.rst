@@ -346,7 +346,7 @@ SHOW CREATE TABLE
 
 테이블 이름을 지정하면 해당 테이블의 **CREATE TABLE** 문을 출력한다. ::
 
-    SHOW CREATE TABLE table_name
+    SHOW CREATE TABLE table_name;
 
 .. code-block:: sql
 
@@ -390,6 +390,39 @@ SHOW CREATE VIEW
                        u.name = CURRENT_USER) OR {c} SUBSETEQ (  SELECT SUM(SET{au.class_of})  FROM _db_auth au  WHERE {au.grantee.name} SUBSETEQ
                        (  SELECT SET{CURRENT_USER} + COALESCE(SUM(SET{t.g.name}), SET{})  FROM db_user u, TABLE(groups) AS t(g)  WHERE u.name =
                        CURRENT_USER) AND  au.auth_type = 'SELECT')'
+
+SHOW ACCESS STATUS 
+================== 
+  
+**SHOW ACCESS STATUS** 문은 데이터베이스 계정에 대한 로그인 정보를 출력한다. 이 명령은 데이터베이스 계정이 DBA인 사용자만 사용할 수 있다. 
+  
+:: 
+  
+    SHOW ACCESS STATUS [LIKE 'pattern' | WHERE expr] ; 
+
+해당 구문은 다음과 같은 칼럼을 출력한다.
+
+=================== =========== =================================================================== 
+칼럼 이름           타입          설명 
+=================== =========== =================================================================== 
+user_name           VARCHAR(32) DB 사용자 계정
+last_access_time    DATETIME    DB 사용자가 마지막으로 접속한 시간 
+last_access_host    VARCHAR(32) 마지막으로 접속한 호스트 
+program_name        VARCHAR(32) 클라이언트 프로그램 이름(broker_cub_cas_1, csql ..) 
+=================== =========== =================================================================== 
+  
+다음은 해당 질의를 실행한 결과이다. 
+  
+.. code-block:: sql 
+  
+    SHOW ACCESS STATUS; 
+  
+:: 
+  
+      user_name last_access_time last_access_host program_name 
+    ============================================================================= 
+      'DBA' 08:19:31.000 PM 02/10/2014 127.0.0.1 'csql' 
+      'PUBLIC' NULL NULL NULL
 
 .. _show-exec-statistics-statement:
 

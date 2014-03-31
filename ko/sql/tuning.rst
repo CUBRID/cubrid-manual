@@ -388,7 +388,7 @@ SQL에 대한 성능 분석을 위해서는 질의 프로파일링(profiling) �
         GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
     '
 
-위에서 "Trace Statistics:" 이하가 트레이스 결과를 출력한 것이다. 
+위에서 "Trace Statistics:" 이하가 트레이스 결과를 출력한 것이다.
 
 다음은 트레이스 항목에 대한 설명이다.
 
@@ -541,19 +541,19 @@ SQL 힌트는 주석에 더하기 기호(+)를 함께 사용하여 지정한다.
 
 SELECT, UPDATE, DELETE 문에는 다음 힌트가 지정될 수 있다.
 
-*   **USE_NL** : 테이블 조인과 관련한 힌트로서, 질의 최적화기 중첩 루프 조인 실행 계획을 만든다.
-*   **USE_MERGE** : 테이블 조인과 관련한 힌트로서, 질의 최적화기는 정렬 병합 조인 실행 계획을 만든다.
-*   **ORDERED** : 테이블 조인과 관련한 힌트로서, 질의 최적화기는 **FROM** 절에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다. **FROM** 절에서 왼쪽 테이블은 조인의 외부 테이블이 되고, 오른쪽 테이블은 내부 테이블이 된다.
-*   **USE_IDX** : 인덱스 관련한 힌트로서, 질의 최적화기는 명시된 테이블에 대해 인덱스 조인 실행 계획을 만든다.
-*   **USE_DESC_IDX** : 내림차순 스캔을 위한 힌트이다. 자세한 내용은 :ref:`index-descending-scan` 을 참고한다.
-*   **NO_DESC_IDX** : 내림차순 스캔을 사용하지 않도록 하는 힌트이다.
-*   **NO_COVERING_IDX** : 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index` 를 참고한다.
-*   **NO_MULTI_RANGE_OPT** : 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt` 를 참고한다.
-*   **NO_SORT_LIMIT** : SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\ 를 참고한다.
+*   **USE_NL**: 테이블 조인과 관련한 힌트로서, 질의 최적화기 중첩 루프 조인 실행 계획을 만든다.
+*   **USE_MERGE**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 정렬 병합 조인 실행 계획을 만든다.
+*   **ORDERED**: 테이블 조인과 관련한 힌트로서, 질의 최적화기는 **FROM** 절에 명시된 테이블의 순서대로 조인하는 실행 계획을 만든다. **FROM** 절에서 왼쪽 테이블은 조인의 외부 테이블이 되고, 오른쪽 테이블은 내부 테이블이 된다.
+*   **USE_IDX**: 인덱스 관련한 힌트로서, 질의 최적화기는 명시된 테이블에 대해 인덱스 조인 실행 계획을 만든다.
+*   **USE_DESC_IDX**: 내림차순 스캔을 위한 힌트이다. 자세한 내용은 :ref:`index-descending-scan` 을 참고한다.
+*   **NO_DESC_IDX**: 내림차순 스캔을 사용하지 않도록 하는 힌트이다.
+*   **NO_COVERING_IDX**: 커버링 인덱스 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`covering-index` 를 참고한다.
+*   **NO_MULTI_RANGE_OPT**: 다중 키 범위 최적화 기능을 사용하지 않도록 하는 힌트이다. 자세한 내용은 :ref:`multi-key-range-opt` 를 참고한다.
+*   **NO_SORT_LIMIT**: SORT-LIMIT 최적화를 사용하지 않기 위한 힌트이다. 자세한 내용은 :ref:`sort-limit-optimization`\ 를 참고한다.
 
 .. _no-hash-aggregate:
 
-*   **NO_HASH_AGGREGATE** : 집계 함수에서 투플을 정렬할 때 해싱을 사용하지 않도록 하는 힌트이다. 그 대신, 외부 정렬(external sorting)이 집계 함수에서 사용된다. 인-메모리(in-memory) 해시 테이블을 사용하여, CUBRID는 정렬할 때 필요로 하는 데이터의 양을 줄이거나 심지어는 제거할 수 있다. 그러나, 어떤 경우에는 해시 집계 방식이 실패할 것이라는 것을 미리 알고 전체적으로 해시 집계 과정을 생략하기 위해 이 힌트를 사용할 수 있다. 해시 집계 방식의 메모리 크기를 설정하기 위해서는 :ref:`max_agg_hash_size <max_agg_hash_size>`\ 를 참고한다.
+*   **NO_HASH_AGGREGATE**: 집계 함수에서 투플을 정렬할 때 해싱을 사용하지 않도록 하는 힌트이다. 그 대신, 외부 정렬(external sorting)이 집계 함수에서 사용된다. 인-메모리(in-memory) 해시 테이블을 사용하여, CUBRID는 정렬할 때 필요로 하는 데이터의 양을 줄이거나 심지어는 제거할 수 있다. 그러나, 어떤 경우에는 해시 집계 방식이 실패할 것이라는 것을 미리 알고 전체적으로 해시 집계 과정을 생략하기 위해 이 힌트를 사용할 수 있다. 해시 집계 방식의 메모리 크기를 설정하기 위해서는 :ref:`max_agg_hash_size <max_agg_hash_size>`\ 를 참고한다.
 
     .. note::
     
@@ -563,7 +563,9 @@ SELECT, UPDATE, DELETE 문에는 다음 힌트가 지정될 수 있다.
 
 *   **RECOMPILE** : 질의 실행 계획을 리컴파일한다. 캐시에 저장된 기존 질의 실행 계획을 삭제하고 새로운 질의 실행 계획을 수립하기 위해 이 힌트를 사용한다.
 
-.. note:: <*spec_name*>\ 이 **USE_NL**, **USE_IDX**, **USE_MERGE**\ 와 함께 지정될 경우 해당 조인 방법은 <*spec_name*>\ 에 대해서만 적용된다. 
+.. note::
+
+    <*spec_name*>\ 이 **USE_NL**, **USE_IDX**, **USE_MERGE**\ 와 함께 지정될 경우 해당 조인 방법은 <*spec_name*>\ 에 대해서만 적용된다. 
 
     .. code-block:: sql
     
@@ -577,9 +579,9 @@ SELECT, UPDATE, DELETE 문에는 다음 힌트가 지정될 수 있다.
 
 MERGE 문에는 다음과 같은 힌트를 사용할 수 있다. 
 
-*   **USE_INSERT_INDEX** (<*insert_index_list*>) : MERGE 문의 INSERT 절에서 사용되는 인덱스 힌트. *insert_index_list*\ 에 INSERT 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>에 해당 힌트가 적용된다.
-*   **USE_UPDATE_INDEX** (<*update_index_list*>) : MERGE 문의 UPDATE 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 UPDATE 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
-*   **RECOMPILE** : 위의 :ref:`RECOMPILE <recompile>`\ 을 참고한다.
+*   **USE_INSERT_INDEX** (<*insert_index_list*>): MERGE 문의 INSERT 절에서 사용되는 인덱스 힌트. *insert_index_list*\ 에 INSERT 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>에 해당 힌트가 적용된다.
+*   **USE_UPDATE_INDEX** (<*update_index_list*>): MERGE 문의 UPDATE 절에서 사용되는 인덱스 힌트. *update_index_list*\ 에 UPDATE 절을 수행할 때 사용할 인덱스 이름을 나열한다. MERGE 문의 <*join_condition*>과 <*update_condition*>에 해당 힌트가 적용된다.
+*   **RECOMPILE**: 위의 :ref:`RECOMPILE <recompile>`\ 을 참고한다.
 
 다음은 심권호 선수가 메달을 획득한 연도와 메달 종류를 구하는 예제이다. 단, *athlete* 테이블을 외부 테이블로 하고 *game* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만들어야 한다. 다음과 같은 질의로 표현이 되는데, 질의최적화기는 *game* 테이블을 외부 테이블로 하고, *athlete* 테이블을 내부 테이블로 하는 중첩 루프 조인 실행 계획을 만든다.
 
@@ -590,7 +592,7 @@ MERGE 문에는 다음과 같은 힌트를 사용할 수 있다.
     WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
 
 ::
-    
+
       name                    host_year  medal
     =========================================================
       'Sim Kwon Ho'                2000  'G'
@@ -628,13 +630,12 @@ USING INDEX
     <index_spec> ::=
       [table_spec.]index_name [(+) | (-)] |
       table_spec.NONE
- 
 
-*   **NONE** : **NONE** 을 지정한 경우 모든 테이블에 대해서 순차 스캔이 사용된다.
-*   **ALL EXCEPT** : 질의 수행 시 지정한 인덱스를 제외한 모든 인덱스가 사용될 수 있다.
-*   *index_name*\ (+) : 인덱스 이름 뒤에 (+)를 지정하면 해당 인덱스 선택이 우선시 된다. 해당 인덱스가 해당 질의를 수행하는데 적합하지 않으면 선택하지 않는다. 
-*   *index_name*\ (-) : 인덱스 이름 뒤에 (-)를 지정하면 해당 인덱스가 선택에서 제외된다.
-*   *table_spec*.\ **NONE** : 해당 테이블의 모든 인덱스가 선택에서 제외되어 순차 스캔이 사용된다.
+*   **NONE**: **NONE** 을 지정한 경우 모든 테이블에 대해서 순차 스캔이 사용된다.
+*   **ALL EXCEPT**: 질의 수행 시 지정한 인덱스를 제외한 모든 인덱스가 사용될 수 있다.
+*   *index_name*\ (+): 인덱스 이름 뒤에 (+)를 지정하면 해당 인덱스 선택이 우선시 된다. 해당 인덱스가 해당 질의를 수행하는데 적합하지 않으면 선택하지 않는다. 
+*   *index_name*\ (-): 인덱스 이름 뒤에 (-)를 지정하면 해당 인덱스가 선택에서 제외된다.
+*   *table_spec*.\ **NONE**: 해당 테이블의 모든 인덱스가 선택에서 제외되어 순차 스캔이 사용된다.
 
 USE, FORCE, IGNORE INDEX
 ------------------------
@@ -761,7 +762,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 .. code-block:: sql
 
     SELECT ... 
-    FROM tab1, tab2 USE INDEX (tab1.idx1) 
+    FROM tab1, tab2 USE INDEX(tab1.idx1) 
     WHERE ... ;
     
     SELECT ... 
@@ -861,7 +862,7 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 .. code-block:: sql
 
-    CREATE INDEX idx_open_bugs ON bugs (bugID) WHERE Closed = 0;
+    CREATE INDEX idx_open_bugs ON bugs(bugID) WHERE Closed = 0;
 
 열린 상태의 버그에만 관심있는 질의 처리를 위해 해당 인덱스를 인덱스 힌트로 지정하면, 필터링된 인덱스를 통하여 더 적은 인덱스 페이지를 접근하여 질의 결과를 생성할 수 있게 된다.
 
@@ -905,19 +906,19 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 다음은 인덱스 필터 조건으로 허용하지 않는 경우이다.
 
 *   날짜/시간 함수 또는 랜덤 함수와 같이 입력이 같은데 결과가 매번 다른 함수
-    
+
     .. code-block:: sql
-    
-        CREATE INDEX idx ON bugs (creationdate) WHERE creationdate > SYS_DATETIME;
+
+        CREATE INDEX idx ON bugs(creationdate) WHERE creationdate > SYS_DATETIME;
 
     ::
-        
+
         ERROR: before ' ; '
         'sys_datetime ' is not allowed in a filter expression for index.
 
     .. code-block:: sql
-        
-        CREATE INDEX idx ON bugs (bugID) WHERE bugID > RAND();
+
+        CREATE INDEX idx ON bugs(bugID) WHERE bugID > RAND();
 
     ::
     
@@ -1025,22 +1026,22 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 다음 인덱스가 생성된 이후 **SELECT** 질의는 자동으로 함수 기반 인덱스를 사용한다.
 
 .. code-block:: sql
-  
-    CREATE INDEX idx_trim_post ON posts_table (TRIM (keyword));
+
+    CREATE INDEX idx_trim_post ON posts_table(TRIM(keyword));
     
     SELECT * 
     FROM posts_table 
-    WHERE TRIM (keyword) = 'SQL';
+    WHERE TRIM(keyword) = 'SQL';
 
 **LOWER** 함수로 함수 기반 인덱스를 생성하면, 대소문자 구분을 안 하는 이름을 검색할 때 사용될 수 있다.
 
 .. code-block:: sql
 
-    CREATE INDEX idx_last_name_lower ON clients_table (LOWER (LastName));
+    CREATE INDEX idx_last_name_lower ON clients_table(LOWER(LastName));
     
     SELECT * 
     FROM clients_table 
-    WHERE LOWER (LastName) = LOWER ('Timothy');
+    WHERE LOWER(LastName) = LOWER('Timothy');
 
 질의 계획을 생성할 때 인덱스가 선택되게 하기 위해서는, 이 인덱스에서 사용되는 함수가 질의 조건에서 같은 방법으로 사용되어야 한다. 위의 **SELECT** 질의는 위에서 생성된 last_name_lower 인덱스를 사용한다. 하지만 다음과 같은 조건에서는 함수 기반 인덱스 형태와 다른 표현식이 주어졌기 때문에 인덱스가 사용되지 않는다.
 
@@ -1048,16 +1049,16 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
     SELECT * 
     FROM clients_table
-    WHERE LOWER (CONCAT ('Mr. ', LastName)) = LOWER ('Mr. Timothy');
+    WHERE LOWER(CONCAT('Mr. ', LastName)) = LOWER('Mr. Timothy');
 
 함수 기반 인덱스의 사용을 강제하려면 **USING INDEX** 구문을 사용할 수 있다.
 
 .. code-block:: sql
 
-    CREATE INDEX i_tbl_first_four ON tbl (LEFT (col, 4));
-    SELECT * 
+    CREATE INDEX i_tbl_first_four ON tbl(LEFT(col, 4));
+    SELECT *
     FROM clients_table 
-    WHERE LEFT (col, 4) = 'CAT5' 
+    WHERE LEFT(col, 4) = 'CAT5' 
     USING INDEX i_tbl_first_four;
 
 .. _allowed-function-in-function-index:
@@ -1110,26 +1111,26 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
 .. code-block:: sql
 
-    CREATE INDEX my_idx ON tbl (TRIM (LEFT (col, 3)));
-    CREATE INDEX my_idx ON tbl (LEFT (col1, col2 + 3));
+    CREATE INDEX my_idx ON tbl (TRIM(LEFT(col, 3)));
+    CREATE INDEX my_idx ON tbl (LEFT(col1, col2 + 3));
 
 묵시적인 타입 변환(implicit type cast)은 허용된다. 아래의 예에서 :func:`LEFT` 함수는 첫 번째 인자 타입이 **VARCHAR** 이고 두 번째 인자 타입이 **INTEGER** 여야 하지만 정상 동작한다.
 
 .. code-block:: sql
 
-    CREATE INDEX my_idx ON tbl (LEFT (int_col, str_col));
+    CREATE INDEX my_idx ON tbl (LEFT(int_col, str_col));
 
 함수 기반 인덱스는 필터링된 인덱스와 함께 사용될 수 없다. 아래의 예는 오류를 발생한다.
 
 .. code-block:: sql
 
-    CREATE INDEX my_idx ON tbl (TRIM (col)) WHERE col > 'SQL';
+    CREATE INDEX my_idx ON tbl (TRIM(col)) WHERE col > 'SQL';
 
 함수 기반 인덱스는 다중 칼럼 인덱스가 될 수 없다. 아래의 예는 오류를 발생한다.
 
 .. code-block:: sql
 
-    CREATE INDEX my_idx ON tbl (TRIM (col1), col2, LEFT (col3, 5));
+    CREATE INDEX my_idx ON tbl (TRIM(col1), col2, LEFT(col3, 5));
 
 
 .. _tuning-index:
@@ -1185,9 +1186,9 @@ USE, FORCE, IGNORE INDEX 구문은 시스템에 의해 자동적으로 적절한
 
     .. code-block:: sql
 
-        CREATE TABLE tab (c VARCHAR(32));
-        INSERT INTO tab VALUES ('abcd'), ('abcd    '), ('abcd ');
-        CREATE INDEX i_tab_c ON tab (c);
+        CREATE TABLE tab(c VARCHAR(32));
+        INSERT INTO tab VALUES('abcd'),('abcd    '),('abcd ');
+        CREATE INDEX i_tab_c ON tab(c);
 
     인덱스를 반드시 사용하도록(커버링 인덱스가 적용되도록) 했을 때의 질의 결과는 다음과 같다.
 
@@ -1561,7 +1562,7 @@ GROUP BY 절 최적화
     --  (/* ---> skip GROUP BY */)
 
 ::
-    
+
     Query plan:
     iscan
         class: tab node[0]
@@ -1592,7 +1593,7 @@ GROUP BY 절 최적화
     GROUP BY j,k;
 
 ::
-    
+
     --  the  selection from the query plan dump shows that the index i_tab_j_k was used (since j has the NOT NULL constraint )
     --  and sorting was not necessary (/* ---> skip GROUP BY */)
     Query plan:
@@ -1701,7 +1702,7 @@ GROUP BY 절 최적화
     LIMIT 2; 
 
 ::
-    
+
     Query plan: 
     iscan 
     class: t node[0] 
@@ -1713,10 +1714,10 @@ GROUP BY 절 최적화
 
 ::
 
-    SELECT /*+ hints */ ... 
+    SELECT /*+ hints */ ...
     FROM table
     WHERE col_1 = ? AND col_2 = ? AND ... AND col(j-1) = ?
-    AND col_(j) IN (?, ?, ... )
+    AND col_(j) IN (?, ?, ...)
     AND col_(j+1) = ? AND ... AND col_(p-1) = ?
     AND key_filter_terms
     ORDER BY col_(p) [ASC|DESC], col_(p+1) [ASC|DESC], ... col_(p+k-1) [ASC|DESC]
@@ -1780,8 +1781,8 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
 질의문 힌트로 **INDEX_SS**\가 입력되고 다음의 경우를 만족할 때 인덱스 스킵 스캔이 적용된다.
 
-1.  인덱스의 두번째 칼럼부터 조건에 명시된다.
-2.  필터링된 인덱스가 아니어야 한다.
+1.  복합 인덱스의 두번째 칼럼부터 조건에 명시된다.
+2.  사용되는 인덱스가 필터링된 인덱스가 아니어야 한다.
 3.  인덱스의 첫 번째 칼럼이 범위 필터나 키 필터가 아니어야 한다.
 4.  계층 질의는 지원하지 않는다.
 5.  집계 함수가 포함된 경우는 지원하지 않는다.
@@ -1815,7 +1816,7 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 .. code-block:: sql
 
     -- csql>;plan simple
-    -- this would qualify to use Index Skip Scanning:
+    -- this will qualify to use Index Skip Scanning
     SELECT /*+ RECOMPILE INDEX_SS */ * 
     FROM tbl 
     WHERE name = '1000';
@@ -1824,15 +1825,12 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     Query plan:
 
-    iscan
-        class: tbl node[0]
-        index: idx_tbl_gen_name term[0] (index skip scan)
-        cost:  1334 card 360
+     Index scan(tbl tbl, idx_tbl_gen_name, tbl.[name]= ?:0  (index skip scan))
 
 .. code-block:: sql
 
     -- csql>;plan simple
-    -- this would qualify to use Index Skip Scanning:
+    -- this will qualify to use Index Skip Scanning
     SELECT /*+ RECOMPILE INDEX_SS */ * 
     FROM tbl 
     WHERE name between '1000' and '1050';
@@ -1841,10 +1839,8 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     Query plan:
 
-    iscan
-        class: tbl node[0]
-        index: idx_tbl_gen_name term[0] (index skip scan)
-        cost:  1334 card 3600
+     Index scan(tbl tbl, idx_tbl_gen_name, (tbl.[name]>= ?:0  and tbl.[name]<= ?:1 ) (index skip scan))
+
 
 .. _loose-index-scan:
 
@@ -1853,13 +1849,35 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
 **GROUP BY** 절 또는 **DISTINCT**\의 칼럼이 인덱스 부분 키(subkey)를 포함할 때, 느슨한 인덱스 스캔은 부분 키를 구성하는 칼럼 각각의 고유(unique) 값에 대해 동적으로 범위를 조정하여 B-트리 검색을 시작한다. 따라서 B-트리의 스캔 영역을 상당 부분 줄일 수 있다.
 
+느슨한 인덱스 스캔은 그룹핑되는 칼럼의 카디널리티가 전체 데이터량이 비해 매우 작을 때 적용하는 것이 유리하다.
+
 질의문 힌트로 **INDEX_LS**\가 입력되고 다음의 경우를 만족할 때 느슨한 인덱스 스캔이 적용된다.
 
-1.  인덱스가 SELECT 리스트의 모든 부분을 커버할 때, 즉 커버링 인덱스가 적용될 때.
-2.  DISTINCT 질의 또는 GROUP BY 질의
-3.  집계 함수를 사용하는 경우, 해당 함수의 입력 인자가 DISTINCT를 반드시 포함해야 함. 단, MIN/MAX 함수는 예외.
-4.  COUNT(*)가 사용되어선 안 됨.
-5.  사용되는 부분 키(subkey)의 카디널리티(cardinality)가 전체 인덱스의 카디널리티보다 100배 작을 때.
+1.  인덱스가 SELECT 리스트의 모든 부분을 커버해야 한다. 즉, 커버링 인덱스가 적용되어야 한다.
+2.  DISTINCT 또는 GROUP BY가 인덱스 부분 키(인덱스의 앞부분)를 포함해야 한다. 
+3.  부분 키(subkey)를 탐색할 수 있는 조건이 명시되어야 한다.
+4.  집계 함수를 사용하는 경우, 해당 함수의 입력 인자가 DISTINCT를 반드시 포함해야 한다. 단, MIN/MAX 함수는 예외이다. 또한 MIN/MAX 함수는 동일 칼럼을 참조한다.
+5.  COUNT(*)가 사용되어선 안 된다.
+
+부분 키는 복합 인덱스(composite index)에서 앞 쪽 부분에 해당하는 것으로, 예를 들어 INDEX(a, b, c, d)로 구성되어 있는 경우 (a), (a, b) 또는 (a, b, c)가 부분 키에 해당한다. 
+
+이상과 같이 구성된 테이블에 대해 다음 질의를 수행하는 경우, 
+
+.. code-block:: sql
+
+    SELECT a, b FROM tbl GROUP BY a;
+    
+칼럼 a에 대한 조건이 없으므로 부분 키를 사용할 수 없다. 그러나 다음과 같이 부분 키의 조건이 명시되면 느슨한 인덱스 스캔이 적용될 수 있다.
+
+.. code-block:: sql
+
+    SELECT a, b FROM tbl WHERE a > 10 GROUP BY a;
+
+다음과 같이 그룹핑 칼럼이 앞에, WHERE 조건 칼럼이 뒤에 오는 경우에도 부분 키를 사용할 수 있으므로 느슨한 인덱스 스캔이 적용될 수 있다.
+
+.. code-block:: sql
+
+    SELECT a, b FROM tbl WHERE b > 10 GROUP BY a;
 
 다음은 느슨한 인덱스 스캔이 적용되는 예이다.
 
@@ -1888,6 +1906,21 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
     UPDATE STATISTICS ON ALL CLASSES;
 
 .. code-block:: sql
+
+    -- csql>;plan simple
+    -- add a condition to the grouped column, k1 to enable loose index scan
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1     
+    FROM tbl1 
+    WHERE k1 > -1000000 LIMIT 20;
+
+::
+
+    Query plan:
+
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ) (covers) (loose index scan on prefix 1))
+
+.. code-block:: sql
     
     -- csql>;plan simple
     -- different key ranges/filters
@@ -1899,13 +1932,8 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     Query plan:
 
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[0] (covers) (loose index scan on prefix 1)
-                     sort:  1 asc
-                     cost:  481 card 3600
-        cost:  499 card 3600
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, (tbl1.k1>= ?:0  and tbl1.k1<= ?:1 ) (covers) (loose index scan on prefix 1))
 
 .. code-block:: sql
     
@@ -1918,15 +1946,8 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     Query plan:
 
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[1] (covers) (loose index scan on prefix 2)
-                     filtr: term[0]
-                     sort:  1 asc, 2 asc
-                     cost:  481 card 36
-        cost:  487 card 36
-
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, (tbl1.k1>= ?:0  and tbl1.k1<= ?:1 ), [(tbl1.k2> ?:2  and tbl1.k2< ?:3 )] (covers) (loose index scan on prefix 2))
 
 .. code-block:: sql
     
@@ -1939,14 +1960,8 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     Query plan:
 
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[1] (covers) (loose index scan on prefix 2)
-                     filtr: term[0]
-                     sort:  1 asc, 2 asc
-                     cost:  481 card 3600
-        cost:  500 card 3600
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, (tbl1.k1>= ?:0 ), [tbl1.k1+tbl1.k2<=10] (covers) (loose index scan on prefix 2))
 
 .. code-block:: sql
     
@@ -1958,24 +1973,13 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
 ::
 
-    Query plan:
-
-    temp(group by)
-        subplan: idx-join (inner join)
-                     outer: sscan
-                                class: tbl2 node[0]
-                                cost:  1 card 7
-                     inner: iscan
-                                class: tbl1 node[1]
-                                index: idx term[0] AND term[1] (covers) (loose index scan on prefix 2)
-                                cost:  5 card 360000
-                     cost:  6 card 630
-        sort:  1 asc, 2 asc
-        cost:  13 card 630
+ Sort(group by)
+    Nested loops
+        Sequential scan(tbl2 tbl2)
+        Index scan(tbl1 tbl1, idx, tbl2.k1=tbl1.k1 and tbl2.k2=tbl1.k2 (covers) (loose index scan on prefix 2))
 
 .. code-block:: sql
         
-    -- aggregate functions
     SELECT /*+ RECOMPILE INDEX_LS */ MIN(k2), MAX(k2) 
     FROM tbl1;
 
@@ -1983,10 +1987,7 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     Query plan:
 
-    iscan
-        class: tbl1 node[0]
-        index: idx (covers) (loose index scan on prefix 2)
-        cost:  2157 card 360000
+     Index scan(tbl1 tbl1, idx (covers) (loose index scan on prefix 2))
 
 .. code-block:: sql
 
@@ -1998,10 +1999,7 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     Query plan:
 
-    iscan
-        class: tbl1 node[0]
-        index: idx (covers) (loose index scan on prefix 2)
-        cost:  2157 card 360000
+     Index scan(tbl1 tbl1, idx (covers) (loose index scan on prefix 2))
 
 .. code-block:: sql
 
@@ -2014,17 +2012,11 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     Query plan:
 
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 2)
-                     filtr: term[0]
-                     sort:  1 asc
-                     cost:  2157 card 36000
-        cost:  2287 card 36000
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, [(tbl1.k2> ?:0 )] (covers) (loose index scan on prefix 2))
+
     
 다음은 느슨한 인덱스 스캔이 적용되지 않는 경우이다.
-
 
 .. code-block:: sql
 
@@ -2038,31 +2030,22 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
 
     Query plan:
 
-    temp(distinct)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  1688 card 360000
-        sort:  1 asc, 2 asc, 3 asc
-        cost:  3296 card 360000
+     Sort(distinct)
+        Sequential scan(tbl1 tbl1)
 
-    
 .. code-block:: sql
 
     -- csql>;plan simple
-    SELECT /*+ RECOMPILE INDEX_LS */ k1, k2, k3 
-    FROM tbl1 
-    GROUP BY k1, k2, k3 LIMIT 10;
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, k2, k3
+    FROM tbl1
+    WHERE k1 > -10000 GROUP BY k1, k2, k3 LIMIT 10;
 
 ::
 
     Query plan:
 
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  1688 card 360000
-        sort:  1 asc, 2 asc, 3 asc
-        cost:  3296 card 360000
+     Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ) (covers))
+     skip GROUP BY
 
 .. code-block:: sql
     
@@ -2070,18 +2053,14 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
     -- not enabled when using count star
     SELECT /*+ RECOMPILE INDEX_LS */ COUNT(*), k1 
     FROM tbl1 
-    GROUP BY k1;
+    WHERE k1 > -10000 GROUP BY k1;
 
 ::
 
     Query plan:
 
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  1688 card 360000
-        sort:  2 asc
-        cost:  2945 card 360000
+     Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ) (covers))
+     skip GROUP BY
     
 .. code-block:: sql
 
@@ -2089,18 +2068,15 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
     -- not enabled when index is not covering
     SELECT /*+ RECOMPILE INDEX_LS */ k1, k2, SUM(k4) 
     FROM tbl1 
-    GROUP BY k1, k2 LIMIT 10;
+    WHERE k1 > -1 AND k2 > -1 GROUP BY k1, k2 LIMIT 10;
     
 ::
 
     Query plan:
 
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  1688 card 360000
-        sort:  1 asc, 2 asc
-        cost:  3296 card 360000
+     Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ), [(tbl1.k2> ?:1 )])
+     skip GROUP BY
+
 
 .. code-block:: sql
 
@@ -2108,18 +2084,14 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
     -- not enabled for non-distinct aggregates
     SELECT /*+ RECOMPILE INDEX_LS */ k1, SUM(k2) 
     FROM tbl1 
-    GROUP BY k1;
+    WHERE k1 > -1 GROUP BY k1;
     
 ::
 
     Query plan:
 
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  1688 card 360000
-        sort:  1 asc
-        cost:  3120 card 360000
+     Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ) (covers))
+     skip GROUP BY
 
 .. code-block:: sql
 
@@ -2131,93 +2103,8 @@ JOIN 질의에 대해서 다중 키 범위 최적화가 적용되기 위해서�
     
     Query plan:
 
-    sscan
-        class: tbl1 node[0]
-        cost:  1688 card 360000
+     Sequential scan(tbl1 tbl1)
 
-===============================================================
-(검토)적용 안 되게 된 것들. (CUBRIDSUS-13449 수정 이후 다시 검토해 볼 것
-릴리스노트의 9024도 수정 여부 검토할 것)
-
-
-.. code-block:: sql
-
-    -- basic scenarios
-
-    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1     
-    FROM tbl1 LIMIT 20;
-        
-::
-
-    Query plan:
-
-    temp(distinct)
-    subplan: iscan
-                 class: tbl1 node[0]
-                 index: idx (covers) (loose index scan on prefix 1)
-                 sargs: term[0]
-                 sort:  1 asc
-                 cost:  402 card 720000
-    cost:  2910 card 720000
-
-
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE INDEX_LS */ k1, SUM(DISTINCT k2) 
-    FROM tbl1 
-    GROUP BY k1;
-
-::
-
-    Query plan:
-    
-    temp(group by)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 2)
-                     sort:  1 asc
-                     cost:  402 card 720000
-        sort:  1 asc
-        cost:  3262 card 720000
-    
-.. code-block:: sql
-
-    -- aggregate functions, single tuple
-    SELECT /*+ RECOMPILE INDEX_LS */ k1, MIN(k2), max(k2) 
-    FROM tbl1 
-    GROUP BY k1;
-
-::
-
-    Query plan:
-
-    temp(group by)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 2)
-                     sort:  1 asc
-                     cost:  402 card 720000
-        sort:  1 asc
-        cost:  3262 card 720000        
-        
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE INDEX_LS */ k1, k2     
-    FROM tbl1 GROUP BY k1
-    LIMIT 20;
-    
-::
-
-    Query plan:
-
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 1)
-                     sargs: term[0]
-                     sort:  1 asc
-                     cost:  368 card 360000
-        cost:  1625 card 360000
 
 .. _in-memory-sort:
 
@@ -2258,8 +2145,8 @@ SORT-LIMIT 최적화는 ORDER BY 절과 LIMIT 절을 명시한 질의에 적용�
 *   ORDER BY 표현식이 스캔하는 동안 평가될 수 있다. 
 
     예를 들어, 아래와 같은 질의는 SORT-LIMIT 최적화가 적용될 수 없는데, SUM은 스캔하는 동안 평가될 수 없기 때문이다.
-    
-    ::
+
+    .. code-block:: sql
     
         SELECT SUM(u.i) FROM u, t where u.i = t.i ORDER BY 1 LIMIT 5;
 
@@ -2296,4 +2183,3 @@ SORT-LIMIT 최적화는 ORDER BY 절과 LIMIT 절을 명시한 질의에 적용�
                    cost:  6 card 1000
         sort:  2 asc
         cost:  7 card 0
-

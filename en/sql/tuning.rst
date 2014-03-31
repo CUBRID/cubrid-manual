@@ -19,7 +19,7 @@ Statistics for tables and indexes enables queries of the database system to proc
 
 *   **WITH FULLSCAN**: It updates the statistics with all the data in the specified table. If this is omitted, it updates the statistics with sampling data.
 
-*   **ALL CLASSES** : If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
+*   **ALL CLASSES**: If the **ALL CLASSES** keyword is specified, the statistics on all the tables existing in the database are updated.
 
 *   **CATALOG CLASSES**: It updates the statistics of the catalog tables.
 
@@ -56,7 +56,7 @@ Checking Statistics Information
 You can check the statistics Information with the session command of the CSQL Interpreter. ::
 
     csql> ;info stats table_name
-    
+
 *   *table_name* : Table name to check the statistics Information
 
 The following shows the statistical information of *t1* table in CSQL interpreter.
@@ -130,7 +130,7 @@ The following shows the result which ran the query after inputting ";plan simple
 
     SET OPTIMIZATION LEVEL 257;
     --  csql> ;plan simple
-    SELECT /*+ recompile */  DISTINCT h.host_year, o.host_nation
+    SELECT /*+ RECOMPILE */  DISTINCT h.host_year, o.host_nation
     FROM history h INNER JOIN olympic o 
     ON h.host_year = o.host_year AND o.host_year > 1950;
 
@@ -387,11 +387,11 @@ Below is an example that prints out the query tracing result after setting SQL t
             SCAN (index: nation.pk_nation_code), (btree time: 0, fetch: 76, ioread: 0, readkeys: 38, filteredkeys: 38, rows: 38) (lookup time: 0, rows: 38)
         GROUPBY (time: 0, sort: true, page: 0, ioread: 0, rows: 5)
     '
- 
+
 On the above, later lines of "Trace Statistics:" are the output of the query trace. 
 
 The following are the items of trace statistics.
- 
+
 **SELECT**
  
 *   time: total estimated time when this query is performed(ms)
@@ -520,10 +520,10 @@ Using hints can affect the performance of query execution. You can allow the que
     NO_SORT_LIMIT |
     NO_HASH_AGGREGATE |
     RECOMPILE
-    
+
     <spec_name_comma_list> ::= <spec_name> [, <spec_name>, ... ]
         <spec_name> ::= table_name | view_name
-        
+    
     <merge_statement_hint> ::=
     USE_UPDATE_INDEX (<update_index_list>) |
     USE_DELETE_INDEX (<insert_index_list>) |
@@ -539,38 +539,32 @@ The hint comment must appear after the keyword such as **SELECT**, **UPDATE** or
 
 The following hints can be specified in UPDATE, DELETE and SELECT statements.
 
-*   **USE_NL** : Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
-
-*   **USE_MERGE** : Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
-
-*   **ORDERED** : Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
-
-*   **USE_IDX** : Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
-
-*   **USE_DESC_IDX** : This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
-
-*   **NO_DESC_IDX** : This is a hint not to use the descending index.
-
-*   **NO_COVERING_IDX** : This is a hint not to use the covering index. For details, see :ref:`covering-index`.
-
-*   **NO_SORT_LIMIT** : This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
+*   **USE_NL**: Related to a table join, the query optimizer creates a nested loop join execution plan with this hint.
+*   **USE_MERGE**: Related to a table join, the query optimizer creates a sort merge join execution plan with this hint.
+*   **ORDERED**: Related to a table join, the query optimizer create a join execution plan with this hint, based on the order of tables specified in the FROM clause. The left table in the FROM clause becomes the outer table; the right one becomes the inner table.
+*   **USE_IDX**: Related to an index, the query optimizer creates an index join execution plan corresponding to a specified table with this hint.
+*   **USE_DESC_IDX**: This is a hint for the scan in descending index. For more information, see :ref:`index-descending-scan`.
+*   **NO_DESC_IDX**: This is a hint not to use the descending index.
+*   **NO_COVERING_IDX**: This is a hint not to use the covering index. For details, see :ref:`covering-index`.
+*   **NO_MULTI_RANGE_OPT**: This is a hint not to use the multi-key range optimization. For details, see :ref:`multi-key-range-opt`.
+*   **NO_SORT_LIMIT**: This is a hint not to use the SORT-LIMIT optimization. For more details, see :ref:`sort-limit-optimization`.
 
 .. _no-hash-aggregate:
 
-*   **NO_HASH_AGGREGATE** : This is a hint not to use hashing for the sorting tuples in aggregate functions. Instead, external sorting is used in aggregate functions. By using an in-memory hash table, we can reduce or even eliminate the amount of data that needs to be sorted. However, in some scenarios the user may know beforehand that hash aggregation will fail and can use the hint to skip hash aggregation entirely. For setting the memory size of hashing aggregate, see :ref:`max_agg_hash_size <max_agg_hash_size>`.
+*   **NO_HASH_AGGREGATE**: This is a hint not to use hashing for the sorting tuples in aggregate functions. Instead, external sorting is used in aggregate functions. By using an in-memory hash table, we can reduce or even eliminate the amount of data that needs to be sorted. However, in some scenarios the user may know beforehand that hash aggregation will fail and can use the hint to skip hash aggregation entirely. For setting the memory size of hashing aggregate, see :ref:`max_agg_hash_size <max_agg_hash_size>`.
 
     .. note::
     
         Hash aggregate evaluation will not work for functions evaluated on distinct values (e.g. AVG(DISTINCT x)) and for the GROUP_CONCAT and MEDIAN functions, since they require an extra sorting step for the tuples of each group.
 
 .. _recompile:
-        
+
 *   **RECOMPILE** : Recompiles the query execution plan. This hint is used to delete the query execution plan stored in the cache and establish a new query execution plan.
 
 .. note::
 
     If <*spec_name*> is specified together with **USE_NL**, **USE_IDX** or **USE_MERGE**, the specified join method applies only to the <*spec_name*>. 
-    
+
     .. code-block:: sql
     
         SELECT /*+ ORDERED USE_NL(B) USE_NL(C) USE_MERGE(D) */ * 
@@ -578,14 +572,14 @@ The following hints can be specified in UPDATE, DELETE and SELECT statements.
         INNER JOIN C ON B.col=C.col INNER JOIN D  ON C.col=D.col;
         
     If you run the above query, **USE_NL** is applied when A and B are joined; **USE_NL** is applied when C is joined, too; **USE_MERGE** is applied when D is joined.
-    
+
     If **USE_NL** and **USE_MERGE** are specified together without <*spec_name*>, the given hint is ignored. In some cases, the query optimizer cannot create a query execution plan based on the given hint. For example, if **USE_NL** is specified for a right outer join, the query is converted to a left outer join internally, and the join order may not be guaranteed.
-    
+
 MERGE statement can have below hints.
 
-*   **USE_INSERT_INDEX** (<*insert_index_list*>) : An index hint which is used in INSERT clause of MERGE statement. Lists index names to *insert_index_list* to use when executing INSERT clause. This hint is applied to  <*join_condition*> of MERGE statement.
-*   **USE_UPDATE_INDEX** (<*update_index_list*>) : An index hint which is used in UPDATE clause of MERGE statement. Lists index names to *update_index_list* to use when executing UPDATE clause. This hint is applied to <*join_condition*> and <*update_condition*> of MERGE statement.
-*   **RECOMPILE** : See the above :ref:`RECOMPILE <recompile>`.
+*   **USE_INSERT_INDEX** (<*insert_index_list*>): An index hint which is used in INSERT clause of MERGE statement. Lists index names to *insert_index_list* to use when executing INSERT clause. This hint is applied to  <*join_condition*> of MERGE statement.
+*   **USE_UPDATE_INDEX** (<*update_index_list*>): An index hint which is used in UPDATE clause of MERGE statement. Lists index names to *update_index_list* to use when executing UPDATE clause. This hint is applied to <*join_condition*> and <*update_condition*> of MERGE statement.
+*   **RECOMPILE**: See the above :ref:`RECOMPILE <recompile>`.
 
 The following example shows how to retrieve the years when Sim Kwon Ho won medals and the types of medals. Here, a nested loop join execution plan needs to be created which has the *athlete* table as an outer table and the *game* table as an inner table. It can be expressed by the following query. The query optimizer creates a nested loop join execution plan that has the *game* table as an outer table and the *athlete* table as an inner table.
 
@@ -594,7 +588,7 @@ The following example shows how to retrieve the years when Sim Kwon Ho won medal
     SELECT /*+ USE_NL ORDERED  */ a.name, b.host_year, b.medal
     FROM athlete a, game b 
     WHERE a.name = 'Sim Kwon Ho' AND a.code = b.athlete_code;
-    
+
 ::
 
       name                    host_year  medal
@@ -634,13 +628,12 @@ The **USING INDEX**  clause is useful to get the results in the desired order wi
     <index_spec> ::=
       [table_spec.]index_name [(+) | (-)] |
       table_spec.NONE
- 
 
-*   **NONE** : If **NONE** is specified,  a sequential scan is used on all tables.
-*   **ALL EXCEPT** : All indexes except the specified indexes can be used when the query is executed.
-*   *index_name*\ (+) : If (+) is specified after the index_name, it is the first priority in index selection. IF this index is not proper to run the query, it is not selected.
-*   *index_name*\ (-) : If (-) is specified after the index_name, it is excluded from index selection. 
-*   *table_spec*.\ **NONE** : All indexes are excluded from the selection, so sequential scan is used.
+*   **NONE**: If **NONE** is specified,  a sequential scan is used on all tables.
+*   **ALL EXCEPT**: All indexes except the specified indexes can be used when the query is executed.
+*   *index_name*\ (+): If (+) is specified after the index_name, it is the first priority in index selection. IF this index is not proper to run the query, it is not selected.
+*   *index_name*\ (-): If (-) is specified after the index_name, it is excluded from index selection. 
+*   *table_spec*.\ **NONE**: All indexes are excluded from the selection, so sequential scan is used.
 
 USE, FORCE, IGNORE INDEX
 ------------------------
@@ -730,7 +723,7 @@ Below query always do the sequential scan.
     FROM athlete2
     WHERE gender='M' AND nation_code='USA'
     USING INDEX athlete2.NONE;
-    
+
 Below query forces to be possible to use all indexes except *athlete2_idx2* index.
 
 .. code-block:: sql
@@ -739,7 +732,7 @@ Below query forces to be possible to use all indexes except *athlete2_idx2* inde
     FROM athlete2 
     WHERE gender='M' AND nation_code='USA'
     USING INDEX ALL EXCEPT athlete2_idx2;
-    
+
 When two or more indexes have been specified in the **USING INDEX** clause, the query optimizer selects the proper one of the specified indexes.
 
 .. code-block:: sql
@@ -757,7 +750,7 @@ When a query is run for several tables, you can specify a table to perform index
 
 .. code-block:: sql
 
-    SELECT * 
+    SELECT *
     FROM tab1, tab2 
     WHERE ... 
     USING INDEX tab1.idx1, tab2.NONE;
@@ -797,10 +790,10 @@ The filtered index is used to sort, search, or operate a well-defined partials s
     REBUILD;
      
     <filter_predicate> ::= <filter_predicate> AND <expression> | <expression>
-    
+
 *   <*filter_predicate*>: Condition to compare the column and the constant. When there are several conditions, filtering is available only when they are connected by using **AND**. The filter conditions can include most of the operators and functions supported by CUBRID. However, the date/time function that shows the current date/time (ex: :func:`SYS_DATETIME`) or random functions (ex: :func:`RAND`), which outputs different results for one input are not allowed.
 
-If you apply the filtered index, that filtered index must be specified by **USE INDEX** syntax or **FORCE INDEX** syntax.
+If you want to apply the filtered index, that filtered index must be specified by **USE INDEX** syntax or **FORCE INDEX** syntax.
 
 *   When a filtered index is specified by **USING INDEX** clause or **USE INDEX** syntax: 
     
@@ -875,7 +868,7 @@ To process queries that are interested in open bugs, specify the index as an ind
 
     SELECT * 
     FROM bugs
-    WHERE Author = 'madden' AND Subject LIKE '%fopen%' AND Closed = 0;
+    WHERE Author = 'madden' AND Subject LIKE '%fopen%' AND Closed = 0
     USING INDEX idx_open_bugs(+);
      
     SELECT * 
@@ -913,18 +906,18 @@ The following cases are not allowed as filtering conditions.
 *   Functions, which output different results with the same input, such as date/time function or random function
 
     .. code-block:: sql
-      
+
         CREATE INDEX idx ON bugs(creationdate) WHERE creationdate > SYS_DATETIME;
-        
+
     ::
-    
+
         ERROR: before ' ; '
         'sys_datetime ' is not allowed in a filter expression for index.
-         
+
     .. code-block:: sql
-      
+
         CREATE INDEX idx ON bugs(bugID) WHERE bugID > RAND();
-        
+
     ::
     
         ERROR: before ' ; '
@@ -1027,7 +1020,7 @@ Function-based index is used to sort or find the data based on the combination o
     ALTER /*+ hints */ INDEX index_name
     [ ON table_name (function_name (argument_list)) ]
     REBUILD;
-    
+
 After the following indexes have been created, the **SELECT** query automatically uses the function-based index.
 
 .. code-block:: sql
@@ -1129,13 +1122,13 @@ Function-based indexes cannot be used with filtered indexes. The example will ca
 
 .. code-block:: sql
 
-    CREATE INDEX my_idx ON tbl ( TRIM(col) ) WHERE col > 'SQL';
+    CREATE INDEX my_idx ON tbl (TRIM(col)) WHERE col > 'SQL';
 
 Function-based indexes cannot become multiple-columns indexes. The example will cause an error.
 
 .. code-block:: sql
 
-    CREATE INDEX my_idx ON tbl ( TRIM(col1), col2, LEFT(col3, 5) );
+    CREATE INDEX my_idx ON tbl (TRIM(col1), col2, LEFT(col3, 5));
 
 
 .. _tuning-index:
@@ -1246,7 +1239,7 @@ The index including all columns in the **ORDER BY** clause is referred to as the
     SELECT * 
     FROM tab 
     WHERE col1 > 0 
-    ORDER BY col1, col2
+    ORDER BY col1, col2;
 
 *   The index consisting of *tab* (*col1*, *col2*) is an ordered index.
 *   The index consisting of *tab* (*col1*, *col2*, *col3*) is also an ordered index. This is because the *col3*, which is not referred by the **ORDER BY** clause comes after *col1* and *col2* .
@@ -1317,7 +1310,7 @@ The following example shows that *j* and *k* columns execute **ORDER BY** and th
     ORDER BY j,k;
 
 ::
-    
+
     --  in this case the index i_tab_j_k is a covering index and also respects the ordering index property.
     --  Therefore, it is used as a covering index and sorting is not performed.
      
@@ -1410,7 +1403,7 @@ When a query is executed by sorting in descending order as follows, it usually c
     SELECT * 
     FROM tab 
     [WHERE ...] 
-    ORDER BY a DESC
+    ORDER BY a DESC;
 
 However, if you create an ascending index and an descending index in the same column, the possibility of deadlock increases. In order to decrease the possibility of such case, CUBRID supports the descending scan only with ascending index. Users can use the **USE_DESC_IDX** hint to specify the use of the descending scan. If the hint is not specified, the following three query executions should be considered, provided that the columns listed in the **ORDER BY** clause can use the index.
 
@@ -1511,7 +1504,7 @@ The columns in the **GROUP BY** clause must exist in front side of the column fo
     SELECT * 
     FROM tab 
     WHERE col1 > 0 
-    GROUP BY col1,col2
+    GROUP BY col1,col2;
 
 *   You can use the index consisting of tab(col1, col2) for optimization.
 *   The index consisting of tab(col1, col2, col3) can be used because col3 no referred by **GROUP BY** comes after col1 and col2.
@@ -1525,7 +1518,7 @@ You can use the index if the column condition is a constant although the column 
     SELECT * 
     FROM tab 
     WHERE col2=val 
-    GROUP BY col1,col3
+    GROUP BY col1,col3;
 
 If there is any index that consists of tab(col1, col2, col3) in the above example, use the index for optimizing **GROUP BY**.
 
@@ -1565,7 +1558,7 @@ The following example shows that indexes consisting of tab(j,k) are used and no 
      
     --  the  selection from the query plan dump shows that the index i_tab_j_k was used and sorting was not necessary
     --  (/* ---> skip GROUP BY */)
-     
+
 ::
 
     Query plan:
@@ -1596,7 +1589,7 @@ The following example shows that an index consisting of tab(j,k) is used and no 
     SELECT * 
     FROM tab 
     GROUP BY j,k;
-     
+
 ::
 
     --  the  selection from the query plan dump shows that the index i_tab_j_k was used (since j has the NOT NULL constraint )
@@ -1637,7 +1630,7 @@ If you create tables and indexes of the above, the following example runs the **
     
 .. code-block:: sql
 
-    SELECT /*+ recompile */ k1, k2, SUM(DISTINCT k3)
+    SELECT /*+ RECOMPILE */ k1, k2, SUM(DISTINCT k3)
     FROM tab 
     WHERE k2 > -1 GROUP BY k1, k2;
 
@@ -1661,9 +1654,9 @@ The following example performs **GROUP BY** clause with k1, k2 columns; therefor
     
 .. code-block:: sql
     
-    SELECT /*+ recompile */ k1, k2, stddev_samp(v)  
+    SELECT /*+ RECOMPILE */ k1, k2, stddev_samp(v)  
     FROM tab 
-    WHERE k2 > -1 GROUP BY k1, k2
+    WHERE k2 > -1 GROUP BY k1, k2;
 
 ::
 
@@ -1783,37 +1776,69 @@ Index Skip Scan
 ---------------
 
 Index Skip Scan (also known as ISS) is an optimization method that allows ignoring the first column of an index when the first column of the index is not included in the condition but the following column is included in the condition (in most cases, =).
+
+ISS is applied when **INDEX_SS** is input as a hint and the below cases are satisfied.
+
+1.  The query condition should be specified from the second column of the composite index.
+2.  The used index should not be a filtered index.
+3.  The first column of an index should not be a range filter or key filter.
+4.  A hierarchical query is not supported.
+5.  A query which an aggregate function is included is not supported.
+
 Generally, ISS should consider several columns (C1, C2, ..., Cn). Here, a query has the conditions for the consecutive columns and the conditions are started from the second column (C2) of the index.
 
 ::
 
     INDEX (C1, C2, ..., Cn);
      
-    SELECT ... WHERE C2 = x and C3 = y and ... and Cp = z; -- p <= n
-    SELECT ... WHERE C2 < x and C3 >= y and ... and Cp BETWEEN (z and w); -- other conditions than equal
-    
+    SELECT ... WHERE C2 = x AND C3 = y AND ... AND Cp = z; -- p <= n
+    SELECT ... WHERE C2 < x AND C3 >= y AND ... AND Cp BETWEEN (z AND w); -- other conditions than equal
+
 The query optimizer eventually determines whether ISS is the most optimum access method based on the cost. ISS is applied under very specific situations, such as when the first column of an index has a very small number of **DISTINCT** values compared to the number of records. In this case, ISS provides higher performance compared to Index Full Scan. For example, when the first column of index columns has very low cardinality, such as the value of men/women or millions of records with the value of 1~100, it may be inefficient to perform index scan by using the first column value. So ISS is useful in this case.
 
 ISS skips reading most of the index pages in the disk and uses range search which is dynamically readjusted. Generally, ISS can be applied to a specific scenario when the number of **DISTINCT** values in the first column is very small. If ISS is applied to this case, ISS provides significantly higher performance than the index full scan. However, it means improper index creation that ISS is applied to a lot queries. So DBA should consider whether readjusting the indexes or not.
 
 .. code-block:: sql
 
-    CREATE TABLE t (name string, gender char (1), birthday datetime);
-     
-    CREATE INDEX idx_t_gen_name on t (gender, name);
+    CREATE TABLE tbl (name STRING, gender CHAR (1), birthday DATETIME);
+    
+    INSERT INTO tbl 
+    SELECT ROWNUM, CASE (ROWNUM MOD 2) WHEN 1 THEN 'M' ELSE 'F' END, SYSDATETIME  
+    FROM db_class a, db_class b, db_class c, db_class d, db_class e LIMIT 360000;
+    
+    CREATE INDEX idx_tbl_gen_name ON tbl (gender, name);
     -- Note that gender can only have 2 values, 'M' and 'F' (low cardinality)
-     
-    -- this would qualify to use Index Skip Scanning:
-    SELECT * 
-    FROM t 
-    WHERE name = 'SMITH';
+    
+    UPDATE STATISTICS ON ALL CLASSES;
+    
+.. code-block:: sql
 
-ISS is not applied in the following cases:
+    -- csql>;plan simple
+    -- this will qualify to use Index Skip Scanning
+    SELECT /*+ RECOMPILE INDEX_SS */ * 
+    FROM tbl 
+    WHERE name = '1000';
 
-*   Filtered index
-*   The first column of an index is a range filter or key filter
-*   Hierarchical query
-*   Aggregate function included
+::
+
+    Query plan:
+
+     Index scan(tbl tbl, idx_tbl_gen_name, tbl.[name]= ?:0  (index skip scan))
+
+.. code-block:: sql
+
+    -- csql>;plan simple
+    -- this will qualify to use Index Skip Scanning
+    SELECT /*+ RECOMPILE INDEX_SS */ * 
+    FROM tbl 
+    WHERE name between '1000' and '1050';
+
+::
+
+    Query plan:
+
+     Index scan(tbl tbl, idx_tbl_gen_name, (tbl.[name]>= ?:0  and tbl.[name]<= ?:1 ) (index skip scan))
+
 
 .. _loose-index-scan:
 
@@ -1822,13 +1847,36 @@ Loose Index Scan
 
 When **GROUP BY** clause or **DISTINCT** column includes a subkey of a index, loose index scan starts B-tree search by adjusting the range dynamically for unique value of each of the columns that make up the subkey. Therefore, it is possible to significantly reduce the scanning area of B-tree.
 
-Loose index scan optimization is applied if below cases are satisfied.
+Applying loose index scan is advantageous when the cardinality of the grouped column is very small, compared to the total data amount.
+
+Loose index scan optimization is applied when **INDEX_LS** is input as a hint and the below cases are satisfied.
 
 1.  When an index covers all SELECT list, that is, covered index is applied.
 2.  SELECT DISTINCT, SELECT ... GROUP BY statement or SELECT statement with a single tuple.
 3.  If you use an aggregate function, it is necessary that an input argument of the function always includes DISTINCT. However, MIN / MAX function exception.
 4.  COUNT(*) should not be used.
 5.  When cardinality of the used subkey is 100 times smaller than that of the entire index.
+
+a subkey is a prefix part in a composite index; e.g. when there is INDEX(a, b, c, d), (a), (a, b) or (a, b, c) belongs to the subkey.
+
+When you run the below query regarding the above table,
+
+.. code-block:: sql
+
+    SELECT a, b FROM tbl GROUP BY a;
+
+CUBRID cannot use a subkey because there is no condition for the column a. However, if the condition of the subkey is specified as follows, loose index scan can be applied.
+
+.. code-block:: sql
+
+    SELECT a, b FROM tbl WHERE a > 10 GROUP BY a;
+
+
+As follows, a subkey can be used when the grouped column is on the first and the WHERE-condition column is on the following position; therefore, also in this case, loose index scan can be applied.
+
+.. code-block:: sql
+
+    SELECT a, b FROM tbl WHERE b > 10 GROUP BY a;
 
 The following shows the cases when loose index scan optimization is applied.
 
@@ -1846,7 +1894,6 @@ The following shows the cases when loose index scan optimization is applied.
     FROM db_class a, db_class b, db_class c, db_class d, db_class e LIMIT 360000;
     
     CREATE INDEX idx ON tbl1 (k1, k2, k3);
-    UPDATE STATISTICS ON tbl1;
 
     CREATE TABLE tbl2 (
         k1 INT, 
@@ -1855,50 +1902,28 @@ The following shows the cases when loose index scan optimization is applied.
     
     INSERT INTO tbl2 VALUES (0, 0), (1, 1), (0, 2), (1, 3), (0, 4), (0, 100), (1000, 1000);
 
+    UPDATE STATISTICS ON ALL CLASSES;
+
 .. code-block:: sql
 
-    -- basic scenarios
+    -- csql>;plan simple
+    -- add a condition to the grouped column, k1 to enable loose index scan
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1     
+    FROM tbl1 
+    WHERE k1 > -1000000 LIMIT 20;
 
-    SELECT /*+ RECOMPILE */ DISTINCT k1     
-    FROM tbl1 LIMIT 20;
-        
 ::
 
     Query plan:
 
-    temp(distinct)
-    subplan: iscan
-                 class: tbl1 node[0]
-                 index: idx (covers) (loose index scan on prefix 1)
-                 sargs: term[0]
-                 sort:  1 asc
-                 cost:  402 card 720000
-    cost:  2910 card 720000
-
-        
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE */ k1, k2     
-    FROM tbl1 GROUP BY k1
-    LIMIT 20;
-    
-::
-
-    Query plan:
-
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 1)
-                     sargs: term[0]
-                     sort:  1 asc
-                     cost:  368 card 360000
-        cost:  1625 card 360000
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ) (covers) (loose index scan on prefix 1))
 
 .. code-block:: sql
     
+    -- csql>;plan simple
     -- different key ranges/filters
-    SELECT /*+ RECOMPILE */ DISTINCT k1 
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1 
     FROM tbl1 
     WHERE k1 >= 0 AND k1 <= 1;
 
@@ -1906,17 +1931,13 @@ The following shows the cases when loose index scan optimization is applied.
 
     Query plan:
 
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[0] (covers) (loose index scan on prefix 1)
-                     sort:  1 asc
-                     cost:  43 card 7200
-        cost:  73 card 7200
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, (tbl1.k1>= ?:0  and tbl1.k1<= ?:1 ) (covers) (loose index scan on prefix 1))
 
 .. code-block:: sql
     
-    SELECT /*+ RECOMPILE */ DISTINCT k1, k2 
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1, k2 
     FROM tbl1 
     WHERE k1 >= 0 AND k1 <= 1 AND k2 > 3 AND k2 < 11;
     
@@ -1924,18 +1945,13 @@ The following shows the cases when loose index scan optimization is applied.
 
     Query plan:
 
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[1] (covers) (loose index scan on prefix 2)
-                     filtr: term[0]
-                     sort:  1 asc, 2 asc
-                     cost:  43 card 72
-        cost:  49 card 72
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, (tbl1.k1>= ?:0  and tbl1.k1<= ?:1 ), [(tbl1.k2> ?:2  and tbl1.k2< ?:3 )] (covers) (loose index scan on prefix 2))
 
 .. code-block:: sql
     
-    SELECT /*+ RECOMPILE */ DISTINCT k1, k2 
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1, k2 
     FROM tbl1 
     WHERE k1 >= 0 AND k1 + k2 <= 10;
 
@@ -1943,120 +1959,51 @@ The following shows the cases when loose index scan optimization is applied.
 
     Query plan:
 
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[1] (covers) (loose index scan on prefix 2)
-                     filtr: term[0]
-                     sort:  1 asc, 2 asc
-                     cost:  402 card 7200
-        cost:  436 card 7200
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, (tbl1.k1>= ?:0 ), [tbl1.k1+tbl1.k2<=10] (covers) (loose index scan on prefix 2))
 
 .. code-block:: sql
     
-    -- joins
-
-    SELECT /*+ RECOMPILE */ tbl1.k1, tbl1.k2 
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ tbl1.k1, tbl1.k2 
     FROM tbl2 INNER JOIN tbl1 
     ON tbl2.k1 = tbl1.k1 AND tbl2.k2 = tbl1.k2 
     GROUP BY tbl1.k1, tbl1.k2;
 
 ::
 
-    Query plan:
+ Sort(group by)
+    Nested loops
+        Sequential scan(tbl2 tbl2)
+        Index scan(tbl1 tbl1, idx, tbl2.k1=tbl1.k1 and tbl2.k2=tbl1.k2 (covers) (loose index scan on prefix 2))
 
-    temp(group by)
-        subplan: idx-join (inner join)
-                     outer: sscan
-                                class: tbl2 node[0]
-                                cost:  1 card 14
-                     inner: iscan
-                                class: tbl1 node[1]
-                                index: idx term[0] AND term[1] (covers) (loose index scan on prefix 2)
-                                cost:  19 card 720000
-                     cost:  20 card 10080
-        sort:  1 asc, 2 asc
-        cost:  65 card 10080
-    
 .. code-block:: sql
         
-    -- aggregate functions
-    SELECT /*+ RECOMPILE */ k1, MIN(K2), MAX(k2) 
-    FROM tbl1 
-    GROUP BY k1;
-        
-::
-
-    Query plan:
-
-    temp(group by)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 2)
-                     sort:  1 asc
-                     cost:  402 card 720000
-        sort:  1 asc
-        cost:  3262 card 720000
-        
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE */ k1, SUM(DISTINCT k2) 
-    FROM tbl1 
-    GROUP BY k1;
-
-::
-
-    Query plan:
-    
-    temp(group by)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 2)
-                     sort:  1 asc
-                     cost:  402 card 720000
-        sort:  1 asc
-        cost:  3262 card 720000
-    
-.. code-block:: sql
-
-    -- aggregate functions, single tuple
-    SELECT /*+ RECOMPILE */ k1, MIN(k2), max(k2) 
-    FROM tbl1 
-    GROUP BY k1;
-
-::
-
-    Query plan:
-
-    temp(group by)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx (covers) (loose index scan on prefix 2)
-                     sort:  1 asc
-                     cost:  402 card 720000
-        sort:  1 asc
-        cost:  3262 card 720000
-    
-.. code-block:: sql
-
-    SELECT /*+ RECOMPILE */ SUM(DISTINCT k1), SUM(DISTINCT k2)
+    SELECT /*+ RECOMPILE INDEX_LS */ MIN(k2), MAX(k2) 
     FROM tbl1;
 
 ::
 
     Query plan:
 
-    iscan
-        class: tbl1 node[0]
-        index: idx (covers) (loose index scan on prefix 2)
-        cost:  402 card 720000
-    
-The following shows the cases when loose index scan optimization is not applied.
+     Index scan(tbl1 tbl1, idx (covers) (loose index scan on prefix 2))
 
 .. code-block:: sql
 
-    -- not enabled in skip scan scenarios
-    SELECT /*+ RECOMPILE */ DISTINCT k1 
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ SUM(DISTINCT k1), SUM(DISTINCT k2)
+    FROM tbl1;
+
+::
+
+    Query plan:
+
+     Index scan(tbl1 tbl1, idx (covers) (loose index scan on prefix 2))
+
+.. code-block:: sql
+
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1 
     FROM tbl1 
     WHERE k2 > 0;
 
@@ -2064,18 +2011,16 @@ The following shows the cases when loose index scan optimization is not applied.
 
     Query plan:
 
-    temp(distinct)
-        subplan: iscan
-                     class: tbl1 node[0]
-                     index: idx term[0] (covers) (index skip scan)
-                     sort:  1 asc
-                     cost:  405 card 72000
-        cost:  660 card 72000
-    
+     Sort(distinct)
+        Index scan(tbl1 tbl1, idx, [(tbl1.k2> ?:0 )] (covers) (loose index scan on prefix 2))
+
+The following shows the cases when loose index scan optimization is not applied.
+
 .. code-block:: sql
 
+    -- csql>;plan simple
     -- not enabled when full key is used
-    SELECT /*+ RECOMPILE */ DISTINCT k1, k2, k3 
+    SELECT /*+ RECOMPILE INDEX_LS */ DISTINCT k1, k2, k3 
     FROM tbl1 
     ORDER BY 1, 2, 3 LIMIT 10;
     
@@ -2083,88 +2028,72 @@ The following shows the cases when loose index scan optimization is not applied.
 
     Query plan:
 
-    temp(distinct)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  1 asc, 2 asc, 3 asc
-        cost:  6784 card 720000
-    
+     Sort(distinct)
+        Sequential scan(tbl1 tbl1)
+
 .. code-block:: sql
 
-    SELECT /*+ RECOMPILE */ k1, k2, k3 
-    FROM tbl1 
-    GROUP BY k1, k2, k3 LIMIT 10;
+    -- csql>;plan simple
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, k2, k3
+    FROM tbl1
+    WHERE k1 > -10000 GROUP BY k1, k2, k3 LIMIT 10;
 
 ::
 
     Query plan:
 
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  1 asc, 2 asc, 3 asc
-        cost:  6784 card 720000
+     Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ) (covers))
+     skip GROUP BY
 
-    
 .. code-block:: sql
     
+    -- csql>;plan simple
     -- not enabled when using count star
-    SELECT /*+ RECOMPILE */ COUNT(*), k1 
+    SELECT /*+ RECOMPILE INDEX_LS */ COUNT(*), k1 
     FROM tbl1 
-    GROUP BY k1;
+    WHERE k1 > -10000 GROUP BY k1;
 
 ::
 
     Query plan:
 
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  2 asc
-        cost:  6081 card 720000
+     Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ) (covers))
+     skip GROUP BY
     
 .. code-block:: sql
 
+    -- csql>;plan simple
     -- not enabled when index is not covering
-    SELECT /*+ RECOMPILE */ k1, k2, SUM(k4) 
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, k2, SUM(k4) 
     FROM tbl1 
-    GROUP BY k1, k2 LIMIT 10;
+    WHERE k1 > -1 AND k2 > -1 GROUP BY k1, k2 LIMIT 10;
     
 ::
 
     Query plan:
 
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  1 asc, 2 asc
-        cost:  6784 card 720000
-    
+     Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ), [(tbl1.k2> ?:1 )])
+     skip GROUP BY
+
 
 .. code-block:: sql
 
+    -- csql>;plan simple
     -- not enabled for non-distinct aggregates
-    SELECT /*+ RECOMPILE */ k1, SUM(k2) 
+    SELECT /*+ RECOMPILE INDEX_LS */ k1, SUM(k2) 
     FROM tbl1 
-    GROUP BY k1;
+    WHERE k1 > -1 GROUP BY k1;
     
 ::
 
     Query plan:
 
-    temp(group by)
-        subplan: sscan
-                     class: tbl1 node[0]
-                     cost:  3573 card 720000
-        sort:  1 asc
-        cost:  6433 card 720000
+     Index scan(tbl1 tbl1, idx, (tbl1.k1> ?:0 ) (covers))
+     skip GROUP BY
 
 .. code-block:: sql
 
+    -- csql>;plan simple
     SELECT /*+ RECOMPILE */ SUM(k1), SUM(k2) 
     FROM tbl1;
 
@@ -2172,12 +2101,11 @@ The following shows the cases when loose index scan optimization is not applied.
     
     Query plan:
 
-    sscan
-        class: tbl1 node[0]
-        cost:  3573 card 720000
+     Sequential scan(tbl1 tbl1)
+
 
 .. _in-memory-sort:
- 
+
 In Memory Sort
 --------------
  
@@ -2191,7 +2119,7 @@ Whether this optimization is applied or not is not transparent to users. CUBRID 
 Note that IMS considers the actual size of the result and not the count of tuples the result contains. For example, for the default sort buffer size (two megabytes), this optimization will be applied for a LIMIT value of 524,288 tuples consisting of one 4 byte INTEGER type but only for ~2,048 tuples of CHAR(1024) values. This optimization is not applied to queries requiring DISTINCT ordered result sets.
 
 .. _sort-limit-optimization:
- 
+
 SORT-LIMIT optimization
 -----------------------
  
@@ -2211,12 +2139,12 @@ The SORT-LIMIT optimization applies to queries specifying ORDER BY and LIMIT cla
 *   Query does not specify DISTINCT.
 *   ORDER BY expressions can be evaluated during scan.
  
-     For example, the below query cannot apply SORT-LIMIT plan because SUM cannot be evaluated during scan.
-     
-     .. code-block:: sql
+    For example, the below query cannot apply SORT-LIMIT plan because SUM cannot be evaluated during scan.
+
+    .. code-block:: sql
     
          SELECT SUM(u.i) FROM u, t where u.i = t.i ORDER BY 1 LIMIT 5;
- 
+
 The below is an example of planning SORT-LIMIT.
  
 .. code-block:: sql
@@ -2250,4 +2178,3 @@ The above SELECT query's plan is printed out as below; we can see "(sort limit)"
                    cost:  6 card 1000
         sort:  2 asc
         cost:  7 card 0
- 

@@ -449,7 +449,9 @@ To provide normal service during a database failover, it is necessary to configu
 
 A broker is used to access applications such as JDBC, CCI or PHP. Therefore, to simply test server redundancy, execute the CSQL interpreter that is directly connected to the server processes, without having to start a broker. To start a broker, execute **cubrid broker start**. To stop it, execute **cubrid broker stop**.
 
-The following example shows how to execute a broker from the master node. ::
+The following example shows how to execute a broker from the master node. 
+
+::
 
     [nodeA]$ cubrid broker start
     @ cubrid broker start
@@ -1057,7 +1059,6 @@ When a broker accesses DB server, it tries the primary connection; if it fails, 
 *  The secondary connection: Ignore the DB status(active/standby) and the delay of replication. However, SO broker always accepts to connect only to standby DB.
 
     1.  A broker tries to connect as the order specified by **PREFERRED_HOSTS**. The broker accepts connecting to the improper DB of which status does not match with **ACCESS_MODE** or in which the replication is delayed. However, SO broker can never connect to active DB.
-    
     2.  By the **CONNECT_ORDER**, a broker tries to connect to the host in the order specified in **databases.txt** or the random order. The broker ignores the DB status(active/standby) and the delay of replication; it is connected if possible.
    
 Samples of Behaviors by Configuration
@@ -1210,6 +1211,8 @@ Running and Monitoring
 cubrid heartbeat Utility
 ------------------------
 
+**cubrid heartbeat** command can be run as **cubrid hb**, the abbreviated command.
+
 **start**
 
 This utility is used to activate CUBRID HA feature and start all processes of CUBRID HA in the node(database server process, replication log copy process, and replication log reflection process). Note that a master node or a slave node is determined based on the execution order of **cubrid heartbeat start**.
@@ -1262,7 +1265,7 @@ When *nodeB* is a node to run a command and *nodeA* is *peer_node*, you can run 
     
     [nodeB]$ cubrid heartbeat copylogdb stop testdb nodeA
     [nodeB]$ cubrid heartbeat copylogdb start testdb nodeA
-    
+
 When the **copylogdb** process is started/stopped, the configuration information of the **cubrid_ha.conf** is used. We recommend that you do not change the configuration as possible after you have set the configuration once. If you need to change it, it is recommended to restart the whole nodes.
 
 **applylogdb**
@@ -1293,6 +1296,30 @@ How to use this utility is as shown below. ::
     $ cubrid heartbeat reload
 
 Reconfigurable parameters are **ha_node_list** and **ha_replica_list**. Even if an error occurs on a special node during running this command, the left jobs are continued. After **reload** command is finished, check if the reconfiguration of nodes is applied well or not. If it fails, find the reason and resolve it.
+
+**replication(or repl) start** 
+  
+This utility is used to run in batch HA processes(copylogdb/applylogdb) related to a specific node; in general, it is used to run in batch HA replication processes of added nodes after running **cubrid heartbeat reload**.
+
+**replication** command can be abbreviated by **repl**.
+  
+:: 
+  
+    cubrid heartbeat repl start <node_name> 
+  
+*   *node_name*: one of nodes specified in **ha_node_list** of cubrid_ha.conf.
+     
+**replication(또는 repl) stop** 
+  
+This utility is used to stop in batch HA processes(copylogdb/applylogdb) related to a specific node; in general, it is used to stop in batch HA replication processes of removed nodes after running **cubrid heartbeat reload**.
+
+**replication** command can be abbreviated by **repl**.
+  
+:: 
+  
+    cubrid heartbeat repl stop <node_name> 
+     
+*   *node_name*: one of nodes specified in **ha_node_list** of cubrid_ha.conf.
 
 **status**
 
@@ -1503,7 +1530,7 @@ When applylogdb stops the replication after the time of being specified by **ha_
     Time: 06/20/13 11:51:05.549 - ERROR *** file ../../src/transaction/log_applier.c, line 7913 ERROR CODE = -1040 Tran = 1, EID = 3
     HA generic: applylogdb paused since it reached a log record committed on master at 2013-06-20 11:31:00 or later.
     Adjust or remove ha_replica_time_bound and restart applylogdb to resume.
-    
+
 .. _cubrid-changemode:
 
 cubrid changemode
@@ -1777,7 +1804,9 @@ The following is an example of **cubrid_broker.conf** in *node A* and *node B*.
     # Broker mode setting parameter
     ACCESS_MODE             =RW
 
-The following is an example **cubrid_broker.conf** in *node C*, *node D* and *node E*. ::
+The following is an example **cubrid_broker.conf** in *node C*, *node D* and *node E*. 
+
+::
 
     [%PHRO_broker]
     ...
@@ -2064,7 +2093,7 @@ Using the above instructions, build a new slave node by following these steps, i
         [nodeA]$ cubrid backupdb -z -S testdb
         Backup Volume Label: Level: 0, Unit: 0, Database testdb, Backup Time: Thu Apr 19 16:05:18 2012
         [nodeA]$ cd $CUBRID_DATABASES/testdb/log
-        [nodeA]$ scp testdb_bk* cubrid_usr@nodeB:/home/cubrid_usr/CUBRID/databases/testdb/log
+        [nodeA]$ scp testdb_bk* cubrid_usr@nodeB:/home/cubrid/DB/testdb/log
         cubrid_usr@nodeB's password:
         testdb_bk0v000                            100% 6157KB   6.0MB/s   00:00
         testdb_bkvinf                             100%   66     0.1KB/s   00:00
@@ -2634,13 +2663,13 @@ The following are optional items:
 
 *   **backup_dest_path** : Specifies the path in which the backup volume is created when executing **backupdb** in source node for rebuilding replication.
 
-*   **backup_option** : Specifies necessary options when executing **backupdb** in source node in which replication will be rebuilt.
+*   **backup_option** : Specifies necessary options when executing **backupdb** in the source node in which replication will be rebuilt.
 
-*   **restore_option** : Specifies necessary options when executing **restoredb** in target node in which replication will be rebuilt.
+*   **restore_option** : Specifies necessary options when executing **restoredb** in the target node in which replication will be rebuilt.
 
 *   **scp_option** : Specifies the **scp** option which enables backup of source node in which replication is rebuilt to copy into the target node. The default option is **-l 131072**, which does not impose an overload on network (limits the transfer rate to 16 MB).
 
-Once the script has been configured, execute the **ha_make_slavedb.sh** script in target node in which replication will be rebuilt. When the script is executed, rebuilding replication happens in a number of phases. To move to the next stage, the user must enter an appropriate value. The following are the descriptions of available values.
+Once the script has been configured, execute the **ha_make_slavedb.sh** script in the target node in which replication will be rebuilt. When the script is executed, rebuilding replication happens in a number of phases. To move to the next stage, the user must enter an appropriate value. The following are the descriptions of available values.
 
 *   **yes** : Keeps going.
 
@@ -2900,25 +2929,6 @@ If you find an error or quit the step by pressing "n" during executing each step
         ################################################################################
          
            continue ? ([y]es / [n]o / [s]kip) : y
-         
-        - 1. remove old copy log.
-         
-        [nodeA]$ rm -rf /home/cubrid_usr/CUBRID/databases/testdb_nodeB/*
-        cubrid_usr@nodeA's password:
-        Connection to nodeA closed.
-         
-        - 2. init db_ha_apply_info.
-         
-        [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "delete from db_ha_apply_info where db_name='testdb'"
-        cubrid_usr@nodeA's password:
-        Connection to nodeA closed.
-        [nodeA]$ csql -C -u dba  --sysadm testdb@localhost -c "select * from db_ha_apply_info where db_name='testdb'"
-        cubrid_usr@nodeA's password:
-         
-        === <Result of SELECT Command in Line 1> ===
-         
-        There are no results.
-        Connection to nodeA closed.
 
 8.  At this step, initialize the HA meta information table of replica node. In this scenario, there is no replica node; therefore, you can skip this step and go to the next step by entering s. 
 
@@ -2991,8 +3001,6 @@ If you find an error or quit the step by pressing "n" during executing each step
         ################################################################################
          
            continue ? ([y]es / [n]o / [s]kip) : y
-         
-        [nodeB]$ cubrid restoredb -B /home/cubrid_usr/.ha/backup  testdb
 
 12. At this step, configure the HA meta information table value of the slave node. Enter y to the question. 
 
@@ -3293,7 +3301,7 @@ If you find an error or quit the step by pressing "n" during executing each step
 6.  At this step, create backup volumes from a slave node(**target_host**) to rebuild HA replication; if you already have backup volumes which was created before, you can skip this step by entering "s". To rebuild replication with previous backup volumes, there are some constraints as follows.
    
     *   Archive logs created after starting backup, replication logs for the transactions after replication rebuilding must exist within a slave node(**target_host**); that is, backup volumes created a long time ago cannot be used).
- 
+
     *   Backup status information files should be left with "-o" option when doing backup. At this time, a stored path should be the same with the path of backup volume files. The file name should be the format such as *db_name*\ **.bkup.output**; if the file name is not this format, you should change it before running the script.
 
     
@@ -3303,7 +3311,7 @@ If you find an error or quit the step by pressing "n" during executing each step
     
         ##### step 6 ###################################################################
         #
-        #  online backup database  on slave
+        #  online backup database on slave
         #
         #  * details
         #   - run 'cubrid backupdb -C -D ... -o ... testdb@localhost' on slave
@@ -3392,7 +3400,7 @@ If you find an error or quit the step by pressing "n" during executing each step
         #  completed
         #
         ################################################################################
-        .
+        
         
 Operate the below process when you complete to run **ha_make_slavedb.sh** script.
 
@@ -4212,8 +4220,7 @@ Operate the below process when you complete to run **ha_make_slavedb.sh** script
            Node nodeC (priority 32767, state replica)
            Node nodeB(priority 2, state slave)
            Node nodeA (priority 1, state master)
-           
-           
+
          HA-Process Info (master 27221, state slave)
            Applylogdb testdb@nodeA:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27455, state registered)
            Copylogdb testdb@nodeA:/home1/cubrid/CUBRID/databases/testdb_nodeA (pid 27453, state registered)

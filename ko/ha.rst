@@ -717,7 +717,6 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 **ha_replica_time_bound**
 
 마스터 노드에서 파라미터로 지정한 시간까지 수행된 트랜잭션만 레플리카 노드에 반영한다. 포맷은 "YYYY-MM-DD hh:mi:ss"이며, 기본값은 없다.
-    
 
 .. note::
 
@@ -748,7 +747,7 @@ CUBRID HA의 복제 로그 반영 프로세스에서 에러가 발생하면 해�
 슬레이브 노드 또는 레플리카 노드가 복제 지연 여부를 판단하는 대상 서버, 즉 standby 상태의 DB 서버에 해당한다. 
   
 예를 들어 복제 지연 시간을 10분으로 설정하고 복제 지연 해제는 8분으로 하고 싶다면, **ha_delay_limit**\의 값은 600s(또는 10min), **ha_delay_limit_delta**\의 값은 120s(또는 2min)이다. 
-  
+
 복제 지연으로 판단되면 CAS는 현재 접속 중인 standby DB가 작업 처리에 문제가 있다고 판단하고, 다른 standby DB로 재접속을 시도한다. 
 
 복제 지연으로 인해 우선 순위가 낮은 DB에 연결된 CAS는 **cubrid_broker.conf**\의 :ref:`RECONNECT_TIME <reconnect_time>` 파라미터로 명시한 시간이 경과하면 복제 지연이 해소되었을 것으로 기대하여, 우선 순위가 높은 standby DB에 재접속을 시도한다. 
@@ -902,7 +901,7 @@ CAS가 연결할 호스트 순서를 결정할 때 **$CUBRID_DATABASES/databases
 
 브로커가 DB에 접속하기 위한 단계는 1차 연결과 2차 연결로 나뉜다.
 
-*   1차 연결: 최초에 브로커가 DB에 접속을 시도하는 단계. DB 상태(active/standby)와 복제 지연 여부를 확인.
+*   1차 연결: 브로커가 DB에 접속하기 위해 최초에 접속을 시도하는 단계. DB 상태(active/standby)와 복제 지연 여부를 확인.
 
     먼저 **PREFERRED_HOSTS**\ 의 호스트들에 접속을 시도한 후, databases.txt의 호스트들에 접속을 시도한다. 이때는 **ACCESS_MODE**\ 에 따라 DB의 상태가 active인지, standby인지도 검사하여 접속을 결정한다.
 
@@ -1014,7 +1013,7 @@ HA 환경에서 브로커는 여러 개의 DB 서버 중 하나와 접속을 결
 +============+======================+===============================+=======================================================================+
 | DB 서버    | cubrid.conf          | ha_mode                       | DB 서버의 HA 모드(on/off/replica). 기본값: off                        | 
 |            +----------------------+-------------------------------+-----------------------------------------------------------------------+
-|            | cubrid_ha.conf       | ha_delay_limit                | 복제 지연 여부를 판단하는 기간.                                       |
+|            | cubrid_ha.conf       | ha_delay_limit                | DB 서버에서 복제 지연 여부를 판단하는 복제 지연 기준이 되는 시간.     |
 |            |                      +-------------------------------+-----------------------------------------------------------------------+
 |            |                      | ha_delay_limit_delta          | 복제 지연 기준 시간에서 복제 지연 해소 시간을 뺀 시간.                |
 +------------+----------------------+-------------------------------+-----------------------------------------------------------------------+
@@ -1181,6 +1180,8 @@ HA 환경에서 브로커는 여러 개의 DB 서버 중 하나와 접속을 결
 cubrid heartbeat 유틸리티
 -------------------------
 
+**cubrid heartbeat** 명령은 줄여서 **cubrid hb**\로도 실행할 수 있다.
+
 **start**
 
 해당 노드의 CUBRID HA 기능을 활성화하고 구성 프로세스(데이터베이스 서버 프로세스, 복제 로그 복사 프로세스, 복제 로그 반영 프로세스)를 모두 구동한다. **cubrid heartbeat start** 를 실행하는 순서에 따라 마스터 노드와 슬레이브 노드가 결정되므로, 순서를 주의해야 한다.
@@ -1226,7 +1227,7 @@ CUBRID HA 구성에서 특정 peer_node의 db_name에 대한 트랜잭션 로그
 사용법은 다음과 같다. ::
 
     $ cubrid heartbeat copylogdb <start|stop> db_name peer_node
-    
+
 명령을 수행하는 노드가 *nodeB*\ 이고, *peer_node*\가 *nodeA*\ 라면, 다음과 같이 명령을 수행할 수 있다.
     
 ::
@@ -1245,25 +1246,49 @@ CUBRID HA 구성에서 특정 peer_node의 db_name에 대한 트랜잭션 로그
 사용법은 다음과 같다. ::
 
     $ cubrid heartbeat applylogdb <start|stop> db_name peer_node
-    
+
 명령을 수행하는 노드가 *nodeB*\ 이고, peer_node가 *nodeA*\ 라면, 다음과 같이 명령을 수행할 수 있다.
     
 ::
     
     [nodeB]$ cubrid heartbeat applylogdb stop testdb nodeA
     [nodeB]$ cubrid heartbeat applylogdb start testdb nodeA
-    
+
 **applylogdb** 프로세스의 시작/정지 시 **cubrid_ha.conf** 의 설정 정보를 사용하므로 한 번 정한 설정은 가급적 바꾸지 않을 것을 권장하며, 바꾸어야만 하는 경우 노드 전체를 재구동할 것을 권장한다.
 
 **reload**
 
-**cubrid_ha.conf** 에서 CUBRID HA 구성 정보를 다시 읽고 새로운 구성에 맞는 CUBRID HA의 구성 요소들을 구동 및 종료한다. 노드를 추가하거나 삭제하는 경우 사용하며, 수정 이전에 비해 추가된 노드에 해당하는 HA 프로세스들을 시작하거나, 삭제된 노드에 해당하는 HA 프로세스들을 정지한다.
+**cubrid_ha.conf**\ 에서 CUBRID HA 구성 정보를 다시 읽는다. 노드를 추가하거나 삭제하는 경우 사용하며, **reload** 명령 이후에 추가/삭제된 노드의 HA 복제 프로세스를 일괄적으로 구동/정지하려면 "**cubrid replication start/stop**" 명령을 사용할 수 있다. 
 
 사용법은 다음과 같다. ::
 
     $ cubrid heartbeat reload
 
-변경할 수 있는 구성 정보는 **ha_node_list**\ 와 **ha_replica_list**\ 이다. 이 명령을 실행 중에 특정 노드에서 오류가 발생하더라도 남은 작업을 계속 진행한다. **reload** 명령이 종료된 후 **status** 명령으로 노드의 재구성이 잘 반영되었는지 확인한다. 재구성에 실패한 경우 원인을 찾아 해소하도록 한다.
+변경할 수 있는 구성 정보는 **ha_node_list**\ 와 **ha_replica_list**\ 이다. **reload** 명령이 실행된 후 **status** 명령으로 노드의 재구성이 잘 반영되었는지 확인한다. 재구성에 실패한 경우 원인을 찾아 해소하도록 한다. 
+
+**replication(또는 repl) start** 
+  
+특정 노드와 관련된 HA 프로세스(copylogdb/applylogdb)를 일괄 구동하기 위한 명령으로, 일반적으로 **cubrid heartbeat reload** 이후 추가된 노드의 HA 복제 프로세스들을 일괄적으로 시작하기 위해 실행한다. 
+  
+**replication** 명령은 줄여서 **repl**\로도 사용할 수 있다. 
+  
+:: 
+  
+    cubrid heartbeat repl start <node_name> 
+  
+* *node_name*: cubrid_ha.conf의 **ha_node_list**\에 명시된 노드 이름 중 하나 
+     
+**replication(또는 repl) stop** 
+  
+특정 노드와 관련된 HA 프로세스(copylogdb/applylogdb)를 일괄 정지하기 위한 명령으로,일반적으로 **cubrid heartbeat reload** 이후 삭제된 노드의 HA 복제 프로세스들을 일괄적으로 정지하기 위해 실행한다. 
+  
+**replication** 명령은 줄여서 **repl**\로도 사용할 수 있다. 
+  
+:: 
+  
+    cubrid heartbeat repl stop <node_name> 
+     
+* *node_name*: cubrid_ha.conf의 **ha_node_list**\에 명시된 노드 이름 중 하나 
 
 **status**
 

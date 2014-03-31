@@ -595,10 +595,10 @@ CUBRID 9.0 버전부터는 **ALTER** 문의 **ANALYZE PARTITION** 절은 더 이
 * 분할들은 상속(inheritance) 관계의 일부가 될 수 없다. 클래스는 분할을 상속할 수 없으며, 분할은 다른 클래스를 상속할 수 없다. 
 
 * 다음 질의 최적화는 분할 테이블에서 수행되지 않는다.
-    * ORDER BY 절 최적화(:ref:`order-by-skip-optimization` 참고)
-    * GROUP BY 절 최적화(:ref:`group-by-skip-optimization` 참고)
-    * 다중 키 범위 최적화(:ref:`multi-key-range-opt` 참고)
-    * INDEX JOIN
+    *   ORDER BY 절 최적화(:ref:`order-by-skip-optimization` 참고)
+    *   GROUP BY 절 최적화(:ref:`group-by-skip-optimization` 참고)
+    *   다중 키 범위 최적화(:ref:`multi-key-range-opt` 참고)
+    *   INDEX JOIN
 
     .. 7583: 분할 테이블에서 인덱스 스킵 스캔이 수행됨
     

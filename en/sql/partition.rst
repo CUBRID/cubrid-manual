@@ -111,16 +111,16 @@ The following example shows how to create the *participant2* table which holds c
         PARTITION before_2008 VALUES LESS THAN (2008)
     );
      
-When creating partitions, CUBRID sorts the user supplied range values from smallest to largest and creates the non-overlapping intervals from the sorted list. The identifier **MAXVALUE** can be used to specify an infinite upper limit for a partition. In the example above, the created range intervals are [-∞, 2000) and [2000, 2008).
+When creating partitions, CUBRID sorts the user supplied range values from smallest to largest and creates the non-overlapping intervals from the sorted list. The identifier **MAXVALUE** can be used to specify an infinite upper limit for a partition. In the example above, the created range intervals are [-?? 2000) and [2000, 2008).
 
-When inserting a tuple into a range-partitioned table, CUBRID identifies the range to which the tuple belongs by evaluating the partitioning key. If the partitioning key value is **NULL**, the data is stored in the partition with the smallest specified range value. If there is no range which accepts the partitioning key value, CUBRID returns an error. CUBRID also returns an error when updating a tuple if the new value of the partitioning key does not belong to any of the defined ranges.
+When inserting a tuple into a range-partitioned table, CUBRID identifies the range to which the tuple belongs by evaluating the partitioning key. If the partitioning key value is **NULL**, the data is stored in the partition with the smallest specified range value. If there is no range which would accept the partitioning key value, CUBRID returns an error. CUBRID also returns an error when updating a tuple if the new value of the partitioning key does not belong to any of the defined ranges.
 
 .. _hash-partitioning:
 
 Hash Partitioning
 =================
 
-Hash partitioning is a partitioning method which is used to distribute data across a specified number of partition. This partitioning method is useful when table data contains values for which ranges or lists is meaningless (for example, a keywords table or a user's table for which user_id is the most interesting value). If the values for the partitioning key are evenly distributed across the table data, hash-partitioning technique divides table data evenly between the defined partitions. For hash partitioning, :ref:`partition-pruning` can only be applied on equality predicates (e.g. predicates using **=** and :ref:`IN <in-expr>` expressions), making hash partitioning useful only if most of the queries specify such a predicate for the partitioning key. 
+Hash partitioning is a partitioning method which is used to distribute data across a specified number of partition. This partitioning method is useful when table data contains values for which ranges or lists would be meaningless (for example, a keywords table or an users table for which user_id is the most interesting value). If the values for the partitioning key are evenly distributed across the table data, hash-partitioning technique divides table data evenly between the defined partitions. For hash partitioning, :ref:`partition-pruning` can only be applied on equality predicates (e.g. predicates using **=** and :ref:`IN <in-expr>` expressions), making hash partitioning useful only if most of the queries specify such a predicate for the partitioning key. 
 
 Tables can be partitioned by hash by using the **PARTITION BY HASH** clause in **CREATE** or **ALTER** statements::
 
@@ -175,7 +175,7 @@ Tables can be partitioned by list by using the **PARTITION BY LIST** clause in *
       PARTITION partition_name VALUES IN ( <values_list> ),
       ... 
     )
-    
+
 *   *partitioning_key* : Specifies the :ref:`partitioning-key`.
 *   *partition_name* : Specifies the partition name.
 *   *value_list* : Specifies the list of values for the partitioning key.
@@ -555,21 +555,21 @@ The following examples show how CUBRID decides between local and global indexes:
 
 .. code-block:: sql
     
-	CREATE TABLE t(i INTEGER, j INTEGER k INTEGER)
-	PARTITION BY HASH(i) PARTITIONS 5;
-	
-	-- pk_t_i is global because it is a primary key
-	ALTER TABLE t ADD CONSTRAINT pk_t_i PRIMARY KEY(i);
-	
-	-- i_t_j and i_t_j_k are local indexes
-	CREATE INDEX i_t_j ON t(j);
-	CREATE INDEX i_t_j_k ON t(j, k);
-	
-	-- u_t_i_j is a local index because the partitioning key (i) is part of the index definition
-	CREATE UNIQUE INDEX u_t_i_j ON t(i, j);
-	
-	-- u_t_j_k is a global index because the partitioning key (i) is not part of the index definition
-	CREATE UNIQUE INDEX u_t_j_k ON t(j, k);
+    CREATE TABLE t(i INTEGER, j INTEGER k INTEGER)
+    PARTITION BY HASH(i) PARTITIONS 5;
+    
+    -- pk_t_i is global because it is a primary key
+    ALTER TABLE t ADD CONSTRAINT pk_t_i PRIMARY KEY(i);
+    
+    -- i_t_j and i_t_j_k are local indexes
+    CREATE INDEX i_t_j ON t(j);
+    CREATE INDEX i_t_j_k ON t(j, k);
+    
+    -- u_t_i_j is a local index because the partitioning key (i) is part of the index definition
+    CREATE UNIQUE INDEX u_t_i_j ON t(i, j);
+    
+    -- u_t_j_k is a global index because the partitioning key (i) is not part of the index definition
+    CREATE UNIQUE INDEX u_t_j_k ON t(j, k);
 
 It is important to define local indexes wherever possible. CUBRID does not optimize index scans to be able to scan several partitions together using a global index. Instead, in a global index scan, for each partition that was not pruned a separate index scan is performed. This leads to poorer performance than scanning local indexes because data from other partitions is fetched from disk and then discarded (it belongs to another partition than the one being scanned at the moment). **INSERT** statements also show better performance on local indexes since these indexes are smaller.
 
@@ -593,12 +593,10 @@ The following restrictions apply to partitioned tables:
 * The maximum number of partitions which can be defined on a table is 1,024.
 * Partitions cannot be a part of the inheritance chain. Classes cannot inherit a partition and partitions cannot inherit other classes than the partitioned class (which it inherits by default).
 * The following query optimizations are not performed on partitioned tables:
-    * ORDER BY skip (for details, see :ref:`order-by-skip-optimization`)
-    * GROUP BY skip (for details, see :ref:`group-by-skip-optimization`)
-    * Multi-key range optimization (for details, see :ref:`multi-key-range-opt`)
-    * INDEX JOIN
-
-    .. 7583: 분할 테이블에서 인덱스 스킵 스캔이 수행됨
+    *   ORDER BY skip (for details, see :ref:`order-by-skip-optimization`)
+    *   GROUP BY skip (for details, see :ref:`group-by-skip-optimization`)
+    *   Multi-key range optimization (for details, see :ref:`multi-key-range-opt`)
+    *   INDEX JOIN
 
 Partitioning Key and Charset, Collation
 ----------------------------------------
@@ -612,7 +610,7 @@ Partitioning keys and partition definition must have the same character set. The
         PARTITION p0 VALUES IN (_utf8'x'),
         PARTITION p1 VALUES IN (_iso88591'y')
     );
-    
+
 ::
 
     ERROR: Invalid codeset '_iso88591' for partition value. Expecting '_utf8' codeset.
@@ -627,6 +625,8 @@ CUBRID uses the collation defined on the table when performing comparisons on th
         PARTITION p1 VALUES IN ('TEST')
     );
     
+::
+
     ERROR: Partition definition is duplicated. 'p1'
  
 .. CUBRIDSUS-10161 : below constraints of 9.1 was removed from 9.2. (below will be commented)
